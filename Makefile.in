@@ -1241,6 +1241,7 @@ COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR =  \
 	wx/msw/gccpriv.h \
 	wx/msw/mimetype.h \
 	wx/msw/winundef.h \
+	wx/msw/wrapcctl.h \
 	wx/msw/wrapwin.h
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = $(COND_PLATFORM_WIN32_1_BASE_PLATFORM_HDR)
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = 
@@ -6037,7 +6038,7 @@ advdll_tipdlg.o: $(srcdir)/src/generic/tipdlg.cpp
 advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).a: $(ADVLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv-2.5$(HOST_SUFFIX).a: $(ADVLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(AR) rcu $@ $(ADVLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(RANLIB) $@
@@ -6409,7 +6410,7 @@ basedll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 basedll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(BASELIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(BASELIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(BASELIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
@@ -8099,9 +8100,6 @@ coredll_notebmac.o: $(srcdir)/src/mac/notebmac.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@coredll_pen.o: $(srcdir)/src/gtk/pen.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_pen.o: $(srcdir)/src/cocoa/pen.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@coredll_pen.o: $(srcdir)/src/x11/pen.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -8110,6 +8108,9 @@ coredll_notebmac.o: $(srcdir)/src/mac/notebmac.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_pen.o: $(srcdir)/src/mgl/pen.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_pen.o: $(srcdir)/src/cocoa/pen.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 coredll_penwin.o: $(srcdir)/src/msw/penwin.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -8789,7 +8790,7 @@ coredll_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 @COND_USE_GUI_1@coredll_xpmdecod.o: $(srcdir)/src/common/xpmdecod.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a: $(CORELIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core-2.5$(HOST_SUFFIX).a: $(CORELIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(AR) rcu $@ $(CORELIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1@	$(RANLIB) $@
@@ -10153,9 +10154,6 @@ corelib_notebmac.o: $(srcdir)/src/mac/notebmac.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@corelib_pen.o: $(srcdir)/src/gtk/pen.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_pen.o: $(srcdir)/src/cocoa/pen.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@corelib_pen.o: $(srcdir)/src/x11/pen.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
@@ -10164,6 +10162,9 @@ corelib_notebmac.o: $(srcdir)/src/mac/notebmac.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_pen.o: $(srcdir)/src/mgl/pen.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_pen.o: $(srcdir)/src/cocoa/pen.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 corelib_penwin.o: $(srcdir)/src/msw/penwin.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -10850,7 +10851,7 @@ corelib_winuniv.o: $(srcdir)/src/univ/winuniv.cpp
 dbgriddll_dbgrid.o: $(srcdir)/src/common/dbgrid.cpp
 	$(CXXC) -c -o $@ $(DBGRIDDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a: $(DBGRIDLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_dbgrid-2.5$(HOST_SUFFIX).a: $(DBGRIDLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(DBGRIDLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
@@ -10881,7 +10882,7 @@ distclean: clean
 @COND_TOOLKIT_MSW@gldll_glcanvas.o: $(srcdir)/src/msw/glcanvas.cpp
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $<
 
-@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a: $(GLLIB_OBJECTS)
+@COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl-2.5$(HOST_SUFFIX).a: $(GLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	rm -f $@
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(AR) rcu $@ $(GLLIB_OBJECTS)
 @COND_SHARED_0_USE_GUI_1_USE_OPENGL_1@	$(RANLIB) $@
@@ -10971,7 +10972,7 @@ htmldll_m_tables.o: $(srcdir)/src/html/m_tables.cpp
 htmldll_winpars.o: $(srcdir)/src/html/winpars.cpp
 	$(CXXC) -c -o $@ $(HTMLDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a: $(HTMLLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html-2.5$(HOST_SUFFIX).a: $(HTMLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(AR) rcu $@ $(HTMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_HTML_1@	$(RANLIB) $@
@@ -12867,9 +12868,6 @@ monodll_object.o: $(srcdir)/src/common/object.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@monodll_pen.o: $(srcdir)/src/gtk/pen.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_pen.o: $(srcdir)/src/cocoa/pen.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monodll_pen.o: $(srcdir)/src/x11/pen.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -12878,6 +12876,9 @@ monodll_object.o: $(srcdir)/src/common/object.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_pen.o: $(srcdir)/src/mgl/pen.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_pen.o: $(srcdir)/src/cocoa/pen.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_penwin.o: $(srcdir)/src/msw/penwin.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -13731,7 +13732,7 @@ monodll_zipstrm.o: $(srcdir)/src/common/zipstrm.cpp
 monodll_zstream.o: $(srcdir)/src/common/zstream.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_1_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(MONOLIB_OBJECTS)
+@COND_MONOLITHIC_1_SHARED_0@$(LIBDIRNAME)/libwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)-2.5$(HOST_SUFFIX).a: $(MONOLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_1_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_1_SHARED_0@	$(AR) rcu $@ $(MONOLIB_OBJECTS)
 @COND_MONOLITHIC_1_SHARED_0@	$(RANLIB) $@
@@ -15383,9 +15384,6 @@ monolib_object.o: $(srcdir)/src/common/object.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@monolib_pen.o: $(srcdir)/src/gtk/pen.cpp
 @COND_TOOLKIT_GTK_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_pen.o: $(srcdir)/src/cocoa/pen.cpp
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 @COND_TOOLKIT_MOTIF_USE_GUI_1@monolib_pen.o: $(srcdir)/src/x11/pen.cpp
 @COND_TOOLKIT_MOTIF_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -15394,6 +15392,9 @@ monolib_object.o: $(srcdir)/src/common/object.cpp
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_pen.o: $(srcdir)/src/mgl/pen.cpp
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_pen.o: $(srcdir)/src/cocoa/pen.mm
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_penwin.o: $(srcdir)/src/msw/penwin.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -16299,7 +16300,7 @@ netdll_socket.o: $(srcdir)/src/common/socket.cpp
 netdll_url.o: $(srcdir)/src/common/url.cpp
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a: $(NETLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_net-2.5$(HOST_SUFFIX).a: $(NETLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(NETLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
@@ -16362,7 +16363,7 @@ odbcdll_db.o: $(srcdir)/src/common/db.cpp
 odbcdll_dbtable.o: $(srcdir)/src/common/dbtable.cpp
 	$(CXXC) -c -o $@ $(ODBCDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(ODBCLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc-2.5$(HOST_SUFFIX).a: $(ODBCLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(AR) rcu $@ $(ODBCLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0_USE_GUI_1_USE_ODBC_1@	$(RANLIB) $@
@@ -16819,7 +16820,7 @@ wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
 xmldll_xml.o: $(srcdir)/src/xml/xml.cpp
 	$(CXXC) -c -o $@ $(XMLDLL_CXXFLAGS) $<
 
-@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a: $(XMLLIB_OBJECTS)
+@COND_MONOLITHIC_0_SHARED_0@$(LIBDIRNAME)/libwx_base$(WXBASEPORT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xml-2.5$(HOST_SUFFIX).a: $(XMLLIB_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(__wxexpat___depname) $(__wxzlib___depname) $(__wxodbc___depname) $(__wxregex___depname)
 @COND_MONOLITHIC_0_SHARED_0@	rm -f $@
 @COND_MONOLITHIC_0_SHARED_0@	$(AR) rcu $@ $(XMLLIB_OBJECTS)
 @COND_MONOLITHIC_0_SHARED_0@	$(RANLIB) $@
