@@ -313,28 +313,27 @@ void wxLog::RemoveTraceMask(const wxString& str)
 
 void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
 {
-    wxString str;
-
     switch ( level ) {
         case wxLOG_FatalError:
-            DoLogString(str << _("Fatal error: ") << szString, t);
+            DoLogString(wxString(_("Fatal error: ")) + szString, t);
             DoLogString(_("Program aborted."), t);
             Flush();
             abort();
             break;
 
         case wxLOG_Error:
-            DoLogString(str << _("Error: ") << szString, t);
+            DoLogString(wxString(_("Error: ")) + szString, t);
             break;
 
         case wxLOG_Warning:
-            DoLogString(str << _("Warning: ") << szString, t);
+            DoLogString(wxString(_("Warning: ")) + szString, t);
             break;
 
         case wxLOG_Info:
             if ( GetVerbose() )
         case wxLOG_Message:
-                DoLogString(str + szString, t);
+        default:    // log unknown log levels too
+                DoLogString(szString, t);
             // fall through
 
         case wxLOG_Status:
