@@ -72,7 +72,7 @@ void Client_OnRequest(wxSocketBase& sock,
 
 // All sockets will be created with the following flags
 
-#define SCKIPC_FLAGS wxSOCKET_NONE
+#define SCKIPC_FLAGS (wxSOCKET_WAITALL)
 
 // ---------------------------------------------------------------------------
 // wxTCPClient
