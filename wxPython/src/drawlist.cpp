@@ -204,6 +204,7 @@ bool wxPyDrawXXXPolygon(wxDC& dc, PyObject* coords)
         return False;
     }
     dc.DrawPolygon(numPoints, points);
+    delete [] points;
     return True;
 }
 
