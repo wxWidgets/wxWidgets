@@ -49,6 +49,12 @@ clean : .SYMBOLIC
 	-if exist .\*.res del .\*.res
 	-if exist .\*.lbc del .\*.lbc
 	-if exist .\*.ilk del .\*.ilk
+	cd styles
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd wxedit
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
 
 styles : .SYMBOLIC 
 	cd styles

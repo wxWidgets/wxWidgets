@@ -32,6 +32,11 @@ all: configtool emulator helpview tex2rtf helpgen
 
 clean: 
 	-if exist .\*.o del .\*.o
+	$(MAKE) -C configtool\src -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C emulator\src -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C helpview\src -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C tex2rtf\src -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C HelpGen -f makefile.gcc $(MAKEARGS) clean
 
 configtool: 
 	$(MAKE) -C configtool\src -f makefile.gcc $(MAKEARGS) all

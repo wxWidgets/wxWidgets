@@ -33,6 +33,30 @@ all: sub_about sub_help sub_helpview sub_printing sub_test sub_virtual sub_widge
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd about
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd help
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd helpview
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd printing
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd test
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd virtual
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd widget
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd zip
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
 
 sub_about: 
 	cd about

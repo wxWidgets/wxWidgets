@@ -49,6 +49,21 @@ clean : .SYMBOLIC
 	-if exist .\*.res del .\*.res
 	-if exist .\*.lbc del .\*.lbc
 	-if exist .\*.ilk del .\*.ilk
+	cd configtool\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd emulator\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd helpview\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd tex2rtf\src
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
+	cd HelpGen
+	wmake $(__MAKEOPTS__) -f makefile.wat $(MAKEARGS) clean
+	cd $(WATCOM_CWD)
 
 configtool : .SYMBOLIC 
 	cd configtool\src

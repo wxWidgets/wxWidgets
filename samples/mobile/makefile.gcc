@@ -32,6 +32,8 @@ all: styles wxedit
 
 clean: 
 	-if exist .\*.o del .\*.o
+	$(MAKE) -C styles -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C wxedit -f makefile.gcc $(MAKEARGS) clean
 
 styles: 
 	$(MAKE) -C styles -f makefile.gcc $(MAKEARGS) all

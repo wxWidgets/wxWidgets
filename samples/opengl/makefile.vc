@@ -33,6 +33,15 @@ all: sub_cube sub_isosurf sub_penguin
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd cube
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd isosurf
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd penguin
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
 
 sub_cube: 
 	cd cube

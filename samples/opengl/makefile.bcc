@@ -42,6 +42,15 @@ all: cube isosurf penguin
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd cube
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd isosurf
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd penguin
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
 
 cube: 
 	cd cube

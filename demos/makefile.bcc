@@ -42,6 +42,24 @@ all: bombs dbbrowse forty fractal life poem
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd bombs
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd dbbrowse
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd forty
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd fractal
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd life
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd poem
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
 
 bombs: 
 	cd bombs

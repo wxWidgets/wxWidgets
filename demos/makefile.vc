@@ -33,6 +33,24 @@ all: sub_bombs sub_dbbrowse sub_forty sub_fractal sub_life sub_poem
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd bombs
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd dbbrowse
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd forty
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd fractal
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd life
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd poem
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
 
 sub_bombs: 
 	cd bombs

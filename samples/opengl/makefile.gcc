@@ -32,6 +32,9 @@ all: cube isosurf penguin
 
 clean: 
 	-if exist .\*.o del .\*.o
+	$(MAKE) -C cube -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C isosurf -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C penguin -f makefile.gcc $(MAKEARGS) clean
 
 cube: 
 	$(MAKE) -C cube -f makefile.gcc $(MAKEARGS) all

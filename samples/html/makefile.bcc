@@ -42,6 +42,30 @@ all: about help helpview printing test virtual widget zip
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd about
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd help
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd helpview
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd printing
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd test
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd virtual
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd widget
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd zip
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
 
 about: 
 	cd about

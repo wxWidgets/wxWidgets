@@ -42,6 +42,231 @@ all: access artprov calendar caret checklst config console controls db dialogs d
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd access
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd artprov
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd calendar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd caret
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd checklst
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd config
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd console
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd controls
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd db
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd dialogs
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd dialup
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd display
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd dnd
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd docview
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd docvwmdi
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd dragimag
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd drawing
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd dynamic
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd erase
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd event
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd exec
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd except
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd font
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd grid
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd help
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd htlbox
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd html
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd image
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd internat
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd ipc
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd joytest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd keyboard
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd layout
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd listbox
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd listctrl
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd mdi
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd memcheck
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd menu
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd mfc
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd minifram
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd minimal
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd mobile
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd multimon
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd nativdlg
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd notebook
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd oleauto
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd opengl
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd ownerdrw
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd png
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd printing
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd propsize
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd regtest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd render
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd richedit
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd rotate
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd sashtest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd scroll
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd scrollsub
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd shaped
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd sockets
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd sound
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd splitter
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd statbar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd tab
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd taskbar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd text
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd thread
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd toolbar
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd treectrl
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd typetest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd validate
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd vscroll
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd widgets
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd wizard
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd wxtest
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
 
 access: 
 	cd access

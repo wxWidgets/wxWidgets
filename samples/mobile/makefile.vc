@@ -33,6 +33,12 @@ all: sub_styles sub_wxedit
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd styles
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
+	cd wxedit
+	$(MAKE) -f makefile.vc $(MAKEARGS) clean
+	cd $(MAKEDIR)
 
 sub_styles: 
 	cd styles

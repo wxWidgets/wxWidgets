@@ -42,6 +42,21 @@ all: configtool emulator helpview tex2rtf helpgen
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd configtool\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..\..
+	cd emulator\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..\..
+	cd helpview\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..\..
+	cd tex2rtf\src
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..\..
+	cd HelpGen
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
 
 configtool: 
 	cd configtool\src

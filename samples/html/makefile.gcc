@@ -32,6 +32,14 @@ all: about help helpview printing test virtual widget zip
 
 clean: 
 	-if exist .\*.o del .\*.o
+	$(MAKE) -C about -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C help -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C helpview -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C printing -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C test -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C virtual -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C widget -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C zip -f makefile.gcc $(MAKEARGS) clean
 
 about: 
 	$(MAKE) -C about -f makefile.gcc $(MAKEARGS) all

@@ -42,6 +42,12 @@ all: styles wxedit
 clean: 
 	-if exist .\*.obj del .\*.obj
 	-if exist .\*.res del .\*.res
+	cd styles
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
+	cd wxedit
+	$(MAKE) -f makefile.bcc $(MAKEARGS) clean
+	cd ..
 
 styles: 
 	cd styles

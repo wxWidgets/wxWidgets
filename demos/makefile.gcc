@@ -32,6 +32,12 @@ all: bombs dbbrowse forty fractal life poem
 
 clean: 
 	-if exist .\*.o del .\*.o
+	$(MAKE) -C bombs -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C dbbrowse -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C forty -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C fractal -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C life -f makefile.gcc $(MAKEARGS) clean
+	$(MAKE) -C poem -f makefile.gcc $(MAKEARGS) clean
 
 bombs: 
 	$(MAKE) -C bombs -f makefile.gcc $(MAKEARGS) all
