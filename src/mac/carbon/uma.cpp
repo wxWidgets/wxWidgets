@@ -11,6 +11,10 @@
 
 // init
 
+#if !TARGET_CARBON
+#define	GetControlOwner( control ) (**control).contrlOwner
+#endif
+
 static bool	sUMAHasAppearance = false ;
 static long sUMAAppearanceVersion = 0 ;
 extern int gAGABackgroundColor ;
@@ -453,6 +457,8 @@ void			UMACloseWindow(WindowRef inWindowRef)
 
 void UMAActivateControl( ControlHandle inControl ) 
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(inControl) , updateRgn ) ;
 #if UMA_USE_APPEARANCE
 	if ( UMAHasAppearance() )
 	{
@@ -468,10 +474,13 @@ void UMAActivateControl( ControlHandle inControl )
 	{
 	}
 #endif
+			InvalRgn( updateRgn ) ;
 }
 
 void UMADrawControl( ControlHandle inControl ) 
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(inControl) , updateRgn ) ;
 #if UMA_USE_APPEARANCE
 	if ( UMAHasAppearance() )
 	{
@@ -487,10 +496,13 @@ void UMADrawControl( ControlHandle inControl )
 	{
 	}
 #endif
+			InvalRgn( updateRgn ) ;
 }
 
 void UMAMoveControl( ControlHandle inControl , short x , short y ) 
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(inControl) , updateRgn ) ;
 #if UMA_USE_APPEARANCE
 	if ( UMAHasAppearance() )
 	{
@@ -506,10 +518,13 @@ void UMAMoveControl( ControlHandle inControl , short x , short y )
 	{
 	}
 #endif
+			InvalRgn( updateRgn ) ;
 }
 
 void UMASizeControl( ControlHandle inControl , short x , short y ) 
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(inControl) , updateRgn ) ;
 #if UMA_USE_APPEARANCE
 	if ( UMAHasAppearance() )
 	{
@@ -525,10 +540,13 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
 	{
 	}
 #endif
+			InvalRgn( updateRgn ) ;
 }
 
 void UMADeactivateControl( ControlHandle inControl ) 
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(inControl) , updateRgn ) ;
 #if UMA_USE_APPEARANCE
 	if ( UMAHasAppearance() )
 	{
@@ -544,6 +562,7 @@ void UMADeactivateControl( ControlHandle inControl )
 	{
 	}
 #endif
+			InvalRgn( updateRgn ) ;
 }
 
 void			UMASetThemeWindowBackground		(WindowRef 				inWindow,
@@ -640,6 +659,8 @@ void UMADisposeControl (ControlHandle 			theControl)
 void UMAHiliteControl	(ControlHandle 			theControl,
 								 ControlPartCode 		hiliteState)
 								 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(theControl) , updateRgn ) ;
 	if ( UMAHasAppearance() )
 	{
    	::HiliteControl( theControl , hiliteState ) ;
@@ -648,11 +669,14 @@ void UMAHiliteControl	(ControlHandle 			theControl,
    {
    	::HiliteControl( theControl , hiliteState ) ;
 	}
+			InvalRgn( updateRgn ) ;
 }
 
 
 void UMAShowControl						(ControlHandle 			theControl)
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( GetControlOwner(theControl) , updateRgn ) ;
 	if ( UMAHasAppearance() )
 	{
    	::ShowControl( theControl ) ;
@@ -661,6 +685,7 @@ void UMAShowControl						(ControlHandle 			theControl)
    {
    	::ShowControl( theControl ) ;
    }
+			InvalRgn( updateRgn ) ;
 }
 
 
@@ -913,6 +938,8 @@ void UMAIdleControls					(WindowPtr 				inWindow)
 
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) 
 {
+			RgnHandle updateRgn = NewRgn() ;
+			GetWindowUpdateRgn( inWindow , updateRgn ) ;
 #if UMA_USE_APPEARANCE
 	if ( UMAHasAppearance() )
 	{
@@ -928,6 +955,7 @@ void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn )
 	{
 	}
 #endif
+			InvalRgn( updateRgn ) ;
 }
 
 OSErr UMAGetRootControl( WindowPtr inWindow , ControlHandle *outControl ) 

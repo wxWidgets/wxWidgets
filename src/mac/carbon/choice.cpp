@@ -27,7 +27,7 @@ short nextMenuId = 100 ; // wxMenu takes the lower ids
 wxChoice::~wxChoice()
 {
 	// DeleteMenu( m_macPopUpMenuId ) ;
-	DisposeMenu( m_macPopUpMenuHandle ) ;
+	// DisposeMenu( m_macPopUpMenuHandle ) ;
 }
 
 bool wxChoice::Create(wxWindow *parent, wxWindowID id,
