@@ -468,8 +468,6 @@ size_t wxStringBase::find(const wxChar* sz, size_t nStart, size_t n) const
   return find(wxStringBase(sz, n), nStart);
 }
 
-// Gives a duplicate symbol (presumably a case-insensitivity problem)
-#if !defined(__BORLANDC__)
 size_t wxStringBase::find(wxChar ch, size_t nStart) const
 {
   wxASSERT( nStart <= length() );
@@ -478,7 +476,6 @@ size_t wxStringBase::find(wxChar ch, size_t nStart) const
 
   return p == NULL ? npos : p - c_str();
 }
-#endif
 
 size_t wxStringBase::rfind(const wxStringBase& str, size_t nStart) const
 {
