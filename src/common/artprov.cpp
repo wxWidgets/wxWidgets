@@ -32,6 +32,7 @@
 #include "wx/artprov.h"
 #include "wx/hashmap.h"
 #include "wx/module.h"
+#include "wx/image.h"
 
 // For the purposes of forcing this module to link
 extern char g_ArtProviderModule;
@@ -168,8 +169,18 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
         {
             bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
+            {
+                if ( size != wxDefaultSize && 
+                     (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
+                {
+                    wxImage img = bmp.ConvertToImage();
+                    img.Rescale(size.x, size.y);
+                    bmp = wxBitmap(img);
+                }
                 break;
+            }
         }
+
         sm_cache->PutBitmap(hashId, bmp);
     }
 
