@@ -297,6 +297,19 @@ protected: \
  \
         return node; \
     } \
+    void CreateNodeLast( const value_type& value )                           \
+    {                                                                        \
+        size_t bucket = m_hasher( m_getKey(value) ) % m_tableBuckets;        \
+        Node* curr = m_table[bucket],                                        \
+            * next = m_table[bucket];                                        \
+        while( next ) { curr = next; next = next->m_next(); }                \
+        Node** ptr = curr ? (Node**)&curr->m_nxt : &m_table[bucket];         \
+        *ptr = new Node( value );                                            \
+        /* must be after the node is inserted */                             \
+        ++m_items;                                                           \
+        if( SHOULD_GROW( m_tableBuckets, m_items ) )                         \
+            ResizeTable( m_tableBuckets );                                   \
+    }                                                                        \
     void CreateNode( const value_type& value ) \
     {\
         CreateNode(value, m_hasher( m_getKey(value) ) % m_tableBuckets ); \

@@ -140,7 +140,24 @@ WX_DECLARE_EXPORTED_HASH_MAP( wxHashKeyValue,
                               void*,
                               wxHashTableHash,
                               wxHashTableEqual,
-                              wxHashTableBaseBase );
+                              wxHashTableBaseBaseBase );
+
+// hack: we should really have HASH_MULTI(MAP|SET), but this requires
+// less work
+
+class WXDLLIMPEXP_BASE wxHashTableBaseBase : public wxHashTableBaseBaseBase
+{
+public:
+    wxHashTableBaseBase(size_t size, const wxHashTableHash& hash,
+                        const wxHashTableEqual& equal)
+        : wxHashTableBaseBaseBase(size, hash, equal)
+    { }
+
+    void multi_insert(const wxHashKeyValue& key, void* value)
+    {
+        CreateNodeLast(value_type(key, value));
+    }
+};
 
 class WXDLLIMPEXP_BASE wxHashTableBase
 {
@@ -176,7 +193,7 @@ protected:
         wxASSERT( m_keyType == wxKEY_INTEGER );
 
         wxHashKeyValue k; k.integer = key;
-        m_map[k] = data;
+        m_map.multi_insert(k, data);
     }
 
     void DoPut( const wxChar* key, void* data )
@@ -184,17 +201,8 @@ protected:
         wxASSERT( m_keyType == wxKEY_STRING );
 
         wxHashKeyValue k;
-        k.string = (wxChar*)key;
-        wxHashTableBaseBase::iterator it = m_map.find(k);
-
-        if( it == m_map.end() )
-        {
-            k.string = new wxChar[wxStrlen(key) + 1];
-            wxStrcpy(k.string, key);
-            m_map[k] = data;
-        }
-        else
-            it->second = data;
+        k.string = wxStrcpy(new wxChar[wxStrlen(key) + 1], key);
+        m_map.multi_insert(k, data);
     }
 
     void* DoGet( long key ) const
@@ -407,8 +415,8 @@ public:
     wxObject *Get(const wxChar *value) const { return (wxObject*)DoGet( value ); }
 
     // Deletes entry and returns data if found
-    wxObject *Delete(long key) { return (wxObject*)DoGet( key ); }
-    wxObject *Delete(const wxChar *key) { return (wxObject*)DoGet( key ); }
+    wxObject *Delete(long key) { return (wxObject*)DoDelete( key ); }
+    wxObject *Delete(const wxChar *key) { return (wxObject*)DoDelete( key ); }
 
 #if 0
     // Construct your own integer key from a string, e.g. in case

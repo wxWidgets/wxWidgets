@@ -1152,10 +1152,11 @@ static void TestHash()
 
     {
         wxHashTable hash(wxKEY_INTEGER), hash2(wxKEY_STRING);
+        wxObject o;
         int i;
 
         for ( i = 0; i < 100; ++i )
-            hash.Put(i, (wxObject*)&i + i);
+            hash.Put(i, &o + i);
 
         hash.BeginFind();
         wxHashTable::compatibility_iterator it = hash.Next();
@@ -1171,18 +1172,50 @@ static void TestHash()
             wxPuts(_T("Error in wxHashTable::compatibility_iterator\n"));
 
         for ( i = 99; i >= 0; --i )
-            if( hash.Get(i) != (wxObject*)&i + i )
+            if( hash.Get(i) != &o + i )
                 wxPuts(_T("Error in wxHashTable::Get/Put\n"));
 
-        hash2.Put("foo", (wxObject*)&i + 1);
-        hash2.Put("bar", (wxObject*)&i + 2);
-        hash2.Put("baz", (wxObject*)&i + 3);
+        for ( i = 0; i < 100; ++i )
+            hash.Put(i, &o + i + 20);
 
-        if (hash2.Get("moo") != NULL)
+        for ( i = 99; i >= 0; --i )
+            if( hash.Get(i) != &o + i)
+                wxPuts(_T("Error (2) in wxHashTable::Get/Put\n"));
+
+        for ( i = 0; i < 50; ++i )
+            if( hash.Delete(i) != &o + i)
+                wxPuts(_T("Error in wxHashTable::Delete\n"));
+
+        for ( i = 50; i < 100; ++i )
+            if( hash.Get(i) != &o + i)
+                wxPuts(_T("Error (3) in wxHashTable::Get/Put\n"));
+
+        for ( i = 0; i < 50; ++i )
+            if( hash.Get(i) != &o + i + 20)
+                wxPuts(_T("Error (4) in wxHashTable::Put/Delete\n"));
+
+        for ( i = 0; i < 50; ++i )
+            if( hash.Delete(i) != &o + i + 20)
+                wxPuts(_T("Error (2) in wxHashTable::Delete\n"));
+
+        for ( i = 0; i < 50; ++i )
+            if( hash.Get(i) != NULL)
+                wxPuts(_T("Error (5) in wxHashTable::Put/Delete\n"));
+
+        hash2.Put(_T("foo"), &o + 1);
+        hash2.Put(_T("bar"), &o + 2);
+        hash2.Put(_T("baz"), &o + 3);
+
+        if (hash2.Get(_T("moo")) != NULL)
             wxPuts(_T("Error in wxHashTable::Get\n"));
 
-        if (hash2.Get("bar") != (wxObject*)&i + 2)
+        if (hash2.Get(_T("bar")) != &o + 2)
             wxPuts(_T("Error in wxHashTable::Get/Put\n"));
+
+        hash2.Put(_T("bar"), &o + 0);
+
+        if (hash2.Get(_T("bar")) != &o + 2)
+            wxPuts(_T("Error (2) in wxHashTable::Get/Put\n"));
     }
 #if !wxUSE_STL
     {
