@@ -1503,9 +1503,54 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     if (text.Length() == 0)
         return false;
     
-    wxFAIL_MSG( wxT("Unimplemented for Core Graphics") ) ;
-    
-    return false;
+    ATSUTextLayout atsuLayout ;
+    UniCharCount chars = text.Length() ;
+    UniChar* ubuf = NULL ;
+#if SIZEOF_WCHAR_T == 4
+    wxMBConvUTF16BE converter ;
+#if wxUSE_UNICODE
+    size_t unicharlen = converter.WC2MB( NULL , text.wc_str() , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , text.wc_str(), unicharlen + 2 ) ;
+#else
+    const wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
+    size_t unicharlen = converter.WC2MB( NULL , wchar.data()  , 0 ) ;
+    ubuf = (UniChar*) malloc( unicharlen + 2 ) ;
+    converter.WC2MB( (char*) ubuf , wchar.data() , unicharlen + 2 ) ;
+#endif
+    chars = unicharlen / 2 ;
+#else
+#if wxUSE_UNICODE
+    ubuf = (UniChar*) text.wc_str() ;
+#else
+    wxWCharBuffer wchar = text.wc_str( wxConvLocal ) ;
+    chars = wxWcslen( wchar.data() ) ;
+    ubuf = (UniChar*) wchar.data() ;
+#endif
+#endif
+
+	OSStatus status;
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) ubuf , 0 , chars , chars , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+        
+    	for ( int pos = 0; pos < chars; pos ++ ) {
+			unsigned long actualNumberOfBounds = 0;
+			ATSTrapezoid glyphBounds;
+
+			// We get a single bound, since the text should only require one. If it requires more, there is an issue
+			OSStatus result; 
+			result = ATSUGetGlyphBounds( atsuLayout, 0, 0, kATSUFromTextBeginning, pos + 1, kATSUseDeviceOrigins, 1, &glyphBounds, &actualNumberOfBounds );
+			if (result != noErr || actualNumberOfBounds != 1 )
+			{
+				return false;
+			}
+
+			widths[pos] = XDEV2LOGREL(FixedToInt( glyphBounds.upperRight.x - glyphBounds.upperLeft.x ));
+			//unsigned char uch = s[i];
+			
+    	}
+    ::ATSUDisposeTextLayout(atsuLayout);
+    return true;
 }
 
 wxCoord   wxDC::GetCharWidth(void) const
