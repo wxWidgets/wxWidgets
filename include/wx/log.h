@@ -543,11 +543,6 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 // debug only logging functions: use them with API name and error code
 // ----------------------------------------------------------------------------
 
-#ifndef __TFILE__
-    #define __XFILE__(x) Tx)
-    #define __TFILE__ __XFILE__(__FILE__)
-#endif
-
 #ifdef __WXDEBUG__
     // make life easier for people using VC++ IDE: clicking on the message
     // will take us immediately to the place of the failed API

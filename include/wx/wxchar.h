@@ -674,10 +674,20 @@ WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const 
 // and _() in wxWindows sources
 #define wxT(x)       _T(x)
 
-// a Unicode-friendly __FILE__ analog
+// Unicode-friendly __FILE__, __DATE__ and __TIME__ analogs
 #ifndef __TFILE__
     #define __XFILE__(x) wxT(x)
     #define __TFILE__ __XFILE__(__FILE__)
+#endif
+
+#ifndef __TDATE__
+    #define __XDATE__(x) wxT(x)
+    #define __TDATE__ __XDATE__(__DATE__)
+#endif
+
+#ifndef __TTIME__
+    #define __XTIME__(x) wxT(x)
+    #define __TTIME__ __XTIME__(__TIME__)
 #endif
 
 #endif
