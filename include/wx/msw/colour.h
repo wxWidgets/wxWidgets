@@ -25,7 +25,7 @@ public:
   wxColour(unsigned long colRGB) { Set(colRGB); }
   wxColour(const wxColour& col);
   wxColour(const wxString& col) { InitFromName(col); }
-  wxColour(const char *col) { InitFromName(col); }
+//  wxColour(const char *col) { InitFromName(col); }
   ~wxColour();
 
   wxColour& operator =(const wxColour& src) ;
@@ -33,13 +33,13 @@ public:
   inline int Ok() const { return (m_isInit) ; }
 
   void Set(unsigned char r, unsigned char g, unsigned char b);
-  void Set(unsigned long colRGB) 
-  { 
+  void Set(unsigned long colRGB)
+  {
     // we don't need to know sizeof(long) here because we assume that the three
     // least significant bytes contain the R, G and B values
-    Set((unsigned char)colRGB, 
+    Set((unsigned char)colRGB,
         (unsigned char)(colRGB >> 8),
-        (unsigned char)(colRGB >> 16)); 
+        (unsigned char)(colRGB >> 16));
   }
 
   // Let's remove this inelegant function
