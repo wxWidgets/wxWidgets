@@ -52,6 +52,7 @@
 #if wxUSE_WCHAR_T
     WXDLLEXPORT_DATA(wxMBConv) wxConvLibc;
     WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
+    WXDLLEXPORT_DATA(wxCSConv) wxConvISO8859_1(_T("iso-8859-1"));
 #else
     // stand-ins in absence of wchar_t
     WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile, wxConvLocal;
@@ -68,6 +69,7 @@ public:
     {
 #if wxUSE_WCHAR_T
          wxConvLocal.Clear();
+         wxConvISO8859_1.Clear();
 #endif
     }
 
