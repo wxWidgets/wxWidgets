@@ -14,7 +14,7 @@ class TestPanel(wxPanel):
                      wxPoint(20, 30))
 
         wxStaticText(self, -1, "Is this yellow?",
-                     wxPoint(20, 70)).SetBackgroundColour(wxNamedColour('Yellow'))
+                     wxPoint(20, 70)).SetBackgroundColour('Yellow')
 
         str = "This is a different font."
         text = wxStaticText(self, -1, str, wxPoint(20, 100))

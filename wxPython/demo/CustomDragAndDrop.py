@@ -107,7 +107,7 @@ class DoodlePad(wxWindow):
         dropSource = wxDropSource(self)
         dropSource.SetData(data)
         self.log.WriteText("Begining DragDrop\n")
-        result = dropSource.DoDragDrop(true)
+        result = dropSource.DoDragDrop(wxDrag_AllowMove)
         self.log.WriteText("DragDrop completed: %d\n" % result)
         if result == wxDragMove:
             self.lines = []

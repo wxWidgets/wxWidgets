@@ -85,9 +85,9 @@ else:
             EVT_ERASE_BACKGROUND(self, self.OnEraseBackground)
             EVT_SIZE(self, self.OnSize)
             EVT_PAINT(self, self.OnPaint)
-            #EVT_LEFT_DOWN(self, self.OnMouseDown)  # needs fixing...
-            #EVT_LEFT_UP(self, self.OnMouseUp)
-            #EVT_MOTION(self, self.OnMouseMotion)
+            EVT_LEFT_DOWN(self, self.OnMouseDown)  # needs fixing...
+            EVT_LEFT_UP(self, self.OnMouseUp)
+            EVT_MOTION(self, self.OnMouseMotion)
 
         def OnEraseBackground(self, event):
             pass # Do nothing, to avoid flashing on MSW.
@@ -116,7 +116,7 @@ else:
             if evt.Dragging() and evt.LeftIsDown():
                 self.x, self.y = self.lastx, self.lasty
                 self.x, self.y = evt.GetPosition()
-                self.Refresh()
+                self.Refresh(false)
 
 
 
