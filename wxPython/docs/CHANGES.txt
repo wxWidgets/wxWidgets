@@ -192,14 +192,6 @@ it.
 wxPython on OSX can now be built in Unicode mode, can support multiple
 version installs, and comes with an uninstaller script.
 
-PyPlot updates from Oliver Schoenborn:
-    - Factored out "draw command" so extensions easier to implement: clean 
-      separation b/w user's "draw" (Draw) and internal "draw" (_draw)
-    - Added ability to define your own ticks at PlotCanvas.Draw
-    - Added better bar charts: PolyBar class and getBarTicksGen()
-    - Put legend writing for a Poly* into Poly* class where it belongs
-    - If no legend specified or exists, no gap created
-
 
 
 
