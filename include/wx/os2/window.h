@@ -494,6 +494,7 @@ protected:
 #endif // wxUSE_MOUSEEVENT_HACK
 
     WXHMENU                         m_hMenu; // Menu, if any
+    unsigned long                   m_ulMenubarId; // it's Id, if any
 
     // the return value of WM_GETDLGCODE handler
     long                            m_lDlgCode;

@@ -165,7 +165,8 @@ public:
 #endif // wxUSE_ACCEL
 
         // get the menu handle
-    WXHMENU GetHMenu() const { return m_hMenu; }
+    WXHMENU       GetHMenu() const { return m_hMenu; }
+    unsigned long GetMenubarId() const { return m_ulMenubarId; }
 
     // if the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
@@ -183,8 +184,9 @@ protected:
 
     wxArrayString m_titles;
 
-    wxFrame      *m_menuBarFrame;
-    WXHMENU       m_hMenu;
+    wxFrame*                        m_menuBarFrame;
+    WXHMENU                         m_hMenu;
+    unsigned long                   m_ulMenubarId;
 
 #if wxUSE_ACCEL
     // the accelerator table for all accelerators in all our menus

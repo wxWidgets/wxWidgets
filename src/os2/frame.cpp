@@ -438,51 +438,74 @@ bool wxFrame::IsMaximized() const
     return (vSwp.fl & SWP_MAXIMIZE);
 } // end of wxFrame::IsMaximized
 
-void wxFrame::SetIcon(const wxIcon& icon)
+void wxFrame::SetIcon(
+  const wxIcon&                     rIcon
+)
 {
-    wxFrameBase::SetIcon(icon);
+    wxFrameBase::SetIcon(rIcon);
 
-// TODO:
-/*
-    if ( m_icon.Ok() )
+    if (m_icon.Ok())
     {
-        SendMessage(GetHwnd(), WM_SETICON,
-                    (WPARAM)TRUE, (LPARAM)(HICON) m_icon.GetHICON());
+        WinSendMessage( GetHwnd()
+                       ,WM_SETICON
+                       ,(HICON) m_icon.GetHICON()
+                       ,NULL
+                      )
     }
-*/
-}
+} // end of wxFrame::SetIcon
 
 #if wxUSE_STATUSBAR
-wxStatusBar *wxFrame::OnCreateStatusBar(int number,
-                                        long style,
-                                        wxWindowID id,
-                                        const wxString& name)
+wxStatusBar* wxFrame::OnCreateStatusBar(
+  int                               nNumber
+, long                              lStyle
+, wxWindowID                        vId
+, const wxString&                   rName
+)
 {
-    wxStatusBar *statusBar = NULL;
+    wxStatusBar*                    pStatusBar = NULL;
 
-    statusBar = wxFrameBase::OnCreateStatusBar(number, style, id, name);
-
-    return statusBar;
-}
+    pStatusBar = wxFrameBase::OnCreateStatusBar( nNumber
+                                                ,lStyle
+                                                ,vId
+                                                ,rName
+                                               );
+    return pStatusBar;
+} // end of wxFrame::OnCreateStatusBar
 
 void wxFrame::PositionStatusBar()
 {
-// TODO:
-/*
-    // native status bar positions itself
-    if ( m_frameStatusBar )
+    //
+    // Native status bar positions itself
+    //
+    if (m_frameStatusBar)
     {
-        int w, h;
-        GetClientSize(&w, &h);
-        int sw, sh;
-        m_frameStatusBar->GetSize(&sw, &sh);
+        int                         nWidth
+        int                         nHeight;
+        int                         nStatbarWidth
+        int                         nStatbarHeight;
+        HWND                        hWndClient;
+        RECTL                       vRect;
 
+        hWndClient = ::WinWindowFromId(GetHwnd(), FID_CLIENT);
+        ::WinQueryWindowRect(hWndClient, &vRect);
+        nWidth = vRect.xRight - vRect.xLeft;
+        nHeight = vRect.xTop - vRect.xBottom;
+        
+        m_frameStatusBar->GetSize( &nStatbarWidth
+                                  ,&nStatbarHeight
+                                 );
+
+        //
         // Since we wish the status bar to be directly under the client area,
         // we use the adjusted sizes without using wxSIZE_NO_ADJUSTMENTS.
-        m_frameStatusBar->SetSize(0, h, w, sh);
+        //
+        m_frameStatusBar->SetSize( 0
+                                  ,nHeight
+                                  ,nWidth
+                                  ,nStatbarHeight
+                                 );
     }
-*/
-}
+} // end of wxFrame::PositionStatusBar
 #endif // wxUSE_STATUSBAR
 
 void wxFrame::DetachMenuBar()
@@ -492,42 +515,51 @@ void wxFrame::DetachMenuBar()
         m_frameMenuBar->Detach();
         m_frameMenuBar = NULL;
     }
-}
+} // end of wxFrame::DetachMenuBar
 
-void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
+void wxFrame::SetMenuBar(
+  wxMenuBar*                        pMenuBbar
+)
 {
-    if (!menu_bar)
+    if (!pMenuBar)
     {
         DetachMenuBar();
         return;
     }
 
-    wxCHECK_RET( !menu_bar->GetFrame(), wxT("this menubar is already attached") );
+    wxCHECK_RET(!pMenuBar->GetFrame(), wxT("this menubar is already attached"));
 
     if (m_frameMenuBar)
         delete m_frameMenuBar;
 
-    m_hMenu = menu_bar->Create();
+    m_hMenu = pMenuBbar->Create();
+    m_ulMenubarId = pMenubar->GetMenubarId();
+    if (m_ulMenubarId != FID_MENU)
+    {
+        ::WinSetWIndowUShort( m_hMenu
+                             ,QWS_ID
+                             ,(unsigned short(m_ulMenubarId)
+                            );
+    }
 
-    if ( !m_hMenu )
+    if (!m_hMenu)
         return;
 
     InternalSetMenuBar();
 
     m_frameMenuBar = menu_bar;
     menu_bar->Attach(this);
-}
+} // end of wxFrame::SetMenuBar
 
 void wxFrame::InternalSetMenuBar()
 {
-// TODO:
-/*
-    if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
-    {
-        wxLogLastError("SetMenu");
-    }
-*/
-}
+        
+    ::WinPostMsg( GetHwnd()
+                 ,WM_UPDATEFRAME
+                 ,FCF_MENU
+                 ,NULL
+                );
+} // end of wxFrame::InternalSetMenuBar
 
 // Responds to colour changes, and passes event on to children.
 void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
