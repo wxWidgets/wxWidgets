@@ -205,10 +205,21 @@ public:
     void Start(long t0 = 0);
 
     // pause the stop watch
-    void Pause() { if ( !m_pauseCount++) m_pause = GetElapsedTime(); }
+    void Pause()
+    {
+        if ( !m_pauseCount++ )
+            m_pause = GetElapsedTime();
+    }
 
     // resume it
-    void Resume() { if ( !--m_pauseCount ) Start(m_pause); }
+    void Resume()
+    {
+        wxASSERT_MSG( m_pauseCount > 0,
+                      _T("Resuming stop watch which is not paused") );
+
+        if ( !--m_pauseCount )
+            Start(m_pause);
+    }
 
     // get elapsed time since the last Start() in milliseconds
     long Time() const;
