@@ -4782,8 +4782,8 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 
 bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
                               WXWORD pos, WXHWND control)
-{
-    if ( control )
+{    
+    if ( control && control != m_hWnd ) // Prevent infinite recursion
     {
         wxWindow *child = wxFindWinFromHandle(control);
         if ( child )
