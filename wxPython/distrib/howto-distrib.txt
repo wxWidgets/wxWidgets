@@ -14,7 +14,7 @@ main intent of this document...
 Preflight Checklist
 -------------------
 
-* Ensure that the version info in wxPython/setup.py is correct.
+* Ensure that the version info in wxPython/config.py is correct.
 
 * Ensure that all build machines are up to date with CVS, they should
   have the same versions of all the wxWidgets files if possible.  (Use
