@@ -1845,9 +1845,12 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
     if ( event.Dragging() )
     {
         m_isDragging = TRUE;
-
         if ( m_cursorMode == WXGRID_CURSOR_SELECT_CELL )
         {
+	    // Hide the edit control, so it
+	    // won't interfer with drag-shrinking.
+	    if ( IsCellEditControlEnabled() )
+	        HideCellEditControl();
             if ( coords != wxGridNoCellCoords )
             {
                 if ( !IsSelection() )
@@ -1856,8 +1859,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 }
                 else
                 {
-                    if ( !IsInSelection( coords ) )
-                        SelectBlock( m_currentCellCoords, coords );
+		    SelectBlock( m_currentCellCoords, coords );
                 }
             }
         }
@@ -1901,6 +1903,10 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             {
                 SendEvent( EVT_GRID_RANGE_SELECT, -1, -1, event );
             }
+	    // Show the edit control, if it has
+	    // been hidden for drag-shrinking.
+	    if ( IsCellEditControlEnabled() )
+	        ShowCellEditControl();
         }
 
         m_dragLastPos = -1;
@@ -4223,6 +4229,8 @@ void wxGrid::SelectCol( int col, bool addToSelected )
 void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
 {
     int temp;
+    bool changed = false;
+    wxGridCellCoords updateTopLeft, updateBottomRight;
 
     if ( topRow > bottomRow )
     {
@@ -4237,13 +4245,48 @@ void wxGrid::SelectBlock( int topRow, int leftCol, int bottomRow, int rightCol )
         leftCol = rightCol;
         rightCol = temp;
     }
+    
+    updateTopLeft = m_selectedTopLeft;
+    if (m_selectedTopLeft != wxGridCellCoords( topRow, leftCol ) )
+    {
+        m_selectedTopLeft = wxGridCellCoords( topRow, leftCol );
+	if (updateTopLeft == wxGridNoCellCoords)
+	{
+	    updateTopLeft = m_selectedTopLeft;
+	}
+	else
+	{
+	     if(updateTopLeft.GetRow() > topRow)
+	        updateTopLeft.SetRow(topRow);
+	    if (updateTopLeft.GetCol() > leftCol)
+	      updateTopLeft.SetCol(leftCol);
+	}
+	changed = true;
+    }
 
-    m_selectedTopLeft.Set( topRow, leftCol );
-    m_selectedBottomRight.Set( bottomRow, rightCol );
+    updateBottomRight = m_selectedBottomRight;
+    if (m_selectedBottomRight != wxGridCellCoords( bottomRow, rightCol ) )
+    {
+        m_selectedBottomRight = wxGridCellCoords( bottomRow, rightCol );
+	if (updateBottomRight == wxGridNoCellCoords)
+	{
+	    updateBottomRight = m_selectedBottomRight;
+	}
+	else
+	{
+	    if (updateBottomRight.GetRow() < bottomRow)
+	        updateBottomRight.SetRow(bottomRow);
+	    if (updateBottomRight.GetCol() < rightCol)
+	        updateBottomRight.SetCol(rightCol);
+	}
+	changed = true;
+    }
 
-    wxRect r;
-    r = SelectionToDeviceRect();
-    m_gridWin->Refresh( TRUE, &r );
+    if (changed)
+    {
+        wxRect r( BlockToDeviceRect( updateTopLeft, updateBottomRight ) );
+        m_gridWin->Refresh( TRUE, &r );
+    }
 
     // only generate an event if the block is not being selected by
     // dragging the mouse (in which case the event will be generated in
@@ -4276,17 +4319,18 @@ void wxGrid::ClearSelection()
 }
 
 
-// This function returns the rectangle that encloses the selected cells
+// This function returns the rectangle that encloses the given block
 // in device coords clipped to the client size of the grid window.
 //
-wxRect wxGrid::SelectionToDeviceRect()
+wxRect wxGrid::BlockToDeviceRect(const wxGridCellCoords & TopLeft,
+				 const wxGridCellCoords & BottomRight)
 {
     wxRect rect;
     wxRect cellRect;
 
     if ( IsSelection() )
     {
-        cellRect = CellToRect( m_selectedTopLeft );
+        cellRect = CellToRect( TopLeft );
         if ( cellRect != wxGridNoCellRect )
         {
             rect = cellRect;
@@ -4296,7 +4340,7 @@ wxRect wxGrid::SelectionToDeviceRect()
             rect = wxRect( 0, 0, 0, 0 );
         }
 
-        cellRect = CellToRect( m_selectedBottomRight );
+        cellRect = CellToRect( BottomRight );
         if ( cellRect != wxGridNoCellRect )
         {
             rect += cellRect;
