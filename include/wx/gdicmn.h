@@ -100,6 +100,9 @@ enum wxStockCursor
     wxCURSOR_WAIT,
     wxCURSOR_WATCH,
     wxCURSOR_BLANK,
+#ifdef __WXGTK__
+    wxCURSOR_DEFAULT, // standard X11 cursor
+#endif
 #ifdef __X__
     // Not yet implemented for Windows
     wxCURSOR_CROSS_REVERSE,

@@ -100,6 +100,7 @@ public:
     GtkItemFactory  *m_factory;
     wxList           m_menus;
     GtkWidget       *m_menubar;
+    long             m_style;
 };
 
 //-----------------------------------------------------------------------------
@@ -112,7 +113,9 @@ class wxMenu : public wxEvtHandler
 
 public:
     wxMenu( const wxString& title = wxEmptyString,
-            const wxFunction func = (wxFunction) NULL );
+            const wxFunction func = (wxFunction) NULL,
+            long style = 0);
+    wxMenu( long style );
     ~wxMenu();
 
     // operations
@@ -182,7 +185,13 @@ public:
     GtkAccelGroup   *m_accel;
     GtkItemFactory  *m_factory;
 
-private:
+    // used by wxMenuBar
+    inline long GetStyle(void) const { return m_style; }
+ private:
+    // common code for both constructors:
+    void Init( const wxString& title,
+               const wxFunction func,
+               long style);
 
     wxString       m_title;
     wxList         m_items;
@@ -190,6 +199,7 @@ private:
     wxFunction     m_callback;
     wxEvtHandler  *m_eventHandler;
     void          *m_clientData;
+    long           m_style;
 };
 
 #endif // __GTKMENUH__

@@ -618,7 +618,13 @@ enum wxOrientation
  */
 // use native docking
 #define wxMB_DOCKABLE       0x0001
+// make all menus tearoff menus, even if not set on per-menu basis
+#define wxMB_TEAROFF        0x0002
 
+/*
+ * wxMenu style flags
+ */
+#define wxMENU_TEAROFF      0x0001
 
 /*
  * Apply to all panel items

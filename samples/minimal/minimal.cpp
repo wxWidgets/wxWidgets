@@ -149,14 +149,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu;
+    wxMenu *menuFile = new wxMenu("File",NULL,wxMENU_TEAROFF);
 
     menuFile->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
     menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
 
     // now append the freshly created menu to the menu bar...
-    wxMenuBar *menuBar = new wxMenuBar;
+    wxMenuBar *menuBar = new wxMenuBar();
     menuBar->Append(menuFile, "&File");
 
     // ... and attach this menu bar to the frame

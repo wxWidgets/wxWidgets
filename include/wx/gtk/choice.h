@@ -16,8 +16,6 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_CHOICE
-
 #include "wx/object.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -99,6 +97,5 @@ public:
     void ApplyWidgetStyle();
 };
 
-#endif
 
 #endif // __GTKCHOICEH__

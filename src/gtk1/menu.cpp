@@ -37,7 +37,8 @@ wxMenuBar::wxMenuBar( long style )
 {
     /* the parent window is known after wxFrame::SetMenu() */
     m_needParent = FALSE; 
-
+    m_style = style;
+    
     PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, style, "menu" );
 
     m_menus.DeleteContents( TRUE );
@@ -69,7 +70,8 @@ wxMenuBar::wxMenuBar()
 {
     /* the parent window is known after wxFrame::SetMenu() */
     m_needParent = FALSE;
-
+    m_style = 0;
+    
     PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
 
     m_menus.DeleteContents( TRUE );
@@ -216,7 +218,9 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) NULL;
     entry.callback_action = 0;
-    entry.item_type = "<Branch>";
+    entry.item_type = (m_style & wxMB_TEAROFF || menu->GetStyle() &
+                       wxMENU_TEAROFF) ?
+       "<Tearoff>" : "<Branch>";
     
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
@@ -632,11 +636,23 @@ bool wxMenuItem::IsChecked() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
-wxMenu::wxMenu( const wxString& title, const wxFunction func )
+wxMenu::wxMenu( const wxString& title, const wxFunction func, long style )
+{
+   Init(title, func, style);
+}
+
+wxMenu::wxMenu(long style)
+{
+   Init(wxEmptyString, (wxFunction) NULL, style);
+}
+
+void
+wxMenu::Init( const wxString& title, const wxFunction func, long style )
 {
     m_title = title;
     m_items.DeleteContents( TRUE );
     m_invokingWindow = (wxWindow *) NULL;
+    m_style = style;
     
 #if (GTK_MINOR_VERSION > 0)
     m_accel = gtk_accel_group_new();
@@ -829,7 +845,7 @@ void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxStri
     entry.path = buf;
     entry.callback = (GtkItemFactoryCallback) 0;
     entry.callback_action = 0;
-    entry.item_type = "<Branch>";
+    entry.item_type = (m_style & wxMENU_TEAROFF) ? "<Tearoff>" : "<Branch>";
     
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
