@@ -506,6 +506,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     else if ( currentMouseWindow )
     {
         currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
+        wxWindow *currentMouseWindowParent = currentMouseWindow->GetParent();
         
         wxevent.SetEventObject( currentMouseWindow ) ;
 
@@ -547,6 +548,13 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
     #endif
                     HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
                         modifiers , (ControlActionUPP ) -1 ) ;
+                        
+                    // We need to handle the rare case that the control to
+                    // which the currentMouseWindow points gets deleted as
+                    // a reaction to HandleControlClick. This would lead to
+                    // a crash in the update cursor code below.
+                    if (!currentMouseWindowParent->GetChildren().Find( currentMouseWindow ))
+                        currentMouseWindow = NULL;
                 }
                 result = noErr ;
             }
@@ -566,7 +574,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         {
             cursorTarget = cursorTarget->GetParent() ;
             if ( cursorTarget )
-                cursorPoint += cursorTarget->GetPosition() ;
+                cursorPoint += cursorTarget->GetPosition();
         }
 
     } // else if ( currentMouseWindow )
