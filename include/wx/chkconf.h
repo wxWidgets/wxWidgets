@@ -24,7 +24,7 @@
 #elif defined(__WXMAC__)
 #  include "wx/mac/chkconf.h"
 #elif defined(__WXMOTIF__)
-#  include "wx/mac/chkconf.h"
+#  include "wx/motif/chkconf.h"
 #endif
 
 /*
