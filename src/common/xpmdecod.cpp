@@ -119,6 +119,20 @@ license is as follows:
 
 #include "wx/xpmdecod.h"
 
+#ifdef __WXWINCE__
+char* strdup(const char* s)
+{
+    char* s2 = new char[strlen(s)];
+    strcpy(s2, s);
+    return s2;
+}
+
+bool isspace(char c)
+{
+    return (c == ' ');
+}
+#endif
+
 #if wxUSE_STREAMS
 bool wxXPMDecoder::CanRead(wxInputStream& stream)
 {
