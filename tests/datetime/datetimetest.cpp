@@ -22,6 +22,54 @@
 
 #include "wx/datetime.h"
 
+// to test Today() meaningfully we must be able to change the system date which
+// is not usually the case, but if we're under Win32 we can try it -- define
+// the macro below to do it
+//#define CHANGE_SYSTEM_DATE
+
+#ifndef __WINDOWS__
+    #undef CHANGE_SYSTEM_DATE
+#endif
+
+#ifdef CHANGE_SYSTEM_DATE
+
+class DateChanger
+{
+public:
+    DateChanger(int year, int month, int day, int hour, int min, int sec)
+    {
+        SYSTEMTIME st;
+        st.wDay = day;
+        st.wMonth = month;
+        st.wYear = year;
+        st.wHour = hour;
+        st.wMinute = min;
+        st.wSecond = sec;
+        st.wMilliseconds = 0;
+
+        ::GetSystemTime(&m_savedTime);
+        ::GetTimeZoneInformation(&m_tzi);
+
+        m_changed = ::SetSystemTime(&st) != 0;
+    }
+
+    ~DateChanger()
+    {
+        if ( m_changed )
+        {
+            ::SetSystemTime(&m_savedTime);
+            ::SetTimeZoneInformation(&m_tzi);
+        }
+    }
+
+private:
+    SYSTEMTIME m_savedTime;
+    TIME_ZONE_INFORMATION m_tzi;
+    bool m_changed;
+};
+
+#endif // CHANGE_SYSTEM_DATE
+
 // ----------------------------------------------------------------------------
 // broken down date representation used for testing
 // ----------------------------------------------------------------------------
@@ -129,6 +177,7 @@ private:
         CPPUNIT_TEST( TestTimeTicks );
         CPPUNIT_TEST( TestTimeParse );
         CPPUNIT_TEST( TestTimeArithmetics );
+        CPPUNIT_TEST( TestDSTBug );
     CPPUNIT_TEST_SUITE_END();
 
     void TestLeapYears();
@@ -141,6 +190,7 @@ private:
     void TestTimeTicks();
     void TestTimeParse();
     void TestTimeArithmetics();
+    void TestDSTBug();
 
     DECLARE_NO_COPY_CLASS(DateTimeTestCase)
 };
@@ -679,5 +729,74 @@ void DateTimeTestCase::TestTimeArithmetics()
         CPPUNIT_ASSERT( dt2 + span == dt );
         CPPUNIT_ASSERT( dt2 + 2*span == dt1 );
     }
+}
+
+void DateTimeTestCase::TestDSTBug()
+{
+    /////////////////////////
+    // Test GetEndDST()
+    wxDateTime dt = wxDateTime::GetEndDST(2004);
+    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
+    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
+    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
+    CPPUNIT_ASSERT_EQUAL(2, (int)dt.GetHour());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+
+    /////////////////////////
+    // Test ResetTime()
+    dt.SetHour(5);
+    CPPUNIT_ASSERT_EQUAL(5, (int)dt.GetHour());
+    dt.ResetTime();
+    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
+    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
+    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetHour());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+
+    /////////////////////////
+    // Test Today()
+#ifdef CHANGE_SYSTEM_DATE
+    {
+        DateChanger change(2004, 10, 31, 5, 0, 0);
+        dt = wxDateTime::Today();
+    }
+
+    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
+    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
+    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetHour());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMinute());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+
+    /////////////////////////
+    // Test Set(hour, minute, second, milli)
+    wxDateTime dt2;
+    {
+        DateChanger change(2004, 10, 31, 5, 0, 0);
+        dt.Set(1, 30, 0, 0);
+        dt2.Set(5, 30, 0, 0);
+    }
+
+    CPPUNIT_ASSERT_EQUAL(31, (int)dt.GetDay());
+    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt.GetMonth());
+    CPPUNIT_ASSERT_EQUAL(2004, (int)dt.GetYear());
+    CPPUNIT_ASSERT_EQUAL(1, (int)dt.GetHour());
+    CPPUNIT_ASSERT_EQUAL(30, (int)dt.GetMinute());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
+
+    CPPUNIT_ASSERT_EQUAL(31, (int)dt2.GetDay());
+    CPPUNIT_ASSERT_EQUAL(wxDateTime::Oct, dt2.GetMonth());
+    CPPUNIT_ASSERT_EQUAL(2004, (int)dt2.GetYear());
+    CPPUNIT_ASSERT_EQUAL(5, (int)dt2.GetHour());
+    CPPUNIT_ASSERT_EQUAL(30, (int)dt2.GetMinute());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetSecond());
+    CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetMillisecond());
+#endif // CHANGE_SYSTEM_DATE
 }
 
