@@ -307,6 +307,19 @@ void wxTextCtrl::WriteText(
   const wxString&                   rsValue
 )
 {
+    if (m_defaultStyle.HasFont() || m_defaultStyle.HasTextColour())
+    {
+        long                        lStart;
+        long                        lEnd;
+
+        GetSelection( &lStart
+                     ,&lEnd
+                    );
+        SetStyle( lStart
+                 ,lEnd
+                 ,m_defaultStyle
+                );
+    }
     ::WinSetWindowText(GetHwnd(), rsValue.c_str());
     AdjustSpaceLimit();
 } // end of wxTextCtrl::WriteText
@@ -604,6 +617,52 @@ void wxTextCtrl::SetSelection(
     else
         ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lFromChar, (USHORT)lToChar), (MPARAM)0);
 } // end of wxTextCtrl::SetSelection
+
+bool wxTextCtrl::SetStyle(
+  long                              lStart
+, long                              lEnd
+, const wxTextAttr&                 rStyle
+)
+{
+    HWND                            hWnd = GetHwnd();
+    //
+    // Order the range if needed
+    //
+    if (lStart > lEnd)
+    {
+        long                        lTmp = lStart;
+
+        lStart = lEnd;
+        lEnd = lTmp;
+    }
+
+    //
+    // We can only change the format of the selection, so select the range we
+    // want and restore the old selection later
+    long                            lStartOld;
+    long                            lEndOld;
+
+    GetSelection( &lStartOld
+                 ,&lEndOld
+                );
+
+    //
+    // But do we really have to change the selection?
+    //
+    bool                            bChangeSel = lStart != lStartOld || lEnd != lEndOld;
+
+    if (bChangeSel)
+    {
+        if (m_bIsMLE)
+            ::WinSendMsg(hWnd, MLM_SETSEL, MPFROM2SHORT((USHORT)lStart, (USHORT)lEnd), 0);
+        else
+            ::WinSendMsg(hWnd, EM_SETSEL, MPFROM2SHORT((USHORT)lStart, (USHORT)lEnd), 0);
+    }
+    //
+    // TODO:: finish this by setting fonts and colors
+    //
+    return TRUE;
+} // end of wxTextCtrl::SetStyle
 
 bool wxTextCtrl::LoadFile(
   const wxString&                   rsFile

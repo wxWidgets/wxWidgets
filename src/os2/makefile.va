@@ -105,6 +105,7 @@ GENERICOBJS= \
   ..\generic\$D\dragimgg.obj \
   ..\generic\$D\fontdlgg.obj \
   ..\generic\$D\grid.obj \
+  ..\generic\$D\gridctrl.obj \
   ..\generic\$D\gridsel.obj \
   ..\generic\$D\helpext.obj \
   ..\generic\$D\helphtml.obj \
@@ -149,6 +150,7 @@ GENLIBOBJS= \
   dragimgg.obj \
   fontdlgg.obj \
   grid.obj \
+  gridctrl.obj \
   gridsel.obj \
   helpext.obj \
   helphtml.obj \
@@ -770,6 +772,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\dirctrlg.obj
   copy ..\generic\$D\fontdlgg.obj
   copy ..\generic\$D\grid.obj
+  copy ..\generic\$D\gridctrl.obj
   copy ..\generic\$D\gridsel.obj
   copy ..\generic\$D\helpext.obj
   copy ..\generic\$D\helphtml.obj

@@ -5092,15 +5092,21 @@ EXPORTS
       __ls__14wxTextCtrlBaseFi
       ;wxTextCtrlBase::wxTextCtrlBase()
       __ct__14wxTextCtrlBaseFv
+      ;wxTextCtrlBase::SetDefaultStyle(const wxTextAttr&)
+      SetDefaultStyle__14wxTextCtrlBaseFRC10wxTextAttr
       ;wxTextCtrlBase::operator<<(long)
       __ls__14wxTextCtrlBaseFl
       ;wxTextCtrlBase::~wxTextCtrlBase()
       __dt__14wxTextCtrlBaseFv
+      ;wxTextCtrlBase::GetDefaultStyle() const
+      GetDefaultStyle__14wxTextCtrlBaseCFv
       ;wxTextCtrlBase::SaveFile(const wxString&)
       SaveFile__14wxTextCtrlBaseFRC8wxString
       ;wxTextCtrlBase::operator<<(const char)
       __ls__14wxTextCtrlBaseFCc
       __vft14wxTextCtrlBase8wxObject
+      ;wxTextCtrlBase::SetStyle(long,long,const wxTextAttr&)
+      SetStyle__14wxTextCtrlBaseFlT1RC10wxTextAttr
   ;From object file:  ..\common\textfile.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxTextFile::GuessType() const
@@ -6521,6 +6527,8 @@ EXPORTS
       wxGetSingleChoice__FRC8wxStringT1iPC8wxStringP8wxWindowN23UlN23
       ;wxMultiChoiceDialog::SetSelections(const wxArrayInt&)
       SetSelections__19wxMultiChoiceDialogFRC10wxArrayInt
+      ;wxGetSingleChoiceIndex(const wxString&,const wxString&,const wxArrayString&,wxWindow*,int,int,unsigned long,int,int)
+      wxGetSingleChoiceIndex__FRC8wxStringT1RC13wxArrayStringP8wxWindowiT5UlN25
       ;wxSingleChoiceDialog::GetEventTable() const
       GetEventTable__20wxSingleChoiceDialogCFv
       ;wxConstructorForwxSingleChoiceDialog()
@@ -6967,215 +6975,1000 @@ EXPORTS
       sm_classwxGenericFontDialog__19wxGenericFontDialog
   ;From object file:  ..\generic\grid.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxGenericGrid::OnSize(wxSizeEvent&)
-      OnSize__13wxGenericGridFR11wxSizeEvent
-      __vft10wxGridCell8wxObject
-      ;wxGenericGrid::_OnCellRightClick(wxGridEvent&)
-      _OnCellRightClick__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::_OnCellChange(wxGridEvent&)
-      _OnCellChange__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::RefreshCell(int,int,unsigned long)
-      RefreshCell__13wxGenericGridFiT1Ul
-      ;wxGenericGrid::OnMouseEvent(wxMouseEvent&)
-      OnMouseEvent__13wxGenericGridFR12wxMouseEvent
-      ;wxGenericGrid::InsertCols(int,int,unsigned long)
-      InsertCols__13wxGenericGridFiT1Ul
-      ;wxGenericGrid::AppendRows(int,unsigned long)
-      AppendRows__13wxGenericGridFiUl
-      ;wxGenericGrid::SetCurrentRect(int,int,int,int)
-      SetCurrentRect__13wxGenericGridFiN31
-      ;wxGenericGrid::SetGridCursor(int,int)
-      SetGridCursor__13wxGenericGridFiT1
-      ;wxGenericGrid::SetColumnWidth(int,int)
-      SetColumnWidth__13wxGenericGridFiT1
-      ;wxGenericGrid::GetRowHeight(int) const
-      GetRowHeight__13wxGenericGridCFi
-      ;wxGenericGrid::GetLabelAlignment(int) const
-      GetLabelAlignment__13wxGenericGridCFi
-      ;wxGenericGrid::DrawTextRect(wxDC*,const wxString&,wxRect*,int)
-      DrawTextRect__13wxGenericGridFP4wxDCRC8wxStringP6wxRecti
-      ;wxGenericGrid::wxGenericGrid()
-      __ct__13wxGenericGridFv
-      ;wxGridCell::~wxGridCell()
-      __dt__10wxGridCellFv
-      ;wxGenericGrid::UpdateDimensions()
-      UpdateDimensions__13wxGenericGridFv
-      ;wxGenericGrid::SetLabelTextColour(const wxColour&)
-      SetLabelTextColour__13wxGenericGridFRC8wxColour
-      ;wxGenericGrid::SetCellTextColour(const wxColour&)
-      SetCellTextColour__13wxGenericGridFRC8wxColour
-      ;wxGenericGrid::SetCellBitmap(wxBitmap*,int,int)
-      SetCellBitmap__13wxGenericGridFP8wxBitmapiT2
-      ;wxGenericGrid::SetCellBackgroundColour(const wxColour&,int,int)
-      SetCellBackgroundColour__13wxGenericGridFRC8wxColouriT2
-      ;wxGenericGrid::SetCellBackgroundColour(const wxColour&)
-      SetCellBackgroundColour__13wxGenericGridFRC8wxColour
-      ;wxGenericGrid::DrawGridLines(wxDC*)
-      DrawGridLines__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::LabelHitTest(int,int,int*,int*)
-      LabelHitTest__13wxGenericGridFiT1PiT3
-      ;wxGenericGrid::DrawRowLabels(wxDC*)
-      DrawRowLabels__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::DrawCellBackground(wxDC*,wxRect*,int,int)
-      DrawCellBackground__13wxGenericGridFP4wxDCP6wxRectiT3
-      ;wxGenericGrid::OnPaint(wxPaintEvent&)
-      OnPaint__13wxGenericGridFR12wxPaintEvent
-      ;wxGenericGrid::_OnSelectCell(wxGridEvent&)
-      _OnSelectCell__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::_OnLabelRightClick(wxGridEvent&)
-      _OnLabelRightClick__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::_OnCreateCell(wxGridEvent&)
-      _OnCreateCell__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::SetCellTextFont(const wxFont&)
-      SetCellTextFont__13wxGenericGridFRC6wxFont
-      ;wxGenericGrid::OnText(wxCommandEvent&)
-      OnText__13wxGenericGridFR14wxCommandEvent
-      ;wxGenericGrid::OnTextInPlaceEnter(wxCommandEvent&)
-      OnTextInPlaceEnter__13wxGenericGridFR14wxCommandEvent
-      ;wxGenericGrid::OnActivate(unsigned long)
-      OnActivate__13wxGenericGridFUl
-      ;wxGenericGrid::InsertRows(int,int,unsigned long)
-      InsertRows__13wxGenericGridFiT1Ul
-      ;wxGenericGrid::DrawColumnLabel(wxDC*,wxRect*,int)
-      DrawColumnLabel__13wxGenericGridFP4wxDCP6wxRecti
-      ;wxGenericGrid::SetLabelSize(int,int)
-      SetLabelSize__13wxGenericGridFiT1
-      ;wxGenericGrid::GetLabelCell(int,int) const
-      GetLabelCell__13wxGenericGridCFiT1
-      ;wxGenericGrid::GetColumnWidth(int) const
-      GetColumnWidth__13wxGenericGridCFi
-      ;wxGenericGrid::GetCellTextColour(int,int) const
-      GetCellTextColour__13wxGenericGridCFiT1
-      ;wxGenericGrid::GetCellAlignment(int,int) const
-      GetCellAlignment__13wxGenericGridCFiT1
-      ;wxGenericGrid::SetCellValue(const wxString&,int,int)
-      SetCellValue__13wxGenericGridFRC8wxStringiT2
-      ;wxGenericGrid::SetGridClippingRegion(wxDC*)
-      SetGridClippingRegion__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::DrawColumnLabels(wxDC*)
-      DrawColumnLabels__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::DrawCells(wxDC*)
-      DrawCells__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::SetEditable(unsigned long)
-      SetEditable__13wxGenericGridFUl
-      ;wxGenericGrid::sm_classwxGenericGrid
-      sm_classwxGenericGrid__13wxGenericGrid
-      __vft13wxGenericGrid8wxObject
-      ;wxGenericGrid::DeleteCols(int,int,unsigned long)
-      DeleteCols__13wxGenericGridFiT1Ul
-      ;wxGenericGrid::DrawBitmapRect(wxDC*,wxBitmap*,wxRect*,int)
-      DrawBitmapRect__13wxGenericGridFP4wxDCP8wxBitmapP6wxRecti
-      ;wxGenericGrid::SetCellAlignment(int)
-      SetCellAlignment__13wxGenericGridFi
-      ;wxGenericGrid::GetCellTextFont(int,int) const
-      GetCellTextFont__13wxGenericGridCFiT1
-      ;wxGenericGrid::GetEventTable() const
-      GetEventTable__13wxGenericGridCFv
-      ;wxGenericGrid::SetCellTextFont(const wxFont&,int,int)
-      SetCellTextFont__13wxGenericGridFRC6wxFontiT2
-      ;wxGenericGrid::SetCellData(void*,int,int)
-      SetCellData__13wxGenericGridFPviT2
-      ;wxGenericGrid::OnChangeLabels()
-      OnChangeLabels__13wxGenericGridFv
-      ;wxGenericGrid::GetCellAlignment() const
-      GetCellAlignment__13wxGenericGridCFv
-      ;wxGenericGrid::DrawCellText()
-      DrawCellText__13wxGenericGridFv
-      ;wxGenericGrid::ClearGrid()
-      ClearGrid__13wxGenericGridFv
-      ;wxGenericGrid::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
-      Create__13wxGenericGridFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxGenericGrid::DrawLabelAreas(wxDC*)
-      DrawLabelAreas__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::DrawEditableArea(wxDC*)
-      DrawEditableArea__13wxGenericGridFP4wxDC
-      ;wxGenericGrid::DrawCellValue(wxDC*,wxRect*,int,int)
-      DrawCellValue__13wxGenericGridFP4wxDCP6wxRectiT3
-      ;wxGenericGrid::HighlightCell(wxDC*,unsigned long)
-      HighlightCell__13wxGenericGridFP4wxDCUl
-      ;wxGenericGrid::sm_eventTable
-      sm_eventTable__13wxGenericGrid
-      ;wxGenericGrid::sm_eventTableEntries
-      sm_eventTableEntries__13wxGenericGrid
+      ;wxGrid::EnableDragColSize(unsigned long)
+      EnableDragColSize__6wxGridFUl
+      wxEVT_GRID_SELECT_CELL
+      ;wxGridRangeSelectEvent::sm_classwxGridRangeSelectEvent
+      sm_classwxGridRangeSelectEvent__22wxGridRangeSelectEvent
+      __vft26wxGridCellEditorEvtHandler8wxObject
+      ;wxGridTableBase::SetValueAsLong(int,int,long)
+      SetValueAsLong__15wxGridTableBaseFiT1l
+      ;wxGridCellBoolEditor::SetSize(const wxRect&)
+      SetSize__20wxGridCellBoolEditorFRC6wxRect
+      ;wxGrid::SendEvent(const int,int,int,wxMouseEvent&)
+      SendEvent__6wxGridFCiiT2R12wxMouseEvent
+      ;wxGrid::SelectRow(int,unsigned long)
+      SelectRow__6wxGridFiUl
+      ;wxGrid::ProcessCornerLabelMouseEvent(wxMouseEvent&)
+      ProcessCornerLabelMouseEvent__6wxGridFR12wxMouseEvent
+      ;wxGridWindow::OnPaint(wxPaintEvent&)
+      OnPaint__12wxGridWindowFR12wxPaintEvent
+      ;wxGridWindow::OnMouseWheel(wxMouseEvent&)
+      OnMouseWheel__12wxGridWindowFR12wxMouseEvent
+      ;wxGridCornerLabelWindow::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__23wxGridCornerLabelWindowFR10wxKeyEvent
+      ;wxGridWindow::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__12wxGridWindowFR10wxKeyEvent
+      ;wxGridCornerLabelWindow::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__23wxGridCornerLabelWindowFR10wxKeyEvent
+      ;wxGridColLabelWindow::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__20wxGridColLabelWindowFR10wxKeyEvent
+      ;wxGridCellTextEditor::IsAcceptedKey(wxKeyEvent&)
+      IsAcceptedKey__20wxGridCellTextEditorFR10wxKeyEvent
+      ;wxGrid::EnableDragGridSize(unsigned long)
+      EnableDragGridSize__6wxGridFUl
+      ;wxGrid::DrawTextRectangle(wxDC&,const wxArrayString&,const wxRect&,int,int)
+      DrawTextRectangle__6wxGridFR4wxDCRC13wxArrayStringRC6wxRectiT4
+      ;wxGrid::ChangeCursorMode(wxGrid::CursorMode,wxWindow*,unsigned long)
+      ChangeCursorMode__6wxGridFQ2_6wxGrid10CursorModeP8wxWindowUl
+      ;wxGridCellTextEditor::BeginEdit(int,int,wxGrid*)
+      BeginEdit__20wxGridCellTextEditorFiT1P6wxGrid
+      ;wxGridStringArray::RemoveAt(unsigned int)
+      RemoveAt__17wxGridStringArrayFUi
+      ;wxGridCellFloatRenderer::wxGridCellFloatRenderer(int,int)
+      __ct__23wxGridCellFloatRendererFiT1
+      ;wxGrid::XToEdgeOfCol(int)
+      XToEdgeOfCol__6wxGridFi
+      ;wxGridCellAttrData::UpdateAttrCols(unsigned int,int)
+      UpdateAttrCols__18wxGridCellAttrDataFUii
+      ;wxGridCellAttrProvider::SetRowAttr(wxGridCellAttr*,int)
+      SetRowAttr__22wxGridCellAttrProviderFP14wxGridCellAttri
+      ;wxGridTableBase::SetRowAttr(wxGridCellAttr*,int)
+      SetRowAttr__15wxGridTableBaseFP14wxGridCellAttri
+      ;wxGrid::SetOrCalcRowSizes(unsigned long,unsigned long)
+      SetOrCalcRowSizes__6wxGridFUlT1
+      ;wxGrid::SetColMinimalWidth(int,int)
+      SetColMinimalWidth__6wxGridFiT1
+      ;wxGridCellWithAttrArray::RemoveAt(unsigned int)
+      RemoveAt__23wxGridCellWithAttrArrayFUi
+      ;wxGrid::ProcessTableMessage(wxGridTableMessage&)
+      ProcessTableMessage__6wxGridFR18wxGridTableMessage
+      ;wxGridCellCoordsArray::Insert(const wxGridCellCoords&,unsigned int)
+      Insert__21wxGridCellCoordsArrayFRC16wxGridCellCoordsUi
+      ;wxGridStringTable::InsertRows(unsigned int,unsigned int)
+      InsertRows__17wxGridStringTableFUiT1
+      ;wxGridTableBase::GetValueAsBool(int,int)
+      GetValueAsBool__15wxGridTableBaseFiT1
+      ;wxGrid::GetRowBottom(int) const
+      GetRowBottom__6wxGridCFi
+      ;wxGridTypeRegistry::GetEditor(int)
+      GetEditor__18wxGridTypeRegistryFi
+      ;wxGrid::GetColLabelValue(int)
+      GetColLabelValue__6wxGridFi
+      ;wxGridTableBase::GetColLabelValue(int)
+      GetColLabelValue__15wxGridTableBaseFi
+      ;wxGrid::DrawRowLabel(wxDC&,int)
+      DrawRowLabel__6wxGridFR4wxDCi
+      ;wxGridCellWithAttrArray::DoCopy(const wxGridCellWithAttrArray&)
+      DoCopy__23wxGridCellWithAttrArrayFRC23wxGridCellWithAttrArray
+      ;wxGrid::DeselectCol(int)
+      DeselectCol__6wxGridFi
+      ;wxGridTableBase::AppendCols(unsigned int)
+      AppendCols__15wxGridTableBaseFUi
+      ;wxGridStringArray::DoEmpty()
+      DoEmpty__17wxGridStringArrayFv
+      wxEVT_GRID_EDITOR_SHOWN
+      ;wxConstructorForwxGridCornerLabelWindow()
+      wxConstructorForwxGridCornerLabelWindow__Fv
+      __vft24wxGridCellStringRenderer16wxGridCellWorker
+      ;wxGrid::~wxGrid()
+      __dt__6wxGridFv
+      ;wxGridCellWithAttrArray::~wxGridCellWithAttrArray()
+      __dt__23wxGridCellWithAttrArrayFv
+      ;wxGridTableBase::~wxGridTableBase()
+      __dt__15wxGridTableBaseFv
+      ;wxGridCellAttrProvider::wxGridCellAttrProvider()
+      __ct__22wxGridCellAttrProviderFv
+      ;wxGridCellEditor::Show(unsigned long,wxGridCellAttr*)
+      Show__16wxGridCellEditorFUlP14wxGridCellAttr
+      ;wxGrid::SetLabelTextColour(const wxColour&)
+      SetLabelTextColour__6wxGridFRC8wxColour
+      ;wxGrid::SetCellHighlightColour(const wxColour&)
+      SetCellHighlightColour__6wxGridFRC8wxColour
+      ;wxGrid::SetCellBackgroundColour(int,int,const wxColour&)
+      SetCellBackgroundColour__6wxGridFiT1RC8wxColour
+      ;wxGridCellAttrData::SetAttr(wxGridCellAttr*,int,int)
+      SetAttr__18wxGridCellAttrDataFP14wxGridCellAttriT2
+      ;wxGrid::LookupAttr(int,int,wxGridCellAttr**) const
+      LookupAttr__6wxGridCFiT1PP14wxGridCellAttr
+      ;wxGridCellAttrProvider::InitData()
+      InitData__22wxGridCellAttrProviderFv
+      ;wxGridCellAttr::GetRenderer(wxGrid*,int,int) const
+      GetRenderer__14wxGridCellAttrCFP6wxGridiT2
+      ;wxGridColLabelWindow::GetEventTable() const
+      GetEventTable__20wxGridColLabelWindowCFv
+      ;wxGrid::GetDividerPen() const
+      GetDividerPen__6wxGridCFv
+      ;wxGrid::GetDefaultCellBackgroundColour()
+      GetDefaultCellBackgroundColour__6wxGridFv
+      ;wxGrid::DoGetBestSize() const
+      DoGetBestSize__6wxGridCFv
+      ;wxGridCellTextEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__20wxGridCellTextEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGridCellEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__16wxGridCellEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGridCellFloatRenderer::Clone() const
+      Clone__23wxGridCellFloatRendererCFv
+      ;wxGrid::ClearGrid()
+      ClearGrid__6wxGridFv
+      ;wxGridTableBase::CanHaveAttributes()
+      CanHaveAttributes__15wxGridTableBaseFv
+      ;wxGrid::CanEnableCellControl() const
+      CanEnableCellControl__6wxGridCFv
+      ;wxGrid::CalcColLabelsExposed(const wxRegion&)
+      CalcColLabelsExposed__6wxGridFRC8wxRegion
+      ;wxGrid::AutoSizeColOrRow(int,unsigned long,unsigned long)
+      AutoSizeColOrRow__6wxGridFiUlT2
+      ;wxGridCellTextEditor::SetParameters(const wxString&)
+      SetParameters__20wxGridCellTextEditorFRC8wxString
+      wxEVT_GRID_CELL_RIGHT_DCLICK
+      wxEVT_GRID_CELL_LEFT_DCLICK
+      ;wxGridCornerLabelWindow::sm_classwxGridCornerLabelWindow
+      sm_classwxGridCornerLabelWindow__23wxGridCornerLabelWindow
+      ;wxGridStringTable::SetValue(int,int,const wxString&)
+      SetValue__17wxGridStringTableFiT1RC8wxString
+      ;wxGridStringTable::SetRowLabelValue(int,const wxString&)
+      SetRowLabelValue__17wxGridStringTableFiRC8wxString
+      ;wxGrid::GetTextBoxSize(wxDC&,const wxArrayString&,long*,long*)
+      GetTextBoxSize__6wxGridFR4wxDCRC13wxArrayStringPlT3
+      ;wxGrid::GetDefaultRendererForType(const wxString&) const
+      GetDefaultRendererForType__6wxGridCFRC8wxString
+      ;wxGrid::GetDefaultEditorForType(const wxString&) const
+      GetDefaultEditorForType__6wxGridCFRC8wxString
+      ;wxGridTypeRegistry::FindDataType(const wxString&)
+      FindDataType__18wxGridTypeRegistryFRC8wxString
+      ;wxGridTableBase::CanGetValueAs(int,int,const wxString&)
+      CanGetValueAs__15wxGridTableBaseFiT1RC8wxString
+      ;wxGrid::SetCellFont(int,int,const wxFont&)
+      SetCellFont__6wxGridFiT1RC6wxFont
+      ;wxGrid::sm_eventTableEntries
+      sm_eventTableEntries__6wxGrid
+      __vft20wxGridRowLabelWindow8wxObject
+      __vft15wxGridTableBase8wxObject
+      __vft12wxGridWindow8wxObject
+      ;wxGridCellNumberEditor::StartingKey(wxKeyEvent&)
+      StartingKey__22wxGridCellNumberEditorFR10wxKeyEvent
+      ;wxGridCellFloatEditor::StartingKey(wxKeyEvent&)
+      StartingKey__21wxGridCellFloatEditorFR10wxKeyEvent
+      ;wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid&,wxGridCellAttr&,wxDC&,unsigned long)
+      SetTextColoursAndFont__24wxGridCellStringRendererFR6wxGridR14wxGridCellAttrR4wxDCUl
+      ;wxGridCellTextEditor::SetSize(const wxRect&)
+      SetSize__20wxGridCellTextEditorFRC6wxRect
+      ;wxGrid::ProcessColLabelMouseEvent(wxMouseEvent&)
+      ProcessColLabelMouseEvent__6wxGridFR12wxMouseEvent
+      ;wxGrid::OnPaint(wxPaintEvent&)
+      OnPaint__6wxGridFR12wxPaintEvent
+      ;wxGridColLabelWindow::OnMouseEvent(wxMouseEvent&)
+      OnMouseEvent__20wxGridColLabelWindowFR12wxMouseEvent
+      ;wxGridColLabelWindow::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__20wxGridColLabelWindowFR10wxKeyEvent
+      ;wxGrid::MoveCursorUpBlock(unsigned long)
+      MoveCursorUpBlock__6wxGridFUl
+      ;wxGrid::MoveCursorDownBlock(unsigned long)
+      MoveCursorDownBlock__6wxGridFUl
+      ;wxGridCellCoordsArray::Index(const wxGridCellCoords&,unsigned long) const
+      Index__21wxGridCellCoordsArrayCFRC16wxGridCellCoordsUl
+      ;wxGridTableBase::GetAttr(int,int,wxGridCellAttr::wxAttrKind)
+      GetAttr__15wxGridTableBaseFiT1Q2_14wxGridCellAttr10wxAttrKind
+      ;wxGridCellNumberEditor::EndEdit(int,int,wxGrid*)
+      EndEdit__22wxGridCellNumberEditorFiT1P6wxGrid
+      ;wxGridCellBoolEditor::EndEdit(int,int,wxGrid*)
+      EndEdit__20wxGridCellBoolEditorFiT1P6wxGrid
+      ;wxGrid::EnableEditing(unsigned long)
+      EnableEditing__6wxGridFUl
+      ;wxGridCellRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__18wxGridCellRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGrid::DrawColLabels(wxDC&,const wxArrayInt&)
+      DrawColLabels__6wxGridFR4wxDCRC10wxArrayInt
+      ;wxGridCellBoolEditor::BeginEdit(int,int,wxGrid*)
+      BeginEdit__20wxGridCellBoolEditorFiT1P6wxGrid
+      ;wxGridCellFloatEditor::wxGridCellFloatEditor(int,int)
+      __ct__21wxGridCellFloatEditorFiT1
+      wxEVT_GRID_CELL_CHANGE
+      ;wxGridTableBase::sm_classwxGridTableBase
+      sm_classwxGridTableBase__15wxGridTableBase
+      ;wxGridCellCoordsArray::wxGridCellCoordsArray(const wxGridCellCoordsArray&)
+      __ct__21wxGridCellCoordsArrayFRC21wxGridCellCoordsArray
+      ;wxGridRowLabelWindow::wxGridRowLabelWindow(wxGrid*,int,const wxPoint&,const wxSize&)
+      __ct__20wxGridRowLabelWindowFP6wxGridiRC7wxPointRC6wxSize
+      ;wxGrid::SetRowLabelAlignment(int,int)
+      SetRowLabelAlignment__6wxGridFiT1
+      ;wxGrid::SetDefaultCellAlignment(int,int)
+      SetDefaultCellAlignment__6wxGridFiT1
+      ;wxGrid::SetColLabelSize(int)
+      SetColLabelSize__6wxGridFi
+      ;wxGrid::SetColFormatFloat(int,int,int)
+      SetColFormatFloat__6wxGridFiN21
+      ;wxGridTableBase::SetColAttr(wxGridCellAttr*,int)
+      SetColAttr__15wxGridTableBaseFP14wxGridCellAttri
+      ;wxGridRowOrColAttrData::SetAttr(wxGridCellAttr*,int)
+      SetAttr__22wxGridRowOrColAttrDataFP14wxGridCellAttri
+      ;wxGridCellCoordsArray::RemoveAt(unsigned int)
+      RemoveAt__21wxGridCellCoordsArrayFUi
+      ;wxGrid::MakeCellVisible(int,int)
+      MakeCellVisible__6wxGridFiT1
+      ;wxGrid::IsInSelection(int,int)
+      IsInSelection__6wxGridFiT1
+      ;wxGridStringArray::Insert(const wxArrayString&,unsigned int)
+      Insert__17wxGridStringArrayFRC13wxArrayStringUi
+      ;wxGridTableBase::InsertRows(unsigned int,unsigned int)
+      InsertRows__15wxGridTableBaseFUiT1
+      ;wxGridStringTable::GetValue(int,int)
+      GetValue__17wxGridStringTableFiT1
+      ;wxGridTableBase::GetValueAsLong(int,int)
+      GetValueAsLong__15wxGridTableBaseFiT1
+      ;wxGrid::GetRowSize(int)
+      GetRowSize__6wxGridFi
+      ;wxGridStringTable::GetRowLabelValue(int)
+      GetRowLabelValue__17wxGridStringTableFi
+      ;wxGridTypeRegistry::GetRenderer(int)
+      GetRenderer__18wxGridTypeRegistryFi
+      ;wxGrid::GetOrCreateCellAttr(int,int) const
+      GetOrCreateCellAttr__6wxGridCFiT1
+      ;wxGrid::GetColWidth(int) const
+      GetColWidth__6wxGridCFi
+      ;wxGrid::GetColRight(int) const
+      GetColRight__6wxGridCFi
+      ;wxGrid::GetCellBackgroundColour(int,int)
+      GetCellBackgroundColour__6wxGridFiT1
+      ;wxGridRowOrColAttrData::GetAttr(int) const
+      GetAttr__22wxGridRowOrColAttrDataCFi
+      ;wxGridCellAttrData::GetAttr(int,int) const
+      GetAttr__18wxGridCellAttrDataCFiT1
+      ;wxGridStringTable::DeleteRows(unsigned int,unsigned int)
+      DeleteRows__17wxGridStringTableFUiT1
+      ;wxGridTableBase::DeleteRows(unsigned int,unsigned int)
+      DeleteRows__15wxGridTableBaseFUiT1
+      ;wxGrid::CellToRect(int,int)
+      CellToRect__6wxGridFiT1
+      ;wxGridTableBase::AppendRows(unsigned int)
+      AppendRows__15wxGridTableBaseFUi
+      ;wxGridStringTable::AppendCols(unsigned int)
+      AppendCols__17wxGridStringTableFUi
+      ;wxGrid::SetDefaultCellBackgroundColour(const wxColour&)
+      SetDefaultCellBackgroundColour__6wxGridFRC8wxColour
+      wxEVT_GRID_EDITOR_HIDDEN
+      ;wxConstructorForwxGridRangeSelectEvent()
+      wxConstructorForwxGridRangeSelectEvent__Fv
+      ;wxConstructorForwxGridCellEditorEvtHandler()
+      wxConstructorForwxGridCellEditorEvtHandler__Fv
+      ;wxGridCellEditorEvtHandler::sm_eventTable
+      sm_eventTable__26wxGridCellEditorEvtHandler
+      ;wxGridCellBoolRenderer::ms_sizeCheckMark
+      ms_sizeCheckMark__22wxGridCellBoolRenderer
+      __vft24wxGridCellNumberRenderer16wxGridCellWorker
+      __vft22wxGridCellBoolRenderer16wxGridCellWorker
+      __vft20wxGridCellTextEditor16wxGridCellWorker
+      ;wxGridCellAttrProvider::~wxGridCellAttrProvider()
+      __dt__22wxGridCellAttrProviderFv
+      ;wxGridTypeRegistry::~wxGridTypeRegistry()
+      __dt__18wxGridTypeRegistryFv
+      ;wxGridStringArray::~wxGridStringArray()
+      __dt__17wxGridStringArrayFv
+      ;wxGridTableBase::wxGridTableBase()
+      __ct__15wxGridTableBaseFv
+      ;wxGridCellBoolEditor::Show(unsigned long,wxGridCellAttr*)
+      Show__20wxGridCellBoolEditorFUlP14wxGridCellAttr
+      ;wxGrid::SetModelValues()
+      SetModelValues__6wxGridFv
+      ;wxGrid::SetColAttr(int,wxGridCellAttr*)
+      SetColAttr__6wxGridFiP14wxGridCellAttr
+      ;wxGrid::SetCellEditor(int,int,wxGridCellEditor*)
+      SetCellEditor__6wxGridFiT1P16wxGridCellEditor
+      ;wxGridTableBase::SetAttr(wxGridCellAttr*,int,int)
+      SetAttr__15wxGridTableBaseFP14wxGridCellAttriT2
+      ;wxGridCellBoolEditor::Reset()
+      Reset__20wxGridCellBoolEditorFv
+      ;wxGrid::MovePageUp()
+      MovePageUp__6wxGridFv
+      ;wxGridCellAttr::MergeWith(wxGridCellAttr*)
+      MergeWith__14wxGridCellAttrFP14wxGridCellAttr
+      ;wxGrid::IsCurrentCellReadOnly() const
+      IsCurrentCellReadOnly__6wxGridCFv
+      ;wxGridCellAttr::GetTextColour() const
+      GetTextColour__14wxGridCellAttrCFv
+      ;wxGridCellNumberRenderer::GetString(wxGrid&,int,int)
+      GetString__24wxGridCellNumberRendererFR6wxGridiT2
+      ;wxGrid::GetEventTable() const
+      GetEventTable__6wxGridCFv
+      ;wxGrid::GetDefaultRowSize()
+      GetDefaultRowSize__6wxGridFv
+      ;wxGrid::GetDefaultCellFont()
+      GetDefaultCellFont__6wxGridFv
+      ;wxGrid::ForceRefresh()
+      ForceRefresh__6wxGridFv
+      ;wxGrid::DoEndDragResizeRow()
+      DoEndDragResizeRow__6wxGridFv
+      ;wxGridCellChoiceEditor::Clone() const
+      Clone__22wxGridCellChoiceEditorCFv
+      ;wxGridCellAttr::Clone() const
+      Clone__14wxGridCellAttrCFv
+      ;wxGrid::ClearSelection()
+      ClearSelection__6wxGridFv
+      ;wxGrid::CalcWindowSizes()
+      CalcWindowSizes__6wxGridFv
+      ;wxGrid::CalcRowLabelsExposed(const wxRegion&)
+      CalcRowLabelsExposed__6wxGridFRC8wxRegion
+      ;wxGridCellWithAttrArray::Add(const wxGridCellWithAttr&)
+      Add__23wxGridCellWithAttrArrayFRC18wxGridCellWithAttr
+      ;wxGrid::SetCurrentCell(const wxGridCellCoords&)
+      SetCurrentCell__6wxGridFRC16wxGridCellCoords
+      wxGridNoCellCoords
+      wxEVT_GRID_LABEL_RIGHT_DCLICK
+      ;wxGridColLabelWindow::sm_eventTable
+      sm_eventTable__20wxGridColLabelWindow
+      ;wxGridWindow::sm_eventTable
+      sm_eventTable__12wxGridWindow
+      ;wxGridRowLabelWindow::sm_classwxGridRowLabelWindow
+      sm_classwxGridRowLabelWindow__20wxGridRowLabelWindow
+      ;wxGrid::XYToCell(int,int,wxGridCellCoords&)
+      XYToCell__6wxGridFiT1R16wxGridCellCoords
+      ;wxGrid::SetColFormatCustom(int,const wxString&)
+      SetColFormatCustom__6wxGridFiRC8wxString
+      ;wxGridTypeRegistry::FindRegisteredDataType(const wxString&)
+      FindRegisteredDataType__18wxGridTypeRegistryFRC8wxString
+      ;wxGrid::DrawCellBorder(wxDC&,const wxGridCellCoords&)
+      DrawCellBorder__6wxGridFR4wxDCRC16wxGridCellCoords
+      ;wxGridCellStringRenderer::DoGetBestSize(wxGridCellAttr&,wxDC&,const wxString&)
+      DoGetBestSize__24wxGridCellStringRendererFR14wxGridCellAttrR4wxDCRC8wxString
+      ;wxGridCellCoordsArray::Add(const wxGridCellCoords&)
+      Add__21wxGridCellCoordsArrayFRC16wxGridCellCoords
+      ;wxGridStringArray::Add(const wxArrayString&)
+      Add__17wxGridStringArrayFRC13wxArrayString
+      ;wxGrid::EnableCellEditControl(unsigned long)
+      EnableCellEditControl__6wxGridFUl
+      ;wxGrid::sm_classwxGrid
+      sm_classwxGrid__6wxGrid
+      ;wxGridSizeEvent::sm_classwxGridSizeEvent
+      sm_classwxGridSizeEvent__15wxGridSizeEvent
+      __vft20wxGridColLabelWindow8wxObject
+      ;wxGridCellEditor::StartingKey(wxKeyEvent&)
+      StartingKey__16wxGridCellEditorFR10wxKeyEvent
+      ;wxGridCellEditor::SetSize(const wxRect&)
+      SetSize__16wxGridCellEditorFRC6wxRect
+      ;wxGrid::SetDefaultRowSize(int,unsigned long)
+      SetDefaultRowSize__6wxGridFiUl
+      ;wxGrid::SetDefaultColSize(int,unsigned long)
+      SetDefaultColSize__6wxGridFiUl
+      ;wxGrid::SelectBlock(int,int,int,int,unsigned long)
+      SelectBlock__6wxGridFiN31Ul
+      ;wxGrid::OnSize(wxSizeEvent&)
+      OnSize__6wxGridFR11wxSizeEvent
+      ;wxGridCornerLabelWindow::OnPaint(wxPaintEvent&)
+      OnPaint__23wxGridCornerLabelWindowFR12wxPaintEvent
+      ;wxGridRowLabelWindow::OnPaint(wxPaintEvent&)
+      OnPaint__20wxGridRowLabelWindowFR12wxPaintEvent
+      ;wxGridCornerLabelWindow::OnMouseWheel(wxMouseEvent&)
+      OnMouseWheel__23wxGridCornerLabelWindowFR12wxMouseEvent
+      ;wxGrid::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__6wxGridFR10wxKeyEvent
+      ;wxGridRowLabelWindow::OnKeyUp(wxKeyEvent&)
+      OnKeyUp__20wxGridRowLabelWindowFR10wxKeyEvent
+      ;wxGridWindow::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__12wxGridWindowFR10wxKeyEvent
+      ;wxGrid::OnEraseBackground(wxEraseEvent&)
+      OnEraseBackground__6wxGridFR12wxEraseEvent
+      ;wxGridWindow::OnEraseBackground(wxEraseEvent&)
+      OnEraseBackground__12wxGridWindowFR12wxEraseEvent
+      ;wxGridCellEditorEvtHandler::OnChar(wxKeyEvent&)
+      OnChar__26wxGridCellEditorEvtHandlerFR10wxKeyEvent
+      ;wxGrid::MoveCursorUp(unsigned long)
+      MoveCursorUp__6wxGridFUl
+      ;wxGrid::MoveCursorDown(unsigned long)
+      MoveCursorDown__6wxGridFUl
+      ;wxGrid::IsVisible(int,int,unsigned long)
+      IsVisible__6wxGridFiT1Ul
+      ;wxGridCellNumberEditor::IsAcceptedKey(wxKeyEvent&)
+      IsAcceptedKey__22wxGridCellNumberEditorFR10wxKeyEvent
+      ;wxGridCellEditor::IsAcceptedKey(wxKeyEvent&)
+      IsAcceptedKey__16wxGridCellEditorFR10wxKeyEvent
+      ;wxGridCellWithAttrArray::Index(const wxGridCellWithAttr&,unsigned long) const
+      Index__23wxGridCellWithAttrArrayCFRC18wxGridCellWithAttrUl
+      ;wxGridCellNumberRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__24wxGridCellNumberRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      ;wxGrid::EnableDragRowSize(unsigned long)
+      EnableDragRowSize__6wxGridFUl
+      ;wxGridCellFloatRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__23wxGridCellFloatRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGridCellBoolRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__22wxGridCellBoolRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGrid::DeleteCols(int,int,unsigned long)
+      DeleteCols__6wxGridFiT1Ul
+      ;wxGridCellFloatEditor::BeginEdit(int,int,wxGrid*)
+      BeginEdit__21wxGridCellFloatEditorFiT1P6wxGrid
+      ;wxGrid::AppendRows(int,unsigned long)
+      AppendRows__6wxGridFiUl
+      ;wxGrid::SetRowSize(int,int)
+      SetRowSize__6wxGridFiT1
+      ;wxGridStringTable::sm_classwxGridStringTable
+      sm_classwxGridStringTable__17wxGridStringTable
+      ;wxGridColLabelWindow::wxGridColLabelWindow(wxGrid*,int,const wxPoint&,const wxSize&)
+      __ct__20wxGridColLabelWindowFP6wxGridiRC7wxPointRC6wxSize
+      ;wxGridStringArray::wxGridStringArray(const wxGridStringArray&)
+      __ct__17wxGridStringArrayFRC17wxGridStringArray
+      ;wxGridWindow::wxGridWindow(wxGrid*,wxGridRowLabelWindow*,wxGridColLabelWindow*,int,const wxPoint&,const wxSize&)
+      __ct__12wxGridWindowFP6wxGridP20wxGridRowLabelWindowP20wxGridColLabelWindowiRC7wxPointRC6wxSize
+      ;wxGridCellWithAttrArray::operator=(const wxGridCellWithAttrArray&)
+      __as__23wxGridCellWithAttrArrayFRC23wxGridCellWithAttrArray
+      ;wxGridCellCoordsArray::operator=(const wxGridCellCoordsArray&)
+      __as__21wxGridCellCoordsArrayFRC21wxGridCellCoordsArray
+      ;wxGrid::YToRow(int)
+      YToRow__6wxGridFi
+      ;wxGridCellAttrProvider::UpdateAttrCols(unsigned int,int)
+      UpdateAttrCols__22wxGridCellAttrProviderFUii
+      ;wxGrid::SetRowMinimalHeight(int,int)
+      SetRowMinimalHeight__6wxGridFiT1
+      ;wxGrid::SetRowLabelSize(int)
+      SetRowLabelSize__6wxGridFi
+      ;wxGrid::SetCellHighlightROPenWidth(int)
+      SetCellHighlightROPenWidth__6wxGridFi
+      ;wxGrid::Redimension(wxGridTableMessage&)
+      Redimension__6wxGridFR18wxGridTableMessage
+      ;wxGrid::IsReadOnly(int,int) const
+      IsReadOnly__6wxGridCFiT1
+      ;wxGrid::HighlightBlock(int,int,int,int)
+      HighlightBlock__6wxGridFiN31
+      ;wxGridTableBase::GetTypeName(int,int)
+      GetTypeName__15wxGridTableBaseFiT1
+      ;wxGrid::GetRowLabelAlignment(int*,int*)
+      GetRowLabelAlignment__6wxGridFPiT1
+      ;wxGridStringTable::GetColLabelValue(int)
+      GetColLabelValue__17wxGridStringTableFi
+      ;wxGrid::GetCellEditor(int,int)
+      GetCellEditor__6wxGridFiT1
+      ;wxGrid::DrawHighlight(wxDC&,const wxGridCellCoordsArray&)
+      DrawHighlight__6wxGridFR4wxDCRC21wxGridCellCoordsArray
+      ;wxGrid::DrawColLabel(wxDC&,int)
+      DrawColLabel__6wxGridFR4wxDCi
+      ;wxGridCellCoordsArray::DoCopy(const wxGridCellCoordsArray&)
+      DoCopy__21wxGridCellCoordsArrayFRC21wxGridCellCoordsArray
+      ;wxGridStringTable::DeleteCols(unsigned int,unsigned int)
+      DeleteCols__17wxGridStringTableFUiT1
+      ;wxGridCellEditor::wxGridCellEditor()
+      __ct__16wxGridCellEditorFv
+      ;wxConstructorForwxGrid()
+      wxConstructorForwxGrid__Fv
+      ;wxConstructorForwxGridRowLabelWindow()
+      wxConstructorForwxGridRowLabelWindow__Fv
+      ;wxGridCellEditorEvtHandler::sm_classwxGridCellEditorEvtHandler
+      sm_classwxGridCellEditorEvtHandler__26wxGridCellEditorEvtHandler
+      __vft22wxGridCellNumberEditor16wxGridCellWorker
+      __vft22wxGridCellAttrProvider
+      __vft21wxGridCellFloatEditor16wxGridCellWorker
+      __vft20wxGridCellBoolEditor16wxGridCellWorker
+      __vft16wxGridCellWorker
+      ;wxGridStringTable::~wxGridStringTable()
+      __dt__17wxGridStringTableFv
+      ;wxGridWindow::~wxGridWindow()
+      __dt__12wxGridWindowFv
+      ;wxGridRangeSelectEvent::wxGridRangeSelectEvent(int,int,wxObject*,const wxGridCellCoords&,const wxGridCellCoords&,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)
+      __ct__22wxGridRangeSelectEventFiT1P8wxObjectRC16wxGridCellCoordsT4UlN46
+      ;wxGrid::SetRowAttr(int,wxGridCellAttr*)
+      SetRowAttr__6wxGridFiP14wxGridCellAttr
+      ;wxGrid::SetGridLineColour(const wxColour&)
+      SetGridLineColour__6wxGridFRC8wxColour
+      ;wxGrid::SetDefaultEditor(wxGridCellEditor*)
+      SetDefaultEditor__6wxGridFP16wxGridCellEditor
+      ;wxGrid::SetDefaultCellTextColour(const wxColour&)
+      SetDefaultCellTextColour__6wxGridFRC8wxColour
+      ;wxGrid::SetCellRenderer(int,int,wxGridCellRenderer*)
+      SetCellRenderer__6wxGridFiT1P18wxGridCellRenderer
+      ;wxGridCellAttrProvider::SetAttr(wxGridCellAttr*,int,int)
+      SetAttr__22wxGridCellAttrProviderFP14wxGridCellAttriT2
+      ;wxGrid::SendEvent(const int,int,int)
+      SendEvent__6wxGridFCiiT2
+      ;wxGrid::SelectAll()
+      SelectAll__6wxGridFv
+      ;wxGridCellNumberEditor::Reset()
+      Reset__22wxGridCellNumberEditorFv
+      ;wxGridCellFloatEditor::Reset()
+      Reset__21wxGridCellFloatEditorFv
+      ;wxGridCellTextEditor::Reset()
+      Reset__20wxGridCellTextEditorFv
+      ;wxGridCellTextEditor::PaintBackground(const wxRect&,wxGridCellAttr*)
+      PaintBackground__20wxGridCellTextEditorFRC6wxRectP14wxGridCellAttr
+      ;wxGrid::IsSelection()
+      IsSelection__6wxGridFv
+      ;wxGrid::IsCellEditControlEnabled() const
+      IsCellEditControlEnabled__6wxGridCFv
+      ;wxGridCornerLabelWindow::GetEventTable() const
+      GetEventTable__23wxGridCornerLabelWindowCFv
+      ;wxGrid::EndBatch()
+      EndBatch__6wxGridFv
+      ;wxGrid::DrawCellHighlight(wxDC&,const wxGridCellAttr*)
+      DrawCellHighlight__6wxGridFR4wxDCPC14wxGridCellAttr
+      ;wxGridCellEditor::Destroy()
+      Destroy__16wxGridCellEditorFv
+      ;wxGrid::Create()
+      Create__6wxGridFv
+      ;wxGridStringTable::Clear()
+      Clear__17wxGridStringTableFv
+      ;wxGridCellTextEditor::DoBeginEdit(const wxString&)
+      DoBeginEdit__20wxGridCellTextEditorFRC8wxString
+      wxEVT_GRID_LABEL_RIGHT_CLICK
+      wxEVT_GRID_LABEL_LEFT_DCLICK
+      wxEVT_GRID_CELL_LEFT_CLICK
+      ;wxGridCornerLabelWindow::sm_eventTable
+      sm_eventTable__23wxGridCornerLabelWindow
+      ;wxGridRowLabelWindow::sm_eventTable
+      sm_eventTable__20wxGridRowLabelWindow
+      ;wxGridWindow::sm_eventTableEntries
+      sm_eventTableEntries__12wxGridWindow
+      ;wxGridWindow::sm_classwxGridWindow
+      sm_classwxGridWindow__12wxGridWindow
+      ;wxGridColLabelWindow::sm_classwxGridColLabelWindow
+      sm_classwxGridColLabelWindow__20wxGridColLabelWindow
+      ;wxGridSizeEvent::wxGridSizeEvent(int,int,wxObject*,int,int,int,unsigned long,unsigned long,unsigned long,unsigned long)
+      __ct__15wxGridSizeEventFiT1P8wxObjectN31UlN37
+      ;wxGrid::SetTable(wxGridTableBase*,unsigned long,wxGrid::wxGridSelectionModes)
+      SetTable__6wxGridFP15wxGridTableBaseUlQ2_6wxGrid20wxGridSelectionModes
+      ;wxGridCellChoiceEditor::SetParameters(const wxString&)
+      SetParameters__22wxGridCellChoiceEditorFRC8wxString
+      ;wxGridTableBase::GetValueAsCustom(int,int,const wxString&)
+      GetValueAsCustom__15wxGridTableBaseFiT1RC8wxString
+      ;wxGridTypeRegistry::FindOrCloneDataType(const wxString&)
+      FindOrCloneDataType__18wxGridTypeRegistryFRC8wxString
+      ;wxGridTableBase::CanSetValueAs(int,int,const wxString&)
+      CanSetValueAs__15wxGridTableBaseFiT1RC8wxString
+      ;wxGrid::SetDefaultCellFont(const wxFont&)
+      SetDefaultCellFont__6wxGridFRC6wxFont
       ;wxGridEvent::sm_classwxGridEvent
       sm_classwxGridEvent__11wxGridEvent
-      ;wxGenericGrid::_OnChangeLabels(wxGridEvent&)
-      _OnChangeLabels__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::OnTextInPlace(wxCommandEvent&)
-      OnTextInPlace__13wxGenericGridFR14wxCommandEvent
-      ;wxGenericGrid::OnGridScroll(wxScrollEvent&)
-      OnGridScroll__13wxGenericGridFR13wxScrollEvent
-      ;wxGenericGrid::OnEraseBackground(wxEraseEvent&)
-      OnEraseBackground__13wxGenericGridFR12wxEraseEvent
-      ;wxGenericGrid::DeleteRows(int,int,unsigned long)
-      DeleteRows__13wxGenericGridFiT1Ul
-      ;wxGenericGrid::DrawRowLabel(wxDC*,wxRect*,int)
-      DrawRowLabel__13wxGenericGridFP4wxDCP6wxRecti
-      ;wxGenericGrid::SetRowHeight(int,int)
-      SetRowHeight__13wxGenericGridFiT1
-      ;wxGenericGrid::SetLabelValue(int,const wxString&,int)
-      SetLabelValue__13wxGenericGridFiRC8wxStringT1
-      ;wxGenericGrid::SetCellAlignment(int,int,int)
-      SetCellAlignment__13wxGenericGridFiN21
-      ;wxGenericGrid::GetLabelSize(int) const
-      GetLabelSize__13wxGenericGridCFi
-      ;wxGenericGrid::GetCellData(int,int)
-      GetCellData__13wxGenericGridFiT1
-      ;wxGenericGrid::GetCellBitmap(int,int) const
-      GetCellBitmap__13wxGenericGridCFiT1
-      ;wxGenericGrid::GetCellBackgroundColour(int,int) const
-      GetCellBackgroundColour__13wxGenericGridCFiT1
-      ;wxConstructorForwxGenericGrid()
-      wxConstructorForwxGenericGrid__Fv
-      ;wxGenericGrid::SetCellTextColour(const wxColour&,int,int)
-      SetCellTextColour__13wxGenericGridFRC8wxColouriT2
-      ;wxGridCell::SetBackgroundColour(const wxColour&)
-      SetBackgroundColour__10wxGridCellFRC8wxColour
-      ;wxGenericGrid::OnSelectCellImplementation(wxDC*,int,int)
-      OnSelectCellImplementation__13wxGenericGridFP4wxDCiT2
-      ;wxGenericGrid::AdjustScrollbars()
-      AdjustScrollbars__13wxGenericGridFv
-      ;wxGenericGrid::PaintGrid(wxDC&)
-      PaintGrid__13wxGenericGridFR4wxDC
-      ;wxGenericGrid::LabelSashHitTest(int,int,int*,int*,int*)
-      LabelSashHitTest__13wxGenericGridFiT1PiN23
-      ;wxGridCell::wxGridCell(wxGenericGrid*)
-      __ct__10wxGridCellFP13wxGenericGrid
-      ;wxGenericGrid::_OnLabelLeftClick(wxGridEvent&)
-      _OnLabelLeftClick__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::_OnChangeSelectionLabel(wxGridEvent&)
-      _OnChangeSelectionLabel__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::_OnCellLeftClick(wxGridEvent&)
-      _OnCellLeftClick__13wxGenericGridFR11wxGridEvent
-      ;wxGenericGrid::SetEditInPlace(unsigned long)
-      SetEditInPlace__13wxGenericGridFUl
-      ;wxGenericGrid::OnTextEnter(wxCommandEvent&)
-      OnTextEnter__13wxGenericGridFR14wxCommandEvent
-      ;wxGenericGrid::AppendCols(int,unsigned long)
-      AppendCols__13wxGenericGridFiUl
-      ;wxGenericGrid::CreateGrid(int,int,wxString**,short*,short,short)
-      CreateGrid__13wxGenericGridFiT1PP8wxStringPssT5
-      ;wxGenericGrid::SetLabelAlignment(int,int)
-      SetLabelAlignment__13wxGenericGridFiT1
-      ;wxGenericGrid::GetLabelValue(int,int) const
-      GetLabelValue__13wxGenericGridCFiT1
-      ;wxGenericGrid::GetCell(int,int) const
-      GetCell__13wxGenericGridCFiT1
-      ;wxGenericGrid::GetCellValue(int,int) const
-      GetCellValue__13wxGenericGridCFiT1
-      ;wxGenericGrid::~wxGenericGrid()
-      __dt__13wxGenericGridFv
+      ;wxGridCellChoiceEditor::wxGridCellChoiceEditor(unsigned int,const wxString*,unsigned long)
+      __ct__22wxGridCellChoiceEditorFUiPC8wxStringUl
+      ;wxGridCellTextEditor::StartingKey(wxKeyEvent&)
+      StartingKey__20wxGridCellTextEditorFR10wxKeyEvent
+      ;wxGridWindow::ScrollWindow(int,int,const wxRect*)
+      ScrollWindow__12wxGridWindowFiT1PC6wxRect
+      ;wxGrid::ProcessRowLabelMouseEvent(wxMouseEvent&)
+      ProcessRowLabelMouseEvent__6wxGridFR12wxMouseEvent
+      ;wxGridColLabelWindow::OnPaint(wxPaintEvent&)
+      OnPaint__20wxGridColLabelWindowFR12wxPaintEvent
+      ;wxGridRowLabelWindow::OnMouseWheel(wxMouseEvent&)
+      OnMouseWheel__20wxGridRowLabelWindowFR12wxMouseEvent
+      ;wxGridRowLabelWindow::OnMouseEvent(wxMouseEvent&)
+      OnMouseEvent__20wxGridRowLabelWindowFR12wxMouseEvent
+      ;wxGridWindow::OnMouseEvent(wxMouseEvent&)
+      OnMouseEvent__12wxGridWindowFR12wxMouseEvent
+      ;wxGrid::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__6wxGridFR10wxKeyEvent
+      ;wxGridCellEditorEvtHandler::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__26wxGridCellEditorEvtHandlerFR10wxKeyEvent
+      ;wxGridRowLabelWindow::OnKeyDown(wxKeyEvent&)
+      OnKeyDown__20wxGridRowLabelWindowFR10wxKeyEvent
+      ;wxGrid::MoveCursorRight(unsigned long)
+      MoveCursorRight__6wxGridFUl
+      ;wxGrid::MoveCursorRightBlock(unsigned long)
+      MoveCursorRightBlock__6wxGridFUl
+      ;wxGrid::MoveCursorLeft(unsigned long)
+      MoveCursorLeft__6wxGridFUl
+      ;wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent&)
+      IsAcceptedKey__21wxGridCellFloatEditorFR10wxKeyEvent
+      ;wxGridCellBoolEditor::IsAcceptedKey(wxKeyEvent&)
+      IsAcceptedKey__20wxGridCellBoolEditorFR10wxKeyEvent
+      ;wxGrid::InsertRows(int,int,unsigned long)
+      InsertRows__6wxGridFiT1Ul
+      ;wxGridCellTextEditor::HandleReturn(wxKeyEvent&)
+      HandleReturn__20wxGridCellTextEditorFR10wxKeyEvent
+      ;wxGridCellEditor::HandleReturn(wxKeyEvent&)
+      HandleReturn__16wxGridCellEditorFR10wxKeyEvent
+      ;wxGridCellFloatRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__23wxGridCellFloatRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      ;wxGridCellAttrProvider::GetAttr(int,int,wxGridCellAttr::wxAttrKind) const
+      GetAttr__22wxGridCellAttrProviderCFiT1Q2_14wxGridCellAttr10wxAttrKind
+      ;wxGridCellStringRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__24wxGridCellStringRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGridCellNumberRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__24wxGridCellNumberRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGrid::DrawRowLabels(wxDC&,const wxArrayInt&)
+      DrawRowLabels__6wxGridFR4wxDCRC10wxArrayInt
+      ;wxGridCellNumberEditor::BeginEdit(int,int,wxGrid*)
+      BeginEdit__22wxGridCellNumberEditorFiT1P6wxGrid
+      ;wxGridCellChoiceEditor::BeginEdit(int,int,wxGrid*)
+      BeginEdit__22wxGridCellChoiceEditorFiT1P6wxGrid
+      ;wxGrid::AppendCols(int,unsigned long)
+      AppendCols__6wxGridFiUl
+      ;wxGridCellNumberEditor::wxGridCellNumberEditor(int,int)
+      __ct__22wxGridCellNumberEditorFiT1
+      wxEVT_GRID_ROW_SIZE
+      wxEVT_GRID_COL_SIZE
+      ;wxGridCornerLabelWindow::wxGridCornerLabelWindow(wxGrid*,int,const wxPoint&,const wxSize&)
+      __ct__23wxGridCornerLabelWindowFP6wxGridiRC7wxPointRC6wxSize
+      ;wxGridCellWithAttrArray::wxGridCellWithAttrArray(const wxGridCellWithAttrArray&)
+      __ct__23wxGridCellWithAttrArrayFRC23wxGridCellWithAttrArray
+      ;wxGridStringArray::operator=(const wxGridStringArray&)
+      __as__17wxGridStringArrayFRC17wxGridStringArray
+      ;wxGridRowOrColAttrData::UpdateAttrRowsOrCols(unsigned int,int)
+      UpdateAttrRowsOrCols__22wxGridRowOrColAttrDataFUii
+      ;wxGrid::SetColSize(int,int)
+      SetColSize__6wxGridFiT1
+      ;wxGrid::SetColLabelAlignment(int,int)
+      SetColLabelAlignment__6wxGridFiT1
+      ;wxGrid::SetColFormatBool(int)
+      SetColFormatBool__6wxGridFi
+      ;wxGridCellAttrProvider::SetColAttr(wxGridCellAttr*,int)
+      SetColAttr__22wxGridCellAttrProviderFP14wxGridCellAttri
+      ;wxGrid::SetCellAlignment(int,int,int,int)
+      SetCellAlignment__6wxGridFiN31
+      ;wxGridStringTable::IsEmptyCell(int,int)
+      IsEmptyCell__17wxGridStringTableFiT1
+      ;wxGridTableBase::InsertCols(unsigned int,unsigned int)
+      InsertCols__15wxGridTableBaseFUiT1
+      ;wxGrid::GetRowTop(int) const
+      GetRowTop__6wxGridCFi
+      ;wxGrid::GetRowMinimalHeight(int) const
+      GetRowMinimalHeight__6wxGridCFi
+      ;wxGrid::GetRowLabelValue(int)
+      GetRowLabelValue__6wxGridFi
+      ;wxGrid::GetRowHeight(int) const
+      GetRowHeight__6wxGridCFi
+      ;wxGrid::GetDefaultRendererForCell(int,int) const
+      GetDefaultRendererForCell__6wxGridCFiT1
+      ;wxGrid::GetColMinimalWidth(int) const
+      GetColMinimalWidth__6wxGridCFi
+      ;wxGrid::GetColLabelAlignment(int*,int*)
+      GetColLabelAlignment__6wxGridFPiT1
+      ;wxGrid::GetCellTextColour(int,int)
+      GetCellTextColour__6wxGridFiT1
+      ;wxGrid::GetCellFont(int,int)
+      GetCellFont__6wxGridFiT1
+      ;wxGrid::DeselectRow(int)
+      DeselectRow__6wxGridFi
+      ;wxGridCellEditor::~wxGridCellEditor()
+      __dt__16wxGridCellEditorFv
+      ;wxConstructorForwxGridStringTable()
+      wxConstructorForwxGridStringTable__Fv
+      __vft16wxGridCellEditor16wxGridCellWorker
+      ;wxGridStringTable::wxGridStringTable()
+      __ct__17wxGridStringTableFv
+      ;wxGrid::ShowCellEditControl()
+      ShowCellEditControl__6wxGridFv
+      ;wxGridTableBase::SetValueAsCustom(int,int,const wxString&,void*)
+      SetValueAsCustom__15wxGridTableBaseFiT1RC8wxStringPv
+      ;wxGrid::SetLabelBackgroundColour(const wxColour&)
+      SetLabelBackgroundColour__6wxGridFRC8wxColour
+      ;wxGrid::SetCellTextColour(int,int,const wxColour&)
+      SetCellTextColour__6wxGridFiT1RC8wxColour
+      ;wxGridTableBase::SetAttrProvider(wxGridCellAttrProvider*)
+      SetAttrProvider__15wxGridTableBaseFP22wxGridCellAttrProvider
+      ;wxGrid::SaveEditControlValue()
+      SaveEditControlValue__6wxGridFv
+      ;wxGrid::RegisterDataType(const wxString&,wxGridCellRenderer*,wxGridCellEditor*)
+      RegisterDataType__6wxGridFRC8wxStringP18wxGridCellRendererP16wxGridCellEditor
+      ;wxGridTypeRegistry::RegisterDataType(const wxString&,wxGridCellRenderer*,wxGridCellEditor*)
+      RegisterDataType__18wxGridTypeRegistryFRC8wxStringP18wxGridCellRendererP16wxGridCellEditor
+      ;wxGridCellChoiceEditor::PaintBackground(const wxRect&,wxGridCellAttr*)
+      PaintBackground__22wxGridCellChoiceEditorFRC6wxRectP14wxGridCellAttr
+      ;wxGrid::Init()
+      Init__6wxGridFv
+      ;wxGrid::InitRowHeights()
+      InitRowHeights__6wxGridFv
+      ;wxGridCellFloatRenderer::GetString(wxGrid&,int,int)
+      GetString__23wxGridCellFloatRendererFR6wxGridiT2
+      ;wxGridCellFloatEditor::GetString() const
+      GetString__21wxGridCellFloatEditorCFv
+      ;wxGridStringTable::GetNumberCols()
+      GetNumberCols__17wxGridStringTableFv
+      ;wxGrid::GetModelValues()
+      GetModelValues__6wxGridFv
+      ;wxGridCellEditorEvtHandler::GetEventTable() const
+      GetEventTable__26wxGridCellEditorEvtHandlerCFv
+      ;wxGridRowLabelWindow::GetEventTable() const
+      GetEventTable__20wxGridRowLabelWindowCFv
+      ;wxGridWindow::GetEventTable() const
+      GetEventTable__12wxGridWindowCFv
+      ;wxGrid::DoEndDragResizeCol()
+      DoEndDragResizeCol__6wxGridFv
+      ;wxGridCellCoordsArray::DoEmpty()
+      DoEmpty__21wxGridCellCoordsArrayFv
+      ;wxGridCellChoiceEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__22wxGridCellChoiceEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGridCellBoolEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__20wxGridCellBoolEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGrid::CalcDimensions()
+      CalcDimensions__6wxGridFv
+      ;wxGrid::CalcCellsExposed(const wxRegion&)
+      CalcCellsExposed__6wxGridFRC8wxRegion
+      ;wxGrid::AutoSize()
+      AutoSize__6wxGridFv
+      ;wxGridCellTextEditor::DoReset(const wxString&)
+      DoReset__20wxGridCellTextEditorFRC8wxString
+      ;wxGridCornerLabelWindow::sm_eventTableEntries
+      sm_eventTableEntries__23wxGridCornerLabelWindow
+      ;wxGridColLabelWindow::sm_eventTableEntries
+      sm_eventTableEntries__20wxGridColLabelWindow
+      ;wxGrid::StringToLines(const wxString&,wxArrayString&)
+      StringToLines__6wxGridFRC8wxStringR13wxArrayString
+      ;wxGridCellFloatRenderer::SetParameters(const wxString&)
+      SetParameters__23wxGridCellFloatRendererFRC8wxString
+      ;wxGridCellNumberEditor::SetParameters(const wxString&)
+      SetParameters__22wxGridCellNumberEditorFRC8wxString
+      ;wxGridCellFloatEditor::SetParameters(const wxString&)
+      SetParameters__21wxGridCellFloatEditorFRC8wxString
+      ;wxGridStringTable::SetColLabelValue(int,const wxString&)
+      SetColLabelValue__17wxGridStringTableFiRC8wxString
+      ;wxGrid::GetCellAlignment(int,int,int*,int*)
+      GetCellAlignment__6wxGridFiT1PiT3
+      ;wxGrid::DrawGridSpace(wxDC&)
+      DrawGridSpace__6wxGridFR4wxDC
+      ;wxGrid::DrawCell(wxDC&,const wxGridCellCoords&)
+      DrawCell__6wxGridFR4wxDCRC16wxGridCellCoords
+      ;wxGridCellTextEditor::EndEdit(int,int,wxGrid*)
+      EndEdit__20wxGridCellTextEditorFiT1P6wxGrid
+      wxGridNoCellRect
+      wxEVT_GRID_RANGE_SELECT
+      ;wxGrid::sm_eventTable
+      sm_eventTable__6wxGrid
+      __vft6wxGrid8wxObject
+      __vft23wxGridCornerLabelWindow8wxObject
+      __vft17wxGridStringTable8wxObject
+      ;wxGridEvent::wxGridEvent(int,int,wxObject*,int,int,int,int,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)
+      __ct__11wxGridEventFiT1P8wxObjectN41UlN48
+      ;wxGridTableBase::SetValueAsDouble(int,int,double)
+      SetValueAsDouble__15wxGridTableBaseFiT1d
+      ;wxGridTableBase::SetValueAsBool(int,int,unsigned long)
+      SetValueAsBool__15wxGridTableBaseFiT1Ul
+      ;wxGrid::SetReadOnly(int,int,unsigned long)
+      SetReadOnly__6wxGridFiT1Ul
+      ;wxGrid::SetLabelFont(const wxFont&)
+      SetLabelFont__6wxGridFRC6wxFont
+      ;wxGrid::SelectCol(int,unsigned long)
+      SelectCol__6wxGridFiUl
+      ;wxGrid::ProcessGridCellMouseEvent(wxMouseEvent&)
+      ProcessGridCellMouseEvent__6wxGridFR12wxMouseEvent
+      ;wxGridColLabelWindow::OnMouseWheel(wxMouseEvent&)
+      OnMouseWheel__20wxGridColLabelWindowFR12wxMouseEvent
+      ;wxGridCornerLabelWindow::OnMouseEvent(wxMouseEvent&)
+      OnMouseEvent__23wxGridCornerLabelWindowFR12wxMouseEvent
+      ;wxGrid::MoveCursorLeftBlock(unsigned long)
+      MoveCursorLeftBlock__6wxGridFUl
+      ;wxGrid::InsertCols(int,int,unsigned long)
+      InsertCols__6wxGridFiT1Ul
+      ;wxGridStringArray::Index(const wxArrayString&,unsigned long) const
+      Index__17wxGridStringArrayCFRC13wxArrayStringUl
+      ;wxGridCellStringRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__24wxGridCellStringRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      ;wxGridCellBoolRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__22wxGridCellBoolRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      ;wxGridCellChoiceEditor::EndEdit(int,int,wxGrid*)
+      EndEdit__22wxGridCellChoiceEditorFiT1P6wxGrid
+      ;wxGridCellFloatEditor::EndEdit(int,int,wxGrid*)
+      EndEdit__21wxGridCellFloatEditorFiT1P6wxGrid
+      ;wxGrid::EnableGridLines(unsigned long)
+      EnableGridLines__6wxGridFUl
+      ;wxGrid::DrawTextRectangle(wxDC&,const wxString&,const wxRect&,int,int)
+      DrawTextRectangle__6wxGridFR4wxDCRC8wxStringRC6wxRectiT4
+      ;wxGrid::DeleteRows(int,int,unsigned long)
+      DeleteRows__6wxGridFiT1Ul
+      ;wxGrid::SetOrCalcColumnSizes(unsigned long,unsigned long)
+      SetOrCalcColumnSizes__6wxGridFUlT1
+      ;wxGridStringTable::wxGridStringTable(int,int)
+      __ct__17wxGridStringTableFiT1
+      ;wxGrid::YToEdgeOfRow(int)
+      YToEdgeOfRow__6wxGridFi
+      ;wxGrid::XToCol(int)
+      XToCol__6wxGridFi
+      ;wxGridCellAttrProvider::UpdateAttrRows(unsigned int,int)
+      UpdateAttrRows__22wxGridCellAttrProviderFUii
+      ;wxGridCellAttrData::UpdateAttrRows(unsigned int,int)
+      UpdateAttrRows__18wxGridCellAttrDataFUii
+      ;wxGrid::SetColFormatNumber(int)
+      SetColFormatNumber__6wxGridFi
+      ;wxGrid::SetCellHighlightPenWidth(int)
+      SetCellHighlightPenWidth__6wxGridFi
+      ;wxGridCellWithAttrArray::Insert(const wxGridCellWithAttr&,unsigned int)
+      Insert__23wxGridCellWithAttrArrayFRC18wxGridCellWithAttrUi
+      ;wxGridStringTable::InsertCols(unsigned int,unsigned int)
+      InsertCols__17wxGridStringTableFUiT1
+      ;wxGridTableBase::GetValueAsDouble(int,int)
+      GetValueAsDouble__15wxGridTableBaseFiT1
+      ;wxGridTableBase::GetRowLabelValue(int)
+      GetRowLabelValue__15wxGridTableBaseFi
+      ;wxGrid::GetDefaultEditorForCell(int,int) const
+      GetDefaultEditorForCell__6wxGridCFiT1
+      ;wxGrid::GetDefaultCellAlignment(int*,int*)
+      GetDefaultCellAlignment__6wxGridFPiT1
+      ;wxGrid::GetColSize(int)
+      GetColSize__6wxGridFi
+      ;wxGrid::GetColLeft(int) const
+      GetColLeft__6wxGridCFi
+      ;wxGrid::GetCellRenderer(int,int)
+      GetCellRenderer__6wxGridFiT1
+      ;wxGrid::GetCellAttr(int,int) const
+      GetCellAttr__6wxGridCFiT1
+      ;wxGridCellAttr::GetAlignment(int*,int*) const
+      GetAlignment__14wxGridCellAttrCFPiT1
+      ;wxGridCellAttrData::FindIndex(int,int) const
+      FindIndex__18wxGridCellAttrDataCFiT1
+      ;wxGrid::DrawGridCellArea(wxDC&,const wxGridCellCoordsArray&)
+      DrawGridCellArea__6wxGridFR4wxDCRC21wxGridCellCoordsArray
+      ;wxGridStringArray::DoCopy(const wxGridStringArray&)
+      DoCopy__17wxGridStringArrayFRC17wxGridStringArray
+      ;wxGrid::DeselectCell(int,int)
+      DeselectCell__6wxGridFiT1
+      ;wxGridTableBase::DeleteCols(unsigned int,unsigned int)
+      DeleteCols__15wxGridTableBaseFUiT1
+      ;wxGrid::BlockToDeviceRect(const wxGridCellCoords&,const wxGridCellCoords&)
+      BlockToDeviceRect__6wxGridFRC16wxGridCellCoordsT1
+      ;wxGridStringTable::AppendRows(unsigned int)
+      AppendRows__17wxGridStringTableFUi
+      ;wxGridCellWorker::~wxGridCellWorker()
+      __dt__16wxGridCellWorkerFv
+      ;wxConstructorForwxGridWindow()
+      wxConstructorForwxGridWindow__Fv
+      ;wxConstructorForwxGridSizeEvent()
+      wxConstructorForwxGridSizeEvent__Fv
       ;wxConstructorForwxGridEvent()
       wxConstructorForwxGridEvent__Fv
-      ;wxGenericGrid::SetLabelBackgroundColour(const wxColour&)
-      SetLabelBackgroundColour__13wxGenericGridFRC8wxColour
-      ;wxGenericGrid::OnCreateCell()
-      OnCreateCell__13wxGenericGridFv
-      ;wxGenericGrid::OnChangeSelectionLabel()
-      OnChangeSelectionLabel__13wxGenericGridFv
-      ;wxGenericGrid::CellHitTest(int,int,int*,int*)
-      CellHitTest__13wxGenericGridFiT1PiT3
+      ;wxConstructorForwxGridColLabelWindow()
+      wxConstructorForwxGridColLabelWindow__Fv
+      ;wxGridCellEditorEvtHandler::sm_eventTableEntries
+      sm_eventTableEntries__26wxGridCellEditorEvtHandler
+      __vft23wxGridCellFloatRenderer16wxGridCellWorker
+      __vft22wxGridCellChoiceEditor16wxGridCellWorker
+      ;wxGridRowOrColAttrData::~wxGridRowOrColAttrData()
+      __dt__22wxGridRowOrColAttrDataFv
+      ;wxGridCellCoordsArray::~wxGridCellCoordsArray()
+      __dt__21wxGridCellCoordsArrayFv
+      ;wxGridCellTextEditor::wxGridCellTextEditor()
+      __ct__20wxGridCellTextEditorFv
+      ;wxGridTableMessage::wxGridTableMessage()
+      __ct__18wxGridTableMessageFv
+      ;wxGridTableMessage::wxGridTableMessage(wxGridTableBase*,int,int,int)
+      __ct__18wxGridTableMessageFP15wxGridTableBaseiN22
+      ;wxGridCellBoolEditor::StartingClick()
+      StartingClick__20wxGridCellBoolEditorFv
+      ;wxGridCellEditor::StartingClick()
+      StartingClick__16wxGridCellEditorFv
+      ;wxGrid::SetDefaultRenderer(wxGridCellRenderer*)
+      SetDefaultRenderer__6wxGridFP18wxGridCellRenderer
+      ;wxGridCellChoiceEditor::Reset()
+      Reset__22wxGridCellChoiceEditorFv
+      ;wxGridCellEditor::PaintBackground(const wxRect&,wxGridCellAttr*)
+      PaintBackground__16wxGridCellEditorFRC6wxRectP14wxGridCellAttr
+      ;wxGrid::MovePageDown()
+      MovePageDown__6wxGridFv
+      ;wxGrid::IsCellEditControlShown() const
+      IsCellEditControlShown__6wxGridCFv
+      ;wxGrid::InitColWidths()
+      InitColWidths__6wxGridFv
+      ;wxGrid::HideCellEditControl()
+      HideCellEditControl__6wxGridFv
+      ;wxGridStringTable::GetNumberRows()
+      GetNumberRows__17wxGridStringTableFv
+      ;wxGridCellAttr::GetFont() const
+      GetFont__14wxGridCellAttrCFv
+      ;wxGridCellAttr::GetEditor(wxGrid*,int,int) const
+      GetEditor__14wxGridCellAttrCFP6wxGridiT2
+      ;wxGrid::GetDefaultRenderer() const
+      GetDefaultRenderer__6wxGridCFv
+      ;wxGrid::GetDefaultEditor() const
+      GetDefaultEditor__6wxGridCFv
+      ;wxGrid::GetDefaultColSize()
+      GetDefaultColSize__6wxGridFv
+      ;wxGrid::GetDefaultCellTextColour()
+      GetDefaultCellTextColour__6wxGridFv
+      ;wxGridCellAttr::GetBackgroundColour() const
+      GetBackgroundColour__14wxGridCellAttrCFv
+      ;wxGrid::Fit()
+      Fit__6wxGridFv
+      ;wxGrid::DrawAllGridLines(wxDC&,const wxRegion&)
+      DrawAllGridLines__6wxGridFR4wxDCRC8wxRegion
+      ;wxGridCellWithAttrArray::DoEmpty()
+      DoEmpty__23wxGridCellWithAttrArrayFv
+      ;wxGridCellNumberEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__22wxGridCellNumberEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGridCellFloatEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__21wxGridCellFloatEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGrid::ClearAttrCache()
+      ClearAttrCache__6wxGridFv
+      ;wxGrid::CanHaveAttributes()
+      CanHaveAttributes__6wxGridFv
+      ;wxGrid::CacheAttr(int,int,wxGridCellAttr*) const
+      CacheAttr__6wxGridCFiT1P14wxGridCellAttr
+      ;wxGrid::SetCellValue(int,int,const wxString&)
+      SetCellValue__6wxGridFiT1RC8wxString
+      wxEVT_GRID_LABEL_LEFT_CLICK
+      wxEVT_GRID_CELL_RIGHT_CLICK
+      ;wxGridRowLabelWindow::sm_eventTableEntries
+      sm_eventTableEntries__20wxGridRowLabelWindow
+      ;wxGrid::wxGrid(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
+      __ct__6wxGridFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
+      ;wxGrid::SetSelectionMode(wxGrid::wxGridSelectionModes)
+      SetSelectionMode__6wxGridFQ2_6wxGrid20wxGridSelectionModes
+      ;wxGrid::SetRowLabelValue(int,const wxString&)
+      SetRowLabelValue__6wxGridFiRC8wxString
+      ;wxGridCellWorker::SetParameters(const wxString&)
+      SetParameters__16wxGridCellWorkerFRC8wxString
+      ;wxGrid::SetColLabelValue(int,const wxString&)
+      SetColLabelValue__6wxGridFiRC8wxString
+      ;wxGrid::CreateGrid(int,int,wxGrid::wxGridSelectionModes)
+      CreateGrid__6wxGridFiT1Q2_6wxGrid20wxGridSelectionModes
+  ;From object file:  ..\generic\gridctrl.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGridCellAutoWrapStringEditor::Create(wxWindow*,int,wxEvtHandler*)
+      Create__30wxGridCellAutoWrapStringEditorFP8wxWindowiP12wxEvtHandler
+      ;wxGridCellDateTimeRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__26wxGridCellDateTimeRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      ;wxGridCellEnumRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__22wxGridCellEnumRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGridCellDateTimeRenderer::wxGridCellDateTimeRenderer(wxString,wxString)
+      __ct__26wxGridCellDateTimeRendererF8wxStringT1
+      ;wxGridCellDateTimeRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__26wxGridCellDateTimeRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGridCellAutoWrapStringRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__32wxGridCellAutoWrapStringRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      __vft32wxGridCellAutoWrapStringRenderer16wxGridCellWorker
+      ;wxGridCellDateTimeRenderer::SetParameters(const wxString&)
+      SetParameters__26wxGridCellDateTimeRendererFRC8wxString
+      ;wxGridCellEnumRenderer::SetParameters(const wxString&)
+      SetParameters__22wxGridCellEnumRendererFRC8wxString
+      ;wxGridCellEnumEditor::BeginEdit(int,int,wxGrid*)
+      BeginEdit__20wxGridCellEnumEditorFiT1P6wxGrid
+      ;wxGridCellEnumEditor::EndEdit(int,int,wxGrid*)
+      EndEdit__20wxGridCellEnumEditorFiT1P6wxGrid
+      ;wxGridCellAutoWrapStringRenderer::Draw(wxGrid&,wxGridCellAttr&,wxDC&,const wxRect&,int,int,unsigned long)
+      Draw__32wxGridCellAutoWrapStringRendererFR6wxGridR14wxGridCellAttrR4wxDCRC6wxRectiT5Ul
+      ;wxGridCellDateTimeRenderer::Clone() const
+      Clone__26wxGridCellDateTimeRendererCFv
+      __vft22wxGridCellEnumRenderer16wxGridCellWorker
+      __vft20wxGridCellEnumEditor16wxGridCellWorker
+      ;wxGridCellDateTimeRenderer::GetString(wxGrid&,int,int)
+      GetString__26wxGridCellDateTimeRendererFR6wxGridiT2
+      ;wxGridCellEnumRenderer::GetString(wxGrid&,int,int)
+      GetString__22wxGridCellEnumRendererFR6wxGridiT2
+      ;wxGridCellEnumEditor::Clone() const
+      Clone__20wxGridCellEnumEditorCFv
+      ;wxGridCellEnumRenderer::wxGridCellEnumRenderer(const wxString&)
+      __ct__22wxGridCellEnumRendererFRC8wxString
+      ;wxGridCellEnumEditor::wxGridCellEnumEditor(const wxString&)
+      __ct__20wxGridCellEnumEditorFRC8wxString
+      ;wxGridCellEnumRenderer::GetBestSize(wxGrid&,wxGridCellAttr&,wxDC&,int,int)
+      GetBestSize__22wxGridCellEnumRendererFR6wxGridR14wxGridCellAttrR4wxDCiT4
+      ;wxGridCellAutoWrapStringRenderer::GetTextLines(wxGrid&,wxDC&,wxGridCellAttr&,const wxRect&,int,int)
+      GetTextLines__32wxGridCellAutoWrapStringRendererFR6wxGridR4wxDCR14wxGridCellAttrRC6wxRectiT5
+      ;wxGridCellEnumRenderer::Clone() const
+      Clone__22wxGridCellEnumRendererCFv
+      __vft30wxGridCellAutoWrapStringEditor16wxGridCellWorker
+      __vft26wxGridCellDateTimeRenderer16wxGridCellWorker
   ;From object file:  ..\generic\gridsel.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxGridSelection::SelectBlock(int,int,int,int,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)
+      SelectBlock__15wxGridSelectionFiN31UlN45
+      ;wxGridSelection::UpdateRows(unsigned int,int)
+      UpdateRows__15wxGridSelectionFUii
+      ;wxGridSelection::BlockContain(int,int,int,int,int,int,int,int)
+      BlockContain__15wxGridSelectionFiN71
+      ;wxGridSelection::SelectRow(int,unsigned long,unsigned long,unsigned long,unsigned long)
+      SelectRow__15wxGridSelectionFiUlN32
+      ;wxGridSelection::wxGridSelection(wxGrid*,wxGrid::wxGridSelectionModes)
+      __ct__15wxGridSelectionFP6wxGridQ2_6wxGrid20wxGridSelectionModes
+      ;wxGridSelection::IsSelection()
+      IsSelection__15wxGridSelectionFv
+      ;wxGridSelection::SelectCol(int,unsigned long,unsigned long,unsigned long,unsigned long)
+      SelectCol__15wxGridSelectionFiUlN32
+      ;wxGridSelection::IsInSelection(int,int)
+      IsInSelection__15wxGridSelectionFiT1
+      ;wxGridSelection::SetSelectionMode(wxGrid::wxGridSelectionModes)
+      SetSelectionMode__15wxGridSelectionFQ2_6wxGrid20wxGridSelectionModes
+      ;wxGridSelection::ToggleCellSelection(int,int,unsigned long,unsigned long,unsigned long,unsigned long)
+      ToggleCellSelection__15wxGridSelectionFiT1UlN33
+      ;wxGridSelection::UpdateCols(unsigned int,int)
+      UpdateCols__15wxGridSelectionFUii
+      ;wxGridSelection::ClearSelection()
+      ClearSelection__15wxGridSelectionFv
+      ;wxGridSelection::SelectCell(int,int,unsigned long,unsigned long,unsigned long,unsigned long,unsigned long)
+      SelectCell__15wxGridSelectionFiT1UlN43
   ;From object file:  ..\generic\helpext.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxExtHelpController::SetBrowser(const wxString&,unsigned long)
@@ -7994,6 +8787,8 @@ EXPORTS
       OnNavigationKey__7wxPanelFR20wxNavigationKeyEvent
       ;wxPanel::OnFocus(wxFocusEvent&)
       OnFocus__7wxPanelFR12wxFocusEvent
+      ;wxPanel::RemoveChild(wxWindowBase*)
+      RemoveChild__7wxPanelFP12wxWindowBase
       ;wxConstructorForwxPanel()
       wxConstructorForwxPanel__Fv
       ;wxPanel::SetFocus()
@@ -11507,8 +12302,6 @@ EXPORTS
       Iconize__7wxFrameFUl
       ;wxFrame::HandleMenuSelect(unsigned short,unsigned short,unsigned long)
       HandleMenuSelect__7wxFrameFUsT1Ul
-      ;wxFrame::RemoveChild(wxWindowBase*)
-      RemoveChild__7wxFrameFP12wxWindowBase
       ;wxFrame::OS2TranslateMessage(void**)
       OS2TranslateMessage__7wxFrameFPPv
       ;wxFrame::HandlePaint()
@@ -13131,6 +13924,8 @@ EXPORTS
       SetSelection__10wxTextCtrlFlT1
       ;wxTextCtrl::Copy()
       Copy__10wxTextCtrlFv
+      ;wxTextCtrl::SetStyle(long,long,const wxTextAttr&)
+      SetStyle__10wxTextCtrlFlT1RC10wxTextAttr
       ;wxTextCtrl::CanRedo() const
       CanRedo__10wxTextCtrlCFv
       ;wxTextCtrl::SetEditable(unsigned long)
@@ -13774,6 +14569,8 @@ EXPORTS
       HandleActivate__8wxWindowFiUl
       ;wxWindow::FindItemByHWND(unsigned long,unsigned long) const
       FindItemByHWND__8wxWindowCFUlT1
+      ;wxWindow::OS2Create(unsigned long,char*,const char*,unsigned long,long,long,long,long,unsigned long,unsigned long,unsigned long,void*,void*,unsigned long)
+      OS2Create__8wxWindowFUlPcPCcT1lN35N31PvT12_T1
       ;wxWindow::DoMoveWindow(int,int,int,int)
       DoMoveWindow__8wxWindowFiN31
       ;wxWindow::DoClientToScreen(int*,int*) const
@@ -13788,12 +14585,10 @@ EXPORTS
       GetCharWidth__8wxWindowCFv
       ;wxWindowBase::FindFocus()
       FindFocus__12wxWindowBaseFv
-      ;wxWindow::OS2Create(unsigned long,char*,const char*,unsigned long,long,long,long,long,unsigned long,unsigned long,unsigned long,void*,void*,unsigned long)
-      OS2Create__8wxWindowFUlPcPCcT1lN35N31PvT12_T1
-      ;wxWindow::sm_eventTableEntries
-      sm_eventTableEntries__8wxWindow
       ;wxWindow::SetTitle(const wxString&)
       SetTitle__8wxWindowFRC8wxString
+      ;wxWindow::sm_eventTableEntries
+      sm_eventTableEntries__8wxWindow
   ;From object file:  ..\os2\xpmhand.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxXPMDataHandler::Create(wxBitmap*,void*,long,int,int,int)

@@ -389,7 +389,7 @@ bool wxMenu::DoInsertOrAppend(
         //
         // If we're already attached to the menubar, we must update it
         //
-        if (IsAttached())
+        if (IsAttached() && m_menuBar->IsAttached())
         {
             m_menuBar->Refresh();
         }
@@ -460,7 +460,7 @@ wxMenuItem* wxMenu::DoRemove(
                  ,MPFROM2SHORT(pItem->GetId(), TRUE)
                  ,(MPARAM)0
                 );
-    if (IsAttached())
+    if (IsAttached() && m_menuBar->IsAttached())
     {
         //
         // Otherwise, the chane won't be visible

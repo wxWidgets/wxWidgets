@@ -66,7 +66,6 @@ public:
 
     // override some more virtuals
     virtual bool Show(bool bShow = TRUE);
-    virtual void RemoveChild(wxWindowBase* pChild);
 
     // event handlers
     void OnActivate(wxActivateEvent& rEvent);
@@ -140,6 +139,12 @@ public:
     WXHWND GetToolTipCtrl(void) const { return m_hWndToolTip; }
     void   SetToolTipCtrl(WXHWND hHwndTT) { m_hWndToolTip = hHwndTT; }
 #endif // tooltips
+
+    //
+    // Called by wxWindow whenever it gets focus
+    //
+    void SetLastFocus(wxWindow* pWin) { m_pWinLastFocused = pWin; }
+    wxWindow *GetLastFocus(void) const { return m_pWinLastFocused; }
 
     void      SetClient(WXHWND    c_Hwnd);
     void      SetClient(wxWindow* c_Window);

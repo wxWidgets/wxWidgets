@@ -306,6 +306,17 @@ wxWindow::~wxWindow()
     m_isBeingDeleted = TRUE;
 
     OS2DetachWindowMenu();
+    for (wxWindow* pWin = GetParent(); pWin; pWin = pWin->GetParent())
+    {
+        wxFrame*                    pFrame = wxDynamicCast(pWin, wxFrame);
+
+        if (pFrame)
+        {
+            if (pFrame->GetLastFocus() == this)
+                pFrame->SetLastFocus((wxWindow*)NULL);
+            break;
+        }
+    }
     if (m_parent)
         m_parent->RemoveChild(this);
     DestroyChildren();

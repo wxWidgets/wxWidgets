@@ -15,9 +15,6 @@
 class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
 {
 public:
-    // creation
-    // --------
-
     wxTextCtrl();
     wxTextCtrl( wxWindow*          pParent
                ,wxWindowID         vId
@@ -46,9 +43,10 @@ public:
                 ,const wxString&    rsName = wxTextCtrlNameStr
                );
 
-    // implement base class pure virtuals
+    //
+    // Implement base class pure virtuals
     // ----------------------------------
-
+    //
     virtual      wxString GetValue(void) const;
     virtual void SetValue(const wxString& rsValue);
 
@@ -59,15 +57,13 @@ public:
     virtual bool IsModified(void) const;
     virtual bool IsEditable(void) const;
 
-    // If the return values from and to are the same, there is no selection.
     virtual void GetSelection( long* pFrom
                               ,long* pTo
                              ) const;
-
-    // operations
+    //
+    // Operations
     // ----------
-
-    // editing
+    //
     virtual void Clear(void);
     virtual void Replace( long            lFrom
                          ,long            lTo
@@ -77,20 +73,17 @@ public:
                         ,long lTo
                        );
 
-    // load the controls contents from the file
     virtual bool LoadFile(const wxString& rsFile);
 
-    // clears the dirty flag
     virtual void DiscardEdits(void);
 
-    // writing text inserts it at the current position, appending always
-    // inserts it at the end
     virtual void WriteText(const wxString& rsText);
     virtual void AppendText(const wxString& rsText);
 
-    // translate between the position (which is just an index in the text ctrl
-    // considering all its contents as a single strings) and (x, y) coordinates
-    // which represent column and line.
+    virtual bool SetStyle( long              lStart
+                          ,long              lEnd
+                          ,const wxTextAttr& rStyle
+                         );
     virtual long XYToPosition( long lX
                               ,long lY
                              ) const;
@@ -101,7 +94,6 @@ public:
 
     virtual void ShowPosition(long lPos);
 
-    // Clipboard operations
     virtual void Copy(void);
     virtual void Cut(void);
     virtual void Paste(void);
@@ -110,14 +102,12 @@ public:
     virtual bool CanCut(void) const;
     virtual bool CanPaste(void) const;
 
-    // Undo/redo
     virtual void Undo(void);
     virtual void Redo(void);
 
     virtual bool CanUndo(void) const;
     virtual bool CanRedo(void) const;
 
-    // Insertion point
     virtual void SetInsertionPoint(long lPos);
     virtual void SetInsertionPointEnd(void);
     virtual long GetInsertionPoint(void) const;
