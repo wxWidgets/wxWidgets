@@ -87,6 +87,10 @@ enum wxDLFlags
     wxDL_VERBATIM   = 0x00000008,   // Attempt to load the supplied library
                                     // name without appending the usual dll
                                     // filename extension.
+
+    wxDL_NOSHARE    = 0x00000010,   // load new DLL, don't reuse already loaded
+
+    // FIXME: why? (VZ)
 #ifdef __osf__
     wxDL_DEFAULT    = wxDL_LAZY
 #else
@@ -106,7 +110,7 @@ public:
 
         // return the platform standard DLL extension (with leading dot)
 
-    static const wxString   &GetDllExt() { return ms_dllext; }
+    static const wxChar *GetDllExt() { return ms_dllext; }
 
     wxDynamicLibrary() : m_handle(0) {}
     wxDynamicLibrary(wxString libname, int flags = wxDL_DEFAULT)
@@ -155,7 +159,7 @@ protected:
 
         // Platform specific shared lib suffix.
 
-    static const wxString ms_dllext;
+    static const wxChar *ms_dllext;
 
         // the handle to DLL or NULL
 
@@ -189,7 +193,7 @@ public:
     wxPluginLibrary( const wxString &libname, int flags = wxDL_DEFAULT );
     ~wxPluginLibrary();
 
-    wxPluginLibrary  *RefLib() { ++m_linkcount; return this; }
+    wxPluginLibrary  *RefLib();
     bool              UnrefLib();
 
         // These two are called by the PluginSentinel on (PLUGGABLE) object
@@ -304,7 +308,7 @@ public:
 
     static void *GetSymbol(wxDllType dllHandle, const wxString &name, bool *success = 0);
 
-    static const wxString &GetDllExt() { return wxDynamicLibrary::GetDllExt(); }
+    static wxString GetDllExt() { return wxDynamicLibrary::GetDllExt(); }
 
 private:
 
@@ -312,8 +316,6 @@ private:
 };
 #endif
 
-
 #endif  // wxUSE_DYNAMIC_LOADER
 #endif  // _WX_DYNAMICLOADER_H__
 
-// vi:sts=4:sw=4:et
