@@ -1738,6 +1738,10 @@ SOURCE=..\include\wx\pen.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\platform.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\popupwin.h
 # End Source File
 # Begin Source File

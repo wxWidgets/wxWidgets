@@ -2018,6 +2018,10 @@ SOURCE=..\include\wx\pen.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\platform.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\popupwin.h
 # End Source File
 # Begin Source File
@@ -2503,15 +2507,15 @@ SOURCE=..\include\wx\msw\frame.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\gauge.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\gauge95.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\include\wx\msw\gaugemsw.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\gccpriv.h
 # End Source File
 # Begin Source File
 
@@ -2647,10 +2651,6 @@ SOURCE=..\include\wx\msw\settings.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\include\wx\msw\slider.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\include\wx\msw\slider95.h
 # End Source File
 # Begin Source File
@@ -2660,6 +2660,10 @@ SOURCE=..\include\wx\msw\slidrmsw.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\spinbutt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\spinctrl.h
 # End Source File
 # Begin Source File
 
@@ -2712,6 +2716,10 @@ SOURCE=..\include\wx\msw\timer.h
 # Begin Source File
 
 SOURCE=..\include\wx\msw\tooltip.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\msw\toplevel.h
 # End Source File
 # Begin Source File
 

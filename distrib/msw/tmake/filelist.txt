@@ -833,6 +833,7 @@ palette.h	WXH
 panel.h	WXH
 paper.h	WXH
 pen.h	WXH
+platform.h	WXH
 popupwin.h	WXH
 print.h	WXH
 printdlg.h	WXH
