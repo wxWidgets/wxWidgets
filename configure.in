@@ -1384,6 +1384,9 @@ WXGTK12=
 
 WXWINE=
 
+dnl Extension for programs; '.exe' for msw builds
+PROGRAM_EXT= 
+
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     AC_MSG_CHECKING(for Windows headers)
     WX_PATH_FIND_INCLUDES($SEARCH_INCLUDE, windows.h)
@@ -1411,6 +1414,7 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
     GENERICOBJS=MSW_GENERICOBJS
     UNIXOBJS=
     GUIDIST=MSW_DIST
+    PROGRAM_EXT=.exe
 fi
 
 if test "$wxUSE_GTK" = 1; then
@@ -2692,6 +2696,7 @@ AC_SUBST(WX_TARGET_LIBRARY)
 AC_SUBST(WX_LIBRARY_LINK1)
 AC_SUBST(WX_LIBRARY_LINK2)
 AC_SUBST(WX_LIBRARY_LINK3)
+AC_SUBST(PROGRAM_EXT)
 
 dnl are we supposed to create the links?
 AC_SUBST(WX_CREATE_LINKS)

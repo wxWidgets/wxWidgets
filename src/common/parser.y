@@ -120,7 +120,10 @@ arg1	:	WORD
 
 %%
 
-#if (defined(__WXGTK__) || defined(__WXWINE__) || defined(__WXMOTIF__)) && !defined(NO_CONFIGURE)
+/* We include lexer.c if we are building for gtk, wine or motif
+ * and also whenever we are using configure (marked by __WX_SETUP_H__) for,
+ * for example, cross compilation. */
+#if (defined(__WXGTK__) || defined(__WXWINE__) || defined(__WXMOTIF__)) || defined(__WX_SETUP_H__) && !defined(NO_CONFIGURE)
 #include "lexer.c"
 #else
 #if (defined(__MWERKS__))

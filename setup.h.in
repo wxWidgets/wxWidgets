@@ -79,7 +79,11 @@
 #undef __EMX__
 #undef _GNU_SOURCE
 
+/* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
+#ifndef __WINDOWS__
 #undef __WINDOWS__
+#endif
+
 #undef __WIN95__
 #undef __WIN32__
 #undef __GNUWIN32__
@@ -280,6 +284,7 @@
 #define wxUSE_TOOLBAR 0
 
 #if defined(__WXWINE__) || defined(__GNUWIN32__)
+#define wxUSE_OWNER_DRAWN 1 
   #if wxUSE_TOOLBAR
     #define wxUSE_BUTTONBAR 1
   #endif

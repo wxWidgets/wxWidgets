@@ -366,9 +366,11 @@ MSW_GENERICDEPS = \
 		#$ ExpandList("WXMSW_GENERICDEPS");
 
 MSW_COMMONOBJS = \
+		parser.o \
 		#$ ExpandList("WXMSW_COMMONOBJS");
 
 MSW_COMMONDEPS = \
+		parser.d \
 		#$ ExpandList("WXMSW_COMMONDEPS");
 
 MSW_GUIOBJS = \
