@@ -106,14 +106,17 @@ class wxTextCtrl: public wxControl, public streambuf
 
   // implementation    
     
-    GtkWidget* GetConnectWidget(void);
+    GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
+    void CalculateScrollbar();
     
   private:
   
     bool        m_modified;
     GtkWidget  *m_text;
+    GtkWidget  *m_vScrollbar;
+    bool        m_vScrollbarVisible;
 };
 
 #endif // __GTKTEXTCTRLH__

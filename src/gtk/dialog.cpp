@@ -245,7 +245,7 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
 
 void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-    wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+    wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
   
     if (GetAutoLayout())
     {

@@ -155,7 +155,7 @@ static gint
 selection_clear( GtkWidget *WXUNUSED(widget), GdkEventSelection *WXUNUSED(event) )
 {
     if (!wxTheClipboard) return TRUE;
-  
+    
     // the clipboard is no longer in our hands. we have to delete the
     // clipboard data.
     
@@ -307,6 +307,22 @@ bool wxClipboard::SetData( wxDataObject *data )
 {
     wxCHECK_MSG( data, FALSE, "data is invalid" );
   
+    wxNode *node = m_dataObjects.First();
+    
+    while (node)
+    {
+        wxDataObject *d = (wxDataObject*)node->Data();
+	
+	if (d->GetFormat() == data->GetFormat())
+	{
+	    m_dataObjects.DeleteNode( node );
+	    
+	    break;
+	}
+	
+        node = node->Next();
+    }
+    
     m_dataObjects.Append( data );
   
     wxCHECK_MSG( m_open, FALSE, "clipboard not open" );

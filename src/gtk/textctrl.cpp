@@ -24,16 +24,30 @@
 //  "changed"
 //-----------------------------------------------------------------------------
 
-static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
+static void 
+gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
 {
-  win->SetModified();
+    win->SetModified();
+    
+    win->CalculateScrollbar();
 
-  wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
-  wxString val( win->GetValue() );
-  if (!val.IsNull()) event.m_commandString = WXSTRINGCAST val;
-  event.SetEventObject( win );
-  win->GetEventHandler()->ProcessEvent( event );
+    wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->m_windowId );
+    wxString val( win->GetValue() );
+    if (!val.IsNull()) event.m_commandString = WXSTRINGCAST val;
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
 }
+
+//-----------------------------------------------------------------------------
+// "size_allocate"
+//-----------------------------------------------------------------------------
+
+static void 
+gtk_text_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* WXUNUSED(alloc), wxTextCtrl *win )
+{
+    win->CalculateScrollbar();
+}
+
 
 //-----------------------------------------------------------------------------
 //  wxTextCtrl
@@ -42,186 +56,217 @@ static void gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
-  EVT_CHAR(wxTextCtrl::OnChar)
+    EVT_CHAR(wxTextCtrl::OnChar)
 END_EVENT_TABLE()
 
 wxTextCtrl::wxTextCtrl() : streambuf()
 {
-  if (allocate()) setp(base(),ebuf());
+    if (allocate()) setp(base(),ebuf());
 
-  m_modified = FALSE;
+    m_modified = FALSE;
 }
 
 wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxValidator& validator, const wxString &name ) : streambuf()
 {
-  if (allocate()) setp(base(),ebuf());
+    if (allocate()) setp(base(),ebuf());
 
-  m_modified = FALSE;
-  Create( parent, id, value, pos, size, style, validator, name );
+    m_modified = FALSE;
+    Create( parent, id, value, pos, size, style, validator, name );
 }
 
 bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxValidator& validator, const wxString &name )
 {
-  m_needParent = TRUE;
+    m_needParent = TRUE;
 
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
 
-  SetValidator( validator );
+    SetValidator( validator );
+    
+    m_vScrollbarVisible = TRUE;
 
-  bool multi_line = (style & wxTE_MULTILINE) != 0;
-  if ( multi_line )
-  {
-    // a multi-line edit control: create a vertical scrollbar by default and
-    // horizontal if requested
-    bool bHasHScrollbar = (style & wxHSCROLL) != 0;
+    bool multi_line = (style & wxTE_MULTILINE) != 0;
+    if ( multi_line )
+    {
+        // a multi-line edit control: create a vertical scrollbar by default and
+        // horizontal if requested
+        bool bHasHScrollbar = (style & wxHSCROLL) != 0;
+ 
+        // create our control...
+        m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
 
-    // create our control...
-    m_text = gtk_text_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
-
-    // ... and put into the upper left hand corner of the table
-    m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
-    gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
+        // ... and put into the upper left hand corner of the table
+        m_widget = gtk_table_new(bHasHScrollbar ? 2 : 1, 2, FALSE);
+        gtk_table_attach( GTK_TABLE(m_widget), m_text, 0, 1, 0, 1,
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                       (GtkAttachOptions)(GTK_FILL | GTK_EXPAND | GTK_SHRINK),
                        0, 0);
 
-    // put the horizontal scrollbar in the lower left hand corner
-    if (bHasHScrollbar)
-    {
-      GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
-      gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
+        // put the horizontal scrollbar in the lower left hand corner
+        if (bHasHScrollbar)
+        {
+            GtkWidget *hscrollbar = gtk_hscrollbar_new(GTK_TEXT(m_text)->hadj);
+            gtk_table_attach(GTK_TABLE(m_widget), hscrollbar, 0, 1, 1, 2,
                        (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
                        GTK_FILL,
                        0, 0);
-      gtk_widget_show(hscrollbar);
-    }
+            gtk_widget_show(hscrollbar);
+        }
 
-    // finally, put the vertical scrollbar in the upper right corner
-    GtkWidget *vscrollbar = gtk_vscrollbar_new(GTK_TEXT(m_text)->vadj);
-    gtk_table_attach(GTK_TABLE(m_widget), vscrollbar, 1, 2, 0, 1,
+        // finally, put the vertical scrollbar in the upper right corner
+        m_vScrollbar = gtk_vscrollbar_new( GTK_TEXT(m_text)->vadj );
+        gtk_table_attach(GTK_TABLE(m_widget), m_vScrollbar, 1, 2, 0, 1,
                      GTK_FILL,
                      (GtkAttachOptions)(GTK_EXPAND | GTK_FILL | GTK_SHRINK),
                      0, 0);
-    gtk_widget_show( vscrollbar );
-  }
-  else
-  {
-    // a single-line text control: no need for scrollbars
-    m_widget =
-    m_text = gtk_entry_new();
-  }
+        gtk_widget_show( m_vScrollbar );
+	
+        gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
+          GTK_SIGNAL_FUNC(gtk_text_size_callback), (gpointer)this );
+    }
+    else
+    {
+        // a single-line text control: no need for scrollbars
+        m_widget =
+          m_text = gtk_entry_new();
+    }
 
-  wxSize newSize = size;
-  if (newSize.x == -1) newSize.x = 80;
-  if (newSize.y == -1) newSize.y = 26;
-  SetSize( newSize.x, newSize.y );
+    wxSize newSize = size;
+    if (newSize.x == -1) newSize.x = 80;
+    if (newSize.y == -1) newSize.y = 26;
+    SetSize( newSize.x, newSize.y );
 
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
 
-  PostCreation();
+    PostCreation();
 
-  if (multi_line)
-  {
-    gtk_widget_realize(m_text);
-    gtk_widget_show(m_text);
-  }
+    if (multi_line)
+    {
+        gtk_widget_realize(m_text);
+        gtk_widget_show(m_text);
+    }
 
-  // we want to be notified about text changes
-  gtk_signal_connect(GTK_OBJECT(m_text), "changed",
+    // we want to be notified about text changes
+    gtk_signal_connect(GTK_OBJECT(m_text), "changed",
                      GTK_SIGNAL_FUNC(gtk_text_changed_callback),
                      (gpointer)this);
 
-  if (!value.IsNull())
-  {
-    gint tmp = 0;
-    gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
-    SetInsertionPointEnd();
-  }
+    if (!value.IsNull())
+    {
+        gint tmp = 0;
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &tmp );
+        SetInsertionPointEnd();
+    }
 
-  if (style & wxTE_PASSWORD)
-  {
-    if (!multi_line)
-      gtk_entry_set_visibility( GTK_ENTRY(m_text), FALSE );
-  }
+    if (style & wxTE_PASSWORD)
+    {
+        if (!multi_line)
+            gtk_entry_set_visibility( GTK_ENTRY(m_text), FALSE );
+    }
 
-  if (style & wxTE_READONLY)
-  {
-    if (!multi_line)
-      gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
-  }
-  else
-  {
-    if (multi_line)
-      gtk_text_set_editable( GTK_TEXT(m_text), 1 );
-  }
+    if (style & wxTE_READONLY)
+    {
+        if (!multi_line)
+            gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
+    }
+    else
+    {
+        if (multi_line)
+            gtk_text_set_editable( GTK_TEXT(m_text), 1 );
+    }
+    
+    Show( TRUE );
+    
+    SetBackgroundColour( parent->GetBackgroundColour() );
+    SetForegroundColour( parent->GetForegroundColour() );
 
-  Show( TRUE );
+    return TRUE;
+}
 
-  SetBackgroundColour( parent->GetBackgroundColour() );
-  SetForegroundColour( parent->GetForegroundColour() );
+void wxTextCtrl::CalculateScrollbar()
+{
+    if ((m_windowStyle & wxTE_MULTILINE) == 0) return;
 
-  return TRUE;
+    GtkAdjustment *adj = GTK_TEXT(m_text)->vadj;
+    
+    if (adj->upper - adj->page_size < 0.8)
+    {
+        if (m_vScrollbarVisible)
+        {
+	    gtk_widget_hide( m_vScrollbar );
+	
+	    m_vScrollbarVisible = FALSE;
+        }
+    }
+    else
+    {
+        if (!m_vScrollbarVisible)
+        {
+	    gtk_widget_show( m_vScrollbar );
+	    
+	    m_vScrollbarVisible = TRUE;
+        }
+    }
 }
 
 wxString wxTextCtrl::GetValue() const
 {
-  wxCHECK_MSG( m_text != NULL, "", "invalid text ctrl" );
+    wxCHECK_MSG( m_text != NULL, "", "invalid text ctrl" );
 
-  wxString tmp;
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-    char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
-    tmp = text;
-    g_free( text );
-  }
-  else
-  {
-    tmp = gtk_entry_get_text( GTK_ENTRY(m_text) );
-  }
-  return tmp;
+    wxString tmp;
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
+        tmp = text;
+        g_free( text );
+    }
+    else
+    {
+        tmp = gtk_entry_get_text( GTK_ENTRY(m_text) );
+    }
+    return tmp;
 }
 
 void wxTextCtrl::SetValue( const wxString &value )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  wxString tmp = "";
-  if (!value.IsNull()) tmp = value;
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-    gtk_editable_delete_text( GTK_EDITABLE(m_text), 0, len );
-    len = 0;
-    gtk_editable_insert_text( GTK_EDITABLE(m_text), tmp, tmp.Length(), &len );
-  }
-  else
-  {
-    gtk_entry_set_text( GTK_ENTRY(m_text), tmp );
-  }
+    wxString tmp = "";
+    if (!value.IsNull()) tmp = value;
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        gtk_editable_delete_text( GTK_EDITABLE(m_text), 0, len );
+        len = 0;
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), tmp, tmp.Length(), &len );
+    }
+    else
+    {
+        gtk_entry_set_text( GTK_ENTRY(m_text), tmp );
+    }
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  if (text.IsNull()) return;
+    if (text.IsNull()) return;
 
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-    gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
-  }
-  else
-  {
-    gtk_entry_append_text( GTK_ENTRY(m_text), text );
-  }
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
+    }
+    else
+    {
+        gtk_entry_append_text( GTK_ENTRY(m_text), text );
+    }
 }
 
 bool wxTextCtrl::LoadFile( const wxString &file )
@@ -354,7 +399,7 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
 
 void wxTextCtrl::OnDropFiles( wxDropFilesEvent &WXUNUSED(event) )
 {
-  wxFAIL_MSG( "wxTextCtrl::OnDropFiles not implemented" );
+    wxFAIL_MSG( "wxTextCtrl::OnDropFiles not implemented" );
 }
 
 long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
@@ -386,14 +431,14 @@ long wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
 
 long wxTextCtrl::XYToPosition(long x, long y ) const
 {
-  if (!(m_windowStyle & wxTE_MULTILINE))
-    return 0;
-  long pos=0;
+    if (!(m_windowStyle & wxTE_MULTILINE)) return 0;
+    
+    long pos=0;
 
-  for(int i=1;i<y;i++)
-      pos +=GetLineLength(i);
-  pos +=x-1; // Pos start with 0
-  return pos;
+    for( int i=1; i<y; i++ ) pos += GetLineLength(i);
+    
+    pos +=x-1; // Pos start with 0
+    return pos;
 }
 
 int wxTextCtrl::GetLineLength(long lineNo) const
@@ -404,244 +449,251 @@ int wxTextCtrl::GetLineLength(long lineNo) const
 
 int wxTextCtrl::GetNumberOfLines() const
 {
-  if (m_windowStyle & wxTE_MULTILINE)
-  {
-    gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-    char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
-
-    if (text)
+    if (m_windowStyle & wxTE_MULTILINE)
     {
-        int currentLine = 0;
-        for (int i = 0; i < len; i++ )
-          if (text[i] == '\n')
-            currentLine++;
+        gint len = gtk_text_get_length( GTK_TEXT(m_text) );
+        char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), 0, len );
 
-        g_free( text );
-        return currentLine;
+        if (text)
+        {
+            int currentLine = 0;
+            for (int i = 0; i < len; i++ )
+	    {
+                if (text[i] == '\n')
+                  currentLine++;
+	    }
+            g_free( text );
+            return currentLine;
+        }
+        else
+	{
+            return 0;
+	}
     }
     else
-      return 0;
-  }
-  else
-  {
-    return 1;
-  }
+    {
+       return 1;
+    }
 }
 
 void wxTextCtrl::SetInsertionPoint( long pos )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  int tmp = (int) pos;
-  if (m_windowStyle & wxTE_MULTILINE)
-    gtk_text_set_point( GTK_TEXT(m_text), tmp );
-  else
-    gtk_entry_set_position( GTK_ENTRY(m_text), tmp );
+    int tmp = (int) pos;
+    if (m_windowStyle & wxTE_MULTILINE)
+        gtk_text_set_point( GTK_TEXT(m_text), tmp );
+    else
+        gtk_entry_set_position( GTK_ENTRY(m_text), tmp );
 }
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  int pos = 0;
-  if (m_windowStyle & wxTE_MULTILINE)
-    pos = gtk_text_get_length( GTK_TEXT(m_text) );
-  else
-    pos = GTK_ENTRY(m_text)->text_length;
-  SetInsertionPoint((pos-1)>0 ? (pos-1):0);
+    int pos = 0;
+    if (m_windowStyle & wxTE_MULTILINE)
+        pos = gtk_text_get_length( GTK_TEXT(m_text) );
+    else
+      pos = GTK_ENTRY(m_text)->text_length;
+      
+    SetInsertionPoint((pos-1)>0 ? (pos-1):0);
 }
 
 void wxTextCtrl::SetEditable( bool editable )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  if (m_windowStyle & wxTE_MULTILINE)
-    gtk_text_set_editable( GTK_TEXT(m_text), editable );
-  else
-    gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
+    if (m_windowStyle & wxTE_MULTILINE)
+        gtk_text_set_editable( GTK_TEXT(m_text), editable );
+    else
+        gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
 }
 
 void wxTextCtrl::SetSelection( long from, long to )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
+    gtk_editable_select_region( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
 void wxTextCtrl::ShowPosition( long WXUNUSED(pos) )
 {
-  wxFAIL_MSG( "wxTextCtrl::ShowPosition not implemented" );
+    wxFAIL_MSG( "wxTextCtrl::ShowPosition not implemented" );
 }
 
 long wxTextCtrl::GetInsertionPoint() const
 {
-  wxCHECK_MSG( m_text != NULL, 0, "invalid text ctrl" );
+    wxCHECK_MSG( m_text != NULL, 0, "invalid text ctrl" );
 
-  return (long) GTK_EDITABLE(m_text)->current_pos;
+    return (long) GTK_EDITABLE(m_text)->current_pos;
 }
 
 long wxTextCtrl::GetLastPosition() const
 {
-  wxCHECK_MSG( m_text != NULL, 0, "invalid text ctrl" );
+    wxCHECK_MSG( m_text != NULL, 0, "invalid text ctrl" );
 
-  int pos = 0;
-  if (m_windowStyle & wxTE_MULTILINE)
-    pos = gtk_text_get_length( GTK_TEXT(m_text) );
-  else
-    pos = GTK_ENTRY(m_text)->text_length;
-  return (long)pos-1;
+    int pos = 0;
+    if (m_windowStyle & wxTE_MULTILINE)
+        pos = gtk_text_get_length( GTK_TEXT(m_text) );
+    else
+        pos = GTK_ENTRY(m_text)->text_length;
+	
+    return (long)pos-1;
 }
 
 void wxTextCtrl::Remove( long from, long to )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
+    gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
 }
 
 void wxTextCtrl::Replace( long from, long to, const wxString &value )
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
-  gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
-  if (value.IsNull()) return;
-  gint pos = (gint)to;
-  gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
+    gtk_editable_delete_text( GTK_EDITABLE(m_text), (gint)from, (gint)to );
+    if (value.IsNull()) return;
+    gint pos = (gint)to;
+    gtk_editable_insert_text( GTK_EDITABLE(m_text), value, value.Length(), &pos );
 }
 
 void wxTextCtrl::Cut()
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
 #if (GTK_MINOR_VERSION == 1)
-  gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
+    gtk_editable_cut_clipboard( GTK_EDITABLE(m_text) );
 #else
-  gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
+    gtk_editable_cut_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
 }
 
 void wxTextCtrl::Copy()
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
 #if (GTK_MINOR_VERSION == 1)
-  gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
+    gtk_editable_copy_clipboard( GTK_EDITABLE(m_text) );
 #else
-  gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
+    gtk_editable_copy_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
 }
 
 void wxTextCtrl::Paste()
 {
-  wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
 
 #if (GTK_MINOR_VERSION == 1)
-  gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
+    gtk_editable_paste_clipboard( GTK_EDITABLE(m_text) );
 #else
-  gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
+    gtk_editable_paste_clipboard( GTK_EDITABLE(m_text), 0 );
 #endif
 }
 
 void wxTextCtrl::Clear()
 {
-  SetValue( "" );
+    SetValue( "" );
 }
 
 void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 {
-  if ((key_event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
-  {
-    wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
-    event.SetEventObject(this);
-    if (GetEventHandler()->ProcessEvent(event)) return;
-  }
-  else if (key_event.KeyCode() == WXK_TAB)
-  {
-    wxNavigationKeyEvent event;
-    event.SetDirection( key_event.m_shiftDown );
-    event.SetWindowChange(FALSE);
-    event.SetEventObject(this);
+    wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
+    
+    if ((key_event.KeyCode() == WXK_RETURN) && (m_windowStyle & wxPROCESS_ENTER))
+    {
+        wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+        event.SetEventObject(this);
+        if (GetEventHandler()->ProcessEvent(event)) return;
+    }
+    else if (key_event.KeyCode() == WXK_TAB)
+    {
+        wxNavigationKeyEvent event;
+        event.SetDirection( key_event.m_shiftDown );
+        event.SetWindowChange(FALSE);
+        event.SetEventObject(this);
 
-    if (GetEventHandler()->ProcessEvent(event)) return;
-  }
-  key_event.Skip();
+        if (GetEventHandler()->ProcessEvent(event)) return;
+    }
+    key_event.Skip();
 }
 
 int wxTextCtrl::overflow( int WXUNUSED(c) )
 {
-  int len = pptr() - pbase();
-  char *txt = new char[len+1];
-  strncpy(txt, pbase(), len);
-  txt[len] = '\0';
-  (*this) << txt;
-  setp(pbase(), epptr());
-  delete[] txt;
-  return EOF;
+    int len = pptr() - pbase();
+    char *txt = new char[len+1];
+    strncpy(txt, pbase(), len);
+    txt[len] = '\0';
+    (*this) << txt;
+    setp(pbase(), epptr());
+    delete[] txt;
+    return EOF;
 }
 
 int wxTextCtrl::sync()
 {
-  int len = pptr() - pbase();
-  char *txt = new char[len+1];
-  strncpy(txt, pbase(), len);
-  txt[len] = '\0';
-  (*this) << txt;
-  setp(pbase(), epptr());
-  delete[] txt;
-  return 0;
+    int len = pptr() - pbase();
+    char *txt = new char[len+1];
+    strncpy(txt, pbase(), len);
+    txt[len] = '\0';
+    (*this) << txt;
+    setp(pbase(), epptr());
+    delete[] txt;
+    return 0;
 }
 
 int wxTextCtrl::underflow()
 {
-  return EOF;
+    return EOF;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(const wxString& s)
 {
-  WriteText(s);
-  return *this;
+    WriteText(s);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(float f)
 {
-  static char buf[100];
-  sprintf(buf, "%.2f", f);
-  WriteText(buf);
-  return *this;
+    static char buf[100];
+    sprintf(buf, "%.2f", f);
+    WriteText(buf);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(double d)
 {
-  static char buf[100];
-  sprintf(buf, "%.2f", d);
-  WriteText(buf);
-  return *this;
+    static char buf[100];
+    sprintf(buf, "%.2f", d);
+    WriteText(buf);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(int i)
 {
-  static char buf[100];
-  sprintf(buf, "%i", i);
-  WriteText(buf);
-  return *this;
+    static char buf[100];
+    sprintf(buf, "%i", i);
+    WriteText(buf);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(long i)
 {
-  static char buf[100];
-  sprintf(buf, "%ld", i);
-  WriteText(buf);
-  return *this;
+    static char buf[100];
+    sprintf(buf, "%ld", i);
+    WriteText(buf);
+    return *this;
 }
 
 wxTextCtrl& wxTextCtrl::operator<<(const char c)
 {
-  char buf[2];
+    char buf[2];
 
-  buf[0] = c;
-  buf[1] = 0;
-  WriteText(buf);
-  return *this;
+    buf[0] = c;
+    buf[1] = 0;
+    WriteText(buf);
+    return *this;
 }
 
 GtkWidget* wxTextCtrl::GetConnectWidget()
@@ -700,6 +752,7 @@ void wxTextCtrl::ApplyWidgetStyle()
 {
     if (m_windowStyle & wxTE_MULTILINE)
     {
+        // how ?
     } 
     else
     {

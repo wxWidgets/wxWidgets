@@ -642,10 +642,12 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
 	    
 	    wxString text = text_object->GetText();
 	    
+	    char *s = WXSTRINGCAST text;
+	    
             gtk_widget_dnd_data_set( widget, 
 	                             event, 
-				     (unsigned char*) text.c_str, 
-				     (int) text.Length() );
+				     (unsigned char*) s, 
+				     (int) text.Length()+1 );
 	
 	    break;
 	}
@@ -656,10 +658,12 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
 	    
 	    wxString text = file_object->GetFiles();
 	    
+	    char *s = WXSTRINGCAST text;
+	    
             gtk_widget_dnd_data_set( widget, 
 	                             event, 
-				     (unsigned char*) text.c_str, 
-				     (int) text.Length() );
+				     (unsigned char*) s, 
+				     (int) text.Length()+1 );
 	
 	    break;
 	}
