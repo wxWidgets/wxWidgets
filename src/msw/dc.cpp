@@ -1334,7 +1334,9 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 
 wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    return (wxCoord) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX) - m_logicalOriginX);
+    double xRel = x - m_deviceOriginX;
+    xRel /= m_logicalScaleX*m_userScaleX*m_signX*m_scaleX;
+    return (wxCoord)(xRel + m_logicalOriginX);
 }
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
@@ -1344,7 +1346,9 @@ wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    return (wxCoord) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY) - m_logicalOriginY);
+    double yRel = y - m_deviceOriginY;
+    yRel /= m_logicalScaleY*m_userScaleY*m_signY*m_scaleY;
+    return (wxCoord)(yRel + m_logicalOriginY);
 }
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
