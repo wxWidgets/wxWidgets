@@ -1755,7 +1755,7 @@ fi
     ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS)"
 
     dnl ODBC objects are Unix only
-    if test "$(TOOLKIT)" != "MSW"; then
+    if test "$TOOLKIT" != "MSW"; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
     fi
 
@@ -2092,7 +2092,8 @@ AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 
 AC_LANG_RESTORE
 
-if test "$USE_UNIX" = 1; then
+dnl under MSW we always have Sleep()
+if test "$TOOLKIT" != "MSW"; then
 
 dnl check for vfork() (even if it's the same as fork() in modern Unices)
 AC_CHECK_FUNCS(vfork)
@@ -2162,7 +2163,7 @@ if test "x$INET_LINK" != "x"; then
 fi
 
 fi
-dnl Unix
+dnl if !MSW
 
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!
@@ -2175,7 +2176,8 @@ dnl ---------------------------------------------------------------------------
 dnl thread support for Unix (always available under Win32)
 dnl ---------------------------------------------------------------------------
 
-if test "$USE_UNIX" = 1; then
+dnl under MSW we always have thread support
+if test "$TOOLKIT" != "MSW"; then
 
 dnl the code below:
 dnl   defines THREADS_OBJ which contains the object files to build
@@ -2288,7 +2290,7 @@ if test "$wxUSE_THREADS" = "yes" ; then
   THREADS_LINK="-l$THREADS_LINK"
 fi
 
-dnl from if USE_UNIX
+dnl from if !MSW
 fi
 
 if test "$wxUSE_THREADS" = "yes"; then
@@ -2692,6 +2694,9 @@ dnl ------------------------------------------------------------------------
 dnl wxSocket
 dnl ------------------------------------------------------------------------
 
+dnl under MSW we always have sockets
+if test "$TOOLKIT" != "MSW"; then
+
 if test "$wxUSE_SOCKETS" = "yes"; then
     dnl under Solaris, socket functions live in -lsocket
     AC_CHECK_FUNC(socket,,
@@ -2705,10 +2710,14 @@ if test "$wxUSE_SOCKETS" = "yes"; then
     )
 fi
 
+fi
+dnl if !MSW
+
 if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
     dnl determine the type of third argument for getsockname
+    dnl TODO cache it!!
     AC_MSG_CHECKING(the type of the third argument of getsockname)
     AC_TRY_COMPILE(
         [#include <sys/socket.h>],
@@ -2737,18 +2746,32 @@ dnl ---------------------------------------------------------------------------
 dnl Joystick support
 dnl ---------------------------------------------------------------------------
 
+dnl under MSW we always have joystick support
+if test "$TOOLKIT" != "MSW"; then
+
 if test "$wxUSE_JOYSTICK" = 1; then
   dnl joystick support is only for Linux 2.1.x or greater
   AC_CHECK_HEADERS(linux/joystick.h)
-  if test "$ac_cv_header_linux_joystick_h" = "yes"; then
+  if test "$ac_cv_header_linux_joystick_h" != "yes"; then
+    wxUSE_JOYSTICK=0
+    AC_MSG_WARN(Joystick not supported yb this system, disabled)
+  fi
+fi
+
+fi
+dnl if !MSW
+
+if test "$wxUSE_JOYSTICK" = 1; then
     AC_DEFINE(wxUSE_JOYSTICK)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
-  fi
 fi
 
 dnl ------------------------------------------------------------------------
 dnl DLL support
 dnl ------------------------------------------------------------------------
+
+dnl under MSW we always have LoadLibrary/GetProcAddress
+if test "$TOOLKIT" != "MSW"; then
 
 HAVE_DL_FUNCS=0
 HAVE_SHL_FUNCS=0
@@ -2788,6 +2811,9 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
         fi
     fi
 fi
+
+fi
+dnl if !MSW
 
 if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
     AC_DEFINE(wxUSE_DYNLIB_CLASS)
