@@ -132,22 +132,18 @@ class wxGridSizer(wxPySizer):
         isz = item.CalcMin()
         flag = item.GetFlag()
 
-        if flag & wxEXPAND:
+        if flag & wxEXPAND or flag & wxSHAPED:
             isz = wxSize(w, h)
+        else:
+            if flag & wxALIGN_CENTER_HORIZONTAL:
+                ipt.x = x + (w - isz.width) / 2
+            elif flag & wxALIGN_RIGHT:
+                ipt.x = x + (w - isz.width)
 
-        elif flag & wxCENTER:
-            ipt.x = x + (w - isz.width) / 2
-            ipt.y = y + (h - isz.height) / 2
-
-        if flag & wxALIGN_LEFT:
-            ipt.x = x
-        elif flag & wxALIGN_RIGHT:
-            ipt.x = x + (w - isz.width)
-
-        if flag & wxALIGN_TOP:
-            ipt.y = y
-        elif flag & wxALIGN_BOTTOM:
-            ipt.y = y + (h - isz.height)
+            if flag & wxALIGN_CENTER_VERTICAL:
+                ipt.y = y + (h - isz.height) / 2
+            elif flag & wxALIGN_BOTTOM:
+                ipt.y = y + (h - isz.height)
 
         item.SetDimension(ipt, isz)
 

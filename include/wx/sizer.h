@@ -56,6 +56,15 @@ public:
   virtual wxSize CalcMin();
   virtual void SetDimension( wxPoint pos, wxSize size );
 
+  void SetRatio( int width, int height )
+    // if either of dimensions is zero, ratio is assumed to be 1
+    // to avoid "divide by zero" errors
+    { m_ratio = (width && height) ? ((float) width / (float) height) : 1; }
+  void SetRatio( wxSize size )
+    { m_ratio = (size.x && size.y) ? ((float) size.x / (float) size.y) : 1; }
+  void SetRatio( float ratio ) { m_ratio = ratio; }
+  float GetRatio() const { return m_ratio; }
+
   bool IsWindow();
   bool IsSizer();
   bool IsSpacer();
@@ -81,6 +90,10 @@ protected:
   int          m_option;
   int          m_border;
   int          m_flag;
+  // als: aspect ratio can always be calculated from m_size,
+  //      but this would cause precision loss when the window
+  //      is shrinked.  it is safer to preserve initial value.
+  float        m_ratio;
   wxObject    *m_userData;
 };
 

@@ -695,12 +695,17 @@ enum wxDirection
 enum wxAlignment
 {
     wxALIGN_NOT               = 0x0000,
-    wxALIGN_CENTER            = 0x0100,
-    wxALIGN_CENTRE            = wxALIGN_CENTER,
+    wxALIGN_CENTER_HORIZONTAL = 0x0100,
+    wxALIGN_CENTRE_HORIZONTAL = wxALIGN_CENTER_HORIZONTAL,
     wxALIGN_LEFT              = wxALIGN_NOT,
     wxALIGN_TOP               = wxALIGN_NOT,
     wxALIGN_RIGHT             = 0x0200,
-    wxALIGN_BOTTOM            = 0x0400
+    wxALIGN_BOTTOM            = 0x0400,
+    wxALIGN_CENTER_VERTICAL   = 0x0800,
+    wxALIGN_CENTRE_VERTICAL   = wxALIGN_CENTER_VERTICAL,
+
+    wxALIGN_CENTER            = (wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL),
+    wxALIGN_CENTRE            = wxALIGN_CENTER
 };
 
 enum wxStretch
@@ -708,7 +713,8 @@ enum wxStretch
     wxSTRETCH_NOT             = 0x0000,
     wxSHRINK                  = 0x1000,
     wxGROW                    = 0x2000,
-    wxEXPAND                  = wxGROW
+    wxEXPAND                  = wxGROW,
+    wxSHAPED                  = 0x4000
 };
 
 // ----------------------------------------------------------------------------

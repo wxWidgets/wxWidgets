@@ -1,6 +1,6 @@
 \section{\class{wxBoxSizer}}\label{wxboxsizer}
 
-The basic idea behind a box sizer is that windows will most often be laid out in rather 
+The basic idea behind a box sizer is that windows will most often be laid out in rather
 simple basic geomerty, typically in a row or a column or several hierachies of either.
 
 As an exmaple, we will construct a dialog that will contain a text field at the top and
@@ -21,13 +21,16 @@ when adding a window (or another sizer) to a sizer. It is interpreted
 as a weight factor, i.e. it can be zero, indicating that the window may not be resized
 at all, or above zero. If several windows have a value above zero, the value is interpreted
 relative to the sum of all weight factors of the sizer, so when adding two windows with
-a value of 1, they will both get resized equally much and each half as much as the sizer 
+a value of 1, they will both get resized equally much and each half as much as the sizer
 owning them. Then what do we do when a column sizer changes its width? This behaviour is
-controlled by {\it flags} (the second parameter of the Add() function): Zero or no flag indicates that
-the window will get aligned at the left (in a column sizer) and the top (row sizer), whereas
-wxALIGN\_RIGHT and wxALIGN\_BOTTOM will do what they say. The item can also be centered
-using the wxCENTRE flag (same as wxCENTER) or it can be forced to grow with the sizer (using
-the wxGROW flag (same as wxEXPAND)).
+controlled by {\it flags} (the second parameter of the Add() function): Zero or no flag
+indicates that the window will preserve it's original size, wxGROW flag (same as wxEXPAND)
+forces the window to grow with the sizer, and wxSHAPED flag tells the window to change it's
+size proportionally, preserving original aspect ratio.  When wxGROW flag is not used,
+the item can be aligned within available space.  wxALIGN\_LEFT, wxALIGN\_TOP, wxALIGN\_RIGHT,
+wxALIGN\_BOTTOM, wxALIGN\_CENTER\_HORIZONTAL and wxALIGN\_CENTER\_VERTICAL do what they say.
+wxALIGN\_CENTRE (same as wxALIGN\_CENTER) is defined as (wxALIGN\_CENTER\_HORIZONTAL |
+wxALIGN\_CENTER\_VERTICAL).  Default alignment is wxALIGN\_LEFT | wxALIGN\_TOP.
 
 As mentioned above, any window belonging to a sizer may have border, and it can be specified
 which of the four sides may have this border, using the wxTOP, wxLEFT, wxRIGHT and wxBOTTOM
@@ -45,9 +48,9 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title ) :
   wxDialog( parent, id, title, wxDefaultPosition, wxDefaultSize, wxDIALOG_STYLE | wxRESIZE_BORDER )
 {
   wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-  
+
   // create text ctrl with minimal size 100x60
-  topsizer->Add( 
+  topsizer->Add(
     new wxTextCtrl( this, -1, "My text.", wxDefaultPosition, wxSize(100,60), wxTE_MULTILINE),
     1,            // make vertically stretchable
     wxEXPAND |    // make horizontally stretchable
@@ -57,20 +60,20 @@ MyDialog::MyDialog(wxFrame *parent, wxWindowID id, const wxString &title ) :
 
   wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
   button_sizer->Add(
-     new wxButton( this, wxID_OK, "OK" ), 
+     new wxButton( this, wxID_OK, "OK" ),
      0,           // make horizontally unstretchable
      wxALL,       // make border all around (implicit top alignment)
      10 );        // set border width to 10
   button_sizer->Add(
-     new wxButton( this, wxID_CANCEL, "Cancel" ), 
+     new wxButton( this, wxID_CANCEL, "Cancel" ),
      0,           // make horizontally unstretchable
      wxALL,       // make border all around (implicit top alignment)
      10 );        // set border width to 10
-  
-  topsizer->Add( 
+
+  topsizer->Add(
      button_sizer,
-     0,          // make vertically unstretchable
-     wxCENTER ); // no border and centre horizontally
+     0,                // make vertically unstretchable
+     wxALIGN_CENTER ); // no border and centre horizontally
 
   SetAutoLayout( TRUE );     // tell dialog to use sizer
   SetSizer( topsizer );      // actually set the sizer
@@ -98,7 +101,7 @@ or wxHORIZONTAL for creating either a column sizer or a row sizer.
 
 Implements the calculation of a box sizer's dimensions and then sets
 the size of its its children (calling \helpref{wxWindow::SetSize}{wxwindowsetsize}
-if the child is a window). It is used internally only and must not be called 
+if the child is a window). It is used internally only and must not be called
 by the users. Documented for information.
 
 \membersection{wxBoxSizer::CalcMin}\label{wxboxsizercalcmin}

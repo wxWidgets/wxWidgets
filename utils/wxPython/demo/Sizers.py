@@ -69,7 +69,7 @@ def makeSimpleBox6(win):
     box = wxBoxSizer(wxHORIZONTAL)
     box.Add(wxButton(win, 1010, "one"), 1, wxALIGN_TOP)
     box.Add(wxButton(win, 1010, "two"), 1, wxEXPAND)
-    box.Add(wxButton(win, 1010, "three"), 1, wxCENTER)
+    box.Add(wxButton(win, 1010, "three"), 1, wxALIGN_CENTER)
     box.Add(wxButton(win, 1010, "four"), 1, wxEXPAND)
     box.Add(wxButton(win, 1010, "five"), 1, wxALIGN_BOTTOM)
 
@@ -93,7 +93,7 @@ def makeSimpleBox8(win):
     box = wxBoxSizer(wxVERTICAL)
     box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
     box.Add(0,0, 1)
-    box.Add(wxButton(win, 1010, "two"), 0, wxCENTER)
+    box.Add(wxButton(win, 1010, "two"), 0, wxALIGN_CENTER)
     box.Add(0,0, 1)
     box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
     box.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
@@ -243,7 +243,7 @@ def makeGrid2(win):
                  (wxButton(win, 1010, 'two'),   0, wxEXPAND),
                  (wxButton(win, 1010, 'three'), 0, wxALIGN_LEFT | wxALIGN_BOTTOM),
                  (wxButton(win, 1010, 'four'),  0, wxEXPAND),
-                 (wxButton(win, 1010, 'five'),  0, wxCENTER),
+                 (wxButton(win, 1010, 'five'),  0, wxALIGN_CENTER),
                  (wxButton(win, 1010, 'six'),   0, wxEXPAND),
                  (box,                          0, wxEXPAND | wxALL, 10),
                  (wxButton(win, 1010, 'eight'), 0, wxEXPAND),
@@ -273,6 +273,76 @@ def makeGrid3(win):
     gs.AddGrowableRow(2)
     gs.AddGrowableCol(1)
     return gs
+
+#----------------------------------------------------------------------
+
+def makeGrid4(win):
+    bpos = wxDefaultPosition
+    bsize = wxSize(100, 50)
+    gs = wxGridSizer(3, 3, 2, 2)  # rows, cols, hgap, vgap
+
+    gs.AddMany([ (wxButton(win, 1010, 'one', bpos, bsize),
+                  0, wxALIGN_TOP | wxALIGN_LEFT ),
+                 (wxButton(win, 1010, 'two', bpos, bsize),
+                  0, wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL ),
+                 (wxButton(win, 1010, 'three', bpos, bsize),
+                  0, wxALIGN_TOP | wxALIGN_RIGHT ),
+                 (wxButton(win, 1010, 'four', bpos, bsize),
+                  0, wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT ),
+                 (wxButton(win, 1010, 'five', bpos, bsize),
+                  0, wxALIGN_CENTER ),
+                 (wxButton(win, 1010, 'six', bpos, bsize),
+                  0, wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT ),
+                 (wxButton(win, 1010, 'seven', bpos, bsize),
+                  0, wxALIGN_BOTTOM | wxALIGN_LEFT ),
+                 (wxButton(win, 1010, 'eight', bpos, bsize),
+                  0, wxALIGN_BOTTOM | wxALIGN_CENTER_HORIZONTAL ),
+                 (wxButton(win, 1010, 'nine', bpos, bsize),
+                  0, wxALIGN_BOTTOM | wxALIGN_RIGHT ),
+                 ])
+
+    return gs
+
+#----------------------------------------------------------------------
+
+def makeShapes(win):
+    bpos = wxDefaultPosition
+    bsize = wxSize(100, 50)
+    gs = wxGridSizer(3, 3, 2, 2)  # rows, cols, hgap, vgap
+
+    gs.AddMany([ (wxButton(win, 1010, 'one', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_TOP | wxALIGN_LEFT ),
+                 (wxButton(win, 1010, 'two', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_TOP | wxALIGN_CENTER_HORIZONTAL ),
+                 (wxButton(win, 1010, 'three', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_TOP | wxALIGN_RIGHT ),
+                 (wxButton(win, 1010, 'four', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_CENTER_VERTICAL | wxALIGN_LEFT ),
+                 (wxButton(win, 1010, 'five', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_CENTER ),
+                 (wxButton(win, 1010, 'six', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_CENTER_VERTICAL | wxALIGN_RIGHT ),
+                 (wxButton(win, 1010, 'seven', bpos, bsize),
+                  0, wxSHAPED |  wxALIGN_BOTTOM | wxALIGN_LEFT ),
+                 (wxButton(win, 1010, 'eight', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_BOTTOM | wxALIGN_CENTER_HORIZONTAL ),
+                 (wxButton(win, 1010, 'nine', bpos, bsize),
+                  0, wxSHAPED | wxALIGN_BOTTOM | wxALIGN_RIGHT ),
+                 ])
+
+    return gs
+
+#----------------------------------------------------------------------
+
+def makeSimpleBoxShaped(win):
+    box = wxBoxSizer(wxHORIZONTAL)
+    box.Add(wxButton(win, 1010, "one"), 0, wxEXPAND)
+    box.Add(wxButton(win, 1010, "two"), 0, wxEXPAND)
+    box.Add(wxButton(win, 1010, "three"), 0, wxEXPAND)
+    box.Add(wxButton(win, 1010, "four"), 0, wxEXPAND)
+    box.Add(wxButton(win, 1010, "five"), 1, wxSHAPED)
+
+    return box
 
 #----------------------------------------------------------------------
 
@@ -328,7 +398,7 @@ theTests = [
     ("", None, ""),
 
     ("Simple border sizer", makeSimpleBorder1,
-     "The wxBorderSizer leaves empty space around its contents.  This one "
+     "The wxBoxSizer can leave empty space around its contents.  This one "
      "gives a border all the way around."
      ),
 
@@ -378,6 +448,22 @@ theTests = [
      "which we have done for the first and last row and the middle column for "
      "this example.\n"
      "\nThere is also a spacer in the middle cell instead of an actual window."
+     ),
+
+    ("Grid with Alignment", makeGrid4,
+     "New alignment flags allow for the positioning of items in any corner or centered "
+     "position."
+     ),
+
+    ("", None, ""),
+
+    ("Proportional resize", makeSimpleBoxShaped,
+     "Managed items can preserve their original aspect ratio.  The last item has the "
+     "wxSHAPED flag set and will resize proportional to its origingal size."
+     ),
+
+    ("Proportional resize with Alignments", makeShapes,
+     "This one shows various alignments as well as proportional resizing for all items."
      ),
 
     ]

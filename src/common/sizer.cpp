@@ -48,6 +48,8 @@ wxSizerItem::wxSizerItem( int width, int height, int option, int flag, int borde
     m_minSize.x = width;
     m_minSize.y = height;
 
+    SetRatio(width, height);
+
     // size is set directly
     m_size = m_minSize;
 }
@@ -64,6 +66,9 @@ wxSizerItem::wxSizerItem( wxWindow *window, int option, int flag, int border, wx
     // minimal size is the initial size
     m_minSize = window->GetSize();
 
+    // aspect ratio calculated from initial size
+    SetRatio(m_minSize);
+
     // size is calculated later
     // m_size = ...
 }
@@ -79,6 +84,7 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int option, int flag, int border, wxOb
 
     // minimal size is calculated later
     // m_minSize = ...
+    m_ratio = 0;
 
     // size is calculated later
     // m_size = ...
@@ -119,7 +125,13 @@ wxSize wxSizerItem::CalcMin()
 {
     wxSize ret;
     if (IsSizer())
+    {
         ret = m_sizer->CalcMin();
+        // if we have to preserve aspect ratio _AND_ this is
+        // the first-time calculation, consider ret to be initial size
+        if ((m_flag & wxSHAPED) && !m_ratio) SetRatio(ret);
+    }
+
 /*
     The minimum size of a window should be the
     initial size, as saved in m_minSize, not the
@@ -162,6 +174,28 @@ void wxSizerItem::SetDimension( wxPoint pos, wxSize size )
     if (m_flag & wxSOUTH)
     {
         size.y -= m_border;
+    }
+    if (m_flag & wxSHAPED) {
+        // adjust aspect ratio
+        int rwidth = (int) (size.y * m_ratio);
+        if (rwidth > size.x) {
+            // fit horizontally
+            int rheight = (int) (size.x / m_ratio);
+            // add vertical space
+            if (m_flag & wxALIGN_CENTER_VERTICAL)
+                pos.y += (size.y - rheight) / 2;
+            else if (m_flag & wxALIGN_BOTTOM)
+                pos.y += (size.y - rheight);
+            // use reduced dimensions
+            size.y =rheight;
+        } else if (rwidth < size.x) {
+            // add horizontal space
+            if (m_flag & wxALIGN_CENTER_HORIZONTAL)
+                pos.x += (size.x - rwidth) / 2;
+            else if (m_flag & wxALIGN_RIGHT)
+                pos.x += (size.x - rwidth);
+            size.x = rwidth;
+        }
     }
 
     if (IsSizer())
@@ -370,12 +404,14 @@ void wxBoxSizer::RecalcSizes()
 	    wxPoint child_pos( pt );
 	    wxSize  child_size( wxSize( size.x, height) );
 
-	    if (item->GetFlag() & wxALIGN_RIGHT)
-	      child_pos.x += m_size.x - size.x;
-	    else if (item->GetFlag() & wxCENTER)
-	      child_pos.x += (m_size.x - size.x) / 2;
-	    else if (item->GetFlag() & wxEXPAND)
+	    if (item->GetFlag() & (wxEXPAND | wxSHAPED))
 	      child_size.x = m_size.x;
+	    else if (item->GetFlag() & wxALIGN_RIGHT)
+	      child_pos.x += m_size.x - size.x;
+	    else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_HORIZONTAL))
+	      // XXX wxCENTER is added for backward compatibility;
+	      //     wxALIGN_CENTER should be used in new code
+	      child_pos.x += (m_size.x - size.x) / 2;
 
 	    item->SetDimension( child_pos, child_size );
 
@@ -393,12 +429,14 @@ void wxBoxSizer::RecalcSizes()
 	    wxPoint child_pos( pt );
 	    wxSize  child_size( wxSize(width, size.y) );
 
-	    if (item->GetFlag() & wxALIGN_BOTTOM)
-	      child_pos.y += m_size.y - size.y;
-	    else if (item->GetFlag() & wxCENTER)
-	      child_pos.y += (m_size.y - size.y) / 2;
-	    else if (item->GetFlag() & wxEXPAND)
+	    if (item->GetFlag() & (wxEXPAND | wxSHAPED))
 	      child_size.y = m_size.y;
+	    else if (item->GetFlag() & wxALIGN_BOTTOM)
+	      child_pos.y += m_size.y - size.y;
+	    else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_VERTICAL))
+	      // XXX wxCENTER is added for backward compatibility;
+	      //     wxALIGN_CENTER should be used in new code
+	      child_pos.y += (m_size.y - size.y) / 2;
 
 	    item->SetDimension( child_pos, child_size );
 

@@ -1,7 +1,7 @@
 \section{\class{wxSizer}}\label{wxsizer}
 
 wxSizer is the abstract base class used for laying out subwindows in a window. You
-cannot use wxSizer directly; instead, you'll have to use \helpref{wxBoxSizer}{wxboxsizer} 
+cannot use wxSizer directly; instead, you'll have to use \helpref{wxBoxSizer}{wxboxsizer}
 or \helpref{wxStaticBoxSizer}{wxstaticboxsizer}.
 
 The layout algorithm used by sizers in wxWindows closely related to layout
@@ -87,9 +87,12 @@ determine the child window's behaviour if the size of the sizer changes, but - i
 the {\it option} flag - not in the main orientation, but the respectively other orientation. So
 if you created a wxBoxSizer with the wxVERTICAL option, these flags will be relevant if the
 sizer changes its horizontal size. A child may get resized to completely fill out the new size (using
-either wxGROW or wxEXPAND), may get centered (wxCENTER or wxCENTRE) or may get aligned to either
-side (wxALIGN\_LEFT and wxALIGN\_TOP are set to 0 and thus represent the default, wxALIGN\_RIGHT and
-wxALIGN\_BOTTOM have their obvious meaning).}
+either wxGROW or wxEXPAND), may get proportionally resized (wxSHAPED), may get centered (wxALIGN\_CENTER
+or wxALIGN\_CENTRE) or may get aligned to either side (wxALIGN\_LEFT and wxALIGN\_TOP are set to 0
+and thus represent the default, wxALIGN\_RIGHT and wxALIGN\_BOTTOM have their obvious meaning).
+With proportional resize, a child may also be centered in the main orientation using
+wxALIGN\_CENTER\_VERTICAL (same as wxALIGN\_CENTRE\_VERTICAL) and wxALIGN\_CENTER\_HORIZONTAL
+(same as wxALIGN\_CENTRE\_HORIZONTAL) flags.}
 
 \docparam{border}{Determines the border width, if the {\it flag} parameter is set to any border.}
 
