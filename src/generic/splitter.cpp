@@ -756,21 +756,22 @@ void wxSplitterWindow::OnSashPosChanged(wxSplitterEvent& event)
         // threshold top / left check
         newSashPosition = 0;
     }
-    else if ( newSashPosition >= window_size - UNSPLIT_THRESHOLD )
+    else if ( newSashPosition < m_minimumPaneSize )
+    {
+        // If resultant pane would be too small, enlarge it
+        newSashPosition = m_minimumPaneSize;
+    }
+
+    if ( newSashPosition >= window_size - UNSPLIT_THRESHOLD )
     {
         // threshold bottom/right check
         newSashPosition = window_size;
     }
-
-    // If resultant pane would be too small, enlarge it.
-
-    // Check upper / left pane
-    if ( newSashPosition < m_minimumPaneSize )
-        newSashPosition = m_minimumPaneSize;
-
-    // Check lower / right pane (check even if sash was just adjusted)
-    if ( newSashPosition > window_size - m_minimumPaneSize )
+    else if ( newSashPosition > window_size - m_minimumPaneSize )
+    {
+        // If resultant pane would be too small, enlarge it
         newSashPosition = window_size - m_minimumPaneSize;
+    }
 
     // If the result is out of bounds it means minimum size is too big,
     // so split window in half as best compromise.
