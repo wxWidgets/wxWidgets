@@ -2312,6 +2312,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/gridsel.cpp
     src/generic/helpext.cpp
     src/generic/laywin.cpp
+    src/generic/propdlg.cpp
     src/generic/sashwin.cpp
     src/generic/splash.cpp
     src/generic/tipdlg.cpp
@@ -2329,12 +2330,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/gridsel.h
     wx/generic/helpext.h
     wx/generic/laywin.h
+    wx/generic/propdlg.h
     wx/generic/sashwin.h
     wx/generic/splash.h
     wx/generic/wizard.h
     wx/grid.h
     wx/joystick.h
     wx/laywin.h
+    wx/propdlg.h
     wx/sashwin.h
     wx/sound.h
     wx/splash.h

@@ -113,8 +113,8 @@ and wxTopLevelWindow::SetRightMenu, for example:
 For implementing property sheets (flat tabs), use a wxNotebook with wxNB_FLAT|wxNB_BOTTOM
 and have the notebook left, top and right sides overlap the dialog by about 3 pixels
 to eliminate spurious borders. You can do this by using a negative spacing in your
-sizer Add() call. A cross-platform property sheet dialog will be implemented in the
-future, so you only need to provide the dialog's pages.
+sizer Add() call. The cross-platform property sheet dialog \helpref{wxPropertySheetDialog}{wxpropertysheetdialog} is
+provided, to show settings in the correct style on PocketPC and on other platforms.
 
 Notifications (bubble HTML text with optional buttons and links) will also be
 implemented in the future for PocketPC.
@@ -170,8 +170,6 @@ standard identifiers can be used.
 needs to be simplified (and speeded up).
 \item {\bf Sizer speed.} Particularly for dialogs containing notebooks,
 layout seems slow. Some analysis is required.
-\item {\bf Property sheets.} We should have a class for handling property sheets
-on WinCE and desktop platforms (see previous section on dialogs).
 \item {\bf Notification boxes.} The balloon-like notification messages, and their
 icons, should be implemented. This will be quite straightforward.
 \item {\bf WM\_SETTINGCHANGE.} This message needs to be handled by calling SHHandleWMSettingChange.
