@@ -3,8 +3,9 @@
 // Purpose:    Socket handler classes
 // Authors:    Guilhem Lavaux, Guillermo Rodriguez Garcia
 // Created:    April 1997
-// Updated:    July 1999
+// Updated:    September 1999
 // Copyright:  (C) 1999, 1998, 1997, Guilhem Lavaux
+//             (C) 1999, Guillermo Rodriguez Garcia
 // RCS_ID:     $Id$
 // License:    see wxWindows license
 /////////////////////////////////////////////////////////////////////////////
@@ -184,7 +185,7 @@ int wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
   if (GSocket_Select(m_socket, GSOCK_INPUT_FLAG))
     DoDefer();
 
-  // Wait for buffer completion.
+  // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
     wxYield();
 
@@ -220,11 +221,25 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
 
   // If we have got the whole needed buffer, return immediately
   if (!nbytes)
-  {
     return *this;
-  }
 
-  if (m_flags & SPEED & WAITALL)    // SPEED && WAITALL
+  // Possible combinations (they are checked in this order)
+  // NOWAIT
+  // SPEED | WAITALL
+  // SPEED          
+  // WAITALL
+  // NONE
+  //
+  if (m_flags & NOWAIT)                 // NOWAIT
+  {
+    GSocket_SetNonBlocking(m_socket, TRUE);
+    ret = GSocket_Read(m_socket, buffer, nbytes);
+    GSocket_SetNonBlocking(m_socket, FALSE);
+
+    if (ret > 0)
+      m_lcount += ret;
+  }
+  else if (m_flags & SPEED & WAITALL)   // SPEED, WAITALL
   {
     while (ret > 0 && nbytes > 0)
     {
@@ -237,14 +252,14 @@ wxSocketBase& wxSocketBase::Read(char* buffer, wxUint32 nbytes)
     if (ret < 0)
       m_lcount ++;
   }
-  else if (m_flags & SPEED)         // SPEED && !WAITALL
+  else if (m_flags & SPEED)             // SPEED, !WAITALL
   {
     ret = GSocket_Read(m_socket, buffer, nbytes);
 
     if (ret > 0)
       m_lcount += ret;
   }
-  else                              // !SPEED
+  else                                  // NONE or WAITALL
   {
     ret = DeferRead(buffer, nbytes);
 
@@ -277,7 +292,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   // compilers in which wxUint32 was actually a 16-bit unsigned integer
 
   old_flags = m_flags;
-  SetFlags(WAITALL | SPEED);
+  SetFlags(old_flags | WAITALL);
 
   Read((char *)&msg, sizeof(msg));
   if (m_lcount != sizeof(msg))
@@ -313,7 +328,7 @@ wxSocketBase& wxSocketBase::ReadMsg(char* buffer, wxUint32 nbytes)
   else
     len2 = 0;
 
-  // The "len &&" in the following statements is necessary so
+  // The "len &&" in the following statements is necessary so 
   // that we don't attempt to read (and possibly hang the system)
   // if the message was zero bytes long
   if (len && Read(buffer, len).LastCount() != len)
@@ -400,7 +415,7 @@ int wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
   if (GSocket_Select(m_socket, GSOCK_OUTPUT_FLAG))
     DoDefer();
 
-  // Wait for buffer completion.
+  // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
     wxYield();
 
@@ -426,7 +441,23 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
     return *this;
   }
 
-  if (m_flags & SPEED & WAITALL)    // SPEED && WAITALL
+  // Possible combinations (they are checked in this order)
+  // NOWAIT
+  // SPEED | WAITALL
+  // SPEED          
+  // WAITALL
+  // NONE
+  //
+  if (m_flags & NOWAIT)                 // NOWAIT
+  {
+    GSocket_SetNonBlocking(m_socket, TRUE);
+    ret = GSocket_Write(m_socket, buffer, nbytes);
+    GSocket_SetNonBlocking(m_socket, FALSE);
+
+    if (ret > 0)
+      m_lcount += ret;
+  }
+  else if (m_flags & SPEED & WAITALL)   // SPEED, WAITALL
   {
     while (ret > 0 && nbytes > 0)
     {
@@ -439,14 +470,14 @@ wxSocketBase& wxSocketBase::Write(const char *buffer, wxUint32 nbytes)
     if (ret < 0)
       m_lcount ++;
   }
-  else if (m_flags & SPEED)         // SPEED && !WAITALL
+  else if (m_flags & SPEED)             // SPEED, !WAITALL
   {
     ret = GSocket_Write(m_socket, buffer, nbytes);
 
     if (ret > 0)
       m_lcount += ret;
   }
-  else                              // !SPEED
+  else                                  // NONE or WAITALL
   {
     ret = DeferWrite(buffer, nbytes);
 
@@ -486,9 +517,8 @@ wxSocketBase& wxSocketBase::WriteMsg(const char *buffer, wxUint32 nbytes)
   msg.len[2] = (char) (nbytes >> 16) & 0xff;
   msg.len[3] = (char) (nbytes >> 24) & 0xff;
 
-  // GRG: We need WAITALL | SPEED
   old_flags = m_flags;
-  SetFlags(WAITALL | SPEED);
+  SetFlags(old_flags | WAITALL);
 
   if (Write((char *)&msg, sizeof(msg)).LastCount() < sizeof(msg))
   {
@@ -699,7 +729,11 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
   int state = -1;
 
   // Check for valid socket
-  if ((!m_connected && !m_establishing) || !m_socket)
+  if (!m_socket)
+    return FALSE;
+
+  // If it is not a server, it must be connected or establishing connection
+  if ((m_type != SOCK_SERVER) && (!m_connected && !m_establishing))
     return FALSE;
 
   // Check for valid timeout value
@@ -714,17 +748,50 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
   timer.Start(timeout, TRUE);
 
   // Active polling (without using events)
-  result = GSocket_Select(m_socket, flags);
-
-  while ((result == 0) && (state == -1))
+  //
+  // NOTE: this duplicates some of the code in OnRequest (lost
+  // connection and connection establishment handling) but this
+  // doesn't hurt. It has to be here because the event might
+  // be a bit delayed, and it has to be in OnRequest as well
+  // because maybe the WaitXXX functions are not being used.
+  //
+  while (state == -1)
   {
+    result = GSocket_Select(m_socket, flags | GSOCK_LOST_FLAG);
+
+    // Connection lost
+    if (result & GSOCK_LOST_FLAG)
+    {
+      timer.Stop();
+      m_defer_buffer = NULL;
+      Close();
+      return TRUE;
+    }
+
+    // Incoming connection (server) or connection established (client)
+    if (result & GSOCK_CONNECTION_FLAG)
+    {
+      timer.Stop();
+      m_connected = TRUE;
+      m_establishing = FALSE;
+      return TRUE;
+    }
+
+    // If we are in the middle of a deferred R/W, ignore these.
+    if ((result & GSOCK_INPUT_FLAG) || (result & GSOCK_OUTPUT_FLAG))
+    {
+      if (m_defer_buffer == NULL)
+      {
+        timer.Stop();
+        return TRUE;
+      }
+    }
+
     wxYield();
-    result = GSocket_Select(m_socket, flags);
   }
 
   timer.Stop();
-
-  return (result != 0);
+  return FALSE;
 }
 
 bool wxSocketBase::Wait(long seconds, long milliseconds)
@@ -737,12 +804,12 @@ bool wxSocketBase::Wait(long seconds, long milliseconds)
 
 bool wxSocketBase::WaitForRead(long seconds, long milliseconds)
 {
-  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_INPUT_FLAG);
 }
 
 bool wxSocketBase::WaitForWrite(long seconds, long milliseconds)
 {
-  return _Wait(seconds, milliseconds, GSOCK_OUTPUT_FLAG | GSOCK_LOST_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_OUTPUT_FLAG);
 }
 
 bool wxSocketBase::WaitForLost(long seconds, long milliseconds)
@@ -766,7 +833,7 @@ void wxSocketBase::SetFlags(wxSockFlags _flags)
 {
   m_flags = _flags;
 }
-
+                    
 wxSocketBase::wxSockFlags wxSocketBase::GetFlags() const
 {
   return m_flags;
@@ -830,6 +897,12 @@ void wxSocketBase::OnRequest(wxSocketNotify req_evt)
   wxSocketEvent event(m_id);
   wxSocketEventFlags flag = EventToNotify(req_evt);
 
+  // NOTE: this duplicates some of the code in _Wait (lost
+  // connection and connection establishment handling) but
+  // this doesn't hurt. It has to be here because maybe the
+  // WaitXXX are not being used, and it has to be in _Wait
+  // as well because the event might be a bit delayed.
+  //
   switch(req_evt)
   {
     case wxSOCKET_CONNECTION:
@@ -1028,7 +1101,7 @@ wxSocketBase *wxSocketServer::Accept(bool wait)
 
 bool wxSocketServer::WaitForAccept(long seconds, long milliseconds)
 {
-  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
+  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG);
 }
 
 // --------------------------------------------------------------
@@ -1102,32 +1175,14 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
 
 bool wxSocketClient::WaitOnConnect(long seconds, long milliseconds)
 {
-  bool ret;
-
-  if (m_connected)      // Already connected
+  if (m_connected)                      // Already connected
     return TRUE;
 
-  if (!m_establishing || !m_socket)  // No connection in progress
+  if (!m_establishing || !m_socket)     // No connection in progress
     return FALSE;
 
-  ret = _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG | GSOCK_LOST_FLAG);
-
-  // GRG: m_connected and m_establishing will be updated in
-  // OnRequest(), but we do it here anyway because sometimes
-  // the event might be a bit delayed, and if that happens,
-  // when WaitOnConnect() returns, m_connected will still be
-  // FALSE. We have to do it as well in OnRequest because
-  // maybe WaitOnConnect() is not being used...
-
-  if (ret)
-  {
-    m_connected = GSocket_Select(m_socket, GSOCK_CONNECTION_FLAG);
-    m_establishing = FALSE;
-  }
-
-  return m_connected;
+  return _Wait(seconds, milliseconds, GSOCK_CONNECTION_FLAG);
 }
-
 
 // --------------------------------------------------------------
 // wxSocketEvent
