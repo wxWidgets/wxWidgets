@@ -2003,8 +2003,13 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxSB_VERTICAL", PyInt_FromLong((long) wxSB_VERTICAL));
 	 PyDict_SetItemString(d,"wxST_SIZEGRIP", PyInt_FromLong((long) wxST_SIZEGRIP));
 	 PyDict_SetItemString(d,"wxST_NO_AUTORESIZE", PyInt_FromLong((long) wxST_NO_AUTORESIZE));
-	 PyDict_SetItemString(d,"wxBU_AUTODRAW", PyInt_FromLong((long) wxBU_AUTODRAW));
 	 PyDict_SetItemString(d,"wxBU_NOAUTODRAW", PyInt_FromLong((long) wxBU_NOAUTODRAW));
+	 PyDict_SetItemString(d,"wxBU_AUTODRAW", PyInt_FromLong((long) wxBU_AUTODRAW));
+	 PyDict_SetItemString(d,"wxBU_LEFT", PyInt_FromLong((long) wxBU_LEFT));
+	 PyDict_SetItemString(d,"wxBU_TOP", PyInt_FromLong((long) wxBU_TOP));
+	 PyDict_SetItemString(d,"wxBU_RIGHT", PyInt_FromLong((long) wxBU_RIGHT));
+	 PyDict_SetItemString(d,"wxBU_BOTTOM", PyInt_FromLong((long) wxBU_BOTTOM));
+	 PyDict_SetItemString(d,"wxBU_EXACTFIT", PyInt_FromLong((long) wxBU_EXACTFIT));
 	 PyDict_SetItemString(d,"wxSP_VERTICAL", PyInt_FromLong((long) wxSP_VERTICAL));
 	 PyDict_SetItemString(d,"wxSP_HORIZONTAL", PyInt_FromLong((long) wxSP_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxSP_ARROW_KEYS", PyInt_FromLong((long) wxSP_ARROW_KEYS));
@@ -2548,6 +2553,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_NC_LEFT_DCLICK", PyInt_FromLong((long) wxEVT_NC_LEFT_DCLICK));
 	 PyDict_SetItemString(d,"wxEVT_NC_MIDDLE_DCLICK", PyInt_FromLong((long) wxEVT_NC_MIDDLE_DCLICK));
 	 PyDict_SetItemString(d,"wxEVT_NC_RIGHT_DCLICK", PyInt_FromLong((long) wxEVT_NC_RIGHT_DCLICK));
+	 PyDict_SetItemString(d,"wxEVT_SET_CURSOR", PyInt_FromLong((long) wxEVT_SET_CURSOR));
 	 PyDict_SetItemString(d,"wxEVT_CHAR", PyInt_FromLong((long) wxEVT_CHAR));
 	 PyDict_SetItemString(d,"wxEVT_KEY_DOWN", PyInt_FromLong((long) wxEVT_KEY_DOWN));
 	 PyDict_SetItemString(d,"wxEVT_KEY_UP", PyInt_FromLong((long) wxEVT_KEY_UP));
