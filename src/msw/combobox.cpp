@@ -290,6 +290,10 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
+    if ( style & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
+
     // and now create the MSW control
     if ( !MSWCreateControl(_T("COMBOBOX"), msStyle) )
         return FALSE;

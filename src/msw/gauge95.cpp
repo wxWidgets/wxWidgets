@@ -103,6 +103,10 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
 
   long msFlags = WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */;
 
+  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    msFlags |= WS_CLIPSIBLINGS;
+
+
   if (m_windowStyle & wxGA_VERTICAL)
     msFlags |= PBS_VERTICAL;
 

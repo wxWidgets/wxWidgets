@@ -2483,11 +2483,10 @@ bool wxWindow::MSWCreate(int id,
     {
         int controlId = 0;
         if ( style & WS_CHILD )
-          {
             controlId = id;
-            // all child windows should clip their siblings
-            // style |= /* WS_CLIPSIBLINGS */ ;
-          }
+
+        if ( GetWindowStyleFlag() & wxCLIP_SIBLINGS )
+          style |= WS_CLIPSIBLINGS;
 
         wxString className(wclass);
         if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )

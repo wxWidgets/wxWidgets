@@ -57,7 +57,10 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
   m_windowStyle = style;
 
-  long msStyle = WS_CHILD | WS_VISIBLE /* | WS_CLIPSIBLINGS */ ;
+  long msStyle = WS_CHILD | WS_VISIBLE;
+
+  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    msStyle |= WS_CLIPSIBLINGS;
   if (m_windowStyle & wxALIGN_CENTRE)
     msStyle |= SS_CENTER;
   else if (m_windowStyle & wxALIGN_RIGHT)

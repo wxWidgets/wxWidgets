@@ -245,6 +245,10 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( want3D || wxStyleHasBorder(style) )
         msStyle |= WS_BORDER;
 
+    if ( style & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
+
     // create the text window
     m_hwndBuddy = (WXHWND)::CreateWindowEx
                     (

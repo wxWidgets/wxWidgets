@@ -153,6 +153,8 @@ bool wxNotebook::Create(wxWindow *parent,
 
   long tabStyle = WS_CHILD | WS_VISIBLE | WS_TABSTOP | TCS_TABS;
 
+  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    tabStyle |= WS_CLIPSIBLINGS;
   if (m_windowStyle & wxCLIP_CHILDREN)
     tabStyle |= WS_CLIPCHILDREN;
   if ( m_windowStyle & wxTC_MULTILINE )

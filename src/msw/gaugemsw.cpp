@@ -109,6 +109,9 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   if (want3D)
     msFlags |= ZYZGS_3D;
 
+  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    msFlags |= WS_CLIPSIBLINGS;
+
   HWND wx_button =
       CreateWindowEx(MakeExtendedStyle(m_windowStyle), wxT("zYzGauge"), NULL, msFlags,
                     0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)m_windowId,

@@ -77,6 +77,9 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 	long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD | BS_OWNERDRAW ;
 
+    if ( m_windowStyle & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
 #ifdef __WIN32__
     if(m_windowStyle & wxBU_LEFT)
         msStyle |= BS_LEFT;

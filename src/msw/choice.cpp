@@ -64,6 +64,10 @@ bool wxChoice::Create(wxWindow *parent,
     if ( style & wxCB_SORT )
         msStyle |= CBS_SORT;
 
+    if ( style & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
+
     // Experience shows that wxChoice vs. wxComboBox distinction confuses
     // quite a few people - try to help them
     wxASSERT_MSG( !(style & wxCB_DROPDOWN) &&

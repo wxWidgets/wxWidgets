@@ -76,6 +76,9 @@ bool wxButton::Create(wxWindow *parent,
 
     long msStyle = WS_VISIBLE | WS_TABSTOP | WS_CHILD /* | WS_CLIPSIBLINGS */ ;
 
+    if ( m_windowStyle & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
 #ifdef __WIN32__
     if(m_windowStyle & wxBU_LEFT)
         msStyle |= BS_LEFT;

@@ -159,7 +159,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // translate wxWin style flags to MSW ones, checking for consistency while
     // doing it
-    long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP /* | WS_CLIPSIBLINGS */ ;
+    long msStyle = ES_LEFT | WS_VISIBLE | WS_CHILD | WS_TABSTOP;
+
+    if ( m_windowStyle & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
     if ( m_windowStyle & wxTE_MULTILINE )
     {
         wxASSERT_MSG( !(m_windowStyle & wxTE_PROCESS_ENTER),

@@ -115,6 +115,10 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     int winstyle = BS_OWNERDRAW;
 #endif // Win32
 
+    if ( m_windowStyle & wxCLIP_SIBLINGS )
+        winstyle |= WS_CLIPSIBLINGS;
+
+
     m_hWnd = (WXHWND)::CreateWindow
                        (
                         classname,

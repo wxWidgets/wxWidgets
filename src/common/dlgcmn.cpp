@@ -106,46 +106,46 @@ wxSizer *wxDialogBase::CreateButtonSizer( long flags )
 
     if (flags & wxYES_NO)
     {
-        yes = new wxButton( this, wxID_YES, _("Yes") );
+        yes = new wxButton( this, wxID_YES, _("Yes"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
-        no = new wxButton( this, wxID_NO, _("No") );
+        no = new wxButton( this, wxID_NO, _("No") ,wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS);
         box->Add( no, 0, wxLEFT|wxRIGHT, margin );
     } else
     if (flags & wxYES)
     {
-        yes = new wxButton( this, wxID_YES, _("Yes") );
+        yes = new wxButton( this, wxID_YES, _("Yes"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
     } else
     if (flags & wxNO)
     {
-        no = new wxButton( this, wxID_NO, _("No") );
+        no = new wxButton( this, wxID_NO, _("No"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         box->Add( no, 0, wxLEFT|wxRIGHT, margin );
     }
 
     if (flags & wxOK)
     {
-        ok = new wxButton( this, wxID_OK, _("OK") );
+        ok = new wxButton( this, wxID_OK, _("OK"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         box->Add( ok, 0, wxLEFT|wxRIGHT, margin );
     }
 
     if (flags & wxFORWARD)
-        box->Add( new wxButton( this, wxID_FORWARD, _("Forward")  ), 0, wxLEFT|wxRIGHT, margin );
+        box->Add( new wxButton( this, wxID_FORWARD, _("Forward"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
 
     if (flags & wxBACKWARD)
-        box->Add( new wxButton( this, wxID_BACKWARD, _("Backward")  ), 0, wxLEFT|wxRIGHT, margin );
+        box->Add( new wxButton( this, wxID_BACKWARD, _("Backward"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
 
     if (flags & wxSETUP)
-        box->Add( new wxButton( this, wxID_SETUP, _("Setup")  ), 0, wxLEFT|wxRIGHT, margin );
+        box->Add( new wxButton( this, wxID_SETUP, _("Setup"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
 
     if (flags & wxMORE)
-        box->Add( new wxButton( this, wxID_MORE, _("More...")  ), 0, wxLEFT|wxRIGHT, margin );
+        box->Add( new wxButton( this, wxID_MORE, _("More..."),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
 
     if (flags & wxHELP)
-        box->Add( new wxButton( this, wxID_HELP, _("Help")  ), 0, wxLEFT|wxRIGHT, margin );
+        box->Add( new wxButton( this, wxID_HELP, _("Help"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS  ), 0, wxLEFT|wxRIGHT, margin );
 
     if (flags & wxCANCEL)
     {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
+        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"),wxDefaultPosition,wxDefaultSize,wxCLIP_SIBLINGS );
         box->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
     }
 

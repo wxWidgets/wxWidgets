@@ -84,11 +84,15 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
   int width = size.x;
   int height = size.y;
 
-  long msStyle ;
+  long msStyle=0 ;
+  long wstyle=0 ;
+
+  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    msStyle |= WS_CLIPSIBLINGS;
 
   if ( m_windowStyle & wxSL_LABELS )
   {
-      msStyle = WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER;
+      msStyle |= WS_CHILD | WS_VISIBLE | WS_BORDER | SS_CENTER;
 
       bool want3D;
       WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D) ;
@@ -100,13 +104,20 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
 
       // Now create min static control
       wxSprintf(wxBuffer, wxT("%d"), minValue);
+      wstyle = STATIC_FLAGS;
+      if ( m_windowStyle & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
       m_staticMin = (WXHWND) CreateWindowEx(0, wxT("STATIC"), wxBuffer,
-                             STATIC_FLAGS,
+                             wstyle,
                              0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                              wxGetInstance(), NULL);
   }
 
   msStyle = 0;
+
+  if ( m_windowStyle & wxCLIP_SIBLINGS )
+    msStyle |= WS_CLIPSIBLINGS;
+
   if (m_windowStyle & wxSL_VERTICAL)
     msStyle = TBS_VERT | WS_CHILD | WS_VISIBLE | WS_TABSTOP ;
   else
@@ -157,8 +168,11 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
   {
       // Finally, create max value static item
       wxSprintf(wxBuffer, wxT("%d"), maxValue);
+      wstyle = STATIC_FLAGS;
+      if ( m_windowStyle & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
       m_staticMax = (WXHWND) CreateWindowEx(0, wxT("STATIC"), wxBuffer,
-                             STATIC_FLAGS,
+                             wstyle,
                              0, 0, 0, 0, (HWND) parent->GetHWND(), (HMENU)NewControlId(),
                              wxGetInstance(), NULL);
 

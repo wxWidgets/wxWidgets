@@ -104,6 +104,9 @@ bool wxCheckBox::Create(wxWindow *parent,
     if ( style & wxALIGN_RIGHT )
         msStyle |= BS_LEFTTEXT;
 
+    if ( style & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
     // We perhaps have different concepts of 3D here - a 3D border,
     // versus a 3D button.
     // So we only wish to give a border if this is specified

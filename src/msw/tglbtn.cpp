@@ -86,6 +86,10 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
 #endif
 
    long msStyle = BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
+
+   if ( m_windowStyle & wxCLIP_SIBLINGS )
+        msStyle |= WS_CLIPSIBLINGS;
+
 #ifdef __WIN32__
    if(m_windowStyle & wxBU_LEFT)
       msStyle |= BS_LEFT;

@@ -110,6 +110,8 @@ bool wxSpinButton::Create(wxWindow *parent,
                    UDS_NOTHOUSANDS | // never useful, sometimes harmful
                    UDS_SETBUDDYINT;  // it doesn't harm if we don't have buddy
 
+    if ( m_windowStyle & wxCLIP_SIBLINGS )
+        wstyle |= WS_CLIPSIBLINGS;
     if ( m_windowStyle & wxSP_HORIZONTAL )
         wstyle |= UDS_HORZ;
     if ( m_windowStyle & wxSP_ARROW_KEYS )

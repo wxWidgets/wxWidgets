@@ -214,6 +214,9 @@ bool wxToolBar::Create(wxWindow *parent,
     if (style & wxBORDER)
         msflags |= WS_BORDER;
 
+   if ( style & wxCLIP_SIBLINGS )
+        msflags |= WS_CLIPSIBLINGS;
+
 #ifdef TBSTYLE_TOOLTIPS
     msflags |= TBSTYLE_TOOLTIPS;
 #endif
