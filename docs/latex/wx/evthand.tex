@@ -74,12 +74,15 @@ up idle handling is done calling \helpref{::wxWakeUpIdle}{wxwakeupidle}.)
 
 \membersection{wxEvtHandler::Connect}\label{wxevthandlerconnect}
 
+\func{void}{Connect}{\param{int}{ id}, \param{int}{ lastId},
+ \param{wxEventType }{eventType}, \param{wxObjectEventFunction}{ function},
+ \param{wxObject*}{ userData = NULL}, \param{wxEvtHandler*}{ eventSink = NULL}}
+
 \func{void}{Connect}{\param{int}{ id},
  \param{wxEventType }{eventType}, \param{wxObjectEventFunction}{ function},
  \param{wxObject*}{ userData = NULL}, \param{wxEvtHandler*}{ eventSink = NULL}}
 
-\func{void}{Connect}{\param{int}{ id}, \param{int}{ lastId},
- \param{wxEventType }{eventType}, \param{wxObjectEventFunction}{ function},
+\func{void}{Connect}{\param{wxEventType }{eventType}, \param{wxObjectEventFunction}{ function},
  \param{wxObject*}{ userData = NULL}, \param{wxEvtHandler*}{ eventSink = NULL}}
 
 Connects the given function dynamically with the event handler, id and event type. This
@@ -87,25 +90,29 @@ is an alternative to the use of static event tables. See the 'event' or the old 
 
 \wxheading{Parameters}
 
-\docparam{id}{The identifier (or first of the identifier range) to be associated with the event handler function.}
+\docparam{id}{The identifier (or first of the identifier range) to be
+associated with the event handler function. For the version not taking this
+argument, it defaults to \texttt{wxID\_ANY}.}
 
 \docparam{lastId}{The second part of the identifier range to be associated with the event handler function.}
 
 \docparam{eventType}{The event type to be associated with this event handler.}
 
-\docparam{function}{The event handler function.}
+\docparam{function}{The event handler function. Note that this function should
+be explicitly converted to the correct type which can be done using a macro
+called \texttt{wxFooHandler} for the handler for any \texttt{wxFooEvent}.}
 
 \docparam{userData}{Data to be associated with the event table entry.}
 
 \docparam{eventSink}{Object whose member function should be called. If this is NULL,
-'this' will be used.}
+\textit{this} will be used.}
 
 \wxheading{Example}
 
 \begin{verbatim}
   frame->Connect( wxID_EXIT,
     wxEVT_COMMAND_MENU_SELECTED,
-    (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) &MyFrame::OnQuit );
+    wxCommandEventHandler(MyFrame::OnQuit) );
 \end{verbatim}
 
 \perlnote{In wxPerl this function takes 4 arguments: \texttt{id,
