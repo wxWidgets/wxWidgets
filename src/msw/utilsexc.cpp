@@ -735,7 +735,11 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
 #endif // wxUSE_GUI
 
     while ( data->state )
+    {
+        // don't take 100% of the CPU
+        ::Sleep(500);
         wxYield();
+    }
 
 #if wxUSE_GUI
     }
