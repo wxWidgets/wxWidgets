@@ -30,7 +30,7 @@
     AlwaysCreateUninstallIcon=1
     UninstallIconName=Uninstall wxWindows 2.5.0
     Uninstallable=1
-    DefaultDirName=c:\wxWindows_2.5.0
+    DefaultDirName=c:\wxWindows-2.5.0
     DefaultGroupName=wxWindows 2.5.0
     LicenseFile=C:\wx24\wxWindows\docs\licence.txt
     InfoBeforeFile=C:\wx24\wxWindows\docs\readme.txt

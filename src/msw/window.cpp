@@ -217,15 +217,13 @@ static inline void wxBringWindowToTop(HWND hwnd)
 
     // activate (set focus to) specified window
     ::SetFocus(hwnd);
+#endif
 
     // raise top level parent to top of z order
-    ::SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
-#else // !__WXMICROWIN__
-    if ( !::BringWindowToTop(hwnd) )
+    if (!::SetWindowPos(hwnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE))
     {
-        wxLogLastError(_T("BringWindowToTop"));
+        wxLogLastError(_T("SetWindowPos"));
     }
-#endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
 // ---------------------------------------------------------------------------

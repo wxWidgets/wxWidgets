@@ -78,6 +78,8 @@ public:
     // override some base class virtuals
     virtual bool Show(bool show = TRUE);
 
+    virtual void Raise();
+
     // event handlers
     void OnCharHook(wxKeyEvent& event);
     void OnCloseWindow(wxCloseEvent& event);

@@ -339,6 +339,11 @@ bool wxDialog::Show(bool show)
     return TRUE;
 }
 
+void wxDialog::Raise()
+{
+    ::SetForegroundWindow(GetHwnd());
+}
+
 // a special version for Show(TRUE) for modal dialogs which returns return code
 int wxDialog::ShowModal()
 {
