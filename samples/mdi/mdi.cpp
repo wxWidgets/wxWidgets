@@ -417,7 +417,8 @@ void MyChild::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void MyChild::OnRefresh(wxCommandEvent& event)
 {
-    Refresh();
+    if ( canvas )
+        canvas->Refresh();
 }
 
 void MyChild::OnActivate(wxActivateEvent& event)
