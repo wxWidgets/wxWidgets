@@ -414,6 +414,10 @@ public:
     bool IsItemChecked(const wxTreeItemId& item) const;
     void SetItemCheck(const wxTreeItemId& item, bool check = TRUE);
 
+    // set/get the item state.image (state == -1 means cycle to the next one)
+    void SetState(const wxTreeItemId& node, int state);
+    int GetState(const wxTreeItemId& node);
+
 protected:
     // SetImageList helper
     void SetAnyImageList(wxImageList *imageList, int which);

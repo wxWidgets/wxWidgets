@@ -795,7 +795,7 @@ wxImageList *wxTreeCtrl::GetImageList() const
 
 wxImageList *wxTreeCtrl::GetStateImageList() const
 {
-    return m_imageListNormal;
+    return m_imageListState;
 }
 
 void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
@@ -2582,6 +2582,23 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             return true;
 #endif // _WIN32_IE >= 0x300
 
+        case NM_CLICK:
+            {
+                DWORD pos = GetMessagePos();
+                POINT point;
+                point.x = LOWORD(pos);
+                point.y = HIWORD(pos);
+                ::MapWindowPoints(HWND_DESKTOP, GetHwnd(), &point, 1);
+                int flags = 0;
+                wxTreeItemId item = HitTest(wxPoint(point.x, point.y), flags);
+                if (flags & wxTREE_HITTEST_ONITEMSTATEICON)
+                {
+                    event.m_item = item;
+                    eventType = wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK;
+                }
+                break;
+            }
+
         case NM_DBLCLK:
         case NM_RCLICK:
             {
@@ -2768,6 +2785,50 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return processed;
 }
 
+// ----------------------------------------------------------------------------
+// State control.
+// ----------------------------------------------------------------------------
+
+// why do they define INDEXTOSTATEIMAGEMASK but not the inverse?
+#define STATEIMAGEMASKTOINDEX(state) (((state) & TVIS_STATEIMAGEMASK) >> 12)
+
+void wxTreeCtrl::SetState(const wxTreeItemId& node, int state)
+{
+    TV_ITEM tvi;
+    tvi.hItem = (HTREEITEM)node.m_pItem;
+    tvi.mask = TVIF_STATE;
+    tvi.stateMask = TVIS_STATEIMAGEMASK;
+
+    // Select the specified state, or -1 == cycle to the next one.
+    if ( state == -1 )
+    {
+        TreeView_GetItem(GetHwnd(), &tvi); 
+
+        state = STATEIMAGEMASKTOINDEX(tvi.state) + 1;
+        if ( state == m_imageListState->GetImageCount() )
+            state = 1;
+    }
+
+    wxCHECK_RET( state < m_imageListState->GetImageCount(),
+                 _T("wxTreeCtrl::SetState(): item index out of bounds") );
+
+    tvi.state = INDEXTOSTATEIMAGEMASK(state); 
+
+    TreeView_SetItem(GetHwnd(), &tvi);
+}
+
+int wxTreeCtrl::GetState(const wxTreeItemId& node)
+{
+    TV_ITEM tvi;
+    tvi.hItem = (HTREEITEM)node.m_pItem;
+    tvi.mask = TVIF_STATE;
+    tvi.stateMask = TVIS_STATEIMAGEMASK;
+    TreeView_GetItem(GetHwnd(), &tvi); 
+
+    return STATEIMAGEMASKTOINDEX(tvi.state);
+}
+
 #endif // __WIN95__
 
 #endif // wxUSE_TREECTRL
+
