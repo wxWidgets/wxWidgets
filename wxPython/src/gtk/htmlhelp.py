@@ -233,6 +233,7 @@ class wxHtmlHelpFrame(wxHtmlHelpFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlhelpc.new_wxHtmlHelpFrame,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -287,6 +288,7 @@ class wxHtmlHelpController(wxHtmlHelpControllerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlhelpc.new_wxHtmlHelpController,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

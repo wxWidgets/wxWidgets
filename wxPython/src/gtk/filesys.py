@@ -71,8 +71,8 @@ class wxFileSystemHandlerPtr(wxCPPFileSystemHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def _setSelf(self, *_args, **_kwargs):
-        val = apply(filesysc.wxFileSystemHandler__setSelf,(self,) + _args, _kwargs)
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(filesysc.wxFileSystemHandler__setCallbackInfo,(self,) + _args, _kwargs)
         return val
     def CanOpen(self, *_args, **_kwargs):
         val = apply(filesysc.wxFileSystemHandler_CanOpen,(self,) + _args, _kwargs)
@@ -107,7 +107,7 @@ class wxFileSystemHandler(wxFileSystemHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(filesysc.new_wxFileSystemHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self, wxFileSystemHandler)
+        self._setCallbackInfo(self, wxFileSystemHandler)
 
 
 

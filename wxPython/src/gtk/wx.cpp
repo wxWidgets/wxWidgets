@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -57,28 +55,47 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
+}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {
+    if (!target) {                   
         target = o;
-    } else if (target == Py_None) {
+    } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {
+    } else {                         
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);
-        PyTuple_SetItem(o3, 0, o);
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
 
         o2 = target;
-        target = PySequence_Concat(o2, o3);
-        Py_DECREF(o2);
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
         Py_DECREF(o3);
     }
     return target;
@@ -87,7 +104,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
 
@@ -664,7 +681,7 @@ static wxPyCoreAPI API = {
     wxRect_helper,
     wxColour_helper,
 
-    wxPyCBH_setSelf,
+    wxPyCBH_setCallbackInfo,
     wxPyCBH_findCallback,
     wxPyCBH_callCallback,
     wxPyCBH_callCallbackObj,
@@ -1855,12 +1872,14 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxBORDER", PyInt_FromLong((long) wxBORDER));
 	 PyDict_SetItemString(d,"wxSIMPLE_BORDER", PyInt_FromLong((long) wxSIMPLE_BORDER));
 	 PyDict_SetItemString(d,"wxSTATIC_BORDER", PyInt_FromLong((long) wxSTATIC_BORDER));
+	 PyDict_SetItemString(d,"wxBORDER_MASK", PyInt_FromLong((long) wxBORDER_MASK));
 	 PyDict_SetItemString(d,"wxTRANSPARENT_WINDOW", PyInt_FromLong((long) wxTRANSPARENT_WINDOW));
 	 PyDict_SetItemString(d,"wxNO_BORDER", PyInt_FromLong((long) wxNO_BORDER));
 	 PyDict_SetItemString(d,"wxUSER_COLOURS", PyInt_FromLong((long) wxUSER_COLOURS));
 	 PyDict_SetItemString(d,"wxNO_3D", PyInt_FromLong((long) wxNO_3D));
 	 PyDict_SetItemString(d,"wxTAB_TRAVERSAL", PyInt_FromLong((long) wxTAB_TRAVERSAL));
 	 PyDict_SetItemString(d,"wxWANTS_CHARS", PyInt_FromLong((long) wxWANTS_CHARS));
+	 PyDict_SetItemString(d,"wxPOPUP_WINDOW", PyInt_FromLong((long) wxPOPUP_WINDOW));
 	 PyDict_SetItemString(d,"wxHORIZONTAL", PyInt_FromLong((long) wxHORIZONTAL));
 	 PyDict_SetItemString(d,"wxVERTICAL", PyInt_FromLong((long) wxVERTICAL));
 	 PyDict_SetItemString(d,"wxBOTH", PyInt_FromLong((long) wxBOTH));
@@ -2116,6 +2135,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxJOY_BUTTON4", PyInt_FromLong((long) wxJOY_BUTTON4));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON_ANY", PyInt_FromLong((long) wxJOY_BUTTON_ANY));
 	 PyDict_SetItemString(d,"wxWS_EX_VALIDATE_RECURSIVELY", PyInt_FromLong((long) wxWS_EX_VALIDATE_RECURSIVELY));
+	 PyDict_SetItemString(d,"wxWS_EX_BLOCK_EVENTS", PyInt_FromLong((long) wxWS_EX_BLOCK_EVENTS));
 	 PyDict_SetItemString(d,"wxMM_TEXT", PyInt_FromLong((long) wxMM_TEXT));
 	 PyDict_SetItemString(d,"wxMM_LOMETRIC", PyInt_FromLong((long) wxMM_LOMETRIC));
 	 PyDict_SetItemString(d,"wxMM_HIMETRIC", PyInt_FromLong((long) wxMM_HIMETRIC));

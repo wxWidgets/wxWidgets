@@ -107,9 +107,15 @@ class wxGLCanvas(wxGLCanvasPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(glcanvasc.new_wxGLCanvas,_args,_kwargs)
         self.thisown = 1
-        #wx._StdWindowCallbacks(self)
+        self._setOORInfo(self)
 
 
+
+def wxGLCanvasWithContext(*_args,**_kwargs):
+    val = wxGLCanvasPtr(apply(glcanvasc.new_wxGLCanvasWithContext,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(self)
+    return val
 
 
 

@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -60,29 +58,49 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/dirdlg.h>
 #include <wx/fontdlg.h>
 #include <wx/progdlg.h>
+#include <wx/fdrepdlg.h>
 
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
+}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {
+    if (!target) {                   
         target = o;
-    } else if (target == Py_None) {
+    } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {
+    } else {                         
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);
-        PyTuple_SetItem(o3, 0, o);
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
 
         o2 = target;
-        target = PySequence_Concat(o2, o3);
-        Py_DECREF(o2);
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
         Py_DECREF(o3);
     }
     return target;
@@ -91,7 +109,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 #ifdef __cplusplus
 extern "C" {
@@ -2938,7 +2956,904 @@ static PyObject *_wrap_wxProgressDialog_Resume(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+static void *SwigwxFindDialogEventTowxCommandEvent(void *ptr) {
+    wxFindDialogEvent *src;
+    wxCommandEvent *dest;
+    src = (wxFindDialogEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFindDialogEventTowxEvent(void *ptr) {
+    wxFindDialogEvent *src;
+    wxEvent *dest;
+    src = (wxFindDialogEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFindDialogEventTowxObject(void *ptr) {
+    wxFindDialogEvent *src;
+    wxObject *dest;
+    src = (wxFindDialogEvent *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxFindDialogEvent(_swigarg0,_swigarg1) (new wxFindDialogEvent(_swigarg0,_swigarg1))
+static PyObject *_wrap_new_wxFindDialogEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindDialogEvent * _result;
+    wxEventType  _arg0 = (wxEventType ) wxEVT_NULL;
+    int  _arg1 = (int ) 0;
+    char *_kwnames[] = { "commandType","id", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxFindDialogEvent",_kwnames,&_arg0,&_arg1)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFindDialogEvent *)new_wxFindDialogEvent(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFindDialogEvent_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_GetFlags(_swigobj)  (_swigobj->GetFlags())
+static PyObject *_wrap_wxFindDialogEvent_GetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFindDialogEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindDialogEvent_GetFlags",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_GetFlags. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFindDialogEvent_GetFlags(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_GetFindString(_swigobj)  (_swigobj->GetFindString())
+static PyObject *_wrap_wxFindDialogEvent_GetFindString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFindDialogEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindDialogEvent_GetFindString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_GetFindString. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxFindDialogEvent_GetFindString(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_GetReplaceString(_swigobj)  (_swigobj->GetReplaceString())
+static PyObject *_wrap_wxFindDialogEvent_GetReplaceString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFindDialogEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindDialogEvent_GetReplaceString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_GetReplaceString. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFindDialogEvent_GetReplaceString(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_GetDialog(_swigobj)  (_swigobj->GetDialog())
+static PyObject *_wrap_wxFindDialogEvent_GetDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceDialog * _result;
+    wxFindDialogEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindDialogEvent_GetDialog",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_GetDialog. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFindReplaceDialog *)wxFindDialogEvent_GetDialog(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFindReplaceDialog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_SetFlags(_swigobj,_swigarg0)  (_swigobj->SetFlags(_swigarg0))
+static PyObject *_wrap_wxFindDialogEvent_SetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindDialogEvent * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFindDialogEvent_SetFlags",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_SetFlags. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindDialogEvent_SetFlags(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_SetFindString(_swigobj,_swigarg0)  (_swigobj->SetFindString(_swigarg0))
+static PyObject *_wrap_wxFindDialogEvent_SetFindString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindDialogEvent * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","str", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFindDialogEvent_SetFindString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_SetFindString. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindDialogEvent_SetFindString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFindDialogEvent_SetReplaceString(_swigobj,_swigarg0)  (_swigobj->SetReplaceString(_swigarg0))
+static PyObject *_wrap_wxFindDialogEvent_SetReplaceString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindDialogEvent * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","str", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFindDialogEvent_SetReplaceString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindDialogEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindDialogEvent_SetReplaceString. Expected _wxFindDialogEvent_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindDialogEvent_SetReplaceString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static void *SwigwxFindReplaceDataTowxObject(void *ptr) {
+    wxFindReplaceData *src;
+    wxObject *dest;
+    src = (wxFindReplaceData *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxFindReplaceData(_swigarg0) (new wxFindReplaceData(_swigarg0))
+static PyObject *_wrap_new_wxFindReplaceData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceData * _result;
+    int  _arg0 = (int ) 0;
+    char *_kwnames[] = { "flags", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|i:new_wxFindReplaceData",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFindReplaceData *)new_wxFindReplaceData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFindReplaceData_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define delete_wxFindReplaceData(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxFindReplaceData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxFindReplaceData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxFindReplaceData. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxFindReplaceData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFindReplaceData_GetFindString(_swigobj)  (_swigobj->GetFindString())
+static PyObject *_wrap_wxFindReplaceData_GetFindString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFindReplaceData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindReplaceData_GetFindString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceData_GetFindString. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFindReplaceData_GetFindString(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFindReplaceData_GetReplaceString(_swigobj)  (_swigobj->GetReplaceString())
+static PyObject *_wrap_wxFindReplaceData_GetReplaceString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxFindReplaceData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindReplaceData_GetReplaceString",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceData_GetReplaceString. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        const wxString & _result_ref = wxFindReplaceData_GetReplaceString(_arg0);
+    _result = (wxString *) &_result_ref;
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+    return _resultobj;
+}
+
+#define wxFindReplaceData_GetFlags(_swigobj)  (_swigobj->GetFlags())
+static PyObject *_wrap_wxFindReplaceData_GetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    int  _result;
+    wxFindReplaceData * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindReplaceData_GetFlags",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceData_GetFlags. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxFindReplaceData_GetFlags(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxFindReplaceData_SetFlags(_swigobj,_swigarg0)  (_swigobj->SetFlags(_swigarg0))
+static PyObject *_wrap_wxFindReplaceData_SetFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceData * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","flags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxFindReplaceData_SetFlags",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceData_SetFlags. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindReplaceData_SetFlags(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFindReplaceData_SetFindString(_swigobj,_swigarg0)  (_swigobj->SetFindString(_swigarg0))
+static PyObject *_wrap_wxFindReplaceData_SetFindString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceData * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","str", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFindReplaceData_SetFindString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceData_SetFindString. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindReplaceData_SetFindString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFindReplaceData_SetReplaceString(_swigobj,_swigarg0)  (_swigobj->SetReplaceString(_swigarg0))
+static PyObject *_wrap_wxFindReplaceData_SetReplaceString(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceData * _arg0;
+    wxString * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","str", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFindReplaceData_SetReplaceString",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceData_SetReplaceString. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindReplaceData_SetReplaceString(_arg0,*_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static void *SwigwxFindReplaceDialogTowxDialog(void *ptr) {
+    wxFindReplaceDialog *src;
+    wxDialog *dest;
+    src = (wxFindReplaceDialog *) ptr;
+    dest = (wxDialog *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFindReplaceDialogTowxTopLevelWindow(void *ptr) {
+    wxFindReplaceDialog *src;
+    wxTopLevelWindow *dest;
+    src = (wxFindReplaceDialog *) ptr;
+    dest = (wxTopLevelWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFindReplaceDialogTowxWindow(void *ptr) {
+    wxFindReplaceDialog *src;
+    wxWindow *dest;
+    src = (wxFindReplaceDialog *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFindReplaceDialogTowxEvtHandler(void *ptr) {
+    wxFindReplaceDialog *src;
+    wxEvtHandler *dest;
+    src = (wxFindReplaceDialog *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxFindReplaceDialogTowxObject(void *ptr) {
+    wxFindReplaceDialog *src;
+    wxObject *dest;
+    src = (wxFindReplaceDialog *) ptr;
+    dest = (wxObject *) src;
+    return (void *) dest;
+}
+
+#define new_wxFindReplaceDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxFindReplaceDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_new_wxFindReplaceDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceDialog * _result;
+    wxWindow * _arg0;
+    wxFindReplaceData * _arg1;
+    wxString * _arg2;
+    int  _arg3 = (int ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "parent","data","title","style", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:new_wxFindReplaceDialog",_kwnames,&_argo0,&_argo1,&_obj2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxFindReplaceDialog. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxFindReplaceDialog. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg2 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFindReplaceDialog *)new_wxFindReplaceDialog(_arg0,_arg1,*_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFindReplaceDialog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
+#define new_wxPreFindReplaceDialog() (new wxFindReplaceDialog())
+static PyObject *_wrap_new_wxPreFindReplaceDialog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceDialog * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPreFindReplaceDialog",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFindReplaceDialog *)new_wxPreFindReplaceDialog();
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFindReplaceDialog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxFindReplaceDialog_Create(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->Create(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxFindReplaceDialog_Create(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFindReplaceDialog * _arg0;
+    wxWindow * _arg1;
+    wxFindReplaceData * _arg2;
+    wxString * _arg3;
+    int  _arg4 = (int ) 0;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "self","parent","data","title","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO|i:wxFindReplaceDialog_Create",_kwnames,&_argo0,&_argo1,&_argo2,&_obj3,&_arg4)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceDialog_Create. Expected _wxFindReplaceDialog_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFindReplaceDialog_Create. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxFindReplaceDialog_Create. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg3 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
+#endif
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFindReplaceDialog_Create(_arg0,_arg1,_arg2,*_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj3)
+        delete _arg3;
+}
+    return _resultobj;
+}
+
+#define wxFindReplaceDialog_GetData(_swigobj)  (_swigobj->GetData())
+static PyObject *_wrap_wxFindReplaceDialog_GetData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceData * _result;
+    wxFindReplaceDialog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFindReplaceDialog_GetData",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceDialog_GetData. Expected _wxFindReplaceDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxFindReplaceData *)wxFindReplaceDialog_GetData(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxFindReplaceData_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxFindReplaceDialog_SetData(_swigobj,_swigarg0)  (_swigobj->SetData(_swigarg0))
+static PyObject *_wrap_wxFindReplaceDialog_SetData(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxFindReplaceDialog * _arg0;
+    wxFindReplaceData * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","data", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxFindReplaceDialog_SetData",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFindReplaceDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFindReplaceDialog_SetData. Expected _wxFindReplaceDialog_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxFindReplaceData_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFindReplaceDialog_SetData. Expected _wxFindReplaceData_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxFindReplaceDialog_SetData(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef cmndlgscMethods[] = {
+	 { "wxFindReplaceDialog_SetData", (PyCFunction) _wrap_wxFindReplaceDialog_SetData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceDialog_GetData", (PyCFunction) _wrap_wxFindReplaceDialog_GetData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceDialog_Create", (PyCFunction) _wrap_wxFindReplaceDialog_Create, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPreFindReplaceDialog", (PyCFunction) _wrap_new_wxPreFindReplaceDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFindReplaceDialog", (PyCFunction) _wrap_new_wxFindReplaceDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceData_SetReplaceString", (PyCFunction) _wrap_wxFindReplaceData_SetReplaceString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceData_SetFindString", (PyCFunction) _wrap_wxFindReplaceData_SetFindString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceData_SetFlags", (PyCFunction) _wrap_wxFindReplaceData_SetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceData_GetFlags", (PyCFunction) _wrap_wxFindReplaceData_GetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceData_GetReplaceString", (PyCFunction) _wrap_wxFindReplaceData_GetReplaceString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindReplaceData_GetFindString", (PyCFunction) _wrap_wxFindReplaceData_GetFindString, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxFindReplaceData", (PyCFunction) _wrap_delete_wxFindReplaceData, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFindReplaceData", (PyCFunction) _wrap_new_wxFindReplaceData, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_SetReplaceString", (PyCFunction) _wrap_wxFindDialogEvent_SetReplaceString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_SetFindString", (PyCFunction) _wrap_wxFindDialogEvent_SetFindString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_SetFlags", (PyCFunction) _wrap_wxFindDialogEvent_SetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_GetDialog", (PyCFunction) _wrap_wxFindDialogEvent_GetDialog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_GetReplaceString", (PyCFunction) _wrap_wxFindDialogEvent_GetReplaceString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_GetFindString", (PyCFunction) _wrap_wxFindDialogEvent_GetFindString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFindDialogEvent_GetFlags", (PyCFunction) _wrap_wxFindDialogEvent_GetFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxFindDialogEvent", (PyCFunction) _wrap_new_wxFindDialogEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProgressDialog_Resume", (PyCFunction) _wrap_wxProgressDialog_Resume, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProgressDialog_Update", (PyCFunction) _wrap_wxProgressDialog_Update, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxProgressDialog", (PyCFunction) _wrap_new_wxProgressDialog, METH_VARARGS | METH_KEYWORDS },
@@ -3016,6 +3931,8 @@ static PyMethodDef cmndlgscMethods[] = {
  * This table is used by the pointer type-checker
  */
 static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
+    { "_wxEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
+    { "_wxEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
     { "_signed_long","_long",0},
     { "_wxPrintQuality","_wxCoord",0},
     { "_wxPrintQuality","_int",0},
@@ -3026,6 +3943,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
     { "_wxPrintQuality","_time_t",0},
+    { "_class_wxEvtHandler","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
+    { "_class_wxEvtHandler","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
     { "_class_wxEvtHandler","_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
     { "_class_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler},
@@ -3045,6 +3964,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_byte","_unsigned_char",0},
     { "_long","_unsigned_long",0},
     { "_long","_signed_long",0},
+    { "_class_wxObject","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
+    { "_class_wxObject","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
+    { "_class_wxObject","_class_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
+    { "_class_wxObject","_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
+    { "_class_wxObject","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
+    { "_class_wxObject","_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
     { "_class_wxObject","_class_wxProgressDialog",SwigwxProgressDialogTowxObject},
     { "_class_wxObject","_wxProgressDialog",SwigwxProgressDialogTowxObject},
     { "_class_wxObject","_class_wxMessageDialog",SwigwxMessageDialogTowxObject},
@@ -3072,6 +3997,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
     { "_size_t","_uint",0},
+    { "_wxTopLevelWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
+    { "_wxTopLevelWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
@@ -3088,6 +4015,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxTopLevelWindow","_wxDirDialog",SwigwxDirDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_class_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
     { "_wxTopLevelWindow","_wxColourDialog",SwigwxColourDialogTowxTopLevelWindow},
+    { "_class_wxDialog","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
+    { "_class_wxDialog","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
     { "_class_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_class_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_class_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog},
@@ -3110,6 +4039,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
+    { "_class_wxEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
+    { "_class_wxEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxEvent},
+    { "_wxCommandEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
+    { "_wxCommandEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
     { "_char","_wxChar",0},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
@@ -3124,6 +4057,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_int","_EBool",0},
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
+    { "_class_wxTopLevelWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
+    { "_class_wxTopLevelWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxTopLevelWindow},
     { "_class_wxTopLevelWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
     { "_class_wxTopLevelWindow","_wxProgressDialog",SwigwxProgressDialogTowxTopLevelWindow},
     { "_class_wxTopLevelWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxTopLevelWindow},
@@ -3145,6 +4080,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_WXTYPE","_unsigned_short",0},
     { "_unsigned_short","_WXTYPE",0},
     { "_unsigned_short","_short",0},
+    { "_class_wxWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
+    { "_class_wxWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
     { "_class_wxWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxWindow},
     { "_class_wxWindow","_wxProgressDialog",SwigwxProgressDialogTowxWindow},
     { "_class_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow},
@@ -3161,6 +4098,12 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxWindow","_wxDirDialog",SwigwxDirDialogTowxWindow},
     { "_class_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow},
     { "_class_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow},
+    { "_wxObject","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
+    { "_wxObject","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxObject},
+    { "_wxObject","_class_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
+    { "_wxObject","_wxFindReplaceData",SwigwxFindReplaceDataTowxObject},
+    { "_wxObject","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
+    { "_wxObject","_wxFindDialogEvent",SwigwxFindDialogEventTowxObject},
     { "_wxObject","_class_wxProgressDialog",SwigwxProgressDialogTowxObject},
     { "_wxObject","_wxProgressDialog",SwigwxProgressDialogTowxObject},
     { "_wxObject","_class_wxMessageDialog",SwigwxMessageDialogTowxObject},
@@ -3191,6 +4134,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
     { "_unsigned_int","_int",0},
+    { "_wxDialog","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
+    { "_wxDialog","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxDialog},
     { "_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog},
     { "_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog},
@@ -3244,6 +4189,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_class_wxCommandEvent","_class_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
+    { "_class_wxCommandEvent","_wxFindDialogEvent",SwigwxFindDialogEventTowxCommandEvent},
+    { "_wxEvtHandler","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
+    { "_wxEvtHandler","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxEvtHandler},
     { "_wxEvtHandler","_class_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler},
     { "_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler},
@@ -3260,6 +4209,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxEvtHandler","_wxDirDialog",SwigwxDirDialogTowxEvtHandler},
     { "_wxEvtHandler","_class_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
     { "_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler},
+    { "_wxWindow","_class_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
+    { "_wxWindow","_wxFindReplaceDialog",SwigwxFindReplaceDialogTowxWindow},
     { "_wxWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxWindow},
     { "_wxWindow","_wxProgressDialog",SwigwxProgressDialogTowxWindow},
     { "_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow},
@@ -3289,6 +4240,18 @@ SWIGEXPORT(void) initcmndlgsc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("cmndlgsc", cmndlgscMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxFR_DOWN", PyInt_FromLong((long) wxFR_DOWN));
+	 PyDict_SetItemString(d,"wxFR_WHOLEWORD", PyInt_FromLong((long) wxFR_WHOLEWORD));
+	 PyDict_SetItemString(d,"wxFR_MATCHCASE", PyInt_FromLong((long) wxFR_MATCHCASE));
+	 PyDict_SetItemString(d,"wxFR_REPLACEDIALOG", PyInt_FromLong((long) wxFR_REPLACEDIALOG));
+	 PyDict_SetItemString(d,"wxFR_NOUPDOWN", PyInt_FromLong((long) wxFR_NOUPDOWN));
+	 PyDict_SetItemString(d,"wxFR_NOMATCHCASE", PyInt_FromLong((long) wxFR_NOMATCHCASE));
+	 PyDict_SetItemString(d,"wxFR_NOWHOLEWORD", PyInt_FromLong((long) wxFR_NOWHOLEWORD));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_FIND", PyInt_FromLong((long) wxEVT_COMMAND_FIND));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_FIND_NEXT", PyInt_FromLong((long) wxEVT_COMMAND_FIND_NEXT));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_FIND_REPLACE", PyInt_FromLong((long) wxEVT_COMMAND_FIND_REPLACE));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_FIND_REPLACE_ALL", PyInt_FromLong((long) wxEVT_COMMAND_FIND_REPLACE_ALL));
+	 PyDict_SetItemString(d,"wxEVT_COMMAND_FIND_CLOSE", PyInt_FromLong((long) wxEVT_COMMAND_FIND_CLOSE));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

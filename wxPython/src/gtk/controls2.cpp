@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -63,28 +61,47 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
 
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
+}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {
+    if (!target) {                   
         target = o;
-    } else if (target == Py_None) {
+    } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {
+    } else {                         
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);
-        PyTuple_SetItem(o3, 0, o);
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
 
         o2 = target;
-        target = PySequence_Concat(o2, o3);
-        Py_DECREF(o2);
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
         Py_DECREF(o3);
     }
     return target;
@@ -93,7 +110,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
   // C++ Version of a Python aware class
 class wxPyListCtrl : public wxListCtrl {
@@ -3232,8 +3249,8 @@ static PyObject *_wrap_wxListCtrl_Create(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxListCtrl__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxListCtrl__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxListCtrl__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxListCtrl__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyListCtrl * _arg0;
     PyObject * _arg1;
@@ -3244,12 +3261,12 @@ static PyObject *_wrap_wxListCtrl__setSelf(PyObject *self, PyObject *args, PyObj
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxListCtrl__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxListCtrl__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl__setSelf. Expected _wxPyListCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl__setCallbackInfo. Expected _wxPyListCtrl_p.");
         return NULL;
         }
     }
@@ -3261,7 +3278,7 @@ static PyObject *_wrap_wxListCtrl__setSelf(PyObject *self, PyObject *args, PyObj
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxListCtrl__setSelf(_arg0,_arg1,_arg2);
+        wxListCtrl__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -6783,8 +6800,8 @@ static PyObject *_wrap_wxTreeCtrl_Create(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxTreeCtrl__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxTreeCtrl__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxTreeCtrl__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxTreeCtrl__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyTreeCtrl * _arg0;
     PyObject * _arg1;
@@ -6795,12 +6812,12 @@ static PyObject *_wrap_wxTreeCtrl__setSelf(PyObject *self, PyObject *args, PyObj
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxTreeCtrl__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl__setSelf. Expected _wxPyTreeCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl__setCallbackInfo. Expected _wxPyTreeCtrl_p.");
         return NULL;
         }
     }
@@ -6812,7 +6829,7 @@ static PyObject *_wrap_wxTreeCtrl__setSelf(PyObject *self, PyObject *args, PyObj
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTreeCtrl__setSelf(_arg0,_arg1,_arg2);
+        wxTreeCtrl__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -9503,7 +9520,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_SetIndent", (PyCFunction) _wrap_wxTreeCtrl_SetIndent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetIndent", (PyCFunction) _wrap_wxTreeCtrl_GetIndent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_GetCount", (PyCFunction) _wrap_wxTreeCtrl_GetCount, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTreeCtrl__setSelf", (PyCFunction) _wrap_wxTreeCtrl__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl__setCallbackInfo", (PyCFunction) _wrap_wxTreeCtrl__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_Create", (PyCFunction) _wrap_wxTreeCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreTreeCtrl", (PyCFunction) _wrap_new_wxPreTreeCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxTreeCtrl", (PyCFunction) _wrap_new_wxTreeCtrl, METH_VARARGS | METH_KEYWORDS },
@@ -9600,7 +9617,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_GetColumn", (PyCFunction) _wrap_wxListCtrl_GetColumn, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetBackgroundColour", (PyCFunction) _wrap_wxListCtrl_SetBackgroundColour, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_SetForegroundColour", (PyCFunction) _wrap_wxListCtrl_SetForegroundColour, METH_VARARGS | METH_KEYWORDS },
-	 { "wxListCtrl__setSelf", (PyCFunction) _wrap_wxListCtrl__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxListCtrl__setCallbackInfo", (PyCFunction) _wrap_wxListCtrl__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxListCtrl_Create", (PyCFunction) _wrap_wxListCtrl_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreListCtrl", (PyCFunction) _wrap_new_wxPreListCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxListCtrl", (PyCFunction) _wrap_new_wxListCtrl, METH_VARARGS | METH_KEYWORDS },

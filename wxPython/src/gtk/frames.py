@@ -62,6 +62,7 @@ class wxTopLevelWindow(wxTopLevelWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxTopLevelWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
@@ -124,12 +125,14 @@ class wxFrame(wxFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxFrame,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreFrame(*_args,**_kwargs):
     val = wxFramePtr(apply(framesc.new_wxPreFrame,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -173,12 +176,14 @@ class wxDialog(wxDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxDialog,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreDialog(*_args,**_kwargs):
     val = wxDialogPtr(apply(framesc.new_wxPreDialog,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -195,12 +200,14 @@ class wxMiniFrame(wxMiniFramePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxMiniFrame,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreMiniFrame(*_args,**_kwargs):
     val = wxMiniFramePtr(apply(framesc.new_wxPreMiniFrame,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -214,6 +221,7 @@ class wxTipWindow(wxTipWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(framesc.new_wxTipWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

@@ -116,6 +116,7 @@ class wxContextHelpButton(wxContextHelpButtonPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(helpc.new_wxContextHelpButton,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 

@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -59,28 +57,47 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/menuitem.h>
 #include <wx/tooltip.h>
 
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
+}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {
+    if (!target) {                   
         target = o;
-    } else if (target == Py_None) {
+    } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {
+    } else {                         
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);
-        PyTuple_SetItem(o3, 0, o);
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
 
         o2 = target;
-        target = PySequence_Concat(o2, o3);
-        Py_DECREF(o2);
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
         Py_DECREF(o3);
     }
     return target;
@@ -89,7 +106,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
     static wxString wxPyEmptyStr("");
@@ -517,6 +534,41 @@ static PyObject *_wrap_wxEvtHandler_Disconnect(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+static void  wxEvtHandler__setOORInfo(wxEvtHandler *self,PyObject * _self) {
+            self->SetClientObject(new wxPyClientData(_self));
+        }
+static PyObject *_wrap_wxEvtHandler__setOORInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEvtHandler * _arg0;
+    PyObject * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    char *_kwnames[] = { "self","_self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxEvtHandler__setOORInfo",_kwnames,&_argo0,&_obj1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEvtHandler__setOORInfo. Expected _wxEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxEvtHandler__setOORInfo(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxValidatorTowxEvtHandler(void *ptr) {
     wxValidator *src;
     wxEvtHandler *dest;
@@ -739,8 +791,8 @@ static PyObject *_wrap_new_wxPyValidator(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxPyValidator__setSelf(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->_setSelf(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPyValidator__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyValidator__setCallbackInfo(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxPyValidator__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyValidator * _arg0;
     PyObject * _arg1;
@@ -752,12 +804,12 @@ static PyObject *_wrap_wxPyValidator__setSelf(PyObject *self, PyObject *args, Py
     char *_kwnames[] = { "self","self","_class","incref", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:wxPyValidator__setSelf",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO|i:wxPyValidator__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2,&_arg3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyValidator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyValidator__setSelf. Expected _wxPyValidator_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyValidator__setCallbackInfo. Expected _wxPyValidator_p.");
         return NULL;
         }
     }
@@ -769,7 +821,7 @@ static PyObject *_wrap_wxPyValidator__setSelf(PyObject *self, PyObject *args, Py
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyValidator__setSelf(_arg0,_arg1,_arg2,_arg3);
+        wxPyValidator__setCallbackInfo(_arg0,_arg1,_arg2,_arg3);
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
@@ -10153,7 +10205,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Create", (PyCFunction) _wrap_wxWindow_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreWindow", (PyCFunction) _wrap_new_wxPreWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxWindow", (PyCFunction) _wrap_new_wxWindow, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyValidator__setSelf", (PyCFunction) _wrap_wxPyValidator__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyValidator__setCallbackInfo", (PyCFunction) _wrap_wxPyValidator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyValidator", (PyCFunction) _wrap_new_wxPyValidator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_SetBellOnError", (PyCFunction) _wrap_wxValidator_SetBellOnError, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_IsSilent", (PyCFunction) _wrap_wxValidator_IsSilent, METH_VARARGS | METH_KEYWORDS },
@@ -10161,6 +10213,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxValidator_GetWindow", (PyCFunction) _wrap_wxValidator_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_Clone", (PyCFunction) _wrap_wxValidator_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxValidator", (PyCFunction) _wrap_new_wxValidator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEvtHandler__setOORInfo", (PyCFunction) _wrap_wxEvtHandler__setOORInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_Disconnect", (PyCFunction) _wrap_wxEvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_Connect", (PyCFunction) _wrap_wxEvtHandler_Connect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_SetPreviousHandler", (PyCFunction) _wrap_wxEvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS },

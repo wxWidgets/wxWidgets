@@ -118,12 +118,14 @@ class wxSashWindow(wxSashWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows3c.new_wxSashWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreSashWindow(*_args,**_kwargs):
     val = wxSashWindowPtr(apply(windows3c.new_wxPreSashWindow,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -227,12 +229,14 @@ class wxSashLayoutWindow(wxSashLayoutWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windows3c.new_wxSashLayoutWindow,_args,_kwargs)
         self.thisown = 1
+        self._setOORInfo(self)
 
 
 
 def wxPreSashLayoutWindow(*_args,**_kwargs):
     val = wxSashLayoutWindowPtr(apply(windows3c.new_wxPreSashLayoutWindow,_args,_kwargs))
     val.thisown = 1
+    val._setOORInfo(self)
     return val
 
 
@@ -260,6 +264,64 @@ class wxLayoutAlgorithm(wxLayoutAlgorithmPtr):
         self.thisown = 1
 
 
+
+
+class wxPopupWindowPtr(wxWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def Create(self, *_args, **_kwargs):
+        val = apply(windows3c.wxPopupWindow_Create,(self,) + _args, _kwargs)
+        return val
+    def Position(self, *_args, **_kwargs):
+        val = apply(windows3c.wxPopupWindow_Position,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPopupWindow instance at %s>" % (self.this,)
+class wxPopupWindow(wxPopupWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows3c.new_wxPopupWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+def wxPrePopupWindow(*_args,**_kwargs):
+    val = wxPopupWindowPtr(apply(windows3c.new_wxPrePopupWindow,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(self)
+    return val
+
+
+class wxPopupTransientWindowPtr(wxPopupWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setCallbackInfo(self, *_args, **_kwargs):
+        val = apply(windows3c.wxPopupTransientWindow__setCallbackInfo,(self,) + _args, _kwargs)
+        return val
+    def Popup(self, *_args, **_kwargs):
+        val = apply(windows3c.wxPopupTransientWindow_Popup,(self,) + _args, _kwargs)
+        return val
+    def Dismiss(self, *_args, **_kwargs):
+        val = apply(windows3c.wxPopupTransientWindow_Dismiss,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPopupTransientWindow instance at %s>" % (self.this,)
+class wxPopupTransientWindow(wxPopupTransientWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows3c.new_wxPopupTransientWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setCallbackInfo(self, wxPopupTransientWindow)
+        self._setOORInfo(self)
+
+
+
+def wxPrePopupTransientWindow(*_args,**_kwargs):
+    val = wxPopupTransientWindowPtr(apply(windows3c.new_wxPrePopupTransientWindow,_args,_kwargs))
+    val.thisown = 1
+    val._setOORInfo(self)
+    return val
 
 
 

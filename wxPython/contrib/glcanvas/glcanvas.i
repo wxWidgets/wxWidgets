@@ -15,7 +15,12 @@
 
 %{
 #include "export.h"
+#ifdef __WXMSW__
 #include "myglcanvas.h"
+#else
+#include <wx/glcanvas.h>
+#endif
+
 %}
 
 //---------------------------------------------------------------------------
@@ -109,8 +114,8 @@ public:
                     int *attribList = NULL,
                     const wxPalette& palette = wxNullPalette );
 
-    bool Create(wxWindow *parent, wxWindowID id,
-                const wxPoint& pos, const wxSize& size, long style, const wxString& name);
+//      bool Create(wxWindow *parent, wxWindowID id,
+//                  const wxPoint& pos, const wxSize& size, long style, const wxString& name);
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxGLCanvasWithContext:val._setOORInfo(self)"
@@ -121,11 +126,12 @@ public:
 
     wxGLContext* GetContext();
 
-   void SetupPixelFormat(int *attribList = NULL);
-   void SetupPalette(const wxPalette& palette);
-   wxPalette CreateDefaultPalette();
-
-   wxPalette* GetPalette();
+#ifdef __WXMSW__
+    void SetupPixelFormat(int *attribList = NULL);
+    void SetupPalette(const wxPalette& palette);
+    wxPalette CreateDefaultPalette();
+    wxPalette* GetPalette();
+#endif
 };
 
 

@@ -27,21 +27,19 @@
 #	define SWIGEXPORT(a) __declspec(dllexport) a
 #   else
 #	if defined(__BORLANDC__)
-#	    define SWIGEXPORT(a) a _export
+#	    define SWIGEXPORT(a) a _export 
 #	else
-#	    define SWIGEXPORT(a) a
+#	    define SWIGEXPORT(a) a 
 #	endif
 #   endif
 #else
-#   define SWIGEXPORT(a) a
+#   define SWIGEXPORT(a) a 
 #endif
-
-#include "Python.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
+#include "Python.h"
 extern void SWIG_MakePtr(char *, void *, char *);
 extern void SWIG_RegisterMapping(char *, char *, void *(*)(void *));
 extern char *SWIG_GetPtr(char *, void **, char *);
@@ -71,28 +69,47 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/wave.h>
 #endif
 
+static PyObject* l_output_helper(PyObject* target, PyObject* o) {
+    PyObject*   o2;
+    if (!target) {                   
+        target = o;
+    } else if (target == Py_None) {  
+        Py_DECREF(Py_None);
+        target = o;
+    } else {                         
+        if (!PyList_Check(target)) {
+            o2 = target;
+            target = PyList_New(0);
+            PyList_Append(target, o2);
+	    Py_XDECREF(o2);
+        }
+        PyList_Append(target,o);
+	Py_XDECREF(o);
+    }
+    return target;
+}
 
 static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
     PyObject*   o3;
 
-    if (!target) {
+    if (!target) {                   
         target = o;
-    } else if (target == Py_None) {
+    } else if (target == Py_None) {  
         Py_DECREF(Py_None);
         target = o;
-    } else {
+    } else {                         
         if (!PyTuple_Check(target)) {
             o2 = target;
             target = PyTuple_New(1);
             PyTuple_SetItem(target, 0, o2);
         }
-        o3 = PyTuple_New(1);
-        PyTuple_SetItem(o3, 0, o);
+        o3 = PyTuple_New(1);            
+        PyTuple_SetItem(o3, 0, o);      
 
         o2 = target;
-        target = PySequence_Concat(o2, o3);
-        Py_DECREF(o2);
+        target = PySequence_Concat(o2, o3); 
+        Py_DECREF(o2);                      
         Py_DECREF(o3);
     }
     return target;
@@ -101,7 +118,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #if PYTHON_API_VERSION >= 1009
     static char* wxStringErrorMsg = "String or Unicode type required";
 #else
-    static char* wxStringErrorMsg = "string type is required for parameter";
+    static char* wxStringErrorMsg = "String type required";
 #endif
 
     static wxString wxPyEmptyStr("");
@@ -160,6 +177,34 @@ IMP_PYCALLBACK_STRING__pure( wxPyTipProvider, wxTipProvider, GetTip);
 
 
 #include <wx/generic/dragimgg.h>
+
+// A Log class that can be derived from in wxPython
+class wxPyLog : public wxLog {
+public:
+    wxPyLog() : wxLog() {}
+
+    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));
+        wxPyEndBlockThreads(state);
+        if (! found)
+            wxLog::DoLog(level, szString, t);
+    }
+
+    virtual void DoLogString(const wxChar *szString, time_t t) {
+        bool found;
+        wxPyTState* state = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));
+        wxPyEndBlockThreads(state);
+        if (! found)
+            wxLog::DoLogString(szString, t);
+    }
+
+    PYPRIVATE;
+};
  // C++ version of wxProcess derived class
 
 class wxPyProcess : public wxProcess {
@@ -2921,8 +2966,8 @@ static PyObject *_wrap_delete_wxFontEnumerator(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxFontEnumerator__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxFontEnumerator__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxFontEnumerator__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFontEnumerator__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyFontEnumerator * _arg0;
     PyObject * _arg1;
@@ -2933,12 +2978,12 @@ static PyObject *_wrap_wxFontEnumerator__setSelf(PyObject *self, PyObject *args,
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFontEnumerator__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxFontEnumerator__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator__setSelf. Expected _wxPyFontEnumerator_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator__setCallbackInfo. Expected _wxPyFontEnumerator_p.");
         return NULL;
         }
     }
@@ -2950,7 +2995,7 @@ static PyObject *_wrap_wxFontEnumerator__setSelf(PyObject *self, PyObject *args,
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxFontEnumerator__setSelf(_arg0,_arg1,_arg2);
+        wxFontEnumerator__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4631,6 +4676,58 @@ static PyObject *_wrap_wxLog_RemoveTraceMask(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+static PyObject *_wrap_wxLog_ClearTraceMasks(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxLog_ClearTraceMasks",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLog::ClearTraceMasks();
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLog_SetTimestamp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxChar * _arg0;
+    char *_kwnames[] = { "ts", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"s:wxLog_SetTimestamp",_kwnames,&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLog::SetTimestamp(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxLog_GetTimestamp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxChar * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxLog_GetTimestamp",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxChar *)wxLog::GetTimestamp();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("s", _result);
+    return _resultobj;
+}
+
 #define wxLog_GetVerbose(_swigobj)  (_swigobj->GetVerbose())
 static PyObject *_wrap_wxLog_GetVerbose(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4692,6 +4789,42 @@ static PyObject *_wrap_wxLog_IsAllowedTraceMask(PyObject *self, PyObject *args, 
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static wxString  wxLog_TimeStamp(wxLog *self) {
+            wxString msg;
+            wxLog::TimeStamp(&msg);
+            return msg;
+        }
+static PyObject *_wrap_wxLog_TimeStamp(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxLog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLog_TimeStamp",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLog_TimeStamp. Expected _wxLog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxLog_TimeStamp(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
     return _resultobj;
 }
 
@@ -5052,6 +5185,272 @@ static PyObject *_wrap_delete_wxLogNull(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
+static void *SwigwxLogChainTowxLog(void *ptr) {
+    wxLogChain *src;
+    wxLog *dest;
+    src = (wxLogChain *) ptr;
+    dest = (wxLog *) src;
+    return (void *) dest;
+}
+
+#define new_wxLogChain(_swigarg0) (new wxLogChain(_swigarg0))
+static PyObject *_wrap_new_wxLogChain(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLogChain * _result;
+    wxLog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "logger", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:new_wxLogChain",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxLogChain. Expected _wxLog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxLogChain *)new_wxLogChain(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLogChain_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxLogChain_SetLog(_swigobj,_swigarg0)  (_swigobj->SetLog(_swigarg0))
+static PyObject *_wrap_wxLogChain_SetLog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLogChain * _arg0;
+    wxLog * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","logger", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxLogChain_SetLog",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogChain_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLogChain_SetLog. Expected _wxLogChain_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxLog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxLogChain_SetLog. Expected _wxLog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLogChain_SetLog(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxLogChain_PassMessages(_swigobj,_swigarg0)  (_swigobj->PassMessages(_swigarg0))
+static PyObject *_wrap_wxLogChain_PassMessages(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLogChain * _arg0;
+    bool  _arg1;
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","bDoPass", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxLogChain_PassMessages",_kwnames,&_argo0,&tempbool1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogChain_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLogChain_PassMessages. Expected _wxLogChain_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxLogChain_PassMessages(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxLogChain_IsPassingMessages(_swigobj)  (_swigobj->IsPassingMessages())
+static PyObject *_wrap_wxLogChain_IsPassingMessages(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxLogChain * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLogChain_IsPassingMessages",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogChain_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLogChain_IsPassingMessages. Expected _wxLogChain_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxLogChain_IsPassingMessages(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxLogChain_GetOldLog(_swigobj)  (_swigobj->GetOldLog())
+static PyObject *_wrap_wxLogChain_GetOldLog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLog * _result;
+    wxLogChain * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxLogChain_GetOldLog",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxLogChain_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxLogChain_GetOldLog. Expected _wxLogChain_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxLog *)wxLogChain_GetOldLog(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxLog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+static void *SwigwxPyLogTowxLog(void *ptr) {
+    wxPyLog *src;
+    wxLog *dest;
+    src = (wxPyLog *) ptr;
+    dest = (wxLog *) src;
+    return (void *) dest;
+}
+
+#define new_wxPyLog() (new wxPyLog())
+static PyObject *_wrap_new_wxPyLog(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyLog * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxPyLog",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxPyLog *)new_wxPyLog();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyLog_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
+#define wxPyLog__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxPyLog__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyLog * _arg0;
+    PyObject * _arg1;
+    PyObject * _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyLog__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyLog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyLog__setCallbackInfo. Expected _wxPyLog_p.");
+        return NULL;
+        }
+    }
+{
+  _arg1 = _obj1;
+}
+{
+  _arg2 = _obj2;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyLog__setCallbackInfo(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void  wxPyLog_Destroy(wxPyLog *self) { delete self; }
+static PyObject *_wrap_wxPyLog_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyLog * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyLog_Destroy",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyLog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyLog_Destroy. Expected _wxPyLog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyLog_Destroy(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxProcessEventTowxEvent(void *ptr) {
     wxProcessEvent *src;
     wxEvent *dest;
@@ -5338,8 +5737,8 @@ static PyObject *_wrap_wxProcess_Destroy(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxProcess__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxProcess__setCallbackInfo(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setCallbackInfo(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxProcess__setCallbackInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyProcess * _arg0;
     PyObject * _arg1;
@@ -5350,12 +5749,12 @@ static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObje
     char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxProcess__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxProcess__setCallbackInfo",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyProcess_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess__setSelf. Expected _wxPyProcess_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProcess__setCallbackInfo. Expected _wxPyProcess_p.");
         return NULL;
         }
     }
@@ -5367,7 +5766,7 @@ static PyObject *_wrap_wxProcess__setSelf(PyObject *self, PyObject *args, PyObje
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxProcess__setSelf(_arg0,_arg1,_arg2);
+        wxProcess__setCallbackInfo(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -7031,7 +7430,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxProcess_IsRedirected", (PyCFunction) _wrap_wxProcess_IsRedirected, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_Redirect", (PyCFunction) _wrap_wxProcess_Redirect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_base_OnTerminate", (PyCFunction) _wrap_wxProcess_base_OnTerminate, METH_VARARGS | METH_KEYWORDS },
-	 { "wxProcess__setSelf", (PyCFunction) _wrap_wxProcess__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess__setCallbackInfo", (PyCFunction) _wrap_wxProcess__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_Destroy", (PyCFunction) _wrap_wxProcess_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxProcess", (PyCFunction) _wrap_new_wxProcess, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcessEvent_m_exitcode_get", (PyCFunction) _wrap_wxProcessEvent_m_exitcode_get, METH_VARARGS | METH_KEYWORDS },
@@ -7041,6 +7440,14 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxProcessEvent_GetExitCode", (PyCFunction) _wrap_wxProcessEvent_GetExitCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcessEvent_GetPid", (PyCFunction) _wrap_wxProcessEvent_GetPid, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxProcessEvent", (PyCFunction) _wrap_new_wxProcessEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyLog_Destroy", (PyCFunction) _wrap_wxPyLog_Destroy, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyLog__setCallbackInfo", (PyCFunction) _wrap_wxPyLog__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxPyLog", (PyCFunction) _wrap_new_wxPyLog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLogChain_GetOldLog", (PyCFunction) _wrap_wxLogChain_GetOldLog, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLogChain_IsPassingMessages", (PyCFunction) _wrap_wxLogChain_IsPassingMessages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLogChain_PassMessages", (PyCFunction) _wrap_wxLogChain_PassMessages, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLogChain_SetLog", (PyCFunction) _wrap_wxLogChain_SetLog, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxLogChain", (PyCFunction) _wrap_new_wxLogChain, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxLogNull", (PyCFunction) _wrap_delete_wxLogNull, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogNull", (PyCFunction) _wrap_new_wxLogNull, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLogWindow_PassMessages", (PyCFunction) _wrap_wxLogWindow_PassMessages, METH_VARARGS | METH_KEYWORDS },
@@ -7052,9 +7459,13 @@ static PyMethodDef misc2cMethods[] = {
 	 { "new_wxLogGui", (PyCFunction) _wrap_new_wxLogGui, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogTextCtrl", (PyCFunction) _wrap_new_wxLogTextCtrl, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxLogStderr", (PyCFunction) _wrap_new_wxLogStderr, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_TimeStamp", (PyCFunction) _wrap_wxLog_TimeStamp, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_IsAllowedTraceMask", (PyCFunction) _wrap_wxLog_IsAllowedTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetTraceMask", (PyCFunction) _wrap_wxLog_GetTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_GetVerbose", (PyCFunction) _wrap_wxLog_GetVerbose, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_GetTimestamp", (PyCFunction) _wrap_wxLog_GetTimestamp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_SetTimestamp", (PyCFunction) _wrap_wxLog_SetTimestamp, METH_VARARGS | METH_KEYWORDS },
+	 { "wxLog_ClearTraceMasks", (PyCFunction) _wrap_wxLog_ClearTraceMasks, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_RemoveTraceMask", (PyCFunction) _wrap_wxLog_RemoveTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_AddTraceMask", (PyCFunction) _wrap_wxLog_AddTraceMask, METH_VARARGS | METH_KEYWORDS },
 	 { "wxLog_SetTraceMask", (PyCFunction) _wrap_wxLog_SetTraceMask, METH_VARARGS | METH_KEYWORDS },
@@ -7108,7 +7519,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxFontEnumerator_GetEncodings", (PyCFunction) _wrap_wxFontEnumerator_GetEncodings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_EnumerateEncodings", (PyCFunction) _wrap_wxFontEnumerator_EnumerateEncodings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_EnumerateFacenames", (PyCFunction) _wrap_wxFontEnumerator_EnumerateFacenames, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFontEnumerator__setSelf", (PyCFunction) _wrap_wxFontEnumerator__setSelf, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontEnumerator__setCallbackInfo", (PyCFunction) _wrap_wxFontEnumerator__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxFontEnumerator", (PyCFunction) _wrap_delete_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxFontEnumerator", (PyCFunction) _wrap_new_wxFontEnumerator, METH_VARARGS | METH_KEYWORDS },
 	 { "wxCaret_Hide", (PyCFunction) _wrap_wxCaret_Hide, METH_VARARGS | METH_KEYWORDS },
@@ -7213,6 +7624,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_time_t",0},
     { "_class_wxEvtHandler","_class_wxPyProcess",SwigwxPyProcessTowxEvtHandler},
     { "_class_wxEvtHandler","_wxPyProcess",SwigwxPyProcessTowxEvtHandler},
+    { "_wxLog","_class_wxPyLog",SwigwxPyLogTowxLog},
+    { "_wxLog","_wxPyLog",SwigwxPyLogTowxLog},
+    { "_wxLog","_class_wxLogChain",SwigwxLogChainTowxLog},
+    { "_wxLog","_wxLogChain",SwigwxLogChainTowxLog},
     { "_wxLog","_class_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_wxLog","_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_wxLog","_class_wxLogGui",SwigwxLogGuiTowxLog},
@@ -7292,6 +7707,10 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxObject","_wxToolTip",SwigwxToolTipTowxObject},
     { "_signed_short","_WXTYPE",0},
     { "_signed_short","_short",0},
+    { "_class_wxLog","_class_wxPyLog",SwigwxPyLogTowxLog},
+    { "_class_wxLog","_wxPyLog",SwigwxPyLogTowxLog},
+    { "_class_wxLog","_class_wxLogChain",SwigwxLogChainTowxLog},
+    { "_class_wxLog","_wxLogChain",SwigwxLogChainTowxLog},
     { "_class_wxLog","_class_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_class_wxLog","_wxLogWindow",SwigwxLogWindowTowxLog},
     { "_class_wxLog","_class_wxLogGui",SwigwxLogGuiTowxLog},
