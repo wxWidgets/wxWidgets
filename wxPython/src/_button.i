@@ -51,8 +51,8 @@ RefDoc(wxButton,  "
 class wxButton : public wxControl
 {
 public:
-    %addtofunc wxButton         "self._setOORInfo(self)"
-    %addtofunc wxButton()       ""
+    %pythonAppend wxButton         "self._setOORInfo(self)"
+    %pythonAppend wxButton()       ""
 
 
     DocStr(wxButton, "Create and show a button.");
@@ -102,8 +102,8 @@ DocStr(wxBitmapButton, "A Buttont that contains a bitmap.");
 class wxBitmapButton : public wxButton
 {
 public:
-    %addtofunc wxBitmapButton         "self._setOORInfo(self)"
-    %addtofunc wxBitmapButton()       ""
+    %pythonAppend wxBitmapButton         "self._setOORInfo(self)"
+    %pythonAppend wxBitmapButton()       ""
 
     DocStr(wxBitmapButton, "Create and show a button.")
     wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,

@@ -40,7 +40,7 @@ IMP_PYCALLBACK__(wxPyTimer, wxTimer, Notify);
 %name(Timer) class wxPyTimer : public wxEvtHandler
 {
 public:
-    %addtofunc wxPyTimer         "self._setCallbackInfo(self, Timer)"
+    %pythonAppend wxPyTimer         "self._setCallbackInfo(self, Timer)"
 
     // if you don't call SetOwner() or provide an owner in the contstructor
     // then you must override Notify() inorder to receive the timer

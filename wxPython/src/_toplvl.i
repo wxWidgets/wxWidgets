@@ -109,8 +109,8 @@ public:
 
 class wxFrame : public wxTopLevelWindow {
 public:
-    %addtofunc wxFrame         "self._setOORInfo(self)"
-    %addtofunc wxFrame()       ""
+    %pythonAppend wxFrame         "self._setOORInfo(self)"
+    %pythonAppend wxFrame()       ""
 
     wxFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
@@ -216,8 +216,8 @@ public:
 
 class wxDialog : public wxTopLevelWindow {
 public:
-    %addtofunc wxDialog   "self._setOORInfo(self)"
-    %addtofunc wxDialog() ""
+    %pythonAppend wxDialog   "self._setOORInfo(self)"
+    %pythonAppend wxDialog() ""
 
     wxDialog(wxWindow* parent,
              const wxWindowID id,
@@ -280,8 +280,8 @@ public:
 
 class wxMiniFrame : public wxFrame {
 public:
-    %addtofunc wxMiniFrame         "self._setOORInfo(self)"
-    %addtofunc wxMiniFrame()       ""
+    %pythonAppend wxMiniFrame         "self._setOORInfo(self)"
+    %pythonAppend wxMiniFrame()       ""
 
     wxMiniFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
                 const wxPoint& pos = wxDefaultPosition,
@@ -315,7 +315,7 @@ enum {
 class wxSplashScreenWindow: public wxWindow
 {
 public:
-    %addtofunc wxSplashScreenWindow         "self._setOORInfo(self)"
+    %pythonAppend wxSplashScreenWindow         "self._setOORInfo(self)"
 
     wxSplashScreenWindow(const wxBitmap& bitmap,
                          wxWindow* parent, wxWindowID id,
@@ -330,7 +330,7 @@ public:
 
 class wxSplashScreen : public wxFrame {
 public:
-    %addtofunc wxSplashScreen         "self._setOORInfo(self)"
+    %pythonAppend wxSplashScreen         "self._setOORInfo(self)"
 
     wxSplashScreen(const wxBitmap& bitmap, long splashStyle, int milliseconds,
                    wxWindow* parent, wxWindowID id,

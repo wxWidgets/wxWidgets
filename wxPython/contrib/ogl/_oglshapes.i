@@ -124,7 +124,7 @@ public:
 
 class wxPyRectangleShape : public wxPyShape {
 public:
-    %addtofunc wxPyRectangleShape "self._setOORandCallbackInfo(PyRectangleShape)"
+    %pythonAppend wxPyRectangleShape "self._setOORandCallbackInfo(PyRectangleShape)"
     
     wxPyRectangleShape(double width = 0.0, double height = 0.0);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -172,7 +172,7 @@ public:
 
 class wxPyControlPoint : public wxPyRectangleShape {
 public:
-    %addtofunc wxPyControlPoint "self._setOORandCallbackInfo(PyControlPoint)"
+    %pythonAppend wxPyControlPoint "self._setOORandCallbackInfo(PyControlPoint)"
     
     wxPyControlPoint(wxPyShapeCanvas *the_canvas = NULL,
                      wxPyShape *object = NULL,
@@ -223,7 +223,7 @@ public:
 
 class wxPyBitmapShape : public wxPyRectangleShape {
 public:
-    %addtofunc wxPyBitmapShape "self._setOORandCallbackInfo(PyBitmapShape)"
+    %pythonAppend wxPyBitmapShape "self._setOORandCallbackInfo(PyBitmapShape)"
     
     wxPyBitmapShape();
 
@@ -273,7 +273,7 @@ public:
 
 class wxPyDrawnShape : public wxPyRectangleShape {
 public:
-    %addtofunc wxPyDrawnShape "self._setOORandCallbackInfo(PyDrawnShape)"
+    %pythonAppend wxPyDrawnShape "self._setOORandCallbackInfo(PyDrawnShape)"
     
     wxPyDrawnShape();
 
@@ -378,7 +378,7 @@ public:
 
 class wxPyCompositeShape : public wxPyRectangleShape {
 public:
-    %addtofunc wxPyCompositeShape "self._setOORandCallbackInfo(PyCompositeShape)"
+    %pythonAppend wxPyCompositeShape "self._setOORandCallbackInfo(PyCompositeShape)"
     
     wxPyCompositeShape();
 
@@ -476,7 +476,7 @@ public:
 
 class wxPyDividedShape : public wxPyRectangleShape {
 public:
-    %addtofunc wxPyDividedShape "self._setOORandCallbackInfo(PyDividedShape)"
+    %pythonAppend wxPyDividedShape "self._setOORandCallbackInfo(PyDividedShape)"
     
     wxPyDividedShape(double width = 0.0, double height = 0.0);
 
@@ -526,7 +526,7 @@ public:
 
 class wxPyDivisionShape : public wxPyCompositeShape {
 public:
-    %addtofunc wxPyDivisionShape "self._setOORandCallbackInfo(PyDivisionShape)"
+    %pythonAppend wxPyDivisionShape "self._setOORandCallbackInfo(PyDivisionShape)"
     
     wxPyDivisionShape();
 

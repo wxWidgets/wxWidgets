@@ -106,7 +106,7 @@ public:
 {
 public:
 
-    %addtofunc wxPyArtProvider "self._setCallbackInfo(self, ArtProvider)"
+    %pythonAppend wxPyArtProvider "self._setCallbackInfo(self, ArtProvider)"
     wxPyArtProvider();
     
     void _setCallbackInfo(PyObject* self, PyObject* _class);

@@ -281,7 +281,7 @@ public:
 // Now tell SWIG about it
 class wxPyLog : public wxLog {
 public:
-    %addtofunc wxPyLog   "self._setCallbackInfo(self, PyLog)"
+    %pythonAppend wxPyLog   "self._setCallbackInfo(self, PyLog)"
 
     wxPyLog();
     

@@ -22,8 +22,8 @@ MAKE_CONST_WXSTRING(ScrollBarNameStr);
 
 class wxScrollBar : public wxControl {
 public:
-    %addtofunc wxScrollBar         "self._setOORInfo(self)"
-    %addtofunc wxScrollBar()       ""
+    %pythonAppend wxScrollBar         "self._setOORInfo(self)"
+    %pythonAppend wxScrollBar()       ""
 
     wxScrollBar(wxWindow* parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,

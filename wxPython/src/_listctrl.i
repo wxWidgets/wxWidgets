@@ -401,8 +401,8 @@ IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 %name(ListCtrl)class wxPyListCtrl : public wxControl {
 public:
 
-    %addtofunc wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
-    %addtofunc wxPyListCtrl()       ""
+    %pythonAppend wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
+    %pythonAppend wxPyListCtrl()       ""
    
     wxPyListCtrl(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -427,7 +427,7 @@ public:
     bool SetBackgroundColour(const wxColour& col);
 
     // Gets information about this column
-    %addtofunc GetColumn "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
+    %pythonAppend GetColumn "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
     %extend {
         wxListItem* GetColumn(int col) {
             wxListItem item;
@@ -470,7 +470,7 @@ public:
 #endif
 
     // Gets information about the item
-    %addtofunc GetItem "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
+    %pythonAppend GetItem "if val is not None: val.thisown = 1";  // %newobject doesn't work with OOR typemap
     %extend {
         wxListItem* GetItem(long itemId, int col=0) {
             wxListItem* info = new wxListItem;
@@ -776,8 +776,8 @@ public:
 class wxListView : public wxPyListCtrl
 {
 public:
-    %addtofunc wxListView         "self._setOORInfo(self)"
-    %addtofunc wxListView()       ""
+    %pythonAppend wxListView         "self._setOORInfo(self)"
+    %pythonAppend wxListView()       ""
 
     wxListView( wxWindow *parent,
                 wxWindowID id = -1,

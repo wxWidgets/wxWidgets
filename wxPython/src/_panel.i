@@ -25,8 +25,8 @@
 class wxPanel : public wxWindow
 {
 public:
-    %addtofunc wxPanel         "self._setOORInfo(self)"
-    %addtofunc wxPanel()       ""
+    %pythonAppend wxPanel         "self._setOORInfo(self)"
+    %pythonAppend wxPanel()       ""
 
     wxPanel(wxWindow* parent,
             const wxWindowID id=-1,
@@ -58,8 +58,8 @@ public:
 class wxScrolledWindow : public wxPanel
 {
 public:
-    %addtofunc wxScrolledWindow         "self._setOORInfo(self)"
-    %addtofunc wxScrolledWindow()       ""
+    %pythonAppend wxScrolledWindow         "self._setOORInfo(self)"
+    %pythonAppend wxScrolledWindow()       ""
 
     wxScrolledWindow(wxWindow* parent,
                      const wxWindowID id = -1,

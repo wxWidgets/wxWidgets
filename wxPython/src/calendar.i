@@ -143,8 +143,8 @@ MAKE_CONST_WXSTRING(CalendarNameStr);
 class wxCalendarCtrl : public wxControl
 {
 public:
-    %addtofunc wxCalendarCtrl      "self._setOORInfo(self)"
-    %addtofunc wxCalendarCtrl()    ""
+    %pythonAppend wxCalendarCtrl      "self._setOORInfo(self)"
+    %pythonAppend wxCalendarCtrl()    ""
 
     wxCalendarCtrl(wxWindow *parent,
                    wxWindowID id,

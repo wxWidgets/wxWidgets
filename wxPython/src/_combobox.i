@@ -28,8 +28,8 @@ class wxComboBox : public wxControl, public wxItemContainer
 #endif
 {
 public:
-    %addtofunc wxComboBox         "self._setOORInfo(self)"
-    %addtofunc wxComboBox()       ""
+    %pythonAppend wxComboBox         "self._setOORInfo(self)"
+    %pythonAppend wxComboBox()       ""
 
     wxComboBox(wxWindow* parent, wxWindowID id,
                const wxString& value = wxPyEmptyString,

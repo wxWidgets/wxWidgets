@@ -42,7 +42,7 @@ public:
 
 class wxColourDialog : public wxDialog {
 public:
-    %addtofunc wxColourDialog   "self._setOORInfo(self)"
+    %pythonAppend wxColourDialog   "self._setOORInfo(self)"
 
     wxColourDialog(wxWindow* parent, wxColourData* data = NULL);
 
@@ -55,7 +55,7 @@ public:
 
 class wxDirDialog : public wxDialog {
 public:
-    %addtofunc wxDirDialog   "self._setOORInfo(self)"
+    %pythonAppend wxDirDialog   "self._setOORInfo(self)"
     
     wxDirDialog(wxWindow* parent,
                 const wxString& message = wxPyDirSelectorPromptStr,
@@ -79,7 +79,7 @@ public:
 
 class wxFileDialog : public wxDialog {
 public:
-    %addtofunc wxFileDialog   "self._setOORInfo(self)"
+    %pythonAppend wxFileDialog   "self._setOORInfo(self)"
     
     wxFileDialog(wxWindow* parent,
                  const wxString& message = wxPyFileSelectorPromptStr,
@@ -150,7 +150,7 @@ enum { wxCHOICEDLG_STYLE };
 class wxMultiChoiceDialog : public wxDialog
 {
 public:
-    %addtofunc wxMultiChoiceDialog   "self._setOORInfo(self)"
+    %pythonAppend wxMultiChoiceDialog   "self._setOORInfo(self)"
     
     wxMultiChoiceDialog(wxWindow *parent,
                         const wxString& message,
@@ -174,7 +174,7 @@ public:
 
 class wxSingleChoiceDialog : public wxDialog {
 public:
-    %addtofunc wxSingleChoiceDialog   "self._setOORInfo(self)"
+    %pythonAppend wxSingleChoiceDialog   "self._setOORInfo(self)"
     
     %extend {
         // TODO: ignoring clientData for now...  FIX THIS
@@ -202,7 +202,7 @@ public:
 
 class wxTextEntryDialog : public wxDialog {
 public:
-    %addtofunc wxTextEntryDialog   "self._setOORInfo(self)"
+    %pythonAppend wxTextEntryDialog   "self._setOORInfo(self)"
     
     wxTextEntryDialog(wxWindow* parent,
                       const wxString& message,
@@ -241,7 +241,7 @@ public:
 
 class wxFontDialog : public wxDialog {
 public:
-    %addtofunc wxFontDialog   "self._setOORInfo(self)"
+    %pythonAppend wxFontDialog   "self._setOORInfo(self)"
     
     wxFontDialog(wxWindow* parent, const wxFontData& data);
 
@@ -254,7 +254,7 @@ public:
 
 class wxMessageDialog : public wxDialog {
 public:
-    %addtofunc wxMessageDialog   "self._setOORInfo(self)"
+    %pythonAppend wxMessageDialog   "self._setOORInfo(self)"
     
     wxMessageDialog(wxWindow* parent,
                     const wxString& message,
@@ -269,7 +269,7 @@ public:
 
 class wxProgressDialog : public wxFrame {
 public:
-    %addtofunc wxProgressDialog   "self._setOORInfo(self)"
+    %pythonAppend wxProgressDialog   "self._setOORInfo(self)"
     
     wxProgressDialog(const wxString& title,
                      const wxString& message,
@@ -368,8 +368,8 @@ public:
 
 class wxFindReplaceDialog : public wxDialog {
 public:
-    %addtofunc wxFindReplaceDialog     "self._setOORInfo(self)"
-    %addtofunc wxFindReplaceDialog()   ""
+    %pythonAppend wxFindReplaceDialog     "self._setOORInfo(self)"
+    %pythonAppend wxFindReplaceDialog()   ""
 
     wxFindReplaceDialog(wxWindow *parent,
                         wxFindReplaceData *data,

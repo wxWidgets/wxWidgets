@@ -35,8 +35,8 @@
 
 class wxMDIParentFrame : public wxFrame {
 public:
-    %addtofunc wxMDIParentFrame         "self._setOORInfo(self)"
-    %addtofunc wxMDIParentFrame()       ""
+    %pythonAppend wxMDIParentFrame         "self._setOORInfo(self)"
+    %pythonAppend wxMDIParentFrame()       ""
 
     wxMDIParentFrame(wxWindow *parent,
                      const wxWindowID id,
@@ -80,8 +80,8 @@ public:
 
 class wxMDIChildFrame : public wxFrame {
 public:
-    %addtofunc wxMDIChildFrame         "self._setOORInfo(self)"
-    %addtofunc wxMDIChildFrame()       ""
+    %pythonAppend wxMDIChildFrame         "self._setOORInfo(self)"
+    %pythonAppend wxMDIChildFrame()       ""
 
     wxMDIChildFrame(wxMDIParentFrame* parent,
                     const wxWindowID id,
@@ -111,8 +111,8 @@ public:
 
 class wxMDIClientWindow : public wxWindow {
 public:
-    %addtofunc wxMDIClientWindow         "self._setOORInfo(self)"
-    %addtofunc wxMDIClientWindow()       ""
+    %pythonAppend wxMDIClientWindow         "self._setOORInfo(self)"
+    %pythonAppend wxMDIClientWindow()       ""
 
     wxMDIClientWindow(wxMDIParentFrame* parent, long style = 0);
     %name(PreMDIClientWindow)wxMDIClientWindow();

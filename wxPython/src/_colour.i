@@ -82,10 +82,11 @@ public:
         }
 };
 
-// %pythoncode {
-//     Color = Colour
-//     NamedColor = NamedColour    
-// }
+%pythoncode {
+    Color = Colour
+    NamedColor = NamedColour
+    ColorRGB = ColourRGB
+}
 
 //---------------------------------------------------------------------------
 

@@ -95,7 +95,7 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyControl, wxControl, RemoveChild);
 class wxPyControl : public wxControl
 {
 public:
-    %addtofunc wxPyControl         "self._setOORInfo(self); self._setCallbackInfo(self, PyControl)"
+    %pythonAppend wxPyControl         "self._setOORInfo(self); self._setCallbackInfo(self, PyControl)"
 
     wxPyControl(wxWindow* parent, const wxWindowID id,
                 const wxPoint& pos = wxDefaultPosition,

@@ -29,8 +29,8 @@ MAKE_CONST_WXSTRING(ListBoxNameStr);
 class wxListBox : public wxControlWithItems
 {
 public:
-    %addtofunc wxListBox         "self._setOORInfo(self)"
-    %addtofunc wxListBox()       ""
+    %pythonAppend wxListBox         "self._setOORInfo(self)"
+    %pythonAppend wxListBox()       ""
 
     wxListBox(wxWindow* parent, wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
@@ -114,8 +114,8 @@ public:
 class wxCheckListBox : public wxListBox
 {
 public:
-    %addtofunc wxCheckListBox         "self._setOORInfo(self)"
-    %addtofunc wxCheckListBox()       ""
+    %pythonAppend wxCheckListBox         "self._setOORInfo(self)"
+    %pythonAppend wxCheckListBox()       ""
 
     wxCheckListBox(wxWindow *parent, wxWindowID id,
                    const wxPoint& pos = wxDefaultPosition,

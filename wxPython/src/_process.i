@@ -89,7 +89,7 @@ public:
     static wxPyProcess *Open(const wxString& cmd, int flags = wxEXEC_ASYNC);
 
 
-    %addtofunc wxPyProcess  "self._setCallbackInfo(self, Process)"
+    %pythonAppend wxPyProcess  "self._setCallbackInfo(self, Process)"
     wxPyProcess(wxEvtHandler *parent = NULL, int id = -1);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);

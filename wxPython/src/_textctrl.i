@@ -102,7 +102,8 @@ public:
                const wxColour& colBack = wxNullColour,
                const wxFont& font = wxNullFont,
                wxTextAttrAlignment alignment = wxTEXT_ALIGNMENT_DEFAULT);
-
+    ~wxTextAttr();
+    
     // operations
     void Init();
 
@@ -153,8 +154,8 @@ public:
 class wxTextCtrl : public wxControl
 {
 public:
-    %addtofunc wxTextCtrl         "self._setOORInfo(self)"
-    %addtofunc wxTextCtrl()       ""
+    %pythonAppend wxTextCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxTextCtrl()       ""
 
     wxTextCtrl(wxWindow* parent, wxWindowID id,
                const wxString& value = wxPyEmptyString,

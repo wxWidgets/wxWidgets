@@ -81,7 +81,7 @@ public:
 
 class wxPyShapeEvtHandler : public wxObject {
 public:
-    %addtofunc wxPyShapeEvtHandler "self._setOORandCallbackInfo(PyShapeEvtHandler)"
+    %pythonAppend wxPyShapeEvtHandler "self._setOORandCallbackInfo(PyShapeEvtHandler)"
     
     wxPyShapeEvtHandler(wxPyShapeEvtHandler *prev = NULL,
                         wxPyShape *shape = NULL);
@@ -145,7 +145,7 @@ public:
 
 class wxPyShape : public wxPyShapeEvtHandler {
 public:
-    %addtofunc wxPyShape "self._setOORandCallbackInfo(PyShapeEvtHandler)"
+    %pythonAppend wxPyShape "self._setOORandCallbackInfo(PyShapeEvtHandler)"
     
     wxPyShape(wxPyShapeCanvas *can = NULL);  
 

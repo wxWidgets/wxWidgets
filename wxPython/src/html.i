@@ -249,7 +249,7 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 
 %name(HtmlTagHandler) class wxPyHtmlTagHandler : public wxObject {
 public:
-    %addtofunc wxPyHtmlTagHandler   "self._setCallbackInfo(self, HtmlTagHandler)"    
+    %pythonAppend wxPyHtmlTagHandler   "self._setCallbackInfo(self, HtmlTagHandler)"    
     wxPyHtmlTagHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -287,7 +287,7 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleT
 
 %name(HtmlWinTagHandler) class wxPyHtmlWinTagHandler : public wxPyHtmlTagHandler {
 public:
-    %addtofunc wxPyHtmlWinTagHandler    "self._setCallbackInfo(self, HtmlWinTagHandler)"
+    %pythonAppend wxPyHtmlWinTagHandler    "self._setCallbackInfo(self, HtmlWinTagHandler)"
     wxPyHtmlWinTagHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -667,7 +667,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
 
 %name(HtmlFilter) class wxPyHtmlFilter : public wxObject {
 public:
-    %addtofunc wxPyHtmlFilter   "self._setCallbackInfo(self, HtmlFilter)"
+    %pythonAppend wxPyHtmlFilter   "self._setCallbackInfo(self, HtmlFilter)"
     wxPyHtmlFilter();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -778,8 +778,8 @@ wxHtmlOpeningStatus wxPyHtmlWindow::OnOpeningURL(wxHtmlURLType type,
 
 %name(HtmlWindow) class wxPyHtmlWindow : public wxScrolledWindow {
 public:
-    %addtofunc wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
-    %addtofunc wxPyHtmlWindow()    ""
+    %pythonAppend wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
+    %pythonAppend wxPyHtmlWindow()    ""
     
     wxPyHtmlWindow(wxWindow *parent, int id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -1087,7 +1087,7 @@ public:
 
 class wxHtmlHelpFrame : public wxFrame {
 public:
-    %addtofunc wxHtmlHelpFrame    "self._setOORInfo(self)"
+    %pythonAppend wxHtmlHelpFrame    "self._setOORInfo(self)"
     
     wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
 		    const wxString& title = wxPyEmptyString,
@@ -1124,7 +1124,7 @@ enum {
 
 class wxHtmlHelpController : public wxEvtHandler {
 public:
-    %addtofunc wxHtmlHelpController "self._setOORInfo(self)"
+    %pythonAppend wxHtmlHelpController "self._setOORInfo(self)"
     
     wxHtmlHelpController(int style = wxHF_DEFAULTSTYLE);
     ~wxHtmlHelpController();

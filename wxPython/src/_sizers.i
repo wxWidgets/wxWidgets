@@ -382,7 +382,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPySizer, wxSizer);
 
 class wxPySizer : public wxSizer {
 public:
-    %addtofunc wxPySizer "self._setCallbackInfo(self, PySizer);self._setOORInfo(self)"
+    %pythonAppend wxPySizer "self._setCallbackInfo(self, PySizer);self._setOORInfo(self)"
 
     wxPySizer();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -394,7 +394,7 @@ public:
 
 class  wxBoxSizer : public wxSizer {
 public:
-    %addtofunc wxBoxSizer "self._setOORInfo(self)"
+    %pythonAppend wxBoxSizer "self._setOORInfo(self)"
 
     wxBoxSizer(int orient = wxHORIZONTAL);
 
@@ -409,7 +409,7 @@ public:
 
 class  wxStaticBoxSizer : public wxBoxSizer {
 public:
-    %addtofunc wxStaticBoxSizer "self._setOORInfo(self)"
+    %pythonAppend wxStaticBoxSizer "self._setOORInfo(self)"
 
     wxStaticBoxSizer(wxStaticBox *box, int orient = wxHORIZONTAL);
     
@@ -424,7 +424,7 @@ public:
 class wxGridSizer: public wxSizer
 {
 public:
-    %addtofunc wxGridSizer "self._setOORInfo(self)"
+    %pythonAppend wxGridSizer "self._setOORInfo(self)"
 
     wxGridSizer( int rows=1, int cols=0, int vgap=0, int hgap=0 );
 
@@ -460,7 +460,7 @@ enum wxFlexSizerGrowMode
 class wxFlexGridSizer: public wxGridSizer
 {
 public:
-    %addtofunc wxFlexGridSizer "self._setOORInfo(self)"
+    %pythonAppend wxFlexGridSizer "self._setOORInfo(self)"
 
     wxFlexGridSizer( int rows=1, int cols=0, int vgap=0, int hgap=0 );
     

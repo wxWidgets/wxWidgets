@@ -20,7 +20,7 @@
 class wxMenu : public wxEvtHandler
 {
 public:
-    %addtofunc wxMenu         "self._setOORInfo(self)"
+    %pythonAppend wxMenu         "self._setOORInfo(self)"
     wxMenu(const wxString& title = wxPyEmptyString, long style = 0);
 
 
@@ -206,7 +206,7 @@ public:
 class wxMenuBar : public wxWindow
 {
 public:
-    %addtofunc wxMenuBar         "self._setOORInfo(self)"
+    %pythonAppend wxMenuBar         "self._setOORInfo(self)"
     wxMenuBar(long style = 0);
 
 

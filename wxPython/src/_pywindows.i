@@ -125,7 +125,7 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWindow, wxWindow, RemoveChild);
 class wxPyWindow : public wxWindow
 {
 public:
-    %addtofunc wxPyWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyWindow)"
+    %pythonAppend wxPyWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyWindow)"
 
     wxPyWindow(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
@@ -250,7 +250,7 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyPanel, wxPanel, RemoveChild);
 class wxPyPanel : public wxPanel
 {
 public:
-    %addtofunc wxPyPanel         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
+    %pythonAppend wxPyPanel         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
 
     wxPyPanel(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,

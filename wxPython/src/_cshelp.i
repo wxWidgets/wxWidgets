@@ -75,7 +75,7 @@ public:
 
 class wxContextHelpButton : public wxBitmapButton {
 public:
-    %addtofunc wxContextHelpButton "self._setOORInfo(self)"
+    %pythonAppend wxContextHelpButton "self._setOORInfo(self)"
 
     wxContextHelpButton(wxWindow* parent, wxWindowID id = wxID_CONTEXT_HELP,
                         const wxPoint& pos = wxDefaultPosition,

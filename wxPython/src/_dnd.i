@@ -118,7 +118,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyDropTarget, wxDropTarget, OnDrop);
 %name(DropTarget) class wxPyDropTarget // : public wxDropTarget
 {
 public:
-    %addtofunc wxPyDropTarget
+    %pythonAppend wxPyDropTarget
        "self._setCallbackInfo(self, DropTarget)"
     %apply SWIGTYPE *DISOWN { wxDataObject *dataObject };
 
@@ -180,7 +180,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyTextDropTarget, wxTextDropTarget, OnDrop);
 
 %name(TextDropTarget) class wxPyTextDropTarget : public wxPyDropTarget {
 public:
-    %addtofunc wxPyTextDropTarget   "self._setCallbackInfo(self, TextDropTarget)"
+    %pythonAppend wxPyTextDropTarget   "self._setCallbackInfo(self, TextDropTarget)"
 
     wxPyTextDropTarget();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -241,7 +241,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyFileDropTarget, wxFileDropTarget, OnDrop);
 %name(FileDropTarget) class wxPyFileDropTarget : public wxPyDropTarget
 {
 public:
-    %addtofunc wxPyFileDropTarget   "self._setCallbackInfo(self, FileDropTarget)"
+    %pythonAppend wxPyFileDropTarget   "self._setCallbackInfo(self, FileDropTarget)"
 
     wxPyFileDropTarget();
     void _setCallbackInfo(PyObject* self, PyObject* _class);

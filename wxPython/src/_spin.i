@@ -41,8 +41,8 @@ enum {
 class wxSpinButton : public wxControl
 {
 public:
-    %addtofunc wxSpinButton         "self._setOORInfo(self)"
-    %addtofunc wxSpinButton()       ""
+    %pythonAppend wxSpinButton         "self._setOORInfo(self)"
+    %pythonAppend wxSpinButton()       ""
 
     wxSpinButton(wxWindow* parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
@@ -80,8 +80,8 @@ public:
 class wxSpinCtrl : public wxControl
 {
 public:
-    %addtofunc wxSpinCtrl         "self._setOORInfo(self)"
-    %addtofunc wxSpinCtrl()       ""
+    %pythonAppend wxSpinCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxSpinCtrl()       ""
 
     wxSpinCtrl(wxWindow *parent,
                wxWindowID id = -1,

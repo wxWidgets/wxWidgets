@@ -147,7 +147,7 @@ public:
 
 class wxPageSetupDialog : public wxDialog {
 public:
-    %addtofunc wxPageSetupDialog         "self._setOORInfo(self)"
+    %pythonAppend wxPageSetupDialog         "self._setOORInfo(self)"
 
     wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
 
@@ -213,7 +213,7 @@ public:
 
 class wxPrintDialog : public wxDialog {
 public:
-    %addtofunc wxPrintDialog         "self._setOORInfo(self)"
+    %pythonAppend wxPrintDialog         "self._setOORInfo(self)"
 
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
@@ -320,7 +320,7 @@ IMP_PYCALLBACK_BOOL_INT(wxPyPrintout, wxPrintout, HasPage);
 // Now define the custom class for SWIGging
 %name(Printout) class wxPyPrintout  : public wxObject {
 public:
-    %addtofunc wxPyPrintout   "self._setCallbackInfo(self, Printout)"
+    %pythonAppend wxPyPrintout   "self._setCallbackInfo(self, Printout)"
 
     wxPyPrintout(const wxString& title = wxPyPrintoutTitleStr);
     //~wxPyPrintout();      wxPrintPreview object takes ownership...
@@ -374,7 +374,7 @@ public:
 class wxPreviewCanvas: public wxScrolledWindow
 {
 public:
-    %addtofunc wxPreviewCanvas   "self._setOORInfo(self)"
+    %pythonAppend wxPreviewCanvas   "self._setOORInfo(self)"
 
     wxPreviewCanvas(wxPrintPreview *preview,
                     wxWindow *parent,
@@ -387,7 +387,7 @@ public:
 
 class wxPreviewFrame : public wxFrame {
 public:
-    %addtofunc wxPreviewFrame   "self._setOORInfo(self)"
+    %pythonAppend wxPreviewFrame   "self._setOORInfo(self)"
 
     wxPreviewFrame(wxPrintPreview* preview, wxFrame* parent, const wxString& title,
                    const wxPoint& pos = wxDefaultPosition,
@@ -427,7 +427,7 @@ enum {
 class wxPreviewControlBar: public wxPanel
 {
 public:
-    %addtofunc wxPreviewControlBar   "self._setOORInfo(self)"
+    %pythonAppend wxPreviewControlBar   "self._setOORInfo(self)"
 
     wxPreviewControlBar(wxPrintPreview *preview,
                         long buttons,
@@ -580,7 +580,7 @@ IMP_PYCALLBACK_VOID_        (wxPyPrintPreview, wxPrintPreview, DetermineScaling)
 class wxPyPrintPreview : public wxPrintPreview
 {
 public:
-    %addtofunc wxPyPrintPreview   "self._setCallbackInfo(self, PyPrintPreview)"
+    %pythonAppend wxPyPrintPreview   "self._setCallbackInfo(self, PyPrintPreview)"
 
     wxPyPrintPreview(wxPyPrintout* printout,
                      wxPyPrintout* printoutForPrinting,
@@ -635,7 +635,7 @@ IMP_PYCALLBACK_VOID_(wxPyPreviewFrame, wxPreviewFrame, CreateControlBar);
 class wxPyPreviewFrame : public wxPreviewFrame
 {
 public:
-    %addtofunc wxPyPreviewFrame "self._setCallbackInfo(self, PyPreviewFrame); self._setOORInfo(self)"
+    %pythonAppend wxPyPreviewFrame "self._setCallbackInfo(self, PyPreviewFrame); self._setOORInfo(self)"
 
     wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
                      const wxString& title,
@@ -689,7 +689,7 @@ IMP_PYCALLBACK_VOID_INT(wxPyPreviewControlBar, wxPreviewControlBar, SetZoomContr
 class wxPyPreviewControlBar : public wxPreviewControlBar
 {
 public:
-    %addtofunc wxPyPreviewControlBar   "self._setCallbackInfo(self, PyPreviewControlBar); self._setOORInfo(self)"
+    %pythonAppend wxPyPreviewControlBar   "self._setCallbackInfo(self, PyPreviewControlBar); self._setOORInfo(self)"
 
     wxPyPreviewControlBar(wxPrintPreview *preview,
                           long buttons,

@@ -32,7 +32,7 @@
 class wxValidator : public wxEvtHandler
 {
 public:
-    %addtofunc wxValidator "self._setOORInfo(self)"
+    %pythonAppend wxValidator "self._setOORInfo(self)"
     wxValidator();
     //~wxValidator();
 
@@ -73,7 +73,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPyValidator, wxValidator);
 
 class wxPyValidator : public wxValidator {
 public:
-    %addtofunc wxPyValidator "
+    %pythonAppend wxPyValidator "
         self._setCallbackInfo(self, PyValidator, 1)
         self._setOORInfo(self)"
     wxPyValidator();

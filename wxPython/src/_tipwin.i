@@ -31,7 +31,7 @@ class wxTipWindow :
 #endif
 {
 public:
-    %addtofunc wxTipWindow         "self._setOORInfo(self)"
+    %pythonAppend wxTipWindow         "self._setOORInfo(self)"
     
     %extend {
         wxTipWindow(wxWindow *parent,

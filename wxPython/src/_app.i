@@ -44,7 +44,7 @@ enum
 class wxPyApp : public wxEvtHandler {
 public:
 
-    %addtofunc wxPyApp
+    %pythonAppend wxPyApp
        "self._setCallbackInfo(self, PyApp)
         self._setOORInfo(self)";
 

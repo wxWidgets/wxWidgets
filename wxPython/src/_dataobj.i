@@ -222,7 +222,7 @@ bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
 // Now define it for SWIG
 class wxPyDataObjectSimple : public wxDataObjectSimple {
 public:
-    %addtofunc wxPyDataObjectSimple   "self._setCallbackInfo(self, PyDataObjectSimple)"
+    %pythonAppend wxPyDataObjectSimple   "self._setCallbackInfo(self, PyDataObjectSimple)"
 
     wxPyDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -281,7 +281,7 @@ IMP_PYCALLBACK__STRING(wxPyTextDataObject, wxTextDataObject, SetText);
 // Now define it for SWIG
 class wxPyTextDataObject : public wxTextDataObject {
 public:
-    %addtofunc wxPyTextDataObject   "self._setCallbackInfo(self, PyTextDataObject)"
+    %pythonAppend wxPyTextDataObject   "self._setCallbackInfo(self, PyTextDataObject)"
 
     wxPyTextDataObject(const wxString& text = wxPyEmptyString);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -344,7 +344,7 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 // Now define it for SWIG
 class wxPyBitmapDataObject : public wxBitmapDataObject {
 public:
-    %addtofunc wxPyBitmapDataObject   "self._setCallbackInfo(self, PyBitmapDataObject)"
+    %pythonAppend wxPyBitmapDataObject   "self._setCallbackInfo(self, PyBitmapDataObject)"
 
     wxPyBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
     void _setCallbackInfo(PyObject* self, PyObject* _class);

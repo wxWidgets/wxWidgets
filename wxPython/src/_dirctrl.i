@@ -57,8 +57,8 @@ public:
 class wxGenericDirCtrl: public wxControl
 {
 public:
-    %addtofunc wxGenericDirCtrl         "self._setOORInfo(self)"
-    %addtofunc wxGenericDirCtrl()       ""
+    %pythonAppend wxGenericDirCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxGenericDirCtrl()       ""
 
     wxGenericDirCtrl(wxWindow *parent, const wxWindowID id = -1,
                      const wxString& dir = wxPyDirDialogDefaultFolderStr,
@@ -137,8 +137,8 @@ public:
 class wxDirFilterListCtrl: public wxChoice
 {
 public:
-    %addtofunc wxDirFilterListCtrl         "self._setOORInfo(self)"
-    %addtofunc wxDirFilterListCtrl()       ""
+    %pythonAppend wxDirFilterListCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxDirFilterListCtrl()       ""
 
     wxDirFilterListCtrl(wxGenericDirCtrl* parent, const wxWindowID id = -1,
                         const wxPoint& pos = wxDefaultPosition,

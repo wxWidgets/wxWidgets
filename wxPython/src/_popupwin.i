@@ -28,8 +28,8 @@
 // combobox popups and such.
 class wxPopupWindow : public wxWindow {
 public:
-    %addtofunc wxPopupWindow         "self._setOORInfo(self)"
-    %addtofunc wxPopupWindow()       ""
+    %pythonAppend wxPopupWindow         "self._setOORInfo(self)"
+    %pythonAppend wxPopupWindow()       ""
     
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
     %name(PrePopupWindow)wxPopupWindow();
@@ -79,8 +79,8 @@ IMP_PYCALLBACK_BOOL_(wxPyPopupTransientWindow, wxPopupTransientWindow, CanDismis
 %name(PopupTransientWindow) class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:
-    %addtofunc wxPyPopupTransientWindow         "self._setOORInfo(self);self._setCallbackInfo(self, PopupTransientWindow)"
-    %addtofunc wxPyPopupTransientWindow()       ""
+    %pythonAppend wxPyPopupTransientWindow         "self._setOORInfo(self);self._setCallbackInfo(self, PopupTransientWindow)"
+    %pythonAppend wxPyPopupTransientWindow()       ""
     
     wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
     %name(PrePopupTransientWindow)wxPyPopupTransientWindow();

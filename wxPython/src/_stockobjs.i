@@ -17,6 +17,63 @@
 %newgroup
 
 
+// See also wxPy_ReinitStockObjects in helpers.cpp
+%immutable;
+
+wxFont* const wxNORMAL_FONT;
+wxFont* const wxSMALL_FONT;
+wxFont* const wxITALIC_FONT;
+wxFont* const wxSWISS_FONT;
+
+wxPen* const wxRED_PEN;
+wxPen* const wxCYAN_PEN;
+wxPen* const wxGREEN_PEN;
+wxPen* const wxBLACK_PEN;
+wxPen* const wxWHITE_PEN;
+wxPen* const wxTRANSPARENT_PEN;
+wxPen* const wxBLACK_DASHED_PEN;
+wxPen* const wxGREY_PEN;
+wxPen* const wxMEDIUM_GREY_PEN;
+wxPen* const wxLIGHT_GREY_PEN;
+
+wxBrush* const wxBLUE_BRUSH;
+wxBrush* const wxGREEN_BRUSH;
+wxBrush* const wxWHITE_BRUSH;
+wxBrush* const wxBLACK_BRUSH;
+wxBrush* const wxTRANSPARENT_BRUSH;
+wxBrush* const wxCYAN_BRUSH;
+wxBrush* const wxRED_BRUSH;
+wxBrush* const wxGREY_BRUSH;
+wxBrush* const wxMEDIUM_GREY_BRUSH;
+wxBrush* const wxLIGHT_GREY_BRUSH;
+
+wxColour* const wxBLACK;
+wxColour* const wxWHITE;
+wxColour* const wxRED;
+wxColour* const wxBLUE;
+wxColour* const wxGREEN;
+wxColour* const wxCYAN;
+wxColour* const wxLIGHT_GREY;
+
+wxCursor* const wxSTANDARD_CURSOR;
+wxCursor* const wxHOURGLASS_CURSOR;
+wxCursor* const wxCROSS_CURSOR;
+
+
+const wxBitmap wxNullBitmap;
+const wxIcon   wxNullIcon;
+const wxCursor wxNullCursor;
+const wxPen    wxNullPen;
+const wxBrush  wxNullBrush;
+const wxPalette wxNullPalette;
+const wxFont   wxNullFont;
+const wxColour wxNullColour;
+
+%mutable;
+
+
+//---------------------------------------------------------------------------
+
 class wxPenList : public wxObject {
 public:
 
@@ -80,64 +137,9 @@ public:
 %newgroup
 
 
-// %typemap(varout) wxFont* {
-//     // my typemap
-//     $result = SWIG_NewPointerObj((void *) $1, $1_descriptor, 0);
-// }
-
 
 // See also wxPy_ReinitStockObjects in helpers.cpp
 %immutable;
-
-wxFont* const wxNORMAL_FONT;
-wxFont* const wxSMALL_FONT;
-wxFont* const wxITALIC_FONT;
-wxFont* const wxSWISS_FONT;
-
-wxPen* const wxRED_PEN;
-wxPen* const wxCYAN_PEN;
-wxPen* const wxGREEN_PEN;
-wxPen* const wxBLACK_PEN;
-wxPen* const wxWHITE_PEN;
-wxPen* const wxTRANSPARENT_PEN;
-wxPen* const wxBLACK_DASHED_PEN;
-wxPen* const wxGREY_PEN;
-wxPen* const wxMEDIUM_GREY_PEN;
-wxPen* const wxLIGHT_GREY_PEN;
-
-wxBrush* const wxBLUE_BRUSH;
-wxBrush* const wxGREEN_BRUSH;
-wxBrush* const wxWHITE_BRUSH;
-wxBrush* const wxBLACK_BRUSH;
-wxBrush* const wxTRANSPARENT_BRUSH;
-wxBrush* const wxCYAN_BRUSH;
-wxBrush* const wxRED_BRUSH;
-wxBrush* const wxGREY_BRUSH;
-wxBrush* const wxMEDIUM_GREY_BRUSH;
-wxBrush* const wxLIGHT_GREY_BRUSH;
-
-wxColour* const wxBLACK;
-wxColour* const wxWHITE;
-wxColour* const wxRED;
-wxColour* const wxBLUE;
-wxColour* const wxGREEN;
-wxColour* const wxCYAN;
-wxColour* const wxLIGHT_GREY;
-
-wxCursor* const wxSTANDARD_CURSOR;
-wxCursor* const wxHOURGLASS_CURSOR;
-wxCursor* const wxCROSS_CURSOR;
-
-
-const wxBitmap wxNullBitmap;
-const wxIcon   wxNullIcon;
-const wxCursor wxNullCursor;
-const wxPen    wxNullPen;
-const wxBrush  wxNullBrush;
-const wxPalette wxNullPalette;
-const wxFont   wxNullFont;
-const wxColour wxNullColour;
-
 
 wxFontList*       const wxTheFontList;
 wxPenList*        const wxThePenList;
@@ -149,3 +151,8 @@ wxColourDatabase* const wxTheColourDatabase;
 
 //---------------------------------------------------------------------------
  
+%pythoncode { NullColor = NullColour }
+
+
+
+

@@ -135,8 +135,8 @@ public:
 
 class wxDynamicSashWindow : public wxWindow {
 public:
-    %addtofunc wxDynamicSashWindow         "self._setOORInfo(self)"
-    %addtofunc wxDynamicSashWindow()       ""
+    %pythonAppend wxDynamicSashWindow         "self._setOORInfo(self)"
+    %pythonAppend wxDynamicSashWindow()       ""
 
     wxDynamicSashWindow(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
@@ -174,8 +174,8 @@ enum {
 class wxEditableListBox : public wxPanel
 {
 public:
-    %addtofunc wxEditableListBox         "self._setOORInfo(self)"
-    %addtofunc wxEditableListBox()       ""
+    %pythonAppend wxEditableListBox         "self._setOORInfo(self)"
+    %pythonAppend wxEditableListBox()       ""
 
     wxEditableListBox(wxWindow *parent, wxWindowID id,
                       const wxString& label,
@@ -224,8 +224,8 @@ public:
 class wxRemotelyScrolledTreeCtrl: public wxPyTreeCtrl
 {
 public:
-    %addtofunc wxRemotelyScrolledTreeCtrl         "self._setOORInfo(self)"
-    %addtofunc wxRemotelyScrolledTreeCtrl()       ""
+    %pythonAppend wxRemotelyScrolledTreeCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxRemotelyScrolledTreeCtrl()       ""
 
     wxRemotelyScrolledTreeCtrl(wxWindow* parent, wxWindowID id,
                                const wxPoint& pos = wxDefaultPosition,
@@ -295,8 +295,8 @@ public:
 %name(TreeCompanionWindow) class wxPyTreeCompanionWindow: public wxWindow
 {
 public:
-    %addtofunc wxPyTreeCompanionWindow         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCompanionWindow)"
-    %addtofunc wxPyTreeCompanionWindow()       ""
+    %pythonAppend wxPyTreeCompanionWindow         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCompanionWindow)"
+    %pythonAppend wxPyTreeCompanionWindow()       ""
 
     wxPyTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,
                             const wxPoint& pos = wxDefaultPosition,
@@ -320,8 +320,8 @@ public:
 class wxThinSplitterWindow: public wxSplitterWindow
 {
 public:
-    %addtofunc wxThinSplitterWindow         "self._setOORInfo(self)"
-    %addtofunc wxThinSplitterWindow()       ""
+    %pythonAppend wxThinSplitterWindow         "self._setOORInfo(self)"
+    %pythonAppend wxThinSplitterWindow()       ""
 
     wxThinSplitterWindow(wxWindow* parent, wxWindowID id = -1,
                          const wxPoint& pos = wxDefaultPosition,
@@ -343,8 +343,8 @@ public:
 class wxSplitterScrolledWindow: public wxScrolledWindow
 {
 public:
-    %addtofunc wxSplitterScrolledWindow         "self._setOORInfo(self)"
-    %addtofunc wxSplitterScrolledWindow()       ""
+    %pythonAppend wxSplitterScrolledWindow         "self._setOORInfo(self)"
+    %pythonAppend wxSplitterScrolledWindow()       ""
 
     wxSplitterScrolledWindow(wxWindow* parent, wxWindowID id = -1,
                              const wxPoint& pos = wxDefaultPosition,
@@ -372,8 +372,8 @@ enum wxLEDValueAlign
 class wxLEDNumberCtrl :	public wxControl
 {
 public:
-    %addtofunc wxLEDNumberCtrl         "self._setOORInfo(self)"
-    %addtofunc wxLEDNumberCtrl()       ""
+    %pythonAppend wxLEDNumberCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxLEDNumberCtrl()       ""
 
     wxLEDNumberCtrl(wxWindow *parent, wxWindowID id = -1,
                     const wxPoint& pos = wxDefaultPosition,
@@ -485,8 +485,8 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyTreeListCtrl, wxTreeListCtrl)
 %name(TreeListCtrl) class wxPyTreeListCtrl : public wxControl
 {
 public:
-    %addtofunc wxPyTreeListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)"
-    %addtofunc wxPyTreeListCtrl()       ""
+    %pythonAppend wxPyTreeListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)"
+    %pythonAppend wxPyTreeListCtrl()       ""
 
     wxPyTreeListCtrl(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition,

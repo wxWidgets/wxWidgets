@@ -75,7 +75,7 @@ enum wxIEHtmlRefreshLevel {
 class wxIEHtmlWin : public wxWindow /* wxActiveX */ 
 {
 public:
-    %addtofunc wxIEHtmlWin      "self._setOORInfo(self)"
+    %pythonAppend wxIEHtmlWin      "self._setOORInfo(self)"
     
     wxIEHtmlWin(wxWindow * parent, wxWindowID id = -1,
                 const wxPoint& pos = wxDefaultPosition,

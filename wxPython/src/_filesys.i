@@ -95,7 +95,7 @@ public:
 %name(FileSystemHandler) class wxPyFileSystemHandler : public wxFileSystemHandler
 {
 public:
-    %addtofunc    wxPyFileSystemHandler "self._setCallbackInfo(self, FileSystemHandler)";
+    %pythonAppend    wxPyFileSystemHandler "self._setCallbackInfo(self, FileSystemHandler)";
     
     wxPyFileSystemHandler();
 

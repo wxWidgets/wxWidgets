@@ -34,7 +34,7 @@ IMP_PYCALLBACK_OBJECT_STRING_pure(wxPyXmlSubclassFactory, wxXmlSubclassFactory, 
 
 %name(XmlSubclassFactory)class wxPyXmlSubclassFactory {
 public:
-    %addtofunc wxPyXmlSubclassFactory "self._setCallbackInfo(self, XmlSubclassFactory)"
+    %pythonAppend wxPyXmlSubclassFactory "self._setCallbackInfo(self, XmlSubclassFactory)"
     wxPyXmlSubclassFactory();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 };

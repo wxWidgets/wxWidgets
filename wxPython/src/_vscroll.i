@@ -128,8 +128,8 @@ IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, Est
 %name(VScrolledWindow) class wxPyVScrolledWindow : public wxPanel
 {
 public:
-    %addtofunc wxPyVScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)"
-    %addtofunc wxPyVScrolledWindow()       ""
+    %pythonAppend wxPyVScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)"
+    %pythonAppend wxPyVScrolledWindow()       ""
     
 
     wxPyVScrolledWindow(wxWindow *parent,
@@ -285,8 +285,8 @@ IMP_PYCALLBACK__DCRECTSIZET_const    (wxPyVListBox, wxVListBox, OnDrawBackground
 %name(VListBox) class wxPyVListBox : public wxPyVScrolledWindow
 {
 public:
-    %addtofunc wxPyVListBox         "self._setOORInfo(self);self._setCallbackInfo(self, VListBox)"
-    %addtofunc wxPyVListBox()       ""
+    %pythonAppend wxPyVListBox         "self._setOORInfo(self);self._setCallbackInfo(self, VListBox)"
+    %pythonAppend wxPyVListBox()       ""
     
 
     wxPyVListBox(wxWindow *parent,
@@ -481,8 +481,8 @@ IMP_PYCALLBACK_STRING_SIZET     (wxPyHtmlListBox, wxHtmlListBox, OnGetItemMarkup
 %name(HtmlListBox) class wxPyHtmlListBox : public wxPyVListBox
 {
 public:
-    %addtofunc wxPyHtmlListBox         "self._setOORInfo(self);self._setCallbackInfo(self, HtmlListBox)"
-    %addtofunc wxPyHtmlListBox()       ""
+    %pythonAppend wxPyHtmlListBox         "self._setOORInfo(self);self._setCallbackInfo(self, HtmlListBox)"
+    %pythonAppend wxPyHtmlListBox()       ""
     
 
     // normal constructor which calls Create() internally

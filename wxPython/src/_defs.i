@@ -40,13 +40,14 @@ typedef unsigned char   byte;
 //----------------------------------------------------------------------
 // Various SWIG macros and such
 
-#define %addtofunc      %feature("addtofunc")
+#define %pythonAppend   %feature("pythonappend")
+#define %pythonPrepend  %feature("pythonprepend")
 #define %kwargs         %feature("kwargs")
 #define %nokwargs       %feature("nokwargs")
 
-#ifndef %shadow
-#define %shadow         %insert("shadow")
-#endif
+//#ifndef %shadow
+//#define %shadow         %insert("shadow")
+//#endif
 
 #ifndef %pythoncode
 #define %pythoncode     %insert("python")

@@ -51,8 +51,8 @@ enum wxSashEdgePosition {
 class wxSashWindow: public wxWindow
 {
 public:
-    %addtofunc wxSashWindow         "self._setOORInfo(self)"
-    %addtofunc wxSashWindow()       ""
+    %pythonAppend wxSashWindow         "self._setOORInfo(self)"
+    %pythonAppend wxSashWindow()       ""
 
     wxSashWindow(wxWindow* parent, wxWindowID id,
                  const wxPoint& pos = wxDefaultPosition,
@@ -237,8 +237,8 @@ public:
 class wxSashLayoutWindow: public wxSashWindow
 {
 public:
-    %addtofunc wxSashLayoutWindow         "self._setOORInfo(self)"
-    %addtofunc wxSashLayoutWindow()       ""
+    %pythonAppend wxSashLayoutWindow         "self._setOORInfo(self)"
+    %pythonAppend wxSashLayoutWindow()       ""
     
     wxSashLayoutWindow(wxWindow* parent, wxWindowID id,
                        const wxPoint& pos = wxDefaultPosition,

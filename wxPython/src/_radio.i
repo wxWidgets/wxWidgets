@@ -24,12 +24,14 @@ MAKE_CONST_WXSTRING(RadioButtonNameStr);
 class wxRadioBox : public wxControl
 {
 public:
-    %addtofunc wxRadioBox         "self._setOORInfo(self)"
-    %addtofunc wxRadioBox()       ""
+    %pythonPrepend wxRadioBox         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']"
+    %pythonPrepend wxRadioBox()       ""
+    %pythonAppend  wxRadioBox         "self._setOORInfo(self)"
+    %pythonAppend  wxRadioBox()       ""
 
     wxRadioBox(wxWindow* parent, wxWindowID id,
                const wxString& label,
-               const wxPoint& point = wxDefaultPosition,
+               const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int choices = 0, wxString* choices_array = NULL,
                int majorDimension = 0,
@@ -40,7 +42,7 @@ public:
 
     bool Create(wxWindow* parent, wxWindowID id,
                const wxString& label,
-               const wxPoint& point = wxDefaultPosition,
+               const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                int choices = 0, wxString* choices_array = NULL,
                int majorDimension = 0,
@@ -91,8 +93,8 @@ public:
 class wxRadioButton : public wxControl
 {
 public:
-    %addtofunc wxRadioButton         "self._setOORInfo(self)"
-    %addtofunc wxRadioButton()       ""
+    %pythonAppend wxRadioButton         "self._setOORInfo(self)"
+    %pythonAppend wxRadioButton()       ""
 
     wxRadioButton(wxWindow* parent, wxWindowID id,
                   const wxString& label,

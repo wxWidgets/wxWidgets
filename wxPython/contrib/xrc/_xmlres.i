@@ -44,9 +44,9 @@ class wxXmlResource : public wxObject
 {
 public:
 
-    %addtofunc wxXmlResource(const wxString& filemask, int flags)        "self.InitAllHandlers()"
+    %pythonAppend wxXmlResource(const wxString& filemask, int flags)        "self.InitAllHandlers()"
 
-    %addtofunc wxXmlResource(int flags)        "val.InitAllHandlers()"
+    %pythonAppend wxXmlResource(int flags)        "val.InitAllHandlers()"
 
     // Ctors.
     // Flags: wxXRC_USE_LOCALE

@@ -47,8 +47,8 @@ enum wxCheckBoxState
 class wxCheckBox : public wxControl
 {
 public:
-    %addtofunc wxCheckBox         "self._setOORInfo(self)"
-    %addtofunc wxCheckBox()       ""
+    %pythonAppend wxCheckBox         "self._setOORInfo(self)"
+    %pythonAppend wxCheckBox()       ""
     
     wxCheckBox(wxWindow* parent, wxWindowID id, const wxString& label,
                const wxPoint& pos = wxDefaultPosition,

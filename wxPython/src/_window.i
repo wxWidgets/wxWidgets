@@ -26,8 +26,8 @@ MAKE_CONST_WXSTRING(PanelNameStr);
 class wxWindow : public wxEvtHandler
 {
 public:
-    %addtofunc wxWindow         "self._setOORInfo(self)"
-    %addtofunc wxWindow()       ""
+    %pythonAppend wxWindow         "self._setOORInfo(self)"
+    %pythonAppend wxWindow()       ""
 
     wxWindow(wxWindow* parent, const wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,

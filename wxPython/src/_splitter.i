@@ -53,18 +53,20 @@ enum
 class wxSplitterWindow: public wxWindow
 {
 public:
-    %addtofunc wxSplitterWindow         "self._setOORInfo(self)"
-    %addtofunc wxSplitterWindow()       ""
+    %pythonPrepend wxSplitterWindow         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']"
+    %pythonPrepend wxSplitterWindow()       ""
+    %pythonAppend  wxSplitterWindow         "self._setOORInfo(self)"
+    %pythonAppend  wxSplitterWindow()       ""
 
     wxSplitterWindow(wxWindow* parent, wxWindowID id,
-                     const wxPoint& point = wxDefaultPosition,
+                     const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style=wxSP_3D,
                      const wxString& name = wxPySplitterNameStr);
     %name(PreSplitterWindow)wxSplitterWindow();
 
     bool Create(wxWindow* parent, wxWindowID id,
-                const wxPoint& point = wxDefaultPosition,
+                const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style=wxSP_3D,
                 const wxString& name = wxPySplitterNameStr);

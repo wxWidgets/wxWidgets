@@ -25,8 +25,8 @@ MAKE_CONST_WXSTRING(StaticTextNameStr);
 
 class wxStaticBox : public wxControl {
 public:
-    %addtofunc wxStaticBox         "self._setOORInfo(self)"
-    %addtofunc wxStaticBox()       ""
+    %pythonAppend wxStaticBox         "self._setOORInfo(self)"
+    %pythonAppend wxStaticBox()       ""
 
     wxStaticBox(wxWindow* parent, wxWindowID id, const wxString& label,
                 const wxPoint& pos = wxDefaultPosition,
@@ -49,8 +49,8 @@ public:
 
 class wxStaticLine : public wxControl {
 public:
-    %addtofunc wxStaticLine         "self._setOORInfo(self)"
-    %addtofunc wxStaticLine()       ""
+    %pythonAppend wxStaticLine         "self._setOORInfo(self)"
+    %pythonAppend wxStaticLine()       ""
 
     wxStaticLine( wxWindow *parent, wxWindowID id,
                   const wxPoint &pos = wxDefaultPosition,
@@ -79,8 +79,8 @@ public:
 
 class wxStaticText : public wxControl {
 public:
-    %addtofunc wxStaticText         "self._setOORInfo(self)"
-    %addtofunc wxStaticText()       ""
+    %pythonAppend wxStaticText         "self._setOORInfo(self)"
+    %pythonAppend wxStaticText()       ""
 
     wxStaticText(wxWindow* parent, wxWindowID id, const wxString& label,
                  const wxPoint& pos = wxDefaultPosition,
@@ -101,8 +101,8 @@ public:
 
 class wxStaticBitmap : public wxControl {
 public:
-    %addtofunc wxStaticText         "self._setOORInfo(self)"
-    %addtofunc wxStaticText()       ""
+    %pythonAppend wxStaticText         "self._setOORInfo(self)"
+    %pythonAppend wxStaticText()       ""
 
     wxStaticBitmap(wxWindow* parent, wxWindowID id,
                    const wxBitmap& bitmap,

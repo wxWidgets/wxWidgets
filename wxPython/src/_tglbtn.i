@@ -53,8 +53,8 @@ public:
 class wxToggleButton : public wxControl
 {
 public:
-    %addtofunc wxToggleButton         "self._setOORInfo(self)"
-    %addtofunc wxToggleButton()       ""
+    %pythonAppend wxToggleButton         "self._setOORInfo(self)"
+    %pythonAppend wxToggleButton()       ""
 
     wxToggleButton(wxWindow *parent,
                    wxWindowID id,

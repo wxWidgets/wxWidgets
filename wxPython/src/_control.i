@@ -28,8 +28,8 @@ MAKE_CONST_WXSTRING(ControlNameStr);
 class wxControl : public wxWindow
 {
 public:
-    %addtofunc wxControl         "self._setOORInfo(self)"
-    %addtofunc wxControl()       ""
+    %pythonAppend wxControl         "self._setOORInfo(self)"
+    %pythonAppend wxControl()       ""
 
     wxControl(wxWindow *parent,
               wxWindowID id,

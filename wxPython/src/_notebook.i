@@ -159,8 +159,8 @@ enum {
 
 class wxNotebook : public wxBookCtrl {
 public:
-    %addtofunc wxNotebook         "self._setOORInfo(self)"
-    %addtofunc wxNotebook()       ""
+    %pythonAppend wxNotebook         "self._setOORInfo(self)"
+    %pythonAppend wxNotebook()       ""
 
     wxNotebook(wxWindow *parent,
                wxWindowID id,
@@ -283,8 +283,8 @@ enum
 class wxListbook : public wxBookCtrl
 {
 public:
-    %addtofunc wxListbook         "self._setOORInfo(self)"
-    %addtofunc wxListbook()       ""
+    %pythonAppend wxListbook         "self._setOORInfo(self)"
+    %pythonAppend wxListbook()       ""
 
     wxListbook(wxWindow *parent,
                wxWindowID id,
@@ -332,7 +332,7 @@ public:
 class wxBookCtrlSizer: public wxSizer
 {
 public:
-    %addtofunc wxBookCtrlSizer "self._setOORInfo(self)"
+    %pythonAppend wxBookCtrlSizer "self._setOORInfo(self)"
 
     wxBookCtrlSizer( wxBookCtrl *nb );
     
@@ -344,7 +344,7 @@ public:
 
 class wxNotebookSizer: public wxSizer {
 public:
-    %addtofunc wxNotebookSizer "self._setOORInfo(self)"
+    %pythonAppend wxNotebookSizer "self._setOORInfo(self)"
 
     wxNotebookSizer( wxNotebook *nb );
     

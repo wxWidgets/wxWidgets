@@ -101,7 +101,7 @@ public:
 
 class wxPyShapeCanvas : public wxScrolledWindow {
 public:
-    %addtofunc wxPyShapeEvtHandler "self._setOORandCallbackInfo(PyShapeEvtHandler)"
+    %pythonAppend wxPyShapeEvtHandler "self._setOORandCallbackInfo(PyShapeEvtHandler)"
     
     wxPyShapeCanvas(wxWindow* parent = NULL, wxWindowID id = -1,
                     const wxPoint& pos = wxDefaultPosition,

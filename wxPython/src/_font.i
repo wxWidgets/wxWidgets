@@ -523,7 +523,7 @@ IMP_PYCALLBACK_BOOL_STRINGSTRING(wxPyFontEnumerator, wxFontEnumerator, OnFontEnc
 
 %name(FontEnumerator) class wxPyFontEnumerator {
 public:
-    %addtofunc wxPyFontEnumerator "self._setCallbackInfo(self, FontEnumerator, 0)"
+    %pythonAppend wxPyFontEnumerator "self._setCallbackInfo(self, FontEnumerator, 0)"
 
     wxPyFontEnumerator();
     ~wxPyFontEnumerator();

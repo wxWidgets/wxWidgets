@@ -27,12 +27,14 @@ MAKE_CONST_WXSTRING(SliderNameStr);
 
 class wxSlider : public wxControl {
 public:
-    %addtofunc wxSlider         "self._setOORInfo(self)"
-    %addtofunc wxSlider()       ""
+    %pythonPrepend wxSlider         "if kwargs.has_key('point'): kwargs['pos'] = kwargs['point']"
+    %pythonPrepend wxSlider()       ""
+    %pythonAppend  wxSlider         "self._setOORInfo(self)"
+    %pythonAppend  wxSlider()       ""
 
     wxSlider(wxWindow* parent, wxWindowID id,
              int value, int minValue, int maxValue,
-             const wxPoint& point = wxDefaultPosition,
+             const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
@@ -41,7 +43,7 @@ public:
 
     bool Create(wxWindow* parent, wxWindowID id,
              int value, int minValue, int maxValue,
-             const wxPoint& point = wxDefaultPosition,
+             const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = wxSL_HORIZONTAL,
              const wxValidator& validator = wxDefaultValidator,
@@ -71,7 +73,7 @@ public:
     virtual void SetThumbLength(int lenPixels);
     virtual int GetThumbLength() const;
 
-    virtual void SetTickFreq(int n, int pos);
+    virtual void SetTickFreq(int n, int pos=1);
     virtual int GetTickFreq() const;
     virtual void ClearTicks();
     virtual void SetTick(int tickPos);

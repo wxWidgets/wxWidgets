@@ -22,7 +22,7 @@
 
 class wxPyEllipseShape : public wxPyShape {
 public:
-    %addtofunc wxPyEllipseShape "self._setOORandCallbackInfo(PyEllipseShape)"
+    %pythonAppend wxPyEllipseShape "self._setOORandCallbackInfo(PyEllipseShape)"
     
     wxPyEllipseShape(double width = 0.0, double height = 0.0);
 
@@ -66,7 +66,7 @@ public:
 
 class wxPyCircleShape : public wxPyEllipseShape {
 public:
-    %addtofunc wxPyCircleShape "self._setOORandCallbackInfo(PyCircleShape)"
+    %pythonAppend wxPyCircleShape "self._setOORandCallbackInfo(PyCircleShape)"
     
     wxPyCircleShape(double width = 0.0);
 
@@ -141,7 +141,7 @@ public:
 
 class wxPyLineShape : public wxPyShape {
 public:
-    %addtofunc wxPyLineShape "self._setOORandCallbackInfo(PyLineShape)"
+    %pythonAppend wxPyLineShape "self._setOORandCallbackInfo(PyLineShape)"
     
     wxPyLineShape();
 
@@ -254,7 +254,7 @@ public:
 
 class wxPyPolygonShape : public wxPyShape {
 public:
-    %addtofunc wxPyPolygonShape "self._setOORandCallbackInfo(PyPolygonShape)"
+    %pythonAppend wxPyPolygonShape "self._setOORandCallbackInfo(PyPolygonShape)"
     
     wxPyPolygonShape();
 
@@ -364,7 +364,7 @@ public:
 
 class wxPyTextShape : public wxPyRectangleShape {
 public:
-    %addtofunc wxPyTextShape "self._setOORandCallbackInfo(PyTextShape)"
+    %pythonAppend wxPyTextShape "self._setOORandCallbackInfo(PyTextShape)"
     
     wxPyTextShape(double width = 0.0, double height = 0.0);
 

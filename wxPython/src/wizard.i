@@ -196,8 +196,8 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWizardPage, wxWizardPage, RemoveChild);
 class wxPyWizardPage : public wxWizardPage {
 public:
 
-    %addtofunc wxPyWizardPage   "self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)"
-    %addtofunc wxPyWizardPage() ""
+    %pythonAppend wxPyWizardPage   "self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)"
+    %pythonAppend wxPyWizardPage() ""
     
     // ctor accepts an optional bitmap which will be used for this page instead
     // of the default one for this wizard (should be of the same size). Notice
@@ -274,8 +274,8 @@ class wxWizardPageSimple : public wxWizardPage
 {
 public:
 
-    %addtofunc wxWizardPageSimple   "self._setOORInfo(self)"
-    %addtofunc wxWizardPageSimple() ""
+    %pythonAppend wxWizardPageSimple   "self._setOORInfo(self)"
+    %pythonAppend wxWizardPageSimple() ""
     
     // ctor takes the previous and next pages
     wxWizardPageSimple(wxWizard *parent,
@@ -305,8 +305,8 @@ public:
 class  wxWizard : public wxDialog
 {
 public:
-    %addtofunc wxWizard   "self._setOORInfo(self)"
-    %addtofunc wxWizard() ""
+    %pythonAppend wxWizard   "self._setOORInfo(self)"
+    %pythonAppend wxWizard() ""
     
     // ctor
     wxWizard(wxWindow *parent,

@@ -558,9 +558,9 @@ public:
 class wxBufferedDC : public wxMemoryDC
 {
 public:
-    %addtofunc wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
+    %pythonAppend wxBufferedDC( wxDC *dc, const wxBitmap &buffer )
         "self._dc = args[0] # save a ref so the other dc will not be deleted before self";
-    %addtofunc wxBufferedDC( wxDC *dc, const wxSize &area )
+    %pythonAppend wxBufferedDC( wxDC *dc, const wxSize &area )
         "val._dc = args[0] # save a ref so the other dc will not be deleted before self";
 
     // Construct a wxBufferedDC using a user supplied buffer.

@@ -24,8 +24,8 @@ MAKE_CONST_WXSTRING(ChoiceNameStr);
 class wxChoice : public wxControlWithItems
 {
 public:
-    %addtofunc wxChoice         "self._setOORInfo(self)"
-    %addtofunc wxChoice()       ""
+    %pythonAppend wxChoice         "self._setOORInfo(self)"
+    %pythonAppend wxChoice()       ""
 
     wxChoice(wxWindow *parent, wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,

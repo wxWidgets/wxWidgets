@@ -1211,7 +1211,7 @@ public:
 
 class wxPyEvent : public wxEvent {
 public:
-    %addtofunc wxPyEvent     "self.SetSelf(self)"
+    %pythonAppend wxPyEvent     "self.SetSelf(self)"
     wxPyEvent(int winid=0, wxEventType commandType = wxEVT_NULL );
     ~wxPyEvent();
 
@@ -1223,7 +1223,7 @@ public:
 
 class wxPyCommandEvent : public wxCommandEvent {
 public:
-    %addtofunc wxPyCommandEvent     "self.SetSelf(self)"
+    %pythonAppend wxPyCommandEvent     "self.SetSelf(self)"
     wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0);
     ~wxPyCommandEvent();
 
