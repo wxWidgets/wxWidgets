@@ -47,7 +47,7 @@ wxBEGIN_FLAGS( wxBitmapButtonStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -126,7 +126,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id,
         m_marginY = wxDEFAULT_BUTTON_MARGIN;
     }
 
-    if (id == -1)
+    if (id == wxID_ANY)
         m_windowId = NewControlId();
     else
         m_windowId = id;

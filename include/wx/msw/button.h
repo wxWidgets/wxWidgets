@@ -35,7 +35,7 @@ public:
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
-    
+
     wxButton(wxWindow *parent, wxWindowID id, wxStockItemID stock,
            const wxString& descriptiveLabel = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -45,7 +45,7 @@ public:
     {
         Create(parent, id, stock, descriptiveLabel, pos, style, validator, name);
     }
-  
+
     bool Create(wxWindow *parent, wxWindowID id, wxStockItemID stock,
            const wxString& descriptiveLabel = wxEmptyString,
            const wxPoint& pos = wxDefaultPosition,
@@ -80,7 +80,7 @@ public:
         // avoide switching into owner-drawn mode
         wxControl::SetBackgroundColour(bg);
     }
-    
+
 #ifdef __WIN32__
     // coloured buttons support
     virtual bool SetBackgroundColour(const wxColour &colour);
@@ -93,7 +93,7 @@ private:
 #endif // __WIN32__
 
 protected:
-    // send a notification event, return TRUE if processed
+    // send a notification event, return true if processed
     bool SendClickEvent();
 
     // default button handling

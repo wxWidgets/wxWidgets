@@ -59,7 +59,7 @@ wxBEGIN_FLAGS( wxButtonStyle )
     wxFLAGS_MEMBER(wxBORDER_RAISED)
     wxFLAGS_MEMBER(wxBORDER_STATIC)
     wxFLAGS_MEMBER(wxBORDER_NONE)
-    
+
     // old style border flags
     wxFLAGS_MEMBER(wxSIMPLE_BORDER)
     wxFLAGS_MEMBER(wxSUNKEN_BORDER)
@@ -88,10 +88,10 @@ wxEND_FLAGS( wxButtonStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxButton, wxControl,"wx/button.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxButton)
-	wxEVENT_PROPERTY( Click , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent)
+    wxEVENT_PROPERTY( Click , wxEVT_COMMAND_BUTTON_CLICKED , wxCommandEvent)
 
-	wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	wxPROPERTY( Label, wxString , SetLabel, GetLabel, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+    wxPROPERTY( Font , wxFont , SetFont , GetFont  , EMPTY_MACROVALUE, 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxPROPERTY( Label, wxString , SetLabel, GetLabel, wxString(), 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
 
     wxPROPERTY_FLAGS( WindowStyle , wxButtonStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , EMPTY_MACROVALUE , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
@@ -129,7 +129,7 @@ bool wxButton::Create(wxWindow *parent,
                       const wxString& name)
 {
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
-        return FALSE;
+        return false;
 
     WXDWORD exstyle;
     WXDWORD msStyle = MSWGetStyle(style, &exstyle);
@@ -302,8 +302,8 @@ void wxButton::SetDefault()
     wxWindow *winOldDefault = parent->SetDefaultItem(this);
 
     // ... and Windows
-    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), FALSE);
-    SetDefaultStyle(this, TRUE);
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
+    SetDefaultStyle(this, true);
 }
 
 // set this button as being currently default
@@ -316,8 +316,8 @@ void wxButton::SetTmpDefault()
     wxWindow *winOldDefault = parent->GetDefaultItem();
     parent->SetTmpDefaultItem(this);
 
-    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), FALSE);
-    SetDefaultStyle(this, TRUE);
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
+    SetDefaultStyle(this, true);
 }
 
 // unset this button as currently default, it may still stay permanent default
@@ -331,8 +331,8 @@ void wxButton::UnsetTmpDefault()
 
     wxWindow *winOldDefault = parent->GetDefaultItem();
 
-    SetDefaultStyle(this, FALSE);
-    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), TRUE);
+    SetDefaultStyle(this, false);
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), true);
 }
 
 /* static */
@@ -413,7 +413,7 @@ void wxButton::Command(wxCommandEvent & event)
 
 bool wxButton::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-    bool processed = FALSE;
+    bool processed = false;
     switch ( param )
     {
         // NOTE: Apparently older versions (NT 4?) of the common controls send
@@ -510,14 +510,14 @@ bool wxButton::SetBackgroundColour(const wxColour &colour)
     if ( !wxControl::SetBackgroundColour(colour) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     MakeOwnerDrawn();
 
     Refresh();
 
-    return TRUE;
+    return true;
 }
 
 bool wxButton::SetForegroundColour(const wxColour &colour)
@@ -525,14 +525,14 @@ bool wxButton::SetForegroundColour(const wxColour &colour)
     if ( !wxControl::SetForegroundColour(colour) )
     {
         // nothing to do
-        return FALSE;
+        return false;
     }
 
     MakeOwnerDrawn();
 
     Refresh();
 
-    return TRUE;
+    return true;
 }
 
 /*
@@ -592,7 +592,7 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
         DrawRect(hdc, r);
 
         (void)SelectObject(hdc, hpenGrey);
-        InflateRect(&r, -1, -1);
+        ::InflateRect(&r, -1, -1);
 
         DrawRect(hdc, r);
     }
@@ -602,7 +602,7 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
         {
             DrawRect(hdc, r);
 
-            InflateRect(&r, -1, -1);
+            ::InflateRect(&r, -1, -1);
         }
 
         wxDrawLine(hdc, r.left, r.bottom, r.right, r.bottom);
@@ -685,7 +685,7 @@ bool wxButton::MSWOnDraw(WXDRAWITEMSTRUCT *wxdis)
 
     ::DeleteObject(hbrushBackground);
 
-    return TRUE;
+    return true;
 }
 
 #endif // __WIN32__

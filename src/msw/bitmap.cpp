@@ -200,7 +200,7 @@ wxBitmapRefData::wxBitmapRefData()
 #endif
 
     m_isDIB =
-    m_hasAlpha = FALSE;
+    m_hasAlpha = false;
 }
 
 wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
@@ -215,7 +215,7 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData& data)
 
     wxASSERT_MSG( !data.m_isDIB,
                     _T("can't copy bitmap locked for raw access!") );
-    m_isDIB = FALSE;
+    m_isDIB = false;
 
     m_hasAlpha = data.m_hasAlpha;
 }
@@ -332,7 +332,7 @@ bool wxBitmap::CopyFromCursor(const wxCursor& cursor)
     UnRef();
 
     if ( !cursor.Ok() )
-        return FALSE;
+        return false;
 
     return CopyFromIconOrCursor(cursor);
 }
@@ -342,7 +342,7 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
     UnRef();
 
     if ( !icon.Ok() )
-        return FALSE;
+        return false;
 
     return CopyFromIconOrCursor(icon);
 }
@@ -351,12 +351,12 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
 
 bool wxBitmap::CopyFromDIB(const wxDIB& dib)
 {
-    wxCHECK_MSG( dib.IsOk(), FALSE, _T("invalid DIB in CopyFromDIB") );
+    wxCHECK_MSG( dib.IsOk(), false, _T("invalid DIB in CopyFromDIB") );
 
 #ifdef SOMETIMES_USE_DIB
     HBITMAP hbitmap = dib.CreateDDB();
     if ( !hbitmap )
-        return FALSE;
+        return false;
 #else // ALWAYS_USE_DIB
     HBITMAP hbitmap = ((wxDIB &)dib).Detach();  // const_cast
 #endif // SOMETIMES_USE_DIB/ALWAYS_USE_DIB
@@ -382,7 +382,7 @@ bool wxBitmap::CopyFromDIB(const wxDIB& dib)
     delete palette;
 #endif // wxUSE_PALETTE
 
-    return TRUE;
+    return true;
 }
 
 #endif // NEVER_USE_DIB
@@ -458,25 +458,22 @@ wxBitmap::wxBitmap(const char bits[], int width, int height, int depth)
 }
 
 // Create from XPM data
-#if wxUSE_IMAGE && wxUSE_XPM
 bool wxBitmap::CreateFromXpm(const char **data)
-#else
-bool wxBitmap::CreateFromXpm(const char **WXUNUSED(data))
-#endif
 {
 #if wxUSE_IMAGE && wxUSE_XPM
     Init();
 
-    wxCHECK_MSG( data != NULL, FALSE, wxT("invalid bitmap data") )
+    wxCHECK_MSG( data != NULL, false, wxT("invalid bitmap data") )
 
     wxXPMDecoder decoder;
     wxImage img = decoder.ReadData(data);
-    wxCHECK_MSG( img.Ok(), FALSE, wxT("invalid bitmap data") )
+    wxCHECK_MSG( img.Ok(), false, wxT("invalid bitmap data") )
 
     *this = wxBitmap(img);
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    wxUnusedVar(data);
+    return false;
 #endif
 }
 
@@ -515,7 +512,7 @@ bool wxBitmap::Create(int width, int height, int depth)
 
 bool wxBitmap::Create(int width, int height, const wxDC& dc)
 {
-    wxCHECK_MSG( dc.Ok(), FALSE, _T("invalid HDC in wxBitmap::Create()") );
+    wxCHECK_MSG( dc.Ok(), false, _T("invalid HDC in wxBitmap::Create()") );
 
     return DoCreate(width, height, -1, dc.GetHDC());
 }
@@ -542,12 +539,12 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
 
         wxDIB dib(w, h, d);
         if ( !dib.IsOk() )
-           return FALSE;
+           return false;
 
         // don't delete the DIB section in dib object dtor
         hbmp = dib.Detach();
 
-        GetBitmapData()->m_isDIB = TRUE;
+        GetBitmapData()->m_isDIB = true;
         GetBitmapData()->m_depth = d;
     }
     else // create a DDB
@@ -622,7 +619,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, const wxDC& dc)
     if (hBitmap == NULL)
     {
         ::ReleaseDC(NULL, hScreenDC);
-        return FALSE;
+        return false;
     }
     HDC hMemDC = ::CreateCompatibleDC(hScreenDC);
 
@@ -648,7 +645,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, const wxDC& dc)
 
         if (!hMaskBitmap)
         {
-            hasMask = FALSE;
+            hasMask = false;
         }
         else
         {
@@ -659,7 +656,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, const wxDC& dc)
             hOldMaskBitmap = ::SelectObject( hMaskDC, hMaskBitmap);
         }
 #else
-        hasMask = FALSE;
+        hasMask = false;
 #endif
     }
 
@@ -706,7 +703,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, const wxDC& dc)
     SetPalette(image.GetPalette());
 #endif // wxUSE_PALETTE
 
-    return TRUE;
+    return true;
 }
 
 wxImage wxBitmap::ConvertToImage() const
@@ -787,7 +784,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
 
 bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
 {
-    wxCHECK_MSG( dc.Ok(), FALSE,
+    wxCHECK_MSG( dc.Ok(), false,
                     _T("invalid HDC in wxBitmap::CreateFromImage()") );
 
     return CreateFromImage(image, -1, dc.GetHDC());
@@ -795,7 +792,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, const wxDC& dc)
 
 bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 {
-    wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") );
+    wxCHECK_MSG( image.Ok(), false, wxT("invalid image") );
 
     UnRef();
 
@@ -805,7 +802,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 
     wxDIB dib(image);
     if ( !dib.IsOk() )
-        return FALSE;
+        return false;
 
 
     // store the bitmap parameters
@@ -828,7 +825,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
         // don't delete the DIB section in dib object dtor
         hbitmap = dib.Detach();
 
-        refData->m_isDIB = TRUE;
+        refData->m_isDIB = true;
         refData->m_depth = dib.GetDepth();
     }
 #ifndef ALWAYS_USE_DIB
@@ -851,7 +848,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
                                            image.GetMaskBlue())));
     }
 
-    return TRUE;
+    return true;
 }
 
 wxImage wxBitmap::ConvertToImage() const
@@ -965,12 +962,12 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
         {
             *this = wxBitmap(image);
 
-            return TRUE;
+            return true;
         }
     }
 #endif // wxUSE_IMAGE
 
-    return FALSE;
+    return false;
 }
 
 bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
@@ -983,7 +980,7 @@ bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
     {
         wxLogDebug(wxT("Failed to create bitmap: no bitmap handler for type %ld defined."), type);
 
-        return FALSE;
+        return false;
     }
 
     m_refData = new wxBitmapRefData;
@@ -1013,7 +1010,7 @@ bool wxBitmap::SaveFile(const wxString& filename,
     }
 #endif // wxUSE_IMAGE
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1347,7 +1344,7 @@ wxMask::~wxMask()
 bool wxMask::Create(const wxBitmap& bitmap)
 {
 #ifndef __WXMICROWIN__
-    wxCHECK_MSG( bitmap.Ok() && bitmap.GetDepth() == 1, FALSE,
+    wxCHECK_MSG( bitmap.Ok() && bitmap.GetDepth() == 1, false,
                  _T("can't create mask from invalid or not monochrome bitmap") );
 
     if ( m_maskBitmap )
@@ -1370,9 +1367,10 @@ bool wxMask::Create(const wxBitmap& bitmap)
     DeleteDC(srcDC);
     SelectObject(destDC, 0);
     DeleteDC(destDC);
-    return TRUE;
+    return true;
 #else
-    return FALSE;
+    wxUnusedVar(bitmap);
+    return false;
 #endif
 }
 
@@ -1398,7 +1396,7 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
     }
 #endif // wxUSE_PALETTE
 
-    return FALSE;
+    return false;
 }
 
 // Create a mask from a bitmap and a colour indicating
@@ -1406,7 +1404,7 @@ bool wxMask::Create(const wxBitmap& bitmap, int paletteIndex)
 bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
 #ifndef __WXMICROWIN__
-    wxCHECK_MSG( bitmap.Ok(), FALSE, _T("invalid bitmap in wxMask::Create") );
+    wxCHECK_MSG( bitmap.Ok(), false, _T("invalid bitmap in wxMask::Create") );
 
     if ( m_maskBitmap )
     {
@@ -1429,7 +1427,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
         wxLogLastError(wxT("CreateCompatibleDC"));
     }
 
-    bool ok = TRUE;
+    bool ok = true;
 
     // SelectObject() will fail
     wxASSERT_MSG( !bitmap.GetSelectedInto(),
@@ -1440,7 +1438,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     {
         wxLogLastError(wxT("SelectObject"));
 
-        ok = FALSE;
+        ok = false;
     }
 
     HGDIOBJ hbmpDstOld = ::SelectObject(destDC, (HBITMAP)m_maskBitmap);
@@ -1448,7 +1446,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     {
         wxLogLastError(wxT("SelectObject"));
 
-        ok = FALSE;
+        ok = false;
     }
 
     if ( ok )
@@ -1467,7 +1465,9 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
     return ok;
 #else // __WXMICROWIN__
-    return FALSE;
+    wxUnusedVar(bitmap);
+    wxUnusedVar(colour);
+    return false;
 #endif // __WXMICROWIN__/!__WXMICROWIN__
 }
 
@@ -1482,7 +1482,7 @@ bool wxBitmapHandler::Create(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? Create(bitmap, data, flags, width, height, depth) : FALSE;
+    return bitmap ? Create(bitmap, data, flags, width, height, depth) : false;
 }
 
 bool wxBitmapHandler::Load(wxGDIImage *image,
@@ -1492,7 +1492,7 @@ bool wxBitmapHandler::Load(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? LoadFile(bitmap, name, flags, width, height) : FALSE;
+    return bitmap ? LoadFile(bitmap, name, flags, width, height) : false;
 }
 
 bool wxBitmapHandler::Save(wxGDIImage *image,
@@ -1501,7 +1501,7 @@ bool wxBitmapHandler::Save(wxGDIImage *image,
 {
     wxBitmap *bitmap = wxDynamicCast(image, wxBitmap);
 
-    return bitmap ? SaveFile(bitmap, name, type) : FALSE;
+    return bitmap ? SaveFile(bitmap, name, type) : false;
 }
 
 bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
@@ -1511,7 +1511,7 @@ bool wxBitmapHandler::Create(wxBitmap *WXUNUSED(bitmap),
                              int WXUNUSED(height),
                              int WXUNUSED(depth))
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
@@ -1520,7 +1520,7 @@ bool wxBitmapHandler::LoadFile(wxBitmap *WXUNUSED(bitmap),
                                int WXUNUSED(desiredWidth),
                                int WXUNUSED(desiredHeight))
 {
-    return FALSE;
+    return false;
 }
 
 bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
@@ -1528,7 +1528,7 @@ bool wxBitmapHandler::SaveFile(wxBitmap *WXUNUSED(bitmap),
                                int WXUNUSED(type),
                                const wxPalette *WXUNUSED(palette))
 {
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -1573,7 +1573,7 @@ bool wxCreateDIB(long xSize, long ySize, long bitsPerPixel,
 
    *lpDIBHeader = lpDIBheader;
 
-   return TRUE;
+   return true;
 }
 
 void wxFreeDIB(LPBITMAPINFO lpDIBHeader)
@@ -1650,12 +1650,12 @@ HICON wxBitmapToIconOrCursor(const wxBitmap& bmp,
 
 HICON wxBitmapToHICON(const wxBitmap& bmp)
 {
-    return wxBitmapToIconOrCursor(bmp, TRUE, 0, 0);
+    return wxBitmapToIconOrCursor(bmp, true, 0, 0);
 }
 
 HCURSOR wxBitmapToHCURSOR(const wxBitmap& bmp, int hotSpotX, int hotSpotY)
 {
-    return (HCURSOR)wxBitmapToIconOrCursor(bmp, FALSE, hotSpotX, hotSpotY);
+    return (HCURSOR)wxBitmapToIconOrCursor(bmp, false, hotSpotX, hotSpotY);
 }
 
 HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
@@ -1697,7 +1697,7 @@ HBITMAP wxInvertMask(HBITMAP hbmpMask, int w, int h)
     // Deselect objects
     SelectObject(hdcSrc,srcTmp);
     SelectObject(hdcDst,dstTmp);
-    
+
     ::DeleteDC(hdcSrc);
     ::DeleteDC(hdcDst);
 
