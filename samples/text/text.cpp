@@ -782,8 +782,8 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
 
                 wxLogMessage(_T("Selection: from %ld to %ld."), from, to);
                 wxLogMessage(_T("Selection = '%s' (len = %u)"),
-                             sel.c_str(), 
-							 (unsigned int) sel.length());
+                             sel.c_str(),
+                             (unsigned int) sel.length());
             }
             break;
 
