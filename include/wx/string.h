@@ -630,6 +630,11 @@ public:
     // as vprintf(), returns the number of characters written or < 0 on error
   int PrintfV(const wxChar* pszFormat, va_list argptr);
 
+    // returns the string containing the result of Printf() to it
+  static wxString Format(const wxChar *pszFormat, ...);
+    // the same as above, but takes a va_list
+  static wxString FormatV(const wxChar *pszFormat, va_list argptr);
+
   // raw access to string memory
     // ensure that string has space for at least nLen characters
     // only works if the data of this string is not shared

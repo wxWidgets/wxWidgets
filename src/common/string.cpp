@@ -1102,6 +1102,27 @@ wxString& wxString::operator<<(double d)
 // formatted output
 // ---------------------------------------------------------------------------
 
+/* static */
+wxString wxString::Format(const wxChar *pszFormat, ...)
+{
+  va_list argptr;
+  va_start(argptr, pszFormat);
+
+  wxString s = FormatV(pszFormat, argptr);
+
+  va_end(argptr);
+
+  return s;
+}
+
+/* static */
+wxString wxString::FormatV(const wxChar *pszFormat, va_list argptr)
+{
+    wxString s;
+    s.Printf(pszFormat, argptr);
+    return s;
+}
+
 int wxString::Printf(const wxChar *pszFormat, ...)
 {
   va_list argptr;

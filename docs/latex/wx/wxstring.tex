@@ -152,8 +152,22 @@ converted to a number.
 \membersection{Writing values into the string}
 
 Both formatted versions (\helpref{Printf}{wxstringprintf}) and stream-like
-insertion operators exist (for basic types only).
+insertion operators exist (for basic types only). Additionally, the 
+\helpref{Format}{wxstringformat} function allows to use simply append
+formatted value to a string:
 
+\begin{verbatim}
+    // the following 2 snippets are equivalent
+
+    wxString s = "...";
+    s += wxString::Format("%d", n);
+
+    wxString s;
+    s.Printf("...%d", n);
+\end{verbatim}
+
+\helpref{Format}{wxstringformat}\\
+\helpref{FormatV}{wxstringformatv}\\
 \helpref{Printf}{wxstringprintf}\\
 \helpref{PrintfV}{wxstringprintfv}\\
 \helpref{operator \cinsert}{wxstringoperatorout}
@@ -558,6 +572,28 @@ Searches for the given string. Returns the starting index, or -1 if not found.
 \constfunc{size\_t}{First}{\param{const char}{ ch}}
 
 Returns the first occurrence of the item.
+
+\membersection{wxString::Format}\label{wxstringformat}
+
+\func{static wxString}{Format}{\param{const wxChar }{*format}, \param{}{...}}
+
+This static function returns the string containing the result of calling 
+\helpref{Printf}{wxstringprintf} with the passed parameters on it.
+
+\wxheading{See also}
+
+\helpref{FormatV}{wxstringformatv}, \helpref{Printf}{wxstringprintf}
+
+\membersection{wxString::FormatV}\label{wxstringformatv}
+
+\func{static wxString}{Format}{\param{const wxChar }{*format}, \param{va\_list }{argptr}}
+
+This static function returns the string containing the result of calling 
+\helpref{PrintfV}{wxstringprintfv} with the passed parameters on it.
+
+\wxheading{See also}
+
+\helpref{Format}{wxstringformat}, \helpref{PrintfV}{wxstringprintfv}
 
 \membersection{wxString::Freq}\label{wxstringfreq}
 
