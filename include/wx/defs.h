@@ -1874,7 +1874,7 @@ enum wxKeyCode
     WXK_SPACE   =    32,
     WXK_DELETE  =    127,
 
-    WXK_START   = 65536, /* Above max short to avoid conflict with unicode chars */
+    WXK_START   = 300, /* FIXME:  Conflicts with UNICODE */
     WXK_LBUTTON,
     WXK_RBUTTON,
     WXK_CANCEL,
