@@ -83,6 +83,8 @@ public:
     // called immediately after the control is shown
     virtual void OnShow() = 0;
 
+    virtual wxCoord GetBestWidth() const {return 0; }
+
 protected:
     wxComboControl *m_combo;
 };
