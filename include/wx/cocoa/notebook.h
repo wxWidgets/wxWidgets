@@ -6,7 +6,7 @@
 // Created:     2004/04/08
 // RCS-ID:      $Id$
 // Copyright:   (c) 2004 David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_NOTEBOOK_H__
@@ -31,7 +31,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = 0,
-            const wxString& name = wxNOTEBOOK_NAME)
+            const wxString& name = wxNotebookNameStr)
     {
         Create(parent, winid, pos, size, style, name);
     }
@@ -40,7 +40,7 @@ public:
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = 0,
-            const wxString& name = wxNOTEBOOK_NAME);
+            const wxString& name = wxNotebookNameStr);
     virtual ~wxNotebook();
 
 // ------------------------------------------------------------------------
@@ -94,7 +94,7 @@ public:
     bool InsertPage( size_t position,
                      wxNotebookPage *win,
                      const wxString& strText,
-                     bool bSelect = FALSE,
+                     bool bSelect = false,
                      int imageId = -1 );
 
 protected:

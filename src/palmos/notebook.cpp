@@ -27,58 +27,12 @@
   #include  "wx/string.h"
 #endif  // WX_PRECOMP
 
-#include  "wx/log.h"
-#include  "wx/imaglist.h"
-#include  "wx/event.h"
-#include  "wx/control.h"
-#include  "wx/notebook.h"
-#include  "wx/app.h"
-
-#include  "wx/palmos/private.h"
-
-#include "wx/palmos/winundef.h"
-
-#if wxUSE_UXTHEME
-#include "wx/palmos/uxtheme.h"
-
-#include "wx/radiobut.h"
-#include "wx/radiobox.h"
-#include "wx/checkbox.h"
-#include "wx/bmpbuttn.h"
-#include "wx/statline.h"
-#include "wx/statbox.h"
-#include "wx/stattext.h"
-#include "wx/slider.h"
-#include "wx/scrolwin.h"
-#include "wx/panel.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) ((nPage) < GetPageCount())
-
-// hide the ugly cast
-#define m_hwnd    (HWND)GetHWND()
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-// This is a work-around for missing defines in gcc-2.95 headers
-#ifndef TCS_RIGHT
-    #define TCS_RIGHT       0x0002
-#endif
-
-#ifndef TCS_VERTICAL
-    #define TCS_VERTICAL    0x0080
-#endif
-
-#ifndef TCS_BOTTOM
-    #define TCS_BOTTOM      TCS_RIGHT
-#endif
 
 // ----------------------------------------------------------------------------
 // event table
@@ -225,23 +179,18 @@ bool wxNotebook::Create(wxWindow *parent,
     return false;
 }
 
-WXDWORD wxNotebook::MSWGetStyle(long style, WXDWORD *exstyle) const
-{
-    return 0;
-}
-
 // ----------------------------------------------------------------------------
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
 
 size_t wxNotebook::GetPageCount() const
 {
-  return 0;
+    return 0;
 }
 
 int wxNotebook::GetRowCount() const
 {
-  return 0;
+    return 0;
 }
 
 int wxNotebook::SetSelection(size_t nPage)
@@ -256,14 +205,12 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 
 wxString wxNotebook::GetPageText(size_t nPage) const
 {
-  wxString str;
-
-  return str;
+    return wxEmptyString;
 }
 
 int wxNotebook::GetPageImage(size_t nPage) const
 {
-  return -1;
+    return -1;
 }
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
@@ -313,7 +260,7 @@ wxNotebookPage *wxNotebook::DoRemovePage(size_t nPage)
 // remove all pages
 bool wxNotebook::DeleteAllPages()
 {
-  return true;
+    return true;
 }
 
 // same as AddPage() but does it at given position
@@ -344,11 +291,6 @@ void wxNotebook::OnSelChange(wxNotebookEvent& event)
 {
 }
 
-bool wxNotebook::MSWTranslateMessage(WXMSG *wxmsg)
-{
-    return false;
-}
-
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
 }
@@ -371,42 +313,5 @@ bool wxNotebook::DoPhase(int WXUNUSED(nPhase))
 }
 
 #endif // wxUSE_CONSTRAINTS
-
-// ----------------------------------------------------------------------------
-// wxNotebook Windows message handlers
-// ----------------------------------------------------------------------------
-
-bool wxNotebook::MSWOnScroll(int orientation, WXWORD nSBCode,
-                             WXWORD pos, WXHWND control)
-{
-    return false;
-}
-
-bool wxNotebook::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM* result)
-{
-  return false;
-}
-
-// Windows only: attempts to get colour for UX theme page background
-wxColour wxNotebook::GetThemeBackgroundColour()
-{
-    return wxColour;
-}
-
-// Windows only: attempts to apply the UX theme page background to this page
-#if wxUSE_UXTHEME
-void wxNotebook::ApplyThemeBackground(wxWindow* window, const wxColour& colour)
-#else
-void wxNotebook::ApplyThemeBackground(wxWindow*, const wxColour&)
-#endif
-{
-}
-
-#if wxUSE_UXTHEME
-WXLRESULT wxNotebook::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
-{
-    return 0;
-}
-#endif // #if wxUSE_UXTHEME
 
 #endif // wxUSE_NOTEBOOK

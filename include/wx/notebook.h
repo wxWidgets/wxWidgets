@@ -41,7 +41,11 @@ enum
 
 typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
-#define wxNOTEBOOK_NAME _T("notebook")
+WXDLLEXPORT_DATA(extern const wxChar*) wxNotebookNameStr;
+
+#if WXWIN_COMPATIBILITY_2_4
+    #define wxNOTEBOOK_NAME wxNotebookNameStr
+#endif
 
 // ----------------------------------------------------------------------------
 // wxNotebookBase: define wxNotebook interface
@@ -60,7 +64,7 @@ public:
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
                    long style = 0,
-                   const wxString& name = wxNOTEBOOK_NAME) ;
+                   const wxString& name = wxNotebookNameStr) ;
 
     // wxNotebook-specific additions to wxBookCtrlBase interface
     // ---------------------------------------------------------

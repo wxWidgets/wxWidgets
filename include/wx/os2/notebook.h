@@ -41,7 +41,7 @@ public:
                ,const wxPoint&  rPos = wxDefaultPosition
                ,const wxSize&   rSize = wxDefaultSize
                ,long            lStyle = 0
-               ,const wxString& rsName = "notebook"
+               ,const wxString& rsName = wxNotebookNameStr
               );
 
     bool Create( wxWindow*       pParent
@@ -49,7 +49,7 @@ public:
                 ,const wxPoint&  rPos = wxDefaultPosition
                 ,const wxSize&   rSize = wxDefaultSize
                 ,long            lStyle = 0
-                ,const wxString& rsName = "notebook"
+                ,const wxString& rsName = wxNotebookNameStr
                );
 
     //
@@ -127,7 +127,7 @@ public:
     //
            bool     AddPage( wxNotebookPage* pPage
                             ,const wxString& rsStrText
-                            ,bool            bSelect = FALSE
+                            ,bool            bSelect = false
                             ,int             nImageId = -1
                            );
 
@@ -137,7 +137,7 @@ public:
     bool     InsertPage( size_t nPage
                         ,wxNotebookPage* pPage
                         ,const wxString& rsStrText
-                        ,bool            bSelect = FALSE
+                        ,bool            bSelect = false
                         ,int             nImageId = -1
                        );
 
@@ -165,7 +165,7 @@ public:
                              ,WXWORD wPos
                              ,WXHWND hControl
                             );
-    virtual void SetConstraintSizes(bool bRecurse = TRUE);
+    virtual void SetConstraintSizes(bool bRecurse = true);
     virtual bool DoPhase(int nPhase);
 
 protected:

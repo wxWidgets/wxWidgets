@@ -39,14 +39,14 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxT("notebook"));
+             const wxString& name = wxNotebookNameStr);
       // Create() function
     bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxT("notebook"));
+              const wxString& name = wxNotebookNameStr);
       // dtor
     virtual ~wxNotebook();
 
@@ -89,7 +89,7 @@ public:
     bool InsertPage( size_t position,
                      wxNotebookPage *win,
                      const wxString& strText,
-                     bool bSelect = FALSE,
+                     bool bSelect = false,
                      int imageId = -1 );
 
     // handler for tab navigation
@@ -99,7 +99,7 @@ public:
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation
     // --------------
 
@@ -127,7 +127,7 @@ public:
     // selection internally instead of querying the notebook for it
     int m_selection;
 
-    // flag set to TRUE while we're inside "switch_page" callback
+    // flag set to true while we're inside "switch_page" callback
     bool m_inSwitchPage;
 
 protected:

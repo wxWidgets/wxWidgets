@@ -64,14 +64,14 @@ public:
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxNOTEBOOK_NAME);
+             const wxString& name = wxNotebookNameStr);
     // Create() function
   bool Create(wxWindow *parent,
               wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxNOTEBOOK_NAME);
+              const wxString& name = wxNotebookNameStr);
   virtual ~wxNotebook();
 
   // accessors

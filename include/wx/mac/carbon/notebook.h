@@ -44,18 +44,18 @@ public:
   wxNotebook();
     // the same arguments as for wxControl (@@@ any special styles?)
   wxNotebook(wxWindow *parent,
-             wxWindowID id, 
+             wxWindowID id,
              const wxPoint& pos = wxDefaultPosition,
              const wxSize& size = wxDefaultSize,
              long style = 0,
-             const wxString& name = wxT("notebook"));
+             const wxString& name = wxNotebookNameStr);
     // Create() function
   bool Create(wxWindow *parent,
-              wxWindowID id, 
+              wxWindowID id,
               const wxPoint& pos = wxDefaultPosition,
               const wxSize& size = wxDefaultSize,
               long style = 0,
-              const wxString& name = wxT("notebook"));
+              const wxString& name = wxNotebookNameStr);
     // dtor
   ~wxNotebook();
 
@@ -83,7 +83,7 @@ public:
   virtual void SetPadding(const wxSize& padding);
     // sets the size of the tabs (assumes all tabs are the same size)
   virtual void SetTabSize(const wxSize& sz);
-   
+
     // calculate size for wxNotebookSizer
   wxSize CalcSizeFromPage(const wxSize& sizePage) const;
   wxRect GetPageRect() const ;
@@ -92,7 +92,7 @@ public:
   int GetPageCount() const;
 
     // cycle thru the tabs
-  void AdvanceSelection(bool bForward = TRUE);
+  void AdvanceSelection(bool bForward = true);
 
 
     // currently it's always 1 because wxGTK doesn't support multi-row
@@ -107,7 +107,7 @@ public:
   bool InsertPage(size_t nPage,
                   wxNotebookPage *pPage,
                   const wxString& strText,
-                  bool bSelect = FALSE,
+                  bool bSelect = false,
                   int imageId = -1);
 /*
     // get the panel which represents the given page
@@ -124,7 +124,7 @@ public:
     // --------------
 
 #if wxUSE_CONSTRAINTS
-  virtual void SetConstraintSizes(bool recurse = TRUE);
+  virtual void SetConstraintSizes(bool recurse = true);
   virtual bool DoPhase(int nPhase);
 
 #endif

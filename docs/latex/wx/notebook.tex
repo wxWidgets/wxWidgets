@@ -54,7 +54,7 @@ See also \helpref{window styles overview}{windowstyles}.
 Default constructor.
 
 \func{}{wxNotebook}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
- \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0}, \param{const wxString\& }{name = "notebook"}}
+ \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0}, \param{const wxString\& }{name = wxNotebookNameStr}}
 
 Constructs a notebook control.
 
@@ -141,7 +141,7 @@ the list.
 \membersection{wxNotebook::Create}\label{wxnotebookcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
- \param{const wxSize\&}{ size}, \param{long}{ style = 0}, \param{const wxString\& }{name = "notebook"}}
+ \param{const wxSize\&}{ size}, \param{long}{ style = 0}, \param{const wxString\& }{name = wxNotebookNameStr}}
 
 Creates a notebook control. See \helpref{wxNotebook::wxNotebook}{wxnotebookctor} for a description
 of the parameters.
@@ -233,7 +233,7 @@ used instead in this case.
 
 \func{int}{HitTest}{\param{const wxPoint\&}{ pt}, \param{long}{ *flags = {\tt NULL}}}
 
-Returns the index of the tab at the specified position or {\tt wxNOT\_FOUND} 
+Returns the index of the tab at the specified position or {\tt wxNOT\_FOUND}
 if none. If {\it flags} parameter is non {\tt NULL}, the position of the point
 inside the tab is returned as well.
 
