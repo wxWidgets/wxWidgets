@@ -1760,6 +1760,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/NSTextField.mm
     src/cocoa/NSView.mm
     src/cocoa/NSWindow.mm
+    src/cocoa/ObjcRef.mm
     src/cocoa/app.mm
     src/cocoa/bitmap.mm
     src/cocoa/bmpbuttn.mm
@@ -1843,6 +1844,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/NSWindow.h
     wx/cocoa/ObjcAssociate.h
     wx/cocoa/ObjcPose.h
+    wx/cocoa/ObjcRef.h
     wx/cocoa/app.h
     wx/cocoa/bitmap.h
     wx/cocoa/bmpbuttn.h
