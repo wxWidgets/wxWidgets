@@ -71,7 +71,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+#if defined(__WXMSW__) || defined(__WXMAC__)
     EVT_MENU(DIALOGS_GENERIC_DIR_CHOOSE,            MyFrame::GenericDirChoose)
+#endif // wxMSW || wxMAC
     EVT_MENU(DIALOGS_MODAL,                         MyFrame::ModalDlg)
     EVT_MENU(DIALOGS_MODELESS,                      MyFrame::ModelessDlg)
     EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
@@ -158,7 +160,9 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tCtrl-Q");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file\tCtrl-S");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
+#if defined(__WXMSW__) || defined(__WXMAC__)
   file_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  "&Choose a directory (generic implementation)");
+#endif // wxMSW || wxMAC
 #if wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_PROGRESS, "Pro&gress dialog\tCtrl-G");
 #endif // wxUSE_PROGRESSDLG
@@ -531,6 +535,8 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
+#if defined(__WXMSW__) || defined(__WXMAC__)
+
 void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
 {
 #if !defined(__WXMSW__) || defined(wxUSE_DIRDLGG) && wxUSE_DIRDLGG
@@ -550,6 +556,8 @@ void MyFrame::GenericDirChoose(wxCommandEvent& WXUNUSED(event) )
                wxT("set wxUSE_DIRDLGG to 1 and recompile"));
 #endif
 }
+
+#endif // wxMSW || wxMAC
 
 void MyFrame::ModalDlg(wxCommandEvent& WXUNUSED(event))
 {
