@@ -371,7 +371,8 @@ call to this function.
 
 \membersection{::wxSafeYield}\label{wxsafeyield}
 
-\func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}}
+\func{bool}{wxSafeYield}{\param{wxWindow*}{ win = NULL}, \param{bool}{
+    onlyIfNeeded = FALSE}}
 
 This function is similar to wxYield, except that it disables the user input to
 all program windows before calling wxYield and re-enables it again
@@ -401,7 +402,7 @@ once for each previous successful call to \helpref{wxInitialize}{wxinitialize}.
 
 Calls \helpref{wxApp::Yield}{wxappyield}.
 
-This function is kept only for backwards compatibility. Please use 
+This function is kept only for backwards compatibility. Please use
 the \helpref{wxApp::Yield}{wxappyield} method instead in any new code.
 
 \wxheading{Include files}
@@ -476,10 +477,10 @@ case of using DDE under Windows for command execution). In particular, in this,
 and only this, case the calling code will not get the notification about
 process termination.
 
-If callback isn't NULL and if execution is asynchronous, 
+If callback isn't NULL and if execution is asynchronous,
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
 the process finishes. Specifying this parameter also allows you to redirect the
-standard input and/or output of the process being launched by calling 
+standard input and/or output of the process being launched by calling
 \helpref{Redirect}{wxprocessredirect}. If the child process IO is redirected,
 under Windows the process window is not shown by default (this avoids having to
 flush an unnecessary console for the processes which don't create any windows
@@ -509,7 +510,7 @@ single string.}
 array, any additional ones are the command parameters and the array must be
 terminated with a NULL pointer.}
 
-\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC}, 
+\docparam{flags}{Combination of bit masks {\tt wxEXEC\_ASYNC},
 {\tt wxEXEC\_SYNC} and {\tt wxEXEC\_NOHIDE}}
 
 \docparam{callback}{An optional pointer to \helpref{wxProcess}{wxprocess}}
@@ -617,7 +618,7 @@ See also \helpref{wxExecute}{wxexecute}, \helpref{Exec sample}{sampleexec}.
 
 \func{bool}{wxShutdown}{\param{wxShutdownFlags}{flags}}
 
-This function shuts down or reboots the computer depending on the value of the 
+This function shuts down or reboots the computer depending on the value of the
 {\it flags}. Please notice that doing this requires the corresponding access
 rights (superuser under Unix, {\tt SE\_SHUTDOWN} privelege under Windows NT)
 and that this function is only implemented under Unix and Win32.
@@ -731,7 +732,7 @@ Returns time of last modification of given file.
 
 \func{char *}{wxFileNameFromPath}{\param{char *}{path}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
 
 Returns the filename for a full path. The second form returns a pointer to
@@ -925,7 +926,7 @@ Under MS Windows, the current drive is also changed if {\it dir} contains a driv
 
 \func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
 
 This function splits a full file name into components: the path (including possible disk/drive
@@ -1127,7 +1128,7 @@ Gets operating system version information.
 \func{const wxChar *}{wxGetUserHome}{\param{const wxString\& }{user = ""}}
 
 Returns the home directory for the given user. If the username is empty
-(default value), this function behaves like 
+(default value), this function behaves like
 \helpref{wxGetHomeDir}{wxgethomedir}.
 
 \wxheading{Include files}
@@ -2224,7 +2225,7 @@ Find a menu item identifier associated with the given frame's menu bar.
 
 \func{wxWindow *}{wxFindWindowByLabel}{\param{const wxString\& }{label}, \param{wxWindow *}{parent=NULL}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxWindow::FindWindowByLabel}{wxwindowfindwindowbylabel} instead.
 
 Find a window by its label. Depending on the type of window, the label may be a window title
@@ -2240,7 +2241,7 @@ The search is recursive in both cases.
 
 \func{wxWindow *}{wxFindWindowByName}{\param{const wxString\& }{name}, \param{wxWindow *}{parent=NULL}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxWindow::FindWindowByName}{wxwindowfindwindowbyname} instead.
 
 Find a window by its name (as given in a window constructor or {\bf Create} function call).
@@ -2418,7 +2419,7 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 
 \func{void}{wxStripMenuCodes}{\param{char *}{in}, \param{char *}{out}}
 
-{\bf NB:} This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use
 \helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} instead.
 
 Strips any menu codes from {\it in} and places the result
@@ -3071,7 +3072,7 @@ instead.
 
 \func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
 
-{\bf NB:} This function is now obsolete, please use \helpref{wxLogError}{wxlogerror} 
+{\bf NB:} This function is now obsolete, please use \helpref{wxLogError}{wxlogerror}
 instead.
 
 Displays {\it msg} and continues. This writes to standard error under
@@ -3086,7 +3087,7 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \func{void}{wxFatalError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Fatal Error"}}
 
-{\bf NB:} This function is now obsolete, please use 
+{\bf NB:} This function is now obsolete, please use
 \helpref{wxLogFatalError}{wxlogfatalerror} instead.
 
 Displays {\it msg} and exits. This writes to standard error under Unix,
@@ -3251,7 +3252,7 @@ trace masks.
 This function shows a message to the user in a safe way and should be safe to
 call even before the application has been initialized or if it is currently in
 some other strange state (for example, about to crash). Under Windows this
-function shows a message box using a native dialog instead of 
+function shows a message box using a native dialog instead of
 \helpref{wxMessageBox}{wxmessagebox} (which might be unsafe to call), elsewhere
 it simply prints the message to the standard output using the title as prefix.
 
@@ -3494,7 +3495,7 @@ builds the \helpref{wxCHECK}{wxcheck} failures don't result in anything.
 
 To override the default behaviour in the debug builds which is to show the user
 a dialog asking whether he wants to abort the program, continue or continue
-ignoring any subsequent assert failures, you may override 
+ignoring any subsequent assert failures, you may override
 \helpref{wxApp::OnAssert}{wxapponassert} which is called by this function if
 the global application object exists.
 
@@ -3517,7 +3518,7 @@ because it will not be executed in release mode at all.
 
 \func{}{wxASSERT\_MIN\_BITSIZE}{\param{}{type}, \param{}{size}}
 
-This macro results in a 
+This macro results in a
 \helpref{compile time assertion failure}{wxcompiletimeassert} if the size
 of the given type {\it type} is less than {\it size} bits.
 
@@ -3551,14 +3552,14 @@ specified {\it condition} is false. The compiler error message should include
 the {\it msg} identifier - please note that it must be a valid C++ identifier
 and not a string unlike in the other cases.
 
-This macro is mostly useful for testing the expressions involving the 
+This macro is mostly useful for testing the expressions involving the
 {\tt sizeof} operator as they can't be tested by the preprocessor but it is
 sometimes desirable to test them at the compile time.
 
 Note that this macro internally declares a struct whose name it tries to make
 unique by using the {\tt \_\_LINE\_\_} in it but it may still not work if you
 use it on the same line in two different source files. In this case you may
-either change the line in which either of them appears on or use the 
+either change the line in which either of them appears on or use the
 \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2} macro.
 
 \wxheading{See also}
@@ -3570,7 +3571,7 @@ either change the line in which either of them appears on or use the
 
 \func{}{wxCOMPILE\_TIME\_ASSERT}{\param{}{condition}, \param{}{msg}, \param{}{name}}
 
-This macro is identical to \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2} 
+This macro is identical to \helpref{wxCOMPILE\_TIME\_ASSERT2}{wxcompiletimeassert2}
 except that it allows you to specify a unique {\it name} for the struct
 internally defined by this macro to avoid getting the compilation errors
 described \helpref{above}{wxcompiletimeassert}.
