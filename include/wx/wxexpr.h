@@ -74,8 +74,8 @@ class WXDLLEXPORT wxExpr
   wxExprType type;
   union {
     long integer;
-    char *word;
-    char *string;
+    wxChar *word;
+    wxChar *string;
     double real;
     wxExpr *first;  // If is a list expr, points to the first node
     } value;
@@ -83,7 +83,7 @@ class WXDLLEXPORT wxExpr
   wxExpr *next;     // If this is a node in a list, points to the next node
   wxExpr *last;     // If is a list expr, points to the last node
 
-  wxExpr(wxExprType the_type, char *word_or_string, bool allocate);
+  wxExpr(wxExprType the_type, wxChar *word_or_string, bool allocate);
   wxExpr(const wxString& functor);      // Assume this is a new clause - pass functor
   wxExpr(wxExprType the_type, const wxString& word_or_string = "");
   wxExpr(long the_integer);
@@ -114,7 +114,7 @@ class WXDLLEXPORT wxExpr
       return value.word;
     else if (type == wxExprString)
       return wxString(value.string);
-    else return wxString("");
+    else return wxString(_T(""));
   }
 
   inline wxString StringValue(void) const {
@@ -122,7 +122,7 @@ class WXDLLEXPORT wxExpr
       return wxString(value.string);
     else if (type == wxExprWord)
       return wxString(value.word);
-    else return wxString("");
+    else return wxString(_T(""));
   }
 
   // Get nth arg of clause (starting from 1)
@@ -179,12 +179,12 @@ class WXDLLEXPORT wxExpr
   bool GetAttributeValue(const wxString& att, wxExpr **var) const;
 
   // Compatibility with old PrologIO
-  inline void AssignAttributeValue(char *att, int *var) const { GetAttributeValue(att, *var); }
-  inline void AssignAttributeValue(char *att, long *var) const { GetAttributeValue(att, *var); }
-  inline void AssignAttributeValue(char *att, float *var) const { GetAttributeValue(att, *var); }
-  inline void AssignAttributeValue(char *att, double *var) const { GetAttributeValue(att, *var); }
-  inline void AssignAttributeValue(char *att, wxExpr **var) const { GetAttributeValue(att, var); }
-  void AssignAttributeValue(char *att, char **var) const ;  // Word OR string -> string
+  inline void AssignAttributeValue(wxChar *att, int *var) const { GetAttributeValue(att, *var); }
+  inline void AssignAttributeValue(wxChar *att, long *var) const { GetAttributeValue(att, *var); }
+  inline void AssignAttributeValue(wxChar *att, float *var) const { GetAttributeValue(att, *var); }
+  inline void AssignAttributeValue(wxChar *att, double *var) const { GetAttributeValue(att, *var); }
+  inline void AssignAttributeValue(wxChar *att, wxExpr **var) const { GetAttributeValue(att, var); }
+  void AssignAttributeValue(wxChar *att, wxChar **var) const ;  // Word OR string -> string
 
   // Add string items to list if the list attribute exists
   bool GetAttributeValueStringList(const wxString& att, wxList *var) const;
@@ -248,7 +248,7 @@ public:
     void WriteLisp(ostream& stream);
 
     // Compatibility
-    inline bool ReadProlog(char *filename) { return Read(wxString(filename)); }
+    inline bool ReadProlog(wxChar *filename) { return Read(wxString(filename)); }
     inline bool ReadPrologFromString(char *buffer) { return ReadFromString(wxString(buffer)); }
     inline void WriteProlog(ostream& stream) { Write(stream); }
 
