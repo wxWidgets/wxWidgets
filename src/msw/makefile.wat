@@ -949,6 +949,9 @@ calctrl.obj:     $(GENDIR)\calctrl.cpp
 choicdgg.obj:     $(GENDIR)\choicdgg.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
+dragimgg.obj:     $(GENDIR)\dragimgg.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
 grid.obj:     $(GENDIR)\grid.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 

@@ -38,7 +38,7 @@ $(LIBS)
 <<
 
 $(PROGRAM).res :      $(PROGRAM).rc $(WXDIR)\include\wx\msw\wx.rc
-    $(rc) -r /i$(WXDIR)\include -fo$@ $(PROGRAM).rc
+    $(rc) -r /i$(WXDIR)\include /i$(WXDIR)\contrib\include -fo$@ $(PROGRAM).rc
 
 clean:
         -erase $(OBJECTS)

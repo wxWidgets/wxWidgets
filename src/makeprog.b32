@@ -16,11 +16,11 @@ WXDIR = $(WXWIN)
 LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
 
 !if "$(FINAL)" == "0"
-LINKFLAGS=/v /c /Tpe /L$(WXLIBDIR);$(BCCDIR)\lib $(EXTRALINKFLAGS)
+LINKFLAGS=/v /c /Tpe /L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS= -v
 !else
-LINKFLAGS=/Tpe /L$(WXLIBDIR);$(BCCDIR)\lib $(EXTRALINKFLAGS)
+LINKFLAGS=/Tpe /L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib $(EXTRALINKFLAGS)
 OPT = -Od
 DEBUG_FLAGS =
 !endif
@@ -46,7 +46,7 @@ $(TARGET).res
 	bcc32 $(CPPFLAGS) -P- -c {$< }
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
+    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include /i$(WXDIR)\contrib\include $(TARGET)
 
 clean:
         -erase *.obj

@@ -25,7 +25,7 @@ $(TARGET).def
 	bcc $(CPPFLAGS) -P- -c {$< }
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    brc -r /i$(BCCDIR)\include /i$(WXDIR)\include $(TARGET)
+    brc -r /i$(BCCDIR)\include /i$(WXDIR)\include /i$(WXDIR)\contrib\include $(TARGET)
 
 clean:
         -erase *.obj

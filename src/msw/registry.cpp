@@ -573,7 +573,7 @@ bool wxRegKey::Copy(wxRegKey& keyDst)
         wxRegKey key(*this, strKey);
         wxString keyName;
         keyName << GetFullName(&keyDst) << REG_SEPARATOR << strKey;
-        ok = key.Copy(keyName);
+        ok = key.Copy((const char*) keyName);
 
         if ( ok )
             bCont = GetNextKey(strKey, lIndex);

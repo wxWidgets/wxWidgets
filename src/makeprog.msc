@@ -47,7 +47,7 @@ $(TARGET).def
         rc -K $(TARGET).res
 
 $(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
-    rc -r /i$(WXDIR)\include $(TARGET)
+    rc -r /i$(WXDIR)\include /i$(WXDIR)\contrib\include $(TARGET)
 
 clean:
         -erase *.obj

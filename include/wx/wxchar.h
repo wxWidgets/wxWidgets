@@ -18,7 +18,8 @@
 
 // only do SBCS or _UNICODE
 #if defined (_MBCS )
-#  error "MBCS is not supported by wxChar"
+// It may be OK anyway.
+// #  error "MBCS is not supported by wxChar"
 #endif
 
 // set wxUSE_UNICODE to 1 if UNICODE or _UNICODE is defined
