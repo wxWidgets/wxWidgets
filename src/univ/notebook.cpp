@@ -473,7 +473,7 @@ void wxNotebook::DoDrawTab(wxDC& dc, const wxRect& rect, size_t n)
         m_imageList->Draw(image, dc, 0, 0, wxIMAGELIST_DRAW_NORMAL, true);
         dc.SelectObject(wxNullBitmap);
 #else
-        bmp = *m_imageList->GetBitmap(image);
+        bmp = m_imageList->GetBitmap(image);
 #endif
     }
 

@@ -107,13 +107,37 @@ int wxGenericImageList::Add( const wxBitmap& bitmap, const wxColour& maskColour 
     return Add(wxBitmap(img));
 }
 
-const wxBitmap *wxGenericImageList::GetBitmap( int index ) const
+const wxBitmap *wxGenericImageList::GetBitmapPtr( int index ) const
 {
     wxList::compatibility_iterator node = m_images.Item( index );
 
     wxCHECK_MSG( node, (wxBitmap *) NULL, wxT("wrong index in image list") );
 
     return (wxBitmap*)node->GetData();
+}
+
+// Get the bitmap
+wxBitmap wxImageList::GetBitmap(int index) const
+{
+    const wxBitmap* bmp = GetBitmapPtr(index);
+    if (bmp)
+        return *bmp;
+    else
+        return wxNullBitmap;
+}
+
+// Get the icon
+wxIcon wxImageList::GetIcon(int index) const
+{
+    const wxBitmap* bmp = GetBitmapPtr(index);
+    if (bmp)
+    {
+        wxIcon icon;
+        icon.CopyFromBitmap(*bmp);
+        return icon;
+    }
+    else
+        return wxNullIcon;
 }
 
 bool wxGenericImageList::Replace( int index, const wxBitmap &bitmap )

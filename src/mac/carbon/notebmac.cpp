@@ -351,7 +351,7 @@ void wxNotebook::MacSetupTabs()
 
         if ( GetImageList() && GetPageImage(ii) >= 0 && UMAGetSystemVersion() >= 0x1020 )
         {
-            const wxBitmap* bmap = GetImageList()->GetBitmap( GetPageImage(ii ) ) ;
+            const wxBitmap* bmap = GetImageList()->GetBitmapPtr( GetPageImage(ii ) ) ;
             if ( bmap )
             {
                 ControlButtonContentInfo info ;

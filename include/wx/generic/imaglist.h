@@ -68,7 +68,8 @@ public:
     int Add( const wxBitmap& bitmap );
     int Add( const wxBitmap& bitmap, const wxBitmap& mask );
     int Add( const wxBitmap& bitmap, const wxColour& maskColour );
-    const wxBitmap *GetBitmap(int index) const;
+    wxBitmap GetBitmap(int index) const;
+    wxIcon GetIcon(int index) const;
     bool Replace( int index, const wxBitmap &bitmap );
     bool Remove( int index );
     bool RemoveAll();
@@ -77,6 +78,8 @@ public:
               int flags = wxIMAGELIST_DRAW_NORMAL,
               bool solidBackground = false);
 
+    // Internal use only
+    const wxBitmap *GetBitmapPtr(int index) const;
 private:
     wxList  m_images;
 

@@ -499,7 +499,7 @@ bool wxNotebook::SetPageImage( size_t page, int image )
     wxASSERT( m_imageList != NULL ); /* Just in case */
 
     /* Construct the new pixmap */
-    const wxBitmap *bmp = m_imageList->GetBitmap(image);
+    const wxBitmap *bmp = m_imageList->GetBitmapPtr(image);
     GdkPixmap *pixmap = bmp->GetPixmap();
     GdkBitmap *mask = (GdkBitmap*) NULL;
     if ( bmp->GetMask() )
@@ -673,7 +673,7 @@ bool wxNotebook::InsertPage( size_t position,
     {
         wxASSERT( m_imageList != NULL );
 
-        const wxBitmap *bmp = m_imageList->GetBitmap(imageId);
+        const wxBitmap *bmp = m_imageList->GetBitmapPtr(imageId);
         GdkPixmap *pixmap = bmp->GetPixmap();
         GdkBitmap *mask = (GdkBitmap*) NULL;
         if ( bmp->GetMask() )

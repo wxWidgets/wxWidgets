@@ -202,7 +202,7 @@ bool wxNotebook::InsertPage( size_t pos,
     m_pages.Insert(page,pos);
     NSTabViewItem *tvitem = [[WXCTabViewImageItem alloc] initWithIdentifier:nil];
     [tvitem setLabel: wxNSStringWithWxString(title)];
-    const wxBitmap *bmp = (imageId!=-1)?m_imageList->GetBitmap(imageId):NULL;
+    const wxBitmap *bmp = (imageId!=-1)?m_imageList->GetBitmapPtr(imageId):NULL;
     if(bmp)
         [(WXCTabViewImageItem*) tvitem setImage: bmp->GetNSImage(true)];
 
@@ -250,7 +250,7 @@ int wxNotebook::GetPageImage(size_t nPage) const
 
 bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 {
-    const wxBitmap *bmp = nImage!=-1?m_imageList->GetBitmap(nImage):NULL;
+    const wxBitmap *bmp = nImage!=-1?m_imageList->GetBitmapPtr(nImage):NULL;
     if(!bmp)
         return false;
     NSTabViewItem *tvitem = [GetNSTabView() tabViewItemAtIndex: nPage];

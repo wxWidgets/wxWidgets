@@ -130,6 +130,12 @@ public:
             int flags = wxIMAGELIST_DRAW_NORMAL,
             bool solidBackground = false);
 
+  // Get a bitmap
+  wxBitmap GetBitmap(int index) const;
+
+  // Get an icon
+  wxIcon GetIcon(int index) const;
+
   // TODO: miscellaneous functionality
 /*
   wxIcon *MakeIcon(int index);

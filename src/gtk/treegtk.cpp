@@ -496,7 +496,7 @@ printf("begin insert\n");
   const wxBitmap *bmp;
   const wxImageList *list;
   if ((list = GetImageList(wxIMAGE_LIST_NORMAL)) != NULL)
-    if ((bmp = list->GetBitmap(image)) != NULL)
+    if ((bmp = list->GetBitmapPtr(image)) != NULL)
       if (bmp->Ok()) {
         GdkBitmap *mask = NULL;
         if (bmp->GetMask())

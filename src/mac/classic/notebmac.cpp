@@ -457,7 +457,7 @@ void wxNotebook::MacSetupTabs()
             // afterwards Unregister it (IconRef is ref counted, so it will stay on the tab even if we
             // unregister it) in case this will ever lead to having the same icon everywhere add some kind
             // of static counter
-            const wxBitmap* bmap = GetImageList()->GetBitmap( GetPageImage(ii ) ) ;
+            const wxBitmap* bmap = GetImageList()->GetBitmapPtr( GetPageImage(ii ) ) ;
             if ( bmap )
             {
                 wxBitmap scaledBitmap ;
