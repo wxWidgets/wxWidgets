@@ -38,7 +38,7 @@
     #include "wx/menu.h"
 #endif //WX_PRECOMP
 
-#ifdef __SMARTPHONE__
+#if defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
 #include <windows.h>
 #include <ole2.h>
@@ -257,5 +257,5 @@ bool wxTopLevelWindowMSW::HandleCommand(WXWORD id, WXWORD WXUNUSED(cmd), WXHWND 
     return false;
 }
 
-#endif // __SMARTPHONE__
+#endif // __SMARTPHONE__ && __WXWINCE__
 

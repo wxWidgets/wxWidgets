@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/wince/textctrlce.cpp
-// Purpose:     wxTextCtrl implementation for Smartphones
+// Purpose:     wxTextCtrl implementation for smart phones driven by WinCE
 // Author:      Wlodzimierz ABX Skiba
 // Modified by:
 // Created:     30.08.2004
@@ -40,7 +40,7 @@
 #include "wx/msw/missing.h"
 #include "wx/msw/winundef.h"
 
-#if wxUSE_TEXTCTRL && defined(__SMARTPHONE__)
+#if wxUSE_TEXTCTRL && defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
 #define GetBuddyHwnd()      (HWND)(m_hwndBuddy)
 
@@ -1250,4 +1250,4 @@ void wxTextCtrl::OnSetFocus(wxFocusEvent& WXUNUSED(event))
     }
 }
 
-#endif // wxUSE_TEXTCTRL && __SMARTPHONE__
+#endif // wxUSE_TEXTCTRL && __SMARTPHONE__ && __WXWINCE__

@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/wince/choicece.cpp
-// Purpose:     wxChoice implementation for Smartphones
+// Purpose:     wxChoice implementation for smart phones driven by WinCE
 // Author:      Wlodzimierz ABX Skiba
 // Modified by:
 // Created:     29.07.2004
@@ -39,7 +39,7 @@
 #include "wx/msw/missing.h"
 #include "wx/msw/winundef.h"
 
-#if wxUSE_CHOICE && defined(__SMARTPHONE__)
+#if wxUSE_CHOICE && defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
 #if wxUSE_EXTENDED_RTTI
 // TODO
@@ -545,4 +545,4 @@ void wxChoice::DoGetPosition(int *x, int *y) const
     wxConstCast(this, wxChoice)->m_hWnd = hWnd;
 }
 
-#endif // wxUSE_CHOICE && __SMARTPHONE__
+#endif // wxUSE_CHOICE && __SMARTPHONE__ && __WXWINCE__

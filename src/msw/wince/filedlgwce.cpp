@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/msw/wince/filedlgwce.cpp
-// Purpose:     wxFileDialog for WinCE (SmartPhone)
+// Purpose:     wxFileDialog implementation for smart phones driven by WinCE
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -31,7 +31,7 @@
 // Only use this for MS SmartPhone. Use standard file dialog
 // for Pocket PC.
 
-#if wxUSE_FILEDLG && defined(__SMARTPHONE__)
+#if wxUSE_FILEDLG && defined(__SMARTPHONE__) && defined(__WXWINCE__)
 
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
@@ -135,5 +135,4 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     files = m_fileNames;
 }
 
-#endif // wxUSE_FILEDLG
-
+#endif // wxUSE_FILEDLG && __SMARTPHONE__ && __WXWINCE__
