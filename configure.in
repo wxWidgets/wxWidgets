@@ -1874,7 +1874,6 @@ dnl ------------------------------------------------------------------------
 dnl Check for regex libraries
 dnl ------------------------------------------------------------------------
 
-REGEX_INCLUDE=
 if test "$wxUSE_REGEX" != "no"; then
     AC_DEFINE(wxUSE_REGEX)
 
@@ -1895,17 +1894,12 @@ if test "$wxUSE_REGEX" != "no"; then
             wxUSE_REGEX=sys
         fi
     fi
-
-    if test "$wxUSE_REGEX" = "builtin" ; then
-        REGEX_INCLUDE="-I\${top_srcdir}/src/regex"
-    fi
 fi
 
 dnl ------------------------------------------------------------------------
 dnl Check for zlib compression library
 dnl ------------------------------------------------------------------------
 
-ZLIB_INCLUDE=
 ZLIB_LINK=
 if test "$wxUSE_ZLIB" != "no" ; then
     AC_DEFINE(wxUSE_ZLIB)
@@ -1973,17 +1967,12 @@ if test "$wxUSE_ZLIB" != "no" ; then
             wxUSE_ZLIB=sys
         fi
     fi
-
-    if test "$wxUSE_ZLIB" = "builtin" ; then
-        ZLIB_INCLUDE="-I\${top_srcdir}/src/zlib"
-    fi
 fi
 
 dnl ------------------------------------------------------------------------
 dnl Check for png library
 dnl ------------------------------------------------------------------------
 
-PNG_INCLUDE=
 PNG_LINK=
 if test "$wxUSE_LIBPNG" != "no" ; then
     AC_DEFINE(wxUSE_LIBPNG)
@@ -2048,10 +2037,6 @@ if test "$wxUSE_LIBPNG" != "no" ; then
         fi
     fi
 
-    if test "$wxUSE_LIBPNG" = "builtin" ; then
-        PNG_INCLUDE="-I\${top_srcdir}/src/png"
-    fi
-
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS png"
 fi
 
@@ -2059,7 +2044,6 @@ dnl ------------------------------------------------------------------------
 dnl Check for jpeg library
 dnl ------------------------------------------------------------------------
 
-JPEG_INCLUDE=
 JPEG_LINK=
 if test "$wxUSE_LIBJPEG" != "no" ; then
     AC_DEFINE(wxUSE_LIBJPEG)
@@ -2108,17 +2092,12 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
             fi
         fi
     fi
-
-    if test "$wxUSE_LIBJPEG" = "builtin" ; then
-        JPEG_INCLUDE="-I\${top_srcdir}/src/jpeg"
-    fi
 fi
 
 dnl ------------------------------------------------------------------------
 dnl Check for tiff library
 dnl ------------------------------------------------------------------------
 
-TIFF_INCLUDE=
 TIFF_LINK=
 TIFF_PREREQ_LINKS=-lm
 if test "$wxUSE_LIBTIFF" != "no" ; then
@@ -2153,10 +2132,6 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
             dnl we are using the system library
             wxUSE_LIBTIFF=sys
         fi
-    fi
-
-    if test "$wxUSE_LIBTIFF" = "builtin" ; then
-        TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
     fi
 fi
 
@@ -5628,15 +5603,12 @@ fi
 
 dnl all -I options we must pass to the compiler
 dnl
-dnl note that the order is somewhat important, in particular the ZLIB_INCLUDE
-dnl and other stuff for the built in libraries should come first to avoid
-dnl including the system headers with the same name (it is particularly
-dnl important for zlib because XFree 4.2.0 has its own, horribly old and
-dnl incompatible, zlib.h) and the wxWindows headers should come first anyhow
+dnl note that the order is somewhat important: wxWindows headers should
+dnl come first and the one with setup.h should be before $(top_srcdir)/include
+dnl in case the latter contains setup.h used by non-autoconf makefiles (e.g.
+dnl CodeWarrior):
 INCLUDES="-I\${top_builddir}lib/wx/include/${TOOLCHAIN_NAME} \
--I\${top_srcdir}/include \
-$REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
-$TOOLKIT_INCLUDE"
+-I\${top_srcdir}/include $TOOLKIT_INCLUDE"
 
 dnl C/C++ compiler options used to compile wxWindows
 if test "$GXX" = yes ; then
