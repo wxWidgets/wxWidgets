@@ -527,12 +527,11 @@ wxTabView::wxTabView(long style)
   m_tabViewRect.x = 300;
   m_highlightColour = *wxWHITE;
   m_shadowColour = wxColour(128, 128, 128);
-  m_backgroundColour = *wxLIGHT_GREY;
+  m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_BTNFACE);
   m_textColour = *wxBLACK;
   m_highlightPen = wxWHITE_PEN;
   m_shadowPen = wxGREY_PEN;
-  m_backgroundPen = wxLIGHT_GREY_PEN;
-  m_backgroundBrush = wxLIGHT_GREY_BRUSH;
+  SetBackgroundColour(m_backgroundColour);
   m_tabFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
   m_tabSelectedFont = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
   m_window = (wxWindow *) NULL;
