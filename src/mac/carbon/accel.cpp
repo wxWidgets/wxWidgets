@@ -21,6 +21,18 @@
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
 #endif
 
+// ----------------------------------------------------------------------------
+// wxAccelList: a list of wxAcceleratorEntries
+// ----------------------------------------------------------------------------
+
+WX_DECLARE_LIST(wxAcceleratorEntry, wxAccelList);
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxAccelList);
+
+// ----------------------------------------------------------------------------
+// wxAccelRefData: the data used by wxAcceleratorTable
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {
     friend class WXDLLEXPORT wxAcceleratorTable;
@@ -28,32 +40,19 @@ public:
     wxAcceleratorRefData();
     ~wxAcceleratorRefData();
 
-/* TODO: implementation
-    inline HACCEL GetHACCEL() const { return m_hAccel; }
-protected:
-    HACCEL      m_hAccel;
-*/
+    wxAccelList m_accels;
 };
 
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
 
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
-    // TODO
-/*
-    HACCEL      m_hAccel;
-*/
+    m_accels.DeleteContents( TRUE );
 }
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-/*
-  if (m_hAccel)
-  {
-    DestroyAcceleratorTable((HACCEL) m_hAccel);
-  }
-  m_hAccel = 0 ;
-*/
+    m_accels.DeleteContents( TRUE );
 }
 
 wxAcceleratorTable::wxAcceleratorTable()
@@ -65,29 +64,45 @@ wxAcceleratorTable::~wxAcceleratorTable()
 {
 }
 
-// Load from .rc resource
-wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
-{
-    m_refData = new wxAcceleratorRefData;
-
-/* TODO: load acelerator from resource, if appropriate for your platform
-    M_ACCELDATA->m_hAccel = hAccel;
-    M_ACCELDATA->m_ok = (hAccel != 0);
-*/
-}
-
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
 {
     m_refData = new wxAcceleratorRefData;
 
-/* TODO: create table from entries
- */
+    for (int i = 0; i < n; i++)
+    {
+        int flag    = entries[i].GetFlags();
+        int keycode = entries[i].GetKeyCode();
+        int command = entries[i].GetCommand();
+        if ((keycode >= (int)'a') && (keycode <= (int)'z')) keycode = (int)toupper( (char)keycode );
+        M_ACCELDATA->m_accels.Append( new wxAcceleratorEntry( flag, keycode, command ) );
+    }
 }
 
 bool wxAcceleratorTable::Ok() const
 {
-    // TODO
-    return FALSE;
+    return (m_refData != NULL);
 }
+
+int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
+{
+    if (!Ok()) return -1;
+
+    wxNode *node = M_ACCELDATA->m_accels.First();
+    while (node)
+    {
+        wxAcceleratorEntry *entry = (wxAcceleratorEntry*)node->Data();
+        if ((event.m_keyCode == entry->GetKeyCode()) &&
+           (((entry->GetFlags() & wxACCEL_CTRL) == 0) || event.ControlDown()) &&
+           (((entry->GetFlags() & wxACCEL_SHIFT) == 0) || event.ShiftDown()) &&
+           (((entry->GetFlags() & wxACCEL_ALT) == 0) || event.AltDown() || event.MetaDown()))
+        {
+            return entry->GetCommand();
+        }
+        node = node->Next();
+    }
+
+    return -1;
+}
+
 

@@ -23,7 +23,6 @@ class WXDLLEXPORT wxAcceleratorTable: public wxObject
 DECLARE_DYNAMIC_CLASS(wxAcceleratorTable)
 public:
     wxAcceleratorTable();
-    wxAcceleratorTable(const wxString& resource); // Load from .rc resource
     wxAcceleratorTable(int n, wxAcceleratorEntry entries[]); // Load from array
 
     // Copy constructors
@@ -37,6 +36,8 @@ public:
     inline bool operator != (const wxAcceleratorTable& accel) { return m_refData != accel.m_refData; }
 
     bool Ok() const;
+
+    int GetCommand( wxKeyEvent &event );
 };
 
 WXDLLEXPORT_DATA(extern wxAcceleratorTable) wxNullAcceleratorTable;
