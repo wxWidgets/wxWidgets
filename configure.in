@@ -5043,6 +5043,67 @@ if test "$wxUSE_SOCKETS" = "yes" ; then
         else
             AC_DEFINE_UNQUOTED(SOCKLEN_T, $wx_cv_type_getsockname3)
         fi
+        dnl Do this again for getsockopt as it may be different
+        AC_CACHE_CHECK([what is the type of the fifth argument of getsockopt],
+                       wx_cv_type_getsockopt5,
+            [
+                AC_TRY_COMPILE(
+                    [
+                        #include <sys/types.h>
+                        #include <sys/socket.h>
+                    ],
+                    [
+                        socklen_t len;
+                        getsockopt(0, 0, 0, 0, &len);
+                    ],
+                    wx_cv_type_getsockopt5=socklen_t,
+                    [
+                        dnl the compiler will compile the version with size_t
+                        dnl even if the real type of the last parameter is int
+                        dnl but it should give at least a warning about
+                        dnl converting between incompatible pointer types, so
+                        dnl try to use it to get the correct behaviour at
+                        dnl least with gcc (otherwise we'd always use size_t)
+                        CFLAGS_OLD="$CFLAGS"
+                        if test "$GCC" = yes ; then
+                            CFLAGS="$CFLAGS -Werror"
+                        fi
+
+                        AC_TRY_COMPILE(
+                            [
+                                #include <sys/types.h>
+                                #include <sys/socket.h>
+                            ],
+                            [
+                                size_t len;
+                                getsockopt(0, 0, 0, 0, &len);
+                            ],
+                            wx_cv_type_getsockopt5=size_t,
+                            AC_TRY_COMPILE(
+                                [
+                                    #include <sys/types.h>
+                                    #include <sys/socket.h>
+                                ],
+                                [
+                                    int len;
+                                    getsockopt(0, 0, 0, 0, &len);
+                                ],
+                                wx_cv_type_getsockopt5=int,
+                                wx_cv_type_getsockopt5=unknown
+                            )
+                        )
+
+                        CFLAGS="$CFLAGS_OLD"
+                    ]
+                )
+            ])
+
+        if test "$wx_cv_type_getsockopt5" = "unknown"; then
+            wxUSE_SOCKETS=no
+            AC_MSG_WARN([Couldn't find socklen_t synonym for this system])
+        else
+            AC_DEFINE_UNQUOTED(SOCKOPTLEN_T, $wx_cv_type_getsockopt5)
+        fi
         AC_LANG_POP
     fi
 fi

@@ -117,13 +117,11 @@ int _System soclose(int);
 #  endif
 #endif
 
-#else
-   /* undefine for OSX - its really an int */
-#  ifdef __DARWIN__
-#    undef SOCKLEN_T
-#    define SOCKLEN_T int
-#  endif
 #endif /* SOCKLEN_T */
+
+#ifndef SOCKOPTLEN_T
+#define SOCKOPTLEN_T SOCKLEN_T
+#endif
 
 /*
  * MSW defines this, Unices don't.
@@ -698,7 +696,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
       else
       {
         int error;
-        SOCKLEN_T len = sizeof(error);
+        SOCKOPTLEN_T len = sizeof(error);
 
         getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
 
@@ -983,7 +981,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
       if (m_establishing && !m_server)
       {
         int error;
-        SOCKLEN_T len = sizeof(error);
+        SOCKOPTLEN_T len = sizeof(error);
 
         m_establishing = false;
 
@@ -1138,7 +1136,7 @@ void GSocket::UnsetCallback(GSocketEventFlags flags)
 GSocketError GSocket::GetSockOpt(int level, int optname,
                                 void *optval, int *optlen)
 {
-    if (getsockopt(m_fd, level, optname, (char*)optval, (SOCKLEN_T*)optlen) == 0)
+    if (getsockopt(m_fd, level, optname, (char*)optval, (SOCKOPTLEN_T*)optlen) == 0)
     {
         return GSOCK_NOERROR;
     }
@@ -1405,7 +1403,7 @@ void GSocket::Detected_Write()
   if (m_establishing && !m_server)
   {
     int error;
-    SOCKLEN_T len = sizeof(error);
+    SOCKOPTLEN_T len = sizeof(error);
 
     m_establishing = false;
 
