@@ -27,7 +27,9 @@ using namespace std ;
 #endif
 
 #include "wx/mac/private.h"
-
+#include "ATSUnicode.h"
+#include "TextCommon.h"
+#include "TextEncodingConverter.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
@@ -51,6 +53,19 @@ const short kEmulatedMode = -1 ;
 const short kUnsupportedMode = -2 ;
 
 #define wxMAC_EXPERIMENTAL_PATTERN 0
+
+wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
+	m_ph( (GrafPtr) dc->m_macPort ) 
+{
+	wxASSERT( dc->Ok() ) ;
+	m_dc = dc ;
+	dc->MacSetupPort(&m_ph) ;
+}
+
+wxMacPortSetter::~wxMacPortSetter() 
+{
+	m_dc->MacCleanupPort(&m_ph) ;
+}
 
 //-----------------------------------------------------------------------------
 // Local functions
@@ -194,17 +209,11 @@ wxDC::wxDC()
     m_pen = *wxBLACK_PEN;
     m_font = *wxNORMAL_FONT;
     m_brush = *wxWHITE_BRUSH;
-}
-wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
-	m_ph( (GrafPtr) dc->m_macPort ) 
-{
-	wxASSERT( dc->Ok() ) ;
-	
-	dc->MacSetupPort(&m_ph) ;
-}
-
-wxMacPortSetter::~wxMacPortSetter() 
-{
+    m_macCurrentPortStateHelper = NULL ;
+    m_macATSUIStyle = NULL ;
+    m_macAliasWasEnabled = false;
+    m_macForegroundPixMap = NULL ;
+    m_macBackgroundPixMap = NULL ;
 }
 
 wxDC::~wxDC(void)
@@ -214,11 +223,43 @@ wxDC::~wxDC(void)
 }
 void wxDC::MacSetupPort(wxMacPortStateHelper* help) const
 {
+    wxASSERT( m_macCurrentPortStateHelper == NULL ) ;
+    m_macCurrentPortStateHelper = help ;
 	SetClip( (RgnHandle) m_macCurrentClipRgn);
 
 	m_macFontInstalled = false ;
 	m_macBrushInstalled = false ;
 	m_macPenInstalled = false ;	
+}
+
+void wxDC::MacCleanupPort(wxMacPortStateHelper* help) const
+{
+    wxASSERT( m_macCurrentPortStateHelper == help ) ;
+    m_macCurrentPortStateHelper = NULL ;
+    if( m_macATSUIStyle )
+    {
+        ::ATSUDisposeStyle((ATSUStyle)m_macATSUIStyle);
+        m_macATSUIStyle = NULL ;
+    }
+    if ( m_macAliasWasEnabled )
+    {
+        SetAntiAliasedTextEnabled(m_macFormerAliasState, m_macFormerAliasSize);
+        m_macAliasWasEnabled = false ;
+    }
+    if ( m_macForegroundPixMap )
+    {
+        Pattern blackColor ;
+        ::PenPat(GetQDGlobalsBlack(&blackColor));
+        DisposePixMap( (PixMapHandle) m_macForegroundPixMap ) ;
+        m_macForegroundPixMap = NULL ;
+    }
+    if ( m_macBackgroundPixMap )
+    {
+        Pattern whiteColor ;
+        ::BackPat(GetQDGlobalsWhite(&whiteColor));
+        DisposePixMap( (PixMapHandle) m_macBackgroundPixMap ) ;
+        m_macBackgroundPixMap = NULL ;
+    }
 }
 
 void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask )
@@ -687,6 +728,10 @@ void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
         ::LineTo( XLOG2DEVMAC(w), yy );
         ::MoveTo( xx, YLOG2DEVMAC(0) );
         ::LineTo( xx, YLOG2DEVMAC(h) );
+
+        CalcBoundingBox(x, y);
+        CalcBoundingBox(x+w, y+h);
+
     }
 }
 
@@ -1316,104 +1361,89 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
   return TRUE;
 }
 
-void  wxDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
+inline Fixed	IntToFixed( int inInt )
+	{
+		return (((SInt32) inInt) << 16);
+	}
+
+
+void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoDrawRotatedText  Invalid window dc") );
 
     if (angle == 0.0)
     {
-        DrawText(text, x, y);
+        DrawText(str, x, y);
         return;
     }
 
-    MacInstallFont();
-
-    // the size of the text
-    wxCoord w, h;
-    GetTextExtent(text, &w, &h);
-
-    // draw the string normally
-    wxBitmap src(w, h);
-    wxMemoryDC dc;
-    dc.SelectObject(src);
-    dc.SetFont(GetFont());
-    dc.SetBackground(*wxWHITE_BRUSH);
-    dc.SetBrush(*wxBLACK_BRUSH);
-    dc.Clear();
-    dc.DrawText(text, 0, 0);
-    dc.SetFont(wxNullFont);
-    dc.SelectObject(wxNullBitmap);
-
     wxMacPortSetter helper(this) ;
+    MacInstallFont() ;
+    
+	wxString text ;
+	if ( wxApp::s_macDefaultEncodingIsPC )
+	{
+		text = wxMacMakeMacStringFromPC( str ) ;
+	}
+	else
+	{
+		text = str ;
+	}
 
-    // Calculate the size of the rotated bounding box.
-    double rad = DegToRad(angle);
-    double dx = cos(rad);
-    double dy = sin(rad);
-
-    // the rectngle vertices are counted clockwise with the first one being at
-    // (0, 0) (or, rather, at (x, y))
-    double x2 = w * dx;
-    double y2 = -w * dy;      // y axis points to the bottom, hence minus
-    double x4 = h * dy;
-    double y4 = h * dx;
-    double x3 = x4 + x2;
-    double y3 = y4 + y2;
-
-    // calc max and min
-    wxCoord maxX = (wxCoord)(dmax(x2, dmax(x3, x4)) + 0.5);
-    wxCoord maxY = (wxCoord)(dmax(y2, dmax(y3, y4)) + 0.5);
-    wxCoord minX = (wxCoord)(dmin(x2, dmin(x3, x4)) - 0.5);
-    wxCoord minY = (wxCoord)(dmin(y2, dmin(y3, y4)) - 0.5);
- 
-    // prepare to blit-with-rotate the bitmap to the DC
-    wxImage image(src);
-
-    RGBColor colText = MAC_WXCOLORREF( m_textForegroundColour.GetPixel() );
-    RGBColor colBack = MAC_WXCOLORREF( m_textBackgroundColour.GetPixel() );
-
-    unsigned char *data = image.GetData();
-
-    wxCoord dstX, dstY;
-    double r, angleOrig;
-    bool textPixel;
-
-    // paint pixel by pixel
-    for ( wxCoord srcX = 0; srcX < w; srcX++ )
+	wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
+    if ( 0 )
     {
-        for ( wxCoord srcY = 0; srcY < h; srcY++ )
-        {
-            // transform source coords to dest coords
-            r         = sqrt( (double)(srcX * srcX + srcY * srcY) );
-            angleOrig = atan2((double)srcY, (double)srcX) - rad;
-            dstX      = (wxCoord)(r * cos(angleOrig) + 0.5);
-            dstY      = (wxCoord)(r * sin(angleOrig) + 0.5);
-
-            // black pixel?
-            textPixel = data[(srcY*w + srcX)*3] == 0;
-            if ( textPixel || (m_backgroundMode == wxSOLID) )
-            {
-                SetCPixel(XLOG2DEVMAC(x + dstX), YLOG2DEVMAC(y + dstY),
-                          textPixel ? &colText : &colBack);
-            }
-        }
+        m_macFormerAliasState = IsAntiAliasedTextEnabled(&m_macFormerAliasSize);
+        SetAntiAliasedTextEnabled(true, m_scaleY * font->m_macFontSize);
+        m_macAliasWasEnabled = true ;
     }
+    
+    OSStatus status = noErr ;
+    
+	TECObjectRef ec;
+	status = TECCreateConverter(&ec, kTextEncodingMacRoman, kTextEncodingUnicodeDefault);
+	wxASSERT_MSG( status == noErr , "couldn't start converter" ) ;
+    
+    ByteCount byteOutLen ;
+    ByteCount byteInLen = text.Length() ;
+    ByteCount byteBufferLen = byteInLen *2 ;
+    char* buf = new char[byteBufferLen] ;
+    
+	status = TECConvertText(ec, (ConstTextPtr)text.c_str() , byteInLen, &byteInLen, 
+	    (TextPtr)buf, byteBufferLen, &byteOutLen);
+	    
+	wxASSERT_MSG( status == noErr , "couldn't convert text" ) ;
+	status = TECDisposeConverter(ec);
+	wxASSERT_MSG( status == noErr , "couldn't dispose converter" ) ;
+	
+	ATSUTextLayout atsuLayout ;
+	UniCharCount chars = byteOutLen / 2 ;
+    status = ::ATSUCreateTextLayoutWithTextPtr( (UniCharArrayPtr) buf , 0 , byteOutLen / 2 , byteOutLen / 2 , 1 ,
+        &chars , (ATSUStyle*) &m_macATSUIStyle , &atsuLayout ) ;
+	wxASSERT_MSG( status == noErr , "couldn't create the layout of the rotated text" );
 
-    // it would be better to draw with non underlined font and draw the line
-    // manually here (it would be more straight...)
-#if 0
-    if ( m_font.GetUnderlined() )
-    {
-        ::MoveTo(XLOG2DEVMAC(x + x4), YLOG2DEVMAC(y + y4 + font->descent));
-        ::LineTo(XLOG2DEVMAC(x + x3), YLOG2DEVMAC(y + y3 + font->descent));
-    }
-#endif // 0
+    Fixed atsuAngle = IntToFixed( angle ) ;
+	ByteCount angleSize = sizeof(Fixed) ;
+	ATSUAttributeTag rotationTag = kATSULineRotationTag ;
+	ATSUAttributeValuePtr	angleValue = &atsuAngle ;
+	status = ::ATSUSetLayoutControls(atsuLayout , 1 , &rotationTag , &angleSize , &angleValue ) ;
 
-    // update the bounding box
-    CalcBoundingBox(x + minX, y + minY);
-    CalcBoundingBox(x + maxX, y + maxY);
+	status = ::ATSUDrawText( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+					IntToFixed(XLOG2DEVMAC(x) ) , IntToFixed(YLOG2DEVMAC(y) ) );
+	wxASSERT_MSG( status == noErr , "couldn't draw the rotated text" );
+    Rect rect ;
+	status = ::ATSUMeasureTextImage( atsuLayout, kATSUFromTextBeginning, kATSUToTextEnd,
+					IntToFixed(XLOG2DEVMAC(x) ) , IntToFixed(YLOG2DEVMAC(y) ) , &rect );
+	wxASSERT_MSG( status == noErr , "couldn't measure the rotated text" );
+    
+    OffsetRect( &rect , -m_macLocalOrigin.x , -m_macLocalOrigin.y ) ;
+    CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
+    CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
+    ::ATSUDisposeTextLayout(atsuLayout);
+    delete[] buf ;
 }
+
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawText  Invalid DC"));
@@ -1422,64 +1452,62 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 	long xx = XLOG2DEVMAC(x);
 	long yy = YLOG2DEVMAC(y);
   
-//	if (m_pen.GetStyle() != wxTRANSPARENT)
+	MacInstallFont() ;
+    if ( 0 ) 
+    {
+        m_macFormerAliasState = IsAntiAliasedTextEnabled(&m_macFormerAliasSize);
+        SetAntiAliasedTextEnabled(true, 8);
+        m_macAliasWasEnabled = true ;
+    }
+    
+	FontInfo fi ;
+	::GetFontInfo( &fi ) ;
+	
+	yy += fi.ascent ;
+	::MoveTo( xx , yy );
+	if (  m_backgroundMode == wxTRANSPARENT )
 	{
-		MacInstallFont() ;
-		/*
-		Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
-			
-		  ::ClipRect( &clip ) ;
-		*/
-		
-		FontInfo fi ;
-		::GetFontInfo( &fi ) ;
-		
-		yy += fi.ascent ;
-		::MoveTo( xx , yy );
-		if (  m_backgroundMode == wxTRANSPARENT )
-		{
-			::TextMode( srcOr) ;
-		}
-		else
-		{
-			::TextMode( srcCopy ) ;
-		}
-
-		const char *text = NULL ;
-		int length = 0 ;
-		wxString macText ;
-
-		if ( wxApp::s_macDefaultEncodingIsPC )
-		{
-			macText = wxMacMakeMacStringFromPC( strtext ) ;
-			text = macText ;
-			length = macText.Length() ;
-		}
-		else
-		{
-			text = strtext ;
-			length = strtext.Length() ;
-		}
-		
-		int laststop = 0 ;
-		int i = 0 ;
-		int line = 0 ;
-		
-		while( i < length )
-		{
-			if( text[i] == 13 || text[i] == 10)
-			{
-				::DrawText( text , laststop , i - laststop ) ;
-				line++ ;
-				::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
-				laststop = i+1 ;
-			}
-			i++ ;
-		}
-				
-		::DrawText( text , laststop , i - laststop ) ;
-		::TextMode( srcOr ) ;
+		::TextMode( srcOr) ;
 	}
+	else
+	{
+		::TextMode( srcCopy ) ;
+	}
+
+	const char *text = NULL ;
+	int length = 0 ;
+	wxString macText ;
+
+	if ( wxApp::s_macDefaultEncodingIsPC )
+	{
+		macText = wxMacMakeMacStringFromPC( strtext ) ;
+		text = macText ;
+		length = macText.Length() ;
+	}
+	else
+	{
+		text = strtext ;
+		length = strtext.Length() ;
+	}
+	
+	int laststop = 0 ;
+	int i = 0 ;
+	int line = 0 ;
+	
+	while( i < length )
+	{
+		if( text[i] == 13 || text[i] == 10)
+		{
+			::DrawText( text , laststop , i - laststop ) ;
+			line++ ;
+			::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
+			laststop = i+1 ;
+		}
+		i++ ;
+	}
+			
+	::DrawText( text , laststop , i - laststop ) ;
+	::TextMode( srcOr ) ;
 }
 
 bool  wxDC::CanGetTextExtent() const 
@@ -1602,12 +1630,13 @@ void  wxDC::Clear(void)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));  
     wxMacPortSetter helper(this) ;
-	Rect rect = { -32767 , -32767 , 32767 , 32767 } ;
+	Rect rect = { -32000 , -32000 , 32000 , 32000 } ;
 	
 	if (m_backgroundBrush.GetStyle() != wxTRANSPARENT) 
 	{
+	    ::PenNormal() ;
+	    //MacInstallBrush() ;
         MacSetupBackgroundForCurrentPort( m_backgroundBrush ) ;
-	
 		::EraseRect( &rect ) ;
 	}
 }
@@ -1698,6 +1727,63 @@ void wxDC::MacInstallFont() const
 			break ;
 	}
 	::PenMode( mode ) ;
+
+    OSStatus status = noErr ;
+    
+    Fixed atsuSize = IntToFixed(m_scaleY * font->m_macFontSize) ;
+
+    Style qdStyle = font->m_macFontStyle ;
+	ATSUFontID	atsuFont = font->m_macATSUFontID ;
+
+    status = ::ATSUCreateStyle(&(ATSUStyle)m_macATSUIStyle) ;
+	wxASSERT_MSG( status == noErr , "couldn't create ATSU style" ) ;
+				
+	ATSUAttributeTag atsuTags[] =
+	{
+	    kATSUFontTag ,
+	    kATSUSizeTag ,
+	    kATSUColorTag ,
+	    
+	    kATSUQDBoldfaceTag ,
+	    kATSUQDItalicTag ,
+	    kATSUQDUnderlineTag ,
+	    kATSUQDCondensedTag ,
+	    kATSUQDExtendedTag ,
+	    
+	} ;
+								
+    ByteCount atsuSizes[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+    {
+        sizeof( ATSUFontID ) ,
+        sizeof( Fixed ) ,
+        sizeof( RGBColor ) ,
+        sizeof( Boolean ) ,
+        sizeof( Boolean ) ,
+        sizeof( Boolean ) ,
+        sizeof( Boolean ) ,
+        sizeof( Boolean ) ,
+    } ;
+									
+    Boolean kTrue = true ;
+    Boolean kFalse = false ;
+
+	ATSUAttributeValuePtr	atsuValues[sizeof(atsuTags)/sizeof(ATSUAttributeTag)] =
+	{
+	    &atsuFont ,
+	    &atsuSize ,
+	    &MAC_WXCOLORREF( m_textForegroundColour.GetPixel() ) ,
+	    
+	    (qdStyle & bold) ? &kTrue : &kFalse ,
+	    (qdStyle & italic) ? &kTrue : &kFalse ,
+	    (qdStyle & underline) ? &kTrue : &kFalse ,
+	    (qdStyle & condense) ? &kTrue : &kFalse ,
+	    (qdStyle & extend) ? &kTrue : &kFalse ,
+	} ;
+		
+	status = ::ATSUSetAttributes((ATSUStyle)m_macATSUIStyle, sizeof(atsuTags)/sizeof(ATSUAttributeTag), 
+	    atsuTags, atsuSizes, atsuValues);
+	wxASSERT_MSG( status == noErr , "couldn't set create ATSU style" ) ;
+
 }
 
 static void wxMacGetHatchPattern(int hatchStyle, Pattern *pattern)
@@ -1875,7 +1961,7 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
         }
       case kwxMacBrushColour :
         {
-       	  ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
+       	    ::RGBBackColor( &MAC_WXCOLORREF( background.GetColour().GetPixel()) );
         	int brushStyle = background.GetStyle();
         	if (brushStyle == wxSOLID)
         		::BackPat(GetQDGlobalsWhite(&whiteColor));
@@ -1946,42 +2032,38 @@ void wxDC::MacInstallBrush() const
                 isMonochrome = true ;
         }
 
-
-	    if ( isMonochrome )
+        if ( isMonochrome && width == 8 && height == 8 )
 	    {
 	        ::RGBForeColor( &MAC_WXCOLORREF( m_textForegroundColour.GetPixel()) );
 	        ::RGBForeColor( &MAC_WXCOLORREF( m_textBackgroundColour.GetPixel()) );
-
             BitMap* gwbitmap = (BitMap*) *gwpixmaphandle ; // since the color depth is 1 it is a BitMap
             UInt8 *gwbits = (UInt8*) gwbitmap->baseAddr ;
             int alignment = gwbitmap->rowBytes & 0x7FFF ;
-
-    	    if( width == 8 && height == 8 )
-    	    {
-                Pattern pat ;
-                for ( int i = 0 ; i < 8 ; ++i )
-                {
-                    pat.pat[i] = gwbits[i*alignment+0] ;
-                }
-                UnlockPixels( GetGWorldPixMap( gw ) ) ;
-                ::PenPat( &pat ) ;
-    	    }
-    	    else
-    	    {
- #if wxMAC_EXPERIMENTAL_PATTERN
+            Pattern pat ;
+            for ( int i = 0 ; i < 8 ; ++i )
+            {
+                pat.pat[i] = gwbits[i*alignment+0] ;
+            }
+            UnlockPixels( GetGWorldPixMap( gw ) ) ;
+            ::PenPat( &pat ) ;
+	    }
+	    else
+	    {
  // this will be the code to handle power of 2 patterns, we will have to arrive at a nice
  // caching scheme before putting this into production
-            	Handle      image;
-            	long		imageSize;
-    	        PixPatHandle pixpat = NewPixPat() ;
+        	Handle      image;
+        	long		imageSize;
+	        PixPatHandle pixpat = NewPixPat() ;
 
-		        CopyPixMap(gwpixmaphandle, (**pixpat).patMap);
-	            imageSize = GetPixRowBytes((**pixpat).patMap) *
-				    ((**(**pixpat).patMap).bounds.bottom -
-				    (**(**pixpat).patMap).bounds.top);
-				
-	            PtrToHand( (**gwpixmaphandle).baseAddr, &image, imageSize );
-	            (**pixpat).patData = image;
+	        CopyPixMap(gwpixmaphandle, (**pixpat).patMap);
+            imageSize = GetPixRowBytes((**pixpat).patMap) *
+			    ((**(**pixpat).patMap).bounds.bottom -
+			    (**(**pixpat).patMap).bounds.top);
+			
+            PtrToHand( (**gwpixmaphandle).baseAddr, &image, imageSize );
+            (**pixpat).patData = image;
+            if ( isMonochrome )
+            {
 	            CTabHandle ctable = ((**((**pixpat).patMap)).pmTable) ;
 	            ColorSpecPtr ctspec = (ColorSpecPtr) &(**ctable).ctTable ;
 	            if ( ctspec[0].rgb.red == 0x0000 )
@@ -1995,12 +2077,9 @@ void wxDC::MacInstallBrush() const
 	                ctspec[1].rgb = MAC_WXCOLORREF( m_textForegroundColour.GetPixel()) ;
 	            }
 	            ::CTabChanged( ctable ) ;
-	            ::PenPixPat(pixpat);
-#endif
-    	    }
-	    }
-	    else
-	    {
+            }
+            ::PenPixPat(pixpat);
+            m_macForegroundPixMap = pixpat ;
 	    }
 	    UnlockPixels( gwpixmaphandle ) ;
 	}

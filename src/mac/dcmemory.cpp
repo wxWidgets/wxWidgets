@@ -66,6 +66,8 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 			{
 				m_macMask = mask->GetMaskBitmap() ;
 			}
+        	SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , 0 , 0 , m_selected.GetWidth() , m_selected.GetHeight() ) ;
+        	CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
  			m_ok = TRUE ;
  		}
  		else

@@ -306,7 +306,7 @@ WXWidget wxTopLevelWindowMac::MacGetContainerForEmbedding()
 void wxTopLevelWindowMac::MacUpdate( long timestamp)
 {
 
-    wxMacPortStateHelper help( GetWindowPort( (WindowRef) m_macWindow) ) ;
+    wxMacPortStateHelper help( (GrafPtr) GetWindowPort( (WindowRef) m_macWindow) ) ;
 
     BeginUpdate( (WindowRef)m_macWindow ) ;
 

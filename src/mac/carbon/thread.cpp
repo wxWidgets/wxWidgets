@@ -35,6 +35,9 @@
 #include "wx/thread.h"
 
 #ifdef __WXMAC__
+#ifndef __DARWIN__
+#include <Threads.h>
+#endif
 #include "wx/mac/uma.h"
 #endif
 

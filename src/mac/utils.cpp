@@ -30,6 +30,11 @@
 #include "MoreFilesExtras.h"
 
 #ifndef __DARWIN__
+#include <Threads.h>
+#include <Sound.h>
+#endif
+
+#ifndef __DARWIN__
 // defined in unix/utilsunx.cpp for Mac OS X
 
 // get full hostname (with domain name if possible)

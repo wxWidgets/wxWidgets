@@ -10,6 +10,8 @@
 #      include <PMCore.h>
 #    endif
 #    include <PMApplication.h>
+#  else
+#    include <Printing.h>
 #  endif
 #endif
 
@@ -121,8 +123,17 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
   if ( menuMgrAttr & gestaltMenuMgrAquaLayoutMask )
     sUMAHasAquaLayout = true ;
   sUMASystemInitialized = true ;
+
 }
 
+/*
+Boolean CanUseATSUI()
+	{
+	long result;
+	OSErr err = Gestalt(gestaltATSUVersion, &result);
+	return (err == noErr);
+	}
+*/
 // process manager
 long UMAGetProcessMode() 
 {

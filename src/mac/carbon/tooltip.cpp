@@ -225,7 +225,7 @@ void wxMacToolTip::Draw()
 */
 #endif
 	  {
-   		wxMacPortStateHelper help( GetWindowPort( m_window ) );
+   		wxMacPortStateHelper help( (GrafPtr) GetWindowPort( m_window ) );
  
   		m_shown = true ;
 
@@ -333,7 +333,7 @@ void wxMacToolTip::Clear()
 		 
 	if ( m_window == s_ToolTipWindowRef && m_backpict )
 	{
-		wxMacPortStateHelper help( GetWindowPort(m_window) ) ;
+		wxMacPortStateHelper help( (GrafPtr) GetWindowPort(m_window) ) ;
 
 		m_shown = false ;
 

@@ -23,6 +23,9 @@
 #include "wx/intl.h"
 
 #include "wx/mac/private.h"
+#ifndef __DARWIN__
+#include <Scrap.h>
+#endif
 
 #define wxUSE_DATAOBJ 1
 

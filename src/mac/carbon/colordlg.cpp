@@ -21,6 +21,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxColourDialog, wxDialog)
 #endif
 
 #include "wx/mac/private.h"
+#ifndef __DARWIN__
+#include <ColorPicker.h>
+#endif
 
 /*
  * wxColourDialog

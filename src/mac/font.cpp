@@ -23,7 +23,7 @@
 #include "wx/fontutil.h"
 
 #include "wx/mac/private.h"
-
+#include "ATSUnicode.h"
 
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
@@ -116,6 +116,12 @@ void wxFontRefData::MacFindFont()
 	if (m_underlined) 
 		m_macFontStyle |= underline;
 	m_macFontSize = m_pointSize ;
+	
+	//TODO:if we supply the style as an additional parameter we must make a testing
+	//sequence in order to degrade gracefully while trying to maintain most of the style
+	//information, meanwhile we just take the normal font and apply the features after
+	OSStatus status = ::ATSUFONDtoFontID(m_macFontNum, normal /*qdStyle*/, (UInt32*)&m_macATSUFontID); 
+	wxASSERT_MSG( status == noErr , "couldn't retrieve font identifier" ) ;
 }
 
 // ----------------------------------------------------------------------------

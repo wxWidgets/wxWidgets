@@ -42,6 +42,10 @@
   #include <malloc.h>
 #endif
 
+#ifndef __DARWIN__
+#include <Scrap.h>
+#include <MacTextEditor.h>
+#endif
 #include "wx/mac/uma.h"
 
 #define wxUSE_MLTE 0

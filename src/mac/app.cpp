@@ -56,6 +56,12 @@
 #if wxUSE_SOCKETS
     #ifdef __DARWIN__
         #include <CoreServices/CoreServices.h>
+    #else
+        #include <Sound.h>
+        #include <Threads.h>
+        #include <ToolUtils.h>
+        #include <DiskInit.h>
+        #include <Devices.h>
     #endif
 #endif
 
@@ -1160,7 +1166,7 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     GrafPtr port ;
                     GetPort( &port ) ;
                     Point pt = { 0, 0 } ;
-                    SetPort( GetWindowPort(window) ) ;
+                    SetPortWindowPort(window) ;
                     LocalToGlobal( &pt ) ;
                     SetPort( port ) ;
                         win->SetSize( pt.h , pt.v , -1 ,
@@ -1226,7 +1232,7 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                 {
                     GrafPtr port ;
                     GetPort( &port ) ;
-                    SetPort( GetWindowPort(window) ) ;
+                    SetPortWindowPort(window) ;
                     SetPort( port ) ;
                 }
                 if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )

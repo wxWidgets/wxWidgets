@@ -27,6 +27,9 @@
 #include "wx/msgdlg.h"
 #include <math.h>
 #include "wx/mac/uma.h"
+#ifndef __DARWIN__
+#include "Printing.h"
+#endif
 
 #if defined(TARGET_CARBON) && !defined(__DARWIN__)
 #  if PM_USE_SESSION_APIS

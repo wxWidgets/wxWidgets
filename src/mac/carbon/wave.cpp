@@ -19,6 +19,9 @@
 
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
+#ifndef __DARWIN__
+#include <Sound.h>
+#endif
 #endif
 
 wxWave::wxWave()

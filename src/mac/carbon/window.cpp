@@ -46,6 +46,10 @@
 #define MAC_SCROLLBAR_SIZE 16
 
 #include "wx/mac/uma.h"
+#ifndef __DARWIN__
+#include <Windows.h>
+#include <ToolUtils.h>
+#endif
 
 #if  wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"

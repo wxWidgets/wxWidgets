@@ -22,6 +22,9 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 #ifdef __WXMAC__
 #include "wx/mac/private.h"
 #endif
+#ifndef __DARWIN__
+#include <Timer.h>
+#endif
 
 typedef struct MacTimerInfo
 {
