@@ -123,7 +123,9 @@ private:
   size_t        m_buffersize;
   bool          m_deletebufferwhendone;
 
-    DECLARE_NO_COPY_CLASS(wxConnectionBase)
+  // can't use DECLARE_NO_COPY_CLASS(wxConnectionBase) because we already
+  // have copy ctor but still forbid the default assignment operator
+  wxConnectionBase& operator=(const wxConnectionBase&);
 };
 
 

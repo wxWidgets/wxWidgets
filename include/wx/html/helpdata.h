@@ -116,7 +116,7 @@ private:
     bool m_CaseSensitive;
     bool m_WholeWords;
 
-    DECLARE_NO_COPY_CLASS(wxSearchEngine)
+    DECLARE_NO_COPY_CLASS(wxHtmlSearchEngine)
 };
 
 

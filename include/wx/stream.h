@@ -99,7 +99,7 @@ protected:
 
     friend class wxStreamBuffer;
 
-    DECLARE_NO_COPY_CLASS(wxInputStream)
+    DECLARE_NO_COPY_CLASS(wxStreamBase)
 };
 
 // ----------------------------------------------------------------------------

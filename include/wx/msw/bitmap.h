@@ -64,11 +64,12 @@ public:
     // optional mask for transparent drawing
     wxMask       *m_bitmapMask;
 
-    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
-
 #if wxUSE_DIB_FOR_BITMAP
     WXHANDLE     m_hFileMap;	// file mapping handle for large DIB's
 #endif
+
+
+    DECLARE_NO_COPY_CLASS(wxBitmapRefData)
 };
 
 // ----------------------------------------------------------------------------
