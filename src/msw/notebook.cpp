@@ -744,6 +744,15 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     UpdateBgBrush();
 #endif // wxUSE_UXTHEME
 
+    if (GetPageCount() == 0)
+    {
+        // Prevents droppings on resize, but does cause some flicker
+        // when there are no pages.
+        Refresh(false);
+        event.Skip();
+        return;
+    }
+
     // fit all the notebook pages to the tab control's display area
 
     RECT rc;
