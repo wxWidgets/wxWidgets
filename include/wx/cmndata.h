@@ -176,6 +176,8 @@ class WXDLLEXPORT wxPrintData: public wxObject
     void ConvertFromNative();
     void* GetNativeData() const { return m_devMode; }
     void SetNativeData(void* data) { m_devMode = data; }
+    void* GetNativeDataDevNames() const { return m_devNames; }
+    void SetNativeDataDevNames(void* data) { m_devNames = data; }
 #elif defined( __WXMAC__)
   void ConvertToNative();
   void ConvertFromNative();
@@ -184,6 +186,7 @@ class WXDLLEXPORT wxPrintData: public wxObject
 public:
 #ifdef __WXMSW__
     void*           m_devMode;
+    void*           m_devNames;
 #elif defined( __WXMAC__  )
 	THPrint 		m_macPrintInfo ;
 #endif

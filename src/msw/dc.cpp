@@ -261,7 +261,11 @@ void wxDC::Clear()
     }
     else
     {
-        wxCHECK_RET( m_selectedBitmap.Ok(), wxT("this DC can't be cleared") );
+        // No, I think we should simply ignore this if printing on e.g.
+        // a printer DC.
+        // wxCHECK_RET( m_selectedBitmap.Ok(), wxT("this DC can't be cleared") );
+        if (!m_selectedBitmap.Ok())
+            return;
 
         rect.left = 0; rect.top = 0;
         rect.right = m_selectedBitmap.GetWidth();

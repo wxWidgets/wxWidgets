@@ -169,7 +169,8 @@ wxFontData::~wxFontData()
 wxPrintData::wxPrintData()
 {
 #ifdef __WXMSW__
-    m_devMode = NULL;
+    m_devMode = (void*) NULL;
+    m_devNames = (void*) NULL;
 #elif defined( __WXMAC__ )
     m_macPrintInfo = NULL ;
 #endif
@@ -201,7 +202,8 @@ wxPrintData::wxPrintData()
 wxPrintData::wxPrintData(const wxPrintData& printData)
 {
 #ifdef __WXMSW__
-    m_devMode = NULL;
+    m_devMode = (void*) NULL;
+    m_devNames = (void*) NULL;
 #elif defined( __WXMAC__ )
     m_macPrintInfo = NULL ;
 #endif
@@ -212,8 +214,11 @@ wxPrintData::~wxPrintData()
 {
 #ifdef __WXMSW__
     HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
-    if (hDevMode )
+    if ( hDevMode )
         GlobalFree(hDevMode);
+    HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
+    if ( hDevNames )
+        GlobalFree(hDevNames);
 #elif defined(__WXMAC__)
     if ( m_macPrintInfo )
         ::DisposeHandle( (Handle) m_macPrintInfo ) ;
@@ -257,9 +262,40 @@ static wxString wxGetPrintDlgError()
 }
 #endif
 
+static HGLOBAL wxCreateDevNames(const wxString& driverName, const wxString& printerName, const wxString& portName)
+{
+	HGLOBAL hDev = NULL;
+	// if (!driverName.IsEmpty() && !printerName.IsEmpty() && !portName.IsEmpty())
+    if (driverName.IsEmpty() && printerName.IsEmpty() && portName.IsEmpty())
+    {
+    }
+    else
+	{
+		hDev = GlobalAlloc(GPTR, 4*sizeof(WORD)+
+			driverName.Length() + 1 +
+			printerName.Length() + 1 +
+			portName.Length()+1);
+		LPDEVNAMES lpDev = (LPDEVNAMES)GlobalLock(hDev);
+		lpDev->wDriverOffset = sizeof(WORD)*4;
+		wxStrcpy((wxChar*)lpDev + lpDev->wDriverOffset, driverName);
+
+		lpDev->wDeviceOffset = (WORD)(lpDev->wDriverOffset + driverName.Length()+1);
+		wxStrcpy((wxChar*)lpDev + lpDev->wDeviceOffset, printerName);
+
+		lpDev->wOutputOffset = (WORD)(lpDev->wDeviceOffset + printerName.Length()+1);
+		wxStrcpy((wxChar*)lpDev + lpDev->wOutputOffset, portName);
+
+		lpDev->wDefault = 0;
+
+        GlobalUnlock(hDev);
+	}
+	return hDev;
+}
+
 void wxPrintData::ConvertToNative()
 {
     HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
+    HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
     if (!hDevMode)
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
@@ -301,13 +337,19 @@ void wxPrintData::ConvertToNative()
         }
         else
         {
+            hDevMode = pd->hDevMode;
+            m_devMode = (void*)(long) hDevMode;
+            pd->hDevMode = NULL;
+
+            // We'll create a new DEVNAMEs structure below.
             if ( pd->hDevNames )
                 GlobalFree(pd->hDevNames);
             pd->hDevNames = NULL;
 
-            hDevMode = pd->hDevMode;
-            m_devMode = (void*)(long) hDevMode;
-            pd->hDevMode = NULL;
+            // hDevNames = pd->hDevNames;
+            // m_devNames = (void*)(long) hDevNames;
+            // pd->hDevnames = NULL;
+
         }
 
         delete pd;
@@ -426,11 +468,20 @@ void wxPrintData::ConvertToNative()
 
         GlobalUnlock(hDevMode);
     }
+
+    if ( hDevNames )
+    {
+        GlobalFree(hDevNames);
+    }
+
+    // TODO: I hope it's OK to pass some empty strings to DEVNAMES.
+    hDevNames = wxCreateDevNames("", m_printerName, "");
 }
 
 void wxPrintData::ConvertFromNative()
 {
     HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
+    HGLOBAL hDevNames = (HGLOBAL)(DWORD) m_devNames;
 
     if (!hDevMode)
         return;
@@ -598,6 +649,30 @@ void wxPrintData::ConvertFromNative()
             m_printQuality = wxPRINT_QUALITY_HIGH;
 
         GlobalUnlock(hDevMode);
+    }
+
+    if (hDevNames)
+    {
+        LPDEVNAMES lpDevNames = (LPDEVNAMES)GlobalLock(hDevNames);
+        if (lpDevNames)
+        {
+            // TODO: Unicode-ification
+
+            // Get the port name
+            // port is obsolete in WIN32
+            // m_printData.SetPortName((LPSTR)lpDevNames + lpDevNames->wDriverOffset);
+
+            // Get the printer name
+            wxString printerName = (LPSTR)lpDevNames + lpDevNames->wDeviceOffset;
+
+            // Not sure if we should check for this mismatch
+//            wxASSERT_MSG( (m_printerName == "" || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
+
+            if (printerName != "")
+                m_printerName = printerName;
+
+            GlobalUnlock(hDevNames);
+        }
     }
 }
 
@@ -793,11 +868,22 @@ void wxPrintDialogData::ConvertToNative()
         GlobalFree(pd->hDevMode);
     }
 
+    // Pass the devnames data to the PRINTDLG structure, since it'll
+    // be needed when PrintDlg is called.
+    if (pd->hDevNames)
+    {
+        GlobalFree(pd->hDevNames);
+    }
+
     pd->hDevMode = (HGLOBAL)(DWORD) m_printData.GetNativeData();
 
     m_printData.SetNativeData((void*) NULL);
 
     wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+
+    pd->hDevNames = (HGLOBAL)(DWORD) m_printData.GetNativeDataDevNames();
+
+    m_printData.SetNativeDataDevNames((void*) NULL);
 
     pd->hDC = (HDC) NULL;
     pd->nFromPage = (UINT)m_printFromPage;
@@ -815,7 +901,7 @@ void wxPrintDialogData::ConvertToNative()
 #endif
 
     pd->hwndOwner=(HWND)NULL;
-    pd->hDevNames=(HANDLE)NULL;
+//    pd->hDevNames=(HANDLE)NULL;
     pd->hInstance=(HINSTANCE)NULL;
     pd->lCustData = (LPARAM) NULL;
     pd->lpfnPrintHook = NULL;
@@ -861,6 +947,18 @@ void wxPrintDialogData::ConvertFromNative()
         }
         m_printData.SetNativeData((void*)(long) pd->hDevMode);
         pd->hDevMode = NULL;
+    }
+
+    // Pass the devnames data back to the wxPrintData structure where it really belongs.
+    if (pd->hDevNames)
+    {
+        if (m_printData.GetNativeDataDevNames())
+        {
+            // Make sure we don't leak memory
+            GlobalFree((HGLOBAL)(DWORD) m_printData.GetNativeDataDevNames());
+        }
+        m_printData.SetNativeDataDevNames((void*)(long) pd->hDevNames);
+        pd->hDevNames = NULL;
     }
 
     // Now convert the DEVMODE object, passed down from the PRINTDLG object,
@@ -1044,6 +1142,8 @@ wxPageSetupDialogData::~wxPageSetupDialogData()
     PAGESETUPDLG *pd = (PAGESETUPDLG *)m_pageSetupData;
     if ( pd && pd->hDevMode )
         GlobalFree(pd->hDevMode);
+    if ( pd && pd->hDevNames )
+        GlobalFree(pd->hDevNames);
     if ( pd )
         delete pd;
 #elif defined( __WXMAC__ )
@@ -1086,6 +1186,7 @@ void wxPageSetupDialogData::ConvertToNative()
     {
         pd = new PAGESETUPDLG;
         pd->hDevMode = NULL;
+        pd->hDevNames = NULL;
         m_pageSetupData = (void *)pd;
     }
 
@@ -1104,6 +1205,20 @@ void wxPageSetupDialogData::ConvertToNative()
     m_printData.SetNativeData((void*) NULL);
 
     wxASSERT_MSG( (pd->hDevMode), wxT("hDevMode must be non-NULL in ConvertToNative!"));
+
+    // Pass the devnames data (created in m_printData.ConvertToNative)
+    // to the PRINTDLG structure, since it'll
+    // be needed when PrintDlg is called.
+
+    if (pd->hDevNames)
+    {
+        GlobalFree(pd->hDevNames);
+        pd->hDevNames = NULL;
+    }
+
+    pd->hDevNames = (HGLOBAL) m_printData.GetNativeDataDevNames();
+
+    m_printData.SetNativeDataDevNames((void*) NULL);
 
 //        pd->hDevMode = GlobalAlloc(GMEM_MOVEABLE, sizeof(DEVMODE));
 
@@ -1129,7 +1244,7 @@ void wxPageSetupDialogData::ConvertToNative()
 
     pd->lStructSize = sizeof( PAGESETUPDLG );
     pd->hwndOwner=(HWND)NULL;
-    pd->hDevNames=(HWND)NULL;
+//    pd->hDevNames=(HWND)NULL;
     pd->hInstance=(HINSTANCE)NULL;
 
     pd->ptPaperSize.x = m_paperSize.x * 100;
@@ -1180,6 +1295,20 @@ void wxPageSetupDialogData::ConvertFromNative()
         }
         m_printData.SetNativeData((void*) pd->hDevMode);
         pd->hDevMode = NULL;
+    }
+
+    m_printData.ConvertFromNative();
+
+    // Pass the devnames data back to the wxPrintData structure where it really belongs.
+    if (pd->hDevNames)
+    {
+        if (m_printData.GetNativeDataDevNames())
+        {
+            // Make sure we don't leak memory
+            GlobalFree((HGLOBAL) m_printData.GetNativeDataDevNames());
+        }
+        m_printData.SetNativeDataDevNames((void*) pd->hDevNames);
+        pd->hDevNames = NULL;
     }
 
     m_printData.ConvertFromNative();
