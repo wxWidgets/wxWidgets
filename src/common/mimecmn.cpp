@@ -34,8 +34,6 @@
 #ifndef WX_PRECOMP
     #include "wx/module.h"
 #endif
-// this one is needed for MSVC5
-#include "wx/module.h"
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
