@@ -64,11 +64,12 @@ Loads an image from an input stream.
 \begin{twocollist}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_BMP}}}{Load a Windows bitmap file.}
 \twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_PNG}}}{Load a PNG bitmap file.}
+\twocolitem{{\bf \indexit{wxBITMAP\_TYPE\_JPEG}}}{Load a JPEG bitmap file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.
-If all possible wxWindows settings are used, the loading a BMP (Windows bitmap) file
-and a PNG (portable network graphics) file is supported on all platforms that
+If all possible wxWindows settings are used, the loading a BMP (Windows bitmap) file,
+a PNG (portable network graphics) file and a JPEG file is supported on all platforms that
 implement wxImage.}
 
 \wxheading{See also}
@@ -244,8 +245,8 @@ Returns TRUE if there is a mask active, FALSE otherwise.
 \func{static void}{InitStandardHandlers}{\void}
 
 Adds the standard image format handlers, which, depending on wxWindows
-configuration, can be handlers for Windows BMP (loading) and PNG
-(loading and saving) file formats.
+configuration, can be handlers for Windows BMP (loading), PNG
+(loading and saving) and JPEG (loading and saving) file formats.
 
 This function is called by wxWindows on startup.
 
@@ -290,6 +291,7 @@ The meaning of {\it stream} data is determined by the {\it type} parameter.}
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Load a JPEG image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.}
@@ -341,11 +343,12 @@ Saves a image in the given stream.
 
 \docparam{stream}{An output stream. The meaning of {\it stream} is determined by the {\it type} parameter.}
 
-\docparam{type}{Currently only one type can be used:
+\docparam{type}{Currently two types can be used:
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Save a JPEG image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration
@@ -456,6 +459,14 @@ It is used within wxImage and is not normally seen by the application.
 If you wish to extend the capabilities of wxImage, derive a class from wxImageHandler
 and add the handler using \helpref{wxImage::AddHandler}{wximageaddhandler} in your
 application initialisation.
+
+\wxheading{Note (Legal Issue)}
+
+This software is based in part on the work of
+ the Independent JPEG Group.
+
+(Applies when wxWindows is linked with JPEG support. wxJPEGHandler uses libjpeg
+created by IJG.)
 
 \wxheading{Derived from}
 
