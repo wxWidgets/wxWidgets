@@ -18,7 +18,7 @@ THISDIR = $(MMDIR)\lib
 EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
 
 LIBTARGET=$(WXDIR)\lib\mmedia2.lib
-OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj \
+OBJECTS = cdbase.obj cdwin.obj g711.obj g721.obj g723_24.obj sndg72x.obj \
         g723_40.obj g72x.obj sndbase.obj sndcodec.obj sndpcm.obj \
         sndcpcm.obj sndulaw.obj sndfile.obj sndwav.obj sndaiff.obj sndwin.obj \
         vidbase.obj
