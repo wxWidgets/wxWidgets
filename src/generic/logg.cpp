@@ -44,6 +44,7 @@
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
     #include "wx/button.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_LOGGUI || wxUSE_LOGWINDOW
