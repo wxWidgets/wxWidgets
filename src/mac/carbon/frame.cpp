@@ -100,6 +100,7 @@ bool wxFrame::Create(wxWindow *parent,
   m_frameToolBar = NULL ;
 #endif
   m_frameStatusBar = NULL;
+  m_winLastFocused = NULL ;
 
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE));
 
@@ -259,10 +260,21 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 {
     if ( !event.GetActive() )
     {
-        event.Skip();
-        return;
-    }
+       // remember the last focused child
+        m_winLastFocused = FindFocus();
+        while ( m_winLastFocused )
+        {
+            if ( GetChildren().Find(m_winLastFocused) )
+                break;
 
+            m_winLastFocused = m_winLastFocused->GetParent();
+        }
+
+        event.Skip();
+    }
+	else
+	{
+/*
     for ( wxWindowList::Node *node = GetChildren().GetFirst();
           node;
           node = node->GetNext() )
@@ -273,7 +285,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
         // restore focus
         wxWindow *child = node->GetData();
 
-        if ( !child->IsTopLevel()
+        if ( !child->IsTopLevel() && child->AcceptsFocus()
 #if wxUSE_TOOLBAR
              && !wxDynamicCast(child, wxToolBar)
 #endif // wxUSE_TOOLBAR
@@ -286,11 +298,14 @@ void wxFrame::OnActivate(wxActivateEvent& event)
             break;
         }
     }
-    
-    if ( m_frameMenuBar != NULL )
-    {
-    	m_frameMenuBar->MacInstallMenuBar() ;
-    }
+   */
+    	wxSetFocusToChild(this, &m_winLastFocused);
+
+	    if ( m_frameMenuBar != NULL )
+	    {
+	    	m_frameMenuBar->MacInstallMenuBar() ;
+	    }
+	}
 }
 
 void wxFrame::DoGetClientSize(int *x, int *y) const

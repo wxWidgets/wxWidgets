@@ -65,7 +65,7 @@ BEGIN_EVENT_TABLE(wxWindow, wxEvtHandler)
   EVT_SYS_COLOUR_CHANGED(wxWindow::OnSysColourChanged)
   EVT_INIT_DIALOG(wxWindow::OnInitDialog)
   EVT_IDLE(wxWindow::OnIdle)
-//  EVT_SCROLL(wxWindow::OnScroll)
+  EVT_SET_FOCUS(wxWindow::OnSetFocus)
 END_EVENT_TABLE()
 
 #endif
@@ -205,6 +205,9 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
 void wxWindow::SetFocus()
 {
+	if ( gFocusWindow == this )
+		return ;
+		
 	if ( AcceptsFocus() )
 	{
 		if (gFocusWindow )
@@ -510,6 +513,14 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 	DoSetSize( x,y, width, height ) ;
 }
 
+// set the size of the window: if the dimensions are positive, just use them,
+// but if any of them is equal to -1, it means that we must find the value for
+// it ourselves (unless sizeFlags contains wxSIZE_ALLOW_MINUS_ONE flag, in
+// which case -1 is a valid value for x and y)
+//
+// If sizeFlags contains wxSIZE_AUTO_WIDTH/HEIGHT flags (default), we calculate
+// the width/height to best suit our contents, otherwise we reuse the current
+// width/height
 void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
 
@@ -531,11 +542,49 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
       actualX = currentX;
   if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
       actualY = currentY;
-  if (width == -1)
+  
+  wxSize size( -1 , -1 ) ;
+  
+  if (width == -1 || height == -1 )
+  {
+  	size = DoGetBestSize() ;
+  }
+  
+  if ( width == -1 )
+  {
+  	if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+    {
+      actualWidth = size.x ;	
+      if ( actualWidth == -1 )
+      	actualWidth = 80 ;
+    }
+    else
+    {
       actualWidth = currentW ;
+    }
+  }
   if (height == -1)
+  {
+  	if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+  	{
+  		actualHeight = size.y ;
+  		if ( actualHeight == -1 )
+  			actualHeight = 26 ;
+  	}
+  	else 
+  	{
       actualHeight = currentH ;
+    }
+  }
 
+    if ((m_minWidth != -1) && (actualWidth < m_minWidth)) 
+    	actualWidth = m_minWidth;
+    if ((m_minHeight != -1) && (actualHeight < m_minHeight)) 
+    	actualHeight = m_minHeight;
+    if ((m_maxWidth != -1) && (actualWidth > m_maxWidth)) 
+    	actualWidth = m_maxWidth;
+    if ((m_maxHeight != -1) && (actualHeight > m_maxHeight)) 
+    	actualHeight = m_maxHeight;
 	if ( actualX == currentX && actualY == currentY && actualWidth == currentW && actualHeight == currentH)
 	{
 		MacRepositionScrollBars() ; // we might have a real position shift
@@ -1363,6 +1412,30 @@ wxObject* wxWindow::GetChild(int number) const
 }
 #endif // WXWIN_COMPATIBILITY
 
+void wxWindow::OnSetFocus(wxFocusEvent& event)
+{
+    // panel wants to track the window which was the last to have focus in it,
+    // so we want to set ourselves as the window which last had focus
+    //
+    // notice that it's also important to do it upwards the tree becaus
+    // otherwise when the top level panel gets focus, it won't set it back to
+    // us, but to some other sibling
+    wxWindow *win = this;
+    while ( win )
+    {
+        wxWindow *parent = win->GetParent();
+        wxPanel *panel = wxDynamicCast(parent, wxPanel);
+        if ( panel )
+        {
+            panel->SetLastFocus(win);
+        }
+
+        win = parent;
+    }
+
+    event.Skip();
+}
+
 void wxWindow::Clear()
 {
 	if ( m_macWindowData )
@@ -1527,6 +1600,13 @@ bool wxWindow::MacDispatchMouseEvent(wxMouseEvent& event)
 	{
 		m_cursor.MacInstall() ;
 	}
+	
+	if ( event.GetEventType() == wxEVT_LEFT_DOWN )
+	{
+    	// set focus to this window
+        if (AcceptsFocus() && FindFocus()!=this)
+        	SetFocus();
+    }
 
 #if wxUSE_TOOLTIPS
     if ( event.GetEventType() == wxEVT_MOTION 

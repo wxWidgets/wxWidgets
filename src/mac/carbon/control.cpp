@@ -761,10 +761,12 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
 	
 		controlpart = FindControl( localwhere , window , &control ) ;
 		{
+		/*
 			if ( AcceptsFocus() && FindFocus() != this )
 			{
 				SetFocus() ;
 			}
+		*/
 			if ( control && UMAIsControlActive( control ) )
 			{
 				{

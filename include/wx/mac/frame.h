@@ -125,6 +125,8 @@ protected:
 #if wxUSE_STATUSBAR
     static bool           m_useNativeStatusBar;
 #endif // wxUSE_STATUSBAR
+    // the last focused child: we restore focus to it on activation
+    wxWindow             *m_winLastFocused;
 
 private:
     DECLARE_EVENT_TABLE()
