@@ -1,16 +1,15 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imagjpeg.cpp
-// Purpose:     wxImage JPEG handler
-// Author:      Vaclav Slavik
+// Name:        imagtiff.cpp
+// Purpose:     wxImage TIFF handler
+// Author:      Robert Roebling
 // RCS-ID:      $Id$
-// Copyright:   (c) Vaclav Slavik
+// Copyright:   (c) Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-/*
-   We don't put pragma implement in this file because it is already present in
-   src/common/image.cpp
-*/
+#ifdef __GNUG__
+#pragma implementation "imagtiff.h"
+#endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -23,7 +22,7 @@
 
 #if wxUSE_LIBTIFF
 
-#include "wx/image.h"
+#include "wx/imagtiff.h"
 #include "wx/bitmap.h"
 #include "wx/debug.h"
 #include "wx/log.h"

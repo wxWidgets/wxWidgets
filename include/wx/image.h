@@ -29,25 +29,6 @@
 //-----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxImageHandler;
-#if wxUSE_LIBPNG
-class WXDLLEXPORT wxPNGHandler;
-#endif
-#if wxUSE_LIBJPEG
-class WXDLLEXPORT wxJPEGHandler;
-#endif
-#if wxUSE_LIBTIFF
-class WXDLLEXPORT wxTIFFHandler;
-#endif
-class WXDLLEXPORT wxBMPHandler;
-#if wxUSE_GIF
-class WXDLLEXPORT wxGIFHandler;
-#endif
-#if wxUSE_PNM
-class WXDLLEXPORT wxPNMHandler;
-#endif
-#if wxUSE_PCX
-class WXDLLEXPORT wxPCXHandler;
-#endif
 class WXDLLEXPORT wxImage;
 
 //-----------------------------------------------------------------------------
@@ -90,193 +71,7 @@ protected:
 
 };
 
-//-----------------------------------------------------------------------------
-// wxPNGHandler
-//-----------------------------------------------------------------------------
 
-#if wxUSE_LIBPNG
-class WXDLLEXPORT wxPNGHandler: public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxPNGHandler)
-
-public:
-
-  inline wxPNGHandler()
-  {
-      m_name = "PNG file";
-      m_extension = "png";
-      m_type = wxBITMAP_TYPE_PNG;
-      m_mime = "image/png";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif
-};
-#endif
-
-//-----------------------------------------------------------------------------
-// wxJPEGHandler
-//-----------------------------------------------------------------------------
-
-#if wxUSE_LIBJPEG
-class WXDLLEXPORT wxJPEGHandler: public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxJPEGHandler)
-
-public:
-
-  inline wxJPEGHandler()
-  {
-      m_name = "JPEG file";
-      m_extension = "jpg";
-      m_type = wxBITMAP_TYPE_JPEG;
-      m_mime = "image/jpeg";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif
-};
-#endif
-
-//-----------------------------------------------------------------------------
-// wxTIFFHandler
-//-----------------------------------------------------------------------------
-
-#if wxUSE_LIBTIFF
-class WXDLLEXPORT wxTIFFHandler: public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxTIFFHandler)
-
-public:
-
-  inline wxTIFFHandler()
-  {
-      m_name = "TIFF file";
-      m_extension = "tif";
-      m_type = wxBITMAP_TYPE_TIF;
-      m_mime = "image/tiff";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
-  virtual int GetImageCount( wxInputStream& stream );
-#endif
-};
-#endif
-
-//-----------------------------------------------------------------------------
-// wxBMPHandler
-//-----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxBMPHandler: public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxBMPHandler)
-
-public:
-
-  inline wxBMPHandler()
-  {
-      m_name = "BMP file";
-      m_extension = "bmp";
-      m_type = wxBITMAP_TYPE_BMP;
-      m_mime = "image/bmp";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif
-};
-
-//-----------------------------------------------------------------------------
-// wxGIFHandler
-//-----------------------------------------------------------------------------
-
-#if wxUSE_GIF
-
-class WXDLLEXPORT wxGIFHandler : public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxGIFHandler)
-
-public:
-
-  inline wxGIFHandler()
-  {
-      m_name = "GIF file";
-      m_extension = "gif";
-      m_type = wxBITMAP_TYPE_GIF;
-      m_mime = "image/gif";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif
-};
-#endif
-
-//-----------------------------------------------------------------------------
-// wxPNMHandler
-//-----------------------------------------------------------------------------
-
-#if wxUSE_PNM
-class WXDLLEXPORT wxPNMHandler : public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxPNMHandler)
-
-public:
-
-  inline wxPNMHandler()
-  {
-      m_name = "PNM file";
-      m_extension = "pnm";
-      m_type = wxBITMAP_TYPE_PNM;
-      m_mime = "image/pnm";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif
-};
-#endif
-
-//-----------------------------------------------------------------------------
-// wxPCXHandler
-//-----------------------------------------------------------------------------
-
-#if wxUSE_PCX
-class WXDLLEXPORT wxPCXHandler : public wxImageHandler
-{
-  DECLARE_DYNAMIC_CLASS(wxPCXHandler)
-
-public:
-
-  inline wxPCXHandler()
-  {
-      m_name = "PCX file";
-      m_extension = "pcx";
-      m_type = wxBITMAP_TYPE_PCX;
-      m_mime = "image/pcx";
-  };
-
-#if wxUSE_STREAMS
-  virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
-  virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
-  virtual bool DoCanRead( wxInputStream& stream );
-#endif // wxUSE_STREAMS
-};
-#endif // wxUSE_PCX
 
 //-----------------------------------------------------------------------------
 // wxImage
@@ -400,7 +195,21 @@ protected:
 
 };
 
+
 extern void WXDLLEXPORT wxInitAllImageHandlers();
+
+
+//-----------------------------------------------------------------------------
+// wxImage handlers
+//-----------------------------------------------------------------------------
+
+#include "wx/imagbmp.h"
+#include "wx/imagpng.h"
+#include "wx/imaggif.h"
+#include "wx/imagpcx.h"
+#include "wx/imagjpeg.h"
+#include "wx/imagtiff.h"
+#include "wx/imagpnm.h"
 
 #endif
   // _WX_IMAGE_H_
