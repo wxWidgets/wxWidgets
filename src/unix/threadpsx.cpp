@@ -778,3 +778,4 @@ void wxMutexGuiLeave()
 {
   gs_mutexGui->Unlock();
 }
+

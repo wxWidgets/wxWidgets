@@ -458,6 +458,7 @@ AC_FUNC_VPRINTF
 dnl check for several standard functions we use if they are available
 AC_CHECK_FUNCS(vsnprintf vfork)
 
+POSIX4_LINK=
 dnl check for usleep() and nanosleep() which is better in MT programs
 dnl AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
 dnl                [
@@ -467,7 +468,9 @@ dnl                    AC_CHECK_FUNCS(usleep))
 dnl                ]
 dnl               )
 AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
-[AC_CHECK_LIB(posix4, nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
+[AC_CHECK_LIB(posix4, nanosleep, [
+	AC_DEFINE(HAVE_NANOSLEEP)
+	POSIX4_LINK="-lposix4" ],
  [AC_CHECK_FUNCS(usleep, AC_DEFINE(HAVE_USLEEP),
                          AC_MSG_WARN(Sleep() function will not work)
   )]
@@ -1435,14 +1438,13 @@ fi
 
 dnl do other tests only if we are using threads
 if test "$wxUSE_THREADS" = "1"; then
-  THREADS_LINK2=""
 
   AC_CHECK_HEADERS(sched.h)
 
   AC_CHECK_LIB($THREADS_LINK, sched_yield,
                AC_DEFINE(HAVE_SCHED_YIELD),
                [AC_CHECK_LIB("posix4", sched_yield,
-                   [AC_DEFINE(HAVE_SCHED_YIELD) THREADS_LINK2="-lposix4"],
+                   [AC_DEFINE(HAVE_SCHED_YIELD) POSIX4_LINK="-lposix4"],
                    AC_MSG_WARN(wxThread::Yield() will not work properly)
                 )]
                )
@@ -1450,7 +1452,7 @@ if test "$wxUSE_THREADS" = "1"; then
   AC_CHECK_LIB($THREADS_LINK, sched_get_priority_min,
                AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS),
                [AC_CHECK_LIB("posix4", sched_get_priority_min,
-                   [AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS) THREADS_LINK2="-lposix4"],
+                   [AC_DEFINE(HAVE_THREAD_PRIORITY_FUNCTIONS) POSIX4_LINK="-lposix4"],
                    AC_MSG_WARN(Setting thread priority will not work)
                 )]
                )
@@ -1459,11 +1461,12 @@ if test "$wxUSE_THREADS" = "1"; then
                AC_DEFINE(HAVE_PTHREAD_CANCEL),
                AC_MSG_WARN(wxThread::Kill() will not work properly))
 
-  THREADS_LINK="-l$THREADS_LINK $THREADS_LINK2"
+  THREADS_LINK="-l$THREADS_LINK"
 fi
 
 AC_SUBST(UNIX_THREAD)
 AC_SUBST(THREADS_LINK)
+AC_SUBST(POSIX4_LINK)
 
 dnl ------------------------------------------------------------------------
 dnl compiler options for shared libs

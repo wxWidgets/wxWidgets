@@ -13,10 +13,6 @@
 #ifndef __THREADH__
 #define __THREADH__
 
-#ifdef __GNUG__
-    #pragma interface "thread.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
@@ -25,6 +21,10 @@
 #include "wx/setup.h"
 
 #if wxUSE_THREADS
+/* otherwise we get undefined references for non-thread case (KB)*/
+#ifdef __GNUG__
+    #pragma interface "thread.h"
+#endif
 
 // Windows headers define it
 #ifdef Yield
