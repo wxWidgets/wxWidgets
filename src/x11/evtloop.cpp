@@ -170,7 +170,7 @@ int wxEventLoop::Run()
 #endif
             if (!m_impl->SendIdleEvent())
             {
-#if 0 // wxUSE_THREADS
+#if wxUSE_THREADS
                 // leave the main loop to give other threads a chance to
                 // perform their GUI work
                 wxMutexGuiLeave();

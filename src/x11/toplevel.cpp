@@ -260,6 +260,18 @@ bool wxTopLevelWindowX11::Show(bool show)
         m_needResizeInIdle = FALSE;
     }
 
+    if (show)
+    {
+        // This does the layout _before_ the
+        // window is shown, else the items are
+        // drawn first at the wrong positions,
+        // then at the correct positions.
+        if (GetAutoLayout())
+        {
+            Layout();
+        }
+    }
+
     return wxWindowX11::Show(show);
 }
 
