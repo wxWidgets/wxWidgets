@@ -1086,22 +1086,16 @@ wxProperty *wxListBoxPropertyInfo::GetProperty(wxString& name)
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(listBox);
     if (!resource)
       return NULL;
+
+    char *mult = "wxLB_SINGLE";
       
-    char *mult = "wxSINGLE";
-      
-    switch (resource->GetValue1())
-    {
-      case wxLB_MULTIPLE:
+    if ((listBox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0)
         mult = "wxLB_MULTIPLE";
-        break;
-      case wxLB_EXTENDED:
+    else if ((listBox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)
         mult = "wxLB_EXTENDED";
-        break;
-      default:
-      case wxLB_SINGLE:
+    else
         mult = "wxLB_SINGLE";
-        break;
-    }
+
     return new wxProperty("multiple", mult, "string",
        new wxStringListValidator(new wxStringList("wxLB_SINGLE", "wxLB_MULTIPLE", "wxLB_EXTENDED",
           NULL)));
@@ -1128,17 +1122,21 @@ bool wxListBoxPropertyInfo::SetProperty(wxString& name, wxProperty *property)
   }
   else if (name == "multiple")
   {
-    int mult = wxLB_SINGLE;
+    SetWindowStyle(m_propertyWindow, wxLB_SINGLE, FALSE);
+    SetWindowStyle(m_propertyWindow, wxLB_MULTIPLE, FALSE);
+    SetWindowStyle(m_propertyWindow, wxLB_EXTENDED, FALSE);
+
     wxString str(property->GetValue().StringValue());
     if (str == "wxLB_MULTIPLE")
-      mult = wxLB_MULTIPLE;
+      SetWindowStyle(m_propertyWindow, wxLB_MULTIPLE, TRUE);
     else if (str == "wxLB_EXTENDED")
-      mult = wxLB_EXTENDED;
+      SetWindowStyle(m_propertyWindow, wxLB_EXTENDED, TRUE);
     else
-      mult = wxLB_SINGLE;
+      SetWindowStyle(m_propertyWindow, wxLB_SINGLE, TRUE);
+
     wxItemResource *resource = wxResourceManager::GetCurrentResourceManager()->FindResourceForWindow(listBox);
     if (resource)
-      resource->SetValue1(mult);
+      resource->SetStyle(m_propertyWindow->GetWindowStyleFlag());
     wxResourceManager::GetCurrentResourceManager()->RecreateWindowFromResource(listBox, this);
     return TRUE;
   }

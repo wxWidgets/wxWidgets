@@ -310,7 +310,9 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource* it
           node = node->Next();
         }
       }
-      stream << "], ";
+      stream << "]";
+/* Styles are now in the window style, not in a separate arg
+      stream << ", ";
       switch (item->GetValue1())
       {
         case wxLB_MULTIPLE:
@@ -330,6 +332,8 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource* it
           break;
         }
       }
+ */
+
       if (item->GetFont().Ok())
       {
         stream << ",\\\n      ";

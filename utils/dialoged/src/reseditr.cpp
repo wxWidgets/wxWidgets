@@ -1020,7 +1020,7 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
 
   if ((panelResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0)
   {
-    wxPoint pt = panel->ConvertPixelsToDialog(pt);
+    wxPoint pt = panel->ConvertPixelsToDialog(wxPoint(x, y));
     res->SetSize(pt.x, pt.y, -1, -1);
   }
   else res->SetSize(x, y, -1, -1);
@@ -1158,6 +1158,16 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
     }
   if (!newItem)
     return FALSE;
+
+  int actualW, actualH;
+  newItem->GetSize(&actualW, &actualH);
+  wxSize actualSize(actualW, actualH);
+
+  if ((panelResource->GetResourceStyle() & wxRESOURCE_DIALOG_UNITS) != 0)
+  {
+    actualSize = panel->ConvertPixelsToDialog(actualSize);
+  }
+  res->SetSize(res->GetX(), res->GetY(), actualSize.x, actualSize.y);
 
   wxString newIdName;
   int id = GenerateWindowId(prefix, newIdName);
@@ -1759,7 +1769,7 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
   wxWindow *parent = win->GetParent();
   wxItemResource* parentResource = NULL;
   if (parent)
-    FindResourceForWindow(parent);
+    parentResource = FindResourceForWindow(parent);
   
   if (win->IsKindOf(CLASSINFO(wxPanel)))
   {

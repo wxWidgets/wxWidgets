@@ -433,6 +433,12 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     int width = size.x;
     int height = size.y;
 
+    // To be consistent with wxGTK
+    if (width == -1)
+        width = 20;
+    if (height == -1)
+        height = 20;
+
     wxSystemSettings settings;
 
     m_backgroundColour = settings.GetSystemColour(wxSYS_COLOUR_WINDOW) ; ;

@@ -927,7 +927,7 @@ void wxGenericGrid::AdjustScrollbars(void)
   int noHorizSteps = 0;
   int noVertSteps = 0;
   
-  if (m_totalGridWidth <= cw)
+  if (m_totalGridWidth + vertScrollBarWidth <= cw)
     noHorizSteps = 0;
   else
   {
@@ -954,7 +954,7 @@ void wxGenericGrid::AdjustScrollbars(void)
     
     noHorizSteps += nx;
   }
-  if (m_totalGridHeight <= ch)
+  if (m_totalGridHeight + horizScrollBarHeight <= ch)
     noVertSteps = 0;
   else
   {
@@ -981,7 +981,7 @@ void wxGenericGrid::AdjustScrollbars(void)
     noVertSteps += ny;
   }
   
-  if (m_totalGridWidth <= cw)
+  if (m_totalGridWidth + vertScrollBarWidth <= cw)
   {
 	if ( m_hScrollBar )
     	m_hScrollBar->Show(FALSE);
@@ -993,7 +993,7 @@ void wxGenericGrid::AdjustScrollbars(void)
     	m_hScrollBar->Show(TRUE);
   }
 
-  if (m_totalGridHeight <= ch)
+  if (m_totalGridHeight + horizScrollBarHeight <= ch)
   {
 	if ( m_vScrollBar )
     	m_vScrollBar->Show(FALSE);

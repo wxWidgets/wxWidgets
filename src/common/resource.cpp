@@ -960,26 +960,31 @@ wxItemResource *wxResourceInterpretControl(wxResourceTable& table, wxExpr *expr)
       }
       controlItem->SetStringValues(stringList);
      count ++;
-
+// This is now obsolete: it's in the window style.
       // Check for wxSINGLE/wxMULTIPLE
       wxExpr *mult = (wxExpr *) NULL;
+/*
       controlItem->SetValue1(wxLB_SINGLE);
+*/
       if ((mult = expr->Nth(count)) && ((mult->Type() == PrologString)||(mult->Type() == PrologWord)))
       {
+/*
         wxString m(mult->StringValue());
-        if (m == "wxMULTIPLE")
+        if (m == "wxLB_MULTIPLE")
           controlItem->SetValue1(wxLB_MULTIPLE);
-        else if (m == "wxEXTENDED")
+        else if (m == "wxLB_EXTENDED")
           controlItem->SetValue1(wxLB_EXTENDED);
+*/
+       // Ignore the value
        count ++;
-        if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-       {
-          // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+      }
+      if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
+      {
+         // controlItem->SetLabelFont(wxResourceInterpretFontSpec(expr->Nth(count)));
          count ++;
-          if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
-            controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
-       }
-     }
+         if (expr->Nth(count) && expr->Nth(count)->Type() == PrologList)
+           controlItem->SetFont(wxResourceInterpretFontSpec(expr->Nth(count)));
+      }
    }
   }
   else if (controlType == "wxChoice")

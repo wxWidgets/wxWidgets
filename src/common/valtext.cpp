@@ -42,6 +42,8 @@ BEGIN_EVENT_TABLE(wxTextValidator, wxValidator)
 END_EVENT_TABLE()
 #endif
 
+static bool wxIsNumeric(const wxString& val);
+
 wxTextValidator::wxTextValidator(long style, wxString *val)
 {
 	m_validatorStyle = style ;
@@ -169,7 +171,8 @@ bool wxTextValidator::Validate(wxWindow *parent)
 			wxMessageBox(buf,_("Validation conflict"), wxOK | wxICON_EXCLAMATION, parent);
 			return FALSE;
 	}
-	if ( (m_validatorStyle & wxFILTER_NUMERIC) && !val.IsNumber())
+	if ( (m_validatorStyle & wxFILTER_NUMERIC) && !wxIsNumeric(val))
+
 	{
 			char buf[512];
 			sprintf(buf, _("%s should be numeric."), (const char *)val);
@@ -291,4 +294,14 @@ void wxTextValidator::OnChar(wxKeyEvent& event)
 	textCtrl->wxTextCtrl::OnChar(event);
 }
 
+static bool wxIsNumeric(const wxString& val)
+{
+	int i;
+	for ( i = 0; i < (int)val.Length(); i++)
+	{
+		if ((!isdigit(val[i])) && (val[i] != '.'))
+			return FALSE;
+	}
+	return TRUE;
+}
 

@@ -86,6 +86,9 @@ Add centring, right justify styles to wxStaticText.
 Synchronize drawing functions on all platforms, using Chris's
 code to test them.
 
+Extend wxSystemSettings to get symbols for current nationality,
+e.g. ',' instead of '.' for decimal points.
+
 LOW PRIORITY
 ------------
 
