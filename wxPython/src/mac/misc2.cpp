@@ -6041,6 +6041,81 @@ static void *SwigwxPyProcessTowxObject(void *ptr) {
     return (void *) dest;
 }
 
+static PyObject *_wrap_wxProcess_Kill(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxKillError  _result;
+    int  _arg0;
+    wxSignal  _arg1 = (wxSignal ) (wxSIGTERM);
+    char *_kwnames[] = { "pid","sig", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i|i:wxProcess_Kill",_kwnames,&_arg0,&_arg1)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxKillError )wxPyProcess::Kill(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxProcess_Exists(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    int  _arg0;
+    char *_kwnames[] = { "pid", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxProcess_Exists",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxPyProcess::Exists(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxProcess_Open(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyProcess * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "cmd", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_Open",_kwnames,&_obj0)) 
+        return NULL;
+{
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (wxPyProcess *)wxPyProcess::Open(*_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyProcess_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
+}
+
 #define new_wxProcess(_swigarg0,_swigarg1) (new wxPyProcess(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxProcess(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -10317,6 +10392,9 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxProcess__setCallbackInfo", (PyCFunction) _wrap_wxProcess__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcess_Destroy", (PyCFunction) _wrap_wxProcess_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxProcess", (PyCFunction) _wrap_new_wxProcess, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_Open", (PyCFunction) _wrap_wxProcess_Open, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_Exists", (PyCFunction) _wrap_wxProcess_Exists, METH_VARARGS | METH_KEYWORDS },
+	 { "wxProcess_Kill", (PyCFunction) _wrap_wxProcess_Kill, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcessEvent_m_exitcode_get", (PyCFunction) _wrap_wxProcessEvent_m_exitcode_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcessEvent_m_exitcode_set", (PyCFunction) _wrap_wxProcessEvent_m_exitcode_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxProcessEvent_m_pid_get", (PyCFunction) _wrap_wxProcessEvent_m_pid_get, METH_VARARGS | METH_KEYWORDS },
@@ -10739,6 +10817,28 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxTraceMessages", PyInt_FromLong((long) wxTraceMessages));
 	 PyDict_SetItemString(d,"wxTraceResAlloc", PyInt_FromLong((long) wxTraceResAlloc));
 	 PyDict_SetItemString(d,"wxTraceRefCount", PyInt_FromLong((long) wxTraceRefCount));
+	 PyDict_SetItemString(d,"wxKILL_OK", PyInt_FromLong((long) wxKILL_OK));
+	 PyDict_SetItemString(d,"wxKILL_BAD_SIGNAL", PyInt_FromLong((long) wxKILL_BAD_SIGNAL));
+	 PyDict_SetItemString(d,"wxKILL_ACCESS_DENIED", PyInt_FromLong((long) wxKILL_ACCESS_DENIED));
+	 PyDict_SetItemString(d,"wxKILL_NO_PROCESS", PyInt_FromLong((long) wxKILL_NO_PROCESS));
+	 PyDict_SetItemString(d,"wxKILL_ERROR", PyInt_FromLong((long) wxKILL_ERROR));
+	 PyDict_SetItemString(d,"wxSIGNONE", PyInt_FromLong((long) wxSIGNONE));
+	 PyDict_SetItemString(d,"wxSIGHUP", PyInt_FromLong((long) wxSIGHUP));
+	 PyDict_SetItemString(d,"wxSIGINT", PyInt_FromLong((long) wxSIGINT));
+	 PyDict_SetItemString(d,"wxSIGQUIT", PyInt_FromLong((long) wxSIGQUIT));
+	 PyDict_SetItemString(d,"wxSIGILL", PyInt_FromLong((long) wxSIGILL));
+	 PyDict_SetItemString(d,"wxSIGTRAP", PyInt_FromLong((long) wxSIGTRAP));
+	 PyDict_SetItemString(d,"wxSIGABRT", PyInt_FromLong((long) wxSIGABRT));
+	 PyDict_SetItemString(d,"wxSIGIOT", PyInt_FromLong((long) wxSIGIOT));
+	 PyDict_SetItemString(d,"wxSIGEMT", PyInt_FromLong((long) wxSIGEMT));
+	 PyDict_SetItemString(d,"wxSIGFPE", PyInt_FromLong((long) wxSIGFPE));
+	 PyDict_SetItemString(d,"wxSIGKILL", PyInt_FromLong((long) wxSIGKILL));
+	 PyDict_SetItemString(d,"wxSIGBUS", PyInt_FromLong((long) wxSIGBUS));
+	 PyDict_SetItemString(d,"wxSIGSEGV", PyInt_FromLong((long) wxSIGSEGV));
+	 PyDict_SetItemString(d,"wxSIGSYS", PyInt_FromLong((long) wxSIGSYS));
+	 PyDict_SetItemString(d,"wxSIGPIPE", PyInt_FromLong((long) wxSIGPIPE));
+	 PyDict_SetItemString(d,"wxSIGALRM", PyInt_FromLong((long) wxSIGALRM));
+	 PyDict_SetItemString(d,"wxSIGTERM", PyInt_FromLong((long) wxSIGTERM));
 	 PyDict_SetItemString(d,"wxEVT_END_PROCESS", PyInt_FromLong((long) wxEVT_END_PROCESS));
 	 PyDict_SetItemString(d,"wxEXEC_ASYNC", PyInt_FromLong((long) wxEXEC_ASYNC));
 	 PyDict_SetItemString(d,"wxEXEC_SYNC", PyInt_FromLong((long) wxEXEC_SYNC));
