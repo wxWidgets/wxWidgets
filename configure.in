@@ -6076,6 +6076,19 @@ AC_SUBST(HOST_SUFFIX)
 AC_SUBST(CPPUNIT_CFLAGS)
 AC_SUBST(CPPUNIT_LIBS)
 
+case "$TOOLKIT" in
+    GTK)
+        TOOLKIT_USER="GTK+"
+        if test "$WXGTK20" = 1; then
+            TOOLKIT_USER="$TOOLKIT_USER 2"
+        fi
+        ;;
+
+    *)
+        TOOLKIT_USER=$TOOLKIT_LOWERCASE
+        ;;
+esac
+
 AC_BAKEFILE
 
 
@@ -6368,11 +6381,11 @@ done
 
 AC_OUTPUT
 
-dnl report on what we decided to do
+dnl report how we have been configured
 echo
 echo "Configured wxWidgets ${WX_VERSION} for \`${host}'"
 echo ""
-echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_LOWERCASE:-base only}"
+echo "  Which GUI toolkit should wxWidgets use?                 ${TOOLKIT_USER:-base only}"
 echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITHIC:-yes}"
 
 echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
