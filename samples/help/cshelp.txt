@@ -1,9 +1,0 @@
-.topic IDH_PANEL
-This is the topic for the main panel.
-
-.topic IDH_TEXT
-This is the topic for the text control.
-
-.topic IDH_OK
-This is the topic for the OK button.
-
