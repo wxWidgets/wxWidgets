@@ -420,7 +420,7 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
         if (scroll_window->hscrollbar_visible)
         {
             dh += 15;   /* dh += hscrollbar->allocation.height; */
-            dw += scroll_class->scrollbar_spacing;
+            dh += scroll_class->scrollbar_spacing;
         }
     }
 
@@ -2068,7 +2068,7 @@ void wxWindow::DoSetClientSize( int width, int height )
             if (scroll_window->hscrollbar_visible)
             {
                 dh += 15;   /* dh += hscrollbar->allocation.height; */
-                dw += scroll_class->scrollbar_spacing;
+                dh += scroll_class->scrollbar_spacing;
             }
        }
 

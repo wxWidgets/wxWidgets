@@ -1340,13 +1340,6 @@ dnl  JPEG_LINK="-ljpeg"
 dnl fi
 AC_SUBST(JPEG_LINK)
 
-IODBC_C_SRC=""
-if test "$wxUSE_ODBC" = 1 ; then
-  AC_DEFINE_UNQUOTED(wxUSE_ODBC,$wxUSE_ODBC)
-  IODBC_C_SRC="\$(IODBC_C_SRC)"
-fi
-AC_SUBST(IODBC_C_SRC)
-
 dnl ----------------------------------------------------------------
 dnl thread support
 dnl ----------------------------------------------------------------
@@ -1522,6 +1515,7 @@ dnl wxLibrary class
 dnl ------------------------------------------------------------------------
 
 HAVE_DL_FUNCS=0
+HAVE_SHL_FUNCS=0
 if test "$wxUSE_DYNLIB_CLASS" = "1"; then
     dnl the test is a bit complicated because we check for dlopen() both with
     dnl and without -ldl
@@ -1529,11 +1523,12 @@ if test "$wxUSE_DYNLIB_CLASS" = "1"; then
         [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1],
         [AC_CHECK_LIB(dl, dlopen,
             [AC_DEFINE(HAVE_DLOPEN) HAVE_DL_FUNCS=1])])
-    AC_CHECK_FUNCS(shl_load, [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1])
+    AC_CHECK_FUNCS( shl_load, 
+                    [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1 HAVE_SHL_FUNCS=1])
 
     if test "$HAVE_DL_FUNCS" = 0; then
-        AC_MSG_WARN("--with-dynlib will be disabled because no function was found to load a shared library on this platform")
-
+        AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
+        wxUSE_ODBC=0
         wxUSE_DYNLIB_CLASS=0
     fi
 fi
@@ -1541,6 +1536,17 @@ fi
 if test "$wxUSE_DYNLIB_CLASS" = 1 ; then
   AC_DEFINE_UNQUOTED(wxUSE_DYNLIB_CLASS,$wxUSE_DYNLIB_CLASS)
 fi
+
+dnl ----------------------------------------------------------------
+dnl iODBC support
+dnl ----------------------------------------------------------------
+
+IODBC_C_SRC=""
+if test "$wxUSE_ODBC" = 1 ; then
+  AC_DEFINE_UNQUOTED(wxUSE_ODBC,$wxUSE_ODBC)
+  IODBC_C_SRC="\$(IODBC_C_SRC)"
+fi
+AC_SUBST(IODBC_C_SRC)
 
 dnl ----------------------------------------------------------------
 dnl Register Prolog and Resources options for makefiles and setup.h
@@ -1744,17 +1750,37 @@ case "${canonical}" in
     PICFLAGS=
 esac
 
-if test "x$GCC" = xyes; then
+dnl ------------------------------------------------------------------------
+dnl compiler flags for C++ and C
+dnl ------------------------------------------------------------------------
+
+dnl if test "x$GCC" = xyes; then
+dnl   CFLAGS="${CFLAGS} -Wall -Wno-unused -Wno-uninitialized -D_REENTRANT -DLEX_SCANNER -DHAVE_LIBDL"
+dnl fi
+dnl 
+dnl if test "x$GXX" = xyes; then
+dnl   if test "$wxUSE_MOTIF" = 1; then
+dnl     CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused -D_REENTRANT"
+dnl   else
+dnl     CXXFLAGS="${CXXFLAGS} -Wall -D_REENTRANT"
+dnl   fi
+dnl fi
+
+if test "$HAVE_SHL_FUNCS" = 1; then
+  CFLAGS="${CFLAGS} -Wall -Wno-unused -Wno-uninitialized -D_REENTRANT -DLEX_SCANNER -DHAVE_SHL_LOAD"
+else
   CFLAGS="${CFLAGS} -Wall -Wno-unused -Wno-uninitialized -D_REENTRANT -DLEX_SCANNER -DHAVE_LIBDL"
 fi
 
-if test "x$GXX" = xyes; then
-  if test "$wxUSE_MOTIF" = 1; then
-    CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused -D_REENTRANT"
-  else
-    CXXFLAGS="${CXXFLAGS} -Wall -D_REENTRANT"
-  fi
+if test "$wxUSE_MOTIF" = 1; then
+  CXXFLAGS="${CXXFLAGS} -Wall -Wno-unused -D_REENTRANT"
+else
+  CXXFLAGS="${CXXFLAGS} -Wall -D_REENTRANT"
 fi
+
+dnl ------------------------------------------------------------------------
+dnl maybe comeone can enlighten me what this does..
+dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_SHARED" != 1; then
     CREATE_SHARED=

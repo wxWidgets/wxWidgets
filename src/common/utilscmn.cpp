@@ -355,8 +355,8 @@ StringMatch (char *str1, char *str2, bool subString, bool exact)
   return FALSE;
 }
 
-// Synthesize KeyUp events holding down a key and producing
-// KeyDown events with autorepeat. On by default an always
+// Don't synthesize KeyUp events holding down a key and producing
+// KeyDown events with autorepeat. On by default and always on
 // on in wxMSW. wxGTK version in utilsgtk.cpp.
 #ifndef __WXGTK__
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
