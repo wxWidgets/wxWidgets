@@ -27,9 +27,6 @@
 // classes
 //-----------------------------------------------------------------------------
 
-//class wxDirItemData;
-class wxDirCtrl;
-
 //-----------------------------------------------------------------------------
 // Extra styles for wxGenericDirCtrl
 //-----------------------------------------------------------------------------
@@ -110,9 +107,6 @@ public:
 
     inline wxString GetDefaultPath() const { return m_defaultPath; }
     void SetDefaultPath(const wxString& path) { m_defaultPath = path; }
-
-    //inline long GetStyleEx() const { return m_styleEx; }
-    //void SetStyleEx(long styleEx) { m_styleEx = styleEx; }
 
     // Get dir or filename
     wxString GetPath() const ;

@@ -39,13 +39,13 @@
 WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
 
 
-wxXmlResource::wxXmlResource(bool use_locale = TRUE)
+wxXmlResource::wxXmlResource(bool use_locale)
 {
     m_Handlers.DeleteContents(TRUE);
     m_UseLocale = use_locale;
 }
     
-wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale = TRUE)
+wxXmlResource::wxXmlResource(const wxString& filemask, bool use_locale)
 {
     m_UseLocale = use_locale;
     m_Handlers.DeleteContents(TRUE);
@@ -836,7 +836,7 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent, bool this_hnd_only)
 }
 
 
-void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL)
+void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode)
 {
     wxXmlNode *root;
     if (rootnode == NULL) root = m_Node; else root = rootnode;

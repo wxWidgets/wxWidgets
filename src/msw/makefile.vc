@@ -750,6 +750,8 @@ $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/w
         cd $(DOCDIR)/latex/wx
         -erase wx.ph
         hc wx
+        -erase $(DOCDIR)\winhelp\wx.hlp
+        -erase $(DOCDIR)\winhelp\wx.cnt
         move wx.hlp $(DOCDIR)\winhelp\wx.hlp
         move wx.cnt $(DOCDIR)\winhelp\wx.cnt
         cd $(THISDIR)
@@ -801,6 +803,7 @@ $(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx.htm $(DOCDIR)\html\wx\wx.hhp
 	cd $(DOCDIR)\html\wx
 	-hhc wx.hhp
     -mkdir ..\..\htmlhelp
+    -erase $(DOCDIR)\htmlhelp\wx.chm
     move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
