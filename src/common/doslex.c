@@ -252,7 +252,9 @@ static int my_unput(char);
 	if ( (result = read( fileno(yyin), (char *) buf, max_size )) < 0 ) \
 	    YY_FATAL_ERROR( "read() in flex scanner failed" );
 #else
-# undef unput
+# ifndef unput
+#  undef unput
+# endif
 # define unput(_c) my_unput(_c)
 #endif
 

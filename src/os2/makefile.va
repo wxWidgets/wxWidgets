@@ -226,7 +226,6 @@ COMMONOBJS = \
   ..\common\$D\mstream.obj \
   ..\common\$D\object.obj \
   ..\common\$D\objstrm.obj \
-  ..\common\$D\odbc.obj \
   ..\common\$D\paper.obj \
   ..\common\$D\prntbase.obj \
   ..\common\$D\process.obj \
@@ -326,7 +325,6 @@ COMLIBOBJS2 = \
   mstream.obj \
   object.obj \
   objstrm.obj \
-  odbc.obj \
   paper.obj \
   prntbase.obj \
   process.obj \
@@ -354,10 +352,10 @@ COMLIBOBJS2 = \
   url.obj \
   utilscmn.obj \
   valgen.obj \
-  validate.obj
+  validate.obj \
+  valtext.obj 
 
 COMLIBOBJS3 = \
-  valtext.obj \
   variant.obj \
   wfstream.obj \
   wincmn.obj \
@@ -630,7 +628,6 @@ $(COMLIBOBJS2):
   copy ..\common\$D\mstream.obj
   copy ..\common\$D\object.obj
   copy ..\common\$D\objstrm.obj
-  copy ..\common\$D\odbc.obj
   copy ..\common\$D\paper.obj
   copy ..\common\$D\prntbase.obj
   copy ..\common\$D\process.obj
@@ -659,9 +656,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\utilscmn.obj
   copy ..\common\$D\valgen.obj
   copy ..\common\$D\validate.obj
+  copy ..\common\$D\valtext.obj
 
 $(COMLIBOBJS3):
-  copy ..\common\$D\valtext.obj
   copy ..\common\$D\variant.obj
   copy ..\common\$D\wfstream.obj
   copy ..\common\$D\wincmn.obj

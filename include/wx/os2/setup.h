@@ -19,28 +19,24 @@
 // define this to 0 when building wxBase library
 #define wxUSE_GUI            1
 
-#define WXWIN_COMPATIBILITY  0
-                                // Compatibility with 1.68 API.
-                                // Level 0: no backward compatibility, all new features
-                                // Level 1: Some compatibility. In fact
-                                // the compatibility code is now very minimal so there
-                                // is little advantage to setting it to 1.
-
 // ----------------------------------------------------------------------------
 // General features
 // ----------------------------------------------------------------------------
 
-#define wxUSE_NET_API          0 // Utilize OS/2's UPM netapi's
+#define wxUSE_PCX              1 // Utilize PCX images
+
+#define wxUSE_PNM              1 // Utilize PNM images
+
+#define wxUSE_GIF              1 // Utilize GIF images
+
+#if defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )
+#define wxUSE_LONG_LONG        1
+#endif
+
+#define wxUSE_NET_API          1 // Utilize OS/2's UPM netapi's
 
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
-
-#define WXWIN_COMPATIBILITY  0
-                                // Compatibility with 1.68 API.
-                                // Level 0: no backward compatibility, all new features
-                                // Level 1: Some compatibility. In fact
-                                // the compatibility code is now very minimal so there
-                                // is little advantage to setting it to 1.
 
 #define wxUSE_POSTSCRIPT  1
                             // 0 for no PostScript device context
@@ -70,8 +66,6 @@
 #define wxUSE_DRAG_AND_DROP 1
                                 // 0 for no drag and drop
 
-#define wxUSE_TOOLBAR       1
-                                    // Define 1 to use toolbar classes
 #define wxUSE_BUTTONBAR     1
                                     // Define 1 to use buttonbar classes (enhanced toolbar
                                     // for MS Windows)
@@ -106,9 +100,6 @@
 
 #define wxUSE_CHECKLISTBOX 1
                                     // Define 1 to compile check listbox
-
-#define wxUSE_CHOICE 1
-                                    // Define 1 to compile choice
 
 #define wxUSE_CARET       1
                                     // Define 1 to use wxCaret class
@@ -173,7 +164,7 @@
                                   // Some databases/ODBC drivers only allow forward scrolling cursors.
                                   // Unless you specifically want to use backward scrolling
                                   // cursors, and you know that all of the databases/ODBC drivers
-                                  // that you will use these odbc classes with allow backward 
+                                  // that you will use these odbc classes with allow backward
                                   // scrolling cursors, this setting should remain set to 1
                                   // for maximum database/driver compatibilty
 
@@ -285,8 +276,6 @@
                                     // MS C7 memory bug. Bounds checker
                                     // complains about deallocating
                                     // arrays of wxPoints if wxPoint is a class.
-
-#define wxUSE_DRAG_AND_DROP 1
 
 #define wxUSE_PORTABLE_FONTS_IN_OS2  0
                                 // Define 1 to use new portable font scheme in Windows

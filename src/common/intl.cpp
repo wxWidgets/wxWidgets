@@ -310,7 +310,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName0)
    wxString szName = szName0;
    if(szName.Find('.') != -1) // contains a dot
       szName = szName.Left(szName.Find('.'));
-   
+
   // FIXME VZ: I forgot the exact meaning of LC_PATH - anyone to remind me?
   // KB: search path where to find the mo files, probably : delimited
 #if 0
@@ -418,7 +418,13 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
 
     size_t32 nIncr = 1 + (nHashVal % (m_nHashSize - 2));
 
-    while ( TRUE ) {
+#if defined(__VISAGECPP__)
+// VA just can't stand while(1) or while(TRUE)
+    bool bOs2var = TRUE;
+    while(bOs2var) {
+#else
+    while (1) {
+#endif
       size_t32 nStr = Swap(m_pHashTable[nIndex]);
       if ( nStr == 0 )
         return NULL;

@@ -79,8 +79,11 @@
 #define yy_scan_bytes PROIO_scan_bytes
 #define yy_flex_debug PROIO_flex_debug
 #define yy_flush_buffer PROIO_flush_buffer
+#if !defined(__VISAGECPP__)
+// multiply defined???
 #define yyleng PROIO_yyleng
 #define yytext PROIO_yytext
+#endif
 
 #ifdef __cplusplus
 extern "C" {

@@ -96,7 +96,7 @@ wxString wxHTTP::GetHeader(const wxString& header)
   wxString upper_header;
 
   upper_header = header.Upper();
-  
+
   node = m_headers.Find(upper_header);
   if (!node)
     return wxEmptyString;
@@ -130,7 +130,13 @@ bool wxHTTP::ParseHeaders()
   m_headers.Clear();
   m_read = TRUE;
 
-  while (1) {
+#if defined(__VISAGECPP__)
+// VA just can't stand while(1)
+    bool bOs2var = TRUE;
+    while(bOs2var) {
+#else
+    while (1) {
+#endif
     m_perr = GetLine(this, line);
     if (m_perr != wxPROTO_NOERR)
       return FALSE;
@@ -197,7 +203,7 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
   // If there is no User-Agent defined, define it.
   if (GetHeader(wxT("User-Agent")).IsNull())
-    SetHeader(wxT("User-Agent"), wxT("wxWindows 2.x")); 
+    SetHeader(wxT("User-Agent"), wxT("wxWindows 2.x"));
 
   switch (req) {
   case wxHTTP_GET:

@@ -3,7 +3,7 @@
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
 // Version:     3.03
-// RCS-ID:      
+// RCS-ID:
 // Copyright:   (c) Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "wx/gifdecod.h"
- 
+
 
 //---------------------------------------------------------------------------
 // wxGIFDecoder constructor and destructor
@@ -131,7 +131,7 @@ bool wxGIFDecoder::ConvertToImage(wxImage *image) const
     return TRUE;
 }
 
-                 
+
 //---------------------------------------------------------------------------
 // Data accessors
 //---------------------------------------------------------------------------
@@ -202,7 +202,7 @@ bool wxGIFDecoder::GoNextFrame(bool cyclic)
     }
     else
         return FALSE;
-}            
+}
 
 bool wxGIFDecoder::GoPrevFrame(bool cyclic)
 {
@@ -293,7 +293,7 @@ int wxGIFDecoder::getcode(int bits, int ab_fin)
         /* adjust total number of bits extracted from the buffer */
         m_restbits = m_restbits + 8;
     }
-    
+
     /* find number of bits remaining for next code */
     m_restbits = (m_restbits - bits);
 
@@ -509,7 +509,13 @@ int wxGIFDecoder::ReadGIF()
     pprev = NULL;
     pimg  = NULL;
 
+#if defined(__VISAGECPP__)
+// VA just can't stand while(1)
+    bool bOs2var = TRUE;
+    while(bOs2var)
+#else
     while (1)
+#endif
     {
         type = (unsigned char)m_f->GetC();
 
@@ -537,7 +543,7 @@ int wxGIFDecoder::ReadGIF()
             }
             else
             /* other extension, skip */
-            {   
+            {
                 while ((i = (unsigned char)m_f->GetC()) != 0)
                 {
                     /* This line should not be neccessary!
