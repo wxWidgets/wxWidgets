@@ -91,7 +91,10 @@ bool wxCheckBox::GetValue(void) const
 
 void wxCheckBox::SetFont( const wxFont &font )
 {
-  m_font = font;
+  if (((wxFont*)&font)->Ok())
+    m_font = font;
+  else
+    m_font = *wxSWISS_FONT;
   
   GtkButton *bin = GTK_BUTTON( m_widget );
   GtkWidget *label = bin->child;

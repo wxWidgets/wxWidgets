@@ -22,14 +22,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticBox,wxControl)
 
 wxStaticBox::wxStaticBox(void)
 {
-};
+}
 
 wxStaticBox::wxStaticBox( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
   Create( parent, id, label, pos, size, style, name );
-};
+}
 
 bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label,
       const wxPoint &pos, const wxSize &size,
@@ -47,4 +47,4 @@ bool wxStaticBox::Create( wxWindow *parent, wxWindowID id, const wxString &label
   Show( TRUE );
 
   return TRUE;
-};
+}

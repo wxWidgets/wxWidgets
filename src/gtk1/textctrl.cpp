@@ -431,7 +431,10 @@ bool wxTextCtrl::IsOwnGtkWindow( GdkWindow *window )
 
 void wxTextCtrl::SetFont( const wxFont &font )
 {
-  m_font = font;
+  if (((wxFont*)&font)->Ok())
+    m_font = font;
+  else
+    m_font = *wxSWISS_FONT;
   
   GtkStyle *style = (GtkStyle*) NULL;
   if (!m_hasOwnStyle)

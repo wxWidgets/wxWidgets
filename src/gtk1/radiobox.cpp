@@ -53,6 +53,10 @@ static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRad
 
 IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
 
+BEGIN_EVENT_TABLE(wxRadioBox, wxControl)
+  EVT_SIZE(wxRadioBox::OnSize)
+END_EVENT_TABLE()
+
 wxRadioBox::wxRadioBox(void)
 {
 }
@@ -116,6 +120,24 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   Show( TRUE );
     
   return TRUE;
+}
+
+void wxRadioBox::OnSize( wxSizeEvent &WXUNUSED(event) )
+{
+  int x = m_x+5;
+  int y = m_y+15;
+  
+  GSList *item = gtk_radio_button_group( m_radio );
+  while (item)
+  {
+    GtkWidget *button = GTK_WIDGET( item->data );
+    
+    gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
+    
+    y += 20;
+    
+    item = item->next;
+  }
 }
 
 bool wxRadioBox::Show( bool show )

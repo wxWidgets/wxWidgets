@@ -81,6 +81,8 @@ class wxRadioBox: public wxControl
     void SetNumberOfRowsOrCols( int n );
     void SetFont( const wxFont &font );
 
+    void OnSize( wxSizeEvent &event );
+    
   // implementation    
     
     bool            m_alreadySent;
@@ -88,6 +90,8 @@ class wxRadioBox: public wxControl
   private:
   
     GtkRadioButton *m_radio;
+    
+  DECLARE_EVENT_TABLE()    
     
 };
 

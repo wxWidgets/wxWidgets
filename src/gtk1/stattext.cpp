@@ -23,14 +23,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxStaticText,wxControl)
 
 wxStaticText::wxStaticText(void)
 {
-};
+}
 
 wxStaticText::wxStaticText( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos, const wxSize &size, 
       long style, const wxString &name )
 {
   Create( parent, id, label, pos, size, style, name );
-};
+}
 
 bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &label, 
       const wxPoint &pos, const wxSize &size, 
@@ -95,7 +95,7 @@ bool wxStaticText::Create( wxWindow *parent, wxWindowID id, const wxString &labe
   Show( TRUE );
     
   return TRUE;
-};
+}
 
 wxString wxStaticText::GetLabel(void) const
 {
@@ -103,11 +103,11 @@ wxString wxStaticText::GetLabel(void) const
   gtk_label_get( GTK_LABEL(m_widget), &str );
   wxString tmp( str );
   return tmp;
-};
+}
 
 void wxStaticText::SetLabel( const wxString &label )
 {
   wxControl::SetLabel(label);
 
   gtk_label_set( GTK_LABEL(m_widget), m_label );
-};
+}

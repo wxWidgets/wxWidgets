@@ -62,7 +62,9 @@ wxStatusBar::wxStatusBar(void)
 
 wxStatusBar::~wxStatusBar(void)
 {
+#ifdef __WXMSW__
     SetFont(wxNullFont);
+#endif
 
 	if ( m_statusWidths )
 		delete[] m_statusWidths;
