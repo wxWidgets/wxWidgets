@@ -139,7 +139,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
   wxBeginBusyCursor();
 
   wxWindow *win = CreateAbortWindow(parent, printout);
-  wxYield();
+  wxSafeYield(win,true);
 
   if (!win)
   {
@@ -150,7 +150,7 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
   }
   sm_abortWindow = win;
   sm_abortWindow->Show(TRUE);
-  wxYield();
+  wxSafeYield(win,true);
 
   printout->OnBeginPrinting();
   
@@ -181,8 +181,8 @@ bool wxMacPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
       {
 		GrafPtr thePort ;
 		GetPort( &thePort ) ;
-		wxYield() ;
-		SetPort( thePort ) ;
+		wxSafeYield(win,true);
+        SetPort( thePort ) ;
 
         dc->StartPage();
         keepGoing = printout->OnPrintPage(pn);
