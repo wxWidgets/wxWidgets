@@ -100,7 +100,33 @@ public:
 
 WX_DECLARE_EXPORTED_HASH_MAP(unsigned long, wxImageHistogramEntry,
                              wxIntegerHash, wxIntegerEqual,
-                             wxImageHistogram);
+                             wxImageHistogramBase);
+
+class wxImageHistogram : public wxImageHistogramBase
+{
+public:
+    wxImageHistogram() : wxImageHistogramBase(256) { }
+
+    // get the key in the histogram for the given RGB values
+    static unsigned long MakeKey(unsigned char r,
+                                 unsigned char g,
+                                 unsigned char b)
+    {
+        return (r << 16) | (g << 8) | b;
+    }
+
+    // find first colour that is not used in the image and has higher
+    // RGB values than RGB(startR, startG, startB)
+    //
+    // returns true and puts this colour in r, g, b (each of which may be NULL)
+    // on success or returns false if there are no more free colours
+    bool FindFirstUnusedColour(unsigned char *r,
+                               unsigned char *g,
+                               unsigned char *b,
+                               unsigned char startR = 1,
+                               unsigned char startG = 0,
+                               unsigned char startB = 0 ) const;
+};
 
 //-----------------------------------------------------------------------------
 // wxImage
@@ -176,6 +202,9 @@ public:
     unsigned char GetGreen( int x, int y ) const;
     unsigned char GetBlue( int x, int y ) const;
 
+    void SetAlpha(int x, int y, unsigned char alpha);
+    unsigned char GetAlpha(int x, int y);
+
     // find first colour that is not used in the image and has higher
     // RGB values than <startR,startG,startB>
     bool FindFirstUnusedColour( unsigned char *r, unsigned char *g, unsigned char *b,
@@ -210,9 +239,15 @@ public:
     int GetWidth() const;
     int GetHeight() const;
 
-    char unsigned *GetData() const;
-    void SetData( char unsigned *data );
-    void SetData( char unsigned *data, int new_width, int new_height );
+    // these functions provide fastest access to wxImage data but should be
+    // used carefully as no checks are done
+    unsigned char *GetData() const;
+    void SetData( unsigned char *data );
+    void SetData( unsigned char *data, int new_width, int new_height );
+
+    unsigned char *GetAlpha() const;    // may return NULL!
+    bool HasAlpha() const { return GetAlpha() != NULL; }
+    void SetAlpha(unsigned char *alpha = NULL);
 
     // Mask functions
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );

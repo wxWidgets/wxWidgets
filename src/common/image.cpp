@@ -50,18 +50,25 @@ class wxImageRefData: public wxObjectRefData
 {
 public:
     wxImageRefData();
-    ~wxImageRefData();
+    virtual ~wxImageRefData();
 
     int             m_width;
     int             m_height;
     unsigned char  *m_data;
+
     bool            m_hasMask;
     unsigned char   m_maskRed,m_maskGreen,m_maskBlue;
+
+    // alpha channel data, may be NULL for the formats without alpha support
+    unsigned char  *m_alpha;
+
     bool            m_ok;
     bool            m_static;
+
 #if wxUSE_PALETTE
     wxPalette       m_palette;
 #endif // wxUSE_PALETTE
+
     wxArrayString   m_optionNames;
     wxArrayString   m_optionValues;
 
@@ -72,19 +79,24 @@ wxImageRefData::wxImageRefData()
 {
     m_width = 0;
     m_height = 0;
-    m_data = (unsigned char*) NULL;
-    m_ok = FALSE;
+    m_data =
+    m_alpha = (unsigned char *) NULL;
+
     m_maskRed = 0;
     m_maskGreen = 0;
     m_maskBlue = 0;
     m_hasMask = FALSE;
+
+    m_ok = FALSE;
     m_static = FALSE;
 }
 
 wxImageRefData::~wxImageRefData()
 {
-    if (m_data && !m_static)
+    if ( !m_static )
         free( m_data );
+
+    free(m_alpha);
 }
 
 wxList wxImage::sm_handlers;
@@ -198,7 +210,7 @@ wxImage wxImage::Copy() const
 
     image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
 
-    char unsigned *data = image.GetData();
+    unsigned char *data = image.GetData();
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
@@ -331,7 +343,7 @@ wxImage wxImage::Scale( int width, int height ) const
     }
     image.Create( width, height );
 
-    char unsigned *data = image.GetData();
+    unsigned char *data = image.GetData();
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
@@ -342,8 +354,8 @@ wxImage wxImage::Scale( int width, int height ) const
                              M_IMGDATA->m_maskBlue );
     }
 
-    char unsigned *source_data = M_IMGDATA->m_data;
-    char unsigned *target_data = data;
+    unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data = data;
 
 #if 0
     // This is nonsense, RR.
@@ -402,7 +414,7 @@ wxImage wxImage::Rotate90( bool clockwise ) const
 
     image.Create( M_IMGDATA->m_height, M_IMGDATA->m_width );
 
-    char unsigned *data = image.GetData();
+    unsigned char *data = image.GetData();
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
@@ -412,8 +424,8 @@ wxImage wxImage::Rotate90( bool clockwise ) const
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
 
-    char unsigned *source_data = M_IMGDATA->m_data;
-    char unsigned *target_data;
+    unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data;
 
     for (long j = 0; j < height; j++)
     {
@@ -439,7 +451,7 @@ wxImage wxImage::Mirror( bool horizontally ) const
 
     image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
 
-    char unsigned *data = image.GetData();
+    unsigned char *data = image.GetData();
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
@@ -449,8 +461,8 @@ wxImage wxImage::Mirror( bool horizontally ) const
     long height = M_IMGDATA->m_height;
     long width  = M_IMGDATA->m_width;
 
-    char unsigned *source_data = M_IMGDATA->m_data;
-    char unsigned *target_data;
+    unsigned char *source_data = M_IMGDATA->m_data;
+    unsigned char *target_data;
 
     if (horizontally)
     {
@@ -493,7 +505,7 @@ wxImage wxImage::GetSubImage( const wxRect &rect ) const
 
     image.Create( subwidth, subheight );
 
-    char unsigned *subdata = image.GetData(), *data=GetData();
+    unsigned char *subdata = image.GetData(), *data=GetData();
 
     wxCHECK_MSG( subdata, image, wxT("unable to create image") );
 
@@ -601,7 +613,7 @@ void wxImage::Replace( unsigned char r1, unsigned char g1, unsigned char b1,
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
-    char unsigned *data = GetData();
+    unsigned char *data = GetData();
 
     const int w = GetWidth();
     const int h = GetHeight();
@@ -627,7 +639,7 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
 
     image.Create( M_IMGDATA->m_width, M_IMGDATA->m_height );
 
-    char unsigned *data = image.GetData();
+    unsigned char *data = image.GetData();
 
     wxCHECK_MSG( data, image, wxT("unable to create image") );
 
@@ -642,8 +654,8 @@ wxImage wxImage::ConvertToMono( unsigned char r, unsigned char g, unsigned char 
 
     long size = M_IMGDATA->m_height * M_IMGDATA->m_width;
 
-    char unsigned *srcd = M_IMGDATA->m_data;
-    char unsigned *tard = image.GetData();
+    unsigned char *srcd = M_IMGDATA->m_data;
+    unsigned char *tard = image.GetData();
 
     for ( long i = 0; i < size; i++, srcd += 3, tard += 3 )
     {
@@ -722,14 +734,14 @@ bool wxImage::Ok() const
     return data && data->m_ok && data->m_width && data->m_height;
 }
 
-char unsigned *wxImage::GetData() const
+unsigned char *wxImage::GetData() const
 {
-    wxCHECK_MSG( Ok(), (char unsigned *)NULL, wxT("invalid image") );
+    wxCHECK_MSG( Ok(), (unsigned char *)NULL, wxT("invalid image") );
 
     return M_IMGDATA->m_data;
 }
 
-void wxImage::SetData( char unsigned *data )
+void wxImage::SetData( unsigned char *data )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
 
@@ -749,7 +761,7 @@ void wxImage::SetData( char unsigned *data )
     m_refData = newRefData;
 }
 
-void wxImage::SetData( char unsigned *data, int new_width, int new_height )
+void wxImage::SetData( unsigned char *data, int new_width, int new_height )
 {
     wxImageRefData *newRefData = new wxImageRefData();
 
@@ -776,6 +788,59 @@ void wxImage::SetData( char unsigned *data, int new_width, int new_height )
 
     m_refData = newRefData;
 }
+
+// ----------------------------------------------------------------------------
+// alpha channel support
+// ----------------------------------------------------------------------------
+
+void wxImage::SetAlpha(int x, int y, unsigned char alpha)
+{
+    wxCHECK_RET( Ok() && HasAlpha(), wxT("invalid image or no alpha channel") );
+
+    int w = M_IMGDATA->m_width,
+        h = M_IMGDATA->m_height;
+
+    wxCHECK_RET( x >=0 && y >= 0 && x < w && y < h, wxT("invalid image index") );
+
+    M_IMGDATA->m_alpha[y*w + x] = alpha;
+}
+
+unsigned char wxImage::GetAlpha(int x, int y)
+{
+    wxCHECK_MSG( Ok() && HasAlpha(), 0, wxT("invalid image or no alpha channel") );
+
+    int w = M_IMGDATA->m_width,
+        h = M_IMGDATA->m_height;
+
+    wxCHECK_MSG( x >=0 && y >= 0 && x < w && y < h, 0, wxT("invalid image index") );
+
+    return M_IMGDATA->m_alpha[y*w + x];
+}
+
+void wxImage::SetAlpha( unsigned char *alpha )
+{
+    wxCHECK_RET( Ok(), wxT("invalid image") );
+
+    if ( !alpha )
+    {
+        alpha = (unsigned char *)
+                    malloc(M_IMGDATA->m_width*M_IMGDATA->m_height*3);
+    }
+
+    delete [] M_IMGDATA->m_alpha;
+    M_IMGDATA->m_alpha = alpha;
+}
+
+unsigned char *wxImage::GetAlpha() const
+{
+    wxCHECK_MSG( Ok(), (unsigned char *)NULL, wxT("invalid image") );
+
+    return M_IMGDATA->m_alpha;
+}
+
+// ----------------------------------------------------------------------------
+// mask support
+// ----------------------------------------------------------------------------
 
 void wxImage::SetMaskColour( unsigned char r, unsigned char g, unsigned char b )
 {
@@ -836,73 +901,26 @@ int wxImage::GetHeight() const
     return M_IMGDATA->m_height;
 }
 
-
-bool wxImage::FindFirstUnusedColour(
-            unsigned char *r, unsigned char *g, unsigned char *b,
-            unsigned char startR, unsigned char startG, unsigned char startB) const
-{
-    wxImageHistogram histogram;
-    unsigned long key;
-   
-    ComputeHistogram(histogram);
-    
-    unsigned char r2 = startR;
-    unsigned char g2 = startG;
-    unsigned char b2 = startB;
-    
-    key = (r2 << 16) | (g2 << 8) | b2;
-
-    while ( histogram.find(key) != histogram.end() )
-    {
-        // color already used
-        r2++;
-        if ( r2 >= 255 )
-        {
-            r2 = 0;
-            g2++;
-            if ( g2 >= 255 )
-            {
-                g2 = 0;
-                b2++;
-                if ( b2 >= 255 )
-                {
-                    wxLogError( _("GetUnusedColour:: No Unused Color in image ") );            
-                    return FALSE;                              
-                }
-            }
-        }
-        
-        key = (r2 << 16) | (g2 << 8) | b2;
-    }
-    
-    if (r) *r = r2;
-    if (g) *g = g2;
-    if (b) *b = b2;
-    
-    return TRUE;
-}
-
-
-bool wxImage::SetMaskFromImage(const wxImage& mask, 
+bool wxImage::SetMaskFromImage(const wxImage& mask,
                                unsigned char mr, unsigned char mg, unsigned char mb)
 {
     // check that the images are the same size
     if ( (M_IMGDATA->m_height != mask.GetHeight() ) || (M_IMGDATA->m_width != mask.GetWidth () ) )
     {
-        wxLogError( _("Image and Mask have different sizes") );            
+        wxLogError( _("Image and Mask have different sizes") );
         return FALSE;
     }
-    
+
     // find unused colour
     unsigned char r,g,b ;
     if (!FindFirstUnusedColour(&r, &g, &b))
     {
-        wxLogError( _("No Unused Color in image being masked") );            
+        wxLogError( _("No Unused Color in image being masked") );
         return FALSE ;
     }
-        
-    char unsigned *imgdata = GetData();
-    char unsigned *maskdata = mask.GetData();
+
+    unsigned char *imgdata = GetData();
+    unsigned char *maskdata = mask.GetData();
 
     const int w = GetWidth();
     const int h = GetHeight();
@@ -924,7 +942,7 @@ bool wxImage::SetMaskFromImage(const wxImage& mask,
 
     SetMaskColour(r, g, b);
     SetMask(TRUE);
-    
+
     return TRUE;
 }
 
@@ -1051,7 +1069,7 @@ bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype, int 
 bool wxImage::SaveFile( const wxString& filename ) const
 {
     wxString ext = filename.AfterLast('.').Lower();
-    
+
     wxImageHandler * pHandler = FindHandler(ext, -1);
     if (pHandler)
     {
@@ -1478,7 +1496,69 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #endif // WXWIN_COMPATIBILITY_2_2 && wxUSE_GUI
 
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// image histogram stuff
+// ----------------------------------------------------------------------------
+
+bool
+wxImageHistogram::FindFirstUnusedColour(unsigned char *r,
+                                        unsigned char *g,
+                                        unsigned char *b,
+                                        unsigned char r2,
+                                        unsigned char b2,
+                                        unsigned char g2) const
+{
+    unsigned long key = MakeKey(r2, g2, b2);
+
+    while ( find(key) != end() )
+    {
+        // color already used
+        r2++;
+        if ( r2 >= 255 )
+        {
+            r2 = 0;
+            g2++;
+            if ( g2 >= 255 )
+            {
+                g2 = 0;
+                b2++;
+                if ( b2 >= 255 )
+                {
+                    wxLogError(_("GetUnusedColour:: No Unused Color in image ") );
+                    return FALSE;
+                }
+            }
+        }
+
+        key = MakeKey(r2, g2, b2);
+    }
+
+    if ( r )
+        *r = r2;
+    if ( g )
+        *g = g2;
+    if ( b )
+        *b = b2;
+
+    return TRUE;
+}
+
+bool
+wxImage::FindFirstUnusedColour(unsigned char *r,
+                               unsigned char *g,
+                               unsigned char *b,
+                               unsigned char r2,
+                               unsigned char b2,
+                               unsigned char g2) const
+{
+    wxImageHistogram histogram;
+
+    ComputeHistogram(histogram);
+
+    return histogram.FindFirstUnusedColour(r, g, b, r2, g2, b2);
+}
+
+
 
 // GRG, Dic/99
 // Counts and returns the number of different colours. Optionally stops
@@ -1504,7 +1584,7 @@ unsigned long wxImage::CountColours( unsigned long stopafter ) const
         r = *(p++);
         g = *(p++);
         b = *(p++);
-        key = (r << 16) | (g << 8) | b;
+        key = wxImageHistogram::MakeKey(r, g, b);
 
         if (h.Get(key) == NULL)
         {
@@ -1519,24 +1599,22 @@ unsigned long wxImage::CountColours( unsigned long stopafter ) const
 
 unsigned long wxImage::ComputeHistogram( wxImageHistogram &h ) const
 {
-    unsigned char r, g, b;
-    unsigned char *p;
-    unsigned long size, nentries, key;
+    unsigned char *p = GetData();
+    unsigned long nentries = 0;
 
     h.clear();
 
-    p = GetData();
-    size = GetWidth() * GetHeight();
-    nentries = 0;
+    const unsigned long size = GetWidth() * GetHeight();
 
-    for (unsigned long j = 0; j < size; j++)
+    unsigned char r, g, b;
+    for ( unsigned long n = 0; n < size; n++ )
     {
-        r = *(p++);
-        g = *(p++);
-        b = *(p++);
-        key = (r << 16) | (g << 8) | b;
+        r = *p++;
+        g = *p++;
+        b = *p++;
 
-        wxImageHistogramEntry& entry = h[key];
+        wxImageHistogramEntry& entry = h[wxImageHistogram::MakeKey(r, g, b)];
+
         if ( entry.value++ == 0 )
             entry.index = nentries++;
     }

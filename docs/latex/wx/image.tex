@@ -15,6 +15,22 @@ be drawn in a device context, using \helpref{wxDC::DrawBitmap}{wxdcdrawbitmap}.
 One colour value of the image may be used as a mask colour which will lead to the automatic
 creation of a \helpref{wxMask}{wxmask} object associated to the bitmap object.
 
+\wxheading{Alpha channel support}
+
+Starting from wxWindows 2.5.0 wxImage supports alpha channel data, that is in
+addition to a byte for the red, green and blue colour components for each pixel
+it also stores a byte representing the pixel opacity. The alpha value of $0$
+corresponds to a transparent pixel (null opacity) while the value of $255$
+means that the pixel is 100\% opaque.
+
+Unlike the RGB data, not all images have the alpha channel and before using 
+\helpref{GetAlpha}{wximagegetalpha} you should check if this image contains
+alpha value with \helpref{HasAlpha}{wximagehasalpha}. In fact, currently only
+images loaded from PNG files with transparency information will have alpha
+channel but support for it will be added to the other formats as well (as well
+as support for saving images with alpha channel which is not still implemented
+neither).
+
 \wxheading{Available image handlers}
 
 The following image handlers are available. {\bf wxBMPHandler} is always
@@ -25,7 +41,7 @@ handler with \helpref{wxImage::AddHandler}{wximageaddhandler} or
 \twocolwidtha{5cm}%
 \begin{twocollist}
 \twocolitem{\indexit{wxBMPHandler}}{For loading and saving, always installed.}
-\twocolitem{\indexit{wxPNGHandler}}{For loading and saving.}
+\twocolitem{\indexit{wxPNGHandler}}{For loading (including alpha support) and saving.}
 \twocolitem{\indexit{wxJPEGHandler}}{For loading and saving.}
 \twocolitem{\indexit{wxGIFHandler}}{Only for loading, due to legal issues.}
 \twocolitem{\indexit{wxPCXHandler}}{For loading and saving (see below).}
@@ -337,6 +353,25 @@ A pointer to the handler if found, NULL otherwise.
 
 \helpref{wxImageHandler}{wximagehandler}
 
+\membersection{wxImage::GetAlpha}\label{wximagegetalpha}
+
+\constfunc{unsigned char}{GetAlpha}{\param{int}{ x}, \param{int}{ y}}
+
+Returns the alpha value for the given pixel. This function may only be called
+for the images with alpha channel, use \helpref{HasAlpha}{wximagehasalpha} to
+check for this.
+
+The returned value is the {\it opacity} of the image, i.e. the value of $0$
+corresponds to the transparent pixels while the value of $255$ -- to the opaque
+ones.
+
+\constfunc{unsigned char *}{GetAlpha}{\void}
+
+Returns pointer to the array storing the alpha values for this image. This
+pointer is {\tt NULL} for the images without the alpha channel. If the image
+does have it, this pointer may be used to directly manipulate the alpha values
+which are stored as the \helpref{RGB}{wximagegetdata} ones.
+
 \membersection{wxImage::GetBlue}\label{wximagegetblue}
 
 \constfunc{unsigned char}{GetBlue}{\param{int}{ x}, \param{int}{ y}}
@@ -349,7 +384,9 @@ Returns the blue intensity at the given coordinate.
 
 Returns the image data as an array. This is most often used when doing
 direct image manipulation. The return value points to an array of
-characters in RGBRGBRGB$\ldots$ format.
+characters in RGBRGBRGB$\ldots$ format in the top-to-bottom, left-to-right
+order, that is the first RGB triplet corresponds to the pixel $(0, 0)$, the
+second one --- to $(0, 1)$ and so on.
 
 You should not delete the returned pointer nor pass it to
 \helpref{wxImage::SetData}{wximagesetdata}.
@@ -462,6 +499,16 @@ Gets the width of the image in pixels.
 \wxheading{See also}
 
 \helpref{wxImage::GetHeight}{wximagegetheight}
+
+\membersection{wxImage::HasAlpha}\label{wximagehasalpha}
+
+\constfunc{bool}{HasAlpha}{\void}
+
+Returns true if this image has alpha channel, false otherwise.
+
+\wxheading{See also}
+
+\helpref{GetAlpha}{wximagegetalpha}, \helpref{SetAlpha}{wximagesetalpha}
 
 \membersection{wxImage::HasMask}\label{wximagehasmask}
 
@@ -805,6 +852,23 @@ Example:
 
 \helpref{Rescale}{wximagerescale}
 
+\membersection{wxImage::SetAlpha}\label{wximagesetalpha}
+
+\func{void}{SetAlpha}{\param{unsigned char *}{alpha = {\tt NULL}}}
+
+This function is similar to \helpref{SetData}{wximagesetdata} and has similar
+restrictions. The pointer passed to it may however be {\tt NULL} in which case
+the function will allocate the alpha array internally -- this is useful to add
+alpha channel data to an image which doesn't have any. If the pointer is not 
+{\tt NULL}, it must have one byte for each image pixel and be allocated with 
+{\tt malloc()}. wxImage takes ownership of the pointer and will free it.
+
+\func{void}{SetAlpha}{\param{int }{x}, \param{int }{y}, \param{unsigned char }{alpha}}
+
+Sets the alpha value for the given pixel. This function should only be called
+if the image has alpha channel data, use \helpref{HasAlpha}{wximagehasalpha} to
+check for this.
+
 \membersection{wxImage::SetData}\label{wximagesetdata}
 
 \func{void}{SetData}{\param{unsigned char*}{data}}
@@ -813,7 +877,8 @@ Sets the image data without performing checks. The data given must have
 the size (width*height*3) or results will be unexpected. Don't use this
 method if you aren't sure you know what you are doing.
 
-The data must have been allocated with malloc(), NOT with operator new.
+The data must have been allocated with {\tt malloc()}, {\large \bf NOT} with
+{\tt operator new}.
 
 After this call the pointer to the data is owned by the wxImage object,
 that will be responsible for deleting it.
