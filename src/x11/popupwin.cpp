@@ -31,8 +31,6 @@
 BEGIN_EVENT_TABLE(wxPopupWindow,wxPopupWindowBase)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxPopupWindow, wxWindow)
-
 wxPopupWindow::~wxPopupWindow()
 {
 }
