@@ -839,7 +839,7 @@ void wxDateTime::GetAmPmStrings(wxString *am, wxString *pm)
 {
     tm tm;
     InitTm(tm);
-    char buffer[64];
+    wxChar buffer[64];
     // @Note: Do not call 'CallStrftime' here! CallStrftime checks the return code
     // and causes an assertion failed if the buffer is to small (which is good) - OR -
     // if strftime does not return anything because the format string is invalid - OR -
