@@ -193,6 +193,9 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
     // the other windows reenabled, the activation is going to return to the
     // window which had had it before
     data->winActive->Destroy();
+
+    // also delete the temporary data object itself
+    delete data;
 }
 
 bool wxGUIAppTraits::DoMessageFromThreadWait()
@@ -799,3 +802,33 @@ terminate the program,\r\n\
 }
 
 #endif // wxUSE_EXCEPTIONS
+
+// ----------------------------------------------------------------------------
+// deprecated event loop functions
+// ----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_4
+
+#include "wx/evtloop.h"
+
+void wxApp::DoMessage(WXMSG *pMsg)
+{
+    wxEventLoop *evtLoop = wxEventLoop::GetActive();
+    if ( evtLoop )
+        evtLoop->ProcessMessage(pMsg);
+}
+
+bool wxApp::DoMessage()
+{
+    wxEventLoop *evtLoop = wxEventLoop::GetActive();
+    return evtLoop ? evtLoop->Dispatch() : false;
+}
+
+bool wxApp::ProcessMessage(WXMSG* pMsg)
+{
+    wxEventLoop *evtLoop = wxEventLoop::GetActive();
+    return evtLoop && evtLoop->PreProcessMessage(pMsg);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_4
+
