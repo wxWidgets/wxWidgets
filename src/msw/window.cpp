@@ -1927,34 +1927,74 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         // place edit control from being closed with Escape in a dialog
         if ( msg->message != WM_KEYDOWN || msg->wParam != VK_ESCAPE )
         {
-            // ::IsDialogMessage() can enter in an infinite loop when the
-            // currently focused window is disabled or hidden and its parent
-            // has WS_EX_CONTROLPARENT style, so don't call it in this case
+            // ::IsDialogMessage() is broken and may sometimes hang the
+            // application by going into an infinite loop, so we try to detect
+            // [some of] the situatations when this may happen and not call it
+            // then
+
+            // assume we can call it by default
             bool canSafelyCallIsDlgMsg = TRUE;
 
             HWND hwndFocus = ::GetFocus();
-            while ( hwndFocus )
+
+            // if the currently focused window itself has WS_EX_CONTROLPARENT style, ::IsDialogMessage() will also enter
+            // an infinite loop, because it will recursively check the child
+            // windows but not the window itself and so if none of the children
+            // accepts focus it loops forever (as it only stops when it gets
+            // back to the window it started from)
+            //
+            // while it is very unusual that a window with WS_EX_CONTROLPARENT
+            // style has the focus, it can happen. One such possibility is if
+            // all windows are either toplevel, wxDialog, wxPanel or static
+            // controls and no window can actually accept keyboard input.
+            if ( ::GetWindowLong(hwndFocus, GWL_EXSTYLE) & WS_EX_CONTROLPARENT )
             {
-                if ( !::IsWindowEnabled(hwndFocus) ||
-                        !::IsWindowVisible(hwndFocus) )
+                // passimistic by default
+                canSafelyCallIsDlgMsg = FALSE;
+                for ( wxWindowList::Node *node = GetChildren().GetFirst();
+                      node;
+                      node = node->GetNext() )
                 {
-                    // it would enter an infinite loop if we do this!
-                    canSafelyCallIsDlgMsg = FALSE;
+                    if ( node->GetData()->AcceptsFocus() )
+                    {
+                        // it shouldn't hang...
+                        canSafelyCallIsDlgMsg = TRUE;
 
-                    break;
+                        break;
+                    }
                 }
-
-                if ( !(::GetWindowLong(hwndFocus, GWL_STYLE) & WS_CHILD) )
-                {
-                    // it's a top level window, don't go further -- e.g. even
-                    // if the parent of a dialog is disabled, this doesn't
-                    // break navigation inside the dialog
-                    break;
-                }
-
-                hwndFocus = ::GetParent(hwndFocus);
             }
 
+            if ( canSafelyCallIsDlgMsg )
+            {
+                // ::IsDialogMessage() can enter in an infinite loop when the
+                // currently focused window is disabled or hidden and its
+                // parent has WS_EX_CONTROLPARENT style, so don't call it in
+                // this case
+                while ( hwndFocus )
+                {
+                    if ( !::IsWindowEnabled(hwndFocus) ||
+                            !::IsWindowVisible(hwndFocus) )
+                    {
+                        // it would enter an infinite loop if we do this!
+                        canSafelyCallIsDlgMsg = FALSE;
+
+                        break;
+                    }
+
+                    if ( !(::GetWindowLong(hwndFocus, GWL_STYLE) & WS_CHILD) )
+                    {
+                        // it's a top level window, don't go further -- e.g. even
+                        // if the parent of a dialog is disabled, this doesn't
+                        // break navigation inside the dialog
+                        break;
+                    }
+
+                    hwndFocus = ::GetParent(hwndFocus);
+                }
+            }
+
+            // let IsDialogMessage() have the message if it's safe to call it
             if ( canSafelyCallIsDlgMsg && ::IsDialogMessage(GetHwnd(), msg) )
             {
                 // IsDialogMessage() did something...
