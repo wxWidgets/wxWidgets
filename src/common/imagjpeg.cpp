@@ -356,8 +356,8 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     // 'Quality' is a number between 0 (terrible) and 100 (very good).
     // The default (in jcparam.c, jpeg_set_defaults) is 75,
     // and force_baseline is TRUE.
-    if (image->HasOption(wxT("quality")))
-        jpeg_set_quality(&cinfo, image->GetOptionInt(wxT("quality")), TRUE);
+    if (image->HasOption(wxIMAGE_OPTION_QUALITY))
+        jpeg_set_quality(&cinfo, image->GetOptionInt(wxIMAGE_OPTION_QUALITY), TRUE);
 
     // set the resolution fields in the output file
     UINT16 resX,
