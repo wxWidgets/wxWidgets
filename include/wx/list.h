@@ -273,6 +273,9 @@ protected:
 
     // operations
         // append to end of list
+    wxNodeBase *Prepend(void *object)
+        { return (wxNodeBase *)wxListBase::Insert(object); }
+        // append to beginning of list
     wxNodeBase *Append(void *object);
         // insert a new item at the beginning of the list
     wxNodeBase *Insert(void *object) { return Insert( (wxNodeBase*)NULL, object); }
@@ -538,6 +541,10 @@ public:
         // makes a copy of the string
     wxNode *Add(const wxChar *s)
         { return (wxNode *)wxStringListBase::Append(copystring(s)); }
+        
+        // Append to beginning of list
+    wxNode *Prepend(const wxChar *s)
+        { return (wxNode *)wxStringListBase::Insert(copystring(s)); }
 
     bool Delete(const wxChar *s);
 
