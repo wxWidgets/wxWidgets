@@ -31,7 +31,7 @@
 // System dependent include
 // ---------------------------------------------------------------------------
 
-#ifdef __UNIX__ 
+#if defined(__UNIX__) || defined(__unix__)
 #include <dlfcn.h>
 #endif
 
@@ -71,7 +71,7 @@ wxLibrary::wxLibrary(void *handle)
 wxLibrary::~wxLibrary()
 {
   if (m_handle && m_destroy) {
-#ifdef __UNIX__
+#if defined(__UNIX__) || defined(__unix__)
     dlclose(m_handle);
 #endif
 #ifdef __WINDOWS__
@@ -115,7 +115,7 @@ void wxLibrary::PrepareClasses(wxClassInfo *first)
 
 void *wxLibrary::GetSymbol(const wxString& symbname)
 {
-#ifdef __UNIX__
+#if defined(__UNIX__) || defined(__unix__)
   return dlsym(m_handle, WXSTRINGCAST symbname);
 #endif
 #ifdef __WINDOWS__
@@ -158,7 +158,7 @@ wxLibrary *wxLibraries::LoadLibrary(const wxString& name)
   old_sm_first = wxClassInfo::sm_first;
   wxClassInfo::sm_first = NULL;
 
-#if defined(__UNIX__)
+#if defined(__UNIX__) || defined(__unix__)
   lib_name.Prepend("./lib");
   lib_name += ".so";
 
@@ -199,7 +199,7 @@ wxObject *wxLibraries::CreateObject(const wxString& path)
 
   while (node) {
     obj = ((wxLibrary *)node->Data())->CreateObject(path);
-    if (obj) 
+    if (obj)
       return obj;
 
     node = node->Next();
