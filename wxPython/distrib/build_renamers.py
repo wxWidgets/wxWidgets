@@ -69,7 +69,7 @@ if sys.modules.has_key('wxPython.wx'):
 
 import wx.%s
 
-sys.modules['wxPython.wx']
+sys.modules['wxPython.wx'] = _wx
 del sys, _wx
 
 

@@ -14,7 +14,7 @@ if sys.modules.has_key('wxPython.wx'):
 
 import wx.xrc
 
-sys.modules['wxPython.wx']
+sys.modules['wxPython.wx'] = _wx
 del sys, _wx
 
 
@@ -54,5 +54,6 @@ wxXmlDocument = wx.xrc.XmlDocument
 wxXmlResourceHandler = wx.xrc.XmlResourceHandler
 XRCID   = wx.xrc.XRCID
 XRCCTRL = wx.xrc.XRCCTRL
+wxTheXmlResource = wx.xrc.TheXmlResource
 
 
