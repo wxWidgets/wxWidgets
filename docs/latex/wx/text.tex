@@ -92,8 +92,8 @@ streambuf\\
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{\windowstyle{wxTE\_PROCESS\_ENTER}}{The control will generate
-the message wxEVENT\_TYPE\_TEXT\_ENTER\_COMMAND (otherwise pressing <Enter> is
-either processed internally by the control or used for navigation between
+the message wxEVENT\_TYPE\_TEXT\_ENTER\_COMMAND (otherwise pressing Enter key
+is either processed internally by the control or used for navigation between
 dialog controls).}
 \twocolitem{\windowstyle{wxTE\_PROCESS\_TAB}}{The control will receive
 EVT\_CHAR messages for TAB pressed - normally, TAB is used for passing to the
@@ -269,7 +269,8 @@ generated when the text changes. Notice that this event will always be sent
 when the text controls contents changes - whether this is due to user input or
 comes from the program itself (for example, if SetValue() is called)}
 \twocolitem{{\bf EVT\_TEXT\_ENTER(id, func)}}{Respond to a wxEVT\_COMMAND\_TEXT\_ENTER event,
-generated when enter is pressed in a single-line text control.}
+generated when enter is pressed in a text control (which must have
+wxTE\_PROCESS\_ENTER style for this event to be generated).}
 \twocolitem{{\bf EVT\_TEXT\_URL(id, func)}}{A mouse event occured over an URL
 in the text control (Win32 only)}
 \twocolitem{{\bf EVT\_TEXT\_MAXLEN(id, func)}}{User tried to enter more text
