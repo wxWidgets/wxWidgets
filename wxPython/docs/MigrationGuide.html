@@ -301,13 +301,13 @@ method.  For example, if you had this code before:</p>
 <pre class="literal-block">
 dc.DrawRectangle(x, y, width, height)
 </pre>
-<p>You could either continue to use the <em>Type B</em> method bu changing the
-name to DrawRectabgleXY, or just change it to the new <em>Type A</em> by
+<p>You could either continue to use the <em>Type B</em> method by changing the
+name to DrawRectangleXY, or just change it to the new <em>Type A</em> by
 adding some parentheses like this:</p>
 <pre class="literal-block">
 dc.DrawRectangle((x, y), (width, height))
 </pre>
-<p>Or if you were already using a point and size:</p>
+<p>Or if you were already using a point and size like this:</p>
 <pre class="literal-block">
 dc.DrawRectangle(p.x, p.y, s.width, s.height)
 </pre>
@@ -316,7 +316,7 @@ dc.DrawRectangle(p.x, p.y, s.width, s.height)
 dc.DrawRectangle(p, s)
 </pre>
 <p>Now before you start yelling and screaming at me for breaking all your
-code, take note that I said above &quot;...using the new wx namespace...&quot;
+code, take note that up above I said, &quot;...using the new wx namespace...&quot;
 That's because if you are still importing from wxPython.wx then there
 are some classes defined there with Draw and etc. methods that have
 2.4 compatible signatures.  However if/when the old wxPython.wx
@@ -332,21 +332,21 @@ copies of them.  If you build your own copies of wxPython please be
 aware that you now need to also build the ogl, stc, xrc, and gizmos
 libraries in addition to the main wx lib.</p>
 <p>The wxPython.h and other header files are now in
-.../wxPython/include/wx/wxPython instead of in wxPython/src.  You should
-include it via the &quot;wx/wxPython/wxPython.h&quot; path and add
+.../wxPython/include/wx/wxPython instead of in wxPython/src.  You
+should include it via the &quot;wx/wxPython/wxPython.h&quot; path and add
 .../wxPython/include to your list of include paths.  On OSX and
 unix-like systems the wxPython headers are installed to the same place
-that the wxWidgets headers are installed, so if you building wxPython
-compatible extensions on those platforms then your include path shoudl
-already be set properly.</p>
+that the wxWidgets headers are installed, so if you are building
+wxPython compatible extensions on those platforms then your include
+path should already be set properly.</p>
 <p>If you are also using SWIG for your extension then you'll need to
 adapt how the wxPython .i files are imported into your .i files.  See
 the wxPython sources for examples.  Your modules will need to at least
 <tt class="literal"><span class="pre">%import</span> <span class="pre">core.i</span></tt>, and possibly others if you need the definition of
-other classes.  Since you will need them to build your modules, the
-main wxPython .i files are also installed with the wxPython headers in
-an i_files sibdirectory.  It should be enough to pass a -I/pathname on
-the command line for it to find the files.</p>
+other classes.  Since you will need them to build your modules using
+SWIG, the main wxPython .i files are also installed with the wxPython
+headers in an i_files sibdirectory.  It should be enough to pass a
+-I/pathname on the command line for SWIG to find the files.</p>
 <p>The bulk of wxPython's setup.py has been moved to another module,
 wx/build/config.py.  This module will be installed as part of wxPython
 so 3rd party modules that wish to use the same setup/configuration
@@ -383,7 +383,7 @@ class MyDialog(wx.Dialog):
 <div class="section" id="sizers">
 <h1><a name="sizers">Sizers</a></h1>
 <p>The hack allowing the old &quot;option&quot; keyword parameter has been removed.
-If you use keyworkd args with w.xSizer Add, Insert, or Prepend methods
+If you use keyword args with w.xSizer Add, Insert, or Prepend methods
 then you will need to use the <tt class="literal"><span class="pre">proportion</span></tt> name instead of <tt class="literal"><span class="pre">option</span></tt>.</p>
 <p>When adding a spacer to a sizer you now need to use a wx.Size or a
 2-integer sequence instead of separate width and height parameters.</p>

@@ -332,13 +332,13 @@ method.  For example, if you had this code before::
 
     dc.DrawRectangle(x, y, width, height)
 
-You could either continue to use the *Type B* method bu changing the
-name to DrawRectabgleXY, or just change it to the new *Type A* by
+You could either continue to use the *Type B* method by changing the
+name to DrawRectangleXY, or just change it to the new *Type A* by
 adding some parentheses like this::
 
     dc.DrawRectangle((x, y), (width, height))
 
-Or if you were already using a point and size::
+Or if you were already using a point and size like this::
 
     dc.DrawRectangle(p.x, p.y, s.width, s.height)
 
@@ -347,7 +347,7 @@ Then you can just simplify it like this::
     dc.DrawRectangle(p, s)
 
 Now before you start yelling and screaming at me for breaking all your
-code, take note that I said above "...using the new wx namespace..."
+code, take note that up above I said, "...using the new wx namespace..."
 That's because if you are still importing from wxPython.wx then there
 are some classes defined there with Draw and etc. methods that have
 2.4 compatible signatures.  However if/when the old wxPython.wx
@@ -367,22 +367,22 @@ aware that you now need to also build the ogl, stc, xrc, and gizmos
 libraries in addition to the main wx lib.  
 
 The wxPython.h and other header files are now in
-.../wxPython/include/wx/wxPython instead of in wxPython/src.  You should
-include it via the "wx/wxPython/wxPython.h" path and add
+.../wxPython/include/wx/wxPython instead of in wxPython/src.  You
+should include it via the "wx/wxPython/wxPython.h" path and add
 .../wxPython/include to your list of include paths.  On OSX and
 unix-like systems the wxPython headers are installed to the same place
-that the wxWidgets headers are installed, so if you building wxPython
-compatible extensions on those platforms then your include path shoudl
-already be set properly.
+that the wxWidgets headers are installed, so if you are building
+wxPython compatible extensions on those platforms then your include
+path should already be set properly.
 
 If you are also using SWIG for your extension then you'll need to
 adapt how the wxPython .i files are imported into your .i files.  See
 the wxPython sources for examples.  Your modules will need to at least
 ``%import core.i``, and possibly others if you need the definition of
-other classes.  Since you will need them to build your modules, the
-main wxPython .i files are also installed with the wxPython headers in
-an i_files sibdirectory.  It should be enough to pass a -I/pathname on
-the command line for it to find the files.
+other classes.  Since you will need them to build your modules using
+SWIG, the main wxPython .i files are also installed with the wxPython
+headers in an i_files sibdirectory.  It should be enough to pass a
+-I/pathname on the command line for SWIG to find the files.
 
 The bulk of wxPython's setup.py has been moved to another module,
 wx/build/config.py.  This module will be installed as part of wxPython
@@ -427,7 +427,7 @@ Sizers
 ------
 
 The hack allowing the old "option" keyword parameter has been removed.
-If you use keyworkd args with w.xSizer Add, Insert, or Prepend methods
+If you use keyword args with w.xSizer Add, Insert, or Prepend methods
 then you will need to use the ``proportion`` name instead of ``option``.
 
 When adding a spacer to a sizer you now need to use a wx.Size or a
