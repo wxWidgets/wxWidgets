@@ -79,6 +79,11 @@
 
 <set var="BASE_MAC_SRC">
     src/unix/baseunix.cpp
+    src/unix/dir.cpp
+    src/mac/gsocket.c
+    src/mac/mimetmac.cpp
+    src/mac/utils.cpp
+    src/mac/utilsexc.cpp
 </set>
 <set var="BASE_AND_GUI_MAC_SRC">
     src/unix/utilsunx.cpp
@@ -1247,7 +1252,6 @@
 <set var="MAC_LOWLEVEL_HDR">
 </set>
 <set var="MAC_SRC">
-    src/mac/gsocket.c
     src/mac/accel.cpp
     src/mac/aga.cpp
     src/mac/app.cpp
@@ -1273,7 +1277,6 @@
     src/mac/dcscreen.cpp
     src/mac/dialog.cpp
     src/mac/dirdlg.cpp
-    src/mac/dirmac.cpp
     src/mac/dnd.cpp
     src/mac/filedlg.cpp
     src/mac/font.cpp
@@ -1291,7 +1294,6 @@
     src/mac/menu.cpp
     src/mac/menuitem.cpp
     src/mac/metafile.cpp
-    src/mac/mimetmac.cpp
     src/mac/minifram.cpp
     src/mac/msgdlg.cpp
     src/mac/notebmac.cpp
@@ -1320,8 +1322,6 @@
     src/mac/toolbar.cpp
     src/mac/tooltip.cpp
     src/mac/uma.cpp
-    src/mac/utils.cpp
-    src/mac/utilsexc.cpp
     src/mac/wave.cpp
     src/mac/window.cpp
     src/mac/morefilex/MoreFilesX.c
