@@ -661,7 +661,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                     g_nextFocus = win;
                     
                     win->SetFocus();
-                    // return TRUE;
                 }
             }
             

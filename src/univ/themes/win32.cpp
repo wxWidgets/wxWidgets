@@ -3979,7 +3979,8 @@ bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
     {
         wxWindow *win = control->GetInputWindow();
 
-        if ( wxWindow::FindFocus() != control->GetInputWindow() )
+        if (( wxWindow::FindFocus() != control->GetInputWindow() ) &&
+            ( win->AcceptsFocus() ) )
         {
             win->SetFocus();
 

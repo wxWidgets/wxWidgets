@@ -216,12 +216,13 @@ void wxPopupTransientWindow::PopHandlers()
 
     if ( m_focus )
     {
+#ifndef __WXX11__
         if ( !m_focus->RemoveEventHandler(m_handlerFocus) )
         {
             // see above
             m_handlerFocus = NULL;
         }
-
+#endif
         m_focus = NULL;
     }
 }
@@ -251,6 +252,8 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     m_focus = winFocus ? winFocus : this;
     m_focus->SetFocus();
 
+#ifndef __WXX11__
+
 #ifdef __WXMSW__
     // MSW doesn't allow to set focus to the popup window, but we need to
     // subclass the window which has the focus, and not winFocus passed in or
@@ -264,6 +267,8 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 
         m_focus->PushEventHandler(m_handlerFocus);
     }
+    
+#endif
 }
 
 void wxPopupTransientWindow::Dismiss()

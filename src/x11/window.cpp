@@ -251,7 +251,17 @@ void wxWindowX11::SetFocus()
     Window xwindow = (Window) GetMainWindow();
     
     wxCHECK_RET( xwindow, wxT("invalid window") );
-
+    
+    wxCHECK_RET( AcceptsFocus(), wxT("set focus on window that doesn't accept the focus") );
+    
+#if 0
+    if (GetName() == "scrollBar")
+    {
+        char *crash = NULL;
+        *crash = 0;
+    }
+#endif
+    
     if (wxWindowIsVisible(xwindow))
     {
         XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
