@@ -897,24 +897,27 @@ wxFileTypeImpl::GetEntry(const wxFileType::MessageParameters& params) const
     wxString command;
     MailCapEntry *entry = m_manager->m_aEntries[m_index[0]];
     while ( entry != NULL ) {
-        // notice that an empty command would always succeed (it's ok)
+        // get the command to run as the test for this entry
         command = wxFileType::ExpandCommand(entry->GetTestCmd(), params);
 
-        // suppress the command output
-        if ( !command.IsEmpty() )
+        // don't trace the test result if there is no test at all
+        if ( command.IsEmpty() )
         {
-            if ( wxSystem(command) == 0 ) {
-                // ok, passed
-                wxLogTrace(TRACE_MIME,
-                           wxT("Test '%s' for mime type '%s' succeeded."),
-                           command.c_str(), params.GetMimeType().c_str());
-                break;
-            }
-            else {
-                wxLogTrace(TRACE_MIME,
-                           wxT("Test '%s' for mime type '%s' failed."),
-                           command.c_str(), params.GetMimeType().c_str());
-            }
+            // no test at all, ok
+            break;
+        }
+
+        if ( wxSystem(command) == 0 ) {
+            // ok, test passed
+            wxLogTrace(TRACE_MIME,
+                       wxT("Test '%s' for mime type '%s' succeeded."),
+                       command.c_str(), params.GetMimeType().c_str());
+            break;
+        }
+        else {
+            wxLogTrace(TRACE_MIME,
+                       wxT("Test '%s' for mime type '%s' failed."),
+                       command.c_str(), params.GetMimeType().c_str());
         }
 
         entry = entry->GetNext();
