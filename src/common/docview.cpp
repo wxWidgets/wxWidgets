@@ -2085,7 +2085,7 @@ void wxFileHistory::Load(wxConfigBase& config)
     wxString buf;
     buf.Printf(wxT("file%d"), m_fileHistoryN+1);
     wxString historyFile;
-    while ((m_fileHistoryN <= m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
+    while ((m_fileHistoryN < m_fileMaxFiles) && config.Read(buf, &historyFile) && (historyFile != wxT("")))
     {
         m_fileHistory[m_fileHistoryN] = copystring((const wxChar*) historyFile);
         m_fileHistoryN ++;
