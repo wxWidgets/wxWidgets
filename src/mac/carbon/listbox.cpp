@@ -286,11 +286,11 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     OptionBits  options = 0;
     if ( style & wxLB_MULTIPLE )
     {
-        options += lNoExtend ;
+        options += lExtendDrag + lUseSense  ;
     }
     else if ( style & wxLB_EXTENDED )
     {
-        options += lExtendDrag ;
+        // default behaviour
     }
     else
     {
