@@ -15,7 +15,7 @@ OBJECTS = antiflickpl.o bardragpl.o barhintspl.o cbcustom.o\
  cbstore.o controlarea.o controlbar.o dyntbar.o dyntbarhnd.o\
  frmview.o garbagec.o gcupdatesmgr.o hintanimpl.o newbmpbtn.o\
  objstore.o panedrawpl.o rowdragpl.o rowlayoutpl.o\
- settingsdlg.o toolwnd.o updatesmgr.o 
+ toolwnd.o updatesmgr.o 
 
 include $(WXDIR)/src/makelib.g95
 
