@@ -1338,7 +1338,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OS2_LOWLEVEL_HDR" hints="files">
 </set>
 <set var="OS2_SRC" hints="files">
+    <!-- Generic implementations used by wxOS2: -->
     src/generic/caret.cpp
+    src/generic/colrdlgg.cpp
+    src/generic/dirdlgg.cpp
+    src/generic/fdrepdlg.cpp
+    src/generic/imaglist.cpp
+    src/generic/msgdlgg.cpp
+    src/generic/prntdlgg.cpp
+    src/generic/statusbr.cpp
+    <!-- OS/2 specific files: -->
     src/os2/accel.cpp
     src/os2/app.cpp
     src/os2/bitmap.cpp
@@ -1376,6 +1385,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/icon.cpp
     src/os2/iniconf.cpp
     src/os2/listbox.cpp
+    src/os2/listctrl.cpp
     src/os2/main.cpp
     src/os2/menu.cpp
     src/os2/menuitem.cpp
@@ -1405,11 +1415,16 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
     src/os2/toplevel.cpp
+    src/os2/treectrl.cpp
     src/os2/utilsgui.cpp
     src/os2/window.cpp
 </set>
 <set var="OS2_HDR" hints="files">
     wx/generic/caret.h
+    wx/generic/colrdlgg.h
+    wx/generic/dirdlgg.h
+    wx/generic/fdrepdlg.h
+    wx/generic/statusbr.h
     wx/os2/accel.h
     wx/os2/app.h
     wx/os2/bitmap.h
@@ -1445,6 +1460,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/icon.h
     wx/os2/iniconf.h
     wx/os2/listbox.h
+    wx/os2/listctrl.h
     wx/os2/menu.h
     wx/os2/menuitem.h
     wx/os2/metafile.h
@@ -1476,6 +1492,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/toolbar.h
     wx/os2/tooltip.h
     wx/os2/toplevel.h
+    wx/msw/treectrl.h
     wx/os2/window.h
 </set>
 
