@@ -93,7 +93,7 @@ class ParamBinaryOr(PPanel):
         dlg.SetSizer(topSizer)
         topSizer.Fit(dlg)
         dlg.Center()
-        if dlg.ShowModal() == wxID_OK: 
+        if dlg.ShowModal() == wxID_OK:
             value = []
             for i in range(listBox.Number()):
                 if listBox.IsChecked(i):
@@ -146,7 +146,7 @@ class ParamColour(PPanel):
         sizer = wxBoxSizer()
         self.text = wxTextCtrl(self, self.ID_TEXT_CTRL, size=(65,-1))
         sizer.Add(self.text, 0, wxRIGHT, 5)
-        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(40, -1))
+        self.button = wxPanel(self, self.ID_BUTTON, wxDefaultPosition, wxSize(20, 20))
         sizer.Add(self.button, 0, wxGROW)
         self.SetAutoLayout(true)
         self.SetSizer(sizer)
@@ -608,7 +608,7 @@ class ParamIntList(ParamContent):
             self.textModified = false
         dlg.Destroy()
 
-# Boxless radiobox 
+# Boxless radiobox
 class RadioBox(PPanel):
     def __init__(self, parent, id, choices,
                  pos=wxDefaultPosition, name='radiobox'):
@@ -660,7 +660,7 @@ class ParamOrient(RadioBox):
         self.SetStringSelection(self.seulav[value])
 
 class ParamFile(PPanel):
-    def __init__(self, parent, name):    
+    def __init__(self, parent, name):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wxNewId()
         self.ID_BUTTON_BROWSE = wxNewId()
@@ -677,7 +677,7 @@ class ParamFile(PPanel):
         EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        if self.freeze: return        
+        if self.freeze: return
         self.SetModified()
         self.textModified = true
         evt.Skip()

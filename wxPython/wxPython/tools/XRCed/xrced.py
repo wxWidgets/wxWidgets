@@ -747,7 +747,7 @@ class XML_Tree(wxTreeCtrl):
         if xxx.className == 'wxFrame':
             # Create new frame
             testWin = wxPreFrame()
-            res.LoadFrame(testWin, frame, xxx.name)
+            res.LoadOnFrame(testWin, frame, xxx.name)
             # Create status bar
             testWin.CreateStatusBar()
             testWin.panel = testWin
