@@ -582,6 +582,9 @@ public:
     void AssignImageList(wxImageList *imageList, int which);
     %clear wxImageList *imageList;
     
+    // are we in report mode?
+    bool InReportView() const;
+        
     // returns True if it is a virtual list control
     bool IsVirtual() const;
 
