@@ -919,7 +919,10 @@ wxpExtensions.append(ext)
 #----------------------------------------------------------------------
 
 if CONTRIBS_INC:
-    includes += [ CONTRIBS_INC ]
+    CONTRIBS_INC = [ CONTRIBS_INC ]
+else:
+    CONTRIBS_INC = []
+    
 
 #----------------------------------------------------------------------
 # Define the GLCanvas extension module
@@ -944,7 +947,7 @@ if BUILD_GLCANVAS:
     ext = Extension('_glcanvas',
                     swig_sources,
 
-                    include_dirs = includes,
+                    include_dirs = includes + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
@@ -977,7 +980,7 @@ if BUILD_OGL:
     ext = Extension('_ogl',
                     swig_sources,
 
-                    include_dirs =  includes + [ location ],
+                    include_dirs =  includes + [ location ] + CONTRIBS_INC,
                     define_macros = defines + [('wxUSE_DEPRECATED', '0')],
 
                     library_dirs = libdirs,
@@ -1027,7 +1030,7 @@ if BUILD_STC:
     ext = Extension('_stc',
                     swig_sources,
 
-                    include_dirs = includes,
+                    include_dirs = includes + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
@@ -1059,7 +1062,7 @@ if BUILD_IEWIN:
                                '%s/wxactivex.cpp' % location,
                              ] + swig_sources,
 
-                    include_dirs =  includes,
+                    include_dirs =  includes + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
@@ -1093,7 +1096,7 @@ if BUILD_XRC:
     ext = Extension('_xrc',
                     swig_sources,
 
-                    include_dirs =  includes,
+                    include_dirs =  includes + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
@@ -1121,7 +1124,7 @@ if BUILD_GIZMOS:
     ext = Extension('_gizmos',
                     [ '%s/treelistctrl.cpp' % location ] + swig_sources,
 
-                    include_dirs =  includes + [ location ],
+                    include_dirs =  includes + [ location ] + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
@@ -1154,7 +1157,7 @@ if BUILD_DLLWIDGET:
                                 '%s/dllwidget.cpp' % location,
                              ] + swig_sources,
 
-                    include_dirs =  includes,
+                    include_dirs =  includes + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
