@@ -113,8 +113,6 @@ libwx_motif_la_SOURCES = \
  prntdlgg.cpp \
  progdlgg.cpp \
  prop.cpp \
- propform.cpp \
- proplist.cpp \
  sashwin.cpp \
  scrolwin.cpp \
  splitter.cpp \
@@ -180,6 +178,9 @@ libwx_motif_la_SOURCES = \
  wave.cpp \
  window.cpp
 
+# propform.cpp \
+# proplist.cpp \
+ 
 # these are the sources which we build by our own rules
 #
 # TODO: parser.y can be included into SOURCES, but for the sake of my life I

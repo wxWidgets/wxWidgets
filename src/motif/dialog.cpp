@@ -586,6 +586,11 @@ void wxDialog::OnCloseWindow(wxCloseEvent& event)
     closing.DeleteObject(this);
 }
 
+void wxDialog::OnPaint(wxPaintEvent &WXUNUSED(event))
+{
+  // added for compatiblity only
+}
+
 // Destroy the window (delayed, if a managed window)
 bool wxDialog::Destroy()
 {

@@ -103,8 +103,8 @@ public:
                                const wxRect* rect = (wxRect *) NULL );
 
     virtual void SetSizeHints(int minW, int minH,
-                              int maxW, int maxH,
-                              int incW, int incH);
+                              int maxW = -1, int maxH = -1,
+                              int incW = -1, int incH = -1);
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP
@@ -237,8 +237,10 @@ protected:
     // accelerator table, and try to find what menu id or window (beneath it)
     // has this ID. Then construct an appropriate command
     // event and send it.
+public:
     virtual bool ProcessAccelerator(wxKeyEvent& event);
-
+    
+protected:
     // unmanage and destroy an X widget f it's !NULL (passing NULL is ok)
     void UnmanageAndDestroy(WXWidget widget);
 

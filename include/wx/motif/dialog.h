@@ -88,6 +88,7 @@ public:
     void OnOK(wxCommandEvent& event);
     void OnApply(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
+    void OnPaint(wxPaintEvent &event);
 
     // Responds to colour changes
     void OnSysColourChanged(wxSysColourChangedEvent& event);

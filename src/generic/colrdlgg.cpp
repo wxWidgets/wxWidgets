@@ -184,7 +184,9 @@ void wxGenericColourDialog::OnMouseEvent(wxMouseEvent& event)
 
 void wxGenericColourDialog::OnPaint(wxPaintEvent& event)
 {
+#ifndef __WXMOTIF__
   wxDialog::OnPaint(event);
+#endif
 
   wxPaintDC dc(this);
 
