@@ -39,8 +39,16 @@
 // conditional compilation
 // ----------------------------------------------------------------------------
 
+/*
+   A note about all these conditional compilation macros: this file is used
+   both as a test suite for various non-GUI wxWindows classes and as a
+   scratchpad for quick tests. So there are two compilation modes: if you
+   define TEST_ALL all tests are run, otherwise you may enable the individual
+   tests individually in the "#else" branch below.
+ */
+
 // what to test (in alphabetic order)? uncomment the line below to do all tests
-//#define TEST_ALL
+#define TEST_ALL
 #ifdef TEST_ALL
     #define TEST_ARRAYS
     #define TEST_CHARSET
@@ -76,13 +84,23 @@
     #define TEST_WCHAR
     #define TEST_ZIP
     #define TEST_ZLIB
+
+    #undef TEST_ALL
+    static const bool TEST_ALL = TRUE;
 #else
     #define TEST_FILENAME
+
+    static const bool TEST_ALL = FALSE;
 #endif
 
-#ifdef TEST_SNGLINST
-    #include "wx/snglinst.h"
-#endif // TEST_SNGLINST
+// some tests are interactive, define this to run them
+#ifdef TEST_INTERACTIVE
+    #undef TEST_INTERACTIVE
+
+    static const bool TEST_INTERACTIVE = FALSE;
+#else
+    static const bool TEST_INTERACTIVE = FALSE;
+#endif
 
 // ----------------------------------------------------------------------------
 // test class for container objects
@@ -236,7 +254,7 @@ static void TestCmdLineConvert()
         printf("\targc = %u\n", count);
         for ( size_t arg = 0; arg < count; arg++ )
         {
-            printf("\targv[%u] = %s\n", arg, args[arg]);
+            printf("\targv[%u] = %s\n", arg, args[arg].c_str());
         }
     }
 }
@@ -783,9 +801,11 @@ static struct FileNameInfo
 
     // Mac file names
     { _T("Volume:Dir:File"), _T("Volume"), _T("Dir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
+    { _T("Volume:Dir:Subdir:File"), _T("Volume"), _T("Dir:Subdir"), _T("File"), _T(""), TRUE, wxPATH_MAC },
+    { _T("Volume:"), _T("Volume"), _T(""), _T(""), _T(""), TRUE, wxPATH_MAC },
     { _T(":Dir:File"), _T(""), _T("Dir"), _T("File"), _T(""), FALSE, wxPATH_MAC },
-    { _T(":File"), _T(""), _T(""), _T("File"), _T(""), FALSE, wxPATH_MAC },
-    { _T("File"), _T(""), _T(""), _T("File"), _T(""), FALSE, wxPATH_MAC },
+    { _T(":File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), FALSE, wxPATH_MAC },
+    { _T("File.Ext"), _T(""), _T(""), _T("File"), _T(".Ext"), FALSE, wxPATH_MAC },
 
     // VMS file names
     { _T("device:[dir1.dir2.dir3]file.txt"), _T("device"), _T("dir1.dir2.dir3"), _T("file"), _T("txt"), TRUE, wxPATH_VMS },
@@ -910,6 +930,10 @@ static void TestFileNameMakeRelative()
             case wxPATH_VMS:
                 // TODO: I don't know how this is supposed to work there
                 continue;
+
+            case wxPATH_NATIVE: // make gcc happy
+            default:
+                wxFAIL_MSG( "unexpected path format" );
         }
 
         printf("'%s' relative to '%s': ",
@@ -976,7 +1000,6 @@ static void TestFileSetTimes()
 {
     wxFileName fn(_T("testdata.fc"));
 
-    wxDateTime dtAccess, dtMod, dtChange;
     if ( !fn.Touch() )
     {
         wxPrintf(_T("ERROR: Touch() failed.\n"));
@@ -1125,8 +1148,8 @@ static const char *GetLangName(int lang)
 {
     static const char *languageNames[] =
     {
-        "DEFAULT", 
-        "UNKNOWN", 
+        "DEFAULT",
+        "UNKNOWN",
         "ABKHAZIAN",
         "AFAR",
         "AFRIKAANS",
@@ -2092,7 +2115,7 @@ static void TestRegExReplacement()
     };
 
     const wxChar *pattern = _T("([a-z]+)[^0-9]*([0-9]+)");
-    wxRegEx re = pattern;
+    wxRegEx re(pattern);
 
     wxPrintf(_T("Using pattern '%s' for replacement.\n"), pattern);
 
@@ -5062,6 +5085,10 @@ static void TestStringMatch()
 // entry point
 // ----------------------------------------------------------------------------
 
+#ifdef TEST_SNGLINST
+    #include "wx/snglinst.h"
+#endif // TEST_SNGLINST
+
 int main(int argc, char **argv)
 {
     wxInitializer initializer;
@@ -5146,7 +5173,7 @@ int main(int argc, char **argv)
 #endif // TEST_CMDLINE
 
 #ifdef TEST_STRINGS
-    if ( 0 )
+    if ( TEST_ALL )
     {
         TestPChar();
         TestString();
@@ -5157,63 +5184,71 @@ int main(int argc, char **argv)
         TestStringTokenizer();
         TestStringReplace();
     }
-    TestStringMatch();
+    else
+    {
+        TestStringMatch();
+    }
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
-    if ( 0 )
+    if ( TEST_ALL )
     {
-    wxArrayString a1;
-    a1.Add("tiger");
-    a1.Add("cat");
-    a1.Add("lion");
-    a1.Add("dog");
-    a1.Add("human");
-    a1.Add("ape");
+        wxArrayString a1;
+        a1.Add("tiger");
+        a1.Add("cat");
+        a1.Add("lion");
+        a1.Add("dog");
+        a1.Add("human");
+        a1.Add("ape");
 
-    puts("*** Initially:");
+        puts("*** Initially:");
 
-    PrintArray("a1", a1);
+        PrintArray("a1", a1);
 
-    wxArrayString a2(a1);
-    PrintArray("a2", a2);
+        wxArrayString a2(a1);
+        PrintArray("a2", a2);
 
-    wxSortedArrayString a3(a1);
-    PrintArray("a3", a3);
+        wxSortedArrayString a3(a1);
+        PrintArray("a3", a3);
 
-    puts("*** After deleting a string from a1");
-    a1.Remove(2);
+        puts("*** After deleting a string from a1");
+        a1.Remove(2);
 
-    PrintArray("a1", a1);
-    PrintArray("a2", a2);
-    PrintArray("a3", a3);
+        PrintArray("a1", a1);
+        PrintArray("a2", a2);
+        PrintArray("a3", a3);
 
-    puts("*** After reassigning a1 to a2 and a3");
-    a3 = a2 = a1;
-    PrintArray("a2", a2);
-    PrintArray("a3", a3);
+        puts("*** After reassigning a1 to a2 and a3");
+        a3 = a2 = a1;
+        PrintArray("a2", a2);
+        PrintArray("a3", a3);
 
-    puts("*** After sorting a1");
-    a1.Sort();
-    PrintArray("a1", a1);
+        puts("*** After sorting a1");
+        a1.Sort();
+        PrintArray("a1", a1);
 
-    puts("*** After sorting a1 in reverse order");
-    a1.Sort(TRUE);
-    PrintArray("a1", a1);
+        puts("*** After sorting a1 in reverse order");
+        a1.Sort(TRUE);
+        PrintArray("a1", a1);
 
-    puts("*** After sorting a1 by the string length");
-    a1.Sort(StringLenCompare);
-    PrintArray("a1", a1);
+        puts("*** After sorting a1 by the string length");
+        a1.Sort(StringLenCompare);
+        PrintArray("a1", a1);
 
-    TestArrayOfObjects();
+        TestArrayOfObjects();
     }
-    TestArrayOfInts();
+    else
+    {
+        TestArrayOfInts();
+    }
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
-    if ( 0 )
+    if ( TEST_ALL )
+    {
         TestDirEnum();
-    TestDirTraverse();
+        TestDirTraverse();
+    }
 #endif // TEST_DIR
 
 #ifdef TEST_DLLLOADER
@@ -5260,12 +5295,12 @@ int main(int argc, char **argv)
 #endif // TEST_LOG
 
 #ifdef TEST_FILE
-    if ( 0 )
+    if ( TEST_ALL )
     {
         TestFileRead();
         TestTextFileRead();
+        TestFileCopy();
     }
-    TestFileCopy();
 #endif // TEST_FILE
 
 #ifdef TEST_FILENAME
@@ -5277,12 +5312,12 @@ int main(int argc, char **argv)
         DumpFileName(fn);
     }
 
-    TestFileNameMakeRelative();
-    if ( 0 )
+    if ( TEST_ALL )
     {
-    TestFileNameConstruction();
-    TestFileNameSplit();
-    TestFileNameTemp();
+        TestFileNameConstruction();
+        TestFileNameMakeRelative();
+        TestFileNameSplit();
+        TestFileNameTemp();
         TestFileNameCwd();
         TestFileNameComparison();
         TestFileNameOperations();
@@ -5298,16 +5333,17 @@ int main(int argc, char **argv)
     wxLog::AddTraceMask(FTP_TRACE_MASK);
     if ( TestFtpConnect() )
     {
-            TestFtpFileSize();
-        if ( 0 )
+        if ( TEST_ALL )
         {
             TestFtpList();
             TestFtpDownload();
             TestFtpMisc();
+            TestFtpFileSize();
             TestFtpUpload();
         }
-        if ( 0 )
-        TestFtpInteractive();
+
+        if ( TEST_INTERACTIVE )
+            TestFtpInteractive();
     }
     //else: connecting to the FTP server failed
 
@@ -5343,7 +5379,8 @@ int main(int argc, char **argv)
     {
         TestSpeed();
     }
-    if ( 0 )
+
+    if ( TEST_ALL )
     {
         TestMultiplication();
         TestDivision();
@@ -5351,8 +5388,8 @@ int main(int argc, char **argv)
         TestLongLongConversion();
         TestBitOperations();
         TestLongLongComparison();
+        TestLongLongPrint();
     }
-    TestLongLongPrint();
 #endif // TEST_LONGLONG
 
 #ifdef TEST_HASH
@@ -5372,11 +5409,11 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
-    TestDiskInfo();
-    if ( 0 )
+    if ( TEST_ALL )
     {
         TestOsInfo();
         TestUserInfo();
+        TestDiskInfo();
     }
 #endif // TEST_INFO_FUNCTIONS
 
@@ -5390,32 +5427,29 @@ int main(int argc, char **argv)
 
 #ifdef TEST_REGEX
     // TODO: write a real test using src/regex/tests file
-    if ( 0 )
+    if ( TEST_ALL )
     {
         TestRegExCompile();
         TestRegExMatch();
         TestRegExSubmatch();
-        TestRegExInteractive();
+        TestRegExReplacement();
+
+        if ( TEST_INTERACTIVE )
+            TestRegExInteractive();
     }
-    TestRegExReplacement();
 #endif // TEST_REGEX
 
 #ifdef TEST_REGISTRY
-    if ( 0 )
-        TestRegistryRead();
+    TestRegistryRead();
     TestRegistryAssociation();
 #endif // TEST_REGISTRY
 
 #ifdef TEST_SOCKETS
-    if ( 0 )
-    {
-        TestSocketServer();
-    }
-        TestSocketClient();
+    TestSocketServer();
+    TestSocketClient();
 #endif // TEST_SOCKETS
 
 #ifdef TEST_STREAMS
-    if ( 0 )
     TestFileStream();
     TestMemoryStream();
 #endif // TEST_STREAMS
@@ -5425,7 +5459,7 @@ int main(int argc, char **argv)
 #endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
-    if ( 0 )
+    if ( TEST_ALL )
     {
         TestTimeSet();
         TestTimeStatic();
@@ -5440,12 +5474,13 @@ int main(int argc, char **argv)
         TestTimeArithmetics();
         TestTimeHolidays();
         TestTimeFormat();
+        TestTimeSpanFormat();
         TestTimeMS();
 
         TestTimeZoneBug();
     }
-    TestTimeSpanFormat();
-    if ( 0 )
+
+    if ( TEST_INTERACTIVE )
         TestDateTimeInteractive();
 #endif // TEST_DATETIME
 
@@ -5455,7 +5490,6 @@ int main(int argc, char **argv)
 #endif // TEST_USLEEP
 
 #ifdef TEST_VCARD
-    if ( 0 )
     TestVCardRead();
     TestVCardWrite();
 #endif // TEST_VCARD
@@ -5465,13 +5499,11 @@ int main(int argc, char **argv)
 #endif // TEST_WCHAR
 
 #ifdef TEST_ZIP
-    if ( 0 )
-        TestZipStreamRead();
+    TestZipStreamRead();
     TestZipFileSystem();
 #endif // TEST_ZIP
 
 #ifdef TEST_ZLIB
-    if ( 0 )
     TestZlibStreamWrite();
     TestZlibStreamRead();
 #endif // TEST_ZLIB
