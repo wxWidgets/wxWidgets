@@ -13,7 +13,7 @@ class TestPanel(wxPanel):
         cal = wxCalendarCtrl(self, -1, wxDateTime_Now(), pos = (25,50),
                              style = wxCAL_SHOW_HOLIDAYS
                              | wxCAL_SUNDAY_FIRST
-                             #| wxCAL_SEQUENTIAL_MONTH_SELECTION
+                             | wxCAL_SEQUENTIAL_MONTH_SELECTION
                              )
 
         EVT_CALENDAR(self, cal.GetId(), self.OnCalSelected)
