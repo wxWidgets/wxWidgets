@@ -47,7 +47,9 @@
 #include<os2.h>
 typedef unsigned long COLORREF;
 // RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
-#define OS2RGB(r,g,b) ((ULONG ((BYTE) (r) | ((UINT) (g) << 8)) | (((ULONG)(BYTE)(b)) << 16)))
+//#define OS2RGB(r,g,b) ((ULONG ((BYTE) (r) | ((UINT) (g) << 8)) | (((ULONG)(BYTE)(b)) << 16)))
+#define OS2RGB(r,g,b) ((unsigned long)r<<16|(unsigned long)g<<8|(unsigned long)b)
+
 #define GetBValue(rgb) ((BYTE)((rgb) >> 16))
 #define GetGValue(rgb) ((BYTE)(((WORD)(rgb)) >> 8))
 #define GetRValue(rgb) ((BYTE)(rgb))

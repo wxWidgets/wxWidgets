@@ -319,11 +319,9 @@ XpmCreateXpmImageFromImage(display, image, shapeimage,
 
 #else
 
-#ifndef __OS2__
 	    ErrorStatus = MSWGetImagePixels(display, image, width, height, &pmap,
 		    			storePixel);
 /* calling convention all messed up OS/2 -- figure out later */
-#endif
 
 #endif
 
@@ -1042,11 +1040,8 @@ MSWGetImagePixels(display, image, width, height, pmap, storeFunc)
 	    pixel = GetPixel(*display, x, y);
 #endif
 
-#ifndef __OS2__
-/* calling convention all messed up under OS/2 */
 	    if ((*storeFunc) (pixel, pmap, iptr))
 		return (XpmNoMemory);
-#endif
 	}
     }
     return (XpmSuccess);
