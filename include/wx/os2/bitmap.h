@@ -219,8 +219,6 @@ protected:
 
 private:
     bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
-    HDC                             m_hDc;
-    HPS                             m_hPs;
 
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };

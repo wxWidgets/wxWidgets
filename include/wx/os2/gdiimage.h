@@ -122,6 +122,7 @@ public:
                        ) = 0;
     virtual bool Load( wxGDIImage*     pImage
                       ,const wxString& rName
+                      ,HPS             hPs
                       ,long            lFlags
                       ,int             nDesiredWidth
                       ,int             nDesiredHeight

@@ -11,7 +11,7 @@
 # info
 
 # Set WXDIR for your system
-WXDIR = $(WXWIN)
+WXDIR = j:\dev\wx2\wxWindows
 
 WXUSINGDLL=0
 

@@ -396,6 +396,7 @@ OS2OBJS = \
   ..\os2\$D\frame.obj \
   ..\os2\$D\gauge.obj \
   ..\os2\$D\gdiobj.obj \
+  ..\os2\$D\gdiimage.obj \
   ..\os2\$D\gsocket.obj \
   ..\os2\$D\helpwin.obj \
   ..\os2\$D\icon.obj \
@@ -470,6 +471,7 @@ OS2LIBOBJS1 = \
   fontdlg.obj \
   frame.obj \
   gauge.obj \
+  gdiimage.obj \
   gdiobj.obj \
   gsocket.obj \
   helpwin.obj \
@@ -484,10 +486,10 @@ OS2LIBOBJS1 = \
   metafile.obj \
   minifram.obj \
   msgdlg.obj \
-  nativdlg.obj \
-  notebook.obj
+  nativdlg.obj
 
 OS2LIBOBJS2 = \
+  notebook.obj \
   ownerdrw.obj \
   palette.obj \
   pen.obj \
@@ -752,6 +754,7 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\fontdlg.obj
   copy ..\os2\$D\frame.obj
   copy ..\os2\$D\gauge.obj
+  copy ..\os2\$D\gdiimage.obj
   copy ..\os2\$D\gdiobj.obj
   copy ..\os2\$D\gsocket.obj
   copy ..\os2\$D\helpwin.obj
@@ -767,9 +770,9 @@ $(OS2LIBOBJS1):
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj
   copy ..\os2\$D\nativdlg.obj
-  copy ..\os2\$D\notebook.obj
 
 $(OS2LIBOBJS2):
+  copy ..\os2\$D\notebook.obj
   copy ..\os2\$D\ownerdrw.obj
   copy ..\os2\$D\palette.obj
   copy ..\os2\$D\pen.obj

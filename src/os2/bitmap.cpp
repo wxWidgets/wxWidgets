@@ -185,9 +185,6 @@ wxBitmap::wxBitmap(
         wxLogLastError("GpiCreatePS Failure");
     }
 
-    m_hDc = hDc;
-    m_hPs = hPs;
-
     m_refData = pRefData;
 
     pRefData->m_nWidth = nTheWidth;
