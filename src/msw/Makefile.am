@@ -12,7 +12,7 @@ SUFFIXES = .cpp .c
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
+VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${srcdir}/../html:${EXTRA_VPATH}
 
 EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 
@@ -59,6 +59,9 @@ libwx_msw_la_SOURCES = \
  ffile.cpp \
  file.cpp \
  fileconf.cpp \
+ filesys.cpp \
+ fs_inet.cpp \
+ fs_zip.cpp \
  framecmn.cpp \
  ftp.cpp \
  gdicmn.cpp \
@@ -96,13 +99,16 @@ libwx_msw_la_SOURCES = \
  textfile.cpp \
  time.cpp \
  url.cpp \
+ unzip.c \
  validate.cpp \
  valtext.cpp \
  wfstream.cpp \
  wincmn.cpp \
  wxexpr.cpp \
+ zipstream.cpp \
  zstream.cpp \
 \
+ busyinfo.cpp \
  choicdgg.cpp \
  dcpsg.cpp \
  gridg.cpp \
@@ -178,6 +184,7 @@ libwx_msw_la_SOURCES = \
  stattext.cpp \
  tbar95.cpp \
  textctrl.cpp \
+ treectrl.cpp \
  thread.cpp \
  timer.cpp \
  tooltip.cpp \
@@ -185,7 +192,26 @@ libwx_msw_la_SOURCES = \
  utilsexc.cpp \
  wave.cpp \
  window.cpp \
- nativdlg.cpp
+ nativdlg.cpp \
+\
+ htmlcell.cpp \
+ htmlfilter.cpp \
+ htmlhelp.cpp \
+ htmlhelp_io.cpp \
+ htmlparser.cpp \
+ htmltag.cpp \
+ htmlwin.cpp \
+ htmlwinparser.cpp \
+ mod_fonts.cpp \
+ mod_hline.cpp \
+ mod_image.cpp \
+ mod_layout.cpp \
+ mod_links.cpp \
+ mod_list.cpp \
+ mod_pre.cpp \
+ mod_tables.cpp \
+ search.cpp
+		 
 
 # these are the sources which we build by our own rules
 #
