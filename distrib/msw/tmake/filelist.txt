@@ -89,7 +89,6 @@ grid.cpp	Generic
 gridctrl.cpp	Generic
 gridsel.cpp	Generic
 helpext.cpp	Generic	Generic
-helphtml.cpp	Generic	Generic
 imaglist.cpp	Generic	NotWin32
 laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
@@ -903,7 +902,6 @@ hash.h	WXH	Base
 hashmap.h	WXH	Base
 help.h	WXH
 helpbase.h	WXH
-helphtml.h	WXH
 helpwin.h	WXH
 icon.h	WXH
 iconbndl.h	WXH
@@ -1586,7 +1584,6 @@ grid.h	GenericH
 gridctrl.h	GenericH
 gridg.h	GenericH
 helpext.h	GenericH
-helphtml.h	GenericH
 imaglist.h	GenericH
 laywin.h	GenericH
 listctrl.h	GenericH	NotWin32

@@ -19,7 +19,6 @@ ALL_SOURCES = \
 		generic/gridctrl.cpp \
 		generic/gridsel.cpp \
 		generic/helpext.cpp \
-		generic/helphtml.cpp \
 		generic/imaglist.cpp \
 		generic/laywin.cpp \
 		generic/listctrl.cpp \
@@ -357,7 +356,6 @@ ALL_HEADERS = \
 		hashmap.h \
 		help.h \
 		helpbase.h \
-		helphtml.h \
 		helpwin.h \
 		icon.h \
 		iconbndl.h \
@@ -555,7 +553,6 @@ ALL_HEADERS = \
 		generic/gridctrl.h \
 		generic/gridg.h \
 		generic/helpext.h \
-		generic/helphtml.h \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
@@ -757,7 +754,6 @@ GENERICOBJS = \
 		gridctrl.o \
 		gridsel.o \
 		helpext.o \
-		helphtml.o \
 		imaglist.o \
 		laywin.o \
 		listctrl.o \

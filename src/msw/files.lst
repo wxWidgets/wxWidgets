@@ -391,7 +391,6 @@ ALL_HEADERS = \
 		hashmap.h \
 		help.h \
 		helpbase.h \
-		helphtml.h \
 		helpwin.h \
 		icon.h \
 		iconbndl.h \
@@ -646,7 +645,6 @@ ALL_HEADERS = \
 		generic/gridctrl.h \
 		generic/gridg.h \
 		generic/helpext.h \
-		generic/helphtml.h \
 		generic/imaglist.h \
 		generic/laywin.h \
 		generic/listctrl.h \
