@@ -2390,6 +2390,10 @@ static void TestRegExInteractive()
 // database
 // ----------------------------------------------------------------------------
 
+#if !wxUSE_ODBC
+    #undef TEST_ODBC
+#endif
+
 #ifdef TEST_ODBC
 
 #include <wx/db.h>
@@ -3346,7 +3350,7 @@ static void TestVCardWrite()
 // wxVolume tests
 // ----------------------------------------------------------------------------
 
-#if !wxUSE_FSVOLUME
+#if !defined(__WIN32__) || !wxUSE_FSVOLUME
     #undef TEST_VOLUME
 #endif
 
@@ -3831,7 +3835,7 @@ static void TestTimeTicks()
         else
         {
             printf(" (ERROR: should be %ld, delta = %ld)\n",
-                   d.ticks, ticks - d.ticks);
+                   (long)d.ticks, (long)(ticks - d.ticks));
         }
 
         dt = d.DT().ToTimezone(wxDateTime::GMT0);
@@ -3844,7 +3848,7 @@ static void TestTimeTicks()
         else
         {
             printf(" (ERROR: should be %ld, delta = %ld)\n",
-                   d.gmticks, ticks - d.gmticks);
+                   (long)d.gmticks, (long)(ticks - d.gmticks));
         }
     }
 
