@@ -391,10 +391,18 @@ afminstall: preinstall
 	$(INSTALL) -d $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/afm
 	$(INSTALL_DATA) $(top_srcdir)/misc/gs_afm/*.afm $(datadir)/wx/$(VER_MAJMIN)/gs_afm
-        
+
 m4datainstall: preinstall
 	$(INSTALL) -d $(datadir)/aclocal
 	$(INSTALL_DATA) $(top_srcdir)/wxwin.m4 $(datadir)/aclocal
+
+win32install: preinstall
+	$(INSTALL) -d $(includedir)/wx/msw
+	$(INSTALL_DATA) $(top_srcdir)/include/wx/msw/*.cur \
+			$(top_srcdir)/include/wx/msw/*.ico \
+			$(top_srcdir)/include/wx/msw/*.bmp \
+			$(top_srcdir)/include/wx/msw/wx.rc \
+				$(includedir)/wx/msw
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
@@ -421,7 +429,7 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	$(INSTALL_DATA) $(build_libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h \
                     $(libdir)/wx/include/@TOOLCHAIN_NAME@/wx/setup.h
 
-	$(INSTALL) -d $(includedir)/wx
+	(INSTALL) -d $(includedir)/wx
 	@# FIXME: This will erroneously install a wx/base dir for wxBase..
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
@@ -462,7 +470,7 @@ preinstall_gl: $(build_libdir)/@WX_TARGET_LIBRARY_GL@
 	@if test ! -d $(libdir); then $(INSTALL) -d $(libdir); fi
 	@INSTALL_LIBRARY@ $(build_libdir)/@WX_TARGET_LIBRARY_GL@ $(libdir)/@WX_TARGET_LIBRARY_GL@
 
-install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall
+install: @AFMINSTALL@ @WX_ALL_INSTALLED@ m4datainstall @WIN32INSTALL@
 	@echo " "
 	@echo " The installation of wxWindows is finished.  On certain"
 	@echo " platforms (e.g. Linux) you'll now have to run ldconfig"
@@ -493,7 +501,7 @@ uninstall:
 	@$(RM) $(bindir)/wx@TOOLCHAIN_NAME@-config
 	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/afm/*
 	@$(RM) $(datadir)/wx/$(VER_MAJMIN)/gs_afm/*
-# FIXME: wxBase doesnt install these next 3 dirs.
+	# FIXME: wxBase doesnt install these next 3 dirs.
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/gs_afm
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)/afm
 	@-rmdir $(datadir)/wx/$(VER_MAJMIN)
@@ -502,6 +510,7 @@ uninstall:
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(RM) $(includedir)/wx/$$p; \
 	done
+	# TODO: uninstall the files installed by win32install
 	@echo " Removing i18n files..."
 	@-for p in $(WX_LINGUAS); do \
 	  $(RM) $(localedir)/$$p/LC_MESSAGES/wxstd.mo; \
