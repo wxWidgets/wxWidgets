@@ -26,8 +26,10 @@
     </headers>
 
     <dll id="gizmosdll" template="wx_contrib_dll" cond="SHARED=='1'">
-        <define>WXMAKINGDLL</define>
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_GIZMOS</define>
         <sources>$(GIZMOS_SRC)</sources>
+        <wx-lib>base</wx-lib>
         <wx-lib>core</wx-lib>
     </dll>
     

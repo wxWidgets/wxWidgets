@@ -16,13 +16,7 @@
 #endif
 
 #include "wx/panel.h"
-
-#ifdef GIZMOISDLL
-#define GIZMODLLEXPORT WXDLLEXPORT
-#else
-#define GIZMODLLEXPORT
-#endif
-
+#include "wx/gizmos/gizmos.h"
 
 class WXDLLEXPORT wxBitmapButton;
 class WXDLLEXPORT wxListCtrl;
@@ -35,7 +29,7 @@ class WXDLLEXPORT wxListEvent;
 // This class provides a composite control that lets the
 // user easily enter list of strings
 
-class GIZMODLLEXPORT wxEditableListBox : public wxPanel
+class WXDLLIMPEXP_GIZMOS wxEditableListBox : public wxPanel
 {
 	DECLARE_CLASS(wxEditableListBox);
 

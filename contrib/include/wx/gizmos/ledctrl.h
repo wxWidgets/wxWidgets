@@ -5,12 +5,7 @@
     #pragma interface "wxLEDNumberCtrl.h"
 #endif
 
-#ifdef GIZMOISDLL
-#define GIZMODLLEXPORT WXDLLEXPORT
-#else
-#define GIZMODLLEXPORT
-#endif
-
+#include "wx/gizmos/gizmos.h"
 
 #include <wx/window.h>
 #include <wx/control.h>
@@ -38,7 +33,7 @@ enum wxLEDValueAlign
 // wxLEDNumberCtrl
 // ----------------------------------------------------------------------------
 
-class GIZMODLLEXPORT wxLEDNumberCtrl :	public wxControl
+class WXDLLIMPEXP_GIZMOS wxLEDNumberCtrl :	public wxControl
 {
 public:
     // Constructors.

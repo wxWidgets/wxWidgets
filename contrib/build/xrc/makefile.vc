@@ -4,43 +4,7 @@
 #     Do not modify, all changes will be overwritten!
 # =========================================================================
 
-
-# -------------------------------------------------------------------------
-# These are configurable options:
-# -------------------------------------------------------------------------
-
-# Type of compiled binaries [debug,release]
-BUILD = release
-# C compiler 
-CC = cl
-# Name of your custom configuration. This affects directory
-#            where object files are stored as well as the location of
-#            compiled .lib files and setup.h under the lib/ toplevel directory. 
-CFG = 
-# Standard flags for CC 
-CFLAGS = 
-# Standard preprocessor flags (common for CC and CXX) 
-CPPFLAGS = /DWIN32 /D_WINDOWS
-# C++ compiler 
-CXX = cl
-# Standard flags for C++ 
-CXXFLAGS = 
-# Standard linker flags 
-LDFLAGS = 
-# Multiple libraries or single huge monolithic one? [0,1]
-MONOLITHIC = 1
-# Is this official build by wxWindows developers? [0,1]
-OFFICIAL_BUILD = 0
-# What type of library to build? [0,1]
-SHARED = 1
-# Compile Unicode build of wxWindows? [0,1]
-UNICODE = 0
-# Build GUI libraries? [0,1]
-USE_GUI = 1
-# Use this to name your customized DLLs differently 
-VENDOR = custom
-# Build wxUniversal instead of native port? [0,1]
-WXUNIV = 0
+!include <../../../build/config.vc>
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -48,11 +12,11 @@ WXUNIV = 0
 
 ### Variables: ###
 
-XRCDLL_CXXFLAGS = $(CPPFLAGS) /MD$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrcdll.pch /I..\..\src\xrc\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_XRC /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS)  /Yuwx/wxprec.h
 OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-XRCDLL_CFLAGS = $(CPPFLAGS) /MD$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrcdll.pch /I..\..\src\xrc\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_XRC /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CFLAGS) 
-XRCLIB_CFLAGS = $(CPPFLAGS) /MD$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrclib.pch /I..\..\src\xrc\..\..\include /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CFLAGS)
-XRCLIB_CXXFLAGS = $(CPPFLAGS) /MD$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrclib.pch /I..\..\src\xrc\..\..\include /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS) /Yuwx/wxprec.h
+XRCDLL_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrcdll.pch /I..\..\src\xrc\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_XRC /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CFLAGS) 
+XRCDLL_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrcdll.pch /I..\..\src\xrc\..\..\include /DWXUSINGDLL /DWXMAKINGDLL_XRC /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS)  /Yuwx/wxprec.h
+XRCLIB_CFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrclib.pch /I..\..\src\xrc\..\..\include /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CFLAGS)
+XRCLIB_CXXFLAGS = $(CPPFLAGS) /M$(__RUNTIME_LIBS)$(__DEBUGFLAG_3) $(__DEBUGFLAG) /Fd..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.pdb $(__OPTIMIZEFLAG)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I..\..\src\xrc\..\..\..\include /I..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I..\..\src\xrc\..\..\..\src\tiff /I..\..\src\xrc\..\..\..\src\jpeg /I..\..\src\xrc\..\..\..\src\png /I..\..\src\xrc\..\..\..\src\zlib  /I..\..\src\xrc\..\..\..\src\regex /Fp$(OBJS)\wxprec_xrclib.pch /I..\..\src\xrc\..\..\include /I..\..\src\xrc\expat\xmlparse /I..\..\src\xrc\expat\xmltok $(CXXFLAGS) /Yuwx/wxprec.h
 
 ### Conditionally set variables: ###
 
@@ -107,6 +71,12 @@ __OPTIMIZEFLAG = /Od
 !if "$(BUILD)" == "release"
 __OPTIMIZEFLAG = /O2
 !endif
+!if "$(RUNTIME_LIBS)" == "dynamic"
+__RUNTIME_LIBS = D
+!endif
+!if "$(RUNTIME_LIBS)" == "static"
+__RUNTIME_LIBS = 
+!endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
 !endif
@@ -124,12 +94,6 @@ __WXLIB_MONO_p = wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
 !if "$(WXUNIV)" == "1"
 __WXUNIV_DEFINE_p = /D__WXUNIVERSAL__
-!endif
-!if "$(SHARED)" == "1"
-__install_xrcdll___depname = install_xrcdll
-!endif
-!if "$(SHARED)" == "0"
-__install_xrclib___depname = install_xrclib
 !endif
 !if "$(SHARED)" == "1"
 __xrcdll___depname = ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll
@@ -405,23 +369,6 @@ clean:
 	-if exist ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll del ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll
 	-if exist ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib del ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib
 	-if exist ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib del ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib
-
-install: all $(__install_xrcdll___depname) $(__install_xrclib___depname)
-
-!if "$(SHARED)" == "1"
-install_xrcdll: 
-	mkdir /usr/local/lib
-	copy /Y ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib /usr/local/lib
-	copy /Y ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll /usr/local/lib
-!endif
-
-!if "$(SHARED)" == "0"
-install_xrclib: 
-	mkdir /usr/local/lib
-	copy /Y ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc.lib /usr/local/lib
-!endif
-
-uninstall: 
 
 !if "$(SHARED)" == "1"
 ..\..\src\xrc\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_xrc_vc$(VENDORTAG).dll: $(OBJS)\xrcdll_dummy.obj $(OBJS)\xrcdll_dummy.obj $(OBJS)\xrcdll_xmlparse.obj $(OBJS)\xrcdll_xmltok.obj $(OBJS)\xrcdll_xmlrole.obj $(OBJS)\xrcdll_xml.obj $(OBJS)\xrcdll_xmlres.obj $(OBJS)\xrcdll_xh_bmp.obj $(OBJS)\xrcdll_xh_bmpbt.obj $(OBJS)\xrcdll_xh_bttn.obj $(OBJS)\xrcdll_xh_cald.obj $(OBJS)\xrcdll_xh_chckb.obj $(OBJS)\xrcdll_xh_chckl.obj $(OBJS)\xrcdll_xh_choic.obj $(OBJS)\xrcdll_xh_combo.obj $(OBJS)\xrcdll_xh_dlg.obj $(OBJS)\xrcdll_xh_frame.obj $(OBJS)\xrcdll_xh_gauge.obj $(OBJS)\xrcdll_xh_gdctl.obj $(OBJS)\xrcdll_xh_html.obj $(OBJS)\xrcdll_xh_listb.obj $(OBJS)\xrcdll_xh_listc.obj $(OBJS)\xrcdll_xh_menu.obj $(OBJS)\xrcdll_xh_notbk.obj $(OBJS)\xrcdll_xh_panel.obj $(OBJS)\xrcdll_xh_radbt.obj $(OBJS)\xrcdll_xh_radbx.obj $(OBJS)\xrcdll_xh_scrol.obj $(OBJS)\xrcdll_xh_scwin.obj $(OBJS)\xrcdll_xh_sizer.obj $(OBJS)\xrcdll_xh_slidr.obj $(OBJS)\xrcdll_xh_spin.obj $(OBJS)\xrcdll_xh_split.obj $(OBJS)\xrcdll_xh_stbmp.obj $(OBJS)\xrcdll_xh_stbox.obj $(OBJS)\xrcdll_xh_stlin.obj $(OBJS)\xrcdll_xh_sttxt.obj $(OBJS)\xrcdll_xh_text.obj $(OBJS)\xrcdll_xh_toolb.obj $(OBJS)\xrcdll_xh_tree.obj $(OBJS)\xrcdll_xh_unkwn.obj $(OBJS)\xrcdll_xh_wizrd.obj $(OBJS)\xrcdll_xmlrsall.obj
