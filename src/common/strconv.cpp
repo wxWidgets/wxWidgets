@@ -846,7 +846,8 @@ public:
     || ( defined(__MWERKS__) && defined(__WXMSW__) )
         size_t inbuf = std::wcslen(psz);
 #else
-        size_t inbuf = ::wcslen(psz);
+	//        size_t inbuf = ::wcslen(psz);
+	size_t inbuf = wxWcslen(psz);
 #endif
         if (buf)
             w2m.Convert(psz,buf);
@@ -1038,7 +1039,8 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     || ( defined(__MWERKS__) && defined(__WXMSW__) )
     size_t len=std::wcslen(psz);
 #else
-    size_t len=::wcslen(psz);
+    //    size_t len=::wcslen(psz);
+    size_t len = wxWcslen(psz);
 #endif
     if (buf)
     {

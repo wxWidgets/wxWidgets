@@ -1368,7 +1368,7 @@ static wxWindow* wxFindSuitableParent()
 // template extension.
 
 wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
                                                 int noTemplates,
 #else
                                                 int WXUNUSED(noTemplates),
@@ -1378,7 +1378,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                                 bool WXUNUSED(save))
 {
     // We can only have multiple filters in Windows and GTK
-#if defined(__WXMSW__) || defined(__WXGTK__)
+#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXMAC__)
     wxString descrBuf;
 
     int i;
