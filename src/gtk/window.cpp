@@ -8,15 +8,17 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "window.h"
 #endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #ifdef __VMS
 #define XWarpPointer XWARPPOINTER
 #endif
 
-#include "wx/defs.h"
 #include "wx/window.h"
 #include "wx/dcclient.h"
 #include "wx/frame.h"

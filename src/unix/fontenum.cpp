@@ -17,11 +17,13 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "fontenum.h"
 #endif
 
-#include "wx/defs.h"
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/dynarray.h"
 #include "wx/string.h"
 #include "wx/regex.h"

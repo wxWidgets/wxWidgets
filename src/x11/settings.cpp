@@ -13,7 +13,7 @@
 // per-user file, which can be edited using a Windows-control-panel clone.
 // Also they should be documented better. Some are very MS Windows-ish.
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "settings.h"
 #endif
 

@@ -62,7 +62,7 @@ license is as follows:
 %
 */
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "imagxpm.h"
 #endif
 

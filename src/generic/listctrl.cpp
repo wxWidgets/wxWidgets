@@ -23,7 +23,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "listctrl.h"
     #pragma implementation "listctrlbase.h"
 #endif

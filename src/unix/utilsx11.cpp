@@ -11,6 +11,9 @@
 
 #if defined(__WXX11__) || defined(__WXGTK__) || defined(__WXMOTIF__)
 
+// for compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
 #include "wx/unix/utilsx11.h"
 #include "wx/iconbndl.h"
 #include "wx/image.h"

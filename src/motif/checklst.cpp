@@ -13,7 +13,7 @@
 // headers & declarations
 // ============================================================================
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "checklst.h"
 #endif
 

@@ -30,7 +30,7 @@
 
 /* modified by Vaclav Slavik for use as jpeglib-independent module */
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "quantize.h"
 #endif
 

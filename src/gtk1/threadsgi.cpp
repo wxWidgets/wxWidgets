@@ -8,9 +8,12 @@
 // Copyright:   (c) Wolfram Gloger (1996, 1997); Guilhem Lavaux (1998)
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma implementation "thread.h"
 #endif
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
 
 #include <stdio.h>
 #include <unistd.h>

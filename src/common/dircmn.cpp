@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 
 /* this is done in platform-specific files
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma implementation "dir.h"
 #endif
 */
