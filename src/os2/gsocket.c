@@ -80,9 +80,9 @@ int _System soclose(int);
 
 /* Global initialisers */
 
-bool GSocket_Init()
+int GSocket_Init()
 {
-  return TRUE;
+  return 1;
 }
 
 void GSocket_Cleanup()
@@ -110,13 +110,13 @@ GSocket *GSocket_new()
   socket->m_local               = NULL;
   socket->m_peer                = NULL;
   socket->m_error               = GSOCK_NOERROR;
-  socket->m_server              = FALSE;
-  socket->m_stream              = TRUE;
+  socket->m_server              = 0;
+  socket->m_stream              = 1;
   socket->m_gui_dependent       = NULL;
-  socket->m_non_blocking        = FALSE;
+  socket->m_non_blocking        = 0;
   socket->m_timeout             = 10*60*1000;
                                 /* 10 minutes * 60 sec * 1000 millisec */
-  socket->m_establishing        = FALSE;
+  socket->m_establishing        = 0;
 
   return socket;
 }
@@ -278,8 +278,8 @@ GSocketError GSocket_SetServer(GSocket *sck)
   }
 
   /* We always have a stream here  */
-  sck->m_stream = TRUE;
-  sck->m_server = TRUE;
+  sck->m_stream = 1;
+  sck->m_server = 1;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_STREAM, 0);
@@ -360,9 +360,9 @@ GSocket *GSocket_WaitConnection(GSocket *socket)
   }
 
   /* Initialize all fields */
-  connection->m_server   = FALSE;
-  connection->m_stream   = TRUE;
-  connection->m_oriented = TRUE;
+  connection->m_server   = 0;
+  connection->m_stream   = 1;
+  connection->m_oriented = 1;
 
   ioctl(connection->m_fd, FIONBIO, (char*)&arg, sizeof(int));
   return connection;
@@ -386,9 +386,9 @@ GSocketError GSocket_SetNonOriented(GSocket *sck)
     return GSOCK_INVADDR;
   }
 
-  sck->m_stream   = FALSE;
-  sck->m_server   = FALSE;
-  sck->m_oriented = FALSE;
+  sck->m_stream   = 0;
+  sck->m_server   = 0;
+  sck->m_oriented = 0;
 
   /* Create the socket */
   sck->m_fd = socket(sck->m_local->m_realfamily, SOCK_DGRAM, 0);
@@ -446,9 +446,9 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
 
   /* Test whether we want the socket to be a stream (e.g. TCP) */
   sck->m_stream   = (stream == GSOCK_STREAMED);
-  sck->m_oriented = TRUE;
-  sck->m_server   = FALSE;
-  sck->m_establishing = FALSE;
+  sck->m_oriented = 1;
+  sck->m_server   = 0;
+  sck->m_establishing = 0;
 
   if (sck->m_stream)
     type = SOCK_STREAM;
@@ -503,7 +503,7 @@ GSocketError GSocket_Connect(GSocket *sck, GSocketStream stream)
     if ((err == EINPROGRESS) && (sck->m_non_blocking))
     {
       sck->m_error = GSOCK_WOULDBLOCK;
-      sck->m_establishing = TRUE;
+      sck->m_establishing = 1;
       fprintf(stderr, "Nonblocking connect in progress\n");
 
       return GSOCK_WOULDBLOCK;
@@ -620,7 +620,7 @@ GSocketEventFlags GSocket_Select(GSocket *socket, GSocketEventFlags flags)
  *  Sets the socket to non-blocking mode. This is useful if
  *  we don't want to wait.
  */
-void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
+void GSocket_SetNonBlocking(GSocket *socket, int non_block)
 {
   assert(socket != NULL);
 
@@ -891,7 +891,7 @@ void _GSocket_Detected_Write(GSocket *socket)
   {
     int error, len;
 
-    socket->m_establishing = FALSE;
+    socket->m_establishing = 0;
 
     len = sizeof(error);
     getsockopt(socket->m_fd, SOL_SOCKET, SO_ERROR, (char*)&error, &len);
