@@ -622,7 +622,7 @@ class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 {
 public:
     wxStaticBoxSizer(wxStaticBox *box, int orient);
-    wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = _T(""));
+    wxStaticBoxSizer(int orient, wxWindow *win, const wxString& label = wxEmptyString);
 
     void RecalcSizes();
     wxSize CalcMin();
