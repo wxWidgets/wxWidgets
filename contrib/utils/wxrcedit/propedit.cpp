@@ -18,7 +18,7 @@
 #endif
 
 #include "wx/wx.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "propframe.h"
 #include "propedit.h"
 #include "xmlhelpr.h"

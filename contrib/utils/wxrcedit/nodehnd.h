@@ -22,9 +22,9 @@ class WXDLLEXPORT wxListCtrl;
 class EditorFrame;
 
 #include "wx/treectrl.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "nodesdb.h"
-
+#include "wx/arrstr.h"
 
 
 

@@ -19,7 +19,7 @@
 #endif
 
 #include "wx/wx.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/xrc/xmlres.h"
 #include "wx/splitter.h"
 #include "wx/config.h"
@@ -396,7 +396,7 @@ void EditorFrame::RefreshTree()
 static void RecursivelyExpand(wxTreeCtrl *t, wxTreeItemId item)
 {
     t->Expand(item);
-    long cookie;
+    void* cookie;
     wxTreeItemId id = t->GetFirstChild(item, cookie);
     while (id.IsOk())
     {
@@ -416,7 +416,7 @@ bool EditorFrame::SelectNode(wxXmlNode *node, wxTreeItemId *root)
     wxTreeItemId item;
     XmlTreeData *dt;
     wxXmlNode *nd;
-    long cookie;
+    void* cookie;
     
     item = m_TreeCtrl->GetFirstChild(*root, cookie);
     while (item.IsOk())

@@ -166,6 +166,7 @@ public:
       const wxPoint& pos = wxDefaultPosition,
       const wxSize& sz = wxDefaultSize,
       long style = wxSP_3D | wxCLIP_CHILDREN);
+    ~wxThinSplitterWindow();
 
 //// Overrides
 

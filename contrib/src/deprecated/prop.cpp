@@ -35,6 +35,8 @@
 #include <math.h>
 #include <string.h>
 
+static inline wxChar* copystring(const wxChar* s)
+    { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
 
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyValue, wxObject)
 
@@ -1154,11 +1156,17 @@ wxChar *wxPropertyValidator::DoubleToString (double number) {
 }
 
 wxChar *wxPropertyValidator::IntToString (int number) {
-    return ::IntToString (number);
+    static wxChar buf[20];
+
+    wxSprintf (buf, wxT("%d"), number);
+    return buf;
 }
 
 wxChar *wxPropertyValidator::LongToString (long number) {
-    return ::LongToString (number);
-  }
+    static wxChar buf[20];
+
+    wxSprintf (buf, wxT("%ld"), number);
+    return buf;
+}
 
 #endif // wxUSE_PROPSHEET

@@ -16,6 +16,7 @@
         ../../utils/*.bkl
         ../../utils/*/*.bkl
         ../../utils/*/*/*.bkl
+        ../../contrib/utils/*/*.bkl
         ../../contrib/samples/*.bkl
         ../../contrib/samples/*/*.bkl
         ../../contrib/samples/*/*/*.bkl

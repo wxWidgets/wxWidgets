@@ -18,7 +18,7 @@
 #endif
 
 #include "wx/wx.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/tokenzr.h"
 #include "pe_basic.h"
 #include "xmlhelpr.h"

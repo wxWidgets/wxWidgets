@@ -32,5 +32,8 @@
     <template id="wx_contrib_headers">
         <srcdir>$(CONTRIB_HDR_DIR)</srcdir>
     </template>    
-    
+
+    <template id="wx_contrib_util" template="wx_util">
+        <include>$(CONTRIB_HDR_DIR)</include>
+    </template>
 </makefile>

@@ -18,7 +18,7 @@
 #endif
 
 #include "nodehnd.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/filefn.h"
 #include "wx/wx.h"
 #include "wx/arrimpl.cpp"

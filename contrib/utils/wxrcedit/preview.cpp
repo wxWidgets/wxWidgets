@@ -18,7 +18,7 @@
 #endif
 
 #include "wx/wx.h"
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/xrc/xmlres.h"
 #include "wx/config.h"
 #include "wx/log.h"

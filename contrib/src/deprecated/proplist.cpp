@@ -57,6 +57,9 @@
 #include <math.h>
 #include <string.h>
 
+static inline wxChar* copystring(const wxChar* s)
+    { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
+
 // ----------------------------------------------------------------------------
 // Property text edit control
 // ----------------------------------------------------------------------------

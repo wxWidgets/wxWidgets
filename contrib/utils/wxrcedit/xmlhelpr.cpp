@@ -17,7 +17,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/wx.h"
 #include "wx/tokenzr.h"
 #include "xmlhelpr.h"

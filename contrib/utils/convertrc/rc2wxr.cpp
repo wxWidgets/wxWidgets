@@ -251,7 +251,7 @@ if (!tok.IsNumber())
 
 //Generate Dialog text
 
-fprintf(m_wxr,"static char *dialog%i = \"dialog(name = '%s',\\\n",dlgid,dlgname);
+fprintf(m_wxr,"static char *dialog%i = \"dialog(name = '%s',\\\n",dlgid,dlgname.c_str());
 
 //be lazy about style for now. add it later
 
@@ -295,7 +295,7 @@ if (tok=="CAPTION")
 
 title=GetQuoteField();
 
-fprintf(m_wxr,"title = '%s',\\\n",title);
+fprintf(m_wxr,"title = '%s',\\\n",title.c_str());
 
 }
 
@@ -413,7 +413,7 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxStaticText,'%s','0','%s',",m_controlid,phrase,varname);
+fprintf(m_wxr,"  control = [%i,wxStaticText,'%s','0','%s',",m_controlid,phrase.c_str(),varname.c_str());
 
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 
@@ -439,7 +439,7 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxTextCtrl,'','0','%s',",m_controlid,varname);
+fprintf(m_wxr,"  control = [%i,wxTextCtrl,'','0','%s',",m_controlid,varname.c_str());
 
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 
@@ -491,7 +491,7 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxButton,'%s','0','%s',",c,phrase,varname);
+fprintf(m_wxr,"  control = [%i,wxButton,'%s','0','%s',",c,phrase.c_str(),varname.c_str());
 
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 
@@ -551,7 +551,7 @@ int x,y,width,height;
 
 ReadRect(x,y,width,height);
 
-fprintf(m_wxr,"  control = [%i,wxStaticBox,'%s','0','%s',",m_controlid,phrase,varname);
+fprintf(m_wxr,"  control = [%i,wxStaticBox,'%s','0','%s',",m_controlid,phrase.c_str(),varname.c_str());
 
 fprintf(m_wxr,"%i,%i,%i,%i,'',\\\n",x,y,width,height);
 
@@ -771,7 +771,7 @@ ReadRect(x,y,width,height);
 
 
 
-fprintf(m_wxr,"  control = [%i,wxChoice,'','0','%s',",m_controlid,varname);
+fprintf(m_wxr,"  control = [%i,wxChoice,'','0','%s',",m_controlid,varname.c_str());
 
 fprintf(m_wxr,"%i,%i,%i,%i,[],\\\n",x,y,width,height);
 
@@ -795,7 +795,7 @@ static int menuid=0;
 
 menuid++;
 
-fprintf(m_wxr,"static char *MenuBar%i = \"menu(name = '%s',\\\n",menuid,name);
+fprintf(m_wxr,"static char *MenuBar%i = \"menu(name = '%s',\\\n",menuid,name.c_str());
 
 fprintf(m_wxr,"menu = \\\n");
 
@@ -857,7 +857,7 @@ spot=tok.First("\\t");
 
 tok=tok.Left(spot);
 
-fprintf(m_wxr,"  ['%s',%i,'',\\\n",tok,menuitem);
+fprintf(m_wxr,"  ['%s',%i,'',\\\n",tok.c_str(),menuitem);
 
 while ((tok!="BEGIN")&(tok!="{"))
 
@@ -893,7 +893,7 @@ tok=tok.Left(spot);
 
 menuitem++;
 
-fprintf(m_wxr,"      ['%s',%i,''],\\\n",tok,menuitem);
+fprintf(m_wxr,"      ['%s',%i,''],\\\n",tok.c_str(),menuitem);
 
 }
 
@@ -981,7 +981,7 @@ wxString tok;
 
 while (ReadOrs(tok));
 
-fprintf(m_wxr,"  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',",m_controlid,varname);
+fprintf(m_wxr,"  control = [%i,wxSlider,'','wxSL_HORIZONTAL','%s',",m_controlid,varname.c_str());
 
 int x,y,width,height;
 
@@ -1011,7 +1011,7 @@ wxString tok;
 
 while (ReadOrs(tok));
 
-fprintf(m_wxr,"  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',",m_controlid,varname);
+fprintf(m_wxr,"  control = [%i,wxGauge,'','wxGA_HORIZONTAL','%s',",m_controlid,varname.c_str());
 
 int x,y,width,height;
 
@@ -1069,7 +1069,7 @@ if (tok=="BS_AUTOCHECKBOX")
 
 {
 
-    fprintf(m_wxr,"  control = [%i,wxCheckBox,'%s','0','%s',",m_controlid,label,varname);
+    fprintf(m_wxr,"  control = [%i,wxCheckBox,'%s','0','%s',",m_controlid,label.c_str(),varname.c_str());
 
     while (ReadOrs(tok));
 
@@ -1087,7 +1087,7 @@ if (tok=="BS_AUTORADIOBUTTON")
 
 {
 
-    fprintf(m_wxr,"  control = [%i,wxRadioButton,'%s','0','%s',",m_controlid,label,varname);
+    fprintf(m_wxr,"  control = [%i,wxRadioButton,'%s','0','%s',",m_controlid,label.c_str(),varname.c_str());
 
     while(ReadOrs(tok));
 

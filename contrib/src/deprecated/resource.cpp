@@ -89,6 +89,9 @@
 #include "wx/deprecated/resource.h"
 #include "wx/deprecated/wxexpr.h"
 
+static inline wxChar* copystring(const wxChar* s)
+    { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
+
 // Forward (private) declarations
 bool wxResourceInterpretResources(wxResourceTable& table, wxExprDatabase& db);
 wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, bool isPanel = FALSE);

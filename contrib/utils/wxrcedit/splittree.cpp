@@ -18,7 +18,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma implementation "splittree.h"
 #endif
 
@@ -332,9 +332,9 @@ void wxRemotelyScrolledTreeCtrl::CalcTreeSize(const wxTreeItemId& id, wxRect& re
 		rect = CombineRectangles(rect, itemSize);
 	}
 
-	long cookie;
+	void* cookie;
 	wxTreeItemId childId = GetFirstChild(id, cookie);
-	while (childId != 0)
+	while (childId)
 	{
 		CalcTreeSize(childId, rect);
 		childId = GetNextChild(childId, cookie);
@@ -495,6 +495,10 @@ wxThinSplitterWindow::wxThinSplitterWindow(wxWindow* parent, wxWindowID id,
 {
 }
 
+wxThinSplitterWindow::~wxThinSplitterWindow()
+{
+}
+
 void wxThinSplitterWindow::SizeWindows()
 {
 	// The client size may have changed inbetween
@@ -512,7 +516,7 @@ bool wxThinSplitterWindow::SashHitTest(int x, int y, int tolerance)
 
 void wxThinSplitterWindow::DrawSash(wxDC& dc)
 {
-    if ( m_sashPosition == 0 || !m_windowTwo)
+    if ( GetSashPosition() == 0 || !m_windowTwo)
         return;
     if (GetWindowStyle() & wxSP_NOSASH)
         return;
@@ -532,7 +536,7 @@ void wxThinSplitterWindow::DrawSash(wxDC& dc)
 		{
 			y1 = 2; h1 -= 3;
 		}
-		dc.DrawRectangle(m_sashPosition, y1, m_sashSize, h1);
+		dc.DrawRectangle(GetSashPosition(), y1, GetSashSize(), h1);
 	}
 	else
 	{
@@ -546,7 +550,7 @@ void wxThinSplitterWindow::DrawSash(wxDC& dc)
 		{
 			x1 = 2; w1 -= 3;
 		}
-		dc.DrawRectangle(x1, m_sashPosition, w1, m_sashSize);
+		dc.DrawRectangle(x1, GetSashPosition(), w1, GetSashSize());
 	}
 	
     dc.SetPen(wxNullPen);

@@ -25,7 +25,7 @@
     #include "wx/wx.h"
 #endif
 
-#include "wx/xrc/xml.h"
+#include "wx/xml/xml.h"
 #include "wx/image.h"
 #include "wx/wx.h"
 
