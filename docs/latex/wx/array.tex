@@ -142,10 +142,15 @@ WX\_DEFINE\_OBJARRAY macro.
 
 \helpref{WX\_DEFINE\_ARRAY}{wxdefinearray}\\
 \helpref{WX\_DEFINE\_EXPORTED\_ARRAY}{wxdefinearray}\\
+\helpref{WX\_DEFINE\_USER\_EXPORTED\_ARRAY}{wxdefinearray}\\
 \helpref{WX\_DEFINE\_SORTED\_ARRAY}{wxdefinesortedarray}\\
 \helpref{WX\_DEFINE\_SORTED\_EXPORTED\_ARRAY}{wxdefinesortedarray}\\
+\helpref{WX\_DEFINE\_SORTED\_USER\_EXPORTED\_ARRAY}{wxdefinesortedarray}\\
 \helpref{WX\_DECLARE\_EXPORTED\_OBJARRAY}{wxdeclareobjarray}\\
-\helpref{WX\_DEFINE\_OBJARRAY}{wxdefineobjarray}
+\helpref{WX\_DECLARE\_USER\_EXPORTED\_OBJARRAY}{wxdeclareobjarray}\\
+\helpref{WX\_DEFINE\_OBJARRAY}{wxdefineobjarray}\\
+\helpref{WX\_DEFINE\_EXPORTED\_OBJARRAY}{wxdefineobjarray}\\
+\helpref{WX\_DEFINE\_USER\_EXPORTED\_OBJARRAY}{wxdefineobjarray}
 
 \membersection{Constructors and destructors}
 
@@ -224,9 +229,13 @@ does exactly the same as \helpref{Item()}{wxarrayitem} method.
 
 \func{}{WX\_DEFINE\_EXPORTED\_ARRAY}{\param{}{T}, \param{}{name}}
 
+\func{}{WX\_DEFINE\_USER\_EXPORTED\_ARRAY}{\param{}{T}, \param{}{name}, \param{}{exportspec}}
+
 This macro defines a new array class named {\it name} and containing the
-elements of type {\it T}. The second form is used when compiling DLL
-under Windows and array needs to be visible outside the DLL.
+elements of type {\it T}. The second form is used when compiling wxWindows as
+a DLL under Windows and array needs to be visible outside the DLL.  The third is
+needed for exporting an array from a user DLL.
+
 Example:
 
 \begin{verbatim}
@@ -245,9 +254,12 @@ wxArrayLong and wxArrayPtrVoid.
 
 \func{}{WX\_DEFINE\_SORTED\_EXPORTED\_ARRAY}{\param{}{T}, \param{}{name}}
 
+\func{}{WX\_DEFINE\_SORTED\_USER\_EXPORTED\_ARRAY}{\param{}{T}, \param{}{name}}
+
 This macro defines a new sorted array class named {\it name} and containing
-the elements of type {\it T}. The second form is used when compiling DLL
-under Windows and array needs to be visible outside the DLL.
+the elements of type {\it T}. The second form is used when compiling wxWindows as
+a DLL under Windows and array needs to be visible outside the DLL.  The third is
+needed for exporting an array from a user DLL.
 
 Example:
 
@@ -284,9 +296,12 @@ wxArrayOfMyClass another(CompareMyClassObjects);
 
 \func{}{WX\_DECLARE\_EXPORTED\_OBJARRAY}{\param{}{T}, \param{}{name}}
 
+\func{}{WX\_DECLARE\_USER\_EXPORTED\_OBJARRAY}{\param{}{T}, \param{}{name}}
+
 This macro declares a new object array class named {\it name} and containing
-the elements of type {\it T}. The second form is used when compiling DLL
-under Windows and array needs to be visible outside the DLL.
+the elements of type {\it T}. The second form is used when compiling wxWindows as
+a DLL under Windows and array needs to be visible outside the DLL.  The third is
+needed for exporting an array from a user DLL.
 
 Example:
 
@@ -302,6 +317,10 @@ the array class - otherwise you would get link errors.
 
 \func{}{WX\_DEFINE\_OBJARRAY}{\param{}{name}}
 
+\func{}{WX\_DEFINE\_EXPORTED\_OBJARRAY}{\param{}{name}}
+
+\func{}{WX\_DEFINE\_USER\_EXPORTED\_OBJARRAY}{\param{}{name}}
+
 This macro defines the methods of the array class {\it name} not defined by the 
 \helpref{WX\_DECLARE\_OBJARRAY()}{wxdeclareobjarray} macro. You must include the
 file <wx/arrimpl.cpp> before using this macro and you must have the full
@@ -309,7 +328,8 @@ declaration of the class of array elements in scope! If you forget to do the
 first, the error will be caught by the compiler, but, unfortunately, many
 compilers will not give any warnings if you forget to do the second - but the
 objects of the class will not be copied correctly and their real destructor will
-not be called.
+not be called.  The latter two forms are merely aliases of the first to satisfy
+some people's sense of symmetry when using the exported declarations.
 
 Example of usage:
 
