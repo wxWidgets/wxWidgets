@@ -185,7 +185,7 @@ void wxGUIAppTraits::AfterChildWaitLoop(void *dataOrig)
 {
     wxEndBusyCursor();
 
-    const ChildWaitLoopData * const data = (ChildWaitLoopData *)dataOrig;
+    ChildWaitLoopData * const data = (ChildWaitLoopData *)dataOrig;
 
     delete data->wd;
 
