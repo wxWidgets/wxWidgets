@@ -35,6 +35,7 @@ _treeList = [
         'FloatCanvas',
         'wxXmlResourceSubclass',
         'wxGridBagSizer',
+        'Cursor',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -185,6 +186,7 @@ _treeList = [
 
     # Images
     ('Using Images', [
+        'Cursor',
         'Throbber',
         'wxArtProvider',
         'wxDragImage',
