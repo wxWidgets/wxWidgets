@@ -274,10 +274,12 @@ off_t wxFile::Read(void *pBuf, off_t nCount)
 {
     wxCHECK( (pBuf != NULL) && IsOpened(), 0 );
 
+    // note: we have to use scope resolution operator because there is also an
+    // enum value "read"
 #ifdef __MWERKS__
     int iRc = ::read(m_fd, (char*) pBuf, nCount);
 #else
-    int iRc = wxRead(m_fd, pBuf, nCount);
+    int iRc = ::wxRead(m_fd, pBuf, nCount);
 #endif
     if ( iRc == -1 ) {
         wxLogSysError(_("can't read from file descriptor %d"), m_fd);
