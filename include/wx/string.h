@@ -66,6 +66,7 @@ const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 
 // 'naughty' cast
 #define   WXSTRINGCAST (wxChar *)(const wxChar *)
+#define   WXCSTRINGCAST (wxChar *)(const wxChar *)
 #define   MBSTRINGCAST (char *)(const char *)
 #define   WCSTRINGCAST (wchar_t *)(const wchar_t *)
 
@@ -169,6 +170,7 @@ struct WXDLLEXPORT wxStringData
 // ---------------------------------------------------------------------------
 // types of multibyte<->Unicode conversions
 // ---------------------------------------------------------------------------
+#if wxUSE_WCHAR_T
 class WXDLLEXPORT wxMBConv
 {
  public:
@@ -254,6 +256,10 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConv_current;
 #define wxFNCONV(name) name
 #define FNSTRINGCAST WXSTRINGCAST
 #endif
+#else//!wxUSE_WCHAR_T
+class WXDLLEXPORT wxMBConv {};
+WXDLLEXPORT_DATA(extern wxMBConv) wxConv_libc;
+#endif//wxUSE_WCHAR_T
 
 // ---------------------------------------------------------------------------
 // This is (yet another one) String class for C++ programmers. It doesn't use
@@ -370,8 +376,10 @@ public:
     // from multibyte string
   wxString(const char *psz, wxMBConv& WXUNUSED(conv), size_t nLength = wxSTRING_MAXLEN)
     { InitWith(psz, 0, nLength); }
+#if wxUSE_WCHAR_T
     // from wide (Unicode) string
   wxString(const wchar_t *pwz);
+#endif
     // from wxCharBuffer
   wxString(const wxCharBuffer& psz)
     { InitWith(psz, 0, wxSTRING_MAXLEN); }
@@ -451,6 +459,8 @@ public:
     operator const wxChar*() const { return m_pchData; }
     // explicit conversion to C string (use this with printf()!)
     const wxChar* c_str()   const { return m_pchData; }
+    // (and this with [wx]Printf()!)
+    const wxChar* wx_str()  const { return m_pchData; }
     //
     const wxChar* GetData() const { return m_pchData; }
 #if wxUSE_UNICODE
@@ -463,7 +473,9 @@ public:
 #endif
 #else
     const wxChar* mb_str(wxMBConv& WXUNUSED(conv) = wxConv_libc ) const { return m_pchData; }
+#if wxUSE_WCHAR_T
     const wxWCharBuffer wc_str(wxMBConv& conv) const { return conv.cMB2WC(m_pchData); }
+#endif
     const wxChar* fn_str() const { return m_pchData; }
 #endif
     // for convenience
@@ -482,8 +494,10 @@ public:
 #else
     // from another kind of C string
   wxString& operator=(const unsigned char* psz);
+#if wxUSE_WCHAR_T
     // from a wide string
   wxString& operator=(const wchar_t *pwz);
+#endif
     // from wxCharBuffer
   wxString& operator=(const wxCharBuffer& psz) { return operator=((const char *)psz); }
 #endif
