@@ -17,14 +17,21 @@ class LayoutTestFrame(wx.Frame):
         p = wx.Panel(self)
 
         # Create control widgets
-        self.testHistory = wx.ListBox(p, -1, size=(150, 250))
+        self.testHistory = wx.ListBox(p, -1, size=(150, 300))
         self.moduleName = wx.TextCtrl(p, -1, "wx")
         self.className  = wx.TextCtrl(p, -1, "")
         self.parameters = wx.TextCtrl(p, -1, "")
+        self.postCreate = wx.TextCtrl(p, -1, "", size=(1,75),
+                                      style=wx.TE_MULTILINE|wx.TE_DONTWRAP)
         self.expression = wx.TextCtrl(p, -1, "", style=wx.TE_READONLY)
-        self.docstring  = wx.TextCtrl(p, -1, "", size=(1,125),
+        self.docstring  = wx.TextCtrl(p, -1, "", size=(1,75),
                                       style=wx.TE_READONLY|wx.TE_MULTILINE|wx.TE_DONTWRAP)
-                                      
+
+        self.expression.SetBackgroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOBK))
+        self.docstring.SetBackgroundColour(
+            wx.SystemSettings.GetColour(wx.SYS_COLOUR_INFOBK))
+        
 
         addBtn = wx.Button(p, -1, "Add")
         remBtn = wx.Button(p, -1, "Remove")
@@ -76,21 +83,28 @@ class LayoutTestFrame(wx.Frame):
 
         ctlsSizer.Add((1,25))
         ctlsSizer.Add((1,25))
+
         ctlsSizer.Add(wx.StaticText(p, -1, "Module name:"),
                       0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-        ctlsSizer.Add(self.moduleName, 0, wx.EXPAND)
-        ctlsSizer.Add(wx.StaticText(p, -1, "Class name:"),
-                      0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-        ctlsSizer.Add(self.className, 0, wx.EXPAND)
+        mcSizer = wx.BoxSizer(wx.HORIZONTAL)
+        mcSizer.Add(self.moduleName, 0, 0)
+        mcSizer.Add(wx.StaticText(p, -1, "Class name:"),
+                      0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL |wx.LEFT, 10)
+        mcSizer.Add(self.className, 1, 0)
+        ctlsSizer.Add(mcSizer, 0, wx.EXPAND)
+
         ctlsSizer.Add(wx.StaticText(p, -1, "Parameters:"),
                       0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
         ctlsSizer.Add(self.parameters, 0, wx.EXPAND)
-        ctlsSizer.Add(wx.StaticText(p, -1, "Expression:"),
+        ctlsSizer.Add(wx.StaticText(p, -1, "Create Expr:"),
                       0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
         ctlsSizer.Add(self.expression, 0, wx.EXPAND)
+        ctlsSizer.Add(wx.StaticText(p, -1, "Post create:"), 0, wx.ALIGN_RIGHT)
+        ctlsSizer.Add(self.postCreate, 0, wx.EXPAND)
         ctlsSizer.Add(wx.StaticText(p, -1, "DocString:"), 0, wx.ALIGN_RIGHT)
         ctlsSizer.Add(self.docstring, 0, wx.EXPAND)
-        topSizer.Add(ctlsSizer, 1)
+        ctlsSizer.AddGrowableRow(5)
+        topSizer.Add(ctlsSizer, 1, wx.EXPAND)
 
         btnSizer.Add((5,5))
         btnSizer.Add(addBtn, 0, wx.RIGHT, 5)
@@ -139,7 +153,7 @@ class LayoutTestFrame(wx.Frame):
         for idx in range(len(self.history)):
             item = self.history[idx]
             # check if it is too short
-            while len(item) < 3:
+            while len(item) < 4:
                 item.append('')
 
             # add it to the listbox
@@ -165,8 +179,9 @@ class LayoutTestFrame(wx.Frame):
         moduleName = self.moduleName.GetValue()
         className  = self.className.GetValue()
         parameters = self.parameters.GetValue()
+        postCreate = self.postCreate.GetValue()
 
-        item = [str(moduleName), str(className), str(parameters)]
+        item = [str(moduleName), str(className), str(parameters), str(postCreate)]
         self.history.append(item)
         self.testHistory.Append(item[0] + '.' + item[1])
 
@@ -180,7 +195,8 @@ class LayoutTestFrame(wx.Frame):
             del self.history[idx]
             self.testHistory.Delete(idx)
         self.needSaved = True
-
+        self.OnClear(None)
+        
 
     def OnReplaceHistory(self, evt):
         idx = self.testHistory.GetSelection()
@@ -188,8 +204,9 @@ class LayoutTestFrame(wx.Frame):
             moduleName = self.moduleName.GetValue()
             className  = self.className.GetValue()
             parameters = self.parameters.GetValue()
+            postCreate = self.postCreate.GetValue()
 
-            item = [str(moduleName), str(className), str(parameters)]
+            item = [str(moduleName), str(className), str(parameters), str(postCreate)]
             self.history[idx] = item
             self.testHistory.SetString(idx, item[0] + '.' + item[1])
         self.needSaved = True
@@ -202,6 +219,7 @@ class LayoutTestFrame(wx.Frame):
             self.moduleName.SetValue(item[0])
             self.className.SetValue(item[1])
             self.parameters.SetValue(item[2])
+            self.postCreate.SetValue(item[3])
 
 
     def OnHistoryActivate(self, evt):
@@ -218,7 +236,7 @@ class LayoutTestFrame(wx.Frame):
         className  = self.className.GetValue()
         parameters = self.parameters.GetValue()
         
-        expr = "%s.%s(self.testPanel, %s)" % (moduleName, className, parameters)
+        expr = "w = %s.%s( testPanel, %s )" % (moduleName, className, parameters)
         self.expression.SetValue(expr)
 
         docstring = ""
@@ -239,12 +257,15 @@ class LayoutTestFrame(wx.Frame):
     def OnCreateWidget(self, evt):
         if self.testWidget is not None:
             return
+
+        testPanel = self.testPanel
         
         # get the details from the form
         moduleName = self.moduleName.GetValue()
         className  = self.className.GetValue()
         parameters = self.parameters.GetValue()
-        expr       = self.expression.GetValue()
+        expr       = self.expression.GetValue()[4:]
+        postCreate = self.postCreate.GetValue()
 
         # make sure the module is imported already
         if not sys.modules.has_key(moduleName):
@@ -263,6 +284,19 @@ class LayoutTestFrame(wx.Frame):
             traceback.print_exc()
             return
 
+        # Is there postCreate code?
+        if postCreate:
+            ns = {}
+            ns.update(globals())
+            ns.update(locals())
+            try:
+                exec postCreate in ns
+            except Exception, e:
+                wx.MessageBox("Got a '%s' Exception!" % e.__class__.__name__, "Error")
+                import traceback
+                traceback.print_exc()
+                return
+            
         # Put the widget in a sizer and the sizer in the testPanel
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(w, 0, wx.ALL, 5)
@@ -309,10 +343,11 @@ class LayoutTestFrame(wx.Frame):
         self.parameters.SetValue("")
         self.expression.SetValue("")
         self.docstring.SetValue("")
+        self.postCreate.SetValue("")
         
 
 
-app = wx.PySimpleApp(redirect=False)
+app = wx.PySimpleApp(redirect=True)
 frame = LayoutTestFrame()
 app.SetTopWindow(frame)
 frame.Show()
