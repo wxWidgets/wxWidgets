@@ -219,7 +219,7 @@ public :
 
 	virtual bool						MacDispatchMouseEvent(wxMouseEvent& event ) ;
 
-	virtual void 						MacPaintBorders() ;
+	virtual void 						MacPaintBorders( int left , int top ) ;
 	WindowRef						    MacGetRootWindow() const  ;
 	wxTopLevelWindowMac*                MacGetTopLevelWindow() const ;
 
@@ -240,18 +240,10 @@ public :
 	// for compatibility
 	void                                MacUpdateImmediately() { Update() ; }
 	
-/*
-	bool										MacSetupFocusPort() ;
-	bool										MacSetupDrawingPort() ;
-	bool										MacSetupFocusClientPort() ;
-	bool										MacSetupDrawingClientPort() ;
-*/	
-	virtual bool						MacSetPortFocusParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
 	virtual bool						MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* rootwin )  ;
 
 	virtual void						MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
 	virtual void						MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
-	virtual void						MacDoGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
 	const wxBrush&                      MacGetBackgroundBrush() ;
     const wxRegion&                     MacGetVisibleRegion() ;
 	bool								MacIsWindowScrollbar( const wxScrollBar* sb ) { return (m_hScrollBar == sb || m_vScrollBar == sb) ; }
@@ -317,56 +309,18 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-/*
-class wxMacFocusHelper
-{
-public :
-	wxMacFocusHelper( wxWindowMac * theWindow ) ;
-	~wxMacFocusHelper() ;
-	bool Ok() { return m_ok ; }
-
-private :
-	GrafPtr 	m_formerPort ;
-	GrafPtr		m_currentPort ;
-	bool			m_ok ;
-} ;
-*/
-
 class wxMacDrawingHelper
 {
 public :
-	wxMacDrawingHelper( wxWindowMac * theWindow ) ;
+	wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea = false ) ;
 	~wxMacDrawingHelper() ;
 	bool Ok() { return m_ok ; }
-
+	void LocalToWindow( Rect *rect) { OffsetRect( rect , m_origin.h , m_origin.v ) ; }
+	void LocalToWindow( Point *pt ) { AddPt( m_origin , pt ) ; }
+	void LocalToWindow( RgnHandle rgn ) { OffsetRgn( rgn , m_origin.h , m_origin.v ) ; }
+  const Point& GetOrigin() { return m_origin ; }
 private :
-	GrafPtr 	m_formerPort ;
-	GrafPtr		m_currentPort ;
-	PenState 	m_savedPenState ;
-	bool			m_ok ;
-} ;
-/*
-class wxMacFocusClientHelper
-{
-public :
-	wxMacFocusClientHelper( wxWindowMac * theWindow ) ;
-	~wxMacFocusClientHelper() ;
-	bool Ok() { return m_ok ; }
-
-private :
-	GrafPtr 	m_formerPort ;
-	GrafPtr		m_currentPort ;
-	bool			m_ok ;
-} ;
-*/
-class wxMacDrawingClientHelper
-{
-public :
-	wxMacDrawingClientHelper( wxWindowMac * theWindow ) ;
-	~wxMacDrawingClientHelper() ;
-	bool Ok() { return m_ok ; }
-
-private :
+  Point     m_origin ;
 	GrafPtr 	m_formerPort ;
 	GrafPtr		m_currentPort ;
 	PenState 	m_savedPenState ;

@@ -118,7 +118,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
     
     wxCoord XDEV2LOG(wxCoord x) const
 	{
-	  long new_x = x - m_deviceOriginX;
+	  long new_x = x - m_deviceOriginX ;
 	  if (new_x > 0) 
 	    return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
 	  else
@@ -133,7 +133,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 	}
     wxCoord YDEV2LOG(wxCoord y) const
 	{
-	  long new_y = y - m_deviceOriginY;
+	  long new_y = y - m_deviceOriginY ;
 	  if (new_y > 0)
 	    return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
 	  else
@@ -150,9 +150,9 @@ class WXDLLEXPORT wxDC: public wxDCBase
 	{ 
 	  long new_x = x - m_logicalOriginX;
 	  if (new_x > 0)
-	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
+	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX  ;
 	  else
-	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
+	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX ;
 	}
     wxCoord XLOG2DEVREL(wxCoord x) const
 	{ 
@@ -163,11 +163,11 @@ class WXDLLEXPORT wxDC: public wxDCBase
 	}
     wxCoord YLOG2DEV(wxCoord y) const
 	{
-	  long new_y = y - m_logicalOriginY;
+	  long new_y = y - m_logicalOriginY ;
 	  if (new_y > 0)
-	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
+	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY ;
 	  else
-	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
+	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY ;
 	}
     wxCoord YLOG2DEVREL(wxCoord y) const
 	{ 
@@ -176,9 +176,25 @@ class WXDLLEXPORT wxDC: public wxDCBase
 	  else
 	    return (wxCoord)((double)(y) * m_scaleY - 0.5);
 	}
+    wxCoord XLOG2DEVMAC(wxCoord x) const
+	{ 
+	  long new_x = x - m_logicalOriginX;
+	  if (new_x > 0)
+	    return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.h ;
+	  else
+	    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX + m_macLocalOrigin.h ;
+	}
+    wxCoord YLOG2DEVMAC(wxCoord y) const
+	{
+	  long new_y = y - m_logicalOriginY ;
+	  if (new_y > 0)
+	    return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.v ;
+	  else
+	    return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.v ;
+	}
   
     RgnHandle MacGetCurrentClipRgn() { return m_macCurrentClipRgn ; }
-    static MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
+    static void MacSetupBackgroundForCurrentPort(const wxBrush& background ) ;
 //
 
 protected:

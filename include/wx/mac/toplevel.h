@@ -70,7 +70,6 @@ public:
            const wxString& name ) ;
 	static WindowRef MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
 	virtual void MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) ;
-	virtual void MacDoGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) ;
   virtual void Clear() ;
   virtual ControlHandle MacGetContainerForEmbedding() ;
   WindowRef MacGetWindowRef() { return m_macWindow ; }
