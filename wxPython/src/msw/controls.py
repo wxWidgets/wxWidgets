@@ -4726,6 +4726,14 @@ class PyControl(core.Control):
         """base_RemoveChild(Window child)"""
         return _controls.PyControl_base_RemoveChild(*args, **kwargs)
 
+    def base_ShouldInheritColours(*args, **kwargs):
+        """base_ShouldInheritColours() -> bool"""
+        return _controls.PyControl_base_ShouldInheritColours(*args, **kwargs)
+
+    def base_ApplyParentThemeBackground(*args, **kwargs):
+        """base_ApplyParentThemeBackground(Colour c)"""
+        return _controls.PyControl_base_ApplyParentThemeBackground(*args, **kwargs)
+
 
 class PyControlPtr(PyControl):
     def __init__(self, this):
@@ -4733,6 +4741,12 @@ class PyControlPtr(PyControl):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyControl
 _controls.PyControl_swigregister(PyControlPtr)
+
+def PrePyControl(*args, **kwargs):
+    """PrePyControl() -> PyControl"""
+    val = _controls.new_PrePyControl(*args, **kwargs)
+    val.thisown = 1
+    return val
 
 #---------------------------------------------------------------------------
 
