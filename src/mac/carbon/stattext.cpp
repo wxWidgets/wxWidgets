@@ -189,14 +189,17 @@ void wxStaticText::OnPaint( wxPaintEvent &event )
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-	int x , y  ;
-   int widthTextMax = 0, widthLine,
+	int x,y ;
+    int widthTextMax = 0, widthLine,
         heightTextTotal = 0, heightLineDefault = 0, heightLine = 0;
-
+        
     wxString curLine;
-    for ( const wxChar *pc = m_label; ; pc++ ) {
-        if ( *pc == wxT('\n') || *pc == wxT('\0') ) {
-            if ( !curLine ) {
+    for ( const wxChar *pc = m_label; ; pc++ )
+    {
+        if ( *pc == wxT('\n') || *pc == wxT('\0') )
+        {
+            if ( !curLine )
+            {
                 // we can't use GetTextExtent - it will return 0 for both width
                 // and height and an empty line should count in height
                 // calculation
@@ -206,12 +209,17 @@ wxSize wxStaticText::DoGetBestSize() const
                     GetTextExtent(_T("W"), NULL, &heightLineDefault);
 
                 heightTextTotal += heightLineDefault;
+                
+                heightTextTotal++;  // FIXME: why is this necessary?
             }
-            else {
+            else
+            {
                 GetTextExtent(curLine, &widthLine, &heightLine);
                 if ( widthLine > widthTextMax )
                     widthTextMax = widthLine;
                 heightTextTotal += heightLine;
+                
+                heightTextTotal++;  // FIXME: why is this necessary?
             }
 
             if ( *pc == wxT('\n') ) {
