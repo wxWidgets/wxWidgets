@@ -1,23 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        accel.h
 // Purpose:     wxAcceleratorTable class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_ACCEL_H_
 #define _WX_ACCEL_H_
 
-#ifdef __GNUG__
-#pragma interface "accel.h"
-#endif
-
 #include "wx/object.h"
-#include "wx/string.h"
 
 class WXDLLEXPORT wxAcceleratorTable;
 

@@ -1,20 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        bitmap.h
 // Purpose:     wxBitmap class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BITMAP_H_
 #define _WX_BITMAP_H_
-
-#ifdef __GNUG__
-#pragma interface "bitmap.h"
-#endif
 
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
@@ -27,6 +23,7 @@ class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxIcon;
 class WXDLLEXPORT wxCursor;
+class WXDLLEXPORT wxControl;
 
 // A mask is a mono bitmap used for drawing bitmaps
 // transparently.
@@ -54,13 +51,11 @@ public:
   bool Create(const wxBitmap& bitmap, int paletteIndex);
   bool Create(const wxBitmap& bitmap);
 
-/* TODO: platform-specific data access
   // Implementation
   inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
   inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
 protected:
   WXHBITMAP m_maskBitmap;
-*/
 };
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
@@ -124,22 +119,18 @@ public:
   wxBitmap(); // Platform-specific
 
   // Copy constructors
-  inline wxBitmap(const wxBitmap& bitmap)
-  { Ref(bitmap); if ( wxTheBitmapList ) wxTheBitmapList->AddBitmap(this); }
+  wxBitmap(const wxBitmap& bitmap);
 
-  // Initialize with raw data.
+  // Initialize with raw data
   wxBitmap(const char bits[], int width, int height, int depth = 1);
 
-/* TODO: maybe implement XPM reading
   // Initialize with XPM data
-  wxBitmap(const char **data);
-*/
+  wxBitmap(char **data, wxControl *anItem = NULL);
 
   // Load a file or resource
-  // TODO: make default type whatever's appropriate for the platform.
   wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
 
-  // Constructor for generalised creation from data
+  // New constructor for generalised creation from data
   wxBitmap(void *data, long type, int width, int height, int depth = 1);
 
   // If depth is omitted, will create a bitmap compatible with the display
@@ -162,6 +153,10 @@ public:
   void SetQuality(int q);
   void SetOk(bool isOk);
 
+#if WXWIN_COMPATIBILITY
+  inline wxPalette *GetColourMap(void) const { return GetPalette(); }
+  void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
+#endif
   inline wxPalette* GetPalette() const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
   void SetPalette(const wxPalette& palette);
 
@@ -169,6 +164,7 @@ public:
   void SetMask(wxMask *mask) ;
 
   inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
+
   inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
   inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
 
@@ -186,13 +182,26 @@ public:
 protected:
   static wxList sm_handlers;
 
-  // TODO: Implementation
+  // Implementation
 public:
   void SetHBITMAP(WXHBITMAP bmp);
   inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
   inline void SetSelectedInto(wxDC *dc) { if (M_BITMAPDATA) M_BITMAPDATA->m_selectedInto = dc; }
   inline wxDC *GetSelectedInto(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_selectedInto : (wxDC*) NULL); }
-//  bool FreeResource(bool force = FALSE);
+  bool FreeResource(bool force = FALSE);
+
+  // Creates a bitmap that matches the device context's depth, from
+  // an arbitray bitmap. At present, the original bitmap must have an
+  // associated palette. (TODO: use a default palette if no palette exists.)
+  // This function is necessary for you to Blit an arbitrary bitmap (which may have
+  // the wrong depth). wxDC::SelectObject will compare the depth of the bitmap
+  // with the DC's depth, and create a new bitmap if the depths differ.
+  // Eventually we should perhaps make this a public API function so that
+  // an app can efficiently produce bitmaps of the correct depth.
+  // The Windows solution is to use SetDibBits to blit an arbotrary DIB directly to a DC, but
+  // this is too Windows-specific, hence this solution of quietly converting the wxBitmap.
+  // Contributed by Frederic Villeneuve <frederic.villeneuve@natinst.com>
+  wxBitmap GetBitmapForDC(wxDC& dc) const;
 };
 #endif
   // _WX_BITMAP_H_

@@ -1,23 +1,18 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        button.h
 // Purpose:     wxButton class
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_BUTTON_H_
 #define _WX_BUTTON_H_
 
-#ifdef __GNUG__
-#pragma interface "button.h"
-#endif
-
 #include "wx/control.h"
-#include "wx/gdicmn.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
@@ -44,14 +39,23 @@ class WXDLLEXPORT wxButton: public wxControl
 
   virtual ~wxButton();
 
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
   virtual void SetDefault();
-  virtual void SetLabel(const wxString& label);
-  virtual wxString GetLabel() const ;
 
   static wxSize GetDefaultSize();
 
   virtual void Command(wxCommandEvent& event);
+  virtual bool OS2Command(WXUINT param, WXWORD id);
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC,
+                              WXHWND pWnd,
+                              WXUINT nCtlColor,
+                              WXUINT message,
+                              WXWPARAM wParam,
+                              WXLPARAM lParam);
+protected:
+    // send a notification event, return TRUE if processed
+    bool SendClickEvent();
+
+    virtual wxSize DoGetBestSize();
 };
 
 #endif

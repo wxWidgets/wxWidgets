@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        accel.cpp
 // Purpose:     wxAcceleratorTable
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/13/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) David Webster
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -37,6 +37,7 @@ public:
     inline HACCEL GetHACCEL() const { return m_hAccel; }
 protected:
     HACCEL      m_hAccel;
+    bool        m_ok;
 };
 
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
@@ -79,6 +80,8 @@ wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
     M_ACCELDATA->m_ok = (hAccel != 0);
 */
 }
+
+extern int wxCharCodeWXToOS2(int id, bool *isVirtual);
 
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, wxAcceleratorEntry entries[])
