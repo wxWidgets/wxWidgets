@@ -30,6 +30,7 @@ _treeList = [
         'wxFileHistory',
         'wxGenericDirCtrl',
         'wxImageFromStream',
+        'wxArtProvider',
         ]),
 
     # managed windows == things with a caption you can close
@@ -154,6 +155,7 @@ _treeList = [
         'wxImage',
         'wxImageFromStream',
         'wxMask',
+        'wxArtProvider',
         ]),
 
     # Other stuff

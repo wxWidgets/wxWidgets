@@ -245,7 +245,7 @@ public:
 
     void Layout();
 
-    void Fit( wxWindow *window );
+    wxSize Fit( wxWindow *window );
     void FitInside( wxWindow *window );
 
     void SetSizeHints( wxWindow *window );

@@ -182,6 +182,7 @@ class wxSizerPtr(wxObjectPtr):
         return val
     def Fit(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_Fit,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def FitInside(self, *_args, **_kwargs):
         val = apply(sizersc.wxSizer_FitInside,(self,) + _args, _kwargs)

@@ -1349,6 +1349,136 @@ extern wxMimeTypesManager* wxTheMimeTypesManager;
 //----------------------------------------------------------------------
 
 %{
+#include <wx/artprov.h>
+
+    DECLARE_DEF_STRING(ART_OTHER);
+
+%}
+
+// Art clients
+#define wxART_TOOLBAR                  "toolbar_C"
+#define wxART_MENU                     "menu_C"
+#define wxART_FRAME_ICON               "frame_icon_C"
+
+#define wxART_CMN_DIALOG               "cmn_dialog_C"
+#define wxART_HELP_BROWSER             "help_browser_C"
+#define wxART_MESSAGE_BOX              "message_box_C"
+
+#define wxART_OTHER                    "other_C"
+
+// Art IDs
+#define wxART_ADD_BOOKMARK             "add_bookmark"
+#define wxART_DEL_BOOKMARK             "del_bookmark"
+#define wxART_HELP_SIDE_PANEL          "help_side_panel"
+#define wxART_HELP_SETTINGS            "help_settings"
+#define wxART_HELP_BOOK                "help_book"
+#define wxART_HELP_FOLDER              "help_folder"
+#define wxART_HELP_PAGE                "help_page"
+#define wxART_GO_BACK                  "go_back"
+#define wxART_GO_FORWARD               "go_forward"
+#define wxART_GO_UP                    "go_up"
+#define wxART_GO_DOWN                  "go_down"
+#define wxART_GO_TO_PARENT             "go_to_parent"
+#define wxART_GO_HOME                  "go_home"
+#define wxART_FILE_OPEN                "file_open"
+#define wxART_PRINT                    "print"
+#define wxART_HELP                     "help"
+#define wxART_TIP                      "tip"
+#define wxART_REPORT_VIEW              "report_view"
+#define wxART_LIST_VIEW                "list_view"
+#define wxART_NEW_DIR                  "new_dir"
+#define wxART_FOLDER                   "folder"
+#define wxART_GO_DIR_UP                "go_dir_up"
+#define wxART_EXECUTABLE_FILE          "executable_file"
+#define wxART_NORMAL_FILE              "normal_file"
+#define wxART_TICK_MARK                "tick"
+#define wxART_CROSS_MARK               "cross"
+#define wxART_ERROR                    "error"
+#define wxART_QUESTION                 "question"
+#define wxART_WARNING                  "warning"
+#define wxART_INFORMATION              "information"
+
+
+%{  // Python aware wxArtProvider
+class wxPyArtProvider : public wxArtProvider  {
+public:
+
+    virtual wxBitmap CreateBitmap(const wxArtID& id,
+                                  const wxArtClient& client,
+                                  const wxSize& size) {
+        wxBitmap rval = wxNullBitmap;
+        wxPyBeginBlockThreads();
+        if ((wxPyCBH_findCallback(m_myInst, "CreateBitmap"))) {
+            PyObject* so = wxPyConstructObject((void*)&size, "wxSize", 0);
+            PyObject* ro;
+            wxBitmap* ptr;
+#if 0
+            ro = wxPyCBH_callCallbackObj(
+                m_myInst, Py_BuildValue("(OOO)",
+                                        wx2PyString(id),
+                                        wx2PyString(client),
+                                        so));
+#else  // testing...
+            PyObject *args, *s1, *s2;
+            s1 = wx2PyString(id);
+            s2 = wx2PyString(client);
+            args = Py_BuildValue("(OOO)", s1, s2, so);
+            ro = wxPyCBH_callCallbackObj(m_myInst, args);
+#endif
+            Py_DECREF(so);
+            if (ro) {
+                if (!SWIG_GetPtrObj(ro, (void**)&ptr, "_wxBitmap_p"))
+                    rval = *ptr;
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads();
+        return rval;
+    }
+
+    PYPRIVATE;
+};
+%}
+
+// The one for SWIG to see
+%name(wxArtProvider) class wxPyArtProvider : public wxObject
+{
+public:
+    wxPyArtProvider();
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setCallbackInfo(self, wxArtProvider)"
+
+    // Add new provider to the top of providers stack.
+    static void PushProvider(wxPyArtProvider *provider);
+
+    // Remove latest added provider and delete it.
+    static bool PopProvider();
+
+    // Remove provider. The provider must have been added previously!
+    // The provider is _not_ deleted.
+    static bool RemoveProvider(wxPyArtProvider *provider);
+
+    // Query the providers for bitmap with given ID and return it. Return
+    // wxNullBitmap if no provider provides it.
+    static wxBitmap GetBitmap(const wxString& id,
+                              const wxString& client = wxPyART_OTHER,
+                              const wxSize& size = wxDefaultSize);
+
+    // Query the providers for icon with given ID and return it. Return
+    // wxNullIcon if no provider provides it.
+    static wxIcon GetIcon(const wxString& id,
+                          const wxString& client = wxPyART_OTHER,
+                          const wxSize& size = wxDefaultSize);
+
+    // Destroy caches & all providers
+    static void CleanUpProviders();
+};
+
+
+//----------------------------------------------------------------------
+
+%{
 #include <wx/docview.h>
 %}
 
@@ -1389,6 +1519,7 @@ public:
 %init %{
     wxPyPtrTypeMap_Add("wxDragImage", "wxGenericDragImage");
     wxPyPtrTypeMap_Add("wxProcess", "wxPyProcess");
+    wxPyPtrTypeMap_Add("wxArtProvider", "wxPyArtProvider");
 %}
 
 //----------------------------------------------------------------------

@@ -1788,6 +1788,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_uint","_int",0},
     { "_uint","_wxWindowID",0},
     { "_wxChar","_char",0},
+    { "_wxString","_wxArtID",0},
+    { "_wxString","_wxArtClient",0},
     { "_char","_wxChar",0},
     { "_struct_wxNativeFontInfo","_wxNativeFontInfo",0},
     { "_EBool","_wxCoord",0},
@@ -1861,7 +1863,11 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_size_t",0},
     { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
+    { "_wxArtClient","_wxArtID",0},
+    { "_wxArtClient","_wxString",0},
     { "_wxEvtHandler","_wxPyApp",SwigwxPyAppTowxEvtHandler},
+    { "_wxArtID","_wxString",0},
+    { "_wxArtID","_wxArtClient",0},
 {0,0,0}};
 
 static PyObject *SWIG_globals;
