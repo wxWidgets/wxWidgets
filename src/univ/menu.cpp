@@ -2411,6 +2411,8 @@ void wxMenuBar::PopupCurrentMenu(bool selectFirst)
             // item, not to the right of it
             wxRect rectItem = GetItemRect(m_current);
 
+            m_menuShown->SetInvokingWindow(m_frameLast);
+
             m_menuShown->Popup(ClientToScreen(rectItem.GetPosition()),
                                wxSize(0, rectItem.GetHeight()),
                                selectFirst);
