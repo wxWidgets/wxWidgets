@@ -19,13 +19,13 @@ include ./src/make.env
 .SUFFIXES:	.o .cpp .c .cxx
 
 .c.o :
-	$(CCC) -c @DEP_INFO_FLAGS@ $(CFLAGS) $(PICFLAGS) -o $@ $<
+	$(CCC) -c @DEP_INFO_FLAGS@ $(CFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 .cpp.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) -o $@ $<
+	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 .cxx.o :
-	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) -o $@ $<
+	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) @WXMSW_DLL_DEFINES@ -o $@ $<
 
 ########################### Paths #################################
 

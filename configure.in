@@ -1577,6 +1577,30 @@ dnl ------------------------------------------------------------------------
 dnl flush the cache because checking for libraries below might abort
 AC_CACHE_SAVE
 
+dnl ------------------------------------------------------------------------
+dnl Check for regex libraries
+dnl ------------------------------------------------------------------------
+
+REGEX_INCLUDE=
+if test "$wxUSE_REGEX" != "no"; then
+    dnl according to Unix 98 specs, regcomp() is in libc but I believe that
+    dnl on some old systems it may be in libregex - check for it too?
+    AC_CHECK_HEADER(regex.h, AC_CHECK_FUNCS(regcomp))
+
+    if test "x$ac_cv_func_regcomp" != "xyes"; then
+        dnl we were asked to use the system version of regex lib only but it
+        dnl is not available
+        if test "$wxUSE_REGEX" = "sys"; then
+            AC_MSG_ERROR([system regex library not found! Use --with-regex to use the built-in regex library.])
+        fi
+
+        dnl fallback to the built in code
+        REGEX_INCLUDE="-I\${top_srcdir}/src/regex"
+    fi
+
+    AC_DEFINE(wxUSE_REGEX)
+fi
+
 dnl ----------------------------------------------------------------
 dnl search for toolkit (widget sets)
 dnl ----------------------------------------------------------------
@@ -2138,8 +2162,15 @@ WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
 WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY}_gl.a"
 
 dnl the name of the shared library
-WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+case "${host}" in
+  *-*-mingw32* )
+    WX_LIBRARY_NAME_SHARED="wx${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}_${WX_RELEASE_NUMBER}.dll"
+  ;;
+  * )
+    WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+    WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+  ;;
+esac
 
 dnl the name of the links to the shared library
 WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}"
@@ -2314,14 +2345,17 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
       ;;
       *-*-mingw32* )
-        dnl only static for now
-        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
+        WX_LIBRARY_NAME_STATIC="lib/libwx${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}_${WX_RELEASE_NUMBER}.a"
+        SHARED_LD="${CC} -shared -Wl,--out-implib,${WX_LIBRARY_NAME_STATIC} -o"
+        TOOLKIT_DEF="${TOOLKIT_DEF} -DWXUSINGDLL=1"
+        WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
+        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
+        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_SHARED_GL}"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
+            WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
         else
-            WX_ALL="${WX_LIBRARY_NAME_STATIC}"
+            WX_ALL="${WX_LIBRARY_NAME_SHARED}"
         fi
       ;;
       *-pc-os2_emx )
@@ -2588,6 +2622,11 @@ AC_CHECK_LIB(c, wcslen, [
             AC_CHECK_LIB(w, wcslen, [
                 AC_DEFINE(HAVE_WCSLEN)
                 WCHAR_LINK="-lw"
+            ], [
+                AC_CHECK_LIB(msvcrt, wcslen, [
+                    AC_DEFINE(HAVE_WCSLEN)
+                    WCHAR_LINK=""
+                ])
             ])
         ])
 
@@ -3211,26 +3250,6 @@ fi
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
 dnl ---------------------------------------------------------------------------
-
-REGEX_INCLUDE=
-if test "$wxUSE_REGEX" != "no"; then
-    dnl according to Unix 98 specs, regcomp() is in libc but I believe that
-    dnl on some old systems it may be in libregex - check for it too?
-    AC_CHECK_HEADER(regex.h, AC_CHECK_FUNCS(regcomp))
-
-    if test "x$ac_cv_func_regcomp" != "xyes"; then
-        dnl we were asked to use the system version of regex lib only but it
-        dnl is not available
-        if test "$wxUSE_REGEX" = "sys"; then
-            AC_MSG_ERROR([system regex library not found! Use --with-regex to use the built-in regex library.])
-        fi
-
-        dnl fallback to the built in code
-        REGEX_INCLUDE="-I\${top_srcdir}/src/regex"
-    fi
-
-    AC_DEFINE(wxUSE_REGEX)
-fi
 
 ZLIB_INCLUDE=
 if test "$wxUSE_ZLIB" = "yes" -o "$wxUSE_ZLIB" = "sys" ; then
@@ -3930,7 +3949,6 @@ if test "$wxUSE_HELP" = "yes"; then
 
     if test "$USE_WIN32" = 1; then
       if test "$wxUSE_MS_HTML_HELP" = "yes"; then
-        AC_DEFINE(wxUSE_MS_HTML_HELP)
         AC_CHECK_HEADER(htmlhelp.h, 
             [
                 AC_DEFINE(wxUSE_MS_HTML_HELP)
@@ -4020,7 +4038,7 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
                 ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
                 ALL_DEPFILES="$ALL_DEPFILES \$(OLEDEPS)"
                 CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
-                LIBS="$LIBS -lole32 -luuid"
+                LIBS="$LIBS -lrpcrt4 -loleaut32 -lole32 -luuid"
                 AC_DEFINE(wxUSE_OLE)
 
                 dnl metafiles need the ole code, right??  if not this
@@ -4620,6 +4638,7 @@ AC_SUBST(OPENGL_LIBS)
 AC_SUBST(EXTRADEFS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)
+AC_SUBST(WXMSW_DLL_DEFINES)
 
 dnl additional resurces settings
 AC_SUBST(RCINPUTSWITCH)
