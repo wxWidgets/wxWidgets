@@ -26,6 +26,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/dc.h"
+    #include "wx/msgdlg.h"
 #endif
 
 #if wxUSE_HTML && wxUSE_PRINTING_ARCHITECTURE && wxUSE_STREAMS
