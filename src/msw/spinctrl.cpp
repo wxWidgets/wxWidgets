@@ -317,6 +317,10 @@ wxSpinCtrl::~wxSpinCtrl()
 {
     ms_allSpins.Remove(this);
 
+    // This removes spurious memory leak reporting
+    if (ms_allSpins.GetCount() == 0)
+        ms_allSpins.Clear();
+
     // destroy the buddy window because this pointer which wxBuddyTextWndProc
     // uses will not soon be valid any more
     ::DestroyWindow(GetBuddyHwnd());
