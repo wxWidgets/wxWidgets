@@ -1,0 +1,55 @@
+\section{\class{wxHTTP}}\label{wxhttp}
+
+\wxheading{Derived from}
+
+\helpref{wxProtocol}{wxprotocol}
+
+\wxheading{Include files}
+
+<wx/protocol/http.h>
+
+\wxheading{See also}
+
+\helpref{wxSocketBase}{wxsocketbase}, \helpref{wxURL}{wxurl}
+
+% ----------------------------------------------------------------------------
+% Members
+% ----------------------------------------------------------------------------
+
+% ----------------------------------------------------------------------------
+\membersection{wxHTTP::GetInputStream}\label{wxprotogetinput}
+
+\func{wxInputStream *}{GetInputStream}{\param{const wxString\&}{ path}}
+
+Creates a new input stream on the the specified path. You can use all but seek
+functionnality of wxStream. Seek isn't available on all stream. For example,
+http or ftp streams doesn't deal with it. Other functions like StreamSize and
+Tell aren't available for the moment for this sort of stream.
+You will be notified when the EOF is reached by an error.
+
+\wxheading{Return value}
+
+Returns the initialized stream. You will have to delete it yourself once you
+don't use it anymore. The destructor closes the network connection.
+The next time you will try to get a file the network connection will have
+to be reestablished: but you don't have to take care of this wxHTTP reestablishes it automatically.
+
+\wxheading{See also}
+
+\helpref{wxInputStream}{wxinputstream}
+
+% ----------------------------------------------------------------------------
+
+\membersection{wxHTTP::SetHeader}
+
+\func{void}{SetHeader}{\param{const wxString\&}{ header}, \param{const wxString\&}{ h_data}}
+
+It sets data of a field to be sent during the next request to the HTTP server. The field
+name is specified by \it{header} and the content by \it{h_data}.
+This is a low level function and it assumes that you know what you are doing.
+
+\membersection{wxHTTP::SetHeader}
+\func{wxString}{GetHeader}{\param{const wxString\&}{ header}}
+
+Returns the data attached with a field whose name is specified by \it{header}.
+If the field doesn't exist, it will return an empty string and not a NULL string.
