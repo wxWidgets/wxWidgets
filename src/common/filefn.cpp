@@ -1474,7 +1474,13 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 wxString wxGetCwd()
 {
     wxString str;
-    wxGetWorkingDirectory(wxStringBuffer(str, _MAXPATHLEN), _MAXPATHLEN);
+
+    // we can't create wxStringBuffer object inline: Sun CC generates buggy
+    // code in this case!
+    {
+        wxStringBuffer buf(str, _MAXPATHLEN);
+        wxGetWorkingDirectory(buf, _MAXPATHLEN);
+    }
 
     return str;
 }
