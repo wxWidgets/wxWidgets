@@ -760,7 +760,7 @@ bool wxLocale::Init(int language, int flags)
         wxLogError(wxT("Cannot set locale to language %s."), name.c_str());
         return FALSE;
     }
-#elif defined(__WXMAC__)
+#elif defined(__WXMAC__) || defined(__WXPM__)
     wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #else
     return FALSE;
