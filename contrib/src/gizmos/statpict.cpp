@@ -19,10 +19,9 @@
 #include "wx/gizmos/statpict.h"
 #include "wx/dcclient.h"
 
-#if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticPicture, wxControl)
-#endif
-
+WXDLLIMPEXP_GIZMOS const wxChar * wxStaticPictureNameStr = wxT("staticPicture");
+    
 /*
  * wxStaticPicture
  */
@@ -154,5 +153,3 @@ void wxStaticPicture::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.EndDrawing();
 }
 
-//WXDLLEXPORT_DATA(const wxChar *) wxStaticPictureNameStr = wxT("message");
-const wxChar * wxStaticPictureNameStr = wxT("message");
