@@ -692,7 +692,10 @@ public:
                           const wxRect *rect = (const wxRect *) NULL ) = 0;
 
         // a less awkward wrapper for Refresh
-    void RefreshRect(const wxRect& rect) { Refresh(true, &rect); }
+    void RefreshRect(const wxRect& rect, bool eraseBackground = true)
+    {
+        Refresh(eraseBackground, &rect);
+    }
 
         // repaint all invalid areas of the window immediately
     virtual void Update() { }

@@ -2228,12 +2228,14 @@ be treated as damaged.}
 
 \membersection{wxWindow::RefreshRect}\label{wxwindowrefreshrect}
 
-\func{void}{RefreshRect}{\param{const wxRect\& }{rect}}
+\func{void}{RefreshRect}{\param{const wxRect\& }{rect}, \param{bool }{eraseBackground = \true}}
 
-Redraws the contents of the given rectangle: the area inside it will be
+Redraws the contents of the given rectangle: only the area inside it will be
 repainted.
 
-This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax.
+This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax
+as it can be called with a temporary wxRect object as argument like this 
+\texttt{RefreshRect(wxRect(x, y, w, h))}.
 
 
 \membersection{wxWindow::RegisterHotKey}\label{wxwindowregisterhotkey}
