@@ -1939,11 +1939,11 @@ which always returns the columns in the order they were created.
 
 */
 
-typedef struct _TableColumns
+typedef struct
 {
   int noCols;
   wxDbColInf *colInf;
-};
+} _TableColumns;
 
 wxDbColInf *wxDb::GetColumns(char *tableName[], const char* WXUNUSED(userID))
 {
