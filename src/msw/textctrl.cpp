@@ -464,11 +464,12 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
         msStyle |= ES_AUTOHSCROLL;
     }
 
-    // styles which we add depending on the specified wxWindows styles
-    if ( style & wxHSCROLL )
+    // note that wxTE_DONTWRAP is the same as wxHSCROLL so if we have a horz
+    // scrollbar, there is no wrapping -- which makes sense
+    if ( style & wxTE_DONTWRAP )
     {
         // automatically scroll the control horizontally as necessary
-        msStyle |= WS_HSCROLL;// | ES_AUTOHSCROLL;
+        msStyle |= WS_HSCROLL;
     }
 
     if ( style & wxTE_READONLY )
@@ -486,7 +487,7 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
     else if ( style & wxTE_RIGHT )
         msStyle |= ES_RIGHT;
     else
-        msStyle |= ES_LEFT; // ES_LEFT if 0 as well but for consistency...
+        msStyle |= ES_LEFT; // ES_LEFT is 0 as well but for consistency...
 
     return msStyle;
 }
