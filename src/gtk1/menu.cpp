@@ -154,7 +154,7 @@ void gtk_menu_clicked_callback( GtkWidget *widget, gpointer data )
   event.SetEventObject( menu );
   event.SetInt(id );
   wxWindow *win = menu->GetInvokingWindow();
-  if (win) win->ProcessEvent( event );
+  if (win) win->GetEventHandler()->ProcessEvent( event );
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxMenuItem,wxObject)

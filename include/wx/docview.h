@@ -157,9 +157,6 @@ class WXDLLEXPORT wxView: public wxEvtHandler
 
   inline wxFrame *GetFrame(void) const { return m_viewFrame ; }
   inline void SetFrame(wxFrame *frame) { m_viewFrame = frame; }
-#ifdef __WXGTK__
-  inline void SetFrame(wxMDIChildFrame *frame) { m_viewFrame = (wxFrame*)frame; }
-#endif
 
   virtual void OnActivateView(bool activate, wxView *activeView, wxView *deactiveView);
   virtual void OnDraw(wxDC *dc) = 0;

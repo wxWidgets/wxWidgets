@@ -117,7 +117,6 @@ class wxToolBar: public wxControl
 
     virtual void EnableTool(int toolIndex, bool enable);
     virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
-    virtual void SetToggle(int toolIndex, bool toggle); // Set this to be togglable (or not)
     virtual wxObject *GetToolClientData(int index) const;
 
     virtual bool GetToolState(int toolIndex) const;

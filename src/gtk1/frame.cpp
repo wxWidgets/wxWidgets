@@ -16,6 +16,9 @@
 #include "wx/dialog.h"
 #include "wx/control.h"
 #include "wx/app.h"
+#include "wx/menu.h"
+#include "wx/toolbar.h"
+#include "wx/statusbr.h"
 #include "wx/gtk/win_gtk.h"
 
 const wxMENU_HEIGHT    = 28;
@@ -74,12 +77,13 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 
 wxFrame::wxFrame()
 {
-  m_doingOnSize = FALSE;
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
   m_frameToolBar = NULL;
   m_sizeSet = FALSE;
   m_addPrivateChild = FALSE;
+  m_wxwindow = NULL;
+  m_mainWindow = NULL;
   wxTopLevelWindows.Insert( this );
 };
 
@@ -87,12 +91,13 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
-  m_doingOnSize = FALSE;
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
   m_frameToolBar = NULL;
   m_sizeSet = FALSE;
   m_addPrivateChild = FALSE;
+  m_wxwindow = NULL;
+  m_mainWindow = NULL;
   Create( parent, id, title, pos, size, style, name );
   wxTopLevelWindows.Insert( this );
 };
@@ -102,12 +107,8 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
       long style, const wxString &name )
 {
   m_needParent = FALSE;
-  m_mainWindow = NULL;
-  m_wxwindow = NULL;
 
   PreCreation( parent, id, pos, size, style, name );
-
-  m_doingOnSize = FALSE;
 
   m_title = title;
 

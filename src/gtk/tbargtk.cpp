@@ -106,17 +106,10 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
 
 bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
 {
-  wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, toolIndex );
-  event.SetEventObject( this );
-  event.SetInt( toolIndex );
-  event.SetExtraLong( (long) toggleDown);
-  
-/*
-  wxCommandEvent event(wxEVT_COMMAND_TOOL_CLICKED, toolIndex);
+  wxCommandEvent event( wxEVT_COMMAND_TOOL_CLICKED, toolIndex );
   event.SetEventObject(this);
   event.SetInt( toolIndex );
   event.SetExtraLong((long) toggleDown);
-*/
 
   GetEventHandler()->ProcessEvent(event);
 
@@ -125,7 +118,7 @@ bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
 
 void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y) )
 {
-  wxCommandEvent event( wxEVENT_TYPE_MENU_COMMAND, toolIndex );
+  wxCommandEvent event( wxEVT_COMMAND_TOOL_RCLICKED, toolIndex );
   event.SetEventObject( this );
   event.SetInt( toolIndex );
 
@@ -134,7 +127,7 @@ void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y
 
 void wxToolBar::OnMouseEnter( int toolIndex )
 {
-  wxCommandEvent event(wxEVT_COMMAND_TOOL_ENTER, toolIndex);
+  wxCommandEvent event( wxEVT_COMMAND_TOOL_ENTER, toolIndex );
   event.SetEventObject(this);
   event.SetInt( toolIndex );
 
@@ -177,6 +170,7 @@ void wxToolBar::AddSeparator(void)
 
 void wxToolBar::ClearTools(void)
 {
+  wxFAIL_MSG("wxToolBar::ClearTools not implemented");
 };
 
 void wxToolBar::Realize(void)
@@ -204,37 +198,70 @@ void wxToolBar::Realize(void)
 
 void wxToolBar::EnableTool(int toolIndex, bool enable)
 {
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+    if (tool->m_index == toolIndex)
+    { 
+      tool->m_enabled = enable;
+      return;
+    }
+    node = node->Next();
+  };
 };
 
-void wxToolBar::ToggleTool(int toolIndex, bool toggle)
+void wxToolBar::ToggleTool(int WXUNUSED(toolIndex), bool WXUNUSED(toggle) ) 
 {
-};
-
-void wxToolBar::SetToggle(int toolIndex, bool toggle) 
-{
+  wxFAIL_MSG("wxToolBar::ToggleTool not implemented");
 };
 
 wxObject *wxToolBar::GetToolClientData(int index) const
 {
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+    if (tool->m_index == index) return tool->m_clientData;;
+    node = node->Next();
+  };
+  return (wxObject*)NULL;
 };
 
 bool wxToolBar::GetToolState(int toolIndex) const
 {
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+    if (tool->m_index == toolIndex) return tool->m_toggleState;
+    node = node->Next();
+  };
+  return FALSE;
 };
 
 bool wxToolBar::GetToolEnabled(int toolIndex) const
 {
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+    if (tool->m_index == toolIndex) return tool->m_enabled;
+    node = node->Next();
+  };
+  return FALSE;
 };
 
-void wxToolBar::SetMargins(int x, int y)
+void wxToolBar::SetMargins( int WXUNUSED(x), int WXUNUSED(y) )
 {
 };
 
-void wxToolBar::SetToolPacking(int packing)
+void wxToolBar::SetToolPacking( int WXUNUSED(packing) )
 {
 };
 
-void wxToolBar::SetToolSeparation(int separation)
+void wxToolBar::SetToolSeparation( int separation )
 {
+  gtk_toolbar_set_space_size( m_toolbar, separation );
 };
 

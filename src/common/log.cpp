@@ -32,6 +32,7 @@
   #include  <wx/app.h>
   #include  <wx/string.h>
   #include  <wx/intl.h>
+  #include  <wx/menu.h>
 
   #include  <wx/generic/msgdlgg.h>
   #include  <wx/filedlg.h>

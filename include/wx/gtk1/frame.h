@@ -19,15 +19,17 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/window.h"
-#include "wx/menu.h"
-#include "wx/statusbr.h"
-#include "wx/toolbar.h"
 
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
 class wxMDIChildFrame;
+class wxMDIClientWindow;
+class wxMenu;
+class wxMenuBar;
+class wxToolBar;
+class wxStatusBar;
 
 class wxFrame;
 
@@ -36,6 +38,7 @@ class wxFrame;
 //-----------------------------------------------------------------------------
 
 extern const char *wxFrameNameStr;
+extern const char *wxToolBarNameStr;
 
 //-----------------------------------------------------------------------------
 // wxFrame
@@ -77,10 +80,10 @@ public:
   virtual void SetMenuBar( wxMenuBar *menuBar );
   virtual wxMenuBar *GetMenuBar();
 
-  void SetTitle( const wxString &title );
-  wxString GetTitle() const { return m_title; }
+  virtual void SetTitle( const wxString &title );
+  virtual wxString GetTitle() const { return m_title; }
   
-  void SetIcon( const wxIcon &icon );
+  virtual void SetIcon( const wxIcon &icon );
 
   void OnActivate( wxActivateEvent &WXUNUSED(event) ) { } // called from docview.cpp
   void OnSize( wxSizeEvent &event );
@@ -93,6 +96,7 @@ public:
 private:
   friend  wxWindow;
   friend  wxMDIChildFrame;
+  friend  wxMDIClientWindow;
 
   // update frame's menus (called from OnIdle)
   void DoMenuUpdates();
@@ -103,7 +107,6 @@ private:
   wxStatusBar  *m_frameStatusBar;
   wxToolBar    *m_frameToolBar;
   int           m_toolBarHeight;
-  bool          m_doingOnSize;
   bool          m_addPrivateChild;   // for toolbar (and maybe menubar)
   wxString      m_title;
   wxIcon        m_icon;

@@ -14,6 +14,7 @@
 
 #include "wx/mdi.h"
 #include "wx/dialog.h"
+#include "wx/menu.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
@@ -171,11 +172,9 @@ void wxMDIParentFrame::OnSysColourChanged( wxSysColourChangedEvent& WXUNUSED(eve
 // wxMDIChildFrame
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxPanel)
+IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxFrame)
   
-BEGIN_EVENT_TABLE(wxMDIChildFrame, wxPanel)
-  EVT_CLOSE(wxMDIChildFrame::OnCloseWindow)
-  EVT_SIZE(wxMDIChildFrame::OnSize)
+BEGIN_EVENT_TABLE(wxMDIChildFrame, wxFrame)
   EVT_ACTIVATE(wxMDIChildFrame::OnActivate)
 END_EVENT_TABLE()
 
@@ -215,55 +214,19 @@ bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
       long style, const wxString& name )
 {
   m_title = title;
-  return wxPanel::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
+  return wxWindow::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
 };
 
-void wxMDIChildFrame::OnCloseWindow( wxCloseEvent &event )
+void wxMDIChildFrame::GetClientSize( int *width, int *height ) const
 {
-    if ( GetEventHandler()->OnClose() || event.GetForce())
-    {
-        this->Destroy();
-    }
-};
-
-void wxMDIChildFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
-{
-  if ( GetAutoLayout() )
-    Layout();
-  else {
-    // no child: go out !
-    if (!GetChildren()->First())
-      return;
-      
-    // do we have exactly one child?
-    wxWindow *child = NULL;
-    for(wxNode *node = GetChildren()->First(); node; node = node->Next())
-    {
-      wxWindow *win = (wxWindow *)node->Data();
-      if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog))
-      {
-        if ( child )  // it's the second one: do nothing
-          return;
-
-        child = win;
-      };
-    };
-
-    // yes: set it's size to fill all the frame
-    int client_x, client_y;
-    GetClientSize(&client_x, &client_y);
-    child->SetSize( 1, 1, client_x-2, client_y);
-  }
-};
-
-bool wxMDIChildFrame::Destroy(void)
-{
-  if (!wxPendingDelete.Member(this))
-    wxPendingDelete.Append(this);
-
-  return TRUE;
+  wxWindow::GetClientSize( width, height );
 }
 
+void wxMDIChildFrame::AddChild( wxWindow *child )
+{
+  wxWindow::AddChild( child );
+}
+  
 static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 {
   menu->SetInvokingWindow( win );
@@ -302,6 +265,11 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
     gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_mainWindow),
       m_menuBar->m_widget, m_menuBar->m_x, m_menuBar->m_y );
   }
+};
+
+wxMenuBar *wxMDIChildFrame::GetMenuBar()
+{
+  return m_menuBar;
 };
 
 void wxMDIChildFrame::Activate(void)
