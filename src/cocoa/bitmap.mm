@@ -558,7 +558,7 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     wxCHECK(maskRep,false);
 
     // We need the source NSBitmapImageRep to detemine its pixel format
-    NSBitmapImageRep *srcBitmapRep = ((wxBitmapRefData*)bitmap.GetRefData())->m_cocoaNSBitmapImageRep;
+    NSBitmapImageRep *srcBitmapRep = const_cast<wxBitmap&>(bitmap).GetNSBitmapImageRep();
     wxCHECK_MSG(srcBitmapRep,false,"Can't create mask for an uninitialized bitmap");
 
     // Get a pointer to the destination data
