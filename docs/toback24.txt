@@ -183,3 +183,11 @@ Checking in dcclient.cpp;
 new revision: 1.170; previous revision: 1.169
 done
 
+
+22. patch [ 619705 ] Fixes wxApp::GetComCtl32Version
+
+Checking in wxWindows/src/msw/app.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/app.cpp,v  <--  app.cpp
+new revision: 1.186; previous revision: 1.185
+done
+

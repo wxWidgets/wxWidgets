@@ -46,6 +46,9 @@ enum wxMailcapStyle
     wxMAILCAP_ALL = 15
 };
 
+#define wxICON_LARGE 0
+#define wxICON_SMALL 1
+
 /*
     TODO: would it be more convenient to have this class?
 
@@ -214,7 +217,8 @@ public:
         // in this file (Win-only) is in iconIndex
     bool GetIcon(wxIcon *icon,
                  wxString *iconFile = NULL,
-                 int *iconIndex = NULL) const;
+                 int *iconIndex = NULL,
+                 int iconSize = wxICON_LARGE) const;
         // get a brief file type description ("*.txt" => "text document")
     bool GetDescription(wxString *desc) const;
 

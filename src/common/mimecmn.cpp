@@ -271,7 +271,8 @@ bool wxFileType::GetMimeTypes(wxArrayString& mimeTypes) const
 
 bool wxFileType::GetIcon(wxIcon *icon,
                          wxString *iconFile,
-                         int *iconIndex) const
+                         int *iconIndex,
+                         int iconSize) const
 {
     if ( m_info )
     {
@@ -291,7 +292,9 @@ bool wxFileType::GetIcon(wxIcon *icon,
         return TRUE;
     }
 
-#if defined(__WXMSW__) || defined(__UNIX__)
+#if defined(__WXMSW__)
+    return m_impl->GetIcon(icon, iconFile, iconIndex, iconSize);
+#elif defined(__UNIX__)
     return m_impl->GetIcon(icon, iconFile, iconIndex);
 #else
     return m_impl->GetIcon(icon);

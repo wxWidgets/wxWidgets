@@ -336,7 +336,8 @@ bool wxFileTypeImpl::GetMimeTypes(wxArrayString& mimeTypes) const
 
 bool wxFileTypeImpl::GetIcon(wxIcon *icon,
                              wxString *iconFile,
-                             int *iconIndex) const
+                             int *iconIndex,
+                             int iconSize) const
 {
 #if wxUSE_GUI
     wxString strIconKey;
@@ -367,7 +368,11 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
             // here we need C based counting!
             int nIndex = wxAtoi(strIndex);
 
-            HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
+            HICON hIcon, hIconLarge, hIconSmall;
+            ExtractIconEx(strExpPath, nIndex, &hIconLarge, &hIconSmall, 1);
+
+            hIcon = (iconSize == wxICON_LARGE) ? hIconLarge : hIconSmall;
+
 
             switch ( (int)hIcon ) {
                 case 0: // means no icons were found

@@ -210,5 +210,6 @@ wxMiscellaneous
   (extend editor API) to work around bad checkbox
   behaviour (click, click, click, click away...) and
   reduce checkbox size on non-Windows platforms.
+- Add wxNotebook::HitTest for non-Windows platforms.
 
 Version:      $Id$

@@ -152,10 +152,13 @@ function in the first place.
 
 \membersection{wxFileType::GetIcon}\label{wxfiletypegeticon}
 
-\func{bool}{GetIcon}{\param{wxIcon*}{ icon}}
+\func{bool}{GetIcon}{\param{wxIcon*}{ icon}, \param{wxString*}{ iconFile = NULL}, \param{int*}{ iconIndex = NULL}, \param{int}{ iconSize = wxICON\_LARGE}}
 
-If the function returns {\tt true}, the icon associated with this file type will be
-created and assigned to the {\it icon} parameter.
+If the function returns {\tt TRUE}, the icon associated with this file type will be
+created and assigned to the {\it icon} parameter. {\it iconFile} is assigned the file name
+that contains the icon and {\it iconIndex} is assigned the index of the icon
+(windows and unix only). A 32x32 icon is assigned if {\it iconSize} is wxICON\_LARGE
+and a 16x16 icon is assigned if {\it iconSize} is wxICON\_SMALL (windows only).
 
 {\bf Unix:} MIME manager gathers information about icons from GNOME
 and KDE settings and thus GetIcon's success depends on availability
