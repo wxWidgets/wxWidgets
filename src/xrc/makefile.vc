@@ -58,7 +58,7 @@ OBJECTS=$(EXPAT_OBJS) \
         $(D)\xh_bmpbt.obj $(D)\xh_cald.obj $(D)\xh_listc.obj $(D)\xh_scrol.obj \
         $(D)\xh_stbox.obj $(D)\xh_tree.obj $(D)\xh_stlin.obj $(D)\xh_bmp.obj \
         $(D)\xh_unkwn.obj $(D)\xh_gdctl.obj $(D)\xh_scwin.obj \
-        $(D)\xh_split.obj
+        $(D)\xh_split.obj $(D)\xh_wizrd.obj
 
 !include $(WXDIR)\src\makelib.vc
 

@@ -28,7 +28,7 @@ OBJECTS=$(EXPAT_OBJECTS) \
         xh_text.obj xh_listb.obj xh_toolb.obj xh_stlin.obj xh_bmp.obj \
         xh_bmpbt.obj xh_cald.obj xh_listc.obj xh_scrol.obj xh_stbox.obj \
         xh_tree.obj xh_unkwn.obj xh_frame.obj xh_gdctl.obj xh_scwin.obj \
-		xh_split.obj
+		xh_split.obj xh_wizrd.obj
 
 !include $(WXDIR)\src\makelib.b32
 
