@@ -100,9 +100,17 @@ public:
     wxDC         *m_selectedInto;
 #endif // __WXDEBUG__
 
+    // when GetRawData() is called for a DDB we need to convert it to a DIB
+    // first to be able to provide direct access to it and we cache that DIB
+    // here and convert it back to DDB when UngetRawData() is called
+    wxDIB *m_dib;
+
     // true if we have alpha transparency info and can be drawn using
     // AlphaBlend()
     bool m_hasAlpha;
+
+    // true if our HBITMAP is a DIB section, false if it is a DDB
+    bool m_isDIB;
 
 private:
     // optional mask for transparent drawing
@@ -162,7 +170,11 @@ wxBitmapRefData::wxBitmapRefData()
     m_selectedInto = NULL;
 #endif
     m_bitmapMask = NULL;
+
     m_hBitmap = (WXHBITMAP) NULL;
+    m_dib = NULL;
+
+    m_isDIB =
     m_hasAlpha = FALSE;
 }
 
@@ -170,6 +182,8 @@ void wxBitmapRefData::Free()
 {
     wxASSERT_MSG( !m_selectedInto,
                   wxT("deleting bitmap still selected into wxMemoryDC") );
+
+    wxASSERT_MSG( !m_dib, _T("forgot to call wxBitmap::UngetRawData()!") );
 
     if ( m_hBitmap)
     {
@@ -493,6 +507,7 @@ bool wxBitmap::DoCreate(int w, int h, int d, WXHDC hdc)
         // don't delete the DIB section in dib object dtor
         hbmp = dib.Detach();
 
+        GetBitmapData()->m_isDIB = TRUE;
         GetBitmapData()->m_depth = d;
     }
     else // create a DDB
@@ -778,6 +793,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc )
         // don't delete the DIB section in dib object dtor
         hbitmap = dib.Detach();
 
+        refData->m_isDIB = TRUE;
         refData->m_depth = dib.GetDepth();
     }
     else // we need to convert DIB to DDB
@@ -1179,10 +1195,38 @@ bool wxBitmap::GetRawData(wxRawBitmapData *data)
         return FALSE;
     }
 
-    // we only support raw access to the DIBs, so check if we have one
-    DIBSECTION ds;
-    if ( ::GetObject(GetHbitmap(), sizeof(ds), &ds) != sizeof(DIBSECTION) )
+    // if we're already a DIB we can access our data directly, but if not we
+    // need to convert this DDB to a DIB section and use it for raw access and
+    // then convert it back
+    HBITMAP hDIB;
+    if ( !GetBitmapData()->m_isDIB )
     {
+        wxCHECK_MSG( !GetBitmapData()->m_dib, FALSE,
+                        _T("GetRawData() may be called only once") );
+
+        wxDIB *dib = new wxDIB(*this);
+        if ( !dib->IsOk() )
+        {
+            delete dib;
+
+            return FALSE;
+        }
+
+        // we'll free it in UngetRawData()
+        GetBitmapData()->m_dib = dib;
+
+        hDIB = dib->GetHandle();
+    }
+    else // we're a DIB
+    {
+        hDIB = GetHbitmap();
+    }
+
+    DIBSECTION ds;
+    if ( ::GetObject(hDIB, sizeof(ds), &ds) != sizeof(DIBSECTION) )
+    {
+        wxFAIL_MSG( _T("failed to get DIBSECTION from a DIB?") );
+
         return FALSE;
     }
 
@@ -1208,6 +1252,9 @@ bool wxBitmap::GetRawData(wxRawBitmapData *data)
 void wxBitmap::UngetRawData(wxRawBitmapData *data)
 {
     wxCHECK_RET( data, _T("NULL pointer in wxBitmap::UngetRawData()") );
+
+    if ( !Ok() )
+        return;
 
     if ( !*data )
     {
@@ -1241,6 +1288,18 @@ void wxBitmap::UngetRawData(wxRawBitmapData *data)
 
         p = rowStart;
         p.OffsetY(1);
+    }
+
+    // if we're a DDB we need to convert DIB back to DDB now to make the
+    // changes made via wxRawBitmapData effective
+    if ( !GetBitmapData()->m_isDIB )
+    {
+        wxDIB *dib = GetBitmapData()->m_dib;
+        GetBitmapData()->m_dib = NULL;
+
+        // TODO: convert
+
+        delete dib;
     }
 }
 
