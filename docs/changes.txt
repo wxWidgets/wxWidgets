@@ -57,6 +57,7 @@ All:
   and Mac) which contain some tests that were in setup.h
 - added event sink argument to wxEvtHandler::Connect()
 - added support for POST method and alt ports to wxHTTP (Roger Chickering)
+- added wxSocket::IPAddress() (Chris Mellon)
 
 wxBase:
 
