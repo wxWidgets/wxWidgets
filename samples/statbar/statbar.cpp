@@ -497,19 +497,19 @@ void MyFrame::OnUpdateSetStyleRaised(wxUpdateUIEvent &event)
     event.Check(m_statbarStyle == wxSB_RAISED);
 }
 
-void MyFrame::OnSetStyleNormal(wxCommandEvent &event)
+void MyFrame::OnSetStyleNormal(wxCommandEvent & WXUNUSED(event))
 {
     m_statbarStyle = wxSB_NORMAL;
     ApplyStyle();
 }
 
-void MyFrame::OnSetStyleFlat(wxCommandEvent &event)
+void MyFrame::OnSetStyleFlat(wxCommandEvent & WXUNUSED(event))
 {
     m_statbarStyle = wxSB_FLAT;
     ApplyStyle();
 }
 
-void MyFrame::OnSetStyleRaised(wxCommandEvent &event)
+void MyFrame::OnSetStyleRaised(wxCommandEvent & WXUNUSED(event))
 {
     m_statbarStyle = wxSB_RAISED;
     ApplyStyle();
