@@ -169,9 +169,6 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"));
 
-    static wxClassInfo* NextBackend();
-
-
     bool Play();
     bool Pause();
     bool Stop();
@@ -191,7 +188,16 @@ public:
     wxLongLong GetPosition();
     wxLongLong GetDuration();
 
+    //The following two prevent function hiding
+    void GetPosition(int* x, int* y) const
+    {       wxControl::GetPosition(x, y);           }
+
+    wxPoint GetPosition() const
+    {       return wxControl::GetPosition();        }  
+
 protected:
+    static wxClassInfo* NextBackend();
+
     void OnMediaFinished(wxMediaEvent& evt);
     virtual void DoMoveWindow(int x, int y, int w, int h);
     wxSize DoGetBestSize() const;
