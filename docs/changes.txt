@@ -62,6 +62,7 @@ versions, please update your code to not use them.
 - wxHashTable::Next: use wxHashTable::Node* or
                      wxHashTable::compatibility_iterator to store the return
                      value
+- wxWave class; use wxSound instead
 
 
 OTHER CHANGES
@@ -95,6 +96,7 @@ All:
 - added overloaded constructors and Create() methods taking wxArrayString
   for wxChoice, wxComboBox, wxListBox, wxRadioBox, wxCheckListBox,
   wxSingleChoiceDialog, wxMultipleChoiceDialog
+- renamed wxWave class to wxSound
 
 All (GUI):
 
@@ -165,7 +167,9 @@ wxHTML:
 
 Unix:
 
-- Added XFree86 resolution changing using xf86vidmode extensions (Ryan Norton)
+- added XFree86 resolution changing using xf86vidmode extensions (Ryan Norton)
+- implemented asynchronous playback in wxSound and added SDL backend in
+  addition to existing OSS one
 
 
 2.5.0
