@@ -152,6 +152,9 @@ Added a generic static text control to wxPython.lib.stattext.  This is
 so things like Boa and PythonCard can have a static text that can
 respond to mouse events and etc.
 
+Changed the wxDateTime.Parse* methods to return an int that will be -1
+on failure, and the index where parsing stopped otherwise.
+
 
 
 
