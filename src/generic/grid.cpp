@@ -297,11 +297,60 @@ void wxGridCellEditor::Destroy()
     }
 }
 
-void wxGridCellEditor::Show(bool show)
+void wxGridCellEditor::Show(bool show, wxGridCellAttr *attr)
 {
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
     m_control->Show(show);
+
+    if ( show )
+    {
+        // set the colours/fonts if we have any
+        if ( attr )
+        {
+            if ( attr->HasTextColour() )
+            {
+                m_colFgOld = m_control->GetForegroundColour();
+                m_control->SetForegroundColour(attr->GetTextColour());
+            }
+
+            if ( attr->HasBackgroundColour() )
+            {
+                m_colBgOld = m_control->GetBackgroundColour();
+                m_control->SetBackgroundColour(attr->GetBackgroundColour());
+            }
+
+            if ( attr->HasFont() )
+            {
+                m_fontOld = m_control->GetFont();
+                m_control->SetFont(attr->GetFont());
+            }
+
+            // can't do anything more in the base class version, the other
+            // attributes may only be used by the derived classes
+        }
+    }
+    else
+    {
+        // restore the standard colours fonts
+        if ( m_colFgOld.Ok() )
+        {
+            m_control->SetForegroundColour(m_colFgOld);
+            m_colFgOld = wxNullColour;
+        }
+
+        if ( m_colBgOld.Ok() )
+        {
+            m_control->SetBackgroundColour(m_colBgOld);
+            m_colBgOld = wxNullColour;
+        }
+
+        if ( m_fontOld.Ok() )
+        {
+            m_control->SetFont(m_fontOld);
+            m_fontOld = wxNullFont;
+        }
+    }
 }
 
 void wxGridCellEditor::SetSize(const wxRect& rect)
@@ -343,8 +392,7 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
 }
 
 
-void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid,
-                           wxGridCellAttr* attr)
+void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
 {
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
@@ -353,14 +401,12 @@ void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid,
     ((wxTextCtrl*)m_control)->SetValue(m_startValue);
     ((wxTextCtrl*)m_control)->SetInsertionPointEnd();
     ((wxTextCtrl*)m_control)->SetFocus();
-
-    // ???  Should we use attr and try to set colours and font?
 }
 
 
 
 bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
-                                   wxGrid* grid, wxGridCellAttr* attr)
+                                   wxGrid* grid)
 {
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
@@ -373,7 +419,7 @@ bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
     if (changed)
         grid->GetTable()->SetValue(row, col, value);
 
-    m_startValue = "";
+    m_startValue = wxEmptyString;
     ((wxTextCtrl*)m_control)->SetValue(m_startValue);
 
     return changed;
@@ -2908,7 +2954,9 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     // the edit control
                     if (m_waitForSlowClick && coords == m_currentCellCoords) {
                         EnableCellEditControl(TRUE);
-                        ShowCellEditControl();
+                        // VZ: this is done by the call above, so why do it
+                        //     again? please remove this line if it's ok
+                        //ShowCellEditControl();
                         m_waitForSlowClick = FALSE;
                     }
                     else {
@@ -2950,10 +2998,9 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     SendEvent( EVT_GRID_RANGE_SELECT, -1, -1, event );
                 }
 
-                // Show the edit control, if it has
-                // been hidden for drag-shrinking.
-                if ( IsCellEditControlEnabled() )
-                    ShowCellEditControl();
+                // Show the edit control, if it has been hidden for
+                // drag-shrinking.
+                ShowCellEditControl();
             }
             else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
             {
@@ -4205,8 +4252,11 @@ void wxGrid::ShowCellEditControl()
             int cw, ch;
             m_gridWin->GetClientSize( &cw, &ch );
 
-            // Make the edit control large enough to allow for internal margins
-            // TODO: remove this if the text ctrl sizing is improved esp. for unix
+            // Make the edit control large enough to allow for internal
+            // margins
+            //
+            // TODO: remove this if the text ctrl sizing is improved esp. for
+            // unix
             //
             int extra;
 #if defined(__WXMOTIF__)
@@ -4247,14 +4297,15 @@ void wxGrid::ShowCellEditControl()
 
             wxGridCellAttr*   attr = GetCellAttr(row, col);
             wxGridCellEditor* editor = attr->GetEditor();
-            if (! editor->IsCreated()) {
+            if ( !editor->IsCreated() )
+            {
                 editor->Create(m_gridWin, -1,
                                new wxGridCellEditorEvtHandler(this, editor));
             }
 
             editor->SetSize( rect );
-            editor->Show( TRUE );
-            editor->BeginEdit(row, col, this, attr);
+            editor->Show( TRUE, attr );
+            editor->BeginEdit(row, col, this);
             attr->DecRef();
          }
     }
@@ -4268,7 +4319,7 @@ void wxGrid::HideCellEditControl()
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
 
-        wxGridCellAttr*   attr = GetCellAttr(row, col);
+        wxGridCellAttr* attr = GetCellAttr(row, col);
         attr->GetEditor()->Show( FALSE );
         attr->DecRef();
         m_gridWin->SetFocus();
@@ -4285,16 +4336,18 @@ void wxGrid::SetEditControlValue( const wxString& value )
 
 void wxGrid::SaveEditControlValue()
 {
-    if (IsCellEditControlEnabled()) {
+    if ( IsCellEditControlEnabled() )
+    {
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
 
-        wxGridCellAttr*   attr = GetCellAttr(row, col);
-        bool changed = attr->GetEditor()->EndEdit(row, col, TRUE, this, attr);
+        wxGridCellAttr* attr = GetCellAttr(row, col);
+        bool changed = attr->GetEditor()->EndEdit(row, col, TRUE, this);
 
         attr->DecRef();
 
-        if (changed) {
+        if (changed)
+        {
             SendEvent( EVT_GRID_CELL_CHANGE,
                        m_currentCellCoords.GetRow(),
                        m_currentCellCoords.GetCol() );

@@ -127,20 +127,19 @@ public:
     // Size and position the edit control
     virtual void SetSize(const wxRect& rect);
 
-    // Show or hide the edit control
-    virtual void Show(bool show);
+    // Show or hide the edit control, use the specified attributes to set
+    // colours/fonts for it
+    virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
 
     // Fetch the value from the table and prepare the edit control
     // to begin editing.  Set the focus to the edit control.
-    virtual void BeginEdit(int row, int col, wxGrid* grid,
-                           wxGridCellAttr* attr) = 0;
+    virtual void BeginEdit(int row, int col, wxGrid* grid) = 0;
 
     // Complete the editing of the current cell.  If saveValue is
     // true then send the new value back to the table.  Returns true
     // if the value has changed.  If necessary, the control may be
     // destroyed.
-    virtual bool EndEdit(int row, int col,  bool saveValue,
-                         wxGrid* grid, wxGridCellAttr* attr) = 0;
+    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid) = 0;
 
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
@@ -158,7 +157,15 @@ public:
     virtual void Destroy();
 
 protected:
+    // the control we show on screen
     wxControl*  m_control;
+
+    // if we change the colours/font of the control from the default ones, we
+    // must restore the default later and we save them here between calls to
+    // Show(TRUE) and Show(FALSE)
+    wxColour m_colFgOld,
+             m_colBgOld;
+    wxFont m_fontOld;
 };
 
 
@@ -171,11 +178,8 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
-    virtual void BeginEdit(int row, int col, wxGrid* grid,
-                           wxGridCellAttr* attr);
-
-    virtual bool EndEdit(int row, int col,  bool saveValue,
-                         wxGrid* grid, wxGridCellAttr* attr);
+    virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
 
     virtual void Reset();
     virtual void StartingKey(wxKeyEvent& event);
