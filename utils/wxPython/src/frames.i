@@ -15,10 +15,7 @@
 
 %{
 #include "helpers.h"
-
-#ifdef __WXMSW__
 #include <wx/minifram.h>
-#endif
 %}
 
 //----------------------------------------------------------------------
@@ -95,6 +92,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1998/12/16 22:10:53  RD
+// Tweaks needed to be able to build wxPython with wxGTK.
+//
 // Revision 1.3  1998/12/15 20:41:18  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

@@ -325,6 +325,101 @@ class wxLayoutConstraints(wxLayoutConstraintsPtr):
 
 
 
+class wxRegionPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            miscc.delete_wxRegion(self.this)
+    def Clear(self):
+        val = miscc.wxRegion_Clear(self.this)
+        return val
+    def Contains(self,arg0,arg1):
+        val = miscc.wxRegion_Contains(self.this,arg0,arg1)
+        return val
+    def ContainsPoint(self,arg0):
+        val = miscc.wxRegion_ContainsPoint(self.this,arg0.this)
+        return val
+    def ContainsRect(self,arg0):
+        val = miscc.wxRegion_ContainsRect(self.this,arg0.this)
+        return val
+    def GetBox(self):
+        val = miscc.wxRegion_GetBox(self.this)
+        val = wxRectPtr(val)
+        val.thisown = 1
+        return val
+    def Intersect(self,arg0):
+        val = miscc.wxRegion_Intersect(self.this,arg0.this)
+        return val
+    def Subtract(self,arg0):
+        val = miscc.wxRegion_Subtract(self.this,arg0.this)
+        return val
+    def Union(self,arg0):
+        val = miscc.wxRegion_Union(self.this,arg0.this)
+        return val
+    def Xor(self,arg0):
+        val = miscc.wxRegion_Xor(self.this,arg0.this)
+        return val
+    def __repr__(self):
+        return "<C wxRegion instance>"
+class wxRegion(wxRegionPtr):
+    def __init__(self) :
+        self.this = miscc.new_wxRegion()
+        self.thisown = 1
+
+
+
+
+class wxRegionIteratorPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            miscc.delete_wxRegionIterator(self.this)
+    def GetX(self):
+        val = miscc.wxRegionIterator_GetX(self.this)
+        return val
+    def GetY(self):
+        val = miscc.wxRegionIterator_GetY(self.this)
+        return val
+    def GetW(self):
+        val = miscc.wxRegionIterator_GetW(self.this)
+        return val
+    def GetWidth(self):
+        val = miscc.wxRegionIterator_GetWidth(self.this)
+        return val
+    def GetH(self):
+        val = miscc.wxRegionIterator_GetH(self.this)
+        return val
+    def GetHeight(self):
+        val = miscc.wxRegionIterator_GetHeight(self.this)
+        return val
+    def GetRect(self):
+        val = miscc.wxRegionIterator_GetRect(self.this)
+        val = wxRectPtr(val)
+        val.thisown = 1
+        return val
+    def HaveRects(self):
+        val = miscc.wxRegionIterator_HaveRects(self.this)
+        return val
+    def Reset(self):
+        val = miscc.wxRegionIterator_Reset(self.this)
+        return val
+    def Next(self):
+        val = miscc.wxRegionIterator_Next(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxRegionIterator instance>"
+class wxRegionIterator(wxRegionIteratorPtr):
+    def __init__(self,arg0) :
+        self.this = miscc.new_wxRegionIterator(arg0.this)
+        self.thisown = 1
+
+
+
+
 class wxAcceleratorEntryPtr :
     def __init__(self,this):
         self.this = this
@@ -517,3 +612,6 @@ wxLeftOf = miscc.wxLeftOf
 wxRightOf = miscc.wxRightOf
 wxSameAs = miscc.wxSameAs
 wxAbsolute = miscc.wxAbsolute
+wxOutRegion = miscc.wxOutRegion
+wxPartRegion = miscc.wxPartRegion
+wxInRegion = miscc.wxInRegion

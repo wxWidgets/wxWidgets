@@ -8,7 +8,7 @@ from windows import *
 from gdi import *
 
 from events import *
-import wxp
+import wx
 class wxControlPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
@@ -50,7 +50,7 @@ class wxButton(wxButtonPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxButton,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -78,7 +78,7 @@ class wxBitmapButton(wxBitmapButtonPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxBitmapButton,(arg0.this,arg1,arg2.this,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -105,7 +105,7 @@ class wxCheckBox(wxCheckBoxPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxCheckBox,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -159,7 +159,7 @@ class wxChoice(wxChoicePtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxChoice,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -243,7 +243,7 @@ class wxComboBox(wxComboBoxPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxComboBox,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -288,7 +288,7 @@ class wxGauge(wxGaugePtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxGauge,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -335,7 +335,7 @@ class wxStaticText(wxStaticTextPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxStaticText,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -404,7 +404,7 @@ class wxListBox(wxListBoxPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxListBox,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -500,7 +500,7 @@ class wxTextCtrl(wxTextCtrlPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxTextCtrl,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -515,14 +515,14 @@ class wxScrollBarPtr(wxControlPtr):
     def GetPageSize(self):
         val = controlsc.wxScrollBar_GetPageSize(self.this)
         return val
-    def GetPosition(self):
-        val = controlsc.wxScrollBar_GetPosition(self.this)
+    def GetThumbPosition(self):
+        val = controlsc.wxScrollBar_GetThumbPosition(self.this)
         return val
     def GetThumbSize(self):
         val = controlsc.wxScrollBar_GetThumbSize(self.this)
         return val
-    def SetPosition(self,arg0):
-        val = controlsc.wxScrollBar_SetPosition(self.this,arg0)
+    def SetThumbPosition(self,arg0):
+        val = controlsc.wxScrollBar_SetThumbPosition(self.this,arg0)
         return val
     def SetScrollbar(self,arg0,arg1,arg2,arg3,*args):
         val = apply(controlsc.wxScrollBar_SetScrollbar,(self.this,arg0,arg1,arg2,arg3,)+args)
@@ -539,7 +539,7 @@ class wxScrollBar(wxScrollBarPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxScrollBar,(arg0.this,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -602,7 +602,7 @@ class wxStaticBitmap(wxStaticBitmapPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxStaticBitmap,(arg0.this,arg1,arg2.this,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -665,7 +665,7 @@ class wxRadioBox(wxRadioBoxPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxRadioBox,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -692,7 +692,7 @@ class wxRadioButton(wxRadioButtonPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxRadioButton,(arg0.this,arg1,arg2,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -770,7 +770,7 @@ class wxSlider(wxSliderPtr):
         args = tuple(argl)
         self.this = apply(controlsc.new_wxSlider,(arg0.this,arg1,arg2,arg3,arg4,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 

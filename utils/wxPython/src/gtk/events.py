@@ -67,6 +67,9 @@ class wxCloseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def CanVeto(self):
+        val = eventsc.wxCloseEvent_CanVeto(self.this)
+        return val
     def GetLoggingOff(self):
         val = eventsc.wxCloseEvent_GetLoggingOff(self.this)
         return val
@@ -78,6 +81,12 @@ class wxCloseEventPtr(wxEventPtr):
         return val
     def SetForce(self,arg0):
         val = eventsc.wxCloseEvent_SetForce(self.this,arg0)
+        return val
+    def SetCanVeto(self,arg0):
+        val = eventsc.wxCloseEvent_SetCanVeto(self.this,arg0)
+        return val
+    def SetLoggingOff(self,arg0):
+        val = eventsc.wxCloseEvent_SetLoggingOff(self.this,arg0)
         return val
     def GetForce(self):
         val = eventsc.wxCloseEvent_GetForce(self.this)

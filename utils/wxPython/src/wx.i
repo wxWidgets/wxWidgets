@@ -46,7 +46,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.5.0"
+#define __version__ "0.5.1"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -152,6 +152,9 @@ extern "C" SWIGEXPORT(void,initutilsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/12/16 22:10:57  RD
+// Tweaks needed to be able to build wxPython with wxGTK.
+//
 // Revision 1.1  1998/12/15 20:41:27  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

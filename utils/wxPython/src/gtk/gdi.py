@@ -17,6 +17,7 @@ class wxBitmapPtr :
         return val
     def GetPalette(self):
         val = gdic.wxBitmap_GetPalette(self.this)
+        val = wxPalettePtr(val)
         return val
     def GetMask(self):
         val = gdic.wxBitmap_GetMask(self.this)
@@ -32,6 +33,10 @@ class wxBitmapPtr :
         val = gdic.wxBitmap_Ok(self.this)
         return val
     def SaveFile(self,arg0,arg1,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
         val = apply(gdic.wxBitmap_SaveFile,(self.this,arg0,arg1,)+args)
         return val
     def SetDepth(self,arg0):
@@ -375,10 +380,12 @@ class wxDCPtr :
     def GetBackground(self):
         val = gdic.wxDC_GetBackground(self.this)
         val = wxBrushPtr(val)
+        val.thisown = 1
         return val
     def GetBrush(self):
         val = gdic.wxDC_GetBrush(self.this)
         val = wxBrushPtr(val)
+        val.thisown = 1
         return val
     def GetCharHeight(self):
         val = gdic.wxDC_GetCharHeight(self.this)
@@ -392,6 +399,7 @@ class wxDCPtr :
     def GetFont(self):
         val = gdic.wxDC_GetFont(self.this)
         val = wxFontPtr(val)
+        val.thisown = 1
         return val
     def GetLogicalFunction(self):
         val = gdic.wxDC_GetLogicalFunction(self.this)
@@ -405,6 +413,7 @@ class wxDCPtr :
     def GetPen(self):
         val = gdic.wxDC_GetPen(self.this)
         val = wxPenPtr(val)
+        val.thisown = 1
         return val
     def GetPixel(self,arg0,arg1):
         val = gdic.wxDC_GetPixel(self.this,arg0,arg1)
@@ -465,7 +474,7 @@ class wxDCPtr :
         val = gdic.wxDC_SetClippingRegion(self.this,arg0,arg1,arg2,arg3)
         return val
     def SetPalette(self,arg0):
-        val = gdic.wxDC_SetPalette(self.this,arg0)
+        val = gdic.wxDC_SetPalette(self.this,arg0.this)
         return val
     def SetBrush(self,arg0):
         val = gdic.wxDC_SetBrush(self.this,arg0.this)
@@ -597,6 +606,32 @@ class wxPostScriptDC(wxPostScriptDCPtr):
         except: pass
         args = tuple(argl)
         self.this = apply(gdic.new_wxPostScriptDC,(arg0,)+args)
+        self.thisown = 1
+
+
+
+
+class wxPalettePtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            gdic.delete_wxPalette(self.this)
+    def GetPixel(self,arg0,arg1,arg2):
+        val = gdic.wxPalette_GetPixel(self.this,arg0,arg1,arg2)
+        return val
+    def GetRGB(self,arg0,arg1,arg2,arg3):
+        val = gdic.wxPalette_GetRGB(self.this,arg0,arg1,arg2,arg3)
+        return val
+    def Ok(self):
+        val = gdic.wxPalette_Ok(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxPalette instance>"
+class wxPalette(wxPalettePtr):
+    def __init__(self,arg0,arg1,arg2) :
+        self.this = gdic.new_wxPalette(arg0,arg1,arg2)
         self.thisown = 1
 
 

@@ -10,11 +10,14 @@ from windows import *
 from controls import *
 
 from events import *
-import wxp
+import wx
 class wxGridCellPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            windows2c.delete_wxGridCell(self.this)
     def GetTextValue(self):
         val = windows2c.wxGridCell_GetTextValue(self.this)
         return val
@@ -62,8 +65,9 @@ class wxGridCellPtr :
     def __repr__(self):
         return "<C wxGridCell instance>"
 class wxGridCell(wxGridCellPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self) :
+        self.this = windows2c.new_wxGridCell()
+        self.thisown = 1
 
 
 
@@ -212,6 +216,9 @@ class wxGridPtr(wxPanelPtr):
     def InsertRows(self,*args):
         val = apply(windows2c.wxGrid_InsertRows,(self.this,)+args)
         return val
+    def OnActivate(self,arg0):
+        val = windows2c.wxGrid_OnActivate(self.this,arg0)
+        return val
     def SetCellAlignment(self,arg0,arg1,arg2):
         val = windows2c.wxGrid_SetCellAlignment(self.this,arg0,arg1,arg2)
         return val
@@ -287,7 +294,68 @@ class wxGrid(wxGridPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxGrid,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
+        wx._checkForCallback(self, 'OnSelectCell',           wxEVT_GRID_SELECT_CELL)
+        wx._checkForCallback(self, 'OnCreateCell',           wxEVT_GRID_CREATE_CELL)
+        wx._checkForCallback(self, 'OnChangeLabels',         wxEVT_GRID_CHANGE_LABELS)
+        wx._checkForCallback(self, 'OnChangeSelectionLabel', wxEVT_GRID_CHANGE_SEL_LABEL)
+        wx._checkForCallback(self, 'OnCellChange',           wxEVT_GRID_CELL_CHANGE)
+        wx._checkForCallback(self, 'OnCellLeftClick',        wxEVT_GRID_CELL_LCLICK)
+        wx._checkForCallback(self, 'OnCellRightClick',       wxEVT_GRID_CELL_RCLICK)
+        wx._checkForCallback(self, 'OnLabelLeftClick',       wxEVT_GRID_LABEL_LCLICK)
+        wx._checkForCallback(self, 'OnLabelRightClick',      wxEVT_GRID_LABEL_RCLICK)
+
+
+
+
+class wxGridEventPtr(wxEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __setattr__(self,name,value):
+        if name == "m_row" :
+            windows2c.wxGridEvent_m_row_set(self.this,value)
+            return
+        if name == "m_col" :
+            windows2c.wxGridEvent_m_col_set(self.this,value)
+            return
+        if name == "m_x" :
+            windows2c.wxGridEvent_m_x_set(self.this,value)
+            return
+        if name == "m_y" :
+            windows2c.wxGridEvent_m_y_set(self.this,value)
+            return
+        if name == "m_control" :
+            windows2c.wxGridEvent_m_control_set(self.this,value)
+            return
+        if name == "m_shift" :
+            windows2c.wxGridEvent_m_shift_set(self.this,value)
+            return
+        if name == "m_cell" :
+            windows2c.wxGridEvent_m_cell_set(self.this,value.this)
+            return
+        self.__dict__[name] = value
+    def __getattr__(self,name):
+        if name == "m_row" : 
+            return windows2c.wxGridEvent_m_row_get(self.this)
+        if name == "m_col" : 
+            return windows2c.wxGridEvent_m_col_get(self.this)
+        if name == "m_x" : 
+            return windows2c.wxGridEvent_m_x_get(self.this)
+        if name == "m_y" : 
+            return windows2c.wxGridEvent_m_y_get(self.this)
+        if name == "m_control" : 
+            return windows2c.wxGridEvent_m_control_get(self.this)
+        if name == "m_shift" : 
+            return windows2c.wxGridEvent_m_shift_get(self.this)
+        if name == "m_cell" : 
+            return wxGridCellPtr(windows2c.wxGridEvent_m_cell_get(self.this))
+        raise AttributeError,name
+    def __repr__(self):
+        return "<C wxGridEvent instance>"
+class wxGridEvent(wxGridEventPtr):
+    def __init__(self,this):
+        self.this = this
 
 
 
@@ -372,7 +440,7 @@ class wxNotebook(wxNotebookPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxNotebook,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -381,11 +449,17 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def GetBorderSize(self):
+        val = windows2c.wxSplitterWindow_GetBorderSize(self.this)
+        return val
     def GetMinimumPaneSize(self):
         val = windows2c.wxSplitterWindow_GetMinimumPaneSize(self.this)
         return val
     def GetSashPosition(self):
         val = windows2c.wxSplitterWindow_GetSashPosition(self.this)
+        return val
+    def GetSashSize(self):
+        val = windows2c.wxSplitterWindow_GetSashSize(self.this)
         return val
     def GetSplitMode(self):
         val = windows2c.wxSplitterWindow_GetSplitMode(self.this)
@@ -404,8 +478,14 @@ class wxSplitterWindowPtr(wxWindowPtr):
     def IsSplit(self):
         val = windows2c.wxSplitterWindow_IsSplit(self.this)
         return val
+    def SetBorderSize(self,arg0):
+        val = windows2c.wxSplitterWindow_SetBorderSize(self.this,arg0)
+        return val
     def SetSashPosition(self,arg0,*args):
         val = apply(windows2c.wxSplitterWindow_SetSashPosition,(self.this,arg0,)+args)
+        return val
+    def SetSashSize(self,arg0):
+        val = windows2c.wxSplitterWindow_SetSashSize(self.this,arg0)
         return val
     def SetMinimumPaneSize(self,arg0):
         val = windows2c.wxSplitterWindow_SetMinimumPaneSize(self.this,arg0)
@@ -438,7 +518,7 @@ class wxSplitterWindow(wxSplitterWindowPtr):
         args = tuple(argl)
         self.this = apply(windows2c.new_wxSplitterWindow,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -454,3 +534,12 @@ class wxSplitterWindow(wxSplitterWindowPtr):
 wxGRID_TEXT_CTRL = windows2c.wxGRID_TEXT_CTRL
 wxGRID_HSCROLL = windows2c.wxGRID_HSCROLL
 wxGRID_VSCROLL = windows2c.wxGRID_VSCROLL
+wxEVT_GRID_SELECT_CELL = windows2c.wxEVT_GRID_SELECT_CELL
+wxEVT_GRID_CREATE_CELL = windows2c.wxEVT_GRID_CREATE_CELL
+wxEVT_GRID_CHANGE_LABELS = windows2c.wxEVT_GRID_CHANGE_LABELS
+wxEVT_GRID_CHANGE_SEL_LABEL = windows2c.wxEVT_GRID_CHANGE_SEL_LABEL
+wxEVT_GRID_CELL_CHANGE = windows2c.wxEVT_GRID_CELL_CHANGE
+wxEVT_GRID_CELL_LCLICK = windows2c.wxEVT_GRID_CELL_LCLICK
+wxEVT_GRID_CELL_RCLICK = windows2c.wxEVT_GRID_CELL_RCLICK
+wxEVT_GRID_LABEL_LCLICK = windows2c.wxEVT_GRID_LABEL_LCLICK
+wxEVT_GRID_LABEL_RCLICK = windows2c.wxEVT_GRID_LABEL_RCLICK

@@ -365,6 +365,7 @@ class CustomStatusBar(wxStatusBar):
     # reposition the checkbox
     def OnSize(self, event):
         rect = self.GetFieldRect(1)
+        print "%s, %s" % (rect.x, rect.y)
         self.cb.SetPosition(wxPoint(rect.x+2, rect.y+2))
         self.cb.SetSize(wxSize(rect.width-4, rect.height-4))
 
@@ -803,6 +804,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.10  1998/12/16 22:12:47  RD
+# Tweaks needed to be able to build wxPython with wxGTK.
+#
 # Revision 1.9  1998/12/15 20:44:35  RD
 # Changed the import semantics from "from wxPython import *" to "from
 # wxPython.wx import *"  This is for people who are worried about

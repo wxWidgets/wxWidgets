@@ -35,21 +35,21 @@ class MyCanvas(wxWindow):
 
 #---------------------------------------------------------------------------
 
-if wxPlatform == '__WXMSW__':
-    class MyMiniFrame(wxMiniFrame):
-        def __init__(self, parent, ID, title, pos, size, style):
-            wxMiniFrame.__init__(self, parent, ID, title, pos, size, style)
-            panel = wxPanel(self, -1)
-            ID = NewId()
-            button = wxButton(panel, ID, "Close Me")
-            button.SetPosition(wxPoint(15, 15))
-            self.Connect(ID, -1, wxEVT_COMMAND_BUTTON_CLICKED, self.OnCloseMe)
+#if wxPlatform == '__WXMSW__':
+class MyMiniFrame(wxMiniFrame):
+    def __init__(self, parent, ID, title, pos, size, style):
+        wxMiniFrame.__init__(self, parent, ID, title, pos, size, style)
+        panel = wxPanel(self, -1)
+        ID = NewId()
+        button = wxButton(panel, ID, "Close Me")
+        button.SetPosition(wxPoint(15, 15))
+        self.Connect(ID, -1, wxEVT_COMMAND_BUTTON_CLICKED, self.OnCloseMe)
 
-        def OnCloseMe(self, event):
-            self.Close(true)
+    def OnCloseMe(self, event):
+        self.Close(true)
 
-        def OnCloseWindow(self, event):
-            self.Destroy()
+    def OnCloseWindow(self, event):
+        self.Destroy()
 
 #---------------------------------------------------------------------------
 
@@ -99,7 +99,7 @@ class MyFrame(wxFrame):
         if event.GetInt() == 200:
             self.Close()
         elif event.GetInt() == 101:
-            if wxPlatform == '__WXMSW__':
+            #if wxPlatform == '__WXMSW__':
                 win = MyMiniFrame(self, -1, "This is a Mini...",
                               wxPoint(-1, -1), #wxPyDefaultPosition,
                               wxSize(150, 150),
@@ -107,8 +107,8 @@ class MyFrame(wxFrame):
                               wxTHICK_FRAME | wxSYSTEM_MENU |
                               wxTINY_CAPTION_HORIZ)
                 win.Show(true)
-            else:
-                print 'Sorry, can\'t do mini\'s...'
+            #else:
+            #    print 'Sorry, can\'t do mini\'s...'
 
 
 
@@ -147,6 +147,9 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.4  1998/12/16 22:12:46  RD
+# Tweaks needed to be able to build wxPython with wxGTK.
+#
 # Revision 1.3  1998/12/15 20:44:35  RD
 # Changed the import semantics from "from wxPython import *" to "from
 # wxPython.wx import *"  This is for people who are worried about

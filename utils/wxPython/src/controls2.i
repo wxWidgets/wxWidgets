@@ -318,7 +318,9 @@ public:
 
     void SetItemBold(const wxTreeItemId& item, bool bold = TRUE);
     bool IsBold(const wxTreeItemId& item) const;
+#ifdef __WXMSW__
     wxTreeItemId HitTest(const wxPoint& point);
+#endif
 };
 
 
@@ -382,6 +384,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1998/12/16 22:10:52  RD
+// Tweaks needed to be able to build wxPython with wxGTK.
+//
 // Revision 1.11  1998/12/15 20:41:16  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

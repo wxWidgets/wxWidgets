@@ -10,7 +10,7 @@ from gdi import *
 from events import *
 
 from controls import *
-import wxp
+import wx
 class wxListItemPtr :
     def __init__(self,this):
         self.this = this
@@ -288,7 +288,7 @@ class wxListCtrl(wxListCtrlPtr):
         args = tuple(argl)
         self.this = apply(controls2c.new_wxListCtrl,(arg0.this,arg1,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 
@@ -556,6 +556,12 @@ class wxTreeCtrlPtr(wxControlPtr):
     def EndEditLabel(self,arg0,*args):
         val = apply(controls2c.wxTreeCtrl_EndEditLabel,(self.this,arg0.this,)+args)
         return val
+    def SetItemBold(self,arg0,*args):
+        val = apply(controls2c.wxTreeCtrl_SetItemBold,(self.this,arg0.this,)+args)
+        return val
+    def IsBold(self,arg0):
+        val = controls2c.wxTreeCtrl_IsBold(self.this,arg0.this)
+        return val
     def __repr__(self):
         return "<C wxTreeCtrl instance>"
 class wxTreeCtrl(wxTreeCtrlPtr):
@@ -568,7 +574,7 @@ class wxTreeCtrl(wxTreeCtrlPtr):
         args = tuple(argl)
         self.this = apply(controls2c.new_wxTreeCtrl,(arg0.this,)+args)
         self.thisown = 1
-        wxp._StdWindowCallbacks(self)
+        wx._StdWindowCallbacks(self)
 
 
 

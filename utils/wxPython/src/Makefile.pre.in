@@ -328,7 +328,7 @@ distclean:	clobber
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__
 
 
-PYMODULES = $(GENCODEDIR)/wxp.py       $(GENCODEDIR)/events.py    \
+PYMODULES = $(GENCODEDIR)/wx.py        $(GENCODEDIR)/events.py    \
 	    $(GENCODEDIR)/windows.py   $(GENCODEDIR)/misc.py      \
 	    $(GENCODEDIR)/gdi.py       $(GENCODEDIR)/mdi.py       \
 	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \

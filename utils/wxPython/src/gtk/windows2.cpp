@@ -57,6 +57,9 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/grid.h>
 #include <wx/notebook.h>
 #include <wx/splitter.h>
+#ifdef __WXMSW__
+#include <wx/msw/taskbar.h>
+#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -106,6 +109,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
@@ -116,6 +120,42 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 
 static char* wxStringErrorMsg = "string type is required for parameter";
+#define new_wxGridCell() (new wxGridCell())
+static PyObject *_wrap_new_wxGridCell(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,":new_wxGridCell")) 
+        return NULL;
+    _result = (wxGridCell *)new_wxGridCell();
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define delete_wxGridCell(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxGridCell(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGridCell * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_wxGridCell",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridCell_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxGridCell. Expected _wxGridCell_p.");
+        return NULL;
+        }
+    }
+    delete_wxGridCell(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxGridCell_GetTextValue(_swigobj)  (_swigobj->GetTextValue())
 static PyObject *_wrap_wxGridCell_GetTextValue(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -191,7 +231,8 @@ static PyObject *_wrap_wxGridCell_GetFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxGridCell_GetFont(_arg0);
+    wxFont & _result_ref = wxGridCell_GetFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -220,7 +261,7 @@ static PyObject *_wrap_wxGridCell_SetFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGridCell_SetFont(_arg0,_arg1);
+    wxGridCell_SetFont(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -349,7 +390,8 @@ static PyObject *_wrap_wxGridCell_GetBackgroundBrush(PyObject *self, PyObject *a
         return NULL;
         }
     }
-    _result = (wxBrush *)wxGridCell_GetBackgroundBrush(_arg0);
+    wxBrush & _result_ref = wxGridCell_GetBackgroundBrush(_arg0);
+    _result = (wxBrush *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxBrush_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -982,7 +1024,8 @@ static PyObject *_wrap_wxGrid_GetCellTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxGrid_GetCellTextFont(_arg0,_arg1,_arg2);
+    wxFont & _result_ref = wxGrid_GetCellTextFont(_arg0,_arg1,_arg2);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1005,7 +1048,8 @@ static PyObject *_wrap_wxGrid_GetDefCellTextFont(PyObject *self, PyObject *args)
         return NULL;
         }
     }
-    _result = (wxFont *)wxGrid_GetDefCellTextFont(_arg0);
+    wxFont & _result_ref = wxGrid_GetDefCellTextFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1299,7 +1343,8 @@ static PyObject *_wrap_wxGrid_GetLabelTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    _result = (wxFont *)wxGrid_GetLabelTextFont(_arg0);
+    wxFont & _result_ref = wxGrid_GetLabelTextFont(_arg0);
+    _result = (wxFont *) &_result_ref;
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxFont_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
@@ -1514,6 +1559,30 @@ static PyObject *_wrap_wxGrid_InsertRows(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxGrid_OnActivate(_swigobj,_swigarg0)  (_swigobj->OnActivate(_swigarg0))
+static PyObject *_wrap_wxGrid_OnActivate(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxGrid_OnActivate",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_OnActivate. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    wxGrid_OnActivate(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxGrid_SetCellAlignment(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetCellAlignment(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxGrid_SetCellAlignment(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1705,7 +1774,7 @@ static PyObject *_wrap_wxGrid_SetCellTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGrid_SetCellTextFont(_arg0,_arg1,_arg2,_arg3);
+    wxGrid_SetCellTextFont(_arg0,*_arg1,_arg2,_arg3);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1734,7 +1803,7 @@ static PyObject *_wrap_wxGrid_SetDefCellTextFont(PyObject *self, PyObject *args)
         return NULL;
         }
     }
-    wxGrid_SetDefCellTextFont(_arg0,_arg1);
+    wxGrid_SetDefCellTextFont(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -1822,7 +1891,7 @@ static PyObject *_wrap_wxGrid_SetDividerPen(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGrid_SetDividerPen(_arg0,_arg1);
+    wxGrid_SetDividerPen(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2002,7 +2071,7 @@ static PyObject *_wrap_wxGrid_SetLabelTextFont(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    wxGrid_SetLabelTextFont(_arg0,_arg1);
+    wxGrid_SetLabelTextFont(_arg0,*_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2085,6 +2154,163 @@ static PyObject *_wrap_wxGrid_UpdateDimensions(PyObject *self, PyObject *args) {
     wxGrid_UpdateDimensions(_arg0);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void *SwigwxGridEventTowxEvent(void *ptr) {
+    wxGridEvent *src;
+    wxEvent *dest;
+    src = (wxGridEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define wxGridEvent_m_row_get(_swigobj) ((int ) _swigobj->m_row)
+static PyObject *_wrap_wxGridEvent_m_row_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_row_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_row_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_row_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_col_get(_swigobj) ((int ) _swigobj->m_col)
+static PyObject *_wrap_wxGridEvent_m_col_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_col_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_col_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_col_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_x_get(_swigobj) ((int ) _swigobj->m_x)
+static PyObject *_wrap_wxGridEvent_m_x_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_x_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_x_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_x_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_y_get(_swigobj) ((int ) _swigobj->m_y)
+static PyObject *_wrap_wxGridEvent_m_y_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_y_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_y_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxGridEvent_m_y_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_control_get(_swigobj) ((bool ) _swigobj->m_control)
+static PyObject *_wrap_wxGridEvent_m_control_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_control_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_control_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxGridEvent_m_control_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_shift_get(_swigobj) ((bool ) _swigobj->m_shift)
+static PyObject *_wrap_wxGridEvent_m_shift_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_shift_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_shift_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxGridEvent_m_shift_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGridEvent_m_cell_get(_swigobj) ((wxGridCell *) _swigobj->m_cell)
+static PyObject *_wrap_wxGridEvent_m_cell_get(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGridCell * _result;
+    wxGridEvent * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGridEvent_m_cell_get",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGridEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridEvent_m_cell_get. Expected _wxGridEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (wxGridCell *)wxGridEvent_m_cell_get(_arg0);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxGridCell_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -2617,7 +2843,7 @@ static PyObject *_wrap_new_wxSplitterWindow(PyObject *self, PyObject *args) {
     wxWindowID  _arg1;
     wxPoint * _arg2 = &wxPyDefaultPosition;
     wxSize * _arg3 = &wxPyDefaultSize;
-    long  _arg4 = (wxSP_3D);
+    long  _arg4 = (wxSP_3D)|wxCLIP_CHILDREN;
     char * _arg5 = "splitterWindow";
     char * _argc0 = 0;
     char * _argc2 = 0;
@@ -2648,6 +2874,27 @@ static PyObject *_wrap_new_wxSplitterWindow(PyObject *self, PyObject *args) {
     _result = (wxSplitterWindow *)new_wxSplitterWindow(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxSplitterWindow_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxSplitterWindow_GetBorderSize(_swigobj)  (_swigobj->GetBorderSize())
+static PyObject *_wrap_wxSplitterWindow_GetBorderSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSplitterWindow * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSplitterWindow_GetBorderSize",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_GetBorderSize. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxSplitterWindow_GetBorderSize(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -2689,6 +2936,27 @@ static PyObject *_wrap_wxSplitterWindow_GetSashPosition(PyObject *self, PyObject
         }
     }
     _result = (int )wxSplitterWindow_GetSashPosition(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxSplitterWindow_GetSashSize(_swigobj)  (_swigobj->GetSashSize())
+static PyObject *_wrap_wxSplitterWindow_GetSashSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxSplitterWindow * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSplitterWindow_GetSashSize",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_GetSashSize. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxSplitterWindow_GetSashSize(_arg0);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -2810,6 +3078,28 @@ static PyObject *_wrap_wxSplitterWindow_IsSplit(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
+#define wxSplitterWindow_SetBorderSize(_swigobj,_swigarg0)  (_swigobj->SetBorderSize(_swigarg0))
+static PyObject *_wrap_wxSplitterWindow_SetBorderSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSplitterWindow * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxSplitterWindow_SetBorderSize",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_SetBorderSize. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+    wxSplitterWindow_SetBorderSize(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxSplitterWindow_SetSashPosition(_swigobj,_swigarg0,_swigarg1)  (_swigobj->SetSashPosition(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxSplitterWindow_SetSashPosition(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2828,6 +3118,28 @@ static PyObject *_wrap_wxSplitterWindow_SetSashPosition(PyObject *self, PyObject
         }
     }
     wxSplitterWindow_SetSashPosition(_arg0,_arg1,_arg2);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSplitterWindow_SetSashSize(_swigobj,_swigarg0)  (_swigobj->SetSashSize(_swigarg0))
+static PyObject *_wrap_wxSplitterWindow_SetSashSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSplitterWindow * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxSplitterWindow_SetSashSize",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSplitterWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSplitterWindow_SetSashSize. Expected _wxSplitterWindow_p.");
+        return NULL;
+        }
+    }
+    wxSplitterWindow_SetSashSize(_arg0,_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2988,14 +3300,18 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxSplitterWindow_SplitHorizontally", _wrap_wxSplitterWindow_SplitHorizontally, 1 },
 	 { "wxSplitterWindow_SetSplitMode", _wrap_wxSplitterWindow_SetSplitMode, 1 },
 	 { "wxSplitterWindow_SetMinimumPaneSize", _wrap_wxSplitterWindow_SetMinimumPaneSize, 1 },
+	 { "wxSplitterWindow_SetSashSize", _wrap_wxSplitterWindow_SetSashSize, 1 },
 	 { "wxSplitterWindow_SetSashPosition", _wrap_wxSplitterWindow_SetSashPosition, 1 },
+	 { "wxSplitterWindow_SetBorderSize", _wrap_wxSplitterWindow_SetBorderSize, 1 },
 	 { "wxSplitterWindow_IsSplit", _wrap_wxSplitterWindow_IsSplit, 1 },
 	 { "wxSplitterWindow_Initialize", _wrap_wxSplitterWindow_Initialize, 1 },
 	 { "wxSplitterWindow_GetWindow2", _wrap_wxSplitterWindow_GetWindow2, 1 },
 	 { "wxSplitterWindow_GetWindow1", _wrap_wxSplitterWindow_GetWindow1, 1 },
 	 { "wxSplitterWindow_GetSplitMode", _wrap_wxSplitterWindow_GetSplitMode, 1 },
+	 { "wxSplitterWindow_GetSashSize", _wrap_wxSplitterWindow_GetSashSize, 1 },
 	 { "wxSplitterWindow_GetSashPosition", _wrap_wxSplitterWindow_GetSashPosition, 1 },
 	 { "wxSplitterWindow_GetMinimumPaneSize", _wrap_wxSplitterWindow_GetMinimumPaneSize, 1 },
+	 { "wxSplitterWindow_GetBorderSize", _wrap_wxSplitterWindow_GetBorderSize, 1 },
 	 { "new_wxSplitterWindow", _wrap_new_wxSplitterWindow, 1 },
 	 { "wxNotebook_GetPage", _wrap_wxNotebook_GetPage, 1 },
 	 { "wxNotebook_AddPage", _wrap_wxNotebook_AddPage, 1 },
@@ -3015,6 +3331,13 @@ static PyMethodDef windows2cMethods[] = {
 	 { "new_wxNotebook", _wrap_new_wxNotebook, 1 },
 	 { "wxNotebookEvent_GetOldSelection", _wrap_wxNotebookEvent_GetOldSelection, 1 },
 	 { "wxNotebookEvent_GetSelection", _wrap_wxNotebookEvent_GetSelection, 1 },
+	 { "wxGridEvent_m_cell_get", _wrap_wxGridEvent_m_cell_get, 1 },
+	 { "wxGridEvent_m_shift_get", _wrap_wxGridEvent_m_shift_get, 1 },
+	 { "wxGridEvent_m_control_get", _wrap_wxGridEvent_m_control_get, 1 },
+	 { "wxGridEvent_m_y_get", _wrap_wxGridEvent_m_y_get, 1 },
+	 { "wxGridEvent_m_x_get", _wrap_wxGridEvent_m_x_get, 1 },
+	 { "wxGridEvent_m_col_get", _wrap_wxGridEvent_m_col_get, 1 },
+	 { "wxGridEvent_m_row_get", _wrap_wxGridEvent_m_row_get, 1 },
 	 { "wxGrid_UpdateDimensions", _wrap_wxGrid_UpdateDimensions, 1 },
 	 { "wxGrid_SetRowHeight", _wrap_wxGrid_SetRowHeight, 1 },
 	 { "wxGrid_SetLabelValue", _wrap_wxGrid_SetLabelValue, 1 },
@@ -3036,6 +3359,7 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxGrid_SetCellBackgroundColour", _wrap_wxGrid_SetCellBackgroundColour, 1 },
 	 { "wxGrid_SetDefCellAlignment", _wrap_wxGrid_SetDefCellAlignment, 1 },
 	 { "wxGrid_SetCellAlignment", _wrap_wxGrid_SetCellAlignment, 1 },
+	 { "wxGrid_OnActivate", _wrap_wxGrid_OnActivate, 1 },
 	 { "wxGrid_InsertRows", _wrap_wxGrid_InsertRows, 1 },
 	 { "wxGrid_InsertCols", _wrap_wxGrid_InsertCols, 1 },
 	 { "wxGrid_GetVertScrollBar", _wrap_wxGrid_GetVertScrollBar, 1 },
@@ -3092,6 +3416,8 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxGridCell_GetFont", _wrap_wxGridCell_GetFont, 1 },
 	 { "wxGridCell_SetTextValue", _wrap_wxGridCell_SetTextValue, 1 },
 	 { "wxGridCell_GetTextValue", _wrap_wxGridCell_GetTextValue, 1 },
+	 { "delete_wxGridCell", _wrap_delete_wxGridCell, 1 },
+	 { "new_wxGridCell", _wrap_new_wxGridCell, 1 },
 	 { NULL, NULL }
 };
 static PyObject *SWIG_globals;
@@ -3106,6 +3432,15 @@ SWIGEXPORT(void,initwindows2c)() {
 	 PyDict_SetItemString(d,"wxGRID_TEXT_CTRL", PyInt_FromLong((long) wxGRID_TEXT_CTRL));
 	 PyDict_SetItemString(d,"wxGRID_HSCROLL", PyInt_FromLong((long) wxGRID_HSCROLL));
 	 PyDict_SetItemString(d,"wxGRID_VSCROLL", PyInt_FromLong((long) wxGRID_VSCROLL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_SELECT_CELL", PyInt_FromLong((long) wxEVT_GRID_SELECT_CELL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CREATE_CELL", PyInt_FromLong((long) wxEVT_GRID_CREATE_CELL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CHANGE_LABELS", PyInt_FromLong((long) wxEVT_GRID_CHANGE_LABELS));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CHANGE_SEL_LABEL", PyInt_FromLong((long) wxEVT_GRID_CHANGE_SEL_LABEL));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CELL_CHANGE", PyInt_FromLong((long) wxEVT_GRID_CELL_CHANGE));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CELL_LCLICK", PyInt_FromLong((long) wxEVT_GRID_CELL_LCLICK));
+	 PyDict_SetItemString(d,"wxEVT_GRID_CELL_RCLICK", PyInt_FromLong((long) wxEVT_GRID_CELL_RCLICK));
+	 PyDict_SetItemString(d,"wxEVT_GRID_LABEL_LCLICK", PyInt_FromLong((long) wxEVT_GRID_LABEL_LCLICK));
+	 PyDict_SetItemString(d,"wxEVT_GRID_LABEL_RCLICK", PyInt_FromLong((long) wxEVT_GRID_LABEL_RCLICK));
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
@@ -3113,10 +3448,13 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
+	 SWIG_RegisterMapping("_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent);
+	 SWIG_RegisterMapping("_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxEvent",0);
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxSplitterWindow",SwigwxSplitterWindowTowxEvtHandler);
@@ -3173,7 +3511,10 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxNotebookEvent",SwigwxNotebookEventTowxEvent);
+	 SWIG_RegisterMapping("_class_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent);
+	 SWIG_RegisterMapping("_class_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
+	 SWIG_RegisterMapping("_wxGridEvent","_class_wxGridEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
@@ -3193,6 +3534,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxDropFilesEvent","_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxStaticText","_class_wxStaticText",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
@@ -3293,6 +3635,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
+	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
@@ -3307,13 +3650,16 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxIcon","_wxIcon",0);
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
+	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxIdleEvent","_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_wxEraseEvent","_class_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxSplitterWindow","_wxSplitterWindow",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
+	 SWIG_RegisterMapping("_class_wxGridEvent","_wxGridEvent",0);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);
@@ -3338,6 +3684,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_wxKeyEvent","_class_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_wxMoveEvent","_class_wxMoveEvent",0);
+	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxEraseEvent","_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxSplitterWindow",SwigwxSplitterWindowTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxSplitterWindow",SwigwxSplitterWindowTowxWindow);

@@ -299,7 +299,9 @@ public:
 
     wxRect GetBox();
     bool Intersect(const wxRect& rect);
+#ifdef __WXMSW__
     bool IsEmpty();
+#endif
     bool Subtract(const wxRect& rect);
     bool Union(const wxRect& rect);
     bool Xor(const wxRect& rect);
@@ -358,6 +360,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.9  1998/12/16 22:10:55  RD
+// Tweaks needed to be able to build wxPython with wxGTK.
+//
 // Revision 1.8  1998/12/15 20:41:22  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

@@ -87,13 +87,28 @@ public:
     int  GetCharHeight();
     int  GetCharWidth();
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
+#ifdef __WXMSW__
     wxSize GetClientSize();
+#else
+    %addmethods {
+        wxSize GetClientSize() {
+            int w, h;
+            self->GetClientSize(&w, &h);
+            return wxSize(w, h);
+        }
+    }
+#endif
     wxLayoutConstraints * GetConstraints();
 #ifdef __WXMSW__
     wxButton* GetDefaultItem();
 #endif
     //wxEvtHandler* GetEventHandler();
+
+#ifdef __WXMSW__
     wxFont& GetFont();
+#else
+    wxFont GetFont();
+#endif
     wxColour GetForegroundColour();
     wxWindow * GetGrandParent();
     int GetId();
@@ -101,14 +116,18 @@ public:
     wxString GetName();
     wxWindow * GetParent();
     %name(GetPositionTuple) void GetPosition(int *OUTPUT, int *OUTPUT);
+#ifdef __WXMSW__
     wxPoint GetPosition();
     wxRect GetRect();
+#endif
     int  GetReturnCode();
     int GetScrollThumb(int orientation);
     int GetScrollPos(int orientation);
     int GetScrollRange(int orientation);
     %name(GetSizeTuple) void GetSize(int *OUTPUT, int *OUTPUT);
+#ifdef __WXMSW__
     wxSize GetSize();
+#endif
     void GetTextExtent(const wxString& string, int *OUTPUT, int *OUTPUT); // int* descent = NULL, int* externalLeading = NULL, const wxFont* font = NULL, bool use16 = FALSE)
     wxString GetTitle();
     long GetWindowStyleFlag();
@@ -364,6 +383,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/12/16 22:10:56  RD
+// Tweaks needed to be able to build wxPython with wxGTK.
+//
 // Revision 1.7  1998/12/15 20:41:25  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

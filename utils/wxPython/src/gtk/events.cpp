@@ -104,6 +104,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
@@ -379,6 +380,27 @@ static void *SwigwxCloseEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+#define wxCloseEvent_CanVeto(_swigobj)  (_swigobj->CanVeto())
+static PyObject *_wrap_wxCloseEvent_CanVeto(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxCloseEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxCloseEvent_CanVeto",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_CanVeto. Expected _wxCloseEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxCloseEvent_CanVeto(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxCloseEvent_GetLoggingOff(_swigobj)  (_swigobj->GetLoggingOff())
 static PyObject *_wrap_wxCloseEvent_GetLoggingOff(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -464,6 +486,54 @@ static PyObject *_wrap_wxCloseEvent_SetForce(PyObject *self, PyObject *args) {
     }
     _arg1 = (bool ) tempbool1;
     wxCloseEvent_SetForce(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCloseEvent_SetCanVeto(_swigobj,_swigarg0)  (_swigobj->SetCanVeto(_swigarg0))
+static PyObject *_wrap_wxCloseEvent_SetCanVeto(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxCloseEvent * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxCloseEvent_SetCanVeto",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_SetCanVeto. Expected _wxCloseEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    wxCloseEvent_SetCanVeto(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxCloseEvent_SetLoggingOff(_swigobj,_swigarg0)  (_swigobj->SetLoggingOff(_swigarg0))
+static PyObject *_wrap_wxCloseEvent_SetLoggingOff(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxCloseEvent * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxCloseEvent_SetLoggingOff",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxCloseEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxCloseEvent_SetLoggingOff. Expected _wxCloseEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    wxCloseEvent_SetLoggingOff(_arg0,_arg1);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
     return _resultobj;
@@ -2628,10 +2698,13 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxCommandEvent_GetExtraLong", _wrap_wxCommandEvent_GetExtraLong, 1 },
 	 { "wxCommandEvent_Checked", _wrap_wxCommandEvent_Checked, 1 },
 	 { "wxCloseEvent_GetForce", _wrap_wxCloseEvent_GetForce, 1 },
+	 { "wxCloseEvent_SetLoggingOff", _wrap_wxCloseEvent_SetLoggingOff, 1 },
+	 { "wxCloseEvent_SetCanVeto", _wrap_wxCloseEvent_SetCanVeto, 1 },
 	 { "wxCloseEvent_SetForce", _wrap_wxCloseEvent_SetForce, 1 },
 	 { "wxCloseEvent_GetVeto", _wrap_wxCloseEvent_GetVeto, 1 },
 	 { "wxCloseEvent_Veto", _wrap_wxCloseEvent_Veto, 1 },
 	 { "wxCloseEvent_GetLoggingOff", _wrap_wxCloseEvent_GetLoggingOff, 1 },
+	 { "wxCloseEvent_CanVeto", _wrap_wxCloseEvent_CanVeto, 1 },
 	 { "wxSizeEvent_GetSize", _wrap_wxSizeEvent_GetSize, 1 },
 	 { "wxEvent_Skip", _wrap_wxEvent_Skip, 1 },
 	 { "wxEvent_SetTimestamp", _wrap_wxEvent_SetTimestamp, 1 },
@@ -2707,6 +2780,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
@@ -2789,6 +2863,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxDropFilesEvent","_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxCloseEvent","_class_wxCloseEvent",0);
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
@@ -2841,6 +2916,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
 	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
+	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
@@ -2848,6 +2924,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxIdleEvent","_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_wxEraseEvent","_class_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);

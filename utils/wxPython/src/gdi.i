@@ -16,6 +16,9 @@
 %{
 #include "helpers.h"
 #include <wx/metafile.h>
+#ifndef __WXMSW__
+#include <wx/postscrp.h>
+#endif
 %}
 
 //----------------------------------------------------------------------
@@ -286,23 +289,31 @@ public:
     void EndDoc();
     void EndDrawing();
     void EndPage();
-#ifdef __WXWIN__
     void FloodFill(long x, long y, const wxColour& colour, int style=wxFLOOD_SURFACE);
-#endif
-#ifdef __WXGTK__
-    void FloodFill(long x, long y, wxColour* colour, int style=wxFLOOD_SURFACE);
-#endif
+#ifdef __WXMSW__
     wxBrush&  GetBackground();
     wxBrush&  GetBrush();
+#else
+    wxBrush  GetBackground();
+    wxBrush  GetBrush();
+#endif
     long GetCharHeight();
     long GetCharWidth();
     void GetClippingBox(long *OUTPUT, long *OUTPUT,
                         long *OUTPUT, long *OUTPUT);
+#ifdef __WXMSW__
     wxFont& GetFont();
+#else
+    wxFont GetFont();
+#endif
     int GetLogicalFunction();
     int GetMapMode();
     bool GetOptimization();
+#ifdef __WXMSW__
     wxPen& GetPen();
+#else
+    wxPen GetPen();
+#endif
     %addmethods {
         %new wxColour* GetPixel(long x, long y) {
             wxColour* wc = new wxColour();
@@ -511,6 +522,9 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.8  1998/12/16 22:10:54  RD
+// Tweaks needed to be able to build wxPython with wxGTK.
+//
 // Revision 1.7  1998/12/15 20:41:18  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

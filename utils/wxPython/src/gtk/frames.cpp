@@ -54,10 +54,7 @@ extern PyObject *SWIG_newvarlink(void);
 #define SWIG_name    "framesc"
 
 #include "helpers.h"
-
-#ifdef __WXMSW__
 #include <wx/minifram.h>
-#endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -107,6 +104,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 }
 
 
+extern byte* byte_LIST_helper(PyObject* source);
 extern int* int_LIST_helper(PyObject* source);
 extern long* long_LIST_helper(PyObject* source);
 extern char** string_LIST_helper(PyObject* source);
@@ -242,7 +240,7 @@ static PyObject *_wrap_wxFrame_CreateToolBar(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxToolBar * _result;
     wxFrame * _arg0;
-    long  _arg1 = (wxNO_BORDER)|(wxTB_HORIZONTAL);
+    long  _arg1 = (wxNO_BORDER)|(wxTB_HORIZONTAL)|(wxTB_FLAT);
     wxWindowID  _arg2 = -1;
     char * _arg3 = "toolBar";
     char * _argc0 = 0;
@@ -678,7 +676,87 @@ static PyObject *_wrap_wxFrame_SetToolBar(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static void *SwigwxMiniFrameTowxFrame(void *ptr) {
+    wxMiniFrame *src;
+    wxFrame *dest;
+    src = (wxMiniFrame *) ptr;
+    dest = (wxFrame *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMiniFrameTowxWindow(void *ptr) {
+    wxMiniFrame *src;
+    wxWindow *dest;
+    src = (wxMiniFrame *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxMiniFrameTowxEvtHandler(void *ptr) {
+    wxMiniFrame *src;
+    wxEvtHandler *dest;
+    src = (wxMiniFrame *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxMiniFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6) (new wxMiniFrame(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5,_swigarg6))
+static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxMiniFrame * _result;
+    wxWindow * _arg0;
+    wxWindowID  _arg1;
+    wxString * _arg2;
+    wxPoint * _arg3 = &wxPyDefaultPosition;
+    wxSize * _arg4 = &wxPyDefaultSize;
+    long  _arg5 = (wxDEFAULT_FRAME_STYLE);
+    char * _arg6 = "frame";
+    char * _argc0 = 0;
+    PyObject * _obj2 = 0;
+    char * _argc3 = 0;
+    char * _argc4 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"siO|ssls:new_wxMiniFrame",&_argc0,&_arg1,&_obj2,&_argc3,&_argc4,&_arg5,&_arg6)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxMiniFrame. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2));
+}
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxMiniFrame. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    if (_argc4) {
+        if (SWIG_GetPtr(_argc4,(void **) &_arg4,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 5 of new_wxMiniFrame. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+    _result = (wxMiniFrame *)new_wxMiniFrame(_arg0,_arg1,*_arg2,*_arg3,*_arg4,_arg5,_arg6);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxMiniFrame_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj2)
+        delete _arg2;
+}
+    return _resultobj;
+}
+
 static PyMethodDef framescMethods[] = {
+	 { "new_wxMiniFrame", _wrap_new_wxMiniFrame, 1 },
 	 { "wxFrame_SetToolBar", _wrap_wxFrame_SetToolBar, 1 },
 	 { "wxFrame_SetTitle", _wrap_wxFrame_SetTitle, 1 },
 	 { "wxFrame_SetStatusWidths", _wrap_wxFrame_SetStatusWidths, 1 },
@@ -718,7 +796,10 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxMiniFrame",SwigwxMiniFrameTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxMiniFrame",SwigwxMiniFrameTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxFrame",SwigwxFrameTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxFrame",SwigwxFrameTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxEvtHandler",0);
@@ -760,6 +841,7 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
+	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
@@ -784,6 +866,7 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxDropFilesEvent","_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxStaticText","_class_wxStaticText",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
@@ -816,6 +899,8 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxBrush","_wxBrush",0);
 	 SWIG_RegisterMapping("_unsigned_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_unsigned_short","_short",0);
+	 SWIG_RegisterMapping("_class_wxWindow","_class_wxMiniFrame",SwigwxMiniFrameTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_wxMiniFrame",SwigwxMiniFrameTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxFrame",SwigwxFrameTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxFrame",SwigwxFrameTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxWindow",0);
@@ -860,6 +945,8 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_wxFrame","_class_wxMiniFrame",SwigwxMiniFrameTowxFrame);
+	 SWIG_RegisterMapping("_wxFrame","_wxMiniFrame",SwigwxMiniFrameTowxFrame);
 	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
@@ -875,6 +962,7 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
 	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
+	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0);
 	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
@@ -887,9 +975,12 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxIcon","_wxIcon",0);
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
+	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxIdleEvent","_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_wxEraseEvent","_class_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_class_wxMiniFrame","_wxMiniFrame",0);
+	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
@@ -900,6 +991,8 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);
 	 SWIG_RegisterMapping("_class_wxMemoryDC","_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxMenuBar","_class_wxMenuBar",0);
+	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxMiniFrame",SwigwxMiniFrameTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_wxMiniFrame",SwigwxMiniFrameTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxFrame",SwigwxFrameTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxFrame",SwigwxFrameTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxEvtHandler",0);
@@ -910,9 +1003,14 @@ SWIGEXPORT(void,initframesc)() {
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_wxKeyEvent","_class_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_wxMoveEvent","_class_wxMoveEvent",0);
+	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
 	 SWIG_RegisterMapping("_class_wxEraseEvent","_wxEraseEvent",0);
+	 SWIG_RegisterMapping("_wxWindow","_class_wxMiniFrame",SwigwxMiniFrameTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_wxMiniFrame",SwigwxMiniFrameTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxFrame",SwigwxFrameTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxFrame",SwigwxFrameTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxWindow",0);
+	 SWIG_RegisterMapping("_class_wxFrame","_class_wxMiniFrame",SwigwxMiniFrameTowxFrame);
+	 SWIG_RegisterMapping("_class_wxFrame","_wxMiniFrame",SwigwxMiniFrameTowxFrame);
 	 SWIG_RegisterMapping("_class_wxFrame","_wxFrame",0);
 }
