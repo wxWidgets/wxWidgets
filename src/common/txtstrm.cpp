@@ -65,18 +65,18 @@ wxChar wxTextInputStream::NextNonSeparators()
 
 inline bool wxTextInputStream::EatEOL(const wxChar &c)
 {
-  if (c == wxT('\n')) return TRUE; // eat on UNIX
+    if (c == wxT('\n')) return TRUE; // eat on UNIX
 
-  if (c == wxT('\r')) // eat on both Mac and DOS
+    if (c == wxT('\r')) // eat on both Mac and DOS
     {
-      if (!m_input) return TRUE;
-      wxChar c2 = m_input.GetC();
+        if (!m_input) return TRUE;
+        wxChar c2 = m_input.GetC();
 
-      if (c2 != wxT('\n'))  m_input.Ungetch( c2 ); // Don't eat on Mac
-      return TRUE;
+        if (c2 != wxT('\n'))  m_input.Ungetch( c2 ); // Don't eat on Mac
+        return TRUE;
     }
 
-  return FALSE;
+    return FALSE;
 }
 
 void wxTextInputStream::SkipIfEndOfLine( wxChar c )
@@ -237,6 +237,7 @@ wxString wxTextInputStream::ReadLine()
     while ( !m_input.Eof() )
     {
         c = m_input.GetC();
+        
         if ( !m_input )
             break;
 
@@ -260,8 +261,15 @@ wxString wxTextInputStream::ReadWord()
     if ( !c )
         return word;
 
+    word += c;
+    
     while ( !m_input.Eof() )
     {
+        c = m_input.GetC();
+        
+        if (!m_input)
+            break;
+            
         if (m_separators.Contains(c))
             break;
 
@@ -269,10 +277,6 @@ wxString wxTextInputStream::ReadWord()
             break;
 
         word += c;
-
-        c = m_input.GetC();
-        if (!m_input)
-            break;
     }
 
     return word;

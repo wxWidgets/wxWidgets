@@ -1,9 +1,7 @@
 
 -------------------- High priority ---------------------
 
-Improve, update translations. Install *.mo files somewehere.
-
-Fix wxMenu::Replace() bug reported weeks ago.
+Improve, update translations. Install *.mo files somewhere.
 
 -------------------- Medium priority ---------------------
 
@@ -24,9 +22,6 @@ Add wxNoteBook::SetTabPosition()
 
 More testing of Unicode support.
   -> Postponed.
-
-OwnerDraw for wxListCtrl and others
-  -> Hardly necessary.
 
 Implement wxPalette
   -> Postponed.

@@ -132,7 +132,7 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
-        _tiffReadProc, _tiffWriteProc,
+        _tiffReadProc, _tiffNullProc,
         _tiffSeekIProc, _tiffCloseProc, _tiffSizeProc,
         _tiffMapProc, _tiffUnmapProc);
 
@@ -144,7 +144,7 @@ TIFFwxOpen(wxOutputStream &stream, const char* name, const char* mode)
 {
     TIFF* tif = TIFFClientOpen(name, mode,
         (thandle_t) &stream,
-        _tiffReadProc, _tiffWriteProc,
+        _tiffNullProc, _tiffWriteProc,
         _tiffSeekOProc, _tiffCloseProc, _tiffSizeProc,
         _tiffMapProc, _tiffUnmapProc);
 

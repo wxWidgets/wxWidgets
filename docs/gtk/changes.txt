@@ -1,6 +1,10 @@
-20th June 2000: wxWindows 2.2 released
+4th July 2000: wxWindows 2.2 released
 
-Minor bug-fixes.
+Added code for writing BMP images.
+
+Added code for writing TIFF images.
+
+Bug-fixes.
 
 4th June 2000: wxWindows pre-2.2 release
 
