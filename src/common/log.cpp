@@ -750,20 +750,9 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         // developpers only
         wxStrcat(szBuf, wxT("\nDo you want to stop the program?\nYou can also choose [Cancel] to suppress further warnings."));
 
-#if wxUSE_GUI
-        switch ( wxMessageBox(szBuf, wxT("Debug"),
-                              wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
-            case wxYES:
-                Trap();
-                break;
-
-            case wxCANCEL:
-                s_bNoAsserts = TRUE;
-                break;
-
-            //case wxNO: nothing to do
-        }
-#else // !GUI, but MSW
+        // use the native message box if available: this is more robust than
+        // using our own
+#ifdef __WXMSW__
         switch ( ::MessageBox(NULL, szBuf, _T("Debug"),
                               MB_YESNOCANCEL | MB_ICONSTOP ) ) {
             case IDYES:
@@ -775,6 +764,19 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
                 break;
 
             //case IDNO: nothing to do
+        }
+#else // !MSW
+        switch ( wxMessageBox(szBuf, wxT("Debug"),
+                              wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
+            case wxYES:
+                Trap();
+                break;
+
+            case wxCANCEL:
+                s_bNoAsserts = TRUE;
+                break;
+
+            //case wxNO: nothing to do
         }
 #endif // GUI or MSW
 
