@@ -3598,6 +3598,8 @@ void wxGrid::Init()
     m_gridLineColour = wxColour( 128, 128, 255 );
     m_gridLinesEnabled = TRUE;
     m_cellHighlightColour = m_gridLineColour;
+    m_cellHighlightPenWidth = 3;
+    m_cellHighlightROPenWidth = 1;
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture = (wxWindow *)NULL;
@@ -5991,10 +5993,27 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
     // hmmm... what could we do here to show that the cell is disabled?
     // for now, I just draw a thinner border than for the other ones, but
     // it doesn't look really good
-    dc.SetPen(wxPen(m_cellHighlightColour, attr->IsReadOnly() ? 1 : 3, wxSOLID));
-    dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
-    dc.DrawRectangle(rect);
+    int penWidth = attr->IsReadOnly() ? m_cellHighlightROPenWidth : m_cellHighlightPenWidth;
+
+    if (penWidth > 0) {
+
+        // The center of th drawn line is where the position/width/height of
+        // the rectangle is actually at, (on wxMSW atr least,) so we will
+        // reduce the size of the rectangle to compensate for the thickness of
+        // the line.  If this is too strange on non wxMSW platforms then
+        // please #ifdef this appropriately.
+        rect.x += penWidth/2;
+        rect.y += penWidth/2;
+        rect.width -= penWidth-1;
+        rect.height -= penWidth-1;
+
+
+        // Now draw the rectangle
+        dc.SetPen(wxPen(m_cellHighlightColour, penWidth, wxSOLID));
+        dc.SetBrush(*wxTRANSPARENT_BRUSH);
+        dc.DrawRectangle(rect);
+    }
 
 #if 0
         // VZ: my experiments with 3d borders...
@@ -7544,6 +7563,38 @@ void wxGrid::SetCellHighlightColour( const wxColour& colour )
         wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
         DrawCellHighlight(dc, attr);
         attr->DecRef();
+    }
+}
+
+void wxGrid::SetCellHighlightPenWidth(int width)
+{
+    if (m_cellHighlightPenWidth != width) {
+        m_cellHighlightPenWidth = width;
+
+        // Just redrawing the cell highlight is not enough since that won't
+        // make any visible change if the the thickness is getting smaller.
+        int row = m_currentCellCoords.GetRow();
+        int col = m_currentCellCoords.GetCol();
+        if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
+            return;
+        wxRect rect = CellToRect(row, col);
+        m_gridWin->Refresh(TRUE, &rect);
+    }
+}
+
+void wxGrid::SetCellHighlightROPenWidth(int width)
+{
+    if (m_cellHighlightROPenWidth != width) {
+        m_cellHighlightROPenWidth = width;
+
+        // Just redrawing the cell highlight is not enough since that won't
+        // make any visible change if the the thickness is getting smaller.
+        int row = m_currentCellCoords.GetRow();
+        int col = m_currentCellCoords.GetCol();
+        if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
+            return;
+        wxRect rect = CellToRect(row, col);
+        m_gridWin->Refresh(TRUE, &rect);
     }
 }
 

@@ -107,6 +107,9 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELECT_ALL, GridFrame::SelectAll)
     EVT_MENU( ID_SELECT_UNSELECT, GridFrame::OnAddToSelectToggle)
 
+    EVT_MENU( ID_SET_HIGHLIGHT_WIDTH, GridFrame::OnSetHighlightWidth)
+    EVT_MENU( ID_SET_RO_HIGHLIGHT_WIDTH, GridFrame::OnSetROHighlightWidth)
+
     EVT_GRID_LABEL_LEFT_CLICK( GridFrame::OnLabelLeftClick )
     EVT_GRID_CELL_LEFT_CLICK( GridFrame::OnCellLeftClick )
     EVT_GRID_ROW_SIZE( GridFrame::OnRowSize )
@@ -142,6 +145,8 @@ GridFrame::GridFrame()
     viewMenu->Append( ID_TOGGLECOLSIZING, "C&ol drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLEGRIDSIZING, "&Grid drag-resize", "", TRUE );
     viewMenu->Append( ID_TOGGLEGRIDLINES, "&Grid Lines", "", TRUE );
+    viewMenu->Append( ID_SET_HIGHLIGHT_WIDTH, "&Set Cell Highlight Width...", "" );
+    viewMenu->Append( ID_SET_RO_HIGHLIGHT_WIDTH, "&Set Cell RO Highlight Width...", "" );
     viewMenu->Append( ID_AUTOSIZECOLS, "&Auto-size cols" );
 
     wxMenu *rowLabelMenu = new wxMenu;
@@ -379,6 +384,35 @@ void GridFrame::ToggleGridLines( wxCommandEvent& WXUNUSED(ev) )
     grid->EnableGridLines(
         GetMenuBar()->IsChecked( ID_TOGGLEGRIDLINES ) );
 }
+
+void GridFrame::OnSetHighlightWidth( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxString choices[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+
+    wxSingleChoiceDialog dlg(this, "Choose the thickness of the highlight pen:",
+                             "Pen Width", 11, choices);
+
+    int current = grid->GetCellHighlightPenWidth();
+    dlg.SetSelection(current);
+    if (dlg.ShowModal() == wxID_OK) {
+        grid->SetCellHighlightPenWidth(dlg.GetSelection());
+    }
+}
+
+void GridFrame::OnSetROHighlightWidth( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxString choices[] = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
+
+    wxSingleChoiceDialog dlg(this, "Choose the thickness of the highlight pen:",
+                             "Pen Width", 11, choices);
+
+    int current = grid->GetCellHighlightROPenWidth();
+    dlg.SetSelection(current);
+    if (dlg.ShowModal() == wxID_OK) {
+        grid->SetCellHighlightROPenWidth(dlg.GetSelection());
+    }
+}
+
 
 
 void GridFrame::AutoSizeCols( wxCommandEvent& WXUNUSED(ev) )

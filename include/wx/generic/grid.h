@@ -1078,7 +1078,7 @@ public:
     // handler to reduce screen flicker.
     //
     void     ForceRefresh();
-    
+
 
     // ------ edit control functions
     //
@@ -1160,6 +1160,8 @@ public:
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour() { return m_gridLineColour; }
     wxColour GetCellHighlightColour() { return m_cellHighlightColour; }
+    int      GetCellHighlightPenWidth() { return m_cellHighlightPenWidth; }
+    int      GetCellHighlightROPenWidth() { return m_cellHighlightROPenWidth; }
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
@@ -1172,6 +1174,8 @@ public:
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
     void     SetCellHighlightColour( const wxColour& );
+    void     SetCellHighlightPenWidth(int width);
+    void     SetCellHighlightROPenWidth(int width);
 
     void     EnableDragRowSize( bool enable = TRUE );
     void     DisableDragRowSize() { EnableDragRowSize( FALSE ); }
@@ -1363,6 +1367,14 @@ public:
         m_extraWidth = extraWidth;
         m_extraHeight = extraHeight;
     }
+
+    // Accessors for component windows
+    wxWindow* GetGridWindow()            { return (wxWindow*)m_gridWin; }
+    wxWindow* GetGridRowLabelWindow()    { return (wxWindow*)m_rowLabelWin; }
+    wxWindow* GetGridColLabelWindow()    { return (wxWindow*)m_colLabelWin; }
+    wxWindow* GetGridCornerLabelWindow() { return (wxWindow*)m_cornerLabelWin; }
+
+
 
     // ------ For compatibility with previous wxGrid only...
     //
@@ -1605,6 +1617,9 @@ protected:
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
     wxColour   m_cellHighlightColour;
+    int        m_cellHighlightPenWidth;
+    int        m_cellHighlightROPenWidth;
+
 
     // common part of AutoSizeColumn/Row() and GetBestSize()
     int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = TRUE);
@@ -1741,7 +1756,7 @@ protected:
     void HighlightBlock( int topRow, int leftCol, int bottomRow, int rightCol );
 
     void HighlightBlock( const wxGridCellCoords& topLeft,
-                      const wxGridCellCoords& bottomRight )
+                         const wxGridCellCoords& bottomRight )
         { HighlightBlock( topLeft.GetRow(), topLeft.GetCol(),
                        bottomRight.GetRow(), bottomRight.GetCol() ); }
 

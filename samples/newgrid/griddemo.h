@@ -83,6 +83,9 @@ class GridFrame : public wxFrame
     void OnEditorShown(wxGridEvent&);
     void OnEditorHidden(wxGridEvent&);
 
+    void OnSetHighlightWidth(wxCommandEvent&);
+    void OnSetROHighlightWidth(wxCommandEvent&);
+
 public:
     GridFrame();
     ~GridFrame();
@@ -134,6 +137,9 @@ public:
         ID_DESELECT_ROW,
         ID_DESELECT_COL,
         ID_DESELECT_CELL,
+
+        ID_SET_HIGHLIGHT_WIDTH,
+        ID_SET_RO_HIGHLIGHT_WIDTH,
 
         ID_TESTFUNC
     };
