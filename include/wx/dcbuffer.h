@@ -14,7 +14,7 @@
 
 #include "wx/dcmemory.h"
 #include "wx/dcclient.h"
-
+#include "wx/window.h"
 
 // ----------------------------------------------------------------------------
 // Double buffering helper.
