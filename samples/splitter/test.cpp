@@ -211,6 +211,8 @@ void MyFrame::OnIdle(wxIdleEvent& event)
 {
     if ( GetStatusBar()->GetStatusText(0) != "Ready" )
         SetStatusText("Ready");
+	
+	wxFrame::OnIdle(event);
 }
 
 MyCanvas::MyCanvas(wxWindow* parent, int x, int y, int w, int h) :

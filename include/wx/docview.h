@@ -283,9 +283,6 @@ class WXDLLEXPORT wxDocManager: public wxEvtHandler
   void OnUndo(wxCommandEvent& event);
   void OnRedo(wxCommandEvent& event);
 
-#ifdef WXWIN_COMPATIBILITY
-  virtual wxDocument *CreateDocument(char *WXUNUSED(path), long WXUNUSED(flags = 0)) { return NULL; };
-#endif
   virtual wxDocument *CreateDocument(const wxString& path, long flags = 0);
   virtual wxView *CreateView(wxDocument *doc, long flags = 0);
   virtual void DeleteTemplate(wxDocTemplate *temp, long flags = 0);
