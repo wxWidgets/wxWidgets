@@ -747,7 +747,7 @@ public:
         #ifdef __WXMSW__
             return self;
         #else
-            return (wxWindow*)m_mainWin;
+            return (wxWindow*)self->m_mainWin;
         #endif
         }
     }
