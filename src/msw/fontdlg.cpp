@@ -87,9 +87,6 @@ int wxFontDialog::ShowModal()
     if ( m_fontData.m_fontColour.Ok() )
     {
         chooseFontStruct.rgbColors = wxColourToRGB(m_fontData.m_fontColour);
-
-        // need this for the colour to be taken into account
-        flags |= CF_EFFECTS;
     }
 
     // CF_ANSIONLY flag is obsolete for Win32
