@@ -157,7 +157,7 @@
         <if cond="FORMAT!='autoconf' and UNICODE=='1'">wxUSE_UNICODE=1</if>
     </set>
 
-    <template id="anything">
+    <template id="common_settings">
         <debug-info>$(DEBUGFLAG)</debug-info>
         <optimize>$(OPTIMIZEFLAG)</optimize>
         <threading>multi</threading>
@@ -176,7 +176,7 @@
         </if>
     </template>
 
-    <template id="3rdparty_lib" template="anylib">
+    <template id="3rdparty_lib" template="common_settings,anylib">
         <libname>$(id)$(WXDEBUGFLAG)</libname>
     </template>
 
@@ -198,7 +198,7 @@
     <!--                  Templates for wxWindows libs:                  -->
     <!-- =============================================================== -->
 
-    <template id="wx" template="anything">
+    <template id="wx" template="common_settings">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
         <define>$(WXUNIV_DEFINE)</define>
