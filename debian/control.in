@@ -207,7 +207,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (examples)
 Package: libwxbase-msw=V-dev
 Architecture: i386
 Section: otherosfs
-Depends: wxwin=V-headers (= ${Source-Version})
+Depends: wxwin=V-headers-msw (= ${Source-Version})
 Conflicts: libwxmsw-dev
 Replaces: libwxbase-msw-dev
 Provides: libwxbase-msw-dev
@@ -217,7 +217,7 @@ Description: wxBase mingw32msvc-cross
 Package: libwxmsw=V-dev
 Architecture: i386
 Section: otherosfs
-Depends: wxwin=V-headers (= ${Source-Version})
+Depends: wxwin=V-headers-msw (= ${Source-Version})
 Conflicts: libwxmsw-dev
 Replaces: libwxmsw-dev
 Provides: libwxmsw-dev
@@ -227,6 +227,7 @@ Description: wxMSW mingw32msvc-cross
 Package: wxwin=V-headers-msw
 Architecture: i386
 Section: otherosfs
+Depends: wxwin=V-headers (= ${Source-Version})
 Conflicts: wxwin-headers-msw
 Replaces: wxwin-headers-msw
 Provides: wxwin-headers-msw
