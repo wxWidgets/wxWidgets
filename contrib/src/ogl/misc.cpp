@@ -28,6 +28,10 @@
 
 #include <wx/types.h>
 
+#ifdef new
+#undef new
+#endif
+
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
 #else

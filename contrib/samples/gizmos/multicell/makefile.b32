@@ -5,6 +5,7 @@ WXDIR = $(WXWIN)
 
 TARGET=mtest
 OBJECTS = $(TARGET).obj
+EXTRALIBS=$(WXDIR)\lib\gizmos.lib
 
 !include $(WXDIR)\src\makeprog.b32
 

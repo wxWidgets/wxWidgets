@@ -9,8 +9,9 @@
 
 WXDIR = $(WXWIN)
 
-TARGET=minimal
+TARGET=tree
 OBJECTS = $(TARGET).obj
+EXTRALIBS=$(WXDIR)\lib\gizmos.lib
 
 !include $(WXDIR)\src\makeprog.b32
 

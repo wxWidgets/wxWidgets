@@ -35,6 +35,10 @@
 #include "mondrian.xpm"
 #endif
 
+#ifdef new
+#undef new
+#endif
+
 #include "wx/ioswrap.h"
 
 #if wxUSE_IOSTREAMH
