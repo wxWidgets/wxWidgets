@@ -208,7 +208,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     }
     bResult = PyInt_AS_LONG(result);
     if (! bResult) {
-        PyErr_SetString(PyExc_SystemExit, "OnInit returned false, exiting...");
+        PyErr_SetString(PyExc_SystemExit, "OnInit returned FALSE, exiting...");
         return NULL;
     }
 
@@ -457,7 +457,7 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
 wxPyEvtSelfRef::wxPyEvtSelfRef() {
     //m_self = Py_None;         // **** We don't do normal ref counting to prevent
     //Py_INCREF(m_self);        //      circular loops...
-    m_cloned = false;
+    m_cloned = FALSE;
 }
 
 wxPyEvtSelfRef::~wxPyEvtSelfRef() {

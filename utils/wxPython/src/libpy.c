@@ -401,8 +401,6 @@ SWIG_GetPtrObj(PyObject *obj, void **ptr, char *type) {
   if (!PyString_Check(obj)) {
       if (!PyInstance_Check(obj) || !(sobj = PyObject_GetAttrString(obj,"this")))
           return "";
-//    sobj = PyObject_GetAttrString(obj,"this");
-//    if (!sobj) return "";
   }
   str = PyString_AsString(sobj);
   return SWIG_GetPtr(str,ptr,type);

@@ -313,7 +313,7 @@ public:
         bool doSave = wxPyRestoreThread();                              \
         if (m_myInst.findCallback(#CBNAME))                             \
             rval = m_myInst.callCallback(Py_BuildValue("(i)",a));       \
-        else rval = false;                                              \
+        else rval = FALSE;                                              \
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }
@@ -741,7 +741,7 @@ public:
 
 #define IMP_PYCALLBACK_BOOL_TAG_pure(CLASS, PCLASS, CBNAME)                     \
     bool CLASS::CBNAME(const wxHtmlTag& a)  {                                   \
-        bool rval = false;                                                      \
+        bool rval = FALSE;                                                      \
         bool doSave = wxPyRestoreThread();                                      \
         if (m_myInst.findCallback(#CBNAME))                                     \
             rval = m_myInst.callCallback(Py_BuildValue("(O)",                   \
