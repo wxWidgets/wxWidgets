@@ -213,9 +213,12 @@ TRUE if successful.
 
 \membersection{::wxCopyFile}
 
-\func{bool}{wxCopyFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}}
+\func{bool}{wxCopyFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}, \param{bool }{overwrite = TRUE}}
 
-Copies {\it file1} to {\it file2}, returning TRUE if successful.
+Copies {\it file1} to {\it file2}, returning TRUE if successful. If 
+{\it overwrite} parameter is TRUE (default), the destination file is overwritten
+if it exists, but if {\it overwrite} is FALSE, the functions failes in this
+case.
 
 \membersection{::wxGetCwd}\label{wxgetcwd}
 

@@ -220,7 +220,8 @@ WXDLLEXPORT bool wxMatchWild(const wxString& pattern,  const wxString& text, boo
 WXDLLEXPORT bool wxConcatFiles(const wxString& file1, const wxString& file2, const wxString& file3);
 
 // Copy file1 to file2
-WXDLLEXPORT bool wxCopyFile(const wxString& file1, const wxString& file2);
+WXDLLEXPORT bool wxCopyFile(const wxString& file1, const wxString& file2,
+                            bool overwrite = TRUE);
 
 // Remove file
 WXDLLEXPORT bool wxRemoveFile(const wxString& file);

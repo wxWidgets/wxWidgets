@@ -996,8 +996,15 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 
 // Copy files
 bool
-wxCopyFile (const wxString& file1, const wxString& file2)
+wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 {
+#if defined(__WIN32__)
+    // CopyFile() copies file attributes and modification time too, so use it
+    // instead of our code if available
+    //
+    // NB: 3rd parameter is bFailIfExists i.e. the inverse of overwrite
+    return ::CopyFile(file1, file2, !overwrite);
+#else // !Win32
     wxStructStat fbuf;
 
     // get permissions of file1
@@ -1017,7 +1024,7 @@ wxCopyFile (const wxString& file1, const wxString& file2)
 
     // remove file2, if it exists. This is needed for creating
     // file2 with the correct permissions in the next step
-    if ( wxFileExists(file2) && !wxRemoveFile(file2) )
+    if ( wxFileExists(file2)  && (!overwrite || !wxRemoveFile(file2)))
     {
         wxLogSysError(_("Impossible to overwrite the file '%s'"),
                       file2.c_str());
@@ -1033,7 +1040,7 @@ wxCopyFile (const wxString& file1, const wxString& file2)
     // create file2 with the same permissions than file1 and open it for
     // writing
     wxFile fileOut;
-    if ( !fileOut.Create(file2, TRUE, fbuf.st_mode & 0777) )
+    if ( !fileOut.Create(file2, overwrite, fbuf.st_mode & 0777) )
         return FALSE;
 
 #ifdef __UNIX__
@@ -1059,15 +1066,17 @@ wxCopyFile (const wxString& file1, const wxString& file2)
     }
 
 #if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
-// no chmod in VA.  SHould be some permission API for HPFS386 partitions however
+    // no chmod in VA.  SHould be some permission API for HPFS386 partitions however
     if ( chmod(OS_FILENAME(file2), fbuf.st_mode) != 0 )
     {
         wxLogSysError(_("Impossible to set permissions for the file '%s'"),
                       file2.c_str());
         return FALSE;
     }
-#endif
+#endif // OS/2 || Mac
+
     return TRUE;
+#endif // __WXMSW__ && __WIN32__
 }
 
 bool
