@@ -2093,7 +2093,11 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                                      SRCCOPY
                                      ) == (int)GDI_ERROR )
                 {
-                    wxLogLastError(wxT("StretchDIBits"));
+                    // On Win9x this API fails most (all?) of the time, so
+                    // logging it becomes quite distracting.  Since it falls
+                    // back to the code below this is not really serious, so
+                    // don't log it.                     
+                    //wxLogLastError(wxT("StretchDIBits"));
                 }
                 else
                 {
