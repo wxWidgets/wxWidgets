@@ -1,9 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        font.h
-// Purpose:
 // Author:      Vaclav Slavik
 // Id:          $Id$
-// Copyright:   (c) 2001 Vaclav Slavik
+// Copyright:   (c) 2001, Vaclav Slavik
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -23,8 +22,9 @@
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxPaintDC;
 class WXDLLEXPORT wxWindow;
-
 class WXDLLEXPORT wxFont;
+
+struct font_t;
 
 // ----------------------------------------------------------------------------
 // wxFont
@@ -36,17 +36,13 @@ public:
     // ctors and such
     wxFont() { Init(); }
     wxFont(const wxFont& font) { Init(); Ref(font); }
-    wxFont(const wxString& fontname,
-           wxFontEncoding fontenc = wxFONTENCODING_DEFAULT)
+
+    wxFont(const wxNativeFontInfo& info)
     {
         Init();
 
-        Create(fontname, fontenc);
+        (void)Create(info);  
     }
-
-#if 0 // FIXME_MGL -- not in wxUniversal branch
-    wxFont(const wxNativeFontInfo& info);
-#endif
 
     wxFont(int size,
            int family,
@@ -69,13 +65,7 @@ public:
                 const wxString& face = wxEmptyString,
                 wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
-    // FIXME_MGL - may disappear in wxMGL
-    // wxGTK-specific
-    bool Create(const wxString& fontname,
-                wxFontEncoding fontenc = wxFONTENCODING_DEFAULT);
-#if 0 // FIXME_MGL -- not in wxUniversal branch
     bool Create(const wxNativeFontInfo& fontinfo);
-#endif
 
     ~wxFont();
 
@@ -91,25 +81,22 @@ public:
     virtual bool GetUnderlined() const;
     virtual wxFontEncoding GetEncoding() const;
 
-#if 0 // FIXME_MGL -- not in wxUniversal branch
-    virtual wxNativeFontInfo *GetNativeFontInfo() const;
-#endif
-
-    virtual void SetPointSize( int pointSize );
-    virtual void SetFamily( int family );
-    virtual void SetStyle( int style );
-    virtual void SetWeight( int weight );
-    virtual void SetFaceName( const wxString& faceName );
-    virtual void SetUnderlined( bool underlined );
+    virtual void SetPointSize(int pointSize);
+    virtual void SetFamily(int family);
+    virtual void SetStyle(int style);
+    virtual void SetWeight(int weight);
+    virtual void SetFaceName(const wxString& faceName);
+    virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
 
-#if 0 // FIXME_MGL -- not in wxUniversal branch
-    virtual void SetNativeFontInfo( const wxNativeFontInfo& info );
-#endif
-
-protected:
+    // implementation from now on
     void Unshare();
 
+    struct font_t *GetMGLfont_t(float scale, bool antialiased);
+
+    // no data :-)
+
+protected:
     // common part of all ctors
     void Init();
 

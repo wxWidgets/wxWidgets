@@ -28,107 +28,12 @@
 #include "wx/fontenum.h"
 #include "wx/fontutil.h"
 
-#ifdef __VMS__ // Xlib.h for VMS is not (yet) compatible with C++
-               // The resulting warnings are switched off here
-#pragma message disable nosimpint
-#endif
-#include <X11/Xlib.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
-// ----------------------------------------------------------------------------
-// private functions
-// ----------------------------------------------------------------------------
-
-// create the list of all fonts with the given spacing and encoding
-static char **CreateFontList(wxChar spacing, wxFontEncoding encoding,
-                             int *nFonts);
-
-// extract all font families from the given font list and call our
-// OnFacename() for each of them
-static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
-                                        char **fonts,
-                                        int nFonts);
-
-
-// ----------------------------------------------------------------------------
-// private types
-// ----------------------------------------------------------------------------
+#include <mgraph.h>
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// helpers
-// ----------------------------------------------------------------------------
-
-static char **CreateFontList(wxChar spacing,
-                             wxFontEncoding encoding,
-                             int *nFonts)
-{
-#if 0 // FIXME_MGL
-    wxNativeEncodingInfo info;
-    wxGetNativeFontEncoding(encoding, &info);
-
-#if wxUSE_FONTMAP
-    if ( !wxTestFontEncoding(info) )
-    {
-        // ask font mapper for a replacement
-        (void)wxTheFontMapper->GetAltForEncoding(encoding, &info);
-    }
-#endif // wxUSE_FONTMAP
-
-    wxString pattern;
-    pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-%s-%s"),
-                   spacing,
-                   info.xregistry.c_str(),
-                   info.xencoding.c_str());
-
-    // get the list of all fonts
-    return XListFonts((Display *)wxGetDisplay(), pattern.mb_str(), 32767, nFonts);
-#endif
-}
-
-static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
-                                        char **fonts,
-                                        int nFonts)
-{
-#if 0 // FIXME_MGL
-    // extract the list of (unique) font families
-    wxSortedArrayString families;
-    for ( int n = 0; n < nFonts; n++ )
-    {
-        char *font = fonts[n];
-        if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
-        {
-            // it's not a full font name (probably an alias)
-            continue;
-        }
-
-        char *dash = strchr(font + 1, '-');
-        char *family = dash + 1;
-        dash = strchr(family, '-');
-        *dash = '\0'; // !NULL because Matches() above succeeded
-        wxString fam(family);
-
-        if ( families.Index(fam) == wxNOT_FOUND )
-        {
-            if ( !This->OnFacename(fam) )
-            {
-                // stop enumerating
-                return FALSE;
-            }
-
-            families.Add(fam);
-        }
-        //else: already seen
-    }
-
-    return TRUE;
-#endif
-}
 
 // ----------------------------------------------------------------------------
 // wxFontEnumerator
@@ -137,120 +42,59 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
-#if 0 // FIXME_MGL
-    int nFonts;
-    char **fonts;
+    wxMGLFontFamilyList *list = wxTheFontsManager->GetFamilyList();
+    wxMGLFontFamilyList::Node *node;
+    wxMGLFontFamily *f = NULL;
 
-    if ( fixedWidthOnly )
+    // FIXME_MGL - available encodings    
+    for (node = list->GetFirst(); node; node = node->GetNext())
     {
-        bool cont = TRUE;
-        fonts = CreateFontList(wxT('m'), encoding, &nFonts);
-        if ( fonts )
-        {
-            cont = ProcessFamiliesFromFontList(this, fonts, nFonts);
-
-            XFreeFontNames(fonts);
-        }
-
-        if ( !cont )
-        {
-            return TRUE;
-        }
-
-        fonts = CreateFontList(wxT('c'), encoding, &nFonts);
-        if ( !fonts )
-        {
-            return TRUE;
-        }
-    }
-    else
-    {
-        fonts = CreateFontList(wxT('*'), encoding, &nFonts);
-
-        if ( !fonts )
-        {
-            // it's ok if there are no fonts in given encoding - but it's not
-            // ok if there are no fonts at all
-            wxASSERT_MSG(encoding != wxFONTENCODING_SYSTEM,
-                         wxT("No fonts at all on this system?"));
-
-            return FALSE;
-        }
+        f = node->GetData();
+        if ( !fixedWidthOnly || f->GetInfo()->isFixed )
+            if ( !OnFacename(f->GetName()) )
+                return TRUE;
     }
 
-    (void)ProcessFamiliesFromFontList(this, fonts, nFonts);
-
-    XFreeFontNames(fonts);
-
-#endif
-    return TRUE;
+    return (f != NULL) /* i.e. FALSE if there are no fonts */;
 }
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
-#if 0 // FIXME_MGL
-    wxString pattern;
-    pattern.Printf(wxT("-*-%s-*-*-*-*-*-*-*-*-*-*-*-*"),
-                   family.IsEmpty() ? wxT("*") : family.c_str());
-
-    // get the list of all fonts
-    int nFonts;
-    char **fonts = XListFonts((Display *)wxGetDisplay(), pattern.mb_str(),
-                              32767, &nFonts);
-
-    if ( !fonts )
-    {
-        // unknown family?
-        return FALSE;
-    }
-
-    // extract the list of (unique) encodings
-    wxSortedArrayString encodings;
-    for ( int n = 0; n < nFonts; n++ )
-    {
-        char *font = fonts[n];
-        if ( !wxString(font).Matches(wxT("-*-*-*-*-*-*-*-*-*-*-*-*-*-*")) )
-        {
-            // it's not a full font name (probably an alias)
-            continue;
-        }
-
-        // extract the family
-        char *dash = strchr(font + 1, '-');
-        char *familyFont = dash + 1;
-        dash = strchr(familyFont, '-');
-        *dash = '\0'; // !NULL because Matches() above succeeded
-
-        if ( !family.IsEmpty() && (family != familyFont) )
-        {
-            // family doesn't match
-            continue;
-        }
-
-        // now extract the registry/encoding
-        char *p = dash + 1; // just after the dash after family
-        dash = strrchr(p, '-');
-
-        wxString registry(dash + 1);
-        *dash = '\0';
-
-        dash = strrchr(p, '-');
-        wxString encoding(dash + 1);
-
-        encoding << wxT('-') << registry;
-        if ( encodings.Index(encoding) == wxNOT_FOUND )
-        {
-            if ( !OnFontEncoding(familyFont, encoding) )
-            {
-                break;
-            }
-
-            encodings.Add(encoding);
-        }
-        //else: already had this one
-    }
-
-    XFreeFontNames(fonts);
+#if 0
+    static wxFontEncoding encodings[] = {
+        wxFONTENCODING_ISO8859_1,
+        wxFONTENCODING_ISO8859_2,
+        wxFONTENCODING_ISO8859_3,
+        wxFONTENCODING_ISO8859_4,
+        wxFONTENCODING_ISO8859_5,
+        wxFONTENCODING_ISO8859_6,
+        wxFONTENCODING_ISO8859_7,
+        wxFONTENCODING_ISO8859_8,
+        wxFONTENCODING_ISO8859_9,
+        wxFONTENCODING_ISO8859_10,
+        //wxFONTENCODING_ISO8859_11,
+        //wxFONTENCODING_ISO8859_12,
+        wxFONTENCODING_ISO8859_13,
+        wxFONTENCODING_ISO8859_14,
+        wxFONTENCODING_ISO8859_15,
+        wxFONTENCODING_CP1250,
+        wxFONTENCODING_CP1251,
+        wxFONTENCODING_CP1252,
+        wxFONTENCODING_CP1253,
+        wxFONTENCODING_CP1254,
+        wxFONTENCODING_CP1255,
+        wxFONTENCODING_CP1256,
+        wxFONTENCODING_CP1257,
+        wxFONTENCODING_KOI8,
+        wxFONTENCODING_SYSTEM
+    };
+    
+    for (size_t i = 0; encodings[i] != wxFONTENCODING_SYSTEM; i++)
+        if ( !OnFontEncoding(family, encodings[i]) )
+            break;
 #endif
+    OnFontEncoding(family, wxT("iso8859-1"));
+    // FIXME_MGL -- tests for validity
+
     return TRUE;
 }

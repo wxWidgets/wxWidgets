@@ -1766,9 +1766,16 @@ typedef enum {
     wxPRINT_MODE_PRINTER = 3    // Send to printer
 } wxPrintMode;
 
-// ---------------------------------------------------------------------------
-// Macro to specify "All Files" on different platforms
-// ---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
+// miscellaneous
+// ----------------------------------------------------------------------------
+
+// define this macro if font handling is done using the X font names
+#if defined(__WXGTK__) || defined(__X__)
+    #define _WX_X_FONTLIKE
+#endif
+
+// macro to specify "All Files" on different platforms
 #if defined(__WXMSW__)
 #   define wxALL_FILES_PATTERN   "*.*"
 #   define wxALL_FILES           gettext_noop("All files (*.*)|*.*")

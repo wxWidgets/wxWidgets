@@ -32,6 +32,11 @@
     #include "wx/font.h"
 #endif // WX_PRECOMP
 
+#include "wx/gdicmn.h"
+#include "wx/fontutil.h" // for wxNativeFontInfo
+
+#include "wx/tokenzr.h"
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -54,6 +59,77 @@ wxFont *wxFontBase::New(int size,
     return new wxFont(size, family, style, weight, underlined, face, encoding);
 }
 
+/* static */
+wxFont *wxFontBase::New(const wxNativeFontInfo& info)
+{
+#ifdef __WXMGL__ // FIXME_MGL (temporary, due to backport)
+    return new wxFont(info);
+#else
+    return NULL;
+#endif
+}
+
+/* static */
+wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
+{
+#ifdef __WXMGL__ // FIXME_MGL (temporary, due to backport)
+    wxNativeFontInfo fontInfo;
+    if ( !fontInfo.FromString(strNativeFontDesc) )
+        return new wxFont(*wxNORMAL_FONT);
+
+    return New(fontInfo);
+#else
+    return NULL;
+#endif
+}
+
+wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
+{
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
+    wxNativeFontInfo *fontInfo = new wxNativeFontInfo;
+
+    fontInfo->pointSize = GetPointSize();
+    fontInfo->family = GetFamily();
+    fontInfo->style = GetStyle();
+    fontInfo->weight = GetWeight();
+    fontInfo->underlined = GetUnderlined();
+    fontInfo->faceName = GetFaceName();
+    fontInfo->encoding = GetEncoding();
+
+    return fontInfo;
+#else
+    return (wxNativeFontInfo *)NULL;
+#endif
+}
+
+void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
+{
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
+    SetPointSize(info.pointSize);
+    SetFamily(info.family);
+    SetStyle(info.style);
+    SetWeight(info.weight);
+    SetUnderlined(info.underlined);
+    SetFaceName(info.faceName);
+    SetEncoding(info.encoding);
+#else
+	(void)info;	
+#endif
+}
+
+wxString wxFontBase::GetNativeFontInfoDesc() const
+{
+    wxString fontDesc;
+    wxNativeFontInfo *fontInfo = GetNativeFontInfo();
+    if ( fontInfo )
+    {
+        fontDesc = fontInfo->ToString();
+        delete fontInfo;
+    }
+
+    return fontDesc;
+}
+
 wxFont& wxFont::operator=(const wxFont& font)
 {
     if ( this != &font )
@@ -62,15 +138,25 @@ wxFont& wxFont::operator=(const wxFont& font)
     return (wxFont &)*this;
 }
 
-// VZ: is it correct to compare pointers and not the contents? (FIXME)
 bool wxFontBase::operator==(const wxFont& font) const
 {
-    return GetFontData() == font.GetFontData();
+    // either it is the same font, i.e. they share the same common data or they
+    // have different ref datas but still describe the same font
+    return GetFontData() == font.GetFontData() ||
+           (
+            Ok() == font.Ok() &&
+            GetPointSize() == font.GetPointSize() &&
+            GetFamily() == font.GetFamily() &&
+            GetStyle() == font.GetStyle() &&
+            GetUnderlined() == font.GetUnderlined() &&
+            GetFaceName() == font.GetFaceName() &&
+            GetEncoding() == font.GetEncoding()
+           );
 }
 
 bool wxFontBase::operator!=(const wxFont& font) const
 {
-    return GetFontData() != font.GetFontData();
+    return !(*this == font);
 }
 
 wxString wxFontBase::GetFamilyString() const
@@ -114,4 +200,82 @@ wxString wxFontBase::GetWeightString() const
         default:         return wxT("wxDEFAULT");
     }
 }
+
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
+
+// ----------------------------------------------------------------------------
+// wxNativeFontInfo
+// ----------------------------------------------------------------------------
+
+// These are the generic forms of FromString()/ToString.
+//
+// convert to/from the string representation: format is
+//      version;pointsize;family;style;weight;underlined;facename;encoding
+
+bool wxNativeFontInfo::FromString(const wxString& s)
+{
+    long l;
+
+    wxStringTokenizer tokenizer(s, _T(";"));
+
+    wxString token = tokenizer.GetNextToken();
+    //
+    //  Ignore the version for now
+    //
+
+    token = tokenizer.GetNextToken();
+    if ( !token.ToLong(&l) )
+        return FALSE;
+    pointSize = (int)l;
+
+    token = tokenizer.GetNextToken();
+    if ( !token.ToLong(&l) )
+        return FALSE;
+    family = (int)l;
+
+    token = tokenizer.GetNextToken();
+    if ( !token.ToLong(&l) )
+        return FALSE;
+    style = (int)l;
+
+    token = tokenizer.GetNextToken();
+    if ( !token.ToLong(&l) )
+        return FALSE;
+    weight = (int)l;
+
+    token = tokenizer.GetNextToken();
+    if ( !token.ToLong(&l) )
+        return FALSE;
+    underlined = l != 0;
+
+    faceName = tokenizer.GetNextToken();
+    if( !faceName )
+        return FALSE;
+
+    token = tokenizer.GetNextToken();
+    if ( !token.ToLong(&l) )
+        return FALSE;
+    encoding = (wxFontEncoding)l;
+
+    return TRUE;
+}
+
+wxString wxNativeFontInfo::ToString() const
+{
+    wxString s;
+
+    s.Printf(_T("%d;%d;%d;%d;%d;%d;%s;%d"),
+             0,                                 // version
+             pointSize,
+             family,
+             style,
+             weight,
+             underlined,
+             faceName.GetData(),
+             (int)encoding);
+
+    return s;
+}
+
+#endif // generic wxNativeFontInfo implementation
 
