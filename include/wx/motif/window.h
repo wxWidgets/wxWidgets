@@ -24,8 +24,6 @@
 
 class wxWindow : public wxWindowBase
 {
-DECLARE_DYNAMIC_CLASS(wxWindow)
-
 friend class WXDLLEXPORT wxDC;
 friend class WXDLLEXPORT wxWindowDC;
 
@@ -33,11 +31,11 @@ public:
     wxWindow() { Init(); }
 
     wxWindow(wxWindow *parent,
-             wxWindowID id,
-             const wxPoint& pos = wxDefaultPosition,
-             const wxSize& size = wxDefaultSize,
-             long style = 0,
-             const wxString& name = wxPanelNameStr)
+	     wxWindowID id,
+	     const wxPoint& pos = wxDefaultPosition,
+	     const wxSize& size = wxDefaultSize,
+	     long style = 0,
+	     const wxString& name = wxPanelNameStr)
     {
         Init();
         Create(parent, id, pos, size, style, name);
@@ -327,7 +325,8 @@ private:
     // common part of all ctors
     void Init();
 
-    DECLARE_NO_COPY_CLASS(wxWindow);
+    DECLARE_DYNAMIC_CLASS(wxWindow)
+    DECLARE_NO_COPY_CLASS(wxWindow)
     DECLARE_EVENT_TABLE()
 };
 
