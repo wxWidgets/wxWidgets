@@ -54,7 +54,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
 #ifdef __WXMAC__
-               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES,
+               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES | wxTR_ROW_LINES,
 #else
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
 #endif
@@ -71,7 +71,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
 #ifdef __WXMAC__
-               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES,
+               long style = wxTR_MAC_BUTTONS | wxTR_NO_LINES | wxTR_ROW_LINES,
 #else
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
 #endif

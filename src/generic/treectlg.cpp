@@ -1788,15 +1788,22 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         dc.SetBrush(wxBrush(colBg, wxSOLID));
     }
 
+    int offset = 0;
+    if (HasFlag(wxTR_ROW_LINES)) offset = 1;
+
     if (item->IsSelected() && image != NO_IMAGE)
     {
         // If it's selected, and there's an image, then we should
         // take care to leave the area under the image painted in the
         // background colour.
-        dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY(), item->GetWidth() - image_w + 2, total_h );
+        dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset, 
+        				  item->GetWidth() - image_w + 2, total_h-offset );
     }
     else
-        dc.DrawRectangle( item->GetX()-2, item->GetY(), item->GetWidth()+2, total_h );
+    {
+        dc.DrawRectangle( item->GetX()-2, item->GetY()+offset, 
+        				  item->GetWidth()+2, total_h-offset );
+    }
 
     if ( image != NO_IMAGE )
     {
@@ -1821,38 +1828,36 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 // Now y stands for the top of the item, whereas it used to stand for middle !
 void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
 {
-    int horizX = level*m_indent;
+    int x = (level+1)*m_indent;
 
-    item->SetX( horizX+m_indent+m_spacing );
+    item->SetX( x+m_spacing );
     item->SetY( y );
 
     int oldY = y;
     y+=GetLineHeight(item)/2;
 
-    item->SetCross( horizX+m_indent, y );
+    item->SetCross( x, y );
 
     int exposed_x = dc.LogicalToDeviceX( 0 );
     int exposed_y = dc.LogicalToDeviceY( item->GetY() );
 
-    bool drawLines = ((GetWindowStyle() & wxTR_NO_LINES) == 0);
+    bool drawLines = (HasFlag(wxTR_NO_LINES) && !HasFlag(wxTR_MAC_BUTTONS));
 
     if (IsExposed( exposed_x, exposed_y, 10000, GetLineHeight(item) ))  // 10000 = very much
     {
-        int startX = horizX;
-        int endX = horizX + (m_indent-5);
+        int startX = x - m_indent;
+        int endX = x-5;
 
-//        if (!item->HasChildren()) endX += (m_indent+5);
         if (!item->HasChildren()) endX += 20;
         
         if (HasFlag( wxTR_MAC_BUTTONS ))
-        {
+        {        	
             if (item->HasPlus())
             {
                 dc.SetPen( *wxBLACK_PEN );
                 dc.SetBrush( *m_hilightBrush );
                 
                 wxPoint button[3];
-                int x = horizX + m_indent;
                 
                 if (item->IsExpanded())
                 {
@@ -1885,15 +1890,15 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             if (item->HasPlus())
             {
                 if (drawLines)
-                    dc.DrawLine( horizX+(m_indent+5), y, horizX+(m_indent+15), y );
+                    dc.DrawLine( x+5, y, x+15, y );
                 dc.SetPen( *wxGREY_PEN );
                 dc.SetBrush( *wxWHITE_BRUSH );
-                dc.DrawRectangle( horizX+(m_indent-5), y-4, 11, 9 );
+                dc.DrawRectangle( x-5, y-4, 11, 9 );
 
                 dc.SetPen( *wxBLACK_PEN );
-                dc.DrawLine( horizX+(m_indent-2), y, horizX+(m_indent+3), y );
+                dc.DrawLine( x-2, y, x+3, y );
                 if (!item->IsExpanded())
-                    dc.DrawLine( horizX+m_indent, y-2, horizX+m_indent, y+3 );
+                    dc.DrawLine( x, y-2, x, y+3 );
                 dc.SetPen( m_dottedPen );
             }
         }
@@ -1925,6 +1930,13 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         // draw
         PaintItem(item, dc);
 
+        if (HasFlag( wxTR_ROW_LINES ))
+        {
+        	dc.SetPen( *wxWHITE_PEN );
+        	dc.DrawLine( 0, oldY, 10000, oldY );
+        	dc.DrawLine( 0, oldY + GetLineHeight(item), 10000, oldY + GetLineHeight(item) );
+        }
+        
         // restore DC objects
         dc.SetBrush( *wxWHITE_BRUSH );
         dc.SetPen( m_dottedPen );
@@ -1953,7 +1965,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
         {
             semiOldY+=GetLineHeight(children[--n])/2;
             if (drawLines)
-                dc.DrawLine( horizX+m_indent, oldY+5, horizX+m_indent, semiOldY );
+                dc.DrawLine( x, oldY+5, x, semiOldY );
         }
     }
 }
