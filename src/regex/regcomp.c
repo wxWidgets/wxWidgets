@@ -188,7 +188,6 @@ extern int	wx_ispunct(wx_wchar c);
 extern int	wx_isspace(wx_wchar c);
 extern wx_wchar wx_toupper(wx_wchar c);
 extern wx_wchar wx_tolower(wx_wchar c);
-extern int  wx_strlen(const wx_wchar* szString);
 static int	nmcces(struct vars *);
 static int	nleaders(struct vars *);
 static struct cvec *allmcces(struct vars *, struct cvec *);

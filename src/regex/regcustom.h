@@ -85,6 +85,8 @@ typedef long celt;				/* type to hold chr, MCCE number, or
 #define iscdigit(x) wx_isdigit(x)
 #define iscspace(x) wx_isspace(x)
 
+extern int  wx_strlen(const wx_wchar* szString);
+
 /* and pick up the standard header */
 #include "regex.h"
 
