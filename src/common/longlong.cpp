@@ -996,7 +996,7 @@ wxLongLongWx& wxLongLongWx::operator/=(const wxLongLongWx& ll)
 
 wxULongLongWx& wxULongLongWx::operator/=(const wxULongLongWx& ll)
 {
-    wxLongLongWx quotient, remainder;
+    wxULongLongWx quotient, remainder;
 
     Divide(ll, quotient, remainder);
 
