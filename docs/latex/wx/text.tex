@@ -453,9 +453,28 @@ Writes the text into the text control at the current insertion position.
 
 Newlines in the text string
 are the only control characters allowed, and they will cause appropriate
-line breaks.  See \helpref{wxTextCtrl::\cinsert}{wxtextctrlinsert} for more convenient ways of writing to the window.
+line breaks.  See \helpref{wxTextCtrl::\cinsert}{wxtextctrlinsert} and \helpref{wxTextCtrl::AppendText}{wxtextctrlappendtext} for more convenient ways of writing to the window.
 
 After the write operation, the insertion point will be at the end of the inserted text, so subsequent write operations will be appended. To append text after the user may have interacted with the control, call \helpref{wxTextCtrl::SetInsertionPointEnd}{wxtextctrlsetinsertionpointend} before writing.
+
+\membersection{wxTextCtrl::AppendText}\label{wxtextctrlappendtext}
+
+\func{void}{WriteText}{\param{const wxString\& }{ text}}
+
+Appends the text to the end of the text control.
+
+\wxheading{Parameters}
+
+\docparam{text}{Text to write to the text control.}
+
+\wxheading{Remarks}
+
+After the text is appended, the insertion point will be at the end of the text control. If this behaviour is not desired,
+the programmer should use \helpref{GetInsertionPoint}{wxtextctrlgetinsertionpoint} and \helpref{SetInsertionPoint}{wxtextctrlsetinsertionpoint}.
+
+\wxheading{See also}
+
+\helpref{wxTextCtrl::WriteText}{wxtextctrlwritetext}
 
 \membersection{wxTextCtrl::XYToPosition}\label{wxtextctrlxytoposition}
 
@@ -487,7 +506,7 @@ The position value.
 
 \func{wxTextCtrl\&}{operator \cinsert}{\param{char}{ c}}
 
-Operator definitions for writing to a text control, for example:
+Operator definitions for appending to a text control, for example:
 
 \begin{verbatim}
   wxTextCtrl *wnd = new wxTextCtrl(my_frame);
