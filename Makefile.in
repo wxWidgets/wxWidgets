@@ -286,22 +286,22 @@ TIFFOBJS = \
 		tif_write.o \
 		tif_zip.o
 
-# IODBCOBJS = \
-#		catalog.o \
-#		connect.o \
-#		dlf.o \
-#		dlproc.o \
-#		execute.o \
-#		fetch.o \
-#		hdbc.o \
-#		henv.o \
-#		herr.o \
-#		hstmt.o \
-#		info.o \
-#		itrace.o \
-#		misc.o \
-#		prepare.o \
-#		result.o
+IODBCOBJS = \
+		catalog.o \
+		connect.o \
+		dlf.o \
+		dlproc.o \
+		execute.o \
+		fetch.o \
+		hdbc.o \
+		henv.o \
+		herr.o \
+		hstmt.o \
+		info.o \
+		itrace.o \
+		misc.o \
+		prepare.o \
+		result.o
 
 
 ############################## Rules ##################################

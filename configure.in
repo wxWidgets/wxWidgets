@@ -715,7 +715,7 @@ dnl for GUI only
 WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (http://dmalloc.com/)], wxUSE_DMALLOC)
 WX_ARG_SYS_WITH(regex,     [  --with-regex            enable support for wxRegEx class], wxUSE_REGEX)
 WX_ARG_SYS_WITH(zlib,      [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
-WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
+WX_ARG_SYS_WITH(odbc,      [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
 dnl ---------------------------------------------------------------------------
 dnl compile options
@@ -2081,9 +2081,14 @@ if test "$USE_WIN32" = 1 ; then
     esac
 
     dnl add extra odbc libs if we have compiled in odbc
+    if test "$wxUSE_ODBC" = "sys" ; then
+        wxUSE_ODBC = "yes"
+    fi
     if test "$wxUSE_ODBC" = "yes" ; then
         LIBS=" -lodbc32 -lole32 -loleaut32 $LIBS"
+        AC_DEFINE(wxUSE_ODBC)
     fi
+    dnl We might want to abort here if wxUSE_ODBC="builtin" isn't supported on msw.
 
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
     RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
@@ -2754,9 +2759,40 @@ dnl ---------------------------------------------------------------------------
 dnl Optional libraries included when system library is not used
 dnl ---------------------------------------------------------------------------
 
-dnl ODBC objects are Unix only
-if test "$TOOLKIT" != "MSW" -a "$wxUSE_ODBC" = "yes" ; then
-    ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+
+dnl ----------------------------------------------------------------
+dnl iODBC support
+dnl ----------------------------------------------------------------
+
+IODBC_C_SRC=""
+
+
+dnl ODBC is handled seperately for MSW 
+if test "$TOOLKIT" != "MSW" ; then
+
+    if test "$wxUSE_ODBC" != "no" ; then
+        AC_DEFINE(wxUSE_ODBC)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
+    
+        dnl is this still necessary in 2.5?
+        WXODBCFLAG="-D_IODBC_"
+
+
+        if test "$wxUSE_ODBC" = "sys" ; then
+            dnl This is not ideal we really ough to use the unixodbc-config
+            dnl  or iodbc-config if they exist.
+
+            AC_CHECK_HEADER(sql.h)
+            AC_SEARCH_LIBS(SQLAllocEnv,iodbc unixodbc odbc , , [ wxUSE_ODBC=builtin ])
+        fi
+
+    fi
+    
+    dnl Not "no" either...
+    if test "$wxUSE_ODBC" != "sys" ; then
+        AC_MSG_WARN( [ can't find system Odbc library falling back to builtin ])
+        ALL_OBJECTS="${ALL_OBJECTS} \$(IODBCOBJS)"
+    fi
 fi
 
 if test "$wxUSE_REGEX" = "builtin" ; then
@@ -4655,18 +4691,6 @@ fi
 
 if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
   AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
-fi
-
-
-dnl ----------------------------------------------------------------
-dnl iODBC support
-dnl ----------------------------------------------------------------
-
-IODBC_C_SRC=""
-if test "$wxUSE_ODBC" = "yes" ; then
-    AC_DEFINE(wxUSE_ODBC)
-    WXODBCFLAG="-D_IODBC_"
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS db"
 fi
 
 dnl ----------------------------------------------------------------
