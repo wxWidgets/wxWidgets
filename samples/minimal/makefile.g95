@@ -7,7 +7,7 @@
 #
 # Makefile for wxWindows sample (Cygwin/Mingw32).
 
-WXDIR = ..\..
+WXDIR = ../..
 
 TARGET=minimal
 OBJECTS = $(TARGET).o

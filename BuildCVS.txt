@@ -5,20 +5,16 @@
 I) Windows using plain makefiles
 ----------------------------------------
 
-a) Using the GNU MingW32 or GNU Cygwin32 compilers
+a) Using the GNU MinGW32 or GNU CygWin32 compilers
 
 You'll need the compiler itself which is available from
 
   http://www.cygwin.com
 
-When using MingW32 you'll need a few of the tools that
-are either shipped separately or only as part of the
-Cygwin32 toolchain. First and foremost, you'll need
+When using MingW32 you'll need GNU make which is part of
+part of the CygWin32 toolchain and is also available as
+a stand alone port without the infamous Cygwin.dll from
 
-make.exe
-byacc.exe
-
-make.exe is also available from 
   http://agnes.dida.physik.uni-essen.de/~janjaap/mingw32
 
 -> Set your path so that it includes the directory
