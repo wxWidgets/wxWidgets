@@ -1,11 +1,22 @@
 Index: Source/Modules/python.cxx
 ===================================================================
-RCS file: /cvsroot/SWIG/Source/Modules/python.cxx,v
+RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.40
 diff -u -4 -r1.40 python.cxx
 --- Source/Modules/python.cxx	24 Jan 2004 00:25:31 -0000	1.40
-+++ Source/Modules/python.cxx	30 Jan 2004 22:22:16 -0000
-@@ -50,8 +50,17 @@
++++ Source/Modules/python.cxx	22 Apr 2004 16:38:43 -0000
+@@ -8,9 +8,9 @@
+  * Copyright (C) 1999-2000.  The University of Chicago
+  * See the file LICENSE for information on usage and redistribution.
+  * ----------------------------------------------------------------------------- */
+ 
+-char cvsroot_python_cxx[] = "$Header$";
++char cvsroot_python_cxx[] = "$Header$";
+ 
+ #include "swigmod.h"
+ 
+ #include <ctype.h>
+@@ -50,8 +50,18 @@
  static  int       have_constructor;
  static  int       have_repr;
  static  String   *real_classname;
@@ -16,22 +27,23 @@ diff -u -4 -r1.40 python.cxx
 +  AUTODOC_CTOR,
 +  AUTODOC_DTOR,
 +  AUTODOC_STATICFUNC,
-+  AUTODOC_FUNC
++  AUTODOC_FUNC,
++  AUTODOC_METHOD
 +};
 +
  static const char *usage = (char *)"\
  Python Options (available with -python)\n\
       -ldflags        - Print runtime libraries to link with\n\
       -globals <name> - Set <name> used to access C global variable [default: 'cvar']\n\
-@@ -417,17 +426,23 @@
+@@ -417,17 +427,25 @@
     *    functions.
     * ------------------------------------------------------------ */
  
    void emitFunctionShadowHelper(Node *n, File *f_dest, String *name, int kw) {
 -    if ( ! have_addtofunc(n) ) {
 -      /* If there is no addtofunc directive then just assign from the extension module */
-+    if ( ! have_addtofunc(n) && ! have_docstring(n) ) {
-+      /* If there is no addtofunc or docstring directive then just assign from the extension module */
++    if ( !have_pythonprepend(n) && !have_pythonappend(n) && !have_docstring(n) ) {
++      /* If there is no pythonappend or docstring directive then just assign from the extension module */
        Printv(f_dest, "\n", name, " = ", module, ".", name, "\n", NIL);
      } else {
        /* Otherwise make a wrapper function to insert the code into */
@@ -41,9 +53,11 @@ diff -u -4 -r1.40 python.cxx
 -      Printv(f_dest, tab4, "return val\n", NIL);
 +      if ( have_docstring(n) )
 +        Printv(f_dest, tab4, docstring(n, AUTODOC_FUNC, tab4), "\n", NIL);
-+      if ( have_addtofunc(n) ) {
++      if ( have_pythonprepend(n) )
++        Printv(f_dest, tab4, pythonprepend(n), "\n", NIL);
++      if ( have_pythonappend(n) ) {
 +        Printv(f_dest, tab4, "val = ", funcCallHelper(name, kw), "\n", NIL);
-+        Printv(f_dest, tab4, addtofunc(n), "\n", NIL);
++        Printv(f_dest, tab4, pythonappend(n), "\n", NIL);
 +        Printv(f_dest, tab4, "return val\n", NIL);
 +      } else {
 +        Printv(f_dest, tab4, "return ", funcCallHelper(name, kw), "\n", NIL);
@@ -52,11 +66,13 @@ diff -u -4 -r1.40 python.cxx
    }
  
  
-@@ -441,8 +456,248 @@
+@@ -441,24 +459,303 @@
    }
  
  
    /* ------------------------------------------------------------
+-   * have_addtofunc()
+-   *    Check if there is a %addtofunc directive and it has text
 +   * have_docstring()
 +   *    Check if there is a docstring directive and it has text,
 +   *    or there is an autodoc flag set
@@ -153,8 +169,10 @@ diff -u -4 -r1.40 python.cxx
 +   *    it is "1" (the default) then do.  If it has some other
 +   *    value then assume it is supplied by the extension writer
 +   *    and use it directly.
-+   * ------------------------------------------------------------ */
-+
+    * ------------------------------------------------------------ */
+ 
+-  bool have_addtofunc(Node *n) {
+-    String* str = Getattr(n, "feature:addtofunc");
 +  String* make_autodoc(Node *n, autodoc_t ad_type) {
 +
 +    if (ad_type == AUTODOC_CLASS)
@@ -205,23 +223,37 @@ diff -u -4 -r1.40 python.cxx
 +        
 +        switch ( ad_type ) {
 +        case AUTODOC_CTOR:
-+          if ( Strcmp(class_name, symname) == 0)
-+            Printf(doc, "__init__(%s) -> %s", make_autodocParmList(n, showTypes), class_name);
++          if ( Strcmp(class_name, symname) == 0) {
++            String* paramList = make_autodocParmList(n, showTypes);
++            if (Len(paramList))
++              Printf(doc, "__init__(self, %s) -> %s", paramList, class_name);
++            else
++              Printf(doc, "__init__(self) -> %s", class_name);
++          }              
 +          else
 +            Printf(doc, "%s(%s) -> %s", symname, make_autodocParmList(n, showTypes), class_name);
 +          break;
 +          
 +        case AUTODOC_DTOR:
-+          Printf(doc, "__del__()");
++          Printf(doc, "__del__(self)");
 +          break;
 +        
 +        case AUTODOC_STATICFUNC:
-+          Printf(doc, "%s(%s)", symname, make_autodocParmList(n, showTypes));
++          Printf(doc, "%s.%s(%s)", class_name, symname, make_autodocParmList(n, showTypes));
 +          if (type) Printf(doc, " -> %s", type);
 +          break;
 +                      
 +        case AUTODOC_FUNC:
 +          Printf(doc, "%s(%s)", symname, make_autodocParmList(n, showTypes));
++          if (type) Printf(doc, " -> %s", type);
++          break;            
++
++        case AUTODOC_METHOD:
++          String* paramList = make_autodocParmList(n, showTypes);
++          if (Len(paramList))
++            Printf(doc, "%s(self, %s)", symname, paramList);
++          else
++            Printf(doc, "%s(self)", symname);
 +          if (type) Printf(doc, " -> %s", type);
 +          break;            
 +        }
@@ -297,11 +329,56 @@ diff -u -4 -r1.40 python.cxx
 +  
 +  
 +  /* ------------------------------------------------------------
-    * have_addtofunc()
-    *    Check if there is a %addtofunc directive and it has text
++   * have_pythonprepend()
++   *    Check if there is a %pythonprepend directive and it has text
++   * ------------------------------------------------------------ */
++
++  bool have_pythonprepend(Node *n) {
++    String* str = Getattr(n, "feature:pythonprepend");
++    return (str != NULL && Len(str) > 0);
++  }
++  
++  /* ------------------------------------------------------------
++   * pythonprepend()
++   *    Get the %pythonprepend code, stripping off {} if neccessary
++   * ------------------------------------------------------------ */
++
++  String *pythonprepend(Node *n) {
++    String* str = Getattr(n, "feature:pythonprepend");
++    char* t = Char(str);
++    if (*t == '{') {
++      Delitem(str ,0);
++      Delitem(str,DOH_END);
++    }
++    return str;
++  }
++    
++  /* ------------------------------------------------------------
++   * have_pythonappend()
++   *    Check if there is a %pythonappend directive and it has text
++   * ------------------------------------------------------------ */
++
++  bool have_pythonappend(Node *n) {
++    String* str = Getattr(n, "feature:pythonappend");
+     return (str != NULL && Len(str) > 0);
+   }
+   
+   /* ------------------------------------------------------------
+-   * addtofunc()
+-   *    Get the %addtofunc code, stripping off {} if neccessary
++   * pythonappend()
++   *    Get the %pythonappend code, stripping off {} if neccessary
     * ------------------------------------------------------------ */
  
-@@ -1731,9 +1986,11 @@
+-  String *addtofunc(Node *n) {
+-    String* str = Getattr(n, "feature:addtofunc");
++  String *pythonappend(Node *n) {
++    String* str = Getattr(n, "feature:pythonappend");
+     char* t = Char(str);
+     if (*t == '{') {
+       Delitem(str ,0);
+       Delitem(str,DOH_END);
+@@ -1731,9 +2028,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -314,7 +391,7 @@ diff -u -4 -r1.40 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1866,16 +2123,22 @@
+@@ -1866,16 +2165,24 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -326,16 +403,18 @@ diff -u -4 -r1.40 python.cxx
 -            Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
 -            Printv(f_shadow, tab8, "return val\n", NIL);
 +          Printv(f_shadow, tab4, "def ", symname, "(*args", (allow_kwargs ? ", **kwargs" : ""), "):", NIL);
-+          if ( ! have_addtofunc(n) && ! have_docstring(n)) {
++          if ( !have_pythonprepend(n) && !have_pythonappend(n) && !have_docstring(n)) {
 +            Printv(f_shadow, " return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
            } else {
 -            Printv(f_shadow, "return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
 +            Printv(f_shadow, "\n", NIL);
 +            if ( have_docstring(n) )
-+              Printv(f_shadow, tab8, docstring(n, AUTODOC_FUNC, tab8), "\n", NIL);
-+            if ( have_addtofunc(n) ) {
++              Printv(f_shadow, tab8, docstring(n, AUTODOC_METHOD, tab8), "\n", NIL);
++            if ( have_pythonprepend(n) )
++              Printv(f_shadow, tab8, pythonprepend(n), "\n", NIL);
++            if ( have_pythonappend(n) ) {
 +              Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n", NIL);
-+              Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
++              Printv(f_shadow, tab8, pythonappend(n), "\n", NIL);
 +              Printv(f_shadow, tab8, "return val\n\n", NIL);
 +            } else {
 +              Printv(f_shadow, tab8, "return ", funcCallHelper(Swig_name_member(class_name,symname), allow_kwargs), "\n\n", NIL);
@@ -344,13 +423,13 @@ diff -u -4 -r1.40 python.cxx
          }
  
        }
-@@ -1890,14 +2153,20 @@
+@@ -1890,14 +2197,22 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
      if (shadow) {
 -      if ( !classic && have_addtofunc(n) ) {
-+      if ( !classic && (have_addtofunc(n) || have_docstring(n)) ) {
++      if ( !classic && (have_pythonprepend(n) || have_pythonappend(n) || have_docstring(n)) ) {
          int kw = (check_kwargs(n) && !Getattr(n,"sym:overloaded")) ? 1 : 0;
          Printv(f_shadow, tab4, "def ", symname, "(*args", (kw ? ", **kwargs" : ""), "):\n", NIL);
 -        Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n", NIL);
@@ -358,9 +437,11 @@ diff -u -4 -r1.40 python.cxx
 -        Printv(f_shadow, tab8, "return val\n", NIL);
 +        if ( have_docstring(n) )
 +          Printv(f_shadow, tab8, docstring(n, AUTODOC_STATICFUNC, tab8), "\n", NIL);
-+        if ( have_addtofunc(n) ) {
++        if ( have_pythonprepend(n) )
++          Printv(f_shadow, tab8, pythonprepend(n), "\n", NIL);
++        if ( have_pythonappend(n) ) {
 +          Printv(f_shadow, tab8, "val = ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n", NIL);
-+          Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
++          Printv(f_shadow, tab8, pythonappend(n), "\n", NIL);
 +          Printv(f_shadow, tab8, "return val\n\n", NIL);
 +        } else {
 +          Printv(f_shadow, tab8, "return ", funcCallHelper(Swig_name_member(class_name, symname), kw), "\n\n", NIL);
@@ -369,53 +450,70 @@ diff -u -4 -r1.40 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -1982,8 +2251,10 @@
+@@ -1982,8 +2297,12 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
                     (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
 +            if ( have_docstring(n) )
 +              Printv(f_shadow, tab8, docstring(n, AUTODOC_CTOR, tab8), "\n", NIL);
++            if ( have_pythonprepend(n) )
++              Printv(f_shadow, tab8, pythonprepend(n), "\n", NIL);
              Printv(f_shadow, pass_self, NIL);
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -1997,9 +2268,9 @@
+@@ -1996,10 +2315,10 @@
+               Printv(f_shadow, tab8, "self.this = newobj.this\n", NIL);
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
              }
-             if ( have_addtofunc(n) )
+-            if ( have_addtofunc(n) )
 -              Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
-+              Printv(f_shadow, tab8, addtofunc(n), "\n\n", NIL);
++            if ( have_pythonappend(n) )
++              Printv(f_shadow, tab8, pythonappend(n), "\n\n", NIL);
    	    Delete(pass_self);
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -2015,8 +2286,10 @@
+@@ -2015,13 +2334,17 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
                     (allow_kwargs ? ", **kwargs" : ""), "):\n", NIL);
 +            if ( have_docstring(n) )
 +              Printv(f_shadow_stubs, tab4, docstring(n, AUTODOC_CTOR, tab4), "\n", NIL);
++            if ( have_pythonprepend(n) )
++              Printv(f_shadow_stubs, tab4, pythonprepend(n), "\n", NIL);
              Printv(f_shadow_stubs, tab4, "val = ",
                     funcCallHelper(Swig_name_construct(symname), allow_kwargs), "\n", NIL);
  	    Printv(f_shadow_stubs, tab4, "val.thisown = 1\n", NIL);
-             if ( have_addtofunc(n) )
-@@ -2048,13 +2321,15 @@
+-            if ( have_addtofunc(n) )
+-              Printv(f_shadow_stubs, tab4, addtofunc(n), "\n", NIL);
++            if ( have_pythonappend(n) )
++              Printv(f_shadow_stubs, tab4, pythonappend(n), "\n", NIL);
+             Printv(f_shadow_stubs, tab4, "return val\n", NIL);
+   	  }
+ 	}
+       }
+@@ -2048,13 +2371,18 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {
  	Printv(f_shadow, tab4, "def __del__(self, destroy=", module, ".", Swig_name_destroy(symname), "):\n", NIL);
+-	if ( have_addtofunc(n) )
+-	  Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
 +        if ( have_docstring(n) )
 +              Printv(f_shadow, tab8, docstring(n, AUTODOC_DTOR, tab8), "\n", NIL);
- 	if ( have_addtofunc(n) )
- 	  Printv(f_shadow, tab8, addtofunc(n), "\n", NIL);
++	if ( have_pythonprepend(n) )
++	  Printv(f_shadow, tab8, pythonprepend(n), "\n", NIL);
  	Printv(f_shadow, tab8, "try:\n", NIL);
 -	Printv(f_shadow, tab4, tab8, "if self.thisown: destroy(self)\n", NIL);
--	Printv(f_shadow, tab8, "except: pass\n", NIL);
 +	Printv(f_shadow, tab8, tab4, "if self.thisown: destroy(self)\n", NIL);
-+	Printv(f_shadow, tab8, "except: pass\n\n", NIL);
+ 	Printv(f_shadow, tab8, "except: pass\n", NIL);
++	if ( have_pythonappend(n) )
++	  Printv(f_shadow, tab8, pythonappend(n), "\n", NIL);
++        Printv(f_shadow, "\n", NIL);
        }
      }
      return SWIG_OK;

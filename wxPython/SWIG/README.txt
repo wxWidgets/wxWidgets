@@ -15,6 +15,11 @@ source tree soon.
 swig.python-docstring.patch  Adds "autodoc" and "docstring" features.
 			     See SF Patch #883402
 
+			     Also changes the "addtofunc" feature to
+			     "pythonappend" and also adds a
+			     "pythonprepend" feature that prepends
+			     pythoncode to the begining of a
+			     SWIG-generated proxy function or method.
 
 swig.xmlout.patch	     Fixes a couple problems in the XML output
 			     of SWIG: an extra "/>" was removed and
@@ -30,12 +35,6 @@ swig.xmlout.patch	     Fixes a couple problems in the XML output
 			     language module.)
 			     See SF Patch #864689
 
-
-swig.python-prepend.patch    Changes the "addtofunc" feature to
-			     "pythonappend" and also adds a
-			     "pythonprepend" feature that prepends
-			     pythoncode to the begining of a 
-			     SWIG-generated proxy function or method.
 
 
 ------------------------------------------------------------------------
