@@ -1,7 +1,7 @@
 Announcing wxWindows 2.4.1: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-June 8th, 2003 -- the wxWindows team is pleased to announce
+June 13th, 2003 -- the wxWindows team is pleased to announce
 an official 2.4.1 release of the mature cross-platform C++
 application framework.
 
@@ -74,7 +74,7 @@ If you're considering wxWindows, do check out some of these links:
 
 Have fun!
 
-Julian Smart and the wxWindows team
+The wxWindows team
 
 =====
 

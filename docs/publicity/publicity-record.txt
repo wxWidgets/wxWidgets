@@ -1,0 +1,31 @@
+For information on newsgroups, sites for
+publicity, ideas etc. please see the file
+publicity.txt in CVS head.
+
+PUBLICITY RECORD
+================
+
+The 2.4.0 release has been publicised at
+the following places:
+
+wx-users@lists.wxwindows.org
+
+comp.os.ms-windows.programmer.misc
+comp.os.ms-windows.programmer.tools.mfc
+comp.os.ms-windows.programmer.tools.misc
+comp.os.ms-windows.programmer.win32
+comp.windows.ms.programmer
+comp.os.linux.announce (pending acceptance)
+comp.sys.mac.programmer.tools
+comp.lang.c++
+comp.windows.x.announce
+microsoft.public.win32.programmer.tools
+microsoft.public.win32.programmer.ui
+microsoft.public.vc.3rdparty
+borland.public.cppbuilder.thirdpartytools
+
+news@macnn.com
+adcnews@apple.com
+presse@ct.heise.de
+press_releases@mactech.com
+
