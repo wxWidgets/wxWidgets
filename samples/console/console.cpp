@@ -91,7 +91,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = TRUE;
 #else
-    #define TEST_MIME
+    #define TEST_STREAMS
 
     static const bool TEST_ALL = FALSE;
 #endif
@@ -314,7 +314,7 @@ static void TestDirEnum()
         return;
     }
 
-    wxDir dir(cwd);
+    wxDir dir("s:/tmp/foo");
     if ( !dir.IsOpened() )
     {
         printf("ERROR: failed to open current directory '%s'.\n", cwd.c_str());
@@ -3072,13 +3072,27 @@ static void TestFileStream()
 
 static void TestMemoryStream()
 {
-    puts("*** Testing wxMemoryInputStream ***");
+    wxPuts(_T("*** Testing wxMemoryOutputStream ***"));
+
+    wxMemoryOutputStream memOutStream;
+    wxPrintf(_T("Initially out stream offset: %lu\n"),
+             (unsigned long)memOutStream.TellO());
+
+    for ( const wxChar *p = _T("Hello, stream!"); *p; p++ )
+    {
+        memOutStream.PutC(*p);
+    }
+
+    wxPrintf(_T("Final out stream offset: %lu\n"),
+             (unsigned long)memOutStream.TellO());
+
+    wxPuts(_T("*** Testing wxMemoryInputStream ***"));
 
     wxChar buf[1024];
-    wxStrncpy(buf, _T("Hello, stream!"), WXSIZEOF(buf));
+    size_t len = memOutStream.CopyTo(buf, WXSIZEOF(buf));
 
-    wxMemoryInputStream memInpStream(buf, wxStrlen(buf));
-    printf(_T("Memory stream size: %u\n"), memInpStream.GetSize());
+    wxMemoryInputStream memInpStream(buf, len);
+    wxPrintf(_T("Memory stream size: %u\n"), memInpStream.GetSize());
     while ( !memInpStream.Eof() )
     {
         putchar(memInpStream.GetC());
@@ -5837,12 +5851,12 @@ int main(int argc, char **argv)
 #endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
-    TestDirExists();
     if ( TEST_ALL )
     {
-        TestDirEnum();
+        TestDirExists();
         TestDirTraverse();
     }
+    TestDirEnum();
 #endif // TEST_DIR
 
 #ifdef TEST_DLLLOADER
@@ -6036,8 +6050,11 @@ int main(int argc, char **argv)
 #endif // TEST_SOCKETS
 
 #ifdef TEST_STREAMS
-    TestFileStream();
-    TestMemoryStream();
+    if ( TEST_ALL )
+    {
+        TestFileStream();
+    }
+        TestMemoryStream();
 #endif // TEST_STREAMS
 
 #ifdef TEST_THREADS
