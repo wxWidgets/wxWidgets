@@ -110,7 +110,8 @@ $(LOCALDOCDIR)\tex2rtf.rtf: $(DOCSOURCES)
 
 $(DOCDIR)\pdf\tex2rtf.rtf: $(DOCSOURCES)
         cd $(LOCALDOCDIR)
-        -copy *.bmp *.wmf $(DOCDIR)\pdf
+        -copy *.wmf $(DOCDIR)\pdf
+        -copy *.bmp $(DOCDIR)\pdf
         -start /w tex2rtf $(LOCALDOCDIR)\tex2rtf.tex $(DOCDIR)\pdf\tex2rtf.rtf -twice -rtf
         cd $(THISDIR)
 

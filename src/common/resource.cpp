@@ -2504,7 +2504,7 @@ int wxResourceGetIdentifier(const wxString& name, wxResourceTable *table)
   if (!table)
     table = wxDefaultResourceTable;
 
-  return (int)table->identifiers.Get(name);
+  return (int)(long)table->identifiers.Get(name);
 }
 
 /*

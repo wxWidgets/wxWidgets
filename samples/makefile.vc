@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile : Builds samples for Win95, MSVC++ 4.0
+# Makefile : Builds samples for Win95, MSVC++ 16-bit
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
@@ -16,167 +16,258 @@ WXDIR = $(WXWIN)
 
 THISDIR=$(WXDIR)\samples
 
-!include $(WXDIR)\src\makevc.env
+#
+# Indicates kind of pb with samples
+#
+# No makefile.vc file
+NOMAKE=1
+# No 16 bit version
+#ONLY32=1
+# Misc. compilation errors
+COMPIL=1
+# Need PNG
+PNGSETUP=1
 
-DEBUG_FLAGS="/Zi /FR"
-LINK_DEBUG_FLAGS="/RELEASE"
+!include $(WXDIR)\src\makemsc.env
 
+#
+# Please keep samples list up-to-date, in alphabetical order
+#
 all:
-        cd $(WXDIR)\samples\splitter
+        cd $(WXDIR)\samples\bombs
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\resource
+        cd $(WXDIR)\samples\caret
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\checklst
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\config
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\controls
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\listctrl
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\db
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\treectrl
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\validate
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\mdi
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\minimal
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\layout
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\printing
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\toolbar
+!endif
+        cd $(WXDIR)\samples\dde
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\dnd
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\docview
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\docvwmdi
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\controls
+        cd $(WXDIR)\samples\drawing
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\nativdlg
+        cd $(WXDIR)\samples\dynamic
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\forty
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\fractal
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\grid
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\internat
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\help
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dnd
+!endif
+!if "$(PNGSETUP)"==""
+        cd $(WXDIR)\samples\html
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\image
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\internat
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\joytest
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\taskbar
+        cd $(WXDIR)\samples\layout
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\sashtest
+        cd $(WXDIR)\samples\listctrl
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\config
+        cd $(WXDIR)\samples\mdi
         nmake -f makefile.vc FINAL=$(FINAL)
 !if "$(FINAL)" == "0"
         cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.vc FINAL=$(FINAL)
 !endif
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\mfc
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\minifram
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\notebook
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\oleauto
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\ownerdrw
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\checklst
+        cd $(WXDIR)\samples\png
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\minifram
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\bombs
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\fractal
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\wxpoem
-        nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\typetest
+        cd $(WXDIR)\samples\printing
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\proplist
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\image
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\regtest
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\dde
-        nmake -f client.vc FINAL=$(FINAL)
-        nmake -f server.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\caret
+!endif
+        cd $(WXDIR)\samples\resource
         nmake -f makefile.vc FINAL=$(FINAL)
-        cd $(WXDIR)\samples\drawing
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\richedit
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc FINAL=$(FINAL)
         cd $(WXDIR)\samples\scroll
         nmake -f makefile.vc FINAL=$(FINAL)
-#        cd $(WXDIR)\samples\regtest
-#        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.vc FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\tab
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\text
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\thread
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\toolbar
+        nmake -f makefile.vc FINAL=$(FINAL)
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.vc FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.vc FINAL=$(FINAL)
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\wizard
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
+        cd $(WXDIR)\samples\wxpoem
+        nmake -f makefile.vc FINAL=$(FINAL)
+!if "$(COMPIL)"==""
+        cd $(WXDIR)\samples\wxsocket
+        nmake -f makefile.vc FINAL=$(FINAL)
+!endif
 
 clean:
-        cd $(WXDIR)\samples\splitter
+        cd $(WXDIR)\samples\bombs
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\mdi
+        cd $(WXDIR)\samples\caret
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\minimal
+        cd $(WXDIR)\samples\checklst
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\layout
+        cd $(WXDIR)\samples\config
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\printing
+        cd $(WXDIR)\samples\controls
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\toolbar
+        cd $(WXDIR)\samples\db
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\dde
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\resource
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\listctrl
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\treectrl
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\validate
+        cd $(WXDIR)\samples\dnd
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\docview
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\docvwmdi
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\controls
+        cd $(WXDIR)\samples\drawing
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\nativdlg
+        cd $(WXDIR)\samples\dynamic
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\grid
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\internat
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\checklst
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\ownerdrw
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\dnd
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\joytest
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\regtest
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\taskbar
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\sashtest
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\config
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\memcheck
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\minifram
-        nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\bombs
+        cd $(WXDIR)\samples\forty
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\fractal
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\wxpoem
+        cd $(WXDIR)\samples\grid
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\typetest
+        cd $(WXDIR)\samples\help
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\proplist
+        cd $(WXDIR)\samples\html
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\image
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\dde
-        nmake -f client.vc clean
-        nmake -f server.vc clean
-        cd $(WXDIR)\samples\caret
+        cd $(WXDIR)\samples\internat
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples\drawing
+        cd $(WXDIR)\samples\joytest
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\layout
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\listctrl
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\mdi
+        nmake -f makefile.vc clean
+!if "$(FINAL)" == "0"
+        cd $(WXDIR)\samples\memcheck
+        nmake -f makefile.vc clean
+!endif
+        cd $(WXDIR)\samples\mfc
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\minifram
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\minimal
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\nativdlg
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\notebook
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\oleauto
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\ownerdrw
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\png
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\printing
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\proplist
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\regtest
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\resource
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\richedit
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\sashtest
         nmake -f makefile.vc clean
         cd $(WXDIR)\samples\scroll
         nmake -f makefile.vc clean
-        cd $(WXDIR)\samples
+        cd $(WXDIR)\samples\splitter
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\tab
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\taskbar
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\text
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\thread
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\toolbar
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\treectrl
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\typetest
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\validate
+        nmake -f makefile.vc clean
+!if "$(NOMAKE)"==""
+        cd $(WXDIR)\samples\wizard
+        nmake -f makefile.vc clean
+!endif
+        cd $(WXDIR)\samples\wxpoem
+        nmake -f makefile.vc clean
+        cd $(WXDIR)\samples\wxsocket
+        nmake -f makefile.vc clean
 

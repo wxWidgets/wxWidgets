@@ -563,7 +563,7 @@ wxStringList::wxStringList (const wxChar *first, ...)
       s = va_arg(ap, const wxChar *);
       //    if (s == NULL)
 #ifdef __WXMSW__
-      if ((int) s == 0)
+      if ((int)(long) s == 0)
 #else
       if ((long) s == 0)
 #endif

@@ -647,7 +647,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 #ifdef __WXWINE__
         return (FALSE);
 #else
-    NPLOGPALETTE npPal;
+    LPLOGPALETTE npPal;
     RGBQUAD far *lpRGB;
     HPALETTE hLogPal;
     WORD i;
@@ -661,7 +661,7 @@ HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo)
 	npPal = (NPLOGPALETTE)LocalAlloc(LMEM_FIXED, sizeof(LOGPALETTE) +
 				(WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
 */
-	npPal = (NPLOGPALETTE)malloc(sizeof(LOGPALETTE) +
+	npPal = (LPLOGPALETTE)malloc(sizeof(LOGPALETTE) +
 				(WORD)lpInfo->biClrUsed * sizeof(PALETTEENTRY));
         if (!npPal)
 	    return(FALSE);

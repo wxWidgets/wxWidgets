@@ -377,8 +377,8 @@ void wxDC::DoDrawArc(long x1,long y1,long x2,long y2, long xc, long yc)
         Arc(GetHdc(),xxx1,yyy1,xxx2,yyy2,
         xx1,yy1,xx2,yy2);
 
-    CalcBoundingBox((xc-radius), (yc-radius));
-    CalcBoundingBox((xc+radius), (yc+radius));
+    CalcBoundingBox((long)(xc-radius), (long)(yc-radius));
+    CalcBoundingBox((long)(xc+radius), (long)(yc+radius));
 }
 
 void wxDC::DoDrawPoint(long x, long y)

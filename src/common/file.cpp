@@ -500,7 +500,7 @@ bool wxTempFile::Open(const wxString& strName)
     if ( !GetTempFileName(strPath, _T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
 #else
         // Not sure why MSVC++ 1.5 header defines first param as BYTE - bug?
-        if ( !GetTempFileName((BYTE) (const wxChar*) strPath, _T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
+        if ( !GetTempFileName((BYTE) (DWORD)(const wxChar*) strPath, _T("wx_"),0, m_strTemp.GetWriteBuf(MAX_PATH)) )
 #endif
             wxLogLastError(_T("GetTempFileName"));
     m_strTemp.UngetWriteBuf();

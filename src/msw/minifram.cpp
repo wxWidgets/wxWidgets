@@ -983,7 +983,7 @@ BOOL PASCAL DrawCaption( HDC hDC, HWND hWnd, LPRECT lprc,
             SetBkMode( hDC, nBkMode ) ;
             
 #ifdef __WIN16__
-            GlobalFreePtr( (unsigned int) lpsz ) ;
+            GlobalFreePtr( (unsigned int)(DWORD) lpsz ) ;
 #else
             GlobalFreePtr( lpsz ) ;
 #endif

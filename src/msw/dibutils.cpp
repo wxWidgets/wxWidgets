@@ -716,7 +716,7 @@ HPALETTE MakePalette(const BITMAPINFO FAR* Info, UINT flags)
 
    logPal->palVersion  = 0x300; // Windows 3.0 version
    logPal->palNumEntries = nColors;
-   for (short n = 0; n < nColors; n++) {
+   for (WORD n = 0; n < nColors; n++) {
     logPal->palPalEntry[n].peRed   = rgb[n].rgbRed;
     logPal->palPalEntry[n].peGreen = rgb[n].rgbGreen;
     logPal->palPalEntry[n].peBlue  = rgb[n].rgbBlue;

@@ -219,7 +219,7 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
 wxPrintData::~wxPrintData()
 {
 #ifdef __WXMSW__
-    HGLOBAL hDevMode = (HGLOBAL) m_devMode;
+    HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
     if (hDevMode )
         GlobalFree(hDevMode);
 #endif
@@ -264,7 +264,7 @@ static wxString wxGetPrintDlgError()
 
 void wxPrintData::ConvertToNative()
 {
-    HGLOBAL hDevMode = (HGLOBAL) m_devMode;
+    HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
     if (!hDevMode)
     {
         // Use PRINTDLG as a way of creating a DEVMODE object
@@ -435,7 +435,7 @@ void wxPrintData::ConvertToNative()
 
 void wxPrintData::ConvertFromNative()
 {
-    HGLOBAL hDevMode = (HGLOBAL) m_devMode;
+    HGLOBAL hDevMode = (HGLOBAL)(DWORD) m_devMode;
 
     if (!hDevMode)
         return;
@@ -755,7 +755,7 @@ void wxPrintDialogData::ConvertToNative()
         GlobalFree(pd->hDevMode);
     }
 
-    pd->hDevMode = (HGLOBAL) m_printData.GetNativeData();
+    pd->hDevMode = (HGLOBAL)(DWORD) m_printData.GetNativeData();
 
     m_printData.SetNativeData((void*) NULL);
 
@@ -817,7 +817,7 @@ void wxPrintDialogData::ConvertFromNative()
         if (m_printData.GetNativeData())
         {
             // Make sure we don't leak memory
-            GlobalFree((HGLOBAL) m_printData.GetNativeData());
+            GlobalFree((HGLOBAL)(DWORD) m_printData.GetNativeData());
         }
         m_printData.SetNativeData((void*) pd->hDevMode);
         pd->hDevMode = NULL;

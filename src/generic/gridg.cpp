@@ -1786,21 +1786,21 @@ void wxGenericGrid::DrawTextRect(wxDC *dc, const wxString& text, wxRect *rect, i
   {
     case wxRIGHT:
     {
-      x = (rect->x + rect->width - textWidth - 1.0);
-      y = (rect->y + (rect->height - textHeight)/2.0);
+      x = (rect->x + rect->width - textWidth - (float)1.0);
+      y = (rect->y + (rect->height - textHeight)/(float)2.0);
       break;
     }
     case wxCENTRE:
     {
-      x = (rect->x + (rect->width - textWidth)/2.0);
-      y = (rect->y + (rect->height - textHeight)/2.0);
+      x = (rect->x + (rect->width - textWidth)/(float)2.0);
+      y = (rect->y + (rect->height - textHeight)/(float)2.0);
       break;
     }
     case wxLEFT:
     default:
     {
-      x = (rect->x + 1.0);
-      y = (rect->y + (rect->height - textHeight)/2.0);
+      x = (rect->x + (float)1.0);
+      y = (rect->y + (rect->height - textHeight)/(float)2.0);
       break;
     }
   }

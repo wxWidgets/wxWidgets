@@ -2021,7 +2021,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
       if (imageFile)
         delete[] imageFile;
       imageFile = NULL;
-      if (f)
+      if (!f.IsEmpty())
       {
         imageFile = copystring(f);
       }

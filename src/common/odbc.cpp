@@ -443,7 +443,7 @@ float wxDatabase::GetODBCVersionFloat(bool implementation)
   if (retcode == SQL_ERROR)
     return 0.0;
   else
-    return atof(buf);
+    return (float)atof(buf);
 }
 
 /*

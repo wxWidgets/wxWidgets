@@ -23,10 +23,6 @@ THISDIR=$(WXDIR)\samples
 NOMAKE=1
 # No 16 bit version
 ONLY32=1
-# PNG unresolved
-PNGSETUP=1
-# DND not set in setup.h
-DNDSETUP=1
 # Misc. compilation errors
 COMPIL=1
 
@@ -54,7 +50,7 @@ all:
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.dos FINAL=$(FINAL)
-!if "$(DNDSETUP)"==""
+!if "$(ONLY32)"==""
         cd $(WXDIR)\samples\dnd
         nmake -f makefile.dos FINAL=$(FINAL)
 !endif
@@ -78,10 +74,8 @@ all:
         cd $(WXDIR)\samples\html
         nmake -f makefile.dos FINAL=$(FINAL)
 !endif
-!if "$(PNGSETUP)"==""
         cd $(WXDIR)\samples\image
         nmake -f makefile.dos FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\internat
         nmake -f makefile.dos FINAL=$(FINAL)
         cd $(WXDIR)\samples\joytest
@@ -136,10 +130,8 @@ all:
         cd $(WXDIR)\samples\sashtest
         nmake -f makefile.dos FINAL=$(FINAL)
 !endif
-!if "$(PNGSETUP)"==""
         cd $(WXDIR)\samples\scroll
         nmake -f makefile.dos FINAL=$(FINAL)
-!endif
         cd $(WXDIR)\samples\splitter
         nmake -f makefile.dos FINAL=$(FINAL)
 !if "$(COMPIL)"==""
@@ -156,10 +148,8 @@ all:
 !endif
         cd $(WXDIR)\samples\toolbar
         nmake -f makefile.dos FINAL=$(FINAL)
-!if "$(PNGSETUP)"==""
         cd $(WXDIR)\samples\treectrl
         nmake -f makefile.dos FINAL=$(FINAL)
-!endif
 !if "$(COMPIL)"==""
         cd $(WXDIR)\samples\typetest
         nmake -f makefile.dos FINAL=$(FINAL)

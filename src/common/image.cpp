@@ -682,7 +682,11 @@ wxBitmap wxImage::ConvertToBitmap() const
         return wxNullBitmap;
 
     // sizeLimit is the MS upper limit for the DIB size
+#ifdef  WIN32
     int sizeLimit = 1024*768*3;
+#else
+    int sizeLimit = 0x7fff ;
+#endif
 
     // width and height of the device-dependent bitmap
     int width = GetWidth();
