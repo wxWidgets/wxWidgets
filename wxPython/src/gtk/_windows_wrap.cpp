@@ -5463,6 +5463,45 @@ static PyObject *_wrap_StatusBar_SetStatusWidths(PyObject *self, PyObject *args,
 }
 
 
+static PyObject *_wrap_StatusBar_SetStatusStyles(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStatusBar *arg1 = (wxStatusBar *) 0 ;
+    int arg2 ;
+    int *arg3 = (int *) 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "styles", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StatusBar_SetStatusStyles",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxStatusBar,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        arg2 = PyList_Size(obj1);
+        arg3 =  int_LIST_helper(obj1);
+        if (arg3 == NULL) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetStatusStyles(arg2,(int const *)arg3);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (arg3) delete [] arg3;
+    }
+    return resultobj;
+    fail:
+    {
+        if (arg3) delete [] arg3;
+    }
+    return NULL;
+}
+
+
 static PyObject *_wrap_StatusBar_GetFieldRect(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStatusBar *arg1 = (wxStatusBar *) 0 ;
@@ -25079,6 +25118,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StatusBar_PushStatusText", (PyCFunction) _wrap_StatusBar_PushStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StatusBar_PopStatusText", (PyCFunction) _wrap_StatusBar_PopStatusText, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StatusBar_SetStatusWidths", (PyCFunction) _wrap_StatusBar_SetStatusWidths, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StatusBar_SetStatusStyles", (PyCFunction) _wrap_StatusBar_SetStatusStyles, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StatusBar_GetFieldRect", (PyCFunction) _wrap_StatusBar_GetFieldRect, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StatusBar_SetMinHeight", (PyCFunction) _wrap_StatusBar_SetMinHeight, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StatusBar_GetBorderX", (PyCFunction) _wrap_StatusBar_GetBorderX, METH_VARARGS | METH_KEYWORDS },
@@ -26952,6 +26992,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"SPLASH_NO_CENTRE", SWIG_FromInt((int)wxSPLASH_NO_CENTRE));
     PyDict_SetItemString(d,"SPLASH_TIMEOUT", SWIG_FromInt((int)wxSPLASH_TIMEOUT));
     PyDict_SetItemString(d,"SPLASH_NO_TIMEOUT", SWIG_FromInt((int)wxSPLASH_NO_TIMEOUT));
+    PyDict_SetItemString(d,"SB_NORMAL", SWIG_FromInt((int)wxSB_NORMAL));
+    PyDict_SetItemString(d,"SB_FLAT", SWIG_FromInt((int)wxSB_FLAT));
+    PyDict_SetItemString(d,"SB_RAISED", SWIG_FromInt((int)wxSB_RAISED));
     SWIG_addvarlink(SWIG_globals,(char*)"SplitterNameStr",_wrap_SplitterNameStr_get, _wrap_SplitterNameStr_set);
     PyDict_SetItemString(d,"SP_NOBORDER", SWIG_FromInt((int)wxSP_NOBORDER));
     PyDict_SetItemString(d,"SP_NOSASH", SWIG_FromInt((int)wxSP_NOSASH));

@@ -748,6 +748,9 @@ _windows_.SplashScreen_swigregister(SplashScreenPtr)
 
 #---------------------------------------------------------------------------
 
+SB_NORMAL = _windows_.SB_NORMAL
+SB_FLAT = _windows_.SB_FLAT
+SB_RAISED = _windows_.SB_RAISED
 class StatusBar(_core.Window):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxStatusBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -793,6 +796,10 @@ class StatusBar(_core.Window):
     def SetStatusWidths(*args, **kwargs):
         """SetStatusWidths(self, int widths, int widths_field)"""
         return _windows_.StatusBar_SetStatusWidths(*args, **kwargs)
+
+    def SetStatusStyles(*args, **kwargs):
+        """SetStatusStyles(self, int styles, int styles_field)"""
+        return _windows_.StatusBar_SetStatusStyles(*args, **kwargs)
 
     def GetFieldRect(*args, **kwargs):
         """GetFieldRect(self, int i) -> Rect"""
