@@ -73,7 +73,6 @@ extern wxList *wxWinMacControlList;
 // statics for implementation
 
 static bool s_inYield = FALSE;
-static bool s_inOnIdle = FALSE;
 
 #if TARGET_CARBON
 static bool s_inReceiveEvent = FALSE ;
