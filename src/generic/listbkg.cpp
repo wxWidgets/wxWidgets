@@ -72,7 +72,9 @@ END_EVENT_TABLE()
 void wxListbook::Init()
 {
     m_list = NULL;
+#if wxUSE_LINE_IN_LISTBOOK
     m_line = NULL;
+#endif // wxUSE_LINE_IN_LISTBOOK
     m_selection = wxNOT_FOUND;
 }
 
@@ -93,6 +95,11 @@ wxListbook::Create(wxWindow *parent,
 #endif // __WXMAC__/!__WXMAC__
     }
 
+    // no border for this control, it doesn't look nice together with
+    // wxListCtrl border
+    style &= ~wxBORDER_MASK;
+    style |= wxBORDER_NONE;
+
     if ( !wxControl::Create(parent, id, pos, size, style,
                             wxDefaultValidator, name) )
         return false;
@@ -103,10 +110,11 @@ wxListbook::Create(wxWindow *parent,
                     wxID_LISTBOOKLISTVIEW,
                     wxDefaultPosition,
                     wxDefaultSize,
-                    wxBORDER_NONE | wxLC_ICON | wxLC_SINGLE_SEL |
+                    wxLC_ICON | wxLC_SINGLE_SEL |
                         (IsVertical() ? wxLC_ALIGN_LEFT : wxLC_ALIGN_TOP)
                  );
 
+#if wxUSE_LINE_IN_LISTBOOK
     m_line = new wxStaticLine
                  (
                     this,
@@ -115,6 +123,7 @@ wxListbook::Create(wxWindow *parent,
                     wxDefaultSize,
                     IsVertical() ? wxLI_HORIZONTAL : wxLI_VERTICAL
                  );
+#endif // wxUSE_LINE_IN_LISTBOOK
 
     return true;
 }
@@ -212,6 +221,7 @@ void wxListbook::OnSize(wxSizeEvent& event)
     m_list->Move(posList.x, posList.y);
     m_list->SetClientSize(sizeList.x, sizeList.y);
 
+#if wxUSE_LINE_IN_LISTBOOK
     if ( m_line )
     {
         wxRect rectLine(wxPoint(0, 0), sizeClient);
@@ -241,6 +251,7 @@ void wxListbook::OnSize(wxSizeEvent& event)
 
         m_line->SetSize(rectLine);
     }
+#endif // wxUSE_LINE_IN_LISTBOOK
 
     // we should always have some selection if possible
     if ( m_selection == wxNOT_FOUND && GetPageCount() )
