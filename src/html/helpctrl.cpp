@@ -148,6 +148,7 @@ void wxHtmlHelpController::CreateHelpWindow()
 
     m_helpFrame->Create(NULL, wxID_HTML_HELPFRAME, wxEmptyString, m_FrameStyle);
     m_helpFrame->SetTitleFormat(m_titleFormat);
+
     m_helpFrame->Show(TRUE);
 }
 

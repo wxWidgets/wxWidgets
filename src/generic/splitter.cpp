@@ -801,6 +801,16 @@ void wxSplitterWindow::SetSashPosition(int position, bool redraw)
     }
 }
 
+// Make sure the child window sizes are updated. This is useful
+// for reducing flicker by updating the sizes before a
+// window is shown, if you know the overall size is correct.
+void wxSplitterWindow::UpdateSize()
+{
+    m_checkRequestedSashPosition = true;
+    SizeWindows();
+    m_checkRequestedSashPosition = false;
+}
+
 bool wxSplitterWindow::DoSendEvent(wxSplitterEvent& event)
 {
     return !GetEventHandler()->ProcessEvent(event) || event.IsAllowed();

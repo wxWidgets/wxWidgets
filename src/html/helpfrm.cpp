@@ -490,6 +490,13 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
         }
     }
     
+    // Reduce flicker by updating the splitter pane sizes before the
+    // frame is shown
+    wxSizeEvent sizeEvent(GetSize(), GetId());
+    ProcessEvent(sizeEvent);
+    
+    m_Splitter->UpdateSize();
+    
     return TRUE;
 }
 
