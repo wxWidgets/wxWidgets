@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_pre.cpp
+// Name:        m_pre.cpp
 // Purpose:     wxHtml module for <PRE> ... </PRE> tag (code citation)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -30,7 +30,7 @@
 #include "wx/html/htmlcell.h"
 #include "wx/tokenzr.h"
 
-FORCE_LINK_ME(mod_pre)
+FORCE_LINK_ME(m_pre)
 
 
 //-----------------------------------------------------------------------------

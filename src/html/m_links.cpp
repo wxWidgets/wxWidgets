@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_links.cpp
+// Name:        m_links.cpp
 // Purpose:     wxHtml module for links & anchors
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -29,7 +29,7 @@
 #include "wx/html/m_templ.h"
 
 
-FORCE_LINK_ME(mod_links)
+FORCE_LINK_ME(m_links)
 
 
 class wxHtmlAnchorCell : public wxHtmlCell

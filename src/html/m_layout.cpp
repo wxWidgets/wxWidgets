@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_layout.cpp
+// Name:        m_layout.cpp
 // Purpose:     wxHtml module for basic paragraphs/layout handling
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -29,7 +29,7 @@
 
 #include "wx/html/htmlwin.h"
 
-FORCE_LINK_ME(mod_layout)
+FORCE_LINK_ME(m_layout)
 
 
 TAG_HANDLER_BEGIN(P, "P")

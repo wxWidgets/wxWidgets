@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_image.cpp
+// Name:        m_image.cpp
 // Purpose:     wxHtml module for displaying images
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -34,7 +34,7 @@
 #include <math.h>
 #include <float.h>
 
-FORCE_LINK_ME(mod_image)
+FORCE_LINK_ME(m_image)
 
 
 

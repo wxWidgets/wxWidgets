@@ -361,9 +361,9 @@ bool wxHtmlWindow::HistoryBack()
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + "#" + a);
     m_HistoryOn = TRUE;
-    Scroll(0, m_History[m_HistoryPos].GetPos());
-//    wxYield();
+    wxYield();
     m_tmpCanDrawLocks--;
+    Scroll(0, m_History[m_HistoryPos].GetPos());
     Refresh();
     return TRUE;
 }
@@ -387,9 +387,9 @@ bool wxHtmlWindow::HistoryForward()
     if (a == wxEmptyString) LoadPage(l);
     else LoadPage(l + "#" + a);
     m_HistoryOn = TRUE;
-    Scroll(0, m_History[m_HistoryPos].GetPos());
-//    wxYield();
+    wxYield();
     m_tmpCanDrawLocks--;
+    Scroll(0, m_History[m_HistoryPos].GetPos());
     Refresh();
     return TRUE;
 }
@@ -586,14 +586,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlWinModule, wxModule)
 
 ///// default mod handlers are forced there:
 
-FORCE_LINK(mod_layout)
-FORCE_LINK(mod_fonts)
-FORCE_LINK(mod_image)
-FORCE_LINK(mod_list)
-FORCE_LINK(mod_pre)
-FORCE_LINK(mod_hline)
-FORCE_LINK(mod_links)
-FORCE_LINK(mod_tables)
+FORCE_LINK(m_layout)
+FORCE_LINK(m_fonts)
+FORCE_LINK(m_image)
+FORCE_LINK(m_list)
+FORCE_LINK(m_dflist)
+FORCE_LINK(m_pre)
+FORCE_LINK(m_hline)
+FORCE_LINK(m_links)
+FORCE_LINK(m_tables)
 
 
 #endif

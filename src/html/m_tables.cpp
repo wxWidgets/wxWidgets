@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_tables.cpp
+// Name:        m_tables.cpp
 // Purpose:     wxHtml module for tables
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -26,7 +26,7 @@
 
 /*
 REMARKS:
-    1. This version of mod_tables doesn't support auto-layout algorithm.
+    1. This version of m_tables doesn't support auto-layout algorithm.
        This means that all columns are of same width unless explicitly specified.
 */
 
@@ -36,7 +36,7 @@ REMARKS:
 
 #include "wx/html/htmlcell.h"
 
-FORCE_LINK_ME(mod_tables)
+FORCE_LINK_ME(m_tables)
 
 
 #define TABLE_BORDER_CLR_1  wxColour(0xC5, 0xC2, 0xC5)

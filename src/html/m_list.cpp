@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_list.cpp
+// Name:        m_list.cpp
 // Purpose:     wxHtml module for lists
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -30,7 +30,7 @@
 
 #include "wx/html/htmlcell.h"
 
-FORCE_LINK_ME(mod_list)
+FORCE_LINK_ME(m_list)
 
 
 //-----------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        mod_hline.cpp
+// Name:        m_hline.cpp
 // Purpose:     wxHtml module for horizontal line (HR tag)
 // Author:      Vaclav Slavik
 // RCS-ID:      $Id$
@@ -31,7 +31,7 @@
 
 #include "wx/html/htmlcell.h"
 
-FORCE_LINK_ME(mod_hline)
+FORCE_LINK_ME(m_hline)
 
 
 //-----------------------------------------------------------------------------
