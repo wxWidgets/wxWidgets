@@ -578,9 +578,10 @@ public:
 
     // is there a way to tell SWIG to disown this???
 
-    %addtofunc AssignImageList "args[1].thisown = 0";    
+    %apply SWIGTYPE *DISOWN { wxImageList *imageList };
     void AssignImageList(wxImageList *imageList, int which);
-
+    %clear wxImageList *imageList;
+    
     // returns True if it is a virtual list control
     bool IsVirtual() const;
 

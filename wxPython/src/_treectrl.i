@@ -371,10 +371,10 @@ public:
     void SetImageList(wxImageList *imageList);
     void SetStateImageList(wxImageList *imageList);
 
-    %addtofunc AssignImageList      "args[1].thisown = 0";
-    %addtofunc AssignStateImageList "args[1].thisown = 0";
+    %apply SWIGTYPE *DISOWN { wxImageList *imageList };
     void AssignImageList(wxImageList *imageList);
     void AssignStateImageList(wxImageList *imageList);
+    %clear wxImageList *imageList;
     
 
     // retrieve items label

@@ -683,8 +683,10 @@ public:
 
     // set/retrieve the drop target associated with this window (may be
     // NULL; it's owned by the window and will be deleted by it)
-    %addtofunc SetDropTarget "args[1].thisown = 0"
+    %apply SWIGTYPE *DISOWN { wxPyDropTarget *dropTarget };
     virtual void SetDropTarget( wxPyDropTarget *dropTarget );
+    %clear wxPyDropTarget *dropTarget;
+    
     virtual wxPyDropTarget *GetDropTarget() const;
 
 #ifdef __WXMSW__  // TODO:  should I drop-kick this?

@@ -119,8 +119,8 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyDropTarget, wxDropTarget, OnDrop);
 {
 public:
     %addtofunc wxPyDropTarget
-       "if args: args[0].thisown = 0;
-        self._setCallbackInfo(self, DropTarget)"
+       "self._setCallbackInfo(self, DropTarget)"
+    %apply SWIGTYPE *DISOWN { wxDataObject *dataObject };
 
     wxPyDropTarget(wxDataObject *dataObject = NULL);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -129,8 +129,9 @@ public:
 
     // get/set the associated wxDataObject
     wxDataObject *GetDataObject();
-    %addtofunc SetDataObject "args[1].thisown = 0"
     void SetDataObject(wxDataObject *dataObject);
+
+    %clear wxDataObject *dataObject;
 
     wxDragResult base_OnEnter(wxCoord x, wxCoord y, wxDragResult def);
     wxDragResult base_OnDragOver(wxCoord x, wxCoord y, wxDragResult def);

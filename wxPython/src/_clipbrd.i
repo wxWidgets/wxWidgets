@@ -40,6 +40,9 @@ public:
     // query whether the clipboard is opened
     virtual bool IsOpened() const;
 
+
+    %apply SWIGTYPE *DISOWN { wxDataObject *data };
+    
     // add to the clipboard data
     //
     // NB: the clipboard owns the pointer and will delete it, so data must be
@@ -50,6 +53,8 @@ public:
     // AddData()
     virtual bool SetData( wxDataObject *data );
 
+    %clear wxDataObject *data;
+    
     // ask if data in correct format is available
     virtual bool IsSupported( const wxDataFormat& format );
 

@@ -64,8 +64,9 @@ public:
     virtual void SetImageList(wxImageList *imageList);
 
     // as SetImageList() but we will delete the image list ourselves
-    %addtofunc AssignImageList "args[1].thisown = 0"
+    %apply SWIGTYPE *DISOWN { wxImageList *imageList };
     void AssignImageList(wxImageList *imageList);
+    %clear wxImageList *imageList;
 
     // get pointer (may be NULL) to the associated image list
     wxImageList* GetImageList() const;

@@ -240,8 +240,9 @@ class wxDataObjectComposite : public wxDataObject {
 public:
     wxDataObjectComposite();
 
-    %addtofunc Add "args[1].thisown = 0"
+    %apply SWIGTYPE *DISOWN { wxDataObjectSimple *dataObject };
     void Add(wxDataObjectSimple *dataObject, int preferred = False);
+    %clear wxDataObjectSimple *dataObject;
 };
 
 //---------------------------------------------------------------------------
