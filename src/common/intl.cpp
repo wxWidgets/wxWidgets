@@ -475,7 +475,10 @@ bool wxLocale::Init(const wxChar *szName,
 
   // change current locale (default: same as long name)
   if ( szLocale == NULL )
-    szLocale = szName;
+  {
+    // the argument to setlocale()
+    szLocale = szShort;
+  }
   m_pszOldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( m_pszOldLocale == NULL )
     wxLogError(_("locale '%s' can not be set."), szLocale);
