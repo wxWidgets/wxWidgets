@@ -212,6 +212,14 @@ Sets the number of fields, and optionally the field widths.
 in pixels. A value of -1 indicates that the field is variable width; at least one
 field must be -1.}
 
+\membersection{wxStatusBar::SetMinHeight}\label{wxstatusbarsetminheight}
+
+\func{void}{SetMinHeight}{\param{int}{ height}}
+
+Sets the minimal possible hight for the status bar. The real height may be
+bigger than the height specified here depending on the size of the font used by
+the status bar.
+
 \membersection{wxStatusBar::SetStatusText}\label{wxstatusbarsetstatustext}
 
 \func{virtual void}{SetStatusText}{\param{const wxString\& }{text}, \param{int}{ i = 0}}
