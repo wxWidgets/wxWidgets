@@ -1706,6 +1706,14 @@ void* wxAccessible::GetIAccessibleStd()
     return NULL;
 }
 
+// Sends an event when something changes in an accessible object.
+void wxAccessible::NotifyEvent(int eventType, wxWindow* window, wxAccObject objectType,
+                        int objectId)
+{
+    ::NotifyWinEvent((DWORD) eventType, (HWND) window->GetHWND(),
+        (LONG) objectType, (LONG) objectId);
+}
+
 // Utilities
 
 // Convert to Windows role

@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:      msw/region.cpp
 // Purpose:   wxRegion implementation using Win32 API
-// Author:    Markus Holzem, Vadim Zeitlin
+// Author:    Vadim Zeitlin
 // Modified by:
 // Created:   Fri Oct 24 10:46:34 MET 1997
 // RCS-ID:    $Id$

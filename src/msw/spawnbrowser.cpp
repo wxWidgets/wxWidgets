@@ -6,7 +6,7 @@
 // Created:     13.06.01
 // RCS-ID:
 // Copyright:   (c) 2001 Jason Quijano <jasonq@scitechsoft.com>
-// License:     wxWindows license
+// License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

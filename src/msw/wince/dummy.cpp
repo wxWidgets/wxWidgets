@@ -6,7 +6,7 @@
 // Created:     08/11/2002
 // RCS-ID:      
 // Copyright:   (c) KOAN SAS ( www.koansoftware.com )
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////// 
 
 /* A dummy file to include wx.h. If precompiling wx.h, I

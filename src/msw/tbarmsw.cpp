@@ -5,8 +5,8 @@
 // Modified by: 13.12.99 by VZ during toolbar classes reorganization
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) Julian Smart
+// Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================

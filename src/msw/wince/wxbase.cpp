@@ -6,7 +6,7 @@
 // Created:     05/12/2002
 // RCS-ID:      
 // Copyright:   (c) KOAN SAS ( www.koansoftware.com )
-// Licence:     wxWindows license
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////// 
 
 // For compilers that support precompilation, includes "wx.h".
