@@ -115,11 +115,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
     m_maximum /= m_factor;
 #endif // __WXMSW__
 
-    m_parentTop = parent;
-    while ( m_parentTop && m_parentTop->GetParent() )
-    {
-        m_parentTop = m_parentTop->GetParent();
-    }
+    m_parentTop = wxGetTopLevelParent(parent);
 
     wxLayoutConstraints *c;
 
