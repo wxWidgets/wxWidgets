@@ -1309,6 +1309,39 @@ public:
     void     SetColMinimalWidth( int col, int width );
     void     SetRowMinimalHeight( int row, int width );
 
+    /*  These two members can be used to query and modify the minimal
+     *  acceptable size of grid rows and columns. In the implementation of
+     *  wxGrid and related functions and classes these replace the macros
+     *  WXGRID_MIN_ROW_HEIGHT and WXGRID_MIN_COL_WIDTH. This allows users
+     *  to override these defaults to allow for grids with smaller cells.
+     *
+     *  These numbers are the lower boundaries for the arguments which are
+     *  passed to the two versions above for setting per row/column minimum
+     *  sizes. Like the members SetColMinimalWidth and SetRowMinimalWidth,
+     *  the two Set members below must be called during grid creation, because
+     *  the existing rows or columns will not be resized if necessary.
+     *
+     *  Notes:
+     *  * In order to keep backwards compatibility, these bits of state
+     *    information cannot be stored in member variables in the 2.4 series.
+     *    Hence the implementations of these functions use auxiliary static
+     *    functions which hold the numbers as static data (see grid.cpp).
+     *  * Those data are initialised to according to the values of the macros
+     *    WXGRID_MIN_ROW_HEIGHT and WXGRID_MIN_COL_WIDTH. This ensures 
+     *    complete backward compatibility. There is guaranteed to be no 
+     *    effect of this change, unless you actually call this function.
+     *  * In the 2.6 series, the behaviour of these functions will change. The
+     *    minimal acceptable height and width will be stored in member
+     *    variables, so calling these members only affects the class on which
+     *    they are called.
+     */
+    void     SetColMinimalAcceptableWidth( int width );
+    void     SetRowMinimalAcceptableHeight( int width );
+    int      GetColMinimalAcceptableWidth() const;
+    int      GetRowMinimalAcceptableHeight() const;
+
+
+
     void     SetDefaultCellBackgroundColour( const wxColour& );
     void     SetCellBackgroundColour( int row, int col, const wxColour& );
     void     SetDefaultCellTextColour( const wxColour& );
@@ -1835,6 +1868,7 @@ protected:
     DECLARE_DYNAMIC_CLASS( wxGrid )
     DECLARE_EVENT_TABLE()
 };
+
 
 // ----------------------------------------------------------------------------
 // Grid event class and event types

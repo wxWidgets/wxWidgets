@@ -3698,10 +3698,10 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
                            bool clipToMinMax);
 
 #define internalXToCol(x) CoordToRowOrCol(x, m_defaultColWidth, \
-                                          WXGRID_MIN_COL_WIDTH, \
+                                          GetColMinimalAcceptableWidth(), \
                                           m_colRights, m_numCols, TRUE)
 #define internalYToRow(y) CoordToRowOrCol(y, m_defaultRowHeight, \
-                                          WXGRID_MIN_ROW_HEIGHT, \
+                                          GetRowMinimalAcceptableHeight(), \
                                           m_rowBottoms, m_numRows, TRUE)
 /////////////////////////////////////////////////////////////////////
 
@@ -5542,7 +5542,7 @@ void wxGrid::DoEndDragResizeRow()
 
         int rowTop = GetRowTop(m_dragRowOrCol);
         SetRowSize( m_dragRowOrCol,
-                    wxMax( m_dragLastPos - rowTop, WXGRID_MIN_ROW_HEIGHT ) );
+                    wxMax( m_dragLastPos - rowTop, GetRowMinimalAcceptableHeight() ) );
 
         if ( !GetBatchCount() )
         {
@@ -7556,14 +7556,14 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
 int wxGrid::YToRow( int y )
 {
     return CoordToRowOrCol(y, m_defaultRowHeight,
-                           WXGRID_MIN_ROW_HEIGHT, m_rowBottoms, m_numRows, FALSE);
+                           GetRowMinimalAcceptableHeight(), m_rowBottoms, m_numRows, FALSE);
 }
 
 
 int wxGrid::XToCol( int x )
 {
     return CoordToRowOrCol(x, m_defaultColWidth,
-                           WXGRID_MIN_COL_WIDTH, m_colRights, m_numCols, FALSE);
+                           GetColMinimalAcceptableWidth(), m_colRights, m_numCols, FALSE);
 }
 
 
@@ -9124,7 +9124,7 @@ void wxGrid::EnableDragGridSize( bool enable )
 
 void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
 {
-    m_defaultRowHeight = wxMax( height, WXGRID_MIN_ROW_HEIGHT );
+    m_defaultRowHeight = wxMax( height, GetRowMinimalAcceptableHeight() );
 
     if ( resizeExistingRows )
     {
@@ -9164,7 +9164,7 @@ void wxGrid::SetRowSize( int row, int height )
 
 void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
 {
-    m_defaultColWidth = wxMax( width, WXGRID_MIN_COL_WIDTH );
+    m_defaultColWidth = wxMax( width, GetColMinimalAcceptableWidth() );
 
     if ( resizeExistingCols )
     {
@@ -9218,13 +9218,13 @@ void wxGrid::SetRowMinimalHeight( int row, int width )
 int wxGrid::GetColMinimalWidth(int col) const
 {
     long value = m_colMinWidths.Get(col);
-    return value != wxNOT_FOUND ? (int)value : WXGRID_MIN_COL_WIDTH;
+    return value != wxNOT_FOUND ? (int)value : GetColMinimalAcceptableWidth();
 }
 
 int wxGrid::GetRowMinimalHeight(int row) const
 {
     long value = m_rowMinHeights.Get(row);
-    return value != wxNOT_FOUND ? (int)value : WXGRID_MIN_ROW_HEIGHT;
+    return value != wxNOT_FOUND ? (int)value : GetRowMinimalAcceptableHeight();
 }
 
 // ----------------------------------------------------------------------------
@@ -9769,6 +9769,48 @@ wxRect wxGrid::BlockToDeviceRect( const wxGridCellCoords &topLeft,
     rect.SetBottom( wxMin(ch, bottom) );
 
     return rect;
+}
+
+/* We may be overly precise here, but: a static global variable is not good
+ * enough here. In theory, a wxGrid may be created from within the constructor
+ * of a global class variable. In that case there is no guarantee that global
+ * width/heght variables have been initialised already. Therefore we use this
+ * typical Singleton pattern. The static rowsize variable in the function below
+ * will be initialised when the function is first called.
+ *
+ * The same holds for the wxGridGlobalMinColWidth() function below.
+ */
+static inline int& wxGridGlobalMinRowHeight()
+{
+    static int rowsize=WXGRID_MIN_ROW_HEIGHT;
+    return rowsize;
+}
+
+void wxGrid::SetRowMinimalAcceptableHeight( int height )
+{
+    ::wxGridGlobalMinRowHeight()=height;
+}
+
+int wxGrid::GetRowMinimalAcceptableHeight() const
+{
+    return ::wxGridGlobalMinRowHeight();
+}
+
+static inline int& wxGridGlobalMinColWidth()
+{
+    static int colwidth=WXGRID_MIN_COL_WIDTH;
+    return colwidth;
+}
+
+void wxGrid::SetColMinimalAcceptableWidth( int width )
+{
+    ::wxGridGlobalMinColWidth()=width;
+}
+
+
+int wxGrid::GetColMinimalAcceptableWidth() const
+{
+    return ::wxGridGlobalMinColWidth();
 }
 
 
