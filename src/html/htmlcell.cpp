@@ -800,7 +800,7 @@ void wxHtmlContainerCell::Layout(int w)
                     {
                         prev =
                         next = NULL;
-                        for ( int n = 0; line != cell; line = line->GetNext() )
+                        for ( int n = 0; line != cell; prev = line, line = next )
                         {
                             line->SetPos(line->GetPosX() + s_indent +
                                            ((n * step) / total),
