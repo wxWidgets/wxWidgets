@@ -1479,6 +1479,8 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
     #if wxUSE_UNICODE
         // finally convert the result to Unicode if needed
         wxConvFile.MB2WC(buf, cbuf, sz);
+        // wxString tmp = wxString::FromAscii( cbuf );
+        // wxStrcpy( buf, tmp.c_str() );
     #endif // wxUSE_UNICODE
     }
 
