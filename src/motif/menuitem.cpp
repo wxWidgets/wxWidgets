@@ -338,32 +338,36 @@ void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
     wxMenuItem *item = (wxMenuItem *) clientData;
     if (item)
     {
+        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
+        event.SetInt( item->GetId() );
+
         if (item->IsCheckable())
         {
             Boolean isChecked = FALSE;
-            XtVaGetValues ((Widget) item->GetButtonWidget(), XmNset, & isChecked, NULL);
+            XtVaGetValues ((Widget) item->GetButtonWidget(),
+                           XmNset, & isChecked,
+                           NULL);
 
             // only set the flag, don't actually check anything
             item->wxMenuItemBase::Check(isChecked);
+            event.SetInt(isChecked);
         }
+
         if (item->GetMenuBar() && item->GetMenuBar()->GetMenuBarFrame())
         {
-            wxCommandEvent commandEvent(wxEVT_COMMAND_MENU_SELECTED, item->GetId());
-            commandEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
-            commandEvent.SetInt( item->GetId() );
+            event.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
-            item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(commandEvent);
+            item->GetMenuBar()->GetMenuBarFrame()
+                ->GetEventHandler()->ProcessEvent(event);
         }
         // this is the child of a popup menu
         else if (item->GetTopMenu())
         {
-            wxCommandEvent event (wxEVT_COMMAND_MENU_SELECTED, item->GetId());
             event.SetEventObject(item->GetTopMenu());
-            event.SetInt( item->GetId() );
 
             item->GetTopMenu()->ProcessCommand (event);
 
-            // Since PopupMenu under Motif stills grab right mouse
+            // Since PopupMenu under Motif still grab right mouse
             // button events after it was closed, we need to delete
             // the associated widgets to allow next PopUpMenu to
             // appear; this needs to be done there because doing it in
@@ -385,7 +389,8 @@ void wxMenuItemArmCallback (Widget WXUNUSED(w), XtPointer clientData,
             wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, item->GetId());
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
-            item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(menuEvent);
+            item->GetMenuBar()->GetMenuBarFrame()
+                ->GetEventHandler()->ProcessEvent(menuEvent);
         }
     }
 }
@@ -404,7 +409,8 @@ wxMenuItemDisarmCallback (Widget WXUNUSED(w), XtPointer clientData,
             wxMenuEvent menuEvent(wxEVT_MENU_HIGHLIGHT, -1);
             menuEvent.SetEventObject(item->GetMenuBar()->GetMenuBarFrame());
 
-            item->GetMenuBar()->GetMenuBarFrame()->GetEventHandler()->ProcessEvent(menuEvent);
+            item->GetMenuBar()->GetMenuBarFrame()
+                ->GetEventHandler()->ProcessEvent(menuEvent);
         }
     }
 }
