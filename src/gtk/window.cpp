@@ -889,7 +889,12 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     /* win is a control: tab can be propagated up */
     if ( (!ret) &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
+// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
+//     have this style, yet choose not to process this particular TAB in which
+//     case TAB must still work as a navigational character
+#if 0
          (!win->HasFlag(wxTE_PROCESS_TAB)) &&
+#endif // 0
          (win->GetParent()) &&
          (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
