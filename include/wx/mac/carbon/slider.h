@@ -93,6 +93,9 @@ public:
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     void                     MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
 
+    // Common processing to invert slider values based on wxSL_INVERSE
+    int MacInvertOrNot(int value) const;
+
      wxStaticText*    m_macMinimumStatic ;
      wxStaticText*    m_macMaximumStatic ;
      wxStaticText*    m_macValueStatic ;
