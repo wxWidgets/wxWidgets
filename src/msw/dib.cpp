@@ -33,9 +33,9 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/setup.h"
-#include "wx/defs.h"
 #include "wx/bitmap.h"
+#include "wx/log.h"
+#include "wx/intl.h"
 #endif
 
 #include <windows.h>
