@@ -232,15 +232,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
     
     bool ret = drop_target->OnDrop( x, y );
     
-    if (ret)
-    {
-        /* this should trigger an "drag_data_received" event */
-        gtk_drag_get_data( widget, 
-	                   context, 
-		           GPOINTER_TO_INT (context->targets->data), 
-		           time );
-    }
-    else
+    if (!ret)
     {
         /* cancel the whole thing */
         gtk_drag_finish( context,
@@ -279,47 +271,32 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
 //    printf( "data received.\n" );
        
-    /* strangely, we get a "drag_data_received" event even when
-       we don't request them. this checks this. */
-    if (!drop_target->m_currentDataObject) return;
-    
-    wxDataObject *data_object = drop_target->m_currentDataObject;
-
     if ((data->length <= 0) || (data->format != 8))
     {
         /* negative data length and non 8-bit data format
            qualifies for junk */
         gtk_drag_finish (context, FALSE, FALSE, time);
+	
+	return;
     }
-    else
+    
+    /* inform the wxDropTarget about the current GtkSelectionData.
+       this is only valid for the duration of this call */
+    drop_target->SetDragData( data );
+    
+    if (drop_target->OnData( x, y ))
     {
-        wxASSERT_MSG( data->target ==  data_object->GetFormat().GetAtom(), "DnD GetData target mismatch."  );
-	
-	if (data_object->GetFormat().GetType() == wxDF_TEXT)
-	{
-	    wxTextDataObject *text_object = (wxTextDataObject*)data_object;
-	    text_object->SetText( (const char*)data->data );
-	} else
-	
-	if (data_object->GetFormat().GetType() == wxDF_FILENAME)
-	{
-	} else
-	
-	if (data_object->GetFormat().GetType() == wxDF_PRIVATE)
-	{
-	    wxPrivateDataObject *priv_object = (wxPrivateDataObject*)data_object;
-	    priv_object->SetData( (const char*)data->data, (size_t)data->length );
-	}
-	
-	/* tell wxDropTarget that data transfer was successfull */
-	drop_target->m_dataRetrieveSuccess = TRUE;
-	
 	/* tell GTK that data transfer was successfull */
         gtk_drag_finish( context, TRUE, FALSE, time );
     }
-
-    /* tell wxDropTarget that data has arrived (or not) */
-    drop_target->m_waiting = FALSE;
+    else
+    {
+	/* tell GTK that data transfer was not successfull */
+        gtk_drag_finish( context, FALSE, FALSE, time );
+    }
+    
+    /* after this, invalidate the drop_target's drag data */
+    drop_target->SetDragData( (GtkSelectionData*) NULL );
 }
 
 //----------------------------------------------------------------------------
@@ -331,9 +308,8 @@ wxDropTarget::wxDropTarget()
     m_firstMotion = TRUE;
     m_dragContext = (GdkDragContext*) NULL;
     m_dragWidget = (GtkWidget*) NULL;
+    m_dragData = (GtkSelectionData*) NULL;
     m_dragTime = 0;
-    m_currentDataObject = (wxDataObject*) NULL;
-    m_dataRetrieveSuccess = FALSE;
 }
 
 wxDropTarget::~wxDropTarget()
@@ -358,6 +334,25 @@ bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
     return FALSE;
 }
 
+bool wxDropTarget::OnData( int WXUNUSED(x), int WXUNUSED(y) )
+{
+    return FALSE;
+}
+
+bool wxDropTarget::RequestData( wxDataFormat format )
+{
+    if (!m_dragContext) return FALSE;
+    if (!m_dragWidget) return FALSE;
+    
+    /* this should trigger an "drag_data_received" event */
+    gtk_drag_get_data( m_dragWidget, 
+	               m_dragContext,
+		       format.GetAtom(),
+		       m_dragTime );
+		       
+    return TRUE;
+}
+
 bool wxDropTarget::IsSupported( wxDataFormat format )
 { 
     if (!m_dragContext) return FALSE;
@@ -377,32 +372,29 @@ bool wxDropTarget::IsSupported( wxDataFormat format )
     return FALSE;
 }
   
-bool wxDropTarget::GetData( wxDataObject *data )
+bool wxDropTarget::GetData( wxDataObject *data_object )
 {
-    if (!m_dragContext) return FALSE;
-    if (!m_dragWidget) return FALSE;
+    if (!m_dragData) return FALSE;
     
-    m_currentDataObject = data;
-    m_dataRetrieveSuccess = FALSE;
+    if (m_dragData->target !=  data_object->GetFormat().GetAtom()) return FALSE;
+	
+    if (data_object->GetFormat().GetType() == wxDF_TEXT)
+    {
+        wxTextDataObject *text_object = (wxTextDataObject*)data_object;
+        text_object->SetText( (const char*)m_dragData->data );
+    } else
+	
+    if (data_object->GetFormat().GetType() == wxDF_FILENAME)
+    {
+    } else
+	
+    if (data_object->GetFormat().GetType() == wxDF_PRIVATE)
+    {
+	wxPrivateDataObject *priv_object = (wxPrivateDataObject*)data_object;
+	priv_object->SetData( (const char*)m_dragData->data, (size_t)m_dragData->length );
+    }
     
-    /* this should trigger an "drag_data_received" event */
-    gtk_drag_get_data( m_dragWidget, 
-	               m_dragContext,
-		       data->GetFormat().GetAtom(),
-		       m_dragTime );
-		       
-    /* wait for the "drag_data_received" event */
-    
-//    printf( "pre wait.\n" );
-    
-    m_waiting = TRUE;
-    while (m_waiting) wxYield();
-    
-//    printf( "post wait.\n" );
-    
-    m_currentDataObject = (wxDataObject*) NULL;
-    
-    return m_dataRetrieveSuccess;
+    return TRUE;
 }
   
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
@@ -463,17 +455,27 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 
 bool wxTextDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    return IsSupported( wxDF_TEXT );  // same as "STRING"
+    return IsSupported( wxDF_TEXT );
 }
 
-bool wxTextDropTarget::OnDrop( int x, int y )
+bool wxTextDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (!IsSupported( wxDF_TEXT )) return FALSE;
+    if (IsSupported( wxDF_TEXT ))
+    {
+        RequestData( wxDF_TEXT );
+	return TRUE;
+    }
     
+    return FALSE;
+}
+
+bool wxTextDropTarget::OnData( int x, int y )
+{
     wxTextDataObject data;
     if (!GetData( &data )) return FALSE;
     
     OnDropText( x, y, data.GetText() );
+    
     return TRUE;
 }
 
@@ -496,7 +498,18 @@ bool wxPrivateDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
     return IsSupported( m_id );
 }
 
-bool wxPrivateDropTarget::OnDrop( int x, int y )
+bool wxPrivateDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
+{
+    if (!IsSupported( m_id ))
+    { 
+        RequestData( m_id );
+        return FALSE;
+    }
+    
+    return FALSE;
+}
+
+bool wxPrivateDropTarget::OnData( int x, int y )
 {
     if (!IsSupported( m_id )) return FALSE;
     
@@ -514,18 +527,24 @@ bool wxPrivateDropTarget::OnDrop( int x, int y )
 
 bool wxFileDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    return IsSupported( wxDF_FILENAME );  // same as "file:ALL"
+    return IsSupported( wxDF_FILENAME );
 }
 
 bool wxFileDropTarget::OnDrop( int x, int y )
 {
-    return IsSupported( wxDF_FILENAME );  // same as "file:ALL"
+    if (IsSupported( wxDF_FILENAME ))
+    {
+        RequestData( wxDF_FILENAME );
+	return TRUE;
+    }
+    
+    return FALSE;
 }
 
-void wxFileDropTarget::OnData( int x, int y )
+bool wxFileDropTarget::OnData( int x, int y )
 {
     wxFileDataObject data;
-    if (!GetData( &data )) return;
+    if (!GetData( &data )) return FALSE;
 
     /* get number of substrings /root/mytext.txt/0/root/myothertext.txt/0/0 */
     size_t number = 0;
@@ -535,7 +554,7 @@ void wxFileDropTarget::OnData( int x, int y )
     for ( i = 0; i < size; i++)
         if (text[i] == 0) number++;
 
-    if (number == 0) return;
+    if (number == 0) return FALSE;
     
     char **files = new char*[number];
   
@@ -550,6 +569,8 @@ void wxFileDropTarget::OnData( int x, int y )
     OnDropFiles( x, y, number, files ); 
   
     free( files );
+    
+    return TRUE;
 }
 
 //----------------------------------------------------------------------------
@@ -564,8 +585,8 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 		       guint               WXUNUSED(time),
 		       wxDropSource       *drop_source )
 {
-    char *name = gdk_atom_name( selection_data->target );
-    if (name) printf( "Format requested: %s.\n", name );
+//    char *name = gdk_atom_name( selection_data->target );
+//    if (name) printf( "Format requested: %s.\n", name );
     
     wxNode *node = drop_source->m_data->m_dataObjects.First();
     while (node)
@@ -783,6 +804,8 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 				  bm,
 				  0,
 				  0 );
+    
+        gdk_flush();
     
         while (m_waiting) wxYield();
     }

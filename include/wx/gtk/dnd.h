@@ -117,12 +117,23 @@ public:
   virtual void OnLeave();
   
   /* may be overridden to reject certain formats or drops
-     on certain areas */
+     on certain areas. always returns TRUE by default
+     indicating that you'd accept the data from the drag. */
   virtual bool OnMove( int x, int y );
     
-  /* has to be overridden to accept drop. call GetData() to
-     indicate the format you request and get the data. */
+  /* has to be overridden to accept a drop event. call 
+     IsSupported() to ask which formats are available
+     and then call RequestData() to indicate the format 
+     you request. */
   virtual bool OnDrop( int x, int y );
+  
+  /* this gets called once the data has actually arrived. get
+     it with GetData(). this has to be overridden. */
+  virtual bool OnData( int x, int y );
+
+  /* called from within OnDrop() to request a certain format
+     from the drop event. */
+  bool RequestData( wxDataFormat format );
 
   /* called to query what formats are available */
   bool IsSupported( wxDataFormat format );
@@ -137,14 +148,13 @@ public:
     
   GdkDragContext     *m_dragContext;
   GtkWidget          *m_dragWidget;
+  GtkSelectionData   *m_dragData;
   guint               m_dragTime;
   bool                m_firstMotion;     /* gdk has no "gdk_drag_enter" event */
-  bool                m_waiting;         /* asynchronous process */
-  bool                m_dataRetrieveSuccess;
-  wxDataObject       *m_currentDataObject;
     
   void SetDragContext( GdkDragContext *dc ) { m_dragContext = dc; }
   void SetDragWidget( GtkWidget *w ) { m_dragWidget = w; }
+  void SetDragData( GtkSelectionData *sd ) { m_dragData = sd; }
   void SetDragTime( guint time ) { m_dragTime = time; }
 };
 
@@ -160,6 +170,7 @@ public:
 
   virtual bool OnMove( int x, int y );
   virtual bool OnDrop( int x, int y );
+  virtual bool OnData( int x, int y );
     
   /* you have to override OnDropData to get at the text */
   virtual bool OnDropText( int x, int y, const char *text ) = 0;
@@ -182,6 +193,7 @@ public:
   
   virtual bool OnMove( int x, int y );
   virtual bool OnDrop( int x, int y );
+  virtual bool OnData( int x, int y );
   
   /* you have to override OnDropData to get at the data */
   virtual bool OnDropData( int x, int y, void *data, size_t size ) = 0;
@@ -210,7 +222,7 @@ public:
     
   virtual bool OnMove( int x, int y );
   virtual bool OnDrop( int x, int y );
-  virtual void OnData( int x, int y );
+  virtual bool OnData( int x, int y );
   
   /* you have to override OnDropFiles to get at the file names */
   virtual bool OnDropFiles( int x, int y, size_t nFiles, const char * const aszFiles[] ) = 0;
