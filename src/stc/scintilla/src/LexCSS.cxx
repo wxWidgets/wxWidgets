@@ -21,10 +21,8 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-
-
 static inline bool IsAWordChar(const unsigned int ch) {
-	return (isalnum(ch) || ch == '-' || ch >= 161);
+	return (isalnum(ch) || ch == '-' || ch == '_' || ch >= 161); // _ is not in fact correct CSS word-character
 }
 
 inline bool IsCssOperator(const char ch) {
@@ -73,6 +71,17 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 		if (sc.state == SCE_CSS_COMMENT)
 			continue;
 
+		if (sc.state == SCE_CSS_DOUBLESTRING || sc.state == SCE_CSS_SINGLESTRING) {
+			if (sc.ch != (sc.state == SCE_CSS_DOUBLESTRING ? '\"' : '\''))
+				continue;
+			unsigned int i = sc.currentPos;
+			while (i && styler[i-1] == '\\')
+				i--;
+			if ((sc.currentPos - i) % 2 == 1)
+				continue;
+			sc.ForwardSetState(SCE_CSS_VALUE);
+		}
+
 		if (sc.state == SCE_CSS_OPERATOR) {
 			if (op == ' ') {
 				unsigned int i = startPos;
@@ -99,7 +108,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_CSS_DEFAULT);
 				break;
 			case ':':
-				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_DEFAULT || lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID)
+				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT || lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID)
 					sc.SetState(SCE_CSS_PSEUDOCLASS);
 				else if (lastState == SCE_CSS_IDENTIFIER || lastState == SCE_CSS_UNKNOWN_IDENTIFIER)
 					sc.SetState(SCE_CSS_VALUE);
@@ -169,19 +178,18 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 		}
 
-		if (sc.ch != '.' && sc.ch != ':' && sc.ch != '#' && (sc.state == SCE_CSS_CLASS || sc.state == SCE_CSS_PSEUDOCLASS || sc.state == SCE_CSS_UNKNOWN_PSEUDOCLASS || sc.state == SCE_CSS_UNKNOWN_PSEUDOCLASS || sc.state == SCE_CSS_ID))
+		if (sc.ch != '.' && sc.ch != ':' && sc.ch != '#' && (sc.state == SCE_CSS_CLASS || sc.state == SCE_CSS_PSEUDOCLASS || sc.state == SCE_CSS_UNKNOWN_PSEUDOCLASS || sc.state == SCE_CSS_ID))
 			sc.SetState(SCE_CSS_TAG);
 
 		if (sc.Match('/', '*')) {
 			lastStateC = sc.state;
 			sc.SetState(SCE_CSS_COMMENT);
 			sc.Forward();
-			continue;
-		}
-
-		if (IsCssOperator(static_cast<char>(sc.ch))
-		&& (sc.state != SCE_CSS_VALUE || sc.ch == ';' || sc.ch == '}' || sc.ch == '!')
-		&& (sc.state != SCE_CSS_DIRECTIVE || sc.ch == ';' || sc.ch == '{')
+		} else if (sc.state == SCE_CSS_VALUE && (sc.ch == '\"' || sc.ch == '\'')) {
+			sc.SetState((sc.ch == '\"' ? SCE_CSS_DOUBLESTRING : SCE_CSS_SINGLESTRING));
+		} else if (IsCssOperator(static_cast<char>(sc.ch))
+			&& (sc.state != SCE_CSS_VALUE || sc.ch == ';' || sc.ch == '}' || sc.ch == '!')
+			&& (sc.state != SCE_CSS_DIRECTIVE || sc.ch == ';' || sc.ch == '{')
 		) {
 			if (sc.state != SCE_CSS_OPERATOR)
 				lastState = sc.state;
@@ -243,4 +251,10 @@ static void FoldCSSDoc(unsigned int startPos, int length, int, WordList *[], Acc
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-LexerModule lmCss(SCLEX_CSS, ColouriseCssDoc, "css", FoldCSSDoc);
+static const char * const cssWordListDesc[] = {
+	"Keywords",
+	"Pseudo classes",
+	0
+};
+
+LexerModule lmCss(SCLEX_CSS, ColouriseCssDoc, "css", FoldCSSDoc, cssWordListDesc);

@@ -129,5 +129,14 @@ static void ColouriseAsmDoc(unsigned int startPos, int length, int initStyle, Wo
 	sc.Complete();
 }
 
-LexerModule lmAsm(SCLEX_ASM, ColouriseAsmDoc, "asm");
+static const char * const asmWordListDesc[] = {
+	"CPU instructions",
+	"FPU instructions",
+	"Registers",
+	"Directives",
+	"Directive operands",
+	0
+};
+
+LexerModule lmAsm(SCLEX_ASM, ColouriseAsmDoc, "asm", 0, asmWordListDesc);
 

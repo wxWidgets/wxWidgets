@@ -32,7 +32,7 @@ public:
 	bool GrabMatches(CharacterIndexer &ci);
 	void ChSet(char c);
 	void ChSetWithCase(char c, bool caseSensitive);
-	const char *Compile(const char *pat, int length, bool caseSensitive);
+	const char *Compile(const char *pat, int length, bool caseSensitive, bool posix);
 	int Execute(CharacterIndexer &ci, int lp, int endp);
 	void ModifyWord(char *s);
 	int Substitute(CharacterIndexer &ci, char *src, char *dst);
