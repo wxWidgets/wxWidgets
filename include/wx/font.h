@@ -71,6 +71,39 @@ enum wxFontWeight
     wxFONTWEIGHT_MAX
 };
 
+// the font flag bits for the new font ctor accepting one combined flags word
+enum
+{
+    // no special flags: font with default weight/slant/anti-aliasing
+    wxFONTFLAG_DEFAULT          = 0,
+
+    // slant flags (default: no slant)
+    wxFONTFLAG_ITALIC           = 1 << 0,
+    wxFONTFLAG_SLANT            = 1 << 1,
+
+    // weight flags (default: medium)
+    wxFONTFLAG_LIGHT            = 1 << 2,
+    wxFONTFLAG_BOLD             = 1 << 3,
+
+    // anti-aliasing flag: force on or off (default: the current system default)
+    wxFONTFLAG_ANTIALIASED      = 1 << 4,
+    wxFONTFLAG_NOT_ANTIALIASED  = 1 << 5,
+
+    // underlined/strikethrough flags (default: no lines)
+    wxFONTFLAG_UNDERLINED       = 1 << 6,
+    wxFONTFLAG_STRIKETHROUGH    = 1 << 7,
+
+    // the mask of all currently used flags
+    wxFONTFLAG_MASK = wxFONTFLAG_ITALIC             |
+                      wxFONTFLAG_SLANT              |
+                      wxFONTFLAG_LIGHT              |
+                      wxFONTFLAG_BOLD               |
+                      wxFONTFLAG_ANTIALIASED        |
+                      wxFONTFLAG_NOT_ANTIALIASED    |
+                      wxFONTFLAG_UNDERLINED         |
+                      wxFONTFLAG_STRIKETHROUGH
+};
+
 // ----------------------------------------------------------------------------
 // wxFontBase represents a font object
 // ----------------------------------------------------------------------------
@@ -93,6 +126,14 @@ public:
         bool underlined = FALSE,    // not underlined by default
         const wxString& face = wxEmptyString,              // facename
         wxFontEncoding encoding = wxFONTENCODING_DEFAULT); // ISO8859-X, ...
+
+    // from the font components but using the font flags instead of separate
+    // parameters for each flag
+    static wxFont *New(int pointSize,
+                       wxFontFamily family,
+                       int flags = wxFONTFLAG_DEFAULT,
+                       const wxString& face = wxEmptyString,
+                       wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
     // from the (opaque) native font description object
     static wxFont *New(const wxNativeFontInfo& nativeFontDesc);
