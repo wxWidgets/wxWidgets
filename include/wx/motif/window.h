@@ -122,6 +122,7 @@ public:
     virtual WXWidget GetTopWidget() const;
     
     // Get the underlying X window and display
+    WXWindow GetClientXWindow() const;
     WXWindow GetXWindow() const;
     WXDisplay *GetXDisplay() const;
     

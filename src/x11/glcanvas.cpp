@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        glcanvas.cpp
-// Purpose:     wxGLCanvas, for using OpenGL with wxWindows 2.0 for Motif.
+// Purpose:     wxGLCanvas, for using OpenGL with wxWindows
 //              Uses the GLX extension.
 // Author:      Julian Smart and Wolfram Gloger
 // Modified by:
@@ -18,8 +18,6 @@
 
 #if wxUSE_GLCANVAS
 
-// #error Sorry, wxGLCanvas does not work yet with wxX11
-
 #include "wx/glcanvas.h"
 #include "wx/utils.h"
 #include "wx/app.h"
@@ -28,11 +26,20 @@
 #ifdef __VMS
 # pragma message disable nosimpint
 #endif
-#include <Xm/Xm.h>
+#include <X11/Xlib.h>
 #ifdef __VMS
 # pragma message enable nosimpint
 #endif
-#include "wx/motif/private.h"
+#include "wx/x11/private.h"
+
+static inline WXWindow wxGetClientAreaWindow(wxWindow* win)
+{
+#ifdef __WXMOTIF__
+    return win->GetClientXWindow();
+#else
+    return win->GetClientAreaWindow();
+#endif
+}
 
 #ifdef OLD_MESA
 // workaround for bug in Mesa's glx.c
@@ -111,7 +118,7 @@ void wxGLContext::SwapBuffers()
     if (m_glContext)
     {
         Display* display = (Display*) wxGetDisplay();
-        glXSwapBuffers(display, (Window) m_window->GetClientAreaWindow());
+        glXSwapBuffers(display, (Window) wxGetClientAreaWindow(m_window));
     }
 }
 
@@ -120,7 +127,7 @@ void wxGLContext::SetCurrent()
     if (m_glContext) 
     { 
         Display* display = (Display*) wxGetDisplay();
-        glXMakeCurrent(display, (Window) m_window->GetClientAreaWindow(), 
+        glXMakeCurrent(display, (Window) wxGetClientAreaWindow(m_window), 
                        m_glContext );;
     }
 }
@@ -136,7 +143,11 @@ void wxGLContext::SetColour(const char *colour)
 		       the_colour->Green(),
 		       the_colour->Blue());
 	} else {
+#ifdef __WXMOTIF__
+            the_colour->AllocColour(m_window->GetXDisplay());
+#else
             the_colour->CalcPixel(wxTheApp->GetMainColormap(wxGetDisplay()));
+#endif
 	    GLint pix = (GLint)the_colour->GetPixel();
 	    if(pix == -1)
             {
@@ -297,7 +308,7 @@ bool wxGLCanvas::Create( wxWindow *parent,
     } else {
 	// By default, we use the visual of xwindow
         // NI: is this really senseful ? opengl in e.g. color index mode ?
-	XGetWindowAttributes(display, (Window) GetClientAreaWindow(), &xwa);
+	XGetWindowAttributes(display, (Window)wxGetClientAreaWindow(this), &xwa);
 	vi_templ.visualid = XVisualIDFromVisual(xwa.visual);
 	vi = XGetVisualInfo(display, VisualIDMask, &vi_templ, &n);
 	if(!vi) return FALSE;

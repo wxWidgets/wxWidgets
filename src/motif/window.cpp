@@ -577,7 +577,7 @@ wxWindow *wxWindowBase::FindFocus()
     // (2) The widget with the focus may not be in the widget table
     // depending on which widgets I put in the table
     wxWindow *winFocus = (wxWindow *)NULL;
-    for ( wxWindowList::Node *node = wxTopLevelWindows.GetFirst();
+    for ( wxWindowList::compatibility_iterator node = wxTopLevelWindows.GetFirst();
           node;
           node = node->GetNext() )
     {
@@ -904,7 +904,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     wxBrush brush(GetBackgroundColour(), wxSOLID);
     dc.SetBrush(brush); // FIXME: needed?
 
-    wxWindowList::Node *cnode = m_children.GetFirst();
+    wxWindowList::compatibility_iterator cnode = m_children.GetFirst();
     while (cnode)
     {
         wxWindow *child = cnode->GetData();
@@ -1000,7 +1000,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
     // Now send expose events
 
-    wxList::Node* node = updateRects.GetFirst();
+    wxList::compatibility_iterator  node = updateRects.GetFirst();
     while (node)
     {
         wxRect* rect = (wxRect*) node->GetData();
@@ -1666,7 +1666,7 @@ void wxWindow::DoPaint()
 // Responds to colour changes: passes event on to children.
 void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
-    wxWindowList::Node *node = GetChildren().GetFirst();
+    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
     while ( node )
     {
         // Only propagate to non-top-level windows
@@ -1866,6 +1866,15 @@ bool wxWindow::DetachWidget(WXWidget widget)
 // ----------------------------------------------------------------------------
 // Motif-specific accessors
 // ----------------------------------------------------------------------------
+
+WXWindow wxWindow::GetClientXWindow() const
+{
+    Widget wMain = (Widget)GetClientWidget();
+    if ( wMain )
+        return (WXWindow) XtWindow(wMain);
+    else
+        return (WXWindow) 0;
+}
 
 // Get the underlying X window
 WXWindow wxWindow::GetXWindow() const
