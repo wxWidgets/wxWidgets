@@ -31,7 +31,7 @@ class WXDLLEXPORT wxWinHelpController: public wxHelpControllerBase
   ~wxWinHelpController(void);
 
   // Must call this to set the filename and server name
-  virtual bool Initialize(const wxString& file, int server = -1);
+  virtual bool Initialize(const wxString& file);
 
   // If file is "", reloads file given  in Initialize
   virtual bool LoadFile(const wxString& file = "");

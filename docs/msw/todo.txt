@@ -54,6 +54,7 @@ Update manual.
     wxBaseArray, other arrays
     (wxOwnerDrawn)
     Document the include file for each class
+    Macros, e.g. wxASSERT
 
 Write tutorial.
 

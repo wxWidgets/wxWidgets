@@ -278,7 +278,7 @@ void wxThread::TestDestroy()
   pthread_testcancel();
 }
 
-bool wxThread::IsMain() const
+bool wxThread::IsMain()
 {
   return (bool)pthread_equal(pthread_self(), p_mainid);
 }

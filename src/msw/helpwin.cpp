@@ -54,7 +54,7 @@ wxWinHelpController::~wxWinHelpController(void)
 {
 }
 
-bool wxWinHelpController::Initialize(const wxString& filename, int server)
+bool wxWinHelpController::Initialize(const wxString& filename)
 {
   m_helpFile = filename;
   return TRUE;

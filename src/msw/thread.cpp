@@ -233,7 +233,7 @@ void wxThread::SetPriority(int prio)
   p_internal->prio = prio;
 }
 
-int wxThread::GetPriority()
+int wxThread::GetPriority() const
 {
   return p_internal->prio;
 }
@@ -275,7 +275,7 @@ unsigned long wxThread::GetID() const
   return (unsigned long)p_internal->tid;
 }
 
-bool wxThread::IsMain() const
+bool wxThread::IsMain()
 {
   return (GetCurrentThread() == p_mainid);
 }
