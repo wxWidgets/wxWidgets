@@ -18,20 +18,22 @@
 
 #include "wx/dialog.h"
 #include "wx/listctrl.h"
+#include "wx/datetime.h"
 
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
-class wxCheckBox;
-class wxChoice;
-class wxFileData;
-class wxFileCtrl;
-class wxGenericFileDialog;
-class wxListEvent;
-class wxListItem;
-class wxStaticText;
-class wxTextCtrl;
+class WXDLLEXPORT wxBitmapButton;
+class WXDLLEXPORT wxCheckBox;
+class WXDLLEXPORT wxChoice;
+class WXDLLEXPORT wxFileData;
+class WXDLLEXPORT wxFileCtrl;
+class WXDLLEXPORT wxGenericFileDialog;
+class WXDLLEXPORT wxListEvent;
+class WXDLLEXPORT wxListItem;
+class WXDLLEXPORT wxStaticText;
+class WXDLLEXPORT wxTextCtrl;
 
 #if defined(__WXUNIVERSAL__)||defined(__WXGTK__)||defined(__WXX11__)||defined(__WXMGL__)||defined(__WXCOCOA__)
     #define USE_GENERIC_FILEDIALOG
@@ -104,7 +106,9 @@ public:
     void OnTextChange( wxCommandEvent &event );
     void OnCheck( wxCommandEvent &event );
 
-    void HandleAction( const wxString &fn );
+    virtual void HandleAction( const wxString &fn );
+
+    virtual void UpdateControls();
 
 protected:
     // use the filter with the given index
@@ -123,6 +127,8 @@ protected:
     wxFileCtrl    *m_list;
     wxCheckBox    *m_check;
     wxStaticText  *m_static;
+    wxBitmapButton *m_upDirButton;
+    wxBitmapButton *m_newDirButton;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGenericFileDialog)
@@ -201,58 +207,65 @@ class WXDLLEXPORT wxFileData
 public:
     enum fileType
     {
-        is_file  = 0,
+        is_file  = 0x0000,
         is_dir   = 0x0001,
         is_link  = 0x0002,
         is_exe   = 0x0004,
         is_drive = 0x0008
     };
 
-    wxFileData( const wxString &name, const wxString &fname, fileType type );
-    wxString GetName() const;
-    wxString GetFullName() const;
-    wxString GetHint() const;
+    wxFileData( const wxString &filePath, const wxString &fileName,
+                fileType type, int image_id );
+
+    // get the name of the file, dir, drive
+    wxString GetFileName() const { return m_fileName; }
+    // get the full path + name of the file, dir, path
+    wxString GetFilePath() const { return m_filePath; }
+    long GetSize() const { return m_size; }
+    // Get the type of file, either file extension or <DIR>, <LINK>, <DRIVE>
+    wxString GetType() const;
+    // get the last modification time
+    wxDateTime GetTime() const { return m_dateTime; }
+    wxString GetModificationTime() const;
+    // in UNIX get rwx for file, in MSW get attributes ARHS
+    wxString GetPermissions() const { return m_permissions; }
+    int GetImageId() const { return m_image; }
+
+    bool IsDir() const   { return (m_type & is_dir  ) != 0; }
+    bool IsLink() const  { return (m_type & is_link ) != 0; }
+    bool IsExe() const   { return (m_type & is_exe  ) != 0; }
+    bool IsDrive() const { return (m_type & is_drive) != 0; }
+
+    int GetFileType() const { return m_type; }
 
     // the wxFileCtrl fields in report view
     enum fileListFieldType
     {
         FileList_Name,
+        FileList_Size,
         FileList_Type,
-        FileList_Date,
         FileList_Time,
-#ifdef __UNIX__
+#if defined(__UNIX__) || defined(__WIN32__)
         FileList_Perm,
-#endif // __UNIX__
+#endif // defined(__UNIX__) || defined(__WIN32__)
         FileList_Max
     };
 
     wxString GetEntry( fileListFieldType num ) const;
 
-    bool IsDir() const;
-    bool IsLink() const;
-    bool IsExe() const;
-    bool IsDrive() const;
-    long GetSize() const { return m_size; }
-    int GetHour() const { return m_hour; }
-    int GetMinute() const { return m_minute; }
-    int GetYear() const { return m_year; }
-    int GetMonth() const { return m_month; }
-    int GetDay() const { return m_day; }
-
+    // Get a string representation of the file info
+    wxString GetHint() const;
     void MakeItem( wxListItem &item );
-    void SetNewName( const wxString &name, const wxString &fname );
+    void SetNewName( const wxString &filePath, const wxString &fileName );
 
 private:
-    wxString m_name;
     wxString m_fileName;
+    wxString   m_filePath;
     long     m_size;
-    int      m_hour;
-    int      m_minute;
-    int      m_year;
-    int      m_month;
-    int      m_day;
+    wxDateTime m_dateTime;
     wxString m_permissions;
     int      m_type;
+    int        m_image;
 };
 
 //-----------------------------------------------------------------------------
@@ -274,39 +287,31 @@ public:
                 const wxString &name = wxT("filelist") );
     virtual ~wxFileCtrl();
 
-    void ChangeToListMode();
-    void ChangeToReportMode();
-    void ChangeToIconMode();
-    void ShowHidden( bool show = TRUE );
+    virtual void ChangeToListMode();
+    virtual void ChangeToReportMode();
+    virtual void ChangeToSmallIconMode();
+    virtual void ShowHidden( bool show = TRUE );
     bool GetShowHidden() const { return m_showHidden; }
 
-    long Add( wxFileData *fd, wxListItem &item );
-    void UpdateFiles();
-    virtual void StatusbarText( wxChar *WXUNUSED(text) ) {};
-    void MakeDir();
-    void GoToParentDir();
-    void GoToHomeDir();
-    void GoToDir( const wxString &dir );
-    void SetWild( const wxString &wild );
+    virtual long Add( wxFileData *fd, wxListItem &item );
+    virtual void UpdateFiles();
+    virtual void MakeDir();
+    virtual void GoToParentDir();
+    virtual void GoToHomeDir();
+    virtual void GoToDir( const wxString &dir );
+    virtual void SetWild( const wxString &wild );
     wxString GetWild() const { return m_wild; }
-    void GetDir( wxString &dir );
     wxString GetDir() const { return m_dirName; }
 
     void OnListDeleteItem( wxListEvent &event );
     void OnListEndLabelEdit( wxListEvent &event );
     void OnListColClick( wxListEvent &event );
 
-    // Associate commonly used UI controls with wxFileCtrl so that they can be
-    // disabled when they cannot be used (e.g. can't go to parent directory
-    // if wxFileCtrl already is in the root dir):
-    void SetGoToParentControl(wxWindow *ctrl) { m_goToParentControl = ctrl; }
-    void SetNewDirControl(wxWindow *ctrl) { m_newDirControl = ctrl; }
-
-    void SortItems(wxFileData::fileListFieldType field, bool foward);
-    bool GetSortDirection() const { return m_sort_foward > 0; }
+    virtual void SortItems(wxFileData::fileListFieldType field, bool foward);
+    bool GetSortDirection() const { return m_sort_foward; }
     wxFileData::fileListFieldType GetSortField() const { return m_sort_field; }
 
-private:
+protected:
     void FreeItemData(const wxListItem& item);
     void FreeAllItemsData();
 
@@ -314,12 +319,10 @@ private:
     bool          m_showHidden;
     wxString      m_wild;
 
-    wxWindow     *m_goToParentControl;
-    wxWindow     *m_newDirControl;
-
-    int m_sort_foward;
+    bool m_sort_foward;
     wxFileData::fileListFieldType m_sort_field;
 
+private:
     DECLARE_DYNAMIC_CLASS(wxFileCtrl);
     DECLARE_EVENT_TABLE()
 };
