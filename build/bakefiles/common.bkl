@@ -204,7 +204,7 @@
         <if cond="FORMAT!='autoconf' and DEBUG_FLAG=='1'">__WXDEBUG__</if>
     </set>
     <set var="UNICODE_DEFINE">
-        <if cond="FORMAT!='autoconf' and UNICODE=='1'">wxUSE_UNICODE=1</if>
+        <if cond="FORMAT!='autoconf' and UNICODE=='1'">_UNICODE</if>
     </set>
     
     <set var="UNICOWS_LIB">
