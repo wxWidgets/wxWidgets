@@ -47,6 +47,7 @@
 #include "wx/textfile.h"
 #include "wx/spinctrl.h"
 #include "wx/tokenzr.h"
+#include "wx/renderer.h"
 
 #include "wx/grid.h"
 #include "wx/generic/gridsel.h"
@@ -3646,6 +3647,15 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     int client_width = 0;
     GetClientSize( &client_width, &client_height );
 
+#if __WXGTK__
+    wxRect rect;
+    rect.SetX( 1 );
+    rect.SetY( 1 );
+    rect.SetWidth( client_width - 2 );
+    rect.SetHeight( client_height - 2 );
+    
+    wxRendererNative::Get().DrawHeaderButton( this, dc, rect, 0 );
+#else
     dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW),1, wxSOLID) );
     dc.DrawLine( client_width-1, client_height-1, client_width-1, 0 );
     dc.DrawLine( client_width-1, client_height-1, 0, client_height-1 );
@@ -3655,6 +3665,7 @@ void wxGridCornerLabelWindow::OnPaint( wxPaintEvent& WXUNUSED(event) )
     dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( 1, 1, client_width-1, 1 );
     dc.DrawLine( 1, 1, 1, client_height-1 );
+#endif
 }
 
 
@@ -7203,6 +7214,19 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     if ( GetRowHeight(row) <= 0 )
         return;
 
+    wxRect rect;
+#ifdef __WXGTK__
+    rect.SetX( 1 );
+    rect.SetY( GetRowTop(row) + 1 );
+    rect.SetWidth( m_rowLabelWidth - 2 );
+    rect.SetHeight( GetRowHeight(row) - 2 );
+    
+    CalcScrolledPosition( 0, rect.y, NULL, &rect.y );
+    
+    wxWindowDC *win_dc = (wxWindowDC*) &dc;
+
+    wxRendererNative::Get().DrawHeaderButton( win_dc->m_owner, dc, rect, 0 );
+#else
     int rowTop = GetRowTop(row),
         rowBottom = GetRowBottom(row) - 1;
 
@@ -7217,7 +7241,7 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( 1, rowTop, 1, rowBottom );
     dc.DrawLine( 1, rowTop, m_rowLabelWidth-1, rowTop );
-
+#endif
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
@@ -7225,7 +7249,6 @@ void wxGrid::DrawRowLabel( wxDC& dc, int row )
     int hAlign, vAlign;
     GetRowLabelAlignment( &hAlign, &vAlign );
 
-    wxRect rect;
     rect.SetX( 2 );
     rect.SetY( GetRowTop(row) + 2 );
     rect.SetWidth( m_rowLabelWidth - 4 );
@@ -7253,8 +7276,20 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     if ( GetColWidth(col) <= 0 )
         return;
 
-    int colLeft = GetColLeft(col),
-        colRight = GetColRight(col) - 1;
+    int colLeft = GetColLeft(col);
+    
+    wxRect rect;
+#ifdef __WXGTK__
+    rect.SetX( colLeft + 1 );
+    rect.SetY( 1 );
+    rect.SetWidth( GetColWidth(col) - 2 );
+    rect.SetHeight( m_colLabelHeight - 2 );
+    
+    wxWindowDC *win_dc = (wxWindowDC*) &dc;
+
+    wxRendererNative::Get().DrawHeaderButton( win_dc->m_owner, dc, rect, 0 );
+#else
+    int colRight = GetColRight(col) - 1;
 
     dc.SetPen( wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_3DDKSHADOW),1, wxSOLID) );
     dc.DrawLine( colRight, 0,
@@ -7268,7 +7303,7 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     dc.SetPen( *wxWHITE_PEN );
     dc.DrawLine( colLeft, 1, colLeft, m_colLabelHeight-1 );
     dc.DrawLine( colLeft, 1, colRight, 1 );
-
+#endif
     dc.SetBackgroundMode( wxTRANSPARENT );
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
@@ -7277,7 +7312,6 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     GetColLabelAlignment( &hAlign, &vAlign );
     orient = GetColLabelTextOrientation();
 
-    wxRect rect;
     rect.SetX( colLeft + 2 );
     rect.SetY( 2 );
     rect.SetWidth( GetColWidth(col) - 4 );
