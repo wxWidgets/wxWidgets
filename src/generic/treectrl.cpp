@@ -81,6 +81,7 @@ public:
   wxGenericTreeItem *GetParent() const { return m_parent; }
 
   // operations
+  void DeleteChildren();
   void Reset();
 
   // get count of all children (and grand children if 'recursively')
@@ -182,9 +183,16 @@ wxGenericTreeItem::~wxGenericTreeItem()
 {
   delete m_data;
 
+  DeleteChildren();
+}
+
+void wxGenericTreeItem::DeleteChildren()
+{
   size_t count = m_children.Count();
   for ( size_t n = 0; n < count; n++ )
     delete m_children[n];
+
+  m_children.Empty();
 }
 
 void wxGenericTreeItem::SetText( const wxString &text, wxDC& dc )
@@ -207,7 +215,7 @@ void wxGenericTreeItem::Reset()
 
   m_level = 0;
 
-  m_children.Empty();
+  DeleteChildren();
   m_isCollapsed = TRUE;
 
   m_parent = (wxGenericTreeItem *)NULL;
@@ -690,10 +698,24 @@ wxTreeItemId wxTreeCtrl::AppendItem(const wxTreeItemId& parentId,
                       image, selImage, data);
 }
 
+void wxTreeCtrl::DeleteChildren(const wxTreeItemId& itemId)
+{
+    wxGenericTreeItem *item = itemId.m_pItem;
+    item->DeleteChildren();
+
+    m_dirty = TRUE;
+}
+
 void wxTreeCtrl::Delete(const wxTreeItemId& itemId)
 {
   wxGenericTreeItem *item = itemId.m_pItem;
   wxGenericTreeItem *parent = item->GetParent();
+
+  // notify the parent...
+  wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, GetId() );
+  event.m_item = item;
+  event.SetEventObject( this );
+  ProcessEvent( event );
 
   if ( parent )
   {
@@ -779,7 +801,7 @@ void wxTreeCtrl::Collapse(const wxTreeItemId& itemId)
 void wxTreeCtrl::CollapseAndReset(const wxTreeItemId& item)
 {
   Collapse(item);
-  Delete(item);
+  DeleteChildren(item);
 }
 
 void wxTreeCtrl::Toggle(const wxTreeItemId& itemId)
@@ -1061,22 +1083,26 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     }
   }
 
-  if ( !item->IsExpanded() )
-    return;
-
-  int semiOldY = y;
-
-  wxArrayTreeItems& children = item->GetChildren();
-  size_t count = children.Count();
-  for ( size_t n = 0; n < count; n++ )
+  if ( item->IsExpanded() )
   {
-    y += m_lineHeight;
-    semiOldY = y;
+      int semiOldY = y;
 
-    PaintLevel( children[n], dc, level+1, y );
+      wxArrayTreeItems& children = item->GetChildren();
+      size_t count = children.Count();
+      for ( size_t n = 0; n < count; n++ )
+      {
+        y += m_lineHeight;
+        semiOldY = y;
+
+        PaintLevel( children[n], dc, level+1, y );
+      }
+
+      // it may happen that the item is expanded but has no items (when you
+      // delete all its children for example) - don't draw the vertical line
+      // in this case
+      if ( count > 0 )
+          dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
   }
-
-  dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
 }
 
 // -----------------------------------------------------------------------------

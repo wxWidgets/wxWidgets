@@ -86,6 +86,7 @@ public:
   void OnAbout(wxCommandEvent& event);
   void OnDump(wxCommandEvent& event);
   void OnDelete(wxCommandEvent& event);
+  void OnDeleteChildren(wxCommandEvent& event);
   void OnDeleteAll(wxCommandEvent& event);
   void OnRecreate(wxCommandEvent& event);
 
@@ -109,6 +110,7 @@ enum
   TreeTest_Bold,
   TreeTest_UnBold,
   TreeTest_Delete,
+  TreeTest_DeleteChildren,
   TreeTest_DeleteAll,
   TreeTest_Recreate,
   TreeTest_Ctrl = 100

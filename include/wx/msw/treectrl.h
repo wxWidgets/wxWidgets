@@ -338,7 +338,11 @@ public:
 
         // delete this item and associated data if any
     void Delete(const wxTreeItemId& item);
+        // delete all children (but don't delete the item itself)
+        // NB: this won't send wxEVT_COMMAND_TREE_ITEM_DELETED events
+    void DeleteChildren(const wxTreeItemId& item);
         // delete all items from the tree
+        // NB: this won't send wxEVT_COMMAND_TREE_ITEM_DELETED events
     void DeleteAllItems();
 
         // expand this item

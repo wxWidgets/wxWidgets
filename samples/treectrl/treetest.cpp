@@ -46,6 +46,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
   EVT_MENU(TreeTest_Bold, MyFrame::OnSetBold)
   EVT_MENU(TreeTest_UnBold, MyFrame::OnClearBold)
   EVT_MENU(TreeTest_Delete, MyFrame::OnDelete)
+  EVT_MENU(TreeTest_DeleteChildren, MyFrame::OnDeleteChildren)
   EVT_MENU(TreeTest_DeleteAll, MyFrame::OnDeleteAll)
   EVT_MENU(TreeTest_Recreate, MyFrame::OnRecreate)
 END_EVENT_TABLE()
@@ -100,9 +101,11 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
   wxMenu *file_menu = new wxMenu;
 
   file_menu->Append(TreeTest_Dump, "D&ump tree items");
-  file_menu->Append(TreeTest_Delete, "&Delete this item");
-  file_menu->Append(TreeTest_DeleteAll, "Delete &all items");
   file_menu->Append(TreeTest_Recreate, "&Recreate the tree");
+  file_menu->AppendSeparator();
+  file_menu->Append(TreeTest_Delete, "&Delete this item");
+  file_menu->Append(TreeTest_DeleteChildren, "Delete &children");
+  file_menu->Append(TreeTest_DeleteAll, "Delete &all items");
   file_menu->AppendSeparator();
   file_menu->Append(TreeTest_Bold, "Make item &bold");
   file_menu->Append(TreeTest_UnBold, "Make item &not bold");
@@ -188,6 +191,12 @@ void MyFrame::OnDelete(wxCommandEvent& WXUNUSED(event))
 {
   wxTreeItemId item = m_treeCtrl->GetSelection();
   m_treeCtrl->Delete(item);
+}
+
+void MyFrame::OnDeleteChildren(wxCommandEvent& WXUNUSED(event))
+{
+  wxTreeItemId item = m_treeCtrl->GetSelection();
+  m_treeCtrl->DeleteChildren(item);
 }
 
 void MyFrame::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
