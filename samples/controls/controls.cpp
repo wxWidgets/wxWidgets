@@ -706,7 +706,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_spintext = new wxTextCtrl( panel, -1, s, wxPoint(20,160), wxSize(80,-1) );
 #if wxUSE_SPINBTN
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, -1) );
-    m_spinbutton->SetRange(-10,30);
+    m_spinbutton->SetRange(-40,30);
     m_spinbutton->SetValue(initialSpinValue);
 
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "&Show progress dialog",
@@ -1233,7 +1233,7 @@ void MyPanel::OnSpinUp( wxSpinEvent &event )
     value.Printf( _T("Spin control up: current = %d\n"),
                  m_spinbutton->GetValue());
 
-    if ( m_spinbutton->GetValue() > 17 )
+    if ( event.GetPosition() > 17 )
     {
         value += _T("Preventing the spin button from going above 17.\n");
 
@@ -1249,7 +1249,7 @@ void MyPanel::OnSpinDown( wxSpinEvent &event )
     value.Printf( _T("Spin control down: current = %d\n"),
                  m_spinbutton->GetValue());
 
-    if ( m_spinbutton->GetValue() < -17 )
+    if ( event.GetPosition() < -17 )
     {
         value += _T("Preventing the spin button from going below -17.\n");
 
