@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        imagxpm.cpp
 // Purpose:     wxXPMHandler
-// Author:      Vaclav Slavik
+// Author:      Vaclav Slavik, Robert Roebling
 // RCS-ID:      $Id$
 // Copyright:   (c) 2001 Vaclav Slavik
 // Licence:     wxWindows licence
@@ -84,7 +84,7 @@ license is as follows:
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/utils.h"
-
+#include "wx/xpmdecod.h"
 
 IMPLEMENT_DYNAMIC_CLASS(wxXPMHandler,wxImageHandler)
 
@@ -94,13 +94,17 @@ IMPLEMENT_DYNAMIC_CLASS(wxXPMHandler,wxImageHandler)
 
 #if wxUSE_STREAMS
 
-bool wxXPMHandler::LoadFile(wxImage *WXUNUSED(image), 
-                            wxInputStream& WXUNUSED(stream), 
+bool wxXPMHandler::LoadFile(wxImage *image, 
+                            wxInputStream& stream,
                             bool verbose, int WXUNUSED(index))
 {
-    if (verbose)
-        wxLogDebug(_("XPM: the handler is write-only!"));
-    return FALSE;
+    wxXPMDecoder decoder;
+
+    wxImage img = decoder.ReadFile(stream);
+    if ( !img.Ok() )
+        return FALSE;
+    *image = img;
+    return TRUE;
 }
 
 bool wxXPMHandler::SaveFile(wxImage * image,
@@ -208,12 +212,8 @@ bool wxXPMHandler::SaveFile(wxImage * image,
 
 bool wxXPMHandler::DoCanRead(wxInputStream& stream)
 {
-    unsigned char buf[9];
-
-    stream.Read(buf, 9);
-    stream.SeekI(-9, wxFromCurrent);
-
-    return (memcmp(buf, "/* XPM */", 9) == 0);
+    wxXPMDecoder decoder;
+    return decoder.CanRead(stream);
 }
 
 #endif  // wxUSE_STREAMS
