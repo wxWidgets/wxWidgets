@@ -2348,13 +2348,15 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
 
         case WM_PAINT:
             {
-                wxPaintDCEx *pdc = 0;
-                if (wParam) {
-                    pdc = new wxPaintDCEx(this, (WXHDC) wParam);
+                if ( wParam )
+                {
+                    // cast to wxWindow is needed for wxUniv
+                    wxPaintDCEx dc((wxWindow *)this, (WXHDC)wParam);
+                    processed = HandlePaint();
                 }
-                processed = HandlePaint();
-                if (pdc) {
-                    delete pdc;
+                else
+                {
+                    processed = HandlePaint();
                 }
                 break;
             }
@@ -3550,19 +3552,25 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 
 #endif // USE_OWNER_DRAWN
 
-#if wxUSE_CONTROLS
+#if wxUSE_CONTROLS && !defined(__WXUNIVERSAL__) 
 
+    wxControl *item = wxDynamicCast
+                      (
+                        FindItem(id),
 #if wxUSE_OWNER_DRAWN
-    wxWindow *item = FindItem(id);
-    if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
-        return ((wxControl *)item)->MSWOnDraw(itemStruct);
-#elif !defined(__WXUNIVERSAL__)
-    // we may still have owner-drawn buttons internally because we have to make
-    // them owner-drawn to support colour change
-    wxWindow *item = FindItem(id);
-    if ( item && item->IsKindOf(CLASSINFO(wxButton)) )
-        return ((wxButton *)item)->MSWOnDraw(itemStruct);
+                        wxControl
+#else // !wxUSE_OWNER_DRAWN
+                        // we may still have owner-drawn buttons internally
+                        // because we have to make them owner-drawn to support
+                        // colour change
+                        wxButton
 #endif // USE_OWNER_DRAWN
+                       );
+
+    if ( item )
+    {
+        return item->MSWOnDraw(itemStruct);
+    }
 
 #endif // wxUSE_CONTROLS
 
@@ -3571,7 +3579,7 @@ bool wxWindowMSW::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 
 bool wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
-#if wxUSE_OWNER_DRAWN
+#if wxUSE_OWNER_DRAWN && !defined(__WXUNIVERSAL__)
     // is it a menu item?
     MEASUREITEMSTRUCT *pMeasureStruct = (MEASUREITEMSTRUCT *)itemStruct;
     if ( id == 0 && pMeasureStruct->CtlType == ODT_MENU )
@@ -3584,12 +3592,13 @@ bool wxWindowMSW::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
                                         &pMeasureStruct->itemHeight);
     }
 
-    wxWindow *item = FindItem(id);
-    if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
+    wxControl *item = wxDynamicCast(FindItem(id), wxControl);
+    if ( item )
     {
-        return ((wxControl *)item)->MSWOnMeasure(itemStruct);
+        return item->MSWOnMeasure(itemStruct);
     }
-#endif  // owner-drawn menus
+#endif // wxUSE_OWNER_DRAWN
+
     return FALSE;
 }
 

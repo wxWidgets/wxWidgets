@@ -180,7 +180,7 @@ void wxFileData::ReadData()
 
 #if defined(__DOS__) || defined(__WINDOWS__)
     // c:\.. is a drive don't stat it
-    if ((fileName == wxT("..")) && (filePath.length() <= 5))
+    if ((m_fileName == wxT("..")) && (m_filePath.length() <= 5))
     {
         m_type = is_drive;
         m_size = 0;
@@ -225,7 +225,7 @@ void wxFileData::ReadData()
                          buff.st_mode & wxS_IWOTH ? _T('w') : _T('-'),
                          buff.st_mode & wxS_IXOTH ? _T('x') : _T('-'));
 #elif defined(__WIN32__)
-    DWORD attribs = GetFileAttributes(filePath);
+    DWORD attribs = GetFileAttributes(m_filePath);
     if (attribs != (DWORD)-1)
     {
         m_permissions.Printf(_T("%c%c%c%c"),
