@@ -606,7 +606,6 @@ choicdlg.h	WXH
 choice.h	WXH
 clipbrd.h	WXH
 cmdline.h	WXH	Base
-cmdproc.cpp	WXH
 cmndata.h	WXH
 colordlg.h	WXH
 colour.h	WXH
@@ -673,14 +672,12 @@ xpmdecod.h	WXH
 dbkeyg.h	WXH
 glcanvas.h	WXH
 grid.h	WXH
-gridctrl.h	WXH
 gsocket.h	WXH	Base
 hash.h	WXH	Base
 help.h	WXH
 helpbase.h	WXH
 cshelp.h	WXH
 helphtml.h	WXH
-helpchm.h	WXH
 helpwin.h	WXH
 icon.h	WXH
 image.h	WXH
