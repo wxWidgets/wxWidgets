@@ -76,7 +76,7 @@ void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dial
 
     gchar *fontname = gtk_font_selection_dialog_get_font_name(fontdlg);
 
-    dialog->m_fontData.SetChosenFont(wxFont(fontname));
+    dialog->SetChosenFont(fontname);
 
     g_free( fontname );
 
@@ -105,10 +105,9 @@ void gtk_fontdialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFontDialog *dialo
 // wxFontDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFontDialog,wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
-wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
-            : m_fontData(*fontdata)
+bool wxFontDialog::DoCreate(wxWindow *parent)
 {
     m_needParent = FALSE;
 
@@ -116,10 +115,10 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,
                      wxDefaultValidator, wxT("fontdialog") ))
     {
-        wxFAIL_MSG( wxT("wxXX creation failed") );
-        return;
+        wxFAIL_MSG( wxT("wxFontDialog creation failed") );
+        return FALSE;
     }
-    
+
     wxString m_message( _("Choose font") );
     m_widget = gtk_font_selection_dialog_new( m_message.mbc_str() );
 
@@ -166,10 +165,17 @@ wxFontDialog::wxFontDialog( wxWindow *parent, wxFontData *fontdata )
             wxFAIL_MSG(_T("font is ok but no native font info?"));
         }
     }
+
+    return TRUE;
 }
 
 wxFontDialog::~wxFontDialog()
 {
+}
+
+void wxFontDialog::SetChosenFont(const char *fontname)
+{
+    m_fontData.SetChosenFont(wxFont(fontname));
 }
 
 #endif // wxUSE_FONTDLG

@@ -167,10 +167,29 @@ This class represents the font chooser dialog.
 
 \membersection{wxFontDialog::wxFontDialog}
 
-\func{}{wxFontDialog}{\param{wxWindow* }{parent}, \param{wxFontData* }{data = NULL}}
+\func{}{wxFontDialog}{\void}
 
-Constructor. Pass a parent window, and optionally a pointer to a block of font
-data, which will be copied to the font dialog's font data.
+\func{}{wxFontDialog}{\param{wxWindow* }{parent}}
+
+\func{}{wxFontDialog}{\param{wxWindow* }{parent}, \param{const wxFontData\& }{data}}
+
+Constructor. Pass a parent window, and optionally the 
+\helpref{font data}{wxfontdata} object to be used to initialize the dialog
+controls. If the default constructor is used, 
+\helpref{Create()}{wxfontdialogcreate} must be called before the dialog can be
+shown.
+
+\membersection{wxFontDialog::Create}\label{wxfontdialogcreate}
+
+\func{bool}{Create}{\void}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{const wxFontData\& }{data}}
+
+Creates the dialog if it the wxFontDialog object had been initialized using the
+default constructor. Returns {\tt TRUE} on success and {\tt FALSE} if an error
+occured.
 
 \membersection{wxFontDialog::\destruct{wxFontDialog}}
 
@@ -180,6 +199,8 @@ Destructor.
 
 \membersection{wxFontDialog::GetFontData}
 
+\constfunc{const wxFontData\&}{GetFontData}{\void}
+
 \func{wxFontData\&}{GetFontData}{\void}
 
 Returns the \helpref{font data}{wxfontdata} associated with the font dialog.
@@ -188,10 +209,10 @@ Returns the \helpref{font data}{wxfontdata} associated with the font dialog.
 
 \func{int}{ShowModal}{\void}
 
-Shows the dialog, returning wxID\_OK if the user pressed Ok, and wxID\_CANCEL
-otherwise.
+Shows the dialog, returning {\tt wxID\_OK} if the user pressed Ok, and 
+{\tt wxID\_CANCEL} otherwise.
 
-If the user cancels the dialog (ShowModal returns wxID\_CANCEL), no font will be
-created. If the user presses OK (ShowModal returns wxID\_OK), a new wxFont will
-be created and stored in the font dialog's wxFontData structure.
+If the user cancels the dialog (ShowModal returns {\tt wxID\_CANCEL}), no font
+will be created. If the user presses OK, a new wxFont will be created and
+stored in the font dialog's wxFontData structure.
 

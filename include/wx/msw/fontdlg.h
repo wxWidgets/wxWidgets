@@ -16,28 +16,25 @@
     #pragma interface "fontdlg.h"
 #endif
 
-#include "wx/dialog.h"
-#include "wx/cmndata.h"
-
 // ----------------------------------------------------------------------------
 // wxFontDialog
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontDialog : public wxDialog
+class WXDLLEXPORT wxFontDialog : public wxFontDialogBase
 {
 public:
-    wxFontDialog();
-    wxFontDialog(wxWindow *parent, wxFontData *data = NULL);
-
-    bool Create(wxWindow *parent, wxFontData *data = NULL);
+    wxFontDialog() : wxFontDialogBase() { }
+    wxFontDialog(wxWindow *parent) : wxFontDialogBase(parent) { }
+    wxFontDialog(wxWindow *parent, const wxFontData& data)
+        : wxFontDialogBase(parent, data) { }
 
     virtual int ShowModal();
 
-    wxFontData& GetFontData() { return m_fontData; }
+    // deprecated
+    wxFontDialog(wxWindow *parent, wxFontData *data)
+        : wxFontDialogBase(parent, data) { }
 
 protected:
-    wxFontData m_fontData;
-
     DECLARE_DYNAMIC_CLASS(wxFontDialog)
 };
 

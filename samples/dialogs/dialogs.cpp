@@ -239,19 +239,25 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
 {
-      wxFontData data;
-      data.SetInitialFont(wxGetApp().m_canvasFont);
-      data.SetColour(wxGetApp().m_canvasTextColour);
+    wxFontData data;
+    data.SetInitialFont(wxGetApp().m_canvasFont);
+    data.SetColour(wxGetApp().m_canvasTextColour);
 
-      wxFontDialog *dialog = new wxFontDialog(this, &data);
-      if (dialog->ShowModal() == wxID_OK)
-      {
-        wxFontData retData = dialog->GetFontData();
+    // you might also do this:
+    //
+    //  wxFontDialog dialog;
+    //  if ( !dialog.Create(this, data) { ... error ... }
+    //
+    wxFontDialog dialog(this, data);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxFontData retData = dialog.GetFontData();
         wxGetApp().m_canvasFont = retData.GetChosenFont();
         wxGetApp().m_canvasTextColour = retData.GetColour();
         myCanvas->Refresh();
-      }
-      dialog->Destroy();
+    }
+    //else: cancelled by the user, don't change the font
 }
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW

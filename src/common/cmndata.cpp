@@ -39,6 +39,10 @@
 #include "wx/cmndata.h"
 #include "wx/log.h"
 
+#if wxUSE_FONTDLG
+    #include "wx/fontdlg.h"
+#endif // wxUSE_FONTDLG
+
 // For compatibility
 #if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXX11__)|| defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
     #define wxCOMPATIBILITY_WITH_PRINTSETUPDATA 1
@@ -178,6 +182,14 @@ wxFontData::~wxFontData()
 {
 }
 
+#if wxUSE_FONTDLG
+
+wxFontDialogBase::~wxFontDialogBase()
+{
+}
+
+#endif // wxUSE_FONTDLG
+
 #if wxUSE_PRINTING_ARCHITECTURE
 // ----------------------------------------------------------------------------
 // Print data
@@ -192,16 +204,16 @@ wxPrintData::wxPrintData()
 #if TARGET_CARBON
     m_macPageFormat = kPMNoPageFormat;
     m_macPrintSettings = kPMNoPrintSettings;
-    
+
   #if PM_USE_SESSION_APIS
     PMPrintSession macPrintSession = kPMNoReference;
     OSStatus       err;
-    
+
     err = ::UMAPrOpen(&macPrintSession) ;
     if ( err == noErr )
-    {  
+    {
         err = PMCreatePageFormat((PMPageFormat *)&m_macPageFormat);
-        
+
         //  Note that PMPageFormat is not session-specific, but calling
         //  PMSessionDefaultPageFormat assigns values specific to the printer
         //  associated with the current printing session.
@@ -210,9 +222,9 @@ wxPrintData::wxPrintData()
             err = PMSessionDefaultPageFormat((PMPrintSession)macPrintSession,
                                              (PMPageFormat)m_macPageFormat);
         }
-        
+
         err = PMCreatePrintSettings((PMPrintSettings *)&m_macPrintSettings);
-        
+
         //  Note that PMPrintSettings is not session-specific, but calling
         //  PMSessionDefaultPrintSettings assigns values specific to the printer
         //  associated with the current printing session.
@@ -311,7 +323,7 @@ wxPrintData::~wxPrintData()
   #endif
         m_macPrintSettings = kPMNoPrintSettings;
     }
-    
+
 #else
     wxASSERT( m_macPrintSettings );
     // we should perhaps delete
@@ -861,7 +873,7 @@ bool wxPrintData::Ok() const
     return (m_devMode != NULL) ;
 #else
     return TRUE;
-#endif    
+#endif
 }
 
 // ----------------------------------------------------------------------------

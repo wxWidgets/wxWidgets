@@ -64,27 +64,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 // wxFontDialog
 // ----------------------------------------------------------------------------
 
-wxFontDialog::wxFontDialog()
-{
-    m_parent = NULL;
-}
-
-wxFontDialog::wxFontDialog(wxWindow *parent, wxFontData *data)
-{
-    Create(parent, data);
-}
-
-bool wxFontDialog::Create(wxWindow *parent, wxFontData *data)
-{
-    m_parent = parent;
-
-    wxCHECK_MSG( data, FALSE, _T("no font data in wxFontDialog") );
-
-    m_fontData = *data;
-
-    return TRUE;
-}
-
 int wxFontDialog::ShowModal()
 {
     DWORD flags = CF_SCREENFONTS | CF_NOSIMULATIONS;

@@ -15,33 +15,31 @@
 #pragma interface "fontdlg.h"
 #endif
 
-#include "wx/setup.h"
-#include "wx/gdicmn.h"
-#include "wx/font.h"
-#include "wx/dialog.h"
-#include "wx/cmndata.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxFontDialog;
-
 //-----------------------------------------------------------------------------
 // wxFontDialog
 //-----------------------------------------------------------------------------
 
-class wxFontDialog: public wxDialog
+class wxFontDialog : public wxFontDialogBase
 {
 public:
-    wxFontDialog() {}
-    wxFontDialog( wxWindow *parent, wxFontData *data = (wxFontData *) NULL );
-    ~wxFontDialog();
+    wxFontDialog() : wxFontDialogBase() { /* must be Create()d later */ }
+    wxFontDialog(wxWindow *parent)
+        : wxFontDialogBase(parent) { Create(parent); }
+    wxFontDialog(wxWindow *parent, const wxFontData& data)
+        : wxFontDialogBase(parent, data) { Create(parent, data); }
 
-    wxFontData& GetFontData() { return m_fontData; }
+    virtual ~wxFontDialog();
 
-//protected:
-    wxFontData m_fontData;
+    // implementation only
+    void SetChosenFont(const char *name);
+
+    // deprecated interface, don't use
+    wxFontDialog(wxWindow *parent, const wxFontData *data)
+        : wxFontDialogBase(parent, data) { Create(parent, data); }
+
+protected:
+    // create the GTK dialog
+    virtual bool DoCreate(wxWindow *parent);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFontDialog)
