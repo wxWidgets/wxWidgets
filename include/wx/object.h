@@ -590,7 +590,7 @@ private :
 
 #if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS
     #define new new(__TFILE__,__LINE__)
-#else if (defined(__WXDEBUG__) && defined(__VISUALC__) && !wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS)
+#elif (defined(__WXDEBUG__) && defined(__VISUALC__) && !wxUSE_GLOBAL_MEMORY_OPERATORS && wxUSE_DEBUG_NEW_ALWAYS)
     // Including this file redefines new and allows leak reports to contain line numbers
     #include "wx/msw/msvcrt.h"
 #endif
