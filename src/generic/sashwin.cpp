@@ -109,8 +109,8 @@ void wxSashWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 {
-    long x, y;
-    event.Position(&x, &y);
+    wxCoord x, y;
+    event.GetPosition(&x, &y);
 
     wxSashEdgePosition sashHit = SashHitTest(x, y);
 
