@@ -537,11 +537,11 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 #else // !Windows, !OS/2
     if ( dir.empty() )
     {
-#if defined( __WXMAC__ ) && !defined(__DARWIN__)
-	      dir = wxMacFindFolder(  (short) kOnSystemDisk, pTemporaryFolder, kCreateFolder ) ;
-#else
+#if defined(__WXMAC__) && !defined(__DARWIN__)
+        dir = wxMacFindFolder(  (short) kOnSystemDisk, pTemporaryFolder, kCreateFolder ) ;
+#else // !Mac
         dir = wxGetenv(_T("TMP"));
-        if ( path.empty() )
+        if ( dir.empty() )
         {
             dir = wxGetenv(_T("TEMP"));
         }
@@ -555,7 +555,7 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
                 dir = _T("/tmp");
             #endif
         }
-#endif
+#endif // Mac/!Mac
     }
 
     path = dir;
