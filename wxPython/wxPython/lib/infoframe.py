@@ -5,16 +5,32 @@ Released under wxWindows license etc.
 This is a fairly rudimentary, but slightly fancier tha
 wxPyOnDemandOutputWindow (on which it's based; thanks Robin), version
 of the same sort of thing: a file-like class called
-InformationalMessagesFrame.. This window also has a status bar with a
+wxInformationalMessagesFrame. This window also has a status bar with a
 couple of buttons for controlling the echoing of all output to a file
-with a randomly-chosen filename... [[A LITTLE MORE COULD BE SAID
-HERE]]
+with a randomly-chosen filename...
+
+The class behaves similarly to wxPyOnDemandOutputWindow in that (at
+least by default) the frame does not appear until written to, but is
+somewhat different in that, either under programmatic (the
+DisableOutput method) or user (the frame's close button, it's status
+bar's "Dismiss" button, or a "Disable output" item of some menu,
+perhaps of some other frame), the frame will be destroyed, an
+associated file closed, and writing to it will then do nothing.  This
+can be reversed: either under programmatic (the EnableOutput method)
+or user (an "Enable output" item of some menu), a new frame will be
+opened,And an associated file (with a "randomly"selected filename)
+opened for writing [to which all subsequent displayed messages will be
+echoed].
+
+Please note that, like wxPyOnDemandOutputWindow, the instance is not
+itself a subclass of wxWindow: when the window is open (and ONLY
+then), it's "frame" attribute is the actual instance of wFrame...
 
 Typical usage:
     from wxPython.lib.infoframe import *
     ... # ... modify your wxApp as follows:
     class myApp[wxApp):
-        outputWindowClass = wxInformationalMessagesFrame
+        outputWindowClass = wxPyInformationalMessagesFrame
         ...
 If you're running on Linux, you'll also have to supply an argument 1 to your
 constructor of myApp to redirect stdout/stderr to this window (it's done
@@ -23,7 +39,7 @@ automatically for you on Windows).
 If you don't want to redirect stdout/stderr, but use the class directly: do
 it this way:
 
-InformationalMessagesFrame = wxInformationalMessagesFrame\
+ InformationalMessagesFrame = wxPyInformationalMessagesFrame\
                                          ([options from progname (default ""),
                                            txt (default "informational
                                                          messages"])
@@ -37,39 +53,52 @@ InformationalMessagesFrame([comma-separated list of items to
 
 The latter statement, of course, may be repeated arbitrarily often.
 The window will not appear until it is written to, and it may be
-manually closed by the user, after which it will not appear again
-until written to... Also note that all output is echoed to a file with
-a randomly-generated name [see the mktemp module in the standard
+manually closed by the user, after which it will reappear again until
+written to... Also note that all output is echoed to a file with a
+randomly-generated name [see the mktemp module in the standard
 library], in the directory given as the 'dir' keyword argument to the
 InformationalMessagesFrame constructor [which has a default value of
-'.'), or set via the method SetOutputDirectory...
+'.'), or set via the method SetOutputDirectory... This file will be
+closed with the window--a new one will be created [by default] upon
+each subsequent reopening.
 
 Please also note the methods EnableOutput and DisableOutput, and the
 possible arguments for the constructor in the code below... (* TO DO:
-explain this here...*) The former, EnableOutput, displays the frame
-with an introductory message, opens a random file to which future
-displayed output also goes, and sets the __debug__ variable of each
-module whose name begins with a capital letter {this happens to be the
-author's personal practice; all my python module start with capital
-letters} to 1.  This is so that you can say
+explain this here...*) Neither of these methods need be used at all,
+and in this case the frame will only be displayed once it has been
+written to, like wxPyOnDemandOutputWindow.
+
+The former, EnableOutput, displays the frame with an introductory
+message, opens a random file to which future displayed output also
+goes (unless the nofile attribute is present), and sets the __debug__
+variable of each module to 1 (unless the no __debug__ attribute is
+present].  This is so that you can say, in any module whatsoever,
 
     if __debug__:
         InformationalMessagesFrame("... with lots of %<Character> constructs"
                                     % TUPLE)
 
-without worrying about a huge about of overhead in the case where
-debugging is not turned on.  "Debug mode" can also be turned on by
-selecting the item-"Enable debugging output" from the "Debug" menu of
-a frame which has been either passed appropriately to the constructor
-of the wxInformationalMessagesFrame (see the code), or set via the
-SetOtherMenuBar method thereof.  (I have found this to be an extremely
-useful tool, in lieu of a full wxPython debugger...)  This menu item
-is also disabled, and an item "Disable debugging output" (which calls
-the method described in the next paragraph) is enabled.  Note that
-these things need not be done: e.g., you don't need to have a "Debug"
-menu with appropriate items; in this case simply do not call the
-SetOtherMenuBar method or use the othermenubar keyword argument of the
-class Instance constructor.
+without worrying about the overhead of evaluating the arguments, and
+calling the wxInformationalMessagesFrame instance, in the case where
+debugging is not turned on.  (This won't happen if the instance has an
+attribute no__debug__; you can arrange this by sub-classing...)
+
+"Debug mode" can also be turned on by selecting the item-"Enable
+output" from the "Debug" menu [the default--see the optional arguments
+to the SetOtherMenuBar method] of a frame which has been either passed
+appropriately to the constructor of the wxInformationalMessagesFrame
+(see the code), or set via the SetOtherMenuBar method thereof.  This
+also writes an empty string to the instance, meaning that the frame
+will open (unless DisablOutput has been called) with an appropriate
+introductory message (which will vary according to whether the
+instance/class has the "no __debug__" attribute)^  I have found this to
+be an extremely useful tool, in lieu of a full wxPython debugger...
+
+Following this, the menu item is also disabled, and an item "Disable
+output" (again, by default) is enabled.  Note that these need not be
+done: e.g., you don't NEED to have a menu with appropriate items; in
+this case simply do not call the SetOtherMenuBar method or use the
+othermenubar keyword argument of the class instance constructor.
 
 The DisableOutput method does the reverse of this; it closes the
 window (and associated file), and sets the __debug__ variable of each
@@ -77,12 +106,17 @@ module whose name begins with a capital letter {this happens to be the
 author's personal practice; all my python module start with capital
 letters} to 0.  It also enables/disabled the appropriate menu items,
 if this was done previously (or SetOtherMenuBar has been called...).
+Note too that after a call to DisableOutput, nothing further will be
+done upon subsequent write()'s, until the EnableOutput method is
+called, either explicitly or by the menu selection above...
 
 Finally, note that the file-like method close() destroys the window
-(and any associated file) and there is a file-like method write()
-which displays it's argument [actually, it's very similar to
-DisableOutput).  Also, class instances are callable as noted above,
-displaying successive arguments if this is done.
+(and closes any associated file) and there is a file-like method
+write() which displays it's argument.
+
+All (well, most) of this is made clear by the example code at the end
+of this file, which is run if the file is run by itself; otherwise,
+see the appropriate "stub" file in the wxPython demo.
 
 """
 
@@ -90,7 +124,7 @@ from wxPython.wx import *
 import string, sys, types, tempfile, os
 
 class _MyStatusBar(wxStatusBar):
-    def __init__(self, parent,callbacks=None):
+    def __init__(self, parent,callbacks=None,useopenbutton=0):
         wxStatusBar.__init__(self, parent, -1, style=wxTAB_TRAVERSAL)
         self.SetFieldsCount(3)
 
@@ -99,14 +133,18 @@ class _MyStatusBar(wxStatusBar):
         ID = NewId()
         self.button1 = wxButton(self,ID,"Dismiss",
                                style=wxTAB_TRAVERSAL)
-        EVT_BUTTON(self,ID,callbacks[0])
+        EVT_BUTTON(self,ID,self.OnButton1)
 
         ID = NewId()
-        self.button2 = wxButton(self,ID,"Close File",
-                               style=wxTAB_TRAVERSAL)
+        if not useopenbutton:
+            self.button2 = wxButton(self,ID,"Close File",
+                                   style=wxTAB_TRAVERSAL)
+        else:
+            self.button2 = wxButton(self,ID,"Open New File",
+                                   style=wxTAB_TRAVERSAL)
         EVT_BUTTON(self,ID,self.OnButton2)
-        self.usealternate = 0
-        self.callbacks = [callbacks[1],callbacks[2]]
+        self.useopenbutton = useopenbutton
+        self.callbacks = callbacks
 
         # figure out how tall to make the status bar
         dc = wxClientDC(self)
@@ -139,99 +177,171 @@ class _MyStatusBar(wxStatusBar):
 
         self.SetStatusWidths([-1,w1+15,w2+15])
 
+    def OnButton1(self,event):
+        self.callbacks[0] ()
+
     def OnButton2(self,event):
-        if self.usealternate:
-            if self.callbacks[1] ():
+        if self.useopenbutton and self.callbacks[2] ():
                 self.button2.SetLabel ("Close File")
-                self.usealternate = 1 - self.usealternate
-        else:
-            if self.callbacks[0] ():
+        elif self.callbacks[1] ():
                 self.button2.SetLabel ("Open New File")
-                self.usealternate = 1 - self.usealternate
+        self.useopenbutton = 1 - self.useopenbutton
         self.OnSize("")
         self.button2.Refresh(TRUE)
         self.Refresh()
 
-class wxInformationalMessagesFrame:#wxPyOnDemandOutputWindow):
-    parent = None
+
+
+class wxPyInformationalMessagesFrame:
+    def __init__(self,
+                 progname="",
+                 text="informational messages",
+                 dir='.',
+                 menuname="Debug",
+                 enableitem="Enable output",
+                 disableitem="Disable output",
+                 othermenubar=None):
+
+        self.SetOtherMenuBar(othermenubar,
+                             menuname=menuname,
+                             enableitem=enableitem,
+                             disableitem=disableitem)
+
+        if hasattr(self,"othermenu") and self.othermenu is not None:
+            i = self.othermenu.FindMenuItem(self.menuname,self.disableitem)
+            self.othermenu.Enable(i,0)
+            i = self.othermenu.FindMenuItem(self.menuname,self.enableitem)
+            self.othermenu.Enable(i,1)
+
+        self.frame  = None
+        self.title  = "%s %s" % (progname,text)
+        self.parent = None # use the SetParent method if desired...
+        self.softspace = 1 # of rather limited use
+        if dir:
+            self.SetOutputDirectory(dir)
+
 
     def SetParent(self, parent):
         self.parent = parent
 
-    def SetOtherMenuBar(self,othermenu):
-        self.othermenu = othermenu
 
-    def __init__(self,progname="",text="informational messages",dir=',',
-                 othermenubar=None):
-        self.othermenu = othermenubar
-        self.frame  = None
-        self.title  = "%s %s" % (progname,text)
-        self.softspace = 1 # of rather limited use
-        if dir:
-            self.SetOutputDirectory(dir)
-        if __debug__:
-            self.EnableOutput()
-        #wxPyOnDemandOutputWindow.__init__(self,self.title)
-        for m in sys.modules.values():
-            if m is  not None:# and m.__dict__.has_key("__debug__"):
-                m.__dict__["__debug__"] = self.Enabled
+    def SetOtherMenuBar(self,
+                        othermenu,
+                        menuname="Debug",
+                        enableitem="Enable output",
+                        disableitem="Disable output"):
+        self.othermenu = othermenu
+        self.menuname = menuname
+        self.enableitem = enableitem
+        self.disableitem = disableitem
+
 
     f = None
 
+
     def write(self,string):
+        if not wxThread_IsMain():
+            # Aquire the GUI mutex before making GUI calls.  Mutex is released
+            # when locker is deleted at the end of this function.
+            locker = wxMutexGuiLocker()
+
         if self.Enabled:
             if self.f:
-                self.f.write (string)
-                self.f.flush ()
+                self.f.write(string)
+                self.f.flush()
+
             move = 1
-            if hasattr(self,"text")\
-               and self.text is not None\
-               and self.text.GetInsertionPoint()\
-               <> self.text.GetLastPosition():
+            if (hasattr(self,"text")
+                and self.text is not None
+                and self.text.GetInsertionPoint() != self.text.GetLastPosition()):
                 move = 0
+
             if not self.frame:
-                self.frame = wxFrame(self.parent, -1, self.title)
+                self.frame = wxFrame(self.parent, -1, self.title, size=(450, 300),
+                                     style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
                 self.text  = wxTextCtrl(self.frame, -1, "",
-                                        style = wxTE_MULTILINE|wxTE_READONLY
-                                        |wxTE_RICH)# appears to cause problem?
+                                        style = wxTE_MULTILINE|wxTE_READONLY|wxTE_RICH)
+
                 self.frame.sb = _MyStatusBar(self.frame,
-                                            callbacks=[self.DisableOutput,
+                                             callbacks=[self.DisableOutput,
                                                        self.CloseFile,
-                                                       self.OpenNewFile])
+                                                       self.OpenNewFile],
+                                             useopenbutton=hasattr(self,
+                                                                  "nofile"))
                 self.frame.SetStatusBar(self.frame.sb)
-                self.frame.SetSize(wxSize(450, 300))
                 self.frame.Show(true)
                 EVT_CLOSE(self.frame, self.OnCloseWindow)
+
+                if hasattr(self,"nofile"):
+                    self.text.AppendText(
+                        "Please close this window (or select the "
+                        "'Dismiss' button below) when desired.  By "
+                        "default all messages written to this window "
+                        "will NOT be written to a file--you "
+                        "may change this by selecting 'Open New File' "
+                        "below, allowing you to select a "
+                        "new file...\n\n")
+                else:
+                    tempfile.tempdir = self.dir
+                    filename = os.path.abspath(tempfile.mktemp ())
+                    self.text.AppendText(
+                        "Please close this window (or select the "
+                        "'Dismiss' button below) when desired.  By "
+                        "default all messages written to this window "
+                        "will also be written to the file '%s'--you "
+                        "may close this file by selecting 'Close "
+                        "File' below, whereupon this button will be "
+                        "replaced with one allowing you to select a "
+                        "new file...\n\n" % filename)
+                    try:
+                        self.f = open(filename, 'w')
+                        self.frame.sb.SetStatusText("File '%s' opened..."
+                                                    % filename,
+                                                    0)
+                    except EnvironmentError:
+                        self.frame.sb.SetStatusText("File creation failed "
+                                                    "(filename '%s')..."
+                                                    % filename,
+                                                    0)
             self.text.AppendText(string)
-##            if __debug__ and type(sys.__stderr__) == types.FileType\
-##               and sys.__stderr__.isatty():
-##                sys.__stderr__.write(
-##                    "%s.write(): self.text.GetInsertionPoint() = %s, "\
-##                    "self.text.GetLastPosition() = %s, "\
-##                    "move = %d\n" % (self,
-##                                     self.text.GetInsertionPoint(),
-##                                     self.text.GetLastPosition(),
-##                                     move))
+
             if move:
                 self.text.ShowPosition(self.text.GetLastPosition())
 
-    Enabled = __debug__
+            if  not hasattr(self,"no__debug__"):
+                for m in sys.modules.values():
+                    if m is  not None:# and m.__dict__.has_key("__debug__"):
+                        m.__dict__["__debug__"] = 1
 
-    def OnCloseWindow(self,event,exiting=0):
+            if hasattr(self,"othermenu") and self.othermenu is not None:
+                i = self.othermenu.FindMenuItem(self.menuname,self.disableitem)
+                self.othermenu.Enable(i,1)
+                i = self.othermenu.FindMenuItem(self.menuname,self.enableitem)
+                self.othermenu.Enable(i,0)
+
+
+    Enabled = 1
+
+    def OnCloseWindow(self, event, exiting=0):
         if self.f:
             self.f.close()
             self.f = None
-        if hasattr(self,"othermenu") and self.othermenu is not None\
-           and self.frame is not None\
-           and not exiting:
-            i = self.othermenu.FindMenuItem('Debug','Disable debugging output')
+
+        if (hasattr(self,"othermenu") and self.othermenu is not None
+            and self.frame is not None
+            and not exiting):
+
+            i = self.othermenu.FindMenuItem(self.menuname,self.disableitem)
             self.othermenu.Enable(i,0)
-            i = self.othermenu.FindMenuItem('Debug','Enable debugging output')
+            i = self.othermenu.FindMenuItem(self.menuname,self.enableitem)
             self.othermenu.Enable(i,1)
-        for m in sys.modules.values():
-            if m is  not None:# and m.__dict__.has_key("__debug__"):
-                m.__dict__["__debug__"] = 0
-        if self.frame is not None: # should be true, but, e.g., allows
+
+        if  not hasattr(self,"no__debug__"):
+            for m in sys.modules.values():
+                if m is  not None:# and m.__dict__.has_key("__debug__"):
+                    m.__dict__["__debug__"] = 0
+
+        if self.frame is not None: # typically true, but, e.g., allows
                                    # DisableOutput method (which calls this
                                    # one) to be called when the frame is not
                                    # actually open, so that it is always safe
@@ -239,40 +349,27 @@ class wxInformationalMessagesFrame:#wxPyOnDemandOutputWindow):
             frame = self.frame
             self.frame = self.text = None
             frame.Destroy()
-        self.Enabled = 0
-
-    def EnableOutput(self,othermenubar=None):
-        if othermenubar is not None:
-            self.othermenu = othermenubar
         self.Enabled = 1
-        for m in sys.modules.values():
-            if m is  not None:# and m.__dict__.has_key("__debug__"):
-                m.__dict__["__debug__"] = 1
-        if hasattr(self,"othermenu") and self.othermenu is not None:
-            i = self.othermenu.FindMenuItem('Debug','Disable debugging output')
-            self.othermenu.Enable(i,1)
-            i = self.othermenu.FindMenuItem('Debug','Enable debugging output')
-            self.othermenu.Enable(i,0)
-        if not self.f:
-            try:
-                filename = tempfile.mktemp ()
-                self.write("Please close this window (or select the "
-                           "'Dismiss' button below) when desired.  By "
-                           "default all messages written to this window "
-                           "will also be written to the file '%s'--you "
-                           "may close this file by selecting 'Close "
-                           "File' below, whereupon this button will be "
-                           "replaced with one allowing you to select a "
-                           "new file...\n\n" % os.path.abspath(filename))
-                self.f = open (filename,'w')
-                self.frame.sb.SetStatusText("File '%s' opened..."
-                                            % os.path.abspath(self.f.name),
-                                            0)
-            except EnvironmentError:
-                self.frame.sb.SetStatusText("File creation failed (filename "
-                                            "'%s')..."
-                                            % os.path.abspath(filename),
-                                            0)
+
+
+    def EnableOutput(self,
+                     event=None,# event must be the first optional argument...
+                     othermenubar=None,
+                     menuname="Debug",
+                     enableitem="Enable output",
+                     disableitem="Disable output"):
+
+        if othermenubar is not None:
+            self.SetOtherMenuBar(othermenubar,
+                                 menuname=menuname,
+                                 enableitem=enableitem,
+                                 disableitem=disableitem)
+        self.Enabled = 1
+        if self.f:
+            self.f.close()
+            self.f = None
+        self.write("")
+
 
     def CloseFile(self):
         if self.f:
@@ -288,6 +385,7 @@ class wxInformationalMessagesFrame:#wxPyOnDemandOutputWindow):
         if self.frame:
             self.frame.sb.Refresh()
         return 1
+
 
     def OpenNewFile(self):
         self.CloseFile()
@@ -308,37 +406,50 @@ class wxInformationalMessagesFrame:#wxPyOnDemandOutputWindow):
                 self.frame.sb.SetStatusText("File '%s' opened..."
                                             % os.path.abspath(self.f.name),
                                             0)
+                if hasattr(self,"nofile"):
+                    self.frame.sb = _MyStatusBar(self.frame,
+                                                callbacks=[self.DisableOutput,
+                                                           self.CloseFile,
+                                                           self.OpenNewFile])
+                    self.frame.SetStatusBar(self.frame.sb)
+            if hasattr(self,"nofile"):
+                delattr(self,"nofile")
             return 1
 
-    def DisableOutput(self,exiting=0):
+
+    def DisableOutput(self,
+                      event=None,# event must be the first optional argument...
+                      exiting=0):
         self.write("<InformationalMessagesFrame>.DisableOutput()\n")
-        self.CloseFile()
-        self.Enabled = 0
-        if hasattr(self,"othermenu") and self.othermenu is not None:
-            i = self.othermenu.FindMenuItem('Debug','Disable debugging output')
-            self.othermenu.Enable(i,0)
-            i = self.othermenu.FindMenuItem('Debug','Enable debugging output')
-            self.othermenu.Enable(i,1)
         if hasattr(self,"frame") \
            and self.frame is not None:
             self.OnCloseWindow("Dummy",exiting=exiting)
+        self.Enabled = 0
+
 
     def close(self):
         self.DisableOutput()
+
 
     def flush(self):
         if self.text:
             self.text.SetInsertionPointEnd()
         wxYield()
 
+
     def __call__(self,* args):
         for s in args:
             self.write (str (s))
 
-    def SetOutputDirectory(self,dir):
-        self.dir = tempfile.tempdir = dir
 
-class DummyFile:
+    def SetOutputDirectory(self,dir):
+        self.dir = os.path.abspath(dir)
+##        sys.__stderr__.write("Directory: os.path.abspath(%s) = %s\n"
+##                             % (dir,self.dir))
+
+
+
+class Dummy_wxPyInformationalMessagesFrame:
     def __init__(self,progname=""):
         self.softspace = 1
     def __call__(self,*args):
@@ -358,40 +469,3 @@ class DummyFile:
     def SetParent(self,wX):
         pass
 
-if __name__ == "__main__":
-    __debug__ = 1
-
-    ImportErrors = 0
-    try:
-        import Errors
-        importErrors = 1
-    except ImportError:
-        pass
-
-    class MyFrame(wxFrame):
-        def __init__(self):
-            wxFrame.__init__(self,None,-1,"Close me...",size=(300,10))
-            EVT_CLOSE(self,self.OnClose)
-
-        def OnClose(self,event):
-            if isinstance(sys.stdout,wxInformationalMessagesFrame):
-                sys.stdout.close()# shouldn't be necessary?
-            self.Destroy()
-
-    class MyApp(wxApp):
-        outputWindowClass = wxInformationalMessagesFrame
-        def OnInit(self):
-            if ImportErrors:
-                sys.stderr = Errors.NonWindowingErrorWindow(
-                    file=self.stdioWin)
-            print "Starting.\n",
-            frame = MyFrame()
-            frame.Show(TRUE)
-            self.SetTopWindow(frame)
-            if isinstance(sys.stdout,wxInformationalMessagesFrame):
-                sys.stdout.SetParent(frame)#  Shouldn't this mean the
-                #wxInternationalMessagesFrame is Destroy()'d when MFrame is?
-            return true
-
-    app = MyApp()
-    app.MainLoop()

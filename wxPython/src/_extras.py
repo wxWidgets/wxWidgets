@@ -727,11 +727,12 @@ class wxPyOnDemandOutputWindow:
     def write(self, str):
         if not wxThread_IsMain():
             # Aquire the GUI mutex before making GUI calls.  Mutex is released
-            # when locker is deleted a the end of this function.
+            # when locker is deleted at the end of this function.
             locker = wxMutexGuiLocker()
 
         if not self.frame:
-            self.frame = wxFrame(self.parent, -1, self.title)
+            self.frame = wxFrame(self.parent, -1, self.title,
+                                 style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
             self.text  = wxTextCtrl(self.frame, -1, "",
                                     style = wxTE_MULTILINE|wxTE_READONLY)
             self.frame.SetSize(wxSize(450, 300))
