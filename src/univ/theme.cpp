@@ -64,7 +64,7 @@ wxThemeInfo::wxThemeInfo(Constructor c,
     wxThemeInfo *info = ms_allThemes;
     while ( info )
     {
-        if ( name == info->name )
+        if ( name.CmpNoCase(info->name) == 0 )
         {
             return info->ctor();
         }
