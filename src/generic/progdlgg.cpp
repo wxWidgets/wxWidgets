@@ -406,6 +406,17 @@ void wxProgressDialog::Resume()
     m_btnAbort->Enable();
 }
 
+bool wxProgressDialog::Show( bool show )
+{
+    // reenable other windows before hiding this one because otherwise
+    // Windows wouldn't give the focus back to the window which had
+    // been previously focused because it would still be disabled
+    if(!show)
+        ReenableOtherWindows();
+
+    return wxDialog::Show(show);
+}
+
 // ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
