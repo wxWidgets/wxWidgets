@@ -661,24 +661,23 @@ int wxEntry( int argc, char *argv[] , bool enterLoop )
 
     wxCHECK_MSG( wxTheApp, 0, wxT("You have to define an instance of wxApp!") );
 
-#ifdef __WXMAC__
-  argc = 0 ; // currently we don't support files as parameters
+#ifndef __DARWIN__
+    argc = 0 ; // currently we don't support files as parameters
 #endif
+    // we could try to get the open apple events here to adjust argc and argv better
 
-  wxTheApp->argc = argc;
-  wxTheApp->argv = argv;
+    wxTheApp->argc = argc;
+    wxTheApp->argv = argv;
 
-  // GUI-specific initialization, such as creating an app context.
-  wxEntryInitGui();
-
-  // we could try to get the open apple events here to adjust argc and argv better
+    // GUI-specific initialization, such as creating an app context.
+    wxEntryInitGui();
 
 
-  // Here frames insert themselves automatically
-  // into wxTopLevelWindows by getting created
-  // in OnInit().
+    // Here frames insert themselves automatically
+    // into wxTopLevelWindows by getting created
+    // in OnInit().
 
-  int retValue = 0;
+    int retValue = 0;
 
     if ( wxTheApp->OnInit() )
     {
