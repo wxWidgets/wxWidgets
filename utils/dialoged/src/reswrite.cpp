@@ -36,7 +36,7 @@
 
 #include "reseditr.h"
 
-#if !defined(__WXMSW__) && defined(__WXMAC__)
+#if ( !defined(__WXMSW__) && defined(__WXMAC__) ) || defined( __VMS )
 static char wxBuffer[512];
 #endif
 
