@@ -163,7 +163,10 @@ Compilation using EMX
 In addition to EMX-0.9d you will need a rather complete Unix-like
 environment, starting with a shell (e.g. ash) and most of the
 GNU file/text/shell utilities, but also flex, bison, sed, grep, awk
-and GNU make.
+and GNU make. Particularly note that uname is relevant to get the
+configure script working - the one from GNU shell utilities 1.12
+does work (check that uname -s returns "OS/2" and uname -m returns "i386"
+and you should be mostly fine.
 
 The first thing to do is to decide on a build directory. You can either
 do in-tree builds or you can do the build in a directory separated from
@@ -180,6 +183,10 @@ might find something like the system's tcpip\pcomos\install.exe which will
 not do the thing you want), e.g.
 SET MAKE_SHELL=ash
 SET INSTALL=/wx/wxWindows-2.3.3/install-sh.
+
+Be warned that depending on the precise version of your make, setting
+MAKE_SHELL might not be sufficient, it might be necessary to set SHELL
+and even COMSPEC to a unix like shell as well.
 
 Now run the provided configure script by executing e.g.
 `ash -c "../../configure \
