@@ -15,6 +15,12 @@
 // ----------------------------------------------------------------------------
 // global settings
 // ----------------------------------------------------------------------------
+// use TCPV40 from toolkit - EK
+#define TCPV40HDRS
+
+// use double mode + PM GUI and Window text window,
+// to use it you must link your app as "Window"
+#define wxUSE_CONSOLEDEBUG   1
 
 // define this to 1 if you want icons to behave as bitmaps
 #define wxICON_IS_BITMAP     0

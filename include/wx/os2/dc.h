@@ -13,7 +13,7 @@
 #define _WX_DC_H_
 
 #include "wx/defs.h"
-#include "wx/dc.h"
+//#include "wx/dc.h"
 
 // ---------------------------------------------------------------------------
 // macros
@@ -72,7 +72,7 @@ class WXDLLEXPORT wxDC : public wxDCBase
     DECLARE_DYNAMIC_CLASS(wxDC)
 
 public:
-    wxDC();
+    wxDC(void);
     ~wxDC();
 
     // implement base class pure virtuals
@@ -303,6 +303,13 @@ protected:
     wxWindow*                       m_pCanvas;
     wxBitmap                        m_vSelectedBitmap;
 
+public:
+    // PM specific stuff
+    HPS                             m_hPS;
+    HPS                             m_hOldPS;   // old hPS, if any
+    bool                            m_bIsPaintTime;// True at Paint Time
+
+    RECTL                           m_vRclPaint; // Bounding rectangle at Paint time etc.
     //
     // TRUE => DeleteDC() in dtor, FALSE => only ReleaseDC() it
     //

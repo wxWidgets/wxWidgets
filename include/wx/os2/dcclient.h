@@ -44,8 +44,6 @@ public:
 
     virtual ~wxWindowDC();
 
-    // PM specific stuff
-    HPS                     m_hPS;
 private:
     HAB                     m_hab;
     SIZEL                   m_PageSize;

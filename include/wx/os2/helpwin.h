@@ -12,7 +12,9 @@
 #ifndef _WX_HELPWIN_H_
 #define _WX_HELPWIN_H_
 
-#include "wx/wx.h"
+//EK #include "wx/wx.h"
+
+#if wxUSE_HELP
 
 #include "wx/helpbase.h"
 
@@ -46,6 +48,8 @@ private:
     bool Initialize(const wxString& rFile, int WXUNUSED(nServer) ) { return(Initialize(rFile)); }
     bool DisplaySection(const wxString& rSection) { return wxHelpControllerBase::DisplaySection(rSection); }
 };
+
+#endif //wxUSE_HELP
 
 #endif
     // _WX_HELPWIN_H_
