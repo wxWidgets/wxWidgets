@@ -215,7 +215,11 @@ extern LONG APIENTRY _EXPORT
 // ---------------------------------------------------------------------------
 
 // a wrapper macro for ZeroMemory()
+#ifdef __WIN32__
 #define wxZeroMemory(obj)   ::ZeroMemory(&obj, sizeof(obj))
+#else
+#define wxZeroMemory(obj)   memset((void*) & obj, 0, sizeof(obj))
+#endif
 
 // make conversion from wxColour and COLORREF a bit less painful
 inline COLORREF wxColourToRGB(const wxColour& c)

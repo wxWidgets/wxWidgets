@@ -1,4 +1,4 @@
-wxWindows 2.1.10
+wxWindows 2.1.11
 ----------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
@@ -21,20 +21,30 @@ important documents and samples.
 Changes in this release
 -----------------------
 
-These are the major improvements:
+These are some of the major improvements:
 
-wxWindows 2.1.10
+wxWindows 2.1.11
 ================
 
 - Numerous bug fixes and consistency improvements.
 - Further samples.
 - Factoring out of some code into base classes, for easier
   maintenance.
+- Ability to compile library in console (non-GUI) mode.
 - Integration of wxHTML widget and help controller into
   wxWindows. wxHTML allows HTML viewing and printing.
 - New classes wxChrono, wxDialUpManager, wxFontEnumerator,
-  wxWizard, etc.
+  wxWizard, wxStaticLine, etc.
+- wxShowTip for showing 'startup tips' to the user.
 - wxSocket and wxThread classes rewritten.
+- New, consistent drag and drop API (not wxMotif).
+- Better-looking dialogs in wxGTK.
+- wxSizers reimplemented and used to specify window layout
+  for some generic dialogs.
+- New, more sophisticated wxGrid class (in beta). The old grid
+  class can still be used.
+- Text alignment options in wxStaticText.
+- wxImage class extended to read PCX and GIF files.
 - Documentation improvements.
 
 Platforms supported

@@ -11,7 +11,7 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-PROGRAM=minimal
+PROGRAM=menu
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.vc

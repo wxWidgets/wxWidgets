@@ -1012,3 +1012,15 @@ samples/scrollsub/*.png
 samples/scrollsub/*.ico
 samples/scrollsub/*.txt
 
+samples/menu/*.cpp
+samples/menu/*.h
+samples/menu/makefile*
+samples/menu/*.rc
+samples/menu/*.def
+samples/menu/*.bmp
+samples/menu/*.xpm
+samples/menu/*.xbm
+samples/menu/*.png
+samples/menu/*.ico
+samples/menu/*.txt
+

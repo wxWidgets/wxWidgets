@@ -397,6 +397,7 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
             fontEncoding = wxFONTENCODING_CP1252;
             break;
 
+#ifdef __WIN32__
         case EASTEUROPE_CHARSET:
             fontEncoding = wxFONTENCODING_CP1250;
             break;
@@ -424,6 +425,7 @@ wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
         case TURKISH_CHARSET:
             fontEncoding = wxFONTENCODING_CP1254;
             break;
+#endif
 
         case OEM_CHARSET:
             fontEncoding = wxFONTENCODING_CP437;

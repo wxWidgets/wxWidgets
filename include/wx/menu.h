@@ -57,9 +57,6 @@ public:
     // menu construction
     // -----------------
 
-    // append a separator to the menu
-    void AppendSeparator() { Append(wxID_SEPARATOR, wxEmptyString); }
-
     // append a normal item to the menu
     void Append(int id,
                 const wxString& text,
@@ -68,6 +65,9 @@ public:
     {
         DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, isCheckable));
     }
+
+    // append a separator to the menu
+    void AppendSeparator() { Append(wxID_SEPARATOR, wxEmptyString); }
 
     // append a submenu
     void Append(int id,

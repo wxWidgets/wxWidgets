@@ -49,18 +49,21 @@
 
 #ifdef __WIN16__
     // Win16 doesn't have them
-    #undef wxUSE_SPINBUTTON
-    #define wxUSE_SPINBUTTON 0
+    #ifndef wxUSE_SPINBTN
+    #undef wxUSE_SPINBTN
+    #define wxUSE_SPINBTN 0
 #else
-    #if !defined(wxUSE_SPINBUTTON)
-        #define wxUSE_SPINBUTTON 1
+    #if !defined(wxUSE_SPINBTN)
+        #define wxUSE_SPINBTN 1
     #endif
 #endif // __WIN16__
 
 #include "wx/progdlg.h"
 
 // VZ: this is a temp. hack, will remove soon
+#ifndef wxUSE_SPINCTRL
 #define wxUSE_SPINCTRL 1
+#endif
 
 #if wxUSE_SPINCTRL
     #include "wx/spinctrl.h"
@@ -97,13 +100,13 @@ public:
     void OnPageChanging( wxNotebookEvent &event );
     void OnSliderUpdate( wxCommandEvent &event );
     void OnUpdateLabel( wxCommandEvent &event );
-#if wxUSE_SPINBUTTON
+#if wxUSE_SPINBTN
     void OnSpinUp( wxSpinEvent &event );
     void OnSpinDown( wxSpinEvent &event );
     void OnSpinUpdate( wxSpinEvent &event );
     void OnUpdateShowProgress( wxUpdateUIEvent& event );
     void OnShowProgress( wxCommandEvent &event );
-#endif // wxUSE_SPINBUTTON
+#endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
     void OnSpinCtrl(wxSpinEvent& event);
@@ -123,10 +126,10 @@ public:
     wxButton      *m_fontButton;
     wxButton      *m_lbSelectNum;
     wxButton      *m_lbSelectThis;
-#if wxUSE_SPINBUTTON
+#if wxUSE_SPINBTN
     wxSpinButton  *m_spinbutton;
     wxButton      *m_btnProgress;
-#endif // wxUSE_SPINBUTTON
+#endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
     wxSpinCtrl    *m_spinctrl;
@@ -344,13 +347,13 @@ EVT_BUTTON    (ID_RADIOBOX_FONT,        MyPanel::OnRadioButtons)
 EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
 EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
-#if wxUSE_SPINBUTTON
+#if wxUSE_SPINBTN
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
 EVT_SPIN_DOWN (ID_SPIN,                 MyPanel::OnSpinDown)
 EVT_UPDATE_UI (ID_BTNPROGRESS,          MyPanel::OnUpdateShowProgress)
 EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
-#endif // wxUSE_SPINBUTTON
+#endif // wxUSE_SPINBTN
 #if wxUSE_SPINCTRL
 EVT_SPIN      (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
@@ -547,14 +550,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     wxString s;
     s << initialSpinValue;
     m_spintext = new wxTextCtrl( panel, -1, s, wxPoint(20,160), wxSize(80,-1) );
-#if wxUSE_SPINBUTTON
+#if wxUSE_SPINBTN
     m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,160), wxSize(80, -1) );
     m_spinbutton->SetRange(-10,30);
     m_spinbutton->SetValue(initialSpinValue);
 
     m_btnProgress = new wxButton( panel, ID_BTNPROGRESS, "Show progress dialog",
                                   wxPoint(300, 160) );
-#endif // wxUSE_SPINBUTTON
+#endif // wxUSE_SPINBTN
 
 #if wxUSE_SPINCTRL
     m_spinctrl = new wxSpinCtrl( panel, ID_SPINCTRL, "", wxPoint(200, 160), wxSize(80, -1) );
@@ -994,7 +997,7 @@ void MyPanel::OnSpinCtrl(wxSpinEvent& event)
 
 #endif // wxUSE_SPINCTRL
 
-#if wxUSE_SPINBUTTON
+#if wxUSE_SPINBTN
 void MyPanel::OnSpinUp( wxSpinEvent &event )
 {
     wxString value;
@@ -1087,7 +1090,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
     }
 }
 
-#endif // wxUSE_SPINBUTTON
+#endif // wxUSE_SPINBTN
 
 MyPanel::~MyPanel()
 {

@@ -32,7 +32,9 @@
         $isCFile = $file =~ /\.c$/;
         $file =~ s/cp?p?$/obj/;
         $obj = "\$(COMMDIR)\\" . $file . " ";
-        $project{"WXCOMMONOBJS"} .= $obj;
+        #! $project{"WXCOMMONOBJS"} .= $obj;
+        #! have to split lib in 2 halves because otherwise it's too big
+        $project{$file =~ "^[a-o]" ? "WXCOMMONOBJS1" : "WXCOMMONOBJS2"} .= $obj;
         $project{"WXCOBJS"} .= $obj if $isCFile;
     }
 
@@ -109,9 +111,13 @@ MSWDIR=.
 
 GENERICOBJS= #$ ExpandList("WXGENERICOBJS");
 
-COMMONOBJS = \
+# we can't have all objects in one list because the library becomes too big
+COMMONOBJS1 = \
 		$(COMMDIR)\y_tab.obj \
-		#$ ExpandList("WXCOMMONOBJS");
+		#$ ExpandList("WXCOMMONOBJS1");
+
+COMMONOBJS2 = \
+		#$ ExpandList("WXCOMMONOBJS2");
 
 # we can't have all objects in one list because the library becomes too big
 MSWOBJS1 = #$ ExpandList("WXMSWOBJS1");
@@ -122,45 +128,55 @@ MSWOBJS2 = #$ ExpandList("WXMSWOBJS2");
 #  $(OLEDIR)\xpmhand \
 #  $(OLEDIR)\pnghand \
 
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS1) $(MSWOBJS2)
+OBJECTS = $(COMMONOBJS1) $(COMMONOBJS2) $(GENERICOBJS) $(MSWOBJS1) $(MSWOBJS2)
 
 # Normal, static library
-all:    $(DUMMYOBJ) $(WXDIR)\lib\wx1.lib $(WXDIR)\lib\wx2.lib $(WXDIR)\lib\wx3.lib $(WXDIR)\lib\wx4.lib
+all:    $(DUMMYOBJ) $(WXDIR)\lib\wx1.lib $(WXDIR)\lib\wx2.lib $(WXDIR)\lib\wx3.lib $(WXDIR)\lib\wx4.lib $(WXDIR)\lib\wx5.lib
 
-$(WXDIR)\lib\wx1.lib:      $(COMMONOBJS) $(PERIPH_LIBS)
+$(WXDIR)\lib\wx1.lib:      $(COMMONOBJS1) $(PERIPH_LIBS)
 	-erase $(WXDIR)\lib\wx1.lib
 	lib /PAGESIZE:128 @<<
 $(WXDIR)\lib\wx1.lib
 y
-$(COMMONOBJS) $(PERIPH_LIBS)
+$(COMMONOBJS1) $(PERIPH_LIBS)
 nul
 ;
 <<
 
-$(WXDIR)\lib\wx2.lib:      $(GENERICOBJS)
+$(WXDIR)\lib\wx2.lib:      $(COMMONOBJS2)
 	-erase $(WXDIR)\lib\wx2.lib
 	lib /PAGESIZE:128 @<<
 $(WXDIR)\lib\wx2.lib
+y
+$(COMMONOBJS2)
+nul
+;
+<<
+
+$(WXDIR)\lib\wx3.lib:      $(GENERICOBJS)
+	-erase $(WXDIR)\lib\wx3.lib
+	lib /PAGESIZE:128 @<<
+$(WXDIR)\lib\wx3.lib
 y
 $(GENERICOBJS)
 nul
 ;
 <<
 
-$(WXDIR)\lib\wx3.lib:      $(MSWOBJS1)
-	-erase $(WXDIR)\lib\wx3.lib
+$(WXDIR)\lib\wx4.lib:      $(MSWOBJS1)
+	-erase $(WXDIR)\lib\wx4.lib
 	lib /PAGESIZE:128 @<<
-$(WXDIR)\lib\wx3.lib
+$(WXDIR)\lib\wx4.lib
 y
 $(MSWOBJS1)
 nul
 ;
 <<
 
-$(WXDIR)\lib\wx4.lib:      $(MSWOBJS2)
-	-erase $(WXDIR)\lib\wx4.lib
+$(WXDIR)\lib\wx5.lib:      $(MSWOBJS2)
+	-erase $(WXDIR)\lib\wx5.lib
 	lib /PAGESIZE:128 @<<
-$(WXDIR)\lib\wx4.lib
+$(WXDIR)\lib\wx5.lib
 y
 $(MSWOBJS2)
 nul
@@ -184,7 +200,7 @@ $(CPPFLAGS) /YcWX/WXPREC.H /c /Tp $*.$(SRCSUFF)
 <<
 
 #${
-    $_ = $project{"WXMSWOBJS1"} . $project{"WXMSWOBJS2"} . $project{"WXCOMMONOBJS"} . $project{"WXGENERICOBJS"};
+    $_ = $project{"WXMSWOBJS1"} . $project{"WXMSWOBJS2"} . $project{"WXCOMMONOBJS1"} . $project{"WXCOMMONOBJS2"} . $project{"WXGENERICOBJS"};
     my @objs = split;
     foreach (@objs) {
         if ( $project{"WXCOBJS"} =~ / \Q$_\E / ) {

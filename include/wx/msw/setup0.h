@@ -420,6 +420,12 @@
 #undef wxUSE_TOOLTIPS
 #define wxUSE_TOOLTIPS 0
 
+#undef wxUSE_SPINCTRL
+#define wxUSE_SPINCTRL 0
+
+#undef wxUSE_SPINBTN
+#define wxUSE_SPINBTN 0
+
 #undef wxUSE_LIBPNG
 #define wxUSE_LIBPNG 0
 

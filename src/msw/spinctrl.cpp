@@ -33,6 +33,8 @@
     #include "wx/wx.h"
 #endif
 
+#if wxUSE_SPINCTRL
+
 #if defined(__WIN95__)
 
 #include "wx/spinctrl.h"
@@ -245,3 +247,7 @@ void wxSpinCtrl::DoMoveWindow(int x, int y, int width, int height)
 }
 
 #endif // __WIN95__
+
+#endif
+       // wxUSE_SPINCTRL
+

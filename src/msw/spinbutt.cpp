@@ -35,6 +35,8 @@
 // Can't resolve reference to CreateUpDownControl in
 // TWIN32, but could probably use normal CreateWindow instead.
 
+#if wxUSE_SPINBTN
+
 #if defined(__WIN95__) && !defined(__TWIN32__)
 
 #include "wx/spinbutt.h"
@@ -240,3 +242,7 @@ bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
 }
 
 #endif // __WIN95__
+
+#endif
+    // wxUSE_SPINCTN
+

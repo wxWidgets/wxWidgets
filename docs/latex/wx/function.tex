@@ -420,16 +420,15 @@ the front when the dialog box is popped up.
 
 \membersection{::wxCreateFileTipProvider}\label{wxcreatefiletipprovider}
 
-\func{wxTipProvider *}{wxCreateFileTipProvider}{
-    \param{const wxString\& }{filename},
-    \param{size\_t }{currentTip}}
+\func{wxTipProvider *}{wxCreateFileTipProvider}{\param{const wxString\& }{filename},
+ \param{size\_t }{currentTip}}
 
 This function creates a \helpref{wxTipProvider}{wxtipprovider} which may be
 used with \helpref{wxShowTip}{wxshowtip}.
 
 \docparam{filename}{The name of the file containing the tips, one per line}
 \docparam{currentTip}{The index of the first tip to show - normally this index
-    is remembered between the 2 program runs.}
+is remembered between the 2 program runs.}
 
 \wxheading{See also:}
 
@@ -442,9 +441,9 @@ used with \helpref{wxShowTip}{wxshowtip}.
 \membersection{::wxFileSelector}\label{wxfileselector}
 
 \func{wxString}{wxFileSelector}{\param{const wxString\& }{message}, \param{const wxString\& }{default\_path = ""},\\
-  \param{const wxString\& }{default\_filename = ""}, \param{const wxString\& }{default\_extension = ""},\\
-  \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = ""},\\
-  \param{int}{ x = -1}, \param{int}{ y = -1}}
+ \param{const wxString\& }{default\_filename = ""}, \param{const wxString\& }{default\_extension = ""},\\
+ \param{const wxString\& }{wildcard = ``*.*''}, \param{int }{flags = 0}, \param{wxWindow *}{parent = ""},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 Pops up a file selector box. In Windows, this is the common file selector
 dialog. In X, this is a file selector box with somewhat less functionality.
@@ -485,14 +484,14 @@ if (s)
 \membersection{::wxGetNumberFromUser}\label{wxgetnumberfromuser}
 
 \func{long}{wxGetNumberFromUser}{
-    \param{const wxString\& }{message},
-    \param{const wxString\& }{prompt},
-    \param{const wxString\& }{caption},
-    \param{long }{value},
-    \param{long }{min = 0},
-    \param{long }{max = 100},
-    \param{wxWindow *}{parent = NULL},
-    \param{const wxPoint\& }{pos = wxDefaultPosition}}
+ \param{const wxString\& }{message},
+ \param{const wxString\& }{prompt},
+ \param{const wxString\& }{caption},
+ \param{long }{value},
+ \param{long }{min = 0},
+ \param{long }{max = 100},
+ \param{wxWindow *}{parent = NULL},
+ \param{const wxPoint\& }{pos = wxDefaultPosition}}
 
 Shows a dialog asking the user for numeric input. The dialogs title is set to 
 {\it caption}, it contains a (possibly) multiline {\it message} above the
@@ -512,8 +511,8 @@ Dialog is centered on its {\it parent} unless an explicit position is given in
 \membersection{::wxGetTextFromUser}\label{wxgettextfromuser}
 
 \func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
-  \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
-  \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = TRUE}}
+ \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL},\\
+ \param{int}{ x = -1}, \param{int}{ y = -1}, \param{bool}{ centre = TRUE}}
 
 Pop up a dialog box with title set to {\it caption}, message {\it message}, and a
 \rtfsp{\it default\_value}.  The user may type in text and press OK to return this text,
@@ -529,9 +528,9 @@ is centred; if FALSE, the message is left-justified.
 \membersection{::wxGetMultipleChoice}\label{wxgetmultiplechoice}
 
 \func{int}{wxGetMultipleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
-  \param{int }{nsel}, \param{int *}{selection},
-  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
-  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{int }{nsel}, \param{int *}{selection},
+ \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
 
 Pops up a dialog box containing a message, OK/Cancel buttons and a multiple-selection
 listbox. The user may choose one or more item(s) and press OK or Cancel.
@@ -555,8 +554,8 @@ is centred; if FALSE, the message is left-justified.
 \membersection{::wxGetSingleChoice}\label{wxgetsinglechoice}
 
 \func{wxString}{wxGetSingleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
-  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
-  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
 
 Pops up a dialog box containing a message, OK/Cancel buttons and a single-selection
 listbox. The user may choose an item and press OK to return a string or
@@ -574,8 +573,8 @@ is centred; if FALSE, the message is left-justified.
 \membersection{::wxGetSingleChoiceIndex}\label{wxgetsinglechoiceindex}
 
 \func{int}{wxGetSingleChoiceIndex}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
-  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
-  \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
+ \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
 
 As {\bf wxGetSingleChoice} but returns the index representing the selected string.
 If the user pressed cancel, -1 is returned.
@@ -587,8 +586,8 @@ If the user pressed cancel, -1 is returned.
 \membersection{::wxGetSingleChoiceData}\label{wxgetsinglechoicedata}
 
 \func{wxString}{wxGetSingleChoiceData}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
-  \param{const wxString\& }{client\_data[]}, \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1},\\
-  \param{int}{ y = -1}, \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
+ \param{const wxString\& }{client\_data[]}, \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1},\\
+ \param{int}{ y = -1}, \param{bool}{ centre = TRUE}, \param{int }{width=150}, \param{int }{height=200}}
 
 As {\bf wxGetSingleChoice} but takes an array of client data pointers
 corresponding to the strings, and returns one of these pointers.
@@ -600,7 +599,7 @@ corresponding to the strings, and returns one of these pointers.
 \membersection{::wxMessageBox}\label{wxmessagebox}
 
 \func{int}{wxMessageBox}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Message"}, \param{int}{ style = wxOK \pipe wxCENTRE},\\
-  \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1}}
+ \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1}}
 
 General purpose message dialog.  {\it style} may be a bit list of the
 following identifiers:
@@ -645,22 +644,20 @@ The symbols are not shown when the generic function is used.
 
 \membersection{::wxShowTip}\label{wxshowtip}
 
-\func{bool}{wxShowTip}{
-    \param{wxWindow *}{parent},
-    \param{wxTipProvider *}{tipProvider},
-    \param{bool }{showAtStartup = TRUE}}
+\func{bool}{wxShowTip}{\param{wxWindow *}{parent},
+ \param{wxTipProvider *}{tipProvider},
+ \param{bool }{showAtStartup = TRUE}}
 
 This function shows a "startup tip" to the user.
 
 \docparam{parent}{The parent window for the modal dialog}
 
 \docparam{tipProvider}{An object which is used to get the text of the tips.
-    It may be created with 
-    \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider} function.}
+It may be created with the \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider} function.}
 
 \docparam{showAtStartup}{Should be TRUE if startup tips are shown, FALSE
-    otherwise. This is used as the initial value for "Show tips at startup"
-    checkbox which is shown in the tips dialog.}
+otherwise. This is used as the initial value for "Show tips at startup"
+checkbox which is shown in the tips dialog.}
 
 \wxheading{See also:}
 
