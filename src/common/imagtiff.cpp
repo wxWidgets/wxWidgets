@@ -188,13 +188,14 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     bool hasmask = FALSE;
 
     unsigned char *ptr = image->GetData();
+    ptr += w*3*(h-1);
     uint32 pos = 0;
 
     for (uint32 i = 0; i < h; i++)
     {
-        for (uint32 j = 0; w < h; j++)
+        for (uint32 j = 0; j < h; j++)
         {
-            unsigned char alpha = (unsigned char)(raster[pos] >> 24);
+            unsigned char alpha = (unsigned char)TIFFGetA(raster[pos]);
             if (alpha < 127)
             {
                 hasmask = TRUE;
@@ -207,15 +208,16 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
             }
             else
             {
-                ptr[0] = (unsigned char)(raster[pos] >> 16);
+                ptr[0] = (unsigned char)TIFFGetR(raster[pos]);
                 ptr++;
-                ptr[0] = (unsigned char)(raster[pos] >> 8);
+                ptr[0] = (unsigned char)TIFFGetG(raster[pos]);
                 ptr++;
-                ptr[0] = (unsigned char)(raster[pos]);
+                ptr[0] = (unsigned char)TIFFGetB(raster[pos]);
                 ptr++;
             }
             pos++;
         }
+        ptr -= 2*w*3; // subtract line we just added plus one line
     }
 
     _TIFFfree( raster );
