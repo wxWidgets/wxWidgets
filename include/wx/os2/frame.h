@@ -102,7 +102,6 @@ public:
 #endif // wxUSE_STATUSBAR
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
-    WXHWND  GetFrame() const { return m_hFrame; }
 
     // Returns the origin of client area (may be different from (0,0) if the
     // frame has a toolbar)
@@ -204,13 +203,6 @@ private:
 #if wxUSE_TOOLTIPS
     WXHWND                          m_hWndToolTip;
 #endif // tooltips
-
-    //
-    // The main handle of a frame window, that used for message processing
-    // is the client handle under PM.  But we still need the frame handle
-    // as well
-    //
-    WXHWND                          m_hFrame;
 
     //
     // Handles to child windows of the Frame that we don't have child objects for

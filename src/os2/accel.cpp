@@ -90,7 +90,7 @@ wxAcceleratorTable::wxAcceleratorTable(
 
         ::WinSetAccelTable( vHabmain
                            ,hAccel
-                           ,(HWND)pFrame->GetFrame()
+                           ,(HWND)pFrame->GetHWND()
                           );
     }
     M_ACCELDATA->m_hAccel = hAccel;
@@ -153,7 +153,7 @@ wxAcceleratorTable::wxAcceleratorTable(
 
         ::WinSetAccelTable( vHabmain
                            ,M_ACCELDATA->m_hAccel
-                           ,(HWND)pFrame->GetFrame()
+                           ,(HWND)pFrame->GetHWND()
                           );
     }
 

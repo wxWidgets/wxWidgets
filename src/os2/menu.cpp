@@ -1031,7 +1031,7 @@ void wxMenuBar::Attach(
     // Ensure the accelerator table is set to the frame (not the client!)
     //
     if (!::WinSetAccelTable( vHabmain
-                            ,(HWND)pFrame->GetFrame()
+                            ,(HWND)pFrame->GetHWND()
                             ,m_vAccelTable.GetHACCEL()
                            ))
         wxLogLastError("WinSetAccelTable");
