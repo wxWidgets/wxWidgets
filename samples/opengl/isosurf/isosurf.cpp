@@ -54,6 +54,8 @@
 
 #include "isosurf.h"
 
+#include "../../sample.xpm"
+
 // The following part is taken largely unchanged from the original C Version
 
 GLboolean speed_test = GL_FALSE;
@@ -315,6 +317,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos,
     : wxFrame(frame, wxID_ANY, title, pos, size, style)
 {
     m_canvas = NULL;
+    SetIcon(wxIcon(sample_xpm));
 }
 
 MyFrame::~MyFrame()
@@ -344,7 +347,7 @@ END_EVENT_TABLE()
 TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style,
     const wxString& name, int* gl_attrib)
-    : wxGLCanvas(parent, id, pos, size, style, name, gl_attrib)
+    : wxGLCanvas(parent, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name, gl_attrib)
 {
     parent->Show(true);
     SetCurrent();

@@ -30,6 +30,7 @@
 #endif
 
 #include "cube.h"
+#include "../../sample.xpm"
 
 #ifndef __WXMSW__     // for wxStopWatch, see remark below
   #if defined(__WXMAC__) && !defined(__DARWIN__)
@@ -182,7 +183,7 @@ unsigned long  TestGLCanvas::m_gsynct;
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name)
-    : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style, name )
+    : wxGLCanvas(parent, (wxGLCanvas*) NULL, id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name )
 {
     m_init = false;
     m_gllist = 0;
@@ -193,7 +194,7 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent, wxWindowID id,
 TestGLCanvas::TestGLCanvas(wxWindow *parent, const TestGLCanvas &other,
     wxWindowID id, const wxPoint& pos, const wxSize& size, long style,
     const wxString& name )
-    : wxGLCanvas(parent, other.GetContext(), id, pos, size, style, name)
+    : wxGLCanvas(parent, other.GetContext(), id, pos, size, style|wxFULL_REPAINT_ON_RESIZE , name)
 {
     m_init = false;
     m_gllist = other.m_gllist; // share display list
@@ -440,6 +441,7 @@ MyFrame::MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos,
     : wxFrame(parent, wxID_ANY, title, pos, size, style)
 {
     m_canvas = NULL;
+    SetIcon(wxIcon(sample_xpm));
 }
 
 // Intercept menu commands
@@ -456,11 +458,6 @@ void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
 
     MyFrame *frame = new MyFrame(NULL, str, wxDefaultPosition,
         wxSize(400, 300));
-
-    // Give it an icon
-#ifdef __WXMSW__
-    frame->SetIcon(wxIcon(_T("mondrian")));
-#endif
 
     // Make a menubar
     wxMenu *winMenu = new wxMenu;
