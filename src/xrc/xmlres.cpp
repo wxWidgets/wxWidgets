@@ -868,7 +868,8 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
     if (fsfile == NULL)
     {
-        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."), param.c_str());
+        wxLogError(_("XRC resource: Cannot create bitmap from '%s'."),
+                   name.c_str());
         return wxNullBitmap;
     }
     wxImage img(*(fsfile->GetStream()));
