@@ -104,7 +104,7 @@ class WXDLLEXPORT wxHashTable: public wxObject
 
  private:
    size_t m_count;             // number of elements in the hashtable
-
+   bool m_deleteContents;
 };
 
 #endif

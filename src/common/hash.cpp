@@ -37,6 +37,7 @@ wxHashTable::wxHashTable (int the_key_type, int size)
   hash_table = (wxList**) NULL;
   Create(the_key_type, size);
   m_count = 0;
+  m_deleteContents = FALSE;
 /*
   n = size;
   current_position = -1;
@@ -110,7 +111,10 @@ void wxHashTable::Put (long key, long value, wxObject * object)
 
   int position = (int) (k % n);
   if (!hash_table[position])
+  {
     hash_table[position] = new wxList (wxKEY_INTEGER);
+    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+  }
 
   hash_table[position]->Append (value, object);
   m_count++;
@@ -125,7 +129,10 @@ void wxHashTable::Put (long key, const wxChar *value, wxObject * object)
 
   int position = (int) (k % n);
   if (!hash_table[position])
+  {
     hash_table[position] = new wxList (wxKEY_INTEGER);
+    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+  }
 
   hash_table[position]->Append (value, object);
   m_count++;
@@ -140,8 +147,11 @@ void wxHashTable::Put (long key, wxObject * object)
 
   int position = (int) (k % n);
   if (!hash_table[position])
+  {
     hash_table[position] = new wxList (wxKEY_INTEGER);
-
+    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+  }
+  
   hash_table[position]->Append (k, object);
   m_count++;
 }
@@ -151,7 +161,10 @@ void wxHashTable::Put (const wxChar *key, wxObject * object)
   int position = (int) (MakeKey (key) % n);
 
   if (!hash_table[position])
+  {
     hash_table[position] = new wxList (wxKEY_STRING);
+    if (m_deleteContents) hash_table[position]->DeleteContents(TRUE);
+  }
 
   hash_table[position]->Append (key, object);
   m_count++;
@@ -369,6 +382,7 @@ wxNode *wxHashTable::Next (void)
 void wxHashTable::DeleteContents (bool flag)
 {
   int i;
+  m_deleteContents = flag;
   for (i = 0; i < n; i++)
     {
       if (hash_table[i])
