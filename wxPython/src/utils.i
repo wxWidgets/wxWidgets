@@ -25,6 +25,9 @@
 %include typemaps.i
 %include my_typemaps.i
 
+// Import some definitions of other classes, etc.
+%import _defs.i
+
 %pragma(python) code = "import string"
 
 

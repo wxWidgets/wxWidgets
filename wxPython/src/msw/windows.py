@@ -62,8 +62,9 @@ class wxEvtHandlerPtr :
     _prop_list_ = {}
     
 class wxEvtHandler(wxEvtHandlerPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windowsc.new_wxEvtHandler,_args,_kwargs)
+        self.thisown = 1
 
 
 

@@ -7,6 +7,8 @@ New in 2.2.1
 
 Various tweaks, fixes, missing methods, etc.
 
+Added use of wxTaskBarIcon to the demo.
+
 
 
 New in 2.2.0

@@ -65,6 +65,7 @@ _treeList = [
 #---------------------------------------------------------------------------
 
 class wxPythonDemo(wxFrame):
+
     def __init__(self, parent, id, title):
         wxFrame.__init__(self, parent, -1, title, size = (800, 600),
                          style=wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE)
@@ -73,8 +74,17 @@ class wxPythonDemo(wxFrame):
         self.curOverview = ""
 
         if wxPlatform == '__WXMSW__':
-            self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
-            self.SetIcon(self.icon)
+            icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
+            self.SetIcon(icon)
+
+            # setup a taskbar icon, and catch some events from it
+            self.tbicon = wxTaskBarIcon()
+            self.tbicon.SetIcon(icon, "wxPython Demo")
+            EVT_TASKBAR_LEFT_DCLICK(self.tbicon, self.OnTaskBarActivate)
+            EVT_TASKBAR_RIGHT_UP(self.tbicon, self.OnTaskBarMenu)
+            EVT_MENU(self.tbicon, self.TBMENU_RESTORE, self.OnTaskBarActivate)
+            EVT_MENU(self.tbicon, self.TBMENU_CLOSE, self.OnTaskBarClose)
+
 
         self.otherWin = None
         EVT_IDLE(self, self.OnIdle)
@@ -307,7 +317,7 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     # Menu methods
-    def OnFileExit(self, event):
+    def OnFileExit(self, *event):
         self.Close()
 
 
@@ -323,7 +333,10 @@ class wxPythonDemo(wxFrame):
         self.dying = true
         self.window = None
         self.mainmenu = None
+        if hasattr(self, "tbicon"):
+            del self.tbicon
         self.Destroy()
+
 
     #---------------------------------------------
     def OnIdle(self, event):
@@ -341,6 +354,36 @@ class wxPythonDemo(wxFrame):
         if selectedDemo:
             self.tree.SelectItem(selectedDemo)
             self.tree.EnsureVisible(selectedDemo)
+
+
+    #---------------------------------------------
+    def OnTaskBarActivate(self, evt):
+        if self.IsIconized():
+            self.Iconize(false)
+        if not self.IsShown():
+            self.Show(true)
+        self.Raise()
+
+    #---------------------------------------------
+
+    TBMENU_RESTORE = 1000
+    TBMENU_CLOSE   = 1001
+
+    def OnTaskBarMenu(self, evt):
+        menu = wxMenu()
+        menu.Append(self.TBMENU_RESTORE, "Restore wxPython Demo")
+        menu.Append(self.TBMENU_CLOSE,   "Close")
+        self.tbicon.PopupMenu(menu)
+        menu.Destroy()
+
+    #---------------------------------------------
+    def OnTaskBarClose(self, evt):
+        self.Close()
+
+        # because of the way wxTaskBarIcon.PopupMenu is implemented we have to
+        # prod the main idle handler a bit to get the window to actually close
+        wxGetApp().ProcessIdle()
+
 
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------

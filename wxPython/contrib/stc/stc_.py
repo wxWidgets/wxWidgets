@@ -170,6 +170,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def EndUndoAction(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_EndUndoAction,(self,) + _args, _kwargs)
         return val
+    def SetSavePoint(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetSavePoint,(self,) + _args, _kwargs)
+        return val
     def GetSelection(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_GetSelection,(self,) + _args, _kwargs)
         return val

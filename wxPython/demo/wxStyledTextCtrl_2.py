@@ -127,6 +127,7 @@ class PythonSTC(wxStyledTextCtrl):
             # Code completion
             else:
                 self.AutoCompShow('I love wxPython a b c')
+                self.AutoCompSelect('wx')
 
 
 

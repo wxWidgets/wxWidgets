@@ -22,7 +22,7 @@
 
 
 #include <wx/wx.h>
-
+#include "SciLexer.h"
 
 //----------------------------------------------------------------------
 // constants and stuff
@@ -75,6 +75,8 @@ const int wxSTC_INDIC_MAX         = 7;
 const int wxSTC_INDIC_PLAIN       = 0;
 const int wxSTC_INDIC_SQUIGGLE    = 1;
 const int wxSTC_INDIC_TT          = 2;
+const int wxSTC_INDIC_DIAGONAL    = 3;
+const int wxSTC_INDIC_STRIKE      = 4;
 const int wxSTC_INDIC0_MASK       = 32;
 const int wxSTC_INDIC1_MASK       = 64;
 const int wxSTC_INDIC2_MASK       = 128;
@@ -150,6 +152,8 @@ enum wxSTC_LEX {
     wxSTC_LEX_ERRORLIST,
     wxSTC_LEX_MAKEFILE,
     wxSTC_LEX_BATCH,
+    wxSTC_LEX_XCODE,
+    wxSTC_LEX_LATEX
 };
 
 
@@ -178,7 +182,7 @@ public:
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize, long style = 0,
-                     const char* name = wxSTCNameStr);
+                     const char* name = "styledtext");
 #else
     wxStyledTextCtrl(wxWindow *parent, wxWindowID id,
                      const wxPoint& pos = wxDefaultPosition,
@@ -233,6 +237,7 @@ public:
     wxSTC_UndoType GetUndoCollection();
     void     BeginUndoAction();
     void     EndUndoAction();
+    void     SetSavePoint();
 
 
     // Selection and information
@@ -323,12 +328,13 @@ public:
     void     StyleSetForeground(int styleNum, const wxColour& colour);
     void     StyleSetBackground(int styleNum, const wxColour& colour);
     void     StyleSetFont(int styleNum, wxFont& font);
-    void     StyleSetFontAttr(int styleNum, int size, const wxString& faceName, bool bold, bool italic);
+    void     StyleSetFontAttr(int styleNum, int size, const wxString& faceName, bool bold=FALSE, bool italic=FALSE, bool underline=FALSE);
     void     StyleSetBold(int styleNum, bool bold);
     void     StyleSetItalic(int styleNum, bool italic);
     void     StyleSetFaceName(int styleNum, const wxString& faceName);
     void     StyleSetSize(int styleNum, int pointSize);
     void     StyleSetEOLFilled(int styleNum, bool fillEOL);
+    void     StyleSetUnderline(int styleNum, bool underline);
 
 
     // Margins in the edit area
@@ -458,6 +464,13 @@ public:
     void     SetFoldFlags(int flags);
 
 
+    // Zooming
+    void     ZoomIn();
+    void     ZoomOut();
+    void     SetZoom(int zoom);
+    int      GetZoom();
+
+
     // Long Lines
     int      GetEdgeColumn();
     void     SetEdgeColumn(int column);
@@ -474,6 +487,10 @@ public:
     void     SetProperty(const wxString& key, const wxString& value);
     void     SetKeywords(int keywordSet, const wxString& keywordList);
 
+
+    // Event mask for Modified Event
+    void     SetModEventMask(int mask);
+    //int      GetModEventMask();
 
 #ifndef SWIG
 private:
@@ -584,7 +601,7 @@ private:
 };
 
 
-
+// Event types
 enum {
     wxEVT_STC_CHANGE = 1650,
     wxEVT_STC_STYLENEEDED,
@@ -600,6 +617,20 @@ enum {
     wxEVT_STC_MARGINCLICK,
     wxEVT_STC_NEEDSHOWN
 };
+
+// Modification and action types
+const int wxSTC_MOD_INSERTTEXT = 0x1;
+const int wxSTC_MOD_DELETETEXT = 0x2;
+const int wxSTC_MOD_CHANGESTYLE = 0x4;
+const int wxSTC_MOD_CHANGEFOLD = 0x8;
+const int wxSTC_PERFORMED_USER = 0x10;
+const int wxSTC_PERFORMED_UNDO = 0x20;
+const int wxSTC_PERFORMED_REDO = 0x40;
+const int wxSTC_LASTSTEPINUNDOREDO = 0x100;
+const int wxSTC_MOD_CHANGEMARKER = 0x200;
+const int wxSTC_MOD_BEFOREINSERT = 0x400;
+const int wxSTC_MOD_BEFOREDELETE = 0x800;
+
 
 #ifndef SWIG
 typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);

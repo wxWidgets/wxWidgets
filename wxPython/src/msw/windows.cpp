@@ -321,6 +321,31 @@ static PyObject *_wrap_wxWindow_PrevControlId(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define new_wxEvtHandler() (new wxEvtHandler())
+static PyObject *_wrap_new_wxEvtHandler(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxEvtHandler * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxEvtHandler",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxEvtHandler *)new_wxEvtHandler();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxEvtHandler_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define wxEvtHandler_ProcessEvent(_swigobj,_swigarg0)  (_swigobj->ProcessEvent(_swigarg0))
 static PyObject *_wrap_wxEvtHandler_ProcessEvent(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -9307,6 +9332,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxEvtHandler_GetEvtHandlerEnabled", (PyCFunction) _wrap_wxEvtHandler_GetEvtHandlerEnabled, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_AddPendingEvent", (PyCFunction) _wrap_wxEvtHandler_AddPendingEvent, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_ProcessEvent", (PyCFunction) _wrap_wxEvtHandler_ProcessEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxEvtHandler", (PyCFunction) _wrap_new_wxEvtHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PrevControlId", (PyCFunction) _wrap_wxWindow_PrevControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NextControlId", (PyCFunction) _wrap_wxWindow_NextControlId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_NewControlId", (PyCFunction) _wrap_wxWindow_NewControlId, METH_VARARGS | METH_KEYWORDS },
@@ -9335,6 +9361,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_uint",0},
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
+    { "_wxPrintQuality","_time_t",0},
     { "_class_wxCustomDataObject","_wxCustomDataObject",0},
     { "_class_wxRegionIterator","_wxRegionIterator",0},
     { "_class_wxPyTextDropTarget","_wxPyTextDropTarget",0},
@@ -9374,6 +9401,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxBitmapDataObject","_wxBitmapDataObject",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
+    { "_size_t","_time_t",0},
     { "_size_t","_unsigned_int",0},
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
@@ -9397,6 +9425,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataObjectSimple","_wxDataObjectSimple",0},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
+    { "_uint","_time_t",0},
     { "_uint","_size_t",0},
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
@@ -9480,6 +9509,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxMenu","_wxMenu",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
+    { "_unsigned_int","_time_t",0},
     { "_unsigned_int","_size_t",0},
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
@@ -9495,6 +9525,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxImageList","_wxImageList",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
+    { "_wxWindowID","_time_t",0},
     { "_wxWindowID","_size_t",0},
     { "_wxWindowID","_EBool",0},
     { "_wxWindowID","_uint",0},
@@ -9503,12 +9534,20 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxWindowID","_unsigned_int",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
+    { "_int","_time_t",0},
     { "_int","_size_t",0},
     { "_int","_EBool",0},
     { "_int","_uint",0},
     { "_int","_wxWindowID",0},
     { "_int","_unsigned_int",0},
     { "_int","_signed_int",0},
+    { "_time_t","_wxCoord",0},
+    { "_time_t","_wxPrintQuality",0},
+    { "_time_t","_unsigned_int",0},
+    { "_time_t","_int",0},
+    { "_time_t","_wxWindowID",0},
+    { "_time_t","_uint",0},
+    { "_time_t","_size_t",0},
     { "_wxSize","_class_wxSize",0},
     { "_wxRegionIterator","_class_wxRegionIterator",0},
     { "_class_wxPrinterDC","_wxPrinterDC",0},
@@ -9530,6 +9569,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_uint",0},
     { "_wxCoord","_EBool",0},
     { "_wxCoord","_size_t",0},
+    { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
     { "_wxRegion","_class_wxRegion",0},

@@ -103,6 +103,11 @@ public:
 
 };
 
+%inline %{
+    wxPyApp* wxGetApp() {
+        return wxPythonApp;
+    }
+%}
 
 //----------------------------------------------------------------------
 // this is used to cleanup after wxWindows when Python shuts down.

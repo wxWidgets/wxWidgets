@@ -144,6 +144,11 @@ _wxStart = wxc._wxStart
 
 _wxSetDictionary = wxc._wxSetDictionary
 
+def wxGetApp(*_args, **_kwargs):
+    val = apply(wxc.wxGetApp,_args,_kwargs)
+    if val: val = wxPyAppPtr(val)
+    return val
+
 wxApp_CleanUp = wxc.wxApp_CleanUp
 
 
@@ -858,10 +863,10 @@ _wxSetDictionary(vars())
 # Helper function to link python methods to wxWindows virtual
 # functions by name.
 
-## def _checkForCallback(obj, name, event, theID=-1):
-##     try:    cb = getattr(obj, name)
-##     except: pass
-##     else:   obj.Connect(theID, -1, event, cb)
+def _checkForCallback(obj, name, event, theID=-1):
+    try:    cb = getattr(obj, name)
+    except: pass
+    else:   obj.Connect(theID, -1, event, cb)
 
 ## def _StdWindowCallbacks(win):
 ##     _checkForCallback(win, "OnChar",               wxEVT_CHAR)

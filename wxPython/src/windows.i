@@ -35,6 +35,8 @@
 
 class wxEvtHandler {
 public:
+    wxEvtHandler();
+
     bool ProcessEvent(wxEvent& event);
     void AddPendingEvent(wxEvent& event);
     //bool SearchEventTable(wxEventTable& table, wxEvent& event);

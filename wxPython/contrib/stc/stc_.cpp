@@ -1094,6 +1094,33 @@ static PyObject *_wrap_wxStyledTextCtrl_EndUndoAction(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxStyledTextCtrl_SetSavePoint(_swigobj)  (_swigobj->SetSavePoint())
+static PyObject *_wrap_wxStyledTextCtrl_SetSavePoint(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxStyledTextCtrl * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStyledTextCtrl_SetSavePoint",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxStyledTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxStyledTextCtrl_SetSavePoint. Expected _wxStyledTextCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxStyledTextCtrl_SetSavePoint(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxStyledTextCtrl_GetSelection(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetSelection(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxStyledTextCtrl_GetSelection(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7259,6 +7286,7 @@ static PyMethodDef stc_cMethods[] = {
 	 { "wxStyledTextCtrl_GetSelectedText", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelectedText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_SetSelection", (PyCFunction) _wrap_wxStyledTextCtrl_SetSelection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetSelection", (PyCFunction) _wrap_wxStyledTextCtrl_GetSelection, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStyledTextCtrl_SetSavePoint", (PyCFunction) _wrap_wxStyledTextCtrl_SetSavePoint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_EndUndoAction", (PyCFunction) _wrap_wxStyledTextCtrl_EndUndoAction, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_BeginUndoAction", (PyCFunction) _wrap_wxStyledTextCtrl_BeginUndoAction, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStyledTextCtrl_GetUndoCollection", (PyCFunction) _wrap_wxStyledTextCtrl_GetUndoCollection, METH_VARARGS | METH_KEYWORDS },
@@ -7321,6 +7349,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrintQuality","_uint",0},
     { "_wxPrintQuality","_EBool",0},
     { "_wxPrintQuality","_size_t",0},
+    { "_wxPrintQuality","_time_t",0},
     { "_class_wxCustomDataObject","_wxCustomDataObject",0},
     { "_wxSpinCtrl","_class_wxSpinCtrl",0},
     { "_wxFontData","_class_wxFontData",0},
@@ -7390,6 +7419,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxSashLayoutWindow","_class_wxSashLayoutWindow",0},
     { "_size_t","_wxCoord",0},
     { "_size_t","_wxPrintQuality",0},
+    { "_size_t","_time_t",0},
     { "_size_t","_unsigned_int",0},
     { "_size_t","_int",0},
     { "_size_t","_wxWindowID",0},
@@ -7440,6 +7470,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxShowEvent","_class_wxShowEvent",0},
     { "_uint","_wxCoord",0},
     { "_uint","_wxPrintQuality",0},
+    { "_uint","_time_t",0},
     { "_uint","_size_t",0},
     { "_uint","_unsigned_int",0},
     { "_uint","_int",0},
@@ -7612,6 +7643,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxListBox","_wxListBox",0},
     { "_unsigned_int","_wxCoord",0},
     { "_unsigned_int","_wxPrintQuality",0},
+    { "_unsigned_int","_time_t",0},
     { "_unsigned_int","_size_t",0},
     { "_unsigned_int","_uint",0},
     { "_unsigned_int","_wxWindowID",0},
@@ -7645,6 +7677,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxJPEGHandler","_class_wxJPEGHandler",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
+    { "_wxWindowID","_time_t",0},
     { "_wxWindowID","_size_t",0},
     { "_wxWindowID","_EBool",0},
     { "_wxWindowID","_uint",0},
@@ -7655,6 +7688,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSizerItem","_wxSizerItem",0},
     { "_int","_wxCoord",0},
     { "_int","_wxPrintQuality",0},
+    { "_int","_time_t",0},
     { "_int","_size_t",0},
     { "_int","_EBool",0},
     { "_int","_uint",0},
@@ -7668,6 +7702,13 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPrintPreview","_wxPrintPreview",0},
     { "_class_wxSpinEvent","_wxSpinEvent",0},
     { "_class_wxQueryNewPaletteEvent","_wxQueryNewPaletteEvent",0},
+    { "_time_t","_wxCoord",0},
+    { "_time_t","_wxPrintQuality",0},
+    { "_time_t","_unsigned_int",0},
+    { "_time_t","_int",0},
+    { "_time_t","_wxWindowID",0},
+    { "_time_t","_uint",0},
+    { "_time_t","_size_t",0},
     { "_class_wxNavigationKeyEvent","_wxNavigationKeyEvent",0},
     { "_wxLogNull","_class_wxLogNull",0},
     { "_wxButton","_class_wxButton",0},
@@ -7709,6 +7750,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxCoord","_uint",0},
     { "_wxCoord","_EBool",0},
     { "_wxCoord","_size_t",0},
+    { "_wxCoord","_time_t",0},
     { "_wxCoord","_wxPrintQuality",0},
     { "_wxEraseEvent","_class_wxEraseEvent",0},
     { "_wxDataObjectComposite","_class_wxDataObjectComposite",0},
