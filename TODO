@@ -10,22 +10,15 @@ TODO
 
 *   problems with large fonts!
 
+*   sizer calculate layout slightly incorrectly
+
 wxRadioBox:
 
-*   updating moves buttons around several times???
-*   focus rect drawing broken
-*   layout completely wrong (numbering ordering should be changed)
 *   no kbd interface?
 
 widgets sample:
 
     add SetString button to listbox page
-    add wxCheckListBox to listbox page
-
-wxRadioBox
-
-*   the direction of layout is different from MSW???
-*   arrows don't work
 
 wxTextCtrl
 
@@ -46,7 +39,6 @@ All
 
 MSW
 
-*   checkboxes don't look correctly in checked+disabled state (radio too?)
 *   (disabled only) text control scrollbar has text cursor
 *   the corner between 2 scrollbars should behave as a size grip in a frame
 

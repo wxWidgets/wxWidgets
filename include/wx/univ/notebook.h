@@ -78,6 +78,8 @@ public:
     virtual void SetPadding(const wxSize& padding);
     virtual void SetTabSize(const wxSize& sz);
 
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage);
+
     virtual bool DeleteAllPages();
 
     virtual bool InsertPage(int nPage,

@@ -1017,24 +1017,15 @@ void wxNotebookSizer::RecalcSizes()
 
 wxSize wxNotebookSizer::CalcMin()
 {
-    // This will have to be done platform by platform
-    // as there is no way to guess the thickness of
-    // the wxNotebook tabs and border.
+    wxSize sizeBorder = m_notebook->CalcSizeFromPage(wxSize(0, 0));
 
-    int borderX = 5;
-    int borderY = 5;
-    if ((m_notebook->HasFlag(wxNB_RIGHT)) ||
-        (m_notebook->HasFlag(wxNB_LEFT)))
-    {
-        borderX += 90; // improvements later..
-    }
-    else
-    {
-        borderY += 40; // improvements later..
-    }
+    sizeBorder.x += 5;
+    sizeBorder.y += 5;
 
     if (m_notebook->GetChildren().GetCount() == 0)
-        return wxSize(borderX + 10, borderY + 10);
+    {
+        return wxSize(sizeBorder.x + 10, sizeBorder.y + 10);
+    }
 
     int maxX = 0;
     int maxY = 0;
@@ -1049,14 +1040,16 @@ wxSize wxNotebookSizer::CalcMin()
         {
             wxSize subsize( itemsizer->CalcMin() );
 
-            if (subsize.x > maxX) maxX = subsize.x;
-            if (subsize.y > maxY) maxY = subsize.y;
+            if (subsize.x > maxX)
+                maxX = subsize.x;
+            if (subsize.y > maxY)
+                maxY = subsize.y;
         }
 
         node = node->GetNext();
     }
 
-    return wxSize( borderX + maxX, borderY + maxY );
+    return wxSize( maxX, maxY ) + sizeBorder;
 }
 
 #endif // wxUSE_NOTEBOOK

@@ -100,6 +100,20 @@ public:
     // set the size of the tabs for wxNB_FIXEDWIDTH controls
     virtual void SetTabSize(const wxSize& sz) = 0;
 
+    // calculate the size of the notebook from the size of its page
+    virtual wxSize CalcSizeFromPage(const wxSize& sizePage)
+    {
+        // this was just taken from wxNotebookSizer::CalcMin() and is, of
+        // course, totally bogus - just like the original code was
+        wxSize sizeTotal = sizePage;
+        if ( HasFlag(wxNB_LEFT) || HasFlag(wxNB_RIGHT) )
+            sizeTotal.x += 90;
+        else
+            sizeTotal.y += 40;
+
+        return sizeTotal;
+    }
+
     // operations
     // ----------
 
