@@ -233,6 +233,7 @@ pascal OSStatus wxMacWindowEventHandler( EventHandlerCallRef handler , EventRef 
         case kEventClassTextInput :
             if ( wxMacConvertEventToRecord( event , &rec ) )
             {
+    			wxTheApp->m_macCurrentEvent = &rec ;
                 wxWindow* focus = wxWindow::FindFocus() ;
                 if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent( focus , rec.message , rec.modifiers , rec.when , rec.where.h , rec.where.v ) )
                 {
