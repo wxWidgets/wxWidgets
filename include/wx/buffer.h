@@ -54,6 +54,7 @@ public:
    }
 
    operator const char *() const { return m_str; }
+   char operator[](size_t n) const { return m_str[n]; }
 
 private:
    char *m_str;
@@ -98,7 +99,8 @@ public:
    }
 
    operator const wchar_t *() const { return m_wcs; }
-
+   wchar_t operator[](size_t n) const { return m_wcs[n]; }
+          
 private:
    wchar_t *m_wcs;
 };
