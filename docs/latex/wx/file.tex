@@ -1,11 +1,65 @@
 \section{\class{wxFile}}\label{wxfile}
 
-A wxFile performs raw file I/O. Note that wxFile::Flush is not implemented on some Windows compilers
-due to a missing fsync function, which reduces the usefulness of this class.
+A wxFile performs raw file I/O. This is a very small class designed to
+minimize the overhead of using it - in fact, there is hardly any overhead at
+all, but using it brings you automatic error checking and hides differences
+between platforms and compilers.
 
 \wxheading{Derived from}
 
 None.
+
+\wxheading{Constants}
+
+wx/file.h defines the following constants:
+{\small
+\begin{verbatim}
+#define wxS_IRUSR 00400
+#define wxS_IWUSR 00200
+#define wxS_IXUSR 00100
+
+#define wxS_IRGRP 00040
+#define wxS_IWGRP 00020
+#define wxS_IXGRP 00010
+
+#define wxS_IROTH 00004
+#define wxS_IWOTH 00002
+#define wxS_IXOTH 00001
+
+// default mode for the new files: corresponds to umask 022
+#define wxS_DEFAULT  (wxS_IRUSR | wxS_IWUSR | wxS_IRGRP | wxS_IWGRP | wxS_IROTH | wxS_IWOTH)
+\end{verbatim}
+}
+
+These constants define the file access rights and are used with 
+\helpref{wxFile::Create}{wxfilecreate} and \helpref{wxFile::Open}{wxfileopen}.
+
+The {\it OpenMode} enumeration defines the different modes for opening a file,
+it's defined inside wxFile class so its members should be specified with {\it
+wxFile::} scope resolution prefix. It is also used with 
+\helpref{wxFile::Access}{wxfileaccess} function.
+
+\twocolwidtha{7cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxFile::read}}{Open file for reading or test if it can be opened for reading with Access()}
+\twocolitem{{\bf wxFile::write}}{Open file for writing deleting the contents of the file if it already exists
+or test if it can be opened for writing with Access()}
+\twocolitem{{\bf wxFile::read\_write}}{Open file for reading and writing; can not be used with Access()}
+\twocolitem{{\bf wxFile::write\_append}}{Open file for appending: the file is opened for writing, but the old
+contents of the file is not erased and the file pointer is initially placed at the end of the file;
+can not be used with Access()}
+\end{twocollist}
+
+Other constants defined elsewhere but used by wxFile functions are wxInvalidOffset which represents an
+invalid value of type {\it off\_t} and is returned by functions returning {\it off\_t} on error and the seek
+mode constants used with \helpref{Seek()}{wxfileseek}:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxFromStart}}{Count offset from the start of the file}
+\twocolitem{{\bf wxFromCurrent}}{Count offset from the current position of the file pointer}
+\twocolitem{{\bf wxFromEnd}}{Count offset from the end of the file (backwards)}
+\end{twocollist}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -17,7 +71,10 @@ Default constructor.
 
 \func{}{wxFile}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
 
-Opens a file with the given mode.
+Opens a file with the given mode. As there is no way to return whether the
+operation was successful or not from the constructor you should test the
+return value of \helpref{IsOpened}{wxfileisopened} to check that it didn't
+fail.
 
 \func{}{wxFile}{\param{int}{ fd}}
 
@@ -29,19 +86,31 @@ Opens a file with the given file descriptor, which has already been opened.
 
 \docparam{mode}{The mode in which to open the file. May be one of {\bf wxFile::read}, {\bf wxFile::write} and {\bf wxFile::read\_write}.}
 
-\docparam{fd}{An existing file descriptor.}
+\docparam{fd}{An existing file descriptor (see \helpref{Attach()}{wxfileattach} for the list of predefined descriptors)}
 
 \membersection{wxFile::\destruct{wxFile}}
 
 \func{}{\destruct{wxFile}}{\void}
 
-Destructor. This is not virtual, for efficiency.
+Destructor will close the file.
+
+NB: it is not virtual so you should {\it not} derive from wxFile!
+
+\membersection{wxFile::Access}\label{wxfileaccess}
+\func{static bool}{Access}{\param{const char *}{ name}, \param{OpenMode}{ mode}
+
+This function verifies if we may access the given file in specified mode. Only
+values of wxFile::read or wxFile::write really make sense here.
 
 \membersection{wxFile::Attach}\label{wxfileattach}
-
 \func{void}{Attach}{\param{int}{ fd}}
 
-Attaches an existing file descriptor to the wxFile object.
+Attaches an existing file descriptor to the wxFile object. Example of predefined
+file descriptors are 0, 1 and 2 which correspond to stdin, stdout and stderr (and
+have symbolic names of wxFile::fd\_stdin, wxFile::fd\_stdout and wxFile::fd\_stderr).
+
+The descriptor should be already opened and it will be closed by wxFile
+object.
 
 \membersection{wxFile::Close}\label{wxfileclose}
 
@@ -51,10 +120,21 @@ Closes the file.
 
 \membersection{wxFile::Create}\label{wxfilecreate}
 
-\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = FALSE}}
+\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = FALSE}, \param{int }{access = wxS\_DEFAULT}}
 
 Creates a file for writing. If the file already exists, setting {\bf overwrite} to TRUE
 will ensure it is overwritten.
+
+\membersection{wxFile::Detach}\label{wxfiledetach}
+\func{void}{Detach}{\void}
+
+Get back a file descriptor from wxFile object - the caller is responsible for closing the file if this
+descriptor is opened. \helpref{IsOpened()}{wxfileisopened} will return FALSE after call to Detach().
+
+\membersection{wxFile::fd}\label{wxfilefd}
+\constfunc{int}{fd}{\void}
+
+Returns the file descriptor associated with the file.
 
 \membersection{wxFile::Eof}\label{wxfileeof}
 
@@ -66,13 +146,17 @@ Returns TRUE if the end of the file has been reached.
 
 \func{static bool}{Exists}{\param{const char*}{ filename}}
 
-Returns TRUE if the file exists.
+Returns TRUE if the given name specifies an existing regular file.
 
 \membersection{wxFile::Flush}\label{wxfileflush}
 
 \func{bool}{Flush}{\void}
 
-Flushes the file descriptor. Not implemented for some Windows compilers.
+Flushes the file descriptor.
+
+Note that wxFile::Flush is not implemented on some Windows compilers
+due to a missing fsync function, which reduces the usefulness of this function
+(it can still be called but it will do nothing on unsupported compilers).
 
 \membersection{wxFile::IsOpened}\label{wxfileisopened}
 
@@ -112,7 +196,7 @@ Reads the specified number of bytes into a buffer, returning the actual number r
 
 \wxheading{Return value}
 
-The number of bytes read, or the symbol {\bf ofsInvalid} (-1) if there was an error.
+The number of bytes read, or the symbol {\bf wxInvalidOffset} (-1) if there was an error.
 
 \membersection{wxFile::Seek}\label{wxfileseek}
 
@@ -128,7 +212,7 @@ Seeks to the specified position.
 
 \wxheading{Return value}
 
-The actual offset position achieved, or ofsInvalid on failure.
+The actual offset position achieved, or wxInvalidOffset on failure.
 
 \membersection{wxFile::SeekEnd}\label{wxfileseekend}
 
@@ -142,13 +226,14 @@ Moves the file pointer to the specified number of bytes before the end of the fi
 
 \wxheading{Return value}
 
-The actual offset position achieved, or ofsInvalid on failure.
+The actual offset position achieved, or wxInvalidOffset on failure.
 
 \membersection{wxFile::Tell}\label{wxfiletell}
 
 \constfunc{off\_t}{Tell}{\void}
 
-Returns the current position.
+Returns the current position or wxInvalidOffset if file is not opened or if another
+error occured.
 
 \membersection{wxFile::Write}\label{wxfilewrite}
 
@@ -166,4 +251,7 @@ Writes the specified number of bytes from a buffer.
 
 TRUE if the operation was successful.
 
+\membersection{wxFile::Write}\label{wxfilewrites}
+\func{bool}{Write}{\param{const wxString& }{s}}
 
+Writes the contents of the string to the file, returns TRUE on success
