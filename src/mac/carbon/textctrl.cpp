@@ -59,7 +59,7 @@
 // if this is set to 1 then under OSX 10.2 the 'classic' MLTE implementation will be used
 // if set to 0 then the unicode textctrl will be used
 #ifndef wxMAC_AWAYS_USE_MLTE
-#define wxMAC_AWAYS_USE_MLTE 0
+#define wxMAC_AWAYS_USE_MLTE 1
 #endif
 
 #ifndef __WXMAC_OSX__
@@ -416,7 +416,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 #ifdef __WXMAC_OSX__
 #if MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
-    if ( UMAGetSystemVersion() >= 0x1050 )
+    if ( UMAGetSystemVersion() >= 0x1030 )
     {
         m_peer = new wxMacMLTEHIViewControl( this , str , pos , size , style ) ;
     }
@@ -1498,7 +1498,7 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
         else
             iControlData[1].uValue = kTXNAutoWrap ;
     }
-    verify_noerr( TXNSetTXNObjectControls( m_txn, true, toptag,
+    verify_noerr( TXNSetTXNObjectControls( m_txn, false, toptag,
                                         iControlTags, iControlData )) ;
 
     // setting the default font
