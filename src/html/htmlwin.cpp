@@ -45,6 +45,7 @@ wxHtmlWindow::wxHtmlWindow(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
                 long style, const wxString& name) : wxScrolledWindow(parent, id, pos, size, wxVSCROLL, name)
 {
     m_tmpMouseMoved = FALSE;
+    m_tmpLastLink = wxEmptyString;
     m_tmpCanDraw = TRUE;
     m_FS = new wxFileSystem();
     m_RelatedStatusBar = -1;
@@ -390,7 +391,6 @@ void wxHtmlWindow::CleanUpStatics()
 {
     if (m_DefaultFilter) delete m_DefaultFilter;
     m_DefaultFilter = NULL;
-    wxNode* node = m_Filters.GetFirst();
     m_Filters.DeleteContents(TRUE);
     m_Filters.Clear();
 
@@ -514,13 +514,16 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& event)
         ScreenToClient(&x, &y);
         lnk = m_Cell -> GetLink(sx + x, sy + y);
 
-        if (lnk == wxEmptyString) {
-            SetCursor(cur_arrow);
-            if (m_RelatedStatusBar != -1) m_RelatedFrame -> SetStatusText(wxEmptyString, m_RelatedStatusBar);
-        }
-        else {
-            SetCursor(cur_hand);
-            if (m_RelatedStatusBar != -1) m_RelatedFrame -> SetStatusText(lnk, m_RelatedStatusBar);
+        if (lnk != m_tmpLastLink) {
+            if (lnk == wxEmptyString) {
+                SetCursor(cur_arrow);
+                if (m_RelatedStatusBar != -1) m_RelatedFrame -> SetStatusText(wxEmptyString, m_RelatedStatusBar);
+            }
+            else {
+                SetCursor(cur_hand);
+                if (m_RelatedStatusBar != -1) m_RelatedFrame -> SetStatusText(lnk, m_RelatedStatusBar);
+            }
+            m_tmpLastLink = lnk;
         }
         m_tmpMouseMoved = FALSE;
     }

@@ -70,25 +70,6 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 {
     DECLARE_DYNAMIC_CLASS(wxHtmlWindow)
 
-    private:
-        bool m_tmpMouseMoved;
-                // a flag indicated if mouse moved
-                // (if TRUE we will try to change cursor in last call to OnIdle)
-        bool m_tmpCanDraw;
-                // if FALSE contents of the window is not redrawn
-                // (in order to avoid ugly bliking)
-
-        static wxList m_Filters;
-                // list of HTML filters
-        static wxHtmlFilter *m_DefaultFilter;
-                // this filter is used when no filter is able to read some file
-
-        HtmlHistoryArray m_History;
-        int m_HistoryPos;
-                // browser history
-        bool m_HistoryOn;
-                // if this FLAG is false, items are not added to history
-
     public:
         wxHtmlWindow() : wxScrolledWindow() {};
         wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
@@ -188,6 +169,7 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
 	virtual wxHtmlFilter *GetDefaultFilter() {return new wxHtmlFilterPlainText;}
 	        // returns new filter (will be stored into m_DefaultFilter variable)
 
+
     protected:
         wxHtmlContainerCell *m_Cell;
                 // This is pointer to the first cell in parsed data.
@@ -214,6 +196,27 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
                 // defaults to 10 pixels.
 
         int m_Style;
+
+    private:
+        bool m_tmpMouseMoved;
+                // a flag indicated if mouse moved
+                // (if TRUE we will try to change cursor in last call to OnIdle)
+        wxString m_tmpLastLink;
+                // contains last link name
+        bool m_tmpCanDraw;
+                // if FALSE contents of the window is not redrawn
+                // (in order to avoid ugly bliking)
+
+        static wxList m_Filters;
+                // list of HTML filters
+        static wxHtmlFilter *m_DefaultFilter;
+                // this filter is used when no filter is able to read some file
+
+        HtmlHistoryArray m_History;
+        int m_HistoryPos;
+                // browser history
+        bool m_HistoryOn;
+                // if this FLAG is false, items are not added to history
 
 
     DECLARE_EVENT_TABLE()
