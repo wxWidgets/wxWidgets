@@ -217,7 +217,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of tree sample.\n")
+    msg.Printf( _T("This is the about dialog of splittree sample.\n")
                 _T("Welcome to %s"), wxVERSION_STRING);
 
     wxMessageBox(msg, "About Tree Test", wxOK | wxICON_INFORMATION, this);
@@ -281,8 +281,6 @@ void TestTree::OnPaint(wxPaintEvent& event)
 
     // Reset the device origin since it may have been set
     dc.SetDeviceOrigin(0, 0);
-
-	wxSize sz = GetClientSize();
 
 	wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
 	dc.SetPen(pen);
