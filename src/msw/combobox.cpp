@@ -304,11 +304,13 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
     int sel = -1;
     switch ( param )
     {
+        case CBN_SELENDOK:
         case CBN_SELCHANGE:
             sel = GetSelection();
 
-            // somehow we get 2 CBN_SELCHANGE events with the same index when
-            // the user selects an item in the combobox -- ignore duplicates
+            // we may sometimes get 2 CBN_SELCHANGE events or a CBN_SELENDOK
+            // before CBN_SELCHANGE with the same index when the user selects
+            // an item in the combobox -- ignore duplicates
             if ( sel > -1 && sel != m_selectionOld )
             {
                 m_selectionOld = sel;
