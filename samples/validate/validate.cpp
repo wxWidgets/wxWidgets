@@ -171,7 +171,7 @@ void MyFrame::OnToggleBell(wxCommandEvent& event)
 
 MyDialog::MyDialog( wxWindow *parent, const wxString& title,
                     const wxPoint& pos, const wxSize& size, const long WXUNUSED(style) ) :
-    wxDialog(parent, VALIDATE_DIALOG_ID, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxRESIZE_BORDER)
+    wxDialog(parent, VALIDATE_DIALOG_ID, title, pos, size, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER)
 {
     // Sizers automatically ensure a workable layout.
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );

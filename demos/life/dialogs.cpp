@@ -78,14 +78,11 @@ END_EVENT_TABLE()
 // --------------------------------------------------------------------------
 
 LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
-                 : wxDialog(parent, -1,
-                            _("Sample games"),
-                            wxDefaultPosition,
-                            wxDefaultSize,
-                            wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL)
+                 : wxDialog(parent, wxID_ANY, _("Sample games"),
+                            wxDefaultPosition, wxDefaultSize)
 {
     m_value = 0;
-   
+
     // create and populate the list of available samples
     m_list = new wxListBox( this, ID_LISTBOX,
         wxDefaultPosition,
@@ -97,11 +94,11 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
         m_list->Append(g_patterns[i].m_name);
 
     // descriptions
-    wxStaticBox *statbox = new wxStaticBox( this, -1, _("Description"));
+    wxStaticBox *statbox = new wxStaticBox( this, wxID_ANY, _("Description"));
     m_life   = new Life();
     m_life->SetPattern(g_patterns[0]);
-    m_canvas = new LifeCanvas( this, m_life, FALSE );
-    m_text   = new wxTextCtrl( this, -1,
+    m_canvas = new LifeCanvas( this, m_life, false );
+    m_text   = new wxTextCtrl( this, wxID_ANY,
         g_patterns[0].m_description,
         wxDefaultPosition,
         wxSize(300, 60),
@@ -118,14 +115,13 @@ LifeSamplesDialog::LifeSamplesDialog(wxWindow *parent)
 
     wxBoxSizer *sizer3 = new wxBoxSizer( wxVERTICAL );
     sizer3->Add( CreateTextSizer(_("Select one configuration")), 0, wxALL, 10 );
-    sizer3->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
+    sizer3->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
     sizer3->Add( sizer2, 1, wxGROW | wxALL, 5 );
-    sizer3->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
+    sizer3->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 10 );
     sizer3->Add( CreateButtonSizer(wxOK | wxCANCEL), 0, wxCENTRE | wxALL, 10 );
 
     // activate
     SetSizer(sizer3);
-    SetAutoLayout(TRUE);
     sizer3->SetSizeHints(this);
     sizer3->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);
@@ -164,35 +160,31 @@ void LifeSamplesDialog::OnListBox(wxCommandEvent& event)
 // --------------------------------------------------------------------------
 
 LifeAboutDialog::LifeAboutDialog(wxWindow *parent)
-               : wxDialog(parent, -1,
-                          _("About Life!"),
-                          wxDefaultPosition,
-                          wxDefaultSize,
-                          wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL)
+               : wxDialog(parent, wxID_ANY, _("About Life!"),
+                          wxDefaultPosition, wxDefaultSize)
 {
     // logo
     wxBitmap bmp = wxBITMAP(life);
 #if !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXMAC__)
     bmp.SetMask(new wxMask(bmp, *wxBLUE));
 #endif
-    wxStaticBitmap *sbmp = new wxStaticBitmap(this, -1, bmp);
+    wxStaticBitmap *sbmp = new wxStaticBitmap(this, wxID_ANY, bmp);
 
     // layout components
     wxBoxSizer *sizer = new wxBoxSizer( wxVERTICAL );
     sizer->Add( sbmp, 0, wxCENTRE | wxALL, 10 );
-    sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
+    sizer->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
     sizer->Add( CreateTextSizer(_("Life! version 2.2 for wxWidgets\n\n\
 (c) 2000 Guillermo Rodriguez Garcia\n\n\
 <guille@iies.es>\n\n\
 Portions of the code are based in XLife;\n\
 XLife is (c) 1989 by Jon Bennett et al.")),
                                   0, wxCENTRE | wxALL, 20 );
-    sizer->Add( new wxStaticLine(this, -1), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
+    sizer->Add( new wxStaticLine(this, wxID_ANY), 0, wxGROW | wxLEFT | wxRIGHT, 5 );
     sizer->Add( CreateButtonSizer(wxOK), 0, wxCENTRE | wxALL, 10 );
 
     // activate
     SetSizer(sizer);
-    SetAutoLayout(TRUE);
     sizer->SetSizeHints(this);
     sizer->Fit(this);
     Centre(wxBOTH | wxCENTRE_ON_SCREEN);

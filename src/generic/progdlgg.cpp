@@ -144,8 +144,8 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     if ( maximum > 0 )
     {
-        // note that we can't use wxGA_SMOOTH because it happens to also mean
-        // wxDIALOG_MODAL and will cause the dialog to be modal. Have an extra
+        // note that we can't use wxGA_SMOOTH because it happens to
+        // cause the dialog to be modal. Have an extra
         // style argument to wxProgressDialog, perhaps.
         m_gauge = new wxGauge(this, -1, m_maximum,
                               wxDefaultPosition, wxDefaultSize,

@@ -133,7 +133,7 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
     m_needParent = FALSE;
 
     if (!PreCreation( parent, pos, wxDefaultSize ) ||
-        !CreateBase( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, wxDefaultValidator, wxT("filedialog") ))
+        !CreateBase( parent, wxID_ANY, pos, wxDefaultSize, style, wxDefaultValidator, wxT("filedialog") ))
     {
         wxFAIL_MSG( wxT("wxXX creation failed") );
         return;

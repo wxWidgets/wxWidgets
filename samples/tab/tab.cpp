@@ -39,7 +39,7 @@ bool MyApp::OnInit(void)
 {
   // Create the main window
 #if USE_TABBED_DIALOG
-  dialog = new MyDialog((wxFrame *) NULL, -1, (char *) "Tabbed Dialog", wxPoint(-1, -1), wxSize(365, 390), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE);
+  dialog = new MyDialog((wxFrame *) NULL, wxID_ANY, (char *) "Tabbed Dialog", wxPoint(-1, -1), wxSize(365, 390));
 
   dialog->ShowModal();
 

@@ -36,7 +36,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit(void)
 {
     // Create the main frame window
-    dialog = new MyDialog(NULL, wxID_ANY, wxT("wxTaskBarIcon Test Dialog"), wxDefaultPosition, wxSize(365, 290), wxDIALOG_MODELESS|wxDEFAULT_DIALOG_STYLE);
+    dialog = new MyDialog(NULL, wxID_ANY, wxT("wxTaskBarIcon Test Dialog"), wxDefaultPosition, wxSize(365, 290));
 
     dialog->Show(true);
 

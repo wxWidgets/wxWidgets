@@ -182,7 +182,7 @@ void MyApp::PropertyListTest(bool useDialog)
     if (useDialog)
     {
         propDialog = new PropListDialog(view, NULL, _T("Property Sheet Test"),
-            wxDefaultPosition, wxSize(400, 500), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODELESS);
+            wxDefaultPosition, wxSize(400, 500));
         m_childWindow = propDialog;
     }
     else
@@ -230,7 +230,7 @@ void MyApp::PropertyFormTest(bool useDialog)
     if (useDialog)
     {
         propDialog = new PropFormDialog(view, NULL, _T("Property Form Test"),
-            wxDefaultPosition, wxSize(380, 250), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
+            wxDefaultPosition, wxSize(380, 250));
         m_childWindow = propDialog;
     }
     else

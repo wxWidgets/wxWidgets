@@ -82,8 +82,7 @@ wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
                                          long max,
                                          const wxPoint& pos)
                    : wxDialog(parent, -1, caption,
-                              pos, wxDefaultSize,
-                              wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL )
+                              pos, wxDefaultSize)
 {
     m_value = value;
     m_max = max;

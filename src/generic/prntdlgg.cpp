@@ -107,7 +107,6 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                     : wxDialog(parent, -1, _("Print"),
                                wxPoint(0, 0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
-                               wxDIALOG_MODAL |
                                wxTAB_TRAVERSAL)
 {
     if ( data )
@@ -121,7 +120,6 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                     : wxDialog(parent, -1, _("Print"),
                                wxPoint(0, 0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
-                               wxDIALOG_MODAL |
                                wxTAB_TRAVERSAL)
 {
     if ( data )
@@ -133,7 +131,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 void wxGenericPrintDialog::Init(wxWindow * WXUNUSED(parent))
 {
   //    wxDialog::Create(parent, -1, _("Print"), wxPoint(0, 0), wxSize(600, 600),
-  //                     wxDEFAULT_DIALOG_STYLE | wxDIALOG_MODAL | wxTAB_TRAVERSAL);
+  //                     wxDEFAULT_DIALOG_STYLE | wxTAB_TRAVERSAL);
 
     wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
 
@@ -405,7 +403,7 @@ wxDC *wxGenericPrintDialog::GetPrintDC()
 // ----------------------------------------------------------------------------
 
 wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data):
-wxDialog(parent, -1, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
+wxDialog(parent, -1, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL)
 {
     Init(data);
 }
@@ -598,7 +596,7 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
                 _("Page Setup"),
                 wxPoint(0, 0),
                 wxSize(600, 600),
-                wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL )
+                wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL )
 {
     if (data)
         m_pageData = *data;

@@ -6,9 +6,7 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
-//---------------------------------------------------------------------------
-// Last modified: 22nd July 1998 - ported to wxWidgets 2.0
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -33,57 +31,55 @@
 const int ID_LISTBOX = 101;
 
 BEGIN_EVENT_TABLE(PlayerSelectionDialog, wxDialog)
-	EVT_SIZE(PlayerSelectionDialog::OnSize)
-	EVT_BUTTON(wxID_OK, PlayerSelectionDialog::ButtonCallback)
-	EVT_BUTTON(wxID_CANCEL, PlayerSelectionDialog::ButtonCallback)
-	EVT_LISTBOX(ID_LISTBOX, PlayerSelectionDialog::SelectCallback)
+    EVT_SIZE(PlayerSelectionDialog::OnSize)
+    EVT_BUTTON(wxID_OK, PlayerSelectionDialog::ButtonCallback)
+    EVT_BUTTON(wxID_CANCEL, PlayerSelectionDialog::ButtonCallback)
+    EVT_LISTBOX(ID_LISTBOX, PlayerSelectionDialog::SelectCallback)
     EVT_CLOSE(PlayerSelectionDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
 PlayerSelectionDialog::PlayerSelectionDialog(
-							wxWindow* parent,
-							ScoreFile* file
-							) :
-	wxDialog(parent, wxID_ANY, _T("Player Selection"),
-			wxDefaultPosition, wxDefaultSize,
-			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
-	m_scoreFile(file)
+                            wxWindow* parent,
+                            ScoreFile* file
+                            ) :
+    wxDialog(parent, wxID_ANY, _T("Player Selection"), wxDefaultPosition),
+    m_scoreFile(file)
 {
-	wxStaticText* msg = new wxStaticText(this, wxID_ANY, _T("Please select a name or type a new one:"));
+    wxStaticText* msg = new wxStaticText(this, wxID_ANY, _T("Please select a name or type a new one:"));
 
-	wxListBox* list = new wxListBox(
-						this, ID_LISTBOX,
-						wxDefaultPosition, wxDefaultSize,
-						0, 0,
-						wxLB_SINGLE
-						);
-    
-	wxArrayString players;
-	m_scoreFile->GetPlayerList(players);
-	for (unsigned int i = 0; i < players.Count(); i++)
-	{
-		list->Append(players[i]);
-	}
+    wxListBox* list = new wxListBox(
+                        this, ID_LISTBOX,
+                        wxDefaultPosition, wxDefaultSize,
+                        0, 0,
+                        wxLB_SINGLE
+                        );
 
-	m_textField = new wxTextCtrl(this, wxID_ANY, _T(""), wxDefaultPosition, wxDefaultSize, 0);
+    wxArrayString players;
+    m_scoreFile->GetPlayerList(players);
+    for (unsigned int i = 0; i < players.Count(); i++)
+    {
+        list->Append(players[i]);
+    }
 
-	m_OK = new wxButton(this, wxID_OK, _T("OK"));
-	m_cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
+    m_textField = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize);
 
-  wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
-  button_sizer->Add( m_OK, 0, wxALL, 10 );
-  button_sizer->Add( m_cancel, 0, wxALL, 10 );
+    m_OK = new wxButton(this, wxID_OK, _T("OK"));
+    m_cancel = new wxButton(this, wxID_CANCEL, _T("Cancel"));
 
-  wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-  topsizer->Add( msg, 0, wxALL , 10 );
-  topsizer->Add( list, 1, wxEXPAND | wxLEFT | wxRIGHT, 10 );
-  topsizer->Add( m_textField, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10 );
-  topsizer->Add( button_sizer, 0, wxALIGN_LEFT );
+    wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
+    button_sizer->Add( m_OK, 0, wxALL, 10 );
+    button_sizer->Add( m_cancel, 0, wxALL, 10 );
 
-  SetSizer( topsizer );
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+    topsizer->Add( msg, 0, wxALL , 10 );
+    topsizer->Add( list, 1, wxEXPAND | wxLEFT | wxRIGHT, 10 );
+    topsizer->Add( m_textField, 0, wxEXPAND | wxLEFT | wxRIGHT | wxTOP, 10 );
+    topsizer->Add( button_sizer, 0, wxALIGN_LEFT );
 
-  topsizer->SetSizeHints( this );
-    
+    SetSizer( topsizer );
+
+    topsizer->SetSizeHints( this );
+
     CentreOnParent();
 }
 
@@ -93,58 +89,58 @@ PlayerSelectionDialog::~PlayerSelectionDialog()
 
 void PlayerSelectionDialog::OnSize(wxSizeEvent& WXUNUSED(event))
 {
-	Layout();
+    Layout();
 }
 
 const wxString& PlayerSelectionDialog::GetPlayersName()
 {
 /*
-	m_player = "";
-	Show(true);
+    m_player = wxEmptyString;
+    Show(true);
 */
-	return m_player;
+    return m_player;
 }
 
 void PlayerSelectionDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-	m_player = _T("");
+    m_player = wxEmptyString;
     EndModal(wxID_CANCEL);
 }
 
 void PlayerSelectionDialog::SelectCallback(wxCommandEvent& event)
 {
-	if (event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED)
-	{
-//	    if (event.IsSelection())
-		m_textField->SetValue(event.GetString());
-	}
+    if (event.GetEventType() == wxEVT_COMMAND_LISTBOX_SELECTED)
+    {
+//        if (event.IsSelection())
+        m_textField->SetValue(event.GetString());
+    }
 }
 
 void PlayerSelectionDialog::ButtonCallback(wxCommandEvent& event)
 {
-	if (event.GetId() == wxID_OK)
-	{
-		wxString name = m_textField->GetValue();
-		if (!name.IsNull() && name.Length() > 0)
-		{
-			if (name.Contains(_T('@')))
-			{
-				wxMessageBox(_T("Names should not contain the '@' character"), _T("Forty Thieves"));
-			}
-			else
-			{
-				m_player = name;
-				EndModal(wxID_OK);
-			}
-		}
-		else
-		{
- 			wxMessageBox(_T("Please enter your name"), _T("Forty Thieves"));
-		}
-	}
-	else
-	{
-		m_player = _T("");
-		EndModal(wxID_CANCEL);
-	}
+    if (event.GetId() == wxID_OK)
+    {
+        wxString name = m_textField->GetValue();
+        if (!name.IsNull() && name.Length() > 0)
+        {
+            if (name.Contains(_T('@')))
+            {
+                wxMessageBox(_T("Names should not contain the '@' character"), _T("Forty Thieves"));
+            }
+            else
+            {
+                m_player = name;
+                EndModal(wxID_OK);
+            }
+        }
+        else
+        {
+             wxMessageBox(_T("Please enter your name"), _T("Forty Thieves"));
+        }
+    }
+    else
+    {
+        m_player = wxEmptyString;
+        EndModal(wxID_CANCEL);
+    }
 }

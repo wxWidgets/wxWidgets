@@ -6,9 +6,7 @@
 // Created:     21/07/97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1993-1998 Chris Breeze
-// Licence:   	wxWindows licence
-//---------------------------------------------------------------------------
-// Last modified: 22nd July 1998 - ported to wxWidgets 2.0
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
@@ -38,49 +36,49 @@
 class ScoreCanvas : public wxScrolledWindow
 {
 public:
-	ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile, const wxPoint& pos, wxSize& size);
-	virtual ~ScoreCanvas();
+    ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile, const wxPoint& pos, wxSize& size);
+    virtual ~ScoreCanvas();
 
-	void OnDraw(wxDC& dc);
+    void OnDraw(wxDC& dc);
 
 private:
-	wxFont*		m_font;
-	wxString	m_text;
+    wxFont     *m_font;
+    wxString    m_text;
 };
 
 ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile, const wxPoint& pos, wxSize& size) :
-	wxScrolledWindow(parent, -1, pos, size, wxSUNKEN_BORDER)
+    wxScrolledWindow(parent, wxID_ANY, pos, size, wxSUNKEN_BORDER)
 {
     SetBackgroundColour(*wxWHITE);
 #ifdef __WXGTK__
-	m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
+    m_font = wxTheFontList->FindOrCreateFont(12, wxROMAN, wxNORMAL, wxNORMAL);
 #else
-	m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
+    m_font = wxTheFontList->FindOrCreateFont(10, wxSWISS, wxNORMAL, wxNORMAL);
 #endif
 
     wxArrayString players;
-	scoreFile->GetPlayerList( players);
+    scoreFile->GetPlayerList( players);
 
-	wxString os;
+    wxString os;
 
-	os << wxT("Player\tWins\tGames\tScore\n");
-	for (unsigned int i = 0; i < players.Count(); i++)
-	{
-		int wins, games, score;
-		scoreFile->ReadPlayersScore(players[i], wins, games, score);
-		int average = 0;
-		if (games > 0)
-		{
-			average = (2 * score + games) / (2 * games);
-		}
+    os << wxT("Player\tWins\tGames\tScore\n");
+    for (unsigned int i = 0; i < players.Count(); i++)
+    {
+        int wins, games, score;
+        scoreFile->ReadPlayersScore(players[i], wins, games, score);
+        int average = 0;
+        if (games > 0)
+        {
+            average = (2 * score + games) / (2 * games);
+        }
 
-		os << players[i] << wxT('\t') 
-		   << wins  << wxT('\t')
-		   << games << wxT('\t')
-		   << average << wxT('\n');
-	}
-	os << wxT('\0');
-	m_text = os;
+        os << players[i] << wxT('\t')
+           << wins  << wxT('\t')
+           << games << wxT('\t')
+           << average << wxT('\n');
+    }
+    os << wxT('\0');
+    m_text = os;
 }
 
 ScoreCanvas::~ScoreCanvas()
@@ -89,45 +87,45 @@ ScoreCanvas::~ScoreCanvas()
 
 void ScoreCanvas::OnDraw(wxDC& dc)
 {
-	dc.SetFont(* m_font);
+    dc.SetFont(* m_font);
 
-	const wxChar* str = m_text;
-	unsigned int tab = 0;
-	unsigned int tabstops[] = { 5, 100, 150, 200 };
+    const wxChar* str = m_text;
+    unsigned int tab = 0;
+    unsigned int tabstops[] = { 5, 100, 150, 200 };
 
-	// get the line spacing for the current font
-	int lineSpacing;
-	{
-		long w, h;
-		dc.GetTextExtent(wxT("Testing"), &w, &h);
-		lineSpacing = (int)h;
-	}
+    // get the line spacing for the current font
+    int lineSpacing;
+    {
+        long w, h;
+        dc.GetTextExtent(wxT("Testing"), &w, &h);
+        lineSpacing = (int)h;
+    }
 
-	int y = 0;
-	while (*str)
-	{
-		wxChar text[256];
-		wxChar* dest = text;
-		
-		while (*str && *str >= ' ') *dest++ = *str++;
-		*dest = '\0';
+    int y = 0;
+    while (*str)
+    {
+        wxChar text[256];
+        wxChar* dest = text;
 
-		dc.DrawText(text, tabstops[tab], y);
+        while (*str && *str >= ' ') *dest++ = *str++;
+        *dest = '\0';
 
-		if (*str == '\t')
-		{
-			if (tab < sizeof(tabstops) / sizeof(tabstops[0]) - 1)
-			{
-				tab++;
-			}
-		}
-		else if (*str == '\n')
-		{
-			tab = 0;
-			y += lineSpacing;
-		}
-		if (*str) str++;
-	}
+        dc.DrawText(text, tabstops[tab], y);
+
+        if (*str == '\t')
+        {
+            if (tab < sizeof(tabstops) / sizeof(tabstops[0]) - 1)
+            {
+                tab++;
+            }
+        }
+        else if (*str == '\n')
+        {
+            tab = 0;
+            y += lineSpacing;
+        }
+        if (*str) str++;
+    }
 }
 #endif
 
@@ -136,31 +134,30 @@ BEGIN_EVENT_TABLE(ScoreDialog, wxDialog)
 END_EVENT_TABLE()
 
 ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
-	wxDialog(parent, wxID_ANY, _("Scores"),
-			wxDefaultPosition, wxSize(400, 300),
-			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
-	m_scoreFile(file)
+    wxDialog(parent, wxID_ANY, _("Scores"),
+            wxDefaultPosition, wxSize(400, 300)),
+    m_scoreFile(file)
 {
     // create grid with players
     wxArrayString players;
-	file->GetPlayerList(players);
-    
+    file->GetPlayerList(players);
+
     wxSize sz = wxSize(400, 300);
 
 #if USE_GRID_FOR_SCORE
-	wxGrid* list = new wxGrid(this, wxID_ANY, wxDefaultPosition, sz, 0);
+    wxGrid* list = new wxGrid(this, wxID_ANY, wxDefaultPosition, sz, 0);
     list->CreateGrid(players.Count(), 4);
-	for (unsigned int i = 0; i < players.Count(); i++)
-	{
-		int wins, games, score;
+    for (unsigned int i = 0; i < players.Count(); i++)
+    {
+        int wins, games, score;
         wxString string_value;
 
-		file->ReadPlayersScore(players[i], wins, games, score);
-		int average = 0;
-		if (games > 0)
-		{
-			average = (2 * score + games) / (2 * games);
-		}
+        file->ReadPlayersScore(players[i], wins, games, score);
+        int average = 0;
+        if (games > 0)
+        {
+            average = (2 * score + games) / (2 * games);
+        }
         list->SetCellValue(i,0,players[i]);
         string_value.Printf( _T("%u"), wins );
         list->SetCellValue(i,1,string_value);
@@ -181,7 +178,7 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     list->EnableDragColSize(false);
     list->EnableDragGridSize(false);
 #else
-	ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile, wxDefaultPosition, sz);
+    ScoreCanvas* list = new ScoreCanvas(this, m_scoreFile, wxDefaultPosition, sz);
 #endif
 
     // locate and resize with sizers
@@ -193,7 +190,7 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
 
     GetSizer()->Fit(this);
     GetSizer()->SetSizeHints(this);
-    
+
     CentreOnParent();
 }
 
@@ -203,7 +200,7 @@ ScoreDialog::~ScoreDialog()
 
 void ScoreDialog::Display()
 {
-	Show(true);
+    Show(true);
 }
 
 void ScoreDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))

@@ -1643,7 +1643,7 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
 
   wxBeginBusyCursor();
   wxPropertyStringListEditorDialog *dialog = new wxPropertyStringListEditorDialog(parent,
-      title, wxPoint(10, 10), wxSize(400, 400), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL);
+      title, wxPoint(10, 10), wxSize(400, 400));
 
   dialog->m_stringList = stringList;
 

@@ -44,7 +44,7 @@ class LifeCanvas : public wxWindow
 {
 public:
     // ctor and dtor
-    LifeCanvas(wxWindow* parent, Life* life, bool interactive = TRUE);
+    LifeCanvas(wxWindow* parent, Life* life, bool interactive = true);
     ~LifeCanvas();
 
     // view management

@@ -177,12 +177,6 @@ bool wxDialog::IsModal() const
 
 void wxDialog::SetModal( bool WXUNUSED(flag) )
 {
-/*
-  if (flag)
-    m_windowStyle |= wxDIALOG_MODAL;
-  else
-    if (m_windowStyle & wxDIALOG_MODAL) m_windowStyle -= wxDIALOG_MODAL;
-*/
     wxFAIL_MSG( wxT("wxDialog:SetModal obsolete now") );
 }
 
