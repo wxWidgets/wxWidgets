@@ -22,6 +22,7 @@
 #endif
 #include "wx/setup.h"
 #include "wx/utils.h"
+#include "wx/apptrait.h"
 #include "wx/app.h"
 #include "wx/dcmemory.h"
 #include "wx/bitmap.h"
@@ -132,7 +133,7 @@ void wxBell()
     XBell (wxGlobalDisplay(), 0);
 }
 
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
+int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
 {
     // FIXME TODO
     // This code is WRONG!! Does NOT return the
