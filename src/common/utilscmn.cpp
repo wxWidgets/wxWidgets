@@ -72,7 +72,6 @@
     #include "wx/notebook.h"
     #include "wx/frame.h"
     #include "wx/statusbr.h"
-    #include "wx/toolbar.h"
 #endif // wxUSE_GUI
 
 #include <time.h>
