@@ -117,8 +117,8 @@ class Calltip(wx.TextCtrl):
     """Text control containing the most recent shell calltip."""
 
     def __init__(self, parent=None, id=-1):
-        style = wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2
-        wx.TextCtrl.__init__(self, parent=parent, id=id, style=style)
+        style = (wx.TE_MULTILINE | wx.TE_READONLY | wx.TE_RICH2)
+        wx.TextCtrl.__init__(self, parent, id, style=style)
         self.SetBackgroundColour(wx.Colour(255, 255, 232))
         dispatcher.connect(receiver=self.display, signal='Shell.calltip')
 
@@ -131,9 +131,9 @@ class SessionListing(wx.TextCtrl):
     """Text control containing all commands for session."""
 
     def __init__(self, parent=None, id=-1):
-        style = wx.TE_MULTILINE | wx.TE_READONLY | \
-                wx.TE_RICH2 | wx.TE_DONTWRAP
-        wx.TextCtrl.__init__(self, parent=parent, id=id, style=style)
+        style = (wx.TE_MULTILINE | wx.TE_READONLY |
+                 wx.TE_RICH2 | wx.TE_DONTWRAP)
+        wx.TextCtrl.__init__(self, parent, id, style=style)
         dispatcher.connect(receiver=self.push, signal='Interpreter.push')
 
     def push(self, command, more):
@@ -150,9 +150,9 @@ class DispatcherListing(wx.TextCtrl):
     """Text control containing all dispatches for session."""
 
     def __init__(self, parent=None, id=-1):
-        style = wx.TE_MULTILINE | wx.TE_READONLY | \
-                wx.TE_RICH2 | wx.TE_DONTWRAP
-        wx.TextCtrl.__init__(self, parent=parent, id=id, style=style)
+        style = (wx.TE_MULTILINE | wx.TE_READONLY |
+                 wx.TE_RICH2 | wx.TE_DONTWRAP)
+        wx.TextCtrl.__init__(self, parent, id, style=style)
         dispatcher.connect(receiver=self.spy)
 
     def spy(self, signal, sender):
