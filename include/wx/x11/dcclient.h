@@ -114,6 +114,7 @@ public:
     virtual wxSize GetPPI() const;
     
     virtual void DestroyClippingRegion();
+    WXWindow GetWindow() const { return m_window; }
 
 protected:    
     // implementation
