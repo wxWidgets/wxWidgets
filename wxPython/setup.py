@@ -23,9 +23,22 @@ import sys
 # back and forth, and also more stuff in config.py will get converted
 # to functions, etc.
 
-sys.setup_is_main =  __name__ == "__main__"  # an icky hack!
-from wx.build.config import *
+# This script imports it as just "config" because if wxPython doesn't
+# exist yet, then it can't be imported from wx.build.config (since
+# wx._core doesn't exist yet.)  So instead we keep the main copy of
+# config .py in the same place as setup.py, and then copy it to
+# wx/build as needed below.
 
+sys.setup_is_main =  __name__ == "__main__"  # an icky hack!
+from config import *
+
+
+#----------------------------------------------------------------------
+# Update the packaged config file.
+#----------------------------------------------------------------------
+
+copy_file('config.py', 'wx/build', update=1, verbose=1)
+CLEANUP.append('wx/build/config.py')
 
 #----------------------------------------------------------------------
 # Update the version file
