@@ -495,6 +495,13 @@ public:
     void DrawBitmap(const wxBitmap& bitmap);
     void DrawBackgroundBitmap();
     void DrawScrollbar(const wxScrollBar *scrollbar, int thumbPosOld);
+#if wxUSE_NOTEBOOK
+    void DrawTab(wxDirection dir,
+                 const wxRect& rect,
+                 const wxString& title,
+                 const wxBitmap *image,
+                 int flags = 0);
+#endif // wxUSE_NOTEBOOK
 
     // accessors
     wxWindow *GetWindow() const { return m_window; }

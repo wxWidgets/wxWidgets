@@ -306,16 +306,6 @@ int wxNotebook::GetSelection() const
     return g_list_index( pages, (gpointer)(notebook->cur_page) );
 }
 
-int wxNotebook::GetPageCount() const
-{
-    return (int) g_list_length( GTK_NOTEBOOK(m_widget)->children );
-}
-
-int wxNotebook::GetRowCount() const
-{
-    return 1;
-}
-
 wxString wxNotebook::GetPageText( int page ) const
 {
     wxCHECK_MSG( m_widget != NULL, wxT(""), wxT("invalid notebook") );
@@ -364,25 +354,6 @@ int wxNotebook::SetSelection( int page )
         g_page->m_client->SetFocus();
 
     return selOld;
-}
-
-void wxNotebook::AdvanceSelection( bool forward )
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid notebook") );
-
-    int max = GetPageCount();
-    if ( !max )
-    {
-        // nothing to do with empty notebook
-        return;
-    }
-
-    int sel = GetSelection();
-
-    if (forward)
-        SetSelection( sel == max - 1 ? 0 : sel + 1 );
-    else
-        SetSelection( sel == 0 ? max - 1 : sel - 1 );
 }
 
 void wxNotebook::SetImageList( wxImageList* imageList )
@@ -643,17 +614,6 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         AdvanceSelection( event.GetDirection() );
     else
         event.Skip();
-}
-
-wxNotebookPage *wxNotebook::GetPage( int page ) const
-{
-    wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, wxT("invalid notebook") );
-
-    wxGtkNotebookPage* nb_page = GetNotebookPage(page);
-    if (!nb_page)
-        return (wxNotebookPage *) NULL;
-    else
-        return nb_page->m_client;
 }
 
 #if wxUSE_CONSTRAINTS

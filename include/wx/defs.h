@@ -1205,9 +1205,11 @@ enum wxBorder
  * wxNotebook flags
  */
 #define wxNB_FIXEDWIDTH       0x0010
+#define wxNB_TOP              0x0000    // default
 #define wxNB_LEFT             0x0020
 #define wxNB_RIGHT            0x0040
 #define wxNB_BOTTOM           0x0080
+#define wxNB_MULTILINE        0x0100
 
 /*
  * wxStatusBar95 flags
