@@ -42,8 +42,8 @@ class MyApp : public wxApp
 {
 public:
     virtual bool OnInit();
-    virtual ~MyApp();
-    void Init_wxPython();
+    virtual int  OnExit();
+    bool Init_wxPython();
 private:
     PyThreadState* m_mainTState;
 };
@@ -68,36 +68,51 @@ private:
 
 bool MyApp::OnInit()
 {
-    Init_wxPython();
+    if ( !Init_wxPython() )
+        // don't start the app if we can't initialize wxPython.
+        return false;  
+    
     MyFrame *frame = new MyFrame(_T("Embedded wxPython Test"),
-                                 wxPoint(50, 50), wxSize(700, 600));
-    frame->Show(TRUE);
-    return TRUE;
+                                 wxDefaultPosition, wxSize(700, 600));
+    frame->Show(true);
+    return true;
 }
 
 
-void MyApp::Init_wxPython()
+
+bool MyApp::Init_wxPython()
 {
     // Initialize Python
     Py_Initialize();
     PyEval_InitThreads();
 
-    // Load the wxPython core API.  Imports the wx._core module and sets a
-    // local pointer to a function table located there.
-    wxPyCoreAPI_IMPORT();
-
+    // Load the wxPython core API.  Imports the wx._core_ module and sets a
+    // local pointer to a function table located there.  The pointer is used
+    // internally by the rest of the API functions.
+    if ( ! wxPyCoreAPI_IMPORT() ) {
+        wxLogError(wxT("***** Error importing the wxPython API! *****"));
+        PyErr_Print();
+        Py_Finalize();
+        return false;
+    }        
+    
     // Save the current Python thread state and release the
     // Global Interpreter Lock.
     m_mainTState = wxPyBeginAllowThreads();
+
+    return true;
 }
 
 
-MyApp::~MyApp()
+int MyApp::OnExit()
 {
     // Restore the thread state and tell Python to cleanup after itself.
-    // wxPython will do its own cleanup as part of that process.
+    // wxPython will do its own cleanup as part of that process.  This is done
+    // in OnExit instead of ~MyApp because OnExit is only called if OnInit is
+    // successful.
     wxPyEndAllowThreads(m_mainTState);
     Py_Finalize();
+    return 0;    
 }
 
 
@@ -138,8 +153,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
 
     // Make some child windows from C++
     wxSplitterWindow* sp = new wxSplitterWindow(this, -1);
-    wxPanel* p1 = new wxPanel(sp, -1);
-    p1->SetFont(wxFont(12, wxSWISS, wxNORMAL, wxBOLD));
+    wxPanel* p1 = new wxPanel(sp, -1, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER);
+
     new wxStaticText(p1, -1,
                  _T("The frame, menu, splitter, this panel and this text were created in C++..."),
                  wxPoint(10,10));
@@ -172,7 +187,7 @@ void MyFrame::OnPyFrame(wxCommandEvent& event)
     // C++ code in any way, you can execute it with PyRun_SimpleString.
 
 
-    // First, whenever you do anyting with Python objects or code, you
+    // First, whenever you do anything with Python objects or code, you
     // *MUST* aquire the Global Interpreter Lock and block other
     // Python threads from running.
     bool blocked = wxPyBeginBlockThreads();

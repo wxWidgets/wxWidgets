@@ -3,12 +3,11 @@ from wx.py import shell, version
 
 class MyPanel(wx.Panel):
     def __init__(self, parent):
-        wx.Panel.__init__(self, parent, -1)
+        wx.Panel.__init__(self, parent, -1, style=wx.SUNKEN_BORDER)
 
         text = wx.StaticText(self, -1,
                             "Everything on this side of the splitter comes from Python.")
-        text.SetFont(wx.Font(12, wx.SWISS, wx.NORMAL, wx.BOLD))
-
+        
         intro = 'Welcome To PyCrust %s - The Flakiest Python Shell' % version.VERSION
         pycrust = shell.Shell(self, -1, introText=intro)
         #pycrust = wxTextCtrl(self, -1, intro)
