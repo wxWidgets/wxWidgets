@@ -294,7 +294,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_BMPBUTTON=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
-  DEFAULT_wxUSE_CHOICE=no
+  DEFAULT_wxUSE_CHOICE=yes
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_GRID=no
@@ -841,7 +841,7 @@ AC_PROG_LN_S
 
 dnl without this (which just means that we use WXDLLEXPORT) libtool won't build
 dnl DLLs under Win32.
-AC_LIBTOOL_WIN32_DLL
+dnl AC_LIBTOOL_WIN32_DLL
 
 dnl disable static libs by default, this takes too much time...
 AM_DISABLE_STATIC
