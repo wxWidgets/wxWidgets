@@ -2084,7 +2084,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         dnl FIXME_MGL - test for MGL variants for freebsd etc.
         case "${host}" in
             *-*-linux* )
-              mgl_os=linux/gcc/glibc
+              mgl_os="linux/gcc/glibc*"
               ;;
             *-pc-msdosdjgpp )
               mgl_os=dos32/dj2
