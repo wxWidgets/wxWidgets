@@ -2162,11 +2162,6 @@ void wxFileHistory::RemoveFileFromHistory(int i)
     wxCHECK_RET( i < m_fileHistoryN,
                  wxT("invalid index in wxFileHistory::RemoveFileFromHistory") );
 
-    wxNode* node = m_fileMenus.First();
-    while ( node )
-    {
-        wxMenu* menu = (wxMenu*) node->Data();
-
         // delete the element from the array (could use memmove() too...)
         delete [] m_fileHistory[i];
 
@@ -2175,6 +2170,12 @@ void wxFileHistory::RemoveFileFromHistory(int i)
         {
             m_fileHistory[j] = m_fileHistory[j + 1];
         }
+
+    wxNode* node = m_fileMenus.First();
+    while ( node )
+    {
+        wxMenu* menu = (wxMenu*) node->Data();
+
 
         // shuffle filenames up
         wxString buf;
@@ -2187,6 +2188,7 @@ void wxFileHistory::RemoveFileFromHistory(int i)
         node = node->Next();
 
         // delete the last menu item which is unused now
+        if (menu->FindItem(wxID_FILE1 + m_fileHistoryN - 1))
         menu->Delete(wxID_FILE1 + m_fileHistoryN - 1);
 
         // delete the last separator too if no more files are left
