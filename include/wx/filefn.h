@@ -175,17 +175,17 @@ enum wxSeekMode
     // Digital Mars doesn't)
     #include "wx/msw/private.h"
 
-    #undef __HUGEFILES_SUPPORTED
+    #undef wxHAS_HUGE_FILES
     #if defined(__MINGW32__)
-        #define __HUGEFILES_SUPPORTED 1
+        #define wxHAS_HUGE_FILES 1
     #elif defined(__MWERKS__)
-        #define __HUGEFILES_SUPPORTED 0
+        #define wxHAS_HUGE_FILES 0
     #elif defined(__DMC__)
-        #define __HUGEFILES_SUPPORTED 0
+        #define wxHAS_HUGE_FILES 0
     #elif ((_INTEGRAL_MAX_BITS >= 64) || defined(_LARGE_FILES))
-        #define __HUGEFILES_SUPPORTED 1
+        #define wxHAS_HUGE_FILES 1
     #else
-        #define __HUGEFILES_SUPPORTED 0
+        #define wxHAS_HUGE_FILES 0
     #endif
 
     // functions
@@ -193,7 +193,7 @@ enum wxSeekMode
         #define   _tell        tell
     #endif
 
-    #if __HUGEFILES_SUPPORTED
+    #if wxHAS_HUGE_FILES
         typedef wxLongLong_t wxFileOffset;
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
     #else
@@ -222,7 +222,7 @@ enum wxSeekMode
             #define wxWrite        _write
         #endif
     #endif
-    #if __HUGEFILES_SUPPORTED
+    #if wxHAS_HUGE_FILES
         #define   wxSeek      _lseeki64
         #define   wxLseek      _lseeki64
         #define   wxTell       _telli64
@@ -245,7 +245,7 @@ enum wxSeekMode
             #define   wxAccess     wxMSLU__waccess
             #define   wxMkDir      wxMSLU__wmkdir
             #define   wxRmDir      wxMSLU__wrmdir
-            #if __HUGEFILES_SUPPORTED
+            #if wxHAS_HUGE_FILES
                 #define   wxStat       wxMSLU__wstati64
             #else
                 #define   wxStat       wxMSLU__wstat
@@ -255,7 +255,7 @@ enum wxSeekMode
             #define   wxAccess     _waccess
             #define   wxMkDir      _wmkdir
             #define   wxRmDir      _wrmdir
-            #if __HUGEFILES_SUPPORTED
+            #if wxHAS_HUGE_FILES
                 #define   wxStat       _wstati64
             #else
                 #define   wxStat       _wstat
@@ -274,7 +274,7 @@ enum wxSeekMode
         #else
             #define   wxRmDir      _rmdir
         #endif
-        #if __HUGEFILES_SUPPORTED
+        #if wxHAS_HUGE_FILES
             #define   wxStat       _stati64
         #else
             #define   wxStat       _stat
@@ -283,7 +283,7 @@ enum wxSeekMode
 
     // types: notice that Watcom is the only compiler to have a wide char
     // version of struct stat as well as a wide char stat function variant
-    #if __HUGEFILES_SUPPORTED
+    #if wxHAS_HUGE_FILES
         #if wxUSE_UNICODE && defined(__WATCOMC__)
             #define   wxStructStat struct _wstati64
         #else
@@ -314,7 +314,7 @@ enum wxSeekMode
     #endif // O_RDONLY
 
     // It's a private define, undefine it so nobody gets tempted to use it
-    #undef __HUGEFILES_SUPPORTED
+    #undef wxHAS_HUGE_FILES
 #else // Unix platforms using configure
     typedef off_t wxFileOffset;
     #ifdef _LARGE_FILES
