@@ -56,7 +56,7 @@ class MyParentFrame(wxMDIParentFrame):
         while x < sz.width:
             y = 0
             while y < sz.height:
-                dc.DrawBitmap(self.bg_bmp, x, y)
+                dc.DrawBitmap(self.bg_bmp, (x, y))
                 y = y + h
             x = x + w
 
