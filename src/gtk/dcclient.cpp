@@ -762,6 +762,8 @@ void wxWindowDC::DoDrawText( const wxString &text, long x, long y )
 
     GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
+    wxCHECK_RET( font, wxT("invalid font") );
+
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
