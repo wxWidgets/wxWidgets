@@ -159,6 +159,54 @@ bool wxXmlResource::LoadPanel(wxPanel *panel, wxWindow *parent, const wxString& 
 
 
 
+void wxXmlResource::ProcessPlatformProperty(wxXmlNode *node)
+{
+    wxString s;
+    bool isok;
+    
+    wxXmlNode *c = node->GetChildren();
+    while (c)
+    {
+        isok = FALSE;
+        if (!c->GetPropVal(_T("platform"), &s)) 
+            isok = TRUE;
+        else
+        {
+            wxStringTokenizer tkn(s, " |");
+
+            while (tkn.HasMoreTokens())
+            {
+                s = tkn.GetNextToken();    
+                if (
+#ifdef __WXMSW__
+                    s == wxString(_T("win"))
+#elif defined(__UNIX__)
+                    s == wxString(_T("unix"))
+#elif defined(__MAC__)
+                    s == wxString(_T("mac"))
+#elif defined(__OS2__)
+                    s == wxString(_T("os2"))
+#else
+                    FALSE
+#endif
+              ) isok = TRUE;
+            }
+        }
+        
+        if (isok)
+            ProcessPlatformProperty(c);
+        else
+        {
+            node->RemoveChild(c);
+            delete c;
+        }
+        
+        c = c->GetNext();
+    }
+}
+
+
+
 void wxXmlResource::UpdateResources()
 {
     bool modif;
@@ -206,6 +254,8 @@ void wxXmlResource::UpdateResources()
             if (m_Data[i].Doc->GetRoot()->GetName() != _T("resource")) 
                 wxLogError(_("Invalid XML resource '%s': doesn't have root node 'resource'."), m_Data[i].File.c_str());
 
+            ProcessPlatformProperty(m_Data[i].Doc->GetRoot());
+
 #           if wxUSE_FILESYSTEM
             delete file;
 #           else
@@ -229,8 +279,7 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name, const wxString& typ
             if (    node->GetType() == wxXML_ELEMENT_NODE &&
                     (!type || node->GetName() == type) &&
                     node->GetPropVal(wxT("name"), &dummy) &&
-                    dummy == name &&
-                    wxXmlResourceHandler::CheckPlatform(node))
+                    dummy == name)
                 return node;
     }
 
@@ -280,8 +329,6 @@ wxXmlResourceHandler::wxXmlResourceHandler()
 
 wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent, wxObject *instance)
 {
-    if (!CheckPlatform(node)) return NULL;
-
     wxXmlNode *myNode = m_Node;
     wxObject *myParent = m_Parent, *myInstance = m_Instance;
     wxWindow *myParentAW = m_ParentAsWindow, *myInstanceAW = m_InstanceAsWindow;
@@ -299,26 +346,6 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     m_Instance = myInstance; m_InstanceAsWindow = myInstanceAW;
     
     return returned;
-}
-
-
-
-/*static*/ bool wxXmlResourceHandler::CheckPlatform(wxXmlNode *node)
-{
-    wxString s;
-    if (!node->GetPropVal(_T("platform"), &s)) return TRUE;
-#ifdef __WXMSW__
-    return s == wxString(_T("win"));
-#elif defined(__UNIX__)
-    return s == wxString(_T("unix"));
-#elif defined(__MAC__)
-    return s == wxString(_T("mac"));
-#elif defined(__OS2__)
-    return s == wxString(_T("os2"));
-#else
-    wxLogWarning(_("You're running the application on unknown platform, check for platfrom '%s' failed."), s.mb_str());
-    return TRUE; // unknown platform
-#endif
 }
 
 
@@ -507,7 +534,7 @@ wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 wxSize wxXmlResourceHandler::GetSize(const wxString& param)
 {
     wxString s = GetParamValue(param);
-    if (!s) s = _T("-1,-1");
+    if (s.IsEmpty()) s = _T("-1,-1");
     bool is_dlg;
     long sx, sy;
     
@@ -606,10 +633,11 @@ void wxXmlResourceHandler::CreateChildren(wxObject *parent,
 
 #define XMLID_TABLE_SIZE     1024
 
+
 struct XMLID_record
 {
     int id;
-    const char *key;
+    char *key;
     XMLID_record *next;
 };
 
@@ -624,9 +652,17 @@ static int XMLID_LastID = wxID_HIGHEST;
     index %= XMLID_TABLE_SIZE;
     
     XMLID_record *oldrec = NULL;
+    int matchcnt = 0;
     for (XMLID_record *rec = XMLID_Records[index]; rec; rec = rec->next)
     {
-        if (strcmp(rec->key, str_id) == 0) return rec->id;
+        if (strcmp(rec->key, str_id) == 0)
+        {
+#ifdef DEBUG_XMLID_HASH
+            printf("XMLID: matched '%s' (%ith item)\n", rec->key, matchcnt);
+#endif
+            return rec->id;
+        }
+        matchcnt++;
         oldrec = rec;
     }
     
@@ -634,8 +670,12 @@ static int XMLID_LastID = wxID_HIGHEST;
                               &XMLID_Records[index] : &oldrec->next;
     *rec_var = new XMLID_record;
     (*rec_var)->id = ++XMLID_LastID;
-    (*rec_var)->key = str_id;
+    (*rec_var)->key = strdup(str_id);
     (*rec_var)->next = NULL;
+#ifdef DEBUG_XMLID_HASH
+    printf("XMLID: new key for '%s': %i at %i (%ith item)\n", 
+           (*rec_var)->key, (*rec_var)->id, index, matchcnt);
+#endif
     
     return (*rec_var)->id;
 }
@@ -645,7 +685,11 @@ static void CleanXMLID_Record(XMLID_record *rec)
 {
     if (rec)
     {
+#ifdef DEBUG_XMLID_HASH
+        printf("XMLID: clearing '%s'\n", rec->key);
+#endif
         CleanXMLID_Record(rec->next);
+        free (rec->key);
         delete rec;
     }
 }
