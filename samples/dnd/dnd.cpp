@@ -32,12 +32,13 @@
 // Derive two simple classes which just put in the listbox the strings (text or
 // file names) we drop on them
 // ----------------------------------------------------------------------------
+
 class DnDText : public wxTextDropTarget
 {
 public:
   DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropText(long x, long y, const char *psz);
+  virtual bool OnDropText(long x, long y, const char *psz );
 
 private:
   wxListBox *m_pOwner;
@@ -49,7 +50,7 @@ public:
   DnDFile(wxListBox *pOwner) { m_pOwner = pOwner; }
 
   virtual bool OnDropFiles(long x, long y,
-                           size_t nFiles, const char * const aszFiles[]);
+                           size_t nFiles, const char * const aszFiles[] );
 
 private:
   wxListBox *m_pOwner;
@@ -58,6 +59,7 @@ private:
 // ----------------------------------------------------------------------------
 // Define a new application type
 // ----------------------------------------------------------------------------
+
 class DnDApp : public wxApp
 {
 public:
@@ -102,6 +104,7 @@ private:
 // ----------------------------------------------------------------------------
 // IDs for the menu commands
 // ----------------------------------------------------------------------------
+
 enum
 {
   Menu_Quit = 1,
@@ -190,7 +193,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
+  m_ctrlText->SetDropTarget( new DnDText(m_ctrlText) );
 
   wxLayoutConstraints *c;
 
@@ -302,14 +305,16 @@ bool DnDFrame::OnClose()
 
 void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
 {
-  if ( !m_strText.IsEmpty() ) {
+  if ( !m_strText.IsEmpty() ) 
+  {
     // start drag operation
 
     wxTextDataObject data(m_strText);
     wxDropSource dragSource(data, this);
     const char *pc;
 
-    switch ( dragSource.DoDragDrop(TRUE) ) {
+    switch ( dragSource.DoDragDrop(TRUE) ) 
+    {
       case wxDragError:   pc = "Error!";    break;
       case wxDragNone:    pc = "Nothing";   break;
       case wxDragCopy:    pc = "Copied";    break;

@@ -138,11 +138,9 @@ class wxPrivateDataObject : public wxDataObject
 
 public:
 
-  wxPrivateDataObject() 
-    { m_size = 0; m_data = (char*) NULL; }
+  wxPrivateDataObject();
     
-  ~wxPrivateDataObject()
-    { if (m_data) delete[] m_data; }
+  ~wxPrivateDataObject();
   
   virtual wxDataFormat GetFormat() const
     { return wxDF_PRIVATE; }

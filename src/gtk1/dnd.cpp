@@ -102,10 +102,10 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
   
     if ((data->length >= 0) && (data->format == 8))
     {
-      wxString str = (const char*)data->data;
-      printf( "Received %s\n.", WXSTRINGCAST str );
-      gtk_drag_finish( context, TRUE, FALSE, time );
-      return;
+        wxString str = (const char*)data->data;
+        printf( "Received %s\n.", WXSTRINGCAST str );
+        gtk_drag_finish( context, TRUE, FALSE, time );
+        return;
     }
   
     gtk_drag_finish (context, FALSE, FALSE, time);
@@ -153,6 +153,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
   GtkTargetEntry format;
   format.info = 0;
   format.flags = 0;
+  char buf[100];
   
   int valid = 0;
   for ( size_t i = 0; i < GetFormatCount(); i++ )
@@ -168,6 +169,12 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
         format.target = "file:ALL";
 	valid++;
 	break;
+      case wxDF_PRIVATE:
+        wxPrivateDropTarget *pdt = (wxPrivateDropTarget *)this;
+        strcpy( buf, "applications/" );
+	strcat( buf, WXSTRINGCAST pdt->GetID() );
+        format.target = buf;
+	valid++;
       default:
         break;
     }
@@ -478,9 +485,9 @@ static void gtk_target_callback( GtkWidget *widget,
         int x = 0;
         int y = 0;
         gdk_window_get_pointer( widget->window, &x, &y, (GdkModifierType *) NULL );
-
-//        printf( "Drop data is of type %s.\n", event->data_type );
-  
+/*
+        printf( "Drop data is of type %s.\n", event->data_type );
+*/
         target->OnDrop( x, y, (const void*)event->data, (size_t)event->data_numbytes );
     }
 
@@ -523,22 +530,35 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
         switch (df) 
         {
             case wxDF_TEXT:
-	      if (i > 0) formats += ";";
-              formats += "text/plain";
-	      valid++;
-	      break;
-           case wxDF_FILENAME:
-	      if (i > 0) formats += ";";
-              formats += "file:ALL";
-	      valid++;
-	      break;
-           default:
+	    {
+	        if (i > 0) formats += ";";
+                formats += "text/plain";
+	        valid++;
+	        break;
+	    }
+            case wxDF_FILENAME:
+	    {
+	        if (i > 0) formats += ";";
+                formats += "file:ALL";
+	        valid++;
+	        break;
+	    }
+            case wxDF_PRIVATE:
+	    {
+	        if (i > 0) formats += ";";
+                wxPrivateDropTarget *pdt = (wxPrivateDropTarget *)this;
+                formats += "applications/";
+                formats += pdt->GetId();
+	        valid++;
+		break;
+	    }
+            default:
               break;
         }
     }
   
     char *str = WXSTRINGCAST formats;
-  
+    
     gtk_widget_dnd_drop_set( widget, TRUE, &str, valid, FALSE );
   
     gtk_signal_connect( GTK_OBJECT(widget), "drop_data_available_event",
@@ -557,8 +577,10 @@ bool wxTextDropTarget::OnDrop( long x, long y, const void *data, size_t WXUNUSED
 
 bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
 {
+/*
     printf( "Got dropped text: %s.\n", psz );
     printf( "At x: %d, y: %d.\n", (int)x, (int)y );
+*/
     return TRUE;
 }
 
@@ -573,6 +595,25 @@ wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 }
 
 // ----------------------------------------------------------------------------
+// wxPrivateDropTarget
+// ----------------------------------------------------------------------------
+
+wxPrivateDropTarget::wxPrivateDropTarget()
+{
+    m_id = wxTheApp->GetAppName();
+}
+
+size_t wxPrivateDropTarget::GetFormatCount() const
+{
+    return 1;
+}
+
+wxDataFormat wxPrivateDropTarget::GetFormat(size_t WXUNUSED(n)) const
+{
+    return wxDF_PRIVATE;
+}
+
+// ----------------------------------------------------------------------------
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
 
@@ -580,11 +621,13 @@ bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * 
 {
     printf( "Got %d dropped files.\n", (int)nFiles );
     printf( "At x: %d, y: %d.\n", (int)x, (int)y );
+
     for (size_t i = 0; i < nFiles; i++)
     {
         printf( aszFiles[i] );
         printf( "\n" );
     }
+    
     return TRUE;
 }
 
@@ -641,6 +684,17 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
 
     switch (data->GetFormat())
     {
+        case wxDF_PRIVATE:
+	{
+            wxPrivateDataObject *pdo = (wxPrivateDataObject*) data;
+	    
+            gtk_widget_dnd_data_set( widget, 
+	                             event,
+				     (unsigned char*) pdo->GetData(), 
+				     (int) pdo->GetDataSize() );
+	    
+	    break;
+	}
         case wxDF_TEXT:
 	{
 	    wxTextDataObject *text_object = (wxTextDataObject*) data;
@@ -684,62 +738,62 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
 
 wxDropSource::wxDropSource( wxWindow *win )
 {
-  g_blockEventsOnDrag = TRUE;
+    g_blockEventsOnDrag = TRUE;
   
-  m_window = win;
-  m_widget = win->m_widget;
-  if (win->m_wxwindow) m_widget = win->m_wxwindow;
+    m_window = win;
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
   
-  m_data = (wxDataObject *) NULL;
-  m_retValue = wxDragCancel;
+    m_data = (wxDataObject *) NULL;
+    m_retValue = wxDragCancel;
 
-  m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-  m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 }
 
 wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 {
-  g_blockEventsOnDrag = TRUE;
+    g_blockEventsOnDrag = TRUE;
   
-  m_window = win;
-  m_widget = win->m_widget;
-  if (win->m_wxwindow) m_widget = win->m_wxwindow;
-  m_retValue = wxDragCancel;
+    m_window = win;
+    m_widget = win->m_widget;
+    if (win->m_wxwindow) m_widget = win->m_wxwindow;
+    m_retValue = wxDragCancel;
   
-  m_data = &data;
+    m_data = &data;
 
-  m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
-  m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+    m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+    m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 }
 
 void wxDropSource::SetData( wxDataObject &data )
 {
-  m_data = &data;  
+    m_data = &data;  
 }
 
 wxDropSource::~wxDropSource(void)
 {
 //  if (m_data) delete m_data;
 
-  g_blockEventsOnDrag = FALSE;
+    g_blockEventsOnDrag = FALSE;
 }
    
 wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-  if (gdk_dnd.dnd_grabbed) return (wxDragResult) wxDragNone;
-  if (gdk_dnd.drag_really) return (wxDragResult) wxDragNone;
+    if (gdk_dnd.dnd_grabbed) return (wxDragResult) wxDragNone;
+    if (gdk_dnd.drag_really) return (wxDragResult) wxDragNone;
   
-  wxASSERT_MSG( m_data, "wxDragSource: no data" );
+    wxASSERT_MSG( m_data, "wxDragSource: no data" );
   
-  if (!m_data) return (wxDragResult) wxDragNone;
+    if (!m_data) return (wxDragResult) wxDragNone;
   
-  static GtkWidget *drag_icon = (GtkWidget*) NULL;
-  static GtkWidget *drop_icon = (GtkWidget*) NULL;
+    static GtkWidget *drag_icon = (GtkWidget*) NULL;
+    static GtkWidget *drop_icon = (GtkWidget*) NULL;
 
-  GdkPoint hotspot_1 = {0,-5 };
+    GdkPoint hotspot_1 = {0,-5 };
       
-     if (!drag_icon)
-	{
+    if (!drag_icon)
+    {
 	  drag_icon = shape_create_icon ( gv_xpm,
 					 440, 140, 0,0, GTK_WINDOW_POPUP);
 	  
@@ -748,12 +802,12 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 			      &drag_icon);
 
 	  gtk_widget_hide (drag_icon);
-	}
+    }
       
-  GdkPoint hotspot_2 = {-5,-5};
+    GdkPoint hotspot_2 = {-5,-5};
 	
-      if (!drop_icon)
-	{
+    if (!drop_icon)
+    {
 	  drop_icon = shape_create_icon ( page_xpm,
 					 440, 140, 0,0, GTK_WINDOW_POPUP);
 	  
@@ -762,7 +816,7 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 			      &drop_icon);
 
 	  gtk_widget_hide (drop_icon);
-	}
+    }
 	
 
     gdk_dnd_set_drag_shape( drag_icon->window,
@@ -771,101 +825,107 @@ wxDragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 			     &hotspot_2);
   
   
-  GdkWindowPrivate *wp = (GdkWindowPrivate*) m_widget->window;
+    GdkWindowPrivate *wp = (GdkWindowPrivate*) m_widget->window;
   
-  RegisterWindow();
+    RegisterWindow();
   
-  gdk_dnd.drag_perhaps = TRUE;
+    gdk_dnd.drag_perhaps = TRUE;
 
-  gdk_dnd.dnd_drag_start.x = 5;
-  gdk_dnd.dnd_drag_start.y = 5;
-  gdk_dnd.real_sw = wp;
+    gdk_dnd.dnd_drag_start.x = 5;
+    gdk_dnd.dnd_drag_start.y = 5;
+    gdk_dnd.real_sw = wp;
 	  
-  if (gdk_dnd.drag_startwindows)
-  {
-    g_free( gdk_dnd.drag_startwindows );
-    gdk_dnd.drag_startwindows = (GdkWindow **) NULL;
-  }
-  gdk_dnd.drag_numwindows = gdk_dnd.drag_really = 0;
+    if (gdk_dnd.drag_startwindows)
+    {
+        g_free( gdk_dnd.drag_startwindows );
+        gdk_dnd.drag_startwindows = (GdkWindow **) NULL;
+    }
+    gdk_dnd.drag_numwindows = gdk_dnd.drag_really = 0;
   
-  XWindowAttributes dnd_winattr;
-  XGetWindowAttributes( gdk_display, wp->xwindow, &dnd_winattr );
-  wp->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
+    XWindowAttributes dnd_winattr;
+    XGetWindowAttributes( gdk_display, wp->xwindow, &dnd_winattr );
+    wp->dnd_drag_savedeventmask = dnd_winattr.your_event_mask;
   
-  gdk_dnd_drag_addwindow( m_widget->window );
+    gdk_dnd_drag_addwindow( m_widget->window );
   
-  GdkEventDragBegin ev;
-  ev.type = GDK_DRAG_BEGIN;
-  ev.window = m_widget->window;
-  ev.u.allflags = 0;
-  ev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
+    GdkEventDragBegin ev;
+    ev.type = GDK_DRAG_BEGIN;
+    ev.window = m_widget->window;
+    ev.u.allflags = 0;
+    ev.u.flags.protocol_version = DND_PROTOCOL_VERSION;
   
-  gdk_event_put( (GdkEvent*)&ev );
+    gdk_event_put( (GdkEvent*)&ev );
   
-  XGrabPointer( gdk_display, wp->xwindow, False, 
-                ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask,
-		GrabModeAsync, GrabModeAsync, gdk_root_window, None, CurrentTime );
+    XGrabPointer( gdk_display, wp->xwindow, False, 
+                  ButtonMotionMask | ButtonPressMask | ButtonReleaseMask | PointerMotionMask,
+		  GrabModeAsync, GrabModeAsync, gdk_root_window, None, CurrentTime );
 		
-  gdk_dnd_set_drag_cursors( m_defaultCursor.GetCursor(), m_goaheadCursor.GetCursor() );
+    gdk_dnd_set_drag_cursors( m_defaultCursor.GetCursor(), m_goaheadCursor.GetCursor() );
   
-  gdk_dnd.dnd_grabbed = TRUE;
-  gdk_dnd.drag_really = 1;
+    gdk_dnd.dnd_grabbed = TRUE;
+    gdk_dnd.drag_really = 1;
   
-  int x = 0;
-  int y = 0;
-  wxGetMousePosition( &x, &y );  
+    int x = 0;
+    int y = 0;
+    wxGetMousePosition( &x, &y );  
   
-  gdk_dnd_display_drag_cursor( x, y, FALSE, TRUE );
+    gdk_dnd_display_drag_cursor( x, y, FALSE, TRUE );
   
-/*
-    shape_motion( drag_icon, (GdkEventMotion *)NULL );
-    shape_motion( drop_icon, (GdkEventMotion *)NULL );
-*/
-
-  while (gdk_dnd.drag_really || gdk_dnd.drag_perhaps) wxYield();
+    while (gdk_dnd.drag_really || gdk_dnd.drag_perhaps) wxYield();
   
-  UnregisterWindow();
+    UnregisterWindow();
   
-  g_blockEventsOnDrag = FALSE;
+    g_blockEventsOnDrag = FALSE;
   
-  return m_retValue;
+    return m_retValue;
 }
 
 void wxDropSource::RegisterWindow(void)
 {
-  if (!m_data) return;
+    if (!m_data) return;
 
-  wxString formats;
+    wxString formats;
     
-  wxDataFormat df = m_data->GetFormat();
+    wxDataFormat df = m_data->GetFormat();
   
     switch (df) 
     {
-      case wxDF_TEXT: 
-        formats += "text/plain";
-	break;
-      case wxDF_FILENAME:
-        formats += "file:ALL";
-	break;
-      default:
-        break;
+        case wxDF_TEXT:
+	{ 
+            formats += "text/plain";
+	    break;
+	}
+        case wxDF_FILENAME:
+	{
+            formats += "file:ALL";
+	    break;
+	}
+        case wxDF_PRIVATE:
+	{
+	    wxPrivateDataObject* pdo = (wxPrivateDataObject*) m_data;
+	    formats += "applications/";
+	    formats += pdo->GetId();
+	    break;
+	}
+        default:
+            break;
     }
   
-  char *str = WXSTRINGCAST formats;
+    char *str = WXSTRINGCAST formats;
   
-  gtk_widget_dnd_drag_set( m_widget, TRUE, &str, 1 );
+    gtk_widget_dnd_drag_set( m_widget, TRUE, &str, 1 );
 
-  gtk_signal_connect( GTK_OBJECT(m_widget), "drag_request_event",
-    GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)this );
+    gtk_signal_connect( GTK_OBJECT(m_widget), "drag_request_event",
+      GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)this );
 }
 
 void wxDropSource::UnregisterWindow(void)
 {
-  if (!m_widget) return;
+    if (!m_widget) return;
   
-  gtk_widget_dnd_drag_set( m_widget, FALSE, (gchar **) NULL, 0 );
+    gtk_widget_dnd_drag_set( m_widget, FALSE, (gchar **) NULL, 0 );
   
-  gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
+    gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
 }
 
 

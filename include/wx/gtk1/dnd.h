@@ -43,6 +43,7 @@ class wxWindow;
 class wxDropTarget;
 class wxTextDropTarget;
 class wxFileDropTarget;
+class wxPrivateDropTarget;
 
 class wxDropSource;
 
@@ -88,6 +89,36 @@ class wxTextDropTarget: public wxDropTarget
   
     virtual size_t GetFormatCount() const;
     virtual wxDataFormat GetFormat(size_t n) const;
+};
+
+//-------------------------------------------------------------------------
+// wxPrivateDropTarget
+//-------------------------------------------------------------------------
+
+class wxPrivateDropTarget: public wxDropTarget
+{
+public:
+
+  wxPrivateDropTarget();
+  
+  // you have to override OnDrop to get at the data
+    
+  // the string ID identifies the format of clipboard or DnD data. a word
+  // processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
+  // to the clipboard - the latter with the Id "WXWORD_FORMAT".
+    
+  void SetId( const wxString& id )
+      { m_id = id; }
+    
+  wxString GetId()
+      { return m_id; }
+
+private:
+
+  virtual size_t GetFormatCount() const;
+  virtual wxDataFormat GetFormat(size_t n) const;
+    
+  wxString   m_id;
 };
 
 // ----------------------------------------------------------------------------
