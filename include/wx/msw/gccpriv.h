@@ -10,6 +10,10 @@
             #define HAVE_W32API_H
         #endif
     #endif
+#elif defined( __CYGWIN__ ) && !defined( HAVE_W32API_H )
+    #if ( __GNUC__ > 2 ) 
+        #define HAVE_W32API_H
+    #endif
 #endif
 
 // check for MinGW/Cygwin w32api version ( releases >= 0.5, only )
