@@ -174,6 +174,67 @@ The method does these things:
 
 You shouldn't use InitParser, DoParsing, GetProduct or DoneParser directly.
 
+
+
+\membersection{wxHtmlParser::PushTagHandler}\label{wxhtmlparserpushtaghandler}
+
+\func{void}{PushTagHandler}{\param{wxHtmlTagHandler* }{handler}, \param{wxString }{tags}}
+
+Forces the handler to handle additional tags 
+(not returned by \helpref{GetSupportedTags}{wxhtmltaghandlergetsupportedtags}). 
+The handler should already be added to this parser.
+
+\wxheading{Parameters}
+
+\docparam{handler}{the handler}
+\docparam{tags}{List of tags (in same format as GetSupportedTags's return value). The parser
+will redirect these tags to {\it handler} (until call to \helpref{PopTagHandler}{wxhtmlparserpoptaghandler}). }
+
+\wxheading{Example}
+
+Imagine you want to parse following pseudo-html structure:
+
+\begin{verbatim}
+<myitems>
+    <param name="one" value="1">
+    <param name="two" value="2">
+</myitems>
+
+<execute>
+    <param program="text.exe">
+</execute>
+\end{verbatim}
+
+It is obvious that you cannot use only one tag handler for <param> tag.
+Instead you must use context-sensitive handlers for <param> inside <myitems>
+and <param> inside <execute>.        
+
+This is the prefered solution:
+
+\begin{verbatim}
+TAG_HANDLER_BEGIN(MYITEM, "MYITEMS")
+    TAG_HANDLER_PROC(tag)
+    {
+        // ...something...
+
+        m_Parser -> PushTagHandler(this, "PARAM");
+        ParseInner(tag);
+        m_Parser -> PopTagHandler();
+
+        // ...something...
+     }
+TAG_HANDLER_END(MYITEM)
+\end{verbatim}
+
+
+\membersection{wxHtmlParser::PopTagHandler}\label{wxhtmlparserpoptaghandler}
+
+\func{void}{PopTagHandler}{\void}
+
+Restores parser's state before last call to 
+\helpref{PushTagHandler}{wxhtmlparserpushtaghandler}.
+
+
 \membersection{wxHtmlParser::SetFS}\label{wxhtmlparsersetfs}
 
 \func{void}{SetFS}{\param{wxFileSystem }{*fs}}
