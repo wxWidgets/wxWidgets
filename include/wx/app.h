@@ -24,6 +24,7 @@
 #endif // wxUSE_GUI
 
 #include "wx/build.h"
+#include "wx/init.h"        // we must declare wxEntry()
 
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxAppTraits;
@@ -554,7 +555,6 @@ public:
 
 #if !wxUSE_GUI || !defined(__WXMSW__)
     #define IMPLEMENT_WXWIN_MAIN                                              \
-        extern int wxEntry( int& argc, char **argv );                         \
         int main(int argc, char **argv) { return wxEntry(argc, argv); }
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     #define IMPLEMENT_WXWIN_MAIN \
