@@ -860,6 +860,7 @@ wxEVT_SCROLL_PAGEUP = wxc.wxEVT_SCROLL_PAGEUP
 wxEVT_SCROLL_PAGEDOWN = wxc.wxEVT_SCROLL_PAGEDOWN
 wxEVT_SCROLL_THUMBTRACK = wxc.wxEVT_SCROLL_THUMBTRACK
 wxEVT_SCROLL_THUMBRELEASE = wxc.wxEVT_SCROLL_THUMBRELEASE
+wxEVT_SCROLL_ENDSCROLL = wxc.wxEVT_SCROLL_ENDSCROLL
 wxEVT_SCROLLWIN_TOP = wxc.wxEVT_SCROLLWIN_TOP
 wxEVT_SCROLLWIN_BOTTOM = wxc.wxEVT_SCROLLWIN_BOTTOM
 wxEVT_SCROLLWIN_LINEUP = wxc.wxEVT_SCROLLWIN_LINEUP
@@ -1138,14 +1139,15 @@ def EVT_COMMAND_RANGE(win, id1, id2, cmd, func):
 
 # Scrolling
 def EVT_SCROLL(win, func):
-    win.Connect(-1, -1, wxEVT_SCROLL_TOP,       func)
-    win.Connect(-1, -1, wxEVT_SCROLL_BOTTOM,    func)
-    win.Connect(-1, -1, wxEVT_SCROLL_LINEUP,    func)
-    win.Connect(-1, -1, wxEVT_SCROLL_LINEDOWN,  func)
-    win.Connect(-1, -1, wxEVT_SCROLL_PAGEUP,    func)
-    win.Connect(-1, -1, wxEVT_SCROLL_PAGEDOWN,  func)
-    win.Connect(-1, -1, wxEVT_SCROLL_THUMBTRACK,func)
+    win.Connect(-1, -1, wxEVT_SCROLL_TOP,         func)
+    win.Connect(-1, -1, wxEVT_SCROLL_BOTTOM,      func)
+    win.Connect(-1, -1, wxEVT_SCROLL_LINEUP,      func)
+    win.Connect(-1, -1, wxEVT_SCROLL_LINEDOWN,    func)
+    win.Connect(-1, -1, wxEVT_SCROLL_PAGEUP,      func)
+    win.Connect(-1, -1, wxEVT_SCROLL_PAGEDOWN,    func)
+    win.Connect(-1, -1, wxEVT_SCROLL_THUMBTRACK,  func)
     win.Connect(-1, -1, wxEVT_SCROLL_THUMBRELEASE,func)
+    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_SCROLL_TOP(win, func):
     win.Connect(-1, -1, wxEVT_SCROLL_TOP, func)
@@ -1171,6 +1173,9 @@ def EVT_SCROLL_THUMBTRACK(win, func):
 def EVT_SCROLL_THUMBRELEASE(win, func):
     win.Connect(-1, -1, wxEVT_SCROLL_THUMBRELEASE, func)
 
+def EVT_SCROLL_ENDSCROLL(win, func):
+    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL, func)
+
 
 
 # Scrolling, with an id
@@ -1183,6 +1188,7 @@ def EVT_COMMAND_SCROLL(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_PAGEDOWN,  func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBTRACK,func)
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE,func)
+    win.Connect(-1, -1, wxEVT_SCROLL_ENDSCROLL,   func)
 
 def EVT_COMMAND_SCROLL_TOP(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_TOP, func)
@@ -1207,6 +1213,9 @@ def EVT_COMMAND_SCROLL_THUMBTRACK(win, id, func):
 
 def EVT_COMMAND_SCROLL_THUMBRELEASE(win, id, func):
     win.Connect(id, -1, wxEVT_SCROLL_THUMBRELEASE, func)
+
+def EVT_COMMAND_SCROLL_ENDSCROLL(win, id, func):
+    win.Connect(id, -1, wxEVT_SCROLL_ENDSCROLL, func)
 
 #---
 def EVT_SCROLLWIN(win, func):

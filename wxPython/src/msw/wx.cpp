@@ -2575,6 +2575,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_PAGEDOWN", PyInt_FromLong((long) wxEVT_SCROLL_PAGEDOWN));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_THUMBTRACK", PyInt_FromLong((long) wxEVT_SCROLL_THUMBTRACK));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_THUMBRELEASE", PyInt_FromLong((long) wxEVT_SCROLL_THUMBRELEASE));
+	 PyDict_SetItemString(d,"wxEVT_SCROLL_ENDSCROLL", PyInt_FromLong((long) wxEVT_SCROLL_ENDSCROLL));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_TOP", PyInt_FromLong((long) wxEVT_SCROLLWIN_TOP));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_BOTTOM", PyInt_FromLong((long) wxEVT_SCROLLWIN_BOTTOM));
 	 PyDict_SetItemString(d,"wxEVT_SCROLLWIN_LINEUP", PyInt_FromLong((long) wxEVT_SCROLLWIN_LINEUP));
