@@ -296,7 +296,8 @@ public:
     // copy ctor
   wxString(const wxString& stringSrc)
   {
-    wxASSERT( stringSrc.GetStringData()->IsValid() );
+    wxASSERT_MSG( stringSrc.GetStringData()->IsValid(),
+                  _T("did you forget to call UngetWriteBuf()?") );
 
     if ( stringSrc.IsEmpty() ) {
       // nothing to do for an empty string
@@ -364,8 +365,9 @@ public:
     if ( !GetStringData()->IsEmpty() )
       Reinit();
 
-    wxASSERT( GetStringData()->nDataLength == 0 );  // should be empty
-    wxASSERT( GetStringData()->nAllocLength == 0 ); // and not own any memory
+    wxASSERT_MSG( !GetStringData()->nDataLength &&
+                  !GetStringData()->nAllocLength,
+                  _T("string should be empty after Clear()") );
   }
 
   // contents test
@@ -389,10 +391,19 @@ public:
 
     // get last character
     wxChar  Last() const
-      { wxASSERT( !IsEmpty() ); return m_pchData[Len() - 1]; }
+      {
+          wxASSERT_MSG( !IsEmpty(), _T("wxString: index out of bounds") );
+
+          return m_pchData[Len() - 1];
+      }
+
     // get writable last character
     wxChar& Last()
-      { wxASSERT( !IsEmpty() ); CopyBeforeWrite(); return m_pchData[Len()-1]; }
+      {
+          wxASSERT_MSG( !IsEmpty(), _T("wxString: index out of bounds") );
+          CopyBeforeWrite();
+          return m_pchData[Len()-1];
+      }
 
     /*
         So why do we have all these overloaded operator[]s? A bit of history:
@@ -519,7 +530,8 @@ public:
       // string += string
   wxString& operator<<(const wxString& s)
   {
-    wxASSERT( s.GetStringData()->IsValid() );
+    wxASSERT_MSG( s.GetStringData()->IsValid(),
+                  _T("did you forget to call UngetWriteBuf()?") );
 
     ConcatSelf(s.Len(), s);
     return *this;
@@ -539,14 +551,27 @@ public:
 
       // string += buffer (i.e. from wxGetString)
 #if wxUSE_UNICODE
-  wxString& operator<<(const wxWCharBuffer& s) { (void)operator<<((const wchar_t *)s); return *this; }
-  void operator+=(const wxWCharBuffer& s) { (void)operator<<((const wchar_t *)s); }
-#else
-  wxString& operator<<(const wxCharBuffer& s) { (void)operator<<((const char *)s); return *this; }
-  void operator+=(const wxCharBuffer& s) { (void)operator<<((const char *)s); }
-#endif
+  wxString& operator<<(const wxWCharBuffer& s)
+    { (void)operator<<((const wchar_t *)s); return *this; }
+  void operator+=(const wxWCharBuffer& s)
+    { (void)operator<<((const wchar_t *)s); }
+#else // !wxUSE_UNICODE
+  wxString& operator<<(const wxCharBuffer& s)
+    { (void)operator<<((const char *)s); return *this; }
+  void operator+=(const wxCharBuffer& s)
+    { (void)operator<<((const char *)s); }
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // string += C string
+  wxString& Append(const wxString& s)
+    {
+        // test for IsEmpty() to share the string if possible
+        if ( IsEmpty() )
+            *this = s;
+        else
+            ConcatSelf(s.Length(), s.c_str());
+        return *this;
+    }
   wxString& Append(const wxChar* psz)
     { ConcatSelf(wxStrlen(psz), psz); return *this; }
     // append count copies of given character
@@ -771,7 +796,9 @@ public:
     // take nLen chars starting at nPos
   wxString(const wxString& str, size_t nPos, size_t nLen)
   {
-    wxASSERT( str.GetStringData()->IsValid() );
+    wxASSERT_MSG( str.GetStringData()->IsValid(),
+                  _T("did you forget to call UngetWriteBuf()?") );
+
     InitWith(str.c_str(), nPos, nLen == npos ? 0 : nLen);
   }
     // take all characters from pStart to pEnd
@@ -1016,11 +1043,22 @@ public:
   // items access (range checking is done in debug version)
     // get item at position uiIndex
   wxString& Item(size_t nIndex) const
-    { wxASSERT( nIndex < m_nCount ); return *(wxString *)&(m_pItems[nIndex]); }
+    {
+        wxASSERT_MSG( nIndex < m_nCount,
+                      _T("wxArrayString: index out of bounds") );
+
+        return *(wxString *)&(m_pItems[nIndex]);
+    }
+
     // same as Item()
   wxString& operator[](size_t nIndex) const { return Item(nIndex); }
     // get last item
-  wxString& Last() const { wxASSERT( !IsEmpty() ); return Item(Count() - 1); }
+  wxString& Last() const
+  {
+      wxASSERT_MSG( !IsEmpty(),
+                    _T("wxArrayString: index out of bounds") );
+      return Item(Count() - 1);
+  }
 
     // return a wxString[], useful for the controls which
     // take one in their ctor.  You must delete[] it yourself
