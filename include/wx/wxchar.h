@@ -311,7 +311,7 @@
     #define  wxGets      _getts
     #define  wxPerror    _tperror
     #define  wxPrintf    _tprintf
-    #define  wxPutc      _puttc
+    #define  wxPutc(c,f) _puttc(WXWCHAR_T_CAST(c),f)
     #define  wxPutchar   _puttchar
     #define  wxPuts      _putts
     #define  wxScanf     _tscanf
