@@ -40,6 +40,9 @@
 
 #include "wx/dialup.h"
 
+// Doesn't yet compile under BC++: no wininet.h
+#ifndef __BORLANDC__
+
 #include <ras.h>
 #include <raserror.h>
 
@@ -1273,4 +1276,6 @@ static void WINAPI wxRasDialFunc(UINT unMsg,
                 rasconnstate, dwError);
 }
 
+#endif
+  // __BORLANDC__
 #endif // wxUSE_DIALUP_MANAGER

@@ -46,6 +46,9 @@ wxWindows 2.1.11
 - Text alignment options in wxStaticText.
 - wxImage class extended to read PCX and GIF files.
 - Documentation improvements.
+- Revised configure system for wxGTK and wxMotif; tmake-based
+  system for generating wxMSW makefiles.
+- Installer for Windows as alternative to zip archives.
 
 Platforms supported
 -------------------

@@ -149,6 +149,9 @@ strong optimization, so long as the application is not strongly
 optimized. For example, in wxWindows project, set to 'Minimum
 Size'. In Dialog Editor project, set to 'Customize: Favor Small
 Code' (and no others). This will then work.
+Note also that a bug in the compiler, even without optimization,
+causes dobjcmn.cpp to produce an internal error, so setup.h
+switches off drag and drop for VC++ 5.
 
 Similarly, in VC++ 4, optimization can cause internal compiler
 errors, so edit src\makevc.env and change /O1 to /Od before

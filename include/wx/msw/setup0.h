@@ -32,7 +32,8 @@
 
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
-
+#define wxUSE_DIALUP_MANAGER   1
+                                // Use wxDialUpManager class
 #define wxUSE_POSTSCRIPT  0
                                 // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0
@@ -449,6 +450,13 @@
 #undef wxUSE_PCX
 #define wxUSE_PCX 0
 
+#endif
+
+// Problem with VC++ 5 and dobjcmn.cpp
+
+#if defined(_MSC_VER) && (_MSC_VER > 1020) && (_MSC_VER < 1200)
+#undef wxUSE_DRAG_AND_DROP
+#define wxUSE_DRAG_AND_DROP 0
 #endif
 
 #endif
