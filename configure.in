@@ -1976,17 +1976,17 @@ if test "$wxUSE_GUI" = "yes"; then
                     GTK_MODULES=gthread
                 fi
 
+                dnl note that if we fail to find GTK2 we abort and don't fall
+                dnl back to GTK1.x
                 wx_cv_lib_gtk=
                 if test "x$wxUSE_GTK2" = "xyes"; then
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
-                fi
-
-                if test -z "$wx_cv_lib_gtk"; then
+                else
                     AM_PATH_GTK(1.2.7, wx_cv_lib_gtk=1.2.7, , $GTK_MODULES)
-                fi
 
-                if test -z "$wx_cv_lib_gtk"; then
-                    AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
+                    if test -z "$wx_cv_lib_gtk"; then
+                        AM_PATH_GTK(1.2.3, wx_cv_lib_gtk=1.2.3, , $GTK_MODULES)
+                    fi
                 fi
 
                 if test -z "$wx_cv_lib_gtk"; then
@@ -2036,6 +2036,11 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                         wxUSE_PRINTING_ARCHITECTURE="no"
                     ]
                 )
+            fi
+        else
+            if test "$wxUSE_UNICODE" = "yes"; then
+                AC_MSG_WARN([Unicode configuration not supported with GTK+ 1.x])
+                wxUSE_UNICODE=no
             fi
         fi
 
@@ -2187,7 +2192,7 @@ equivalent variable and GTK+ is version 1.2.3 or above.
                 ]
             )
         fi
-        
+
         if test "$wxUSE_UNICODE" = "yes"; then
                 PKG_CHECK_MODULES(PANGOX, pangox,
                     [
@@ -4357,9 +4362,9 @@ fi
 if test "$wxUSE_RESOURCES" = "yes" ; then
     if test "$wxUSE_NANOX" = "yes"; then
         AC_MSG_WARN([Cannot use resource database functions in NanoX])
-	else
-		AC_DEFINE(wxUSE_RESOURCES)
-		SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
+    else
+        AC_DEFINE(wxUSE_RESOURCES)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS resource"
     fi
     if test "$wxUSE_PROLOGIO" != "yes" ; then
         ALL_OBJECTS="$ALL_OBJECTS parser.o"
