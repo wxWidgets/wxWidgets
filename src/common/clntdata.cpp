@@ -24,7 +24,7 @@
 
 
 // ----------------------------------------------------------------------------
-
+#if 0
 
 wxClientDataContainer::wxClientDataContainer()
 {
@@ -81,7 +81,7 @@ void *wxClientDataContainer::DoGetClientData() const
     return m_clientData;
 }
 
-
+#endif
 // ----------------------------------------------------------------------------
 
 

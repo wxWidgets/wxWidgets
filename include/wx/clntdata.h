@@ -50,7 +50,7 @@ private:
 
 
 
-
+#if 0
 // This class is a mixin that provides storage and management of "client
 // data."  The client data stored can either be a pointer to a wxClientData
 // object in which case it is managed by the container (i.e.  it will delete
@@ -73,7 +73,7 @@ protected:
     // The user data: either an object which will be deleted by the container
     // when it's deleted or some raw pointer which we do nothing with - only
     // one type of data can be used with the given window (i.e. you cannot set
-    // the void data and then associate the window with wxClientData or vice
+    // the void data and then associate the container with wxClientData or vice
     // versa)
     union
     {
@@ -92,7 +92,7 @@ protected:
     wxClientDataType m_clientDataType;
 
 };
-
+#endif
 // ----------------------------------------------------------------------------
 #endif
 

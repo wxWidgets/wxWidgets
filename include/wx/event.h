@@ -1653,7 +1653,7 @@ struct WXDLLEXPORT wxEventTable
 // wxEvtHandler: the base class for all objects handling wxWindows events
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEvtHandler : public wxObject, public wxClientDataContainer
+class WXDLLEXPORT wxEvtHandler : public wxObject
 {
 public:
     wxEvtHandler();
@@ -1702,6 +1702,15 @@ public:
                   wxObjectEventFunction func = NULL,
                   wxObject *userData = (wxObject *) NULL )
         { return Disconnect(id, -1, eventType, func, userData); }
+
+
+    // User data can be associated with each wxEvtHandler
+    void SetClientObject( wxClientData *data ) { DoSetClientObject(data); }
+    wxClientData *GetClientObject() const { return DoGetClientObject(); }
+
+    void SetClientData( void *data ) { DoSetClientData(data); }
+    void *GetClientData() const { return DoGetClientData(); }
+
 
     // implementation from now on
     virtual bool SearchEventTable(wxEventTable& table, wxEvent& event);
@@ -1762,6 +1771,29 @@ protected:
 
     // Is event handler enabled?
     bool                m_enabled;
+
+
+    // The user data: either an object which will be deleted by the container
+    // when it's deleted or some raw pointer which we do nothing with - only
+    // one type of data can be used with the given window (i.e. you cannot set
+    // the void data and then associate the container with wxClientData or vice
+    // versa)
+    union
+    {
+        wxClientData *m_clientObject;
+        void         *m_clientData;
+    };
+
+    // what kind of data do we have?
+    wxClientDataType m_clientDataType;
+
+    // client data accessors
+    virtual void DoSetClientObject( wxClientData *data );
+    virtual wxClientData *DoGetClientObject() const;
+
+    virtual void DoSetClientData( void *data );
+    virtual void *DoGetClientData() const;
+
 
 private:
     DECLARE_DYNAMIC_CLASS(wxEvtHandler)
