@@ -1156,6 +1156,7 @@ if test "$wxUSE_WINE" = "yes"; then
     DEFAULT_DEFAULT_wxUSE_GTK=0
     DEFAULT_DEFAULT_wxUSE_MOTIF=0
     DEFAULT_DEFAULT_wxUSE_MSW=1
+    wxUSE_SHARED=no
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -5758,8 +5759,27 @@ AC_SUBST(SAMPLES_RPATH_FLAG)
 AC_SUBST(SAMPLES_RPATH_POSTLINK)
 AC_SUBST(HOST_SUFFIX)
 
-AC_BAKEFILE
+dnl Please see comments in aclocal.m4 (AC_BAKEFILE) for an explanation
+dnl of why this doesn't just say AC_BAKEFILE at present, to make Winelib
+dnl configuration work.
 
+AC_BAKEFILE_CHECK_BASIC_STUFF
+AC_BAKEFILE_GNUMAKE
+AC_BAKEFILE_PLATFORM
+
+dnl Override plaform detection for Wine
+if test "$wxUSE_WINE" = "yes"; then
+    PLATFORM_UNIX=0
+    PLATFORM_WIN32=1
+fi
+
+AC_BAKEFILE_SUFFIXES
+AC_BAKEFILE_SHARED_LD
+AC_BAKEFILE_SHARED_VERSIONS
+AC_BAKEFILE_DEPS
+AC_BAKEFILE_RES_COMPILERS
+
+builtin(include, autoconf_inc.m4)
 
 dnl Find out if we have to define NO_GCC_PRAGMA and WX_PRECOMP:
 if test $GCC_PCH = 1 ; then
