@@ -505,23 +505,7 @@ void wxChoice::DoSetSize(int x, int y,
         height += hItem*(nItems + 1);
     }
 
-    // To work around a Windows bug (see "Bug in Windows Combobox" thread in Google Groups)
-    // we have to reset the selection if it was accidentally selected in the size.
-    DWORD oldSelStart = 0;
-    DWORD oldSelEnd = 0;
-    DWORD newSelStart = 0;
-    DWORD newSelEnd = 0;
-
-    ::SendMessage(GetHwnd(), CB_GETEDITSEL, (WPARAM) & oldSelStart, (LPARAM) & oldSelEnd);
-
     wxControl::DoSetSize(x, y, width, height, sizeFlags);
-
-    ::SendMessage(GetHwnd(), CB_GETEDITSEL, (WPARAM) & newSelStart, (LPARAM) & newSelEnd);
-
-    if (oldSelStart != newSelStart || oldSelEnd != newSelEnd)
-    {
-        ::SendMessage(GetHwnd(), CB_SETEDITSEL, (WPARAM) 0, (LPARAM) MAKELPARAM(oldSelStart, oldSelEnd));
-    }
 
     // I'm commenting this out since the code appears to make choices
     // and comboxes too high when they have associated sizers. I'm sure this

@@ -477,6 +477,29 @@ WXDWORD wxComboBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 }
 
 // ----------------------------------------------------------------------------
+// wxComboBox geometry
+// ----------------------------------------------------------------------------
+
+void
+wxComboBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // work around a Windows bug (search for "Bug in Windows Combobox" in
+    // Google Groups): resizing the combobox changes the selection in it
+    long fromOld, toOld;
+    GetSelection(&fromOld, &toOld);
+
+    wxChoice::DoSetSize(x, y, width, height, sizeFlags);
+
+    long fromNew, toNew;
+    GetSelection(&fromNew, &toNew);
+
+    if ( fromOld != fromNew || toOld != toNew )
+    {
+        SetSelection(fromOld, toOld);
+    }
+}
+
+// ----------------------------------------------------------------------------
 // wxComboBox text control-like methods
 // ----------------------------------------------------------------------------
 

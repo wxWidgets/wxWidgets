@@ -136,6 +136,9 @@ public:
 
 protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 
     // common part of all ctors
     void Init() { m_selectionOld = -1; }
