@@ -193,6 +193,14 @@ wxRect wxListbook::GetPageRect() const
 
 void wxListbook::OnSize(wxSizeEvent& event)
 {
+    event.Skip();
+
+    if ( !m_list )
+    {
+        // we're not fully created yet
+        return;
+    }
+
     // resize the list control and the page area to fit inside our new size
     const wxSize sizeClient = GetClientSize(),
                  sizeList = GetListSize();
@@ -267,8 +275,6 @@ void wxListbook::OnSize(wxSizeEvent& event)
             page->Show();
         }
     }
-
-    event.Skip();
 }
 
 wxSize wxListbook::CalcSizeFromPage(const wxSize& sizePage) const
