@@ -132,9 +132,70 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 //
 // TODO: isn't there a GTK function to draw it?
 void
-wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
+wxRendererGTK::DrawTreeItemButton(wxWindow* win,
                                   wxDC& dc, const wxRect& rect, int flags)
 {
+#if 1
+
+#define PM_SIZE 8
+
+    GtkPizza *pizza = GTK_PIZZA( win->m_wxwindow );
+    GtkStyle *style = win->m_widget->style;
+    int x = rect.x;
+    int y = rect.y;
+
+#if 1
+    // This draws the GTK+ 2.2.4 triangle
+    x--;
+    GdkPoint points[3];
+    
+    if ( flags & wxCONTROL_EXPANDED )
+    {
+        points[0].x = x;
+        points[0].y = y + (PM_SIZE + 2) / 6;
+        points[1].x = points[0].x + (PM_SIZE + 2);
+        points[1].y = points[0].y;
+        points[2].x = (points[0].x + (PM_SIZE + 2) / 2);
+        points[2].y = y + 2 * (PM_SIZE + 2) / 3;
+    }
+    else
+    {  
+        points[0].x = x + ((PM_SIZE + 2) / 6 + 2);
+        points[0].y = y - 1;
+        points[1].x = points[0].x;
+        points[1].y = points[0].y + (PM_SIZE + 2);
+        points[2].x = (points[0].x +
+			 (2 * (PM_SIZE + 2) / 3 - 1));
+        points[2].y = points[0].y + (PM_SIZE + 2) / 2;
+    }
+
+    if ( flags & wxCONTROL_CURRENT )
+        gdk_draw_polygon( pizza->bin_window, style->fg_gc[GTK_STATE_PRELIGHT], TRUE, points, 3);
+    else
+        gdk_draw_polygon( pizza->bin_window, style->base_gc[GTK_STATE_NORMAL], TRUE, points, 3);
+    gdk_draw_polygon( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL], FALSE, points, 3 );
+#else
+    // this draws the GTK+ 2.2.3 tree item square    
+    gdk_draw_rectangle( pizza->bin_window,
+        style->base_gc[GTK_STATE_NORMAL], TRUE,
+        x, y, PM_SIZE, PM_SIZE);
+    gdk_draw_rectangle( pizza->bin_window,
+        style->fg_gc[GTK_STATE_NORMAL], FALSE,
+        x, y, PM_SIZE, PM_SIZE);
+
+    gdk_draw_line( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL],
+        x + 2, y + PM_SIZE / 2, x + PM_SIZE - 2, y + PM_SIZE / 2);
+
+    if ( flags & wxCONTROL_EXPANDED )
+    {
+        gdk_draw_line( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL],
+		       x + PM_SIZE / 2, y + 2,
+		       x + PM_SIZE / 2, y + PM_SIZE - 2);
+    }
+#endif    
+    
+    
+#else
     dc.SetBrush(wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT),
                         wxSOLID));
     dc.SetPen(*wxBLACK_PEN);
@@ -163,6 +224,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* WXUNUSED(win),
     }
 
     dc.DrawPolygon(3, button);
+#endif
 }
 
 #endif // GTK 2.0

@@ -183,7 +183,7 @@ public:
 
         // return the item at given position (or NULL if no item), onButton is
         // TRUE if the point belongs to the item's button, otherwise it lies
-        // on the button's label
+        // on the item's label
     wxGenericTreeItem *HitTest( const wxPoint& point,
                                 const wxGenericTreeCtrl *,
                                 int &flags,
@@ -578,8 +578,8 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest(const wxPoint& point,
                 HasPlus() && theCtrl->HasButtons() )
 #else
             // 5 is the size of the plus sign
-            if ((point.x > xCross-5) && (point.x < xCross+5) &&
-                (point.y > y_mid-5) && (point.y < y_mid+5) &&
+            if ((point.x > xCross-6) && (point.x < xCross+6) &&
+                (point.y > y_mid-6) && (point.y < y_mid+6) &&
                 HasPlus() && theCtrl->HasButtons() )
 #endif
             {
@@ -724,7 +724,8 @@ void wxGenericTreeCtrl::Init()
 
     m_dragCount = 0;
     m_isDragging = FALSE;
-    m_dropTarget = m_oldSelection = (wxGenericTreeItem *)NULL;
+    m_dropTarget = m_oldSelection = NULL;
+    m_underMouse = NULL;
     m_textCtrl = NULL;
 
     m_renameTimer = NULL;
@@ -2334,7 +2335,13 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             {
                 static const int wImage = 9;
                 static const int hImage = 9;
-
+                
+                int flag = 0;
+                if (item->IsExpanded())
+                    flag |= wxCONTROL_EXPANDED;
+                if (item == m_underMouse)
+                    flag |= wxCONTROL_CURRENT;
+                                            
                 wxRendererNative::Get().DrawTreeItemButton
                                         (
                                             this,
@@ -2342,9 +2349,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                                             wxRect(x - wImage/2,
                                                    y_mid - hImage/2,
                                                    wImage, hImage),
-                                            item->IsExpanded()
-                                                ? wxCONTROL_EXPANDED
-                                                : 0
+                                            flag
                                         );
             }
         }
@@ -2873,6 +2878,38 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
 {
     if ( !m_anchor ) return;
 
+    wxPoint pt = CalcUnscrolledPosition(event.GetPosition());
+    
+    // Is the mouse over a tree item button?
+    int flags = 0;
+    wxGenericTreeItem *underMouse = m_anchor->HitTest(pt, this, flags, 0);
+    if ((underMouse) &&
+        (flags & wxTREE_HITTEST_ONITEMBUTTON) &&
+        (!event.LeftIsDown()) &&
+        (!m_isDragging) && 
+        (!m_renameTimer || !m_renameTimer->IsRunning()))
+    {
+    }
+    else
+    {
+        underMouse = NULL;
+    }
+    
+    if (underMouse != m_underMouse)
+    {
+         if (m_underMouse)
+         {
+            // unhighlight old item
+            wxGenericTreeItem *tmp = m_underMouse;
+            m_underMouse = NULL;
+            RefreshLine( tmp );
+         }
+         
+         m_underMouse = underMouse;
+         if (m_underMouse)
+            RefreshLine( m_underMouse );
+    }
+
 #if wxUSE_TOOLTIPS
     // Determines what item we are hovering over and need a tooltip for
     wxTreeItemId hoverItem = HitTest(ScreenToClient(wxGetMousePosition()));
@@ -2907,9 +2944,8 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
         return;
     }
 
-    wxPoint pt = CalcUnscrolledPosition(event.GetPosition());
 
-    int flags = 0;
+    flags = 0;
     wxGenericTreeItem *item = m_anchor->HitTest(pt, this, flags, 0);
 
     if ( event.Dragging() && !m_isDragging )

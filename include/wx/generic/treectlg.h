@@ -423,6 +423,7 @@ protected:
     wxGenericTreeItem   *m_dropTarget;
     wxCursor             m_oldCursor;  // cursor is changed while dragging
     wxGenericTreeItem   *m_oldSelection;
+    wxGenericTreeItem   *m_underMouse; // for visual effects
     wxTreeTextCtrl      *m_textCtrl;
 
     wxTimer             *m_renameTimer;
