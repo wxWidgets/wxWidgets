@@ -386,7 +386,7 @@ void wxControl::MacAdjustControlRect()
             m_height += 2 * m_macVerticalBorder;
         }
         
-        wxMacDrawingHelper helper ( wxFindWinFromMacWindow( GetMacRootWindow() ) ) ;
+        wxMacDrawingHelper helper ( wxFindWinFromMacWindow( MacGetRootWindow() ) ) ;
         if ( helper.Ok() )
         {
             UMASizeControl( m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
@@ -411,14 +411,15 @@ void wxControl::MacSuperChangedPosition()
         int former_mac_y = contrlRect.top ;
         int mac_x = m_x ;
         int mac_y = m_y ;
-        GetParent()->MacClientToRootWindow( & mac_x , & mac_y ) ;
+        GetParent()->MacWindowToRootWindow( & mac_x , & mac_y ) ;
         
-        WindowRef rootwindow = GetMacRootWindow() ;
+        WindowRef rootwindow = MacGetRootWindow() ;
         wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
-        ::SetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
+
         wxMacDrawingHelper focus( wxrootwindow ) ;
     
-        if ( mac_x != former_mac_x || mac_y != former_mac_y )
+        if ( mac_x + m_macHorizontalBorder != former_mac_x || 
+            mac_y + m_macVerticalBorder != former_mac_y )
         {
             {
                 Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
@@ -430,13 +431,6 @@ void wxControl::MacSuperChangedPosition()
                 InvalWindowRect( rootwindow , &inval ) ;
             }
         }
-        if ( wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
-        {
-        }
-        else
-        {
-            ::SetThemeWindowBackground( rootwindow , kThemeBrushDocumentWindowBackground , false ) ;
-        }
     }
 
     wxWindow::MacSuperChangedPosition() ;
@@ -444,6 +438,7 @@ void wxControl::MacSuperChangedPosition()
 
 void wxControl::MacSuperEnabled( bool enabled ) 
 {
+    wxWindow::MacSuperEnabled( enabled ) ;
 /*
     if ( m_macControl )
     {
@@ -484,7 +479,7 @@ void  wxControl::MacSuperShown( bool show )
         {
             if ( m_macControlIsShown )
             {
-                ::HideControl( m_macControl ) ;
+                ::UMAHideControl( m_macControl ) ;
                 m_macControlIsShown = false ;
             }
         }
@@ -547,12 +542,12 @@ void  wxControl::DoSetSize(int x, int y,
              if (height == -1)   new_height = size.y;
          }
      }
-     // AdjustForParentClientOrigin(new_x, new_y, sizeFlags);
+     AdjustForParentClientOrigin(new_x, new_y, sizeFlags);
  
      mac_x = new_x;
      mac_y = new_y;
      if(GetParent()) {
-         GetParent()->MacClientToRootWindow(&mac_x, &mac_y);
+         GetParent()->MacWindowToRootWindow(&mac_x, &mac_y);
      }
      GetControlBounds(m_macControl, &oldbounds);
      oldbounds.right = oldbounds.left + m_width;
@@ -574,6 +569,8 @@ void  wxControl::DoSetSize(int x, int y,
  
      if ( doMove || doResize )
      {
+         Refresh() ;
+     
          // Ensure resize is within constraints
          if ((m_minWidth != -1) && (new_width < m_minWidth)) {
              new_width = m_minWidth;
@@ -595,7 +592,7 @@ void  wxControl::DoSetSize(int x, int y,
  
              UMAMoveControl(m_macControl,
                             mac_x + m_macHorizontalBorder, mac_y + m_macVerticalBorder);
- 
+
              wxMoveEvent event(wxPoint(m_x, m_y), m_windowId);
              event.SetEventObject(this);
              GetEventHandler()->ProcessEvent(event) ;
@@ -615,23 +612,7 @@ void  wxControl::DoSetSize(int x, int y,
              GetEventHandler()->ProcessEvent(event);
          }
  
-         // Set up port
-         WindowRef rootwindow = GetMacRootWindow() ;
-         wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
-         wxMacDrawingHelper focus( wxrootwindow );
- 
-         ::SetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
-         // Update window at old and new positions
-         SetRect(&newbounds, m_x, m_y, m_x + m_width, m_y + m_height);
-         InvalWindowRect( rootwindow , &oldbounds );
-         InvalWindowRect( rootwindow , &newbounds );
- 
-         MacRepositionScrollBars() ;
- 
-         if ( !wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
-         {
-             ::SetThemeWindowBackground( rootwindow, kThemeBrushDocumentWindowBackground, false );
-         }
+          Refresh() ;
      }
 }
 
@@ -646,7 +627,7 @@ bool  wxControl::Show(bool show)
         {
             if ( m_macControlIsShown )
             {
-                ::HideControl( m_macControl ) ;
+                ::UMAHideControl( m_macControl ) ;
                 m_macControlIsShown = false ;
             }
         }
@@ -679,21 +660,14 @@ bool  wxControl::Enable(bool enable)
 
 void wxControl::Refresh(bool eraseBack, const wxRect *rect)
 {
-  if ( m_macControl )
-  {
     wxWindow::Refresh( eraseBack , rect ) ;
-    }
-  else
-  {
-    wxWindow::Refresh( eraseBack , rect ) ;
-  }
 }
 
 void wxControl::MacRedrawControl()
 {
     if ( m_macControl )
     {
-        WindowRef window = GetMacRootWindow() ;
+        WindowRef window = MacGetRootWindow() ;
         if ( window )
         {
             wxWindow* win = wxFindWinFromMacWindow( window ) ;
@@ -706,9 +680,9 @@ void wxControl::MacRedrawControl()
                 wxWindow* parent = GetParent() ;
                 while ( parent )
                 {
-                    if( parent->MacGetWindowData() )
+                    if( parent->IsTopLevel() )
                     {
-                        ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+                    //    ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
                         break ;
                     }
                     
@@ -723,7 +697,7 @@ void wxControl::MacRedrawControl()
                 } 
                 
                 UMADrawControl( m_macControl ) ;
-                ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+                // ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
             }
         }
     }
@@ -733,7 +707,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 {
     if ( m_macControl )
     {
-        WindowRef window = GetMacRootWindow() ;
+        WindowRef window = MacGetRootWindow() ;
         if ( window )
         {
             wxWindow* win = wxFindWinFromMacWindow( window ) ;
@@ -743,12 +717,13 @@ void wxControl::OnPaint(wxPaintEvent& event)
                 // the mac control manager always assumes to have the origin at 0,0
                 SetOrigin( 0 , 0 ) ;
 
+                /*
                 wxWindow* parent = GetParent() ;
                 while ( parent )
                 {
-                    if( parent->MacGetWindowData() )
+                    if( parent->IsTopLevel() )
                     {
-                        ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+                    //    ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
                         break ;
                     }
                     
@@ -761,9 +736,10 @@ void wxControl::OnPaint(wxPaintEvent& event)
                     
                     parent = parent->GetParent() ;
                 } 
-
+                */
+                SetUpControlBackground( m_macControl , -1 , true ) ;
                 UMADrawControl( m_macControl ) ;
-                ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
+                // ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
             }
         }
     }
@@ -774,10 +750,7 @@ void wxControl::OnPaint(wxPaintEvent& event)
 }
 void wxControl::OnEraseBackground(wxEraseEvent& event)
 {
-    // In general, you don't want to erase the background of a control,
-    // or you'll get a flicker.
-    // TODO: move this 'null' function into each control that
-    // might flicker.
+    wxWindow::OnEraseBackground( event ) ; 
 }
 
 
@@ -814,7 +787,7 @@ void  wxControl::OnMouseEvent( wxMouseEvent &event )
         ControlHandle   control ;
         Point       localwhere ;
         SInt16      controlpart ;
-        WindowRef   window = GetMacRootWindow() ;
+        WindowRef   window = MacGetRootWindow() ;
         
         localwhere.h = x ;
         localwhere.v = y ;
