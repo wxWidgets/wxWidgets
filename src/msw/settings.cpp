@@ -174,6 +174,7 @@ wxFont wxSystemSettingsNative::GetFont(wxSystemFont index)
 // unknown
 static const int gs_metricsMap[] =
 {
+    -1,  // wxSystemMetric enums start at 1, so give a dummy value for pos 0.
 #ifdef __WIN32__
     SM_CMOUSEBUTTONS,
 #else
