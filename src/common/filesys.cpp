@@ -35,6 +35,8 @@
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
 
 
+static wxFileTypeInfo *gs_FSMimeFallbacks = NULL;
+
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
     wxString ext = wxEmptyString, mime = wxEmptyString;
@@ -53,39 +55,8 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
     static bool s_MinimalMimeEnsured = FALSE;
     if (!s_MinimalMimeEnsured) {
-        static const wxFileTypeInfo fallbacks[] =
-        {
-            wxFileTypeInfo("image/jpeg",
-                           "",
-                           "",
-                           "JPEG image (from fallback)",
-                           "jpg", "jpeg", NULL),
-            wxFileTypeInfo("image/gif",
-                           "",
-                           "",
-                           "GIF image (from fallback)",
-                           "gif", NULL),
-            wxFileTypeInfo("image/png",
-                           "",
-                           "",
-                           "PNG image (from fallback)",
-                           "png", NULL),
-            wxFileTypeInfo("image/bmp",
-                           "",
-                           "",
-                           "windows bitmap image (from fallback)",
-                           "bmp", NULL),
-            wxFileTypeInfo("text/html",
-                           "",
-                           "",
-                           "HTML document (from fallback)",
-                           "htm", "html", NULL),
-
-            // must terminate the table with this!
-            wxFileTypeInfo()
-        };
-
-        wxTheMimeTypesManager -> AddFallbacks(fallbacks);
+        wxTheMimeTypesManager -> AddFallbacks(gs_FSMimeFallbacks);
+        s_MinimalMimeEnsured = TRUE;
     }
 
     ft = wxTheMimeTypesManager -> GetFileTypeFromExtension(ext);
@@ -439,10 +410,47 @@ class wxFileSystemModule : public wxModule
         virtual bool OnInit()
         {
             wxFileSystem::AddHandler(new wxLocalFSHandler);
+            
+            gs_FSMimeFallbacks = new wxFileTypeInfo[6];
+            gs_FSMimeFallbacks[0] = 
+            wxFileTypeInfo("image/jpeg",
+                           "",
+                           "",
+                           "JPEG image (from fallback)",
+                           "jpg", "jpeg", NULL);
+            gs_FSMimeFallbacks[1] = 
+            wxFileTypeInfo("image/gif",
+                           "",
+                           "",
+                           "GIF image (from fallback)",
+                           "gif", NULL);
+            gs_FSMimeFallbacks[2] = 
+            wxFileTypeInfo("image/png",
+                           "",
+                           "",
+                           "PNG image (from fallback)",
+                           "png", NULL);
+            gs_FSMimeFallbacks[3] = 
+            wxFileTypeInfo("image/bmp",
+                           "",
+                           "",
+                           "windows bitmap image (from fallback)",
+                           "bmp", NULL);
+            gs_FSMimeFallbacks[4] = 
+            wxFileTypeInfo("text/html",
+                           "",
+                           "",
+                           "HTML document (from fallback)",
+                           "htm", "html", NULL);
+            gs_FSMimeFallbacks[5] = 
+            // must terminate the table with this!
+            wxFileTypeInfo();
+            
             return TRUE;
         }
         virtual void OnExit()
     	{
+            delete gs_FSMimeFallbacks;
             wxFileSystem::CleanUpHandlers();
     	}
 };
