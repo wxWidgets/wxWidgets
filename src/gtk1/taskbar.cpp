@@ -20,9 +20,10 @@
 #include "wx/frame.h"
 
 #include <gdk/gdkx.h>
-#include <gtk/gtkversion.h>
 
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 1, 0)
+#ifdef __WXGTK20__
+#include <gtk/gtkversion.h>
+#if GTK_CHECK_VERSION(2, 1, 0)
 
 #include "wx/gtk/taskbarpriv.h"
 #include "eggtrayicon.h"
@@ -66,3 +67,4 @@ bool wxTaskBarIconAreaBase::IsProtocolSupported()
 }
 
 #endif // __WXGTK20__
+#endif // GTK_CHECK_VERSION(2, 1, 0)

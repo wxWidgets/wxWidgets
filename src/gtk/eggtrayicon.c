@@ -107,9 +107,10 @@ Anders
 #include "wx/platform.h"
 
 #include <gdk/gdkx.h>
-#include <gtk/gtkversion.h>
 
-#if defined(__WXGTK20__) && GTK_CHECK_VERSION(2, 1, 0)
+#ifdef __WXGTK20__
+#include <gtk/gtkversion.h>
+#if GTK_CHECK_VERSION(2, 1, 0)
 
 #include <string.h>
 #include "eggtrayicon.h"
@@ -436,4 +437,5 @@ egg_tray_icon_cancel_message (EggTrayIcon *icon,
 				      id, 0, 0);
 }
 
-#endif /* __WXGTK20__ */
+#endif // __WXGTK20__
+#endif // GTK_CHECK_VERSION(2, 1, 0)
