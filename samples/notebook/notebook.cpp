@@ -37,7 +37,8 @@ bool MyApp::OnInit()
 {
   // Create the main window
 #if USE_TABBED_DIALOG
-  dialog = new MyDialog((wxFrame *) NULL, -1, (char *) "Notebook", wxPoint(-1, -1), wxSize(365, 390), wxDIALOG_MODAL|wxDEFAULT_DIALOG_STYLE);
+  dialog = new MyDialog((wxFrame *) NULL, -1, "Notebook", wxPoint(-1, -1), wxSize(365, 390),
+                        wxRESIZE_BORDER);
   dialog->ShowModal();
   delete dialog;
 
