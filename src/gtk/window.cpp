@@ -210,7 +210,11 @@ extern bool g_mainThreadLocked;
 
 #ifdef __WXDEBUG__
 
-#define DEBUG_MAIN_THREAD if (wxThread::IsMain() && g_mainThreadLocked) printf("gui reentrance");
+#if wxUSE_THREADS
+#   define DEBUG_MAIN_THREAD if (wxThread::IsMain() && g_mainThreadLocked) printf("gui reentrance");
+#else
+#   define DEBUG_MAIN_THREAD
+#endif
 
 static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
                                          GdkEvent *WXUNUSED(event),
