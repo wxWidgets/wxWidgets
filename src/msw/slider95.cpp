@@ -98,7 +98,9 @@ bool wxSlider95::Create(wxWindow *parent, wxWindowID id,
         msStyle |= SS_CENTER;
 
         WXDWORD exStyle = 0;
-        msStyle |= MSWGetStyle(GetWindowStyle(), & exStyle) ;
+        long valueStyle = m_windowStyle & ~wxBORDER_MASK;
+        valueStyle |= wxBORDER_SUNKEN;
+        msStyle |= MSWGetStyle(valueStyle, & exStyle) ;
 
         m_staticValue = (WXHWND) CreateWindowEx
             (
