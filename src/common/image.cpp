@@ -1262,6 +1262,8 @@ bool wxImage::SaveFile( const wxString& filename ) const
 bool wxImage::SaveFile( const wxString& filename, int type ) const
 {
 #if wxUSE_STREAMS
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+
     ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
 
     wxFileOutputStream stream(filename);
@@ -1279,6 +1281,8 @@ bool wxImage::SaveFile( const wxString& filename, int type ) const
 bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype ) const
 {
 #if wxUSE_STREAMS
+    wxCHECK_MSG( Ok(), false, wxT("invalid image") );
+
     ((wxImage*)this)->SetOption(wxIMAGE_OPTION_FILENAME, filename);
 
     wxFileOutputStream stream(filename);
@@ -1428,8 +1432,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, int type ) const
     wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandler(type);
-
-    if (handler == 0)
+    if ( !handler )
     {
         wxLogWarning( _("No image handler for type %d defined."), type );
 
@@ -1444,8 +1447,7 @@ bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype ) const
     wxCHECK_MSG( Ok(), false, wxT("invalid image") );
 
     wxImageHandler *handler = FindHandlerMime(mimetype);
-
-    if (handler == 0)
+    if ( !handler )
     {
         wxLogWarning( _("No image handler for type %s defined."), mimetype.GetData() );
 
