@@ -2679,17 +2679,10 @@ unsigned long wxImage::ComputeHistogram( wxHashTable &h )
  * Rotation code by Carlos Moreno
  */
 
-struct wxRotationPixel
-{
-    unsigned char rgb[3];
-};
-
-struct wxRotationPoint
-{
-    wxRotationPoint (double _x, double _y) : x(_x), y(_y) {}
-    wxRotationPoint (const wxPoint & p) : x(p.x), y(p.y) {}
-    double x, y;
-};
+// GRG: I've removed wxRotationPoint - we already have wxRealPoint which
+//      does exactly the same thing. And I also got rid of wxRotationPixel
+//      bacause of potential problems in architectures where alignment
+//      is an issue, so I had to rewrite parts of the code.
 
 static const double gs_Epsilon = 1e-10;
 
@@ -2705,34 +2698,31 @@ static inline int wxCint (double x)
 // repeating the time-consuming calls to these functions -- sin/cos can
 // be computed and stored in the calling function.
 
-inline wxRotationPoint rotated_point (const wxRotationPoint & p, double cos_angle, double sin_angle, const wxRotationPoint & p0)
+inline wxRealPoint rotated_point (const wxRealPoint & p, double cos_angle, double sin_angle, const wxRealPoint & p0)
 {
-    return wxRotationPoint (p0.x + (p.x - p0.x) * cos_angle - (p.y - p0.y) * sin_angle,
-                  p0.y + (p.y - p0.y) * cos_angle + (p.x - p0.x) * sin_angle);
+    return wxRealPoint (p0.x + (p.x - p0.x) * cos_angle - (p.y - p0.y) * sin_angle,
+                        p0.y + (p.y - p0.y) * cos_angle + (p.x - p0.x) * sin_angle);
 }
 
-inline wxRotationPoint rotated_point (double x, double y, double cos_angle, double sin_angle, const wxRotationPoint & p0)
+inline wxRealPoint rotated_point (double x, double y, double cos_angle, double sin_angle, const wxRealPoint & p0)
 {
-    return rotated_point (wxRotationPoint(x,y), cos_angle, sin_angle, p0);
+    return rotated_point (wxRealPoint(x,y), cos_angle, sin_angle, p0);
 }
 
 wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool interpolating, wxPoint * offset_after_rotation) const
 {
-    const wxImage& img = * this;
     int i;
     angle = -angle;     // screen coordinates are a mirror image of "real" coordinates
 
     // Create pointer-based array to accelerate access to wxImage's data
-    wxRotationPixel ** data = new wxRotationPixel * [img.GetHeight()];
+    unsigned char ** data = new unsigned char * [GetHeight()];
 
-    data[0] = (wxRotationPixel *) img.GetData();
+    data[0] = GetData();
 
-    for (i = 1; i < img.GetHeight(); i++)
-    {
-        data[i] = data[i - 1] + img.GetWidth();
-    }
+    for (i = 1; i < GetHeight(); i++)
+        data[i] = data[i - 1] + (3 * GetWidth());
 
-    // pre-compute coefficients for rotation formula
+    // precompute coefficients for rotation formula
     // (sine and cosine of the angle)
     const double cos_angle = cos(angle);
     const double sin_angle = sin(angle);
@@ -2741,16 +2731,15 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     // First, find rectangle that covers the rotated image;  to do that,
     // rotate the four corners
 
-    const wxRotationPoint p0 = centre_of_rotation;
+    const wxRealPoint p0(centre_of_rotation.x, centre_of_rotation.y);
 
-    wxRotationPoint p1 = rotated_point (0, 0, cos_angle, sin_angle, p0);
-    wxRotationPoint p2 = rotated_point (0, img.GetHeight(), cos_angle, sin_angle, p0);
-    wxRotationPoint p3 = rotated_point (img.GetWidth(), 0, cos_angle, sin_angle, p0);
-    wxRotationPoint p4 = rotated_point (img.GetWidth(), img.GetHeight(), cos_angle, sin_angle, p0);
+    wxRealPoint p1 = rotated_point (0, 0, cos_angle, sin_angle, p0);
+    wxRealPoint p2 = rotated_point (0, GetHeight(), cos_angle, sin_angle, p0);
+    wxRealPoint p3 = rotated_point (GetWidth(), 0, cos_angle, sin_angle, p0);
+    wxRealPoint p4 = rotated_point (GetWidth(), GetHeight(), cos_angle, sin_angle, p0);
 
     int x1 = (int) floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
     int y1 = (int) floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
-
     int x2 = (int) ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
     int y2 = (int) ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
 
@@ -2761,48 +2750,45 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         *offset_after_rotation = wxPoint (x1, y1);
     }
 
-    wxRotationPixel ** result_data = new wxRotationPixel * [rotated.GetHeight()];
-
-    result_data[0] = (wxRotationPixel *) rotated.GetData();
-
-    for (i = 1; i < rotated.GetHeight(); i++)
-    {
-        result_data[i] = result_data[i - 1] + rotated.GetWidth();
-    }
+    // GRG: The rotated (destination) image is always accessed
+    //      sequentially, so there is no need for a pointer-based
+    //      array here (and in fact it would be slower).
+    //
+    unsigned char * dst = rotated.GetData();
 
     // GRG: if the original image has a mask, use its RGB values
     //      as the blank pixel, else, fall back to default (black).
     //
-    wxRotationPixel blankPixel = {{ 0, 0, 0 }};
+    unsigned char blank_r = 0;
+    unsigned char blank_g = 0;
+    unsigned char blank_b = 0;
 
     if (HasMask())
     {
-        unsigned char r = GetMaskRed();
-        unsigned char g = GetMaskGreen();
-        unsigned char b = GetMaskBlue();
-        rotated.SetMaskColour( r, g, b );
-        blankPixel.rgb[0] = r;
-        blankPixel.rgb[1] = g;
-        blankPixel.rgb[2] = b;
+        blank_r = GetMaskRed();
+        blank_g = GetMaskGreen();
+        blank_b = GetMaskBlue();
+        rotated.SetMaskColour( blank_r, blank_g, blank_b );
     }
 
     // Now, for each point of the rotated image, find where it came from, by
     // performing an inverse rotation (a rotation of -angle) and getting the
     // pixel at those coordinates
 
-    // GRG: I'd suggest to take the (interpolating) test out of the loops
+    // GRG: I've taken the (interpolating) test out of the loops, so that
+    //      it is done only once, instead of repeating it for each pixel.
 
     int x;
-    for (x = 0; x < rotated.GetWidth(); x++)
+    if (interpolating)
     {
         for (int y = 0; y < rotated.GetHeight(); y++)
         {
-            wxRotationPoint src = rotated_point (x + x1, y + y1, cos_angle, -sin_angle, p0);
-
-            if (interpolating)
+            for (x = 0; x < rotated.GetWidth(); x++)
             {
-                if (0 < src.x && src.x < img.GetWidth() - 1 &&
-                    0 < src.y && src.y < img.GetHeight() - 1)
+                wxRealPoint src = rotated_point (x + x1, y + y1, cos_angle, -sin_angle, p0);
+
+                if (0 < src.x && src.x < GetWidth() - 1 &&
+                    0 < src.y && src.y < GetHeight() - 1)
                 {
                     // interpolate using the 4 enclosing grid-points.  Those
                     // points can be obtained using floor and ceiling of the
@@ -2815,10 +2801,11 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
                     // get four points and the distances (square of the distance,
                     // for efficiency reasons) for the interpolation formula
-                    const wxRotationPixel & v1 = data[y1][x1];
-                    const wxRotationPixel & v2 = data[y1][x2];
-                    const wxRotationPixel & v3 = data[y2][x2];
-                    const wxRotationPixel & v4 = data[y2][x1];
+
+                    // GRG: Do not calculate the points until they are
+                    //      really needed -- this way we can calculate
+                    //      just one, instead of four, if d1, d2, d3
+                    //      or d4 are < gs_Epsilon
 
                     const double d1 = (src.x - x1) * (src.x - x1) + (src.y - y1) * (src.y - y1);
                     const double d2 = (src.x - x2) * (src.x - x2) + (src.y - y1) * (src.y - y1);
@@ -2833,59 +2820,97 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 
                     if (d1 < gs_Epsilon)        // d1,d2,d3,d4 are positive -- no need for abs()
                     {
-                        result_data[y][x] = v1;
+                        unsigned char *p = data[y1] + (3 * x1);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
                     }
                     else if (d2 < gs_Epsilon)
                     {
-                        result_data[y][x] = v2;
+                        unsigned char *p = data[y1] + (3 * x2);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
                     }
                     else if (d3 < gs_Epsilon)
                     {
-                        result_data[y][x] = v3;
+                        unsigned char *p = data[y2] + (3 * x2);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
                     }
                     else if (d4 < gs_Epsilon)
                     {
-                        result_data[y][x] = v4;
+                        unsigned char *p = data[y2] + (3 * x1);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
+                        *(dst++) = *(p++);
                     }
                     else
                     {
                         // weights for the weighted average are proportional to the inverse of the distance
+                        unsigned char *v1 = data[y1] + (3 * x1);
+                        unsigned char *v2 = data[y1] + (3 * x2);
+                        unsigned char *v3 = data[y2] + (3 * x2);
+                        unsigned char *v4 = data[y2] + (3 * x1);
+
                         const double w1 = 1/d1, w2 = 1/d2, w3 = 1/d3, w4 = 1/d4;
 
-                        for (int i = 0; i < 3; i++)     // repeat calculation for R, G, and B
-                        {
-                            result_data[y][x].rgb[i] =
-                                (unsigned char) ( (w1 * v1.rgb[i] + w2 * v2.rgb[i] +
-                                                   w3 * v3.rgb[i] + w4 * v4.rgb[i]) /
-                                                  (w1 + w2 + w3 + w4) );
-                        }
+                        // GRG: Unrolled.
+
+                        *(dst++) = (unsigned char)
+                            ( (w1 * *(v1++) + w2 * *(v2++) +
+                               w3 * *(v3++) + w4 * *(v4++)) /
+                              (w1 + w2 + w3 + w4) );
+                        *(dst++) = (unsigned char)
+                            ( (w1 * *(v1++) + w2 * *(v2++) +
+                               w3 * *(v3++) + w4 * *(v4++)) /
+                              (w1 + w2 + w3 + w4) );
+                        *(dst++) = (unsigned char)
+                            ( (w1 * *(v1++) + w2 * *(v2++) +
+                               w3 * *(v3++) + w4 * *(v4++)) /
+                              (w1 + w2 + w3 + w4) );
                     }
                 }
                 else
                 {
-                    result_data[y][x] = blankPixel;
+                    *(dst++) = blank_r;
+                    *(dst++) = blank_g;
+                    *(dst++) = blank_b;
                 }
             }
-            else
+        }
+    }
+    else    // not interpolating
+    {
+        for (int y = 0; y < rotated.GetHeight(); y++)
+        {
+            for (x = 0; x < rotated.GetWidth(); x++)
             {
-                const int xs = wxCint (src.x);      // wxCint performs rounding to the
+                wxRealPoint src = rotated_point (x + x1, y + y1, cos_angle, -sin_angle, p0);
+
+                const int xs = wxCint (src.x);      // wxCint rounds to the
                 const int ys = wxCint (src.y);      // closest integer
 
-                if (0 <= xs && xs < img.GetWidth() &&
-                    0 <= ys && ys < img.GetHeight())
+                if (0 <= xs && xs < GetWidth() &&
+                    0 <= ys && ys < GetHeight())
                 {
-                    result_data[y][x] = data[ys][xs];
+                    unsigned char *p = data[ys] + (3 * xs);
+                    *(dst++) = *(p++);
+                    *(dst++) = *(p++);
+                    *(dst++) = *(p++);
                 }
                 else
                 {
-                    result_data[y][x] = blankPixel;
+                    *(dst++) = blank_r;
+                    *(dst++) = blank_g;
+                    *(dst++) = blank_b;
                 }
             }
         }
     }
 
     delete [] data;
-    delete [] result_data;
 
     return rotated;
 }
