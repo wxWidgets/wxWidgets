@@ -2163,6 +2163,7 @@ bool wxStyledTextCtrl::LoadFile(const wxString& filename)
 }
 
 
+#if wxUSE_DRAG_AND_DROP
 wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def) { 
         return m_swx->DoDragOver(x, y, def); 
 } 
@@ -2171,6 +2172,7 @@ wxDragResult wxStyledTextCtrl::DoDragOver(wxCoord x, wxCoord y, wxDragResult def
 bool wxStyledTextCtrl::DoDropText(long x, long y, const wxString& data) { 
     return m_swx->DoDropText(x, y, data);
 }
+#endif
 
 
 //----------------------------------------------------------------------
