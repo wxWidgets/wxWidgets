@@ -7,7 +7,7 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=test
+BIN_TARGET=dialogs
 # define library sources
 BIN_SRC=\
 dialogs.cpp

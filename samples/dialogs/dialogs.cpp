@@ -121,7 +121,7 @@ void MyFrame::ChooseColour(wxCommandEvent& WXUNUSED(event) )
         myCanvas->Clear();
         myCanvas->Refresh();
       }
-      dialog->Close();
+      dialog->Destroy();
 }
 
 void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
@@ -138,7 +138,7 @@ void MyFrame::ChooseFont(wxCommandEvent& WXUNUSED(event) )
         wxGetApp().m_canvasTextColour = retData.GetColour();
         myCanvas->Refresh();
       }
-      dialog->Close();
+      dialog->Destroy();
 }
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
@@ -162,7 +162,7 @@ void MyFrame::ChooseColourGeneric(wxCommandEvent& WXUNUSED(event))
         myCanvas->Clear();
         myCanvas->Refresh();
       }
-      dialog->Close();
+      dialog->Destroy();
 }
 
 void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
@@ -179,7 +179,7 @@ void MyFrame::ChooseFontGeneric(wxCommandEvent& WXUNUSED(event) )
         wxGetApp().m_canvasTextColour = retData.GetColour();
         myCanvas->Refresh();
       }
-      dialog->Close();
+      dialog->Destroy();
 }
 #endif
 
@@ -226,7 +226,14 @@ void MyFrame::FileOpen(wxCommandEvent& WXUNUSED(event) )
 
 	if (dialog.ShowModal() == wxID_OK)
 	{
-		wxMessageDialog dialog2(this, dialog.GetPath(), "Selected path");
+        wxString info;
+        info.Printf("Full file name: %s\n"
+                    "Path: %s\n"
+                    "Name: %s",
+                    dialog.GetPath().c_str(),
+                    dialog.GetDirectory().c_str(),
+                    dialog.GetFilename().c_str());
+		wxMessageDialog dialog2(this, info, "Selected file");
 		dialog2.ShowModal();
 	}
 }
