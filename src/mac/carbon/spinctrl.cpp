@@ -267,6 +267,13 @@ bool wxSpinCtrl::Show(bool show)
     return TRUE;
 }
 
+void wxSpinCtrl::SetFocus()
+{
+    if ( m_text != NULL) {
+        m_text->SetFocus();
+    }
+}
+
 // ----------------------------------------------------------------------------
 // value and range access
 // ----------------------------------------------------------------------------
