@@ -261,12 +261,3 @@ bool wxDir::GetNext(wxString *filename) const
     return M_DIR->Read(filename);
 }
 
-bool wxDir::HasSubDirs(const wxString& spec)
-{
-    wxCHECK_MSG( IsOpened(), FALSE, _T("must wxDir::Open() first") );
-
-    // just try to find first directory
-    wxString s;
-    return GetFirst(&s, spec, wxDIR_DIRS | wxDIR_HIDDEN);
-}
-
