@@ -66,12 +66,6 @@ void wxStatusBarGeneric::Init()
 
 wxStatusBarGeneric::~wxStatusBarGeneric()
 {
-    // VZ: what is this for? please comment...
-#ifdef __WXMSW__
-    // JACS: commenting out since it causes an assert
-    // and there seems no reason for it.
-    // SetFont(wxNullFont);
-#endif // MSW
 }
 
 bool wxStatusBarGeneric::Create(wxWindow *parent,
@@ -87,14 +81,6 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
   // The status bar should have a themed background
   SetThemeEnabled( true );
 
-  // Don't wish this to be found as a child
-  // JACS: this is not true for the Windows native version,
-  // so why should it be true here? This control can be used
-  // as a child of an arbitrary window, not just for frames.
-  // Commenting out.
-#ifndef __WXMAC__
-  // parent->GetChildren().DeleteObject(this);
-#endif
   InitColours();
   
 #ifdef __WXPM__
