@@ -8,7 +8,8 @@
 %define version @VERSION@
 %define ver2    @VER2@
 %define release 1
-%define wxpref  %{pref}/lib/wxPython
+%define wxpref  %{pref}/lib/wxPython-%{version}
+%define wxprefbase %{pref}/lib/wxPython
 %define name    wxPython%{port}-py%{pyver}
 
 
@@ -271,6 +272,18 @@ $GFL    $RPM_BUILD_ROOT %{wxpref}/bin/wx-config    >> DEVELLIST
 ##
 ##%postun
 ##%{clean_menus}
+
+
+%post
+if [ -e %{wxprefbase} ]; then
+	rm %{wxprefbase}
+fi
+ln -s %{wxpref} %{wxprefbase}
+
+%postun
+if [ -e %{wxprefbase} ]; then
+	rm %{wxprefbase}
+fi
 
 #----------------------------------------------------------------
 %clean
