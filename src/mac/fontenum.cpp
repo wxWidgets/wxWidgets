@@ -170,7 +170,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& family)
 {
-    wxFAIL_MSG(wxT("TODO"));
+    wxFAIL_MSG(wxT("wxFontEnumerator::EnumerateEncodings() not yet implemented"));
 
     return TRUE;
 }
