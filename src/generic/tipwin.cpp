@@ -157,7 +157,7 @@ wxTipWindow::wxTipWindow(wxWindow *parent,
     y += wxSystemSettings::GetMetric(wxSYS_CURSOR_Y) / 2;
 
 #if wxUSE_POPUPWIN
-    Position(wxPoint(x, y), wxSize(0, 0));
+    Position(wxPoint(x, y), wxSize());
     Popup(m_view);
     #ifdef __WXGTK__
         if (!GTK_WIDGET_HAS_GRAB(m_widget))

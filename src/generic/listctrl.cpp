@@ -3000,10 +3000,10 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     else
     {
         // This is neccessary , because after a DnD operation in
-        // from and to ourself, the up event is swallowed by the 
+        // from and to ourself, the up event is swallowed by the
         // DnD code. So on next non-up event (which means here and
         // now) m_lineSelectSingleOnUp should be reset.
-        m_lineSelectSingleOnUp = (size_t) -1;  
+        m_lineSelectSingleOnUp = (size_t) -1;
     }
     if (event.RightDown())
     {
@@ -3045,7 +3045,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
             }
             else // multi sel & current is highlighted & no mod keys
             {
-                m_lineSelectSingleOnUp = current;	
+                m_lineSelectSingleOnUp = current;
                 ChangeCurrent(current); // change focus
             }
         }
@@ -4645,7 +4645,7 @@ void wxGenericListCtrl::CreateHeaderWindow()
     m_headerWin = new wxListHeaderWindow
                       (
                         this, wxID_ANY, m_mainWin,
-                        wxPoint(0, 0),
+                        wxPoint(),
                         wxSize(GetClientSize().x, m_headerHeight),
                         wxTAB_TRAVERSAL
                       );
@@ -4683,7 +4683,7 @@ bool wxGenericListCtrl::Create(wxWindow *parent,
     // don't create the inner window with the border
     style &= ~wxBORDER_MASK;
 
-    m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(0,0), size, style );
+    m_mainWin = new wxListMainWindow( this, wxID_ANY, wxPoint(), size, style );
 
 #ifdef  __WXMAC_CARBON__
     // Human Interface Guidelines ask us for a special font in this case

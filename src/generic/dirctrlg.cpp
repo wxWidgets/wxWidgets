@@ -504,7 +504,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     Init();
 
     long treeStyle = wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT;
-    
+
 #ifdef __WXGTK20__
     treeStyle |= wxTR_NO_LINES;
 #endif
@@ -524,7 +524,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
         filterStyle |= wxBORDER_SUNKEN;
 
     m_treeCtrl = CreateTreeCtrl(this, wxID_TREECTRL,
-                                wxPoint(0,0), GetClientSize(), treeStyle);
+                                wxPoint(), GetClientSize(), treeStyle);
 
     if (!filter.empty() && (style & wxDIRCTRL_SHOW_FILTERS))
         m_filterListCtrl = new wxDirFilterListCtrl(this, wxID_FILTERLISTCTRL, wxDefaultPosition, wxDefaultSize, filterStyle);
@@ -553,7 +553,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_rootId = m_treeCtrl->AddRoot( rootName, 3, -1, rootData);
     m_treeCtrl->SetItemHasChildren(m_rootId);
     ExpandDir(m_rootId); // automatically expand first level
-    
+
     // Expand and select the default path
     if (!m_defaultPath.empty())
     {

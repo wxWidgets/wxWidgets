@@ -48,7 +48,7 @@
 #include "wx/dateevt.h"
 #include "wx/generic/datectrl.h"
 
-#include "wx/arrstr.h" 
+#include "wx/arrstr.h"
 #include "wx/calctrl.h"
 #include "wx/popupwin.h"
 #include "wx/renderer.h"
@@ -144,10 +144,10 @@ bool wxDatePickerCtrlGeneric::Create(wxWindow *parent,
     m_popup->SetFont(GetFont());
 
     wxPanel *panel=new wxPanel(m_popup, CTRLID_PAN,
-                               wxPoint(0, 0), wxDefaultSize,
+                               wxPoint(), wxDefaultSize,
                                wxSUNKEN_BORDER);
     m_cal = new wxCalendarCtrl(panel, CTRLID_CAL, wxDefaultDateTime,
-                               wxPoint(0,0), wxDefaultSize,
+                               wxPoint(), wxDefaultSize,
                                wxCAL_SHOW_HOLIDAYS | wxSUNKEN_BORDER);
     m_cal->Connect(CTRLID_CAL, CTRLID_CAL, wxEVT_CALENDAR_SEL_CHANGED,
                    (wxObjectEventFunction)

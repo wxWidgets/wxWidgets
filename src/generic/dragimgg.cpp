@@ -220,7 +220,7 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
     // dragged.
 
     wxSize clientSize;
-    wxPoint pt(0, 0);
+    wxPoint pt;
     if (!m_fullScreen)
     {
         clientSize = window->GetClientSize();

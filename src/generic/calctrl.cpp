@@ -322,7 +322,7 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     // Since we don't paint the whole background make sure that the platform
     // will use the right one.
     SetBackgroundColour(GetBackgroundColour());
-    
+
     SetHolidayAttrs();
 
     return true;
@@ -801,7 +801,7 @@ wxSize wxCalendarCtrl::DoGetBestSize() const
 
     wxSize best(width, height);
     CacheBestSize(best);
-    return best;   
+    return best;
 }
 
 void wxCalendarCtrl::DoSetSize(int x, int y,
@@ -975,7 +975,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         leftarrow[1] = wxPoint(arrowheight / 2, 0);
         leftarrow[2] = wxPoint(arrowheight / 2, arrowheight - 1);
 
-        rightarrow[0] = wxPoint(0, 0);
+        rightarrow[0] = wxPoint();
         rightarrow[1] = wxPoint(arrowheight / 2, arrowheight / 2);
         rightarrow[2] = wxPoint(0, arrowheight - 1);
 
@@ -984,8 +984,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         wxCoord arrowy = (m_heightRow - arrowheight) / 2;
         wxCoord larrowx = (m_widthCol - (arrowheight / 2)) / 2;
         wxCoord rarrowx = ((m_widthCol - (arrowheight / 2)) / 2) + m_widthCol*6;
-        m_leftArrowRect = wxRect(0, 0, 0, 0);
-        m_rightArrowRect = wxRect(0, 0, 0, 0);
+        m_leftArrowRect = m_rightArrowRect = wxRect();
 
         if ( AllowMonthChange() )
         {

@@ -172,7 +172,7 @@ wxRect wxListbook::GetPageRect() const
 {
     const wxSize sizeList = m_list->GetSize();
 
-    wxPoint pt(0, 0);
+    wxPoint pt;
     wxRect rectPage(pt, GetClientSize());
     switch ( GetWindowStyle() & wxLB_ALIGN_MASK )
     {

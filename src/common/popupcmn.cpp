@@ -282,7 +282,7 @@ bool wxPopupTransientWindow::Show( bool show )
     if (!show)
     {
         gdk_pointer_ungrab( (guint32)GDK_CURRENT_TIME );
-    
+
         gtk_grab_remove( m_widget );
     }
 #endif
@@ -295,12 +295,12 @@ bool wxPopupTransientWindow::Show( bool show )
 #endif
 
     bool ret = wxPopupWindow::Show( show );
-    
+
 #ifdef __WXGTK__
     if (show)
     {
         gtk_grab_add( m_widget );
-        
+
         gdk_pointer_grab( m_widget->window, TRUE,
                           (GdkEventMask)
                             (GDK_BUTTON_PRESS_MASK |
@@ -317,7 +317,7 @@ bool wxPopupTransientWindow::Show( bool show )
     if (show)
     {
         Window xwindow = (Window) m_clientWindow;
-        
+
         /* int res =*/ XGrabPointer(wxGlobalDisplay(), xwindow,
             True,
             ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask,
@@ -382,7 +382,7 @@ bool wxPopupComboWindow::Create(wxComboControl *parent)
 void wxPopupComboWindow::PositionNearCombo()
 {
     // the origin point must be in screen coords
-    wxPoint ptOrigin = m_combo->ClientToScreen(wxPoint(0, 0));
+    wxPoint ptOrigin = m_combo->ClientToScreen(wxPoint());
 
 #if 0 //def __WXUNIVERSAL__
     // account for the fact that (0, 0) is not the top left corner of the

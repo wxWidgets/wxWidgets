@@ -554,7 +554,7 @@ void wxWindowBase::InvalidateBestSize()
 wxSize wxWindowBase::DoGetBestSize() const
 {
     wxSize best;
-    
+
     if ( m_windowSizer )
     {
         best = m_windowSizer->GetMinSize();
@@ -699,7 +699,7 @@ void wxWindowBase::SetBestFittingSize(const wxSize& size)
 // by default the origin is not shifted
 wxPoint wxWindowBase::GetClientAreaOrigin() const
 {
-    return wxPoint(0, 0);
+    return wxPoint();
 }
 
 // set the min/max size of the window

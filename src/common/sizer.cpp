@@ -99,7 +99,7 @@ void wxSizerItem::Init()
     m_sizer = NULL;
     m_show = true;
     m_userData = NULL;
-    m_zoneRect = wxRect( 0, 0, 0, 0 );
+    m_zoneRect = wxRect();
 }
 
 void wxSizerItem::Init(const wxSizerFlags& flags)
@@ -119,7 +119,7 @@ wxSizerItem::wxSizerItem( int width, int height, int proportion, int flag, int b
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_zoneRect( 0, 0, 0, 0 )
+    , m_zoneRect()
     , m_show( true )
     , m_userData( userData )
 {
@@ -132,7 +132,7 @@ wxSizerItem::wxSizerItem( wxWindow *window, int proportion, int flag, int border
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_zoneRect( 0, 0, 0, 0 )
+    , m_zoneRect()
     , m_show( true )
     , m_userData( userData )
 {
@@ -152,7 +152,7 @@ wxSizerItem::wxSizerItem( wxSizer *sizer, int proportion, int flag, int border, 
     , m_proportion( proportion )
     , m_border( border )
     , m_flag( flag )
-    , m_zoneRect( 0, 0, 0, 0 )
+    , m_zoneRect()
     , m_show( true )
     , m_ratio( 0.0 )
     , m_userData( userData )
@@ -363,7 +363,7 @@ int wxSizerItem::GetOption() const
 //---------------------------------------------------------------------------
 
 wxSizer::wxSizer()
-    : m_minSize( wxSize( 0, 0 ) )
+        :m_minSize()
 {
 }
 
@@ -1699,7 +1699,7 @@ void wxStdDialogButtonSizer::AddButton(wxButton *mybutton)
             m_buttonCancel = mybutton;
             break;
         case wxID_HELP:
-		case wxID_CONTEXT_HELP:
+        case wxID_CONTEXT_HELP:
             m_buttonHelp = mybutton;
             break;
         default:
@@ -1845,7 +1845,7 @@ void wxBookCtrlSizer::RecalcSizes()
 
 wxSize wxBookCtrlSizer::CalcMin()
 {
-    wxSize sizeBorder = m_bookctrl->CalcSizeFromPage(wxSize(0, 0));
+    wxSize sizeBorder = m_bookctrl->CalcSizeFromPage(wxSize());
 
     sizeBorder.x += 5;
     sizeBorder.y += 5;

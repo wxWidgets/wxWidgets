@@ -534,14 +534,14 @@ void wxPrintDialogData::operator=(const wxPrintData& data)
 
 wxPageSetupDialogData::wxPageSetupDialogData()
 {
-    m_paperSize = wxSize(0, 0);
+    m_paperSize = wxSize();
 
     CalculatePaperSizeFromId();
 
-    m_minMarginTopLeft = wxPoint(0, 0);
-    m_minMarginBottomRight = wxPoint(0, 0);
-    m_marginTopLeft = wxPoint(0, 0);
-    m_marginBottomRight = wxPoint(0, 0);
+    m_minMarginTopLeft =
+    m_minMarginBottomRight =
+    m_marginTopLeft =
+    m_marginBottomRight = wxPoint();
 
     // Flags
     m_defaultMinMargins = false;
@@ -561,11 +561,11 @@ wxPageSetupDialogData::wxPageSetupDialogData(const wxPageSetupDialogData& dialog
 
 wxPageSetupDialogData::wxPageSetupDialogData(const wxPrintData& printData)
 {
-    m_paperSize = wxSize(0, 0);
-    m_minMarginTopLeft = wxPoint(0, 0);
-    m_minMarginBottomRight = wxPoint(0, 0);
-    m_marginTopLeft = wxPoint(0, 0);
-    m_marginBottomRight = wxPoint(0, 0);
+    m_paperSize = wxSize();
+    m_minMarginTopLeft =
+    m_minMarginBottomRight =
+    m_marginTopLeft =
+    m_marginBottomRight = wxPoint();
 
     // Flags
     m_defaultMinMargins = false;

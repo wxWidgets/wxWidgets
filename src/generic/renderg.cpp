@@ -355,7 +355,7 @@ wxRendererGeneric::DrawComboBoxDropButton(wxWindow *win,
 
     wxPoint pt[3] =
     {
-        wxPoint(0, 0),
+        wxPoint(),
         wxPoint(rect.width, 0),
         wxPoint(rect.width/2, rect.height - 2)
     };

@@ -149,7 +149,7 @@ void wxGenericColourDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 bool wxGenericColourDialog::Create(wxWindow *parent, wxColourData *data)
 {
     if ( !wxDialog::Create(parent, wxID_ANY, _("Choose colour"),
-                           wxPoint(0, 0), wxSize(900, 900)) )
+                           wxPoint(), wxSize(900, 900)) )
         return false;
 
     dialogParent = parent;
@@ -493,15 +493,15 @@ void wxGenericColourDialog::OnBasicColourClick(int which)
     PaintHighlight(dc, false);
     whichKind = 1;
     colourSelection = which;
-    
+
 #if wxUSE_SLIDER
     redSlider->SetValue( standardColours[colourSelection].Red() );
     greenSlider->SetValue( standardColours[colourSelection].Green() );
     blueSlider->SetValue( standardColours[colourSelection].Blue() );
 #endif // wxUSE_SLIDER
-    
-    colourData.m_dataColour.Set(standardColours[colourSelection].Red(), 
-                                standardColours[colourSelection].Green(), 
+
+    colourData.m_dataColour.Set(standardColours[colourSelection].Red(),
+                                standardColours[colourSelection].Green(),
                                 standardColours[colourSelection].Blue());
 
     PaintCustomColour(dc);
@@ -514,17 +514,17 @@ void wxGenericColourDialog::OnCustomColourClick(int which)
     PaintHighlight(dc, false);
     whichKind = 2;
     colourSelection = which;
-    
+
 #if wxUSE_SLIDER
     redSlider->SetValue( customColours[colourSelection].Red() );
     greenSlider->SetValue( customColours[colourSelection].Green() );
     blueSlider->SetValue( customColours[colourSelection].Blue() );
 #endif // wxUSE_SLIDER
-    
-    colourData.m_dataColour.Set(customColours[colourSelection].Red(), 
-                                customColours[colourSelection].Green(), 
+
+    colourData.m_dataColour.Set(customColours[colourSelection].Red(),
+                                customColours[colourSelection].Green(),
                                 customColours[colourSelection].Blue());
-    
+
     PaintCustomColour(dc);
     PaintHighlight(dc, true);
 }
@@ -553,10 +553,10 @@ void wxGenericColourDialog::OnAddCustom(wxCommandEvent& WXUNUSED(event))
     PaintHighlight(dc, true);
   }
 
-  customColours[colourSelection].Set(colourData.m_dataColour.Red(), 
-                                     colourData.m_dataColour.Green(), 
+  customColours[colourSelection].Set(colourData.m_dataColour.Red(),
+                                     colourData.m_dataColour.Green(),
                                      colourData.m_dataColour.Blue());
-  
+
   colourData.SetCustomColour(colourSelection, customColours[colourSelection]);
 
   PaintCustomColours(dc);
