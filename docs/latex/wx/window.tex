@@ -1759,6 +1759,19 @@ erased.}
 \docparam{rect}{If non-NULL, only the given rectangle will
 be treated as damaged.}
 
+\wxheading{See also}
+
+\helpref{wxWindow::RefreshRect}{wxwindowrefreshrect}
+
+\membersection{wxWindow::RefreshRect}\label{wxwindowrefreshrect}
+
+\func{virtual void}{Refresh}{\param{const wxRect\& }{rect}}
+
+Redraws the contents of the given rectangle: the area inside it will be
+repainted.
+
+This is the same as \helpref{Refresh}{wxwindowrefresh} but has a nicer syntax.
+
 \membersection{wxWindow::ReleaseMouse}\label{wxwindowreleasemouse}
 
 \func{virtual void}{ReleaseMouse}{\void}
@@ -2681,6 +2694,17 @@ Returns {\tt FALSE} if a transfer failed.
 
 \helpref{wxWindow::TransferDataFromWindow}{wxwindowtransferdatafromwindow},\rtfsp
 \helpref{wxValidator}{wxvalidator}, \helpref{wxWindow::Validate}{wxwindowvalidate}
+
+\membersection{wxWindow::Update}\label{wxwindowupdate}
+
+\func{virtual void}{Update}{\void}
+
+Calling this method immediately repaints the invalidated area of the window
+while this would usually only happen when the flow of control returns to the
+event loop. Notice that this function doesn't refresh the window and does
+nothing if the window hadn't been already repainted. Use 
+\helpref{Refresh}{wxwindowrefresh} first if you want to immediately redraw the
+window unconditionally.
 
 \membersection{wxWindow::Validate}\label{wxwindowvalidate}
 
