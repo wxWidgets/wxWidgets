@@ -326,7 +326,7 @@ wxStringBase& wxStringBase::append(size_t n, wxChar ch)
 {
     size_type len = length();
 
-    if ( !CopyBeforeWrite() || !Alloc(len + n) ) {
+    if ( !Alloc(len + n) || !CopyBeforeWrite() ) {
       wxFAIL_MSG( _T("out of memory in wxStringBase::append") );
     }
     GetStringData()->nDataLength = len + n;
@@ -445,7 +445,7 @@ wxStringBase& wxStringBase::insert(size_t nPos, const wxChar *sz, size_t n)
   if ( n == npos ) n = wxStrlen(sz);
   if ( n == 0 ) return *this;
 
-  if ( !CopyBeforeWrite() || !Alloc(length() + n) ) {
+  if ( !Alloc(length() + n) || !CopyBeforeWrite() ) {
     wxFAIL_MSG( _T("out of memory in wxStringBase::insert") );
   }
 
@@ -1225,7 +1225,7 @@ wxString operator+(const wxString& str, const wxChar *psz)
   if ( !s.Alloc(wxStrlen(psz) + str.Len()) ) {
     wxFAIL_MSG( _T("out of memory in wxString::operator+") );
   }
-  s = str;
+  s += str;
   s += psz;
 
   return s;
