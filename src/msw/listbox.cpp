@@ -294,7 +294,7 @@ void wxListBox::Append(const wxString& item)
 
 #if wxUSE_OWNER_DRAWN
     if ( m_windowStyle & wxLB_OWNERDRAW ) {
-      wxOwnerDrawn *pNewItem = CreateItem(-1); // dummy argument
+      wxOwnerDrawn *pNewItem = CreateItem(index); // dummy argument
       pNewItem->SetName(item);
       m_aItems.Add(pNewItem);
       ListBox_SetItemData(hwnd, index, pNewItem);
