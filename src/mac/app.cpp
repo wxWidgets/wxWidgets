@@ -1823,6 +1823,9 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
 
 bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
 {
+    if ( !focus )
+        return false ;
+        
     short keycode ;
     short keychar ;
     keychar = short(keymessage & charCodeMask);
@@ -1959,6 +1962,9 @@ void wxApp::MacHandleKeyUpEvent( WXEVENTREF evr )
 
 bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
 {
+    if ( !focus )
+        return false ;
+
     short keycode ;
     short keychar ;
     keychar = short(keymessage & charCodeMask);
@@ -1975,24 +1981,20 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     long keyval = wxMacTranslateKey(keychar, keycode) ;
 
     bool handled = false ;
-    if ( focus )
-    {
-        wxKeyEvent event(wxEVT_KEY_UP);
-        event.m_shiftDown = modifiers & shiftKey;
-        event.m_controlDown = modifiers & controlKey;
-        event.m_altDown = modifiers & optionKey;
-        event.m_metaDown = modifiers & cmdKey;
-        if ( event.m_controlDown )
-        {
-        }
-        event.m_keyCode = wxToupper(keyval );
 
-        event.m_x = wherex;
-        event.m_y = wherey;
-        event.m_timeStamp = when;
-        event.SetEventObject(focus);
-        handled = focus->GetEventHandler()->ProcessEvent( event ) ;
-    }
+    wxKeyEvent event(wxEVT_KEY_UP);
+    event.m_shiftDown = modifiers & shiftKey;
+    event.m_controlDown = modifiers & controlKey;
+    event.m_altDown = modifiers & optionKey;
+    event.m_metaDown = modifiers & cmdKey;
+    event.m_keyCode = wxToupper(keyval );
+
+    event.m_x = wherex;
+    event.m_y = wherey;
+    event.m_timeStamp = when;
+    event.SetEventObject(focus);
+    handled = focus->GetEventHandler()->ProcessEvent( event ) ;
+
     return handled ;
 }
 void wxApp::MacHandleActivateEvent( WXEVENTREF evr )
