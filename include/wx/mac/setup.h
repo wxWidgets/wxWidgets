@@ -207,6 +207,22 @@
                                   // and make the library thread safe
 #define wxUSE_ZLIB          1
                                   // Use zlib for compression in streams and PNG code
+
+// ----------------------------------------------------------------------------
+// image format support
+// ----------------------------------------------------------------------------
+
+// wxImage supports many different image formats which can be configured at
+// compile-time. BMP is always supported, others are optional and can be safely
+// disabled if you don't plan to use images in such format sometimes saving
+// substantial amount of code in the final library.
+//
+// Some formats require an extra library which is included in wxWin sources
+// which is mentioned if it is the case.
+
+// Set to 1 for wxImage support (recommended).
+#define wxUSE_IMAGE         1
+
 #define wxUSE_LIBPNG        1
                                   // Use PNG bitmap code
 #define wxUSE_LIBJPEG       1
@@ -216,6 +232,15 @@
 #define wxUSE_GIF			1
 									// Use GIF bitmap code
                                   
+// Set to 1 for PNM format support
+#define wxUSE_PNM           1
+
+// Set to 1 for PCX format support
+#define wxUSE_PCX           1
+
+// Set to 1 for XPM format support
+#define wxUSE_XPM           1
+
 #define wxUSE_SERIAL        0
                                   // Use serialization (requires utils/serialize)
 #define wxUSE_DYNLIB_CLASS  0
