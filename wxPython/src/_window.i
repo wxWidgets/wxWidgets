@@ -1721,19 +1721,46 @@ the window can remove itself from the sizer when it is destroyed.");
 #endif
 
 
-// TODO: These are currently protected, but woudl be nice ot have them in wxPython...
-//
-//     // inherit the parents visual attributes if they had been explicitly set
-//     // by the user (i.e. we don't inherit default attributes) and if we don't
-//     // have our own explicitly set
-//     virtual void InheritAttributes();
 
-//     // returns false from here if this window doesn't want to inherit the
-//     // parents colours even if InheritAttributes() would normally do it
-//     //
-//     // this just provides a simple way to customize InheritAttributes()
-//     // behaviour in the most common case
-//     virtual bool ShouldInheritColours() const { return false; }
+
+    DocDeclStr(
+        virtual void , InheritAttributes(),
+        "This function is (or should be, in case of custom controls)
+called during window creation to intelligently set up the window
+visual attributes, that is the font and the foreground and
+background colours.
+
+By 'intelligently' the following is meant: by default, all
+windows use their own default attributes. However if some of the
+parent's attributes are explicitly changed (that is, using
+SetFont and not SetDefaultFont) and if the corresponding
+attribute hadn't been explicitly set for this window itself, then
+this window takes the same value as used by the parent. In
+addition, if the window overrides ShouldInheritColours to return
+false, the colours will not be changed no matter what and only
+the font might.
+
+This rather complicated logic is necessary in order to accomodate
+the different usage scenarius. The most common one is when all
+default attributes are used and in this case, nothing should be
+inherited as in modern GUIs different controls use different
+fonts (and colours) than their siblings so they can't inherit the
+same value from the parent. However it was also deemed desirable
+to allow to simply change the attributes of all children at once
+by just changing the font or colour of their common parent, hence
+in this case we do inherit the parents attributes.");
+
+    
+// TODO:  Virtualize this with directors    
+    DocDeclStr(
+        virtual bool , ShouldInheritColours() const,
+        "Return true from here to allow the colours of this window to be
+changed by InheritAttributes, returning false forbids inheriting
+them from the parent window.
+
+The base class version returns false, but this method is
+overridden in wxControl where it returns true.");
+    
     
 
     %pythoncode {
