@@ -796,15 +796,27 @@ Rect* UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds)
 #if TARGET_API_MAC_OSX
     if ( win != NULL && win->MacGetTopLevelWindow() != NULL )   
     {
-        int x , y ;
-        x = 0 ;
-        y = 0 ;
-        
-        win->GetParent()->MacWindowToRootWindow( &x , & y ) ;
-        bounds->left += x ;
-        bounds->right += x ;
-        bounds->top += y ;
-        bounds->bottom += y ;
+        wxWindow* parent = win->GetParent() ;
+        if ( parent )
+        {
+            // the parent controls 'origin' expressed in its own
+            // window coordinates (explanation in window.cpp)
+            int x , y ;
+            x = 0 ;
+            y = 0 ;
+            
+            if ( !parent->IsTopLevel() )
+            {
+                x += parent->MacGetLeftBorderSize() ;
+                y += parent->MacGetTopBorderSize() ;
+            }
+            
+            parent->MacWindowToRootWindow( &x , & y ) ;
+            bounds->left += x ;
+            bounds->right += x ;
+            bounds->top += y ;
+            bounds->bottom += y ;
+        }
     }
 #endif
     return bounds ;
