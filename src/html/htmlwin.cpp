@@ -834,7 +834,7 @@ void wxHtmlWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
                  y * wxHTML_SCROLL_STEP + rect.GetTop(),
                  y * wxHTML_SCROLL_STEP + rect.GetBottom(),
                  rinfo);
-
+ 
     dcm.SetDeviceOrigin(0,0);
     dc.Blit(0, rect.GetTop(),
             sz.x, rect.GetBottom() - rect.GetTop() + 1,
@@ -936,7 +936,7 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
 
 
 void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
-{
+{    
     if (m_tmpMouseMoved && (m_Cell != NULL))
     {
         int xc, yc, x, y;
@@ -953,6 +953,9 @@ void wxHtmlWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
                              m_tmpSelFromPos.y == y && m_tmpSelFromPos.x < x;
 
             if ( !m_tmpSelFromCell )
+                m_tmpSelFromCell = m_Cell->FindCellByPos(
+                                         m_tmpSelFromPos.x,m_tmpSelFromPos.y);
+            if ( /*still*/ !m_tmpSelFromCell )
             {
                 if (goingDown)
                 {
