@@ -507,7 +507,7 @@ int wxListBox::GetSelection() const
 wxString wxListBox::GetString(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, wxEmptyString,
-                 wxT("invalid index in wxListBox::GetClientData") );
+                 wxT("invalid index in wxListBox::GetString") );
 
     int len = ListBox_GetTextLen(GetHwnd(), N);
 
