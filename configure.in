@@ -14,9 +14,9 @@ AC_DEFUN(AM_PATH_GTK,
 [dnl 
 dnl Get the cflags and libraries from the gtk-config script
 dnl
-AC_ARG_WITH(gtk-prefix,[**--with-gtk-prefix=PFX   Prefix where GTK is installed],
+AC_ARG_WITH(gtk-prefix,[**--with-gtk-prefix=PFX       Prefix where GTK is installed],
             gtk_config_prefix="$withval", gtk_config_prefix="")
-AC_ARG_WITH(gtk-exec-prefix,[**--with-gtk-exec-prefix=PFX Exec prefix where GTK is installed],
+AC_ARG_WITH(gtk-exec-prefix,[**--with-gtk-exec-prefix=PFX  Exec prefix where GTK is installed],
             gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 
   if test x$gtk_config_exec_prefix != x ; then
@@ -1547,6 +1547,6 @@ dnl add OS to list of configured
 echo $OS >> system.list
 
 AC_CONFIG_HEADER(./include/wx/gtk/setup.h:./setup/setup.hin)
-AC_OUTPUT(./setup/substit,./setup/general/createall)
+AC_OUTPUT(./setup/substit ./wx-config:./wx-config.in,./setup/general/createall)
 
 AC_OVERRIDES_DONE

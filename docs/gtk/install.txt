@@ -17,7 +17,7 @@ Unix that comes with Posix threads or SGI threads.
 
 Now create your super-application myfoo.app and compile anywhere with
 
-gcc -o -c myfoo.cpp -I/usr/local/include -L/usr/local/lib -lwx_gtk
+g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
 
 * General
 -----------------------
@@ -256,10 +256,34 @@ will do the work for you.
 * Creating a new Project
 --------------------------
 
-There are two ways to create your own project. The first creates
-a project within the source code directories of wxWindows: In this
-case I propose to put all contributed programs in the directory
-"/user", with a directory of its own.
+There are two ways to create your own project:
+
+1) The first way uses the installed libraries and header files
+automatically using wx-config
+
+g++ myfoo.cpp `wx-config --libs` `wx-config --cflags` -o myfoo
+
+Using this way, a make file for the minimal sample would look
+like this
+
+CC = g++
+
+minimal: minimal.o
+    $(CC) -o minimal minimal.o `wx-config --libs` 
+
+minimal.o: minimal.cpp mondrian.xpm
+    $(CC) `wx-config --cflags` -c minimal.cpp -o minimal.o
+
+clean: 
+	rm -f *.o minimal
+
+This is certain to become the standard way unless we decide
+to sitch to tmake.
+
+2) The other way creates a project within the source code 
+directories of wxWindows: In this case I propose to put 
+all contributed programs in the directory "/user", with a 
+directory of its own.
 
 This directory then should include the following files:
 
@@ -273,12 +297,6 @@ Makefile.in	(This is the base application-Makefile template, from
 
 put ALL your source code along with all the other stuff you need for
 your application in this directory (subdirectories are welcome).
-
-The other way uses the installed libraries and header files in 
-/usr/local/include/wx and /usr/local/lib. In this case, just
-compile your program like this:
-
-gcc -o -c myfoo.cpp -I/usr/local/include -L/usr/local/lib -lwx_gtk
 
 
 ** Something about Makefiles

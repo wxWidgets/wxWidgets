@@ -2,7 +2,8 @@ system.list
 bin
 .gdb_history
 Test
-config.cashe
+config.cache
 config.status
 system.list
-linux.system.cashe
+linux.system.cache
+wx-config

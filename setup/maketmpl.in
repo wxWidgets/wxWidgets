@@ -61,18 +61,18 @@ DJPEG_PROG =
 GIFTOPNM_PROG = 
 NETPBM_PATH = 
 
+# Base directories for installation
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 
-# Directory in which to install scripts.
-#bindir = @bindir@
+# Directory in which to install headers
+includedir = @includedir@
 
-# Directory in which to install library files.
-datadir = @datadir@
-acdatadir = $(datadir)/autoconf
+# Directory in which to install library files
+libdir = @libdir@
 
-# Directory in which to install documentation info files.
-infodir = @infodir@
+# Directory in which to install executable files
+bindir = @bindir@
 
 X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@

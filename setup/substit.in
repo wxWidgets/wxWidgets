@@ -25,9 +25,9 @@ s|*AWK*|@AWK@|g
 s|*LN_S*|@LN_S@|g
 s|*prefix*|@prefix@|g
 s|*exec_prefix*|@exec_prefix@|g
+s|*libdir*|@libdir@|g
 s|*bindir*|@bindir@|g
-s|*datadir*|@datadir@|g
-s|*infodir*|@infodir@|g
+s|*includedir*|@includedir@|g
 s|*X_CFLAGS*|@X_CFLAGS@|g
 s|*X_LIBS*|@X_LIBS@|g
 s|*X_EXTRA_LIBS*|@X_EXTRA_LIBS@|g

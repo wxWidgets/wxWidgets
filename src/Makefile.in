@@ -18,6 +18,10 @@ RULE=gslib
 # include gtk.inc, qt.inc or motif.inc here
 include @MAKEINCLUDE@
 
+# determine library names
+STATIC_LIBRARY=lib$(LIB_TARGET).a
+SHARED_LIBRARY=lib$(LIB_TARGET).so.$(LIB_MAJOR).$(LIB_MINOR)
+
 LIB_CPP_ALL_SRC=$(LIB_CPP_SRC) @GTK_JOYSTICK@ @UNIX_THREAD@
 
 LIB_C_ALL_SRC=$(LIB_C_SRC) parser.c
@@ -39,7 +43,9 @@ all::
 	@if test ! -d iodbc; then mkdir iodbc; fi
 
 install::
+	@echo " "
 	@echo "Installing library files and headers.."
+	@echo " "
 	@echo "  Creating directories.."
 	@$(WXBASEDIR)/mkinstalldirs \
 	   /usr/local/include/wx \
@@ -49,33 +55,37 @@ install::
 	@echo "  Copying headers from /include/wx"
 	@cd $(WXBASEDIR)/include/wx ; \
 	for f in *.h ; do \
-	  rm -f /usr/local/include/wx/$$f ; \
-	  $(INSTALL_DATA) $$f /usr/local/include/wx/$$f ; \
+	  rm -f $(includedir)/wx/$$f ; \
+	  $(INSTALL_DATA) $$f $(includedir)/wx/$$f ; \
 	done
 	@echo "  Copying headers from /include/wx/gtk"
 	@cd $(WXBASEDIR)/include/wx/gtk ; \
 	for f in *.h ; do \
-	  rm -f /usr/local/include/wx/gtk/$$f ; \
-	  $(INSTALL_DATA) $$f /usr/local/include/wx/gtk/$$f ; \
+	  rm -f $(includedir)/wx/gtk/$$f ; \
+	  $(INSTALL_DATA) $$f $(includedir)/wx/gtk/$$f ; \
 	done
 	@echo "  Copying headers from /include/wx/generic"
 	@cd $(WXBASEDIR)/include/wx/generic ; \
 	for f in *.h ; do \
-	  rm -f /usr/local/include/wx/generic/$$f ; \
-	  $(INSTALL_DATA) $$f /usr/local/include/wx/generic/$$f ; \
+	  rm -f $(includedir)/wx/generic/$$f ; \
+	  $(INSTALL_DATA) $$f $(includedir)/wx/generic/$$f ; \
 	done
-	@echo "  Copying static libraries files to /usr/local/lib"
+	@echo "  Copying wx-config"
+	@cd $(WXBASEDIR) ; \
+	  rm -f $(bindir)/wx-config ; \
+	  $(INSTALL_PROGRAM) wx-config $(bindir)/wx-config
+	@echo "  Copying static library"
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
-	for f in libwx_gtk.a ; do \
-	  rm -f /usr/local/lib/$$f ; \
-	  $(INSTALL_DATA) $$f /usr/local/lib/$$f ; \
-	done
-	@echo "  Copying shared libraries to /usr/local/lib"
+	  rm -f $(libdir)/$(STATIC_LIBRARY) ; \
+	  $(INSTALL_DATA) $(STATIC_LIBRARY) $(libdir)/$(STATIC_LIBRARY)
+	@echo "  Copying shared library"
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
-	for f in libwx_gtk.so* ; do \
-	  rm -f /usr/local/lib/$$f ; \
-	  $(INSTALL_PROGRAM) $$f /usr/local/lib/$$f ; \
-	done
+	  rm -f $(libdir)/$(SHARED_LIBRARY) ; \
+	  $(INSTALL_PROGRAM) $(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY)
+	@echo " "
+	@echo "Installation complete. You may have to run ldconfig!"
+	@echo " "
+	
 	
 clean::
 	$(RM) -rf gtk

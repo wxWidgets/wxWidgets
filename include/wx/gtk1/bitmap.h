@@ -25,17 +25,6 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class wxDC;
-class wxPaintDC;
-class wxMemoryDC;
-class wxToolBar;
-class wxBitmapButton;
-class wxStaticBitmap;
-class wxFrame;
-class wxDialog;
-class wxTreeCtrl;
-class wxNotebook;
-
 class wxMask;
 class wxBitmap;
 
@@ -55,19 +44,8 @@ class wxMask: public wxObject
     wxMask( const wxBitmap& bitmap );
     ~wxMask();
 
-  private:
-
-    friend wxBitmap;
-    friend wxDC;
-    friend wxPaintDC;
-    friend wxToolBar;
-    friend wxBitmapButton;
-    friend wxStaticBitmap;
-    friend wxFrame;
-    friend wxDialog;
-    friend wxTreeCtrl;
-    friend wxNotebook;
-
+  // implementation
+    
     GdkBitmap *GetBitmap() const;
 
   protected:
@@ -118,11 +96,12 @@ class wxBitmap: public wxObject
     wxPalette *GetPalette() const;
     wxPalette *GetColourMap() const
       { return GetPalette(); };
+      
+  // implementation      
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
 
-  private:
     void DestroyImage();
     void RecreateImage();
     void Render();

@@ -106,9 +106,9 @@ ac_help="$ac_help
 ac_help="$ac_help
 **--with-printarch        use printing architecture"
 ac_help="$ac_help
-**--with-gtk-prefix=PFX   Prefix where GTK is installed"
+**--with-gtk-prefix=PFX       Prefix where GTK is installed"
 ac_help="$ac_help
-**--with-gtk-exec-prefix=PFX Exec prefix where GTK is installed"
+**--with-gtk-exec-prefix=PFX  Exec prefix where GTK is installed"
 ac_help="$ac_help
 **--without-threads       Force disabling threads "
 
@@ -6881,7 +6881,7 @@ done
 ac_given_srcdir=$srcdir
 ac_given_INSTALL="$INSTALL"
 
-trap 'rm -fr `echo "./setup/substit ./include/wx/gtk/setup.h:./setup/setup.hin" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
+trap 'rm -fr `echo "./setup/substit ./wx-config:./wx-config.in ./include/wx/gtk/setup.h:./setup/setup.hin" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
 
@@ -7006,7 +7006,7 @@ EOF
 
 cat >> $CONFIG_STATUS <<EOF
 
-CONFIG_FILES=\${CONFIG_FILES-"./setup/substit"}
+CONFIG_FILES=\${CONFIG_FILES-"./setup/substit ./wx-config:./wx-config.in"}
 EOF
 cat >> $CONFIG_STATUS <<\EOF
 for ac_file in .. $CONFIG_FILES; do if test "x$ac_file" != x..; then
