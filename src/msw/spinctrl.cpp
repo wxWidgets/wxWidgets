@@ -296,7 +296,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     style |= wxSP_VERTICAL;
 
     if ( (style & wxBORDER_MASK) == wxBORDER_DEFAULT )
+#ifdef __WXWINCE__
+        style |= wxBORDER_SIMPLE;
+#else
         style |= wxBORDER_SUNKEN;
+#endif
 
     SetWindowStyle(style);
 
