@@ -182,7 +182,10 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
   dc.SetBackgroundMode(wxTRANSPARENT);
 
 #ifdef __WXPM__
-  ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, CLR_GREEN);
+  wxColour                          vColor;
+
+  vColor.InitFromName("DIM GREY");
+  ::WinFillRect(dc.m_hPS, &dc.m_vRclPaint, vColor.GetPixel());
 #endif
 
   for ( i = 0; i < m_nFields; i ++ )
@@ -244,6 +247,8 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
 
     dc.SetPen(m_hilightPen);
 
+#ifndef __WXPM__
+
     // Right and bottom white lines
     dc.DrawLine(rect.x + rect.width, rect.y,
                 rect.x + rect.width, rect.y + rect.height);
@@ -257,6 +262,25 @@ void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
            rect.x, rect.y);
     dc.DrawLine(rect.x, rect.y,
         rect.x + rect.width, rect.y);
+#else
+    // Right
+    dc.DrawLine(rect.x + rect.width, rect.y - 3,
+                rect.x + rect.width, rect.y + rect.height);
+    dc.SetPen(m_mediumShadowPen);
+    dc.DrawLine(rect.x + rect.width + 1, rect.y - 3,
+                rect.x + rect.width + 1, rect.y + rect.height);
+    dc.DrawLine(rect.x + rect.width + 2, rect.y - 3,
+                rect.x + rect.width + 2, rect.y + rect.height);
+    // Top
+    dc.DrawLine(rect.x + rect.width + 2, rect.y + rect.height + 2,
+                rect.x - 2, rect.y + rect.height + 2);
+    dc.DrawLine(rect.x + rect.width + 1, rect.y + rect.height + 1,
+                rect.x - 2, rect.y + rect.height + 1);
+    dc.SetPen(m_hilightPen);
+    dc.DrawLine(rect.x + rect.width, rect.y + rect.height,
+                rect.x - 2, rect.y + rect.height);
+
+#endif
 
     DrawFieldText(dc, i);
 }
@@ -345,6 +369,9 @@ void wxStatusBarGeneric::InitColours()
 
     wxColour hilightColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DHILIGHT));
     m_hilightPen = wxPen(hilightColour, 1, wxSOLID);
+#elif defined(__WXPM__)
+    m_mediumShadowPen = wxPen("LIGHT GREY", 1, wxSOLID);
+    m_hilightPen = wxPen("WHITE", 1, wxSOLID);
 #else
     m_mediumShadowPen = wxPen("GREY", 1, wxSOLID);
     m_hilightPen = wxPen("WHITE", 1, wxSOLID);
