@@ -724,17 +724,26 @@ public:
     wxLocale(int language = wxLANGUAGE_DEFAULT,
              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
 
-    bool Init(const wxString& szName,
-              const wxString& szShort = wxPyEmptyString,
-              const wxString& szLocale = wxPyEmptyString,
-              bool bLoadDefault = TRUE,
-              bool bConvertEncoding = FALSE);
-
-    %name(InitLang) bool Init(int language = wxLANGUAGE_DEFAULT,
-                              int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
-
         // restores old locale
     ~wxLocale();
+
+    %name(Init1)bool Init(const wxString& szName,
+                          const wxString& szShort = wxPyEmptyString,
+                          const wxString& szLocale = wxPyEmptyString,
+                          bool bLoadDefault = TRUE,
+                          bool bConvertEncoding = FALSE);
+
+    %name(Init2) bool Init(int language = wxLANGUAGE_DEFAULT,
+                           int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);
+
+    %pragma(python) addtoclass = "
+    def Init(self, *_args, **_kwargs):
+        if type(_args[0]) in [type(''), type(u'')]:
+            val = apply(self.Init1, _args, _kwargs)
+        else:
+            val = apply(self.Init2, _args, _kwargs)
+        return val
+    "
 
 
     // Try to get user's (or OS's) prefered language setting.
