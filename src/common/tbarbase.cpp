@@ -740,8 +740,19 @@ bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
 {
     out = in.Copy();
 
-    // assuming the pixels along the edges are of the background color
-    wxColour bgCol(in.GetRed(0, 0), in.GetGreen(0, 0), in.GetBlue(0, 0));
+    unsigned char r, g, b;
+    if ( in.HasMask() )
+    {
+        in.GetOrFindMaskColour(&r, &g, &b);
+    }
+    else // assuming the pixels along the edges are of the background color
+    {
+        r = in.GetRed(0, 0);
+        g = in.GetGreen(0, 0);
+        b = in.GetBlue(0, 0);
+    }
+
+    wxColour bgCol(r, g, b);
 
     wxColour darkCol = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW) ;
     wxColour lightCol = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT) ;
