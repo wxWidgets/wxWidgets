@@ -220,9 +220,11 @@ static int classifyTagHTML(unsigned int start, unsigned int end,
 			isScript = 0 == strcmp(s, "script");
 		}
 	}
-	if ((chAttr == SCE_H_TAGUNKNOWN) && !keywords)
+	if ((chAttr == SCE_H_TAGUNKNOWN) && !keywords) {
 		// No keywords -> all are known
 		chAttr = SCE_H_TAG;
+		isScript = 0 == strcmp(s, "script");
+	}
 	styler.ColourTo(end, chAttr);
 	return isScript ? SCE_H_SCRIPT : chAttr;
 }
@@ -555,6 +557,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 				//case SCE_HJ_COMMENTLINE:
 			case SCE_HJ_DOUBLESTRING:
 			case SCE_HJ_SINGLESTRING:
+			case SCE_HJ_REGEX:
 			case SCE_HB_STRING:
 			case SCE_HP_STRING:
 			case SCE_HP_TRIPLE:
@@ -1851,7 +1854,17 @@ static void ColourisePHPDoc(unsigned int startPos, int length, int initStyle, Wo
 	sc.Complete();
 }
 
-LexerModule lmHTML(SCLEX_HTML, ColouriseHyperTextDoc, "hypertext");
-LexerModule lmXML(SCLEX_XML, ColouriseHyperTextDoc, "xml");
-LexerModule lmASP(SCLEX_ASP, ColouriseASPDoc, "asp");
-LexerModule lmPHP(SCLEX_PHP, ColourisePHPDoc, "php");
+static const char * const htmlWordListDesc[] = {
+	"HTML elements and attributes",
+	"JavaScript keywords",
+	"VBScript keywords",
+	"Python keywords",
+	"PHP keywords",
+	"SGML and DTD keywords",
+	0,
+};
+
+LexerModule lmHTML(SCLEX_HTML, ColouriseHyperTextDoc, "hypertext", 0, htmlWordListDesc);
+LexerModule lmXML(SCLEX_XML, ColouriseHyperTextDoc, "xml", 0, htmlWordListDesc);
+LexerModule lmASP(SCLEX_ASP, ColouriseASPDoc, "asp", 0, htmlWordListDesc);
+LexerModule lmPHP(SCLEX_PHP, ColourisePHPDoc, "php", 0, htmlWordListDesc);

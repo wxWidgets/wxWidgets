@@ -76,10 +76,6 @@ public:
 		bool ignoreCase=false, char otherSeparator='\0');
 };
 
-inline bool nonFuncChar(char ch) {
-	return strchr("\t\n\r !\"#$%&'()*+,-./:;<=>?@[\\]^`{|}~", ch) != NULL;
-}
-
 inline bool IsAlphabetic(unsigned int ch) {
 	return ((ch >= 'A') && (ch <= 'Z')) || ((ch >= 'a') && (ch <= 'z'));
 }

@@ -106,8 +106,8 @@ public:
 			(rc.top >= top) && (rc.bottom <= bottom);
 	}
 	bool Intersects(PRectangle other) {
-		return (right >= other.left) && (left <= other.right) &&
-			(bottom >= other.top) && (top <= other.bottom);
+		return (right > other.left) && (left < other.right) &&
+			(bottom > other.top) && (top < other.bottom);
 	}
 	int Width() { return right - left; }
 	int Height() { return bottom - top; }
@@ -430,6 +430,8 @@ public:
 	static bool IsKeyDown(int key);
 	static long SendScintilla(
 		WindowID w, unsigned int msg, unsigned long wParam=0, long lParam=0);
+	static long SendScintillaPointer(
+		WindowID w, unsigned int msg, unsigned long wParam=0, void *lParam=0);
 	static bool IsDBCSLeadByte(int codePage, char ch);
 
 	// These are utility functions not really tied to a platform

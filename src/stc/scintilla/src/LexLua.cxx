@@ -4,7 +4,7 @@
  **
  ** Written by Paul Winwood.
  ** Folder by Alexey Yutkin.
- ** Modified by Marcos E. Wurzius
+ ** Modified by Marcos E. Wurzius & Philippe Lhoste
  **/
 
 #include <stdlib.h>
@@ -23,6 +23,7 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
+#define SCE_LUA_LAST_STYLE	SCE_LUA_WORD6
 
 static inline bool IsAWordChar(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
@@ -31,7 +32,6 @@ static inline bool IsAWordChar(const int ch) {
 inline bool IsAWordStart(const int ch) {
 	return (ch < 0x80) && (isalnum(ch) || ch == '_');
 }
-
 
 inline bool isLuaOperator(char ch) {
 	if (isalnum(ch))
@@ -47,9 +47,12 @@ inline bool isLuaOperator(char ch) {
 	return false;
 }
 
-
-static void ColouriseLuaDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
-                            Accessor &styler) {
+static void ColouriseLuaDoc(
+	unsigned int startPos,
+	int length,
+	int initStyle,
+	WordList *keywordlists[],
+	Accessor &styler) {
 
 	WordList &keywords = *keywordlists[0];
 	WordList &keywords2 = *keywordlists[1];
@@ -57,28 +60,40 @@ static void ColouriseLuaDoc(unsigned int startPos, int length, int initStyle, Wo
 	WordList &keywords4 = *keywordlists[3];
 	WordList &keywords5 = *keywordlists[4];
 	WordList &keywords6 = *keywordlists[5];
-	int literalString = 0;
-	int literalStringFlag =0;
+
+	// Must initialize the literal string nesting level, if we are inside such a string.
+	int literalStringLevel = 0;
+	if (initStyle == SCE_LUA_LITERALSTRING) {
+		literalStringLevel = 1;
+	}
+	// We use states above the last one to indicate nesting level of literal strings
+	if (initStyle > SCE_LUA_LAST_STYLE) {
+		literalStringLevel = initStyle - SCE_LUA_LAST_STYLE + 1;
+	}
 
 	// Do not leak onto next line
-	if (initStyle == SCE_LUA_STRINGEOL)
+	if (initStyle == SCE_LUA_STRINGEOL) {
 		initStyle = SCE_LUA_DEFAULT;
+	}
 
 	StyleContext sc(startPos, length, initStyle, styler);
-	if(startPos == 0 && sc.ch == '#') sc.SetState(SCE_LUA_COMMENTLINE);
+	if (startPos == 0 && sc.ch == '#') {
+		sc.SetState(SCE_LUA_COMMENTLINE);
+	}
 	for (; sc.More(); sc.Forward()) {
-	
-		// Handle line continuation generically.
-		if (sc.ch == '\\') {
-			if (sc.Match("\\\n")) {
+		if (sc.atLineStart && (sc.state == SCE_LUA_STRING)) {
+			// Prevent SCE_LUA_STRINGEOL from leaking back to previous line
+			sc.SetState(SCE_LUA_STRING);
+		}
+
+		// Handle string line continuation
+		if ((sc.state == SCE_LUA_STRING || sc.state == SCE_LUA_CHARACTER) &&
+				sc.ch == '\\') {
+			if (sc.chNext == '\n' || sc.chNext == '\r') {
 				sc.Forward();
-				sc.Forward();
-				continue;
-			}
-			if (sc.Match("\\\r\n")) {
-				sc.Forward();
-				sc.Forward();
-				sc.Forward();
+				if (sc.ch == '\r' && sc.chNext == '\n') {
+					sc.Forward();
+				}
 				continue;
 			}
 		}
@@ -109,9 +124,11 @@ static void ColouriseLuaDoc(unsigned int startPos, int length, int initStyle, Wo
 				}
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
- 
-
 		} else if (sc.state == SCE_LUA_COMMENTLINE ) {
+			if (sc.atLineEnd) {
+				sc.SetState(SCE_LUA_DEFAULT);
+			}
+		} else if (sc.state == SCE_LUA_PREPROCESSOR ) {
 			if (sc.atLineEnd) {
 				sc.SetState(SCE_LUA_DEFAULT);
 			}
@@ -126,7 +143,6 @@ static void ColouriseLuaDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
-			
 		} else if (sc.state == SCE_LUA_CHARACTER) {
 			if (sc.ch == '\\') {
 				if (sc.chNext == '\"' || sc.chNext == '\'' || sc.chNext == '\\') {
@@ -138,33 +154,41 @@ static void ColouriseLuaDoc(unsigned int startPos, int length, int initStyle, Wo
 				sc.ChangeState(SCE_LUA_STRINGEOL);
 				sc.ForwardSetState(SCE_LUA_DEFAULT);
 			}
-		} else if (sc.state == SCE_LUA_LITERALSTRING) {
-			if (sc.chPrev == '[' && sc.ch == '[' && literalStringFlag != 1) 	{
-				literalString++;
-				literalStringFlag = 1;
-			}
-			else if (sc.chPrev == ']' && sc.ch == ']' && literalStringFlag != 2 ) {
-				if((--literalString == 1))
+		} else if (sc.state == SCE_LUA_LITERALSTRING || sc.state > SCE_LUA_LAST_STYLE) {
+			if (sc.Match('[', '[')) {
+				literalStringLevel++;
+				sc.SetState(SCE_LUA_LAST_STYLE + literalStringLevel - 1);
+			} else if (sc.Match(']', ']') && literalStringLevel > 0) {
+				literalStringLevel--;
+				sc.Forward();
+				if (literalStringLevel == 0) {
 					sc.ForwardSetState(SCE_LUA_DEFAULT);
-				literalStringFlag = 2;
+				} else if (literalStringLevel == 1) {
+					sc.ForwardSetState(SCE_LUA_LITERALSTRING);
+				} else {
+					sc.ForwardSetState(SCE_LUA_LAST_STYLE + literalStringLevel - 1);
+				}
 			}
-			else literalStringFlag = 0;
-		}		
+		}
 		// Determine if a new state should be entered.
 		if (sc.state == SCE_LUA_DEFAULT) {
 			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
-					sc.SetState(SCE_LUA_NUMBER);
-			} else if (IsAWordStart(sc.ch) || (sc.ch == '@')) {
-					sc.SetState(SCE_LUA_IDENTIFIER);
-			} else if (sc.ch == '\"') {
+				sc.SetState(SCE_LUA_NUMBER);
+			} else if (IsAWordStart(sc.ch)) {
+				sc.SetState(SCE_LUA_IDENTIFIER);
+			} else if (sc.Match('\"')) {
 				sc.SetState(SCE_LUA_STRING);
-			} else if (sc.ch == '\'') {
+			} else if (sc.Match('\'')) {
 				sc.SetState(SCE_LUA_CHARACTER);
-			} else if (sc.ch == '[' && sc.chNext == '[') {
+			} else if (sc.Match('[', '[')) {
+				literalStringLevel = 1;
 				sc.SetState(SCE_LUA_LITERALSTRING);
-				literalString = 1;
-			} else if (sc.ch == '-' && sc.chNext == '-') {
+				sc.Forward();
+			} else if (sc.Match('-', '-')) {
 				sc.SetState(SCE_LUA_COMMENTLINE);
+				sc.Forward();
+			} else if (sc.Match('$') && sc.atLineStart) {
+				sc.SetState(SCE_LUA_PREPROCESSOR);	// Obsolete since Lua 4.0, but still in old code
 			}  else if (isLuaOperator(static_cast<char>(sc.ch))) {
 				sc.SetState(SCE_LUA_OPERATOR);
 			}
@@ -185,6 +209,7 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	int styleNext = styler.StyleAt(startPos);
 	char s[10];
+
 	for (unsigned int i = startPos; i < lengthDoc; i++) {
 		char ch = chNext;
 		chNext = styler.SafeGetCharAt(i + 1);
@@ -192,36 +217,38 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 		if (style == SCE_LUA_WORD) {
-			if ( ch == 'i' || ch == 'e' || ch == 't' || ch == 'd' || ch == 'f') {
+			if (ch == 'i' || ch == 'd' || ch == 'f' || ch == 'e') {
 				for (unsigned int j = 0; j < 8; j++) {
-					if (!iswordchar(styler[i + j]))
+					if (!iswordchar(styler[i + j])) {
 						break;
+					}
 					s[j] = styler[i + j];
 					s[j + 1] = '\0';
 				}
-				
-				if ((strcmp(s, "if") == 0) || (strcmp(s, "do") == 0)
-					|| (strcmp(s, "function") == 0))
+
+				if ((strcmp(s, "if") == 0) || (strcmp(s, "do") == 0) || (strcmp(s, "function") == 0)) {
 					levelCurrent++;
-				if ((strcmp(s, "end") == 0) || (strcmp(s, "elseif") == 0))
+				}
+				if ((strcmp(s, "end") == 0) || (strcmp(s, "elseif") == 0)) {
 					levelCurrent--;
-				
+				}
+			}
+		} else if (style == SCE_LUA_OPERATOR) {
+			if (ch == '{' || ch == '(') {
+				levelCurrent++;
+			} else if (ch == '}' || ch == ')') {
+				levelCurrent--;
 			}
 		}
-		else if (style == SCE_LUA_OPERATOR)
-		{
-			if(ch == '{' || ch == '(')
-				levelCurrent++;
-			else if(ch == '}' || ch == ')')
-				levelCurrent--;
-		}
-			
+
 		if (atEOL) {
 			int lev = levelPrev;
-			if (visibleChars == 0 && foldCompact)
+			if (visibleChars == 0 && foldCompact) {
 				lev |= SC_FOLDLEVELWHITEFLAG;
-			if ((levelCurrent > levelPrev) && (visibleChars > 0))
+			}
+			if ((levelCurrent > levelPrev) && (visibleChars > 0)) {
 				lev |= SC_FOLDLEVELHEADERFLAG;
+			}
 			if (lev != styler.LevelAt(lineCurrent)) {
 				styler.SetLevel(lineCurrent, lev);
 			}
@@ -229,8 +256,9 @@ static void FoldLuaDoc(unsigned int startPos, int length, int /* initStyle */, W
 			levelPrev = levelCurrent;
 			visibleChars = 0;
 		}
-		if (!isspacechar(ch))
+		if (!isspacechar(ch)) {
 			visibleChars++;
+		}
 	}
 	// Fill in the real level of the next line, keeping the current flags as they will be filled in later
 

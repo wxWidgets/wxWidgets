@@ -10,7 +10,7 @@
 
 // These functions are implemented because each platform calls them something different.
 int CompareCaseInsensitive(const char *a, const char *b);
-int CompareNCaseInsensitive(const char *a, const char *b, int len);
+int CompareNCaseInsensitive(const char *a, const char *b, size_t len);
 bool EqualCaseInsensitive(const char *a, const char *b);
 
 // Define another string class.
@@ -22,13 +22,13 @@ bool EqualCaseInsensitive(const char *a, const char *b);
  *
  * Hold the length of the string for quick operations,
  * can have a buffer bigger than the string to avoid too many memory allocations and copies.
- * May have embedded zeroes as a result of @a substitute, but rely too heavily on C string
- * functions to allow reliable manipulations of these strings.
+ * May have embedded zeroes as a result of @a substitute, but relies too heavily on C string
+ * functions to allow reliable manipulations of these strings, other than simple appends, etc.
  **/
 class SString {
 public:
 	/** Type of string lengths (sizes) and positions (indexes). */
-	typedef unsigned int lenpos_t;
+	typedef size_t lenpos_t;
 	/** Out of bounds value indicating that the string argument should be measured. */
 	enum { measure_length=0xffffffffU};
 
@@ -63,7 +63,7 @@ private:
 		}
 		if (sSize > 0 && sSize_ <= sSize) {	// Does not allocate new buffer if the current is big enough
 			if (s && sSize_) {
-				strncpy(s, sOther, sSize_);
+				memcpy(s, sOther, sSize_);
 			}
 			s[sSize_] = '\0';
 			sLen = sSize_;
@@ -92,6 +92,7 @@ public:
 		sSize = sLen = (s) ? strlen(s) : 0;
 	}
 	SString(const char *s_, lenpos_t first, lenpos_t last) : sizeGrowth(sizeGrowthDefault) {
+		// note: expects the "last" argument to point one beyond the range end (a la STL iterators)
 		s = StringAllocate(s_ + first, last - first);
 		sSize = sLen = (s) ? strlen(s) : 0;
 	}
@@ -188,6 +189,27 @@ public:
 		else
 			return '\0';
 	}
+	SString substr(lenpos_t subPos, lenpos_t subLen=measure_length) const {
+		if (subPos >= sLen) {
+			return SString();					// return a null string if start index is out of bounds
+		}
+		if ((subLen == measure_length) || (subPos + subLen > sLen)) {
+			subLen = sLen - subPos;		// can't substr past end of source string
+		}
+		return SString(s, subPos, subPos + subLen);
+	}
+	SString &lowercase(lenpos_t subPos = 0, lenpos_t subLen=measure_length) {
+		if ((subLen == measure_length) || (subPos + subLen > sLen)) {
+			subLen = sLen - subPos;		// don't apply past end of string
+		}
+		for (lenpos_t i = subPos; i < subPos + subLen; i++) {
+			if (s[i] < 'A' || s[i] > 'Z')
+				continue;
+			else
+				s[i] = static_cast<char>(s[i] - 'A' + 'a');
+		}
+		return *this;
+	}
 	SString &append(const char *sOther, lenpos_t sLenOther=measure_length, char sep = '\0') {
 		if (!sOther) {
 			return *this;
@@ -206,7 +228,7 @@ public:
 				s[sLen] = sep;
 				sLen++;
 			}
-			strncpy(&s[sLen], sOther, sLenOther);
+			memcpy(&s[sLen], sOther, sLenOther);
 			sLen += sLenOther;
 			s[sLen] = '\0';
 		}
@@ -259,6 +281,13 @@ public:
 			sLen -= len;
 		}
 	}
+	SString &change(lenpos_t pos, char ch) {
+		if (pos >= sLen) {					// character changed must be in string bounds
+			return *this;
+		}
+		*(s + pos) = ch;
+		return *this;
+	}
 	/** Read an integral numeric value from the string. */
 	int value() const {
 		if (s)
@@ -266,7 +295,7 @@ public:
 		else
 			return 0;
 	}
-	int search(const char *sFind, lenpos_t start=0) {
+	int search(const char *sFind, lenpos_t start=0) const {
 		if (start < sLen) {
 			const char *sFound = strstr(s + start, sFind);
 			if (sFound) {
@@ -325,7 +354,7 @@ public:
 		}
 		char *sNew = new char[len + 1];
 		if (sNew) {
-			strncpy(sNew, s, len);
+			memcpy(sNew, s, len);
 			sNew[len] = '\0';
 		}
 		return sNew;

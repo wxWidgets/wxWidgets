@@ -66,7 +66,7 @@ protected:
 	void AutoCompleteCancel();
 	void AutoCompleteMove(int delta);
 	void AutoCompleteChanged(char ch=0);
-	void AutoCompleteCompleted(char fillUp='\0');
+	void AutoCompleteCompleted();
 	void AutoCompleteMoveToCurrentWord();
 	static void AutoCompleteDoubleClick(void* p);
 

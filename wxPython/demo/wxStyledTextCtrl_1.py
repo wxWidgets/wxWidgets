@@ -162,8 +162,11 @@ def runTest(frame, nb, log):
         p.SetAutoLayout(true)
 
 
-##     ed.SetBufferedDraw(false)
-##     ed.StyleClearAll()
+    #ed.SetBufferedDraw(false)
+    #ed.StyleClearAll()
+    #ed.SetScrollWidth(800)
+    #ed.SetWrapMode(true)
+
     ed.SetText(demoText)
     if wxUSE_UNICODE:
         import codecs

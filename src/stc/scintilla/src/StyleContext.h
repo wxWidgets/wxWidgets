@@ -144,6 +144,10 @@ inline bool IsASpace(unsigned int ch) {
     return (ch == ' ') || ((ch >= 0x09) && (ch <= 0x0d));
 }
 
+inline bool IsASpaceOrTab(unsigned int ch) {
+	return (ch == ' ') || (ch == '\t');
+}
+
 inline bool IsADigit(unsigned int ch) {
 	return (ch >= '0') && (ch <= '9');
 }

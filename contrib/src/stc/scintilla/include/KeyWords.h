@@ -19,15 +19,22 @@ protected:
 	int language;
 	LexerFunction fnLexer;
 	LexerFunction fnFolder;
-	
+	const char * const * wordListDescriptions;
+
 	static const LexerModule *base;
 	static int nextLanguage;
 
 public:
 	const char *languageName;
 	LexerModule(int language_, LexerFunction fnLexer_, 
-		const char *languageName_=0, LexerFunction fnFolder_=0);
+		const char *languageName_=0, LexerFunction fnFolder_=0,
+		const char * const wordListDescriptions_[] = NULL);
 	int GetLanguage() const { return language; }
+
+	// -1 is returned if no WordList information is available
+	int GetNumWordLists() const;
+	const char *GetWordListDescription(int index) const;
+
 	virtual void Lex(unsigned int startPos, int lengthDoc, int initStyle,
                   WordList *keywordlists[], Accessor &styler) const;
 	virtual void Fold(unsigned int startPos, int lengthDoc, int initStyle,

@@ -42,7 +42,16 @@ void WindowAccessor::Fill(int position) {
 		endPos = lenDoc;
 
 	TextRange tr = {{startPos, endPos}, buf};
-	Platform::SendScintilla(id, SCI_GETTEXTRANGE, 0, reinterpret_cast<long>(&tr));
+	Platform::SendScintillaPointer(id, SCI_GETTEXTRANGE, 0, &tr);
+}
+
+bool WindowAccessor::Match(int pos, const char *s) {
+	for (int i=0; *s; i++) {
+		if (*s != SafeGetCharAt(pos+i))
+			return false;
+		s++;
+	}
+	return true;
 }
 
 char WindowAccessor::StyleAt(int position) {
@@ -116,8 +125,8 @@ void WindowAccessor::Flush() {
 	startPos = extremePosition;
 	lenDoc = -1;
 	if (validLen > 0) {
-		Platform::SendScintilla(id, SCI_SETSTYLINGEX, validLen, 
-			reinterpret_cast<long>(styleBuf));
+		Platform::SendScintillaPointer(id, SCI_SETSTYLINGEX, validLen, 
+			styleBuf);
 		validLen = 0;
 	}
 }

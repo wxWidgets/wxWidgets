@@ -55,6 +55,7 @@ public:
 	}
 	void SetCodePage(int codePage_) { codePage = codePage_; }
 
+	virtual bool Match(int pos, const char *s)=0;
 	virtual char StyleAt(int position)=0;
 	virtual int GetLine(int position)=0;
 	virtual int LineStart(int line)=0;

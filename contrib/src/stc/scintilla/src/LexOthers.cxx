@@ -159,21 +159,23 @@ static void ColouriseDiffLine(char *lineBuffer, int endLine, Accessor &styler) {
 	// difference starts then each line starting with ' ' is a whitespace
 	// otherwise it is considered a comment (Only in..., Binary file...)
 	if (0 == strncmp(lineBuffer, "diff ", 3)) {
-		styler.ColourTo(endLine, 2);
+		styler.ColourTo(endLine, SCE_DIFF_COMMAND);
 	} else if (0 == strncmp(lineBuffer, "--- ", 3)) {
-		styler.ColourTo(endLine, 3);
+		styler.ColourTo(endLine, SCE_DIFF_HEADER);
 	} else if (0 == strncmp(lineBuffer, "+++ ", 3)) {
-		styler.ColourTo(endLine, 3);
+		styler.ColourTo(endLine, SCE_DIFF_HEADER);
+	} else if (0 == strncmp(lineBuffer, "***", 3)) {
+		styler.ColourTo(endLine, SCE_DIFF_HEADER);
 	} else if (lineBuffer[0] == '@') {
-		styler.ColourTo(endLine, 4);
+		styler.ColourTo(endLine, SCE_DIFF_POSITION);
 	} else if (lineBuffer[0] == '-') {
-		styler.ColourTo(endLine, 5);
+		styler.ColourTo(endLine, SCE_DIFF_DELETED);
 	} else if (lineBuffer[0] == '+') {
-		styler.ColourTo(endLine, 6);
+		styler.ColourTo(endLine, SCE_DIFF_ADDED);
 	} else if (lineBuffer[0] != ' ') {
-		styler.ColourTo(endLine, 1);
+		styler.ColourTo(endLine, SCE_DIFF_COMMENT);
 	} else {
-		styler.ColourTo(endLine, 0);
+		styler.ColourTo(endLine, SCE_DIFF_DEFAULT);
 	}
 }
 
@@ -208,28 +210,28 @@ static void ColourisePropsLine(
 		i++;
 	if (i < lengthLine) {
 		if (lineBuffer[i] == '#' || lineBuffer[i] == '!' || lineBuffer[i] == ';') {
-			styler.ColourTo(endPos, 1);
+			styler.ColourTo(endPos, SCE_PROPS_COMMENT);
 		} else if (lineBuffer[i] == '[') {
-			styler.ColourTo(endPos, 2);
+			styler.ColourTo(endPos, SCE_PROPS_SECTION);
 		} else if (lineBuffer[i] == '@') {
-			styler.ColourTo(startLine + i, 4);
+			styler.ColourTo(startLine + i, SCE_PROPS_DEFVAL);
 			if (lineBuffer[++i] == '=')
-				styler.ColourTo(startLine + i, 3);
-			styler.ColourTo(endPos, 0);
+				styler.ColourTo(startLine + i, SCE_PROPS_ASSIGNMENT);
+			styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 		} else {
 			// Search for the '=' character
 			while ((i < lengthLine) && (lineBuffer[i] != '='))
 				i++;
 			if ((i < lengthLine) && (lineBuffer[i] == '=')) {
-				styler.ColourTo(startLine + i - 1, 0);
+				styler.ColourTo(startLine + i - 1, SCE_PROPS_DEFAULT);
 				styler.ColourTo(startLine + i, 3);
-				styler.ColourTo(endPos, 0);
+				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 			} else {
-				styler.ColourTo(endPos, 0);
+				styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 			}
 		}
 	} else {
-		styler.ColourTo(endPos, 0);
+		styler.ColourTo(endPos, SCE_PROPS_DEFAULT);
 	}
 }
 
@@ -386,6 +388,8 @@ static void ColouriseErrorListLine(
 				state = 1;
 			} else if ((state == 0) && (lineBuffer[i] == '(')) {
 				state = 10;
+			} else if ((state == 0) && (lineBuffer[i] == '\t')) {
+				state = 20;
 			} else if ((state == 1) && isdigit(lineBuffer[i])) {
 				state = 2;
 			} else if ((state == 2) && (lineBuffer[i] == ':')) {
@@ -406,12 +410,22 @@ static void ColouriseErrorListLine(
 				break;
 			} else if (((state == 11) || (state == 14)) && !((lineBuffer[i] == ' ') || isdigit(lineBuffer[i]))) {
 				state = 99;
+			} else if ((state == 20) && isdigit(lineBuffer[i])) {
+				state = 24;
+				break;
+			} else if ((state == 20) && ((lineBuffer[i] == '/') && (lineBuffer[i+1] == '^'))) {
+				state = 21;
+			} else if ((state == 21) && ((lineBuffer[i] == '$') && (lineBuffer[i+1] == '/'))) {
+				state = 22;
+				break;		
 			}
 		}
 		if (state == 3) {
 			styler.ColourTo(endPos, SCE_ERR_GCC);
 		} else if ((state == 13) || (state == 14) || (state == 15)) {
 			styler.ColourTo(endPos, SCE_ERR_MS);
+		} else if (((state == 22) || (state == 24)) && (lineBuffer[0] != '\t')) {
+			styler.ColourTo(endPos, SCE_ERR_CTAG);	
 		} else {
 			styler.ColourTo(endPos, SCE_ERR_DEFAULT);
 		}

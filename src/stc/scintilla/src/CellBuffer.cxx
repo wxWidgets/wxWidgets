@@ -958,10 +958,13 @@ void CellBuffer::BasicDeleteChars(int position, int deleteLength) {
 					//Platform::DebugPrintf("Removing cr end of line\n");
 					lv.Remove(lineRemove);
 				}
-			} else if ((ch == '\n') && !ignoreNL) {
-				//Platform::DebugPrintf("Removing lf end of line\n");
-				lv.Remove(lineRemove);
-				ignoreNL = false; 	// Further \n are not real deletions
+			} else if (ch == '\n') {
+				if (ignoreNL) {
+					ignoreNL = false; 	// Further \n are real deletions
+				} else {
+					//Platform::DebugPrintf("Removing lf end of line\n");
+					lv.Remove(lineRemove);
+				}
 			}
 
 			ch = chNext;

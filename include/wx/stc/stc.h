@@ -44,7 +44,7 @@
 #define wxSTC_OPTIONAL_START 3000
 #define wxSTC_LEXER_START 4000
 
-// Redoes the next action on the undo history
+// Redoes the next action on the undo history.
 #define wxSTC_CMD_REDO 2011
 
 // Select all the text in the document.
@@ -70,7 +70,7 @@
 #define wxSTC_MARK_MINUS 7
 #define wxSTC_MARK_PLUS 8
 
-// Shapes used for outlining column
+// Shapes used for outlining column.
 #define wxSTC_MARK_VLINE 9
 #define wxSTC_MARK_LCORNER 10
 #define wxSTC_MARK_TCORNER 11
@@ -85,11 +85,11 @@
 #define wxSTC_MARK_CIRCLEMINUS 20
 #define wxSTC_MARK_CIRCLEMINUSCONNECTED 21
 
-// Invisible mark that only sets the line background color
+// Invisible mark that only sets the line background color.
 #define wxSTC_MARK_BACKGROUND 22
 #define wxSTC_MARK_CHARACTER 10000
 
-// Markers used for outlining column
+// Markers used for outlining column.
 #define wxSTC_MARKNUM_FOLDEREND 25
 #define wxSTC_MARKNUM_FOLDEROPENMID 26
 #define wxSTC_MARKNUM_FOLDERMIDTAIL 27
@@ -270,8 +270,7 @@
 // Delete the selection or if no selection, the character before the caret.
 #define wxSTC_CMD_DELETEBACK 2326
 
-// If selection is empty or all on one line replace the selection with a tab
-// character.
+// If selection is empty or all on one line replace the selection with a tab character.
 // If more than one line selected, indent the lines.
 #define wxSTC_CMD_TAB 2327
 
@@ -325,40 +324,46 @@
 #define wxSTC_CMD_LINESCROLLUP 2343
 
 // Delete the selection or if no selection, the character before the caret.
-// Will not delete the chraacter before at the start of a line.
+// Will not delete the character before at the start of a line.
 #define wxSTC_CMD_DELETEBACKNOTLINE 2344
 #define wxSTC_EDGE_NONE 0
 #define wxSTC_EDGE_LINE 1
 #define wxSTC_EDGE_BACKGROUND 2
-
-// Show caret within N lines of edge when it's scrolled to view
-// If CARET_SLOP not set then centre caret on screen when it's
-// scrolled to view
-#define wxSTC_CARET_SLOP 0x01
-
-// Value not used
-#define wxSTC_CARET_CENTER 0x02
-
-// If CARET_SLOP also set then reposition whenever outside slop border
-// If CARET_SLOP not set then recentre even when visible
-#define wxSTC_CARET_STRICT 0x04
-
-// If CARET_XEVEN set then both left and right margins are given equal weight
-// rather than favouring left following behaviour.
-#define wxSTC_CARET_XEVEN 0x08
-
-// If CARET_XJUMPS set then when caret reaches the margin the display jumps
-// enough to leave the caret solidly within the display.
-#define wxSTC_CARET_XJUMPS 0x10
 #define wxSTC_CURSORNORMAL -1
 #define wxSTC_CURSORWAIT 3
 
-// Constants for use with SetVisiblePolicy, similar to SetCaretPolicy
+// Constants for use with SetVisiblePolicy, similar to SetCaretPolicy.
 #define wxSTC_VISIBLE_SLOP 0x01
 #define wxSTC_VISIBLE_STRICT 0x04
 
+// Caret policy, used by SetXCaretPolicy and SetYCaretPolicy.
+// If CARET_SLOP is set, we can define a slop value: caretSlop.
+// This value defines an unwanted zone (UZ) where the caret is... unwanted.
+// This zone is defined as a number of pixels near the vertical margins,
+// and as a number of lines near the horizontal margins.
+// By keeping the caret away from the edges, it is seen within its context,
+// so it is likely that the identifier that the caret is on can be completely seen,
+// and that the current line is seen with some of the lines following it which are
+// often dependent on that line.
+#define wxSTC_CARET_SLOP 0x01
+
+// If CARET_STRICT is set, the policy is enforced... strictly.
+// The caret is centred on the display if slop is not set,
+// and cannot go in the UZ if slop is set.
+#define wxSTC_CARET_STRICT 0x04
+
+// If CARET_JUMPS is set, the display is moved more energetically
+// so the caret can move in the same direction longer before the policy is applied again.
+#define wxSTC_CARET_JUMPS 0x10
+
+// If CARET_EVEN is not set, instead of having symmetrical UZs,
+// the left and bottom UZs are extended up to right and top UZs respectively.
+// This way, we favour the displaying of useful information: the begining of lines,
+// where most code reside, and the lines after the caret, eg. the body of a function.
+#define wxSTC_CARET_EVEN 0x08
+
 // Notifications
-// Type of modification and the action which caused the modification
+// Type of modification and the action which caused the modification.
 // These are defined as a bit mask to make it easy to specify which notifications are wanted.
 // One bit is set from each of SC_MOD_* and SC_PERFORMED_*.
 #define wxSTC_MOD_INSERTTEXT 0x1
@@ -374,9 +379,9 @@
 #define wxSTC_MOD_BEFOREDELETE 0x800
 #define wxSTC_MODEVENTMASKALL 0xF77
 
-// Symbolic key codes and modifier flags
-// ASCII and other printable characters below 256
-// Extended keys above 300
+// Symbolic key codes and modifier flags.
+// ASCII and other printable characters below 256.
+// Extended keys above 300.
 #define wxSTC_KEY_DOWN 300
 #define wxSTC_KEY_UP 301
 #define wxSTC_KEY_LEFT 302
@@ -432,6 +437,7 @@
 #define wxSTC_LEX_PHP 30
 #define wxSTC_LEX_BAAN 31
 #define wxSTC_LEX_MATLAB 32
+#define wxSTC_LEX_SCRIPTOL 33
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -473,17 +479,6 @@
 #define wxSTC_C_WORD2 16
 #define wxSTC_C_COMMENTDOCKEYWORD 17
 #define wxSTC_C_COMMENTDOCKEYWORDERROR 18
-
-// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT
-#define wxSTC_B_DEFAULT 0
-#define wxSTC_B_COMMENT 1
-#define wxSTC_B_NUMBER 2
-#define wxSTC_B_KEYWORD 3
-#define wxSTC_B_STRING 4
-#define wxSTC_B_PREPROCESSOR 5
-#define wxSTC_B_OPERATOR 6
-#define wxSTC_B_IDENTIFIER 7
-#define wxSTC_B_DATE 8
 
 // Lexical states for SCLEX_HTML, SCLEX_XML
 #define wxSTC_H_DEFAULT 0
@@ -651,6 +646,24 @@
 #define wxSTC_PL_STRING_QR 29
 #define wxSTC_PL_STRING_QW 30
 
+// Lexical states for SCLEX_VB, SCLEX_VBSCRIPT
+#define wxSTC_B_DEFAULT 0
+#define wxSTC_B_COMMENT 1
+#define wxSTC_B_NUMBER 2
+#define wxSTC_B_KEYWORD 3
+#define wxSTC_B_STRING 4
+#define wxSTC_B_PREPROCESSOR 5
+#define wxSTC_B_OPERATOR 6
+#define wxSTC_B_IDENTIFIER 7
+#define wxSTC_B_DATE 8
+
+// Lexical states for SCLEX_PROPERTIES
+#define wxSTC_PROPS_DEFAULT 0
+#define wxSTC_PROPS_COMMENT 1
+#define wxSTC_PROPS_SECTION 2
+#define wxSTC_PROPS_ASSIGNMENT 3
+#define wxSTC_PROPS_DEFVAL 4
+
 // Lexical states for SCLEX_LATEX
 #define wxSTC_L_DEFAULT 0
 #define wxSTC_L_COMMAND 1
@@ -688,6 +701,7 @@
 #define wxSTC_ERR_PERL 6
 #define wxSTC_ERR_NET 7
 #define wxSTC_ERR_LUA 8
+#define wxSTC_ERR_CTAG 9
 #define wxSTC_ERR_DIFF_CHANGED 10
 #define wxSTC_ERR_DIFF_ADDITION 11
 #define wxSTC_ERR_DIFF_DELETION 12
@@ -712,7 +726,16 @@
 #define wxSTC_MAKE_TARGET 5
 #define wxSTC_MAKE_IDEOL 9
 
-// Lexical states for the SCLEX_CONF (Apache Configuration Files Lexer)
+// Lexical states for SCLEX_DIFF
+#define wxSTC_DIFF_DEFAULT 0
+#define wxSTC_DIFF_COMMENT 1
+#define wxSTC_DIFF_COMMAND 2
+#define wxSTC_DIFF_HEADER 3
+#define wxSTC_DIFF_POSITION 4
+#define wxSTC_DIFF_DELETED 5
+#define wxSTC_DIFF_ADDED 6
+
+// Lexical states for SCLEX_CONF (Apache Configuration Files Lexer)
 #define wxSTC_CONF_DEFAULT 0
 #define wxSTC_CONF_COMMENT 1
 #define wxSTC_CONF_NUMBER 2
@@ -724,7 +747,7 @@
 #define wxSTC_CONF_IP 8
 #define wxSTC_CONF_DIRECTIVE 9
 
-// Avenue
+// Lexical states for SCLEX_AVE, Avenue
 #define wxSTC_AVE_DEFAULT 0
 #define wxSTC_AVE_COMMENT 1
 #define wxSTC_AVE_NUMBER 2
@@ -782,7 +805,7 @@
 #define wxSTC_EIFFEL_IDENTIFIER 7
 #define wxSTC_EIFFEL_STRINGEOL 8
 
-// Lexical states for the SCLEX_NNCRONTAB (nnCron crontab Lexer)
+// Lexical states for SCLEX_NNCRONTAB (nnCron crontab Lexer)
 #define wxSTC_NNCRONTAB_DEFAULT 0
 #define wxSTC_NNCRONTAB_COMMENT 1
 #define wxSTC_NNCRONTAB_TASK 2
@@ -804,6 +827,28 @@
 #define wxSTC_MATLAB_STRING 5
 #define wxSTC_MATLAB_OPERATOR 6
 #define wxSTC_MATLAB_IDENTIFIER 7
+
+// Lexical states for SCLEX_SCRIPTOL
+#define wxSTC_SCRIPTOL_DEFAULT 0
+#define wxSTC_SCRIPTOL_COMMENT 1
+#define wxSTC_SCRIPTOL_COMMENTLINE 2
+#define wxSTC_SCRIPTOL_COMMENTDOC 3
+#define wxSTC_SCRIPTOL_NUMBER 4
+#define wxSTC_SCRIPTOL_WORD 5
+#define wxSTC_SCRIPTOL_STRING 6
+#define wxSTC_SCRIPTOL_CHARACTER 7
+#define wxSTC_SCRIPTOL_UUID 8
+#define wxSTC_SCRIPTOL_PREPROCESSOR 9
+#define wxSTC_SCRIPTOL_OPERATOR 10
+#define wxSTC_SCRIPTOL_IDENTIFIER 11
+#define wxSTC_SCRIPTOL_STRINGEOL 12
+#define wxSTC_SCRIPTOL_VERBATIM 13
+#define wxSTC_SCRIPTOL_REGEX 14
+#define wxSTC_SCRIPTOL_COMMENTLINEDOC 15
+#define wxSTC_SCRIPTOL_WORD2 16
+#define wxSTC_SCRIPTOL_COMMENTDOCKEYWORD 17
+#define wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR 18
+#define wxSTC_SCRIPTOL_COMMENTBASIC 19
 
 // END of generated section
 //----------------------------------------------------------------------
@@ -845,37 +890,37 @@ public:
 //       and regenerate
 
 
-    // Add text to the document
+    // Add text to the document.
     void AddText(const wxString& text);
 
-    // Add array of cells to document
+    // Add array of cells to document.
     void AddStyledText(const wxMemoryBuffer& data);
 
-    // Insert string at a position
+    // Insert string at a position.
     void InsertText(int pos, const wxString& text);
 
-    // Delete all text in the document
+    // Delete all text in the document.
     void ClearAll();
 
-    // Set all style bytes to 0, remove all folding information
+    // Set all style bytes to 0, remove all folding information.
     void ClearDocumentStyle();
 
-    // The number of characters in the document
+    // The number of characters in the document.
     int GetLength();
 
-    // Returns the character byte at the position
+    // Returns the character byte at the position.
     int GetCharAt(int pos);
 
-    // Returns the position of the caret
+    // Returns the position of the caret.
     int GetCurrentPos();
 
-    // Returns the position of the opposite end of the selection to the caret
+    // Returns the position of the opposite end of the selection to the caret.
     int GetAnchor();
 
-    // Returns the style byte at the position
+    // Returns the style byte at the position.
     int GetStyleAt(int pos);
 
-    // Redoes the next action on the undo history
+    // Redoes the next action on the undo history.
     void Redo();
 
     // Choose between collecting actions into the undo
@@ -892,10 +937,10 @@ public:
     // Retrieve a buffer of cells.
     wxMemoryBuffer GetStyledText(int startPos, int endPos);
 
-    // Are there any redoable actions in the undo history.
+    // Are there any redoable actions in the undo history?
     bool CanRedo();
 
-    // Retrieve the line number at which a particular marker is located
+    // Retrieve the line number at which a particular marker is located.
     int MarkerLineFromHandle(int handle);
 
     // Delete a marker.
@@ -949,23 +994,21 @@ public:
     void SetEOLMode(int eolMode);
 
     // Set the current styling position to pos and the styling mask to mask.
-    // The styling mask can be used to protect some bits in each styling byte from
-    // modification.
+    // The styling mask can be used to protect some bits in each styling byte from modification.
     void StartStyling(int pos, int mask);
 
     // Change style from current styling position for length characters to a style
     // and move the current styling position to after this newly styled segment.
     void SetStyling(int length, int style);
 
-    // Is drawing done first into a buffer or direct to the screen.
+    // Is drawing done first into a buffer or direct to the screen?
     bool GetBufferedDraw();
 
     // If drawing is buffered then each line of text is drawn into a bitmap buffer
     // before drawing it to the screen to avoid flicker.
     void SetBufferedDraw(bool buffered);
 
-    // Change the visible size of a tab to be a multiple of the width of a space
-    // character.
+    // Change the visible size of a tab to be a multiple of the width of a space character.
     void SetTabWidth(int tabWidth);
 
     // Retrieve the visible size of a tab.
@@ -989,10 +1032,10 @@ public:
     // Add a marker to a line, returning an ID which can be used to find or delete the marker.
     int MarkerAdd(int line, int markerNumber);
 
-    // Delete a marker from a line
+    // Delete a marker from a line.
     void MarkerDelete(int line, int markerNumber);
 
-    // Delete all markers with a particular number from all lines
+    // Delete all markers with a particular number from all lines.
     void MarkerDeleteAll(int markerNumber);
 
     // Get a bit mask of all the markers set on a line.
@@ -1094,8 +1137,7 @@ public:
     // Get the time in milliseconds that the caret is on and off. 0 = steady on.
     void SetCaretPeriod(int periodMilliseconds);
 
-    // Set the set of characters making up words for when moving or selecting
-    // by word.
+    // Set the set of characters making up words for when moving or selecting by word.
     void SetWordChars(const wxString& characters);
 
     // Start a sequence of actions that is undone and redone as a unit.
@@ -1117,8 +1159,8 @@ public:
     // Retrieve the foreground colour of an indicator.
     wxColour IndicatorGetForeground(int indic);
 
-    // Divide each styling byte into lexical class bits (default:5) and indicator
-    // bits (default:3). If a lexer requires more than 32 lexical states, then this
+    // Divide each styling byte into lexical class bits (default: 5) and indicator
+    // bits (default: 3). If a lexer requires more than 32 lexical states, then this
     // is used to expand the possible states.
     void SetStyleBits(int bits);
 
@@ -1137,7 +1179,7 @@ public:
     // Is the background of the line containing the caret in a different colour?
     bool GetCaretLineVisible();
 
-    // Dsplay the background of the line containing the caret in a different colour.
+    // Display the background of the line containing the caret in a different colour.
     void SetCaretLineVisible(bool show);
 
     // Get the colour of the background of the line containing the caret.
@@ -1161,8 +1203,7 @@ public:
     // Is there an auto-completion list visible?
     bool AutoCompActive();
 
-    // Retrieve the position of the caret when the auto-completion list was
-    // displayed.
+    // Retrieve the position of the caret when the auto-completion list was displayed.
     int AutoCompPosStart();
 
     // User has selected an item so remove the list and insert the selection.
@@ -1171,8 +1212,8 @@ public:
     // Define a set of character that when typed cancel the auto-completion list.
     void AutoCompStops(const wxString& characterSet);
 
-    // Change the separator character in the string setting up an auto-completion
-    // list. Default is space but can be changed if items contain space.
+    // Change the separator character in the string setting up an auto-completion list.
+    // Default is space but can be changed if items contain space.
     void AutoCompSetSeparator(int separatorCharacter);
 
     // Retrieve the auto-completion list separator character.
@@ -1207,16 +1248,18 @@ public:
     // Display a list of strings and send notification when user chooses one.
     void UserListShow(int listType, const wxString& itemList);
 
-    // Set whether or not autocompletion is hidden automatically when nothing matches
+    // Set whether or not autocompletion is hidden automatically when nothing matches.
     void AutoCompSetAutoHide(bool autoHide);
 
-    // Retrieve whether or not autocompletion is hidden automatically when nothing matches
+    // Retrieve whether or not autocompletion is hidden automatically when nothing matches.
     bool AutoCompGetAutoHide();
 
-    // Set whether or not autocompletion deletes any word characters after the inserted text upon completion
+    // Set whether or not autocompletion deletes any word characters
+    // after the inserted text upon completion.
     void AutoCompSetDropRestOfWord(bool dropRestOfWord);
 
-    // Retrieve whether or not autocompletion deletes any word characters after the inserted text upon completion
+    // Retrieve whether or not autocompletion deletes any word characters
+    // after the inserted text upon completion.
     bool AutoCompGetDropRestOfWord();
 
     // Set the number of spaces used for one level of indentation.
@@ -1305,7 +1348,7 @@ public:
     // Find some text in the document.
     int FindText(int minPos, int maxPos, const wxString& text, int flags=0);
 
-    // On Windows will draw the document into a display context such as a printer.
+    // On Windows, will draw the document into a display context such as a printer.
     int FormatRange(bool   doDraw,
                                int    startPos,
                                int    endPos,
@@ -1371,7 +1414,7 @@ public:
     // Will a paste succeed?
     bool CanPaste();
 
-    // Are there any undoable actions in the undo history.
+    // Are there any undoable actions in the undo history?
     bool CanUndo();
 
     // Delete the undo history.
@@ -1401,16 +1444,16 @@ public:
     // Retrieve the number of characters in the document.
     int GetTextLength();
 
-    // Set to overtype (true) or insert mode
+    // Set to overtype (true) or insert mode.
     void SetOvertype(bool overtype);
 
     // Returns true if overtype mode is active otherwise false is returned.
     bool GetOvertype();
 
-    // Set the width of the insert mode caret
+    // Set the width of the insert mode caret.
     void SetCaretWidth(int pixelWidth);
 
-    // Returns the width of the insert mode caret
+    // Returns the width of the insert mode caret.
     int GetCaretWidth();
 
     // Sets the position that starts the target which is used for updating the
@@ -1445,10 +1488,10 @@ public:
     // Returns length of range or -1 for failure in which case target is not moved.
     int SearchInTarget(const wxString& text);
 
-    // Set the search flags used by SearchInTarget
+    // Set the search flags used by SearchInTarget.
     void SetSearchFlags(int flags);
 
-    // Get the search flags used by SearchInTarget
+    // Get the search flags used by SearchInTarget.
     int GetSearchFlags();
 
     // Show a call tip containing a definition near position pos.
@@ -1510,53 +1553,76 @@ public:
     // Ensure a particular line is visible by expanding any header line hiding it.
     void EnsureVisible(int line);
 
-    // Set some debugging options for folding
+    // Set some debugging options for folding.
     void SetFoldFlags(int flags);
 
     // Ensure a particular line is visible by expanding any header line hiding it.
     // Use the currently set visibility policy to determine which range to display.
     void EnsureVisibleEnforcePolicy(int line);
 
-    // Sets whether a tab pressed when caret is within indentation indents
+    // Sets whether a tab pressed when caret is within indentation indents.
     void SetTabIndents(bool tabIndents);
 
     // Does a tab pressed when caret is within indentation indent?
     bool GetTabIndents();
 
-    // Sets whether a backspace pressed when caret is within indentation unindents
+    // Sets whether a backspace pressed when caret is within indentation unindents.
     void SetBackSpaceUnIndents(bool bsUnIndents);
 
     // Does a backspace pressed when caret is within indentation unindent?
     bool GetBackSpaceUnIndents();
 
-    // Sets the time the mouse must sit still to generate a mouse dwell event
+    // Sets the time the mouse must sit still to generate a mouse dwell event.
     void SetMouseDwellTime(int periodMilliseconds);
 
-    // Retrieve the time the mouse must sit still to generate a mouse dwell event
+    // Retrieve the time the mouse must sit still to generate a mouse dwell event.
     int GetMouseDwellTime();
 
-    // Get position of start of word
+    // Get position of start of word.
     int WordStartPosition(int pos, bool onlyWordCharacters);
 
-    // Get position of end of word
+    // Get position of end of word.
     int WordEndPosition(int pos, bool onlyWordCharacters);
 
-    // Sets whether text is word wrapped
+    // Sets whether text is word wrapped.
     void SetWrapMode(int mode);
 
-    // Retrieve whether text is word wrapped
+    // Retrieve whether text is word wrapped.
     int GetWrapMode();
 
-    // Sets the degree of caching of layout information
+    // Sets the degree of caching of layout information.
     void SetLayoutCache(int mode);
 
-    // Retrieve the degree of caching of layout information
+    // Retrieve the degree of caching of layout information.
     int GetLayoutCache();
 
-    // Move the caret inside current view if it's not there already
+    // Sets the document width assumed for scrolling.
+    void SetScrollWidth(int pixelWidth);
+
+    // Retrieve the document width assumed for scrolling.
+    int GetScrollWidth();
+
+    // Measure the pixel width of some text in a particular style.
+    // Nul terminated text argument.
+    // Does not handle tab or control characters.
+    int TextWidth(int style, const wxString& text);
+
+    // Sets the scroll range so that maximum scroll position has
+    // the last line at the bottom of the view (default).
+    // Setting this to false allows scrolling one page below the last line.
+    void SetEndAtLastLine(bool endAtLastLine);
+
+    // Retrieve whether the maximum scroll position has the last
+    // line at the bottom of the view.
+    int GetEndAtLastLine();
+
+    // Retrieve the height of a particular line of text in pixels.
+    int TextHeight(int line);
+
+    // Move the caret inside current view if it's not there already.
     void MoveCaretInsideView();
 
-    // How many characters are on a line, not including end of line characters.
+    // How many characters are on a line, not including end of line characters?
     int LineLength(int line);
 
     // Highlight the characters at two positions.
@@ -1568,10 +1634,10 @@ public:
     // Find the position of a matching brace or INVALID_POSITION if no match.
     int BraceMatch(int pos);
 
-    // Are the end of line characters visible.
+    // Are the end of line characters visible?
     bool GetViewEOL();
 
-    // Make the end of line characters visible or invisible
+    // Make the end of line characters visible or invisible.
     void SetViewEOL(bool visible);
 
     // Retrieve a pointer to the document object.
@@ -1614,9 +1680,6 @@ public:
     // Does not ensure the selection is visible.
     int SearchPrev(int flags, const wxString& text);
 
-    // Set the way the line the caret is on is kept visible.
-    void SetCaretPolicy(int caretPolicy, int caretSlop);
-
     // Retrieves the number of lines completely visible.
     int LinesOnScreen();
 
@@ -1624,7 +1687,7 @@ public:
     // the wrong mouse button.
     void UsePopUp(bool allowPopUp);
 
-    // Is the selection a rectangular. The alternative is the more common stream selection.
+    // Is the selection rectangular? The alternative is the more common stream selection.
     bool SelectionIsRectangle();
 
     // Set the zoom level. This number of points is added to the size of all fonts.
@@ -1647,61 +1710,72 @@ public:
     // Get which document modification events are sent to the container.
     int GetModEventMask();
 
-    // Change internal focus flag
+    // Change internal focus flag.
     void SetSTCFocus(bool focus);
 
-    // Get internal focus flag
+    // Get internal focus flag.
     bool GetSTCFocus();
 
-    // Change error status - 0 = OK
+    // Change error status - 0 = OK.
     void SetStatus(int statusCode);
 
-    // Get error status
+    // Get error status.
     int GetStatus();
 
-    // Set whether the mouse is captured when its button is pressed
+    // Set whether the mouse is captured when its button is pressed.
     void SetMouseDownCaptures(bool captures);
 
-    // Get whether mouse gets captured
+    // Get whether mouse gets captured.
     bool GetMouseDownCaptures();
 
-    // Sets the cursor to one of the SC_CURSOR* values
+    // Sets the cursor to one of the SC_CURSOR* values.
     void SetCursor(int cursorType);
 
-    // Get cursor type
+    // Get cursor type.
     int GetCursor();
 
     // Change the way control characters are displayed:
-    // If symbol is < 32, keep the drawn way, else, use the given character
+    // If symbol is < 32, keep the drawn way, else, use the given character.
     void SetControlCharSymbol(int symbol);
 
-    // Get the way control characters are displayed
+    // Get the way control characters are displayed.
     int GetControlCharSymbol();
 
-    // Move to the previous change in capitalistion
+    // Move to the previous change in capitalisation.
     void WordPartLeft();
 
-    // Move to the previous change in capitalistion extending selection to new caret position.
+    // Move to the previous change in capitalisation extending selection
+    // to new caret position.
     void WordPartLeftExtend();
 
-    // Move to the change next in capitalistion
+    // Move to the change next in capitalisation.
     void WordPartRight();
 
-    // Move to the next change in capitalistion extending selection to new caret position.
+    // Move to the next change in capitalisation extending selection
+    // to new caret position.
     void WordPartRightExtend();
 
-    // Set the way the display area is determined when a particular line is to be moved to.
+    // Set the way the display area is determined when a particular line
+    // is to be moved to by Find, FindNext, GotoLine, etc.
     void SetVisiblePolicy(int visiblePolicy, int visibleSlop);
 
-    // Delete back from the current position to the start of the line
+    // Delete back from the current position to the start of the line.
     void DelLineLeft();
 
-    // Delete forwards from the current position to the end of the line
+    // Delete forwards from the current position to the end of the line.
     void DelLineRight();
 
-    // Get and Set the xOffset (ie, horizonal scroll position)
+    // Get and Set the xOffset (ie, horizonal scroll position).
     void SetXOffset(int newOffset);
     int GetXOffset();
+
+    // Set the way the caret is kept visible when going sideway.
+    // The exclusion zone is given in pixels.
+    void SetXCaretPolicy(int caretPolicy, int caretSlop);
+
+    // Set the way the line the caret is on is kept visible.
+    // The exclusion zone is given in lines.
+    void SetYCaretPolicy(int caretPolicy, int caretSlop);
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();
@@ -1986,6 +2060,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_START_DRAG,              1669)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_ZOOM,                    1672)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -2011,6 +2086,7 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_START_DRAG,
         wxEVT_STC_DRAG_OVER,
         wxEVT_STC_DO_DROP,
+        wxEVT_STC_ZOOM,
     };
 #endif
 
@@ -2041,6 +2117,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_START_DRAG(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_START_DRAG,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_ZOOM(id, fn)                    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #endif
 
 //----------------------------------------------------------------------

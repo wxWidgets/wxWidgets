@@ -148,7 +148,7 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
 		look = newline + 1;
 		numLines++;
 	}
-	int lastWidth = surfaceMeasure->WidthText(font, look, strlen(look));
+	int lastWidth = surfaceMeasure->WidthText(font, look, static_cast<int>(strlen(look)));
 	width = Platform::Maximum(width, lastWidth) + 10;
 	int lineHeight = surfaceMeasure->Height(font);
 	// Extra line for border and an empty line at top and bottom

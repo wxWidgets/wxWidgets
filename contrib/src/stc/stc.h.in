@@ -338,6 +338,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_START_DRAG,              1669)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DRAG_OVER,               1670)
     DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_DO_DROP,                 1671)
+    DECLARE_LOCAL_EVENT_TYPE(wxEVT_STC_ZOOM,                    1672)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -363,6 +364,7 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_START_DRAG,
         wxEVT_STC_DRAG_OVER,
         wxEVT_STC_DO_DROP,
+        wxEVT_STC_ZOOM,
     };
 #endif
 
@@ -393,6 +395,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_START_DRAG(id, fn)              DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_START_DRAG,            id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DRAG_OVER(id, fn)               DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DRAG_OVER,             id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_STC_DO_DROP(id, fn)                 DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_DO_DROP,               id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
+#define EVT_STC_ZOOM(id, fn)                    DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_ZOOM,                  id, -1, (wxObjectEventFunction) (wxEventFunction) (wxStyledTextEventFunction) & fn, (wxObject *) NULL ),
 #endif
 
 //----------------------------------------------------------------------

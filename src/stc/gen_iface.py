@@ -553,6 +553,12 @@ def processIface(iface, h_tmplt, cpp_tmplt, h_dest, cpp_dest):
         elif op == 'evt ':
             pass
 
+        elif op == 'enu ':
+            pass
+
+        elif op == 'lex ':
+            pass
+
         else:
             print '***** Unknown line type: ', line
 

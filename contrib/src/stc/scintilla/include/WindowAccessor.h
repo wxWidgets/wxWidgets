@@ -31,6 +31,7 @@ public:
 		lenDoc(-1), validLen(0), chFlags(0), chWhile(0) {
 	}
 	~WindowAccessor();
+	bool Match(int pos, const char *s);
 	char StyleAt(int position);
 	int GetLine(int position);
 	int LineStart(int line);

@@ -118,7 +118,7 @@ void AutoComplete::Move(int delta) {
 }
 
 void AutoComplete::Select(const char *word) {
-	int lenWord = strlen(word);
+	size_t lenWord = strlen(word);
 	int location = -1;
 	const int maxItemLen=1000;
 	char item[maxItemLen];

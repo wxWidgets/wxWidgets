@@ -38,6 +38,7 @@ public:
 		startSeg(0), startPosStyling(0) {
 	}
 	~DocumentAccessor();
+	bool Match(int pos, const char *s);
 	char StyleAt(int position);
 	int GetLine(int position);
 	int LineStart(int line);

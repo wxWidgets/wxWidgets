@@ -408,4 +408,10 @@ static void FoldPyDoc(unsigned int startPos, int length, int /*initStyle - unuse
 	//styler.SetLevel(lineCurrent, indentCurrent);
 }
 
-LexerModule lmPython(SCLEX_PYTHON, ColourisePyDoc, "python", FoldPyDoc);
+static const char * const pythonWordListDesc[] = {
+	"Python keywords",
+	0
+};
+
+LexerModule lmPython(SCLEX_PYTHON, ColourisePyDoc, "python", FoldPyDoc, 
+					 pythonWordListDesc);

@@ -18,7 +18,7 @@ class TestView(wxStyledTextCtrl):
                           wxFont(10, wxMODERN, wxNORMAL, wxNORMAL))
         EVT_DYNAMIC_SASH_SPLIT(self, -1, self.OnSplit)
         EVT_DYNAMIC_SASH_UNIFY(self, -1, self.OnUnify)
-
+        #self.SetScrollWidth(500)
 
     def SetupScrollBars(self):
         # hook the scrollbars provided by the wxDynamicSashWindow

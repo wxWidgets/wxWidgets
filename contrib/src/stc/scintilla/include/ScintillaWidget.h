@@ -28,7 +28,7 @@ struct _ScintillaObject {
 };
 
 struct _ScintillaClass {
-	GtkFixedClass parent_class;
+	GtkContainerClass parent_class;
 
 	void (* command) (ScintillaObject *ttt);
 	void (* notify) (ScintillaObject *ttt);
@@ -38,6 +38,12 @@ guint		scintilla_get_type	(void);
 GtkWidget*	scintilla_new		(void);
 void		scintilla_set_id	(ScintillaObject *sci,int id);
 sptr_t	scintilla_send_message	(ScintillaObject *sci,unsigned int iMessage, uptr_t wParam, sptr_t lParam);
+
+#if GTK_MAJOR_VERSION < 2
+#define SCINTILLA_NOTIFY "notify"
+#else
+#define SCINTILLA_NOTIFY "sci-notify"
+#endif
 
 #ifdef __cplusplus
 }

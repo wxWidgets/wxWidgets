@@ -48,6 +48,15 @@ void DocumentAccessor::Fill(int position) {
 	buf[endPos-startPos] = '\0';
 }
 
+bool DocumentAccessor::Match(int pos, const char *s) {
+	for (int i=0; *s; i++) {
+		if (*s != SafeGetCharAt(pos+i))
+			return false;
+		s++;
+	}
+	return true;
+}
+
 char DocumentAccessor::StyleAt(int position) {
 	return pdoc->StyleAt(position);
 }

@@ -81,6 +81,7 @@ DEFINE_EVENT_TYPE( wxEVT_STC_DWELLEND )
 DEFINE_EVENT_TYPE( wxEVT_STC_START_DRAG )
 DEFINE_EVENT_TYPE( wxEVT_STC_DRAG_OVER )
 DEFINE_EVENT_TYPE( wxEVT_STC_DO_DROP )
+DEFINE_EVENT_TYPE( wxEVT_STC_ZOOM )
 
 
 BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
@@ -117,7 +118,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxStyledTextEvent, wxCommandEvent)
 
 #ifdef LINK_LEXERS
 // forces the linking of the lexer modules
-int wxForceScintillaLexers();
+int Scintilla_LinkLexers();
 #endif
 
 //----------------------------------------------------------------------
@@ -134,7 +135,7 @@ wxStyledTextCtrl::wxStyledTextCtrl(wxWindow *parent,
               wxDefaultValidator, name)
 {
 #ifdef LINK_LEXERS
-    wxForceScintillaLexers();
+    Scintilla_LinkLexers();
 #endif
     m_swx = new ScintillaWX(this);
     m_stopWatch.Start();
@@ -168,58 +169,58 @@ long wxStyledTextCtrl::SendMsg(int msg, long wp, long lp) {
 //       this file.  Edit stc.cpp.in or gen_iface.py instead and regenerate.
 
 
-// Add text to the document
+// Add text to the document.
 void wxStyledTextCtrl::AddText(const wxString& text) {
                     wxWX2MBbuf buf = (wxWX2MBbuf)wx2stc(text);
                     SendMsg(2001, strlen(buf), (long)(const char*)buf);
 }
 
-// Add array of cells to document
+// Add array of cells to document.
 void wxStyledTextCtrl::AddStyledText(const wxMemoryBuffer& data) {
                           SendMsg(2002, data.GetDataLen(), (long)data.GetData());
 }
 
-// Insert string at a position
+// Insert string at a position.
 void wxStyledTextCtrl::InsertText(int pos, const wxString& text) {
     SendMsg(2003, pos, (long)(const char*)wx2stc(text));
 }
 
-// Delete all text in the document
+// Delete all text in the document.
 void wxStyledTextCtrl::ClearAll() {
     SendMsg(2004, 0, 0);
 }
 
-// Set all style bytes to 0, remove all folding information
+// Set all style bytes to 0, remove all folding information.
 void wxStyledTextCtrl::ClearDocumentStyle() {
     SendMsg(2005, 0, 0);
 }
 
-// The number of characters in the document
+// The number of characters in the document.
 int wxStyledTextCtrl::GetLength() {
     return SendMsg(2006, 0, 0);
 }
 
-// Returns the character byte at the position
+// Returns the character byte at the position.
 int wxStyledTextCtrl::GetCharAt(int pos) {
                        return (unsigned char)SendMsg(2007, pos, 0);
 }
 
-// Returns the position of the caret
+// Returns the position of the caret.
 int wxStyledTextCtrl::GetCurrentPos() {
     return SendMsg(2008, 0, 0);
 }
 
-// Returns the position of the opposite end of the selection to the caret
+// Returns the position of the opposite end of the selection to the caret.
 int wxStyledTextCtrl::GetAnchor() {
     return SendMsg(2009, 0, 0);
 }
 
-// Returns the style byte at the position
+// Returns the style byte at the position.
 int wxStyledTextCtrl::GetStyleAt(int pos) {
                        return (unsigned char)SendMsg(2010, pos, 0);
 }
 
-// Redoes the next action on the undo history
+// Redoes the next action on the undo history.
 void wxStyledTextCtrl::Redo() {
     SendMsg(2011, 0, 0);
 }
@@ -260,12 +261,12 @@ wxMemoryBuffer wxStyledTextCtrl::GetStyledText(int startPos, int endPos) {
                           return buf;
 }
 
-// Are there any redoable actions in the undo history.
+// Are there any redoable actions in the undo history?
 bool wxStyledTextCtrl::CanRedo() {
     return SendMsg(2016, 0, 0) != 0;
 }
 
-// Retrieve the line number at which a particular marker is located
+// Retrieve the line number at which a particular marker is located.
 int wxStyledTextCtrl::MarkerLineFromHandle(int handle) {
     return SendMsg(2017, handle, 0);
 }
@@ -358,8 +359,7 @@ void wxStyledTextCtrl::SetEOLMode(int eolMode) {
 }
 
 // Set the current styling position to pos and the styling mask to mask.
-// The styling mask can be used to protect some bits in each styling byte from
-// modification.
+// The styling mask can be used to protect some bits in each styling byte from modification.
 void wxStyledTextCtrl::StartStyling(int pos, int mask) {
     SendMsg(2032, pos, mask);
 }
@@ -370,7 +370,7 @@ void wxStyledTextCtrl::SetStyling(int length, int style) {
     SendMsg(2033, length, style);
 }
 
-// Is drawing done first into a buffer or direct to the screen.
+// Is drawing done first into a buffer or direct to the screen?
 bool wxStyledTextCtrl::GetBufferedDraw() {
     return SendMsg(2034, 0, 0) != 0;
 }
@@ -381,8 +381,7 @@ void wxStyledTextCtrl::SetBufferedDraw(bool buffered) {
     SendMsg(2035, buffered, 0);
 }
 
-// Change the visible size of a tab to be a multiple of the width of a space
-// character.
+// Change the visible size of a tab to be a multiple of the width of a space character.
 void wxStyledTextCtrl::SetTabWidth(int tabWidth) {
     SendMsg(2036, tabWidth, 0);
 }
@@ -432,12 +431,12 @@ int wxStyledTextCtrl::MarkerAdd(int line, int markerNumber) {
     return SendMsg(2043, line, markerNumber);
 }
 
-// Delete a marker from a line
+// Delete a marker from a line.
 void wxStyledTextCtrl::MarkerDelete(int line, int markerNumber) {
     SendMsg(2044, line, markerNumber);
 }
 
-// Delete all markers with a particular number from all lines
+// Delete all markers with a particular number from all lines.
 void wxStyledTextCtrl::MarkerDeleteAll(int markerNumber) {
     SendMsg(2045, markerNumber, 0);
 }
@@ -607,8 +606,7 @@ void wxStyledTextCtrl::SetCaretPeriod(int periodMilliseconds) {
     SendMsg(2076, periodMilliseconds, 0);
 }
 
-// Set the set of characters making up words for when moving or selecting
-// by word.
+// Set the set of characters making up words for when moving or selecting by word.
 void wxStyledTextCtrl::SetWordChars(const wxString& characters) {
     SendMsg(2077, 0, (long)(const char*)wx2stc(characters));
 }
@@ -645,8 +643,8 @@ wxColour wxStyledTextCtrl::IndicatorGetForeground(int indic) {
     return wxColourFromLong(c);
 }
 
-// Divide each styling byte into lexical class bits (default:5) and indicator
-// bits (default:3). If a lexer requires more than 32 lexical states, then this
+// Divide each styling byte into lexical class bits (default: 5) and indicator
+// bits (default: 3). If a lexer requires more than 32 lexical states, then this
 // is used to expand the possible states.
 void wxStyledTextCtrl::SetStyleBits(int bits) {
     SendMsg(2090, bits, 0);
@@ -677,7 +675,7 @@ bool wxStyledTextCtrl::GetCaretLineVisible() {
     return SendMsg(2095, 0, 0) != 0;
 }
 
-// Dsplay the background of the line containing the caret in a different colour.
+// Display the background of the line containing the caret in a different colour.
 void wxStyledTextCtrl::SetCaretLineVisible(bool show) {
     SendMsg(2096, show, 0);
 }
@@ -716,8 +714,7 @@ bool wxStyledTextCtrl::AutoCompActive() {
     return SendMsg(2102, 0, 0) != 0;
 }
 
-// Retrieve the position of the caret when the auto-completion list was
-// displayed.
+// Retrieve the position of the caret when the auto-completion list was displayed.
 int wxStyledTextCtrl::AutoCompPosStart() {
     return SendMsg(2103, 0, 0);
 }
@@ -732,8 +729,8 @@ void wxStyledTextCtrl::AutoCompStops(const wxString& characterSet) {
     SendMsg(2105, 0, (long)(const char*)wx2stc(characterSet));
 }
 
-// Change the separator character in the string setting up an auto-completion
-// list. Default is space but can be changed if items contain space.
+// Change the separator character in the string setting up an auto-completion list.
+// Default is space but can be changed if items contain space.
 void wxStyledTextCtrl::AutoCompSetSeparator(int separatorCharacter) {
     SendMsg(2106, separatorCharacter, 0);
 }
@@ -790,22 +787,24 @@ void wxStyledTextCtrl::UserListShow(int listType, const wxString& itemList) {
     SendMsg(2117, listType, (long)(const char*)wx2stc(itemList));
 }
 
-// Set whether or not autocompletion is hidden automatically when nothing matches
+// Set whether or not autocompletion is hidden automatically when nothing matches.
 void wxStyledTextCtrl::AutoCompSetAutoHide(bool autoHide) {
     SendMsg(2118, autoHide, 0);
 }
 
-// Retrieve whether or not autocompletion is hidden automatically when nothing matches
+// Retrieve whether or not autocompletion is hidden automatically when nothing matches.
 bool wxStyledTextCtrl::AutoCompGetAutoHide() {
     return SendMsg(2119, 0, 0) != 0;
 }
 
-// Set whether or not autocompletion deletes any word characters after the inserted text upon completion
+// Set whether or not autocompletion deletes any word characters
+// after the inserted text upon completion.
 void wxStyledTextCtrl::AutoCompSetDropRestOfWord(bool dropRestOfWord) {
     SendMsg(2270, dropRestOfWord, 0);
 }
 
-// Retrieve whether or not autocompletion deletes any word characters after the inserted text upon completion
+// Retrieve whether or not autocompletion deletes any word characters
+// after the inserted text upon completion.
 bool wxStyledTextCtrl::AutoCompGetDropRestOfWord() {
     return SendMsg(2271, 0, 0) != 0;
 }
@@ -961,7 +960,7 @@ int wxStyledTextCtrl::FindText(int minPos, int maxPos,
                      return SendMsg(2150, flags, (long)&ft);
 }
 
-// On Windows will draw the document into a display context such as a printer.
+// On Windows, will draw the document into a display context such as a printer.
  int wxStyledTextCtrl::FormatRange(bool   doDraw,
                                 int    startPos,
                                 int    endPos,
@@ -1123,7 +1122,7 @@ bool wxStyledTextCtrl::CanPaste() {
     return SendMsg(2173, 0, 0) != 0;
 }
 
-// Are there any undoable actions in the undo history.
+// Are there any undoable actions in the undo history?
 bool wxStyledTextCtrl::CanUndo() {
     return SendMsg(2174, 0, 0) != 0;
 }
@@ -1179,7 +1178,7 @@ int wxStyledTextCtrl::GetTextLength() {
     return SendMsg(2183, 0, 0);
 }
 
-// Set to overtype (true) or insert mode
+// Set to overtype (true) or insert mode.
 void wxStyledTextCtrl::SetOvertype(bool overtype) {
     SendMsg(2186, overtype, 0);
 }
@@ -1189,12 +1188,12 @@ bool wxStyledTextCtrl::GetOvertype() {
     return SendMsg(2187, 0, 0) != 0;
 }
 
-// Set the width of the insert mode caret
+// Set the width of the insert mode caret.
 void wxStyledTextCtrl::SetCaretWidth(int pixelWidth) {
     SendMsg(2188, pixelWidth, 0);
 }
 
-// Returns the width of the insert mode caret
+// Returns the width of the insert mode caret.
 int wxStyledTextCtrl::GetCaretWidth() {
     return SendMsg(2189, 0, 0);
 }
@@ -1251,12 +1250,12 @@ int wxStyledTextCtrl::GetTargetEnd() {
                            return SendMsg(2197, strlen(buf), (long)(const char*)buf);
 }
 
-// Set the search flags used by SearchInTarget
+// Set the search flags used by SearchInTarget.
 void wxStyledTextCtrl::SetSearchFlags(int flags) {
     SendMsg(2198, flags, 0);
 }
 
-// Get the search flags used by SearchInTarget
+// Get the search flags used by SearchInTarget.
 int wxStyledTextCtrl::GetSearchFlags() {
     return SendMsg(2199, 0, 0);
 }
@@ -1358,7 +1357,7 @@ void wxStyledTextCtrl::EnsureVisible(int line) {
     SendMsg(2232, line, 0);
 }
 
-// Set some debugging options for folding
+// Set some debugging options for folding.
 void wxStyledTextCtrl::SetFoldFlags(int flags) {
     SendMsg(2233, flags, 0);
 }
@@ -1369,7 +1368,7 @@ void wxStyledTextCtrl::EnsureVisibleEnforcePolicy(int line) {
     SendMsg(2234, line, 0);
 }
 
-// Sets whether a tab pressed when caret is within indentation indents
+// Sets whether a tab pressed when caret is within indentation indents.
 void wxStyledTextCtrl::SetTabIndents(bool tabIndents) {
     SendMsg(2260, tabIndents, 0);
 }
@@ -1379,7 +1378,7 @@ bool wxStyledTextCtrl::GetTabIndents() {
     return SendMsg(2261, 0, 0) != 0;
 }
 
-// Sets whether a backspace pressed when caret is within indentation unindents
+// Sets whether a backspace pressed when caret is within indentation unindents.
 void wxStyledTextCtrl::SetBackSpaceUnIndents(bool bsUnIndents) {
     SendMsg(2262, bsUnIndents, 0);
 }
@@ -1389,52 +1388,87 @@ bool wxStyledTextCtrl::GetBackSpaceUnIndents() {
     return SendMsg(2263, 0, 0) != 0;
 }
 
-// Sets the time the mouse must sit still to generate a mouse dwell event
+// Sets the time the mouse must sit still to generate a mouse dwell event.
 void wxStyledTextCtrl::SetMouseDwellTime(int periodMilliseconds) {
     SendMsg(2264, periodMilliseconds, 0);
 }
 
-// Retrieve the time the mouse must sit still to generate a mouse dwell event
+// Retrieve the time the mouse must sit still to generate a mouse dwell event.
 int wxStyledTextCtrl::GetMouseDwellTime() {
     return SendMsg(2265, 0, 0);
 }
 
-// Get position of start of word
+// Get position of start of word.
 int wxStyledTextCtrl::WordStartPosition(int pos, bool onlyWordCharacters) {
     return SendMsg(2266, pos, onlyWordCharacters);
 }
 
-// Get position of end of word
+// Get position of end of word.
 int wxStyledTextCtrl::WordEndPosition(int pos, bool onlyWordCharacters) {
     return SendMsg(2267, pos, onlyWordCharacters);
 }
 
-// Sets whether text is word wrapped
+// Sets whether text is word wrapped.
 void wxStyledTextCtrl::SetWrapMode(int mode) {
     SendMsg(2268, mode, 0);
 }
 
-// Retrieve whether text is word wrapped
+// Retrieve whether text is word wrapped.
 int wxStyledTextCtrl::GetWrapMode() {
     return SendMsg(2269, 0, 0);
 }
 
-// Sets the degree of caching of layout information
+// Sets the degree of caching of layout information.
 void wxStyledTextCtrl::SetLayoutCache(int mode) {
     SendMsg(2272, mode, 0);
 }
 
-// Retrieve the degree of caching of layout information
+// Retrieve the degree of caching of layout information.
 int wxStyledTextCtrl::GetLayoutCache() {
     return SendMsg(2273, 0, 0);
 }
 
-// Move the caret inside current view if it's not there already
+// Sets the document width assumed for scrolling.
+void wxStyledTextCtrl::SetScrollWidth(int pixelWidth) {
+    SendMsg(2274, pixelWidth, 0);
+}
+
+// Retrieve the document width assumed for scrolling.
+int wxStyledTextCtrl::GetScrollWidth() {
+    return SendMsg(2275, 0, 0);
+}
+
+// Measure the pixel width of some text in a particular style.
+// Nul terminated text argument.
+// Does not handle tab or control characters.
+int wxStyledTextCtrl::TextWidth(int style, const wxString& text) {
+    return SendMsg(2276, style, (long)(const char*)wx2stc(text));
+}
+
+// Sets the scroll range so that maximum scroll position has
+// the last line at the bottom of the view (default).
+// Setting this to false allows scrolling one page below the last line.
+void wxStyledTextCtrl::SetEndAtLastLine(bool endAtLastLine) {
+    SendMsg(2277, endAtLastLine, 0);
+}
+
+// Retrieve whether the maximum scroll position has the last
+// line at the bottom of the view.
+int wxStyledTextCtrl::GetEndAtLastLine() {
+    return SendMsg(2278, 0, 0);
+}
+
+// Retrieve the height of a particular line of text in pixels.
+int wxStyledTextCtrl::TextHeight(int line) {
+    return SendMsg(2279, line, 0);
+}
+
+// Move the caret inside current view if it's not there already.
 void wxStyledTextCtrl::MoveCaretInsideView() {
     SendMsg(2401, 0, 0);
 }
 
-// How many characters are on a line, not including end of line characters.
+// How many characters are on a line, not including end of line characters?
 int wxStyledTextCtrl::LineLength(int line) {
     return SendMsg(2350, line, 0);
 }
@@ -1454,12 +1488,12 @@ int wxStyledTextCtrl::BraceMatch(int pos) {
     return SendMsg(2353, pos, 0);
 }
 
-// Are the end of line characters visible.
+// Are the end of line characters visible?
 bool wxStyledTextCtrl::GetViewEOL() {
     return SendMsg(2355, 0, 0) != 0;
 }
 
-// Make the end of line characters visible or invisible
+// Make the end of line characters visible or invisible.
 void wxStyledTextCtrl::SetViewEOL(bool visible) {
     SendMsg(2356, visible, 0);
 }
@@ -1529,11 +1563,6 @@ int wxStyledTextCtrl::SearchPrev(int flags, const wxString& text) {
     return SendMsg(2368, flags, (long)(const char*)wx2stc(text));
 }
 
-// Set the way the line the caret is on is kept visible.
-void wxStyledTextCtrl::SetCaretPolicy(int caretPolicy, int caretSlop) {
-    SendMsg(2369, caretPolicy, caretSlop);
-}
-
 // Retrieves the number of lines completely visible.
 int wxStyledTextCtrl::LinesOnScreen() {
     return SendMsg(2370, 0, 0);
@@ -1545,7 +1574,7 @@ void wxStyledTextCtrl::UsePopUp(bool allowPopUp) {
     SendMsg(2371, allowPopUp, 0);
 }
 
-// Is the selection a rectangular. The alternative is the more common stream selection.
+// Is the selection rectangular? The alternative is the more common stream selection.
 bool wxStyledTextCtrl::SelectionIsRectangle() {
     return SendMsg(2372, 0, 0) != 0;
 }
@@ -1582,98 +1611,113 @@ int wxStyledTextCtrl::GetModEventMask() {
     return SendMsg(2378, 0, 0);
 }
 
-// Change internal focus flag
+// Change internal focus flag.
 void wxStyledTextCtrl::SetSTCFocus(bool focus) {
     SendMsg(2380, focus, 0);
 }
 
-// Get internal focus flag
+// Get internal focus flag.
 bool wxStyledTextCtrl::GetSTCFocus() {
     return SendMsg(2381, 0, 0) != 0;
 }
 
-// Change error status - 0 = OK
+// Change error status - 0 = OK.
 void wxStyledTextCtrl::SetStatus(int statusCode) {
     SendMsg(2382, statusCode, 0);
 }
 
-// Get error status
+// Get error status.
 int wxStyledTextCtrl::GetStatus() {
     return SendMsg(2383, 0, 0);
 }
 
-// Set whether the mouse is captured when its button is pressed
+// Set whether the mouse is captured when its button is pressed.
 void wxStyledTextCtrl::SetMouseDownCaptures(bool captures) {
     SendMsg(2384, captures, 0);
 }
 
-// Get whether mouse gets captured
+// Get whether mouse gets captured.
 bool wxStyledTextCtrl::GetMouseDownCaptures() {
     return SendMsg(2385, 0, 0) != 0;
 }
 
-// Sets the cursor to one of the SC_CURSOR* values
+// Sets the cursor to one of the SC_CURSOR* values.
 void wxStyledTextCtrl::SetCursor(int cursorType) {
     SendMsg(2386, cursorType, 0);
 }
 
-// Get cursor type
+// Get cursor type.
 int wxStyledTextCtrl::GetCursor() {
     return SendMsg(2387, 0, 0);
 }
 
 // Change the way control characters are displayed:
-// If symbol is < 32, keep the drawn way, else, use the given character
+// If symbol is < 32, keep the drawn way, else, use the given character.
 void wxStyledTextCtrl::SetControlCharSymbol(int symbol) {
     SendMsg(2388, symbol, 0);
 }
 
-// Get the way control characters are displayed
+// Get the way control characters are displayed.
 int wxStyledTextCtrl::GetControlCharSymbol() {
     return SendMsg(2389, 0, 0);
 }
 
-// Move to the previous change in capitalistion
+// Move to the previous change in capitalisation.
 void wxStyledTextCtrl::WordPartLeft() {
     SendMsg(2390, 0, 0);
 }
 
-// Move to the previous change in capitalistion extending selection to new caret position.
+// Move to the previous change in capitalisation extending selection
+// to new caret position.
 void wxStyledTextCtrl::WordPartLeftExtend() {
     SendMsg(2391, 0, 0);
 }
 
-// Move to the change next in capitalistion
+// Move to the change next in capitalisation.
 void wxStyledTextCtrl::WordPartRight() {
     SendMsg(2392, 0, 0);
 }
 
-// Move to the next change in capitalistion extending selection to new caret position.
+// Move to the next change in capitalisation extending selection
+// to new caret position.
 void wxStyledTextCtrl::WordPartRightExtend() {
     SendMsg(2393, 0, 0);
 }
 
-// Set the way the display area is determined when a particular line is to be moved to.
+// Set the way the display area is determined when a particular line
+// is to be moved to by Find, FindNext, GotoLine, etc.
 void wxStyledTextCtrl::SetVisiblePolicy(int visiblePolicy, int visibleSlop) {
     SendMsg(2394, visiblePolicy, visibleSlop);
 }
 
-// Delete back from the current position to the start of the line
+// Delete back from the current position to the start of the line.
 void wxStyledTextCtrl::DelLineLeft() {
     SendMsg(2395, 0, 0);
 }
 
-// Delete forwards from the current position to the end of the line
+// Delete forwards from the current position to the end of the line.
 void wxStyledTextCtrl::DelLineRight() {
     SendMsg(2396, 0, 0);
 }
 
-// Get and Set the xOffset (ie, horizonal scroll position)
+// Get and Set the xOffset (ie, horizonal scroll position).
 void wxStyledTextCtrl::SetXOffset(int newOffset) {
     SendMsg(2397, newOffset, 0);
 }
 int wxStyledTextCtrl::GetXOffset() {
     return SendMsg(2398, 0, 0);
+}
+
+// Set the way the caret is kept visible when going sideway.
+// The exclusion zone is given in pixels.
+void wxStyledTextCtrl::SetXCaretPolicy(int caretPolicy, int caretSlop) {
+    SendMsg(2402, caretPolicy, caretSlop);
+}
+
+// Set the way the line the caret is on is kept visible.
+// The exclusion zone is given in lines.
+void wxStyledTextCtrl::SetYCaretPolicy(int caretPolicy, int caretSlop) {
+    SendMsg(2403, caretPolicy, caretSlop);
 }
 
 // Start notifying the container of all key presses and commands.
@@ -2102,6 +2146,10 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_DWELLEND);
         evt.SetX(scn.x);
         evt.SetY(scn.y);
+        break;
+
+    case SCN_ZOOM:
+        evt.SetEventType(wxEVT_STC_ZOOM);
         break;
 
     default:

@@ -45,7 +45,7 @@ int CompareCaseInsensitive(const char *a, const char *b) {
 	return *a - *b;
 }
 
-int CompareNCaseInsensitive(const char *a, const char *b, int len) {
+int CompareNCaseInsensitive(const char *a, const char *b, size_t len) {
 	while (*a && *b && len) {
 		if (*a != *b) {
 			char upperA = MakeUpperCase(*a);
@@ -68,7 +68,7 @@ bool EqualCaseInsensitive(const char *a, const char *b) {
 	return 0 == CompareCaseInsensitive(a, b);
 }
 
-inline unsigned int HashString(const char *s, int len) {
+inline unsigned int HashString(const char *s, size_t len) {
 	unsigned int ret = 0;
 	while (len--) {
 		ret <<= 4;
@@ -93,9 +93,9 @@ void PropSet::Set(const char *key, const char *val, int lenKey, int lenVal) {
 	if (!*key)	// Empty keys are not supported
 		return;
 	if (lenKey == -1)
-		lenKey = strlen(key);
+		lenKey = static_cast<int>(strlen(key));
 	if (lenVal == -1)
-		lenVal = strlen(val);
+		lenVal = static_cast<int>(strlen(val));
 	unsigned int hash = HashString(key, lenKey);
 	for (Property *p = props[hash % hashRoots]; p; p = p->next) {
 		if ((hash == p->hash) && 
@@ -187,7 +187,7 @@ SString PropSet::Expand(const char *withVars) {
 			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
 			char *var = StringDup(cpvar + 2, lenvar);
 			SString val = GetExpanded(var);
-			int newlenbase = strlen(base) + val.length() - lenvar;
+			size_t newlenbase = strlen(base) + val.length() - lenvar;
 			char *newbase = new char[newlenbase];
 			strncpy(newbase, base, cpvar - base);
 			strcpy(newbase + (cpvar - base), val.c_str());
@@ -224,11 +224,11 @@ bool isprefix(const char *target, const char *prefix) {
 }
 
 static bool IsSuffixCaseInsensitive(const char *target, const char *suffix) {
-	int lentarget = strlen(target);
-	int lensuffix = strlen(suffix);
+	size_t lentarget = strlen(target);
+	size_t lensuffix = strlen(suffix);
 	if (lensuffix > lentarget)
 		return false;
-	for (int i = lensuffix - 1; i >= 0; i--) {
+	for (int i = static_cast<int>(lensuffix) - 1; i >= 0; i--) {
 		if (MakeUpperCase(target[i + lentarget - lensuffix]) !=
 		        MakeUpperCase(suffix[i]))
 			return false;
@@ -306,7 +306,7 @@ SString PropSet::GetNewExpand(const char *keybase, const char *filename) {
 			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
 			char *var = StringDup(cpvar + 2, lenvar);
 			SString val = GetWild(var, filename);
-			int newlenbase = strlen(base) + val.length() - lenvar;
+			size_t newlenbase = strlen(base) + val.length() - lenvar;
 			char *newbase = new char[newlenbase];
 			strncpy(newbase, base, cpvar - base);
 			strcpy(newbase + (cpvar - base), val.c_str());
@@ -340,7 +340,7 @@ void PropSet::Clear() {
 }
 
 char *PropSet::ToString() {
-	unsigned int len=0;
+	size_t len=0;
 	for (int r = 0; r < hashRoots; r++) {
 		for (Property *p = props[r]; p; p = p->next) {
 			len += strlen(p->key) + 1;
@@ -435,8 +435,8 @@ static char **ArrayFromWordList(char *wordlist, int *len, bool onlyLineEnds = fa
 	if (keywords) {
 		words = 0;
 		prev = '\0';
-		int slen = strlen(wordlist);
-		for (int k = 0; k < slen; k++) {
+		size_t slen = strlen(wordlist);
+		for (size_t k = 0; k < slen; k++) {
 			if (!iswordsep(wordlist[k], onlyLineEnds)) {
 				if (!prev) {
 					keywords[words] = &wordlist[k];

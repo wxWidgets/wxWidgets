@@ -906,6 +906,15 @@ long Platform::SendScintilla(WindowID w,
     return stc->SendMsg(msg, wParam, lParam);
 }
 
+long Platform::SendScintillaPointer(WindowID w,
+                                    unsigned int msg,
+                                    unsigned long wParam,
+                                    void *lParam) {
+
+    wxStyledTextCtrl* stc = (wxStyledTextCtrl*)w;
+    return stc->SendMsg(msg, wParam, (long)lParam);
+}
+
 
 // These are utility functions not really tied to a platform
 

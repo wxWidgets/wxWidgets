@@ -2,7 +2,7 @@
 /** @file LexCrontab.cxx
  ** Lexer to use with extended crontab files used by a powerful
  ** Windows scheduler/event monitor/automation manager nnCron.
- ** (http://nemtsev.virtualave.net/)
+ ** (http://nemtsev.eserv.ru/)
  **/
 // Copyright 1998-2001 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
@@ -62,7 +62,8 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 					state = SCE_NNCRONTAB_TASK;
 					styler.ColourTo(i,SCE_NNCRONTAB_TASK);
 				}
-				  else if( ch == '\\' && styler.SafeGetCharAt(i+1) == ' ') {
+				  else if( ch == '\\' && (styler.SafeGetCharAt(i+1) == ' ' || 
+										 styler.SafeGetCharAt(i+1) == '\t')) {
 					// signals the start of an extended comment...
 					state = SCE_NNCRONTAB_COMMENT;
 					styler.ColourTo(i,SCE_NNCRONTAB_COMMENT);
@@ -78,6 +79,10 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 					state = SCE_NNCRONTAB_STRING;
 					styler.ColourTo(i,SCE_NNCRONTAB_STRING);
 				} else if( ch == '%') {
+					// signals environment variables
+					state = SCE_NNCRONTAB_ENVIRONMENT;
+					styler.ColourTo(i,SCE_NNCRONTAB_ENVIRONMENT);
+				} else if( ch == '<' && styler.SafeGetCharAt(i+1) == '%') {
 					// signals environment variables
 					state = SCE_NNCRONTAB_ENVIRONMENT;
 					styler.ColourTo(i,SCE_NNCRONTAB_ENVIRONMENT);
@@ -148,7 +153,7 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 					break;
 				}
 				if( (ch == '%' && styler.SafeGetCharAt(i-1)!='\\')
-					|| (ch == '\n') || (ch == '\r') ) {
+					|| (ch == '\n') || (ch == '\r') || (ch == '>') ) {
 					state = SCE_NNCRONTAB_DEFAULT;
 					styler.ColourTo(i,SCE_NNCRONTAB_ENVIRONMENT);
 					break;
@@ -159,7 +164,8 @@ static void ColouriseNncrontabDoc(unsigned int startPos, int length, int, WordLi
 			case SCE_NNCRONTAB_IDENTIFIER:
 				// stay  in CONF_IDENTIFIER state until we find a non-alphanumeric
 				if( isalnum(ch) || (ch == '_') || (ch == '-') || (ch == '/') ||
-					(ch == '$') || (ch == '.') || (ch == '<') || (ch == '>') ) {
+					(ch == '$') || (ch == '.') || (ch == '<') || (ch == '>') ||
+					(ch == '@') ) {
 					buffer[bufferCount++] = ch;
 				} else {
 					state = SCE_NNCRONTAB_DEFAULT;

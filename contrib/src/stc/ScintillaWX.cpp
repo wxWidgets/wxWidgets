@@ -19,13 +19,6 @@
 #include "wx/stc/stc.h"
 #include "PlatWX.h"
 
-
-//----------------------------------------------------------------------
-
-const int H_SCROLL_MAX  = 4000;
-const int H_SCROLL_STEP = 20;
-const int H_SCROLL_PAGE = 200;
-
 //----------------------------------------------------------------------
 // Helper classes
 
@@ -265,10 +258,12 @@ void ScintillaWX::SetHorizontalScrollPos() {
     }
 }
 
+const int H_SCROLL_STEP = 20;
 
 bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     bool modified = false;
 
+    // Check the vertical scrollbar
     if (stc->m_vScrollBar == NULL) {  // Use built-in scrollbar
         int  sbMax    = stc->GetScrollRange(wxVERTICAL);
         int  sbThumb  = stc->GetScrollThumb(wxVERTICAL);
@@ -289,24 +284,40 @@ bool ScintillaWX::ModifyScrollBars(int nMax, int nPage) {
     }
 
 
-    if (horizontalScrollBarVisible) {
-        if (stc->m_hScrollBar == NULL) {  // Use built-in scrollbar
-            int sbMax    = stc->GetScrollRange(wxHORIZONTAL);
-            int sbThumb  = stc->GetScrollThumb(wxHORIZONTAL);
-            if ((sbMax != H_SCROLL_MAX) || (sbThumb != H_SCROLL_STEP)) {
-                stc->SetScrollbar(wxHORIZONTAL, 0, H_SCROLL_STEP, H_SCROLL_MAX);
-                modified = true;
-            }
-        }
-        else { // otherwise use the one that's been given to us
-            int  sbMax    = stc->m_hScrollBar->GetRange();
-            int  sbPage   = stc->m_hScrollBar->GetPageSize();
-            if ((sbMax != H_SCROLL_MAX) || (sbPage != H_SCROLL_STEP)) {
-                stc->m_hScrollBar->SetScrollbar(0, H_SCROLL_STEP, H_SCROLL_MAX, H_SCROLL_STEP);
-                modified = true;
+    // Check the horizontal scrollbar
+    PRectangle rcText = GetTextRectangle();
+    int horizEnd = scrollWidth;
+    if (horizEnd < 0)
+        horizEnd = 0;
+    if (!horizontalScrollBarVisible || (wrapState != eWrapNone))
+        horizEnd = 0;
+    int pageWidth = rcText.Width();
+
+    if (stc->m_hScrollBar == NULL) {  // Use built-in scrollbar
+        int sbMax    = stc->GetScrollRange(wxHORIZONTAL);
+        int sbThumb  = stc->GetScrollThumb(wxHORIZONTAL);
+        int sbPos    = stc->GetScrollPos(wxHORIZONTAL);
+        if ((sbMax != horizEnd) || (sbThumb != pageWidth) || (sbPos != 0)) {
+            stc->SetScrollbar(wxHORIZONTAL, 0, pageWidth, horizEnd);
+            modified = true;
+            if (scrollWidth < pageWidth) {
+                HorizontalScrollTo(0);
             }
         }
     }
+    else { // otherwise use the one that's been given to us
+        int sbMax    = stc->m_hScrollBar->GetRange();
+        int sbThumb  = stc->m_hScrollBar->GetPageSize();
+        int sbPos    = stc->m_hScrollBar->GetThumbPosition();
+        if ((sbMax != horizEnd) || (sbThumb != pageWidth) || (sbPos != 0)) {
+            stc->m_hScrollBar->SetScrollbar(0, pageWidth, horizEnd, pageWidth);
+            modified = true;
+            if (scrollWidth < pageWidth) {
+                HorizontalScrollTo(0);
+            }
+        }
+    }
+
     return modified;
 }
 
@@ -443,18 +454,24 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
 void ScintillaWX::DoHScroll(int type, int pos) {
     int xPos = xOffset;
+    PRectangle rcText = GetTextRectangle();
+    int pageWidth = rcText.Width() * 2 / 3;
     if (type == wxEVT_SCROLLWIN_LINEUP || type == wxEVT_SCROLL_LINEUP)
         xPos -= H_SCROLL_STEP;
     else if (type == wxEVT_SCROLLWIN_LINEDOWN || type == wxEVT_SCROLL_LINEDOWN)
         xPos += H_SCROLL_STEP;
     else if (type == wxEVT_SCROLLWIN_PAGEUP || type == wxEVT_SCROLL_PAGEUP)
-        xPos -= H_SCROLL_PAGE;
-    else if (type == wxEVT_SCROLLWIN_PAGEDOWN || type == wxEVT_SCROLL_PAGEDOWN)
-        xPos += H_SCROLL_PAGE;
+        xPos -= pageWidth;
+    else if (type == wxEVT_SCROLLWIN_PAGEDOWN || type == wxEVT_SCROLL_PAGEDOWN) {
+        xPos += pageWidth;
+        if (xPos > scrollWidth - rcText.Width()) {
+            xPos = scrollWidth - rcText.Width();
+        }
+    }
     else if (type == wxEVT_SCROLLWIN_TOP || type == wxEVT_SCROLL_TOP)
         xPos = 0;
     else if (type == wxEVT_SCROLLWIN_BOTTOM || type == wxEVT_SCROLL_BOTTOM)
-        xPos = H_SCROLL_MAX;
+        xPos = scrollWidth;
     else if (type == wxEVT_SCROLLWIN_THUMBTRACK || type == wxEVT_SCROLL_THUMBTRACK)
         xPos = pos;
 

@@ -111,6 +111,9 @@ def EVT_STC_DRAG_OVER(win, id, func):
 def EVT_STC_DO_DROP(win, id, func):
     win.Connect(id, -1, wxEVT_STC_DO_DROP, func)
 
+def EVT_STC_ZOOM(win, id, func):
+    win.Connect(id, -1, wxEVT_STC_ZOOM, func)
+
 "
 
 //----------------------------------------------------------------------
