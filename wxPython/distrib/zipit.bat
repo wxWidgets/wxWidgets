@@ -36,7 +36,9 @@ copy %WXWIN%\docs\html\ogl\*.htm wxPython-%1\docs\ogl
 copy wxPython-%1\docs\ogl\ogl.htm wxPython-%1\docs\ogl\index.htm
 
 rem **** zip up the docs
-zip -r ..\distrib\wxPython-docs-%1.zip wxPython-%1\docs
+rem zip -r ..\distrib\wxPython-docs-%1.zip wxPython-%1\docs
+tar cvf ..\distrib\wxPython-docs-%1.tar wxPython-%1
+gzip -9 ..\distrib\wxPython-docs-%1.tar
 
 
 rem **** Cleanup

@@ -79,7 +79,7 @@ item: Remark
 end
 item: Set Variable
   Variable=PYTHONVER
-  Value=1.5
+  Value=2.0
 end
 item: Set Variable
   Variable=SAMEDIR
@@ -861,6 +861,12 @@ item: Install File
 end
 item: Install File
   Source=c:\Projects\wx\wxPython\wxPython\lib\editor\*.py
+  Destination=%MAINDIR%\wxPython\lib\editor
+  Description=wxPython Standard Library
+  Flags=0000000010000010
+end
+item: Install File
+  Source=c:\Projects\wx\wxPython\wxPython\lib\editor\*.txt
   Destination=%MAINDIR%\wxPython\lib\editor
   Description=wxPython Standard Library
   Flags=0000000010000010
