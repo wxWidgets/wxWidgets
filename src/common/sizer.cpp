@@ -1044,7 +1044,7 @@ wxSize wxGridSizer::CalcMin()
 void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
 {
     wxPoint pt( x,y );
-    wxSize sz( item->CalcMin() );
+    wxSize sz( item->GetMinSizeWithBorder() ); 
     int flag = item->GetFlag();
 
     if ((flag & wxEXPAND) || (flag & wxSHAPED))
@@ -1055,20 +1055,20 @@ void wxGridSizer::SetItemBounds( wxSizerItem *item, int x, int y, int w, int h )
     {
         if (flag & wxALIGN_CENTER_HORIZONTAL)
         {
-            pt.x = x + (w - sz.x - m_hgap) / 2;
+            pt.x = x + (w - sz.x) / 2;
         }
         else if (flag & wxALIGN_RIGHT)
         {
-            pt.x = x + (w - sz.x - m_hgap);
+            pt.x = x + (w - sz.x);
         }
 
         if (flag & wxALIGN_CENTER_VERTICAL)
         {
-            pt.y = y + (h - sz.y - m_vgap) / 2;
+            pt.y = y + (h - sz.y) / 2;
         }
         else if (flag & wxALIGN_BOTTOM)
         {
-            pt.y = y + (h - sz.y - m_vgap);
+            pt.y = y + (h - sz.y);
         }
     }
 
