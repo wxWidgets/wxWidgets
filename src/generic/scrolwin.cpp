@@ -55,6 +55,7 @@
 #endif
 
 #ifndef __WXGTK__
+#include "wx/scrolwin.h"
 IMPLEMENT_CLASS(wxScrolledWindow, wxGenericScrolledWindow)
 #endif
 
