@@ -12,16 +12,16 @@
 \section{\class{wxWizard}}\label{wxwizard}
 
 wxWizard is the central class for implementing `wizard-like' dialogs. These
-dialogs are mostly familiar to Windows users and are nothing else but a
-sequence of `pages' each of them displayed inside a dialog which has the
-buttons to pass to the next (and previous) pages.
+dialogs are mostly familiar to Windows users and are nothing other than a
+sequence of `pages', each displayed inside a dialog which has the
+buttons to navigate to the next (and previous) pages.
 
 The wizards are typically used to decompose a complex dialog into several
 simple steps and are mainly useful to the novice users, hence it is important
 to keep them as simple as possible.
 
-To show a wizard dialog, you must first create an object of wxWizard class
-using either the non default constructor or a default one followed by call to 
+To show a wizard dialog, you must first create an instance of the wxWizard class
+using either the non-default constructor or a default one followed by call to the 
 \helpref{Create}{wxwizardcreate} function. Then you should add all pages you
 want the wizard to show and call \helpref{RunWizard}{wxwizardrunwizard}.
 Finally, don't forget to call {\tt wizard->Destroy()}.
@@ -48,8 +48,8 @@ happening.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=2pt
-\twocolitem{{\bf EVT\_WIZARD\_PAGE\_CHANGED(id, func)}}{The page has been just
-changed (this event can not be vetoed).}
+\twocolitem{{\bf EVT\_WIZARD\_PAGE\_CHANGED(id, func)}}{The page has just been
+changed (this event cannot be vetoed).}
 \twocolitem{{\bf EVT\_WIZARD\_PAGE\_CHANGING(id, func)}}{The page is being
 changed (this event can be vetoed).}
 \twocolitem{{\bf EVT\_WIZARD\_CANCEL(id, func)}}{The user attempted to cancel
@@ -91,7 +91,7 @@ Constructor which really creates the wizard -- if you use this constructor, you
 shouldn't call \helpref{Create}{wxwizardcreate}.
 
 Notice that unlike almost all other wxWidgets classes, there is no {\it size} 
-parameter in wxWizard constructor because the wizard will have a predefined
+parameter in the wxWizard constructor because the wizard will have a predefined
 default size by default. If you want to change this, you should use the 
 \helpref{GetPageAreaSizer}{wxwizardgetpageareasizer} function.
 
@@ -120,7 +120,7 @@ Creates the wizard dialog. Must be called if the default constructor had been
 used to create the object.
 
 Notice that unlike almost all other wxWidgets classes, there is no {\it size} 
-parameter in wxWizard constructor because the wizard will have a predefined
+parameter in the wxWizard constructor because the wizard will have a predefined
 default size by default. If you want to change this, you should use the 
 \helpref{GetPageAreaSizer}{wxwizardgetpageareasizer} function.
 
@@ -153,8 +153,8 @@ given {\it firstPage}, i.e. this page, its next page and so on.
 
 This method may be called more than once and it will only change the page size
 if the size required by the new page is bigger than the previously set one.
-This is useful if the decision about which pages to show is taken during the
-run-time as in this case, the wizard won't be able to get to all pages starting
+This is useful if the decision about which pages to show is taken during
+run-time, as in this case, the wizard won't be able to get to all pages starting
 from a single one and you should call {\it Fit} separately for the others.
 
 
@@ -170,31 +170,31 @@ Get the current page while the wizard is running. {\tt NULL} is returned if
 
 \constfunc{virtual wxSizer*}{GetPageAreaSizer}{\void}
 
-Returns pointer to page area sizer. Wizard is laid out using sizers and
-page area sizer is the place holder for the pages. All pages are resized before
+Returns pointer to page area sizer. The wizard is laid out using sizers and
+the page area sizer is the place-holder for the pages. All pages are resized before
 being shown to match the wizard page area.
 
-Page area sizer has minimal size that is maximum of several values. First,
+Page area sizer has a minimal size that is the maximum of several values. First,
 all pages (or other objects) added to the sizer. Second, all pages reachable
 by repeatedly applying 
 \helpref{wxWizardPage::GetNext}{wxwizardpagegetnext} to
 any page inserted into the sizer. Third,
-minimal size specified using \helpref{SetPageSize}{wxwizardsetpagesize} and 
+the minimal size specified using \helpref{SetPageSize}{wxwizardsetpagesize} and 
 \helpref{FitToPage}{wxwizardfittopage}. Fourth, the total wizard height may
 be increased to accomodate the bitmap height. Fifth and finally, wizards are
-never smaller some built-in minimal size to avoid too small wizards.
+never smaller than some built-in minimal size to avoid wizards that are too small.
 
-Caller can use \helpref{wxSizer::SetMinSize}{wxsizersetminsize} to enlarge it
-beyond minimal size. If {\tt wxRESIZE\_BORDER} was passed to constructor, user
-can resize wizard and consequently page area (but not make it smaller than the
+The caller can use \helpref{wxSizer::SetMinSize}{wxsizersetminsize} to enlarge it
+beyond the minimal size. If {\tt wxRESIZE\_BORDER} was passed to constructor, user
+can resize wizard and consequently the page area (but not make it smaller than the
 minimal size).
 
-It is recommended to add first page to page area sizer. For simple wizards,
-this will enlarge the wizard to fit biggest page. For non-linear wizards,
-first page of every separate chain should be added. Caller-specified size
+It is recommended to add the first page to the page area sizer. For simple wizards,
+this will enlarge the wizard to fit the biggest page. For non-linear wizards,
+the first page of every separate chain should be added. Caller-specified size
 can be accomplished using \helpref{wxSizer::SetMinSize}{wxsizersetminsize}.
 
-Adding pages to page area sizer affects default border width around page
+Adding pages to the page area sizer affects the default border width around page
 area that can be altered with \helpref{SetBorder}{wxwizardsetborder}.
 
 
@@ -223,7 +223,7 @@ for example, the pages are created on demand only.
 
 \func{virtual bool}{HasPrevPage}{\param{wxWizardPage *}{page}}
 
-Return {\tt true} if this page is not the last one in the wizard. The base
+Returns {\tt true} if this page is not the last one in the wizard. The base
 class version implements this by calling 
 \helpref{page->GetPrev}{wxwizardpagegetprev} but this could be undesirable if,
 for example, the pages are created on demand only.
@@ -237,7 +237,7 @@ for example, the pages are created on demand only.
 
 \func{bool}{RunWizard}{\param{wxWizardPage* }{firstPage}}
 
-Executes the wizard starting from the given page, returns {\tt true} if it was
+Executes the wizard starting from the given page, returning {\tt true} if it was
 successfully finished or {\tt false} if user cancelled it. The {\it firstPage} 
 can not be {\tt NULL}.
 
@@ -253,7 +253,7 @@ Sets the minimal size to be made available for the wizard pages. The wizard
 will take into account the size of the bitmap (if any) itself. Also, the
 wizard will never be smaller than the default size.
 
-The recommended way to use this function is to layout all wizard pages using
+The recommended way to use this function is to lay out all wizard pages using
 the sizers (even though the wizard is not resizeable) and then use 
 \helpref{wxSizer::CalcMin}{wxsizercalcmin} in a loop to calculate the maximum
 of minimal sizes of the pages and pass it to SetPageSize().
@@ -265,10 +265,10 @@ of minimal sizes of the pages and pass it to SetPageSize().
 
 Sets width of border around page area. Default is zero. For backward
 compatibility, if there are no pages in
-\helpref{GetPageAreaSizer}{wxwizardgetpageareasizer}, default is $5$ pixels.
+\helpref{GetPageAreaSizer}{wxwizardgetpageareasizer}, the default is $5$ pixels.
 
-If there is five point border around all controls in a page and border around
-page area is left zero, five point white space along all dialog borders
-will be added to control border to space page controls ten points from dialog
+If there is a five point border around all controls in a page and the border around
+page area is left as zero, a five point white space along all dialog borders
+will be added to the control border in order to space page controls ten points from the dialog
 border and non-page controls.
 
