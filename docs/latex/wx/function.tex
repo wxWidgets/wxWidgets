@@ -182,7 +182,7 @@ See \helpref{wxFindFirstFile}{wxfindfirstfile} for an example.
 \func{bool}{wxGetDiskSpace}{\param{const wxString\& }{path}, \param{wxLongLong }{*total = NULL}, \param{wxLongLong }{*free = NULL}}
 
 This function returns the total number of bytes and number of free bytes on
-the disk containing the directory {\it path} (it should exist). Both 
+the disk containing the directory {\it path} (it should exist). Both
 {\it total} and {\it free} parameters may be {\tt NULL} if the corresponding
 information is not needed.
 
@@ -1698,7 +1698,7 @@ Gets operating system version information.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitemruled{Platform}{Return types}
-\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC_DARWIN when compiled with the Apple Developer Tools under Mac OS X.}
+\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC\_DARWIN when compiled with the Apple Developer Tools under Mac OS X.}
 \twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
 \twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
 \twocolitem{OS/2}{Return value is wxOS2\_PM.}
@@ -1819,15 +1819,15 @@ see \helpref{wxImage}{wximage}.
 
 \func{bool}{wxInitialize}{\void}
 
-This function is used in wxBase only and only if you don't create 
-\helpref{wxApp}{wxapp} object at all. In this case you must call it from your 
+This function is used in wxBase only and only if you don't create
+\helpref{wxApp}{wxapp} object at all. In this case you must call it from your
 {\tt main()} function before calling any other wxWindows functions.
 
 If the function returns {\tt FALSE} the initialization could not be performed,
-in this case the library cannot be used and 
+in this case the library cannot be used and
 \helpref{wxUninitialize}{wxuninitialize} shouldn't be called neither.
 
-This function may be called several times but 
+This function may be called several times but
 \helpref{wxUninitialize}{wxuninitialize} must be called for each successful
 call to this function.
 
@@ -1878,7 +1878,7 @@ enum wxSignal
 \end{verbatim}
 
 {\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
-under both Unix and Windows but all the other signals are equivalent to 
+under both Unix and Windows but all the other signals are equivalent to
 {\tt wxSIGTERM} under Windows.
 
 Returns 0 on success, -1 on failure. If {\it rc} parameter is not NULL, it will
@@ -2504,7 +2504,7 @@ In non-debug mode, this is defined as the normal new operator.
 \func{classname *}{wxDynamicCast}{ptr, classname}
 
 This macro returns the pointer {\it ptr} cast to the type {\it classname *} if
-the pointer is of this type (the check is done during the run-time) or 
+the pointer is of this type (the check is done during the run-time) or
 {\tt NULL} otherwise. Usage of this macro is preferred over obsoleted
 wxObject::IsKindOf() function.
 
