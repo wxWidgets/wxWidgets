@@ -142,7 +142,7 @@ public:
     
     DocDeclStrName(
         virtual void , SetSelection(long from, long to),
-        "Selects the text between the two positions in the combobox text field."
+        "Selects the text between the two positions in the combobox text field.",
         SetMark);    
 
     DocDeclStr(
