@@ -498,7 +498,6 @@ public:
         return val
     "
 
-
     // Sets information about the item
     bool SetItem(wxListItem& info) ;
 
@@ -1215,6 +1214,16 @@ public:
                 data->SetData(obj);
         }
     }
+
+
+    // get the item's text colour
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+
+    // get the item's background colour
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+
+    // get the item's font
+    wxFont GetItemFont(const wxTreeItemId& item) const;
 
 
     bool IsVisible(const wxTreeItemId& item);
