@@ -11,11 +11,18 @@
 # Use FINAL=1 argument to nmake to build final version with no debugging
 # info
 
+
+# N.B. This makefiles uses CPPFLAGS2 to disable precompiled headers so we
+# can override optimization, which is necessary for correct behaviour under
+# VC++ 5 (otherwise deleting an object causes a crash).
+
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 THISDIR = $(WXDIR)\utils\dialoged\src
 DOCDIR=$(WXDIR)\docs
 LOCALDOCDIR=$(WXDIR)\utils\dialoged\docs
+
+OVERRIDEFLAGS=/Od
 
 PROGRAM=dialoged
  
@@ -29,47 +36,47 @@ all:    dialoged.exe
 
 dialoged.obj:      winprop.h reseditr.h dialoged.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 winprop.obj:      winprop.h reseditr.h winprop.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 reswrite.obj:      winprop.h reseditr.h reswrite.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 reseditr.obj:      winprop.h reseditr.h reseditr.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 edtree.obj:      winprop.h reseditr.h edtree.h edtree.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 edlist.obj:      winprop.h reseditr.h edlist.h edlist.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 dlghndlr.obj:      winprop.h reseditr.h dlghndlr.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 symbtabl.obj:      symbtabl.h symbtabl.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 winstyle.obj:      winstyle.h winstyle.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF)
 <<
 
 DOCSOURCES=$(LOCALDOCDIR)\dialoged.tex $(LOCALDOCDIR)\body.tex\

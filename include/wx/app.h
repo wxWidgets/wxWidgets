@@ -60,6 +60,26 @@ public:
 #define IMPLEMENT_WXWIN_MAIN \
 extern int wxEntry( int argc, char *argv[] ); \
 int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
+
+#elif defined(__WXMSW__) && defined(WXUSINGDLL)
+
+// NT defines APIENTRY, 3.x not
+#if !defined(WXAPIENTRY)
+#  ifdef __WATCOMC__
+#    define WXAPIENTRY PASCAL
+#  else
+#    define WXAPIENTRY FAR PASCAL
+#  endif
+#endif
+
+#define IMPLEMENT_WXWIN_MAIN \
+int WXAPIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,\
+        LPSTR m_lpCmdLine, int nCmdShow )\
+{\
+    return wxEntry((WXHINSTANCE) hInstance, (WXHINSTANCE) hPrevInstance,\
+                   m_lpCmdLine, nCmdShow);\
+}
+
 #else
 #define IMPLEMENT_WXWIN_MAIN
 #endif

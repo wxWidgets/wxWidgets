@@ -9,6 +9,8 @@ wx-config.in
 mkinstalldirs
 wxGTK.spec
 
+distrib/gtk/copy_src
+
 docs/gtk/*.html
 docs/gtk/*.txt
 docs/gtk/makewxgtk

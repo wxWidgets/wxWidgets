@@ -1,5 +1,7 @@
-src/wxVC.dsp
-src/wxVC.dsw
+src/wxvc.dsp
+src/wxvc.dsw
+src/wxvc_dll.dsp
+src/wxvc_dll.dsw
 
 samples/checklst/ChecklstVC.dsp
 samples/checklst/ChecklstVC.dsw
@@ -145,6 +147,8 @@ utils/ogl/src/OglVC.dsp
 utils/ogl/src/OglVC.dsw
 utils/ogl/samples/ogledit/OgleditVC.dsp
 utils/ogl/samples/ogledit/OgleditVC.dsw
+utils/ogl/samples/studio/StudioVC.dsp
+utils/ogl/samples/studio/StudioVC.dsw
 
 utils/wxtree/src/TreeVC.dsp
 utils/wxtree/src/TreeVC.dsw

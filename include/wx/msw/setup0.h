@@ -287,6 +287,9 @@
 #undef wxUSE_THREADS
 #define wxUSE_THREADS 0
 
+#undef wxUSE_TOOLTIPS
+#define wxUSE_TOOLTIPS 0
+
 #endif
 
 #endif

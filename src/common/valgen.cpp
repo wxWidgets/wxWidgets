@@ -26,8 +26,10 @@
 #include "wx/wx.h"
 #endif
 
+#ifndef __WIN16__
 #include "wx/spinbutt.h"
 #include "wx/checklst.h"
+#endif
 
 #include "wx/valgen.h"
 
@@ -129,6 +131,7 @@ bool wxGenericValidator::TransferToWindow(void)
       return TRUE;
     }
   }
+#ifndef __WIN16__
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinButton)) )
   {
     wxSpinButton* pControl = (wxSpinButton*) m_validatorWindow;
@@ -138,6 +141,7 @@ bool wxGenericValidator::TransferToWindow(void)
       return TRUE;
     }
   }
+#endif
   // string controls
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxButton)) )
   {
@@ -184,6 +188,7 @@ bool wxGenericValidator::TransferToWindow(void)
       return TRUE;
     }
   }
+#ifndef __WIN16__
   // array controls
   // NOTE: wxCheckListBox isa wxListBox, so wxCheckListBox
   // MUST come first:
@@ -205,6 +210,7 @@ bool wxGenericValidator::TransferToWindow(void)
 	else
 		return FALSE;
   }
+#endif
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxListBox)) )
   {
     wxListBox* pControl = (wxListBox*) m_validatorWindow;
@@ -279,6 +285,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   }
+#ifndef __WIN16__
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxSpinButton)) )
   {
     wxSpinButton* pControl = (wxSpinButton*) m_validatorWindow;
@@ -288,6 +295,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   }
+#endif
   // string controls
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxButton)) )
   {
@@ -334,6 +342,7 @@ bool wxGenericValidator::TransferFromWindow(void)
       return TRUE;
     }
   }
+#ifndef __WIN16__
   // array controls
   // NOTE: wxCheckListBox isa wxListBox, so wxCheckListBox
   // MUST come first:
@@ -354,6 +363,7 @@ bool wxGenericValidator::TransferFromWindow(void)
 	else
 	  return FALSE;
   }
+#endif
   else if (m_validatorWindow->IsKindOf(CLASSINFO(wxListBox)) )
   {
     wxListBox* pControl = (wxListBox*) m_validatorWindow;

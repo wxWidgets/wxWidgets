@@ -248,7 +248,7 @@ bool wxApp::RegisterWindowClasses()
 // Register the frame window class.
   WNDCLASS wndclass;   // Structure used to register Windows class.
 
-  wndclass.style         = CS_HREDRAW | CS_VREDRAW;
+  wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
   wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
   wndclass.cbClsExtra    = 0;
   wndclass.cbWndExtra    = sizeof( DWORD ); // was 4
@@ -272,7 +272,7 @@ bool wxApp::RegisterWindowClasses()
 // Register the MDI frame window class.
   WNDCLASS wndclass1;   // Structure used to register Windows class.
 
-  wndclass1.style         = CS_HREDRAW | CS_VREDRAW;
+  wndclass1.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
   wndclass1.lpfnWndProc   = (WNDPROC)wxWndProc;
   wndclass1.cbClsExtra    = 0;
   wndclass1.cbWndExtra    = sizeof( DWORD ); // was 4
@@ -294,7 +294,7 @@ bool wxApp::RegisterWindowClasses()
 // Register the MDI child frame window class.
   WNDCLASS wndclass4;   // Structure used to register Windows class.
 
-  wndclass4.style         = CS_HREDRAW | CS_VREDRAW;
+  wndclass4.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
   wndclass4.lpfnWndProc   = (WNDPROC)wxWndProc;
   wndclass4.cbClsExtra    = 0;
   wndclass4.cbWndExtra    = sizeof( DWORD ); // was 4
@@ -321,7 +321,7 @@ bool wxApp::RegisterWindowClasses()
   memset(&wndclass2, 0, sizeof(WNDCLASS));   // start with NULL defaults
   // Use CS_OWNDC to avoid messing about restoring the context
   // for every graphic operation.
-  wndclass2.style         = CS_HREDRAW | CS_VREDRAW;
+  wndclass2.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
   wndclass2.lpfnWndProc   = (WNDPROC)wxWndProc;
   wndclass2.cbClsExtra    = 0;
   wndclass2.cbWndExtra    = sizeof( DWORD ); // was 4

@@ -1,6 +1,28 @@
 wxWindows 2 Change Log
 ----------------------
 
+Beta 4, February 1999
+-------------------------
+
+wxGTK:
+
+- Miscellaneous fixes.
+
+wxMSW:
+
+- Makefiles for more compilers and samples; Cygwin makefiles
+  rationalised.
+- Added DLL support to VC++ makefiles.
+
+wxMotif:
+
+
+General:
+
+- Further doc improvements.
+- wxGenericValidator added.
+
+
 Beta 3, January 31st 1999
 -------------------------
 

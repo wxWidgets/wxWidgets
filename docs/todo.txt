@@ -20,14 +20,6 @@ Please see also:
 
 - Fix TCP/IP mode in dde sample (how to use; why does it crash).
 
-- Remove trashed CVS files:
-
-  include/wx/msw/magnif1.cur
-  src/msw/ctl3d/*
-  utils/glcanvas/samples/isosurf/isosurf.dat.gz
-
-  and re-add them.
-
 - wxDB ODBC classes: it seems that there are too many
   Sybase-specific features for it to work on e.g. MySQL,
   PostgreSQL. Find out what Remstar uses and document
@@ -35,6 +27,8 @@ Please see also:
 
 - In doc/view file selector, document type is selected by
   extension, not the type selected in the (Windows) file selector.
+
+- Add all makefiles/documentation for utils/serialize.
 
 - Complete this ToDo list :-)
 

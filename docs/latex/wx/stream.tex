@@ -61,7 +61,7 @@ But you should care about destroying the stream buffer \it{YOURSELF}.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer:SetBufferIO}{wxstreambufsetbufferio}
+\helpref{wxStreamBuffer:SetBufferIO}{wxstreambuffersetbufferio}
 
 \func{}{wxStreamBuffer}{\param{const wxStreamBuffer &}{buffer}}
 
@@ -90,7 +90,7 @@ The "Write-Back" buffer is freed.
 % -----------
 % Filtered IO
 % -----------
-\membersection{wxStreamBuffer::Read}\label{wxstreambufread}
+\membersection{wxStreamBuffer::Read}\label{wxstreambufferread}
 
 \func{size\_t}{Read}{\param{void *}{buffer}, \param{size\_t }{size}}
 
@@ -108,14 +108,14 @@ It returns the real read size. If returned size is different of the specified
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer::WriteBack}{wxstreambufwriteback}
+\helpref{wxStreamBuffer::WriteBack}{wxstreambufferwriteback}
 
 \func{size\_t}{Read}{\param{wxStreamBuffer *}{buffer}}
 
 Reads a \it{buffer}. The function returns when \it{buffer} is full or
 when there aren't datas anymore in the current buffer.
 
-\membersection{wxStreamBuffer::Write}
+\membersection{wxStreamBuffer::Write}\label{wxstreambufferwrite}
 
 \func{size\_t}{Write}{\param{const void *}{buffer}, \param{size\_t }{size}}
 
@@ -124,9 +124,9 @@ are cached in a buffer before being sent in one block to the stream.
 
 \func{size\_t}{Write}{\param{wxStreamBuffer *}{buffer}}
 
-See \helpref{Read}{wxstreambufreadbuf}
+See \helpref{Read}{wxstreambufferread}.
 
-\membersection{wxStreamBuffer::WriteBack}\label{wxstreambufwriteback}
+\membersection{wxStreamBuffer::WriteBack}\label{wxstreambufferwriteback}
 
 \func{size\_t}{WriteBack}{\param{const char*}{ buffer}, \param{size\_t}{ size}}
 
@@ -157,7 +157,7 @@ You aren't directly notified if an error occured during the IO call.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer::Read}{wxstreambufread}
+\helpref{wxStreamBuffer::Read}{wxstreambufferread}
 
 \membersection{wxStreamBuffer::PutChar}
 
@@ -171,7 +171,7 @@ You aren't directly notified if an error occured during the IO call.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer::Read}{wxstreambufwrite}
+\helpref{wxStreamBuffer::Read}{wxstreambufferwrite}
 
 \membersection{wxStreamBuffer::Tell}
 
@@ -216,7 +216,7 @@ the beginning of the stream. Otherwise, it returns wxInvalidOffset.
 
 Resets to the initial state variables concerning the buffer.
 
-\membersection{wxStreamBuffer::SetBufferIO}\label{wxstreambufsetbufferio}
+\membersection{wxStreamBuffer::SetBufferIO}\label{wxstreambuffersetbufferio}
 
 \func{void}{SetBufferIO}{\param{char*}{ buffer\_start}, \param{char*}{ buffer\_end}}
 
@@ -235,8 +235,8 @@ it when it is full.
 \wxheading{See also}
 
 \helpref{wxStreamBuffer constructor}{wxstreambufconst}\\
-\helpref{wxStreamBuffer::Fixed}{wxstreambuffixed}\\
-\helpref{wxStreamBuffer::Flushable}{wxstreambufflushable}
+\helpref{wxStreamBuffer::Fixed}{wxstreambufferfixed}\\
+\helpref{wxStreamBuffer::Flushable}{wxstreambufferflushable}
 
 \func{void}{SetBufferIO}{\param{size\_t}{ bufsize}}
 
@@ -253,8 +253,8 @@ The created IO buffer is growable by the object.
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer::Fixed}{wxstreambuffixed}\\
-\helpref{wxStreamBuffer::Flushable}{wxstreambufflushable}
+\helpref{wxStreamBuffer::Fixed}{wxstreambufferfixed}\\
+\helpref{wxStreamBuffer::Flushable}{wxstreambufferflushable}
 
 \membersection{wxStreamBuffer::GetBufferStart}
 
@@ -292,7 +292,7 @@ Sets the current position in the stream buffer.
 
 Returns the amount of bytes read during the last IO call to the parent stream.
 
-\membersection{wxStreamBuffer::Fixed}
+\membersection{wxStreamBuffer::Fixed}\label{wxstreambufferfixed}
 
 \func{void}{Fixed}{\param{bool}{ fixed}}
 
@@ -302,9 +302,9 @@ Toggles the fixed flag. Usually this flag is toggled at the same time as
 
 \wxheading{See also}
 
-\helpref{wxStreamBuffer::SetBufferIO}{wxstreambufsetbufferio}
+\helpref{wxStreamBuffer::SetBufferIO}{wxstreambuffersetbufferio}
 
-\membersection{wxStreamBuffer::Flushable}
+\membersection{wxStreamBuffer::Flushable}\label{wxstreambufferflushable}
 
 \func{void}{Flushable}{\param{bool}{ flushable}}
 

@@ -203,6 +203,12 @@ samples/wxsocket/client.wat
 samples/wxsocket/server.wat
 samples/wxsocket/client.vc
 samples/wxsocket/server.vc
+samples/wxsocket/client.dos
+samples/wxsocket/server.dos
+samples/wxsocket/client.b32
+samples/wxsocket/server.b32
+samples/wxsocket/client.bcc
+samples/wxsocket/server.bcc
 samples/wxsocket/*.xbm
 samples/wxsocket/*.xpm
 samples/wxsocket/*.ico
@@ -648,6 +654,12 @@ samples/dde/client.vc
 samples/dde/server.vc
 samples/dde/client.wat
 samples/dde/server.wat
+samples/dde/client.b32
+samples/dde/server.b32
+samples/dde/client.bcc
+samples/dde/server.bcc
+samples/dde/client.dos
+samples/dde/server.dos
 samples/dde/*.rc
 samples/dde/*.def
 samples/dde/*.bmp

@@ -1,4 +1,4 @@
-wxWindows 2 beta 3
+wxWindows 2 beta 4
 ------------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++

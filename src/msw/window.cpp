@@ -49,7 +49,11 @@
 
 #include "wx/menuitem.h"
 #include "wx/log.h"
+
+#if wxUSE_TOOLTIPS
 #include "wx/tooltip.h"
+#endif
+
 #include "wx/intl.h"
 #include "wx/log.h"
 
@@ -2037,7 +2041,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                             // it
                             return FALSE;
                         }
-
+#ifndef __WIN16__
                         wxButton *btnDefault = GetDefaultItem();
                         if ( btnDefault && !bCtrlDown )
                         {
@@ -2050,6 +2054,7 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                         // else: but if there is not it makes sense to make it
                         //       work like a TAB - and that's what we do.
                         //       Note that Ctrl-Enter always works this way.
+#endif
                     }
                     break;
 

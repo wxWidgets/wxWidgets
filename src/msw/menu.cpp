@@ -341,6 +341,7 @@ void wxMenu::SetTitle(const wxString& label)
     }
   }
 
+#ifndef __WIN16__
   // put the title string in bold face
   if ( !m_title.IsEmpty() )
   {
@@ -354,6 +355,7 @@ void wxMenu::SetTitle(const wxString& label)
       wxLogLastError("SetMenuItemInfo");
     }
   }
+#endif
 }
 
 const wxString wxMenu::GetTitle() const

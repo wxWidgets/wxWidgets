@@ -45,7 +45,10 @@
 #endif
 
 // if wxWindows is in the DLL link our entry point with the application
-#if defined(WXUSINGDLL)
+// N.B. see include/wx/app.h, we're now putting this in IMPLEMENT_APP so we
+// don't have to link our apps with dummy.obj.
+
+#if 0 // defined(WXUSINGDLL)
 
 // NT defines APIENTRY, 3.x not
 #if !defined(APIENTRY)

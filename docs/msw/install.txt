@@ -98,6 +98,16 @@ Note (2): libraries and applications generated with makefiles and
 project files are unlikely to be compatible, so use one method or
 the other.
 
+Note (3): VC++ 5's optimization code seems to be broken and can
+cause problems: this can be seen when deleting an object Dialog
+Editor, in Release mode with optimizations on. If in doubt,
+switch off optimisations, although this will result in much
+larger executables. It seems possible that the library can be created with
+strong optimization, so long as the application is not strongly
+optimized. For example, in wxWindows project, set to 'Minimum
+Size'. In Dialog Editor project, set to 'Customize: Favor Small
+Code' (and no others). This will then work.
+
 Visual C++ 1.5 compilation
 --------------------------
 

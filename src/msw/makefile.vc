@@ -295,13 +295,18 @@ $(WXDIR)\lib\wx200.dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\wx200.lib
 ########################################################
 # Windows-specific objects
 
-dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h
+dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\msw\setup.h
         cl $(CPPFLAGS) $(MAKEPRECOMP) /c /Tp $*.$(SRCSUFF)
 
-dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h
+dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h $(WXDIR)\include\wx\msw\setup.h
         cl @<<
 $(CPPFLAGS) $(MAKEPRECOMP) /c /Tp $*.$(SRCSUFF)
 <<
+
+# If taking wxWindows from CVS, setup.h doesn't exist yet.
+$(WXDIR)\include\wx\msw\setup.h: $(WXDIR)\include\wx\msw\setup0.h
+    -copy "$(WXDIR)"\include\wx\msw\setup.h "$(WXDIR)"\include\wx\msw\setup.bak
+    copy "$(WXDIR)"\include\wx\msw\setup0.h "$(WXDIR)"\include\wx\msw\setup.h 
 
 $(MSWDIR)/accel.obj:     $*.$(SRCSUFF)
         cl @<<

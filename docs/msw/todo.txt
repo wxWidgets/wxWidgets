@@ -14,10 +14,7 @@ Update manual.
     wxListBox changes (for ownerdraw functionality)
     wxThread            DONE (except for topic overview)
     wxString            PARTLY DONE
-    wxBaseArray, other arrays
-    (wxOwnerDrawn)
     Document the include file for each class
-    Stream classes
     wxSocket topic overview
     Functions
 
@@ -35,15 +32,12 @@ Supply correct ctl3d/odbc lib files for BC++, Watcom (corrupt?)
 
 Implement new wxClipboard and DnD (Vadim)
 
-Implement wxToolTip
+Implement wxToolTip (Vadim)
 
 LOW PRIORITY (MEDIUM TERM)
 --------------------------
 
-Get wxMSW's wxGLCanvas working with non-VC++ compilers.
-
-Generate VC++ lib project files and supply VC++ project
-generator utility.
+Supply VC++ project generator utility.
 
 Convert remaining utilities e.g. wxGraphLayout.
 

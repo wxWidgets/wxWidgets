@@ -281,7 +281,7 @@ $(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
 $(COMMDIR)/lex_yy.c:	$(COMMDIR)/lexer.l
 	$(LEX) $(COMMDIR)/lexer.l > $(COMMDIR)/lex_yy.c
 
-# The following may be required for some versions of LEX/FLEX
+# The following may be required for FLEX
 #	$(LEX) -o$(COMMDIR)/lex_yy.c $(COMMDIR)/lexer.l
 
 #	sed -e "s/BUFSIZ/5000/g" < lex.yy.c | \

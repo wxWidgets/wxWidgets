@@ -191,6 +191,8 @@ static int my_input( void )
 
 void wxExprCleanUp()
 {
+#ifdef FLEX_SCANNER
 	if (yy_current_buffer)
 		yy_delete_buffer(yy_current_buffer);
+#endif
 }

@@ -105,8 +105,21 @@ COMPILING USING MAKEFILES
 
   and run the resulting minimal_motif binary.
 
-Notes:
-------
+Troubleshooting
+---------------
+
+- If you have trouble compiling the file y_tab.c, or have strange
+  linking errors, check whether you're using a C or C++ compiler for this file.
+  You should specify a C compiler in the CCLEX variable in src/make.env.
+  You could also try using bison and flex instead of yacc and
+  lex.
+
+- Solaris compilation with gcc: if the compiler has problems with the variable argument
+  functions, try putting the gcc fixinclude file paths early in the
+  include path.
+
+Other Notes
+-----------
 
 - Better installation and makefile systems are
   required. A revised configure system is in preparation.
@@ -128,10 +141,6 @@ Notes:
   For Linux, the problem is expected to go away with future
   distributions of the operating system.
 
-- If you have trouble compiling the file y_tab.c, or have strange
-  linking errors, check whether you're using a C or C++ compiler for this file.
-  You should specify a C compiler in the CCLEX variable in src/make.env.
-
 - If you run into problems with a missing X11/Xpm.h header, you
   need to install the XPM package. It can be obtained from:
 
@@ -146,8 +155,11 @@ Notes:
   to 0, and recompile. You will not be able to load any XPMs,
   though (currently the only supported colour bitmap format).
 
-- Please send bug reports with a description of your environment,
-  compiler and the error message(s) to the wxwin-users mailing list at:
+Bug reports
+-----------
+
+Please send bug reports with a description of your environment,
+compiler and the error message(s) to the wxwin-users mailing list at:
 
     wxwin-users@wx.dent.med.uni-muenchen.de
 
