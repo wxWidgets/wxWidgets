@@ -10,7 +10,7 @@ except ImportError:
 
 def MakeCone(vtkwin):
     cone = vtk.vtkConeSource()
-    cone.SetResolution(128)
+    cone.SetResolution(80)
     coneMapper = vtk.vtkPolyDataMapper()
     coneMapper.SetInput(cone.GetOutput())
     coneActor = vtk.vtkActor()
