@@ -25,6 +25,7 @@
 #include "wx/cmndata.h"
 #include "wx/prntbase.h"
 #include "wx/printdlg.h"
+#include "wx/listctrl.h"
 
 #if wxUSE_POSTSCRIPT
     #include "wx/dcps.h"
@@ -36,7 +37,6 @@ class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxComboBox;
 class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxRadioBox;
-class WXDLLEXPORT wxPrintSetupData;
 class WXDLLEXPORT wxPageSetupData;
 
 // ----------------------------------------------------------------------------
@@ -70,7 +70,8 @@ enum
     wxPRINTID_ORIENTATION,
     wxPRINTID_COMMAND,
     wxPRINTID_OPTIONS,
-    wxPRINTID_PAPERSIZE
+    wxPRINTID_PAPERSIZE,
+    wxPRINTID_PRINTER
 };
 
 #if wxUSE_POSTSCRIPT
@@ -155,10 +156,8 @@ public:
 
     virtual int ShowModal();
 
-#if wxUSE_POSTSCRIPT
     wxPrintData& GetPrintData()
         { return m_printDialogData.GetPrintData(); }
-#endif // wxUSE_POSTSCRIPT
 
     wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
     wxDC *GetPrintDC();
@@ -190,29 +189,33 @@ public:
     // There are no configuration options for the dialog, so we
     // just pass the wxPrintData object (no wxPrintSetupDialogData class needed)
     wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data);
-    wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data);
     virtual ~wxGenericPrintSetupDialog();
 
     void Init(wxPrintData* data);
 
+    void OnPrinter(wxListEvent& event);
+    
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
     virtual wxComboBox *CreatePaperTypeChoice();
 
 public:
+    wxListCtrl*         m_printerListCtrl;
     wxRadioBox*         m_orientationRadioBox;
     wxTextCtrl*         m_printerCommandText;
     wxTextCtrl*         m_printerOptionsText;
     wxCheckBox*         m_colourCheckBox;
-    wxComboBox*           m_paperTypeChoice;
+    wxComboBox*         m_paperTypeChoice;
 
-#if wxUSE_POSTSCRIPT
     wxPrintData         m_printData;
     wxPrintData&        GetPrintData() { return m_printData; }
-#endif // wxUSE_POSTSCRIPT
+    
+    // After pressing OK, write data here.
+    wxPrintData*        m_targetData;
 
 private:
+    DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxGenericPrintSetupDialog)
 };
 #endif

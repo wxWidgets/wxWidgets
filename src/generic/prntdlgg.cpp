@@ -60,6 +60,7 @@
 #include "wx/printdlg.h"
 #include "wx/paper.h"
 #include "wx/filename.h"
+#include "wx/tokenzr.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -153,7 +154,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 {
     if ( data )
         m_printDialogData = *data;
-
+        
     Init(parent);
 }
 
@@ -420,7 +421,7 @@ bool wxGenericPrintDialog::TransferDataFromWindow()
         m_printDialogData.SetNoCopies( res );
 
     m_printDialogData.SetPrintToFile(m_printToFileCheckBox->GetValue());
-
+    
     return true;
 }
 
@@ -435,19 +436,152 @@ wxDC *wxGenericPrintDialog::GetPrintDC()
 
 IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
 
+BEGIN_EVENT_TABLE(wxGenericPrintSetupDialog, wxDialog)
+    EVT_LIST_ITEM_ACTIVATED(wxPRINTID_PRINTER, wxGenericPrintSetupDialog::OnPrinter)
+END_EVENT_TABLE()
+
 wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data):
 wxDialog(parent, wxID_ANY, _("Print Setup"), wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxTAB_TRAVERSAL)
 {
     Init(data);
 }
 
+/* XPM */
+static char * check_xpm[] = {
+/* width height ncolors chars_per_pixel */
+"16 16 3 1",
+/* colors */
+" 	s None	c None",
+"X	c #000000",
+".	c #808080",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"             .. ",
+"            XX  ",
+"           XX.  ",
+"          .XX   ",
+"          XX    ",
+"   X     XX.    ",
+"   XX   .XX     ",
+"    XX  XX      ",
+"     XXXX.      ",
+"      XX.       ",
+"       .        ",
+"                ",
+"                "
+};
+
+
 void wxGenericPrintSetupDialog::Init(wxPrintData* data)
 {
     if ( data )
         m_printData = *data;
 
+    m_targetData = data;
 
     wxBoxSizer *main_sizer = new wxBoxSizer( wxVERTICAL );
+
+    // printer selection
+    
+    wxStaticBoxSizer *printer_sizer = new wxStaticBoxSizer( new wxStaticBox( this, -1, _("Printer") ), wxVERTICAL );
+    main_sizer->Add( printer_sizer, 0, wxALL|wxGROW, 10 );
+    
+    m_printerListCtrl = new wxListCtrl( this, wxPRINTID_PRINTER, 
+        wxDefaultPosition, wxSize(-1,100), wxLC_REPORT|wxLC_SINGLE_SEL|wxSUNKEN_BORDER );
+    wxImageList *image_list = new wxImageList;
+    image_list->Add( wxBitmap(check_xpm) );
+    m_printerListCtrl->AssignImageList( image_list, wxIMAGE_LIST_SMALL );
+        
+    m_printerListCtrl->InsertColumn( 0, wxT(" "), wxLIST_FORMAT_LEFT, 20 );
+    m_printerListCtrl->InsertColumn( 1, wxT("Printer"), wxLIST_FORMAT_LEFT, 150 );
+    m_printerListCtrl->InsertColumn( 2, wxT("Device"), wxLIST_FORMAT_LEFT, 150 );
+    m_printerListCtrl->InsertColumn( 3, wxT("Status"), wxLIST_FORMAT_LEFT, 80 );
+
+    wxListItem item;
+    item.SetMask( wxLIST_MASK_TEXT );
+    item.SetColumn( 1 );
+    item.SetText( _("Default printer") );
+    item.SetId( m_printerListCtrl->InsertItem( item ) );
+
+    if (data->GetPrinterName().IsEmpty())
+    {
+        wxListItem item2;
+        item2.SetId( item.GetId() );
+        item2.SetMask( wxLIST_MASK_IMAGE );
+        item2.SetImage( 0 );
+        m_printerListCtrl->SetItem( item2 );
+    }
+
+    item.SetId( 1+ item.GetId() );
+
+    wxArrayString errors;
+    wxArrayString output;
+    long res = wxExecute( wxT("lpstat -v"), output, errors );
+    if (res >= 0 && errors.GetCount() == 0)
+    {
+        size_t i;
+        for (i = 0; i < output.GetCount(); i++)
+        {
+            wxStringTokenizer tok( output[i], wxT(" ") );
+            wxString tmp = tok.GetNextToken(); // "device"
+            if (tmp != wxT("device"))
+                break;  // the lpstat syntax must have changed.
+            tmp = tok.GetNextToken();          // "for"
+            if (tmp != wxT("for"))
+                break;  // the lpstat syntax must have changed.
+            tmp = tok.GetNextToken();          // "hp_deskjet930c:"
+            if (tmp[tmp.Len()-1] == wxT(':'))
+                tmp.Remove(tmp.Len()-1,1);
+            wxString name = tmp;
+            item.SetText( name );
+            item.SetId( m_printerListCtrl->InsertItem( item ) );
+            tmp = tok.GetNextToken();          // "parallel:/dev/lp0"
+            item.SetColumn( 2 );
+            item.SetText( tmp );
+            m_printerListCtrl->SetItem( item );
+            if (data->GetPrinterName() == name)
+            {
+                wxListItem item2;
+                item2.SetId( item.GetId() );
+                item2.SetMask( wxLIST_MASK_IMAGE );
+                item2.SetImage( 0 );
+                m_printerListCtrl->SetItem( item2 );
+            }
+            
+            wxString command = wxT("lpstat -p ");
+            command += name;
+            wxArrayString errors2;
+            wxArrayString output2;
+            res = wxExecute( command, output2, errors2 );
+            if (res >= 0 && errors2.GetCount() == 0 && output2.GetCount() > 0)
+            {
+                tmp = output2[0]; // "printer hp_deskjet930c is idle. enable since ..."
+                int pos = tmp.Find( wxT('.') );
+                if (pos != -1)
+                    tmp.Remove( (size_t)pos, tmp.Len()-(size_t)pos );
+                wxStringTokenizer tok2( tmp, wxT(" ") );
+                tmp = tok2.GetNextToken();  // "printer"
+                tmp = tok2.GetNextToken();  // "hp_deskjet930c"
+                tmp = wxT("");
+                while (tok2.HasMoreTokens())
+                {
+                    tmp += tok2.GetNextToken();
+                    tmp += wxT(" ");
+                }
+                item.SetColumn( 3 );
+                item.SetText( tmp );
+                m_printerListCtrl->SetItem( item );
+            }
+            
+            item.SetColumn( 1 );
+            item.SetId( 1+ item.GetId() );
+        }
+    }
+
+    
+    printer_sizer->Add( m_printerListCtrl, 0, wxALL|wxGROW, 5 );
 
     wxBoxSizer *item1 = new wxBoxSizer( wxHORIZONTAL );
     main_sizer->Add( item1, 0, wxALL, 5 );
@@ -540,6 +674,32 @@ wxGenericPrintSetupDialog::~wxGenericPrintSetupDialog()
 {
 }
 
+void wxGenericPrintSetupDialog::OnPrinter(wxListEvent& event)
+{
+    // Delete check mark
+    long item;
+    for (item = 0; item < m_printerListCtrl->GetItemCount(); item++)
+        m_printerListCtrl->SetItemImage( item, -1 );
+    
+    m_printerListCtrl->SetItemImage( event.GetIndex(), 0 );
+    
+    if (event.GetIndex() == 0)
+    {
+        m_printerCommandText->SetValue( wxT("lpr") );
+    }
+    else
+    {
+        wxString tmp = wxT("lpr -P");
+        wxListItem item;
+        item.SetColumn( 1 );
+        item.SetMask( wxLIST_MASK_TEXT );
+        item.SetId( event.GetIndex() );
+        m_printerListCtrl->GetItem( item );
+        tmp += item.GetText();
+        m_printerCommandText->SetValue( tmp );
+    }
+}
+
 bool wxGenericPrintSetupDialog::TransferDataToWindow()
 {
     wxPostScriptPrintNativeData *data = 
@@ -567,6 +727,22 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
     wxPostScriptPrintNativeData *data = 
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
+    // find selected printer
+    long id = m_printerListCtrl->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
+    if (id == 0)
+    {
+        m_printData.SetPrinterName( wxT("") );
+    }
+    else
+    {
+        wxListItem item;
+        item.SetId( id );
+        item.SetMask( wxLIST_MASK_TEXT );
+        item.SetColumn( 1 );
+        m_printerListCtrl->GetItem( item );
+        m_printData.SetPrinterName( item.GetText() );
+    }
+
     if (m_printerCommandText)
         data->SetPrinterCommand(m_printerCommandText->GetValue());
     if (m_printerOptionsText)
@@ -591,6 +767,9 @@ bool wxGenericPrintSetupDialog::TransferDataFromWindow()
               m_printData.SetPaperId( paper->GetId());
         }
     }
+
+    if (m_targetData)
+        *m_targetData = m_printData;
 
     return true;
 }
