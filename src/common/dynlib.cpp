@@ -22,14 +22,16 @@
 #endif
 
 #include  "wx/wxprec.h"
-#if defined(__WINDOWS__)
-#include "wx/msw/private.h"
-#endif
 
 #ifdef __BORLANDC__
   #pragma hdrstop
 #endif
+
 #if wxUSE_DYNLIB_CLASS
+
+#if defined(__WINDOWS__)
+    #include "wx/msw/private.h"
+#endif
 
 #include "wx/dynlib.h"
 #include "wx/filefn.h"
