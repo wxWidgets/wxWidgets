@@ -183,7 +183,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/zstream.cpp
 </set>
 <set var="BASE_AND_GUI_CMN_SRC" hints="files">
-    src/common/bookctrl.cpp
     src/common/event.cpp
     src/common/fs_mem.cpp
     src/common/msgout.cpp
@@ -365,6 +364,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/artprov.cpp
     src/common/artstd.cpp
     src/common/bmpbase.cpp
+    src/common/bookctrl.cpp
     src/common/choiccmn.cpp
     src/common/clipcmn.cpp
     src/common/cmdproc.cpp
@@ -436,6 +436,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dcpsg.cpp
     src/generic/dirctrlg.cpp
     src/generic/dragimgg.cpp
+    src/generic/listbkg.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
     src/generic/panelg.cpp
@@ -534,6 +535,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/access.h
     wx/artprov.h
     wx/bitmap.h
+    wx/bookctrl.h
     wx/busyinfo.h
     wx/caret.h
     wx/clipbrd.h
@@ -578,6 +580,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/imagtiff.h
     wx/imagxpm.h
     wx/listbase.h
+    wx/listbook.h
     wx/listctrl.h
     wx/matrix.h
     wx/menuitem.h
