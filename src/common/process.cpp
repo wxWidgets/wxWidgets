@@ -63,10 +63,10 @@ void wxProcess::Init(wxEvtHandler *parent, int id, int flags)
 }
 
 /* static */
-wxProcess *wxProcess::Open(const wxString& cmd)
+wxProcess *wxProcess::Open(const wxString& cmd, int flags)
 {
     wxProcess *process = new wxProcess(wxPROCESS_REDIRECT);
-    if ( !wxExecute(cmd, wxEXEC_ASYNC, process) )
+    if ( !wxExecute(cmd, flags, process) )
     {
         // couldn't launch the process
         delete process;

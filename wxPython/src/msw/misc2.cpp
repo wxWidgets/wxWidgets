@@ -6147,12 +6147,13 @@ static PyObject *_wrap_wxProcess_Open(PyObject *self, PyObject *args, PyObject *
     PyObject * _resultobj;
     wxPyProcess * _result;
     wxString * _arg0;
+    int  _arg1 = (int ) wxEXEC_ASYNC;
     PyObject * _obj0 = 0;
-    char *_kwnames[] = { "cmd", NULL };
+    char *_kwnames[] = { "cmd","flags", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxProcess_Open",_kwnames,&_obj0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O|i:wxProcess_Open",_kwnames,&_obj0,&_arg1)) 
         return NULL;
 {
     _arg0 = wxString_in_helper(_obj0);
@@ -6161,7 +6162,7 @@ static PyObject *_wrap_wxProcess_Open(PyObject *self, PyObject *args, PyObject *
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxPyProcess *)wxPyProcess::Open(*_arg0);
+    _result = (wxPyProcess *)wxPyProcess::Open(*_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

@@ -623,7 +623,7 @@ entry is also logged to the defined log file.
 \docparam{aHdbc}{Handle to the ODBC connection.  Pass this in if the ODBC
 function call that erred required a hdbc or hstmt argument.}
 
-\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass 
+\docparam{aHstmt}{Handle to the ODBC statement being executed against.  Pass
 this in if the ODBC function call that failed required a hstmt argument.}
 
 \wxheading{Remarks}
@@ -980,10 +980,10 @@ in the result set after the current position of the cursor.
 \wxheading{Parameters}
 
 \docparam{aHenv}{A handle to the ODBC environment.}
-\docparam{aHdbc}{{\it OPTIONAL.}  A handle to the ODBC connection.  Pass this 
+\docparam{aHdbc}{{\it OPTIONAL.}  A handle to the ODBC connection.  Pass this
 in if the ODBC function call that failed required a hdbc or hstmt argument.}
-\docparam{AHstmt}{{\it OPTIONAL.}A handle to the ODBC statement being executed 
-against.  Pass this in if the ODBC function call that failed requires a 
+\docparam{AHstmt}{{\it OPTIONAL.}A handle to the ODBC statement being executed
+against.  Pass this in if the ODBC function call that failed requires a
 hstmt argument.}
 
 \wxheading{Example}
@@ -1694,9 +1694,9 @@ functions planned to be added for creating/manipulating datasource definitions.
 
 Default constructor.
 
-\func{}{wxDbConnectInf}{\param{HENV }{henv}, \param{const wxString \&}{dsn}, 
-\param{const wxString \&}{userID=""}, \param{const wxString \&}{password}, 
-\param{const wxString \&}{defaultDir=""}, \param{const wxString \&}{description=""}, 
+\func{}{wxDbConnectInf}{\param{HENV }{henv}, \param{const wxString \&}{dsn},
+\param{const wxString \&}{userID=""}, \param{const wxString \&}{password},
+\param{const wxString \&}{defaultDir=""}, \param{const wxString \&}{description=""},
 \param{const wxString \&}{fileType=""}}
 
 Constructor which allows initial settings of all the classes member variables.
@@ -2574,7 +2574,7 @@ To delete all users with a first name of "JOHN", do the following:
 
 \begin{enumerate}\itemsep=0pt
 \item Clear all "columns" using wxDbTable::ClearMemberVars().
-\item Set the FIRST_NAME column equal to "JOHN".
+\item Set the FIRST\_NAME column equal to "JOHN".
 \item Call wxDbTable::DeleteMatching().
 \end{enumerate}
 
@@ -3280,7 +3280,7 @@ example, if column 3 is defined in the wxDbTable bound column
 definitions to be a float, the SELECT statement must return a
 float for column 3 (e.g. PRICE * 1.10 to increase the price by
 10%).
-\item The ROWID can be included in your SELECT statement as the {\bf last} 
+\item The ROWID can be included in your SELECT statement as the {\bf last}
 column selected, if the datasource supports it.  Use
 wxDbTable::CanUpdByROWID() to determine if the ROWID can be
 selected from the datasource.  If it can, much better

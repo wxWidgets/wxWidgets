@@ -1,6 +1,6 @@
 \section{\class{wxProcess}}\label{wxprocess}
 
-The objects of this class are used in conjunction with the 
+The objects of this class are used in conjunction with the
 \helpref{wxExecute}{wxexecute} function. When a wxProcess object is passed to
 wxExecute(), its \helpref{OnTerminate()}{wxprocessonterminate} virtual method
 is called when the process terminates. This allows the program to be
@@ -15,10 +15,10 @@ library users should only delete those objects whose notifications have been
 processed (and call \helpref{Detach()}{wxprocessdetach} for others).
 
 wxProcess also supports IO redirection of the child process. For this, you have
-to call its \helpref{Redirect}{wxprocessredirect} method before passing it to 
-\helpref{wxExecute}{wxexecute}. If the child process was launched successfully, 
-\helpref{GetInputStream}{wxprocessgetinputstream}, 
-\helpref{GetOutputStream}{wxprocessgetoutputstream} and 
+to call its \helpref{Redirect}{wxprocessredirect} method before passing it to
+\helpref{wxExecute}{wxexecute}. If the child process was launched successfully,
+\helpref{GetInputStream}{wxprocessgetinputstream},
+\helpref{GetOutputStream}{wxprocessgetoutputstream} and
 \helpref{GetErrorStream}{wxprocessgeterrorstream} can then be used to retrieve
 the streams corresponding to the child process standard output, input and
 error output respectively.
@@ -92,7 +92,7 @@ Normally, a wxProcess object is deleted by its parent when it receives the
 notification about the process termination. However, it might happen that the
 parent object is destroyed before the external process is terminated (e.g. a
 window from which this external process was launched is closed by the user)
-and in this case it {\bf should not delete} the wxProcess object, but 
+and in this case it {\bf should not delete} the wxProcess object, but
 {\bf should call Detach()} instead. After the wxProcess object is detached
 from its parent, no notification events will be sent to the parent and the
 object will delete itself upon reception of the process termination
@@ -150,7 +150,7 @@ enum wxSignal
 \end{verbatim}
 
 {\tt wxSIGNONE}, {\tt wxSIGKILL} and {\tt wxSIGTERM} have the same meaning
-under both Unix and Windows but all the other signals are equivalent to 
+under both Unix and Windows but all the other signals are equivalent to
 {\tt wxSIGTERM} under Windows.
 
 Returns the element of {\tt wxKillError} enum:
@@ -196,7 +196,7 @@ It raises a wxWindows event when it isn't overridden.
 
 \membersection{wxProcess::Open}\label{wxprocessopen}
 
-\func{static wxProcess *}{Open}{\param{const wxString\& }{cmd}}
+\func{static wxProcess *}{Open}{\param{const wxString\& }{cmd} \param{int }{flags = wxEXEC\_ASYNC}}
 
 This static method replaces the standard {\tt popen()} function: it launches
 the process specified by the {\it cmd} parameter and returns the wxProcess
@@ -212,6 +212,7 @@ exits to avoid memory leaks.
 \wxheading{Parameters}
 
 \docparam{cmd}{The command to execute, including optional arguments.}
+\docparam{flags}{The flags to pass to \helpref{wxExecute}{wxexecute}.}
 
 \wxheading{Return value}
 

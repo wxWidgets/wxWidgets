@@ -55,7 +55,7 @@ public:
     // on error NULL is returned, in any case the process object will be
     // deleted automatically when the process terminates and should *not* be
     // deleted by the caller
-    static wxProcess *Open(const wxString& cmd);
+    static wxProcess *Open(const wxString& cmd, int flags = wxEXEC_ASYNC);
 
 
     // ctors
