@@ -361,7 +361,7 @@ void wxFrame::DoSetClientSize( int width, int height )
         m_frameToolBar->GetSize( (int *) NULL, &y );
         h += y;
     }
-    wxWindow::SetClientSize( width + m_miniEdge*2, h  + m_miniEdge*2 + m_miniTitle );
+    wxWindow::DoSetClientSize( width + m_miniEdge*2, h  + m_miniEdge*2 + m_miniTitle );
 }
 
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
