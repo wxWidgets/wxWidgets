@@ -48,19 +48,16 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
     m_message = message;
     m_dir = defaultDir;
     m_fileName = defaultFile;
-    m_wildCard = wildCard;
+    m_wildCard = wildCard.empty() ? wxFileSelectorDefaultWildcardStr : wildCard;
     m_dialogStyle = style;
     m_path = wxT("");
     m_filterIndex = 0;
 
-    if (m_wildCard.IsEmpty())
-        m_wildCard = wxFileSelectorDefaultWildcardStr;
-
     // convert m_wildCard from "*.bar" to "Files (*.bar)|*.bar"
     if ( m_wildCard.Find(wxT('|')) == wxNOT_FOUND )
     {
-        m_wildCard.Printf(_("Files (%s)|%s"),
-                          m_wildCard.c_str(), m_wildCard.c_str());
+        m_wildCard = wxString::Format(_("Files (%s)|%s"),
+                                        m_wildCard.c_str(), m_wildCard.c_str());
     }
 }
 
