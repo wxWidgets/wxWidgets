@@ -887,10 +887,10 @@ private:
    /// A structure for the selection.
    struct Selection
    {
+      Selection() { m_valid = false; m_selecting = false; }
       bool m_valid;
       bool m_selecting;
       wxPoint m_CursorA, m_CursorB;
-      Selection() { m_valid = false; m_selecting = true; }
    } m_Selection;
    /** @name Font parameters. */
    //@{
