@@ -242,20 +242,8 @@ private:
 };
 
 // make a default book control for given platform
-#if defined(__WXMSW__) && defined(__SMARTPHONE__)
-    #include "wx/choicebk.h"
-    #define wxBookCtrl                             wxChoicebook
-    #define wxBookCtrlEvent                        wxChoicebookEvent
-    #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED
-    #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
-    #define EVT_BOOKCTRL_PAGE_CHANGED(id, fn)      EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)
-    #define EVT_BOOKCTRL_PAGE_CHANGING(id, fn)     EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)
-    #define wxBC_TOP                               wxCHB_TOP
-    #define wxBC_BOTTOM                            wxCHB_BOTTOM
-    #define wxBC_LEFT                              wxCHB_LEFT
-    #define wxBC_RIGHT                             wxCHB_RIGHT
-    #define wxBC_DEFAULT                           wxCHB_DEFAULT
-#else
+#if wxUSE_NOTEBOOK
+    // dedicated to majority of desktops
     #include "wx/notebook.h"
     #define wxBookCtrl                             wxNotebook
     #define wxBookCtrlEvent                        wxNotebookEvent
@@ -268,6 +256,20 @@ private:
     #define wxBC_LEFT                              wxNB_LEFT
     #define wxBC_RIGHT                             wxNB_RIGHT
     #define wxBC_DEFAULT                           wxNB_DEFAULT
+#else
+    // dedicated to Smartphones
+    #include "wx/choicebk.h"
+    #define wxBookCtrl                             wxChoicebook
+    #define wxBookCtrlEvent                        wxChoicebookEvent
+    #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGED    wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED
+    #define wxEVT_COMMAND_BOOKCTRL_PAGE_CHANGING   wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING
+    #define EVT_BOOKCTRL_PAGE_CHANGED(id, fn)      EVT_CHOICEBOOK_PAGE_CHANGED(id, fn)
+    #define EVT_BOOKCTRL_PAGE_CHANGING(id, fn)     EVT_CHOICEBOOK_PAGE_CHANGING(id, fn)
+    #define wxBC_TOP                               wxCHB_TOP
+    #define wxBC_BOTTOM                            wxCHB_BOTTOM
+    #define wxBC_LEFT                              wxCHB_LEFT
+    #define wxBC_RIGHT                             wxCHB_RIGHT
+    #define wxBC_DEFAULT                           wxCHB_DEFAULT
 #endif
 
 #endif // wxUSE_BOOKCTRL
