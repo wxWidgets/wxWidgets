@@ -125,10 +125,6 @@
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
 
-#define wxUSE_WXCONFIG      1
-                                  // if enabled, compiles built-in OS independent wxConfig
-                                  // class and it's file (any platform) and registry (Win)
-                                  // based implementations
 #define wxUSE_TIMEDATE      1
                                   // Use time and date
 #define wxUSE_THREADS       0

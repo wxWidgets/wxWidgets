@@ -204,3 +204,32 @@ Description: wxWindows Cross-platform C++ GUI toolkit (examples)
  .
  This package contains examples of using the wxWindows toolkit.
 
+Package: libwxbase-msw=V-dev
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers (= ${Source-Version})
+Conflicts: libwxmsw-dev
+Replaces: libwxbase-msw-dev
+Provides: libwxbase-msw-dev
+Description: wxBase mingw32msvc-cross
+ mingw32msvc-cross wxBase libs.
+
+Package: libwxmsw=V-dev
+Architecture: i386
+Section: otherosfs
+Depends: wxwin=V-headers (= ${Source-Version})
+Conflicts: libwxmsw-dev
+Replaces: libwxmsw-dev
+Provides: libwxmsw-dev
+Description: wxMSW mingw32msvc-cross
+ mingw32msvc-cross wxMSW libs.
+
+Package: wxwin=V-headers-msw
+Architecture: i386
+Section: otherosfs
+Conflicts: wxwin-headers-msw
+Replaces: wxwin-headers-msw
+Provides: wxwin-headers-msw
+Description: wxWindows headers for mingw32msvc-cross
+ Headers required by the wxWindows mingw32msvc-cross libraries.
+

@@ -1,7 +1,17 @@
 wxwindows2.2 (2.2.8) unstable; urgency=low
 
-  * 2.2.7 was never released for various sundry reasons,
-    but here's a 2.2.8 prerelease to play with instead.
+  * Fixed bogus samples makefile. Closes: #110061
+  * Added ability to build wxMSW-cross packages, but they
+    are not built and distributed by default.
+
+      If you think such creatures belong in the archive,
+      register your vote by filing a wishlist bug (or preferably
+      append some reasoned response to one already posted ;)
+
+  * Pruned more inapplicable files from the raw cvs source,
+    cleaned configure.in and removed the need for a common setup.h,
+    removed superfluous library links and generally tweaked things
+    so as to make adding new ports easier.
 
  -- Ron Lee <ron@debian.org>  Thu, 30 Aug 2001 15:41:49 -0700
 
@@ -11,6 +21,7 @@ wxwindows2.2 (2.2.7) unstable; urgency=medium
   * various small control (mis)behaviours corrected.
   * added missing build-dep for gettext.
   * updated wxPython description, Closes: #102689
+  * Never publicly released, oh well.
 
  -- Ron Lee <ron@debian.org>  Sun, 10 Jun 2001 19:32:46 -0700
 

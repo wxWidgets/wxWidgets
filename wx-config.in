@@ -31,7 +31,7 @@ cppflags()
             includes=-I@includedir@
         fi
     fi
-    includes="$includes -I@libdir@/wx/include -D__USE_WXCONFIG__"
+    includes="-I@libdir@/wx/include/@TOOLCHAIN_NAME@ $includes"
     echo $includes @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @WXCONFIG_INCLUDE@
 }
 
@@ -78,7 +78,7 @@ while test $# -gt 0; do
       if test @libdir@ != /usr/lib ; then
         libs="-L@libdir@"
       fi
-      echo $libs -l@WX_LIBRARY@ @EXTRA_LIBS@
+      echo $libs @WXCONFIG_LIBS@ @EXTRA_LIBS@
       ;;
     --cc)
       echo $CC

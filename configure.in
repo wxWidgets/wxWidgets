@@ -670,19 +670,11 @@ esac
 if test "$USE_UNIX" = 1 ; then
     wxUSE_UNIX=yes
     AC_DEFINE(__UNIX__)
-
-    SRC_SUBDIRS="$SRC_SUBDIRS unix"
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS unix"
-fi
-
-if test "$USE_BEOS" = 1; then
-    SRC_SUBDIRS="$SRC_SUBDIRS be"
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS be"
 fi
 
 dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
 if test "$USE_LINUX" = 1; then
-  AC_CHECK_LIB(c,gettext,AC_DEFINE(wxHAVE_GLIBC2))
+    AC_CHECK_LIB(c,gettext,AC_DEFINE(wxHAVE_GLIBC2))
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1330,7 +1322,7 @@ done
 dnl from "if wxUSE_GUI"
 else
     PATH_IFS=':'
-    AC_MSG_RESULT(base ($host hosted) only)
+    AC_MSG_RESULT(base ($host_alias hosted) only)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1567,9 +1559,9 @@ if test "$USE_WIN32" = 1 ; then
         fi
     fi
 
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS msw"
     dnl --- Quick & Dirty ; link against most/all libraries
     dnl --- This will bloat the executable, but it'll work for now...
+    dnl --- FIXME: trim this list for wxBase
     LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
     dnl add extra odbc libs if we have compiled in odbc
@@ -1608,10 +1600,8 @@ WXGTK13=
 WXWINE=
 
 if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
-
     TOOLKIT=MSW
     GUIDIST=MSW_DIST
-
 fi
 
 if test "$wxUSE_GTK" = 1; then
@@ -1639,21 +1629,7 @@ dnl        )
 dnl    )
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
-
-dnl Appending gthreads as it was done here is not portable, instead
-dnl we now call "gtk-config --libs gthread" which sets the right library
-dnl name for us. The following hacks are no longer required.
-
     GUI_TK_LIBRARY="$GTK_LIBS"
-
-dnl dnl On FreeBSD, the libs are called gtk12 etc, so we must append gthread12
-dnl    echo $GTK_LIBS | fgrep -q "glib12"
-dnl    if test $? = 0  ; then
-dnl       GUI_TK_LIBRARY="$GTK_LIBS -gthread12"
-dnl    else
-dnl       GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
-dnl    fi
-
     AFMINSTALL=afminstall
     TOOLKIT=GTK
     GUIDIST=GTK_DIST
@@ -1881,24 +1857,12 @@ if test "$wxUSE_PM" = 1; then
 fi
 
 dnl the name of the directory where the files for this toolkit live
-if test "$TOOLKIT" != "PM" ; then
-    TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
-else
+if test "$TOOLKIT" = "PM" ; then
     TOOLKIT_DIR="os2"
+else
+    TOOLKIT_DIR=`echo ${TOOLKIT} | tr "[[A-Z]]" "[[a-z]]"`
 fi
 
-    dnl the (base) name of the library and support files for this toolkit
-    if test "$wxUSE_DEBUG_FLAG" = "yes"; then
-        TOOLKIT_NAME="${TOOLKIT_DIR}d"
-    else
-        TOOLKIT_NAME="${TOOLKIT_DIR}"
-    fi
-
-    dnl the symbol which allows conditional compilation for the given toolkit
-    TOOLKIT_DEF="-D__WX${TOOLKIT}__"
-
-    dnl the name of the (libtool) library
-    WX_LIBRARY="wx_${TOOLKIT_NAME}"
 
     dnl the sources, their dependenices and the headers
     ALL_OBJECTS="\$(GUIOBJS) \$(COMMONOBJS) \$(GENERICOBJS) \$(UNIXOBJS) \$(HTMLOBJS) \$(OGLOBJS)"
@@ -1932,44 +1896,28 @@ fi
 else
     USE_GUI=0
 
-    dnl this may be (almost) unneccesary for wxBase now we use TOOLKIT_NAME
+    dnl this doesn't quite work right for wxBase, but the places
+    dnl where it is wrong aren't fatal (yet) though.
     TOOLKIT_DIR="base"
 
     dnl the sources, their dependenices and the headers
     if test "$USE_WIN32" = 1 ; then
-        TOOLKIT_DEF="-D__WXBASEMSW__ -D__WXMSW__"
         ALL_OBJECTS="\${BASE_OBJS} \${BASE_MSW_OBJS}"
         ALL_DEPFILES="\${BASE_DEPS} \${BASE_MSW_DEPS}"
-        TOOLKIT_SRC="msw"
+        TOOLKIT_VPATH="\${top_srcdir}/src/msw"
 
-        dnl so we can have native and cross wxBase packages installed together
-        TOOLKIT_DIR="${TOOLKIT_DIR}_w32"
-
-        dnl this is a hack to have the correct configure checks done for
-        dnl wxBase.  It is fragile though and probably should be replaced
-        dnl (along with the tests later in the file) with something more
-        dnl specific to wxBase.
+        dnl yes, the toolkit for wxBase on win32 is actually MSW
+        dnl wxBase on unix does not need a 'TOOLKIT' defined.
         TOOLKIT="MSW"
     else
-        TOOLKIT_DEF="-D__WXBASEUNIX__"
         ALL_OBJECTS="\${BASE_OBJS} \${BASE_UNIX_OBJS}"
         ALL_DEPFILES="\${BASE_DEPS} \${BASE_UNIX_DEPS}"
-        TOOLKIT_SRC="unix"
-    fi
-
-    dnl the base name of the library and wxXXX-config files
-    if test "$wxUSE_DEBUG_FLAG" = "yes"; then
-        TOOLKIT_NAME="${TOOLKIT_DIR}d"
-    else
-        TOOLKIT_NAME="${TOOLKIT_DIR}"
+        TOOLKIT_VPATH="\${top_srcdir}/src/unix"
     fi
 
     if test "$wxUSE_ZLIB" = "yes" ; then
         ALL_OBJECTS="${ALL_OBJECTS} \$(ZLIBOBJS)"
     fi
-
-    dnl building wxBase only
-    WX_LIBRARY="wx_${TOOLKIT_NAME}"
 
     PORT_FILES="src/files.lst"
     RPM_FILES="src/rpmfiles.lst"
@@ -1980,29 +1928,58 @@ else
     DISTDIR="wxBase"
 fi
 
-if test -z "$TOOLKIT_SRC" ; then
-    TOOLKIT_SRC="$TOOLKIT_DIR"
+if test -z "$TOOLKIT_VPATH" ; then
+    TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}"
 fi
 
-dnl the name of the (libtool) library
-WX_LIBRARY_NAME="lib${WX_LIBRARY}.la"
-WX_LIBRARY_NAME_GL="lib${WX_LIBRARY}_gl.la"
+dnl the symbol which allows conditional compilation for the given toolkit
+if test -n "$TOOLKIT" ; then
+    TOOLKIT_DEF="-D__WX${TOOLKIT}__"
+fi
+
+dnl the base name of the library and wxXXX-config files
+TOOLCHAIN_NAME="${TOOLKIT_DIR}"
+
+if test "$wxUSE_DEBUG_FLAG" = "yes"; then
+    TOOLCHAIN_NAME="${TOOLCHAIN_NAME}d"
+fi
+
+TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${WX_RELEASE}"
+
+if test "$cross_compiling" = "yes"; then
+    TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
+fi
+
+
+dnl library link name.
+WX_LIBRARY="wx_${TOOLCHAIN_NAME}"
+
+dnl kludge for separate opengl lib created by wxGTK.
+if test "$wxUSE_DEBUG_FLAG" = "yes"; then
+    WX_LIBRARY_GL="wx_${TOOLKIT_DIR}d_gl-${WX_RELEASE}"
+else
+    WX_LIBRARY_GL="wx_${TOOLKIT_DIR}_gl-${WX_RELEASE}"
+fi
+
+dnl define which libs wx-config should link.
+WXCONFIG_LIBS="-l${WX_LIBRARY}"
+if test "$wxUSE_OPENGL" = "yes"; then
+    WXCONFIG_LIBS="${WXCONFIG_LIBS} -l${WX_LIBRARY_GL}"
+fi
 
 dnl the name of the static library
 WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
-WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY}_gl.a"
+WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
 
 dnl the name of the shared library
-WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
-WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+WX_LIBRARY_NAME_SHARED="lib${WX_LIBRARY}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
+WX_LIBRARY_NAME_SHARED_GL="lib${WX_LIBRARY_GL}.so.${WX_CURRENT}.${WX_REVISION}.${WX_AGE}"
 
 dnl the name of the links to the shared library
-WX_LIBRARY_LINK1="lib${WX_LIBRARY}-${WX_RELEASE}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2="lib${WX_LIBRARY}-${WX_RELEASE}.so"
-WX_LIBRARY_LINK3="lib${WX_LIBRARY}.so"
-WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so.${WX_CURRENT}"
-WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY}_gl-${WX_RELEASE}.so"
-WX_LIBRARY_LINK3_GL="lib${WX_LIBRARY}_gl.so"
+WX_LIBRARY_LINK1="lib${WX_LIBRARY}.so.${WX_CURRENT}"
+WX_LIBRARY_LINK2="lib${WX_LIBRARY}.so"
+WX_LIBRARY_LINK1_GL="lib${WX_LIBRARY_GL}.so.${WX_CURRENT}"
+WX_LIBRARY_LINK2_GL="lib${WX_LIBRARY_GL}.so"
 
 dnl shared library settings
 SHARED_LD=
@@ -2027,8 +2004,8 @@ if test "$wxUSE_SHARED" = "yes"; then
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
         fi
-        WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_NAME}.sl"
-        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_NAME}_gl.sl"
+        WX_LIBRARY_NAME_SHARED="libwx_${TOOLCHAIN_NAME}.sl"
+        WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLCHAIN_NAME}_gl.sl"
         if test "$wxUSE_OPENGL" = "yes"; then
             WX_ALL_INSTALLED="preinstall_gl"
             WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
@@ -2090,32 +2067,14 @@ if test "$wxUSE_SHARED" = "yes"; then
             WX_ALL="CREATE_LINKS"
         fi
       ;;
-      *-*-sunos4* )
+      *-*-sunos4* | *-*-sysv5* | *-*-freebsd* | *-*-openbsd* | *-*-netbsd* )
         SHARED_LD="${CC} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
       ;;
-      *-*-freebsd* | *-*-openbsd* | *-*-netbsd*)
-        SHARED_LD="${CC} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-osf* )
+      *-*-osf* | *-*-dgux5* )
         SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-dgux5* )
-        SHARED_LD="${CXX} -shared -o"
-        PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-      ;;
-      *-*-sysv5* )
-        SHARED_LD="${CC} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
@@ -2124,27 +2083,10 @@ if test "$wxUSE_SHARED" = "yes"; then
         SHARED_LD="/usr/lpp/xlC/bin/makeC++SharedLib -p 0 -o"
         WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
-      *-*-cygwin32* )
+      *-*-cygwin32* | *-*-mingw32* )
         dnl only static for now
-        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
-        else
-            WX_ALL="${WX_LIBRARY_NAME_STATIC}"
-        fi
-      ;;
-      *-*-mingw32* )
-        dnl only static for now
-        WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-        WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
-        if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
-        else
-            WX_ALL="${WX_LIBRARY_NAME_STATIC}"
-        fi
+        AC_MSG_WARN(Shared libs unsupported for $host_alias -- forcing static build.)
+        wxUSE_SHARED=no
       ;;
       *-pc-os2_emx )
         dnl only static for now
@@ -2160,7 +2102,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_ALL="CREATE_LINKS"
       ;;
       *)
-        AC_MSG_ERROR(unknown system type ${host}.)
+        AC_MSG_ERROR(unknown system type $host.)
     esac
 
     dnl set target to shared if not explicitly chose static before
@@ -2168,25 +2110,29 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_SHARED}"
         WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_SHARED_GL}"
     fi
+
     dnl do not alter the LIBRARY_TYPE strings "so" and "a", they are magic
     WX_TARGET_LIBRARY_TYPE="so"
-else
-    dnl set target to static
-    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
-    WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
+fi
+
+dnl do not 'else' this, it may be changed in the above conditional.
+if test "$wxUSE_SHARED" = "no"; then
+
+    dnl give static wxBase and wxMSW build a working install target
+    if test "$wxUSE_GUI" = "no" -o "$USE_WIN32" = 1 ; then
+        dnl we're here because WX_ALL_INSTALLED is empty, but play safe anyway
+        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
+    fi
 
     if test "$wxUSE_OPENGL" = "yes"; then
-        WX_ALL_INSTALLED="preinstall_gl"
+        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall_gl"
         WX_ALL="${WX_LIBRARY_NAME_STATIC} ${WX_LIBRARY_NAME_STATIC_GL}"
     else
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
     fi
 
-    dnl give static wxBase build a working install target
-    if test "$wxUSE_GUI" = "no"; then
-        dnl we're here because WX_ALL_INSTALLED is empty, but play safe anyway
-        WX_ALL_INSTALLED="${WX_ALL_INSTALLED} preinstall"
-    fi
+    WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
+    WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
 
     WX_TARGET_LIBRARY_TYPE="a"
 fi
@@ -3220,7 +3166,6 @@ dnl if !MSW
 if test "$wxUSE_SOCKETS" = "yes" ; then
     AC_DEFINE(wxUSE_SOCKETS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS sockets"
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS protocol"
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -3715,7 +3660,6 @@ fi
 if test "$wxUSE_HTML" = "yes"; then
     AC_DEFINE(wxUSE_HTML)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS html"
-    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS html"
 fi
 
 if test "$wxUSE_VALIDATORS" = "yes"; then
@@ -3771,7 +3715,7 @@ dnl makefile system without libtool
 LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 dnl all -I options we must pass to the compiler
-INCLUDES="-I. -I\${top_builddir}/include -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
+INCLUDES="-I. -I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE $TOOLKIT_INCLUDE"
 
 dnl wxGTK does not need TOOLKIT includes in wx-config
 if test "$wxUSE_GTK" = 1; then
@@ -3827,25 +3771,19 @@ dnl global options
 AC_SUBST(WX_MAJOR_VERSION_NUMBER)
 AC_SUBST(WX_MINOR_VERSION_NUMBER)
 AC_SUBST(WX_RELEASE_NUMBER)
-AC_SUBST(WX_LIBRARY_NAME)
 AC_SUBST(WX_LIBRARY_NAME_STATIC)
 AC_SUBST(WX_LIBRARY_NAME_SHARED)
-AC_SUBST(WX_LIBRARY)
 AC_SUBST(WX_TARGET_LIBRARY)
 AC_SUBST(WX_LIBRARY_LINK1)
 AC_SUBST(WX_LIBRARY_LINK2)
-AC_SUBST(WX_LIBRARY_LINK3)
 AC_SUBST(PROGRAM_EXT)
 
 dnl global gl options
-AC_SUBST(WX_LIBRARY_NAME_GL)
 AC_SUBST(WX_LIBRARY_NAME_STATIC_GL)
 AC_SUBST(WX_LIBRARY_NAME_SHARED_GL)
-AC_SUBST(WX_LIBRARY_GL)
 AC_SUBST(WX_TARGET_LIBRARY_GL)
 AC_SUBST(WX_LIBRARY_LINK1_GL)
 AC_SUBST(WX_LIBRARY_LINK2_GL)
-AC_SUBST(WX_LIBRARY_LINK3_GL)
 
 dnl are we supposed to create the links?
 AC_SUBST(WX_ALL)
@@ -3870,9 +3808,11 @@ AC_SUBST(AFMINSTALL)
 AC_SUBST(TOOLKIT)
 AC_SUBST(TOOLKIT_DEF)
 AC_SUBST(TOOLKIT_DIR)
-AC_SUBST(TOOLKIT_NAME)
-AC_SUBST(TOOLKIT_INCLUDE)
-AC_SUBST(TOOLKIT_SRC)
+AC_SUBST(TOOLCHAIN_NAME)
+AC_SUBST(TOOLKIT_VPATH)
+
+dnl wx-config options
+AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_INCLUDE)
 
 dnl what to compile
@@ -3887,12 +3827,7 @@ AC_SUBST(RPM_SPEC)
 AC_SUBST(RPM_FILES)
 
 dnl additional subdirectories where we will build
-AC_SUBST(SRC_SUBDIRS)
-AC_SUBST(INCLUDE_SUBDIRS)
-AC_SUBST(UTILS_SUBDIRS)
-AC_SUBST(DOCS_SUBDIRS)
 AC_SUBST(SAMPLES_SUBDIRS)
-AC_SUBST(USER_SUBDIRS)
 
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
@@ -3923,16 +3858,10 @@ dnl - and we do use it)
 AC_PROG_MAKE_SET
 
 dnl move setup.h back if available
-if test -d include; then
-    if test -d include/wx; then
-        if test -d include/wx/${TOOLKIT_DIR}; then
-            if test -f include/wx/${TOOLKIT_DIR}/setup.h; then
-                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h 
-            fi
-        fi
-    fi
+if test -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h; then
+    mv -f lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h setup.h 
 fi
-            
+
 AC_CONFIG_HEADER(setup.h:setup.h.in)
 
 dnl some more GUI only things
@@ -3959,13 +3888,15 @@ AC_OUTPUT([
             Makefile
           ],
           [
-            chmod +x wx-config
-            mv wx-config wx${TOOLKIT_NAME}-config
-            ${LN_S} wx${TOOLKIT_NAME}-config wx-config
-            
-            dnl the debian build process wants setup.h in the lib subdir so we
-            dnl can pretend wxWin is already installed, so we *copy* it there
-            
+            dnl don't move the file on itself - this happens when we run
+            dnl config.status which, as configure, executes these commands
+            dnl but, unlike it, doesn't create wx-config (which already
+            if test ! -f wx${TOOLCHAIN_NAME}-config; then
+                chmod +x wx-config
+                mv wx-config wx${TOOLCHAIN_NAME}-config
+                ${LN_S} wx${TOOLCHAIN_NAME}-config wx-config
+            fi
+
             if test ! -d lib; then
               mkdir lib
             fi
@@ -3975,35 +3906,18 @@ AC_OUTPUT([
             if test ! -d lib/wx/include; then
               mkdir lib/wx/include
             fi
-            if test ! -d lib/wx/include/wx; then
-              mkdir lib/wx/include/wx
+            if test ! -d lib/wx/include/${TOOLCHAIN_NAME}; then
+              mkdir lib/wx/include/${TOOLCHAIN_NAME}
             fi
-            if test ! -d lib/wx/include/wx/${TOOLKIT_NAME}; then
-              mkdir lib/wx/include/wx/${TOOLKIT_NAME}
-            fi
-            if test -f setup.h; then
-                cp -f setup.h lib/wx/include/wx/${TOOLKIT_NAME}/setup.h
-            fi
-
-            dnl *move* setup.h to its final place
-
-            if test ! -d include; then
-              mkdir include
-            fi
-            if test ! -d include/wx; then
-              mkdir include/wx
-            fi
-            if test ! -d include/wx/${TOOLKIT_DIR}; then
-              mkdir include/wx/${TOOLKIT_DIR}
+            if test ! -d lib/wx/include/${TOOLCHAIN_NAME}/wx; then
+              mkdir lib/wx/include/${TOOLCHAIN_NAME}/wx
             fi
             if test -f setup.h; then
-                mv -f setup.h include/wx/${TOOLKIT_DIR}/setup.h
+              mv -f setup.h lib/wx/include/${TOOLCHAIN_NAME}/wx/setup.h
             fi
-            
           ],
           [
-            TOOLKIT_DIR="${TOOLKIT_DIR}"
-            TOOLKIT_NAME="${TOOLKIT_NAME}"
+            TOOLCHAIN_NAME="${TOOLCHAIN_NAME}"
             LN_S="${LN_S}"
           ]
          )

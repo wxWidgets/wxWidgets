@@ -201,10 +201,6 @@
                                   // Use standard C++ streams if 1. If 0, use wxWin
                                   // streams implementation.
 
-#define wxUSE_WXCONFIG      1
-                                  // if enabled, compiles built-in OS independent wxConfig
-                                  // class and it's file (any platform) and registry (Win)
-                                  // based implementations
 #define wxUSE_THREADS       1
                                   // support for multithreaded applications: if
                                   // 1, compile in thread classes (thread.h)
