@@ -33,6 +33,7 @@
 
 #include "wx/plot/plot.h"
 #include "wx/bmpbuttn.h"
+#include "wx/module.h"
 
 #include <math.h>
 
@@ -53,27 +54,27 @@
 // event types
 //----------------------------------------------------------------------------
 
-int wxEVT_PLOT_SEL_CHANGING = wxNewId();
-int wxEVT_PLOT_SEL_CHANGED = wxNewId();
-int wxEVT_PLOT_CLICKED = wxNewId();
-int wxEVT_PLOT_DOUBLECLICKED = wxNewId();
-int wxEVT_PLOT_ZOOM_IN = wxNewId();
-int wxEVT_PLOT_ZOOM_OUT = wxNewId();
-int wxEVT_PLOT_VALUE_SEL_CREATING = wxNewId();
-int wxEVT_PLOT_VALUE_SEL_CREATED = wxNewId();
-int wxEVT_PLOT_VALUE_SEL_CHANGING = wxNewId();
-int wxEVT_PLOT_VALUE_SEL_CHANGED = wxNewId();
-int wxEVT_PLOT_AREA_SEL_CREATING = wxNewId();
-int wxEVT_PLOT_AREA_SEL_CREATED = wxNewId();
-int wxEVT_PLOT_AREA_SEL_CHANGING = wxNewId();
-int wxEVT_PLOT_AREA_SEL_CHANGED = wxNewId();
-int wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxNewId();
-int wxEVT_PLOT_END_X_LABEL_EDIT = wxNewId();
-int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxNewId();
-int wxEVT_PLOT_END_Y_LABEL_EDIT = wxNewId();
-int wxEVT_PLOT_BEGIN_TITLE_EDIT = wxNewId();
-int wxEVT_PLOT_END_TITLE_EDIT = wxNewId();
-int wxEVT_PLOT_AREA_CREATE = wxNewId();
+const int wxEVT_PLOT_SEL_CHANGING = wxNewEventType();
+const int wxEVT_PLOT_SEL_CHANGED = wxNewEventType();
+const int wxEVT_PLOT_CLICKED = wxNewEventType();
+const int wxEVT_PLOT_DOUBLECLICKED = wxNewEventType();
+const int wxEVT_PLOT_ZOOM_IN = wxNewEventType();
+const int wxEVT_PLOT_ZOOM_OUT = wxNewEventType();
+const int wxEVT_PLOT_VALUE_SEL_CREATING = wxNewEventType();
+const int wxEVT_PLOT_VALUE_SEL_CREATED = wxNewEventType();
+const int wxEVT_PLOT_VALUE_SEL_CHANGING = wxNewEventType();
+const int wxEVT_PLOT_VALUE_SEL_CHANGED = wxNewEventType();
+const int wxEVT_PLOT_AREA_SEL_CREATING = wxNewEventType();
+const int wxEVT_PLOT_AREA_SEL_CREATED = wxNewEventType();
+const int wxEVT_PLOT_AREA_SEL_CHANGING = wxNewEventType();
+const int wxEVT_PLOT_AREA_SEL_CHANGED = wxNewEventType();
+const int wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxNewEventType();
+const int wxEVT_PLOT_END_X_LABEL_EDIT = wxNewEventType();
+const int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxNewEventType();
+const int wxEVT_PLOT_END_Y_LABEL_EDIT = wxNewEventType();
+const int wxEVT_PLOT_BEGIN_TITLE_EDIT = wxNewEventType();
+const int wxEVT_PLOT_END_TITLE_EDIT = wxNewEventType();
+const int wxEVT_PLOT_AREA_CREATE = wxNewEventType();
 
 //----------------------------------------------------------------------------
 // accessor functions for the bitmaps (may return NULL, check for it!)

@@ -4,7 +4,7 @@ top_srcdir = @top_srcdir@/..
 top_builddir = ../../..
 libsrc_dir = contrib/src/plot
 
-TARGET_LIBNAME=libplot
+TARGET_LIBNAME=libwx_plot
 
 LIBVERSION_CURRENT=1
 LIBVERSION_REVISION=0

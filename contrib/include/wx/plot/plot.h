@@ -38,27 +38,27 @@ class WXDLLEXPORT wxPlotWindow;
 // classes
 //-----------------------------------------------------------------------------
 
-extern int wxEVT_PLOT_SEL_CHANGING;
-extern int wxEVT_PLOT_SEL_CHANGED;
-extern int wxEVT_PLOT_CLICKED;
-extern int wxEVT_PLOT_DOUBLECLICKED;
-extern int wxEVT_PLOT_ZOOM_IN;
-extern int wxEVT_PLOT_ZOOM_OUT;
-extern int wxEVT_PLOT_VALUE_SEL_CREATING;
-extern int wxEVT_PLOT_VALUE_SEL_CREATED;
-extern int wxEVT_PLOT_VALUE_SEL_CHANGING;
-extern int wxEVT_PLOT_VALUE_SEL_CHANGED;
-extern int wxEVT_PLOT_AREA_SEL_CREATING;
-extern int wxEVT_PLOT_AREA_SEL_CREATED;
-extern int wxEVT_PLOT_AREA_SEL_CHANGING;
-extern int wxEVT_PLOT_AREA_SEL_CHANGED;
-extern int wxEVT_PLOT_BEGIN_X_LABEL_EDIT;
-extern int wxEVT_PLOT_END_X_LABEL_EDIT;
-extern int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT;
-extern int wxEVT_PLOT_END_Y_LABEL_EDIT;
-extern int wxEVT_PLOT_BEGIN_TITLE_EDIT;
-extern int wxEVT_PLOT_END_TITLE_EDIT;
-extern int wxEVT_PLOT_AREA_CREATE;
+extern const int wxEVT_PLOT_SEL_CHANGING;
+extern const int wxEVT_PLOT_SEL_CHANGED;
+extern const int wxEVT_PLOT_CLICKED;
+extern const int wxEVT_PLOT_DOUBLECLICKED;
+extern const int wxEVT_PLOT_ZOOM_IN;
+extern const int wxEVT_PLOT_ZOOM_OUT;
+extern const int wxEVT_PLOT_VALUE_SEL_CREATING;
+extern const int wxEVT_PLOT_VALUE_SEL_CREATED;
+extern const int wxEVT_PLOT_VALUE_SEL_CHANGING;
+extern const int wxEVT_PLOT_VALUE_SEL_CHANGED;
+extern const int wxEVT_PLOT_AREA_SEL_CREATING;
+extern const int wxEVT_PLOT_AREA_SEL_CREATED;
+extern const int wxEVT_PLOT_AREA_SEL_CHANGING;
+extern const int wxEVT_PLOT_AREA_SEL_CHANGED;
+extern const int wxEVT_PLOT_BEGIN_X_LABEL_EDIT;
+extern const int wxEVT_PLOT_END_X_LABEL_EDIT;
+extern const int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT;
+extern const int wxEVT_PLOT_END_Y_LABEL_EDIT;
+extern const int wxEVT_PLOT_BEGIN_TITLE_EDIT;
+extern const int wxEVT_PLOT_END_TITLE_EDIT;
+extern const int wxEVT_PLOT_AREA_CREATE;
 
 //-----------------------------------------------------------------------------
 // consts
