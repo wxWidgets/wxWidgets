@@ -20,6 +20,7 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/filename.h"
+#include "wx/msgdlg.h"
 
 #include <gtk/gtk.h>
 #include "wx/gtk/private.h"
