@@ -619,7 +619,7 @@ void wxMenuBar::EnableTop(size_t pos, bool enable)
 
 bool wxMenuBar::Enable( bool enable)
 {
-    wxCHECK_RET( IsAttached(), wxT("doesn't work with unattached menubars") );
+    wxCHECK_MSG( IsAttached(), false, wxT("doesn't work with unattached menubars") );
     size_t i;
     for (i = 0; i < GetMenuCount(); i++)
     {
