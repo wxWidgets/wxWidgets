@@ -78,6 +78,10 @@ class Interpreter(InteractiveInterpreter):
             sys.stderr = stderr
         return more
         
+    def getAutoCompleteKeys(self):
+        """Return list of auto-completion keycodes."""
+        return [ord('.')]
+
     def getAutoCompleteList(self, command='', *args, **kwds):
         """Return list of auto-completion options for a command.
         

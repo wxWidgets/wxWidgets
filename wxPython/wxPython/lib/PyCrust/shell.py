@@ -19,6 +19,8 @@ from pseudo import PseudoFileErr
 from version import VERSION
 
 
+NAVKEYS = (WXK_END, WXK_LEFT, WXK_RIGHT, WXK_UP, WXK_DOWN, WXK_PRIOR, WXK_NEXT)
+
 if wxPlatform == '__WXMSW__':
     faces = { 'times'  : 'Times New Roman',
               'mono'   : 'Courier New',
@@ -48,7 +50,7 @@ else:  # GTK
 class ShellFacade:
     """Simplified interface to all shell-related functionality.
 
-    This is a semi-transparent facade, in that all attributes of other are
+    This is a semi-transparent facade, in that all attributes of other are 
     still accessible, even though only some are visible to the user."""
 
     name = 'PyCrust Shell Interface'
@@ -66,6 +68,8 @@ class ShellFacade:
                    'redirectStdout',
                    'run',
                    'runfile',
+                   'wrap',
+                   'zoom',
                   ]
         for method in methods:
             self.__dict__[method] = getattr(other, method)
@@ -160,6 +164,8 @@ class Shell(wxStyledTextCtrl):
                                   stdout=PseudoFileOut(self.writeOut), \
                                   stderr=PseudoFileErr(self.writeErr), \
                                   *args, **kwds)
+        # Find out for which keycodes the interpreter will autocomplete.
+        self.autoCompleteKeys = self.interp.getAutoCompleteKeys()
         # Keep track of the last non-continuation prompt positions.
         self.promptPosStart = 0
         self.promptPosEnd = 0
@@ -219,6 +225,7 @@ class Shell(wxStyledTextCtrl):
         # Do we want to automatically pop up command argument help?
         self.autoCallTip = 1
         self.CallTipSetBackground(wxColour(255, 255, 232))
+        self.wrap()
 
     def showIntro(self, text=''):
         """Display introductory text in the shell."""
@@ -301,6 +308,10 @@ class Shell(wxStyledTextCtrl):
         caretPos = self.GetCurrentPos()
         if caretPos > 0:
             charBefore = self.GetCharAt(caretPos - 1)
+            #*** Patch to fix bug in wxSTC for wxPython < 2.3.3.
+            if charBefore < 0:
+                charBefore = 32  # Mimic a space.
+            #***
             styleBefore = self.GetStyleAt(caretPos - 1)
 
         # Check before.
@@ -311,6 +322,10 @@ class Shell(wxStyledTextCtrl):
         # Check after.
         if braceAtCaret < 0:
             charAfter = self.GetCharAt(caretPos)
+            #*** Patch to fix bug in wxSTC for wxPython < 2.3.3.
+            if charAfter < 0:
+                charAfter = 32  # Mimic a space.
+            #***
             styleAfter = self.GetStyleAt(caretPos)
             if charAfter and chr(charAfter) in '[]{}()' \
             and styleAfter == wxSTC_P_OPERATOR:
@@ -325,20 +340,20 @@ class Shell(wxStyledTextCtrl):
             self.BraceHighlight(braceAtCaret, braceOpposite)
 
     def OnChar(self, event):
-        """Keypress event handler.
+        """Keypress event handler."""
 
-        Prevents modification of previously submitted commands/responses."""
+        # Prevent modification of previously submitted commands/responses.
         if not self.CanEdit():
             return
         key = event.KeyCode()
         currpos = self.GetCurrentPos()
         stoppos = self.promptPosEnd
-        if key == ord('.'):
-            # The dot or period key activates auto completion.
+        if key in self.autoCompleteKeys:
+            # Usually the dot (period) key activates auto completion.
             # Get the command between the prompt and the cursor.
-            # Add a dot to the end of the command.
-            command = self.GetTextRange(stoppos, currpos) + '.'
-            self.write('.')
+            # Add the autocomplete character to the end of the command.
+            command = self.GetTextRange(stoppos, currpos) + chr(key)
+            self.write(chr(key))
             if self.autoComplete: self.autoCompleteShow(command)
         elif key == ord('('):
             # The left paren activates a call tip and cancels
@@ -355,9 +370,9 @@ class Shell(wxStyledTextCtrl):
             event.Skip()
 
     def OnKeyDown(self, event):
-        """Key down event handler.
+        """Key down event handler."""
 
-        Prevents modification of previously submitted commands/responses."""
+        # Prevent modification of previously submitted commands/responses.
         key = event.KeyCode()
         controlDown = event.ControlDown()
         altDown = event.AltDown()
@@ -401,6 +416,25 @@ class Shell(wxStyledTextCtrl):
         elif controlDown and shiftDown \
             and key in (ord('C'), ord('c'), WXK_INSERT):
             self.CopyWithPrompts()
+        # Home needs to be aware of the prompt.
+        elif key == WXK_HOME:
+            home = self.promptPosEnd
+            if currpos > home:
+                selecting = self.GetSelectionStart() != self.GetSelectionEnd()
+                self.SetCurrentPos(home)
+                if not selecting and not shiftDown:
+                    self.SetAnchor(home)
+                    self.EnsureCaretVisible()
+            else:
+                event.Skip()
+        #
+        # The following handlers modify text, so we need to see if there
+        # is a selection that includes text prior to the prompt.
+        #
+        # Don't modify a selection with text prior to the prompt.
+        elif self.GetSelectionStart() != self.GetSelectionEnd()\
+        and key not in NAVKEYS and not self.CanEdit():
+            pass
         # Paste from the clipboard.
         elif (controlDown and not shiftDown \
             and key in (ord('V'), ord('v'))) \
@@ -419,34 +453,20 @@ class Shell(wxStyledTextCtrl):
         or (altDown and key in (ord('N'), ord('n'))):
             self.OnHistoryReplace(step=-1)
         # Insert the previous command from the history buffer.
-        elif (shiftDown and key == WXK_UP):
+        elif (shiftDown and key == WXK_UP) and self.CanEdit():
             self.OnHistoryInsert(step=+1)
         # Insert the next command from the history buffer.
-        elif (shiftDown and key == WXK_DOWN):
+        elif (shiftDown and key == WXK_DOWN) and self.CanEdit():
             self.OnHistoryInsert(step=-1)
         # Search up the history for the text in front of the cursor.
         elif key == WXK_F8:
             self.OnHistorySearch()
-        # Home needs to be aware of the prompt.
-        elif key == WXK_HOME:
-            home = self.promptPosEnd
-            if currpos >= home:
-                if event.ShiftDown():
-                    # Select text from current position to end of prompt.
-                    self.SetSelection(self.GetCurrentPos(), home)
-                else:
-                    self.SetCurrentPos(home)
-                    self.SetAnchor(home)
-                    self.EnsureCaretVisible()
-            else:
-                event.Skip()
-        # Basic navigation keys should work anywhere.
-        elif key in (WXK_END, WXK_LEFT, WXK_RIGHT, WXK_UP, WXK_DOWN, \
-                     WXK_PRIOR, WXK_NEXT):
-            event.Skip()
         # Don't backspace over the latest non-continuation prompt.
         elif key == WXK_BACK:
-            if currpos > self.promptPosEnd:
+            if self.GetSelectionStart() != self.GetSelectionEnd()\
+            and self.CanEdit():
+                event.Skip()
+            elif currpos > self.promptPosEnd:
                 event.Skip()
         # Only allow these keys after the latest prompt.
         elif key in (WXK_TAB, WXK_DELETE):
@@ -461,6 +481,9 @@ class Shell(wxStyledTextCtrl):
         # Don't allow line transposition.
         elif controlDown and key in (ord('T'), ord('t')):
             pass
+        # Basic navigation keys should work anywhere.
+        elif key in NAVKEYS:
+            event.Skip()
         # Protect the readonly portion of the shell.
         elif not self.CanEdit():
             pass
@@ -551,7 +574,7 @@ class Shell(wxStyledTextCtrl):
         # The user hit ENTER and we need to decide what to do. They could be
         # sitting on any line in the shell.
 
-        thepos = self.GetCurrentPos()
+        thepos = self.GetCurrentPos()        
         startpos = self.promptPosEnd
         endpos = self.GetTextLength()
         # If they hit RETURN inside the current command, execute the command.
@@ -638,9 +661,10 @@ class Shell(wxStyledTextCtrl):
         elif text[:ps2size] == ps2:
             text = text[ps2size:]
         return text
-
+    
     def push(self, command):
         """Send command to the interpreter for execution."""
+        busy = wxBusyCursor()
         self.write(os.linesep)
         self.more = self.interp.push(command)
         if not self.more:
@@ -742,11 +766,11 @@ class Shell(wxStyledTextCtrl):
         >>> shell.run('print "this"')
         >>> print "this"
         this
-        >>>
+        >>> 
         """
         # Go to the very bottom of the text.
         endpos = self.GetTextLength()
-        self.SetCurrentPos(endpos)
+        self.SetCurrentPos(endpos)        
         command = command.rstrip()
         if prompt: self.prompt()
         if verbose: self.write(command)
@@ -844,7 +868,14 @@ class Shell(wxStyledTextCtrl):
 
     def CanEdit(self):
         """Return true if editing should succeed."""
-        return self.GetCurrentPos() >= self.promptPosEnd
+        if self.GetSelectionStart() != self.GetSelectionEnd():
+            if self.GetSelectionStart() >= self.promptPosEnd \
+            and self.GetSelectionEnd() >= self.promptPosEnd:
+                return 1
+            else:
+                return 0
+        else:
+            return self.GetCurrentPos() >= self.promptPosEnd
 
     def Cut(self):
         """Remove selection and place it on the clipboard."""
@@ -926,11 +957,25 @@ class Shell(wxStyledTextCtrl):
                             command += '\n'
                             command += line
                     commands.append(command)
-                    for command in commands:
+                    for command in commands:    
                         command = command.replace('\n', os.linesep + sys.ps2)
                         self.write(command)
                         self.processLine()
             wxTheClipboard.Close()
+
+    def wrap(self, wrap=1):
+        """Sets whether text is word wrapped."""
+        try:
+            self.SetWrapMode(wrap)
+        except AttributeError:
+            return 'Wrapping is not available in this version of PyCrust.'
+
+    def zoom(self, points=0):
+        """Set the zoom level.
+        
+        This number of points is added to the size of all fonts.
+        It may be positive to magnify or negative to reduce."""
+        self.SetZoom(points)
 
 
 wxID_SELECTALL = NewId()  # This *should* be defined by wxPython.
@@ -1124,19 +1169,18 @@ class ShellFrame(wxFrame, ShellMenu):
         intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
-
-        import os
         filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
         icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
         self.SetIcon(icon)
-
         self.shell = Shell(parent=self, id=-1, introText=intro, \
                            locals=locals, InterpClass=InterpClass, \
                            *args, **kwds)
         # Override the shell so that status messages go to the status bar.
         self.shell.setStatusText = self.SetStatusText
         self.createMenus()
+        EVT_CLOSE(self, self.OnCloseWindow)
 
-
-
+    def OnCloseWindow(self, event):
+        self.shell.destroy()
+        self.Destroy()
 

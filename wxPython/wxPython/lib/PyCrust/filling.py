@@ -14,6 +14,14 @@ import keyword
 import sys
 import types
 
+COMMONTYPES = [getattr(types, t) for t in dir(types) \
+               if not t.startswith('_') \
+               and t not in ('ClassType', 'InstanceType', 'ModuleType')]
+try:
+    COMMONTYPES.append(type(''.__repr__))  # Method-wrapper in version 2.2.x.
+except AttributeError:
+    pass
+
 
 class FillingTree(wxTreeCtrl):
     """PyCrust FillingTree based on wxTreeCtrl."""
@@ -39,40 +47,43 @@ class FillingTree(wxTreeCtrl):
         EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemCollapsed)
         EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
 
-    def hasChildren(self, object):
+    def hasChildren(self, o):
         """Return true if object has children."""
-        if self.getChildren(object):
+        if self.getChildren(o):
             return true
         else:
             return false
 
-    def getChildren(self, object):
+    def getChildren(self, o):
         """Return a dictionary with the attributes or contents of object."""
-        dict = {}
-        objtype = type(object)
-        if (objtype is types.DictType) \
-        or str(objtype)[17:23] == 'BTrees' and hasattr(object, 'keys'):
-            dict = object
-        elif (objtype in (types.ClassType, \
-                          types.InstanceType, \
-                          types.ModuleType)) \
-        or str(objtype)[1:10] == 'extension':
-            for key in introspect.getAttributeNames(object):
+        busy = wxBusyCursor()
+        otype = type(o)
+        if (otype is types.DictType) \
+        or str(otype)[17:23] == 'BTrees' and hasattr(o, 'keys'):
+            return o
+        d = {}
+        if otype is types.ListType:
+            for n in range(len(o)):
+                key = '[' + str(n) + ']'
+                d[key] = o[n]
+        if otype not in COMMONTYPES:
+            for key in introspect.getAttributeNames(o):
                 # Believe it or not, some attributes can disappear, such as
                 # the exc_traceback attribute of the sys module. So this is
                 # nested in a try block.
                 try:
-                    dict[key] = getattr(object, key)
+                    d[key] = getattr(o, key)
                 except:
                     pass
-        return dict
+        return d
 
     def OnItemExpanding(self, event):
+        busy = wxBusyCursor()
         selection = event.GetItem()
         if self.IsExpanded(selection):
             return
-        object = self.GetPyData(selection)
-        children = self.getChildren(object)
+        o = self.GetPyData(selection)
+        children = self.getChildren(o)
         if not children:
             return
         list = children.keys()
@@ -84,7 +95,7 @@ class FillingTree(wxTreeCtrl):
             itemtext = str(item)
             # Show string dictionary items with single quotes, except for
             # the first level of items, if they represent a namespace.
-            if type(object) is types.DictType \
+            if type(o) is types.DictType \
             and type(item) is types.StringType \
             and (selection != self.root \
                  or (selection == self.root and not self.rootIsNamespace)):
@@ -95,42 +106,44 @@ class FillingTree(wxTreeCtrl):
 
     def OnItemCollapsed(self, event):
         """Remove all children from the item."""
+        busy = wxBusyCursor()
         item = event.GetItem()
         self.DeleteChildren(item)
 
     def OnSelChanged(self, event):
+        busy = wxBusyCursor()
         item = event.GetItem()
         if item == self.root:
             self.setText('')
             return
-        object = self.GetPyData(item)
-        otype = type(object)
+        o = self.GetPyData(item)
+        otype = type(o)
         text = ''
         text += self.getFullName(item)
         text += '\n\nType: ' + str(otype)
         try:
-            value = str(object)
+            value = str(o)
         except:
             value = ''
         if otype is types.StringType or otype is types.UnicodeType:
-            value = repr(object)
+            value = repr(o)
         text += '\n\nValue: ' + value
         if otype is types.InstanceType:
             try:
                 text += '\n\nClass Definition:\n\n' + \
-                        inspect.getsource(object.__class__)
+                        inspect.getsource(o.__class__)
             except:
                 try:
-                    text += '\n\n"""' + inspect.getdoc(object).strip() + '"""'
+                    text += '\n\n"""' + inspect.getdoc(o).strip() + '"""'
                 except:
                     pass
         else:
             try:
                 text += '\n\nSource Code:\n\n' + \
-                        inspect.getsource(object)
+                        inspect.getsource(o)
             except:
                 try:
-                    text += '\n\n"""' + inspect.getdoc(object).strip() + '"""'
+                    text += '\n\n"""' + inspect.getdoc(o).strip() + '"""'
                 except:
                     pass
         self.setText(text)
@@ -138,13 +151,13 @@ class FillingTree(wxTreeCtrl):
     def getFullName(self, item, partial=''):
         """Return a syntactically proper name for item."""
         parent = self.GetItemParent(item)
-        parentobject = self.GetPyData(parent)
+        parento = self.GetPyData(parent)
         name = self.GetItemText(item)
         # Apply dictionary syntax to dictionary items, except the root
         # and first level children of a namepace.
-        if (type(parentobject) is types.DictType \
-            or str(type(parentobject))[17:23] == 'BTrees' \
-            and hasattr(parentobject, 'keys')) \
+        if (type(parento) is types.DictType \
+            or str(type(parento))[17:23] == 'BTrees' \
+            and hasattr(parento, 'keys')) \
         and ((item != self.root and parent != self.root) \
             or (parent == self.root and not self.rootIsNamespace)):
             name = '[' + name + ']'
@@ -228,6 +241,10 @@ class FillingText(wxStyledTextCtrl):
         self.SetTabWidth(4)
         self.SetUseTabs(0)
         self.SetReadOnly(1)
+        try:
+            self.SetWrapMode(1)
+        except AttributeError:
+            pass
 
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""

@@ -8,6 +8,7 @@ from wxPython.wx import *
 from shell import Shell
 from filling import Filling
 from version import VERSION
+import os
 
 
 class Crust(wxSplitterWindow):
@@ -55,12 +56,9 @@ class CrustFrame(wxFrame, ShellMenu):
         intro += '\nSponsored by Orbtech - Your source for Python programming expertise.'
         self.CreateStatusBar()
         self.SetStatusText(intro.replace('\n', ', '))
-
-        import os
         filename = os.path.join(os.path.dirname(__file__), 'PyCrust.ico')
         icon = wxIcon(filename, wxBITMAP_TYPE_ICO)
         self.SetIcon(icon)
-
         self.crust = Crust(parent=self, intro=intro, \
                            rootObject=rootObject, \
                            rootLabel=rootLabel, \
@@ -78,6 +76,10 @@ class CrustFrame(wxFrame, ShellMenu):
         # Temporary hack to share menus between PyCrust and PyShell.
         self.shell = self.crust.shell
         self.createMenus()
+        EVT_CLOSE(self, self.OnCloseWindow)
 
+    def OnCloseWindow(self, event):
+        self.crust.shell.destroy()
+        self.Destroy()
 
 
