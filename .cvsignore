@@ -3,6 +3,7 @@ bin
 .gdb_history
 Test
 config.cache
+configarg.cache
 config.status
 system.list
 linux.system.cache
@@ -17,6 +18,7 @@ linux-gnu.system.cache
 *.ncb
 *.pro
 *.opt
+*.d
 Release
 Debug
 ReleaseDLL
