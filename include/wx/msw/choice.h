@@ -70,6 +70,7 @@ public:
             WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
+    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoSetItemClientData( int n, void* clientData );
     virtual void* DoGetItemClientData( int n ) const;
     virtual void DoSetItemClientObject( int n, wxClientData* clientData );

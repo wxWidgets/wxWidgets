@@ -38,7 +38,7 @@
 
 #include "wx/msw/private.h"
 
-    IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
 
 // ============================================================================
 // implementation
@@ -253,6 +253,24 @@ wxClientData* wxChoice::DoGetItemClientObject( int n ) const
 // ----------------------------------------------------------------------------
 // wxMSW specific helpers
 // ----------------------------------------------------------------------------
+
+void wxChoice::DoMoveWindow(int x, int y, int width, int height)
+{
+    // here is why this is necessary: if the width is negative, the combobox
+    // window proc makes the window of the size width*height instead of
+    // interpreting height in the usual manner (meaning the height of the drop
+    // down list - usually the height specified in the call to MoveWindow()
+    // will not change the height of combo box per se)
+    //
+    // this behaviour is not documented anywhere, but this is just how it is
+    // here (NT 4.4) and, anyhow, the check shouldn't hurt - however without
+    // the check, constraints/sizers using combos may break the height
+    // constraint will have not at all the same value as expected
+    if ( width < 0 )
+        return;
+
+    wxControl::DoMoveWindow(x, y, width, height);
+}
 
 void wxChoice::DoSetSize(int x, int y,
                          int width, int WXUNUSED(height),

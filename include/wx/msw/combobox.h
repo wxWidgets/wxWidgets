@@ -86,7 +86,6 @@ public:
     WXHWND GetEditHWND() const;
 
 protected:
-    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual wxSize DoGetBestSize() const;
 };
 
