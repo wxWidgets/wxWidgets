@@ -42,7 +42,7 @@ public:
     ~wxColourData();
 
     bool GetChooseFull();
-    wxColour& GetColour();
+    wxColour GetColour();
     wxColour GetCustomColour(int i);
     void SetChooseFull(int flag);
     void SetColour(const wxColour& colour);
@@ -198,7 +198,7 @@ public:
 
     void EnableEffects(bool enable);
     bool GetAllowSymbols();
-    wxColour& GetColour();
+    wxColour GetColour();
     wxFont GetChosenFont();
     bool GetEnableEffects();
     wxFont GetInitialFont();

@@ -9976,18 +9976,12 @@ static PyObject *_wrap_wxMenuItem_GetTextColour(PyObject *self, PyObject *args, 
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxColour & _result_ref = wxMenuItem_GetTextColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxMenuItem_GetTextColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 
@@ -10048,18 +10042,12 @@ static PyObject *_wrap_wxMenuItem_GetBackgroundColour(PyObject *self, PyObject *
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxColour & _result_ref = wxMenuItem_GetBackgroundColour(_arg0);
-    _result = (wxColour *) &_result_ref;
+        _result = new wxColour (wxMenuItem_GetBackgroundColour(_arg0));
 
     wxPy_END_ALLOW_THREADS;
     if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxColour_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
 

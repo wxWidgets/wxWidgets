@@ -696,9 +696,9 @@ public:
     void SetFont(const wxFont& font);
     wxFont& GetFont();
     void SetTextColour(const wxColour& colText);
-    wxColour& GetTextColour();
+    wxColour GetTextColour();
     void SetBackgroundColour(const wxColour& colBack);
-    wxColour& GetBackgroundColour();
+    wxColour GetBackgroundColour();
     void SetBitmaps(const wxBitmap& bmpChecked,
                     const wxBitmap& bmpUnchecked = wxNullBitmap);
     void SetBitmap(const wxBitmap& bmpChecked);

@@ -118,6 +118,10 @@ from Mike Fletcher.  If you have any custom code that can be factored
 out of existing classes into a mix-in that would be useful to others
 please send it to me for inclusion in this package.
 
+Added a few little sample applications to help newbies to get started
+by having smaller functional apps to play with.  They can be found in
+wxPython/samples.
+
 
 
 

@@ -70,116 +70,116 @@ class JoystickTestPanel(wxPanel):
     # WDR: methods for JoystickTestPanel
 
     def GetYPositionCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Y_Position_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Y_Position_Ctrl)
 
     def GetXPositionCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_X_Position_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_X_Position_Ctrl)
 
 
     def GetVMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_V_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_V_Max_Ctrl)
 
     def GetVMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_V_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_V_Min_Ctrl)
 
     def GetRudderMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Rudder_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Rudder_Max_Ctrl)
 
     def GetRudderMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Rudder_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Rudder_Min_Ctrl)
 
     def GetMaxAxesCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Max_Axes_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Max_Axes_Ctrl)
 
     def GetMaxButtonsCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Max_Buttons_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Max_Buttons_Ctrl)
 
     def GetZMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Z_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Z_Max_Ctrl)
 
     def GetYMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Y_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Y_Max_Ctrl)
 
     def GetYMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Y_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Y_Min_Ctrl)
 
     def GetXMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_X_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_X_Min_Ctrl)
 
     def GetNumSticksCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Num_Sticks_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Num_Sticks_Ctrl)
 
     def GetHasPovCtsCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_POV_CTS_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_POV_CTS_Ctrl)
 
     def GetHasVCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_V_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_V_Ctrl)
 
     def GetHasUCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_U_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_U_Ctrl)
 
     def GetVPositionCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_V_Position_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_V_Position_Ctrl)
 
     def GetUPositionCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_U_Position_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_U_Position_Ctrl)
 
     def GetPovPositionCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_POV_Position_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_POV_Position_Ctrl)
 
     def GetButtonStateCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Button_State_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Button_State_Ctrl)
 
     def GetUMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_U_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_U_Max_Ctrl)
 
     def GetUMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_U_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_U_Min_Ctrl)
 
     def GetPollingMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Polling_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Polling_Max_Ctrl)
 
     def GetPollingMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Polling_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Polling_Min_Ctrl)
 
     def GetNumAxesCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Num_Axes_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Num_Axes_Ctrl)
 
     def GetNumButtonsCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Num_Buttons_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Num_Buttons_Ctrl)
 
     def GetXMaxCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_X_Max_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_X_Max_Ctrl)
 
     def GetZMinCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Z_Min_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Z_Min_Ctrl)
 
     def GetProdNameCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Prod_Name_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Prod_Name_Ctrl)
 
     def GetMfgIdCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Mfg_ID_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Mfg_ID_Ctrl)
 
     def GetHasPov4dirCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_POV_4DIR_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_POV_4DIR_Ctrl)
 
     def GetHasPovCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_POV_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_POV_Ctrl)
 
     def GetHasZCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_Z_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_Z_Ctrl)
 
     def GetHasRudderCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Has_Rudder_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Has_Rudder_Ctrl)
 
     def GetRudderPosCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Rudder_Pos_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Rudder_Pos_Ctrl)
 
     def GetPovCtsPosCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_POV_CTS_Pos_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_POV_CTS_Pos_Ctrl)
 
     def GetZPositionCtrl(self):
-        return wxPyTypeCast( self.FindWindowById(ID_Z_Position_Ctrl), "wxTextCtrl" )
+        return self.FindWindowById(ID_Z_Position_Ctrl)
 
     # WDR: handler implementations for JoysticktestPanel
 

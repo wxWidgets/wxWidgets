@@ -54,7 +54,7 @@ mail list.  You can view the archive or subscribe by going to
 
 Or you can send mail directly to the list using this address:
 
-       wxpython-users@lists.sourceforge.net
+       wxpython-users@lists.wxwindows.org
 
 
 Other Info

@@ -631,24 +631,6 @@ static PyObject *_wrap_wxEnableTopLevelWindows(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-static PyObject *_wrap_wxFlushEvents(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char *_kwnames[] = {  NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxFlushEvents",_kwnames)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxFlushEvents();
-
-    wxPy_END_ALLOW_THREADS;
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxGetResource(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     char * _result;
@@ -4192,7 +4174,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxGetEmailAddress", (PyCFunction) _wrap_wxGetEmailAddress, METH_VARARGS | METH_KEYWORDS },
 	 { "wxStripMenuCodes", (PyCFunction) _wrap_wxStripMenuCodes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetResource", (PyCFunction) _wrap_wxGetResource, METH_VARARGS | METH_KEYWORDS },
-	 { "wxFlushEvents", (PyCFunction) _wrap_wxFlushEvents, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEnableTopLevelWindows", (PyCFunction) _wrap_wxEnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYieldIfNeeded", (PyCFunction) _wrap_wxYieldIfNeeded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxYield", (PyCFunction) _wrap_wxYield, METH_VARARGS | METH_KEYWORDS },

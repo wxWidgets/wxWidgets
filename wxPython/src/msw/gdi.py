@@ -414,7 +414,7 @@ class wxPenPtr(wxGDIObjectPtr):
         return val
     def GetColour(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_GetColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetJoin(self, *_args, **_kwargs):
         val = apply(gdic.wxPen_GetJoin,(self,) + _args, _kwargs)
@@ -498,7 +498,7 @@ class wxBrushPtr(wxGDIObjectPtr):
             gdic.delete_wxBrush(self)
     def GetColour(self, *_args, **_kwargs):
         val = apply(gdic.wxBrush_GetColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetStipple(self, *_args, **_kwargs):
         val = apply(gdic.wxBrush_GetStipple,(self,) + _args, _kwargs)
@@ -694,7 +694,7 @@ class wxDCPtr(wxObjectPtr):
         return val
     def GetTextBackground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextBackground,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetTextExtent(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextExtent,(self,) + _args, _kwargs)
@@ -704,7 +704,7 @@ class wxDCPtr(wxObjectPtr):
         return val
     def GetTextForeground(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetTextForeground,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def GetUserScale(self, *_args, **_kwargs):
         val = apply(gdic.wxDC_GetUserScale,(self,) + _args, _kwargs)

@@ -59,9 +59,9 @@ public:
     void      SetTextValue(const wxString& str);
     wxFont&   GetFont();
     void      SetFont(wxFont& f);
-    wxColour& GetTextColour();
+    wxColour GetTextColour();
     void      SetTextColour(const wxColour& colour);
-    wxColour& GetBackgroundColour();
+    wxColour GetBackgroundColour();
     void      SetBackgroundColour(const wxColour& colour);
     wxBrush&  GetBackgroundBrush();
     int       GetAlignment();
@@ -122,7 +122,7 @@ public:
     wxGridCell* GetCell(int row, int col);
     int GetCellAlignment(int row, int col);
     %name(GetDefCellAlignment)int GetCellAlignment();
-    wxColour& GetCellBackgroundColour(int row, int col);
+    wxColour GetCellBackgroundColour(int row, int col);
     %name(GetDefCellBackgroundColour) wxColour& GetCellBackgroundColour();
 
     //wxGridCell *** GetCells();
@@ -148,7 +148,7 @@ public:
             return rows;
         }
     }
-    wxColour& GetCellTextColour(int row, int col);
+    wxColour GetCellTextColour(int row, int col);
     %name(GetDefCellTextColour)wxColour& GetCellTextColour();
     wxFont& GetCellTextFont(int row, int col);
     %name(GetDefCellTextFont)wxFont& GetCellTextFont();
@@ -161,9 +161,9 @@ public:
     bool GetEditable();
     wxScrollBar * GetHorizScrollBar();
     int GetLabelAlignment(int orientation);
-    wxColour& GetLabelBackgroundColour();
+    wxColour GetLabelBackgroundColour();
     int GetLabelSize(int orientation);
-    wxColour& GetLabelTextColour();
+    wxColour GetLabelTextColour();
     wxFont& GetLabelTextFont();
     wxString& GetLabelValue(int orientation, int pos);
     int GetRowHeight(int row);

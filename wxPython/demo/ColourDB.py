@@ -78,7 +78,7 @@ class TestWindow(wxScrolledWindow):
         numColours = len(colours)
 
         if rgn:
-            # determine the subset that have been exposed and needs drawn
+            # determine the subset that has been exposed and needs drawn
             rect = rgn.GetBox()
             pixStart = vs[1]*self.lineHeight + rect.y
             pixStop  = pixStart + rect.height

@@ -60,6 +60,32 @@ elseiff "%1" == "h" then
 	shift
 	set CMD=%SETUP% %FLAGS% HYBRID=1 build_ext --inplace %1 %2 %3 %4 %5 %6 %7 %8 %9
 
+rem "a" --> make all installers
+elseiff "%1" == "a" then
+	shift
+	set CMD=echo Finished!
+	call b.bat 15 c
+	call b.bat 15 f
+	call b.bat 15 r
+	call b.bat 15 c
+	call b.bat 15 h
+	call b.bat 15 r
+
+	call b.bat 20 c
+	call b.bat 20 f
+	call b.bat 20 r
+	call b.bat 20 c
+	call b.bat 20 h
+	call b.bat 20 r
+
+	call b.bat 21 c
+	call b.bat 21 f
+	call b.bat 21 r
+	call b.bat 21 c
+	call b.bat 21 h
+	call b.bat 21 r
+
+
 rem (no command arg) --> normal build for development
 else
 	set CMD=%SETUP% %FLAGS% HYBRID=0 build_ext --inplace --debug %1 %2 %3 %4 %5 %6 %7 %8 %9

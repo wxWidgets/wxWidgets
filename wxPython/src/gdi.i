@@ -442,7 +442,7 @@ public:
     ~wxPen();
 
     int GetCap();
-    wxColour& GetColour();
+    wxColour GetColour();
 
     int GetJoin();
     int GetStyle();
@@ -482,7 +482,7 @@ public:
     wxBrush(const wxColour& colour, int style=wxSOLID);
     ~wxBrush();
 
-    wxColour& GetColour();
+    wxColour GetColour();
     wxBitmap * GetStipple();
     int GetStyle();
     bool Ok();
@@ -567,12 +567,12 @@ public:
     %name(GetSizeTuple)void GetSize(int* OUTPUT, int* OUTPUT);
     wxSize GetSize();
     wxSize GetSizeMM();
-    wxColour& GetTextBackground();
+    wxColour GetTextBackground();
     void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT);
     %name(GetFullTextExtent)void GetTextExtent(const wxString& string,
                        long *OUTPUT, long *OUTPUT, long *OUTPUT, long* OUTPUT,
                        const wxFont* font = NULL);
-    wxColour& GetTextForeground();
+    wxColour GetTextForeground();
     void GetUserScale(double *OUTPUT, double *OUTPUT);
     long LogicalToDeviceX(long x);
     long LogicalToDeviceXRel(long x);

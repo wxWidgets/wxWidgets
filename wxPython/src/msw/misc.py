@@ -587,8 +587,6 @@ wxYieldIfNeeded = miscc.wxYieldIfNeeded
 
 wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 
-wxFlushEvents = miscc.wxFlushEvents
-
 wxGetResource = miscc.wxGetResource
 
 wxStripMenuCodes = miscc.wxStripMenuCodes

@@ -726,6 +726,8 @@ def wxFindWindowAtPoint(*_args, **_kwargs):
 
 wxCheckForInterrupt = misc2c.wxCheckForInterrupt
 
+wxFlushEvents = misc2c.wxFlushEvents
+
 wxResourceAddIdentifier = misc2c.wxResourceAddIdentifier
 
 wxResourceClear = misc2c.wxResourceClear

@@ -950,14 +950,14 @@ class wxMenuItemPtr(wxObjectPtr):
         return val
     def GetTextColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetTextColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetBackgroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetBackgroundColour,(self,) + _args, _kwargs)
         return val
     def GetBackgroundColour(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_GetBackgroundColour,(self,) + _args, _kwargs)
-        if val: val = wxColourPtr(val) 
+        if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
     def SetBitmaps(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuItem_SetBitmaps,(self,) + _args, _kwargs)
