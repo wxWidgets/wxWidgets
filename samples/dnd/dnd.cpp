@@ -626,7 +626,7 @@ BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(DnDShapeDialog, wxDialog)
-    EVT_BUTTON(Button_Colour, OnColour)
+    EVT_BUTTON(Button_Colour, DnDShapeDialog::OnColour)
 END_EVENT_TABLE()
 
 // ============================================================================
