@@ -951,9 +951,9 @@ protected:
     virtual wxBorder GetDefaultBorder() const;
 
     // get the default size for the new window if no explicit size given
-    // FIXME why 40 and not 20, 10 or ...? GTK can crash with 40. RR.
-    static int WidthDefault(int w) { return w == -1 ? 40 : w; }
-    static int HeightDefault(int h) { return h == -1 ? 40 : h; }
+    // FIXME why 20 and not 30, 10 or ...?
+    static int WidthDefault(int w) { return w == -1 ? 20 : w; }
+    static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
     // set the best size for the control if the default size was given:
     // replaces the fields of size == -1 with the best values for them and
