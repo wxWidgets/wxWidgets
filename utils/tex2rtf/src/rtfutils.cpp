@@ -1176,7 +1176,10 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         OutputCurrentSection();
       
         if (winHelp)
-          wxFprintf(Contents, _T("}{\\v %s}\\par\\pard\n"), topicName);
+        {
+          wxFprintf(Contents, _T("}{\\v %s}\\pard\\par\n"), topicName);
+          //WriteEnvironmentStyles();
+        }
         else if ((macroId == ltCHAPTER) || (macroId == ltCHAPTERHEADING))
           wxFprintf(Contents, _T("}\\par\\par\\pard\n"));
 
@@ -1333,7 +1336,10 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       if (winHelp)
       {
         if (!InPopups())
-          wxFprintf(jumpFrom, _T("}{\\v %s}\\par\\pard\n"), topicName);
+        {
+          wxFprintf(jumpFrom, _T("}{\\v %s}\\pard\\par\n"), topicName);
+          //WriteEnvironmentStyles();
+        }
       }
       else if ((macroId != ltSECTIONSTAR) && (macroId != ltGLOSS))
       {
@@ -1497,7 +1503,10 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       if (winHelp)
       {
         if (!InPopups())
-          wxFprintf(Sections, _T("}{\\v %s}\\par\\pard\n"), topicName);
+        {
+          wxFprintf(Sections, _T("}{\\v %s}\\pard\\par\n"), topicName);
+          //WriteEnvironmentStyles();
+        }
       }
       else if ((macroId != ltSUBSECTIONSTAR) && (macroId != ltMEMBERSECTION) &&
          (macroId != ltFUNCTIONSECTION))
@@ -1652,7 +1661,10 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       OutputCurrentSection();
 
       if (winHelp)
-        wxFprintf(Subsections, _T("}{\\v %s}\\par\\pard\n"), topicName);
+      {
+        wxFprintf(Subsections, _T("}{\\v %s}\\pard\\par\n"), topicName);
+        //WriteEnvironmentStyles();
+      }
       else if ((DocumentStyle == LATEX_ARTICLE) && (macroId != ltSUBSUBSECTIONSTAR))
         wxFprintf(Contents, _T("\\par\\pard\n"));
         
@@ -2575,11 +2587,13 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           // Extra par if parskip is more than zero (usually looks best.)
           // N.B. JACS 2004-02-21: shouldn't need this for linear RTF if
           // we have a suitable set of styles.
+#if 0
           if (winHelp && !inTabular && (ParSkip > 0))
 		  {
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
 		  }
+#endif          
           WriteEnvironmentStyles();
 		}
 		// 1 is a whole paragraph if ParSkip == 0,
@@ -2589,12 +2603,14 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 		  // Don't need a par at all if we've already had one,
 		  // and ParSkip == 0.
 
+#if 0
           // Extra par if parskip is more than zero (usually looks best.)
           if (winHelp && !inTabular && (ParSkip > 0))
 		  {
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
 		  }
+#endif          
           WriteEnvironmentStyles();
 		}
 /*
@@ -4921,7 +4937,10 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       wxChar *topicName = _T("bibliography");
 
       if (winHelp)
+      {
         wxFprintf(Contents, _T("{\\v %s}\\par\\pard\n"), topicName);
+        WriteEnvironmentStyles();
+      }
       else
         wxFprintf(Contents, _T("\\par\\par\\pard\n"));
 
