@@ -53,6 +53,7 @@ different API.
 
 Updated the AnalogClockWindow with many enhancements from E. A. Tacão.
 
+wxMac now has wx.ToggleButton!
 
 
 

@@ -22,8 +22,8 @@ MAKE_CONST_WXSTRING2(ToggleButtonNameStr, _T("wxToggleButton"));
 
 
 %{
-#if defined(__WXMAC__) || defined(__WXX11__)
-// implement dummy classes and such for wxMac
+#if !wxUSE_TOGGLEBTN
+// implement dummy items for platforms that don't have this class
 
 #define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
     
