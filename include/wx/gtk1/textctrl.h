@@ -28,7 +28,7 @@ class wxTextCtrl;
 class wxTextCtrl: public wxTextCtrlBase
 {
 public:
-    wxTextCtrl();
+    wxTextCtrl() { Init(); }
     wxTextCtrl(wxWindow *parent,
                wxWindowID id,
                const wxString &value = wxEmptyString,
@@ -139,17 +139,25 @@ public:
     void ApplyWidgetStyle();
     void CalculateScrollbar();
     void OnInternalIdle();
+    void UpdateFontIfNeeded();
 
     void SetModified() { m_modified = TRUE; }
 
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    // common part of all ctors
+    void Init();
+
 private:
+    // change the font for everything in this control
+    void ChangeFontGlobally();
+
     bool        m_modified;
     GtkWidget  *m_text;
     GtkWidget  *m_vScrollbar;
     bool        m_vScrollbarVisible;
+    bool        m_updateFont;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxTextCtrl);

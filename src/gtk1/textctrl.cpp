@@ -51,6 +51,7 @@ gtk_text_changed_callback( GtkWidget *WXUNUSED(widget), wxTextCtrl *win )
         wxapp_install_idle_handler();
 
     win->SetModified();
+    win->UpdateFontIfNeeded();
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetString( win->GetValue() );
@@ -95,9 +96,10 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_UPDATE_UI(wxID_REDO, wxTextCtrl::OnUpdateRedo)
 END_EVENT_TABLE()
 
-wxTextCtrl::wxTextCtrl()
+void wxTextCtrl::Init()
 {
     m_modified = FALSE;
+    m_updateFont = FALSE;
     m_text =
     m_vScrollbar = (GtkWidget *)NULL;
 }
@@ -111,7 +113,8 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name )
 {
-    m_modified = FALSE;
+    Init();
+
     Create( parent, id, value, pos, size, style, validator, name );
 }
 
@@ -321,23 +324,21 @@ void wxTextCtrl::SetValue( const wxString &value )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    wxString tmp = wxT("");
-    if (!value.IsNull()) tmp = value;
     if (m_windowStyle & wxTE_MULTILINE)
     {
         gint len = gtk_text_get_length( GTK_TEXT(m_text) );
         gtk_editable_delete_text( GTK_EDITABLE(m_text), 0, len );
         len = 0;
 #if wxUSE_UNICODE
-        wxWX2MBbuf tmpbuf = tmp.mbc_str();
+        wxWX2MBbuf tmpbuf = value.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), tmpbuf, strlen(tmpbuf), &len );
 #else
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), tmp.mbc_str(), tmp.Length(), &len );
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), value.mbc_str(), value.Length(), &len );
 #endif
     }
     else
     {
-        gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
+        gtk_entry_set_text( GTK_ENTRY(m_text), value.mbc_str() );
     }
 
     // GRG, Jun/2000: Changed this after a lot of discussion in
@@ -869,18 +870,35 @@ bool wxTextCtrl::SetFont( const wxFont &font )
 
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        // for compatibility with other ports: the font is a global controls
-        // characteristic, so change the font globally
-        wxString value = GetValue();
-        if ( !value.IsEmpty() )
-        {
-            Clear();
+        m_updateFont = TRUE;
 
-            AppendText(value);
-        }
+        ChangeFontGlobally();
     }
 
     return TRUE;
+}
+
+void wxTextCtrl::ChangeFontGlobally()
+{
+    // this method is very inefficient and hence should be called as rarely as
+    // possible!
+    wxASSERT_MSG( (m_windowStyle & wxTE_MULTILINE) && m_updateFont,
+                  _T("shouldn't be called for single line controls") );
+
+    wxString value = GetValue();
+    if ( !value.IsEmpty() )
+    {
+        Clear();
+        AppendText(value);
+
+        m_updateFont = FALSE;
+    }
+}
+
+void wxTextCtrl::UpdateFontIfNeeded()
+{
+    if ( m_updateFont )
+        ChangeFontGlobally();
 }
 
 bool wxTextCtrl::SetForegroundColour( const wxColour &WXUNUSED(colour) )
