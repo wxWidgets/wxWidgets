@@ -387,7 +387,13 @@ bool wxSound::DoPlay(unsigned flags) const
     //Start the movie!
     StartMovie(movie);
 
-    if (flags & wxSOUND_SYNC)
+    if (flags & wxSOUND_ASYNC)
+    {
+        //Start timer and play movie asyncronously
+        ((wxQTTimer*&)m_pTimer) = new wxQTTimer(movie, flags & wxSOUND_LOOP ? 1 : 0);
+        ((wxQTTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
+    }
+    else
     {
         wxASSERT_MSG(!(flags & wxSOUND_LOOP), "Can't loop and play syncronously at the same time");
 
@@ -396,12 +402,6 @@ bool wxSound::DoPlay(unsigned flags) const
             MoviesTask(movie, 0);
 
         DisposeMovie(movie);
-    }
-    else
-    {
-        //Start timer and play movie asyncronously
-        ((wxQTTimer*&)m_pTimer) = new wxQTTimer(movie, flags & wxSOUND_LOOP ? 1 : 0);
-        ((wxQTTimer*)m_pTimer)->Start(MOVIE_DELAY, wxTIMER_CONTINUOUS);
     }
 
     return true;
