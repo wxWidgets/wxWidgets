@@ -2048,15 +2048,19 @@ wxRect wxWin32Renderer::GetSliderShaftRect(const wxRect& rectOrig,
         // make the rect of minimal width and centre it
         rect.height = 2*BORDER_THICKNESS;
         rect.y = rectOrig.y + (rectOrig.height - rect.height) / 2;
+        if ( rect.y < 0 )
+            rect.y = 0;
 
         // leave margins on the sides
         rect.Deflate(SLIDER_MARGIN, 0);
     }
     else // vertical
     {
-        // same as above but in other sense
+        // same as above but in other direction
         rect.width = 2*BORDER_THICKNESS;
         rect.x = rectOrig.x + (rectOrig.width - rect.width) / 2;
+        if ( rect.x < 0 )
+            rect.x = 0;
 
         rect.Deflate(0, SLIDER_MARGIN);
     }
@@ -2235,7 +2239,7 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
     dc.SetPen(m_penBlack);
 
     int range = end - start;
-    for ( int n = 0; n < range; n++ )
+    for ( int n = 0; n < range; n += step )
     {
         wxCoord x = x1 + (len*n) / range;
 

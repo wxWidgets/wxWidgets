@@ -33,6 +33,8 @@
 
 #include "wx/sizer.h"
 
+#include "wx/checklst.h"
+
 #include "widgets.h"
 
 #include "icons/listbox.xpm"
@@ -80,6 +82,7 @@ protected:
 
     void OnListbox(wxCommandEvent& event);
     void OnListboxDClick(wxCommandEvent& event);
+    void OnCheckListbox(wxCommandEvent& event);
 
     void OnCheckOrRadioBox(wxCommandEvent& event);
 
@@ -121,6 +124,7 @@ protected:
 
     // the checkboxes
     wxCheckBox *m_chkSort,
+               *m_chkCheck,
                *m_chkHScroll,
                *m_chkVScroll;
 
@@ -165,7 +169,9 @@ BEGIN_EVENT_TABLE(ListboxWidgetsPage, WidgetsPage)
     EVT_UPDATE_UI(ListboxPage_DeleteSel, ListboxWidgetsPage::OnUpdateUIDeleteSelButton)
 
     EVT_LISTBOX(ListboxPage_Listbox, ListboxWidgetsPage::OnListbox)
-    EVT_LISTBOX_DCLICK(-1, ListboxWidgetsPage::OnListboxDClick)
+    EVT_LISTBOX_DCLICK(ListboxPage_Listbox, ListboxWidgetsPage::OnListboxDClick)
+    EVT_CHECKLISTBOX(ListboxPage_Listbox, ListboxWidgetsPage::OnCheckListbox)
+
     EVT_CHECKBOX(-1, ListboxWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(-1, ListboxWidgetsPage::OnCheckOrRadioBox)
 END_EVENT_TABLE()
@@ -187,6 +193,7 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
 
     m_chkVScroll =
     m_chkHScroll =
+    m_chkCheck =
     m_chkSort = (wxCheckBox *)NULL;
 
     m_lbox = (wxListBox *)NULL;
@@ -201,6 +208,9 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
     wxSizer *sizerTop = new wxBoxSizer(wxHORIZONTAL);
 
     // left pane
+    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set listbox parameters"));
+    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
+
     static const wxString modes[] =
     {
         _T("single"),
@@ -208,21 +218,24 @@ ListboxWidgetsPage::ListboxWidgetsPage(wxNotebook *notebook,
         _T("multiple"),
     };
 
-    wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set listbox parameters"));
     m_radioSelMode = new wxRadioBox(this, -1, _T("Selection &mode:"),
                                     wxDefaultPosition, wxDefaultSize,
                                     WXSIZEOF(modes), modes,
                                     1, wxRA_SPECIFY_COLS);
 
-    m_chkVScroll = new wxCheckBox(this, -1, _T("Always show &vertical scrollbar"));
-    m_chkHScroll = new wxCheckBox(this, -1, _T("Show &horizontal scrollbar"));
-    m_chkSort = new wxCheckBox(this, -1, _T("&Sort items"));
+    m_chkVScroll = CreateCheckBoxAndAddToSizer
+                   (
+                    sizerLeft,
+                    _T("Always show &vertical scrollbar")
+                   );
+    m_chkHScroll = CreateCheckBoxAndAddToSizer
+                   (
+                    sizerLeft,
+                    _T("Show &horizontal scrollbar")
+                   );
+    m_chkCheck = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Check list box"));
+    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Sort items"));
 
-    wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
-
-    sizerLeft->Add(m_chkVScroll, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkHScroll, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkSort, 0, wxLEFT | wxRIGHT, 5);
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioSelMode, 0, wxGROW | wxALL, 5);
 
@@ -298,6 +311,7 @@ void ListboxWidgetsPage::Reset()
 {
     m_radioSelMode->SetSelection(LboxSel_Single);
     m_chkSort->SetValue(FALSE);
+    m_chkCheck->SetValue(FALSE);
     m_chkHScroll->SetValue(TRUE);
     m_chkVScroll->SetValue(FALSE);
 }
@@ -335,10 +349,21 @@ void ListboxWidgetsPage::CreateLbox()
         delete m_lbox;
     }
 
-    m_lbox = new wxListBox(this, ListboxPage_Listbox,
-                           wxDefaultPosition, wxDefaultSize,
-                           0, NULL,
-                           flags);
+    if ( m_chkCheck->GetValue() )
+    {
+        m_lbox = new wxCheckListBox(this, ListboxPage_Listbox,
+                                    wxDefaultPosition, wxDefaultSize,
+                                    0, NULL,
+                                    flags);
+    }
+    else // just a listbox
+    {
+        m_lbox = new wxListBox(this, ListboxPage_Listbox,
+                               wxDefaultPosition, wxDefaultSize,
+                               0, NULL,
+                               flags);
+    }
+
     m_lbox->Set(items);
     m_sizerLbox->Add(m_lbox, 1, wxGROW | wxALL, 5);
     m_sizerLbox->Layout();
@@ -467,6 +492,11 @@ void ListboxWidgetsPage::OnListbox(wxCommandEvent& event)
 void ListboxWidgetsPage::OnListboxDClick(wxCommandEvent& event)
 {
     wxLogMessage(_T("Listbox item %d double clicked"), event.GetInt());
+}
+
+void ListboxWidgetsPage::OnCheckListbox(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Listbox item %d toggled"), event.GetInt());
 }
 
 void ListboxWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& event)

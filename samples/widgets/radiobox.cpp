@@ -59,6 +59,10 @@ enum
     RadioDir_TtoB
 };
 
+// default values for the number of radiobox items
+static const int DEFAULT_NUM_ENTRIES = 12;
+static const int DEFAULT_MAJOR_DIM = 4;
+
 // ----------------------------------------------------------------------------
 // RadioWidgetsPage
 // ----------------------------------------------------------------------------
@@ -261,8 +265,8 @@ RadioWidgetsPage::~RadioWidgetsPage()
 
 void RadioWidgetsPage::Reset()
 {
-    m_textMajorDim->SetValue(_T("4"));
-    m_textNumBtns->SetValue(_T("12"));
+    m_textMajorDim->SetValue(wxString::Format(_T("%d"), DEFAULT_MAJOR_DIM));
+    m_textNumBtns->SetValue(wxString::Format(_T("%d"), DEFAULT_NUM_ENTRIES));
     m_textLabel->SetValue(_T("I'm a radiobox"));
     m_textLabelBtns->SetValue(_T("item"));
 
@@ -292,7 +296,7 @@ void RadioWidgetsPage::CreateRadio()
         wxLogWarning(_T("Should have a valid number for number of items."));
 
         // fall back to default
-        count = 12;
+        count = DEFAULT_NUM_ENTRIES;
     }
 
     unsigned long majorDim;
@@ -301,7 +305,7 @@ void RadioWidgetsPage::CreateRadio()
         wxLogWarning(_T("Should have a valid major dimension number."));
 
         // fall back to default
-        majorDim = 4;
+        majorDim = DEFAULT_MAJOR_DIM;
     }
 
     wxString *items = new wxString[count];
@@ -417,5 +421,29 @@ void RadioWidgetsPage::OnUpdateUISelection(wxUpdateUIEvent& event)
     unsigned long n;
     event.Enable( m_textSel->GetValue().ToULong(&n) &&
                    (n < (size_t)m_radio->Number()) );
+}
+
+void RadioWidgetsPage::OnUpdateUIReset(wxUpdateUIEvent& event)
+{
+    // only enable it if something is not set to default
+    bool enable = m_chkVert->GetValue();
+
+    if ( !enable )
+    {
+        unsigned long numEntries;
+
+        enable = !m_textNumBtns->GetValue().ToULong(&numEntries) ||
+                    numEntries != DEFAULT_NUM_ENTRIES;
+
+        if ( !enable )
+        {
+            unsigned long majorDim;
+
+            enable = !m_textMajorDim->GetValue().ToULong(&majorDim) ||
+                        majorDim != DEFAULT_MAJOR_DIM;
+        }
+    }
+
+    event.Enable(enable);
 }
 

@@ -123,8 +123,6 @@ void wxSlider::Init()
     m_max =
     m_value = 0;
 
-    m_oldValue = INVALID_THUMB_VALUE;
-
     m_tickFreq = 1;
 
     m_lineSize =
@@ -193,11 +191,12 @@ bool wxSlider::ChangeValueTo(int value)
     if ( value == m_value )
         return FALSE;
 
-    m_oldValue = m_value;
+    // refresh the old thumb position
+    RefreshThumb();
 
     m_value = value;
 
-    // refresh the thumb position
+    // and the new one
     RefreshThumb();
 
     // generate the event
@@ -661,52 +660,38 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
 {
     wxRenderer *rend = GetRenderer();
     wxDC& dc = renderer->GetDC();
+    wxRect rectUpdate = GetUpdateClientRect();
+
     bool isVertical = IsVert();
     wxOrientation orient = GetOrientation();
     int flags = GetStateFlags();
 
-    // calculate the previous thumb and label positions if we need to erase
-    // them
-    wxRect rectThumbOld, rectLabelOld;
-    if ( m_oldValue == m_value )
-    {
-        // don't erase and redraw - this causes flicker
-        m_oldValue = INVALID_THUMB_VALUE;
-    }
-
-    if ( m_oldValue != INVALID_THUMB_VALUE )
-    {
-        CalcThumbRect(NULL, &rectThumbOld, &rectLabelOld, m_oldValue);
-
-        EraseBackground(dc, rectThumbOld);
-    }
-
     // first draw the shaft
-    wxRect rectShaft;
-    rend->DrawSliderShaft(dc, m_rectSlider, orient, flags, &rectShaft);
+    wxRect rectShaft = rend->GetSliderShaftRect(m_rectSlider, orient);
+    if ( rectUpdate.Intersects(rectShaft) )
+    {
+        rend->DrawSliderShaft(dc, m_rectSlider, orient, flags);
+    }
 
     // calculate the thumb position in pixels and draw it
     wxRect rectThumb, rectLabel;
     CalcThumbRect(&rectShaft, &rectThumb, &rectLabel);
 
-    rend->DrawSliderThumb(dc, rectThumb, orient, flags | m_thumbFlags);
+    if ( rectUpdate.Intersects(rectThumb) )
+    {
+        rend->DrawSliderThumb(dc, rectThumb, orient, flags | m_thumbFlags);
+    }
 
-    // draw the ticks
-    if ( HasTicks() )
+    // then draw the ticks
+    if ( HasTicks() && rectUpdate.Intersects(m_rectTicks) )
     {
         rend->DrawSliderTicks(dc, m_rectTicks, rectThumb.GetSize(), orient,
                               m_min, m_max, m_tickFreq);
     }
 
-    // draw the label near the thumb
-    if ( HasLabels() )
+    // finally, draw the label near the thumb
+    if ( HasLabels() && rectUpdate.Intersects(rectLabel) )
     {
-        // erase the old label
-        if ( m_oldValue != INVALID_THUMB_VALUE )
-        {
-            EraseBackground(dc, rectLabelOld);
-        }
-
         // align it to be close to the shaft
         int align;
         if ( isVertical )
@@ -727,8 +712,6 @@ void wxSlider::DoDraw(wxControlRenderer *renderer)
         rend->DrawLabel(dc, FormatValue(m_value), rectLabel,
                         flags & ~wxCONTROL_FOCUSED, align);
     }
-
-    m_oldValue = INVALID_THUMB_VALUE;
 }
 
 void wxSlider::RefreshThumb()
@@ -896,8 +879,6 @@ void wxSlider::SetShaftPartState(wxScrollThumb::Shaft shaftPart,
             m_thumbFlags |= flag;
         else
             m_thumbFlags &= ~flag;
-
-        m_oldValue = INVALID_THUMB_VALUE;
 
         RefreshThumb();
     }

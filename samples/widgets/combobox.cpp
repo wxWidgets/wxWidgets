@@ -206,13 +206,11 @@ ComboboxWidgetsPage::ComboboxWidgetsPage(wxNotebook *notebook,
                                  WXSIZEOF(kinds), kinds,
                                  1, wxRA_SPECIFY_COLS);
 
-    m_chkSort = new wxCheckBox(this, -1, _T("&Sort items"));
-    m_chkReadonly = new wxCheckBox(this, -1, _T("&Read only"));
-
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    sizerLeft->Add(m_chkSort, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkReadonly, 0, wxLEFT | wxRIGHT, 5);
+    m_chkSort = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Sort items"));
+    m_chkReadonly = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Read only"));
+
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
     sizerLeft->Add(m_radioKind, 0, wxGROW | wxALL, 5);
 

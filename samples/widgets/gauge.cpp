@@ -171,13 +171,11 @@ GaugeWidgetsPage::GaugeWidgetsPage(wxNotebook *notebook,
     // left pane
     wxStaticBox *box = new wxStaticBox(this, -1, _T("&Set style"));
 
-    m_chkVert = new wxCheckBox(this, -1, _T("&Vertical"));
-    m_chkSmooth = new wxCheckBox(this, -1, _T("&Smooth"));
-
     wxSizer *sizerLeft = new wxStaticBoxSizer(box, wxVERTICAL);
 
-    sizerLeft->Add(m_chkVert, 0, wxLEFT | wxRIGHT, 5);
-    sizerLeft->Add(m_chkSmooth, 0, wxLEFT | wxRIGHT, 5);
+    m_chkVert = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Vertical"));
+    m_chkSmooth = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Smooth"));
+
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
     wxButton *btn = new wxButton(this, GaugePage_Reset, _T("&Reset"));

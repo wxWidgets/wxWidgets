@@ -213,9 +213,6 @@ private:
     // the state of the thumb (wxCONTROL_XXX constants sum)
     int m_thumbFlags;
 
-    // the previous slider value
-    int m_oldValue;
-
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSlider)
 };

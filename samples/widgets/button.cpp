@@ -162,6 +162,11 @@ ButtonWidgetsPage::ButtonWidgetsPage(wxNotebook *notebook,
     m_chkFit = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Fit exactly"));
     m_chkDefault = CreateCheckBoxAndAddToSizer(sizerLeft, _T("&Default"));
 
+#ifndef __WXUNIVERSAL__
+    // only wxUniv currently supoprts buttons with images
+    m_chkImage->Disable();
+#endif // !wxUniv
+
     sizerLeft->Add(5, 5, 0, wxGROW | wxALL, 5); // spacer
 
     // should be in sync with enums Button[HV]Align!
@@ -309,10 +314,12 @@ void ButtonWidgetsPage::CreateButton()
                             wxDefaultPosition, wxDefaultSize,
                             flags);
 
+#ifdef __WXUNIVERSAL__
     if ( m_chkImage->GetValue() )
     {
         m_button->SetImageLabel(wxTheApp->GetStdIcon(wxICON_INFORMATION));
     }
+#endif // wxUniv
 
     if ( m_chkDefault->GetValue() )
     {
