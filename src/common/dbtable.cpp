@@ -1326,7 +1326,7 @@ void wxDbTable::BuildWhereClause(wxString &pWhereClause, int typeOfWhere,
                         wxString strMsg;
                         strMsg.Printf(wxT("wxDbTable::bindParams(): Unknown column type for colDefs %d colName %s"),
                                     colNo,colDefs[colNo].ColName);
-                        wxFAIL_MSG(wxT(strMsg));
+                        wxFAIL_MSG(strMsg.c_str());
                     }
                     break;
             }

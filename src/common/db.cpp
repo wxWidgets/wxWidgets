@@ -753,9 +753,9 @@ bool wxDb::open(bool failOnDataTypeUnsupported)
 bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
 {
     wxASSERT(inConnectStr.Length());
-    dsn        = "";
-    uid        = "";
-    authStr    = "";
+    dsn        = wxT("");
+    uid        = wxT("");
+    authStr    = wxT("");
 
     RETCODE retcode;
 
@@ -770,17 +770,19 @@ bool wxDb::Open(const wxString& inConnectStr, bool failOnDataTypeUnsupported)
             cout << wxT("SQLSetConnectOption(CURSOR_LIB) successful") << endl;
         else
             cout << wxT("SQLSetConnectOption(CURSOR_LIB) failed") << endl;
+#else
+        wxUnusedVar(retcode);
 #endif
     }
 
     // Connect to the data source
-    UCHAR outConnectBuffer[SQL_MAX_CONNECTSTR_LEN+1];  // MS recommends at least 1k buffer
+    SQLTCHAR outConnectBuffer[SQL_MAX_CONNECTSTR_LEN+1];  // MS recommends at least 1k buffer
     short outConnectBufferLen;
 
     inConnectionStr = inConnectStr;
 
-    retcode = SQLDriverConnect(hdbc, NULL, (UCHAR FAR *)inConnectionStr.c_str(),
-                        inConnectionStr.Length(), (UCHAR FAR *)outConnectBuffer,
+    retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
+                        inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
                         sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE );
 
     if ((retcode != SQL_SUCCESS) &&
@@ -802,8 +804,8 @@ bool wxDb::Open(const wxString &Dsn, const wxString &Uid, const wxString &AuthSt
     uid        = Uid;
     authStr    = AuthStr;
 
-    inConnectionStr = "";
-    outConnectionStr = "";
+    inConnectionStr = wxT("");
+    outConnectionStr = wxT("");
 
     RETCODE retcode;
 
@@ -879,13 +881,13 @@ bool wxDb::Open(wxDb *copyDb)
     if (copyDb->OpenedWithConnectionString())
     {
         // Connect to the data source
-        UCHAR outConnectBuffer[SQL_MAX_CONNECTSTR_LEN+1];
+        SQLTCHAR outConnectBuffer[SQL_MAX_CONNECTSTR_LEN+1];
         short outConnectBufferLen;
 
         inConnectionStr = copyDb->GetConnectionInStr();
 
-        retcode = SQLDriverConnect(hdbc, NULL, (UCHAR FAR *)inConnectionStr.c_str(),
-                            inConnectionStr.Length(), (UCHAR FAR *)outConnectBuffer,
+        retcode = SQLDriverConnect(hdbc, NULL, (SQLTCHAR FAR *)inConnectionStr.c_str(),
+                            inConnectionStr.Length(), (SQLTCHAR FAR *)outConnectBuffer,
                             sizeof(outConnectBuffer), &outConnectBufferLen, SQL_DRIVER_COMPLETE);
 
         if ((retcode != SQL_SUCCESS) &&
