@@ -25,8 +25,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #include "wx/mac/uma.h"
 // Button
 
-static const int kMacOSXHorizontalBorder = 1 ;
-static const int kMacOSXVerticalBorder = 1 ;
+static const int kMacOSXHorizontalBorder = 2 ;
+static const int kMacOSXVerticalBorder = 4 ;
 
 bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
