@@ -4,10 +4,10 @@
 tn0001.txt   How to add a new sample
 tn0002.txt   wxWindows translator guide
 tn0003.txt   Adding wxWindows class documentation
-tn0004.htm   Compiling a sample in the C++Builder IDE
+tn0004.htm   *** Not currently applicable Compiling a sample in the C++Builder IDE
 tn0005.txt   Adding a wxWindows contribution
 tn0006.txt   *** REMOVED *** (obsoleted by tn0013.txt)
-tn0007.txt   Using and modifying the BC++ IDE files
+tn0007.txt   *** Not currently applicable Using and modifying the BC++ IDE files
 tn0008.htm   How to learn wxWindows programming
 tn0009.htm   Creating and converting icons
 tn0010.htm   Compiling wxWindows applications in the VC++ IDE
