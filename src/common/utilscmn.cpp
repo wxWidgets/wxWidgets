@@ -41,6 +41,7 @@
         #include "wx/menu.h"
         #include "wx/msgdlg.h"
         #include "wx/textdlg.h"
+        #include "wx/textctrl.h"    // for wxTE_PASSWORD
         #if wxUSE_ACCEL
             #include "wx/menuitem.h"
             #include "wx/accel.h"

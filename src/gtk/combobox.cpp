@@ -18,6 +18,8 @@
 #include "wx/settings.h"
 #include "wx/intl.h"
 
+#include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
 

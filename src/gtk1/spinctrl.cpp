@@ -18,6 +18,8 @@
 
 #include "wx/utils.h"
 
+#include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
+
 #include <math.h>
 
 #include <gdk/gdk.h>
