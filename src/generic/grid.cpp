@@ -3504,7 +3504,7 @@ void wxGridWindow::OnEraseBackground( wxEraseEvent& WXUNUSED(event) )
 
 // Internal Helper function for computing row or column from some
 // (unscrolled) coordinate value, using either
-// m_defaultRowHeight/m_defaultColWidth or binary search on array 
+// m_defaultRowHeight/m_defaultColWidth or binary search on array
 // of m_rowBottoms/m_ColRights to speed up the search!
 
 // Internal helper macros for simpler use of that function
@@ -4464,7 +4464,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
     if (m_isDragging)
     {
-        m_rowLabelWin->ReleaseMouse();
+        if (m_rowLabelWin->HasCapture()) m_rowLabelWin->ReleaseMouse();
         m_isDragging = FALSE;
     }
 
@@ -4671,7 +4671,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
     if (m_isDragging)
     {
-        m_colLabelWin->ReleaseMouse();
+        if (m_colLabelWin->HasCapture()) m_colLabelWin->ReleaseMouse();
         m_isDragging = FALSE;
     }
 
@@ -4881,7 +4881,7 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
 
     if ( m_winCapture )
     {
-        m_winCapture->ReleaseMouse();
+        if (m_winCapture->HasCapture()) m_winCapture->ReleaseMouse();
         m_winCapture = (wxWindow *)NULL;
     }
 
@@ -5151,7 +5151,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
             {
                 if (m_winCapture)
                 {
-                    m_winCapture->ReleaseMouse();
+                    if (m_winCapture->HasCapture()) m_winCapture->ReleaseMouse();
                     m_winCapture = NULL;
                 }
 
@@ -6822,7 +6822,7 @@ void wxGrid::ShowCellEditControl()
 
             // cell is shifted by one pixel
             // However, don't allow x or y to become negative
-            // since the SetSize() method interprets that as 
+            // since the SetSize() method interprets that as
             // "don't change."
             if (rect.x > 0)
                 rect.x--;
@@ -6932,7 +6932,7 @@ void wxGrid::XYToCell( int x, int y, wxGridCellCoords& coords )
 
 // Internal Helper function for computing row or column from some
 // (unscrolled) coordinate value, using either
-// m_defaultRowHeight/m_defaultColWidth or binary search on array 
+// m_defaultRowHeight/m_defaultColWidth or binary search on array
 // of m_rowBottoms/m_ColRights to speed up the search!
 
 static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
@@ -6949,7 +6949,7 @@ static int CoordToRowOrCol(int coord, int defaultDist, int minDist,
 
     if ( i_max >= BorderArray.GetCount())
         i_max = BorderArray.GetCount() - 1;
-    else 
+    else
     {
         if ( coord >= BorderArray[i_max])
         {
