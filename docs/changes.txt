@@ -183,6 +183,7 @@ Unix (Base/GUI):
 
 - minor OpenBSD compilation/linking fixes, now builds OOB under OpenBSD 3.1
 - don't include -I/usr/include nor -I/usr/local/include in wx-config output
+- shared library symbols are now versioned on platforms that support it (Linux)
 
 wxMSW:
 

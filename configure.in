@@ -2590,6 +2590,8 @@ if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
 fi
 
+WX_VERSION_TAG=`echo WX${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_${WX_RELEASE} | tr "[[a-z]]" "[[A-Z]]"`
+
 TOOLCHAIN_NAME="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
 TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
 
@@ -2688,20 +2690,24 @@ if test "$wxUSE_SHARED" = "yes"; then
         PIC_FLAG="-fPIC"
     fi
 
+
+    dnl use versioned symbols if available on the platform
+    WX_VERSIONED_SYMBOLS([\$(top_builddir)/version-script])
+
     dnl the command to use for creating the shared library
-    SHARED_LD="${CXX} -shared -o"
+    SHARED_LD="${CXX} -shared $LDFLAGS_VERSIONING -o"
 
     case "${host}" in
       *-hp-hpux* )
         dnl default settings are good for gcc but not for the native HP-UX
         if test "$GCC" = "yes"; then
             dnl -o flag must be after PIC flag
-            SHARED_LD="${CXX} -shared ${PIC_FLAG} -o"
+            SHARED_LD="${CXX} -shared ${PIC_FLAG} $LDFLAGS_VERSIONING -o"
         else
             dnl no idea why it wants it, but it does
             LDFLAGS="$LDFLAGS -L/usr/lib"
 
-            SHARED_LD="${CXX} -b -o"
+            SHARED_LD="${CXX} -b $LDFLAGS_VERSIONING -o"
             PIC_FLAG="+Z"
         fi
 
@@ -2747,7 +2753,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             dnl Solaris (which use old style C syntax)
             CPPFLAGS="$CPPFLAGS -isystem /usr/openwin/include"
         else
-            SHARED_LD="${CXX} -G -o"
+            SHARED_LD="${CXX} -G $LDFLAGS_VERSIONING -o"
             PIC_FLAG="-KPIC"
             SONAME_FLAGS="-h ${WX_LIBRARY_NAME_SHARED}"
             SONAME_FLAGS_GL="-h ${WX_LIBRARY_NAME_SHARED_GL}"
@@ -2764,7 +2770,7 @@ if test "$wxUSE_SHARED" = "yes"; then
         dnl this can be done either with the exe linker flag -Wl,-bind_at_load
         dnl or with a double stage link in order to create a single module
         dnl "-init _wxWindowsDylibInit" not useful with lazy linking solved
-        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace -o"
+        SHARED_LD="\${top_srcdir}/distrib/mac/shared-ld-sh -undefined suppress -flat_namespace $LDFLAGS_VERSIONING -o"
         PIC_FLAG="-dynamic -fPIC"
         SONAME_FLAGS="-compatibility_version ${WX_RELEASE} -current_version ${WX_VERSION}"
         SONAME_FLAGS_GL=${SONAME_FLAGS}
@@ -2778,7 +2784,7 @@ if test "$wxUSE_SHARED" = "yes"; then
             AC_CHECK_PROG(AIX_CXX_LD, makeC++SharedLib,
                           makeC++SharedLib, /usr/lpp/xlC/bin/makeC++SharedLib)
 
-            SHARED_LD="$(AIX_CXX_LD) -p 0 -o"
+            SHARED_LD="$(AIX_CXX_LD) -p 0 $LDFLAGS_VERSIONING -o"
         fi
       ;;
 
@@ -2802,7 +2808,7 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-beos* )
         dnl can't use gcc under BeOS for shared library creation because it
         dnl complains about missing 'main'
-        SHARED_LD="${LD} -shared -o"
+        SHARED_LD="${LD} -shared $LDFLAGS_VERSIONING -o"
       ;;
 
       *-*-irix* )
@@ -5197,6 +5203,7 @@ AC_SUBST(LDFLAGS_EXE)
 AC_SUBST(OPENGL_LIBS)
 AC_SUBST(DMALLOC_LIBS)
 AC_SUBST(EXTRADEFS)
+AC_SUBST(WX_VERSION_TAG)
 
 dnl additional resurces settings
 AC_SUBST(RESCOMP)
@@ -5262,6 +5269,7 @@ dnl (the original file name may be overriden by appending another name after a
 dnl colon)
 AC_OUTPUT([
             wx-config
+            version-script
             src/make.env
             src/makeprog.env
             src/makelib.env
