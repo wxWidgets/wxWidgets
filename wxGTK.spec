@@ -167,7 +167,6 @@ wx/beforestd.h
 wx/buffer.h
 wx/build.h
 wx/chkconf.h
-wx/clntdata.h
 wx/cmdline.h
 wx/confbase.h
 wx/config.h
