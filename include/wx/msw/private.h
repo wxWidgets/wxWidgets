@@ -158,7 +158,7 @@ WXDLLEXPORT extern void wxFindMaxSize(WXHWND hwnd, RECT *rect);
 WXDLLEXPORT_DATA(extern wxList) wxScrollBarList;
 // The MakeProcInstance version of the function wxSubclassedGenericControlProc
 WXDLLEXPORT_DATA(extern FARPROC) wxGenericControlSubClassProc;
-WXDLLEXPORT_DATA(extern char*) wxBuffer;
+WXDLLEXPORT_DATA(extern wxChar*) wxBuffer;
 WXDLLEXPORT_DATA(extern HINSTANCE) wxhInstance;
 
 WXDLLEXPORT wxWindow* wxFindControlFromHandle(WXHWND hWnd);
