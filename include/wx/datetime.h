@@ -17,6 +17,8 @@
     #pragma interface "datetime.h"
 #endif
 
+#include "wx/defs.h"
+
 #if wxUSE_DATETIME
 
 #include <time.h>
