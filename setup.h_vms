@@ -106,7 +106,9 @@
 #endif
 
 #undef __WIN95__
+#ifndef __WIN32__
 #undef __WIN32__
+#endif
 #undef __GNUWIN32__
 #undef STRICT
 #undef WINVER
@@ -152,13 +154,13 @@
 /*
  * Use iODBC
  */
-#define wxUSE_ODBC 0
+#define wxUSE_ODBC 1
 #define wxODBC_FWD_ONLY_CURSORS 1
 #define wxODBC_BACKWARD_COMPATABILITY 0
 /*
  * Use freetype
  */
-#define wxUSE_FREETYPE 0
+#define wxUSE_FREETYPE 1
 /*
  * Use Threads
  */

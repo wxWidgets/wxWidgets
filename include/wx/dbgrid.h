@@ -136,7 +136,7 @@ public:
     virtual void     SetValueAsCustom(int row, int col, const wxString& typeName, void* value);
 
 
-    virtual wxString wxDbGridTableBase::GetColLabelValue(int col);
+    virtual wxString GetColLabelValue(int col);
 
     virtual bool     AssignDbTable(wxDbTable *tab, int count = wxUSE_QUERY, bool takeOwnership=TRUE);
     virtual void     ValidateRow(int row);

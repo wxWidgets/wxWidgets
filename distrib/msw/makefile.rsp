@@ -136,9 +136,13 @@ samples/caret/descrip.mms
 samples/checklst/descrip.mms
 samples/config/descrip.mms
 samples/controls/descrip.mms
+samples/db/descrip.mms
 samples/dialogs/descrip.mms
+samples/dialup/descrip.mms
 samples/dnd/descrip.mms
+samples/docview/descrip.mms
 samples/drawing/descrip.mms
+samples/font/descrip.mms
 samples/image/descrip.mms
 samples/mdi/descrip.mms
 samples/menu/descrip.mms

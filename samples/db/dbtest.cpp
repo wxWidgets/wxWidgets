@@ -2651,6 +2651,9 @@ void DisplayDbDiagnostics(wxDb *pDb)
     }
     s += "\n";
 
+#ifdef __VMS__
+#pragma message disable incboodep
+#endif
     comma = FALSE;
     s += langDBINF_TXN_ISOLATION_OPTS;
     if (pDb->dbInf.txnIsolationOptions & SQL_TXN_READ_UNCOMMITTED)
@@ -2758,6 +2761,9 @@ void DisplayDbDiagnostics(wxDb *pDb)
     if (pDb->dbInf.staticSensitivity & SQL_SS_UPDATES)
         {if (comma++) s += ", "; s += langDBINF_UPDATES;}
     s += "\n";
+#ifdef __VMS__
+#pragma message enable incboodep
+#endif
 
 
     s += langDBINF_TXN_CAPABLE;

@@ -42,6 +42,8 @@ OBJECTS = \
 		dirdlgg.obj,\
 		fontdlgg.obj,\
 		grid.obj,\
+		gridctrl.obj,\
+		gridsel.obj,\
 		helpext.obj,\
 		helphtml.obj,\
 		helpwxht.obj,\
@@ -83,6 +85,8 @@ SOURCES = \
 		filedlgg.cpp,\
 		fontdlgg.cpp,\
 		grid.cpp,\
+		gridctrl.cpp,\
+		gridsel.cpp,\
 		helpext.cpp,\
 		helphtml.cpp,\
 		helpwxht.cpp,\
@@ -143,6 +147,8 @@ dirdlgg.obj : dirdlgg.cpp
 filedlgg.obj : filedlgg.cpp
 fontdlgg.obj : fontdlgg.cpp
 grid.obj : grid.cpp
+gridctrl.obj : gridctrl.cpp
+gridsel.obj : gridsel.cpp
 helpext.obj : helpext.cpp
 helphtml.obj : helphtml.cpp
 helpwxht.obj : helpwxht.cpp

@@ -44,6 +44,7 @@ OBJECTS = \
 		clipcmn.obj,\
 		clntdata.obj,\
 		cmdline.obj,\
+		cmdproc.obj,\
 		cmndata.obj,\
 		config.obj,\
 		containr.obj,\
@@ -53,6 +54,7 @@ OBJECTS = \
 		datetime.obj,\
 		datstrm.obj,\
 		db.obj,\
+		dbgrid.obj,\
 		dbtable.obj,\
 		dcbase.obj,\
 		dlgcmn.obj,\
@@ -156,6 +158,7 @@ SOURCES = \
 		clipcmn.cpp,\
 		clntdata.cpp,\
 		cmdline.cpp,\
+		cmdproc.cpp,\
 		cmndata.cpp,\
 		config.cpp,\
 		containr.cpp,\
@@ -165,6 +168,7 @@ SOURCES = \
 		datetime.cpp,\
 		datstrm.cpp,\
 		db.cpp,\
+		dbgrid.cpp,\
 		dbtable.cpp,\
 		dcbase.cpp,\
 		dlgcmn.cpp,\
@@ -299,6 +303,7 @@ choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
 clntdata.obj : clntdata.cpp
 cmdline.obj : cmdline.cpp
+cmdproc.obj : cmdproc.cpp
 cmndata.obj : cmndata.cpp
 config.obj : config.cpp
 containr.obj : containr.cpp
@@ -308,6 +313,7 @@ ctrlsub.obj : ctrlsub.cpp
 datetime.obj : datetime.cpp
 datstrm.obj : datstrm.cpp
 db.obj : db.cpp
+dbgrid.obj : dbgrid.cpp
 dbtable.obj : dbtable.cpp
 dcbase.obj : dcbase.cpp
 dlgcmn.obj : dlgcmn.cpp
