@@ -9,5 +9,11 @@
         <wx-lib>base</wx-lib>
         <win32-res>rotate.rc</win32-res>
     </exe>
+    
+    <wx-data id="data">
+        <files>
+            kclub.bmp
+        </files>
+    </wx-data>
 
 </makefile>
