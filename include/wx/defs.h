@@ -678,7 +678,7 @@ typedef wxUint16 wxWord;
         typedef int wxInt32;
         typedef unsigned int wxUint32;
 
-		#if defined (__MWERKS__) && defined(__MACH__)
+		#if defined(__MACH__) && !defined(SIZEOF_WCHAR_T)
 			#define SIZEOF_WCHAR_T 4
 		#endif
         #if wxUSE_WCHAR_T && !defined(SIZEOF_WCHAR_T)
