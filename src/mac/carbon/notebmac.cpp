@@ -32,18 +32,12 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
 
-#ifdef __DARWIN__
-  // I got these values for Mac OS X from the Appearance mgr docs. (Mark Newsam)
-const short kwxMacTabLeftMargin = 20 ;
-const short kwxMacTabTopMargin = 38 ;
-const short kwxMacTabRightMargin = 20 ;
-const short kwxMacTabBottomMargin = 12 ;
-#else
-const short kwxMacTabLeftMargin = 16 ;
-const short kwxMacTabTopMargin = 30 ;
-const short kwxMacTabRightMargin = 16 ;
-const short kwxMacTabBottomMargin = 16 ;
-#endif
+static bool constantsSet = false ;
+
+ short kwxMacTabLeftMargin = 0 ;
+ short kwxMacTabTopMargin = 0 ;
+ short kwxMacTabRightMargin = 0 ;
+ short kwxMacTabBottomMargin = 0 ;
 
 // ----------------------------------------------------------------------------
 // event table
@@ -76,10 +70,31 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // common part of all ctors
 void wxNotebook::Init()
 {
-#ifdef __DARWIN__
-    m_macHorizontalBorder = 7;
-    m_macVerticalBorder = 8;
-#endif
+    if ( !constantsSet )
+    {
+        if ( UMAHasAquaLayout() )
+        {
+      // I got these values for Mac OS X from the Appearance mgr docs. (Mark Newsam)
+            kwxMacTabLeftMargin = 20 ;
+            kwxMacTabTopMargin = 38 ;
+            kwxMacTabRightMargin = 20 ;
+            kwxMacTabBottomMargin = 12 ;
+        }
+        else
+        {
+            kwxMacTabLeftMargin = 16 ;
+            kwxMacTabTopMargin = 30 ;
+            kwxMacTabRightMargin = 16 ;
+            kwxMacTabBottomMargin = 16 ;
+        }
+        constantsSet = true ;
+    }
+    if ( UMAHasAquaLayout() )
+    {
+        m_macHorizontalBorder = 7;
+        m_macVerticalBorder = 8;
+    }
+
     m_nSelection = -1;
 }
 
