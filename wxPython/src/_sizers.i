@@ -251,6 +251,21 @@ public:
         }
 
         
+        bool Detach(PyObject* item) {
+            bool blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
+            wxPyEndBlockThreads(blocked);
+            if ( info.window )
+                return self->Detach(info.window);
+            else if ( info.sizer )
+                return self->Detach(info.sizer);
+            else if ( info.gotPos )
+                return self->Detach(info.pos);
+            else 
+                return False;
+        }
+
+        
         void _SetItemMinSize(PyObject* item, const wxSize& size) {
             bool blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
@@ -314,11 +329,11 @@ public:
 
     %pythoncode {
     def GetSizeTuple(self):
-        return self.GetSize().asTuple()
+        return self.GetSize().Get()
     def GetPositionTuple(self):
-        return self.GetPosition().asTuple()
+        return self.GetPosition().Get()
     def GetMinSizeTuple(self):
-        return self.GetMinSize().asTuple()
+        return self.GetMinSize().Get()
     }
 
     virtual void RecalcSizes();
