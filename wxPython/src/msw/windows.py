@@ -559,6 +559,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def OnPaint(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_OnPaint,(self,) + _args, _kwargs)
         return val
+    def GetDefaultItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetDefaultItem,(self,) + _args, _kwargs)
+        return val
+    def SetDefaultItem(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_SetDefaultItem,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
     # replaces broken shadow method
@@ -592,12 +598,6 @@ class wxPanelPtr(wxWindowPtr):
         return val
     def InitDialog(self, *_args, **_kwargs):
         val = apply(windowsc.wxPanel_InitDialog,(self,) + _args, _kwargs)
-        return val
-    def GetDefaultItem(self, *_args, **_kwargs):
-        val = apply(windowsc.wxPanel_GetDefaultItem,(self,) + _args, _kwargs)
-        return val
-    def SetDefaultItem(self, *_args, **_kwargs):
-        val = apply(windowsc.wxPanel_SetDefaultItem,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxPanel instance at %s>" % (self.this,)

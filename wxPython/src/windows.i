@@ -405,6 +405,9 @@ public:
     // A way to do the native draw first...  Too bad it isn't in wxGTK too.
     void OnPaint(wxPaintEvent& event);
 #endif
+
+    wxButton* GetDefaultItem();
+    void SetDefaultItem(wxButton *btn);
 };
 
 
@@ -460,8 +463,6 @@ public:
     %pragma(python) addtomethod = "wxPrePanel:val._setOORInfo(val)"
 
     void InitDialog();
-    wxButton* GetDefaultItem();
-    void SetDefaultItem(wxButton *btn);
 
 };
 
