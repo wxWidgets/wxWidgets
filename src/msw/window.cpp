@@ -2084,16 +2084,27 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             // has WS_EX_CONTROLPARENT style, so don't call it in this case
             bool canSafelyCallIsDlgMsg = TRUE;
 
-            HWND hwnd = ::GetFocus();
-            if ( hwnd && !(::IsWindowEnabled(hwnd) && ::IsWindowVisible(hwnd)) )
+            HWND hwndFocus = ::GetFocus();
+            while ( hwndFocus )
             {
-                hwnd = ::GetParent(hwnd);
-                if ( hwnd &&
-                      (::GetWindowLong(hwnd, GWL_STYLE) & WS_EX_CONTROLPARENT) )
+                if ( !::IsWindowEnabled(hwndFocus) ||
+                        !::IsWindowVisible(hwndFocus) )
                 {
                     // it would enter an infinite loop if we do this!
                     canSafelyCallIsDlgMsg = FALSE;
+
+                    break;
                 }
+
+                if ( !(::GetWindowLong(hwndFocus, GWL_STYLE) & WS_CHILD) )
+                {
+                    // it's a top level window, don't go further -- e.g. even
+                    // if the parent of a dialog is disabled, this doesn't
+                    // break navigation inside the dialog
+                    break;
+                }
+
+                hwndFocus = ::GetParent(hwndFocus);
             }
 
             if ( canSafelyCallIsDlgMsg && ::IsDialogMessage(GetHwnd(), msg) )
