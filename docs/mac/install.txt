@@ -102,6 +102,7 @@ Several AppleScript files are provided in the docs:mac directory:
   - M5build.applescript to automatically build all samples/demos projects
   - M8xml2mcp.applescript to convert xml files to CodeWarrior 8 projects
   - M8mcp2xml.applescript to convert CodeWarrior 8 projects to xml files
+  - SetXMLCreator.applescript to set correct creator type (see below)
 
 To run the XML to MCP conversion scripts:
 
@@ -110,6 +111,9 @@ the applescript and when asked for a folder pick src/. Then it
 takes a while to scan all dirs for the xml files and convert
 them to mcps. If some conversions fail it means an mcp already
 exists (back them up prior to running the script).
+
+To set the correct creator type for importing into CodeWarrior,
+you may need to run SetXMLCreator.applescript.
 
 Apple Developer Tools
 ---------------------
