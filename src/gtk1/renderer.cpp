@@ -101,16 +101,28 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 const wxRect& rect,
                                 int flags)
 {
+
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
+    if (s_button == NULL)
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+	gtk_widget_realize( s_window );
+	s_button = gtk_button_new();
+	gtk_container_add( GTK_CONTAINER(s_window), s_button );
+	gtk_widget_realize( s_button );
+    }
+
     gtk_paint_box
     (
-        win->m_wxwindow->style,
+	s_button->style,
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
-        (GdkRectangle*) NULL,
-        win->m_wxwindow,
-        (char *)"button", // const_cast
-        dc.XLOG2DEV(rect.x) - 1, rect.y - 1, rect.width + 2, rect.height + 2
+	NULL,
+        s_button,
+        "button",
+        dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
     );
 }
 
