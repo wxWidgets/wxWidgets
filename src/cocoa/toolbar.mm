@@ -147,6 +147,8 @@ wxToolBarTool::~wxToolBarTool()
 
 bool wxToolBarTool::CreateButtonCell()
 {
+    wxAutoNSAutoreleasePool pool;
+
     NSImage *nsimage = [m_bmpNormal.GetNSImage(true) retain];
     m_cocoaNSButtonCell = [[NSButtonCell alloc] initTextCell:nil];
     [m_cocoaNSButtonCell setImage:nsimage];
@@ -205,6 +207,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 void wxToolBar::Init()
 {
     m_owningFrame = NULL;
+    m_mouseDownTool = NULL;
 }
 
 wxToolBar::~wxToolBar()
@@ -327,6 +330,8 @@ bool wxToolBar::Cocoa_mouseDown(WX_NSEvent theEvent)
 
 bool wxToolBar::Realize()
 {
+    wxAutoNSAutoreleasePool pool;
+
     wxToolBarToolsList::compatibility_iterator node;
     NSSize totalSize = NSZeroSize;
     // This is for horizontal, TODO: vertical
