@@ -25,21 +25,6 @@ class WXDLLEXPORT wxDialog : public wxDialogBase
 public:
     wxDialog() { Init(); }
 
-    // Constructor with a modal flag, but no window id - the old convention
-    wxDialog(wxWindow *parent,
-             const wxString& title, bool modal,
-             int x = -1, int y= -1, int width = 500, int height = 500,
-             long style = wxDEFAULT_DIALOG_STYLE,
-             const wxString& name = wxDialogNameStr)
-    {
-        long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
-        Init();
-        Create(parent, -1, title, wxPoint(x, y), wxSize(width, height),
-               style | modalStyle, name);
-    }
-    
-    ~wxDialog();
-
     // Constructor with no modal flag - the new convention.
     wxDialog(wxWindow *parent, wxWindowID id,
              const wxString& title,
@@ -59,7 +44,9 @@ public:
                 long style = wxDEFAULT_DIALOG_STYLE,
                 const wxString& name = wxDialogNameStr);
 
-    void SetModal(bool flag);
+    virtual ~wxDialog();
+
+    // is the dialog in modal state right now?
     virtual bool IsModal() const;
 
     // For now, same as Show(TRUE) but returns return code
@@ -90,8 +77,10 @@ private:
     // while we are showing a modal dialog we disable the other windows using
     // this object
     wxWindowDisabler *m_windowDisabler;
+
     // modal dialog runs its own event loop
     wxEventLoop *m_eventLoop;
+
     // is modal right now?
     bool m_isShowingModal;
 
