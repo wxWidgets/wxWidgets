@@ -256,6 +256,10 @@ wxMSW:
 - support for alpha channel in toolbar bitmaps (Jurgen Doornik)
 - wxFileDialog can now be moved and centered (Randall Fox)
 
+wxUniv/X11:
+
+- fixed fatal crash when opening a menu
+
 wxWinCE:
 
 - added automatized but customizable handling of native SmartPhone menus

@@ -446,16 +446,15 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
             if (event->update.utype == GR_UPDATE_SIZE)
 #endif
             {
-                if (win->IsTopLevel())
+                wxTopLevelWindow *tlw = wxDynamicCast(win, wxTopLevelWindow);
+                if ( tlw )
                 {
-                    wxTopLevelWindow *tlw = (wxTopLevelWindow*) win;
                     tlw->SetConfigureGeometry( XConfigureEventGetX(event), XConfigureEventGetY(event),
                         XConfigureEventGetWidth(event), XConfigureEventGetHeight(event) );
                 }
 
-                if (win->IsTopLevel() && win->IsShown())
+                if ( tlw && tlw->IsShown() )
                 {
-                    wxTopLevelWindowX11 *tlw = (wxTopLevelWindowX11 *) win;
                     tlw->SetNeedResizeInIdle();
                 }
                 else
@@ -467,7 +466,6 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
                 }
             }
             return FALSE;
-            break;
         }
 #if !wxUSE_NANOX
         case PropertyNotify:
