@@ -115,11 +115,11 @@ public:
                 + _T(";\n"));
         }
         file.Write(_T("\nprivate:\n void InitWidgetsFromXRC(){\n")
-                   _T("  wxXmlResource::Get()->LoadObject(this,NULL,\"")
+                   _T("  wxXmlResource::Get()->LoadObject(this,NULL,_T(\"")
                    +  m_className
-                   +  _T("\",\"")
+                   +  _T("\"), _T(\"")
                    +  m_parentClassName
-                   +  _T("\");\n"));
+                   +  _T("\"));\n"));
         for(i=0;i<m_wdata.Count();++i)
         {
             const XRCWidgetData& w = m_wdata.Item(i);
