@@ -80,15 +80,36 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 	return FALSE;
     }
 
-
-    m_widget = gtk_button_new_with_label( "" );
+/*
+    wxString label2( label );
+    for (size_t i = 0; i < label2.Len(); i++)
+    {
+        if (label2.GetChar(i) == wxT('&'))
+	    label2.SetChar(i,wxT('_'));
+    }
     
+    GtkWidget *accel_label = gtk_accel_label_new( label2.mb_str() );
+    gtk_widget_show( accel_label );
+    
+    m_widget = gtk_button_new();
+    gtk_container_add( GTK_CONTAINER(m_widget), accel_label );
+    
+    gtk_accel_label_set_accel_widget( GTK_ACCEL_LABEL(accel_label), m_widget );
+    
+    guint accel_key = gtk_label_parse_uline (GTK_LABEL(accel_label), label2.mb_str() );
+    gtk_accel_label_refetch( GTK_ACCEL_LABEL(accel_label) );
+    
+    wxControl::SetLabel( label );
+*/
+    
+    m_widget = gtk_button_new_with_label("");
+
+    SetLabel( label );
+
 #if (GTK_MINOR_VERSION > 0)    
     if (style & wxNO_BORDER)
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 #endif
-
-    SetLabel(label);
 
     int x = 0;  int y = 0;
     wxFont new_font( parent->GetFont() );

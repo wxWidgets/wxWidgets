@@ -97,6 +97,7 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
                         const wxString& name)
 {
     m_needParent = TRUE;
+    m_acceptsFocus = TRUE;
 
     wxSize new_size = size;
     if (new_size.y == -1)

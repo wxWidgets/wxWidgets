@@ -2486,19 +2486,37 @@ void wxWindow::SetFocus()
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (connect_widget)
+    wxNode *node = m_children.First();
+    while (node)
     {
-        if (GTK_WIDGET_CAN_FOCUS(connect_widget) /*&& !GTK_WIDGET_HAS_FOCUS (connect_widget)*/ )
+	wxWindow *child = (wxWindow*) node->Data();
+	if (child->AcceptsFocus())
+	{
+	    child->SetFocus();
+	    return;
+	}
+        node = node->Next();
+    }
+
+    if (m_wxwindow)
+    {
+        gtk_widget_grab_focus (m_wxwindow);
+        return;
+    }
+
+    if (m_widget)
+    {
+        if (GTK_WIDGET_CAN_FOCUS(m_widget) /*&& !GTK_WIDGET_HAS_FOCUS (connect_widget)*/ )
         {
-            gtk_widget_grab_focus (connect_widget);
+            gtk_widget_grab_focus (m_widget);
         }
-        else if (GTK_IS_CONTAINER(connect_widget))
+        else if (GTK_IS_CONTAINER(m_widget))
         {
-            gtk_container_focus( GTK_CONTAINER(connect_widget), GTK_DIR_TAB_FORWARD );
+            gtk_container_focus( GTK_CONTAINER(m_widget), GTK_DIR_TAB_FORWARD );
         }
         else
         {
+	   // ?
         }
     }
 }

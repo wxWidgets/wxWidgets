@@ -30,7 +30,7 @@ public:
     ~wxMenuItem();
 
     // implement base class virtuals
-    virtual void SetText( const wxString& str ) { DoSetText(str); }
+    virtual void SetText( const wxString& str );
     virtual void Enable( bool enable = TRUE );
     virtual void Check( bool check = TRUE );
     virtual bool IsChecked() const;
@@ -38,6 +38,7 @@ public:
     // implementation
     void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
     GtkWidget *GetMenuItem() const { return m_menuItem; }
+    wxString GetFactoryPath() const;
 
     wxString GetHotKey() const { return m_hotKey; }
 

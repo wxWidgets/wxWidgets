@@ -561,13 +561,29 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
 
     m_menuItem = (GtkWidget *) NULL;
 
-    // call it after initializing m_menuItem to NULL
     DoSetText(text);
 }
 
 wxMenuItem::~wxMenuItem()
 {
    // don't delete menu items, the menus take care of that
+}
+
+void wxMenuItem::SetText( const wxString& str ) 
+{ 
+    DoSetText(str); 
+
+    if (m_menuItem)
+    {
+        GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
+	
+	/* set new text */
+        gtk_label_set( label, m_text.mb_str());
+	
+	/* reparse key accel */
+        guint accel_key = gtk_label_parse_uline (GTK_LABEL(label), m_text.mb_str() );
+        gtk_accel_label_refetch( GTK_ACCEL_LABEL(label) );
+    }
 }
 
 // it's valid for this function to be called even if m_menuItem == NULL
@@ -593,7 +609,7 @@ void wxMenuItem::DoSetText( const wxString& str )
 #endif
         }
         else
-           m_text << *pc;
+            m_text << *pc;
     }
 
     /* only GTK 1.2 knows about hot keys */
@@ -605,12 +621,6 @@ void wxMenuItem::DoSetText( const wxString& str )
        m_hotKey = pc;
     }
 #endif
-
-    if (m_menuItem)
-    {
-        GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
-        gtk_label_set( label, m_text.mb_str());
-    }
 }
 
 void wxMenuItem::Check( bool check )
@@ -642,6 +652,19 @@ bool wxMenuItem::IsChecked() const
                  wxT("can't get state of uncheckable item!") );
 
     return ((GtkCheckMenuItem*)m_menuItem)->active != 0;
+}
+
+wxString wxMenuItem::GetFactoryPath() const
+{
+    /* in order to get the pointer to the item we need the item text _without_ underscores */
+    wxString path( wxT("<main>/") );
+    for ( const wxChar *pc = m_text; *pc != wxT('\0'); pc++ )
+    {
+        while (*pc == wxT('_')) pc++; /* skip it */
+        path << *pc;
+    }
+    
+    return path;
 }
 
 //-----------------------------------------------------------------------------
@@ -848,20 +871,13 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     strncpy(s_accel, GetHotKey(*mitem).mb_str(), WXSIZEOF(s_accel));
     entry.accelerator = s_accel;
 #else
-    entry.accelerator = NULL;
+    entry.accelerator = (char*) NULL;
 #endif
 
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
-    /* in order to get the pointer to the item we need the item text _without_ underscores */
-    wxString s = wxT("<main>/");
-    for ( const wxChar *pc = text; *pc != wxT('\0'); pc++ )
-    {
-        while (*pc == wxT('_')) pc++; /* skip it */
-        s << *pc;
-    }
-
-    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, s.mb_str() );
+    wxString path( mitem->GetFactoryPath() );
+    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, path.mb_str() );
 
 #else
 
@@ -911,15 +927,8 @@ void wxMenu::Append( int id, const wxString &item, wxMenu *subMenu, const wxStri
 
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
 
-    /* in order to get the pointer to the item we need the item text _without_ underscores */
-    wxString s = wxT("<main>/");
-    for ( const wxChar *pc = text; *pc != wxT('\0'); pc++ )
-    {
-        if (*pc == wxT('_')) pc++; /* skip it */
-        s << *pc;
-    }
-
-    GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, s.mb_str() );
+    wxString path( mitem->GetFactoryPath() );
+    GtkWidget *menuItem = gtk_item_factory_get_item( m_factory, path.mb_str() );
 
 #else
 
@@ -990,6 +999,8 @@ void wxMenu::Delete( int id )
         wxMenuItem *item = (wxMenuItem*)node->Data();
         if (item->GetId() == id)
         {
+	    /* TODO: this code doesn't delete the item factory item and
+	       this seems impossible as of GTK 1.2.6. */
             gtk_widget_destroy( item->GetMenuItem() );
             m_items.DeleteNode( node );
             return;

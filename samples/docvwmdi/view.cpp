@@ -57,6 +57,7 @@ bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
     frame->SetSize(-1, -1, x, y);
 #endif
     frame->Show(TRUE);
+    Activate(TRUE);
 
     return TRUE;
 }

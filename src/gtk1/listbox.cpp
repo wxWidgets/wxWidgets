@@ -26,12 +26,9 @@
 #include "wx/tooltip.h"
 #endif
 
-#if wxUSE_DRAG_AND_DROP
-#include "wx/dnd.h"
-#endif
-
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#include "gdk/gdkkeysyms.h"
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -170,32 +167,52 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
 // "key_press_event"
 //-----------------------------------------------------------------------------
 
-#if wxUSE_CHECKLISTBOX
 static gint
 gtk_listbox_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxListBox *listbox )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 
-    if (g_blockEventsOnDrag) return FALSE;
+    if (g_blockEventsOnDrag) 
+        return FALSE;
 
-    if (!listbox->m_hasVMT) return FALSE;
+    bool ret = FALSE;
 
-    if (gdk_event->keyval != ' ') return FALSE;
+    if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
+    {
+        wxNavigationKeyEvent new_event;
+        /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
+        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
+        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
+        new_event.SetCurrentFocus( listbox );
+        ret = listbox->GetEventHandler()->ProcessEvent( new_event );
+    }
+    
+#if wxUSE_CHECKLISTBOX
+    if ((gdk_event->keyval != ' ') && (listbox->m_hasCheckBoxes) && (!ret))
+    {
+        int sel = listbox->GtkGetIndex( widget );
 
-    int sel = listbox->GtkGetIndex( widget );
+        wxCheckListBox *clb = (wxCheckListBox *)listbox;
 
-    wxCheckListBox *clb = (wxCheckListBox *)listbox;
+        clb->Check( sel, !clb->IsChecked(sel) );
 
-    clb->Check( sel, !clb->IsChecked(sel) );
+        wxCommandEvent new_event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
+        new_event.SetEventObject( listbox );
+        new_event.SetInt( sel );
+        ret = listbox->GetEventHandler()->ProcessEvent( new_event );
+    }
+#endif // wxUSE_CHECKLISTBOX
 
-    wxCommandEvent event( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, listbox->GetId() );
-    event.SetEventObject( listbox );
-    event.SetInt( sel );
-    listbox->GetEventHandler()->ProcessEvent( event );
+    if (ret)
+    {
+        gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
+        return TRUE;
+    }
 
     return FALSE;
 }
-#endif // wxUSE_CHECKLISTBOX
 
 //-----------------------------------------------------------------------------
 // "select" and "deselect"
@@ -461,15 +478,10 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
                         (GtkSignalFunc)gtk_listbox_button_release_callback,
                         (gpointer) this );
 
-#if wxUSE_CHECKLISTBOX
-    if (m_hasCheckBoxes)
-    {
-       gtk_signal_connect( GTK_OBJECT(list_item),
+    gtk_signal_connect( GTK_OBJECT(list_item),
                            "key_press_event",
                            (GtkSignalFunc)gtk_listbox_key_press_callback,
                            (gpointer)this );
-    }
-#endif // wxUSE_CHECKLISTBOX
 
     gtk_widget_show( list_item );
 

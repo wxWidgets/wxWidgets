@@ -871,10 +871,13 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
     {
         // start drag operation
         wxTextDataObject textData(m_strText);
-        wxDropSource source(textData, this,
-                            wxCURSOR_PENCIL,            // for copy
+        wxDropSource source(textData, this
+#ifdef __WXMSW__
+                            ,wxCURSOR_PENCIL,            // for copy
                             wxCURSOR_SPRAYCAN,          // for move
-                            wxCURSOR_QUESTION_ARROW);   // for nothing
+                            wxCURSOR_QUESTION_ARROW   // for nothing
+#endif
+			    );
 
         const char *pc;
 

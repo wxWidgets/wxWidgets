@@ -20,6 +20,7 @@
 
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
+#include "gdk/gdkkeysyms.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
@@ -117,7 +118,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
         if (!i) gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_radio), TRUE );
 
         gtk_signal_connect( GTK_OBJECT(m_radio), "clicked",
-           GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
+            GTK_SIGNAL_FUNC(gtk_radiobutton_clicked_callback), (gpointer*)this );
 
         gtk_pizza_put( GTK_PIZZA(m_parent->m_wxwindow),
                          GTK_WIDGET(m_radio),
