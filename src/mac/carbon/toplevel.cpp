@@ -564,6 +564,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
            long style,
            const wxString& name )
 {
+    OSStatus err = noErr ;
     SetName(name);
     m_windowStyle = style;
     m_isShown = FALSE;
@@ -623,7 +624,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     else
     {
         if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) ||
-            HasFlag( wxSYSTEM_MENU ) )
+            HasFlag( wxCLOSE_BOX ) || HasFlag( wxSYSTEM_MENU ) )
         {
             wclass = kDocumentWindowClass ;
         }
@@ -637,16 +638,19 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         }
     }
 
-    if ( HasFlag( wxMINIMIZE_BOX ) || HasFlag( wxMAXIMIZE_BOX ) )
+    if ( HasFlag( wxMINIMIZE_BOX ) )
+    {
+        attr |= kWindowCollapseBoxAttribute ;
+    }
+    if ( HasFlag( wxMAXIMIZE_BOX ) )
     {
         attr |= kWindowFullZoomAttribute ;
-        attr |= kWindowCollapseBoxAttribute ;
     }
     if ( HasFlag( wxRESIZE_BORDER ) )
     {
         attr |= kWindowResizableAttribute ;
     }
-    if ( HasFlag( wxSYSTEM_MENU ) )
+    if ( HasFlag( wxCLOSE_BOX) )
     {
         attr |= kWindowCloseBoxAttribute ;
     }
@@ -665,16 +669,17 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         customWindowDefSpec.defType = kWindowDefProcPtr;
         customWindowDefSpec.u.defProc = NewWindowDefUPP(wxShapedMacWindowDef);
 
-        ::CreateCustomWindow( &customWindowDefSpec, wclass,
+        err = ::CreateCustomWindow( &customWindowDefSpec, wclass,
                               attr, &theBoundsRect,
                               (WindowRef*) &m_macWindow);
     }
     else
 #endif
     {
-        ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
+        err = ::CreateNewWindow( wclass , attr , &theBoundsRect , (WindowRef*)&m_macWindow ) ;
     }
 
+    wxCHECK_RET( err == noErr, wxT("Mac OS error when trying to create new window") );
     wxAssociateWinWithMacWindow( m_macWindow , this ) ;
     UMASetWTitle( (WindowRef)m_macWindow , title ) ;
     ::CreateRootControl( (WindowRef)m_macWindow , (ControlHandle*)&m_macRootControl ) ;
