@@ -332,7 +332,6 @@ void wxRadioBox::SetSelection(int N)
         ::SendMessage((HWND) m_radioButtons[m_selectedButton], BM_SETCHECK, 0, 0L);
 
     ::SendMessage((HWND)m_radioButtons[N], BM_SETCHECK, 1, 0L);
-    ::SetFocus((HWND)m_radioButtons[N]);
 
     m_selectedButton = N;
 }
@@ -634,10 +633,9 @@ void wxRadioBox::SetFocus()
 {
     if (m_noItems > 0)
     {
-        if (m_selectedButton == -1)
-            ::SetFocus((HWND) m_radioButtons[0]);
-        else
-            ::SetFocus((HWND) m_radioButtons[m_selectedButton]);
+        ::SetFocus((HWND)m_radioButtons[m_selectedButton == -1
+                                            ? 0
+                                            : m_selectedButton]);
     }
 
 }
@@ -701,6 +699,7 @@ bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
 void wxRadioBox::Command(wxCommandEvent & event)
 {
     SetSelection (event.m_commandInt);
+    SetFocus();
     ProcessCommand (event);
 }
 
@@ -708,8 +707,6 @@ void wxRadioBox::Command(wxCommandEvent & event)
 //     radiobox pointer in GWL_USERDATA for radio buttons must be updated too!
 void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 {
-    // No GWL_USERDATA in Win16, so omit this subclassing.
-#ifdef __WIN32__
     HWND hwndBtn = (HWND)hWndBtn;
 
     if ( !s_wndprocRadioBtn )
@@ -717,7 +714,6 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
 
     ::SetWindowLong(hwndBtn, GWL_WNDPROC, (long)wxRadioBtnWndProc);
     ::SetWindowLong(hwndBtn, GWL_USERDATA, (long)this);
-#endif // __WIN32__
 }
 
 void wxRadioBox::SendNotificationEvent()
@@ -933,6 +929,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                     if ( selNew != selOld )
                     {
                         radiobox->SetSelection(selNew);
+                        radiobox->SetFocus();
 
                         // emulate the button click
                         radiobox->SendNotificationEvent();
