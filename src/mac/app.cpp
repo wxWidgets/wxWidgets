@@ -89,8 +89,6 @@ wxWindow*			wxApp::s_captureWindow = NULL ;
 int					wxApp::s_lastMouseDown = 0 ;
 long 					wxApp::sm_lastMessageTime = 0;
 
-#ifdef __WXMAC__
-
 bool	wxApp::s_macDefaultEncodingIsPC = true ;
 bool wxApp::s_macSupportPCMenuShortcuts = true ;
 long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
@@ -343,7 +341,44 @@ wxString wxMacMakePCStringFromMac( const char * p )
 	return result ;
 }
 
-#endif
+wxString wxMacMakeStringFromMacString( const char* from , bool mac2pcEncoding ) 
+{
+	if (mac2pcEncoding)
+	{
+	  return wxMacMakePCStringFromMac( from ) ;
+	}
+	else
+	{
+	  return wxString( from ) ;
+	}
+}
+
+wxString wxMacMakeStringFromPascal( StringPtr from , bool mac2pcEncoding ) 
+{
+  // this is safe since a pascal string can never be larger than 256 bytes
+  char s[256] ;
+  CopyPascalStringToC( from , s ) ;
+	if (mac2pcEncoding)
+	{
+	  return wxMacMakePCStringFromMac( s ) ;
+	}
+	else
+	{
+	  return wxString( s ) ;
+	}
+}
+
+void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding ) 
+{
+	if (pc2macEncoding)
+	{
+	  CopyCStringToPascal( wxMacMakeMacStringFromPC( from ) , to ) ;
+	}
+	else
+	{
+	  CopyCStringToPascal( from , to ) ;
+	}
+}
 
 bool wxApp::Initialize()
 {
