@@ -803,7 +803,9 @@ bool wxTreeCtrl::ItemHasChildren(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), FALSE, wxT("invalid tree item") );
 
-    return !item.m_pItem->GetChildren().IsEmpty();
+    // return TRUE if SetItemHasChildren() had been called before (i.e. the
+    // item has a [+] button)
+    return item.m_pItem->HasPlus() || !item.m_pItem->GetChildren().IsEmpty();
 }
 
 bool wxTreeCtrl::IsExpanded(const wxTreeItemId& item) const
