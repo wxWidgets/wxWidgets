@@ -771,6 +771,59 @@ void wxListRenameTimer::Notify()
 };
 
 //-----------------------------------------------------------------------------
+// wxListTextCtrl (internal)
+//-----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxListTextCtrl,wxTextCtrl);
+    
+BEGIN_EVENT_TABLE(wxListTextCtrl,wxTextCtrl)
+  EVT_CHAR           (wxListTextCtrl::OnChar)
+  EVT_KILL_FOCUS     (wxListTextCtrl::OnKillFocus)
+END_EVENT_TABLE()
+
+wxListTextCtrl::wxListTextCtrl( wxWindow *parent, const wxWindowID id, 
+    bool *accept, wxString *res, wxListMainWindow *owner,
+    const wxString &value, const wxPoint &pos, const wxSize &size,
+    int style, const wxValidator& validator, const wxString &name ) :
+  wxTextCtrl( parent, id, value, pos, size, style, validator, name )
+{
+  m_res = res;
+  m_accept = accept;
+  m_owner = owner;
+}
+
+void wxListTextCtrl::OnChar( wxKeyEvent &event )
+{
+  if (event.m_keyCode == WXK_RETURN)
+  {
+    (*m_accept) = TRUE;
+    (*m_res) = GetValue();
+    m_owner->OnRenameAccept();
+//  Show( FALSE );
+    Destroy();
+    return;
+  }
+  if (event.m_keyCode == WXK_ESCAPE)
+  { 
+    (*m_accept) = FALSE;
+    (*m_res) = "";
+//  Show( FALSE );
+    Destroy();
+    return;
+  }
+  event.Skip();
+}
+
+void wxListTextCtrl::OnKillFocus( wxFocusEvent &WXUNUSED(event) )
+{
+  (*m_accept) = FALSE;
+  (*m_res) = "";
+//   Show( FALSE );
+   Destroy();
+   return;
+}
+
+//-----------------------------------------------------------------------------
 //  wxListMainWindow
 //-----------------------------------------------------------------------------
 
@@ -804,7 +857,8 @@ wxListMainWindow::wxListMainWindow( void )
   m_hasFocus = FALSE;
   m_usedKeys = TRUE;
   m_lastOnSame = FALSE;
-//  m_renameTimer = new wxRenameTimer( this );
+//  m_renameTimer = new wxListRenameTimer( this );
+  m_renameTimer = NULL;
   m_isCreated = FALSE;
   m_dragCount = 0;
 };
@@ -853,11 +907,6 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
 //  m_text->Show( FALSE );
 
   SetBackgroundColour( *wxWHITE );
-  
-/*
-  char *accepted_drop_types[] = { "text/plain" };
-  gtk_widget_dnd_drag_set( m_wxwindow, TRUE, accepted_drop_types, 1 );
-*/  
 };
 
 wxListMainWindow::~wxListMainWindow( void )
@@ -977,9 +1026,17 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
   SendNotify( line, wxEVT_COMMAND_LIST_DELETE_ITEM );
 };
 
+void wxListMainWindow::StartLabelEdit( wxListLineData *line )
+{
+  SendNotify( line, wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT );
+};
+
 void wxListMainWindow::RenameLine( wxListLineData *line, const wxString &newName )
 {
-  wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT );
+  if (!m_parent) return;
+  
+  wxListEvent le( wxEVT_COMMAND_LIST_END_LABEL_EDIT, m_parent->GetId() );
+  le.SetEventObject( m_parent );
   le.m_code = 0;
   le.m_itemIndex = GetIndexOfLine( line );
   le.m_col = 0;
@@ -990,7 +1047,7 @@ void wxListMainWindow::RenameLine( wxListLineData *line, const wxString &newName
 
 void wxListMainWindow::OnRenameTimer()
 {
-  return;
+  StartLabelEdit( m_current );
   wxString s;
   m_current->GetText( 0, s );
   int x = 0;
@@ -998,16 +1055,15 @@ void wxListMainWindow::OnRenameTimer()
   int w = 0;
   int h = 0;
   m_current->GetLabelExtent( x, y, w, h );
-  int dx = 0;
-  int dy = 0;
-  GetPosition( &dx, &dy );
-  x += dx;
-  y += dy;
-/*
-  wxRawListTextCtrl *text = new wxRawListTextCtrl( 
-    GetParent(), s, &m_renameAccept, &m_renameRes, this, x+2, y+2, w+8, h+8 );
+  
+  wxClientDC dc(this);
+  PrepareDC( dc );
+  x = dc.LogicalToDeviceX( x );
+  y = dc.LogicalToDeviceY( y );
+  
+  wxListTextCtrl *text = new wxListTextCtrl( 
+    this, -1, &m_renameAccept, &m_renameRes, this, s, wxPoint(x-4,y-4), wxSize(w+11,h+8) );
   text->SetFocus();
-*/
 /*
   m_text->SetSize( x+3, y+3, w+6, h+6 );
   m_text->SetValue( s );
@@ -1088,7 +1144,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         (hitResult == wxLIST_HITTEST_ONITEMLABEL) /* && 
 	(m_mode & wxLC_ICON) */  )
     {
-      m_renameTimer->Start( 330, TRUE );
+      m_renameTimer->Start( 100, TRUE );
     };
     m_lastOnSame = FALSE;
     return;

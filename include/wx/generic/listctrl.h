@@ -20,6 +20,7 @@
 #include "wx/imaglist.h"
 #include "wx/control.h"
 #include "wx/timer.h"
+#include "wx/textctrl.h"
 #include "wx/dcclient.h"
 #include "wx/scrolwin.h"
 #include "wx/settings.h"
@@ -386,8 +387,6 @@ class wxListRenameTimer: public wxTimer
    void Notify();
 };
 
-/*
-
 //-----------------------------------------------------------------------------
 //  wxListTextCtrl (internal)
 //-----------------------------------------------------------------------------
@@ -402,47 +401,18 @@ class wxListTextCtrl: public wxTextCtrl
     wxListMainWindow   *m_owner;
 
   public:
-    wxListTextCtrl(void) : wxTextCtrl() {};
-    wxListTextCtrl(  wxWindow *parent, const char *value = "",
-      bool *accept, wxString *res, wxListMainWindow *owner,
-      int x = -1, int y = -1, int w = -1, int h = -1, int style = 0, char *name = "rawtext" ) :
-      wxTextCtrl( parent, value, x, y, w, h, style, name )
-      {
-        m_res = res;
-        m_accept = accept;
-	m_owner = owner;
-      };
-    void OnChar( wxKeyEvent &event )
-      {
-        if (event.keyCode == WXK_RETURN)
-        {
-          (*m_accept) = TRUE;
-	  (*m_res) = GetValue();
-	  m_owner->OnRenameAccept();
-//	  Show( FALSE );
-          delete this;
-  	  return;
-	};
-        if (event.keyCode == WXK_ESCAPE)
-        {
-          (*m_accept) = FALSE;
-	  (*m_res) = "";
-//	  Show( FALSE );
-          delete this;
-	  return;
-	};
-      };
-    void OnKillFocus(void)
-      {
-        (*m_accept) = FALSE;
-        (*m_res) = "";
-//      Show( FALSE );
-        delete this;
-        return;
-      };
+    wxListTextCtrl(void) {};
+    wxListTextCtrl( wxWindow *parent, const wxWindowID id, 
+                    bool *accept, wxString *res, wxListMainWindow *owner,
+                    const wxString &value = "",
+                    const wxPoint &pos = wxDefaultPosition, const wxSize &size = wxDefaultSize,
+                    int style = 0, const wxValidator& validator = wxDefaultValidator,
+                    const wxString &name = "wxListTextCtrlText" );
+    void OnChar( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+    
+  DECLARE_EVENT_TABLE()
 };
-
-*/
 
 //-----------------------------------------------------------------------------
 //  wxListMainWindow (internal)
@@ -494,6 +464,7 @@ class wxListMainWindow: public wxScrolledWindow
     void DeselectLine( wxListLineData *line );
     void DeleteLine( wxListLineData *line );
     void RenameLine( wxListLineData *line, const wxString &newName );
+    void StartLabelEdit( wxListLineData *line );
     void OnRenameTimer(void);
     void OnRenameAccept(void);
     void OnMouse( wxMouseEvent &event );
