@@ -200,6 +200,7 @@ wxGTK:
 wxMSW:
 
 - no longer take ampersand into account in wxStaticText::GetBestSize
+- set orientation for scrolbar events
 
 2.4.0
 -----
