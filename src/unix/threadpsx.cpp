@@ -893,8 +893,7 @@ void wxThreadInternal::Wait()
                 // wxLogDebug: it is possible to bring the system to its knees
                 // by creating too many threads and not joining them quite
                 // easily
-                wxLogError(_("Failed to join a thread, potential memory leak "
-                             "detected - please restart the program"));
+                wxLogError(_("Failed to join a thread, potential memory leak detected - please restart the program"));
             }
 
             m_shouldBeJoined = FALSE;
@@ -1456,8 +1455,7 @@ wxThreadError wxThread::Kill()
 void wxThread::Exit(ExitCode status)
 {
     wxASSERT_MSG( This() == this,
-                  _T("wxThread::Exit() can only be called in the "
-                     "context of the same thread") );
+                  _T("wxThread::Exit() can only be called in the context of the same thread") );
 
     if ( m_isDetached )
     {
@@ -1496,8 +1494,7 @@ void wxThread::Exit(ExitCode status)
 bool wxThread::TestDestroy()
 {
     wxASSERT_MSG( This() == this,
-                  _T("wxThread::TestDestroy() can only be called in the "
-                     "context of the same thread") );
+                  _T("wxThread::TestDestroy() can only be called in the context of the same thread") );
 
     m_critsect.Enter();
 
@@ -1530,8 +1527,7 @@ wxThread::~wxThread()
     if ( m_internal->GetState() != STATE_EXITED &&
          m_internal->GetState() != STATE_NEW )
     {
-        wxLogDebug(_T("The thread %ld is being destroyed although it is still "
-                      "running! The application may crash."), GetId());
+        wxLogDebug(_T("The thread %ld is being destroyed although it is still running! The application may crash."), GetId());
     }
 
     m_critsect.Leave();
@@ -1597,8 +1593,7 @@ bool wxThreadModule::OnInit()
     int rc = pthread_key_create(&gs_keySelf, NULL /* dtor function */);
     if ( rc != 0 )
     {
-        wxLogSysError(rc, _("Thread module initialization failed: "
-                            "failed to create thread key"));
+        wxLogSysError(rc, _("Thread module initialization failed: failed to create thread key"));
 
         return FALSE;
     }
