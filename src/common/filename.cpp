@@ -1663,16 +1663,16 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
         FILETIME ftAccess, ftCreate, ftWrite;
 
         if ( ::GetFileTime(fh,
-                           dtMod ? &ftCreate : NULL,
+                           dtCreate ? &ftCreate : NULL,
                            dtAccess ? &ftAccess : NULL,
-                           dtCreate ? &ftWrite : NULL) )
+                           dtMod ? &ftWrite : NULL) )
         {
-            if ( dtMod )
-                ConvertFileTimeToWx(dtMod, ftCreate);
+            if ( dtCreate )
+                ConvertFileTimeToWx(dtCreate, ftCreate);
             if ( dtAccess )
                 ConvertFileTimeToWx(dtAccess, ftAccess);
-            if ( dtCreate )
-                ConvertFileTimeToWx(dtCreate, ftWrite);
+            if ( dtMod )
+                ConvertFileTimeToWx(dtMod, ftWrite);
 
             return TRUE;
         }
