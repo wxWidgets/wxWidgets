@@ -70,27 +70,29 @@
 #define wxUSE_UNIX 0
 
 #undef __UNIX__
-#undef __LINUX__
-#undef __SGI__
-#undef __HPUX__
-#undef __SYSV__
-#undef __SVR4__
+
 #undef __AIX__
-#undef __SUN__
-#undef __SOLARIS__
-#undef __SUNOS__
-#undef __ALPHA__
-#undef __IA64__
-#undef __OSF__
 #undef __BSD__
-#undef __FREEBSD__
 #undef __DARWIN__
+#undef __EMX__
+#undef __FREEBSD__
+#undef __HPUX__
+#undef __LINUX__
 #undef __NETBSD__
 #undef __OPENBSD__
-#undef __VMS__
+#undef __OSF__
+#undef __SGI__
+#undef __SOLARIS__
+#undef __SUN__
+#undef __SUNOS__
+#undef __SVR4__
+#undef __SYSV__
 #undef __ULTRIX__
-#undef __DATA_GENERAL__
-#undef __EMX__
+#undef __UNIXWARE__
+#undef __VMS__
+
+#undef __IA64__
+#undef __ALPHA__
 
 /* NanoX (with wxX11) */
 #define wxUSE_NANOX 0
