@@ -237,11 +237,6 @@ bool wxDialog::IsIconized(void) const
   return FALSE;
 }
 
-void wxDialog::SetSize(int x, int y, int width, int height, int WXUNUSED(sizeFlags))
-{
-  wxWindow::SetSize(x, y, width, height);
-}
-
 void wxDialog::SetClientSize(int width, int height)
 {
   HWND hWnd = (HWND) GetHWND();
