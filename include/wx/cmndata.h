@@ -138,6 +138,12 @@ private:
  * Encapsulates printer information (not printer dialog information)
  */
 
+#ifdef __WXMAC__
+
+class wxNativePrintData ;
+
+#endif
+
 class WXDLLEXPORT wxPrintData: public wxObject
 {
 public:
@@ -209,7 +215,6 @@ public:
 #elif defined(__WXMAC__)
   void ConvertToNative();
   void ConvertFromNative();
-  void ValidateOrCreateNative() ;
 #endif
 
 public:
@@ -217,9 +222,7 @@ public:
     void*           m_devMode;
     void*           m_devNames;
 #elif defined(__WXMAC__)
-    void*           m_macPageFormat ;
-    void*           m_macPrintSettings ;
-    void*			m_macPrintSession ;
+    wxNativePrintData* m_nativePrintData ;
 #endif
 
 private:
