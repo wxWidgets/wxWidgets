@@ -280,7 +280,7 @@ public: \
    type *remove(iterator& i) \
       { return (type *)kbList::remove(i); } \
    inline void erase(iterator & i) \
-      { deleteContent(i); kbList::erase(i); } \
+      { deleteContent(i); doErase(i); } \
    \
    inline iterator begin(void) const \
       { return kbList::begin(); } \
