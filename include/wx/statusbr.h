@@ -20,6 +20,10 @@
 
 #if wxUSE_STATUSBAR
 
+#include "wx/list.h"
+
+WX_DECLARE_LIST(wxString, wxListString);
+
 // ----------------------------------------------------------------------------
 // wxStatusBar: a window near the bottom of the frame used for status info
 // ----------------------------------------------------------------------------
@@ -44,6 +48,9 @@ public:
 
     virtual void SetStatusText(const wxString& text, int number = 0) = 0;
     virtual wxString GetStatusText(int number = 0) const = 0;
+
+    void PushStatusText(const wxString& text, int number = 0);
+    void PopStatusText(int number = 0);
 
     // fields widths
     // -------------
@@ -82,8 +89,17 @@ protected:
     // reset the widths
     void ReinitWidths() { FreeWidths(); InitWidths(); }
 
+    // same, for text stacks
+    void InitStacks();
+    void FreeStacks();
+    void ReinitStacks() { FreeStacks(); InitStacks(); }
+
     // calculate the real field widths for the given total available size
     wxArrayInt CalculateAbsWidths(wxCoord widthTotal) const;
+
+    // use these functions to access the stacks of field strings
+    wxListString *GetStatusStack(int i) const;
+    wxListString *GetOrCreateStatusStack(int i);
 
     // the current number of fields
     int        m_nFields;
@@ -91,6 +107,10 @@ protected:
     // the widths of the fields in pixels if !NULL, all fields have the same
     // width otherwise
     int       *m_statusWidths;
+
+    // stacks of previous values for PushStatusText/PopStatusText
+    // this is created on demand, use GetStatusStack/GetOrCreateStatusStack
+    wxListString **m_statusTextStacks;
 };
 
 // ----------------------------------------------------------------------------

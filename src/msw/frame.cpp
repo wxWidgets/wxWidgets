@@ -746,17 +746,11 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
 #endif
     else
     {
-#if wxUSE_STATUSBAR
         // don't give hints for separators (doesn't make sense) nor for the
         // items opening popup menus (they don't have them anyhow) but do clear
         // the status line - otherwise, we would be left with the help message
         // for the previous item which doesn't apply any more
-        wxStatusBar *statbar = GetStatusBar();
-        if ( statbar )
-        {
-            statbar->SetStatusText(wxEmptyString);
-        }
-#endif // wxUSE_STATUSBAR
+        DoGiveHelp(wxEmptyString, FALSE);
 
         return FALSE;
     }

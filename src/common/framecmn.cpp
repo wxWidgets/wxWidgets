@@ -76,6 +76,8 @@ wxFrameBase::wxFrameBase()
 #if wxUSE_STATUSBAR
     m_frameStatusBar = NULL;
 #endif // wxUSE_STATUSBAR
+
+    m_statusBarPane = 0;
 }
 
 wxFrameBase::~wxFrameBase()
@@ -277,16 +279,40 @@ void wxFrameBase::SetStatusWidths(int n, const int widths_field[] )
     PositionStatusBar();
 }
 
-bool wxFrameBase::ShowMenuHelp(wxStatusBar *statbar, int menuId)
+void wxFrameBase::PushStatusText(const wxString& text, int number)
+{
+    wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set text for") );
+
+    m_frameStatusBar->PushStatusText(text, number);
+}
+
+void wxFrameBase::PopStatusText(int number)
+{
+    wxCHECK_RET( m_frameStatusBar != NULL, wxT("no statusbar to set text for") );
+
+    m_frameStatusBar->PopStatusText(number);
+}
+
+void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
+{
+#if wxUSE_STATUSBAR
+    if ( m_statusBarPane < 0 ) return;
+    wxStatusBar* statbar = GetStatusBar();
+    if ( !statbar ) return;
+
+    wxString help = show ? text : wxString();
+    statbar->SetStatusText( help, m_statusBarPane );
+#endif // wxUSE_STATUSBAR
+}
+
+bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
 {
 #if wxUSE_MENUS
-    if ( !statbar )
-        return FALSE;
-
     // if no help string found, we will clear the status bar text
     wxString helpString;
+    bool show = menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */;
 
-    if ( menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */ )
+    if ( show )
     {
         wxMenuBar *menuBar = GetMenuBar();
         if ( menuBar )
@@ -299,9 +325,7 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *statbar, int menuId)
         }
     }
 
-    // set status text even if the string is empty - this will at least
-    // remove the string from the item which was previously selected
-    statbar->SetStatusText(helpString);
+    DoGiveHelp(helpString, show);
 
     return !helpString.IsEmpty();
 #else // !wxUSE_MENUS

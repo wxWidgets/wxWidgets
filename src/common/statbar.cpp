@@ -34,6 +34,9 @@
 
 #if wxUSE_STATUSBAR
 
+#include "wx/listimpl.cpp"
+WX_DEFINE_LIST(wxListString);
+
 // ============================================================================
 // wxStatusBarBase implementation
 // ============================================================================
@@ -49,11 +52,13 @@ wxStatusBarBase::wxStatusBarBase()
     m_nFields = 0;
 
     InitWidths();
+    InitStacks();
 }
 
 wxStatusBarBase::~wxStatusBarBase()
 {
     FreeWidths();
+    FreeStacks();
 }
 
 // ----------------------------------------------------------------------------
@@ -82,6 +87,31 @@ void wxStatusBarBase::SetFieldsCount(int number, const int *widths)
 
     if ( number != m_nFields )
     {
+        // copy stacks if present
+        if(m_statusTextStacks)
+        {
+            wxListString **newStacks = new wxListString*[number];
+            size_t i, j, max = wxMin(number, m_nFields);
+
+            // copy old stacks
+            for(i = 0; i < max; ++i)
+                newStacks[i] = m_statusTextStacks[i];
+            // free old stacks in excess
+            for(j = i; j < (size_t)m_nFields; ++j)
+            {
+                if(m_statusTextStacks[j])
+                {
+                    m_statusTextStacks[j]->Clear();
+                    delete m_statusTextStacks[j];
+                }
+            }
+            // initialize new stacks to NULL
+            for(j = i; j < (size_t)number; ++j)
+                newStacks[j] = 0;
+
+            m_statusTextStacks = newStacks;
+        }
+
         m_nFields = number;
 
         ReinitWidths();
@@ -184,6 +214,84 @@ wxArrayInt wxStatusBarBase::CalculateAbsWidths(wxCoord widthTotal) const
     }
 
     return widths;
+}
+
+// ----------------------------------------------------------------------------
+// text stacks handling
+// ----------------------------------------------------------------------------
+
+void wxStatusBarBase::InitStacks()
+{
+    m_statusTextStacks = NULL;
+}
+
+void wxStatusBarBase::FreeStacks()
+{
+    if(!m_statusTextStacks) return;
+    size_t i;
+
+    for(i = 0; i < (size_t)m_nFields; ++i)
+    {
+        if(m_statusTextStacks[i])
+        {
+            m_statusTextStacks[i]->Clear();
+            delete m_statusTextStacks[i];
+        }
+    }
+
+    delete[] m_statusTextStacks;
+}
+
+// ----------------------------------------------------------------------------
+// text stacks
+// ----------------------------------------------------------------------------
+
+void wxStatusBarBase::PushStatusText(const wxString& text, int number)
+{
+    wxListString* st = GetOrCreateStatusStack(number);
+    st->Insert(new wxString(GetStatusText(number)));
+    SetStatusText(text, number);
+}
+
+void wxStatusBarBase::PopStatusText(int number)
+{
+    wxListString *st = GetStatusStack(number);
+    wxCHECK_RET( st, _T("Unbalanced PushStatusText/PopStatusText") );
+    wxListString::Node *top = st->GetFirst();
+
+    SetStatusText(*top->GetData(), number);
+    st->DeleteNode(top);
+    if(st->GetCount() == 0)
+    {
+        delete st;
+        m_statusTextStacks[number] = 0;
+    }
+}
+
+wxListString *wxStatusBarBase::GetStatusStack(int i) const
+{
+    if(!m_statusTextStacks)
+        return 0;
+    return m_statusTextStacks[i];
+}
+
+wxListString *wxStatusBarBase::GetOrCreateStatusStack(int i)
+{
+    if(!m_statusTextStacks)
+    {
+        m_statusTextStacks = new wxListString*[m_nFields];
+
+        size_t j;
+        for(j = 0; j < (size_t)m_nFields; ++j) m_statusTextStacks[j] = 0;
+    }
+
+    if(!m_statusTextStacks[i])
+    {
+        m_statusTextStacks[i] = new wxListString();
+        m_statusTextStacks[i]->DeleteContents(TRUE);
+    }
+
+    return m_statusTextStacks[i];
 }
 
 #endif // wxUSE_STATUSBAR

@@ -507,26 +507,15 @@ void wxToolBarBase::OnMouseEnter(int id)
     event.SetEventObject(this);
     event.SetInt(id);
 
-    (void)GetEventHandler()->ProcessEvent(event);
-
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if ( !frame )
-        return;
-
-    wxString helpstring;
-
-    if ( id != -1 )
+    if( frame )
     {
-        wxToolBarToolBase *tool = FindById(id);
-        if ( tool )
-            helpstring = tool->GetLongHelp();
+        wxToolBarToolBase* tool = id == -1 ? (wxToolBarToolBase*)0 : FindById(id);
+        wxString help = tool ? tool->GetLongHelp() : wxString();
+        frame->DoGiveHelp( help, id != -1 );
     }
 
-    // set the status text anyhow, even if the string is empty: this ensures
-    // that it is cleared when the mouse leaves the toolbar or enters a tool
-    // without help
-	if (frame->GetStatusBar())
-		frame->SetStatusText(helpstring);
+    (void)GetEventHandler()->ProcessEvent(event);
 }
 
 // ----------------------------------------------------------------------------

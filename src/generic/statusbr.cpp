@@ -53,9 +53,7 @@ END_EVENT_TABLE()
 
 wxStatusBarGeneric::wxStatusBarGeneric()
 {
-  m_statusWidths = (int *) NULL;
   m_statusStrings = (wxString *) NULL;
-  m_nFields = 0;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
 }
@@ -75,9 +73,7 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
                          long style,
                          const wxString& name)
 {
-  m_statusWidths = (int *) NULL;
   m_statusStrings = (wxString *) NULL;
-  m_nFields = 0;
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
 
@@ -151,36 +147,18 @@ void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 
     // delete the old widths in any case - this function may be used to reset
     // the widths to the default (all equal)
-    delete [] m_statusWidths;
+    // MBN: this is incompatible with at least wxMSW and wxMAC and not
+    //      documented, but let's keep it for now
+    ReinitWidths();
 
     if ( !widths_field )
     {
         // not an error, see the comment above
-        m_statusWidths = (int *)NULL;
         Refresh();
         return;
     }
 
-    int i;
-
-    // VZ: this doesn't do anything as is_variable is unused later
-#if 0
-    // when one window (minimum) is variable (width <= 0)
-    bool is_variable = FALSE;
-    for (i = 0; i < m_nFields; i++)
-    {
-        if (widths_field[i] <= 0)
-            is_variable = TRUE;
-    }
-#endif // 0
-
-    // set widths
-    m_statusWidths = new int[n];
-    for (i = 0; i < m_nFields; i++)
-    {
-        m_statusWidths[i] = widths_field[i];
-    }
-    Refresh();
+    wxStatusBarBase::SetStatusWidths(n, widths_field);
 }
 
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
