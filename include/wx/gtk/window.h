@@ -210,10 +210,11 @@ public:
     bool                 m_isRadioButton:1;     // faster than IS_KIND_OF
     bool                 m_isListBox:1;         // faster than IS_KIND_OF
     bool                 m_isFrame:1;           // faster than IS_KIND_OF
-    bool                 m_acceptsFocus:1;      // not wxStaticBox, not wxStaticBitmap etc.
-    bool                 m_isScrolling;
-    bool                 m_clipPaintRegion;     // TRUE after ScrollWindow()
-    bool                 m_queuedFullRedraw;    // TRUE after DoMoveWindow
+    bool                 m_acceptsFocus:1;      // true if not static
+    bool                 m_hasFocus:1;          // true if == FindFocus()
+    bool                 m_isScrolling:1;       // dragging scrollbar thumb?
+    bool                 m_clipPaintRegion:1;   // TRUE after ScrollWindow()
+    bool                 m_queuedFullRedraw:1;  // TRUE after DoMoveWindow
 
     // These are true if the style were set before the widget was realized
     // (typcally in the constructor) but the actual GTK style must not be set
