@@ -32,7 +32,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS && wxUSE_STREAMS
+#if wxUSE_PROTOCOL_FTP
 
 #ifndef WX_PRECOMP
     #include <stdlib.h>
@@ -925,5 +925,5 @@ wxList *wxFTP::GetList(const wxString& wildcard, bool details)
 }
 #endif // WXWIN_COMPATIBILITY_2
 
-#endif
-  // wxUSE_SOCKETS
+#endif // wxUSE_PROTOCOL_FTP
+

@@ -551,6 +551,13 @@
  */
 #define wxUSE_INTL 0
 /*
+ * Use wxProtocol and related classes
+ */
+#define wxUSE_PROTOCOL 0
+#define wxUSE_PROTOCOL_FILE 0
+#define wxUSE_PROTOCOL_FTP 0
+#define wxUSE_PROTOCOL_HTTP 0
+/*
  * Use streams
  */
 #define wxUSE_STREAMS 0
@@ -610,6 +617,11 @@
  * Use MS Layer for Unicode on Win9X (Win32 only)?
  */
 #define wxUSE_UNICODE_MSLU 0
+
+/*
+ * Use wxURL class
+ */
+#define wxUSE_URL 0
 
 /*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.

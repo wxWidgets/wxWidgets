@@ -8,12 +8,17 @@
 // Copyright:   (c) 1997, 1998 Guilhem Lavaux
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
+
 #ifndef __WX_PROTO_FILE_H__
 #define __WX_PROTO_FILE_H__
 
 #ifdef __GNUG__
 #pragma interface "sckfile.h"
 #endif
+
+#include "wx/defs.h"
+
+#if wxUSE_PROTOCOL_FILE
 
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
@@ -32,4 +37,6 @@ public:
   wxInputStream *GetInputStream(const wxString& path);
 };
 
-#endif
+#endif // wxUSE_PROTOCOL_FILE
+
+#endif // __WX_PROTO_FILE_H__

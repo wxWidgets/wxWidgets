@@ -17,7 +17,10 @@
     #pragma interface "ftp.h"
 #endif
 
-#include "wx/object.h"
+#include "wx/defs.h"
+
+#if wxUSE_PROTOCOL_FTP
+
 #include "wx/sckaddr.h"
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
@@ -160,5 +163,7 @@ protected:
 // the trace mask used by assorted wxLogTrace() in ftp code, do
 // wxLog::AddTraceMask(FTP_TRACE_MASK) to see them in output
 #define FTP_TRACE_MASK _T("ftp")
+
+#endif // wxUSE_PROTOCOL_FTP
 
 #endif // __WX_FTP_H__

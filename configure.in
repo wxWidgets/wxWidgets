@@ -1074,6 +1074,10 @@ dnl ---------------------------------------------------------------------------
 WX_ARG_ENABLE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
 WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
 
+WX_ARG_ENABLE(protocols,     [  --enable-protocols      use wxProtocol and derived classes], wxUSE_PROTOCOL)
+WX_ARG_ENABLE(ftp,           [  --enable-ftp            use wxFTP (requires wxProtocol], wxUSE_PROTOCOL_FTP)
+WX_ARG_ENABLE(http,          [  --enable-http           use wxHTTP (requires wxProtocol], wxUSE_PROTOCOL_HTTP)
+WX_ARG_ENABLE(fileproto,     [  --enable-fileproto      use wxFileProto class (requires wxProtocol], wxUSE_PROTOCOL_FILE)
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
 
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)

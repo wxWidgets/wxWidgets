@@ -20,7 +20,7 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS && wxUSE_STREAMS
+#if wxUSE_PROTOCOL_HTTP
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -343,5 +343,5 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
   return inp_stream;
 }
 
-#endif
-   // wxUSE_SOCKETS
+#endif // wxUSE_PROTOCOL_HTTP
+

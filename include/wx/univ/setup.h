@@ -16,6 +16,17 @@
 // not all ports implement everything...
 // ----------------------------------------------------------------------------
 
+// FIXME: why do we have different sections for Mac/OS2/the rest? Most settings
+//        should have the same value, like this it's a real pain to update this
+//        file...
+
+#define wxUSE_DYNAMIC_LOADER 0
+
+#define wxUSE_PROTOCOL 0
+#define wxUSE_URL 0
+
+#define wxUSE_UNICODE_MSLU 0
+
 #if defined(__WXMAC__)
 
 #define wxUSE_GUI            1
@@ -389,6 +400,7 @@
 
 #define wxUSE_CONTROLS     1
 #define wxUSE_POPUPWIN     1
+#define wxUSE_TIPWINDOW    1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CALENDARCTRL 0

@@ -16,13 +16,14 @@
 #pragma interface
 #endif
 
-// wxWindows header
-#include "wx/object.h"
+#include "wx/defs.h"
 
-// wxSocket headers
+#if wxUSE_URL
+
+#include "wx/object.h"
 #include "wx/protocol/protocol.h"
 
-#if wxUSE_SOCKETS
+#if wxUSE_PROTOCOL_HTTP
   #include "wx/protocol/http.h"
 #endif
 
@@ -35,7 +36,7 @@ typedef enum {
   wxURL_CONNERR,
   wxURL_PROTOERR
 } wxURLError;
-  
+
 class WXDLLEXPORT wxURL : public wxObject
 {
 public:
@@ -97,4 +98,7 @@ private:
     DECLARE_DYNAMIC_CLASS(wxURL)
 };
 
-#endif
+#endif // wxUSE_URL
+
+#endif // _WX_URL_H
+

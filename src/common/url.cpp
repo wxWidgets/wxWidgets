@@ -20,14 +20,16 @@
 #pragma hdrstop
 #endif
 
-#include <string.h>
-#include <ctype.h>
+#if wxUSE_URL
 
 #include "wx/string.h"
 #include "wx/list.h"
 #include "wx/utils.h"
 #include "wx/module.h"
 #include "wx/url.h"
+
+#include <string.h>
+#include <ctype.h>
 
 IMPLEMENT_CLASS(wxProtoInfo, wxObject)
 IMPLEMENT_CLASS(wxURL, wxObject)
@@ -521,3 +523,6 @@ void wxURLModule::OnExit()
 }
 
 #endif // wxUSE_SOCKETS
+
+#endif // wxUSE_URL
+

@@ -20,7 +20,6 @@
 #define wxABORT_ON_CONFIG_ERROR
 
 
-
 /*
    tests for non GUI features
  */
@@ -40,6 +39,136 @@
 #       define wxUSE_DYNAMIC_LOADER 0
 #   endif
 #endif /* !defined(wxUSE_DYNAMIC_LOADER) */
+
+#ifndef wxUSE_LOG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_LOG must be defined."
+#   else
+#       define wxUSE_LOG 0
+#   endif
+#endif /* !defined(wxUSE_LOG) */
+
+#ifndef wxUSE_LONGLONG
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_LONGLONG must be defined."
+#   else
+#       define wxUSE_LONGLONG 0
+#   endif
+#endif /* !defined(wxUSE_LONGLONG) */
+
+#ifndef wxUSE_MIMETYPE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MIMETYPE must be defined."
+#   else
+#       define wxUSE_MIMETYPE 0
+#   endif
+#endif /* !defined(wxUSE_MIMETYPE) */
+
+#ifndef wxUSE_PROTOCOL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PROTOCOL must be defined."
+#   else
+#       define wxUSE_PROTOCOL 0
+#   endif
+#endif /* !defined(wxUSE_PROTOCOL) */
+
+/* we may not define wxUSE_PROTOCOL_XXX if wxUSE_PROTOCOL is set to 0 */
+#if !wxUSE_PROTOCOL
+#   undef wxUSE_PROTOCOL_HTTP
+#   undef wxUSE_PROTOCOL_FTP
+#   undef wxUSE_PROTOCOL_FILE
+#   define wxUSE_PROTOCOL_HTTP 0
+#   define wxUSE_PROTOCOL_FTP 0
+#   define wxUSE_PROTOCOL_FILE 0
+#endif /* wxUSE_PROTOCOL */
+
+#ifndef wxUSE_PROTOCOL_HTTP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PROTOCOL_HTTP must be defined."
+#   else
+#       define wxUSE_PROTOCOL_HTTP 0
+#   endif
+#endif /* !defined(wxUSE_PROTOCOL_HTTP) */
+
+#ifndef wxUSE_PROTOCOL_FTP
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PROTOCOL_FTP must be defined."
+#   else
+#       define wxUSE_PROTOCOL_FTP 0
+#   endif
+#endif /* !defined(wxUSE_PROTOCOL_FTP) */
+
+#ifndef wxUSE_PROTOCOL_FILE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_PROTOCOL_FILE must be defined."
+#   else
+#       define wxUSE_PROTOCOL_FILE 0
+#   endif
+#endif /* !defined(wxUSE_PROTOCOL_FILE) */
+
+#ifndef wxUSE_REGEX
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_REGEX must be defined."
+#   else
+#       define wxUSE_REGEX 0
+#   endif
+#endif /* !defined(wxUSE_REGEX) */
+
+#ifndef wxUSE_SOCKETS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SOCKETS must be defined."
+#   else
+#       define wxUSE_SOCKETS 0
+#   endif
+#endif /* !defined(wxUSE_SOCKETS) */
+
+#ifndef wxUSE_STREAMS
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_STREAMS must be defined."
+#   else
+#       define wxUSE_STREAMS 0
+#   endif
+#endif /* !defined(wxUSE_STREAMS) */
+
+#ifndef wxUSE_STOPWATCH
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_STOPWATCH must be defined."
+#   else
+#       define wxUSE_STOPWATCH 0
+#   endif
+#endif /* !defined(wxUSE_STOPWATCH) */
+
+#ifndef wxUSE_TEXTBUFFER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTBUFFER must be defined."
+#   else
+#       define wxUSE_TEXTBUFFER 0
+#   endif
+#endif /* !defined(wxUSE_TEXTBUFFER) */
+
+#ifndef wxUSE_TEXTFILE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTFILE must be defined."
+#   else
+#       define wxUSE_TEXTFILE 0
+#   endif
+#endif /* !defined(wxUSE_TEXTFILE) */
+
+#ifndef wxUSE_UNICODE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_UNICODE must be defined."
+#   else
+#       define wxUSE_UNICODE 0
+#   endif
+#endif /* !defined(wxUSE_UNICODE) */
+
+#ifndef wxUSE_URL
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_URL must be defined."
+#   else
+#       define wxUSE_URL 0
+#   endif
+#endif /* !defined(wxUSE_URL) */
 
 /*
    all these tests are for GUI only
@@ -251,14 +380,6 @@
 #   endif
 #endif /* !defined(wxUSE_LISTCTRL) */
 
-#ifndef wxUSE_LOG
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_LOG must be defined."
-#   else
-#       define wxUSE_LOG 0
-#   endif
-#endif /* !defined(wxUSE_LOG) */
-
 #ifndef wxUSE_LOGGUI
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_LOGGUI must be defined."
@@ -298,14 +419,6 @@
 #       define wxUSE_MENUS 0
 #   endif
 #endif /* !defined(wxUSE_MENUS) */
-
-#ifndef wxUSE_MIMETYPE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_MIMETYPE must be defined."
-#   else
-#       define wxUSE_MIMETYPE 0
-#   endif
-#endif /* !defined(wxUSE_MIMETYPE) */
 
 #ifndef wxUSE_MSGDLG
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -370,14 +483,6 @@
 #       define wxUSE_RADIOBTN 0
 #   endif
 #endif /* !defined(wxUSE_RADIOBTN) */
-
-#ifndef wxUSE_REGEX
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_REGEX must be defined."
-#   else
-#       define wxUSE_REGEX 0
-#   endif
-#endif /* !defined(wxUSE_REGEX) */
 
 #ifndef wxUSE_SASH
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -475,14 +580,6 @@
 #   endif
 #endif /* !defined(wxUSE_STATUSBAR) */
 
-#ifndef wxUSE_STOPWATCH
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_STOPWATCH must be defined."
-#   else
-#       define wxUSE_STOPWATCH 0
-#   endif
-#endif /* !defined(wxUSE_STOPWATCH) */
-
 #ifndef wxUSE_TAB_DIALOG
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TAB_DIALOG must be defined."
@@ -491,14 +588,6 @@
 #   endif
 #endif /* !defined(wxUSE_TAB_DIALOG) */
 
-#ifndef wxUSE_TEXTBUFFER
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TEXTBUFFER must be defined."
-#   else
-#       define wxUSE_TEXTBUFFER 0
-#   endif
-#endif /* !defined(wxUSE_TEXTBUFFER) */
-
 #ifndef wxUSE_TEXTCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TEXTCTRL must be defined."
@@ -506,14 +595,6 @@
 #       define wxUSE_TEXTCTRL 0
 #   endif
 #endif /* !defined(wxUSE_TEXTCTRL) */
-
-#ifndef wxUSE_TEXTFILE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TEXTFILE must be defined."
-#   else
-#       define wxUSE_TEXTFILE 0
-#   endif
-#endif /* !defined(wxUSE_TEXTFILE) */
 
 #ifndef wxUSE_TIPWINDOW
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -555,17 +636,107 @@
 #   endif
 #endif /* !defined(wxUSE_WXHTML_HELP) */
 
-#ifndef wxUSE_UNICODE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_UNICODE must be defined."
-#   else
-#       define wxUSE_UNICODE 0
-#   endif
-#endif /* !defined(wxUSE_UNICODE) */
+#endif /* wxUSE_GUI */
 
 /*
    check consistency of the settings
  */
+
+#if wxUSE_PROTOCOL_FILE || wxUSE_PROTOCOL_FTP || wxUSE_PROTOCOL_HTTP
+#   if !wxUSE_PROTOCOL
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_PROTOCOL_XXX requires wxUSE_PROTOCOL"
+#        else
+#            undef wxUSE_PROTOCOL
+#            define wxUSE_PROTOCOL 1
+#        endif
+#   endif
+#endif /* wxUSE_PROTOCOL_XXX */
+
+#if wxUSE_URL
+#   if !wxUSE_PROTOCOL
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_URL requires wxUSE_PROTOCOL"
+#        else
+#            undef wxUSE_PROTOCOL
+#            define wxUSE_PROTOCOL 1
+#        endif
+#   endif
+#endif /* wxUSE_URL */
+
+#if wxUSE_PROTOCOL
+#   if !wxUSE_SOCKETS
+#       if wxUSE_PROTOCOL_HTTP || wxUSE_PROTOCOL_FTP
+#           ifdef wxABORT_ON_CONFIG_ERROR
+#               error "wxUSE_PROTOCOL_FTP/HTTP requires wxUSE_SOCKETS"
+#           else
+#               undef wxUSE_SOCKETS
+#               define wxUSE_SOCKETS 1
+#           endif
+#       endif
+#   endif
+
+#   if !wxUSE_STREAMS
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_PROTOCOL requires wxUSE_STREAMS"
+#       else
+#           undef wxUSE_STREAMS
+#           define wxUSE_STREAMS 1
+#       endif
+#   endif
+#endif /* wxUSE_PROTOCOL */
+
+/* non GUI settings */
+#if wxUSE_STOPWATCH
+#    if !wxUSE_LONGLONG
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "wxUSE_STOPWATCH requires wxUSE_LONGLONG"
+#        else
+#            undef wxUSE_LONGLONG
+#            define wxUSE_LONGLONG 1
+#        endif
+#    endif
+#endif /* wxUSE_STOPWATCH */
+
+#if wxUSE_MIMETYPE && !wxUSE_TEXTFILE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MIMETYPE requires wxUSE_TEXTFILE"
+#   else
+#       undef wxUSE_TEXTFILE
+#       define wxUSE_TEXTFILE 1
+#   endif
+#endif /* wxUSE_MIMETYPE */
+
+#if wxUSE_TEXTFILE && !wxUSE_TEXTBUFFER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTFILE requires wxUSE_TEXTBUFFER"
+#   else
+#       undef wxUSE_TEXTBUFFER
+#       define wxUSE_TEXTBUFFER 1
+#   endif
+#endif /* wxUSE_TEXTFILE */
+
+#if wxUSE_TEXTFILE && !wxUSE_FILE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTFILE requires wxUSE_FILE"
+#   else
+#       undef wxUSE_FILE
+#       define wxUSE_FILE 1
+#   endif
+#endif /* wxUSE_TEXTFILE */
+
+#if wxUSE_UNICODE_MSLU && !wxUSE_UNICODE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_UNICODE_MSLU requires wxUSE_UNICODE"
+#   else
+#       undef wxUSE_UNICODE
+#       define wxUSE_UNICODE 1
+#   endif
+#endif /* wxUSE_UNICODE_MSLU */
+
+/* the rest of the tests is for the GUI settings only */
+#if wxUSE_GUI
+
 #if wxUSE_BUTTON || \
     wxUSE_CALENDARCTRL || \
     wxUSE_CARET || \
@@ -869,17 +1040,6 @@
 #   endif
 #endif /* wxUSE_RADIOBOX */
 
-#if wxUSE_STOPWATCH
-#    if !wxUSE_LONGLONG
-#        ifdef wxABORT_ON_CONFIG_ERROR
-#            error "wxUSE_STOPWATCH requires wxUSE_LONGLONG"
-#        else
-#            undef wxUSE_LONGLONG
-#            define wxUSE_LONGLONG 1
-#        endif
-#    endif
-#endif /* wxUSE_STOPWATCH */
-
 #if wxUSE_LOGWINDOW
 #    if !wxUSE_TEXTCTRL
 #        ifdef wxABORT_ON_CONFIG_ERROR
@@ -913,33 +1073,6 @@
 #   endif
 #endif /* wxUSE_DYNAMIC_CLASSES */
 
-#if wxUSE_MIMETYPE && !wxUSE_TEXTFILE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_MIMETYPE requires wxUSE_TEXTFILE"
-#   else
-#       undef wxUSE_TEXTFILE
-#       define wxUSE_TEXTFILE 1
-#   endif
-#endif /* wxUSE_MIMETYPE */
-
-#if wxUSE_TEXTFILE && !wxUSE_TEXTBUFFER
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TEXTFILE requires wxUSE_TEXTBUFFER"
-#   else
-#       undef wxUSE_TEXTBUFFER
-#       define wxUSE_TEXTBUFFER 1
-#   endif
-#endif /* wxUSE_TEXTFILE */
-
-#if wxUSE_TEXTFILE && !wxUSE_FILE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_TEXTFILE requires wxUSE_FILE"
-#   else
-#       undef wxUSE_FILE
-#       define wxUSE_FILE 1
-#   endif
-#endif /* wxUSE_TEXTFILE */
-
 #if wxUSE_CLIPBOARD && !wxUSE_DATAOBJ
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxClipboard requires wxDataObject"
@@ -948,15 +1081,6 @@
 #       define wxUSE_DATAOBJ 1
 #   endif
 #endif /* wxUSE_CLIPBOARD */
-
-#if wxUSE_UNICODE_MSLU && !wxUSE_UNICODE
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxUSE_UNICODE_MSLU requires wxUSE_UNICODE"
-#   else
-#       undef wxUSE_UNICODE
-#       define wxUSE_UNICODE 1
-#   endif
-#endif /* wxUSE_UNICODE_MSLU */
 
 #endif /* wxUSE_GUI */
 
