@@ -454,8 +454,8 @@ private:
     // the helper functions used by HandleChar/KeyXXX methods
     wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
 
-    DECLARE_DYNAMIC_CLASS(wxWindowMSW);
-    DECLARE_NO_COPY_CLASS(wxWindowMSW);
+    DECLARE_DYNAMIC_CLASS(wxWindowMSW)
+    DECLARE_NO_COPY_CLASS(wxWindowMSW)
     DECLARE_EVENT_TABLE()
 };
 
