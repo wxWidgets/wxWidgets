@@ -42,7 +42,7 @@ VP8 = @top_srcdir@/src/jpeg
 VP9 = @top_srcdir@/src/tiff
 VP10 = @top_srcdir@/src/zlib
 VP11 = @top_srcdir@/src/iodbc
-VP12 = @top_srcdir@/src/ole
+VP12 = @top_srcdir@/src/msw/ole
 
 FTVP01 = @top_srcdir@/src/freetype/unix
 FTVP02 = @top_srcdir@/src/freetype/autohint
@@ -337,7 +337,15 @@ IODBCOBJS = \
 		misc.o \
 		prepare.o \
 		result.o
-        
+
+OLEOBJS = \
+		automtn.o \
+		dataobj.o \
+		dropsrc.o \
+		droptgt.o \
+		oleutils.o \
+		uuid.o
+  
 ############################## Rules ##################################
 
 BURNT_LIBRARY_NAME = @BURNT_LIBRARY_NAME@
