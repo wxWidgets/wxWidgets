@@ -569,7 +569,7 @@ wxString wxString::Right(char ch) const
   if ( iPos == NOT_FOUND )
     str = *this;
   else
-    str = c_str() + iPos;
+    str = c_str() + iPos + 1;
 
   return str;
 }
@@ -837,7 +837,7 @@ int wxString::Find(const char *pszSub) const
 }
 
 // ---------------------------------------------------------------------------
-// formatted output
+// formatted input/output
 // ---------------------------------------------------------------------------
 int wxString::Printf(const char *pszFormat, ...)
 {
@@ -853,13 +853,30 @@ int wxString::Printf(const char *pszFormat, ...)
 
 int wxString::PrintfV(const char* pszFormat, va_list argptr)
 {
-  static char s_szScratch[1024];
+  static char s_szScratch[1024]; // @@@@ shouldn't use fixed-size buffer!
 
   int iLen = vsprintf(s_szScratch, pszFormat, argptr);
   AllocBeforeWrite(iLen);
   strcpy(m_pchData, s_szScratch);
 
   return iLen;
+}
+
+int wxString::Scanf(const char *pszFormat, ...) const
+{
+  va_list argptr;
+  va_start(argptr, pszFormat);
+
+  int iLen = ScanfV(pszFormat, argptr);
+
+  va_end(argptr);
+
+  return iLen;
+}
+
+int wxString::ScanfV(const char *pszFormat, va_list argptr) const
+{
+  return vsscanf(c_str(), pszFormat, argptr);
 }
 
 // ---------------------------------------------------------------------------

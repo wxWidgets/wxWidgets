@@ -349,12 +349,16 @@ public:
     //@}
   //@}
 
-  /** @name formated output */
+  /** @name formated input/output */
   //@{
     /// as sprintf(), returns the number of characters written or < 0 on error
   int Printf(const char *pszFormat, ...);
     /// as vprintf(), returns the number of characters written or < 0 on error
   int PrintfV(const char* pszFormat, va_list argptr);
+    /// as sscanf()
+  int Scanf(const char *pszFormat, ...) const;
+    /// as vsscanf()
+  int ScanfV(const char *pszFormat, va_list argptr) const;
   //@}
   
   // get writable buffer of at least nLen characters
