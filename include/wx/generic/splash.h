@@ -16,8 +16,13 @@
 #ifndef _WX_SPLASH_H_
 #define _WX_SPLASH_H_
 
-#include "wx/frame.h"
+#ifndef WX_PRECOMP
+#include "wx/bitmap.h"
 #include "wx/timer.h"
+#endif
+
+#include "wx/frame.h"
+
 
 /*
  * A window for displaying a splash screen

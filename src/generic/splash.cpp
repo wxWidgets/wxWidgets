@@ -23,6 +23,7 @@
 #if wxUSE_SPLASH
 
 #ifndef WX_PRECOMP
+#include "wx/dcmemory.h"
 #endif
 
 #include "wx/splash.h"
