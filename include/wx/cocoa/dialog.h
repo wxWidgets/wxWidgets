@@ -6,7 +6,7 @@
 // Created:     2002/12/15
 // RCS-ID:      $Id:
 // Copyright:   David Elliott
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_COCOA_DIALOG_H_
@@ -81,7 +81,7 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
-    bool Show(bool show = true);
+    virtual bool Show(bool show = true);
 
     void SetModal(bool flag);
     virtual bool IsModal() const { return m_isModal; }

@@ -58,7 +58,7 @@ public:
     // returns true if we're in a modal loop
     bool IsModalShowing() const;
 
-    bool Show(bool show = true);
+    virtual bool Show(bool show = true);
 
     // implementation only from now on
     // -------------------------------

@@ -1460,20 +1460,21 @@
 #   endif
 #endif /* wxUSE_FILEDLG */
 
-#if !wxUSE_GAUGE
-#   if wxUSE_PROGRESSDLG
+#if !wxUSE_GAUGE || !wxUSE_BUTTON
+#   if wxUSE_PROGRESSDLG && !defined(__WXPALMOS__)
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "Progress dialog require wxUSE_GAUGE"
+#           error "Generic progress dialog requires wxUSE_GAUGE and wxUSE_BUTTON"
 #       else
 #           undef wxUSE_GAUGE
+#           undef wxUSE_BUTTON
 #           define wxUSE_GAUGE 1
+#           define wxUSE_BUTTON 1
 #       endif
 #   endif
 #endif /* !wxUSE_GAUGE */
 
 #if !wxUSE_BUTTON
-#   if wxUSE_PROGRESSDLG || \
-       wxUSE_FONTDLG || \
+#   if wxUSE_FONTDLG || \
        wxUSE_FILEDLG || \
        wxUSE_CHOICEDLG || \
        wxUSE_NUMBERDLG || \

@@ -100,6 +100,7 @@ wxPalmOS:
   all wxMSW specific code which was base for the new port)
 - enumeration of available volumes
 - native wxPrefConfig around Preferences database
+- native wxProgressDialog implementation
 
 
 2.5.3

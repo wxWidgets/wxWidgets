@@ -67,7 +67,7 @@ public:
     ~wxDialog();
 
 //    virtual bool Destroy();
-    bool Show(bool show = true);
+    virtual bool Show(bool show = true);
 
     void SetModal(bool flag);
     virtual bool IsModal() const;

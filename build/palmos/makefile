@@ -247,6 +247,7 @@ SOURCES =  ../../samples/minimal/minimal.cpp \
 ../../src/palmos/prefconf.cpp \
 ../../src/palmos/printdlg.cpp \
 ../../src/palmos/printpalm.cpp \
+../../src/palmos/progdlg.cpp \
 ../../src/palmos/radiobox.cpp \
 ../../src/palmos/radiobut.cpp \
 ../../src/palmos/region.cpp \

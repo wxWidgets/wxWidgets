@@ -63,7 +63,7 @@ public:
    */
    void Resume();
 
-   bool Show( bool show = true );
+   virtual bool Show( bool show = true );
 
 protected:
    // callback for optional abort button
@@ -150,7 +150,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxProgressDialog)
 };
-#endif
 
-#endif
-    // __PROGDLGH_G__
+#endif // wxUSE_PROGRESSDLG
+
+#endif // __PROGDLGH_G__
