@@ -181,6 +181,7 @@ public:
 
     void SetSelf(PyObject* self, bool clone=FALSE);
     PyObject* GetSelf() const;
+    bool GetCloned() const { return m_cloned; }
 
 protected:
     PyObject*   m_self;
