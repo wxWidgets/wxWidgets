@@ -452,9 +452,9 @@ Returns the background colour of the window.
 
 This functions returns the best acceptable minimal size for the window. For
 example, for a static control, it will be the minimal size such that the
-control label is not truncated. For windows containing subwindows (typically 
-\helpref{wxPanel}{wxpanel}), the size returned by this function will be the
-same as the size the window would have had after calling 
+control label is not truncated. For windows containing subwindows (typically
+\helpref{wxPanel}wxpanel}), the size returned by this function will be the
+same as the size the window would have had after calling
 \helpref{Fit}{wxwindowfit}.
 
 \membersection{wxWindow::GetCharHeight}
@@ -820,6 +820,14 @@ Returns TRUE if the window is enabled for input, FALSE otherwise.
 Returns TRUE if the given point or rectange area has been exposed since the
 last repaint. Call this in an paint event handler to optimize redrawing by
 only redrawing those areas, which have been exposed.
+
+\pythonnote{In place of a single overloaded method name, wxPython
+implements the following methods:\par
+\indented{2cm}{\begin{twocollist}
+\twocolitem{{\bf IsExposed(x,y, w=0,h=0}}{}
+\twocolitem{{\bf IsExposedPoint(pt)}}{}
+\twocolitem{{\bf IsExposedRect(rect)}}{}
+\end{twocollist}}
 
 \membersection{wxWindow::IsRetained}\label{wxwindowisretained}
 
