@@ -133,6 +133,14 @@ public:
     // Retrieve the point in the window where a position is displayed.
     wxPoint PointFromPosition(int pos);
 
+
+    // Scroll enough to make the given line visible
+    void ScrollToLine(int line);
+
+
+    // Scroll enough to make the given column visible
+    void ScrollToColumn(int column);
+
 //----------------------------------------------------------------------
 
 
