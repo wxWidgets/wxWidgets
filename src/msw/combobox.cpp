@@ -53,15 +53,24 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxComboBox, wxControl,"wx/combobox.h")
 
-/* 
-	TODO PROPERTIES
-		selection (long¨)
-		content
-			value
-			item
-*/
+WX_BEGIN_PROPERTIES_TABLE(wxComboBox)
+    // TODO DELEGATES
+	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
+	WX_PROPERTY( Value ,wxString, SetValue, GetValue, )
+	WX_PROPERTY( Selection ,int, SetSelectionLine, GetSelection, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxComboBox)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_5( wxComboBox , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size )
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
+#endif
 
 // ----------------------------------------------------------------------------
 // function prototypes

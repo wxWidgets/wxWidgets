@@ -40,8 +40,23 @@
 
 #include "wx/msw/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl,"wx/checkbox.h")
 
+WX_BEGIN_PROPERTIES_TABLE(wxChoice)
+    // TODO DELEGATES
+	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
+	WX_PROPERTY( Selection ,int, SetSelection, GetSelection, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxChoice)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+#else
+IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+#endif
 /*
 	TODO PROPERTIES
 		selection (long)

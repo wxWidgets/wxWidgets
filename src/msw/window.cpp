@@ -230,40 +230,57 @@ static inline void wxBringWindowToTop(HWND hwnd)
     IMPLEMENT_ABSTRACT_CLASS(wxWindowMSW, wxWindowBase)
 #else // __WXMSW__
 #if wxUSE_EXTENDED_RTTI
+
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxWindow, wxWindowBase,"wx/window.h")
+
+// make wxWindowList known before the property is used
+
+template<> const wxTypeInfo* wxGetTypeInfo( wxWindowList * )
+{
+    static wxCollectionTypeInfo s_typeInfo( (wxTypeInfo*) wxGetTypeInfo( (wxWindow **) NULL) ) ;
+    return &s_typeInfo ;
+}
+
+template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVariantArray &value)
+{
+    wxListCollectionToVariantArray( theList , value ) ;
+}
 
 WX_BEGIN_PROPERTIES_TABLE(wxWindow)
     // Always constructor Properties first
 
     WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  )
 	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1 )
-	WX_PROPERTY_SET_BY_REF( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) ) // pos
-	WX_PROPERTY_SET_BY_REF( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) ) // size
-    WX_PROPERTY( WindowStyle , long , SetWindowStyle , GetWindowStyle , ) // style 
+	WX_PROPERTY( Position,wxPoint, SetWindowPosition , GetWindowPosition, wxPoint(-1,-1) ) // pos
+	WX_PROPERTY( Size,wxSize, SetWindowSize, GetWindowSize, wxSize(-1,-1) ) // size
+    WX_PROPERTY( WindowStyle , long , SetWindowStyle , GetWindowStyle , ) // style
 
     // Then all relations of the object graph
 
-    WX_READONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetChildren )
+    WX_READONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetWindowChildren )
 
    // and finally all other properties
 
 	WX_PROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , ) // extstyle
-	WX_PROPERTY_SET_BY_REF_RET_BOOL( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , ) // bg
-	WX_PROPERTY_SET_BY_REF_RET_BOOL( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , ) // fg
-	WX_PROPERTY_SET_RET_BOOL( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) )
-	WX_PROPERTY_SET_RET_BOOL( Shown , bool , Show , IsShown , wxxVariant((bool)true) )
+	WX_PROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , ) // bg
+	WX_PROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , ) // fg
+	WX_PROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) )
+	WX_PROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) )
 #if 0
     // possible property candidates (not in xrc) or not valid in all subclasses
-	WX_PROPERTY_SET_BY_REF( Title,wxString, SetTitle, GetTitle, wxT("") )
-	WX_PROPERTY_SET_AND_GET_BY_REF_RET_BOOL( Font , wxFont , SetFont , GetFont  , )
-	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
+	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
+	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
 	// MaxHeight, Width , MinHeight , Width
 	// TODO switch label to control and title to toplevels
- 
+
 	WX_PROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
-	//WX_PROPERTY_SET_BY_REF( Cursor , wxCursor , SetCursor , GetCursor , )
+	//WX_PROPERTY( Cursor , wxCursor , SetCursor , GetCursor , )
 	// WX_PROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
 	WX_PROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
+
+
+
 #endif
 WX_END_PROPERTIES_TABLE()
 
@@ -271,6 +288,7 @@ WX_BEGIN_HANDLERS_TABLE(wxWindow)
 WX_END_HANDLERS_TABLE()
 
 WX_CONSTRUCTOR_DUMMY(wxWindow)
+
 #else
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 #endif
@@ -3458,7 +3476,7 @@ wxWindowMSW::MSWOnDrawItem(int WXUNUSED_UNLESS_ODRAWN(id),
 
 #endif // USE_OWNER_DRAWN
 
-#if wxUSE_CONTROLS && !defined(__WXUNIVERSAL__) 
+#if wxUSE_CONTROLS && !defined(__WXUNIVERSAL__)
 
 #if wxUSE_OWNER_DRAWN
     wxControl *item = wxDynamicCast(FindItem(id), wxControl);

@@ -47,7 +47,23 @@
     #include "wx/msw/gnuwin32/extra.h"
 #endif
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl,"wx/listbox.h")
+
+WX_BEGIN_PROPERTIES_TABLE(wxListBox)
+    // TODO DELEGATES
+	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+    WX_PROPERTY_COLLECTION( Choices , wxArrayString , wxString , AppendString , GetStrings )
+	WX_PROPERTY( Selection ,int, SetSelectionLine, GetSelection, )
+WX_END_PROPERTIES_TABLE()
+
+WX_BEGIN_HANDLERS_TABLE(wxListBox)
+WX_END_HANDLERS_TABLE()
+
+WX_CONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+#else
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+#endif
 
 /*
 TODO PROPERTIES

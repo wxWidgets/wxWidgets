@@ -47,7 +47,7 @@
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxStaticBox, wxControl,"wx/statbox.h")
 
 WX_BEGIN_PROPERTIES_TABLE(wxStaticBox)
-	WX_PROPERTY_SET_BY_REF( Label,wxString, SetLabel, GetLabel, wxT("") )
+	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
 /*
 	TODO PROPERTIES :
 		label

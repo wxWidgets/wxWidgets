@@ -76,7 +76,7 @@ WX_BEGIN_PROPERTIES_TABLE(wxFont)
 	WX_PROPERTY( Style, int , SetStyle, GetStyle, (int)wxNORMAL ) // wxFontStyle
 	WX_PROPERTY( Weight, int , SetWeight, GetWeight, (int)wxNORMAL ) // wxFontWeight
 	WX_PROPERTY( Underlined, bool , SetUnderlined, GetUnderlined, false )
-	WX_PROPERTY_SET_BY_REF( Face, wxString , SetFaceName, GetFaceName, )
+	WX_PROPERTY( Face, wxString , SetFaceName, GetFaceName, )
 	WX_PROPERTY( Encoding, wxFontEncoding , SetEncoding, GetEncoding, wxFONTENCODING_DEFAULT )
 WX_END_PROPERTIES_TABLE()
 

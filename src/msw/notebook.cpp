@@ -158,6 +158,11 @@ WX_END_HANDLERS_TABLE()
 
 WX_CONSTRUCTOR_4( wxNotebookPageInfo , wxNotebookPage* , Page , wxString , Text , bool , Selected , int , ImageId ) 
 
+template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList, wxxVariantArray &value)
+{
+    wxListCollectionToVariantArray( theList , value ) ;
+}
+
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxNotebookPageInfo, wxObject )
