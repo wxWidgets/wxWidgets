@@ -62,6 +62,34 @@ static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *wi
 }
 
 //-----------------------------------------------------------------------------
+// "button_press_event" from slider
+//-----------------------------------------------------------------------------
+
+static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButton *gdk_event, wxScrollBar *win )
+{
+  if (gdk_event->window != widget->slider) return FALSE;
+    
+  win->m_isScrolling = TRUE;
+  
+  return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "button_release_event" from slider
+//-----------------------------------------------------------------------------
+
+static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventButton *gdk_event, wxScrollBar *win )
+{
+  if (gdk_event->window != widget->slider) return FALSE;
+
+  gtk_signal_emit_by_name( GTK_OBJECT(win->m_adjust), "value_changed" );
+      
+  win->m_isScrolling = FALSE;
+  
+  return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // wxScrollBar
 //-----------------------------------------------------------------------------
 
@@ -93,6 +121,12 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
   gtk_signal_connect (GTK_OBJECT (m_adjust), "value_changed",
 		      (GtkSignalFunc) gtk_scrollbar_callback, (gpointer) this );
   
+  gtk_signal_connect( GTK_OBJECT(m_widget), "button_press_event",
+          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
+
+  gtk_signal_connect( GTK_OBJECT(m_widget), "button_release_event",
+          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
+
   PostCreation();
   
   Show( TRUE );
@@ -126,25 +160,29 @@ void wxScrollBar::SetPosition( int viewStart )
   m_oldPos = fpos;
   if (fabs(fpos-m_adjust->value) < 0.2) return;
   m_adjust->value = fpos;
-  
-  gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
+
+  if (!m_isScrolling)
+    gtk_signal_emit_by_name( GTK_OBJECT(m_adjust), "value_changed" );
 }
 
 void wxScrollBar::SetScrollbar( int position, int thumbSize, int range, int pageSize,
       bool WXUNUSED(refresh) )
 {
   float fpos = (float)position;
-  m_oldPos = fpos;
   float frange = (float)range;
   float fthumb = (float)thumbSize;
   float fpage = (float)pageSize;
       
-  if ((fabs(fpos-m_adjust->value) < 0.2) &&
-      (fabs(frange-m_adjust->upper) < 0.2) &&
+  if ((fabs(frange-m_adjust->upper) < 0.2) &&
       (fabs(fthumb-m_adjust->page_size) < 0.2) &&
       (fabs(fpage-m_adjust->page_increment) < 0.2))
-      return;
+  {
+    SetPosition( position );
+    return;
+  }
       
+  m_oldPos = fpos;
+  
   m_adjust->lower = 0.0;
   m_adjust->upper = frange;
   m_adjust->value = fpos;

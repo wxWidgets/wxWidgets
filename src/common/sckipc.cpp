@@ -194,7 +194,7 @@ wxTCPConnection::~wxTCPConnection (void)
   wxDELETE(m_sockstrm);
 }
 
-void wxTCPConnection::Compress(bool on)
+void wxTCPConnection::Compress(bool WXUNUSED(on))
 {
   // Use wxLZWStream
 }

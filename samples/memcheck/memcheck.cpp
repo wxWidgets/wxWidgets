@@ -59,8 +59,9 @@ bool MyApp::OnInit(void)
   MyFrame *frame = new MyFrame((wxFrame *) NULL);
 
   // Give it an icon
-#ifdef wx_msw
+#ifdef __WXMSW__
   frame->SetIcon(wxIcon("mondrian"));
+#else
   frame->SetIcon(wxIcon(mondrian_xpm));
 #endif
 
@@ -113,7 +114,7 @@ MyFrame::MyFrame(wxFrame *parent):
 {}
 
 // Intercept menu commands
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }

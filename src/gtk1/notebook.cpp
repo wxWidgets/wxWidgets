@@ -62,12 +62,11 @@ static void gtk_notebook_page_change_callback(GtkNotebook *WXUNUSED(widget),
   int old = notebook->GetSelection();
 
   // TODO: emulate PAGE_CHANGING event
-  wxNotebookEvent event(wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
-                        notebook->GetId(),
-                        nPage,
-                        old);
+  
+  wxNotebookEvent event( wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
+                         notebook->GetId(),  nPage, old );
   event.SetEventObject( notebook );
-  notebook->ProcessEvent( event );
+  notebook->GetEventHandler()->ProcessEvent( event );
 }
 
 //-----------------------------------------------------------------------------

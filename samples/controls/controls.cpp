@@ -58,6 +58,7 @@ class MyPanel: public wxPanel
     void OnRadio( wxCommandEvent &event );
     void OnRadioButtons( wxCommandEvent &event );
     void OnSetFont( wxCommandEvent &event );
+    void OnPageChanged( wxNotebookEvent &event );
     
     wxListBox   *m_listbox;
     wxChoice    *m_choice;
@@ -171,37 +172,38 @@ const  ID_RADIOBOX_ENABLE   = 164;
 const  ID_SET_FONT          = 170;
 
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
-  EVT_SIZE      (                       MyPanel::OnSize)
-  EVT_LISTBOX   (ID_LISTBOX,            MyPanel::OnListBox)
-  EVT_BUTTON    (ID_LISTBOX_SEL_NUM,    MyPanel::OnListBoxButtons)
-  EVT_BUTTON    (ID_LISTBOX_SEL_STR,    MyPanel::OnListBoxButtons)
-  EVT_BUTTON    (ID_LISTBOX_CLEAR,      MyPanel::OnListBoxButtons)
-  EVT_BUTTON    (ID_LISTBOX_APPEND,     MyPanel::OnListBoxButtons)
-  EVT_BUTTON    (ID_LISTBOX_DELETE,     MyPanel::OnListBoxButtons)
-  EVT_BUTTON    (ID_LISTBOX_FONT,       MyPanel::OnListBoxButtons)
-  EVT_CHECKBOX  (ID_LISTBOX_ENABLE,     MyPanel::OnListBoxButtons)
-  EVT_CHOICE    (ID_CHOICE,             MyPanel::OnChoice)
-  EVT_BUTTON    (ID_CHOICE_SEL_NUM,     MyPanel::OnChoiceButtons)
-  EVT_BUTTON    (ID_CHOICE_SEL_STR,     MyPanel::OnChoiceButtons)
-  EVT_BUTTON    (ID_CHOICE_CLEAR,       MyPanel::OnChoiceButtons)
-  EVT_BUTTON    (ID_CHOICE_APPEND,      MyPanel::OnChoiceButtons)
-  EVT_BUTTON    (ID_CHOICE_DELETE,      MyPanel::OnChoiceButtons)
-  EVT_BUTTON    (ID_CHOICE_FONT,        MyPanel::OnChoiceButtons)
-  EVT_CHECKBOX  (ID_CHOICE_ENABLE,      MyPanel::OnChoiceButtons)
-  EVT_CHOICE    (ID_COMBO,              MyPanel::OnCombo)
-  EVT_BUTTON    (ID_COMBO_SEL_NUM,      MyPanel::OnComboButtons)
-  EVT_BUTTON    (ID_COMBO_SEL_STR,      MyPanel::OnComboButtons)
-  EVT_BUTTON    (ID_COMBO_CLEAR,        MyPanel::OnComboButtons)
-  EVT_BUTTON    (ID_COMBO_APPEND,       MyPanel::OnComboButtons)
-  EVT_BUTTON    (ID_COMBO_DELETE,       MyPanel::OnComboButtons)
-  EVT_BUTTON    (ID_COMBO_FONT,         MyPanel::OnComboButtons)
-  EVT_CHECKBOX  (ID_COMBO_ENABLE,       MyPanel::OnComboButtons)
-  EVT_RADIOBOX  (ID_RADIOBOX,           MyPanel::OnRadio)
-  EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,   MyPanel::OnRadioButtons)
-  EVT_BUTTON    (ID_RADIOBOX_SEL_STR,   MyPanel::OnRadioButtons)
-  EVT_BUTTON    (ID_RADIOBOX_FONT,      MyPanel::OnRadioButtons)
-  EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,    MyPanel::OnRadioButtons)
-  EVT_BUTTON    (ID_SET_FONT,           MyPanel::OnSetFont)
+  EVT_SIZE      (                         MyPanel::OnSize)
+  EVT_NOTEBOOK_PAGE_CHANGED(ID_NOTEBOOK,  MyPanel::OnPageChanged)  
+  EVT_LISTBOX   (ID_LISTBOX,              MyPanel::OnListBox)
+  EVT_BUTTON    (ID_LISTBOX_SEL_NUM,      MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_SEL_STR,      MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_CLEAR,        MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_APPEND,       MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_DELETE,       MyPanel::OnListBoxButtons)
+  EVT_BUTTON    (ID_LISTBOX_FONT,         MyPanel::OnListBoxButtons)
+  EVT_CHECKBOX  (ID_LISTBOX_ENABLE,       MyPanel::OnListBoxButtons)
+  EVT_CHOICE    (ID_CHOICE,               MyPanel::OnChoice)
+  EVT_BUTTON    (ID_CHOICE_SEL_NUM,       MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_SEL_STR,       MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_CLEAR,         MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_APPEND,        MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_DELETE,        MyPanel::OnChoiceButtons)
+  EVT_BUTTON    (ID_CHOICE_FONT,          MyPanel::OnChoiceButtons)
+  EVT_CHECKBOX  (ID_CHOICE_ENABLE,        MyPanel::OnChoiceButtons)
+  EVT_CHOICE    (ID_COMBO,                MyPanel::OnCombo)
+  EVT_BUTTON    (ID_COMBO_SEL_NUM,        MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_SEL_STR,        MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_CLEAR,          MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_APPEND,         MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_DELETE,         MyPanel::OnComboButtons)
+  EVT_BUTTON    (ID_COMBO_FONT,           MyPanel::OnComboButtons)
+  EVT_CHECKBOX  (ID_COMBO_ENABLE,         MyPanel::OnComboButtons)
+  EVT_RADIOBOX  (ID_RADIOBOX,             MyPanel::OnRadio)
+  EVT_BUTTON    (ID_RADIOBOX_SEL_NUM,     MyPanel::OnRadioButtons)
+  EVT_BUTTON    (ID_RADIOBOX_SEL_STR,     MyPanel::OnRadioButtons)
+  EVT_BUTTON    (ID_RADIOBOX_FONT,        MyPanel::OnRadioButtons)
+  EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
+  EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
@@ -301,6 +303,11 @@ void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
   
   if (m_notebook) m_notebook->SetSize( 2, 2, x-4, y*2/3-4 );
   if (m_text) m_text->SetSize( 2, y*2/3+2, x-4, y/3-4 );
+}
+
+void MyPanel::OnPageChanged( wxNotebookEvent &event )
+{
+  *m_text << "Notebook selection is " << event.GetSelection() << "\n";
 }
 
 void MyPanel::OnListBox( wxCommandEvent &event )

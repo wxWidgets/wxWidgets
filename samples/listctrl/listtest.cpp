@@ -161,7 +161,7 @@ bool MyApp::OnInit(void)
 	{
 		char buf[20];
 		sprintf(buf, "Item %d", i);
-		long tmp = frame->m_listCtrl->InsertItem(i, buf);
+		frame->m_listCtrl->InsertItem(i, buf);
 	}
 
   frame->CreateStatusBar(3);
@@ -230,7 +230,7 @@ void MyFrame::OnListView(wxCommandEvent& WXUNUSED(event))
 	{
 		char buf[20];
 		sprintf(buf, "Item %d", i);
-		long tmp = m_listCtrl->InsertItem(i, buf);
+		m_listCtrl->InsertItem(i, buf);
 	}
 }
 
@@ -266,7 +266,7 @@ void MyFrame::OnIconView(wxCommandEvent& WXUNUSED(event))
 
 	for ( int i=0; i < 9; i++)
 	{
-		long tmp = m_listCtrl->InsertItem(i, i);
+		m_listCtrl->InsertItem(i, i);
 	}
 }
 
@@ -282,7 +282,7 @@ void MyFrame::OnIconTextView(wxCommandEvent& WXUNUSED(event))
 	{
 		char buf[20];
 		sprintf(buf, "Label %d", i);
-		long tmp = m_listCtrl->InsertItem(i, buf, i);
+		m_listCtrl->InsertItem(i, buf, i);
 	}
 }
 
@@ -296,7 +296,7 @@ void MyFrame::OnSmallIconView(wxCommandEvent& WXUNUSED(event))
 
 	for ( int i=0; i < 9; i++)
 	{
-		long tmp = m_listCtrl->InsertItem(i, 0);
+		m_listCtrl->InsertItem(i, 0);
 	}
 }
 
@@ -310,13 +310,13 @@ void MyFrame::OnSmallIconTextView(wxCommandEvent& WXUNUSED(event))
 
 	for ( int i=0; i < 9; i++)
 	{
-		long tmp = m_listCtrl->InsertItem(i, "Label", 0);
+		m_listCtrl->InsertItem(i, "Label", 0);
 	}
 }
 
 // MyListCtrl
 
-void MyListCtrl::OnBeginDrag(wxListEvent& event)
+void MyListCtrl::OnBeginDrag(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -333,7 +333,7 @@ void MyListCtrl::OnBeginDrag(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnBeginRDrag(wxListEvent& event)
+void MyListCtrl::OnBeginRDrag(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -349,7 +349,7 @@ void MyListCtrl::OnBeginRDrag(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
+void MyListCtrl::OnBeginLabelEdit(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -366,7 +366,7 @@ void MyListCtrl::OnBeginLabelEdit(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
+void MyListCtrl::OnEndLabelEdit(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -383,7 +383,7 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnDeleteItem(wxListEvent& event)
+void MyListCtrl::OnDeleteItem(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -437,7 +437,7 @@ void MyListCtrl::OnGetInfo(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnSetInfo(wxListEvent& event)
+void MyListCtrl::OnSetInfo(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -454,7 +454,7 @@ void MyListCtrl::OnSetInfo(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnSelected(wxListEvent& event)
+void MyListCtrl::OnSelected(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -471,7 +471,7 @@ void MyListCtrl::OnSelected(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnDeselected(wxListEvent& event)
+void MyListCtrl::OnDeselected(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -488,7 +488,7 @@ void MyListCtrl::OnDeselected(wxListEvent& event)
 #endif
 }
 
-void MyListCtrl::OnKeyDown(wxListEvent& event)
+void MyListCtrl::OnKeyDown(wxListEvent& WXUNUSED(event))
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;

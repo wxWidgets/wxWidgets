@@ -79,7 +79,8 @@ bool MyApp::OnInit(void)
 
   // Force a resize. This should probably be replaced by a call to a wxFrame
   // function that lays out default decorations and the remaining content window.
-  frame->OnSize(wxSizeEvent(wxSize(-1, -1), frame->GetId()));
+  wxSizeEvent event(wxSize(-1, -1), frame->GetId());
+  frame->OnSize(event);
   frame->Show(TRUE);
 
   frame->SetStatusText("Hello, wxWindows");

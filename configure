@@ -112,7 +112,7 @@ ac_help="$ac_help
 ac_help="$ac_help
 **--with-gtk-exec-prefix=PFX  Exec prefix where GTK is installed"
 ac_help="$ac_help
-**--without-threads       Force disabling threads "
+**--without-threads       Force disabling threads"
 
 # Initialize some variables set by options.
 # The variables have the same names as the options, with
@@ -4205,6 +4205,8 @@ DEFAULT_USE_GTK=1
 DEFAULT_USE_QT=0
 DEFAULT_USE_MOTIF=0
 
+DEFAULT_USE_THREADS=1
+
 DEFAULT_USE_SHARED=1
 DEFAULT_USE_OPTIMISE=1
 DEFAULT_USE_PROFILE=0
@@ -4266,7 +4268,7 @@ DEFAULT_USE_HELP=0
 
 
 echo $ac_n "checking "for gtk"""... $ac_c" 1>&6
-echo "configure:4270: checking "for gtk"" >&5
+echo "configure:4272: checking "for gtk"" >&5
 # Check whether --with-gtk or --without-gtk was given.
 if test "${with_gtk+set}" = set; then
   withval="$with_gtk"
@@ -4296,7 +4298,7 @@ fi
 
 
 echo $ac_n "checking "for qt"""... $ac_c" 1>&6
-echo "configure:4300: checking "for qt"" >&5
+echo "configure:4302: checking "for qt"" >&5
 # Check whether --with-qt or --without-qt was given.
 if test "${with_qt+set}" = set; then
   withval="$with_qt"
@@ -4326,7 +4328,7 @@ fi
 
 
 echo $ac_n "checking "for motif"""... $ac_c" 1>&6
-echo "configure:4330: checking "for motif"" >&5
+echo "configure:4332: checking "for motif"" >&5
 # Check whether --with-motif or --without-motif was given.
 if test "${with_motif+set}" = set; then
   withval="$with_motif"
@@ -4357,7 +4359,7 @@ fi
 
 
 echo $ac_n "checking "for shared"""... $ac_c" 1>&6
-echo "configure:4361: checking "for shared"" >&5
+echo "configure:4363: checking "for shared"" >&5
 # Check whether --with-shared or --without-shared was given.
 if test "${with_shared+set}" = set; then
   withval="$with_shared"
@@ -4387,7 +4389,7 @@ fi
 
 
 echo $ac_n "checking "for optimise"""... $ac_c" 1>&6
-echo "configure:4391: checking "for optimise"" >&5
+echo "configure:4393: checking "for optimise"" >&5
 # Check whether --with-optimise or --without-optimise was given.
 if test "${with_optimise+set}" = set; then
   withval="$with_optimise"
@@ -4417,7 +4419,7 @@ fi
 
 
 echo $ac_n "checking "for debug_flag"""... $ac_c" 1>&6
-echo "configure:4421: checking "for debug_flag"" >&5
+echo "configure:4423: checking "for debug_flag"" >&5
 # Check whether --with-debug_flag or --without-debug_flag was given.
 if test "${with_debug_flag+set}" = set; then
   withval="$with_debug_flag"
@@ -4447,7 +4449,7 @@ fi
 
 
 echo $ac_n "checking "for debug_info"""... $ac_c" 1>&6
-echo "configure:4451: checking "for debug_info"" >&5
+echo "configure:4453: checking "for debug_info"" >&5
 # Check whether --with-debug_info or --without-debug_info was given.
 if test "${with_debug_info+set}" = set; then
   withval="$with_debug_info"
@@ -4477,7 +4479,7 @@ fi
 
 
 echo $ac_n "checking "for mem_tracing"""... $ac_c" 1>&6
-echo "configure:4481: checking "for mem_tracing"" >&5
+echo "configure:4483: checking "for mem_tracing"" >&5
 # Check whether --with-mem_tracing or --without-mem_tracing was given.
 if test "${with_mem_tracing+set}" = set; then
   withval="$with_mem_tracing"
@@ -4507,7 +4509,7 @@ fi
 
 
 echo $ac_n "checking "for dmalloc"""... $ac_c" 1>&6
-echo "configure:4511: checking "for dmalloc"" >&5
+echo "configure:4513: checking "for dmalloc"" >&5
 # Check whether --with-dmalloc or --without-dmalloc was given.
 if test "${with_dmalloc+set}" = set; then
   withval="$with_dmalloc"
@@ -4537,7 +4539,7 @@ fi
 
 
 echo $ac_n "checking "for profile"""... $ac_c" 1>&6
-echo "configure:4541: checking "for profile"" >&5
+echo "configure:4543: checking "for profile"" >&5
 # Check whether --with-profile or --without-profile was given.
 if test "${with_profile+set}" = set; then
   withval="$with_profile"
@@ -4567,7 +4569,7 @@ fi
 
 
 echo $ac_n "checking "for apple_ieee"""... $ac_c" 1>&6
-echo "configure:4571: checking "for apple_ieee"" >&5
+echo "configure:4573: checking "for apple_ieee"" >&5
 # Check whether --with-apple_ieee or --without-apple_ieee was given.
 if test "${with_apple_ieee+set}" = set; then
   withval="$with_apple_ieee"
@@ -4598,7 +4600,7 @@ fi
 
 
 echo $ac_n "checking "for zlib"""... $ac_c" 1>&6
-echo "configure:4602: checking "for zlib"" >&5
+echo "configure:4604: checking "for zlib"" >&5
 # Check whether --with-zlib or --without-zlib was given.
 if test "${with_zlib+set}" = set; then
   withval="$with_zlib"
@@ -4628,7 +4630,7 @@ fi
 
 
 echo $ac_n "checking "for gdk_imlib"""... $ac_c" 1>&6
-echo "configure:4632: checking "for gdk_imlib"" >&5
+echo "configure:4634: checking "for gdk_imlib"" >&5
 # Check whether --with-gdk_imlib or --without-gdk_imlib was given.
 if test "${with_gdk_imlib+set}" = set; then
   withval="$with_gdk_imlib"
@@ -4658,7 +4660,7 @@ fi
 
 
 echo $ac_n "checking "for libpng"""... $ac_c" 1>&6
-echo "configure:4662: checking "for libpng"" >&5
+echo "configure:4664: checking "for libpng"" >&5
 # Check whether --with-libpng or --without-libpng was given.
 if test "${with_libpng+set}" = set; then
   withval="$with_libpng"
@@ -4688,7 +4690,7 @@ fi
 
 
 echo $ac_n "checking "for odbc"""... $ac_c" 1>&6
-echo "configure:4692: checking "for odbc"" >&5
+echo "configure:4694: checking "for odbc"" >&5
 # Check whether --with-odbc or --without-odbc was given.
 if test "${with_odbc+set}" = set; then
   withval="$with_odbc"
@@ -4718,7 +4720,7 @@ fi
 
 
 echo $ac_n "checking "for opengl"""... $ac_c" 1>&6
-echo "configure:4722: checking "for opengl"" >&5
+echo "configure:4724: checking "for opengl"" >&5
 # Check whether --with-opengl or --without-opengl was given.
 if test "${with_opengl+set}" = set; then
   withval="$with_opengl"
@@ -4749,7 +4751,7 @@ fi
 
 
 echo $ac_n "checking "for gauge"""... $ac_c" 1>&6
-echo "configure:4753: checking "for gauge"" >&5
+echo "configure:4755: checking "for gauge"" >&5
 # Check whether --with-gauge or --without-gauge was given.
 if test "${with_gauge+set}" = set; then
   withval="$with_gauge"
@@ -4779,7 +4781,7 @@ fi
 
 
 echo $ac_n "checking "for combobox"""... $ac_c" 1>&6
-echo "configure:4783: checking "for combobox"" >&5
+echo "configure:4785: checking "for combobox"" >&5
 # Check whether --with-combobox or --without-combobox was given.
 if test "${with_combobox+set}" = set; then
   withval="$with_combobox"
@@ -4809,7 +4811,7 @@ fi
 
 
 echo $ac_n "checking "for scrollbar"""... $ac_c" 1>&6
-echo "configure:4813: checking "for scrollbar"" >&5
+echo "configure:4815: checking "for scrollbar"" >&5
 # Check whether --with-scrollbar or --without-scrollbar was given.
 if test "${with_scrollbar+set}" = set; then
   withval="$with_scrollbar"
@@ -4839,7 +4841,7 @@ fi
 
 
 echo $ac_n "checking "for listctrl"""... $ac_c" 1>&6
-echo "configure:4843: checking "for listctrl"" >&5
+echo "configure:4845: checking "for listctrl"" >&5
 # Check whether --with-listctrl or --without-listctrl was given.
 if test "${with_listctrl+set}" = set; then
   withval="$with_listctrl"
@@ -4869,7 +4871,7 @@ fi
 
 
 echo $ac_n "checking "for treectrl"""... $ac_c" 1>&6
-echo "configure:4873: checking "for treectrl"" >&5
+echo "configure:4875: checking "for treectrl"" >&5
 # Check whether --with-treectrl or --without-treectrl was given.
 if test "${with_treectrl+set}" = set; then
   withval="$with_treectrl"
@@ -4899,7 +4901,7 @@ fi
 
 
 echo $ac_n "checking "for grid"""... $ac_c" 1>&6
-echo "configure:4903: checking "for grid"" >&5
+echo "configure:4905: checking "for grid"" >&5
 # Check whether --with-grid or --without-grid was given.
 if test "${with_grid+set}" = set; then
   withval="$with_grid"
@@ -4929,7 +4931,7 @@ fi
 
 
 echo $ac_n "checking "for tab_dialog"""... $ac_c" 1>&6
-echo "configure:4933: checking "for tab_dialog"" >&5
+echo "configure:4935: checking "for tab_dialog"" >&5
 # Check whether --with-tab_dialog or --without-tab_dialog was given.
 if test "${with_tab_dialog+set}" = set; then
   withval="$with_tab_dialog"
@@ -4959,7 +4961,7 @@ fi
 
 
 echo $ac_n "checking "for notebook"""... $ac_c" 1>&6
-echo "configure:4963: checking "for notebook"" >&5
+echo "configure:4965: checking "for notebook"" >&5
 # Check whether --with-notebook or --without-notebook was given.
 if test "${with_notebook+set}" = set; then
   withval="$with_notebook"
@@ -4990,7 +4992,7 @@ fi
 
 
 echo $ac_n "checking "for timedate"""... $ac_c" 1>&6
-echo "configure:4994: checking "for timedate"" >&5
+echo "configure:4996: checking "for timedate"" >&5
 # Check whether --with-timedate or --without-timedate was given.
 if test "${with_timedate+set}" = set; then
   withval="$with_timedate"
@@ -5020,7 +5022,7 @@ fi
 
 
 echo $ac_n "checking "for fraction"""... $ac_c" 1>&6
-echo "configure:5024: checking "for fraction"" >&5
+echo "configure:5026: checking "for fraction"" >&5
 # Check whether --with-fraction or --without-fraction was given.
 if test "${with_fraction+set}" = set; then
   withval="$with_fraction"
@@ -5050,7 +5052,7 @@ fi
 
 
 echo $ac_n "checking "for log"""... $ac_c" 1>&6
-echo "configure:5054: checking "for log"" >&5
+echo "configure:5056: checking "for log"" >&5
 # Check whether --with-log or --without-log was given.
 if test "${with_log+set}" = set; then
   withval="$with_log"
@@ -5080,7 +5082,7 @@ fi
 
 
 echo $ac_n "checking "for intl"""... $ac_c" 1>&6
-echo "configure:5084: checking "for intl"" >&5
+echo "configure:5086: checking "for intl"" >&5
 # Check whether --with-intl or --without-intl was given.
 if test "${with_intl+set}" = set; then
   withval="$with_intl"
@@ -5110,7 +5112,7 @@ fi
 
 
 echo $ac_n "checking "for config"""... $ac_c" 1>&6
-echo "configure:5114: checking "for config"" >&5
+echo "configure:5116: checking "for config"" >&5
 # Check whether --with-config or --without-config was given.
 if test "${with_config+set}" = set; then
   withval="$with_config"
@@ -5140,7 +5142,7 @@ fi
 
 
 echo $ac_n "checking "for streams"""... $ac_c" 1>&6
-echo "configure:5144: checking "for streams"" >&5
+echo "configure:5146: checking "for streams"" >&5
 # Check whether --with-streams or --without-streams was given.
 if test "${with_streams+set}" = set; then
   withval="$with_streams"
@@ -5170,7 +5172,7 @@ fi
 
 
 echo $ac_n "checking "for serial"""... $ac_c" 1>&6
-echo "configure:5174: checking "for serial"" >&5
+echo "configure:5176: checking "for serial"" >&5
 # Check whether --with-serial or --without-serial was given.
 if test "${with_serial+set}" = set; then
   withval="$with_serial"
@@ -5200,7 +5202,7 @@ fi
 
 
 echo $ac_n "checking "for file"""... $ac_c" 1>&6
-echo "configure:5204: checking "for file"" >&5
+echo "configure:5206: checking "for file"" >&5
 # Check whether --with-file or --without-file was given.
 if test "${with_file+set}" = set; then
   withval="$with_file"
@@ -5230,7 +5232,7 @@ fi
 
 
 echo $ac_n "checking "for textfile"""... $ac_c" 1>&6
-echo "configure:5234: checking "for textfile"" >&5
+echo "configure:5236: checking "for textfile"" >&5
 # Check whether --with-textfile or --without-textfile was given.
 if test "${with_textfile+set}" = set; then
   withval="$with_textfile"
@@ -5261,7 +5263,7 @@ fi
 
 
 echo $ac_n "checking "for afmfonts"""... $ac_c" 1>&6
-echo "configure:5265: checking "for afmfonts"" >&5
+echo "configure:5267: checking "for afmfonts"" >&5
 # Check whether --with-afmfonts or --without-afmfonts was given.
 if test "${with_afmfonts+set}" = set; then
   withval="$with_afmfonts"
@@ -5291,7 +5293,7 @@ fi
 
 
 echo $ac_n "checking "for normalized"""... $ac_c" 1>&6
-echo "configure:5295: checking "for normalized"" >&5
+echo "configure:5297: checking "for normalized"" >&5
 # Check whether --with-normalized or --without-normalized was given.
 if test "${with_normalized+set}" = set; then
   withval="$with_normalized"
@@ -5321,7 +5323,7 @@ fi
 
 
 echo $ac_n "checking "for postscript"""... $ac_c" 1>&6
-echo "configure:5325: checking "for postscript"" >&5
+echo "configure:5327: checking "for postscript"" >&5
 # Check whether --with-postscript or --without-postscript was given.
 if test "${with_postscript+set}" = set; then
   withval="$with_postscript"
@@ -5352,7 +5354,7 @@ fi
 
 
 echo $ac_n "checking "for wxresources"""... $ac_c" 1>&6
-echo "configure:5356: checking "for wxresources"" >&5
+echo "configure:5358: checking "for wxresources"" >&5
 # Check whether --with-wxresources or --without-wxresources was given.
 if test "${with_wxresources+set}" = set; then
   withval="$with_wxresources"
@@ -5382,7 +5384,7 @@ fi
 
 
 echo $ac_n "checking "for prologio"""... $ac_c" 1>&6
-echo "configure:5386: checking "for prologio"" >&5
+echo "configure:5388: checking "for prologio"" >&5
 # Check whether --with-prologio or --without-prologio was given.
 if test "${with_prologio+set}" = set; then
   withval="$with_prologio"
@@ -5412,7 +5414,7 @@ fi
 
 
 echo $ac_n "checking "for RPC"""... $ac_c" 1>&6
-echo "configure:5416: checking "for RPC"" >&5
+echo "configure:5418: checking "for RPC"" >&5
 # Check whether --with-rpc or --without-rpc was given.
 if test "${with_rpc+set}" = set; then
   withval="$with_rpc"
@@ -5443,7 +5445,7 @@ fi
 
 
 echo $ac_n "checking "for IPC"""... $ac_c" 1>&6
-echo "configure:5447: checking "for IPC"" >&5
+echo "configure:5449: checking "for IPC"" >&5
 # Check whether --with-ipc or --without-ipc was given.
 if test "${with_ipc+set}" = set; then
   withval="$with_ipc"
@@ -5473,7 +5475,7 @@ fi
 
 
 echo $ac_n "checking "for resources"""... $ac_c" 1>&6
-echo "configure:5477: checking "for resources"" >&5
+echo "configure:5479: checking "for resources"" >&5
 # Check whether --with-resources or --without-resources was given.
 if test "${with_resources+set}" = set; then
   withval="$with_resources"
@@ -5503,7 +5505,7 @@ fi
 
 
 echo $ac_n "checking "for clipboard"""... $ac_c" 1>&6
-echo "configure:5507: checking "for clipboard"" >&5
+echo "configure:5509: checking "for clipboard"" >&5
 # Check whether --with-clipboard or --without-clipboard was given.
 if test "${with_clipboard+set}" = set; then
   withval="$with_clipboard"
@@ -5533,7 +5535,7 @@ fi
 
 
 echo $ac_n "checking "for dnd"""... $ac_c" 1>&6
-echo "configure:5537: checking "for dnd"" >&5
+echo "configure:5539: checking "for dnd"" >&5
 # Check whether --with-dnd or --without-dnd was given.
 if test "${with_dnd+set}" = set; then
   withval="$with_dnd"
@@ -5563,7 +5565,7 @@ fi
 
 
 echo $ac_n "checking "for constrains"""... $ac_c" 1>&6
-echo "configure:5567: checking "for constrains"" >&5
+echo "configure:5569: checking "for constrains"" >&5
 # Check whether --with-constraints or --without-constraints was given.
 if test "${with_constraints+set}" = set; then
   withval="$with_constraints"
@@ -5594,7 +5596,7 @@ fi
 
 
 echo $ac_n "checking "for mdi"""... $ac_c" 1>&6
-echo "configure:5598: checking "for mdi"" >&5
+echo "configure:5600: checking "for mdi"" >&5
 # Check whether --with-mdi or --without-mdi was given.
 if test "${with_mdi+set}" = set; then
   withval="$with_mdi"
@@ -5624,7 +5626,7 @@ fi
 
 
 echo $ac_n "checking "for docview"""... $ac_c" 1>&6
-echo "configure:5628: checking "for docview"" >&5
+echo "configure:5630: checking "for docview"" >&5
 # Check whether --with-docview or --without-docview was given.
 if test "${with_docview+set}" = set; then
   withval="$with_docview"
@@ -5654,7 +5656,7 @@ fi
 
 
 echo $ac_n "checking "for printarch"""... $ac_c" 1>&6
-echo "configure:5658: checking "for printarch"" >&5
+echo "configure:5660: checking "for printarch"" >&5
 # Check whether --with-printarch or --without-printarch was given.
 if test "${with_printarch+set}" = set; then
   withval="$with_printarch"
@@ -5734,7 +5736,7 @@ fi
   # Extract the first word of "gtk-config", so it can be a program name with args.
 set dummy gtk-config; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:5738: checking for $ac_word" >&5
+echo "configure:5740: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_path_GTK_CONFIG'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -5765,7 +5767,7 @@ fi
 
   min_gtk_version=0.99.7
   echo $ac_n "checking for GTK - version >= $min_gtk_version""... $ac_c" 1>&6
-echo "configure:5769: checking for GTK - version >= $min_gtk_version" >&5
+echo "configure:5771: checking for GTK - version >= $min_gtk_version" >&5
   no_gtk=""
   if test "$GTK_CONFIG" != "no" ; then
     GTK_CFLAGS=`$GTK_CONFIG --cflags`
@@ -5778,7 +5780,7 @@ echo "configure:5769: checking for GTK - version >= $min_gtk_version" >&5
   echo $ac_n "cross compiling; assumed OK... $ac_c"
 else
   cat > conftest.$ac_ext <<EOF
-#line 5782 "configure"
+#line 5784 "configure"
 #include "confdefs.h"
 
 #include <gtk/gtk.h>
@@ -5800,7 +5802,7 @@ main ()
 }
 
 EOF
-if { (eval echo configure:5804: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
+if { (eval echo configure:5806: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest && (./conftest; exit) 2>/dev/null
 then
   :
 else
@@ -5839,7 +5841,7 @@ fi
 
 if test "$USE_QT" = 1; then
    echo $ac_n "checking for Qt includes""... $ac_c" 1>&6
-echo "configure:5843: checking for Qt includes" >&5
+echo "configure:5845: checking for Qt includes" >&5
    
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE;
@@ -5853,7 +5855,7 @@ for ac_dir in $SEARCH_INCLUDE;
    if test "$ac_find_includes" != "" ; then
      echo "$ac_t""found $ac_find_includes" 1>&6
      echo $ac_n "checking for Qt library""... $ac_c" 1>&6
-echo "configure:5857: checking for Qt library" >&5
+echo "configure:5859: checking for Qt library" >&5
      
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB;
@@ -5903,7 +5905,7 @@ fi
 
 if test "$USE_MOTIF" = 1; then
    echo $ac_n "checking for Motif/Lesstif includes""... $ac_c" 1>&6
-echo "configure:5907: checking for Motif/Lesstif includes" >&5
+echo "configure:5909: checking for Motif/Lesstif includes" >&5
    
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE;
@@ -5917,7 +5919,7 @@ for ac_dir in $SEARCH_INCLUDE;
    if test "$ac_find_includes" != "" ; then
      echo "$ac_t""found $ac_find_includes" 1>&6
      echo $ac_n "checking for Motif or Lesstif library""... $ac_c" 1>&6
-echo "configure:5921: checking for Motif or Lesstif library" >&5
+echo "configure:5923: checking for Motif or Lesstif library" >&5
      
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB;
@@ -6346,7 +6348,7 @@ fi
 
 
 echo $ac_n "checking for main in -ldl""... $ac_c" 1>&6
-echo "configure:6350: checking for main in -ldl" >&5
+echo "configure:6352: checking for main in -ldl" >&5
 ac_lib_var=`echo dl'_'main | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6354,14 +6356,14 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-ldl  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6358 "configure"
+#line 6360 "configure"
 #include "confdefs.h"
 
 int main() {
 main()
 ; return 0; }
 EOF
-if { (eval echo configure:6365: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6367: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6387,13 +6389,37 @@ fi
 
 USE_THREADS=1
 THREADS_LINK=""
-UNIX_THREAD=""
+UNIX_THREAD="gtk/threadno.cpp"
 
+
+echo $ac_n "checking "for threads"""... $ac_c" 1>&6
+echo "configure:6397: checking "for threads"" >&5
 # Check whether --with-threads or --without-threads was given.
 if test "${with_threads+set}" = set; then
   withval="$with_threads"
-  USE_THREADS="$withval"
+  if test "x$with_threads" = xyes; then
+  ac_cv_use_threads='USE_THREADS="1"'
+else
+  ac_cv_use_threads='USE_THREADS="0"'
 fi
+else
+  
+  LINE=`grep "USE_THREADS" ${OSTYPE}.system.cache`
+  if test "x$LINE" != x ; then
+    eval "DEFAULT_$LINE"
+  fi
+  ac_cv_use_threads='USE_THREADS='$DEFAULT_USE_THREADS
+
+fi
+
+eval "$ac_cv_use_threads"
+echo $ac_cv_use_threads >> ${OSTYPE}.system.cache.tmp
+if test "$USE_THREADS" = 1; then
+  echo "$ac_t""yes" 1>&6
+else
+  echo "$ac_t""no" 1>&6
+fi
+
 
 
 if test "$USE_THREADS" = "1"; then
@@ -6401,7 +6427,7 @@ if test "$USE_THREADS" = "1"; then
 
   
   echo $ac_n "checking for pthread_create in -lpthread-0.7""... $ac_c" 1>&6
-echo "configure:6405: checking for pthread_create in -lpthread-0.7" >&5
+echo "configure:6431: checking for pthread_create in -lpthread-0.7" >&5
 ac_lib_var=`echo pthread-0.7'_'pthread_create | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6409,7 +6435,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthread-0.7  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6413 "configure"
+#line 6439 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -6420,7 +6446,7 @@ int main() {
 pthread_create()
 ; return 0; }
 EOF
-if { (eval echo configure:6424: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6450: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6444,17 +6470,17 @@ else
 
     ac_safe=`echo "sys/prctl.h" | sed 'y%./+-%__p_%'`
 echo $ac_n "checking for sys/prctl.h""... $ac_c" 1>&6
-echo "configure:6448: checking for sys/prctl.h" >&5
+echo "configure:6474: checking for sys/prctl.h" >&5
 if eval "test \"`echo '$''{'ac_cv_header_$ac_safe'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   cat > conftest.$ac_ext <<EOF
-#line 6453 "configure"
+#line 6479 "configure"
 #include "confdefs.h"
 #include <sys/prctl.h>
 EOF
 ac_try="$ac_cpp conftest.$ac_ext >/dev/null 2>conftest.out"
-{ (eval echo configure:6458: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
+{ (eval echo configure:6484: \"$ac_try\") 1>&5; (eval $ac_try) 2>&5; }
 ac_err=`grep -v '^ *+' conftest.out`
 if test -z "$ac_err"; then
   rm -rf conftest*
@@ -6480,7 +6506,7 @@ fi
 
         
     echo $ac_n "checking for pthread_setcanceltype in -lpthread""... $ac_c" 1>&6
-echo "configure:6484: checking for pthread_setcanceltype in -lpthread" >&5
+echo "configure:6510: checking for pthread_setcanceltype in -lpthread" >&5
 ac_lib_var=`echo pthread'_'pthread_setcanceltype | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6488,7 +6514,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthread  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6492 "configure"
+#line 6518 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -6499,7 +6525,7 @@ int main() {
 pthread_setcanceltype()
 ; return 0; }
 EOF
-if { (eval echo configure:6503: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6529: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6526,7 +6552,7 @@ fi
 fi
 
   echo $ac_n "checking for pthread_setcanceltype in -lpthreads""... $ac_c" 1>&6
-echo "configure:6530: checking for pthread_setcanceltype in -lpthreads" >&5
+echo "configure:6556: checking for pthread_setcanceltype in -lpthreads" >&5
 ac_lib_var=`echo pthreads'_'pthread_setcanceltype | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_lib_$ac_lib_var'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -6534,7 +6560,7 @@ else
   ac_save_LIBS="$LIBS"
 LIBS="-lpthreads  $LIBS"
 cat > conftest.$ac_ext <<EOF
-#line 6538 "configure"
+#line 6564 "configure"
 #include "confdefs.h"
 /* Override any gcc2 internal prototype to avoid an error.  */
 /* We use char because int might match the return type of a gcc2
@@ -6545,7 +6571,7 @@ int main() {
 pthread_setcanceltype()
 ; return 0; }
 EOF
-if { (eval echo configure:6549: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
+if { (eval echo configure:6575: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest; then
   rm -rf conftest*
   eval "ac_cv_lib_$ac_lib_var=yes"
 else
@@ -6589,7 +6615,7 @@ OPENGL_LINK=
 
 if test "$USE_OPENGL" = 1; then
     echo $ac_n "checking for OpenGL includes""... $ac_c" 1>&6
-echo "configure:6593: checking for OpenGL includes" >&5
+echo "configure:6619: checking for OpenGL includes" >&5
   
 ac_find_includes=
 for ac_dir in $SEARCH_INCLUDE;
@@ -6604,7 +6630,7 @@ for ac_dir in $SEARCH_INCLUDE;
     OPENGL_INCLUDE="-I$ac_find_includes"
     echo "$ac_t""found $ac_find_includes" 1>&6
         echo $ac_n "checking for OpenGL library""... $ac_c" 1>&6
-echo "configure:6608: checking for OpenGL library" >&5
+echo "configure:6634: checking for OpenGL library" >&5
     
 ac_find_libraries=
 for ac_dir in $SEARCH_LIB;

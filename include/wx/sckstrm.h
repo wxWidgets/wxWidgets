@@ -18,7 +18,7 @@
 #include "wx/stream.h"
 #include "wx/socket.h"
 
-class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
+class WXDLLEXPORT wxSocketOutputStream : public virtual wxOutputStream
 {
  public:
   wxSocketOutputStream(wxSocketBase& s);
@@ -36,7 +36,7 @@ class WXDLLEXPORT wxSocketOutputStream : public wxOutputStream
   wxSocketBase *m_o_socket;
 };
 
-class WXDLLEXPORT wxSocketInputStream : public wxInputStream
+class WXDLLEXPORT wxSocketInputStream : public virtual wxInputStream
 {
  public:
   wxSocketInputStream(wxSocketBase& s);

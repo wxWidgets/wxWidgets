@@ -458,11 +458,7 @@ bool wxSocketBase::GetPeer(wxSockAddress& addr_man) const
   if (m_fd < 0)
     return FALSE;
 
-#ifdef __WINDOWS__
   if (getpeername(m_fd, (struct sockaddr *)&my_addr, (int *)&len_addr) < 0)
-#else
-  if (getpeername(m_fd, (struct sockaddr *)&my_addr, (unsigned int *)&len_addr) < 0)
-#endif
     return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);
@@ -477,11 +473,7 @@ bool wxSocketBase::GetLocal(wxSockAddress& addr_man) const
   if (m_fd < 0)
     return FALSE;
 
-#ifdef __WINDOWS__
   if (getsockname(m_fd, (struct sockaddr *)&my_addr, (int *)&len_addr) < 0)
-#else
-  if (getsockname(m_fd, (struct sockaddr *)&my_addr, (unsigned int *)&len_addr) < 0)
-#endif
     return FALSE;
 
   addr_man.Disassemble(&my_addr, len_addr);

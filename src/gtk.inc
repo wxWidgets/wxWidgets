@@ -4,7 +4,7 @@ NONE =
 # define library name
 LIB_TARGET=wx_gtk
 LIB_MAJOR=1
-LIB_MINOR=93
+LIB_MINOR=94
 
 # define library sources
 

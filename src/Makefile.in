@@ -53,6 +53,7 @@ install::
 	   $(includedir)/wx/common \
 	   $(includedir)/wx/generic \
 	   $(includedir)/wx/protocol \
+	   $(libdir)/wx/include/wx/gtk \
 	   $(libdir) \
 	   $(bindir)
 	@echo "  Copying headers from /include/wx"
@@ -82,6 +83,9 @@ install::
 	  rm -f $(includedir)/wx/protocol/$$f ; \
 	  $(INSTALL_DATA) $$f $(includedir)/wx/protocol/$$f ; \
 	done
+	@echo "  Moving setup.h to library path"
+	@$(INSTALL) -d $(libdir)/wx/include/wx/gtk ;\
+	mv $(includedir)/wx/gtk/setup.h $(libdir)/wx/include/wx/gtk/setup.h ;
 	@echo "  Copying wx-config"
 	@cd $(WXBASEDIR) ; \
 	  $(INSTALL) -d $(bindir) ;\
@@ -91,16 +95,19 @@ install::
 	@cd $(WXBASEDIR)/lib/$(OS) ; \
 	  rm -f $(libdir)/$(STATIC_LIBRARY) ; \
 	  $(INSTALL_DATA) $(STATIC_LIBRARY) $(libdir)/$(STATIC_LIBRARY)
-	@if test -d $(SHARED_LIBRARY); then \
-	  echo "  Copying shared library" \
+	@if test $(WXBASEDIR)/lib/$(OS)/$(SHARED_LIBRARY) ; then \
+	  echo "  Copying shared library" ; \
 	  cd $(WXBASEDIR)/lib/$(OS) ; \
-	    rm -f $(libdir)/$(SHARED_LIBRARY) ; \
+	    rm -f $(libdir)/lib$(LIB_TARGET).so* ; \
 	    $(INSTALL_PROGRAM) $(SHARED_LIBRARY) $(libdir)/$(SHARED_LIBRARY) ; \
 	    $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so.$(LIB_MAJOR) ; \
 	    $(LN_S) $(SHARED_LIBRARY) $(libdir)/lib$(LIB_TARGET).so ; \
+	    echo " " ; \
+	    echo "  You may have to run ldconfig!" ; \
+	    echo " " ; \
 	fi
 	@echo " "
-	@echo "Installation complete. You may have to run ldconfig!"
+	@echo "Installation complete."
 	@echo " "
 	
 clean::

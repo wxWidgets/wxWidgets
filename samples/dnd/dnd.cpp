@@ -149,7 +149,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   SetIcon(wxIcon(mondrian_xpm));
 #endif  
   
-  const int widths[] = { -1 };
+//  const int widths[] = { -1 };
   CreateStatusBar();
 
   // construct menu

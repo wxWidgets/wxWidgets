@@ -646,6 +646,8 @@ DEFAULT_USE_GTK=1
 DEFAULT_USE_QT=0
 DEFAULT_USE_MOTIF=0
 
+DEFAULT_USE_THREADS=1
+
 DEFAULT_USE_SHARED=1
 DEFAULT_USE_OPTIMISE=1
 DEFAULT_USE_PROFILE=0
@@ -1318,11 +1320,15 @@ dnl ----------------------------------------------------------------
 
 USE_THREADS=1
 THREADS_LINK=""
-UNIX_THREAD=""
+UNIX_THREAD="gtk/threadno.cpp"
 
-AC_ARG_WITH(threads,
-[**--without-threads       Force disabling threads ],
-[USE_THREADS="$withval"])
+AC_OVERRIDES(threads,threads,
+**--without-threads       Force disabling threads,
+USE_THREADS)
+
+dnl AC_ARG_WITH(threads,
+dnl [**--without-threads       Force disabling threads ],
+dnl [USE_THREADS="$withval"])
 
 if test "$USE_THREADS" = "1"; then
   UNIX_THREAD="gtk/threadno.cpp"

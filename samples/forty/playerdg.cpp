@@ -62,7 +62,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
     
 	wxArrayString players;
 	m_scoreFile->GetPlayerList(players);
-	for (int i = 0; i < players.Count(); i++)
+	for (unsigned int i = 0; i < players.Count(); i++)
 	{
 		list->Append(players[i]);
 	}
@@ -128,7 +128,7 @@ PlayerSelectionDialog::~PlayerSelectionDialog()
 {
 }
 
-void PlayerSelectionDialog::OnSize(wxSizeEvent& event)
+void PlayerSelectionDialog::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 	Layout();
 }

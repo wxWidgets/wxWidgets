@@ -36,12 +36,13 @@ while test $# -gt 0; do
       echo $exec_prefix
       ;;
     --version)
-      echo 1.93
+      echo 1.94
       ;;
     --cflags)
       if test @includedir@ != /usr/include ; then
         includes=-I@includedir@
       fi
+      includes="$includes -I@libdir@/wx/include"
       echo $includes -D@TOOLKIT_DEF@ @GUI_TK_INCLUDE@
       ;;
     --libs)

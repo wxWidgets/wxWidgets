@@ -64,7 +64,7 @@ ScoreCanvas::ScoreCanvas(wxWindow* parent, ScoreFile* scoreFile) :
 	ostrstream os;
 
 	os << "Player\tWins\tGames\tScore\n";
-	for (int i = 0; i < players.Count(); i++)
+	for (unsigned int i = 0; i < players.Count(); i++)
 	{
 		int wins, games, score;
 		scoreFile->ReadPlayersScore(players[i], wins, games, score);

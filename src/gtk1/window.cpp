@@ -800,6 +800,39 @@ static void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxW
 }
 
 //-----------------------------------------------------------------------------
+// "button_press_event" from scrollbar
+//-----------------------------------------------------------------------------
+
+static gint gtk_scrollbar_button_press_callback( GtkRange *widget, GdkEventButton *gdk_event, wxWindow *win )
+{
+  if (gdk_event->window != widget->slider) return FALSE;
+    
+  win->m_isScrolling = TRUE;
+  
+  return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "button_release_event" from scrollbar
+//-----------------------------------------------------------------------------
+
+static gint gtk_scrollbar_button_release_callback( GtkRange *widget, GdkEventButton *gdk_event, wxWindow *win )
+{
+  if (gdk_event->window != widget->slider) return FALSE;
+
+  GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(win->m_widget);
+ 
+  if (widget == GTK_RANGE(s_window->vscrollbar))
+    gtk_signal_emit_by_name( GTK_OBJECT(win->m_hAdjust), "value_changed" );
+  else  
+    gtk_signal_emit_by_name( GTK_OBJECT(win->m_vAdjust), "value_changed" );
+      
+  win->m_isScrolling = FALSE;
+  
+  return FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // "drop_data_available_event"
 //-----------------------------------------------------------------------------
 
@@ -865,6 +898,7 @@ wxWindow::wxWindow()
   m_hasVMT = FALSE;
   m_needParent = TRUE;
   m_hasScrolling = FALSE;
+  m_isScrolling = FALSE;
   m_hAdjust = (GtkAdjustment *) NULL;
   m_vAdjust = (GtkAdjustment *) NULL;
   m_oldHorizontalPos = 0.0;
@@ -891,9 +925,14 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
   m_hasScrolling = TRUE;
   
-  GtkScrolledWindow *s_window;
-  s_window = GTK_SCROLLED_WINDOW(m_widget);
-  
+  GtkScrolledWindow *s_window = GTK_SCROLLED_WINDOW(m_widget);
+ 
+  gtk_signal_connect( GTK_OBJECT(s_window->vscrollbar), "button_press_event",
+          (GtkSignalFunc)gtk_scrollbar_button_press_callback, (gpointer) this );
+
+  gtk_signal_connect( GTK_OBJECT(s_window->hscrollbar), "button_release_event",
+          (GtkSignalFunc)gtk_scrollbar_button_release_callback, (gpointer) this );
+
   GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(m_widget)->klass );
   scroll_class->scrollbar_spacing = 0;
   
@@ -905,18 +944,17 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
   m_hAdjust = gtk_range_get_adjustment( GTK_RANGE(s_window->hscrollbar) );
   m_vAdjust = gtk_range_get_adjustment( GTK_RANGE(s_window->vscrollbar) );
   
-  gtk_signal_connect (GTK_OBJECT (m_hAdjust), "value_changed",
+  gtk_signal_connect( GTK_OBJECT(m_hAdjust), "value_changed",
           (GtkSignalFunc) gtk_window_hscroll_callback, (gpointer) this );
-  gtk_signal_connect (GTK_OBJECT (m_vAdjust), "value_changed",
+  gtk_signal_connect( GTK_OBJECT(m_vAdjust), "value_changed",
           (GtkSignalFunc) gtk_window_vscroll_callback, (gpointer) this );
           
-  gtk_signal_connect (GTK_OBJECT (m_hAdjust), "changed",
+  gtk_signal_connect( GTK_OBJECT(m_hAdjust), "changed",
           (GtkSignalFunc) gtk_window_hscroll_change_callback, (gpointer) this );
-  gtk_signal_connect (GTK_OBJECT (m_vAdjust), "changed",
+  gtk_signal_connect(GTK_OBJECT(m_vAdjust), "changed",
           (GtkSignalFunc) gtk_window_vscroll_change_callback, (gpointer) this );
   
-  GtkViewport *viewport;
-  viewport = GTK_VIEWPORT(s_window->viewport);
+  GtkViewport *viewport = GTK_VIEWPORT(s_window->viewport);
   
   if (m_windowStyle & wxRAISED_BORDER)
   {
@@ -1055,6 +1093,8 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_windowSizer = (wxSizer *) NULL;
   m_sizerParent = (wxWindow *) NULL;
   m_autoLayout = FALSE;
+  m_hasScrolling = FALSE;
+  m_isScrolling = FALSE;
   m_pDropTarget = (wxDropTarget *) NULL;
   m_resizing = FALSE;
   m_windowValidator = (wxValidator *) NULL;
@@ -2197,7 +2237,7 @@ wxWindow *wxWindow::FindWindow( const wxString& name )
 }
 
 void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
-      int range, bool WXUNUSED(refresh) )
+      int range, bool refresh )
 {
   wxASSERT_MSG( (m_widget != NULL), "invalid window" );
   
@@ -2208,15 +2248,18 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
   if (orient == wxHORIZONTAL)
   {
     float fpos = (float)pos;
-    m_oldHorizontalPos = fpos;
     float frange = (float)range;
     float fthumb = (float)thumbVisible;
     
-    if ((fabs(fpos-m_hAdjust->value) < 0.2) &&
-        (fabs(frange-m_hAdjust->upper) < 0.2) &&
-  (fabs(fthumb-m_hAdjust->page_size) < 0.2))
+    if ((fabs(frange-m_hAdjust->upper) < 0.2) &&
+        (fabs(fthumb-m_hAdjust->page_size) < 0.2))
+    {
+      SetScrollPos( orient, pos, refresh );
       return;
+    }
       
+    m_oldHorizontalPos = fpos;
+    
     m_hAdjust->lower = 0.0;
     m_hAdjust->upper = frange;
     m_hAdjust->value = fpos;
@@ -2227,14 +2270,17 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
   else
   {
     float fpos = (float)pos;
-    m_oldVerticalPos = fpos;
     float frange = (float)range;
     float fthumb = (float)thumbVisible;
     
-    if ((fabs(fpos-m_vAdjust->value) < 0.2) &&
-        (fabs(frange-m_vAdjust->upper) < 0.2) &&
-  (fabs(fthumb-m_vAdjust->page_size) < 0.2))
+    if ((fabs(frange-m_vAdjust->upper) < 0.2) &&
+        (fabs(fthumb-m_vAdjust->page_size) < 0.2))
+    {
+      SetScrollPos( orient, pos, refresh );
       return;
+    }
+    
+    m_oldVerticalPos = fpos;
       
     m_vAdjust->lower = 0.0;
     m_vAdjust->upper = frange;
@@ -2279,12 +2325,15 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
     m_vAdjust->value = fpos;
   }
   
-  if (m_wxwindow->window)
-  {  
-    if (orient == wxHORIZONTAL)
-      gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
-    else  
-      gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
+  if (!m_isScrolling)
+  {
+    if (m_wxwindow->window)
+    {  
+      if (orient == wxHORIZONTAL)
+        gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
+      else  
+        gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
+    }
   }
 }
 
