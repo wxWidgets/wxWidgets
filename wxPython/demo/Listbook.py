@@ -1,6 +1,4 @@
 
-import  sys
-
 import  wx
 
 import ColorPanel

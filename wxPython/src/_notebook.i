@@ -261,7 +261,7 @@ class NotebookPage(wx.Panel):
         wx.Panel.__init__(self, parent, id, pos, size, style, name)
         self.child = None
         EVT_SIZE(self, self.OnSize)
-        
+
     def OnSize(self, evt):
         if self.child is None:
             children = self.GetChildren()
@@ -321,7 +321,7 @@ public:
     // returns True if we have wxLB_TOP or wxLB_BOTTOM style
     bool IsVertical() const;
 
-    wxListView* GetListView();    
+    wxListView* GetListView();
 };
 
 
@@ -344,6 +344,72 @@ public:
 
 
 //---------------------------------------------------------------------------
+
+%{
+#include <wx/choicebk.h>
+%}
+
+/*
+ * wxChoicebook flags
+ */
+enum {
+    wxCHB_DEFAULT,
+    wxCHB_TOP,
+    wxCHB_BOTTOM,
+    wxCHB_LEFT,
+    wxCHB_RIGHT,
+    wxCHB_ALIGN_MASK
+};
+
+
+MustHaveApp(wxChoicebook);
+
+class wxChoicebook : public wxBookCtrl
+{
+public:
+    %pythonAppend wxChoicebook         "self._setOORInfo(self)"
+    %pythonAppend wxChoicebook()       ""
+
+    wxChoicebook(wxWindow *parent,
+                 wxWindowID id,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = 0,
+                 const wxString& name = wxPyEmptyString);
+    %name(PreChoicebook)wxChoicebook();
+
+    // quasi ctor
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPyEmptyString);
+
+
+    // returns true if we have wxCHB_TOP or wxCHB_BOTTOM style
+    bool IsVertical() const { return HasFlag(wxCHB_BOTTOM | wxCHB_TOP); }
+
+    virtual bool DeleteAllPages();
+};
+
+
+class wxChoicebookEvent : public wxBookCtrlEvent
+{
+public:
+    wxChoicebookEvent(wxEventType commandType = wxEVT_NULL, int id = 0,
+                      int nSel = -1, int nOldSel = -1);
+};
+
+%constant wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED;
+%constant wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING;
+
+%pythoncode {
+    EVT_CHOICEBOOK_PAGE_CHANGED  = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED, 1 )
+    EVT_CHOICEBOOK_PAGE_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING, 1 )
+}
+
+//---------------------------------------------------------------------------
 %newgroup;
 
 
@@ -353,7 +419,7 @@ public:
     %pythonAppend wxBookCtrlSizer "self._setOORInfo(self)"
 
     wxBookCtrlSizer( wxBookCtrl *nb );
-    
+
     void RecalcSizes();
     wxSize CalcMin();
     wxBookCtrl *GetControl();
@@ -365,7 +431,7 @@ public:
     %pythonAppend wxNotebookSizer "self._setOORInfo(self)"
 
     wxNotebookSizer( wxNotebook *nb );
-    
+
     void RecalcSizes();
     wxSize CalcMin();
     wxNotebook *GetNotebook();

@@ -49,6 +49,7 @@ _treeList = [
     ('Recent Additions/Updates', [
         'StockButtons',
         'Ticker',
+        'Choicebook',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -89,6 +90,7 @@ _treeList = [
         'CheckBox',
         'CheckListBox',
         'Choice',
+        'Choicebook',
         'ComboBox',
         'Gauge',
         'Grid',
