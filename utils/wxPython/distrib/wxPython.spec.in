@@ -36,6 +36,9 @@ extension language for applications that need a programmable interface.
 #make install
 
 %files
-%doc /usr/doc/wxPython-__VERSION__/README.txt
+%doc /usr/doc/wxPython-__VERSION__
+/usr/lib/libwxPyHelpers.so
 /usr/lib/python1.5/site-packages/wxPython
+
+
 

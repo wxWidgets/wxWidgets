@@ -12,12 +12,18 @@ fi
 
 
 
-strip /usr/lib/python1.5/site-packages/wxPython/wxcmodule.so
+strip /usr/lib/python1.5/site-packages/wxPython/*.so
+strip /usr/lib/libwxPyHelpers.so
 
 cat wxPython.spec.in | sed s/__VERSION__/$1/g > wxPython.spec
 
 mkdir /usr/doc/wxPython-$1
 cp ../README.txt /usr/doc/wxPython-$1
+cp ../../../docs/preamble.txt /usr/doc/wxPython-$1
+cp ../../../docs/licence.txt /usr/doc/wxPython-$1
+cp ../../../docs/licendoc.txt /usr/doc/wxPython-$1
+cp ../../../docs/lgpl.txt /usr/doc/wxPython-$1
+cp ../../../docs/gpl.txt /usr/doc/wxPython-$1
 
 rpm -bb wxPython.spec
 
