@@ -193,7 +193,7 @@ void wxWindowDC::CrossHair( long x, long y )
     }
 }
 
-void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double yc )
+void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, long xc, long yc )
 {
     wxCHECK_RET( Ok(), _T("invalid window dc") );
   
@@ -201,8 +201,8 @@ void wxWindowDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double 
     long yy1 = YLOG2DEV(y1);
     long xx2 = XLOG2DEV(x2); 
     long yy2 = YLOG2DEV(y2);
-    long xxc = XLOG2DEV((long)xc); 
-    long yyc = YLOG2DEV((long)yc);
+    long xxc = XLOG2DEV(xc); 
+    long yyc = YLOG2DEV(yc);
     double dx = xx1 - xxc; 
     double dy = yy1 - yyc;
     double radius = sqrt(dx*dx+dy*dy);

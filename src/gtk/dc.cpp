@@ -93,7 +93,7 @@ bool wxDC::Ok() const
 }
 
 void wxDC::DrawArc( long WXUNUSED(x1), long WXUNUSED(y1), long WXUNUSED(x2), long WXUNUSED(y2), 
-  double WXUNUSED(xc), double WXUNUSED(yc) )
+  long WXUNUSED(xc), long WXUNUSED(yc) )
 {
 }
 

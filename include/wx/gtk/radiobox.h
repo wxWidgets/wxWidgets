@@ -42,9 +42,8 @@ class wxRadioBox: public wxControl
 
   DECLARE_DYNAMIC_CLASS(wxRadioBox)
   
-  public:
-  
-    wxRadioBox(void);
+public:
+    wxRadioBox();
     inline wxRadioBox( wxWindow *parent, wxWindowID id, const wxString& title,
              const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
              int n = 0, const wxString choices[] = (const wxString *) NULL,
@@ -61,22 +60,32 @@ class wxRadioBox: public wxControl
              int majorDim = 0, long style = wxRA_HORIZONTAL,
              const wxValidator& val = wxDefaultValidator, 
              const wxString& name = wxRadioBoxNameStr );
+	     
     int FindString( const wxString& s) const;
     void SetSelection( int n );
-    int GetSelection(void) const;
+    int GetSelection() const;
+    
     wxString GetString( int n ) const;
+    
+    wxString GetLabel( int item ) const;
+    wxString GetLabel() const { return wxControl::GetLabel(); }
     void SetLabel( const wxString& label );
     void SetLabel( int item, const wxString& label );
+    
+    /* doesn't work */
     void SetLabel( int item, wxBitmap *bitmap );
-    wxString GetLabel( int item ) const;
+    
     bool Show( bool show );
+    void Show( int item, bool show );
+    
     bool Enable( bool enable );
     void Enable( int item, bool enable );
-    void Show( int item, bool show );
-    virtual wxString GetStringSelection(void) const;
+    
+    virtual wxString GetStringSelection() const;
     virtual bool SetStringSelection( const wxString& s );
-    virtual int Number(void) const;
-    int GetNumberOfRowsOrCols(void) const;
+    
+    virtual int Number() const;
+    int GetNumberOfRowsOrCols() const;
     void SetNumberOfRowsOrCols( int n );
     
     void OnSize( wxSizeEvent &event );

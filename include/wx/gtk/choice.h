@@ -69,6 +69,11 @@ public:
     void SetClientObject( int n, wxClientData* clientData );
     wxClientData* GetClientObject( int n );
 
+    void SetClientObject( wxClientData *data )  { wxControl::SetClientObject( data ); }
+    wxClientData *GetClientObject() const       { return wxControl::GetClientObject(); }
+    void SetClientData( void *data )            { wxControl::SetClientData( data ); }
+    void *GetClientData() const                 { return wxControl::GetClientData(); }
+    
     void Clear();
     void Delete(int n);
 

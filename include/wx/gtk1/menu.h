@@ -68,8 +68,9 @@ public:
     void Enable( int id, bool enable );
     bool IsEnabled( int id ) const;
 
-    wxString GetLabel( int id ) const;
     void SetLabel( int id, const wxString &label );
+    wxString GetLabel( int id ) const;
+    wxString GetLabel() const                { return wxWindow::GetLabel(); }
 
     void EnableTop( int pos, bool flag );
     void SetLabelTop( int pos, const wxString& label );
