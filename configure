@@ -11956,6 +11956,8 @@ trap 'rm -fr `echo "
 	    utils/wxMMedia2/Makefile
 	    utils/wxMMedia2/lib/Makefile
 	    utils/wxMMedia2/sample/Makefile
+	    utils/glcanvas/Makefile
+	    utils/glcanvas/${TOOLKIT_DIR}/Makefile
            setup.h:setup.h.in" | sed "s/:[^ ]*//g"` conftest*; exit 1' 1 2 15
 EOF
 cat >> $CONFIG_STATUS <<EOF
@@ -12155,6 +12157,8 @@ CONFIG_FILES=\${CONFIG_FILES-"wx-config
 	    utils/wxMMedia2/Makefile
 	    utils/wxMMedia2/lib/Makefile
 	    utils/wxMMedia2/sample/Makefile
+	    utils/glcanvas/Makefile
+	    utils/glcanvas/${TOOLKIT_DIR}/Makefile
           "}
 EOF
 cat >> $CONFIG_STATUS <<\EOF

@@ -3,6 +3,10 @@
 
 Finalise DnD API.
  
+Fix bug that thread sample reports about non-finished threads.
+
+Added wxExpandedImageList to wxTreeControl.
+
 More testing of Unicode support.
 
 Make wxSockets work on all platform.
@@ -10,7 +14,7 @@ Make wxSockets work on all platform.
 Add ID based i18n system as a replacement for the
   unelegant gettext system.
   
-Add controls to toolbar.
+Add controls to wxToolbar.
 
 Add TIFF handler. Someone? (Hint, hint).
 

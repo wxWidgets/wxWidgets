@@ -1,0 +1,3 @@
+all:
+	cd @TOOLKIT_DIR@; make
+	cd samples; make

@@ -1,13 +1,13 @@
 #
-# File:		makefile.unx
-# Author:	Julian Smart
+# File:		Makefile
+# Author:	Guilhem Lavaux
 # Created:	1998
 # Updated:	
 # Copyright:	(c) 1998 Julian Smart
 #
 # "%W% %G%"
 #
-# Makefile for thread example (UNIX).
+# Makefile for wxMultiMedia (UNIX).
 
 top_srcdir = @top_srcdir@
 top_builddir = ../../..

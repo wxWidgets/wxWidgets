@@ -2806,6 +2806,8 @@ AC_OUTPUT([
 	    utils/wxMMedia2/Makefile
 	    utils/wxMMedia2/lib/Makefile
 	    utils/wxMMedia2/sample/Makefile
+	    utils/glcanvas/Makefile
+	    utils/glcanvas/${TOOLKIT_DIR}/Makefile
           ],
           [
             chmod +x wx-config

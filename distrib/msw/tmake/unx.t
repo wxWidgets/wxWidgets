@@ -283,6 +283,7 @@ MOTIFDIR = $(WXDIR)/src/motif
 MSWDIR   = $(WXDIR)/src/msw
 INCDIR   = $(WXDIR)/include
 SAMPDIR  = $(WXDIR)/samples
+UTILSDIR = $(WXDIR)/utils
 
 DOCDIR = $(WXDIR)/docs
 
@@ -733,14 +734,195 @@ SAMPLES_DIST:
 	cp $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
-	mkdir $(DISTDIR)/samples/checkls
+	mkdir $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/Makefile.in $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.cpp $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.h $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xpm $(DISTDIR)/samples/printing
 	cp $(SAMPDIR)/printing/*.xbm $(DISTDIR)/samples/printing
+	mkdir $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/Makefile.in $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
+	mkdir $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/Makefile.in $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.cpp $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.xpm $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.txt $(DISTDIR)/samples/dnd
+	cp $(SAMPDIR)/dnd/*.png $(DISTDIR)/samples/dnd
+	mkdir $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/Makefile.in $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/*.cpp $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/*.h $(DISTDIR)/samples/docview
+	cp $(SAMPDIR)/docview/*.xpm $(DISTDIR)/samples/docview
+	mkdir $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/Makefile.in $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/*.cpp $(DISTDIR)/samples/docvwmdi
+	cp $(SAMPDIR)/docvwmdi/*.h $(DISTDIR)/samples/docvwmdi
+	mkdir $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/Makefile.in $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/*.cpp $(DISTDIR)/samples/drawing
+	cp $(SAMPDIR)/drawing/*.xpm $(DISTDIR)/samples/drawing
+	mkdir $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/Makefile.in $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/*.cpp $(DISTDIR)/samples/dynamic
+	cp $(SAMPDIR)/dynamic/*.xpm $(DISTDIR)/samples/dynamic
+	mkdir $(DISTDIR)/samples/html
+	cp $(SAMPDIR)/html/Makefile.in $(DISTDIR)/samples/html
+	mkdir $(DISTDIR)/samples/html/about
+	cp $(SAMPDIR)/html/about/Makefile.in $(DISTDIR)/samples/html/about
+	cp $(SAMPDIR)/html/about/*.cpp $(DISTDIR)/samples/html/about
+	mkdir $(DISTDIR)/samples/html/about/data
+	cp $(SAMPDIR)/html/about/data/*.htm $(DISTDIR)/samples/html/about/data
+	cp $(SAMPDIR)/html/about/data/*.png $(DISTDIR)/samples/html/about/data
+	mkdir $(DISTDIR)/samples/html/help
+	cp $(SAMPDIR)/html/help/Makefile.in $(DISTDIR)/samples/html/help
+	cp $(SAMPDIR)/html/help/*.cpp $(DISTDIR)/samples/html/help
+	mkdir $(DISTDIR)/samples/html/help/helpfiles
+	cp $(SAMPDIR)/html/help/helpfiles/*.??? $(DISTDIR)/samples/html/help/helpfiles
+	mkdir $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/Makefile.in $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.xpm $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.cpp $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.h $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.png $(DISTDIR)/samples/html/printing
+	cp $(SAMPDIR)/html/printing/*.htm $(DISTDIR)/samples/html/printing
+	mkdir $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/Makefile.in $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.cpp $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.bmp $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.png $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.htm $(DISTDIR)/samples/html/test
+	cp $(SAMPDIR)/html/test/*.html $(DISTDIR)/samples/html/test
+	mkdir $(DISTDIR)/samples/html/virtual
+	cp $(SAMPDIR)/html/virtual/Makefile.in $(DISTDIR)/samples/html/virtual
+	cp $(SAMPDIR)/html/virtual/*.cpp $(DISTDIR)/samples/html/virtual
+	cp $(SAMPDIR)/html/virtual/*.htm $(DISTDIR)/samples/html/virtual
+	mkdir $(DISTDIR)/samples/html/widget
+	cp $(SAMPDIR)/html/widget/Makefile.in $(DISTDIR)/samples/html/widget
+	cp $(SAMPDIR)/html/widget/*.cpp $(DISTDIR)/samples/html/widget
+	cp $(SAMPDIR)/html/widget/*.htm $(DISTDIR)/samples/html/widget
+	mkdir $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/Makefile.in $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/*.cpp $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/*.htm $(DISTDIR)/samples/html/zip
+	cp $(SAMPDIR)/html/zip/*.zip $(DISTDIR)/samples/html/zip
+	mkdir $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/Makefile.in $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/*.cpp $(DISTDIR)/samples/image
+	cp $(SAMPDIR)/image/horse.* $(DISTDIR)/samples/image
+	mkdir $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/Makefile.in $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/*.cpp $(DISTDIR)/samples/layout
+	cp $(SAMPDIR)/layout/*.h $(DISTDIR)/samples/layout
+	mkdir $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/Makefile.in $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/*.cpp $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/*.h $(DISTDIR)/samples/listctrl
+	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl
+	mkdir $(DISTDIR)/samples/listctrl/bitmap
+	cp $(SAMPDIR)/listctrl/*.xpm $(DISTDIR)/samples/listctrl/bitmaps
+	mkdir $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/Makefile.in $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/*.cpp $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/*.h $(DISTDIR)/samples/mdi
+	cp $(SAMPDIR)/mdi/*.xpm $(DISTDIR)/samples/mdi
+	mkdir $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/Makefile.in $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/*.cpp $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/*.h $(DISTDIR)/samples/minifram
+	cp $(SAMPDIR)/minifram/*.xpm $(DISTDIR)/samples/minifram
+	mkdir $(DISTDIR)/samples/minifram/bitmap
+	cp $(SAMPDIR)/minifram/*.xpm $(DISTDIR)/samples/minifram/bitmaps
+	mkdir $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/Makefile.in $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
+	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
+	mkdir $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/Makefile.in $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/*.cpp $(DISTDIR)/samples/notebook
+	cp $(SAMPDIR)/notebook/*.h $(DISTDIR)/samples/notebook
+	mkdir $(DISTDIR)/samples/proplist
+	cp $(SAMPDIR)/proplist/Makefile.in $(DISTDIR)/samples/proplist
+	cp $(SAMPDIR)/proplist/*.cpp $(DISTDIR)/samples/proplist
+	cp $(SAMPDIR)/proplist/*.h $(DISTDIR)/samples/proplist
+	mkdir $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/Makefile.in $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/*.cpp $(DISTDIR)/samples/sashtest
+	cp $(SAMPDIR)/sashtest/*.h $(DISTDIR)/samples/sashtest
+	mkdir $(DISTDIR)/samples/scroll
+	cp $(SAMPDIR)/scroll/Makefile.in $(DISTDIR)/samples/scroll
+	cp $(SAMPDIR)/scroll/*.cpp $(DISTDIR)/samples/scroll
+	mkdir $(DISTDIR)/samples/splitter
+	cp $(SAMPDIR)/splitter/Makefile.in $(DISTDIR)/samples/splitter
+	cp $(SAMPDIR)/splitter/*.cpp $(DISTDIR)/samples/splitter
+	mkdir $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/Makefile.in $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/*.cpp $(DISTDIR)/samples/text
+	cp $(SAMPDIR)/text/*.xpm $(DISTDIR)/samples/text
+	mkdir $(DISTDIR)/samples/thread
+	cp $(SAMPDIR)/thread/Makefile.in $(DISTDIR)/samples/thread
+	cp $(SAMPDIR)/thread/*.cpp $(DISTDIR)/samples/thread
+	mkdir $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/Makefile.in $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/*.cpp $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/*.h $(DISTDIR)/samples/toolbar
+	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar
+	mkdir $(DISTDIR)/samples/toolbar/bitmap
+	cp $(SAMPDIR)/toolbar/*.xpm $(DISTDIR)/samples/toolbar/bitmaps
+	mkdir $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/Makefile.in $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/*.cpp $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/*.h $(DISTDIR)/samples/treectrl
+	cp $(SAMPDIR)/treectrl/*.xpm $(DISTDIR)/samples/treectrl
+	mkdir $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/Makefile.in $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/*.cpp $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/*.h $(DISTDIR)/samples/typetest
+	cp $(SAMPDIR)/typetest/*.xpm $(DISTDIR)/samples/typetest
+	mkdir $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/Makefile.in $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/*.cpp $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/*.h $(DISTDIR)/samples/validate
+	cp $(SAMPDIR)/validate/*.xpm $(DISTDIR)/samples/validate
+	mkdir $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/Makefile.in $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/*.cpp $(DISTDIR)/samples/wizard
+	cp $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
+	mkdir $(DISTDIR)/samples/wxpoem
+	cp $(SAMPDIR)/wxpoem/Makefile.in $(DISTDIR)/samples/wxpoem
+	cp $(SAMPDIR)/wxpoem/*.cpp $(DISTDIR)/samples/wxpoem
+	cp $(SAMPDIR)/wxpoem/*.xpm $(DISTDIR)/samples/wxpoem
+	cp $(SAMPDIR)/wxpoem/*.dat $(DISTDIR)/samples/wxpoem
+	cp $(SAMPDIR)/wxpoem/*.txt $(DISTDIR)/samples/wxpoem
+	mkdir $(DISTDIR)/samples/wxsocket
+	cp $(SAMPDIR)/wxsocket/Makefile.in $(DISTDIR)/samples/wxsocket
+	cp $(SAMPDIR)/wxsocket/*.cpp $(DISTDIR)/samples/wxsocket
+	cp $(SAMPDIR)/wxsocket/*.xpm $(DISTDIR)/samples/wxsocket
 
-dist: ALL_DIST @GUIDIST@ SAMPLES_DIST
+UTILS_DIST:
+	mkdir $(DISTDIR)/utils
+	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
+	mkdir $(DISTDIR)/utils/wxMMedia2
+	cp $(UTILSDIR)/wxMMedia2/Makefile.in $(DISTDIR)/utils/wxMMedia2
+	mkdir $(DISTDIR)/utils/wxMMedia2/lib
+	cp $(UTILSDIR)/wxMMedia2/lib/Makefile.in $(DISTDIR)/utils/wxMMedia2/lib
+	cp $(UTILSDIR)/wxMMedia2/lib/*.h $(DISTDIR)/utils/wxMMedia2/lib
+	cp $(UTILSDIR)/wxMMedia2/lib/*.cpp $(DISTDIR)/utils/wxMMedia2/lib
+	cp $(UTILSDIR)/wxMMedia2/lib/*.def $(DISTDIR)/utils/wxMMedia2/lib
+	mkdir $(DISTDIR)/utils/wxMMedia2/sample
+	cp $(UTILSDIR)/wxMMedia2/sample/Makefile.in $(DISTDIR)/utils/wxMMedia2/sample
+	cp $(UTILSDIR)/wxMMedia2/sample/*.cpp $(DISTDIR)/utils/wxMMedia2/sample
+	mkdir $(DISTDIR)/utils/glcanvas
+	cp $(UTILSDIR)/glcanvas/Makefile.in $(DISTDIR)/utils/glcanvas
+	cp $(UTILSDIR)/glcanvas/docs/notes.txt $(DISTDIR)/utils/glcanvas/NOTES.txt
+	mkdir $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
+	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/Makefile.in $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
+	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.h $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
+	cp $(UTILSDIR)/glcanvas/$(TOOLKITDIR)/*.cpp $(DISTDIR)/utils/glcanvas/$(TOOLKITDIR)
+	
+dist: ALL_DIST @GUIDIST@ SAMPLES_DIST UTILS_DIST
 	cd _dist_dir; tar ch wx$(TOOLKIT) | gzip -f9 > $(WXARCHIVE); mv $(WXARCHIVE) ..
 	$(RM) -r _dist_dir
 

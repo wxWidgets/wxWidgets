@@ -25,6 +25,14 @@ wxWindows is a free C++ library for cross-platform GUI development.
 With wxWindows, you can create applications for different GUIs (GTK+,
 Motif/LessTif, MS Windows, Mac) from the same source code.
 
+%package devel
+Summary: The GTK+ 1.2 port of the wxWindows library
+Group: X11/Libraries
+Requires: wxGTK
+
+%description devel
+Header files for the wxGTK, the GTK+ 1.2 port of the wxWindows library.
+
 %prep
 %setup -n wxGTK
 ./configure --prefix=%{pref} --enable-threads --disable-std_iostreams
@@ -48,12 +56,15 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr (644, root, root, 755)
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
+%dir %{pref}/share/wx
+%{pref}/share/wx/*
+%attr(755, -, -) %{pref}/lib/libwx_gtk*
+
+%files devel
+%defattr (644, root, root, 755)
 %dir %{pref}/include/wx
 %{pref}/include/wx/*
 %dir %{pref}/lib/wx
 %{pref}/lib/wx/*
-%dir %{pref}/share/wx
-%{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_gtk*
 %attr(755, -, -) %{pref}/bin/wx-config
 

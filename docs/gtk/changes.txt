@@ -2,12 +2,65 @@
 28th August '99: Ninth wxGTK 2.1 snapshot released
 
 As the old makefile system didn't work, I trashed it and wrote
-a new one. It does work on Linux and Solaris but anything else
-is untested.
+a new one - mo more GNU. This, of course, caused a lot of people
+to start sing their song of complaints - any change is a good 
+opportunity to complain, but the effect of the change is that
+we now have shared library support on Linux and Solaris (and
+probably others as well) and that the Linux shared library no
+longer depends on libstdc++, so that we can finally create an
+RPM that works on different Linux distributions. Also, the
+Unix make system is now much simpler and directly mirrors its
+Windows counterparts, making it easier to understand and maintain.
+As it is independent of the various GNU tools, the requirements
+for using CVS versions are also much less (any make, any compiler,
+no other tools).
+
+Split RPMs into two, one for run-time requirements and one
+for developement (mostly headers).
 
 Addition of new layout classes that work like Java's, GTK's
 or Qt`s - basically, you pack item in a box and let it tell
-you how much space it needs.
+you how much space it needs. These class are called wxSizer
+and I consider them a great addition as they make true cross-
+platform dialogs a child's play and are very quick to write
+and easy to read. Do consider using them.
+
+Rewritten all dialogs to make use of the new sizers. Also
+added a new wxFileDialog like Win95 and replaced the generic
+wxFontDialog with GTK's native font selection dialog - this
+probably isn't perfect though.
+
+A few more fixes to wxListCtrl and wxTreeCtrl, implemented
+more options and modes like the wxMSW version.
+
+New handler for PNM files. Added CanRead() function to image
+handlers, updates to GIF handler for preparing the new wxAnimation
+class. We'll also get a PCX and hopefully a TIFF handler so
+that we support all common general-purpose file formats I know
+about. PhotoShop and PhotoPaint images are not general purpose.
+I also tried to correct a wxImage bug in connection with big-endian
+vs. little-endian problems, but I have no Sparc to actually test
+this.
+
+Inclusion of wxMultiMedia. Can play most sound formats on GTK
+and MSW and (using xanim on Unix and Win95's MM functions)
+display a video in a wxWindow. This will probably be moved to
+the core library.
+
+Small updates to socket code. The MSW version is still missing.
+
+Implemented wxBitmapDataObject class.
+
+Added wxFFileStream using FILE* instead if file desrcriptor.
+Useful for creating a "cerr" like class as in normal C++.
+Also added "endl" for use with wxTextStream and fixed a few
+minor problems with buffered streams etc.
+
+Corrected Tabbing code in wxPanel and made it work with wxNotebook.
+
+Small cursor fixes in connection with text control.
+
+Added experimental wxWizard class. Work in progress.
 
 A few more minor fixes.
 

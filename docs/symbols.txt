@@ -11,6 +11,7 @@ __WXGTK12__     GTK 1.2 or higher
 __WXMSW__       Any Windows
 __WXWINE__      WINE (i.e. Win32 on Unix)
 __WXMAC__       MacOS
+__WXPM__        OS/2 native Presentation Manager
 __UNIX__        any Unix
 __WINDOWS__     any Windows
 __WIN95__       GUI for Windows 95 and above; NT 4.0 and above.
