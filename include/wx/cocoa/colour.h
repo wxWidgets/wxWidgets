@@ -53,6 +53,7 @@ public:
 // ------------------------------------------------------------------------
     // accessors
     bool Ok() const { return m_cocoaNSColor; }
+    inline WX_NSColor GetNSColor() { return m_cocoaNSColor; }
 
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
