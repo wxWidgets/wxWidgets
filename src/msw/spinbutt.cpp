@@ -30,6 +30,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+#include "wx/app.h"
 #endif
 
 #if wxUSE_SPINBTN
