@@ -11,7 +11,10 @@ class TestPanel(wxPanel):
         self.log = log
 
         cal = wxCalendarCtrl(self, -1, wxDateTime_Now(), pos = (25,50),
-                             style = wxCAL_SHOW_HOLIDAYS | wxCAL_SUNDAY_FIRST)
+                             style = wxCAL_SHOW_HOLIDAYS
+                             | wxCAL_SUNDAY_FIRST
+                             #| wxCAL_SEQUENTIAL_MONTH_SELECTION
+                             )
 
         EVT_CALENDAR(self, cal.GetId(), self.OnCalSelected)
 
@@ -55,3 +58,12 @@ version described in the docs.  This one will probably be a bit more efficient
 than the one in wxPython.lib.calendar, but I like a few things about it better,
 so I think both will stay in wxPython.
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

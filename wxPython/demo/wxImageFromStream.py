@@ -35,3 +35,12 @@ overview = """\
 At long last there is finally a way to load any supported image type
 directly from any Python file-like object, such as a memory buffer
 using StringIO.  """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

@@ -75,15 +75,24 @@ def runTest(frame, nb, log):
 #---------------------------------------------------------------------------
 
 overview = """\
-wxFloatBar is a subclass of wxToolBar, implemented in Python, which can be detached from its frame.
+wxFloatBar is a subclass of wxToolBar, implemented in Python, which
+can be detached from its frame.
 
-Drag the toolbar with the mouse to make it float, and drag it back, or close it to make the toolbar return to its original position.
+Drag the toolbar with the mouse to make it float, and drag it back, or
+close it to make the toolbar return to its original position.
 
 """
 
 
 
 
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
 
 
 

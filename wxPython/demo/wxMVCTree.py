@@ -51,13 +51,22 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-wxMVCTree is a control which handles hierarchical data. It is constructed in model-view-controller architecture, so the display of that data, and the content of the data can be changed greatly without affecting the other parts.
+
+wxMVCTree is a control which handles hierarchical data. It is
+constructed in model-view-controller architecture, so the display of
+that data, and the content of the data can be changed greatly without
+affecting the other parts.
 
 Multiple selections are possible by holding down the Ctrl key.
 
-This demo shows the wxPython directory structure. The interesting part is that the tree model is late-bound to the filesystem, so the filenames are not retrieved until the directory is expanded. In mvctree.py are models for generic data, and both the early and late-bound filesystem models.
+This demo shows the wxPython directory structure. The interesting part
+is that the tree model is late-bound to the filesystem, so the
+filenames are not retrieved until the directory is expanded. In
+mvctree.py are models for generic data, and both the early and
+late-bound filesystem models.
 
-There is also support for editing, though it's not enabled in this demo, to avoid accidentally renaming files!
+There is also support for editing, though it's not enabled in this
+demo, to avoid accidentally renaming files!
 
 """
 
@@ -65,6 +74,7 @@ There is also support for editing, though it's not enabled in this demo, to avoi
 
 
 
-
-
-
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

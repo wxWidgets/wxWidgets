@@ -114,10 +114,13 @@ def runTest(frame, nb, log):
 
 
 
-overview = """\
-Objects of this class can be associated with a window to define its layout constraints, with respect to siblings or its parent.
+overview = """\<html><body>
+Objects of this class can be associated with a window to define its
+layout constraints, with respect to siblings or its parent.
 
-The class consists of the following eight constraints of class wxIndividualLayoutConstraint, some or all of which should be accessed directly to set the appropriate constraints.
+The class consists of the following eight constraints of class
+wxIndividualLayoutConstraint, some or all of which should be accessed
+directly to set the appropriate constraints.
 
 left: represents the left hand edge of the window
 
@@ -135,10 +138,21 @@ centreX: represents the horizontal centre point of the window
 
 centreY: represents the vertical centre point of the window
 
-Most constraints are initially set to have the relationship wxUnconstrained, which means that their values should be calculated by looking at known constraints. The exceptions are width and height, which are set to wxAsIs to ensure that if the user does not specify a constraint, the existing width and height will be used, to be compatible with panel items which often have take a default size. If the constraint is wxAsIs, the dimension will not be changed.
+Most constraints are initially set to have the relationship
+wxUnconstrained, which means that their values should be calculated by
+looking at known constraints. The exceptions are width and height,
+which are set to wxAsIs to ensure that if the user does not specify a
+constraint, the existing width and height will be used, to be
+compatible with panel items which often have take a default size. If
+the constraint is wxAsIs, the dimension will not be changed.
 
-wxLayoutConstraints()
--------------------------------------------
-
-Constructor.
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

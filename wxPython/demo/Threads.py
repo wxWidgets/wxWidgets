@@ -244,3 +244,11 @@ ProcessEvent does, it processes it later from the context of the GUI
 thread.
 
 """
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

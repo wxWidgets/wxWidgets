@@ -25,39 +25,14 @@ def runTest(frame, nb, log):
 
 
 overview = """\
-wxMessageDialog()
-----------------------------------
-
-wxMessageDialog(wxWindow* parent, const wxString& message, const wxString& caption = "Message box", long style = wxOK | wxCANCEL | wxCENTRE, const wxPoint& pos = wxDefaultPosition)
-
-Constructor. Use wxMessageDialog::ShowModal to show the dialog.
-
-Parameters
--------------------
-
-parent = Parent window.
-
-message = Message to show on the dialog.
-
-caption = The dialog caption.
-
-style = A dialog style (bitlist) containing flags chosen from the following:
-
-wxOK  Show an OK button.
-
-wxCANCEL  Show a Cancel button.
-
-wxYES_NO  Show Yes and No buttons.
-
-wxCENTRE  Centre the message. Not Windows.
-
-wxICON_EXCLAMATION  Shows an exclamation mark icon. Windows only.
-
-wxICON_HAND  Shows a hand icon. Windows only.
-
-wxICON_QUESTION  Shows a question mark icon. Windows only.
-
-wxICON_INFORMATION  Shows an information (i) icon. Windows only.
-
-pos = Dialog position.
+Show a message to the user in a dialog
 """
+
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])

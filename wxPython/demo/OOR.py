@@ -136,3 +136,12 @@ and the second will show #2 (<i>working as of 2.3.2</i>)
 
 </body></html>
 """
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
+

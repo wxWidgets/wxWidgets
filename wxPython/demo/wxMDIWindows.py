@@ -52,3 +52,12 @@ it.  Here are a couple samples of how to use it.
 
 </body></html>
 """
+
+
+
+
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])])
