@@ -249,7 +249,7 @@ public:
     virtual wxSize GetCheckBitmapSize() const
         { return wxSize(13, 13); }
     virtual wxSize GetRadioBitmapSize() const
-        { return wxSize(13, 13); }
+        { return wxSize(12, 12); }
     virtual wxCoord GetCheckItemMargin() const
         { return 0; }
 
@@ -507,7 +507,6 @@ static const char *checked_xpm[] = {
 "dbwwbbbwwwwgh",
 "dbwwwbwwwwwgh",
 "dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
 "dgggggggggggh",
 "hhhhhhhhhhhhh"
 };
@@ -530,7 +529,6 @@ static const char *pressed_checked_xpm[] = {
 "dbgbbbbbggggh",
 "dbggbbbgggggh",
 "dbgggbggggggh",
-"dbggggggggggh",
 "dbggggggggggh",
 "dgggggggggggh",
 "hhhhhhhhhhhhh"
@@ -555,7 +553,6 @@ static const char *pressed_disabled_checked_xpm[] = {
 "dbggdddgggggh",
 "dbgggdggggggh",
 "dbggggggggggh",
-"dbggggggggggh",
 "dgggggggggggh",
 "hhhhhhhhhhhhh"
 };
@@ -577,7 +574,6 @@ static const char *checked_item_xpm[] = {
 "wdwbbbbbwwwdw",
 "wdwwbbbwwwwdw",
 "wdwwwbwwwwwdw",
-"wdwwwwwwwwwdw",
 "wdwwwwwwwwwdw",
 "wdddddddddddw",
 "wwwwwwwwwwwww"
@@ -647,14 +643,13 @@ static const char *unchecked_item_xpm[] = {
 "wdwwwwwwwwwdw",
 "wdwwwwwwwwwdw",
 "wdwwwwwwwwwdw",
-"wdwwwwwwwwwdw",
 "wdddddddddddw",
 "wwwwwwwwwwwww"
 };
 
 static const char *checked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"13 13 6 1",
+"12 12 6 1",
 "  c None",
 "w c white",
 "b c black",
@@ -662,24 +657,23 @@ static const char *checked_radio_xpm[] = {
 "g c #c0c0c0",
 "h c #e0e0e0",
 /* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbwwwwbbh ",
-"  dbwwwwwwgh ",
-" dbwwwbbwwwgh",
-" dbwwbbbbwwgh",
-" dbwwbbbbwwgh",
-" dbwwwbbwwwgh",
-"  dbwwwwwwgh ",
-"  dggwwwwggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
+"    dddd    ",
+"  ddbbbbdd  ",
+" dbbwwwwbbh ",
+" dbwwwwwwgh ",
+"dbwwwbbwwwgh",
+"dbwwbbbbwwgh",
+"dbwwbbbbwwgh",
+"dbwwwbbwwwgh",
+" dbwwwwwwgh ",
+" dggwwwwggh ",
+"  hhgggghh  ",
+"    hhhh    "
 };
 
 static const char *pressed_checked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"13 13 6 1",
+"12 12 6 1",
 "  c None",
 "w c white",
 "b c black",
@@ -687,24 +681,23 @@ static const char *pressed_checked_radio_xpm[] = {
 "g c #c0c0c0",
 "h c #e0e0e0",
 /* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbggggbbh ",
-"  dbgggggggh ",
-" dbgggbbggggh",
-" dbggbbbbgggh",
-" dbggbbbbgggh",
-" dbgggbbggggh",
-"  dbgggggggh ",
-"  dggggggggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
+"    dddd    ",
+"  ddbbbbdd  ",
+" dbbggggbbh ",
+" dbgggggggh ",
+"dbgggbbggggh",
+"dbggbbbbgggh",
+"dbggbbbbgggh",
+"dbgggbbggggh",
+" dbgggggggh ",
+" dggggggggh ",
+"  hhgggghh  ",
+"    hhhh    "
 };
 
 static const char *pressed_disabled_checked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"13 13 6 1",
+"12 12 6 1",
 "  c None",
 "w c white",
 "b c black",
@@ -712,24 +705,23 @@ static const char *pressed_disabled_checked_radio_xpm[] = {
 "g c #c0c0c0",
 "h c #e0e0e0",
 /* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbggggbbh ",
-"  dbgggggggh ",
-" dbgggddggggh",
-" dbggddddgggh",
-" dbggddddgggh",
-" dbgggddggggh",
-"  dbgggggggh ",
-"  dggggggggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
+"    dddd    ",
+"  ddbbbbdd  ",
+" dbbggggbbh ",
+" dbgggggggh ",
+"dbgggddggggh",
+"dbggddddgggh",
+"dbggddddgggh",
+"dbgggddggggh",
+" dbgggggggh ",
+" dggggggggh ",
+"  hhgggghh  ",
+"    hhhh    ",
 };
 
 static const char *unchecked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"13 13 6 1",
+"12 12 6 1",
 "  c None",
 "w c white",
 "b c black",
@@ -737,24 +729,23 @@ static const char *unchecked_radio_xpm[] = {
 "g c #c0c0c0",
 "h c #e0e0e0",
 /* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbwwwwbbh ",
-"  dbwwwwwwgh ",
-" dbwwwwwwwwgh",
-" dbwwwwwwwwgh",
-" dbwwwwwwwwgh",
-" dbwwwwwwwwgh",
-"  dbwwwwwwgh ",
-"  dggwwwwggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
+"    dddd    ",
+"  ddbbbbdd  ",
+" dbbwwwwbbh ",
+" dbwwwwwwgh ",
+"dbwwwwwwwwgh",
+"dbwwwwwwwwgh",
+"dbwwwwwwwwgh",
+"dbwwwwwwwwgh",
+" dbwwwwwwgh ",
+" dggwwwwggh ",
+"  hhgggghh  ",
+"    hhhh    "
 };
 
 static const char *pressed_unchecked_radio_xpm[] = {
 /* columns rows colors chars-per-pixel */
-"13 13 6 1",
+"12 12 6 1",
 "  c None",
 "w c white",
 "b c black",
@@ -762,19 +753,18 @@ static const char *pressed_unchecked_radio_xpm[] = {
 "g c #c0c0c0",
 "h c #e0e0e0",
 /* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbggggbbh ",
-"  dbgggggggh ",
-" dbgggggggggh",
-" dbgggggggggh",
-" dbgggggggggh",
-" dbgggggggggh",
-"  dbgggggggh ",
-"  dggggggggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
+"    dddd    ",
+"  ddbbbbdd  ",
+" dbbggggbbh ",
+" dbgggggggh ",
+"dbgggggggggh",
+"dbgggggggggh",
+"dbgggggggggh",
+"dbgggggggggh",
+" dbgggggggh ",
+" dggggggggh ",
+"  hhgggghh  ",
+"    hhhh    "
 };
 
 static const char **
@@ -1758,13 +1748,18 @@ void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
                                              int indexAccel)
 {
     // calculate the position of the bitmap and of the label
+    wxCoord heightBmp = bitmap.GetHeight();
     wxCoord xBmp,
-            yBmp = rect.y + (rect.height - bitmap.GetHeight()) / 2;
+            yBmp = rect.y + (rect.height - heightBmp) / 2;
 
     wxRect rectLabel;
     dc.GetMultiLineTextExtent(label, NULL, &rectLabel.height);
     rectLabel.y = rect.y + (rect.height - rectLabel.height) / 2;
 
+    // align label vertically with the bitmap - looks nicer like this
+    rectLabel.y -= (rectLabel.height - heightBmp) % 2;
+
+    // calc horz position
     if ( align == wxALIGN_RIGHT )
     {
         xBmp = rect.GetRight() - bitmap.GetWidth();
@@ -1781,7 +1776,7 @@ void wxWin32Renderer::DrawCheckOrRadioButton(wxDC& dc,
     dc.DrawBitmap(bitmap, xBmp, yBmp, TRUE /* use mask */);
 
     DrawLabel(dc, label, rectLabel, flags,
-              wxALIGN_LEFT | wxALIGN_CENTRE_VERTICAL, indexAccel);
+              wxALIGN_LEFT | wxALIGN_TOP, indexAccel);
 }
 
 void wxWin32Renderer::DrawRadioButton(wxDC& dc,

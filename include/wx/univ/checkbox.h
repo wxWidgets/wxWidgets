@@ -153,10 +153,9 @@ class WXDLLEXPORT wxStdCheckboxInputHandler : public wxStdButtonInputHandler
 public:
     wxStdCheckboxInputHandler(wxInputHandler *inphand);
 
-    virtual bool HandleMouse(wxControl *control,
-                             const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxControl *control,
-                                 const wxMouseEvent& event);
+    // we have to override this one as wxStdButtonInputHandler version works
+    // only with the buttons
+    virtual bool HandleActivation(wxControl *control, bool activated);
 };
 
 #endif // _WX_UNIV_CHECKBOX_H_

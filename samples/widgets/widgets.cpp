@@ -223,7 +223,7 @@ bool WidgetsApp::OnInit()
 // ----------------------------------------------------------------------------
 
 WidgetsFrame::WidgetsFrame(const wxString& title)
-            : wxFrame(NULL, -1, title, wxPoint(100, 100))
+            : wxFrame(NULL, -1, title, wxPoint(0, 0))
 {
     // init everything
     m_lboxLog = (wxListBox *)NULL;

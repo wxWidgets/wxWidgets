@@ -45,11 +45,11 @@
 // constants
 // ----------------------------------------------------------------------------
 
-static const int BUTTON_BORDER_X = 0;
-static const int BUTTON_BORDER_Y = 0;
+static const int BUTTON_BORDER_X = 2;
+static const int BUTTON_BORDER_Y = 3;
 
-static const int BOX_BORDER_X = 0;
-static const int BOX_BORDER_Y = 0;
+static const int BOX_BORDER_X = 2;
+static const int BOX_BORDER_Y = 2;
 
 // ----------------------------------------------------------------------------
 // wxRadioBox event handler

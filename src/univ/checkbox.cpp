@@ -186,7 +186,11 @@ wxSize wxCheckBox::DoGetBestClientSize() const
     wxSize sizeBmp = GetBitmapSize();
     if ( height < sizeBmp.y )
         height = sizeBmp.y;
+
+#if wxUNIV_COMPATIBLE_MSW
+    // this looks better but is different from what wxMSW does
     height += GetCharHeight()/2;
+#endif // wxUNIV_COMPATIBLE_MSW
 
     width += sizeBmp.x + 2*GetCharWidth();
 
@@ -272,16 +276,10 @@ wxStdCheckboxInputHandler::wxStdCheckboxInputHandler(wxInputHandler *inphand)
 {
 }
 
-bool wxStdCheckboxInputHandler::HandleMouse(wxControl *control,
-                                            const wxMouseEvent& event)
+bool wxStdCheckboxInputHandler::HandleActivation(wxControl *control,
+                                                 bool activated)
 {
-    return wxStdButtonInputHandler::HandleMouse(control, event);
-}
-
-bool wxStdCheckboxInputHandler::HandleMouseMove(wxControl *control,
-                                                const wxMouseEvent& event)
-{
-    return wxStdButtonInputHandler::HandleMouseMove(control, event);
+    return TRUE;
 }
 
 #endif // wxUSE_CHECKBOX
