@@ -96,7 +96,7 @@ Source: "wxPython\lib\colourchooser\*.py";  DestDir: "{app}\wxPython\lib\colourc
 Source: "wxPython\py\*.py";                 DestDir: "{app}\wxPython\py"; Components: core
 Source: "wxPython\py\*.txt";                DestDir: "{app}\wxPython\py"; Components: core
 Source: "wxPython\py\*.ico";                DestDir: "{app}\wxPython\py"; Components: core
-Source: "wxPython\py\PyCrust.ico";          DestDir: "{app}\wxPython\py"; Components: core
+Source: "wxPython\py\*.png";                DestDir: "{app}\wxPython\py"; Components: core
 Source: "wxPython\py\tests\*.py";           DestDir: "{app}\wxPython\py\tests"; Components: core
 Source: "wxPython\py\wxd\*.py";             DestDir: "{app}\wxPython\py\wxd"; Components: core
 
@@ -108,7 +108,7 @@ Source: "wx\lib\mixins\*.py";               DestDir: "{app}\wx\lib\mixins"; Comp
 Source: "wx\py\*.py";                       DestDir: "{app}\wx\py"; Components: core
 Source: "wx\tools\*.py";                    DestDir: "{app}\wx\tools"; Components: core
 Source: "wx\tools\XRCed\*.py";              DestDir: "{app}\wx\tools\XRCed"; Components: core
-
+Source: "wx\tools\XRCed\*.png";             DestDir: "{app}\wx\tools\XRCed"; Components: core
 
 
 %(LOCALE)s
