@@ -1328,6 +1328,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/wince/choicece.cpp
     src/msw/wince/crt.cpp
     src/msw/wince/filedlgwce.cpp
+    src/msw/wince/filefnwce.cpp
     src/msw/wince/helpwce.cpp
     src/msw/wince/menuce.cpp
     src/msw/wince/tbarwce.cpp
