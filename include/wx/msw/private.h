@@ -184,22 +184,6 @@ extern LONG APIENTRY _EXPORT
   wxSubclassedGenericControlProc(WXHWND hWnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
 // ---------------------------------------------------------------------------
-// constants which might miss from some compilers' headers
-// ---------------------------------------------------------------------------
-
-#if !defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
-    #define WS_EX_CLIENTEDGE 0
-#endif
-
-#if defined(__WIN32__) && !defined(WS_EX_CLIENTEDGE)
-    #define WS_EX_CLIENTEDGE 0x00000200L
-#endif
-
-#ifndef ENDSESSION_LOGOFF
-    #define ENDSESSION_LOGOFF    0x80000000
-#endif
-
-// ---------------------------------------------------------------------------
 // useful macros and functions
 // ---------------------------------------------------------------------------
 

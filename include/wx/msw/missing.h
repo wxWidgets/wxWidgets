@@ -249,5 +249,13 @@ struct HH_AKLINK
     #define QS_ALLPOSTMESSAGE    0x0100
 #endif
 
+#ifndef WS_EX_CLIENTEDGE
+    #define WS_EX_CLIENTEDGE 0x00000200L
+#endif
+
+#ifndef ENDSESSION_LOGOFF
+    #define ENDSESSION_LOGOFF    0x80000000
+#endif
+
 #endif
     // _WX_MISSING_H_
