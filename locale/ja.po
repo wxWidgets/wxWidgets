@@ -1,7 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: $Id$\n"
-"POT-Creation-Date: 2004-02-04 18:56+0100\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-10-13 04:17+0930\n"
 "PO-Revision-Date: 2004-06-29 22:06+0900\n"
 "Last-Translator: Hiroshi Saito <saito@inetrt.skcapi.co.jp>\n"
 "Language-Team: Japanese <wx-translators@wxwindows.org>\n"
@@ -9,48 +10,53 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/common/log.cpp:319
+#: ../src/common/log.cpp:322
 #, c-format
 msgid " (error %ld: %s)"
 msgstr "(エラー %ld: %s)"
 
-#: ../src/common/docview.cpp:1325
+#: ../src/common/docview.cpp:1405
 msgid " - "
 msgstr " -"
 
-#: ../src/html/htmprint.cpp:544
+#: ../src/html/htmprint.cpp:568
 msgid " Preview"
 msgstr "プレビュー"
 
-#: ../src/common/paper.cpp:136
+#: ../src/common/paper.cpp:134
 msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
 msgstr "#10 封筒、4 1/8 x 9 1/2 インチ"
 
-#: ../src/common/paper.cpp:137
+#: ../src/common/paper.cpp:135
 msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
 msgstr "#11 封筒、4 1/2 x 10 3/8 インチ"
 
-#: ../src/common/paper.cpp:138
+#: ../src/common/paper.cpp:136
 msgid "#12 Envelope, 4 3/4 x 11 in"
 msgstr "#12 封筒、4 3/4 x 11 インチ"
 
-#: ../src/common/paper.cpp:139
+#: ../src/common/paper.cpp:137
 msgid "#14 Envelope, 5 x 11 1/2 in"
 msgstr "#14 封筒、5 x 11 1/2 インチ"
 
-#: ../src/common/paper.cpp:135
+#: ../src/common/paper.cpp:133
 msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
 msgstr "#9 封筒、3 7/8 x 8 7/8 インチ"
 
-#: ../src/html/helpfrm.cpp:876
-#: ../src/html/helpfrm.cpp:877
-#: ../src/html/helpfrm.cpp:1514
-#: ../src/html/helpfrm.cpp:1544
+#: ../contrib/src/deprecated/resource.cpp:1808
+#: ../contrib/src/deprecated/resource.cpp:1938
+#: ../contrib/src/deprecated/resource.cpp:3026
+#, c-format
+msgid "#define %s must be an integer."
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:1019 ../src/html/helpfrm.cpp:1021
+#: ../src/html/helpfrm.cpp:1689 ../src/html/helpfrm.cpp:1722
 #, c-format
 msgid "%i of %i"
 msgstr "%i of %i"
 
-#: ../src/generic/filedlgg.cpp:280
+#: ../src/generic/filedlgg.cpp:281
 #, c-format
 msgid "%ld bytes"
 msgstr "%ld バイト"
@@ -80,21 +86,56 @@ msgstr "%s 警告"
 msgid "%s files (%s)|%s"
 msgstr "%s ファイル (%s)|%s"
 
-#: ../src/common/msgout.cpp:188
+#: ../src/common/msgout.cpp:189
 #, c-format
 msgid "%s message"
 msgstr "%s メッセージ"
 
-#: ../src/html/helpfrm.cpp:274
+#: ../contrib/src/deprecated/resource.cpp:2390
+#, c-format
+msgid "%s not a bitmap resource specification."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2544
+#, c-format
+msgid "%s not an icon resource specification."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1901
+#: ../contrib/src/deprecated/resource.cpp:2030
+#: ../contrib/src/deprecated/resource.cpp:3123
+#, c-format
+msgid "%s: ill-formed resource file syntax."
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:341 ../src/html/helpfrm.cpp:343
 msgid "&About..."
 msgstr "バージョン情報(&A)..."
+
+#: ../src/common/stockitem.cpp:150
+msgid "&Actual Size"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:105
+msgid "&Apply"
+msgstr ""
 
 #: ../src/msw/mdi.cpp:190
 msgid "&Arrange Icons"
 msgstr "アイコンを並べる(&A)"
 
-#: ../src/generic/fdrepdlg.cpp:164
-#: ../src/generic/wizard.cpp:403
+#: ../src/common/stockitem.cpp:115
+#, fuzzy
+msgid "&Back"
+msgstr "< 戻る(&B)"
+
+#: ../src/common/stockitem.cpp:106
+#, fuzzy
+msgid "&Bold"
+msgstr "太字"
+
+#: ../src/common/stockitem.cpp:107 ../src/generic/fontdlgg.cpp:350
+#: ../src/generic/fontdlgg.cpp:369 ../src/generic/wizard.cpp:418
 msgid "&Cancel"
 msgstr "キャンセル(&C)"
 
@@ -102,18 +143,21 @@ msgstr "キャンセル(&C)"
 msgid "&Cascade"
 msgstr "カスケード(&C)"
 
-#: ../src/common/prntbase.cpp:441
-#: ../src/generic/logg.cpp:506
-#: ../src/generic/tipdlg.cpp:213
-#: ../src/html/helpfrm.cpp:271
+#: ../src/common/stockitem.cpp:108
+#, fuzzy
+msgid "&Clear"
+msgstr "クリア(&l)"
+
+#: ../src/common/prntbase.cpp:441 ../src/common/stockitem.cpp:109
+#: ../src/generic/logg.cpp:506 ../src/html/helpfrm.cpp:338
 msgid "&Close"
 msgstr "閉じる(&C)"
 
-#: ../src/msw/textctrl.cpp:2035
+#: ../src/common/stockitem.cpp:110 ../src/msw/textctrl.cpp:2053
 msgid "&Copy"
 msgstr "コピー(&C)"
 
-#: ../src/msw/textctrl.cpp:2037
+#: ../src/common/stockitem.cpp:112 ../src/msw/textctrl.cpp:2055
 msgid "&Delete"
 msgstr "削除(&D)"
 
@@ -121,74 +165,143 @@ msgstr "削除(&D)"
 msgid "&Details"
 msgstr "明細(&D)"
 
-#: ../src/html/helpfrm.cpp:276
+#: ../src/common/stockitem.cpp:116
+#, fuzzy
+msgid "&Down"
+msgstr "ダウン"
+
+#: ../src/html/helpfrm.cpp:345
 msgid "&File"
 msgstr "ファイル(&F)"
 
-#: ../src/generic/fdrepdlg.cpp:162
+#: ../src/common/stockitem.cpp:113
 msgid "&Find"
 msgstr "検索(&F)"
 
-#: ../src/generic/wizard.cpp:584
+#: ../src/generic/wizard.cpp:606
 msgid "&Finish"
 msgstr "終了(&F)"
+
+#: ../src/generic/fontdlgg.cpp:271
+#, fuzzy
+msgid "&Font family:"
+msgstr "フォント サイズ: "
+
+#: ../src/common/stockitem.cpp:117
+#, fuzzy
+msgid "&Forward"
+msgstr "前"
 
 #: ../src/common/prntbase.cpp:476
 msgid "&Goto..."
 msgstr "先へ(&G)..."
 
-#: ../src/generic/wizard.cpp:406
-#: ../src/html/helpfrm.cpp:277
+#: ../src/common/stockitem.cpp:119 ../src/generic/wizard.cpp:414
+#: ../src/generic/wizard.cpp:421 ../src/html/helpfrm.cpp:346
 msgid "&Help"
 msgstr "ヘルプ(&H)"
+
+#: ../src/common/stockitem.cpp:120
+#, fuzzy
+msgid "&Home"
+msgstr "移動(&M)"
+
+#: ../src/common/stockitem.cpp:122
+#, fuzzy
+msgid "&Index"
+msgstr "索引"
+
+#: ../src/common/stockitem.cpp:123
+#, fuzzy
+msgid "&Italic"
+msgstr "イタリック"
 
 #: ../src/generic/logg.cpp:507
 msgid "&Log"
 msgstr "ログ(&L)"
 
-#: ../src/univ/themes/win32.cpp:4672
+#: ../src/univ/themes/win32.cpp:4701
 msgid "&Move"
 msgstr "移動(&M)"
 
-#: ../src/generic/mdig.cpp:117
-#: ../src/msw/mdi.cpp:191
+#: ../src/common/stockitem.cpp:128
+#, fuzzy
+msgid "&New"
+msgstr "次へ(&N)"
+
+#: ../src/generic/mdig.cpp:117 ../src/msw/mdi.cpp:191
 msgid "&Next"
 msgstr "次へ(&N)"
 
-#: ../src/generic/wizard.cpp:402
-#: ../src/generic/wizard.cpp:586
+#: ../src/generic/wizard.cpp:417 ../src/generic/wizard.cpp:608
 msgid "&Next >"
 msgstr "次へ(&N) >"
 
-#: ../src/generic/tipdlg.cpp:218
+#: ../src/generic/tipdlg.cpp:238
 msgid "&Next Tip"
 msgstr "次の秘訣(&N)"
 
-#: ../src/html/helpfrm.cpp:269
+#: ../src/common/stockitem.cpp:129
+#, fuzzy
+msgid "&No"
+msgstr "いいえ"
+
+#: ../src/common/stockitem.cpp:130 ../src/generic/fontdlgg.cpp:355
+#: ../src/generic/fontdlgg.cpp:362
+#, fuzzy
+msgid "&OK"
+msgstr "OK"
+
+#: ../src/common/stockitem.cpp:131
+#, fuzzy
+msgid "&Open"
+msgstr "開く(&O)..."
+
+#: ../src/html/helpfrm.cpp:336
 msgid "&Open..."
 msgstr "開く(&O)..."
 
-#: ../src/msw/textctrl.cpp:2036
+#: ../src/common/stockitem.cpp:132 ../src/msw/textctrl.cpp:2054
 msgid "&Paste"
 msgstr "貼り付け(&P)"
 
-#: ../src/generic/mdig.cpp:118
-#: ../src/msw/mdi.cpp:192
+#: ../src/generic/fontdlgg.cpp:315
+#, fuzzy
+msgid "&Point size:"
+msgstr "フォント サイズ: "
+
+#: ../src/common/stockitem.cpp:133
+msgid "&Preferences"
+msgstr ""
+
+#: ../src/generic/mdig.cpp:118 ../src/msw/mdi.cpp:192
 msgid "&Previous"
 msgstr "以前の(&P)"
+
+#: ../src/common/stockitem.cpp:134
+#, fuzzy
+msgid "&Print"
+msgstr "印刷"
 
 #: ../src/common/prntbase.cpp:446
 msgid "&Print..."
 msgstr "印刷(&P)..."
 
-#: ../src/common/cmdproc.cpp:285
-#: ../src/common/cmdproc.cpp:292
-#: ../src/msw/textctrl.cpp:2032
+#: ../src/common/stockitem.cpp:136
+#, fuzzy
+msgid "&Properties"
+msgstr "以前の(&P)"
+
+#: ../src/common/stockitem.cpp:137
+msgid "&Quit"
+msgstr ""
+
+#: ../src/common/cmdproc.cpp:287 ../src/common/cmdproc.cpp:294
+#: ../src/common/stockitem.cpp:138 ../src/msw/textctrl.cpp:2050
 msgid "&Redo"
 msgstr "やり直す(&R)"
 
-#: ../src/common/cmdproc.cpp:281
-#: ../src/common/cmdproc.cpp:301
+#: ../src/common/cmdproc.cpp:283 ../src/common/cmdproc.cpp:303
 msgid "&Redo "
 msgstr "やり直す(&R)"
 
@@ -196,49 +309,82 @@ msgstr "やり直す(&R)"
 msgid "&Replace"
 msgstr "書き換える(&R)"
 
-#: ../src/univ/themes/win32.cpp:4671
+#: ../src/univ/themes/win32.cpp:4700
 msgid "&Restore"
 msgstr "復元(&R)"
 
+#: ../src/common/stockitem.cpp:142
+#, fuzzy
+msgid "&Save"
+msgstr "保存(&S)..."
+
 #: ../src/generic/logg.cpp:502
-#: ../src/generic/logg.cpp:829
 msgid "&Save..."
 msgstr "保存(&S)..."
 
-#: ../src/generic/tipdlg.cpp:215
+#: ../src/generic/tipdlg.cpp:233
 msgid "&Show tips at startup"
 msgstr "起動時に秘訣を表示する(&S)"
 
-#: ../src/univ/themes/win32.cpp:4674
+#: ../src/univ/themes/win32.cpp:4703
 msgid "&Size"
 msgstr "サイズ(&S)"
 
-#: ../src/common/cmdproc.cpp:263
-#: ../src/msw/textctrl.cpp:2031
+#: ../src/common/stockitem.cpp:144
+#, fuzzy
+msgid "&Stop"
+msgstr "設定"
+
+#: ../src/generic/fontdlgg.cpp:282
+msgid "&Style:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:146 ../src/generic/fontdlgg.cpp:326
+#, fuzzy
+msgid "&Underline"
+msgstr "下線"
+
+#: ../src/common/cmdproc.cpp:265 ../src/common/stockitem.cpp:147
+#: ../src/msw/textctrl.cpp:2049
 msgid "&Undo"
 msgstr "元に戻す(&U)"
 
-#: ../src/common/cmdproc.cpp:257
+#: ../src/common/cmdproc.cpp:259
 msgid "&Undo "
 msgstr "元に戻す(&U) "
 
-#: ../src/generic/mdig.cpp:297
-#: ../src/generic/mdig.cpp:313
-#: ../src/generic/mdig.cpp:317
-#: ../src/msw/mdi.cpp:1333
-#: ../src/msw/mdi.cpp:1340
-#: ../src/msw/mdi.cpp:1370
+#: ../src/common/stockitem.cpp:148
+#, fuzzy
+msgid "&Unindent"
+msgstr "第１９"
+
+#: ../src/common/stockitem.cpp:118
+#, fuzzy
+msgid "&Up"
+msgstr "上"
+
+#: ../src/generic/fontdlgg.cpp:293
+#, fuzzy
+msgid "&Weight:"
+msgstr "第８"
+
+#: ../src/generic/mdig.cpp:297 ../src/generic/mdig.cpp:313
+#: ../src/generic/mdig.cpp:317 ../src/msw/mdi.cpp:1384 ../src/msw/mdi.cpp:1391
+#: ../src/msw/mdi.cpp:1421
 msgid "&Window"
 msgstr "ウィンドウ(&W)"
 
-#: ../src/common/config.cpp:410
-#: ../src/msw/regconf.cpp:263
+#: ../src/common/stockitem.cpp:149
+#, fuzzy
+msgid "&Yes"
+msgstr "はい"
+
+#: ../src/common/config.cpp:407 ../src/msw/regconf.cpp:258
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' には余分な'..'がありますが、無視しました。"
 
-#: ../src/common/valtext.cpp:136
-#: ../src/common/valtext.cpp:166
+#: ../src/common/valtext.cpp:136 ../src/common/valtext.cpp:166
 #: ../src/common/valtext.cpp:172
 #, c-format
 msgid "'%s' is invalid"
@@ -249,12 +395,12 @@ msgstr "'%s' は無効です。"
 msgid "'%s' is not a correct numeric value for option '%s'."
 msgstr "'%s' は選定 '%s' の正確な数値ではありません。"
 
-#: ../src/common/intl.cpp:1146
+#: ../src/common/intl.cpp:1148
 #, c-format
 msgid "'%s' is not a valid message catalog."
 msgstr "'%s' は有効なメッセージ カタログではありません。"
 
-#: ../src/common/textbuf.cpp:245
+#: ../src/common/textbuf.cpp:241
 #, c-format
 msgid "'%s' is probably a binary buffer."
 msgstr "'%s'は多分 バイナリバッファでしょう。"
@@ -279,55 +425,56 @@ msgstr "'%s' は文字だけ含むべきです。"
 msgid "'%s' should only contain alphabetic or numeric characters."
 msgstr "'%s' は文字かまたは数字だけ含むべきです。"
 
-#: ../src/html/helpfrm.cpp:812
+#: ../src/html/helpfrm.cpp:953
 msgid "(Help)"
 msgstr "(ヘルプ)"
 
-#: ../src/html/helpfrm.cpp:345
-#: ../src/html/helpfrm.cpp:944
-#: ../src/html/helpfrm.cpp:1572
+#: ../src/html/helpfrm.cpp:415 ../src/html/helpfrm.cpp:1091
+#: ../src/html/helpfrm.cpp:1750
 msgid "(bookmarks)"
 msgstr "(しおり)"
 
-#: ../src/generic/dirctrlg.cpp:679
-#: ../src/generic/filedlgg.cpp:732
+#: ../contrib/src/deprecated/resource.cpp:1840
+#: ../contrib/src/deprecated/resource.cpp:1970
+#: ../contrib/src/deprecated/resource.cpp:3062
+msgid ""
+", expected static, #include or #define\n"
+"whilst parsing resource."
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:634 ../src/generic/filedlgg.cpp:733
 msgid "."
 msgstr "."
 
-#: ../src/generic/dirctrlg.cpp:680
-#: ../src/generic/filedlgg.cpp:733
+#: ../src/generic/dirctrlg.cpp:635 ../src/generic/filedlgg.cpp:734
 msgid ".."
 msgstr ".."
 
-#: ../src/html/chm.cpp:561
-msgid "/#SYSTEM"
-msgstr "/#システム"
-
-#: ../src/common/paper.cpp:132
+#: ../src/common/paper.cpp:130
 msgid "10 x 14 in"
 msgstr "10 x 14 インチ"
 
-#: ../src/common/paper.cpp:133
+#: ../src/common/paper.cpp:131
 msgid "11 x 17 in"
 msgstr "11 x 17 インチ"
 
-#: ../src/common/paper.cpp:151
+#: ../src/common/paper.cpp:149
 msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
 msgstr "6 3/4 封筒, 3 5/8 x 6 1/2 インチ"
 
-#: ../src/html/htmprint.cpp:291
+#: ../src/html/htmprint.cpp:307
 msgid ": file does not exist!"
 msgstr ": ファイルは存在しません!"
 
-#: ../src/common/fontmap.cpp:185
+#: ../src/common/fontmap.cpp:186
 msgid ": unknown charset"
 msgstr ": 不明な文字セット"
 
-#: ../src/common/fontmap.cpp:394
+#: ../src/common/fontmap.cpp:400
 msgid ": unknown encoding"
 msgstr ": 不明なエンコード"
 
-#: ../src/generic/wizard.cpp:407
+#: ../src/generic/wizard.cpp:423
 msgid "< &Back"
 msgstr "< 戻る(&B)"
 
@@ -335,34 +482,31 @@ msgstr "< 戻る(&B)"
 msgid "<<"
 msgstr "<<"
 
-#: ../src/generic/filedlgg.cpp:251
-#: ../src/generic/filedlgg.cpp:274
+#: ../src/generic/filedlgg.cpp:252 ../src/generic/filedlgg.cpp:275
 msgid "<DIR>"
 msgstr "<ディレクトリ>"
 
-#: ../src/generic/filedlgg.cpp:255
-#: ../src/generic/filedlgg.cpp:278
+#: ../src/generic/filedlgg.cpp:256 ../src/generic/filedlgg.cpp:279
 msgid "<DRIVE>"
 msgstr "<ドライブ>"
 
-#: ../src/generic/filedlgg.cpp:253
-#: ../src/generic/filedlgg.cpp:276
+#: ../src/generic/filedlgg.cpp:254 ../src/generic/filedlgg.cpp:277
 msgid "<LINK>"
 msgstr "<リンク>"
 
-#: ../src/html/helpfrm.cpp:1107
+#: ../src/html/helpfrm.cpp:1253
 msgid "<b><i>Bold italic face.</i></b><br>"
 msgstr "<b><i>ボールド イタリック 外観.</i></b><br>"
 
-#: ../src/html/helpfrm.cpp:1111
+#: ../src/html/helpfrm.cpp:1257
 msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
 msgstr "<b><i>ボールド イタリック <u>アンダーライン</u></i></b><br>"
 
-#: ../src/html/helpfrm.cpp:1106
+#: ../src/html/helpfrm.cpp:1252
 msgid "<b>Bold face.</b> "
 msgstr "<b>ボールド外観.</b> "
 
-#: ../src/html/helpfrm.cpp:1105
+#: ../src/html/helpfrm.cpp:1251
 msgid "<i>Italic face.</i> "
 msgstr "<i>イタリック外観.</i> "
 
@@ -378,31 +522,35 @@ msgstr ">>"
 msgid "A non empty collection must consist of 'element' nodes"
 msgstr "空でないコレクションは、「要素」ノードから構成されなくてはいけません"
 
-#: ../src/common/paper.cpp:125
+#: ../src/common/paper.cpp:123
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 用紙、297 x 420 mm"
 
-#: ../src/common/paper.cpp:116
+#: ../src/common/paper.cpp:114
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 用紙、210 x 297 mm"
 
-#: ../src/common/paper.cpp:126
+#: ../src/common/paper.cpp:124
 msgid "A4 small sheet, 210 x 297 mm"
 msgstr "A4 小 用紙、210 x 297 mm"
 
-#: ../src/common/paper.cpp:127
+#: ../src/common/paper.cpp:125
 msgid "A5 sheet, 148 x 210 mm"
 msgstr "A5 用紙、148 x 210 mm"
 
-#: ../src/generic/fontdlgg.cpp:84
+#: ../src/generic/fontdlgg.cpp:85
 msgid "ABCDEFGabcdefg12345"
 msgstr "ABCDEFGabcdefg12345"
 
-#: ../src/common/ftp.cpp:369
+#: ../src/common/ftp.cpp:385
 msgid "ASCII"
 msgstr "ASCII"
 
-#: ../src/html/helpfrm.cpp:358
+#: ../src/common/stockitem.cpp:104
+msgid "Add"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:428
 msgid "Add current page to bookmarks"
 msgstr "今のページをしおりに加える。"
 
@@ -423,7 +571,16 @@ msgstr "有効な演算 w/o でAddToPropertyCollectionが呼ばれました"
 msgid "Adding book %s"
 msgstr "ブック %s を追加する。"
 
-#: ../src/generic/prntdlgg.cpp:157
+#: ../src/common/stockitem.cpp:126
+msgid "Align Left"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:127
+#, fuzzy
+msgid "Align Right"
+msgstr "深夜"
+
+#: ../src/generic/prntdlgg.cpp:155
 msgid "All"
 msgstr "全て"
 
@@ -432,15 +589,15 @@ msgstr "全て"
 msgid "All files (%s)|%s"
 msgstr "全てのファイル (%s)|%s"
 
-#: ../include/wx/defs.h:1975
+#: ../include/wx/defs.h:2141
 msgid "All files (*)|*"
 msgstr "全てのファイル (*)|*"
 
-#: ../src/html/helpfrm.cpp:1412
+#: ../src/html/helpfrm.cpp:1564
 msgid "All files (*.*)|*"
 msgstr "全てのファイル (*.*)|*"
 
-#: ../include/wx/defs.h:1972
+#: ../include/wx/defs.h:2138
 msgid "All files (*.*)|*.*"
 msgstr "全てのファイル (*.*)|*"
 
@@ -452,7 +609,7 @@ msgstr "すでに登録されたオブジェクトはSetObjectClassInfoに渡さ
 msgid "Already dialling ISP."
 msgstr "すでにISPにダイヤル中です。"
 
-#: ../src/generic/logg.cpp:1116
+#: ../src/generic/logg.cpp:1113
 #, c-format
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "ログをファイル '%s' へアペンドしますか ([いいえ]で上書きします)?"
@@ -461,32 +618,35 @@ msgstr "ログをファイル '%s' へアペンドしますか ([いいえ]で�
 msgid "Arabic (ISO-8859-6)"
 msgstr "アラビア (ISO-8859-6)"
 
-#: ../src/generic/filedlgg.cpp:432
+#: ../src/html/chm.cpp:564
+msgid "Archive doesnt contain #SYSTEM file"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:433
 msgid "Attributes"
 msgstr "属性"
 
-#: ../src/common/paper.cpp:146
+#: ../src/common/paper.cpp:144
 msgid "B4 Envelope, 250 x 353 mm"
 msgstr "B4 封筒、250 x 353 mm"
 
-#: ../src/common/paper.cpp:128
+#: ../src/common/paper.cpp:126
 msgid "B4 sheet, 250 x 354 mm"
 msgstr "B4 用紙、250 x 354 mm"
 
-#: ../src/common/paper.cpp:147
+#: ../src/common/paper.cpp:145
 msgid "B5 Envelope, 176 x 250 mm"
 msgstr "B5 封筒、176 x 250 mm"
 
-#: ../src/common/paper.cpp:129
+#: ../src/common/paper.cpp:127
 msgid "B5 sheet, 182 x 257 millimeter"
 msgstr "B5 用紙,、182 x 257 mm"
 
-#: ../src/common/paper.cpp:148
+#: ../src/common/paper.cpp:146
 msgid "B6 Envelope, 176 x 125 mm"
 msgstr "B6 封筒、176 x 125 mm"
 
-#: ../src/common/imagbmp.cpp:476
-#: ../src/common/imagbmp.cpp:492
+#: ../src/common/imagbmp.cpp:476 ../src/common/imagbmp.cpp:492
 msgid "BMP: Couldn't allocate memory."
 msgstr "BMP: メモリーを割り当てることができませんでした。"
 
@@ -508,15 +668,12 @@ msgstr "BMP: ファイル(ビットマップ )ヘッダーを書くことがで�
 
 #: ../src/common/imagbmp.cpp:224
 msgid "BMP: Couldn't write the file (BitmapInfo) header."
-msgstr "BMP: ファイル( ビットマップ情報 )ヘッダーを書くことができませんでした。"
+msgstr ""
+"BMP: ファイル( ビットマップ情報 )ヘッダーを書くことができませんでした。"
 
 #: ../src/common/imagbmp.cpp:128
 msgid "BMP: wxImage doesn't have own wxPalette."
 msgstr "BMP: wxImageは自前のwxPaletteを持っていません。"
-
-#: ../src/common/dlgcmn.cpp:227
-msgid "Backward"
-msgstr "後方"
 
 #: ../src/common/fmapbase.cpp:115
 msgid "Baltic (ISO-8859-13)"
@@ -526,15 +683,20 @@ msgstr "バルト (ISO-8859-13)"
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "バルト(旧) (ISO-8859-4)"
 
-#: ../src/generic/fontdlgg.cpp:231
+#: ../contrib/src/deprecated/resource.cpp:2524
+#, fuzzy, c-format
+msgid "Bitmap resource specification %s not found."
+msgstr "XRCリソース '%s' (クラス '%s') が見つかりません!"
+
+#: ../src/generic/fontdlgg.cpp:235
 msgid "Bold"
 msgstr "太字"
 
-#: ../src/generic/prntdlgg.cpp:663
+#: ../src/generic/prntdlgg.cpp:661
 msgid "Bottom margin (mm):"
 msgstr "下側マージン (mm):"
 
-#: ../src/common/paper.cpp:117
+#: ../src/common/paper.cpp:115
 msgid "C sheet, 17 x 22 in"
 msgstr "C 用紙, 17 x 22 インチ"
 
@@ -542,28 +704,31 @@ msgstr "C 用紙, 17 x 22 インチ"
 msgid "C&lear"
 msgstr "クリア(&l)"
 
-#: ../src/common/paper.cpp:142
+#: ../src/generic/fontdlgg.cpp:304
+msgid "C&olour:"
+msgstr ""
+
+#: ../src/common/paper.cpp:140
 msgid "C3 Envelope, 324 x 458 mm"
 msgstr "C3 封筒, 324 x 458 mm"
 
-#: ../src/common/paper.cpp:143
+#: ../src/common/paper.cpp:141
 msgid "C4 Envelope, 229 x 324 mm"
 msgstr "C4 封筒, 229 x 324 mm"
 
-#: ../src/common/paper.cpp:141
+#: ../src/common/paper.cpp:139
 msgid "C5 Envelope, 162 x 229 mm"
 msgstr "C5 封筒, 162 x 229 mm"
 
-#: ../src/common/paper.cpp:144
+#: ../src/common/paper.cpp:142
 msgid "C6 Envelope, 114 x 162 mm"
 msgstr "C6 封筒, 114 x 162 mm"
 
-#: ../src/common/paper.cpp:145
+#: ../src/common/paper.cpp:143
 msgid "C65 Envelope, 114 x 229 mm"
 msgstr "C65 封筒, 114 x 229 mm"
 
-#: ../src/html/chm.cpp:783
-#: ../src/html/chm.cpp:842
+#: ../src/html/chm.cpp:783 ../src/html/chm.cpp:842
 msgid "CHM handler currently supports only local files!"
 msgstr "現在 CHMハンドラーは、ローカル・ファイルのみサポートしています!"
 
@@ -571,13 +736,12 @@ msgstr "現在 CHMハンドラーは、ローカル・ファイルのみサポ�
 msgid "Can not create mutex."
 msgstr "ミューテックスを生成できません"
 
-#: ../src/common/filefn.cpp:1469
+#: ../src/common/filefn.cpp:1255
 #, c-format
 msgid "Can not enumerate files '%s'"
 msgstr "ファイル '%s' を列挙できません"
 
-#: ../src/msw/dir.cpp:205
-#: ../src/unix/dir.cpp:232
+#: ../src/msw/dir.cpp:205 ../src/unix/dir.cpp:232
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
 msgstr "ディレクトリー '%s' 内のファイルを列挙できません"
@@ -587,7 +751,7 @@ msgstr "ディレクトリー '%s' 内のファイルを列挙できません"
 msgid "Can not resume thread %lu"
 msgstr "スレッド %lu を再開できません"
 
-#: ../src/msw/thread.cpp:830
+#: ../src/mac/classic/thread.cpp:491 ../src/msw/thread.cpp:830
 #, c-format
 msgid "Can not resume thread %x"
 msgstr "スレッド %x を再開できません"
@@ -601,7 +765,7 @@ msgstr "スレッドを開始できません: TLS書き込みエラー。"
 msgid "Can not suspend thread %lu"
 msgstr "スレッド %lu をサスペンドできません"
 
-#: ../src/msw/thread.cpp:815
+#: ../src/mac/classic/thread.cpp:464 ../src/msw/thread.cpp:815
 #, c-format
 msgid "Can not suspend thread %x"
 msgstr "スレッド %x をサスペンドできません"
@@ -610,62 +774,63 @@ msgstr "スレッド %x をサスペンドできません"
 msgid "Can not wait for thread termination"
 msgstr "スレッド終了を待つことができません"
 
-#: ../src/common/cmdproc.cpp:259
+#: ../src/common/cmdproc.cpp:261
 msgid "Can't &Undo "
 msgstr "復元できない(&U)"
 
-#: ../src/common/image.cpp:1441
+#: ../src/common/image.cpp:1481
 #, c-format
 msgid "Can't check image format of file '%s': file does not exist."
-msgstr "ファイル '%s' のイメージ形式をチェックできません: ファイルは存在しません。"
+msgstr ""
+"ファイル '%s' のイメージ形式をチェックできません: ファイルは存在しません。"
 
-#: ../src/msw/registry.cpp:438
+#: ../src/msw/registry.cpp:439
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "レジストリキー '%s' が閉じることができません"
 
-#: ../src/msw/registry.cpp:510
+#: ../src/msw/registry.cpp:516
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "サポートされていない型 %d の値をコピーできません。"
 
-#: ../src/msw/registry.cpp:419
+#: ../src/msw/registry.cpp:420
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "レジストリキー '%s' を生成できません"
 
-#: ../src/msw/thread.cpp:593
+#: ../src/mac/carbon/thread.cpp:1100 ../src/mac/carbon/mpthread.cpp:911
+#: ../src/mac/classic/thread.cpp:439 ../src/msw/thread.cpp:593
 #: ../src/os2/thread.cpp:491
 msgid "Can't create thread"
 msgstr "スレッドを生成できません"
 
-#: ../src/msw/window.cpp:3155
+#: ../src/msw/window.cpp:3145
 #, c-format
 msgid "Can't create window of class %s"
 msgstr "クラス %s のウインドウを生成できません"
 
-#: ../src/msw/registry.cpp:680
+#: ../src/msw/registry.cpp:692
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "キー '%s' を削除できません"
 
-#: ../src/msw/iniconf.cpp:444
-#: ../src/os2/iniconf.cpp:448
+#: ../src/msw/iniconf.cpp:444 ../src/os2/iniconf.cpp:448
 #, c-format
 msgid "Can't delete the INI file '%s'"
 msgstr "INIファイル '%s' を削除できません"
 
-#: ../src/msw/registry.cpp:707
+#: ../src/msw/registry.cpp:719
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "値 '%s' をキー '%s' から削除できません"
 
-#: ../src/msw/registry.cpp:1001
+#: ../src/msw/registry.cpp:1070
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "キー '%s' のサブキーを列挙できません"
 
-#: ../src/msw/registry.cpp:956
+#: ../src/msw/registry.cpp:1025
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "キー '%s' の値を列挙できません"
@@ -675,7 +840,7 @@ msgstr "キー '%s' の値を列挙できません"
 msgid "Can't find current position in file '%s'"
 msgstr "ファイル '%s' 内の現在位置を見つけることができません"
 
-#: ../src/msw/registry.cpp:355
+#: ../src/msw/registry.cpp:356
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "レジストリキー '%s' に関する情報を取得できません"
@@ -688,13 +853,12 @@ msgstr "zip収縮ストリームを初期化できません。"
 msgid "Can't initialize zlib inflate stream."
 msgstr "zip膨張ストリームを初期化できません。"
 
-#: ../src/common/image.cpp:1028
-#: ../src/common/image.cpp:1048
+#: ../src/common/image.cpp:1068 ../src/common/image.cpp:1088
 #, c-format
 msgid "Can't load image from file '%s': file does not exist."
 msgstr "ファイル '%s' からイメージをロードできません: ファイルが存在しません。"
 
-#: ../src/msw/registry.cpp:385
+#: ../src/msw/registry.cpp:386
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "レジストリキー '%s' をオープンできません"
@@ -708,34 +872,32 @@ msgstr "膨張ストリーム %d から読むことができません"
 msgid "Can't read inflate stream: unexpected EOF in underlying stream."
 msgstr "膨張ストリームを読めません: アンダーラインストリームの予期しないEOF"
 
-#: ../src/msw/registry.cpp:890
+#: ../src/msw/registry.cpp:959
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "'%s' の値を読めません"
 
-#: ../src/msw/registry.cpp:780
-#: ../src/msw/registry.cpp:811
+#: ../src/msw/registry.cpp:792 ../src/msw/registry.cpp:823
+#: ../src/msw/registry.cpp:883
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "キー '%s' の値を読めません"
 
-#: ../src/common/image.cpp:1070
+#: ../src/common/image.cpp:1110
 #, c-format
 msgid "Can't save image to file '%s': unknown extension."
 msgstr "ファイル '%s' へのイメージを保存できません: 不明な拡張子。"
 
-#: ../src/generic/logg.cpp:566
-#: ../src/generic/logg.cpp:992
+#: ../src/generic/logg.cpp:566 ../src/generic/logg.cpp:989
 msgid "Can't save log contents to file."
 msgstr "ログ内容をファイルに保存できません。"
 
-#: ../src/msw/thread.cpp:549
-#: ../src/os2/thread.cpp:473
+#: ../src/msw/thread.cpp:549 ../src/os2/thread.cpp:473
 msgid "Can't set thread priority"
 msgstr "スレッド優先度を設定できません"
 
-#: ../src/msw/registry.cpp:798
-#: ../src/msw/registry.cpp:905
+#: ../src/msw/registry.cpp:810 ../src/msw/registry.cpp:852
+#: ../src/msw/registry.cpp:974
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "'%s' の値を設定できません"
@@ -745,46 +907,40 @@ msgstr "'%s' の値を設定できません"
 msgid "Can't write to deflate stream: %s"
 msgstr "収縮ストリーム %d に書き出せません"
 
-#: ../src/common/dlgcmn.cpp:240
-#: ../src/generic/dirdlgg.cpp:155
-#: ../src/generic/filedlgg.cpp:996
-#: ../src/generic/filedlgg.cpp:1015
-#: ../src/generic/fontdlgg.cpp:254
-#: ../src/generic/prntdlgg.cpp:455
-#: ../src/generic/progdlgg.cpp:211
-#: ../src/gtk/filedlg.cpp:168
-#: ../src/gtk/fontdlg.cpp:149
-#: ../src/html/helpfrm.cpp:1075
-#: ../src/motif/msgdlg.cpp:185
+#: ../src/generic/choicdgg.cpp:284 ../src/generic/dirdlgg.cpp:116
+#: ../src/generic/numdlgg.cpp:131 ../src/generic/prntdlgg.cpp:453
+#: ../src/generic/progdlgg.cpp:215 ../src/generic/progdlgg.cpp:453
+#: ../src/generic/textdlgg.cpp:118 ../src/gtk/filedlg.cpp:168
+#: ../src/gtk/fontdlg.cpp:149 ../src/motif/msgdlg.cpp:185
+#: ../contrib/src/deprecated/proplist.cpp:518
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: ../contrib/src/xrc/xmlres.cpp:1012
-#: ../contrib/src/xrc/xmlres.cpp:1053
+#: ../src/xrc/xmlres.cpp:1043 ../src/xrc/xmlres.cpp:1084
 msgid "Cannot convert dialog units: dialog unknown."
 msgstr "ダイアログ・ユニットを変換できません: 不明なダイアログ"
 
-#: ../src/common/strconv.cpp:1686
+#: ../src/common/strconv.cpp:2412
 #, c-format
 msgid "Cannot convert from the charset '%s'!"
 msgstr "文字セット '%s' から変換できません!"
 
-#: ../src/msw/dialup.cpp:510
+#: ../src/msw/dialup.cpp:509
 #, c-format
 msgid "Cannot find active dialup connection: %s"
 msgstr "使用中のダイアルアップ接続を見つけることができません: %s"
 
-#: ../contrib/src/xrc/xmlres.cpp:262
+#: ../src/xrc/xmlres.cpp:264
 #, c-format
 msgid "Cannot find container for unknown control '%s'."
 msgstr "不明なコントロール '%s' のコンテナーを見つけることができません。"
 
-#: ../contrib/src/xrc/xmlres.cpp:1067
+#: ../src/xrc/xmlres.cpp:1098
 #, c-format
 msgid "Cannot find font node '%s'."
 msgstr "フォント・ノード '%s' を見つけることができません。"
 
-#: ../src/msw/dialup.cpp:815
+#: ../src/msw/dialup.cpp:814
 msgid "Cannot find the location of address book file"
 msgstr "アドレス帳ファイルの場所を見つけることができません"
 
@@ -793,20 +949,19 @@ msgstr "アドレス帳ファイルの場所を見つけることができませ
 msgid "Cannot get priority range for scheduling policy %d."
 msgstr "スケジュール・ポリシー %d の優先度範囲を取得できません。"
 
-#: ../src/unix/utilsunx.cpp:727
+#: ../src/unix/utilsunx.cpp:747
 msgid "Cannot get the hostname"
 msgstr "ホスト名を取得できません"
 
-#: ../src/unix/utilsunx.cpp:763
+#: ../src/unix/utilsunx.cpp:783
 msgid "Cannot get the official hostname"
 msgstr "公式ホスト名を取得できません"
 
-#: ../src/msw/dialup.cpp:909
+#: ../src/msw/dialup.cpp:908
 msgid "Cannot hang up - no active dialup connection."
 msgstr "切断できません - 使用中のダイアルアップ接続なし。"
 
-#: ../src/msw/app.cpp:307
-#: ../src/msw/app.cpp:310
+#: ../src/msw/app.cpp:308 ../src/msw/app.cpp:311
 msgid "Cannot initialize OLE"
 msgstr "OLE を初期化できません"
 
@@ -823,7 +978,7 @@ msgstr "ディスプレイを初期化できません。"
 msgid "Cannot load icon from '%s'."
 msgstr "'%s' からアイコンをロードできません。"
 
-#: ../contrib/src/xrc/xmlres.cpp:382
+#: ../src/xrc/xmlres.cpp:387
 #, c-format
 msgid "Cannot load resources from file '%s'."
 msgstr "ファイル '%s' からリソースをロードできません。"
@@ -833,7 +988,7 @@ msgstr "ファイル '%s' からリソースをロードできません。"
 msgid "Cannot open HTML document: %s"
 msgstr "HTMLドキュメント: %s をオープンできません"
 
-#: ../src/html/helpdata.cpp:613
+#: ../src/html/helpdata.cpp:672
 #, c-format
 msgid "Cannot open HTML help book: %s"
 msgstr "HTMLヘルプブック: %s をオープンできません"
@@ -843,46 +998,45 @@ msgstr "HTMLヘルプブック: %s をオープンできません"
 msgid "Cannot open URL '%s'"
 msgstr "URL '%s' をオープンできません"
 
-#: ../src/html/helpdata.cpp:284
+#: ../src/html/helpdata.cpp:312
 #, c-format
 msgid "Cannot open contents file: %s"
 msgstr "コンテンツ・ファイル: %s をオープンできません"
 
-#: ../contrib/src/xrc/xmlres.cpp:353
+#: ../src/xrc/xmlres.cpp:355
 #, c-format
 msgid "Cannot open file '%s'."
 msgstr "ファイル '%s' をオープンできません。"
 
-#: ../src/generic/dcpsg.cpp:1798
+#: ../src/generic/dcpsg.cpp:1816
 msgid "Cannot open file for PostScript printing!"
 msgstr "ポストスクリプト印刷のためのファイルをオープンできません!"
 
-#: ../src/html/helpdata.cpp:299
+#: ../src/html/helpdata.cpp:326
 #, c-format
 msgid "Cannot open index file: %s"
 msgstr "インデックス・ファイル: %s をオープンできません"
 
-#: ../src/common/intl.cpp:1202
+#: ../src/common/intl.cpp:1204
 #, c-format
 msgid "Cannot parse Plural-Forms:'%s'"
 msgstr "'%s' から複数形をパースすることができません。"
 
-#: ../contrib/src/xrc/xmlres.cpp:1000
+#: ../src/xrc/xmlres.cpp:1031
 #, c-format
 msgid "Cannot parse coordinates from '%s'."
 msgstr "'%s' からコーディネートをパースできません。"
 
-#: ../contrib/src/xrc/xmlres.cpp:1041
+#: ../src/xrc/xmlres.cpp:1072
 #, c-format
 msgid "Cannot parse dimension from '%s'."
 msgstr "'%s' からディメンジョンをパースできません。"
 
-#: ../src/html/helpfrm.cpp:1396
+#: ../src/html/helpfrm.cpp:1548
 msgid "Cannot print empty page."
 msgstr "空のページを印刷できません。"
 
-#: ../src/msw/volume.cpp:160
-#: ../src/msw/volume.cpp:491
+#: ../src/msw/volume.cpp:160 ../src/msw/volume.cpp:491
 #, c-format
 msgid "Cannot read typename from '%s'!"
 msgstr "'%s' から型名を読み込めません!"
@@ -895,7 +1049,17 @@ msgstr "スレッド・スケジュール・ポリシーを検索できません
 msgid "Cannot start thread: error writing TLS"
 msgstr "スレッドを開始できません: TLS書き込みエラー"
 
-#: ../src/html/helpfrm.cpp:443
+#: ../src/mac/carbon/thread.cpp:1174 ../src/mac/carbon/mpthread.cpp:977
+#, fuzzy
+msgid "Cannot wait on thread to exit."
+msgstr "スレッド終了を待つことができません"
+
+#: ../src/mac/carbon/thread.cpp:1082 ../src/mac/carbon/mpthread.cpp:893
+#, fuzzy
+msgid "Cant create the thread event queue"
+msgstr "スレッドを生成できません"
+
+#: ../src/html/helpfrm.cpp:511
 msgid "Case sensitive"
 msgstr "大／小文字の区別"
 
@@ -903,13 +1067,22 @@ msgstr "大／小文字の区別"
 msgid "Celtic (ISO-8859-14)"
 msgstr "ケルト (ISO-8859-14)"
 
+#: ../src/common/stockitem.cpp:124
+msgid "Centered"
+msgstr ""
+
 #: ../src/common/fmapbase.cpp:104
 msgid "Central European (ISO-8859-2)"
 msgstr "中央ヨーロッパ (ISO-8859-2)"
 
-#: ../src/msw/dialup.cpp:750
+#: ../src/msw/dialup.cpp:749
 msgid "Choose ISP to dial"
 msgstr "ダイヤルするISPを選択"
+
+#: ../src/generic/colrdlgg.cpp:146 ../src/gtk/colordlg.cpp:45
+#, fuzzy
+msgid "Choose colour"
+msgstr "フォント選択"
 
 #: ../src/gtk/fontdlg.cpp:127
 msgid "Choose font"
@@ -923,11 +1096,22 @@ msgstr "閉じる(&o)"
 msgid "Clear the log contents"
 msgstr "ログコンテンツのクリア"
 
-#: ../src/generic/progdlgg.cpp:353
+#: ../src/generic/fontdlgg.cpp:352 ../src/generic/fontdlgg.cpp:371
+msgid "Click to cancel the font selection."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:357 ../src/generic/fontdlgg.cpp:359
+#: ../src/generic/fontdlgg.cpp:364 ../src/generic/fontdlgg.cpp:366
+msgid "Click to confirm the font selection."
+msgstr ""
+
+#: ../src/generic/progdlgg.cpp:395 ../src/generic/progdlgg.cpp:400
+#: ../src/generic/tipdlg.cpp:230 ../src/generic/tipdlg.cpp:296
+#: ../contrib/src/deprecated/proplist.cpp:513
 msgid "Close"
 msgstr "閉じる"
 
-#: ../src/univ/themes/win32.cpp:4680
+#: ../src/univ/themes/win32.cpp:4709
 msgid "Close\tAlt-F4"
 msgstr "閉じる\tAlt-F4"
 
@@ -939,21 +1123,20 @@ msgstr "全て閉じる"
 msgid "Close this window"
 msgstr "ウインドウを閉じる"
 
-#: ../src/html/helpfrm.cpp:1410
+#: ../src/html/helpfrm.cpp:1562
 msgid "Compressed HTML Help file (*.chm)|*.chm|"
 msgstr "圧縮されたHTMLヘルプファイル (*.chm)|*.chm|"
 
-#: ../src/generic/dirctrlg.cpp:594
+#: ../src/generic/dirctrlg.cpp:548
 msgid "Computer"
 msgstr "コンピュータ"
 
-#: ../src/common/fileconf.cpp:934
+#: ../src/common/fileconf.cpp:929
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Configエントリー名は '%c' で開始できません。"
 
-#: ../src/generic/filedlgg.cpp:1245
-#: ../src/gtk/filedlg.cpp:74
+#: ../src/generic/filedlgg.cpp:1250 ../src/gtk/filedlg.cpp:74
 msgid "Confirm"
 msgstr "確認"
 
@@ -961,25 +1144,25 @@ msgstr "確認"
 msgid "Confirm registry update"
 msgstr "レジストリ更新を確認"
 
-#: ../src/html/htmlwin.cpp:362
+#: ../src/html/htmlwin.cpp:380
 msgid "Connecting..."
 msgstr "接続中..."
 
-#: ../src/html/helpfrm.cpp:383
+#: ../src/html/helpfrm.cpp:453
 msgid "Contents"
 msgstr "コンテンツ"
 
-#: ../src/common/strconv.cpp:947
+#: ../src/common/strconv.cpp:951
 #, c-format
 msgid "Conversion to charset '%s' doesn't work."
 msgstr "文字セット '%s' への変換は無効です。"
 
-#: ../src/html/htmlwin.cpp:782
+#: ../src/html/htmlwin.cpp:818
 #, c-format
 msgid "Copied to clipboard:\"%s\""
 msgstr "クリップボードに\"%s\"がコピーされました。"
 
-#: ../src/generic/prntdlgg.cpp:190
+#: ../src/generic/prntdlgg.cpp:188
 msgid "Copies:"
 msgstr "部数:"
 
@@ -993,11 +1176,17 @@ msgstr "一時ファイル '%s' を作成できません"
 msgid "Could not extract %s into %s: %s"
 msgstr " %s へ %s から抽出できません: %s"
 
+#: ../contrib/src/deprecated/resource.cpp:1830
+#: ../contrib/src/deprecated/resource.cpp:1960
+#, fuzzy, c-format
+msgid "Could not find resource include file %s."
+msgstr "ファイル '%s' を配置できません。"
+
 #: ../src/generic/tabg.cpp:1049
 msgid "Could not find tab for id"
 msgstr "idのためのタブを見つけることができません"
 
-#: ../src/msw/textctrl.cpp:2616
+#: ../src/msw/textctrl.cpp:2636
 #, c-format
 msgid "Could not load Rich Edit DLL '%s'"
 msgstr "リッチエディットDLL '%s' をロードできません"
@@ -1007,53 +1196,70 @@ msgstr "リッチエディットDLL '%s' をロードできません"
 msgid "Could not locate file '%s'."
 msgstr "ファイル '%s' を配置できません。"
 
-#: ../src/common/prntbase.cpp:823
+#: ../contrib/src/deprecated/resource.cpp:829
+#, c-format
+msgid ""
+"Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
+" or provide #define (see manual for caveats)"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1278
+#, c-format
+msgid ""
+"Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+"or provide #define (see manual for caveats)"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:817
 msgid "Could not start document preview."
 msgstr "ドキュメントプレビューを開始できません。"
 
-#: ../src/generic/printps.cpp:221
-#: ../src/msw/printwin.cpp:242
+#: ../src/generic/printps.cpp:221 ../src/msw/printwin.cpp:237
 msgid "Could not start printing."
 msgstr "印刷を開始できません。"
 
-#: ../src/common/wincmn.cpp:1368
+#: ../src/common/wincmn.cpp:1421
 msgid "Could not transfer data to window"
 msgstr "データをウインドウへ転送できません"
+
+#: ../src/mac/carbon/thread.cpp:414 ../src/mac/carbon/thread.cpp:495
+#: ../src/mac/carbon/mpthread.cpp:227 ../src/mac/carbon/mpthread.cpp:306
+#, fuzzy
+msgid "Could not unlock mutex"
+msgstr "ミューテックスを開放できません"
 
 #: ../src/os2/thread.cpp:154
 msgid "Couldn't acquire a mutex lock"
 msgstr "ミューテックスロックを獲得することができません"
 
-#: ../src/msw/dragimag.cpp:166
-#: ../src/msw/dragimag.cpp:206
-#: ../src/msw/imaglist.cpp:156
-#: ../src/msw/imaglist.cpp:174
-#: ../src/msw/imaglist.cpp:186
+#: ../src/msw/dragimag.cpp:166 ../src/msw/dragimag.cpp:206
+#: ../src/msw/imaglist.cpp:157 ../src/msw/imaglist.cpp:175
+#: ../src/msw/imaglist.cpp:187
 msgid "Couldn't add an image to the image list."
 msgstr "イメージ・リストにイメージを追加できません。"
 
-#: ../src/msw/timer.cpp:101
-#: ../src/os2/timer.cpp:118
+#: ../src/msw/timer.cpp:98 ../src/os2/timer.cpp:118
 msgid "Couldn't create a timer"
 msgstr "タイマーを生成できません"
 
-#: ../src/mgl/cursor.cpp:135
-#: ../src/mgl/cursor.cpp:166
+#: ../src/mgl/cursor.cpp:135 ../src/mgl/cursor.cpp:166
 msgid "Couldn't create cursor."
 msgstr "カーソルを生成できません。"
 
-#: ../src/common/dynlib.cpp:388
+#: ../src/common/dynlib.cpp:387
 #, c-format
 msgid "Couldn't find symbol '%s' in a dynamic library"
 msgstr "シンボル '%s' がダイナミックライブラリ中に見つかりません"
 
-#: ../src/msw/thread.cpp:856
+#: ../src/mac/classic/thread.cpp:521 ../src/msw/thread.cpp:856
 msgid "Couldn't get the current thread pointer"
 msgstr "現在のスレッド・ポインターを取得できません"
 
 #: ../src/common/imagpng.cpp:607
 msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
-msgstr "PNGイメージをロードできませんでした - ファイルが壊れているか、メモリーが足りません。"
+msgstr ""
+"PNGイメージをロードできませんでした - ファイルが壊れているか、メモリーが足り"
+"ません。"
 
 #: ../src/unix/sound.cpp:472
 #, c-format
@@ -1074,18 +1280,17 @@ msgstr "クリップボード形式 '%s' を登録できません。"
 msgid "Couldn't release a mutex"
 msgstr "ミューテックスを開放できません"
 
-#: ../src/msw/listctrl.cpp:731
+#: ../src/msw/listctrl.cpp:735
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "リスト・コントロール項目 '%d' に関する情報を抽出できません。"
 
-#: ../src/common/imagpng.cpp:647
-#: ../src/common/imagpng.cpp:658
+#: ../src/common/imagpng.cpp:647 ../src/common/imagpng.cpp:658
 #: ../src/common/imagpng.cpp:666
 msgid "Couldn't save PNG image."
 msgstr "PNGイメージを保存できません。"
 
-#: ../src/msw/thread.cpp:610
+#: ../src/mac/classic/thread.cpp:779 ../src/msw/thread.cpp:610
 msgid "Couldn't terminate thread"
 msgstr "スレッドを終了できません。"
 
@@ -1093,20 +1298,19 @@ msgstr "スレッドを終了できません。"
 msgid "Create Parameter not found in declared RTTI Parameters"
 msgstr "RTTIパラメーター宣言に、バラメータ生成は見つかりません"
 
-#: ../src/generic/dirdlgg.cpp:265
+#: ../src/generic/dirdlgg.cpp:311
 msgid "Create directory"
 msgstr "ディレクトリを作成"
 
-#: ../src/generic/dirdlgg.cpp:105
-#: ../src/generic/filedlgg.cpp:955
+#: ../src/generic/dirdlgg.cpp:142 ../src/generic/filedlgg.cpp:960
 msgid "Create new directory"
 msgstr "新しいディレクトリを作成"
 
-#: ../src/msw/textctrl.cpp:2034
+#: ../src/common/stockitem.cpp:111 ../src/msw/textctrl.cpp:2052
 msgid "Cu&t"
 msgstr "切り取り(&t)"
 
-#: ../src/generic/filedlgg.cpp:966
+#: ../src/generic/filedlgg.cpp:971
 msgid "Current directory:"
 msgstr "カレントディレクトリ:"
 
@@ -1114,11 +1318,11 @@ msgstr "カレントディレクトリ:"
 msgid "Cyrillic (ISO-8859-5)"
 msgstr "キリルアルファベット (ISO-8859-5)"
 
-#: ../src/common/paper.cpp:118
+#: ../src/common/paper.cpp:116
 msgid "D sheet, 22 x 34 in"
 msgstr "D 用紙 22 x 34 インチ"
 
-#: ../src/msw/dde.cpp:649
+#: ../src/msw/dde.cpp:633
 msgid "DDE poke request failed"
 msgstr "DDE を探るリクエストは失敗しました"
 
@@ -1142,15 +1346,15 @@ msgstr "DIBヘッダー: 未知の bitdepth"
 msgid "DIB Header: Unknown encoding in file."
 msgstr "DIB ヘッダー: 未知のエンコード"
 
-#: ../src/common/paper.cpp:140
+#: ../src/common/paper.cpp:138
 msgid "DL Envelope, 110 x 220 mm"
 msgstr "DL 封筒, 110 x 220 mm"
 
-#: ../src/generic/fontdlgg.cpp:221
+#: ../src/generic/fontdlgg.cpp:225
 msgid "Decorative"
 msgstr "装飾"
 
-#: ../src/common/fmapbase.cpp:666
+#: ../src/common/fmapbase.cpp:671
 msgid "Default encoding"
 msgstr "デフォルトエンコーディング"
 
@@ -1158,20 +1362,24 @@ msgstr "デフォルトエンコーディング"
 msgid "Delete item"
 msgstr "削除"
 
-#: ../src/unix/snglinst.cpp:269
+#: ../src/unix/snglinst.cpp:300
 #, c-format
 msgid "Deleted stale lock file '%s'."
 msgstr "古いロックファイル '%s' を削除しました。"
 
-#: ../src/msw/dialup.cpp:359
-msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
-msgstr "リモート・アクセス・サービス(RAS)がインストールされていないため、ダイアルアップ機能は利用できません。RASをインストールしてください。"
+#: ../src/msw/dialup.cpp:358
+msgid ""
+"Dial up functions are unavailable because the remote access service (RAS) is "
+"not installed on this machine. Please install it."
+msgstr ""
+"リモート・アクセス・サービス(RAS)がインストールされていないため、ダイアルアッ"
+"プ機能は利用できません。RASをインストールしてください。"
 
-#: ../src/generic/tipdlg.cpp:220
+#: ../src/generic/tipdlg.cpp:241
 msgid "Did you know..."
 msgstr "ご存知ですか... "
 
-#: ../src/common/filefn.cpp:1359
+#: ../src/common/filefn.cpp:1145
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "ディレクトリー '%s' を作成できません"
@@ -1181,25 +1389,30 @@ msgstr "ディレクトリー '%s' を作成できません"
 msgid "Directory '%s' doesn't exist!"
 msgstr "ディレクトリ '%s' は存在しません!"
 
-#: ../src/generic/dirdlgg.cpp:190
+#: ../src/generic/dirdlgg.cpp:236
 msgid "Directory does not exist"
 msgstr "ディレクトリーは存在しません "
 
-#: ../src/generic/filedlgg.cpp:1222
+#: ../src/generic/filedlgg.cpp:1227
 msgid "Directory doesn't exist."
 msgstr "ディレクトリーは存在しません。"
 
-#: ../src/html/helpfrm.cpp:411
-msgid "Display all index items that contain given substring. Search is case insensitive."
-msgstr "与えられた部分文字列を含むすべてのインデックス項目を表示します。検索は大／小文字を区別しません。"
+#: ../src/html/helpfrm.cpp:480
+msgid ""
+"Display all index items that contain given substring. Search is case "
+"insensitive."
+msgstr ""
+"与えられた部分文字列を含むすべてのインデックス項目を表示します。検索は大／小"
+"文字を区別しません。"
 
-#: ../src/html/helpfrm.cpp:592
+#: ../src/html/helpfrm.cpp:662
 msgid "Display options dialog"
 msgstr "ダイアログオプション表示"
 
 #: ../src/msw/mimetype.cpp:670
 msgid ""
-"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
+"Do you want to overwrite the command used to %s files with extension \"%s"
+"\" ?\n"
 "Current value is \n"
 "%s, \n"
 "New value is \n"
@@ -1211,16 +1424,16 @@ msgstr ""
 "新しい値は\n"
 "%s %1"
 
-#: ../src/common/docview.cpp:466
+#: ../src/common/docview.cpp:446
 #, c-format
 msgid "Do you want to save changes to document %s?"
 msgstr "文書 %s への変更を保存しますか?"
 
-#: ../src/html/htmlwin.cpp:422
+#: ../src/html/htmlwin.cpp:445 ../src/msw/frame.cpp:198
 msgid "Done"
 msgstr "完了"
 
-#: ../src/generic/progdlgg.cpp:365
+#: ../src/generic/progdlgg.cpp:412
 msgid "Done."
 msgstr "完了."
 
@@ -1233,7 +1446,7 @@ msgstr "重複するID : %d"
 msgid "Down"
 msgstr "ダウン"
 
-#: ../src/common/paper.cpp:119
+#: ../src/common/paper.cpp:117
 msgid "E sheet, 34 x 44 in"
 msgstr "E 用紙, 34 x 44 インチ"
 
@@ -1241,7 +1454,7 @@ msgstr "E 用紙, 34 x 44 インチ"
 msgid "Edit item"
 msgstr "エディット項目"
 
-#: ../src/generic/progdlgg.cpp:183
+#: ../src/generic/progdlgg.cpp:186
 msgid "Elapsed time : "
 msgstr "経過時間 :"
 
@@ -1254,33 +1467,27 @@ msgstr "%d と %d の間のページNOを入力してください"
 msgid "Entries found"
 msgstr "エントリーが見つかりました"
 
-#: ../src/common/config.cpp:362
+#: ../src/common/config.cpp:359
 #, c-format
-msgid "Environment variables expansion failed: missing '%c' at position %d in '%s'."
+msgid ""
+"Environment variables expansion failed: missing '%c' at position %d in '%s'."
 msgstr "環境変数の拡張に失敗しました: '%s' 内の位置 %d の '%c' がありません。"
 
-#: ../src/generic/dirctrlg.cpp:685
-#: ../src/generic/dirctrlg.cpp:703
-#: ../src/generic/dirctrlg.cpp:714
-#: ../src/generic/dirdlgg.cpp:300
-#: ../src/generic/filedlgg.cpp:624
-#: ../src/generic/filedlgg.cpp:736
-#: ../src/generic/filedlgg.cpp:750
-#: ../src/generic/filedlgg.cpp:764
-#: ../src/generic/filedlgg.cpp:1197
-#: ../src/generic/filedlgg.cpp:1222
-#: ../src/generic/filedlgg.cpp:1252
-#: ../src/gtk/filedlg.cpp:82
+#: ../src/generic/dirctrlg.cpp:640 ../src/generic/dirctrlg.cpp:658
+#: ../src/generic/dirctrlg.cpp:669 ../src/generic/dirdlgg.cpp:346
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:737
+#: ../src/generic/filedlgg.cpp:751 ../src/generic/filedlgg.cpp:765
+#: ../src/generic/filedlgg.cpp:1202 ../src/generic/filedlgg.cpp:1227
+#: ../src/generic/filedlgg.cpp:1257 ../src/gtk/filedlg.cpp:82
 #: ../src/gtk/fontdlg.cpp:78
 msgid "Error"
 msgstr "エラー"
 
-#: ../src/unix/utilsunx.cpp:1033
-#: ../src/unix/utilsunx.cpp:1041
+#: ../src/unix/utilsunx.cpp:1053 ../src/unix/utilsunx.cpp:1061
 msgid "Error "
 msgstr "エラー"
 
-#: ../src/generic/dirdlgg.cpp:205
+#: ../src/generic/dirdlgg.cpp:251
 msgid "Error creating directory"
 msgstr "ディレクトリー作成エラー"
 
@@ -1288,11 +1495,20 @@ msgstr "ディレクトリー作成エラー"
 msgid "Error in reading image DIB ."
 msgstr "イメージDIB 読込みエラー。"
 
-#: ../src/common/fileconf.cpp:505
+#: ../src/common/fileconf.cpp:501
 msgid "Error reading config options."
 msgstr "configオプションでエラーを読みます。"
 
-#: ../src/common/log.cpp:478
+#: ../src/common/fileconf.cpp:1015
+#, fuzzy
+msgid "Error saving user configuration data."
+msgstr "configオプションでエラーを読みます。"
+
+#: ../src/mac/carbon/thread.cpp:672 ../src/mac/carbon/mpthread.cpp:482
+msgid "Error while waiting on semaphore"
+msgstr ""
+
+#: ../src/common/log.cpp:481
 msgid "Error: "
 msgstr "エラー:"
 
@@ -1300,11 +1516,11 @@ msgstr "エラー:"
 msgid "Esperanto (ISO-8859-3)"
 msgstr "エスペラント (ISO-8859-3)"
 
-#: ../src/generic/progdlgg.cpp:191
+#: ../src/generic/progdlgg.cpp:194
 msgid "Estimated time : "
 msgstr "概算の時間 : "
 
-#: ../src/msw/utilsexc.cpp:733
+#: ../src/msw/utilsexc.cpp:751
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "コマンド '%s' の実行に失敗しました"
@@ -1314,9 +1530,27 @@ msgstr "コマンド '%s' の実行に失敗しました"
 msgid "Execution of command '%s' failed with error: %ul"
 msgstr "コマンド '%s' の実行はエラーで失敗しました: %ul"
 
-#: ../src/common/paper.cpp:124
+#: ../src/common/paper.cpp:122
 msgid "Executive, 7 1/4 x 10 1/2 in"
 msgstr "エクゼクティブ、7 1/4 x 10 1/2 インチ"
+
+#: ../contrib/src/deprecated/resource.cpp:1869
+#: ../contrib/src/deprecated/resource.cpp:1999
+#: ../contrib/src/deprecated/resource.cpp:3091
+msgid "Expected '*' whilst parsing resource."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1886
+#: ../contrib/src/deprecated/resource.cpp:2015
+#: ../contrib/src/deprecated/resource.cpp:3108
+msgid "Expected '=' whilst parsing resource."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1855
+#: ../contrib/src/deprecated/resource.cpp:1985
+#: ../contrib/src/deprecated/resource.cpp:3077
+msgid "Expected 'char' whilst parsing resource."
+msgstr ""
 
 #: ../src/common/fmapbase.cpp:141
 msgid "Extended Unix Codepage for Japanese (EUC-JP)"
@@ -1327,29 +1561,29 @@ msgstr "日本語(EUC_JP)のための拡張Unixコードページ"
 msgid "Extraction of '%s' into '%s' failed."
 msgstr "'%s' の '%s' から抽出に失敗しました"
 
-#: ../src/msw/dialup.cpp:844
+#: ../src/msw/dialup.cpp:843
 #, c-format
 msgid "Failed to %s dialup connection: %s"
 msgstr "%s 失敗。ダイアルアップ接続: %s"
 
-#: ../src/unix/snglinst.cpp:243
+#: ../src/unix/snglinst.cpp:274
 msgid "Failed to access lock file."
 msgstr "ロック・ファイルへのアクセスに失敗しました。"
 
-#: ../src/msw/dib.cpp:528
+#: ../src/msw/dib.cpp:543
 #, c-format
 msgid "Failed to allocated %luKb of memory for bitmap data."
 msgstr "ビットマップ・データのためのメモリー %luKb の割り当てに失敗しました。"
 
-#: ../src/unix/displayx11.cpp:262
+#: ../src/unix/displayx11.cpp:224
 msgid "Failed to change video mode"
 msgstr "ビデオのモード変更に失敗しました。"
 
-#: ../src/common/filename.cpp:188
+#: ../src/common/filename.cpp:191
 msgid "Failed to close file handle"
 msgstr "ファイル・ハンドルのクローズに失敗しました。"
 
-#: ../src/unix/snglinst.cpp:308
+#: ../src/unix/snglinst.cpp:339
 #, c-format
 msgid "Failed to close lock file '%s'"
 msgstr "ロックファイル '%s' のクローズに失敗しました。"
@@ -1358,34 +1592,39 @@ msgstr "ロックファイル '%s' のクローズに失敗しました。"
 msgid "Failed to close the clipboard."
 msgstr "クリップボードのクローズに失敗しました。"
 
-#: ../src/msw/dialup.cpp:784
+#: ../src/msw/dialup.cpp:783
 msgid "Failed to connect: missing username/password."
 msgstr "接続失敗: ユーザー名／パスワードがありません。"
 
-#: ../src/msw/dialup.cpp:730
+#: ../src/msw/dialup.cpp:729
 msgid "Failed to connect: no ISP to dial."
 msgstr "接続失敗: 接続先ISPがありません。"
 
-#: ../src/msw/registry.cpp:614
+#: ../src/msw/registry.cpp:624
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "レジストリ値 '%s' のコピーに失敗しました。"
 
-#: ../src/msw/registry.cpp:623
+#: ../src/msw/registry.cpp:633
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "レジストリキー '%s' の内容を '%s' へコピーできませんでした。"
 
-#: ../src/common/filefn.cpp:1197
+#: ../src/common/filefn.cpp:989
 #, c-format
 msgid "Failed to copy the file '%s' to '%s'"
 msgstr "ファイル '%s' から '%s' へのコピーに失敗しました"
 
-#: ../src/msw/dde.cpp:1004
+#: ../src/msw/registry.cpp:611
+#, fuzzy, c-format
+msgid "Failed to copy the registry subkey '%s' to '%s'."
+msgstr "レジストリ・キー '%s' を '%s' に名前変更できません。"
+
+#: ../src/msw/dde.cpp:988
 msgid "Failed to create DDE string"
 msgstr "DDE文字列の生成に失敗しました"
 
-#: ../src/msw/mdi.cpp:425
+#: ../src/msw/mdi.cpp:455
 msgid "Failed to create MDI parent frame."
 msgstr "MDI親フレームの生成に失敗しました。"
 
@@ -1393,7 +1632,7 @@ msgstr "MDI親フレームの生成に失敗しました。"
 msgid "Failed to create a status bar."
 msgstr "ステータスバーの生成に失敗しいました。"
 
-#: ../src/common/filename.cpp:728
+#: ../src/common/filename.cpp:742
 msgid "Failed to create a temporary file name"
 msgstr "テンポラリー・ファイル名の生成に失敗しました"
 
@@ -1401,7 +1640,7 @@ msgstr "テンポラリー・ファイル名の生成に失敗しました"
 msgid "Failed to create an anonymous pipe"
 msgstr "匿名パイプの生成に失敗しました"
 
-#: ../src/msw/dde.cpp:468
+#: ../src/msw/dde.cpp:450
 #, c-format
 msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr "サーバー '%s' へのトピック '%s' に対する接続の作成に失敗しました"
@@ -1420,7 +1659,7 @@ msgstr "ディレクトリ %s/.gnome の作成に失敗しました。"
 msgid "Failed to create directory %s/mime-info."
 msgstr "ディレクトリ %s/mime-info に失敗しました。"
 
-#: ../src/generic/dirdlgg.cpp:203
+#: ../src/generic/dirdlgg.cpp:249
 #, c-format
 msgid ""
 "Failed to create directory '%s'\n"
@@ -1439,11 +1678,12 @@ msgstr "ファイル '%s' のレジストリ・キーの作成に失敗しまし
 msgid "Failed to create the standard find/replace dialog (error code %d)"
 msgstr "標準の検索/置換ダイアログの生成に失敗しました (エラーコード %d)"
 
-#: ../src/html/winpars.cpp:495
+#: ../src/html/winpars.cpp:519
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "HTMLドキュメントの %s エンコードによる表示に失敗しました。"
 
+#: ../src/mac/carbon/clipbrd.cpp:185 ../src/mac/classic/clipbrd.cpp:185
 #: ../src/msw/clipbrd.cpp:134
 msgid "Failed to empty the clipboard."
 msgstr "クリップボードを空にできません。"
@@ -1452,25 +1692,50 @@ msgstr "クリップボードを空にできません。"
 msgid "Failed to enumerate video modes"
 msgstr "ビデオのモードを列挙するのに失敗しました"
 
-#: ../src/msw/dde.cpp:668
+#: ../src/msw/dde.cpp:652
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "DDE サーバーとの advice loop 確立に失敗しました"
 
-#: ../src/msw/dialup.cpp:622
+#: ../src/msw/dialup.cpp:621
 #, c-format
 msgid "Failed to establish dialup connection: %s"
 msgstr "ダイアルアップ接続: %s の確立に失敗しました"
 
-#: ../src/unix/utilsunx.cpp:460
-#: ../src/unix/utilsunx.cpp:476
+#: ../src/unix/utilsunx.cpp:480 ../src/unix/utilsunx.cpp:496
 #, c-format
 msgid "Failed to execute '%s'\n"
 msgstr "'%s' の実行に失敗しました\n"
 
-#: ../src/msw/dialup.cpp:682
+#: ../contrib/src/deprecated/resource.cpp:2489
+#, c-format
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2643
+#, c-format
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadIconData?"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2504
+#, c-format
+msgid ""
+"Failed to find XPM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:681
 #, c-format
 msgid "Failed to get ISP names: %s"
 msgstr "ISP名の取得に失敗しました: %s"
+
+#: ../src/mac/carbon/clipbrd.cpp:134 ../src/mac/classic/clipbrd.cpp:134
+#, fuzzy
+msgid "Failed to get clipboard data."
+msgstr "クリップボード・データの設定に失敗しました。"
 
 #: ../src/msw/clipbrd.cpp:716
 msgid "Failed to get data from the clipboard"
@@ -1480,7 +1745,7 @@ msgstr "クリップボードからのデータ取得に失敗しました"
 msgid "Failed to get the local system time"
 msgstr "ローカルシステム時刻の取得に失敗しました"
 
-#: ../src/common/filefn.cpp:1609
+#: ../src/common/filefn.cpp:1382
 msgid "Failed to get the working directory"
 msgstr "作業ディレクトリの取得に失敗しました"
 
@@ -1492,15 +1757,24 @@ msgstr "GUIの初期化に失敗しました: 内蔵のテーマが見つかり�
 msgid "Failed to initialize MS HTML Help."
 msgstr "MS HTMLヘルプの初期化に失敗しました。"
 
-#: ../src/msw/glcanvas.cpp:741
+#: ../src/msw/glcanvas.cpp:793
 msgid "Failed to initialize OpenGL"
 msgstr "OpenGLの初期化に失敗しました"
 
-#: ../src/unix/threadpsx.cpp:896
-msgid "Failed to join a thread, potential memory leak detected - please restart the program"
-msgstr "スレッドの結合に失敗しました。メモリ・リークが発生した可能性があります - プログラムを再起動して下さい"
+#: ../src/unix/snglinst.cpp:246
+#, fuzzy, c-format
+msgid "Failed to inspect the lock file '%s'"
+msgstr "ロックファイル '%s' のロックに失敗しました"
 
-#: ../src/msw/utils.cpp:693
+#: ../src/unix/threadpsx.cpp:896
+msgid ""
+"Failed to join a thread, potential memory leak detected - please restart the "
+"program"
+msgstr ""
+"スレッドの結合に失敗しました。メモリ・リークが発生した可能性があります - プロ"
+"グラムを再起動して下さい"
+
+#: ../src/msw/utils.cpp:684
 #, c-format
 msgid "Failed to kill process %d"
 msgstr "プロセス %d の強制終了に失敗しました"
@@ -1514,17 +1788,17 @@ msgstr "イメージ %d をファイル '%s' からロードする事に失敗�
 msgid "Failed to load mpr.dll."
 msgstr "mpr.dll のロードに失敗しました。"
 
-#: ../src/common/dynlib.cpp:287
+#: ../src/common/dynlib.cpp:286
 #, c-format
 msgid "Failed to load shared library '%s'"
 msgstr "共有ライブラリ '%s' のロードに失敗しました"
 
-#: ../src/common/dynlib.cpp:216
+#: ../src/common/dynlib.cpp:215
 #, c-format
 msgid "Failed to load shared library '%s' Error '%s'"
 msgstr "共有ライブラリ '%s' のロードに失敗しました。エラー '%s'"
 
-#: ../src/unix/snglinst.cpp:192
+#: ../src/unix/snglinst.cpp:203
 #, c-format
 msgid "Failed to lock the lock file '%s'"
 msgstr "ロックファイル '%s' のロックに失敗しました"
@@ -1534,12 +1808,12 @@ msgstr "ロックファイル '%s' のロックに失敗しました"
 msgid "Failed to match '%s' in regular expression: %s"
 msgstr "'%s' (正規表現: %s 内)の照合に失敗しました"
 
-#: ../src/common/filename.cpp:1844
+#: ../src/common/filename.cpp:1884
 #, c-format
 msgid "Failed to modify file times for '%s'"
 msgstr "ファイル時刻の '%s' の変更に失敗しました"
 
-#: ../src/common/filename.cpp:176
+#: ../src/common/filename.cpp:179
 #, c-format
 msgid "Failed to open '%s' for %s"
 msgstr "%s の '%s' は開けませんでした。"
@@ -1549,7 +1823,7 @@ msgstr "%s の '%s' は開けませんでした。"
 msgid "Failed to open CHM archive '%s'."
 msgstr "CHMアーカイブ ''%s' は開けませんでした。"
 
-#: ../src/common/filename.cpp:750
+#: ../src/common/filename.cpp:764
 msgid "Failed to open temporary file."
 msgstr "一時ファイルのオープンに失敗しました。"
 
@@ -1561,44 +1835,49 @@ msgstr "クリップボードのオープンに失敗しました。"
 msgid "Failed to put data on the clipboard"
 msgstr "クリップボードにデータを書き込む事はできませんでした。"
 
-#: ../src/unix/snglinst.cpp:252
+#: ../src/unix/snglinst.cpp:283
 msgid "Failed to read PID from lock file."
 msgstr "ロック･ファイルからの PID を読み込みに失敗しました。"
 
-#: ../src/unix/utilsunx.cpp:550
+#: ../src/unix/utilsunx.cpp:570
 msgid "Failed to redirect child process input/output"
 msgstr "子プロセス入出力のリダイレクトに失敗しました"
 
-#: ../src/msw/utilsexc.cpp:633
+#: ../src/msw/utilsexc.cpp:651
 msgid "Failed to redirect the child process IO"
 msgstr "子プロセス入出力のリダイレクトに失敗しました"
 
-#: ../src/msw/dde.cpp:318
+#: ../src/msw/dde.cpp:300
 #, c-format
 msgid "Failed to register DDE server '%s'"
 msgstr "DDE サーバー '%s' の登録に失敗しました"
 
-#: ../src/common/fontmap.cpp:231
+#: ../src/msw/glcanvas.cpp:362
+#, fuzzy
+msgid "Failed to register OpenGL window class."
+msgstr "OpenGLの初期化に失敗しました"
+
+#: ../src/common/fontmap.cpp:232
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "キャラクターセット '%s' のエンコーディングを想起できません。"
 
-#: ../src/unix/snglinst.cpp:296
+#: ../src/unix/snglinst.cpp:327
 #, c-format
 msgid "Failed to remove lock file '%s'"
 msgstr "ロックファイル '%s' を除去できません。"
 
-#: ../src/unix/snglinst.cpp:262
+#: ../src/unix/snglinst.cpp:293
 #, c-format
 msgid "Failed to remove stale lock file '%s'."
 msgstr "古いロック･ファイル '%s' の除去に失敗しました。"
 
-#: ../src/msw/registry.cpp:460
+#: ../src/msw/registry.cpp:461
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "レジストリ値 '%s' を '%s' に名前変更できません。"
 
-#: ../src/msw/registry.cpp:560
+#: ../src/msw/registry.cpp:566
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "レジストリ・キー '%s' を '%s' に名前変更できません。"
@@ -1607,12 +1886,12 @@ msgstr "レジストリ・キー '%s' を '%s' に名前変更できません。
 msgid "Failed to retrieve data from the clipboard."
 msgstr "クリップボードからデータを取り出せません。"
 
-#: ../src/common/filename.cpp:1934
+#: ../src/common/filename.cpp:1974
 #, c-format
 msgid "Failed to retrieve file times for '%s'"
 msgstr "'%s' のファイル時刻取得に失敗しました"
 
-#: ../src/msw/dialup.cpp:455
+#: ../src/msw/dialup.cpp:454
 msgid "Failed to retrieve text of RAS error message"
 msgstr "RAS エラー・メッセージのテキスト取得に失敗しました"
 
@@ -1620,16 +1899,16 @@ msgstr "RAS エラー・メッセージのテキスト取得に失敗しまし�
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "サポートされているクリップボード形式の取得に失敗しました"
 
-#: ../src/msw/dib.cpp:330
+#: ../src/msw/dib.cpp:345
 #, c-format
 msgid "Failed to save the bitmap image to file \"%s\"."
 msgstr "ビットマップイメージをファイル '%s' に保存する事に失敗しました。"
 
-#: ../src/msw/dde.cpp:713
+#: ../src/msw/dde.cpp:697
 msgid "Failed to send DDE advise notification"
 msgstr "DDEアドバイス通知の送信に失敗しました"
 
-#: ../src/common/ftp.cpp:368
+#: ../src/common/ftp.cpp:384
 #, c-format
 msgid "Failed to set FTP transfer mode to %s."
 msgstr "FTP転送モードを %s に設定できません。"
@@ -1638,48 +1917,58 @@ msgstr "FTP転送モードを %s に設定できません。"
 msgid "Failed to set clipboard data."
 msgstr "クリップボード・データの設定に失敗しました。"
 
-#: ../src/common/file.cpp:701
+#: ../src/unix/snglinst.cpp:186
+#, fuzzy, c-format
+msgid "Failed to set permissions on lock file '%s'"
+msgstr "ファイル '%s' のアクセス権を設定できません"
+
+#: ../src/common/file.cpp:528
 msgid "Failed to set temporary file permissions"
 msgstr "一時ファイルのアクセス権設定に失敗しました"
 
-#: ../src/unix/threadpsx.cpp:1244
-#: ../src/unix/threadpsx.cpp:1255
+#: ../src/unix/threadpsx.cpp:1244 ../src/unix/threadpsx.cpp:1255
 #, c-format
 msgid "Failed to set thread priority %d."
 msgstr "スレッド優先度 %d の設定に失敗しました。"
 
-#: ../src/common/fs_mem.cpp:229
+#: ../src/common/fs_mem.cpp:231
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
 msgstr "メモリー VFSへのイメージ '%s' の記録に失敗しました!"
 
+#: ../src/mac/carbon/thread.cpp:1465 ../src/mac/carbon/mpthread.cpp:1273
 #: ../src/unix/threadpsx.cpp:1428
 msgid "Failed to terminate a thread."
 msgstr "スレッドの終了に失敗しました。"
 
-#: ../src/msw/dde.cpp:687
+#: ../src/msw/dde.cpp:671
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "DDE サーバーでアドバイス･ループの終了に失敗しました"
 
-#: ../src/msw/dialup.cpp:917
+#: ../src/msw/dialup.cpp:916
 #, c-format
 msgid "Failed to terminate the dialup connection: %s"
 msgstr "ダイアルアップ接続: %s の切断に失敗しました"
 
-#: ../src/common/filename.cpp:1859
+#: ../src/common/filename.cpp:1899
 #, c-format
 msgid "Failed to touch the file '%s'"
 msgstr "ファイル '%s' のタッチに失敗しました"
 
-#: ../src/unix/snglinst.cpp:302
+#: ../src/unix/snglinst.cpp:333
 #, c-format
 msgid "Failed to unlock lock file '%s'"
 msgstr "ロック・ファイル '%s' のロック解除に失敗しました"
 
-#: ../src/msw/dde.cpp:339
+#: ../src/msw/dde.cpp:321
 #, c-format
 msgid "Failed to unregister DDE server '%s'"
 msgstr "DDE サーバー '%s' の登録解除に失敗しました"
+
+#: ../src/common/fileconf.cpp:990
+#, fuzzy
+msgid "Failed to update user configuration file."
+msgstr "ユーザー設定ファイルを開くことができません。"
 
 #: ../src/unix/snglinst.cpp:173
 #, c-format
@@ -1690,22 +1979,26 @@ msgstr "ロック･ファイル '%s' への書き込みに失敗しました"
 msgid "Fatal error"
 msgstr "致命的エラー"
 
-#: ../src/common/log.cpp:467
+#: ../src/common/log.cpp:470
 msgid "Fatal error: "
 msgstr "致命的エラー: "
+
+#: ../src/msw/wince/filedlgwce.cpp:120
+#, fuzzy
+msgid "File"
+msgstr "ファイル(&F)"
 
 #: ../src/mgl/bitmap.cpp:544
 #, c-format
 msgid "File %s does not exist."
 msgstr "ファイル %s は存在しません。"
 
-#: ../src/generic/filedlgg.cpp:1243
-#: ../src/gtk/filedlg.cpp:71
+#: ../src/generic/filedlgg.cpp:1248 ../src/gtk/filedlg.cpp:71
 #, c-format
 msgid "File '%s' already exists, do you really want to overwrite it?"
 msgstr "ファイル '%s' はすでに存在します。 本当に上書きしますか?"
 
-#: ../src/os2/filedlg.cpp:302
+#: ../src/os2/filedlg.cpp:307
 #, c-format
 msgid ""
 "File '%s' already exists.\n"
@@ -1714,64 +2007,65 @@ msgstr ""
 "ファイル '%s' はすでに存在します。\n"
 "置き換えますか?"
 
-#: ../src/common/textcmn.cpp:224
+#: ../src/common/textcmn.cpp:227
 msgid "File couldn't be loaded."
 msgstr "ファイルはロードできませんでした。"
 
-#: ../src/common/docview.cpp:316
-#: ../src/common/docview.cpp:357
-#: ../src/common/docview.cpp:1502
+#: ../src/common/docview.cpp:553 ../src/common/docview.cpp:585
+#: ../src/common/docview.cpp:1582
 msgid "File error"
 msgstr "ファイル エラー"
 
-#: ../src/generic/dirctrlg.cpp:703
-#: ../src/generic/filedlgg.cpp:750
+#: ../src/generic/dirctrlg.cpp:658 ../src/generic/filedlgg.cpp:751
 msgid "File name exists already."
 msgstr "ファイル名はすでに存在します。"
 
-#: ../src/msw/filedlg.cpp:250
-#, c-format
-msgid "Files (%s)|%s"
+#: ../src/common/filefn.cpp:1695
+#, fuzzy, c-format
+msgid "Files (%s)"
 msgstr "ファイル (%s)|%s"
 
-#: ../src/html/helpfrm.cpp:399
+#: ../src/html/helpfrm.cpp:468
 msgid "Find"
 msgstr "検索"
 
-#: ../src/html/helpfrm.cpp:1049
+#: ../src/html/helpfrm.cpp:1196
 msgid "Fixed font:"
 msgstr "固定フォント: "
 
-#: ../src/html/helpfrm.cpp:1110
+#: ../src/html/helpfrm.cpp:1256
 msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
 msgstr "固定サイズ外観<br> <b>ボールド</b> <i>イタリック</i> "
 
-#: ../src/common/paper.cpp:130
+#: ../src/common/paper.cpp:128
 msgid "Folio, 8 1/2 x 13 in"
 msgstr "フォリオ、8 1/2 x 13 インチ"
 
-#: ../src/html/helpfrm.cpp:1050
+#: ../src/html/helpfrm.cpp:1197
 msgid "Font size:"
 msgstr "フォント サイズ: "
 
-#: ../src/unix/utilsunx.cpp:497
+#: ../src/unix/utilsunx.cpp:517
 msgid "Fork failed"
 msgstr "フォーク失敗"
-
-#: ../src/common/dlgcmn.cpp:224
-msgid "Forward"
-msgstr "前"
 
 #: ../src/common/xtixml.cpp:235
 msgid "Forward hrefs are not supported"
 msgstr "前方の hrefs はサポートされません"
 
-#: ../src/html/helpfrm.cpp:731
+#: ../contrib/src/deprecated/resource.cpp:1838
+#: ../contrib/src/deprecated/resource.cpp:1968
+#: ../contrib/src/deprecated/resource.cpp:3060
+#, fuzzy
+msgid "Found "
+msgstr "検索"
+
+#: ../src/html/helpfrm.cpp:863
 #, c-format
 msgid "Found %i matches"
 msgstr "%i 回の一致がありました"
 
-#: ../src/generic/prntdlgg.cpp:181
+#: ../src/generic/prntdlgg.cpp:179
 msgid "From:"
 msgstr "差出人: "
 
@@ -1795,15 +2089,15 @@ msgstr "GIF: メモリー不足"
 msgid "GIF: unknown error!!!"
 msgstr "GIF: 不明なエラー!!!"
 
-#: ../src/univ/themes/gtk.cpp:631
+#: ../src/univ/themes/gtk.cpp:632
 msgid "GTK+ theme"
 msgstr "GTK+ テーマ"
 
-#: ../src/common/paper.cpp:154
+#: ../src/common/paper.cpp:152
 msgid "German Legal Fanfold, 8 1/2 x 13 in"
 msgstr "ドイツ リーガル ファンフォールド、8 1/2 x 13 インチ"
 
-#: ../src/common/paper.cpp:153
+#: ../src/common/paper.cpp:151
 msgid "German Std Fanfold, 8 1/2 x 12 in"
 msgstr "ドイツ 標準ファンフォールド、8 1/2 x 12 インチ"
 
@@ -1817,30 +2111,26 @@ msgstr "GetPropertyCollectionは、全体のaccessorで呼ばれました"
 
 #: ../include/wx/xti.h:851
 msgid "GetPropertyCollection called w/o valid collection getter"
-msgstr "コレクションゲッターとしての w/o でGetPropertyCollectionは呼ばれました。"
+msgstr ""
+"コレクションゲッターとしての w/o でGetPropertyCollectionは呼ばれました。"
 
-#: ../src/common/image.cpp:1499
-msgid "GetUnusedColour:: No Unused Color in image "
-msgstr "GetUnusedColour:: イメージに未使用の色がありません"
-
-#: ../src/html/helpfrm.cpp:558
+#: ../src/html/helpfrm.cpp:628
 msgid "Go back"
 msgstr "戻る"
 
-#: ../src/html/helpfrm.cpp:561
+#: ../src/html/helpfrm.cpp:631
 msgid "Go forward"
 msgstr "前に進む"
 
-#: ../src/html/helpfrm.cpp:566
+#: ../src/html/helpfrm.cpp:636
 msgid "Go one level up in document hierarchy"
 msgstr "文書階層を１つ上る"
 
-#: ../src/generic/dirdlgg.cpp:110
-#: ../src/generic/filedlgg.cpp:945
+#: ../src/generic/dirdlgg.cpp:147 ../src/generic/filedlgg.cpp:950
 msgid "Go to home directory"
 msgstr "ホームディレクトリに行く"
 
-#: ../src/generic/filedlgg.cpp:937
+#: ../src/generic/filedlgg.cpp:942
 msgid "Go to parent directory"
 msgstr "親ディレクトリに行く"
 
@@ -1852,21 +2142,20 @@ msgstr "指定ページに行く"
 msgid "Greek (ISO-8859-7)"
 msgstr "ギリシャ語 (ISO-8859-7)"
 
-#: ../src/common/zstream.cpp:72
-#: ../src/common/zstream.cpp:209
+#: ../src/common/zstream.cpp:72 ../src/common/zstream.cpp:209
 msgid "Gzip not supported by this version of zlib"
 msgstr "このバージョンのzipはGzipをサポートしません"
 
-#: ../src/html/helpfrm.cpp:1408
+#: ../src/html/helpfrm.cpp:1560
 msgid "HTML Help Project (*.hhp)|*.hhp|"
 msgstr "HTML ヘルププロジェクト (*.hhp)|*.hhp|"
 
-#: ../src/html/htmlwin.cpp:468
+#: ../src/html/htmlwin.cpp:492
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTMLアンカー %s は存在しません。"
 
-#: ../src/html/helpfrm.cpp:1406
+#: ../src/html/helpfrm.cpp:1558
 msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
 msgstr "HTML ファイル (*.html;*.htm)|*.html;*.htm|"
 
@@ -1874,27 +2163,29 @@ msgstr "HTML ファイル (*.html;*.htm)|*.html;*.htm|"
 msgid "Hebrew (ISO-8859-8)"
 msgstr "ヘブライ語 (ISO-8859-8)"
 
-#: ../src/common/dlgcmn.cpp:236
-#: ../src/generic/mdig.cpp:310
-#: ../src/html/helpfrm.cpp:254
-#: ../src/msw/mdi.cpp:1329
+#: ../src/generic/mdig.cpp:310 ../src/html/helpfrm.cpp:321
+#: ../src/msw/mdi.cpp:1380 ../contrib/src/deprecated/proplist.cpp:523
 msgid "Help"
 msgstr "ヘルプ"
 
-#: ../src/html/helpfrm.cpp:1043
+#: ../src/html/helpfrm.cpp:1190
 msgid "Help Browser Options"
 msgstr "ヘルプ ブラウザー オプション"
 
-#: ../src/generic/helpext.cpp:441
-#: ../src/generic/helpext.cpp:442
+#: ../src/generic/helpext.cpp:441 ../src/generic/helpext.cpp:442
 msgid "Help Index"
 msgstr "ヘルプ 索引"
 
-#: ../src/html/helpfrm.cpp:1394
+#: ../src/html/helpfrm.cpp:1546
 msgid "Help Printing"
 msgstr "ヘルプ 印刷"
 
-#: ../src/html/helpfrm.cpp:1407
+#: ../src/html/helpfrm.cpp:791
+#, fuzzy
+msgid "Help Topics"
+msgstr "ヘルプ: %s"
+
+#: ../src/html/helpfrm.cpp:1559
 msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
 msgstr "ヘルプブック (*.htb)|*.htb|ヘルプブック (*.zip)|*.zip|"
 
@@ -1903,29 +2194,35 @@ msgstr "ヘルプブック (*.htb)|*.htb|ヘルプブック (*.zip)|*.zip|"
 msgid "Help: %s"
 msgstr "ヘルプ: %s"
 
+#: ../src/generic/dirdlgg.cpp:107
+#, fuzzy
+msgid "Home"
+msgstr "名前無し"
+
+#: ../include/wx/filefn.h:134
+msgid "I64"
+msgstr ""
+
 #: ../src/common/imagbmp.cpp:942
 msgid "ICO: Error in reading mask DIB."
 msgstr "ICO: マスクDIB 読込みエラー。"
 
-#: ../src/common/imagbmp.cpp:1048
-#: ../src/common/imagbmp.cpp:1107
-#: ../src/common/imagbmp.cpp:1116
-#: ../src/common/imagbmp.cpp:1127
-#: ../src/common/imagbmp.cpp:1171
-#: ../src/common/imagbmp.cpp:1181
-#: ../src/common/imagbmp.cpp:1190
+#: ../src/common/imagbmp.cpp:1047 ../src/common/imagbmp.cpp:1106
+#: ../src/common/imagbmp.cpp:1115 ../src/common/imagbmp.cpp:1126
+#: ../src/common/imagbmp.cpp:1170 ../src/common/imagbmp.cpp:1180
+#: ../src/common/imagbmp.cpp:1189
 msgid "ICO: Error writing the image file!"
 msgstr "ICO: イメージファイル書込みエラー!"
 
-#: ../src/common/imagbmp.cpp:1016
+#: ../src/common/imagbmp.cpp:1015
 msgid "ICO: Image too tall for an icon."
 msgstr "ICO: イメージはアイコンとしては縦が長すぎます。"
 
-#: ../src/common/imagbmp.cpp:1022
+#: ../src/common/imagbmp.cpp:1021
 msgid "ICO: Image too wide for an icon."
 msgstr "ICO: このイメージはアイコンとしては幅が広すぎます。"
 
-#: ../src/common/imagbmp.cpp:1255
+#: ../src/common/imagbmp.cpp:1254
 msgid "ICO: Invalid icon index."
 msgstr "ICO: 無効なアイコン インデックス。"
 
@@ -1945,6 +2242,16 @@ msgstr "IFF: メモリー不足。"
 msgid "IFF: unknown error!!!"
 msgstr "IFF: 不明なエラー!!!"
 
+#: ../contrib/src/deprecated/resource.cpp:2673
+#: ../contrib/src/deprecated/resource.cpp:2684
+#, fuzzy, c-format
+msgid "Icon resource specification %s not found."
+msgstr "XRCリソース '%s' (クラス '%s') が見つかりません!"
+
+#: ../contrib/src/deprecated/resource.cpp:271
+msgid "Ill-formed resource file syntax."
+msgstr ""
+
 #: ../src/common/xtistrm.cpp:260
 msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
 msgstr "イベントソースとして、不正なオブジェクト・クラス(Non-wxEvtHandle)です"
@@ -1957,48 +2264,57 @@ msgstr "構造オブジェクトメソッドの不正なパラメーター・カ
 msgid "Illegal Parameter Count for Create Method"
 msgstr "メソッド作成の不正なパラメーター・カウントです"
 
-#: ../src/generic/dirctrlg.cpp:685
-#: ../src/generic/filedlgg.cpp:736
+#: ../src/generic/dirctrlg.cpp:640 ../src/generic/filedlgg.cpp:737
 msgid "Illegal directory name."
 msgstr "不正なディレクトリ名"
 
-#: ../src/generic/filedlgg.cpp:1197
+#: ../src/generic/filedlgg.cpp:1202
 msgid "Illegal file specification."
 msgstr "不正なファイル仕様。"
 
 #: ../src/common/image.cpp:900
-msgid "Image and Mask have different sizes"
+#, fuzzy
+msgid "Image and mask have different sizes."
 msgstr "イメージとマスクはサイズが一致しません。"
 
-#: ../src/common/image.cpp:1180
+#: ../src/common/image.cpp:1220
 #, c-format
 msgid "Image file is not of type %d."
 msgstr "イメージファイルは形式 %d ではありません。"
 
-#: ../src/msw/textctrl.cpp:305
-msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
-msgstr "リッチ エディット コントロール作成不能です。 代りにシンプル テキスト コントロールを使います。riched32.dll を再インストールして下さい。"
+#: ../src/msw/textctrl.cpp:302
+msgid ""
+"Impossible to create a rich edit control, using simple text control instead. "
+"Please reinstall riched32.dll"
+msgstr ""
+"リッチ エディット コントロール作成不能です。 代りにシンプル テキスト コント"
+"ロールを使います。riched32.dll を再インストールして下さい。"
 
-#: ../src/unix/utilsunx.cpp:380
+#: ../src/unix/utilsunx.cpp:400
 msgid "Impossible to get child process input"
 msgstr "子プロセスの入力を取得できません"
 
-#: ../src/common/filefn.cpp:1213
+#: ../src/common/filefn.cpp:1005
 #, c-format
 msgid "Impossible to get permissions for file '%s'"
 msgstr "ファイル '%s' のアクセス権を取得できません"
 
-#: ../src/common/filefn.cpp:1227
+#: ../src/common/filefn.cpp:1019
 #, c-format
 msgid "Impossible to overwrite the file '%s'"
 msgstr "ファイル '%s' を上書きできません"
 
-#: ../src/common/filefn.cpp:1278
+#: ../src/common/filefn.cpp:1063
 #, c-format
 msgid "Impossible to set permissions for the file '%s'"
 msgstr "ファイル '%s' のアクセス権を設定できません"
 
-#: ../src/html/helpfrm.cpp:424
+#: ../src/common/stockitem.cpp:121
+#, fuzzy
+msgid "Indent"
+msgstr "索引"
+
+#: ../src/html/helpfrm.cpp:493
 msgid "Index"
 msgstr "索引"
 
@@ -2014,12 +2330,12 @@ msgstr "内部エラー、不正なwxCustomTypeInfoです"
 msgid "Invalid TIFF image index."
 msgstr "無効な TIFF イメージインデックス。"
 
-#: ../contrib/src/xrc/xmlres.cpp:389
+#: ../src/xrc/xmlres.cpp:394
 #, c-format
 msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
 msgstr "無効な XRC リソース '%s': ルート・ノード 'resource' がありません。"
 
-#: ../src/common/appcmn.cpp:239
+#: ../src/common/appcmn.cpp:249
 #, c-format
 msgid "Invalid display mode specification '%s'."
 msgstr "無効なディスプレイ・モード指定 '%s'"
@@ -2029,13 +2345,12 @@ msgstr "無効なディスプレイ・モード指定 '%s'"
 msgid "Invalid geometry specification '%s'"
 msgstr "無効なジオメトリー指定　'%s'"
 
-#: ../src/unix/snglinst.cpp:280
+#: ../src/unix/snglinst.cpp:311
 #, c-format
 msgid "Invalid lock file '%s'."
 msgstr "無効なロック・ファイル '%s'"
 
-#: ../src/common/xtistrm.cpp:365
-#: ../src/common/xtistrm.cpp:380
+#: ../src/common/xtistrm.cpp:365 ../src/common/xtistrm.cpp:380
 msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
 msgstr "不正もしくはNULLオブジェクトIDは、GetObjectClassInfoに渡されました"
 
@@ -2048,11 +2363,11 @@ msgstr "不正もしくはNULLオブジェクトIDは、HasObjectClassInfoに渡
 msgid "Invalid regular expression '%s': %s"
 msgstr "無効な正規表現 '%s': %s"
 
-#: ../src/generic/fontdlgg.cpp:227
+#: ../src/generic/fontdlgg.cpp:231
 msgid "Italic"
 msgstr "イタリック"
 
-#: ../src/common/paper.cpp:149
+#: ../src/common/paper.cpp:147
 msgid "Italy Envelope, 110 x 230 mm"
 msgstr "イタリア封筒、110 x 230 mm"
 
@@ -2064,6 +2379,10 @@ msgstr "JPEG: ロードできませんでした - おそらくファイルが壊
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: イメージを保存することができませんでした。"
 
+#: ../src/common/stockitem.cpp:125
+msgid "Justified"
+msgstr ""
+
 #: ../src/common/fmapbase.cpp:118
 msgid "KOI8-R"
 msgstr "KOI8-R"
@@ -2072,32 +2391,31 @@ msgstr "KOI8-R"
 msgid "KOI8-U"
 msgstr "KOI8-U"
 
-#: ../src/generic/prntdlgg.cpp:428
-#: ../src/generic/prntdlgg.cpp:638
+#: ../src/generic/prntdlgg.cpp:426 ../src/generic/prntdlgg.cpp:636
 msgid "Landscape"
 msgstr "横長"
 
-#: ../src/common/paper.cpp:122
+#: ../src/common/paper.cpp:120
 msgid "Ledger, 17 x 11 in"
 msgstr "元帳、17 x 11 インチ"
 
-#: ../src/generic/prntdlgg.cpp:650
+#: ../src/generic/prntdlgg.cpp:648
 msgid "Left margin (mm):"
 msgstr "左の余白 (mm):"
 
-#: ../src/common/paper.cpp:115
+#: ../src/common/paper.cpp:113
 msgid "Legal, 8 1/2 x 14 in"
 msgstr "リーガル、8 1/2 x 14 インチ"
 
-#: ../src/common/paper.cpp:120
+#: ../src/common/paper.cpp:118
 msgid "Letter Small, 8 1/2 x 11 in"
 msgstr "小さいレター, 8 1/2 x 11 インチ"
 
-#: ../src/common/paper.cpp:114
+#: ../src/common/paper.cpp:112
 msgid "Letter, 8 1/2 x 11 in"
 msgstr "レター, 8 1/2 x 11 インチ"
 
-#: ../src/generic/fontdlgg.cpp:230
+#: ../src/generic/fontdlgg.cpp:234
 msgid "Light"
 msgstr "簡単"
 
@@ -2105,12 +2423,12 @@ msgstr "簡単"
 msgid "Link contained '//', converted to absolute link."
 msgstr "'//' リンクは含まれました, 絶対のリンクに変えられます。"
 
-#: ../src/common/fldlgcmn.cpp:290
+#: ../src/common/fldlgcmn.cpp:248
 #, c-format
 msgid "Load %s file"
 msgstr "ファイル '%s' をロードする"
 
-#: ../src/html/htmlwin.cpp:390
+#: ../src/html/htmlwin.cpp:410
 msgid "Loading : "
 msgstr "ロード中 :"
 
@@ -2122,25 +2440,43 @@ msgstr "Grey Ascii PNMイメージの読み込みは、まだ実装されてい�
 msgid "Loading Grey Raw PNM image is not yet implemented."
 msgstr "Grey Raw PNMイメージの読み込みは、まだ実装されていません。"
 
+#: ../src/unix/snglinst.cpp:251
+#, fuzzy, c-format
+msgid "Lock file '%s' has incorrect owner."
+msgstr "サウンドファイル '%s' は、サポートされていないフォーマットです。"
+
+#: ../src/unix/snglinst.cpp:256
+#, c-format
+msgid "Lock file '%s' has incorrect permissions."
+msgstr ""
+
 #: ../src/generic/logg.cpp:569
 #, c-format
 msgid "Log saved to the file '%s'."
 msgstr "ログは、ファイル '%s' に保存されました。"
 
-#: ../include/wx/xti.h:500
-#: ../include/wx/xti.h:504
+#: ../include/wx/xti.h:500 ../include/wx/xti.h:504
 msgid "Long Conversions not supported"
 msgstr "ロングコンバージョンはサポートされませんでした"
 
-#: ../src/gtk/mdi.cpp:442
+#: ../src/gtk/mdi.cpp:459
 msgid "MDI child"
 msgstr "MDI child"
 
-#: ../src/msw/helpchm.cpp:60
-msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
-msgstr "MS HTMLヘルプ・ライブラリーがこのマシンでインストールされていないため、MS HTMLヘルプ機能は利用できません。MS HTMLヘルプ・ライブラリーをインストールして下さい。"
+#: ../src/mac/carbon/thread.cpp:1635
+msgid "MP Thread Support is not available on this System"
+msgstr ""
 
-#: ../src/univ/themes/win32.cpp:4678
+#: ../src/msw/helpchm.cpp:60
+msgid ""
+"MS HTML Help functions are unavailable because the MS HTML Help library is "
+"not installed on this machine. Please install it."
+msgstr ""
+"MS HTMLヘルプ・ライブラリーがこのマシンでインストールされていないため、MS "
+"HTMLヘルプ機能は利用できません。MS HTMLヘルプ・ライブラリーをインストールして"
+"下さい。"
+
+#: ../src/univ/themes/win32.cpp:4707
 msgid "Ma&ximize"
 msgstr "最大化(&x)"
 
@@ -2158,11 +2494,16 @@ msgstr "Match case"
 msgid "Memory VFS already contains file '%s'!"
 msgstr "VFSメモリーは、すでに、ファイル '%s' を含みます!"
 
+#: ../src/msw/frame.cpp:346
+#, fuzzy
+msgid "Menu"
+msgstr "モダン"
+
 #: ../src/univ/themes/metal.cpp:174
 msgid "Metal theme"
 msgstr "Metal theme"
 
-#: ../src/univ/themes/win32.cpp:4676
+#: ../src/univ/themes/win32.cpp:4705
 msgid "Mi&nimize"
 msgstr "最小化(&n)"
 
@@ -2176,19 +2517,19 @@ msgstr "Mime.types file %s, line %d: 引用符が閉じられていません。"
 msgid "Mode %ix%i-%i not available."
 msgstr "モード %ix%i-%i は利用できません."
 
-#: ../src/generic/fontdlgg.cpp:222
+#: ../src/generic/fontdlgg.cpp:226
 msgid "Modern"
 msgstr "モダン"
 
-#: ../src/generic/filedlgg.cpp:426
+#: ../src/generic/filedlgg.cpp:427
 msgid "Modified"
 msgstr "修正"
 
-#: ../src/common/paper.cpp:150
+#: ../src/common/paper.cpp:148
 msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
 msgstr "モナーキ 封筒、3 7/8 x 7 1/2 インチ"
 
-#: ../src/common/dlgcmn.cpp:233
+#: ../src/common/dlgcmn.cpp:242
 msgid "More..."
 msgstr "その他..."
 
@@ -2200,50 +2541,66 @@ msgstr "下に動かす"
 msgid "Move up"
 msgstr "移動"
 
-#: ../src/generic/filedlgg.cpp:423
+#: ../src/generic/filedlgg.cpp:424
 msgid "Name"
 msgstr "名前"
+
+#: ../src/generic/dirdlgg.cpp:111
+#, fuzzy
+msgid "New directory"
+msgstr "ディレクトリを作成"
 
 #: ../contrib/src/gizmos/editlbox.cpp:162
 msgid "New item"
 msgstr "新しい項目"
 
-#: ../src/generic/dirdlgg.cpp:274
-#: ../src/generic/dirdlgg.cpp:284
-#: ../src/generic/filedlgg.cpp:600
-#: ../src/generic/filedlgg.cpp:609
+#: ../src/generic/dirdlgg.cpp:320 ../src/generic/dirdlgg.cpp:330
+#: ../src/generic/filedlgg.cpp:601 ../src/generic/filedlgg.cpp:610
 msgid "NewName"
 msgstr "新しい名前"
 
-#: ../src/html/helpfrm.cpp:572
+#: ../src/generic/tipdlg.cpp:295
+#, fuzzy
+msgid "Next"
+msgstr "次へ(&N)"
+
+#: ../src/html/helpfrm.cpp:642
 msgid "Next page"
 msgstr "次のページ"
 
-#: ../src/common/dlgcmn.cpp:213
+#: ../src/mac/carbon/msgdlg.cpp:56 ../src/mac/carbon/msgdlg.cpp:141
+#: ../src/mac/classic/msgdlg.cpp:56 ../src/mac/classic/msgdlg.cpp:140
 #: ../src/motif/msgdlg.cpp:185
 msgid "No"
 msgstr "いいえ"
 
-#: ../src/common/image.cpp:908
-msgid "No Unused Color in image being masked"
-msgstr "マスクされているイメージには未使用の色がありません"
+#: ../contrib/src/deprecated/resource.cpp:2495
+#: ../contrib/src/deprecated/resource.cpp:2649
+msgid "No XBM facility available!"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2667
+msgid "No XPM icon facility available!"
+msgstr ""
 
 #: ../src/generic/helpext.cpp:436
 msgid "No entries found."
 msgstr "いかなるエントリーも見つかりません。"
 
-#: ../src/common/fontmap.cpp:402
+#: ../src/common/fontmap.cpp:408
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found,\n"
 "but an alternative encoding '%s' is available.\n"
-"Do you want to use this encoding (otherwise you will have to choose another one)?"
+"Do you want to use this encoding (otherwise you will have to choose another "
+"one)?"
 msgstr ""
 "エンコーディング '%s' でテキストを表示するフォントが見つかりません。\n"
 "代替エンコーディング '%s' が利用可能です。\n"
-"代替エンコーディングを使用しますか? (使用しない場合、別のエンコーディングを選択しなければなりません)"
+"代替エンコーディングを使用しますか? (使用しない場合、別のエンコーディングを選"
+"択しなければなりません)"
 
-#: ../src/common/fontmap.cpp:407
+#: ../src/common/fontmap.cpp:413
 #, c-format
 msgid ""
 "No font for displaying text in encoding '%s' found.\n"
@@ -2254,30 +2611,27 @@ msgstr ""
 "このエンコーディングで使用するフォントを選択しますか?\n"
 "(選択しない場合、このエンコードのテキストは正しく表示されません)"
 
-#: ../contrib/src/xrc/xmlres.cpp:606
+#: ../src/xrc/xmlres.cpp:611
 #, c-format
 msgid "No handler found for XML node '%s', class '%s'!"
 msgstr "XMLノード '%s'、クラス '%s' のハンドラが見つかりません!"
 
-#: ../src/common/image.cpp:1162
-#: ../src/common/image.cpp:1205
+#: ../src/common/image.cpp:1202 ../src/common/image.cpp:1245
 msgid "No handler found for image type."
 msgstr "イメージ型のハンドラが見つかりません。"
 
-#: ../src/common/image.cpp:1170
-#: ../src/common/image.cpp:1213
-#: ../src/common/image.cpp:1247
+#: ../src/common/image.cpp:1210 ../src/common/image.cpp:1253
+#: ../src/common/image.cpp:1287
 #, c-format
 msgid "No image handler for type %d defined."
 msgstr "タイプ '%d' のイメージ・ハンドラーは、定義されていません。"
 
-#: ../src/common/image.cpp:1231
-#: ../src/common/image.cpp:1263
+#: ../src/common/image.cpp:1271 ../src/common/image.cpp:1303
 #, c-format
 msgid "No image handler for type %s defined."
 msgstr "タイプ '%d' のイメージ・ハンドラーは、定義されていません。"
 
-#: ../src/html/helpfrm.cpp:719
+#: ../src/html/helpfrm.cpp:846
 msgid "No matching page found yet"
 msgstr "該当するページはまだ見つかりません。"
 
@@ -2285,37 +2639,39 @@ msgstr "該当するページはまだ見つかりません。"
 msgid "No sound"
 msgstr "音無し"
 
+#: ../src/common/image.cpp:908 ../src/common/image.cpp:947
+#, fuzzy
+msgid "No unused colour in image being masked."
+msgstr "マスクされているイメージには未使用の色がありません"
+
+#: ../src/common/image.cpp:1539
+#, fuzzy
+msgid "No unused colour in image."
+msgstr "マスクされているイメージには未使用の色がありません"
+
 #: ../src/common/fmapbase.cpp:112
 msgid "Nordic (ISO-8859-10)"
 msgstr "北欧 (ISO-8859-10)"
 
-#: ../src/generic/fontdlgg.cpp:226
-#: ../src/generic/fontdlgg.cpp:229
+#: ../src/generic/fontdlgg.cpp:230 ../src/generic/fontdlgg.cpp:233
 msgid "Normal"
 msgstr "ノーマル"
 
-#: ../src/html/helpfrm.cpp:1104
+#: ../src/html/helpfrm.cpp:1250
 msgid "Normal face<br>and <u>underlined</u>. "
 msgstr "ノーマル表現<br>かつ<u>アンダーライン</u>. "
 
-#: ../src/html/helpfrm.cpp:1048
+#: ../src/html/helpfrm.cpp:1195
 msgid "Normal font:"
 msgstr "ノーマルフォント:"
 
-#: ../src/common/paper.cpp:134
+#: ../src/common/paper.cpp:132
 msgid "Note, 8 1/2 x 11 in"
 msgstr "ノート, 8 1/2 x 11 インチ"
 
-#: ../src/common/dlgcmn.cpp:219
-#: ../src/generic/dirdlgg.cpp:153
-#: ../src/generic/filedlgg.cpp:995
-#: ../src/generic/filedlgg.cpp:1006
-#: ../src/generic/fontdlgg.cpp:253
-#: ../src/generic/logg.cpp:752
-#: ../src/generic/prntdlgg.cpp:454
-#: ../src/gtk/filedlg.cpp:162
-#: ../src/gtk/fontdlg.cpp:141
-#: ../src/html/helpfrm.cpp:1073
+#: ../src/generic/logg.cpp:749 ../src/generic/prntdlgg.cpp:452
+#: ../src/gtk/filedlg.cpp:162 ../src/gtk/fontdlg.cpp:141
+#: ../src/msw/dialog.cpp:190 ../contrib/src/deprecated/proplist.cpp:506
 msgid "OK"
 msgstr "OK"
 
@@ -2323,20 +2679,16 @@ msgstr "OK"
 msgid "Objects must have an id attribute"
 msgstr "オブジェクトは、ID属性を持っていなくてはいけません"
 
-#: ../src/common/docview.cpp:1197
-#: ../src/common/docview.cpp:1525
+#: ../src/common/docview.cpp:1277 ../src/common/docview.cpp:1605
 msgid "Open File"
 msgstr "オープン・ファイル"
 
-#: ../src/html/helpfrm.cpp:580
-#: ../src/html/helpfrm.cpp:1413
+#: ../src/html/helpfrm.cpp:650 ../src/html/helpfrm.cpp:1565
 msgid "Open HTML document"
 msgstr "HTMLドキュメントを開く"
 
-#: ../src/generic/dirctrlg.cpp:714
-#: ../src/generic/dirdlgg.cpp:300
-#: ../src/generic/filedlgg.cpp:624
-#: ../src/generic/filedlgg.cpp:764
+#: ../src/generic/dirctrlg.cpp:669 ../src/generic/dirdlgg.cpp:346
+#: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:765
 msgid "Operation not permitted."
 msgstr "許可されない操作です。"
 
@@ -2355,17 +2707,15 @@ msgstr "オプション '%s' には値が必要です。"
 msgid "Option '%s': '%s' cannot be converted to a date."
 msgstr "オプション '%s': '%s' は、日付に変換できません。"
 
-#: ../src/generic/prntdlgg.cpp:434
+#: ../src/generic/dirdlgg.cpp:118 ../src/generic/prntdlgg.cpp:432
 msgid "Options"
 msgstr "オプション"
 
-#: ../src/generic/prntdlgg.cpp:430
-#: ../src/generic/prntdlgg.cpp:639
+#: ../src/generic/prntdlgg.cpp:428 ../src/generic/prntdlgg.cpp:637
 msgid "Orientation"
 msgstr "向き"
 
-#: ../src/common/imagpcx.cpp:462
-#: ../src/common/imagpcx.cpp:485
+#: ../src/common/imagpcx.cpp:462 ../src/common/imagpcx.cpp:485
 msgid "PCX: couldn't allocate memory"
 msgstr "PCX: メモリーを割り当てることができませんでした"
 
@@ -2381,8 +2731,7 @@ msgstr "PCX: 無効なイメージ"
 msgid "PCX: this is not a PCX file."
 msgstr "PCX: これは、PCXファイルではありません。"
 
-#: ../src/common/imagpcx.cpp:464
-#: ../src/common/imagpcx.cpp:486
+#: ../src/common/imagpcx.cpp:464 ../src/common/imagpcx.cpp:486
 msgid "PCX: unknown error !!!"
 msgstr "PCX: 不明なエラー!!!"
 
@@ -2402,33 +2751,31 @@ msgstr "PNM: 認識できないファイル形式です。"
 msgid "PNM: File seems truncated."
 msgstr "PNM: データストリームは途切れている可能性があります。"
 
-#: ../src/common/prntbase.cpp:845
+#: ../src/common/prntbase.cpp:839
 #, c-format
 msgid "Page %d"
 msgstr "%d ページ"
 
-#: ../src/common/prntbase.cpp:843
+#: ../src/common/prntbase.cpp:837
 #, c-format
 msgid "Page %d of %d"
 msgstr "%d / %d ページ"
 
-#: ../src/generic/prntdlgg.cpp:598
+#: ../src/generic/prntdlgg.cpp:596
 msgid "Page Setup"
 msgstr "ページ設定"
 
-#: ../src/generic/prntdlgg.cpp:158
+#: ../src/generic/prntdlgg.cpp:156
 msgid "Pages"
 msgstr "ページ"
 
-#: ../src/generic/prntdlgg.cpp:545
-#: ../src/generic/prntdlgg.cpp:625
-#: ../src/generic/prntdlgg.cpp:813
+#: ../src/generic/prntdlgg.cpp:543 ../src/generic/prntdlgg.cpp:623
+#: ../src/generic/prntdlgg.cpp:811
 msgid "Paper Size"
 msgstr "用紙サイズ"
 
-#: ../src/generic/prntdlgg.cpp:420
-#: ../src/generic/prntdlgg.cpp:612
-#: ../src/generic/prntdlgg.cpp:808
+#: ../src/generic/prntdlgg.cpp:418 ../src/generic/prntdlgg.cpp:610
+#: ../src/generic/prntdlgg.cpp:806
 msgid "Paper size"
 msgstr "用紙サイズ"
 
@@ -2440,12 +2787,11 @@ msgstr "すでに登録されたオブジェクトは、SetObjectに渡されま
 msgid "Passing a already registered object to SetObjectName"
 msgstr "すでに登録されたオブジェクトは、SetObjectNameに渡されます"
 
-#: ../src/common/xtistrm.cpp:436
-#: ../src/common/xtistrm.cpp:656
+#: ../src/common/xtistrm.cpp:436 ../src/common/xtistrm.cpp:656
 msgid "Passing an unkown object to GetObject"
 msgstr "未知のオブジェクトは、GetObjectに渡されます"
 
-#: ../src/generic/filedlgg.cpp:429
+#: ../src/generic/filedlgg.cpp:430
 msgid "Permissions"
 msgstr "アクセス権"
 
@@ -2457,16 +2803,20 @@ msgstr "パイプ生成失敗"
 msgid "Please choose a valid font."
 msgstr "有効なフォントを選んで下さい。"
 
-#: ../src/generic/filedlgg.cpp:1252
-#: ../src/gtk/filedlg.cpp:82
+#: ../src/generic/filedlgg.cpp:1257 ../src/gtk/filedlg.cpp:82
 msgid "Please choose an existing file."
 msgstr "既存ファイルを選んで下さい。"
 
-#: ../src/msw/dialup.cpp:751
+#: ../src/html/helpfrm.cpp:790
+#, fuzzy
+msgid "Please choose the page to display:"
+msgstr "既存ファイルを選んで下さい。"
+
+#: ../src/msw/dialup.cpp:750
 msgid "Please choose which ISP do you want to connect to"
 msgstr "接続先ISPを選択してください"
 
-#: ../src/msw/listctrl.cpp:432
+#: ../src/msw/listctrl.cpp:434
 #, c-format
 msgid ""
 "Please install a newer version of comctl32.dll\n"
@@ -2481,79 +2831,80 @@ msgstr ""
 msgid "Please wait while printing\n"
 msgstr "印刷中 お待ちください\n"
 
-#: ../src/generic/prntdlgg.cpp:427
-#: ../src/generic/prntdlgg.cpp:637
+#: ../src/generic/prntdlgg.cpp:425 ../src/generic/prntdlgg.cpp:635
 msgid "Portrait"
 msgstr "ポートレート"
 
-#: ../src/generic/prntdlgg.cpp:270
+#: ../src/generic/prntdlgg.cpp:268
 msgid "PostScript file"
 msgstr "ポストスクリプトファイル"
 
-#: ../src/html/helpfrm.cpp:1065
+#: ../src/generic/fontdlgg.cpp:335 ../src/html/helpfrm.cpp:1212
 msgid "Preview:"
 msgstr "プレビュー:"
 
-#: ../src/html/helpfrm.cpp:569
+#: ../src/html/helpfrm.cpp:639
 msgid "Previous page"
 msgstr "前のページ"
 
-#: ../src/generic/prntdlgg.cpp:107
-#: ../src/generic/prntdlgg.cpp:121
+#: ../src/generic/prntdlgg.cpp:107 ../src/generic/prntdlgg.cpp:120
 msgid "Print"
 msgstr "印刷"
 
-#: ../src/common/docview.cpp:963
+#: ../src/common/docview.cpp:1043
 msgid "Print Preview"
 msgstr "印刷プレビュー "
 
-#: ../src/common/prntbase.cpp:797
-#: ../src/common/prntbase.cpp:823
+#: ../src/common/prntbase.cpp:791 ../src/common/prntbase.cpp:817
 msgid "Print Preview Failure"
 msgstr "印刷プレビュー失敗"
 
-#: ../src/generic/prntdlgg.cpp:166
+#: ../src/generic/prntdlgg.cpp:164
 msgid "Print Range"
 msgstr "印刷範囲 "
 
-#: ../src/generic/prntdlgg.cpp:408
+#: ../src/generic/prntdlgg.cpp:406
 msgid "Print Setup"
 msgstr "印刷設定"
 
-#: ../src/generic/prntdlgg.cpp:442
+#: ../src/generic/prntdlgg.cpp:440
 msgid "Print in colour"
 msgstr "カラー印刷"
 
-#: ../src/generic/prntdlgg.cpp:444
+#: ../src/common/stockitem.cpp:135
+#, fuzzy
+msgid "Print previe&w"
+msgstr "印刷プレビュー "
+
+#: ../src/generic/prntdlgg.cpp:442
 msgid "Print spooling"
 msgstr "印刷スプール"
 
-#: ../src/html/helpfrm.cpp:586
+#: ../src/html/helpfrm.cpp:656
 msgid "Print this page"
 msgstr "このページを印刷"
 
-#: ../src/generic/prntdlgg.cpp:144
+#: ../src/generic/prntdlgg.cpp:142
 msgid "Print to File"
 msgstr "ファイルへ印刷"
 
-#: ../src/generic/prntdlgg.cpp:446
+#: ../src/generic/prntdlgg.cpp:444
 msgid "Printer command:"
 msgstr "プリンターコマンド:"
 
-#: ../src/generic/prntdlgg.cpp:143
+#: ../src/generic/prntdlgg.cpp:141
 msgid "Printer options"
 msgstr "プリンターオプション"
 
-#: ../src/generic/prntdlgg.cpp:450
+#: ../src/generic/prntdlgg.cpp:448
 msgid "Printer options:"
 msgstr "プリンターオプション:"
 
-#: ../src/generic/prntdlgg.cpp:683
+#: ../src/generic/prntdlgg.cpp:681
 msgid "Printer..."
 msgstr "プリンター..."
 
-#: ../src/common/prntbase.cpp:109
-#: ../src/common/prntbase.cpp:154
+#: ../src/common/prntbase.cpp:109 ../src/common/prntbase.cpp:154
 msgid "Printing "
 msgstr "印刷中"
 
@@ -2570,40 +2921,43 @@ msgstr "印刷中 ページ %d..."
 msgid "Printing..."
 msgstr "印刷中..."
 
-#: ../src/common/log.cpp:468
+#: ../src/common/log.cpp:471
 msgid "Program aborted."
 msgstr "プログラム中断"
 
-#: ../src/common/paper.cpp:131
+#: ../src/common/paper.cpp:129
 msgid "Quarto, 215 x 275 mm"
 msgstr "四つ折り判, 215 x 275 mm"
 
-#: ../src/generic/logg.cpp:1118
+#: ../src/generic/logg.cpp:1115
 msgid "Question"
 msgstr "質問"
 
-#: ../src/common/ffile.cpp:111
-#: ../src/common/ffile.cpp:132
+#: ../src/common/ffile.cpp:111 ../src/common/ffile.cpp:132
 #, c-format
 msgid "Read error on file '%s'"
 msgstr "ファイル '%s' の読み込みエラー"
 
-#: ../contrib/src/xrc/xmlres.cpp:572
+#: ../src/xrc/xmlres.cpp:577
 #, c-format
 msgid "Referenced object node with ref=\"%s\" not found!"
 msgstr "参照オブジェクト・ノード ref=\"%s\" が見つかりません!"
 
-#: ../src/msw/registry.cpp:552
+#: ../src/common/stockitem.cpp:139
+msgid "Refresh"
+msgstr ""
+
+#: ../src/msw/registry.cpp:558
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "レジストリ・キー '%s' は、すでに存在します。"
 
-#: ../src/msw/registry.cpp:521
+#: ../src/msw/registry.cpp:527
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "レジストリ・キー '%s' は存在しないので、名前を変更できません。"
 
-#: ../src/msw/registry.cpp:648
+#: ../src/msw/registry.cpp:659
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
@@ -2614,7 +2968,7 @@ msgstr ""
 "削除すると、システムを不安定な状態にします:\n"
 "操作を中断しました。"
 
-#: ../src/msw/registry.cpp:452
+#: ../src/msw/registry.cpp:453
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "レジストリ値 '%s' は、すでに存在します。"
@@ -2623,18 +2977,29 @@ msgstr "レジストリ値 '%s' は、すでに存在します。"
 msgid "Relevant entries:"
 msgstr "関連するエントリー:"
 
-#: ../src/generic/progdlgg.cpp:199
+#: ../src/generic/progdlgg.cpp:202
 msgid "Remaining time : "
 msgstr "残り時間 :"
 
-#: ../src/html/helpfrm.cpp:359
+#: ../src/common/stockitem.cpp:140
+msgid "Remove"
+msgstr ""
+
+#: ../src/html/helpfrm.cpp:429
 msgid "Remove current page from bookmarks"
 msgstr "しおりから現在のページを削除"
 
 #: ../src/common/rendcmn.cpp:193
 #, c-format
 msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
-msgstr "ﾚﾝダラー \"%s\" は、互換性がないバージョン%d.%dを持っています。ロードされないかもしれません。"
+msgstr ""
+"ﾚﾝダラー \"%s\" は、互換性がないバージョン%d.%dを持っています。ロードされない"
+"かもしれません。"
+
+#: ../src/common/stockitem.cpp:114
+#, fuzzy
+msgid "Rep&lace"
+msgstr "書き換える(&R)"
 
 #: ../src/generic/fdrepdlg.cpp:171
 msgid "Replace &all"
@@ -2644,24 +3009,33 @@ msgstr "全て置換(&a)"
 msgid "Replace with:"
 msgstr "置換: "
 
-#: ../contrib/src/xrc/xmlres.cpp:408
+#: ../src/xrc/xmlres.cpp:413
 msgid "Resource files must have same version number!"
 msgstr "リソース・ファイルは、同じバージョン番号でなければなりません!"
 
-#: ../src/generic/prntdlgg.cpp:662
+#: ../src/common/stockitem.cpp:141
+msgid "Revert to Saved"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:660
 msgid "Right margin (mm):"
 msgstr "右の余白 (mm):"
 
-#: ../src/generic/fontdlgg.cpp:220
+#: ../src/generic/fontdlgg.cpp:224
 msgid "Roman"
 msgstr "ローマン "
 
-#: ../src/common/fldlgcmn.cpp:292
+#: ../src/common/fldlgcmn.cpp:250
 #, c-format
 msgid "Save %s file"
 msgstr "'%s' ファイルを保存"
 
-#: ../src/common/docview.cpp:256
+#: ../src/common/stockitem.cpp:143
+#, fuzzy
+msgid "Save &As..."
+msgstr "保存(&S)..."
+
+#: ../src/common/docview.cpp:287
 msgid "Save as"
 msgstr "名前を付けて保存"
 
@@ -2669,17 +3043,18 @@ msgstr "名前を付けて保存"
 msgid "Save log contents to file"
 msgstr "ログ内容をファイルへ保存"
 
-#: ../src/generic/fontdlgg.cpp:223
+#: ../src/generic/fontdlgg.cpp:227
 msgid "Script"
 msgstr "スクリプト"
 
-#: ../src/html/helpfrm.cpp:445
-#: ../src/html/helpfrm.cpp:460
+#: ../src/html/helpfrm.cpp:513 ../src/html/helpfrm.cpp:528
 msgid "Search"
 msgstr "検索"
 
-#: ../src/html/helpfrm.cpp:447
-msgid "Search contents of help book(s) for all occurences of the text you typed above"
+#: ../src/html/helpfrm.cpp:515
+msgid ""
+"Search contents of help book(s) for all occurences of the text you typed "
+"above"
 msgstr "上で入力した全テキストが出現するヘルプ・ブックについて検索する"
 
 #: ../src/generic/fdrepdlg.cpp:152
@@ -2690,15 +3065,15 @@ msgstr "検索方向 "
 msgid "Search for:"
 msgstr "検索: "
 
-#: ../src/html/helpfrm.cpp:893
+#: ../src/html/helpfrm.cpp:1037
 msgid "Search in all books"
 msgstr "すべてのブックを検索"
 
-#: ../src/html/helpfrm.cpp:718
+#: ../src/html/helpfrm.cpp:845
 msgid "Searching..."
 msgstr "検索中..."
 
-#: ../src/generic/dirctrlg.cpp:596
+#: ../src/generic/dirctrlg.cpp:550
 msgid "Sections"
 msgstr "セクション "
 
@@ -2707,19 +3082,19 @@ msgstr "セクション "
 msgid "Seek error on file '%s'"
 msgstr "'%s' ファイルでのシーク・エラー"
 
-#: ../src/msw/textctrl.cpp:2039
+#: ../src/msw/textctrl.cpp:2057
 msgid "Select &All"
 msgstr "全て選択(&A)"
 
-#: ../src/common/docview.cpp:1605
+#: ../src/common/docview.cpp:1685
 msgid "Select a document template"
 msgstr "ドキュメント・テンプレートを選択"
 
-#: ../src/common/docview.cpp:1682
+#: ../src/common/docview.cpp:1762
 msgid "Select a document view"
 msgstr "ドキュメント・ビューを選択"
 
-#: ../src/common/docview.cpp:1485
+#: ../src/common/docview.cpp:1565
 msgid "Select a file"
 msgstr "ファイルを選択"
 
@@ -2732,70 +3107,74 @@ msgstr "オプション '%s' の後にはセパレーターが求められます
 msgid "SetProperty called w/o valid setter"
 msgstr "有効なセッター w/o がSetPropertyを呼びました。"
 
-#: ../src/common/dlgcmn.cpp:230
+#: ../src/common/dlgcmn.cpp:239
 msgid "Setup"
 msgstr "設定"
 
-#: ../src/generic/prntdlgg.cpp:149
+#: ../src/generic/prntdlgg.cpp:147
 msgid "Setup..."
 msgstr "設定..."
 
-#: ../src/msw/dialup.cpp:531
+#: ../src/msw/dialup.cpp:530
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr "接続中のダイアルアップ接続が複数見つかりましたので、１つを無作為に選択します。"
+msgstr ""
+"接続中のダイアルアップ接続が複数見つかりましたので、１つを無作為に選択しま"
+"す。"
 
-#: ../src/html/helpfrm.cpp:401
+#: ../src/html/helpfrm.cpp:470
 msgid "Show all"
 msgstr "全て表示"
 
-#: ../src/html/helpfrm.cpp:412
+#: ../src/html/helpfrm.cpp:481
 msgid "Show all items in index"
 msgstr "インデックス内の全項目を表示"
 
-#: ../src/generic/dirdlgg.cpp:137
+#: ../src/generic/dirdlgg.cpp:114 ../src/generic/dirdlgg.cpp:177
 msgid "Show hidden directories"
 msgstr "隠しディレクトリーを表示"
 
-#: ../src/generic/filedlgg.cpp:1012
+#: ../src/generic/filedlgg.cpp:1017
 msgid "Show hidden files"
 msgstr "隠しファイルを表示"
 
-#: ../src/html/helpfrm.cpp:553
+#: ../src/html/helpfrm.cpp:623
 msgid "Show/hide navigation panel"
 msgstr "ナビゲーション・パネル 表示/非表示"
 
-#: ../src/generic/filedlgg.cpp:424
+#: ../src/generic/fontdlgg.cpp:340 ../src/generic/fontdlgg.cpp:342
+msgid "Shows the font preview."
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:425
 msgid "Size"
 msgstr "サイズ"
 
-#: ../src/generic/fontdlgg.cpp:228
+#: ../src/generic/fontdlgg.cpp:232
 msgid "Slant"
 msgstr "傾き"
 
-#: ../src/common/docview.cpp:326
+#: ../src/common/docview.cpp:563
 msgid "Sorry, could not open this file for saving."
 msgstr "このファイルをオープン(保存)することができませんでした。"
 
-#: ../src/common/docview.cpp:367
-#: ../src/common/docview.cpp:380
-#: ../src/common/docview.cpp:1504
+#: ../src/common/docview.cpp:595 ../src/common/docview.cpp:608
+#: ../src/common/docview.cpp:1584
 msgid "Sorry, could not open this file."
 msgstr "このファイルをオープンすることができませんでした。"
 
-#: ../src/common/docview.cpp:333
+#: ../src/common/docview.cpp:570
 msgid "Sorry, could not save this file."
 msgstr "このファイルを保存することができませんでした。"
 
-#: ../src/common/prntbase.cpp:797
+#: ../src/common/prntbase.cpp:791
 msgid "Sorry, not enough memory to create a preview."
 msgstr "プレビュー生成に必要なメモリーがありません。"
 
-#: ../src/common/docview.cpp:959
+#: ../src/common/docview.cpp:1039
 msgid "Sorry, print preview needs a printer to be installed."
 msgstr "印刷プレビューは、インストールされたプリンターを必要とします。"
 
-#: ../src/common/docview.cpp:1196
-#: ../src/common/docview.cpp:1524
+#: ../src/common/docview.cpp:1276 ../src/common/docview.cpp:1604
 msgid "Sorry, the format for this file is unknown."
 msgstr "このファイルのフォーマットは未知のものです。"
 
@@ -2808,7 +3187,7 @@ msgstr "サウンドデータは、サポートされていないフォーマッ
 msgid "Sound file '%s' is in unsupported format."
 msgstr "サウンドファイル '%s' は、サポートされていないフォーマットです。"
 
-#: ../src/common/paper.cpp:123
+#: ../src/common/paper.cpp:121
 msgid "Statement, 5 1/2 x 8 1/2 in"
 msgstr "ステートメント, 5 1/2 x 8 1/2 インチ"
 
@@ -2818,29 +3197,30 @@ msgstr "状態:"
 
 #: ../src/common/xtistrm.cpp:253
 msgid "Streaming delegates for not already streamed objects not yet supported"
-msgstr "デルゲートストリームは、まだストリームオブジェクトとしてまだサポートされていません"
+msgstr ""
+"デルゲートストリームは、まだストリームオブジェクトとしてまだサポートされてい"
+"ません"
 
 #: ../src/msw/colour.cpp:38
 #, c-format
 msgid "String To Colour : Incorrect colour specification : %s"
 msgstr "カラー文字列: 不正確なカラー指定 '%s'"
 
-#: ../include/wx/xti.h:427
-#: ../include/wx/xti.h:431
+#: ../include/wx/xti.h:427 ../include/wx/xti.h:431
 msgid "String conversions not supported"
 msgstr "ストリング・コンバージョンはサポートされませんでした"
 
-#: ../contrib/src/xrc/xmlres.cpp:680
+#: ../src/xrc/xmlres.cpp:685
 #, c-format
 msgid "Subclass '%s' not found for resource '%s', not subclassing!"
-msgstr "サブクラス '%s' はリソース'%s'から見つけられません, サブクラスではありません!"
+msgstr ""
+"サブクラス '%s' はリソース'%s'から見つけられません, サブクラスではありません!"
 
-#: ../src/generic/fontdlgg.cpp:224
+#: ../src/generic/fontdlgg.cpp:228
 msgid "Swiss"
 msgstr "スイス"
 
-#: ../src/common/imagtiff.cpp:232
-#: ../src/common/imagtiff.cpp:243
+#: ../src/common/imagtiff.cpp:232 ../src/common/imagtiff.cpp:243
 #: ../src/common/imagtiff.cpp:354
 msgid "TIFF: Couldn't allocate memory."
 msgstr "TIFF: メモリー割り当てに失敗しました。"
@@ -2861,15 +3241,15 @@ msgstr "TIFF: イメージ保存エラー。"
 msgid "TIFF: Error writing image."
 msgstr "TIFF: イメージ書込みエラー。"
 
-#: ../src/common/paper.cpp:121
+#: ../src/common/paper.cpp:119
 msgid "Tabloid, 11 x 17 in"
 msgstr "タブロイド, 11 x 17 インチ"
 
-#: ../src/generic/fontdlgg.cpp:225
+#: ../src/generic/fontdlgg.cpp:229
 msgid "Teletype"
 msgstr "テレタイプ"
 
-#: ../src/common/docview.cpp:1606
+#: ../src/common/docview.cpp:1686
 msgid "Templates"
 msgstr "テンプレート"
 
@@ -2877,11 +3257,16 @@ msgstr "テンプレート"
 msgid "Thai (ISO-8859-11)"
 msgstr "タイ (ISO-8859-11)"
 
-#: ../src/common/ftp.cpp:573
+#: ../src/common/ftp.cpp:708
 msgid "The FTP server doesn't support passive mode."
 msgstr "このFTPサーバは、パッシブ・モードをサポートしません。"
 
-#: ../src/common/fontmap.cpp:189
+#: ../src/common/ftp.cpp:696
+#, fuzzy
+msgid "The FTP server doesn't support the PORT command."
+msgstr "このFTPサーバは、パッシブ・モードをサポートしません。"
+
+#: ../src/common/fontmap.cpp:190
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2897,7 +3282,7 @@ msgstr ""
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "クリップボード形式 '%d' は、存在しません。"
 
-#: ../src/generic/dirdlgg.cpp:188
+#: ../src/generic/dirdlgg.cpp:234
 #, c-format
 msgid ""
 "The directory '%s' does not exist\n"
@@ -2906,7 +3291,7 @@ msgstr ""
 "ディレクトリー '%s' は存在しません。\n"
 "今作成しますか?"
 
-#: ../src/common/docview.cpp:1859
+#: ../src/common/docview.cpp:1939
 #, c-format
 msgid ""
 "The file '%s' couldn't be opened.\n"
@@ -2915,7 +3300,7 @@ msgstr ""
 "ファイル '%s' は存在しないので開けませんでした。\n"
 "それは最近使われたファイルリストから削除されました。"
 
-#: ../src/common/docview.cpp:1869
+#: ../src/common/docview.cpp:1949
 #, c-format
 msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
@@ -2924,7 +3309,28 @@ msgstr ""
 "ファイル '%s' は存在しないので開けませんでした。\n"
 "最近使われたファイルのリストから削除されました。"
 
-#: ../src/common/filename.cpp:926
+#: ../src/generic/fontdlgg.cpp:308 ../src/generic/fontdlgg.cpp:310
+msgid "The font colour."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:275 ../src/generic/fontdlgg.cpp:277
+msgid "The font family."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:319 ../src/generic/fontdlgg.cpp:321
+#, fuzzy
+msgid "The font point size."
+msgstr "フォント サイズ"
+
+#: ../src/generic/fontdlgg.cpp:286 ../src/generic/fontdlgg.cpp:288
+msgid "The font style."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:297 ../src/generic/fontdlgg.cpp:299
+msgid "The font weight."
+msgstr ""
+
+#: ../src/common/filename.cpp:940
 #, c-format
 msgid "The path '%s' contains too many \"..\"!"
 msgstr "パス '%s' は、多すぎる \"..\" を含みます!"
@@ -2934,7 +3340,7 @@ msgstr "パス '%s' は、多すぎる \"..\" を含みます!"
 msgid "The required parameter '%s' was not specified."
 msgstr "必要なパラメーター '%s' が指定されませんでした。"
 
-#: ../src/common/textcmn.cpp:255
+#: ../src/common/textcmn.cpp:258
 msgid "The text couldn't be saved."
 msgstr "テキストは保存されませんでした。"
 
@@ -2943,26 +3349,42 @@ msgstr "テキストは保存されませんでした。"
 msgid "The value for the option '%s' must be specified."
 msgstr "オプション '%s' には値が必要です。"
 
-#: ../src/msw/dialup.cpp:419
+#: ../src/msw/dialup.cpp:418
 #, c-format
-msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
-msgstr "このコンピュータにインストールされているリモート・アクセス・サービス(RAS)のバージョンが旧いので、アップデートしてください (以下の機能が見つかりません: %s) "
+msgid ""
+"The version of remote access service (RAS) installed on this machine is "
+"tooold, please upgrade (the following required function is missing: %s)."
+msgstr ""
+"このコンピュータにインストールされているリモート・アクセス・サービス(RAS)の"
+"バージョンが旧いので、アップデートしてください (以下の機能が見つかりません: %"
+"s) "
 
-#: ../src/html/htmprint.cpp:587
-msgid "There was a problem during page setup: you may need to set a default printer."
-msgstr "ページ設定中に問題が発生しました: 通常使うプリンターを設定する必要があります。"
+#: ../src/html/htmprint.cpp:611
+msgid ""
+"There was a problem during page setup: you may need to set a default printer."
+msgstr ""
+"ページ設定中に問題が発生しました: 通常使うプリンターを設定する必要がありま"
+"す。"
 
-#: ../src/msw/thread.cpp:1207
-msgid "Thread module initialization failed: can not store value in thread local storage"
-msgstr "スレッド・モジュール初期化に失敗: スレッド・ローカル・ストレージに値を保存できません"
+#: ../src/msw/thread.cpp:1210
+msgid ""
+"Thread module initialization failed: can not store value in thread local "
+"storage"
+msgstr ""
+"スレッド・モジュール初期化に失敗: スレッド・ローカル・ストレージに値を保存で"
+"きません"
 
 #: ../src/unix/threadpsx.cpp:1596
 msgid "Thread module initialization failed: failed to create thread key"
 msgstr "スレッド・モジュール初期化に失敗: スレッド・キーの生成に失敗しました"
 
-#: ../src/msw/thread.cpp:1195
-msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
-msgstr "スレッド・モジュール初期化に失敗: スレッド・ローカル・ストレージにインデックスを割り当てることができません"
+#: ../src/msw/thread.cpp:1198
+msgid ""
+"Thread module initialization failed: impossible to allocate index in thread "
+"local storage"
+msgstr ""
+"スレッド・モジュール初期化に失敗: スレッド・ローカル・ストレージにインデック"
+"スを割り当てることができません"
 
 #: ../src/unix/threadpsx.cpp:1107
 msgid "Thread priority setting is ignored."
@@ -2976,37 +3398,44 @@ msgstr "水平に並べる(&H)"
 msgid "Tile &Vertically"
 msgstr "垂直に並べる(&V)"
 
-#: ../src/msw/timer.cpp:111
+#: ../src/common/ftp.cpp:635
+#, fuzzy
+msgid "Timeout while waiting for FTP server to connect, try passive mode."
+msgstr "このFTPサーバは、パッシブ・モードをサポートしません。"
+
+#: ../src/msw/timer.cpp:108
 msgid "Timer creation failed."
 msgstr "タイマー生成失敗"
 
-#: ../src/generic/tipdlg.cpp:205
+#: ../src/generic/tipdlg.cpp:219
 msgid "Tip of the Day"
 msgstr "今日のヒント"
 
-#: ../src/generic/tipdlg.cpp:143
+#: ../src/generic/tipdlg.cpp:157
 msgid "Tips not available, sorry!"
 msgstr "ヒントが利用できません!"
 
-#: ../src/generic/prntdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:183
 msgid "To:"
 msgstr "宛先："
 
 #: ../src/common/imagpng.cpp:304
 msgid "Too many colours in PNG, the image may be slightly blurred."
-msgstr "PNGの多すぎるカラーです、イメージは、わずかにぼかされるかもしれません。"
+msgstr ""
+"PNGの多すぎるカラーです、イメージは、わずかにぼかされるかもしれません。"
 
-#: ../src/generic/prntdlgg.cpp:651
+#: ../src/generic/prntdlgg.cpp:649
 msgid "Top margin (mm):"
 msgstr "上の余白(mm):"
 
 #: ../src/common/fs_mem.cpp:205
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr "メモリーVFSからファイル '%s' を削除しようとしましたが、そのファイルは読み込まれていません!"
+msgstr ""
+"メモリーVFSからファイル '%s' を削除しようとしましたが、そのファイルは読み込ま"
+"れていません!"
 
-#: ../src/common/sckaddr.cpp:146
-#: ../src/common/sckaddr.cpp:250
+#: ../src/common/sckaddr.cpp:146 ../src/common/sckaddr.cpp:250
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "NULLホスト名を解決しようとしました: 中断しました"
 
@@ -3014,21 +3443,20 @@ msgstr "NULLホスト名を解決しようとしました: 中断しました"
 msgid "Turkish (ISO-8859-9)"
 msgstr "トルコ (ISO-8859-9)"
 
-#: ../src/generic/filedlgg.cpp:425
+#: ../src/generic/filedlgg.cpp:426
 msgid "Type"
 msgstr "タイプ"
 
-#: ../src/common/xtistrm.cpp:281
-#: ../src/common/xtixml.cpp:351
+#: ../src/common/xtistrm.cpp:281 ../src/common/xtixml.cpp:351
 #: ../src/common/xtixml.cpp:498
 msgid "Type must have enum - long conversion"
 msgstr "型はenumを持っていなくてはいけません - ロングコンバージョン"
 
-#: ../src/common/paper.cpp:152
+#: ../src/common/paper.cpp:150
 msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "US Std Fanfold, 14 7/8 x 11 インチ"
 
-#: ../src/html/htmlwin.cpp:378
+#: ../src/html/htmlwin.cpp:397
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "要求されたHTMLドキュメントを開くことができません: %s "
@@ -3037,9 +3465,25 @@ msgstr "要求されたHTMLドキュメントを開くことができません: 
 msgid "Unable to play sound asynchronously."
 msgstr "同時にサウンドをプレーすることができません。"
 
-#: ../src/generic/fontdlgg.cpp:249
-msgid "Underline"
+#: ../src/common/stockitem.cpp:145
+#, fuzzy
+msgid "Undelete"
 msgstr "下線"
+
+#: ../contrib/src/deprecated/resource.cpp:1848
+#: ../contrib/src/deprecated/resource.cpp:1862
+#: ../contrib/src/deprecated/resource.cpp:1879
+#: ../contrib/src/deprecated/resource.cpp:1893
+#: ../contrib/src/deprecated/resource.cpp:1978
+#: ../contrib/src/deprecated/resource.cpp:1992
+#: ../contrib/src/deprecated/resource.cpp:2008
+#: ../contrib/src/deprecated/resource.cpp:2022
+#: ../contrib/src/deprecated/resource.cpp:3070
+#: ../contrib/src/deprecated/resource.cpp:3084
+#: ../contrib/src/deprecated/resource.cpp:3101
+#: ../contrib/src/deprecated/resource.cpp:3115
+msgid "Unexpected end of file whilst parsing resource."
+msgstr ""
 
 #: ../src/common/cmdline.cpp:800
 #, c-format
@@ -3078,7 +3522,7 @@ msgstr "Unicode 7 bit (UTF-7)"
 msgid "Unicode 8 bit (UTF-8)"
 msgstr "Unicode 8 bit (UTF-8)"
 
-#: ../src/msw/dde.cpp:1108
+#: ../src/msw/dde.cpp:1092
 #, c-format
 msgid "Unknown DDE error %08x"
 msgstr "未知のDDEエラー %08x"
@@ -3087,7 +3531,7 @@ msgstr "未知のDDEエラー %08x"
 msgid "Unknown Object passed to GetObjectClassInfo"
 msgstr "未知のオブジェクトはGetObjectClassInfoに渡されました"
 
-#: ../src/common/fmapbase.cpp:680
+#: ../src/common/fmapbase.cpp:685
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "不明なエンコード (%d)"
@@ -3102,13 +3546,12 @@ msgstr "ファイル %s, %d 行: 不明なフィールド '%s'."
 msgid "Unknown long option '%s'"
 msgstr "不明な長いオプション '%s'"
 
-#: ../src/common/cmdline.cpp:582
-#: ../src/common/cmdline.cpp:603
+#: ../src/common/cmdline.cpp:582 ../src/common/cmdline.cpp:603
 #, c-format
 msgid "Unknown option '%s'"
 msgstr "不明なオプション '%s'"
 
-#: ../contrib/src/xrc/xmlres.cpp:750
+#: ../src/xrc/xmlres.cpp:757
 msgid "Unknown style flag "
 msgstr "不明なスタイル・フラグ"
 
@@ -3122,18 +3565,22 @@ msgstr "不明なプロパティ '%s'"
 msgid "Unmatched '{' in an entry for mime type %s."
 msgstr "MIMEタイプのエントリー %s で対応がとれない '{' があります。"
 
-#: ../src/common/cmdproc.cpp:254
-#: ../src/common/cmdproc.cpp:280
-#: ../src/common/cmdproc.cpp:300
+#: ../src/common/cmdproc.cpp:256 ../src/common/cmdproc.cpp:282
+#: ../src/common/cmdproc.cpp:302
 msgid "Unnamed command"
 msgstr "コマンドに名前がありません"
 
-#: ../src/msw/clipbrd.cpp:276
-#: ../src/msw/clipbrd.cpp:448
+#: ../contrib/src/deprecated/resource.cpp:2367
+#, c-format
+msgid "Unrecognized style %s whilst parsing resource."
+msgstr ""
+
+#: ../src/mac/carbon/clipbrd.cpp:64 ../src/mac/classic/clipbrd.cpp:64
+#: ../src/msw/clipbrd.cpp:276 ../src/msw/clipbrd.cpp:448
 msgid "Unsupported clipboard format."
 msgstr "サポートされていないクリップボード形式です。"
 
-#: ../src/common/appcmn.cpp:222
+#: ../src/common/appcmn.cpp:232
 #, c-format
 msgid "Unsupported theme '%s'."
 msgstr "サポートされないテーマ '%s'。"
@@ -3155,15 +3602,15 @@ msgstr "検証の競合"
 msgid "Video Output"
 msgstr "ビデオのアウトプット"
 
-#: ../src/generic/filedlgg.cpp:928
+#: ../src/generic/filedlgg.cpp:933
 msgid "View files as a detailed view"
 msgstr "詳細ビューでファイル表示"
 
-#: ../src/generic/filedlgg.cpp:921
+#: ../src/generic/filedlgg.cpp:926
 msgid "View files as a list view"
 msgstr "リストビューでファイル表示"
 
-#: ../src/common/docview.cpp:1683
+#: ../src/common/docview.cpp:1763
 msgid "Views"
 msgstr "表示"
 
@@ -3171,15 +3618,15 @@ msgstr "表示"
 msgid "Waiting for subprocess termination failed"
 msgstr "サブプロセス終了待ちが失敗しました。"
 
-#: ../src/common/docview.cpp:463
+#: ../src/common/docview.cpp:443
 msgid "Warning"
 msgstr "警告"
 
-#: ../src/common/log.cpp:482
+#: ../src/common/log.cpp:485
 msgid "Warning: "
 msgstr "警告:"
 
-#: ../src/html/htmlpars.cpp:393
+#: ../src/html/htmlpars.cpp:395
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr "警告: 空のスタックからHTMLタグ・ハンドラーを削除しようとしました。"
 
@@ -3191,23 +3638,27 @@ msgstr "西ヨーロッパ (ISO-8859-1)"
 msgid "Western European with Euro (ISO-8859-15)"
 msgstr "ユーロ圏西ヨーロッパ (ISO-8859-15)"
 
+#: ../src/generic/fontdlgg.cpp:328 ../src/generic/fontdlgg.cpp:330
+msgid "Whether the font is underlined."
+msgstr ""
+
 #: ../src/generic/fdrepdlg.cpp:143
 msgid "Whole word"
 msgstr "全ての語"
 
-#: ../src/html/helpfrm.cpp:444
+#: ../src/html/helpfrm.cpp:512
 msgid "Whole words only"
 msgstr "全ての語のみ"
 
-#: ../src/univ/themes/win32.cpp:1182
+#: ../src/univ/themes/win32.cpp:1183
 msgid "Win32 theme"
 msgstr "Win32テーマ"
 
-#: ../src/msw/utils.cpp:944
+#: ../src/msw/utils.cpp:936
 msgid "Win32s on Windows 3.1"
 msgstr "Windows 3.1上のWin32s "
 
-#: ../src/msw/utils.cpp:948
+#: ../src/msw/utils.cpp:940
 #, c-format
 msgid "Windows 9%c"
 msgstr "Windows 9%c"
@@ -3269,7 +3720,7 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "ファイル '%s' 書き込みエラー"
 
-#: ../src/xml/xml.cpp:548
+#: ../src/xml/xml.cpp:549
 #, c-format
 msgid "XML parsing error: '%s' at line %d"
 msgstr "XML構文解析エラー: '%s' %d 行"
@@ -3278,53 +3729,64 @@ msgstr "XML構文解析エラー: '%s' %d 行"
 msgid "XPM: Malformed pixel data!"
 msgstr "XPM: ピクセル・データ形式異常!"
 
-#: ../src/common/xpmdecod.cpp:711
-#: ../src/common/xpmdecod.cpp:721
+#: ../src/common/xpmdecod.cpp:711 ../src/common/xpmdecod.cpp:721
 #, c-format
 msgid "XPM: malformed colour definition '%s'!"
 msgstr "XPM: カラー定義形式異常 '%s'!"
 
-#: ../contrib/src/xrc/xmlres.cpp:508
+#: ../src/xrc/xmlres.cpp:513
 #, c-format
 msgid "XRC resource '%s' (class '%s') not found!"
 msgstr "XRCリソース '%s' (クラス '%s') が見つかりません!"
 
-#: ../contrib/src/xrc/xmlres.cpp:910
-#: ../contrib/src/xrc/xmlres.cpp:922
+#: ../src/xrc/xmlres.cpp:941 ../src/xrc/xmlres.cpp:953
 #, c-format
 msgid "XRC resource: Cannot create bitmap from '%s'."
 msgstr "XRCリソース: '%s' からビットマップを生成できません。"
 
-#: ../contrib/src/xrc/xmlres.cpp:870
+#: ../src/xrc/xmlres.cpp:897
 #, c-format
 msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
 msgstr "XRCリソース: 不正確なカラー指定 '%s' (プロパティ '%s' に関して)。"
 
-#: ../src/common/dlgcmn.cpp:208
+#: ../src/mac/carbon/msgdlg.cpp:57 ../src/mac/carbon/msgdlg.cpp:140
+#: ../src/mac/classic/msgdlg.cpp:57 ../src/mac/classic/msgdlg.cpp:139
 #: ../src/motif/msgdlg.cpp:185
 msgid "Yes"
 msgstr "はい"
 
-#: ../src/generic/dirdlgg.cpp:264
+#: ../src/generic/dirdlgg.cpp:310
 msgid "You cannot add a new directory to this section."
 msgstr "このセクションに新しいディレクトリーは追加できません。"
 
-#: ../src/common/fs_zip.cpp:88
-#: ../src/common/fs_zip.cpp:138
+#: ../src/common/fs_zip.cpp:84 ../src/common/fs_zip.cpp:134
 msgid "ZIP handler currently supports only local files!"
 msgstr "現在 ZIPハンドラーは、ローカル・ファイルのみサポートしています!"
 
-#: ../src/common/docview.cpp:2043
+#: ../src/common/stockitem.cpp:152
+msgid "Zoom &In"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:153
+msgid "Zoom &Out"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:151
+msgid "Zoom to &Fit"
+msgstr ""
+
+#: ../src/common/docview.cpp:2123
 msgid "[EMPTY]"
 msgstr "[空]"
 
-#: ../src/msw/dde.cpp:1075
+#: ../src/msw/dde.cpp:1059
 msgid "a DDEML application has created a prolonged race condition."
 msgstr "DDEMLアプリケーションが、長時間の競合状態を作り出しました。"
 
-#: ../src/msw/dde.cpp:1063
+#: ../src/msw/dde.cpp:1047
 msgid ""
-"a DDEML function was called without first calling the DdeInitialize function,\n"
+"a DDEML function was called without first calling the DdeInitialize "
+"function,\n"
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
@@ -3332,39 +3794,39 @@ msgstr ""
 "または、無効なインスタンス識別子が\n"
 "DDEML関数に渡されました。"
 
-#: ../src/msw/dde.cpp:1081
+#: ../src/msw/dde.cpp:1065
 msgid "a client's attempt to establish a conversation has failed."
 msgstr "通信を確立させるクライアントの試みは、失敗しました。"
 
-#: ../src/msw/dde.cpp:1078
+#: ../src/msw/dde.cpp:1062
 msgid "a memory allocation failed."
 msgstr "メモリ割り当ては失敗しました。"
 
-#: ../src/msw/dde.cpp:1072
+#: ../src/msw/dde.cpp:1056
 msgid "a parameter failed to be validated by the DDEML."
 msgstr "パラメーターが、DDEMLによる有効性検査に失敗しました。"
 
-#: ../src/msw/dde.cpp:1054
+#: ../src/msw/dde.cpp:1038
 msgid "a request for a synchronous advise transaction has timed out."
 msgstr "同期アドバイス・トランザクションの要求がタイム・アウトしました。"
 
-#: ../src/msw/dde.cpp:1060
+#: ../src/msw/dde.cpp:1044
 msgid "a request for a synchronous data transaction has timed out."
 msgstr "同期データ・トランザクションの要求がタイム・アウトしました。"
 
-#: ../src/msw/dde.cpp:1069
+#: ../src/msw/dde.cpp:1053
 msgid "a request for a synchronous execute transaction has timed out."
 msgstr "同期実行トランザクションの要求がタイム・アウトしました。"
 
-#: ../src/msw/dde.cpp:1087
+#: ../src/msw/dde.cpp:1071
 msgid "a request for a synchronous poke transaction has timed out."
 msgstr "同期ポーク・トランザクションの要求がタイム・アウトしました。"
 
-#: ../src/msw/dde.cpp:1102
+#: ../src/msw/dde.cpp:1086
 msgid "a request to end an advise transaction has timed out."
 msgstr "アドバイス・トランザクション終了要求がタイム・アウトしました。"
 
-#: ../src/msw/dde.cpp:1096
+#: ../src/msw/dde.cpp:1080
 msgid ""
 "a server-side transaction was attempted on a conversation\n"
 "that was terminated by the client, or the server\n"
@@ -3374,7 +3836,7 @@ msgstr ""
 "クライアント、あるいはサーバーによって会話が切断され\n"
 "トランザクションを完了できませんでした。"
 
-#: ../src/msw/dde.cpp:1084
+#: ../src/msw/dde.cpp:1068
 msgid "a transaction failed."
 msgstr "トランザクションは失敗しました。"
 
@@ -3382,7 +3844,7 @@ msgstr "トランザクションは失敗しました。"
 msgid "alt"
 msgstr "alt"
 
-#: ../src/msw/dde.cpp:1066
+#: ../src/msw/dde.cpp:1050
 msgid ""
 "an application initialized as APPCLASS_MONITOR has\n"
 "attempted to perform a DDE transaction,\n"
@@ -3394,15 +3856,15 @@ msgstr ""
 "APPCMD_CLIENTONLYとして初期化されたアプリケーションが\n"
 "サーバー・トランザクションを実行しようとしました。"
 
-#: ../src/msw/dde.cpp:1090
+#: ../src/msw/dde.cpp:1074
 msgid "an internal call to the PostMessage function has failed. "
 msgstr "PostMessage関数の内部呼び出しが失敗しました。"
 
-#: ../src/msw/dde.cpp:1099
+#: ../src/msw/dde.cpp:1083
 msgid "an internal error has occurred in the DDEML."
 msgstr "DDEMLで内部エラーが発生しました。"
 
-#: ../src/msw/dde.cpp:1105
+#: ../src/msw/dde.cpp:1089
 msgid ""
 "an invalid transaction identifier was passed to a DDEML function.\n"
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
@@ -3412,7 +3874,7 @@ msgstr ""
 "XTYP_XACT_COMPLETE コールバックからアプリケーションが戻った場合\n"
 "トランザクション識別子は、もはや有効ではありません。"
 
-#: ../src/common/fileconf.cpp:1815
+#: ../src/common/fileconf.cpp:1804
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "不変キー '%s' を変更しようとしましたが無視されました。"
@@ -3425,15 +3887,15 @@ msgstr "ライブラリー機能への不正な引き数です"
 msgid "bad signature"
 msgstr "署名"
 
-#: ../src/common/ftp.cpp:369
+#: ../src/common/ftp.cpp:385
 msgid "binary"
 msgstr "バイナリ"
 
-#: ../src/common/fontcmn.cpp:533
+#: ../src/common/fontcmn.cpp:645
 msgid "bold"
 msgstr "ボールド"
 
-#: ../src/common/fontcmn.cpp:457
+#: ../src/common/fontcmn.cpp:569
 msgid "bold "
 msgstr "ボールド"
 
@@ -3442,98 +3904,103 @@ msgstr "ボールド"
 msgid "can't close file '%s'"
 msgstr "ファイル '%' を閉じることができません"
 
-#: ../src/common/file.cpp:371
+#: ../src/common/file.cpp:285
 #, c-format
 msgid "can't close file descriptor %d"
 msgstr "ファイルデスクリプター %d を閉じることができません"
 
-#: ../src/common/file.cpp:729
+#: ../src/common/file.cpp:556
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "変更をファイル '%s' に保存できません"
 
-#: ../src/common/file.cpp:252
+#: ../src/common/file.cpp:216
 #, c-format
 msgid "can't create file '%s'"
 msgstr "ファイル '%s' を作成できません"
 
-#: ../src/common/fileconf.cpp:1106
+#: ../src/common/fileconf.cpp:1123
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "ユーザー設定ファイル '%s' を削除できません"
 
-#: ../src/common/file.cpp:631
+#: ../src/common/file.cpp:459
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "デスクリプター %d でファイルの終端に達したかどうかを決定できません"
 
-#: ../src/common/file.cpp:585
+#: ../src/common/file.cpp:425
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "ファイルデスクリプター %d でファイルの長さを取得できません"
 
-#: ../src/msw/utils.cpp:368
+#: ../src/msw/utils.cpp:363
 msgid "can't find user's HOME, using current directory."
-msgstr "現在のユーザーのホームディレクトリが見つかりません。現在のディレクトリを使います。"
+msgstr ""
+"現在のユーザーのホームディレクトリが見つかりません。現在のディレクトリを使い"
+"ます。"
 
-#: ../src/common/file.cpp:450
+#: ../src/common/file.cpp:338
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "ファイルデスクリプター %d への変更を書き出せません"
 
-#: ../src/common/file.cpp:535
-#: ../src/common/file.cpp:543
+#: ../src/common/file.cpp:397 ../src/msw/wince/filefnwce.cpp:202
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "ファイルデスクリプター %d に対するシーク位置を取得できません"
 
-#: ../src/common/fontmap.cpp:306
+#: ../src/common/fontmap.cpp:312
 msgid "can't load any font, aborting"
 msgstr "どのフォントもロードできません。中断します。"
 
-#: ../src/common/ffile.cpp:63
-#: ../src/common/file.cpp:352
+#: ../src/common/ffile.cpp:63 ../src/common/file.cpp:270
 #, c-format
 msgid "can't open file '%s'"
 msgstr "ファイル '%s' をオープンできません"
 
-#: ../src/common/fileconf.cpp:407
+#: ../src/common/fileconf.cpp:401
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "グローバル設定ファイル '%s' を開くことができません。"
 
-#: ../src/common/fileconf.cpp:422
+#: ../src/common/fileconf.cpp:416
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "ユーザー設定ファイル '%s' を開くことができません。"
 
-#: ../src/common/fileconf.cpp:981
+#: ../src/common/fileconf.cpp:972
 msgid "can't open user configuration file."
 msgstr "ユーザー設定ファイルを開くことができません。"
 
-#: ../src/common/dynlib.cpp:445
+#: ../src/common/dynlib.cpp:444
 msgid "can't query for GUI plugins name in console applications"
-msgstr "コンソール・アプリケーションでGUI プラグイン名のために参照ことができません"
+msgstr ""
+"コンソール・アプリケーションでGUI プラグイン名のために参照ことができません"
 
-#: ../src/common/file.cpp:404
+#: ../src/common/file.cpp:308
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "ファイルデスクリプター %d から読むことができません"
 
-#: ../src/common/file.cpp:724
+#: ../src/common/file.cpp:551
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "ファイル '%s' を削除できません"
 
-#: ../src/common/file.cpp:740
+#: ../src/common/file.cpp:567
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "一時ファイル '%s' を削除できません"
 
-#: ../src/common/file.cpp:492
-#: ../src/common/file.cpp:518
+#: ../src/common/file.cpp:383 ../src/msw/wince/filefnwce.cpp:189
 #, c-format
 msgid "can't seek on file descriptor %d"
+msgstr "ファイルデスクリプター %d でシークできません"
+
+#: ../src/common/file.cpp:378
+#, fuzzy, c-format
+msgid "can't seek on file descriptor %d, large files support is not enabled."
 msgstr "ファイルデスクリプター %d でシークできません"
 
 #: ../src/common/textfile.cpp:196
@@ -3541,16 +4008,16 @@ msgstr "ファイルデスクリプター %d でシークできません"
 msgid "can't write buffer '%s' to disk."
 msgstr "バッファー '%s' をディスクに書き込めません"
 
-#: ../src/common/file.cpp:433
+#: ../src/common/file.cpp:323
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "ファイルデスクリプター %d に書き出せません"
 
-#: ../src/common/fileconf.cpp:992
+#: ../src/common/fileconf.cpp:983
 msgid "can't write user configuration file."
 msgstr "ユーザー設定ファイルを書き出せません。"
 
-#: ../src/common/intl.cpp:1108
+#: ../src/common/intl.cpp:1110
 #, c-format
 msgid "catalog file for domain '%s' not found."
 msgstr "ドメイン '%s' のためのカタログファイルが見つかりません。"
@@ -3579,8 +4046,7 @@ msgstr "日付"
 msgid "decompression error"
 msgstr "伸張エラー"
 
-#: ../src/common/fmapbase.cpp:690
-#: ../src/common/fmapbase.cpp:722
+#: ../src/common/fmapbase.cpp:695 ../src/common/fmapbase.cpp:727
 msgid "default"
 msgstr "初期値"
 
@@ -3588,24 +4054,24 @@ msgstr "初期値"
 msgid "delegate has no type info"
 msgstr "デルゲートは、いかなる型情報も持っていません"
 
-#: ../src/common/datetime.cpp:3483
+#: ../src/common/datetime.cpp:3574
 msgid "eighteenth"
 msgstr "第１８"
 
-#: ../src/common/datetime.cpp:3473
+#: ../src/common/datetime.cpp:3564
 msgid "eighth"
 msgstr "第８"
 
-#: ../src/common/datetime.cpp:3476
+#: ../src/common/datetime.cpp:3567
 msgid "eleventh"
 msgstr "第１１"
 
-#: ../src/common/strconv.cpp:1692
+#: ../src/common/strconv.cpp:2418
 #, c-format
 msgid "encoding %s"
 msgstr "エンコード %d"
 
-#: ../src/common/fileconf.cpp:1801
+#: ../src/common/fileconf.cpp:1790
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "エントリー '%s' は、グループ '%s' に複数回出現します"
@@ -3618,7 +4084,7 @@ msgstr "データ形式のエラー"
 msgid "error opening file"
 msgstr "ファイル の読み込みエラー"
 
-#: ../src/msw/dialup.cpp:845
+#: ../src/msw/dialup.cpp:844
 msgid "establish"
 msgstr "確立"
 
@@ -3627,56 +4093,56 @@ msgstr "確立"
 msgid "failed to flush the file '%s'"
 msgstr "ファイル '%s' の書き出しに失敗しました"
 
-#: ../src/common/datetime.cpp:3480
+#: ../src/common/datetime.cpp:3571
 msgid "fifteenth"
 msgstr "第１５"
 
-#: ../src/common/datetime.cpp:3470
+#: ../src/common/datetime.cpp:3561
 msgid "fifth"
 msgstr "第５"
 
-#: ../src/common/fileconf.cpp:658
+#: ../src/common/fileconf.cpp:655
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "ファイル '%s', %d 行: '%s' グループ・ヘッダーの後は無視しました."
 
-#: ../src/common/fileconf.cpp:687
+#: ../src/common/fileconf.cpp:684
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "ファイル '%s', %d 行: '=' が求められます。"
 
-#: ../src/common/fileconf.cpp:710
+#: ../src/common/fileconf.cpp:707
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "ファイル '%s', %d 行: キー '%s' は、%d 行で最初に見つかりました。"
 
-#: ../src/common/fileconf.cpp:700
+#: ../src/common/fileconf.cpp:697
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "ファイル '%s', %d 行: 不変キー '%s' への値は無視されました。"
 
-#: ../src/common/fileconf.cpp:622
+#: ../src/common/fileconf.cpp:619
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "ファイル '%s': 予期せぬ文字 %c が %d 行に見つかりました"
 
-#: ../src/common/datetime.cpp:3466
+#: ../src/common/datetime.cpp:3557
 msgid "first"
 msgstr "第１"
 
-#: ../src/html/helpfrm.cpp:1093
+#: ../src/html/helpfrm.cpp:1239
 msgid "font size"
 msgstr "フォント サイズ"
 
-#: ../src/common/datetime.cpp:3479
+#: ../src/common/datetime.cpp:3570
 msgid "fourteenth"
 msgstr "第１４"
 
-#: ../src/common/datetime.cpp:3469
+#: ../src/common/datetime.cpp:3560
 msgid "fourth"
 msgstr "第４"
 
-#: ../src/common/appbase.cpp:342
+#: ../src/common/appbase.cpp:348
 msgid "generate verbose log messages"
 msgstr "冗長なログメッセージを生成"
 
@@ -3684,54 +4150,53 @@ msgstr "冗長なログメッセージを生成"
 msgid "incorrect event handler string, missing dot"
 msgstr "不正確なイベント・ハンドラー・文字列、ドットミス"
 
-#: ../src/msw/dialup.cpp:845
+#: ../src/msw/dialup.cpp:844
 msgid "initiate"
 msgstr "開始"
 
-#: ../src/common/file.cpp:635
+#: ../src/common/file.cpp:463
 msgid "invalid eof() return value."
 msgstr "無効な eof() 戻り値"
 
-#: ../src/generic/logg.cpp:1132
+#: ../src/generic/logg.cpp:1129
 msgid "invalid message box return value"
 msgstr "無効なメッセージ・ボックス戻り値"
 
-#: ../src/common/fontcmn.cpp:473
-#: ../src/common/fontcmn.cpp:537
+#: ../src/common/fontcmn.cpp:585 ../src/common/fontcmn.cpp:649
 msgid "italic"
 msgstr "イタリック"
 
-#: ../src/common/fontcmn.cpp:529
+#: ../src/common/fontcmn.cpp:641
 msgid "light"
 msgstr "簡単"
 
-#: ../src/common/fontcmn.cpp:453
+#: ../src/common/fontcmn.cpp:565
 msgid "light "
 msgstr "簡単"
 
-#: ../src/common/intl.cpp:1435
+#: ../src/common/intl.cpp:1454
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "ロケール '%s' を設定できません。"
 
-#: ../src/common/intl.cpp:1103
+#: ../src/common/intl.cpp:1105
 #, c-format
 msgid "looking for catalog '%s' in path '%s'."
 msgstr "カタログ '%s' をパス '%s' で検索します。"
 
-#: ../src/common/datetime.cpp:3630
+#: ../src/common/datetime.cpp:3721
 msgid "midnight"
 msgstr "深夜"
 
-#: ../src/common/datetime.cpp:3484
+#: ../src/common/datetime.cpp:3575
 msgid "nineteenth"
 msgstr "第１９"
 
-#: ../src/common/datetime.cpp:3474
+#: ../src/common/datetime.cpp:3565
 msgid "ninth"
 msgstr "第９"
 
-#: ../src/msw/dde.cpp:1050
+#: ../src/msw/dde.cpp:1034
 msgid "no DDE error."
 msgstr "DDEエラーなし。"
 
@@ -3739,11 +4204,11 @@ msgstr "DDEエラーなし。"
 msgid "no error"
 msgstr "不明なエラー"
 
-#: ../src/html/helpdata.cpp:603
+#: ../src/html/helpdata.cpp:662
 msgid "noname"
 msgstr "名前無し"
 
-#: ../src/common/datetime.cpp:3629
+#: ../src/common/datetime.cpp:3720
 msgid "noon"
 msgstr "正午"
 
@@ -3763,15 +4228,15 @@ msgstr "メモリー不足"
 msgid "read error"
 msgstr "読み取り エラー"
 
-#: ../src/common/filename.cpp:178
+#: ../src/common/filename.cpp:181
 msgid "reading"
 msgstr "読む"
 
-#: ../src/msw/dde.cpp:1093
+#: ../src/msw/dde.cpp:1077
 msgid "reentrancy problem."
 msgstr "リエントラント問題"
 
-#: ../src/common/datetime.cpp:3467
+#: ../src/common/datetime.cpp:3558
 msgid "second"
 msgstr "第２"
 
@@ -3779,11 +4244,11 @@ msgstr "第２"
 msgid "seek error"
 msgstr "シーク エラー"
 
-#: ../src/common/datetime.cpp:3482
+#: ../src/common/datetime.cpp:3573
 msgid "seventeenth"
 msgstr "第１７"
 
-#: ../src/common/datetime.cpp:3472
+#: ../src/common/datetime.cpp:3563
 msgid "seventh"
 msgstr "第７"
 
@@ -3791,23 +4256,23 @@ msgstr "第７"
 msgid "shift"
 msgstr "シフト"
 
-#: ../src/common/appbase.cpp:332
+#: ../src/common/appbase.cpp:338
 msgid "show this help message"
 msgstr "このヘルプメッセージを表示する"
 
-#: ../src/common/datetime.cpp:3481
+#: ../src/common/datetime.cpp:3572
 msgid "sixteenth"
 msgstr "第１６"
 
-#: ../src/common/datetime.cpp:3471
+#: ../src/common/datetime.cpp:3562
 msgid "sixth"
 msgstr "第６"
 
-#: ../src/common/appcmn.cpp:193
+#: ../src/common/appcmn.cpp:203
 msgid "specify display mode to use (e.g. 640x480-16)"
 msgstr "使用するディスプレイ・モードを指定して下さい (例 640x480-16)"
 
-#: ../src/common/appcmn.cpp:179
+#: ../src/common/appcmn.cpp:189
 msgid "specify the theme to use"
 msgstr "使用するテーマを指定してください"
 
@@ -3815,53 +4280,53 @@ msgstr "使用するテーマを指定してください"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/datetime.cpp:3475
+#: ../src/common/datetime.cpp:3566
 msgid "tenth"
 msgstr "第１０"
 
-#: ../src/msw/dde.cpp:1057
+#: ../src/msw/dde.cpp:1041
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
-msgstr "トランザクションへの応答が、DDE_FBUSY ビットをセットする原因となりました。"
+msgstr ""
+"トランザクションへの応答が、DDE_FBUSY ビットをセットする原因となりました。"
 
-#: ../src/common/datetime.cpp:3468
+#: ../src/common/datetime.cpp:3559
 msgid "third"
 msgstr "第３"
 
-#: ../src/common/datetime.cpp:3478
+#: ../src/common/datetime.cpp:3569
 msgid "thirteenth"
 msgstr "第１３"
 
-#: ../src/common/imagtiff.cpp:143
-#: ../src/common/imagtiff.cpp:151
+#: ../src/common/imagtiff.cpp:143 ../src/common/imagtiff.cpp:151
 #, c-format
 msgid "tiff module: %s"
 msgstr "tiff モジュール: %s"
 
-#: ../src/common/datetime.cpp:3301
+#: ../src/common/datetime.cpp:3386
 msgid "today"
 msgstr "本日"
 
-#: ../src/common/datetime.cpp:3303
+#: ../src/common/datetime.cpp:3388
 msgid "tomorrow"
 msgstr "明日"
 
-#: ../src/common/datetime.cpp:3477
+#: ../src/common/datetime.cpp:3568
 msgid "twelfth"
 msgstr "第１２"
 
-#: ../src/common/datetime.cpp:3485
+#: ../src/common/datetime.cpp:3576
 msgid "twentieth"
 msgstr "第２０"
 
-#: ../src/common/fontcmn.cpp:525
+#: ../src/common/fontcmn.cpp:637
 msgid "underlined"
 msgstr "下線付き"
 
-#: ../src/common/fontcmn.cpp:440
+#: ../src/common/fontcmn.cpp:552
 msgid "underlined "
 msgstr "下線付き"
 
-#: ../src/common/fileconf.cpp:1935
+#: ../src/common/fileconf.cpp:1914
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "予期せぬ \": ポジション %d, '%s'。"
@@ -3875,40 +4340,38 @@ msgstr "不明"
 msgid "unknown class %s"
 msgstr "不明なクラス %s"
 
-#: ../src/common/regex.cpp:163
-#: ../src/html/chm.cpp:352
+#: ../src/common/regex.cpp:163 ../src/html/chm.cpp:352
 msgid "unknown error"
 msgstr "不明なエラー"
 
-#: ../src/msw/dialup.cpp:458
+#: ../src/msw/dialup.cpp:457
 #, c-format
 msgid "unknown error (error code %08x)."
 msgstr "不明なエラー (エラーコード %08x)"
 
-#: ../src/common/textbuf.cpp:229
+#: ../src/common/textbuf.cpp:225
 msgid "unknown line terminator"
 msgstr "不明な行末符号"
 
-#: ../src/common/file.cpp:474
-#: ../src/common/file.cpp:501
+#: ../src/common/file.cpp:361 ../src/msw/wince/filefnwce.cpp:170
 msgid "unknown seek origin"
 msgstr "不明なシーク開始位置"
 
-#: ../src/common/fmapbase.cpp:704
+#: ../src/common/fmapbase.cpp:709
 #, c-format
 msgid "unknown-%d"
 msgstr "不明-%d"
 
-#: ../src/common/docview.cpp:432
+#: ../src/common/docview.cpp:412
 msgid "unnamed"
 msgstr "名前なし"
 
-#: ../src/common/docview.cpp:1307
+#: ../src/common/docview.cpp:1387
 #, c-format
 msgid "unnamed%d"
 msgstr "名前なし%d"
 
-#: ../src/common/intl.cpp:1113
+#: ../src/common/intl.cpp:1115
 #, c-format
 msgid "using catalog '%s' from '%s'."
 msgstr "カタログ '%s' ('%s'から)を使います"
@@ -3917,7 +4380,7 @@ msgstr "カタログ '%s' ('%s'から)を使います"
 msgid "write error"
 msgstr "書き込み エラー"
 
-#: ../src/common/filename.cpp:178
+#: ../src/common/filename.cpp:181
 msgid "writing"
 msgstr "書き込み中"
 
@@ -3925,16 +4388,16 @@ msgstr "書き込み中"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay 失敗"
 
-#: ../src/common/socket.cpp:395
-#: ../src/common/socket.cpp:449
+#: ../src/common/socket.cpp:414 ../src/common/socket.cpp:468
+#: ../src/mac/carbon/cfsocket.cpp:452 ../src/mac/carbon/cfsocket.cpp:506
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket : ReadMsgの無効な署名"
 
-#: ../src/common/socket.cpp:945
+#: ../src/common/socket.cpp:965 ../src/mac/carbon/cfsocket.cpp:1006
 msgid "wxSocket: unknown event!."
 msgstr "wxSocket: 不明なイベント!"
 
-#: ../src/motif/app.cpp:207
+#: ../src/motif/app.cpp:210
 #, c-format
 msgid "wxWidgets could not open display for '%s': exiting."
 msgstr "wxWidgetsは、'%s' のディスプレイをオープンできません: 終了します。"
@@ -3943,12 +4406,11 @@ msgstr "wxWidgetsは、'%s' のディスプレイをオープンできません:
 msgid "wxWidgets could not open display. Exiting."
 msgstr "wxWidgetsはディスプレイをオープンできません。終了します。"
 
-#: ../src/common/datetime.cpp:3302
+#: ../src/common/datetime.cpp:3387
 msgid "yesterday"
 msgstr "昨日"
 
-#: ../src/common/zstream.cpp:165
-#: ../src/common/zstream.cpp:315
+#: ../src/common/zstream.cpp:165 ../src/common/zstream.cpp:315
 #, c-format
 msgid "zlib error %d"
 msgstr "zlib エラー %ld"
@@ -3957,7 +4419,14 @@ msgstr "zlib エラー %ld"
 msgid "|<<"
 msgstr "<<"
 
-#: ../contrib/src/stc/scintilla/src/ScintillaBase.cxx:390
-msgid "Select All"
-msgstr "全て選択"
+#~ msgid "/#SYSTEM"
+#~ msgstr "/#システム"
 
+#~ msgid "Backward"
+#~ msgstr "後方"
+
+#~ msgid "GetUnusedColour:: No Unused Color in image "
+#~ msgstr "GetUnusedColour:: イメージに未使用の色がありません"
+
+#~ msgid "Select All"
+#~ msgstr "全て選択"
