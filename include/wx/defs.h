@@ -30,10 +30,16 @@
 /*  Make sure the environment is set correctly */
 #   if defined(__WXMSW__) && defined(__X__)
 #       error "Target can't be both X and Windows"
-#   elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
-      !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__WXCOCOA__) && \
-      !defined(__X__) && !defined(__WXMGL__) && !defined(__WXX11__) && \
-      wxUSE_GUI
+#   elif !defined(__WXMOTIF__) && \
+         !defined(__WXMSW__)   && \
+         !defined(__WXGTK__)   && \
+         !defined(__WXPM__)    && \
+         !defined(__WXMAC__)   && \
+         !defined(__WXCOCOA__) && \
+         !defined(__X__)       && \
+         !defined(__WXMGL__)   && \
+         !defined(__WXX11__)   && \
+          wxUSE_GUI
 #       ifdef __UNIX__
 #           error "No Target! You should use wx-config program for compilation flags!"
 #       else /*  !Unix */
