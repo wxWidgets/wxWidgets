@@ -214,18 +214,18 @@ wxPrintData::wxPrintData()
     ::UMAPrClose(&macPrintSession) ;
   #endif
 #else
-    m_macPrintInfo = (THPrint) NewHandleClear( sizeof( TPrint ) );
-    (**(THPrint)m_macPrintInfo).iPrVersion = 0;                    // something invalid
+    m_macPrintSettings = (THPrint) NewHandleClear( sizeof( TPrint ) );
+    (**(THPrint)m_macPrintSettings).iPrVersion = 0;                    // something invalid
 
-    (**(THPrint)m_macPrintInfo).prInfo.iHRes = 72;
-    (**(THPrint)m_macPrintInfo).prInfo.iVRes = 72;
+    (**(THPrint)m_macPrintSettings).prInfo.iHRes = 72;
+    (**(THPrint)m_macPrintSettings).prInfo.iVRes = 72;
     Rect r1 = { 0, 0, 8*72 - 2 * 18, 11*72 - 2 * 36 };
-    (**(THPrint)m_macPrintInfo).prInfo.rPage = r1;// must have its top left & (0,0)
+    (**(THPrint)m_macPrintSettings).prInfo.rPage = r1;// must have its top left & (0,0)
 
     Rect r2 = { -18, -36, 8*72 - 18, 11*72 - 36  };
-    (**(THPrint)m_macPrintInfo).rPaper = r2;
-    (**(THPrint)m_macPrintInfo).prStl.iPageV = 11 * 120 ;                // 11 inches in 120th of an inch
-    (**(THPrint)m_macPrintInfo).prStl.iPageH = 8 * 120 ;                // 8 inches in 120th of an inch
+    (**(THPrint)m_macPrintSettings).rPaper = r2;
+    (**(THPrint)m_macPrintSettings).prStl.iPageV = 11 * 120 ;                // 11 inches in 120th of an inch
+    (**(THPrint)m_macPrintSettings).prStl.iPageH = 8 * 120 ;                // 8 inches in 120th of an inch
 #endif
 #endif
     m_printOrientation = wxPORTRAIT;
@@ -263,7 +263,7 @@ wxPrintData::wxPrintData(const wxPrintData& printData)
     m_macPageFormat    = kPMNoPageFormat;
     m_macPrintSettings = kPMNoPrintSettings;
 #else
-    m_macPrintInfo = NULL;
+    m_macPrintSettings = NULL;
 #endif
 #endif
     (*this) = printData;
@@ -301,7 +301,7 @@ wxPrintData::~wxPrintData()
     }
     
 #else
-    wxASSERT( m_macPrintInfo );
+    wxASSERT( m_macPrintSettings );
     // we should perhaps delete
 #endif
 #endif
@@ -770,7 +770,7 @@ void wxPrintData::ConvertToNative()
 {
 #if TARGET_CARBON
 #else
-    (**(THPrint)m_macPrintInfo).prJob.iCopies = m_printNoCopies;
+    (**(THPrint)m_macPrintSettings).prJob.iCopies = m_printNoCopies;
 #endif
 }
 
@@ -778,7 +778,7 @@ void wxPrintData::ConvertFromNative()
 {
 #if TARGET_CARBON
 #else
-    m_printNoCopies = (**(THPrint)m_macPrintInfo).prJob.iCopies;
+    m_printNoCopies = (**(THPrint)m_macPrintSettings).prJob.iCopies;
 #endif
 }
 #endif
@@ -788,8 +788,8 @@ void wxPrintData::operator=(const wxPrintData& data)
 #ifdef __WXMAC__
 #if TARGET_CARBON
 #else
-    m_macPrintInfo = data.m_macPrintInfo;
-    HandToHand( (Handle*) &m_macPrintInfo );
+    m_macPrintSettings = data.m_macPrintSettings;
+    HandToHand( (Handle*) &m_macPrintSettings );
 #endif
 #endif
     m_printNoCopies = data.m_printNoCopies;
@@ -1090,8 +1090,8 @@ void wxPrintDialogData::ConvertToNative()
 {
 #if TARGET_CARBON
 #else
-    (**(THPrint)m_printData.m_macPrintInfo).prJob.iFstPage = m_printFromPage;
-    (**(THPrint)m_printData.m_macPrintInfo).prJob.iLstPage = m_printToPage;
+    (**(THPrint)m_printData.m_macPrintSettings).prJob.iFstPage = m_printFromPage;
+    (**(THPrint)m_printData.m_macPrintSettings).prJob.iLstPage = m_printToPage;
     m_printData.ConvertToNative();
 #endif
 }
@@ -1101,8 +1101,8 @@ void wxPrintDialogData::ConvertFromNative()
 #if TARGET_CARBON
 #else
     m_printData.ConvertFromNative();
-    m_printFromPage = (**(THPrint)m_printData.m_macPrintInfo).prJob.iFstPage;
-    m_printToPage = (**(THPrint)m_printData.m_macPrintInfo).prJob.iLstPage;
+    m_printFromPage = (**(THPrint)m_printData.m_macPrintSettings).prJob.iFstPage;
+    m_printToPage = (**(THPrint)m_printData.m_macPrintSettings).prJob.iLstPage;
 #endif
 }
 #endif
@@ -1415,16 +1415,16 @@ void wxPageSetupDialogData::ConvertToNative()
     // on mac the paper rect has a negative top left corner, because the page rect (printable area) is at 0,0
 #if TARGET_CARBON
 #else
-    (**(THPrint)m_printData.m_macPrintInfo).rPaper.left = int( ((double) m_minMarginTopLeft.x)*mm2pt );
-    (**(THPrint)m_printData.m_macPrintInfo).rPaper.top = int( ((double) m_minMarginTopLeft.y)*mm2pt );
+    (**(THPrint)m_printData.m_macPrintSettings).rPaper.left = int( ((double) m_minMarginTopLeft.x)*mm2pt );
+    (**(THPrint)m_printData.m_macPrintSettings).rPaper.top = int( ((double) m_minMarginTopLeft.y)*mm2pt );
 
-    (**(THPrint)m_printData.m_macPrintInfo).rPaper.right = int( ((double) m_paperSize.x - m_minMarginTopLeft.x)*mm2pt );
-    (**(THPrint)m_printData.m_macPrintInfo).rPaper.bottom = int( ((double) m_paperSize.y - m_minMarginTopLeft.y)*mm2pt );
+    (**(THPrint)m_printData.m_macPrintSettings).rPaper.right = int( ((double) m_paperSize.x - m_minMarginTopLeft.x)*mm2pt );
+    (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom = int( ((double) m_paperSize.y - m_minMarginTopLeft.y)*mm2pt );
 
-    (**(THPrint)m_printData.m_macPrintInfo).prInfo.rPage.left = 0;
-    (**(THPrint)m_printData.m_macPrintInfo).prInfo.rPage.top = 0;
-    (**(THPrint)m_printData.m_macPrintInfo).prInfo.rPage.right =  int( ((double) m_paperSize.x - m_minMarginTopLeft.x - m_minMarginBottomRight.x)*mm2pt );
-    (**(THPrint)m_printData.m_macPrintInfo).prInfo.rPage.bottom =  int( ((double) m_paperSize.y - m_minMarginTopLeft.y - m_minMarginBottomRight.y)*mm2pt );
+    (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.left = 0;
+    (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.top = 0;
+    (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.right =  int( ((double) m_paperSize.x - m_minMarginTopLeft.x - m_minMarginBottomRight.x)*mm2pt );
+    (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.bottom =  int( ((double) m_paperSize.y - m_minMarginTopLeft.y - m_minMarginBottomRight.y)*mm2pt );
 #endif
 }
 
@@ -1434,14 +1434,14 @@ void wxPageSetupDialogData::ConvertFromNative()
 
 #if TARGET_CARBON
 #else
-    m_paperSize.x = ((double) (**(THPrint)m_printData.m_macPrintInfo).rPaper.right - (**(THPrint)m_printData.m_macPrintInfo).rPaper.left ) * pt2mm;
-    m_paperSize.y = ((double) (**(THPrint)m_printData.m_macPrintInfo).rPaper.bottom - (**(THPrint)m_printData.m_macPrintInfo).rPaper.top ) * pt2mm;
+    m_paperSize.x = ((double) (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).rPaper.left ) * pt2mm;
+    m_paperSize.y = ((double) (**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).rPaper.top ) * pt2mm;
 
-    m_minMarginTopLeft.x = ((double) -(**(THPrint)m_printData.m_macPrintInfo).rPaper.left ) * pt2mm;
-    m_minMarginTopLeft.y = ((double) -(**(THPrint)m_printData.m_macPrintInfo).rPaper.top ) * pt2mm;
+    m_minMarginTopLeft.x = ((double) -(**(THPrint)m_printData.m_macPrintSettings).rPaper.left ) * pt2mm;
+    m_minMarginTopLeft.y = ((double) -(**(THPrint)m_printData.m_macPrintSettings).rPaper.top ) * pt2mm;
 
-    m_minMarginBottomRight.x = ((double) (**(THPrint)m_printData.m_macPrintInfo).rPaper.right - (**(THPrint)m_printData.m_macPrintInfo).prInfo.rPage.right ) * pt2mm;
-    m_minMarginBottomRight.y = ((double)(**(THPrint)m_printData.m_macPrintInfo).rPaper.bottom - (**(THPrint)m_printData.m_macPrintInfo).prInfo.rPage.bottom ) * pt2mm;
+    m_minMarginBottomRight.x = ((double) (**(THPrint)m_printData.m_macPrintSettings).rPaper.right - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.right ) * pt2mm;
+    m_minMarginBottomRight.y = ((double)(**(THPrint)m_printData.m_macPrintSettings).rPaper.bottom - (**(THPrint)m_printData.m_macPrintSettings).prInfo.rPage.bottom ) * pt2mm;
 #endif
     // adjust minimal values
     //TODO add custom fields in dialog for margins

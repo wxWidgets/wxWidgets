@@ -76,7 +76,7 @@ int wxPrintDialog::ShowModal()
 	if ( err == noErr )
 	{
 		m_printDialogData.ConvertToNative() ;
-		if  ( ::PrJobDialog( (THPrint) m_printDialogData.GetPrintData().m_macPrintInfo ) )
+		if  ( ::PrJobDialog( (THPrint) m_printDialogData.GetPrintData().m_macPrintSettings ) )
 		{
 			m_printDialogData.ConvertFromNative() ;
 			result = wxID_OK ;
@@ -228,7 +228,7 @@ int wxPageSetupDialog::ShowModal()
 	if ( err == noErr )
 	{
 		m_pageSetupData.ConvertToNative() ;
-		if  ( ::PrStlDialog(  (THPrint) m_pageSetupData.GetPrintData().m_macPrintInfo ) )
+		if  ( ::PrStlDialog(  (THPrint) m_pageSetupData.GetPrintData().m_macPrintSettings ) )
 		{
 			m_pageSetupData.ConvertFromNative() ;
 			result = wxID_OK ;
