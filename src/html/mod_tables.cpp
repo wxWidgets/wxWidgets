@@ -6,8 +6,21 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/defs.h"
+#ifdef __GNUG__
+#pragma implementation
+#endif
+
+#include <wx/wxprec.h>
+
 #if wxUSE_HTML
+#ifdef __BORDLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WXPRECOMP
+#include <wx/wx.h>
+#endif
+
 
 /*
 REMARKS:
