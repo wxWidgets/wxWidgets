@@ -45,6 +45,8 @@ static long sUMAAppearanceVersion = 0 ;
 static long sUMASystemVersion = 0 ;
 static bool sUMAHasAquaLayout = false ;
 
+static bool sUMAHasInittedAppearance = false;
+
 extern int gAGABackgroundColor ;
 bool UMAHasAppearance() { return sUMAHasAppearance ; }
 long UMAGetAppearanceVersion() { return sUMAAppearanceVersion ; }
@@ -60,7 +62,7 @@ bool UMAHasAquaLayout() { return sUMAHasAquaLayout ; }
 
 void UMACleanupToolbox()
 {
-    if ( sUMAHasAppearance )
+    if (sUMAHasInittedAppearance)
     {
         UnregisterAppearanceClient() ;
     }
@@ -71,25 +73,28 @@ void UMACleanupToolbox()
   if ( TXNTerminateTextension != (void*) kUnresolvedCFragSymbolAddress )
       TXNTerminateTextension( ) ;
 }
-void UMAInitToolbox( UInt16 inMoreMastersCalls )
+void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded )
 {
 #if !TARGET_CARBON
     ::MaxApplZone();
     for (long i = 1; i <= inMoreMastersCalls; i++)
         ::MoreMasters();
 
-    ::InitGraf(&qd.thePort);
-    ::InitFonts();
-    ::InitMenus();
-    ::TEInit();
-    ::InitDialogs(0L);
-    ::FlushEvents(everyEvent, 0);
-    ::InitCursor();
+    if (!isEmbedded)
+    {
+        ::InitGraf(&qd.thePort);
+        ::InitFonts();
+        ::InitMenus();
+        ::TEInit();
+        ::InitDialogs(0L);
+        ::FlushEvents(everyEvent, 0);
+    }
+
     long total,contig;
     PurgeSpace(&total, &contig);
-#else
-    InitCursor();
 #endif
+
+    ::InitCursor();
 
     if ( Gestalt(gestaltSystemVersion, &sUMASystemVersion) != noErr)
         sUMASystemVersion = 0x0000 ;
@@ -98,7 +103,17 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
     if ( Gestalt( gestaltAppearanceAttr, &theAppearance ) == noErr )
     {
         sUMAHasAppearance = true ;
-        RegisterAppearanceClient();
+        OSStatus status = RegisterAppearanceClient();
+        // If status equals appearanceProcessRegisteredErr it means the
+        // appearance client already was registered (For example if we run
+        // embedded, the host might have registered it). In such a case
+        // we don't unregister it later on.
+        if (status != appearanceProcessRegisteredErr)
+        {
+            // Appearance client wasn't registered yet.
+            sUMAHasInittedAppearance = true;
+        }
+
         if ( Gestalt( gestaltAppearanceVersion, &theAppearance ) == noErr )
         {
             sUMAAppearanceVersion = theAppearance ;
@@ -116,10 +131,13 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 #if TARGET_CARBON
 // Call currently implicitely done :        InitFloatingWindows() ;
 #else
-    if ( sUMAHasWindowManager )
-        InitFloatingWindows() ;
-    else
-        InitWindows();
+    if (!isEmbedded)
+    {
+        if ( sUMAHasWindowManager )
+            InitFloatingWindows() ;
+        else
+            InitWindows();
+    }
 #endif
 
     if ( NavServicesAvailable() )
@@ -143,7 +161,7 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls )
 
     TXNMacOSPreferredFontDescription fontDescriptions[] =
     {
-        { fontId , (fontSize << 16) ,kTXNDefaultFontStyle, kTXNSystemDefaultEncoding } ,
+        { fontId , (fontSize << 16) ,kTXNDefaultFontStyle, kTXNSystemDefaultEncoding }
     } ;
     int noOfFontDescriptions = sizeof( fontDescriptions ) / sizeof(TXNMacOSPreferredFontDescription) ;
 #if 0 // TARGET_CARBON

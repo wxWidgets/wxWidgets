@@ -14,7 +14,7 @@
 
 #include "wx/mac/private.h"
 
-void UMAInitToolbox( UInt16 inMoreMastersCalls) ;
+void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded) ;
 void UMACleanupToolbox() ;
 long UMAGetSystemVersion() ;
 bool UMAHasAppearance() ;

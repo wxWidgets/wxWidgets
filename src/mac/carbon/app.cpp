@@ -110,6 +110,8 @@ long      wxApp::s_macPreferencesMenuItemId = wxID_PREFERENCES ;
 long      wxApp::s_macExitMenuItemId = wxID_EXIT ;
 wxString  wxApp::s_macHelpMenuTitleName = wxT("&Help") ;
 
+// Normally we're not a plugin
+bool      wxApp::sm_isEmbedded = false;
 //----------------------------------------------------------------------
 // Core Apple Event Support
 //----------------------------------------------------------------------
@@ -521,7 +523,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // Mac-specific
 
-    UMAInitToolbox( 4 ) ;
+    UMAInitToolbox( 4, sm_isEmbedded ) ;
     SetEventMask( everyEvent ) ;
     UMAShowWatchCursor() ;
 
@@ -638,38 +640,44 @@ bool wxApp::OnInitGui()
 #if TARGET_CARBON
     InstallStandardEventHandler( GetApplicationEventTarget() ) ;
 
-    InstallApplicationEventHandler(
-        GetwxAppEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, wxTheApp, (EventHandlerRef *)&(wxTheApp->m_macEventHandler));
+    if (!sm_isEmbedded)
+    {
+        InstallApplicationEventHandler(
+            GetwxAppEventHandlerUPP(),
+            GetEventTypeCount(eventList), eventList, wxTheApp, (EventHandlerRef *)&(wxTheApp->m_macEventHandler));
+    }
 #endif
 
+    if (!sm_isEmbedded)
+    {
 #if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
-    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
-                           NewAEEventHandlerUPP(AEHandleODoc) ,
-                           0 , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
-                           NewAEEventHandlerUPP(AEHandleOApp) ,
-                           0 , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
-                           NewAEEventHandlerUPP(AEHandlePDoc) ,
-                           0 , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
-                           NewAEEventHandlerUPP(AEHandleQuit) ,
-                           0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
+                               NewAEEventHandlerUPP(AEHandleODoc) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
+                               NewAEEventHandlerUPP(AEHandleOApp) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
+                               NewAEEventHandlerUPP(AEHandlePDoc) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
+                               NewAEEventHandlerUPP(AEHandleQuit) ,
+                               0 , FALSE ) ;
 #else
-    AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
-                           NewAEEventHandlerProc(AEHandleODoc) ,
-                           0 , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
-                           NewAEEventHandlerProc(AEHandleOApp) ,
-                           0 , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
-                           NewAEEventHandlerProc(AEHandlePDoc) ,
-                           0 , FALSE ) ;
-    AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
-                           NewAEEventHandlerProc(AEHandleQuit) ,
-                           0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
+                               NewAEEventHandlerProc(AEHandleODoc) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
+                               NewAEEventHandlerProc(AEHandleOApp) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
+                               NewAEEventHandlerProc(AEHandlePDoc) ,
+                               0 , FALSE ) ;
+        AEInstallEventHandler( kCoreEventClass , kAEQuitApplication ,
+                               NewAEEventHandlerProc(AEHandleQuit) ,
+                               0 , FALSE ) ;
 #endif
+    }
 
     return TRUE ;
 }
@@ -1274,7 +1282,7 @@ void wxApp::MacDoOneEvent()
             ::IdleControls( window ) ;
 
         if ( wxTheApp->ProcessIdle() )
-            sleepTime = 0 ;
+            sleepTime = kEventDurationNoWait;
         else
             sleepTime = GetCaretTime() / 2 ;
     }
@@ -1287,13 +1295,22 @@ void wxApp::MacDoOneEvent()
     wxMacProcessNotifierAndPendingEvents() ;
 }
 
+/*virtual*/ void wxApp::MacHandleUnhandledEvent( WXEVENTREF evr )
+{
+    // Override to process unhandled events as you please    
+}
+
 void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 {
 #if TARGET_CARBON
     EventTargetRef theTarget;
     theTarget = GetEventDispatcherTarget();
     m_macCurrentEvent = evr ;
-    SendEventToEventTarget ((EventRef) evr , theTarget);
+    OSStatus status = SendEventToEventTarget ((EventRef) evr , theTarget);
+    if(status == eventNotHandledErr)
+    {
+        MacHandleUnhandledEvent(evr);
+    }
 #else
     EventRecord* ev = (EventRecord*) evr ;
     m_macCurrentEvent = ev ;
@@ -1325,6 +1342,10 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
             MacHandleActivateEvent( ev ) ;
             break;
         case updateEvt:
+            // In embedded mode we first let the UnhandledEvent function
+            // try to handle the update event. If we handle it ourselves
+            // first and then pass it on, the host's windows won't update.
+            MacHandleUnhandledEvent(ev);
             MacHandleUpdateEvent( ev ) ;
             break;
         case keyDown:

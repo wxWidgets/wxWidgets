@@ -80,6 +80,7 @@ protected:
                                        // where overriden
 public:
 
+    static bool           sm_isEmbedded;
     // Implementation
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
@@ -142,6 +143,10 @@ public:
     void                  MacDoOneEvent() ;
     WXEVENTREF            MacGetCurrentEvent() { return m_macCurrentEvent ; }
     void                  MacHandleOneEvent( WXEVENTREF ev ) ;
+
+    // For embedded use. By default does nothing.
+    virtual void          MacHandleUnhandledEvent( WXEVENTREF ev );
+
 #if !TARGET_CARBON
     virtual void          MacHandleMenuSelect( int menuid , int menuitem ) ;
     virtual void          MacHandleMouseUpEvent( WXEVENTREF ev ) ;
