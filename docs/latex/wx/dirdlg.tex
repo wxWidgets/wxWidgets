@@ -35,9 +35,13 @@ See also \helpref{Generic window styles}{windowstyles}.
 \membersection{wxDirDialog::wxDirDialog}\label{wxdirdialogconstr}
 
 \func{}{wxDirDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message = "Choose a directory"},\rtfsp
-\param{const wxString\& }{defaultPath = ""}, \param{long }{style = 0}, \param{const wxPoint\& }{pos = wxDefaultPosition}}
+\param{const wxString\& }{defaultPath = ""}, \param{long }{style = 0},\rtfsp
+\param{const wxPoint\& }{pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\& }{size = wxDefaultSize},\rtfsp
+\param{const wxString\& }{name = "wxDirCtrl"}}
 
-Constructor. Use \helpref{wxDirDialog::ShowModal}{wxdirdialogshowmodal} to show the dialog.
+Constructor. Use \helpref{wxDirDialog::ShowModal}{wxdirdialogshowmodal} to show
+the dialog.
 
 \wxheading{Parameters}
 
@@ -49,7 +53,11 @@ Constructor. Use \helpref{wxDirDialog::ShowModal}{wxdirdialogshowmodal} to show 
 
 \docparam{style}{A dialog style, currently unused.}
 
-\docparam{pos}{Dialog position. Not implemented.}
+\docparam{pos}{Dialog position. Ignored under Windows.}
+
+\docparam{size}{Dialog size. Ignored under Windows.}
+
+\docparam{name}{The dialog name, not used.}
 
 \membersection{wxDirDialog::\destruct{wxDirDialog}}
 
