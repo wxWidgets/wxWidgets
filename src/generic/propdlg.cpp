@@ -30,7 +30,7 @@
     #include "wx/msgdlg.h"
 #endif
 
-#include "wx/notebook.h"
+#include "wx/bookctrl.h"
 #include "wx/generic/propdlg.h"
 
 //-----------------------------------------------------------------------------
@@ -82,7 +82,10 @@ void wxPropertySheetDialog::LayoutDialog()
 // Creates the buttons, if any
 void wxPropertySheetDialog::CreateButtons(int flags)
 {
-#ifndef __WXWINCE__
+#if defined(__WXWINCE__) && defined(__SMARTPHONE__)
+    SetLeftMenu(wxID_CANCEL);
+    SetLeftMenu(wxID_OK);
+#elif !defined(__WXWINCE__)
     wxSizer* sizer = CreateButtonSizer(flags);
     m_innerSizer->Add( sizer, 0, wxGROW|wxALIGN_CENTER_VERTICAL|wxTOP|wxBOTTOM, 5);
 #endif
@@ -92,16 +95,18 @@ void wxPropertySheetDialog::CreateButtons(int flags)
 wxBookCtrlBase* wxPropertySheetDialog::CreateBookCtrl()
 {
     int style = 0;
-#ifdef __WXWINCE__
+#if defined(__POCKETPC__) && wxUSE_NOTEBOOK
     style |= wxNB_BOTTOM|wxNB_FLAT;
+#else
+    style |= wxBC_DEFAULT;
 #endif
-    return new wxNotebook(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
+    return new wxBookCtrl(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, style );
 }
 
 // Adds the book control to the inner sizer.
 void wxPropertySheetDialog::AddBookCtrl(wxSizer* sizer)
 {
-#ifdef __WXWINCE__
+#if defined(__POCKETPC__) && wxUSE_NOTEBOOK
     // The book control has to be sized larger than the dialog because of a border bug
     // in WinCE
     sizer->Add( m_bookCtrl, 1, wxGROW|wxALIGN_CENTER_VERTICAL|wxLEFT|wxTOP|wxRIGHT, -3 );
