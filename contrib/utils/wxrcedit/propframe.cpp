@@ -27,6 +27,7 @@
 #include "propedit.h"
 #include "pe_basic.h"
 #include "pe_adv.h"
+#include "editor.h"
 
 // ------------- support classes --------
 
@@ -104,6 +105,19 @@ class PropsTree: public wxRemotelyScrolledTreeCtrl
                 m_EditCtrl = NULL;
             }
         }
+
+        void OnScroll(wxScrollWinEvent& event)
+        {
+            event.Skip();
+            if (event.GetOrientation() == wxHORIZONTAL) return;
+            if (!m_EditCtrl) return;
+            
+            wxTreeItemId id = GetSelection();
+            wxRect bounding;
+            GetBoundingRect(id, bounding);
+            
+            m_EditCtrl->Move(-1, bounding.y);
+        }
         
         PropEditCtrl *m_EditCtrl;
         
@@ -113,6 +127,7 @@ class PropsTree: public wxRemotelyScrolledTreeCtrl
 BEGIN_EVENT_TABLE(PropsTree, wxRemotelyScrolledTreeCtrl)
 	EVT_PAINT(PropsTree::OnPaint)
     EVT_TREE_SEL_CHANGED(-1, PropsTree::OnSelChange)
+    EVT_SCROLLWIN(PropsTree::OnScroll)
 END_EVENT_TABLE()
 
 
@@ -157,7 +172,7 @@ class PropsValueWindow: public wxTreeCompanionWindow
                 GetTreeCtrl()->SelectItem(item);
             }
         }
-        
+
         DECLARE_EVENT_TABLE()
 };
 
@@ -184,7 +199,9 @@ PropertiesFrame *PropertiesFrame::Get()
 }
 
 PropertiesFrame::PropertiesFrame()
-    : wxFrame(NULL, -1, _("Properties"))
+    : wxFrame(EditorFrame::Get(), -1, _("Properties"),
+              wxDefaultPosition, wxDefaultSize,
+              wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR | wxFRAME_TOOL_WINDOW)
 {
     ms_Instance = this;
     m_Node = NULL;

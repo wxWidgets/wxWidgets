@@ -165,6 +165,7 @@ void PropEditCtrlFlags::OnDetails()
 
     dlg.SetSizer(sz);
     dlg.SetAutoLayout(TRUE);
+    dlg.Layout();
     
     for (i = 0; i < arr.GetCount(); i++)
         lbox->Append(arr[i]);

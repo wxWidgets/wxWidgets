@@ -20,7 +20,7 @@
 #include "propframe.h"
 
 class WXDLLEXPORT wxXmlNode;
-class WXDLLEXPORT wxTreeCtrl;
+class WXDLLEXPORT wxGenericTreeCtrl;
 class WXDLLEXPORT wxTextCtrl;
 
 
@@ -61,7 +61,7 @@ class PropEditCtrl : public wxPanel
     
         PropertiesFrame *m_PropFrame;
         bool m_Created;
-        wxTreeCtrl *m_TreeCtrl;
+        wxGenericTreeCtrl *m_TreeCtrl;
         wxTreeItemId m_TreeItem;
         wxWindow *m_TheCtrl;
         PropertyInfo *m_PropInfo;

@@ -61,7 +61,9 @@ PreviewFrame *PreviewFrame::Get()
 }
 
 PreviewFrame::PreviewFrame()
-    : wxFrame(NULL, -1, _("Preview"))
+    : wxFrame(EditorFrame::Get(), -1, _("Preview"),
+              wxDefaultPosition, wxDefaultSize, 
+              wxDEFAULT_FRAME_STYLE | wxFRAME_NO_TASKBAR | wxFRAME_TOOL_WINDOW)
 {
     m_Dirty = FALSE;
     ms_Instance = this;
@@ -89,6 +91,8 @@ PreviewFrame::PreviewFrame()
     m_Splitter->SplitHorizontally(m_ScrollWin, m_LogCtrl, cfg->Read(_T("previewframe_sash"), 300));
 
     CreateStatusBar();
+
+    SetSize(GetSize()); // refresh: MSW needs it
 }
 
 
