@@ -29,16 +29,16 @@ wxWizardEvent = wx.wizard.WizardEvent
 wxWizardEventPtr = wx.wizard.WizardEventPtr
 wxWizardPage = wx.wizard.WizardPage
 wxWizardPagePtr = wx.wizard.WizardPagePtr
-wxPrePyWizardPage = wx.wizard.PrePyWizardPage
 wxPyWizardPage = wx.wizard.PyWizardPage
 wxPyWizardPagePtr = wx.wizard.PyWizardPagePtr
-wxPreWizardPageSimple = wx.wizard.PreWizardPageSimple
-wxWizardPageSimple_Chain = wx.wizard.WizardPageSimple_Chain
+wxPrePyWizardPage = wx.wizard.PrePyWizardPage
 wxWizardPageSimple = wx.wizard.WizardPageSimple
 wxWizardPageSimplePtr = wx.wizard.WizardPageSimplePtr
-wxPreWizard = wx.wizard.PreWizard
+wxPreWizardPageSimple = wx.wizard.PreWizardPageSimple
+wxWizardPageSimple_Chain = wx.wizard.WizardPageSimple_Chain
 wxWizard = wx.wizard.Wizard
 wxWizardPtr = wx.wizard.WizardPtr
+wxPreWizard = wx.wizard.PreWizard
 
 
 d = globals()

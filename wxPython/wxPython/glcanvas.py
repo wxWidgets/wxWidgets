@@ -37,8 +37,8 @@ WX_GL_MIN_ACCUM_RED = wx.glcanvas.WX_GL_MIN_ACCUM_RED
 WX_GL_MIN_ACCUM_GREEN = wx.glcanvas.WX_GL_MIN_ACCUM_GREEN
 WX_GL_MIN_ACCUM_BLUE = wx.glcanvas.WX_GL_MIN_ACCUM_BLUE
 WX_GL_MIN_ACCUM_ALPHA = wx.glcanvas.WX_GL_MIN_ACCUM_ALPHA
-wxGLCanvasWithContext = wx.glcanvas.GLCanvasWithContext
 wxGLCanvas = wx.glcanvas.GLCanvas
 wxGLCanvasPtr = wx.glcanvas.GLCanvasPtr
+wxGLCanvasWithContext = wx.glcanvas.GLCanvasWithContext
 
 
