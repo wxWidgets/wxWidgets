@@ -57,6 +57,7 @@ c) Build instructions
    #define wxUSE_STD_IOSTREAM   0
  
 -> type: cd c:\wxWin\src\msw
+-> type: set WXWIN=c:\wxWin
 -> type: make -f makefile.g95  (if using GNU tools)
 or type: nmake -f makefile.vc   (if using MS VC++)
 
