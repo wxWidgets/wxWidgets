@@ -132,12 +132,17 @@ wxWindow::wxWindow()
     m_lastTS = 0;
     m_lastButton = 0;
     m_canAddEventHandler = FALSE;
+    m_paintRegion = (WXRegion) 0;
 }
 
 // Destructor
 wxWindow::~wxWindow()
 {
   //// Motif-specific
+
+  if (m_paintRegion)
+    XDestroyRegion ((Region) m_paintRegion);
+  m_paintRegion = (WXRegion) 0;
 
   if (GetMainWidget())
     DetachWidget(GetMainWidget()); // Removes event handlers
@@ -299,6 +304,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     m_pixmapHeight = 0;
     m_pixmapOffsetX = 0;
     m_pixmapOffsetY = 0;
+    m_paintRegion = (WXRegion) 0;
 
     if (!parent)
         return FALSE;

@@ -351,7 +351,7 @@ void wxPostScriptDC::DrawArc (long x1, long y1, long x2, long y2, long xc, long 
 
     long dx = x1 - xc;
     long dy = y1 - yc;
-    long radius = (long) sqrt(dx*dx+dy*dy);
+    long radius = (long) sqrt((double) (dx*dx+dy*dy));
     double alpha1, alpha2;
 
     if (x1 == x2 && y1 == y2) {
@@ -1214,8 +1214,8 @@ void wxPostScriptDC::EndDoc (void)
   // The Adobe specifications call for integers; we round as to make
   // the bounding larger.
   *m_pstream << "%%BoundingBox: "
-      << floor(llx) << " " << floor(lly) << " "
-      << ceil(urx)  << " " << ceil(ury)  << "\n";
+      << floor((double)llx) << " " << floor((double)lly) << " "
+      << ceil((double)urx)  << " " << ceil((double)ury)  << "\n";
   *m_pstream << "%%Pages: " << wxPageNumber - 1 << "\n";
   *m_pstream << "%%EndComments\n\n";
 
@@ -1417,10 +1417,10 @@ Blit (long xdest, long ydest, long fwidth, long fheight,
 
   if (!source->IsKindOf(CLASSINFO(wxPaintDC))) return FALSE;
 
-  width = (long)floor(fwidth);
-  height = (long)floor(fheight);
-  x = (long)floor(xsrc);
-  y = (long)floor(ysrc);
+  width = (long)floor((double)fwidth);
+  height = (long)floor((double)fheight);
+  x = (long)floor((double)xsrc);
+  y = (long)floor((double)ysrc);
 
   /* PostScript setup: */
   *m_pstream << "gsave\n";

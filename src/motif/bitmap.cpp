@@ -34,6 +34,9 @@ wxBitmapRefData::wxBitmapRefData()
     m_quality = 0;
     m_numColors = 0;
     m_bitmapMask = NULL;
+
+    m_pixmap = (WXPixmap) 0;
+    m_display = (WXDisplay*) 0;
 }
 
 wxBitmapRefData::~wxBitmapRefData()
@@ -296,18 +299,15 @@ wxBitmapHandler *wxBitmap::FindHandler(long bitmapType)
 
 wxMask::wxMask()
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_pixmap = (WXPixmap) 0;
 }
 
 // Construct a mask from a bitmap and a colour indicating
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_pixmap = (WXPixmap) 0;
+
     Create(bitmap, colour);
 }
 
@@ -315,9 +315,7 @@ wxMask::wxMask(const wxBitmap& bitmap, const wxColour& colour)
 // the transparent area
 wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_pixmap = (WXPixmap) 0;
 
     Create(bitmap, paletteIndex);
 }
@@ -325,9 +323,7 @@ wxMask::wxMask(const wxBitmap& bitmap, int paletteIndex)
 // Construct a mask from a mono bitmap (copies the bitmap).
 wxMask::wxMask(const wxBitmap& bitmap)
 {
-/* TODO
-    m_maskBitmap = 0;
-*/
+    m_pixmap = (WXPixmap) 0;
 
     Create(bitmap);
 }

@@ -1,0 +1,13 @@
+wxMotif CHANGES
+---------------
+
+21/9/98
+-------
+
+Julian:
+
+- Made makefiles for wxMotif source directory and minimal sample.
+
+- First go at wxApp, wxWindow, wxDialog, wxPen, wxBrush, wxFont,
+  wxColour, wxButton, wxCheckBox, wxTextCtrl, wxStaticText,
+  wxMenu, wxMenuItem, wxMenuBar

@@ -25,11 +25,6 @@ class WXDLLEXPORT wxIconRefData: public wxBitmapRefData
 public:
     wxIconRefData();
     ~wxIconRefData();
-
-public:
-/* TODO: whatever your actual icon handle is
-  WXHICON m_hIcon;
-*/
 };
 
 #define M_ICONDATA ((wxIconRefData *)m_refData)
@@ -58,11 +53,6 @@ public:
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
   inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
-
-/* TODO: implementation
-  void SetHICON(WXHICON ico);
-  inline WXHICON GetHICON() const { return (M_ICONDATA ? M_ICONDATA->m_hIcon : 0); }
-*/
 
 /* TODO */
   virtual bool Ok() const { return (m_refData != NULL) ; }

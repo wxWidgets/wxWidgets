@@ -3,11 +3,14 @@ src/motif/*.c
 src/motif/*.h
 src/motif/makefile*
 src/motif/*.inc
+src/motif/*.xbm
 
 src/make.env
 src/makeprog.env
 
 include/wx/motif/*.h
+
+docs/motif/*.*
 
 lib/dummy
 

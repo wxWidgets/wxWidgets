@@ -24,6 +24,31 @@ wxColour wxSystemSettings::GetSystemColour(int index)
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
     // TODO
+    switch (index)
+    {
+        case wxSYS_DEVICE_DEFAULT_FONT:
+        {
+            break;
+        }
+        case wxSYS_DEFAULT_PALETTE:
+        {
+            break;
+        }
+        case wxSYS_SYSTEM_FIXED_FONT:
+        {
+            break;
+        }
+        case wxSYS_SYSTEM_FONT:
+        {
+            break;
+        }
+        default:
+        case wxSYS_DEFAULT_GUI_FONT:
+        {
+            break;
+        }
+    }
+
     return wxFont();
 }
 

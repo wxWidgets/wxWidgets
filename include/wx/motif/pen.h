@@ -84,6 +84,8 @@ public:
   inline int GetDashes(wxDash **ptr) const {
      *ptr = (M_PENDATA ? M_PENDATA->m_dash : (wxDash*) NULL); return (M_PENDATA ? M_PENDATA->m_nbDash : 0);
   }
+  inline int GetDashCount() const { return (M_PENDATA->m_nbDash); }
+  inline wxDash* GetDash() const { return (M_PENDATA->m_dash); }
 
   inline wxBitmap *GetStipple() const { return (M_PENDATA ? (& M_PENDATA->m_stipple) : (wxBitmap*) NULL); };
 

@@ -26,10 +26,9 @@ class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 public:
     wxPaletteRefData();
     ~wxPaletteRefData();
-/* TODO: implementation
+
 protected:
- WXHPALETTE m_hPalette;
-*/
+    WXColormap  m_colormap;
 };
 
 #define M_PALETTEDATA ((wxPaletteRefData *)m_refData)
@@ -55,10 +54,7 @@ public:
   inline bool operator == (const wxPalette& palette) { return m_refData == palette.m_refData; }
   inline bool operator != (const wxPalette& palette) { return m_refData != palette.m_refData; }
 
-/* TODO: implementation
-  inline WXHPALETTE GetHPALETTE() const { return (M_PALETTEDATA ? M_PALETTEDATA->m_hPalette : 0); }
-  void SetHPALETTE(WXHPALETTE pal);
-*/
+  WXColormap GetXColormap() const { return (M_PALETTEDATA->m_colormap); }
 };
 
 #endif

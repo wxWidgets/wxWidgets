@@ -37,6 +37,7 @@
 #include  <wx/log.h>
 #include  <wx/textfile.h>
 #include  <wx/confbase.h>
+#include  <wx/utils.h>
 
 // we must include (one of) these files for wxConfigBase::Create
 #if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
@@ -134,7 +135,7 @@ bool wxConfigBase::Read(const wxString& key, long *pl, long defVal) const
 bool wxConfigBase::Read(const wxString& key, double* val) const
 {
     wxString str;
-    if (Read(key, str))
+    if (Read(key, & str))
     {
         *val = atof(str);
         return TRUE;

@@ -28,9 +28,6 @@ class WXDLLEXPORT wxWindow;
 // Under Windows, wxClientDC, wxPaintDC and wxWindowDC are implemented differently.
 // On many platforms, however, they will be the same.
 
-typedef wxWindowDC wxClientDC;
-typedef wxWindowDC wxPaintDC;
-
 //-----------------------------------------------------------------------------
 // wxWindowDC
 //-----------------------------------------------------------------------------
@@ -96,17 +93,22 @@ class WXDLLEXPORT wxWindowDC: public wxDC
     
     virtual void DrawOpenSpline( wxList *points );
 
+    // Motif-specific
+    void SetDCClipping (); // Helper function for setting clipping
+
 protected:
     WXGC         m_gc;
     WXGC         m_gcBacking;
     WXDisplay*   m_display;
     wxWindow*    m_window;
-    WXRegion     m_clippingRegion;    
+    WXRegion     m_currentRegion; // Current clipping region (incl. paint clip region)
+    WXRegion     m_userRegion;    // User-defined clipping region
+    WXPixmap     m_pixmap;        // Pixmap for drawing on
 
     // Not sure if we'll need all of these
     int          m_backgroundPixel;
     wxColour     m_currentColour;
-    int          m_currentBkMode;
+//    int          m_currentBkMode;
     int          m_currentPenWidth ;
     int          m_currentPenJoin ;
     int          m_currentPenCap ;
@@ -115,6 +117,23 @@ protected:
     wxBitmap     m_currentStipple ;
     int          m_currentStyle ;
     int          m_currentFill ;
+    int          m_autoSetting ; // See comment in dcclient.cpp
+};
+
+class WXDLLEXPORT wxPaintDC: public wxWindowDC
+{
+  DECLARE_DYNAMIC_CLASS(wxPaintDC)
+public:
+  wxPaintDC() {}
+  wxPaintDC(wxWindow* win): wxWindowDC(win) {}
+};
+
+class WXDLLEXPORT wxClientDC: public wxWindowDC
+{
+  DECLARE_DYNAMIC_CLASS(wxClientDC)
+public:
+  wxClientDC() {}
+  wxClientDC(wxWindow* win): wxWindowDC(win) {}
 };
 
 #endif

@@ -934,7 +934,7 @@ void wxTreeCtrl::AdjustMyScrollbars()
   }
 }
 
-void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y )
+void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
 {
   int horizX = level*m_indent;
 
@@ -1088,7 +1088,7 @@ void wxTreeCtrl::OnMouse( const wxMouseEvent &event )
   }
 }
 
-void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y )
+void wxTreeCtrl::CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y )
 {
   int horizX = level*m_indent;
 

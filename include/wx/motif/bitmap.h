@@ -54,13 +54,10 @@ public:
   bool Create(const wxBitmap& bitmap, int paletteIndex);
   bool Create(const wxBitmap& bitmap);
 
-/* TODO: platform-specific data access
-  // Implementation
-  inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
-  inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
+  inline WXPixmap GetPixmap() const { return m_pixmap; }
+
 protected:
-  WXHBITMAP m_maskBitmap;
-*/
+  WXPixmap      m_pixmap;
 };
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
@@ -81,8 +78,12 @@ public:
   wxPalette     m_bitmapPalette;
   int           m_quality;
 
-/*  WXHBITMAP     m_hBitmap; TODO: platform-specific handle */
   wxMask *      m_bitmapMask; // Optional mask
+
+  // Motif implementation
+public:
+  WXPixmap      m_pixmap;
+  WXDisplay*    m_display;
 };
 
 #define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
@@ -182,16 +183,15 @@ public:
 
   static void InitStandardHandlers();
   static void CleanUpHandlers();
+
+  // Motif implementation
+public:
+  inline WXDisplay* GetDisplay() const { return M_BITMAPDATA->m_display; }
+  inline WXDisplay* GetPixmap() const { return M_BITMAPDATA->m_pixmap; }
+
 protected:
   static wxList sm_handlers;
 
-/*
-  // TODO: Implementation
-public:
-  void SetHBITMAP(WXHBITMAP bmp);
-  inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
-  bool FreeResource(bool force = FALSE);
-*/
 
 };
 #endif

@@ -80,6 +80,8 @@ wxDC::wxDC(void)
   m_font = *wxNORMAL_FONT;
   m_brush = *wxTRANSPARENT_BRUSH;
   m_backgroundBrush = *wxWHITE_BRUSH;
+
+  m_isInteractive = FALSE;
   
 //  m_palette = wxAPP_COLOURMAP;
 };

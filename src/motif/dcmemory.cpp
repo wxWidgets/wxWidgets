@@ -19,7 +19,7 @@
 // wxMemoryDC
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC,wxPaintDC)
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxWindowDC)
 
 wxMemoryDC::wxMemoryDC(void)
 {
@@ -37,9 +37,10 @@ wxMemoryDC::~wxMemoryDC(void)
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
-  m_selected = bitmap;
-  if (m_selected.Ok())
+  m_bitmap = bitmap;
+  if (m_bitmap.Ok())
   {
+    m_pixmap = m_bitmap.GetPixmap();
   }
   else
   {
@@ -49,10 +50,10 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 
 void wxMemoryDC::GetSize( int *width, int *height ) const
 {
-  if (m_selected.Ok())
+  if (m_bitmap.Ok())
   {
-    if (width) (*width) = m_selected.GetWidth();
-    if (height) (*height) = m_selected.GetHeight();
+    if (width) (*width) = m_bitmap.GetWidth();
+    if (height) (*height) = m_bitmap.GetHeight();
   }
   else
   {

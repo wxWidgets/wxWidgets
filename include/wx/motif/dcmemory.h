@@ -18,7 +18,7 @@
 
 #include "wx/dcclient.h"
 
-class WXDLLEXPORT wxMemoryDC: public wxPaintDC
+class WXDLLEXPORT wxMemoryDC: public wxWindowDC
 {
   DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
@@ -29,9 +29,11 @@ class WXDLLEXPORT wxMemoryDC: public wxPaintDC
     virtual void SelectObject( const wxBitmap& bitmap );
     void GetSize( int *width, int *height ) const;
 
+    inline wxBitmap& GetBitmap() const { return (wxBitmap&) m_bitmap; }
+
   private: 
     friend wxPaintDC;
-    wxBitmap  m_selected;
+    wxBitmap  m_bitmap;
 };
 
 #endif

@@ -128,15 +128,15 @@ void wxColour::Set (unsigned char r, unsigned char g, unsigned char b)
 // Allocate a colour, or nearest colour, using the given display.
 // If realloc is TRUE, ignore the existing pixel, otherwise just return
 // the existing one.
-// Returns FALSE if an exact match was not found, TRUE otherwise.
+// Returns the old or allocated pixel.
 
 // TODO: can this handle mono displays? If not, we should have an extra
 // flag to specify whether this should be black or white by default.
 
-bool wxColour::AllocColour(WXDisplay* display, bool realloc)
+int wxColour::AllocColour(WXDisplay* display, bool realloc)
 {
     if ((m_pixel != -1) && !realloc)
-       return TRUE;
+       return m_pixel;
 
     XColor color;
     color.red = (unsigned short) Red ();
@@ -153,12 +153,12 @@ bool wxColour::AllocColour(WXDisplay* display, bool realloc)
     if (!XAllocColor ((Display*) display, (Colormap) cmap, &color))
     {
        m_pixel = wxGetBestMatchingPixel((Display*) display, &color,(Colormap) cmap);
-       return FALSE;
+       return m_pixel;
     }
     else
     {
        m_pixel = (int) color.pixel;
-       return TRUE;
+       return m_pixel;
     }
 }
 

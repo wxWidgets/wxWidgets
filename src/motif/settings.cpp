@@ -9,6 +9,10 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// TODO: these settings should probably be configurable from some central or
+// per-user file, which can be edited using a Windows-control-panel clone.
+// Also they should be documented better. Some are very MS Windows-ish.
+
 #ifdef __GNUG__
 #pragma implementation "settings.h"
 #endif
@@ -18,12 +22,37 @@
 wxColour wxSystemSettings::GetSystemColour(int index)
 {
     // TODO
-	return wxColour();
+    return wxColour();
 }
 
 wxFont wxSystemSettings::GetSystemFont(int index)
 {
     // TODO
+    switch (index)
+    {
+        case wxSYS_DEVICE_DEFAULT_FONT:
+        {
+            break;
+        }
+        case wxSYS_DEFAULT_PALETTE:
+        {
+            break;
+        }
+        case wxSYS_SYSTEM_FIXED_FONT:
+        {
+            break;
+        }
+        case wxSYS_SYSTEM_FONT:
+        {
+            break;
+        }
+        default:
+        case wxSYS_DEFAULT_GUI_FONT:
+        {
+            break;
+        }
+    }
+
     return wxFont();
 }
 

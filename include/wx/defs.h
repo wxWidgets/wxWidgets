@@ -104,6 +104,10 @@
 typedef unsigned int bool;
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER == 1020)
+#define bool unsigned int
+#endif
+
 #if ( defined(_MSC_VER) && (_MSC_VER <= 800) ) || defined(__GNUWIN32__)
 #define byte unsigned char
 #endif

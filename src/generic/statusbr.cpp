@@ -318,7 +318,7 @@ void wxStatusBar::InitColours(void)
     m_hilightPen = wxPen("WHITE", 1, wxSOLID);
 #endif
 
-	m_defaultStatusBarFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    m_defaultStatusBarFont = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
     SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
 }
 

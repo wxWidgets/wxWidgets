@@ -311,7 +311,7 @@ public:
   bool SetItemState(long item, long state, long stateMask);
 
   void AdjustMyScrollbars();
-  void PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y );
+  void PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
   void OnPaint( const wxPaintEvent &event );
   void OnSetFocus( const wxFocusEvent &event );
   void OnKillFocus( const wxFocusEvent &event );
@@ -338,7 +338,7 @@ private:
   wxImageList         *m_imageList;
   wxImageList         *m_smallImageList;
 
-  void CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y );
+  void CalculateLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &y );
   void CalculatePositions();
   wxGenericTreeItem *FindItem( long itemId ) const;
   void RefreshLine( wxGenericTreeItem *item );

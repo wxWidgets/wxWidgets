@@ -39,6 +39,7 @@
 #include  <wx/textfile.h>
 #include  <wx/config.h>
 #include  <wx/fileconf.h>
+#include  <wx/utils.h>
 
 // _WINDOWS_ is defined when windows.h is included,
 // __WXMSW__ is defined for MS Windows compilation

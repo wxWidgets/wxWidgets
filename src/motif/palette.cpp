@@ -26,7 +26,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPalette, wxGDIObject)
 
 wxPaletteRefData::wxPaletteRefData()
 {
-    // TODO
+    m_colormap = (WXColormap) 0;
 }
 
 wxPaletteRefData::~wxPaletteRefData()

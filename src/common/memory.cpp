@@ -912,7 +912,7 @@ void * operator new (size_t size, char * fileName, int lineNum)
 #endif
 }
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1000) )
+#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void * operator new[] (size_t size, char * fileName, int lineNum)
 {
 #ifdef NO_DEBUG_ALLOCATION
@@ -932,7 +932,7 @@ void operator delete (void * buf)
 #endif
 }
 
-#if !( defined (_MSC_VER) && (_MSC_VER <= 1000) )
+#if !( defined (_MSC_VER) && (_MSC_VER <= 1020) )
 void operator delete[] (void * buf)
 {
 #ifdef NO_DEBUG_ALLOCATION

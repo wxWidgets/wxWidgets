@@ -1,0 +1,73 @@
+wxMotif TODO
+------------
+
+Updated: 21/9/98
+
+         -------------------------------o-------------------------
+
+- wxDCs
+
+- wxBitmap, wxIcon, wxCursor, wxPalette. What about XPMs, can we assume
+  libxpm exists and use that? What about PNGs? Can we use gdk
+  as per wxGTK? Probably not.
+
+- wxRegion
+
+- Bitmap versions of widgets (wxBitmapButton etc.)
+
+- wxCheckBoxList
+
+- Remaining common widgets (wxListBox, wxRadioBox, wxRadioButton, wxChoice,
+  wxGauge, wxComboBox etc.). Use combobox.c code as bundled in wxWin 1.68.
+
+- wxTextCtrl text file loading and saving.
+
+- Scrolling in wxWindow.
+
+- A generic version of wxNotebook that can be used in wxMotif and
+  other toolkits that don't have a native control. Perhaps use wxTab as a
+  starting point.
+
+- MDI classes: use existing Motif widgets for this.
+
+- Miscellaneous classes e.g. wxJoystick (identical to GTK's one for
+  Linux)
+
+- Dialogs e.g. wxFileSelector. Use a native Motif wxMessageBox.
+  Some others need tidying, such as the colour and font selectors.
+
+- Write generic wxDirDialog (directory selector).
+
+- Use generic wxTreeCtrl, wxListCtrl: enhance these.
+
+- Write a better generic wxToolBar class than wxToolBarSimple.
+
+- Optimize colour management so we don't get clashes when e.g.
+  Netscape is running.
+
+- Print/preview framework in print.cpp (see wxGTK's).
+
+- Colour and font setting in widgets.
+
+- wxSystemSettings
+
+- wxTimer
+
+- wxThread (hopefully, similar to wxGTK)
+
+- Copy and paste, drag and drop. Use a standard X drag
+  and drop standard - see http://www.cco.caltech.edu/~jafl/xdnd/
+
+- Optimize screen refresh for non-native widgets, e.g. wxWindow
+  created with Create(), using technique in flicker patch for 1.68
+  (see JACS for latest patch).
+
+- Enhance event handling such that you override e.g. left-click
+  and unless you call the base OnMouseEvent, the click won't be
+  sent to the button. Required for Dialog Editor.
+
+- Write makefiles for all samples.
+
+- Create some samples for testing.
+
+- Get Dialog Editor working under Motif.
