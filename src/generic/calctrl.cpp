@@ -179,6 +179,8 @@ void wxCalendarCtrl::Init()
 {
     m_comboMonth = NULL;
     m_spinYear = NULL;
+    m_staticYear = NULL;
+    m_staticMonth = NULL;
 
     m_userChangedYear = FALSE;
 
