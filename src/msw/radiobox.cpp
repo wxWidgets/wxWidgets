@@ -46,7 +46,7 @@
     #include "wx/tooltip.h"
 #endif // wxUSE_TOOLTIPS
 
-    IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxRadioBox, wxControl)
 
 // VZ: the new behaviour is to create the radio buttons as children of the
 //     radiobox instead of creating them as children of the radiobox' parent.
@@ -56,14 +56,7 @@
 //     reason to revert to the backward compatible behaviour - but I still
 //     leave this possibility just in case.
 
-// For some reason, the background colour is set wrongly in WIN16 mode
-// if we use the new method.
-
-#ifdef __WIN16__
-#define RADIOBTN_PARENT_IS_RADIOBOX 0
-#else
 #define RADIOBTN_PARENT_IS_RADIOBOX 1
-#endif
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -229,7 +222,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     {
         m_radioWidth[i] =
         m_radioHeight[i] = -1;
-        long styleBtn = BS_AUTORADIOBUTTON | WS_CHILD | WS_VISIBLE;
+        long styleBtn = BS_AUTORADIOBUTTON | WS_TABSTOP | WS_CHILD | WS_VISIBLE;
         if ( i == 0 && style == 0 )
             styleBtn |= WS_GROUP;
 
@@ -717,22 +710,41 @@ bool wxRadioBox::SetFont(const wxFont& font)
 
 long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
-    // This is required for the radiobox to be sensitive to mouse input,
-    // e.g. for Dialog Editor.
-    if (nMsg == WM_NCHITTEST)
+    switch ( nMsg )
     {
-        int xPos = LOWORD(lParam);  // horizontal position of cursor
-        int yPos = HIWORD(lParam);  // vertical position of cursor
+        case WM_CTLCOLORSTATIC:
+            // set the colour of the radio buttons to be the same as ours
+            {
+                HDC hdc = (HDC)wParam;
 
-        ScreenToClient(&xPos, &yPos);
+                const wxColour& colBack = GetBackgroundColour();
+                ::SetBkColor(hdc, wxColourToRGB(colBack));
+                ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 
-        // Make sure you can drag by the top of the groupbox, but let
-        // other (enclosed) controls get mouse events also
-        if (yPos < 10)
-            return (long)HTCLIENT;
+                wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+                return (WXHBRUSH)brush->GetResourceHandle();
+            }
+
+        // This is required for the radiobox to be sensitive to mouse input,
+        // e.g. for Dialog Editor.
+        case WM_NCHITTEST:
+            {
+                int xPos = LOWORD(lParam);  // horizontal position of cursor
+                int yPos = HIWORD(lParam);  // vertical position of cursor
+
+                ScreenToClient(&xPos, &yPos);
+
+                // Make sure you can drag by the top of the groupbox, but let
+                // other (enclosed) controls get mouse events also
+                if (yPos < 10)
+                    return (long)HTCLIENT;
+            }
+            // fall through
+
+        default:
+            return wxControl::MSWWindowProc(nMsg, wParam, lParam);
     }
-
-    return wxControl::MSWWindowProc(nMsg, wParam, lParam);
 }
 
 // ---------------------------------------------------------------------------
