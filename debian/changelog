@@ -1,8 +1,14 @@
+wxwindows2.2 (2.2.9.2) unstable; urgency=high
+
+  * Fix wxPython gl bug.  Closes: #130758
+
+ -- Ron Lee <ron@debian.org>  Fri, 25 Jan 2002 03:11:28 -0800
+
 wxwindows2.2 (2.2.9.1) unstable; urgency=high
 
   * recompile with libpng2..  oops.  Closes: #129762
 
- -- Ron <ron@debian.org>  Mon, 21 Jan 2002 13:20:00 -0800
+ -- Ron Lee <ron@debian.org>  Mon, 21 Jan 2002 13:20:00 -0800
 
 wxwindows2.2 (2.2.9) unstable; urgency=high
 

@@ -332,11 +332,10 @@ if BUILD_GLCANVAS or GL_ONLY:
                             USE_SWIG, swig_force, swig_args)
 
     gl_libs = []
-    # libwx_gtk_gl is linked in now by wx-config so we don't need
-    # to add it here.  (If it's not you built without --with-opengl
-    # and are screwed here anyway.
     if os.name == 'posix':
-            gl_libs = ['GL', 'GLU']
+        gl_config = os.popen(WX_CONFIG + ' --gl-libs', 'r').read()[:-1]
+        gl_lflags = string.split(gl_config) + lflags
+        gl_libs = libs
 
     ext = Extension('glcanvasc',
                     swig_sources,
@@ -345,10 +344,10 @@ if BUILD_GLCANVAS or GL_ONLY:
                     define_macros = defines,
 
                     library_dirs = libdirs,
-                    libraries = libs + gl_libs,
+                    libraries = gl_libs,
 
                     extra_compile_args = cflags,
-                    extra_link_args = lflags,
+                    extra_link_args = gl_lflags,
                     )
 
     wxpExtensions.append(ext)
