@@ -370,6 +370,12 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         val = apply(stc_c.wxStyledTextCtrl_IndicatorGetForeground,(self,) + _args, _kwargs)
         if val: val = wxColourPtr(val) ; val.thisown = 1
         return val
+    def SetWhitespaceForeground(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetWhitespaceForeground,(self,) + _args, _kwargs)
+        return val
+    def SetWhitespaceBackground(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_SetWhitespaceBackground,(self,) + _args, _kwargs)
+        return val
     def SetStyleBits(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_SetStyleBits,(self,) + _args, _kwargs)
         return val
@@ -794,6 +800,18 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def TextHeight(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_TextHeight,(self,) + _args, _kwargs)
+        return val
+    def HomeDisplay(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_HomeDisplay,(self,) + _args, _kwargs)
+        return val
+    def HomeDisplayExtend(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_HomeDisplayExtend,(self,) + _args, _kwargs)
+        return val
+    def LineEndDisplay(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_LineEndDisplay,(self,) + _args, _kwargs)
+        return val
+    def LineEndDisplayExtend(self, *_args, **_kwargs):
+        val = apply(stc_c.wxStyledTextCtrl_LineEndDisplayExtend,(self,) + _args, _kwargs)
         return val
     def MoveCaretInsideView(self, *_args, **_kwargs):
         val = apply(stc_c.wxStyledTextCtrl_MoveCaretInsideView,(self,) + _args, _kwargs)
@@ -1220,6 +1238,8 @@ wxSTC_MARK_CIRCLEPLUSCONNECTED = stc_c.wxSTC_MARK_CIRCLEPLUSCONNECTED
 wxSTC_MARK_CIRCLEMINUS = stc_c.wxSTC_MARK_CIRCLEMINUS
 wxSTC_MARK_CIRCLEMINUSCONNECTED = stc_c.wxSTC_MARK_CIRCLEMINUSCONNECTED
 wxSTC_MARK_BACKGROUND = stc_c.wxSTC_MARK_BACKGROUND
+wxSTC_MARK_DOTDOTDOT = stc_c.wxSTC_MARK_DOTDOTDOT
+wxSTC_MARK_ARROWS = stc_c.wxSTC_MARK_ARROWS
 wxSTC_MARK_CHARACTER = stc_c.wxSTC_MARK_CHARACTER
 wxSTC_MARKNUM_FOLDEREND = stc_c.wxSTC_MARKNUM_FOLDEREND
 wxSTC_MARKNUM_FOLDEROPENMID = stc_c.wxSTC_MARKNUM_FOLDEROPENMID
@@ -1340,6 +1360,10 @@ wxSTC_CMD_UPPERCASE = stc_c.wxSTC_CMD_UPPERCASE
 wxSTC_CMD_LINESCROLLDOWN = stc_c.wxSTC_CMD_LINESCROLLDOWN
 wxSTC_CMD_LINESCROLLUP = stc_c.wxSTC_CMD_LINESCROLLUP
 wxSTC_CMD_DELETEBACKNOTLINE = stc_c.wxSTC_CMD_DELETEBACKNOTLINE
+wxSTC_CMD_HOMEDISPLAY = stc_c.wxSTC_CMD_HOMEDISPLAY
+wxSTC_CMD_HOMEDISPLAYEXTEND = stc_c.wxSTC_CMD_HOMEDISPLAYEXTEND
+wxSTC_CMD_LINEENDDISPLAY = stc_c.wxSTC_CMD_LINEENDDISPLAY
+wxSTC_CMD_LINEENDDISPLAYEXTEND = stc_c.wxSTC_CMD_LINEENDDISPLAYEXTEND
 wxSTC_EDGE_NONE = stc_c.wxSTC_EDGE_NONE
 wxSTC_EDGE_LINE = stc_c.wxSTC_EDGE_LINE
 wxSTC_EDGE_BACKGROUND = stc_c.wxSTC_EDGE_BACKGROUND
