@@ -216,6 +216,9 @@ ren s setup.w06
 ren setup.w07 s
 ren s setup.w07
 
+ren setup.w08 s
+ren s setup.w08
+
 rem Put all the setup files into a single zip archive.
 zip32 wxMSW-%version%-setup.zip readme.txt setup.*
 

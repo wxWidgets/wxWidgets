@@ -177,7 +177,6 @@ If you use JPEG image handler, documentation for your program should
 contain following sentence: "This software is based in part on the work of
 the Independent JPEG Group". See src/jpeg/README for details.
 
-
 Documentation
 -------------
 
@@ -216,5 +215,5 @@ web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, 24th May, 2000
+The wxWindows Team, 4th June, 2000
 

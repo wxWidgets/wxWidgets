@@ -5,5 +5,6 @@ TN0004   Compiling a sample in the C++Builder IDE
 TN0005   Adding a wxWindows contribution
 TN0006   Making and installing RPMs for wxWindows
 TN0007   Using and modifying the BC++ IDE files
+TN0008   How to learn wxWindows programming
 
 Version: $Id$

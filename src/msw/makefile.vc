@@ -658,7 +658,7 @@ clean: $(PERIPH_CLEAN_TARGET)
 
 
 # Making documents
-docs:   allhlp allhtml allpdfrtf
+docs:   allhlp allhtml allpdfrtf htb htmlhelp
 alldocs: docs
 hlp:    wxhlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
@@ -844,6 +844,13 @@ touchmanual:
     -touch $(WXDIR)\docs\latex\wx\manual.tex
 
 updatedocs: touchmanual alldocs
+
+cleandocs:
+    -erase /Y $(DOCDIR)\html\wx\wx.htm
+    -erase /Y $(DOCDIR)\pdf\wx.rtf
+    -erase /Y $(DOCDIR)\latex\wx\wx.rtf
+    -erase /Y $(DOCDIR)\htmlhelp\wx.chm
+    -erase /Y $(DOCDIR)\htb\wx.htb
 
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
