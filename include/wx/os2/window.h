@@ -195,7 +195,7 @@ public:
     // title; for items, this is the label or button text.
     inline virtual wxString GetLabel() const { return GetTitle(); }
 
-
+#if wxUSE_CARET && WXWIN_COMPATIBILITY
     // Caret manipulation
     virtual void CreateCaret(int w, int h);
     virtual void CreateCaret(const wxBitmap *bitmap);
@@ -203,7 +203,7 @@ public:
     virtual void ShowCaret(bool show);
     virtual void SetCaretPos(int x, int y);
     virtual void GetCaretPos(int *x, int *y) const;
-
+#endif
 
     // Handle a control command
     virtual void OnCommand(wxWindow& win, wxCommandEvent& event);
@@ -267,10 +267,24 @@ protected:
 
 public:
     int                   m_returnCode;
+    bool                  m_isBeingDeleted;
+    bool                  m_isShown;
+    bool                  m_winCaptured;
+    bool                  m_mouseInWindow;
+    bool                  m_backgroundTransparent;
+    // handles
+    WXHWND                m_hWnd;
+    WXHMENU               m_hMenu; // Menu, if any
+
+    // the size of one page for scrolling
+    int                   m_xThumbSize;
+    int                   m_yThumbSize;
+    long                  m_lDlgCode;
 
 DECLARE_EVENT_TABLE()
 private:
     void Init();
+    void PMDetachWindowMenu();
 };
 
 ////////////////////////////////////////////////////////////////////////
