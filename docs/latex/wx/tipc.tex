@@ -48,8 +48,14 @@ element of some messages. To create a connection (a conversation in
 Windows parlance), the client application sends the message
 MakeConnection to the client object, with a string service name to
 identify the server and a topic name to identify the topic for the
-duration of the connection. Under Unix, the service name must contain an
-integer port identifier.
+duration of the connection. Under Unix, the service name may be either an
+integer port identifier in which case an Internet domain socket will be used
+for the communications or a valid file name (which shouldn't exist and will be
+deleted afterwards) in which case a Unix domain socket is created.
+
+{\bf SECURITY NOTE:} Using Internet domain sockets if extremely insecure for
+IPC as there is absolutely no access control for them, use Unix domain sockets
+whenever possible!
 
 The server then responds and either vetoes the connection or allows it.
 If allowed, a connection object is created which persists until the

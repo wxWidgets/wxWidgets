@@ -5,6 +5,7 @@
 // Modified by: Guilhem Lavaux (big rewrite) May 1997, 1998
 //              Guillermo Rodriguez (updated for wxSocket v2) Jan 2000
 //                                  (callbacks deprecated)    Mar 2000
+//              Vadim Zeitlin (added support for Unix sockets) Apr 2002
 // Created:     1993
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart 1993
@@ -33,23 +34,19 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/defs.h"
+#include "wx/log.h"
 #endif
 
 #if wxUSE_SOCKETS && wxUSE_IPC && wxUSE_STREAMS
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <errno.h>
 
 #include "wx/socket.h"
 #include "wx/sckipc.h"
 #include "wx/module.h"
 #include "wx/event.h"
-#include "wx/log.h"
-
-#ifdef __BORLANDC__
-#pragma hdrstop
-#endif
 
 // --------------------------------------------------------------------------
 // macros and constants
@@ -74,9 +71,46 @@ enum
 };
 #endif
 
-
 // All sockets will be created with the following flags
 #define SCKIPC_FLAGS (wxSOCKET_WAITALL)
+
+// headers needed for umask()
+#ifdef __UNIX_LIKE__
+    #include <sys/types.h>
+    #include <sys/stat.h>
+#endif // __UNIX_LIKE__
+
+// ----------------------------------------------------------------------------
+// private functions
+// ----------------------------------------------------------------------------
+
+// get the address object for the given server name, the caller must delete it
+static wxSockAddress *
+GetAddressFromName(const wxString& serverName, const wxString& host = _T(""))
+{
+    // we always use INET sockets under non-Unix systems
+#ifdef __UNIX_LIKE__
+    // under Unix, if the server name looks like a path, create a AF_UNIX
+    // socket instead of AF_INET one
+    if ( serverName.Find(_T('/')) != wxNOT_FOUND )
+    {
+        wxUNIXaddress *addr = new wxUNIXaddress;
+        addr->Filename(serverName);
+
+        return addr;
+    }
+#endif // Unix/!Unix
+    {
+        wxIPV4address *addr = new wxIPV4address;
+        addr->Service(serverName);
+        if ( !host.empty() )
+        {
+            addr->Hostname(host);
+        }
+
+        return addr;
+    }
+}
 
 // --------------------------------------------------------------------------
 // wxTCPEventHandler stuff (private class)
@@ -129,7 +163,7 @@ bool wxTCPClient::ValidHost(const wxString& host)
 }
 
 wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
-                                               const wxString& server_name,
+                                               const wxString& serverName,
                                                const wxString& topic)
 {
   wxSocketClient *client = new wxSocketClient(SCKIPC_FLAGS);
@@ -137,11 +171,14 @@ wxConnectionBase *wxTCPClient::MakeConnection (const wxString& host,
   wxDataInputStream *data_is = new wxDataInputStream(*stream);
   wxDataOutputStream *data_os = new wxDataOutputStream(*stream);
 
-  wxIPV4address addr;
-  addr.Service(server_name);
-  addr.Hostname(host);
+  wxSockAddress *addr = GetAddressFromName(serverName, host);
+  if ( !addr )
+      return NULL;
 
-  if (client->Connect(addr))
+  bool ok = client->Connect(*addr);
+  delete addr;
+
+  if ( ok )
   {
     unsigned char msg;
   
@@ -213,12 +250,49 @@ bool wxTCPServer::Create(const wxString& serverName)
     m_server = NULL;
   }
 
-  // wxIPV4address defaults to INADDR_ANY:0
-  wxIPV4address addr;
-  addr.Service(serverName);
+  wxSockAddress *addr = GetAddressFromName(serverName);
+  if ( !addr )
+      return FALSE;
+
+#ifdef __UNIX_LIKE__
+  mode_t umaskOld;
+  if ( addr->Type() == wxSockAddress::UNIX )
+  {
+      // ensure that the file doesn't exist as otherwise calling socket() would
+      // fail
+      int rc = remove(serverName);
+      if ( rc < 0 && errno != ENOENT )
+      {
+          delete addr;
+
+          return FALSE;
+      }
+
+      // also set the umask to prevent the others from reading our file
+      umaskOld = umask(077);
+  }
+  else
+  {
+      // unused anyhow but shut down the compiler warnings
+      umaskOld = 0;
+  }
+#endif // __UNIX_LIKE__
 
   // Create a socket listening on the specified port
-  m_server = new wxSocketServer(addr, SCKIPC_FLAGS);
+  m_server = new wxSocketServer(*addr, SCKIPC_FLAGS);
+
+#ifdef __UNIX_LIKE__
+  if ( addr->Type() == wxSockAddress::UNIX )
+  {
+      // restore the umask
+      umask(umaskOld);
+
+      // save the file name to remove it later
+      m_filename = serverName;
+  }
+#endif // __UNIX_LIKE__
+
+  delete addr;
 
   if (!m_server->Ok())
   {
@@ -238,11 +312,21 @@ bool wxTCPServer::Create(const wxString& serverName)
 
 wxTCPServer::~wxTCPServer()
 {
-  if (m_server)
-  {
-    m_server->SetClientData(NULL);
-    m_server->Destroy();
-  }
+    if (m_server)
+    {
+        m_server->SetClientData(NULL);
+        m_server->Destroy();
+    }
+
+#ifdef __UNIX_LIKE__
+    if ( !m_filename.empty() )
+    {
+        if ( !remove(m_filename) )
+        {
+            wxLogDebug(_T("Stale AF_UNIX file '%s' left."), m_filename.c_str());
+        }
+    }
+#endif // __UNIX_LIKE__
 }
 
 wxConnectionBase *wxTCPServer::OnAcceptConnection( const wxString& WXUNUSED(topic) )

@@ -122,6 +122,11 @@ public:
 
 protected:
   wxSocketServer *m_server;
+
+#ifdef __UNIX_LIKE__
+  // the name of the file associated to the Unix domain socket, may be empty
+  wxString m_filename;
+#endif // __UNIX_LIKE__
 };
 
 class wxTCPClient: public wxClientBase

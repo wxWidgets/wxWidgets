@@ -131,6 +131,7 @@ Unix (Base/GUI):
 
 - wxWindows may be built using BSD and Solaris (and possibly other) make
   programs and not only GNU make
+- wxTCP-based IPC classes now support communicating over Unix domain sockets
 
 All (GUI):
 
