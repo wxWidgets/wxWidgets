@@ -179,39 +179,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     else
         value = st ;
     ::SetControlData( m_macControl, 0, ( m_windowStyle & wxTE_PASSWORD ) ? kControlEditTextPasswordTag : kControlEditTextTextTag , value.Length() , (char*) ((const char*)value) ) ;
-    WindowRef window = MacGetRootWindow() ;
-    if ( window )
-    {
-        wxWindow* win = wxFindWinFromMacWindow( window ) ;
-        if ( win )
-        {
-            wxMacDrawingHelper help( win ) ;
-            // the mac control manager always assumes to have the origin at 0,0
-            
-            bool            hasTabBehind = false ;
-            wxWindow* parent = GetParent() ;
-            while ( parent )
-            {
-                if( parent->IsTopLevel() )
-                {
-//                    ::SetThemeWindowBackground( win->MacGetRootWindow() , kThemeBrushDialogBackgroundActive , false ) ;
-                    break ;
-                }
-                
-                if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                {
-                    if ( ((wxControl*)parent)->GetMacControl() )
-                        SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-                    break ;
-                }
-                
-                parent = parent->GetParent() ;
-            } 
-            
-            UMADrawControl( m_macControl ) ;
-//            ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-        }
-    }
+    MacRedrawControl() ;
 }
 
 // Clipboard operations
@@ -254,39 +222,7 @@ void wxTextCtrl::Paste()
         ::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
         TEFromScrap() ;
         TEPaste( teH ) ;
-        WindowRef window = MacGetRootWindow() ;
-        if ( window )
-        {
-            wxWindow* win = wxFindWinFromMacWindow( window ) ;
-            if ( win )
-            {
-                wxMacDrawingHelper help( win ) ;
-                // the mac control manager always assumes to have the origin at 0,0
-                
-                bool            hasTabBehind = false ;
-                wxWindow* parent = GetParent() ;
-                while ( parent )
-                {
-                    if( parent->IsTopLevel() )
-                    {
-//                        ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-                        break ;
-                    }
-                    
-                    if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                    {
-                        if ( ((wxControl*)parent)->GetMacControl() )
-                            SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-                        break ;
-                    }
-                    
-                    parent = parent->GetParent() ;
-                } 
-                
-                UMADrawControl( m_macControl ) ;
-//                ::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-            }
-        }
+        MacRedrawControl() ;
     }
 }
 
@@ -1885,39 +1821,7 @@ void wxTextCtrl::SetValue(const wxString& st)
     TXNSetData( (**tpvars).fTXNRec, kTXNTextData,  (const char*)value, value.Length(),
       kTXNStartOffset, kTXNEndOffset);
   }
-    WindowRef window = MacGetRootWindow() ;
-    if ( window )
-    {
-        wxWindow* win = wxFindWinFromMacWindow( window ) ;
-        if ( win )
-        {
-            wxMacDrawingHelper help( win ) ;
-            // the mac control manager always assumes to have the origin at 0,0
-            
-            bool            hasTabBehind = false ;
-            wxWindow* parent = GetParent() ;
-            while ( parent )
-            {
-                if( parent->MacGetWindowData() )
-                {
-                    UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-                    break ;
-                }
-                
-                if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-                {
-                    if ( ((wxControl*)parent)->GetMacControl() )
-                        SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-                    break ;
-                }
-                
-                parent = parent->GetParent() ;
-            } 
-            
-            UMADrawControl( m_macControl ) ;
-            UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-        }
-    }
+  MacRedrawControl() ;
 }
 
 // Clipboard operations
@@ -1976,38 +1880,7 @@ void wxTextCtrl::Paste()
      		::GetControlData( m_macControl , 0, kControlEditTextTEHandleTag , sizeof( TEHandle ) , (char*) &teH , &size ) ;
   		TEFromScrap() ;
   		TEPaste( teH ) ;
-  		WindowRef window = MacGetRootWindow() ;
-  		if ( window )
-  		{
-  			wxWindow* win = wxFindWinFromMacWindow( window ) ;
-  			if ( win )
-  			{
-  				wxMacDrawingHelper help( win ) ;
-  				// the mac control manager always assumes to have the origin at 0,0  				
-  				bool			hasTabBehind = false ;
-  				wxWindow* parent = GetParent() ;
-  				while ( parent )
-  				{
-  					if( parent->MacGetWindowData() )
-  					{
-  						::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-  						break ;
-  					}
-  					
-  					if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-  					{
-  						if ( ((wxControl*)parent)->GetMacControl() )
-  							SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-  						break ;
-  					}
-  					
-  					parent = parent->GetParent() ;
-  				} 
-  				
-  				UMADrawControl( m_macControl ) ;
-  				::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
-  			}
-  		}
+      MacRedrawControl() ;
   	}
    	else
    	{

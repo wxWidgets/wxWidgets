@@ -387,11 +387,7 @@ void wxControl::MacAdjustControlRect()
             m_height += 2 * m_macVerticalBorder;
         }
         
-        wxMacDrawingHelper helper ( wxFindWinFromMacWindow( MacGetRootWindow() ) ) ;
-        if ( helper.Ok() )
-        {
-            UMASizeControl( m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
-        }
+        UMASizeControl( m_macControl , m_width - 2 * m_macHorizontalBorder, m_height -  2 * m_macVerticalBorder ) ;
     }
 }
 ControlHandle wxControl::MacGetContainerForEmbedding() 
@@ -415,10 +411,7 @@ void wxControl::MacSuperChangedPosition()
         GetParent()->MacWindowToRootWindow( & mac_x , & mac_y ) ;
         
         WindowRef rootwindow = MacGetRootWindow() ;
-        wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
 
-        wxMacDrawingHelper focus( wxrootwindow ) ;
-    
         if ( mac_x + m_macHorizontalBorder != former_mac_x || 
             mac_y + m_macVerticalBorder != former_mac_y )
         {
@@ -637,20 +630,19 @@ void wxControl::Refresh(bool eraseBack, const wxRect *rect)
 
 void wxControl::MacRedrawControl()
 {
-    if ( m_macControl )
+    if ( m_macControl && MacGetRootWindow() )
     {
-        WindowRef window = MacGetRootWindow() ;
-        if ( window )
-        {
-            wxWindow* win = wxFindWinFromMacWindow( window ) ;
-            if ( win )
-            {
-                wxMacDrawingHelper help( win ) ;
-                // the mac control manager always assumes to have the origin at 0,0
-                wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
-                UMADrawControl( m_macControl ) ;
-            }
-        }
+        wxClientDC dc(this) ;
+        wxMacPortSetter helper(&dc) ;
+        
+        // the controls sometimes draw outside their boundaries, this
+        // should be resolved differently but is not trivial (e.g. drop shadows)
+        // since adding them to the border would yield in enormous gaps between
+        // the controls
+        Rect r = { 0 , 0 , 32000 , 32000 } ;
+        ClipRect( &r ) ;
+        wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
+        UMADrawControl( m_macControl ) ;
     }
 }
 
@@ -658,18 +650,17 @@ void wxControl::OnPaint(wxPaintEvent& event)
 {
     if ( m_macControl )
     {
-        WindowRef window = MacGetRootWindow() ;
-        if ( window )
-        {
-            wxWindow* win = wxFindWinFromMacWindow( window ) ;
-            if ( win )
-            {
-                wxMacDrawingHelper help( win ) ;
-                // the mac control manager always assumes to have the origin at 0,0
-                wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
-                UMADrawControl( m_macControl ) ;
-            }
-        }
+        wxPaintDC dc(this) ;
+        wxMacPortSetter helper(&dc) ;
+        // the controls sometimes draw outside their boundaries, this
+        // should be resolved differently but is not trivial (e.g. drop shadows)
+        // since adding them to the border would yield in enormous gaps between
+        // the controls
+        Rect r = { 0 , 0 , 32000 , 32000 } ;
+        ClipRect( &r ) ;
+
+        wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
+        UMADrawControl( m_macControl ) ;
     }
     else
     {

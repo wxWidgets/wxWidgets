@@ -168,13 +168,19 @@ bool wxToolBar::Realize()
 
     Point localOrigin ;
     Rect clipRect ;
-    WindowRef window ;
+    WindowRef window = MacGetRootWindow() ;
     wxWindow *win ;
     
-    GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
+    int lx , ly ;
+    lx = ly = 0 ;
+    MacWindowToRootWindow( &lx , &ly ) ;
+    localOrigin.v = ly ;
+    localOrigin.h = lx ;
+    
+//    GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
 
-    Rect toolbarrect = { m_y + localOrigin.v , m_x  + localOrigin.h , 
-                         m_y + m_height + localOrigin.v  , m_x + m_width + localOrigin.h} ;
+    Rect toolbarrect = { localOrigin.v ,localOrigin.h , 
+        m_height + localOrigin.v  , m_width + localOrigin.h} ;
     ControlFontStyleRec                controlstyle ;
 
     controlstyle.flags = kControlUseFontMask ;
@@ -378,11 +384,16 @@ void wxToolBar::MacSuperChangedPosition()
     Rect clipRect ;
     WindowRef window ;
     wxWindow *win ;
+    int lx , ly ;
+    lx = ly = 0 ;
+    MacWindowToRootWindow( &lx , &ly ) ;
+    localOrigin.v = ly ;
+    localOrigin.h = lx ;
     
-    GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
+//    GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
 
-    Rect toolbarrect = { m_y + localOrigin.v , m_x  + localOrigin.h , 
-        m_y + m_height + localOrigin.v  , m_x + m_width + localOrigin.h} ;
+    Rect toolbarrect = { localOrigin.v ,localOrigin.h , 
+        m_height + localOrigin.v  , m_width + localOrigin.h} ;
     ControlFontStyleRec     controlstyle ;
 
     controlstyle.flags = kControlUseFontMask ;
@@ -399,10 +410,7 @@ void wxToolBar::MacSuperChangedPosition()
     int maxHeight = 0 ;
     int toolcount = 0 ;
     {
-   		WindowRef rootwindow = MacGetRootWindow() ;
-   		wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
-   		::SetThemeWindowBackground( rootwindow , kThemeBrushDialogBackgroundActive , false ) ;
-   		wxMacDrawingHelper focus( wxrootwindow ) ;
+      WindowRef rootwindow = MacGetRootWindow() ;
     	while (node)
     	{
     		wxToolBarTool *tool = (wxToolBarTool *)node->Data();
@@ -452,13 +460,6 @@ void wxToolBar::MacSuperChangedPosition()
                 maxHeight = toolbarrect.top  + kwxMacToolBarTopMargin + m_yMargin - m_y - localOrigin.v ;
 
             node = node->Next();
-        }
-        if ( wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
-        {
-        }
-        else
-        {
-            ::SetThemeWindowBackground( rootwindow , kThemeBrushDocumentWindowBackground , false ) ;
         }
     }
 
@@ -578,51 +579,21 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
 
 void wxToolBar::OnPaint(wxPaintEvent& event)
 {
-	Point localOrigin ;
-	Rect clipRect ;
-	WindowRef window ;
-	wxWindow *win ;
-	
-	GetParent()->MacGetPortParams( &localOrigin , &clipRect , &window , &win ) ;
-	if ( window && win )
+  wxPaintDC dc(this) ;
+  wxMacPortSetter helper(&dc) ;
+  
+	Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
+		dc.YLOG2DEVMAC(m_height) , dc.XLOG2DEVMAC(m_width) } ;
+	UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
 	{
-		wxMacDrawingHelper help( win ) ;
-		// the mac control manager always assumes to have the origin at 0,0
-		bool			hasTabBehind = false ;
-		wxWindow* parent = GetParent() ;
-		while ( parent )
+		int index = 0 ;
+		for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
 		{
-			if( parent->IsTopLevel() )
+			if ( m_macToolHandles[index] )
 			{
-//				::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
-				break ;
-			}
-			
-			if( parent->IsKindOf( CLASSINFO( wxNotebook ) ) ||  parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
-			{
-				if ( ((wxControl*)parent)->GetMacControl() )
-					SetUpControlBackground( ((wxControl*)parent)->GetMacControl() , -1 , true ) ;
-				break ;
-			}
-			
-			parent = parent->GetParent() ;
-		} 
-
-		Rect toolbarrect = { m_y + localOrigin.v , m_x + localOrigin.h , 
-			m_y  + localOrigin.v + m_height , m_x + localOrigin.h + m_width } ;
-
-		UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
-		{
-			int index = 0 ;
-			for ( index = 0 ; index < m_macToolHandles.Count() ; ++index )
-			{
-				if ( m_macToolHandles[index] )
-				{
-					UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
-				}
+				UMADrawControl( (ControlHandle) m_macToolHandles[index] ) ;
 			}
 		}
-//		::SetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
 	}
 }
 

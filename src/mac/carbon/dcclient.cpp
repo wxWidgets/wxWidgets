@@ -47,14 +47,15 @@ wxWindowDC::wxWindowDC()
 
 wxWindowDC::wxWindowDC(wxWindow *the_canvas) 
 {
-	WindowRef windowref ;
-	wxWindowMac* rootwindow ;
+	wxTopLevelWindowMac* rootwindow = the_canvas->MacGetTopLevelWindow() ;
+	WindowRef windowref = rootwindow->MacGetWindowRef() ;
 	
-	// this time it is really the full window
-	Rect clipRect ;
-	the_canvas->MacGetPortParams(&m_macLocalOrigin, &clipRect , &windowref , &rootwindow );
-	SetRectRgn( m_macBoundaryClipRgn , clipRect.left , clipRect.top , clipRect.right , clipRect.bottom ) ;
-	SectRgn( m_macBoundaryClipRgn , the_canvas->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
+	int x , y ;
+	x = y = 0 ;
+	the_canvas->MacWindowToRootWindow( &x , &y ) ;
+	m_macLocalOrigin.h = x ;
+	m_macLocalOrigin.v = y ;
+	CopyRgn( the_canvas->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
 	OffsetRgn( m_macBoundaryClipRgn , m_macLocalOrigin.h , m_macLocalOrigin.v ) ;
 	CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
 	m_macPort = UMAGetWindowPort( windowref ) ;
@@ -81,21 +82,23 @@ wxClientDC::wxClientDC()
 
 wxClientDC::wxClientDC(wxWindow *window)
 {
-	WindowRef windowref ;
-	wxWindowMac* rootwindow ;
-	
-	Rect clipRect ;
+	wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+	WindowRef windowref = rootwindow->MacGetWindowRef() ;
 	wxPoint origin = window->GetClientAreaOrigin() ;
-	
-	window->MacGetPortClientParams(&m_macLocalOrigin, &clipRect , &windowref , &rootwindow );
-	SetRectRgn( m_macBoundaryClipRgn , clipRect.left + origin.x , clipRect.top + origin.y , clipRect.right + origin.x , clipRect.bottom + origin.y ) ;
+	wxSize size = window->GetClientSize() ;
+	int x , y ;
+	x = origin.x ;
+	y = origin.y ;
+	window->MacWindowToRootWindow( &x , &y ) ;
+	m_macLocalOrigin.h = x ;
+	m_macLocalOrigin.v = y ;
+	SetRectRgn( m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
 	SectRgn( m_macBoundaryClipRgn , window->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
 	OffsetRgn( m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
 	OffsetRgn( m_macBoundaryClipRgn , m_macLocalOrigin.h , m_macLocalOrigin.v ) ;
 	CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
 	m_macPort = UMAGetWindowPort( windowref ) ;
 	m_minY = m_minX =  0;
-	wxSize size = window->GetSize() ;
 	m_maxX = size.x  ;
 	m_maxY = size.y ; 
  	m_ok = TRUE ;
@@ -117,32 +120,29 @@ wxPaintDC::wxPaintDC()
 
 wxPaintDC::wxPaintDC(wxWindow *window)
 {
-	WindowRef windowref ;
-	wxWindowMac* rootwindow ;
-	
-	Rect clipRect ;
+	wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+	WindowRef windowref = rootwindow->MacGetWindowRef() ;
 	wxPoint origin = window->GetClientAreaOrigin() ;
-	
-	window->MacGetPortClientParams(&m_macLocalOrigin, &clipRect , &windowref , &rootwindow );
-	SetRectRgn( m_macBoundaryClipRgn , clipRect.left + origin.x , clipRect.top + origin.y , clipRect.right + origin.x , clipRect.bottom + origin.y ) ;
+	wxSize size = window->GetClientSize() ;
+	int x , y ;
+	x = origin.x ;
+	y = origin.y ;
+	window->MacWindowToRootWindow( &x , &y ) ;
+	m_macLocalOrigin.h = x ;
+	m_macLocalOrigin.v = y ;
+	SetRectRgn( m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
 	SectRgn( m_macBoundaryClipRgn , window->MacGetVisibleRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
 	OffsetRgn( m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
   SectRgn( m_macBoundaryClipRgn  , window->GetUpdateRegion().GetWXHRGN() , m_macBoundaryClipRgn ) ;
 	OffsetRgn( m_macBoundaryClipRgn , m_macLocalOrigin.h , m_macLocalOrigin.v ) ;
 	CopyRgn( m_macBoundaryClipRgn , m_macCurrentClipRgn ) ;
 	m_macPort = UMAGetWindowPort( windowref ) ;
- 	m_ok = TRUE ;
-	/*
-	wxCoord x , y ,w , h ;
-	window->GetUpdateRegion().GetBox( x , y , w , h ) ;
 	m_minY = m_minX =  0;
-	wxSize size = window->GetSize() ;
 	m_maxX = size.x  ;
 	m_maxY = size.y ; 
-	SetClippingRegion( x , y , w , h ) ;
-  	*/
+ 	m_ok = TRUE ;
   SetBackground(window->MacGetBackgroundBrush());
-  SetFont(window->GetFont() ) ;
+	SetFont( window->GetFont() ) ;
 }
 
 wxPaintDC::~wxPaintDC()

@@ -162,6 +162,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
       macListDefUPP = NewListDefUPP( wxMacListDefinition ); 
     }
         listDef.u.userProc = macListDefUPP ;
+
 #if TARGET_CARBON
     Size asize;
 
@@ -176,6 +177,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     SetControlVisibility(m_macControl, false, false);
 
 #else
+
     long    result ;
 
     m_macControl = ::NewControl( parent->MacGetRootWindow() , &bounds , title , false ,
@@ -197,7 +199,6 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
     Point pt = (**m_macList).cellSize ;
     pt.v = 14 ;
     LCellSize( pt , m_macList ) ;
-    
     LAddColumn( 1 , 0 , m_macList ) ;
 #endif
     OptionBits  options = 0;
@@ -585,12 +586,8 @@ void wxListBox::SetupColours()
 
 void wxListBox::Refresh(bool eraseBack, const wxRect *rect)
 {
-    // Set up port
-    WindowRef rootwindow = MacGetRootWindow() ;
-    wxWindow* wxrootwindow = wxFindWinFromMacWindow( rootwindow ) ;
-    wxMacDrawingHelper focus( wxrootwindow );
-
-    UMADrawControl(m_macControl);
+    wxControl::Refresh( eraseBack , rect ) ;
+//    MacRedrawControl() ;
 }
 
 #if wxUSE_OWNER_DRAWN
