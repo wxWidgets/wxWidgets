@@ -337,8 +337,16 @@ void wxWindowBase::Centre(int direction)
     }
     else
     {
-        // centre inside the parents rectangle
-        parent->GetClientSize(&widthParent, &heightParent);
+        if (IsTopLevel())
+        {
+            // centre on the parent
+            parent->GetSize(&widthParent, &heightParent);
+        }
+        else
+        {
+            // centre inside the parents client rectangle
+            parent->GetClientSize(&widthParent, &heightParent);
+        }
     }
 
     int width, height;
@@ -361,8 +369,17 @@ void wxWindowBase::Centre(int direction)
         // without parent which shouldn't happen
         wxCHECK_RET( parent, wxT("this window must have a parent") );
 
-        // adjust to the parents client area origin
-        wxPoint posParent = parent->ClientToScreen(wxPoint(0, 0));
+        wxPoint posParent;
+        if (IsTopLevel())
+        {
+            // adjust to the parents position
+            posParent = parent->GetPosition();
+        }
+        else
+        {
+            // adjust to the parents client area origin
+            posParent = parent->ClientToScreen(wxPoint(0, 0));
+        }
 
         xNew += posParent.x;
         yNew += posParent.y;
