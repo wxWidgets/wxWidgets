@@ -43,8 +43,8 @@ wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
   m_servname = serv;
   m_cinfo = info;
   m_needhost = need_host1;
-  next = wxURL::g_protocols;
-  wxURL::g_protocols = this;
+  next = wxURL::ms_protocols;
+  wxURL::ms_protocols = this;
 }
 
 /////////////////////////////////////////////////////////////////
@@ -167,42 +167,3 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
 #undef PROTO_BSIZE
 }
 #endif
-
-// ----------------------------------------------------------------------
-// Module
-// ----------------------------------------------------------------------
-
-class wxProtocolModule: public wxModule {
-  DECLARE_DYNAMIC_CLASS(wxProtocolModule)
-public:
-  wxProtocolModule() {}
-  bool OnInit();
-  void OnExit();
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxProtocolModule, wxModule)
-
-bool wxProtocolModule::OnInit()
-{
-#if wxUSE_SOCKETS
-  char *env_http_prox;
-
-  wxURL::g_proxy = NULL;
-  // Initialize the proxy when HTTP_PROXY is defined
-  env_http_prox = getenv("HTTP_PROXY");
-  if (env_http_prox)
-    wxURL::SetDefaultProxy(env_http_prox);
-#endif
-  
-  return TRUE;
-}
-
-void wxProtocolModule::OnExit()
-{
-#if wxUSE_SOCKETS
-  if (wxURL::g_proxy)
-    delete wxURL::g_proxy;
-  wxURL::g_proxy = NULL;
-#endif
-}
-

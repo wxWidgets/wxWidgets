@@ -35,54 +35,62 @@ typedef enum {
   wxURL_PROTOERR
 } wxURLError;
   
-class WXDLLEXPORT wxURL : public wxObject {
-  DECLARE_DYNAMIC_CLASS(wxURL)
-protected:
-  static wxProtoInfo *g_protocols;
-#if wxUSE_SOCKETS
-  static wxHTTP *g_proxy;
-#endif
-  wxProtoInfo *m_protoinfo;
-  wxProtocol *m_protocol;
-#if wxUSE_SOCKETS
-  wxHTTP *m_proxy;
-#endif
-  wxURLError m_error;
-  wxString m_protoname, m_hostname, m_servname, m_path, m_url;
-  wxString m_user, m_password;
-  bool m_useProxy;
-
-  bool PrepProto(wxString& url);
-  bool PrepHost(wxString& url);
-  bool PrepPath(wxString& url);
-  bool ParseURL();
-  void CleanData();
-  bool FetchProtocol();
-
-  friend class wxProtoInfo;
-  friend class wxProtocolModule;
+class WXDLLEXPORT wxURL : public wxObject
+{
 public:
+    wxURL(const wxString& url);
+    virtual ~wxURL();
 
-  wxURL(const wxString& url);
-  virtual ~wxURL();
+    wxString GetProtocolName() const { return m_protoinfo->m_protoname; }
+    wxString GetHostName() const { return m_hostname; }
+    wxString GetURL() const { return m_url; }
+    wxProtocol& GetProtocol() { return *m_protocol; }
+    wxURLError GetError() const { return m_error; }
+    wxString GetPath() const { return m_path; }
 
-  inline wxString GetProtocolName() const
-        { return m_protoinfo->m_protoname; }
-  inline wxString GetHostName() const { return m_hostname; }
-  inline wxString GetURL() const { return m_url; }
-  inline wxProtocol& GetProtocol() { return *m_protocol; }
-  inline wxURLError GetError() const { return m_error; }
-  inline wxString GetPath() const { return m_path; }
-
-  wxInputStream *GetInputStream();
+    wxInputStream *GetInputStream();
 
 #if wxUSE_SOCKETS
-  static void SetDefaultProxy(const wxString& url_proxy);
-  void SetProxy(const wxString& url_proxy);
-#endif
+    static void SetDefaultProxy(const wxString& url_proxy);
+    void SetProxy(const wxString& url_proxy);
+#endif // wxUSE_SOCKETS
 
-  static wxString ConvertToValidURI(const wxString& uri);
-  static wxString ConvertFromURI(const wxString& uri);
+    static wxString ConvertToValidURI(const wxString& uri);
+    static wxString ConvertFromURI(const wxString& uri);
+
+protected:
+    static wxProtoInfo *ms_protocols;
+
+#if wxUSE_SOCKETS
+    static wxHTTP *ms_proxyDefault;
+    static bool ms_useDefaultProxy;
+    wxHTTP *m_proxy;
+#endif // wxUSE_SOCKETS
+
+    wxProtoInfo *m_protoinfo;
+    wxProtocol *m_protocol;
+
+    wxURLError m_error;
+    wxString m_protoname, m_hostname, m_servname, m_path, m_url;
+    wxString m_user, m_password;
+    bool m_useProxy;
+
+    bool PrepProto(wxString& url);
+    bool PrepHost(wxString& url);
+    bool PrepPath(wxString& url);
+    bool ParseURL();
+    void CleanData();
+    bool FetchProtocol();
+
+    friend class wxProtoInfo;
+    friend class wxURLModule;
+
+private:
+    // VZ: can't use default copy ctor for this class, should write a correct
+    //     one! (TODO)
+    DECLARE_NO_COPY_CLASS(wxURL);
+
+    DECLARE_DYNAMIC_CLASS(wxURL)
 };
 
 #endif

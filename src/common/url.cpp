@@ -32,10 +32,11 @@ IMPLEMENT_CLASS(wxProtoInfo, wxObject)
 IMPLEMENT_CLASS(wxURL, wxObject)
 
 // Protocols list
-wxProtoInfo *wxURL::g_protocols = NULL;
+wxProtoInfo *wxURL::ms_protocols = NULL;
 
 #if wxUSE_SOCKETS
-wxHTTP *wxURL::g_proxy = NULL;
+    wxHTTP *wxURL::ms_proxyDefault = NULL;
+    bool wxURL::ms_useDefaultProxy = FALSE;
 #endif
 
 // --------------------------------------------------------------
@@ -48,14 +49,27 @@ wxHTTP *wxURL::g_proxy = NULL;
 
 wxURL::wxURL(const wxString& url)
 {
-  m_protocol = NULL;
-  m_error = wxURL_NOERR;
-  m_url = url;
+    m_protocol = NULL;
+    m_error = wxURL_NOERR;
+    m_url = url;
+
 #if wxUSE_SOCKETS
-  m_useProxy = (g_proxy != NULL);
-  m_proxy = g_proxy;
-#endif
-  ParseURL();
+    if ( ms_useDefaultProxy && !ms_proxyDefault )
+    {
+        SetDefaultProxy(getenv("HTTP_PROXY"));
+
+        if ( !ms_proxyDefault )
+        {
+            // don't try again
+            ms_useDefaultProxy = FALSE;
+        }
+    }
+
+    m_useProxy = ms_proxyDefault != NULL;
+    m_proxy = ms_proxyDefault;
+#endif // wxUSE_SOCKETS
+
+    ParseURL();
 }
 
 bool wxURL::ParseURL()
@@ -130,7 +144,7 @@ wxURL::~wxURL()
 {
   CleanData();
 #if wxUSE_SOCKETS
-  if (m_proxy && m_proxy != g_proxy)
+  if (m_proxy && m_proxy != ms_proxyDefault)
     delete m_proxy;
 #endif
 }
@@ -218,7 +232,7 @@ bool wxURL::PrepPath(wxString& url)
 
 bool wxURL::FetchProtocol()
 {
-  wxProtoInfo *info = g_protocols;
+  wxProtoInfo *info = ms_protocols;
 
   while (info) {
     if (m_protoname == info->m_protoname) {
@@ -290,75 +304,84 @@ wxInputStream *wxURL::GetInputStream()
 #if wxUSE_SOCKETS
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
-  if (url_proxy.IsNull()) {
-    g_proxy->Close();
-    delete g_proxy;
-    g_proxy = NULL;
-    return;
+  if ( !url_proxy )
+  {
+      if ( ms_proxyDefault )
+      {
+          ms_proxyDefault->Close();
+          delete ms_proxyDefault;
+          ms_proxyDefault = NULL;
+      }
   }
-
-  wxString tmp_str = url_proxy;
-  int pos = tmp_str.Find(wxT(':'));
-  if (pos == -1)
-    return;
-
-  wxString hostname = tmp_str(0, pos),
-           port = tmp_str(pos+1, tmp_str.Length()-pos);
-  wxIPV4address addr;
-
-  if (!addr.Hostname(hostname))
-    return;
-  if (!addr.Service(port))
-    return;
-
-  if (g_proxy)
-  // Finally, when all is right, we connect the new proxy.
-    g_proxy->Close();
   else
-    g_proxy = new wxHTTP();
-  g_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
+  {
+      wxString tmp_str = url_proxy;
+      int pos = tmp_str.Find(wxT(':'));
+      if (pos == -1)
+          return;
+
+      wxString hostname = tmp_str(0, pos),
+      port = tmp_str(pos+1, tmp_str.Length()-pos);
+      wxIPV4address addr;
+
+      if (!addr.Hostname(hostname))
+          return;
+      if (!addr.Service(port))
+          return;
+
+      if (ms_proxyDefault)
+          // Finally, when all is right, we connect the new proxy.
+          ms_proxyDefault->Close();
+      else
+          ms_proxyDefault = new wxHTTP();
+      ms_proxyDefault->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
+  }
 }
 
 void wxURL::SetProxy(const wxString& url_proxy)
 {
-  if (url_proxy.IsNull()) {
-    if (m_proxy) {
-      m_proxy->Close();
-      delete m_proxy;
+    if ( !url_proxy )
+    {
+        if ( m_proxy && m_proxy != ms_proxyDefault )
+        {
+            m_proxy->Close();
+            delete m_proxy;
+        }
+
+        m_useProxy = FALSE;
     }
-    m_useProxy = FALSE;
-    return;
-  }
+    else
+    {
+        wxString tmp_str;
+        wxString hostname, port;
+        int pos;
+        wxIPV4address addr;
 
-  wxString tmp_str;
-  wxString hostname, port;
-  int pos;
-  wxIPV4address addr;
+        tmp_str = url_proxy;
+        pos = tmp_str.Find(wxT(':'));
+        // This is an invalid proxy name.
+        if (pos == -1)
+            return;
 
-  tmp_str = url_proxy;
-  pos = tmp_str.Find(wxT(':'));
-  // This is an invalid proxy name.
-  if (pos == -1)
-    return;
+        hostname = tmp_str(0, pos);
+        port = tmp_str(pos, tmp_str.Length()-pos);
 
-  hostname = tmp_str(0, pos);
-  port = tmp_str(pos, tmp_str.Length()-pos);
+        addr.Hostname(hostname);
+        addr.Service(port);
 
-  addr.Hostname(hostname);
-  addr.Service(port);
+        // Finally, create the whole stuff.
+        if (m_proxy && m_proxy != ms_proxyDefault)
+            delete m_proxy;
+        m_proxy = new wxHTTP();
+        m_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
 
-  // Finally, create the whole stuff.
-  if (m_proxy && m_proxy != g_proxy)
-    delete m_proxy;
-  m_proxy = new wxHTTP();
-  m_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
-
-  CleanData();
-  // Reparse url.
-  m_useProxy = TRUE;
-  ParseURL();
+        CleanData();
+        // Reparse url.
+        m_useProxy = TRUE;
+        ParseURL();
+    }
 }
-#endif
+#endif // wxUSE_SOCKETS
 
 wxString wxURL::ConvertToValidURI(const wxString& uri)
 {
@@ -410,3 +433,43 @@ wxString wxURL::ConvertFromURI(const wxString& uri)
   }
   return new_uri;
 }
+
+// ----------------------------------------------------------------------
+// A module which deletes the default proxy if we created it
+// ----------------------------------------------------------------------
+
+#if wxUSE_SOCKETS
+
+class wxURLModule : public wxModule
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxURLModule)
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxURLModule, wxModule)
+
+bool wxURLModule::OnInit()
+{
+    // env var HTTP_PROXY contains the address of the default proxy to use if
+    // set, but don't try to create this proxy right now because it will slow
+    // down the program startup (especially if there is no DNS server
+    // available, in which case it may take up to 1 minute)
+    if ( getenv("HTTP_PROXY") )
+    {
+        wxURL::ms_useDefaultProxy = TRUE;
+    }
+
+    return TRUE;
+}
+
+void wxURLModule::OnExit()
+{
+    delete wxURL::ms_proxyDefault;
+    wxURL::ms_proxyDefault = NULL;
+}
+
+#endif // wxUSE_SOCKETS
