@@ -28,24 +28,20 @@
 
 #include "wx/setup.h"
 
-#include "wx/window.h"
 #include "wx/dcmemory.h"
 #include "wx/utils.h"
 #include "wx/intl.h"
-#include "wx/filedlg.h"
 #include "wx/app.h"
-#include "wx/msgdlg.h"
 #include "wx/image.h"
 #include "wx/log.h"
 #include "wx/generic/dcpsg.h"
-#include "wx/printdlg.h"
-#include "wx/button.h"
-#include "wx/stattext.h"
-#include "wx/radiobox.h"
-#include "wx/textctrl.h"
 #include "wx/prntbase.h"
 #include "wx/paper.h"
 #include "wx/filefn.h"
+#if WXWIN_COMPATIBILITY_2_2
+    #include "wx/window.h"
+    #include "wx/printdlg.h"
+#endif
 
 #include <math.h>
 
