@@ -1174,7 +1174,7 @@ long wxTextCtrl::GetLastPosition() const
 void wxTextCtrl::Replace(long from, long to, const wxString& str)
 {
     wxString value = str ;
-    wxMacConvertNewlines13To10( &st ) ;
+    wxMacConvertNewlines13To10( &value ) ;
     if ( !m_macUsesTXN )
     {
         ControlEditTextSelectionRec selection ;
