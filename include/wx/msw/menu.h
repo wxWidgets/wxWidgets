@@ -197,10 +197,8 @@ private:
 // Menu Bar (a la Windows)
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxMenuBar : public wxEvtHandler
+class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
 {
-    DECLARE_DYNAMIC_CLASS(wxMenuBar)
-
 public:
     // ctors & dtor
         // default constructor
@@ -212,66 +210,38 @@ public:
     virtual ~wxMenuBar();
 
     // menubar construction
-    WXHMENU Create();
-    void Append(wxMenu *menu, const wxString& title);
-    void Insert(int pos, wxMenu * menu, const wxString& title);
-    void ReplaceMenu(int pos, wxMenu * new_menu, const wxString& title);
-    int  FindMenu(const wxString& title);
-    void Detach();
-    virtual void Delete(wxMenu *menu, int index = 0); /* Menu not destroyed */
+    virtual bool Append( wxMenu *menu, const wxString &title );
+    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
+    virtual wxMenu *Remove(size_t pos);
 
-    // state control
-    // NB: must only be used AFTER menu has been attached to frame,
-    //     otherwise use individual menus to enable/disable items
-        // enable the item
-    void Enable(int id, bool enable);
-        // TRUE if item enabled
-    bool IsEnabled(int id) const;
-        //
-    void EnableTop(int pos, bool enable);
+    virtual int FindMenuItem(const wxString& menuString,
+                             const wxString& itemString) const;
+    virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const;
 
-        // works only with checkable items
-    void Check(int id, bool check);
-        // TRUE if checked
-    bool IsChecked(int id) const;
-
-    void SetLabel(int id, const wxString& label) ;
-    wxString GetLabel(int id) const ;
-
-    virtual void SetHelpString(int id, const wxString& helpString);
-    virtual wxString GetHelpString(int id) const ;
-
-    void SetLabelTop(int pos, const wxString& label) ;
-    wxString GetLabelTop(int pos) const ;
+    virtual void EnableTop( size_t pos, bool flag );
+    virtual void SetLabelTop( size_t pos, const wxString& label );
+    virtual wxString GetLabelTop( size_t pos ) const;
 
     // notifications: return FALSE to prevent the menu from being
     // appended/deleted
     virtual bool OnAppend(wxMenu *menu, const wxChar *title);
     virtual bool OnDelete(wxMenu *menu, int index);
 
-    // item search
-        // by menu and item names, returns wxNOT_FOUND if not found
-    virtual int FindMenuItem(const wxString& menuString,
-                             const wxString& itemString) const;
-        // returns NULL if not found
-    wxMenuItem* FindItem(int id) const { return FindItemForId(id); }
-        // returns NULL if not found, fills menuForItem if !NULL
-    wxMenuItem *FindItemForId(int itemId, wxMenu **menuForItem = NULL) const;
-
-    // submenus access
-    int GetMenuCount() const { return m_menuCount; }
-    wxMenu *GetMenu(int i) const { return m_menus[i]; }
-
+    // compatibility: these functions are deprecated
+#ifdef WXWIN_COMPATIBILITY
     void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
     wxEvtHandler *GetEventHandler() { return m_eventHandler; }
 
-#ifdef WXWIN_COMPATIBILITY
-    // compatibility: these functions are deprecated
     bool Enabled(int id) const { return IsEnabled(id); }
     bool Checked(int id) const { return IsChecked(id); }
 #endif // WXWIN_COMPATIBILITY
 
-    // IMPLEMENTATION
+    // implementation from now on
+    WXHMENU Create();
+    int  FindMenu(const wxString& title);
+    void Detach();
+
         // returns TRUE if we're attached to a frame
     bool IsAttached() const { return m_menuBarFrame != NULL; }
         // get the frame we live in
@@ -295,10 +265,12 @@ protected:
     // common part of all ctors
     void Init();
 
+#ifdef WXWIN_COMPATIBILITY
     wxEvtHandler *m_eventHandler;
-    int           m_menuCount;
-    wxMenu      **m_menus;
-    wxString     *m_titles;
+#endif // WXWIN_COMPATIBILITY
+
+    wxArrayString m_titles;
+
     wxFrame      *m_menuBarFrame;
     WXHMENU       m_hMenu;
 
@@ -306,6 +278,9 @@ protected:
     // the accelerator table for all accelerators in all our menus
     wxAcceleratorTable m_accelTable;
 #endif // wxUSE_ACCEL
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };
 
 #endif // _WX_MENU_H_

@@ -585,8 +585,6 @@ void wxMenu::Detach()
 void wxMenuBar::Init()
 {
     m_eventHandler = this;
-    m_menuCount = 0;
-    m_menus = NULL;
     m_titles = NULL;
     m_menuBarFrame = NULL;
     m_hMenu = 0;
@@ -606,27 +604,19 @@ wxMenuBar::wxMenuBar(int count, wxMenu *menus[], const wxString titles[])
 {
     Init();
 
-    m_menuCount = count;
-    m_menus = menus;
-    m_titles = new wxString[count];
+    m_titles.Alloc(count);
 
-    int i;
-    for ( i = 0; i < count; i++ )
-        m_titles[i] = titles[i];
+    for ( int i = 0; i < count; i++ )
+    {
+        m_menus.Append(menus[i]);
+        m_titles.Add(titles[i]);
 
-    for ( i = 0; i < count; i++ )
-        m_menus[i]->Attach(this);
+        menus[i]->Attach(this);
+    }
 }
 
 wxMenuBar::~wxMenuBar()
 {
-    for ( int i = 0; i < m_menuCount; i++ )
-    {
-        delete m_menus[i];
-    }
-
-    delete[] m_menus;
-    delete[] m_titles;
 }
 
 // ---------------------------------------------------------------------------
@@ -655,7 +645,8 @@ WXHMENU wxMenuBar::Create()
     }
     else
     {
-        for ( int i = 0; i < m_menuCount; i++ )
+        size_t count = GetMenuCount();
+        for ( size_t i = 0; i < count; i++ )
         {
             if ( !::AppendMenu((HMENU)m_hMenu, MF_POPUP | MF_STRING,
                                (UINT)m_menus[i]->GetHMenu(),
@@ -676,7 +667,7 @@ WXHMENU wxMenuBar::Create()
 // NB: we don't support owner drawn top level items for now, if we do these
 //     functions would have to be changed to use wxMenuItem as well
 
-void wxMenuBar::EnableTop(int pos, bool enable)
+void wxMenuBar::EnableTop(size_t pos, bool enable)
 {
     int flag = enable ? MF_ENABLED : MF_GRAYED;;
 
@@ -685,7 +676,7 @@ void wxMenuBar::EnableTop(int pos, bool enable)
     Refresh();
 }
 
-void wxMenuBar::SetLabelTop(int pos, const wxString& label)
+void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
 {
     UINT id;
     UINT flagsOld = ::GetMenuState((HMENU)m_hMenu, pos, MF_BYPOSITION);
@@ -714,7 +705,7 @@ void wxMenuBar::SetLabelTop(int pos, const wxString& label)
     }
 }
 
-wxString wxMenuBar::GetLabelTop(int pos) const
+wxString wxMenuBar::GetLabelTop(size_t pos) const
 {
     int len = ::GetMenuString((HMENU)m_hMenu, pos, NULL, 0, MF_BYCOMMAND);
 
@@ -780,10 +771,13 @@ bool wxMenuBar::OnAppend(wxMenu *a_menu, const wxChar *title)
 // ---------------------------------------------------------------------------
 // wxMenuBar construction
 // ---------------------------------------------------------------------------
+
 int wxMenuBar::FindMenu(const wxString& title)
 {
     wxString menuTitle = wxStripMenuCodes(title);
-    for ( int i = 0; i < m_menuCount; i++ )
+
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; i < count; i++ )
     {
         wxString title = wxStripMenuCodes(m_titles[i]);
         if ( menuTitle == title )
@@ -794,121 +788,75 @@ int wxMenuBar::FindMenu(const wxString& title)
 
 }
 
-
-void wxMenuBar::ReplaceMenu(int pos, wxMenu * new_menu, const wxString& title)
+wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
 {
-    if (m_menuBarFrame) return;
-
-    if ( pos >= 0 && pos < m_menuCount )
+    if ( m_menuBarFrame )
     {
-       wxMenu *old_menu = m_menus[pos];
-       m_menus[pos] = new_menu; 
-       delete old_menu;
+        wxFAIL_MSG(wxT("not implemented"));
+
+        return NULL;
     }
-
-}
-
-
-void wxMenuBar::Insert(int pos, wxMenu * menu, const wxString& title)
-{
-    if (m_menuBarFrame) return;
-    if ( pos < 0 && pos >= m_menuCount ) return;
-
-    m_menuCount ++;
-    wxMenu **new_menus = new wxMenu *[m_menuCount];
-    wxString *new_titles = new wxString[m_menuCount];
-    int i;
-
-    for (i = 0; i < pos; i++)
+    else
     {
-        new_menus[i] = m_menus[i];
-        m_menus[i] = NULL;
-        new_titles[i] = m_titles[i];
-        m_titles[i] = wxT("");
-    }
-
-    new_menus[pos] = (wxMenu *)menu;
-    new_titles[i] = title; 
-
-    for (i = pos+1; i < m_menuCount; i++)
-    {
-        new_menus[i] = m_menus[i-1];
-        m_menus[i-1] = NULL;
-        new_titles[i] = m_titles[i-1];
-        m_titles[i-1] = wxT("");
-    }
-    if (m_menus)
-    {
-        delete[]m_menus;
-        delete[]m_titles;
-    }
-    m_menus = new_menus;
-    m_titles = new_titles;
-
-    menu->SetParent(this);
-
-}
-
-
-void wxMenuBar::Append (wxMenu * menu, const wxString& title)
-{
-    if (!OnAppend(menu, title))
-        return;
-
-    m_menuCount ++;
-    wxMenu **new_menus = new wxMenu *[m_menuCount];
-    wxString *new_titles = new wxString[m_menuCount];
-    int i;
-
-    for (i = 0; i < m_menuCount - 1; i++)
-    {
-        new_menus[i] = m_menus[i];
-        m_menus[i] = NULL;
-        new_titles[i] = m_titles[i];
-        m_titles[i] = wxT("");
-    }
-    if (m_menus)
-    {
-        delete[]m_menus;
-        delete[]m_titles;
-    }
-    m_menus = new_menus;
-    m_titles = new_titles;
-
-    m_menus[m_menuCount - 1] = (wxMenu *)menu;
-    m_titles[m_menuCount - 1] = title;
-
-    menu->SetParent(this);
-}
-
-void wxMenuBar::Delete(wxMenu * menu, int i)
-{
-    int j;
-    int ii = (int) i;
-
-    if (menu != 0) {
-        for (ii = 0; ii < m_menuCount; ii++) {
-            if (m_menus[ii] == menu)
-                break;
+        wxMenu *menuOld = wxMenuBarBase::Replace(pos, menu, title);
+        if ( menuOld )
+        {
+            m_titles[pos] = title;
         }
-        if (ii >= m_menuCount)
-            return;
-    } else {
-        if (ii < 0 || ii >= m_menuCount)
-            return;
-        menu = m_menus[ii];
-    }
 
-    if (!OnDelete(menu, ii))
-        return;
+        return menuOld;
+    }
+}
+
+bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
+{
+    if ( m_menuBarFrame )
+    {
+        wxFAIL_MSG(wxT("not implemented"));
+
+        return FALSE;
+    }
+    else
+    {
+        if ( !wxMenuBarBase::Insert(pos, menu, title) )
+            return FALSE;
+
+        m_titles.Insert(title, pos);
+
+        return TRUE;
+    }
+}
+
+bool wxMenuBar::Append(wxMenu * menu, const wxString& title)
+{
+    if ( !wxMenuBarBase::Append(menu, title) )
+        return FALSE;
+
+    // menu is already appended, ignore errors
+    (void)OnAppend(menu, title);
+
+    m_titles.Add(title);
+
+    menu->SetParent(this);
+
+    return TRUE;
+}
+
+wxMenu *wxMenuBar::Remove(size_t pos)
+{
+    wxMenu *menu = wxMenuBarBase::Remove(pos);
+    if ( !menu )
+        return NULL;
 
     menu->SetParent(NULL);
 
-    -- m_menuCount;
-    for (j = ii; j < m_menuCount; j++) {
-        m_menus[j] = m_menus[j + 1];
-        m_titles[j] = m_titles[j + 1];
-    }
+    // the menu is deleted from the list anyhow, so we have to ignore all
+    // possible errors here
+    (void)OnDelete(menu, pos);
+
+    m_titles.Remove(pos);
+
+    return menu;
 }
 
 void wxMenuBar::Attach(wxFrame *frame)
@@ -921,8 +869,8 @@ void wxMenuBar::Attach(wxFrame *frame)
     // create the accel table - we consider that the menubar construction is
     // finished
     size_t nAccelCount = 0;
-    int i;
-    for ( i = 0; i < m_menuCount; i++ )
+    size_t i, count = GetMenuCount();
+    for ( i = 0; i < count; i++ )
     {
         nAccelCount += m_menus[i]->GetAccelCount();
     }
@@ -932,7 +880,7 @@ void wxMenuBar::Attach(wxFrame *frame)
         wxAcceleratorEntry *accelEntries = new wxAcceleratorEntry[nAccelCount];
 
         nAccelCount = 0;
-        for ( i = 0; i < m_menuCount; i++ )
+        for ( i = 0; i < count; i++ )
         {
             nAccelCount += m_menus[i]->CopyAccels(&accelEntries[nAccelCount]);
         }
@@ -961,7 +909,8 @@ int wxMenuBar::FindMenuItem(const wxString& menuString,
                             const wxString& itemString) const
 {
     wxString menuLabel = wxStripMenuCodes(menuString);
-    for ( int i = 0; i < m_menuCount; i++ )
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; i < count; i++ )
     {
         wxString title = wxStripMenuCodes(m_titles[i]);
         if ( menuString == title )
@@ -971,13 +920,14 @@ int wxMenuBar::FindMenuItem(const wxString& menuString,
     return wxNOT_FOUND;
 }
 
-wxMenuItem *wxMenuBar::FindItemForId (int id, wxMenu **itemMenu) const
+wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
 {
     if ( itemMenu )
         *itemMenu = NULL;
 
     wxMenuItem *item = NULL;
-    for ( int i = 0; !item && (i < m_menuCount); i++ )
+    size_t count = GetMenuCount();
+    for ( size_t i = 0; !item && (i < count); i++ )
     {
         item = m_menus[i]->FindItemForId(id, itemMenu);
     }
