@@ -27,6 +27,9 @@ class wxEvtHandlerPtr :
     def ProcessEvent(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_ProcessEvent,(self,) + _args, _kwargs)
         return val
+    def AddPendingEvent(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_AddPendingEvent,(self,) + _args, _kwargs)
+        return val
     def GetEvtHandlerEnabled(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_GetEvtHandlerEnabled,(self,) + _args, _kwargs)
         return val
@@ -55,6 +58,9 @@ class wxEvtHandlerPtr :
         return val
     def __repr__(self):
         return "<C wxEvtHandler instance at %s>" % (self.this,)
+    
+    _prop_list_ = {}
+    
 class wxEvtHandler(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
@@ -79,6 +85,12 @@ class wxValidatorPtr(wxEvtHandlerPtr):
         return val
     def __repr__(self):
         return "<C wxValidator instance at %s>" % (self.this,)
+    
+    _prop_list_ = {
+        'window' : ('GetWindow', 'SetWindow'),
+    }
+    _prop_list_.update(wxEvtHandler._prop_list_)
+    
 class wxValidator(wxValidatorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxValidator,_args,_kwargs)
@@ -472,6 +484,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetSizer(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_SetSizer,(self,) + _args, _kwargs)
         return val
+    def GetSizer(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetSizer,(self,) + _args, _kwargs)
+        if val: val = wxSizerPtr(val) 
+        return val
     def GetValidator(self, *_args, **_kwargs):
         val = apply(windowsc.wxWindow_GetValidator,(self,) + _args, _kwargs)
         if val: val = wxValidatorPtr(val) 
@@ -506,7 +522,38 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val)
         return val
+    
+    
+    _prop_list_ = {
+        'size'          : ('GetSize',                  'SetSize'),
+        'enabled'       : ('IsEnabled',                'Enable'),
+        'background'    : ('GetBackgroundColour',      'SetBackgroundColour'),
+        'foreground'    : ('GetForegroundColour',      'SetForegroundColour'),
+        'children'      : ('GetChildren',              None),
+        'charHeight'    : ('GetCharHeight',            None),
+        'charWidth'     : ('GetCharWidth',             None),
+        'clientSize'    : ('GetClientSize',            'SetClientSize'),
+        'font'          : ('GetFont',                  'SetFont'),
+        'grandParent'   : ('GetGrandParent',           None),
+        'handle'        : ('GetHandle',                None),
+        'label'         : ('GetLabel',                 'SetLabel'),
+        'name'          : ('GetName',                  'SetName'),
+        'parent'        : ('GetParent',                None),
+        'position'      : ('GetPosition',              'SetPosition'),
+        'title'         : ('GetTitle',                 'SetTitle'),
+        'style'         : ('GetWindowStyleFlag',       'SetWindowStyleFlag'),
+        'visible'       : ('IsShown',                  'Show'),
+        'toolTip'       : ('GetToolTip',               'SetToolTip'),
+        'sizer'         : ('GetSizer',                 'SetSizer'),
+        'validator'     : ('GetValidator',             'SetValidator'),
+        'dropTarget'    : ('GetDropTarget',            'SetDropTarget'),
+        'caret'         : ('GetCaret',                 'SetCaret'),
+        'autoLayout'    : ('GetAutoLayout',            'SetAutoLayout'),
+        'constraints'   : ('GetConstraints',           'SetConstraints'),
 
+    }
+    _prop_list_.update(wxEvtHandler._prop_list_)
+    
 class wxWindow(wxWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(windowsc.new_wxWindow,_args,_kwargs)

@@ -121,6 +121,85 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 #ifdef __cplusplus
 extern "C" {
 #endif
+static PyObject *_wrap_wxGetLocalTime(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetLocalTime",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxGetLocalTime();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetUTCTime(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetUTCTime",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxGetUTCTime();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetCurrentTime(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetCurrentTime",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxGetCurrentTime();
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetLocalTimeMillis(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxLongLong * _result;
+    char *_kwnames[] = {  NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxGetLocalTimeMillis",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxLongLong (wxGetLocalTimeMillis());
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    PyObject *hi, *lo, *shifter, *shifted;
+    hi = PyLong_FromLong(_result->GetHi());
+    lo = PyLong_FromLong(_result->GetLo());
+    shifter = PyLong_FromLong(32);
+    shifted = PyNumber_Lshift(hi, shifter);
+    _resultobj = PyNumber_Or(shifted, lo);
+    Py_DECREF(hi);
+    Py_DECREF(lo);
+    Py_DECREF(shifter);
+    Py_DECREF(shifted);
+}
+    return _resultobj;
+}
+
 #define delete_wxConfigBase(_swigobj) (delete _swigobj)
 static PyObject *_wrap_delete_wxConfigBase(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -6240,70 +6319,6 @@ static PyObject *_wrap_wxTimeSpan_Format(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxTimeSpan_FormatDate(_swigobj)  (_swigobj->FormatDate())
-static PyObject *_wrap_wxTimeSpan_FormatDate(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxTimeSpan * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTimeSpan_FormatDate",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTimeSpan_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTimeSpan_FormatDate. Expected _wxTimeSpan_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxTimeSpan_FormatDate(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxTimeSpan_FormatTime(_swigobj)  (_swigobj->FormatTime())
-static PyObject *_wrap_wxTimeSpan_FormatTime(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxTimeSpan * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxTimeSpan_FormatTime",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTimeSpan_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTimeSpan_FormatTime. Expected _wxTimeSpan_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxTimeSpan_FormatTime(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
 #define new_wxDateSpan(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxDateSpan(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
 static PyObject *_wrap_new_wxDateSpan(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -7148,8 +7163,6 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxDateSpan_Days", (PyCFunction) _wrap_wxDateSpan_Days, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxDateSpan", (PyCFunction) _wrap_delete_wxDateSpan, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxDateSpan", (PyCFunction) _wrap_new_wxDateSpan, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTimeSpan_FormatTime", (PyCFunction) _wrap_wxTimeSpan_FormatTime, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTimeSpan_FormatDate", (PyCFunction) _wrap_wxTimeSpan_FormatDate, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTimeSpan_Format", (PyCFunction) _wrap_wxTimeSpan_Format, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTimeSpan_GetMilliseconds", (PyCFunction) _wrap_wxTimeSpan_GetMilliseconds, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTimeSpan_GetSeconds", (PyCFunction) _wrap_wxTimeSpan_GetSeconds, METH_VARARGS | METH_KEYWORDS },
@@ -7335,6 +7348,10 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxConfigBase_Get", (PyCFunction) _wrap_wxConfigBase_Get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_Set", (PyCFunction) _wrap_wxConfigBase_Set, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxConfigBase", (PyCFunction) _wrap_delete_wxConfigBase, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetLocalTimeMillis", (PyCFunction) _wrap_wxGetLocalTimeMillis, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetCurrentTime", (PyCFunction) _wrap_wxGetCurrentTime, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetUTCTime", (PyCFunction) _wrap_wxGetUTCTime, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetLocalTime", (PyCFunction) _wrap_wxGetLocalTime, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus

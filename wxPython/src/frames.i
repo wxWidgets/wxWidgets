@@ -34,6 +34,16 @@
 
 //----------------------------------------------------------------------
 
+enum {
+    wxFULLSCREEN_NOMENUBAR,
+    wxFULLSCREEN_NOTOOLBAR,
+    wxFULLSCREEN_NOSTATUSBAR,
+    wxFULLSCREEN_NOBORDER,
+    wxFULLSCREEN_NOCAPTION,
+    wxFULLSCREEN_ALL
+};
+
+
 class wxFrame : public wxWindow {
 public:
     wxFrame(wxWindow* parent, const wxWindowID id, const wxString& title,
@@ -75,6 +85,8 @@ public:
     wxPoint GetClientAreaOrigin() const;
     bool Command(int id);
     bool ProcessCommand(int id);
+
+    bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
 };
 
 //---------------------------------------------------------------------------

@@ -101,6 +101,9 @@ class wxFramePtr(wxWindowPtr):
     def ProcessCommand(self, *_args, **_kwargs):
         val = apply(framesc.wxFrame_ProcessCommand,(self,) + _args, _kwargs)
         return val
+    def ShowFullScreen(self, *_args, **_kwargs):
+        val = apply(framesc.wxFrame_ShowFullScreen,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFrame instance at %s>" % (self.this,)
 class wxFrame(wxFramePtr):
@@ -135,3 +138,9 @@ class wxMiniFrame(wxMiniFramePtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxFULLSCREEN_NOMENUBAR = framesc.wxFULLSCREEN_NOMENUBAR
+wxFULLSCREEN_NOTOOLBAR = framesc.wxFULLSCREEN_NOTOOLBAR
+wxFULLSCREEN_NOSTATUSBAR = framesc.wxFULLSCREEN_NOSTATUSBAR
+wxFULLSCREEN_NOBORDER = framesc.wxFULLSCREEN_NOBORDER
+wxFULLSCREEN_NOCAPTION = framesc.wxFULLSCREEN_NOCAPTION
+wxFULLSCREEN_ALL = framesc.wxFULLSCREEN_ALL

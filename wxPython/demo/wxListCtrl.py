@@ -63,7 +63,7 @@ class TestListCtrlPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
 
         self.log = log
-        tID = NewId()
+        tID = wxNewId()
 
         self.il = wxImageList(16, 16)
         idx1 = self.il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))

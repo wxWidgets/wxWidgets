@@ -59,9 +59,14 @@ class SplashScreen(wxFrame):
             size = (size[0], wxSystemSettings_GetSystemMetric(wxSYS_SCREEN_Y))
 
         wxFrame.__init__(self, parent, ID, title, pos, size, style)
+        EVT_LEFT_DOWN(self, self.OnMouseClick)
+        EVT_CLOSE(self, self.OnCloseWindow)
+        EVT_PAINT(self, self.OnPaint)
+        EVT_ERASE_BACKGROUND(self, self.OnEraseBG)
+
         self.Show(true)
-        dc = wxClientDC(self)
-        dc.DrawBitmap(self.bitmap, 0,0, false)
+        #dc = wxClientDC(self)
+        #dc.DrawBitmap(self.bitmap, 0,0, false)
 
         class SplashTimer(wxTimer):
             def __init__(self, targetFunction):
@@ -73,25 +78,22 @@ class SplashScreen(wxFrame):
 
         self.timer = SplashTimer(callback)
         self.timer.Start(duration, 1) # one-shot only
-        EVT_LEFT_DOWN(self, self.OnMouseClick)
-        EVT_CLOSE(self, self.OnCloseWindow)
-        EVT_PAINT(self, self.OnPaint)
 
     def OnPaint(self, event):
         dc = wxPaintDC(self)
         dc.DrawBitmap(self.bitmap, 0,0, false)
 
+    def OnEraseBG(self, event):
+        pass
 
     def OnSplashExitDefault(self, event=None):
         self.Close(true)
-
 
     def OnCloseWindow(self, event=None):
         self.Show(false)
         self.timer.Stop()
         del self.timer
         self.Destroy()
-
 
     def OnMouseClick(self, event):
         self.timer.Notify()

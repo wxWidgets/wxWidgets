@@ -920,11 +920,11 @@ public:
         // minutes and seconds make sense, but not "PM/AM" string for example.
     wxString Format(const char *format = "%c") const;
 
-        // preferred date representation for the current locale
-    wxString FormatDate() const;
+//          // preferred date representation for the current locale
+//      wxString FormatDate() const;
 
-        // preferred time representation for the current locale
-    wxString FormatTime() const;
+//          // preferred time representation for the current locale
+//      wxString FormatTime() const;
 
 //      %pragma(python) addtoclass = "
 //      def __repr__(self):
@@ -1014,6 +1014,14 @@ public:
         wxDateSpan __neg__()                        { return self->Negate(); }
     }
 };
+
+
+//---------------------------------------------------------------------------
+
+long wxGetLocalTime();
+long wxGetUTCTime();
+long wxGetCurrentTime();
+wxLongLong wxGetLocalTimeMillis();
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

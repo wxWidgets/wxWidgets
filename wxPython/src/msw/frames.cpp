@@ -1028,6 +1028,37 @@ static PyObject *_wrap_wxFrame_ProcessCommand(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxFrame_ShowFullScreen(_swigobj,_swigarg0,_swigarg1)  (_swigobj->ShowFullScreen(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxFrame_ShowFullScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxFrame * _arg0;
+    bool  _arg1;
+    long  _arg2 = (long ) (wxFULLSCREEN_ALL);
+    PyObject * _argo0 = 0;
+    int tempbool1;
+    char *_kwnames[] = { "self","show","style", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|l:wxFrame_ShowFullScreen",_kwnames,&_argo0,&tempbool1,&_arg2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxFrame_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFrame_ShowFullScreen. Expected _wxFrame_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxFrame_ShowFullScreen(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxMiniFrameTowxFrame(void *ptr) {
     wxMiniFrame *src;
     wxFrame *dest;
@@ -1122,6 +1153,7 @@ static PyObject *_wrap_new_wxMiniFrame(PyObject *self, PyObject *args, PyObject 
 
 static PyMethodDef framescMethods[] = {
 	 { "new_wxMiniFrame", (PyCFunction) _wrap_new_wxMiniFrame, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFrame_ShowFullScreen", (PyCFunction) _wrap_wxFrame_ShowFullScreen, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_ProcessCommand", (PyCFunction) _wrap_wxFrame_ProcessCommand, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_Command", (PyCFunction) _wrap_wxFrame_Command, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFrame_GetClientAreaOrigin", (PyCFunction) _wrap_wxFrame_GetClientAreaOrigin, METH_VARARGS | METH_KEYWORDS },
@@ -1498,6 +1530,12 @@ SWIGEXPORT(void) initframesc() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("framesc", framescMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOMENUBAR", PyInt_FromLong((long) wxFULLSCREEN_NOMENUBAR));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOTOOLBAR", PyInt_FromLong((long) wxFULLSCREEN_NOTOOLBAR));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOSTATUSBAR", PyInt_FromLong((long) wxFULLSCREEN_NOSTATUSBAR));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOBORDER", PyInt_FromLong((long) wxFULLSCREEN_NOBORDER));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_NOCAPTION", PyInt_FromLong((long) wxFULLSCREEN_NOCAPTION));
+	 PyDict_SetItemString(d,"wxFULLSCREEN_ALL", PyInt_FromLong((long) wxFULLSCREEN_ALL));
 {
    int i;
    for (i = 0; _swig_mapping[i].n1; i++)

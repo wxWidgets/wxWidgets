@@ -683,12 +683,6 @@ class wxTimeSpanPtr :
     def Format(self, *_args, **_kwargs):
         val = apply(utilsc.wxTimeSpan_Format,(self,) + _args, _kwargs)
         return val
-    def FormatDate(self, *_args, **_kwargs):
-        val = apply(utilsc.wxTimeSpan_FormatDate,(self,) + _args, _kwargs)
-        return val
-    def FormatTime(self, *_args, **_kwargs):
-        val = apply(utilsc.wxTimeSpan_FormatTime,(self,) + _args, _kwargs)
-        return val
     def __repr__(self):
         return "<C wxTimeSpan instance at %s>" % (self.this,)
 class wxTimeSpan(wxTimeSpanPtr):
@@ -786,6 +780,14 @@ class wxDateSpan(wxDateSpanPtr):
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+wxGetLocalTime = utilsc.wxGetLocalTime
+
+wxGetUTCTime = utilsc.wxGetUTCTime
+
+wxGetCurrentTime = utilsc.wxGetCurrentTime
+
+wxGetLocalTimeMillis = utilsc.wxGetLocalTimeMillis
 
 def wxConfigBase_Set(*_args, **_kwargs):
     val = apply(utilsc.wxConfigBase_Set,_args,_kwargs)

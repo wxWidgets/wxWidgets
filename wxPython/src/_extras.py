@@ -24,10 +24,10 @@ _wxSetDictionary(vars())
 # Helper function to link python methods to wxWindows virtual
 # functions by name.
 
-## def _checkForCallback(obj, name, event, theID=-1):
-##     try:    cb = getattr(obj, name)
-##     except: pass
-##     else:   obj.Connect(theID, -1, event, cb)
+def _checkForCallback(obj, name, event, theID=-1):
+    try:    cb = getattr(obj, name)
+    except: pass
+    else:   obj.Connect(theID, -1, event, cb)
 
 ## def _StdWindowCallbacks(win):
 ##     _checkForCallback(win, "OnChar",               wxEVT_CHAR)

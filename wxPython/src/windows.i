@@ -36,6 +36,7 @@
 class wxEvtHandler {
 public:
     bool ProcessEvent(wxEvent& event);
+    void AddPendingEvent(wxEvent& event);
     //bool SearchEventTable(wxEventTable& table, wxEvent& event);
 
     bool GetEvtHandlerEnabled();
@@ -64,6 +65,32 @@ public:
         }
 
     }
+
+    %pragma(python) addtoclass = "
+    _prop_list_ = {}
+    "
+
+//      %pragma(python) addtoclass = "
+//      def __getattr__(self, name):
+//          pl = self._prop_list_
+//          if pl.has_key(name):
+//              getFunc, setFunc = pl[name]
+//              if getFunc:
+//                  return getattr(self, getFunc)()
+//              else:
+//                  raise TypeError, '%s property is write-only' % name
+//          raise AttributeError, name
+
+//      def __setattr__(self, name, value):
+//          pl = self._prop_list_
+//          if pl.has_key(name):
+//              getFunc, setFunc = pl[name]
+//              if setFunc:
+//                  return getattr(self, setFunc)(value)
+//              else:
+//                  raise TypeError, '%s property is read-only' % name
+//          self.__dict__[name] = value
+//      "
 };
 
 
@@ -77,6 +104,14 @@ public:
     wxValidator* Clone();
     wxWindow* GetWindow();
     void SetWindow(wxWindow* window);
+
+    // Properties list
+    %pragma(python) addtoclass = "
+    _prop_list_ = {
+        'window' : ('GetWindow', 'SetWindow'),
+    }
+    _prop_list_.update(wxEvtHandler._prop_list_)
+    "
 };
 
 %inline %{
@@ -321,6 +356,8 @@ public:
     wxToolTip* GetToolTip();
 
     void SetSizer(wxSizer* sizer);
+    wxSizer* GetSizer();
+
     wxValidator* GetValidator();
     void SetValidator(const wxValidator& validator);
 
@@ -338,7 +375,41 @@ public:
         val = apply(windowsc.wxWindow_GetCaret,(self,) + _args, _kwargs)
         if val: val = wxCaretPtr(val)
         return val
-"
+    "
+
+
+    // Properties list
+    %pragma(python) addtoclass = "
+    _prop_list_ = {
+        'size'          : ('GetSize',                  'SetSize'),
+        'enabled'       : ('IsEnabled',                'Enable'),
+        'background'    : ('GetBackgroundColour',      'SetBackgroundColour'),
+        'foreground'    : ('GetForegroundColour',      'SetForegroundColour'),
+        'children'      : ('GetChildren',              None),
+        'charHeight'    : ('GetCharHeight',            None),
+        'charWidth'     : ('GetCharWidth',             None),
+        'clientSize'    : ('GetClientSize',            'SetClientSize'),
+        'font'          : ('GetFont',                  'SetFont'),
+        'grandParent'   : ('GetGrandParent',           None),
+        'handle'        : ('GetHandle',                None),
+        'label'         : ('GetLabel',                 'SetLabel'),
+        'name'          : ('GetName',                  'SetName'),
+        'parent'        : ('GetParent',                None),
+        'position'      : ('GetPosition',              'SetPosition'),
+        'title'         : ('GetTitle',                 'SetTitle'),
+        'style'         : ('GetWindowStyleFlag',       'SetWindowStyleFlag'),
+        'visible'       : ('IsShown',                  'Show'),
+        'toolTip'       : ('GetToolTip',               'SetToolTip'),
+        'sizer'         : ('GetSizer',                 'SetSizer'),
+        'validator'     : ('GetValidator',             'SetValidator'),
+        'dropTarget'    : ('GetDropTarget',            'SetDropTarget'),
+        'caret'         : ('GetCaret',                 'SetCaret'),
+        'autoLayout'    : ('GetAutoLayout',            'SetAutoLayout'),
+        'constraints'   : ('GetConstraints',           'SetConstraints'),
+
+    }
+    _prop_list_.update(wxEvtHandler._prop_list_)
+    "
 };
 
 //%clear int* x, int* y;
@@ -470,7 +541,7 @@ public:
     void Scroll(int x, int y);
     void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                        int noUnitsX, int noUnitsY,
-                       int xPos = 0, int yPos = 0);
+                       int xPos = 0, int yPos = 0, int noRefresh=FALSE);
     void SetScrollPageSize(int orient, int pageSize);
     void SetTargetWindow(wxWindow* window);
     void GetViewStart(int* OUTPUT, int* OUTPUT);
