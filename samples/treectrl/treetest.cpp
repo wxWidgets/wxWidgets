@@ -23,10 +23,10 @@
 
 #ifndef WX_PRECOMP
   #include "wx/wx.h"
-  #include "wx/colordlg.h"
+  #include "wx/log.h"
 #endif
 
-#include "wx/log.h"
+#include "wx/colordlg.h"
 
 #include "wx/image.h"
 #include "wx/imaglist.h"
