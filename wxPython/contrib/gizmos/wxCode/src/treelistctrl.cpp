@@ -1676,8 +1676,10 @@ wxTreeListItem *wxTreeListItem::HitTest(const wxPoint& point,
             }
 
             // check for image hit
-            if (theCtrl->m_imgWidth > 0) {
+            if (theCtrl->m_imgWidth > 0 && GetImage() != NO_IMAGE) {
                 int imgX = m_x - theCtrl->m_imgWidth2;
+                if (HasPlus() && theCtrl->HasButtons())
+                    imgX += theCtrl->m_btnWidth + LINEATROOT;
                 int imgY = y_mid - theCtrl->m_imgHeight2;
                 if ((point.x >= imgX) && (point.x <= (imgX + theCtrl->m_imgWidth)) &&
                     (point.y >= imgY) && (point.y <= (imgY + theCtrl->m_imgHeight))) {
