@@ -732,20 +732,23 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
             0, NULL);
 
     // copy it to our buffer and free memory
-    if( lpMsgBuf != 0 )
+    if( lpMsgBuf != 0 ) {
         wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
-    else
-        s_szBuf[0] = wxT('\0');
-    s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
-    LocalFree(lpMsgBuf);
+        s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
 
-    // returned string is capitalized and ended with '\r\n' - bad
-    s_szBuf[0] = (wxChar)wxTolower(s_szBuf[0]);
-    size_t len = wxStrlen(s_szBuf);
-    if ( len > 0 ) {
-        // truncate string
-        if ( s_szBuf[len - 2] == wxT('\r') )
-            s_szBuf[len - 2] = wxT('\0');
+        LocalFree(lpMsgBuf);
+
+        // returned string is capitalized and ended with '\r\n' - bad
+        s_szBuf[0] = (wxChar)wxTolower(s_szBuf[0]);
+        size_t len = wxStrlen(s_szBuf);
+        if ( len > 0 ) {
+            // truncate string
+            if ( s_szBuf[len - 2] == wxT('\r') )
+                s_szBuf[len - 2] = wxT('\0');
+        }
+    }
+    else {
+        s_szBuf[0] = wxT('\0');
     }
 
     return s_szBuf;
