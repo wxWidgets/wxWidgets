@@ -2062,6 +2062,9 @@ gint gtk_window_enter_callback( GtkWidget *widget,
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
+    // Event was emitted after a grab
+    if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
+    
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     int x = 0;
@@ -2099,6 +2102,9 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
+    // Event was emitted after an ungrab
+    if (gdk_event->mode != GDK_CROSSING_NORMAL) return FALSE;
+    
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     wxMouseEvent event( wxEVT_LEAVE_WINDOW );
