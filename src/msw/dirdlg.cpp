@@ -28,7 +28,7 @@
 #include "wx/dirdlg.h"
 #endif
 
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__))||defined(wxUSE_NORLANDER_HEADERS)
 #include "shlobj.h" // Win95 shell
 #endif
 
@@ -89,7 +89,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent, const wxString& message,
 int wxDirDialog::ShowModal(void)
 {
     // Unfortunately Gnu-Win32 doesn't yet have COM support
-#if defined(__WIN95__) && !defined(__GNUWIN32__)
+#if (defined(__WIN95__) && !defined(__GNUWIN32__))||defined(wxUSE_NORLANDER_HEADERS)
   HWND hWnd = 0;
   if (m_parent) hWnd = (HWND) m_parent->GetHWND();
 
