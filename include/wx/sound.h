@@ -27,7 +27,7 @@ enum wxSoundFlags
 {
     wxSOUND_SYNC   = 0,
     wxSOUND_ASYNC  = 1,
-    wxSOUND_LOOP   = 2 | wxSOUND_ASYNC
+    wxSOUND_LOOP   = 2
 };
 
 class wxSoundBase : public wxObject
@@ -51,7 +51,7 @@ inline bool wxSoundBase::Play(bool async, bool looped)
 {
     unsigned flags = 0;
     if (async) flags |= wxSOUND_ASYNC;
-    if (looped) flags |= wxSOUND_LOOP;
+    if (looped) flags |= wxSOUND_LOOP | wxSOUND_ASYNC;
     return DoPlay(flags);
 }
 #endif
