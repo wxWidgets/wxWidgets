@@ -102,11 +102,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/dirmac.cpp
     src/mac/mimetmac.cpp
     src/unix/baseunix.cpp
+    src/mac/utilsexc.cpp
 </set>
 
 <set var="BASE_AND_GUI_MAC_SRC" hints="files">
     src/mac/utils.cpp
-    src/mac/utilsexc.cpp
 </set>
 
 <set var="BASE_MAC_HDR" hints="files">
