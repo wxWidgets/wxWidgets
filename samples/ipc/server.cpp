@@ -45,6 +45,7 @@
 IMPLEMENT_APP(MyApp)
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU   (SERVER_EXIT, MyFrame::OnExit)
     EVT_LISTBOX(SERVER_LISTBOX, MyFrame::OnListBoxClick)
 END_EVENT_TABLE()
 
@@ -110,7 +111,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
 
-    file_menu->Append(SERVER_QUIT, "&Exit");
+    file_menu->Append(SERVER_EXIT, "&Exit");
 
     wxMenuBar *menu_bar = new wxMenuBar;
 
@@ -133,7 +134,7 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title)
 }
 
 // Set the client process's listbox to this item
-void MyFrame::OnListBoxClick(wxCommandEvent& event)
+void MyFrame::OnListBoxClick(wxCommandEvent& WXUNUSED(event))
 {
     wxListBox* listBox = (wxListBox*) panel->FindWindow(SERVER_LISTBOX);
     if (listBox)
@@ -144,6 +145,11 @@ void MyFrame::OnListBoxClick(wxCommandEvent& event)
             the_connection->Advise("Item", (wxChar *)value.c_str());
         }
     }
+}
+
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
+{
+    Close(TRUE);
 }
 
 // ----------------------------------------------------------------------------
