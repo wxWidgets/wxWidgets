@@ -86,6 +86,8 @@
             $wxMACINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "MotifH" ) {
             $wxMOTIFINCLUDE{$filename} = $fileflags;
+        } elsif ( $filetype eq "MSWH" && $fileflags =~ m/O/ ) {
+            $wxOLEINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "MSWH" ) {
             $wxMSWINCLUDE{$filename} = $fileflags;
         } elsif ( $filetype eq "GTKH" ) {

@@ -411,6 +411,10 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLCHAIN_NAME@-config $(bindir)/wx@TOOLCHAIN_NAME@-config
 	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLCHAIN_NAME@-config wx-config
 	$(INSTALL_PROGRAM) $(build_libdir)/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
+	@# this installs the import library for a MSW DLL
+	@# remember: for wxMSW DLL WX_LIBRARY_NAME_STATIC is the
+	@# import livraru name
+	@if test "@TOOLKIT_DIR@" = "msw" -a "@WX_LIBRARY_NAME_STATIC@" != "@WX_TARGET_LIBRARY@"; then $(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_LIBRARY_NAME_STATIC@ $(libdir)/@WX_LIBRARY_NAME_STATIC@; fi
 
 	$(INSTALL) -d $(libdir)/wx
 	$(INSTALL) -d $(libdir)/wx/include
@@ -424,6 +428,8 @@ preinstall: $(build_libdir)/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLCHAIN_NAM
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/@TOOLKIT_DIR@; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/html; fi
 	@if test "$(USE_GUI)" = 1; then $(INSTALL) -d $(includedir)/wx/generic; fi
+	@if test "@TOOLKIT_DIR@" = "msw"; then $(INSTALL) -d $(includedir)/wx/msw/ole; fi
+
 	$(INSTALL) -d $(includedir)/wx/protocol
 	$(INSTALL) -d $(includedir)/wx/unix
 	@list='$(HEADERS)'; for p in $$list; do \

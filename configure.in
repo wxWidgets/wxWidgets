@@ -641,8 +641,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
-  DEFAULT_wxUSE_NO_RTTI=no
-  DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_NO_RTTI=yes
+  DEFAULT_wxUSE_NO_EXCEPTIONS=yes
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=yes
   DEFAULT_wxUSE_DEBUG_INFO=yes
@@ -803,8 +803,8 @@ else
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
-  DEFAULT_wxUSE_NO_RTTI=no
-  DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_NO_RTTI=yes
+  DEFAULT_wxUSE_NO_EXCEPTIONS=yes
   DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=no
   DEFAULT_wxUSE_DEBUG_INFO=no
@@ -2329,14 +2329,19 @@ if test "$wxUSE_CYGWIN" = 1 ; then
   TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WIN95__"
 fi
 
+lib_unicode_suffix=
+if test "$wxUSE_UNICODE" = "yes"; then
+    lib_unicode_suffix=u
+fi
+
 lib_debug_suffix=
 if test "$wxUSE_DEBUG_FLAG" = "yes"; then
     lib_debug_suffix=d
     TOOLCHAIN_NAME="${TOOLCHAIN_NAME}d"
 fi
 
-TOOLCHAIN_NAME="${TOOLKIT_DIR}${WIDGET_SET}${lib_debug_suffix}-${WX_RELEASE}"
-TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${WIDGET_SET}${lib_debug_suffix}_gl-${WX_RELEASE}"
+TOOLCHAIN_NAME="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}-${WX_RELEASE}"
+TOOLCHAIN_NAME_GL="${TOOLKIT_DIR}${WIDGET_SET}${lib_unicode_suffix}${lib_debug_suffix}_gl-${WX_RELEASE}"
 
 if test "$cross_compiling" = "yes"; then
     TOOLCHAIN_NAME="${TOOLCHAIN_NAME}-${host_alias}"
@@ -2466,6 +2471,10 @@ if test "$wxUSE_SHARED" = "yes"; then
       ;;
 
       *-*-cygwin* | *-*-mingw32* )
+        WX_LIBRARY="wxmsw${WX_MAJOR_VERSION_NUMBER}${WX_MINOR_VERSION_NUMBER}${WX_RELEASE_NUMBER}${lib_unicode_suffix}${lib_debug_suffix}"
+        WX_LIBRARY_NAME_SHARED="${WX_LIBRARY}.dll"
+        WX_LIBRARY_NAME_STATIC="lib${WX_LIBRARY}.a"
+        WXCONFIG_LIBS="-l${WX_LIBRARY}"
         SHARED_LD="${CXX} -shared -Wl,--out-implib,lib/${WX_LIBRARY_NAME_STATIC} -o"
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DWXUSINGDLL=1"
         WXMSW_DLL_DEFINES="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"

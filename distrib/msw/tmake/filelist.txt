@@ -1163,9 +1163,9 @@ filedlg.h	MSWH
 font.h	MSWH
 fontdlg.h	MSWH
 frame.h	MSWH
-gauge.h	MSWH
 gauge95.h	MSWH
 gaugemsw.h	MSWH
+gccpriv.h	MSWH
 gdiimage.h	MSWH
 gdiobj.h	MSWH
 glcanvas.h	MSWH
@@ -1199,10 +1199,10 @@ registry.h	MSWH
 scrolbar.h	MSWH
 settings.h	MSWH
 setup0.h	MSWH
-slider.h	MSWH
 slider95.h	MSWH
 slidrmsw.h	MSWH
 spinbutt.h	MSWH
+spinctrl.h	MSWH
 statbmp.h	MSWH
 statbox.h	MSWH
 statbr95.h	MSWH
@@ -1216,10 +1216,21 @@ textctrl.h	MSWH
 tglbtn.h	MSWH
 timer.h	MSWH
 tooltip.h	MSWH
+toplevel.h	MSWH
 treectrl.h	MSWH
 wave.h	MSWH
 window.h	MSWH
 winundef.h	MSWH
+
+automtn.h	MSWH	OLE
+dataform.h	MSWH	OLE
+dataobj.h	MSWH	OLE
+dataobj2.h	MSWH	OLE
+dropsrc.h	MSWH	OLE
+droptgt.h	MSWH	OLE
+oleutils.h	MSWH	OLE
+uuid.h	MSWH	OLE
+
 # blank.cur	MSWH
 # bullseye.cur	MSWH
 # child.ico	MSWH
