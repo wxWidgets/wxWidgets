@@ -1,4 +1,4 @@
-wxWindows 2.3 for X11 installation
+wxWindows 2.5 for X11 installation
 ----------------------------------
 
 IMPORTANT NOTE:
@@ -11,12 +11,12 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWindows you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxX11 2.3.4, gcc 2.95.4, Redhat 6.2
+  example: wxX11 2.5.0, gcc 2.95.4, Redhat 6.2
 
 First steps
 -----------
 
-- Download wxWindows-X-x.y.z.tgz, where x.y.z is the version number.
+- Download wxX11-x.y.z.tgz, where x.y.z is the version number.
   Download documentation in a preferred format, such as
   wxWindows-HTML.zip or wxWindows-PDF.zip.
 
