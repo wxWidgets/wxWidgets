@@ -388,9 +388,25 @@ public:
     void SetOwnerDrawn(bool ownerDrawn = true);
     void ResetOwnerDrawn();
 #else
-    // just to keep the global  renamers in sync
     %extend {
+        void SetFont(const wxFont& font) {}
+        wxFont GetFont() { return wxNullFont; }
+        void SetTextColour(const wxColour& colText) {}
+        wxColour GetTextColour() { return wxNullColour; }
+        void SetBackgroundColour(const wxColour& colBack) {}
+        wxColour GetBackgroundColour() { return wxNullColour; }
+        void SetBitmaps(const wxBitmap& bmpChecked,
+                        const wxBitmap& bmpUnchecked = wxNullBitmap) {}
+    
+        void SetDisabledBitmap( const wxBitmap& bmpDisabled ) {}
+        const wxBitmap& GetDisabledBitmap() const { return wxNullBitmap; }
+   
+        void SetMarginWidth(int nWidth) {}
+        int GetMarginWidth() { return 0; }
         static int GetDefaultMarginWidth() { return 0; }
+        bool IsOwnerDrawn() { return false; }
+        void SetOwnerDrawn(bool ownerDrawn = true) {}
+        void ResetOwnerDrawn() {}
     }
 #endif
 
