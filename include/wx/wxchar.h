@@ -576,11 +576,19 @@
         #define  wxStrxfrm   strxfrm
 
         // stdio.h functions
+        #if defined(__WXMAC__) && !defined(__DARWIN__)
+        #include <stdio.h>
+        WXDLLIMPEXP_BASE FILE *   wxFopen(const wxChar *path, const wxChar *mode);
+        WXDLLIMPEXP_BASE FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
+        WXDLLIMPEXP_BASE int      wxRemove(const wxChar *path);
+        WXDLLIMPEXP_BASE int      wxRename(const wxChar *oldpath, const wxChar *newpath);
+        #else
         #define  wxFopen     fopen
         #define  wxFreopen   freopen
-        #define  wxPerror    perror
         #define  wxRemove    remove
         #define  wxRename    rename
+        #endif
+        #define  wxPerror    perror
         #define  wxTmpnam    tmpnam
 
         #define  wxFgetc     fgetc
