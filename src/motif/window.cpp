@@ -1972,22 +1972,6 @@ static void wxCanvasInputEvent(Widget drawingArea,
             else if (local_event.xany.type == MotionNotify)
             {
                 eventType = wxEVT_MOTION;
-                if (local_event.xmotion.is_hint == NotifyHint)
-                {
-                    Window root, child;
-                    Display *dpy = XtDisplay (drawingArea);
-
-                    XQueryPointer (dpy, XtWindow (drawingArea),
-                        &root, &child,
-                        &local_event.xmotion.x_root,
-                        &local_event.xmotion.y_root,
-                        &local_event.xmotion.x,
-                        &local_event.xmotion.y,
-                        &local_event.xmotion.state);
-                }
-                else
-                {
-                }
             }
 
             else if (local_event.xany.type == ButtonPress)
@@ -2044,6 +2028,26 @@ static void wxCanvasInputEvent(Widget drawingArea,
             wxevent.m_altDown = local_event.xbutton.state & Mod3Mask;
             wxevent.m_metaDown = local_event.xbutton.state & Mod1Mask;
             wxevent.SetTimestamp(local_event.xbutton.time);
+
+           if (eventType = wxEVT_MOTION)
+           {
+                if (local_event.xmotion.is_hint == NotifyHint)
+                {
+                    Window root, child;
+                    Display *dpy = XtDisplay (drawingArea);
+
+                    XQueryPointer (dpy, XtWindow (drawingArea),
+                        &root, &child,
+                        &local_event.xmotion.x_root,
+                        &local_event.xmotion.y_root,
+                        &local_event.xmotion.x,
+                        &local_event.xmotion.y,
+                        &local_event.xmotion.state);
+                }
+                else
+                {
+                }
+           }
 
             // Now check if we need to translate this event into a double click
             if (TRUE) // canvas->doubleClickAllowed)
