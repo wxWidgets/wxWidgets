@@ -46,7 +46,7 @@
 #include "rtfutils.h"
 #include "symbols.h"
 
-#if (defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)) && !defined(NO_GUI)
+#if (defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXX11__)) && !defined(NO_GUI)
 #include "tex2rtf.xpm"
 #endif
 
