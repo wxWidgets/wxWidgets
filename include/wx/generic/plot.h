@@ -16,6 +16,10 @@
 #pragma interface "plot.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_PLOT
+
 #include "wx/scrolwin.h"
 #include "wx/event.h"
 
@@ -51,22 +55,22 @@ class WXDLLEXPORT wxPlotEvent: public wxNotifyEvent
 {
 public:
     wxPlotEvent( wxEventType commandType = wxEVT_NULL, int id = 0 );
-      
+
     wxPlotCurve *GetCurve()
         { return m_curve; }
     void SetCurve( wxPlotCurve *curve )
         { m_curve = curve; }
-        
+
     double GetZoom()
         { return m_zoom; }
     void SetZoom( double zoom )
         { m_zoom = zoom; }
-    
+
     wxInt32 GetPosition()
         { return m_position; }
     void SetPosition( wxInt32 pos )
         { m_position = pos; }
-    
+
 private:
     wxPlotCurve   *m_curve;
     double         m_zoom;
@@ -81,7 +85,7 @@ class WXDLLEXPORT wxPlotCurve: public wxObject
 {
 public:
     wxPlotCurve( int offsetY, double startY, double endY );
-    
+
     virtual wxInt32 GetStartX() = 0;
     virtual wxInt32 GetEndX() = 0;
 
@@ -99,7 +103,7 @@ public:
        { m_offsetY = offsetY; }
     int GetOffsetY()
        { return m_offsetY; }
-    
+
 private:
     int     m_offsetY;
     double  m_startY;
@@ -117,15 +121,15 @@ class WXDLLEXPORT wxPlotArea: public wxWindow
 public:
     wxPlotArea() {}
     wxPlotArea( wxPlotWindow *parent );
-    
+
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
 
     void DrawCurve( wxDC *dc, wxPlotCurve *curve, int from = -1, int to = -1 );
     void DeleteCurve( wxPlotCurve *curve, int from = -1, int to = -1 );
-    
+
     virtual void ScrollWindow( int dx, int dy, const wxRect *rect );
-    
+
 private:
     wxPlotWindow     *m_owner;
     bool              m_zooming;
@@ -143,10 +147,10 @@ class WXDLLEXPORT wxPlotXAxisArea: public wxWindow
 public:
     wxPlotXAxisArea() {}
     wxPlotXAxisArea( wxPlotWindow *parent );
-    
+
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
-    
+
 private:
     wxPlotWindow   *m_owner;
 
@@ -163,10 +167,10 @@ class WXDLLEXPORT wxPlotYAxisArea: public wxWindow
 public:
     wxPlotYAxisArea() {}
     wxPlotYAxisArea( wxPlotWindow *parent );
-    
+
     void OnPaint( wxPaintEvent &event );
     void OnMouse( wxMouseEvent &event );
-    
+
 private:
     wxPlotWindow   *m_owner;
 
@@ -184,36 +188,36 @@ public:
     wxPlotWindow() {}
     wxPlotWindow( wxWindow *parent, wxWindowID id, const wxPoint &pos, const wxSize &size, int flags = wxPLOT_DEFAULT );
     ~wxPlotWindow();
-    
+
     // curve accessors
     // ---------------
-    
+
     void Add( wxPlotCurve *curve );
     size_t GetCount();
     wxPlotCurve *GetAt( size_t n );
 
     void SetCurrent( wxPlotCurve* current );
     wxPlotCurve *GetCurrent();
-    
+
     void Delete( wxPlotCurve* curve );
-    
+
     // vertical representation
     // -----------------------
-    
+
     void Move( wxPlotCurve* curve, int pixels_up );
     void Enlarge( wxPlotCurve *curve, double factor );
 
     // horizontal representation
     // -------------------------
-    
+
     void SetUnitsPerValue( double upv );
     double GetUnitsPerValue()
         { return m_xUnitsPerValue; }
-        
+
     void SetZoom( double zoom );
     double GetZoom()
         { return m_xZoom; }
-        
+
     // options
     // -------
 
@@ -221,7 +225,7 @@ public:
         { m_scrollOnThumbRelease = scrollOnThumbRelease; }
     bool GetScrollOnThumbRelease()
         { return m_scrollOnThumbRelease; }
-        
+
     void SetEnlargeAroundWindowCentre( bool enlargeAroundWindowCentre = TRUE )
         { m_enlargeAroundWindowCentre = enlargeAroundWindowCentre; }
     bool GetEnlargeAroundWindowCentre()
@@ -232,37 +236,37 @@ public:
 
     void OnMoveUp( wxCommandEvent& event );
     void OnMoveDown( wxCommandEvent& event );
-    
+
     void OnEnlarge( wxCommandEvent& event );
     void OnShrink( wxCommandEvent& event );
     void OnZoomIn( wxCommandEvent& event );
     void OnZoomOut( wxCommandEvent& event );
-    
+
     void OnScroll2( wxScrollWinEvent& event );
-    
+
     // utilities
     // ---------
-    
+
     void RedrawEverything();
     void RedrawXAxis();
     void RedrawYAxis();
-    
+
     void ResetScrollbar();
-    
+
 private:
     friend wxPlotArea;
     friend wxPlotXAxisArea;
     friend wxPlotYAxisArea;
-    
+
     double             m_xUnitsPerValue;
     double             m_xZoom;
-    
+
     wxList             m_curves;
     wxPlotArea        *m_area;
     wxPlotXAxisArea   *m_xaxis;
     wxPlotYAxisArea   *m_yaxis;
     wxPlotCurve       *m_current;
-    
+
     bool               m_scrollOnThumbRelease;
     bool               m_enlargeAroundWindowCentre;
 
@@ -295,6 +299,8 @@ private:
 #define EVT_PLOT_END_Y_LABEL_EDIT(id, fn) { wxEVT_PLOT_END_Y_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 #define EVT_PLOT_BEGIN_TITLE_EDIT(id, fn) { wxEVT_PLOT_BEGIN_TITLE_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
 #define EVT_PLOT_END_TITLE_EDIT(id, fn) { wxEVT_PLOT_END_TITLE_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) & fn, (wxObject *) NULL },
+
+#endif // wxUSE_PLOT
 
 #endif
    // _WX_PLOT_H_

@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_PLOT
+
 #ifndef WX_PRECOMP
 #include "wx/object.h"
 #include "wx/font.h"
@@ -953,3 +955,5 @@ static wxBitmap *GetDownBitmap()
 
     return s_bitmap;
 }
+
+#endif // wxUSE_PLOT

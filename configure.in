@@ -714,6 +714,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_LISTBOX=no
   DEFAULT_wxUSE_LISTCTRL=no
   DEFAULT_wxUSE_NOTEBOOK=no
+  DEFAULT_wxUSE_PLOT=no
   DEFAULT_wxUSE_RADIOBOX=no
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
@@ -830,6 +831,7 @@ else
   DEFAULT_wxUSE_LISTBOX=yes
   DEFAULT_wxUSE_LISTCTRL=yes
   DEFAULT_wxUSE_NOTEBOOK=yes
+  DEFAULT_wxUSE_PLOT=yes
   DEFAULT_wxUSE_RADIOBOX=yes
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
@@ -1147,6 +1149,7 @@ WX_ARG_ENABLE(tooltips,    [  --enable-tooltips       use wxToolTip class], wxUS
 WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], wxUSE_SPLINES)
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
+WX_ARG_ENABLE(plot,        [  --enable-plot           use wxPlot], wxUSE_PLOT)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -2626,6 +2629,10 @@ fi
 
 if test "$wxUSE_LONGLONG" = "yes"; then
   AC_DEFINE(wxUSE_LONGLONG)
+fi
+
+if test "$wxUSE_PLOT" = "yes"; then
+  AC_DEFINE(wxUSE_PLOT)
 fi
 
 if test "$wxUSE_DIALUP_MANAGER" = "yes" ; then

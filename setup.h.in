@@ -258,6 +258,10 @@
  */
 #define wxUSE_NOTEBOOK 0
 /*
+ * Use wxPlot class
+ */
+#define wxUSE_PLOT 0
+/*
  * Use this control
  */
 #define wxUSE_RADIOBOX 0
