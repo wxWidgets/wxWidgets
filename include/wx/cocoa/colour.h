@@ -36,6 +36,9 @@ public:
     {   InitFromName(colourName); }
     wxColour( const char *colourName )
     {   InitFromName(wxString::FromAscii(colourName)); }
+#if wxUSE_UNICODE
+    wxColour( const wxChar *colourName ) { InitFromName( wxString(colourName) ); }
+#endif
 
     // copy ctors and assignment operators
     wxColour( const wxColour& col );
