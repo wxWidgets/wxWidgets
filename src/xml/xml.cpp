@@ -370,7 +370,7 @@ inline static wxString CharToString(wxMBConv *conv,
         return str;
     }
     else
-        return wxString(s, len);
+        return wxString(s, len != wxSTRING_MAXLEN ? len : strlen(s));
 #endif
 }
 
