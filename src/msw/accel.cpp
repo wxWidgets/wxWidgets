@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        accel.cpp
+// Name:        msw/accel.cpp
 // Purpose:     wxAcceleratorTable
 // Author:      Julian Smart
 // Modified by:
@@ -9,16 +9,26 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma implementation "accel.h"
+    #pragma implementation "accel.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_ACCEL
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
@@ -26,11 +36,15 @@
 
 #include "wx/accel.h"
 
-#if wxUSE_ACCEL
-
 #include "wx/msw/private.h"
 
+extern WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual);
+
 IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable, wxObject)
+
+// ----------------------------------------------------------------------------
+// data defining wxAcceleratorTable
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxAcceleratorRefData: public wxObjectRefData
 {
@@ -47,52 +61,43 @@ protected:
     DECLARE_NO_COPY_CLASS(wxAcceleratorRefData)
 };
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxAcceleratorRefData
+// ----------------------------------------------------------------------------
+
 #define M_ACCELDATA ((wxAcceleratorRefData *)m_refData)
 
 wxAcceleratorRefData::wxAcceleratorRefData()
 {
-  m_ok = false;
-  m_hAccel = 0;
+    m_ok = false;
+    m_hAccel = 0;
 }
 
 wxAcceleratorRefData::~wxAcceleratorRefData()
 {
-  if (m_hAccel)
-  {
-    DestroyAcceleratorTable((HACCEL) m_hAccel);
-  }
-  m_hAccel = 0 ;
+    if (m_hAccel)
+    {
+        DestroyAcceleratorTable((HACCEL) m_hAccel);
+    }
 }
 
-wxAcceleratorTable::wxAcceleratorTable()
-{
-  m_refData = NULL;
-}
-
-wxAcceleratorTable::~wxAcceleratorTable()
-{
-}
+// ----------------------------------------------------------------------------
+// wxAcceleratorTable
+// ----------------------------------------------------------------------------
 
 // Load from .rc resource
 wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
 {
     m_refData = new wxAcceleratorRefData;
 
-    HACCEL hAccel =
-#if defined(__WIN32__)
-#ifdef UNICODE
-        ::LoadAcceleratorsW(wxGetInstance(), (const wxChar *)resource);
-#else
-        ::LoadAcceleratorsA(wxGetInstance(), (const char *)resource);
-#endif
-#else
-        ::LoadAccelerators(wxGetInstance(), (const wxChar *)resource);
-#endif
+    HACCEL hAccel = ::LoadAccelerators(wxGetInstance(), resource);
     M_ACCELDATA->m_hAccel = hAccel;
-    M_ACCELDATA->m_ok = (hAccel != 0);
+    M_ACCELDATA->m_ok = hAccel != 0;
 }
-
-extern WXWORD wxCharCodeWXToMSW(int id, bool *isVirtual);
 
 // Create from an array
 wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[])
@@ -129,6 +134,16 @@ wxAcceleratorTable::wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]
     M_ACCELDATA->m_ok = (M_ACCELDATA->m_hAccel != 0);
 }
 
+bool wxAcceleratorTable::operator==(const wxAcceleratorTable& accel) const
+{
+    const wxAcceleratorRefData *
+        accelData = (wxAcceleratorRefData *)accel.m_refData;
+
+    return m_refData ? (accelData &&
+                           M_ACCELDATA->m_hAccel == accelData->m_hAccel)
+                     : !accelData;
+}
+
 bool wxAcceleratorTable::Ok() const
 {
     return (M_ACCELDATA && (M_ACCELDATA->m_ok));
@@ -155,4 +170,5 @@ bool wxAcceleratorTable::Translate(wxWindow *window, WXMSG *wxmsg) const
     return Ok() && ::TranslateAccelerator(GetHwndOf(window), GetHaccel(), msg);
 }
 
-#endif
+#endif // wxUSE_ACCEL
+

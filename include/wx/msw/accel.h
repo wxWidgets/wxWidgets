@@ -24,7 +24,7 @@ class WXDLLEXPORT wxAcceleratorTable : public wxObject
 {
 public:
     // default ctor
-    wxAcceleratorTable();
+    wxAcceleratorTable() : wxObject() { }
 
     // copy ctor
     wxAcceleratorTable(const wxAcceleratorTable& accel) : wxObject(accel) { Ref(accel); }
@@ -35,17 +35,16 @@ public:
     // initialize from array
     wxAcceleratorTable(int n, const wxAcceleratorEntry entries[]);
 
-    virtual ~wxAcceleratorTable();
+    wxAcceleratorTable& operator=(const wxAcceleratorTable& accel)
+    {
+        if ( *this != accel )
+            Ref(accel);
+        return *this;
+    }
 
-    wxAcceleratorTable& operator = (const wxAcceleratorTable& accel) { if ( *this != accel ) Ref(accel); return *this; }
-
-// #if WXWIN_COMPATIBILITY_2_4
-// fixme: it is still used in 'operator =' above
-    bool operator==(const wxAcceleratorTable& accel) const
-        { return m_refData == accel.m_refData; }
+    bool operator==(const wxAcceleratorTable& accel) const;
     bool operator!=(const wxAcceleratorTable& accel) const
         { return !(*this == accel); }
-// #endif
 
     bool Ok() const;
     void SetHACCEL(WXHACCEL hAccel);
