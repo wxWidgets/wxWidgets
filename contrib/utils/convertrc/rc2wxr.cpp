@@ -675,41 +675,24 @@ return phrase;
 
 
 void rc2wxr::ReadChar(int &ch)
-
 {
+    wxFileOffset result = m_rc.Tell();
 
-    int result;
+    if ( result >= m_filesize )
+        m_done=true;
 
-result=m_rc.Tell();
+    result = m_rc.Read(&ch,1);
 
+    if ( result==wxInvalidOffset )
+        m_done=true;
 
-
-if((result>=m_filesize))
-
-    m_done=true;
-
-
-
-result=m_rc.Read(&ch,1);
-
-
-
-if((result==-1))
-
-   m_done=true;
-
-
-
-if(ch==EOF)
-
-   m_done=true;
-
+    if(ch==EOF)
+        m_done=true;
 }
 
 
 
 void rc2wxr::ParseComboBox()
-
 {
 
 /* COMBOBOX        IDC_SCALECOMBO,10,110,48,52,CBS_DROPDOWNLIST | CBS_SORT |

@@ -60,10 +60,10 @@ class PropsTree: public wxRemotelyScrolledTreeCtrl
             // Reset the device origin since it may have been set
             dc.SetDeviceOrigin(0, 0);
 
-            wxPen pen(wxColour(_T("BLACK")), 1, wxSOLID);
+            wxPen pen(*wxBLACK, 1, wxSOLID);
             dc.SetPen(pen);
 
-            dc.SetBrush(* wxTRANSPARENT_BRUSH);
+            dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
             wxSize clientSize = GetClientSize();
             wxRect itemRect;

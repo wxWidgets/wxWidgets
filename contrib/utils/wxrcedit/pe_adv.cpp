@@ -115,9 +115,9 @@ void PropEditCtrlColor::OnDetails()
 
     if (txt.Length() == 7 && txt[0u] == _T('#') &&
         wxSscanf(txt.c_str(), _T("#%lX"), &tmp) == 1)
-        clr = wxColour((tmp & 0xFF0000) >> 16,
-                       (tmp & 0x00FF00) >> 8,
-                       (tmp & 0x0000FF));
+        clr = wxColour((unsigned char)((tmp & 0xFF0000) >> 16),
+                       (unsigned char)((tmp & 0x00FF00) >> 8),
+                       (unsigned char)((tmp & 0x0000FF)));
 
     clr = wxGetColourFromUser(NULL, clr);
     if (clr.Ok())
@@ -186,7 +186,7 @@ void PropEditCtrlFlags::OnDetails()
     for (i = 0; i < arr.GetCount(); i++)
         if (lbox->IsChecked(i))
             txt << arr[i] << _T('|');
-    if (!txt.IsEmpty()) txt.RemoveLast();
+    if (!txt.empty()) txt.RemoveLast();
 
     m_TextCtrl->SetValue(txt);
     WriteValue();

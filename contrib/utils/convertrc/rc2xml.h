@@ -87,7 +87,7 @@ protected:
     wxList * m_resourcelist;
     wxFile m_rc;
     wxFFile m_xmlfile;
-    int m_filesize;
+    wxFileOffset m_filesize;
     bool m_done;
 
 };

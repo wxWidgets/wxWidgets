@@ -901,7 +901,8 @@ void rc2xml::FirstPass()
 
 void rc2xml::ParseBitmap(wxString varname)
 {
-    wxString token,*bitmapfile;
+    wxString token;
+    wxString *bitmapfile;
 
     token=PeekToken();
     //Microsoft notation?
@@ -1138,7 +1139,8 @@ void rc2xml::ParseIconStatic()
 //IDR_MAINFRAME           ICON    DISCARDABLE     "res\\mfcexample.ico"
 void rc2xml::ParseIcon(wxString varname)
 {
-    wxString token,*iconfile;
+    wxString token;
+    wxString *iconfile;
     iconfile=new wxString;
     token=PeekToken();
 
