@@ -382,12 +382,14 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 wxPyCallbackHelper::wxPyCallbackHelper() {
     m_self = NULL;
     m_lastFound = NULL;
+    m_incRef = FALSE;
 }
 
 
 wxPyCallbackHelper::~wxPyCallbackHelper() {
     bool doSave = wxPyRestoreThread();
-    Py_XDECREF(m_self);
+    if (m_incRef)
+        Py_XDECREF(m_self);
     wxPySaveThread(doSave);
 }
 
@@ -401,6 +403,7 @@ wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
 
 void wxPyCallbackHelper::setSelf(PyObject* self, int incref) {
     m_self = self;
+    m_incRef = incref;
     if (incref)
         Py_INCREF(m_self);
 }

@@ -333,7 +333,7 @@ class wxDropSource(wxDropSourcePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(clip_dndc.new_wxDropSource,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, 0)
 
 
 

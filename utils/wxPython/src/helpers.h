@@ -179,6 +179,7 @@ public:
 private:
     PyObject*   m_self;
     PyObject*   m_lastFound;
+    int         m_incRef;
 };
 
 
