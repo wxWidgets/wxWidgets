@@ -282,7 +282,7 @@ bool wxIniConfig::IsEmpty() const
 // read/write
 // ----------------------------------------------------------------------------
 
-bool wxIniConfig::Read(const wxString& szKey, wxString *pstr) const
+bool wxIniConfig::DoReadString(const wxString& szKey, wxString *pstr) const
 {
   wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
@@ -309,36 +309,7 @@ bool wxIniConfig::Read(const wxString& szKey, wxString *pstr) const
   }
 }
 
-bool wxIniConfig::Read(const wxString& szKey, wxString *pstr,
-                       const wxString& szDefault) const
-{
-  wxConfigPathChanger path(this, szKey);
-  wxString strKey = GetPrivateKeyName(path.Name());
-
-  char szBuf[1024]; // @@ should dynamically allocate memory...
-
-  // first look in the private INI file
-
-  // NB: the lpDefault param to GetPrivateProfileString can't be NULL
-  GetPrivateProfileString(m_strGroup, strKey, "",
-                          szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
-  if ( ::IsEmpty(szBuf) ) {
-    // now look in win.ini
-    wxString strKey = GetKeyName(path.Name());
-    GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
-  }
-
-  if ( ::IsEmpty(szBuf) ) {
-    *pstr = szDefault;
-    return FALSE;
-  }
-  else {
-    *pstr = szBuf ;
-    return TRUE;
-  }
-}
-
-bool wxIniConfig::Read(const wxString& szKey, long *pl) const
+bool wxIniConfig::DoReadLong(const wxString& szKey, long *pl) const
 {
   wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
@@ -375,7 +346,7 @@ bool wxIniConfig::Read(const wxString& szKey, long *pl) const
   return FALSE ;
 }
 
-bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
+bool wxIniConfig::DoWriteString(const wxString& szKey, const wxString& szValue)
 {
   wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
@@ -389,7 +360,7 @@ bool wxIniConfig::Write(const wxString& szKey, const wxString& szValue)
   return bOk;
 }
 
-bool wxIniConfig::Write(const wxString& szKey, long lValue)
+bool wxIniConfig::DoWriteLong(const wxString& szKey, long lValue)
 {
   // ltoa() is not ANSI :-(
   char szBuf[40];   // should be good for sizeof(long) <= 16 (128 bits)

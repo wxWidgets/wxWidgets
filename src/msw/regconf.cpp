@@ -555,44 +555,10 @@ wxConfigBase::EntryType wxRegConfig::GetEntryType(const wxString& key) const
 // reading/writing
 // ----------------------------------------------------------------------------
 
-bool wxRegConfig::Read(const wxString& key, wxString *pStr) const
+bool wxRegConfig::DoReadString(const wxString& key, wxString *pStr) const
 {
-  wxConfigPathChanger path(this, key);
+    wxCHECK_MSG( pStr, FALSE, _T("wxRegConfig::Read(): NULL param") );
 
-  bool bQueryGlobal = TRUE;
-
-  // if immutable key exists in global key we must check that it's not
-  // overriden by the local key with the same name
-  if ( IsImmutable(path.Name()) ) {
-    if ( TryGetValue(m_keyGlobal, path.Name(), *pStr) ) {
-      if ( m_keyLocal.Exists() && LocalKey().HasValue(path.Name()) ) {
-        wxLogWarning(wxT("User value for immutable key '%s' ignored."),
-                   path.Name().c_str());
-      }
-     *pStr = wxConfigBase::ExpandEnvVars(*pStr);
-      return TRUE;
-    }
-    else {
-      // don't waste time - it's not there anyhow
-      bQueryGlobal = FALSE;
-    }
-  }
-
-  // first try local key
-  if ( (m_keyLocal.Exists() && TryGetValue(LocalKey(), path.Name(), *pStr)) ||
-       (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
-    // nothing to do
-
-    *pStr = wxConfigBase::ExpandEnvVars(*pStr);
-    return TRUE;
-  }
-
-  return FALSE;
-}
-
-bool wxRegConfig::Read(const wxString& key, wxString *pStr,
-                       const wxString& szDefault) const
-{
   wxConfigPathChanger path(this, key);
 
   bool bQueryGlobal = TRUE;
@@ -617,25 +583,19 @@ bool wxRegConfig::Read(const wxString& key, wxString *pStr,
   // first try local key
   if ( (m_keyLocal.Exists() && TryGetValue(LocalKey(), path.Name(), *pStr)) ||
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), *pStr)) ) {
-    *pStr = wxConfigBase::ExpandEnvVars(*pStr);
     return TRUE;
   }
-  else {
-    if ( IsRecordingDefaults() ) {
-      ((wxRegConfig*)this)->Write(key, szDefault);
-    }
-
-    // default value
-    *pStr = szDefault;
-  }
-
-  *pStr = wxConfigBase::ExpandEnvVars(*pStr);
 
   return FALSE;
 }
 
-bool wxRegConfig::Read(const wxString& key, long *plResult) const
+// this exactly reproduces the string version above except for ExpandEnvVars(),
+// we really should avoid this code duplication somehow...
+
+bool wxRegConfig::DoReadLong(const wxString& key, long *plResult) const
 {
+    wxCHECK_MSG( plResult, FALSE, _T("wxRegConfig::Read(): NULL param") );
+
   wxConfigPathChanger path(this, key);
 
   bool bQueryGlobal = TRUE;
@@ -662,10 +622,11 @@ bool wxRegConfig::Read(const wxString& key, long *plResult) const
        (bQueryGlobal && TryGetValue(m_keyGlobal, path.Name(), plResult)) ) {
     return TRUE;
   }
+
   return FALSE;
 }
 
-bool wxRegConfig::Write(const wxString& key, const wxString& szValue)
+bool wxRegConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
   wxConfigPathChanger path(this, key);
 
@@ -677,7 +638,7 @@ bool wxRegConfig::Write(const wxString& key, const wxString& szValue)
   return LocalKey().SetValue(path.Name(), szValue);
 }
 
-bool wxRegConfig::Write(const wxString& key, long lValue)
+bool wxRegConfig::DoWriteLong(const wxString& key, long lValue)
 {
   wxConfigPathChanger path(this, key);
 

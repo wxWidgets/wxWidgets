@@ -63,41 +63,6 @@ public:
   virtual size_t GetNumberOfEntries(bool bRecursive = FALSE) const;
   virtual size_t GetNumberOfGroups(bool bRecursive = FALSE) const;
 
-  // read/write
-  bool Read(const wxString& key, wxString *pStr) const;
-  bool Read(const wxString& key, wxString *pStr, const wxString& szDefault) const;
-  wxString Read(const wxString& key, const wxString& defVal) const
-      { return wxConfigBase::Read(key, defVal); }
-
-  bool Read(const wxString& key, long *plResult) const;
-  bool Read(const wxString& key, long *pl, long defVal) const
-      { return wxConfigBase::Read(key, pl, defVal); }
-  long Read(const wxString& key, long defVal) const
-      { return wxConfigBase::Read(key, defVal); }
-
-  // The following are necessary to satisfy the compiler
-  bool Read(const wxString& key, int *pi, int defVal) const
-      { return wxConfigBase::Read(key, pi, defVal); }
-  bool Read(const wxString& key, int *pi) const
-      { return wxConfigBase::Read(key, pi); }
-
-  bool Read(const wxString& key, double* val, double defVal) const
-      { return wxConfigBase::Read(key, val, defVal); }
-  bool Read(const wxString& key, double* val) const
-      { return wxConfigBase::Read(key, val); }
-
-  bool Read(const wxString& key, bool *pb, bool defVal) const
-      { return wxConfigBase::Read(key, pb, defVal); }
-  bool Read(const wxString& key, bool *pb) const
-      { return wxConfigBase::Read(key, pb); }
-
-  bool Write(const wxString& key, const wxString& szValue);
-  bool Write(const wxString& key, long lValue);
-  bool Write(const wxString& key, double dValue)
-      { return wxConfigBase::Write(key, dValue); }
-  bool Write(const wxString& key, bool bValue)
-      { return wxConfigBase::Write(key, bValue); }
-
   virtual bool Flush(bool WXUNUSED(bCurrentOnly) = FALSE) { return TRUE; }
 
   // rename
@@ -123,6 +88,13 @@ protected:
 
       return self->m_keyLocal;
   }
+
+  // implement read/write methods
+  virtual bool DoReadString(const wxString& key, wxString *pStr) const;
+  virtual bool DoReadLong(const wxString& key, long *plResult) const;
+
+  virtual bool DoWriteString(const wxString& key, const wxString& szValue);
+  virtual bool DoWriteLong(const wxString& key, long lValue);
 
 private:
   // no copy ctor/assignment operator

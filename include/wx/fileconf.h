@@ -152,39 +152,6 @@ public:
   virtual bool HasGroup(const wxString& strName) const;
   virtual bool HasEntry(const wxString& strName) const;
 
-  virtual bool Read(const wxString& key, wxString *pStr) const;
-  virtual bool Read(const wxString& key, wxString *pStr, const wxString& defValue) const;
-  virtual bool Read(const wxString& key, long *pl) const;
-
-  // The following are necessary to satisfy the compiler
-  wxString Read(const wxString& key, const wxString& defVal) const
-    { return wxConfigBase::Read(key, defVal); }
-  bool Read(const wxString& key, long *pl, long defVal) const
-    { return wxConfigBase::Read(key, pl, defVal); }
-  long Read(const wxString& key, long defVal) const
-    { return wxConfigBase::Read(key, defVal); }
-  bool Read(const wxString& key, int *pi, int defVal) const
-    { return wxConfigBase::Read(key, pi, defVal); }
-  bool Read(const wxString& key, int *pi) const
-    { return wxConfigBase::Read(key, pi); }
-  bool Read(const wxString& key, double* val) const
-    { return wxConfigBase::Read(key, val); }
-  bool Read(const wxString& key, double* val, double defVal) const
-    { return wxConfigBase::Read(key, val, defVal); }
-  bool Read(const wxString& key, bool* val) const
-    { return wxConfigBase::Read(key, val); }
-  bool Read(const wxString& key, bool* val, bool defVal) const
-    { return wxConfigBase::Read(key, val, defVal); }
-
-  virtual bool Write(const wxString& key, const wxString& szValue);
-  virtual bool Write(const wxString& key, long lValue);
-  bool Write(const wxString& key, double value)
-    { return wxConfigBase::Write(key, value); }
-  bool Write(const wxString& key, bool value)
-    { return wxConfigBase::Write(key, value); }
-  bool Write(const wxString& key, const wxChar* value)
-    { return wxConfigBase::Write(key, value); }
-
   virtual bool Flush(bool bCurrentOnly = FALSE);
 
   virtual bool RenameEntry(const wxString& oldName, const wxString& newName);
@@ -201,6 +168,13 @@ public:
                            wxFileConfigLineList *pLine);    // NULL => Prepend()
   void      LineListRemove(wxFileConfigLineList *pLine);
   bool      LineListIsEmpty();
+
+protected:
+  virtual bool DoReadString(const wxString& key, wxString *pStr) const;
+  virtual bool DoReadLong(const wxString& key, long *pl) const;
+
+  virtual bool DoWriteString(const wxString& key, const wxString& szValue);
+  virtual bool DoWriteLong(const wxString& key, long lValue);
 
 private:
   // GetXXXFileName helpers: return ('/' terminated) directory names

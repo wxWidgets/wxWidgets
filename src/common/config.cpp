@@ -42,6 +42,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <ctype.h>
+#include <limits.h>     // for INT_MAX
 
 // ----------------------------------------------------------------------------
 // global and class static variables
@@ -99,36 +100,80 @@ wxConfigBase *wxConfigBase::Create()
   return ms_pConfig;
 }
 
-wxString wxConfigBase::Read(const wxString& key, const wxString& defVal) const
-{
-  wxString s;
-  Read(key, &s, defVal);
-  return s;
-}
+// ----------------------------------------------------------------------------
+// wxConfigBase reading entries
+// ----------------------------------------------------------------------------
 
-bool wxConfigBase::Read(const wxString& key, wxString *str, const wxString& defVal) const
-{
-    if (!Read(key, str))
-    {
-        *str = ExpandEnvVars(defVal);
-        return FALSE;
+// implement both Read() overloads for the given type in terms of DoRead()
+#define IMPLEMENT_READ_FOR_TYPE(name, type, deftype, extra)                 \
+    bool wxConfigBase::Read(const wxString& key, type *val) const           \
+    {                                                                       \
+        wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
+                                                                            \
+        return DoRead##name(key, val);                                      \
+    }                                                                       \
+                                                                            \
+    bool wxConfigBase::Read(const wxString& key,                            \
+                            type *val,                                      \
+                            deftype defVal) const                           \
+    {                                                                       \
+        wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );  \
+                                                                            \
+        if ( DoRead##name(key, val) )                                       \
+            return TRUE;                                                    \
+                                                                            \
+        if ( IsRecordingDefaults() )                                        \
+        {                                                                   \
+            ((wxConfigBase *)this)->DoWrite##name(key, defVal);             \
+        }                                                                   \
+                                                                            \
+        *val = extra(defVal);                                               \
+                                                                            \
+        return FALSE;                                                       \
     }
-    else
-        return TRUE;
-}
 
-bool wxConfigBase::Read(const wxString& key, long *pl, long defVal) const
+
+IMPLEMENT_READ_FOR_TYPE(String, wxString, const wxString&, ExpandEnvVars)
+IMPLEMENT_READ_FOR_TYPE(Long, long, long, long)
+IMPLEMENT_READ_FOR_TYPE(Int, int, int, int)
+IMPLEMENT_READ_FOR_TYPE(Double, double, double, double)
+IMPLEMENT_READ_FOR_TYPE(Bool, bool, bool, bool)
+
+#undef IMPLEMENT_READ_FOR_TYPE
+
+// the DoReadXXX() for the other types have implementation in the base class
+// but can be overridden in the derived ones
+bool wxConfigBase::DoReadInt(const wxString& key, int *pi) const
 {
-    if (!Read(key, pl))
-    {
-        *pl = defVal;
+    wxCHECK_MSG( pi, FALSE, _T("wxConfig::Read(): NULL parameter") );
+
+    long l;
+    if ( !DoReadLong(key, &l) )
         return FALSE;
-    }
-    else
-        return TRUE;
+
+    wxASSERT_MSG( l < INT_MAX, _T("overflow in wxConfig::DoReadInt") );
+
+    *pi = (int)l;
+
+    return TRUE;
 }
 
-bool wxConfigBase::Read(const wxString& key, double* val) const
+bool wxConfigBase::DoReadBool(const wxString& key, bool* val) const
+{
+    wxCHECK_MSG( val, FALSE, _T("wxConfig::Read(): NULL parameter") );
+
+    long l;
+    if ( !DoReadLong(key, &l) )
+        return FALSE;
+
+    wxASSERT_MSG( l == 0 || l == 1, _T("bad bool value in wxConfig::DoReadInt") );
+
+    *val = l != 0;
+
+    return TRUE;
+}
+
+bool wxConfigBase::DoReadDouble(const wxString& key, double* val) const
 {
     wxString str;
     if ( Read(key, &str) )
@@ -139,78 +184,7 @@ bool wxConfigBase::Read(const wxString& key, double* val) const
     return FALSE;
 }
 
-bool wxConfigBase::Read(const wxString& key, double* val, double defVal) const
-{
-    if (!Read(key, val))
-    {
-        *val = defVal;
-        return FALSE;
-    }
-    else
-        return TRUE;
-}
-
-bool wxConfigBase::Read(const wxString& key, bool* val) const
-{
-    long l;
-    if (Read(key, & l))
-    {
-        *val = (l != 0);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
-bool wxConfigBase::Read(const wxString& key, bool* val, bool defVal) const
-{
-    if (!Read(key, val))
-    {
-        *val = defVal;
-        return FALSE;
-    }
-    else
-        return TRUE;
-}
-
-// Convenience functions
-
-bool wxConfigBase::Read(const wxString& key, int *pi) const
-{
-    long l;
-    bool ret = Read(key, &l);
-    if (ret)
-        *pi = (int) l;
-    return ret;
-}
-
-bool wxConfigBase::Read(const wxString& key, int *pi, int defVal) const
-{
-    long l;
-    bool ret = Read(key, &l, (long) defVal);
-    if (ret)
-        *pi = (int) l;
-    return ret;
-}
-
-bool wxConfigBase::Write(const wxString& key, double val)
-{
-    wxString str;
-    str.Printf(wxT("%g"), val);
-    return Write(key, str);
-}
-
-bool wxConfigBase::Write(const wxString& key, bool value)
-{
-    return Write(key, value ? 1l : 0l);
-}
-
-bool wxConfigBase::Write(const wxString& key, const wxChar *value)
-{
-    // explicit cast needed, otherwise value would have been converted to bool
-    return Write(key, wxString(value));
-}
-
+// string reading helper
 wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
 {
     wxString tmp; // Required for BC++
@@ -219,6 +193,25 @@ wxString wxConfigBase::ExpandEnvVars(const wxString& str) const
     else
         tmp = str;
     return tmp;
+}
+
+// ----------------------------------------------------------------------------
+// wxConfigBase writing
+// ----------------------------------------------------------------------------
+
+bool wxConfigBase::DoWriteDouble(const wxString& key, double val)
+{
+    return DoWriteString(key, wxString::Format(_T("%g"), val));
+}
+
+bool wxConfigBase::DoWriteInt(const wxString& key, int value)
+{
+    return DoWriteLong(key, (long)value);
+}
+
+bool wxConfigBase::DoWriteBool(const wxString& key, bool value)
+{
+    return DoWriteLong(key, value ? 1l : 0l);
 }
 
 // ----------------------------------------------------------------------------

@@ -819,8 +819,7 @@ bool wxFileConfig::HasEntry(const wxString& strName) const
 // read/write values
 // ----------------------------------------------------------------------------
 
-bool wxFileConfig::Read(const wxString& key,
-                        wxString* pStr) const
+bool wxFileConfig::DoReadString(const wxString& key, wxString* pStr) const
 {
   wxConfigPathChanger path(this, key);
 
@@ -829,32 +828,12 @@ bool wxFileConfig::Read(const wxString& key,
     return FALSE;
   }
 
-  *pStr = ExpandEnvVars(pEntry->Value());
+  *pStr = pEntry->Value();
+
   return TRUE;
 }
 
-bool wxFileConfig::Read(const wxString& key,
-                        wxString* pStr, const wxString& defVal) const
-{
-  wxConfigPathChanger path(this, key);
-
-  wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(path.Name());
-  bool ok;
-  if (pEntry == NULL) {
-    if( IsRecordingDefaults() )
-      ((wxFileConfig *)this)->Write(key,defVal);
-    *pStr = ExpandEnvVars(defVal);
-    ok = FALSE;
-  }
-  else {
-    *pStr = ExpandEnvVars(pEntry->Value());
-    ok = TRUE;
-  }
-
-  return ok;
-}
-
-bool wxFileConfig::Read(const wxString& key, long *pl) const
+bool wxFileConfig::DoReadLong(const wxString& key, long *pl) const
 {
   wxString str;
   if ( !Read(key, & str) )
@@ -862,11 +841,10 @@ bool wxFileConfig::Read(const wxString& key, long *pl) const
     return FALSE;
   }
 
-  *pl = wxAtol(str);
-  return TRUE;
+  return str.ToLong(pl);
 }
 
-bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
+bool wxFileConfig::DoWriteString(const wxString& key, const wxString& szValue)
 {
   wxConfigPathChanger path(this, key);
 
@@ -901,12 +879,9 @@ bool wxFileConfig::Write(const wxString& key, const wxString& szValue)
   return TRUE;
 }
 
-bool wxFileConfig::Write(const wxString& key, long lValue)
+bool wxFileConfig::DoWriteLong(const wxString& key, long lValue)
 {
-  // ltoa() is not ANSI :-(
-  wxString buf;
-  buf.Printf(wxT("%ld"), lValue);
-  return Write(key, buf);
+  return Write(key, wxString::Format(_T("%ld"), lValue));
 }
 
 bool wxFileConfig::Flush(bool /* bCurrentOnly */)

@@ -100,6 +100,11 @@ bool MyApp::OnInit()
 
   wxConfigBase *pConfig = wxConfigBase::Get();
 
+  // uncomment this to force writing back of the defaults for all values
+  // if they're not present in the config - this can give the user an idea
+  // of all possible settings for this program
+  pConfig->SetRecordDefaults();
+
   // or you could also write something like this:
   //  wxFileConfig *pConfig = new wxFileConfig("conftest");
   //  wxConfigBase::Set(pConfig);
@@ -209,7 +214,7 @@ void MyFrame::OnQuit(wxCommandEvent&)
 
 void MyFrame::OnAbout(wxCommandEvent&)
 {
-  wxMessageBox(_T("wxConfig demo\n© Vadim Zeitlin 1998"), _T("About"),
+  wxMessageBox(_T("wxConfig demo\n© 1998-2001 Vadim Zeitlin"), _T("About"),
                wxICON_INFORMATION | wxOK);
 }
 

@@ -155,43 +155,56 @@ public:
 
   // key access: returns TRUE if value was really read, FALSE if default used
   // (and if the key is not found the default value is returned.)
+
     // read a string from the key
-  virtual bool Read(const wxString& key, wxString *pStr) const = 0;
-  virtual bool Read(const wxString& key, wxString *pStr, const wxString& defVal) const;
+  bool Read(const wxString& key, wxString *pStr) const;
+  bool Read(const wxString& key, wxString *pStr, const wxString& defVal) const;
 
-  virtual wxString Read(const wxString& key, const wxString& defVal = wxEmptyString) const;
+    // read a number (long)
+  bool Read(const wxString& key, long *pl) const;
+  bool Read(const wxString& key, long *pl, long defVal) const;
 
-  virtual bool Read(const wxString& key, long *pl) const = 0;
-  virtual bool Read(const wxString& key, long *pl, long defVal) const;
+    // read an int
+  bool Read(const wxString& key, int *pi) const;
+  bool Read(const wxString& key, int *pi, int defVal) const;
 
-  virtual long Read(const wxString& strKey, long defVal) const
-    { long l; Read(strKey, &l, defVal); return l; }
+    // read a double
+  bool Read(const wxString& key, double* val) const;
+  bool Read(const wxString& key, double* val, double defVal) const;
 
-  // Convenience functions that are built on other forms
+    // read a bool
+  bool Read(const wxString& key, bool* val) const;
+  bool Read(const wxString& key, bool* val, bool defVal) const;
 
-  // int
-  virtual bool Read(const wxString& key, int *pi) const;
-  virtual bool Read(const wxString& key, int *pi, int defVal) const;
+  // convenience functions returning directly the value (we don't have them for
+  // int/double/bool as there would be ambiguities with the long one then)
+  wxString Read(const wxString& key,
+                const wxString& defVal = wxEmptyString) const
+    { wxString s; (void)Read(key, &s, defVal); return s; }
 
-  // double
-  virtual bool Read(const wxString& key, double* val) const;
-  virtual bool Read(const wxString& key, double* val, double defVal) const;
-
-  // bool
-  virtual bool Read(const wxString& key, bool* val) const;
-  virtual bool Read(const wxString& key, bool* val, bool defVal) const;
+  long Read(const wxString& key, long defVal) const
+    { long l; (void)Read(key, &l, defVal); return l; }
 
     // write the value (return true on success)
-  virtual bool Write(const wxString& key, const wxString& value) = 0;
-  virtual bool Write(const wxString& key, long value) = 0;
+  bool Write(const wxString& key, const wxString& value)
+    { return DoWriteString(key, value); }
 
-  // convenience functions
-  virtual bool Write(const wxString& key, double value);
-  virtual bool Write(const wxString& key, bool value);
+  bool Write(const wxString& key, long value)
+    { return DoWriteLong(key, value); }
+
+  bool Write(const wxString& key, int value)
+    { return DoWriteInt(key, value); }
+
+  bool Write(const wxString& key, double value)
+    { return DoWriteDouble(key, value); }
+
+  bool Write(const wxString& key, bool value)
+    { return DoWriteBool(key, value); }
 
   // we have to provide a separate version for C strings as otherwise they
   // would be converted to bool and not to wxString as expected!
-  virtual bool Write(const wxString& key, const wxChar *value);
+  bool Write(const wxString& key, const wxChar *value)
+    { return Write(key, wxString(value)); }
 
   // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = FALSE) = 0;
@@ -242,6 +255,19 @@ protected:
   static bool IsImmutable(const wxString& key)
     { return !key.IsEmpty() && key[0] == wxCONFIG_IMMUTABLE_PREFIX; }
 
+  // do read/write the values of different types
+  virtual bool DoReadString(const wxString& key, wxString *pStr) const = 0;
+  virtual bool DoReadLong(const wxString& key, long *pl) const = 0;
+  virtual bool DoReadInt(const wxString& key, int *pi) const;
+  virtual bool DoReadDouble(const wxString& key, double* val) const;
+  virtual bool DoReadBool(const wxString& key, bool* val) const;
+
+  virtual bool DoWriteString(const wxString& key, const wxString& value) = 0;
+  virtual bool DoWriteLong(const wxString& key, long value) = 0;
+  virtual bool DoWriteInt(const wxString& key, int value);
+  virtual bool DoWriteDouble(const wxString& key, double value);
+  virtual bool DoWriteBool(const wxString& key, bool value);
+
 private:
   // are we doing automatic environment variable expansion?
   bool m_bExpandEnvVars;
@@ -260,27 +286,27 @@ private:
   long              m_style;
 };
 
-  // a handy little class which changes current path to the path of given entry
-  // and restores it in dtor: so if you declare a local variable of this type,
-  // you work in the entry directory and the path is automatically restored
-  // when the function returns
-  // Taken out of wxConfig since not all compilers can cope with nested classes.
-  class wxConfigPathChanger
-  {
-  public:
-    // ctor/dtor do path changing/restorin
-    wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
-   ~wxConfigPathChanger();
+// a handy little class which changes current path to the path of given entry
+// and restores it in dtor: so if you declare a local variable of this type,
+// you work in the entry directory and the path is automatically restored
+// when the function returns
+// Taken out of wxConfig since not all compilers can cope with nested classes.
+class wxConfigPathChanger
+{
+public:
+  // ctor/dtor do path changing/restorin
+  wxConfigPathChanger(const wxConfigBase *pContainer, const wxString& strEntry);
+ ~wxConfigPathChanger();
 
-    // get the key name
-    const wxString& Name() const { return m_strName; }
+  // get the key name
+  const wxString& Name() const { return m_strName; }
 
-  private:
-    wxConfigBase *m_pContainer;   // object we live in
-    wxString      m_strName,      // name of entry (i.e. name only)
-                  m_strOldPath;   // saved path
-    bool          m_bChanged;     // was the path changed?
-  };
+private:
+  wxConfigBase *m_pContainer;   // object we live in
+  wxString      m_strName,      // name of entry (i.e. name only)
+                m_strOldPath;   // saved path
+  bool          m_bChanged;     // was the path changed?
+};
 
 
 // ----------------------------------------------------------------------------
