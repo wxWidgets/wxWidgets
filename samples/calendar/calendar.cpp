@@ -2,7 +2,7 @@
 // Name:        calendar.cpp
 // Purpose:     wxCalendarCtrl sample
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Mark Johnson : Added wxLayoutConstraints support for Ctrl
 // Created:     02.01.00
 // RCS-ID:      $Id$
 // Copyright:   (c) Vadim Zeitlin
@@ -299,12 +299,13 @@ void MyFrame::OnAllowYearUpdate(wxUpdateUIEvent& event)
 MyPanel::MyPanel(wxFrame *frame)
        : wxPanel(frame, -1)
 {
-    SetAutoLayout(TRUE);
-
     wxString date;
-    date.Printf("Selected date: %s",
+    //------------------
+    SetAutoLayout(TRUE);
+    date.Printf("Selected date: %s ",
                 wxDateTime::Today().FormatISODate().c_str());
     m_date = new wxStaticText(this, -1, date);
+    //------------------
     m_calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
                                     wxDefaultDateTime,
                                     wxDefaultPosition,
@@ -313,21 +314,25 @@ MyPanel::MyPanel(wxFrame *frame)
                                     wxCAL_SHOW_HOLIDAYS |
                                     wxRAISED_BORDER);
 
+    m_calendar->SetAutoLayout(TRUE);
+    //------------------
     wxLayoutConstraints *c = new wxLayoutConstraints;
-    c->left.SameAs(this, wxLeft, 10);
-    c->centreY.SameAs(m_calendar, wxCentreY);
-    c->height.AsIs();
-    c->width.AsIs();
-
-    m_date->SetConstraints(c);
-
+    //------------------
     c = new wxLayoutConstraints;
-    c->left.SameAs(m_date, wxRight, 10);
-    c->top.SameAs(this, wxTop, 10);
+    c->left.PercentOf(this, wxWidth, 10);
+    c->right.PercentOf(this, wxWidth, 60);
+    c->top.PercentOf(this, wxHeight, 10);
+    c->bottom.PercentOf(this, wxHeight, 60);
+    m_calendar->SetConstraints(c);
+    //------------------
+    c = new wxLayoutConstraints;
+    c->left.SameAs(m_calendar, wxLeft, 10);
+    c->top.SameAs(m_calendar, wxBottom);
     c->height.AsIs();
     c->width.AsIs();
-
-    m_calendar->SetConstraints(c);
+    m_date->SetConstraints(c);
+    //------------------
+    Layout();
 }
 
 void MyPanel::OnCalendar(wxCalendarEvent& event)
