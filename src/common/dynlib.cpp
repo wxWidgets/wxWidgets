@@ -64,8 +64,8 @@ WX_DEFINE_USER_EXPORTED_OBJARRAY(wxDynamicLibraryDetailsArray);
     const wxChar *wxDynamicLibrary::ms_dllext = wxEmptyString;
 #endif
 
-// for Unix it is in src/unix/dlunix.cpp
-#if !defined(__UNIX__) || defined(__EMX__)
+// for MSW/Unix it is defined in platform-specific file
+#if !(defined(__WXMSW__) && (!defined(__UNIX__) || defined(__EMX__)))
 
 wxDllType wxDynamicLibrary::GetProgramHandle()
 {
@@ -73,7 +73,8 @@ wxDllType wxDynamicLibrary::GetProgramHandle()
    return 0;
 }
 
-#endif // __UNIX__
+#endif // __WXMSW__ || __UNIX__
+
 
 bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 {

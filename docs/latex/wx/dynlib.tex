@@ -103,6 +103,14 @@ contains no such symbol.
 \helpref{wxDYNLIB\_FUNCTION}{wxdynlibfunction}
 
 
+\membersection{wxDynamicLibrary::GetProgramHandle}\label{wxdynamiclibrarygetprogramhandle}
+
+\func{static wxDllType}{GetProgramHandle}{\void}
+
+Return a valid handle for the main program itself or \texttt{NULL} if symbols
+from the main program can't be loaded on this platform.
+
+
 \membersection{wxDynamicLibrary::HasSymbol}\label{wxdynamiclibraryhassymbol}
 
 \constfunc{bool}{HasSymbol}{\param{const wxString\& }{name}}
