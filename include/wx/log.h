@@ -12,9 +12,11 @@
 #ifndef   _WX_LOG_H_
 #define   _WX_LOG_H_
 
-#ifdef    __GNUG__
-#pragma interface "log.h"
+#ifdef  __GNUG__
+    #pragma interface "log.h"
 #endif
+
+#include <wx/dynarray.h>
 
 // ----------------------------------------------------------------------------
 // constants
@@ -23,17 +25,33 @@
 // different standard log levels (you may also define your own)
 enum
 {
-  wxLOG_FatalError, // program can't continue, abort immediately
-  wxLOG_Error,      // a serious error, user must be informed about it
-  wxLOG_Warning,    // user is normally informed about it but may be ignored
-  wxLOG_Message,    // normal message (i.e. normal output of a non GUI app)
-  wxLOG_Info,       // informational message (a.k.a. 'Verbose')
-  wxLOG_Status,     // informational: might go to the status line of GUI app
-  wxLOG_Debug,      // never shown to the user, disabled in release mode
-  wxLOG_Trace,      // trace messages are also only enabled in debug mode
-  wxLOG_Progress,   // used for progress indicator (not yet)
-  wxLOG_User = 100  // user defined levels start here
+    wxLOG_FatalError, // program can't continue, abort immediately
+    wxLOG_Error,      // a serious error, user must be informed about it
+    wxLOG_Warning,    // user is normally informed about it but may be ignored
+    wxLOG_Message,    // normal message (i.e. normal output of a non GUI app)
+    wxLOG_Info,       // informational message (a.k.a. 'Verbose')
+    wxLOG_Status,     // informational: might go to the status line of GUI app
+    wxLOG_Debug,      // never shown to the user, disabled in release mode
+    wxLOG_Trace,      // trace messages are also only enabled in debug mode
+    wxLOG_Progress,   // used for progress indicator (not yet)
+    wxLOG_User = 100  // user defined levels start here
 };
+
+// symbolic trace masks - wxLogTrace("foo", "some trace message...") will be
+// discarded unless the string "foo" has been added to the list of allowed
+// ones with AddTraceMask()
+
+#define wxTRACE_MemAlloc "memalloc" // trace memory allocation (new/delete)
+#define wxTRACE_Messages "messages" // trace window messages/X callbacks
+#define wxTRACE_ResAlloc "resalloc" // trace GDI resource allocation
+#define wxTRACE_RefCount "refcount" // trace various ref counting operations
+
+#ifdef  __WXMSW__
+    #define wxTRACE_OleCalls "ole"  // OLE interface calls
+#endif
+
+// the trace masks have been superceded by symbolic trace constants, they're
+// for compatibility only andwill be removed soon - do NOT use them
 
 // meaning of different bits of the trace mask (which allows selectively
 // enable/disable some trace messages)
@@ -43,7 +61,7 @@ enum
 #define wxTraceRefCount 0x0008  // trace various ref counting operations
 
 #ifdef  __WXMSW__
-  #define wxTraceOleCalls 0x0100  // OLE interface calls
+    #define wxTraceOleCalls 0x0100  // OLE interface calls
 #endif
 
 typedef unsigned long wxTraceMask;
@@ -52,12 +70,13 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxLogFrame;
 class WXDLLEXPORT wxFrame;
 
 #if wxUSE_IOSTREAMH
-    // N.B. BC++ doesn't have istream.h, ostream.h
+// N.B. BC++ doesn't have istream.h, ostream.h
 #   include <iostream.h>
 #else
 #   include <ostream>
@@ -70,96 +89,97 @@ class WXDLLEXPORT wxFrame;
 // derive from this class to redirect (or suppress, or ...) log messages
 // normally, only a single instance of this class exists but it's not enforced
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxLog
 {
 public:
-  // ctor
-  wxLog();
+    // ctor
+    wxLog();
 
-  // these functions allow to completely disable all log messages
-    // is logging disabled now?
-  static bool IsEnabled() { return ms_doLog; }
-    // change the flag state, return the previous one
-  static bool EnableLogging(bool doIt = TRUE)
-    { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
+    // these functions allow to completely disable all log messages
+        // is logging disabled now?
+    static bool IsEnabled() { return ms_doLog; }
+        // change the flag state, return the previous one
+    static bool EnableLogging(bool doIt = TRUE)
+        { bool doLogOld = ms_doLog; ms_doLog = doIt; return doLogOld; }
 
-  // sink function
-  static void OnLog(wxLogLevel level, const char *szString)
-  {
-    if ( IsEnabled() ) {
-      wxLog *pLogger = GetActiveTarget();
-      if ( pLogger )
-        pLogger->DoLog(level, szString);
+    // static sink function - see DoLog() for function to overload in the
+    // derived classes
+    static void OnLog(wxLogLevel level, const char *szString, time_t t)
+    {
+        if ( IsEnabled() ) {
+            wxLog *pLogger = GetActiveTarget();
+            if ( pLogger )
+                pLogger->DoLog(level, szString, t);
+        }
     }
-  }
 
-  // message buffering
-    // flush shows all messages if they're not logged immediately
-    // (FILE and iostream logs don't need it, but wxGuiLog does to avoid
-    //  showing 17 modal dialogs one after another)
-  virtual void Flush();
-    // call to Flush() may be optimized: call it only if this function
-    // returns true (although Flush() also returns immediately if there
-    // is no messages, this functions is more efficient because inline)
-  bool HasPendingMessages() const { return m_bHasMessages; }
+    // message buffering
+        // flush shows all messages if they're not logged immediately (FILE
+        // and iostream logs don't need it, but wxGuiLog does to avoid showing
+        // 17 modal dialogs one after another)
+    virtual void Flush();
+        // call to Flush() may be optimized: call it only if this function
+        // returns true (although Flush() also returns immediately if there is
+        // no messages, this functions is more efficient because inline)
+    bool HasPendingMessages() const { return m_bHasMessages; }
 
-  // only one sink is active at each moment
-    // get current log target, will call wxApp::CreateLogTarget() to create one
-    // if none exists
-  static wxLog *GetActiveTarget();
-    // change log target, pLogger may be NULL
-  static wxLog *SetActiveTarget(wxLog *pLogger);
+    // only one sink is active at each moment
+        // get current log target, will call wxApp::CreateLogTarget() to
+        // create one if none exists
+    static wxLog *GetActiveTarget();
+        // change log target, pLogger may be NULL
+    static wxLog *SetActiveTarget(wxLog *pLogger);
 
-  // functions controlling the default wxLog behaviour
-    // verbose mode is activated by standard command-line '-verbose' option
-  void SetVerbose(bool bVerbose = TRUE) { m_bVerbose = bVerbose; }
-    // sets the format for timestamp prepended by wxLog::DoLog(): it's
-    // passed to strftime() function, see it's documentation for details.
-    // no time stamp at all if szTF is NULL or empty
-    // NB: the string is not copied, so it's lifetime must be long enough!
-  void SetTimeStampFormat(const char *szTF) { m_szTimeFormat = szTF; }
-    // trace mask (see wxTraceXXX constants for details)
-  static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
-    // should GetActiveTarget() try to create a new log object if the current
-    // is NULL?
-  static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
+    // functions controlling the default wxLog behaviour
+        // verbose mode is activated by standard command-line '-verbose'
+        // option
+    void SetVerbose(bool bVerbose = TRUE) { m_bVerbose = bVerbose; }
+        // should GetActiveTarget() try to create a new log object if the
+        // current is NULL?
+    static void DontCreateOnDemand() { ms_bAutoCreate = FALSE; }
 
-  // accessors
-    // gets the verbose status
-  bool GetVerbose() const { return m_bVerbose; }
-    // get current time format
-  const char *GetTimeStampFormat() const { return m_szTimeFormat; }
-    // get trace mask
-  static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
+        // trace mask (see wxTraceXXX constants for details)
+    static void SetTraceMask(wxTraceMask ulMask) { ms_ulTraceMask = ulMask; }
+        // add string trace mask
+    static void AddTraceMask(const wxString& str) { ms_aTraceMasks.Add(str); }
+        // add string trace mask
+    static void RemoveTraceMask(const wxString& str);
 
-  // make dtor virtual for all derived classes
-  virtual ~wxLog() { }
+    // accessors
+        // gets the verbose status
+    bool GetVerbose() const { return m_bVerbose; }
+        // get trace mask
+    static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
+        // is this trace mask in the list?
+    static bool IsAllowedTraceMask(const char *mask)
+        { return ms_aTraceMasks.Index(mask) != wxNOT_FOUND; }
+
+    // make dtor virtual for all derived classes
+    virtual ~wxLog() { }
 
 protected:
-  bool m_bHasMessages;
+    bool m_bHasMessages; // any messages in the queue?
+    bool m_bVerbose;     // FALSE => ignore LogInfo messages
 
-  bool          m_bVerbose;     // FALSE => ignore LogInfo messages
-  const char   *m_szTimeFormat; // format for strftime()
-
-  // the logging functions that can be overriden
-    // default DoLog() prepends the time stamp and a prefix corresponding
-    // to the message to szString and then passes it to DoLogString()
-  virtual void DoLog(wxLogLevel level, const char *szString);
-    // default DoLogString does nothing but is not pure virtual because if
-    // you override DoLog() you might not need it at all
-  virtual void DoLogString(const char *szString);
-
-  // helpers
-    // put the time stamp in the current format into the string
-  wxString TimeStamp() const;
+    // the logging functions that can be overriden
+        // default DoLog() prepends the time stamp and a prefix corresponding
+        // to the message to szString and then passes it to DoLogString()
+    virtual void DoLog(wxLogLevel level, const char *szString, time_t t);
+        // default DoLogString does nothing but is not pure virtual because if
+        // you override DoLog() you might not need it at all
+    virtual void DoLogString(const char *szString, time_t t);
 
 private:
-  // static variables
-  // ----------------
-  static wxLog      *ms_pLogger;      // currently active log sink
-  static bool        ms_doLog;        // FALSE => all logging disabled
-  static bool        ms_bAutoCreate;  // automatically create new log targets?
-  static wxTraceMask ms_ulTraceMask;  // controls wxLogTrace behaviour
+    // static variables
+    // ----------------
+
+    static wxLog      *ms_pLogger;      // currently active log sink
+    static bool        ms_doLog;        // FALSE => all logging disabled
+    static bool        ms_bAutoCreate;  // create new log targets on demand?
+
+    static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
+    static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
 };
 
 // ----------------------------------------------------------------------------
@@ -170,14 +190,14 @@ private:
 class WXDLLEXPORT wxLogStderr : public wxLog
 {
 public:
-  // redirect log output to a FILE
-  wxLogStderr(FILE *fp = (FILE *) NULL);
+    // redirect log output to a FILE
+    wxLogStderr(FILE *fp = (FILE *) NULL);
 
 private:
-  // implement sink function
-  virtual void DoLogString(const char *szString);
+    // implement sink function
+    virtual void DoLogString(const char *szString, time_t t);
 
-  FILE *m_fp;
+    FILE *m_fp;
 };
 
 #if wxUSE_STD_IOSTREAM
@@ -185,15 +205,15 @@ private:
 class WXDLLEXPORT wxLogStream : public wxLog
 {
 public:
-  // redirect log output to an ostream
-  wxLogStream(ostream *ostr = (ostream *) NULL);
+    // redirect log output to an ostream
+    wxLogStream(ostream *ostr = (ostream *) NULL);
 
 protected:
-  // implement sink function
-  virtual void DoLogString(const char *szString);
+    // implement sink function
+    virtual void DoLogString(const char *szString, time_t t);
 
-  // @@ using ptr here to avoid including <iostream.h> from this file
-  ostream *m_ostr;
+    // using ptr here to avoid including <iostream.h> from this file
+    ostream *m_ostr;
 };
 #endif
 
@@ -204,9 +224,9 @@ protected:
 class WXDLLEXPORT wxLogTextCtrl : public wxLogStream
 {
 public:
-  // we just create an ostream from wxTextCtrl and use it in base class
-  wxLogTextCtrl(wxTextCtrl *pTextCtrl);
- ~wxLogTextCtrl();
+    // we just create an ostream from wxTextCtrl and use it in base class
+    wxLogTextCtrl(wxTextCtrl *pTextCtrl);
+    ~wxLogTextCtrl();
 };
 #endif
 
@@ -216,17 +236,22 @@ public:
 class WXDLLEXPORT wxLogGui : public wxLog
 {
 public:
-  // ctor
-  wxLogGui();
+    // ctor
+    wxLogGui();
 
-  // show all messages that were logged since the last Flush()
-  virtual void Flush();
+    // show all messages that were logged since the last Flush()
+    virtual void Flush();
 
 protected:
-  virtual void DoLog(wxLogLevel level, const char *szString);
+    virtual void DoLog(wxLogLevel level, const char *szString, time_t t);
 
-  wxArrayString m_aMessages;
-  bool          m_bErrors;
+    // empty everything
+    void Clear();
+
+    wxArrayString m_aMessages;
+    wxArrayLong   m_aTimes;
+    bool          m_bErrors,        // do we have any errors?
+                  m_bWarnings;      // any warnings?
 };
 
 // ----------------------------------------------------------------------------
@@ -238,48 +263,48 @@ protected:
 class WXDLLEXPORT wxLogWindow : public wxLog
 {
 public:
-  wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
-              const char *szTitle,      // the title of the frame
-              bool bShow = TRUE,        // show window immediately?
-              bool bPassToOld = TRUE);  // pass log messages to the old target?
-  ~wxLogWindow();
+    wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
+            const char *szTitle,      // the title of the frame
+            bool bShow = TRUE,        // show window immediately?
+            bool bPassToOld = TRUE);  // pass log messages to the old target?
+    ~wxLogWindow();
 
-  // window operations
+    // window operations
     // show/hide the log window
-  void Show(bool bShow = TRUE);
+    void Show(bool bShow = TRUE);
     // retrieve the pointer to the frame
-  wxFrame *GetFrame() const;
+    wxFrame *GetFrame() const;
 
-  // accessors
+    // accessors
     // the previous log target (may be NULL)
-  wxLog *GetOldLog() const { return m_pOldLog; }
+    wxLog *GetOldLog() const { return m_pOldLog; }
     // are we passing the messages to the previous log target?
-  bool IsPassingMessages() const { return m_bPassMessages; }
+    bool IsPassingMessages() const { return m_bPassMessages; }
 
-  // we can pass the messages to the previous log target (we're in this mode by
-  // default: we collect all messages in the window, but also let the default
-  // processing take place)
-  void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
+    // we can pass the messages to the previous log target (we're in this mode by
+    // default: we collect all messages in the window, but also let the default
+    // processing take place)
+    void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
 
-  // base class virtuals
+    // base class virtuals
     // we don't need it ourselves, but we pass it to the previous logger
-  virtual void Flush();
+    virtual void Flush();
 
-  // overridables
+    // overridables
     // called immediately after the log frame creation allowing for
     // any extra initializations
-  virtual void OnFrameCreate(wxFrame *frame);
+    virtual void OnFrameCreate(wxFrame *frame);
     // called right before the log frame is going to be deleted
-  virtual void OnFrameDelete(wxFrame *frame);
+    virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
-  virtual void DoLog(wxLogLevel level, const char *szString);
-  virtual void DoLogString(const char *szString);
+    virtual void DoLog(wxLogLevel level, const char *szString, time_t t);
+    virtual void DoLogString(const char *szString, time_t t);
 
 private:
-  bool        m_bPassMessages;  // pass messages to m_pOldLog?
-  wxLog      *m_pOldLog;        // previous log target
-  wxLogFrame *m_pLogFrame;      // the log frame
+    bool        m_bPassMessages;  // pass messages to m_pOldLog?
+    wxLog      *m_pOldLog;        // previous log target
+    wxLogFrame *m_pLogFrame;      // the log frame
 };
 
 #endif // wxUSE_NOGUI
@@ -290,25 +315,25 @@ private:
 
 // example of usage:
 /*
-void Foo() {
-  wxFile file;
+   void Foo() {
+   wxFile file;
 
-  // wxFile.Open() normally complains if file can't be opened, we don't want it
-  wxLogNull logNo;
-  if ( !file.Open("bar") )
-    ... process error ourselves ...
+// wxFile.Open() normally complains if file can't be opened, we don't want it
+wxLogNull logNo;
+if ( !file.Open("bar") )
+... process error ourselves ...
 
-  // ~wxLogNull called, old log sink restored
+// ~wxLogNull called, old log sink restored
 }
-*/
+ */
 class WXDLLEXPORT wxLogNull
 {
 public:
-  wxLogNull() { m_flagOld = wxLog::EnableLogging(FALSE); }
- ~wxLogNull() { (void)wxLog::EnableLogging(m_flagOld);   }
+    wxLogNull() { m_flagOld = wxLog::EnableLogging(FALSE); }
+    ~wxLogNull() { (void)wxLog::EnableLogging(m_flagOld);   }
 
 private:
-  bool m_flagOld; // the previous value of the wxLog::ms_doLog
+    bool m_flagOld; // the previous value of the wxLog::ms_doLog
 };
 
 // ============================================================================
@@ -324,82 +349,89 @@ private:
 // -------------------
 
 #define DECLARE_LOG_FUNCTION(level)                                 \
-        extern void WXDLLEXPORT wxLog##level(const char *szFormat, ...)
+extern void WXDLLEXPORT wxLog##level(const char *szFormat, ...)
 #define DECLARE_LOG_FUNCTION2(level, arg1)                          \
-        extern void WXDLLEXPORT wxLog##level(arg1, const char *szFormat, ...)
+extern void WXDLLEXPORT wxLog##level(arg1, const char *szFormat, ...)
 
-// a generic function for all levels (level is passes as parameter)
-DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
+    // a generic function for all levels (level is passes as parameter)
+    DECLARE_LOG_FUNCTION2(Generic, wxLogLevel level);
 
-// one function per each level
-DECLARE_LOG_FUNCTION(FatalError);
-DECLARE_LOG_FUNCTION(Error);
-DECLARE_LOG_FUNCTION(Warning);
-DECLARE_LOG_FUNCTION(Message);
-DECLARE_LOG_FUNCTION(Info);
-DECLARE_LOG_FUNCTION(Verbose);
+    // one function per each level
+    DECLARE_LOG_FUNCTION(FatalError);
+    DECLARE_LOG_FUNCTION(Error);
+    DECLARE_LOG_FUNCTION(Warning);
+    DECLARE_LOG_FUNCTION(Message);
+    DECLARE_LOG_FUNCTION(Info);
+    DECLARE_LOG_FUNCTION(Verbose);
 
-// this function sends the log message to the status line of the top level
-// application frame, if any
-DECLARE_LOG_FUNCTION(Status);
+    // this function sends the log message to the status line of the top level
+    // application frame, if any
+    DECLARE_LOG_FUNCTION(Status);
 
-// this one is the same as previous except that it allows to explicitly 
-// specify the frame to which the output should go
-DECLARE_LOG_FUNCTION2(Status, wxFrame *pFrame);
+    // this one is the same as previous except that it allows to explicitly
+    // specify the frame to which the output should go
+    DECLARE_LOG_FUNCTION2(Status, wxFrame *pFrame);
 
-// additional one: as wxLogError, but also logs last system call error code
-// and the corresponding error message if available
-DECLARE_LOG_FUNCTION(SysError);
+    // additional one: as wxLogError, but also logs last system call error code
+    // and the corresponding error message if available
+    DECLARE_LOG_FUNCTION(SysError);
 
-// and another one which also takes the error code (for those broken APIs
-// that don't set the errno (like registry APIs in Win32))
-DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
+    // and another one which also takes the error code (for those broken APIs
+    // that don't set the errno (like registry APIs in Win32))
+    DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 
-// debug functions do nothing in release mode
+    // debug functions do nothing in release mode
 #ifdef  __WXDEBUG__
-  DECLARE_LOG_FUNCTION(Debug);
+    DECLARE_LOG_FUNCTION(Debug);
 
-  // first king of LogTrace is uncoditional: it doesn't check the level,
-  // while the second one does nothing if all of level bits are not set
-  // in wxLog::GetActive()->GetTraceMask().
-  DECLARE_LOG_FUNCTION(Trace);
-  DECLARE_LOG_FUNCTION2(Trace, wxTraceMask mask);
+    // first king of LogTrace is uncoditional: it doesn't check the level,
+    DECLARE_LOG_FUNCTION(Trace);
+
+    // this second version will only log the message if the mask had been
+    // added to the list of masks with AddTraceMask()
+    DECLARE_LOG_FUNCTION2(Trace, const char *mask);
+
+    // the last one does nothing if all of level bits are not set
+    // in wxLog::GetActive()->GetTraceMask() - it's deprecated in favour of
+    // string identifiers
+    DECLARE_LOG_FUNCTION2(Trace, wxTraceMask mask);
 #else   //!debug
-  // these functions do nothing
-  inline void wxLogDebug(const char *, ...) { }
-  inline void wxLogTrace(const char *, ...) { }
-  inline void wxLogTrace(wxTraceMask, const char *, ...) { }
+    // these functions do nothing in release builds
+    inline void wxLogDebug(const char *, ...) { }
+    inline void wxLogTrace(const char *, ...) { }
+    inline void wxLogTrace(wxTraceMask, const char *, ...) { }
+    inline void wxLogTrace(const char *, const char *, ...) { }
 #endif
 
 
-// are we in 'verbose' mode?
-// (note that it's often handy to change this var manually from the
-//  debugger, thus enabling/disabling verbose reporting for some
-//  parts of the program only)
-WXDLLEXPORT_DATA(extern bool) g_bVerbose;
+    // are we in 'verbose' mode?
+    // (note that it's often handy to change this var manually from the
+    //  debugger, thus enabling/disabling verbose reporting for some
+    //  parts of the program only)
+    WXDLLEXPORT_DATA(extern bool) g_bVerbose;
 
-// ----------------------------------------------------------------------------
-// get error code/error message from system in a portable way
-// ----------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
+    // get error code/error message from system in a portable way
+    // ----------------------------------------------------------------------------
 
-// return the last system error code
-WXDLLEXPORT unsigned long wxSysErrorCode();
-// return the error message for given (or last if 0) error code
-WXDLLEXPORT const char* wxSysErrorMsg(unsigned long nErrCode = 0);
+    // return the last system error code
+    WXDLLEXPORT unsigned long wxSysErrorCode();
+    // return the error message for given (or last if 0) error code
+    WXDLLEXPORT const char* wxSysErrorMsg(unsigned long nErrCode = 0);
 
-// ----------------------------------------------------------------------------
-// debug only logging functions: use them with API name and error code
-// ----------------------------------------------------------------------------
+    // ----------------------------------------------------------------------------
+    // debug only logging functions: use them with API name and error code
+    // ----------------------------------------------------------------------------
 
 #ifdef  __WXDEBUG__
-  #define wxLogApiError(api, rc)                                              \
-                    wxLogDebug("At %s(%d) '%s' failed with error %lx (%s).",  \
-                               __FILE__, __LINE__, api,                       \
-                               rc, wxSysErrorMsg(rc))
-  #define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
+#define wxLogApiError(api, rc)                                              \
+    wxLogDebug("At %s(%d) '%s' failed with error %lx (%s).",  \
+            __FILE__, __LINE__, api,                       \
+            rc, wxSysErrorMsg(rc))
+#define wxLogLastError(api) wxLogApiError(api, wxSysErrorCode())
 #else   //!debug
-  inline void wxLogApiError(const char *, long) { }
-  inline void wxLogLastError(const char *) { }
+    inline void wxLogApiError(const char *, long) { }
+    inline void wxLogLastError(const char *) { }
 #endif  //debug/!debug
 
 #endif  // _WX_LOG_H_

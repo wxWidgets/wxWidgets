@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CMNDATA_H_BASE_
@@ -30,16 +30,16 @@ public:
     wxColourData();
     wxColourData(const wxColourData& data);
     ~wxColourData();
-    
-    inline void SetChooseFull(bool flag) { chooseFull = flag; }
-    inline bool GetChooseFull() const { return chooseFull; }
-    inline void SetColour(wxColour& colour) { dataColour = colour; }
-    inline wxColour &GetColour() { return dataColour; }
+
+    void SetChooseFull(bool flag) { chooseFull = flag; }
+    bool GetChooseFull() const { return chooseFull; }
+    void SetColour(wxColour& colour) { dataColour = colour; }
+    wxColour &GetColour() { return dataColour; }
 
     // Array of 16 custom colours
     void SetCustomColour(int i, wxColour& colour);
     wxColour GetCustomColour(int i);
-    
+
     void operator=(const wxColourData& data);
 
 public:
@@ -56,26 +56,26 @@ public:
     wxFontData(const wxFontData& fontData);
     ~wxFontData();
 
-    inline void SetAllowSymbols(bool flag) { allowSymbols = flag; }
-    inline bool GetAllowSymbols() const { return allowSymbols; }
+    void SetAllowSymbols(bool flag) { allowSymbols = flag; }
+    bool GetAllowSymbols() const { return allowSymbols; }
 
-    inline void SetColour(const wxColour& colour) { fontColour = colour; }
-    inline wxColour &GetColour() { return fontColour; }
+    void SetColour(const wxColour& colour) { fontColour = colour; }
+    wxColour &GetColour() { return fontColour; }
 
-    inline void SetShowHelp(bool flag) { showHelp = flag; }
-    inline bool GetShowHelp() const { return showHelp; }
+    void SetShowHelp(bool flag) { showHelp = flag; }
+    bool GetShowHelp() const { return showHelp; }
 
-    inline void EnableEffects(bool flag) { enableEffects = flag; }
-    inline bool GetEnableEffects() const { return enableEffects; }
+    void EnableEffects(bool flag) { enableEffects = flag; }
+    bool GetEnableEffects() const { return enableEffects; }
 
-    inline void SetInitialFont(const wxFont& font) { initialFont = font; }
-    inline wxFont GetInitialFont() const { return initialFont; }
+    void SetInitialFont(const wxFont& font) { initialFont = font; }
+    wxFont GetInitialFont() const { return initialFont; }
 
-    inline void SetChosenFont(const wxFont& font) { chosenFont = font; }
-    inline wxFont GetChosenFont() const { return chosenFont; }
+    void SetChosenFont(const wxFont& font) { chosenFont = font; }
+    wxFont GetChosenFont() const { return chosenFont; }
 
-    inline void SetRange(int minRange, int maxRange) { minSize = minRange; maxSize = maxRange; }
-    
+    void SetRange(int minRange, int maxRange) { minSize = minRange; maxSize = maxRange; }
+
     void operator=(const wxFontData& data);
 
 public:
@@ -97,58 +97,58 @@ public:
 class WXDLLEXPORT wxPrintData: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxPrintData)
-        
+
     wxPrintData();
     wxPrintData(const wxPrintData& printData);
     ~wxPrintData();
-    
-    inline int GetNoCopies() const { return m_printNoCopies; };
-    inline bool GetCollate() const { return m_printCollate; };
-    inline int  GetOrientation() const { return m_printOrientation; };
 
-    inline const wxString& GetPrinterName() const { return m_printerName; }
-    inline bool GetColour() const { return m_colour; }
-    inline wxDuplexMode GetDuplex() const { return m_duplexMode; }
-    inline wxPaperSize GetPaperId() const { return m_paperId; }
-    inline const wxSize& GetPaperSize() const { return m_paperSize; } // Not used yet: confusable with paper size
+    int GetNoCopies() const { return m_printNoCopies; };
+    bool GetCollate() const { return m_printCollate; };
+    int  GetOrientation() const { return m_printOrientation; };
+
+    const wxString& GetPrinterName() const { return m_printerName; }
+    bool GetColour() const { return m_colour; }
+    wxDuplexMode GetDuplex() const { return m_duplexMode; }
+    wxPaperSize GetPaperId() const { return m_paperId; }
+    const wxSize& GetPaperSize() const { return m_paperSize; } // Not used yet: confusable with paper size
                                                                       // in wxPageSetupDialogData
-    inline wxPrintQuality GetQuality() const { return m_printQuality; }
+    wxPrintQuality GetQuality() const { return m_printQuality; }
 
-    inline void SetNoCopies(int v) { m_printNoCopies = v; };
-    inline void SetCollate(bool flag) { m_printCollate = flag; };
-    inline void SetOrientation(int orient) { m_printOrientation = orient; };
+    void SetNoCopies(int v) { m_printNoCopies = v; };
+    void SetCollate(bool flag) { m_printCollate = flag; };
+    void SetOrientation(int orient) { m_printOrientation = orient; };
 
-    inline void SetPrinterName(const wxString& name) { m_printerName = name; }
-    inline void SetColour(bool colour) { m_colour = colour; }
-    inline void SetDuplex(wxDuplexMode duplex) { m_duplexMode = duplex; }
-    inline void SetPaperId(wxPaperSize sizeId) { m_paperId = sizeId; }
-    inline void SetPaperSize(const wxSize& sz) { m_paperSize = sz; }
-    inline void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
+    void SetPrinterName(const wxString& name) { m_printerName = name; }
+    void SetColour(bool colour) { m_colour = colour; }
+    void SetDuplex(wxDuplexMode duplex) { m_duplexMode = duplex; }
+    void SetPaperId(wxPaperSize sizeId) { m_paperId = sizeId; }
+    void SetPaperSize(const wxSize& sz) { m_paperSize = sz; }
+    void SetQuality(wxPrintQuality quality) { m_printQuality = quality; }
 
     // PostScript-specific data
-    inline const wxString& GetPrinterCommand() const { return m_printerCommand; }
-    inline const wxString& GetPrinterOptions() const { return m_printerOptions; }
-    inline const wxString& GetPreviewCommand() const { return m_previewCommand; }
-    inline const wxString& GetFilename() const { return m_filename; }
-    inline const wxString& GetFontMetricPath() const { return m_afmPath; }
-    inline double GetPrinterScaleX() const { return m_printerScaleX; }
-    inline double GetPrinterScaleY() const { return m_printerScaleY; }
-    inline long GetPrinterTranslateX() const { return m_printerTranslateX; }
-    inline long GetPrinterTranslateY() const { return m_printerTranslateY; }
-    inline wxPrintMode GetPrintMode() const { return m_printMode; }
+    const wxString& GetPrinterCommand() const { return m_printerCommand; }
+    const wxString& GetPrinterOptions() const { return m_printerOptions; }
+    const wxString& GetPreviewCommand() const { return m_previewCommand; }
+    const wxString& GetFilename() const { return m_filename; }
+    const wxString& GetFontMetricPath() const { return m_afmPath; }
+    double GetPrinterScaleX() const { return m_printerScaleX; }
+    double GetPrinterScaleY() const { return m_printerScaleY; }
+    long GetPrinterTranslateX() const { return m_printerTranslateX; }
+    long GetPrinterTranslateY() const { return m_printerTranslateY; }
+    wxPrintMode GetPrintMode() const { return m_printMode; }
 
-    inline void SetPrinterCommand(const wxString& command) { m_printerCommand = command; }
-    inline void SetPrinterOptions(const wxString& options) { m_printerOptions = options; }
-    inline void SetPreviewCommand(const wxString& command) { m_previewCommand = command; }
-    inline void SetFilename(const wxString& filename) { m_filename = filename; }
-    inline void SetFontMetricPath(const wxString& path) { m_afmPath = path; }
-    inline void SetPrinterScaleX(double x) { m_printerScaleX = x; }
-    inline void SetPrinterScaleY(double y) { m_printerScaleY = y; }
-    inline void SetPrinterScaling(double x, double y) { m_printerScaleX = x; m_printerScaleY = y; }
-    inline void SetPrinterTranslateX(long x) { m_printerTranslateX = x; }
-    inline void SetPrinterTranslateY(long y) { m_printerTranslateY = y; }
-    inline void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
-    inline void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
+    void SetPrinterCommand(const wxString& command) { m_printerCommand = command; }
+    void SetPrinterOptions(const wxString& options) { m_printerOptions = options; }
+    void SetPreviewCommand(const wxString& command) { m_previewCommand = command; }
+    void SetFilename(const wxString& filename) { m_filename = filename; }
+    void SetFontMetricPath(const wxString& path) { m_afmPath = path; }
+    void SetPrinterScaleX(double x) { m_printerScaleX = x; }
+    void SetPrinterScaleY(double y) { m_printerScaleY = y; }
+    void SetPrinterScaling(double x, double y) { m_printerScaleX = x; m_printerScaleY = y; }
+    void SetPrinterTranslateX(long x) { m_printerTranslateX = x; }
+    void SetPrinterTranslateY(long y) { m_printerTranslateY = y; }
+    void SetPrinterTranslation(long x, long y) { m_printerTranslateX = x; m_printerTranslateY = y; }
+    void SetPrintMode(wxPrintMode printMode) { m_printMode = printMode; }
 
     void operator=(const wxPrintData& data);
 
@@ -156,15 +156,15 @@ class WXDLLEXPORT wxPrintData: public wxObject
 #if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
     void operator=(const wxPrintSetupData& setupData);
 #endif
-    
+
 #ifdef __WXMSW__
     // Convert to/from the DEVMODE structure
     void ConvertToNative();
     void ConvertFromNative();
-    inline void* GetNativeData() const { return m_devMode; }
-    inline void SetNativeData(void* data) { m_devMode = data; }
+    void* GetNativeData() const { return m_devMode; }
+    void SetNativeData(void* data) { m_devMode = data; }
 #endif
-    
+
 public:
 #ifdef __WXMSW__
     void*           m_devMode;
@@ -207,56 +207,56 @@ private:
 class WXDLLEXPORT wxPrintDialogData: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxPrintDialogData)
-        
+
     wxPrintDialogData();
     wxPrintDialogData(const wxPrintDialogData& dialogData);
     wxPrintDialogData(const wxPrintData& printData);
     ~wxPrintDialogData();
-    
-    inline int GetFromPage() const { return m_printFromPage; };
-    inline int GetToPage() const { return m_printToPage; };
-    inline int GetMinPage() const { return m_printMinPage; };
-    inline int GetMaxPage() const { return m_printMaxPage; };
-    inline int GetNoCopies() const { return m_printNoCopies; };
-    inline bool GetAllPages() const { return m_printAllPages; };
-    inline bool GetCollate() const { return m_printCollate; };
-    inline bool GetPrintToFile() const { return m_printToFile; };
-    inline bool GetSetupDialog() const { return m_printSetupDialog; };
 
-    inline void SetFromPage(int v) { m_printFromPage = v; };
-    inline void SetToPage(int v) { m_printToPage = v; };
-    inline void SetMinPage(int v) { m_printMinPage = v; };
-    inline void SetMaxPage(int v) { m_printMaxPage = v; };
-    inline void SetNoCopies(int v) { m_printNoCopies = v; };
-    inline void SetAllPages(bool flag) { m_printAllPages = flag; };
-    inline void SetCollate(bool flag) { m_printCollate = flag; };
-    inline void SetPrintToFile(bool flag) { m_printToFile = flag; };
-    inline void SetSetupDialog(bool flag) { m_printSetupDialog = flag; };
+    int GetFromPage() const { return m_printFromPage; };
+    int GetToPage() const { return m_printToPage; };
+    int GetMinPage() const { return m_printMinPage; };
+    int GetMaxPage() const { return m_printMaxPage; };
+    int GetNoCopies() const { return m_printNoCopies; };
+    bool GetAllPages() const { return m_printAllPages; };
+    bool GetCollate() const { return m_printCollate; };
+    bool GetPrintToFile() const { return m_printToFile; };
+    bool GetSetupDialog() const { return m_printSetupDialog; };
 
-    inline void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; };
-    inline void EnableSelection(bool flag) { m_printEnableSelection = flag; };
-    inline void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; };
-    inline void EnableHelp(bool flag) { m_printEnableHelp = flag; };
+    void SetFromPage(int v) { m_printFromPage = v; };
+    void SetToPage(int v) { m_printToPage = v; };
+    void SetMinPage(int v) { m_printMinPage = v; };
+    void SetMaxPage(int v) { m_printMaxPage = v; };
+    void SetNoCopies(int v) { m_printNoCopies = v; };
+    void SetAllPages(bool flag) { m_printAllPages = flag; };
+    void SetCollate(bool flag) { m_printCollate = flag; };
+    void SetPrintToFile(bool flag) { m_printToFile = flag; };
+    void SetSetupDialog(bool flag) { m_printSetupDialog = flag; };
 
-    inline bool GetEnablePrintToFile() const { return m_printEnablePrintToFile; };
-    inline bool GetEnableSelection() const { return m_printEnableSelection; };
-    inline bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; };
-    inline bool GetEnableHelp() const { return m_printEnableHelp; };
+    void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; };
+    void EnableSelection(bool flag) { m_printEnableSelection = flag; };
+    void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; };
+    void EnableHelp(bool flag) { m_printEnableHelp = flag; };
 
-    inline wxPrintData& GetPrintData() { return m_printData; }
-    inline void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
+    bool GetEnablePrintToFile() const { return m_printEnablePrintToFile; };
+    bool GetEnableSelection() const { return m_printEnableSelection; };
+    bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; };
+    bool GetEnableHelp() const { return m_printEnableHelp; };
+
+    wxPrintData& GetPrintData() { return m_printData; }
+    void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
     void operator=(const wxPrintDialogData& data);
     void operator=(const wxPrintData& data); // Sets internal m_printData member
-    
+
 #ifdef __WXMSW__
     // Convert to/from the PRINTDLG structure
     void ConvertToNative();
     void ConvertFromNative();
     void SetOwnerWindow(wxWindow* win);
-    inline void* GetNativeData() const { return m_printDlgData; }
+    void* GetNativeData() const { return m_printDlgData; }
 #endif
-    
+
 #ifdef __WXMSW__
     void*           m_printDlgData;
 #endif
@@ -290,27 +290,27 @@ private:
 class WXDLLEXPORT wxPageSetupDialogData: public wxObject
 {
     DECLARE_DYNAMIC_CLASS(wxPageSetupDialogData)
-        
+
 public:
     wxPageSetupDialogData();
     wxPageSetupDialogData(const wxPageSetupDialogData& dialogData);
     wxPageSetupDialogData(const wxPrintData& printData);
     ~wxPageSetupDialogData();
 
-    inline wxSize GetPaperSize() const { return m_paperSize; };
-    inline wxPaperSize GetPaperId() const { return m_printData.GetPaperId(); };
-    inline wxPoint GetMinMarginTopLeft() const { return m_minMarginTopLeft; };
-    inline wxPoint GetMinMarginBottomRight() const { return m_minMarginBottomRight; };
-    inline wxPoint GetMarginTopLeft() const { return m_marginTopLeft; };
-    inline wxPoint GetMarginBottomRight() const { return m_marginBottomRight; };
+    wxSize GetPaperSize() const { return m_paperSize; };
+    wxPaperSize GetPaperId() const { return m_printData.GetPaperId(); };
+    wxPoint GetMinMarginTopLeft() const { return m_minMarginTopLeft; };
+    wxPoint GetMinMarginBottomRight() const { return m_minMarginBottomRight; };
+    wxPoint GetMarginTopLeft() const { return m_marginTopLeft; };
+    wxPoint GetMarginBottomRight() const { return m_marginBottomRight; };
 
-    inline bool GetDefaultMinMargins() const { return m_defaultMinMargins; };
-    inline bool GetEnableMargins() const { return m_enableMargins; };
-    inline bool GetEnableOrientation() const { return m_enableOrientation; };
-    inline bool GetEnablePaper() const { return m_enablePaper; };
-    inline bool GetEnablePrinter() const { return m_enablePrinter; };
-    inline bool GetDefaultInfo() const { return m_getDefaultInfo; };
-    inline bool GetEnableHelp() const { return m_enableHelp; };
+    bool GetDefaultMinMargins() const { return m_defaultMinMargins; };
+    bool GetEnableMargins() const { return m_enableMargins; };
+    bool GetEnableOrientation() const { return m_enableOrientation; };
+    bool GetEnablePaper() const { return m_enablePaper; };
+    bool GetEnablePrinter() const { return m_enablePrinter; };
+    bool GetDefaultInfo() const { return m_getDefaultInfo; };
+    bool GetEnableHelp() const { return m_enableHelp; };
 
     // If a corresponding paper type is found in the paper database, will set the m_printData
     // paper size id member as well.
@@ -319,39 +319,39 @@ public:
     // Sets the wxPrintData id, plus the paper width/height if found in the paper database.
     void SetPaperSize(wxPaperSize id);
 
-    inline void SetMinMarginTopLeft(const wxPoint& pt) { m_minMarginTopLeft = pt; };
-    inline void SetMinMarginBottomRight(const wxPoint& pt) { m_minMarginBottomRight = pt; };
-    inline void SetMarginTopLeft(const wxPoint& pt) { m_marginTopLeft = pt; };
-    inline void SetMarginBottomRight(const wxPoint& pt) { m_marginBottomRight = pt; };
-    inline void SetDefaultMinMargins(bool flag) { m_defaultMinMargins = flag; };
-    inline void SetDefaultInfo(bool flag) { m_getDefaultInfo = flag; };
-    
-    inline void EnableMargins(bool flag) { m_enableMargins = flag; };
-    inline void EnableOrientation(bool flag) { m_enableOrientation = flag; };
-    inline void EnablePaper(bool flag) { m_enablePaper = flag; };
-    inline void EnablePrinter(bool flag) { m_enablePrinter = flag; };
-    inline void EnableHelp(bool flag) { m_enableHelp = flag; };
-    
+    void SetMinMarginTopLeft(const wxPoint& pt) { m_minMarginTopLeft = pt; };
+    void SetMinMarginBottomRight(const wxPoint& pt) { m_minMarginBottomRight = pt; };
+    void SetMarginTopLeft(const wxPoint& pt) { m_marginTopLeft = pt; };
+    void SetMarginBottomRight(const wxPoint& pt) { m_marginBottomRight = pt; };
+    void SetDefaultMinMargins(bool flag) { m_defaultMinMargins = flag; };
+    void SetDefaultInfo(bool flag) { m_getDefaultInfo = flag; };
+
+    void EnableMargins(bool flag) { m_enableMargins = flag; };
+    void EnableOrientation(bool flag) { m_enableOrientation = flag; };
+    void EnablePaper(bool flag) { m_enablePaper = flag; };
+    void EnablePrinter(bool flag) { m_enablePrinter = flag; };
+    void EnableHelp(bool flag) { m_enableHelp = flag; };
+
 #if defined(__WIN95__)
     // Convert to/from the PAGESETUPDLG structure
     void ConvertToNative();
     void ConvertFromNative();
     void SetOwnerWindow(wxWindow* win);
-    inline void* GetNativeData() const { return m_pageSetupData; }
+    void* GetNativeData() const { return m_pageSetupData; }
 #endif
 
     // Use paper size defined in this object to set the wxPrintData
     // paper id
     void CalculateIdFromPaperSize();
-    
+
     // Use paper id in wxPrintData to set this object's paper size
     void CalculatePaperSizeFromId();
-    
+
     void operator=(const wxPageSetupData& data);
     void operator=(const wxPrintData& data);
 
-    inline wxPrintData& GetPrintData() { return m_printData; }
-    inline void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
+    wxPrintData& GetPrintData() { return m_printData; }
+    void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
 
 #if defined(__WIN95__)
     void*           m_pageSetupData;

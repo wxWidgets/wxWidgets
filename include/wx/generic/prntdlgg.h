@@ -7,24 +7,22 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c)
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __PRINTDLGH_G_
 #define __PRINTDLGH_G_
 
 #ifdef __GNUG__
-#pragma interface "prntdlgg.h"
+    #pragma interface "prntdlgg.h"
 #endif
 
 #include "wx/defs.h"
 #include "wx/dialog.h"
-#include "wx/dc.h"
-#include "wx/cmndata.h"
 #include "wx/dialog.h"
 
 #if wxUSE_POSTSCRIPT
-#include "wx/dcps.h"
+    #include "wx/dcps.h"
 #endif
 
 class WXDLLEXPORT wxTextCtrl;
@@ -35,37 +33,71 @@ class WXDLLEXPORT wxStaticText;
 class WXDLLEXPORT wxRadioBox;
 class WXDLLEXPORT wxPrintSetupData;
 
-/*
-* Simulated Print and Print Setup dialogs
-* for non-Windows platforms (and Windows using PostScript print/preview)
-*/
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
 
-#define wxPRINTID_STATIC        10
-#define wxPRINTID_RANGE         11
-#define wxPRINTID_FROM          12
-#define wxPRINTID_TO            13
-#define wxPRINTID_COPIES        14
-#define wxPRINTID_PRINTTOFILE   15
-#define wxPRINTID_SETUP         16
+// FIXME why all these enums start with 10 or 30?
 
-class WXDLLEXPORT wxGenericPrintDialog: public wxDialog
+enum
+{
+    wxPRINTID_STATIC = 10,
+    wxPRINTID_RANGE,
+    wxPRINTID_FROM,
+    wxPRINTID_TO,
+    wxPRINTID_COPIES,
+    wxPRINTID_PRINTTOFILE,
+    wxPRINTID_SETUP
+};
+
+enum
+{
+    wxPRINTID_LEFTMARGIN = 30,
+    wxPRINTID_RIGHTMARGIN,
+    wxPRINTID_TOPMARGIN,
+    wxPRINTID_BOTTOMMARGIN
+};
+
+enum
+{
+    wxPRINTID_PRINTCOLOUR = 10,
+    wxPRINTID_ORIENTATION,
+    wxPRINTID_COMMAND,
+    wxPRINTID_OPTIONS,
+    wxPRINTID_PAPERSIZE
+};
+
+// ----------------------------------------------------------------------------
+// Simulated Print and Print Setup dialogs for non-Windows platforms (and
+// Windows using PostScript print/preview)
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxGenericPrintDialog : public wxDialog
 {
     DECLARE_DYNAMIC_CLASS(wxGenericPrintDialog)
-        
+
 public:
-    wxGenericPrintDialog(wxWindow *parent, wxPrintDialogData* data = (wxPrintDialogData*) NULL);
-    ~wxGenericPrintDialog();
+    wxGenericPrintDialog(wxWindow *parent,
+                         wxPrintDialogData* data = (wxPrintDialogData*)NULL);
+    wxGenericPrintDialog(wxWindow *parent, wxPrintData* data);
+
+    virtual ~wxGenericPrintDialog();
 
     void OnSetup(wxCommandEvent& event);
     void OnRange(wxCommandEvent& event);
     void OnOK(wxCommandEvent& event);
-    
+
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
     virtual int ShowModal();
 
-    inline wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
+#if wxUSE_POSTSCRIPT
+    wxPrintData& GetPrintData()
+        { return m_printDialogData.GetPrintData(); }
+#endif // wxUSE_POSTSCRIPT
+
+    wxPrintDialogData& GetPrintDialogData() { return m_printDialogData; }
     wxDC *GetPrintDC();
 
 public:
@@ -78,29 +110,26 @@ public:
     wxTextCtrl*         m_noCopiesText;
     wxCheckBox*         m_printToFileCheckBox;
     wxCheckBox*         m_collateCopiesCheckBox;
-    
+
     wxPrintDialogData   m_printDialogData;
-    
-    
+
+protected:
+    void Init(wxWindow *parent);
+
+private:
     DECLARE_EVENT_TABLE()
 };
 
-#define wxPRINTID_PRINTCOLOUR       10
-#define wxPRINTID_ORIENTATION       11
-#define wxPRINTID_COMMAND           12
-#define wxPRINTID_OPTIONS           13
-#define wxPRINTID_PAPERSIZE         14
-
-class WXDLLEXPORT wxGenericPrintSetupDialog: public wxDialog
+class WXDLLEXPORT wxGenericPrintSetupDialog : public wxDialog
 {
     DECLARE_CLASS(wxGenericPrintSetupDialog)
-        
+
 public:
     // There are no configuration options for the dialog, so we
     // just pass the wxPrintData object (no wxPrintSetupDialogData class needed)
     wxGenericPrintSetupDialog(wxWindow *parent, wxPrintData* data);
     wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSetupData* data);
-    ~wxGenericPrintSetupDialog();
+    virtual ~wxGenericPrintSetupDialog();
 
     void Init(wxPrintData* data);
 
@@ -108,41 +137,35 @@ public:
     virtual bool TransferDataToWindow();
 
     wxChoice *CreatePaperTypeChoice(int* x, int* y);
-    
+
 public:
     wxRadioBox*         m_orientationRadioBox;
     wxTextCtrl*         m_printerCommandText;
     wxTextCtrl*         m_printerOptionsText;
     wxCheckBox*         m_colourCheckBox;
     wxChoice*           m_paperTypeChoice;
-    
+
 #if wxUSE_POSTSCRIPT
     wxPrintData         m_printData;
-    inline wxPrintData& GetPrintData() { return m_printData; }
-#endif
-    
+    wxPrintData&        GetPrintData() { return m_printData; }
+#endif // wxUSE_POSTSCRIPT
 };
 
-#define wxPRINTID_LEFTMARGIN         30
-#define wxPRINTID_RIGHTMARGIN        31
-#define wxPRINTID_TOPMARGIN          32
-#define wxPRINTID_BOTTOMMARGIN       33
-
-class WXDLLEXPORT wxGenericPageSetupDialog: public wxDialog
+class WXDLLEXPORT wxGenericPageSetupDialog : public wxDialog
 {
     DECLARE_CLASS(wxGenericPageSetupDialog)
-        
+
 public:
     wxGenericPageSetupDialog(wxWindow *parent, wxPageSetupData* data = (wxPageSetupData*) NULL);
-    ~wxGenericPageSetupDialog();
+    virtual ~wxGenericPageSetupDialog();
 
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
     void OnPrinter(wxCommandEvent& event);
-    
+
     wxChoice *CreatePaperTypeChoice(int* x, int* y);
-    inline wxPageSetupData& GetPageSetupData() { return m_pageData; }
+    wxPageSetupData& GetPageSetupData() { return m_pageData; }
 
 public:
     wxButton*       m_printerButton;
@@ -152,11 +175,12 @@ public:
     wxTextCtrl*     m_marginRightText;
     wxTextCtrl*     m_marginBottomText;
     wxChoice*       m_paperTypeChoice;
-    
+
     static bool     m_pageSetupDialogCancelled;
-    
+
     wxPageSetupData m_pageData;
-    
+
+private:
     DECLARE_EVENT_TABLE()
 };
 
