@@ -136,6 +136,25 @@ typedef struct _LVITEMW {
 typedef LV_ITEM LV_ITEMA;
 #endif
 
+#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 0, 5 )
+#ifndef LV_DISPINFOA
+typedef struct tagNMLVDISPINFOA {
+        NMHDR hdr;
+        LV_ITEMA item;
+} NMLVDISPINFOA, FAR *LPNMLVDISPINFOA;
+#define _LV_DISPINFOA tagNMLVDISPINFOA
+#define LV_DISPINFOA NMLVDISPINFOA
+#endif
+#ifndef LV_DISPINFOW
+typedef struct tagNMLVDISPINFOW {
+        NMHDR hdr;
+        LV_ITEMW item;
+} NMLVDISPINFOW, FAR *LPNMLVDISPINFOW;
+#define _LV_DISPINFOW tagNMLVDISPINFOW
+#define LV_DISPINFOW NMLVDISPINFOW
+#endif
+#endif
+
 // ----------------------------------------------------------------------------
 // private functions
 // ----------------------------------------------------------------------------
