@@ -21,9 +21,9 @@
 
 #define WX_TEST_ARCHIVE_ITERATOR
 
-// This sample uses some advanced typedef syntax that messes
-// up MSVC 6 - turn off its warning about it
-#if defined _MSC_VER
+// VC++ 6 warns that the list iterator's '->' operator will not work whenever
+// std::list is used with a non-pointer, so switch it off.
+#if defined _MSC_VER && _MSC_VER < 1300
 #pragma warning (disable:4284)
 #endif
 
@@ -114,7 +114,7 @@ class TestEntry
 {
 public:
     TestEntry(const wxDateTime& dt, int len, const char *data);
-    ~TestEntry() { delete [] (char*) m_data; }
+    ~TestEntry() { delete [] m_data; }
 
     wxDateTime GetDateTime() const  { return m_dt; }
     wxFileOffset GetLength() const  { return m_len; }
@@ -129,7 +129,7 @@ public:
 private:
     wxDateTime m_dt;
     size_t m_len;
-    const char *m_data;
+    char *m_data;
     wxString m_comment;
     bool m_isText;
 };
@@ -139,9 +139,8 @@ TestEntry::TestEntry(const wxDateTime& dt, int len, const char *data)
     m_len(len),
     m_isText(len > 0)
 {
-    char *d = new char[len];
-    memcpy(d, data, len);
-    m_data = d;
+    m_data = new char[len];
+    memcpy(m_data, data, len);
 
     for (int i = 0; i < len && m_isText; i++)
         m_isText = (signed char)m_data[i] > 0;
@@ -163,7 +162,7 @@ public:
     wxFileOffset GetLength() const { return m_size; }
 
     // gives away the data, this stream is then empty, and can be reused
-    void GetData(const char*& data, size_t& size);
+    void GetData(char*& data, size_t& size);
 
     enum { STUB_SIZE = 2048, INITIAL_SIZE = 0x18000, SEEK_LIMIT = 0x100000 };
 
@@ -256,7 +255,7 @@ size_t TestOutputStream::OnSysWrite(const void *buffer, size_t size)
     return size;
 }
 
-void TestOutputStream::GetData(const char*& data, size_t& size)
+void TestOutputStream::GetData(char*& data, size_t& size)
 {
     data = m_data;
     size = m_size;
@@ -289,7 +288,7 @@ public:
     TestInputStream(TestOutputStream& out) : m_data(NULL) { SetData(out); }
     // this ctor 'dups'
     TestInputStream(const TestInputStream& in);
-    ~TestInputStream() { delete [] (char*) m_data; }
+    ~TestInputStream() { delete [] m_data; }
 
     void Rewind();
     wxFileOffset GetLength() const { return m_size; }
@@ -303,7 +302,7 @@ private:
     int m_options;
     size_t m_pos;
     size_t m_size;
-    const char *m_data;
+    char *m_data;
 };
 
 TestInputStream::TestInputStream(const TestInputStream& in)
@@ -311,9 +310,8 @@ TestInputStream::TestInputStream(const TestInputStream& in)
     m_pos(in.m_pos),
     m_size(in.m_size)
 {
-    char *p = new char[m_size];
-    memcpy(p, in.m_data, m_size);
-    m_data = p;
+    m_data = new char[m_size];
+    memcpy(m_data, in.m_data, m_size);
 }
 
 void TestInputStream::Rewind()
@@ -333,7 +331,7 @@ void TestInputStream::Rewind()
 
 void TestInputStream::SetData(TestOutputStream& out)
 {
-    delete [] (char*) m_data;
+    delete [] m_data;
     m_options = out.GetOptions();
     out.GetData(m_data, m_size);
     Rewind();
@@ -734,7 +732,7 @@ TestEntry& ArchiveTestCase<Classes>::Add(const char *name,
 {
     wxCharBuffer buf(len);
     for (int i = 0; i < len; i++)
-        buf.data()[i] = value == EOF ? rand() : value;
+        buf.data()[i] = (char)(value == EOF ? rand() : value);
     return Add(name, buf, len);
 }
 
@@ -884,7 +882,7 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
 {
     auto_ptr<InputStreamT> arcIn(m_factory->NewStream(in));
     auto_ptr<OutputStreamT> arcOut(m_factory->NewStream(out));
-    ;
+    EntryT *pEntry;
 
     const wxString deleteName = _T("bin/bin1000");
     const wxString renameFrom = _T("zero/zero1024");
@@ -894,14 +892,10 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
 
     arcOut->CopyArchiveMetaData(*arcIn);
 
-    auto_ptr<EntryT>* pEntry;
-
-    for (pEntry = new auto_ptr<EntryT>(arcIn->GetNextEntry()) ; 
-         pEntry->get() != NULL ; 
-         delete pEntry, pEntry = new auto_ptr<EntryT>(arcIn->GetNextEntry())) 
-    {
-        OnSetNotifier(**pEntry);
-        wxString name = (*pEntry)->GetName(wxPATH_UNIX);
+    while ((pEntry = arcIn->GetNextEntry()) != NULL) {
+        auto_ptr<EntryT> entry(pEntry);
+        OnSetNotifier(*entry);
+        wxString name = entry->GetName(wxPATH_UNIX);
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
@@ -919,7 +913,7 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
         }
         else {
             if (name == renameFrom) {
-                (*pEntry)->SetName(renameTo);
+                entry->SetName(renameTo);
                 TestEntries::iterator it = m_testEntries.find(renameFrom);
                 CPPUNIT_ASSERT_MESSAGE(
                     "rename failed (already renamed?) for" + error_entry,
@@ -930,11 +924,9 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
             }
 
             CPPUNIT_ASSERT_MESSAGE("CopyEntry" + error_context,
-                arcOut->CopyEntry(pEntry->release(), *arcIn));
+                arcOut->CopyEntry(entry.release(), *arcIn));
         }
     }
-
-    delete pEntry;
 
     // check that the deletion and rename were done
     CPPUNIT_ASSERT(m_testEntries.count(deleteName) == 0);
@@ -1141,7 +1133,7 @@ void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
                 CPPUNIT_ASSERT_MESSAGE(
                     "entry not found in archive" + error_entry, in.Ok());
 
-                size_t size = in.GetLength();
+                size_t size = (size_t)in.GetLength();
                 wxCharBuffer buf(size);
                 CPPUNIT_ASSERT_MESSAGE("Read" + error_context,
                     in.Read(buf.data(), size).LastRead() == size);
@@ -1248,6 +1240,11 @@ void ArchiveTestCase<Classes>::TestSmartIterator(wxInputStream& in)
 template <class Classes>
 void ArchiveTestCase<Classes>::TestSmartPairIterator(wxInputStream& in)
 {
+#if defined _MSC_VER && defined _MSC_VER < 1200
+    // With VC++ 5.0 the '=' operator of std::pair breaks when the second
+    // type is Ptr<EntryT>, so this iterator can't be made to work.
+    (void)in;
+#else
     typedef std::map<wxString, Ptr<EntryT> > ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
     typedef wxArchiveIterator<InputStreamT,
@@ -1267,6 +1264,7 @@ void ArchiveTestCase<Classes>::TestSmartPairIterator(wxInputStream& in)
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it)
         CPPUNIT_ASSERT(m_testEntries.count(it->second->GetName(wxPATH_UNIX)));
+#endif
 }
 
 // try reading two entries at the same time

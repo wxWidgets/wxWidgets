@@ -622,7 +622,8 @@ wxZipEntry::~wxZipEntry()
 }
 
 wxZipEntry::wxZipEntry(const wxZipEntry& e)
-  : m_SystemMadeBy(e.m_SystemMadeBy),
+  : wxArchiveEntry(e),
+    m_SystemMadeBy(e.m_SystemMadeBy),
     m_VersionMadeBy(e.m_VersionMadeBy),
     m_VersionNeeded(e.m_VersionNeeded),
     m_Flags(e.m_Flags),
@@ -640,7 +641,7 @@ wxZipEntry::wxZipEntry(const wxZipEntry& e)
     m_ExternalAttributes(e.m_ExternalAttributes),
     m_Extra(AddRef(e.m_Extra)),
     m_LocalExtra(AddRef(e.m_LocalExtra)),
-    m_zipnotifier(e.m_zipnotifier),
+    m_zipnotifier(NULL),
     m_backlink(NULL)
 {
 }
@@ -666,7 +667,7 @@ wxZipEntry& wxZipEntry::operator=(const wxZipEntry& e)
         m_ExternalAttributes = e.m_ExternalAttributes;
         Copy(m_Extra, e.m_Extra);
         Copy(m_LocalExtra, e.m_LocalExtra);
-        m_zipnotifier = e.m_zipnotifier;
+        m_zipnotifier = NULL;
         if (m_backlink) {
             m_backlink->Release(m_Key);
             m_backlink = NULL;

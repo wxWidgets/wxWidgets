@@ -155,7 +155,9 @@ void TestApp::List(Test *test, const string& parent /*=""*/) const
         // take the last component of the name and append to the parent
         name = test->getName();
         string::size_type i = name.find_last_of(".:");
-        name = parent + "." + (i != string::npos ? name.substr(i + 1) : name);
+        if (i != string::npos)
+            name = name.substr(i + 1);
+        name = parent + "." + name;
 
         // drop the 1st component from the display and indent
         if (parent != "") {

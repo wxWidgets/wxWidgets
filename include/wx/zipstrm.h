@@ -455,29 +455,29 @@ private:
 #if wxUSE_STL || defined WX_TEST_ARCHIVE_ITERATOR
 typedef wxArchiveIterator<wxZipInputStream> wxZipIter;
 typedef wxArchiveIterator<wxZipInputStream,
-         std::pair<wxString, wxZipEntry*> >  wxZipPairIter;
+         std::pair<wxString, wxZipEntry*> > wxZipPairIter;
 #endif
 
 
 /////////////////////////////////////////////////////////////////////////////
 // wxZipEntry inlines
 
-bool wxZipEntry::IsText() const
+inline bool wxZipEntry::IsText() const
 {
     return (m_InternalAttributes & TEXT_ATTR) != 0;
 }
 
-bool wxZipEntry::IsDir() const
+inline bool wxZipEntry::IsDir() const
 {
     return (m_ExternalAttributes & wxZIP_A_SUBDIR) != 0;
 }
 
-bool wxZipEntry::IsReadOnly() const
+inline bool wxZipEntry::IsReadOnly() const
 {
     return (m_ExternalAttributes & wxZIP_A_RDONLY) != 0;
 }
 
-bool wxZipEntry::IsMadeByUnix() const
+inline bool wxZipEntry::IsMadeByUnix() const
 {
     const int pattern =
         (1 << wxZIP_SYSTEM_OPENVMS) |
@@ -492,7 +492,7 @@ bool wxZipEntry::IsMadeByUnix() const
         || ((pattern >> m_SystemMadeBy) & 1);
 }
 
-void wxZipEntry::SetIsText(bool isText)
+inline void wxZipEntry::SetIsText(bool isText)
 {
     if (isText)
         m_InternalAttributes |= TEXT_ATTR;
@@ -500,7 +500,7 @@ void wxZipEntry::SetIsText(bool isText)
         m_InternalAttributes &= ~TEXT_ATTR;
 }
 
-void wxZipEntry::SetIsReadOnly(bool isReadOnly)
+inline void wxZipEntry::SetIsReadOnly(bool isReadOnly)
 {
     if (isReadOnly)
         SetMode(GetMode() & ~0222);
@@ -508,8 +508,8 @@ void wxZipEntry::SetIsReadOnly(bool isReadOnly)
         SetMode(GetMode() | 0200);
 }
 
-void wxZipEntry::SetName(const wxString& name,
-                         wxPathFormat format /*=wxPATH_NATIVE*/)
+inline void wxZipEntry::SetName(const wxString& name,
+                                wxPathFormat format /*=wxPATH_NATIVE*/)
 {
     bool isDir;
     m_Name = GetInternalName(name, format, &isDir);

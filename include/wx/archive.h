@@ -67,6 +67,7 @@ public:
 
 protected:
     wxArchiveEntry() : m_notifier(NULL) { }
+    wxArchiveEntry(const wxArchiveEntry& e) : wxObject(e), m_notifier(NULL) { }
 
     virtual void SetOffset(wxFileOffset offset) = 0;
     virtual wxArchiveEntry* DoClone() const = 0;
@@ -211,14 +212,14 @@ private:
 #include <iterator>
 #include <utility>
 
-template <class X, class Y>
-void WXDLLIMPEXP_BASE _wxSetArchiveIteratorValue(
+template <class X, class Y> inline
+void _wxSetArchiveIteratorValue(
     X& val, Y entry, void *WXUNUSED(d))
 {
     val = X(entry);
 }
-template <class X, class Y, class Z>
-void WXDLLIMPEXP_BASE _wxSetArchiveIteratorValue(
+template <class X, class Y, class Z> inline
+void _wxSetArchiveIteratorValue(
     std::pair<X, Y>& val, Z entry, Z WXUNUSED(d))
 {
     val = std::make_pair(X(entry->GetInternalName()), Y(entry));
@@ -229,7 +230,7 @@ template <class Arc, class T = Arc::entry_type*>
 #else
 template <class Arc, class T = typename Arc::entry_type*>
 #endif
-class WXDLLIMPEXP_BASE wxArchiveIterator
+class wxArchiveIterator
 {
 public:
     typedef std::input_iterator_tag iterator_category;
@@ -283,11 +284,11 @@ public:
         return it;
     }
 
-    bool operator ==(const wxArchiveIterator& j) {
-        return (*this).m_rep == j.m_rep;
+    bool operator ==(const wxArchiveIterator& j) const {
+        return m_rep == j.m_rep;
     }
 
-    bool operator !=(const wxArchiveIterator& j) {
+    bool operator !=(const wxArchiveIterator& j) const {
         return !(*this == j);
     }
 
