@@ -375,7 +375,7 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
         }
  static const wxString wxPyScrollBarNameStr(wxScrollBarNameStr); 
  static const wxString wxPySPIN_BUTTON_NAME(wxSPIN_BUTTON_NAME); 
- static const wxString wxPySpinCtrlNameStr(wxT(_T("wxSpinCtrl"))); 
+ static const wxString wxPySpinCtrlNameStr(_T("wxSpinCtrl")); 
  static const wxString wxPyRadioBoxNameStr(wxRadioBoxNameStr); 
  static const wxString wxPyRadioButtonNameStr(wxRadioButtonNameStr); 
 
@@ -383,7 +383,7 @@ wxString wxTextCtrl_GetString(wxTextCtrl *self,long from,long to){
 
 
  static const wxString wxPySliderNameStr(wxSliderNameStr); 
- static const wxString wxPyToggleButtonNameStr(wxT(_T("wxToggleButton"))); 
+ static const wxString wxPyToggleButtonNameStr(_T("wxToggleButton")); 
 
 #ifdef __WXMAC__
 // implement dummy classes and such for wxMac
@@ -449,7 +449,7 @@ void wxToolBarBase_SetToolClientData(wxToolBarBase *self,int id,PyObject *client
 #include <wx/listctrl.h>
 
 
- static const wxString wxPyListCtrlNameStr(wxT(_T("wxListCtrl"))); 
+ static const wxString wxPyListCtrlNameStr(_T("wxListCtrl")); 
 void wxListItemAttr_Destroy(wxListItemAttr *self){ delete self; }
  // Python aware sorting function for wxPyListCtrl
     static int wxCALLBACK wxPyListCtrl_SortItems(long item1, long item2, long funcPtr) {
@@ -553,7 +553,7 @@ wxWindow *wxPyListCtrl_GetMainWindow(wxPyListCtrl *self){
 #include <wx/treectrl.h>
 #include "wx/wxPython/pytree.h"
 
- static const wxString wxPyTreeCtrlNameStr(wxT(_T("wxTreeCtrl"))); 
+ static const wxString wxPyTreeCtrlNameStr(_T("wxTreeCtrl")); 
 bool wxTreeItemId_operator_ee___(wxTreeItemId *self,wxTreeItemId const *other){
             if (!other) return False;
             return *self == *other;

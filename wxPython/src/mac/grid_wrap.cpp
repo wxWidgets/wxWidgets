@@ -282,7 +282,7 @@ static swig_type_info *swig_types[52];
 
  static const wxString wxPyEmptyString(wxEmptyString); 
  static const wxString wxPyPanelNameStr(wxPanelNameStr); 
- static const wxString wxPyDateTimeFormatStr(wxT(wxT("%c"))); 
+ static const wxString wxPyDateTimeFormatStr(wxT("%c")); 
 
 
 #define wxPyMake_TEMPLATE(TYPE) \

@@ -1224,6 +1224,10 @@ class Grid(windows.ScrolledWindow):
     wxGridSelectCells = _grid.Grid_wxGridSelectCells
     wxGridSelectRows = _grid.Grid_wxGridSelectRows
     wxGridSelectColumns = _grid.Grid_wxGridSelectColumns
+    SelectCells =   wxGridSelectCells
+    SelectRows =    wxGridSelectRows
+    SelectColumns = wxGridSelectColumns,
+
     def CreateGrid(*args, **kwargs):
         """CreateGrid(int numRows, int numCols, WXGRIDSELECTIONMODES selmode=wxGridSelectCells) -> bool"""
         return _grid.Grid_CreateGrid(*args, **kwargs)

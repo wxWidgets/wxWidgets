@@ -2687,8 +2687,8 @@ class DC(core.Object):
 
 
     def DrawPolygonList(self, polygons, pens=None, brushes=None):
-        
-        
+        ## Note: This does not currently support fill style or offset
+        ## you can always use the non-List version if need be.
         if pens is None:
            pens = []
         elif isinstance(pens, wx.Pen):
@@ -2705,9 +2705,9 @@ class DC(core.Object):
 
 
     def DrawTextList(self, textList, coords, foregrounds = None, backgrounds = None, fonts = None):
-        
-        
-        
+        ## NOTE: this does not currently support changing the font
+        ##       Make sure you set Background mode to wxSolid (DC.SetBackgroundMode)
+        ##       If you want backgounds to do anything.
         if type(textList) == type(''):
            textList = [textList]
         elif len(textList) != len(coords):
@@ -3019,6 +3019,246 @@ class PrinterDCPtr(PrinterDC):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PrinterDC
 _gdi.PrinterDC_swigregister(PrinterDCPtr)
+
+class DC_old(DC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = DC.FloodFillXY
+    GetPixel = DC.GetPixelXY
+    DrawLine = DC.DrawLineXY
+    CrossHair = DC.CrossHairXY
+    DrawArc = DC.DrawArcXY
+    DrawCheckMark = DC.DrawCheckMarkXY
+    DrawEllipticArc = DC.DrawEllipticArcXY
+    DrawPoint = DC.DrawPointXY
+    DrawRectangle = DC.DrawRectangleXY
+    DrawRoundedRectangle = DC.DrawRoundedRectangleXY
+    DrawCircle = DC.DrawCircleXY
+    DrawEllipse = DC.DrawEllipseXY
+    DrawIcon = DC.DrawIconXY
+    DrawBitmap = DC.DrawBitmapXY
+    DrawText = DC.DrawTextXY
+    DrawRotatedText = DC.DrawRotatedTextXY
+    Blit = DC.BlitXY
+
+class MemoryDC_old(MemoryDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = MemoryDC.FloodFillXY
+    GetPixel = MemoryDC.GetPixelXY
+    DrawLine = MemoryDC.DrawLineXY
+    CrossHair = MemoryDC.CrossHairXY
+    DrawArc = MemoryDC.DrawArcXY
+    DrawCheckMark = MemoryDC.DrawCheckMarkXY
+    DrawEllipticArc = MemoryDC.DrawEllipticArcXY
+    DrawPoint = MemoryDC.DrawPointXY
+    DrawRectangle = MemoryDC.DrawRectangleXY
+    DrawRoundedRectangle = MemoryDC.DrawRoundedRectangleXY
+    DrawCircle = MemoryDC.DrawCircleXY
+    DrawEllipse = MemoryDC.DrawEllipseXY
+    DrawIcon = MemoryDC.DrawIconXY
+    DrawBitmap = MemoryDC.DrawBitmapXY
+    DrawText = MemoryDC.DrawTextXY
+    DrawRotatedText = MemoryDC.DrawRotatedTextXY
+    Blit = MemoryDC.BlitXY
+
+class BufferedDC_old(BufferedDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = BufferedDC.FloodFillXY
+    GetPixel = BufferedDC.GetPixelXY
+    DrawLine = BufferedDC.DrawLineXY
+    CrossHair = BufferedDC.CrossHairXY
+    DrawArc = BufferedDC.DrawArcXY
+    DrawCheckMark = BufferedDC.DrawCheckMarkXY
+    DrawEllipticArc = BufferedDC.DrawEllipticArcXY
+    DrawPoint = BufferedDC.DrawPointXY
+    DrawRectangle = BufferedDC.DrawRectangleXY
+    DrawRoundedRectangle = BufferedDC.DrawRoundedRectangleXY
+    DrawCircle = BufferedDC.DrawCircleXY
+    DrawEllipse = BufferedDC.DrawEllipseXY
+    DrawIcon = BufferedDC.DrawIconXY
+    DrawBitmap = BufferedDC.DrawBitmapXY
+    DrawText = BufferedDC.DrawTextXY
+    DrawRotatedText = BufferedDC.DrawRotatedTextXY
+    Blit = BufferedDC.BlitXY
+
+class BufferedPaintDC_old(BufferedPaintDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = BufferedPaintDC.FloodFillXY
+    GetPixel = BufferedPaintDC.GetPixelXY
+    DrawLine = BufferedPaintDC.DrawLineXY
+    CrossHair = BufferedPaintDC.CrossHairXY
+    DrawArc = BufferedPaintDC.DrawArcXY
+    DrawCheckMark = BufferedPaintDC.DrawCheckMarkXY
+    DrawEllipticArc = BufferedPaintDC.DrawEllipticArcXY
+    DrawPoint = BufferedPaintDC.DrawPointXY
+    DrawRectangle = BufferedPaintDC.DrawRectangleXY
+    DrawRoundedRectangle = BufferedPaintDC.DrawRoundedRectangleXY
+    DrawCircle = BufferedPaintDC.DrawCircleXY
+    DrawEllipse = BufferedPaintDC.DrawEllipseXY
+    DrawIcon = BufferedPaintDC.DrawIconXY
+    DrawBitmap = BufferedPaintDC.DrawBitmapXY
+    DrawText = BufferedPaintDC.DrawTextXY
+    DrawRotatedText = BufferedPaintDC.DrawRotatedTextXY
+    Blit = BufferedPaintDC.BlitXY
+
+class ScreenDC_old(ScreenDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = ScreenDC.FloodFillXY
+    GetPixel = ScreenDC.GetPixelXY
+    DrawLine = ScreenDC.DrawLineXY
+    CrossHair = ScreenDC.CrossHairXY
+    DrawArc = ScreenDC.DrawArcXY
+    DrawCheckMark = ScreenDC.DrawCheckMarkXY
+    DrawEllipticArc = ScreenDC.DrawEllipticArcXY
+    DrawPoint = ScreenDC.DrawPointXY
+    DrawRectangle = ScreenDC.DrawRectangleXY
+    DrawRoundedRectangle = ScreenDC.DrawRoundedRectangleXY
+    DrawCircle = ScreenDC.DrawCircleXY
+    DrawEllipse = ScreenDC.DrawEllipseXY
+    DrawIcon = ScreenDC.DrawIconXY
+    DrawBitmap = ScreenDC.DrawBitmapXY
+    DrawText = ScreenDC.DrawTextXY
+    DrawRotatedText = ScreenDC.DrawRotatedTextXY
+    Blit = ScreenDC.BlitXY
+
+class ClientDC_old(ClientDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = ClientDC.FloodFillXY
+    GetPixel = ClientDC.GetPixelXY
+    DrawLine = ClientDC.DrawLineXY
+    CrossHair = ClientDC.CrossHairXY
+    DrawArc = ClientDC.DrawArcXY
+    DrawCheckMark = ClientDC.DrawCheckMarkXY
+    DrawEllipticArc = ClientDC.DrawEllipticArcXY
+    DrawPoint = ClientDC.DrawPointXY
+    DrawRectangle = ClientDC.DrawRectangleXY
+    DrawRoundedRectangle = ClientDC.DrawRoundedRectangleXY
+    DrawCircle = ClientDC.DrawCircleXY
+    DrawEllipse = ClientDC.DrawEllipseXY
+    DrawIcon = ClientDC.DrawIconXY
+    DrawBitmap = ClientDC.DrawBitmapXY
+    DrawText = ClientDC.DrawTextXY
+    DrawRotatedText = ClientDC.DrawRotatedTextXY
+    Blit = ClientDC.BlitXY
+
+class PaintDC_old(PaintDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = PaintDC.FloodFillXY
+    GetPixel = PaintDC.GetPixelXY
+    DrawLine = PaintDC.DrawLineXY
+    CrossHair = PaintDC.CrossHairXY
+    DrawArc = PaintDC.DrawArcXY
+    DrawCheckMark = PaintDC.DrawCheckMarkXY
+    DrawEllipticArc = PaintDC.DrawEllipticArcXY
+    DrawPoint = PaintDC.DrawPointXY
+    DrawRectangle = PaintDC.DrawRectangleXY
+    DrawRoundedRectangle = PaintDC.DrawRoundedRectangleXY
+    DrawCircle = PaintDC.DrawCircleXY
+    DrawEllipse = PaintDC.DrawEllipseXY
+    DrawIcon = PaintDC.DrawIconXY
+    DrawBitmap = PaintDC.DrawBitmapXY
+    DrawText = PaintDC.DrawTextXY
+    DrawRotatedText = PaintDC.DrawRotatedTextXY
+    Blit = PaintDC.BlitXY
+
+class WindowDC_old(WindowDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = WindowDC.FloodFillXY
+    GetPixel = WindowDC.GetPixelXY
+    DrawLine = WindowDC.DrawLineXY
+    CrossHair = WindowDC.CrossHairXY
+    DrawArc = WindowDC.DrawArcXY
+    DrawCheckMark = WindowDC.DrawCheckMarkXY
+    DrawEllipticArc = WindowDC.DrawEllipticArcXY
+    DrawPoint = WindowDC.DrawPointXY
+    DrawRectangle = WindowDC.DrawRectangleXY
+    DrawRoundedRectangle = WindowDC.DrawRoundedRectangleXY
+    DrawCircle = WindowDC.DrawCircleXY
+    DrawEllipse = WindowDC.DrawEllipseXY
+    DrawIcon = WindowDC.DrawIconXY
+    DrawBitmap = WindowDC.DrawBitmapXY
+    DrawText = WindowDC.DrawTextXY
+    DrawRotatedText = WindowDC.DrawRotatedTextXY
+    Blit = WindowDC.BlitXY
+
+class MirrorDC_old(MirrorDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = MirrorDC.FloodFillXY
+    GetPixel = MirrorDC.GetPixelXY
+    DrawLine = MirrorDC.DrawLineXY
+    CrossHair = MirrorDC.CrossHairXY
+    DrawArc = MirrorDC.DrawArcXY
+    DrawCheckMark = MirrorDC.DrawCheckMarkXY
+    DrawEllipticArc = MirrorDC.DrawEllipticArcXY
+    DrawPoint = MirrorDC.DrawPointXY
+    DrawRectangle = MirrorDC.DrawRectangleXY
+    DrawRoundedRectangle = MirrorDC.DrawRoundedRectangleXY
+    DrawCircle = MirrorDC.DrawCircleXY
+    DrawEllipse = MirrorDC.DrawEllipseXY
+    DrawIcon = MirrorDC.DrawIconXY
+    DrawBitmap = MirrorDC.DrawBitmapXY
+    DrawText = MirrorDC.DrawTextXY
+    DrawRotatedText = MirrorDC.DrawRotatedTextXY
+    Blit = MirrorDC.BlitXY
+
+class PostScriptDC_old(PostScriptDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = PostScriptDC.FloodFillXY
+    GetPixel = PostScriptDC.GetPixelXY
+    DrawLine = PostScriptDC.DrawLineXY
+    CrossHair = PostScriptDC.CrossHairXY
+    DrawArc = PostScriptDC.DrawArcXY
+    DrawCheckMark = PostScriptDC.DrawCheckMarkXY
+    DrawEllipticArc = PostScriptDC.DrawEllipticArcXY
+    DrawPoint = PostScriptDC.DrawPointXY
+    DrawRectangle = PostScriptDC.DrawRectangleXY
+    DrawRoundedRectangle = PostScriptDC.DrawRoundedRectangleXY
+    DrawCircle = PostScriptDC.DrawCircleXY
+    DrawEllipse = PostScriptDC.DrawEllipseXY
+    DrawIcon = PostScriptDC.DrawIconXY
+    DrawBitmap = PostScriptDC.DrawBitmapXY
+    DrawText = PostScriptDC.DrawTextXY
+    DrawRotatedText = PostScriptDC.DrawRotatedTextXY
+    Blit = PostScriptDC.BlitXY
+
+class MetaFileDC_old(MetaFileDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = MetaFileDC.FloodFillXY
+    GetPixel = MetaFileDC.GetPixelXY
+    DrawLine = MetaFileDC.DrawLineXY
+    CrossHair = MetaFileDC.CrossHairXY
+    DrawArc = MetaFileDC.DrawArcXY
+    DrawCheckMark = MetaFileDC.DrawCheckMarkXY
+    DrawEllipticArc = MetaFileDC.DrawEllipticArcXY
+    DrawPoint = MetaFileDC.DrawPointXY
+    DrawRectangle = MetaFileDC.DrawRectangleXY
+    DrawRoundedRectangle = MetaFileDC.DrawRoundedRectangleXY
+    DrawCircle = MetaFileDC.DrawCircleXY
+    DrawEllipse = MetaFileDC.DrawEllipseXY
+    DrawIcon = MetaFileDC.DrawIconXY
+    DrawBitmap = MetaFileDC.DrawBitmapXY
+    DrawText = MetaFileDC.DrawTextXY
+    DrawRotatedText = MetaFileDC.DrawRotatedTextXY
+    Blit = MetaFileDC.BlitXY
+
+class PrinterDC_old(PrinterDC):
+    """DC class that has methods with 2.4 compatible parameters."""
+    FloodFill = PrinterDC.FloodFillXY
+    GetPixel = PrinterDC.GetPixelXY
+    DrawLine = PrinterDC.DrawLineXY
+    CrossHair = PrinterDC.CrossHairXY
+    DrawArc = PrinterDC.DrawArcXY
+    DrawCheckMark = PrinterDC.DrawCheckMarkXY
+    DrawEllipticArc = PrinterDC.DrawEllipticArcXY
+    DrawPoint = PrinterDC.DrawPointXY
+    DrawRectangle = PrinterDC.DrawRectangleXY
+    DrawRoundedRectangle = PrinterDC.DrawRoundedRectangleXY
+    DrawCircle = PrinterDC.DrawCircleXY
+    DrawEllipse = PrinterDC.DrawEllipseXY
+    DrawIcon = PrinterDC.DrawIconXY
+    DrawBitmap = PrinterDC.DrawBitmapXY
+    DrawText = PrinterDC.DrawTextXY
+    DrawRotatedText = PrinterDC.DrawRotatedTextXY
+    Blit = PrinterDC.BlitXY
 
 #---------------------------------------------------------------------------
 
