@@ -784,24 +784,9 @@ if ! user_mask_fits "$this_config" ; then
             exit
 
         else
-
-            cat 1>&2 <<-EOF
-
-	  Warning: No config found to match: $config_spec
-	           in $wxconfdir
-	  If you require this configuration, please install the desired
-	  library build.  If this is part of an automated configuration
-	  test and no other errors occur, you may safely ignore it.
-	  You may use wx-config --list to see all configs available in
-	  the default prefix.
-
-	EOF
-
-            # PIPEDREAM:  This will probably give Vadim an aneurysm if I
-            # mention it out of context, but from here we are actually
-            # just a teensy step from simply building the missing config
-            # for the user on the fly if this is an in tree wx-config.
-
+            # silently exit with error: we shouldn't give any messages here as
+            # we may be called from a configure script where this would really
+            # mess things up
             exit 1
         fi
     fi
