@@ -436,7 +436,7 @@ bool wxPrinterDC::DoBlit(wxCoord xdest, wxCoord ydest,
     else // no mask
     {
         if ( !(::GetDeviceCaps(GetHdc(), RASTERCAPS) & RC_STRETCHDIB) ||
-                !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, xsrc, ysrc) )
+                !DrawBitmapUsingStretchDIBits(GetHdc(), bmp, xdest, ydest) )
         {
             // no support for StretchDIBits
 
