@@ -545,7 +545,6 @@ typedef wxDbList DbList;
 typedef wxTablesInUse CstructTablesInUse;
 #endif
 
->>>>>>> 1.30
 // Deprecated function names that are replaced by the function names listed above
 wxDB  WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff, bool FwdOnlyCursors=(bool)wxODBC_FWD_ONLY_CURSORS);
 bool  WXDLLEXPORT  FreeDbConnection(wxDB *pDb);
