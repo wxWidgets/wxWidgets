@@ -869,7 +869,7 @@ bool wxGenericDirCtrl::ExpandPath(const wxString& path)
     bool done = FALSE;
     wxTreeItemId id = FindChild(m_rootId, path, done);
     wxTreeItemId lastId = id; // The last non-zero id
-    while (id.IsOK() && !done)
+    while (id.IsOk() && !done)
     {
         ExpandDir(id);
 
