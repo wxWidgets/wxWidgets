@@ -111,7 +111,13 @@ public:
     // Adjust the scrollbars
     virtual void AdjustScrollbars();
     
+    // Set the scale factor, used in PrepareDC
+    void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
+    double GetScaleX() const { return m_scaleX; }
+    double GetScaleY() const { return m_scaleY; }
+
     // implementation from now on
+    void OnScroll(wxScrollWinEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnChar(wxKeyEvent& event);
@@ -119,6 +125,9 @@ public:
     void GtkVScroll( float value );
     void GtkHScroll( float value );
 
+    // Calculate scroll increment
+    virtual int CalcScrollInc(wxScrollWinEvent& event);
+    
 protected:
     wxWindow             *m_targetWindow;
     int                   m_xScrollPixelsPerLine;
@@ -131,6 +140,8 @@ protected:
     int                   m_yScrollLines;
     int                   m_xScrollLinesPerPage;
     int                   m_yScrollLinesPerPage;
+    
+    double                m_scaleY,m_scaleX;
 
 private:
     DECLARE_EVENT_TABLE()

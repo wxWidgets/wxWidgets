@@ -573,7 +573,7 @@ void wxSplitterScrolledWindow::OnScroll(wxScrollWinEvent& event)
     if (inOnScroll)
         return;
     inOnScroll = TRUE;
-
+    
     int orient = event.GetOrientation();
 
     int nScrollInc = CalcScrollInc(event);

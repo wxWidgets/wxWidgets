@@ -42,6 +42,7 @@
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
+    EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
     EVT_SIZE(wxScrolledWindow::OnSize)
     EVT_PAINT(wxScrolledWindow::OnPaint)
     EVT_CHAR(wxScrolledWindow::OnChar)
@@ -134,6 +135,8 @@ wxScrolledWindow::wxScrolledWindow()
     m_xScrollLinesPerPage = 0;
     m_yScrollLinesPerPage = 0;
     m_targetWindow = (wxWindow*) NULL;
+    m_scaleX = 1.0;
+    m_scaleY = 1.0;
 }
 
 bool wxScrolledWindow::Create(wxWindow *parent,
@@ -342,9 +345,49 @@ void wxScrolledWindow::SetScrollPageSize(int orient, int pageSize)
         m_yScrollLinesPerPage = pageSize;
 }
 
-/*
- * Scroll to given position (scroll position, not pixel position)
- */
+void wxScrolledWindow::OnScroll(wxScrollWinEvent& event)
+{
+    int orient = event.GetOrientation();
+    
+    int nScrollInc = CalcScrollInc(event);
+    if (nScrollInc == 0) return;
+
+    if (orient == wxHORIZONTAL)
+    {
+        int newPos = m_xScrollPosition + nScrollInc;
+        SetScrollPos(wxHORIZONTAL, newPos, TRUE );
+    }
+    else
+    {
+        int newPos = m_yScrollPosition + nScrollInc;
+        SetScrollPos(wxVERTICAL, newPos, TRUE );
+    }
+
+    if (orient == wxHORIZONTAL)
+    {
+        m_xScrollPosition += nScrollInc;
+    }
+    else
+    {
+        m_yScrollPosition += nScrollInc;
+    }
+
+    if (orient == wxHORIZONTAL)
+    {
+       if (m_xScrollingEnabled)
+            m_targetWindow->ScrollWindow(-m_xScrollPixelsPerLine * nScrollInc, 0, (const wxRect *) NULL);
+       else
+            m_targetWindow->Refresh();
+    }
+    else
+    {
+        if (m_yScrollingEnabled)
+            m_targetWindow->ScrollWindow(0, -m_yScrollPixelsPerLine * nScrollInc, (const wxRect *) NULL);
+        else
+            m_targetWindow->Refresh();
+    }
+}
+
 void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 {
     if (!m_targetWindow)
@@ -359,6 +402,11 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = x_pos;
         m_hAdjust->value = x_pos;
         
+        wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+        wxScrollWinEvent event( command, m_xScrollPosition, wxHORIZONTAL );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+    
         m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
         
         gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "value_changed" );
@@ -370,6 +418,11 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = y_pos;
         m_vAdjust->value = y_pos;
         
+        wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+        wxScrollWinEvent event( command, m_yScrollPosition, wxVERTICAL );
+        event.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event );
+    
         m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
         
         gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
@@ -392,6 +445,19 @@ void wxScrolledWindow::GtkVScroll( float value )
     int old_y = m_yScrollPosition;
     m_yScrollPosition = y_pos;
 
+    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
+    GtkRange *range = GTK_RANGE(scrolledWindow->hscrollbar);
+    
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
+    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+
+    wxScrollWinEvent event( command, m_yScrollPosition, wxVERTICAL );
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( event );
+    
     m_targetWindow->ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
 }
 
@@ -411,6 +477,19 @@ void wxScrolledWindow::GtkHScroll( float value )
     int old_x = m_xScrollPosition;
     m_xScrollPosition = x_pos;
 
+    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
+    GtkRange *range = GTK_RANGE(scrolledWindow->hscrollbar);
+    
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
+    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+
+    wxScrollWinEvent event( command, m_xScrollPosition, wxHORIZONTAL );
+    event.SetEventObject( this );
+    GetEventHandler()->ProcessEvent( event );
+    
     m_targetWindow->ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
 }
 
@@ -451,6 +530,101 @@ void wxScrolledWindow::CalcUnscrolledPosition(int x, int y, int *xx, int *yy) co
         *xx = x + m_xScrollPosition * m_xScrollPixelsPerLine;
     if ( yy )
         *yy = y + m_yScrollPosition * m_yScrollPixelsPerLine;
+}
+
+int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
+{
+    int pos = event.GetPosition();
+    int orient = event.GetOrientation();
+
+    int nScrollInc = 0;
+    if (event.GetEventType() == wxEVT_SCROLLWIN_TOP)
+    {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = - m_xScrollPosition;
+            else
+                nScrollInc = - m_yScrollPosition;
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_BOTTOM)
+    {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = m_xScrollLines - m_xScrollPosition;
+            else
+                nScrollInc = m_yScrollLines - m_yScrollPosition;
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_LINEUP)
+    {
+            nScrollInc = -1;
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN)
+    {
+            nScrollInc = 1;
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_PAGEUP)
+    {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = -GetScrollPageSize(wxHORIZONTAL);
+            else
+                nScrollInc = -GetScrollPageSize(wxVERTICAL);
+    } else
+    if (event.GetEventType() == wxEVT_SCROLLWIN_PAGEDOWN)
+    {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = GetScrollPageSize(wxHORIZONTAL);
+            else
+                nScrollInc = GetScrollPageSize(wxVERTICAL);
+    } else
+    if ((event.GetEventType() == wxEVT_SCROLLWIN_THUMBTRACK) ||
+        (event.GetEventType() == wxEVT_SCROLLWIN_THUMBRELEASE))
+    {
+            if (orient == wxHORIZONTAL)
+                nScrollInc = pos - m_xScrollPosition;
+            else
+                nScrollInc = pos - m_yScrollPosition;
+    }
+
+    if (orient == wxHORIZONTAL)
+    {
+        if (m_xScrollPixelsPerLine > 0)
+        {
+            int w, h;
+            m_targetWindow->GetClientSize(&w, &h);
+
+            int nMaxWidth = m_xScrollLines*m_xScrollPixelsPerLine;
+            int noPositions = (int) ( ((nMaxWidth - w)/(double)m_xScrollPixelsPerLine) + 0.5 );
+            if (noPositions < 0)
+                noPositions = 0;
+
+            if ( (m_xScrollPosition + nScrollInc) < 0 )
+                nScrollInc = -m_xScrollPosition; // As -ve as we can go
+            else if ( (m_xScrollPosition + nScrollInc) > noPositions )
+                nScrollInc = noPositions - m_xScrollPosition; // As +ve as we can go
+        }
+        else
+            m_targetWindow->Refresh();
+    }
+    else
+    {
+        if (m_yScrollPixelsPerLine > 0)
+        {
+            int w, h;
+            m_targetWindow->GetClientSize(&w, &h);
+
+            int nMaxHeight = m_yScrollLines*m_yScrollPixelsPerLine;
+            int noPositions = (int) ( ((nMaxHeight - h)/(double)m_yScrollPixelsPerLine) + 0.5 );
+            if (noPositions < 0)
+                noPositions = 0;
+
+            if ( (m_yScrollPosition + nScrollInc) < 0 )
+                nScrollInc = -m_yScrollPosition; // As -ve as we can go
+            else if ( (m_yScrollPosition + nScrollInc) > noPositions )
+                nScrollInc = noPositions - m_yScrollPosition; // As +ve as we can go
+        }
+        else
+            m_targetWindow->Refresh();
+    }
+
+    return nScrollInc;
 }
 
 // ----------------------------------------------------------------------------
