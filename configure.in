@@ -1561,7 +1561,14 @@ if test "$USE_WIN32" = 1 ; then
     dnl --- Quick & Dirty ; link against most/all libraries
     dnl --- This will bloat the executable, but it'll work for now...
     dnl --- FIXME: trim this list for wxBase
-    LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
+    LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -ladvapi32 -lwsock32"
+
+    # This is the original list of libs we were linking with.
+    # Some of them needed to be pruned, eg. -lcrtdll would cause
+    # a crash at startup on NT, and some appear to just not be
+    # required.  The latter is the reason for preserving this
+    # list for a little while longer.
+    # LIBS="$LIBS -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lcrtdll -ladvapi32 -lwsock32"
 
     dnl add extra odbc libs if we have compiled in odbc
     if test "$wxUSE_ODBC" = "yes" ; then
@@ -1569,20 +1576,16 @@ if test "$USE_WIN32" = 1 ; then
     fi
 
     dnl -mwindows is needed to avoid that spawning of a console window
+    dnl This probably doesn't belong here..  The user may actually *want*
+    dnl a console window.  People should add this to their own app makefiles
+    dnl instead.  Unless someone cries murder about it, expect this to
+    dnl disappear from here soon.
     if test "$wxUSE_MINGW" = 1; then
         LDFLAGS="$LDFLAGS -mwindows"
     fi
 
-    dnl we should calculate these
-    RCINCSWITCH="--include-dir"
-    RCDEFSWITCH="--define"
-    RCPREPROCESSOR="--preprocessor \"\$(CC) -c -E -xc-header -DRC_INVOKED\""
-    RCINPUTSWITCH="-i"
-    RCOUTPUTSWITCH="-o"
-    RESFLAGS="$RCPREPROCESSOR $RCINCSWITCH \$(top_srcdir)/include $RCINCSWITCH \$(top_srcdir)/\$(program_dir) $RCDEFSWITCH __WIN32__ $RCDEFSWITCH __WIN95__ $RCDEFSWITCH __GNUWIN32__"
-
-    dnl set optinal RES_PROGRAM_OPT to RES_PROGRAM
-    RESPROGRAM="\$(RES_PROGRAM)"
+    RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
+    RESPROGRAMOBJ="\$(PROGRAM)_resources.o"
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -1927,6 +1930,20 @@ else
     DISTDIR="wxBase"
 fi
 
+if test "$wxUSE_OPENGL" = "yes"; then
+  AC_CHECK_HEADER(GL/gl.h, [
+    AC_DEFINE(wxUSE_OPENGL)
+    AC_DEFINE(wxUSE_GLCANVAS)
+    AC_CHECK_LIB(GL, glFlush, [
+      OPENGL_LIBS="-lGL -lGLU"
+    ],[
+        AC_CHECK_LIB(MesaGL, glFlush, [
+        OPENGL_LIBS="-lMesaGL -lMesaGLU"
+      ],)
+     ],)
+    ],wxUSE_OPENGL=0)
+fi
+
 if test -z "$TOOLKIT_VPATH" ; then
     TOOLKIT_VPATH="\${top_srcdir}/src/${TOOLKIT_DIR}"
 fi
@@ -1962,8 +1979,9 @@ fi
 
 dnl define which libs wx-config should link.
 WXCONFIG_LIBS="-l${WX_LIBRARY}"
+
 if test "$wxUSE_OPENGL" = "yes"; then
-    WXCONFIG_LIBS="${WXCONFIG_LIBS} -l${WX_LIBRARY_GL}"
+    WXCONFIG_LIBS_GL="-l${WX_LIBRARY_GL} $OPENGL_LIBS"
 fi
 
 dnl the name of the static library
@@ -2492,8 +2510,11 @@ dnl   defines THREADS_OBJ which contains the object files to build
 dnl   defines THREADS_LINK which contains the thread library to link with
 dnl   defines wxUSE_THREADS=1 if thread support is activated
 
-THREADS_LINK=""
-THREADS_OBJ=""
+THREADS_LINK=
+THREADS_OBJ=
+DEP_INFO_FLAGS=
+CODE_GEN_FLAGS=
+CODE_GEN_FLAGS_CXX=
 
 if test "$wxUSE_THREADS" = "yes" ; then
     if test "$wxUSE_WINE" = 1 ; then
@@ -2624,8 +2645,7 @@ if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
   dnl must define _REENTRANT for multithreaded code
-  CFLAGS="${CFLAGS} -D_REENTRANT"
-  CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+  CODE_GEN_FLAGS="$CODE_GEN_FLAGS -D_REENTRANT"
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
@@ -2634,8 +2654,7 @@ else
   if test "$ac_cv_func_strtok_r" = "yes"; then
     AC_MSG_CHECKING(if -D_REENTRANT is needed)
     if test "$NEEDS_D_REENTRANT_FOR_R_FUNCS" = 1; then
-        CFLAGS="${CFLAGS} -D_REENTRANT"
-        CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -D_REENTRANT"
         AC_MSG_RESULT(yes)
     else
         AC_MSG_RESULT(no)
@@ -2701,9 +2720,6 @@ if test "$wxUSE_PROFILE" = "yes" ; then
     PROFILE="-pg"
 fi
 
-DEP_INFO_FLAGS=
-CODE_GEN_FLAGS=
-CODE_GEN_FLAGS_CXX=
 if test "$GCC" = yes ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
         CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fno-rtti"
@@ -2716,6 +2732,12 @@ if test "$GCC" = yes ; then
     fi
     if test "$wxUSE_NO_DEPS" = "no" ; then
         DEP_INFO_FLAGS="-MMD"
+    fi
+    if test "$USE_WIN32" = 1 ; then
+        # I'm not even really sure what this was ever added to solve,
+        # but someone added it for mingw native builds, so I guess
+        # they had a reason, right??
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fno-pcc-struct-return"
     fi
 fi
 
@@ -2814,19 +2836,6 @@ if test "$wxUSE_LIBTIFF" = "yes" -o "$wxUSE_LIBTIFF" = "sys" ; then
   fi
 fi
 
-if test "$wxUSE_OPENGL" = "yes"; then
-  AC_CHECK_HEADER(GL/gl.h, [
-    AC_DEFINE(wxUSE_OPENGL)
-    AC_DEFINE(wxUSE_GLCANVAS)
-    AC_CHECK_LIB(GL, glFlush, [
-      OPENGL_LINK="-lGL -lGLU"
-    ],[
-        AC_CHECK_LIB(MesaGL, glFlush, [
-        OPENGL_LINK="-lMesaGL -lMesaGLU"
-      ],)
-     ],)
-    ],wxUSE_OPENGL=0)
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl the library may be built without GUI classes at all
@@ -3698,7 +3707,6 @@ dnl Output the makefiles and such from the results found above
 dnl ---------------------------------------------------------------------------
 
 GUILIBS="$GUI_TK_LIBRARY $TOOLKIT_LINK"
-OPENGL_LIBS="$OPENGL_LINK"
 
 dnl all additional libraries (except wxWindows itself) we link with
 dnl
@@ -3813,6 +3821,7 @@ AC_SUBST(TOOLKIT_VPATH)
 dnl wx-config options
 AC_SUBST(cross_compiling)
 AC_SUBST(WXCONFIG_LIBS)
+AC_SUBST(WXCONFIG_LIBS_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 
 dnl what to compile
@@ -3838,11 +3847,9 @@ AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)
 
 dnl additional resurces settings
-AC_SUBST(RCINPUTSWITCH)
-AC_SUBST(RCOUTPUTSWITCH)
-AC_SUBST(RESPROGRAM)
 AC_SUBST(RESCOMP)
 AC_SUBST(RESFLAGS)
+AC_SUBST(RESPROGRAMOBJ)
 
 dnl These seam to be missing
 AC_SUBST(DLLTOOL)
@@ -3891,7 +3898,7 @@ AC_OUTPUT([
             dnl don't move the file on itself - this happens when we run
             dnl config.status which, as configure, executes these commands
             dnl but, unlike it, doesn't create wx-config (which already
-            if test ! -f wx${TOOLCHAIN_NAME}-config; then
+            if test ! -L wx-config; then
                 chmod +x wx-config
                 mv wx-config wx${TOOLCHAIN_NAME}-config
                 ${LN_S} wx${TOOLCHAIN_NAME}-config wx-config
