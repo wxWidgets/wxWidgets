@@ -40,13 +40,16 @@ class wxColumnSorterMixin:
     """
 
     def __init__(self, numColumns):
-        self._colSortFlag = [0] * numColumns
-        self._col = -1
-
+        self.SetColumnCount(numColumns)
         list = self.GetListCtrl()
         if not list:
             raise ValueError, "No wxListCtrl available"
         EVT_LIST_COL_CLICK(list, list.GetId(), self.__OnColClick)
+
+
+    def SetColumnCount(self, newNumColumns):
+        self._colSortFlag = [0] * newNumColumns
+        self._col = -1
 
 
     def SortListItems(self, col=-1, ascending=1):
