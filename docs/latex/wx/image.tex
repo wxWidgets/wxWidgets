@@ -46,9 +46,13 @@ Creates an image with the given width and height.
 
 \func{}{wxImage}{\param{const wxString\& }{name}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
 
+\func{}{wxImage}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}}
+
 Loads an image from a file.
 
 \func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{long}{ type = wxBITMAP\_TYPE\_PNG}}
+
+\func{}{wxImage}{\param{wxInputStream\& }{stream}, \param{const wxString\&}{ mimetype}}
 
 Loads an image from an input stream.
 
@@ -75,6 +79,8 @@ The validity of these flags depends on the platform and wxWindows configuration.
 If all possible wxWindows settings are used, the loading a BMP (Windows bitmap) file,
 a PNG (portable network graphics) file and a JPEG file is supported on all platforms that
 implement wxImage.}
+
+\docparam{mimetype}{MIME type string (for example 'image/jpeg')}
 
 Note : you must call wxImage::AddHandler(new wxJPEGHandler) during application 
 initialization in order to work with JPEGs.
@@ -157,11 +163,17 @@ Finds the handler associated with the given extension and type.
 
 Finds the handler associated with the given image type.
 
+\func{static wxImageHandler*}{FindHandlerMime}{\param{const wxString\& }{mimetype}}
+
+Finds the handler associated with the given MIME type.
+
 \docparam{name}{The handler name.}
 
 \docparam{extension}{The file extension, such as ``bmp".}
 
 \docparam{imageType}{The image type, such as wxBITMAP\_TYPE\_BMP.}
+
+\docparam{mimetype}{MIME type.}
 
 \wxheading{Return value}
 
@@ -278,9 +290,13 @@ of a given handler class in an application session.}
 
 \func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{long}{ type}}
 
+\func{bool}{LoadFile}{\param{const wxString\&}{ name}, \param{const wxString\&}{ mimetype}}
+
 Loads an image from a file.
 
 \func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{long}{ type}}
+
+\func{bool}{LoadFile}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ mimetype}}
 
 Loads an image from an input stream.
 
@@ -302,6 +318,8 @@ The meaning of {\it stream} data is determined by the {\it type} parameter.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration.}
+
+\docparam{mimetype}{MIME type string (for example 'image/jpeg')}
 
 \wxheading{Return value}
 
@@ -338,9 +356,13 @@ TRUE if the handler was found and removed, FALSE otherwise.
 
 \func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{int}{ type}}
 
+\func{bool}{SaveFile}{\param{const wxString\& }{name}, \param{const wxString\&}{ mimetype}}
+
 Saves a image in the named file.
 
 \func{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{int}{ type}}
+
+\func{bool}{SaveFile}{\param{wxOutputStream\& }{stream}, \param{const wxString\&}{ mimetype}}
 
 Saves a image in the given stream.
 
@@ -360,6 +382,8 @@ Saves a image in the given stream.
 
 The validity of these flags depends on the platform and wxWindows configuration
 as well as user-added handlers.}
+
+\docparam{mimetype}{MIME type.}
 
 \wxheading{Return value}
 
@@ -519,6 +543,12 @@ Gets the file extension associated with this handler.
 
 Gets the image type associated with this handler.
 
+\membersection{wxImageHandler::GetMimeType}
+
+\constfunc{wxString}{GetMimeType}{\void}
+
+Gets the MIME type associated with this handler.
+
 \membersection{wxImageHandler::LoadFile}\label{wximagehandlerloadfile}
 
 \func{bool}{LoadFile}{\param{wxImage* }{image}, \param{wxInputStream\&}{ stream}}
@@ -593,4 +623,15 @@ Sets the handler type.
 \wxheading{Parameters}
 
 \docparam{name}{Handler type.}
+
+
+\membersection{wxImageHandler::SetMimeType}
+
+\func{void}{SetMimeType}{\param{const wxString\& }{mimetype}}
+
+Sets the handler MIME type.
+
+\wxheading{Parameters}
+
+\docparam{mimename}{Handler MIME type.}
 

@@ -58,13 +58,16 @@ public:
   inline void SetName(const wxString& name) { m_name = name; }
   inline void SetExtension(const wxString& ext) { m_extension = ext; }
   inline void SetType(long type) { m_type = type; }
+  inline void SetMimeType(const wxString& type) { m_mime = type; }
   inline wxString GetName() const { return m_name; }
   inline wxString GetExtension() const { return m_extension; }
   inline long GetType() const { return m_type; }
-  
+  inline wxString GetMimeType() const { return m_mime; }
+
 protected:
   wxString  m_name;
   wxString  m_extension;
+  wxString  m_mime;
   long      m_type;
   
 };
@@ -85,6 +88,7 @@ public:
       m_name = "PNG file";
       m_extension = "png";
       m_type = wxBITMAP_TYPE_PNG;
+      m_mime = "image/png";
   };
 
 #if wxUSE_STREAMS
@@ -111,6 +115,7 @@ public:
       m_name = "JPEG file";
       m_extension = "jpg";
       m_type = wxBITMAP_TYPE_JPEG;
+      m_mime = "image/jpeg";
   };
 
   virtual bool LoadFile( wxImage *image, wxInputStream& stream );
@@ -133,6 +138,7 @@ public:
       m_name = "BMP file";
       m_extension = "bmp";
       m_type = wxBITMAP_TYPE_BMP;
+      m_mime = "image/bmp";
   };
 
 #if wxUSE_STREAMS
@@ -156,7 +162,9 @@ public:
   wxImage( int width, int height );
   wxImage( const wxString& name, long type = wxBITMAP_TYPE_PNG );
   wxImage( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
-  
+  wxImage( const wxString& name, const wxString& mimetype );
+  wxImage( wxInputStream& stream, const wxString& mimetype );
+
   wxImage( const wxImage& image );
   wxImage( const wxImage* image );
   
@@ -176,15 +184,19 @@ public:
   unsigned char GetBlue( int x, int y );
   
   virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_PNG );
+  virtual bool LoadFile( const wxString& name, const wxString& mimetype );
 
 #if wxUSE_STREAMS
   virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_PNG );
+  virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype );
 #endif
 
   virtual bool SaveFile( const wxString& name, int type );
+  virtual bool SaveFile( const wxString& name, const wxString& mimetype );
 
 #if wxUSE_STREAMS
   virtual bool SaveFile( wxOutputStream& stream, int type );
+  virtual bool SaveFile( wxOutputStream& stream, const wxString& mimetype );
 #endif
 
   bool Ok() const;
@@ -219,7 +231,8 @@ public:
   static wxImageHandler *FindHandler( const wxString& name );
   static wxImageHandler *FindHandler( const wxString& extension, long imageType );
   static wxImageHandler *FindHandler( long imageType );
-  
+  static wxImageHandler *FindHandlerMime( const wxString& mimetype );
+
   static void CleanUpHandlers();
   static void InitStandardHandlers();
 
@@ -231,3 +244,4 @@ protected:
 
 #endif
   // _WX_IMAGE_H_
+

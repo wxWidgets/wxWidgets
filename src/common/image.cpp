@@ -101,10 +101,20 @@ wxImage::wxImage( const wxString& name, long type )
     LoadFile( name, type );
 }
 
+wxImage::wxImage( const wxString& name, const wxString& mimetype )
+{
+    LoadFile( name, mimetype );
+}
+
 #if wxUSE_STREAMS
 wxImage::wxImage( wxInputStream& stream, long type )
 {
     LoadFile( stream, type );
+}
+
+wxImage::wxImage( wxInputStream& stream, const wxString& mimetype )
+{
+    LoadFile( stream, mimetype );
 }
 #endif // wxUSE_STREAMS
 
@@ -325,6 +335,25 @@ bool wxImage::LoadFile( const wxString& filename, long type )
         wxFileInputStream stream(filename);
         return LoadFile(stream, type);
     }
+
+    else {
+        wxLogError( "Can't load image from file '%s': file does not exist.", filename.c_str() );
+
+        return FALSE;
+    }
+#else // !wxUSE_STREAMS
+    return FALSE;
+#endif // wxUSE_STREAMS
+}
+
+bool wxImage::LoadFile( const wxString& filename, const wxString& mimetype )
+{
+#if wxUSE_STREAMS
+    if (wxFileExists(filename))
+    {
+        wxFileInputStream stream(filename);
+        return LoadFile(stream, mimetype);
+    }
     
     else {
         wxLogError( "Can't load image from file '%s': file does not exist.", filename.c_str() );
@@ -340,9 +369,21 @@ bool wxImage::SaveFile( const wxString& filename, int type )
 {
 #if wxUSE_STREAMS
     wxFileOutputStream stream(filename);
-    
+
     if ( stream.LastError() == wxStream_NOERROR )
         return SaveFile(stream, type);
+    else
+#endif // wxUSE_STREAMS
+        return FALSE;
+}
+
+bool wxImage::SaveFile( const wxString& filename, const wxString& mimetype )
+{
+#if wxUSE_STREAMS
+    wxFileOutputStream stream(filename);
+    
+    if ( stream.LastError() == wxStream_NOERROR )
+        return SaveFile(stream, mimetype);
     else
 #endif // wxUSE_STREAMS
         return FALSE;
@@ -367,15 +408,49 @@ bool wxImage::LoadFile( wxInputStream& stream, long type )
     return handler->LoadFile( this, stream );
 }
 
+bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype )
+{
+    UnRef();
+
+    m_refData = new wxImageRefData;
+
+    wxImageHandler *handler = FindHandlerMime(mimetype);
+
+    if (handler == NULL)
+    {
+        wxLogWarning( "No image handler for type %s defined.", mimetype.GetData() );
+
+        return FALSE;
+    }
+
+    return handler->LoadFile( this, stream );
+}
+
 bool wxImage::SaveFile( wxOutputStream& stream, int type )
 {
     wxCHECK_MSG( Ok(), FALSE, "invalid image" );
-    
+
     wxImageHandler *handler = FindHandler(type);
-    
+
     if (handler == NULL)
     {
         wxLogWarning( "No image handler for type %d defined.", type );
+
+        return FALSE;
+    }
+
+    return handler->SaveFile( this, stream );
+}
+
+bool wxImage::SaveFile( wxOutputStream& stream, const wxString& mimetype )
+{
+    wxCHECK_MSG( Ok(), FALSE, "invalid image" );
+    
+    wxImageHandler *handler = FindHandlerMime(mimetype);
+    
+    if (handler == NULL)
+    {
+        wxLogWarning( "No image handler for type %s defined.", mimetype.GetData() );
         
         return FALSE;
     }
@@ -446,6 +521,18 @@ wxImageHandler *wxImage::FindHandler( long bitmapType )
     {
         wxImageHandler *handler = (wxImageHandler *)node->Data();
         if (handler->GetType() == bitmapType) return handler;
+        node = node->Next();
+    }
+    return NULL;
+}
+
+wxImageHandler *wxImage::FindHandlerMime( const wxString& mimetype )
+{
+    wxNode *node = sm_handlers.First();
+    while (node)
+    {
+        wxImageHandler *handler = (wxImageHandler *)node->Data();
+        if (handler->GetMimeType().IsSameAs(mimetype, FALSE)) return handler;
         node = node->Next();
     }
     return NULL;
