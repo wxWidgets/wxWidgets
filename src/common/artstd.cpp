@@ -20,6 +20,12 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #if WXWIN_COMPATIBILITY_2_2
+        #include "wx/app.h"
+    #endif
+#endif
+
 #include "wx/artprov.h"
 #include "wx/module.h"
 
@@ -37,9 +43,54 @@ protected:
                                   const wxSize& size);
 };
 
+// ----------------------------------------------------------------------------
+// helper macros
+// ----------------------------------------------------------------------------
+
+// Standard macro for getting a resource from XPM file:
 #define ART(artId, xpmRc) \
     if ( id == artId ) return wxBitmap(xpmRc##_xpm);
-    
+
+// Compatibility hack to use wxApp::GetStdIcon of overriden by the user
+#if WXWIN_COMPATIBILITY_2_2
+    #define GET_STD_ICON_FROM_APP(iconId) \
+        if ( client == wxART_MESSAGE_BOX ) \
+        { \
+            wxIcon icon = wxTheApp->GetStdIcon(iconId); \
+            if ( icon.Ok() ) \
+            { \
+                wxBitmap bmp; \
+                bmp.CopyFromIcon(icon); \
+                return bmp; \
+            } \
+        }
+#else
+    #define GET_STD_ICON_FROM_APP(iconId)
+#endif
+
+// There are two ways of getting the standard icon: either via XPMs or via
+// wxIcon ctor. This depends on the platform:
+#if defined(__WXUNIVERSAL__)
+    #define CREATE_STD_ICON(iconId, xpmRc) return wxNullBitmap;
+#elif defined(__WXGTK__) || defined(__WXMOTIF__)
+    #define CREATE_STD_ICON(iconId, xpmRc) return wxBitmap(xpmRc##_xpm);
+#else
+    #define CREATE_STD_ICON(iconId, xpmRc) \
+        { \
+            wxIcon icon(_T(iconId)); \
+            wxBitmap bmp; \
+            bmp.CopyFromIcon(icon); \
+            return bmp; \
+        }
+#endif
+
+// Macro used in CreateBitmap to get wxICON_FOO icons:
+#define ART_MSGBOX(artId, iconId, xpmRc) \
+    if ( id == artId ) \
+    { \
+        GET_STD_ICON_FROM_APP(iconId) \
+        CREATE_STD_ICON(#iconId, xpmRc) \
+    }
 
 // ----------------------------------------------------------------------------
 // wxDefaultArtProviderModule
@@ -67,6 +118,18 @@ IMPLEMENT_DYNAMIC_CLASS(wxDefaultArtProviderModule, wxModule)
 
 // XPM hack: make the arrays const
 #define static static const
+
+#if defined(__WXGTK__)
+    #include "../../art/gtk/info.xpm"
+    #include "../../art/gtk/error.xpm"
+    #include "../../art/gtk/warning.xpm"
+    #include "../../art/gtk/question.xpm"
+#elif defined(__WXMOTIF__)
+    #include "../../art/motif/info.xpm"
+    #include "../../art/motif/error.xpm"
+    #include "../../art/motif/warning.xpm"
+    #include "../../art/motif/question.xpm"
+#endif
 
 #if wxUSE_HTML
     #include "../../art/htmsidep.xpm"
@@ -108,6 +171,13 @@ wxBitmap wxDefaultArtProvider::CreateBitmap(const wxArtID& id,
                                             const wxArtClient& client,
                                             const wxSize& size)
 {
+    // wxMessageBox icons:
+    ART_MSGBOX(wxART_ERROR,       wxICON_ERROR,       error)
+    ART_MSGBOX(wxART_INFORMATION, wxICON_INFORMATION, info)
+    ART_MSGBOX(wxART_WARNING,     wxICON_WARNING,     warning)
+    ART_MSGBOX(wxART_QUESTION,    wxICON_QUESTION,    question)
+
+    // standard icons:
 #if wxUSE_HTML
     ART(wxART_HELP_SIDE_PANEL,                     htmsidep)
     ART(wxART_HELP_SETTINGS,                       htmoptns)
