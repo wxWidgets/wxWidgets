@@ -1860,10 +1860,14 @@ bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 //
 wxFileKind wxGetFileKind(int fd)
 {
+#if !defined (__WXWINCE__)
     if (isatty(fd))
         return wxFILE_KIND_TERMINAL;
+#endif
 
-#if defined __WXMSW__
+#if defined __WXWINCE__
+    return wxFILE_KIND_UNKNOWN;
+#elif defined __WXMSW__
     switch (::GetFileType(wxGetOSFHandle(fd)) & ~FILE_TYPE_REMOTE)
     {
         case FILE_TYPE_DISK:
