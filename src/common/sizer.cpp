@@ -25,7 +25,7 @@
 #include "wx/utils.h"
 #include "wx/statbox.h"
 #include "wx/notebook.h"
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 
 //---------------------------------------------------------------------------
 
