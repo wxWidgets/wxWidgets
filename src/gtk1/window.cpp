@@ -4230,6 +4230,9 @@ void wxWindowGTK::ApplyWidgetStyle(bool forceStyle)
         DoApplyWidgetStyle(style);
         gtk_rc_style_unref(style);
     }
+
+    // Style change may affect GTK+'s size calculation:
+    InvalidateBestSize();
 }
 
 void wxWindowGTK::DoApplyWidgetStyle(GtkRcStyle *style)
