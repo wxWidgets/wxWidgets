@@ -10,7 +10,7 @@
 
 THISDIR=$(WXWIN)\src\msw
 # WXDIR=$(WXWIN)
-WXDIR=d:\wx2\wxWindows
+WXDIR=$(WXWIN)
 
 DOCDIR = $(WXDIR)\docs
 
