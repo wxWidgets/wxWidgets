@@ -1705,7 +1705,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   if (inet_aton(hostname, addr) == 0)
   {
 #elif defined(HAVE_INET_ADDR)
-  if ( (addr->s_addr = inet_addr(hostname)) == (in_addr_t)-1 )
+  if ( (addr->s_addr = inet_addr(hostname)) == (unsigned)-1 )
   {
 #else
   /* Use gethostbyname by default */
