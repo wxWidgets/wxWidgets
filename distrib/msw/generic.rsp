@@ -953,15 +953,6 @@ samples/statbar/*.xpm
 samples/statbar/*.bmp
 samples/statbar/*.txt
 
-samples/plot/*.cpp
-samples/plot/*.h
-samples/plot/makefile*
-samples/plot/*.rc
-samples/plot/*.def
-samples/plot/*.ico
-samples/plot/*.xpm
-samples/plot/*.txt
-
 samples/exec/*.cpp
 samples/exec/*.h
 samples/exec/makefile*

@@ -9,8 +9,8 @@
     CreateUninstallRegKey=1
     UsePreviousAppDir=1
     UsePreviousGroup=1
-    AppVersion=2.2.6
-    AppVerName=wxWindows 2.2.6
+    AppVersion=2.3.0
+    AppVerName=wxWindows 2.3.0
     AppCopyright=Copyright © The wxWindows Team
     BackColor=$FF0000
     BackColor2=$000000
@@ -31,16 +31,16 @@
     UninstallIconName=Uninstall wxWindows
     Uninstallable=1
     DefaultDirName=c:\wx2
-    DefaultGroupName=wxWindows 2.2.6
-    LicenseFile=C:\wx2stable\wxWindows\docs\licence.txt
-    InfoBeforeFile=C:\wx2stable\wxWindows\docs\readme.txt
-    InfoAfterFile=C:\wx2stable\wxWindows\docs\msw\install.txt
+    DefaultGroupName=wxWindows 2.3.0
+    LicenseFile=C:\wx2dev\wxWindows\docs\licence.txt
+    InfoBeforeFile=C:\wx2dev\wxWindows\docs\readme.txt
+    InfoAfterFile=C:\wx2dev\wxWindows\docs\msw\install.txt
     MessagesFile=compiler:default.isl
     DiskSpanning=1
     DiskSize=1457664
     DiskClusterSize=512
     ReserveBytes=0
     UseSetupLdr=1
-    SourceDir=C:\wx2stable\wxWindows\deliver\wx
-    OutputDir=C:\wx2stable\wxWindows\deliver
+    SourceDir=C:\wx2dev\wxWindows\deliver\wx
+    OutputDir=C:\wx2dev\wxWindows\deliver
 

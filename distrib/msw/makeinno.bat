@@ -7,7 +7,7 @@ Rem
 Rem [Files]
 Rem     Source: c:\wx2stable\wxWindows\deliver2\docs\readme.txt; DestDir: {app}\docs\; DestName: readme.txt
 
-set wxwindir=c:\wx2stable\wxWindows
+set wxwindir=%WXWIN
 
 Rem Generate a list of all files in the distribution.
 Rem We have to be in the right directory already.

@@ -1,7 +1,7 @@
 @echo off
 rem Zip up an external distribution of wxXML
-set src=d:\wx2\wxWindows
-set dest=d:\wx2\wxWindows\deliver
+set src=%WXWIN%
+set dest=%WXWIN%\deliver
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage

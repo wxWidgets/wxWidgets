@@ -6,7 +6,7 @@ set dest=%src\deliver
 set inno=0
 
 Rem Set this to the required version
-set version=2.2.6
+set version=2.3.0
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -104,6 +104,8 @@ zip32 -@ %dest\jpeg.zip < %src\distrib\msw\jpeg.rsp
 rem TIFF source
 zip32 -@ %dest\tiff.zip < %src\distrib\msw\tiff.rsp
 
+zip32 -@ %dest\wxxml.zip < %src\distrib\msw\xml.rsp
+
 rem Dialog Editor source and binary
 erase %dest\dialoged_source.zip
 zip32 -@ %dest\dialoged_source.zip < %src\distrib\msw\dialoged.rsp
@@ -158,6 +160,7 @@ unzip32 -o ..\wxWindows-%version%-Word.zip
 unzip32 -o ..\ogl3.zip
 unzip32 -o ..\jpeg.zip
 unzip32 -o ..\tiff.zip
+unzip32 -o ..\xml.zip
 unzip32 -o ..\tex2rtf2.zip
 
 rem Now delete a few files that are unnecessary
