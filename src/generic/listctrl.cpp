@@ -47,16 +47,26 @@
     #include "wx/textctrl.h"
 #endif
 
-// Include wx/listctrl.h (with wxListView declaration)
-// only when wxGenericListCtrl is the only
-// implementation, and therefore wxListView needs
-// to be derived from the 'generic' version.
-
+// under Win32 we always use the native version and also may use the generic
+// one, however some things should be done only if we use only the generic
+// version
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
-    #include "wx/listctrl.h"
-#else
-    #include "wx/generic/listctrl.h"
+    #define HAVE_NATIVE_LISTCTRL
 #endif
+
+// if we have the native control, wx/listctrl.h declares it and not this one
+#ifdef HAVE_NATIVE_LISTCTRL
+    #include "wx/generic/listctrl.h"
+#else // !HAVE_NATIVE_LISTCTRL
+    #include "wx/listctrl.h"
+
+    // if we have a native version, its implementation file does all this
+    IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
+    IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
+
+    IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
+#endif // HAVE_NATIVE_LISTCTRL/!HAVE_NATIVE_LISTCTRL
 
 #if defined(__WXGTK__)
     #include <gtk/gtk.h>
@@ -4572,40 +4582,15 @@ void wxListMainWindow::GetVisibleLinesRange(size_t *from, size_t *to)
 }
 
 // -------------------------------------------------------------------------------------
-// wxListItem
-// -------------------------------------------------------------------------------------
-
-#if !defined(__WIN32__) || defined(__WXUNIVERSAL__)
-IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
-#endif
-
-// -------------------------------------------------------------------------------------
 // wxGenericListCtrl
 // -------------------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericListCtrl, wxControl)
 
-#if !defined(__WIN32__)
-IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
-#endif
-
-#if !defined(__WIN32__) || defined(__WXUNIVERSAL__)
-IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
-#endif
-
 BEGIN_EVENT_TABLE(wxGenericListCtrl,wxControl)
   EVT_SIZE(wxGenericListCtrl::OnSize)
   EVT_IDLE(wxGenericListCtrl::OnIdle)
 END_EVENT_TABLE()
-
-#if !defined(__WXMSW__) || defined(__WIN16__) || defined(__WXUNIVERSAL__)
-/*
- * wxListCtrl has to be a real class or we have problems with
- * the run-time information.
- */
-
-IMPLEMENT_DYNAMIC_CLASS(wxListCtrl, wxGenericListCtrl)
-#endif
 
 wxGenericListCtrl::wxGenericListCtrl()
 {
