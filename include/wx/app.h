@@ -66,16 +66,16 @@ class WXDLLEXPORT wxDisplayModeInfo
 {
 public:
     wxDisplayModeInfo() : m_ok(FALSE) {}
-    wxDisplayModeInfo(const wxSize& size, unsigned depth) 
-        : m_size(size), m_depth(depth), m_ok(TRUE) {}
+    wxDisplayModeInfo(unsigned width, unsigned height, unsigned depth) 
+        : m_width(width), m_height(height), m_depth(depth), m_ok(TRUE) {}
     
-    const wxSize& GetScreenSize() const { return m_size; }
+    unsigned GetWidth() const { return m_width; }
+    unsigned GetHeight() const { return m_height; }
     unsigned GetDepth() const { return m_depth; }
     bool IsOk() const { return m_ok; }
 
 private:
-    wxSize   m_size;
-    unsigned m_depth;
+    unsigned m_width, m_height, m_depth;
     bool     m_ok;
 };
 #endif

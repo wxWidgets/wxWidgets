@@ -284,7 +284,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
             return FALSE;
         }
 
-        if ( !SetDisplayMode(wxDisplayModeInfo(wxSize(w, h), bpp)) )
+        if ( !SetDisplayMode(wxDisplayModeInfo(w, h, bpp)) )
             return FALSE;
     }
 #endif
