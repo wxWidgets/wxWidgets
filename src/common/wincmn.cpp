@@ -1429,6 +1429,9 @@ void wxWindowBase::DeleteRelatedConstraints()
 
 void wxWindowBase::SetSizer(wxSizer *sizer, bool deleteOld)
 {
+    if ( sizer == m_windowSizer)
+        return;
+    
     if ( deleteOld )
         delete m_windowSizer;
 
