@@ -6,6 +6,10 @@
  * $Id$
  *******************************************************************/
 
+/*
+  
+ */
+ 
 #ifdef __GNUG__
 #pragma implementation "wxllist.h"
 #endif
@@ -15,13 +19,13 @@
 #  pragma hdrstop
 #endif
 
-
 //#include "Mpch.h"
 #ifdef M_PREFIX
 #   include "gui/wxllist.h"
 #else
 #   include "wxllist.h"
 #endif
+
 #ifndef USE_PCH
 #   include   "iostream.h"
 #   include   <wx/dc.h>
@@ -302,7 +306,7 @@ wxLayoutObjectCmd::Layout(wxDC &dc)
 wxLayoutLine::wxLayoutLine(wxLayoutLine *prev)
 {
    m_LineNumber = 0;
-   m_Height = 0;
+   m_Width = m_Height = 0;
    m_Length = 0;
    m_Dirty = true;
    m_Previous = prev;
@@ -568,9 +572,9 @@ wxLayoutLine::DeleteWord(CoordType xpos)
          str = str.substr(offset,str.Length()-offset);
          // Find out how many positions we need to delete:
          // 1. eat leading space
-         while(isspace(str[count])) count++;
+         while(isspace(str.c_str()[count])) count++;
          // 2. eat the word itself:
-         while(isalnum(str[count])) count++;
+         while(isalnum(str.c_str()[count])) count++;
          // now delete it:
          wxASSERT(count+offset <= (size_t) (**i).GetLength());
          ((wxLayoutObjectText *)*i)->GetText().erase(offset,count);
@@ -833,7 +837,7 @@ wxLayoutLine::GetWrapPosition(CoordType column)
       {
          do
          {
-            if( isspace(((wxLayoutObjectText*)*i)->GetText()[(size_t)offset]))
+            if( isspace(((wxLayoutObjectText*)*i)->GetText().c_str()[(size_t)offset]))
                return column;
             else
             {
@@ -893,6 +897,7 @@ wxLayoutList::wxLayoutList()
 wxLayoutList::~wxLayoutList()
 {
    InternalClear();
+   m_FirstLine->DeleteLine(false);
 }
 
 void
@@ -1482,8 +1487,8 @@ void wxLayoutPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom,
    float scale = ScaleDC(&psdc);
 
    psdc.GetSize(&m_PageWidth, &m_PageHeight);
-   // This sets a left/top origin of 10% and 5%:
-   m_Offset = wxPoint(m_PageWidth/10, m_PageHeight/20);
+   // This sets a left/top origin of 15% and 20%:
+   m_Offset = wxPoint((15*m_PageWidth)/100, m_PageHeight/20);
 
    // This is the length of the printable area.
    m_PrintoutHeight = m_PageHeight - (int) (m_PageHeight * 0.15);
