@@ -99,12 +99,12 @@ if [ ! $? = 0 ]; then error; fi
 cd -
 
 
-# #echo ------------------
-# echo cd ../../contrib/build/xrc
-# cd ../../contrib/build/xrc
-# $WXWIN/build/msw/.mymake $BUILD_TYPE $@
-# if [ ! $? = 0 ]; then error; fi
-# cd -
+#echo ------------------
+echo cd ../../contrib/build/animate
+cd ../../contrib/build/animate
+$WXWIN/build/msw/.mymake $BUILD_TYPE $@
+if [ ! $? = 0 ]; then error; fi
+cd -
 
 
 echo ------------------
