@@ -40,6 +40,7 @@
 #include "wx/scrolwin.h"
 #include "wx/panel.h"
 #include "wx/timer.h"
+#include "wx/sizer.h"
 
 #ifdef __WXMSW__
     #include <windows.h> // for DLGC_WANTARROWS
