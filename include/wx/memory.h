@@ -35,11 +35,12 @@
 
 #include "wx/string.h"
 
-#ifndef WXDEBUG_NEW
-#define WXDEBUG_NEW new(__FILE__,__LINE__)
-#endif
-
 #if WXDEBUG
+
+// #ifndef WXDEBUG_NEW
+// #define WXDEBUG_NEW new(__FILE__,__LINE__)
+// #endif
+
 void * wxDebugAlloc(size_t size, char * fileName, int lineNum, bool isObject, bool isVect = FALSE);
 void wxDebugFree(void * buf, bool isVect = FALSE);
 
@@ -60,8 +61,6 @@ void operator delete (void * buf);
 void * operator new[] (size_t size, char * fileName, int lineNum);
 void operator delete[] (void * buf);
 #endif
-
-#define new WXDEBUG_NEW
 
 #endif
 #endif
@@ -270,7 +269,7 @@ inline void wxTraceLevel(int WXUNUSED(level), const char *WXUNUSED(fmt)) {}
 
 #define WXTRACE TRUE ? (void)0 : wxTrace
 #define WXTRACELEVEL TRUE ? (void)0 : wxTraceLevel
-#define WXDEBUG_NEW new
+// #define WXDEBUG_NEW new
 
 #endif // WXDEBUG
 

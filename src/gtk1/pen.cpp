@@ -40,6 +40,15 @@ wxPenRefData::wxPenRefData(void)
   m_capStyle = wxCAP_ROUND;
 }
 
+wxPenRefData::wxPenRefData( const wxPenRefData& data )
+{
+  m_style = data.m_style;
+  m_width = data.m_width;
+  m_joinStyle = data.m_joinStyle;
+  m_capStyle = data.m_capStyle;
+  m_colour = data.m_colour;
+}
+
 //-----------------------------------------------------------------------------
 
 #define M_PENDATA ((wxPenRefData *)m_refData)
@@ -109,99 +118,117 @@ bool wxPen::operator != ( const wxPen& pen )
 
 void wxPen::SetColour( const wxColour &colour )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_colour = colour;
 }
 
 void wxPen::SetColour( const wxString &colourName )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_colour = colourName;
 }
 
 void wxPen::SetColour( int red, int green, int blue )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_colour.Set( red, green, blue );
 }
 
 void wxPen::SetCap( int capStyle )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_capStyle = capStyle;
 }
 
 void wxPen::SetJoin( int joinStyle )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_joinStyle = joinStyle;
 }
 
 void wxPen::SetStyle( int style )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_style = style;
 }
 
 void wxPen::SetWidth( int width )
 {
-  if (!m_refData)
-    m_refData = new wxPenRefData();
-
+  Unshare();
   M_PENDATA->m_width = width;
 }
 
 int wxPen::GetCap(void) const
 {
+  if (!m_refData)
+  {
+    wxFAIL_MSG( "invalid pen" );
+    return -1;
+  }
+  
   return M_PENDATA->m_capStyle;
 }
 
 int wxPen::GetJoin(void) const
 {
   if (!m_refData)
-    return 0;
-  else
-    return M_PENDATA->m_joinStyle;
+  {
+    wxFAIL_MSG( "invalid pen" );
+    return -1;
+  }
+  
+  return M_PENDATA->m_joinStyle;
 }
 
 int wxPen::GetStyle(void) const
 {
   if (!m_refData)
-    return 0;
-  else
-    return M_PENDATA->m_style;
+  {
+    wxFAIL_MSG( "invalid pen" );
+    return -1;
+  }
+  
+  return M_PENDATA->m_style;
 }
 
 int wxPen::GetWidth(void) const
 {
   if (!m_refData)
-    return 0;
-  else
-    return M_PENDATA->m_width;
+  {
+    wxFAIL_MSG( "invalid pen" );
+    return -1;
+  }
+  
+  return M_PENDATA->m_width;
 }
 
 wxColour &wxPen::GetColour(void) const
 {
   if (!m_refData)
+  {
+    wxFAIL_MSG( "invalid pen" );
     return wxNullColour;
-  else
-    return M_PENDATA->m_colour;
+  }
+  
+  return M_PENDATA->m_colour;
 }
 
 bool wxPen::Ok(void) const
 {
-  return (m_refData);
+  return (m_refData != NULL);
+}
+
+void wxPen::Unshare(void)
+{
+  if (!m_refData)
+  {
+    m_refData = new wxPenRefData();
+  }
+  else
+  {
+    wxPenRefData* ref = new wxPenRefData( *(wxPenRefData*)m_refData );
+    UnRef();
+    m_refData = ref;
+  }
 }
 

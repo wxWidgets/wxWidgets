@@ -23,7 +23,7 @@ Consistent keyboard interface and focus behaviour
 
 Add support Set colour/baclgroundcolour in GTK widgets
 Correct tab navigation (seems to be a GTK feature)
-Finish DnD (postponed as GTK 1.2 will have new DnD)
+Finish DnD
 Add Clipboard
 Help system (not sure about this one)
 Show accelerator in menus
@@ -36,7 +36,6 @@ Finish wxTextCtrl
 Finish native wxTreeCtrl
 Implement wxPalette
 Implement wxDirDialog
-Implement CopyOnWrite (unshare) for GDI objects
 Support cooperation between Qt and wxWindows
 Fix toolbar tips
 TrueType support (just kidding)

@@ -167,9 +167,9 @@ int WXDLLEXPORT wxFindMenuItemId(wxFrame *frame, const wxString& menuString, con
 // Can't export a class derived from a non-export class
 #if !defined(_WINDLL) && !defined(WXUSINGDLL)
 
-#ifdef new
-#undef new
-#endif
+// #ifdef new
+// #undef new
+// #endif
 
 class WXDLLEXPORT wxDebugStreamBuf: public streambuf
 {
@@ -182,9 +182,9 @@ class WXDLLEXPORT wxDebugStreamBuf: public streambuf
     int sync(void);
 };
 
-#if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
-#define new WXDEBUG_NEW
-#endif
+// #if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
+// #define new WXDEBUG_NEW
+// #endif
 
 #endif
 

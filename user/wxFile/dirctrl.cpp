@@ -33,10 +33,8 @@ wxDirInfo::wxDirInfo( const wxString &path )
   if (m_path == "/home")
   {
     m_name = "My Home";
-    m_path += "/";
-    wxString str;
-    wxGetHomeDir( & str );
-    m_path = str;
+    m_path = "";
+    wxGetHomeDir( &m_path );
   }
   else
   if (m_path == "/proc") m_name = "Info Filesystem";
@@ -97,7 +95,7 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
   item.m_children = 1;
   m_rootId = InsertItem( 0, item );
   
-  SetDropTarget( new wxFileDropTarget() );
+//  SetDropTarget( new wxFileDropTarget() );
 };
 
 void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )

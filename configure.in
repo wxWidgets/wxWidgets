@@ -976,7 +976,6 @@ if test "$USE_GTK" = 1; then
        GUI_TK_INCLUDE="$GTK_CFLAGS"
        GUI_TK_LIBRARY="$GTK_LIBS"
   ], AC_MSG_ERROR(Are gtk-config and the GTK in path and up-to-date?))
-  AC_DEFINE(__WXGTK__)
   TOOLKIT=GTK
   TOOLKIT_DEF=__WXGTK__
   MAKEINCLUDE=../gtk.inc
@@ -1002,7 +1001,6 @@ if test "$USE_QT" = 1; then
      AC_MSG_ERROR(no)
   fi
   GUI_TK_LINK="-lXext -lX11 -lqt -lm"
-  AC_DEFINE(__WXQT__)
   TOOLKIT=QT
   TOOLKIT_DEF=__WXQT__
   MAKEINCLUDE=../qt.inc
@@ -1028,7 +1026,6 @@ if test "$USE_MOTIF" = 1; then
      AC_MSG_ERROR(no)
   fi
   GUI_TK_LINK="-lXext -lXt -lX11 -lXm -lm"
-  AC_DEFINE(__WXMOTIF__)
   TOOLKIT=MOTIF
   TOOLKIT_DEF=__WXMOTIF__
   MAKEINCLUDE=../motif.inc
@@ -1065,7 +1062,7 @@ fi
 
 if test "$USE_MEM_TRACING" = 1 ; then
   AC_DEFINE_UNQUOTED(USE_MEMORY_TRACING,$USE_MEM_TRACING)
-  dnl AC_DEFINE_UNQUOTED(USE_GLOBAL_MEMORY_OPERATORS,$USE_MEM_TRACING)
+  AC_DEFINE_UNQUOTED(USE_GLOBAL_MEMORY_OPERATORS,$USE_MEM_TRACING)
 fi
 
 EXTRA_LINK=

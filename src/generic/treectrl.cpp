@@ -381,6 +381,8 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
 
 wxTreeCtrl::~wxTreeCtrl()
 {
+  if (m_hilightBrush) delete m_hilightBrush;
+  if (m_anchor) delete m_anchor;
 }
 
 bool wxTreeCtrl::Create(wxWindow *parent, wxWindowID id,

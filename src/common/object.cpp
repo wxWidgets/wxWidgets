@@ -220,7 +220,6 @@ void wxClassInfo::InitializeClasses(void)
   }
 }
 
-// Clean up hash table
 void wxClassInfo::CleanUpClasses(void)
 {
     delete wxClassInfo::sm_classTable;

@@ -17,6 +17,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/memory.h"
 
 class WXDLLEXPORT wxObject;
 
@@ -232,10 +233,10 @@ private:
 };
 
 #if WXDEBUG && USE_GLOBAL_MEMORY_OPERATORS
-#ifndef WXDEBUG_NEW
-#define WXDEBUG_NEW new(__FILE__,__LINE__)
-#endif
-#define new WXDEBUG_NEW
+//#ifndef WXDEBUG_NEW
+//#define WXDEBUG_NEW new(__FILE__,__LINE__)
+//#endif
+#define new new(__FILE__,__LINE__)
 #endif
 
 #endif

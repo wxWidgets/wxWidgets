@@ -48,11 +48,18 @@ wxHashTable::wxHashTable (int the_key_type, int size)
 
 wxHashTable::~wxHashTable (void)
 {
+  Destroy();
+}
+
+void wxHashTable::Destroy(void)
+{
+  if (!hash_table) return;
   int i;
   for (i = 0; i < n; i++)
     if (hash_table[i])
       delete hash_table[i];
   delete[] hash_table;
+  hash_table = NULL;
 }
 
 bool wxHashTable::Create(int the_key_type, int size)

@@ -155,10 +155,9 @@ MyFrame::MyFrame(void) :
   m_leftFile = (wxFileCtrl *) NULL;
   m_dir = new wxDirCtrl( m_splitter, ID_DIRCTRL, "/", wxPoint(10,45), wxSize(200,330) );
   
-  wxString homepath( "/home" );
-  wxString str;
-  wxGetHomeDir( & str );
-  homepath = str;
+  wxString homepath;
+  wxGetHomeDir( &homepath );
+  
   m_rightFile = new wxFileCtrl( m_splitter, ID_FILECTRL, homepath, wxPoint(220,5), wxSize(200,330) );
    
   m_leftFile = new wxFileCtrl( m_splitter, ID_FILECTRL, homepath, wxPoint(0,5), wxSize(200,330) );

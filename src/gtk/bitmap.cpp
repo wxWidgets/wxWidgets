@@ -228,25 +228,39 @@ bool wxBitmap::operator != ( const wxBitmap& bmp )
   
 bool wxBitmap::Ok(void) const
 {
-  wxASSERT_MSG( m_refData != NULL, "invalid bitmap" );
   return (m_refData != NULL);
 }
   
 int wxBitmap::GetHeight(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return -1;
+  }
+
   return M_BMPDATA->m_height;
 }
 
 int wxBitmap::GetWidth(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return -1;
+  }
+  
   return M_BMPDATA->m_width;
 }
 
 int wxBitmap::GetDepth(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return -1;
+  }
+  
   return M_BMPDATA->m_bpp;
 }
 
@@ -279,14 +293,22 @@ void wxBitmap::SetDepth( int depth )
 
 wxMask *wxBitmap::GetMask(void) const
 {
-  if (!Ok()) return (wxMask *) NULL;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return (wxMask *) NULL;
+  }
   
   return M_BMPDATA->m_mask;
 }
 
 void wxBitmap::SetMask( wxMask *mask )
 {
-  if (!Ok()) return;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return;
+  }
   
   if (M_BMPDATA->m_mask) delete M_BMPDATA->m_mask;
   
@@ -295,11 +317,19 @@ void wxBitmap::SetMask( wxMask *mask )
 
 void wxBitmap::Resize( int height, int width )
 {
-  if (!Ok()) return;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return;
+  }
   
 #ifdef USE_GDK_IMLIB
   
-  if (M_BMPDATA->m_bitmap) return;  // not supported for bitmaps
+  if (M_BMPDATA->m_bitmap)
+  {
+    wxFAIL_MSG( "wxBitmap::Resize not supported for mono-bitmaps" );
+    return;
+  }
   
   if (!M_BMPDATA->m_image) RecreateImage();
   
@@ -324,9 +354,19 @@ void wxBitmap::Resize( int height, int width )
 bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type), 
   wxPalette *WXUNUSED(palette) )
 {
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return FALSE;
+  }
+  
 #ifdef USE_GDK_IMLIB
 
-  if (!Ok()) return FALSE;
+  if (M_BMPDATA->m_bitmap)
+  {
+    wxFAIL_MSG( "wxBitmap::SaveFile not supported for mono-bitmaps" );
+    return FALSE;
+  }
   
   if (!M_BMPDATA->m_image) RecreateImage();
   
@@ -380,7 +420,11 @@ wxPalette *wxBitmap::GetPalette(void) const
 
 GdkPixmap *wxBitmap::GetPixmap(void) const
 {
-  if (!Ok()) return (GdkPixmap *) NULL;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return (GdkPixmap *) NULL;
+  }
   
 //  if (!M_BMPDATA->m_image) RecreateImage();
   
@@ -389,14 +433,22 @@ GdkPixmap *wxBitmap::GetPixmap(void) const
   
 GdkBitmap *wxBitmap::GetBitmap(void) const
 {
-  if (!Ok()) return (GdkBitmap *) NULL;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return (GdkBitmap *) NULL;
+  }
   
   return M_BMPDATA->m_bitmap;
 }
   
 void wxBitmap::DestroyImage(void)
 {
-  if (!Ok()) return;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return;
+  }
   
   if (M_BMPDATA->m_image)
   {
@@ -407,7 +459,11 @@ void wxBitmap::DestroyImage(void)
 
 void wxBitmap::RecreateImage(void)
 {
-  if (!Ok()) return;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return;
+  }
   
 #ifdef USE_GDK_IMLIB
 
@@ -458,7 +514,11 @@ void wxBitmap::RecreateImage(void)
 
 void wxBitmap::Render(void)
 {
-  if (!Ok()) return;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid bitmap" );
+    return;
+  }
   
 #ifdef USE_GDK_IMLIB
 

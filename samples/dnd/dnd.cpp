@@ -192,7 +192,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-  //m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
+  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
 
   wxLayoutConstraints *c;
 

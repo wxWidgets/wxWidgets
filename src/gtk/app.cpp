@@ -293,8 +293,6 @@ void wxApp::CommonCleanUp(void)
   wxCleanUpResourceSystem();
 
   wxSystemSettings::Done();
-
-  wxClassInfo::CleanUpClasses();
 }
 
 wxLog *wxApp::CreateLogTarget()
@@ -314,11 +312,7 @@ int wxEntry( int argc, char *argv[] )
 
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
 
-#if !defined(_WINDLL)
   streambuf* sBuf = new wxDebugStreamBuf;
-#else
-  streambuf* sBuf = NULL;
-#endif
   ostream* oStr = new ostream(sBuf) ;
   wxDebugContext::SetStream(oStr, sBuf);
 
@@ -348,6 +342,12 @@ int wxEntry( int argc, char *argv[] )
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
 
+  char name[200];
+  strcpy( name, argv[0] );
+  strcpy( name, wxFileNameFromPath(name) );
+  wxStripExtension( name );
+  wxTheApp->SetAppName( name );
+  
   gtk_set_locale();
   
   gtk_init( &argc, &argv );
@@ -386,11 +386,15 @@ int wxEntry( int argc, char *argv[] )
 
   wxDELETE(wxTheApp);
 
+  wxLog *oldLog = wxLog::SetActiveTarget( NULL );
+  if (oldLog) delete oldLog;
+  
+  wxClassInfo::CleanUpClasses();
+  
+  delete[] wxBuffer;
+  
 #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
-  // At this point we want to check if there are any memory
-  // blocks that aren't part of the wxDebugContext itself,
-  // as a special case. Then when dumping we need to ignore
-  // wxDebugContext, too.
+  
   if (wxDebugContext::CountObjectsLeft() > 0)
   {
     wxTrace("There were memory leaks.\n");
@@ -398,6 +402,7 @@ int wxEntry( int argc, char *argv[] )
     wxDebugContext::PrintStatistics();
   }
   wxDebugContext::SetStream(NULL, NULL);
+  
 #endif
 
   return retValue;

@@ -17,9 +17,6 @@
 #endif
 
 /* define the system to compile */
-#undef __WXGTK__
-#undef __WXMOTIF__
-#undef __WXQT__
 #undef __UNIX__
 #undef __LINUX__
 #undef __SGI__
@@ -265,11 +262,6 @@
  * Disable it, If this causes problems (e.g. link errors)
  */
 #undef USE_GLOBAL_MEMORY_OPERATORS
-/*
- * If WXDEBUG && USE_MEMORY_TRACING && USE_GLOBAL_MEMORY_OPERATORS
- * used to debug the memory allocation of wxWindows Xt port code
- */
-#define USE_INTERNAL_MEMORY_TRACING 0
 /*
  * Matthews garbage collection (used for MrEd?)
  */

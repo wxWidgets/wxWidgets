@@ -158,6 +158,10 @@ void wxRadioBox::OnSize( wxSizeEvent &event )
     gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), button, x, y );
     y += 20;
     
+    int w = m_width-10;
+    if (w < 15) w = 15;
+    gtk_widget_set_usize( button, w, 20 );
+      
     node = node->Next();
   }
 }

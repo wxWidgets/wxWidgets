@@ -40,6 +40,8 @@ class WXDLLEXPORT wxHashTable: public wxObject
 
   wxHashTable(int the_key_type = wxKEY_INTEGER, int size = 1000);
   ~wxHashTable(void);
+  
+  void Destroy(void);  // Robert Roebling
 
   bool Create(int the_key_type = wxKEY_INTEGER, int size = 1000);
 

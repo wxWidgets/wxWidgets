@@ -179,25 +179,27 @@ bool wxFont::operator != ( const wxFont& font )
 
 bool wxFont::Ok() const
 {
-  if (!m_refData)
-  {
-    wxFAIL_MSG( "invalid font" );
-    return FALSE;
-  }
-  else
-    return TRUE;
+  return (m_refData != NULL);
 }
 
 int wxFont::GetPointSize(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok()) 
+  {
+    wxFAIL_MSG( "invalid font" );
+    return 0;
+  }
   
   return M_FONTDATA->m_pointSize;
 }
 
 wxString wxFont::GetFaceString(void) const
 {
-  if (!Ok()) return "";
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+     return "";
+  }
   
   wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s;
@@ -205,7 +207,11 @@ wxString wxFont::GetFaceString(void) const
 
 wxString wxFont::GetFaceName(void) const
 {
-  if (!Ok()) return "";
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+     return "";
+  }
   
   wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s; 
@@ -213,14 +219,22 @@ wxString wxFont::GetFaceName(void) const
 
 int wxFont::GetFamily(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+     return 0;
+  }
   
   return M_FONTDATA->m_family;
 }
 
 wxString wxFont::GetFamilyString(void) const
 {
-  if (!Ok()) return "wxDEFAULT";
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return "wxDEFAULT";
+  }
   
   switch (M_FONTDATA->m_family)
   {
@@ -238,21 +252,33 @@ wxString wxFont::GetFamilyString(void) const
 
 int wxFont::GetFontId(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return 0;
+  }
   
   return M_FONTDATA->m_fontId; // stub
 }
 
 int wxFont::GetStyle(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return 0;
+  }
   
   return M_FONTDATA->m_style;
 }
 
 wxString wxFont::GetStyleString(void) const
 {
-  if (!Ok()) return "wxDEFAULT";
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return "wxDEFAULT";
+  }
   
   switch (M_FONTDATA->m_style)
   {
@@ -267,14 +293,22 @@ wxString wxFont::GetStyleString(void) const
 
 int wxFont::GetWeight(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return 0;
+  }
 
   return M_FONTDATA->m_weight;
 }
 
 wxString wxFont::GetWeightString(void) const
 {
-  if (!Ok()) return "wxDEFAULT";
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return "wxDEFAULT";
+  }
 
   switch (M_FONTDATA->m_weight)
   {
@@ -289,7 +323,11 @@ wxString wxFont::GetWeightString(void) const
 
 bool wxFont::GetUnderlined(void) const
 {
-  if (!Ok()) return FALSE;
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return FALSE;
+  }
   
   return M_FONTDATA->m_underlined;
 }
@@ -305,6 +343,12 @@ static GdkFont *wxLoadQueryNearestFont(int point_size, int fontid,
 
 GdkFont *wxFont::GetInternalFont(float scale) const
 {
+  if (!Ok())
+  {
+    wxFAIL_MSG( "invalid font" );
+    return (GdkFont*) NULL;
+  }
+  
   if (M_FONTDATA->m_byXFontName) return M_FONTDATA->m_font;
    
   long int_scale = long(scale * 100.0 + 0.5); // key for fontlist

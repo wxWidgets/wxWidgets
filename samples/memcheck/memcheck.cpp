@@ -35,8 +35,6 @@
 #error You must set WXDEBUG to 1 on the 'make' command line (MSW) or with configure (GTK)
 #endif
 
-// #define new WXDEBUG_NEW
-
 // Define a new application type
 class MyApp: public wxApp
 { public:
@@ -85,10 +83,9 @@ bool MyApp::OnInit(void)
   wxDebugContext::SetCheckpoint();
   wxDebugContext::SetFile("debug.log");
 
-  wxString *thing = new wxString; // WXDEBUG_NEW wxString;
+  wxString *thing = new wxString;
   wxDate* date = new wxDate;
 
-  // Proves that defining 'new' to be 'WXDEBUG_NEW' doesn't mess up
   // non-object allocation
   char *ordinaryNonObject = new char[1000];
 

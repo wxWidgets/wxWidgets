@@ -66,11 +66,9 @@
 
 #include "wx/memory.h"
 
-/*
 #ifdef new
 #undef new
 #endif
-*/
 
 // wxDebugContext wxTheDebugContext;
 /*
@@ -651,10 +649,16 @@ bool wxDebugContext::Dump(void)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = (char*) (const char*) appNameStr;
-        wxTrace("Memory dump of %s at %s:\n", appName, WXSTRINGCAST wxNow() );
+        wxTrace("----- Memory dump of %s at %s -----\n", appName, WXSTRINGCAST wxNow() );
+    }
+    else
+    {
+      wxTrace( "----- Memory dump -----\n" );
     }
   }
   TraverseList ((PmSFV)&wxMemStruct::Dump, (checkPoint ? checkPoint->m_next : (wxMemStruct*)NULL));
+  
+  wxTrace( "\n\n" );
 
   return TRUE;
 #else
@@ -693,6 +697,22 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   if (!HasStream())
     return FALSE;
 
+  if (TRUE)
+  {
+    char* appName = "application";
+    wxString appNameStr("");
+    if (wxTheApp)
+    {
+        appNameStr = wxTheApp->GetAppName();
+        appName = (char*) (const char*) appNameStr;
+        wxTrace("----- Memory statistics of %s at %s -----\n", appName, WXSTRINGCAST wxNow() );
+    }
+    else
+    {
+      wxTrace( "----- Memory statistics -----\n" );
+    }
+  }
+  
   bool currentMode = GetDebugMode();
   SetDebugMode(FALSE);
   
@@ -760,6 +780,7 @@ bool wxDebugContext::PrintStatistics(bool detailed)
   wxTrace("Number of object items: %ld\n", noObjectNodes);
   wxTrace("Number of non-object items: %ld\n", noNonObjectNodes);
   wxTrace("Total allocated size: %ld\n", totalSize);
+  wxTrace("\n\n");
 
   return TRUE;
 #else
@@ -780,7 +801,7 @@ bool wxDebugContext::PrintClasses(void)
     {
         appNameStr = wxTheApp->GetAppName();
         appName = (char*) (const char*) appNameStr;
-        wxTrace("Classes in %s:\n\n", appName);
+        wxTrace("----- Classes in %s -----\n", appName);
     }
   }
 
@@ -806,10 +827,10 @@ bool wxDebugContext::PrintClasses(void)
       else
         wxTrace("\n");
     }
-    node = node->Next();
+    node = wxClassInfo::sm_classTable->Next();
     n ++;
   }
-  wxTrace("\nThere are %d classes derived from wxObject.\n", n);
+  wxTrace("\nThere are %d classes derived from wxObject.\n\n\n", n);
   return TRUE;
 }    
 

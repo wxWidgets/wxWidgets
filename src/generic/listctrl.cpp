@@ -910,10 +910,10 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
 
 wxListMainWindow::~wxListMainWindow( void )
 {
-//  if (m_hilightColour) delete m_hilightColour;
-//  if (m_hilightBrush) delete m_hilightBrush;
-//  if (m_myFont) delete m_myFont;
+  if (m_hilightBrush) delete m_hilightBrush;
   delete m_renameTimer;
+//  if (m_hilightColour) delete m_hilightColour;
+//  if (m_myFont) delete m_myFont;
 //  delete m_text;
 }
 

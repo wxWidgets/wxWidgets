@@ -52,7 +52,7 @@ extern wxAcceleratorTable wxNullAcceleratorTable;
 // wxAcceleratorEntry
 //-----------------------------------------------------------------------------
 
-class wxAcceleratorEntry
+class wxAcceleratorEntry: public wxObject
 {
   public:
 

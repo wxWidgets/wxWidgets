@@ -54,6 +54,15 @@ class wxBrush: public wxGDIObject
     wxColour &GetColour(void) const;
     wxBitmap *GetStipple(void) const;
     
+    
+    void SetColour( const wxColour& col );
+    void SetColour( const wxString& col );
+    void SetColour( unsigned char r, unsigned char g, unsigned char b );
+    void SetStyle( int style );
+    void SetStipple( const wxBitmap& stipple );
+    
+    void Unshare(void);
+  
     // no data :-)
 };
 

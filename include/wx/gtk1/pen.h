@@ -62,6 +62,8 @@ class wxPen: public wxGDIObject
     int GetWidth(void) const;
     bool Ok(void) const;
     
+    void Unshare(void);
+    
     // no data :-)
 };
 

@@ -568,7 +568,6 @@ void wxBrushList::RemoveBrush (wxBrush * brush)
 
 wxFontList::~wxFontList ()
 {
-#ifdef __WXMSW__
   wxNode *node = First ();
   while (node)
     {
@@ -582,7 +581,6 @@ wxFontList::~wxFontList ()
 		delete font;
       node = next;
 }
-#endif
 }
 
 void wxFontList::AddFont (wxFont * font)

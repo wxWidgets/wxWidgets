@@ -24,24 +24,13 @@ class wxAccelRefData: public wxObjectRefData
   public:
   
     wxAccelRefData(void);
-    ~wxAccelRefData(void);
   
     wxList m_accels;
 };
 
 wxAccelRefData::wxAccelRefData(void)
 {
-}
-
-wxAccelRefData::~wxAccelRefData(void)
-{
-  wxNode *node = m_accels.First();
-  while (node)
-  {
-    wxAcceleratorEntry *entry = (wxAcceleratorEntry *)node->Data();
-    delete entry;
-    node = node->Next();
-  }
+  m_accels.DeleteContents( TRUE );
 }
 
 //-----------------------------------------------------------------------------
@@ -52,7 +41,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxAcceleratorTable,wxObject)
   
 wxAcceleratorTable::wxAcceleratorTable()
 {
-  m_refData = new wxAccelRefData();
 }
 
 wxAcceleratorTable::wxAcceleratorTable( int n, wxAcceleratorEntry entries[] )
@@ -64,7 +52,7 @@ wxAcceleratorTable::wxAcceleratorTable( int n, wxAcceleratorEntry entries[] )
     int keycode = entries[i].GetKeyCode();
     int command = entries[i].GetCommand();
     if ((keycode >= (int)'A') && (keycode <= (int)'Z')) keycode = (int)tolower( (char)keycode );
-    M_ACCELDATA->m_accels.Append( (wxObject*) new wxAcceleratorEntry( flag, keycode, command ) );
+    M_ACCELDATA->m_accels.Append( new wxAcceleratorEntry( flag, keycode, command ) );
   }
 }
 
@@ -79,6 +67,8 @@ bool wxAcceleratorTable::Ok() const
 
 int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 {
+  if (!Ok()) return -1;
+
   wxNode *node = M_ACCELDATA->m_accels.First();
   while (node)
   {

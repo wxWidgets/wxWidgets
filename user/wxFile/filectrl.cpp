@@ -241,7 +241,7 @@ wxFileCtrl::wxFileCtrl( wxWindow *win, const wxWindowID id, const wxString &dirN
   m_dragStartY = 0;
   m_dragCount = 0;
     
-  SetDropTarget( new wxFileDropTarget() );
+//  SetDropTarget( new wxFileDropTarget() );
 };
 
 void wxFileCtrl::ChangeToListMode()

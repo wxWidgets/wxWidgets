@@ -190,6 +190,8 @@ wxFrame::~wxFrame()
 
 bool wxFrame::Show( bool show )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   if (show)
   {
     wxSizeEvent event( wxSize(m_width,m_height), GetId() );
@@ -201,20 +203,23 @@ bool wxFrame::Show( bool show )
 
 void wxFrame::Enable( bool enable )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
+  if (!m_mainWindow) return;
+  
   wxWindow::Enable( enable );
   gtk_widget_set_sensitive( m_mainWindow, enable );
 }
 
 void wxFrame::OnCloseWindow( wxCloseEvent &event )
 {
-    if ( GetEventHandler()->OnClose() || event.GetForce())
-    {
-        this->Destroy();
-    }
+  if (GetEventHandler()->OnClose() || event.GetForce()) this->Destroy();
 }
 
 bool wxFrame::Destroy()
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   if (!wxPendingDelete.Member(this))
     wxPendingDelete.Append(this);
 
@@ -229,6 +234,8 @@ void wxFrame::ImplementSetPosition(void)
 
 void wxFrame::Centre( int direction )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
   if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;
   ImplementSetPosition();
@@ -236,6 +243,8 @@ void wxFrame::Centre( int direction )
 
 void wxFrame::GetClientSize( int *width, int *height ) const
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   wxWindow::GetClientSize( width, height );
   if (height)
   {
@@ -252,6 +261,8 @@ void wxFrame::GetClientSize( int *width, int *height ) const
 
 void wxFrame::SetClientSize( int const width, int const height )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   int h = height;
   if (m_frameMenuBar) h += wxMENU_HEIGHT;
   if (m_frameStatusBar) h += wxSTATUS_HEIGHT;
@@ -342,6 +353,8 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   if ( GetAutoLayout() )
     Layout();
   else {
@@ -378,6 +391,12 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void wxFrame::AddChild( wxWindow *child )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  wxASSERT_MSG( (m_wxwindow != NULL), "invalid frame" );
+  wxASSERT_MSG( (m_mainWindow != NULL), "invalid frame" );
+  wxASSERT_MSG( (child != NULL),  "invalid child" );
+  wxASSERT_MSG( (child->m_widget != NULL), "invalid child" );
+  
   // wxFrame and wxDialog as children aren't placed into the parents
   
   if (IS_KIND_OF(child,wxMDIChildFrame)) wxFAIL_MSG( "wxFrame::AddChild error.\n" );
@@ -424,6 +443,10 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  wxASSERT_MSG( (m_wxwindow != NULL), "invalid frame" );
+  wxASSERT_MSG( (m_mainWindow != NULL), "invalid frame" );
+  
   m_frameMenuBar = menuBar;
   
   if (m_frameMenuBar)
@@ -452,6 +475,8 @@ wxMenuBar *wxFrame::GetMenuBar(void) const
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   wxCHECK_MSG( m_frameToolBar == NULL, FALSE, "recreating toolbar in wxFrame" );
 
   m_addPrivateChild = TRUE;
@@ -473,6 +498,8 @@ wxToolBar *wxFrame::GetToolBar(void) const
 
 wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   wxCHECK_MSG( m_frameStatusBar == NULL, FALSE, "recreating status bar in wxFrame" );
 
   m_frameStatusBar = OnCreateStatusBar( number, style, id, name );
@@ -503,6 +530,8 @@ wxStatusBar *wxFrame::OnCreateStatusBar( int number, long style, wxWindowID id, 
 
 void wxFrame::SetStatusText(const wxString& text, int number)
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set text for" );
 
   m_frameStatusBar->SetStatusText(text, number);
@@ -510,6 +539,8 @@ void wxFrame::SetStatusText(const wxString& text, int number)
 
 void wxFrame::SetStatusWidths(int n, const int widths_field[] )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   wxCHECK_RET( m_frameStatusBar != NULL, "no statusbar to set widths for" );
 
   m_frameStatusBar->SetStatusWidths(n, widths_field);
@@ -522,6 +553,8 @@ wxStatusBar *wxFrame::GetStatusBar(void) const
 
 void wxFrame::SetTitle( const wxString &title )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   m_title = title;
   if (m_title.IsNull()) m_title = "";
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
@@ -529,6 +562,8 @@ void wxFrame::SetTitle( const wxString &title )
 
 void wxFrame::SetIcon( const wxIcon &icon )
 {
+  wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
+  
   m_icon = icon;
   if (!icon.Ok()) return;
   

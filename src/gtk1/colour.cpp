@@ -165,25 +165,40 @@ void wxColour::Set( const unsigned char red, const unsigned char green, const un
 
 unsigned char wxColour::Red(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+     wxFAIL_MSG( "invalid colour" );
+     return 0;
+  }
+  
   return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
 }
 
 unsigned char wxColour::Green(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+     wxFAIL_MSG( "invalid colour" );
+     return 0;
+  }
+  
   return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
 }
 
 unsigned char wxColour::Blue(void) const
 {
-  if (!Ok()) return 0;
+  if (!Ok())
+  {
+     wxFAIL_MSG( "invalid colour" );
+     return 0;
+  }
+  
   return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
 }
 
 bool wxColour::Ok(void) const
 {
-  return (m_refData);
+  return (m_refData != NULL);
 }
 
 void wxColour::CalcPixel( GdkColormap *cmap )
