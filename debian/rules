@@ -225,6 +225,7 @@ configure-gtk-shared-stamp:
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
 				--with-libtiff=sys			\
+				--with-gnomeprint			\
 				--enable-dynamic-loader			\
 				--enable-std_iostreams
 	touch $@
@@ -249,6 +250,7 @@ configure-gtk-static-stamp:
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
 				--with-libtiff=sys			\
+				--with-gnomeprint			\
 				--enable-dynamic-loader			\
 				--enable-std_iostreams
 	touch $@
@@ -273,6 +275,7 @@ configure-gtk-debug-stamp:
 				--with-libjpeg=sys			\
 				--with-libpng=sys			\
 				--with-libtiff=sys			\
+				--with-gnomeprint			\
 				--enable-dynamic-loader			\
 				--enable-std_iostreams
 	touch $@
