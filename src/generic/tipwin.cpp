@@ -140,7 +140,12 @@ void wxTipWindow::OnActivate(wxActivateEvent& event)
 
 void wxTipWindow::OnKillFocus(wxFocusEvent& event)
 {
+    // Under Windows at least, we will get this immediately
+    // because when the view window is focussed, the
+    // tip window goes out of focus.
+#ifdef __WXGTK__
     Close();
+#endif
 }
 
 // ----------------------------------------------------------------------------
