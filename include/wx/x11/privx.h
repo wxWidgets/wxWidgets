@@ -69,5 +69,10 @@ void wxXColorToHSV(wxHSV *hsv,XColor *xcolor);
 void wxAllocNearestColor(Display *display,Colormap colormap,XColor *xcolor);
 void wxAllocColor(Display *display,Colormap colormap,XColor *xcolor);
 
+// For debugging
+#ifdef __WXDEBUG__
+wxString wxGetXEventName(XEvent& event);
+#endif
+
 #endif
 // _WX_PRIVX_H_

@@ -142,8 +142,6 @@
     #define _MAXPATHLEN 1024
 #endif
 
-extern wxChar *wxBuffer;
-
 #ifdef __WXMAC__
 #    include "MoreFiles.h"
 #    include "MoreFilesExtras.h"

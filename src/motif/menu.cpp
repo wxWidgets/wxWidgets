@@ -526,8 +526,6 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar, WXWidget parent, wxMenu * topM
     else
     {
         char mnem = wxFindMnemonic (title);
-        wxStripMenuCodes ((char*) (const char*) title, wxBuffer);
-
         menu = XmCreatePulldownMenu ((Widget) parent, "pulldown", args, 2);
 
         wxString title2(wxStripMenuCodes(title));

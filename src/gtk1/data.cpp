@@ -25,9 +25,6 @@
 
 #define _MAXPATHLEN 500
 
-/* Useful buffer, initialized in wxCommonInit */
-wxChar *wxBuffer = (wxChar *) NULL;
-
 /* Windows List */
 wxWindowList wxTopLevelWindows;
 

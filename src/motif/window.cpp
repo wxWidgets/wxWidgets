@@ -2147,12 +2147,13 @@ static void wxCanvasInputEvent(Widget drawingArea,
     case KeyPress:
         {
             KeySym keySym;
+            static char buf[100];
 #if 0
             XComposeStatus compose;
-            (void) XLookupString ((XKeyEvent *) & local_event, wxBuffer, 20, &keySym, &compose);
+            (void) XLookupString ((XKeyEvent *) & local_event, buf, 20, &keySym, &compose);
 #endif // 0
 
-            (void) XLookupString ((XKeyEvent *) & local_event, wxBuffer, 20, &keySym, NULL);
+            (void) XLookupString ((XKeyEvent *) & local_event, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
 
             wxEventType eventType = wxEVT_CHAR;
@@ -2200,8 +2201,9 @@ static void wxCanvasInputEvent(Widget drawingArea,
         }
     case KeyRelease:
         {
+            static char buf[100];
             KeySym keySym;
-            (void) XLookupString ((XKeyEvent *) & local_event, wxBuffer, 20, &keySym, NULL);
+            (void) XLookupString ((XKeyEvent *) & local_event, buf, 20, &keySym, NULL);
             int id = wxCharCodeXToWX (keySym);
 
             wxKeyEvent event (wxEVT_KEY_UP);

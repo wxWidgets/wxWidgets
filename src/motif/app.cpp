@@ -60,7 +60,6 @@
 
 #include <string.h>
 
-extern char *wxBuffer;
 extern wxList wxPendingDelete;
 
 wxApp *wxTheApp = NULL;
@@ -89,8 +88,6 @@ long wxApp::sm_lastMessageTime = 0;
 
 bool wxApp::Initialize()
 {
-    wxBuffer = new char[BUFSIZ + 512];
-
     wxClassInfo::InitializeClasses();
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
@@ -157,9 +154,6 @@ void wxApp::CleanUp()
 #endif
 
     wxBitmap::CleanUpHandlers();
-
-    delete[] wxBuffer;
-    wxBuffer = NULL;
 
     wxClassInfo::CleanUpClasses();
 

@@ -412,8 +412,6 @@ bool wxApp::Initialize()
     if ( MGL_init(".", NULL) == 0 )
         return FALSE;
 
-    wxBuffer = new wxChar[BUFSIZ + 512];
-
     wxClassInfo::InitializeClasses();
 
 #if wxUSE_INTL
@@ -496,8 +494,6 @@ void wxApp::CleanUp()
     // may be deleting fonts that lately)
     delete wxTheFontsManager;
     wxTheFontsManager = (wxFontsManager*) NULL;
-
-    delete[] wxBuffer;
 
     // check for memory leaks
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT

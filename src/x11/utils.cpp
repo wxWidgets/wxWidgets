@@ -1062,6 +1062,29 @@ void wxAllocColor(Display *d,Colormap cmp,XColor *xc)
     }
 }
 
+#ifdef __WXDEBUG__
+wxString wxGetXEventName(XEvent& event)
+{
+    int type = event.xany.type;
+	    static char* event_name[] = {
+		"", "unknown(-)",                                         // 0-1
+		"KeyPress", "KeyRelease", "ButtonPress", "ButtonRelease", // 2-5
+		"MotionNotify", "EnterNotify", "LeaveNotify", "FocusIn",  // 6-9
+		"FocusOut", "KeymapNotify", "Expose", "GraphicsExpose",   // 10-13
+		"NoExpose", "VisibilityNotify", "CreateNotify",           // 14-16
+		"DestroyNotify", "UnmapNotify", "MapNotify", "MapRequest",// 17-20
+		"ReparentNotify", "ConfigureNotify", "ConfigureRequest",  // 21-23
+		"GravityNotify", "ResizeRequest", "CirculateNotify",      // 24-26
+		"CirculateRequest", "PropertyNotify", "SelectionClear",   // 27-29
+		"SelectionRequest", "SelectionNotify", "ColormapNotify",  // 30-32
+		"ClientMessage", "MappingNotify",                         // 33-34
+		"unknown(+)"};                                            // 35
+	    type = wxMin(35, type); type = wxMax(1, type);
+        wxString str(event_name[type]);
+        return str;
+	}
+#endif
+
 #ifdef __WXMOTIF__
 // ----------------------------------------------------------------------------
 // accelerators
@@ -1115,7 +1138,8 @@ char * wxFindAccelerator (const char *s)
 
     */
 
-    wxBuffer[0] = '\0';
+    static char buf[256];
+    buf[0] = '\0';
     char *tmp = copystring (s);
     s = tmp;
     char *p = tmp;
@@ -1127,23 +1151,23 @@ char * wxFindAccelerator (const char *s)
         if (*p)
         {
             *p = '\0';
-            if (wxBuffer[0])
-                strcat (wxBuffer, " ");
+            if (buf[0])
+                strcat (buf, " ");
             if (strcmp (s, "Alt"))
-                strcat (wxBuffer, s);
+                strcat (buf, s);
             else
-                strcat (wxBuffer, "Meta");
+                strcat (buf, "Meta");
             s = p++;
         }
         else
         {
-            strcat (wxBuffer, "<Key>");
-            strcat (wxBuffer, s);
+            strcat (buf, "<Key>");
+            strcat (buf, s);
             break;
         }
     }
     delete[]tmp;
-    return wxBuffer;
+    return buf;
 #endif
 }
 

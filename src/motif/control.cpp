@@ -68,14 +68,13 @@ void wxControl::SetLabel(const wxString& label)
     if (!widget)
         return;
 
-    wxStripMenuCodes((char*) (const char*) label, wxBuffer);
+    wxString buf(wxStripMenuCodes());
+    wxXmString label_str(buf);
 
-    XmString text = XmStringCreateSimple (wxBuffer);
     XtVaSetValues (widget,
-        XmNlabelString, text,
+        XmNlabelString, label_str,
         XmNlabelType, XmSTRING,
         NULL);
-    XmStringFree (text);
 }
 
 wxString wxControl::GetLabel() const

@@ -564,8 +564,6 @@ void wxApp::DeletePendingObjects()
 
 bool wxApp::Initialize()
 {
-    wxBuffer = new wxChar[BUFSIZ + 512];
-
     wxClassInfo::InitializeClasses();
 
 #if wxUSE_INTL
@@ -612,9 +610,6 @@ void wxApp::CleanUp()
 
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;
-
-    delete[] wxBuffer;
-    wxBuffer = NULL;
 
     wxClassInfo::CleanUpClasses();
 

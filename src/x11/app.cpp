@@ -29,6 +29,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/evtloop.h"
+#include "wx/cmdline.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -53,7 +54,6 @@
 
 #include <string.h>
 
-extern char *wxBuffer;
 extern wxList wxPendingDelete;
 
 wxApp *wxTheApp = NULL;
@@ -65,6 +65,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxApp::OnIdle)
 END_EVENT_TABLE()
+
+static const wxCmdLineEntryDesc g_cmdLineDesc[] =
+{
+    { wxCMD_LINE_SWITCH, "sync", "sync", "synchronize the display" },
+    { wxCMD_LINE_OPTION, "display", "display",  "use the given display", wxCMD_LINE_VAL_STRING },
+
+    { wxCMD_LINE_NONE }
+};
 
 #ifdef __WXDEBUG__
 typedef int (*XErrorHandlerFunc)(Display *, XErrorEvent *);
@@ -83,8 +91,6 @@ WXDisplay *wxApp::ms_display = NULL;
 
 bool wxApp::Initialize()
 {
-    wxBuffer = new char[BUFSIZ + 512];
-
     wxClassInfo::InitializeClasses();
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
@@ -132,9 +138,6 @@ void wxApp::CleanUp()
     delete wxTheApp;
     wxTheApp = NULL;
 
-    delete[] wxBuffer;
-    wxBuffer = NULL;
-
     wxClassInfo::CleanUpClasses();
 
 #if wxUSE_THREADS
@@ -161,6 +164,11 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 }
 
+// This is set within wxEntryStart -- too early on
+// to put these in wxTheApp
+static int g_newArgc = 0;
+static wxChar** g_newArgv = NULL;
+
 // NB: argc and argv may be changed here, pass by reference!
 int wxEntryStart( int& argc, char *argv[] )
 {
@@ -168,6 +176,13 @@ int wxEntryStart( int& argc, char *argv[] )
     // install the X error handler
     gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
 #endif // __WXDEBUG__
+
+    /// TODO
+#if 0
+    // Parse the arguments. Is it OK to use the command line
+    // parser before calling Initialize?
+    wxCmdLineParser cmdLine(argv, argv);
+#endif
 
     Display* xdisplay = XOpenDisplay(NULL);
 
@@ -236,8 +251,18 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->SetClassName(wxFileNameFromPath(argv[0]));
     wxTheApp->SetAppName(wxFileNameFromPath(argv[0]));
 
-    wxTheApp->argc = argc;
-    wxTheApp->argv = argv;
+    // The command line may have been changed
+    // by stripping out -display etc.
+    if (g_newArgc > 0)
+    {
+        wxTheApp->argc = g_newArgc;
+        wxTheApp->argv = g_newArgv;
+    }
+    else
+    {
+        wxTheApp->argc = argc;
+        wxTheApp->argv = argv;
+    }
 
     int retValue;
     retValue = wxEntryInitGui();
@@ -339,7 +364,7 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 
     win = wxGetWindowFromTable(window);
     if (!win)
-	return;
+	    return;
 
     switch (event->type)
     {
@@ -498,6 +523,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             }
         default:
         {
+#ifdef __WXDEBUG__
+            //wxString eventName = wxGetXEventName(XEvent& event);
+            //wxLogDebug(wxT("Event %s not handled"), eventName.c_str());
+#endif
             break;
         }
     }
@@ -775,13 +804,3 @@ void wxApp::OnAssert(const wxChar *file, int line, const wxChar *msg)
 #endif
 }
 
-// ----------------------------------------------------------------------------
-// accessors for C modules
-// ----------------------------------------------------------------------------
-
-#if 0
-extern "C" XtAppContext wxGetAppContext()
-{
-    return (XtAppContext)wxTheApp->GetAppContext();
-}
-#endif
