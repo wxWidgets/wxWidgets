@@ -3305,7 +3305,7 @@ void wxListMainWindow::SetFocus()
     //     focus to the panel from wxListTextCtrl because the text control should
     //     disappear when the user clicks outside it.
 
-    wxWindow *oldFocus = FindFocus();
+    wxWindow *oldFocus = DoFindFocus();
 
     if ( oldFocus && oldFocus->GetParent() == this )
     {
@@ -5353,7 +5353,7 @@ void wxGenericListCtrl::SetFocus()
 {
     /* The test in window.cpp fails as we are a composite
        window, so it checks against "this", but not m_mainWin. */
-    if ( FindFocus() != this )
+    if ( DoFindFocus() != this )
         m_mainWin->SetFocus();
 }
 
