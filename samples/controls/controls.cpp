@@ -750,7 +750,7 @@ void MyPanel::OnShowProgress( wxCommandEvent& WXUNUSED(event) )
                             "An informative message",
                             max,    // range
                             this,   // parent
-                            wxPD_CAN_ABORT | wxPD_APP_MODAL);
+                            wxPD_CAN_ABORT | wxPD_APP_MODAL | wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME | wxPD_REMAINING_TIME);
                             
 
     bool cont = TRUE;

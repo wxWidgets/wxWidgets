@@ -57,11 +57,16 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                  wxWindow *parent,
                                  int style)
 {
+   wxWindow *lastWindow = NULL;
    bool hasAbortButton = (style & wxPD_CAN_ABORT) != 0;
    m_state = hasAbortButton ? Continue : Uncancelable;
    m_disableParentOnly = (style & wxPD_APP_MODAL) == 0;
    m_parent = parent;
    m_maximum = maximum;
+
+   m_elapsed = m_estimated = m_remaining = NULL;
+   if ((style & (wxPD_ELAPSED_TIME | wxPD_ESTIMATED_TIME | wxPD_REMAINING_TIME)) != 0) m_time = new wxTime;
+   else m_time = NULL;
 
    wxFrame::Create(m_parent, -1, title, wxDefaultPosition,
                    wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
@@ -81,6 +86,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
    c->width.AsIs();
    c->height.AsIs();
    m_msg->SetConstraints(c);
+   lastWindow = m_msg;
 
    if ( maximum > 0 )
    {
@@ -94,17 +100,82 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
       c->height.AsIs();
       m_gauge->SetConstraints(c);
       m_gauge->SetValue(0);
+      lastWindow = m_gauge;
    }
    else
       m_gauge = (wxGauge *)NULL;
+
+   
+   if ( style & wxPD_ELAPSED_TIME )
+   {
+      m_elapsed = new wxStaticText(this, -1, "");
+      c = new wxLayoutConstraints;
+      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+      c->top.Below(lastWindow, LAYOUT_Y_MARGIN);
+      c->width.Absolute(60);
+      c->height.AsIs();
+      m_elapsed->SetConstraints(c);
+
+      wxStaticText *dummy = new wxStaticText(this, -1, _T("Elapsed time : "));
+      c = new wxLayoutConstraints;
+      c->right.LeftOf(m_elapsed);
+      c->top.SameAs(m_elapsed, wxTop, 0);
+      c->width.AsIs();
+      c->height.AsIs();
+      dummy->SetConstraints(c);      
+
+      lastWindow = m_elapsed;
+   }
+
+   if ( style & wxPD_ESTIMATED_TIME )
+   {
+      m_estimated = new wxStaticText(this, -1, "");
+      c = new wxLayoutConstraints;
+      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+      c->top.Below(lastWindow, 0);
+      c->width.Absolute(60);
+      c->height.AsIs();
+      m_estimated->SetConstraints(c);
+
+      wxStaticText *dummy = new wxStaticText(this, -1, _T("Estimated time : "));
+      c = new wxLayoutConstraints;
+      c->right.LeftOf(m_estimated);
+      c->top.SameAs(m_estimated, wxTop, 0);
+      c->width.AsIs();
+      c->height.AsIs();
+      dummy->SetConstraints(c);      
+
+      lastWindow = m_estimated;
+   }
+
+   if ( style & wxPD_REMAINING_TIME )
+   {
+      m_remaining = new wxStaticText(this, -1, "");
+      c = new wxLayoutConstraints;
+      c->right.SameAs(this, wxRight, 2*LAYOUT_X_MARGIN);
+      c->top.Below(lastWindow, 0);
+      c->width.Absolute(60);
+      c->height.AsIs();
+      m_remaining->SetConstraints(c);
+
+      wxStaticText *dummy = new wxStaticText(this, -1, _T("Remaining time : "));
+      c = new wxLayoutConstraints;
+      c->right.LeftOf(m_remaining);
+      c->top.SameAs(m_remaining, wxTop, 0);
+      c->width.AsIs();
+      c->height.AsIs();
+      dummy->SetConstraints(c);      
+
+      lastWindow = m_remaining;
+   }
 
    if ( hasAbortButton )
    {
       m_btnAbort = new wxButton(this, -1, _("Cancel"));
       c = new wxLayoutConstraints;
       c->centreX.SameAs(this, wxCentreX);
-      if(m_gauge)
-         c->top.Below(m_gauge, 2*LAYOUT_Y_MARGIN);
+      if(lastWindow)
+         c->top.Below(lastWindow, 2*LAYOUT_Y_MARGIN);
       else
          c->top.Below(m_btnAbort, 2*LAYOUT_Y_MARGIN);
       c->width.AsIs();
@@ -153,6 +224,32 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
    if( !newmsg.IsEmpty() )
       m_msg->SetLabel(newmsg);
 
+   if ( (m_elapsed || m_remaining || m_estimated) && (value != 0) )
+   {
+      wxTime timenow;
+      wxTime diff = timenow -  *m_time;
+      unsigned long secs = diff.GetSecond() + 60 * diff.GetMinute() + 60 * 60 * diff.GetHour();
+      unsigned long estim = secs * m_maximum / value; 
+      unsigned long remai = estim - secs; 
+      wxString s;
+
+      if (m_elapsed) 
+      {
+	 s.Printf("%i:%02i:%02i", diff.GetHour(), diff.GetMinute(), diff.GetSecond());
+	 if (s != m_elapsed->GetLabel()) m_elapsed->SetLabel(s);
+      }
+      if (m_estimated) 
+      {
+	 s.Printf("%i:%02i:%02i", estim / (60 * 60), (estim / 60) % 60, estim % 60);
+	 if (s != m_estimated->GetLabel()) m_estimated->SetLabel(s);
+      }
+      if (m_remaining) 
+      {
+	 s.Printf("%i:%02i:%02i", remai / (60 * 60), (remai / 60) % 60, remai % 60);
+	 if (s != m_remaining->GetLabel()) m_remaining->SetLabel(s);
+      }
+   }
+
    if ( (value == m_maximum - 1) && !(GetWindowStyleFlag() & wxPD_AUTO_HIDE) )
    {
        if ( m_btnAbort )
@@ -191,6 +288,7 @@ wxProgressDialog::~wxProgressDialog()
       m_parent->Enable(TRUE);
    else
       wxEnableTopLevelWindows(TRUE);
+   if (m_time) delete m_time;
 }
 
 #endif
