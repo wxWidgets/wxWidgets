@@ -316,8 +316,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="NET_OS2_SRC" hints="files">
+    src/os2/gsocket.c
 </set>
 <set var="NET_OS2_HDR" hints="files">
+    wx/unix/gsockunx.h
 </set>
 
 <set var="NET_CMN_SRC" hints="files">
@@ -1356,7 +1358,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/gauge.cpp
     src/os2/gdiimage.cpp
     src/os2/gdiobj.cpp
-    src/os2/gsocket.c
     src/os2/gsockpm.c
     src/os2/helpwin.cpp
     src/os2/icon.cpp
@@ -1393,6 +1394,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
     src/os2/toplevel.cpp
+    src/os2/utilsgui.cpp
     src/os2/window.cpp
 </set>
 <set var="OS2_HDR" hints="files">
@@ -1428,7 +1430,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/gauge.h
     wx/os2/gdiimage.h
     wx/os2/gdiobj.h
-    wx/os2/gsockos2.h
     wx/os2/helpwin.h
     wx/os2/icon.h
     wx/os2/iniconf.h

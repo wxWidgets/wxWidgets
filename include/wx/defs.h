@@ -2172,7 +2172,7 @@ typedef int             (__stdcall *WXFARPROC)();
 #endif // __WXMSW__
 
 
-#if defined(__WXPM__)
+#if defined(__WXPM__) || defined(__EMX__)
 #ifdef __EMX__
 /* Need a well-known type for WXFARPROC
    below. MPARAM is typedef'ed too late. */
@@ -2205,7 +2205,9 @@ typedef unsigned long   HIMAGELIST;
 typedef unsigned long   HGLOBAL;
 typedef unsigned long   DWORD;
 typedef unsigned short  WORD;
+#endif // WXPM || EMX
 
+#if defined (__WXPM__)
 // WIN32 graphics types for OS/2 GPI
 
 // RGB under OS2 is more like a PALETTEENTRY struct under Windows so we need a real RGB def
