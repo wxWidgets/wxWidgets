@@ -104,7 +104,7 @@ bool MyApp::OnInit(void)
 
 void MySock::OldOnNotify(wxRequestEvent flags)
 {
-  extern wxList wxPendingDelete;
+  extern wxList WXDLLEXPORT wxPendingDelete;
 
   switch (flags) {
   case EVT_READ:
