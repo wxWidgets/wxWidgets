@@ -119,6 +119,8 @@ zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\stc.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\contrib.rsp
 zip32 -u -@ %dest%\wxMac-%version%.zip < %src%\distrib\msw\makefile.rsp
 
+zip32 -@ %dest%\wxWindows-%version%-CW-Mac.zip < %src%\distrib\msw\cw_mac.rsp
+
 erase /Y %src%\include\wx\setup.h
 
 if direxist %dest%\wxWindows-%version% erase /sxyz %dest%\wxWindows-%version%
