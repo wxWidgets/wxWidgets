@@ -86,12 +86,14 @@ public:
                                             wxStatusLineNameStr);
     // sets the main status bar
     void SetStatusBar(wxStatusBar *statBar);
+#if wxUSE_TOOLBAR
     // create main toolbar bycalling OnCreateToolBar()
     virtual wxToolBar* CreateToolBar(long style = -1,
                                      wxWindowID winid = -1,
                                      const wxString& name = wxToolBarNameStr);
     // sets the main tool bar
     virtual void SetToolBar(wxToolBar *toolbar);
+#endif //wxUSE_TOOLBAR
 protected:
     void PositionStatusBar();
 };
