@@ -1,5 +1,5 @@
 /* XPM */
-static char *info_xpm[] = {
+static char *info[] = {
 /* columns rows colors chars-per-pixel */
 "48 48 478 2",
 "   c Gray0",
@@ -181,7 +181,7 @@ static char *info_xpm[] = {
 "_. c #9d9d9d9d9999",
 "`. c #9e9e9e9e9a9a",
 "'. c #a2a29c9c8484",
-"]. c #b2b2b2b29b9b",
+"]. c None",
 "[. c #b8b8b0b09595",
 "{. c #a0a0a0a0a0a0",
 "}. c Gray63",
@@ -478,7 +478,7 @@ static char *info_xpm[] = {
 "-+ c #fefefefefcfc",
 ";+ c #fefefefefdfd",
 ":+ c #fefefefefefe",
-">+ c Gray100",
+">+ c None",
 ",+ c None",
 /* pixels */
 ",+,+,+,+,+,+,+,+,+,+,+,+,+,+,+,+,+,+,+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+>+,+,+,+,+,+,+,+,+",
