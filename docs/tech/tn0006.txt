@@ -1,0 +1,41 @@
+How to make RPMs of the wxWindows sources
+=========================================
+
+This is just a short description. It is assumed that you know what you are
+doing. I do not take any responsibility for damaged systems, use at your own
+risk!
+
+	1. Extract the archive in a temporary directory. Since you are
+	   reading this text, you already have done this.
+	2. Copy the .spec file to
+		(rpm-dir)/SPECS
+	3. Copy the .tgz file to
+		(rpm-dir)/SOURCES
+	4. Start the RPM manager with
+		rpm -bb (rpm-dir)/SPECS/(.spec-file)
+	   or with
+		rpm -ba (rpm-dir)/SPECS/(.spec-file)
+	   (the latter also builds the .src.rpm-file)
+	5. You now have a nice set of RPMs in (rpm-dir)/RPMS
+
+Example
+=======
+
+Here's how to install e.g. wxMotif 2.1.14:
+
+	cp wxMotif.spec /usr/src/packages/SPECS
+	cp wxMotif-2.1.14.tgz /usr/src/packages/SOURCES
+	rpm -bb /usr/src/packages/SPECS/wxMotif.spec
+
+Install the resulting packages with
+
+	rpm --install /usr/src/packages/RPMS/i386/wxMotif-2.1.14-0.i386.rpm
+	rpm --install /usr/src/packages/RPMS/i386/wxMotif-devel-2.1.14-0.i386.rpm
+	rpm --install /usr/src/packages/RPMS/i386/wxMotif-gl-2.1.14-0.i386.rpm
+
+
+
+That's all. You should now have a working wxWindows library.
+
+Regards,
+	Robert Fendt

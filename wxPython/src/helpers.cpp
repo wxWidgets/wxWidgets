@@ -92,7 +92,6 @@ BOOL WINAPI DllMain(
 
 
 wxPyApp::wxPyApp() {
-    SetUseBestVisual(TRUE);
 }
 
 wxPyApp::~wxPyApp() {
@@ -889,7 +888,6 @@ size_t wxPyCBInputStream::OnSysRead(void *buffer, size_t bufsize) {
     else
         m_lasterror = wxSTREAM_READ_ERROR;
     wxPyEndBlockThreads();
-    m_lastcount = o;
     return o;
 }
 

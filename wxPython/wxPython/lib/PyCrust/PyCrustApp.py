@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """PyCrustApp is a python shell and namespace browser application."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"

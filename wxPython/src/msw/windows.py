@@ -983,6 +983,9 @@ class wxMenuBarPtr(wxWindowPtr):
     def EnableTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_EnableTop,(self,) + _args, _kwargs)
         return val
+    def IsEnabledTop(self, *_args, **_kwargs):
+        val = apply(windowsc.wxMenuBar_IsEnabledTop,(self,) + _args, _kwargs)
+        return val
     def SetLabelTop(self, *_args, **_kwargs):
         val = apply(windowsc.wxMenuBar_SetLabelTop,(self,) + _args, _kwargs)
         return val

@@ -172,6 +172,7 @@ cp ${distdir}/wxPython${port}.spec ${builddir}/${tarver}/wxPython${port}.spec
 
 if [ -z "${skiptar}" ]; then
     echo "*** Creating tarball..."
+    cp distrib/README.1st.txt ${builddir}/${tarver}
     pushd ${builddir} > /dev/null
     tar cvf ${distdir}/${tarver}.tar ${tarver} > /dev/null
     echo "*** Compressing..."

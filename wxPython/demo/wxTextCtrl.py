@@ -22,6 +22,7 @@ class TestPanel(wxPanel):
         l1 = wxStaticText(self, -1, "wxTextCtrl")
         t1 = wxTextCtrl(self, 10, "Test it out and see", size=(125, -1))
         t1.SetInsertionPoint(0)
+        self.tc1 = t1
         EVT_TEXT(self, 10, self.EvtText)
         EVT_CHAR(t1, self.EvtChar)
         EVT_SET_FOCUS(t1, self.OnSetFocus)
@@ -43,6 +44,8 @@ class TestPanel(wxPanel):
         EVT_BUTTON(self, b.GetId(), self.OnTestReplace)
         b2 = wxButton(self, -1, "Test GetSelection")
         EVT_BUTTON(self, b2.GetId(), self.OnTestGetSelection)
+        b3 = wxButton(self, -1, "Test WriteText")
+        EVT_BUTTON(self, b3.GetId(), self.OnTestWriteText)
         self.tc = t3
 
         l4 = wxStaticText(self, -1, "Rich Text")
@@ -58,6 +61,7 @@ class TestPanel(wxPanel):
         bsizer = wxBoxSizer(wxVERTICAL)
         bsizer.Add(b, 0, wxGROW)
         bsizer.Add(b2, 0, wxGROW)
+        bsizer.Add(b3, 0, wxGROW)
 
         sizer = wxFlexGridSizer(cols=3, hgap=6, vgap=6)
         sizer.AddMany([ l1, t1, (0,0),
@@ -83,6 +87,9 @@ class TestPanel(wxPanel):
     def OnTestReplace(self, evt):
         self.tc.Replace(5, 9, "IS A")
         #self.tc.Remove(5, 9)
+
+    def OnTestWriteText(self, evt):
+        self.tc.WriteText("TEXT")
 
     def OnTestGetSelection(self, evt):
         start, end = self.tc.GetSelection()

@@ -380,31 +380,34 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 
     if ( tool->IsButton() )
     {
-        wxBitmap bitmap = tool->GetNormalBitmap();
+        if ( !HasFlag(wxTB_NOICONS) )
+        {
+            wxBitmap bitmap = tool->GetNormalBitmap();
 
-        wxCHECK_MSG( bitmap.Ok(), FALSE,
-                     wxT("invalid bitmap for wxToolBar icon") );
+            wxCHECK_MSG( bitmap.Ok(), FALSE,
+                         wxT("invalid bitmap for wxToolBar icon") );
 
-        wxCHECK_MSG( bitmap.GetBitmap() == NULL, FALSE,
-                     wxT("wxToolBar doesn't support GdkBitmap") );
+            wxCHECK_MSG( bitmap.GetBitmap() == NULL, FALSE,
+                         wxT("wxToolBar doesn't support GdkBitmap") );
 
-        wxCHECK_MSG( bitmap.GetPixmap() != NULL, FALSE,
-                     wxT("wxToolBar::Add needs a wxBitmap") );
+            wxCHECK_MSG( bitmap.GetPixmap() != NULL, FALSE,
+                         wxT("wxToolBar::Add needs a wxBitmap") );
 
-        GtkWidget *tool_pixmap = (GtkWidget *)NULL;
+            GtkWidget *tool_pixmap = (GtkWidget *)NULL;
 
-        GdkPixmap *pixmap = bitmap.GetPixmap();
+            GdkPixmap *pixmap = bitmap.GetPixmap();
 
-        GdkBitmap *mask = (GdkBitmap *)NULL;
-        if ( bitmap.GetMask() )
-          mask = bitmap.GetMask()->GetBitmap();
+            GdkBitmap *mask = (GdkBitmap *)NULL;
+            if ( bitmap.GetMask() )
+              mask = bitmap.GetMask()->GetBitmap();
 
-        tool_pixmap = gtk_pixmap_new( pixmap, mask );
-        gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
+            tool_pixmap = gtk_pixmap_new( pixmap, mask );
+            gtk_pixmap_set_build_insensitive( GTK_PIXMAP(tool_pixmap), TRUE );
 
-        gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
+            gtk_misc_set_alignment( GTK_MISC(tool_pixmap), 0.5, 0.5 );
 
-        tool->m_pixmap = tool_pixmap;
+            tool->m_pixmap = tool_pixmap;
+        }
     }
 
     switch ( tool->GetStyle() )

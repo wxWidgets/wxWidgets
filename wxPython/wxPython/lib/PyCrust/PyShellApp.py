@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """PyShellApp is a python shell application."""
 
 __author__ = "Patrick K. O'Brien <pobrien@orbtech.com>"
