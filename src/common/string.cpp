@@ -1073,33 +1073,24 @@ wxArrayString::wxArrayString()
 // copy ctor
 wxArrayString::wxArrayString(const wxArrayString& src)
 {
-  m_nSize  = src.m_nSize;
-  m_nCount = src.m_nCount;
+  m_pItems = NULL;
 
-  if ( m_nSize != 0 )
-    m_pItems = new char *[m_nSize];
-  else
-    m_pItems = NULL;
-
-  if ( m_nCount != 0 )
-    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(char *));
+  *this = src;
 }
 
-// copy operator
+// assignment operator
 wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 {
   DELETEA(m_pItems);
 
-  m_nSize  = src.m_nSize;
-  m_nCount = src.m_nCount;
+  m_nSize = 0;
+  if ( src.m_nCount > ARRAY_DEFAULT_INITIAL_SIZE )
+    Alloc(src.m_nCount);
 
-  if ( m_nSize != 0 )
-    m_pItems = new char *[m_nCount];
-  else
-    m_pItems = NULL;
-
-  if ( m_nCount != 0 )
-    memcpy(m_pItems, src.m_pItems, m_nCount*sizeof(char *));
+  // we can't just copy the pointers here because otherwise we would share
+  // the strings with another array
+  for ( uint n = 0; n < src.m_nCount; n++ )
+    Add(src[n]);
 
   return *this;
 }
@@ -1116,7 +1107,8 @@ void wxArrayString::Grow()
     }
     else {
       // add 50% but not too much
-      size_t nIncrement = m_nSize >> 1;
+      size_t nIncrement = m_nSize < ARRAY_DEFAULT_INITIAL_SIZE 
+                          ? ARRAY_DEFAULT_INITIAL_SIZE : m_nSize >> 1;
       if ( nIncrement > ARRAY_MAXSIZE_INCREMENT )
         nIncrement = ARRAY_MAXSIZE_INCREMENT;
       m_nSize += nIncrement;
