@@ -33,7 +33,7 @@
 // a color different from the start pixel is reached (wxFLOOD_SURFACE)
 // or fill color is reached (wxFLOOD_BORDER)
 
-static LINKAGEMODE bool MatchPixel(wxImage *img, int x, int y, int w, int h, const wxColour& c)
+static bool LINKAGEMODE MatchPixel(wxImage *img, int x, int y, int w, int h, const wxColour& c)
 {
     if ((x<0)||(x>=w)||(y<0)||(y>=h)) return FALSE;
 
@@ -43,26 +43,26 @@ static LINKAGEMODE bool MatchPixel(wxImage *img, int x, int y, int w, int h, con
     return c.Red() == r && c.Green() == g && c.Blue() == b ;
 }
 
-static LINKAGEMODE bool MatchBoundaryPixel(wxImage *img, int x, int y, int w, int h, const wxColour & fill, const wxColour& bound)
+static bool LINKAGEMODE MatchBoundaryPixel(wxImage *img, int x, int y, int w, int h, const wxColour & fill, const wxColour& bound)
 {
     if ((x<0)||(x>=w)||(y<0)||(y>=h)) return TRUE;
 
     unsigned char r = img->GetRed(x,y);
     unsigned char g = img->GetGreen(x,y);
     unsigned char b = img->GetBlue(x,y);
-    if ( fill.Red() == r && fill.Green() == g && fill.Blue() == b ) 
+    if ( fill.Red() == r && fill.Green() == g && fill.Blue() == b )
         return TRUE;
-    if ( bound.Red() == r && bound.Green() == g && bound.Blue() == b ) 
+    if ( bound.Red() == r && bound.Green() == g && bound.Blue() == b )
         return TRUE;
     return FALSE;
 }
 
 
-static LINKAGEMODE
-void wxImageFloodFill(wxImage *image,
-                      wxCoord x, wxCoord y, const wxBrush & fillBrush,
-                      const wxColour& testColour, int style,
-                      int LogicalFunction)
+static void LINKAGEMODE
+wxImageFloodFill(wxImage *image,
+                 wxCoord x, wxCoord y, const wxBrush & fillBrush,
+                 const wxColour& testColour, int style,
+                int LogicalFunction)
 {
     /* A diamond flood-fill using a circular queue system.
     Each pixel surrounding the current pixel is added to
@@ -273,7 +273,7 @@ void wxImageFloodFill(wxImage *image,
 }
 
 
-void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y, 
+void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
                    const wxColour& col, int style)
 {
     if (dc->GetBrush().GetStyle() == wxTRANSPARENT)
@@ -294,7 +294,7 @@ void wxDoFloodFill(wxDC *dc, wxCoord x, wxCoord y,
     memdc.SelectObject(wxNullBitmap);
 
     wxImage image = bitmap.ConvertToImage();
-    wxImageFloodFill(&image, x,y, dc->GetBrush(), col, style, 
+    wxImageFloodFill(&image, x,y, dc->GetBrush(), col, style,
                      dc->GetLogicalFunction());
     bitmap = wxBitmap(image);
     memdc.SelectObject(bitmap);
