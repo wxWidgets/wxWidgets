@@ -97,29 +97,21 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
                                    );
     }
 
-#if 0 // gcc 2.95 doesn't like this apparently    
-    // Use XmStringCreateLtoR(), since XmStringCreateSimple
-    // doesn't obey separators.
-//    XmString text = XmStringCreateSimple (label1);
-    XmString text = XmStringCreateLtoR (label1, XmSTRING_DEFAULT_CHARSET);
-#endif // 0
-    
-    XmString text = XmStringCreateLtoR ((char *)(const char*)label, XmSTRING_DEFAULT_CHARSET);
-    
+    wxString buf(wxStripMenuCodes(label));
+    wxXmString label_str(buf);
+
     XmFontList fontList = (XmFontList) m_font.GetFontList(1.0, XtDisplay(parentWidget));
 
     m_labelWidget = XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,
                                          borderWidget ? borderWidget : parentWidget,
                                          XmNfontList, fontList,
-                                         XmNlabelString, text,
+                                         XmNlabelString, label_str(),
                                          XmNalignment,
                      ((style & wxALIGN_RIGHT) ? XmALIGNMENT_END :
                      ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
                      XmALIGNMENT_BEGINNING)),
                                          NULL);
-
-    XmStringFree (text);
 
     m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
 
