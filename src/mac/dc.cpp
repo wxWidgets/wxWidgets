@@ -46,6 +46,10 @@ const double M_PI = 3.14159265358979 ;
 const double RAD2DEG  = 180.0 / M_PI;
 const short kEmulatedMode = -1 ;
 const short kUnsupportedMode = -2 ;
+
+// set to 0 if problems arise
+#define wxMAC_EXPERIMENTAL_DC 1
+
 wxMacPortSetter::wxMacPortSetter( const wxDC* dc ) :
 	m_ph( (GrafPtr) dc->m_macPort )
 {
@@ -57,6 +61,33 @@ wxMacPortSetter::~wxMacPortSetter()
 {
 	m_dc->MacCleanupPort(&m_ph) ;
 }
+
+#if wxMAC_EXPERIMENTAL_DC
+class wxMacFastPortSetter
+{
+public :
+    wxMacFastPortSetter( const wxDC *dc ) 
+    {
+	    wxASSERT( dc->Ok() ) ;
+	    GetPort( &m_oldPort ) ;
+	    SetPort( (GrafPtr) dc->m_macPort ) ;
+	    m_dc = dc ;
+	    dc->MacSetupPort( NULL ) ;
+    }
+    ~wxMacFastPortSetter()
+    {
+	    SetPort( m_oldPort ) ;
+	    m_dc->MacCleanupPort( NULL ) ;
+    }
+private :
+    GrafPtr m_oldPort ;
+    const wxDC*   m_dc ;
+} ;
+
+#else
+typedef wxMacPortSetter wxMacFastPortSetter ;
+#endif
+
 wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
 {
     m_formerClip = NewRgn() ;
@@ -238,9 +269,11 @@ void wxDC::MacSetupPort(wxMacPortStateHelper* help) const
     wxASSERT( m_macCurrentPortStateHelper == NULL ) ;
     m_macCurrentPortStateHelper = help ;
 	SetClip( (RgnHandle) m_macCurrentClipRgn);
+#if ! wxMAC_EXPERIMENTAL_DC
 	m_macFontInstalled = false ;
 	m_macBrushInstalled = false ;
 	m_macPenInstalled = false ;
+#endif
 }
 void wxDC::MacCleanupPort(wxMacPortStateHelper* help) const
 {
@@ -624,7 +657,7 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y,
 bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
 {
     wxCHECK_MSG( Ok(), false, wxT("wxDC::DoGetPixel  Invalid DC") );
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
     RGBColor colour;
     GetCPixel( XLOG2DEVMAC(x), YLOG2DEVMAC(y), &colour );
     // Convert from Mac colour to wx
@@ -636,7 +669,7 @@ bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
 void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
   wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  wxMacPortSetter helper(this) ;
+  wxMacFastPortSetter helper(this) ;
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
 		MacInstallPen() ;
@@ -673,7 +706,7 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoCrossHair  Invalid window dc") );
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
     if (m_pen.GetStyle() != wxTRANSPARENT)
     {
         int w = 0;
@@ -710,7 +743,7 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
                            wxCoord xc, wxCoord yc )
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawArc  Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
     wxCoord xx1 = XLOG2DEVMAC(x1);
     wxCoord yy1 = YLOG2DEVMAC(y1);
     wxCoord xx2 = XLOG2DEVMAC(x2);
@@ -759,7 +792,7 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
                                    double sa, double ea )
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawEllepticArc  Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
     Rect r;
     double angle = sa - ea;  // Order important Mac in opposite direction to wx
     // we have to make sure that the filling is always counter-clockwise
@@ -789,7 +822,7 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 void  wxDC::DoDrawPoint( wxCoord x, wxCoord y )
 {
   wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  wxMacPortSetter helper(this) ;
+  wxMacFastPortSetter helper(this) ;
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
         wxCoord xx1 = XLOG2DEVMAC(x);
@@ -803,7 +836,7 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
                              wxCoord xoffset, wxCoord yoffset)
 {
   wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  wxMacPortSetter helper(this) ;
+  wxMacFastPortSetter helper(this) ;
   if (m_pen.GetStyle() == wxTRANSPARENT)
   	return;
   MacInstallPen() ;
@@ -825,7 +858,7 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
                           int fillStyle )
 {
   	wxCHECK_RET(Ok(), wxT("Invalid DC"));
-  	wxMacPortSetter helper(this) ;
+  	wxMacFastPortSetter helper(this) ;
   	wxCoord x1, x2 , y1 , y2 ;
     if ( m_brush.GetStyle() == wxTRANSPARENT && m_pen.GetStyle() == wxTRANSPARENT )
         return ;
@@ -860,7 +893,7 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
 	wxCoord xx = XLOG2DEVMAC(x);
 	wxCoord yy = YLOG2DEVMAC(y);
 	wxCoord ww = m_signX * XLOG2DEVREL(width);
@@ -896,7 +929,7 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
                                         double radius)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
     if (radius < 0.0)
   	    radius = - radius * ((width < height) ? width : height);
 	wxCoord xx = XLOG2DEVMAC(x);
@@ -932,7 +965,7 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
 	wxCoord xx = XLOG2DEVMAC(x);
 	wxCoord yy = YLOG2DEVMAC(y);
 	wxCoord ww = m_signX * XLOG2DEVREL(width);
@@ -1237,7 +1270,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
     }
     if ( str.Length() == 0 )
         return ;
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
     MacInstallFont() ;
 	wxString text ;
 	if ( wxApp::s_macDefaultEncodingIsPC )
@@ -1322,7 +1355,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawText  Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
 	long xx = XLOG2DEVMAC(x);
 	long yy = YLOG2DEVMAC(y);
 #if TARGET_CARBON
@@ -1462,7 +1495,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
                      wxFont *theFont ) const
 {
    wxCHECK_RET(Ok(), wxT("Invalid DC"));
-   wxMacPortSetter helper(this) ;
+   wxMacFastPortSetter helper(this) ;
  	wxFont formerFont = m_font ;
 	if ( theFont )
 	{
@@ -1569,7 +1602,7 @@ void  wxDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *he
 wxCoord   wxDC::GetCharWidth(void) const
 {
     wxCHECK_MSG(Ok(), 1, wxT("Invalid DC"));
-   wxMacPortSetter helper(this) ;
+   wxMacFastPortSetter helper(this) ;
 	MacInstallFont() ;
     int width = 0 ;
 #if TARGET_CARBON
@@ -1603,7 +1636,7 @@ wxCoord   wxDC::GetCharWidth(void) const
 wxCoord   wxDC::GetCharHeight(void) const
 {
     wxCHECK_MSG(Ok(), 1, wxT("Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
 	MacInstallFont() ;
 	FontInfo fi ;
 	::GetFontInfo( &fi ) ;
@@ -1612,7 +1645,7 @@ wxCoord   wxDC::GetCharHeight(void) const
 void  wxDC::Clear(void)
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
-    wxMacPortSetter helper(this) ;
+    wxMacFastPortSetter helper(this) ;
 	Rect rect = { -31000 , -31000 , 31000 , 31000 } ;
 	if (m_backgroundBrush.GetStyle() != wxTRANSPARENT)
 	{
@@ -1625,8 +1658,9 @@ void  wxDC::Clear(void)
 void wxDC::MacInstallFont() const
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
-//	if ( m_macFontInstalled )
-//		return ;
+    if ( m_macFontInstalled )
+        return ;
+        
 	Pattern blackColor ;
 	MacSetupBackgroundForCurrentPort(m_backgroundBrush) ;
 	wxFontRefData * font = (wxFontRefData*) m_font.GetRefData() ;
@@ -1700,6 +1734,7 @@ void wxDC::MacInstallFont() const
 			break ;
 	}
 	::PenMode( mode ) ;
+
     OSStatus status = noErr ;
     Fixed atsuSize = IntToFixed( int(m_scaleY * font->m_macFontSize) ) ;
     Style qdStyle = font->m_macFontStyle ;
@@ -1795,9 +1830,11 @@ static void wxMacGetHatchPattern(int hatchStyle, Pattern *pattern)
 void wxDC::MacInstallPen() const
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
+
+    if ( m_macPenInstalled )
+		return ;
+
 	Pattern	 blackColor;
-//	if ( m_macPenInstalled )
-//		return ;
 	RGBColor forecolor = MAC_WXCOLORREF( m_pen.GetColour().GetPixel());
 	RGBColor backcolor = MAC_WXCOLORREF( m_backgroundBrush.GetColour().GetPixel());
 	::RGBForeColor( &forecolor );
@@ -1946,8 +1983,9 @@ void wxDC::MacInstallBrush() const
 {
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
 	Pattern	 blackColor ;
-//	if ( m_macBrushInstalled )
-//		return ;
+    if ( m_macBrushInstalled )
+        return ;
+        
 	// foreground
 	bool backgroundTransparent = (GetBackgroundMode() == wxTRANSPARENT) ;
 	::RGBForeColor( &MAC_WXCOLORREF( m_brush.GetColour().GetPixel()) );
