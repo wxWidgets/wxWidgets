@@ -96,6 +96,10 @@ bool wxSplitterWindow::Create(wxWindow *parent, wxWindowID id,
 
     m_permitUnsplitAlways = (style & wxSP_PERMIT_UNSPLIT) != 0;
 
+    // don't erase the splitter background, it's pointless as we overwrite it
+    // anyhow
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+
     return true;
 }
 
