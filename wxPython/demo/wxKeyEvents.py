@@ -114,8 +114,7 @@ keyMap = {
 
 class KeySink(wxWindow):
     def __init__(self, parent):
-        wxWindow.__init__(self, parent, -1,
-                          style=wxRAISED_BORDER | wxWANTS_CHARS)
+        wxWindow.__init__(self, parent, -1, style=wxWANTS_CHARS)
         self.SetBackgroundColour(wxBLUE)
         self.haveFocus = false
         self.callSkip = false
