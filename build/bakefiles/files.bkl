@@ -1649,6 +1649,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/tabg.cpp
     <!-- Unix files used by wxMac: -->
     src/unix/snglinst.cpp
+    <!-- wxWebKit files -->
+    src/html/htmlctrl/webkit/webkit.mm
 </set>
 <!-- Header files like wx/mac/foo.h which include wx/mac/carbon/foo.h -->
 <set var="MAC_CMN_HDR" hints="files">
@@ -1825,6 +1827,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/listctrl.h
     wx/generic/statusbr.h
     wx/generic/tabg.h
+    <!-- wxWebKit headers -->
+    wx/html/webkit.h
 </set>
 
 
