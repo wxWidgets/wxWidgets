@@ -11,6 +11,13 @@
 #pragma implementation "image.h"
 #endif
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
 #include "wx/image.h"
 #include "wx/debug.h"
 #include "wx/log.h"
@@ -320,6 +327,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
    unsigned char      *ptr, **lines, *ptr2;
    int                 transp,bit_depth,color_type,interlace_type;
    png_uint_32         width, height;
+   unsigned int	       i;
 
    image->Destroy();
    
@@ -375,7 +383,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
      return FALSE;
    }
    
-   for (unsigned int i = 0; i < height; i++)
+   for (i = 0; i < height; i++)
    {
      if ((lines[i] = (unsigned char *)malloc(width * (sizeof(unsigned char) * 4))) == NULL)
      {
@@ -444,7 +452,7 @@ bool wxPNGHandler::LoadFile( wxImage *image, const wxString& name )
 	       }
 	  }
      }
-   for (unsigned int i = 0; i < height; i++) free( lines[i] );
+   for (i = 0; i < height; i++) free( lines[i] );
    free( lines );
    if (transp)
      image->SetMaskColour( 255, 0, 255 );
@@ -556,11 +564,12 @@ bool wxBMPHandler::LoadFile( wxImage *image, const wxString& name )
 	unsigned char       r, g, b;
      }
                       *cmap = NULL;
-
+#ifndef BI_RGB
 #define BI_RGB       0
 #define BI_RLE8      1
 #define BI_RLE4      2
 #define BI_BITFIELDS 3
+#endif
 
   image->Destroy();
 
