@@ -1,5 +1,4 @@
 #include "wx/msw/wx.rc"
 
-#define MINIMAL_QUIT 	1
-#define MINIMAL_ABOUT 	102
-
+wiztest     BITMAP  wiztest.bmp
+wiztest2    BITMAP  wiztest2.bmp
