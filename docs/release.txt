@@ -1,6 +1,12 @@
 wxWindows Release Notes
 -----------------------
 
+2.1.13
+======
+
+- New wxEncodingConverter class
+
+
 2.1.12
 ======
 
@@ -44,9 +50,11 @@ wxWindows Release Notes
   HTML (such as the wxWindows manual generated using Tex2RTF).
   This may be a compiler problem and will be investigated
   for 2.1.12.
+  [ fixed since 2.1.13 ]
 
 - wxHTML printing has spacing problems under Windows, and may not
   work fully under Unix. Hopefully this will be resolved for 2.1.12.
+  [ fixed since 2.1.12 ]
 
 - wxStaticBox under Windows obscures controls placed within it:
   this will be fixed in 2.1.12.

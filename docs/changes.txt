@@ -52,6 +52,10 @@ all (GUI):
 - wxScrolledWindow now has keyboard interface
 - wxTextEntryDialog may be used for entering passwords (supports wxTE_PASSWORD)
 
+- added wxEncodingConverter and improved wxFontMapper
+  for dealing with convertions between different encodings,
+  charsets support in wxLocale and wxHTML
+
 wxMSW:
 
 - support for enhanced metafiles added, support for copying/pasting metafiles
@@ -72,7 +76,25 @@ wxGTK:
 
 wxMotif:
 
-- wxMenu::Enable) works
+- wxMenu::Enable works
+
+wxHTML:
+
+- almost complete rewrite of wxHtmlHelpController,
+  including faster search, bookmarks, printing, setup dialog
+  and cross-platform binary compatible .cached files for faster 
+  loading of large helpbooks, case insensitive search
+  splitted into 3 parts: wxHtmlHelpData, Frame and Controller
+- added support for charsets and <meta> tag
+- added support for font faces and justified paragraphs,
+  taken some steps to prepare wxHTML for frames
+- added dynamic pushing/poping of wxHtmlParser tag handlers
+- improved HTML printing
+- added extensive table of HTML characters substitutions (&nbsp; etc.)
+- fixed wxHtmlWindow flickering, several minor bugfixes
+- added some tags: <address>, <code>, <kbd>, <samp>, <small>, <big>,
+  fixed handling of relative and absolute font sizes in <font size>
+
 
 NOTE: for changes after wxWindows 2.1.0 b4, please see the CVS
 change log.
