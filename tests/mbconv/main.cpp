@@ -24,6 +24,10 @@
 #include "wx/strconv.h"
 #include "wx/string.h"
 
+#if wxUSE_FONTMAP
+    #include "wx/fontmap.h"
+#endif // wxUSE_FONTMAP
+
 #include "wx/cppunit.h"
 
 // ----------------------------------------------------------------------------
@@ -38,9 +42,11 @@ public:
 private:
     CPPUNIT_TEST_SUITE( MBConvTestCase );
         CPPUNIT_TEST( WC2CP1250 );
+        CPPUNIT_TEST( Charsets );
     CPPUNIT_TEST_SUITE_END();
 
     void WC2CP1250();
+    void Charsets();
 
     DECLARE_NO_COPY_CLASS(MBConvTestCase)
 };
@@ -76,4 +82,72 @@ void MBConvTestCase::WC2CP1250()
             CPPUNIT_ASSERT( (const char*)cs1250.cWC2MB(d.wc) == NULL );
         }
     }
+}
+
+void MBConvTestCase::Charsets()
+{
+#if wxUSE_FONTMAP
+
+    static const wxChar *charsets[] =
+    {
+        // some vali charsets
+        _T("us-ascii"    ),
+        _T("iso8859-1"   ),
+        _T("iso-8859-12" ),
+        _T("koi8-r"      ),
+        _T("utf-7"       ),
+        _T("cp1250"      ),
+        _T("windows-1252"),
+
+        // and now some bogus ones
+        _T(""            ),
+        _T("cp1249"      ),
+        _T("iso--8859-1" ),
+        _T("iso-8859-19" ),
+    };
+
+    static const wxChar *names[] =
+    {
+        // some vali charsets
+        _T("default"     ),
+        _T("iso-8859-1"  ),
+        _T("iso-8859-12" ),
+        _T("koi8-r"      ),
+        _T("utf-7"       ),
+        _T("windows-1250"),
+        _T("windows-1252"),
+
+        // and now some bogus ones
+        _T("default"     ),
+        _T("unknown--1"  ),
+        _T("unknown--1"  ),
+        _T("unknown--1"  ),
+    };
+
+    static const wxChar *descriptions[] =
+    {
+        // some vali charsets
+        _T("Default encoding"                  ),
+        _T("Western European (ISO-8859-1)"     ),
+        _T("Indian (ISO-8859-12)"              ),
+        _T("KOI8-R"                            ),
+        _T("Unicode 7 bit (UTF-7)"             ),
+        _T("Windows Central European (CP 1250)"),
+        _T("Windows Western European (CP 1252)"),
+
+        // and now some bogus ones
+        _T("Default encoding"                  ),
+        _T("Unknown encoding (-1)"             ),
+        _T("Unknown encoding (-1)"             ),
+        _T("Unknown encoding (-1)"             ),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(charsets); n++ )
+    {
+        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charsets[n]);
+        CPPUNIT_ASSERT( wxFontMapper::Get()->GetEncodingName(enc) == names[n] );
+        CPPUNIT_ASSERT( wxFontMapper::Get()->GetEncodingDescription(enc) == descriptions[n] );
+    }
+
+#endif // wxUSE_FONTMAP
 }

@@ -51,7 +51,6 @@
 
 #if TEST_ALL
 
-    #define TEST_CHARSET
     #define TEST_CMDLINE
     #define TEST_DATETIME
     #define TEST_DIR
@@ -152,46 +151,6 @@ static wxString MakePrintable(const wxChar *s)
 }
 
 #endif // MakePrintable() is used
-
-// ----------------------------------------------------------------------------
-// wxFontMapper::CharsetToEncoding
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_CHARSET
-
-#include "wx/fontmap.h"
-
-static void TestCharset()
-{
-    static const wxChar *charsets[] =
-    {
-        // some vali charsets
-        _T("us-ascii    "),
-        _T("iso8859-1   "),
-        _T("iso-8859-12 "),
-        _T("koi8-r      "),
-        _T("utf-7       "),
-        _T("cp1250      "),
-        _T("windows-1252"),
-
-        // and now some bogus ones
-        _T("            "),
-        _T("cp1249      "),
-        _T("iso--8859-1 "),
-        _T("iso-8859-19 "),
-    };
-
-    for ( size_t n = 0; n < WXSIZEOF(charsets); n++ )
-    {
-        wxFontEncoding enc = wxFontMapper::Get()->CharsetToEncoding(charsets[n]);
-        wxPrintf(_T("Charset: %s\tEncoding: %s (%s)\n"),
-                 charsets[n],
-                 wxFontMapper::Get()->GetEncodingName(enc).c_str(),
-                 wxFontMapper::Get()->GetEncodingDescription(enc).c_str());
-    }
-}
-
-#endif // TEST_CHARSET
 
 // ----------------------------------------------------------------------------
 // wxCmdLineParser
@@ -5310,10 +5269,6 @@ int main(int argc, char **argv)
         wxPrintf(_T("Failed to init wxSingleInstanceChecker.\n"));
     }
 #endif // TEST_SNGLINST
-
-#ifdef TEST_CHARSET
-    TestCharset();
-#endif // TEST_CHARSET
 
 #ifdef TEST_CMDLINE
     TestCmdLineConvert();
