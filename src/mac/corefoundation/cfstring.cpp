@@ -107,6 +107,10 @@ wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding)
         encoding = wxLocale::GetSystemEncoding() ;
 #endif
     }
+    if ( encoding == wxFONTENCODING_SYSTEM )
+    {
+        enc = CFStringGetSystemEncoding();
+    }
 
     switch( encoding)
     {
@@ -629,7 +633,9 @@ wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding)
 // converts this string into a carbon foundation string with optional pc 2 mac encoding
 void wxMacCFStringHolder::Assign( const wxString &st , wxFontEncoding encoding )
 {
-    Release() ;
+    Release() ; 
+    if (st.IsEmpty())
+        return ;
 
     wxString str = st ;
     wxMacConvertNewlines13To10( &str ) ;
