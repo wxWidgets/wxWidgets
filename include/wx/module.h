@@ -20,7 +20,7 @@
 #include "wx/list.h"
 
 // declare a linked list of modules
-class wxModule;
+class WXDLLIMPEXP_BASE wxModule;
 WX_DECLARE_USER_EXPORTED_LIST(wxModule, wxModuleList, WXDLLIMPEXP_BASE);
 
 // declaring a class derived from wxModule will automatically create an

@@ -26,9 +26,9 @@
 // classes
 //---------------------------------------------------------------------------
 
-class wxSizerItem;
-class wxSizer;
-class wxBoxSizer;
+class WXDLLEXPORT wxSizerItem;
+class WXDLLEXPORT wxSizer;
+class WXDLLEXPORT wxBoxSizer;
 
 //---------------------------------------------------------------------------
 // wxSizerItem

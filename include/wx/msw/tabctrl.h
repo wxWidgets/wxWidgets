@@ -16,7 +16,7 @@
 #pragma interface "tabctrl.h"
 #endif
 
-class wxImageList;
+class WXDLLIMPEXP_CORE wxImageList;
 
 // WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
 

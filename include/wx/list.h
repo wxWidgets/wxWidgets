@@ -371,7 +371,7 @@ private:
 // a double-linked list class
 // -----------------------------------------------------------------------------
 
-class wxList;
+class WXDLLIMPEXP_BASE wxList;
 
 class WXDLLIMPEXP_BASE wxListBase : public wxObject
 {

@@ -3,9 +3,9 @@
 
 #include "wx/list.h"
 
-class wxDDEClient;
-class wxDDEServer;
-class wxDDEConnection;
+class WXDLLIMPEXP_BASE wxDDEClient;
+class WXDLLIMPEXP_BASE wxDDEServer;
+class WXDLLIMPEXP_BASE wxDDEConnection;
 
 WX_DECLARE_USER_EXPORTED_LIST(wxDDEClient, wxDDEClientList, WXDLLIMPEXP_BASE);
 WX_DECLARE_USER_EXPORTED_LIST(wxDDEServer, wxDDEServerList, WXDLLIMPEXP_BASE);

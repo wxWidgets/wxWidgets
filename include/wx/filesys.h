@@ -30,9 +30,9 @@
 #include "wx/datetime.h"
 #include "wx/filename.h"
 
-class wxFSFile;
-class wxFileSystemHandler;
-class wxFileSystem;
+class WXDLLIMPEXP_BASE wxFSFile;
+class WXDLLIMPEXP_BASE wxFileSystemHandler;
+class WXDLLIMPEXP_BASE wxFileSystem;
 
 //--------------------------------------------------------------------------------
 // wxFSFile

@@ -36,8 +36,8 @@
     #define wxMulDivInt32( a , b , c ) ((wxInt32)((a)*(((wxDouble)b)/((wxDouble)c))))
 #endif
 
-class wxDataInputStream;
-class wxDataOutputStream;
+class WXDLLIMPEXP_BASE wxDataInputStream;
+class WXDLLIMPEXP_BASE wxDataOutputStream;
 
 // clipping from Cohen-Sutherland
 

@@ -32,7 +32,7 @@
 #endif // wxUSE_OWNER_DRAWN
 
 // forward decl for GetSelections()
-class wxArrayInt;
+class WXDLLIMPEXP_BASE wxArrayInt;
 
 // ----------------------------------------------------------------------------
 // List box control
