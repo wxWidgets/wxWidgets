@@ -208,13 +208,13 @@ class wxpTagHandler(wxHtmlWinTagHandler):
 
         # convert to wxColour
         elif value[0] == '#':
-            #try:
+            try:
                 red   = string.atoi('0x'+value[1:3], 16)
                 green = string.atoi('0x'+value[3:5], 16)
                 blue  = string.atoi('0x'+value[5:], 16)
                 value = wxColor(red, green, blue)
-            #except:
-            #    pass
+            except:
+                pass
 
         self.ctx.kwargs[name] = value
         return false
