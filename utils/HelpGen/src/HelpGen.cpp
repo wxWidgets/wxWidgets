@@ -54,6 +54,7 @@
 #ifndef WX_PRECOMP
     #include <wx/string.h>
     #include <wx/log.h>
+    #include <wx/regex.h>
     #include <wx/dynarray.h>
     #include <wx/wx.h>
 #endif // WX_PRECOMP
@@ -67,23 +68,30 @@
 #include <stdio.h>
 #include <time.h>
 
+// argh, Windows defines this
+#ifdef GetCurrentTime
+#undef GetCurrentTime
+#endif
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+#define VERSION_STRING "$Revision$"
+
 // -----------------------------------------------------------------------------
 // global vars
 // -----------------------------------------------------------------------------
-
-// just a copy of argv
-static char **g_argv = NULL;
 
 class HelpGenApp: public wxApp
 {
 public:
     HelpGenApp() {};
 
-#if wxUSE_GUI
-    bool OnInit();
-#else
-    int OnRun();
-#endif
+    // don't let wxWin parse our cmd line, we do it ourselves
+    virtual bool OnInit() { return TRUE; }
+
+    virtual int OnRun();
 };
 
 IMPLEMENT_APP(HelpGenApp);
@@ -107,10 +115,6 @@ static wxString GetAllComments(const spContext& ctx);
 
 // get the string with current time (returns pointer to static buffer)
 // timeFormat is used for the call of strftime(3)
-#ifdef GetCurrentTime
-#undef GetCurrentTime
-#endif
-
 static const char *GetCurrentTime(const char *timeFormat);
 
 // -----------------------------------------------------------------------------
@@ -123,6 +127,14 @@ class wxTeXFile : public wxFile
 public:
     wxTeXFile() { }
 
+    // write a string to file verbatim (should only be used for the strings
+    // inside verbatim environment)
+    bool WriteVerbatim(const wxString& s)
+    {
+        return wxFile::Write(s);
+    }
+
+    // write a string quoting TeX specials in it
     bool WriteTeX(const wxString& s)
     {
         wxString t(s);
@@ -247,9 +259,13 @@ protected:
          m_inFunction;      // we're parsing a function declaration
 
     // holders for "saved" documentation
-    wxString m_textStoredEnums,
-             m_textStoredTypedefs,
+    wxString m_textStoredTypedefs,
              m_textStoredFunctionComment;
+
+    // for enums we have to use an array as we can't intermix the normal text
+    // and the text inside verbatim environment
+    wxArrayString m_storedEnums,
+                  m_storedEnumsVerb;
 
     // headers included by this file
     wxArrayString m_headers;
@@ -435,7 +451,7 @@ private:
 // this function never returns
 static void usage()
 {
-    wxString prog = g_argv[0];
+    wxString prog = wxTheApp->argv[0];
     wxString basename = prog.AfterLast('/');
 #ifdef __WXMSW__
     if ( !basename )
@@ -444,7 +460,7 @@ static void usage()
     if ( !basename )
         basename = prog;
 
-    wxLogError(
+    wxLogMessage(
 "usage: %s [global options] <mode> [mode options] <files...>\n"
 "\n"
 "   where global options are:\n"
@@ -467,21 +483,11 @@ static void usage()
 "   mode specific options are:\n"
 "       -p          do check parameter names (not done by default)\n"
 "\n", basename.c_str(), basename.c_str());
-#ifndef wxUSE_GUI
+
     exit(1);
-#endif
 }
 
-/*
-int main(int argc, char **argv)
-{
-*/
-
-#if wxUSE_GUI
-bool HelpGenApp::OnInit()
-#else
 int HelpGenApp::OnRun()
-#endif
 {
     enum
     {
@@ -489,8 +495,6 @@ int HelpGenApp::OnRun()
         Mode_Dump,
         Mode_Diff
     } mode = Mode_None;
-
-    g_argv = argv;
 
     if ( argc < 2 ) {
         usage();
@@ -520,6 +524,14 @@ int HelpGenApp::OnRun()
                     case 'H':
                         // help requested
                         usage();
+                        // doesn't return
+
+                    case 'V':
+                        // version requested
+                        wxLogMessage("HelpGen version %s\n"
+                                     "(c) 1999-2001 Vadim Zeitlin\n",
+                                     VERSION_STRING);
+                        return 0;
 
                     case 'i':
                         current++;
@@ -659,7 +671,7 @@ int HelpGenApp::OnRun()
             wxLogError("Can't complete diff.");
 
             // failure
-            return false;
+            return FALSE;
         }
 
         DocManager docman(paramNames);
@@ -679,7 +691,7 @@ int HelpGenApp::OnRun()
         docman.DumpDifferences(ctxTop);
     }
 
-    return false;
+    return 0;
 }
 
 // -----------------------------------------------------------------------------
@@ -703,8 +715,10 @@ void HelpGenVisitor::Reset()
     m_inMethodSection = FALSE;
 
     m_textStoredTypedefs =
-    m_textStoredEnums =
     m_textStoredFunctionComment = "";
+
+    m_storedEnums.Empty();
+    m_storedEnumsVerb.Empty();
     m_headers.Empty();
 }
 
@@ -716,8 +730,15 @@ void HelpGenVisitor::InsertTypedefDocs()
 
 void HelpGenVisitor::InsertEnumDocs()
 {
-    m_file.WriteTeX(m_textStoredEnums);
-    m_textStoredEnums.Empty();
+    size_t count = m_storedEnums.GetCount();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_file.WriteTeX(m_storedEnums[n]);
+        m_file.WriteVerbatim(m_storedEnumsVerb[n] + '\n');
+    }
+
+    m_storedEnums.Empty();
+    m_storedEnumsVerb.Empty();
 }
 
 void HelpGenVisitor::InsertDataStructuresHeader()
@@ -725,7 +746,7 @@ void HelpGenVisitor::InsertDataStructuresHeader()
     if ( !m_inTypesSection ) {
         m_inTypesSection = TRUE;
 
-        m_file.WriteTeX("\\wxheading{Data structures}\n\n");
+        m_file.Write("\\wxheading{Data structures}\n\n");
     }
 }
 
@@ -734,7 +755,7 @@ void HelpGenVisitor::InsertMethodsHeader()
     if ( !m_inMethodSection ) {
         m_inMethodSection = TRUE;
 
-        m_file.WriteTeX( "\\latexignore{\\rtfignore{\\wxheading{Members}}}\n\n");
+        m_file.Write( "\\latexignore{\\rtfignore{\\wxheading{Members}}}\n\n");
     }
 }
 
@@ -750,11 +771,10 @@ void HelpGenVisitor::CloseFunction()
         }
 
         totalText << "}\n\n";
+        m_file.Write(totalText);
 
         if ( !m_textStoredFunctionComment.IsEmpty() )
-            totalText << m_textStoredFunctionComment << '\n';
-
-        m_file.WriteTeX(totalText);
+            m_file.WriteTeX(m_textStoredFunctionComment + '\n');
     }
 }
 
@@ -822,24 +842,25 @@ void HelpGenVisitor::VisitClass( spClass& cl )
     wxLogInfo("Created new file '%s' for class '%s'.",
               filename.c_str(), name.c_str());
 
+    // write out the header
+    wxString header;
+    header.Printf("%%\n"
+                  "%% automatically generated by HelpGen %s from\n"
+                  "%% %s at %s\n"
+                  "%%\n"
+                  "\n"
+                  "\n"
+                  "\\section{\\class{%s}}\\label{%s}\n\n",
+                  VERSION_STRING,
+                  m_fileHeader.c_str(),
+                  GetCurrentTime("%d/%b/%y %H:%M:%S"),
+                  name.c_str(),
+                  wxString(name).MakeLower().c_str());
+
+    m_file.Write(header);
+
     // the entire text we're writing to file
     wxString totalText;
-
-    // write out the header
-    {
-        wxString header;
-        header.Printf("%%\n"
-                      "%% automatically generated by HelpGen from\n"
-                      "%% %s at %s\n"
-                      "%%\n"
-                      "\n"
-                      "\n"
-                      "\\section{\\class{%s}}\\label{%s}\n",
-                      m_fileHeader.c_str(), GetCurrentTime("%d/%b/%y %H:%M:%S"),
-                      name.c_str(), wxString(name).MakeLower().c_str());
-
-        totalText << header << '\n';
-    }
 
     // if the header includes other headers they must be related to it... try to
     // automatically generate the "See also" clause
@@ -962,25 +983,25 @@ void HelpGenVisitor::VisitEnumeration( spEnumeration& en )
     }
 
     // simply copy the enum text in the docs
-    wxString enumeration = GetAllComments(en);
-    enumeration << "{\\small \\begin{verbatim}\n"
-                << en.mEnumContent
-                << "\n\\end{verbatim}}\n";
+    wxString enumeration = GetAllComments(en),
+             enumerationVerb;
+
+    enumerationVerb << "\\begin{verbatim}\n"
+                    << en.mEnumContent
+                    << "\n\\end{verbatim}\n";
 
     // remember for later use if we're not inside a class yet
     if ( !m_inClass ) {
-        if ( !m_textStoredEnums.IsEmpty() ) {
-            m_textStoredEnums << '\n';
-        }
-
-        m_textStoredEnums << enumeration;
+        m_storedEnums.Add(enumeration);
+        m_storedEnumsVerb.Add(enumerationVerb);
     }
     else {
         // write the header for this section if not done yet
         InsertDataStructuresHeader();
 
-        enumeration << '\n';
         m_file.WriteTeX(enumeration);
+        m_file.WriteVerbatim(enumerationVerb);
+        m_file.Write('\n');
     }
 }
 
@@ -1886,21 +1907,33 @@ static wxString MakeHelpref(const char *argument)
     return helpref;
 }
 
+static void TeXFilter(wxString* str)
+{
+    // TeX special which can be quoted (don't include backslash nor braces as
+    // we generate them 
+    static wxRegEx reNonSpecialSpecials("[#$%&_]"),
+                   reAccents("[~^]");
+
+    // just quote
+    reNonSpecialSpecials.ReplaceAll(str, "\\\\\\0");
+
+    // can't quote these ones as they produce accents when preceded by
+    // backslash, so put them inside verb
+    reAccents.ReplaceAll(str, "\\\\verb|\\0|");
+}
+
 static void TeXUnfilter(wxString* str)
 {
     // FIXME may be done much more quickly
     str->Trim(TRUE);
     str->Trim(FALSE);
 
-    str->Replace("\\&", "&");
-    str->Replace("\\_", "_");
-}
+    // undo TeXFilter
+    static wxRegEx reNonSpecialSpecials("\\\\([#$%&_{}])"),
+                   reAccents("\\\\verb|([~^])|");
 
-static void TeXFilter(wxString* str)
-{
-    // FIXME may be done much more quickly
-    str->Replace("&", "\\&");
-    str->Replace("_", "\\_");
+    reNonSpecialSpecials.ReplaceAll(str, "\\1");
+    reAccents.ReplaceAll(str, "\\1");
 }
 
 static wxString GetAllComments(const spContext& ctx)
@@ -1940,7 +1973,12 @@ static const char *GetCurrentTime(const char *timeFormat)
 
 /*
    $Log$
+   Revision 1.13  2001/07/19 13:44:57  VZ
+   1. compilation fixes
+   2. don't quote special characters inside verbatim environment
+
    Revision 1.12  2000/10/09 13:53:33  juliansmart
+
    Doc corrections; added HelpGen project files
 
    Revision 1.11  2000/07/15 19:50:42  cvsuser

@@ -15,10 +15,15 @@
 
 #include "srcparser.h"
 
-#include "wx/ioswrap.h"
 #include <memory.h>
 #include <stdlib.h>
 #include <stdio.h>
+
+#if wxUSE_IOSTREAMH
+    #include <iostream.h>
+#else
+    #include <iostream>
+#endif
 
 // class parses given "memory-resident" Java or C++ source code
 // and captures information about classes/attrubutes/methods/

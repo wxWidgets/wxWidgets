@@ -403,9 +403,9 @@ void check_keyword_map( int keywordMapNr )
 		// "make sure" the address of the first member of non-polimorphic class
 		// coinsides with the address of the instance
 
+/*
 		KeywordT dummy;
 
-/*
 		if ( (char*)& dummy != &dummy.keyWord[0] )
 			throw;
 */
