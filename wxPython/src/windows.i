@@ -331,6 +331,10 @@ public:
         void SetPosition(const wxPoint& pos) {
             self->Move(pos);
         }
+
+        void SetRect(const wxRect& rect, int sizeFlags=wxSIZE_AUTO) {
+            self->SetSize(rect, sizeFlags);
+        }
     }
 
     void SetSizeHints(int minW=-1, int minH=-1, int maxW=-1, int maxH=-1, int incW=-1, int incH=-1);

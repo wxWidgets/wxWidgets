@@ -214,7 +214,7 @@ public:
 
     wxPyCallbackHelper(const wxPyCallbackHelper& other);
 
-    void        setSelf(PyObject* self, PyObject* _class, int incref=TRUE);
+    void        setSelf(PyObject* self, PyObject* klass, int incref=TRUE);
 
     bool        findCallback(const wxString& name) const;
     int         callCallback(PyObject* argTuple) const;

@@ -246,8 +246,16 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 //---------------------------------------------------------------------------
 
 PyObject* wxPyConstructObject(void* ptr,
-                              const char* className,
-                              int setThisOwn) {
+                                 const char* className,
+                                 int setThisOwn) {
+    PyObject* obj;
+    PyObject* arg;
+
+    if (!ptr) {
+        Py_INCREF(Py_None);
+        return Py_None;
+    }
+
     char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
@@ -257,12 +265,18 @@ PyObject* wxPyConstructObject(void* ptr,
     sprintf(buff, "%sPtr", className);
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
-        Py_INCREF(Py_None);
-        return Py_None;
+        //Py_INCREF(Py_None);
+        //return Py_None;
+        char temp[128];
+        sprintf(temp,
+                "*** Unknown class name %s, tell Robin about it please ***",
+                buff);
+        obj = PyString_FromString(temp);
+        return obj;
     }
 
-    PyObject* arg = Py_BuildValue("(s)", swigptr);
-    PyObject* obj = PyInstance_New(classobj, arg, NULL);
+    arg = Py_BuildValue("(s)", swigptr);
+    obj = PyInstance_New(classobj, arg, NULL);
     Py_DECREF(arg);
 
     if (setThisOwn) {
@@ -399,9 +413,9 @@ wxPyCallbackHelper::wxPyCallbackHelper(const wxPyCallbackHelper& other) {
 }
 
 
-void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* _class, int incref) {
+void wxPyCallbackHelper::setSelf(PyObject* self, PyObject* klass, int incref) {
     m_self = self;
-    m_class = _class;
+    m_class = klass;
     m_incRef = incref;
     if (incref) {
         Py_INCREF(m_self);
