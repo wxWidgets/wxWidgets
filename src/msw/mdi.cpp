@@ -180,12 +180,12 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
   {
       m_windowMenu = new wxMenu;
 
-      m_windowMenu->Append(IDM_WINDOWCASCADE, wxT("&Cascade"));
-      m_windowMenu->Append(IDM_WINDOWTILEHOR, wxT("Tile &Horizontally"));
-      m_windowMenu->Append(IDM_WINDOWTILEVERT, wxT("Tile &Vertically"));
+      m_windowMenu->Append(IDM_WINDOWCASCADE, _("&Cascade"));
+      m_windowMenu->Append(IDM_WINDOWTILEHOR, _("Tile &Horizontally"));
+      m_windowMenu->Append(IDM_WINDOWTILEVERT, _("Tile &Vertically"));
       m_windowMenu->AppendSeparator();
-      m_windowMenu->Append(IDM_WINDOWICONS, wxT("&Arrange Icons"));
-      m_windowMenu->Append(IDM_WINDOWNEXT, wxT("&Next"));
+      m_windowMenu->Append(IDM_WINDOWICONS, _("&Arrange Icons"));
+      m_windowMenu->Append(IDM_WINDOWNEXT, _("&Next"));
   }
 
   m_parentFrameActive = TRUE;
@@ -300,7 +300,10 @@ void wxMDIParentFrame::SetWindowMenu(wxMenu* menu)
     {
         m_windowMenu = menu;
         if (GetMenuBar())
-            InsertWindowMenu(GetClientWindow(), m_hMenu, (HMENU) m_windowMenu->GetHMenu());
+        {
+            InsertWindowMenu(GetClientWindow(), m_hMenu,
+                             GetHMenuOf(m_windowMenu));
+        }
     }
 }
 
