@@ -988,7 +988,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
     // otherwise a string is expected
     else if (PyString_Check(source)) {
         wxString spec = PyString_AS_STRING(source);
-        if (spec[0] == '#' && spec.Length() == 7) {  // It's  #RRGGBB
+        if (spec[0U] == '#' && spec.Length() == 7) {  // It's  #RRGGBB
             char* junk;
             int red   = strtol(spec.Mid(1,2), &junk, 16);
             int green = strtol(spec.Mid(3,2), &junk, 16);
