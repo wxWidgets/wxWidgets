@@ -3082,7 +3082,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                 if ( haveDay )
                 {
                     // we already have the day, so may only be a month or year
-                    if ( val > 12 )
+                    if ( !haveYear && (val > 12) )
                     {
                         isYear = TRUE;
                     }
