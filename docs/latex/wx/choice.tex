@@ -48,6 +48,11 @@ Default constructor.
 \param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
 \param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``choice"}}
 
+\func{}{wxChoice}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
+\param{long}{ style = 0}, \param{const wxValidator\& }{validator = wxDefaultValidator}, \param{const wxString\& }{name = ``choice"}}
+
 Constructor, creating and showing a choice.
 
 \wxheading{Parameters}
@@ -93,6 +98,11 @@ Destructor, destroying the choice item.
 \func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
 \param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
 \param{int}{ n}, \param{const wxString }{choices[]},\rtfsp
+\param{long}{ style = 0}, \param{const wxString\& }{name = ``choice"}}
+
+\func{bool}{Create}{\param{wxWindow *}{parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxPoint\& }{pos}, \param{const wxSize\&}{ size},\rtfsp
+\param{const wxArrayString\& }{choices},\rtfsp
 \param{long}{ style = 0}, \param{const wxString\& }{name = ``choice"}}
 
 Creates the choice for two-step construction. See \helpref{wxChoice::wxChoice}{wxchoiceconstr}.

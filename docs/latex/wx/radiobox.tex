@@ -55,6 +55,13 @@ Default constructor.
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``radioBox"}}
 
+\func{}{wxRadioBox}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\& }{point}, \param{const wxSize\& }{size},\rtfsp
+\param{const wxArrayString\&}{ choices},\rtfsp
+\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_SPECIFY\_COLS},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``radioBox"}}
+
 Constructor, creating and showing a radiobox.
 
 \wxheading{Parameters}
@@ -104,6 +111,13 @@ Destructor, destroying the radiobox item.
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
 \param{const wxPoint\& }{point = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize},\rtfsp
 \param{int}{ n = 0}, \param{const wxString}{ choices[] = NULL},\rtfsp
+\param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_SPECIFY\_COLS},\rtfsp
+\param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
+\param{const wxString\& }{name = ``radioBox"}}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{label},\rtfsp
+\param{const wxPoint\& }{point}, \param{const wxSize\& }{size},\rtfsp
+\param{const wxArrayString\&}{ choices},\rtfsp
 \param{int}{ majorDimension = 0}, \param{long}{ style = wxRA\_SPECIFY\_COLS},\rtfsp
 \param{const wxValidator\& }{validator = wxDefaultValidator},\rtfsp
 \param{const wxString\& }{name = ``radioBox"}}
