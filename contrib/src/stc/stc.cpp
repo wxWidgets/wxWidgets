@@ -88,6 +88,10 @@ BEGIN_EVENT_TABLE(wxStyledTextCtrl, wxControl)
     EVT_SCROLLWIN               (wxStyledTextCtrl::OnScrollWin)
     EVT_SIZE                    (wxStyledTextCtrl::OnSize)
     EVT_LEFT_DOWN               (wxStyledTextCtrl::OnMouseLeftDown)
+#ifdef __WXMSW__
+    // Let Scintilla see the double click as a second click
+    EVT_LEFT_DCLICK             (wxStyledTextCtrl::OnMouseLeftDown)
+#endif
     EVT_MOTION                  (wxStyledTextCtrl::OnMouseMove)
     EVT_LEFT_UP                 (wxStyledTextCtrl::OnMouseLeftUp)
     EVT_RIGHT_UP                (wxStyledTextCtrl::OnMouseRightUp)
