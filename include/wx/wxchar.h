@@ -90,7 +90,16 @@
 
 #if wxUSE_WCHAR_T
     #ifdef HAVE_WCHAR_H
-        #include <wchar.h>
+        // the current (as of Nov 2002) version of cygwin has a bug in its
+        // wchar.h -- there is no extern "C" around the declarations in it and
+        // this results in linking errors later
+        #ifdef __CYGWIN__
+            extern "C" {
+        #endif // Cygwin
+                #include <wchar.h>
+        #ifdef __CYGWIN__
+            }
+        #endif // Cygwin
     #elif defined(HAVE_WCSTR_H)
         // old compilers have relevant declarations here
         #include <wcstr.h>
