@@ -265,7 +265,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_PLATFORM_UNIX_1@	wx/unix/gsockunx.h wx/unix/mimetype.h
 @COND_PLATFORM_WIN32_1@BASE_PLATFORM_HDR = \
 @COND_PLATFORM_WIN32_1@	wx/msw/dde.h wx/msw/gccpriv.h wx/msw/mimetype.h \
-@COND_PLATFORM_WIN32_1@	wx/msw/winundef.h wx/msw/wrapwin.h wx/msw/chkconf.h
+@COND_PLATFORM_WIN32_1@	wx/msw/winundef.h wx/msw/wrapwin.h wx/msw/chkconf.h \
+@COND_PLATFORM_WIN32_1@	wx/msw/crashrpt.h
 @COND_TOOLKIT_COCOA@BASE_PLATFORM_HDR = 
 @COND_TOOLKIT_MAC@BASE_PLATFORM_HDR = 
 @COND_DEPS_TRACKING_0@CCC = $(CC)
@@ -585,7 +586,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_PLATFORM_WIN32_1@	monodll_basemsw.o monodll_dde.o monodll_dir.o \
 @COND_PLATFORM_WIN32_1@	monodll_mimetype.o monodll_regconf.o \
 @COND_PLATFORM_WIN32_1@	monodll_registry.o monodll_snglinst.o \
-@COND_PLATFORM_WIN32_1@	monodll_thread.o monodll_utils.o monodll_utilsexc.o
+@COND_PLATFORM_WIN32_1@	monodll_thread.o monodll_utils.o monodll_utilsexc.o \
+@COND_PLATFORM_WIN32_1@	monodll_crashrpt.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_1)
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = \
@@ -597,7 +599,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_PLATFORM_WIN32_1@	monolib_basemsw.o monolib_dde.o monolib_dir.o \
 @COND_PLATFORM_WIN32_1@	monolib_mimetype.o monolib_regconf.o \
 @COND_PLATFORM_WIN32_1@	monolib_registry.o monolib_snglinst.o \
-@COND_PLATFORM_WIN32_1@	monolib_thread.o monolib_utils.o monolib_utilsexc.o
+@COND_PLATFORM_WIN32_1@	monolib_thread.o monolib_utils.o monolib_utilsexc.o \
+@COND_PLATFORM_WIN32_1@	monolib_crashrpt.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_2)
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = \
@@ -609,7 +612,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_PLATFORM_WIN32_1@	basedll_basemsw.o basedll_dde.o basedll_dir.o \
 @COND_PLATFORM_WIN32_1@	basedll_mimetype.o basedll_regconf.o \
 @COND_PLATFORM_WIN32_1@	basedll_registry.o basedll_snglinst.o \
-@COND_PLATFORM_WIN32_1@	basedll_thread.o basedll_utils.o basedll_utilsexc.o
+@COND_PLATFORM_WIN32_1@	basedll_thread.o basedll_utils.o basedll_utilsexc.o \
+@COND_PLATFORM_WIN32_1@	basedll_crashrpt.o
 @COND_PLATFORM_MACOSX_1@__BASE_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_MACOSX_1@	= $(__BASE_MACOSX_SRC_OBJECTS_3)
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = \
@@ -621,58 +625,60 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_PLATFORM_WIN32_1@	baselib_basemsw.o baselib_dde.o baselib_dir.o \
 @COND_PLATFORM_WIN32_1@	baselib_mimetype.o baselib_regconf.o \
 @COND_PLATFORM_WIN32_1@	baselib_registry.o baselib_snglinst.o \
-@COND_PLATFORM_WIN32_1@	baselib_thread.o baselib_utils.o baselib_utilsexc.o
+@COND_PLATFORM_WIN32_1@	baselib_thread.o baselib_utils.o baselib_utilsexc.o \
+@COND_PLATFORM_WIN32_1@	baselib_crashrpt.o
 @COND_USE_GUI_1_WXUNIV_0@__CORE_SRC_OBJECTS = \
 @COND_USE_GUI_1_WXUNIV_0@	$(__LOWLEVEL_SRC_OBJECTS) $(__GUI_SRC_OBJECTS) \
 @COND_USE_GUI_1_WXUNIV_0@	monodll_selstore.o monodll_busyinfo.o \
 @COND_USE_GUI_1_WXUNIV_0@	monodll_calctrl.o monodll_choicdgg.o \
 @COND_USE_GUI_1_WXUNIV_0@	monodll_dcbuffer.o monodll_dcpsg.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_dirctrlg.o monodll_grid.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_gridctrl.o monodll_gridsel.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_laywin.o monodll_logg.o monodll_numdlgg.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_panelg.o monodll_progdlgg.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_sashwin.o monodll_scrlwing.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_spinctlg.o monodll_splash.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_splitter.o monodll_tbarsmpl.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_textdlgg.o monodll_tipdlg.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_tipwin.o monodll_treectlg.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_vlbox.o monodll_vscroll.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_wizard.o monodll_appcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_fontmap.o monodll_accesscmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_artprov.o monodll_artstd.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_bmpbase.o monodll_choiccmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_clipcmn.o monodll_cmdproc.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_cmndata.o monodll_containr.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_cshelp.o monodll_ctrlcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_ctrlsub.o monodll_datacmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_dbgrid.o monodll_dcbase.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_dlgcmn.o monodll_dndcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_dobjcmn.o monodll_docmdi.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_docview.o monodll_dpycmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_dseldlg.o monodll_effects.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_fddlgcmn.o monodll_fldlgcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_fontcmn.o monodll_framecmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_timercmn.o monodll_toplvcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_gaugecmn.o monodll_gdicmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_geometry.o monodll_gifdecod.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_helpbase.o monodll_iconbndl.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_imagall.o monodll_imagbmp.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_image.o monodll_imaggif.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_imagiff.o monodll_imagjpeg.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_imagpcx.o monodll_imagpng.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_imagpnm.o monodll_imagtiff.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_imagxpm.o monodll_imagfill.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_layout.o monodll_lboxcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_matrix.o monodll_menucmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_nbkbase.o monodll_paper.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_popupcmn.o monodll_prntbase.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_quantize.o monodll_radiocmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_rgncmn.o monodll_settcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_sizer.o monodll_statbar.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_tbarbase.o monodll_textcmn.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_treebase.o monodll_valgen.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_validate.o monodll_valtext.o \
-@COND_USE_GUI_1_WXUNIV_0@	monodll_wincmn.o monodll_xpmdecod.o
+@COND_USE_GUI_1_WXUNIV_0@	monodll_dirctrlg.o monodll_dragimgg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_grid.o monodll_gridctrl.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_gridsel.o monodll_laywin.o monodll_logg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_numdlgg.o monodll_panelg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_progdlgg.o monodll_sashwin.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_scrlwing.o monodll_spinctlg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_splash.o monodll_splitter.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_tbarsmpl.o monodll_textdlgg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_tipdlg.o monodll_tipwin.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_treectlg.o monodll_vlbox.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_vscroll.o monodll_wizard.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_appcmn.o monodll_fontmap.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_accesscmn.o monodll_artprov.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_artstd.o monodll_bmpbase.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_choiccmn.o monodll_clipcmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_cmdproc.o monodll_cmndata.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_containr.o monodll_cshelp.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_ctrlcmn.o monodll_ctrlsub.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_datacmn.o monodll_dbgrid.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_dcbase.o monodll_dlgcmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_dndcmn.o monodll_dobjcmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_docmdi.o monodll_docview.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_dpycmn.o monodll_dseldlg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_effects.o monodll_fddlgcmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_fldlgcmn.o monodll_fontcmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_framecmn.o monodll_timercmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_toplvcmn.o monodll_gaugecmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_gdicmn.o monodll_geometry.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_gifdecod.o monodll_helpbase.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_iconbndl.o monodll_imagall.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_imagbmp.o monodll_image.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_imaggif.o monodll_imagiff.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_imagjpeg.o monodll_imagpcx.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_imagpng.o monodll_imagpnm.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_imagtiff.o monodll_imagxpm.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_imagfill.o monodll_layout.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_lboxcmn.o monodll_matrix.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_menucmn.o monodll_nbkbase.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_paper.o monodll_popupcmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_prntbase.o monodll_quantize.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_radiocmn.o monodll_rgncmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_settcmn.o monodll_sizer.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_statbar.o monodll_tbarbase.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_textcmn.o monodll_treebase.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_valgen.o monodll_validate.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_valtext.o monodll_wincmn.o \
+@COND_USE_GUI_1_WXUNIV_0@	monodll_xpmdecod.o
 @COND_USE_GUI_1_WXUNIV_1@__CORE_SRC_OBJECTS = \
 @COND_USE_GUI_1_WXUNIV_1@	$(__LOWLEVEL_SRC_OBJECTS) \
 @COND_USE_GUI_1_WXUNIV_1@	$(__UNIV_TEXTCTRL_OBJECTS) monodll_bmpbuttn.o \
@@ -701,7 +707,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_1@	monodll_metal.o monodll_selstore.o \
 @COND_USE_GUI_1_WXUNIV_1@	monodll_busyinfo.o monodll_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_1@	monodll_choicdgg.o monodll_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_1@	monodll_dcpsg.o monodll_dirctrlg.o monodll_grid.o \
+@COND_USE_GUI_1_WXUNIV_1@	monodll_dcpsg.o monodll_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_1@	monodll_dragimgg.o monodll_grid.o \
 @COND_USE_GUI_1_WXUNIV_1@	monodll_gridctrl.o monodll_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_1@	monodll_laywin.o monodll_logg.o monodll_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_1@	monodll_panelg.o monodll_progdlgg.o \
@@ -752,7 +759,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_0@	$(__GUI_SRC_OBJECTS_1) monolib_selstore.o \
 @COND_USE_GUI_1_WXUNIV_0@	monolib_busyinfo.o monolib_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_0@	monolib_choicdgg.o monolib_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_0@	monolib_dcpsg.o monolib_dirctrlg.o monolib_grid.o \
+@COND_USE_GUI_1_WXUNIV_0@	monolib_dcpsg.o monolib_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_0@	monolib_dragimgg.o monolib_grid.o \
 @COND_USE_GUI_1_WXUNIV_0@	monolib_gridctrl.o monolib_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_0@	monolib_laywin.o monolib_logg.o monolib_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_0@	monolib_panelg.o monolib_progdlgg.o \
@@ -826,7 +834,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_1@	monolib_metal.o monolib_selstore.o \
 @COND_USE_GUI_1_WXUNIV_1@	monolib_busyinfo.o monolib_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_1@	monolib_choicdgg.o monolib_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_1@	monolib_dcpsg.o monolib_dirctrlg.o monolib_grid.o \
+@COND_USE_GUI_1_WXUNIV_1@	monolib_dcpsg.o monolib_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_1@	monolib_dragimgg.o monolib_grid.o \
 @COND_USE_GUI_1_WXUNIV_1@	monolib_gridctrl.o monolib_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_1@	monolib_laywin.o monolib_logg.o monolib_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_1@	monolib_panelg.o monolib_progdlgg.o \
@@ -877,7 +886,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_0@	$(__GUI_SRC_OBJECTS_2) coredll_selstore.o \
 @COND_USE_GUI_1_WXUNIV_0@	coredll_busyinfo.o coredll_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_0@	coredll_choicdgg.o coredll_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_0@	coredll_dcpsg.o coredll_dirctrlg.o coredll_grid.o \
+@COND_USE_GUI_1_WXUNIV_0@	coredll_dcpsg.o coredll_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_0@	coredll_dragimgg.o coredll_grid.o \
 @COND_USE_GUI_1_WXUNIV_0@	coredll_gridctrl.o coredll_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_0@	coredll_laywin.o coredll_logg.o coredll_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_0@	coredll_panelg.o coredll_progdlgg.o \
@@ -951,7 +961,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_1@	coredll_metal.o coredll_selstore.o \
 @COND_USE_GUI_1_WXUNIV_1@	coredll_busyinfo.o coredll_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_1@	coredll_choicdgg.o coredll_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_1@	coredll_dcpsg.o coredll_dirctrlg.o coredll_grid.o \
+@COND_USE_GUI_1_WXUNIV_1@	coredll_dcpsg.o coredll_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_1@	coredll_dragimgg.o coredll_grid.o \
 @COND_USE_GUI_1_WXUNIV_1@	coredll_gridctrl.o coredll_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_1@	coredll_laywin.o coredll_logg.o coredll_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_1@	coredll_panelg.o coredll_progdlgg.o \
@@ -1002,7 +1013,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_0@	$(__GUI_SRC_OBJECTS_3) corelib_selstore.o \
 @COND_USE_GUI_1_WXUNIV_0@	corelib_busyinfo.o corelib_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_0@	corelib_choicdgg.o corelib_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_0@	corelib_dcpsg.o corelib_dirctrlg.o corelib_grid.o \
+@COND_USE_GUI_1_WXUNIV_0@	corelib_dcpsg.o corelib_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_0@	corelib_dragimgg.o corelib_grid.o \
 @COND_USE_GUI_1_WXUNIV_0@	corelib_gridctrl.o corelib_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_0@	corelib_laywin.o corelib_logg.o corelib_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_0@	corelib_panelg.o corelib_progdlgg.o \
@@ -1076,7 +1088,8 @@ WXZLIB_CFLAGS = $(CPPFLAGS)   $(CFLAGS)
 @COND_USE_GUI_1_WXUNIV_1@	corelib_metal.o corelib_selstore.o \
 @COND_USE_GUI_1_WXUNIV_1@	corelib_busyinfo.o corelib_calctrl.o \
 @COND_USE_GUI_1_WXUNIV_1@	corelib_choicdgg.o corelib_dcbuffer.o \
-@COND_USE_GUI_1_WXUNIV_1@	corelib_dcpsg.o corelib_dirctrlg.o corelib_grid.o \
+@COND_USE_GUI_1_WXUNIV_1@	corelib_dcpsg.o corelib_dirctrlg.o \
+@COND_USE_GUI_1_WXUNIV_1@	corelib_dragimgg.o corelib_grid.o \
 @COND_USE_GUI_1_WXUNIV_1@	corelib_gridctrl.o corelib_gridsel.o \
 @COND_USE_GUI_1_WXUNIV_1@	corelib_laywin.o corelib_logg.o corelib_numdlgg.o \
 @COND_USE_GUI_1_WXUNIV_1@	corelib_panelg.o corelib_progdlgg.o \
@@ -2281,6 +2294,9 @@ basedll_cmdline.o: $(srcdir)/src/common/cmdline.cpp
 basedll_config.o: $(srcdir)/src/common/config.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_datetime.o: $(srcdir)/src/common/datetime.cpp
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -2605,6 +2621,9 @@ baselib_cmdline.o: $(srcdir)/src/common/cmdline.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_config.o: $(srcdir)/src/common/config.cpp
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_datetime.o: $(srcdir)/src/common/datetime.cpp
@@ -3634,6 +3653,9 @@ coredll_combobox_native.o: $(srcdir)/src/motif/combobox_native.cpp
 
 coredll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_USE_GUI_1@coredll_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -5757,6 +5779,9 @@ corelib_combobox_native.o: $(srcdir)/src/motif/combobox_native.cpp
 
 corelib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_USE_GUI_1@corelib_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
@@ -7918,6 +7943,9 @@ monodll_config.o: $(srcdir)/src/common/config.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monodll_control.o: $(srcdir)/src/os2/control.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 @COND_USE_GUI_1@monodll_cshelp.o: $(srcdir)/src/common/cshelp.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -8238,6 +8266,9 @@ monodll_dirmac.o: $(srcdir)/src/mac/dirmac.cpp
 
 monodll_dragimag.o: $(srcdir)/src/msw/dragimag.cpp
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_USE_GUI_1@monodll_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -10401,6 +10432,9 @@ monolib_config.o: $(srcdir)/src/common/config.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@monolib_control.o: $(srcdir)/src/os2/control.cpp
 @COND_TOOLKIT_OS2_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
+monolib_crashrpt.o: $(srcdir)/src/msw/crashrpt.cpp
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
 @COND_USE_GUI_1@monolib_cshelp.o: $(srcdir)/src/common/cshelp.cpp
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10721,6 +10755,9 @@ monolib_dirmac.o: $(srcdir)/src/mac/dirmac.cpp
 
 monolib_dragimag.o: $(srcdir)/src/msw/dragimag.cpp
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_USE_GUI_1@monolib_dragimgg.o: $(srcdir)/src/generic/dragimgg.cpp
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_dropsrc.o: $(srcdir)/src/msw/ole/dropsrc.cpp
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<

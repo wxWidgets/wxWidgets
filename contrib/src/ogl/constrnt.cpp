@@ -24,7 +24,9 @@
 #include <wx/wx.h>
 #endif
 
+#if wxUSE_DEPRECATED
 #include <wx/deprecated/wxexpr.h>
+#endif
 
 #include <wx/ogl/basic.h>
 #include <wx/ogl/constrnt.h>

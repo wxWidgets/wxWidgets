@@ -16,7 +16,9 @@
 #pragma interface "ogldiag.h"
 #endif
 
-#include <wx/deprecated/setup.h>
+#if wxUSE_DEPRECATED
+#include <wx/deprecated/wxexpr.h>
+#endif
 
 #if wxUSE_PROLOGIO
 #include <wx/deprecated/wxexpr.h>
