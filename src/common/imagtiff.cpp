@@ -52,8 +52,7 @@ _tiffReadProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxInputStream *stream = (wxInputStream*) handle;
     stream->Read( (void*) buf, (size_t) size );
-    if (!*stream) return 0;
-    return size;
+    return stream->LastRead();
 }
 
 static tsize_t
@@ -61,8 +60,7 @@ _tiffWriteProc(thandle_t handle, tdata_t buf, tsize_t size)
 {
     wxOutputStream *stream = (wxOutputStream*) handle;
     stream->Write( (void*) buf, (size_t) size );
-    if (!*stream) return 0;
-    return size;
+    return stream->LastWrite();
 }
 
 static toff_t
@@ -91,8 +89,7 @@ static toff_t
 _tiffSizeProc(thandle_t handle)
 {
     wxInputStream *stream = (wxInputStream*) handle;
-    long fsize;
-    return ((fsize = stream->SeekI(0, wxFromEnd)) < 0 ? 0 : fsize);
+    return (toff_t) stream->GetSize();
 }
 
 static int
@@ -126,7 +123,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
 {
     image->Destroy();
     
-    TIFF *tif = TIFFwxOpen( stream, "horse.tif", "r" );
+    TIFF *tif = TIFFwxOpen( stream, "image", "r" );
     
     if (!tif)
     {
@@ -228,15 +225,13 @@ bool wxTIFFHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
 
 bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 {
-    return TRUE;
+    unsigned char hdr[2];
 
-/*
-    unsigned char hdr[4];
-
-    stream.Read(&hdr, 4);
-    stream.SeekI(-4, wxFromCurrent);
-    return (hdr[0] == 'T' && hdr[1] == 'I' && hdr[2] == 'F' && hdr[3] == 'F');
-*/
+    stream.Read(&hdr, 2);
+    stream.SeekI(-2, wxFromCurrent);
+    
+    return ((hdr[0] == 0x49 && hdr[1] == 0x49) ||
+            (hdr[0] == 0x4D && hdr[1] == 0x4D));
 }
 
 

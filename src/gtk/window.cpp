@@ -223,6 +223,7 @@ static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
 
 void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window )
 {
+/*
     wxString tmp = name;
     tmp += wxT(" FROM ");
     tmp += window;
@@ -233,6 +234,7 @@ void debug_focus_in( GtkWidget* widget, const wxChar* name, const wxChar *window
 
     gtk_signal_connect( GTK_OBJECT(widget), "focus_in_event",
       GTK_SIGNAL_FUNC(gtk_debug_focus_in_callback), (gpointer)s );
+*/
 }
 
 #endif // Debug

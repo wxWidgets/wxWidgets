@@ -224,8 +224,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.DrawText( "PNM handler", 30, 1285 );
   if (my_horse_pnm && my_horse_pnm->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1300 );
   
-  dc.DrawText( "TIFF handler", 30, 1415 );
-  if (my_horse_tiff && my_horse_tiff->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1430 );
+  dc.DrawText( "TIFF handler", 30, 1515 );
+  if (my_horse_tiff && my_horse_tiff->Ok()) dc.DrawBitmap( *my_horse_pnm, 30, 1530 );
 }
 
 void MyCanvas::CreateAntiAliasedBitmap()
