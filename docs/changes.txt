@@ -1,6 +1,15 @@
 wxWindows 2 Change Log
 ----------------------
 
+INCOMPATIBLE CHANGES
+--------------------
+
+wxMSW:
+
+- wxListCtrl::Find() parameter meaning changed, see docs for details
+  (starting item is now included in the search, use 0 to search from the
+   beginning)
+
 2.2.1
 -----
 
