@@ -63,6 +63,15 @@
     #define __CYGWIN10__
 #endif
 
+/* Check for Mingw runtime version: */
+#if defined(__MINGW32_MAJOR_VERSION) && defined(__MINGW32_MINOR_VERSION)
+    #define wxCHECK_MINGW32_VERSION( major, minor ) \
+ ( ( ( __MINGW32_MAJOR_VERSION > (major) ) \
+      || ( __MINGW32_MAJOR_VERSION == (major) && __MINGW32_MINOR_VERSION >= (minor) ) ) )
+#else
+    #define wxCHECK_MINGW32_VERSION( major, minor ) (0)
+#endif
+
 /* Mingw runtime 1.0-20010604 has some missing _tXXXX functions,
    so let's define them ourselves: */
 #if defined(__GNUWIN32__) && wxCHECK_W32API_VERSION( 1, 0 ) \
@@ -90,16 +99,17 @@
     #endif
 #endif
 
-// current mingw32 headers forget to define _puttchar, this will probably be
-// fixed in the next versions but for now do it ourselves
-#if defined( __MINGW32__ ) && !defined( _puttchar )
+// current (= before mingw-runtime 3.3) mingw32 headers forget to
+// define _puttchar, this will probably be fixed in the next versions but
+// for now do it ourselves
+#if defined( __MINGW32__ ) && \
+        !wxCHECK_MINGW32_VERSION(3,3) && !defined( _puttchar )
     #ifdef wxUSE_UNICODE
         #define  _puttchar   putwchar
     #else
         #define  _puttchar   puttchar
     #endif
 #endif
-
 
 #endif
   /* _WX_MSW_GCCPRIV_H_ */
