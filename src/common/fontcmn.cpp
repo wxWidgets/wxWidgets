@@ -32,6 +32,7 @@
     #include "wx/font.h"
 #endif // WX_PRECOMP
 
+#include "wx/gdicmn.h"
 #include "wx/fontutil.h" // for wxNativeFontInfo
 
 #include "wx/tokenzr.h"
@@ -69,14 +70,14 @@ wxFont *wxFontBase::New(const wxString& strNativeFontDesc)
 {
     wxNativeFontInfo fontInfo;
     if ( !fontInfo.FromString(strNativeFontDesc) )
-        return (wxFont *)NULL;
+        return new wxFont(*wxNORMAL_FONT);
 
     return New(fontInfo);
 }
 
 wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 {
-#if !defined(__WXGTK__)
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
     wxNativeFontInfo *fontInfo = new wxNativeFontInfo;
 
     fontInfo->pointSize = GetPointSize();
@@ -95,7 +96,7 @@ wxNativeFontInfo *wxFontBase::GetNativeFontInfo() const
 
 void wxFontBase::SetNativeFontInfo(const wxNativeFontInfo& info)
 {
-#if !defined(__WXGTK__)
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
     SetPointSize(info.pointSize);
     SetFamily(info.family);
     SetStyle(info.style);
@@ -180,7 +181,7 @@ wxString wxFontBase::GetWeightString() const
     }
 }
 
-#if !defined(__WXGTK__)
+#if !defined(__WXGTK__) && !defined(__WXMSW__)
 
 // ----------------------------------------------------------------------------
 // wxNativeFontInfo
@@ -189,7 +190,7 @@ wxString wxFontBase::GetWeightString() const
 // These are the generic forms of FromString()/ToString.
 //
 // convert to/from the string representation: format is
-//      pointsize;family;style;weight;underlined;facename;encoding
+//      version;pointsize;family;style;weight;underlined;facename;encoding
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
@@ -198,6 +199,11 @@ bool wxNativeFontInfo::FromString(const wxString& s)
     wxStringTokenizer tokenizer(s, _T(";"));
 
     wxString token = tokenizer.GetNextToken();
+    //
+    //  Ignore the version for now
+    //
+    
+    token = tokenizer.GetNextToken();
     if ( !token.ToLong(&l) )
         return FALSE;
     pointSize = (int)l;
@@ -238,7 +244,8 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxString s;
 
-    s.Printf(_T("%d;%d;%d;%d;%d;%s;%d"),
+    s.Printf(_T("%d;%d;%d;%d;%d;%d;%s;%d"),
+             0,                                 // version
              pointSize,
              family,
              style,

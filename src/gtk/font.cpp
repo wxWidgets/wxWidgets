@@ -152,13 +152,29 @@ wxFontRefData::~wxFontRefData()
 
 bool wxNativeFontInfo::FromString(const wxString& s)
 {
-    xFontName = s;
+    wxStringTokenizer tokenizer(s, _T(";"));
+
+    wxString token = tokenizer.GetNextToken();
+    //
+    //  Ignore the version for now
+    //
+
+    xFontName = tokenizer.GetNextToken();
+    if(!xFontName)
+        return FALSE;
+        
     return TRUE;
 }
 
 wxString wxNativeFontInfo::ToString() const
 {
-    return xFontName;
+    wxString s;
+    
+    s.Printf("%d;%s", 
+             0,                         // version
+             xFontName.c_str());
+             
+    return s;
 }
 
 // ----------------------------------------------------------------------------
@@ -177,7 +193,7 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 {
     Init();
 
-    Create(info.ToString());
+    Create(info.xFontName);
 }
 
 bool wxFont::Create(const wxNativeFontInfo& info)

@@ -403,78 +403,10 @@ void wxFillLogFont(LOGFONT *logFont, const wxFont *font)
 
 wxFont wxCreateFontFromLogFont(const LOGFONT *logFont)
 {
-    // extract family from pitch-and-family
-    int lfFamily = logFont->lfPitchAndFamily;
-    if ( lfFamily & FIXED_PITCH )
-        lfFamily -= FIXED_PITCH;
-    if ( lfFamily & VARIABLE_PITCH )
-        lfFamily -= VARIABLE_PITCH;
+    wxNativeFontInfo info;
 
-    int fontFamily;
-    switch ( lfFamily )
-    {
-        case FF_ROMAN:
-            fontFamily = wxROMAN;
-            break;
+    info.lf = *logFont;
 
-        case FF_SWISS:
-            fontFamily = wxSWISS;
-            break;
-
-        case FF_SCRIPT:
-            fontFamily = wxSCRIPT;
-            break;
-
-        case FF_MODERN:
-            fontFamily = wxMODERN;
-            break;
-
-        case FF_DECORATIVE:
-            fontFamily = wxDECORATIVE;
-            break;
-
-        default:
-            fontFamily = wxSWISS;
-    }
-
-    // weight and style
-    int fontWeight = wxNORMAL;
-    switch ( logFont->lfWeight )
-    {
-        case FW_LIGHT:
-            fontWeight = wxLIGHT;
-            break;
-
-        default:
-        case FW_NORMAL:
-            fontWeight = wxNORMAL;
-            break;
-
-        case FW_BOLD:
-            fontWeight = wxBOLD;
-            break;
-    }
-
-    int fontStyle = logFont->lfItalic ? wxITALIC : wxNORMAL;
-
-    bool fontUnderline = logFont->lfUnderline != 0;
-
-    wxString fontFace = logFont->lfFaceName;
-
-    // remember that 1pt = 1/72inch
-    int height = abs(logFont->lfHeight);
-
-#if wxUSE_SCREEN_DPI
-    HDC dc = ::GetDC(NULL);
-    static const int ppInch = GetDeviceCaps(dc, LOGPIXELSY);
-    ::ReleaseDC(NULL, dc);
-#else
-    static const int ppInch = 96;
-#endif
-    int fontPoints = (int) (((72.0*((double)height))/(double) ppInch) + 0.5);
-
-    return wxFont(fontPoints, fontFamily, fontStyle,
-                  fontWeight, fontUnderline, fontFace,
-                  wxGetFontEncFromCharSet(logFont->lfCharSet));
+    return wxFont(info);
 }
 

@@ -26,6 +26,11 @@
 
 #include "wx/font.h"        // for wxFont and wxFontEncoding
 
+#if defined(__WXMSW__)
+#include <windows.h>
+#include "wx/msw/winundef.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -39,6 +44,8 @@ struct WXDLLEXPORT wxNativeFontInfo
 {
 #if defined(__WXGTK__)
     wxString     xFontName;
+#elif defined(__WXMSW__)
+    LOGFONT      lf;
 #else // other platforms
     //
     //  This is a generic implementation that should work on all ports
