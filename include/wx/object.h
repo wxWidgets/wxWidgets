@@ -348,12 +348,13 @@ name##PluginSentinel  m_pluginsentinel;
 
 
 #ifdef __WXDEBUG__
-inline void wxCheckCast(void *ptr)
+inline void* wxCheckCast(void *ptr)
 {
     wxASSERT_MSG( ptr, _T("wxStaticCast() used incorrectly") );
+    return ptr;
 }
 #define wxStaticCast(obj, className) \
- (wxCheckCast(wxDynamicCast(obj, className)), ((className *)(obj)))
+ ((className *)wxCheckCast(wxDynamicCast(obj, className)))
 
 #else  // !__WXDEBUG__
 #define wxStaticCast(obj, className) ((className *)(obj))
