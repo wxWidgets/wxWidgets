@@ -29,13 +29,13 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
            const wxValidator& validator,
            const wxString& name)
 {
-    m_buttonBitmap = bitmap;
+    m_bmpNormal = bitmap;
  
     m_marginX = 0;
     m_marginY = 0;
 
-    int x = pos.x;
-    int y = pos.y;
+    // int x = pos.x;
+    // int y = pos.y;
     int width = size.x;
     int height = size.y;
 
@@ -52,8 +52,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 	Rect bounds ;
 	Str255 title ;
-    m_buttonBitmap = bitmap;
-	wxBitmapRefData * bmap = (wxBitmapRefData*) ( m_buttonBitmap.GetRefData()) ;
+        m_bmpNormal = bitmap;
+	wxBitmapRefData * bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
 	
 	MacPreControlCreate( parent , id ,  "" , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
 
@@ -64,7 +64,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 	wxASSERT_MSG( (ControlHandle) m_macControl != NULL , "No valid mac control" ) ;
 	
 	ControlButtonContentInfo info ;
-	wxMacCreateBitmapButton( &info , m_buttonBitmap ) ;
+	wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
 	if ( info.contentType != kControlNoContent )
 	{
 	    ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
@@ -76,13 +76,13 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
 
 void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
 {
-    m_buttonBitmap = bitmap;
+    m_bmpNormal = bitmap;
 
-	ControlButtonContentInfo info ;
-	wxMacCreateBitmapButton( &info , m_buttonBitmap ) ;
-	if ( info.contentType != kControlNoContent )
-	{
-	    ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+    ControlButtonContentInfo info ;
+    wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
+    if ( info.contentType != kControlNoContent )
+    {
+        ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
 }
 
