@@ -82,8 +82,15 @@ public:
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
 private:
+    // FIXME: shouldn't we destroy these windows somewhere?
+
     // used by DrawHeaderButton and DrawComboBoxDropButton
-    void PrepareButtonDraw();
+    static GtkWidget *GetButtonWidget();
+
+#ifdef __WXGTK20__
+    // used by DrawTreeItemButton()
+    static GtkWidget *GetTreeWidget();
+#endif // GTK+ 2.0
 };
 
 // ============================================================================
@@ -99,25 +106,48 @@ wxRendererNative& wxRendererNative::GetDefault()
 }
 
 // ----------------------------------------------------------------------------
-// common code
+// helper functions
 // ----------------------------------------------------------------------------
 
-static GtkWidget *gs_button = NULL;
-static GtkWidget *gs_window = NULL;
-
-void
-wxRendererGTK::PrepareButtonDraw()
+GtkWidget *
+wxRendererGTK::GetButtonWidget()
 {
-    // prepares gs_button and gs_window which are used when
-    // drawing button based elements.
-    wxASSERT ( !gs_button );
+    static GtkWidget *s_button = NULL;
+    static GtkWidget *s_window = NULL;
 
-    gs_window = gtk_window_new( GTK_WINDOW_POPUP );
-    gtk_widget_realize( gs_window );
-    gs_button = gtk_button_new();
-    gtk_container_add( GTK_CONTAINER(gs_window), gs_button );
-    gtk_widget_realize( gs_button );
+    if ( !s_button )
+    {
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        s_button = gtk_button_new();
+        gtk_container_add( GTK_CONTAINER(s_window), s_button );
+        gtk_widget_realize( s_button );
+    }
+
+    return s_button;
 }
+
+#ifdef __WXGTK20__
+
+GtkWidget *
+wxRendererGTK::GetTreeWidget()
+{
+    static GtkWidget *s_tree = NULL;
+    static GtkWidget *s_window = NULL;
+
+    if ( !s_tree )
+    {
+        s_tree = gtk_tree_view_new();
+        s_window = gtk_window_new( GTK_WINDOW_POPUP );
+        gtk_widget_realize( s_window );
+        gtk_container_add( GTK_CONTAINER(s_window), s_tree );
+        gtk_widget_realize( s_tree );
+    }
+
+    return s_tree;
+}
+
+#endif // GTK+ 2.0
 
 // ----------------------------------------------------------------------------
 // list/tree controls drawing
@@ -130,19 +160,18 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 int flags)
 {
 
-    if (gs_button == NULL)
-        PrepareButtonDraw();
+    GtkWidget *button = GetButtonWidget();
 
     gtk_paint_box
     (
-        gs_button->style,
+        button->style,
         // FIXME: I suppose GTK_PIZZA(win->m_wxwindow)->bin_window doesn't work with wxMemoryDC.
         //   Maybe use code similar as in DrawComboBoxDropButton below?
         GTK_PIZZA(win->m_wxwindow)->bin_window,
         flags & wxCONTROL_DISABLED ? GTK_STATE_INSENSITIVE : GTK_STATE_NORMAL,
         GTK_SHADOW_OUT,
         NULL,
-        gs_button,
+        button,
         "button",
         dc.XLOG2DEV(rect.x) -1, rect.y -1, rect.width +2, rect.height +2
     );
@@ -151,53 +180,30 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
 #ifdef __WXGTK20__
 
 // draw a ">" or "v" button
-//
-// TODO: replace the code below with gtk_paint_expander()
 void
 wxRendererGTK::DrawTreeItemButton(wxWindow* win,
                                   wxDC& dc, const wxRect& rect, int flags)
 {
-#define PM_SIZE 8
+    GtkWidget *tree = GetTreeWidget();
 
-    GtkPizza *pizza = GTK_PIZZA( win->m_wxwindow );
-    GtkStyle *style = win->m_widget->style;
-    int x = rect.x;
-    int y = rect.y;
-    y = dc.LogicalToDeviceY( y );
-    x = dc.LogicalToDeviceX( x );
-
-    // This draws the GTK+ 2.2.4 triangle
-    x--;
-    GdkPoint points[3];
-
-    if ( flags & wxCONTROL_EXPANDED )
-    {
-        points[0].x = x;
-        points[0].y = y + (PM_SIZE + 2) / 6;
-        points[1].x = points[0].x + (PM_SIZE + 2);
-        points[1].y = points[0].y;
-        points[2].x = (points[0].x + (PM_SIZE + 2) / 2);
-        points[2].y = y + 2 * (PM_SIZE + 2) / 3;
-    }
-    else
-    {
-        points[0].x = x + ((PM_SIZE + 2) / 6 + 2);
-        points[0].y = y - 1;
-        points[1].x = points[0].x;
-        points[1].y = points[0].y + (PM_SIZE + 2);
-        points[2].x = (points[0].x +
-             (2 * (PM_SIZE + 2) / 3 - 1));
-        points[2].y = points[0].y + (PM_SIZE + 2) / 2;
-    }
-
-    if ( flags & wxCONTROL_CURRENT )
-        gdk_draw_polygon( pizza->bin_window, style->fg_gc[GTK_STATE_PRELIGHT], TRUE, points, 3);
-    else
-        gdk_draw_polygon( pizza->bin_window, style->base_gc[GTK_STATE_NORMAL], TRUE, points, 3);
-    gdk_draw_polygon( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL], FALSE, points, 3 );
+    // VZ: I don't know how to get the size of the expander so as to centre it
+    //     in the given rectangle, +2/3 below is just what looks good here...
+    gtk_paint_expander
+    (
+        tree->style,
+        GTK_PIZZA(win->m_wxwindow)->bin_window,
+        GTK_STATE_NORMAL,
+        NULL,
+        tree,
+        "treeview",
+        dc.LogicalToDeviceX(rect.x) + 2,
+        dc.LogicalToDeviceY(rect.y) + 3,
+        flags & wxCONTROL_EXPANDED ? GTK_EXPANDER_EXPANDED
+                                   : GTK_EXPANDER_COLLAPSED
+    );
 }
 
-#endif // __WXGTK20__
+#endif // GTK+ 2.0
 
 // ----------------------------------------------------------------------------
 // splitter sash drawing
@@ -372,8 +378,7 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
                                             const wxRect& rect,
                                             int flags)
 {
-    if (gs_button == NULL)
-        PrepareButtonDraw();
+    GtkWidget *button = GetButtonWidget();
 
     // device context must inherit from wxWindowDC
     // (so it must be wxClientDC, wxMemoryDC or wxPaintDC)
@@ -394,12 +399,12 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     // erase background first
     gtk_paint_box
     (
-        gs_button->style,
+        button->style,
         wdc.m_window,
         state,
         GTK_SHADOW_NONE,
         NULL,
-        gs_button,
+        button,
         "button",
         rect.x, rect.y, rect.width, rect.height
     );
@@ -407,12 +412,12 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     // draw arrow on button
     gtk_paint_arrow
     (
-        gs_button->style,
+        button->style,
         wdc.m_window,
         state,
         flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,
-        gs_button,
+        button,
         "arrow",
         GTK_ARROW_DOWN,
         FALSE,
