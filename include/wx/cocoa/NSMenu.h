@@ -34,11 +34,11 @@ public:
     ,   OBSERVE_DidSendAction       = 0x08
     ,   OBSERVE_WillSendAction      = 0x10
     };
-    void CocoaNotification_menuDidAddItem(WX_NSNotification notification) {}
-    void CocoaNotification_menuDidChangeItem(WX_NSNotification notification) {}
-    void CocoaNotification_menuDidRemoveItem(WX_NSNotification notification) {}
-    void CocoaNotification_menuDidSendAction(WX_NSNotification notification) {}
-    void CocoaNotification_menuWillSendAction(WX_NSNotification notification) {}
+    virtual void CocoaNotification_menuDidAddItem(WX_NSNotification notification) {}
+    virtual void CocoaNotification_menuDidChangeItem(WX_NSNotification notification) {}
+    virtual void CocoaNotification_menuDidRemoveItem(WX_NSNotification notification) {}
+    virtual void CocoaNotification_menuDidSendAction(WX_NSNotification notification) {}
+    virtual void CocoaNotification_menuWillSendAction(WX_NSNotification notification) {}
 protected:
     static struct objc_object *sm_cocoaObserver;
 };
