@@ -1598,7 +1598,6 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     m_vAdjust = gtk_range_get_adjustment( GTK_RANGE(s_window->vscrollbar) );
 
     m_wxwindow = gtk_myfixed_new();
-    gtk_widget_show( m_wxwindow );
 
 #ifdef __WXDEBUG__
     debug_focus_in( m_wxwindow, _T("wxWindow::m_wxwindow"), name );
@@ -1654,6 +1653,9 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     /* grab the actual focus */
 //    gtk_widget_grab_focus( m_wxwindow );
 
+    gtk_widget_show( m_wxwindow );
+
+    
 #if (GTK_MINOR_VERSION == 0)
     // shut the viewport up
     gtk_viewport_set_hadjustment( viewport, (GtkAdjustment*) gtk_adjustment_new( 0.0, 0.0, 0.0, 0.0, 0.0, 0.0) );
