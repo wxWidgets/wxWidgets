@@ -59,7 +59,7 @@ available at dates convenient to the developers.<P>
 
 <H4>Release 2.1.14</H4>
 
-Release date: February 13 or 20, 2000<P>
+Release date: March 12, 2000<P>
 
 This will be the final beta release before the final 2.2 release. It will be
 synchronized for as many platforms as possible (at least Windows and GTK,
@@ -68,24 +68,26 @@ probably Motif and hopefully Mac).
 Changes since the last synchronized release (2.1.11):
 
 <ul>
-<li>first beta release of wxBase
-<li>new or significantly improved base classes: wxDateTime, wxLongLong,
+<li>First beta release of wxBase
+<li>New or significantly improved base classes: wxDateTime, wxLongLong,
 wxCmdLineParser, wxDir, wxStopWatch
-<li>much better i18n support, encoding conversion on the fly, wxFontMapper
-<li>new wxGrid class
-<li>new wxCalendarCtrl class
-<li>dynamic toolbar/menubar management
-<li>better image formats support: TIFF (new), PCX (improved)
-<li>attributes (custom colours/font) support in wxTreeCtrl, wxListCtrl
-<li>impressive number of fixed bugs in wxMSW and wxGTK including various
+<li>Much better i18n support, encoding conversion on the fly, wxFontMapper
+<li>New wxGrid class
+<li>New wxCalendarCtrl class
+<li>Dynamic toolbar/menubar management
+<li>Better image formats support: TIFF (new), PCX (8 and 24 bit saving added)
+<li>Attributes (custom colours/font) support in wxTreeCtrl, wxListCtrl
+<li>Impressive number of fixed bugs in wxMSW and wxGTK including various
 incompatibilities between the two
+<li>wxIPCxxx classes reworked.
+<li>Several new samples and demos.
 </ul>
 
 <P>
 
 <H4>Release 2.2 (stable)</H4>
 
-Release date: March 5, 2000.<P>
+Release date: mid. April, 2000.<P>
 
 This is the next stable version of wxWindows. No new features since
 2.1.14 beta.
@@ -107,7 +109,7 @@ Release date: ?
 <li>More i18n issues: dates, times, ...
 <li>POSIX-like regular expressions support for all platforms.
 <li>Encryption support (interface to OpenSSL).
-<li>UDP support in wxSocket
+<li>Full UDP support in wxSocket
 <li>wxPlot
 <li>XML for resource files.
 <li>Built-in support for configuring key bindings
@@ -143,21 +145,23 @@ Developers: please feel free to add to these, and delete them when they are done
 <P>
 
 <ul>
+<li>wxHTML printing. When finished, this will allow an application to generate
+printed reports with very little effort.
+<li>Split library into several, for base (classes and functions usable by console and GUI
+applications), console (classes and functions usable by console application only)
+and GUI (classes and functions usable by GUI application only).
 <li>wxSocket.
 <li>wxImage handlers in separate .h and .cpp files.
 <li>PCX writing code.
-<li>Tidying of timer code, addition of wxChrono class.
+<li>Tidying of timer code, addition of wxStopWatch class.
+<li>wxDateTime class.
+<li>Rotated text support (might still be improved)
 <li>Bug tracking system.
 </ul>
 
 <B><I>General</I></B><P>
 
 <ul>
-<li>wxHTML printing. When finished, this will allow an application to generate
-printed reports with very little effort.
-<li>Split library into several, for base (classes and functions usable by console and GUI
-applications), console (classes and functions usable by console application only)
-and GUI (classes and functions usable by GUI application only).
 <li>Extend and unify drag and drop handling (e.g. we need to specify multiple drop targets
 that can handle multiple formats).
 <li>Expand the number of controls that can be specified in a WXR file;
@@ -175,11 +179,9 @@ wxPhoneDialer for dialing arbitrary phone numbers and otherwise communicating
 with the modem.
 <li>GIF animation code (support is already there, but wxAnimation is not yet complete)
 <li>Debug wxPostScriptDC further.
-<li>wxDateTime class.
 <li>Regular expressions support.
 <li>Expansion of wxHTML to support further tags, and frames.
 <li>MGL port (see Backroom/Future Ports page).
-<li>Rotated text support.
 <li>FreeType support.
 <li>Support for 'skins', perhaps using a set of alternative control and window classes
 written generically in wxWindows.
