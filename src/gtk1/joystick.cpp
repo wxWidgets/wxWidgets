@@ -347,7 +347,7 @@ bool wxJoystick::HasPOVCTS(void) const
 // Operations
 ////////////////////////////////////////////////////////////////////////////
 
-bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq = 0)
+bool wxJoystick::SetCapture(wxWindow* win, int pollingFreq)
 {
   m_catchwin = win;
   m_polling = pollingFreq;
