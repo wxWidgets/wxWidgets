@@ -1318,15 +1318,17 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/fontdlgg.cpp
+    src/msw/wince/choicece.cpp 
     src/msw/wince/crt.cpp
     src/msw/wince/filedlgwce.cpp
     src/msw/wince/helpwce.cpp
-    src/msw/wince/tbarwce.cpp
     src/msw/wince/menuce.cpp
+    src/msw/wince/tbarwce.cpp
 </set>
 <set var="WINCE_HDR" hints="files">
     wx/generic/fdrepdlg.h
     wx/generic/fontdlgg.h
+    wx/msw/wince/choicece.h 
     wx/msw/wince/helpwce.h
     wx/msw/wince/libraries.h
     wx/msw/wince/missing.h

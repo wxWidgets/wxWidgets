@@ -213,8 +213,14 @@ wxSize wxControl::DoGetBestSize() const
 wxSize wxControl::GetBestSpinerSize(const bool is_vertical) const
 {
     // take size according to layout
-    wxSize bestSize(GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
-                    GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL));
+    wxSize bestSize(
+#ifdef __SMARTPHONE__
+                    0,GetCharHeight()
+#else !__SMARTPHONE__
+                    GetSystemMetrics(is_vertical ? SM_CXVSCROLL : SM_CXHSCROLL),
+                    GetSystemMetrics(is_vertical ? SM_CYVSCROLL : SM_CYHSCROLL)
+#endif __SMARTPHONE__/!__SMARTPHONE__
+    );
 
     // correct size as for undocumented MSW variants cases (WinCE and perhaps others)
     if (bestSize.x==0)
