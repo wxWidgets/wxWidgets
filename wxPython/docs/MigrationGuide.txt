@@ -877,7 +877,7 @@ would like to to have imported.  You use it like this::
       wxversion.select("2.4")
       import wx
 
-Then eventhough a 2.5 version of wxPython may be the default the
+Then even though a 2.5 version of wxPython may be the default the
 application that does the above the first time that wx is imported
 will actually get a 2.4 version.  **NOTE:** There isn't actually a 2.4
 version of wxPython that supports this, but there will be.
