@@ -225,7 +225,8 @@ MyFrame::MyFrame(const wxChar *title, int x, int y, int w, int h)
     menubar->Append(menuCol, _T("&Colour"));
     SetMenuBar(menubar);
 
-    m_logWindow = new wxTextCtrl(this, -1, wxEmptyString,
+    m_panel = new wxPanel(this, -1);
+    m_logWindow = new wxTextCtrl(m_panel, -1, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxSUNKEN_BORDER);
 
@@ -330,7 +331,7 @@ void MyFrame::RecreateList(long flags, bool withText)
     {
         delete m_listCtrl;
 
-        m_listCtrl = new MyListCtrl(this, LIST_CTRL,
+        m_listCtrl = new MyListCtrl(m_panel, LIST_CTRL,
                                     wxDefaultPosition, wxDefaultSize,
                                     flags |
                                     wxSUNKEN_BORDER | wxLC_EDIT_LABELS);
