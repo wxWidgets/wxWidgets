@@ -30,8 +30,13 @@ public:
   wxDC(void);
   ~wxDC(void);
 
+#ifdef WX_COMP_INLINE_NO_CLASS
+  inline void BeginDrawing(void) {}
+  inline void EndDrawing(void) {}
+#else
   inline void wxDC::BeginDrawing(void) {}
   inline void wxDC::EndDrawing(void) {}
+#endif
 
   virtual void FloodFill(long x1, long y1, const wxColour& col, int style=wxFLOOD_SURFACE) ;
   inline void FloodFill(const wxPoint& pt, const wxColour& col, int style=wxFLOOD_SURFACE)
@@ -265,7 +270,11 @@ public:
   }
 
   // This should probably be made available on other platforms
+#ifdef WX_COMP_INLINE_NO_CLASS
+  int GetDepth(void) const ;
+#else
   int wxDC::GetDepth(void) const ;
+#endif
 
 // Implementation
   virtual void SetRop(WXHDC cdc);

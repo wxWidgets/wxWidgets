@@ -133,10 +133,15 @@
 #define wxUSE_ODBC                   1
                                     // Define 1 to use ODBC classes
 
+#ifndef __MWERKS__
 #define wxUSE_IOSTREAMH     1
+#else
+#define wxUSE_IOSTREAMH     0
+#endif
                                   // VC++ 4.2 and above allows <iostream> and <iostream.h>
                                   // but you can't mix them. Set to 1 for <iostream.h>,
                                   // 0 for <iostream>
+                      
 
 #define wxUSE_WXCONFIG      1
                                   // if enabled, compiles built-in OS independent wxConfig

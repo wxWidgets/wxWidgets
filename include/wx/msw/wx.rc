@@ -29,7 +29,7 @@
 //
 //
 
-#ifdef __GNUWIN32__
+#if defined( __GNUWIN32__ ) || defined(__MWERKS__)
 #include <wx/msw/gnuwin32/winresrc.h>
 #else
 #include <windows.h>

@@ -18,6 +18,8 @@
 	#error "this file is only for builds with Metrowerks CodeWarrior"
 #endif 
 
+#define WX_COMP_INLINE_NO_CLASS // defined if the compiler does not want the classname repeated for inlines within a class definition
+
 #if (__MWERKS__ < 0x0900) || macintosh
 	#define __MAC__
 	#define __WXMAC__
@@ -41,12 +43,18 @@
 	#error unknown MW compiler
 #endif
 
-#define __WXDEBUG__ 1
-#define WXDEBUG 1
-
+#define __WXDEBUG__
+#define USE_DEFINE
 // in order to avoid problems further down in wxWindows
 
-char *strdup(const char *s) ;
-
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
+	char *strdup(const char *s) ;
+	int	isascii( int c ) ;
+#ifdef __cplusplus
+} ;
+#endif
 #endif
     // _WX_CW__

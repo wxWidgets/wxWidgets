@@ -311,7 +311,9 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 // where should i put this? we need to make sure of this as it breaks
 // the <iostream> code.
 #if !wxUSE_IOSTREAMH && defined(__WXDEBUG__)
+#ifndef __MWERKS__
 #undef __WXDEBUG__
+#endif
 #endif
 
 // Callback function type definition
