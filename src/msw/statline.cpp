@@ -91,7 +91,7 @@ WX_END_PROPERTIES_TABLE()
 WX_BEGIN_HANDLERS_TABLE(wxStaticLine)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_4( wxStaticLine, wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
+WX_CONSTRUCTOR_5( wxStaticLine, wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle)
 
 #else
 IMPLEMENT_DYNAMIC_CLASS(wxStaticLine, wxControl)

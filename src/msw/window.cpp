@@ -251,7 +251,7 @@ WX_COLLECTION_TYPE_INFO( wxWindow* , wxWindowList ) ;
 
 template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVariantArray &value)
 {
-    wxListCollectionToVariantArray( theList , value ) ;
+    wxListCollectionToVariantArray<wxWindowList::compatibility_iterator>( theList , value ) ;
 }
 
 WX_DEFINE_FLAGS( wxWindowStyle )

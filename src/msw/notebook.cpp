@@ -161,7 +161,7 @@ WX_COLLECTION_TYPE_INFO( wxNotebookPageInfo * , wxNotebookPageInfoList ) ;
 
 template<> void wxCollectionToVariantArray( wxNotebookPageInfoList const &theList, wxxVariantArray &value)
 {
-    wxListCollectionToVariantArray( theList , value ) ;
+    wxListCollectionToVariantArray<wxNotebookPageInfoList::compatibility_iterator>( theList , value ) ;
 }
 
 WX_BEGIN_PROPERTIES_TABLE(wxNotebook)
@@ -181,7 +181,7 @@ WX_END_PROPERTIES_TABLE()
 WX_BEGIN_HANDLERS_TABLE(wxNotebook)
 WX_END_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_4( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size ) 
+WX_CONSTRUCTOR_5( wxNotebook , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size , long , WindowStyle) 
 
 
 WX_BEGIN_PROPERTIES_TABLE(wxNotebookPageInfo)
