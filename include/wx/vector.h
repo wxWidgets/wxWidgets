@@ -112,7 +112,7 @@ public:
 
     int capacity() const
     {
-        return m_size;
+        return m_capacity;
     };
 
     bool empty() const
@@ -153,7 +153,7 @@ public:\
 #define WX_DECLARE_VECTOR(obj, cls)\
 class cls : public wxVectorBase\
 {\
-    WX_DECLARE_STL_VECTORBASE(obj, cls);\
+    WX_DECLARE_VECTORBASE(obj, cls);\
 public:\
     void push_back(const obj& o)\
     {\

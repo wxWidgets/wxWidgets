@@ -13,10 +13,10 @@
 
 #include "wx/vector.h"
 
-#define WX_DECLARE_STL_STACK(obj, cls)\
+#define WX_DECLARE_STACK(obj, cls)\
 class cls : public wxVectorBase\
 {\
-	WX_DECLARE_STL_VECTORBASE(obj, cls);\
+	WX_DECLARE_VECTORBASE(obj, cls);\
 public:\
 	void push(const obj& o)\
 	{\
