@@ -342,33 +342,40 @@ wxProgressDialog::Update(int value, const wxString& newmsg)
         SetTimeLabel(remaining, m_remaining);
     }
 
-    if ( (value == m_maximum ) && !(GetWindowStyle() & wxPD_AUTO_HIDE) )
+    if ( (value == m_maximum ) )
     {
-        if ( m_btnAbort )
-        {
-            // tell the user what he should do...
-            m_btnAbort->SetLabel(_("Close"));
-        }
-#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
-        else // enable the close button to give the user a way to close the dlg
-        {
-            EnableCloseButton(TRUE);
-        }
-#endif // __WXMSW__
-
-        if ( !newmsg )
-        {
-            // also provide the finishing message if the application didn't
-            m_msg->SetLabel(_("Done."));
-        }
-
         // so that we return TRUE below and that out [Cancel] handler knew what
         // to do
         m_state = Finished;
+        if( !(GetWindowStyle() & wxPD_AUTO_HIDE) )
+        {
+            if ( m_btnAbort )
+            {
+                // tell the user what he should do...
+                m_btnAbort->SetLabel(_("Close"));
+            }
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+            else // enable the close button to give the user a way to close the dlg
+            {
+                EnableCloseButton(TRUE);
+            }
+#endif // __WXMSW__
 
-        wxYield();
+            if ( !newmsg )
+            {
+                // also provide the finishing message if the application didn't
+                m_msg->SetLabel(_("Done."));
+            }
 
-        (void)ShowModal();
+            wxYield();
+
+            (void)ShowModal();
+        }
+        else
+        {
+            Hide();
+            ReenableOtherWindows();
+        }
     }
     else
     {
