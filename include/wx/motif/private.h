@@ -86,9 +86,9 @@ extern XmString wxFindAcceleratorText (const char *s);
 // ----------------------------------------------------------------------------
 
 extern bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
-                                  Widget widget, XEvent *xevent);
+                                  Widget widget, const XEvent *xevent);
 extern bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
-                                Widget widget, XEvent *xevent);
+                                Widget widget, const XEvent *xevent);
 
 extern void wxDoChangeForegroundColour(WXWidget widget,
                                        wxColour& foregroundColour);

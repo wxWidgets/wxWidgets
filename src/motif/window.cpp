@@ -1995,7 +1995,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
                                XmDrawingAreaCallbackStruct * cbs)
 {
     wxWindow *canvas = wxGetWindowFromTable(drawingArea);
-    XEvent local_event;
+    XEvent* xevent = cbs->event;
 
     if (canvas==NULL)
         return;
@@ -2003,9 +2003,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
     if (cbs->reason != XmCR_INPUT)
         return;
 
-    local_event = *(cbs->event);    // We must keep a copy!
-
-    switch (local_event.xany.type)
+    switch (xevent->xany.type)
     {
     case EnterNotify:
     case LeaveNotify:
@@ -2013,165 +2011,17 @@ static void wxCanvasInputEvent(Widget drawingArea,
     case ButtonRelease:
     case MotionNotify:
         {
-            // FIXME: most of this mouse event code is more or less
-            // duplicated in wxTranslateMouseEvent
-            //
-            wxEventType eventType = wxEVT_NULL;
-
-            if (local_event.xany.type == EnterNotify)
+            wxMouseEvent wxevent(0);
+            if (wxTranslateMouseEvent(wxevent, canvas, drawingArea, xevent))
             {
-                //if (local_event.xcrossing.mode!=NotifyNormal)
-                //  return ; // Ignore grab events
-                eventType = wxEVT_ENTER_WINDOW;
-                //            canvas->GetEventHandler()->OnSetFocus();
+                canvas->GetEventHandler()->ProcessEvent(wxevent);
             }
-            else if (local_event.xany.type == LeaveNotify)
-            {
-                //if (local_event.xcrossingr.mode!=NotifyNormal)
-                //  return ; // Ignore grab events
-                eventType = wxEVT_LEAVE_WINDOW;
-                //            canvas->GetEventHandler()->OnKillFocus();
-            }
-            else if (local_event.xany.type == MotionNotify)
-            {
-                eventType = wxEVT_MOTION;
-            }
-
-            else if (local_event.xany.type == ButtonPress)
-            {
-                if (local_event.xbutton.button == Button1)
-                {
-                    eventType = wxEVT_LEFT_DOWN;
-                }
-                else if (local_event.xbutton.button == Button2)
-                {
-                    eventType = wxEVT_MIDDLE_DOWN;
-                }
-                else if (local_event.xbutton.button == Button3)
-                {
-                    eventType = wxEVT_RIGHT_DOWN;
-                }
-            }
-            else if (local_event.xany.type == ButtonRelease)
-            {
-                if (local_event.xbutton.button == Button1)
-                {
-                    eventType = wxEVT_LEFT_UP;
-                }
-                else if (local_event.xbutton.button == Button2)
-                {
-                    eventType = wxEVT_MIDDLE_UP;
-                }
-                else if (local_event.xbutton.button == Button3)
-                {
-                    eventType = wxEVT_RIGHT_UP;
-                }
-            }
-
-            wxMouseEvent wxevent (eventType);
-
-            wxevent.m_leftDown = ((eventType == wxEVT_LEFT_DOWN)
-                || (event_left_is_down (&local_event)
-                && (eventType != wxEVT_LEFT_UP)));
-            wxevent.m_middleDown = ((eventType == wxEVT_MIDDLE_DOWN)
-                || (event_middle_is_down (&local_event)
-                && (eventType != wxEVT_MIDDLE_UP)));
-            wxevent.m_rightDown = ((eventType == wxEVT_RIGHT_DOWN)
-                || (event_right_is_down (&local_event)
-                && (eventType != wxEVT_RIGHT_UP)));
-
-            wxevent.m_shiftDown = local_event.xbutton.state & ShiftMask;
-            wxevent.m_controlDown = local_event.xbutton.state & ControlMask;
-            wxevent.m_altDown = local_event.xbutton.state & Mod3Mask;
-            wxevent.m_metaDown = local_event.xbutton.state & Mod1Mask;
-            wxevent.SetTimestamp(local_event.xbutton.time);
-
-           if ( eventType == wxEVT_MOTION )
-           {
-                if (local_event.xmotion.is_hint == NotifyHint)
-                {
-                    Window root, child;
-                    Display *dpy = XtDisplay (drawingArea);
-
-                    XQueryPointer (dpy, XtWindow (drawingArea),
-                        &root, &child,
-                        &local_event.xmotion.x_root,
-                        &local_event.xmotion.y_root,
-                        &local_event.xmotion.x,
-                        &local_event.xmotion.y,
-                        &local_event.xmotion.state);
-                }
-                else
-                {
-                }
-           }
-
-            // Now check if we need to translate this event into a double click
-            if (TRUE) // canvas->doubleClickAllowed)
-            {
-                if (wxevent.ButtonDown())
-                {
-                    long dclickTime = XtGetMultiClickTime((Display*) wxGetDisplay());
-
-                    // get button and time-stamp
-                    int button = 0;
-                    if (wxevent.LeftDown())
-                        button = 1;
-                    else if (wxevent.MiddleDown())
-                        button = 2;
-                    else if (wxevent.RightDown())
-                        button = 3;
-                    long ts = wxevent.GetTimestamp();
-
-                    // check, if single or double click
-                    int buttonLast = canvas->GetLastClickedButton();
-                    long lastTS = canvas->GetLastClickTime();
-                    if ( buttonLast && buttonLast == button && (ts - lastTS) < dclickTime )
-                    {
-                        // I have a dclick
-                        canvas->SetLastClick(0, ts);
-
-                        wxEventType typeDouble;
-                        if ( eventType == wxEVT_LEFT_DOWN )
-                            typeDouble = wxEVT_LEFT_DCLICK;
-                        else if ( eventType == wxEVT_MIDDLE_DOWN )
-                            typeDouble = wxEVT_MIDDLE_DCLICK;
-                        else if ( eventType == wxEVT_RIGHT_DOWN )
-                            typeDouble = wxEVT_RIGHT_DCLICK;
-                        else
-                            typeDouble = wxEVT_NULL;
-
-                        if ( typeDouble != wxEVT_NULL )
-                        {
-                            wxevent.SetEventType(typeDouble);
-                        }
-                    }
-                    else
-                    {
-                        // not fast enough or different button
-                        canvas->SetLastClick(button, ts);
-                    }
-                }
-            }
-
-            wxevent.SetId(canvas->GetId());
-            wxevent.SetEventObject(canvas);
-            wxevent.m_x = local_event.xbutton.x;
-            wxevent.m_y = local_event.xbutton.y;
-            canvas->GetEventHandler()->ProcessEvent (wxevent);
-#if 0
-            if (eventType == wxEVT_ENTER_WINDOW ||
-                    eventType == wxEVT_LEAVE_WINDOW ||
-                    eventType == wxEVT_MOTION
-               )
-                return;
-#endif // 0
             break;
-      }
+        }
     case KeyPress:
         {
             wxKeyEvent event (wxEVT_CHAR);
-            if (wxTranslateKeyEvent (event, canvas, (Widget) 0, &local_event))
+            if (wxTranslateKeyEvent (event, canvas, (Widget) 0, xevent))
             {
                 // Implement wxFrame::OnCharHook by checking ancestor.
                 wxWindow *parent = canvas;
@@ -2201,7 +2051,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
     case KeyRelease:
         {
             wxKeyEvent event (wxEVT_KEY_UP);
-            if (wxTranslateKeyEvent (event, canvas, (Widget) 0, &local_event))
+            if (wxTranslateKeyEvent (event, canvas, (Widget) 0, xevent))
             {
                 canvas->GetEventHandler()->ProcessEvent (event);
             }
@@ -2209,7 +2059,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
         }
     case FocusIn:
         {
-            if (local_event.xfocus.detail != NotifyPointer)
+            if (xevent->xfocus.detail != NotifyPointer)
             {
                 wxFocusEvent event(wxEVT_SET_FOCUS, canvas->GetId());
                 event.SetEventObject(canvas);
@@ -2219,7 +2069,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
         }
     case FocusOut:
         {
-            if (local_event.xfocus.detail != NotifyPointer)
+            if (xevent->xfocus.detail != NotifyPointer)
             {
                 wxFocusEvent event(wxEVT_KILL_FOCUS, canvas->GetId());
                 event.SetEventObject(canvas);
@@ -2359,7 +2209,7 @@ void wxUniversalRepaintProc(Widget w, XtPointer WXUNUSED(c_data), XEvent *event,
 // ----------------------------------------------------------------------------
 
 bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
-                           Widget widget, XEvent *xevent)
+                           Widget widget, const XEvent *xevent)
 {
     switch (xevent->xany.type)
     {
@@ -2374,6 +2224,8 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
         case ButtonRelease:
         case MotionNotify:
         {
+            int eventx = xevent->xbutton.x, eventy = xevent->xbutton.y;
+
             wxEventType eventType = wxEVT_NULL;
 
             if (xevent->xany.type == LeaveNotify)
@@ -2387,6 +2239,18 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
             else if (xevent->xany.type == MotionNotify)
             {
                 eventType = wxEVT_MOTION;
+
+                if (xevent->xmotion.is_hint == NotifyHint)
+                {
+                    Window root, child;
+                    int x_root, y_root;
+                    unsigned int state;
+                    Display *dpy = XtDisplay (widget);
+
+                    XQueryPointer (dpy, XtWindow (widget),
+                        &root, &child,
+                        &x_root, &y_root, &eventx, &eventy, &state);
+                }
             }
             else if (xevent->xany.type == ButtonPress)
             {
@@ -2474,8 +2338,8 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
                 dy = y1;
             }
 
-            wxevent.m_x = xevent->xbutton.x + dx;
-            wxevent.m_y = xevent->xbutton.y + dy;
+            wxevent.m_x = eventx + dx;
+            wxevent.m_y = eventy + dy;
 
             wxevent.m_leftDown = ((eventType == wxEVT_LEFT_DOWN)
                 || (event_left_is_down (xevent)
@@ -2502,7 +2366,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win,
 }
 
 bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win,
-                         Widget WXUNUSED(widget), XEvent *xevent)
+                         Widget WXUNUSED(widget), const XEvent *xevent)
 {
     switch (xevent->xany.type)
     {
