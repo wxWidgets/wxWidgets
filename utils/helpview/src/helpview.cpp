@@ -60,9 +60,7 @@ bool hvApp::OnInit()
 	
     wxArtProvider::PushProvider(new AlternateArtProvider);
 	
-	int istyle = wxHF_DEFAULT_STYLE;
-	
-    wxArtProvider::PushProvider(new AlternateArtProvider);
+    int istyle = wxHF_DEFAULT_STYLE;
 	
     wxString service, windowName, book[10], titleFormat, argStr;
     int bookCount = 0;
