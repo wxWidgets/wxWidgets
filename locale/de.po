@@ -1,17 +1,13 @@
-# .po / .mo for wxWindows in German
-# Copyright (C) 2000 wxWindows
-# Mark Johnson <wxWindows@mj10777.de>, 2000 
-#
 msgid ""
-"Project-Id-Version: 2.2\n"
-"POT-Creation-Date: 2000-04-13 16:08+0930\n"
-"PO-Revision-Date: 2000-08-11 11:11+2\n"
-"Last-Translator: Mark Johnson<wxWindows@mj10777.de>\n"
-"Language-Team: German <wxWindows@mj10777.de>\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=CHARSET\n"
-"Content-Transfer-Encoding: ENCODING\n"
 msgstr ""
+"Project-Id-Version: wxWindows-2.2\n"
+"POT-Creation-Date: 2000-08-11 11:11+0200\n"
+"PO-Revision-Date: 2000-08-11 11:11+0200\n"
+"Last-Translator: Mark Johnson <wxWindows@mj10777.de>\n"
+"Language-Team: wxWindows Team <wx-devel@wxwindows.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso8859-2\n"
+"Content-Transfer-Encoding: 8-bit\n"
 
 #: ../src/generic/dirdlgg.cpp:550
 msgid ""
@@ -504,7 +500,7 @@ msgstr "Kann Serialisierungsobjekt '%s' für Object '%s' nicht finden."
 #: ../src/msw/registry.cpp:342
 #, c-format
 msgid "Can't get info about registry key '%s'"
-msgstr "Kann keine Info über Registrie-Schlüssel '%s' finden"
+msgstr "Kann keine Info über Registrierungsschlüssel '%s' finden"
 
 #: ../src/common/image.cpp:413 ../src/common/image.cpp:433
 #, c-format
@@ -570,7 +566,7 @@ msgstr "Kann Adressbuch Datei nicht finden"
 #: ../src/unix/threadpsx.cpp:954
 #, c-format
 msgid "Cannot get priority range for scheduling policy %d."
-msgstr "Kann Prioritäts 'range' für 'scheduling policy' %d."
+msgstr "Kann Prioritäts 'range' für 'scheduling policy' %d nicht bekommen."
 
 #: ../src/unix/utilsunx.cpp:692
 msgid "Cannot get the hostname"
@@ -952,12 +948,12 @@ msgstr "Verbindungsversuch gescheitert : kein anwählbares ISP."
 #: ../src/msw/registry.cpp:590
 #, c-format
 msgid "Failed to copy registry value '%s'"
-msgstr "Kopieren von Regestrieungs-Wert '%s' gescheitert"
+msgstr "Kopieren von Registrierung-Wert '%s' gescheitert"
 
 #: ../src/msw/registry.cpp:599
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
-msgstr "Kopieren von Inhalt der Regestrieungs-Schlüssel '%s' zum '%s' gescheitert"
+msgstr "Kopieren von Inhalt der Registrieungs-Schlüssel '%s' zum '%s' gescheitert"
 
 #: ../src/msw/dde.cpp:923
 msgid "Failed to create DDE string"
@@ -1059,11 +1055,12 @@ msgid ""
 "Failed to join a thread, potential memory leak detected - please restart the "
 "program"
 msgstr ""
+"Thread-Verbindung gescheitert, mögliche 'memory leak' festgestellt - bitte programm neu starten"
 
 #: ../src/common/dynlib.cpp:229
 #, c-format
 msgid "Failed to load shared library '%s'"
-msgstr ""
+msgstr "Laden des DLL '%s' gescheitert"
 
 #: ../src/msw/clipbrd.cpp:102
 msgid "Failed to open the clipboard."
@@ -1075,7 +1072,7 @@ msgstr "Versuch Daten in der Zwischenablage zulegen gescheitert"
 
 #: ../src/unix/utilsunx.cpp:524
 msgid "Failed to redirect child process input/output"
-msgstr ""
+msgstr "Umleitung des Ein/Ausgabe des Unterprozesses gescheitert"
 
 #: ../src/msw/dde.cpp:285
 #, c-format
@@ -1085,17 +1082,17 @@ msgstr "Versuch DDE-Server '%s' zu Registrieren gecheitert"
 #: ../src/common/fontmap.cpp:504
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
-msgstr ""
+msgstr "Versuch an die Kodierung für den Zeichensatz '%s' zu erinnern ist gescheitert."
 
 #: ../src/msw/registry.cpp:436
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
-msgstr ""
+msgstr "Umbenennen von Registrieungs-Wertes '%s' zum '%s' gescheitert"
 
 #: ../src/msw/registry.cpp:536
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
-msgstr ""
+msgstr "Umbenennen von Registrieungs-Schlüssel '%s' zum '%s' gescheitert"
 
 #: ../src/msw/clipbrd.cpp:428
 msgid "Failed to retrieve data from the clipboard."
@@ -1111,7 +1108,7 @@ msgstr "Versuch Unterstützte Zwischenablage-Formate zu holen gescheitert"
 
 #: ../src/msw/dde.cpp:650
 msgid "Failed to send DDE advise notification"
-msgstr ""
+msgstr "Versuch eine DDE Benachrichtigung zuschicken gescheitert"
 
 #: ../src/msw/clipbrd.cpp:300
 msgid "Failed to set clipboard data."
@@ -1120,20 +1117,20 @@ msgstr "Konnte Datein nicht in Zwischenablage kopieren."
 #: ../src/unix/threadpsx.cpp:1071
 #, c-format
 msgid "Failed to set thread priority %d."
-msgstr ""
+msgstr "Versuch Thread Priorität %d zusetzten gescheitert."
 
 #: ../src/common/fs_mem.cpp:167
 #, c-format
 msgid "Failed to store image '%s' to memory VFS!"
-msgstr ""
+msgstr "Versuch Bild '%s' im VFS-Speicher zu laden gescheitert!"
 
 #: ../src/unix/threadpsx.cpp:1251
 msgid "Failed to terminate a thread."
-msgstr ""
+msgstr "Versuch Thread zu beenden gescheitert."
 
 #: ../src/msw/dde.cpp:624
 msgid "Failed to terminate the advise loop with DDE server"
-msgstr ""
+msgstr "Versuch 'advise loop' mit DDE-Server zubeenden gescheitert."
 
 #: ../src/msw/dialup.cpp:928
 #, c-format
@@ -1147,7 +1144,7 @@ msgstr "Versuch DDE-Server '%s' zu Deregistrieren gecheitert"
 
 #: ../src/msw/app.cpp:749
 msgid "Fatal Error"
-msgstr ""
+msgstr "Nicht-behebbarer Fehler"
 
 #: ../src/generic/logg.cpp:340
 msgid "Fatal error"
@@ -1155,11 +1152,11 @@ msgstr "Nicht-behebbarer Fehler"
 
 #: ../src/common/log.cpp:347
 msgid "Fatal error: "
-msgstr "Nicht-behebbarer Fehler"
+msgstr "Nicht-behebbarer Fehler:"
 
 #: ../src/msw/app.cpp:1237
 msgid "Fatal error: exiting"
-msgstr ""
+msgstr "Nicht-behebbarer Fehler: Abbruch"
 
 #: ../src/generic/filedlgg.cpp:1071 ../src/gtk/filedlg.cpp:72
 #, c-format
@@ -1176,7 +1173,7 @@ msgstr "Dateifehler"
 
 #: ../src/generic/dirdlgg.cpp:286 ../src/generic/filedlgg.cpp:728
 msgid "File name exists already."
-msgstr ""
+msgstr "Dateiname bereits vorhanden"
 
 #: ../src/msw/filedlg.cpp:280
 #, c-format
@@ -1197,7 +1194,7 @@ msgstr "Zeichensatz"
 
 #: ../src/html/helpfrm.cpp:899
 msgid "Font size:"
-msgstr "Fint Große:"
+msgstr "Font Große:"
 
 #: ../src/unix/utilsunx.cpp:481
 msgid "Fork failed"
@@ -1319,11 +1316,11 @@ msgstr "ISO-8859-14"
 #: ../src/common/resource.cpp:2634 ../src/common/resource.cpp:2645
 #, c-format
 msgid "Icon resource specification %s not found."
-msgstr ""
+msgstr "Icon %s nicht gefunden."
 
 #: ../src/common/resource.cpp:251
 msgid "Ill-formed resource file syntax."
-msgstr ""
+msgstr "Ungültige Syntax in 'resource file'"
 
 #: ../src/generic/dirdlgg.cpp:268 ../src/generic/filedlgg.cpp:714
 msgid "Illegal directory name."
@@ -1331,17 +1328,19 @@ msgstr "Ungültige Verzeichnisname"
 
 #: ../src/generic/filedlgg.cpp:1040
 msgid "Illegal file specification."
-msgstr ""
+msgstr "Ungültige Dateiangabe"
 
 #: ../src/msw/textctrl.cpp:216
 msgid ""
 "Impossible to create a rich edit control, using simple text control instead. "
 "Please reinstall riched32.dll"
 msgstr ""
+"Versuch eine 'rich edit control' zu erstellen gescheitert, verwende stattdessen eine einfache 'text control'. "
+"Bitte 'riched32.dll' neu installieren"
 
 #: ../src/unix/utilsunx.cpp:344
 msgid "Impossible to get child process input"
-msgstr ""
+msgstr "Es ist nicht möglich der Eingabe des Unterprozesses zu verarbeiten"
 
 #: ../src/html/helpdata.cpp:288
 msgid "Incorrect version of HTML help book"
@@ -1357,7 +1356,7 @@ msgstr "Information"
 
 #: ../src/common/imagtiff.cpp:136
 msgid "Invalid TIFF image index."
-msgstr ""
+msgstr "Ungültige TIFF-Bild Index."
 
 #: ../src/generic/fontdlgg.cpp:213
 msgid "Italic"
@@ -1365,7 +1364,7 @@ msgstr "Kursiv"
 
 #: ../src/common/imagjpeg.cpp:198
 msgid "JPEG: Couldn't load - file is probably corrupted."
-msgstr ""
+msgstr "JPEG: Lesefehler - Datei ist vermutlich beschädigt."
 
 #: ../src/common/imagjpeg.cpp:315
 msgid "JPEG: Couldn't save image."
@@ -1373,7 +1372,7 @@ msgstr "JPEG: Konnte Bild nicht sichern."
 
 #: ../src/common/fontmap.cpp:111
 msgid "KOI8-R"
-msgstr ""
+msgstr "KOI8-R"
 
 #: ../src/generic/dcpsg.cpp:2183 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
@@ -1400,11 +1399,11 @@ msgstr "Laden : "
 
 #: ../src/common/imagpnm.cpp:72
 msgid "Loading Grey Ascii PNM image is not yet implemented."
-msgstr ""
+msgstr "Laden von 'Grey Ascii PNM' Datei wird zur zeit nicht Unterstützt."
 
 #: ../src/common/imagpnm.cpp:75
 msgid "Loading Grey Raw PNM image is not yet implemented."
-msgstr ""
+msgstr "Laden von 'Grey Raw PNM' Datei wird zur zeit nicht Unterstützt."
 
 #: ../src/generic/logg.cpp:536
 #, c-format
@@ -1413,7 +1412,7 @@ msgstr "Logtext in Datei '%s' gesichert."
 
 #: ../src/gtk/mdi.cpp:422
 msgid "MDI child"
-msgstr ""
+msgstr "MDI child"
 
 #: ../src/unix/mimetype.cpp:1541
 #, c-format
@@ -1423,7 +1422,7 @@ msgstr "Mailcap-Datei %s, Zeile %d: unvollständiger Eintrag ignoriert."
 #: ../src/common/fs_mem.cpp:144
 #, c-format
 msgid "Memory VFS already contains file '%s'!"
-msgstr ""
+msgstr "VFS-Speicher beinhaltet bereits der Datei '%s'!"
 
 #: ../src/unix/mimetype.cpp:1261
 #, c-format
@@ -1432,7 +1431,7 @@ msgstr "Mime.types-Datei %s, Zeile %d: unterminierter Text"
 
 #: ../src/generic/fontdlgg.cpp:208
 msgid "Modern"
-msgstr ""
+msgstr "Modern"
 
 #: ../src/common/dlgcmn.cpp:139
 msgid "More..."
@@ -1444,7 +1443,7 @@ msgstr "Dateisysteme"
 
 #: ../src/generic/dirdlgg.cpp:208
 msgid "My Harddisk"
-msgstr ""
+msgstr "Meine Platte"
 
 #: ../src/generic/dirdlgg.cpp:212
 msgid "My Home"
@@ -1460,7 +1459,7 @@ msgstr "Neu..."
 
 #: ../src/generic/filedlgg.cpp:607
 msgid "NewName"
-msgstr ""
+msgstr "NeuName"
 
 #: ../src/html/helpfrm.cpp:515
 msgid "Next page"
@@ -1474,15 +1473,15 @@ msgstr "Nein"
 #: ../src/common/resourc2.cpp:814 ../src/common/resourc2.cpp:969
 #: ../src/common/resource.cpp:2451 ../src/common/resource.cpp:2606
 msgid "No XBM facility available!"
-msgstr ""
+msgstr "Kein XBM-Dienst verfügbar!"
 
 #: ../src/common/resourc2.cpp:830 ../src/common/resource.cpp:2466
 msgid "No XPM facility available!"
-msgstr ""
+msgstr "Kein XPM-Dienst verfügbar!"
 
 #: ../src/common/resourc2.cpp:991 ../src/common/resource.cpp:2628
 msgid "No XPM icon facility available!"
-msgstr ""
+msgstr "Kein XBM-Icon-Dienst verfügbar!"
 
 #: ../src/generic/helphtml.cpp:304
 msgid "No entries found."
@@ -1490,17 +1489,17 @@ msgstr "Keine Einträge gefunden."
 
 #: ../src/common/image.cpp:518
 msgid "No handler found for image type."
-msgstr ""
+msgstr "Diese Bild-Format wird nicht unterstützt"
 
 #: ../src/common/image.cpp:526 ../src/common/image.cpp:560
 #, c-format
 msgid "No image handler for type %d defined."
-msgstr ""
+msgstr "Bild-Format %d wurde nicht definiert."
 
 #: ../src/common/image.cpp:544 ../src/common/image.cpp:576
 #, c-format
 msgid "No image handler for type %s defined."
-msgstr ""
+msgstr "Bild-Format %s wurde nicht definiert."
 
 #: ../src/html/helpfrm.cpp:628
 msgid "No matching page found yet"
@@ -1530,7 +1529,7 @@ msgstr "Öffne HTLM Dokument"
 #: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
 #: ../src/generic/filedlgg.cpp:622 ../src/generic/filedlgg.cpp:741
 msgid "Operation not permitted."
-msgstr ""
+msgstr "Ausführung nicht erlaubt"
 
 #: ../src/common/cmdline.cpp:590
 #, c-format
@@ -1545,7 +1544,7 @@ msgstr "Option '%s' erwartet ein Wert."
 #: ../src/common/cmdline.cpp:663
 #, c-format
 msgid "Option '%s': '%s' cannot be converted to a date."
-msgstr ""
+msgstr "Option '%s': '%s' kann nicht in eine Datum umgesetzt werden."
 
 #: ../src/generic/prntdlgg.cpp:447
 msgid "Options"
@@ -1621,7 +1620,7 @@ msgstr "Papierformat"
 
 #: ../src/generic/filedlgg.cpp:537
 msgid "Permissions"
-msgstr ""
+msgstr "Erlaubnisse"
 
 #: ../src/unix/utilsunx.cpp:430 ../src/unix/utilsunx.cpp:454
 msgid "Pipe creation failed"
@@ -1637,7 +1636,7 @@ msgstr "Bitte wählen Sie eine bestehende Datei."
 
 #: ../src/msw/dialup.cpp:763
 msgid "Please choose which ISP do you want to connect to"
-msgstr ""
+msgstr "Bitte gewünschte ISP-Verbindung auswählen"
 
 #: ../src/common/prntbase.cpp:105
 msgid "Please wait..."
@@ -1650,7 +1649,7 @@ msgstr "Hochformat"
 
 #: ../src/generic/dcpsg.cpp:377
 msgid "PostScript"
-msgstr ""
+msgstr "PostScript"
 
 #: ../src/generic/prntdlgg.cpp:272
 msgid "PostScript file"
@@ -1658,7 +1657,7 @@ msgstr "PostScript-Datei"
 
 #: ../src/generic/dcpsg.cpp:2224
 msgid "PostScript:"
-msgstr ""
+msgstr "PostScript:"
 
 #: ../src/generic/dcpsg.cpp:2187
 msgid "Preview Only"
@@ -1782,12 +1781,12 @@ msgstr "Lesefehler bei Datei '%s'"
 #: ../src/msw/registry.cpp:528
 #, c-format
 msgid "Registry key '%s' already exists."
-msgstr ""
+msgstr "Registrier-Schlüssel '%s' bereits vorhanden."
 
 #: ../src/msw/registry.cpp:497
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
-msgstr ""
+msgstr "Registrier-Schlüssel '%s' existiert nicht, Umgenennung daher nicht möglich."
 
 #: ../src/msw/registry.cpp:623
 #, c-format
@@ -1796,11 +1795,14 @@ msgid ""
 "deleting it will leave your system in unusable state:\n"
 "operation aborted."
 msgstr ""
+"Registrier-Schlüssel '%s' wird vom System benötigt,\n"
+"durch seine Entfernung wird das System umbrauchbar:\n"
+"Abbruch."
 
 #: ../src/msw/registry.cpp:428
 #, c-format
 msgid "Registry value '%s' already exists."
-msgstr ""
+msgstr "Registrier-Wert '%s' bereits vorhanden."
 
 #: ../src/generic/helphtml.cpp:309
 msgid "Relevant entries:"
@@ -1843,7 +1845,7 @@ msgstr "Logtexte in Datei sichern"
 
 #: ../src/generic/fontdlgg.cpp:209
 msgid "Script"
-msgstr ""
+msgstr "Script"
 
 #: ../src/generic/helpwxht.cpp:160 ../src/html/helpfrm.cpp:414
 #: ../src/html/helpfrm.cpp:434
@@ -1876,15 +1878,15 @@ msgstr "Suchfehler bei Datei '%s'"
 
 #: ../src/common/docview.cpp:1417
 msgid "Select a document template"
-msgstr ""
+msgstr "Dokument-Template wählen"
 
 #: ../src/common/docview.cpp:1440
 msgid "Select a document view"
-msgstr ""
+msgstr "Dokument-Anzeige ('View') wählen"
 
 #: ../src/common/docview.cpp:1335 ../src/common/docview.cpp:1372
 msgid "Select a file"
-msgstr ""
+msgstr "Datei wählen"
 
 #: ../src/generic/dcpsg.cpp:2185
 msgid "Send to Printer"
@@ -1900,7 +1902,7 @@ msgstr "Einstellungen..."
 
 #: ../src/msw/dialup.cpp:535
 msgid "Several active dialup connections found, choosing one randomly."
-msgstr ""
+msgstr "Mehrere Aktive DFÜ-Verbindungen gefunden, wähle einer davon aus."
 
 #: ../src/html/helpfrm.cpp:331
 msgid "Show all"
@@ -1912,7 +1914,7 @@ msgstr "Alle Themen im Index anzeigen"
 
 #: ../src/generic/filedlgg.cpp:910
 msgid "Show hidden files"
-msgstr ""
+msgstr "Versteckte Dateien Anzeigen"
 
 #: ../src/html/helpfrm.cpp:496
 msgid "Show/hide navigation panel"
@@ -1928,15 +1930,15 @@ msgstr "Geneigt"
 
 #: ../src/common/docview.cpp:297
 msgid "Sorry, could not open this file for saving."
-msgstr ""
+msgstr "Bedauere, diese Datei konnte zwecks Sicherung nicht geöffnet werden."
 
 #: ../src/common/docview.cpp:333 ../src/common/docview.cpp:345
 msgid "Sorry, could not open this file."
-msgstr ""
+msgstr "Bedauere, diese Datei konnte nicht geöffnet werden."
 
 #: ../src/common/docview.cpp:304
 msgid "Sorry, could not save this file."
-msgstr ""
+msgstr "Bedauere, diese Datei konnte nicht gesichert werden."
 
 #: ../src/common/prntbase.cpp:683
 msgid "Sorry, not enough memory to create a preview."
@@ -1968,11 +1970,11 @@ msgstr "Schreibmaschine"
 
 #: ../src/common/docview.cpp:1417
 msgid "Templates"
-msgstr ""
+msgstr "Templaten"
 
 #: ../src/generic/dirdlgg.cpp:218
 msgid "Temporary"
-msgstr ""
+msgstr "Temporär"
 
 #: ../src/common/fontmap.cpp:106
 msgid "Thai (ISO-8859-11)"
@@ -1989,11 +1991,14 @@ msgid ""
 "another charset to replace it with or choose\n"
 "[Cancel] if it cannot be replaced"
 msgstr ""
+"Die Zeichensatz '%s' ist nicht bekannt. Wählen Sie eine \n"
+"eine Ersatz-Zeichensatz oder wählen Sie\n"
+"[Abbruch] fall es nicht ersetz werden kann."
 
 #: ../src/msw/ole/dataobj.cpp:169
 #, c-format
 msgid "The clipboard format '%d' doesn't exist."
-msgstr ""
+msgstr "Der Zwischenablage-format '%d' existiert nicht."
 
 #: ../src/generic/dirdlgg.cpp:535
 msgid "The directory "
@@ -2006,6 +2011,9 @@ msgid ""
 "Would you like to select a font to be used for this encoding\n"
 "(otherwise the text in this encoding will not be shown correctly)?"
 msgstr ""
+"Die Kodierung '%s' ist nicht bekannt.\n"
+"Möchten Sie eine Font für diese Kodierung wählen\n"
+"(sonst wird der Text mit diese Kodierun nicht richtig angezeigt)?"
 
 #: ../src/common/docview.cpp:1622
 #, c-format
@@ -2013,20 +2021,22 @@ msgid ""
 "The file '%s' doesn't exist and couldn't be opened.\n"
 "It has been also removed from the MRU files list."
 msgstr ""
+"Die Datei '%s' existiert nicht und konnte nicht geöffnet werden.\n"
+"Is wurde ebenfalls von der MRU-Dateiliste entfernt."
 
 #: ../src/common/cmdline.cpp:753
 #, c-format
 msgid "The required parameter '%s' was not specified."
-msgstr ""
+msgstr "Die benötigte Parameter '%s' wurde nicht angegeben."
 
 #: ../src/common/textcmn.cpp:121
 msgid "The text couldn't be saved."
-msgstr ""
+msgstr "Die Text konnte nicht gesichert werden."
 
 #: ../src/common/cmdline.cpp:732
 #, c-format
 msgid "The value for the option '%s' must be specified."
-msgstr ""
+msgstr "Die Wert für die option '%s' muß angegeben werden"
 
 #: ../src/msw/dialup.cpp:411
 #, c-format
@@ -2034,6 +2044,8 @@ msgid ""
 "The version of remote access service (RAS) installed on this machine is "
 "tooold, please upgrade (the following required function is missing: %s)."
 msgstr ""
+"Die installierte RAS-Dienst Version ist zu alt, "
+"bitte auf der neuste Stand bringen (folgende Funktion fehlt: %s)."
 
 #: ../src/html/htmprint.cpp:486
 msgid ""
@@ -2056,32 +2068,36 @@ msgid ""
 "Thread module initialization failed: can not store value in thread local "
 "storage"
 msgstr ""
+"Thread Modul Initializierung gescheitert: Wert kann ins 'thread local storage' "
+"gesichert werden"
 
 #: ../src/unix/threadpsx.cpp:1441
 msgid "Thread module initialization failed: failed to create thread key"
-msgstr ""
+msgstr "Thread Modul Initializierung gescheitert: Thread-Schlüssel konnte nicht erstellt werden"
 
 #: ../src/msw/thread.cpp:1017
 msgid ""
 "Thread module initialization failed: impossible to allocate index in thread "
 "local storage"
 msgstr ""
+"Thread Modul Initializierung gescheitert: Indexkann ins 'thread local storage' "
+"allokiert werden"
 
 #: ../src/unix/threadpsx.cpp:962
 msgid "Thread priority setting is ignored."
-msgstr ""
+msgstr "Thread Prioritätseinstellung wird ignoriert"
 
 #: ../src/generic/filedlgg.cpp:536
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 #: ../src/generic/tipdlg.cpp:162
 msgid "Tip of the Day"
-msgstr ""
+msgstr "Tip des Tages"
 
 #: ../src/generic/tipdlg.cpp:138
 msgid "Tips not available, sorry!"
-msgstr ""
+msgstr "Bedauere, Tips stehen nicht zur Verfügung"
 
 #: ../src/generic/prntdlgg.cpp:191
 msgid "To:"
@@ -2094,11 +2110,11 @@ msgstr "Oberer Rand (mm):"
 #: ../src/common/fs_mem.cpp:202
 #, c-format
 msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
-msgstr ""
+msgstr "Versuch Datei '%s' im VFS-Speicher zu entfernen, wurde aber nicht geladen!"
 
 #: ../src/common/sckaddr.cpp:107
 msgid "Trying to solve a NULL hostname: giving up"
-msgstr ""
+msgstr "Versuche 'NULL hostname' aufzulösen: gebe auf"
 
 #: ../src/common/fontmap.cpp:104
 msgid "Turkish (ISO-8859-9)"
@@ -2124,22 +2140,22 @@ msgstr "Unterstreichen"
 #: ../src/common/resource.cpp:3019 ../src/common/resource.cpp:3033
 #: ../src/common/resource.cpp:3050 ../src/common/resource.cpp:3064
 msgid "Unexpected end of file whilst parsing resource."
-msgstr ""
+msgstr "Unerwartete Dateiende während Lesevorgang."
 
 #: ../src/common/cmdline.cpp:704
 #, c-format
 msgid "Unexpected parameter '%s'"
-msgstr ""
+msgstr "Unerwartete Parameter '%s'"
 
 #: ../src/msw/dde.cpp:1019
 #, c-format
 msgid "Unknown DDE error %08x"
-msgstr ""
+msgstr "Unbekannte DDE Fehler %08x"
 
 #: ../src/common/fontmap.cpp:326
 #, c-format
 msgid "Unknown encoding (%d)"
-msgstr ""
+msgstr "Unbekannte Kodierung (%d)"
 
 #: ../src/unix/mimetype.cpp:1304
 #, c-format
@@ -2149,12 +2165,12 @@ msgstr "Unbekanntest Feld '%s' in Datei %s, Zeile %d."
 #: ../src/common/cmdline.cpp:496
 #, c-format
 msgid "Unknown long option '%s'"
-msgstr ""
+msgstr "Unbekannte 'long' Option '%s'"
 
 #: ../src/common/cmdline.cpp:518
 #, c-format
 msgid "Unknown option '%s'"
-msgstr ""
+msgstr "Unbekannte Option '%s'"
 
 #: ../src/common/mimecmn.cpp:161
 #, c-format
@@ -2164,16 +2180,16 @@ msgstr "Fehlendes '}' in Eintrag für MIME-Typ %s."
 #: ../src/common/docview.cpp:1869 ../src/common/docview.cpp:1884
 #: ../src/common/docview.cpp:1911
 msgid "Unnamed command"
-msgstr ""
+msgstr "Ungenannte Kommando"
 
 #: ../src/common/resourc2.cpp:687 ../src/common/resource.cpp:2323
 #, c-format
 msgid "Unrecognized style %s whilst parsing resource."
-msgstr ""
+msgstr "Unerkannte 'style' %s während Lesevorgang."
 
 #: ../src/msw/app.cpp:748
 msgid "Unrecoverable program error detected: the application will terminate."
-msgstr ""
+msgstr "Unbehebbare Programm-Fehler festgestelt: Die Applikation wird beendet."
 
 #: ../src/msw/clipbrd.cpp:268 ../src/msw/clipbrd.cpp:369
 msgid "Unsupported clipboard format."
@@ -2194,7 +2210,7 @@ msgstr "Lokaler Benutzer"
 
 #: ../src/common/valtext.cpp:188
 msgid "Validation conflict"
-msgstr ""
+msgstr "Verifizierungs Konflikt"
 
 #: ../src/generic/dirdlgg.cpp:216
 msgid "Variables"
@@ -2202,11 +2218,11 @@ msgstr "Variablen"
 
 #: ../src/generic/filedlgg.cpp:858
 msgid "View files as a detailed view"
-msgstr ""
+msgstr "Dateien mit Datails anzeigen"
 
 #: ../src/generic/filedlgg.cpp:852
 msgid "View files as a list view"
-msgstr ""
+msgstr "Dateien als Liste anzeigen"
 
 #: ../src/common/docview.cpp:1440
 msgid "Views"
@@ -2214,7 +2230,7 @@ msgstr "Ansichten"
 
 #: ../src/unix/utilsunx.cpp:264 ../src/unix/utilsunx.cpp:600
 msgid "Waiting for subprocess termination failed"
-msgstr ""
+msgstr "Wartezeit für Beendigung eine Subprozesses abgelaufen"
 
 #: ../src/common/docview.cpp:428 ../src/common/resource.cpp:121
 #: ../src/generic/logg.cpp:181
@@ -2314,7 +2330,7 @@ msgstr "Ja"
 
 #: ../src/generic/dirdlgg.cpp:570
 msgid "You cannot add a new directory to this section."
-msgstr ""
+msgstr "sie können hier keine neue Verzeichnis anlegen."
 
 #: ../src/common/docview.cpp:1980
 msgid "[EMPTY]"
@@ -2322,19 +2338,23 @@ msgstr "[leer]"
 
 #: ../src/msw/dde.cpp:986
 msgid "a DDEML application has created a prolonged race condition."
-msgstr ""
+msgstr "eine DDEML Application hat eine 'prolonged race condition' erstellt."
 
 #: ../src/msw/dde.cpp:974
 msgid ""
-"a DDEML function was called without first calling the DdeInitialize "
+"a DDEML function was called without first callings the DdeInitialize "
 "function,\n"
 "or an invalid instance identifier\n"
 "was passed to a DDEML function."
 msgstr ""
+"eine DDEML Funktion wurde aufgerufen ohne vorher die DeInitializierung "
+"Funktion aufzurufen,\n"
+"oder eine ungültige 'instance identifier'\n"
+"an eine DDEML Funktion übergeben."
 
 #: ../src/msw/dde.cpp:992
 msgid "a client's attempt to establish a conversation has failed."
-msgstr ""
+msgstr "Eine 'Client' versuch eine Verbindung herzustellen ist gescheitert."
 
 #: ../src/msw/dde.cpp:989
 msgid "a memory allocation failed."
@@ -2342,27 +2362,27 @@ msgstr "eine Speicheranforderung ist gescheitert."
 
 #: ../src/msw/dde.cpp:983
 msgid "a parameter failed to be validated by the DDEML."
-msgstr ""
+msgstr "eine parameter wurde von DDEML nicht Verifiziert."
 
 #: ../src/msw/dde.cpp:965
 msgid "a request for a synchronous advise transaction has timed out."
-msgstr ""
+msgstr "ein Versuch ('request') für eine 'synchronous advise transaction' ist gescheitert ('timed out')"
 
 #: ../src/msw/dde.cpp:971
 msgid "a request for a synchronous data transaction has timed out."
-msgstr ""
+msgstr "ein Versuch ('request') für eine 'synchronous data transaction' ist gescheitert ('timed out')"
 
 #: ../src/msw/dde.cpp:980
 msgid "a request for a synchronous execute transaction has timed out."
-msgstr ""
+msgstr "ein Versuch ('request') für eine 'synchronous execute transaction' ist gescheitert ('timed out')"
 
 #: ../src/msw/dde.cpp:998
 msgid "a request for a synchronous poke transaction has timed out."
-msgstr ""
+msgstr "ein Versuch ('request') für eine 'synchronous poke transaction' ist gescheitert ('timed out')"
 
 #: ../src/msw/dde.cpp:1013
 msgid "a request to end an advise transaction has timed out."
-msgstr ""
+msgstr "ein Versuch ('request') für eine 'advise transaction' zu beenden ist gescheitert ('timed out')"
 
 #: ../src/msw/dde.cpp:1007
 msgid ""
@@ -2370,6 +2390,9 @@ msgid ""
 "that was terminated by the client, or the server\n"
 "terminated before completing a transaction."
 msgstr ""
+"Eine Transaktion-Verbindungsversuch vom Server\n"
+" wurde vom Client abgebrochen, oder der Server\n"
+"wurde beendet bevor der Transaktion beendet wurde."
 
 #: ../src/msw/dde.cpp:995
 msgid "a transaction failed."
@@ -2386,14 +2409,18 @@ msgid ""
 "or an application initialized as APPCMD_CLIENTONLY has \n"
 "attempted to perform server transactions."
 msgstr ""
+"eine Applikation die als ein 'APPCLASS_MONITOR' gestartet wurde, \n"
+"versuchte eine DDE Transaktion auszuführen,\n"
+"oder eine Applikation die als ein 'APPCMD_CLIENTONLY' gestartet wurde, \n"
+"versuchte eine Server Transaktion auszuführen."
 
 #: ../src/msw/dde.cpp:1001
 msgid "an internal call to the PostMessage function has failed. "
-msgstr ""
+msgstr "eine Interne aufruf zur 'PostMessage' Funktion ist gescheitert. "
 
 #: ../src/msw/dde.cpp:1010
 msgid "an internal error has occurred in the DDEML."
-msgstr ""
+msgstr "eine Interne Fehler ist im DDMEL aufgetreten."
 
 #: ../src/msw/dde.cpp:1016
 msgid ""
@@ -2401,6 +2428,9 @@ msgid ""
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
 "the transaction identifier for that callback is no longer valid."
 msgstr ""
+"eine ungültige Transaktionsidentifizierung wurde an eine DDEML Funktion übergeben.\n"
+"Sobald die Application aus eine 'XTYP_XACT_COMPLETE callback' zurückgekehrt ist,\n"
+"ist die Transaktionsidentifizierung für diese 'callback' nicht mehr gültig."
 
 #: ../src/common/fileconf.cpp:1415
 #, c-format
