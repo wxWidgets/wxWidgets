@@ -47,6 +47,7 @@ int  WXDLLEXPORT wxEntryInitGui();
 void WXDLLEXPORT wxEntryCleanup();
 
 wxPyApp* wxPythonApp = NULL;  // Global instance of application object
+bool wxPyDoCleanup = FALSE;
 
 
 #ifdef WXP_WITH_THREAD
@@ -184,6 +185,7 @@ void __wxPreStart()
     if (wxTopLevelWindows.Number() > 0)
         return;
 
+    wxPyDoCleanup = TRUE;
 
     int argc = 0;
     char** argv = NULL;
@@ -280,7 +282,8 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
 
 void __wxCleanup() {
-    wxEntryCleanup();
+    if (wxPyDoCleanup)
+        wxEntryCleanup();
 #ifdef WXP_WITH_THREAD
     delete wxPyTMutex;
     wxPyTMutex = NULL;
@@ -538,12 +541,10 @@ PyObject* wxPyConstructObject(void* ptr,
 
     PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
     if (! classobj) {
-        char temp[128];
-        sprintf(temp,
-                "*** Unknown class name %s, tell Robin about it please ***",
-                buff);
-        obj = PyString_FromString(temp);
-        return obj;
+        wxString msg(wxT("wxPython class not found for "));
+        msg += className;
+        PyErr_SetString(PyExc_NameError, msg.mbc_str());
+        return NULL;
     }
 
     return wxPyConstructObject(ptr, className, classobj, setThisOwn);
