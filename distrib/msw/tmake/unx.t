@@ -20,23 +20,32 @@
             next unless $file =~ /^dirdlgg\./;
         }
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXMSW_GENERICOBJS"} .= "src/generic/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXMSW_GENERICOBJS"} .= $file . " ";
+        $project{"WXMSW_GENERICDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxGeneric) {
         #! skip generic files not required for the wxGTK port
         next if $wxGeneric{$file} =~ /\bR\b/;
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXGTK_GENERICOBJS"} .= "src/generic/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXGTK_GENERICOBJS"} .= $file . " ";
+        $project{"WXGTK_GENERICDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxGeneric) {
         next if $wxCommon{$file} =~ /\bX\b/;
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXMOTIF_GENERICOBJS"} .= "src/generic/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXMOTIF_GENERICOBJS"} .= $file . " ";
+        $project{"WXMOTIF_GENERICDEPS"} .= $file2 . " "
     }
 
     #! Common
@@ -44,15 +53,21 @@
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\bR\b/;
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXGTK_COMMONOBJS"} .= "src/common/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXGTK_COMMONOBJS"} .= $file . " ";
+        $project{"WXGTK_COMMONDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxCommon) {
         next if $wxCommon{$file} =~ /\bX\b/;
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXMOTIF_COMMONOBJS"} .= "src/common/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXMOTIF_COMMONOBJS"} .= $file . " ";
+        $project{"WXMOTIF_COMMONDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxCommon) {
@@ -61,8 +76,11 @@
         #! needs extra files (sql*.h) so not compiled by default.
         next if $file =~ /^odbc\./;
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXMSW_COMMONOBJS"} .= "src/common/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXMSW_COMMONOBJS"} .= $file . " ";
+        $project{"WXMSW_COMMONDEPS"} .= $file2 . " "
     }
 
     #! GUI
@@ -75,30 +93,45 @@
         #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
         next if $file =~ /^dirdlg\./;
 
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXMSW_GUIOBJS"} .= "src/msw/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXMSW_GUIOBJS"} .= $file . " ";
+        $project{"WXMSW_GUIDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxGTK) {
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXGTK_GUIOBJS"} .= "src/gtk/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXGTK_GUIOBJS"} .= $file . " ";
+        $project{"WXGTK_GUIDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxMOTIF) {
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXMOTIF_GUIOBJS"} .= "src/motif/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXMOTIF_GUIOBJS"} .= $file . " ";
+        $project{"WXMOTIF_GUIDEPS"} .= $file2 . " "
     }
 
     #! others
     
     foreach $file (sort keys %wxHTML) {
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXHTMLOBJS"} .= "src/html/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXHTMLOBJS"} .= $file . " ";
+        $project{"WXHTMLDEPS"} .= $file2 . " "
     }
 
     foreach $file (sort keys %wxUNIX) {
+        $file2 = $file;
         $file =~ s/cp?p?$/\o/;
-        $project{"WXUNIXOBJS"} .= "src/unix/" . $file . " "
+        $file2 =~ s/cp?p?$/\d/;
+        $project{"WXUNIXOBJS"} .= $file . " ";
+        $project{"WXUNIXDEPS"} .= $file2 . " "
     }
     
     #! headers
@@ -160,19 +193,29 @@ include ./src/make.env
 .SUFFIXES:	.o .cpp .c .cxx
 
 .c.o :
-	$(CCC) -c $(CFLAGS) $(PICFLAGS) -o $@ $<
+	$(CCC) -c @DEP_INFO_FLAGS@ $(CFLAGS) $(PICFLAGS) -o $@ $<
 
 .cpp.o :
-	$(CC) -c $(CPPFLAGS) $(PICFLAGS) -o $@ $<
+	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) -o $@ $<
 
 .cxx.o :
-	$(CC) -c $(CPPFLAGS) $(PICFLAGS) -o $@ $<
+	$(CC) -c @DEP_INFO_FLAGS@ $(CPPFLAGS) $(PICFLAGS) -o $@ $<
 
 ########################### Paths #################################
 
 srcdir = @srcdir@
 
-VPATH = :@top_srcdir@
+VP1 = @top_srcdir@/src/common
+VP2 = @top_srcdir@/src/@TOOLKIT_DIR@
+VP3 = @top_srcdir@/src/motif/xmcombo
+VP4 = @top_srcdir@/src/generic
+VP5 = @top_srcdir@/src/unix
+VP6 = @top_srcdir@/src/html
+VP7 = @top_srcdir@/src/png
+VP8 = @top_srcdir@/src/jpeg
+VP9 = @top_srcdir@/src/zlib
+
+VPATH = $(VP1):$(VP2):$(VP3):$(VP4):$(VP5):$(VP6):$(VP7):$(VP8):$(VP9)
 
 top_srcdir = @top_srcdir@
 prefix = @prefix@
@@ -277,168 +320,189 @@ HTML_HEADERS = \
 GTK_GENERICOBJS = \
 		#$ ExpandList("WXGTK_GENERICOBJS");
 
+GTK_GENERICDEPS = \
+		#$ ExpandList("WXGTK_GENERICDEPS");
+
 GTK_COMMONOBJS = \
 		parser.o \
 		#$ ExpandList("WXGTK_COMMONOBJS");
 
+GTK_COMMONDEPS = \
+		parser.d \
+		#$ ExpandList("WXGTK_COMMONDEPS");
+
 GTK_GUIOBJS = \
 		#$ ExpandList("WXGTK_GUIOBJS");
 
+GTK_GUIDEPS = \
+		#$ ExpandList("WXGTK_GUIDEPS");
+
 MOTIF_GENERICOBJS = \
 		#$ ExpandList("WXMOTIF_GENERICOBJS");
+
+MOTIF_GENERICDEPS = \
+		#$ ExpandList("WXMOTIF_GENERICDEPS");
 
 MOTIF_COMMONOBJS = \
 		parser.o \
 		#$ ExpandList("WXMOTIF_COMMONOBJS");
 
+MOTIF_COMMONDEPS = \
+		parser.d \
+		#$ ExpandList("WXMOTIF_COMMONDEPS");
+
 MOTIF_GUIOBJS = \
-		src/motif/xmcombo/xmcombo.o \
+		xmcombo.o \
 		#$ ExpandList("WXMOTIF_GUIOBJS");
+
+MOTIF_GUIDEPS = \
+		xmcombo.d \
+		#$ ExpandList("WXMOTIF_GUIDEPS");
 
 MSW_GENERICOBJS = \
 		#$ ExpandList("WXMSW_GENERICOBJS");
 
+MSW_GENERICDEPS = \
+		#$ ExpandList("WXMSW_GENERICDEPS");
+
 MSW_COMMONOBJS = \
 		#$ ExpandList("WXMSW_COMMONOBJS");
+
+MSW_COMMONDEPS = \
+		#$ ExpandList("WXMSW_COMMONDEPS");
 
 MSW_GUIOBJS = \
 		#$ ExpandList("WXMSW_GUIOBJS");
 
+MSW_GUIDEPS = \
+		#$ ExpandList("WXMSW_GUIDEPS");
+
 HTMLOBJS = \
 		#$ ExpandList("WXHTMLOBJS");
+
+HTMLDEPS = \
+		#$ ExpandList("WXHTMLDEPS");
 
 UNIXOBJS = \
 		#$ ExpandList("WXUNIXOBJS");
 
+UNIXDEPS = \
+		#$ ExpandList("WXUNIXDEPS");
+
 ZLIBOBJS    = \
-		src/zlib/adler32.o \
-		src/zlib/compress.o \
-		src/zlib/crc32.o \
-		src/zlib/gzio.o \
-		src/zlib/uncompr.o \
-		src/zlib/deflate.o \
-		src/zlib/trees.o \
-		src/zlib/zutil.o \
-		src/zlib/inflate.o \
-		src/zlib/infblock.o \
-		src/zlib/inftrees.o \
-		src/zlib/infcodes.o \
-		src/zlib/infutil.o \
-		src/zlib/inffast.o
+		adler32.o \
+		compress.o \
+		crc32.o \
+		gzio.o \
+		uncompr.o \
+		deflate.o \
+		trees.o \
+		zutil.o \
+		inflate.o \
+		infblock.o \
+		inftrees.o \
+		infcodes.o \
+		infutil.o \
+		inffast.o
 
 PNGOBJS     = \
-		src/png/png.o \
-		src/png/pngread.o \
-		src/png/pngrtran.o \
-		src/png/pngrutil.o \
-		src/png/pngpread.o \
-		src/png/pngtrans.o \
-		src/png/pngwrite.o \
-		src/png/pngwtran.o \
-		src/png/pngwutil.o \
-		src/png/pngerror.o \
-		src/png/pngmem.o \
-		src/png/pngwio.o \
-		src/png/pngrio.o \
-		src/png/pngget.o \
-		src/png/pngset.o
+		png.o \
+		pngread.o \
+		pngrtran.o \
+		pngrutil.o \
+		pngpread.o \
+		pngtrans.o \
+		pngwrite.o \
+		pngwtran.o \
+		pngwutil.o \
+		pngerror.o \
+		pngmem.o \
+		pngwio.o \
+		pngrio.o \
+		pngget.o \
+		pngset.o
 
 
 JPEGOBJS    = \
-		src/jpeg/jcomapi.o \
-		src/jpeg/jutils.o \
-		src/jpeg/jerror.o \
-		src/jpeg/jmemmgr.o \
-		src/jpeg/jmemnobs.o \
-		src/jpeg/jcapimin.o \
-		src/jpeg/jcapistd.o \
-		src/jpeg/jctrans.o \
-		src/jpeg/jcparam.o \
-		src/jpeg/jdatadst.o \
-		src/jpeg/jcinit.o \
-		src/jpeg/jcmaster.o \
-		src/jpeg/jcmarker.o \
-		src/jpeg/jcmainct.o \
-		src/jpeg/jcprepct.o \
-		src/jpeg/jccoefct.o \
-		src/jpeg/jccolor.o \
-		src/jpeg/jcsample.o \
-		src/jpeg/jchuff.o \
-		src/jpeg/jcphuff.o \
-		src/jpeg/jcdctmgr.o \
-		src/jpeg/jfdctfst.o \
-		src/jpeg/jfdctflt.o \
-		src/jpeg/jfdctint.o \
-		src/jpeg/jdapimin.o \
-		src/jpeg/jdapistd.o \
-		src/jpeg/jdtrans.o \
-		src/jpeg/jdatasrc.o \
-		src/jpeg/jdmaster.o \
-		src/jpeg/jdinput.o \
-		src/jpeg/jdmarker.o \
-		src/jpeg/jdhuff.o \
-		src/jpeg/jdphuff.o \
-		src/jpeg/jdmainct.o \
-		src/jpeg/jdcoefct.o \
-		src/jpeg/jdpostct.o \
-		src/jpeg/jddctmgr.o \
-		src/jpeg/jidctfst.o \
-		src/jpeg/jidctflt.o \
-		src/jpeg/jidctint.o \
-		src/jpeg/jidctred.o \
-		src/jpeg/jdsample.o \
-		src/jpeg/jdcolor.o \
-		src/jpeg/jquant1.o \
-		src/jpeg/jquant2.o \
-		src/jpeg/jdmerge.o
+		jcomapi.o \
+		jutils.o \
+		jerror.o \
+		jmemmgr.o \
+		jmemnobs.o \
+		jcapimin.o \
+		jcapistd.o \
+		jctrans.o \
+		jcparam.o \
+		jdatadst.o \
+		jcinit.o \
+		jcmaster.o \
+		jcmarker.o \
+		jcmainct.o \
+		jcprepct.o \
+		jccoefct.o \
+		jccolor.o \
+		jcsample.o \
+		jchuff.o \
+		jcphuff.o \
+		jcdctmgr.o \
+		jfdctfst.o \
+		jfdctflt.o \
+		jfdctint.o \
+		jdapimin.o \
+		jdapistd.o \
+		jdtrans.o \
+		jdatasrc.o \
+		jdmaster.o \
+		jdinput.o \
+		jdmarker.o \
+		jdhuff.o \
+		jdphuff.o \
+		jdmainct.o \
+		jdcoefct.o \
+		jdpostct.o \
+		jddctmgr.o \
+		jidctfst.o \
+		jidctflt.o \
+		jidctint.o \
+		jidctred.o \
+		jdsample.o \
+		jdcolor.o \
+		jquant1.o \
+		jquant2.o \
+		jdmerge.o
 
 
 OBJECTS = $(@GUIOBJS@) $(@COMMONOBJS@) $(@GENERICOBJS@) $(@UNIXOBJS@) $(HTMLOBJS) \
 	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS)
 
+DEPFILES = $(@GUIDEPS@) $(@COMMONDEPS@) $(@GENERICDEPS@) $(UNIXDEPS) $(HTMLDEPS)
+
 HEADERS = $(@GUIHEADERS@) $(HTML_HEADERS) $(UNIX_HEADERS) $(PROTOCOL_HEADERS) \
 	  $(GENERIC_HEADERS) $(WX_HEADERS)
 
-REQUIRED_DIRS = ./lib ./src ./src/common ./src/gtk ./src/motif ./src/msw \
-                ./src/generic ./src/unix ./src/motif/xmombo ./src/html \
-		./src/zlib ./src/jpeg ./src/png
-
-all:    $(REQUIRED_DIRS) $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
-
-$(REQUIRED_DIRS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h $(WXDIR)/include/wx/setup.h
-	@mkdir -p ./lib
-	@mkdir -p ./src
-	@mkdir -p ./src/common
-	@mkdir -p ./src/msw
-	@mkdir -p ./src/gtk
-	@mkdir -p ./src/motif
-	@mkdir -p ./src/motif/xmcombo
-	@mkdir -p ./src/generic
-	@mkdir -p ./src/unix
-	@mkdir -p ./src/html
-	@mkdir -p ./src/png
-	@mkdir -p ./src/jpeg
-	@mkdir -p ./src/zlib
+all:    $(OBJECTS) @WX_TARGET_LIBRARY@ @WX_CREATE_LINKS@
 
 @WX_LIBRARY_NAME_STATIC@:  $(OBJECTS)
+	$(INSTALL) -d ./lib
 	$(AR) $(AROPTIONS) ./lib/$@ $(OBJECTS)
 	$(RANLIB) ./lib/$@
 
 @WX_LIBRARY_NAME_SHARED@:  $(OBJECTS)
+	$(INSTALL) -d ./lib
 	$(SHARED_LD) ./lib/$@ $(OBJECTS) $(EXTRALIBS)
 	
 CREATE_LINKS:  ./lib/@WX_TARGET_LIBRARY@
-	@if test -e ./lib/@WX_LIBRARY_LINK1@; then $(RM) ./lib/@WX_LIBRARY_LINK1@; fi
-	@if test -e ./lib/@WX_LIBRARY_LINK2@; then $(RM) ./lib/@WX_LIBRARY_LINK2@; fi
-	@if test -e ./lib/@WX_LIBRARY_LINK3@; then $(RM) ./lib/@WX_LIBRARY_LINK3@; fi
+	$(RM) ./lib/@WX_LIBRARY_LINK1@
+	$(RM) ./lib/@WX_LIBRARY_LINK2@
+	$(RM) ./lib/@WX_LIBRARY_LINK3@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK1@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK2@
 	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK3@
 	
 CREATE_INSTALLED_LINKS:  $(libdir)/@WX_TARGET_LIBRARY@
-	@if test -e $(libdir)/@WX_LIBRARY_LINK1@; then $(RM) $(libdir)/@WX_LIBRARY_LINK1@; fi
-	@if test -e $(libdir)/@WX_LIBRARY_LINK2@; then $(RM) $(libdir)/@WX_LIBRARY_LINK2@; fi
-	@if test -e $(libdir)/@WX_LIBRARY_LINK3@; then $(RM) $(libdir)/@WX_LIBRARY_LINK3@; fi
+	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
+	$(RM) $(libdir)/@WX_LIBRARY_LINK3@
 	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK1@
 	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK2@
 	$(LN_S) @WX_TARGET_LIBRARY@ $(libdir)/@WX_LIBRARY_LINK3@
@@ -466,11 +530,12 @@ lexer.c:	$(COMMDIR)/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) lex.yy.c
 
+-include $(DEPFILES)
+
 preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config $(top_builddir)/setup.h
 	@echo " "
 	@echo " Installing wxWindows..."
 	@echo " "
-
 
 	$(INSTALL) -d $(prefix)
 	$(INSTALL) -d $(bindir)
@@ -678,17 +743,8 @@ dist: ALL_DIST @GUIDIST@ SAMPLES_DIST
 	$(RM) -r _dist_dir
 
 clean:
-	$(RM) ./src/msw/*.o
-	$(RM) ./src/gtk/*.o
-	$(RM) ./src/motif/*.o
-	$(RM) ./src/html/*.o
-	$(RM) ./src/common/*.o
-	$(RM) ./src/unix/*.o
-	$(RM) ./src/generic/*.o
-	$(RM) ./src/png/*.o
-	$(RM) ./src/jpeg/*.o
-	$(RM) ./src/zlib/*.o
 	$(RM) *.o
+	$(RM) *.d
 	$(RM) parser.c
 	$(RM) lexer.c
 	$(RM) ./lib/*

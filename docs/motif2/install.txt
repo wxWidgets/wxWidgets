@@ -231,6 +231,13 @@ The following options handle the kind of library you want to build.
 				binary size. Also fewer crashes during the
 				actual compilation...
 				
+	--enable-no_deps        Enable compilation without creation of
+	                        dependency information.
+				
+	--enable-permissive     Enable compilation without creation of
+	                        giving erros as soon as you compile with
+				Solaris ANSI-defying headers...
+				
 	--enable-mem_tracing    Add built-in memory tracing. 
 				
 	--enable-dmalloc        Use the dmalloc memory debugger.

@@ -641,8 +641,10 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_SHARED=yes
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
+  DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=yes
   DEFAULT_wxUSE_DEBUG_INFO=yes
   DEFAULT_wxUSE_DEBUG_GDB=yes
@@ -746,8 +748,10 @@ else
   DEFAULT_wxUSE_SHARED=yes
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
+  DEFAULT_wxUSE_NO_DEPS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
+  DEFAULT_wxUSE_PERMISSIVE=no
   DEFAULT_wxUSE_DEBUG_FLAG=no
   DEFAULT_wxUSE_DEBUG_INFO=no
   DEFAULT_wxUSE_DEBUG_GDB=no
@@ -913,6 +917,8 @@ WX_ARG_ENABLE(mem_tracing,   [  --enable-mem_tracing    create code with memory 
 WX_ARG_ENABLE(profile,       [  --enable-profile        create code with profiling information], wxUSE_PROFILE)
 WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI information], wxUSE_NO_RTTI)
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without exceptions information], wxUSE_NO_EXCEPTIONS)
+WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
+WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
 
 dnl ---------------------------------------------------------------------------
 dnl --disable-gui will build only non-GUI part of wxWindows
@@ -1419,10 +1425,13 @@ if test "$wxUSE_GTK" = 1; then
     GUI_TK_LIBRARY="$GTK_LIBS -ldl"
     TOOLKIT=GTK
   
-    GUIOBJS=GTK_GUIOBJS
     GUIHEADERS=GTK_HEADERS
+    GUIOBJS=GTK_GUIOBJS
     COMMONOBJS=GTK_COMMONOBJS
     GENERICOBJS=GTK_GENERICOBJS
+    GUIDEPS=GTK_GUIDEPS
+    COMMONDEPS=GTK_COMMONDEPS
+    GENERICDEPS=GTK_GENERICDEPS
     UNIXOBJS=UNIXOBJS
     GUIDIST=GTK_DIST
 fi
@@ -1467,10 +1476,13 @@ if test "$wxUSE_WINE" = 1; then
     WXWINE=1
     TOOLKIT=MSW
     
-    GUIOBJS=MSW_GUIOBJS
     GUIHEADERS=MSW_HEADERS
+    GUIOBJS=MSW_GUIOBJS
     COMMONOBJS=MSW_COMMONOBJS
     GENERICOBJS=MSW_GENERICOBJS
+    GUIDEPS=MSW_GUIDEPS
+    COMMONDEPS=MSW_COMMONDEPS
+    GENERICDEPS=MSW_GENERICDEPS
     UNIXOBJS=UNIXOBJS
     GUIDIST=MSW_DIST
 fi
@@ -1539,10 +1551,13 @@ if test "$wxUSE_MOTIF" = 1; then
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     TOOLKIT=MOTIF
   
-    GUIOBJS=MOTIF_GUIOBJS
     GUIHEADERS=MOTIF_HEADERS
+    GUIOBJS=MOTIF_GUIOBJS
     COMMONOBJS=MOTIF_COMMONOBJS
     GENERICOBJS=MOTIF_GENERICOBJS
+    GUIDEPS=MOTIF_GUIDEPS
+    COMMONDEPS=MOTIF_COMMONDEPS
+    GENERICDEPS=MOTIF_GENERICDEPS
     UNIXOBJS=UNIXOBJS
     GUIDIST=MOTIF_DIST
 fi
@@ -1966,14 +1981,15 @@ if test "$wxUSE_CYGWIN" = 1 ; then
 fi
 
 WXDEBUG=
-if test "$wxUSE_DEBUG_GDB" = "yes" ; then
-    wxUSE_DEBUG_INFO=yes
-    WXDEBUG="-ggdb"
-fi
 
 if test "$wxUSE_DEBUG_INFO" = "yes" ; then
     WXDEBUG="-g"
     wxUSE_OPTIMISE=no
+fi
+
+if test "$wxUSE_DEBUG_GDB" = "yes" ; then
+    wxUSE_DEBUG_INFO=yes
+    WXDEBUG="-ggdb"
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
@@ -2000,6 +2016,7 @@ if test "$wxUSE_PROFILE" = "yes" ; then
     PROFILE="-pg"
 fi
 
+DEP_INFO_FLAGS=
 if test "$GCC" = yes ; then
     if test "$wxUSE_NO_RTTI" = "yes" ; then
 	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-rtti"
@@ -2007,8 +2024,13 @@ if test "$GCC" = yes ; then
     if test "$wxUSE_NO_EXCEPTIONS" = "yes" ; then
 	WXDEBUG_DEFINE="$WXDEBUG_DEFINE -fno-exceptions"
     fi
-dnl    CFLAGS="${CFLAGS} -fpermissive"
-dnl    CXXFLAGS="${CXXFLAGS} -fpermissive"
+    if test "$wxUSE_PERMISSIVE" = "yes" ; then
+       CFLAGS="${CFLAGS} -fpermissive"
+       CXXFLAGS="${CXXFLAGS} -fpermissive"
+    fi
+    if test "$wxUSE_NO_DEPS" = "no" ; then
+        DEP_INFO_FLAGS="-MMD"
+    fi
 fi  
 	  
 	  
@@ -2677,6 +2699,7 @@ AC_SUBST(WX_CREATE_INSTALLED_LINKS)
 
 AC_SUBST(SHARED_LD)
 AC_SUBST(PIC_FLAG)
+AC_SUBST(DEP_INFO_FLAGS)
 
 dnl debugging options
 AC_SUBST(WXDEBUG_DEFINE)
@@ -2688,10 +2711,13 @@ AC_SUBST(TOOLKIT_DIR)
 AC_SUBST(TOOLKIT_INCLUDE)
 
 dnl what to compile
-AC_SUBST(GUIOBJS)
 AC_SUBST(GUIHEADERS)
+AC_SUBST(GUIOBJS)
 AC_SUBST(COMMONOBJS)
 AC_SUBST(GENERICOBJS)
+AC_SUBST(GUIDEPS)
+AC_SUBST(COMMONDEPS)
+AC_SUBST(GENERICDEPS)
 AC_SUBST(UNIXOBJS)
 AC_SUBST(GUIDIST)
 
