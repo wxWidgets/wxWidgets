@@ -19,5 +19,6 @@ static char *play_xpm[] = {
 "    .           ",
 "                ",
 "                ",
+"                ",
 "                "
 };
