@@ -20,6 +20,13 @@ available.
 Added GetCount, GetCountRGB, and GetCountColour methods to
 wx.ImageHistogram. 
 
+wxMSW:  wx.Window.Refresh changed to explicitly refresh all children
+as well.  Previously it was implicitly done because parents did not
+clip thier children by default.  Now that they always clip then
+Refresh needed to do a recursive refresh.  This also fixes the
+Freeze/Thaw problems that some people had with 2.5.4.1.
+
+
 
 
 2.5.4.1
