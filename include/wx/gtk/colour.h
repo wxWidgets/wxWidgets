@@ -80,6 +80,9 @@ public:
     unsigned char Blue() const;
 
 
+    // Get colour from name or wxNullColour
+    static wxColour CreateByName(const wxString& name);
+
     // Implementation part
     void CalcPixel( GdkColormap *cmap );
     int GetPixel() const;

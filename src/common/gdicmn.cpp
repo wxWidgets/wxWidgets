@@ -408,11 +408,9 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
     if ( it != m_map->end() )
         return *(it->second);
 
-    // if we didn't find it,query the system, maybe it knows about it
-    //
-    // TODO: move this into platform-specific files
-#ifdef __WXGTK__
-    wxColour col( colour );
+    // if we didn't find it, query the system, maybe it knows about it
+#if defined(__WXGTK__) || defined(__X__)
+    wxColour col = wxColour::CreateByName(colour);
 
     if ( col.Ok() )
     {
@@ -422,6 +420,7 @@ wxColour wxColourDatabase::Find(const wxString& colour) const
 
     return col;
 #elif defined(__X__)
+    // TODO: move this to wxColour::CreateByName()
     XColor xcolour;
 
 #ifdef __WXMOTIF__
