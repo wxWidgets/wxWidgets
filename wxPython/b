@@ -33,12 +33,12 @@ OTHERFLAGS=""
 if [ "$1" =  "c" ]; then
     shift
     CMD="$SETUP $FLAGS $OTHERFLAGS clean $*"
-    OTHERCMD="rm -f wxPython/*.so"
+    OTHERCMD="rm -f wx/*.so"
 
 # "d" --> clean extension modules only
 elif [ "$1" = "d" ]; then
     shift
-    CMD="rm -f wxPython/*.so"
+    CMD="rm -f wx/*.so"
 
 # "t" --> touch *.i files
 elif [ "$1" = "t" ]; then
