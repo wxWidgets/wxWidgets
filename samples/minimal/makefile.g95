@@ -7,7 +7,7 @@
 #
 # "%W% %G%"
 #
-# Makefile for conftest example (UNIX).
+# Makefile for minimal example (UNIX).
 
 WXDIR = ../..
 
@@ -15,23 +15,23 @@ WXDIR = ../..
 # this central makefile.
 include $(WXDIR)/src/makeg95.env
 
-OBJECTS = $(OBJDIR)/conftest.$(OBJSUFF) $(OBJDIR)/conftest_resources.$(OBJSUFF)
+OBJECTS = $(OBJDIR)/minimal.$(OBJSUFF) $(OBJDIR)/minimal_resources.$(OBJSUFF)
 
-all:    $(OBJDIR) conftest$(GUISUFFIX)$(EXESUFF)
+all:    $(OBJDIR) minimal$(GUISUFFIX)$(EXESUFF)
 
 wx:
 
 $(OBJDIR):
 	mkdir $(OBJDIR)
 
-conftest$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
-	$(CC) $(LDFLAGS) -o conftest$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+minimal$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o minimal$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
 
-$(OBJDIR)/conftest.$(OBJSUFF):	conftest.$(SRCSUFF)
-	$(CC) -c $(CPPFLAGS) -o $@ conftest.$(SRCSUFF)
+$(OBJDIR)/minimal.$(OBJSUFF):	minimal.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ minimal.$(SRCSUFF)
 
-$(OBJDIR)/conftest_resources.o:  conftest.rc
-	$(RESCOMP) -i conftest.rc -o $(OBJDIR)/conftest_resources.o $(RESFLAGS)
+$(OBJDIR)/minimal_resources.o:  minimal.rc
+	$(RESCOMP) -i minimal.rc -o $(OBJDIR)/minimal_resources.o $(RESFLAGS)
 
 clean:
-	rm -f $(OBJECTS) conftest$(GUISUFFIX).exe core *.rsc *.res
+	rm -f $(OBJECTS) minimal$(GUISUFFIX).exe core *.rsc *.res

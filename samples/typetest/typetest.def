@@ -1,0 +1,9 @@
+      *   Last change:  JS   11 Sep 98    1:22 pm
+NAME         Typetest
+DESCRIPTION  'Typetest wxWindows application'
+EXETYPE      WINDOWS
+STUB         'WINSTUB.EXE'
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+HEAPSIZE     4048
+STACKSIZE    16000

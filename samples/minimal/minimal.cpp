@@ -38,7 +38,8 @@ class MyApp: public wxApp
 // Define a new frame type
 class MyFrame: public wxFrame
 { public:
-    MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h);
+    MyFrame(wxFrame *parent, const wxString& title,
+       const wxPoint& pos, const wxSize& size);
     
  public:
     void OnQuit(wxCommandEvent& event);
@@ -62,19 +63,15 @@ END_EVENT_TABLE()
 // Create a new application object
 IMPLEMENT_APP	(MyApp)
 
-// `Main program' equivalent, creating windows and returning main app frame
+// `Main program' equivalent
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  MyFrame *frame = new MyFrame((wxFrame *) NULL, (char *) "Minimal wxWindows App", 50, 50, 450, 340);
+  MyFrame *frame = new MyFrame((wxFrame *) NULL, "Minimal wxWindows App",
+      wxPoint(50, 50), wxSize(450, 340));
 
   // Give it an icon
-#ifdef __WXMSW__
-  frame->SetIcon(wxIcon("mondrian"));
-#endif
-#ifdef __WXGTK__
-  frame->SetIcon(wxIcon( mondrian_xpm ));
-#endif
+  frame->SetIcon(wxICON(mondrian));
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
@@ -99,8 +96,9 @@ bool MyApp::OnInit(void)
 }
 
 // My frame constructor
-MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
-  wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+MyFrame::MyFrame(wxFrame *parent, const wxString& title,
+       const wxPoint& pos, const wxSize& size):
+  wxFrame(parent, -1, title, pos, size)
 {}
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
