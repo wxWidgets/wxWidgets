@@ -986,14 +986,22 @@ wxString& wxString::MakeLower()
 // trimming and padding
 // ---------------------------------------------------------------------------
 
+// some compilers (VC++ 6.0 not to name them) return TRUE for a call to
+// isspace('ê') in the C locale which seems to be broken to me, but we have to
+// live with this by checking that the character is a 7 bit one - even if this
+// may fail to detect some spaces (I don't know if Unicode doesn't have
+// space-like symbols somewhere except in the first 128 chars), it is arguably
+// still better than trimming away accented letters
+inline int wxSafeIsspace(wxChar ch) { return (ch < 127) && wxIsspace(ch); }
+
 // trims spaces (in the sense of isspace) from left or right side
 wxString& wxString::Trim(bool bFromRight)
 {
   // first check if we're going to modify the string at all
   if ( !IsEmpty() &&
        (
-        (bFromRight && wxIsspace(GetChar(Len() - 1))) ||
-        (!bFromRight && wxIsspace(GetChar(0u)))
+        (bFromRight && wxSafeIsspace(GetChar(Len() - 1))) ||
+        (!bFromRight && wxSafeIsspace(GetChar(0u)))
        )
      )
   {
@@ -1004,7 +1012,7 @@ wxString& wxString::Trim(bool bFromRight)
     {
       // find last non-space character
       wxChar *psz = m_pchData + GetStringData()->nDataLength - 1;
-      while ( wxIsspace(*psz) && (psz >= m_pchData) )
+      while ( wxSafeIsspace(*psz) && (psz >= m_pchData) )
         psz--;
 
       // truncate at trailing space start
@@ -1015,7 +1023,7 @@ wxString& wxString::Trim(bool bFromRight)
     {
       // find first non-space character
       const wxChar *psz = m_pchData;
-      while ( wxIsspace(*psz) )
+      while ( wxSafeIsspace(*psz) )
         psz++;
 
       // fix up data and length
