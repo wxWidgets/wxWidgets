@@ -340,7 +340,11 @@ public:
         // edited simultaneously)
     wxTextCtrl* GetEditControl() const;
         // end editing and accept or discard the changes to item label
-    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = false);
+    void EndEditLabel(const wxTreeItemId& WXUNUSED(item),
+                      bool discardChanges = false)
+    {
+        DoEndEditLabel(discardChanges);
+    }
 
     // sorting
         // this function is called to compare 2 items and should return -1, 0
@@ -445,6 +449,10 @@ protected:
 
     // refresh a single item
     void RefreshItem(const wxTreeItemId& item);
+
+    // end edit label
+    void DoEndEditLabel(bool discardChanges = false);
+
 
     // data used only while editing the item label:
     wxTextCtrl  *m_textCtrl;        // text control in which it is edited

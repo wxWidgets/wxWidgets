@@ -2053,7 +2053,7 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
 }
 
 // End label editing, optionally cancelling the edit
-void wxTreeCtrl::EndEditLabel(const wxTreeItemId& WXUNUSED(item), bool discardChanges)
+void wxTreeCtrl::DoEndEditLabel(bool discardChanges)
 {
     TreeView_EndEditLabelNow(GetHwnd(), discardChanges);
 
@@ -2474,6 +2474,24 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         if ( wParam == VK_SPACE || wParam == VK_RETURN )
         {
             processed = true;
+        }
+    }
+    else if ( nMsg == WM_COMMAND )
+    {
+        // if we receive a EN_KILLFOCUS command from the in-place edit control
+        // used for label editing, make sure to end editing
+        WORD id, cmd;
+        WXHWND hwnd;
+        UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
+
+        if ( cmd == EN_KILLFOCUS )
+        {
+            if ( m_textCtrl && m_textCtrl->GetHandle() == hwnd )
+            {
+                DoEndEditLabel();
+
+                processed = true;
+            }
         }
     }
 
