@@ -147,18 +147,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
   SetFont(* parent->GetFont());
 
-  // Subclass again for purposes of dialog editing mode
   SubclassWin((WXHWND)m_hWnd);
-
-/* Label will be the same as button font now.
-  if (labelFont)
-  {
-    labelFont->RealizeResource();
-    if (labelFont->GetResourceHandle())
-      SendMessage(ms_handle,WM_SETFONT,
-                (WPARAM)labelFont->GetResourceHandle(),0L);
-  }
-*/
 
   // Some radio boxes test consecutive id.
   (void)NewControlId() ;
@@ -255,15 +244,6 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                            0,0,0,0,
                            (HWND) parent->GetHWND(), (HMENU) m_windowId, wxGetInstance(), NULL) ;
 
-/*
-  if (labelFont)
-  {
-    labelFont->RealizeResource();
-    if (labelFont->GetResourceHandle())
-      SendMessage(ms_handle,WM_SETFONT,
-                (WPARAM)labelFont->GetResourceHandle(),0L);
-  }
-*/
   the_handle = (HWND) parent->GetHWND();
 
 #if CTL3D
@@ -610,11 +590,6 @@ void wxRadioBox::SetLabel(const wxString& label)
 
 void wxRadioBox::SetFocus(void)
 {
-/*
-  if (m_noItems > 0)
-   ::SetFocus((HWND) m_radioButtons[0]);
-*/
-/* Begin Alberts Patch 26. 5. 1997*/
   if (m_noItems > 0)
   {
     if (m_selectedButton == -1)
@@ -622,7 +597,6 @@ void wxRadioBox::SetFocus(void)
     else
       ::SetFocus((HWND) m_radioButtons[m_selectedButton]);
   }
-/* Ende Alberts Patch*/
 
 }
 
@@ -725,36 +699,6 @@ bool wxRadioBox::SetStringSelection (const wxString& s)
     return FALSE;
 }
 
-/*
-void wxRadioBox::SetLabelFont(wxFont *font)
-{
-  // Decrement the usage count of the old label font
-  // (we may be able to free it up)
-  if (labelFont)
-    labelFont->ReleaseResource();
-
-  labelFont = font;
-
-  // Increment usage count
-  if (font)
-    font->UseResource();
-
-  HWND hWnd = GetHWND();
-  if (hWnd != 0)
-  {
-    if (font)
-    {
-      font->RealizeResource();
-
-      if (font->GetResourceHandle())
-        SendMessage(hWnd, WM_SETFONT,
-                  (WPARAM)font->GetResourceHandle(),TRUE);
-    }
-  }
-}
-
-*/
-
 bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
 {
 	int i;
@@ -770,4 +714,21 @@ void wxRadioBox::Command (wxCommandEvent & event)
   ProcessCommand (event);
 }
 
+long wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+	if (nMsg == WM_NCHITTEST)
+    {
+        int xPos = LOWORD(lParam);  // horizontal position of cursor
+        int yPos = HIWORD(lParam);  // vertical position of cursor
+
+        ScreenToClient(&xPos, &yPos);
+
+        // Make sure you can drag by the top of the groupbox, but let
+        // other (enclosed) controls get mouse events also
+        if (yPos < 10)
+            return (long)HTCLIENT;
+    }
+
+	return wxControl::MSWWindowProc(nMsg, wParam, lParam);
+}
 
