@@ -110,11 +110,9 @@ void xt_notify_end_process(XtPointer client, int *fid,
     
     process_data->end_process = TRUE;
 
-/* double deletion!
-    if (process_data->pid > 0)
+    if (process_data->pid > 0) // synchronous
         delete process_data;
     else
-*/
         process_data->pid = 0;
 }
 
@@ -165,9 +163,7 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
             printf ("wxWindows: could not execute '%s'\n", *argv);
             _exit (-1);
     }
-    if (!sync)
-      return pid;
-    
+
     wxLocalProcessData *process_data = new wxLocalProcessData;
     
     process_data->end_process = 0;
@@ -180,15 +176,17 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
         (XtInputCallbackProc) xt_notify_end_process,
         (XtPointer) process_data);
     
-    while (!process_data->end_process)
-        XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
-        
-    if (WIFEXITED(process_data->end_process) != 0)
+    if (sync)
     {
-        delete process_data;
-        return WEXITSTATUS(process_data->end_process);
+        while (!process_data->end_process)
+            XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+        
+        if (WIFEXITED(process_data->end_process) != 0)
+        {
+//            delete process_data; // Double deletion
+            return WEXITSTATUS(process_data->end_process);
+        }
     }
-    
     delete process_data;
     
     return pid;

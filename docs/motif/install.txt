@@ -118,9 +118,9 @@ Troubleshooting
   functions, try putting the gcc fixinclude file paths early in the
   include path.
 
-- If you get strange memory problems (for example in deletion
-  of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS to 0 in
-  setup.h, and recompile.
+- If you operator-related compile errors or strange memory problems
+  (for example in deletion of string arrays), set wxUSE_GLOBAL_MEMORY_OPERATORS
+  and wxUSE_MEMORY_TRACING to 0 in setup.h, and recompile.
 
 - If you get an internal compiler error in gcc, turn off
   optimisations.
@@ -128,7 +128,8 @@ Troubleshooting
 - Problems with XtDestroyWidget crashing in ~wxWindow have been
   reported on SGI IRIX 6.4. This has not yet been resolved, so
   any advice here would be very welcome. See bugs.txt for a
-  possible temporary workaround.
+  possible temporary workaround (comment out the final
+  XtDestroyWidget from ~wxWindow in window.cpp).
 
 Other Notes
 -----------

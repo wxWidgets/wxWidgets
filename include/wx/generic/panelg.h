@@ -69,12 +69,12 @@ public:
     void OnFocus(wxFocusEvent& event);
 
         // called by wxWindow whenever it gets focus
-    void SetLastFocus(wxWindow *focus) { m_lastFocus = focus; }
-    wxWindow* GetLastFocus() const { return m_lastFocus; }
+    void SetLastFocus(long focus) { m_lastFocus = focus; }
+    long GetLastFocus() const { return m_lastFocus; }
 
 protected:
     // the child which had the focus last time this panel was activated
-    wxWindow *m_lastFocus;
+    long m_lastFocus;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxPanel)

@@ -42,7 +42,7 @@ END_EVENT_TABLE()
 
 wxPanel::wxPanel()
 {
-    m_lastFocus = NULL;
+    m_lastFocus = 0;
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,
@@ -145,8 +145,12 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 
 void wxPanel::OnFocus(wxFocusEvent& event)
 {
-    if ( m_lastFocus )
-        m_lastFocus->SetFocus();
+    if (m_lastFocus != 0)
+    {
+        wxWindow* child = FindWindow(m_lastFocus);
+        if (child)
+            child->SetFocus();
+    }
     else
         event.Skip();
 }

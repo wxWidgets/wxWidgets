@@ -19,7 +19,7 @@ Update manual.
     Functions
 
 Makefiles and/or IDE files for other compilers: Symantec C++,
-Salford C++. IDE files for BC++.
+Salford C++.
 
 Check TODO entries in source and manual.
 

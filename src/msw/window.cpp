@@ -308,14 +308,6 @@ wxWindow::wxWindow()
 // Destructor
 wxWindow::~wxWindow()
 {
-    // Remove potential dangling pointer
-    if (GetParent() && GetParent()->IsKindOf(CLASSINFO(wxPanel)))
-    {
-        wxPanel* panel = (wxPanel*) GetParent();
-        if (panel->GetLastFocus() == this)
-            panel->SetLastFocus((wxWindow*) NULL);
-    }
-
     m_isBeingDeleted = TRUE;
 
     // first of all, delete the things on which nothing else depends
@@ -1763,7 +1755,7 @@ bool wxWindow::MSWOnSetFocus(WXHWND WXUNUSED(hwnd))
     wxWindow *parent = GetParent();
     if ( parent && parent->IsKindOf(CLASSINFO(wxPanel)) )
     {
-        ((wxPanel *)parent)->SetLastFocus(this);
+        ((wxPanel *)parent)->SetLastFocus(GetId());
     }
 
     wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
@@ -2201,7 +2193,7 @@ bool wxWindow::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
 long wxWindow::MSWOnSysCommand(WXWPARAM wParam, WXLPARAM lParam)
 {
-    switch (wParam && 0xFFFFFFF0)
+    switch (wParam & 0xFFFFFFF0)
     {
     case SC_MAXIMIZE:
         {
