@@ -144,7 +144,7 @@ class PullDownMenu:
             ID_NEW.SCROLL_BAR: 'wxScrollBar',
             ID_NEW.TREE_CTRL: 'wxTreeCtrl',
             ID_NEW.LIST_CTRL: 'wxListCtrl',
-            ID_NEW.CHECK_LIST: 'wxCheckList',
+            ID_NEW.CHECK_LIST: 'wxCheckListBox',
             ID_NEW.NOTEBOOK: 'wxNotebook',
             ID_NEW.SCROLLED_WINDOW: 'wxScrolledWindow',
             ID_NEW.HTML_WINDOW: 'wxHtmlWindow',

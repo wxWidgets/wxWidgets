@@ -223,7 +223,7 @@ class xxxObject:
                 elif tag in self.specials:
                     self.special(tag, node)
                 elif tag == 'content':
-                    if self.className == 'wxCheckList':
+                    if self.className == 'wxCheckListBox':
                         self.params[tag] = xxxParamContentCheckList(node)
                     else:
                         self.params[tag] = xxxParamContent(node)
@@ -245,7 +245,7 @@ class xxxObject:
                 if self.default.has_key(param):
                     elem = g.tree.dom.createElement(param)
                     if param == 'content':
-                        if self.className == 'wxCheckList':
+                        if self.className == 'wxCheckListBox':
                             self.params[param] = xxxParamContentCheckList(elem)
                         else:
                             self.params[param] = xxxParamContent(elem)
@@ -783,7 +783,7 @@ xxxDict = {
     'wxScrollBar': xxxScrollBar,
     'wxTreeCtrl': xxxTreeCtrl,
     'wxListCtrl': xxxListCtrl,
-    'wxCheckList': xxxCheckList,
+    'wxCheckListBox': xxxCheckList,
     'wxNotebook': xxxNotebook,
     'notebookpage': xxxNotebookPage,
     'wxHtmlWindow': xxxHtmlWindow,
