@@ -54,6 +54,9 @@ typedef  _TUCHAR     wxUChar;
 #define wxSChar signed char
 #define wxUChar unsigned char
 #endif
+   // wchar_t is available
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 1
 
    // ctype.h functions
 #define  wxIsalnum   _istalnum
@@ -161,6 +164,9 @@ typedef  _TUCHAR     wxUChar;
 #define wxSChar signed char
 #define wxUChar unsigned char
 #endif
+   // wchar_t is available
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 1
 
 #include <windef.h>
 #include <winbase.h>
@@ -195,10 +201,23 @@ inline WORD __wxMSW_ctype(wxChar ch)
 #define wxNEED_WX_TIME_H
 #define wxNEED_WCSLEN
 
-#else//!Windows
+#else//!TCHAR-aware compilers
 
-// wchar_t will be used in buffer.h, so include it rather unconditionally
+// check whether we should include wchar.h or equivalent
+#if wxUSE_UNICODE
+#undef wxUSE_WCHAR_T
+#define wxUSE_WCHAR_T 1 // wchar_t *must* be available in Unicode mode
+#elif !defined(wxUSE_WCHAR_T)
+#if defined(__VISUALC__) && (__VISUALC__ < 900)
+#define wxUSE_WCHAR_T 0 // wchar_t is not available for MSVC++ 1.5
+#else
+#define wxUSE_WCHAR_T 1
+#endif
+#endif
+
+#if wxUSE_WCHAR_T
 #include <wchar.h>
+#endif
 
 // check whether we are doing Unicode
 #if wxUSE_UNICODE
@@ -419,6 +438,7 @@ inline size_t WXDLLEXPORT wxStrlen(const wxChar *psz)
    { return psz ? wxStrlen_(psz) : 0; }
 #endif
 
+#if wxUSE_WCHAR_T
 // multibyte<->widechar conversion
 size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n);
 size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *psz, size_t n);
@@ -432,6 +452,7 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 #define wxWX2MB wxStrncpy
 #define wxWC2WX wxWC2MB
 #define wxWX2WC wxMB2WC
+#endif
 #endif
 
 // if libc versions are not available, use replacements defined in wxchar.cpp
@@ -456,8 +477,24 @@ size_t   WXDLLEXPORT wcslen(const wchar_t *s);
 #endif
 
 #ifdef wxNEED_WX_STRING_H
-int      WXDLLEXPORT wxStrcmp(const wxChar *psz1, const wxChar *psz2);
+wxChar * WXDLLEXPORT wxStrcat(wxChar *dest, const wxChar *src);
+wxChar * WXDLLEXPORT wxStrchr(const wxChar *s, wxChar c);
+int      WXDLLEXPORT wxStrcmp(const wxChar *s1, const wxChar *s2);
+int      WXDLLEXPORT wxStrcoll(const wxChar *s1, const wxChar *s2);
+wxChar * WXDLLEXPORT wxStrcpy(wxChar *dest, const wxChar *src);
+size_t   WXDLLEXPORT wxStrcspn(const wxChar *s, const wxChar *reject);
 size_t   WXDLLEXPORT wxStrlen(const wxChar *s);
+wxChar * WXDLLEXPORT wxStrncat(wxChar *dest, const wxChar *src, size_t n);
+int      WXDLLEXPORT wxStrncmp(const wxChar *s1, const wxChar *s2, size_t n);
+wxChar * WXDLLEXPORT wxStrncpy(wxChar *dest, const wxChar *src, size_t n);
+wxChar * WXDLLEXPORT wxStrpbrk(const wxChar *s, const wxChar *accept);
+wxChar * WXDLLEXPORT wxStrrchr(const wxChar *s, wxChar c);
+size_t   WXDLLEXPORT wxStrspn(const wxChar *s, const wxChar *accept);
+wxChar * WXDLLEXPORT wxStrstr(const wxChar *haystack, const wxChar *needle);
+double   WXDLLEXPORT wxStrtod(const wxChar *nptr, wxChar **endptr);
+long int WXDLLEXPORT wxStrtol(const wxChar *nptr, wxChar **endptr, int base);
+unsigned long int WXDLLEXPORT wxStrtoul(const wxChar *nptr, wxChar **endptr, int base);
+size_t   WXDLLEXPORT wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
 #endif
 
 #ifdef wxNEED_WX_STDIO_H
