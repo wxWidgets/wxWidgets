@@ -98,6 +98,9 @@ public:
                              ,const wxRect* pRect = (const wxRect *)NULL
                             );
     virtual void     Clear(void);
+    virtual void     Freeze(void);
+    virtual void     Update(void);
+    virtual void     Thaw(void);
     virtual bool     SetCursor(const wxCursor& rCursor);
     virtual bool     SetFont(const wxFont& rFont);
     virtual int      GetCharHeight(void) const;
@@ -569,6 +572,13 @@ private:
     inline virtual bool Reparent(wxWindowBase* pNewParent)
     { return(wxWindowBase::Reparent(pNewParent));};
 }; // end of wxWindow
+
+class wxWindowCreationHook
+{
+public:
+    wxWindowCreationHook(wxWindow* pWinBeingCreated);
+    ~wxWindowCreationHook();
+}; // end of CLASS wxWindowCreationHook
 
 // ---------------------------------------------------------------------------
 // global functions

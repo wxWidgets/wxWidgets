@@ -147,6 +147,9 @@ static void TranslateKbdEventToMouse( wxWindow* pWin
 //
 static inline bool IsShiftDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) & 0x8000) != 0; }
 static inline bool IsCtrlDown() { return (::WinGetKeyState(HWND_DESKTOP, VK_CTRL) & 0x8000) != 0; }
+
+static wxWindow*                    gpWinBeingCreated = NULL;
+
 // ---------------------------------------------------------------------------
 // event tables
 // ---------------------------------------------------------------------------
@@ -1304,6 +1307,27 @@ void wxWindowOS2::Clear()
     vDc.SetBackground(vBrush);
     vDc.Clear();
 } // end of wxWindowOS2::Clear
+
+void wxWindowOS2::Update()
+{
+    ::WinUpdateWindow(GetHwnd());
+} // end of wxWindowOS2::Update
+
+void wxWindowOS2::Freeze()
+{
+   ::WinSendMsg(GetHwnd(), WM_VRNDISABLED, (MPARAM)0, (MPARAM)0);
+} // end of wxWindowOS2::Freeze
+
+void wxWindowOS2::Thaw()
+{
+   ::WinSendMsg(GetHwnd(), WM_VRNENABLED, (MPARAM)TRUE, (MPARAM)0);
+
+    //
+    // We need to refresh everything or otherwise he invalidated area is not
+    // repainted.
+    //
+    Refresh();
+} // end of wxWindowOS2::Thaw
 
 void wxWindowOS2::Refresh(
   bool                              bEraseBack
@@ -4104,6 +4128,18 @@ int wxWindowOS2::GetOS2ParentHeight(
     }
     return(0L);
 } // end of wxWindowOS2::GetOS2ParentHeight
+
+wxWindowCreationHook::wxWindowCreationHook(
+  wxWindow*                         pWinBeingCreated
+)
+{
+    gpWinBeingCreated = pWinBeingCreated;
+} // end of wxWindowCreationHook::wxWindowCreationHook
+
+wxWindowCreationHook::~wxWindowCreationHook()
+{
+    gpWinBeingCreated = NULL;
+} // end of wxWindowCreationHook::~wxWindowCreationHook
 
 // ===========================================================================
 // global functions
