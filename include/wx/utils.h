@@ -24,7 +24,7 @@
 
 #include "wx/ioswrap.h"
 
-class wxProcess;
+class WXDLLEXPORT wxProcess;
 
 #ifdef __X__
 #ifndef __VMS__

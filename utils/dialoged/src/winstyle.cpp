@@ -98,9 +98,12 @@ int g_WindowStylesRadioButtonCount = sizeof(g_WindowStylesRadioButton)/sizeof(wx
   /* wxRadioBox */
 static wxWindowStylePair g_WindowStylesRadioBox[] = {
   { "wxRA_SPECIFY_COLS", wxRA_SPECIFY_COLS },
-  { "wxRA_SPECIFY_ROWS", wxRA_SPECIFY_ROWS },
+  { "wxRA_SPECIFY_ROWS", wxRA_SPECIFY_ROWS }
+/*
+  ,
   { "wxRA_HORIZONTAL", wxRA_HORIZONTAL },
   { "wxRA_VERTICAL", wxRA_VERTICAL }
+*/
 };
 
 int g_WindowStylesRadioBoxCount = sizeof(g_WindowStylesRadioBox)/sizeof(wxWindowStylePair) ;

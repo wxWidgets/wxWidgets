@@ -857,12 +857,11 @@ bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *propert
     char *s = property->GetValue().StringValue();
     if (s && wxFileExists(s))
     {
-      s = copystring(s);
-      wxBitmap *bitmap = new wxBitmap(s, wxBITMAP_TYPE_BMP);
+      wxString str(s);
+      wxBitmap *bitmap = new wxBitmap(str, wxBITMAP_TYPE_BMP);
       if (!bitmap->Ok())
       {
         delete bitmap;
-        delete[] s;
         return FALSE;
       }
       else
@@ -871,7 +870,7 @@ bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *propert
         if (resource)
         {
           wxString oldResource(resource->GetValue4());
-          wxString resName = wxResourceManager::GetCurrentResourceManager()->AddBitmapResource(s);
+          wxString resName = wxResourceManager::GetCurrentResourceManager()->AddBitmapResource(str);
           resource->SetValue4(resName);
           
           if (!oldResource.IsNull())
@@ -879,7 +878,6 @@ bool wxBitmapButtonPropertyInfo::SetProperty(wxString& name, wxProperty *propert
         }
 
         button->SetLabel(* bitmap);
-        delete[] s;
         return TRUE;
       }
     }
@@ -956,13 +954,12 @@ bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *propert
     char *s = property->GetValue().StringValue();
     if (s && wxFileExists(s))
     {
-      s = copystring(s);
+      wxString str(s);
       
-      wxBitmap *bitmap = new wxBitmap(s, wxBITMAP_TYPE_BMP);
+      wxBitmap *bitmap = new wxBitmap(str, wxBITMAP_TYPE_BMP);
       if (!bitmap->Ok())
       {
         delete bitmap;
-        delete[] s;
         return FALSE;
       }
       else
@@ -971,7 +968,7 @@ bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *propert
         if (resource)
         {
           wxString oldResource(resource->GetValue4());
-          wxString resName = wxResourceManager::GetCurrentResourceManager()->AddBitmapResource(s);
+          wxString resName = wxResourceManager::GetCurrentResourceManager()->AddBitmapResource(str);
           resource->SetValue4(resName);
           
           if (!oldResource.IsNull())
@@ -979,7 +976,6 @@ bool wxStaticBitmapPropertyInfo::SetProperty(wxString& name, wxProperty *propert
         }
 
         message->SetBitmap(* bitmap);
-        delete[] s;
         return TRUE;
       }
     }

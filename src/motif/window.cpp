@@ -142,6 +142,14 @@ wxWindow::wxWindow()
 // Destructor
 wxWindow::~wxWindow()
 {
+    // Remove potential dangling pointer
+    if (GetParent() && GetParent()->IsKindOf(CLASSINFO(wxPanel)))
+    {
+        wxPanel* panel = (wxPanel*) GetParent();
+        if (panel->GetLastFocus() == this)
+            panel->SetLastFocus((wxWindow*) NULL);
+    }
+
     //// Motif-specific
     
     if (GetMainWidget())

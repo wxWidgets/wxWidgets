@@ -970,9 +970,10 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             break;
 
         case WXK_RETURN:
+        {
             wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
                           "this text ctrl should never receive return" );
-            if ( m_windowStyle & wxTE_MULTILINE == 0 )
+            if ( (m_windowStyle & wxTE_MULTILINE) == 0 )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
                 event.SetEventObject( this );
@@ -982,7 +983,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             //else: multiline controls need Enter for themselves
 
             break;
-
+        }
         case WXK_TAB:
             // only produce navigation event if we don't process TAB ourself or
             // if it's a Shift-Tab keypress (we assume nobody will ever need

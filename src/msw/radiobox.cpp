@@ -388,6 +388,17 @@ wxString wxRadioBox::GetString(int N) const
     return wxString(wxBuffer);
 }
 
+/* NOTE. The contributed code to size the group box according to the
+ * given size simply didn't work (try it in e.g. Dialog Editor)
+ * so sorry, I'm removing it. If you reinstate it, please make sure
+ * it's bullet-proof in Dialog Editor. Meanwhile, it's better to have it
+ * working with a calculated size, than supposedly flexibly but
+ * actually broken. This is rather important when it comes to releasing
+ * stable software. Suggestion: if you modify this, rewrite it completely.
+ * -- JACS 7/2/99
+ */
+
+#if 0
 void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 {
     int currentX, currentY;
@@ -413,7 +424,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
     // number of radio boxes in both directions
     int nbHor, nbVer;
-    if (m_windowStyle & wxRA_VERTICAL)
+    if (m_windowStyle & wxRA_SPECIFY_ROWS)
     {
         nbVer = m_majorDim ;
         nbHor = (m_noItems+m_majorDim-1)/m_majorDim ;
@@ -432,6 +443,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 
     // if we're given the width or height explicitly do not recalculate it, but
     // use what we have
+
     bool calcWidth = maxWidth == -1,
          calcHeight = maxHeight == -1;
 
@@ -510,7 +522,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
         // Bidimensional radio adjustment
         if (i&&((i%m_majorDim)==0)) // Why is this omitted for i = 0?
         {
-            if (m_windowStyle & wxRA_VERTICAL)
+            if (m_windowStyle & wxRA_SPECIFY_ROWS)
             {
                 y_offset = startY;
                 x_offset += maxWidth + cx1 ;
@@ -544,7 +556,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
         }
 
         MoveWindow((HWND) m_radioButtons[i],x_offset,y_offset,eachWidth,eachHeight,TRUE);
-        if (m_windowStyle & wxRA_VERTICAL)
+        if (m_windowStyle & wxRA_SPECIFY_ROWS)
         {
             y_offset += maxHeight;
             if (m_radioWidth[0]>0)
@@ -554,6 +566,149 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
             x_offset += maxWidth + cx1;
     }
 }
+#endif
+
+// Restored old code.
+void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+{
+  int currentX, currentY;
+  GetPosition(&currentX, &currentY);
+  int xx = x;
+  int yy = y;
+
+  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    xx = currentX;
+  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+    yy = currentY;
+
+  char buf[400];
+
+  int y_offset = yy;
+  int x_offset = xx;
+  int current_width, cyf;
+
+  int cx1,cy1 ;
+  wxGetCharSize(m_hWnd, &cx1, &cy1, & GetFont());
+  // Attempt to have a look coherent with other platforms:
+  // We compute the biggest toggle dim, then we align all
+  // items according this value.
+  int maxWidth =  -1;
+  int maxHeight = -1 ;
+
+  int i;
+  for (i = 0 ; i < m_noItems; i++)
+  {
+    int eachWidth;
+    int eachHeight ;
+    if (m_radioWidth[i]<0)
+    {
+      // It's a labelled toggle
+      GetWindowText((HWND) m_radioButtons[i], buf, 300);
+      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
+      eachWidth = (int)(current_width + RADIO_SIZE);
+      eachHeight = (int)((3*cyf)/2);
+    }
+    else
+    {
+      eachWidth = m_radioWidth[i] ;
+      eachHeight = m_radioHeight[i] ;
+    }
+    if (maxWidth<eachWidth) maxWidth = eachWidth ;
+    if (maxHeight<eachHeight) maxHeight = eachHeight ;
+  }
+
+  if (m_hWnd)
+  {
+    int totWidth ;
+    int totHeight;
+
+    int nbHor,nbVer;
+
+    if (m_windowStyle & wxRA_SPECIFY_ROWS)
+    {
+      nbVer = m_majorDim ;
+      nbHor = (m_noItems+m_majorDim-1)/m_majorDim ;
+    }
+    else
+    {
+      nbHor = m_majorDim ;
+      nbVer = (m_noItems+m_majorDim-1)/m_majorDim ;
+    }
+
+    // this formula works, but I don't know why.
+    // Please, be sure what you do if you modify it!!
+    if (m_radioWidth[0]<0)
+      totHeight = (nbVer * maxHeight) + cy1/2 ;
+    else
+      totHeight = nbVer * (maxHeight+cy1/2) ;
+    totWidth  = nbHor * (maxWidth+cx1) ;
+
+#if (!CTL3D)
+    // Requires a bigger group box in plain Windows
+    MoveWindow((HWND) m_hWnd,x_offset,y_offset,totWidth+cx1,totHeight+(3*cy1)/2,TRUE) ;
+#else
+    MoveWindow((HWND) m_hWnd,x_offset,y_offset,totWidth+cx1,totHeight+cy1,TRUE) ;
+#endif
+    x_offset += cx1;
+    y_offset += cy1;
+  }
+
+#if (!CTL3D)
+  y_offset += (int)(cy1/2); // Fudge factor since buttons overlapped label
+                            // JACS 2/12/93. CTL3D draws group label quite high.
+#endif
+  int startX = x_offset ;
+  int startY = y_offset ;
+
+  for ( i = 0 ; i < m_noItems; i++)
+  {
+    // Bidimensional radio adjustment
+    if (i&&((i%m_majorDim)==0)) // Why is this omitted for i = 0?
+    {
+      if (m_windowStyle & wxRA_VERTICAL)
+      {
+        y_offset = startY;
+        x_offset += maxWidth + cx1 ;
+      }
+      else
+      {
+        x_offset = startX ;
+        y_offset += maxHeight ;
+        if (m_radioWidth[0]>0)
+          y_offset += cy1/2 ;
+      }
+    }
+    int eachWidth ;
+    int eachHeight ;
+    if (m_radioWidth[i]<0)
+    {
+      // It's a labeled item
+      GetWindowText((HWND) m_radioButtons[i], buf, 300);
+      GetTextExtent(buf, &current_width, &cyf,NULL,NULL, & GetFont());
+
+      // How do we find out radio button bitmap size!!
+      // By adjusting them carefully, manually :-)
+      eachWidth = (int)(current_width + RADIO_SIZE);
+      eachHeight = (int)((3*cyf)/2);
+    }
+    else
+    {
+      eachWidth = m_radioWidth[i] ;
+      eachHeight = m_radioHeight[i] ;
+    }
+
+    MoveWindow((HWND) m_radioButtons[i],x_offset,y_offset,eachWidth,eachHeight,TRUE);
+    if (m_windowStyle & wxRA_SPECIFY_ROWS)
+    {
+      y_offset += maxHeight;
+      if (m_radioWidth[0]>0)
+        y_offset += cy1/2 ;
+    }
+    else
+      x_offset += maxWidth + cx1;
+  }
+}
+
 
 void wxRadioBox::GetSize(int *width, int *height) const
 {

@@ -444,7 +444,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
   panel = new wxPanel(m_notebook);
   m_textentry = new MyTextCtrl( panel, -1, "Write text here.", wxPoint(10,10), wxSize(320,28),
-                                0);//wxTE_PROCESS_ENTER);
+                                //0);
+                                wxTE_PROCESS_ENTER);
   (*m_textentry) << " More text.";          // this text is appended
   m_textentry->SetInsertionPoint(0);
   m_textentry->WriteText("Less text.");     // this text is prepended

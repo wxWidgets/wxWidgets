@@ -70,6 +70,7 @@ public:
 
         // called by wxWindow whenever it gets focus
     void SetLastFocus(wxWindow *focus) { m_lastFocus = focus; }
+    wxWindow* GetLastFocus() const { return m_lastFocus; }
 
 protected:
     // the child which had the focus last time this panel was activated
