@@ -1178,11 +1178,11 @@ public:
         sizer->Add(new wxStaticText(this, wxID_ANY, _("Font size:")));
 
         sizer->Add(NormalFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                      wxSize(200, 200),
+                      wxSize(200, -1),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
         sizer->Add(FixedFont = new wxComboBox(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
-                      wxSize(200, 200),
+                      wxSize(200, -1),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
         sizer->Add(FontSize = new wxSpinCtrl(this, wxID_ANY));
