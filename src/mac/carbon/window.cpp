@@ -2705,6 +2705,8 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
         // get the updateRgn wide enough to always do so, so we do it from the parent
         // this would also be the place to draw any custom backgrounds for native controls
         // in Composited windowing
+        wxPoint clientOrigin = GetClientAreaOrigin() ;
+        
         for (wxWindowListNode *node = GetChildren().GetFirst(); node; node = node->GetNext())
         {
             wxWindowMac *child = node->GetData();
@@ -2718,9 +2720,9 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             int w,h;
             child->GetSize( &w, &h );
             Rect childRect = { y , x , y + h , x + w } ;
+            OffsetRect( &childRect , clientOrigin.x , clientOrigin.y ) ;
             if ( child->MacGetTopBorderSize() )
             {
-                OffsetRect( &childRect , MacGetLeftBorderSize() , MacGetTopBorderSize() ) ;
                 if ( RectInRgn( &childRect , updatergn ) )
                 {
                     // paint custom borders
@@ -2731,7 +2733,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                         wxWindowDC dc(this) ;
                         dc.SetClippingRegion(wxRegion(updatergn));
                         wxMacPortSetter helper(&dc) ;
-                        child->MacPaintBorders( dc.m_macLocalOrigin.x + x , dc.m_macLocalOrigin.y + y)  ;
+                        child->MacPaintBorders( dc.m_macLocalOrigin.x + childRect.left , dc.m_macLocalOrigin.y + childRect.top)  ;
                     }
                 }
             } 
