@@ -266,8 +266,9 @@ dospinwxall()
         dospinmsw
     fi
     cp $DESTDIR/wxWidgets-$VERSION-win.zip $DESTDIR/wxWidgets-$VERSION-all.zip
-
-    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < `cat $APPDIR/distrib/msw/cw_mac.rsp $APPDIR/distrib/msw/x11.rsp $APPDIR/distrib/msw/cocoa.rsp $APPDIR/distrib/msw/motif.rsp $APPDIR/distrib/msw/mac.rsp $APPDIR/distrib/msw/wince.rsp $APPDIR/distrib/msw/mgl.rsp $APPDIR/distrib/msw/os2.rsp`
+    
+    cat $APPDIR/distrib/msw/cw_mac.rsp $APPDIR/distrib/msw/x11.rsp $APPDIR/distrib/msw/cocoa.rsp $APPDIR/distrib/msw/motif.rsp $APPDIR/distrib/msw/mac.rsp $APPDIR/distrib/msw/mgl.rsp $APPDIR/distrib/msw/os2.rsp | sort | uniq > /tmp/all.txt
+    zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < /tmp/all.txt
 
     if [ -d $DESTDIR/wxWidgets-$VERSION ]; then
         rm -f -r $DESTDIR/wxWidgets-$VERSION
@@ -411,6 +412,24 @@ dospinsetup()
     rm -f $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip
     zip $ZIPFLAGS $DESTDIR/wxWidgets-$VERSION-LinuxTransit.zip wxWidgets-$VERSION-LinuxDocs.zip wxWidgets-$VERSION-VC.zip wxWidgets-$VERSION-DMC.zip wxWidgets-$VERSION-eVC.zip wxWidgets-$VERSION-CW-Mac.zip
 
+    if [ ! -f $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip ]; then
+        cd $APPDIR
+        echo Creating $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip
+        zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip < $APPDIR/distrib/msw/wx_chm.rsp
+        rearchive wxWidgets-$VERSION-HTMLHelp.zip wxWidgets-$VERSION $DESTDIR
+        cd $DESTDIR
+    fi
+
+    if [ ! -f $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip ]; then
+        cd $APPDIR
+        echo Creating $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip
+        zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-ExtraDoc.zip < $APPDIR/distrib/msw/extradoc.rsp
+        rearchive wxWidgets-$VERSION-ExtraDoc.zip wxWidgets-$VERSION $DESTDIR
+        cd $DESTDIR
+    fi
+
+    rm -f -r wxWidgets-$VERSION
+
     echo Unzipping the Windows files into wxWidgets-$VERSION
 
     mkdir -p wxWidgets-$VERSION
@@ -420,6 +439,7 @@ dospinsetup()
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-DMC.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-BC.zip -d wxWidgets-$VERSION
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-CW.zip -d wxWidgets-$VERSION
+
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-HTMLHelp.zip
     unzip $ZIPFLAGS -o wxWidgets-$VERSION-ExtraDoc.zip
 
@@ -545,7 +565,7 @@ dospinsetup()
     echo Putting all the setup files into a single zip archive
     zip wxMSW-$VERSION-setup.zip readme-$VERSION.txt setup*.*
 
-    rm -f wxWidgets-$VERSION-win.zip
+#    rm -f wxWidgets-$VERSION-win.zip
     rm -f wxWidgets-$VERSION-ExtraDoc.zip
 
     echo If you saw no warnings or errors, $APPTITLE was successfully spun.

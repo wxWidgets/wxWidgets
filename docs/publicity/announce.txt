@@ -1,7 +1,7 @@
 Announcing wxWidgets 2.5.3: a cross-platform GUI toolkit
 ----------------------------------------------------------------
 
-May 31st, 2004 -- the wxWidgets team is pleased to announce
+October 11th, 2004 -- the wxWidgets team is pleased to announce
 a development snapshot release of the mature cross-platform C++
 application framework.
 
@@ -33,7 +33,7 @@ shaped frame and dialog windows on Windows and GTK+,
 more efficient UI update processing, print preview
 improvements, wxCrashReport class, OpenWatcom and
 Digital Mars compiler support, and more. Improvements
-over 2.5.1 include much improved Mac OS X and Windows CE
+over 2.5.2 include much improved Mac OS X and Windows CE
 support, as well as the usual bug fixes and minor enhancements.
 
 *** About wxWidgets
