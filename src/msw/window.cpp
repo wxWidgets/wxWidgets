@@ -5740,54 +5740,62 @@ bool wxWindowMSW::HandleHotKey(WXWPARAM wParam, WXLPARAM lParam)
 
 #endif // wxUSE_HOTKEY
 
-// Not verified for WinCE
+// Not tested under WinCE
 #ifndef __WXWINCE__
-/*
- *	wxEventFixModule (needs a better name) allows message handling to continute while a menu
- *  is being shown - ie, to continue processing messages from a worker thread.
- * 
- *  Code originally by Jason W. from wx-dev, reworked into a wxModule by Chris Mellon
- */
 
-class wxEventFixModule : public wxModule {
+// this class installs a message hook which really wakes up our idle processing
+// each time a WM_NULL is received (wxWakeUpIdle does this), even if we're
+// sitting inside a local modal loop (e.g. a menu is opened or scrollbar is
+// being dragged or even inside ::MessageBox()) and so don't control message
+// dispatching otherwise
+class wxIdleWakeUpModule : public wxModule
+{
 public:
-	//base class virtuals
-	virtual bool OnInit() {
-		wxEventFixModule::s_hMsgHookProc = SetWindowsHookEx(
-			WH_GETMESSAGE,
-			&wxEventFixModule::MsgHookProc,
-			NULL,
-			GetCurrentThreadId());
-			wxLogDebug(_T("Loaded event fix module"));
-			return true;
-	};
-	virtual void OnExit() {
-		UnhookWindowsHookEx(wxEventFixModule::s_hMsgHookProc);
+	virtual bool OnInit()
+    {
+		ms_hMsgHookProc = ::SetWindowsHookEx
+                            (
+                             WH_GETMESSAGE,
+                             &wxIdleWakeUpModule::MsgHookProc,
+                             NULL,
+                             GetCurrentThreadId()
+                            );
 
-	};
-	static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam) {
+        if ( !ms_hMsgHookProc )
+        {
+            wxLogLastError(_T("SetWindowsHookEx(WH_GETMESSAGE)"));
+
+            return false;
+        }
+
+        return true;
+	}
+
+	virtual void OnExit()
+    {
+		::UnhookWindowsHookEx(wxIdleWakeUpModule::ms_hMsgHookProc);
+	}
+
+	static LRESULT CALLBACK MsgHookProc(int nCode, WPARAM wParam, LPARAM lParam)
+    {
 		MSG *msg = (MSG*)lParam;
-		switch (msg->message)
+		if ( msg->message == WM_NULL )
 		{
-        case WM_NULL:
-            static bool bInHookProc = false;
-            if (!bInHookProc)
-            {
-                bInHookProc = true;
-                wxTheApp->ProcessPendingEvents();
-                bInHookProc = false;
-            }
-            break;
+            wxTheApp->ProcessPendingEvents();
 		}
-		return CallNextHookEx(wxEventFixModule::s_hMsgHookProc, nCode, wParam, lParam);
-	};
-private:
-	static HHOOK s_hMsgHookProc;
-DECLARE_DYNAMIC_CLASS(wxEventFixModule)
-};
-HHOOK wxEventFixModule::s_hMsgHookProc = 0;
 
-IMPLEMENT_DYNAMIC_CLASS(wxEventFixModule, wxModule)
-#endif
-    // __WXWINCE__
+		return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
+	};
+
+private:
+	static HHOOK ms_hMsgHookProc;
+
+    DECLARE_DYNAMIC_CLASS(wxIdleWakeUpModule)
+};
+
+HHOOK wxIdleWakeUpModule::ms_hMsgHookProc = 0;
+
+IMPLEMENT_DYNAMIC_CLASS(wxIdleWakeUpModule, wxModule)
+
+#endif // __WXWINCE__
     
