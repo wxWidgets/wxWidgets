@@ -525,7 +525,7 @@ pascal OSStatus wxMacAppEventHandler( EventHandlerCallRef handler , EventRef eve
                 
                 WindowRef window ;
                 Point screenMouseLocation = cEvent.GetParameter<Point>(kEventParamMouseLocation) ;
-                short windowPart = ::FindWindow(screenMouseLocation, &window);
+                ::FindWindow(screenMouseLocation, &window);
                 // only send this event in case it had not already been sent to a tlw, as we get
                 // double events otherwise (in case event.skip) was called
                 if ( window == NULL )
