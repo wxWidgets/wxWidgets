@@ -80,8 +80,19 @@ inline size_t  WXDLLEXPORT Strlen(const char *psz)
 /// portable strcasecmp/_stricmp
 int WXDLLEXPORT Stricmp(const char *, const char *);
 
+// ----------------------------------------------------------------------------
+// global data
+// ----------------------------------------------------------------------------
+
+// global pointer to empty string
+extern const char *g_szNul;
+
+// return an empty wxString
+class wxString; // not yet defined
+inline const wxString& wxGetEmptyString() { return *(wxString *)&g_szNul; }
+
 // ---------------------------------------------------------------------------
-// string data prepended with some housekeeping info (used by String class),
+// string data prepended with some housekeeping info (used by wxString class),
 // is never used directly (but had to be put here to allow inlining)
 // ---------------------------------------------------------------------------
 struct WXDLLEXPORT wxStringData
@@ -106,8 +117,6 @@ struct WXDLLEXPORT wxStringData
   void  Validate(bool b)  { nRefs = b ? 1 : 0; }
   bool  IsValid() const   { return nRefs != 0; }
 };
-
-extern const char *g_szNul; // global pointer to empty string
 
 // ---------------------------------------------------------------------------
 /**
@@ -837,7 +846,7 @@ inline bool operator>=(const wxString& s1, const char  * s2) { return s1.Cmp(s2)
 ///
 inline bool operator>=(const char  * s1, const wxString& s2) { return s2.Cmp(s1) <= 0; }
 //@}
-    
+
 // ---------------------------------------------------------------------------
 /** @name Global functions complementing standard C string library 
     @memo replacements for strlen() and portable strcasecmp()
