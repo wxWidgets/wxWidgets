@@ -246,8 +246,6 @@ int wxFileDialog::ShowModal()
         OFN_EXPLORER |
 #endif // OFN_EXPLORER
         OFN_ALLOWMULTISELECT;
-    if ( !(m_dialogStyle & wxCHANGE_DIR) )
-        msw_flags |= OFN_NOCHANGEDIR;
 
     OPENFILENAME of;
     wxZeroMemory(of);
