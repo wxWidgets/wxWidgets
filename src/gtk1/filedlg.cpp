@@ -141,35 +141,37 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                        wildCard, style, pos, true )
 {
 #ifdef __WXGTK24__
-    m_needParent = FALSE;
-    m_destroyed_by_delete = FALSE;
+    if (!gtk_check_version(2,4,0))
+    {
+        m_needParent = FALSE;
+        m_destroyed_by_delete = FALSE;
 
-    if (!PreCreation(parent, pos, wxDefaultSize) ||
-        !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
+        if (!PreCreation(parent, pos, wxDefaultSize) ||
+            !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
                     wxDefaultValidator, wxT("filedialog")))
-    {
-        wxFAIL_MSG( wxT("wxFileDialog creation failed") );
-        return;
-    }
+        {
+            wxFAIL_MSG( wxT("wxFileDialog creation failed") );
+            return;
+        }
 
-    bool multiple = (style & wxMULTIPLE) == wxMULTIPLE;
-    GtkFileChooserAction gtk_action;
-    GtkWindow* gtk_parent = NULL;
-    if (parent)
-        gtk_parent = GTK_WINDOW(parent->m_widget);
+        bool multiple = (style & wxMULTIPLE) == wxMULTIPLE;
+        GtkFileChooserAction gtk_action;
+        GtkWindow* gtk_parent = NULL;
+        if (parent)
+            gtk_parent = GTK_WINDOW(parent->m_widget);
     
-    gchar* ok_btn_stock;
-    if ((style & wxSAVE) == wxSAVE)
-    {
-        gtk_action = GTK_FILE_CHOOSER_ACTION_SAVE;
-        ok_btn_stock = GTK_STOCK_SAVE;
-    }
-    else
-    {
-        gtk_action = GTK_FILE_CHOOSER_ACTION_OPEN;
-        ok_btn_stock = GTK_STOCK_OPEN;
-    }
-    m_widget = gtk_file_chooser_dialog_new(
+        gchar* ok_btn_stock;
+        if ((style & wxSAVE) == wxSAVE)
+        {
+            gtk_action = GTK_FILE_CHOOSER_ACTION_SAVE;
+            ok_btn_stock = GTK_STOCK_SAVE;
+        }
+        else
+        {
+            gtk_action = GTK_FILE_CHOOSER_ACTION_OPEN;
+            ok_btn_stock = GTK_STOCK_OPEN;
+        }
+        m_widget = gtk_file_chooser_dialog_new(
                        wxGTK_CONV(m_message),
                        gtk_parent,
                        gtk_action,
@@ -177,232 +179,262 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                        ok_btn_stock, GTK_RESPONSE_ACCEPT,
                        NULL);
 
-    gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), multiple);
+        gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), multiple);
         
-    gtk_signal_connect(GTK_OBJECT(m_widget),
+        gtk_signal_connect(GTK_OBJECT(m_widget),
                              "response", 
                              GTK_SIGNAL_FUNC(gtk_filedialog_response_callback),
                              (gpointer*)this);
     
-    m_path = m_dir;
-    if (!m_path.empty() && m_path.Last() != wxT('/'))
-        m_path += wxT('/');
-    m_path += m_fileName;
-    SetPath(m_path);
+        m_path = m_dir;
+        if (!m_path.empty() && m_path.Last() != wxT('/'))
+            m_path += wxT('/');
+        m_path += m_fileName;
+        SetPath(m_path);
     
-    SetWildcard(wildCard);
-    SetFilterIndex(0);
-#else
-    wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos );
+        SetWildcard(wildCard);
+        SetFilterIndex(0);
+    }
+    else
 #endif
+        wxGenericFileDialog::Create( parent, message, defaultDir, defaultFileName, wildCard, style, pos );
 }
 
 wxFileDialog::~wxFileDialog()
 {
 #ifdef __WXGTK24__
-    if (m_destroyed_by_delete)
-        m_widget = NULL;
+    if (!gtk_check_version(2,4,0))
+    {
+        if (m_destroyed_by_delete)
+            m_widget = NULL;
+    }
 #endif
 }
 
 void wxFileDialog::OnFakeOk( wxCommandEvent &event )
 {
 #ifdef __WXGTK24__
-    wxDialog::OnOK( event );
-#else
-    wxGenericFileDialog::OnListOk( event );
+    if (!gtk_check_version(2,4,0))
+        wxDialog::OnOK( event );
+    else
 #endif
+        wxGenericFileDialog::OnListOk( event );
 }
 
 int wxFileDialog::ShowModal()
 {
 #ifdef __WXGTK24__
-    return wxDialog::ShowModal();
-#else
-    return wxGenericFileDialog::ShowModal();
+    if (!gtk_check_version(2,4,0))
+        return wxDialog::ShowModal();
+    else
 #endif
+        return wxGenericFileDialog::ShowModal();
 }
 
 bool wxFileDialog::Show( bool show )
 {
 #ifdef __WXGTK24__
-    return wxDialog::Show( show );
-#else
-    return wxGenericFileDialog::Show( show );
+    if (!gtk_check_version(2,4,0))
+        return wxDialog::Show( show );
+    else
 #endif
+        return wxGenericFileDialog::Show( show );
 }
 
 void wxFileDialog::GetFilenames(wxArrayString& files) const 
 {
 #ifdef __WXGTK24__
-    GetPaths(files);
-    for (size_t n = 0; n < files.GetCount(); n++ )
+    if (!gtk_check_version(2,4,0))
     {
-        wxString name,ext;
-        wxSplitPath(files[n], NULL, &name, &ext);
-        if (!ext.IsEmpty())
+        GetPaths(files);
+        for (size_t n = 0; n < files.GetCount(); n++ )
         {
-            name += wxT(".");
-            name += ext;
+            wxString name,ext;
+            wxSplitPath(files[n], NULL, &name, &ext);
+            if (!ext.IsEmpty())
+            {
+                name += wxT(".");
+                name += ext;
+            }
+            files[n] = name;
         }
-        files[n] = name;
     }
-#else
-    wxGenericFileDialog::GetFilenames( files );
+    else
 #endif
+        wxGenericFileDialog::GetFilenames( files );
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const 
 {
 #ifdef __WXGTK24__
-    paths.Empty(); 
-    if (GetWindowStyle() & wxMULTIPLE)
+    if (!gtk_check_version(2,4,0))
     {
-        GSList *gpathsi = 
-            gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(m_widget));
-        GSList *gpaths = gpathsi;
-        while (gpathsi)
+        paths.Empty(); 
+        if (GetWindowStyle() & wxMULTIPLE)
         {
-            wxString file = wxGTK_CONV_BACK((gchar*) gpathsi->data);
-            paths.Add(file);
-            g_free(gpathsi->data);
-            gpathsi = gpathsi->next;
+            GSList *gpathsi = 
+                gtk_file_chooser_get_filenames(GTK_FILE_CHOOSER(m_widget));
+            GSList *gpaths = gpathsi;
+            while (gpathsi)
+            {
+                wxString file = wxGTK_CONV_BACK((gchar*) gpathsi->data);
+               paths.Add(file);
+                g_free(gpathsi->data);
+                gpathsi = gpathsi->next;
+            }
+            if (gpaths) 
+                g_slist_free(gpaths);
         }
-        if (gpaths) 
-            g_slist_free(gpaths);
+        else
+        {
+            paths.Add(m_fileName);
+        }
     }
     else
-    {
-        paths.Add(m_fileName);
-    }
-#else
-    wxGenericFileDialog::GetPaths( paths );
 #endif
+        wxGenericFileDialog::GetPaths( paths );
 }
 
 void wxFileDialog::SetMessage(const wxString& message)
 {
 #ifdef __WXGTK24__
-    m_message = message;
-    SetTitle(message);
-#else
-    wxGenericFileDialog::SetMessage( message );
+    if (!gtk_check_version(2,4,0))
+    {
+        m_message = message;
+        SetTitle(message);
+    }
+    else
 #endif    
+        wxGenericFileDialog::SetMessage( message );
 }
 
 void wxFileDialog::SetPath(const wxString& path)
 {
 #ifdef __WXGTK24__
-    if (path.empty()) return;
+    if (!gtk_check_version(2,4,0))
+    {
+        if (path.empty()) return;
 
-    wxFileName fn(path);
-    m_path = fn.GetFullPath();
-    m_dir = fn.GetPath();
-    m_fileName = fn.GetFullName();
-    UpdateDialog();
-#else
-    wxGenericFileDialog::SetPath( path );
+        wxFileName fn(path);
+        m_path = fn.GetFullPath();
+        m_dir = fn.GetPath();
+        m_fileName = fn.GetFullName();
+        UpdateDialog();
+    }
+    else
 #endif    
+        wxGenericFileDialog::SetPath( path );
 }
 
 void wxFileDialog::SetDirectory(const wxString& dir)
 {
 #ifdef __WXGTK24__
-    if (wxDirExists(dir))
+    if (!gtk_check_version(2,4,0))
     {
-        m_dir = dir;
-        m_path = wxFileName(m_dir, m_fileName).GetFullPath();
-        UpdateDialog();
+        if (wxDirExists(dir))
+        {
+            m_dir = dir;
+            m_path = wxFileName(m_dir, m_fileName).GetFullPath();
+            UpdateDialog();
+        }
     }
-#else
-    wxGenericFileDialog::SetDirectory( dir );
+    else
 #endif    
+        wxGenericFileDialog::SetDirectory( dir );
 }
 
 void wxFileDialog::SetFilename(const wxString& name)
 {
 #ifdef __WXGTK24__
-    m_fileName = name;
-    m_path = wxFileName(m_dir, m_fileName).GetFullPath();
-    UpdateDialog();
-#else
-    wxGenericFileDialog::SetFilename( name );
+    if (!gtk_check_version(2,4,0))
+    {
+        m_fileName = name;
+        m_path = wxFileName(m_dir, m_fileName).GetFullPath();
+        UpdateDialog();
+    }
+    else
 #endif
+        wxGenericFileDialog::SetFilename( name );
 }
 
 void wxFileDialog::SetWildcard(const wxString& wildCard)
 {
 #ifdef __WXGTK24__
-    m_wildCard = wildCard;
-    
-    GtkFileChooser* chooser = GTK_FILE_CHOOSER(m_widget);
-    
-    // empty current filter list:
-    GSList* ifilters = gtk_file_chooser_list_filters(chooser);
-    GSList* filters = ifilters;
-    while (ifilters)
+    if (!gtk_check_version(2,4,0))
     {
-        gtk_file_chooser_remove_filter(chooser,GTK_FILE_FILTER(ifilters->data));
-        ifilters = ifilters->next;
-    }
-    g_slist_free(filters);
+        m_wildCard = wildCard;
+        GtkFileChooser* chooser = GTK_FILE_CHOOSER(m_widget);
     
-    // parse filters
-    wxArrayString wildDescriptions, wildFilters;
-    if (!wxParseCommonDialogsFilter(m_wildCard, wildDescriptions, wildFilters))
-    {
-        wxFAIL_MSG( wxT("Wrong file type description") );
-    }
-    else
-    {
-        // add parsed to GtkChooser
-        for (size_t n = 0; n < wildFilters.GetCount(); n++)
+        // empty current filter list:
+        GSList* ifilters = gtk_file_chooser_list_filters(chooser);
+        GSList* filters = ifilters;
+        while (ifilters)
         {
-            GtkFileFilter* filter = gtk_file_filter_new();
-            gtk_file_filter_set_name(filter,wxGTK_CONV(wildDescriptions[n]));
-            wxString after = wildFilters[n];
-            do
+            gtk_file_chooser_remove_filter(chooser,GTK_FILE_FILTER(ifilters->data));
+            ifilters = ifilters->next;
+       }
+        g_slist_free(filters);
+    
+        // parse filters
+        wxArrayString wildDescriptions, wildFilters;
+        if (!wxParseCommonDialogsFilter(m_wildCard, wildDescriptions, wildFilters))
+        {
+            wxFAIL_MSG( wxT("Wrong file type description") );
+        }
+        else
+        {
+            // add parsed to GtkChooser
+            for (size_t n = 0; n < wildFilters.GetCount(); n++)
             {
-                wxString ext = after.BeforeFirst(wxT(';'));
-                gtk_file_filter_add_pattern(filter,wxGTK_CONV(ext));
-                if (after.Find(wxT(';')) == wxNOT_FOUND)
-                    break;
-                after = after.AfterLast(wxT(';'));
-            }
-            while (!after.empty());
+                GtkFileFilter* filter = gtk_file_filter_new();
+                gtk_file_filter_set_name(filter,wxGTK_CONV(wildDescriptions[n]));
+                wxString after = wildFilters[n];
+                do
+                {
+                    wxString ext = after.BeforeFirst(wxT(';'));
+                    gtk_file_filter_add_pattern(filter,wxGTK_CONV(ext));
+                    if (after.Find(wxT(';')) == wxNOT_FOUND)
+                        break;
+                    after = after.AfterLast(wxT(';'));
+                }
+                while (!after.empty());
             
-            gtk_file_chooser_add_filter(chooser, filter);
+                gtk_file_chooser_add_filter(chooser, filter);
+            }
         }
     }
-#else
-    wxGenericFileDialog::SetWildcard( wildCard );
+    else
 #endif
+        wxGenericFileDialog::SetWildcard( wildCard );
 }
 
 void wxFileDialog::SetFilterIndex(int filterIndex)
 {
 #ifdef __WXGTK24__
-    m_filterIndex = filterIndex;
-
-    GtkFileChooser *chooser = GTK_FILE_CHOOSER(m_widget);
-    GSList *fnode = gtk_file_chooser_list_filters(chooser);
-    GSList *filters = fnode;
-    int i = 0;
-    while (fnode)
+    if (!gtk_check_version(2,4,0))
     {
-        if (i == filterIndex)
+        m_filterIndex = filterIndex;
+
+        GtkFileChooser *chooser = GTK_FILE_CHOOSER(m_widget);
+        GSList *fnode = gtk_file_chooser_list_filters(chooser);
+        GSList *filters = fnode;
+        int i = 0;
+        while (fnode)
         {
-            gtk_file_chooser_set_filter(chooser, GTK_FILE_FILTER(fnode->data));
-            m_filterIndex = i;
-            break;
+            if (i == filterIndex)
+            {
+                gtk_file_chooser_set_filter(chooser, GTK_FILE_FILTER(fnode->data));
+                m_filterIndex = i;
+                break;
+            }
+            i++;
+            fnode = fnode->next;
         }
-        i++;
-        fnode = fnode->next;
+        g_slist_free(filters);
     }
-    g_slist_free(filters);
-#else
-    wxGenericFileDialog::SetFilterIndex( filterIndex );
+    else
 #endif
+        wxGenericFileDialog::SetFilterIndex( filterIndex );
 }
 
 void wxFileDialog::UpdateDialog()

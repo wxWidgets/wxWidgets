@@ -487,16 +487,19 @@ bool wxTextCtrl::Create( wxWindow *parent,
             gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_CENTER );
         // Left justify (alignment) is the default and we don't need to apply GTK_JUSTIFY_LEFT
     }
-    // gtk_entry_set_alignment was introduced in gtk+-2.3.5
-#if GTK_CHECK_VERSION(2, 3, 5)
     else
     {
-        if (style & wxTE_RIGHT)
-            gtk_entry_set_alignment( GTK_ENTRY(m_text), 1.0 );
-        else if (style & wxTE_CENTRE)
-            gtk_entry_set_alignment( GTK_ENTRY(m_text), 0.5 );
+#ifdef __WXGTK24__
+        // gtk_entry_set_alignment was introduced in gtk+-2.3.5
+        if (!gtk_check_version(2,4,0))
+        {
+            if (style & wxTE_RIGHT)
+                gtk_entry_set_alignment( GTK_ENTRY(m_text), 1.0 );
+            else if (style & wxTE_CENTRE)
+                gtk_entry_set_alignment( GTK_ENTRY(m_text), 0.5 );
+        }
+#endif
     }
-#endif // gtk+-2.3.5
 #endif // __WXGTK20__
     
     // We want to be notified about text changes.

@@ -202,7 +202,7 @@ static GdkPixbuf *CreateStockIcon(const char *stockid, GtkIconSize size)
                                     GTK_STATE_NORMAL, size, NULL, NULL);
 }
 
-#if GTK_CHECK_VERSION(2,4,0)
+#ifdef __WXGTK24__
 static GdkPixbuf *CreateThemeIcon(const char *iconname,
                                   GtkIconSize iconsize, const wxSize& sz)
 {
@@ -218,7 +218,7 @@ static GdkPixbuf *CreateThemeIcon(const char *iconname,
                     size.x,
                     (GtkIconLookupFlags)0, NULL);
 }
-#endif // GTK+ >= 2.4.0
+#endif
 
 wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
                                          const wxArtClient& client,
@@ -235,9 +235,12 @@ wxBitmap wxGTK2ArtProvider::CreateBitmap(const wxArtID& id,
 
     GdkPixbuf *pixbuf = CreateStockIcon(stockid, stocksize);
 
-#if GTK_CHECK_VERSION(2,4,0)
-    if (!pixbuf)
-        pixbuf = CreateThemeIcon(stockid, stocksize, size);
+#ifdef __WXGTK24__
+    if (!gtk_check_version(2,4,0))
+    {
+        if (!pixbuf)
+            pixbuf = CreateThemeIcon(stockid, stocksize, size);
+    }
 #endif
 
     if (pixbuf && size != wxDefaultSize &&
