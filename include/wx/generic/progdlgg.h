@@ -109,7 +109,7 @@ private:
    // the maximum value
    int m_maximum;
 
-#ifdef __WXMSW__
+#if defined(__WXMSW__ ) || defined(__WXPM__)
    // the factor we use to always keep the value in 16 bit range as the native
    // control only supports ranges from 0 to 65,535
    size_t m_factor;
