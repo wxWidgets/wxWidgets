@@ -51,8 +51,6 @@
 #include "TextEncodingConverter.h"
 #include "wx/mac/uma.h"
 
-#define wxMAC_USE_CARBON_EVENTS 0
-
 extern wxApp *wxTheApp ;
 
 // CS:TODO we still have a problem getting properly at the text events of a control because under Carbon
@@ -149,15 +147,6 @@ ControlUserPaneKeyDownUPP gTPKeyProc = NULL;
 ControlUserPaneActivateUPP gTPActivateProc = NULL;
 ControlUserPaneFocusUPP gTPFocusProc = NULL;
 
-    /* events handled by our focus advance override routine */
-#if TARGET_CARBON
-#if wxMAC_USE_CARBON_EVENTS
-static const EventTypeSpec gMLTEEvents[] = { { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } };
-#define kMLTEEventCount (sizeof( gMLTEEvents ) / sizeof( EventTypeSpec ))
-#endif
-#endif
-
-
 /* TPActivatePaneText activates or deactivates the text edit record
     according to the value of setActive.  The primary purpose of this
     routine is to ensure each call is only made once. */
@@ -170,10 +159,8 @@ static void TPActivatePaneText(STPTextPaneVars **tpvars, Boolean setActive) {
         
         TXNActivate(varsp->fTXNRec, varsp->fTXNFrame, varsp->fTEActive);
 
-#if !TARGET_CARBON
         if (varsp->fInFocus)
             TXNFocus( varsp->fTXNRec, varsp->fTEActive);
-#endif
     }
 }
 
@@ -184,9 +171,7 @@ static void TPFocusPaneText(STPTextPaneVars **tpvars, Boolean setFocus) {
     varsp = *tpvars;
     if (varsp->fInFocus != setFocus) {
         varsp->fInFocus = setFocus;
-#if !TARGET_CARBON
         TXNFocus( varsp->fTXNRec, varsp->fInFocus);
-#endif
     }
 }
 
@@ -215,7 +200,7 @@ static pascal void TPPaneDrawProc(ControlRef theControl, ControlPartCode thePart
 		    Rect oldbounds = varsp->fRFocusOutline ;
 		    InsetRect( &oldbounds , -1 , -1 ) ;
 		    
-//		    InvalWindowRect( GetControlOwner( theControl ) , &oldbounds ) ;
+		    InvalWindowRect( GetControlOwner( theControl ) , &oldbounds ) ;
 			SetRect(&varsp->fRFocusOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
 			SetRect(&varsp->fRTextOutline, bounds.left, bounds.top, bounds.right, bounds.bottom);
         	SetRect(&varsp->fRTextArea, bounds.left + 2 , bounds.top + (varsp->fMultiline ? 0 : 2) , 
@@ -363,7 +348,12 @@ static pascal ControlPartCode TPPaneKeyDownProc(ControlHandle theControl,
         if ((**tpvars).fInFocus) {
                 /* turn autoscrolling on and send the key event to text edit */
             SetPort((**tpvars).fDrawingEnvironment);
-            TXNKeyDown( (**tpvars).fTXNRec, (const EventRecord*) wxTheApp->MacGetCurrentEvent());
+            EventRecord ev ;
+            memset( &ev , 0 , sizeof( ev ) ) ;
+            ev.what = keyDown ;
+            ev.modifiers = modifiers ;
+            ev.message = (( keyCode & keyCodeMask ) << 8 ) + ( charCode & charCodeMask ) ;
+            TXNKeyDown( (**tpvars).fTXNRec, &ev);
         }
     }
     return kControlEntireControl;
@@ -458,41 +448,6 @@ static pascal ControlPartCode TPPaneFocusProc(ControlHandle theControl, ControlF
     return focusResult;
 }
 
-//This our carbon event handler for unicode key downs
-#if TARGET_CARBON
-#if wxMAC_USE_CARBON_EVENTS
-static pascal OSStatus FocusAdvanceOverride(EventHandlerCallRef myHandler, EventRef event, void* userData) {
-    WindowRef window;
-    STPTextPaneVars **tpvars;
-    OSStatus err;
-    unsigned short mUnicodeText;
-    ByteCount charCounts=0;
-        /* get our window pointer */
-    tpvars = (STPTextPaneVars **) userData;
-    window = (**tpvars).fOwner;
-        //find out how many bytes are needed
-    err = GetEventParameter(event, kEventParamTextInputSendText,
-                typeUnicodeText, NULL, 0, &charCounts, NULL);
-    if (err != noErr) goto bail;
-        /* we're only looking at single characters */
-    if (charCounts != 2) { err = eventNotHandledErr; goto bail; }
-        /* get the character */
-    err = GetEventParameter(event, kEventParamTextInputSendText, 
-                typeUnicodeText, NULL, sizeof(mUnicodeText),
-                &charCounts, (char*) &mUnicodeText);
-    if (err != noErr) goto bail;
-        /* if it's not the tab key, forget it... */
-    if ((mUnicodeText != '\t')) { err = eventNotHandledErr; goto bail; }
-        /* advance the keyboard focus */
-    AdvanceKeyboardFocus(window);
-        /* noErr lets the CEM know we handled the event */
-    return noErr;
-bail:
-	return eventNotHandledErr;
-}
-#endif
-#endif
-
 
 /* mUPOpenControl initializes a user pane control so it will be drawn
 	and will behave as a scrolling text edit field inside of a window.
@@ -560,11 +515,9 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
         /* create the new edit field */
     TXNNewObject(NULL, varsp->fOwner, &varsp->fRTextArea,
 	  ( multiline ? kTXNWantVScrollBarMask : 0 ) |
-#if !TARGET_CARBON
 	    kTXNDontDrawCaretWhenInactiveMask |
 	    kTXNDontDrawSelectionWhenInactiveMask |
-#endif
-		 kTXNAlwaysWrapAtViewEdgeMask,
+		kTXNAlwaysWrapAtViewEdgeMask,
         kTXNTextEditStyleFrameType,
         kTXNTextensionFile,
         kTXNSystemDefaultEncoding, 
@@ -590,15 +543,6 @@ OSStatus mUPOpenControl(ControlHandle theControl, bool multiline)
     tback.bgType = kTXNBackgroundTypeRGB;
     tback.bg.color = rgbWhite;
     TXNSetBackground( varsp->fTXNRec, &tback);
-
-        /* install our focus advance override routine */
-#if TARGET_CARBON
-#if wxMAC_USE_CARBON_EVENTS
-    varsp->handlerUPP = NewEventHandlerUPP(FocusAdvanceOverride);
-    err = InstallWindowEventHandler( varsp->fOwner, varsp->handlerUPP,
-        kMLTEEventCount, gMLTEEvents, tpvars, &varsp->handlerRef );
-#endif
-#endif
 		
         /* unlock our storage */
     HUnlock((Handle) tpvars);
@@ -648,13 +592,6 @@ wxTextCtrl::~wxTextCtrl()
     {
         SetControlReference((ControlHandle)m_macControl, 0) ;
         TXNDeleteObject((TXNObject)m_macTXN);
-    #if TARGET_CARBON
-#if wxMAC_USE_CARBON_EVENTS
-            /* remove our focus advance override */
-        ::RemoveEventHandler((**(STPTextPaneVars **) m_macTXNvars).handlerRef);
-        ::DisposeEventHandlerUPP((**(STPTextPaneVars **) m_macTXNvars).handlerUPP);
-    #endif
-#endif
         /* delete our private storage */
         DisposeHandle((Handle) m_macTXNvars);
         /* zero the control reference */
@@ -740,6 +677,10 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_macControl = NewControl(MAC_WXHWND(parent->MacGetRootWindow()), &bounds, "\p", true, featurSet, 0, featurSet, kControlUserPaneProc, 0);
             /* set up the mUP specific features and data */
     	mUPOpenControl((ControlHandle) m_macControl, m_windowStyle & wxTE_MULTILINE );
+    	if ( parent )
+    	{
+    	    parent->MacGetTopLevelWindow()->MacInstallEventHandler() ;
+    	}
 	}
     MacPostControlCreate() ;
 
