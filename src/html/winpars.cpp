@@ -238,12 +238,11 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
             templen = 0;
             if (m_EncConv)
                 m_EncConv->Convert(temp);
-            wxString str = GetEntitiesParser()->Parse(temp);
-            size_t len = str.Len();
+            size_t len = wxStrlen(temp);
             for (size_t j = 0; j < len; j++)
-                if (str.GetChar(j) == nbsp)
-                    str[j] = wxT(' ');
-            c = new wxHtmlWordCell(str, *(GetDC()));
+                if (temp[j] == nbsp)
+                    temp[j] = wxT(' ');
+            c = new wxHtmlWordCell(temp, *(GetDC()));
             if (m_UseLink)
                 c->SetLink(m_Link);
             m_Container->InsertCell(c);
@@ -256,12 +255,11 @@ void wxHtmlWinParser::AddText(const wxChar* txt)
         temp[templen] = 0;
         if (m_EncConv)
             m_EncConv->Convert(temp);
-        wxString str = GetEntitiesParser()->Parse(temp);
-        size_t len = str.Len();
+        size_t len = wxStrlen(temp);
         for (size_t j = 0; j < len; j++)
-            if (str.GetChar(j) == nbsp)
-                str[j] = wxT(' ');
-        c = new wxHtmlWordCell(str, *(GetDC()));
+            if (temp[j] == nbsp)
+                temp[j] = wxT(' ');
+        c = new wxHtmlWordCell(temp, *(GetDC()));
         if (m_UseLink)
             c->SetLink(m_Link);
         m_Container->InsertCell(c);
