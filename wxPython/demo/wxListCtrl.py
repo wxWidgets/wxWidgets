@@ -213,10 +213,11 @@ class TestListCtrlPanel(wxPanel, wxColumnSorterMixin):
             # this does
             self.list.SetItemState(10, 0, wxLIST_STATE_SELECTED)
 
-    # Show how to reselect something we don't want deselected
     def OnItemDeselected(self, evt):
         item = evt.GetItem()
-        print evt.m_itemIndex
+        self.log.WriteText("OnItemDeselected: %d" % evt.m_itemIndex)
+
+        # Show how to reselect something we don't want deselected
         if evt.m_itemIndex == 11:
             wxCallAfter(self.list.SetItemState, 11, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
 

@@ -10,10 +10,12 @@ class wxFindPrefixListBox(wxListBox):
                  choices=[], style=0, validator=wxDefaultValidator):
         wxListBox.__init__(self, parent, id, pos, size, choices, style, validator)
         self.typedText = ''
-        EVT_KEY_UP(self, self.OnKey)
+        self.log = parent.log
+        EVT_KEY_DOWN(self, self.OnKey)
 
 
     def FindPrefix(self, prefix):
+        self.log.WriteText('Looking for prefix: %s\n' % prefix)
         if prefix:
             prefix = string.lower(prefix)
             length = len(prefix)
@@ -21,7 +23,9 @@ class wxFindPrefixListBox(wxListBox):
                 text = self.GetString(x)
                 text = string.lower(text)
                 if text[:length] == prefix:
+                    self.log.WriteText('Prefix %s is found.\n' % prefix)
                     return x
+        self.log.WriteText('Prefix %s is not found.\n' % prefix)
         return -1
 
 
@@ -43,7 +47,11 @@ class wxFindPrefixListBox(wxListBox):
                     self.SetSelection(item)
 
         else:
+            self.typedText = ''
             evt.Skip()
+
+    def OnKeyDown(self, evt):
+        pass
 
 
 #---------------------------------------------------------------------------
