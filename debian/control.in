@@ -108,7 +108,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (GTK+ development)
  Interface) and other facilities on more than one platform.  Version =V
  currently supports subsets of GTK+, Motif, and MS Windows.
  .
- This package provides a debug version of the wxGtk library.  It is compiled
+ This package provides a debug version of the wxGTK library.  It is compiled
  both with -g for normal debugger tracing and with the __WXDEBUG__ flag which
  provides many internal checks by wxWindows itself that are not performed on
  apps compiled with the 'release version' libs in the -dev package.
@@ -126,7 +126,7 @@ Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  Interface) and other facilities on more than one platform.  Version =V
  currently supports subsets of GTK+, Motif, and MS Windows.
  .
- This package provides a Python binding to the wxGTK library and it's
+ This package provides a Python binding to the wxGTK library and its
  contrib libs.  If you wish to use xrced you'll also need the python-xml
  package installed.
 

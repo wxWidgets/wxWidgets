@@ -93,7 +93,7 @@ objdirs = $(objdir_wxbase_shared) $(objdir_wxbase_static) $(objdir_wxbase_debug)
 
 #	note that the i18n package is actually arch indep (once built)
 #	but must be built (and installed) during the arch any phase as
-#	it's pulled out of the wxGtk shared lib package.
+#	it's pulled out of the wxGTK shared lib package.
 
 # Build stamps:
 build_arch_stamps = build-wxbase-shared-stamp build-wxbase-static-stamp \
