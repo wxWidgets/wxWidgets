@@ -30,9 +30,8 @@
 #endif // WX_PRECOMP
 
 #include "wx/os2/private.h"
-
 #include "wx/app.h"
-
+#include "wx/xpmhand.h"
 #include "wx/os2/gdiimage.h"
 
 // ----------------------------------------------------------------------------
@@ -347,10 +346,8 @@ void wxGDIImage::InitStandardHandlers()
     AddHandler(new wxBMPResourceHandler);
     AddHandler(new wxBMPFileHandler);
 
-    // Not added by default: include xpmhand.h in your app
-    // and call these in your wxApp::OnInit.
-    //  AddHandler(new wxXPMFileHandler);
-    //  AddHandler(new wxXPMDataHandler);
+    AddHandler(new wxXPMFileHandler);
+    AddHandler(new wxXPMDataHandler);
 
     AddHandler(new wxICOResourceHandler);
     AddHandler(new wxICOFileHandler);

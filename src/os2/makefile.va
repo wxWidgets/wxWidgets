@@ -115,7 +115,6 @@ GENERICOBJS= \
   ..\generic\$D\logg.obj \
   ..\generic\$D\numdlgg.obj \
   ..\generic\$D\panelg.obj \
-  ..\generic\$D\plot.obj \
   ..\generic\$D\printps.obj \
   ..\generic\$D\prntdlgg.obj \
   ..\generic\$D\progdlgg.obj \
@@ -159,7 +158,6 @@ GENLIBOBJS= \
   logg.obj \
   numdlgg.obj \
   panelg.obj \
-  plot.obj \
   printps.obj \
   prntdlgg.obj \
   progdlgg.obj \
@@ -216,6 +214,7 @@ COMMONOBJS = \
   ..\common\$D\file.obj \
   ..\common\$D\fileconf.obj \
   ..\common\$D\filefn.obj \
+  ..\common\$D\filename.obj \
   ..\common\$D\filesys.obj \
   ..\common\$D\fontcmn.obj \
   ..\common\$D\fontmap.obj \
@@ -325,6 +324,7 @@ COMLIBOBJS1 = \
   file.obj \
   fileconf.obj \
   filefn.obj \
+  filename.obj \
   filesys.obj \
   fontcmn.obj \
   fontmap.obj \
@@ -339,10 +339,10 @@ COMLIBOBJS1 = \
   hash.obj \
   helpbase.obj \
   http.obj \
-  imagall.obj \
-  imagbmp.obj
+  imagall.obj
 
 COMLIBOBJS2 = \
+  imagbmp.obj \
   image.obj \
   imaggif.obj \
   imagjpeg.obj \
@@ -383,10 +383,10 @@ COMLIBOBJS2 = \
   stream.obj \
   string.obj \
   tbarbase.obj \
-  textcmn.obj \
-  textfile.obj
+  textcmn.obj
 
 COMLIBOBJS3 = \
+  textfile.obj \
   timercmn.obj \
   tokenzr.obj \
   treebase.obj \
@@ -483,7 +483,8 @@ OS2OBJS = \
   ..\os2\$D\utils.obj \
   ..\os2\$D\utilsexc.obj \
   ..\os2\$D\wave.obj \
-  ..\os2\$D\window.obj
+  ..\os2\$D\window.obj \
+  ..\os2\$D\xpmhand.obj
 
 OS2LIBOBJS1 = \
   accel.obj \
@@ -564,7 +565,8 @@ OS2LIBOBJS2 = \
   utils.obj \
   utilsexc.obj \
   wave.obj \
-  window.obj
+  window.obj \
+  xpmhand.obj
 
 HTMLOBJS = \
   ..\html\$D\helpctrl.obj \
@@ -657,6 +659,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\file.obj
   copy ..\common\$D\fileconf.obj
   copy ..\common\$D\filefn.obj
+  copy ..\common\$D\filename.obj
   copy ..\common\$D\filesys.obj
   copy ..\common\$D\fontcmn.obj
   copy ..\common\$D\fontmap.obj
@@ -672,9 +675,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\helpbase.obj
   copy ..\common\$D\http.obj
   copy ..\common\$D\imagall.obj
-  copy ..\common\$D\imagbmp.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\imagbmp.obj
   copy ..\common\$D\image.obj
   copy ..\common\$D\imaggif.obj
   copy ..\common\$D\imagjpeg.obj
@@ -716,9 +719,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\string.obj
   copy ..\common\$D\tbarbase.obj
   copy ..\common\$D\textcmn.obj
-  copy ..\common\$D\textfile.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\textfile.obj
   copy ..\common\$D\timercmn.obj
   copy ..\common\$D\tokenzr.obj
   copy ..\common\$D\treebase.obj
@@ -759,7 +762,6 @@ $(GENLIBOBJS):
   copy ..\generic\$D\logg.obj
   copy ..\generic\$D\numdlgg.obj
   copy ..\generic\$D\panelg.obj
-  copy ..\generic\$D\plot.obj
   copy ..\generic\$D\printps.obj
   copy ..\generic\$D\prntdlgg.obj
   copy ..\generic\$D\progdlgg.obj
@@ -881,6 +883,7 @@ $(OS2LIBOBJS2):
   copy ..\os2\$D\utilsexc.obj
   copy ..\os2\$D\wave.obj
   copy ..\os2\$D\window.obj
+  copy ..\os2\$D\xpmhand.obj
 
 # wxWindows library as DLL
 dll:
