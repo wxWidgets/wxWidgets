@@ -66,7 +66,7 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
     
     SetUpDC();
     
-    m_isDrawable = FALSE;
+    m_isMemDC = TRUE;
   }
   else
   {

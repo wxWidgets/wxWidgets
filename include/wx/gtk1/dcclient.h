@@ -100,7 +100,7 @@ class wxPaintDC: public wxDC
     GdkGC        *m_textGC;
     GdkGC        *m_bgGC;
     GdkColormap  *m_cmap;
-    bool          m_isDrawable;
+    bool          m_isMemDC;
     
     void SetUpDC(void);
     GdkWindow *GetWindow(void);

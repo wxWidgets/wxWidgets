@@ -136,6 +136,8 @@ void wxListBox::Append( const wxString &item )
 
 void wxListBox::Append( const wxString &item, char *clientData )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+
   GtkWidget *list_item = gtk_list_item_new_with_label( item );
 
   if (m_hasOwnStyle)
@@ -143,9 +145,13 @@ void wxListBox::Append( const wxString &item, char *clientData )
     GtkBin *bin = GTK_BIN( list_item );
     gtk_widget_set_style( bin->child,
       gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) );
+        gtk_widget_get_style( GTK_WIDGET(m_list) ) ) );
+	
+    gtk_widget_set_style( GTK_WIDGET(bin),
+      gtk_style_ref(
+        gtk_widget_get_style( GTK_WIDGET(m_list) ) ) );
   }
-
+  
   gtk_signal_connect( GTK_OBJECT(list_item), "select",
     GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
@@ -162,11 +168,12 @@ void wxListBox::Append( const wxString &item, char *clientData )
   ConnectWidget( list_item );
 
   ConnectDnDWidget( list_item );
-
 }
 
 void wxListBox::Clear(void)
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+
   gtk_list_clear_items( m_list, 0, Number() );
 
   m_clientData.Clear();
@@ -174,6 +181,8 @@ void wxListBox::Clear(void)
 
 void wxListBox::Delete( int n )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+
   GList *child = g_list_nth( m_list->children, n );
 
   if (!child)
@@ -197,11 +206,15 @@ void wxListBox::Delete( int n )
 
 void wxListBox::Deselect( int n )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+
   gtk_list_unselect_item( m_list, n );
 }
 
 int wxListBox::FindString( const wxString &item ) const
 {
+  wxCHECK_MSG( m_list != NULL, -1, "invalid list ctrl" );
+  
   GList *child = m_list->children;
   int count = 0;
   while (child)
@@ -222,6 +235,8 @@ int wxListBox::FindString( const wxString &item ) const
 
 char *wxListBox::GetClientData( int n ) const
 {
+  wxCHECK_MSG( m_list != NULL, (char*) NULL, "invalid list ctrl" );
+  
   wxNode *node = m_clientData.Nth( n );
   if (node) return ((char*)node->Data());
 
@@ -231,6 +246,8 @@ char *wxListBox::GetClientData( int n ) const
 
 int wxListBox::GetSelection(void) const
 {
+  wxCHECK_MSG( m_list != NULL, -1, "invalid list ctrl" );
+  
   GList *child = m_list->children;
   int count = 0;
   while (child)
@@ -244,6 +261,8 @@ int wxListBox::GetSelection(void) const
 
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
+  wxCHECK_MSG( m_list != NULL, -1, "invalid list ctrl" );
+  
   // get the number of selected items first
   GList *child = m_list->children;
   int count = 0;
@@ -271,6 +290,8 @@ int wxListBox::GetSelections(wxArrayInt& aSelections) const
 
 wxString wxListBox::GetString( int n ) const
 {
+  wxCHECK_MSG( m_list != NULL, "", "invalid list ctrl" );
+  
   GList *child = g_list_nth( m_list->children, n );
   if (child)
   {
@@ -284,6 +305,8 @@ wxString wxListBox::GetString( int n ) const
 
 wxString wxListBox::GetStringSelection(void) const
 {
+  wxCHECK_MSG( m_list != NULL, "", "invalid list ctrl" );
+  
   GList *selection = m_list->selection;
   if (selection)
   {
@@ -297,6 +320,8 @@ wxString wxListBox::GetStringSelection(void) const
 
 int wxListBox::Number(void)
 {
+  wxCHECK_MSG( m_list != NULL, -1, "invalid list ctrl" );
+  
   GList *child = m_list->children;
   int count = 0;
   while (child) { count++; child = child->next; }
@@ -305,6 +330,8 @@ int wxListBox::Number(void)
 
 bool wxListBox::Selected( int n )
 {
+  wxCHECK_MSG( m_list != NULL, FALSE, "invalid list ctrl" );
+  
   GList *target = g_list_nth( m_list->children, n );
   if (target)
   {
@@ -326,6 +353,8 @@ void wxListBox::Set( int WXUNUSED(n), const wxString *WXUNUSED(choices) )
 
 void wxListBox::SetClientData( int n, char *clientData )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+  
   wxNode *node = m_clientData.Nth( n );
   if (node)
   {
@@ -349,6 +378,8 @@ void wxListBox::SetFirstItem( const wxString &WXUNUSED(item) )
 
 void wxListBox::SetSelection( int n, bool select )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+  
   if (select)
     gtk_list_select_item( m_list, n );
   else
@@ -357,6 +388,8 @@ void wxListBox::SetSelection( int n, bool select )
 
 void wxListBox::SetString( int n, const wxString &string )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+  
   GList *child = g_list_nth( m_list->children, n );
   if (child)
   {
@@ -372,6 +405,8 @@ void wxListBox::SetString( int n, const wxString &string )
 
 void wxListBox::SetStringSelection( const wxString &string, bool select )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+  
   SetSelection( FindString(string), select );
 }
 
@@ -393,6 +428,8 @@ int wxListBox::GetIndex( GtkWidget *item ) const
 
 void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
 {
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+  
   GList *child = m_list->children;
   while (child)
   {
@@ -417,7 +454,29 @@ GtkWidget *wxListBox::GetConnectWidget(void)
 
 void wxListBox::SetFont( const wxFont &font )
 {
-  wxWindow::SetFont( font );
+  wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
+  
+  if (((wxFont*)&font)->Ok())
+    m_font = font;
+  else
+    m_font = *wxSWISS_FONT;
+
+  GtkStyle *style = (GtkStyle*) NULL;
+  if (!m_hasOwnStyle)
+  {
+    m_hasOwnStyle = TRUE;
+    style = gtk_style_copy( gtk_widget_get_style( GTK_WIDGET(m_list) ) );
+  }
+  else
+  {
+    style = gtk_widget_get_style( GTK_WIDGET(m_list) );
+  }
+
+  gdk_font_unref( style->font );
+  style->font = gdk_font_ref( m_font.GetInternalFont( 1.0 ) );
+
+  gtk_widget_set_style( GTK_WIDGET(m_list), style );
+  
 
   GList *child = m_list->children;
   while (child)
@@ -425,7 +484,7 @@ void wxListBox::SetFont( const wxFont &font )
     GtkBin *bin = (GtkBin*) child->data;
     gtk_widget_set_style( bin->child,
       gtk_style_ref(
-        gtk_widget_get_style( m_widget ) ) );
+        gtk_widget_get_style( GTK_WIDGET(m_list) ) ) );
     child = child->next;
   }
 }
@@ -437,7 +496,7 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
   GList *child = m_list->children;
   while (child)
   {
-    GtkBin *bin = (GtkBin*) child->data;
+    GtkBin *bin = GTK_BIN( child->data );
     if (bin->child->window == window) return TRUE;
     child = child->next;
   }
@@ -445,10 +504,39 @@ bool wxListBox::IsOwnGtkWindow( GdkWindow *window )
   return FALSE;
 }
 
-void wxListBox::SetBackgroundColour(const wxColour &colour)
+void wxListBox::SetBackgroundColour( const wxColour &colour )
 {
   wxCHECK_RET( m_list != NULL, "invalid list ctrl" );
 
-  SetBackgroundColourHelper( colour, GTK_WIDGET(m_list)->window );
+  m_backgroundColour = colour;
+  if (!m_backgroundColour.Ok()) return;
+  
+  SetBackgroundColourHelper( GTK_WIDGET(m_list)->window );
+
+  GtkStyle *style = (GtkStyle*) NULL;
+  if (!m_hasOwnStyle)
+  {
+    m_hasOwnStyle = TRUE;
+    style = gtk_style_copy( gtk_widget_get_style( GTK_WIDGET(m_list) ) );
+  }
+  else
+  {
+    style = gtk_widget_get_style( GTK_WIDGET(m_list) );
+  }
+
+  style->base[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+  style->bg[GTK_STATE_NORMAL] = *m_backgroundColour.GetColor();
+
+  gtk_widget_set_style( GTK_WIDGET(m_list), style );
+
+  GList *child = m_list->children;
+  while (child)
+  {
+    GtkWidget *item = GTK_WIDGET(child->data);
+    gtk_widget_set_style( item,
+      gtk_style_ref(
+        gtk_widget_get_style( GTK_WIDGET(m_list) ) ) );
+    child = child->next;
+  }
 }
 

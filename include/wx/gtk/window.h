@@ -236,6 +236,8 @@ public:
   void ConnectWidget( GtkWidget *widget );
   void ConnectDnDWidget( GtkWidget *widget );
   void DisconnectDnDWidget( GtkWidget *widget );
+  
+  void SetBackgroundColourHelper( GdkWindow *window );
 
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style, const wxString &name );
@@ -314,11 +316,6 @@ public:
   virtual void GetSizeConstraint(int *w, int *h) const ;
   virtual void GetClientSizeConstraint(int *w, int *h) const ;
   virtual void GetPositionConstraint(int *x, int *y) const ;
-
-protected:
-  // set background colour for arbitrary window (useful because some windows
-  // don't work with m_wxwindow, e.g. wxTextCtrl)
-  void SetBackgroundColourHelper( const wxColour &colour, GdkWindow *window );
 
 private:
   DECLARE_EVENT_TABLE()

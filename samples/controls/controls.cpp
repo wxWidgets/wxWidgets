@@ -28,6 +28,11 @@
 
 #ifdef __WXGTK__
 #include "mondrian.xpm"
+#include "icons/choice.xpm"
+#include "icons/combo.xpm"
+#include "icons/list.xpm"
+#include "icons/radio.xpm"
+#include "icons/text.xpm"
 #endif
 
 //----------------------------------------------------------------------
@@ -227,6 +232,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     Image_List, Image_Choice, Image_Combo, Image_Text, Image_Radio, Image_Max
   };
   
+  // fill the image list
+#ifdef __WXMSW__
   const char *aIconNames[] =
   {
     "list.xpm", "choice.xpm", "combo.xpm", "text.xpm", "radio.xpm"
@@ -234,15 +241,22 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
   
   wxASSERT( WXSIZEOF(aIconNames) == Image_Max ); // keep in sync
 
-  // TODO should find the dir from path to program
-  wxString strIconDir = "icons/"; 
-
-  // fill the image list
+  wxString strIconDir = "icons/";
+  
   wxImageList *imagelist = new wxImageList(32, 32);
   for ( size_t n = 0; n < Image_Max; n++ ) 
   {
     imagelist->Add(wxBitmap(strIconDir + aIconNames[n]));
   }
+#else
+  wxImageList *imagelist = new wxImageList(32, 32);
+  
+  imagelist-> Add( wxBitmap( list_xpm ));
+  imagelist-> Add( wxBitmap( choice_xpm ));
+  imagelist-> Add( wxBitmap( combo_xpm ));
+  imagelist-> Add( wxBitmap( text_xpm ));
+  imagelist-> Add( wxBitmap( radio_xpm ));
+#endif
 
   m_notebook->SetImageList(imagelist);
 

@@ -92,6 +92,7 @@ wxPaintDC::wxPaintDC(void)
   m_textGC = (GdkGC *) NULL;
   m_bgGC = (GdkGC *) NULL;
   m_cmap = (GdkColormap *) NULL;
+  m_isMemDC = FALSE;
 }
 
 wxPaintDC::wxPaintDC( wxWindow *window )
@@ -112,7 +113,7 @@ wxPaintDC::wxPaintDC( wxWindow *window )
   else
     m_cmap = gtk_widget_get_colormap( window->m_widget );
     
-  m_isDrawable = TRUE;
+  m_isMemDC = FALSE;
         
   SetUpDC();
 }
@@ -137,9 +138,7 @@ void wxPaintDC::DrawLine( long x1, long y1, long x2, long y2 )
 {
   if (!Ok()) return;
   
-  // FIXME: is this right? Causes a segfault on my system and doesn't
-  // seem right: wxPaintDC does not inherit from wxMemoryDC
-  //   if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
@@ -152,9 +151,7 @@ void wxPaintDC::CrossHair( long x, long y )
 {
   if (!Ok()) return;
   
-  // FIXME: is this right? Causes a segfault on my system and doesn't
-  // seem right: wxPaintDC does not inherit from wxMemoryDC
-  // if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
   {
@@ -174,7 +171,7 @@ void wxPaintDC::DrawArc( long x1, long y1, long x2, long y2, double xc, double y
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   long xx1 = XLOG2DEV(x1); 
   long yy1 = YLOG2DEV(y1);
@@ -224,7 +221,7 @@ void wxPaintDC::DrawEllipticArc( long x, long y, long width, long height, double
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
@@ -248,7 +245,7 @@ void wxPaintDC::DrawPoint( long x, long y )
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() != wxTRANSPARENT)
     gdk_draw_point( m_window, m_penGC, XLOG2DEV(x), YLOG2DEV(y) );
@@ -258,7 +255,7 @@ void wxPaintDC::DrawLines( int n, wxPoint points[], long xoffset, long yoffset )
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() == wxTRANSPARENT) return;
   
@@ -276,7 +273,7 @@ void wxPaintDC::DrawLines( wxList *points, long xoffset, long yoffset )
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (m_pen.GetStyle() == wxTRANSPARENT) return;
   
@@ -298,7 +295,7 @@ void wxPaintDC::DrawPolygon( int n, wxPoint points[], long xoffset, long yoffset
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
    if (!n) return;    // Nothing to draw
    GdkPoint *gdkpoints = new GdkPoint[n+1];
@@ -325,7 +322,7 @@ void wxPaintDC::DrawPolygon( wxList *lines, long xoffset, long yoffset, int WXUN
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
    int n = lines->Number();
    GdkPoint *gdkpoints = new GdkPoint[n];
@@ -359,7 +356,7 @@ void wxPaintDC::DrawRectangle( long x, long y, long width, long height )
 {
   if (!Ok()) return;
 
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   long xx = XLOG2DEV(x);
   long yy = YLOG2DEV(y);
@@ -384,7 +381,7 @@ void wxPaintDC::DrawRoundedRectangle( long x, long y, long width, long height, d
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   if (radius < 0.0) radius = - radius * ((width < height) ? width : height);
   
@@ -451,7 +448,7 @@ void wxPaintDC::DrawEllipse( long x, long y, long width, long height )
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   long xx = XLOG2DEV(x);    
   long yy = YLOG2DEV(y);
@@ -480,7 +477,7 @@ void wxPaintDC::DrawIcon( const wxIcon &icon, long x, long y, bool useMask )
   
   if (!icon.Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   int xx = XLOG2DEV(x);
   int yy = YLOG2DEV(y);
@@ -509,10 +506,9 @@ bool wxPaintDC::Blit( long xdest, long ydest, long width, long height,
 {
   if (!Ok()) return FALSE;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
-  // CMB 20/5/98: add blitting of bitmaps
-  if (source->IsKindOf(CLASSINFO(wxMemoryDC)))
+  if (m_isMemDC)
   {
     wxMemoryDC* srcDC = (wxMemoryDC*)source;
     GdkBitmap* bmap = srcDC->m_selected.GetBitmap();
@@ -551,7 +547,7 @@ void wxPaintDC::DrawText( const wxString &text, long x, long y, bool WXUNUSED(us
 {
   if (!Ok()) return;
 
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
   GdkFont *font = m_font.GetInternalFont( m_scaleY );
 
@@ -622,9 +618,9 @@ void wxPaintDC::Clear(void)
 {
   if (!Ok()) return;
   
-  if (!m_isDrawable) ((wxMemoryDC*)this)->m_selected.DestroyImage();
+  if (m_isMemDC) ((wxMemoryDC*)this)->m_selected.DestroyImage();
   
-  if (m_isDrawable)
+  if (!m_isMemDC)
   {
     gdk_window_clear( m_window );
   }

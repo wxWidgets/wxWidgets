@@ -464,12 +464,11 @@ void wxTextCtrl::SetFont( const wxFont &font )
   gtk_widget_set_style( m_text, style );
 }
 
-// as our GTK widget is m_text and not m_widget, we have to override
-// SetBackgroundColour() to make it work
 void wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
   wxCHECK_RET( m_text != NULL, "invalid text ctrl" );
-
-  // NB: the GtkEntry and GtkText classes have text_area at the same offset
-  SetBackgroundColourHelper( colour, GTK_TEXT(m_text)->text_area );
+  
+  m_backgroundColour = colour;
+  
+  SetBackgroundColourHelper( GTK_TEXT(m_text)->text_area );
 }

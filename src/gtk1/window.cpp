@@ -1096,7 +1096,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   if (m_cursor == NULL)
     m_cursor = new wxCursor( wxCURSOR_ARROW );
   m_font = *wxSWISS_FONT;
-  m_backgroundColour = wxWHITE;
+//  m_backgroundColour = wxWHITE;
   m_foregroundColour = wxBLACK;
   m_windowStyle = style;
   m_windowName = name;
@@ -1939,7 +1939,7 @@ bool wxWindow::IsExposed( const wxRect& rect ) const
 
 void wxWindow::Clear()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
   if (m_wxwindow && m_wxwindow->window) gdk_window_clear( m_wxwindow->window );
 }
@@ -1949,21 +1949,23 @@ wxColour wxWindow::GetBackgroundColour() const
   return m_backgroundColour;
 }
 
-void wxWindow::SetBackgroundColourHelper(const wxColour& colour,
-                                         GdkWindow *window)
+void wxWindow::SetBackgroundColourHelper( GdkWindow *window )
 {
-  m_backgroundColour = colour;
-  m_backgroundColour.CalcPixel( gdk_window_get_colormap(window) );
+  if (!m_backgroundColour.Ok()) return;
+  
+  m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
   gdk_window_set_background( window, m_backgroundColour.GetColor() );
   gdk_window_clear( window );
 }
 
 void wxWindow::SetBackgroundColour( const wxColour &colour )
 {
-  wxASSERT_MSG( m_widget != NULL, "invalid window" );
+  wxCHECK_RET( m_widget != NULL, "invalid window" );
 
+  m_backgroundColour = colour;
+  
   GtkWidget *widget = m_wxwindow == NULL ? m_widget : m_wxwindow;
-  SetBackgroundColourHelper( colour, widget->window );
+  SetBackgroundColourHelper( widget->window );
 }
 
 wxColour wxWindow::GetForegroundColour() const
@@ -1978,7 +1980,7 @@ void wxWindow::SetForegroundColour( const wxColour &colour )
 
 bool wxWindow::Validate()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
   wxNode *node = GetChildren()->First();
   while (node)
@@ -1993,7 +1995,7 @@ bool wxWindow::Validate()
 
 bool wxWindow::TransferDataToWindow()
 {
-  wxASSERT_MSG( (m_widget != NULL), "invalid window" );
+  wxCHECK_MSG( m_widget != NULL, FALSE, "invalid window" );
 
   wxNode *node = GetChildren()->First();
   while (node)

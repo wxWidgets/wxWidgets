@@ -95,6 +95,7 @@ class wxComboBox: public wxControl
   
   void SetFont( const wxFont &font );
   void OnSize( wxSizeEvent &event );
+  void SetBackgroundColour( const wxColour &colour );
   
   // implementation
 

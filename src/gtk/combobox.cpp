@@ -130,6 +130,12 @@ void wxComboBox::Append( const wxString &item, char *clientData )
         gtk_widget_get_style( m_widget ) ) ); 
   }
   
+  if (m_backgroundColour != wxNullColour)
+  {
+    GtkBin *bin = GTK_BIN( list_item );
+    SetBackgroundColourHelper( bin->child->window );
+  }
+  
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
   
@@ -424,5 +430,20 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 {
   return ( (window == GTK_ENTRY( GTK_COMBO(m_widget)->entry )->text_area) ||
            (window == GTK_COMBO(m_widget)->button->window ) );
+}
+
+void wxComboBox::SetBackgroundColour( const wxColour &colour )
+{
+  wxWindow::SetBackgroundColour( colour );
+  
+  GtkWidget *list = GTK_COMBO(m_widget)->list;
+  
+  GList *child = GTK_LIST(list)->children;
+  while (child)
+  {
+    GtkBin *bin = (GtkBin*) child->data;
+    SetBackgroundColourHelper( bin->child->window );
+    child = child->next;
+  }
 }
 
