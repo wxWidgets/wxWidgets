@@ -78,8 +78,6 @@ public:
 
     virtual void InitDialog(void);
 
-    virtual void Centre( int direction = wxHORIZONTAL );
-
     virtual void SetIcon( const wxIcon &icon );
     virtual void Iconize( bool WXUNUSED(iconize)) { }
     virtual bool IsIconized() const { return FALSE; }

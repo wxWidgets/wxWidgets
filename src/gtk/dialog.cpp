@@ -548,19 +548,6 @@ void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int heigh
     GetEventHandler()->ProcessEvent( event );
 }
 
-void wxDialog::Centre( int direction )
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid dialog") );
-
-    int x = 0;
-    int y = 0;
-
-    if ((direction & wxHORIZONTAL) == wxHORIZONTAL) x = (gdk_screen_width () - m_width) / 2;
-    if ((direction & wxVERTICAL) == wxVERTICAL) y = (gdk_screen_height () - m_height) / 2;
-
-    Move( x, y );
-}
-
 void wxDialog::OnInternalIdle()
 {
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
