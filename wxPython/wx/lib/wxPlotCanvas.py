@@ -51,14 +51,13 @@ imported.  It probably is not installed (it's not part of the standard
 Python distribution). See the Python site (http://www.python.org) for
 information on downloading source or binaries."""
 
-    if wx.Platform == '__WXMSW__':
+    print msg
+    if wx.Platform == '__WXMSW__' and wx.GetApp() is not None:
         d = wx.MessageDialog(None, msg, "Numeric not found")
         if d.ShowModal() == wx.ID_CANCEL:
             d = wx.MessageDialog(None, "I kid you not! Pressing Cancel won't help you!", "Not a joke", wx.OK)
             d.ShowModal()
-    else:
-        print msg
-    raise ImportError
+    raise
 
 #
 # Plotting classes...
