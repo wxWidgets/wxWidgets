@@ -480,9 +480,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>@€ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>{2@</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -879,6 +879,13 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS></FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS></FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -1084,6 +1091,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>DragLib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -1528,9 +1540,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>@€ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>{2@</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -1927,6 +1939,13 @@
                     <FILEKIND>Library</FILEKIND>
                     <FILEFLAGS>Debug</FILEFLAGS>
                 </FILE>
+                <FILE>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                    <FILEKIND>Library</FILEKIND>
+                    <FILEFLAGS>Debug</FILEFLAGS>
+                </FILE>
             </FILELIST>
             <LINKORDER>
                 <FILEREF>
@@ -2132,6 +2151,11 @@
                 <FILEREF>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>zlibd.lib</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
             </LINKORDER>
@@ -2568,9 +2592,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>@€ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>{2@</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -3344,9 +3368,9 @@
                 <SETTING><NAME>MWMerge_MacOS_copyResources</NAME><VALUE>1</VALUE></SETTING>
                 <SETTING><NAME>MWMerge_MacOS_skipResources</NAME>
                     <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
-                    <SETTING><VALUE>@€ø</VALUE></SETTING>
-                    <SETTING><VALUE></VALUE></SETTING>
+                    <SETTING><VALUE>{2@</VALUE></SETTING>
+                    <SETTING><VALUE>%#H</VALUE></SETTING>
+                    <SETTING><VALUE>%8*</VALUE></SETTING>
                 </SETTING>
 
                 <!-- Settings for "PPC CodeGen" panel -->
@@ -3748,15 +3772,15 @@
         </FILEREF>
         <GROUP><NAME>wx</NAME>
             <FILEREF>
-                <TARGETNAME>Carbon Debug</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>wx_CARBON_d.lib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
                 <TARGETNAME>Carbon Release</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
                 <PATH>wx_CARBON.lib</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Carbon Debug</TARGETNAME>
+                <PATHTYPE>Name</PATHTYPE>
+                <PATH>wx_CARBON_d.lib</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -3766,15 +3790,15 @@
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
-                <TARGETNAME>Classic Debug</TARGETNAME>
-                <PATHTYPE>Name</PATHTYPE>
-                <PATH>wx_PPC_d.lib</PATH>
-                <PATHFORMAT>MacOS</PATHFORMAT>
-            </FILEREF>
-            <FILEREF>
                 <TARGETNAME>Classic Release</TARGETNAME>
                 <PATHTYPE>Name</PATHTYPE>
                 <PATH>wx_PPC.lib</PATH>
+                <PATHFORMAT>MacOS</PATHFORMAT>
+            </FILEREF>
+            <FILEREF>
+                <TARGETNAME>Classic Debug</TARGETNAME>
+                <PATHTYPE>Name</PATHTYPE>
+                <PATH>wx_PPC_d.lib</PATH>
                 <PATHFORMAT>MacOS</PATHFORMAT>
             </FILEREF>
             <FILEREF>
@@ -3998,6 +4022,12 @@
                     <TARGETNAME>Classic Release</TARGETNAME>
                     <PATHTYPE>Name</PATHTYPE>
                     <PATH>TextEncodingConverter</PATH>
+                    <PATHFORMAT>MacOS</PATHFORMAT>
+                </FILEREF>
+                <FILEREF>
+                    <TARGETNAME>Classic Release</TARGETNAME>
+                    <PATHTYPE>Name</PATHTYPE>
+                    <PATH>Textension</PATH>
                     <PATHFORMAT>MacOS</PATHFORMAT>
                 </FILEREF>
                 <FILEREF>
