@@ -252,10 +252,10 @@ MOTIF_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/src/x11
 	mkdir $(DISTDIR)/include/wx/x11
 	cp $(X11DIR)/pen.cpp $(X11DIR)/brush.cpp $(X11DIR)/utilsx.cpp \
-		$(X11DIR)/bitmap.cpp $(X11DIR)/region.cpp \
+		$(X11DIR)/bitmap.cpp $(X11DIR)/glcanvas.cpp $(X11DIR)/region.cpp \
 		$(DISTDIR)/src/x11
 	cp $(X11INC)/pen.h $(X11INC)/brush.h $(X11INC)/privx.h \
-		$(X11INC)/bitmap.h $(X11INC)/private.h $(X11INC)/region.h \
+		$(X11INC)/bitmap.h $(X11INC)/glcanvas.h $(X11INC)/private.h $(X11INC)/region.h \
 		$(DISTDIR)/include/wx/x11
 	mkdir $(DISTDIR)/contrib
 	cp -R $(WXDIR)/contrib $(DISTDIR)
@@ -692,7 +692,6 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/minimal/Makefile.in $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/makefile.unx $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.cpp $(DISTDIR)/samples/minimal
-	cp $(SAMPDIR)/minimal/*.xpm $(DISTDIR)/samples/minimal
 	cp $(SAMPDIR)/minimal/*.mms $(DISTDIR)/samples/minimal
 
 	mkdir $(DISTDIR)/samples/mobile
