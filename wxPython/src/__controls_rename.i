@@ -88,8 +88,8 @@
 %rename(RadioButton)                        wxRadioButton;
 %rename(Slider)                             wxSlider;
 %rename(ToggleButton)                       wxToggleButton;
-%rename(BookCtrl)                           wxBookCtrl;
-%rename(BookCtrlEvent)                      wxBookCtrlEvent;
+%rename(BookCtrlBase)                       wxBookCtrlBase;
+%rename(BookCtrlBaseEvent)                  wxBookCtrlBaseEvent;
 %rename(NB_FIXEDWIDTH)                      wxNB_FIXEDWIDTH;
 %rename(NB_TOP)                             wxNB_TOP;
 %rename(NB_LEFT)                            wxNB_LEFT;
