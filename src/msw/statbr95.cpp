@@ -54,7 +54,6 @@
   IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxStatusBar);
 
   BEGIN_EVENT_TABLE(wxStatusBar95, wxStatusBar)
-    EVT_PAINT(wxWindow::OnPaint)
     EVT_SIZE(wxStatusBar95::OnSize)
   END_EVENT_TABLE()
 #endif  //USE_SHARED_LIBRARY
