@@ -190,7 +190,7 @@ place, then do the same for wxPython.
 
 	 WXPORT=gtk2 
 
-   If you woudl like to do a Unicode enabled build (all strings sent
+   If you would like to do a Unicode enabled build (all strings sent
    to or retruned from wx functions are Unicode objects) and your
    wxWidgets was built with unicod enabled then add this flag::
 
