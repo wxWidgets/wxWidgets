@@ -976,7 +976,7 @@ void wxToolBar::OnMouseEvent(
                 m_pToolTip = new wxToolTip(pTool->GetShortHelp());
                 m_vXMouse = (wxCoord)vPoint.x;
                 m_vYMouse = (wxCoord)vPoint.y;
-                m_vToolTimer.Start(3000L, TRUE);
+                m_vToolTimer.Start(1000L, TRUE);
             }
             if (!pTool->IsToggled())
                 RaiseTool(pTool);
@@ -1447,7 +1447,7 @@ void wxToolBar::OnTimer (
 
         m_pToolTip->DisplayToolTipWindow(vPos);
         m_vToolTimer.Stop();
-        m_vToolExpTimer.Start(3000L, TRUE);
+        m_vToolExpTimer.Start(4000L, TRUE);
     }
     else if (rEvent.GetId() == m_vToolExpTimer.GetTimerId())
     {

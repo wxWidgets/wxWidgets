@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\Dev\Wx2\WxWindows\Lib\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1153,6 +1153,8 @@ EXPORTS
       OnNewDocument__10wxDocumentFv
       ;wxView::OnCreatePrintout()
       OnCreatePrintout__6wxViewFv
+      ;wxDocument::NotifyClosing()
+      NotifyClosing__10wxDocumentFv
       ;wxDocManager::GetNoHistoryFiles() const
       GetNoHistoryFiles__12wxDocManagerCFv
       ;wxFileHistory::AddFilesToMenu()
@@ -1805,6 +1807,7 @@ EXPORTS
       ;wxMouseEvent::Assign(const wxMouseEvent&)
       Assign__12wxMouseEventFRC12wxMouseEvent
       wxEVT_SCROLL_LINEUP
+      wxEVT_SCROLL_ENDSCROLL
       wxEVT_PAINT
       wxEVT_NULL
       wxEVT_NC_RIGHT_UP
@@ -4658,12 +4661,14 @@ EXPORTS
       Exists__9wxProcessFi
       ;wxConstructorForwxProcess()
       wxConstructorForwxProcess__Fv
-      ;wxProcess::Init(wxEvtHandler*,int,unsigned long)
-      Init__9wxProcessFP12wxEvtHandleriUl
-      __vft9wxProcess8wxObject
       ;wxProcess::Kill(int,wxSignal)
       Kill__9wxProcessFi8wxSignal
+      __vft9wxProcess8wxObject
+      ;wxProcess::Open(const wxString&,int)
+      Open__9wxProcessFRC8wxStringi
       wxEVT_END_PROCESS
+      ;wxProcess::Init(wxEvtHandler*,int,int)
+      Init__9wxProcessFP12wxEvtHandleriT2
       ;wxProcess::~wxProcess()
       __dt__9wxProcessFv
       ;wxConstructorForwxProcessEvent()
@@ -6616,6 +6621,8 @@ EXPORTS
       sm_classwxVariantDataChar__17wxVariantDataChar
       ;wxVariant::operator==(void*) const
       __eq__9wxVariantCFPv
+      ;wxVariant::NullList()
+      NullList__9wxVariantFv
       ;wxVariant::GetList() const
       GetList__9wxVariantCFv
       ;wxVariant::GetCount() const

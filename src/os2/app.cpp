@@ -422,6 +422,18 @@ bool wxApp::RegisterWindowClasses(
         wxLogLastError(sError);
         return FALSE;
     }
+    if (!::WinRegisterClass( vHab
+                            ,wxCanvasClassNameNR
+                            ,wxWndProc
+                            ,CS_HITTEST | CS_SYNCPAINT
+                            ,sizeof(ULONG)
+                           ))
+    {
+        vError = ::WinGetLastError(vHab);
+        sError = wxPMErrorToStr(vError);
+        wxLogLastError(sError);
+        return FALSE;
+    }
     return TRUE;
 } // end of wxApp::RegisterWindowClasses
 

@@ -83,9 +83,10 @@ MRESULT EXPENTRY wxDlgProc( HWND WXUNUSED(hWnd)
         case WM_INITDLG:
             //
             // For this message, returning TRUE tells system to set focus to
-            // the first control in the dialog box, but as we set the focus
-            // ourselves, we return FALSE from here as well, so fall through
+            // the first control in the dialog box, but we set the focus
+            // ourselves, however in OS/2 we must return true to enable the dialog
             //
+            return (MRESULT)TRUE;
         default:
             //
             // For all the other ones, FALSE means that we didn't process the
@@ -396,7 +397,7 @@ bool wxTopLevelWindowOS2::CreateDialog(
                       ,nY
                       ,nWidth
                       ,nHeight
-                      ,SWP_MOVE | SWP_SIZE | SWP_ZORDER | SWP_SHOW
+                      ,SWP_MOVE | SWP_SIZE | SWP_ZORDER | SWP_SHOW | SWP_ACTIVATE
                      );
     ::WinQueryWindowPos(GetHwnd(), GetSwp());
     m_hFrame = m_hWnd;
