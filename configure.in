@@ -1705,9 +1705,13 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
                     [AC_DEFINE(HAVE_SHL_LOAD) HAVE_DL_FUNCS=1 HAVE_SHL_FUNCS=1])
 
     if test "$HAVE_DL_FUNCS" = 0; then
-        AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
-        wxUSE_ODBC=no
-        wxUSE_DYNLIB_CLASS=no
+        if test "$USE_UNIX" = 1; then 
+            AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
+            wxUSE_ODBC=no
+            wxUSE_DYNLIB_CLASS=no
+	else
+	    AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
+	fi    
     fi
 fi
 

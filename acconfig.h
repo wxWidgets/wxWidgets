@@ -342,7 +342,7 @@
 /*
  * wxLibrary class
  */
-#define wxUSE_DYNLIB_CLASS 1
+#define wxUSE_DYNLIB_CLASS 0
 
 /* ------------------------------------------------------------------------ */
 /* PS options                                                               */
