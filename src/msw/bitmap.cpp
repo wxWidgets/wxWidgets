@@ -810,6 +810,7 @@ bool wxBitmap::CreateFromImage(const wxImage& image, int depth, WXHDC hdc)
 
 wxImage wxBitmap::ConvertToImage() const
 {
+    // convert DDB to DIB
     wxDIB dib(*this);
 
     if ( !dib.IsOk() )
@@ -817,122 +818,75 @@ wxImage wxBitmap::ConvertToImage() const
         return wxNullImage;
     }
 
+    // and then DIB to our wxImage
     wxImage image = dib.ConvertToImage();
     if ( !image.Ok() )
     {
         return wxNullImage;
     }
 
-    // set mask
-
-    // TODO: WinCE mask-copying support and use wxDIB
-#ifndef __WXWINCE__
-
-    if( GetMask() && GetMask()->GetMaskBitmap() )
+    // now do the same for the mask, if we have any
+    HBITMAP hbmpMask = GetMask() ? (HBITMAP) GetMask()->GetMaskBitmap() : NULL;
+    if ( hbmpMask )
     {
-        static const int MASK_RED = 1;
-        static const int MASK_GREEN = 2;
-        static const int MASK_BLUE = 3;
-        static const int MASK_BLUE_REPLACEMENT = 2;
-
-        HBITMAP hbitmap = (HBITMAP) GetMask()->GetMaskBitmap();
-        int width = GetWidth();
-        int height = GetHeight();
-
-        int bytesPerLine = width*3;
-        int sizeDWORD = sizeof( DWORD );
-        int lineBoundary =  bytesPerLine % sizeDWORD;
-        int padding = 0;
-        if( lineBoundary > 0 )
+        wxDIB dibMask(hbmpMask);
+        if ( dibMask.IsOk() )
         {
-            padding = sizeDWORD - lineBoundary;
-            bytesPerLine += padding;
-        }
+            // TODO: use wxRawBitmap to iterate over DIB
 
-        // create a DIB header
-        int headersize = sizeof(BITMAPINFOHEADER);
-        BITMAPINFO *lpDIBh = (BITMAPINFO *) malloc( headersize );
-        if( !lpDIBh )
-        {
-            wxFAIL_MSG( wxT("could not allocate data for DIB header") );
-            //free( data );
-            return wxNullImage;
-        }
+            // we hard code the mask colour for now but we could also make an
+            // effort (and waste time) to choose a colour not present in the
+            // image already to avoid having to fudge the pixels below --
+            // whether it's worth to do it is unclear however
+            static const int MASK_RED = 1;
+            static const int MASK_GREEN = 2;
+            static const int MASK_BLUE = 3;
+            static const int MASK_BLUE_REPLACEMENT = 2;
 
-        // Fill in the DIB header
-        lpDIBh->bmiHeader.biSize = headersize;
-        lpDIBh->bmiHeader.biWidth = width;
-        lpDIBh->bmiHeader.biHeight = -height;
-        lpDIBh->bmiHeader.biSizeImage = bytesPerLine * height;
-        lpDIBh->bmiHeader.biPlanes = 1;
-        lpDIBh->bmiHeader.biBitCount = 24;
-        lpDIBh->bmiHeader.biCompression = BI_RGB;
-        lpDIBh->bmiHeader.biClrUsed = 0;
-        // These seem not really needed for our purpose here.
-        lpDIBh->bmiHeader.biClrImportant = 0;
-        lpDIBh->bmiHeader.biXPelsPerMeter = 0;
-        lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+            const int h = dibMask.GetHeight();
+            const int w = dibMask.GetWidth();
+            const int bpp = dibMask.GetDepth();
+            const int maskBytesPerPixel = bpp >> 3;
+            const int maskBytesPerLine = wxDIB::GetLineSize(w, bpp);
+            unsigned char *data = image.GetData();
 
-        // memory DC created, color set, data copied, and memory DC deleted
+            // remember that DIBs are stored in bottom to top order
+            unsigned char *
+                maskLineStart = dibMask.GetData() + ((h - 1) * maskBytesPerLine);
 
-        // memory for DIB data
-        unsigned char *lpBits
-            = (unsigned char *) malloc( lpDIBh->bmiHeader.biSizeImage );
-        if( !lpBits )
-        {
-            wxFAIL_MSG( wxT("could not allocate data for DIB") );
-            free( lpDIBh );
-            return wxNullImage;
-        }
-
-
-        HDC hdc = ::GetDC(NULL);
-
-        HDC memdc = ::CreateCompatibleDC( hdc );
-        ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
-        ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
-        ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-        ::DeleteDC( memdc );
-        unsigned char *ptdata = image.GetData();//data;
-        unsigned char *ptbits = lpBits;
-        int i, j;
-        for( i=0; i<height; i++ )
-        {
-            for( j=0; j<width; j++ )
+            for ( int y = 0; y < h; y++, maskLineStart -= maskBytesPerLine )
             {
-                // is this pixel transparent?
-                if ( *ptbits != 0 )
+                // traverse one mask DIB line
+                unsigned char *mask = maskLineStart;
+                for ( int x = 0; x < w; x++, mask += maskBytesPerPixel )
                 {
-                    if ( (ptdata[0] == MASK_RED) &&
-                            (ptdata[1] == MASK_GREEN) &&
-                                (ptdata[2] == MASK_BLUE) )
+                    // should this pixel be transparent?
+                    if ( *mask )
                     {
-                        // we have to fudge the colour a bit to prevent this
-                        // pixel from appearing transparent
-                        ptdata[2] = MASK_BLUE_REPLACEMENT;
+                        // no, check that it isn't transparent by accident
+                        if ( (data[0] == MASK_RED) &&
+                                (data[1] == MASK_GREEN) &&
+                                    (data[2] == MASK_BLUE) )
+                        {
+                            // we have to fudge the colour a bit to prevent
+                            // this pixel from appearing transparent
+                            data[2] = MASK_BLUE_REPLACEMENT;
+                        }
+
+                        data += 3;
                     }
-                    ptdata += 3;
+                    else // yes, transparent pixel
+                    {
+                        *data++ = MASK_RED;
+                        *data++ = MASK_GREEN;
+                        *data++ = MASK_BLUE;
+                    }
                 }
-                else // masked pixel
-                {
-                    *(ptdata++)  = MASK_RED;
-                    *(ptdata++)  = MASK_GREEN;
-                    *(ptdata++)  = MASK_BLUE;
-                }
-                ptbits += 3;
             }
-            ptbits += padding;
+
+            image.SetMaskColour(MASK_RED, MASK_GREEN, MASK_BLUE);
         }
-
-        image.SetMaskColour( MASK_RED, MASK_GREEN, MASK_BLUE );
-        image.SetMask( true );
-
-        // free allocated resources
-        ::ReleaseDC(NULL, hdc);
-        free(lpDIBh);
-        free(lpBits);
     }
-#endif // __WXWINCE__
 
     return image;
 }
