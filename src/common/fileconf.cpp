@@ -1107,13 +1107,19 @@ bool wxFileConfig::DeleteAll()
 {
   CleanUp();
 
-  if ( wxFile::Exists(m_strLocalFile) && wxRemove(m_strLocalFile) == -1 )
+  if ( !m_strLocalFile.empty() )
   {
-      wxLogSysError(_("can't delete user configuration file '%s'"), m_strLocalFile.c_str());
-      return false;
+      if ( wxFile::Exists(m_strLocalFile) && wxRemove(m_strLocalFile) == -1 )
+      {
+          wxLogSysError(_("can't delete user configuration file '%s'"),
+                        m_strLocalFile.c_str());
+          return false;
+      }
+
+      m_strLocalFile =
+      m_strGlobalFile = wxT("");
   }
 
-  m_strLocalFile = m_strGlobalFile = wxT("");
   Init();
 
   return true;
@@ -1709,7 +1715,11 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 bool wxFileConfigGroup::DeleteEntry(const wxChar *szName)
 {
   wxFileConfigEntry *pEntry = FindEntry(szName);
-  wxCHECK( pEntry != NULL, false );  // deleting non existing item?
+  if ( !pEntry )
+  {
+      // entry doesn't exist, nothing to do
+      return false;
+  }
 
   wxFileConfigLineList *pLine = pEntry->GetLine();
   if ( pLine != NULL ) {
