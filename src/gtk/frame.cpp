@@ -32,7 +32,7 @@ extern wxList wxPendingDelete;
 // size
 
 void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxFrame *win )
-{ 
+{
   if (!win->HasVMT()) return;
 
 /*
@@ -41,7 +41,7 @@ void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc,
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
 */
-  
+
   win->GtkOnSize( alloc->width, alloc->height );
 };
 
@@ -49,14 +49,14 @@ void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc,
 // delete
 
 bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxFrame *win )
-{ 
+{
 /*
   printf( "OnDelete from " );
   if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
     printf( win->GetClassInfo()->GetClassName() );
   printf( ".\n" );
 */
-  
+
   win->Close();
 
   return TRUE;
@@ -80,7 +80,7 @@ wxFrame::wxFrame(void)
   wxTopLevelWindows.Insert( this );
 };
 
-wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title, 
+wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       const wxPoint &pos, const wxSize &size,
       long style, const wxString &name )
 {
@@ -96,50 +96,50 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
   m_needParent = FALSE;
   m_mainWindow = NULL;
   m_wxwindow = NULL;
-  
+
   PreCreation( parent, id, pos, size, style, name );
 
   m_doingOnSize = FALSE;
-  
+
   m_title = title;
-  
+
   m_widget = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-  if ((size.x != -1) && (size.y != -1)) 
+  if ((size.x != -1) && (size.y != -1))
     gtk_widget_set_usize( m_widget, m_width, m_height );
-  if ((pos.x != -1) && (pos.y != -1)) 
+  if ((pos.x != -1) && (pos.y != -1))
     gtk_widget_set_uposition( m_widget, m_x, m_y );
-  
+
   gtk_window_set_title( GTK_WINDOW(m_widget), title );
   GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
-  
+
   gtk_widget_set( m_widget, "GtkWindow::allow_shrink", TRUE, NULL);
-  
-  gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event", 
+
+  gtk_signal_connect( GTK_OBJECT(m_widget), "delete_event",
     GTK_SIGNAL_FUNC(gtk_frame_delete_callback), (gpointer)this );
-    
+
   m_mainWindow = gtk_myfixed_new();
   gtk_widget_show( m_mainWindow );
   GTK_WIDGET_UNSET_FLAGS( m_mainWindow, GTK_CAN_FOCUS );
-  
+
   gtk_container_add( GTK_CONTAINER(m_widget), m_mainWindow );
   gtk_widget_set_uposition( m_mainWindow, 0, 0 );
-  
+
   m_wxwindow = gtk_myfixed_new();
   gtk_widget_show( m_wxwindow );
   GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-  
+
   gtk_container_add( GTK_CONTAINER(m_mainWindow), m_wxwindow );
-  
+
   m_frameMenuBar = NULL;
   m_frameStatusBar = NULL;
-  
-  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate", 
+
+  gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
     GTK_SIGNAL_FUNC(gtk_frame_size_callback), (gpointer)this );
-  
+
   PostCreation();
-  
+
   gtk_widget_realize( m_mainWindow );
-  
+
   return TRUE;
 };
 
@@ -147,13 +147,13 @@ wxFrame::~wxFrame(void)
 {
   if (m_frameMenuBar) delete m_frameMenuBar;
   if (m_frameStatusBar) delete m_frameStatusBar;
-  
+
 //  if (m_mainWindow) gtk_widget_destroy( m_mainWindow );
 
   wxTopLevelWindows.DeleteObject( this );
   if (wxTopLevelWindows.Number() == 0) wxTheApp->ExitMainLoop();
 };
-      
+
 bool wxFrame::Show( bool show )
 {
   if (show)
@@ -180,7 +180,7 @@ bool wxFrame::Destroy(void)
 {
   if (!wxPendingDelete.Member(this))
     wxPendingDelete.Append(this);
-    
+
   return TRUE;
 }
 
@@ -203,14 +203,14 @@ void wxFrame::GtkOnSize( int width, int height )
 
   m_width = width;
   m_height = height;
-  
+
   gtk_widget_set_usize( m_widget, width, height );
-  
+
   int main_x = 0;
   int main_y = 0;
   int main_height = height;
   int main_width = width;
-  
+
   // This emulates Windows behaviour:
   // The menu bar is part of the main window, but the status bar
   // is on the implementation side in the client area. The
@@ -219,32 +219,32 @@ void wxFrame::GtkOnSize( int width, int height )
   // is represented by m_mainWindow. The menubar is inserted
   // into m_mainWindow whereas the statusbar is insertes into
   // m_wxwindow just like any other window.
-  
+
 //  not really needed
   gtk_widget_set_usize( m_mainWindow, width, height );
-    
+
   if (m_frameMenuBar)
   {
     main_y = wxMENU_HEIGHT;
     main_height -= wxMENU_HEIGHT;
   };
-  
+
   gtk_widget_set_uposition( GTK_WIDGET(m_wxwindow), main_x, main_y );
   gtk_widget_set_usize( GTK_WIDGET(m_wxwindow), main_width, main_height );
-  
+
   if (m_frameMenuBar)
   {
     gtk_widget_set_uposition( m_frameMenuBar->m_widget, 1, 1 );
     gtk_widget_set_usize( m_frameMenuBar->m_widget, width-2, wxMENU_HEIGHT-2 );
   };
-  
+
   if (m_frameStatusBar)
   {
     m_frameStatusBar->SetSize( 0, main_height-wxSTATUS_HEIGHT, width, wxSTATUS_HEIGHT );
   };
 
   m_sizeSet = TRUE;
-  
+
   wxSizeEvent event( wxSize(m_width,m_height), GetId() );
   event.SetEventObject( this );
   ProcessEvent( event );
@@ -252,32 +252,34 @@ void wxFrame::GtkOnSize( int width, int height )
 
 void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
-  wxWindow *child = NULL;
-  int noChildren = 0;
-  for(wxNode *node = GetChildren()->First(); node; node = node->Next())
-  {
-    wxWindow *win = (wxWindow *)node->Data();
-    if (!win->IsKindOf(CLASSINFO(wxFrame)) && 
-        !win->IsKindOf(CLASSINFO(wxDialog)) 
-/*      && (win != m_frameMenuBar) &&
-	(win != m_frameStatusBar)    not in m_children anyway */
-       )
+  if ( GetAutoLayout() )
+    Layout();
+  else {
+    // do we have exactly one child?
+    wxWindow *child = NULL;
+    for(wxNode *node = GetChildren()->First(); node; node = node->Next())
     {
-      child = win;
-      noChildren ++;
+      wxWindow *win = (wxWindow *)node->Data();
+      if (!win->IsKindOf(CLASSINFO(wxFrame)) &&
+          !win->IsKindOf(CLASSINFO(wxDialog))
+#if 0 // not in m_children anyway
+          && (win != m_frameMenuBar) &&
+             (win != m_frameStatusBar)
+#endif
+         )
+      {
+        if ( child )  // it's the second one: do nothing
+          return;
+
+        child = win;
+      };
     };
-  }
-;
 
-  if ((child) && (noChildren == 1))
-  {
+    // yes: set it's size to fill all the frame
     int client_x, client_y;
-
     GetClientSize(&client_x, &client_y);
-
     child->SetSize( 1, 1, client_x-2, client_y);
   }
-;
 };
 
 void SetInvokingWindow( wxMenu *menu, wxWindow *win )
@@ -295,25 +297,25 @@ void SetInvokingWindow( wxMenu *menu, wxWindow *win )
 void wxFrame::SetMenuBar( wxMenuBar *menuBar )
 {
   m_frameMenuBar = menuBar;
-  
+
   wxNode *node = m_frameMenuBar->m_menus.First();
   while (node)
   {
     wxMenu *menu = (wxMenu*)node->Data();
-    SetInvokingWindow( menu, this );   
+    SetInvokingWindow( menu, this );
     node = node->Next();
   };
-  
+
   m_frameMenuBar->m_parent = this;
-  gtk_myfixed_put( GTK_MYFIXED(m_mainWindow), 
+  gtk_myfixed_put( GTK_MYFIXED(m_mainWindow),
     m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
-};   
+};
 
 bool wxFrame::CreateStatusBar( int number )
 {
   if (m_frameStatusBar)
   delete m_frameStatusBar;
-  
+
   m_frameStatusBar = new wxStatusBar( this, -1, wxPoint(0,0), wxSize(100,20) );
 
   m_frameStatusBar->SetFieldsCount( number );
