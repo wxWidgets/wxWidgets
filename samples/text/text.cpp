@@ -61,7 +61,10 @@ class MyTextCtrl : public wxTextCtrl
 public:
     MyTextCtrl(wxWindow *parent, wxWindowID id, const wxString &value,
                const wxPoint &pos, const wxSize &size, int style = 0)
-        : wxTextCtrl(parent, id, value, pos, size, style) { m_hasCapture = FALSE; }
+        : wxTextCtrl(parent, id, value, pos, size, style)
+    {
+        m_hasCapture = FALSE;
+    }
 
     void OnKeyDown(wxKeyEvent& event);
     void OnKeyUp(wxKeyEvent& event);
@@ -73,11 +76,15 @@ public:
 
     void OnMouseEvent(wxMouseEvent& event);
 
-    bool m_hasCapture;
+    static bool ms_logKey;
+    static bool ms_logChar;
+    static bool ms_logMouse;
 
 private:
     static inline wxChar GetChar(bool on, wxChar c) { return on ? c : _T('-'); }
     void LogEvent(const wxChar *name, wxKeyEvent& event) const;
+
+    bool m_hasCapture;
 
     DECLARE_EVENT_TABLE()
 };
@@ -175,6 +182,21 @@ public:
     void OnSetEditable(wxCommandEvent& event);
     void OnSetEnabled(wxCommandEvent& event);
 
+    void OnLogKey(wxCommandEvent& event)
+    {
+        MyTextCtrl::ms_logKey = event.IsChecked();
+    }
+
+    void OnLogChar(wxCommandEvent& event)
+    {
+        MyTextCtrl::ms_logChar = event.IsChecked();
+    }
+
+    void OnLogMouse(wxCommandEvent& event)
+    {
+        MyTextCtrl::ms_logMouse = event.IsChecked();
+    }
+
     void OnIdle( wxIdleEvent& event );
 
 private:
@@ -235,6 +257,13 @@ enum
     TEXT_LINE_UP,
     TEXT_PAGE_DOWN,
     TEXT_PAGE_UP,
+
+    // log menu
+    TEXT_LOG_KEY,
+    TEXT_LOG_CHAR,
+    TEXT_LOG_MOUSE,
+
+    TEXT_END
 };
 
 bool MyApp::OnInit()
@@ -245,8 +274,6 @@ bool MyApp::OnInit()
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
-    file_menu->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
-                      "Clear the log window contents");
     file_menu->Append(TEXT_SAVE, "&Save file\tCtrl-S",
                       "Save the text control contents to file");
     file_menu->Append(TEXT_LOAD, "&Load file\tCtrl-O",
@@ -292,7 +319,19 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_LINE_UP, "Scroll text one line up");
     menuText->Append(TEXT_PAGE_DOWN, "Scroll text one page down");
     menuText->Append(TEXT_PAGE_DOWN, "Scroll text one page up");
-    menu_bar->Append(menuText, "&Text");
+    menu_bar->Append(menuText, "Te&xt");
+
+    wxMenu *menuLog = new wxMenu;
+    menuLog->Append(TEXT_LOG_KEY, "Log &key events", "", TRUE);
+    menuLog->Append(TEXT_LOG_CHAR, "Log &char events", "", TRUE);
+    menuLog->Append(TEXT_LOG_MOUSE, "Log &mouse events", "", TRUE);
+    menuLog->AppendSeparator();
+    menuLog->Append(TEXT_CLEAR, "&Clear the log\tCtrl-C",
+                    "Clear the log window contents");
+    menuLog->Check(TEXT_LOG_KEY, TRUE);
+    menuLog->Check(TEXT_LOG_CHAR, TRUE);
+    menuLog->Check(TEXT_LOG_MOUSE, TRUE);
+    menu_bar->Append(menuLog, "&Log");
 
     frame->SetMenuBar(menu_bar);
 
@@ -319,6 +358,10 @@ BEGIN_EVENT_TABLE(MyTextCtrl, wxTextCtrl)
 
     EVT_MOUSE_EVENTS(MyTextCtrl::OnMouseEvent)
 END_EVENT_TABLE()
+
+bool MyTextCtrl::ms_logKey = TRUE;
+bool MyTextCtrl::ms_logChar = TRUE;
+bool MyTextCtrl::ms_logMouse = TRUE;
 
 void MyTextCtrl::LogEvent(const wxChar *name, wxKeyEvent& event) const
 {
@@ -484,6 +527,11 @@ static wxString GetMouseEventDesc(const wxMouseEvent& ev)
 
 void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
 {
+    ev.Skip();
+
+    if ( !MyTextCtrl::ms_logMouse )
+        return;
+
     if ( !ev.Moving() )
     {
         wxString msg;
@@ -513,8 +561,6 @@ void MyTextCtrl::OnMouseEvent(wxMouseEvent& ev)
         wxLogMessage(msg);
     }
     //else: we're not interested in mouse move events
-
-    ev.Skip();
 }
 
 void MyTextCtrl::OnText(wxCommandEvent& event)
@@ -554,25 +600,16 @@ void MyTextCtrl::OnTextURL(wxTextUrlEvent& event)
 
 void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
-    LogEvent( _T("Char"), event);
+    if ( MyTextCtrl::ms_logChar )
+        LogEvent( _T("Char"), event);
 
-/*  How are we supposed to test wxTE_PROCESS_TAB with this code?
-
-    if ( event.KeyCode() == WXK_TAB )
-    {
-        WriteText("\t");
-    }
-    else
-    {
-        event.Skip();
-    }
-*/
     event.Skip();
 }
 
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)
 {
-    LogEvent( _T("Key up"), event);
+    if ( MyTextCtrl::ms_logKey )
+        LogEvent( _T("Key up"), event);
 
     event.Skip();
 }
@@ -640,7 +677,8 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
             break;
     }
 
-    LogEvent( wxT("Key down"), event);
+    if ( MyTextCtrl::ms_logKey )
+        LogEvent( wxT("Key down"), event);
 
     event.Skip();
 }
@@ -744,9 +782,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 wxTE_AUTO_URL |
                                 wxHSCROLL);
 
-#if 0
-    m_textrich->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE,
-                               wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+#if 1
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
@@ -762,6 +798,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_textrich->AppendText(_T("And this should be in blue and the text you ")
                            _T("type should be in blue as well"));
 #else
+    m_textrich->SetFont(wxFont(12, wxFONTFAMILY_TELETYPE,
+                               wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     m_textrich->SetDefaultStyle(wxTextAttr(*wxRED));
     m_textrich->AppendText(_T("Red text\n"));
     m_textrich->SetDefaultStyle(wxTextAttr(wxNullColour, *wxLIGHT_GREY));
@@ -888,6 +926,10 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_ABOUT,  MyFrame::OnAbout)
     EVT_MENU(TEXT_SAVE,   MyFrame::OnFileSave)
     EVT_MENU(TEXT_LOAD,   MyFrame::OnFileLoad)
+
+    EVT_MENU(TEXT_LOG_KEY,  MyFrame::OnLogKey)
+    EVT_MENU(TEXT_LOG_CHAR,  MyFrame::OnLogChar)
+    EVT_MENU(TEXT_LOG_MOUSE,  MyFrame::OnLogMouse)
     EVT_MENU(TEXT_CLEAR,  MyFrame::OnLogClear)
 
 #if wxUSE_TOOLTIPS
