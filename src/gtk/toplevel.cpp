@@ -134,13 +134,16 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
     // wxASSERT_MSG( (g_activeFrame == win), wxT("TLW deactivatd although it wasn't active") );
         
     // wxPrintf( wxT("inactive: %s\n"), win->GetTitle().c_str() );
-        
-    wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
-    wxActivateEvent event(wxEVT_ACTIVATE, FALSE, g_activeFrame->GetId());
-    event.SetEventObject(g_activeFrame);
-    g_activeFrame->GetEventHandler()->ProcessEvent(event);
 
-    g_activeFrame = NULL;
+    if (g_activeFrame)
+    {
+        wxLogTrace(wxT("activate"), wxT("Activating frame %p (from focus_in)"), g_activeFrame);
+        wxActivateEvent event(wxEVT_ACTIVATE, FALSE, g_activeFrame->GetId());
+        event.SetEventObject(g_activeFrame);
+        g_activeFrame->GetEventHandler()->ProcessEvent(event);
+
+        g_activeFrame = NULL;
+    }
         
     return FALSE;
 }
