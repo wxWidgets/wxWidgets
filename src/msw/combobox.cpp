@@ -96,10 +96,21 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
         case WM_KILLFOCUS:
             {
                 wxComboBox *combo = wxDynamicCast(win, wxComboBox);
-                wxCHECK_MSG( combo, 0, _T("should have combo as parent") );
-
-                if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
+                if ( !combo )
+                {
+                    // we can get WM_KILLFOCUS while our parent is already half
+                    // destroyed and hence doesn't look like a combobx any
+                    // longer, check for it to avoid bogus assert failures
+                    if ( !win->IsBeingDeleted() )
+                    {
+                        wxFAIL_MSG( _T("should have combo as parent") );
+                    }
+                }
+                else if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
+                {
+                    // handled by parent
                     return 0;
+                }
             }
             break;
 
