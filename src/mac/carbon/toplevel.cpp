@@ -36,6 +36,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/settings.h"
+    #include "wx/strconv.h"
     #include "wx/control.h"
 #endif //WX_PRECOMP
 
@@ -167,17 +168,40 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
         return result ;
         
     char charCode ;
+    wxChar uniChar = 0 ; 
     UInt32 keyCode ;
     UInt32 modifiers ;
     Point point ;
     UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+
+#if wxUSE_UNICODE
+    UInt32 dataSize = 0 ;
+    if ( GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, 0 , &dataSize , NULL ) == noErr )
+    {
+        UniChar buf[2] ;
+        
+        UniChar* charBuf = buf ;
+        
+        if ( dataSize > 4 )
+            charBuf = new UniChar[ dataSize / sizeof( UniChar) ] ;
+        GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+#if SIZEOF_WCHAR_T == 2
+        uniChar = charBuf[0] ;
+#else
+        wxMBConvUTF16BE converter ;
+        converter.MB2WC( &uniChar , (const char*)charBuf , 1 ) ;
+#endif        
+        if ( dataSize > 4 )
+            delete[] charBuf ;
+    }
+#endif
 
     GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL,sizeof(char), NULL,&charCode );
     GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL,  sizeof(UInt32), NULL, &keyCode );
        GetEventParameter(event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers);
     GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL,
         sizeof( Point ), NULL, &point );
-
+    
     UInt32 message = (keyCode << 8) + charCode;
     switch( GetEventKind( event ) )
     {
@@ -188,7 +212,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                 wxTheApp->MacSetCurrentEvent( event , handler ) ;
                 if ( (focus != NULL) && wxTheApp->MacSendKeyDownEvent(
-                    focus , message , modifiers , when , point.h , point.v ) )
+                    focus , message , modifiers , when , point.h , point.v , uniChar ) )
                 {
                     result = noErr ;
                 }
@@ -197,7 +221,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
             break ;
         case kEventRawKeyUp :
             if ( (focus != NULL) && wxTheApp->MacSendKeyUpEvent(
-                focus , message , modifiers , when , point.h , point.v ) )
+                focus , message , modifiers , when , point.h , point.v , uniChar ) )
             {
                 result = noErr ;
             }
@@ -210,7 +234,9 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
                 event.m_controlDown = modifiers & controlKey;
                 event.m_altDown = modifiers & optionKey;
                 event.m_metaDown = modifiers & cmdKey;
-
+#if wxUSE_UNICODE
+                event.m_uniChar = uniChar ;
+#endif
                 event.m_x = point.h;
                 event.m_y = point.v;
                 event.SetTimestamp(when);

@@ -1196,7 +1196,7 @@ bool wxGetKeyState(wxKeyCode key) //virtual key code if < 10.2.x, else see below
 #endif
 
 
-bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
+bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar  )
 {
     if ( !focus )
         return false ;
@@ -1231,6 +1231,9 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     event.m_altDown = modifiers & optionKey;
     event.m_metaDown = modifiers & cmdKey;
     event.m_keyCode = keyval ;
+#if wxUSE_UNICODE
+    event.m_uniChar = uniChar ;
+#endif
 
     event.m_x = wherex;
     event.m_y = wherey;
@@ -1341,7 +1344,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
     return handled ;
 }
 
-bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey )
+bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar  )
 {
     if ( !focus )
         return false ;
@@ -1373,6 +1376,9 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
     event.m_altDown = modifiers & optionKey;
     event.m_metaDown = modifiers & cmdKey;
     event.m_keyCode = keyval ;
+#if wxUSE_UNICODE
+    event.m_uniChar = uniChar ;
+#endif
 
     event.m_x = wherex;
     event.m_y = wherey;
