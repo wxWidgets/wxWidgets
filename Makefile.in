@@ -316,7 +316,6 @@ ALL_BASE_SOURCES =  \
 	src/common/url.cpp \
 	src/unix/gsocket.c \
 	src/msw/gsocket.c \
-	src/mac/gsocket.c \
 	src/xml/xml.cpp \
 	src/common/xtixml.cpp \
 	src/common/db.cpp \
@@ -1847,11 +1846,10 @@ COND_TOOLKIT_X11_LOWLEVEL_HDR =  \
 	wx/x11/toplevel.h \
 	wx/x11/window.h
 @COND_TOOLKIT_X11@LOWLEVEL_HDR = $(COND_TOOLKIT_X11_LOWLEVEL_HDR)
+@COND_PLATFORM_MACOSX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
+@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_UNIX_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_PLATFORM_WIN32_1@NET_PLATFORM_HDR = wx/msw/gsockmsw.h
-@COND_PLATFORM_OS2_1@NET_PLATFORM_HDR = wx/unix/gsockunx.h
-@COND_TOOLKIT_MAC@NET_PLATFORM_HDR = wx/mac/gsockmac.h
-@COND_TOOLKIT_COCOA@NET_PLATFORM_HDR = wx/unix/gsockunx.h
 @COND_TOOLKIT_GTK@OPENGL_HDR = wx/gtk/glcanvas.h
 @COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/glcanvas.h
 @COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/x11/glcanvas.h
@@ -3343,6 +3341,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
+	monodll_gsockosx.o \
 	monodll_icon.o \
 	monodll_listbox.o \
 	monodll_mdi.o \
@@ -3739,6 +3738,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
+	monolib_gsockosx.o \
 	monolib_icon.o \
 	monolib_listbox.o \
 	monolib_mdi.o \
@@ -4135,6 +4135,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
+	coredll_gsockosx.o \
 	coredll_icon.o \
 	coredll_listbox.o \
 	coredll_mdi.o \
@@ -4531,6 +4532,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
+	corelib_gsockosx.o \
 	corelib_icon.o \
 	corelib_listbox.o \
 	corelib_mdi.o \
@@ -5588,35 +5590,19 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 	monolib_dbtable.o \
 	monolib_dbgrid.o
 @COND_USE_GUI_1@__MONOLIB_GUI_SRC_OBJECTS_1 = $(COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1)
-@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
-@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
-@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS = monodll_gsocket.o
-@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_TOOLKIT_COCOA@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_TOOLKIT_GTK@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_TOOLKIT_MAC@__NET_MACOSX_SRC_OBJECTS_3 = netlib_gsocket.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS \
-@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS)
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS = monodll_gsocket.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_1)
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_1 = monolib_gsocket.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_2)
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_2 = netdll_gsocket.o
-@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_MACOSX_1@	= $(__NET_MACOSX_SRC_OBJECTS_3)
+@COND_PLATFORM_MACOSX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_OS2_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_UNIX_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
 @COND_PLATFORM_WIN32_1@__NET_PLATFORM_SRC_OBJECTS_3 = netlib_gsocket.o
@@ -8126,6 +8112,9 @@ coredll_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
+coredll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(COREDLL_ODEP)
+	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
+
 coredll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(COREDLL_ODEP)
 	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $<
 
@@ -10230,6 +10219,9 @@ corelib_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
+
+corelib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(CORELIB_ODEP)
+	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
 
 corelib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(CORELIB_ODEP)
 	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $<
@@ -12883,17 +12875,11 @@ monodll_gridctrl.o: $(srcdir)/src/generic/gridctrl.cpp $(MONODLL_ODEP)
 monodll_gridsel.o: $(srcdir)/src/generic/gridsel.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_gsocket.o: $(srcdir)/src/mac/gsocket.c $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
-
 @COND_PLATFORM_UNIX_1@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONODLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONODLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+@COND_PLATFORM_MACOSX_1@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 @COND_PLATFORM_OS2_1@monodll_gsocket.o: $(srcdir)/src/os2/gsocket.c $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
@@ -12909,6 +12895,9 @@ monodll_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
+monodll_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONODLL_ODEP)
+	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 monodll_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(MONODLL_ODEP)
 	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
@@ -15489,17 +15478,11 @@ monolib_gridctrl.o: $(srcdir)/src/generic/gridctrl.cpp $(MONOLIB_ODEP)
 monolib_gridsel.o: $(srcdir)/src/generic/gridsel.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_gsocket.o: $(srcdir)/src/mac/gsocket.c $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
-
 @COND_PLATFORM_UNIX_1@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONOLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONOLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+@COND_PLATFORM_MACOSX_1@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 @COND_PLATFORM_OS2_1@monolib_gsocket.o: $(srcdir)/src/os2/gsocket.c $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
@@ -15515,6 +15498,9 @@ monolib_gsockmot.o: $(srcdir)/src/motif/gsockmot.c $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_gsockmsw.o: $(srcdir)/src/msw/gsockmsw.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
+monolib_gsockosx.o: $(srcdir)/src/mac/gsockosx.c $(MONOLIB_ODEP)
+	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 monolib_gsockpm.o: $(srcdir)/src/os2/gsockpm.c $(MONOLIB_ODEP)
 	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
@@ -16961,17 +16947,11 @@ netdll_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETDLL_ODEP)
 netdll_ftp.o: $(srcdir)/src/common/ftp.cpp $(NETDLL_ODEP)
 	$(CXXC) -c -o $@ $(NETDLL_CXXFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@netdll_gsocket.o: $(srcdir)/src/mac/gsocket.c $(NETDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
-
 @COND_PLATFORM_UNIX_1@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETDLL_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETDLL_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+@COND_PLATFORM_MACOSX_1@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETDLL_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
 @COND_PLATFORM_OS2_1@netdll_gsocket.o: $(srcdir)/src/os2/gsocket.c $(NETDLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
@@ -17014,17 +16994,11 @@ netlib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETLIB_ODEP)
 netlib_ftp.o: $(srcdir)/src/common/ftp.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@netlib_gsocket.o: $(srcdir)/src/mac/gsocket.c $(NETLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
-
 @COND_PLATFORM_UNIX_1@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETLIB_ODEP)
 @COND_PLATFORM_UNIX_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
 
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
-
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETLIB_ODEP)
-@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+@COND_PLATFORM_MACOSX_1@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETLIB_ODEP)
+@COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
 
 @COND_PLATFORM_OS2_1@netlib_gsocket.o: $(srcdir)/src/os2/gsocket.c $(NETLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
