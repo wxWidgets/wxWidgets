@@ -404,3 +404,11 @@ CVS: [VS] wxWindows/include/wx fileconf.h,1.39,1.40
 CVS: [VS] wxWindows/src/common fileconf.cpp,1.93,1.94
 CVS: [VS] wxWindows/include/wx strconv.h,1.12,1.13
 CVS: [VS] wxWindows/src/common strconv.cpp,1.71,1.72
+
+
+33. Add support for GTK2 label mnemonics (patch #689573)
+
+CVS: [VS] wxWindows/src/gtk button.cpp,1.53,1.54 checkbox.cpp,1.52,1.53 control.cpp,1.26,1.27 radiobut.cpp,1.42,1.43
+CVS: [VS] wxWindows/include/wx/gtk control.h,1.16,1.17
+CVS: [VS] wxWindows/docs changes.txt,1.255,1.256
+CVS: [VS] wxWindows/src/gtk control.cpp,1.27,1.28
