@@ -127,14 +127,39 @@ bool wxChoice::Create(wxWindow *parent,
                          validator, name);
 }
 
-bool wxChoice::CreateAndInit(wxWindow *parent, wxWindowID id,
+bool wxChoice::CreateAndInit(wxWindow *parent,
+                             wxWindowID id,
                              const wxPoint& pos,
-                             const wxSize& size,
+                             const wxSize& sizeOrig,
                              int n, const wxString choices[],
                              long style,
                              const wxValidator& validator,
                              const wxString& name)
 {
+    // this is a bit hackish but we want to prevent MSWCreateControl() from
+    // calling SetBestSize() (which it would do if any of the size components
+    // is not given) because it wouldn't calculate it correctly if we have any
+    // strings as they're not yet added to the control when it is called
+    //
+    // so: if we have any strings, we fudge the size parameter so that
+    // SetBestSize() is not called by MSWCreateControl() but then we do call it
+    // manually below
+    bool autoSize = false;
+    wxSize size = sizeOrig;
+    if ( n )
+    {
+        if ( size.x < 0 )
+        {
+            size.x = 1;
+            autoSize = true;
+        }
+        if ( size.y < 0 )
+        {
+            size.y = 1;
+            autoSize = true;
+        }
+    }
+
     // initialize wxControl
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return FALSE;
@@ -148,10 +173,16 @@ bool wxChoice::CreateAndInit(wxWindow *parent, wxWindowID id,
     // course) background rather than inheriting the parent's background
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 
-    // initialize
+    // initialize the controls contents
     for ( int i = 0; i < n; i++ )
     {
         Append(choices[i]);
+    }
+
+    // and now we may finally size the control properly (if needed)
+    if ( autoSize )
+    {
+        SetBestSize(sizeOrig);
     }
 
     return TRUE;
