@@ -181,11 +181,13 @@ void StringTestCase::ConstructorsWithConversion()
 void StringTestCase::Conversion()
 {
 #if wxUSE_UNICODE
-        wxString szTheString(wxT("TheString"));
-        szTheString.insert(3, 1, '\0');
+        wxString szTheString(L"The\0String", wxConvLibc, 10);
         wxCharBuffer theBuffer = szTheString.mb_str();
         
         CPPUNIT_ASSERT( memcmp(theBuffer.data(), "The\0String", 11) == 0 );     
+
+        wxString szTheString2("The\0String", wxConvLocal, 10);
+        CPPUNIT_ASSERT( wxMemcmp(szTheString2.c_str(), L"The\0String", 11) == 0 );     
 #else
 #	if wxUSE_WCHAR_T
         wxString szTheString(wxT("TheString"));

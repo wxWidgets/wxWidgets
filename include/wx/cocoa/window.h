@@ -81,6 +81,7 @@ protected:
 
     void CocoaCreateNSScrollView();
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
+    virtual wxWindow* GetWxWindow() const;
     virtual void Cocoa_FrameChanged(void);
     virtual bool Cocoa_drawRect(const NSRect &rect);
     virtual bool Cocoa_mouseDown(WX_NSEvent theEvent);

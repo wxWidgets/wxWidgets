@@ -5808,7 +5808,7 @@ if test "$wxUSE_MAC" = 1 ; then
     LDFLAGS="$LDFLAGS -framework Carbon -framework Cocoa -framework System"
 fi
 if test "$wxUSE_COCOA" = 1 ; then
-    LDFLAGS="$LDFLAGS -framework Cocoa -framework System"
+    LDFLAGS="$LDFLAGS -framework Cocoa"
 fi
 
 dnl FIXME: should this be covered by the conditional above
