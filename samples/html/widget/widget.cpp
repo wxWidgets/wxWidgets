@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        virtua;.cpp
+// Name:        widget.cpp
 // Purpose:     wxHtml testing example
-//              demonstrates virtual file systems feature
+//              Demonstrates embedded controls
 /////////////////////////////////////////////////////////////////////////////
 
 #if defined(__GNUG__) && !defined(__APPLE__)
@@ -24,6 +24,8 @@
 
 
 #include "wx/html/htmlwin.h"
+
+#include "../../sample.xpm"
 
 
 /*
@@ -193,16 +195,19 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
+    SetIcon(wxIcon(sample_xpm));
+    
 #if wxUSE_STATUSBAR
     CreateStatusBar(2);
 #endif // wxUSE_STATUSBAR
 
     html = new wxHtmlWindow(this);
-    html -> SetRelatedFrame(this, _("VFS Demo: '%s'"));
+    html -> SetRelatedFrame(this, _("wxHTML Demo: '%s'"));
 #if wxUSE_STATUSBAR
     html -> SetRelatedStatusBar(1);
 #endif // wxUSE_STATUSBAR
     html -> LoadPage(wxT("start.htm"));
+
 }
 
 
