@@ -249,9 +249,20 @@ WXHBRUSH wxButton::OnCtlColor(WXHDC pDC,
                               WXWPARAM wParam,
                               WXLPARAM lParam)
 {
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
+    const HDC& hdc = (HDC)pDC;
 
-  return (WXHBRUSH) backgroundBrush->GetResourceHandle();
+    const wxColour& colBack = GetBackgroundColour();
+    ::SetBkColor(hdc, RGB(colBack.Red(), colBack.Green(), colBack.Blue()));
+
+    const wxColour& colFor = GetForegroundColour();
+    ::SetTextColor(hdc, RGB(colFor.Red(), colFor.Green(), colFor.Blue()));
+
+    ::SetBkMode(hdc, OPAQUE);
+
+    wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(colBack,
+                                                                 wxSOLID);
+    backgroundBrush->RealizeResource();
+    return (WXHBRUSH)backgroundBrush->GetResourceHandle();
 }
 
 long wxButton::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)

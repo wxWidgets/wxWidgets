@@ -109,6 +109,9 @@ public:
     void OnSpinCtrl(wxSpinEvent& event);
 #endif // wxUSE_SPINCTRL
 
+    void OnEnableAll(wxCommandEvent& event);
+    void OnChangeColour(wxCommandEvent& event);
+
     wxListBox     *m_listbox,
                   *m_listboxSorted;
     wxChoice      *m_choice,
@@ -148,14 +151,20 @@ public:
 
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
 #if wxUSE_TOOLTIPS
     void OnSetTooltipDelay(wxCommandEvent& event);
     void OnToggleTooltips(wxCommandEvent& event);
 #endif // wxUSE_TOOLTIPS
+
+    void OnEnableAll(wxCommandEvent& event);
+
     void OnIdle( wxIdleEvent& event );
     void OnSize( wxSizeEvent& event );
 
 private:
+    wxPanel *m_panel;
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -180,7 +189,10 @@ enum
 
     // tooltip menu
     MINIMAL_SET_TOOLTIP_DELAY = 200,
-    MINIMAL_ENABLE_TOOLTIPS
+    MINIMAL_ENABLE_TOOLTIPS,
+
+    // panel menu
+    MINIMAL_ENABLE_ALL
 };
 
 bool MyApp::OnInit()
@@ -198,6 +210,7 @@ bool MyApp::OnInit()
 
     wxMenu *file_menu = new wxMenu("",  wxMENU_TEAROFF );
     file_menu->Append(MINIMAL_ABOUT, "&About\tF1");
+    file_menu->AppendSeparator();
     file_menu->Append(MINIMAL_QUIT, "E&xit\tAlt-X", "Quit controls sample");
 
     wxMenuBar *menu_bar = new wxMenuBar;
@@ -212,6 +225,11 @@ bool MyApp::OnInit()
     tooltip_menu->Check(MINIMAL_ENABLE_TOOLTIPS, TRUE);
     menu_bar->Append(tooltip_menu, "&Tooltips");
 #endif // wxUSE_TOOLTIPS
+
+    wxMenu *panel_menu = new wxMenu;
+    panel_menu->Append(MINIMAL_ENABLE_ALL, "&Disable all\tCtrl-E",
+                       "Enable/disable all panel controls", TRUE);
+    menu_bar->Append(panel_menu, "&Panel");
 
     frame->SetMenuBar(menu_bar);
 
@@ -277,6 +295,8 @@ const int  ID_BTNPROGRESS       = 183;
 const int  ID_BUTTON_LABEL      = 184;
 const int  ID_SPINCTRL          = 185;
 
+const int  ID_CHANGE_COLOUR     = 200;
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
 EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
@@ -326,14 +346,13 @@ EVT_BUTTON    (ID_BTNPROGRESS,          MyPanel::OnShowProgress)
 EVT_SPIN      (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
+EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) ),
          m_text(NULL), m_notebook(NULL)
 {
-    //  SetBackgroundColour("cadet blue");
-
     m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
     //  m_text->SetBackgroundColour("wheat");
 
@@ -435,6 +454,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_TOOLTIPS
     m_checkbox->SetToolTip( "Click here to disable the listbox" );
 #endif // wxUSE_TOOLTIPS
+    (void)new wxCheckBox( panel, ID_CHANGE_COLOUR, "&Toggle colour",
+                          wxPoint(110,170) );
     m_notebook->AddPage(panel, "wxListBox", TRUE, Image_List);
 
     panel = new wxPanel(m_notebook);
@@ -640,6 +661,30 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
 void MyPanel::OnPageChanged( wxNotebookEvent &event )
 {
     *m_text << "Notebook selection is " << event.GetSelection() << "\n";
+}
+
+void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
+{
+    static wxColour s_colOld;
+
+    // test panel colour changing and propagation to the subcontrols
+    if ( s_colOld.Ok() )
+    {
+        SetBackgroundColour(s_colOld);
+        s_colOld = wxNullColour;
+
+        m_lbSelectThis->SetBackgroundColour("blue");
+    }
+    else
+    {
+        s_colOld = GetBackgroundColour();
+        SetBackgroundColour("green");
+
+        m_lbSelectThis->SetBackgroundColour("red");
+    }
+
+    m_lbSelectThis->Refresh();
+    Refresh();
 }
 
 void MyPanel::OnListBox( wxCommandEvent &event )
@@ -1029,14 +1074,17 @@ MyPanel::~MyPanel()
 //----------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-EVT_MENU(MINIMAL_QUIT,   MyFrame::OnQuit)
-EVT_MENU(MINIMAL_ABOUT,  MyFrame::OnAbout)
+    EVT_MENU(MINIMAL_QUIT,   MyFrame::OnQuit)
+    EVT_MENU(MINIMAL_ABOUT,  MyFrame::OnAbout)
 #if wxUSE_TOOLTIPS
-EVT_MENU(MINIMAL_SET_TOOLTIP_DELAY,  MyFrame::OnSetTooltipDelay)
-EVT_MENU(MINIMAL_ENABLE_TOOLTIPS,  MyFrame::OnToggleTooltips)
+    EVT_MENU(MINIMAL_SET_TOOLTIP_DELAY,  MyFrame::OnSetTooltipDelay)
+    EVT_MENU(MINIMAL_ENABLE_TOOLTIPS,  MyFrame::OnToggleTooltips)
 #endif // wxUSE_TOOLTIPS
-EVT_SIZE(MyFrame::OnSize)
-EVT_IDLE(MyFrame::OnIdle)
+
+    EVT_MENU(MINIMAL_ENABLE_ALL, MyFrame::OnEnableAll)
+
+    EVT_SIZE(MyFrame::OnSize)
+    EVT_IDLE(MyFrame::OnIdle)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
@@ -1044,7 +1092,7 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 {
     CreateStatusBar(2);
 
-    (void)new MyPanel( this, 10, 10, 300, 100 );
+    m_panel = new MyPanel( this, 10, 10, 300, 100 );
 }
 
 void MyFrame::OnQuit (wxCommandEvent& WXUNUSED(event) )
@@ -1095,6 +1143,14 @@ void MyFrame::OnToggleTooltips(wxCommandEvent& event)
     wxLogStatus(this, _T("Tooltips %sabled"), s_enabled ? _T("en") : _T("dis") );
 }
 #endif // tooltips
+
+void MyFrame::OnEnableAll(wxCommandEvent& WXUNUSED(event))
+{
+    static bool s_enable = TRUE;
+
+    s_enable = !s_enable;
+    m_panel->Enable(s_enable);
+}
 
 void MyFrame::OnSize( wxSizeEvent& event )
 {

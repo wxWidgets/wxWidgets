@@ -226,6 +226,8 @@ bool wxApp::Initialize()
 
     g_globalCursor = new wxCursor;
 
+    // VZ: these icons are not in wx.rc anyhow (but should they?)!
+#if 0
     wxSTD_FRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_FRAME"));
     wxSTD_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_MDIPARENTFRAME"));
     wxSTD_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, wxT("wxSTD_MDICHILDFRAME"));
@@ -233,6 +235,7 @@ bool wxApp::Initialize()
     wxDEFAULT_FRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_FRAME"));
     wxDEFAULT_MDIPARENTFRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_MDIPARENTFRAME"));
     wxDEFAULT_MDICHILDFRAME_ICON = LoadIcon(wxhInstance, wxT("wxDEFAULT_MDICHILDFRAME"));
+#endif // 0
 
     RegisterWindowClasses();
 

@@ -372,6 +372,15 @@ bool wxWindow::Enable(bool enable)
     if ( hWnd )
         ::EnableWindow(hWnd, (BOOL)enable);
 
+    wxWindowList::Node *node = GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow *child = node->GetData();
+        child->Enable(enable);
+
+        node = node->GetNext();
+    }
+
     return TRUE;
 }
 

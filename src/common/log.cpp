@@ -320,12 +320,9 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
         case wxLOG_Info:
             if ( GetVerbose() )
         case wxLOG_Message:
+        case wxLOG_Status:
         default:    // log unknown log levels too
                 DoLogString(szString, t);
-            // fall through
-
-        case wxLOG_Status:
-            // nothing to do
             break;
 
         case wxLOG_Trace:

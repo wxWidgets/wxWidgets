@@ -1,10 +1,16 @@
 \section{\class{wxFileDataObject}}\label{wxfiledataobject}
 
 wxFileDataObject is a specialization of \helpref{wxDataObject}{wxdataobject} 
-for file names. Unlike other predefined wxDataObject derivations, it only works
-in one direction - the one of setting the data, i.e. the program can only
-receive files dropped on it using it and there is no way (currently) to
-initiate a drag and drop file operation.
+for file names. The program works with it just as if it were a list of file
+names (absolutep aths always), but internally it uses the same format as
+Explorer and other compatible programs under Windows or GNOME/KDE filemanager
+under Unix which makes it possible to receive files from them using this
+class.
+
+{\bf Warning:} Under all non-Windows platforms this class is currently
+"input-only", i.e. you can receieve the files from another application, but
+copying (or dragging) file(s) from a wxWindows application is not currently
+supported.
 
 \wxheading{Virtual functions to override}
 
@@ -34,6 +40,12 @@ None.
 \func{}{wxFileDataObject}{\void}
 
 Constructor.
+
+\membersection{wxFileDataObject::AddFile}\label{wxfiledataobjectaddfile}
+
+\func{virtual void}{AddFile}{\param{const wxString\& }{file}}
+
+{\bf MSW only:} adds a file to the file list represented by this data object.
 
 \membersection{wxFileDataObject::GetFilenames}\label{wxfiledataobjectgetfilenames}
 

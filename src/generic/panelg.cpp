@@ -6,7 +6,7 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:           wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -103,11 +103,11 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
     // wxGTK does this in wxWindow, but wxMSW does not. It is
     // also done in wxPanel if the event is propagated up.
         wxWindow *winFocus = event.GetCurrentFocus();
-    
+
     // Do we know where the focus was ourselves, then?
     if (!winFocus)
         winFocus = m_winLastFocused;
-    
+
     if (!winFocus)
         winFocus = wxWindow::FindFocus();
 
@@ -136,23 +136,23 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
             // so give them the chance to process it instead of looping inside
             // this panel (normally, the focus will go to the next/previous
             // item after this panel in the parent panel).
-	    wxWindow *focussed_child_of_parent = this;
+            wxWindow *focussed_child_of_parent = this;
             for ( wxWindow *parent = GetParent(); parent; parent = parent->GetParent() )
             {
-	        // we don't want to tab into a different dialog or frame
-	        if ( focussed_child_of_parent->IsTopLevel() )
-		    break;
-		
-		// is the parent a panel?
-		wxPanel *panel = wxDynamicCast(parent, wxPanel);
+                // we don't want to tab into a different dialog or frame
+                if ( focussed_child_of_parent->IsTopLevel() )
+                    break;
+
+                // is the parent a panel?
+                wxPanel *panel = wxDynamicCast(parent, wxPanel);
                 if (panel)
                 {
-		    event.SetCurrentFocus( focussed_child_of_parent );
-		    if (parent->GetEventHandler()->ProcessEvent( event ))
+                    event.SetCurrentFocus( focussed_child_of_parent );
+                    if (parent->GetEventHandler()->ProcessEvent( event ))
                         return;
                 }
-		
-		focussed_child_of_parent = parent;
+
+                focussed_child_of_parent = parent;
             }
 
             // no, we are not inside another panel so process this ourself
@@ -166,7 +166,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 
         if ( child->AcceptsFocus() )
         {
-	    m_winLastFocused = child;  // should be redundant, but it is not
+            m_winLastFocused = child;  // should be redundant, but it is not
             child->SetFocus();
             return;
         }
@@ -195,51 +195,51 @@ void wxPanel::SetFocus()
     wxNode *node = GetChildren().First();
     while (node)
     {
-	wxWindow *child = (wxWindow*) node->Data();
-	if (child->AcceptsFocus())
-	{
-	    m_winLastFocused = child;   // should be redundant, but it is not
-	    child->SetFocus();
-	    return;
-	}
+        wxWindow *child = (wxWindow*) node->Data();
+        if (child->AcceptsFocus())
+        {
+            m_winLastFocused = child;   // should be redundant, but it is not
+            child->SetFocus();
+            return;
+        }
         node = node->Next();
     }
-    
+
     m_winLastFocused = (wxWindow*) NULL;
-    
+
     wxWindow::SetFocus();
 }
 
 void wxPanel::OnFocus(wxFocusEvent& event)
 {
     // If the panel gets the focus *by way of getting clicked on*
-    // we move it to either the last window that had the focus or 
+    // we move it to either the last window that had the focus or
     // the first one that can get it.
 
     if (m_winLastFocused)
     {
         // it might happen that the window got reparented...
         if ( m_winLastFocused->GetParent() == this )
-	{
+        {
             m_winLastFocused->SetFocus();
-	    return;
-	}
+            return;
+        }
     }
-    
+
     wxNode *node = GetChildren().First();
     while (node)
     {
-	wxWindow *child = (wxWindow*) node->Data();
-	if (child->AcceptsFocus())
-	{
-	    m_winLastFocused = child;  // should be redundant, but it is not
-	    child->SetFocus();
-	    return;
-	}
+        wxWindow *child = (wxWindow*) node->Data();
+        if (child->AcceptsFocus())
+        {
+            m_winLastFocused = child;  // should be redundant, but it is not
+            child->SetFocus();
+            return;
+        }
         node = node->Next();
     }
-    
+
     m_winLastFocused = (wxWindow*) NULL;
-    
+
     event.Skip();
 }

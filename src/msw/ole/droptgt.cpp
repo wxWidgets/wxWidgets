@@ -260,7 +260,7 @@ STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
 
         // and now it has the data
         wxDragResult rc = ConvertDragEffectToResult(GetDropEffect(grfKeyState));
-        m_pTarget->OnData(pt.x, pt.y, rc);
+        rc = m_pTarget->OnData(pt.x, pt.y, rc);
         if ( wxIsDragResultOk(rc) ) {
             // operation succeeded
             *pdwEffect = ConvertDragResultToEffect(rc);
