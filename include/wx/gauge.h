@@ -22,6 +22,20 @@
 
 #include "wx/control.h"
 
+// ----------------------------------------------------------------------------
+// wxGauge style flags
+// ----------------------------------------------------------------------------
+
+#define wxGA_HORIZONTAL      wxHORIZONTAL
+#define wxGA_VERTICAL        wxVERTICAL
+
+// Win32 only, is default (and only) on some other platforms
+#define wxGA_SMOOTH          0x0020
+
+// obsolete style
+#define wxGA_PROGRESSBAR     0
+
+
 WXDLLEXPORT_DATA(extern const wxChar*) wxGaugeNameStr;
 
 // ----------------------------------------------------------------------------

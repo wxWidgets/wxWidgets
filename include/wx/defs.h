@@ -1267,15 +1267,6 @@ enum wxBorder
 #define wxRB_SINGLE         0x0008
 
 /*
- * wxGauge flags
- */
-#define wxGA_HORIZONTAL      wxHORIZONTAL
-#define wxGA_VERTICAL        wxVERTICAL
-#define wxGA_PROGRESSBAR     0x0010
-// Windows only
-#define wxGA_SMOOTH          0x0020
-
-/*
  * wxSlider flags
  */
 #define wxSL_HORIZONTAL      wxHORIZONTAL // 4
