@@ -350,9 +350,9 @@ wxCursor::wxCursor(const wxString& filename,
                     pt.y = hotSpotY;
                     hcursor = MakeCursorFromBitmap(wxGetInstance(), hBitmap, &pt);
                     DeleteObject(hBitmap);
-#endif // wxUSE_RESOURCE_LOADING_IN_MSW
                 }
                 else
+#endif // wxUSE_RESOURCE_LOADING_IN_MSW
                 {
                     hcursor = NULL;
                 }
