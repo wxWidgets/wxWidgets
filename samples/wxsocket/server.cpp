@@ -24,6 +24,7 @@
 #endif
 
 #include "wx/socket.h"
+#include "wx/thread.h"
 
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
 #include "mondrian.xpm"
@@ -97,6 +98,11 @@ extern wxList wxPendingDelete;
 
 void MyFrame::OnSockRequest(wxSocketEvent& evt)
 {
+  /* this routine gets called from within the
+     waiting socket thread, i.e. here we are
+     not in the main GUI thread and thus we
+     must not call any GUI function here. */
+
   wxSocketBase *sock = evt.Socket();
 
   printf("OnSockRequest OK\n");
@@ -111,7 +117,6 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
 
     break;
   case wxSocketBase::EVT_LOST:
-    UpdateStatus(-1);
     printf("Destroying socket\n");
     wxPendingDelete.Append(sock);
     return;
@@ -123,10 +128,16 @@ void MyFrame::OnSockRequest(wxSocketEvent& evt)
 
 void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
 {
+  /* this routine gets called from within the
+     waiting socket thread, i.e. here we are
+     not in the main GUI thread and thus we
+     must not call any GUI function here. */
+
   wxSocketBase *sock2;
   wxSocketServer *server = (wxSocketServer *) evt.Socket();
 
   printf("OnSockRequestServer OK\n");
+  printf("OnSockRequest (event = %d)\n",evt.SocketEvent());
 
   sock2 = server->Accept();
   if (sock2 == NULL)
@@ -136,7 +147,6 @@ void MyFrame::OnSockRequestServer(wxSocketEvent& evt)
   sock2->Notify(TRUE);
   sock2->SetEventHandler(*this, SKDEMO_SOCKET);
   server->SetNotify(wxSocketBase::REQ_ACCEPT);
-  UpdateStatus(1);
 }
 
 // My frame Constructor

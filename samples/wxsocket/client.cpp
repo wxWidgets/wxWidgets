@@ -27,6 +27,7 @@
 #include "wx/socket.h"
 #include "wx/url.h"
 #include "wx/protocol/http.h"
+#include "wx/thread.h"
 
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
 #include "mondrian.xpm"

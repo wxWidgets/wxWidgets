@@ -215,7 +215,7 @@ void wxapp_install_idle_handler()
     g_isIdle = FALSE;
 }
 
-
+#if wxUSE_THREADS
 static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
 {
     gtk_timeout_remove( wxTheApp->m_wakeUpTimerTag );
@@ -242,6 +242,7 @@ static gint wxapp_wakeup_timerout_callback( gpointer WXUNUSED(data) )
     
     return TRUE;
 }
+#endif
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -262,7 +263,9 @@ wxApp::wxApp()
 
     m_idleTag = gtk_idle_add( wxapp_idle_callback, (gpointer) NULL );
     
+#if wxUSE_THREADS
     m_wakeUpTimerTag = gtk_timeout_add( 10, wxapp_wakeup_timerout_callback, (gpointer) NULL );
+#endif
 
     m_colorCube = (unsigned char*) NULL;
 }
@@ -271,7 +274,9 @@ wxApp::~wxApp()
 {
     if (m_idleTag) gtk_idle_remove( m_idleTag );
 
+#if wxUSE_THREADS
     if (m_wakeUpTimerTag) gtk_timeout_remove( m_wakeUpTimerTag );
+#endif
     
     if (m_colorCube) free(m_colorCube);
 }

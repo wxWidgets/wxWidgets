@@ -530,7 +530,6 @@ wxEvtHandler::~wxEvtHandler()
 
 #ifdef __WXGTK__
 extern bool g_isIdle;
-
 extern void wxapp_install_idle_handler();
 #endif
 
@@ -554,7 +553,8 @@ bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
     wxPendingEventsLocker->Leave();
 
 #ifdef __WXGTK__
-//    if (g_isIdle) wxapp_install_idle_handler();
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
 #endif
 
     return TRUE;
