@@ -189,7 +189,7 @@ def main(args):
             print "Running:", cmd
             err = os.system(cmd)
 
-    return err
+    return err/256
 
 
 #----------------------------------------------------------------------------
@@ -463,7 +463,7 @@ class BuildConfig:
             for st in args:
                 pair = string.split(st, '=')
                 name = pair[0]
-                value = pair[1]
+                value = string.join(pair[1:], '=')
                 self.__dict__[name] = value
         except:
             print "Error parsing command-line: %s" % st
