@@ -1,2 +1,0 @@
-You will be guided through the steps necessary to install wxPython 2.3.3pre (including wxMac) for MachoPython 2.2.x on Mac OS X 10.1 or later.
-
