@@ -964,6 +964,9 @@
 /* Define if you have vsnprintf() */
 #undef HAVE_VSNPRINTF
 
+/* Define if you have vsnprintf() declaration in the header */
+#undef HAVE_VSNPRINTF_DECL
+
 /* Define if you have usleep() */
 #undef HAVE_USLEEP
 

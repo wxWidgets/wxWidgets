@@ -3151,11 +3151,44 @@ AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
 dnl check for vsnprintf() -- a safe version of vsprintf())
+dnl
+dnl the trouble here is that on some systems (notable HP-UX) this function is
+dnl present in libc but not in the system headers and so AC_CHECK_FUNCS (which,
+dnl stupidly, provides a dummy function declaration inside its extension)
+dnl succeeds, even with C++ compiler, but the compilation of wxWindows fails
+dnl
+dnl so we first check if the function is in the library
 AC_CHECK_FUNCS(vsnprintf)
+
+if test "$ac_cv_func_vsnprintf" = "yes"; then
+    dnl yes it is -- now check if it is in the headers
+    AC_CACHE_CHECK([for vsnprintf declaration], wx_cv_func_vsnprintf_decl,
+        [
+            AC_TRY_COMPILE(
+                [
+                    #include <stdio.h>
+                    #include <stdarg.h>
+                ],
+                [
+                    char *buf;
+                    va_list ap;
+                    vsnprintf(buf, 10u, "%s", ap);
+                ],
+                wx_cv_func_vsnprintf_decl=yes,
+                wx_cv_func_vsnprintf_decl=no
+            )
+        ]
+    )
+
+    if test "$wx_cv_func_vsnprintf_decl" = "yes"; then
+        AC_DEFINE(HAVE_VSNPRINTF_DECL)
+    fi
+fi
 
 if test "$wxUSE_UNICODE" = yes; then
     dnl also look if we have wide char IO functions
     AC_CHECK_FUNCS(fputwc wprintf vswprintf)
+
     dnl MinGW has a vswprintf with a different prototype, and
     dnl a _vsnwprintf with the correct prototype, but AC_CHECK_FUNCS
     dnl finds it even if it is not declared in some versions...
