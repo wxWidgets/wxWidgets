@@ -279,14 +279,15 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
             }
             if (pfnPrintWindow)
             {
-                printf("Using PrintWindow\n");
+                //printf("Using PrintWindow\n");
                 pfnPrintWindow(GetHwndOf(window), GetHdcOf(dc), 0);
             }
             else
             {
-                printf("Using WM_PRINT\n");
+                //printf("Using WM_PRINT\n");
                 ::SendMessage(GetHwndOf(window), WM_PRINT, (long)GetHdcOf(dc),
-                              PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND | PRF_OWNED );
+                              PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN |
+                              PRF_ERASEBKGND | PRF_OWNED );
             }
     }
 #endif
