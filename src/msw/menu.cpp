@@ -106,7 +106,8 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
     wxZeroMemory(info);
     info.cbSize = sizeof(info);
     info.fMask = MIIM_STATE;
-    if ( !::GetMenuItemInfo(hMenu, id, flags & MF_BYCOMMAND ? FALSE : TRUE, & info) )
+    // MF_BYCOMMAND is zero so test MF_BYPOSITION
+    if ( !::GetMenuItemInfo(hMenu, id, flags & MF_BYPOSITION ? TRUE : FALSE , & info) )
         wxLogLastError(wxT("GetMenuItemInfo"));
     return info.fState;
 }
