@@ -184,10 +184,13 @@ static gint gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    /* win is a control: tab can be propagated up */
+    // win is a control: tab can be propagated up
     if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
     {
         int sel = win->GetSelection();
+        if (sel == -1)
+            return TRUE;
+            
         wxGtkNotebookPage *nb_page = win->GetNotebookPage(sel);
         wxCHECK_MSG( nb_page, FALSE, _T("invalid selection in wxNotebook") );
 
