@@ -7,15 +7,23 @@
 #
 # Makefile for penguin example (UNIX).
 
-PROGRAM=penguin
+CPP = g++
+CC = gcc
 
-OPENGLHOME=/home/jacs/mesa/Mesa-2.3
+Penguin: penguin.o trackball.o lw.o
+	$(CPP) -o Penguin \
+	penguin.o trackball.o lw.o \
+	`wx-config --libs` -lwx_gtk_gl -lMesaGL -lMesaGLU
 
-EXTRACPPFLAGS=-I$(OPENGLHOME)/include # -I../../motif
-EXTRALDFLAGS=-L$(OPENGLHOME)/lib
-EXTRALDLIBS=-lMesaGL -lMesaGLU
+penguin.o: penguin.cpp
+	$(CPP) `wx-config --cflags` -I../../gtk -c penguin.cpp
 
-OBJECTS=$(PROGRAM).o trackball.o lw.o
+lw.o: lw.cpp
+	$(CPP) `wx-config --cflags` -I../../gtk -c lw.cpp
 
-include ../../../src/makeprog.env
+trackball.o: trackball.c
+	$(CC) `wx-config --cflags` -I../../gtk -c trackball.c
+
+clean: 
+	rm -f *.o Penguin
 

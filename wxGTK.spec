@@ -30,7 +30,15 @@ Group: X11/Libraries
 Requires: wxGTK
 
 %description devel
-Header files for the wxGTK, the GTK+ 1.2 port of the wxWindows library.
+Header files for wxGTK, the GTK+ 1.2 port of the wxWindows library.
+
+%package gl
+Summary: The GTK+ 1.2 port of the wxWindows library, OpenGl add-on.
+Group: X11/Libraries
+Requires: wxGTK
+
+%description gl
+OpenGl add-on library files for wxGTK, the GTK+ 1.2 port of the wxWindows library.
 
 %prep
 %setup -n wxGTK
@@ -73,3 +81,5 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755, -, -) %{pref}/bin/wxgtk-config
 %attr(755, -, -) %{pref}/bin/wx-config
 
+%files gl
+%attr(755, -, -) %{pref}/lib/libwx_gtk_gl*

@@ -370,7 +370,7 @@ public:
 // be in your main program (e.g. hello.cpp). Now IMPLEMENT_APP should add this
 // code if required.
 
-#if !wxUSE_GUI || defined(__AIX__) || defined(__HPUX__) || defined( __VMS__ ) || defined(__WXPM__)
+#if !wxUSE_GUI || defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)
     #define IMPLEMENT_WXWIN_MAIN \
         extern int wxEntry( int argc, char *argv[] ); \
         int main(int argc, char *argv[]) { return wxEntry(argc, argv); }
@@ -393,13 +393,20 @@ public:
     #define IMPLEMENT_WXWIN_MAIN
 #endif
 
-// use this macro exactly once, the argument is the name of the wxApp-derived
-// class which is the class of your application
-#define IMPLEMENT_APP(appname)                          \
-    wxApp *wxCreateApp() { return new appname; }      \
+// Use this macro exactly once, the argument is the name of the wxApp-derived
+// class which is the class of your application.
+#define IMPLEMENT_APP(appname)                           \
+    wxApp *wxCreateApp() { return new appname; }         \
     wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
     appname& wxGetApp() { return *(appname *)wxTheApp; } \
     IMPLEMENT_WXWIN_MAIN
+
+// Use this macro if you want to define your own main() or WinMain() function
+// and call wxEntry() from there.
+#define IMPLEMENT_APP_NO_MAIN(appname)                   \
+    wxApp *wxCreateApp() { return new appname; }         \
+    wxAppInitializer wxTheAppInitializer((wxAppInitializerFunction) wxCreateApp); \
+    appname& wxGetApp() { return *(appname *)wxTheApp; }
 
 #define DECLARE_APP(appname) extern appname& wxGetApp();
 

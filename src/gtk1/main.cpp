@@ -9,21 +9,6 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/app.h"
 
-int wxEntry(int argc, char *argv[]);
+// We don't put main() in the library any more. RR.
 
-
-#if defined(AIX) || defined(AIX4) || defined(____HPUX__) || defined(NOMAIN)
-
-  // main in IMPLEMENT_WX_MAIN in IMPLEMENT_APP in app.h
-
-#else
-
-
-int main(int argc, char* argv[])
-{
-  return wxEntry(argc, argv);
-}
-
-#endif

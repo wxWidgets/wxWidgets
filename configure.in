@@ -1981,7 +1981,11 @@ if test "$wxUSE_SHARED" = "yes"; then
         fi
         WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
         WX_LIBRARY_NAME_SHARED_GL="libwx_${TOOLKIT_DIR}_gl.sl"
-        WX_ALL=${WX_LIBRARY_NAME_SHARED}
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL="${WX_LIBRARY_NAME_SHARED} ${WX_LIBRARY_NAME_SHARED_GL}"
+        else
+            WX_ALL="${WX_LIBRARY_NAME_SHARED}"
+        fi
       ;;
 
       dnl in fact, these settings are for any platform using gcc
@@ -1992,10 +1996,12 @@ if test "$wxUSE_SHARED" = "yes"; then
             BURNT_LIBRARY_NAME="-Wl,-soname,${WX_LIBRARY_LINK1}"
             BURNT_LIBRARY_NAME_GL="-Wl,-soname,${WX_LIBRARY_LINK1_GL}"
         fi
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-        if test "$USE_GUI" = 1; then
-            WX_ALL="$WX_ALL CREATE_LINKS_GL"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+        else
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+            WX_ALL="CREATE_LINKS"
         fi
       ;;
       *-*-irix5* | *-*-irix6* )
@@ -2005,10 +2011,12 @@ if test "$wxUSE_SHARED" = "yes"; then
         else
            SHARED_LD="${CXX} -shared -o"
         fi
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
-        if test "$USE_GUI" = 1; then
-            WX_ALL="$WX_ALL CREATE_LINKS_GL"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+        else
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+            WX_ALL="CREATE_LINKS"
         fi
       ;;
       *-*-solaris2* )
@@ -2019,8 +2027,13 @@ if test "$wxUSE_SHARED" = "yes"; then
             SHARED_LD="${CXX} -G -o"
             PIC_FLAG="-KPIC"
         fi
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+        else
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+            WX_ALL="CREATE_LINKS"
+        fi
       ;;
       *-*-sunos4* )
         SHARED_LD="${CC} -shared -o"

@@ -11,16 +11,24 @@
 
 PROGRAM=isosurf
 
-OPENGLHOME=/home/jacs/mesa/Mesa-2.3
+CC = gcc
 
-EXTRACPPFLAGS=-I$(OPENGLHOME)/include
-EXTRALDFLAGS=-L$(OPENGLHOME)/lib
-EXTRALDLIBS=-lMesaGL -lMesaGLU
+OBJECTS = $(PROGRAM).o
 
-OBJECTS=$(PROGRAM).o
-EXTRATARGETS=isosurf.dat
+# implementation
 
-include ../../../src/makeprog.env
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all: $(PROGRAM) isosurf.dat
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs` -lwx_gtk_gl -lMesaGL -lMesaGLU
+
+clean: 
+	rm -f *.o $(PROGRAM)
 
 isosurf.dat:	isosurf.dat.gz
 	gzip -c -d isosurf.dat.gz > isosurf.dat

@@ -54,6 +54,7 @@ AC_OUTPUT([
             thread/Makefile
             toolbar/Makefile
             treectrl/Makefile
+            treelay/Makefile
             typetest/Makefile
             validate/Makefile
             sockets/Makefile
