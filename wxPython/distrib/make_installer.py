@@ -84,6 +84,7 @@ Source: "wxPython\dllwidget_c.pyd";         DestDir: "{app}\wxPython"; Component
 
 Source: "wxPython\*.py";                    DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\lib\*.py";                DestDir: "{app}\wxPython\lib"; Components: core
+Source: "wxPython\lib\*.wdr";               DestDir: "{app}\wxPython\lib"; Components: core
 Source: "wxPython\lib\editor\*.py";         DestDir: "{app}\wxPython\lib\editor"; Components: core
 Source: "wxPython\lib\editor\*.txt";        DestDir: "{app}\wxPython\lib\editor"; Components: core
 Source: "wxPython\lib\mixins\*.py";         DestDir: "{app}\wxPython\lib\mixins"; Components: core
@@ -95,6 +96,7 @@ Source: "demo\*.py";                        DestDir: "{app}\wxPython\demo"; Comp
 Source: "demo\*.xml";                       DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.txt";                       DestDir: "{app}\wxPython\demo"; Components: demo
 Source: "demo\*.ico";                       DestDir: "{app}\wxPython\demo"; Components: demo
+Source: "demo\*.wdr";                       DestDir: "{app}\wxPython\demo"; Components: demo
 
 Source: "demo\bitmaps\*.gif";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
 Source: "demo\bitmaps\*.bmp";               DestDir: "{app}\wxPython\demo\bitmaps"; Components: demo
@@ -138,6 +140,7 @@ Source: "tools\XRCed\README";               DestDir: "{app}\wxPython\tools\XRCed
 Source: "tools\XRCed\*.py";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "tools\XRCed\*.xrc";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "tools\XRCed\*.ico";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "tools\XRCed\*.sh";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples

@@ -10,6 +10,10 @@ include SWIG/*
 exclude SWIG/CVS/*
 
 include demo/*.py
+include demo/*.wdr
+include demo/*.txt
+include demo/*.xml
+include demo/*.ico
 include demo/bitmaps/*.bmp
 include demo/bitmaps/*.ico
 include demo/bitmaps/*.gif
@@ -20,9 +24,6 @@ include demo/bmp_source/*.ico
 include demo/bmp_source/*.gif
 include demo/bmp_source/*.png
 include demo/bmp_source/*.jpg
-include demo/*.txt
-include demo/*.xml
-include demo/*.ico
 include demo/data/*.png
 include demo/data/*.htm
 include demo/data/*.html
@@ -60,6 +61,7 @@ include samples/frogedit/*.py
 
 include wxPython/lib/*.py
 include wxPython/lib/*.txt
+include wxPython/lib/*.wdr
 include wxPython/lib/editor/*.py
 include wxPython/lib/editor/*.txt
 include wxPython/lib/mixins/*.py
@@ -98,6 +100,7 @@ include tools/XRCed/README
 include tools/XRCed/*.py
 include tools/XRCed/*.xrc
 include tools/XRCed/*.ico
+include tools/XRCed/*.sh
 
 include contrib/glcanvas/*.i
 include contrib/glcanvas/*.py
