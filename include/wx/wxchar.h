@@ -121,6 +121,9 @@ typedef  _TUCHAR     wxUChar;
 
    // ctype.h functions
 #ifndef wxNO_TCHAR_CTYPE
+#ifdef __BORLANDC__
+#  include <ctype.h>
+#endif
 #  define  wxIsalnum   _istalnum
 #  define  wxIsalpha   _istalpha
 #  define  wxIsctrl    _istctrl
@@ -549,6 +552,7 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #endif
 
 #ifndef wxSetlocale
+class wxWCharBuffer;
 WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
 #endif
 
