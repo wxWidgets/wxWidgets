@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML><HEAD><TITLE>DBBrowser Help : Problems</TITLE></HEAD>
+<BODY BGCOLOR=#C6DFC6><CENTER><IMG SRC="../help.png/logo.png"></CENTER><BR><CENTER><B>DBBrowser<BR>Mark Johnson, Berlin Germany<BR>mj10777@gmx.net</B><HR></CENTER>
+<!----------------------------------------------------------------------------------------------------------->
+ <TABLE border=1><B><TBODY><TR bgcolor=#CCFFFF>
+  <TH><B><H3><IMG SRC="../help.png/logo.png">&nbsp;DBBrowser : What does not Work ?</H3><BR>(English)</B></FONT></TH>
+ </TABLE></TBODY></TR><P>
+ <B>Stand: 2000-01-22.01-mj10777</B>
+<!-------------------------------------->
+ <HR><TABLE border=1><B><TBODY>
+  <TR><TH bgcolor=#CCFFFF><B>General</B></TH></TR>
+ </TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :&nbsp;<IMG SRC="../help.png/gnu.png">&nbsp;</B></TH><TH bgcolor=#FFFFE0><B>Only gcc 2.95 Compiler :<BR>Assurt failed in file ../../src/msw/fontutil.cpp at line 238: unknown font slant</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :&nbsp;<IMG SRC="../help.png/gnu.png">&nbsp;</B></TH><TH bgcolor=#FFFFE0><B>Only gcc 2.95 Compiler :<BR>Assurt failed in file ../../src/msw/fontutil.cpp at line 249: unknown font weight</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!----------------------------------------------------------------------------------------------------------->
+ <HR><TABLE border=1><B><TBODY>
+  <TR><TH bgcolor=#CCFFFF><B>wxHtmlHelpController</B></TH></TR>
+ </TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>When Help is closed with a Full HTML-View, you see nothing when Help is again started. (Page is Grey)</B></FONT></TH></TR>
+ </TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFF777><B>Press the Upper left Button, so that the screen is again split.</B></FONT></TH></TR>
+ </TR></TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!-------------------------------------->
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>The Middle (Center) Mouse-Wheel does not scroll the HTLM-Page (Rightside)<BR>It does work on the Leftside</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!-------------------------------------->
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>How can Help be called and a certin Page be opened (Context Help)</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!-------------------------------------->
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>Why doesn't the Refresh-Button (F5) work?</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Lvsung :</B></TH><TH><B>unbekannt</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!-------------------------------------->
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>Images that show with HelpView, do not show up when called from OnHelp()</B></FONT></TH></TR>
+ </TR></TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFBBBB><B>Logbook : Warning: No handler found for image type.<HR>Why wasn't this message translated to German ?</B></FONT></TH></TR>
+ </TR></TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B><BR>Added following Code in DBBrowser.cpp(MyApp::OnInit()): <HR>#if wxUSE_LIBPNG<BR>wxImage::AddHandler( new wxPNGHandler );<BR>#endif</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!----------------------------------------------------------------------------------------------------------->
+ <HR><TABLE border=1><B><TBODY>
+  <TR><TH bgcolor=#CCFFFF><B>wxGrid (new Versions)</B></TH></TR>
+ </TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>When wxGrid is used in wxPaggedWindows, the Scrollbars do not work.</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!----------------------------------------------------------------------------------------------------------->
+ <HR><TABLE border=1><B><TBODY>
+  <TR><TH bgcolor=#CCFFFF><B>next Problem</B></TH></TR>
+ </TBODY></TABLE>
+ <TABLE border=1><B><TBODY><TR>
+  <TR><TH bgcolor=#FFFFAA><B>Problem :</B></TH><TH bgcolor=#FFFFE0><B>something will turn up, it allways do.</B></FONT></TH></TR>
+  <TR><TH bgcolor=#CCFFCC><B>Solution :</B></TH><TH><B>unknown</B></FONT></TH></TR>
+ </TR></TBODY></TABLE><P>
+<!----------------------------------------------------------------------------------------------------------->
+ <HR>
+</BODY></HTML>

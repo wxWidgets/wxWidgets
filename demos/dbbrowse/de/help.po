@@ -1,0 +1,133 @@
+# for wxHelp
+# Copyright (C) 2000 Free Software Foundation, Inc.
+# Mark Johnson <mj10777@gmx.net>, 2000.
+#
+#-----------------------------------------------------------
+#: ../Help
+msgid   "Help"
+msgstr  "Hilfe"
+
+#: ../Help
+msgid   "Help: %s"
+msgstr  "Hilfe: %s"
+
+#: ../Help
+msgid   "(Help)"
+msgstr  "(Hilfe)"
+
+#: ../Help
+msgid   "Search"
+msgstr  "Suchen"
+
+#: ../Help
+msgid   "<bookmarks>"
+msgstr  "<Lesezeichen>"
+
+#: ../Help
+msgid   "Contents"
+msgstr  "Inhalt"
+
+#: ../Help
+msgid   "Find"
+msgstr  "Suchen"
+
+#: ../Help
+msgid   "Show all"
+msgstr  "Alles zeigen"
+
+#: ../Help
+msgid   "%i of %i"
+msgstr  "%i von %i"
+
+#: ../Help
+msgid   "Show/hide navigation panel"
+msgstr  "Suchbaum Ein-/Ausschalten"
+
+#: ../Help
+msgid   "Go back to the previous HTML page"
+msgstr  "Vorherige HTLM Seite zeigen"
+
+#: ../Help
+msgid   "Go forward to the next HTML page"
+msgstr  "Nächste HTLM Seite zeigen"
+
+#: ../Help
+msgid   "Add current page to bookmarks"
+msgstr  "Aktuelle HTLM Seite als Lesezeichen hinzufügen"
+
+#: ../Help
+msgid   "Remove current page from bookmarks"
+msgstr  "Aktuelle HTLM Seite als Lesezeichen entfernen"
+
+#: ../Help
+msgid   "Display options dialog"
+msgstr  "Anzeige Options Dialog"
+
+#: ../Help
+msgid   "Help Browser Options"
+msgstr  "Hilfe Browser Optionen"
+
+#: ../Help
+msgid   "Font size:"
+msgstr  "Font Größe:"
+
+#: ../Help
+msgid   "small"
+msgstr  "Klein"
+
+#: ../Help
+msgid   "medium"
+msgstr  "Mittel"
+
+#: ../Help
+msgid   "large"
+msgstr  "Groß"
+
+#: ../Help
+msgid   "Preview:"
+msgstr  "Vorschau:"
+
+#: ../Help
+msgid   "Show all items in index"
+msgstr  "Alle Themen im Index anzeigen"
+
+#: ../Help
+msgid   "Display all index items that contain given substring. Search is case insensitive."
+msgstr  "Alle Themen im Index nach Suchbegriff durchsuchen. Groß-/Kleinschreibung wird nicht beachtet"
+
+#: ../Help
+msgid   "Search contents of help book(s) for all occurences of the text you typed above"
+msgstr  "Alle Hilfebücher nach Suchbegriff durchsuchen."
+
+#: ../Help
+msgid   "all books"
+msgstr  "alle Bücher"
+
+#: ../Help
+msgid   "Case sensitive"
+msgstr  "Groß-/Kleinschreibung"
+
+#: ../Help
+msgid   "Whole words only"
+msgstr  "Als Wort"
+
+#: ../Help
+msgid   "Searching..."
+msgstr  "Suchen..."
+
+#: ../Help
+msgid   "No matching page found yet"
+msgstr  "Passende Seite noch nicht gefunden"
+
+#: ../Help
+msgid   "Found %i matches"
+msgstr  "Suchbegriff %i mal gefunden"
+
+#-----------------------------------------------------------
+#: ../Help
+msgid   "Done"
+msgstr  ":-) Ich habe Fertig"
+#-----------------------------------------------------------
+#: ../Help
+msgid   ""
+msgstr  ""

@@ -1,0 +1,22 @@
+[OPTIONS]
+Compatibility=1.1
+Compiled file=testing.chm
+Contents file=dbbrowse.hhc
+Display compile progress=No
+Index file=dbbrowse.hhk
+Language=0x405 Hesky
+Title=DBBrowser Handbook
+Default topic=sample.htm
+
+[FILES]
+dbbrowse.htm
+compiler.htm
+icons.htm
+problems.htm
+startprm.htm
+picgrams.htm
+remstar.htm
+wxdb.htm
+getcol.htm
+getcolsh.htm
+wxtable.htm
