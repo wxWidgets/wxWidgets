@@ -70,7 +70,7 @@ ostream& operator<< (ostream& o, const wxLongLongNative& ll)
 
     for (int i = 0; i < 64; i++)
     {
-        result[63 - i] = '0' + (char) ((ll.m_ll >> i) & 1);
+        result[63 - i] = '0' + (char) ((ll.GetValue() >> i) & 1);
     }
 
     return o << result;
