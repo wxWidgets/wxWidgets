@@ -135,7 +135,7 @@ Clookup::Clookup(wxChar *tblName, wxChar *colName, wxDb *pDb, const wxString &de
                defDir)
 {
 
-    SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+    SetColDefs (0, colName, DB_DATA_TYPE_VARCHAR, lookupCol, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
 
 }  // Clookup()
 
@@ -153,10 +153,10 @@ Clookup2::Clookup2(wxChar *tblName, wxChar *colName1, wxChar *colName2,
 
     int i = 0;
 
-    SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+    SetColDefs (i, colName1, DB_DATA_TYPE_VARCHAR, lookupCol1, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
 
     if (wxStrlen(colName2) > 0)
-        SetColDefs (++i, colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, false, false);
+        SetColDefs (++i, colName2, DB_DATA_TYPE_VARCHAR, lookupCol2, SQL_C_CHAR, LOOKUP_COL_LEN+1, FALSE, FALSE);
 
 }  // Clookup2()
 
@@ -177,7 +177,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     wxBeginBusyCursor();
     
     wxStrcpy(ListDB_Selection,wxT(""));
-    widgetPtrsSet = false;
+    widgetPtrsSet = FALSE;
     lookup  = 0;
     lookup2 = 0;
     noDisplayCols = 1;
@@ -187,7 +187,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     pLookUpOkBtn            = new wxButton(this,  LOOKUP_DIALOG_OK,      wxT("&Ok"),     wxPoint(113, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
     pLookUpCancelBtn        = new wxButton(this,  LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"), wxPoint(212, 222), wxSize( 70,  35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
 
-    widgetPtrsSet = true;
+    widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
 	 lookup = new Clookup(tableName, colName, pDb, defDir);
@@ -229,7 +229,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     else
     {
         pLookUpCancelBtn->SetDefault();
-        pLookUpOkBtn->Enable(false);
+        pLookUpOkBtn->Enable(FALSE);
     }
 
     // Display the dialog window
@@ -248,7 +248,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 //    1) 2 columns rather than one
 // 2) The ability to select DISTINCT column values
 //
-// Only set distinctValues equal to true if necessary.  In many cases, the constraints
+// Only set distinctValues equal to TRUE if necessary.  In many cases, the constraints
 // of the index(es) will enforce this uniqueness.  Selecting DISTINCT does require
 // overhead by the database to ensure that all values returned are distinct.  Therefore,
 // use this ONLY when you need it.
@@ -275,7 +275,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     
     wxStrcpy(ListDB_Selection,wxT(""));
     wxStrcpy(ListDB_Selection2,wxT(""));
-    widgetPtrsSet = false;
+    widgetPtrsSet = FALSE;
     lookup  = 0;
     lookup2 = 0;
     noDisplayCols = (wxStrlen(dispCol2) ? 2 : 1);
@@ -292,7 +292,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     pLookUpOkBtn            = new wxButton(this, LOOKUP_DIALOG_OK,      wxT("&Ok"),        wxPoint(113, 222), wxSize(70, 35), 0, wxDefaultValidator, wxT("LookUpOkBtn"));
     pLookUpCancelBtn        = new wxButton(this, LOOKUP_DIALOG_CANCEL,  wxT("C&ancel"),    wxPoint(212, 222), wxSize(70, 35), 0, wxDefaultValidator, wxT("LookUpCancelBtn"));
 
-    widgetPtrsSet = true;
+    widgetPtrsSet = TRUE;
 
     // Query the lookup table and display the result set
 	 lookup2 = new Clookup2(tableName, dispCol1, dispCol2, pDb, defDir);
@@ -359,7 +359,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     {
         lookup2->SetOrderByClause(orderBy);
         lookup2->SetWhereClause(where);
-        if (!lookup2->Query(false, distinctValues))
+        if (!lookup2->Query(FALSE, distinctValues))
         {
             wxMessageBox(wxT("ODBC error during Query()"),wxT("ODBC Error..."));
             Close();
@@ -389,7 +389,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
     else
     {
         pLookUpCancelBtn->SetDefault();
-        pLookUpOkBtn->Enable(false);
+        pLookUpOkBtn->Enable(FALSE);
     }
 
     pLookUpOkBtn->Enable(allowOk);
@@ -405,8 +405,8 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, wxChar *windowTitle, wxChar *tableName,
 
 void ClookUpDlg::OnClose(wxCloseEvent& event)
 {
-    widgetPtrsSet = false;
-    GetParent()->Enable(true);
+    widgetPtrsSet = FALSE;
+    GetParent()->Enable(TRUE);
 
     if (lookup)
         delete lookup;
@@ -418,7 +418,7 @@ void ClookUpDlg::OnClose(wxCloseEvent& event)
     while (wxIsBusy()) wxEndBusyCursor();
     event.Skip();
 
-//    return true;
+//    return TRUE;
 
 }  // ClookUpDlg::OnClose
 
