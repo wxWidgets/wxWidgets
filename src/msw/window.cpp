@@ -1209,9 +1209,9 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         return;
     }
 
-    if ( x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    if ( x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         x = currentX;
-    if ( y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    if ( y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
         y = currentY;
 
     AdjustForParentClientOrigin(x, y, sizeFlags);
