@@ -40,13 +40,10 @@ how you can modify your application to be 2.0-compliant.
 You may be worrying that porting to 2.0 will be a lot of work,
 particularly if you have only recently started using 1.xx. In fact,
 the wxWindows 2.0 API has far more in common with 1.xx than it has differences.
-With backward compatibility mode on, much of the conversion can be
-done gradually. The main challenges are doing without the default
+The main challenges are using the new event system, doing without the default
 panel item layout, and the lack of automatic labels in some controls.
-However, if you already use resource files (.wxr), or application-specific positioning,
-or constraints, then even this will be quite painless.
 
-So please don't be freaked out by the jump to 2.0! For one thing, 1.xx is still available
+Please don't be freaked out by the jump to 2.0! For one thing, 1.xx is still available
 and will be supported by the user community for some time. And when you have
 changed to 2.0, we hope that you will appreciate the benefits in terms
 of greater flexibility, better user interface aesthetics, improved C++ conformance,
@@ -100,7 +97,7 @@ void MyFrame::OnOK(wxCommandEvent& event)
 
 You may find that writing the extra code to call a member function isn't worth it at this stage,
 but the option is there.
-\item {\bf Use wxString wherever possible.} 2.0 will replace char * with wxString
+\item {\bf Use wxString wherever possible.} 2.0 replaces char * with wxString
 in most cases, and if you use wxString to receive strings returned from
 wxWindows functions (except when you need to save the pointer if deallocation is required), there should
 be no conversion problems later on.
@@ -112,7 +109,7 @@ Windows and X under wxWindows 1.66. Yes, this is not easy... but I think it's be
 standards of each platform, and currently the size difference makes it difficult to
 conform to Windows UI standards. You may eventually wish to build in a global 'fudge-factor' to compensate
 for size differences. The old font sizing will still be available via wx\_setup.h, so do not panic...
-\item {\bf Consider dropping wxForm usage}: an alternative is to be found in utils/wxprop.
+\item {\bf Consider dropping wxForm usage}:
 wxPropertyFormView can be used in a wxForm-like way, except that you specify a pre-constructed panel
 or dialog; or you can use a wxPropertyListView to show attributes in a scrolling list - you don't even need
 to lay panel items out.
@@ -180,7 +177,8 @@ See \helpref{Device contexts and painting}{dc}.
 These objects - instances of classes such as wxPen, wxBrush, wxBitmap (but not wxColour) -
 are now implemented with reference-counting. This makes assignment a very cheap operation,
 and also means that management of the resource is largely automatic. You now pass {\it references} to
-objects to functions such as wxDC::SetPen. The device context does not store a copy of the pen
+objects to functions such as wxDC::SetPen, not pointers, so you will need to derefence your pointers.
+The device context does not store a copy of the pen
 itself, but takes a copy of it (via reference counting), and the object's data gets freed up
 when the reference count goes to zero. The application does not have to worry so much about
 who the object belongs to: it can pass the reference, then destroy the object without
@@ -191,11 +189,8 @@ pointers to GDI objects, and using the FindOrCreate... functions. However, it is
 keep this explicit management to a minimum, instead creating objects on the fly as needed, on the stack,
 unless this causes too much of an overhead in your application.
 
-At a minimum, you will have to make sure that calls to SetPen, SetBrush etc. work. Some compilers
-will do the conversion from pointer to reference automatically (via a constructor in the GDI
-class) but you cannot rely on this being true for all compilers. Also, where you pass NULL to these
-functions, you will need to either cast to the appropriate reference type, or instead
-use an identifier such as wxNullPen or wxNullBrush.
+At a minimum, you will have to make sure that calls to SetPen, SetBrush etc. work. Also, where you pass NULL to these
+functions, you will need to use an identifier such as wxNullPen or wxNullBrush.
 
 \chapter{Dialogs and controls}\label{dialogscontrols}
 
@@ -213,8 +208,7 @@ properties.
 
 All window constructors have two main changes, apart from the label issue mentioned above.
 Windows now have integer identifiers; and position and size are now passed as wxPoint and
-wxSize objects. In addition, some windows have a wxValidator argument. wxWindows 2.0 may provide
-old-style constructors in WXWIN\_COMPATIBILITY mode for limited backward compatibility.
+wxSize objects. In addition, some windows have a wxValidator argument.
 
 \wxheading{Show versus ShowModal}
 
@@ -253,7 +247,7 @@ wxGroupBox is renamed wxStaticBox.
 
 \wxheading{wxForm}
 
-Note that wxForm is no longer supported in wxWindows 2.0. Consider using the wxPropertyForm class
+Note that wxForm is no longer supported in wxWindows 2.0. Consider using the wxPropertyFormView class
 instead, which takes standard dialogs and panels and associates controls with property objects.
 You may also find that the new validation method, combined with dialog resources, is easier
 and more flexible than using wxForm.
@@ -327,7 +321,7 @@ Try to use the {\bf const} keyword in your own code where possible.
 \chapter{Backward compatibility}\label{compat}
 
 Some wxWindows 1.xx functionality has been left to ease the transition to 2.0. This functionality
-(usually) only works if you compile with WXWIN\_COMPATIBILITY set to 1.
+(usually) only works if you compile with WXWIN\_COMPATIBILITY set to 1 in setup.h.
 
 Mostly this defines old names to be the new names (e.g. wxRectangle is defined to be wxRect).
 
@@ -336,50 +330,169 @@ Mostly this defines old names to be the new names (e.g. wxRectangle is defined t
 This section allows you to quickly find features that
 need to be converted.
 
-TODO
+\section{Include files}
+
+Use the form:
+
+\begin{verbatim}
+#include <wx/wx.h>
+#include <wx/button.h>
+\end{verbatim}
+
+For precompiled header support, use this form:
+
+\begin{verbatim}
+// For compilers that support precompilation, includes "wx.h".
+#include <wx/wxprec.h>
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+// Any files you want to include if not precompiling by including
+// the whole of <wx/wx.h>
+#ifndef WX_PRECOMP
+    #include <stdio.h>
+    #include <wx/setup.h>
+    #include <wx/bitmap.h>
+    #include <wx/brush.h>
+#endif
+
+// Any files you want to include regardless of precompiled headers
+#include <wx/toolbar.h>
+\end{verbatim}
+
+\section{IPC classes}
+
+These are now separated out into wxDDEServer/Client/Connection (Windows only) and wxTCPServer/Client/Connection
+(Windows and Unix). Take care to use wxString for your overridden function arguments, instead of char*, as per
+the documentation.
+
+\section{MDI style frames}
+
+MDI is now implemented as a family of separate classes, so you can't switch to MDI just by
+using a different frame style. Please see the documentation for the MDI frame classes, and the MDI
+sample may be helpful too.
 
 \section{OnActivate}
 
-Rename to OldOnActivate, or replace arguments with one wxActivateEvent\& argument.
+Replace the arguments with one wxActivateEvent\& argument, make sure the function isn't virtual,
+and add an EVT\_ACTIVATE event table entry.
 
-\wxheading{See also}
+\section{OnChar}
 
-\helpref{Backward compatibility}{compat}
+This is now a non-virtual function, with the same wxKeyEvent\& argument as before.
+Add an EVT\_CHAR macro to the event table
+for your window, and the implementation of your function will need very few changes.
 
 \section{OnClose}
 
-This can either remain the same as before, or you can add an OnCloseWindow event
-handler using an EVT\_CLOSE event table entry.
+The old virtual function OnClose is now obsolete.
+Add an OnCloseWindow event handler using an EVT\_CLOSE event table entry. For details
+about window destruction, see the Windows Deletion Overview in the manual. This is a subtle
+topic so please read it very carefully. Basically, OnCloseWindow is now responsible for
+destroying a window with Destroy(), but the default implementation (for example for wxDialog) may not
+destroy the window, so to be sure, always provide this event handler so it's obvious what's going on.
 
-\wxheading{See also}
+\section{OnEvent}
 
-\helpref{Backward compatibility}{compat}
+This is now a non-virtual function, with the same wxMouseEvent\& argument as before. However
+you may wish to rename it OnMouseEvent. Add an EVT\_MOUSE\_EVENTS macro to the event table
+for your window, and the implementation of your function will need very few changes.
+However, if you wish to intercept different events using different functions, you can
+specify specific events in your event table, such as EVT\_LEFT\_DOWN.
+
+Your OnEvent function is likely to have references to GetDC(), so make sure you create
+a wxClientDC instead. See \helpref{Device contexts}{dc}.
+
+If you are using a wxScrolledWindow (formerly wxCanvas), you should call
+PrepareDC(dc) to set the correct translation for the current scroll position.
 
 \section{OnMenuCommand}
 
-Rename to OldOnMenuCommand, or replace with a series of functions, one for
-each case of your old switch statement. Create an event table for your frame
-containing EVT\_MENU macros, and insert DECLARE\_EVENT\_TABLE() in your frame class.
+You need to replace this virtual function with a series of non-virtual functions, one for
+each case of your old switch statement. Each function takes a wxCommandEvent\& argument.
+Create an event table for your frame
+containing EVT\_MENU macros, and insert DECLARE\_EVENT\_TABLE() in your frame class, as
+per the samples.
 
-\wxheading{See also}
+\section{OnPaint}
 
-\helpref{Backward compatibility}{compat}
+This is now a non-virtual function, with a wxPaintEvent\& argument.
+Add an EVT\_PAINT macro to the event table
+for your window.
+
+Your function {\it must} create a wxPaintDC object, instead of using GetDC to
+obtain the device context.
+
+If you are using a wxScrolledWindow (formerly wxCanvas), you should call
+PrepareDC(dc) to set the correct translation for the current scroll position.
 
 \section{OnSize}
 
-Rename to OldOnSize, or replace arguments with one wxSizeEvent\& argument.
+Replace the arguments with one wxSizeEvent\& argument, make it non-virtual, and add to your
+event table using EVT\_SIZE.
 
-\wxheading{See also}
+\section{wxApp definition}
 
-\helpref{Backward compatibility}{compat}
+The definition of OnInit has changed. Return a bool value, not a wxFrame.
+
+Also, do {\it not} declare a global application object. Instead, use the macros
+DECLARE\_APP and IMPLEMENT\_APP as per the samples. Remove any occurrences of IMPLEMENT\_WXWIN\_MAIN:
+this is subsumed in IMPLEMENT\_APP.
+
+\section{wxButton}
+
+For bitmap buttons, use wxBitmapButton.
+
+\section{wxCanvas}
+
+Change the name to wxScrolledWindow.
+
+\section{wxDialogBox}
+
+Change the name to wxDialog, and for modal dialogs, use ShowModal instead of Show.
 
 \section{wxDialog::Show}
 
-If you used {\bf Show} to show a modal dialog, or to override the standard
+If you used {\bf Show} to show a modal dialog or to override the standard
 modal dialog {\bf Show}, use {\bf ShowModal} instead.
 
 \wxheading{See also}
 
 \helpref{Dialogs and controls}{dialogscontrols}
+
+\section{wxForm}
+
+Sorry, this class is no longer available. Try using the wxPropertyListView or wxPropertyFormView class
+instead, or use .wxr files and validators.
+
+\section{wxPoint}
+
+The old wxPoint is called wxRealPoint, and wxPoint now uses integers.
+
+\section{wxRectangle}
+
+This is now called wxRect.
+
+\section{wxScrollBar}
+
+The function names have changed for this class: please refer to the documentation for wxScrollBar. Instead
+of setting properties individually, you will call SetScrollbar with several parameters.
+
+\section{wxText, wxMultiText, wxTextWindow}
+
+Change all these to wxTextCtrl. Add the window style wxTE\_MULTILINE if you
+wish to have a multi-line text control.
+
+\section{wxToolBar}
+
+This name is an alias for the most popular form of toolbar for your platform. There is now a family
+of toolbar classes, with for example wxToolBar95, wxToolBarMSW and wxToolBarSimple classes existing
+under Windows 95.
+
+Toolbar management is supported by frames, so calling wxFrame::CreateToolBar and adding tools is usually
+enough, and the SDI or MDI frame will manage the positioning for you. The client area of the frame is the space
+left over when the menu bar, toolbar and status bar have been taken into account.
 
 \end{document}

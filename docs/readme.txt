@@ -1,5 +1,5 @@
-wxWindows 2.0
--------------
+wxWindows 2.0.1
+---------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where

@@ -55,7 +55,7 @@ EditorToolPalette::EditorToolPalette(wxWindow* parent, const wxPoint& pos, const
 {
   currentlySelected = -1;
 
-#ifndef __WXGTK__
+#if 1 // ndef __WXGTK__
   SetMaxRowsCols(1000, 1);
 #endif
 }

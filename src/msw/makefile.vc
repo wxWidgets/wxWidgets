@@ -455,26 +455,21 @@ cleanall: clean
 # Making documents
 docs:   allhlp allhtml allpdfrtf
 alldocs: docs
-hlp:    wxhlp portinghlp # faqhlp
+hlp:    wxhlp portinghlp
 wxhlp:  $(DOCDIR)/winhelp/wx.hlp
 prophlp: $(DOCDIR)/winhelp/prop.hlp
-faqhlp: $(DOCDIR)/winhelp/faq.hlp
 refhlp: $(DOCDIR)/winhelp/techref.hlp
 rtf:    $(DOCDIR)/winhelp/wx.rtf
-faqrtf: $(DOCDIR)/winhelp/faq.rtf
 proprtf: $(DOCDIR)/winhelp/prop.rtf
 pdfrtf:    $(DOCDIR)/pdf/wx.rtf
-faqpdfrtf: $(DOCDIR)/pdf/faq.rtf
 proppdfrtf: $(DOCDIR)/pdf/prop.rtf
 refpdfrtf: $(DOCDIR)/pdf/techref.rtf
-html:	wxhtml # faqhtml
+html:	wxhtml portinghtml
 wxhtml:	$(DOCDIR)\html\wx\wx.htm
-faqhtml: $(DOCDIR)\html\faq\faq.htm
 prophtml: $(DOCDIR)\html\proplist\prop.htm
-ps:     wxps referencps # faqps
+ps:     wxps referencps
 wxps:	$(WXDIR)\docs\ps\wx.ps
 propps:	$(WXDIR)\docs\ps\prop.ps
-faqps:	$(WXDIR)\docs\ps\faq.ps
 referencps:	$(WXDIR)\docs\ps\referenc.ps
 
 portinghtml: $(DOCDIR)\html\porting\port.htm
@@ -483,7 +478,7 @@ portinghlp: $(DOCDIR)/winhelp/porting.hlp
 portingpdfrtf: $(DOCDIR)/pdf/porting.rtf
 portingps:	$(WXDIR)\docs\ps\porting.ps
 
-allhlp: wxhlp portinghlp prop # faqhlp
+allhlp: wxhlp portinghlp prophlp
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc hlp
         cd $(THISDIR)
@@ -503,7 +498,7 @@ allhlp: wxhlp portinghlp prop # faqhlp
 #        cd $(WXDIR)\utils\wxgrid\src
 #        nmake -f makefile.vc hlp
 
-allhtml: wxhtml portinghtml prophtml # faqhtml
+allhtml: wxhtml portinghtml prophtml
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc html
         cd $(THISDIR)
@@ -524,12 +519,12 @@ allhtml: wxhtml portinghtml prophtml # faqhtml
 #        cd $(WXDIR)\utils\wxtree\src
 #        nmake -f makefile.vc html
 
-allps: wxps referencps portingps propps # faqps
+allps: wxps referencps portingps propps
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc ps
         cd $(THISDIR)
 
-allpdfrtf: pdfrtf portingpdfrtf proppdfrtf # faqpdfrtf
+allpdfrtf: pdfrtf portingpdfrtf proppdfrtf
         cd $(WXDIR)\utils\dialoged\src
         nmake -f makefile.vc pdfrtf
         cd $(THISDIR)
@@ -562,14 +557,6 @@ $(DOCDIR)/winhelp/porting.hlp:         $(DOCDIR)/latex/porting/porting.rtf $(DOC
         move porting.cnt $(DOCDIR)\winhelp\porting.cnt
         cd $(THISDIR)
 
-$(DOCDIR)/winhelp/faq.hlp:         $(DOCDIR)/latex/faq/faq.rtf $(DOCDIR)/latex/faq/faq.hpj
-        cd $(DOCDIR)/latex/faq
-        -erase faq.ph
-        hc faq
-        move faq.hlp $(DOCDIR)\winhelp\faq.hlp
-        move faq.cnt $(DOCDIR)\winhelp\faq.cnt
-        cd $(THISDIR)
-
 $(DOCDIR)/winhelp/prop.hlp:         $(DOCDIR)/latex/proplist/prop.rtf $(DOCDIR)/latex/proplist/prop.hpj
         cd $(DOCDIR)/latex/proplist
         -erase prop.ph
@@ -596,11 +583,6 @@ $(DOCDIR)/latex/porting/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         -start /w tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/latex/porting/porting.rtf -twice -winhelp
         cd $(THISDIR)
 
-$(DOCDIR)/latex/faq/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
-        cd $(DOCDIR)\latex\faq
-        -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/latex/faq/faq.rtf -twice -winhelp
-        cd $(THISDIR)
-
 $(DOCDIR)/latex/proplist/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
         cd $(DOCDIR)\latex\proplist
         -start /w tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/prop.rtf -twice -winhelp
@@ -623,13 +605,7 @@ $(DOCDIR)/pdf/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         -start /w tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/pdf/porting.rtf -twice -rtf
         cd $(THISDIR)
 
-$(DOCDIR)/pdf/faq.rtf:         $(DOCDIR)/latex/faq/faq.tex
-        cd $(DOCDIR)\latex\faq
-        -copy *.bmp *.wmf $(DOCDIR)\pdf
-        -start /w tex2rtf $(DOCDIR)/latex/faq/faq.tex $(DOCDIR)/pdf/faq.rtf -twice -rtf
-        cd $(THISDIR)
-
-$(DOCDIR)/pdf/prop.rtf:         $(DOCDIR)/latex/proplist/proplist.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
+$(DOCDIR)/pdf/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
         cd $(DOCDIR)\latex\proplist
         -copy *.bmp *.wmf $(DOCDIR)\pdf
         -start /w tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/pdf/prop.rtf -twice -rtf
@@ -659,16 +635,6 @@ $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         -erase $(DOCDIR)\html\porting\*.ref
         -erase $(DOCDIR)\latex\porting\*.con
         -erase $(DOCDIR)\latex\porting\*.ref
-        cd $(THISDIR)
-
-$(DOCDIR)\html\faq\faq.htm:         $(DOCDIR)\latex\faq\faq.tex
-        cd $(DOCDIR)\latex\faq
-        -mkdir $(DOCDIR)\html\faq
-        -start /w tex2rtf $(DOCDIR)\latex\faq\faq.tex $(DOCDIR)\html\faq\faq.htm -twice -html
-        -erase $(DOCDIR)\html\faq\*.con
-        -erase $(DOCDIR)\html\faq\*.ref
-        -erase $(DOCDIR)\latex\faq\*.con
-        -erase $(DOCDIR)\latex\faq\*.ref
         cd $(THISDIR)
 
 $(DOCDIR)\html\proplist\prop.htm:         $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\latex\proplist\body.tex $(DOCDIR)\latex\proplist\classes.tex $(DOCDIR)\latex\proplist\changes.tex
@@ -727,21 +693,6 @@ $(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
 	cd $(WXDIR)\docs\latex\wx
         -dvips32 -o referenc.ps referenc
         move referenc.ps $(WXDIR)\docs\ps\referenc.ps
-        cd $(THISDIR)
-
-$(WXDIR)\docs\latex\faq\faq.dvi:	$(DOCDIR)/latex/faq/faq.tex
-	cd $(WXDIR)\docs\latex\faq
-        -latex faq
-        -latex faq
-        -makeindx faq
-        -latex faq
-        -latex faq
-        cd $(THISDIR)
-
-$(WXDIR)\docs\ps\faq.ps:	$(WXDIR)\docs\latex\faq\faq.dvi
-	cd $(WXDIR)\docs\latex\faq
-        -dvips32 -o faq.ps faq
-        move faq.ps $(WXDIR)\docs\ps\faq.ps
         cd $(THISDIR)
 
 # In order to force document reprocessing

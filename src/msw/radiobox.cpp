@@ -66,7 +66,8 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hWnd,
 // ---------------------------------------------------------------------------
 
 // the pointer to standard radio button wnd proc
-static WNDPROC s_wndprocRadioBtn = (WNDPROC)NULL;
+// static WNDPROC s_wndprocRadioBtn = (WNDPROC)NULL;
+static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
 
 // ===========================================================================
 // implementation
@@ -706,7 +707,8 @@ void wxRadioBox::SubclassRadioButton(WXHWND hWndBtn)
     HWND hwndBtn = (HWND)hWndBtn;
 
     if ( !s_wndprocRadioBtn )
-        s_wndprocRadioBtn = (WNDPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
+        s_wndprocRadioBtn = (WXFARPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
+//        s_wndprocRadioBtn = (WNDPROC)::GetWindowLong(hwndBtn, GWL_WNDPROC);
 
     // No GWL_USERDATA in Win16, so omit this subclassing.
 #ifdef __WIN32__
@@ -780,7 +782,7 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     }
 
     if ( !processed )
-        return ::CallWindowProc((WNDPROC) s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
+        return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, msg, wParam, lParam);
     else
         return 0;
 }

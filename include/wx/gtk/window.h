@@ -420,6 +420,9 @@ public:
 
     virtual void OnInternalIdle();
 
+    // For compatibility across platforms (not in event table)
+    void OnIdle(wxIdleEvent& WXUNUSED(event)) {};
+
     /* used by all classes in the widget creation process */
 
     void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,

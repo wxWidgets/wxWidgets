@@ -1,8 +1,8 @@
 wxWindows 2 Change Log
 ----------------------
 
-Beta 6 (release), February 28th 1999
-------------------------------------
+2.0.1 (release), March 1st 1999
+-------------------------------
 
 wxGTK:
 
@@ -13,14 +13,19 @@ wxMSW:
 
 - Fixed problems with <return> in dialogs/panels.
 - Fixed window cursor setting.
+- Some makefile fixes.
 
 wxMotif:
 
+- None.
 
 General:
 
 - Added wxUSE_SOCKETS.
 - More topic overviews.
+- Put wxPrintPaperType, wxPrintPaperDatabase into
+  prntbase.h/cpp for use in non-PostScript situations
+  (e.g. Win16 wxPageSetupDialog).
 
 
 Beta 5, February 18th 1999

@@ -75,7 +75,7 @@ wxToolBarSimple::~wxToolBarSimple ()
 {
 }
 
-void wxToolBarSimple::OnPaint (wxPaintEvent& event)
+void wxToolBarSimple::OnPaint (wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
   PrepareDC(dc);
@@ -103,7 +103,7 @@ void wxToolBarSimple::OnSize ( wxSizeEvent& event )
   wxToolBarBase::OnSize(event);
 }
 
-void wxToolBarSimple::OnKillFocus (wxFocusEvent& event)
+void wxToolBarSimple::OnKillFocus (wxFocusEvent& WXUNUSED(event))
 {
   OnMouseEnter(m_pressedTool = m_currentTool = -1);
 }
@@ -212,8 +212,10 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
 
   if (bitmap && bitmap->Ok())
   {
+#ifndef __WXGTK__
     if (bitmap->GetPalette())
       memDC.SetPalette(*bitmap->GetPalette());
+#endif
 
     int ax = (int)tool->m_x,
         ay = (int)tool->m_y,
@@ -246,17 +248,19 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxMemoryDC& memDC, wxToolBarTool *tool)
             &memDC, 0, 0);
     }
     memDC.SelectObject(wxNullBitmap);
+#ifndef __WXGTK__
     memDC.SetPalette(wxNullPalette);
+#endif
   }
   // No second bitmap, so draw a thick line around bitmap, or invert if mono
   else if (tool->m_toggleState)
   {
     bool drawBorder = FALSE;
-    #ifdef __X__ // X doesn't invert properly on colour
+#ifdef __X__ // X doesn't invert properly on colour
     drawBorder = wxColourDisplay();
-    #else       // Inversion works fine under Windows
+#else       // Inversion works fine under Windows
     drawBorder = FALSE;
-    #endif
+#endif
 
     if (!drawBorder)
     {

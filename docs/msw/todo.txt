@@ -7,30 +7,12 @@ HIGH PRIORITY
 
 Add further controls and properties to Dialog Editor.
 
-Update manual.
-    wxMsgCatalog etc.
-    wxRegKey
-    wxStatusBar95 and wxFrame status bar functions
-    wxListBox changes (for ownerdraw functionality)
-    wxThread            DONE (except for topic overview)
-    wxString            PARTLY DONE
-    Document the include file for each class
-    wxSocket topic overview
-    Functions
-
-Makefiles and/or IDE files for other compilers: Symantec C++,
-Salford C++.
-
-Check TODO entries in source and manual.
-
 Add centring, right justify styles to wxStaticText.
 
 Extend wxSystemSettings to get symbols for current nationality,
 e.g. ',' instead of '.' for decimal points.
 
 Supply correct ctl3d/odbc lib files for BC++, Watcom (corrupt?)
-
-Implement new wxClipboard and DnD (Vadim)
 
 wxToolTip::Enable should be static for wxGTK compatibility (VZ)
 

@@ -169,7 +169,7 @@ public:
   inline size_t LastCount() const { return m_lcount; }
   inline int LastError() const { return m_error; }
   
-  inline void SetFlags(wxSockFlags _flags);
+  void SetFlags(wxSockFlags _flags);
   inline void SetTimeout(unsigned long sec) { m_timeout = sec; }
 
   // seconds = -1 means infinite wait
