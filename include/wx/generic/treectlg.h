@@ -222,7 +222,6 @@ public:
 
         // Only for internal use right now, but should probably be public
     wxTreeItemId GetNext(const wxTreeItemId& item) const;
-    wxTreeItemId GetPrev(const wxTreeItemId& item) const;
 
     // operations
     // ----------
@@ -328,6 +327,10 @@ public:
         { SetItemImage(item, image, wxTreeItemIcon_Selected); }
 
     // implementation only from now on
+
+    // overridden base class virtuals
+    virtual bool SetBackgroundColour(const wxColour& colour);
+    virtual bool SetForegroundColour(const wxColour& colour);
 
     // callbacks
     void OnPaint( wxPaintEvent &event );

@@ -1032,15 +1032,6 @@ wxTreeItemId wxGenericTreeCtrl::GetNext(const wxTreeItemId& item) const
     }
 }
 
-wxTreeItemId wxGenericTreeCtrl::GetPrev(const wxTreeItemId& item) const
-{
-    wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
-
-    wxFAIL_MSG(wxT("not implemented"));
-
-    return wxTreeItemId();
-}
-
 wxTreeItemId wxGenericTreeCtrl::GetFirstVisibleItem() const
 {
     wxTreeItemId id = GetRootItem();
@@ -2924,6 +2915,30 @@ void wxGenericTreeCtrl::RefreshSelectedUnder(wxGenericTreeItem *item)
     {
         RefreshSelectedUnder(children[n]);
     }
+}
+
+// ----------------------------------------------------------------------------
+// changing colours: we need to refresh the tree control
+// ----------------------------------------------------------------------------
+
+bool wxGenericTreeCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxWindow::SetBackgroundColour(colour) )
+        return FALSE;
+
+    Refresh();
+
+    return TRUE;
+}
+
+}bool wxGenericTreeCtrl::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxWindow::SetForegroundColour(colour) )
+        return FALSE;
+
+    Refresh();
+
+    return TRUE;
 }
 
 #endif // wxUSE_TREECTRL
