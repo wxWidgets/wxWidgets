@@ -2584,7 +2584,7 @@ int wxListMainWindow::GetItemState( long item, long stateMask )
         if (item >= 0 && (size_t)item < m_lines.GetCount())
         {
             wxListLineData *line = &m_lines[(size_t)item];
-            if (line->IsHilighted()) ret |= wxLIST_STATE_FOCUSED;
+            if (line->IsHilighted()) ret |= wxLIST_STATE_SELECTED;
         }
     }
     return ret;
