@@ -338,10 +338,11 @@ bool wxButton::SetForegroundColour(const wxColour &colour)
    The button frame looks like this normally:
 
    WWWWWWWWWWWWWWWWWWB
-   W                GB
-   W                GB
-   W                GB  where W, G, B are white, grey and black pixels
-   W                GB
+   WHHHHHHHHHHHHHHHHGB  W = white       (HILIGHT)
+   WH               GB  H = light grey  (LIGHT)
+   WH               GB  G = dark grey   (SHADOW)
+   WH               GB  B = black       (DKSHADOW)
+   WH               GB
    WGGGGGGGGGGGGGGGGGB
    BBBBBBBBBBBBBBBBBBB
 
@@ -350,8 +351,9 @@ bool wxButton::SetForegroundColour(const wxColour &colour)
 
    BBBBBBBBBBBBBBBBBBB
    BWWWWWWWWWWWWWWWWBB
-   BW              GBB
-   BW              GBB
+   BWHHHHHHHHHHHHHHGBB
+   BWH             GBB
+   BWH             GBB
    BWGGGGGGGGGGGGGGGBB
    BBBBBBBBBBBBBBBBBBB
    BBBBBBBBBBBBBBBBBBB
@@ -360,6 +362,7 @@ bool wxButton::SetForegroundColour(const wxColour &colour)
 
    BBBBBBBBBBBBBBBBBBB
    BGGGGGGGGGGGGGGGGGB
+   BG               GB
    BG               GB
    BG               GB
    BG               GB
@@ -373,9 +376,10 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
     RECT r;
     CopyRect(&r, &rectBtn);
 
-    HPEN hpenBlack = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DDKSHADOW)),
-         hpenGrey = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW)),
-         hpenWhite = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
+    HPEN hpenBlack   = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DDKSHADOW)),
+         hpenGrey    = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DSHADOW)),
+         hpenLightGr = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DLIGHT)),
+         hpenWhite   = CreatePen(PS_SOLID, 1, GetSysColor(COLOR_3DHILIGHT));
 
     HPEN hpenOld = (HPEN)SelectObject(hdc, hpenBlack);
 
@@ -409,6 +413,11 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
         LineTo(hdc, r.left, r.top);
         LineTo(hdc, r.right, r.top);
 
+        (void)SelectObject(hdc, hpenLightGr);
+        MoveToEx(hdc, r.left + 1, r.bottom - 2, NULL);
+        LineTo(hdc, r.left + 1, r.top + 1);
+        LineTo(hdc, r.right - 1, r.top + 1);
+
         (void)SelectObject(hdc, hpenGrey);
         MoveToEx(hdc, r.left + 1, r.bottom - 1, NULL);
         LineTo(hdc, r.right - 1, r.bottom - 1);
@@ -417,6 +426,7 @@ static void DrawButtonFrame(HDC hdc, const RECT& rectBtn,
 
     (void)SelectObject(hdc, hpenOld);
     DeleteObject(hpenWhite);
+    DeleteObject(hpenLightGr);
     DeleteObject(hpenGrey);
     DeleteObject(hpenBlack);
 }
