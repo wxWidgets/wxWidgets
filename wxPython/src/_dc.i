@@ -1267,7 +1267,8 @@ public:
         as the bitmap doesn't have to be recreated each time but it
         also requires more memory as the bitmap is never freed. The
         bitmap should have appropriate size, anything drawn outside of
-        its bounds is clipped.
+        its bounds is clipped.  If wx.NullBitmap is used then a new
+        buffer will be allocated that is the same size as the dc.
 
     :param style: The style parameter indicates whether the supplied buffer is
         intended to cover the entire virtual size of a `wx.ScrolledWindow` or
@@ -1275,17 +1276,19 @@ public:
         ``wx.BUFFER_VIRTUAL_AREA`` and ``wx.BUFFER_CLIENT_AREA``.
 
 ");
-    wxBufferedDC( wxDC *dc, const wxBitmap &buffer, int style = wxBUFFER_CLIENT_AREA );
-    wxBufferedDC( wxDC *dc, const wxSize &area, int style = wxBUFFER_CLIENT_AREA );
-    
+    wxBufferedDC( wxDC* dc,
+                  const wxBitmap& buffer=wxNullBitmap,
+                  int style = wxBUFFER_CLIENT_AREA );
+    wxBufferedDC( wxDC* dc,
+                  const wxSize& area,
+                  int style = wxBUFFER_CLIENT_AREA );
 
-    
     DocCtorStr(
         ~wxBufferedDC(),
         "Copies everything drawn on the DC so far to the underlying DC
 associated with this object, if any.", "");
     
-    
+   
     DocDeclStr(
         void , UnMask(),
         "Blits the buffer to the dc, and detaches the dc from the buffer (so it

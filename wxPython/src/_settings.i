@@ -165,7 +165,7 @@ public:
     static wxFont GetFont(wxSystemFont index);
 
     // get a system-dependent metric
-    static int GetMetric(wxSystemMetric index);
+    static int GetMetric(wxSystemMetric index, wxWindow* win=NULL);
 
     // return True if the port has certain feature
     static bool HasFeature(wxSystemFeature index);

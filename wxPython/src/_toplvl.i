@@ -50,6 +50,9 @@ enum
     wxFRAME_NO_TASKBAR,
     wxFRAME_SHAPED,
     wxFRAME_DRAWER,
+
+    wxFRAME_EX_METAL,
+    wxDIALOG_EX_METAL,
     
     // Obsolete
     wxDIALOG_MODAL,
