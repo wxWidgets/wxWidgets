@@ -124,6 +124,25 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             break;
 
 #if !defined(__WIN16__) && !defined(__WXMICROWIN__)
+
+        // The following four fonts are multi-byte charsets
+        case wxFONTENCODING_CP932:
+            info->charset = SHIFTJIS_CHARSET;
+            break;
+
+        case wxFONTENCODING_CP936:
+            info->charset = GB2312_CHARSET;
+            break;
+
+        case wxFONTENCODING_CP949:
+            info->charset = HANGUL_CHARSET;
+            break;
+
+        case wxFONTENCODING_CP950:
+            info->charset = CHINESEBIG5_CHARSET;
+            break;
+
+        // The rest are single byte encodings
         case wxFONTENCODING_CP1250:
             info->charset = EASTEUROPE_CHARSET;
             break;
@@ -155,6 +174,8 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
         case wxFONTENCODING_CP874:
             info->charset = THAI_CHARSET;
             break;
+
+
 #endif // !Win16
 
         case wxFONTENCODING_CP437:
@@ -245,6 +266,23 @@ wxFontEncoding wxGetFontEncFromCharSet(int cs)
         case THAI_CHARSET:
             fontEncoding = wxFONTENCODING_CP437;
             break;
+
+        case SHIFTJIS_CHARSET:
+            fontEncoding = wxFONTENCODING_CP932;
+            break;
+
+        case GB2312_CHARSET:
+            fontEncoding = wxFONTENCODING_CP936;
+            break;
+
+        case HANGUL_CHARSET:
+            fontEncoding = wxFONTENCODING_CP949;
+            break;
+
+        case CHINESEBIG5_CHARSET:
+            fontEncoding = wxFONTENCODING_CP950;
+            break;
+
 #endif // Win32
 
         case OEM_CHARSET:

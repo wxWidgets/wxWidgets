@@ -63,6 +63,10 @@ All (GUI):
 - wxDirSelector() added (Paul A. Thiessen)
 - wxGrid cell editing veto support (Roger Gammans)
 
+wxMSW:
+
+- support for the DBCS fonts (CP 932, 936, 949, 950) (Nathan Cook)
+
 wxHTML:
 
 - new HTML parser with correct parsing of character entities and fixes
