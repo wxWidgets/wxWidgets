@@ -51,9 +51,6 @@ bool wxSpinButton::Create(
 
     SetParent(parent);
 
-    m_min = 0;
-    m_max = 100;
-
     m_windowId = (id == -1) ? NewControlId() : id;
 
     // TODO create spin button
@@ -150,7 +147,7 @@ bool wxSpinButton::OS2OnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return FALSE;
 }
 
-bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)
+bool wxSpinButton::OS2Command(WXUINT cmd, WXWORD id)
 {
     // No command messages
     return FALSE;

@@ -41,9 +41,13 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-    m_messageBitmap = bitmap;
+    Init();
+
     SetName(name);
     if (parent) parent->AddChild(this);
+
+    m_backgroundColour = parent->GetBackgroundColour() ;
+    m_foregroundColour = parent->GetForegroundColour() ;
 
     if ( id == -1 )
         m_windowId = (int)NewControlId();
@@ -52,7 +56,27 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
 
     m_windowStyle = style;
 
+    int x = pos.x;
+    int y = pos.y;
+    int width = size.x;
+    int height = size.y;
+
+    m_windowStyle = style;
+
+    m_isIcon = bitmap.IsKindOf(CLASSINFO(wxIcon));
+
     // TODO: create static bitmap control
+    wxCHECK_MSG( m_hWnd, FALSE, wxT("Failed to create static bitmap") );
+
+    SetBitmap(bitmap);
+
+    // Subclass again for purposes of dialog editing mode
+    SubclassWin(m_hWnd);
+
+    SetFont(GetParent()->GetFont());
+
+    SetSize(x, y, width, height);
+
     return FALSE;
 }
 

@@ -27,6 +27,7 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
+#endif
 
 // Slider
 wxSlider::wxSlider()
@@ -140,6 +141,7 @@ bool wxSlider::OS2OnScroll(int WXUNUSED(orientation), WXWORD wParam,
         return TRUE;
     }
 */
+    int       newPos = 0; //temporary
     SetValue(newPos);
 
     wxScrollEvent event(scrollEvent, m_windowId);

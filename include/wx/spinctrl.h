@@ -52,6 +52,8 @@ protected:
 
 #if defined(__WXMSW__) && defined(__WIN32__)
     #include "wx/msw/spinctrl.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/spinctrl.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/spinctrl.h"
 #else // Win16 || !Win

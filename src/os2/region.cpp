@@ -44,8 +44,11 @@ public:
         // TODO
 
     }
+
+    HRGN m_region;
 };
 
+#define M_REGION (((wxRegionRefData*)m_refData)->m_region)
 
 //-----------------------------------------------------------------------------
 // wxRegion
@@ -224,11 +227,12 @@ bool wxRegion::Empty() const
 // Does the region contain the point (x,y)?
 wxRegionContain wxRegion::Contains(long x, long y) const
 {
+    bool    bOK = FALSE; // temporary
     if (!m_refData)
         return wxOutRegion;
 
     // TODO. Return wxInRegion if within region.
-    if (0)
+    if (bOK)
         return wxInRegion;
     return wxOutRegion;
 }
@@ -236,11 +240,12 @@ wxRegionContain wxRegion::Contains(long x, long y) const
 // Does the region contain the point pt?
 wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 {
+    bool    bOK = FALSE; // temporary
     if (!m_refData)
         return wxOutRegion;
 
     // TODO. Return wxInRegion if within region.
-    if (0)
+    if (bOK)
         return wxInRegion;
     else
         return wxOutRegion;
@@ -249,11 +254,12 @@ wxRegionContain wxRegion::Contains(const wxPoint& pt) const
 // Does the region contain the rectangle (x, y, w, h)?
 wxRegionContain wxRegion::Contains(long x, long y, long w, long h) const
 {
+    bool    bOK = FALSE; // temporary
     if (!m_refData)
         return wxOutRegion;
 
     // TODO. Return wxInRegion if within region.
-    if (0)
+    if (bOK)
         return wxInRegion;
     else
         return wxOutRegion;

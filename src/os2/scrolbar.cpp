@@ -43,7 +43,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     parent->AddChild(this);
     SetName(name);
     SetValidator(validator);
-    
+
     SetBackgroundColour(parent->GetBackgroundColour()) ;
     SetForegroundColour(parent->GetForegroundColour()) ;
     m_windowStyle = style;
@@ -82,6 +82,8 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
     SetFont(parent->GetFont());
 
     m_hWnd = 0; // TODO: (WXHWND)scroll_bar;
+
+    HWND scroll_bar = 0; // temporary
 
     // Subclass again for purposes of dialog editing mode
     SubclassWin((WXHWND) scroll_bar);

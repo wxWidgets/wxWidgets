@@ -34,7 +34,7 @@ END_EVENT_TABLE()
 /*
  * Group box
  */
- 
+
 bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            const wxString& label,
            const wxPoint& pos,
@@ -178,6 +178,8 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
 
 MRESULT wxStaticBox::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
+    // TODO:
+/*
     if ( nMsg == WM_NCHITTEST)
     {
         int xPos = LOWORD(lParam);  // horizontal position of cursor
@@ -190,6 +192,7 @@ MRESULT wxStaticBox::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLP
         if (yPos < 10)
             return (long)HTCLIENT;
     }
+*/
 
     return wxControl::OS2WindowProc(hwnd, nMsg, wParam, lParam);
 }
