@@ -31,6 +31,8 @@ libwx_motif_la_SOURCES = \
  extended.c \
  parser.c \
  xmcombo.c \
+ gsocket.c \
+ gsockmot.cpp \
 \
  cmndata.cpp \
  dynarray.cpp \
@@ -90,7 +92,6 @@ libwx_motif_la_SOURCES = \
  resource.cpp \
  sckaddr.cpp \
  sckfile.cpp \
- sckint.cpp \
  sckipc.cpp \
  sckstrm.cpp \
  serbase.cpp \

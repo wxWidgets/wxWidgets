@@ -1,3 +1,10 @@
+/* -------------------------------------------------------------------------
+ * Project: GSocket (Generic Socket) for WX
+ * Name:    gsockgtk.c
+ * Purpose: GSocket: GTK part
+ * CVSID:   $Id$
+ * -------------------------------------------------------------------------
+ */
 #include <stdlib.h>
 #include <gdk/gdk.h>
 #include <glib.h>

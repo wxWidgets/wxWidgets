@@ -3,22 +3,6 @@
  * Name:    gsocket.c
  * Purpose: GSocket main Unix file
  * CVSID:   $Id$
- * Log:     $Log$
- * Log:     Revision 1.2  1999/07/23 09:48:31  KB
- * Log:     Fixed stupid new bugs :-(
- * Log:
- * Log:     Revision 1.1  1999/07/22 17:51:54  GL
- * Log:     Added GSocket for Unix (only GTK for the moment)
- * Log:     Updated wxSocket to use GSocket API
- * Log:     Added a progress bar to client.cpp
- * Log:     Added CopyTo to wxMemoryOutputStream to copy the internal buffer to a specified buffer.
- * Log:     Various changes/fixes to the high-level protocols FTP/HTTP
- * Log:     Various Unicode fixes
- * Log:     Removed sckint.*
- * Log:
- * Log:     Revision 1.2  1999/07/18 15:52:34  guilhem
- * Log:     * Copyright, etc.
- * Log:
  * -------------------------------------------------------------------------
  */
 
@@ -89,10 +73,10 @@ void GSocket_destroy(GSocket *socket)
 {
   assert(socket != NULL);
 
-  _GSocket_GUI_Destroy(socket);
-
   if (socket->m_fd != -1)
     GSocket_Shutdown(socket);
+
+  _GSocket_GUI_Destroy(socket);
 
   if (socket->m_local)
     GAddress_destroy(socket->m_local);

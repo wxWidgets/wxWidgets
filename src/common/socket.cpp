@@ -83,7 +83,7 @@ wxSocketBase::wxSocketBase(wxSocketBase::wxSockFlags _flags,
 
 wxSocketBase::wxSocketBase() :
   wxEvtHandler(),
-  m_socket(NULL), m_flags((wxSockFlags)SPEED | WAITALL), m_type(SOCK_UNINIT),
+  m_socket(NULL), m_flags(SPEED | WAITALL), m_type(SOCK_UNINIT),
   m_neededreq(GSOCK_INPUT_FLAG | GSOCK_LOST_FLAG),
   m_lcount(0), m_timeout(3600),
   m_unread(NULL), m_unrd_size(0), m_unrd_cur(0),
@@ -413,7 +413,7 @@ void wxSocketBase::Discard()
   size_t recv_size = MAX_BUFSIZE;
 
   SaveState();
-  SetFlags((wxSockFlags)(NOWAIT | SPEED));
+  SetFlags(NOWAIT | SPEED);
 
   while (recv_size == MAX_BUFSIZE) 
   {

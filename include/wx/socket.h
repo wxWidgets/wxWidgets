@@ -39,7 +39,8 @@ class WXDLLEXPORT wxSocketBase : public wxEvtHandler
   DECLARE_CLASS(wxSocketBase)
 public:
 
-  enum wxSockFlags { NONE=0, NOWAIT=1, WAITALL=2, SPEED=4 };
+  enum { NONE=0, NOWAIT=1, WAITALL=2, SPEED=4 };
+  typedef int wxSockFlags;
   // Type of request
 
   enum wxSockType { SOCK_CLIENT, SOCK_SERVER, SOCK_INTERNAL, SOCK_UNINIT }; 

@@ -3,19 +3,6 @@
  * Name:    gsocket.h
  * Purpose: GSocket include file (system independent)
  * CVSID:   $Id$
- * Log:     $Log$
- * Log:     Revision 1.1  1999/07/22 17:51:47  GL
- * Log:     Added GSocket for Unix (only GTK for the moment)
- * Log:     Updated wxSocket to use GSocket API
- * Log:     Added a progress bar to client.cpp
- * Log:     Added CopyTo to wxMemoryOutputStream to copy the internal buffer to a specified buffer.
- * Log:     Various changes/fixes to the high-level protocols FTP/HTTP
- * Log:     Various Unicode fixes
- * Log:     Removed sckint.*
- * Log:
- * Log:     Revision 1.2  1999/07/18 15:54:28  guilhem
- * Log:     Copyright, etc.
- * Log:
  * -------------------------------------------------------------------------
  */
 #ifndef __GSOCKET_H

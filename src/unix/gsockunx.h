@@ -1,3 +1,10 @@
+/* -------------------------------------------------------------------------
+ * Project: GSocket (Generic Socket) for WX
+ * Name:    gsockunx.h
+ * Purpose: GSocket Unix header
+ * CVSID:   $Id$
+ * -------------------------------------------------------------------------
+ */
 #ifndef __GSOCK_UNX_H
 #define __GSOCK_UNX_H
 
