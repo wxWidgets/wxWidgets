@@ -940,7 +940,7 @@ class wxGridCellCoordsPtr :
         return "<C wxGridCellCoords instance at %s>" % (self.this,)
     
     def __str__(self):                   return str(self.asTuple())
-    def __repr__(self):                  return str(self.asTuple())
+    def __repr__(self):                  return 'wxGridCellCoords'+str(self.asTuple())
     def __len__(self):                   return len(self.asTuple())
     def __getitem__(self, index):        return self.asTuple()[index]
     def __setitem__(self, index, val):
