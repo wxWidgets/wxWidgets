@@ -129,8 +129,12 @@ void *dlsym(void *handle, const char *symbol)
     // as on many other systems, C symbols have prepended underscores under
     // Darwin but unlike the normal dlopen(), NSLookupSymbolInModule() is not
     // aware of this
-    NSSymbol nsSymbol = NSLookupSymbolInModule( handle,
-                                                wxString(_T('_')) + symbol );
+    wxCharBuffer buf(strlen(symbol) + 1);
+    char *p = buf.data();
+    p[0] = '_';
+    strcpy(p + 1, symbol);
+
+    NSSymbol nsSymbol = NSLookupSymbolInModule( handle, p );
     return nsSymbol ? NSAddressOfSymbol(nsSymbol) : NULL;
 }
 
