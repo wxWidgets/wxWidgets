@@ -64,6 +64,7 @@ enum wxThreadState
 
 static ThreadID gs_idMainThread = kNoThreadID ;
 static bool gs_waitingForThread = FALSE ;
+size_t g_numberOfThreads = 0;
 
 // ============================================================================
 // MacOS implementation of thread classes
@@ -531,7 +532,7 @@ void wxThread::Sleep(unsigned long milliseconds)
     do
     {
         YieldToAnyThread();
-    } while( clock() - start < milliseconds /  1000.0 * CLOCKS_PER_SEC ) ;
+    } while( clock() - start < milliseconds * CLOCKS_PER_SEC /  1000.0 ) ;
 }
 
 int wxThread::GetCPUCount()
@@ -571,6 +572,7 @@ bool wxThread::SetConcurrency(size_t level)
 
 wxThread::wxThread(wxThreadKind kind)
 {
+    g_numberOfThreads++;
     m_internal = new wxThreadInternal();
 
     m_isDetached = kind == wxTHREAD_DETACHED;
@@ -579,6 +581,17 @@ wxThread::wxThread(wxThreadKind kind)
 
 wxThread::~wxThread()
 {
+    if (g_numberOfThreads>0)
+    {
+        g_numberOfThreads--;
+    }
+#ifdef __WXDEBUG__
+    else
+    {
+        wxFAIL_MSG(wxT("More threads deleted than created."));
+    }
+#endif
+
     s_threads.Remove( (void*) this ) ;
     if (m_internal != NULL) {
         delete m_internal;

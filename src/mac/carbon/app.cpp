@@ -69,6 +69,7 @@
 extern wxList wxPendingDelete;
 extern wxList *wxWinMacWindowList;
 extern wxList *wxWinMacControlList;
+extern size_t g_numberOfThreads;
 
 // statics for implementation
 
@@ -1250,7 +1251,16 @@ void wxApp::MacDoOneEvent()
         if ( wxTheApp->ProcessIdle() )
             sleepTime = kEventDurationNoWait ;
         else
-            sleepTime = kEventDurationForever ;
+        {
+            if (g_numberOfThreads)
+            {
+                sleepTime = kEventDurationNoWait;
+            }
+            else
+            {
+                sleepTime = kEventDurationSecond;
+            }
+        }
     }
     else if ( status == eventLoopQuitErr )
     {
@@ -1284,7 +1294,16 @@ void wxApp::MacDoOneEvent()
         if ( wxTheApp->ProcessIdle() )
             sleepTime = kEventDurationNoWait;
         else
-            sleepTime = GetCaretTime() / 2 ;
+        {
+            if (g_numberOfThreads)
+            {
+                sleepTime = kEventDurationNoWait;
+            }
+            else
+            {
+                sleepTime = kEventDurationSecond;
+            }
+        }
     }
     if ( event.what != kHighLevelEvent )
         SetRectRgn( (RgnHandle) s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
