@@ -29,6 +29,7 @@
 #include <wx/fontenum.h>
 #include <wx/fontmap.h>
 #include <wx/encconv.h>
+#include <wx/splitter.h>
 #include <wx/textfile.h>
 
 // ----------------------------------------------------------------------------
@@ -98,8 +99,6 @@ public:
 
     void OnCheckNativeToFromString(wxCommandEvent& event);
 
-    void OnSize(wxSizeEvent& event);
-
 protected:
     bool DoEnumerateFamilies(bool fixedWidthOnly,
                              wxFontEncoding encoding = wxFONTENCODING_SYSTEM,
@@ -107,8 +106,6 @@ protected:
 
     void DoResizeFont(int diff);
     void DoChangeFont(const wxFont& font, const wxColour& col = wxNullColour);
-
-    void Resize(const wxSize& size, const wxFont& font = wxNullFont);
 
     size_t      m_fontSize; // in points
 
@@ -161,8 +158,6 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_EnumFixedFamilies, MyFrame::OnEnumerateFixedFamilies)
     EVT_MENU(Font_EnumEncodings, MyFrame::OnEnumerateEncodings)
     EVT_MENU(Font_CheckNativeToFromString, MyFrame::OnCheckNativeToFromString)
-
-    EVT_SIZE(MyFrame::OnSize)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -244,13 +239,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
 
-    m_textctrl = new wxTextCtrl(this, -1,
+    wxSplitterWindow *splitter = new wxSplitterWindow(this);
+
+    m_textctrl = new wxTextCtrl(splitter, -1,
                                 "Paste text here to see how it looks\n"
                                 "like in the given font",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE);
 
-    m_canvas = new MyCanvas(this);
+    m_canvas = new MyCanvas(splitter);
+
+    splitter->SplitHorizontally(m_textctrl, m_canvas, 100);
 
     // create a status bar just for fun (by default with 1 pane only)
     CreateStatusBar();
@@ -451,8 +450,6 @@ void MyFrame::DoResizeFont(int diff)
 
 void MyFrame::DoChangeFont(const wxFont& font, const wxColour& col)
 {
-    Resize(GetClientSize(), font);
-
     m_canvas->SetTextFont(font);
     if ( col.Ok() )
         m_canvas->SetColour(col);
@@ -609,35 +606,6 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxOK | wxICON_INFORMATION, this);
 }
 
-void MyFrame::OnSize(wxSizeEvent& event)
-{
-    Resize(GetClientSize());
-
-    event.Skip();
-}
-
-void MyFrame::Resize(const wxSize& size, const wxFont& font)
-{
-    if ( !m_textctrl )
-        return;
-
-    wxCoord h;
-    if ( font.Ok() )
-    {
-        wxClientDC dc(this);
-        dc.SetFont(font);
-
-        h = 10*(dc.GetCharHeight() + 1);
-    }
-    else
-    {
-        h = m_textctrl->GetSize().y;
-    }
-
-    m_textctrl->SetSize(0, 0, size.x, h);
-    m_canvas->SetSize(0, h, size.x, size.y - h);
-}
-
 // ----------------------------------------------------------------------------
 // MyCanvas
 // ----------------------------------------------------------------------------
@@ -667,9 +635,11 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // output the font name/info
     wxString fontInfo;
-    fontInfo.Printf(wxT("Font size is %d points, family is %s, style %s, weight %s"),
+    fontInfo.Printf(wxT("Font size is %d points, family is %s, encoding is '%s', style %s, weight %s"),
                     m_font.GetPointSize(),
                     m_font.GetFamilyString().c_str(),
+                    wxTheFontMapper->
+                        GetEncodingDescription(m_font.GetEncoding()).c_str(),
                     m_font.GetStyleString().c_str(),
                     m_font.GetWeightString().c_str());
 
