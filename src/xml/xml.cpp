@@ -604,7 +604,8 @@ inline static void OutputString(wxOutputStream& stream, const wxString& str,
 // Same as above, but create entities first.
 // Translates '<' to "&lt;", '>' to "&gt;" and '&' to "&amp;"
 static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
-                            wxMBConv *convMem, wxMBConv *convFile)
+                            wxMBConv *convMem, wxMBConv *convFile,
+                            bool escapeQuotes = false)
 {
     wxString buf;
     size_t i, last, len;
@@ -616,7 +617,8 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
     {
         c = str.GetChar(i);
         if (c == wxT('<') || c == wxT('>') ||
-            (c == wxT('&') && str.Mid(i+1, 4) != wxT("amp;")))
+            (c == wxT('&') && str.Mid(i+1, 4) != wxT("amp;")) ||
+            (escapeQuotes && c == wxT('"')))
         {
             OutputString(stream, str.Mid(last, i - last), convMem, convFile);
             switch (c)
@@ -629,6 +631,9 @@ static void OutputStringEnt(wxOutputStream& stream, const wxString& str,
                     break;
                 case wxT('&'):
                     OutputString(stream, wxT("&amp;"), NULL, NULL);
+                    break;
+                case wxT('"'):
+                    OutputString(stream, wxT("&quot;"), NULL, NULL);
                     break;
                 default: break;
             }
@@ -665,10 +670,11 @@ static void OutputNode(wxOutputStream& stream, wxXmlNode *node, int indent,
             prop = node->GetProperties();
             while (prop)
             {
-                OutputString(stream, wxT(" ") + prop->GetName() +
-                             wxT("=\"") + prop->GetValue() + wxT("\""),
+                OutputString(stream, wxT(" ") + prop->GetName() +  wxT("=\""),
                              NULL, NULL);
-                // FIXME - what if prop contains '"'?
+                OutputStringEnt(stream, prop->GetValue(), NULL, NULL,
+                                true/*escapeQuotes*/);
+                OutputString(stream, wxT("\""), NULL, NULL);
                 prop = prop->GetNext();
             }
 
