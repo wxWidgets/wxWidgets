@@ -1141,6 +1141,17 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
     static wxPropertyInfo _propertyInfo##name( first , class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
 // ----------------------------------------------------------------------------
+// Implementation Helper for Simple Properties
+// ----------------------------------------------------------------------------
+
+#define WX_IMPLEMENT_PROPERTY(name, type) \
+private:\
+    type m_##name; \
+public: \
+  void  Set##name( type const & p) { m_##name = p; } \
+  type const & Get##name() const  { return m_##name; }
+
+// ----------------------------------------------------------------------------
 // Handler Info
 //
 // this is describing an event sink
