@@ -461,12 +461,9 @@ void wxApp::CleanUp()
     wxDeleteStockObjects();
     wxDeleteStockLists();
 
-    // Can't do this in wxModule, because fonts are needed by stock lists
-    delete wxTheFontsManager;
-    wxTheFontsManager = (wxFontsManager*) NULL;
-
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;
+
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
@@ -477,9 +474,15 @@ void wxApp::CleanUp()
 
     wxSystemSettings::Done();
 
-    delete[] wxBuffer;
-
     wxClassInfo::CleanUpClasses();
+
+    // Can't do this in wxModule, because fonts are needed by stock lists
+    // (do it after deleting wxTheApp and cleaning modules up, since somebody
+    // may be deleting fonts that lately)
+    delete wxTheFontsManager;
+    wxTheFontsManager = (wxFontsManager*) NULL;
+
+    delete[] wxBuffer;
 
     // check for memory leaks
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
