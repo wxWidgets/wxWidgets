@@ -223,11 +223,13 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
 void __wxCleanup() {
     wxEntryCleanup();
+#ifdef WXP_WITH_THREAD
     delete wxPyTMutex;
     wxPyTMutex = NULL;
     wxPyTStates->Empty();
     delete wxPyTStates;
     wxPyTStates = NULL;
+#endif
 }
 
 
