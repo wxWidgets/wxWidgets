@@ -43,6 +43,9 @@
     #include "wx/log.h"
 #endif
 
+#ifdef __WXMAC__
+    #include "wx/filename.h"
+#endif
 
 #ifdef __WXGTK__
     #include "wx/mdi.h"
@@ -317,6 +320,10 @@ bool wxDocument::OnSaveDocument(const wxString& file)
     Modify(FALSE);
     SetFilename(file);
     SetDocumentSaved(TRUE);
+#ifdef __WXMAC__
+    wxFileName fn(file) ;
+    fn.MacSetDefaultTypeAndCreator() ;
+#endif
     return TRUE;
 }
 
