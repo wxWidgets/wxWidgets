@@ -1883,18 +1883,29 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     int offset = HasFlag(wxTR_ROW_LINES) ? 1 : 0;
 
-    if ( item->IsSelected() && image != NO_IMAGE )
+    if ( HasFlag(wxTR_FULL_ROW_HIGHLIGHT) )
     {
-        // If it's selected, and there's an image, then we should
-        // take care to leave the area under the image painted in the
-        // background colour.
-        dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset,
-                          item->GetWidth() - image_w + 2, total_h-offset );
+        int x, y, w, h;
+
+        DoGetPosition(&x, &y);
+        DoGetSize(&w, &h);
+        dc.DrawRectangle(x, item->GetY()+offset, w, total_h-offset);
     }
     else
     {
-        dc.DrawRectangle( item->GetX()-2, item->GetY()+offset,
-                          item->GetWidth()+2, total_h-offset );
+        if ( item->IsSelected() && image != NO_IMAGE )
+        {
+            // If it's selected, and there's an image, then we should
+            // take care to leave the area under the image painted in the
+            // background colour.
+            dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset,
+                              item->GetWidth() - image_w + 2, total_h-offset );
+        }
+        else
+        {
+            dc.DrawRectangle( item->GetX()-2, item->GetY()+offset,
+                              item->GetWidth()+2, total_h-offset );
+        }
     }
 
     if ( image != NO_IMAGE )
@@ -1963,6 +1974,50 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
 
     if (IsExposed(exposed_x, exposed_y, 10000, h))  // 10000 = very much
     {
+        wxPen *pen =
+#ifndef __WXMAC__
+            // don't draw rect outline if we already have the
+            // background color under Mac
+            (item->IsSelected() && m_hasFocus) ? wxBLACK_PEN :
+#endif // !__WXMAC__
+            wxTRANSPARENT_PEN;
+
+        wxColour colText;
+        if ( item->IsSelected() )
+        {
+            colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
+        }
+        else
+        {
+            wxTreeItemAttr *attr = item->GetAttributes();
+            if (attr && attr->HasTextColour())
+                colText = attr->GetTextColour();
+            else
+                colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
+        }
+
+        // prepare to draw
+        dc.SetTextForeground(colText);
+        dc.SetPen(*pen);
+
+        // draw
+        PaintItem(item, dc);
+
+        if (HasFlag(wxTR_ROW_LINES))
+        {
+            // if the background colour is white, choose a
+            // contrasting color for the lines
+            dc.SetPen(*((GetBackgroundColour() == *wxWHITE)
+                         ? wxMEDIUM_GREY_PEN : wxWHITE_PEN));
+            dc.DrawLine(0, y_top, 10000, y_top);
+            dc.DrawLine(0, y, 10000, y);
+        }
+
+        // restore DC objects
+        dc.SetBrush(*wxWHITE_BRUSH);
+        dc.SetPen(m_dottedPen);
+        dc.SetTextForeground(*wxBLACK);
+
         if (item->HasPlus() && HasButtons())  // should the item show a button?
         {
             if (!HasFlag(wxTR_NO_LINES))
@@ -2069,50 +2124,6 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
                 x_start = 3;
             dc.DrawLine(x_start, y_mid, x + m_spacing, y_mid);
         }
-
-        wxPen *pen =
-#ifndef __WXMAC__
-            // don't draw rect outline if we already have the
-            // background color under Mac
-            (item->IsSelected() && m_hasFocus) ? wxBLACK_PEN :
-#endif // !__WXMAC__
-            wxTRANSPARENT_PEN;
-
-        wxColour colText;
-        if ( item->IsSelected() )
-        {
-            colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-        }
-        else
-        {
-            wxTreeItemAttr *attr = item->GetAttributes();
-            if (attr && attr->HasTextColour())
-                colText = attr->GetTextColour();
-            else
-                colText = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT);
-        }
-
-        // prepare to draw
-        dc.SetTextForeground(colText);
-        dc.SetPen(*pen);
-
-        // draw
-        PaintItem(item, dc);
-
-        if (HasFlag(wxTR_ROW_LINES))
-        {
-            // if the background colour is white, choose a
-            // contrasting color for the lines
-            dc.SetPen(*((GetBackgroundColour() == *wxWHITE)
-                         ? wxMEDIUM_GREY_PEN : wxWHITE_PEN));
-            dc.DrawLine(0, y_top, 10000, y_top);
-            dc.DrawLine(0, y, 10000, y);
-        }
-
-        // restore DC objects
-        dc.SetBrush(*wxWHITE_BRUSH);
-        dc.SetPen(m_dottedPen);
-        dc.SetTextForeground(*wxBLACK);
     }
 
     if (item->IsExpanded())

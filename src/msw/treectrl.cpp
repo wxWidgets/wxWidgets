@@ -47,6 +47,7 @@
 
 #if defined(__WIN95__)
 
+#include "wx/app.h"
 #include "wx/log.h"
 #include "wx/dynarray.h"
 #include "wx/imaglist.h"
@@ -546,6 +547,13 @@ bool wxTreeCtrl::Create(wxWindow *parent,
 
     if ( m_windowStyle & wxTR_LINES_AT_ROOT )
         wstyle |= TVS_LINESATROOT;
+    
+    if ( m_windowStyle & wxTR_FULL_ROW_HIGHLIGHT )
+    {    
+        if ( wxTheApp->GetComCtl32Version() >= 471 )
+            wstyle |= TVS_FULLROWSELECT;
+    }
+
 
     // using TVS_CHECKBOXES for emulation of a multiselection tree control
     // doesn't work without the new enough headers
