@@ -360,6 +360,16 @@ static bool wxIsDriveAvailable(const wxString dirName)
 }
 #endif
 
+// Function which is called by quick sort. We want to override the default wxArrayString behaviour,
+// and sort regardless of case.
+static int LINKAGEMODE wxDirCtrlStringCompareFunction(const void *first, const void *second)
+{
+    wxString *strFirst = (wxString *)first;
+    wxString *strSecond = (wxString *)second;
+    
+    return strFirst->CmpNoCase(*strSecond);
+}
+
 //-----------------------------------------------------------------------------
 // wxDirItemDataEx
 //-----------------------------------------------------------------------------
@@ -743,7 +753,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             while (d.GetNext(& eachFilename)) ;
         }
     }
-    dirs.Sort();
+    dirs.Sort((wxArrayString::CompareFunction) wxDirCtrlStringCompareFunction);
 
     // Now do the filenames -- but only if we're allowed to
     if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
@@ -766,7 +776,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
                 while (d.GetNext(& eachFilename)) ;
             }
         }
-        filenames.Sort();
+        filenames.Sort((wxArrayString::CompareFunction) wxDirCtrlStringCompareFunction);
     }
 
     // Add the sorted dirs
