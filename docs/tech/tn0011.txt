@@ -1,5 +1,5 @@
-All about wxWindows Version Numbers
-===================================
+                 All about wxWindows Version Numbers
+                 ===================================
 
 1. Where to update the version numbers:
 
@@ -30,6 +30,9 @@ All about wxWindows Version Numbers
 Version: $Id$
 
 $Log$
+Revision 1.2  2003/11/18 16:38:48  DS
+Horizontally aligned header (Like other technotes).
+
 Revision 1.1  2001/06/08 04:26:35  RD
 move the tech note to a correctly named file
 
