@@ -2541,10 +2541,10 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         TOOLKIT=PM
         GUIDIST=GTK_DIST
         AC_MSG_WARN([OS/2 PM requires old resource format, re-enabled])
-	wxUSE_PROLOGIO="yes"
-	wxUSE_RESOURCES="yes"
+        wxUSE_PROLOGIO="yes"
+        wxUSE_RESOURCES="yes"
         AC_MSG_WARN([OS/2 threads are not yet supported... disabled])
-	wxUSE_THREADS="no"
+        wxUSE_THREADS="no"
     fi
 
     dnl the name of the directory where the files for this toolkit live
@@ -2927,12 +2927,12 @@ if test "$wxUSE_SHARED" = "yes"; then
 
         PIC_FLAG="-UWXUSINGDLL -DWXMAKINGDLL=1 -D_DLL=1 -D_WINDLL=1"
 
-        dnl install shared libs without symlinks
+        dnl Don't build seperate GL library
+        WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+
         if test "$wxUSE_OPENGL" = "yes"; then
-            WX_ALL_INSTALLED="preinstall_gl"
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED} \$(build_libdir)/${WX_LIBRARY_NAME_SHARED_GL}"
-        else
-            WX_ALL="\$(build_libdir)/${WX_LIBRARY_NAME_SHARED}"
+            LIBS="${LIBS} ${OPENGL_LIBS}"
         fi
       ;;
 
