@@ -216,6 +216,10 @@ class ListCtrlAutoWidthMixin:
             or calculated a minimum width.  This ensure that repeated calls to
             _doResize() don't cause the last column to size itself too large.
         """
+        
+        if not self:  # avoid a PyDeadObject error
+            return
+        
         numCols = self.GetColumnCount()
         if numCols == 0: return # Nothing to resize.
 
