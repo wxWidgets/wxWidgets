@@ -1187,7 +1187,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     }
 #endif
     if (return_after_IM)
-        return true;
+        return false;
 
 #ifndef __WXGTK20__     
     // This is for GTK+ 1.2 only. The char event generatation for GTK+ 2.0 is done
