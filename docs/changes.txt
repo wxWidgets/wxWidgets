@@ -16,6 +16,10 @@ OTHER CHANGES
 2.2.6
 -----
 
+All:
+
+- bug in wxDocMDIParentFrame::OnMRUFile() fixed
+
 wxMSW:
 
 - wxChoice sizing bug introduced in 2.2.5 fixed (oops) and calculating of
