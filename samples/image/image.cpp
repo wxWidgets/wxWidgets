@@ -140,12 +140,8 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   dc.SetBrush( wxBrush( "orange", wxSOLID ) );
   dc.SetPen( *wxWHITE_PEN );
   dc.DrawRectangle( 150, 120, 100, 100 );
-<<<<<<< image.cpp
 #endif
-  
-=======
 
->>>>>>> 1.11
   if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 240 );
 }
 
