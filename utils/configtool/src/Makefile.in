@@ -15,13 +15,13 @@ program_dir = utils/configtool/src
 
 PROGRAM=wxconfigtool
 
-OBJECTS = wxconfigtool.o appsettings.o configitem.o configitemselector.o configtooldoc.o \
- configtoolview.o configtree.o custompropertydialog.o htmlparser.o mainframe.o \
- propeditor.o property.o settingsdialog.o utils.o
+OBJECTS = wxconfigtool.o appsettings.o configitem.o configitemselector.o \
+ configtooldoc.o configtoolview.o configtree.o custompropertydialog.o \
+ htmlparser.o mainframe.o propeditor.o property.o settingsdialog.o utils.o
 
-DEPFILES=wxconfigtool.d appsettings.d configitem.d configitemselector.d configtooldoc.d \
- configtoolview.d configtree.d custompropertydialog.d htmlparser.d mainframe.d \
- propeditor.d property.d settingsdialog.o utils.d
+DEPFILES=wxconfigtool.d appsettings.d configitem.d configitemselector.d
+ configtooldoc.d configtoolview.d configtree.d custompropertydialog.d \
+ htmlparser.d mainframe.d propeditor.d property.d settingsdialog.d utils.d
 
 include ../../../src/makeprog.env
 
