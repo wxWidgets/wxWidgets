@@ -141,5 +141,68 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
 #define MAC_WXRECPTR(a) ((Rect*)a)
 #define MAC_WXPOINTPTR(a) ((Point*)a)
 #define MAC_WXHMENU(a) ((MenuHandle)a)
+
+#if TARGET_CARBON
+
+class wxMacCFStringHolder                                                             
+{                                                                           
+public:      
+	wxMacCFStringHolder()
+	{
+    	m_cfs = NULL ;
+    	m_release = false ;                                                                 
+	}
+	                                                               
+    wxMacCFStringHolder(const wxString &str)                                          
+    {      
+    	m_cfs = NULL ;
+    	m_release = false ;  
+    	Assign( str ) ;                                                               
+    }                                                                       
+                                                                            
+    wxMacCFStringHolder(CFStringRef ref , bool release = true )                                                   
+    {                                                                       
+        m_cfs = ref ;
+        m_release = release ;                                           
+    }                                                                       
+                                                                            
+    ~wxMacCFStringHolder() 
+    { 
+    	Release() ;
+    }                                           
+      
+    wxMacCFStringHolder& operator=(const wxString& str)                               
+    {                                                                       
+        Release() ;                                                        
+		Assign( str ) ;
+        return *this;                                                       
+    }                                                                       
+             
+    CFStringRef Detach()
+    {
+    	CFStringRef retval = m_cfs ;
+    	m_release = false ;
+    	m_cfs = NULL ;
+    	return retval ;
+    }         
+                                                                   
+    void Release()
+    {
+    	if ( m_release && m_cfs)
+    		CFRelease( m_cfs ) ;
+    	m_cfs = NULL ;
+    }         
+
+    operator CFStringRef () { return m_cfs; }   
+    wxString AsString() ;
+             
+private:             
+	void Assign( const wxString &str ) ;
+    	                                                       
+    CFStringRef m_cfs;
+    bool m_release ;                                                        
+} ;
+#endif
+
 #endif
     // _WX_PRIVATE_H_
