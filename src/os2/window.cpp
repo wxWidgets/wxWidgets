@@ -2543,6 +2543,48 @@ MRESULT wxWindowOS2::OS2WindowProc(
             }
             break;
 
+        case WM_CONTROL:
+            switch(SHORT2FROMMP(wParam))
+            {
+                case SPBN_UPARROW:
+                case SPBN_DOWNARROW:
+                case SPBN_CHANGE:
+                    {
+                        char        zVal[10];
+                        long        lVal;
+
+                        ::WinSendMsg( HWNDFROMMP(lParam)
+                                     ,SPBM_QUERYVALUE
+                                     ,&zVal
+                                     ,MPFROM2SHORT( (USHORT)10
+                                                   ,(USHORT)SPBQ_UPDATEIFVALID
+                                                  )
+                                    );
+                        lVal = atol(zVal);
+                        bProcessed = OS2OnScroll( wxVERTICAL
+                                                 ,(int)SHORT2FROMMP(wParam)
+                                                 ,(int)lVal
+                                                 ,HWNDFROMMP(lParam)
+                                                );
+                    }
+                    break;
+
+                case SLN_SLIDERTRACK:
+                    {
+                        HWND                hWnd = ::WinWindowFromID(GetHWND(), SHORT1FROMMP(wParam));
+                        wxWindowOS2*        pChild = wxFindWinFromHandle(hWnd);
+
+                        if (pChild->IsKindOf(CLASSINFO(wxSlider)))
+                            bProcessed = OS2OnScroll( wxVERTICAL
+                                                     ,(int)SHORT2FROMMP(wParam)
+                                                     ,(int)LONGFROMMP(lParam)
+                                                     ,hWnd
+                                                    );
+                    }
+                    break;
+            }
+            break;
+
 #if defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
         case WM_CTLCOLORCHANGE:
             {

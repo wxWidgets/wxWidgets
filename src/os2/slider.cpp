@@ -27,443 +27,998 @@
 
 IMPLEMENT_DYNAMIC_CLASS(wxSlider, wxControl)
 
-// Slider
 wxSlider::wxSlider()
 {
-  m_staticValue = 0;
-  m_staticMin = 0;
-  m_staticMax = 0;
-  m_pageSize = 1;
-  m_lineSize = 1;
-  m_rangeMax = 0;
-  m_rangeMin = 0;
-  m_tickFreq = 0;
-}
-
-bool wxSlider::Create(wxWindow *parent, wxWindowID id,
-           int value, int minValue, int maxValue,
-           const wxPoint& pos,
-           const wxSize& size, long style,
-#if wxUSE_VALIDATORS
-           const wxValidator& validator,
-#endif
-           const wxString& name)
-{
-    SetName(name);
-#if wxUSE_VALIDATORS
-    SetValidator(validator);
-#endif
-
-    if (parent) parent->AddChild(this);
-
-    m_lineSize = 1;
-    m_windowStyle = style;
-    m_tickFreq = 0;
-
-    if ( id == -1 )
-  	    m_windowId = (int)NewControlId();
-    else
-	    m_windowId = id;
-
-    m_rangeMax = maxValue;
-    m_rangeMin = minValue;
-
-    m_pageSize = (int)((maxValue-minValue)/10);
-
-    // TODO create slider
-
-    return FALSE;
-}
-
-bool wxSlider::OS2OnScroll(int WXUNUSED(orientation), WXWORD wParam,
-                           WXWORD pos, WXHWND control)
-{
-    int position = 0; // Dummy - not used in this mode
-
-    int nScrollInc;
-    wxEventType scrollEvent = wxEVT_NULL;
-// TODO:
-/*
-    switch ( wParam )
-    {
-        case SB_TOP:
-            nScrollInc = m_rangeMax - position;
-            scrollEvent = wxEVT_SCROLL_TOP;
-            break;
-
-        case SB_BOTTOM:
-            nScrollInc = - position;
-            scrollEvent = wxEVT_SCROLL_BOTTOM;
-            break;
-
-        case SB_LINEUP:
-            nScrollInc = - GetLineSize();
-            scrollEvent = wxEVT_SCROLL_LINEUP;
-            break;
-
-        case SB_LINEDOWN:
-            nScrollInc = GetLineSize();
-            scrollEvent = wxEVT_SCROLL_LINEDOWN;
-            break;
-
-        case SB_PAGEUP:
-            nScrollInc = -GetPageSize();
-            scrollEvent = wxEVT_SCROLL_PAGEUP;
-            break;
-
-        case SB_PAGEDOWN:
-            nScrollInc = GetPageSize();
-            scrollEvent = wxEVT_SCROLL_PAGEDOWN;
-            break;
-
-        case SB_THUMBTRACK:
-        case SB_THUMBPOSITION:
-#ifdef __WIN32__
-            nScrollInc = (signed short)pos - position;
-#else // Win16
-            nScrollInc = pos - position;
-#endif // Win32/16
-            scrollEvent = wxEVT_SCROLL_THUMBTRACK;
-            break;
-
-        default:
-            nScrollInc = 0;
-    }
-
-    if ( nScrollInc == 0 )
-    {
-        // no event...
-        return FALSE;
-    }
-
-    int newPos = (int)::SendMessage((HWND) control, TBM_GETPOS, 0, 0);
-    if ( (newPos < GetMin()) || (newPos > GetMax()) )
-    {
-        // out of range - but we did process it
-        return TRUE;
-    }
-*/
-    int       newPos = 0; //temporary
-    SetValue(newPos);
-
-    wxScrollEvent event(scrollEvent, m_windowId);
-    event.SetPosition(newPos);
-    event.SetEventObject( this );
-    GetEventHandler()->ProcessEvent(event);
-
-    wxCommandEvent cevent( wxEVT_COMMAND_SLIDER_UPDATED, GetId() );
-    cevent.SetEventObject( this );
-
-    return GetEventHandler()->ProcessEvent( cevent );
-}
+    m_hStaticValue = 0L;
+    m_hStaticMin   = 0L;
+    m_hStaticMax   = 0L;
+    m_nPageSize    = 1;
+    m_nLineSize    = 1;
+    m_nRangeMax    = 0;
+    m_nRangeMin    = 0;
+    m_nTickFreq    = 0;
+} // end of wxSlider::wxSlider
 
 wxSlider::~wxSlider()
 {
-    // TODO:
-}
-
-int wxSlider::GetValue() const
-{
-    // TODO
-    return 0;
-}
-
-void wxSlider::SetValue(int value)
-{
-    // TODO
-}
-
-void wxSlider::GetSize(int *width, int *height) const
-{
-    // TODO
-}
-
-void wxSlider::GetPosition(int *x, int *y) const
-{
-    // TODO
-}
-
-// TODO one day, make sense of all this horros and replace it with a readable
-//      DoGetBestSize()
-void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-  int x1 = x;
-  int y1 = y;
-  int w1 = width;
-  int h1 = height;
-
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  if (x == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    x1 = currentX;
-  if (y == -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-    y1 = currentY;
-
-// TODO:
-/*
-
-  AdjustForParentClientOrigin(x1, y1, sizeFlags);
-
-  wxChar buf[300];
-
-  int x_offset = x;
-  int y_offset = y;
-
-  int cx;     // slider,min,max sizes
-  int cy;
-  int cyf;
-
-  wxGetCharSize(GetHWND(), &cx, &cy, & this->GetFont());
-
-  if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
-  {
-    if ( m_windowStyle & wxSL_LABELS )
-    {
-    int min_len = 0;
-
-    GetWindowText((HWND) m_staticMin, buf, 300);
-    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
-
-    int max_len = 0;
-
-    GetWindowText((HWND) m_staticMax, buf, 300);
-    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
-    if (m_staticValue)
-    {
-      int new_width = (int)(wxMax(min_len, max_len));
-      int valueHeight = (int)cyf;
-#ifdef __WIN32__
-      // For some reason, under Win95, the text edit control has
-      // a lot of space before the first character
-      new_width += 3*cx;
-#endif
-      // The height needs to be a bit bigger under Win95 if using native
-      // 3D effects.
-      valueHeight = (int) (valueHeight * 1.5) ;
-      MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
-      x_offset += new_width + cx;
-    }
-
-    MoveWindow((HWND) m_staticMin, x_offset, y_offset, (int)min_len, cy, TRUE);
-    x_offset += (int)(min_len + cx);
-
-    int slider_length = (int)(w1 - x_offset - max_len - cx);
-
-    int slider_height = h1;
-    if (slider_height < 0 )
-        slider_height = 20;
-
-    // Slider must have a minimum/default length/height
-    if (slider_length < 100)
-      slider_length = 100;
-
-    MoveWindow(GetHwnd(), x_offset, y_offset, slider_length, slider_height, TRUE);
-    x_offset += slider_length + cx;
-
-    MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
-    }
-    else
-    {
-        // No labels
-        // If we're prepared to use the existing size, then...
-        if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-        {
-            GetSize(&w1, &h1);
-        }
-        if ( w1 < 0 )
-            w1 = 200;
-        if ( h1 < 0 )
-            h1 = 20;
-        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
-    }
-  }
-  else
-  {
-    if ( m_windowStyle & wxSL_LABELS )
-    {
-    int min_len;
-    GetWindowText((HWND) m_staticMin, buf, 300);
-    GetTextExtent(buf, &min_len, &cyf,NULL,NULL, & this->GetFont());
-
-    int max_len;
-    GetWindowText((HWND) m_staticMax, buf, 300);
-    GetTextExtent(buf, &max_len, &cyf,NULL,NULL, & this->GetFont());
-
-    if (m_staticValue)
-    {
-      int new_width = (int)(wxMax(min_len, max_len));
-      int valueHeight = (int)cyf;
-//// Suggested change by George Tasker - remove this block...
-#ifdef __WIN32__
-      // For some reason, under Win95, the text edit control has
-      // a lot of space before the first character
-      new_width += 3*cx;
-#endif
- ... and replace with following line:
-      new_width += cx;
-
-      // The height needs to be a bit bigger under Win95 if using native
-      // 3D effects.
-      valueHeight = (int) (valueHeight * 1.5) ;
-
-      MoveWindow((HWND) m_staticValue, x_offset, y_offset, new_width, valueHeight, TRUE);
-      y_offset += valueHeight;
-    }
-
-    MoveWindow((HWND) m_staticMin, x_offset, y_offset, (int)min_len, cy, TRUE);
-    y_offset += cy;
-
-    int slider_length = (int)(h1 - y_offset - cy - cy);
-
-    int slider_width = w1;
-    if (slider_width < 0 )
-        slider_width = 20;
-
-    // Slider must have a minimum/default length
-    if (slider_length < 100)
-      slider_length = 100;
-
-    MoveWindow(GetHwnd(), x_offset, y_offset, slider_width, slider_length, TRUE);
-    y_offset += slider_length;
-
-    MoveWindow((HWND) m_staticMax, x_offset, y_offset, (int)max_len, cy, TRUE);
-    }
-    else
-    {
-        // No labels
-        // If we're prepared to use the existing size, then...
-        if (width == -1 && height == -1 && ((sizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
-        {
-            GetSize(&w1, &h1);
-        }
-        if ( w1 < 0 )
-            w1 = 20;
-        if ( h1 < 0 )
-            h1 = 200;
-        MoveWindow(GetHwnd(), x1, y1, w1, h1, TRUE);
-    }
-  }
-*/
-}
-
-void wxSlider::SetRange(int minValue, int maxValue)
-{
-    m_rangeMin = minValue;
-    m_rangeMax = maxValue;
-
-    // TODO
-}
-
-WXHBRUSH wxSlider::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
-{
-    // TODO:
-/*
-  if ( nCtlColor == CTLCOLOR_SCROLLBAR )
-    return 0;
-
-  // Otherwise, it's a static
-  if (GetParent()->GetTransparentBackground())
-    SetBkMode((HDC) pDC, TRANSPARENT);
-  else
-    SetBkMode((HDC) pDC, OPAQUE);
-
-  ::SetBkColor((HDC) pDC, RGB(GetBackgroundColour().Red(), GetBackgroundColour().Green(), GetBackgroundColour().Blue()));
-  ::SetTextColor((HDC) pDC, RGB(GetForegroundColour().Red(), GetForegroundColour().Green(), GetForegroundColour().Blue()));
-
-  wxBrush *backgroundBrush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
-  return (WXHBRUSH) backgroundBrush->GetResourceHandle();
-*/
-  return (WXHBRUSH)0;
-}
-
-// For trackbars only
-void wxSlider::SetTickFreq(int n, int pos)
-{
-    // TODO
-    m_tickFreq = n;
-}
-
-void wxSlider::SetPageSize(int pageSize)
-{
-    // TODO
-    m_pageSize = pageSize;
-}
-
-int wxSlider::GetPageSize() const
-{
-    return m_pageSize;
-}
+    if (m_hStaticMin)
+        ::WinDestroyWindow((HWND)m_hStaticMin);
+    if (m_hStaticMax)
+        ::WinDestroyWindow((HWND)m_hStaticMax);
+    if (m_hStaticValue)
+        ::WinDestroyWindow((HWND)m_hStaticValue);
+} // end of wxSlider::~wxSlider
 
 void wxSlider::ClearSel()
 {
-    // TODO
-}
+} // end of wxSlider::ClearSel
 
 void wxSlider::ClearTicks()
 {
-    // TODO
-}
+} // end of wxSlider::ClearTicks
 
-void wxSlider::SetLineSize(int lineSize)
+void wxSlider::Command (
+  wxCommandEvent&                   rEvent
+)
 {
-    m_lineSize = lineSize;
-    // TODO
-}
+    SetValue(rEvent.GetInt());
+    ProcessCommand(rEvent);
+} // end of wxSlider::Command
+
+bool wxSlider::ContainsHWND(
+  WXHWND                            hWnd
+) const
+{
+    return ( hWnd == GetStaticMin() ||
+             hWnd == GetStaticMax() ||
+             hWnd == GetEditValue()
+           );
+} // end of wxSlider::ContainsHWND
+
+bool wxSlider::Create(
+  wxWindow*                         pParent
+, wxWindowID                        vId
+, int                               nValue
+, int                               nMinValue
+, int                               nMaxValue
+, const wxPoint&                    rPos
+, const wxSize&                     rSize
+, long                              lStyle
+#if wxUSE_VALIDATORS
+, const wxValidator&                rValidator
+#endif
+, const wxString&                   rsName
+)
+{
+    int                             nX       = rPos.x;
+    int                             nY       = rPos.y;
+    int                             nWidth   = rSize.x;
+    int                             nHeight  = rSize.y;
+    long                            lMsStyle = 0L;
+    long                            lWstyle  = 0L;
+
+    SetName(rsName);
+#if wxUSE_VALIDATORS
+    SetValidator(rValidator);
+#endif
+    if (pParent)
+        pParent->AddChild(this);
+    SetBackgroundColour(pParent->GetBackgroundColour()) ;
+    SetForegroundColour(pParent->GetForegroundColour()) ;
+
+    m_hStaticValue = 0L;
+    m_hStaticMin   = 0L;
+    m_hStaticMax   = 0L;
+    m_nPageSize    = 1;
+    m_nLineSize    = 1;
+    m_windowStyle  = lStyle;
+    m_nTickFreq    = 0;
+
+    if (vId == -1)
+        m_windowId = (int)NewControlId();
+    else
+        m_windowId = vId;
+
+    if (m_windowStyle & wxCLIP_SIBLINGS )
+        lMsStyle |= WS_CLIPSIBLINGS;
+
+    if (m_windowStyle & wxSL_LABELS)
+    {
+        lMsStyle |= WS_VISIBLE | SS_TEXT | DT_VCENTER;
+
+        m_hStaticValue = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
+                                                   ,WC_STATIC                // Window class
+                                                   ,(PSZ)NULL                // Initial Text
+                                                   ,(ULONG)lMsStyle          // Style flags
+                                                   ,0L, 0L, 0L, 0L           // Origin -- 0 size
+                                                   ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
+                                                   ,HWND_TOP                 // initial z position
+                                                   ,(ULONG)NewControlId()    // Window identifier
+                                                   ,NULL                     // no control data
+                                                   ,NULL                     // no Presentation parameters
+                                                  );
+
+        //
+        // Now create min static control
+        //
+        sprintf(wxBuffer, "%d", nMinValue);
+        lWstyle = SS_TEXT|DT_LEFT|WS_VISIBLE;
+        if (m_windowStyle & wxCLIP_SIBLINGS)
+            lWstyle |= WS_CLIPSIBLINGS;
+        m_hStaticMin = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
+                                                 ,WC_STATIC                // Window class
+                                                 ,(PSZ)wxBuffer            // Initial Text
+                                                 ,(ULONG)lWstyle           // Style flags
+                                                 ,0L, 0L, 0L, 0L           // Origin -- 0 size
+                                                 ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
+                                                 ,HWND_TOP                 // initial z position
+                                                 ,(ULONG)NewControlId()    // Window identifier
+                                                 ,NULL                     // no control data
+                                                 ,NULL                     // no Presentation parameters
+                                                );
+    }
+    lMsStyle = 0;
+
+    SLDCDATA                        vSlData;
+
+    vSlData.cbSize = sizeof(SLDCDATA);
+    if (m_windowStyle & wxSL_VERTICAL)
+        lMsStyle = SLS_VERTICAL | WS_VISIBLE | WS_TABSTOP;
+    else
+        lMsStyle = SLS_HORIZONTAL | WS_VISIBLE | WS_TABSTOP;
+
+    if (m_windowStyle & wxCLIP_SIBLINGS)
+        lMsStyle |= WS_CLIPSIBLINGS;
+
+    if (m_windowStyle & wxSL_AUTOTICKS)
+    {
+        vSlData.usScale1Spacing = 0;
+        vSlData.usScale2Spacing = 0;
+    }
+
+    if (m_windowStyle & wxSL_LEFT)
+        lMsStyle |= SLS_PRIMARYSCALE2; // if SLS_VERTICAL then SCALE2 is to the left
+    else if (m_windowStyle & wxSL_RIGHT)
+        lMsStyle |= SLS_PRIMARYSCALE1; // if SLS_VERTICAL then SCALE2 is to the right
+    else if (m_windowStyle & wxSL_TOP)
+        lMsStyle |= SLS_PRIMARYSCALE1; // if SLS_HORIZONTAL then SCALE1 is to the top
+    else if (m_windowStyle & wxSL_BOTTOM )
+        lMsStyle |= SLS_PRIMARYSCALE2; // if SLS_HORIZONTAL then SCALE1 is to the bottom
+    else if ( m_windowStyle & wxSL_BOTH )
+        lMsStyle |= SLS_PRIMARYSCALE1 | SLS_PRIMARYSCALE2;
+    else
+        lMsStyle |= SLS_PRIMARYSCALE2;
+
+    m_nPageSize = ((nMaxValue - nMinValue)/10);
+    vSlData.usScale1Increments = m_nPageSize;
+    vSlData.usScale2Increments = m_nPageSize;
+
+    HWND                            hScrollBar = ::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
+                                                                   ,WC_SLIDER                // Window class
+                                                                   ,(PSZ)wxBuffer            // Initial Text
+                                                                   ,(ULONG)lMsStyle          // Style flags
+                                                                   ,0L, 0L, 0L, 0L           // Origin -- 0 size
+                                                                   ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
+                                                                   ,HWND_TOP                 // initial z position
+                                                                   ,(HMENU)m_windowId       // Window identifier
+                                                                   ,&vSlData                 // Slider control data
+                                                                   ,NULL                     // no Presentation parameters
+                                                                  );
+    m_nRangeMax = nMaxValue;
+    m_nRangeMin = nMinValue;
+
+    //
+    // Set the size of the ticks ... default to 6 pixels
+    //
+    ::WinSendMsg( hScrollBar
+                 ,SLM_SETTICKSIZE
+                 ,MPFROM2SHORT(SMA_SETALLTICKS, 6)
+                 ,NULL
+                );
+    //
+    // Set the position to the initial value
+    //
+    ::WinSendMsg( hScrollBar
+                 ,SLM_SETSLIDERINFO
+                 ,MPFROM2SHORT(SMA_SLIDERARMPOSITION, SMA_RANGEVALUE)
+                 ,(MPARAM)nValue
+                );
+
+    m_hWnd = (WXHWND)hScrollBar;
+    SubclassWin(GetHWND());
+    ::WinSetWindowText((HWND)m_hWnd, "");
+    SetFont(pParent->GetFont());
+    if (m_windowStyle & wxSL_LABELS)
+    {
+        //
+        // Finally, create max value static item
+        //
+        sprintf(wxBuffer, "%d", nMaxValue);
+        lWstyle = SS_TEXT|DT_LEFT|WS_VISIBLE;
+        if (m_windowStyle & wxCLIP_SIBLINGS)
+            lMsStyle |= WS_CLIPSIBLINGS;
+        m_hStaticMax = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
+                                                 ,WC_STATIC                // Window class
+                                                 ,(PSZ)wxBuffer            // Initial Text
+                                                 ,(ULONG)lWstyle           // Style flags
+                                                 ,0L, 0L, 0L, 0L           // Origin -- 0 size
+                                                 ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
+                                                 ,HWND_TOP                 // initial z position
+                                                 ,(ULONG)NewControlId()    // Window identifier
+                                                 ,NULL                     // no control data
+                                                 ,NULL                     // no Presentation parameters
+                                                );
+        if (GetFont().Ok())
+        {
+            if (GetFont().GetResourceHandle())
+            {
+                if (m_hStaticMin)
+                    wxOS2SetFont( m_hStaticMin
+                                 ,GetFont()
+                                );
+                if (m_hStaticMax)
+                    wxOS2SetFont( m_hStaticMax
+                                 ,GetFont()
+                                );
+                if (m_hStaticValue)
+                    wxOS2SetFont( m_hStaticValue
+                                 ,GetFont()
+                                );
+            }
+        }
+    }
+
+    SetSize( nX
+            ,nY
+            ,nWidth
+            ,nHeight
+           );
+    m_nThumbLength = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                               ,SLM_QUERYSLIDERINFO
+                                               ,MPFROM2SHORT( SMA_SLIDERARMDIMENSIONS
+                                                             ,SMA_RANGEVALUE
+                                                            )
+                                               ,(MPARAM)0
+                                              )
+                                 ) + 4; // for bordersizes
+
+    wxColour                        vColour;
+
+    vColour.Set(wxString("BLACK"));
+
+    LONG                            lColor = (LONG)vColour.GetPixel();
+
+    ::WinSetPresParam( m_hStaticMin
+                      ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hStaticMax
+                      ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hStaticValue
+                      ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    ::WinSetPresParam( m_hWnd
+                      ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+    SetValue(nValue);
+    return TRUE;
+} // end of wxSlider::Create
+
+void wxSlider::DoSetSize(
+  int                               nX
+, int                               nY
+, int                               nWidth
+, int                               nHeight
+, int                               nSizeFlags
+)
+{
+    int                             nX1      = nX;
+    int                             nY1      = nY;
+    int                             nWidth1  = nWidth;
+    int                             nHeight1 = nHeight;
+    int                             nXOffset = nX;
+    int                             nYOffset = nY;
+    int                             nCx;     // slider,min,max sizes
+    int                             nCy;
+    int                             nCyf;
+    int                             nCurrentX;
+    int                             nCurrentY;
+    char                            zBuf[300];
+
+    //
+    // Adjust for OS/2's reverse coordinate system
+    //
+    wxWindowOS2*                    pParent = (wxWindowOS2*)GetParent();
+    int                             nUsedHeight = 0;
+    int                             nOS2Height = nHeight;
+
+    if (nOS2Height < 0)
+        nOS2Height = 20;
+
+    if (pParent)
+    {
+        //
+        // Under OS/2, where a frame window is the parent, most child windows
+        // that are not specific frame clients are actually children of the
+        // frame's client, not the frame itself, and so position themselves
+        // with regards to the client origin, not the frame.
+        //
+        if (pParent->IsKindOf(CLASSINFO(wxFrame)))
+        {
+            nYOffset = pParent->GetClientSize().y - (nYOffset + nOS2Height);
+            if (nY != -1)
+                nY1 = pParent->GetClientSize().y - (nY1 + nOS2Height);
+        }
+        else
+        {
+            nYOffset = pParent->GetSize().y - (nYOffset + nOS2Height);
+            if (nY != -1)
+                nY1 = pParent->GetSize().y - (nY1 + nOS2Height);
+        }
+    }
+    else
+    {
+        RECTL                       vRect;
+
+        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
+        nYOffset = vRect.yTop - (nYOffset + nOS2Height);
+        if (nY != -1)
+            nY1 = vRect.yTop - (nY1 + nOS2Height);
+    }
+
+    GetPosition( &nCurrentX
+                ,&nCurrentY
+               );
+    if (nX == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        nX1 = nCurrentX;
+    if (nY == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
+        nY1 = nCurrentY;
+
+    AdjustForParentClientOrigin( nX1
+                                ,nY1
+                                ,nSizeFlags
+                               );
+    wxGetCharSize( GetHWND()
+                  ,&nCx
+                  ,&nCy
+                  ,&this->GetFont()
+                 );
+
+    if ((m_windowStyle & wxSL_VERTICAL) != wxSL_VERTICAL)
+    {
+        if (m_windowStyle & wxSL_LABELS )
+        {
+            int                  nMinLen = 0;
+            int                  nMaxLen = 0;
+
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &this->GetFont());
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &this->GetFont());
+
+            if (m_hStaticValue)
+            {
+                int              nNewWidth = (wxMax(nMinLen, nMaxLen));
+                int              nValueHeight = nCyf;
+
+                ::WinSetWindowPos( (HWND)m_hStaticValue
+                                  ,HWND_TOP
+                                  ,(LONG)nXOffset
+                                  ,(LONG)nYOffset - (nCyf * 1.2)
+                                  ,(LONG)nNewWidth
+                                  ,(LONG)nValueHeight
+                                  ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                                 );
+                nXOffset += nNewWidth + nCx;
+            }
+            ::WinSetWindowPos( (HWND)m_hStaticMin
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset - nCyf
+                              ,(LONG)nMinLen
+                              ,(LONG)nCy
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+            nXOffset += nMinLen + nCx;
+
+            int                  nSliderLength = nWidth1 - nXOffset - nMaxLen - nCx;
+            int                  nSliderHeight = nHeight1;
+
+            if (nSliderHeight < 0)
+                nSliderHeight = 20;
+
+            //
+            // Slider must have a minimum/default length/height
+            //
+            if (nSliderLength < 100)
+                nSliderLength = 100;
+
+            ::WinSetWindowPos( GetHwnd()
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset
+                              ,(LONG)nSliderLength
+                              ,(LONG)nSliderHeight
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+            nXOffset += nSliderLength + nCx;
+
+            ::WinSetWindowPos( (HWND)m_hStaticMax
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset - nCyf
+                              ,(LONG)nMaxLen
+                              ,(LONG)nCy
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+        }
+        else
+        {
+            //
+            // No labels
+            // If we're prepared to use the existing size, then...
+            //
+            if (nWidth == -1 && nHeight == -1 &&
+                ((nSizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
+            {
+                GetSize( &nWidth1
+                        ,&nHeight1
+                       );
+            }
+            if (nWidth1 < 0)
+                nWidth1 = 200;
+            if (nHeight1 < 0)
+                nHeight1 = 20;
+            ::WinSetWindowPos( GetHwnd()
+                              ,HWND_TOP
+                              ,(LONG)nX1
+                              ,(LONG)nY1
+                              ,(LONG)nWidth1
+                              ,(LONG)nHeight1
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+        }
+    }
+
+    //
+    // Now deal with a vertical slider
+    //
+    else
+    {
+        if (m_windowStyle & wxSL_LABELS )
+        {
+            int                  nMinLen;
+            int                  nMaxLen;
+
+            ::WinQueryWindowText((HWND)m_hStaticMin, 300, zBuf);
+            GetTextExtent(zBuf, &nMinLen, &nCyf, NULL, NULL, &this->GetFont());
+            ::WinQueryWindowText((HWND)m_hStaticMax, 300, zBuf);
+            GetTextExtent(zBuf, &nMaxLen, &nCyf, NULL, NULL, &this->GetFont());
+            if (m_hStaticValue)
+            {
+                int              nNewWidth = wxMax(nMinLen, nMaxLen);
+                int              nValueHeight = nCyf;
+
+                nNewWidth += nCx;
+
+                //
+                // The height needs to be a bit bigger under Win95 if using native
+                // 3D effects.
+                //
+                nValueHeight = (int)(nValueHeight * 1.5);
+                ::WinSetWindowPos( (HWND)m_hStaticValue
+                                  ,HWND_TOP
+                                  ,(LONG)nXOffset
+                                  ,(LONG)nYOffset
+                                  ,(LONG)nNewWidth
+                                  ,(LONG)nValueHeight
+                                  ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                                 );
+                nYOffset -= nValueHeight;
+                nUsedHeight += nValueHeight;
+            }
+            ::WinSetWindowPos( (HWND)m_hStaticMin
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset
+                              ,(LONG)nMinLen
+                              ,(LONG)nCy
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+            nYOffset -= nCy;
+            nUsedHeight += nCy;
+
+            int                  nSliderLength = nHeight1 - (nUsedHeight + (2 * nCy));
+            int                  nSliderWidth  = nWidth1;
+
+            if (nSliderWidth < 0)
+                nSliderWidth = 20;
+
+            //
+            // Slider must have a minimum/default length
+            //
+            if (nSliderLength < 100)
+                nSliderLength = 100;
+
+            ::WinSetWindowPos( (HWND)m_hStaticMin
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset
+                              ,(LONG)nSliderWidth
+                              ,(LONG)nSliderLength
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+            nYOffset -= nSliderLength;
+            nUsedHeight += nSliderLength;
+            ::WinSetWindowPos( (HWND)m_hStaticMax
+                              ,HWND_TOP
+                              ,(LONG)nXOffset
+                              ,(LONG)nYOffset
+                              ,(LONG)nMaxLen
+                              ,(LONG)nCy
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+        }
+        else
+        {
+            //
+            // No labels
+            // If we're prepared to use the existing size, then...
+            //
+            if (nWidth == -1 && nHeight == -1 &&
+                ((nSizeFlags & wxSIZE_AUTO) != wxSIZE_AUTO))
+            {
+                GetSize( &nWidth1
+                        ,&nHeight1
+                       );
+            }
+            if (nWidth1 < 0)
+                nWidth1 = 20;
+            if (nHeight1 < 0)
+                nHeight1 = 200;
+            ::WinSetWindowPos( GetHwnd()
+                              ,HWND_TOP
+                              ,(LONG)nX1
+                              ,(LONG)nY1
+                              ,(LONG)nWidth1
+                              ,(LONG)nHeight1
+                              ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
+                             );
+        }
+    }
+} // end of void wxSlider::DoSetSize
 
 int wxSlider::GetLineSize() const
 {
-    // TODO
-    return 0;
-}
+    return 1;
+} // end of wxSlider::GetLineSize
+
+int wxSlider::GetPageSize() const
+{
+    return m_nPageSize;
+} // end of wxSlider::GetPageSize
+
+void wxSlider::GetPosition(
+  int*                              pnX
+, int*                              pnY
+) const
+{
+    wxWindowOS2*                    pParent = GetParent();
+    RECTL                           vRect;
+
+    vRect.xLeft   = -1;
+    vRect.xRight  = -1;
+    vRect.yTop    = -1;
+    vRect.yBottom = -1;
+    wxFindMaxSize( GetHWND()
+                  ,&vRect
+                 );
+
+    if (m_hStaticMin)
+        wxFindMaxSize( m_hStaticMin
+                      ,&vRect
+                     );
+    if (m_hStaticMax)
+        wxFindMaxSize( m_hStaticMax
+                      ,&vRect
+                     );
+    if (m_hStaticValue)
+        wxFindMaxSize( m_hStaticValue
+                      ,&vRect
+                     );
+
+    //
+    // Since we now have the absolute screen coords,
+    // if there's a parent we must subtract its top left corner
+    //
+    POINTL                          vPoint;
+
+    vPoint.x = vRect.xLeft;
+    vPoint.y = vRect.yTop;
+
+    if (pParent)
+    {
+        SWP                             vSwp;
+
+        ::WinQueryWindowPos((HWND)pParent->GetHWND(), &vSwp);
+        vPoint.x = vSwp.x;
+        vPoint.y = vSwp.y;
+    }
+
+    //
+    // We may be faking the client origin.
+    // So a window that's really at (0, 30) may appear
+    // (to wxWin apps) to be at (0, 0).
+    //
+    if (GetParent())
+    {
+        wxPoint                     vPt(GetParent()->GetClientAreaOrigin());
+
+        vPoint.x -= vPt.x;
+        vPoint.y -= vPt.y;
+    }
+    *pnX = vPoint.x;
+    *pnY = vPoint.y;
+} // end of wxSlider::GetPosition
 
 int wxSlider::GetSelEnd() const
 {
-    // TODO
     return 0;
-}
+} // end of wxSlider::GetSelEnd
 
 int wxSlider::GetSelStart() const
 {
-    // TODO
     return 0;
-}
+} // end of wxSlider::GetSelStart
 
-void wxSlider::SetSelection(int minPos, int maxPos)
+void wxSlider::GetSize(
+  int*                              pnWidth
+, int*                              pnHeight
+) const
 {
-    // TODO
-}
+    RECTL                           vRect;
 
-void wxSlider::SetThumbLength(int len)
-{
-    // TODO
-}
+    vRect.xLeft   = -1;
+    vRect.xRight  = -1;
+    vRect.yTop    = -1;
+    vRect.yBottom = -1;
+
+    wxFindMaxSize( GetHWND()
+                  ,&vRect
+                 );
+
+    if (m_hStaticMin)
+        wxFindMaxSize( m_hStaticMin
+                      ,&vRect
+                     );
+    if (m_hStaticMax)
+        wxFindMaxSize( m_hStaticMax
+                      ,&vRect
+                     );
+    if (m_hStaticValue)
+        wxFindMaxSize( m_hStaticValue
+                      ,&vRect
+                     );
+    *pnWidth  = vRect.xRight - vRect.xLeft;
+    *pnHeight = vRect.yBottom - vRect.yTop;
+} // end of wxSlider::GetSize
 
 int wxSlider::GetThumbLength() const
 {
-    // TODO
-    return 0;
-}
+    return m_nThumbLength;
+} // end of wxSlider::GetThumbLength
 
-void wxSlider::SetTick(int tickPos)
+int wxSlider::GetValue() const
 {
-    // TODO
-}
+    int                             nPixelRange = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                            ,SLM_QUERYSLIDERINFO
+                                                                            ,MPFROM2SHORT( SMA_SHAFTDIMENSIONS
+                                                                                          ,SMA_RANGEVALUE
+                                                                                         )
+                                                                            ,(MPARAM)0
+                                                                           )
+                                                              );
+    double                          dPixelToRange = (double)(nPixelRange - m_nThumbLength)/(double)(m_nRangeMax - m_nRangeMin);
+    int                             nNewPos = 0;
+    int                             nPixelPos = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                          ,SLM_QUERYSLIDERINFO
+                                                                          ,MPFROM2SHORT( SMA_SLIDERARMPOSITION
+                                                                                        ,SMA_RANGEVALUE
+                                                                                       )
+                                                                          ,(MPARAM)0
+                                                                         )
+                                                            );
+    nNewPos = (int)(nPixelPos/dPixelToRange);
+    if (nNewPos > (m_nRangeMax - m_nRangeMin)/2)
+        nNewPos++;
+    return nNewPos;
+} // end of wxSlider::GetValue
 
-bool wxSlider::ContainsHWND(WXHWND hWnd) const
+WXHBRUSH wxSlider::OnCtlColor(
+  WXHDC                             hDC
+, WXHWND                            hWnd
+, WXUINT                            uCtlColor
+, WXUINT                            uMessage
+, WXWPARAM                          wParam
+, WXLPARAM                          lParam
+)
 {
-    return ( hWnd == GetStaticMin() || hWnd == GetStaticMax() || hWnd == GetEditValue() );
-}
+    return (wxControl::OnCtlColor( hDC
+                                  ,hWnd
+                                  ,uCtlColor
+                                  ,uMessage
+                                  ,wParam
+                                  ,lParam
+                                 )
+           );
+} // end of wxSlider::OnCtlColor
 
-void wxSlider::Command (wxCommandEvent & event)
+bool wxSlider::OS2OnScroll(
+  int                               WXUNUSED(nOrientation)
+, WXWORD                            wParam
+, WXWORD                            wPos
+, WXHWND                            hControl
+)
 {
-  SetValue (event.GetInt());
-  ProcessCommand (event);
-}
+    wxEventType                     eScrollEvent = wxEVT_NULL;
 
-bool wxSlider::Show(bool show)
+    switch (wParam)
+    {
+        case SLN_CHANGE:
+            if (m_windowStyle & wxSL_TOP)
+                eScrollEvent = wxEVT_SCROLL_TOP;
+            else if (m_windowStyle & wxSL_BOTTOM)
+                eScrollEvent = wxEVT_SCROLL_BOTTOM;
+            break;
+
+        case SLN_SLIDERTRACK:
+            eScrollEvent = wxEVT_SCROLL_THUMBTRACK;
+            break;
+
+        default:
+            return FALSE;
+    }
+
+    int                             nPixelRange = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                            ,SLM_QUERYSLIDERINFO
+                                                                            ,MPFROM2SHORT( SMA_SHAFTDIMENSIONS
+                                                                                          ,SMA_RANGEVALUE
+                                                                                         )
+                                                                            ,(MPARAM)0
+                                                                           )
+                                                              );
+    m_dPixelToRange = (double)(nPixelRange - m_nThumbLength)/(double)(m_nRangeMax - m_nRangeMin);
+    int                             nNewPos = 0;
+    int                             nPixelPos = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                          ,SLM_QUERYSLIDERINFO
+                                                                          ,MPFROM2SHORT( SMA_SLIDERARMPOSITION
+                                                                                        ,SMA_RANGEVALUE
+                                                                                       )
+                                                                          ,(MPARAM)0
+                                                                         )
+                                                            );
+    nNewPos = (nPixelPos/m_dPixelToRange);
+    if (nNewPos > (m_nRangeMax - m_nRangeMin)/2)
+        nNewPos++;
+    if ((nNewPos < GetMin()) || (nNewPos > GetMax()))
+    {
+        //
+        // Out of range - but we did process it
+        //
+        return TRUE;
+    }
+    SetValue(nNewPos);
+
+    wxScrollEvent                   vEvent( eScrollEvent
+                                           ,m_windowId
+                                          );
+
+    vEvent.SetPosition(nNewPos);
+    vEvent.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(vEvent);
+
+    wxCommandEvent                  vCevent( wxEVT_COMMAND_SLIDER_UPDATED
+                                            ,GetId()
+                                           );
+
+    vCevent.SetInt(nNewPos);
+    vCevent.SetEventObject(this);
+    return (GetEventHandler()->ProcessEvent(vCevent));
+} // end of wxSlider::OS2OnScroll
+
+void wxSlider::SetLineSize(
+  int                               nLineSize
+)
 {
-    // TODO
+    m_nLineSize = nLineSize;
+} // end of wxSlider::SetLineSize
+
+
+void wxSlider::SetPageSize(
+  int                               nPageSize
+)
+{
+    m_nPageSize = nPageSize;
+} // end of wxSlider::SetPageSize
+
+void wxSlider::SetRange(
+  int                               nMinValue
+, int                               nMaxValue
+)
+{
+    wxChar                          zBuf[10];
+
+    m_nRangeMin = nMinValue;
+    m_nRangeMax = nMaxValue;
+
+    int                             nPixelRange = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                            ,SLM_QUERYSLIDERINFO
+                                                                            ,MPFROM2SHORT( SMA_SHAFTDIMENSIONS
+                                                                                          ,SMA_RANGEVALUE
+                                                                                         )
+                                                                            ,(MPARAM)0
+                                                                           )
+                                                              );
+    m_dPixelToRange = (double)(nPixelRange - m_nThumbLength)/(double)(m_nRangeMax - m_nRangeMin);
+    if (m_hStaticMin)
+    {
+        wxSprintf(zBuf, wxT("%d"), m_nRangeMin);
+        ::WinSetWindowText((HWND)m_hStaticMin, zBuf);
+    }
+
+    if (m_hStaticMax)
+    {
+        wxSprintf(zBuf, wxT("%d"), m_nRangeMax);
+        ::WinSetWindowText((HWND)m_hStaticMax, zBuf);
+    }
+} // end of wxSlider::SetRange
+
+void wxSlider::SetSelection(
+  int                               WXUNUSED(nMinPos)
+, int                               WXUNUSED(nMaxPos)
+)
+{
+} // end of wxSlider::SetSelection
+
+void wxSlider::SetThumbLength(
+  int                               nLen
+)
+{
+    int                             nBreadth;
+
+    m_nThumbLength = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                               ,SLM_QUERYSLIDERINFO
+                                               ,MPFROM2SHORT( SMA_SLIDERARMDIMENSIONS
+                                                             ,SMA_RANGEVALUE
+                                                            )
+                                               ,(MPARAM)0
+                                              )
+                                 ) + 4; // for bordersizes
+    nBreadth = SHORT2FROMMR(::WinSendMsg( GetHwnd()
+                                         ,SLM_QUERYSLIDERINFO
+                                         ,MPFROM2SHORT( SMA_SLIDERARMDIMENSIONS
+                                                       ,SMA_RANGEVALUE
+                                                      )
+                                         ,(MPARAM)0
+                                        )
+                           );
+    ::WinSendMsg( GetHwnd()
+                 ,SLM_SETSLIDERINFO
+                 ,MPFROM2SHORT( SMA_SLIDERARMDIMENSIONS
+                               ,SMA_RANGEVALUE
+                              )
+                 ,MPFROM2SHORT(nLen, nBreadth)
+                );
+    m_nThumbLength = nLen + 4; // Borders
+} // end of wxSlider::SetThumbLength
+
+void wxSlider::SetTick(
+  int                               nTickPos
+)
+{
+    nTickPos *= m_dPixelToRange;
+    ::WinSendMsg( GetHwnd()
+                 ,SLM_ADDDETENT
+                 ,MPFROMSHORT(nTickPos)
+                 ,NULL
+                );
+} // end of wxSlider::SetTick
+
+// For trackbars only
+void wxSlider::SetTickFreq(
+  int                               n
+, int                               nPos
+)
+{
+    SLDCDATA                        vSlData;
+    WNDPARAMS                       vWndParams;
+    int                             nPixelPos;
+    int                             i;
+
+    vSlData.cbSize = sizeof(SLDCDATA);
+    if (m_windowStyle & wxSL_AUTOTICKS)
+    {
+        vSlData.usScale1Spacing = 0;
+        vSlData.usScale2Spacing = 0;
+    }
+    vSlData.usScale1Increments = (m_nRangeMax - m_nRangeMin)/n;
+    vSlData.usScale2Increments = (m_nRangeMax - m_nRangeMin)/n;
+
+    vWndParams.fsStatus = WPM_CTLDATA;
+    vWndParams.cchText  = 0L;
+    vWndParams.pszText  = NULL;
+    vWndParams.cbPresParams = 0L;
+    vWndParams.pPresParams = NULL;
+    vWndParams.cbCtlData = vSlData.cbSize;
+    vWndParams.pCtlData = (PVOID)&vSlData;
+    ::WinSendMsg(GetHwnd(), WM_SETWINDOWPARAMS, (MPARAM)&vWndParams, (MPARAM)0);
+    for (i = 1; i < (m_nRangeMax - m_nRangeMin)/n; i++)
+    {
+        nPixelPos = i * n * m_dPixelToRange;
+        ::WinSendMsg( GetHwnd()
+                     ,SLM_ADDDETENT
+                     ,MPFROMSHORT(nPixelPos)
+                     ,NULL
+                    );
+    }
+} // end of wxSlider::SetTickFreq
+
+void wxSlider::SetValue(
+  int                               nValue
+)
+{
+    int                             nPixelPos = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                          ,SLM_QUERYSLIDERINFO
+                                                                          ,MPFROM2SHORT( SMA_SLIDERARMPOSITION
+                                                                                        ,SMA_RANGEVALUE
+                                                                                       )
+                                                                          ,(MPARAM)0
+                                                                         )
+                                                            );
+    int                             nPixelRange = SHORT1FROMMR(::WinSendMsg( GetHwnd()
+                                                                            ,SLM_QUERYSLIDERINFO
+                                                                            ,MPFROM2SHORT( SMA_SHAFTDIMENSIONS
+                                                                                          ,SMA_RANGEVALUE
+                                                                                         )
+                                                                            ,(MPARAM)0
+                                                                           )
+                                                              );
+    m_dPixelToRange = (double)(nPixelRange - m_nThumbLength)/(double)(m_nRangeMax - m_nRangeMin);
+    int                             nNewPos = (int)(nValue * m_dPixelToRange);
+
+    ::WinSendMsg( GetHwnd()
+                 ,SLM_SETSLIDERINFO
+                 ,MPFROM2SHORT( SMA_SLIDERARMPOSITION
+                               ,SMA_RANGEVALUE
+                              )
+                 ,(MPARAM)nNewPos
+                );
+    if (m_hStaticValue)
+    {
+        wxSprintf(wxBuffer, wxT("%d"), nValue);
+        ::WinSetWindowText((HWND)m_hStaticValue, wxBuffer);
+    }
+} // end of wxSlider::SetValue
+
+bool wxSlider::Show(
+  bool                              bShow
+)
+{
+    wxWindowOS2::Show(bShow);
+    if(m_hStaticValue)
+        ::WinShowWindow((HWND)m_hStaticValue, bShow);
+    if(m_hStaticMin)
+        ::WinShowWindow((HWND)m_hStaticMin, bShow);
+    if(m_hStaticMax)
+        ::WinShowWindow((HWND)m_hStaticMax, bShow);
     return TRUE;
-}
+} // end of wxSlider::Show
 

@@ -376,5 +376,8 @@
     #define NO_TEXT_WINDOW_STREAM     1  // defined in textctrl.h for DLL builds
 #endif
 
+#define wxUSE_UNICODE      0
+#define wxUSE_UNICODE_MSLU 0
+
 #endif
     // _WX_SETUP_H_

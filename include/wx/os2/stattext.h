@@ -22,11 +22,8 @@ WXDLLEXPORT_DATA(extern const char*) wxStaticTextNameStr;
 
 class WXDLLEXPORT wxStaticText : public wxControl
 {
- DECLARE_DYNAMIC_CLASS(wxStaticText)
-
- public:
+public:
     inline wxStaticText() { }
-
     inline wxStaticText( wxWindow*       pParent
                         ,wxWindowID      vId
                         ,const wxString& rsLabel
@@ -69,6 +66,9 @@ class WXDLLEXPORT wxStaticText : public wxControl
 
 protected:
     virtual wxSize DoGetBestSize(void) const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxStaticText)
 }; // end of CLASS wxStaticText
 
 #endif

@@ -232,6 +232,10 @@ inline bool wxStyleHasBorder(long style)
                    wxSUNKEN_BORDER | wxDOUBLE_BORDER)) != 0;
 }
 
+WXDLLEXPORT extern void wxOS2SetFont( HWND          hWnd
+                                     ,const wxFont& rFont
+                                    );
+
 
 #endif
     // _WX_PRIVATE_H_

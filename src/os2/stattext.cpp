@@ -80,10 +80,26 @@ bool wxStaticText::Create(
 
     wxCHECK_MSG(m_hWnd, FALSE, wxT("Failed to create static ctrl"));
 
+    wxColour                        vColour;
+
+    vColour.Set(wxString("BLACK"));
+
+    LONG                            lColor = (LONG)vColour.GetPixel();
+
+    ::WinSetPresParam( m_hWnd
+                      ,PP_FOREGROUNDCOLOR
+                      ,sizeof(LONG)
+                      ,(PVOID)&lColor
+                     );
+
     SubclassWin(m_hWnd);
     wxControl::SetFont(pParent->GetFont());
-    SetSize(nX, nY, nWidth, nHeight);
-    return FALSE;
+    SetSize( nX
+            ,nY
+            ,nWidth
+            ,nHeight
+           );
+    return TRUE;
 } // end of wxStaticText::Create
 
 wxSize wxStaticText::DoGetBestSize() const
@@ -96,7 +112,7 @@ wxSize wxStaticText::DoGetBestSize() const
     int                             nHeightLine = 0;
     wxString                        sCurLine;
 
-    for ( const wxChar *pc = sText; ; pc++ )
+    for (const wxChar *pc = sText; ; pc++)
     {
         if ( *pc == wxT('\n') || *pc == wxT('\0') )
         {
@@ -143,23 +159,6 @@ wxSize wxStaticText::DoGetBestSize() const
                  );
 } // end of wxStaticText::DoGetBestSize
 
-void wxStaticText::SetLabel(
-  const wxString&                   rsLabel
-)
-{
-    ::WinSetWindowText(GetHwnd(), rsLabel.c_str());
-
-    //
-    // Adjust the size of the window to fit to the label unless autoresizing is
-    // disabled
-    //
-    if (!(GetWindowStyle() & wxST_NO_AUTORESIZE))
-    {
-        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-    }
-    DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
-} // end of wxStaticText::SetLabel
-
 bool wxStaticText::SetFont(
   const wxFont&                     rFont
 )
@@ -176,6 +175,23 @@ bool wxStaticText::SetFont(
     }
     return bRet;
 } // end of wxStaticText::SetFont
+
+void wxStaticText::SetLabel(
+  const wxString&                   rsLabel
+)
+{
+    ::WinSetWindowText(GetHwnd(), rsLabel.c_str());
+
+    //
+    // Adjust the size of the window to fit to the label unless autoresizing is
+    // disabled
+    //
+    if (!(GetWindowStyle() & wxST_NO_AUTORESIZE))
+    {
+        DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+    }
+    DoSetSize(-1, -1, -1, -1, wxSIZE_AUTO_WIDTH | wxSIZE_AUTO_HEIGHT);
+} // end of wxStaticText::SetLabel
 
 MRESULT wxStaticText::OS2WindowProc(
   WXUINT                            uMsg

@@ -1207,3 +1207,78 @@ void wxDrawBorder(
     }
 } // end of wxDrawBorder
 
+void wxOS2SetFont(
+  HWND                              hWnd
+, const wxFont&                     rFont
+)
+{
+    char                            zFont[128];
+    char                            zFacename[30];
+    char                            zWeight[30];
+    char                            zStyle[30];
+
+    if (hWnd == NULLHANDLE)
+
+    //
+    // The fonts available for Presentation Params are just three
+    // outline fonts, the rest are available to the GPI, so we must
+    // map the families to one of these three
+    //
+    switch(rFont.GetFamily())
+    {
+        case wxSCRIPT:
+        case wxDECORATIVE:
+        case wxROMAN:
+            strcpy(zFacename,"Times New Roman");
+            break;
+
+        case wxTELETYPE:
+        case wxMODERN:
+            strcpy(zFacename, "Courier");
+            break;
+
+        case wxSWISS:
+        case wxDEFAULT:
+        default:
+            strcpy(zFacename, "Helvetica");
+            break;
+    }
+
+    switch(rFont.GetWeight())
+    {
+        default:
+        case wxNORMAL:
+        case wxLIGHT:
+            zWeight[0] = '\0';
+            break;
+
+        case wxBOLD:
+        case wxFONTWEIGHT_MAX:
+            strcpy(zWeight, "Bold");
+            break;
+    }
+
+    switch(rFont.GetStyle())
+    {
+        case wxITALIC:
+        case wxSLANT:
+            strcpy(zStyle, "Italic");
+            break;
+
+        default:
+            zStyle[0] = '\0';
+            break;
+    }
+    sprintf(zFont, "%d.%s", rFont.GetPointSize(), zFacename);
+    if (zWeight[0] != '\0')
+    {
+        strcat(zFont, " ");
+        strcat(zFont, zWeight);
+    }
+    if (zStyle[0] != '\0')
+    {
+        strcat(zFont, " ");
+        strcat(zFont, zStyle);
+    }
+    ::WinSetPresParam(hWnd, PP_FONTNAMESIZE, strlen(zFont) + 1, (PVOID)zFont);
+} // end of wxOS2SetFont

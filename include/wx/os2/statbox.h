@@ -19,50 +19,49 @@ WXDLLEXPORT_DATA(extern const char*) wxStaticBoxNameStr;
 // Group box
 class WXDLLEXPORT wxStaticBox : public wxStaticBoxBase
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticBox)
-
- public:
+public:
     inline wxStaticBox() {}
-    inline wxStaticBox( wxWindow*       parent
-                       ,wxWindowID      id
-                       ,const wxString& label
-                       ,const wxPoint&  pos = wxDefaultPosition
-                       ,const wxSize&   size = wxDefaultSize
-                       ,long            style = 0
-                       ,const wxString& name = wxStaticBoxNameStr
+    inline wxStaticBox( wxWindow*       pParent
+                       ,wxWindowID      vId
+                       ,const wxString& rsLabel
+                       ,const wxPoint&  rPos = wxDefaultPosition
+                       ,const wxSize&   rSize = wxDefaultSize
+                       ,long            lStyle = 0
+                       ,const wxString& rsName = wxStaticBoxNameStr
                       )
     {
-        Create(parent, id, label, pos, size, style, name);
+        Create(pParent, vId, rsLabel, rPos, rSize, lStyle, rsName);
     }
 
-  bool Create( wxWindow*       parent
-              ,wxWindowID      id
-              ,const wxString& label
-              ,const wxPoint&  pos = wxDefaultPosition
-              ,const wxSize&   size = wxDefaultSize
-              ,long            style = 0
-              ,const wxString& name = wxStaticBoxNameStr
-             );
+    bool Create( wxWindow*       pParent
+                ,wxWindowID      vId
+                ,const wxString& rsLabel
+                ,const wxPoint&  rPos = wxDefaultPosition
+                ,const wxSize&   rSize = wxDefaultSize
+                ,long            lStyle = 0
+                ,const wxString& rsName = wxStaticBoxNameStr
+               );
 
+    //
     // implementation from now on
     // --------------------------
+    //
+    virtual MRESULT OS2WindowProc( WXUINT   uMsg
+                                  ,WXWPARAM wParam
+                                  ,WXLPARAM lParam
+                                 );
 
-    void OnEraseBackground(wxEraseEvent& event);
-
-    virtual MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-                                WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-
+    //
     // overriden base class virtuals
-    virtual bool AcceptsFocus() const { return FALSE; }
+    //
+    inline virtual bool AcceptsFocus(void) const { return FALSE; }
 
 protected:
-    virtual wxSize DoGetBestSize() const;
+    virtual wxSize DoGetBestSize(void) const;
 
 private:
-    DECLARE_EVENT_TABLE()
-};
+    DECLARE_DYNAMIC_CLASS(wxStaticBox)
+}; // end of CLASS wxStaticBox
 
 #endif
     // _WX_STATBOX_H_

@@ -21,29 +21,62 @@
 
 class WXDLLEXPORT wxStaticLine : public wxStaticLineBase
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticLine)
 
 public:
     // constructors and pseudo-constructors
     wxStaticLine() { }
-
-    wxStaticLine( wxWindow *parent,
-                  wxWindowID id,
-                  const wxPoint &pos = wxDefaultPosition,
-                  const wxSize &size = wxDefaultSize,
-                  long style = wxLI_HORIZONTAL,
-                  const wxString &name = wxStaticTextNameStr )
+    wxStaticLine( wxWindow*       pParent
+                 ,wxWindowID      vId
+                 ,const wxPoint&  rPos = wxDefaultPosition
+                 ,const wxSize&   rSize = wxDefaultSize
+                 ,long            lStyle = wxLI_HORIZONTAL
+                 ,const wxString& rsName = wxStaticTextNameStr
+                )
     {
-        Create(parent, id, pos, size, style, name);
+        Create(pParent, vId, rPos, rSize, lStyle, rsName);
     }
 
-    bool Create( wxWindow *parent,
-                 wxWindowID id,
-                 const wxPoint &pos = wxDefaultPosition,
-                 const wxSize &size = wxDefaultSize,
-                 long style = wxLI_HORIZONTAL,
-                 const wxString &name = wxStaticTextNameStr );
-};
+    bool Create(  wxWindow*       pParent
+                 ,wxWindowID      vId
+                 ,const wxPoint&  rPos = wxDefaultPosition
+                 ,const wxSize&   rSize = wxDefaultSize
+                 ,long            lStyle = wxLI_HORIZONTAL
+                 ,const wxString& rsName = wxStaticTextNameStr
+                );
+
+    inline bool          IsVertical(void) const { return((GetWindowStyleFlag() & wxLI_VERTICAL) != 0); }
+    inline static int    GetDefaultSize(void) { return 2; }
+
+    //
+    // Overriden base class virtuals
+    //
+    inline virtual bool AcceptsFocus(void) const {return FALSE;}
+
+protected:
+    inline wxSize AdjustSize(const wxSize& rSize) const
+    {
+        wxSize                      vSizeReal( rSize.x
+                                              ,rSize.y
+                                             );
+
+        if (IsVertical())
+        {
+            if (rSize.x == -1 )
+                vSizeReal.x = GetDefaultSize();
+        }
+        else
+        {
+            if (rSize.y == -1)
+                vSizeReal.y = GetDefaultSize();
+        }
+        return vSizeReal;
+    }
+
+    inline wxSize DoGetBestSize(void) const { return (AdjustSize(wxDefaultSize)); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxStaticLine)
+}; // end of CLASS wxStaticLine
 
 #endif // _WX_OS2_STATLINE_H_
 

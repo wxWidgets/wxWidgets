@@ -60,6 +60,10 @@ class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
 
     // overriden base class virtuals
     virtual bool AcceptsFocus() const { return FALSE; }
+    virtual MRESULT OS2WindowProc( WXUINT   uMsg
+                                  ,WXWPARAM wParam
+                                  ,WXLPARAM lParam
+                                 );
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -77,7 +81,7 @@ protected:
     wxGDIImage*                     m_pImage;
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
-};
+}; // end of wxStaticBitmap
 
 #endif
     // _WX_STATBMP_H_

@@ -18,52 +18,68 @@ WXDLLEXPORT_DATA(extern const char*) wxGaugeNameStr;
 
 class WXDLLEXPORT wxGauge: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxGauge)
- public:
-  inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; }
+public:
+    inline wxGauge() { m_nRangeMax = 0; m_nGaugePos = 0; }
 
-  inline wxGauge(wxWindow *parent, wxWindowID id,
-           int range,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxGA_HORIZONTAL,
+    inline wxGauge( wxWindow*          pParent
+                   ,wxWindowID         vId
+                   ,int                nRange
+                   ,const wxPoint&     rPos = wxDefaultPosition
+                   ,const wxSize&      rSize = wxDefaultSize
+                   ,long               lStyle = wxGA_HORIZONTAL
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+                   ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-           const wxString& name = wxGaugeNameStr)
-  {
-    Create(parent, id, range, pos, size, style, validator, name);
-  }
-
-  bool Create(wxWindow *parent, wxWindowID id,
-           int range,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxGA_HORIZONTAL,
+                   ,const wxString&    rsName = wxGaugeNameStr
+                  )
+    {
+        Create( pParent
+               ,vId
+               ,nRange
+               ,rPos
+               ,rSize
+               ,lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+               ,rValidator
 #endif
-           const wxString& name = wxGaugeNameStr);
+               ,rsName
+              );
+    }
 
-  void SetShadowWidth(int w);
-  void SetBezelFace(int w);
-  void SetRange(int r);
-  void SetValue(int pos);
-
-  int GetShadowWidth() const ;
-  int GetBezelFace() const ;
-  int GetRange() const ;
-  int GetValue() const ;
-
-  bool SetForegroundColour(const wxColour& col);
-  bool SetBackgroundColour(const wxColour& col);
-
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
-
- protected:
-   int      m_rangeMax;
-   int      m_gaugePos;
-};
-
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,int                nRange
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,long               lStyle = wxGA_HORIZONTAL
+#if wxUSE_VALIDATORS
+                ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-    // _WX_GAUGE_H_
+                ,const wxString&    rsName = wxGaugeNameStr
+               );
+
+    int  GetShadowWidth(void) const;
+    int  GetBezelFace(void) const;
+    int  GetRange(void) const;
+    int  GetValue(void) const;
+
+    bool SetBackgroundColour(const wxColour& rColour);
+    void SetBezelFace(int nWidth);
+    bool SetForegroundColour(const wxColour& rColour);
+    void SetRange(int nRange);
+    void SetShadowWidth(int nWidth);
+    void SetValue(int nPos);
+
+    inline virtual bool AcceptsFocus(void) const { return FALSE; }
+    inline virtual void Command(wxCommandEvent& WXUNUSED(rEvent)) {};
+
+protected:
+    int                             m_nRangeMax;
+    int                             m_nGaugePos;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxGauge)
+}; // end of CLASS wxGauge
+
+#endif // _WX_GAUGE_H_
+
