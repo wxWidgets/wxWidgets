@@ -743,12 +743,12 @@ void wxEnableTopLevelWindows(bool enable)
 // Yield to other apps/messages and disable user input
 bool wxSafeYield(wxWindow *win)
 {
-   wxEnableTopLevelWindow(FALSE);
+   wxEnableTopLevelWindows(FALSE);
    // always enable ourselves
    if ( win )
       win->Enable(TRUE);
    bool rc = wxYield();
-   wxEnableToplevelWindows(TRUE);
+   wxEnableTopLevelWindows(TRUE);
    return rc;
 }
 

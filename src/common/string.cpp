@@ -1935,11 +1935,16 @@ static void wxLoadCharacterSets(void)
 {
   static bool already_loaded = FALSE;
 
+  if (already_loaded) return;
+
 #if defined(__UNIX__) && wxUSE_UNICODE
   // search through files in /usr/share/i18n/charmaps
-  for (wxString fname = ::wxFindFirstFile(_T("/usr/share/i18n/charmaps/*"));
+  wxString fname;
+  printf("Commencing load\n");
+  for (fname = ::wxFindFirstFile(_T("/usr/share/i18n/charmaps/*"));
        !fname.IsEmpty();
        fname = ::wxFindNextFile()) {
+    wxPrintf(_("Loading: %s\n"), fname.c_str());
     wxTextFile cmap(fname);
     if (cmap.Open()) {
       wxCharacterSet *cset = new wxCharacterSet;
@@ -1948,7 +1953,8 @@ static void wxLoadCharacterSets(void)
 
       wxPrintf(_T("yup, loaded %s\n"),fname.c_str());
 
-      for (wxString line = cmap.GetFirstLine();
+      wxString line;
+      for (line = cmap.GetFirstLine();
 	   !cmap.Eof();
 	   line = cmap.GetNextLine()) {
 	wxPrintf(_T("line contents: %s\n"),line.c_str());
@@ -2002,61 +2008,73 @@ static void wxLoadCharacterSets(void)
   already_loaded = TRUE;
 }
 
-static wxCharacterSet *wxFindCharacterSet(const wxString& charset)
+static wxCharacterSet *wxFindCharacterSet(const wxChar *charset)
 {
+  wxLoadCharacterSets();
   for (size_t n=0; n<wxCharsets.GetCount(); n++)
     if (wxCharsets[n].names.Index(charset) != wxNOT_FOUND)
       return &(wxCharsets[n]);
   return (wxCharacterSet *)NULL;
 }
 
-#if wxUSE_UNICODE
 WXDLLEXPORT_DATA(wxCSConv) wxConv_local((const wxChar *)NULL);
-#endif
 
 wxCSConv::wxCSConv(const wxChar *charset)
 {
-  wxLoadCharacterSets();
   if (!charset) {
 #ifdef __UNIX__
     wxChar *lang = wxGetenv(_T("LANG"));
-    wxChar *dot = wxStrchr(lang, _T('.'));
+    wxChar *dot = lang ? wxStrchr(lang, _T('.')) : (wxChar *)NULL;
     if (dot) charset = dot+1;
 #endif
   }
-  cset = (wxCharacterSet *) NULL;
-
+  m_cset = (wxCharacterSet *) NULL;
+  m_deferred = FALSE;
+  if (charset) {
 #ifdef __UNIX__
-  // first, convert the character set name to standard form
-  wxString codeset;
-  if (wxString(charset,3) == _T("ISO")) {
-    // make sure it's represented in the standard form: ISO_8859-1
-    codeset = _T("ISO_");
-    charset += 3;
-    if ((*charset == _T('-')) || (*charset == _T('_'))) charset++;
-    if (wxStrlen(charset)>4) {
-      if (wxString(charset,4) == _T("8859")) {
-	codeset << _T("8859-");
-	if (*charset == _T('-')) charset++;
+    // first, convert the character set name to standard form
+    wxString codeset;
+    if (wxString(charset,3).CmpNoCase(_T("ISO")) == 0) {
+      // make sure it's represented in the standard form: ISO_8859-1
+      codeset = _T("ISO_");
+      charset += 3;
+      if ((*charset == _T('-')) || (*charset == _T('_'))) charset++;
+      if (wxStrlen(charset)>4) {
+	if (wxString(charset,4) == _T("8859")) {
+	  codeset << _T("8859-");
+	  if (*charset == _T('-')) charset++;
+	}
       }
     }
-  }
-  codeset << charset;
-  codeset.MakeUpper();
-  cset = wxFindCharacterSet(codeset);
+    codeset << charset;
+    codeset.MakeUpper();
+    m_name = wxStrdup(codeset.c_str());
+    m_deferred = TRUE;
 #endif
+  }
 }
 
-wxCSConv::~wxCSConv(void)
+wxCSConv::~wxCSConv()
 {
+  free(m_name);
+}
+
+void wxCSConv::LoadNow()
+{
+//  wxPrintf(_T("Conversion request\n"));
+  if (m_deferred) {
+    m_cset = wxFindCharacterSet(m_name);
+    m_deferred = FALSE;
+  }
 }
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
+  ((wxCSConv *)this)->LoadNow(); // discard constness
   if (buf) {
-    if (cset) {
+    if (m_cset) {
       for (size_t c=0; c<=n; c++)
-	buf[c] = cset->data[psz[c]];
+	buf[c] = m_cset->data[psz[c]];
     } else {
       // latin-1 (direct)
       for (size_t c=0; c<=n; c++)
@@ -2068,11 +2086,12 @@ size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 
 size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
+  ((wxCSConv *)this)->LoadNow(); // discard constness
   if (buf) {
-    if (cset) {
+    if (m_cset) {
       for (size_t c=0; c<=n; c++) {
 	size_t n;
-	for (n=0; (n<256) && (cset->data[n] != psz[c]); n++);
+	for (n=0; (n<256) && (m_cset->data[n] != psz[c]); n++);
 	buf[c] = (n>0xff) ? '?' : n;
       }
     } else {
