@@ -103,6 +103,12 @@ public:
     // ctor
     wxLog();
 
+    // Internal buffer.
+        // Allow replacement of the fixed size static buffer with
+        // a user allocated one.  Pass in NULL to restore the
+        // built in static buffer.
+    static wxChar *SetLogBuffer( wxChar *buf, size_t size = 0 );
+
     // these functions allow to completely disable all log messages
         // is logging disabled now?
     static bool IsEnabled() { return ms_doLog; }
@@ -579,3 +585,5 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 #endif  //debug/!debug
 
 #endif  // _WX_LOG_H_
+
+// vi:sts=4:sw=4:et

@@ -89,7 +89,10 @@
 #define LOG_BUFFER_SIZE   (4096)
 
 // static buffer for error messages
-static wxChar s_szBuf[LOG_BUFFER_SIZE];
+static wxChar   s_szBufStatic[LOG_BUFFER_SIZE];
+
+static wxChar  *s_szBuf     = s_szBufStatic;
+static size_t   s_szBufSize = WXSIZEOF( s_szBufStatic );
 
 #if wxUSE_THREADS
 
@@ -117,7 +120,7 @@ void wxVLogGeneric(wxLogLevel level, const wxChar *szFormat, va_list argptr)
     if ( IsLoggingEnabled() ) {
         wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-        wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+        wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
         wxLog::OnLog(level, s_szBuf, time(NULL));
     }
@@ -137,7 +140,7 @@ void wxLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
     if ( IsLoggingEnabled() ) {                                     \
       wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                      \
                                                                     \
-      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);    \
+      wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);    \
                                                                     \
       wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));             \
     }                                                               \
@@ -160,7 +163,7 @@ IMPLEMENT_LOG_FUNCTION(Status)
 // always terminate the program
 void wxVLogFatalError(const wxChar *szFormat, va_list argptr)
 {
-    wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+    wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
 #if wxUSE_GUI
     wxMessageBox(s_szBuf, _("Fatal Error"), wxID_OK | wxICON_STOP);
@@ -187,7 +190,7 @@ void wxVLogVerbose(const wxChar *szFormat, va_list argptr)
         if ( pLog != NULL && pLog->GetVerbose() ) {
             wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-            wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+            wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
             wxLog::OnLog(wxLOG_Info, s_szBuf, time(NULL));
         }
@@ -210,7 +213,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     if ( IsLoggingEnabled() ) {                                     \
       wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);                      \
                                                                     \
-      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);    \
+      wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);    \
                                                                     \
       wxLog::OnLog(wxLOG_##level, s_szBuf, time(NULL));             \
     }                                                               \
@@ -229,7 +232,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
       wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
       wxChar *p = s_szBuf;
-      size_t len = WXSIZEOF(s_szBuf);
+      size_t len = s_szBufSize;
       wxStrncpy(s_szBuf, _T("("), len);
       len -= 1; // strlen("(")
       p += 1;
@@ -264,7 +267,7 @@ void wxLogVerbose(const wxChar *szFormat, ...)
     if ( IsLoggingEnabled() && ((wxLog::GetTraceMask() & mask) == mask) ) {
       wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-      wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+      wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
       wxLog::OnLog(wxLOG_Trace, s_szBuf, time(NULL));
     }
@@ -294,7 +297,7 @@ void wxLogSysErrorHelper(long lErrCode)
     wxChar szErrMsg[LOG_BUFFER_SIZE / 2];
     wxSnprintf(szErrMsg, WXSIZEOF(szErrMsg),
                _(" (error %ld: %s)"), lErrCode, wxSysErrorMsg(lErrCode));
-    wxStrncat(s_szBuf, szErrMsg, WXSIZEOF(s_szBuf) - wxStrlen(s_szBuf));
+    wxStrncat(s_szBuf, szErrMsg, s_szBufSize - wxStrlen(s_szBuf));
 
     wxLog::OnLog(wxLOG_Error, s_szBuf, time(NULL));
 }
@@ -304,7 +307,7 @@ void WXDLLEXPORT wxVLogSysError(const wxChar *szFormat, va_list argptr)
     if ( IsLoggingEnabled() ) {
         wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-        wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+        wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
         wxLogSysErrorHelper(wxSysErrorCode());
     }
@@ -323,7 +326,7 @@ void WXDLLEXPORT wxVLogSysError(long lErrCode, const wxChar *szFormat, va_list a
     if ( IsLoggingEnabled() ) {
         wxCRIT_SECT_LOCKER(locker, gs_csLogBuf);
 
-        wxVsnprintf(s_szBuf, WXSIZEOF(s_szBuf), szFormat, argptr);
+        wxVsnprintf(s_szBuf, s_szBufSize, szFormat, argptr);
 
         wxLogSysErrorHelper(lErrCode);
     }
@@ -344,6 +347,24 @@ void WXDLLEXPORT wxLogSysError(long lErrCode, const wxChar *szFormat, ...)
 wxLog::wxLog()
 {
     m_bHasMessages = FALSE;
+}
+
+wxChar *wxLog::SetLogBuffer( wxChar *buf, size_t size = 0 )
+{
+    wxChar *oldbuf = s_szBuf;
+
+    if( buf == 0 )
+    {
+        s_szBuf = s_szBufStatic;
+        s_szBufSize = WXSIZEOF( s_szBufStatic );
+    }
+    else
+    {
+        s_szBuf = buf;
+        s_szBufSize = size;
+    }
+
+    return (oldbuf == s_szBufStatic ) ? 0 : oldbuf;
 }
 
 wxLog *wxLog::GetActiveTarget()
@@ -493,7 +514,7 @@ wxLogStderr::wxLogStderr(FILE *fp)
 #endif
 
 #ifdef __cplusplus
-	extern "C" {
+    extern "C" {
 #endif
 
 #ifndef __GESTALT__
@@ -510,163 +531,162 @@ wxLogStderr::wxLogStderr(FILE *fp)
 
 #if TARGET_API_MAC_CARBON
 
-	#include <CodeFragments.h>
+    #include <CodeFragments.h>
 
-	EXTERN_API_C( long )
-	CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
+    EXTERN_API_C( long )
+    CallUniversalProc(UniversalProcPtr theProcPtr, ProcInfoType procInfo, ...);
 
-	ProcPtr gCallUniversalProc_Proc = NULL;
-	
+    ProcPtr gCallUniversalProc_Proc = NULL;
+
 #endif
 
-static MetroNubUserEntryBlock*	gMetroNubEntry = NULL;
+static MetroNubUserEntryBlock*    gMetroNubEntry = NULL;
 
 static long fRunOnce = false;
 
 Boolean IsCompatibleVersion(short inVersion);
 
 /* ---------------------------------------------------------------------------
-		IsCompatibleVersion
+        IsCompatibleVersion
    --------------------------------------------------------------------------- */
 
 Boolean IsCompatibleVersion(short inVersion)
 {
-	Boolean result = false;
-	
-	if (fRunOnce)
-	{
-		MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
-		
-		result = (inVersion <= block->apiHiVersion);
-	}
-	
-	return result;	
+    Boolean result = false;
+
+    if (fRunOnce)
+    {
+        MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
+
+        result = (inVersion <= block->apiHiVersion);
+    }
+
+    return result;    
 }
 
 /* ---------------------------------------------------------------------------
-		IsMetroNubInstalled
+        IsMetroNubInstalled
    --------------------------------------------------------------------------- */
 
 Boolean IsMetroNubInstalled()
 {
-	if (!fRunOnce)
-	{
-		long result, value;
-		
-		fRunOnce = true;
-		gMetroNubEntry = NULL;
-		
-		if (Gestalt(gestaltSystemVersion, &value) == noErr && value < 0x1000)
-		{
-			/* look for MetroNub's Gestalt selector */
-			if (Gestalt(kMetroNubUserSignature, &result) == noErr)
-			{
-			
-			#if TARGET_API_MAC_CARBON
-				if (gCallUniversalProc_Proc == NULL)
-				{
-					CFragConnectionID	connectionID;
-					Ptr					mainAddress;
-					Str255				errorString;
-					ProcPtr				symbolAddress;
-					OSErr				err;
-					CFragSymbolClass	symbolClass;
-					
-					symbolAddress = NULL;
-					err = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag,
-											&connectionID, &mainAddress, errorString);
-					
-					if (err != noErr)
-					{
-						gCallUniversalProc_Proc = NULL;
-						goto end;
-					}
+    if (!fRunOnce)
+    {
+        long result, value;
 
-					err = FindSymbol(connectionID, "\pCallUniversalProc",
-									(Ptr *) &gCallUniversalProc_Proc, &symbolClass);
-					
-					if (err != noErr)
-					{
-						gCallUniversalProc_Proc = NULL;
-						goto end;
-					}
-				}
-			#endif
-			
-				{
-					MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
-					
-					/* make sure the version of the API is compatible */
-					if (block->apiLowVersion <= kMetroNubUserAPIVersion &&
-						kMetroNubUserAPIVersion <= block->apiHiVersion)
-						gMetroNubEntry = block;		/* success! */
-				}
+        fRunOnce = true;
+        gMetroNubEntry = NULL;
 
-			}
-		}
-	}
+        if (Gestalt(gestaltSystemVersion, &value) == noErr && value < 0x1000)
+        {
+            /* look for MetroNub's Gestalt selector */
+            if (Gestalt(kMetroNubUserSignature, &result) == noErr)
+            {
+
+            #if TARGET_API_MAC_CARBON
+                if (gCallUniversalProc_Proc == NULL)
+                {
+                    CFragConnectionID   connectionID;
+                    Ptr                 mainAddress;
+                    Str255              errorString;
+                    ProcPtr             symbolAddress;
+                    OSErr               err;
+                    CFragSymbolClass    symbolClass;
+
+                    symbolAddress = NULL;
+                    err = GetSharedLibrary("\pInterfaceLib", kPowerPCCFragArch, kFindCFrag,
+                                           &connectionID, &mainAddress, errorString);
+
+                    if (err != noErr)
+                    {
+                        gCallUniversalProc_Proc = NULL;
+                        goto end;
+                    }
+
+                    err = FindSymbol(connectionID, "\pCallUniversalProc",
+                                    (Ptr *) &gCallUniversalProc_Proc, &symbolClass);
+
+                    if (err != noErr)
+                    {
+                        gCallUniversalProc_Proc = NULL;
+                        goto end;
+                    }
+                }
+            #endif
+
+                {
+                    MetroNubUserEntryBlock* block = (MetroNubUserEntryBlock *)result;
+
+                    /* make sure the version of the API is compatible */
+                    if (block->apiLowVersion <= kMetroNubUserAPIVersion &&
+                        kMetroNubUserAPIVersion <= block->apiHiVersion)
+                        gMetroNubEntry = block;        /* success! */
+                }
+
+            }
+        }
+    }
 
 end:
 
 #if TARGET_API_MAC_CARBON
-	return (gMetroNubEntry != NULL && gCallUniversalProc_Proc != NULL);
+    return (gMetroNubEntry != NULL && gCallUniversalProc_Proc != NULL);
 #else
-	return (gMetroNubEntry != NULL);
+    return (gMetroNubEntry != NULL);
 #endif
 }
 
 /* ---------------------------------------------------------------------------
-		IsMWDebuggerRunning											[v1 API]
+        IsMWDebuggerRunning                                            [v1 API]
    --------------------------------------------------------------------------- */
 
 Boolean IsMWDebuggerRunning()
 {
-	if (IsMetroNubInstalled())
-		return CallIsDebuggerRunningProc(gMetroNubEntry->isDebuggerRunning);
-	else
-		return false;
+    if (IsMetroNubInstalled())
+        return CallIsDebuggerRunningProc(gMetroNubEntry->isDebuggerRunning);
+    else
+        return false;
 }
 
 /* ---------------------------------------------------------------------------
-		AmIBeingMWDebugged											[v1 API]
+        AmIBeingMWDebugged                                            [v1 API]
    --------------------------------------------------------------------------- */
 
 Boolean AmIBeingMWDebugged()
 {
-	if (IsMetroNubInstalled())
-		return CallAmIBeingDebuggedProc(gMetroNubEntry->amIBeingDebugged);
-	else
-		return false;
+    if (IsMetroNubInstalled())
+        return CallAmIBeingDebuggedProc(gMetroNubEntry->amIBeingDebugged);
+    else
+        return false;
 }
 
 /* ---------------------------------------------------------------------------
-		UserSetWatchPoint											[v2 API]
+        UserSetWatchPoint                                            [v2 API]
    --------------------------------------------------------------------------- */
 
 OSErr UserSetWatchPoint (Ptr address, long length, WatchPointIDT* watchPointID)
 {
-	if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
-		return CallUserSetWatchPointProc(gMetroNubEntry->userSetWatchPoint,
-											address, length, watchPointID);
-	else
-		return errProcessIsNotClient;
+    if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
+        return CallUserSetWatchPointProc(gMetroNubEntry->userSetWatchPoint,
+                                         address, length, watchPointID);
+    else
+        return errProcessIsNotClient;
 }
 
 /* ---------------------------------------------------------------------------
-		ClearWatchPoint												[v2 API]
+        ClearWatchPoint                                                [v2 API]
    --------------------------------------------------------------------------- */
 
 OSErr ClearWatchPoint (WatchPointIDT watchPointID)
 {
-	if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
-		return CallClearWatchPointProc(gMetroNubEntry->clearWatchPoint,
-											watchPointID);
-	else
-		return errProcessIsNotClient;
+    if (IsMetroNubInstalled() && IsCompatibleVersion(kMetroNubUserAPIVersion))
+        return CallClearWatchPointProc(gMetroNubEntry->clearWatchPoint, watchPointID);
+    else
+        return errProcessIsNotClient;
 }
 
 #ifdef __cplusplus
-	}
+    }
 #endif
 
 #endif // !TARGET_API_MAC_CARBON
@@ -937,3 +957,5 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
 }
 
 #endif //wxUSE_LOG
+
+// vi:sts=4:sw=4:et
