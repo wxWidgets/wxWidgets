@@ -1,17 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/cocoa/bitmap.cpp
 // Purpose:     wxBitmap
-// Author:      AUTHOR
+// Author:      David Elliott
 // Modified by:
-// Created:     ??/??/98
+// Created:     2003/07/19
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) 2003 David Elliott
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
-
-#ifdef __GNUG__
-#pragma implementation "bitmap.h"
-#endif
 
 #include "wx/setup.h"
 #include "wx/utils.h"
@@ -20,11 +16,38 @@
 #include "wx/icon.h"
 #include "wx/log.h"
 #include "wx/image.h"
+#include "wx/xpmdecod.h"
 
-#if !USE_SHARED_LIBRARIES
-IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
-IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
-#endif
+#include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
+
+#import <AppKit/NSBitmapImageRep.h>
+#import <AppKit/NSGraphics.h>
+
+// ========================================================================
+// wxBitmapRefData
+// ========================================================================
+class wxBitmapRefData: public wxGDIRefData
+{
+    friend class wxBitmap;
+public:
+    wxBitmapRefData();
+    wxBitmapRefData( const wxBitmapRefData& data );
+    virtual ~wxBitmapRefData();
+
+protected:
+    int                 m_width;
+    int                 m_height;
+    int                 m_depth;
+    bool                m_ok;
+    int                 m_numColors;
+    wxPalette           m_bitmapPalette;
+    int                 m_quality;
+    WX_NSBitmapImageRep m_cocoaNSBitmapImageRep;
+    wxMask             *m_bitmapMask; // Optional mask
+};
+
+#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
 
 wxBitmapRefData::wxBitmapRefData()
 {
@@ -34,19 +57,37 @@ wxBitmapRefData::wxBitmapRefData()
     m_depth = 0;
     m_quality = 0;
     m_numColors = 0;
+    m_cocoaNSBitmapImageRep = nil;
     m_bitmapMask = NULL;
+}
+
+wxBitmapRefData::wxBitmapRefData( const wxBitmapRefData& data)
+{
+    m_width = data.m_width;
+    m_height = data.m_height;
+    m_depth = data.m_depth;
+    m_ok = data.m_ok;
+    m_numColors = data.m_numColors;
+    m_bitmapPalette = data.m_bitmapPalette;
+    m_quality = data.m_quality;
+    m_cocoaNSBitmapImageRep = data.m_cocoaNSBitmapImageRep;
+    [m_cocoaNSBitmapImageRep retain];
+    m_bitmapMask = data.m_bitmapMask?new wxMask(*data.m_bitmapMask):NULL;
 }
 
 wxBitmapRefData::~wxBitmapRefData()
 {
-    /*
-     * TODO: delete the bitmap data here.
-     */
+    [m_cocoaNSBitmapImageRep release];
+    m_cocoaNSBitmapImageRep = NULL;
 
-    if (m_bitmapMask)
-        delete m_bitmapMask;
+    delete m_bitmapMask;
     m_bitmapMask = NULL;
 }
+
+// ========================================================================
+// wxBitmap
+// ========================================================================
+IMPLEMENT_DYNAMIC_CLASS(wxBitmap, wxGDIObject)
 
 wxBitmap::wxBitmap()
 {
@@ -101,82 +142,21 @@ wxBitmap::wxBitmap(const wxString& filename, wxBitmapType type)
         wxTheBitmapList->AddBitmap(this);
 }
 
-wxBitmap::wxBitmap(const wxImage& image, int depth)
+wxObjectRefData *wxBitmap::CreateRefData() const
 {
+    return new wxBitmapRefData;
 }
 
-wxBitmap::wxBitmap(char **bits)
+wxObjectRefData *wxBitmap::CloneRefData(const wxObjectRefData *data) const
 {
+    return new wxBitmapRefData(*(wxBitmapRefData*)data);
 }
 
-/* TODO: maybe allow creation from XPM
-// Create from data
-wxBitmap::wxBitmap(const char **data)
+WX_NSBitmapImageRep wxBitmap::GetNSBitmapImageRep()
 {
-    (void) Create((void *)data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
-}
-*/
-
-bool wxBitmap::Create(int w, int h, int d)
-{
-    UnRef();
-
-    m_refData = new wxBitmapRefData;
-
-    M_BITMAPDATA->m_width = w;
-    M_BITMAPDATA->m_height = h;
-    M_BITMAPDATA->m_depth = d;
-
-    /* TODO: create new bitmap */
-
-    return M_BITMAPDATA->m_ok;
-}
-
-bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
-{
-    UnRef();
-
-    m_refData = new wxBitmapRefData;
-
-    wxBitmapHandler *handler = FindHandler(type);
-
-    if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
-
-        return FALSE;
-    }
-
-    return handler->LoadFile(this, filename, type, -1, -1);
-}
-
-bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int depth)
-{
-    UnRef();
-
-    m_refData = new wxBitmapRefData;
-
-    wxBitmapHandler *handler = FindHandler(type);
-
-    if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
-
-        return FALSE;
-    }
-
-    return handler->Create(this, data, type, width, height, depth);
-}
-
-bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPalette *palette) const
-{
-    wxBitmapHandler *handler = FindHandler(type);
-
-    if ( handler == NULL ) {
-        wxLogWarning("no bitmap handler for type %d defined.", type);
-
-        return FALSE;
-  }
-
-  return handler->SaveFile(this, filename, type, palette);
+    if(!M_BITMAPDATA)
+        return NULL;
+    return M_BITMAPDATA->m_cocoaNSBitmapImageRep;
 }
 
 void wxBitmap::SetWidth(int w)
@@ -235,9 +215,181 @@ void wxBitmap::SetMask(wxMask *mask)
     M_BITMAPDATA->m_bitmapMask = mask ;
 }
 
-/*
- * wxMask
- */
+bool wxBitmap::Ok() const
+{
+    return m_refData && M_BITMAPDATA->m_ok;
+}
+
+wxPalette* wxBitmap::GetPalette() const
+{
+    if(!m_refData)
+        return NULL;
+    return &M_BITMAPDATA->m_bitmapPalette;
+}
+
+wxMask* wxBitmap::GetMask() const
+{
+    if(!m_refData)
+        return NULL;
+    return M_BITMAPDATA->m_bitmapMask;
+}
+
+int wxBitmap::GetDepth() const
+{
+    if(!m_refData)
+        return 0;
+    return M_BITMAPDATA->m_depth;
+}
+
+int wxBitmap::GetWidth() const
+{
+    if(!m_refData)
+        return 0;
+    return M_BITMAPDATA->m_width;
+}
+
+int wxBitmap::GetHeight() const
+{
+    if(!m_refData)
+        return 0;
+    return M_BITMAPDATA->m_height;
+}
+
+bool wxBitmap::Create(int w, int h, int d)
+{
+    UnRef();
+
+    m_refData = new wxBitmapRefData;
+
+    M_BITMAPDATA->m_width = w;
+    M_BITMAPDATA->m_height = h;
+    M_BITMAPDATA->m_depth = d;
+
+    /* TODO: create new bitmap */
+
+    return M_BITMAPDATA->m_ok;
+}
+
+bool wxBitmap::LoadFile(const wxString& filename, wxBitmapType type)
+{
+    wxAutoNSAutoreleasePool pool;
+    UnRef();
+
+    m_refData = new wxBitmapRefData;
+
+    NSBitmapImageRep *imageRep = [NSBitmapImageRep
+        imageRepWithContentsOfFile:wxNSStringWithWxString(filename)];
+
+    if(imageRep)
+    {
+        M_BITMAPDATA->m_width = [imageRep pixelsWide];
+        M_BITMAPDATA->m_height = [imageRep pixelsHigh];
+        M_BITMAPDATA->m_depth = 24; // FIXME
+        M_BITMAPDATA->m_ok = true;
+        M_BITMAPDATA->m_numColors = 0;
+        M_BITMAPDATA->m_quality = 0;
+        M_BITMAPDATA->m_cocoaNSBitmapImageRep = [imageRep retain];
+        M_BITMAPDATA->m_bitmapMask = NULL;
+        return true;
+    }
+    wxImage image;
+    if(!image.LoadFile(filename,type))
+        return false;
+    if(!image.Ok())
+        return false;
+    *this = wxBitmap(image);
+    return true;
+}
+
+bool wxBitmap::Create(void *data, wxBitmapType type, int width, int height, int depth)
+{
+    UnRef();
+
+    m_refData = new wxBitmapRefData;
+
+    return false;
+}
+
+bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPalette *palette) const
+{
+    return false;
+}
+
+bool wxBitmap::CopyFromIcon(const wxIcon& icno)
+{
+    return false;
+}
+
+wxBitmap wxBitmap::GetSubBitmap(wxRect const&) const
+{
+    return wxNullBitmap;
+}
+
+wxImage wxBitmap::ConvertToImage() const
+{
+    if(!M_BITMAPDATA->m_ok)
+        return wxImage(5,5)/*wxNullImage*/;
+    return wxImage(M_BITMAPDATA->m_width,M_BITMAPDATA->m_height);
+}
+
+bool wxBitmap::CreateFromXpm(const char **xpm)
+{
+#if wxUSE_IMAGE && wxUSE_XPM
+    UnRef();
+
+    wxCHECK_MSG( xpm, false, wxT("invalid XPM data") )
+
+    wxXPMDecoder decoder;
+    wxImage img = decoder.ReadData(xpm);
+    wxCHECK_MSG( img.Ok(), false, wxT("invalid XPM data") )
+
+    *this = wxBitmap(img);
+    return true;
+#else
+    return false;
+#endif
+}
+
+bool wxBitmap::CreateFromImage(const wxImage& image, int depth)
+{
+    UnRef();
+
+    wxCHECK_MSG(image.Ok(), false, wxT("invalid image"));
+    wxCHECK_MSG(depth == -1 || depth == 1, false, wxT("invalid bitmap depth"));
+
+    m_refData = new wxBitmapRefData();
+
+    M_BITMAPDATA->m_width = image.GetWidth();
+    M_BITMAPDATA->m_height = image.GetHeight();
+    NSBitmapImageRep *bitmapImage = [[NSBitmapImageRep alloc]
+            initWithBitmapDataPlanes: NULL
+            pixelsWide: image.GetWidth()
+            pixelsHigh: image.GetHeight()
+            bitsPerSample: 8
+            samplesPerPixel: 3
+            hasAlpha: NO
+            isPlanar: NO
+            colorSpaceName: NSCalibratedRGBColorSpace
+            bytesPerRow: 0
+            bitsPerPixel: 0];
+
+    const int numBytes = image.GetWidth()*image.GetHeight()*3;
+    memcpy([bitmapImage bitmapData], image.GetData(), numBytes);
+    // TODO: Alpha and convert to desired depth
+    M_BITMAPDATA->m_depth = 24;
+    M_BITMAPDATA->m_ok = true;
+    M_BITMAPDATA->m_numColors = 0;
+    M_BITMAPDATA->m_quality = 0;
+    M_BITMAPDATA->m_cocoaNSBitmapImageRep = bitmapImage;
+    M_BITMAPDATA->m_bitmapMask = NULL;
+    return true;
+}
+
+// ========================================================================
+// wxMask
+// ========================================================================
+
+IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
 wxMask::wxMask()
 {
@@ -305,115 +457,3 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
     return FALSE;
 }
 
-/*
- * wxBitmapHandler
- */
-
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapHandler, wxObject)
-
-wxBitmapHandler::~wxBitmapHandler()
-{
-}
-
-bool wxBitmapHandler::Create(wxBitmap *bitmap, void *data, long type, int width, int height, int depth)
-{
-    return FALSE;
-}
-
-bool wxBitmapHandler::LoadFile(wxBitmap *bitmap, const wxString& name, long type,
-        int desiredWidth, int desiredHeight)
-{
-    return FALSE;
-}
-
-bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette)
-{
-    return FALSE;
-}
-
-/*
- * Standard handlers
- */
-
-/* TODO: bitmap handlers, a bit like this:
-class WXDLLEXPORT wxBMPResourceHandler: public wxBitmapHandler
-{
-    DECLARE_DYNAMIC_CLASS(wxBMPResourceHandler)
-public:
-    inline wxBMPResourceHandler()
-    {
-        m_name = "Windows bitmap resource";
-        m_extension = "";
-        m_type = wxBITMAP_TYPE_BMP_RESOURCE;
-    };
-
-    virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-          int desiredWidth, int desiredHeight);
-};
-IMPLEMENT_DYNAMIC_CLASS(wxBMPResourceHandler, wxBitmapHandler)
-*/
-
-void wxBitmap::InitStandardHandlers()
-{
-/* TODO: initialize all standard bitmap or derive class handlers here.
-    AddHandler(new wxBMPResourceHandler);
-    AddHandler(new wxBMPFileHandler);
-    AddHandler(new wxXPMFileHandler);
-    AddHandler(new wxXPMDataHandler);
-    AddHandler(new wxICOResourceHandler);
-    AddHandler(new wxICOFileHandler);
-*/
-}
-
-bool wxBitmap::CopyFromIcon(const wxIcon& icno)
-{
-    return false;
-}
-
-wxPalette* wxBitmap::GetPalette() const
-{
-    return NULL;
-}
-
-wxBitmap wxBitmap::GetSubBitmap(wxRect const&) const
-{
-    return wxNullBitmap;
-}
-
-wxImage wxBitmap::ConvertToImage() const
-{
-    return wxNullImage;
-}
-
-bool wxBitmap::Ok() const
-{
-    return FALSE;
-}
-
-wxMask* wxBitmap::GetMask() const
-{
-    return NULL;
-}
-
-int wxBitmap::GetDepth() const
-{
-    return 0;
-}
-
-int wxBitmap::GetWidth() const
-{
-    return 0;
-}
-
-int wxBitmap::GetHeight() const
-{
-    return 0;
-}
-
-
-bool wxBitmap::CreateFromXpm(const char **)
-{
-    return false;
-}
-
-// vim:sts=4:sw=4:syn=cpp:et
