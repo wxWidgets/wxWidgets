@@ -53,6 +53,7 @@ LDFLAGS_EXE="@LDFLAGS_EXE@"
 MACRESWXCONFIG="@MACRESWXCONFIG@"
 EXTRALIBS_GUI="@EXTRALIBS_GUI@"
 LIBS="@LIBS@"
+WXCONFIG_LDFLAGS_GUI="@WXCONFIG_LDFLAGS_GUI@"
 
 
 # Linker flags for sublibraries:
@@ -124,6 +125,19 @@ output_libs()
     done
 
     echo $all_ldflags $wxlibs $all_libs
+}
+
+# output $(WXCONFIG_LDFLAGS_GUI) if any of libs passed as arguments is GUI
+# library, nothing otherwise:
+get_ldflags_gui()
+{
+    flags_to_ret=""
+    for lib in $* ; do
+        if isinlist $lib $CORE_GUI_LIBS ; then
+            flags_to_ret="$WXCONFIG_LDFLAGS_GUI"
+        fi
+    done
+    echo $flags_to_ret
 }
 
 # return the absolute path prepending builddir to it if needed
@@ -317,14 +331,15 @@ while test $# -gt 0; do
           # output link flags:
           contrib_libs=`output_libs $libs_list`
           if test $static_flag = yes ; then
-              echo "$libs ${LDFLAGS} ${WXCONFIG_RPATH} $contrib_libs ${libdir}/${WXCONFIG_LIBS_STATIC} ${EXTRALIBS_GUI} ${LIBS} ${DMALLOC_LIBS}"
+              echo "$libs ${LDFLAGS} ${WXCONFIG_LDFLAGS_GUI} ${WXCONFIG_RPATH} $contrib_libs ${libdir}/${WXCONFIG_LIBS_STATIC} ${EXTRALIBS_GUI} ${LIBS} ${DMALLOC_LIBS}"
           else
-              echo $libs ${LDFLAGS} ${WXCONFIG_RPATH} $contrib_libs ${WXCONFIG_LIBS} ${DMALLOC_LIBS}
+              echo $libs ${LDFLAGS} ${WXCONFIG_LDFLAGS_GUI} ${WXCONFIG_RPATH} $contrib_libs ${WXCONFIG_LIBS} ${DMALLOC_LIBS}
           fi
       else
           # in multilib mode, link against all sublibraries:
           wxlibs=`output_libs $libs_list`
-          echo $libs ${LDFLAGS} ${WXCONFIG_RPATH} $wxlibs ${DMALLOC_LIBS}
+          guildflags=`get_ldflags_gui $libs_list`
+          echo $libs ${LDFLAGS} ${guildflags} ${WXCONFIG_RPATH} $wxlibs ${DMALLOC_LIBS}
       fi
 
       ;;

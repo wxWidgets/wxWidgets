@@ -2225,6 +2225,14 @@ if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_MSW" = 1 ; then
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
+
+        dnl -mwindows causes a heap of other default gui libs to be linked in.
+        dnl FIXME: If cygwin needs this, please push it above, if not, please
+        dnl        remove this comment :-)
+        case "${host}" in
+            *-*-mingw32* )
+                WXCONFIG_LDFLAGS_GUI="$LDFLAGS -Wl,--subsystem,windows -mwindows"
+        esac
     fi
 
     if test "$wxUSE_GTK" = 1; then
@@ -5755,6 +5763,7 @@ AC_SUBST(WXCONFIG_LIBS_STATIC)
 AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 AC_SUBST(WXCONFIG_RPATH)
+AC_SUBST(WXCONFIG_LDFLAGS_GUI)
 AC_SUBST(WX_LARGEFILE_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS)
 AC_SUBST(CODE_GEN_FLAGS_CXX)
