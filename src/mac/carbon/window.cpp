@@ -1811,6 +1811,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         if ( vis )
             m_peer->SetVisibility( true , true ) ;
 
+        if ( doMove )
+            wxWindowMac::MacSuperChangedPosition() ; // like this only children will be notified
+
         MacInvalidateBorders() ;
 
         MacRepositionScrollBars() ;
@@ -2401,7 +2404,7 @@ void wxWindowMac::MacPaintBorders( int leftOrigin , int rightOrigin )
     InsetRect( &rect, -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
 
 #if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-    if ( HIThemeDrawFrame != 0)
+    if ( UMAGetSystemVersion() >= 0x1030  )
     {
         Rect srect = rect ;
         HIThemeFrameDrawInfo info ;
@@ -3069,7 +3072,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
                 if ( !child->GetEventHandler()->ProcessEvent( eventNc ) )
                 {
 #if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_3
-                    if ( HIThemeDrawFrame != 0)
+                    if ( UMAGetSystemVersion() >= 0x1030 )
                     {
                         child->MacPaintBorders(0,0) ;
                     }
