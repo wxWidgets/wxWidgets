@@ -529,13 +529,16 @@ void wxGenericDirCtrl::ShowHidden( bool show )
     SetPath(path);
 }
 
-void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
+const wxTreeItemId
+wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
 {
     wxDirItemData *dir_item = new wxDirItemData(path,name,TRUE);
 
-    wxTreeItemId id = m_treeCtrl->AppendItem( m_rootId, name, imageId, -1, dir_item);
+    wxTreeItemId id = AppendItem( m_rootId, name, imageId, -1, dir_item);
 
     m_treeCtrl->SetItemHasChildren(id);
+
+    return id;
 }
 
 void wxGenericDirCtrl::SetupSections()
@@ -755,7 +758,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
         path += eachFilename;
 
         wxDirItemData *dir_item = new wxDirItemData(path,eachFilename,TRUE);
-        wxTreeItemId id = m_treeCtrl->AppendItem( parentId, eachFilename,
+        wxTreeItemId id = AppendItem( parentId, eachFilename,
                                       wxFileIconsTable::folder, -1, dir_item);
         m_treeCtrl->SetItemImage( id, wxFileIconsTable::folder_open,
                                   wxTreeItemIcon_Expanded );
@@ -787,7 +790,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
             int image_id = wxFileIconsTable::file;
             if (eachFilename.Find(wxT('.')) != wxNOT_FOUND)
                 image_id = wxTheFileIconsTable->GetIconID(eachFilename.AfterLast(wxT('.')));
-            (void)m_treeCtrl->AppendItem( parentId, eachFilename, image_id, -1, dir_item);
+            (void) AppendItem( parentId, eachFilename, image_id, -1, dir_item);
         }
     }
 }
@@ -1102,6 +1105,26 @@ void wxGenericDirCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
     DoResize();
 }
 
+wxTreeItemId wxGenericDirCtrl::AppendItem (const wxTreeItemId & parent,
+					   const wxString & text,
+					   int image, int selectedImage,
+					   wxTreeItemData * data)
+{
+  wxTreeCtrl *treeCtrl = GetTreeCtrl ();
+
+  wxASSERT (treeCtrl);
+
+  if (treeCtrl)
+  {
+    return treeCtrl->AppendItem (parent, text, image, selectedImage, data);
+  }
+  else
+  {
+    return wxTreeItemId();
+  }
+}
+
+
 //-----------------------------------------------------------------------------
 // wxDirFilterListCtrl
 //-----------------------------------------------------------------------------
@@ -1156,6 +1179,7 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
         SetSelection(defaultFilter);
     }
 }
+
 
 // ----------------------------------------------------------------------------
 // wxFileIconsTable icons

@@ -163,9 +163,13 @@ public:
     virtual void ReCreateTree();
     
 protected:
-    void ExpandDir(wxTreeItemId parentId);
-    void CollapseDir(wxTreeItemId parentId);
-    void AddSection(const wxString& path, const wxString& name, int imageId = 0);
+    virtual void ExpandDir(wxTreeItemId parentId);
+    virtual void CollapseDir(wxTreeItemId parentId);
+    virtual const wxTreeItemId AddSection(const wxString& path, const wxString& name, int imageId = 0);
+    virtual wxTreeItemId AppendItem (const wxTreeItemId & parent,
+                const wxString & text,
+                int image = -1, int selectedImage = -1,
+                wxTreeItemData * data = NULL);
     //void FindChildFiles(wxTreeItemId id, int dirFlags, wxArrayString& filenames);
 
     // Extract description and actual filter from overall filter string
