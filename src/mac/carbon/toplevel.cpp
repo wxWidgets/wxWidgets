@@ -764,6 +764,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
         SetShape(rgn);
     }
 #endif
+
+    wxWindowCreateEvent event(this);
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxTopLevelWindowMac::MacGetPortParams(WXPOINTPTR localOrigin, WXRECTPTR clipRect, WXHWND *window  , wxWindowMac** rootwin)

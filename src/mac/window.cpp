@@ -218,6 +218,10 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
         MacCreateScrollBars( style ) ;
     }
 #endif
+
+    wxWindowCreateEvent event(this);
+    GetEventHandler()->ProcessEvent(event);
+
     return TRUE;
 }
 
