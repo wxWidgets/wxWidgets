@@ -125,7 +125,7 @@ WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jdmerge.obj
 WXTIFF_CFLAGS = /M$(__RUNTIME_LIBS)$(__DEBUGRUNTIME_43) /DWIN32 $(__DEBUGINFO) \
 	/Fd$(LIBDIRNAME)\wxtiff$(WXDEBUGFLAG).pdb $(____DEBUGRUNTIME_42_p) \
-	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) $(CPPFLAGS) $(CFLAGS)
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /I..\..\src\jpeg $(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.obj \
 	$(OBJS)\wxtiff_tif_aux.obj \

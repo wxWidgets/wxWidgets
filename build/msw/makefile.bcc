@@ -130,8 +130,8 @@ WXJPEG_OBJECTS =  \
 	$(OBJS)\wxjpeg_jquant2.obj \
 	$(OBJS)\wxjpeg_jdmerge.obj
 WXTIFF_CFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG) -tWM -w-8004 -w-8012 -w-8057 -w-8060 -w-8066 $(CPPFLAGS) \
-	$(CFLAGS)
+	$(__OPTIMIZEFLAG) -tWM -I..\..\src\jpeg -w-8004 -w-8012 -w-8057 -w-8060 -w-8066 \
+	$(CPPFLAGS) $(CFLAGS)
 WXTIFF_OBJECTS =  \
 	$(OBJS)\wxtiff_tif_win32.obj \
 	$(OBJS)\wxtiff_tif_aux.obj \
