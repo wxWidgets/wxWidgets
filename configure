@@ -929,7 +929,7 @@ test "$host_alias" != "$target_alias" &&
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=3
-WX_RELEASE_NUMBER=0
+WX_RELEASE_NUMBER=1
 
 WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
 WX_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
@@ -13411,7 +13411,7 @@ if test "$wxUSE_LIBTIFF" = "yes" -o "$wxUSE_LIBTIFF" = "sys" ; then
 #define wxUSE_LIBTIFF 1
 EOF
 
-  if test "$wxUSE_LIBTIFF" = "yes" ; then  
+  if test "$wxUSE_LIBTIFF" = "yes" ; then
     TIFF_INCLUDE="-I\${top_srcdir}/src/tiff"
   else
     TIFF_LINK=
@@ -15740,12 +15740,12 @@ if test -d include; then
     if test -d include/wx; then
         if test -d include/wx/${TOOLKIT_DIR}; then
             if test -f include/wx/${TOOLKIT_DIR}/setup.h; then
-                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h 
+                mv -f include/wx/${TOOLKIT_DIR}/setup.h setup.h
             fi
         fi
     fi
 fi
-            
+
 
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -16237,8 +16237,8 @@ cat >> $CONFIG_STATUS <<\EOF
             chmod +x wx-config
             mv wx-config wx${TOOLKIT_NAME}-config
             ${LN_S} wx${TOOLKIT_NAME}-config wx-config
-            
-                                 
+
+                        
             if test ! -d lib; then
               mkdir lib
             fi
@@ -16271,7 +16271,7 @@ cat >> $CONFIG_STATUS <<\EOF
             if test -f setup.h; then
                 cp -fp setup.h include/wx/${TOOLKIT_DIR}/setup.h
             fi
-            
+
           
 exit 0
 EOF
