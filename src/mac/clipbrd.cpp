@@ -93,11 +93,13 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 	
 #else
 	long offset ;
-	if ( GetScrap( NULL , dataFormat.GetFormatId() , &offset ) > 0 )
-	{
-		return TRUE ;
-	}
-     return FALSE;
+	Handle datahandle = NewHandle(0) ;
+	HLock( datahandle ) ;
+	GetScrap( datahandle , dataFormat.GetFormatId() , &offset ) ;
+	HUnlock( datahandle ) ;
+	bool hasData = GetHandleSize( datahandle ) > 0 ;
+	DisposeHandle( datahandle ) ;
+	return hasData ;
 #endif
 }
 
@@ -249,7 +251,102 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, wxChar *formatName, int m
 
 void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
 {
-    return NULL;
+#if !TARGET_CARBON
+	OSErr err = noErr ;
+#else
+	OSStatus err = noErr ;
+#endif
+  void * data = NULL ;
+	
+    switch (dataFormat.GetType())
+    {
+        case wxDF_BITMAP:
+        case wxDF_DIB:
+#if wxUSE_METAFILE
+        case wxDF_METAFILE:
+#endif
+        case wxDF_SYLK:
+        case wxDF_DIF:
+        case wxDF_TIFF:
+        case wxDF_PALETTE:
+        default:
+            {
+                wxLogError(_("Unsupported clipboard format."));
+                return NULL;
+            }
+
+        case wxDF_OEMTEXT:
+            dataFormat = wxDF_TEXT;
+            // fall through
+
+        case wxDF_TEXT:
+                break;
+    }
+
+#if TARGET_CARBON
+  	ScrapRef scrapRef;
+  	
+  	err = GetCurrentScrap( &scrapRef );
+  	if ( err != noTypeErr && err != memFullErr )	
+  	{
+  		ScrapFlavorFlags	flavorFlags;
+  		Size				byteCount;
+  		
+  		if (( err = GetScrapFlavorFlags( scrapRef, dataFormat.GetFormatId(), &flavorFlags )) == noErr)
+  		{
+  			if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
+  			{
+  			  if ( dataFormat.GetType() == wxDF_TEXT )
+  			    byteCount++ ;
+  			    
+          data = new char[ byteCount ] ;
+          if (( err = GetScrapFlavorData( scrapRef, dataFormat.GetFormatId(), &byteCount , data )) == noErr )
+          {
+            *len = byteCount ;
+  			    if ( dataFormat.GetType() == wxDF_TEXT )  
+  		        ((char*)data)[byteCount] = 0 ;
+          }
+          else
+          {
+            delete[] data ;
+            data = NULL ;
+          }
+	   		}
+  		}
+  	}
+	
+#else
+  	long offset ;
+  	Handle datahandle = NewHandle(0) ;
+  	HLock( datahandle ) ;
+  	GetScrap( datahandle , dataFormat.GetFormatId() , &offset ) ;
+  	HUnlock( datahandle ) ;
+  	if ( GetHandleSize( datahandle ) > 0 )
+  	{
+  	  long byteCount = GetHandleSize( datahandle ) ;
+  	  if ( dataFormat.GetType() == wxDF_TEXT )  
+  	    data = new char[ byteCount + 1] ;
+      else
+        data = new char[ byteCount ] ;
+
+  	  memcpy( (char*) data , (char*) *datahandle , byteCount ) ;
+  	  if ( dataFormat.GetType() == wxDF_TEXT )  
+  		  ((char*)data)[byteCount] = 0 ;
+  	  * len = byteCount ;
+  	}
+  	DisposeHandle( datahandle ) ;
+#endif
+    if ( err )
+    {
+        wxLogSysError(_("Failed to get clipboard data."));
+
+        return NULL ;
+    }
+    if ( dataFormat.GetType() == wxDF_TEXT && wxApp::s_macDefaultEncodingIsPC )
+    {
+      wxMacConvertToPC((char*)data) ;
+    }
+    return data;
 }
 
 
@@ -373,7 +470,7 @@ bool wxClipboard::GetData( wxDataObject& data )
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
     wxDataFormat format = data.GetPreferredFormat();
-    switch ( format )
+    switch ( format.GetType() )
     {
         case wxDF_TEXT:
         case wxDF_OEMTEXT:
