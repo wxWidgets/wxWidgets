@@ -257,12 +257,12 @@ class TestWindow(ogl.ShapeCanvas):
         
         self.MyAddShape(
             ogl.CircleShape(80), 
-            100, 100, wx.Pen(wx.BLUE, 3), wx.GREEN_BRUSH, "Circle"
+            75, 110, wx.Pen(wx.BLUE, 3), wx.GREEN_BRUSH, "Circle"
             )
             
         self.MyAddShape(
-            ogl.TextShape(45, 30), 
-            205, 60, wx.GREEN_PEN, wx.LIGHT_GREY_BRUSH, "Text"
+            ogl.TextShape(120, 45), 
+            160, 35, wx.GREEN_PEN, wx.LIGHT_GREY_BRUSH, "OGL is now a\npure Python lib!"
             )
 
         self.MyAddShape(
