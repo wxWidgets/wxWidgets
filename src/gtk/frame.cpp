@@ -80,6 +80,54 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
 }
 
 //-----------------------------------------------------------------------------
+// "child_attached" of menu bar
+//-----------------------------------------------------------------------------
+
+static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+{
+    if (!win->HasVMT()) return;
+    
+    win->m_menuBarDetached = FALSE;
+    win->m_sizeSet = FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "child_detached" of menu bar
+//-----------------------------------------------------------------------------
+
+static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+{
+    if (!win->HasVMT()) return;
+    
+    win->m_menuBarDetached = TRUE;
+    win->m_sizeSet = FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "child_attached" of tool bar
+//-----------------------------------------------------------------------------
+
+static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+{
+    if (!win->HasVMT()) return;
+    
+    win->m_toolBarDetached = FALSE;
+    win->m_sizeSet = FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "child_detached" of tool bar
+//-----------------------------------------------------------------------------
+
+static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
+{
+    if (!win->HasVMT()) return;
+    
+    win->m_toolBarDetached = TRUE;
+    win->m_sizeSet = FALSE;
+}
+
+//-----------------------------------------------------------------------------
 // "configure_event"
 //-----------------------------------------------------------------------------
 
@@ -110,6 +158,9 @@ static void wxInsertChildInFrame( wxWindow* parent, wxWindow* child )
 {
     if (wxIS_KIND_OF(child,wxToolBar) || wxIS_KIND_OF(child,wxMenuBar))
     {
+        /* actually, menubars are never inserted here, but this
+	   may change one day */
+    
         /* these are outside the client area */
 	wxFrame* frame = (wxFrame*) parent;
         gtk_myfixed_put( GTK_MYFIXED(frame->m_mainWidget),
@@ -156,13 +207,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
 wxFrame::wxFrame()
 {
     m_frameMenuBar = (wxMenuBar *) NULL;
-    m_mdiMenuBar = (wxMenuBar *) NULL;
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
     m_miniEdge = 0;
     m_miniTitle = 0;
     m_mainWidget = (GtkWidget*) NULL;
+    m_menuBarDetached = FALSE;
+    m_toolBarDetached = FALSE;
 }
 
 wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
@@ -170,13 +222,14 @@ wxFrame::wxFrame( wxWindow *parent, wxWindowID id, const wxString &title,
       long style, const wxString &name )
 {
     m_frameMenuBar = (wxMenuBar *) NULL;
-    m_mdiMenuBar = (wxMenuBar *) NULL;
     m_frameStatusBar = (wxStatusBar *) NULL;
     m_frameToolBar = (wxToolBar *) NULL;
     m_sizeSet = FALSE;
     m_miniEdge = 0;
     m_miniTitle = 0;
     m_mainWidget = (GtkWidget*) NULL;
+    m_menuBarDetached = FALSE;
+    m_toolBarDetached = FALSE;
     Create( parent, id, title, pos, size, style, name );
 }
 
@@ -231,14 +284,13 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_ALL;
     long func = (long) GDK_FUNC_ALL;
+    
     if ((m_windowStyle & wxCAPTION) == 0)
 	decor |= GDK_DECOR_TITLE;
-/*
-    if ((m_windowStyle & wxMINIMIZE) == 0)
+/*  if ((m_windowStyle & wxMINIMIZE) == 0)
 	func |= GDK_FUNC_MINIMIZE;
     if ((m_windowStyle & wxMAXIMIZE) == 0)
-	func |= GDK_FUNC_MAXIMIZE;
-*/
+	func |= GDK_FUNC_MAXIMIZE;            */
     if ((m_windowStyle & wxSYSTEM_MENU) == 0)
 	decor |= GDK_DECOR_MENU;
     if ((m_windowStyle & wxMINIMIZE_BOX) == 0)
@@ -247,6 +299,7 @@ bool wxFrame::Create( wxWindow *parent, wxWindowID id, const wxString &title,
 	decor |= GDK_DECOR_MAXIMIZE;
     if ((m_windowStyle & wxRESIZE_BORDER) == 0)
 	func |= GDK_FUNC_RESIZE;
+	
     gdk_window_set_decorations(m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions(m_widget->window, (GdkWMFunction)func);
       
@@ -275,14 +328,10 @@ wxFrame::~wxFrame()
     wxTopLevelWindows.DeleteObject( this );
 
     if (wxTheApp->GetTopWindow() == this)
-    {
         wxTheApp->SetTopWindow( (wxWindow*) NULL );
-    }
 
     if (wxTopLevelWindows.Number() == 0)
-    {
         wxTheApp->ExitMainLoop();
-    }
 }
 
 bool wxFrame::Show( bool show )
@@ -397,7 +446,7 @@ void wxFrame::GetClientSize( int *width, int *height ) const
     wxWindow::GetClientSize( width, height );
     if (height)
     {
-        if (m_frameMenuBar) (*height) -= wxMENU_HEIGHT;
+        if (m_frameMenuBar && !m_menuBarDetached) (*height) -= wxMENU_HEIGHT;
         if (m_frameStatusBar) (*height) -= wxSTATUS_HEIGHT;
         if (m_frameToolBar)
         {
@@ -418,7 +467,7 @@ void wxFrame::DoSetClientSize( int width, int height )
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
 
     int h = height;
-    if (m_frameMenuBar) h += wxMENU_HEIGHT;
+    if (m_frameMenuBar && !m_menuBarDetached) h += wxMENU_HEIGHT;
     if (m_frameStatusBar) h += wxSTATUS_HEIGHT;
     if (m_frameToolBar)
     {
@@ -474,7 +523,8 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
-            int hh = wxMENU_HEIGHT;
+            int hh = 0;
+	    if (!m_menuBarDetached) hh = wxMENU_HEIGHT;
             m_frameMenuBar->m_x = xx;
             m_frameMenuBar->m_y = yy;
             m_frameMenuBar->m_width = ww;
@@ -490,7 +540,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
         {
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
-            if ((m_frameMenuBar) || (m_mdiMenuBar)) yy += wxMENU_HEIGHT;
+            if (m_frameMenuBar && !m_menuBarDetached) yy += wxMENU_HEIGHT;
             int ww = m_width - 2*m_miniEdge;
             int hh = m_frameToolBar->m_height;
 
@@ -642,10 +692,15 @@ void wxFrame::SetMenuBar( wxMenuBar *menuBar )
             m_frameMenuBar->m_parent = this;
             gtk_myfixed_put( GTK_MYFIXED(m_mainWidget),
                 m_frameMenuBar->m_widget, m_frameMenuBar->m_x, m_frameMenuBar->m_y );
-
-            /* an mdi child menu bar might be underneath */
-            if (m_mdiMenuBar)
-                m_frameMenuBar->Show( FALSE );
+	
+	    if (menuBar->m_windowStyle & wxMB_DOCKABLE)
+	    {
+                gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_attached",
+                    GTK_SIGNAL_FUNC(gtk_menu_attached_callback), (gpointer)this );
+		    
+                gtk_signal_connect( GTK_OBJECT(menuBar->m_widget), "child_detached",
+                    GTK_SIGNAL_FUNC(gtk_menu_detached_callback), (gpointer)this );
+	    }
         }
     }
 

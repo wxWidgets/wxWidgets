@@ -108,13 +108,14 @@ public:
     virtual void OnInternalIdle();
 
     wxMenuBar    *m_frameMenuBar;
-    wxMenuBar    *m_mdiMenuBar;
     wxStatusBar  *m_frameStatusBar;
     wxToolBar    *m_frameToolBar;
     wxString      m_title;
     wxIcon        m_icon;
     int           m_miniEdge,m_miniTitle;
     GtkWidget    *m_mainWidget;
+    bool          m_menuBarDetached;
+    bool          m_toolBarDetached;
 
 protected:
     virtual void DoSetSize(int x, int y,

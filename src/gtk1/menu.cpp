@@ -30,7 +30,7 @@ wxMenuBar::wxMenuBar( long style )
 {
     m_needParent = FALSE; // hmmm
 
-    PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, 0, "menu" );
+    PreCreation( (wxWindow *) NULL, -1, wxDefaultPosition, wxDefaultSize, style, "menu" );
 
     m_menus.DeleteContents( TRUE );
 
