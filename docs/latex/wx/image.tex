@@ -6,9 +6,13 @@ can be loaded from a file in a variety of formats, and is extensible to new form
 via image format handlers. Functions are available to set and get image bits, so
 it can be used for basic image manipulation.
 
-A wxImage cannot (currently) be drawn directly to a wxDC. Instead, a platform-specific
-wxBitmap object must be created from it, and that bitmap drawn on the wxDC, using
-wxDC::DrawBitmap.
+A wxImage cannot (currently) be drawn directly to a \helpref{wxDC}{wxdc}. Instead, 
+a platform-specific \helpref{wxBitmap}{wxbitmap} object must be created from it using
+the \helpref{ConvertToBitmap}{wximageconverttobitmap} function. This bitmap can then
+be drawn in a device context, using \helpref{wxDC::DrawBitmap}{wxdcdrawbitmap}.
+
+One colour value of the image may be used as a mask colour which will lead to the automatic
+creation of a \helpref{wxMask}{wxmask} object associated to the bitmap object.
 
 \wxheading{Derived from}
 
@@ -142,9 +146,12 @@ This function is called by wxWindows on exit.
 Converts the image to a platform-specific bitmap object. This has to be done
 to actually display an image as you cannot draw an image directly on a window.
 The resulting bitmap will use the colour depth of the current system which entails
-that a (crude) colour reduction has to take place. When in 8-bit mode, this
-routine will use a color cube created on program start-up to look up colors.
-Still, the image quality won't be perfect for photo images.
+that a colour reduction has to take place. 
+
+When in 8-bit mode (PseudoColour mode), the GTK port will use a color cube created 
+on program start-up to look up colors. This ensures a very fast conversion, but
+the image quality won't be perfect (and could be better for photo images using more
+sophisticated dithering algorithms).
 
 \membersection{wxImage::Create}\label{wximagecreate}
 
@@ -264,7 +271,7 @@ Gets the red value of the mask colour.
 
 \membersection{wxImage::GetSubImage}\label{wximagegetsubimage}
 
-\constfunc{wxImage}{GetSubImage}{\param{const wxRect\&}{rect}}
+\constfunc{wxImage}{GetSubImage}{\param{const wxRect\&}{ rect}}
 
 Returns a sub image of the current one as long as the rect belongs entirely to 
 the image.
@@ -342,6 +349,7 @@ The meaning of {\it stream} data is determined by the {\it type} parameter.}
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_BMP}}{Load a Windows image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_GIF}}{Load a GIF image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_TIF}}{Load a TIFF image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Load a JPEG image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Load a PCX image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Load a PNG image file.}
@@ -414,12 +422,13 @@ Saves a image in the given stream.
 
 \docparam{stream}{An output stream. The meaning of {\it stream} is determined by the {\it type} parameter.}
 
-\docparam{type}{Currently two types can be used:
+\docparam{type}{Currently three types can be used:
 
 \twocolwidtha{5cm}%
 \begin{twocollist}
 \twocolitem{{\bf wxBITMAP\_TYPE\_PNG}}{Save a PNG image file.}
 \twocolitem{{\bf wxBITMAP\_TYPE\_JPEG}}{Save a JPEG image file.}
+\twocolitem{{\bf wxBITMAP\_TYPE\_PCX}}{Save a PCX image file.}
 \end{twocollist}
 
 The validity of these flags depends on the platform and wxWindows configuration
@@ -449,6 +458,13 @@ mimetype to the named file}
 \end{twocollist}}
 }
 
+\membersection{wxImage::Replace}\label{wximagereplace}
+
+\func{void}{Replace}{\param{unsigned char}{ r1}, \param{unsigned char}{ g1}, \param{unsigned char}{ b1},
+\param{unsigned char}{ r2}, \param{unsigned char}{ g2}, \param{unsigned char}{ b2}}
+
+Replaces the colour specified by {\it r1,g1,b1} by the colour {\it r2,g2,b2}.
+
 \membersection{wxImage::Rescale}\label{wximagerescale}
 
 \func{wxImage \&}{Rescale}{\param{int}{ width}, \param{int}{ height}}
@@ -470,7 +486,7 @@ Returns a scaled version of the image. This is also useful for
 scaling bitmaps in general as the only other way to scale bitmaps
 is to blit a wxMemoryDC into another wxMemoryDC.
 
-It may be mentioned that the GTK post uses this function internally
+It may be mentioned that the GTK port uses this function internally
 to scale bitmaps when using mapping mode in wxDC. 
 
 Example:
@@ -523,7 +539,8 @@ Sets the mask colour for this image (and tells the image to use the mask).
 Sets the pixel at the given coordinate. This routine performs bounds-checks
 for the coordinate so it can be considered a safe way to manipulate the
 data, but in some cases this might be too slow so that the data will have to
-be set directly. In that case you have to get that data by calling GetData().
+be set directly. In that case you will have to get access to the image data 
+using the \helpref{GetData}{wximagegetdata} method.
 
 \membersection{wxImage::operator $=$}
 

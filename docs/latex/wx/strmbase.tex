@@ -3,6 +3,9 @@
 % -----------------------------------------------------------------------------
 \section{\class{wxStreamBase}}\label{wxstreambase}
 
+This class is the base class of most stream related classes in wxWindows. It must
+not be used directly.
+
 \wxheading{Derived from}
 
 None
@@ -43,32 +46,32 @@ Destructor.
 This function returns the last error.
 \twocolwidtha{5cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxStream\_NOERROR}}{No error occured.}
-\twocolitem{{\bf wxStream\_EOF}}{An End-Of-File occured.}
-\twocolitem{{\bf wxStream\_WRITE\_ERR}}{A generic error occured on the last write call.}
-\twocolitem{{\bf wxStream\_READ\_ERR}}{A generic error occured on the last read call.}
+\twocolitem{{\bf wxSTREAM\_NO\_ERROR}}{No error occured.}
+\twocolitem{{\bf wxSTREAM\_EOF}}{An End-Of-File occured.}
+\twocolitem{{\bf wxSTREAM\_WRITE\_ERROR}}{A generic error occured on the last write call.}
+\twocolitem{{\bf wxSTREAM\_READ\_ERROR}}{A generic error occured on the last read call.}
 \end{twocollist}
 
 \membersection{wxStreamBase::OnSysRead}\label{wxstreambaseonsysread}
 
 \func{size\_t}{OnSysRead}{\param{void*}{ buffer}, \param{size\_t}{ bufsize}}
 
-Internal function. It is called when the stream buffer needs a buffer of the
+Internal function. It is called when the stream wants to read data of the
 specified size. It should return the size that was actually read.
 
 \membersection{wxStreamBase::OnSysSeek}
 
 \func{off\_t}{OnSysSeek}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
 
-Internal function. It is called when the stream buffer needs to change the
-current position in the stream. See \helpref{wxStreamBuffer::Seek}{wxstreambufferseek}
+Internal function. It is called when the stream needs to change the
+current position.
 
 \membersection{wxStreamBase::OnSysTell}
 
 \constfunc{off\_t}{OnSysTell}{\void}
 
-Internal function. Is is called when the stream buffer needs to know the
-real position in the stream.
+Internal function. Is is called when the stream needs to know the
+real position.
 
 \membersection{wxStreamBase::OnSysWrite}
 
