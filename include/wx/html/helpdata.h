@@ -60,6 +60,11 @@ public:
     void SetBasePath(const wxString& path) { m_BasePath = path; }
     void SetStart(const wxString& start) { m_Start = start; }
 
+    // returns full filename of page (which is part of the book), 
+    // i.e. with book's basePath prepended. If page is already absolute 
+    // path, basePath is _not_ prepended.
+    wxString GetFullPath(const wxString &page) const;
+
 protected:
     wxString m_BasePath;
     wxString m_Title;
@@ -79,6 +84,9 @@ struct wxHtmlContentsItem
     wxChar* m_Name;
     wxChar* m_Page;
     wxHtmlBookRecord *m_Book;
+    
+    // returns full filename of m_Page, i.e. with book's basePath prepended
+    wxString GetFullPath() const { return m_Book->GetFullPath(m_Page); }
 };
 
 //------------------------------------------------------------------------------
@@ -195,9 +203,6 @@ protected:
     // Writes binary book
     bool SaveCachedBook(wxHtmlBookRecord *book, wxOutputStream *f);
 };
-
-// Utility function
-wxString wxAddBasePath(const wxString& basePath, const wxString& path) ;
 
 #endif
 

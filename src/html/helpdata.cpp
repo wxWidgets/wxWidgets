@@ -344,6 +344,16 @@ void HP_TagHandler::ReadIn(wxHtmlContentsItem* array, int size)
 // wxHtmlHelpData
 //-----------------------------------------------------------------------------
 
+wxString wxHtmlBookRecord::GetFullPath(const wxString &page) const
+{
+    if (wxIsAbsolutePath(page))
+        return page;
+    else
+        return m_BasePath + page;
+}
+
+
+
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpData, wxObject)
 
 wxHtmlHelpData::wxHtmlHelpData()
@@ -766,10 +776,10 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     cnt = m_BookRecords.GetCount();
     for (i = 0; i < cnt; i++) 
     {
-        f = fsys.OpenFile(wxAddBasePath(m_BookRecords[i].GetBasePath(), x));
+        f = fsys.OpenFile(m_BookRecords[i].GetFullPath(x));
         if (f) 
 	    {
-            url = wxAddBasePath(m_BookRecords[i].GetBasePath(), x);
+            url = m_BookRecords[i].GetFullPath(x);
             delete f;
             return url;
         }
@@ -782,7 +792,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     {
         if (m_BookRecords[i].GetTitle() == x) 
 	    {
-            url = wxAddBasePath(m_BookRecords[i].GetBasePath(), m_BookRecords[i].GetStart());
+            url = m_BookRecords[i].GetFullPath(m_BookRecords[i].GetStart());
             return url;
         }
     }
@@ -794,7 +804,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     {
         if (wxStrcmp(m_Contents[i].m_Name, x) == 0) 
 	    {
-            url = wxAddBasePath(m_Contents[i].m_Book->GetBasePath(), m_Contents[i].m_Page);
+            url = m_Contents[i].GetFullPath();
             return url;
         }
     }
@@ -807,7 +817,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
     {
         if (wxStrcmp(m_Index[i].m_Name, x) == 0) 
 	    {
-            url = wxAddBasePath(m_Index[i].m_Book->GetBasePath(), m_Index[i].m_Page);
+            url = m_Index[i].GetFullPath();
             return url;
         }
     }
@@ -824,7 +834,7 @@ wxString wxHtmlHelpData::FindPageById(int id)
     {
         if (m_Contents[i].m_ID == id) 
 	    {
-            url = wxAddBasePath(m_Contents[i].m_Book->GetBasePath(), m_Contents[i].m_Page);
+            url = m_Contents[i].GetFullPath();
             return url;
         }
     }
@@ -903,10 +913,11 @@ bool wxHtmlSearchStatus::Search()
     else m_LastPage = thepage;
     
     wxFileSystem fsys;
-    file = fsys.OpenFile(wxAddBasePath(m_Data->m_Contents[i].m_Book->GetBasePath(), thepage));
+    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book->GetFullPath(thepage));
     if (file) 
     {
-        if (m_Engine.Scan(file->GetStream())) {
+        if (m_Engine.Scan(file->GetStream())) 
+        {
             m_Name = m_Data->m_Contents[i].m_Name;
             m_ContentsItem = m_Data->m_Contents + i;
             found = TRUE;
@@ -988,15 +999,6 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
 
     delete[] buf;
     return found;
-}
-
-// Utility function
-wxString wxAddBasePath(const wxString& basePath, const wxString& path)
-{
-    if (wxIsAbsolutePath(path))
-        return path;
-    else
-        return basePath + path;
 }
 
 

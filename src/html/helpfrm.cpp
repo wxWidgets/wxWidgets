@@ -605,7 +605,7 @@ bool wxHtmlHelpFrame::DisplayContents()
     {
         wxHtmlBookRecord& book = m_Data->GetBookRecArray()[0];
         if (!book.GetStart().IsEmpty())
-            m_HtmlWin->LoadPage(wxAddBasePath(book.GetBasePath(), book.GetStart()));
+            m_HtmlWin->LoadPage(book.GetFullPath(book.GetStart()));
     }
     return TRUE;
 }
@@ -627,7 +627,7 @@ bool wxHtmlHelpFrame::DisplayIndex()
     {
         wxHtmlBookRecord& book = m_Data->GetBookRecArray()[0];
         if (!book.GetStart().IsEmpty())
-            m_HtmlWin->LoadPage(wxAddBasePath(book.GetBasePath(), book.GetStart()));
+            m_HtmlWin->LoadPage(book.GetFullPath(book.GetStart()));
     }
     return TRUE;
 }
@@ -686,7 +686,7 @@ bool wxHtmlHelpFrame::KeywordSearch(const wxString& keyword)
         wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_SearchList->GetClientData(0);
         if (it)
         {
-            m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+            m_HtmlWin->LoadPage(it->GetFullPath());
             NotifyPageChanged();
         }
     }
@@ -725,7 +725,7 @@ void wxHtmlHelpFrame::CreateContents()
         roots[it->m_Level + 1] =  m_ContentsBox->AppendItem(
                                        roots[it->m_Level], it->m_Name, IMG_Page, -1,
                                        new wxHtmlHelpTreeItemData(i));
-        m_PagesHash->Put(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page),
+        m_PagesHash->Put(it->GetFullPath(),
                            new wxHtmlHelpHashData(i, roots[it->m_Level + 1]));
 
         if (it->m_Level == 0)
@@ -1114,7 +1114,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                     wxHtmlContentsItem *it = m_Data->GetContents() + (ha->m_Index - 1);
                     if (it->m_Page[0] != 0)
                     {
-                        m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+                        m_HtmlWin->LoadPage(it->GetFullPath());
                         NotifyPageChanged();
                     }
                 }
@@ -1142,7 +1142,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                     {
                         if (it->m_Page[0] != 0)
                         {
-                            m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+                            m_HtmlWin->LoadPage(it->GetFullPath());
                             NotifyPageChanged();
                         }
                     }
@@ -1166,11 +1166,11 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                 {
                     wxHtmlContentsItem *it = m_Data->GetContents() + (ha->m_Index + 1);
 
-                    while (wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page) == adr) it++;
+                    while (it->GetFullPath() == adr) it++;
 
                     if (it->m_Page[0] != 0)
                     {
-                        m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+                        m_HtmlWin->LoadPage(it->GetFullPath());
                         NotifyPageChanged();
                     }
                 }
@@ -1293,7 +1293,7 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
         it = m_Data->GetContents() + (pg->m_Id);
         m_UpdateContents = FALSE;
         if (it->m_Page[0] != 0)
-            m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+            m_HtmlWin->LoadPage(it->GetFullPath());
         m_UpdateContents = TRUE;
     }
 }
@@ -1304,7 +1304,7 @@ void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
     wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexList->GetClientData(m_IndexList->GetSelection());
     if (it->m_Page[0] != 0)
-        m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+        m_HtmlWin->LoadPage(it->GetFullPath());
     NotifyPageChanged();
 }
 
@@ -1343,7 +1343,7 @@ void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
                 if (first)
 		        {
                     if (index[i].m_Page[0] != 0)
-                        m_HtmlWin->LoadPage(wxAddBasePath(index[i].m_Book->GetBasePath(), index[i].m_Page));
+                        m_HtmlWin->LoadPage(index[i].GetFullPath());
                     NotifyPageChanged();
                     first = FALSE;
                 }
@@ -1374,7 +1374,7 @@ void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
         if (first)
 	    {
             if (index[i].m_Page[0] != 0)
-                m_HtmlWin->LoadPage(wxAddBasePath(index[i].m_Book->GetBasePath(), index[i].m_Page));
+                m_HtmlWin->LoadPage(index[i].GetFullPath());
             NotifyPageChanged();
             first = FALSE;
         }
@@ -1392,7 +1392,7 @@ void wxHtmlHelpFrame::OnSearchSel(wxCommandEvent& WXUNUSED(event))
     if (it)
     {
         if (it->m_Page[0] != 0)
-            m_HtmlWin->LoadPage(wxAddBasePath(it->m_Book->GetBasePath(), it->m_Page));
+            m_HtmlWin->LoadPage(it->GetFullPath());
         NotifyPageChanged();
     }
 }
