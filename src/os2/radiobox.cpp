@@ -274,8 +274,9 @@ bool wxRadioBox::Create(
 
     vColour.Set(wxString("BLACK"));
     lColor = (LONG)vColour.GetPixel();
+    m_backgroundColour = pParent->GetBackgroundColour();
     m_nSelectedButton = -1;
-    m_nNoItems        = nNum;
+    m_nNoItems = 0;
 
     m_nMajorDim     = nMajorDim == 0 ? nNum : nMajorDim;
     m_nNoRowsOrCols = nMajorDim;
@@ -293,10 +294,7 @@ bool wxRadioBox::Create(
 #endif
                        ,rsName
                       ))
-
-
-
-
+        return FALSE;
     if (!OS2CreateControl( "STATIC"
 #if RADIOBTN_PARENT_IS_RADIOBOX
                           ,SS_GROUPBOX | WS_GROUP | WS_CLIPCHILDREN
@@ -307,6 +305,7 @@ bool wxRadioBox::Create(
                           ,rSize
                           ,rsTitle
                          ))
+        return FALSE;
 
 #if RADIOBTN_PARENT_IS_RADIOBOX
     HWND                            hWndParent = GetHwnd();
@@ -318,6 +317,7 @@ bool wxRadioBox::Create(
     //
     // Some radio boxes test consecutive id.
     //
+    m_nNoItems = nNum;
     (void)NewControlId();
     m_ahRadioButtons = new WXHWND[nNum];
     m_pnRadioWidth   = new int[nNum];
@@ -403,6 +403,8 @@ bool wxRadioBox::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
+    SetXComp(0);
+    SetYComp(0);
     SetSelection(0);
     SetSize( rPos.x
             ,rPos.y
@@ -462,7 +464,10 @@ void wxRadioBox::DoSetSize(
         nXx = nCurrentX;
     if (nY == -1 && !(nSizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         nYy = nCurrentY;
-
+    if (nYy < 0)
+        nYy = 0;
+    if (nXx < 0)
+        nXx = 0;
 
     wxGetCharSize( m_hWnd
                   ,&nCx1
@@ -627,6 +632,7 @@ void wxRadioBox::DoSetSize(
                           ,(LONG)nMaxHeight
                           ,SWP_ZORDER | SWP_SIZE | SWP_MOVE | SWP_SHOW
                          );
+        GetParent()->Refresh();
         //
         // Where do we put the next button?
         //

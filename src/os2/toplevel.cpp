@@ -722,15 +722,6 @@ bool wxTopLevelWindowOS2::Show(
 
             ::WinQueryWindowPos(hWndParent, &vSwp);
             m_bIconized = vSwp.fl & SWP_MINIMIZE;
-            if (hWndParent)
-                ::WinSetWindowPos( hWndParent
-                                  ,HWND_TOP
-                                  ,vSwp.x
-                                  ,vSwp.y
-                                  ,vSwp.cx
-                                  ,vSwp.cy
-                                  ,SWP_ZORDER | SWP_ACTIVATE | SWP_SHOW | SWP_MOVE
-                                 );
             ::WinEnableWindow(hWndParent, TRUE);
         }
     }

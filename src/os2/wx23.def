@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\WX.lib
+;From library:  F:\Dev\Wx2\WxWindows\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -12094,27 +12094,20 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxCursor::wxCursor(const wxImage&)
       __ct__8wxCursorFRC7wxImage
-      ;wxCursorRefData::~wxCursorRefData()
-      __dt__15wxCursorRefDataFv
       ;wxCursor::wxCursor(const wxString&,long,int,int)
       __ct__8wxCursorFRC8wxStringliT3
-      __vft8wxCursor8wxObject
       ;wxCursor::wxCursor(int)
       __ct__8wxCursorFi
-      ;wxConstructorForwxCursor()
-      wxConstructorForwxCursor__Fv
       ;wxCursorRefData::wxCursorRefData()
       __ct__15wxCursorRefDataFv
-      ;wxCursor::SetHCURSOR(unsigned long)
-      SetHCURSOR__8wxCursorFUl
+      ;wxConstructorForwxCursor()
+      wxConstructorForwxCursor__Fv
+      ;wxCursorRefData::Free()
+      Free__15wxCursorRefDataFv
       ;wxCursor::sm_classwxCursor
       sm_classwxCursor__8wxCursor
-      ;wxCursor::FreeResource(unsigned long)
-      FreeResource__8wxCursorFUl
       ;wxSetCursor(const wxCursor&)
       wxSetCursor__FRC8wxCursor
-      ;wxCursor::~wxCursor()
-      __dt__8wxCursorFv
       ;wxCursor::wxCursor(const char*,int,int,int,int,const char*)
       __ct__8wxCursorFPCciN32T1
       __vft15wxCursorRefData15wxObjectRefData

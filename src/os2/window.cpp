@@ -2870,6 +2870,11 @@ MRESULT wxWindowOS2::OS2WindowProc(
                         HWND                hWnd = ::WinWindowFromID(GetHWND(), SHORT1FROMMP(wParam));
                         wxWindowOS2*        pChild = wxFindWinFromHandle(hWnd);
 
+                        if (!pChild)
+                        {
+                            bProcessed = FALSE;
+                            break;
+                        }
                         if (pChild->IsKindOf(CLASSINFO(wxSlider)))
                             bProcessed = OS2OnScroll( wxVERTICAL
                                                      ,(int)SHORT2FROMMP(wParam)
@@ -3933,6 +3938,8 @@ bool wxWindowOS2::HandleMouseEvent(
 , WXUINT                            uFlags
 )
 {
+    bool                            bProcessed = FALSE;
+
     //
     // The mouse events take consecutive IDs from WM_MOUSEFIRST to
     // WM_MOUSELAST, so it's enough to substract WM_MOUSEMOVE == WM_MOUSEFIRST
@@ -3961,6 +3968,18 @@ bool wxWindowOS2::HandleMouseEvent(
                    ,uFlags
                   );
 
+    bProcessed = GetEventHandler()->ProcessEvent(vEvent);
+    if (!bProcessed)
+    {
+        HPOINTER                    hPtr = ::WinQuerySysPointer(HWND_DESKTOP, SPTR_WAIT, FALSE);
+        HPOINTER                    hCursor = (HPOINTER)GetCursor().GetHCURSOR();
+
+        if (hCursor != NULLHANDLE)
+        {
+            ::WinSetPointer(HWND_DESKTOP, hCursor);
+            bProcessed = TRUE;
+        }
+    }
     return GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::HandleMouseEvent
 

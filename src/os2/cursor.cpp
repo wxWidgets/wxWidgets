@@ -34,22 +34,32 @@ wxCursorRefData::wxCursorRefData(void)
   m_nWidth = 32;
   m_nHeight = 32;
   m_hCursor = 0 ;
-  m_destroyCursor = FALSE;
+  m_bDestroyCursor = FALSE;
 }
 
-wxCursorRefData::~wxCursorRefData(void)
+void wxCursorRefData::Free()
 {
-//    if ( m_hCursor && m_destroyCursor)
-//        ::DestroyCursor((HICON) m_hCursor);
-}
+    if (m_hCursor)
+    {
+        if (m_bDestroyCursor)
+            ::WinDestroyPointer((HPOINTER)m_hCursor);
+        m_hCursor = 0;
+    }
+} // end of wxCursorRefData::Free
 
 // Cursors
 wxCursor::wxCursor(void)
 {
 }
 
-wxCursor::wxCursor(const char WXUNUSED(bits)[], int WXUNUSED(width), int WXUNUSED(height),
-    int WXUNUSED(hotSpotX), int WXUNUSED(hotSpotY), const char WXUNUSED(maskBits)[])
+wxCursor::wxCursor(
+  const char                        WXUNUSED(bits)[]
+, int                               WXUNUSED(width)
+, int                               WXUNUSED(height)
+, int                               WXUNUSED(hotSpotX)
+, int                               WXUNUSED(hotSpotY)
+, const char                        WXUNUSED(maskBits)[]
+)
 {
 }
 
@@ -86,180 +96,221 @@ wxCursor::wxCursor(
 
 } // end of wxCursor::wxCursor
 
-wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int hotSpotY)
+wxCursor::wxCursor(
+  const wxString&                   rsCursorFile
+, long                              lFlags
+, int                               nHotSpotX
+, int                               nHotSpotY
+)
 {
-  m_refData = new wxCursorRefData;
+    wxCursorRefData*                pRefData = new wxCursorRefData;
 
-  M_CURSORDATA->m_destroyCursor = FALSE;
-  M_CURSORDATA->m_hCursor = 0;
-// TODO:
-/*
-  M_CURSORDATA->m_bOK = FALSE;
-  if (flags & wxBITMAP_TYPE_CUR_RESOURCE)
-  {
-    M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadImage(wxGetInstance(), cursor_file, IMAGE_CURSOR, 0, 0, 0);
-    if (M_CURSORDATA->m_hCursor)
-      M_CURSORDATA->m_ok = TRUE;
-    else
-      M_CURSORDATA->m_ok = FALSE;
-  }
-  else if (flags & wxBITMAP_TYPE_CUR)
-  {
-    M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadImage(wxGetInstance(), cursor_file, IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
-  }
-  else if (flags & wxBITMAP_TYPE_ICO)
-  {
-  }
-  else if (flags & wxBITMAP_TYPE_BMP)
-  {
-  }
-*/
-}
+    pRefData = new wxCursorRefData;
+    m_refData = pRefData;
+    pRefData->m_bDestroyCursor = FALSE;
+    if (lFlags == wxBITMAP_TYPE_CUR_RESOURCE)
+    {
+        pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                           ,0
+                                                           ,(ULONG)lFlags // if OS/2 this should be the resource Id
+                                                          );
+    }
+} // end of wxCursor::wxCursor
 
 // Cursors by stock number
-wxCursor::wxCursor(int cursor_type)
+wxCursor::wxCursor(
+  int                               nCursorType
+)
 {
-  m_refData = new wxCursorRefData;
-// TODO:
-/*
-  switch (cursor_type)
-  {
-    case wxCURSOR_WAIT:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_WAIT);
-      break;
-    case wxCURSOR_IBEAM:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_IBEAM);
-      break;
-    case wxCURSOR_CROSS:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_CROSS);
-      break;
-    case wxCURSOR_SIZENWSE:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZENWSE);
-      break;
-    case wxCURSOR_SIZENESW:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZENESW);
-      break;
-    case wxCURSOR_SIZEWE:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZEWE);
-      break;
-    case wxCURSOR_SIZENS:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_SIZENS);
-      break;
-    case wxCURSOR_CHAR:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
-      break;
-    }
-    case wxCURSOR_HAND:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_HAND"));
-      break;
-    }
-    case wxCURSOR_BULLSEYE:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_BULLSEYE"));
-      break;
-    }
-    case wxCURSOR_PENCIL:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_PENCIL"));
-      break;
-    }
-    case wxCURSOR_MAGNIFIER:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_MAGNIFIER"));
-      break;
-    }
-    case wxCURSOR_NO_ENTRY:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_NO_ENTRY"));
-      break;
-    }
-    case wxCURSOR_LEFT_BUTTON:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
-      break;
-    }
-    case wxCURSOR_RIGHT_BUTTON:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
-      break;
-    }
-    case wxCURSOR_MIDDLE_BUTTON:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
-      break;
-    }
-    case wxCURSOR_SIZING:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_SIZING"));
-      break;
-    }
-    case wxCURSOR_WATCH:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_WATCH"));
-      break;
-    }
-    case wxCURSOR_SPRAYCAN:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_ROLLER"));
-      break;
-    }
-    case wxCURSOR_PAINT_BRUSH:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_PBRUSH"));
-      break;
-    }
-    case wxCURSOR_POINT_LEFT:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_PLEFT"));
-      break;
-    }
-    case wxCURSOR_POINT_RIGHT:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_PRIGHT"));
-      break;
-    }
-    case wxCURSOR_QUESTION_ARROW:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_QARROW"));
-      break;
-    }
-    case wxCURSOR_BLANK:
-    {
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor(wxGetInstance(), wxT("wxCURSOR_BLANK"));
-      break;
-    }
-    default:
-    case wxCURSOR_ARROW:
-      M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadCursor((HINSTANCE) NULL, IDC_ARROW);
-      break;
-  }
-*/
-}
+    wxCursorRefData*                pRefData = new wxCursorRefData;
 
-wxCursor::~wxCursor(void)
-{
-//    FreeResource(TRUE);
-}
+    m_refData = pRefData;
+    switch (nCursorType)
+    {
+        case wxCURSOR_ARROWWAIT:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_WAIT
+                                                                   ,FALSE
+                                                                  );
+            break;
 
-bool wxCursor::FreeResource(bool WXUNUSED(force))
-{
-//  if (M_CURSORDATA && M_CURSORDATA->m_hCursor && M_CURSORDATA->m_destroyCursor)
-//  {
-//    DestroyCursor((HCURSOR) M_CURSORDATA->m_hCursor);
-//    M_CURSORDATA->m_hCursor = 0;
-//  }
-  return TRUE;
-}
+        case wxCURSOR_WAIT:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_WAIT
+                                                                   ,FALSE
+                                                                  );
+            break;
 
-void wxCursor::SetHCURSOR(WXHCURSOR cursor)
-{
-  if ( !M_CURSORDATA )
-    m_refData = new wxCursorRefData;
+        case wxCURSOR_IBEAM:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_TEXT
+                                                                   ,FALSE
+                                                                  );
+            break;
 
-  M_CURSORDATA->m_hCursor = cursor;
-}
+        case wxCURSOR_CROSS:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_MOVE
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_SIZENWSE:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_SIZENWSE
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_SIZENESW:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_SIZENESW
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_SIZEWE:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_SIZEWE
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_SIZENS:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_SIZENS
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_CHAR:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_ARROW
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_HAND:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)wxCURSOR_HAND
+                                                              );
+            break;
+
+        case wxCURSOR_BULLSEYE:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)wxCURSOR_BULLSEYE
+                                                              );
+            break;
+
+        case wxCURSOR_PENCIL:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)wxCURSOR_PENCIL
+                                                              );
+            break;
+
+        case wxCURSOR_MAGNIFIER:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)wxCURSOR_MAGNIFIER
+                                                              );
+            break;
+
+        case wxCURSOR_NO_ENTRY:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)wxCURSOR_NO_ENTRY
+                                                              );
+            break;
+
+        case wxCURSOR_LEFT_BUTTON:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_ARROW
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_RIGHT_BUTTON:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_ARROW
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_MIDDLE_BUTTON:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_ARROW
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_SIZING:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_SIZE
+                                                                   ,FALSE
+                                                                  );
+            break;
+
+        case wxCURSOR_WATCH:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)wxCURSOR_WATCH
+                                                              );
+            break;
+
+        case wxCURSOR_SPRAYCAN:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                              ,0
+                                                              ,(ULONG)WXCURSOR_ROLLER
+                                                             );
+            break;
+
+        case wxCURSOR_PAINT_BRUSH:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)WXCURSOR_PBRUSH
+                                                              );
+            break;
+
+        case wxCURSOR_POINT_LEFT:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)WXCURSOR_PLEFT
+                                                              );
+            break;
+
+        case wxCURSOR_POINT_RIGHT:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)WXCURSOR_PRIGHT
+                                                              );
+            break;
+
+        case wxCURSOR_QUESTION_ARROW:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)WXCURSOR_QARROW
+                                                              );
+            break;
+
+        case wxCURSOR_BLANK:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinLoadPointer( HWND_DESKTOP
+                                                               ,0
+                                                               ,(ULONG)WXCURSOR_BLANK
+                                                              );
+            break;
+
+        default:
+        case wxCURSOR_ARROW:
+            pRefData->m_hCursor = (WXHCURSOR) ::WinQuerySysPointer( HWND_DESKTOP
+                                                                   ,(ULONG)SPTR_ARROW
+                                                                   ,FALSE
+                                                                  );
+            break;
+    }
+} // end of wxCursor::wxCursor
 
 // Global cursor setting
 void wxSetCursor(const wxCursor& cursor)
