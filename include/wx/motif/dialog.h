@@ -12,7 +12,7 @@
 #ifndef _WX_DIALOG_H_
 #define _WX_DIALOG_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "dialog.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _WX_MOTIF_MENUITEM_H
 #define _WX_MOTIF_MENUITEM_H
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "menuitem.h"
 #endif
 

@@ -12,7 +12,7 @@
 #ifndef _WX_MOTIF_FRAME_H_
 #define _WX_MOTIF_FRAME_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "frame.h"
 #endif
 
