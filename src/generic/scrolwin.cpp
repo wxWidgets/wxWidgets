@@ -154,9 +154,15 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
     AdjustScrollbars();
    
     if (do_refresh && !noRefresh) 
-	m_targetWindow->Refresh(); 
+        m_targetWindow->Refresh(); 
    
 #ifdef __WXMSW__
+    // GRG: if this turns out to be really necessary, we could
+    //   at least move it to the above if { ... } so that it is
+    //   only done if noRefresh = FALSE (the default). OTOH, if
+    //   this doesn't break anything, which seems to be the
+    //   case, we could just leave it out.
+
     // Necessary?
     // UpdateWindow ((HWND) m_targetWindow->GetHWND());
 #endif
