@@ -580,7 +580,10 @@ public:
 
         // is the date valid (True even for non initialized objects)?
     inline bool IsValid() const;
+    %pythoncode { Ok = IsValid }
+    %pythoncode { def __nonzero__(self): return self.Ok() };
 
+    
         // get the number of seconds since the Unix epoch - returns (time_t)-1
         // if the value is out of range
     inline time_t GetTicks() const;
@@ -1091,6 +1094,10 @@ long wxGetLocalTime();
 long wxGetUTCTime();
 long wxGetCurrentTime();
 wxLongLong wxGetLocalTimeMillis();
+
+%immutable;
+const wxDateTime        wxDefaultDateTime;
+%mutable;
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

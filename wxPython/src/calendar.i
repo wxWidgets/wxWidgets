@@ -60,21 +60,22 @@ enum wxCalendarDateBorder
 
 //---------------------------------------------------------------------------
 
+DocStr(wxCalendarDateAttr,
+"A set of customization attributes for a calendar date, which can be used to
+control the look of the Calendar object.");
 
 class wxCalendarDateAttr
 {
 public:
-    // ctors
-    wxCalendarDateAttr(const wxColour& colText,
+    DocStr(wxCalendarDateAttr,
+            "Create a CalendarDateAttr.");
+    wxCalendarDateAttr(const wxColour& colText = wxNullColour,
                        const wxColour& colBack = wxNullColour,
                        const wxColour& colBorder = wxNullColour,
                        const wxFont& font = wxNullFont,
                        wxCalendarDateBorder border = wxCAL_BORDER_NONE);
 
-    %name(CalendarDateAttrBorder)
-        wxCalendarDateAttr(wxCalendarDateBorder border,
-                           const wxColour& colBorder = wxNullColour);
-
+    
     // setters
     void SetTextColour(const wxColour& colText);
     void SetBackgroundColour(const wxColour& colBack);
@@ -139,13 +140,66 @@ EVT_CALENDAR_WEEKDAY_CLICKED = wx.PyEventBinder( wxEVT_CALENDAR_WEEKDAY_CLICKED,
 MAKE_CONST_WXSTRING(CalendarNameStr);
 
 
+DocStr(wxCalendarCtrl,
+       "The calendar control allows the user to pick a date interactively.");
 
+RefDoc(wxCalendarCtrl,
+
+"The CalendarCtrl displays a window containing several parts: the control to
+pick the month and the year at the top (either or both of them may be
+disabled) and a month area below them which shows all the days in the
+month. The user can move the current selection using the keyboard and select
+the date (generating EVT_CALENDAR event) by pressing <Return> or double
+clicking it.
+
+It has advanced possibilities for the customization of its display. All global
+settings (such as colours and fonts used) can, of course, be changed. But
+also, the display style for each day in the month can be set independently
+using CalendarDateAttr class.
+
+An item without custom attributes is drawn with the default colours and font
+and without border, but setting custom attributes with SetAttr allows to
+modify its appearance. Just create a custom attribute object and set it for
+the day you want to be displayed specially A day may be marked as being a
+holiday, (even if it is not recognized as one by wx.DateTime) by using the
+SetHoliday method.
+
+As the attributes are specified for each day, they may change when the month
+is changed, so you will often want to update them in an EVT_CALENDAR_MONTH
+event handler.
+
+ Styles
+    CAL_SUNDAY_FIRST:	        Show Sunday as the first day in the week
+    CAL_MONDAY_FIRST:	        Show Monday as the first day in the week
+    CAL_SHOW_HOLIDAYS:	        Highlight holidays in the calendar
+    CAL_NO_YEAR_CHANGE:	        Disable the year changing
+    CAL_NO_MONTH_CHANGE:	Disable the month (and, implicitly, the year) changing
+    CAL_SHOW_SURROUNDING_WEEKS:	Show the neighbouring weeks in the previous and next months
+    CAL_SEQUENTIAL_MONTH_SELECTION:	Use alternative, more compact, style for the month and year selection controls.
+
+The default calendar style is wxCAL_SHOW_HOLIDAYS.
+
+ Events
+    EVT_CALENDAR:       	A day was double clicked in the calendar.
+    EVT_CALENDAR_SEL_CHANGED:	The selected date changed.
+    EVT_CALENDAR_DAY:    	The selected day changed.
+    EVT_CALENDAR_MONTH: 	The selected month changed.
+    EVT_CALENDAR_YEAR:   	The selected year changed.
+    EVT_CALENDAR_WEEKDAY_CLICKED: 	User clicked on the week day header
+
+Note that changing the selected date will result in either of
+EVT_CALENDAR_DAY, MONTH or YEAR events and an EVT_CALENDAR_SEL_CHANGED event.
+    
+");       
+
+       
 class wxCalendarCtrl : public wxControl
 {
 public:
     %pythonAppend wxCalendarCtrl      "self._setOORInfo(self)"
     %pythonAppend wxCalendarCtrl()    ""
 
+    DocStr(wxCalendarCtrl, "Create and show a calendar control.");
     wxCalendarCtrl(wxWindow *parent,
                    wxWindowID id,
                    const wxDateTime& date = wxDefaultDateTime,
@@ -153,8 +207,12 @@ public:
                    const wxSize& size = wxDefaultSize,
                    long style = wxCAL_SHOW_HOLIDAYS | wxWANTS_CHARS,
                    const wxString& name = wxPyCalendarNameStr);
+
+
+    DocStr(wxCalendarCtrl(), "Precreate a CalendarCtrl for 2-phase creation.");
     %name(PreCalendarCtrl)wxCalendarCtrl();
 
+    DocStr(Create, "Acutally create the GUI portion of the CalendarCtrl for 2-phase creation.");
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxDateTime& date = wxDefaultDateTime,
@@ -164,86 +222,153 @@ public:
                 const wxString& name = wxPyCalendarNameStr);
 
 
-    // set/get the current date
-    // ------------------------
+    DocDeclStr(
+        void, SetDate(const wxDateTime& date),
+        "Sets the current date.");
 
-    void SetDate(const wxDateTime& date);
-    const wxDateTime& GetDate() const;
-
-    // set/get the range in which selection can occur
-    // ---------------------------------------------
-
-    bool SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime);
-    const wxDateTime& GetLowerDateLimit() const;
-    bool SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime);
-    const wxDateTime& GetUpperDateLimit() const;
-
-    bool SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
-                      const wxDateTime& upperdate = wxDefaultDateTime);
+    DocDeclStr(
+        const wxDateTime&, GetDate() const,
+        "Gets the currently selected date.");
+    
 
 
-    // calendar mode
-    // -------------
+    DocDeclStr(
+        bool, SetLowerDateLimit(const wxDateTime& date = wxDefaultDateTime),
+        "set the range in which selection can occur");
+    
+    DocDeclStr(
+        bool, SetUpperDateLimit(const wxDateTime& date = wxDefaultDateTime),
+        "set the range in which selection can occur");
+    
+    DocDeclStr(
+        const wxDateTime&, GetLowerDateLimit() const,
+        "get the range in which selection can occur");
+    
+    DocDeclStr(
+        const wxDateTime&, GetUpperDateLimit() const,
+        "get the range in which selection can occur");
 
-    // some calendar styles can't be changed after the control creation by
-    // just using SetWindowStyle() and Refresh() and the functions below
-    // should be used instead for them
-
-    // corresponds to wxCAL_NO_YEAR_CHANGE bit
-    void EnableYearChange(bool enable = True);
-
-    // corresponds to wxCAL_NO_MONTH_CHANGE bit
-    void EnableMonthChange(bool enable = True);
-
-    // corresponds to wxCAL_SHOW_HOLIDAYS bit
-    void EnableHolidayDisplay(bool display = True);
-
-    // customization
-    // -------------
-
-    // header colours are used for painting the weekdays at the top
-    void SetHeaderColours(const wxColour& colFg, const wxColour& colBg);
-    wxColour GetHeaderColourFg() const;
-    wxColour GetHeaderColourBg() const;
-
-    // highlight colour is used for the currently selected date
-    void SetHighlightColours(const wxColour& colFg, const wxColour& colBg);
-    wxColour GetHighlightColourFg() const;
-    wxColour GetHighlightColourBg() const;
-
-    // holiday colour is used for the holidays (if style & wxCAL_SHOW_HOLIDAYS)
-    void SetHolidayColours(const wxColour& colFg, const wxColour& colBg);
-    wxColour GetHolidayColourFg() const;
-    wxColour GetHolidayColourBg() const;
-
-    // an item without custom attributes is drawn with the default colours and
-    // font and without border, setting custom attributes allows to modify this
-    //
-    // the day parameter should be in 1..31 range, for days 29, 30, 31 the
-    // corresponding attribute is just unused if there is no such day in the
-    // current month
-
-    wxCalendarDateAttr *GetAttr(size_t day) const;
-    void SetAttr(size_t day, wxCalendarDateAttr *attr);
-
-    void SetHoliday(size_t day);
-
-    void ResetAttr(size_t day);
-
-    // returns one of wxCAL_HITTEST_XXX constants and fills either date or wd
-    // with the corresponding value (none for NOWHERE, the date for DAY and wd
-    // for HEADER)
-    wxCalendarHitTestResult HitTest(const wxPoint& pos,
-                                    wxDateTime *date = NULL,
-                                    wxDateTime::WeekDay *wd = NULL);
+    DocDeclStr(
+        bool, SetDateRange(const wxDateTime& lowerdate = wxDefaultDateTime,
+                           const wxDateTime& upperdate = wxDefaultDateTime),
+        "set the range in which selection can occur");
 
 
-    bool Enable(bool enable = True);
-    bool Show(bool show = True);
+    
 
-    // get the currently shown control for month/year
-    wxControl *GetMonthControl() const;
-    wxControl *GetYearControl() const;
+    DocDeclStr(
+        void, EnableYearChange(bool enable = True),
+        "This function should be used instead of changing CAL_NO_YEAR_CHANGE\n"
+        "style bit directly. It allows or disallows the user to change the year\n"
+        "interactively.");
+    
+    DocDeclStr(
+        void, EnableMonthChange(bool enable = True),
+        "This function should be used instead of changing CAL_NO_MONTH_CHANGE style\n"
+        "bit. It allows or disallows the user to change the month interactively. Note\n"
+        "that if the month can not be changed, the year can not be changed either.");
+
+    DocDeclStr(
+        void, EnableHolidayDisplay(bool display = True),
+        "This function should be used instead of changing CAL_SHOW_HOLIDAYS style\n"
+        "bit directly. It enables or disables the special highlighting of the holidays.");
+
+
+    
+    DocDeclStr(
+        void, SetHeaderColours(const wxColour& colFg, const wxColour& colBg),
+        "header colours are used for painting the weekdays at the top");
+
+    DocDeclStr(
+        wxColour, GetHeaderColourFg() const,
+        "header colours are used for painting the weekdays at the top");
+    
+    DocDeclStr(
+        wxColour, GetHeaderColourBg() const,
+        "header colours are used for painting the weekdays at the top");
+
+
+    
+    DocDeclStr(
+        void, SetHighlightColours(const wxColour& colFg, const wxColour& colBg),
+        "highlight colour is used for the currently selected date");
+    
+    DocDeclStr(
+        wxColour, GetHighlightColourFg() const,
+        "highlight colour is used for the currently selected date");
+    
+    DocDeclStr(
+        wxColour, GetHighlightColourBg() const,
+        "highlight colour is used for the currently selected date");
+
+    
+     
+    DocDeclStr(
+        void, SetHolidayColours(const wxColour& colFg, const wxColour& colBg),
+        "holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)");
+    
+    DocDeclStr(
+        wxColour, GetHolidayColourFg() const,
+        "holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)");
+    
+    DocDeclStr(
+        wxColour, GetHolidayColourBg() const,
+        "holiday colour is used for the holidays (if CAL_SHOW_HOLIDAYS style is used)");
+
+
+    
+    DocDeclStr(
+        wxCalendarDateAttr*, GetAttr(size_t day) const,
+        "Returns the attribute for the given date (should be in the range 1...31).\n"
+        "The returned value may be None");
+    
+    DocDeclStr(
+        void, SetAttr(size_t day, wxCalendarDateAttr *attr),
+        "Associates the attribute with the specified date (in the range 1...31).\n"
+        "If the attribute passed is None, the items attribute is cleared.");
+
+    DocDeclStr(
+        void, SetHoliday(size_t day),
+        "Marks the specified day as being a holiday in the current month.");
+
+    DocDeclStr(
+        void, ResetAttr(size_t day),
+        "Clears any attributes associated with the given day (in the range 1...31).");
+    
+
+
+    DocAStr(HitTest,
+            "HitTest(Point pos) -> (result, date, weekday)",
+"Returns 3-tuple with information about the given position on the calendar
+control.  The first value of the tuple is a result code and determines the
+validity of the remaining two values.  The result codes are:
+
+    CAL_HITTEST_NOWHERE:    hit outside of anything
+    CAL_HITTEST_HEADER:     hit on the header, weekday is valid
+    CAL_HITTEST_DAY:        hit on a day in the calendar, date is set.
+");           
+    %extend {
+        PyObject* HitTest(const wxPoint& pos) {
+            wxDateTime* date = new wxDateTime;
+            wxDateTime::WeekDay wd;
+            wxCalendarHitTestResult result = self->HitTest(pos, date, &wd);
+            wxPyBeginBlockThreads();
+            PyObject* tup = PyTuple_New(3);
+            PyTuple_SET_ITEM(tup, 0, PyInt_FromLong(result));
+            PyTuple_SET_ITEM(tup, 1, wxPyConstructObject(date, wxT("wxDateTime"), 1));
+            PyTuple_SET_ITEM(tup, 2, PyInt_FromLong(wd));
+            wxPyEndBlockThreads();
+            return tup;
+        }
+    }
+
+    DocDeclStr(
+        wxControl*, GetMonthControl() const,
+        "get the currently shown control for month");
+    
+    DocDeclStr(
+        wxControl*, GetYearControl() const,
+        "get the currently shown control for year");
 };
 
 

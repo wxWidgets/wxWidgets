@@ -48,6 +48,8 @@ public:
        "self._setCallbackInfo(self, PyApp)
         self._setOORInfo(self)";
 
+    DocStr(wxPyApp,
+           "Create a new application object, starting the bootstrap process.");
     %extend {
         wxPyApp() {
             wxPythonApp = new wxPyApp();
@@ -188,7 +190,7 @@ public:
         "Get the current exit behaviour setting.");
 
 #if 0 
-    // Get display mode that is used use. This is only used in framebuffer
+    // Get display mode that is in use. This is only used in framebuffer
     // wxWin ports (such as wxMGL).
     virtual wxVideoMode GetDisplayMode() const;
     

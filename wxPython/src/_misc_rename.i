@@ -288,6 +288,7 @@
 %rename(GetUTCTime)                         wxGetUTCTime;
 %rename(GetCurrentTime)                     wxGetCurrentTime;
 %rename(GetLocalTimeMillis)                 wxGetLocalTimeMillis;
+%rename(DefaultDateTime)                    wxDefaultDateTime;
 %rename(DF_INVALID)                         wxDF_INVALID;
 %rename(DF_TEXT)                            wxDF_TEXT;
 %rename(DF_BITMAP)                          wxDF_BITMAP;

@@ -80,13 +80,13 @@ public:
     void SetDefault();
 
 
-#ifdef __WXMSW__
-    // show the image in the button in addition to the label
-    void SetImageLabel(const wxBitmap& bitmap);
+// #ifdef __WXMSW__
+//     // show the image in the button in addition to the label
+//     void SetImageLabel(const wxBitmap& bitmap);
 
-    // set the margins around the image
-    void SetImageMargins(wxCoord x, wxCoord y);
-#endif
+//     // set the margins around the image
+//     void SetImageMargins(wxCoord x, wxCoord y);
+// #endif
 
     DocStr(GetDefaultButtonSize, "Returns the default button size for this platform.");
     static wxSize GetDefaultSize();
@@ -97,7 +97,30 @@ public:
 //---------------------------------------------------------------------------
 
 
-DocStr(wxBitmapButton, "A Buttont that contains a bitmap.");
+DocStr(wxBitmapButton,
+"A Button that contains a bitmap.  A bitmap button can be supplied with a
+single bitmap, and wxWindows will draw all button states using this bitmap. If
+the application needs more control, additional bitmaps for the selected state,
+unpressed focused state, and greyed-out state may be supplied.
+");
+
+RefDoc(wxButton,  "
+ Styles
+    wx.BU_AUTODRAW: If this is specified, the button will be drawn
+                    automatically using the label bitmap only, providing a
+                    3D-look border. If this style is not specified, the button
+                    will be drawn without borders and using all provided
+                    bitmaps. WIN32 only.
+    wx.BU_LEFT:     Left-justifies the label. WIN32 only.
+    wx.BU_TOP:      Aligns the label to the top of the button. WIN32 only.
+    wx.BU_RIGHT:    Right-justifies the bitmap label. WIN32 only.
+    wx.BU_BOTTOM:   Aligns the label to the bottom of the button. WIN32 only.
+    wx.BU_EXACTFIT: Creates the button as small as possible instead of making
+                    it of the standard size (which is the default behaviour.)
+
+ Events
+     EVT_BUTTON:    Sent when the button is clicked.
+");
 
 class wxBitmapButton : public wxButton
 {
@@ -105,7 +128,7 @@ public:
     %pythonAppend wxBitmapButton         "self._setOORInfo(self)"
     %pythonAppend wxBitmapButton()       ""
 
-    DocStr(wxBitmapButton, "Create and show a button.")
+    DocStr(wxBitmapButton, "Create and show a button with a bitmap for the label.")
     wxBitmapButton(wxWindow* parent, wxWindowID id, const wxBitmap& bitmap,
                    const wxPoint& pos = wxDefaultPosition,
                    const wxSize& size = wxDefaultSize,
