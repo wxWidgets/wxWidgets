@@ -108,9 +108,9 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t bufsize)
 
 off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
 {
-    // NB: since ZIP files don't natively support seeking, we have to 
+    // NB: since ZIP files don't natively support seeking, we have to
     //     implement a brute force workaround -- reading all the data
-    //     between current and the new position (or between beginning of 
+    //     between current and the new position (or between beginning of
     //     the file and new position...)
 
     off_t nextpos;
@@ -138,7 +138,7 @@ off_t wxZipInputStream::OnSysSeek(off_t seek, wxSeekMode mode)
         }
         toskip = nextpos;
     }
-        
+
     if ( toskip > 0 )
     {
         const size_t BUFSIZE = 4096;

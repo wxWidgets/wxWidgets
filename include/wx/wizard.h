@@ -180,7 +180,7 @@ public:
        function taking the following arguments:
 
         wxWizard(wxWindow *parent,
-                 int id = -1,
+                 int id = wxID_ANY,
                  const wxString& title = wxEmptyString,
                  const wxBitmap& bitmap = wxNullBitmap,
                  const wxPoint& pos = wxDefaultPosition,
@@ -188,8 +188,8 @@ public:
     */
     wxWizardBase() { }
 
-    // executes the wizard starting from the given page, returns TRUE if it was
-    // successfully finished, FALSE if user cancelled it
+    // executes the wizard starting from the given page, returns true if it was
+    // successfully finished, false if user cancelled it
     virtual bool RunWizard(wxWizardPage *firstPage) = 0;
 
     // get the current page (NULL if RunWizard() isn't running)
@@ -214,15 +214,15 @@ public:
 
     // Adding pages to page area sizer enlarges wizard
     virtual wxSizer *GetPageAreaSizer() const = 0;
-    
+
     // Set border around page area. Default is 0 if you add at least one
     // page to GetPageAreaSizer and 5 if you don't.
     virtual void SetBorder(int border) = 0;
-    
+
     // wxWizard should be created using "new wxWizard" now, not with Create()
 #if WXWIN_COMPATIBILITY_2_2
     static wxWizard *Create(wxWindow *parent,
-                            int id = -1,
+                            int id = wxID_ANY,
                             const wxString& title = wxEmptyString,
                             const wxBitmap& bitmap = wxNullBitmap,
                             const wxPoint& pos = wxDefaultPosition,
@@ -239,7 +239,7 @@ public:
         { return page->GetPrev() != NULL; }
 
     /// Override these functions to stop InitDialog from calling TransferDataToWindow
-    /// for _all_ pages when the wizard starts. Instead 'ShowPage' will call 
+    /// for _all_ pages when the wizard starts. Instead 'ShowPage' will call
     /// TransferDataToWindow for the first page only.
     bool TransferDataToWindow() { return true; }
     bool TransferDataFromWindow() { return true; }
@@ -262,13 +262,13 @@ class WXDLLIMPEXP_ADV wxWizardEvent : public wxNotifyEvent
 {
 public:
     wxWizardEvent(wxEventType type = wxEVT_NULL,
-                  int id = -1,
-                  bool direction = TRUE,
+                  int id = wxID_ANY,
+                  bool direction = true,
                   wxWizardPage* page = NULL);
 
-    // for EVT_WIZARD_PAGE_CHANGING, return TRUE if we're going forward or
-    // FALSE otherwise and for EVT_WIZARD_PAGE_CHANGED return TRUE if we came
-    // from the previous page and FALSE if we returned from the next one
+    // for EVT_WIZARD_PAGE_CHANGING, return true if we're going forward or
+    // false otherwise and for EVT_WIZARD_PAGE_CHANGED return true if we came
+    // from the previous page and false if we returned from the next one
     // (this function doesn't make sense for CANCEL events)
     bool GetDirection() const { return m_direction; }
 
@@ -297,21 +297,21 @@ END_DECLARE_EVENT_TYPES()
 typedef void (wxEvtHandler::*wxWizardEventFunction)(wxWizardEvent&);
 
 // notifies that the page has just been changed (can't be vetoed)
-#define EVT_WIZARD_PAGE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_PAGE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "<Back" or "Next>" button and the page is going to be
 // changed - unless the event handler vetoes the event
-#define EVT_WIZARD_PAGE_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_PAGE_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_PAGE_CHANGING, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "Cancel" button and the wizard is going to be dismissed -
 // unless the event handler vetoes the event
-#define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_CANCEL(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_CANCEL, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 // the user pressed "Finish" button and the wizard is going to be dismissed -
-#define EVT_WIZARD_FINISHED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_FINISHED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+#define EVT_WIZARD_FINISHED(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_FINISHED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
-// the user pressed "Help" button 
-#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
+// the user pressed "Help" button
+#define EVT_WIZARD_HELP(id, fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_WIZARD_HELP, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxWizardEventFunction, & fn ), (wxObject *)NULL),
 
 #endif // wxUSE_WIZARDDLG
 

@@ -1,4 +1,4 @@
-#define MSL_USE_PRECOMPILED_HEADERS	0
+#define MSL_USE_PRECOMPILED_HEADERS 0
 #if __WXDEBUG__
     // mac os assert levels
     #define DEBUG 1
@@ -6,7 +6,7 @@
 #endif
 #if !defined( __MWERKS__ )
     #error "this file is only for builds with Metrowerks CodeWarrior"
-#endif 
+#endif
 
 #define WX_COMP_INLINE_NO_CLASS // defined if the compiler does not want the classname repeated for inlines within a class definition
 
@@ -29,7 +29,7 @@
 #elif __BEOS__
     #include <ansi_prefix.be.h>
     #include <Be.h>
-#else	
+#else
     #error unknown MW compiler
 #endif
 
@@ -38,32 +38,32 @@
     #include <ansi_parms.h>
     #ifdef __MWERKS__
     #if defined( __MSL__ ) && __MSL__ >= 0x5012 && __MSL__ < 0x7000
-			#define	fileno	_fileno
-			#define	fdopen	_fdopen
-			#define	tell	_tell
+            #define fileno _fileno
+            #define fdopen _fdopen
+            #define tell   _tell
     #endif
     #endif
 #elif defined( __WXMAC__)
-    #define	USE_PRECOMPILED_MAC_HEADERS	0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
+    #define USE_PRECOMPILED_MAC_HEADERS  0  /*Set to 0 if you don't want to use precompiled MacHeaders*/
     #define ACCESSOR_CALLS_ARE_FUNCTIONS 1
     #define OPAQUE_TOOLBOX_STRUCTS 1
     #ifdef __MACH__
-   	  #include <ansi_prefix.mach.h>
-   	  #include <msl_c_version.h>
-   	  #include <stdint.h>
-   	  #undef WCHAR_MAX
-   	  #include <machine/ansi.h>
+        #include <ansi_prefix.mach.h>
+        #include <msl_c_version.h>
+        #include <stdint.h>
+        #undef WCHAR_MAX
+        #include <machine/ansi.h>
     #else
       #include <ansi_prefix.mac.h>
     #endif
-    // for getting the correct expat includes 
+    // for getting the correct expat includes
     #define MACOS_CLASSIC
     /*
     #include <MacTypes.h>
-	#if UNIVERSAL_INTERFACES_VERSION < 0x0340
-	    #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
-	#endif
-	*/
+    #if UNIVERSAL_INTERFACES_VERSION < 0x0340
+        #error "please update to Apple's lastest universal headers from http://developer.apple.com/sdk/"
+    #endif
+    */
 #endif
 
 #define USE_DEFINE
@@ -72,11 +72,11 @@
 
 #ifdef __cplusplus
 
-extern "C" 
+extern "C"
 {
 #endif
-	char *strdup(const char *s) ;
-	int	isascii( int c ) ;
+    char *strdup(const char *s) ;
+    int isascii( int c ) ;
 #ifdef __cplusplus
 }
 #endif

@@ -178,10 +178,10 @@ wxImage wxXPMDecoder::ReadFile(wxInputStream& stream)
             if ( (*q == '*') && (*(q + 1) == '/') )
                 break;
         }
-        
+
         // memmove allows overlaps (unlike strcpy):
         size_t cpylen = strlen(q + 2) + 1;
-        memmove(p, q + 2, cpylen); 
+        memmove(p, q + 2, cpylen);
     }
 
     /*
@@ -676,7 +676,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     /*
      *  Read hints and initialize structures:
      */
-     
+
     count = sscanf(xpm_data[0], "%u %u %u %u",
                    &width, &height, &colors_cnt, &chars_per_pixel);
     if ( count != 4 || width * height * colors_cnt == 0 )
@@ -762,7 +762,7 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     unsigned char *img_data = img.GetData();
     wxXPMColourMap::iterator entry;
     wxXPMColourMap::iterator end = clr_tbl.end();
-    
+
     for (j = 0; j < height; j++)
     {
         for (i = 0; i < width; i++, img_data += 3)

@@ -50,17 +50,17 @@ public:
     virtual wxObject *Clone() const
         { return (wxValidator *)NULL; }
     bool Copy(const wxValidator& val)
-        { m_validatorWindow = val.m_validatorWindow; return TRUE; }
+        { m_validatorWindow = val.m_validatorWindow; return true; }
 
     // Called when the value in the window must be validated.
     // This function can pop up an error message.
-    virtual bool Validate(wxWindow *WXUNUSED(parent)) { return FALSE; };
+    virtual bool Validate(wxWindow *WXUNUSED(parent)) { return false; };
 
     // Called to transfer data to the window
-    virtual bool TransferToWindow() { return FALSE; }
+    virtual bool TransferToWindow() { return false; }
 
     // Called to transfer data from the window
-    virtual bool TransferFromWindow() { return FALSE; };
+    virtual bool TransferFromWindow() { return false; };
 
     // accessors
     wxWindow *GetWindow() const { return (wxWindow *)m_validatorWindow; }
@@ -69,7 +69,7 @@ public:
     // validators beep by default if invalid key is pressed, these functions
     // allow to change it
     static bool IsSilent() { return ms_isSilent; }
-    static void SetBellOnError(bool doIt = TRUE) { ms_isSilent = doIt; }
+    static void SetBellOnError(bool doIt = true) { ms_isSilent = doIt; }
 
 protected:
     wxWindowBase *m_validatorWindow;

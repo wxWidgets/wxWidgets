@@ -748,10 +748,10 @@
 #define _XEatData _XEATDATA
 #define _XFlush _XFLUSH
 #define _XFreeTemp _XFREETEMP
-#define _XGetAsyncReply _XGETASYNCREPLY 
+#define _XGetAsyncReply _XGETASYNCREPLY
 #define _XInitImageFuncPtrs _XINITIMAGEFUNCPTRS
 #define _XRead _XREAD
-#define _XRegisterFilterByType _XREGISTERFILTERBYTYPE 
+#define _XRegisterFilterByType _XREGISTERFILTERBYTYPE
 #define _XReply _XREPLY
 #define _XSend _XSEND
 #define _XUnregisterFilter _XUNREGISTERFILTER
@@ -1077,10 +1077,10 @@
 
 #define SetReqLen(req,n,badlen) \
     if ((req->length + n) > (unsigned)65535) { \
-	    n = badlen; \
-	    req->length += n; \
+        n = badlen; \
+        req->length += n; \
     } else \
-	req->length += n
+        req->length += n
 
 #ifdef __cplusplus
 extern "C" {

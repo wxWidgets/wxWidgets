@@ -94,7 +94,7 @@ class WXDLLIMPEXP_BASE wxEvent;
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
 #if wxUSE_FUNC_TEMPLATE_POINTER
-#  define wxTO_STRING(type) wxToStringConverter<type>  
+#  define wxTO_STRING(type) wxToStringConverter<type>
 #  define wxTO_STRING_IMP(type)
 #  define wxFROM_STRING(type) wxFromStringConverter<type>
 #  define wxFROM_STRING_IMP(type)
@@ -533,8 +533,8 @@ public :
        wxTypeInfo( wxT_COLLECTION , to , from , name )
        { m_elementTypeName = wxString::FromAscii( elementName ) ; m_elementType = NULL ;}
 #endif
-       const wxTypeInfo* GetElementType() const 
-       { 
+       const wxTypeInfo* GetElementType() const
+       {
            if ( m_elementType == NULL )
                m_elementType = wxTypeInfo::FindType( m_elementTypeName ) ;
            return m_elementType ; }
@@ -707,7 +707,7 @@ template<typename T>
 void wxToStringConverter( const wxxVariant &v, wxString &s wxTEMPLATED_FUNCTION_FIX(T)) { wxStringWriteValue( s , v.wxTEMPLATED_MEMBER_CALL(Get , T) ) ; }
 
 template<typename T>
-void wxFromStringConverter( const wxString &s, wxxVariant &v wxTEMPLATED_FUNCTION_FIX(T)) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; } 
+void wxFromStringConverter( const wxString &s, wxxVariant &v wxTEMPLATED_FUNCTION_FIX(T)) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; }
 
 // ----------------------------------------------------------------------------
 // Property Support
@@ -1042,13 +1042,13 @@ public :
        ~wxPropertyInfo() ;
 
        // return the class this property is declared in
-       const wxClassInfo*   GetDeclaringClass() const { return m_itsClass ; }
+       const wxClassInfo*  GetDeclaringClass() const { return m_itsClass ; }
 
        // return the name of this property
-       const wxString&		GetName() const { return m_name ; }
+       const wxString&     GetName() const { return m_name ; }
 
        // returns the flags of this property
-       wxPropertyInfoFlags  GetFlags() const { return m_flags ;}
+       wxPropertyInfoFlags GetFlags() const { return m_flags ;}
 
        // returns the short help string of this property
        const wxString&     GetHelpString() const { return m_helpString ; }
@@ -1057,7 +1057,7 @@ public :
        const wxString&     GetGroupString() const { return m_groupString ; }
 
        // return the element type info of this property (for collections, otherwise NULL)
-       const wxTypeInfo *	GetCollectionElementTypeInfo() const
+       const wxTypeInfo *  GetCollectionElementTypeInfo() const
        {
            if ( m_collectionElementTypeInfo == NULL )
                m_collectionElementTypeInfo = wxTypeInfo::FindType(m_collectionElementTypeName) ;
@@ -1065,7 +1065,7 @@ public :
        }
 
        // return the type info of this property
-       const wxTypeInfo *	GetTypeInfo() const
+       const wxTypeInfo *  GetTypeInfo() const
        {
            if ( m_typeInfo == NULL )
                m_typeInfo = wxTypeInfo::FindType(m_typeName) ;
@@ -1079,7 +1079,7 @@ public :
        wxPropertyInfo*     GetNext() const { return m_next ; }
 
        // returns the default value of this property, its kind may be wxT_VOID if it is not valid
-       wxxVariant			GetDefaultValue() const { return m_defaultValue ; }
+       wxxVariant          GetDefaultValue() const { return m_defaultValue ; }
 private :
     void Insert(wxPropertyInfo* &iter)
     {
@@ -1103,7 +1103,7 @@ private :
     mutable wxTypeInfo*         m_collectionElementTypeInfo ;
     wxString            m_collectionElementTypeName ;
     wxPropertyAccessor* m_accessor ;
-    wxxVariant 		m_defaultValue;
+    wxxVariant          m_defaultValue;
     wxPropertyInfoFlags m_flags ;
     wxString            m_helpString ;
     wxString            m_groupString ;
@@ -1225,13 +1225,13 @@ public :
        ~wxHandlerInfo() ;
 
        // return the name of this handler
-       const wxString&		GetName() const { return m_name ; }
+       const wxString& GetName() const { return m_name ; }
 
        // return the class info of the event
-       const wxClassInfo *	GetEventClassInfo() const { return m_eventClassInfo ; }
+       const wxClassInfo *GetEventClassInfo() const { return m_eventClassInfo ; }
 
        // get the handler function pointer
-       wxObjectEventFunction	GetEventFunction() const { return m_eventFunction ; }
+       wxObjectEventFunction GetEventFunction() const { return m_eventFunction ; }
 
        // returns NULL if this is the last handler of this class
        wxHandlerInfo*     GetNext() const { return m_next ; }
@@ -1739,10 +1739,11 @@ public:
 
     // we must be able to cast variants to wxObject pointers, templates seem not to be suitable
     wxObject* VariantToInstance( wxxVariant &data ) const
-    {	if ( data.GetTypeInfo()->GetKind() == wxT_OBJECT )
-    return m_variantToObjectConverter( data ) ;
-    else
-        return m_variantOfPtrToObjectConverter( data ) ;
+    {
+        if ( data.GetTypeInfo()->GetKind() == wxT_OBJECT )
+            return m_variantToObjectConverter( data ) ;
+        else
+            return m_variantOfPtrToObjectConverter( data ) ;
     }
 
     wxxVariant InstanceToVariant( wxObject *object ) const { return m_objectToVariantConverter( object ) ; }
@@ -1778,15 +1779,15 @@ public:
     static wxHashTable      *sm_classTable;
 
 protected :
-    wxPropertyInfo *	    m_firstProperty ;
-    wxHandlerInfo *	        m_firstHandler ;
+    wxPropertyInfo *         m_firstProperty ;
+    wxHandlerInfo *          m_firstHandler ;
 private:
-    const wxClassInfo**		m_parents ;
-    const wxChar*			m_unitName;
+    const wxClassInfo**      m_parents ;
+    const wxChar*            m_unitName;
 
-    wxConstructorBridge*	m_constructor ;
-    const wxChar **			m_constructorProperties ;
-    const int				m_constructorPropertiesCount ;
+    wxConstructorBridge*     m_constructor ;
+    const wxChar **          m_constructorProperties ;
+    const int                m_constructorPropertiesCount ;
     wxVariantToObjectConverter m_variantOfPtrToObjectConverter ;
     wxVariantToObjectConverter m_variantToObjectConverter ;
     wxObjectToVariantConverter m_objectToVariantConverter ;

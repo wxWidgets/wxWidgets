@@ -130,11 +130,11 @@ bool WXDLLEXPORT wxOKlibc()
             (strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8")) ||
             (strcasecmp(cur_locale + strlen(cur_locale) - 5, "utf-8"))) {
       // nope, don't use libc conversion
-      return FALSE;
+      return false;
     }
   }
 #endif
-  return TRUE;
+  return true;
 }
 
 // ============================================================================
@@ -180,10 +180,10 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         {
             static char s_szFlags[256] = "%";
             size_t flagofs = 1;
-            bool adj_left = FALSE,
-                 in_prec = FALSE,
-                 prec_dot = FALSE,
-                 done = FALSE;
+            bool adj_left = false,
+                 in_prec = false,
+                 prec_dot = false,
+                 done = false;
             int ilen = 0;
             size_t min_width = 0,
                    max_width = wxSTRING_MAXLEN;
@@ -194,7 +194,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                 if (in_prec && !prec_dot) \
                 { \
                     s_szFlags[flagofs++] = '.'; \
-                    prec_dot = TRUE; \
+                    prec_dot = true; \
                 }
 
 #define APPEND_CH(ch) \
@@ -220,12 +220,12 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                     case wxT('\0'):
                         APPEND_CH(_T('\0'));
 
-                        done = TRUE;
+                        done = true;
                         break;
 
                     case wxT('%'):
                         APPEND_CH(_T('%'));
-                        done = TRUE;
+                        done = true;
                         break;
 
                     case wxT('#'):
@@ -239,14 +239,14 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 
                     case wxT('-'):
                         CHECK_PREC
-                        adj_left = TRUE;
+                        adj_left = true;
                         s_szFlags[flagofs++] = ch;
                         break;
 
                     case wxT('.'):
                         CHECK_PREC
-                        in_prec = TRUE;
-                        prec_dot = FALSE;
+                        in_prec = true;
+                        prec_dot = false;
                         max_width = 0;
                         // dot will be auto-added to s_szFlags if non-negative
                         // number follows
@@ -372,7 +372,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             APPEND_STR(tmp);
                         }
 
-                        done = TRUE;
+                        done = true;
                         break;
 
                     case wxT('e'):
@@ -400,7 +400,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             APPEND_STR(tmp);
                         }
 
-                        done = TRUE;
+                        done = true;
                         break;
 
                     case wxT('p'):
@@ -415,7 +415,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                                 wxConvLibc.cMB2WX(szScratch);
                             APPEND_STR(tmp);
 
-                            done = TRUE;
+                            done = true;
                         }
                         break;
 
@@ -447,7 +447,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                                 for (i = 1; i < min_width; i++)
                                     APPEND_CH(_T(' '));
 
-                            done = TRUE;
+                            done = true;
                         }
                         break;
 
@@ -517,7 +517,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                                 for (i = len; i < min_width; i++)
                                     APPEND_CH(_T(' '));
 
-                            done = TRUE;
+                            done = true;
                         }
                         break;
 
@@ -537,14 +537,14 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             long int *val = va_arg(argptr, long int *);
                             *val = lenCur;
                         }
-                        done = TRUE;
+                        done = true;
                         break;
 
                     default:
                         // bad format, leave unchanged
                         APPEND_CH(_T('%'));
                         APPEND_CH(ch);
-                        done = TRUE;
+                        done = true;
                         break;
                 }
             }

@@ -288,7 +288,7 @@ void wxWriter::WriteOneProperty( const wxObject *obj , const wxClassInfo* ci , c
                 if ( value.GetAsString() == pi->GetDefaultValue().GetAsString() )
                     return ;
             }
-            
+
             // avoid streaming out null objects
             const wxClassTypeInfo* cti = dynamic_cast< const wxClassTypeInfo* > ( pi->GetTypeInfo() ) ;
 
@@ -582,7 +582,7 @@ void wxRuntimeDepersister::SetConnect(int eventSourceObjectID,
                     handlerInfo->GetEventFunction() , NULL /*user data*/ ,
                     ehsink ) ;
             }
-        }        
+        }
     }
 }
 

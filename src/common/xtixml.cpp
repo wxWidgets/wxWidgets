@@ -233,7 +233,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
             else
             {
                 wxLogError( _("Forward hrefs are not supported") ) ;
-                return wxInvalidObjectID ;                
+                return wxInvalidObjectID ;
             }
         }
         if ( !node->GetPropVal(wxT("id") , &ObjectIdString ) )
@@ -255,7 +255,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
 
     if ( children != NULL && children->GetType() == wxXML_TEXT_NODE )
     {
-        wxLogError(_("objects cannot have XML Text Nodes") ) ; 
+        wxLogError(_("objects cannot have XML Text Nodes") ) ;
         return wxInvalidObjectID;
     }
     if (!node->GetPropVal(wxT("id"), &ObjectIdString))
@@ -268,7 +268,7 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     // is this object already has been streamed in, return it here
     if ( HasObjectClassInfo( objectID ) )
     {
-        wxLogError ( wxString::Format(_("Doubly used id : %d"), objectID ) ) ; 
+        wxLogError ( wxString::Format(_("Doubly used id : %d"), objectID ) ) ;
         return wxInvalidObjectID ;
     }
 

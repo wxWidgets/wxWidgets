@@ -36,9 +36,9 @@ const wxValidator wxDefaultValidator;
 
     IMPLEMENT_DYNAMIC_CLASS(wxValidator, wxEvtHandler)
 
-// VZ: personally, I think TRUE would be more appropriate - these bells are
+// VZ: personally, I think true would be more appropriate - these bells are
 //     _annoying_
-bool wxValidator::ms_isSilent = FALSE;
+bool wxValidator::ms_isSilent = false;
 
 wxValidator::wxValidator()
 {

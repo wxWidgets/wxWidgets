@@ -2,7 +2,7 @@
 // Name:        wx/xtixml.h
 // Purpose:     xml streaming runtime metadata information (extended class info)
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Stefan Csomor
@@ -66,14 +66,14 @@ public :
     virtual void DoBeginWriteElement() ;
     virtual void DoEndWriteElement() ;
 
-    // insert an object reference to an already written object 
+    // insert an object reference to an already written object
     virtual void DoWriteRepeatedObject( int objectID )  ;
 
     // insert a null reference
     virtual void DoWriteNullObject()  ;
 
     // writes a delegate in the stream format
-    virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , 
+    virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo ,
         const wxObject *eventSink , int sinkObjectID , const wxClassInfo* eventSinkClassInfo , const wxHandlerInfo* handlerIndo ) ;
 private :
     struct wxXmlWriterInternal ;

@@ -6,7 +6,7 @@
 // Created:     29/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_VALTEXTH__
@@ -86,14 +86,14 @@ protected:
 
     bool CheckValidator() const
     {
-        wxCHECK_MSG( m_validatorWindow, FALSE,
+        wxCHECK_MSG( m_validatorWindow, false,
                      _T("No window associated with validator") );
-        wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), FALSE,
+        wxCHECK_MSG( m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)), false,
                      _T("wxTextValidator is only for wxTextCtrl's") );
-        wxCHECK_MSG( m_stringValue, FALSE,
+        wxCHECK_MSG( m_stringValue, false,
                      _T("No variable storage for validator") );
 
-        return TRUE;
+        return true;
     }
 
 private:

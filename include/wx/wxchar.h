@@ -74,9 +74,9 @@
     #endif
 #endif
 #if defined(__MWERKS__) && !defined(__MACH__)
-	#ifndef HAVE_WCSLEN
-		#define HAVE_WCSLEN
-	#endif
+    #ifndef HAVE_WCSLEN
+        #define HAVE_WCSLEN
+    #endif
 #endif
 
 #if wxUSE_WCHAR_T
@@ -441,7 +441,7 @@
             #else
                 #define wxPutchar(wch) wxPutc(wch, stdout)
             #endif
-            
+
             #ifdef HAVE_PUTWS
                 #define wxPuts      putws
             #else
@@ -656,10 +656,10 @@
     #ifdef HAVE_WCSLEN
         #define wxWcslen wcslen
     #else
-	#if defined( __WXMAC_XCODE__ ) && !defined( __cplusplus )
-	/* xcode native targets are giving multiply defined symbols on regex */
-		static
-	#endif
+    #if defined( __WXMAC_XCODE__ ) && !defined( __cplusplus )
+    /* xcode native targets are giving multiply defined symbols on regex */
+        static
+    #endif
         inline size_t wxWcslen(const wchar_t *s)
         {
             size_t n = 0;

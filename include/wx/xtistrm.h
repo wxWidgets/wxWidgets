@@ -2,7 +2,7 @@
 // Name:        wx/xtistrm.h
 // Purpose:     streaming runtime metadata information (extended class info)
 // Author:      Stefan Csomor
-// Modified by: 
+// Modified by:
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Stefan Csomor
@@ -50,28 +50,28 @@ class WXDLLIMPEXP_BASE wxPersister
 {
 public :
     // will be called before an object is written, may veto by returning false
-    virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , wxxVariantArray &WXUNUSED(metadata)) { return true ; } 
+    virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , wxxVariantArray &WXUNUSED(metadata)) { return true ; }
 
     // will be called after this object has been written, may be needed for adjusting stacks
     virtual void AfterWriteObject( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) ) {}
 
-    // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( -1 , -1 ) or veto
+    // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( wxDefaultCoord , wxDefaultCoord ) or veto
     // writing that property at all by returning false
-    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object), const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; } 
+    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object), const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; }
 
-    // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( -1 , -1 ) or veto
+    // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( wxDefaultCoord , wxDefaultCoord ) or veto
     // writing that property at all by returning false
-    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object), const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariantArray &WXUNUSED(value) )  { return true ; } 
+    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object), const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariantArray &WXUNUSED(value) )  { return true ; }
 
     // will be called after a property has been written out, may be needed for adjusting stacks
     virtual void AfterWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) ) {}
 
     // will be called before this delegate gets written
-    virtual bool BeforeWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
-        const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { return true ; } 
+    virtual bool BeforeWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) ,
+        const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { return true ; }
 
-        virtual void AfterWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) , 
-            const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { } 
+        virtual void AfterWriteDelegate( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object),  const wxClassInfo* WXUNUSED(classInfo) , const wxPropertyInfo *WXUNUSED(propInfo) ,
+            const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { }
 } ;
 
 class WXDLLIMPEXP_BASE wxWriter : public wxObject
@@ -86,7 +86,7 @@ public :
     //
     // Managing the object identity table a.k.a context
     //
-    // these methods make sure that no object gets written twice, because sometimes multiple calls to the WriteObject will be 
+    // these methods make sure that no object gets written twice, because sometimes multiple calls to the WriteObject will be
     // made without wanting to have duplicate objects written, the object identity table will be reset manually
 
     virtual void ClearObjectContext() ;
@@ -125,14 +125,14 @@ public :
 
     virtual void DoBeginWriteElement() = 0 ;
     virtual void DoEndWriteElement() = 0 ;
-    // insert an object reference to an already written object 
+    // insert an object reference to an already written object
     virtual void DoWriteRepeatedObject( int objectID ) = 0 ;
 
     // insert a null reference
     virtual void DoWriteNullObject() = 0 ;
 
     // writes a delegate in the stream format
-    virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo , 
+    virtual void DoWriteDelegate( const wxObject *object,  const wxClassInfo* classInfo , const wxPropertyInfo *propInfo ,
         const wxObject *eventSink , int sinkObjectID , const wxClassInfo* eventSinkClassInfo , const wxHandlerInfo* handlerIndo ) = 0;
 private :
 
@@ -170,7 +170,7 @@ public :
     bool HasObjectClassInfo( int objectID ) ;
     void SetObjectClassInfo(int objectID, wxClassInfo* classInfo);
 
-    // Reads the component the reader is pointed at from the underlying format.  
+    // Reads the component the reader is pointed at from the underlying format.
     // The return value is the root object ID, which can
     // then be used to ask the depersister about that object
     // if there was a problem you will get back wxInvalidObjectID and the current
@@ -270,7 +270,7 @@ public :
     wxRuntimeDepersister();
     virtual ~wxRuntimeDepersister();
 
-    // returns the object having the corresponding ID fully constructed 
+    // returns the object having the corresponding ID fully constructed
     wxObject *GetObject(int objectID) ;
 
     // allocate the new object on the heap, that object will have the passed in ID
@@ -343,7 +343,7 @@ public :
 
 /*
 wxDepersisterCode implements the callbacks that will depersist
-an object into a C++ initialization function. this will move to 
+an object into a C++ initialization function. this will move to
 a utility lib soon
 */
 

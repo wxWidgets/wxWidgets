@@ -98,7 +98,7 @@ public:
     wxVariant(const wxStringList& val, const wxString& name = wxEmptyString);
     wxVariant(const wxList& val, const wxString& name = wxEmptyString); // List of variants
     wxVariant(void* ptr, const wxString& name = wxEmptyString); // void* (general purpose)
-    wxVariant(wxObject* ptr, const wxString& name = wxEmptyString); //wxObject 
+    wxVariant(wxObject* ptr, const wxString& name = wxEmptyString); //wxObject
     wxVariant(wxVariantData* data, const wxString& name = wxEmptyString); // User-defined data
 #if wxUSE_DATETIME
     wxVariant(const wxDateTime& val, const wxString& name = wxEmptyString); // Date
@@ -109,7 +109,7 @@ public:
     wxVariant(const TIME_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
     wxVariant(const TIMESTAMP_STRUCT* valptr, const wxString& name = wxEmptyString); // DateTime
 #endif
-    
+
     wxVariant(const wxVariant& variant);
     ~wxVariant();
 
@@ -240,7 +240,7 @@ public:
     // Insert at front of list
     void Insert(const wxVariant& value);
 
-    // Returns TRUE if the variant is a member of the list
+    // Returns true if the variant is a member of the list
     bool Member(const wxVariant& value) const;
 
     // Deletes the nth element of the list
@@ -268,12 +268,12 @@ protected:
 };
 
 //Since we want type safety wxVariant we need to fetch and dynamic_cast
-//in a seemingly safe way so the compiler can check, so we define 
+//in a seemingly safe way so the compiler can check, so we define
 //a dynamic_cast /wxDynamicCast analogue.
 
 #define wxGetVariantCast(var,classname) \
-	((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
-		      var.GetWxObjectPtr() : NULL));
+    ((classname*)(var.IsValueKindOf(&classname::ms_classInfo) ?\
+                  var.GetWxObjectPtr() : NULL));
 
 extern wxVariant WXDLLIMPEXP_BASE wxNullVariant;
 

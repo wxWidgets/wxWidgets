@@ -314,7 +314,7 @@ wxTypeInfo ( wxT_DELEGATE , to , from , wxEmptyString )
 { m_eventClass = eventClass ; m_eventType = eventType ; m_lastEventType = lastEventType; }
 
 void wxTypeInfo::Register()
-{    
+{
     if ( ms_typeTable == NULL )
         ms_typeTable = new wxTypeInfoMap() ;
 
@@ -474,7 +474,7 @@ wxObjectStreamingCallback wxClassInfo::GetStreamingCallback() const
     return retval ;
 }
 
-bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxWriter *streamer , wxPersister *persister , wxxVariantArray &metadata) const  
+bool wxClassInfo::BeforeWriteObject( const wxObject *obj, wxWriter *streamer , wxPersister *persister , wxxVariantArray &metadata) const
 {
     wxObjectStreamingCallback sb = GetStreamingCallback() ;
     if ( sb )
@@ -523,13 +523,13 @@ void wxClassInfo::AddToPropertyCollection(wxObject *object, const wxChar *proper
     accessor->AddToPropertyCollection( object , value ) ;
 }
 
-// void wxClassInfo::GetProperties( wxPropertyInfoMap &map ) const 
+// void wxClassInfo::GetProperties( wxPropertyInfoMap &map ) const
 // The map parameter (the name map that is) seems something special
 // to MSVC and so we use a other name.
-void wxClassInfo::GetProperties( wxPropertyInfoMap &infomap ) const 
+void wxClassInfo::GetProperties( wxPropertyInfoMap &infomap ) const
 {
     const wxPropertyInfo *pi = GetFirstProperty() ;
-    while( pi ) 
+    while( pi )
     {
         if ( infomap.find( pi->GetName() ) == infomap.end() )
             infomap[pi->GetName()] = (wxPropertyInfo*) pi ;
@@ -610,13 +610,13 @@ wxxVariant wxDynamicObject::GetProperty (const wxChar *propertyName) const
     return m_data->m_properties[propertyName] ;
 }
 
-void wxDynamicObject::RemoveProperty( const wxChar *propertyName ) 
+void wxDynamicObject::RemoveProperty( const wxChar *propertyName )
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(propertyName),wxT("Removing Unknown Property in a Dynamic Object") ) ;
     m_data->m_properties.erase( propertyName ) ;
 }
 
-void wxDynamicObject::RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) 
+void wxDynamicObject::RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName )
 {
     wxASSERT_MSG(m_classInfo->FindPropertyInfoInThisClass(oldPropertyName),wxT("Renaming Unknown Property in a Dynamic Object") ) ;
     wxxVariant value = m_data->m_properties[oldPropertyName] ;
@@ -701,7 +701,7 @@ void wxDynamicClassInfo::AddHandler( const wxChar *handlerName , wxObjectEventFu
 }
 
 // removes an existing runtime-property
-void wxDynamicClassInfo::RemoveProperty( const wxChar *propertyName ) 
+void wxDynamicClassInfo::RemoveProperty( const wxChar *propertyName )
 {
     for ( wxDynamicObjectList::iterator iter = m_data->m_dynamicObjects.begin() ; iter != m_data->m_dynamicObjects.end() ; ++iter )
         (*iter)->RemoveProperty( propertyName ) ;
@@ -709,13 +709,13 @@ void wxDynamicClassInfo::RemoveProperty( const wxChar *propertyName )
 }
 
 // removes an existing runtime-handler
-void wxDynamicClassInfo::RemoveHandler( const wxChar *handlerName ) 
+void wxDynamicClassInfo::RemoveHandler( const wxChar *handlerName )
 {
     delete FindHandlerInfoInThisClass(handlerName) ;
 }
 
 // renames an existing runtime-property
-void wxDynamicClassInfo::RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName ) 
+void wxDynamicClassInfo::RenameProperty( const wxChar *oldPropertyName , const wxChar *newPropertyName )
 {
     wxPropertyInfo* pi = FindPropertyInfoInThisClass(oldPropertyName) ;
     wxASSERT_MSG( pi ,wxT("not existing property") ) ;
@@ -726,7 +726,7 @@ void wxDynamicClassInfo::RenameProperty( const wxChar *oldPropertyName , const w
 }
 
 // renames an existing runtime-handler
-void wxDynamicClassInfo::RenameHandler( const wxChar *oldHandlerName , const wxChar *newHandlerName ) 
+void wxDynamicClassInfo::RenameHandler( const wxChar *oldHandlerName , const wxChar *newHandlerName )
 {
     wxASSERT_MSG(FindHandlerInfoInThisClass(oldHandlerName),wxT("not existing handler") ) ;
     FindHandlerInfoInThisClass(oldHandlerName)->m_name = newHandlerName ;

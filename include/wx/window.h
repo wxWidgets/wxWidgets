@@ -1202,7 +1202,7 @@ protected:
     void SetBestSize(const wxSize& size) { SetBestFittingSize(size); }
 
     // set the initial window size if none is given (i.e. at least one of the
-    // components of the size passed to ctor/Create() is -1)
+    // components of the size passed to ctor/Create() is wxDefaultCoord)
     //
     // normally just calls SetBestSize() for controls, but can be overridden
     // not to do it for the controls which have to do some additional

@@ -218,7 +218,7 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream,
       memset(m_deflate, 0, sizeof(z_stream_s));
       m_deflate->next_out = m_z_buffer;
       m_deflate->avail_out = m_z_size;
- 
+
       // see zlib.h for documentation on windowBits
       int windowBits = MAX_WBITS;
       switch (flags) {
@@ -228,7 +228,7 @@ wxZlibOutputStream::wxZlibOutputStream(wxOutputStream& stream,
         default:                wxFAIL_MSG(wxT("Invalid zlib flag"));
       }
 
-      if (deflateInit2(m_deflate, level, Z_DEFLATED, windowBits, 
+      if (deflateInit2(m_deflate, level, Z_DEFLATED, windowBits,
                        8, Z_DEFAULT_STRATEGY) == Z_OK)
         return;
     }
@@ -322,10 +322,10 @@ size_t wxZlibOutputStream::OnSysWrite(const void *buffer, size_t size)
 }
 
 /* static */ bool wxZlibOutputStream::CanHandleGZip()
-{ 
+{
   return wxZlibInputStream::CanHandleGZip();
 }
 
 #endif
   // wxUSE_ZLIB && wxUSE_STREAMS
-  
+

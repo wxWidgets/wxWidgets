@@ -6,7 +6,7 @@
 // Created:     12/10/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_CW__
@@ -20,17 +20,17 @@
 #error "profiling is not supported in debug versions"
 #else
 #ifdef __cplusplus
-	#ifdef __MACH__
-		#include "wx_Mach++_d.mch"
-	#elif __POWERPC__
-		#include "wx_Carbon++_d.mch"
-	#endif
+    #ifdef __MACH__
+        #include "wx_Mach++_d.mch"
+    #elif __POWERPC__
+        #include "wx_Carbon++_d.mch"
+    #endif
 #else
-	#ifdef __MACH__
-		#include "wx_Mach_d.mch"
-	#elif __POWERPC__
-		#include "wx_Carbon_d.mch"
-	#endif
+    #ifdef __MACH__
+        #include "wx_Mach_d.mch"
+    #elif __POWERPC__
+        #include "wx_Carbon_d.mch"
+    #endif
 #endif
 #endif
 

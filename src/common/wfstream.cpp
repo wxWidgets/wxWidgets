@@ -34,26 +34,26 @@ wxFileInputStream::wxFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
     m_file = new wxFile(fileName, wxFile::read);
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 }
 
 wxFileInputStream::wxFileInputStream()
   : wxInputStream()
 {
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
     m_file = NULL;
 }
 
 wxFileInputStream::wxFileInputStream(wxFile& file)
 {
     m_file = &file;
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
 }
 
 wxFileInputStream::wxFileInputStream(int fd)
 {
     m_file = new wxFile(fd);
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 }
 
 wxFileInputStream::~wxFileInputStream()
@@ -110,7 +110,7 @@ off_t wxFileInputStream::OnSysTell() const
 wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 {
     m_file = new wxFile(fileName, wxFile::write);
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 
     if (!m_file->IsOpened())
     {
@@ -126,20 +126,20 @@ wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
 wxFileOutputStream::wxFileOutputStream(wxFile& file)
 {
     m_file = &file;
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
 }
 
 wxFileOutputStream::wxFileOutputStream()
                   : wxOutputStream()
 {
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
     m_file = NULL;
 }
 
 wxFileOutputStream::wxFileOutputStream(int fd)
 {
     m_file = new wxFile(fd);
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 }
 
 wxFileOutputStream::~wxFileOutputStream()
@@ -199,26 +199,26 @@ wxFFileInputStream::wxFFileInputStream(const wxString& fileName)
   : wxInputStream()
 {
     m_file = new wxFFile(fileName, _T("rb"));
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 }
 
 wxFFileInputStream::wxFFileInputStream()
   : wxInputStream()
 {
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
     m_file = NULL;
 }
 
 wxFFileInputStream::wxFFileInputStream(wxFFile& file)
 {
     m_file = &file;
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
 }
 
 wxFFileInputStream::wxFFileInputStream(FILE *file)
 {
     m_file = new wxFFile(file);
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 }
 
 wxFFileInputStream::~wxFFileInputStream()
@@ -272,7 +272,7 @@ off_t wxFFileInputStream::OnSysTell() const
 wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName)
 {
     m_file = new wxFFile(fileName, _T("w+b"));
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 
     if (!m_file->IsOpened())
     {
@@ -288,20 +288,20 @@ wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName)
 wxFFileOutputStream::wxFFileOutputStream(wxFFile& file)
 {
     m_file = &file;
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
 }
 
 wxFFileOutputStream::wxFFileOutputStream()
   : wxOutputStream()
 {
-    m_file_destroy = FALSE;
+    m_file_destroy = false;
     m_file = NULL;
 }
 
 wxFFileOutputStream::wxFFileOutputStream(FILE *file)
 {
     m_file = new wxFFile(file);
-    m_file_destroy = TRUE;
+    m_file_destroy = true;
 }
 
 wxFFileOutputStream::~wxFFileOutputStream()

@@ -15,7 +15,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+#if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
 
 #include "wx/stream.h"
 
@@ -54,8 +54,8 @@ private:
 };
 
 
-#endif 
-   // wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB 
+#endif
+   // wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
 
-#endif 
+#endif
    // __ZIPSTREAM_H__
