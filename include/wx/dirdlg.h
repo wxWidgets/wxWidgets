@@ -21,8 +21,6 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 #include "wx/generic/dirdlgg.h"
 #elif defined(__WXGTK__)
 #include "wx/generic/dirdlgg.h"
-#elif defined(__WXQT__)
-#include "wx/qt/dirdlg.h"
 #elif defined(__WXMAC__)
 #ifdef __DARWIN__
 #include "wx/generic/dirdlgg.h"

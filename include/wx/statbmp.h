@@ -54,8 +54,6 @@ protected:
     #include "wx/motif/statbmp.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/statbmp.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/statbmp.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/statbmp.h"
 #elif defined(__WXPM__)

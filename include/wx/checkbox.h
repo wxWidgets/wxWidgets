@@ -40,8 +40,6 @@ public:
     #include "wx/motif/checkbox.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/checkbox.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/checkbox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/checkbox.h"
 #elif defined(__WXPM__)

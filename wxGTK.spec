@@ -16,7 +16,7 @@ BuildRoot: /var/tmp/%{name}-root
 
 # all packages providing an implementation of wxWindows library (regardless of
 # the toolkit used) should provide the (virtual) wxwin package, this makes it
-# possible to require wxwin instead of requiring "wxgtk or wxmotif or wxqt..."
+# possible to require wxwin instead of requiring "wxgtk or wxmotif or wxuniv..."
 Provides: wxwin
 
 # in addition, we should provide libwx_gtk as automatic generator only notices

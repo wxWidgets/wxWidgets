@@ -7,8 +7,6 @@
 #include "wx/motif/dde.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dde.h"
-#elif defined(__WXQT__)
-#include "wx/qt/dde.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/dde.h"
 #elif defined(__WXPM__)

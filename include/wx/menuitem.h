@@ -140,8 +140,6 @@ private:
     #include "wx/motif/menuitem.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/menuitem.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/menuitem.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/menuitem.h"
 #elif defined(__WXPM__)

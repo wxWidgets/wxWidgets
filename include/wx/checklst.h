@@ -36,8 +36,6 @@ public:
     #include "wx/motif/checklst.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/checklst.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/checklst.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/checklst.h"
 #elif defined(__WXPM__)

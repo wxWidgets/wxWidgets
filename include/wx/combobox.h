@@ -59,8 +59,6 @@ public:
     #include "wx/motif/combobox.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/combobox.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/combobox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/combobox.h"
 #elif defined(__WXPM__)

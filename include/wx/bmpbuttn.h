@@ -83,8 +83,6 @@ private:
     #include "wx/motif/bmpbuttn.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/bmpbuttn.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/bmpbuttn.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/bmpbuttn.h"
 #elif defined(__WXPM__)

@@ -273,7 +273,7 @@
     #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
-      !defined(__WXQT__) && !defined(__WXMGL__) && wxUSE_GUI
+      !defined(__WXMGL__) && wxUSE_GUI
     #ifdef __UNIX__
         #error "No Target! You should use wx-config program for compilation flags!"
     #else // !Unix
@@ -603,7 +603,6 @@ enum
     wxGTK_WIN32,              // GTK on Win32
     wxGTK_OS2,                // GTK on OS/2
     wxGTK_BEOS,               // GTK on BeOS
-    wxQT,                     // Qt
     wxGEOS,                   // GEOS
     wxOS2_PM,                 // OS/2 Workplace
     wxWINDOWS,                // Windows or WfW

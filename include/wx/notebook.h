@@ -273,8 +273,6 @@ typedef void (wxEvtHandler::*wxNotebookEventFunction)(wxNotebookEvent&);
     #include  "wx/generic/notebook.h"
 #elif defined(__WXGTK__)
     #include  "wx/gtk/notebook.h"
-#elif defined(__WXQT__)
-    #include  "wx/qt/notebook.h"
 #elif defined(__WXMAC__)
     #include  "wx/mac/notebook.h"
 #elif defined(__WXPM__)

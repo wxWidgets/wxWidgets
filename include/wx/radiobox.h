@@ -102,8 +102,6 @@ public:
     #include "wx/motif/radiobox.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/radiobox.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/radiobox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/radiobox.h"
 #elif defined(__WXPM__)

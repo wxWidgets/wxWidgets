@@ -273,8 +273,6 @@ private:
     #include "wx/motif/textctrl.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/textctrl.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/textctrl.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/textctrl.h"
 #elif defined(__WXPM__)

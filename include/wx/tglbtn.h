@@ -33,8 +33,6 @@ END_DECLARE_EVENT_TYPES()
 /*
 # elif defined(__WXMOTIF__)
 #  include "wx/motif/tglbtn.h"
-# elif defined(__WXQT__)
-#  include "wx/qt/tglbtn.h"
 # elif defined(__WXMAC__)
 #  include "wx/mac/tglbtn.h"
 # elif defined(__WXPM__)

@@ -46,8 +46,6 @@ public:
     #include "wx/motif/scrolbar.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/scrolbar.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/scrolbar.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/scrolbar.h"
 #elif defined(__WXPM__)

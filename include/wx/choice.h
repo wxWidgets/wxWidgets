@@ -69,8 +69,6 @@ public:
     #include "wx/motif/choice.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/choice.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/choice.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/choice.h"
 #elif defined(__WXPM__)

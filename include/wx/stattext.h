@@ -22,8 +22,6 @@ public:
     #include "wx/motif/stattext.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/stattext.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/stattext.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/stattext.h"
 #elif defined(__WXPM__)

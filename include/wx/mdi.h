@@ -7,8 +7,6 @@
 #include "wx/motif/mdi.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/mdi.h"
-#elif defined(__WXQT__)
-#include "wx/qt/mdi.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/mdi.h"
 #elif defined(__WXPM__)

@@ -7,8 +7,6 @@
 // #include "wx/motif/tooltip.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/tooltip.h"
-#elif defined(__WXQT__)
-#include "wx/qt/tooltip.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/tooltip.h"
 #elif defined(__WXPM__)

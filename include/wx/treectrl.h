@@ -19,8 +19,6 @@
     #include "wx/generic/treectlg.h"
 #elif defined(__WXGTK__)
     #include "wx/generic/treectlg.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/treectrl.h"
 #elif defined(__WXMAC__)
     #include "wx/generic/treectlg.h"
 #elif defined(__WXPM__)

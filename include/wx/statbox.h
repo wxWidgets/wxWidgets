@@ -26,8 +26,6 @@ public:
 #include "wx/motif/statbox.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/statbox.h"
-#elif defined(__WXQT__)
-#include "wx/qt/statbox.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/statbox.h"
 #elif defined(__WXPM__)

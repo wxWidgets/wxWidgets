@@ -163,8 +163,6 @@ private:
     #include "wx/gtk/font.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/font.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/font.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/font.h"
 #elif defined(__WXPM__)

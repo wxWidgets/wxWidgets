@@ -15,8 +15,6 @@
   #include "wx/gtk/icon.h"
 #elif defined(__WXMGL__)
   #include "wx/mgl/icon.h"
-#elif defined(__WXQT__)
-  #include "wx/qt/icon.h"
 #elif defined(__WXMAC__)
   #include "wx/mac/icon.h"
 #elif defined(__WXPM__)

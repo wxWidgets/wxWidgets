@@ -133,8 +133,6 @@ protected:
     #include "wx/motif/listbox.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/listbox.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/listbox.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/listbox.h"
 #elif defined(__WXPM__)

@@ -22,11 +22,6 @@
 #define wxDragImage wxGenericDragImage
 #define sm_classwxDragImage sm_classwxGenericDragImage
 
-#elif defined(__WXQT__)
-#include "wx/generic/dragimgg.h"
-#define wxDragImage wxGenericDragImage
-#define sm_classwxDragImage sm_classwxGenericDragImage
-
 #elif defined(__WXMAC__)
 #include "wx/generic/dragimgg.h"
 #define wxDragImage wxGenericDragImage

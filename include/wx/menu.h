@@ -451,8 +451,6 @@ protected:
     #include "wx/motif/menu.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/menu.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/menu.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/menu.h"
 #elif defined(__WXPM__)

@@ -98,8 +98,6 @@ public:
     #include "wx/motif/slider.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/slider.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/slider.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/slider.h"
 #elif defined(__WXPM__)

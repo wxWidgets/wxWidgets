@@ -7,8 +7,6 @@
 #include "wx/motif/glcanvas.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/glcanvas.h"
-#elif defined(__WXQT__)
-#include "wx/qt/glcanvas.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/glcanvas.h"
 #elif defined(__WXPM__)

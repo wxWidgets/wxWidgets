@@ -750,8 +750,6 @@ private:
     #include "wx/gtk/dc.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/dc.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/dc.h"
 #elif defined(__WXMAC__)
     #include "wx/mac/dc.h"
 #elif defined(__WXPM__)

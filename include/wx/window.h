@@ -1019,8 +1019,6 @@ private:
         #define sm_classwxWindowMGL sm_classwxWindow
     #endif // wxUniv
     #include "wx/mgl/window.h"
-#elif defined(__WXQT__)
-    #include "wx/qt/window.h"
 #elif defined(__WXMAC__)
     #ifdef __WXUNIVERSAL__
         #define wxWindowNative wxWindowMac
