@@ -298,9 +298,10 @@ void MainFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 //----------------------------------------------------------------------------------------
 void MainFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
- wxMessageDialog dialog(this, _("DBBrowser\nMark Johnson\nBerlin, Germany\nmj10777@gmx.net\n (c) 1999"),
-      _("About DBBrowser"), wxOK|wxCANCEL);
-
+ wxString Temp0, Temp1;
+ Temp0.Printf(_("%s\nMark Johnson\nBerlin, Germany\nmj10777@gmx.net\n (c) 2000"),p_ProgramCfg->GetAppName().c_str());
+ Temp1.Printf(_("About %s"),p_ProgramCfg->GetAppName().c_str());
+ wxMessageDialog dialog(this, Temp0,Temp1,wxOK|wxCANCEL);
  dialog.ShowModal();
 }
 //----------------------------------------------------------------------------------------

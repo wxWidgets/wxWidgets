@@ -14,7 +14,7 @@ class MainApp: public wxApp
 {
  public:
   bool OnInit(void); // Programmstart
-  wxLocale m_locale; // locale we'll be using and language support
+  wxLocale m_locale; // locale we'll be using and language support - MUST be here !
 };
 //----------------------------------------------------------------------------------------
 // Define a new frame type

@@ -5,11 +5,11 @@
 #: ../browsedb.cpp:67 ../browsedb.cpp:80 ../browsedb.cpp:81 ../browsedb.cpp:82 ../browsedb.cpp:124 ../browsedb.cpp:151 ../browsedb.cpp:152 ../browsedb.cpp:153 ../browsedb.cpp:240 ../browsedb.cpp:460 ../browsedb.cpp:469 ../dbbrowse.cpp:123 ../dbgrid.cpp:64 ../dbgrid.cpp:66 ../dbtree.cpp:40 ../dbtree.cpp:160 ../dbtree.cpp:229 ../dbtree.cpp:234 ../doc.cpp:149 ../doc.cpp:189 ../doc.cpp:190 ../doc.cpp:234 ../doc.cpp:283 ../doc.cpp:296 ../pgmctrl.cpp:47 ../pgmctrl.cpp:122 ../pgmctrl.cpp:257 ../tabpgwin.h:105
 #, fuzzy
 msgid   ""
-msgstr  "Project-Id-Version: PACKAGE VERSION\n"
+msgstr  "Project-Id-Version: V1\n"
         "POT-Creation-Date: 2000-02-21 09:49+0100\n"
-        "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-        "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-        "Language-Team: LANGUAGE <LL@li.org>\n"
+        "PO-Revision-Date: 2000-02-22 11:11-1\n"
+        "Last-Translator: Mark Johnson <mj10777@gmx.net>\n"
+        "Language-Team: mj10777 <mj1077@gmx.net>\n"
         "MIME-Version: 1.0\n"
         "Content-Type: text/plain; charset=CHARSET\n"
         "Content-Transfer-Encoding: ENCODING\n"
@@ -17,6 +17,10 @@ msgstr  "Project-Id-Version: PACKAGE VERSION\n"
 #: ../browsedb.cpp:68 ../browsedb.cpp:72 ../dbgrid.cpp:184 ../dbgrid.cpp:213 ../dbgrid.cpp:236 ../dbgrid.cpp:259 ../dbgrid.cpp:271 ../dbgrid.cpp:286 ../dbgrid.cpp:301 ../dbgrid.cpp:316 ../dbgrid.cpp:331 ../dbgrid.cpp:344 ../dbgrid.cpp:354 ../dbgrid.cpp:366
 msgid   "\n"
 msgstr  "\n"
+
+#:
+msgid   "Time"
+msgstr  "Zeit"
 
 #: ../browsedb.cpp:96
 #, c-format
@@ -413,8 +417,8 @@ msgid   "/Paths/Work"
 msgstr  ""
 
 #: ../dbbrowse.cpp:302
-msgid   "About DBBrowser"
-msgstr  "Info über DBBrowser"
+msgid   "About %s"
+msgstr  "Info über %s"
 
 #: ../dbgrid.cpp:67
 msgid   "Browse Modus"
@@ -445,12 +449,16 @@ msgid   "DBBrowse"
 msgstr  ""
 
 #: ../dbbrowse.cpp:301
-msgid   "DBBrowser\n"
+msgid   "%s\n"
         "Mark Johnson\n"
         "Berlin, Germany\n"
         "mj10777@gmx.net\n"
-        " (c) 1999"
-msgstr  ""
+        " (c) 2000"
+msgstr  "%s\n"
+        "Mark Johnson\n"
+        "Berlin, Deutschland\n"
+        "mj10777@gmx.net\n"
+        " (c) 2000"
 
 #: ../dbgrid.cpp:326
 msgid   "DBGrid::OnCellChange : "
