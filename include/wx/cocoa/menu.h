@@ -34,6 +34,16 @@ public:
 
     virtual ~wxMenu();
 
+// ------------------------------------------------------------------------
+// Cocoa specifics
+// ------------------------------------------------------------------------
+public:
+    inline WX_NSMenu GetNSMenu() { return m_cocoaNSMenu; }
+protected:
+    WX_NSMenu m_cocoaNSMenu;
+// ------------------------------------------------------------------------
+// Implementation
+// ------------------------------------------------------------------------
 protected:
     // implement base class virtuals
     virtual bool DoAppend(wxMenuItem *item);
@@ -66,6 +76,17 @@ public:
     bool Create(long style = 0);
     virtual ~wxMenuBar();
 
+// ------------------------------------------------------------------------
+// Cocoa specifics
+// ------------------------------------------------------------------------
+public:
+    inline WX_NSMenu GetNSMenu() { return m_cocoaNSMenu; }
+protected:
+    WX_NSMenu m_cocoaNSMenu;
+// ------------------------------------------------------------------------
+// Implementation
+// ------------------------------------------------------------------------
+public:
     wxMenuItemList m_items;             // the list of menu items
 
     // implement base class virtuals

@@ -42,15 +42,14 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 
 bool wxMenu::Create(const wxString& title, long style)
 {
-#if 0
-    if(!title)
-        return CocoaCreate("wxMenu");
-#endif
-    return CocoaCreate(title);
+    wxAutoNSAutoreleasePool pool;
+    m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: [NSString stringWithCString: title.c_str()]];
+    return true;
 }
 
 wxMenu::~wxMenu()
 {
+    [m_cocoaNSMenu release];
 }
 
 bool wxMenu::DoAppend(wxMenuItem *item)
@@ -87,8 +86,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 bool wxMenuBar::Create(long style)
 {
-    if(!CocoaCreate("wxMenuBar"))
-        return false;
+    wxAutoNSAutoreleasePool pool;
+    m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: @"wxMenuBar"];
+
     NSMenuItem *dummyItem = [[NSMenuItem alloc] initWithTitle:@"App menu"
         /* Note: title gets clobbered by app name anyway */
         action:nil keyEquivalent:@""];
@@ -99,6 +99,7 @@ bool wxMenuBar::Create(long style)
 
 wxMenuBar::~wxMenuBar()
 {
+    [m_cocoaNSMenu release];
 }
 
 bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
