@@ -340,8 +340,8 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
     {
         // details of the module currently being parsed
         wxString pathCur;
-        unsigned long startCur,
-                      endCur;
+        unsigned long startCur = 0,
+                      endCur = 0;
 
         char path[1024];
         char buf[1024];
