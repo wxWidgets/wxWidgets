@@ -48,6 +48,8 @@ public:
 
     // operations
     virtual void SetValue(int val) = 0;
+    virtual void SetMin(int minVal) { SetRange ( minVal , m_max ) ; }
+    virtual void SetMax(int maxVal) { SetRange ( m_min , maxVal ) ; }
     virtual void SetRange(int minVal, int maxVal)
     {
         m_min = minVal;
