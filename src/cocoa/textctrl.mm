@@ -41,7 +41,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID winid,
     m_cocoaNSView = NULL;
     SetNSTextField([[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
-    [GetNSTextField() setStringValue:[NSString stringWithCString:value.c_str()]];
+    [GetNSTextField() setStringValue:wxNSStringWithWxString(value)];
+
     [GetNSControl() sizeToFit];
     NSRect currentFrame = [m_cocoaNSView frame];
     if(currentFrame.size.width < 70)
@@ -200,6 +201,6 @@ bool wxTextCtrl::CanUndo() const
 wxString wxTextCtrl::GetValue() const
 {
     wxAutoNSAutoreleasePool pool;
-    return wxString([[GetNSTextField() stringValue] lossyCString]);
+    return wxStringWithNSString([GetNSTextField() stringValue]);
 }
 

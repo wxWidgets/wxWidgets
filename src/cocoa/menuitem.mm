@@ -28,6 +28,7 @@
 
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSMenuItem.h>
 #import <AppKit/NSMenu.h>
@@ -134,7 +135,7 @@ wxMenuItemCocoa::wxMenuItemCocoa(wxMenu *pParentMenu,
           : wxMenuItemBase(pParentMenu, itemid, strName, strHelp, kind, pSubMenu)
 {
     wxAutoNSAutoreleasePool pool;
-    NSString *menuTitle = [[NSString alloc] initWithCString: wxStripMenuCodes(strName).c_str()];
+    NSString *menuTitle = wxInitNSStringWithWxString([NSString alloc],wxStripMenuCodes(strName));
     m_cocoaNSMenuItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:@selector(wxMenuItemAction:) keyEquivalent:@""];
     sm_cocoaHash.insert(wxMenuItemCocoaHash::value_type(m_cocoaNSMenuItem,this));
     [m_cocoaNSMenuItem setTarget:sm_cocoaTarget];

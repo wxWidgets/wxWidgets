@@ -189,7 +189,7 @@ void wxFont::SetUnderlined(bool underlined)
 /* New font system */
 wxString wxFont::GetFaceName() const
 {
-    wxString str("");
+    wxString str;
     if (M_FONTDATA)
 	    str = M_FONTDATA->m_faceName ;
     return str;

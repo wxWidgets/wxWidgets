@@ -68,7 +68,7 @@ void wxButton::Cocoa_wxNSButtonAction(void)
 
 wxString wxButton::GetLabel() const
 {
-    return wxString([[GetNSButton() title] lossyCString]);
+    return wxStringWithNSString([GetNSButton() title]);
 }
 
 void wxButton::SetLabel(const wxString& label)

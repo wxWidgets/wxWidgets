@@ -600,7 +600,7 @@ bool wxNotebook::DoPhase(int /* nPhase */)
 
 void wxNotebook::Command(wxCommandEvent& WXUNUSED(event))
 {
-    wxFAIL_MSG("wxNotebook::Command not implemented");
+    wxFAIL_MSG(wxT("wxNotebook::Command not implemented"));
 }
 
 // ----------------------------------------------------------------------------

@@ -16,6 +16,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSTextField.h>
@@ -39,7 +40,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID winid,
     m_cocoaNSView = NULL;
     SetNSTextField([[NSTextField alloc] initWithFrame:MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
-    [GetNSTextField() setStringValue:[NSString stringWithCString:label.c_str()]];
+    [GetNSTextField() setStringValue:wxNSStringWithWxString(label)];
 //    [GetNSTextField() setBordered: NO];
     [GetNSTextField() setBezeled: NO];
     [GetNSTextField() setEditable: NO];

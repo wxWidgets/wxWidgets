@@ -145,7 +145,7 @@ int wxChoice::GetCount() const
 
 wxString wxChoice::GetString(int n) const
 {
-    return wxString([[(NSPopUpButton*)m_cocoaNSView itemTitleAtIndex:n] lossyCString]);
+    return wxStringWithNSString([(NSPopUpButton*)m_cocoaNSView itemTitleAtIndex:n]);
 }
 
 void wxChoice::SetString(int n, const wxString& title)

@@ -24,6 +24,7 @@
 #endif // WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <Foundation/NSString.h>
 #import <AppKit/NSMenu.h>
@@ -43,7 +44,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenu,wxEvtHandler)
 bool wxMenu::Create(const wxString& title, long style)
 {
     wxAutoNSAutoreleasePool pool;
-    m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: [NSString stringWithCString: title.c_str()]];
+    m_cocoaNSMenu = [[NSMenu alloc] initWithTitle: wxNSStringWithWxString(title)];
     return true;
 }
 
@@ -110,7 +111,7 @@ bool wxMenuBar::Append( wxMenu *menu, const wxString &title )
         return false;
     wxASSERT(menu);
     wxASSERT(menu->GetNSMenu());
-    NSString *menuTitle = [[NSString alloc] initWithCString: wxStripMenuCodes(title).c_str()];
+    NSString *menuTitle = wxInitNSStringWithWxString([NSString alloc], wxStripMenuCodes(title));
     NSMenuItem *newItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:NULL keyEquivalent:@""];
     [menu->GetNSMenu() setTitle:menuTitle];
     [newItem setSubmenu:menu->GetNSMenu()];
@@ -132,7 +133,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
         return false;
     wxASSERT(menu);
     wxASSERT(menu->GetNSMenu());
-    NSString *menuTitle = [[NSString alloc] initWithCString: title.c_str()];
+    NSString *menuTitle = wxInitNSStringWithWxString([NSString alloc], title);
     NSMenuItem *newItem = [[NSMenuItem alloc] initWithTitle:menuTitle action:NULL keyEquivalent:@""];
     [menu->GetNSMenu() setTitle:menuTitle];
     [newItem setSubmenu:menu->GetNSMenu()];
@@ -180,7 +181,7 @@ wxString wxMenuBar::GetLabelTop(size_t pos) const
     wxMenu *menu = GetMenu(pos);
     int itemindex = [m_cocoaNSMenu indexOfItemWithSubmenu:menu->GetNSMenu()];
     wxASSERT(itemindex>=0);
-    return wxString([[[m_cocoaNSMenu itemAtIndex:itemindex] title] lossyCString]);
+    return wxStringWithNSString([[m_cocoaNSMenu itemAtIndex:itemindex] title]);
 }
 
 void wxMenuBar::Attach(wxFrame *frame)

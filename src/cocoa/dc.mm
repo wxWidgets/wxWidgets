@@ -16,6 +16,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/cocoa/autorelease.h"
+#include "wx/cocoa/string.h"
 
 #import <AppKit/NSBezierPath.h>
 #import <AppKit/NSTextStorage.h>
@@ -207,7 +208,7 @@ void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord
 // FIXME: Cache this so it can be used for DoDrawText
     wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, wxT("Text system has not been initialized.  BAD PROGRAMMER!"));
     NSAttributedString *attributedString = [[NSAttributedString alloc]
-            initWithString:[NSString stringWithCString:text.c_str()]];
+            initWithString:wxNSStringWithWxString(text.c_str())];
     [sm_cocoaNSTextStorage setAttributedString:attributedString];
     [attributedString release];
 
@@ -228,7 +229,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     if(!CocoaTakeFocus()) return;
     wxASSERT_MSG(sm_cocoaNSTextStorage && sm_cocoaNSLayoutManager && sm_cocoaNSTextContainer, wxT("Text system has not been initialized.  BAD PROGRAMMER!"));
     NSAttributedString *attributedString = [[NSAttributedString alloc]
-            initWithString:[NSString stringWithCString:text.c_str()]];
+            initWithString:wxNSStringWithWxString(text.c_str())];
     [sm_cocoaNSTextStorage setAttributedString:attributedString];
     [attributedString release];
 
