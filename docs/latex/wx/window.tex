@@ -1450,16 +1450,14 @@ implements the following methods:\par
 
 \membersection{wxWindow::Navigate}\label{wxwindownavigate}
 
-\func{bool}{Navigate}{\param{bool}{ direction = true}, \param{bool}{ windowChange = false}}
+\func{bool}{Navigate}{\param{int}{ flags = wxNavigationKeyEvent::IsForward}}
 
 Does keyboard navigation from this window to another, by sending
 a wxNavigationKeyEvent.
 
 \wxheading{Parameters}
 
-\docparam{direction}{{\tt true} to navigate forwards, {\tt false} to navigate backwards.}
-
-\docparam{windowChange}{{\tt true} if the navigation is a window change.}
+\docparam{flags}{A combination of wxNavigationKeyEvent::IsForward and wxNavigationKeyEvent::WinChange.}
 
 \wxheading{Remarks}
 

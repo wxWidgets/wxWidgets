@@ -1987,7 +1987,12 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
         case WXK_TAB:
             if ( !(m_windowStyle & wxTE_PROCESS_TAB))
             {
-                Navigate(!event.ShiftDown(), event.ControlDown());
+                int flags = 0;
+                if (!event.ShiftDown())
+                    flags |= wxNavigationKeyEvent::IsForward ;
+                if (event.ControlDown())
+                    flags |= wxNavigationKeyEvent::WinChange ;
+                Navigate(flags);
                 return;
             }
             else

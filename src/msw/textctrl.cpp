@@ -1707,7 +1707,12 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
             {
                 if ( FindFocus() == this )
                 {
-                    if (Navigate(!event.ShiftDown(), event.ControlDown()))
+                    int flags = 0;
+                    if (!event.ShiftDown())
+                        flags |= wxNavigationKeyEvent::IsForward ;
+                    if (event.ControlDown())
+                        flags |= wxNavigationKeyEvent::WinChange ;
+                    if (Navigate(flags))
                         return;
                 }
             }

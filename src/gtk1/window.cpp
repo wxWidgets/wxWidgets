@@ -1197,8 +1197,8 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 // JS: enabling again to make consistent with other platforms
 //     (with wxTE_PROCESS_TAB you have to call Navigate to get default
 //     navigation behaviour)
-#if 1
-         !win->HasFlag(wxTE_PROCESS_TAB) &&
+#if wxUSE_TEXTCTRL
+         (! (win->HasFlag(wxTE_PROCESS_TAB) && IsKindOf(CLASSINFO(wxTextCtrl)) )) &&
 #endif
          win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
