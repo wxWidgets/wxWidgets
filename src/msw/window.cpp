@@ -1456,6 +1456,18 @@ void wxWindow::GetCaretPos(int *x, int *y) const
 // popup menu
 // ---------------------------------------------------------------------------
 
+static void wxYieldForCommandsOnly()
+{
+    // peek all WM_COMMANDs (it will always return WM_QUIT too but we don't
+    // want to process it here)
+    MSG msg;
+    while ( ::PeekMessage(&msg, (HWND)0, WM_COMMAND, WM_COMMAND, PM_REMOVE)
+                && msg.message != WM_QUIT )
+    {
+        wxTheApp->DoMessage((WXMSG *)&msg);
+    }
+}
+
 bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
 {
     menu->SetInvokingWindow(this);
@@ -1469,7 +1481,9 @@ bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
     ::TrackPopupMenu(hMenu, TPM_RIGHTBUTTON, point.x, point.y, 0, hWnd, NULL);
-    wxYieldIfNeeded();
+    
+    wxYieldForCommands();
+    
     wxCurrentPopupMenu = NULL;
 
     menu->SetInvokingWindow(NULL);
