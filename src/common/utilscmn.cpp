@@ -329,7 +329,7 @@ int wxHexToDec(const wxString& buf)
   else
     secondDigit = buf.GetChar(1) - wxT('0');
 
-  return firstDigit * 16 + secondDigit;
+  return (firstDigit & 0xF) * 16 + (secondDigit & 0xF );
 }
 
 // Convert decimal integer to 2-character hex string
