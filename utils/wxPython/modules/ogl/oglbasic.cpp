@@ -1127,17 +1127,19 @@ static PyObject *_wrap_new_wxPyShapeEvtHandler(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
-#define wxPyShapeEvtHandler__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyShapeEvtHandler__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyShapeEvtHandler__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyShapeEvtHandler * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyShapeEvtHandler__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShapeEvtHandler__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1150,8 +1152,11 @@ static PyObject *_wrap_wxPyShapeEvtHandler__setSelf(PyObject *self, PyObject *ar
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyShapeEvtHandler__setSelf(_arg0,_arg1);
+        wxPyShapeEvtHandler__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2382,17 +2387,19 @@ static void *SwigwxPyShapeTowxPyShapeEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-#define wxPyShape__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyShape__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyShape__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyShape * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyShape__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyShape__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2405,8 +2412,11 @@ static PyObject *_wrap_wxPyShape__setSelf(PyObject *self, PyObject *args, PyObje
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyShape__setSelf(_arg0,_arg1);
+        wxPyShape__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -8265,6 +8275,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_wxPrinter","_class_wxPrinter",0},
     { "_wxPen","_class_wxPen",0},
     { "_wxUpdateUIEvent","_class_wxUpdateUIEvent",0},
+    { "_class_wxNotebookSizer","_wxNotebookSizer",0},
     { "_byte","_unsigned_char",0},
     { "_wxDataObject","_class_wxDataObject",0},
     { "_class_wxPyFontEnumerator","_wxPyFontEnumerator",0},
@@ -8373,7 +8384,6 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPNMHandler","_wxPNMHandler",0},
     { "_wxBoxSizer","_class_wxBoxSizer",0},
     { "_wxBitmap","_class_wxBitmap",0},
-    { "_char","_wxDash",0},
     { "_wxPrintDialog","_class_wxPrintDialog",0},
     { "_wxPyTimer","_class_wxPyTimer",0},
     { "_wxWindowDC","_class_wxWindowDC",0},
@@ -8443,6 +8453,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_signed_int","_wxWindowID",0},
     { "_signed_int","_int",0},
     { "_class_wxTextCtrl","_wxTextCtrl",0},
+    { "_class_wxListItemAttr","_wxListItemAttr",0},
     { "_wxLayoutConstraints","_class_wxLayoutConstraints",0},
     { "_class_wxTextDataObject","_wxTextDataObject",0},
     { "_wxMenu","_class_wxMenu",0},
@@ -8634,8 +8645,8 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxScrollBar","_wxScrollBar",0},
     { "_class_wxColourDialog","_wxColourDialog",0},
     { "_class_wxPrintData","_wxPrintData",0},
-    { "_wxDash","_char",0},
     { "_class_wxScrolledWindow","_wxScrolledWindow",0},
+    { "_wxListItemAttr","_class_wxListItemAttr",0},
     { "_class_wxTextEntryDialog","_wxTextEntryDialog",0},
     { "_wxKeyEvent","_class_wxKeyEvent",0},
     { "_wxMoveEvent","_class_wxMoveEvent",0},
@@ -8644,6 +8655,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPalette","_wxPalette",0},
     { "_wxFileDataObject","_class_wxFileDataObject",0},
     { "_class_wxQueryLayoutInfoEvent","_wxQueryLayoutInfoEvent",0},
+    { "_wxNotebookSizer","_class_wxNotebookSizer",0},
     { "_class_wxEraseEvent","_wxEraseEvent",0},
     { "_wxPyFontEnumerator","_class_wxPyFontEnumerator",0},
     { "_wxMDIClientWindow","_class_wxMDIClientWindow",0},

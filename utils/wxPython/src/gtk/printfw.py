@@ -386,7 +386,7 @@ class wxPrintout(wxPrintoutPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(printfwc.new_wxPrintout,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPrintout)
 
 
 

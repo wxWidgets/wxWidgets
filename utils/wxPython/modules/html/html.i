@@ -208,8 +208,8 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 public:
     wxPyHtmlTagHandler();
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxHtmlTagHandler)"
 
     void SetParser(wxHtmlParser *parser);
     wxHtmlParser* GetParser();
@@ -243,8 +243,8 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleT
 public:
     wxPyHtmlWinTagHandler();
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxHtmlWinTagHandler)"
 
     void SetParser(wxHtmlParser *parser);
     wxHtmlWinParser* GetParser();
@@ -445,8 +445,8 @@ public:
                  int flags=wxHW_SCROLLBAR_AUTO,
                  char* name = "htmlWindow");
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxHtmlWindow)"
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
     %pragma(python) addtomethod = "__init__:wx._StdOnScrollCallbacks(self)"
 

@@ -121,7 +121,7 @@ class wxFontEnumerator(wxFontEnumeratorPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxFontEnumerator,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxFontEnumerator)
 
 
 

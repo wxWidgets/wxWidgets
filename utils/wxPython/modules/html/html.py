@@ -280,7 +280,7 @@ class wxHtmlTagHandler(wxHtmlTagHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlTagHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxHtmlTagHandler)
 
 
 
@@ -308,7 +308,7 @@ class wxHtmlWinTagHandler(wxHtmlWinTagHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlWinTagHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxHtmlWinTagHandler)
 
 
 
@@ -569,7 +569,7 @@ class wxHtmlWindow(wxHtmlWindowPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlWindow,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxHtmlWindow)
         wx._StdWindowCallbacks(self)
         wx._StdOnScrollCallbacks(self)
 

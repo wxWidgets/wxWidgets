@@ -2679,17 +2679,19 @@ static PyObject *_wrap_new_wxPrintout(PyObject *self, PyObject *args, PyObject *
     return _resultobj;
 }
 
-#define wxPrintout__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPrintout__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyPrintout * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPrintout__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPrintout__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2702,8 +2704,11 @@ static PyObject *_wrap_wxPrintout__setSelf(PyObject *self, PyObject *args, PyObj
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintout__setSelf(_arg0,_arg1);
+        wxPrintout__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);

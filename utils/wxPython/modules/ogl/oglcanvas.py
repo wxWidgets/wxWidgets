@@ -209,7 +209,7 @@ class wxPyShapeCanvas(wxPyShapeCanvasPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglcanvasc.new_wxPyShapeCanvas,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyShapeCanvas)
         wx._StdWindowCallbacks(self)
         wx._StdOnScrollCallbacks(self)
 

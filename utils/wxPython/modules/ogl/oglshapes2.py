@@ -136,7 +136,7 @@ class wxPyEllipseShape(wxPyEllipseShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapes2c.new_wxPyEllipseShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyEllipseShape)
 
 
 
@@ -238,7 +238,7 @@ class wxPyCircleShape(wxPyCircleShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapes2c.new_wxPyCircleShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyCircleShape)
 
 
 
@@ -528,7 +528,7 @@ class wxPyLineShape(wxPyLineShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapes2c.new_wxPyLineShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyLineShape)
 
 
 
@@ -648,7 +648,7 @@ class wxPyPolygonShape(wxPyPolygonShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapes2c.new_wxPyPolygonShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyPolygonShape)
 
 
 
@@ -753,7 +753,7 @@ class wxPyTextShape(wxPyTextShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapes2c.new_wxPyTextShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyTextShape)
 
 
 

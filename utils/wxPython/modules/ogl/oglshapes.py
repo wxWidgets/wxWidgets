@@ -282,7 +282,7 @@ class wxPyRectangleShape(wxPyRectangleShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyRectangleShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyRectangleShape)
 
 
 
@@ -390,7 +390,7 @@ class wxPyControlPoint(wxPyControlPointPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyControlPoint,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyControlPoint)
 
 
 
@@ -508,7 +508,7 @@ class wxPyBitmapShape(wxPyBitmapShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyBitmapShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyBitmapShape)
 
 
 
@@ -698,7 +698,7 @@ class wxPyDrawnShape(wxPyDrawnShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyDrawnShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyDrawnShape)
 
 
 
@@ -875,7 +875,7 @@ class wxPyCompositeShape(wxPyCompositeShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyCompositeShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyCompositeShape)
 
 
 
@@ -986,7 +986,7 @@ class wxPyDividedShape(wxPyDividedShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyDividedShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyDividedShape)
 
 
 
@@ -1172,7 +1172,7 @@ class wxPyDivisionShape(wxPyDivisionShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyDivisionShape,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyDivisionShape)
 
 
 

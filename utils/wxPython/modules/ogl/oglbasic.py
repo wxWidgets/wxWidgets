@@ -258,7 +258,7 @@ class wxPyShapeEvtHandler(wxPyShapeEvtHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglbasicc.new_wxPyShapeEvtHandler,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPyShapeEvtHandler)
 
 
 

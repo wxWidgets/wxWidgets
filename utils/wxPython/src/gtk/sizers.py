@@ -205,7 +205,7 @@ class wxPySizer(wxPySizerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(sizersc.new_wxPySizer,_args,_kwargs)
         self.thisown = 1
-        self._setSelf(self)
+        self._setSelf(self, wxPySizer)
 
 
 

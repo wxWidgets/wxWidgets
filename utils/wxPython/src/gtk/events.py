@@ -760,7 +760,7 @@ class wxQueryNewPaletteEvent(wxQueryNewPaletteEventPtr):
 
 
 
-class wxWindowCreateEventPtr(wxEventPtr):
+class wxWindowCreateEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -778,7 +778,7 @@ class wxWindowCreateEvent(wxWindowCreateEventPtr):
 
 
 
-class wxWindowDestroyEventPtr(wxEventPtr):
+class wxWindowDestroyEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

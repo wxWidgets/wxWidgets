@@ -47,8 +47,8 @@ class wxPyEllipseShape : public wxPyShape {
 public:
     wxPyEllipseShape(double width = 0.0, double height = 0.0);
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyEllipseShape)"
 
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
@@ -90,8 +90,8 @@ class wxPyCircleShape : public wxPyEllipseShape {
 public:
     wxPyCircleShape(double width = 0.0);
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyCircleShape)"
 
     void base_OnDraw(wxDC& dc);
     void base_OnDrawContents(wxDC& dc);
@@ -162,8 +162,8 @@ class wxPyLineShape : public wxPyShape {
 public:
     wxPyLineShape();
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyLineShape)"
 
     void AddArrow(int type, int end = ARROW_POSITION_END,
                   double arrowSize = 10.0, double xOffset = 0.0,
@@ -259,8 +259,8 @@ class wxPyPolygonShape : public wxPyShape {
 public:
     wxPyPolygonShape();
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyPolygonShape)"
 
 
     // void Create(wxList* points);
@@ -330,8 +330,8 @@ class wxPyTextShape : public wxPyRectangleShape {
 public:
     wxPyTextShape(double width = 0.0, double height = 0.0);
 
-    void _setSelf(PyObject* self);
-    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+    void _setSelf(PyObject* self, PyObject* _class);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self, wxPyTextShape)"
 
 
     void base_OnDelete();

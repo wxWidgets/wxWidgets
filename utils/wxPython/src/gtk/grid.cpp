@@ -120,7 +120,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
             }                                                           \
         }                                                               \
         else                                                            \
-            return PCLASS::CBNAME(a, b);                                \
+            rval = PCLASS::CBNAME(a, b);                                \
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }                                                                   \
@@ -379,7 +379,7 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         wxPySaveThread(doSave);                                         \
         return rval;                                                    \
     }                                                                   \
-            wxString base_##CBNAME(int a) {                             \
+    wxString base_##CBNAME(int a) {                                     \
         return PCLASS::CBNAME(a);                                       \
     }
 
@@ -686,18 +686,9 @@ public:
     PYCALLBACK_INT__pure(GetNumberRows);
     PYCALLBACK_INT__pure(GetNumberCols);
     PYCALLBACK_BOOL_INTINT_pure(IsEmptyCell);
-    PYCALLBACK_STRING_INTINT_pure(GetValue);
-    PYCALLBACK__INTINTSTRING_pure(SetValue);
-
     PYCALLBACK_STRING_INTINT(wxGridTableBase, GetTypeName);
     PYCALLBACK_BOOL_INTINTSTRING(wxGridTableBase, CanGetValueAs);
     PYCALLBACK_BOOL_INTINTSTRING(wxGridTableBase, CanSetValueAs);
-    PYCALLBACK_LONG_INTINT(wxGridTableBase, GetValueAsLong);
-    PYCALLBACK_DOUBLE_INTINT(wxGridTableBase, GetValueAsDouble);
-    PYCALLBACK_BOOL_INTINT(wxGridTableBase, GetValueAsBool);
-    PYCALLBACK__INTINTLONG(wxGridTableBase, SetValueAsLong);
-    PYCALLBACK__INTINTDOUBLE(wxGridTableBase, SetValueAsDouble);
-    PYCALLBACK__INTINTBOOL(wxGridTableBase, SetValueAsBool);
     PYCALLBACK__(wxGridTableBase, Clear);
     PYCALLBACK_BOOL_SIZETSIZET(wxGridTableBase, InsertRows);
     PYCALLBACK_BOOL_SIZETSIZET(wxGridTableBase, DeleteRows);
@@ -710,20 +701,102 @@ public:
     PYCALLBACK__INTSTRING(wxGridTableBase, SetRowLabelValue);
     PYCALLBACK__INTSTRING(wxGridTableBase, SetColLabelValue);
     PYCALLBACK_BOOL_(wxGridTableBase, CanHaveAttributes);
-    PYCALLBACK__SIZETINT(wxGridTableBase, UpdateAttrRows);
-    PYCALLBACK__SIZETINT(wxGridTableBase, UpdateAttrCols);
     PYCALLBACK_GCA_INTINT(wxGridTableBase, GetAttr);
     PYCALLBACK__GCAINTINT(wxGridTableBase, SetAttr);
     PYCALLBACK__GCAINT(wxGridTableBase, SetRowAttr);
     PYCALLBACK__GCAINT(wxGridTableBase, SetColAttr);
 
 
-    //TODO:  void* GetValueAsCustom( int row, int col, const wxString& typeName );
-    //TODO:  void  SetValueAsCustom( int row, int col, const wxString& typeName, void* value );
-    //
-    // It would be nice to SetValue/GetValue in the Python code to beable to work with
-    // any python objects and auto-convert to the various types for the C++ code.
-    // Figure it out.
+
+    wxString GetValue(int row, int col) {
+        bool doSave = wxPyRestoreThread();
+        wxString rval;
+        if (m_myInst.findCallback("GetValue")) {
+            PyObject* ro;
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)",row,col));
+            if (ro) {
+                rval = PyString_AsString(PyObject_Str(ro));
+                Py_DECREF(ro);
+            }
+        }
+        wxPySaveThread(doSave);
+        return rval;
+    }
+
+    void SetValue(int row, int col, const wxString& val) {
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("SetValue"))
+            m_myInst.callCallback(Py_BuildValue("(iis)",row,col,val.c_str()));
+        wxPySaveThread(doSave);
+    }
+
+
+    // Map the Get/Set methods for the standard non-string types to
+    // the GetValue and SetValue python methods.
+    long GetValueAsLong( int row, int col ) {
+        long rval = 0;
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("GetValue")) {
+            PyObject* ro;
+            PyObject* num;
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", row, col));
+            if (ro && PyNumber_Check(ro)) {
+                num = PyNumber_Int(ro);
+                if (num) {
+                    rval = PyInt_AsLong(num);
+                    Py_DECREF(num);
+                }
+                Py_DECREF(ro);
+            }
+        }
+        wxPySaveThread(doSave);
+        return rval;
+    }
+
+    double GetValueAsDouble( int row, int col ) {
+        double rval = 0.0;
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("GetValue")) {
+            PyObject* ro;
+            PyObject* num;
+            ro = m_myInst.callCallbackObj(Py_BuildValue("(ii)", row, col));
+            if (ro && PyNumber_Check(ro)) {
+                num = PyNumber_Float(ro);
+                if (num) {
+                    rval = PyFloat_AsDouble(num);
+                    Py_DECREF(num);
+                }
+                Py_DECREF(ro);
+            }
+        }
+        wxPySaveThread(doSave);
+        return rval;
+    }
+
+    bool GetValueAsBool( int row, int col ) {
+        return (bool)GetValueAsLong(row, col);
+    }
+
+    void SetValueAsLong( int row, int col, long value ) {
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("SetValue")) {
+            m_myInst.callCallback(Py_BuildValue("(iii)", row, col, value));
+        }
+        wxPySaveThread(doSave);
+    }
+
+    void SetValueAsDouble( int row, int col, double value ) {
+        bool doSave = wxPyRestoreThread();
+        if (m_myInst.findCallback("SetValue")) {
+            m_myInst.callCallback(Py_BuildValue("(iid)", row, col, value));
+        }
+        wxPySaveThread(doSave);
+    }
+
+    void SetValueAsBool( int row, int col, bool value ) {
+        SetValueAsLong( row, col, (long)value );
+    }
+
 
     PYPRIVATE;
 };
@@ -1017,17 +1090,19 @@ static PyObject *_wrap_new_wxPyGridCellRenderer(PyObject *self, PyObject *args, 
     return _resultobj;
 }
 
-#define wxPyGridCellRenderer__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyGridCellRenderer__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyGridCellRenderer__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyGridCellRenderer * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyGridCellRenderer__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyGridCellRenderer__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1040,8 +1115,11 @@ static PyObject *_wrap_wxPyGridCellRenderer__setSelf(PyObject *self, PyObject *a
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridCellRenderer__setSelf(_arg0,_arg1);
+        wxPyGridCellRenderer__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1946,17 +2024,19 @@ static PyObject *_wrap_new_wxPyGridCellEditor(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
-#define wxPyGridCellEditor__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyGridCellEditor__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyGridCellEditor__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyGridCellEditor * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyGridCellEditor__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyGridCellEditor__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -1969,8 +2049,11 @@ static PyObject *_wrap_wxPyGridCellEditor__setSelf(PyObject *self, PyObject *arg
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridCellEditor__setSelf(_arg0,_arg1);
+        wxPyGridCellEditor__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -2311,19 +2394,21 @@ static void *SwigwxGridCellNumberEditorTowxGridCellEditor(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxGridCellNumberEditor() (new wxGridCellNumberEditor())
+#define new_wxGridCellNumberEditor(_swigarg0,_swigarg1) (new wxGridCellNumberEditor(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxGridCellNumberEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGridCellNumberEditor * _result;
-    char *_kwnames[] = {  NULL };
+    int  _arg0 = (int ) -1;
+    int  _arg1 = (int ) -1;
+    char *_kwnames[] = { "min","max", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellNumberEditor",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|ii:new_wxGridCellNumberEditor",_kwnames,&_arg0,&_arg1)) 
         return NULL;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGridCellNumberEditor *)new_wxGridCellNumberEditor();
+        _result = (wxGridCellNumberEditor *)new_wxGridCellNumberEditor(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -2418,19 +2503,40 @@ static void *SwigwxGridCellChoiceEditorTowxGridCellEditor(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxGridCellChoiceEditor() (new wxGridCellChoiceEditor())
+#define new_wxGridCellChoiceEditor(_swigarg0,_swigarg1,_swigarg2) (new wxGridCellChoiceEditor(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_new_wxGridCellChoiceEditor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxGridCellChoiceEditor * _result;
-    char *_kwnames[] = {  NULL };
+    int  _arg0 = (int ) 0;
+    wxString * _arg1 = (wxString *) NULL;
+    bool  _arg2 = (bool ) FALSE;
+    PyObject * _obj1 = 0;
+    int tempbool2 = (int) FALSE;
+    char *_kwnames[] = { "choices","allowOthers", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxGridCellChoiceEditor",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|Oi:new_wxGridCellChoiceEditor",_kwnames,&_obj1,&tempbool2)) 
         return NULL;
+    if (_obj1)
+{
+    _arg1 = wxString_LIST_helper(_obj1);
+    if (_arg1 == NULL) {
+        return NULL;
+    }
+}
+    _arg2 = (bool ) tempbool2;
+{
+    if (_obj1) {
+        _arg0 = PyList_Size(_obj1);
+    }
+    else {
+        _arg0 = 0;
+    }
+}
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxGridCellChoiceEditor *)new_wxGridCellChoiceEditor();
+        _result = (wxGridCellChoiceEditor *)new_wxGridCellChoiceEditor(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    if (_result) {
@@ -2440,6 +2546,9 @@ static PyObject *_wrap_new_wxGridCellChoiceEditor(PyObject *self, PyObject *args
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    delete [] _arg1;
+}
     return _resultobj;
 }
 
@@ -3526,17 +3635,19 @@ static PyObject *_wrap_new_wxPyGridCellAttrProvider(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
-#define wxPyGridCellAttrProvider__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyGridCellAttrProvider__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyGridCellAttrProvider__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyGridCellAttrProvider * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyGridCellAttrProvider__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyGridCellAttrProvider__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -3549,8 +3660,11 @@ static PyObject *_wrap_wxPyGridCellAttrProvider__setSelf(PyObject *self, PyObjec
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridCellAttrProvider__setSelf(_arg0,_arg1);
+        wxPyGridCellAttrProvider__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -3699,33 +3813,6 @@ static PyObject *_wrap_wxPyGridCellAttrProvider_base_SetColAttr(PyObject *self, 
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxPyGridCellAttrProvider_base_SetColAttr(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define delete_wxGridTableBase(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxGridTableBase(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGridTableBase * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxGridTableBase",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxGridTableBase. Expected _wxGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxGridTableBase(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4703,64 +4790,6 @@ static PyObject *_wrap_wxGridTableBase_CanHaveAttributes(PyObject *self, PyObjec
     return _resultobj;
 }
 
-#define wxGridTableBase_UpdateAttrRows(_swigobj,_swigarg0,_swigarg1)  (_swigobj->UpdateAttrRows(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxGridTableBase_UpdateAttrRows(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGridTableBase * _arg0;
-    size_t  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos","numRows", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGridTableBase_UpdateAttrRows",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridTableBase_UpdateAttrRows. Expected _wxGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGridTableBase_UpdateAttrRows(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxGridTableBase_UpdateAttrCols(_swigobj,_swigarg0,_swigarg1)  (_swigobj->UpdateAttrCols(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxGridTableBase_UpdateAttrCols(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxGridTableBase * _arg0;
-    size_t  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos","numCols", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxGridTableBase_UpdateAttrCols",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGridTableBase_UpdateAttrCols. Expected _wxGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxGridTableBase_UpdateAttrCols(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxGridTableBase_GetAttr(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetAttr(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxGridTableBase_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -4942,17 +4971,19 @@ static PyObject *_wrap_new_wxPyGridTableBase(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxPyGridTableBase__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxPyGridTableBase__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyGridTableBase__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyGridTableBase * _arg0;
     PyObject * _arg1;
+    PyObject * _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    PyObject * _obj2 = 0;
+    char *_kwnames[] = { "self","self","_class", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPyGridTableBase__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOO:wxPyGridTableBase__setSelf",_kwnames,&_argo0,&_obj1,&_obj2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -4965,8 +4996,38 @@ static PyObject *_wrap_wxPyGridTableBase__setSelf(PyObject *self, PyObject *args
   _arg1 = _obj1;
 }
 {
+  _arg2 = _obj2;
+}
+{
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridTableBase__setSelf(_arg0,_arg1);
+        wxPyGridTableBase__setSelf(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+static void  wxPyGridTableBase_Destroy(wxPyGridTableBase *self) { delete self; }
+static PyObject *_wrap_wxPyGridTableBase_Destroy(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyGridTableBase * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyGridTableBase_Destroy",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_Destroy. Expected _wxPyGridTableBase_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxPyGridTableBase_Destroy(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5089,185 +5150,6 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanSetValueAs(PyObject *self, PyOb
     if (_obj3)
         delete _arg3;
 }
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_GetValueAsLong(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_GetValueAsLong(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyGridTableBase_base_GetValueAsLong(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    long  _result;
-    wxPyGridTableBase * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","row","col", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyGridTableBase_base_GetValueAsLong",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_GetValueAsLong. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (long )wxPyGridTableBase_base_GetValueAsLong(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("l",_result);
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_GetValueAsDouble(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_GetValueAsDouble(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyGridTableBase_base_GetValueAsDouble(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    double  _result;
-    wxPyGridTableBase * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","row","col", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyGridTableBase_base_GetValueAsDouble",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_GetValueAsDouble. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (double )wxPyGridTableBase_base_GetValueAsDouble(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("d",_result);
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_GetValueAsBool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_GetValueAsBool(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyGridTableBase_base_GetValueAsBool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPyGridTableBase * _arg0;
-    int  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","row","col", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyGridTableBase_base_GetValueAsBool",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_GetValueAsBool. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPyGridTableBase_base_GetValueAsBool(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_SetValueAsLong(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->base_SetValueAsLong(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPyGridTableBase_base_SetValueAsLong(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyGridTableBase * _arg0;
-    int  _arg1;
-    int  _arg2;
-    long  _arg3;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","row","col","value", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiil:wxPyGridTableBase_base_SetValueAsLong",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_SetValueAsLong. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridTableBase_base_SetValueAsLong(_arg0,_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_SetValueAsDouble(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->base_SetValueAsDouble(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPyGridTableBase_base_SetValueAsDouble(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyGridTableBase * _arg0;
-    int  _arg1;
-    int  _arg2;
-    double  _arg3;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","row","col","value", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiid:wxPyGridTableBase_base_SetValueAsDouble",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_SetValueAsDouble. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridTableBase_base_SetValueAsDouble(_arg0,_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_SetValueAsBool(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->base_SetValueAsBool(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxPyGridTableBase_base_SetValueAsBool(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyGridTableBase * _arg0;
-    int  _arg1;
-    int  _arg2;
-    bool  _arg3;
-    PyObject * _argo0 = 0;
-    int tempbool3;
-    char *_kwnames[] = { "self","row","col","value", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oiii:wxPyGridTableBase_base_SetValueAsBool",_kwnames,&_argo0,&_arg1,&_arg2,&tempbool3)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_SetValueAsBool. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-    _arg3 = (bool ) tempbool3;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridTableBase_base_SetValueAsBool(_arg0,_arg1,_arg2,_arg3);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -5645,64 +5527,6 @@ static PyObject *_wrap_wxPyGridTableBase_base_CanHaveAttributes(PyObject *self, 
     return _resultobj;
 }
 
-#define wxPyGridTableBase_base_UpdateAttrRows(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_UpdateAttrRows(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyGridTableBase_base_UpdateAttrRows(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyGridTableBase * _arg0;
-    size_t  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos","numRows", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyGridTableBase_base_UpdateAttrRows",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_UpdateAttrRows. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridTableBase_base_UpdateAttrRows(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPyGridTableBase_base_UpdateAttrCols(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_UpdateAttrCols(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxPyGridTableBase_base_UpdateAttrCols(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPyGridTableBase * _arg0;
-    size_t  _arg1;
-    int  _arg2;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","pos","numCols", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oii:wxPyGridTableBase_base_UpdateAttrCols",_kwnames,&_argo0,&_arg1,&_arg2)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyGridTableBase_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyGridTableBase_base_UpdateAttrCols. Expected _wxPyGridTableBase_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPyGridTableBase_base_UpdateAttrCols(_arg0,_arg1,_arg2);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
 #define wxPyGridTableBase_base_GetAttr(_swigobj,_swigarg0,_swigarg1)  (_swigobj->base_GetAttr(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxPyGridTableBase_base_GetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -5920,6 +5744,33 @@ static PyObject *_wrap_new_wxGridTableMessage(PyObject *self, PyObject *args, Py
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+    return _resultobj;
+}
+
+#define delete_wxGridTableMessage(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxGridTableMessage(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxGridTableMessage * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:delete_wxGridTableMessage",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGridTableMessage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxGridTableMessage. Expected _wxGridTableMessage_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxGridTableMessage(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -12692,14 +12543,13 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGridTableMessage_SetId", (PyCFunction) _wrap_wxGridTableMessage_SetId, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableMessage_GetTableObject", (PyCFunction) _wrap_wxGridTableMessage_GetTableObject, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableMessage_SetTableObject", (PyCFunction) _wrap_wxGridTableMessage_SetTableObject, METH_VARARGS | METH_KEYWORDS },
+	 { "delete_wxGridTableMessage", (PyCFunction) _wrap_delete_wxGridTableMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGridTableMessage", (PyCFunction) _wrap_new_wxGridTableMessage, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxGridStringTable", (PyCFunction) _wrap_new_wxGridStringTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_SetColAttr", (PyCFunction) _wrap_wxPyGridTableBase_base_SetColAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_SetRowAttr", (PyCFunction) _wrap_wxPyGridTableBase_base_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_SetAttr", (PyCFunction) _wrap_wxPyGridTableBase_base_SetAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_GetAttr", (PyCFunction) _wrap_wxPyGridTableBase_base_GetAttr, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_UpdateAttrCols", (PyCFunction) _wrap_wxPyGridTableBase_base_UpdateAttrCols, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_UpdateAttrRows", (PyCFunction) _wrap_wxPyGridTableBase_base_UpdateAttrRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_CanHaveAttributes", (PyCFunction) _wrap_wxPyGridTableBase_base_CanHaveAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_SetColLabelValue", (PyCFunction) _wrap_wxPyGridTableBase_base_SetColLabelValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_SetRowLabelValue", (PyCFunction) _wrap_wxPyGridTableBase_base_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
@@ -12712,23 +12562,16 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxPyGridTableBase_base_AppendRows", (PyCFunction) _wrap_wxPyGridTableBase_base_AppendRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_InsertRows", (PyCFunction) _wrap_wxPyGridTableBase_base_InsertRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_Clear", (PyCFunction) _wrap_wxPyGridTableBase_base_Clear, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_SetValueAsBool", (PyCFunction) _wrap_wxPyGridTableBase_base_SetValueAsBool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_SetValueAsDouble", (PyCFunction) _wrap_wxPyGridTableBase_base_SetValueAsDouble, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_SetValueAsLong", (PyCFunction) _wrap_wxPyGridTableBase_base_SetValueAsLong, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_GetValueAsBool", (PyCFunction) _wrap_wxPyGridTableBase_base_GetValueAsBool, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_GetValueAsDouble", (PyCFunction) _wrap_wxPyGridTableBase_base_GetValueAsDouble, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyGridTableBase_base_GetValueAsLong", (PyCFunction) _wrap_wxPyGridTableBase_base_GetValueAsLong, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_CanSetValueAs", (PyCFunction) _wrap_wxPyGridTableBase_base_CanSetValueAs, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_CanGetValueAs", (PyCFunction) _wrap_wxPyGridTableBase_base_CanGetValueAs, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase_base_GetTypeName", (PyCFunction) _wrap_wxPyGridTableBase_base_GetTypeName, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyGridTableBase_Destroy", (PyCFunction) _wrap_wxPyGridTableBase_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridTableBase__setSelf", (PyCFunction) _wrap_wxPyGridTableBase__setSelf, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyGridTableBase", (PyCFunction) _wrap_new_wxPyGridTableBase, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_SetColAttr", (PyCFunction) _wrap_wxGridTableBase_SetColAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_SetRowAttr", (PyCFunction) _wrap_wxGridTableBase_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_SetAttr", (PyCFunction) _wrap_wxGridTableBase_SetAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_GetAttr", (PyCFunction) _wrap_wxGridTableBase_GetAttr, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGridTableBase_UpdateAttrCols", (PyCFunction) _wrap_wxGridTableBase_UpdateAttrCols, METH_VARARGS | METH_KEYWORDS },
-	 { "wxGridTableBase_UpdateAttrRows", (PyCFunction) _wrap_wxGridTableBase_UpdateAttrRows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_CanHaveAttributes", (PyCFunction) _wrap_wxGridTableBase_CanHaveAttributes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_SetColLabelValue", (PyCFunction) _wrap_wxGridTableBase_SetColLabelValue, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_SetRowLabelValue", (PyCFunction) _wrap_wxGridTableBase_SetRowLabelValue, METH_VARARGS | METH_KEYWORDS },
@@ -12759,7 +12602,6 @@ static PyMethodDef gridcMethods[] = {
 	 { "wxGridTableBase_SetView", (PyCFunction) _wrap_wxGridTableBase_SetView, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_GetAttrProvider", (PyCFunction) _wrap_wxGridTableBase_GetAttrProvider, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGridTableBase_SetAttrProvider", (PyCFunction) _wrap_wxGridTableBase_SetAttrProvider, METH_VARARGS | METH_KEYWORDS },
-	 { "delete_wxGridTableBase", (PyCFunction) _wrap_delete_wxGridTableBase, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridCellAttrProvider_base_SetColAttr", (PyCFunction) _wrap_wxPyGridCellAttrProvider_base_SetColAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridCellAttrProvider_base_SetRowAttr", (PyCFunction) _wrap_wxPyGridCellAttrProvider_base_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyGridCellAttrProvider_base_SetAttr", (PyCFunction) _wrap_wxPyGridCellAttrProvider_base_SetAttr, METH_VARARGS | METH_KEYWORDS },

@@ -20,15 +20,17 @@ wxPython by setting the TARGETDIR variable for the build utility, (see
 below.)
 
 
+
 1. Build and install wxWindows as described in its BuildCVS.txt or
    INSTALL.txt file.
 
-1a. Building wxWindows on Unix/Linux.
+1a. Building wxWindows on Unix/Linux/Etc.
 
    For *nix systems I run configure with these flags:
 
                 --with-gtk
                 --with-libjpeg
+		--with-opengl
                 --without-odbc
                 --enable-unicode=no
                 --enable-threads=yes
@@ -36,11 +38,24 @@ below.)
                 --enable-static=no
                 --enable-shared=yes
                 --disable-std_iostreams
+		--enable-newgrid
 
-   You can use whatever flags you want, but these work for me.  Be
-   sure to run "make install" to install the wxWindows headers and
+   You can use whatever flags you want, but these work for me.  If you
+   want debug libraries, then you should add the "--enable-debug
+   --enable-mem_tracing" flags.  I reccommend creating an empty build
+   directory, and then running make and configure from there.  This
+   makes it easy to experiment with different configure options
+   without losing old builds.
+
+   Be sure to run "make install" to install the wxWindows headers and
    shared library.  You can check where the wxPython build will expect
    to find them by running "wx-config --cflags" and "wx-config --libs"
+
+   If you want the optional OGL (Object Graphics Library) and STC
+   (Styled Text Control) then you need to go to contrib/src/ogl and
+   contrib/src/stc and run "make install" in each of those
+   directories.
+
 
 1b. Building wxWindows on Win32.
 
@@ -74,6 +89,12 @@ below.)
    If you want to make a release build, add FINAL=1 to the nmake
    command, as well as to build.local for wxPython, (see below.)
 
+   If you want the optional OGL (Object Graphics Library) and/or STC
+   (Styled Text Control) then you need to go to contrib/src/ogl and
+   contrib/src/stc and build those libraries.  The command to use is:
+
+   nmake -f makefile.vc WXUSINGDLL=1 CRTFLAG=/MD EXTRAFLAGS=-D__NO_VC_CRTDBG__
+
 
 2. For either platform, you should be sure to set an environment
    variable named WXWIN to be the path to the top of the wxWindows
@@ -90,10 +111,10 @@ below.)
    for more examples about build.local,) containing something like
    this:
 
-   WXPSRCDIR = "~/MyStuff/wxPython-2.1.11/src"
+   WXPSRCDIR = "~/MyStuff/wxPython-2.1.15/src"
 
 
-4. At this point you may want to make an alias or symlink, script,
+4. At this point you may want to make an alias, symlink, script,
    batch file, or whatever on the PATH that invokes
    $WXWIN/utils/wxPython/distrib/build.py to help simplify matters
    somewhat.  For example, on my win32 system I have a file named
@@ -105,12 +126,15 @@ below.)
 5. Change into the $(WXWIN)/utils/wxPython/src directory.
 
 
-6. If you don't use SWIG, or have a new enough version installed, you
-   may have to update the timestamps of the files it generates so the
-   make utility won't think they are out of date and try to run SWIG
-   to update them.  The standard touch utility can do this for you:
+6. If you don't use SWIG, or don't have a new enough version
+   installed, you may have to update the timestamps of the files it
+   generates so the make utility won't think they are out of date and
+   try to run SWIG to update them.  The standard touch utility can do
+   this for you:
 
-   touch gtk/*.cpp gtk/*.py
+      touch gtk/*.cpp gtk/*.py
+   or
+      touch msw\*.cpp msw\*.py
 
 
 7. Type "build -b" to build wxPython and "build -i" to install it.
@@ -118,7 +142,7 @@ below.)
    The build.py script actually generates a Makefile based on what it
    finds on your system and information found in the build.cfg file.
    If you have troubles building or you want it built or installed in
-   a different way, take a look at the docstring in build.py.  You may
+   a different way, take a look at the doc-string in build.py.  You may
    be able to override configuration options in a file named
    build.local.  For example, you can set a new TARGETDIR (the
    installation directory) just by creating a file named build.local
@@ -146,3 +170,8 @@ below.)
     To run it without requiring a console on win32, you can use the
     pythonw.exe version of Python either from the command line or from
     a shortcut.
+
+
+
+
+
