@@ -122,28 +122,28 @@ bool wxFont::RealizeResource(void)
     BYTE ff_italic;
     int ff_weight = 0;
     int ff_family = 0;
-    wxString ff_face("");
+    wxString ff_face(_T(""));
 
     switch (M_FONTDATA->m_family)
     {
       case wxSCRIPT:     ff_family = FF_SCRIPT ;
-                         ff_face = "Script" ;
+                         ff_face = _T("Script") ;
                          break ;
       case wxDECORATIVE: ff_family = FF_DECORATIVE;
                          break;
       case wxROMAN:      ff_family = FF_ROMAN;
-                         ff_face = "Times New Roman" ;
+                         ff_face = _T("Times New Roman") ;
                          break;
       case wxTELETYPE:
       case wxMODERN:     ff_family = FF_MODERN;
-                         ff_face = "Courier New" ;
+                         ff_face = _T("Courier New") ;
                          break;
       case wxSWISS:      ff_family = FF_SWISS;
-                         ff_face = "Arial";
+                         ff_face = _T("Arial") ;
                          break;
       case wxDEFAULT:
       default:           ff_family = FF_SWISS;
-                         ff_face = "Arial" ; 
+                         ff_face = _T("Arial") ; 
     }
 
     if (M_FONTDATA->m_style == wxITALIC || M_FONTDATA->m_style == wxSLANT)
@@ -206,7 +206,7 @@ bool wxFont::RealizeResource(void)
                 0, ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
                 PROOF_QUALITY, DEFAULT_PITCH | ff_family, pzFace);
 #ifdef WXDEBUG_CREATE
-    if (m_hFont==NULL) wxError("Cannot create font","Internal Error") ;
+    if (m_hFont==NULL) wxError(_T("Cannot create font"),_T("Internal Error")) ;
 #endif
     return (M_FONTDATA->m_hFont != (WXHFONT) NULL);
   }
@@ -308,29 +308,29 @@ void wxFont::SetUnderlined(bool underlined)
 
 wxString wxFont::GetFamilyString(void) const
 {
-  wxString fam("");
+  wxString fam(_T(""));
   switch (GetFamily())
   {
     case wxDECORATIVE:
-      fam = "wxDECORATIVE";
+      fam = _T("wxDECORATIVE");
       break;
     case wxROMAN:
-      fam = "wxROMAN";
+      fam = _T("wxROMAN");
       break;
     case wxSCRIPT:
-      fam = "wxSCRIPT";
+      fam = _T("wxSCRIPT");
       break;
     case wxSWISS:
-      fam = "wxSWISS";
+      fam = _T("wxSWISS");
       break;
     case wxMODERN:
-      fam = "wxMODERN";
+      fam = _T("wxMODERN");
       break;
     case wxTELETYPE:
-      fam = "wxTELETYPE";
+      fam = _T("wxTELETYPE");
       break;
     default:
-      fam = "wxDEFAULT";
+      fam = _T("wxDEFAULT");
       break;
   }
   return fam;
@@ -338,7 +338,7 @@ wxString wxFont::GetFamilyString(void) const
 
 wxString wxFont::GetFaceName(void) const
 {
-  wxString str("");
+  wxString str(_T(""));
   if (M_FONTDATA)
 	str = M_FONTDATA->m_faceName ;
   return str;
@@ -346,17 +346,17 @@ wxString wxFont::GetFaceName(void) const
 
 wxString wxFont::GetStyleString(void) const
 {
-  wxString styl("");
+  wxString styl(_T(""));
   switch (GetStyle())
   {
     case wxITALIC:
-      styl = "wxITALIC";
+      styl = _T("wxITALIC");
       break;
     case wxSLANT:
-      styl = "wxSLANT";
+      styl = _T("wxSLANT");
       break;
     default:
-      styl = "wxNORMAL";
+      styl = _T("wxNORMAL");
       break;
   }
   return styl;
@@ -364,17 +364,17 @@ wxString wxFont::GetStyleString(void) const
 
 wxString wxFont::GetWeightString(void) const
 {
-  wxString w("");
+  wxString w(_T(""));
   switch (GetWeight())
   {
     case wxBOLD:
-      w = "wxBOLD";
+      w = _T("wxBOLD");
       break;
     case wxLIGHT:
-      w = "wxLIGHT";
+      w = _T("wxLIGHT");
       break;
     default:
-      w = "wxNORMAL";
+      w = _T("wxNORMAL");
       break;
   }
   return w;
