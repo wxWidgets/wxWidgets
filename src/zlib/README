@@ -1,0 +1,143 @@
+zlib 1.1.2 is a general purpose data compression library.  All the code
+is thread safe.  The data format used by the zlib library
+is described by RFCs (Request for Comments) 1950 to 1952 in the files 
+ftp://ds.internic.net/rfc/rfc1950.txt (zlib format), rfc1951.txt (deflate
+format) and rfc1952.txt (gzip format). These documents are also available in
+other formats from ftp://ftp.uu.net/graphics/png/documents/zlib/zdoc-index.html
+
+All functions of the compression library are documented in the file zlib.h
+(volunteer to write man pages welcome, contact jloup@gzip.org). A usage
+example of the library is given in the file example.c which also tests that
+the library is working correctly. Another example is given in the file
+minigzip.c. The compression library itself is composed of all source files
+except example.c and minigzip.c.
+
+To compile all files and run the test program, follow the instructions
+given at the top of Makefile. In short "make test; make install"
+should work for most machines.  For MSDOS, use one of the special
+makefiles such as Makefile.msc; for VMS, use Make_vms.com or descrip.mms.
+
+Questions about zlib should be sent to <zlib@quest.jpl.nasa.gov> or,
+if this fails, to the addresses given below in the Copyright section.
+The zlib home page is http://www.cdrom.com/pub/infozip/zlib/
+The official zlib ftp site is ftp://ftp.cdrom.com/pub/infozip/zlib/
+Mark Nelson <markn@tiny.com> wrote an article about zlib for the Jan. 1997
+issue of  Dr. Dobb's Journal; a copy of the article is available in
+http://web2.airmail.net/markn/articles/zlibtool/zlibtool.htm
+
+The changes made in version 1.1.2 are documented in the file ChangeLog.
+The main changes since 1.1.1 are:
+
+- added contrib/minzip, mini zip and unzip based on zlib (Gilles Vollant)
+  See http://www.winimage.com/zLibDll/unzip.html
+- preinitialize the inflate tables for fixed codes, to make the code
+  completely thread safe (Mark)
+- some simplifications and slight speed-up to the inflate code (Mark)
+- fix gzeof on non-compressed files (Allan Schrum)
+- add -std1 option in configure for OSF1 to fix gzprintf (Martin Mokrejs)
+- use default value of 4K for Z_BUFSIZE for 16-bit MSDOS (Tim Wegner + Glenn)
+- added os2/Makefile.def and os2/zlib.def (Andrew Zabolotny)
+- add shared lib support for UNIX_SV4.2MP (MATSUURA Takanori)
+- do not wrap extern "C" around system includes (Tom Lane)
+- added amiga/Makefile.pup for Amiga powerUP SAS/C PPC (Andreas Kleinert)
+- allow "make install prefix=..." even after configure (Glenn Randers-Pehrson)
+- allow "configure --prefix $HOME" (Tim Mooney)
+
+
+Unsupported third party contributions are provided in directory "contrib".
+
+A Java implementation of zlib is available in the Java Development Kit 1.1
+http://www.javasoft.com/products/JDK/1.1/docs/api/Package-java.util.zip.html
+See the zlib home page http://www.cdrom.com/pub/infozip/zlib/ for details.
+
+A Perl interface to zlib written by Paul Marquess <pmarquess@bfsec.bt.co.uk>
+is in the CPAN (Comprehensive Perl Archive Network) sites, such as:
+ftp://ftp.cis.ufl.edu/pub/perl/CPAN/modules/by-module/Compress/Compress-Zlib*
+
+A Python interface to zlib written by A.M. Kuchling <amk@magnet.com>
+is available from the Python Software Association sites, such as:
+ftp://ftp.python.org/pub/python/contrib/Encoding/zlib*.tar.gz
+
+A zlib binding for TCL written by Andreas Kupries <a.kupries@westend.com>
+is availlable at http://www.westend.com/~kupries/doc/trf/man/man.html
+
+An experimental package to read and write files in .zip format,
+written on top of zlib by Gilles Vollant <info@winimage.com>, is
+available at http://www.winimage.com/zLibDll/unzip.html
+and also in the contrib/minizip directory of zlib.
+
+
+Notes for some targets:
+
+- To build a Windows DLL version, include in a DLL project zlib.def, zlib.rc
+  and all .c files except example.c and minigzip.c; compile with -DZLIB_DLL
+  The zlib DLL support was initially done by Alessandro Iacopetti and is
+  now maintained by Gilles Vollant <info@winimage.com>. Check the zlib DLL
+  home page at http://www.winimage.com/zLibDll
+
+  From Visual Basic, you can call the DLL functions which do not take
+  a structure as argument: compress, uncompress and all gz* functions.
+  See contrib/visual-basic.txt for more information.
+  I don't know how to handle structures in Visual Basic, sorry.
+
+- For 64-bit Irix, deflate.c must be compiled without any optimization.
+  With -O, one libpng test fails. The test works in 32 bit mode (with
+  the -n32 compiler flag). The compiler bug has been reported to SGI.
+
+- zlib doesn't work with gcc 2.6.3 on a DEC 3000/300LX under OSF/1 2.1   
+  it works when compiled with cc.
+
+- on Digital Unix 4.0D (formely OSF/1) on AlphaServer, the cc option -std1
+  is necessary to get gzprintf working correctly. This is done by configure.
+
+- zlib doesn't work on HP-UX 9.05 with some versions of /bin/cc. It works
+  with other compilers. Use "make test" to check your compiler.
+
+- For shared memory multiprocessors, the decompression code assumes that
+  writes to pointers are atomic. Also the functions zalloc and zfree passed
+  to deflateInit must be multi-threaded in this case.
+
+- gzdopen is not supported on RISCOS, BEOS and by some Mac compilers.
+
+- For Turbo C the small model is supported only with reduced performance to
+  avoid any far allocation; it was tested with -DMAX_WBITS=11 -DMAX_MEM_LEVEL=3
+
+
+Acknowledgments:
+
+  The deflate format used by zlib was defined by Phil Katz. The deflate
+  and zlib specifications were written by L. Peter Deutsch. Thanks to all the
+  people who reported problems and suggested various improvements in zlib;
+  they are too numerous to cite here.
+
+Copyright notice:
+
+ (C) 1995-1998 Jean-loup Gailly and Mark Adler
+
+  This software is provided 'as-is', without any express or implied
+  warranty.  In no event will the authors be held liable for any damages
+  arising from the use of this software.
+
+  Permission is granted to anyone to use this software for any purpose,
+  including commercial applications, and to alter it and redistribute it
+  freely, subject to the following restrictions:
+
+  1. The origin of this software must not be misrepresented; you must not
+     claim that you wrote the original software. If you use this software
+     in a product, an acknowledgment in the product documentation would be
+     appreciated but is not required.
+  2. Altered source versions must be plainly marked as such, and must not be
+     misrepresented as being the original software.
+  3. This notice may not be removed or altered from any source distribution.
+
+  Jean-loup Gailly        Mark Adler
+  jloup@gzip.org          madler@alumni.caltech.edu
+
+If you use the zlib library in a product, we would appreciate *not*
+receiving lengthy legal documents to sign. The sources are provided
+for free but without warranty of any kind.  The library has been
+entirely written by Jean-loup Gailly and Mark Adler; it does not
+include third-party code.
+
+If you redistribute modified sources, we would appreciate that you include
+in the file ChangeLog history information documenting your changes.
