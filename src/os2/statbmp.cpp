@@ -71,13 +71,11 @@ bool wxStaticBitmap::Create(
 
     m_bIsIcon = rBitmap.IsKindOf(CLASSINFO(wxIcon));
 
-    // TODO: create static bitmap control
-    const wxChar*                   zClassname = wxT("WX_STATIC");
     int                             nWinstyle = m_bIsIcon ? SS_ICON : SS_BITMAP;
 
     m_hWnd = (WXHWND)::WinCreateWindow( pParent->GetHWND()
-                                       ,zClassname
-                                       ,wxT("")
+                                       ,WC_STATIC
+                                       ,rName.c_str()
                                        ,nWinstyle | WS_VISIBLE
                                        ,0,0,0,0
                                        ,pParent->GetHWND()

@@ -7388,8 +7388,8 @@ EXPORTS
       GetEventTable__14wxYearSpinCtrlCFv
       ;wxCalendarCtrl::GetDateCoord(const wxDateTime&,int*,int*) const
       GetDateCoord__14wxCalendarCtrlCFRC10wxDateTimePiT2
-      ;wxCalendarCtrl::OnYearChange(wxSpinEvent&)
-      OnYearChange__14wxCalendarCtrlFR11wxSpinEvent
+      ;wxCalendarCtrl::OnPaint(wxPaintEvent&)
+      OnPaint__14wxCalendarCtrlFR12wxPaintEvent
       wxEVT_CALENDAR_DAY_CHANGED
       ;wxYearSpinCtrl::sm_eventTable
       sm_eventTable__14wxYearSpinCtrl
@@ -7402,8 +7402,6 @@ EXPORTS
       ;wxCalendarCtrl::sm_classwxCalendarCtrl
       sm_classwxCalendarCtrl__14wxCalendarCtrl
       __vft14wxCalendarCtrl8wxObject
-      ;wxCalendarCtrl::OnPaint(wxPaintEvent&)
-      OnPaint__14wxCalendarCtrlFR12wxPaintEvent
       ;wxCalendarCtrl::IsDateInRange(const wxDateTime&) const
       IsDateInRange__14wxCalendarCtrlCFRC10wxDateTime
       ;wxCalendarCtrl::HitTest(const wxPoint&,wxDateTime*,wxDateTime::WeekDay*)
@@ -7432,10 +7430,12 @@ EXPORTS
       __vft15wxMonthComboBox15wxItemContainer
       ;wxCalendarCtrl::GetStartDate() const
       GetStartDate__14wxCalendarCtrlCFv
-      ;wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl*)
-      __ct__15wxMonthComboBoxFP14wxCalendarCtrl
+      ;wxCalendarCtrl::OnYearChange(wxCommandEvent&)
+      OnYearChange__14wxCalendarCtrlFR14wxCommandEvent
       ;wxMonthComboBox::sm_eventTable
       sm_eventTable__15wxMonthComboBox
+      ;wxMonthComboBox::wxMonthComboBox(wxCalendarCtrl*)
+      __ct__15wxMonthComboBoxFP14wxCalendarCtrl
       ;wxYearSpinCtrl::wxYearSpinCtrl(wxCalendarCtrl*)
       __ct__14wxYearSpinCtrlFP14wxCalendarCtrl
       ;wxCalendarCtrl::HighlightRange(wxPaintDC*,const wxDateTime&,const wxDateTime&,wxPen*,wxBrush*)
@@ -7918,58 +7918,6 @@ EXPORTS
       ;wxGenericDirCtrl::ExtractWildcard(const wxString&,int,wxString&,wxString&)
       ExtractWildcard__16wxGenericDirCtrlFRC8wxStringiR8wxStringT3
   ;From object file:  ..\generic\dragimgg.cpp
-  ;From object file:  ..\generic\fontdlgg.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxGenericFontDialog::OnCloseWindow(wxCloseEvent&)
-      OnCloseWindow__19wxGenericFontDialogFR12wxCloseEvent
-      ;wxGenericFontDialog::wxGenericFontDialog(wxWindow*,const wxFontData&)
-      __ct__19wxGenericFontDialogFP8wxWindowRC10wxFontData
-      ;wxFontStyleIntToString(int)
-      wxFontStyleIntToString__Fi
-      ;wxGenericFontDialog::GetEventTable() const
-      GetEventTable__19wxGenericFontDialogCFv
-      ;wxFontPreviewer::sm_eventTable
-      sm_eventTable__15wxFontPreviewer
-      ;wxGenericFontDialog::~wxGenericFontDialog()
-      __dt__19wxGenericFontDialogFv
-      ;wxFontWeightStringToInt(char*)
-      wxFontWeightStringToInt__FPc
-      __vft15wxFontPreviewer8wxObject
-      __vft19wxGenericFontDialog8wxObject
-      ;wxFontFamilyIntToString(int)
-      wxFontFamilyIntToString__Fi
-      ;wxFontPreviewer::OnPaint(wxPaintEvent&)
-      OnPaint__15wxFontPreviewerFR12wxPaintEvent
-      ;wxGenericFontDialog::OnChangeFont(wxCommandEvent&)
-      OnChangeFont__19wxGenericFontDialogFR14wxCommandEvent
-      ;wxGenericFontDialog::Create(wxWindow*,const wxFontData&)
-      Create__19wxGenericFontDialogFP8wxWindowRC10wxFontData
-      ;wxGenericFontDialog::ShowModal()
-      ShowModal__19wxGenericFontDialogFv
-      ;wxGenericFontDialog::sm_eventTableEntries
-      sm_eventTableEntries__19wxGenericFontDialog
-      ;wxGenericFontDialog::sm_eventTable
-      sm_eventTable__19wxGenericFontDialog
-      ;wxFontWeightIntToString(int)
-      wxFontWeightIntToString__Fi
-      ;wxFontPreviewer::GetEventTable() const
-      GetEventTable__15wxFontPreviewerCFv
-      ;wxConstructorForwxGenericFontDialog()
-      wxConstructorForwxGenericFontDialog__Fv
-      ;wxFontFamilyStringToInt(char*)
-      wxFontFamilyStringToInt__FPc
-      ;wxFontStyleStringToInt(char*)
-      wxFontStyleStringToInt__FPc
-      ;wxGenericFontDialog::wxGenericFontDialog()
-      __ct__19wxGenericFontDialogFv
-      ;wxFontPreviewer::sm_eventTableEntries
-      sm_eventTableEntries__15wxFontPreviewer
-      ;wxGenericFontDialog::InitializeFont()
-      InitializeFont__19wxGenericFontDialogFv
-      ;wxGenericFontDialog::CreateWidgets()
-      CreateWidgets__19wxGenericFontDialogFv
-      ;wxGenericFontDialog::sm_classwxGenericFontDialog
-      sm_classwxGenericFontDialog__19wxGenericFontDialog
   ;From object file:  ..\generic\fdrepdlg.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxFindReplaceDialog::OnFind(wxCommandEvent&)
@@ -10343,6 +10291,8 @@ EXPORTS
     ;PUBDEFs (Symbols available from object file):
       ;wxTextEntryDialog::OnOK(wxCommandEvent&)
       OnOK__17wxTextEntryDialogFR14wxCommandEvent
+      ;wxTextEntryDialog::SetTextValidator(long)
+      SetTextValidator__17wxTextEntryDialogFl
       ;wxTextEntryDialog::sm_classwxTextEntryDialog
       sm_classwxTextEntryDialog__17wxTextEntryDialog
       ;wxTextEntryDialog::SetValue(const wxString&)
@@ -10354,6 +10304,8 @@ EXPORTS
       ;wxTextEntryDialog::wxTextEntryDialog(wxWindow*,const wxString&,const wxString&,const wxString&,long,const wxPoint&)
       __ct__17wxTextEntryDialogFP8wxWindowRC8wxStringN22lRC7wxPoint
       __vft17wxTextEntryDialog8wxObject
+      ;wxTextEntryDialog::SetTextValidator(wxTextValidator&)
+      SetTextValidator__17wxTextEntryDialogFR15wxTextValidator
       ;wxTextEntryDialog::sm_eventTable
       sm_eventTable__17wxTextEntryDialog
   ;From object file:  ..\generic\tipdlg.cpp
@@ -10684,6 +10636,8 @@ EXPORTS
       DisplaySection__20wxHtmlHelpControllerFi
       ;wxHtmlHelpController::DestroyHelpWindow()
       DestroyHelpWindow__20wxHtmlHelpControllerFv
+      ;wxHtmlHelpController::AddGrabIfNeeded()
+      AddGrabIfNeeded__20wxHtmlHelpControllerFv
       ;wxHtmlHelpController::AddBook(const wxString&,unsigned long)
       AddBook__20wxHtmlHelpControllerFRC8wxStringUl
       __vft20wxHtmlHelpController8wxObject
@@ -10693,8 +10647,14 @@ EXPORTS
       Quit__20wxHtmlHelpControllerFv
       ;wxHtmlHelpController::ReadCustomization(wxConfigBase*,const wxString&)
       ReadCustomization__20wxHtmlHelpControllerFP12wxConfigBaseRC8wxString
+      ;wxHtmlHelpController::KeywordSearch(const wxString&)
+      KeywordSearch__20wxHtmlHelpControllerFRC8wxString
+      ;wxHtmlHelpController::Display(int)
+      Display__20wxHtmlHelpControllerFi
       ;wxHtmlHelpController::sm_classwxHtmlHelpController
       sm_classwxHtmlHelpController__20wxHtmlHelpController
+      ;wxHtmlHelpController::Display(const wxString&)
+      Display__20wxHtmlHelpControllerFRC8wxString
       ;wxHtmlHelpController::WriteCustomization(wxConfigBase*,const wxString&)
       WriteCustomization__20wxHtmlHelpControllerFP12wxConfigBaseRC8wxString
       ;wxHtmlHelpController::UseConfig(wxConfigBase*,const wxString&)
@@ -10711,6 +10671,10 @@ EXPORTS
       OnCloseFrame__20wxHtmlHelpControllerFR12wxCloseEvent
       ;wxHtmlHelpController::wxHtmlHelpController(int)
       __ct__20wxHtmlHelpControllerFi
+      ;wxHtmlHelpController::DisplayContents()
+      DisplayContents__20wxHtmlHelpControllerFv
+      ;wxHtmlHelpController::DisplayIndex()
+      DisplayIndex__20wxHtmlHelpControllerFv
       ;wxHtmlHelpController::SetTitleFormat(const wxString&)
       SetTitleFormat__20wxHtmlHelpControllerFRC8wxString
       ;wxHtmlHelpController::LoadFile(const wxString&)
@@ -10821,12 +10785,12 @@ EXPORTS
       OnIndexAll__15wxHtmlHelpFrameFR14wxCommandEvent
       ;wxHtmlHelpFrame::wxHtmlHelpFrame(wxWindow*,int,const wxString&,int,wxHtmlHelpData*)
       __ct__15wxHtmlHelpFrameFP8wxWindowiRC8wxStringT2P14wxHtmlHelpData
-      ;wxHtmlHelpFrame::DisplayContents()
-      DisplayContents__15wxHtmlHelpFrameFv
-      ;wxHtmlHelpFrame::OptionsDialog()
-      OptionsDialog__15wxHtmlHelpFrameFv
       ;wxHtmlHelpFrame::Create(wxWindow*,int,const wxString&,int)
       Create__15wxHtmlHelpFrameFP8wxWindowiRC8wxStringT2
+      ;wxHtmlHelpFrame::OptionsDialog()
+      OptionsDialog__15wxHtmlHelpFrameFv
+      ;wxHtmlHelpFrame::DisplayContents()
+      DisplayContents__15wxHtmlHelpFrameFv
       ;wxHtmlHelpFrame::CreateIndex()
       CreateIndex__15wxHtmlHelpFrameFv
       ;wxHtmlHelpFrameOptionsDialog::sm_eventTableEntries
@@ -10837,18 +10801,18 @@ EXPORTS
       OnSearch__15wxHtmlHelpFrameFR14wxCommandEvent
       ;wxHtmlHelpFrame::Init(wxHtmlHelpData*)
       Init__15wxHtmlHelpFrameFP14wxHtmlHelpData
-      ;wxHtmlHelpFrame::DisplayIndex()
-      DisplayIndex__15wxHtmlHelpFrameFv
+      ;wxHtmlHelpFrame::NotifyPageChanged()
+      NotifyPageChanged__15wxHtmlHelpFrameFv
       ;wxConstructorForwxHtmlHelpFrame()
       wxConstructorForwxHtmlHelpFrame__Fv
       ;wxHtmlHelpFrame::~wxHtmlHelpFrame()
       __dt__15wxHtmlHelpFrameFv
-      ;wxHtmlHelpFrame::NotifyPageChanged()
-      NotifyPageChanged__15wxHtmlHelpFrameFv
       ;wxHtmlHelpFrameOptionsDialog::GetEventTable() const
       GetEventTable__28wxHtmlHelpFrameOptionsDialogCFv
       ;wxHtmlHelpFrame::GetEventTable() const
       GetEventTable__15wxHtmlHelpFrameCFv
+      ;wxHtmlHelpFrame::DisplayIndex()
+      DisplayIndex__15wxHtmlHelpFrameFv
       ;wxHtmlHelpFrame::CreateSearch()
       CreateSearch__15wxHtmlHelpFrameFv
       ;wxHtmlHelpFrame::ReadCustomization(wxConfigBase*,const wxString&)
@@ -12894,8 +12858,10 @@ EXPORTS
       GetEventTable__7wxFrameCFv
       ;wxFrame::DetachMenuBar()
       DetachMenuBar__7wxFrameFv
-      wxFrameMainWndProc
+      ;wxFrame::OnCreateToolBar(long,int,const wxString&)
+      OnCreateToolBar__7wxFrameFliRC8wxString
       wxFrameWndProc
+      wxFrameMainWndProc
       ;wxFrame::SetClient(wxWindow*)
       SetClient__7wxFrameFP8wxWindow
   ;From object file:  ..\os2\gauge.cpp
@@ -14751,16 +14717,18 @@ EXPORTS
       CreateTool__9wxToolBarFP9wxControl
       ;wxToolBar::DoToggleTool(wxToolBarToolBase*,unsigned long)
       DoToggleTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::SpringUpButton(int)
+      SpringUpButton__9wxToolBarFi
       ;wxToolBar::Init()
       Init__9wxToolBarFv
       ;wxToolBar::sm_eventTable
       sm_eventTable__9wxToolBar
-      ;wxToolBar::GetToolSize() const
-      GetToolSize__9wxToolBarCFv
       ;wxToolBar::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__9wxToolBarFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxToolBar::OS2Command(unsigned int,unsigned short)
-      OS2Command__9wxToolBarFUiUs
+      ;wxToolBar::OnKillFocus(wxFocusEvent&)
+      OnKillFocus__9wxToolBarFR12wxFocusEvent
+      ;wxToolBar::LowerTool(wxToolBarToolBase*,unsigned long)
+      LowerTool__9wxToolBarFP17wxToolBarToolBaseUl
       ;wxToolBar::DoInsertTool(unsigned int,wxToolBarToolBase*)
       DoInsertTool__9wxToolBarFUiP17wxToolBarToolBase
       ;wxToolBar::Realize()
@@ -14769,37 +14737,43 @@ EXPORTS
       sm_eventTableEntries__9wxToolBar
       ;wxToolBar::sm_classwxToolBar
       sm_classwxToolBar__9wxToolBar
+      ;wxToolBar::OnPaint(wxPaintEvent&)
+      OnPaint__9wxToolBarFR12wxPaintEvent
       __vft9wxToolBar8wxObject
-      ;wxToolBar::SetToolBitmapSize(const wxSize&)
-      SetToolBitmapSize__9wxToolBarFRC6wxSize
-      ;wxToolBar::DoEnableTool(wxToolBarToolBase*,unsigned long)
-      DoEnableTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::RaiseTool(wxToolBarToolBase*,unsigned long)
+      RaiseTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::DrawTool(wxDC&,wxToolBarToolBase*)
+      DrawTool__9wxToolBarFR4wxDCP17wxToolBarToolBase
+      ;wxToolBar::OnSize(wxSizeEvent&)
+      OnSize__9wxToolBarFR11wxSizeEvent
       ;wxToolBar::OnMouseEvent(wxMouseEvent&)
       OnMouseEvent__9wxToolBarFR12wxMouseEvent
       ;wxToolBar::DoSetToggle(wxToolBarToolBase*,unsigned long)
       DoSetToggle__9wxToolBarFP17wxToolBarToolBaseUl
-      ;wxToolBar::DoDeleteTool(unsigned int,wxToolBarToolBase*)
-      DoDeleteTool__9wxToolBarFUiP17wxToolBarToolBase
+      ;wxToolBar::DoEnableTool(wxToolBarToolBase*,unsigned long)
+      DoEnableTool__9wxToolBarFP17wxToolBarToolBaseUl
+      ;wxToolBar::DoAddTool(int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,const wxString&,const wxString&,wxObject*,int,int)
+      DoAddTool__9wxToolBarFiRC8wxStringRC8wxBitmapT310wxItemKindN22P8wxObjectN21
       ;wxToolBar::SetRows(int)
       SetRows__9wxToolBarFi
       ;wxToolBar::FindToolForPosition(int,int) const
       FindToolForPosition__9wxToolBarCFiT1
+      ;wxToolBar::DrawTool(wxToolBarToolBase*)
+      DrawTool__9wxToolBarFP17wxToolBarToolBase
+      ;wxToolBar::DoDeleteTool(unsigned int,wxToolBarToolBase*)
+      DoDeleteTool__9wxToolBarFUiP17wxToolBarToolBase
       ;wxToolBar::GetEventTable() const
       GetEventTable__9wxToolBarCFv
-      ;wxToolBar::OS2WindowProc(unsigned int,void*,void*)
-      OS2WindowProc__9wxToolBarFUiPvT2
       ;wxToolBar::CreateTool(int,const wxString&,const wxBitmap&,const wxBitmap&,wxItemKind,wxObject*,const wxString&,const wxString&)
       CreateTool__9wxToolBarFiRC8wxStringRC8wxBitmapT310wxItemKindP8wxObjectN22
-      ;wxToolBar::OnSysColourChanged(wxSysColourChangedEvent&)
-      OnSysColourChanged__9wxToolBarFR23wxSysColourChangedEvent
+      ;wxDisableBitmap(const wxBitmap&,long)
+      wxDisableBitmap__FRC8wxBitmapl
       ;wxConstructorForwxToolBar()
       wxConstructorForwxToolBar__Fv
+      ;wxToolBar::m_bInitialized
+      m_bInitialized__9wxToolBar
       ;wxToolBar::~wxToolBar()
       __dt__9wxToolBarFv
-      ;wxToolBar::UpdateSize()
-      UpdateSize__9wxToolBarFv
-      ;wxToolBar::OS2OnNotify(int,void*,void**)
-      OS2OnNotify__9wxToolBarFiPvPPv
   ;From object file:  ..\os2\tooltip.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxToolTip::wxToolTip(const wxString&)

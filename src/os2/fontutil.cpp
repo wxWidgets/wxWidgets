@@ -361,6 +361,7 @@ void wxFillLogFont(
         STR8                        azNames[255];
         long                        alIds[255];
 
+        memset(alIds, 0, sizeof(long) * 255);
         if(!::GpiQuerySetIds( *phPS
                              ,lNumLids
                              ,alTypes
@@ -372,7 +373,8 @@ void wxFillLogFont(
                 ::WinReleasePS(*phPS);
             return;
         }
-
+        if (*pflId == 0L)
+            *pflId = 1L;
         for(unsigned long LCNum = 0; LCNum < lNumLids; LCNum++)
             if(alIds[LCNum] == *pflId)
                ++*pflId;

@@ -318,6 +318,29 @@ void wxFrame::PositionStatusBar()
 } // end of wxFrame::PositionStatusBar
 #endif // wxUSE_STATUSBAR
 
+#if wxUSE_TOOLBAR
+wxToolBar* wxFrame::OnCreateToolBar(
+  long                              lStyle
+, wxWindowID                        vId
+, const wxString&                   rsName
+)
+{
+    wxToolBar*                      pToolBar = wxFrameBase::OnCreateToolBar( lStyle
+                                                                            ,vId
+                                                                            ,rsName
+                                                                           );
+
+    ::WinSetParent( pToolBar->GetHWND()
+                   ,m_hFrame
+                   ,FALSE
+                  );
+    ::WinSetOwner( pToolBar->GetHWND()
+                  ,m_hFrame
+                 );
+    return pToolBar;
+} // end of WinGuiBase_CFrame::OnCreateToolBar
+#endif
+
 #if wxUSE_MENUS_NATIVE
 void wxFrame::DetachMenuBar()
 {
@@ -722,53 +745,59 @@ wxToolBar* wxFrame::CreateToolBar(
 
 void wxFrame::PositionToolBar()
 {
+    wxToolBar*                      pToolBar = GetToolBar();
+    wxCoord                         vWidth;
+    wxCoord                         vHeight;
+    wxCoord                         vTWidth;
+    wxCoord                         vTHeight;
+
+    if (!pToolBar)
+        return;
+
     HWND                            hWndClient;
     RECTL                           vRect;
+    RECTL                           vFRect;
+    SWP                             vSwp;
+    wxPoint                         vPos;
 
-    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    ::WinQueryWindowRect(m_hFrame, &vRect);
+    vPos.y = (wxCoord)vRect.yTop;
+    ::WinMapWindowPoints(m_hFrame, HWND_DESKTOP, (PPOINTL)&vRect, 2);
+    vFRect = vRect;
+    ::WinCalcFrameRect(m_hFrame, &vRect, TRUE);
 
-#if wxUSE_STATUSBAR
-    if (GetStatusBar())
+    vPos.y = (wxCoord)(vFRect.yTop - vRect.yTop);
+    pToolBar->GetSize( &vTWidth
+                      ,&vTHeight
+                     );
+
+    if (pToolBar->GetWindowStyleFlag() & wxTB_HORIZONTAL)
     {
-        int                         nStatusX;
-        int                         nStatusY;
+        vWidth = (wxCoord)(vRect.xRight - vRect.xLeft);
+        pToolBar->SetSize( vRect.xLeft - vFRect.xLeft
+                          ,vPos.y
+                          ,vWidth
+                          ,vTHeight
+                         );
+    }
+    else
+    {
+        wxCoord                     vSwidth = 0;
+        wxCoord                     vSheight = 0;
 
-        GetStatusBar()->GetClientSize( &nStatusX
-                                      ,&nStatusY
+        if (m_frameStatusBar)
+            m_frameStatusBar->GetSize( &vSwidth
+                                      ,&vSheight
                                      );
-        // PM is backwards from windows
-        vRect.yBottom += nStatusY;
+        vHeight = (wxCoord)(vRect.yTop - vRect.yBottom);
+        pToolBar->SetSize( vRect.xLeft - vFRect.xLeft
+                          ,vPos.y
+                          ,vTWidth
+                          ,vHeight - vSheight
+                         );
     }
-#endif // wxUSE_STATUSBAR
-
-    if ( m_frameToolBar )
-    {
-        int                         nToolbarWidth;
-        int                         nToolbarHeight;
-
-        m_frameToolBar->GetSize( &nToolbarWidth
-                              ,&nToolbarHeight
-                             );
-
-        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
-        {
-            nToolbarHeight = vRect.yBottom;
-        }
-        else
-        {
-            nToolbarWidth = vRect.xRight;
-        }
-
-        //
-        // Use the 'real' PM position here
-        //
-        GetToolBar()->SetSize( 0
-                              ,0
-                              ,nToolbarWidth
-                              ,nToolbarHeight
-                              ,wxSIZE_NO_ADJUSTMENTS
-                             );
-    }
+    if( ::WinIsWindowShowing(m_hFrame) )
+        ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
 } // end of wxFrame::PositionToolBar
 #endif // wxUSE_TOOLBAR
 
@@ -1133,10 +1162,12 @@ MRESULT EXPENTRY wxFrameMainWndProc(
                 int                 nItemCount;
                 int                 i;
                 PSWP                pSWP = NULL;
-                SWP                 vSwpStb;
                 RECTL               vRectl;
                 RECTL               vRstb;
-                int                 nHeight=0;
+                RECTL               vRtlb;
+                int                 nHeight = 0;
+                int                 nHeight2 = 0;
+                int                 nWidth = 0;
 
                 pSWP = (PSWP)PVOIDFROMMP(wParam);
                 nItemCount = SHORT1FROMMR(pWnd->m_fnOldWndProc(hWnd, ulMsg, wParam, lParam));
@@ -1144,18 +1175,11 @@ MRESULT EXPENTRY wxFrameMainWndProc(
                 {
                     ::WinQueryWindowRect(pWnd->m_frameStatusBar->GetHWND(), &vRstb);
                     pWnd->m_frameStatusBar->GetSize(NULL, &nHeight);
-                    ::WinQueryWindowRect(pWnd->m_hFrame, &vRectl);
-                    ::WinMapWindowPoints(pWnd->m_hFrame, HWND_DESKTOP, (PPOINTL)&vRectl, 2);
-                    vRstb = vRectl;
-                    ::WinCalcFrameRect(pWnd->m_hFrame, &vRectl, TRUE);
-
-                    vSwpStb.x                = vRectl.xLeft - vRstb.xLeft;
-                    vSwpStb.y                = vRectl.yBottom - vRstb.yBottom;
-                    vSwpStb.cx               = vRectl.xRight - vRectl.xLeft - 1; //?? -1 ??
-                    vSwpStb.cy               = nHeight;
-                    vSwpStb.fl               = SWP_SIZE |SWP_MOVE | SWP_SHOW;
-                    vSwpStb.hwnd             = pWnd->m_frameStatusBar->GetHWND();
-                    vSwpStb.hwndInsertBehind = HWND_TOP;
+                }
+                if(pWnd->m_frameToolBar)
+                {
+                    ::WinQueryWindowRect(pWnd->m_frameToolBar->GetHWND(), &vRtlb);
+                    pWnd->m_frameToolBar->GetSize(&nWidth, &nHeight2);
                 }
                 ::WinQueryWindowRect(pWnd->m_hFrame, &vRectl);
                 ::WinMapWindowPoints(pWnd->m_hFrame, HWND_DESKTOP, (PPOINTL)&vRectl, 2);
@@ -1165,10 +1189,20 @@ MRESULT EXPENTRY wxFrameMainWndProc(
                 {
                     if(pWnd->m_hWnd && pSWP[i].hwnd == pWnd->m_hWnd)
                     {
-                        pSWP[i].x    = vRectl.xLeft;
-                        pSWP[i].y    = vRectl.yBottom + nHeight;
-                        pSWP[i].cx   = vRectl.xRight - vRectl.xLeft;
-                        pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - nHeight;
+                        if (pWnd->m_frameToolBar && pWnd->m_frameToolBar->GetWindowStyleFlag() & wxTB_HORIZONTAL)
+                        {
+                            pSWP[i].x    = vRectl.xLeft;
+                            pSWP[i].y    = vRectl.yBottom + nHeight;
+                            pSWP[i].cx   = vRectl.xRight - vRectl.xLeft;
+                            pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - (nHeight + nHeight2);
+                        }
+                        else
+                        {
+                            pSWP[i].x    = vRectl.xLeft;
+                            pSWP[i].y    = vRectl.yBottom + nHeight;
+                            pSWP[i].cx   = vRectl.xRight - (vRectl.xLeft + nWidth);
+                            pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - nHeight;
+                        }
                         pSWP[i].fl   = SWP_SIZE | SWP_MOVE | SWP_SHOW;
                         pSWP[i].hwndInsertBehind = HWND_TOP;
                     }

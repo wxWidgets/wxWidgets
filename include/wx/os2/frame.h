@@ -71,6 +71,10 @@ public:
                                      ,const wxString& rsName = wxToolBarNameStr
                                     );
 
+    virtual wxToolBar* OnCreateToolBar( long            lStyle
+                                       ,wxWindowID      vId
+                                       ,const wxString& rsName
+                                      );
     virtual void       PositionToolBar(void);
 #endif // wxUSE_TOOLBAR
 

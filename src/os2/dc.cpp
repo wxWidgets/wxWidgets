@@ -1392,9 +1392,9 @@ void wxDC::DoDrawBitmap(
                 //
                 if (IsKindOf(CLASSINFO(wxPaintDC)))
                 {
-                    wxPaintDC*              pPaintDC = wxDynamicCast(this, wxPaintDC);
+                    wxWindowDC*             pWindowDC = wxDynamicCast(this, wxWindowDC);
 
-                    lColor = pPaintDC->m_pCanvas->GetBackgroundColour().GetPixel();
+                    lColor = pWindowDC->m_pCanvas->GetBackgroundColour().GetPixel();
                 }
                 else if (GetBrush() != wxNullBrush)
                     lColor = GetBrush().GetColour().GetPixel();

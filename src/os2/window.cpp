@@ -3069,31 +3069,27 @@ bool wxWindowOS2::OS2GetCreateWindowCoords(
 ) const
 {
     bool                            bNonDefault = FALSE;
+    static const int                DEFAULT_Y = 200;
+    static const int                DEFAULT_H = 250;
 
     if (rPos.x == -1)
     {
-        //
-        // If set x to CW_USEDEFAULT, y parameter is ignored anyhow so we can
-        // just as well set it to CW_USEDEFAULT as well
         rnX = rnY = CW_USEDEFAULT;
     }
     else
     {
         rnX = rPos.x;
-        rnY = rPos.y == -1 ? CW_USEDEFAULT : rPos.y;
+        rnY = rPos.y == -1 ? DEFAULT_Y : rPos.y;
         bNonDefault = TRUE;
     }
     if (rSize.x == -1)
     {
-        //
-        // As abobe, h is not used at all in this case anyhow
-        //
         rnWidth = rnHeight = CW_USEDEFAULT;
     }
     else
     {
         rnWidth  = rSize.x;
-        rnHeight = rSize.y == -1 ? CW_USEDEFAULT : rSize.y;
+        rnHeight = rSize.y == -1 ? DEFAULT_H : rSize.y;
         bNonDefault = TRUE;
     }
     return bNonDefault;

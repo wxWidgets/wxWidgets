@@ -371,6 +371,8 @@ bool wxFontRefData::Alloc(
     long                            lRc;
     short                           nIndex = 0;
     PFONTMETRICS                    pFM = NULL;
+    ERRORID                         vError;
+    wxString                        sError;
 
     if (!m_bNativeFontInfoOk)
     {
@@ -396,6 +398,8 @@ bool wxFontRefData::Alloc(
     }
     if (!m_hFont)
     {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
         wxLogLastError("CreateFont");
     }
 
@@ -496,10 +500,6 @@ void wxFontRefData::Free()
 
     if ( m_hFont )
     {
-        if (!::GpiSetCharSet(m_hPS, LCID_DEFAULT))
-        {
-            wxLogLastError(wxT("DeleteObject(font)"));
-        }
         ::GpiDeleteSetId(m_hPS, 1L); /* delete the logical font          */
         m_nFontId = 0;
         m_hFont   = 0;

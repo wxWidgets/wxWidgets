@@ -214,6 +214,8 @@ bool wxPen::RealizeResource()
             return FALSE;
         }
 
+        ULONG                           flAttrMask = 0L;
+        ULONG                           flDefMask = 0L;
         switch(M_PENDATA->m_nStyle)
         {
             case wxSTIPPLE:
@@ -224,41 +226,57 @@ bool wxPen::RealizeResource()
                 ::GpiSetPatternSet( M_PENDATA->m_hPen
                                    ,(USHORT)M_PENDATA->m_vStipple.GetId()
                                   );
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SET | ABB_SYMBOL;
+                flDefMask = ABB_REF_POINT;
                 break;
 
             case wxBDIAGONAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_DIAG3;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
             case wxCROSSDIAG_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_DIAGHATCH;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
             case wxFDIAGONAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_DIAG1;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
             case wxCROSS_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_HATCH;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
             case wxHORIZONTAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_HORIZ;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
             case wxVERTICAL_HATCH:
                 m_vAreaBundle.usSymbol = PATSYM_VERT;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
 
             default:
                 m_vAreaBundle.usSymbol = PATSYM_SOLID;
                 m_vAreaBundle.usSet = LCID_DEFAULT;
+                flAttrMask = ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE | ABB_SYMBOL;
+                flDefMask = ABB_SET | ABB_REF_POINT;
                 break;
         }
 
@@ -269,9 +287,8 @@ bool wxPen::RealizeResource()
 
         bOk = ::GpiSetAttrs( M_PENDATA->m_hPen
                             ,PRIM_AREA
-                            ,ABB_COLOR | ABB_BACK_COLOR | ABB_MIX_MODE | ABB_BACK_MIX_MODE |
-                             ABB_SET | ABB_SYMBOL
-                            ,ABB_REF_POINT
+                            ,flAttrMask
+                            ,flDefMask
                             ,&m_vAreaBundle
                            );
         if (!bOk)

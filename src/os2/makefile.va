@@ -106,7 +106,6 @@ GENERICOBJS= \
   ..\generic\$D\dirdlgg.obj \
   ..\generic\$D\dirctrlg.obj \
   ..\generic\$D\dragimgg.obj \
-  ..\generic\$D\fontdlgg.obj \
   ..\generic\$D\fdrepdlg.obj \
   ..\generic\$D\grid.obj \
   ..\generic\$D\gridctrl.obj \
@@ -153,7 +152,6 @@ GENLIBOBJS= \
   dirdlgg.obj \
   dirctrlg.obj \
   dragimgg.obj \
-  fontdlgg.obj \
   fdrepdlg.obj \
   grid.obj \
   gridctrl.obj \
@@ -853,7 +851,6 @@ $(GENLIBOBJS):
   copy ..\generic\$D\dcpsg.obj
   copy ..\generic\$D\dirdlgg.obj
   copy ..\generic\$D\dirctrlg.obj
-  copy ..\generic\$D\fontdlgg.obj
   copy ..\generic\$D\fdrepdlg.obj
   copy ..\generic\$D\grid.obj
   copy ..\generic\$D\gridctrl.obj

@@ -66,16 +66,13 @@ public:
          virtual int  GetValue(void) const ;
          virtual void SetValue(int);
 
-         virtual void DoGetSize( int* pnWidth
-                                ,int* pnHeight
-                               ) const;
                  void GetSize( int* pnX
                               ,int* pnY
                              ) const;
                  void GetPosition( int* pnX
                                   ,int* pnY
                                  ) const ;
-                 bool Show(bool bShow);
+                 bool Show(bool bShow = TRUE);
                  void SetRange( int nMinValue
                                ,int nMaxValue
                               );
@@ -148,6 +145,9 @@ protected:
     int                             m_nThumbLength;
     int                             m_nSizeFlags;
 
+    virtual void DoGetSize( int* pnWidth
+                           ,int* pnHeight
+                          ) const;
     virtual void DoSetSize( int  nX
                            ,int  nY
                            ,int  nWidth

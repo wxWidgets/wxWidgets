@@ -28,10 +28,11 @@ public:
                      ,wxWindowID      vId
                      ,const wxPoint&  rPos = wxDefaultPosition
                      ,const wxSize&   rSize = wxDefaultSize
-                     ,long            lStyle = wxNO_BORDER|wxTB_HORIZONTAL
+                     ,long            lStyle = wxNO_BORDER | wxTB_HORIZONTAL
                      ,const wxString& rName = wxToolBarNameStr
                     )
     {
+        Init();
         Create( pParent
                ,vId
                ,rPos
@@ -40,77 +41,114 @@ public:
                ,rName
               );
     }
+    virtual ~wxToolBar();
+
     bool Create( wxWindow*       pParent
                 ,wxWindowID      vId
                 ,const wxPoint&  rPos = wxDefaultPosition
                 ,const wxSize&   rSize = wxDefaultSize
-                ,long            lStyle = wxNO_BORDER|wxTB_HORIZONTAL
+                ,long            lStyle = wxNO_BORDER | wxTB_HORIZONTAL
                 ,const wxString& rName = wxToolBarNameStr
                );
 
-    virtual ~wxToolBar();
 
-    // override/implement base class virtuals
-    virtual wxToolBarToolBase* FindToolForPosition( wxCoord x
-                                                   ,wxCoord y
+    //
+    // Override/implement base class virtuals
+    //
+    virtual wxToolBarToolBase* FindToolForPosition( wxCoord vX
+                                                   ,wxCoord vY
                                                   ) const;
+    virtual bool               Realize(void);
+    virtual void               SetRows(int nRows);
 
-    // The post-tool-addition call
-    virtual bool Realize(void);
-
-    virtual void SetToolBitmapSize(const wxSize& rSize);
-    virtual wxSize GetToolSize(void) const;
-
-    virtual void SetRows(int nRows);
-
-    // IMPLEMENTATION
-    virtual bool OS2Command( WXUINT uParam
-                            ,WXWORD wId
-                           );
-    virtual bool OS2OnNotify( int       nCtrl
-                             ,WXLPARAM  lParam
-                             ,WXLPARAM* pResult
-                            );
-    void OnMouseEvent(wxMouseEvent& rEvent);
-    void OnSysColourChanged(wxSysColourChangedEvent& rEvent);
+    //
+    // Event handlers
+    //
+    void OnPaint(wxPaintEvent& event);
+    void OnSize(wxSizeEvent& event);
+    void OnMouseEvent(wxMouseEvent& event);
+    void OnKillFocus(wxFocusEvent& event);
 
 protected:
-    void Init(void);
-    // implement base class pure virtuals
-    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
-    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
+    //
+    // Common part of all ctors
+    //
+    void Init();
 
-    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
-    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
-    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+    //
+    // Implement base class pure virtuals
+    //
+    virtual wxToolBarToolBase* DoAddTool( int id
+                                         ,const wxString& label
+                                         ,const wxBitmap& bitmap
+                                         ,const wxBitmap& bmpDisabled
+                                         ,wxItemKind kind
+                                         ,const wxString& shortHelp = wxEmptyString
+                                         ,const wxString& longHelp = wxEmptyString
+                                         ,wxObject *clientData = NULL
+                                         ,wxCoord xPos = -1
+                                         ,wxCoord yPos = -1
+                                        );
+
+    virtual bool DoInsertTool( size_t             nPos
+                              ,wxToolBarToolBase* pTool
+                             );
+    virtual bool DoDeleteTool( size_t              nPos
+                              , wxToolBarToolBase* pTool
+                             );
+
+    virtual void DoEnableTool( wxToolBarToolBase* pTool
+                              ,bool               bEnable
+                             );
+    virtual void DoToggleTool( wxToolBarToolBase* pTool
+                              ,bool               bToggle
+                             );
+    virtual void DoSetToggle( wxToolBarToolBase* pTool
+                             ,bool               bToggle
+                            );
 
     virtual wxToolBarToolBase* CreateTool( int             vId
                                           ,const wxString& rsLabel
-                                          ,const wxBitmap& rBitmapNormal
-                                          ,const wxBitmap& rBitmapDisabled
-                                          ,wxItemKind      vKind
+                                          ,const wxBitmap& rBmpNormal
+                                          ,const wxBitmap& rBmpDisabled
+                                          ,wxItemKind      eKind
                                           ,wxObject*       pClientData
-                                          ,const wxString& rShortHelpString
-                                          ,const wxString& rLongHelpString
+                                          ,const wxString& rsShortHelp
+                                          ,const wxString& rsLongHelp
                                          );
     virtual wxToolBarToolBase* CreateTool(wxControl* pControl);
 
-    // should be called whenever the toolbar size changes
-    void UpdateSize(void);
+    //
+    // Helpers
+    //
+    void         DrawTool(wxToolBarToolBase *tool);
+    virtual void DrawTool( wxDC&              rDC
+                          ,wxToolBarToolBase* pTool
+                         );
+    virtual void SpringUpButton(int nIndex);
 
-    // override WndProc to process WM_SIZE
-    virtual MRESULT OS2WindowProc( WXUINT   ulMsg
-                                  ,WXWPARAM wParam
-                                  ,WXLPARAM lParam
-                                 );
-
-    // the big bitmap containing all bitmaps of the toolbar buttons
-    WXHBITMAP                       m_hBitmap;
-
-    // the total number of toolbar elements
-    size_t                          m_nButtons;
+    int                             m_nCurrentRowsOrColumns;
+    int                             m_nPressedTool;
+    int                             m_nCurrentTool;
+    wxCoord                         m_vLastX;
+    wxCoord                         m_vLastY;
+    wxCoord                         m_vMaxWidth;
+    wxCoord                         m_vMaxHeight;
+    wxCoord                         m_vXPos;
+    wxCoord                         m_vYPos;
+    wxCoord                         m_vTextX;
+    wxCoord                         m_vTextY;
 
 private:
+    void LowerTool( wxToolBarToolBase* pTool
+                   ,bool               bLower = TRUE
+                  );
+    void RaiseTool( wxToolBarToolBase* pTool
+                   ,bool               bRaise = TRUE
+                  );
+
+    static bool                     m_bInitialized;
+
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxToolBar)
 };
