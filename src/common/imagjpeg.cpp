@@ -21,7 +21,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_LIBJPEG
+#if wxUSE_STREAMS && wxUSE_LIBJPEG
 
 #include "wx/image.h"
 #include "wx/bitmap.h"
@@ -58,8 +58,6 @@ extern "C" {
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxJPEGHandler,wxImageHandler)
 #endif
-
-#if wxUSE_STREAMS
 
 //------------- JPEG Data Source Manager
 
@@ -320,11 +318,7 @@ bool wxJPEGHandler::CanRead( wxInputStream& stream )
     return (hdr[0] == 0xFF && hdr[1] == 0xD8);
 }
 
-#endif 
-  // wxUSE_STREAMS
-
-#endif 
-  // wxUSE_LIBJPEG
+#endif   // wxUSE_STREAMS && wxUSE_LIBJPEG
 
 
 

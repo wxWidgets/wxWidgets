@@ -19,15 +19,15 @@
 #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+#  include "wx/setup.h"
+#endif
+
+#if wxUSE_STREAMS && wxUSE_PNM
+
 #include "wx/image.h"
 #include "wx/log.h"
 #include "wx/txtstrm.h"
-
-#if wxUSE_PNM
-
-#ifdef __WXMSW__
-#include <windows.h>
-#endif
 
 //-----------------------------------------------------------------------------
 // wxBMPHandler
@@ -37,9 +37,6 @@
 IMPLEMENT_DYNAMIC_CLASS(wxPNMHandler,wxImageHandler)
 #endif
 
-#if wxUSE_STREAMS
-
-//#include <stream.h> // for cout
 
 void Skip_Comment(wxInputStream &stream)
 {
@@ -158,7 +155,5 @@ bool wxPNMHandler::CanRead( wxInputStream& stream )
 }
 
 
-#endif // wxUSE_STREAMS
-
-#endif // wxUSE_PNM
+#endif // wxUSE_STREAMS && wxUSE_PNM
 

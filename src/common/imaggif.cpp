@@ -23,7 +23,7 @@
 #  include "wx/defs.h"
 #endif
 
-#if wxUSE_LIBGIF
+#if wxUSE_STREAMS && wxUSE_GIF
 
 #include "wx/image.h"
 #include "wx/gifdecod.h"
@@ -33,8 +33,6 @@
 #if !USE_SHARED_LIBRARIES
 IMPLEMENT_DYNAMIC_CLASS(wxGIFHandler,wxImageHandler)
 #endif
-
-#if wxUSE_STREAMS
 
 //-----------------------------------------------------------------------------
 // wxGIFHandler
@@ -91,8 +89,4 @@ bool wxGIFHandler::CanRead( wxInputStream& stream )
     return ok;
 }
 
-#endif
-  // wxUSE_STREAMS
-
-#endif
-  // wxUSE_LIBGIF
+#endif  // wxUSE_STREAMS && wxUSE_GIF

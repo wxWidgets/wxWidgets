@@ -20,13 +20,17 @@
 #pragma hdrstop
 #endif
 
-#include "wx/setup.h"
+#ifndef WX_PRECOMP
+#  include "wx/defs.h"
+#endif
+
+#if wxUSE_STREAMS && wxUSE_PCX 
+
 #include "wx/image.h"
 #include "wx/wfstream.h"
 #include "wx/module.h"
 #include "wx/log.h"
 
-#if wxUSE_PCX
 
 //-----------------------------------------------------------------------------
 // PCX decoding
@@ -218,8 +222,6 @@ int ReadPCX(wxImage *image, wxInputStream& stream)
 IMPLEMENT_DYNAMIC_CLASS(wxPCXHandler,wxImageHandler)
 #endif
 
-#if wxUSE_STREAMS
-
 bool wxPCXHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose )
 {
     int error;
@@ -275,7 +277,5 @@ bool wxPCXHandler::CanRead( wxInputStream& stream )
     return (c == 10);
 }
 
-#endif // wxUSE_STREAMS
-
-#endif // wxUSE_PCX
+#endif // wxUSE_STREAMS && wxUSE_PCX
 
