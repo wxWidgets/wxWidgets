@@ -401,14 +401,17 @@ rcparser:
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
-        -erase $(LIBTARGET)
-        -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
+cleanall: clean_png clean_zlib clean_xpm clean_jpeg clean_tiff
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).dll
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).lib
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).exp
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).pdb
         -erase ..\..\lib\wx$(WXVERSION)$(LIBEXT).ilk
+
+
+clean: $(PERIPH_CLEAN_TARGET)
+        -erase $(LIBTARGET)
+        -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
         -erase *.pdb
         -erase *.sbr
         -erase $(WXLIBNAME).pch
