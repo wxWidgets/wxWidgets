@@ -105,7 +105,22 @@ void wxDC::MacSetupPort(AGAPortHelper* help) const
 {
 //	help->Setup( m_macPort ) ;
 	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
-	::ClipRect(&m_macClipRect);
+	if ( m_clipping )
+	{
+		long x1 = XLOG2DEV(m_clipX1);
+		long y1 = YLOG2DEV(m_clipY1);
+		long x2 = XLOG2DEV(m_clipX2);
+		long y2 = YLOG2DEV(m_clipY2);
+		
+		Rect clip = { y1 , x1 , y2 , x2 } ;
+		::SectRect( &clip , &m_macClipRect , &clip ) ;
+	  	::ClipRect( &clip ) ;
+	}
+	else
+	{
+		::ClipRect(&m_macClipRect);
+	}
+
 
 	m_macFontInstalled = false ;
 	m_macBrushInstalled = false ;
@@ -206,7 +221,6 @@ void wxDC::DoDrawIcon( const wxIcon &icon, wxCoord x, wxCoord y )
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 {
-  	wxMacPortSetter helper(this) ;
 	if( m_clipping )
 	{
 		m_clipX1 = wxMax( m_clipX1 , x ) ;
@@ -223,17 +237,7 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
 	  m_clipX2 = x + width;
 	  m_clipY2 = y + height;
 	}
-  
-	long x1 = XLOG2DEV(m_clipX1);
-	long y1 = YLOG2DEV(m_clipY1);
-	long x2 = XLOG2DEV(m_clipX2);
-	long y2 = YLOG2DEV(m_clipY2);
-	
-	Rect clip = { y1 , x1 , y2 , x2 } ;
-	
-  	::ClipRect( &clip ) ;
-
-};
+  };
 
 void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
 {
@@ -255,8 +259,6 @@ void wxDC::DestroyClippingRegion(void)
 {
   wxMacPortSetter helper(this) ;
   m_clipping = FALSE;
-//	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
-	::ClipRect(&m_macClipRect);
 };
     
 void wxDC::DoGetSize( int* width, int* height ) const

@@ -13,6 +13,8 @@
 
 #if !TARGET_CARBON
 #define	GetControlOwner( control ) (**control).contrlOwner
+// since we always call this in the right context we don't have to set and reset the port
+#define InvalWindowRgn( window , rgn ) InvalRgn( rgn )
 #endif
 
 static bool	sUMAHasAppearance = false ;
@@ -459,7 +461,7 @@ void UMAActivateControl( ControlHandle inControl )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -479,7 +481,7 @@ void UMAActivateControl( ControlHandle inControl )
     {
     }
 #endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
@@ -490,7 +492,7 @@ void UMADrawControl( ControlHandle inControl )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -510,7 +512,7 @@ void UMADrawControl( ControlHandle inControl )
     {
     }
 #endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
@@ -521,7 +523,7 @@ void UMAMoveControl( ControlHandle inControl , short x , short y )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -541,7 +543,7 @@ void UMAMoveControl( ControlHandle inControl , short x , short y )
     {
     }
 #endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
@@ -552,7 +554,7 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -572,18 +574,19 @@ void UMASizeControl( ControlHandle inControl , short x , short y )
     {
     }
 #endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
 #endif
+
 }
 
 void UMADeactivateControl( ControlHandle inControl ) 
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -603,7 +606,7 @@ void UMADeactivateControl( ControlHandle inControl )
     {
     }
 #endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
@@ -700,13 +703,12 @@ void UMADisposeControl (ControlHandle 			theControl)
     }
 }
 
-
 void UMAHiliteControl	(ControlHandle 			inControl,
 			 ControlPartCode 		hiliteState)
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -719,7 +721,7 @@ void UMAHiliteControl	(ControlHandle 			inControl,
     {
         ::HiliteControl( inControl , hiliteState ) ;
     }
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
@@ -730,7 +732,7 @@ void UMAShowControl						(ControlHandle 			inControl)
 {
     WindowRef theWindow = GetControlOwner(inControl) ;
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( theWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( theWindow , updateRgn ) ;
@@ -743,7 +745,7 @@ void UMAShowControl						(ControlHandle 			inControl)
     {
         ::ShowControl( inControl ) ;
     }
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( theWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
@@ -1001,7 +1003,7 @@ void UMAIdleControls					(WindowPtr 				inWindow)
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn ) 
 {
     RgnHandle updateRgn = NewRgn() ;
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn ) ;
 #else
     GetWindowUpdateRgn( inWindow , updateRgn ) ;
@@ -1021,7 +1023,7 @@ void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn )
     {
     }
 #endif
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
+#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0332)
     InvalWindowRgn( inWindow, updateRgn) ;
 #else
     InvalRgn( updateRgn ) ;
