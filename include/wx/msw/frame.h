@@ -160,8 +160,8 @@ public:
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
     bool HandleMenuSelect(WXWORD nItem, WXWORD nFlags, WXHMENU hMenu);
 
-    bool MSWCreate(int id, wxWindow *parent, const char *wclass,
-                   wxWindow *wx_win, const char *title,
+    bool MSWCreate(int id, wxWindow *parent, const wxChar *wclass,
+                   wxWindow *wx_win, const wxChar *title,
                    int x, int y, int width, int height, long style);
 
   // tooltip management

@@ -416,7 +416,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // Add to pool: necessary because Windows needs to have a string
   // still exist across 3 callbacks.
-  char *AddPool(const wxString& str);
+  wxChar *AddPool(const wxString& str);
 
 protected:
   wxTextCtrl*       m_textCtrl;        // The control used for editing a label

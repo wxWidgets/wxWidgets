@@ -41,8 +41,8 @@ typedef     HANDLE             HDIB;
  **************************************************************************/
 
 void        ClearSystemPalette(void);
-PDIB        DibOpenFile(LPSTR szFile);  
-int 			DibWriteFile(LPSTR szFile, LPBITMAPINFOHEADER lpbi);
+PDIB        DibOpenFile(LPTSTR szFile);  
+int 			DibWriteFile(LPTSTR szFile, LPBITMAPINFOHEADER lpbi);
 BOOL        DibSetUsage(PDIB pdib, HPALETTE hpal,UINT wUsage);
 PDIB        DibCreate(int bits, int dx, int dy);
 BOOL        DibMapToPalette(PDIB pdib, HPALETTE hpal);

@@ -216,12 +216,12 @@ public:
     // returns TRUE if the window has been created
     bool MSWCreate(int id,
                    wxWindow *parent,
-                   const char *wclass,
+                   const wxChar *wclass,
                    wxWindow *wx_win,
-                   const char *title,
+                   const wxChar *title,
                    int x, int y, int width, int height,
                    WXDWORD style,
-                   const char *dialog_template = NULL,
+                   const wxChar *dialog_template = NULL,
                    WXDWORD exendedStyle = 0);
     virtual bool MSWCommand(WXUINT param, WXWORD id);
 

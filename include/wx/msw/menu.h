@@ -217,7 +217,7 @@ public:
 
     // notifications: return FALSE to prevent the menu from being
     // appended/deleted
-    virtual bool OnAppend(wxMenu *menu, const char *title);
+    virtual bool OnAppend(wxMenu *menu, const wxChar *title);
     virtual bool OnDelete(wxMenu *menu, int index);
 
     // item search
