@@ -90,6 +90,15 @@ Clears the global clipboard object and the system's clipboard if possible.
 
 Call this function to close the clipboard, having opened it with \helpref{wxClipboard::Open}{wxclipboardopen}.
 
+\membersection{wxClipboard::Flush}\label{wxclipboardflush}
+
+\func{bool}{Flush}{\void}
+
+Flushes the clipboard: this means that the data which is currently on
+clipboard will stay available even after the application exits (possibly
+eating memory), otherwise the clipboard will be emptied on exit.
+Returns FALSE if the operation is unsuccesful for any reason.
+
 \membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
 
 \func{bool}{GetData}{\param{wxDataObject\&}{ data}}
