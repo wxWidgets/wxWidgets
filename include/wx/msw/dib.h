@@ -194,6 +194,11 @@ private:
     // the case
     bool m_ownsHandle;
 
+    // if true, we have alpha, if false we don't (note that we can still have
+    // m_depth == 32 but the last component is then simply padding and not
+    // alpha)
+    bool m_hasAlpha;
+
 
     // DIBs can't be copied
     wxDIB(const wxDIB&);
@@ -209,6 +214,7 @@ void wxDIB::Init()
 {
     m_handle = 0;
     m_ownsHandle = true;
+    m_hasAlpha = false;
 
     m_data = NULL;
 

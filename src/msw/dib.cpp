@@ -182,6 +182,8 @@ bool wxDIB::Create(const wxBitmap& bmp)
             return false;
     }
 
+    m_hasAlpha = bmp.HasAlpha();
+
     return true;
 }
 
@@ -634,8 +636,8 @@ bool wxDIB::Create(const wxImage& image)
 
     // if we have alpha channel, we need to create a 32bpp RGBA DIB, otherwise
     // a 24bpp RGB is sufficient
-    const bool hasAlpha = image.HasAlpha();
-    const int bpp = hasAlpha ? 32 : 24;
+    m_hasAlpha = image.HasAlpha();
+    const int bpp = m_hasAlpha ? 32 : 24;
 
     if ( !Create(w, h, bpp) )
         return false;
@@ -645,7 +647,8 @@ bool wxDIB::Create(const wxImage& image)
     const int srcBytesPerLine = w * 3;
     const int dstBytesPerLine = GetLineSize(w, bpp);
     const unsigned char *src = image.GetData() + ((h - 1) * srcBytesPerLine);
-    const unsigned char *alpha = hasAlpha ? image.GetAlpha() + (h - 1)*w : NULL;
+    const unsigned char *alpha = m_hasAlpha ? image.GetAlpha() + (h - 1)*w
+                                            : NULL;
     unsigned char *dstLineStart = (unsigned char *)m_data;
     for ( int y = 0; y < h; y++ )
     {
@@ -691,19 +694,20 @@ wxImage wxDIB::ConvertToImage() const
         return wxNullImage;
     }
 
-    const int bpp = GetDepth();
-    if ( bpp == 32 )
+    if ( m_hasAlpha )
     {
         image.SetAlpha();
     }
 
     // this is the same loop as in Create() just above but with copy direction
     // reversed
+    const int bpp = GetDepth();
     const int dstBytesPerLine = w * 3;
     const int srcBytesPerLine = GetLineSize(w, bpp);
     unsigned char *dst = image.GetData() + ((h - 1) * dstBytesPerLine);
     unsigned char *alpha = image.HasAlpha() ? image.GetAlpha() + (h - 1)*w
                                             : NULL;
+    const bool is32bit = bpp == 32;
     const unsigned char *srcLineStart = (unsigned char *)GetData();
     for ( int y = 0; y < h; y++ )
     {
@@ -717,8 +721,12 @@ wxImage wxDIB::ConvertToImage() const
 
             dst += 3;
 
-            if ( alpha )
-                *alpha++ = *src++;
+            if ( is32bit )
+            {
+                if ( alpha )
+                    *alpha++ = *src;
+                src++;
+            }
         }
 
         // pass to the previous line in the image
