@@ -1670,6 +1670,179 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #include "wx/utils.h"
 #include <math.h>
 
+/*
+
+Date: Wed, 05 Jan 2000 11:45:40 +0100
+From: Frits Boel <boel@niob.knaw.nl>
+To: julian.smart@ukonline.co.uk
+Subject: Patch for Motif ConvertToBitmap
+
+Hi Julian,
+
+I've been working on a wxWin application for image processing. From the
+beginning, I was surprised by the (lack of) speed of ConvertToBitmap,
+till I looked in the source code of image.cpp. I saw that converting a
+wxImage to a bitmap with 8-bit pixels is done with comparing every pixel
+to the 256 colors of the palet. A very time-consuming piece of code!
+
+Because I wanted a faster application, I've made a 'patch' for this. In
+short: every pixel of the image is compared to a sorted list with
+colors. If the color is found in the list, the palette entry is
+returned; if the color is not found, the color palette is searched and
+then the palette entry is returned and the color added to the sorted
+list.
+
+Maybe there is another method for this, namely changing the palette
+itself (if the colors are known, as is the case with tiffs with a
+colormap). I did not look at this, maybe someone else did?
+
+The code of the patch is attached, have a look on it, and maybe you will
+ship it with the next release of wxMotif?
+
+Regards,
+
+Frits Boel
+Software engineer at Hubrecht Laboratory, The Netherlands.
+
+*/
+
+class wxSearchColor
+{
+public:
+  wxSearchColor( void );
+  wxSearchColor( int size, XColor *colors );
+  ~wxSearchColor( void );
+
+  int SearchColor( int r, int g, int b );
+private:
+  int AddColor( unsigned int value, int pos );
+
+  int          size;
+  XColor       *colors;
+  unsigned int *color;
+  int          *entry;
+
+  int bottom;
+  int top;
+};
+
+wxSearchColor::wxSearchColor( void )
+{
+  this->size   = 0;
+  this->colors = (XColor*) NULL;
+  this->color  = (unsigned int *) NULL;
+  this->entry  = (int*) NULL;
+
+  this->bottom = 0;
+  this->top    = 0;
+}
+
+wxSearchColor::wxSearchColor( int size, XColor *colors )
+{
+    int i;
+  this->size   = size;
+  this->colors = colors;
+  this->color  = new unsigned int[size];
+  this->entry  = new int         [size];
+
+  for (i = 0; i < this->size; i++ ) {
+    this->entry[i] = -1;
+  }
+
+  this->bottom = this->top = ( size >> 1 );
+}
+
+wxSearchColor::~wxSearchColor( void )
+{
+  if ( this->color ) delete this->color;
+  if ( this->entry ) delete this->entry;
+}
+
+int wxSearchColor::SearchColor( int r, int g, int b )
+{
+  unsigned int value = ( ( ( r * 256 ) + g ) * 256 ) + b;
+  int          begin = this->bottom;
+  int          end   = this->top;
+  int          middle;
+
+  while ( begin <= end ) {
+
+    middle = ( begin + end ) >> 1;
+
+    if ( value == this->color[middle] ) {
+      return( this->entry[middle] );
+    } else if ( value < this->color[middle] ) {
+      end = middle - 1;
+    } else {
+      begin = middle + 1;
+    }
+
+  }
+
+  return AddColor( value, middle );
+}
+
+int wxSearchColor::AddColor( unsigned int value, int pos )
+{
+  int i;
+  int pixel = -1;
+  int max = 3 * (65536);
+  for ( i = 0; i < 256; i++ ) {
+    int rdiff = ((value >> 8) & 0xFF00 ) - colors[i].red;
+    int gdiff = ((value     ) & 0xFF00 ) - colors[i].green;
+    int bdiff = ((value << 8) & 0xFF00 ) - colors[i].blue;
+    int sum = abs (rdiff) + abs (gdiff) + abs (bdiff);
+    if (sum < max) { pixel = i; max = sum; }
+  }
+
+  if ( this->entry[pos] < 0 ) {
+    this->color[pos] = value;
+    this->entry[pos] = pixel;
+  } else if ( value < this->color[pos] ) {
+
+    if ( this->bottom > 0 ) {
+      for ( i = this->bottom; i < pos; i++ ) {
+        this->color[i-1] = this->color[i];
+        this->entry[i-1] = this->entry[i];
+      }
+      this->bottom--;
+      this->color[pos-1] = value;
+      this->entry[pos-1] = pixel;
+    } else if ( this->top < this->size-1 ) {
+      for ( i = this->top; i >= pos; i-- ) {
+	this->color[i+1] = this->color[i];
+	this->entry[i+1] = this->entry[i];
+      }
+      this->top++;
+      this->color[pos] = value;
+      this->entry[pos] = pixel;
+    }
+
+  } else {
+
+    if ( this->top < this->size-1 ) {
+      for ( i = this->top; i > pos; i-- ) {
+	this->color[i+1] = this->color[i];
+	this->entry[i+1] = this->entry[i];
+      }
+      this->top++;
+      this->color[pos+1] = value;
+      this->entry[pos+1] = pixel;
+    } else if ( this->bottom > 0 ) {
+      for ( i = this->bottom; i < pos; i++ ) {
+        this->color[i-1] = this->color[i];
+        this->entry[i-1] = this->entry[i];
+      }
+      this->bottom--;
+      this->color[pos] = value;
+      this->entry[pos] = pixel;
+    }
+
+  }
+
+  return( pixel );
+}
+
 wxBitmap wxImage::ConvertToBitmap() const
 {
     wxBitmap bitmap;
@@ -1760,6 +1933,7 @@ wxBitmap wxImage::ConvertToBitmap() const
         XQueryColors( dpy, cmap, colors, 256 );
     }
 
+    wxSearchColor scolor( 256, colors );
     unsigned char* data = GetData();
 
     int index = 0;
@@ -1788,6 +1962,7 @@ wxBitmap wxImage::ConvertToBitmap() const
             {
             case 8:
                 {
+#if 0 // Old, slower code
                     int pixel = -1;
                     /*
                     if (wxTheApp->m_colorCube)
@@ -1810,6 +1985,10 @@ wxBitmap wxImage::ConvertToBitmap() const
                     /*
                     }
                     */
+#endif
+
+	                // And this is all to get the 'right' color...
+	                int pixel = scolor.SearchColor( r, g, b );
                     XPutPixel( data_image, x, y, pixel );
                     break;
                 }
