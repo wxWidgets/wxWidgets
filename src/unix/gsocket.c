@@ -26,7 +26,7 @@
 #include <stdlib.h>
 
 #ifdef sun
-#include <sys/filio.h>
+  #include <sys/filio.h>
 #endif
 
 #ifdef sgi
@@ -34,12 +34,22 @@
 #endif
 
 #include <signal.h>
+#include <features.h>
+
 #include <wx/setup.h>
 #include <wx/gsocket.h>
 #include "gsockunx.h"
 
 #ifndef SOCKLEN_T
-#	define SOCKLEN_T int
+
+#ifdef __GLIBC__
+#      if __GLIBC__ == 2
+#         define SOCKLEN_T socklen_t
+#      endif
+#else
+#      define SOCKLEN_T int
+#endif
+
 #endif
 
 /* Constructors / Destructors */
@@ -107,7 +117,9 @@ void GSocket_Shutdown(GSocket *socket)
 
 GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
 {
-  if (socket == NULL || (socket->m_fd != -1 && !socket->m_server))
+  assert(socket != NULL);
+
+  if ((socket->m_fd != -1 && !socket->m_server))
     return GSOCK_INVSOCK;
 
   if (address == NULL || address->m_family == GSOCK_NOFAMILY)
@@ -123,8 +135,7 @@ GSocketError GSocket_SetLocal(GSocket *socket, GAddress *address)
 
 GSocketError GSocket_SetPeer(GSocket *socket, GAddress *address)
 {
-  if (socket == NULL)
-    return GSOCK_INVSOCK;
+  assert(socket != NULL);
 
   if (address == NULL || address->m_family == GSOCK_NOFAMILY) {
     socket->m_error = GSOCK_INVADDR;
@@ -184,7 +195,8 @@ GAddress *GSocket_GetPeer(GSocket *socket)
   GSocket_SetServer() setup the socket as a server. It uses the "Local" field
   of GSocket. "Local" must be set by GSocket_SetLocal() before
   GSocket_SetServer() is called. GSOCK_INVSOCK if socket has been initialized.
-  In the other cases, it returns GSOCK_INVADDR.
+  In case, you haven't yet defined the local address, it returns GSOCK_INVADDR.
+  In the other cases it returns GSOCK_IOERR.
 */
 GSocketError GSocket_SetServer(GSocket *sck)
 {
@@ -795,7 +807,8 @@ GSocketError GAddress_INET_SetHostAddress(GAddress *address,
   return GSOCK_NOERROR;
 }
 
-GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port)
+GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
+                                       const char *protocol)
 {
   struct servent *se;
   struct sockaddr_in *addr;
@@ -809,7 +822,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port)
   }
  
   /* TODO: TCP or UDP */
-  se = getservbyname(port, "tcp");
+  se = getservbyname(port, protocol);
   if (!se) {
     if (isdigit(port[0])) {
       int port_int;

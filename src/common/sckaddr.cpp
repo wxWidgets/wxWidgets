@@ -106,13 +106,12 @@ bool wxIPV4address::Hostname(const wxString& name)
 
 bool wxIPV4address::Hostname(unsigned long addr)
 {
-  /* Need API */
-  return TRUE;
+  return (GAddress_INET_SetHostAddress(m_address, addr) == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Service(const wxString& name)
 {
-  return (GAddress_INET_SetPortName(m_address, name.fn_str()) == GSOCK_NOERROR);
+  return (GAddress_INET_SetPortName(m_address, name.fn_str(), "tcp") == GSOCK_NOERROR);
 }
 
 bool wxIPV4address::Service(unsigned short port)
@@ -139,7 +138,7 @@ unsigned short wxIPV4address::Service()
   return GAddress_INET_GetPort(m_address); 
 }
 
-#ifdef IPV6_ENABLE
+#if 0
 // ---------------------------------------------------------------------------
 // wxIPV6address
 // ---------------------------------------------------------------------------

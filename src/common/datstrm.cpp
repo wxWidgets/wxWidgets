@@ -29,7 +29,7 @@
 // ---------------------------------------------------------------------------
 
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
-  : m_input(&s)
+  : m_input(&s), m_be_order(FALSE)
 {
 }
 
@@ -39,31 +39,33 @@ wxDataInputStream::~wxDataInputStream()
 
 wxUint32 wxDataInputStream::Read32()
 {
-  char buf[4];
+  wxUint32 i32;
 
-  m_input->Read(buf, 4);
+  m_input->Read(&i32, 4);
 
-  return (wxUint32)buf[0] |
-         ((wxUint32)buf[1] << 8) |
-         ((wxUint32)buf[2] << 16) |
-         ((wxUint32)buf[3] << 24);
+  if (m_be_order)
+    return wxUINT32_SWAP_ON_LE(i32);
+  else
+    return wxUINT32_SWAP_ON_BE(i32);
 }
 
 wxUint16 wxDataInputStream::Read16()
 {
-  char buf[2];
+  wxUint16 i16;
 
-  m_input->Read(buf, 2);
+  m_input->Read(&i16, 2);
 
-  return (wxUint16)buf[0] |
-         ((wxUint16)buf[1] << 8);
+  if (m_be_order)
+    return wxUINT16_SWAP_ON_LE(i16);
+  else
+    return wxUINT16_SWAP_ON_BE(i16);
 }
 
 wxUint8 wxDataInputStream::Read8()
 {
   wxUint8 buf;
 
-  m_input->Read((char *)&buf, 1);
+  m_input->Read(&buf, 1);
   return (wxUint8)buf;
 }
 
@@ -169,22 +171,25 @@ wxDataOutputStream::~wxDataOutputStream()
 
 void wxDataOutputStream::Write32(wxUint32 i)
 {
-  char buf[4];
+  wxUint32 i32;
 
-  buf[0] = i & 0xff;
-  buf[1] = (i >> 8) & 0xff;
-  buf[2] = (i >> 16) & 0xff;
-  buf[3] = (i >> 24) & 0xff;
-  m_output->Write(buf, 4);
+  if (m_be_order)
+    i32 = wxUINT32_SWAP_ON_LE(i);
+  else
+    i32 = wxUINT32_SWAP_ON_BE(i);
+  m_output->Write(&i32, 4);
 }
 
 void wxDataOutputStream::Write16(wxUint16 i)
 {
-  char buf[2];
+  wxUint16 i16;
 
-  buf[0] = i & 0xff;
-  buf[1] = (i >> 8) & 0xff;
-  m_output->Write(buf, 2);
+  if (m_be_order)
+    i16 = wxUINT16_SWAP_ON_LE(i);
+  else
+    i16 = wxUINT16_SWAP_ON_BE(i);
+
+  m_output->Write(&i16, 2);
 }
 
 void wxDataOutputStream::Write8(wxUint8 i)

@@ -87,7 +87,6 @@ libwx_msw_la_SOURCES = \
  resource.cpp \
  sckaddr.cpp \
  sckfile.cpp \
- sckint.cpp \
  sckipc.cpp \
  sckstrm.cpp \
  serbase.cpp \

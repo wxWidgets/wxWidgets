@@ -189,7 +189,8 @@ GAddressType GAddress_GetFamily(GAddress *address);
 GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname);
 GSocketError GAddress_INET_SetHostAddress(GAddress *address,
                                           unsigned long hostaddr);
-GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port);
+GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
+                                       const char *protocol);
 GSocketError GAddress_INET_SetPort(GAddress *address, unsigned short port);
 
 GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname,

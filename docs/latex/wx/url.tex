@@ -143,3 +143,12 @@ Sets the proxy to use for this URL.
 
 \helpref{wxURL::SetDefaultProxy}{wxurlsetdefaultproxy}
 
+%
+% SetProxy
+%
+\membersection{wxURL::ConvertToValidURI}
+
+\func{static wxString}{ConvertToValidURI}{\param{const wxString\&}{ uri}}
+
+It converts a non-standardized URI to a valid network URI. It encodes non
+standard characters.

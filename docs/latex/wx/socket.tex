@@ -8,6 +8,10 @@
 
 <wx/socket.h>
 
+\wxheading{See also}
+
+\helpref{GSocket for wxWindows}{gsocketforwx}
+
 % ---------------------------------------------------------------------------
 % Event handling
 % ---------------------------------------------------------------------------
@@ -52,6 +56,47 @@ Destroys the wxSocketBase object.
 % ---------------------------------------------------------------------------
 % State functions
 % ---------------------------------------------------------------------------
+
+%
+% SetFlags
+%
+
+\membersection{wxSocketBase::SetFlags}\label{wxsocketbasesetflags}
+
+\func{void}{SetFlags}{\param{wxSocketBase::wxSockFlags}{ flags}}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxSocketBase::NONE}}{Normal functionnalities.}
+\twocolitem{{\bf wxSocketBase::NOWAIT}}{Get the available data in the input queue and exit immediately.}
+\twocolitem{{\bf wxSocketBase::WAITALL}}{Wait for all required data unless an error occured.}
+\twocolitem{{\bf wxSocketBase::SPEED}}{Disable the asynchronous IO functionnality.}
+\end{twocollist}
+
+%
+% SetNotify
+%
+\membersection{wxSocketBase::SetNotify}\label{wxsocketbasesetnotify}
+
+\func{void}{SetNotify}{\param{GSocketEventFlags}{ event_flags}}
+
+SetNotify setups which socket events are to be sent to the event handler.
+For more information on socket events see
+\helpref{GSocket events}{gsocketforwxevents}.
+
+%
+% Notify
+%
+\membersection{wxSocketBase::Notify}\label{wxsocketbasesetnotify}
+
+\func{void}{Notify}{\param{bool}{ notify}}
+
+Notify will enable (notify is TRUE) or disable (notify is FALSE) the propagation
+of socket events.
+
+% 
+% Ok
+%
 
 \membersection{wxSocketBase::Ok}\label{wxsocketbaseok}
 
@@ -98,9 +143,9 @@ Returns the number of bytes read or written by the last IO call.
 
 \membersection{wxSocketBase::LastError}\label{wxsocketbaselasterror}
 
-\constfunc{int}{LastError}{\void}
+\constfunc{GSocketError}{LastError}{\void}
 
-Returns an error in the errno format (see your C programmer's guide).
+Returns an error in the GSocket format. See \helpref{GSocket errors}{gsocketforwxerrs}. 
 
 % ---------------------------------------------------------------------------
 % IO calls
@@ -169,21 +214,9 @@ This remark is also valid for all IO call.
 \helpref{wxSocketBase::Error}{wxsocketbaseerror},
  \helpref{wxSocketBase::LastCount}{wxsocketbaselastcount},
  \helpref{wxSocketBase::LastError}{wxsocketbaselasterror}
- 
-\membersection{wxSocketBase::SetFlags}\label{wxsocketbasesetflags}
-
-\func{void}{SetFlags}{\param{wxSockFlags}{ flags}}
-
-\twocolwidtha{7cm}
-\begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf wxSocketBase::NONE}}{Normal functionnalities.}
-\twocolitem{{\bf wxSocketBase::NOWAIT}}{Get the available data in the input queue and exit immediately.}
-\twocolitem{{\bf wxSocketBase::WAITALL}}{Wait for all required data unless an error occured.}
-\twocolitem{{\bf wxSocketBase::SPEED}}{Disable the asynchronous IO functionnality.}
-\end{twocollist}
 
 %
-% Read
+% Write
 %
 \membersection{wxSocketBase::Write}\label{wxsocketbasewrite}
 
@@ -489,8 +522,6 @@ Sets an event handler to be called when a socket event occured.
 
 Constructs a new wxSocketClient.
 
-{\bf Warning !} The new socket client needs to be registered to a socket handler (See \helpref{wxSocketHandler}{wxsockethandler}).
-
 \wxheading{Parameters}
 
 \docparam{flags}{Socket flags (See \helpref{wxSocketBase::SetFlags}{wxsocketbasesetflags})}
@@ -568,7 +599,6 @@ functions that take a wxSocketEvent argument.
 
 \wxheading{See also}
 
-\helpref{wxSocketHandler}{wxsockethandler},\rtfsp
 \helpref{wxSocketBase}{wxsocketbase},\rtfsp
 \helpref{wxSocketClient}{wxsocketclient},\rtfsp
 \helpref{wxSocketServer}{wxsocketserver}
@@ -583,162 +613,9 @@ Constructor.
 
 \membersection{wxSocketEvent::SocketEvent}\label{wxsocketeventsocketevent}
 
-\constfunc{wxSocketBase::wxRequestEvent}{SocketEvent}{\void}
+\constfunc{GSocketEvent}{SocketEvent}{\void}
 
 Returns the socket event type.
-
-% ---------------------------------------------------------------------------
-% CLASS: wxSocketHandler
-% ---------------------------------------------------------------------------
-\section{\class{wxSocketHandler}}\label{wxsockethandler}
-
-\wxheading{Derived from}
-
-\helpref{wxObject}{wxobject}
-
-\wxheading{Include files}
-
-<wx/socket.h>
-
-% ---------------------------------------------------------------------------
-% Members
-% ---------------------------------------------------------------------------
-\latexignore{\rtfignore{\wxheading{Members}}}
-
-%
-% wxSocketHandler
-%
-\membersection{wxSocketHandler::wxSocketHandler}
-
-\func{}{wxSocketHandler}{\void}
-
-Constructs a new wxSocketHandler.
-
-It is advised to use \helpref{wxSocketHandler::Master}{wxsockethandlermaster} to
-get a socket handler. But creating a socket handler is useful to group
-many sockets.
-
-%
-% ~wxSocketHandler
-%
-\membersection{wxSocketHandler::\destruct{wxSocketHandler}}
-
-\func{}{\destruct{wxSocketHandler}}{\void}
-
-Destroys a wxSocketHandler object.
-
-%
-% Register
-%
-\membersection{wxSocketHandler::Register}
-
-\func{void}{Register}{\param{wxSocketBase *}{socket}}
-
-Register a socket: if it is already registered in this handler it will just
-return immediately.
-
-\wxheading{Parameters}
-
-\docparam{socket}{Socket to be registered.}
-
-%
-% UnRegister
-%
-\membersection{wxSocketHandler::UnRegister}
-
-\func{void}{UnRegister}{\param{wxSocketBase *}{socket}}
-
-UnRegister a socket: if it isn't registered in this handler it will just
-return.
-
-\wxheading{Parameters}
-
-\docparam{socket}{Socket to be unregistered.}
-
-%
-% Count
-%
-\membersection{wxSocketHandler::Count}
-
-\constfunc{unsigned long}{Count}{\void}
-
-Returns the number of sockets registered in the handler.
-
-\wxheading{Return value}
-
-Number of sockets registered.
-
-%
-% CreateServer
-%
-\membersection{wxSocketHandler::CreateServer}
-
-\func{wxSocketServer *}{CreateServer}{\param{wxSockAddress\&}{ address}, \param{wxSocketBase::wxSockFlags}{ flags = wxSocketbase::NONE}}
-
-Creates a new wxSocketServer object. The object is automatically registered
-to the current socket handler.
-For a detailed description of the parameters, see \helpref{wxSocketServer::wxSocketServer}{wxsocketserverconstr}.
-
-\wxheading{Return value}
-
-Returns a new socket server.
-
-%
-% CreateClient
-%
-\membersection{wxSocketHandler::CreateClient}
-
-\func{wxSocketServer *}{CreateClient}{\param{wxSocketBase::wxSockFlags}{ flags = wxSocketbase::NONE}}
-
-Creates a new wxSocketClient object. The object is automatically registered
-to the current socket handler.
-
-For a detailed description of the parameters, see \helpref{wxSocketClient::Connect}{wxsocketclientconnect}.
-
-\wxheading{Return value}
-
-Returns a new socket client.
-
-%
-% Master
-%
-\membersection{wxSocketHandler::Master}\label{wxsockethandlermaster}
-
-\func{static wxSocketHandler\&}{Master}{\void}
-
-Returns a default socket handler.
-
-%
-% Wait
-%
-\membersection{wxSocketHandler::Wait}
-
-\func{int}{Wait}{\param{long}{ seconds},\param{long}{ microseconds}}
-
-Wait for an event on all registered sockets.
-
-\wxheading{Parameters}
-
-\docparam{seconds}{Number of seconds to wait. By default, it waits infinitely.}
-
-\docparam{microsecond}{Number of microseconds to wait.}
-
-\wxheading{Return value}
-
-Returns 0 if a timeout occured, else the number of events detected.
-
-\wxheading{See also}
-
-\helpref{wxSocketBase::Wait}{wxsocketbasewait}
-
-%
-% YieldSock
-%
-\membersection{wxSocketHandler::YieldSock}
-
-\func{void}{YieldSock}{\void}
-
-Execute pending requests in all registered sockets.
 
 % ---------------------------------------------------------------------------
 % CLASS: wxSocketServer
@@ -766,9 +643,6 @@ Execute pending requests in all registered sockets.
 \func{}{wxSocketServer}{\param{wxSockAddress\&}{ address}, \param{wxSockFlags}{ flags = wxSocketBase::NONE}}
 
 Constructs a new wxSocketServer.
-
-{\bf Warning !} The created object needs to be registered to a socket handler
-(see \helpref{wxSocketHandler}{wxsockethandler}).
 
 \wxheading{Parameters}
 

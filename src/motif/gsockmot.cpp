@@ -3,11 +3,6 @@
 // Name:    gsockmot.cpp
 // Purpose: GSocket: Motif part
 // CVSID:   $Id$
-// Log:     $Log$
-// Log:     Revision 1.1  1999/07/23 17:24:24  GL
-// Log:     Added GSocket motif (it compiles but I didn't tested it)
-// Log:     Changed wxSockFlags type (switched to int)
-// Log:
 // -------------------------------------------------------------------------
 #include <stdlib.h>
 #include <X11/Intrinsic.h>

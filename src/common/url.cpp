@@ -320,12 +320,16 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
   for (i=0;i<uri.Len();i++) {
     wxChar c = uri.GetChar(i);
 
-    if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('.') && 
-                       c != _T('/')) {
-      hexa_code.Printf(_T("%%%02X"), c);
-      out_str += hexa_code;
-    } else
-      out_str += c;
+    if (c == _T(' '))
+      out_str += _T('+');
+    else {
+      if (!isalpha(c) && c != _T('.') && c != _T('+') && c != _T('.') && 
+                         c != _T('/')) {
+        hexa_code.Printf(_T("%%%02X"), c);
+        out_str += hexa_code;
+      } else
+        out_str += c;
+    }
   }
   
   return out_str;
