@@ -2533,11 +2533,11 @@ dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
 
-dnl do not check for strings.h for wxMac
-dnl   it exists but is only a simple redirection to string.h
-dnl   it is in conflict with Strings.h in FlatCarbon headers
+dnl test for strings.h needed under AIX, but do not check for it wxMac as
+dnl it exists but is only a simple redirection to string.h and it is in
+dnl conflict with Strings.h in FlatCarbon headers
 if test "$wxUSE_MAC" != 1; then
-  dnl defines HAVE_STRINGS_H (where some string functions live on AIX for example)
+  dnl defines HAVE_STRINGS_H
   AC_CHECK_HEADERS(strings.h)
 fi
 
@@ -2549,10 +2549,17 @@ dnl defines HAVE_UNISTD_H
 AC_CHECK_HEADERS(unistd.h)
 dnl defines HAVE_WCHAR_H
 AC_CHECK_HEADERS(wchar.h)
-dnl defines HAVE_WCSTR_H
-AC_CHECK_HEADERS(wcstr.h)
-dnl defined HAVE_WCTYPE_H
-AC_CHECK_HEADERS(wctype.h)
+
+dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
+if test "$ac_cv_header_wchar_h" != "yes"; then
+    dnl defines HAVE_WCSTR_H
+    AC_CHECK_HEADERS(wcstr.h)
+fi
+
+dnl checking for wctype.h is useless as we need wcslen(), not just wchar_t and
+dnl this function is never provided by it
+dnl AC_CHECK_HEADERS(wctype.h)
+
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
 dnl defines HAVE_LANGINFO_H (GNU libc locale parameters)
