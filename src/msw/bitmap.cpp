@@ -811,15 +811,127 @@ wxImage wxBitmap::ConvertToImage() const
 {
     wxDIB dib(*this);
 
-    wxImage image;
-    if ( dib.IsOk() )
+    if ( !dib.IsOk() )
     {
-        image = dib.ConvertToImage();
-        if ( image.Ok() )
-        {
-            // TODO: set mask
-        }
+        return wxNullImage;
     }
+
+    wxImage image = dib.ConvertToImage();
+    if ( !image.Ok() )
+    {
+        return wxNullImage;
+    }
+
+    // set mask
+
+    // TODO: WinCE mask-copying support and use wxDIB
+#ifndef __WXWINCE__
+
+    if( GetMask() && GetMask()->GetMaskBitmap() )
+    {
+        static const int MASK_RED = 1;
+        static const int MASK_GREEN = 2;
+        static const int MASK_BLUE = 3;
+        static const int MASK_BLUE_REPLACEMENT = 2;
+
+        HBITMAP hbitmap = (HBITMAP) GetMask()->GetMaskBitmap();
+        int width = GetWidth();
+        int height = GetHeight();
+
+        int bytesPerLine = width*3;
+        int sizeDWORD = sizeof( DWORD );
+        int lineBoundary =  bytesPerLine % sizeDWORD;
+        int padding = 0;
+        if( lineBoundary > 0 )
+        {
+            padding = sizeDWORD - lineBoundary;
+            bytesPerLine += padding;
+        }
+
+        // create a DIB header
+        int headersize = sizeof(BITMAPINFOHEADER);
+        BITMAPINFO *lpDIBh = (BITMAPINFO *) malloc( headersize );
+        if( !lpDIBh )
+        {
+            wxFAIL_MSG( wxT("could not allocate data for DIB header") );
+            //free( data );
+            return wxNullImage;
+        }
+
+        // Fill in the DIB header
+        lpDIBh->bmiHeader.biSize = headersize;
+        lpDIBh->bmiHeader.biWidth = width;
+        lpDIBh->bmiHeader.biHeight = -height;
+        lpDIBh->bmiHeader.biSizeImage = bytesPerLine * height;
+        lpDIBh->bmiHeader.biPlanes = 1;
+        lpDIBh->bmiHeader.biBitCount = 24;
+        lpDIBh->bmiHeader.biCompression = BI_RGB;
+        lpDIBh->bmiHeader.biClrUsed = 0;
+        // These seem not really needed for our purpose here.
+        lpDIBh->bmiHeader.biClrImportant = 0;
+        lpDIBh->bmiHeader.biXPelsPerMeter = 0;
+        lpDIBh->bmiHeader.biYPelsPerMeter = 0;
+
+        // memory DC created, color set, data copied, and memory DC deleted
+
+        // memory for DIB data
+        unsigned char *lpBits
+            = (unsigned char *) malloc( lpDIBh->bmiHeader.biSizeImage );
+        if( !lpBits )
+        {
+            wxFAIL_MSG( wxT("could not allocate data for DIB") );
+            free( lpDIBh );
+            return wxNullImage;
+        }
+
+
+        HDC hdc = ::GetDC(NULL);
+
+        HDC memdc = ::CreateCompatibleDC( hdc );
+        ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
+        ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
+        ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
+        ::DeleteDC( memdc );
+        unsigned char *ptdata = image.GetData();//data;
+        unsigned char *ptbits = lpBits;
+        int i, j;
+        for( i=0; i<height; i++ )
+        {
+            for( j=0; j<width; j++ )
+            {
+                // is this pixel transparent?
+                if ( *ptbits != 0 )
+                {
+                    if ( (ptdata[0] == MASK_RED) &&
+                            (ptdata[1] == MASK_GREEN) &&
+                                (ptdata[2] == MASK_BLUE) )
+                    {
+                        // we have to fudge the colour a bit to prevent this
+                        // pixel from appearing transparent
+                        ptdata[2] = MASK_BLUE_REPLACEMENT;
+                    }
+                    ptdata += 3;
+                }
+                else // masked pixel
+                {
+                    *(ptdata++)  = MASK_RED;
+                    *(ptdata++)  = MASK_GREEN;
+                    *(ptdata++)  = MASK_BLUE;
+                }
+                ptbits += 3;
+            }
+            ptbits += padding;
+        }
+
+        image.SetMaskColour( MASK_RED, MASK_GREEN, MASK_BLUE );
+        image.SetMask( true );
+
+        // free allocated resources
+        ::ReleaseDC(NULL, hdc);
+        free(lpDIBh);
+        free(lpBits);
+    }
+#endif // __WXWINCE__
 
     return image;
 }
