@@ -86,6 +86,8 @@
 #undef __SUNOS__
 #define __ALPHA__
 #undef __OSF__
+#undef __DARWIN__
+#undef __NETBSD__
 #undef __BSD__
 #undef __FREEBSD__
 #define __VMS__
@@ -93,6 +95,9 @@
 #undef __DATA_GENERAL__
 #undef __EMX__
 #undef _GNU_SOURCE
+
+/* PowerPC Darwin & Mac OS X */
+#undef __POWERPC__
 
 /* Stupid hack; __WINDOWS__ clashes with wx/defs.h */
 #ifndef __WINDOWS__
