@@ -234,5 +234,11 @@ private:
 
 #endif
 
+
+
+wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
+wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
+
+
 #endif
     // _WX_PRIVATE_H_
