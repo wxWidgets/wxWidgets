@@ -82,7 +82,7 @@ END_EVENT_TABLE()
 
 IMPLEMENT_CLASS(wxEditableListBox, wxPanel)
 
-enum 
+enum
 {
     // ID value doesn't matter, it won't propagate out of wxEditableListBox
     // instance
@@ -111,7 +111,7 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
    : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name), m_edittingNew(FALSE)
 {
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
-    
+
     wxPanel *subp = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
                                 wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
@@ -121,25 +121,32 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE, wxBitmap(eldel_xpm));
     m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
     m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
+
+    m_bEdit->SetToolTip(wxT("Edit item"));
+    m_bNew->SetToolTip(wxT("New item"));
+    m_bDel->SetToolTip(wxT("Delete item"));
+    m_bUp->SetToolTip(wxT("Move up"));
+    m_bDown->SetToolTip(wxT("Move down"));
+
     subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL);
     subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL);
     subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL);
     subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL);
     subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL);
-                  
+
     subp->SetAutoLayout(TRUE);
     subp->SetSizer(subsizer);
     subsizer->Fit(subp);
-    
+
     sizer->Add(subp, 0, wxEXPAND);
-    m_listCtrl = new CleverListCtrl(this, wxID_ELD_LISTCTRL, 
+    m_listCtrl = new CleverListCtrl(this, wxID_ELD_LISTCTRL,
                                     wxDefaultPosition, wxDefaultSize,
-                                    wxLC_REPORT | wxLC_NO_HEADER | 
+                                    wxLC_REPORT | wxLC_NO_HEADER |
                                     wxLC_SINGLE_SEL | wxSUNKEN_BORDER |
 									wxLC_EDIT_LABELS);
     wxArrayString empty_ar;
     SetStrings(empty_ar);
-    
+
     sizer->Add(m_listCtrl, 1, wxEXPAND);
 
     SetAutoLayout(TRUE);
@@ -151,11 +158,11 @@ void wxEditableListBox::SetStrings(const wxArrayString& strings)
 {
     m_listCtrl->DeleteAllItems();
     size_t i;
-    
+
     for (i = 0; i < strings.GetCount(); i++)
         m_listCtrl->InsertItem(i, strings[i]);
-    
-    m_listCtrl->InsertItem(strings.GetCount(), _T(""));  
+
+    m_listCtrl->InsertItem(strings.GetCount(), _T(""));
     m_listCtrl->SetItemState(0, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
@@ -178,7 +185,7 @@ void wxEditableListBox::OnItemSelected(wxListEvent& event)
 
 void wxEditableListBox::OnNewItem(wxCommandEvent& event)
 {
-    m_listCtrl->SetItemState(m_listCtrl->GetItemCount()-1,  
+    m_listCtrl->SetItemState(m_listCtrl->GetItemCount()-1,
                              wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
     m_edittingNew = TRUE;
     m_listCtrl->EditLabel(m_selection);
@@ -197,7 +204,7 @@ void wxEditableListBox::OnEndLabelEdit(wxListEvent& event)
 void wxEditableListBox::OnDelItem(wxCommandEvent& event)
 {
     m_listCtrl->DeleteItem(m_selection);
-    m_listCtrl->SetItemState(m_selection, 
+    m_listCtrl->SetItemState(m_selection,
                              wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
 
@@ -209,7 +216,7 @@ void wxEditableListBox::OnEditItem(wxCommandEvent& event)
 void wxEditableListBox::OnUpItem(wxCommandEvent& event)
 {
     wxString t1, t2;
-    
+
     t1 = m_listCtrl->GetItemText(m_selection - 1);
     t2 = m_listCtrl->GetItemText(m_selection);
     m_listCtrl->SetItemText(m_selection - 1, t2);
@@ -221,7 +228,7 @@ void wxEditableListBox::OnUpItem(wxCommandEvent& event)
 void wxEditableListBox::OnDownItem(wxCommandEvent& event)
 {
     wxString t1, t2;
-    
+
     t1 = m_listCtrl->GetItemText(m_selection + 1);
     t2 = m_listCtrl->GetItemText(m_selection);
     m_listCtrl->SetItemText(m_selection + 1, t2);
