@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common.bkl"/>
+
+    <exe id="minimal" template="wx_sample">
+        <sources>minimal.cpp</sources>
+        <wx-lib>core</wx-lib>
+    </exe>
+
+</makefile>

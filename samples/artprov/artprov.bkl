@@ -1,0 +1,11 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common.bkl"/>
+
+    <exe id="arttest" template="wx_sample">
+        <sources>arttest.cpp artbrows.cpp</sources>
+        <wx-lib>core</wx-lib>
+    </exe>
+
+</makefile>
