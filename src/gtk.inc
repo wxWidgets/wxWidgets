@@ -4,7 +4,7 @@ NONE =
 # define library name
 LIB_TARGET=wx_gtk
 LIB_MAJOR=1
-LIB_MINOR=91
+LIB_MINOR=93
 
 # define library sources
 
@@ -162,20 +162,20 @@ LIB_C_SRC=\
  gdk_imlib/misc.c \
  gdk_imlib/rend.c \
  gdk_imlib/save.c \
- gdk_imlib/utils.c 
-# \
-#  iodbc/dlf.c \
-#  iodbc/dlproc.c \
-#  iodbc/herr.c \
-#  iodbc/henv.c \
-#  iodbc/hdbc.c \
-#  iodbc/hstmt.c \
-#  iodbc/connect.c \
-#  iodbc/prepare.c \
-#  iodbc/result.c \
-#  iodbc/execute.c \
-#  iodbc/fetch.c \
-#  iodbc/info.c \
-#  iodbc/catalog.c \
-#  iodbc/misc.c \
-#  iodbc/itrace.c
+ gdk_imlib/utils.c \
+ \
+  iodbc/dlf.c \
+  iodbc/dlproc.c \
+  iodbc/herr.c \
+  iodbc/henv.c \
+  iodbc/hdbc.c \
+  iodbc/hstmt.c \
+  iodbc/connect.c \
+  iodbc/prepare.c \
+  iodbc/result.c \
+  iodbc/execute.c \
+  iodbc/fetch.c \
+  iodbc/info.c \
+  iodbc/catalog.c \
+  iodbc/misc.c \
+  iodbc/itrace.c
