@@ -54,6 +54,9 @@ protected:
 // Implementation
 // ------------------------------------------------------------------------
 public:
+    // The wxButton::DoGetBestSize is not correct for bitmap buttons
+    wxSize DoGetBestSize() const
+    {   return wxButtonBase::DoGetBestSize(); }
 };
 
 #endif // __WX_COCOA_BMPBUTTN_H__
