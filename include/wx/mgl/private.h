@@ -49,7 +49,4 @@ public:
 };
 
 
-extern bool wxCreateMGL_WM();
-extern void wxDestroyMGL_WM();
-
 #endif // _WX_PRIVATE_H_

@@ -84,7 +84,6 @@ bool wxTopLevelWindowMGL::Create(wxWindow *parent,
         parent->AddChild(this);
 
     wxTopLevelWindows.Append(this);
-
     m_title = title;
 
     return TRUE;
@@ -197,9 +196,11 @@ void wxTopLevelWindowMGL::Restore()
     }
 }
 
-void wxTopLevelWindowMGL::Iconize(bool iconize)
+void wxTopLevelWindowMGL::Iconize(bool WXUNUSED(iconize))
 {
-    // FIXME_MGL - use wxDesktop for this
+    wxFAIL_MSG(wxT("Iconize not supported under wxMGL"));
+    // FIXME_MGL - Iconize is not supported in fullscreen mode.
+    //             It will be supported in windowed mode (if ever implemented in MGL...)
 }
 
 bool wxTopLevelWindowMGL::IsIconized() const

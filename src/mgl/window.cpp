@@ -90,80 +90,6 @@ enum
 // private functions
 // ---------------------------------------------------------------------------
 
-// wxCreateMGL_WM creates MGL display DC and associates it with winmng_t
-// structure. Dimensions and depth of the DC are fetched from wxSystemOptions
-// object. 
-// This function is *not* called from wxApp's initialization but rather at
-// the time when WM is needed, i.e. when first wxWindow is created. This 
-// has two important effects:
-//   a) it is possible to write windowless wxMGL apps
-//   b) the app has plenty of time in wxApp::OnInit to feed wxSystemOptions
-//      with desired settings
-
-// FIXME_MGL -- move to app.cpp??
-static void wxDesktopPainter(window_t *wnd, MGLDC *dc)
-{
-    // FIXME_MGL - for now...
-    MGL_setColorRGB(0x63, 0x63, 0x96);
-    MGL_fillRectCoord(0, 0, wnd->width, wnd->height);
-}
-
-
-bool wxCreateMGL_WM()
-{
-    int mode;
-    int width = 640, height = 480, depth = 16;
-    int refresh = MGL_DEFAULT_REFRESH;
-    
-#if wxUSE_SYSTEM_OPTIONS
-    // FIXME_MGL -- so what is The Proper Way?
-    if ( wxSystemOptions::HasOption(wxT("mgl.screen-width") )
-        width = wxSystemOptions::GetOptionInt(wxT("mgl.screen-width"));
-    if ( wxSystemOptions::HasOption(wxT("mgl.screen-height") )
-        height = wxSystemOptions::GetOptionInt(wxT("mgl.screen-height"));
-    if ( wxSystemOptions::HasOption(wxT("mgl.screen-depth") )
-        depth = wxSystemOptions::GetOptionInt(wxT("mgl.screen-depth"));
-    if ( wxSystemOptions::HasOption(wxT("mgl.screen-refresh") )
-        refresh = wxSystemOptions::GetOptionInt(wxT("mgl.screen-refresh"));
-#endif
-        
-    mode = MGL_findMode(width, height, depth);
-    if ( mode == -1 )
-    {
-        wxLogWarning(_("Mode %ix%i-%i not available, falling back to default mode."), width, height, depth);
-        mode = 0; // always available
-    }
-    g_displayDC = new MGLDisplayDC(mode, 1, refresh);
-    if ( !g_displayDC->isValid() )
-    {
-        delete g_displayDC;
-        g_displayDC = NULL;
-        return FALSE;
-    }
-    
-    g_winMng = MGL_wmCreate(g_displayDC->getDC());
-    if (!g_winMng)
-        return FALSE;
-
-    MGL_wmSetWindowPainter(MGL_wmGetRootWindow(g_winMng), wxDesktopPainter);
-    
-    return TRUE;
-}
-
-void wxDestroyMGL_WM()
-{
-    if ( g_winMng )
-    {
-        MGL_wmDestroy(g_winMng);
-        g_winMng = NULL;
-    }
-    if ( g_displayDC )
-    {
-        delete g_displayDC;
-        g_displayDC = NULL;
-    }
-}
-
 // Returns toplevel grandparent of given window:
 static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
 {
@@ -634,18 +560,35 @@ bool wxWindowMGL::Create(wxWindow *parent,
         wnd_parent = NULL;
     }
 
-    m_wnd = MGL_wmCreateWindow(g_winMng, wnd_parent, x, y, w, h);
+    window_t *wnd = MGL_wmCreateWindow(g_winMng, wnd_parent, x, y, w, h);
 
-    MGL_wmSetWindowFlags(m_wnd, mgl_style);
+    MGL_wmSetWindowFlags(wnd, mgl_style);
+    MGL_wmShowWindow(wnd, m_isShown);
+    
+    SetMGLwindow_t(wnd);
+
+    return TRUE;
+}
+
+void wxWindowMGL::SetMGLwindow_t(struct window_t *wnd)
+{
+    if ( m_wnd )
+        MGL_wmDestroyWindow(m_wnd);
+
+    m_wnd = wnd;
+    if ( !m_wnd ) return;
+    
+    m_isShown = m_wnd->visible;
+
     MGL_wmSetWindowUserData(m_wnd, (void*) this);
     MGL_wmSetWindowPainter(m_wnd, wxWindowPainter);
-    MGL_wmShowWindow(m_wnd, m_isShown);
-    MGL_wmSetWindowCursor(m_wnd, *wxSTANDARD_CURSOR->GetMGLCursor());
-
     MGL_wmPushWindowEventHandler(m_wnd, wxWindowMouseHandler, EVT_MOUSEEVT, 0);
     MGL_wmPushWindowEventHandler(m_wnd, wxWindowKeybHandler, EVT_KEYEVT, 0);
-    
-    return TRUE;
+
+    if ( m_cursor.Ok() )
+        MGL_wmSetWindowCursor(m_wnd, *m_cursor.GetMGLCursor());
+    else
+        MGL_wmSetWindowCursor(m_wnd, *wxSTANDARD_CURSOR->GetMGLCursor());
 }
 
 // ---------------------------------------------------------------------------

@@ -24,6 +24,7 @@
 class WXDLLEXPORT wxApp;
 class WXDLLEXPORT wxLog;
 class WXDLLEXPORT wxEventLoop;
+class WXDLLEXPORT wxDesktopWindow;
 
 //-----------------------------------------------------------------------------
 // wxApp

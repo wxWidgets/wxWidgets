@@ -102,6 +102,8 @@ public:
 #endif // WXWIN_COMPATIBILITY
 
     virtual WXWidget GetHandle() const { return m_wnd; }
+    
+    void SetMGLwindow_t(struct window_t *wnd);
 
     // implementation from now on
     // --------------------------

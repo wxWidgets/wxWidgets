@@ -33,6 +33,7 @@
 #include "wx/fontutil.h"
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
+#include "wx/univ/colschem.h"
 #include "wx/mgl/private.h"
 
 #define MGL_DEBUG
@@ -128,6 +129,79 @@ void wxWakeUpIdle()
 }
 
 //-----------------------------------------------------------------------------
+// Root window
+//-----------------------------------------------------------------------------
+
+class wxRootWindow : public wxWindow
+{
+    public:
+        wxRootWindow() : wxWindow(NULL, -1)
+        {
+            SetMGLwindow_t(MGL_wmGetRootWindow(g_winMng));
+            SetBackgroundColour(wxTHEME_COLOUR(DESKTOP));
+        }
+        ~wxRootWindow()
+        {
+            // we don't want to delete MGL_WM's rootWnd
+            m_wnd = NULL; 
+        }
+
+        virtual bool AcceptsFocus() { return FALSE; }
+};
+
+static wxRootWindow *gs_rootWindow = NULL;
+
+//-----------------------------------------------------------------------------
+// MGL initialization
+//-----------------------------------------------------------------------------
+
+static bool wxCreateMGL_WM()
+{
+    int mode;
+    int width = 640, height = 480, depth = 16;
+    int refresh = MGL_DEFAULT_REFRESH;
+    
+#if wxUSE_SYSTEM_OPTIONS
+    if ( wxSystemOptions::HasOption(wxT("mgl.screen-refresh") )
+        refresh = wxSystemOptions::GetOptionInt(wxT("mgl.screen-refresh"));
+#endif
+        
+    mode = MGL_findMode(width, height, depth);
+    if ( mode == -1 )
+    {
+        wxLogWarning(_("Mode %ix%i-%i not available, falling back to default mode."), width, height, depth);
+        mode = 0; // always available
+    }
+    g_displayDC = new MGLDisplayDC(mode, 1, refresh);
+    if ( !g_displayDC->isValid() )
+    {
+        delete g_displayDC;
+        g_displayDC = NULL;
+        return FALSE;
+    }
+    
+    g_winMng = MGL_wmCreate(g_displayDC->getDC());
+    if (!g_winMng)
+        return FALSE;
+    
+    return TRUE;
+}
+
+static void wxDestroyMGL_WM()
+{
+    if ( g_winMng )
+    {
+        MGL_wmDestroy(g_winMng);
+        g_winMng = NULL;
+    }
+    if ( g_displayDC )
+    {
+        delete g_displayDC;
+        g_displayDC = NULL;
+    }
+}
+
+//-----------------------------------------------------------------------------
 // wxApp
 //-----------------------------------------------------------------------------
 
@@ -155,6 +229,9 @@ bool wxApp::OnInitGui()
     // wxUniv's themes
     if ( !wxAppBase::OnInitGui() )
         return FALSE;
+        
+    // ...and this has to be done after wxUniv themes were initialized
+    gs_rootWindow = new wxRootWindow;
 
 #ifdef MGL_DEBUG
     // That damn MGL redirects stdin and stdout to physical console
@@ -335,6 +412,8 @@ wxIcon wxApp::GetStdIcon(int which) const
 
 void wxApp::CleanUp()
 {
+    delete gs_rootWindow;
+
 #if wxUSE_LOG
     // flush the logged messages if any
     wxLog *log = wxLog::GetActiveTarget();
