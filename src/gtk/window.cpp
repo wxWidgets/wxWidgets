@@ -3575,10 +3575,9 @@ void wxWindowGTK::GetTextExtent( const wxString& string,
         pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
 #endif
     }
-    PangoLayoutLine *line = pango_layout_get_line(layout, 0);
 
     PangoRectangle rect;
-    pango_layout_line_get_extents(line, NULL, &rect);
+    pango_layout_get_extents(layout, NULL, &rect);
 
     if (x) (*x) = (wxCoord) PANGO_PIXELS(rect.width);
     if (y) (*y) = (wxCoord) PANGO_PIXELS(rect.height);

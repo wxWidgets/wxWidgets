@@ -2086,17 +2086,18 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
     const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
 #endif
     pango_layout_set_text(layout, (const char*) data, strlen( (const char*) data ));
-    PangoLayoutLine *line = (PangoLayoutLine *)pango_layout_get_lines(layout)->data;
 
     PangoRectangle rect;
-    pango_layout_line_get_extents(line, NULL, &rect);
+    pango_layout_get_extents(layout, NULL, &rect);
 
-    if (x) (*x) = (wxCoord) ( rect.width / PANGO_SCALE / scale );
-    if (y) (*y) = (wxCoord) ( rect.height / PANGO_SCALE / scale );
+    if (x) (*x) = (wxCoord) ( PANGO_PIXELS(rect.width) / scale );
+    if (y) (*y) = (wxCoord) ( PANGO_PIXELS(rect.height) / scale );
     if (descent)
     {
-        // Do something about metrics here
-        (*descent) = 0;
+        PangoLayoutIter *iter = pango_layout_get_iter(layout);
+        int baseline = pango_layout_iter_get_baseline(iter);
+        pango_layout_iter_free(iter);
+        *descent = *y - PANGO_PIXELS(baseline) / scale;
     }
     if (externalLeading) (*externalLeading) = 0;  // ??
 
