@@ -359,8 +359,6 @@ gtk_myfixed_map (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
   myfixed = GTK_MYFIXED (widget);
 
-  gdk_window_show (widget->window);
-
   children = myfixed->children;
   while (children)
     {
@@ -371,6 +369,8 @@ gtk_myfixed_map (GtkWidget *widget)
 	  !GTK_WIDGET_MAPPED (child->widget))
 	gtk_widget_map (child->widget);
     }
+    
+  gdk_window_show (widget->window);
 }
 
 #if (GTK_MINOR_VERSION == 0)
@@ -459,6 +459,7 @@ gtk_myfixed_size_request (GtkWidget      *widget,
   GtkMyFixed *myfixed;
   GtkMyFixedChild *child;
   GList *children;
+  GtkRequisition child_requisition;
   
   g_return_if_fail (widget != NULL);
   g_return_if_fail (GTK_IS_MYFIXED (widget));
@@ -466,11 +467,6 @@ gtk_myfixed_size_request (GtkWidget      *widget,
 
   myfixed = GTK_MYFIXED (widget);
   
-  /* request very little, I'm not sure if requesting nothing
-     will always have positive effects on stability... */
-  requisition->width = 2;
-  requisition->height = 2;
-
   children = myfixed->children;
   while (children)
     {
@@ -479,9 +475,14 @@ gtk_myfixed_size_request (GtkWidget      *widget,
 
       if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-          gtk_widget_size_request (child->widget, &child->widget->requisition);
+          gtk_widget_size_request (child->widget, &child_requisition);
 	}
     }
+    
+  /* request very little, I'm not sure if requesting nothing
+     will always have positive effects on stability... */
+  requisition->width = 2;
+  requisition->height = 2;
 }
 
 static void
@@ -530,9 +531,15 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
  
       /* please look at the text in wxWindow::DoSetSize() on why the
          test GTK_WIDGET_REALIZED() has to be here */
-      if (GTK_WIDGET_VISIBLE (child->widget) && 
-         !(!GTK_WIDGET_REALIZED(child->widget) &&
-	    GTK_IS_NOTEBOOK(child->widget) ))
+      if (GTK_WIDGET_VISIBLE (child->widget))
+      { 
+/*
+        if (GTK_IS_NOTEBOOK(child->widget) && !GTK_WIDGET_REALIZED(child->widget))
+	{
+	  gtk_widget_queue_resize( child->widget );
+	}
+	else
+*/
 	{
 	  child_allocation.x = child->x;
 	  child_allocation.y = child->y;
@@ -540,7 +547,8 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
 	  child_allocation.height = child->height;
 	  gtk_widget_size_allocate (child->widget, &child_allocation);
 	}
-    }
+     }
+   }
 }
 
 static void
@@ -653,13 +661,15 @@ gtk_myfixed_remove (GtkContainer *container,
 
       if (child->widget == widget)
 	{
+	  gboolean was_visible = GTK_WIDGET_VISIBLE (widget);
+	  
 	  gtk_widget_unparent (widget);
 
 	  myfixed->children = g_list_remove_link (myfixed->children, children);
 	  g_list_free (children);
 	  g_free (child);
 
-	  if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (container))
+	  if (was_visible && GTK_WIDGET_VISIBLE (container))
 	    gtk_widget_queue_resize (GTK_WIDGET (container));
 
 	  break;
