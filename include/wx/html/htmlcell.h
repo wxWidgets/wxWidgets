@@ -25,9 +25,9 @@
 #include "wx/window.h"
 
 
-class wxHtmlLinkInfo;
-class wxHtmlCell;
-class wxHtmlContainerCell;
+class WXDLLEXPORT wxHtmlLinkInfo;
+class WXDLLEXPORT wxHtmlCell;
+class WXDLLEXPORT wxHtmlContainerCell;
 
 //--------------------------------------------------------------------------------
 // wxHtmlCell
@@ -96,7 +96,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 // Parent is pointer to wxHtmlWindow that generated the event
                 // HINT: if this handling is not enough for you you should use
                 //       wxHtmlBinderCell
-                
+
         virtual bool AdjustPagebreak(int *pagebreak);
                 // This method used to adjust pagebreak position. The parameter is
                 // variable that contains y-coordinate of page break (= horizontal line that
@@ -106,7 +106,7 @@ class WXDLLEXPORT wxHtmlCell : public wxObject
                 //
                 // Returned value : true if pagebreak was modified, false otherwise
                 // Usage : while (container->AdjustPagebreak(&p)) {}
-                
+
         void SetCanLiveOnPagebreak(bool can) {m_CanLiveOnPagebreak = can;}
                 // Sets cell's behaviour on pagebreaks (see AdjustPagebreak). Default
                 // is true - the cell can be split on two pages
@@ -308,21 +308,21 @@ class WXDLLEXPORT wxHtmlWidgetCell : public wxHtmlCell
 //                  Internal data structure. It represents hypertext link
 //--------------------------------------------------------------------------------
 
-class wxHtmlLinkInfo : public wxObject
+class WXDLLEXPORT wxHtmlLinkInfo : public wxObject
 {
     public:
         wxHtmlLinkInfo() : wxObject()
                 { m_Href = m_Target = wxEmptyString; }
         wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString) : wxObject()
-                { m_Href = href; m_Target = target; }    
-        wxHtmlLinkInfo(const wxHtmlLinkInfo& l) 
+                { m_Href = href; m_Target = target; }
+        wxHtmlLinkInfo(const wxHtmlLinkInfo& l)
                 { m_Href = l.m_Href, m_Target = l.m_Target; }
-        wxHtmlLinkInfo& operator=(const wxHtmlLinkInfo& l) 
+        wxHtmlLinkInfo& operator=(const wxHtmlLinkInfo& l)
                 { m_Href = l.m_Href, m_Target = l.m_Target; return *this; }
 
         wxString GetHref() const { return m_Href; }
         wxString GetTarget() const { return m_Target; }
-        
+
     private:
         wxString m_Href, m_Target;
 };
