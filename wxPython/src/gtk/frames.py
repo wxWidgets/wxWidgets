@@ -212,21 +212,6 @@ def wxPreMiniFrame(*_args,**_kwargs):
     return val
 
 
-class wxTipWindowPtr(wxFramePtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __repr__(self):
-        return "<C wxTipWindow instance at %s>" % (self.this,)
-class wxTipWindow(wxTipWindowPtr):
-    def __init__(self,*_args,**_kwargs):
-        self.this = apply(framesc.new_wxTipWindow,_args,_kwargs)
-        self.thisown = 1
-        self._setOORInfo(self)
-
-
-
-
 
 
 #-------------- FUNCTION WRAPPERS ------------------

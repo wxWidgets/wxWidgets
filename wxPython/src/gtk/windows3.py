@@ -324,6 +324,21 @@ def wxPrePopupTransientWindow(*_args,**_kwargs):
     return val
 
 
+class wxTipWindowPtr(wxPopupTransientWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxTipWindow instance at %s>" % (self.this,)
+class wxTipWindow(wxTipWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(windows3c.new_wxTipWindow,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
