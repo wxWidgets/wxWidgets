@@ -3016,9 +3016,12 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     int year = 0;
 
     // tokenize the string
-    wxStringTokenizer tok(p, _T(",/-\t\n "));
+    size_t nPosCur = 0;
+    static const wxChar *dateDelimiters = _T(".,/-\t\n ");
+    wxStringTokenizer tok(p, dateDelimiters);
     while ( tok.HasMoreTokens() )
     {
+        nPosCur = tok.GetPosition();
         wxString token = tok.GetNextToken();
 
         // is it a number?
@@ -3098,7 +3101,8 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
 
                 haveMon = TRUE;
 
-                mon = (wxDateTime::Month)val;
+                // month 1 is Jan
+                mon = (wxDateTime::Month)(val - 1);
             }
             else
             {
@@ -3116,7 +3120,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
                     if ( (day <= 12) && !haveMon )
                     {
                         // exchange day and month
-                        mon = (wxDateTime::Month)day;
+                        mon = (wxDateTime::Month)(day - 1);
 
                         haveMon = TRUE;
                     }
@@ -3225,18 +3229,49 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     // parse - in any case, see if we can construct a date from what we have
     if ( !haveDay && !haveWDay )
     {
-        wxLogDebug(_T("no day, no weekday hence no date."));
+        wxLogDebug(_T("ParseDate: no day, no weekday hence no date."));
 
         return (wxChar *)NULL;
     }
 
     if ( haveWDay && (haveMon || haveYear || haveDay) &&
-         !(haveMon && haveMon && haveYear) )
+         !(haveDay && haveMon && haveYear) )
     {
         // without adjectives (which we don't support here) the week day only
         // makes sense completely separately or with the full date
         // specification (what would "Wed 1999" mean?)
         return (wxChar *)NULL;
+    }
+
+    if ( !haveWDay && haveYear && !(haveDay && haveMon) )
+    {
+        // may be we have month and day instead of day and year?
+        if ( haveDay && !haveMon )
+        {
+            if ( day <= 12  )
+            {
+                // exchange day and month
+                mon = (wxDateTime::Month)(day - 1);
+
+                // we're in the current year then
+                if ( year <= GetNumOfDaysInMonth(Inv_Year, mon) )
+                {
+                    day = year;
+
+                    haveMon = TRUE;
+                    haveYear = FALSE;
+                }
+                //else: no, can't exchange, leave haveMon == FALSE
+            }
+        }
+
+        if ( !haveMon )
+        {
+            // if we give the year, month and day must be given too
+            wxLogDebug(_T("ParseDate: day and month should be specified if year is."));
+
+            return (wxChar *)NULL;
+        }
     }
 
     if ( !haveMon )
@@ -3259,6 +3294,8 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
             if ( GetWeekDay() != wday )
             {
                 // inconsistency detected
+                wxLogDebug(_T("ParseDate: inconsistent day/weekday."));
+
                 return (wxChar *)NULL;
             }
         }
@@ -3270,8 +3307,16 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
         SetToWeekDayInSameWeek(wday);
     }
 
-    // return the pointer to the next char
-    return p + wxStrlen(p) - wxStrlen(tok.GetString());
+    // return the pointer to the first unparsed char
+    p += nPosCur;
+    if ( nPosCur && wxStrchr(dateDelimiters, *(p - 1)) )
+    {
+        // if we couldn't parse the token after the delimiter, put back the
+        // delimiter as well
+        p--;
+    }
+
+    return p;
 }
 
 const wxChar *wxDateTime::ParseTime(const wxChar *time)
