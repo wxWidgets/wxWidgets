@@ -165,10 +165,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 				    CGContextFillRect( cgContext, bounds );
                 }
 #endif
-                if ( thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
+                if ( !thisWindow->MacIsUserPane() && thisWindow->MacDoRedraw( updateRgn , cEvent.GetTicks() ) )
                     result = noErr ;
-                else
-                    result = eventNotHandledErr; 
+
             }
             break ;
         case kEventControlVisibilityChanged :
@@ -554,14 +553,15 @@ bool wxWindowMac::Create(wxWindowMac *parent, wxWindowID id,
     {
         Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
         
-        UInt32 features = kControlSupportsEmbedding | kControlSupportsLiveFeedback /*| kControlHasSpecialBackground */ | kControlSupportsCalcBestRect | kControlHandlesTracking | kControlSupportsFocus | kControlWantsActivate | kControlWantsIdle; 
+        UInt32 features = kControlSupportsEmbedding | kControlSupportsLiveFeedback | kControlHasSpecialBackground  | 
+        kControlSupportsCalcBestRect | kControlHandlesTracking | kControlSupportsFocus | kControlWantsActivate | kControlWantsIdle; 
 
-        ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, features, (ControlRef*) &m_macControl); 
+        ::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, kControlSupportsEmbedding , (ControlRef*) &m_macControl); 
 
         MacPostControlCreate(pos,size) ;
-#if !TARGET_API_MAC_OSX
         SetControlData((ControlRef) m_macControl,kControlEntireControl,kControlUserPaneDrawProcTag, 
                sizeof(gControlUserPaneDrawUPP),(Ptr) &gControlUserPaneDrawUPP);
+#if !TARGET_API_MAC_OSX
         SetControlData((ControlRef) m_macControl,kControlEntireControl,kControlUserPaneHitTestProcTag, 
                sizeof(gControlUserPaneHitTestUPP),(Ptr) &gControlUserPaneHitTestUPP);
         SetControlData((ControlRef) m_macControl,kControlEntireControl,kControlUserPaneTrackingProcTag, 
@@ -1723,6 +1723,20 @@ void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
         HIViewSetNeedsDisplayInRegion( (ControlRef) m_macControl , update , true ) ;
     }
 #else
+/*
+        RgnHandle updateRgn = NewRgn() ;
+        if ( rect == NULL )
+        {
+            CopyRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , updateRgn ) ;
+        }
+        else
+        {
+            SetRectRgn( updateRgn , rect->x , rect->y , rect->x + rect->width , rect->y + rect->height ) ;
+            SectRgn( (RgnHandle) MacGetVisibleRegion().GetWXHRGN() , updateRgn , updateRgn ) ;        
+        }
+        InvalWindowRgn( (WindowRef) MacGetTopLevelWindowRef() , updateRgn ) ;
+        DisposeRgn(updateRgn) ;
+*/
     if ( IsControlVisible( (ControlRef) m_macControl ) )
     {
         SetControlVisibility( (ControlRef) m_macControl , false , false ) ;
