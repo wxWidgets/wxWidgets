@@ -728,6 +728,11 @@
 /* #undef wxUSE_MOUSEWHEEL */
 
 /*
+ * Hotkey support (Windows)
+ */
+/* #define wxUSE_HOTKEY 1 */
+
+/*
  * Use wxURL class
  */
 #define wxUSE_URL 1

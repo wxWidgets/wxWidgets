@@ -717,6 +717,11 @@
 #define wxUSE_MOUSEWHEEL 1
 
 /*
+ * Hotkey support (Windows)
+ */
+#define wxUSE_HOTKEY 1
+
+/*
  * Use wxURL class
  */
 #define wxUSE_URL 0
@@ -940,8 +945,8 @@
  */
 #define wxUSE_ICO_CUR 0
 
-/* 
- * Set to 1 if for dynamically loadable plugins support 
+/*
+ * Set to 1 if for dynamically loadable plugins support
  */
 #define wxUSE_PLUGINS 0
 
