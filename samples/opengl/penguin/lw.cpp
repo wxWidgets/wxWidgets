@@ -128,9 +128,9 @@ static void read_srfs(FILE *f, int nbytes, lwObject *lwo)
     nbytes -= read_string(f,material->name);
 
     /* defaults */
-    material->r = 0.7;
-    material->g = 0.7;
-    material->b = 0.7;
+    material->r = 0.7f;
+    material->g = 0.7f;
+    material->b = 0.7f;
   }
   lwo->material = (lwMaterial*) realloc(lwo->material, sizeof(lwMaterial)*lwo->material_cnt);
 }

@@ -24,6 +24,11 @@
 #include "wx/wx.h"
 #endif
 
+
+#if !wxUSE_PROPSHEET
+#error Please set wxUSE_PROPSHEET to 1 in include/wx/msw/setup.h and recompile.
+#endif
+
 #include "proplist.h"
 
 IMPLEMENT_APP(MyApp)

@@ -22,6 +22,7 @@
 #endif
 
 #include "wx/image.h"
+#include "wx/sysopt.h"
 #include "wx/html/htmlwin.h"
 #include "wx/html/htmlproc.h"
 #include "wx/fs_inet.h"
@@ -131,7 +132,8 @@ class BoldProcessor : public wxHtmlProcessor
    bool MyApp::OnInit()
    {
      wxLog::AddTraceMask(wxT("strconv"));
-   
+     wxSystemOptions::SetOption(wxT("no-maskblt"), 1);
+
      wxInitAllImageHandlers();
      #if wxUSE_FS_INET && wxUSE_STREAMS && wxUSE_SOCKETS
      wxFileSystem::AddHandler(new wxInternetFSHandler);

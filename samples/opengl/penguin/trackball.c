@@ -59,7 +59,7 @@
  * simple example, though, so that is left as an Exercise for the
  * Programmer.
  */
-#define TRACKBALLSIZE  (0.8)
+#define TRACKBALLSIZE  (0.8f)
 
 /*
  * Local function prototypes (not defined in trackball.h)
@@ -113,7 +113,7 @@ vcross(const float *v1, const float *v2, float *cross)
 float
 vlength(const float *v)
 {
-    return sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
+    return (float) sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
 }
 
 void
@@ -127,7 +127,7 @@ vscale(float *v, float div)
 void
 vnormal(float *v)
 {
-    vscale(v,1.0/vlength(v));
+    vscale(v, 1.0f/vlength(v));
 }
 
 float
@@ -175,8 +175,8 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
      * First, figure out z-coordinates for projection of P1 and P2 to
      * deformed sphere
      */
-    vset(p1,p1x,p1y,tb_project_to_sphere(TRACKBALLSIZE,p1x,p1y));
-    vset(p2,p2x,p2y,tb_project_to_sphere(TRACKBALLSIZE,p2x,p2y));
+    vset(p1, p1x, p1y, tb_project_to_sphere(TRACKBALLSIZE, p1x, p1y));
+    vset(p2, p2x, p2y, tb_project_to_sphere(TRACKBALLSIZE, p2x, p2y));
 
     /*
      *  Now, we want the cross product of P1 and P2
@@ -186,15 +186,15 @@ trackball(float q[4], float p1x, float p1y, float p2x, float p2y)
     /*
      *  Figure out how much to rotate around that axis.
      */
-    vsub(p1,p2,d);
-    t = vlength(d) / (2.0*TRACKBALLSIZE);
+    vsub(p1, p2, d);
+    t = vlength(d) / (2.0f*TRACKBALLSIZE);
 
     /*
      * Avoid problems with out-of-control values...
      */
     if (t > 1.0) t = 1.0;
     if (t < -1.0) t = -1.0;
-    phi = 2.0 * asin(t);
+    phi = 2.0f * (float) asin(t);
 
     axis_to_quat(a,phi,q);
 }
@@ -206,9 +206,9 @@ void
 axis_to_quat(float a[3], float phi, float q[4])
 {
     vnormal(a);
-    vcopy(a,q);
-    vscale(q,sin(phi/2.0));
-    q[3] = cos(phi/2.0);
+    vcopy(a, q);
+    vscale(q, (float) sin(phi/2.0));
+    q[3] = (float) cos(phi/2.0);
 }
 
 /*
@@ -220,11 +220,11 @@ tb_project_to_sphere(float r, float x, float y)
 {
     float d, t, z;
 
-    d = sqrt(x*x + y*y);
+    d = (float) sqrt(x*x + y*y);
     if (d < r * 0.70710678118654752440) {    /* Inside sphere */
-        z = sqrt(r*r - d*d);
+        z = (float) sqrt(r*r - d*d);
     } else {           /* On hyperbola */
-        t = r / 1.41421356237309504880;
+        t = r / 1.41421356237309504880f;
         z = t*t / d;
     }
     return z;
@@ -301,24 +301,24 @@ normalize_quat(float q[4])
 void
 build_rotmatrix(float m[4][4], float q[4])
 {
-    m[0][0] = 1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]);
-    m[0][1] = 2.0 * (q[0] * q[1] - q[2] * q[3]);
-    m[0][2] = 2.0 * (q[2] * q[0] + q[1] * q[3]);
-    m[0][3] = 0.0;
+    m[0][0] = 1.0f - 2.0f * (q[1] * q[1] + q[2] * q[2]);
+    m[0][1] = 2.0f * (q[0] * q[1] - q[2] * q[3]);
+    m[0][2] = 2.0f * (q[2] * q[0] + q[1] * q[3]);
+    m[0][3] = 0.0f;
 
-    m[1][0] = 2.0 * (q[0] * q[1] + q[2] * q[3]);
-    m[1][1]= 1.0 - 2.0 * (q[2] * q[2] + q[0] * q[0]);
-    m[1][2] = 2.0 * (q[1] * q[2] - q[0] * q[3]);
-    m[1][3] = 0.0;
+    m[1][0] = 2.0f * (q[0] * q[1] + q[2] * q[3]);
+    m[1][1]= 1.0f - 2.0f * (q[2] * q[2] + q[0] * q[0]);
+    m[1][2] = 2.0f * (q[1] * q[2] - q[0] * q[3]);
+    m[1][3] = 0.0f;
 
-    m[2][0] = 2.0 * (q[2] * q[0] - q[1] * q[3]);
-    m[2][1] = 2.0 * (q[1] * q[2] + q[0] * q[3]);
-    m[2][2] = 1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]);
-    m[2][3] = 0.0;
+    m[2][0] = 2.0f * (q[2] * q[0] - q[1] * q[3]);
+    m[2][1] = 2.0f * (q[1] * q[2] + q[0] * q[3]);
+    m[2][2] = 1.0f - 2.0f * (q[1] * q[1] + q[0] * q[0]);
+    m[2][3] = 0.0f;
 
-    m[3][0] = 0.0;
-    m[3][1] = 0.0;
-    m[3][2] = 0.0;
-    m[3][3] = 1.0;
+    m[3][0] = 0.0f;
+    m[3][1] = 0.0f;
+    m[3][2] = 0.0f;
+    m[3][3] = 1.0f;
 }
 
