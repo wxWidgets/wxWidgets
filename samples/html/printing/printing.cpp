@@ -204,6 +204,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     m_Prn = new wxHtmlEasyPrinting(_("Easy Printing Demo"), this);
     m_Prn -> SetHeader(m_Name + wxT("(@PAGENUM@/@PAGESCNT@)<hr>"), wxPAGE_ALL);
 
+    // To specify where the AFM files are kept on Unix,
+    // you may wish to do something like this
+    // m_Prn->GetPrintData()->SetFontMetricPath(wxT("/home/julians/afm"));
 }
 
 // frame destructor
