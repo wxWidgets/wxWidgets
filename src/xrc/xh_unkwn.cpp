@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/xrc/xh_unkwn.h"
 #include "wx/window.h"

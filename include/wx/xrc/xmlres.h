@@ -17,7 +17,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/string.h"
 #include "wx/dynarray.h"
@@ -492,6 +492,6 @@ public:
     #define GetXMLID          GetXRCID
 #endif
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC
 
 #endif // _WX_XMLRES_H_

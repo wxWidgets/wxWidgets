@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #if wxUSE_OWNER_DRAWN || !defined(__WXMSW__)
 
@@ -133,4 +133,4 @@ bool wxCheckListBoxXmlHandler::CanHandle(wxXmlNode *node)
 
 #endif // wxUSE_OWNER_DRAWN || !defined(__WXMSW__)
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC

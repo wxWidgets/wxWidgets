@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_TOOLBAR
+#if wxUSE_XML && wxUSE_XRC && wxUSE_TOOLBAR
 
 #include "wx/xrc/xh_toolb.h"
 #include "wx/toolbar.h"

@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_TOGGLEBTN
+#if wxUSE_XML && wxUSE_XRC && wxUSE_TOGGLEBTN
 
 #include "wx/xrc/xh_tglbtn.h"
 #include "wx/tglbtn.h"
@@ -55,4 +55,4 @@ bool wxToggleButtonXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxToggleButton"));
 }
 
-#endif // wxUSE_XRC && wxUSE_TOGGLEBTN
+#endif // wxUSE_XML && wxUSE_XRC && wxUSE_TOGGLEBTN

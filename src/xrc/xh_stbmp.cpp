@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/xrc/xh_stbmp.h"
 #include "wx/statbmp.h"
@@ -53,4 +53,4 @@ bool wxStaticBitmapXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStaticBitmap"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC

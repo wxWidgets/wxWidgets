@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_SLIDER
+#if wxUSE_XML && wxUSE_XRC && wxUSE_SLIDER
 
 #include "wx/xrc/xh_slidr.h"
 #include "wx/slider.h"
@@ -91,4 +91,4 @@ bool wxSliderXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxSlider"));
 }
 
-#endif // wxUSE_XRC && wxUSE_SLIDER
+#endif // wxUSE_XML && wxUSE_XRC && wxUSE_SLIDER

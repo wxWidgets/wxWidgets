@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/textctrl.h"
 #include "wx/xrc/xh_listc.h"
@@ -74,4 +74,4 @@ bool wxListCtrlXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxListCtrl"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC

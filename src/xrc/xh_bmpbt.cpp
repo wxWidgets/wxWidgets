@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/xrc/xh_bmpbt.h"
 #include <wx/bmpbuttn.h>
@@ -68,4 +68,4 @@ bool wxBitmapButtonXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxBitmapButton"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC

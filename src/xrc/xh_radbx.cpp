@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_RADIOBOX
+#if wxUSE_XML && wxUSE_XRC && wxUSE_RADIOBOX
 
 #include "wx/xrc/xh_radbx.h"
 #include "wx/radiobox.h"

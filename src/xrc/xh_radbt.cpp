@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC && wxUSE_RADIOBOX
+#if wxUSE_XML && wxUSE_XRC && wxUSE_RADIOBOX
 
 #include "wx/xrc/xh_radbt.h"
 #include "wx/radiobut.h"
@@ -63,4 +63,4 @@ bool wxRadioButtonXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxRadioButton"));
 }
 
-#endif // wxUSE_XRC && wxUSE_NOTEBOOK
+#endif // wxUSE_XML && wxUSE_XRC && wxUSE_NOTEBOOK

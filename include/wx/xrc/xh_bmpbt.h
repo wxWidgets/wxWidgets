@@ -17,6 +17,8 @@
 
 #include "wx/xrc/xmlres.h"
 
+#if wxUSE_XML && wxUSE_XRC
+
 
 class WXDLLIMPEXP_XRC wxBitmapButtonXmlHandler : public wxXmlResourceHandler
 {
@@ -26,6 +28,8 @@ public:
     virtual wxObject *DoCreateResource();
     virtual bool CanHandle(wxXmlNode *node);
 };
+
+#endif //wxUSE_XML && wxUSE_XRC
 
 
 #endif // _WX_XH_BMPBT_H_

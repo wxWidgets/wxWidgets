@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/xrc/xmlres.h"
 #include "wx/xrc/xh_all.h"

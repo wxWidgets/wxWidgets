@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/xrc/xh_spin.h"
 
@@ -105,4 +105,4 @@ bool wxSpinCtrlXmlHandler::CanHandle(wxXmlNode *node)
 
 #endif // wxUSE_SPINCTRL
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC

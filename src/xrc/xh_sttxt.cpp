@@ -19,7 +19,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_XRC
+#if wxUSE_XML && wxUSE_XRC
 
 #include "wx/xrc/xh_sttxt.h"
 #include "wx/stattext.h"
@@ -57,4 +57,4 @@ bool wxStaticTextXmlHandler::CanHandle(wxXmlNode *node)
     return IsOfClass(node, wxT("wxStaticText"));
 }
 
-#endif // wxUSE_XRC
+#endif // wxUSE_XML && wxUSE_XRC
