@@ -565,7 +565,8 @@ void wxApp::CleanUp()
 // wxEntry
 //-----------------------------------------------------------------------------
 
-int wxEntry( int argc, char *argv[] )
+
+int wxEntryStart( int argc, char *argv[] )
 {
 #if wxUSE_THREADS
     /* GTK 1.2 up to version 1.2.3 has broken threads */
@@ -601,6 +602,55 @@ int wxEntry( int argc, char *argv[] )
         return -1;
     }
 
+    return 0;
+}
+
+
+int wxEntryInitGui()
+{
+    int retValue = 0;
+
+    if ( !wxTheApp->OnInitGui() )
+        retValue = -1;
+
+    wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_widget_realize( wxRootWindow );
+
+    return retValue;
+}
+
+
+void wxEntryCleanup()
+{
+#if wxUSE_LOG
+    // flush the logged messages if any
+    wxLog *log = wxLog::GetActiveTarget();
+    if (log != NULL && log->HasPendingMessages())
+        log->Flush();
+
+    // continuing to use user defined log target is unsafe from now on because
+    // some resources may be already unavailable, so replace it by something
+    // more safe
+    wxLog *oldlog = wxLog::SetActiveTarget(new wxLogStderr);
+    if ( oldlog )
+        delete oldlog;
+#endif // wxUSE_LOG
+
+    wxApp::CleanUp();
+
+    gdk_threads_leave();
+}
+
+
+
+int wxEntry( int argc, char *argv[] )
+{
+    int err;
+
+    err = wxEntryStart(argc, argv);
+    if (err)
+        return err;
+
     if (!wxTheApp)
     {
         wxCHECK_MSG( wxApp::GetInitializerFunction(), -1,
@@ -633,13 +683,8 @@ int wxEntry( int argc, char *argv[] )
     wxStripExtension( name );
     wxTheApp->SetAppName( name );
 
-    int retValue = 0;
-
-    if ( !wxTheApp->OnInitGui() )
-        retValue = -1;
-
-    wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    gtk_widget_realize( wxRootWindow );
+    int retValue;
+    retValue = wxEntryInitGui();
 
     // Here frames insert themselves automatically into wxTopLevelWindows by
     // getting created in OnInit().
@@ -683,23 +728,7 @@ int wxEntry( int argc, char *argv[] )
         }
     }
 
-#if wxUSE_LOG
-    // flush the logged messages if any
-    wxLog *log = wxLog::GetActiveTarget();
-    if (log != NULL && log->HasPendingMessages())
-        log->Flush();
-
-    // continuing to use user defined log target is unsafe from now on because
-    // some resources may be already unavailable, so replace it by something
-    // more safe
-    wxLog *oldlog = wxLog::SetActiveTarget(new wxLogStderr);
-    if ( oldlog )
-        delete oldlog;
-#endif // wxUSE_LOG
-
-    wxApp::CleanUp();
-
-    gdk_threads_leave();
+    wxEntryCleanup();
 
     return retValue;
 }
