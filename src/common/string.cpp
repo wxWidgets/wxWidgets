@@ -340,10 +340,17 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 
 #if wxUSE_WCHAR_T
 // from wide string
-wxString::wxString(const wchar_t *pwz, wxMBConv& conv)
+wxString::wxString(const wchar_t *pwz, wxMBConv& conv, size_t nLength)
 {
   // first get necessary size
-  size_t nLen = pwz ? conv.WC2MB((char *) NULL, pwz, 0) : 0;
+  size_t nLen = 0;
+  if (pwz)
+  {
+    if (nLength == wxSTRING_MAXLEN)
+      nLen = conv.WC2MB((char *) NULL, pwz, 0);
+    else
+      nLen = nLength;
+  }
 
   // empty?
   if ( (nLen != 0) && (nLen != (size_t)-1) ) {

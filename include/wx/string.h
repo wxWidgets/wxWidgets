@@ -346,7 +346,7 @@ public:
 
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
-  wxString(const wchar_t *pwz, wxMBConv& conv = wxConvLibc);
+  wxString(const wchar_t *pwz, wxMBConv& conv = wxConvLibc, size_t nLength = wxSTRING_MAXLEN);
 #endif // !wxUSE_WCHAR_T
 
     // from wxCharBuffer
