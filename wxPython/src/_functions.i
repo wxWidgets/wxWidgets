@@ -33,9 +33,6 @@ void wxBell();
 void wxEndBusyCursor();
 
 long wxGetElapsedTime(bool resetTimer = TRUE);
-#ifdef __WXMSW__
-long wxGetFreeMemory();
-#endif
 void wxGetMousePosition(int* OUTPUT, int* OUTPUT);
 bool wxIsBusy();
 wxString wxNow();
@@ -43,6 +40,15 @@ bool wxShell(const wxString& command = wxPyEmptyString);
 void wxStartTimer();
 int wxGetOsVersion(int *OUTPUT, int *OUTPUT);
 wxString wxGetOsDescription();
+
+#ifdef __WXMSW__
+long wxGetFreeMemory();
+#else
+%inline %{
+    long wxGetFreeMemory()
+        { PyErr_SetNone(PyExc_NotImplementedError); return 0; }
+%}
+#endif
 
 enum wxShutdownFlags
 {
@@ -185,11 +191,6 @@ wxWindow * wxGetActiveWindow();
 wxWindow* wxGenericFindWindowAtPoint(const wxPoint& pt);
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt);
 
-#ifdef __WXMSW__
-bool wxCheckForInterrupt(wxWindow *wnd);
-// link error? void wxFlushEvents();
-#endif
-
 wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 //bool wxSpawnBrowser(wxWindow *parent, wxString href);
@@ -200,6 +201,10 @@ wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 #ifdef __WXMSW__
 void wxWakeUpMainThread();
+#else
+%inline %{
+    void wxWakeUpMainThread() {}
+%}
 #endif
 
 void wxMutexGuiEnter();

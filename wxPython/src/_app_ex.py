@@ -134,9 +134,7 @@ App_SetMacAboutMenuItemId        = _core.PyApp_SetMacAboutMenuItemId
 App_SetMacPreferencesMenuItemId  = _core.PyApp_SetMacPreferencesMenuItemId
 App_SetMacExitMenuItemId         = _core.PyApp_SetMacExitMenuItemId
 App_SetMacHelpMenuTitleName      = _core.PyApp_SetMacHelpMenuTitleName
-
-if wx.Platform == '__WXMSW__':
-    App_GetComCtl32Version       = _core.PyApp_GetComCtl32Version
+App_GetComCtl32Version           = _core.PyApp_GetComCtl32Version
 
 #----------------------------------------------------------------------------
 

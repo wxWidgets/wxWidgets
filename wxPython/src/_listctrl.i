@@ -261,10 +261,11 @@ public:
     %mutable;
 
     int GetKeyCode();
-    %pragma(python) addtoclass = "GetCode = GetKeyCode"
+    %pythoncode { GetCode = GetKeyCode }
     long GetIndex();
     int GetColumn();
     wxPoint GetPoint();
+    %pythoncode { GetPostiion = GetPoint }
     const wxString& GetLabel();
     const wxString& GetText();
     int GetImage();

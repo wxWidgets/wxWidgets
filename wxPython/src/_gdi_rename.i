@@ -369,6 +369,9 @@
 %rename(WindowDC)                           wxWindowDC;
 %rename(MirrorDC)                           wxMirrorDC;
 %rename(PostScriptDC)                       wxPostScriptDC;
+%rename(MetaFile)                           wxMetaFile;
+%rename(MetaFileDC)                         wxMetaFileDC;
+%rename(PrinterDC)                          wxPrinterDC;
 %rename(IMAGELIST_DRAW_NORMAL)              wxIMAGELIST_DRAW_NORMAL;
 %rename(IMAGELIST_DRAW_TRANSPARENT)         wxIMAGELIST_DRAW_TRANSPARENT;
 %rename(IMAGELIST_DRAW_SELECTED)            wxIMAGELIST_DRAW_SELECTED;

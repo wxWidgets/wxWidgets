@@ -36,3 +36,11 @@ wxPreWizard = wx.wizard.PreWizard
 wxWizard = wx.wizard.Wizard
 
 
+d = globals()
+for k, v in wx.wizard.__dict__.iteritems():
+    if k.startswith('EVT'):
+        d[k] = v
+del d, k, v
+
+
+

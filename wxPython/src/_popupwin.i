@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        _popupwin.i
-// Purpose:     SWIG interface defs for
+// Purpose:     SWIG interface defs for wxPopupWindow and derived classes
 //
 // Author:      Robin Dunn
 //
@@ -22,8 +22,6 @@
 //---------------------------------------------------------------------------
 #ifndef __WXMAC__
 %newgroup;
-
-
 
 
 // wxPopupWindow: a special kind of top level window used for popup menus,
@@ -96,6 +94,41 @@ public:
     // hide the window
     virtual void Dismiss();   
 };
+
+//---------------------------------------------------------------------------
+
+
+
+#else  // On Mac we need to provide dummy classes to keep the renamers in sync
+%{
+class wxPopupWindow : public wxWindow {
+public:
+    wxPopupWindow(wxWindow *, int)  { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxPopupWindow()                 { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+
+class wxPyPopupTransientWindow : public wxPopupWindow
+{
+public:
+    wxPyPopupTransientWindow(wxWindow *, int)  { PyErr_SetNone(PyExc_NotImplementedError); }
+    wxPyPopupTransientWindow()                 { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+%}
+
+
+class wxPopupWindow : public wxWindow {
+public:
+    wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE);
+    %name(PrePopupWindow)wxPopupWindow();
+};
+
+%name(PopupTransientWindow) class wxPyPopupTransientWindow : public wxPopupWindow
+{
+public:
+    wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);
+    %name(PrePopupTransientWindow)wxPyPopupTransientWindow();
+};
+
 
 #endif
 //---------------------------------------------------------------------------

@@ -17,6 +17,7 @@ App_SetMacAboutMenuItemId
 App_SetMacPreferencesMenuItemId
 App_SetMacExitMenuItemId
 App_SetMacHelpMenuTitleName
+App_GetComCtl32Version
 
 Platform
 USE_UNICODE

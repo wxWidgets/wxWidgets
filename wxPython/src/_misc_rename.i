@@ -109,6 +109,7 @@
 %rename(StartTimer)                         wxStartTimer;
 %rename(GetOsVersion)                       wxGetOsVersion;
 %rename(GetOsDescription)                   wxGetOsDescription;
+%rename(GetFreeMemory)                      wxGetFreeMemory;
 %rename(SHUTDOWN_POWEROFF)                  wxSHUTDOWN_POWEROFF;
 %rename(SHUTDOWN_REBOOT)                    wxSHUTDOWN_REBOOT;
 %rename(Shutdown)                           wxShutdown;
@@ -150,6 +151,7 @@
 %rename(GenericFindWindowAtPoint)           wxGenericFindWindowAtPoint;
 %rename(FindWindowAtPoint)                  wxFindWindowAtPoint;
 %rename(GetTopLevelParent)                  wxGetTopLevelParent;
+%rename(WakeUpMainThread)                   wxWakeUpMainThread;
 %rename(MutexGuiEnter)                      wxMutexGuiEnter;
 %rename(MutexGuiLeave)                      wxMutexGuiLeave;
 %rename(MutexGuiLocker)                     wxMutexGuiLocker;
@@ -186,10 +188,12 @@
 %rename(TRACE_Messages)                     wxTRACE_Messages;
 %rename(TRACE_ResAlloc)                     wxTRACE_ResAlloc;
 %rename(TRACE_RefCount)                     wxTRACE_RefCount;
+%rename(TRACE_OleCalls)                     wxTRACE_OleCalls;
 %rename(TraceMemAlloc)                      wxTraceMemAlloc;
 %rename(TraceMessages)                      wxTraceMessages;
 %rename(TraceResAlloc)                      wxTraceResAlloc;
 %rename(TraceRefCount)                      wxTraceRefCount;
+%rename(TraceOleCalls)                      wxTraceOleCalls;
 %rename(Log)                                wxLog;
 %rename(LogStderr)                          wxLogStderr;
 %rename(LogTextCtrl)                        wxLogTextCtrl;
@@ -310,6 +314,7 @@
 %rename(FileDataObject)                     wxFileDataObject;
 %rename(CustomDataObject)                   wxCustomDataObject;
 %rename(URLDataObject)                      wxURLDataObject;
+%rename(MetafileDataObject)                 wxMetafileDataObject;
 %rename(Drag_CopyOnly)                      wxDrag_CopyOnly;
 %rename(Drag_AllowMove)                     wxDrag_AllowMove;
 %rename(Drag_DefaultMove)                   wxDrag_DefaultMove;

@@ -611,6 +611,7 @@
 %rename(FindWindowById)                     wxFindWindowById;
 %rename(FindWindowByName)                   wxFindWindowByName;
 %rename(FindWindowByLabel)                  wxFindWindowByLabel;
+%rename(Window_FromHWND)                    wxWindow_FromHWND;
 %rename(Validator)                          wxValidator;
 %rename(PyValidator)                        wxPyValidator;
 %rename(DefaultValidator)                   wxDefaultValidator;

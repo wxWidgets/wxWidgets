@@ -40,21 +40,13 @@ enum
 #define wxTRACE_Messages "messages" // trace window messages/X callbacks
 #define wxTRACE_ResAlloc "resalloc" // trace GDI resource allocation
 #define wxTRACE_RefCount "refcount" // trace various ref counting operations
-
-#ifdef  __WXMSW__
 #define wxTRACE_OleCalls "ole"      // OLE interface calls
-#endif
 
-enum {
-    wxTraceMemAlloc,
-    wxTraceMessages,
-    wxTraceResAlloc,
-    wxTraceRefCount,
-
-#ifdef  __WXMSW__
-    wxTraceOleCalls,
-#endif
-};
+#define wxTraceMemAlloc 0x0001  // trace memory allocation (new/delete)
+#define wxTraceMessages 0x0002  // trace window messages/X callbacks
+#define wxTraceResAlloc 0x0004  // trace GDI resource allocation
+#define wxTraceRefCount 0x0008  // trace various ref counting operations
+#define wxTraceOleCalls 0x0100  // OLE interface calls
 
 //---------------------------------------------------------------------------
 

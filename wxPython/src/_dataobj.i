@@ -439,6 +439,22 @@ public:
     wxMetafile GetMetafile() const;
 };
 
+
+#else
+%{
+class wxMetafileDataObject : public wxDataObjectSimple
+{
+public:
+    wxMetafileDataObject() { PyErr_SetNone(PyExc_NotImplementedError); }
+};    
+%}
+
+class wxMetafileDataObject : public wxDataObjectSimple
+{
+public:
+    wxMetafileDataObject();
+};
+
 #endif
 
 //---------------------------------------------------------------------------

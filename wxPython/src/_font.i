@@ -248,7 +248,7 @@ struct wxNativeEncodingInfo
 
 #ifndef __WXMSW__
 // translate a wxFontEncoding into native encoding parameter (defined above),
-// returning a wxNativeEncodingInfo if an (exact) macth could be found, NULL
+// returning a wxNativeEncodingInfo if an (exact) match could be found, NULL
 // otherwise.
 %inline %{
     wxNativeEncodingInfo* wxGetNativeFontEncoding(wxFontEncoding encoding) {
@@ -263,6 +263,15 @@ struct wxNativeEncodingInfo
 // test for the existence of the font described by this facename/encoding,
 // return TRUE if such font(s) exist, FALSE otherwise
 bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
+
+#else
+
+%inline %{
+    wxNativeEncodingInfo* wxGetNativeFontEncoding(wxFontEncoding encoding)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+    bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+%}
 #endif
 
 //---------------------------------------------------------------------------

@@ -760,16 +760,19 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 
 
 
-#ifdef __WXMSW__
 %inline %{
-wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
-    wxWindow* win = new wxWindow;
-    win->SetHWND(hWnd);
-    win->SubclassWin(hWnd);
-    return win;
-}
-%}
+    wxWindow* wxWindow_FromHWND(unsigned long hWnd) {
+#ifdef __WXMSW__
+        wxWindow* win = new wxWindow;
+        win->SetHWND(hWnd);
+        win->SubclassWin(hWnd);
+        return win;
+#else
+        PyErr_SetNone(PyExc_NotImplementedError);
+        return NULL;
 #endif
+    }
+%}
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

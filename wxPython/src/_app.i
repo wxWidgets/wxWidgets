@@ -203,6 +203,10 @@ public:
     // returns 400, 470, 471 for comctl32.dll 4.00, 4.70, 4.71 or 0 if it
     // wasn't found at all
     static int GetComCtl32Version();
+#else
+    %extend {
+        static int GetComCtl32Version() { PyErr_SetNone(PyExc_NotImplementedError); }
+    }
 #endif
 };
 
