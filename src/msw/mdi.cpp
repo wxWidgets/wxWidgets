@@ -61,7 +61,7 @@ extern wxChar wxMDIFrameClassName[];
 extern wxChar wxMDIChildFrameClassName[];
 extern wxWindow *wxWndHook;                 // from window.cpp
 
-extern wxList *wxWinHandleList;
+extern void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
 
 static HWND invalidHandle = 0;
 
@@ -640,7 +640,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
   m_hWnd = (WXHWND)Return;
 
   wxWndHook = NULL;
-  wxWinHandleList->Append((long)GetHWND(), this);
+  wxAssociateWinWithHandle((HWND) GetHWND(), this);
 
   // VZ: what's this? an act of piracy?
   //SetWindowLong(GetHwnd(), 0, (long)this);

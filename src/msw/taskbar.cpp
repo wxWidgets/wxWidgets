@@ -158,6 +158,16 @@ bool wxTaskBarIcon::RemoveIcon(void)
 
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
 {
+    // OK, so I know this isn't thread-friendly, but
+    // what to do? We need this check.
+
+    static bool s_inPopup = FALSE;
+
+    if (s_inPopup)
+        return FALSE;
+
+    s_inPopup = TRUE;
+
     bool        rval = FALSE;
     wxWindow*   win;
     int         x, y;
@@ -177,7 +187,9 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu) //, int x, int y);
 
     win->PopEventHandler(FALSE);
     win->Destroy();
-    //delete win;
+    delete win;
+
+    s_inPopup = FALSE;
 
     return rval;
 }

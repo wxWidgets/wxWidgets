@@ -77,6 +77,10 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
   str += _T('W'); // 'W' is typically the widest letter
 
   dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
+
+  // JACS: items still look too tightly packed, so adding 2 pixels.
+  (*pheight) = (*pheight) + 2;
+
   m_nHeight = *pheight;                // remember height for use in OnDrawItem
 
   return TRUE;
@@ -85,6 +89,10 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 // searching for this macro you'll find all the code where I'm using the native
 // Win32 GDI functions and not wxWindows ones. Might help to whoever decides to
 // port this code to X. (VZ)
+
+// JACS: TODO. Why does a disabled but highlighted item still
+// get drawn embossed? How can we tell DrawState that we don't want the
+// embossing?
 
 #if defined(__WIN32__) && !defined(__SC__) && !defined(__TWIN32__)
 #define   O_DRAW_NATIVE_API     // comments below explain why I use it

@@ -1719,6 +1719,12 @@ LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARA
     // it with wxWindow stored in wxWndHook
     if ( !wnd && wxWndHook )
     {
+#if 0 // def __WXDEBUG__
+        char buf[512];
+        ::GetClassNameA((HWND) hWnd, buf, 512);
+        wxString className(buf);
+#endif
+
         wxAssociateWinWithHandle(hWnd, wxWndHook);
         wnd = wxWndHook;
         wxWndHook = NULL;
@@ -2124,6 +2130,10 @@ wxWindow *wxFindWinFromHandle(WXHWND hWnd)
     return (wxWindow *)node->Data();
 }
 
+#if 0 // def __WXDEBUG__
+static int gs_AssociationCount = 0;
+#endif
+
 void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
 {
     // adding NULL hWnd is (first) surely a result of an error and
@@ -2131,12 +2141,33 @@ void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
     wxCHECK_RET( hWnd != (HWND)NULL,
                  _T("attempt to add a NULL hWnd to window list ignored") );
 
-    if ( !wxWinHandleList->Find((long)hWnd) )
+
+    wxWindow *oldWin = wxFindWinFromHandle((WXHWND) hWnd);
+    if ( oldWin && (oldWin != win) )
+    {
+        wxString str(win->GetClassInfo()->GetClassName());
+        wxLogError("Bug! Found existing HWND %X for new window of class %s", (int) hWnd, (const char*) str);
+    }
+    else if (!oldWin)
+    {
+#if 0 // def __WXDEBUG__
+        gs_AssociationCount ++;
+        wxLogDebug("+ Association %d", gs_AssociationCount);
+#endif
+
         wxWinHandleList->Append((long)hWnd, win);
+    }
 }
 
 void wxRemoveHandleAssociation(wxWindow *win)
 {
+#if 0 // def __WXDEBUG__
+    if (wxWinHandleList->Member(win))
+    {
+        wxLogDebug("- Association %d", gs_AssociationCount);
+        gs_AssociationCount --;
+    }
+#endif
     wxWinHandleList->DeleteObject(win);
 }
 
@@ -2284,7 +2315,18 @@ bool wxWindow::MSWCreate(int id,
     }
 
     wxWndHook = NULL;
-    wxWinHandleList->Append((long)m_hWnd, this);
+#ifdef __WXDEBUG__
+    wxNode* node = wxWinHandleList->Member(this);
+    if (node)
+    {
+        HWND hWnd = (HWND) node->GetKeyInteger();
+        if (hWnd != (HWND) m_hWnd)
+        {
+            wxLogError("A second HWND association is being added for the same window!");
+        }
+    }
+#endif
+    wxAssociateWinWithHandle((HWND) m_hWnd, this);
 
     return TRUE;
 }
@@ -3513,11 +3555,12 @@ void wxSetKeyboardHook(bool doIt)
     {
         wxTheKeyboardHookProc = MakeProcInstance((FARPROC) wxKeyboardHook, wxGetInstance());
         wxTheKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, (HOOKPROC) wxTheKeyboardHookProc, wxGetInstance(),
+
 #if defined(__WIN32__) && !defined(__TWIN32__)
             GetCurrentThreadId());
         //      (DWORD)GetCurrentProcess()); // This is another possibility. Which is right?
 #else
-        GetCurrentTask());
+            GetCurrentTask());
 #endif
     }
     else
