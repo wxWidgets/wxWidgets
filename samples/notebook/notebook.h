@@ -117,9 +117,10 @@ private:
 
     MyNotebook *m_notebook;
 
+#if wxUSE_LOG
     // Log window
     wxTextCtrl *m_text;
-
+#endif // wxUSE_LOG
 
     // Sizers
 

@@ -275,10 +275,12 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
     m_btnExit = new wxButton( m_panel, wxID_OK, wxT("&Exit") );
     m_btnExit->SetDefault();
 
+#if wxUSE_LOG
     m_text = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString,
         wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE | wxTE_READONLY);
 
     m_logTargetOld = wxLog::SetActiveTarget( new wxLogTextCtrl(m_text) );
+#endif // wxUSE_LOG
 
     // Set sizers
     m_sizerFrame = new wxBoxSizer(wxVERTICAL);
@@ -308,7 +310,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 
 
     m_sizerFrame->Add(m_sizerTop, 1, wxEXPAND);
+#if wxUSE_LOG
     m_sizerFrame->Add(m_text, 0, wxEXPAND);
+#endif // wxUSE_LOG
 
     ReInitNotebook();
     m_notebook->CreateInitialPages();
@@ -324,7 +328,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size,
 
 MyFrame::~MyFrame()
 {
+#if wxUSE_LOG
     delete wxLog::SetActiveTarget(m_logTargetOld);
+#endif // wxUSE_LOG
 
     if (m_imageList)
     {
@@ -530,7 +536,9 @@ void MyFrame::OnNotebook(wxNotebookEvent& event)
     wxLogMessage(wxT("Notebook event #%d: %s (%d)"),
         s_numNotebookEvents++, str.c_str(), eventType);
 
+#if wxUSE_LOG
     m_text->SetInsertionPointEnd();
+#endif // wxUSE_LOG
 
     event.Skip();
 }

@@ -135,9 +135,6 @@ GridFrame::GridFrame()
                    wxDefaultPosition,
                    wxDefaultSize )
 {
-    int gridW = 600, gridH = 300;
-    int logW = gridW, logH = 100;
-
     wxMenu *fileMenu = new wxMenu;
     fileMenu->Append( ID_VTABLE, _T("&Virtual table test\tCtrl-V"));
     fileMenu->Append( ID_BUGS_TABLE, _T("&Bugs table test\tCtrl-B"));
@@ -234,6 +231,10 @@ GridFrame::GridFrame()
                        wxPoint( 0, 0 ),
                        wxSize( 400, 300 ) );
 
+#if wxUSE_LOG
+    int gridW = 600, gridH = 300;
+    int logW = gridW, logH = 100;
+
     logWin = new wxTextCtrl( this,
                              wxID_ANY,
                              wxEmptyString,
@@ -244,6 +245,7 @@ GridFrame::GridFrame()
     logger = new wxLogTextCtrl( logWin );
     m_logOld = logger->SetActiveTarget( logger );
     logger->SetTimestamp( NULL );
+#endif // wxUSE_LOG
 
     // this will create a grid and, by default, an associated grid
     // table for strings
@@ -340,9 +342,11 @@ GridFrame::GridFrame()
                    1,
                    wxEXPAND );
 
+#if wxUSE_LOG
     topSizer->Add( logWin,
                    0,
                    wxEXPAND );
+#endif // wxUSE_LOG
 
     SetSizer( topSizer );
 
@@ -355,7 +359,9 @@ GridFrame::GridFrame()
 
 GridFrame::~GridFrame()
 {
+#if wxUSE_LOG
     delete wxLog::SetActiveTarget(m_logOld);
+#endif // wxUSE_LOG
 }
 
 

@@ -839,13 +839,17 @@ DatabaseDemoFrame::DatabaseDemoFrame(wxFrame *frame, const wxString& title,
     pEditorDlg = NULL;
     pParamDlg  = NULL;
 
+#if wxUSE_LOG
     delete wxLog::SetActiveTarget(new wxLogStderr);
+#endif // wxUSE_LOG
 
 }  // DatabaseDemoFrame constructor
 
 DatabaseDemoFrame::~DatabaseDemoFrame()
 {
+#if wxUSE_LOG
     delete wxLog::SetActiveTarget(NULL);
+#endif // wxUSE_LOG
 }  // DatabaseDemoFrame destructor
 
 

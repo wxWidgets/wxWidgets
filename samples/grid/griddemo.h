@@ -24,8 +24,10 @@ public:
 class GridFrame : public wxFrame
 {
     wxGrid         *grid;
+#if wxUSE_LOG
     wxTextCtrl     *logWin;
     wxLogTextCtrl  *logger;
+#endif // wxUSE_LOG
     wxString       logBuf;
 
     void SetDefaults();
@@ -148,7 +150,9 @@ public:
         ID_TESTFUNC
     };
 
+#if wxUSE_LOG
     wxLog *m_logOld;
+#endif // wxUSE_LOG
 
     // add the cells to selection when using commands from select menu?
     bool m_addToSel;

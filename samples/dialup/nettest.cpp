@@ -170,7 +170,9 @@ bool MyApp::OnInit()
     {
         wxLogError(wxT("The sample can't run on this system."));
 
+#if wxUSE_LOG
         wxLog::GetActiveTarget()->Flush();
+#endif // wxUSE_LOG
 
         // do it here, OnExit() won't be called
         delete m_dial;

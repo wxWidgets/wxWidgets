@@ -47,7 +47,9 @@ private:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+#if wxUSE_LOG
     void OnLogs(wxCommandEvent& event);
+#endif // wxUSE_LOG
     void OnBrowser(wxCommandEvent& event);
     void OnPlugProvider(wxCommandEvent& event);
     
@@ -73,7 +75,9 @@ enum
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_Quit,         MyFrame::OnQuit)
+#if wxUSE_LOG
     EVT_MENU(ID_Logs,         MyFrame::OnLogs)
+#endif // wxUSE_LOG
     EVT_MENU(wxID_ABOUT,      MyFrame::OnAbout)
     EVT_MENU(ID_Browser,      MyFrame::OnBrowser)
     EVT_MENU(ID_PlugProvider, MyFrame::OnPlugProvider)
@@ -155,7 +159,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     menuFile->AppendCheckItem(ID_PlugProvider, _T("&Plug-in art provider"), _T("Enable custom art provider"));   
     menuFile->AppendSeparator();
 
+#if wxUSE_LOG
     menuFile->Append(ID_Logs, _T("&Logging test"), _T("Show some logging output"));
+#endif // wxUSE_LOG
     menuFile->Append(ID_Browser, _T("&Resources browser"), _T("Browse all available icons"));
     menuFile->AppendSeparator();
 
@@ -179,6 +185,7 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(true);
 }
 
+#if wxUSE_LOG
 void MyFrame::OnLogs(wxCommandEvent& WXUNUSED(event))
 {
     wxLogMessage(_T("Some information."));
@@ -188,6 +195,7 @@ void MyFrame::OnLogs(wxCommandEvent& WXUNUSED(event))
     wxLog::GetActiveTarget()->Flush();
     wxLogMessage(_T("Check/uncheck 'File/Plug-in art provider' and try again."));
 }
+#endif // wxUSE_LOG
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
