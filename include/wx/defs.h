@@ -14,10 +14,6 @@
 #ifndef _WX_DEFS_H_
 #define _WX_DEFS_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-#pragma interface "defs.h"
-#endif
-
 /*  ---------------------------------------------------------------------------- */
 /*  compiler and OS identification */
 /*  ---------------------------------------------------------------------------- */
@@ -779,8 +775,8 @@ typedef wxUint32 wxDword;
 #endif
 
 #ifdef __cplusplus
-/* And also define a simple function to cast pointer to it. */
-inline wxUIntPtr wxPtrToUInt(void *p)
+/* And also define a couple of simple functions to cast pointer to/from it. */
+inline wxUIntPtr wxPtrToUInt(const void *p)
 {
     /*
        VC++ 7.1 gives warnings about casts such as below even when they're
@@ -796,6 +792,11 @@ inline wxUIntPtr wxPtrToUInt(void *p)
 #ifdef __VISUALC__
     #pragma warning(default: 4311)
 #endif
+}
+
+inline void *wxUIntToPtr(wxUIntPtr p)
+{
+    return wx_reinterpret_cast(void *, p);
 }
 #endif /*__cplusplus*/
 
@@ -1047,12 +1048,6 @@ typedef float wxFloat32;
     #define wxUINT64_SWAP_ON_LE(val)  wxUINT64_SWAP_ALWAYS(val)
     #define wxUINT64_SWAP_ON_BE(val)  (val)
 #endif
-
-/*  Macros to convert from unsigned long to void pointer. */
-/*  High order truncation occurs if the respective type is not large enough. */
-#define WXPTRULONGSLICE (((wxBYTE_ORDER==wxBIG_ENDIAN)&&(sizeof(void*)==8)&&(sizeof(unsigned long)<8))?1:0)
-#define wxPtrToULong(p) (((unsigned long*)(&(p)))[WXPTRULONGSLICE])
-#define wxULongToPtr(p,n) (p=NULL,wxPtrToULong(p)=(unsigned long)(n),p)
 
 /*  ---------------------------------------------------------------------------- */
 /*  Geometric flags */
