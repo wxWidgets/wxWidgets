@@ -4,7 +4,9 @@
 
 all:
 	cd mmedia; make
+	cd stc; make
 
 clean:
 	cd mmedia; make clean
+	cd stc; make clean
 

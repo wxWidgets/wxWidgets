@@ -5,8 +5,10 @@
 all:
 	cd ogl; make
 	cd mmedia; make
+	cd stc; make
 
 clean:
 	cd ogl; make clean
 	cd mmedia; make clean
+	cd stc; make clean
 
