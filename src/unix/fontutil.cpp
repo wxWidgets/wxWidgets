@@ -32,17 +32,25 @@
 #endif // PCH
 
 #ifdef __X__
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-#include <X11/Xlib.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
+    #ifdef __VMS__
+        #pragma message disable nosimpint
+    #endif
+
+    #include <X11/Xlib.h>
+
+    #ifdef __VMS__
+        #pragma message enable nosimpint
+    #endif
 
     #include "wx/utils.h"       // for wxGetDisplay()
 #elif defined(__WXGTK__)
-    #include "gdk/gdk.h"
+    // we have to declare struct tm to avoid problems with first forward
+    // declaring it in C code (glib.h included from gdk.h does it) and then
+    // defining it when time.h is included from the headers below - this is
+    // known not to work at least with Sun CC 6.01
+    #include <time.h>
+
+    #include <gdk/gdk.h>
 #endif
 
 #include "wx/fontutil.h"
