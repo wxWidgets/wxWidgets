@@ -21,8 +21,10 @@
 
 #ifdef __VMS
 #define XtDisplay XTDISPLAY
-#endif
+#include "[-.x11]utils.cpp"
+#else
 
 #include "../src/x11/utils.cpp"
+#endif
 //#error no longer needed - wxX11 utils.cpp used instead
 

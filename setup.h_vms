@@ -95,7 +95,9 @@
 #undef __ULTRIX__
 #undef __DATA_GENERAL__
 #undef __EMX__
-#undef _GNU_SOURCE
+
+/* NanoX (with wxX11) */
+#define wxUSE_NANOX 0
 
 /* PowerPC Darwin & Mac OS X */
 #undef __POWERPC__
@@ -198,6 +200,11 @@
  * Catch fatal program exceptions
  */
 #define wxUSE_ON_FATAL_EXCEPTION 0
+
+/*
+ * Use wxSingleInstanceChecker class
+ */
+#define wxUSE_SNGLINST_CHECKER 1
 
 /*
  * Use constraints mechanism
@@ -502,11 +509,6 @@
 #define wxUSE_GEOMETRY 1
 
 /*
- * Use wxFFile class
- */
-#define wxUSE_FFILE 1
- 
-/*
  * Use wxCmdLineParser class
  */
 #define wxUSE_CMDLINE_PARSER 1
@@ -518,6 +520,15 @@
  * Use wxFile class
  */
 #define wxUSE_FILE 1
+/*
+ * Use wxFFile class
+ */
+#define wxUSE_FFILE 1
+/*
+ * Use wxFSVolume class
+ */
+#define wxUSE_FSVOLUME 1
+
 /*
  * Use wxTextBuffer class
  */
@@ -620,12 +631,12 @@
 #define wxUSE_POSTSCRIPT 1
 
 /*
- * Compile wxString with some Unicode support?
+ * Compile wxString with some Unicode (wide character) support?
  */
 #define wxUSE_WCHAR_T 0
 
 /*
- * Compile wxString in wide character (Unicode) mode?
+ * Compile wxWindows in Unicode mode (Win32 only for now)?
  */
 #define wxUSE_UNICODE 0
 
@@ -695,10 +706,6 @@
  * Use spline
  */
 #define wxUSE_SPLINES 1
-/*
- * Use wxLibrary class
- */
-#define wxUSE_DYNLIB_CLASS 1
 
 /*
  * Use the mdi architecture
@@ -726,13 +733,17 @@
 #define wxUSE_WX_RESOURCES wxUSE_RESOURCES
 
 /*
- * Use wxWindows help facility (needs wxUSE_IPC 1)
+ * Use wxWindows help facility
  */
 #define wxUSE_HELP 1
 /*
  * Use built-in HTML-based help controller
  */
 #define wxUSE_WXHTML_HELP 1
+/*
+ * Use MS HTML Help controller (win32)
+ */
+#define wxUSE_MS_HTML_HELP 0
 
 /*
  * Use iostream.h rather than iostream
@@ -793,6 +804,7 @@
  * Support for metafiles
  */
 #define wxUSE_METAFILE 1
+#define wxUSE_ENH_METAFILE 1
 
 /*
  * wxMiniFrame
@@ -858,7 +870,7 @@
 #define wxUSE_XPM 1
 
 /*
- * MS Icons and Cursors format support
+ * MS ICO (and CUR,ANI derivatives) image format support (on any platform)
  */
 #define wxUSE_ICO_CUR 1
 
@@ -884,12 +896,14 @@
 /* The type of 3rd argument to getsockname() - usually size_t or int */
 #define SOCKLEN_T size_t
 
+/* The signal handler prototype */
+#undef wxTYPE_SA_HANDLER
+
 /* gettimeofday() usually takes 2 arguments, but some really old systems might
  * have only one, in which case define WX_GETTIMEOFDAY_NO_TZ */
 #undef WX_GETTIMEOFDAY_NO_TZ
 
-/* struct tm doesn't always have the tm_gmtoff field, define this if it is
- * present */
+/* struct tm doesn't always have the tm_gmtoff field, define this if it does */
 #define WX_GMTOFF_IN_TM
 
 /* Define if you have pw_gecos field in struct passwd */
@@ -907,17 +921,17 @@
 /* Define if you have localtime() */
 #define HAVE_LOCALTIME
 
-/* Define if you have the mktemp function.  */
-#define HAVE_MKTEMP 1
-
-/* Define if you have the mkstemp function.  */
-#define HAVE_MKSTEMP 1
-
 /* Define if you have nanosleep() */
 #undef HAVE_NANOSLEEP
 
 /* Define if you have sched_yield */
 #undef HAVE_SCHED_YIELD
+
+/* Define if you have pthread_mutexattr_t and functions to work with it */
+#undef HAVE_PTHREAD_MUTEXATTR_T
+
+/* Define if you have PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP */
+#undef HAVE_PTHREAD_RECURSIVE_MUTEX_INITIALIZER
 
 /* Define if you have pthread_cancel */
 #define HAVE_PTHREAD_CANCEL 1
@@ -939,6 +953,9 @@
 
 /* define if you have statfs function */
 #undef HAVE_STATFS
+
+/* define if you have statvfs function */
+#undef HAVE_STATVFS
 
 /* Define if you have strptime() */
 #define HAVE_STRPTIME 1
@@ -997,6 +1014,12 @@
 /* Define if you have the dlerror function.  */
 #define HAVE_DLERROR 1
 
+/* Define if you have Posix fnctl() function. */
+#define HAVE_FCNTL 1
+
+/* Define if you have BSD flock() function. */
+#undef HAVE_FLOCK
+
 /* Define if you have the gethostname function.  */
 #define HAVE_GETHOSTNAME 1
 
@@ -1006,8 +1029,20 @@
 /* Define if you have the inet_aton function.  */
 #undef HAVE_INET_ATON
 
+/* Define if you have the mktemp function.  */
+#define HAVE_MKTEMP 1
+
+/* Define if you have the mkstemp function.  */
+#define HAVE_MKSTEMP 1
+
 /* Define if you have the nanosleep function.  */
 #undef HAVE_NANOSLEEP
+
+/* Define if you have the putenv function.  */
+#define HAVE_PUTENV 1
+
+/* Define if you have the setenv function.  */
+#undef HAVE_SETENV
 
 /* Define if you have the shl_load function.  */
 #undef HAVE_SHL_LOAD
@@ -1048,11 +1083,17 @@
 /* Define if you have the <unistd.h> header file.  */
 #define HAVE_UNISTD_H 1
 
+/* Define if you have the <fcntl.h> header file.  */
+#define HAVE_FCNTL_H 1
+
 /* Define if you have the <wchar.h> header file.  */
 #define HAVE_WCHAR_H 1
 
 /* Define if you have the <wcstr.h> header file.  */
 #undef HAVE_WCSTR_H
+
+/* Define if you have the <wctype.h> header file.  */
+#undef HAVE_WCTYPE_H
 
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #define HAVE_ICONV_H 1
@@ -1065,11 +1106,6 @@
 
 /* Define if you have the <w32api.h> header file (mingw,cygwin).  */
 #undef HAVE_W32API_H
-
-/*
- * Use MS HTML Help controller (win32)
- */
-#define wxUSE_MS_HTML_HELP 0
 
 /* Define if you have wcsrtombs() function */
 #define HAVE_WCSRTOMBS 1
