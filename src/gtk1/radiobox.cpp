@@ -77,7 +77,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     SetValidator( validator );
 
-    m_widget = gtk_frame_new( title );
+    m_widget = gtk_frame_new( title.mbc_str() );
 
     m_majorDim = majorDim;
 
@@ -88,7 +88,7 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
     {
         if (i) radio_button_group = gtk_radio_button_group( GTK_RADIO_BUTTON(m_radio) );
 
-        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, choices[i] ) );
+        m_radio = GTK_RADIO_BUTTON( gtk_radio_button_new_with_label( radio_button_group, choices[i].mbc_str() ) );
 
         m_boxes.Append( (wxObject*) m_radio );
 
@@ -236,7 +236,7 @@ wxSize wxRadioBox::LayoutItems()
 
 bool wxRadioBox::Show( bool show )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid radiobox") );
 
     wxWindow::Show( show );
 
@@ -255,7 +255,7 @@ bool wxRadioBox::Show( bool show )
 
 int wxRadioBox::FindString( const wxString &s ) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid radiobox") );
 
     int count = 0;
 
@@ -276,7 +276,7 @@ int wxRadioBox::FindString( const wxString &s ) const
 
 void wxRadioBox::SetFocus()
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobox") );
 
     if (m_boxes.GetCount() == 0) return;
 
@@ -297,11 +297,11 @@ void wxRadioBox::SetFocus()
 
 void wxRadioBox::SetSelection( int n )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobox") );
 
     wxNode *node = m_boxes.Nth( n );
 
-    wxCHECK_RET( node, "radiobox wrong index" );
+    wxCHECK_RET( node, _T("radiobox wrong index") );
 
     GtkToggleButton *button = GTK_TOGGLE_BUTTON( node->Data() );
 
@@ -310,7 +310,7 @@ void wxRadioBox::SetSelection( int n )
 
 int wxRadioBox::GetSelection(void) const
 {
-    wxCHECK_MSG( m_widget != NULL, -1, "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, -1, _T("invalid radiobox") );
 
     int count = 0;
 
@@ -323,18 +323,18 @@ int wxRadioBox::GetSelection(void) const
         node = node->Next();
     }
 
-    wxFAIL_MSG( "wxRadioBox none selected" );
+    wxFAIL_MSG( _T("wxRadioBox none selected") );
 
     return -1;
 }
 
 wxString wxRadioBox::GetString( int n ) const
 {
-    wxCHECK_MSG( m_widget != NULL, "", "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid radiobox") );
 
     wxNode *node = m_boxes.Nth( n );
 
-    wxCHECK_MSG( node, "", "radiobox wrong index" );
+    wxCHECK_MSG( node, _T(""), _T("radiobox wrong index") );
 
     GtkButton *button = GTK_BUTTON( node->Data() );
     GtkLabel *label = GTK_LABEL( button->child );
@@ -344,37 +344,37 @@ wxString wxRadioBox::GetString( int n ) const
 
 wxString wxRadioBox::GetLabel( int item ) const
 {
-    wxCHECK_MSG( m_widget != NULL, "", "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid radiobox") );
 
     return GetString( item );
 }
 
 void wxRadioBox::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobox") );
 
     wxControl::SetLabel( label );
 
-    gtk_frame_set_label( GTK_FRAME(m_widget), wxControl::GetLabel() );
+    gtk_frame_set_label( GTK_FRAME(m_widget), wxControl::GetLabel().mbc_str() );
 }
 
 void wxRadioBox::SetLabel( int item, const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobox") );
 
     wxNode *node = m_boxes.Nth( item );
 
-    wxCHECK_RET( node, "radiobox wrong index" );
+    wxCHECK_RET( node, _T("radiobox wrong index") );
 
     GtkButton *button = GTK_BUTTON( node->Data() );
     GtkLabel *g_label = GTK_LABEL( button->child );
 
-    gtk_label_set( g_label, label );
+    gtk_label_set( g_label, label.mbc_str() );
 }
 
 void wxRadioBox::SetLabel( int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap) )
 {
-    wxFAIL_MSG("wxRadioBox::SetLabel not implemented.");
+    wxFAIL_MSG(_T("wxRadioBox::SetLabel not implemented."));
 }
 
 void wxRadioBox::Enable( bool enable )
@@ -394,11 +394,11 @@ void wxRadioBox::Enable( bool enable )
 
 void wxRadioBox::Enable( int item, bool enable )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobox") );
 
     wxNode *node = m_boxes.Nth( item );
 
-    wxCHECK_RET( node, "radiobox wrong index" );
+    wxCHECK_RET( node, _T("radiobox wrong index") );
 
     GtkButton *button = GTK_BUTTON( node->Data() );
     GtkWidget *label = button->child;
@@ -408,11 +408,11 @@ void wxRadioBox::Enable( int item, bool enable )
 
 void wxRadioBox::Show( int item, bool show )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobox" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobox") );
 
     wxNode *node = m_boxes.Nth( item );
 
-    wxCHECK_RET( node, "radiobox wrong index" );
+    wxCHECK_RET( node, _T("radiobox wrong index") );
 
     GtkWidget *button = GTK_WIDGET( node->Data() );
 
@@ -424,7 +424,7 @@ void wxRadioBox::Show( int item, bool show )
 
 wxString wxRadioBox::GetStringSelection(void) const
 {
-    wxCHECK_MSG( m_widget != NULL, "", "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, _T(""), _T("invalid radiobox") );
 
     wxNode *node = m_boxes.First();
     while (node)
@@ -438,13 +438,13 @@ wxString wxRadioBox::GetStringSelection(void) const
         node = node->Next();
     }
 
-    wxFAIL_MSG( "wxRadioBox none selected" );
-    return "";
+    wxFAIL_MSG( _T("wxRadioBox none selected") );
+    return _T("");
 }
 
 bool wxRadioBox::SetStringSelection( const wxString &s )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid radiobox" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid radiobox") );
 
     int res = FindString( s );
     if (res == -1) return FALSE;
@@ -465,7 +465,7 @@ int wxRadioBox::GetNumberOfRowsOrCols(void) const
 
 void wxRadioBox::SetNumberOfRowsOrCols( int WXUNUSED(n) )
 {
-    wxFAIL_MSG("wxRadioBox::SetNumberOfRowsOrCols not implemented.");
+    wxFAIL_MSG(_T("wxRadioBox::SetNumberOfRowsOrCols not implemented."));
 }
 
 void wxRadioBox::ApplyWidgetStyle()

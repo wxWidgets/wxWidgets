@@ -190,7 +190,7 @@ int wxSystemSettings::GetSystemMetric( int index )
         case wxSYS_VSCROLL_X:  return 15;
     }
     
-    wxCHECK_MSG( index, 0, "wxSystemSettings::GetSystemMetric not fully implemented" );
+    wxCHECK_MSG( index, 0, _T("wxSystemSettings::GetSystemMetric not fully implemented") );
     
     return 0;
 }

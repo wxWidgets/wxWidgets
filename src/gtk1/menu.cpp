@@ -73,10 +73,10 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
 {
     m_menus.Append( menu );
     
-    wxString s = "";
-    for ( const char *pc = title; *pc != '\0'; pc++ )
+    wxString s = _T("");
+    for ( const wxChar *pc = title; *pc != _T('\0'); pc++ )
     {
-        if (*pc == '&')
+        if (*pc == _T('&'))
 	{
 	    pc++; /* skip it */
 #if (GTK_MINOR_VERSION > 0)
@@ -87,7 +87,7 @@ void wxMenuBar::Append( wxMenu *menu, const wxString &title )
     }
 
     menu->SetTitle(s);
-    menu->m_owner = gtk_menu_item_new_with_label( WXSTRINGCAST(s) );
+    menu->m_owner = gtk_menu_item_new_with_label( MBSTRINGCAST s.mbc_str() );
     gtk_widget_show( menu->m_owner );
     gtk_menu_item_set_submenu( GTK_MENU_ITEM(menu->m_owner), menu->m_menu );
 
@@ -178,7 +178,7 @@ void wxMenuBar::Check( int id, bool check )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, "wxMenuBar::Check: no such item" );
+    wxCHECK_RET( item, _T("wxMenuBar::Check: no such item") );
 
     item->Check(check);
 }
@@ -187,7 +187,7 @@ bool wxMenuBar::IsChecked( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, FALSE, "wxMenuBar::IsChecked: no such item" );
+    wxCHECK_MSG( item, FALSE, _T("wxMenuBar::IsChecked: no such item") );
 
     return item->IsChecked();
 }
@@ -196,7 +196,7 @@ void wxMenuBar::Enable( int id, bool enable )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, "wxMenuBar::Enable: no such item" );
+    wxCHECK_RET( item, _T("wxMenuBar::Enable: no such item") );
 
     item->Enable(enable);
 }
@@ -205,7 +205,7 @@ bool wxMenuBar::IsEnabled( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, FALSE, "wxMenuBar::IsEnabled: no such item" );
+    wxCHECK_MSG( item, FALSE, _T("wxMenuBar::IsEnabled: no such item") );
 
     return item->IsEnabled();
 }
@@ -214,7 +214,7 @@ wxString wxMenuBar::GetLabel( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, "", "wxMenuBar::GetLabel: no such item" );
+    wxCHECK_MSG( item, _T(""), _T("wxMenuBar::GetLabel: no such item") );
 
     return item->GetText();
 }
@@ -223,7 +223,7 @@ void wxMenuBar::SetLabel( int id, const wxString &label )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, "wxMenuBar::SetLabel: no such item" );
+    wxCHECK_RET( item, _T("wxMenuBar::SetLabel: no such item") );
 
     item->SetText( label );
 }
@@ -232,7 +232,7 @@ void wxMenuBar::EnableTop( int pos, bool flag )
 {
     wxNode *node = m_menus.Nth( pos );
 
-    wxCHECK_RET( node, "menu not found" );
+    wxCHECK_RET( node, _T("menu not found") );
 
     wxMenu* menu = (wxMenu*)node->Data();
 
@@ -244,7 +244,7 @@ wxString wxMenuBar::GetLabelTop( int pos ) const
 {
     wxNode *node = m_menus.Nth( pos );
 
-    wxCHECK_MSG( node, "invalid", "menu not found" );
+    wxCHECK_MSG( node, _T("invalid"), _T("menu not found") );
 
     wxMenu* menu = (wxMenu*)node->Data();
 
@@ -255,7 +255,7 @@ void wxMenuBar::SetLabelTop( int pos, const wxString& label )
 {
     wxNode *node = m_menus.Nth( pos );
 
-    wxCHECK_RET( node, "menu not found" );
+    wxCHECK_RET( node, _T("menu not found") );
 
     wxMenu* menu = (wxMenu*)node->Data();
 
@@ -266,7 +266,7 @@ void wxMenuBar::SetHelpString( int id, const wxString& helpString )
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_RET( item, "wxMenuBar::SetHelpString: no such item" );
+    wxCHECK_RET( item, _T("wxMenuBar::SetHelpString: no such item") );
 
     item->SetHelp( helpString );
 }
@@ -275,7 +275,7 @@ wxString wxMenuBar::GetHelpString( int id ) const
 {
     wxMenuItem* item = FindMenuItemById( id );
 
-    wxCHECK_MSG( item, "", "wxMenuBar::GetHelpString: no such item" );
+    wxCHECK_MSG( item, _T(""), _T("wxMenuBar::GetHelpString: no such item") );
 
     return item->GetHelp();
 }
@@ -295,7 +295,7 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
         return;
 
     wxMenuItem* item = menu->FindItem( id );
-    wxCHECK_RET( item, "error in menu item callback" );
+    wxCHECK_RET( item, _T("error in menu item callback") );
 
     if (item->IsCheckable())
     {
@@ -404,14 +404,14 @@ wxMenuItem::wxMenuItem()
 // it's valid for this function to be called even if m_menuItem == NULL
 void wxMenuItem::SetName( const wxString& str )
 {
-    m_text = "";
-    for ( const char *pc = str; *pc != '\0'; pc++ )
+    m_text = _T("");
+    for ( const wxChar *pc = str; *pc != _T('\0'); pc++ )
     {
-        if (*pc == '&')
+        if (*pc == _T('&'))
 	{
 	    pc++; /* skip it */
 #if (GTK_MINOR_VERSION > 0)
-            m_text << '_';
+            m_text << _T('_');
 #endif
         }
         m_text << *pc;
@@ -420,15 +420,15 @@ void wxMenuItem::SetName( const wxString& str )
     if (m_menuItem)
     {
         GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
-        gtk_label_set( label, m_text.c_str());
+        gtk_label_set( label, m_text.mbc_str());
     }
 }
 
 void wxMenuItem::Check( bool check )
 {
-    wxCHECK_RET( m_menuItem, "invalid menu item" );
+    wxCHECK_RET( m_menuItem, _T("invalid menu item") );
 
-    wxCHECK_RET( IsCheckable(), "Can't check uncheckable item!" )
+    wxCHECK_RET( IsCheckable(), _T("Can't check uncheckable item!") )
 
     if (check == m_isChecked) return;
 
@@ -438,7 +438,7 @@ void wxMenuItem::Check( bool check )
 
 void wxMenuItem::Enable( bool enable )
 {
-    wxCHECK_RET( m_menuItem, "invalid menu item" );
+    wxCHECK_RET( m_menuItem, _T("invalid menu item") );
 
     gtk_widget_set_sensitive( m_menuItem, enable );
     m_isEnabled = enable;
@@ -446,7 +446,7 @@ void wxMenuItem::Enable( bool enable )
 
 bool wxMenuItem::IsChecked() const
 {
-    wxCHECK_MSG( m_menuItem, FALSE, "invalid menu item" );
+    wxCHECK_MSG( m_menuItem, FALSE, _T("invalid menu item") );
 
     wxCHECK( IsCheckable(), FALSE ); // can't get state of uncheckable item!
 
@@ -479,8 +479,8 @@ wxMenu::wxMenu( const wxString& title, const wxFunction func )
     m_eventHandler = this;
     m_clientData = (void*) NULL;
 
-    if (m_title.IsNull()) m_title = "";
-    if (m_title != "")
+    if (m_title.IsNull()) m_title = _T("");
+    if (m_title != _T(""))
     {
         Append(-2, m_title);
         AppendSeparator();
@@ -525,15 +525,16 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     mitem->SetText(item);
     mitem->SetHelp(helpStr);
     mitem->SetCheckable(checkable);
-    const char *text = mitem->GetText();
+    const wxChar *text = mitem->GetText();
     
 #if (GTK_MINOR_VERSION > 0)
-    char buf[100];
-    strcpy( buf, "/" );
-    strcat( buf, text );
+    wxChar buf[100];
+    wxStrcpy( buf, _T("/") );
+    wxStrcat( buf, text );
     
+    wxWX2MBbuf pbuf = wxConv_current->cWX2MB(buf);
     GtkItemFactoryEntry entry;
-    entry.path = buf;
+    entry.path = MBSTRINGCAST pbuf;
     entry.accelerator = (gchar*) NULL;
     entry.callback = (GtkItemFactoryCallback) gtk_menu_clicked_callback;
     entry.callback_action = 0;
@@ -545,14 +546,14 @@ void wxMenu::Append( int id, const wxString &item, const wxString &helpStr, bool
     gtk_item_factory_create_item( m_factory, &entry, (gpointer) this, 2 );  /* what is 2 ? */
     
     /* in order to get the pointer to the item we need the item text _without_ underscores */
-    wxString s = "<main>/";
-    for ( const char *pc = text; *pc != '\0'; pc++ )
+    wxString s = _T("<main>/");
+    for ( const wxChar *pc = text; *pc != _T('\0'); pc++ )
     {
-        if (*pc == '_') pc++; /* skip it */
+        if (*pc == _T('_')) pc++; /* skip it */
         s << *pc;
     }
     
-    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, s );
+    GtkWidget *menuItem = gtk_item_factory_get_widget( m_factory, s.mbc_str() );
     
 #else
 
@@ -588,7 +589,7 @@ void wxMenu::Append( int id, const wxString &text, wxMenu *subMenu, const wxStri
     mitem->SetText(text);
     mitem->SetHelp(helpStr);
 
-    GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText());
+    GtkWidget *menuItem = gtk_menu_item_new_with_label(mitem->GetText().mbc_str());
     mitem->SetMenuItem(menuItem);
     mitem->SetSubMenu(subMenu);
 
@@ -615,10 +616,10 @@ void wxMenu::Append( wxMenuItem *item )
     if (item->IsSeparator())
         menuItem = gtk_menu_item_new();
     else if (item->IsSubMenu())
-        menuItem = gtk_menu_item_new_with_label(item->GetText());
+        menuItem = gtk_menu_item_new_with_label(item->GetText().mbc_str());
     else
-        menuItem = item->IsCheckable() ? gtk_check_menu_item_new_with_label(item->GetText())
-                                       : gtk_menu_item_new_with_label(item->GetText());
+        menuItem = item->IsCheckable() ? gtk_check_menu_item_new_with_label(item->GetText().mbc_str())
+                                       : gtk_menu_item_new_with_label(item->GetText().mbc_str());
 
     if (!item->IsSeparator())
     {
@@ -645,14 +646,14 @@ void wxMenu::Append( wxMenuItem *item )
 
 int wxMenu::FindItem( const wxString itemString ) const
 {
-    wxString s = "";
-    for ( const char *pc = itemString; *pc != '\0'; pc++ )
+    wxString s = _T("");
+    for ( const wxChar *pc = itemString; *pc != _T('\0'); pc++ )
     {
-        if (*pc == '&')
+        if (*pc == _T('&'))
 	{
 	    pc++; /* skip it */
 #if (GTK_MINOR_VERSION > 0)
-            s << '_';
+            s << _T('_');
 #endif
         }
         s << *pc;
@@ -676,7 +677,7 @@ void wxMenu::Enable( int id, bool enable )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, "wxMenu::Enable: no such item" );
+    wxCHECK_RET( item, _T("wxMenu::Enable: no such item") );
 
     item->Enable(enable);
 }
@@ -685,7 +686,7 @@ bool wxMenu::IsEnabled( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, FALSE, "wxMenu::IsEnabled: no such item" );
+    wxCHECK_MSG( item, FALSE, _T("wxMenu::IsEnabled: no such item") );
 
     return item->IsEnabled();
 }
@@ -694,7 +695,7 @@ void wxMenu::Check( int id, bool enable )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, "wxMenu::Check: no such item" );
+    wxCHECK_RET( item, _T("wxMenu::Check: no such item") );
 
     item->Check(enable);
 }
@@ -703,7 +704,7 @@ bool wxMenu::IsChecked( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, FALSE, "wxMenu::IsChecked: no such item" );
+    wxCHECK_MSG( item, FALSE, _T("wxMenu::IsChecked: no such item") );
 
     return item->IsChecked();
 }
@@ -712,7 +713,7 @@ void wxMenu::SetLabel( int id, const wxString &label )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, "wxMenu::SetLabel: no such item" );
+    wxCHECK_RET( item, _T("wxMenu::SetLabel: no such item") );
 
     item->SetText(label);
 }
@@ -721,7 +722,7 @@ wxString wxMenu::GetLabel( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, "", "wxMenu::GetLabel: no such item" );
+    wxCHECK_MSG( item, _T(""), _T("wxMenu::GetLabel: no such item") );
 
     return item->GetText();
 }
@@ -730,7 +731,7 @@ void wxMenu::SetHelpString( int id, const wxString& helpString )
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_RET( item, "wxMenu::SetHelpString: no such item" );
+    wxCHECK_RET( item, _T("wxMenu::SetHelpString: no such item") );
 
     item->SetHelp( helpString );
 }
@@ -739,7 +740,7 @@ wxString wxMenu::GetHelpString( int id ) const
 {
     wxMenuItem *item = FindItem(id);
 
-    wxCHECK_MSG( item, "", "wxMenu::GetHelpString: no such item" );
+    wxCHECK_MSG( item, _T(""), _T("wxMenu::GetHelpString: no such item") );
 
     return item->GetHelp();
 }

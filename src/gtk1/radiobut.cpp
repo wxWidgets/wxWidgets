@@ -64,7 +64,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
   
     SetValidator( validator );
 
-    m_widget = gtk_radio_button_new_with_label( (GSList *) NULL, label );
+    m_widget = gtk_radio_button_new_with_label( (GSList *) NULL, label.mbc_str() );
       
     m_theOtherRadioButtton = 
        gtk_radio_button_new_with_label(
@@ -75,7 +75,7 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 
     m_blockFirstEvent = FALSE;
     
-    if (newSize.x == -1) newSize.x = 22+gdk_string_measure( m_widget->style->font, label );
+    if (newSize.x == -1) newSize.x = 22+gdk_string_measure( m_widget->style->font, label.mbc_str() );
     if (newSize.y == -1) newSize.y = 26;
     SetSize( newSize.x, newSize.y );
 
@@ -99,17 +99,17 @@ bool wxRadioButton::Create( wxWindow *parent, wxWindowID id, const wxString& lab
 
 void wxRadioButton::SetLabel( const wxString& label )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobutton") );
   
     wxControl::SetLabel( label );
     GtkButton *bin = GTK_BUTTON( m_widget );
     GtkLabel *g_label = GTK_LABEL( bin->child );
-    gtk_label_set( g_label, GetLabel() );
+    gtk_label_set( g_label, GetLabel().mbc_str() );
 }
 
 void wxRadioButton::SetValue( bool val )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobutton") );
   
     if ( val == GetValue() )
         return;
@@ -124,14 +124,14 @@ void wxRadioButton::SetValue( bool val )
 
 bool wxRadioButton::GetValue(void) const
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, "invalid radiobutton" );
+    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid radiobutton") );
   
     return GTK_TOGGLE_BUTTON(m_widget)->active;
 }
 
 void wxRadioButton::Enable( bool enable )
 {
-    wxCHECK_RET( m_widget != NULL, "invalid radiobutton" );
+    wxCHECK_RET( m_widget != NULL, _T("invalid radiobutton") );
   
     wxControl::Enable( enable );
   
@@ -144,5 +144,3 @@ void wxRadioButton::ApplyWidgetStyle()
     gtk_widget_set_style( m_widget, m_widgetStyle );
     gtk_widget_set_style( GTK_BUTTON(m_widget)->child, m_widgetStyle );
 }
-
-

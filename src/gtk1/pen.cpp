@@ -138,35 +138,35 @@ void wxPen::SetWidth( int width )
 
 int wxPen::GetCap() const
 {
-    wxCHECK_MSG( Ok(), -1, "invalid pen" );
+    wxCHECK_MSG( Ok(), -1, _T("invalid pen") );
 
     return M_PENDATA->m_capStyle;
 }
 
 int wxPen::GetJoin() const
 {
-    wxCHECK_MSG( Ok(), -1, "invalid pen" );
+    wxCHECK_MSG( Ok(), -1, _T("invalid pen") );
 
     return M_PENDATA->m_joinStyle;
 }
 
 int wxPen::GetStyle() const
 {
-    wxCHECK_MSG( Ok(), -1, "invalid pen" );
+    wxCHECK_MSG( Ok(), -1, _T("invalid pen") );
 
     return M_PENDATA->m_style;
 }
 
 int wxPen::GetWidth() const
 {
-    wxCHECK_MSG( Ok(), -1, "invalid pen" );
+    wxCHECK_MSG( Ok(), -1, _T("invalid pen") );
 
     return M_PENDATA->m_width;
 }
 
 wxColour &wxPen::GetColour() const
 {
-    wxCHECK_MSG( Ok(), wxNullColour, "invalid pen" );
+    wxCHECK_MSG( Ok(), wxNullColour, _T("invalid pen") );
 
     return M_PENDATA->m_colour;
 }
