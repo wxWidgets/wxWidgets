@@ -106,18 +106,20 @@ public:
     bool IsEnabled();
     bool IsToggled();
     bool CanBeToggled();
-    wxBitmap GetBitmap1();
-    wxBitmap GetBitmap2();
+    const wxBitmap& GetNormalBitmap();
+    const wxBitmap& GetDisabledBitmap();
     wxBitmap GetBitmap();
+    wxString GetLabel();
     wxString GetShortHelp();
     wxString GetLongHelp();
     bool Enable(bool enable);
-    bool Toggle(bool toggle);
+    void Toggle();
     bool SetToggle(bool toggle);
     bool SetShortHelp(const wxString& help);
     bool SetLongHelp(const wxString& help);
-    void SetBitmap1(const wxBitmap& bmp);
-    void SetBitmap2(const wxBitmap& bmp);
+    void SetNormalBitmap(const wxBitmap& bmp);
+    void SetDisabledBitmap(const wxBitmap& bmp);
+    void SetLabel(const wxString& label);
     void Detach();
     void Attach(wxToolBarBase *tbar);
 
@@ -139,6 +141,13 @@ public:
             self->SetClientData(new wxPyUserData(clientData));
         }
     }
+
+    %pragma(python) addtoclass="
+    GetBitmap1 = GetNormalBitmap
+    GetBitmap2 = GetDisabledBitmap
+    SetBitmap1 = SetNormalBitmap
+    SetBitmap2 = SetDisabledBitmap
+    "
 };
 
 
@@ -224,8 +233,8 @@ public:
 
     %addmethods {
         // convert the ClientData back to a PyObject
-        PyObject* GetToolClientData(int index) {
-            wxPyUserData* udata = (wxPyUserData*)self->GetToolClientData(index);
+        PyObject* GetToolClientData(int id) {
+            wxPyUserData* udata = (wxPyUserData*)self->GetToolClientData(id);
             if (udata) {
                 Py_INCREF(udata->m_obj);
                 return udata->m_obj;
@@ -235,8 +244,8 @@ public:
             }
         }
 
-        void SetToolClientData(int index, PyObject* clientData) {
-            self->SetToolClientData(index, new wxPyUserData(clientData));
+        void SetToolClientData(int id, PyObject* clientData) {
+            self->SetToolClientData(id, new wxPyUserData(clientData));
         }
     }
 
@@ -266,6 +275,12 @@ public:
     wxSize GetToolBitmapSize();
     wxSize GetToolSize();
 
+    // returns a (non separator) tool containing the point (x, y) or NULL if
+    // there is no tool at this point (corrdinates are client)
+    wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y);
+
+    // return TRUE if this is a vertical toolbar, otherwise FALSE
+    bool IsVertical();
 };
 
 
