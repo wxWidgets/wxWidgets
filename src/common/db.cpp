@@ -96,7 +96,6 @@ DbList WXDLLEXPORT *PtrBegDbList = 0;
 	extern wxList TablesInUse;
 #endif
 
-
 // SQL Log defaults to be used by GetDbConnection
 enum sqlLog SQLLOGstate				= sqlLogOFF;
 
@@ -120,32 +119,32 @@ wxDB::wxDB(HENV &aHenv)
 	sqlLogState = sqlLogOFF;	// By default, logging is turned off
 	nTables		= 0;
 	
-	strcpy(sqlState,"");
-	strcpy(errorMsg,"");
+	wxStrcpy(sqlState,"");
+	wxStrcpy(errorMsg,"");
 	nativeError = cbErrorMsg = 0;
 	for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-		strcpy(errorList[i], "");
+		wxStrcpy(errorList[i], "");
 
 	// Init typeInf structures
-	strcpy(typeInfVarchar.TypeName,"");
+	wxStrcpy(typeInfVarchar.TypeName,"");
 	typeInfVarchar.FsqlType = 0;
 	typeInfVarchar.Precision = 0;
 	typeInfVarchar.CaseSensitive = 0;
 	typeInfVarchar.MaximumScale = 0;
 
-	strcpy(typeInfInteger.TypeName,"");
+	wxStrcpy(typeInfInteger.TypeName,"");
 	typeInfInteger.FsqlType = 0;
 	typeInfInteger.Precision = 0;
 	typeInfInteger.CaseSensitive = 0;
 	typeInfInteger.MaximumScale = 0;
 
-	strcpy(typeInfFloat.TypeName,"");
+	wxStrcpy(typeInfFloat.TypeName,"");
 	typeInfFloat.FsqlType = 0;
 	typeInfFloat.Precision = 0;
 	typeInfFloat.CaseSensitive = 0;
 	typeInfFloat.MaximumScale = 0;
 
-	strcpy(typeInfDate.TypeName,"");
+	wxStrcpy(typeInfDate.TypeName,"");
 	typeInfDate.FsqlType = 0;
 	typeInfDate.Precision = 0;
 	typeInfDate.CaseSensitive = 0;
@@ -172,7 +171,7 @@ wxDB::wxDB(HENV &aHenv)
 /********** wxDB::Open() **********/
 bool wxDB::Open(char *Dsn, char *Uid, char *AuthStr)
 {
-	assert(Dsn && strlen(Dsn));
+	assert(Dsn && wxStrlen(Dsn));
 	dsn		= Dsn;
 	uid		= Uid;
 	authStr	= AuthStr;
@@ -786,7 +785,7 @@ void wxDB::Close(void)
 	// Copy the error messages to a global variable
 	int i;
 	for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-		strcpy(DBerrorList[i],errorList[i]);
+		wxStrcpy(DBerrorList[i],errorList[i]);
 
 } // wxDB::Close()
 
@@ -878,7 +877,7 @@ void wxDB::DispNextError(void)
 /********** wxDB::logError() **********/
 void wxDB::logError(char *errMsg, char *SQLState)
 {
-	assert(errMsg && strlen(errMsg));
+	assert(errMsg && wxStrlen(errMsg));
 
 	static int pLast = -1;
 	int dbStatus;
@@ -887,13 +886,13 @@ void wxDB::logError(char *errMsg, char *SQLState)
 	{
 		int i;
 		for (i = 0; i < DB_MAX_ERROR_HISTORY; i++)
-			strcpy(errorList[i], errorList[i+1]);
+			wxStrcpy(errorList[i], errorList[i+1]);
 		pLast--;
 	}
 
-	strcpy(errorList[pLast], errMsg);
+	wxStrcpy(errorList[pLast], errMsg);
 
-	if (SQLState && strlen(SQLState))
+	if (SQLState && wxStrlen(SQLState))
 		if ((dbStatus = TranslateSqlState(SQLState)) != DB_ERR_FUNCTION_SEQUENCE_ERROR)
 			DB_STATUS = dbStatus;
 
@@ -1095,41 +1094,41 @@ bool wxDB::Grant(int privileges, char *tableName, char *userList)
 	char sqlStmt[DB_MAX_STATEMENT_LEN];
 
 	// Build the grant statement
-	strcpy(sqlStmt, "GRANT ");
+	wxStrcpy(sqlStmt, "GRANT ");
 	if (privileges == DB_GRANT_ALL)
-		strcat(sqlStmt, "ALL");
+		wxStrcat(sqlStmt, "ALL");
 	else
 	{
 		int c = 0;
 		if (privileges & DB_GRANT_SELECT)
 		{
-			strcat(sqlStmt, "SELECT");
+			wxStrcat(sqlStmt, "SELECT");
 			c++;
 		}
 		if (privileges & DB_GRANT_INSERT)
 		{
 			if (c++)
-				strcat(sqlStmt, ", ");
-			strcat(sqlStmt, "INSERT");
+				wxStrcat(sqlStmt, ", ");
+			wxStrcat(sqlStmt, "INSERT");
 		}
 		if (privileges & DB_GRANT_UPDATE)
 		{
 			if (c++)
-				strcat(sqlStmt, ", ");
-			strcat(sqlStmt, "UPDATE");
+				wxStrcat(sqlStmt, ", ");
+			wxStrcat(sqlStmt, "UPDATE");
 		}
 		if (privileges & DB_GRANT_DELETE)
 		{
 			if (c++)
-				strcat(sqlStmt, ", ");
-			strcat(sqlStmt, "DELETE");
+				wxStrcat(sqlStmt, ", ");
+			wxStrcat(sqlStmt, "DELETE");
 		}
 	}
 
-	strcat(sqlStmt, " ON ");
-	strcat(sqlStmt, tableName);
-	strcat(sqlStmt, " TO ");
-	strcat(sqlStmt, userList);
+	wxStrcat(sqlStmt, " ON ");
+	wxStrcat(sqlStmt, tableName);
+	wxStrcat(sqlStmt, " TO ");
+	wxStrcat(sqlStmt, userList);
 
 #ifdef DBDEBUG_CONSOLE
 	cout << endl << sqlStmt << endl;
@@ -1151,18 +1150,18 @@ bool wxDB::CreateView(char *viewName, char *colList, char *pSqlStmt, bool attemp
 		return FALSE;
 
 	// Build the create view statement
-	strcpy(sqlStmt, "CREATE VIEW ");
-	strcat(sqlStmt, viewName);
+	wxStrcpy(sqlStmt, "CREATE VIEW ");
+	wxStrcat(sqlStmt, viewName);
 	
-	if (strlen(colList))
+	if (wxStrlen(colList))
 	{
-		strcat(sqlStmt, " (");
-		strcat(sqlStmt, colList);
-		strcat(sqlStmt, ")");
+		wxStrcat(sqlStmt, " (");
+		wxStrcat(sqlStmt, colList);
+		wxStrcat(sqlStmt, ")");
 	}
 
-	strcat(sqlStmt, " AS ");
-	strcat(sqlStmt, pSqlStmt);
+	wxStrcat(sqlStmt, " AS ");
+	wxStrcat(sqlStmt, pSqlStmt);
 
 	WriteSqlLog(sqlStmt);
 
@@ -1292,7 +1291,7 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 	char userIdUC[80+1];
 	char tableNameUC[DB_MAX_TABLE_NAME_LEN+1];
 
-	if (!userID || !strlen(userID))
+	if (!userID || !wxStrlen(userID))
 		userID = uid;
 
 	// dBase does not use user names, and some drivers fail if you try to pass one
@@ -1325,8 +1324,8 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 			if (!colInf)
 				break;
 			// Mark the end of the array
-			strcpy(colInf[noCols].tableName, "");
-			strcpy(colInf[noCols].colName, "");
+			wxStrcpy(colInf[noCols].tableName, "");
+			wxStrcpy(colInf[noCols].colName, "");
 			colInf[noCols].sqlDataType = 0;
 		}
 		// Loop through each table name
@@ -1387,8 +1386,8 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 				{
 					if (colNo < noCols)  // Some extra error checking to prevent memory overwrites
 					{
-						strcpy(colInf[colNo].tableName, tblName);
-						strcpy(colInf[colNo].colName, colName);
+						wxStrcpy(colInf[colNo].tableName, tblName);
+						wxStrcpy(colInf[colNo].colName, colName);
 						colInf[colNo].sqlDataType = sqlDataType;
 						colNo++;
 					}
@@ -1416,7 +1415,7 @@ CcolInf *wxDB::GetColumns(char *tableName[], char *userID)
 /********** wxDB::Catalog() **********/
 bool wxDB::Catalog(char *userID, char *fileName)
 {
-	assert(fileName && strlen(fileName));
+	assert(fileName && wxStrlen(fileName));
 
 	RETCODE	retcode;
 	SDWORD	cb;
@@ -1433,7 +1432,7 @@ bool wxDB::Catalog(char *userID, char *fileName)
 
 	SQLFreeStmt(hstmt, SQL_CLOSE);
 
-	if (!userID || !strlen(userID))
+	if (!userID || !wxStrlen(userID))
 		userID = uid;
 
 	char userIdUC[80+1];
@@ -1479,7 +1478,7 @@ bool wxDB::Catalog(char *userID, char *fileName)
 	SQLBindCol(hstmt, 8, SQL_C_SSHORT, (UCHAR*) &length,   	 0,                        &cb);
 
 	char outStr[256];
-	strcpy(tblNameSave,"");
+	wxStrcpy(tblNameSave,"");
 	int cnt = 0;
 
 	while ((retcode = SQLFetch(hstmt)) == SQL_SUCCESS)
@@ -1501,7 +1500,7 @@ bool wxDB::Catalog(char *userID, char *fileName)
 			fputs("===================== ", fp);
 			fputs("========= ", fp);
 			fputs("=========\n", fp);
-			strcpy(tblNameSave,tblName);
+			wxStrcpy(tblNameSave,tblName);
 		}
 		sprintf(outStr, "%-32s %-32s (%04d)%-15s %9d %9d\n",
 			tblName, colName, sqlDataType, typeName, precision, length);
@@ -1533,12 +1532,12 @@ bool wxDB::Catalog(char *userID, char *fileName)
 // on the table.
 bool wxDB::TableExists(char *tableName, char *userID, char *tablePath)
 {
-	assert(tableName && strlen(tableName));
+	assert(tableName && wxStrlen(tableName));
 
 	if (Dbms() == dbmsDBASE)
 	{
 		wxString dbName;
-		if (tablePath && strlen(tablePath))
+		if (tablePath && wxStrlen(tablePath))
 			dbName.sprintf("%s/%s.dbf",tablePath,tableName);
 		else
 			dbName.sprintf("%s.dbf",tableName);
@@ -1547,7 +1546,7 @@ bool wxDB::TableExists(char *tableName, char *userID, char *tablePath)
 		return glt;
 	}
 
-	if (!userID || !strlen(userID))
+	if (!userID || !wxStrlen(userID))
 		userID = uid;
 
 	char userIdUC[80+1];
@@ -1708,11 +1707,10 @@ bool wxDB::WriteSqlLog(char *logMsg)
  */
 DBMS wxDB::Dbms(void)
 {
-	wxChar baseName[20];
+	wxChar baseName[25];
 
 	wxStrncpy(baseName,dbInf.dbmsName,6);
 	baseName[6] = 0;
-//	if (!wxStrnicmp(dbInf.dbmsName,"Oracle",6))
 	if (!wxStricmp(baseName,"Oracle"))
 		return(dbmsORACLE);
 	if (!wxStricmp(dbInf.dbmsName,"Adaptive Server Anywhere"))
@@ -1729,9 +1727,13 @@ DBMS wxDB::Dbms(void)
 		return(dbmsACCESS);
 	wxStrncpy(baseName,dbInf.dbmsName,5);
 	baseName[5] = 0;
-//	if (!wxStrnicmp(dbInf.dbmsName,"DBASE",5))
 	if (!wxStricmp(baseName,"DBASE"))
 		return(dbmsDBASE);
+	wxStrncpy(baseName,dbInf.dbmsName,8);
+	baseName[8] = 0;
+	if (!wxStricmp(baseName,"Informix"))
+		return(dbmsINFORMIX);
+
 	return(dbmsUNIDENTIFIED);
 
 }  // wxDB::Dbms()
@@ -1776,7 +1778,7 @@ wxDB WXDLLEXPORT *GetDbConnection(DbStuff *pDbStuff)
 	// Initialize new node in the linked list
 	pList->PtrNext = 0;
 	pList->Free = FALSE;
-	strcpy(pList->Dsn, pDbStuff->Dsn);
+	wxStrcpy(pList->Dsn, pDbStuff->Dsn);
 	pList->PtrDb = new wxDB(pDbStuff->Henv);
 
 	// Connect to the datasource
@@ -1868,7 +1870,7 @@ bool SqlLog(enum sqlLog state, char *filename)
 	}
 
 	SQLLOGstate = state;
-	strcpy(SQLLOGfn,filename);
+	wxStrcpy(SQLLOGfn,filename);
 
 	return(TRUE);
 
