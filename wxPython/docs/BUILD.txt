@@ -192,7 +192,7 @@ place, then do the same for wxPython.
 
    If you would like to do a Unicode enabled build (all strings sent
    to or retruned from wx functions are Unicode objects) and your
-   wxWidgets was built with unicod enabled then add this flag::
+   wxWidgets was built with unicode enabled then add this flag::
 
          UNICODE=1
 
