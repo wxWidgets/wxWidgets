@@ -34,10 +34,8 @@
 #if !defined(__WINDOWS__) || wxUSE_XPM_IN_MSW
     #include "smile.xpm"
 #endif
+#include "wx/rawbmp.h"
 
-#if defined(__WXMSW__)
-    #define wxHAVE_RAW_BITMAP
-#endif
 
 // derived classes
 
@@ -833,6 +831,7 @@ MyFrame::MyFrame()
 
   wxMenu *menuImage = new wxMenu;
   menuImage->Append( ID_NEW, _T("&Show any image...\tCtrl-O"));
+
 #ifdef wxHAVE_RAW_BITMAP
   menuImage->Append( ID_SHOWRAW, _T("Test &raw bitmap...\tCtrl-R"));
 #endif

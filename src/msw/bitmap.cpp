@@ -50,7 +50,9 @@
 #include "wx/image.h"
 #include "wx/xpmdecod.h"
 
+#ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
+#endif
 
 // missing from mingw32 header
 #ifndef CLR_INVALID
@@ -1187,6 +1189,7 @@ void wxBitmap::SetQuality(int WXUNUSED(quality))
 // raw bitmap access support
 // ----------------------------------------------------------------------------
 
+#ifdef wxHAVE_RAW_BITMAP
 void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 {
     if ( !Ok() )
@@ -1317,6 +1320,7 @@ void wxBitmap::UngetRawData(wxPixelDataBase& dataBase)
         }
     }
 }
+#endif // #ifdef wxHAVE_RAW_BITMAP
 
 // ----------------------------------------------------------------------------
 // wxMask

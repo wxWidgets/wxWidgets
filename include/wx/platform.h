@@ -305,6 +305,11 @@
     #endif
 #endif
 
+#if defined (__WXMSW__)
+    #if !defined(__DIGITALMARS__) && !defined(__WATCOMC__)
+        #define wxHAVE_RAW_BITMAP
+    #endif
+#endif
 
 #endif /* _WX_PLATFORM_H_ */
 

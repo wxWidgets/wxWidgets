@@ -44,7 +44,10 @@
 #include "wx/dcprint.h"
 #include "wx/module.h"
 #include "wx/dynload.h"
+
+#ifdef wxHAVE_RAW_BITMAP
 #include "wx/rawbmp.h"
+#endif
 
 #include <string.h>
 #include <math.h>
@@ -114,9 +117,12 @@ static const int MM_METRIC = 10;
 // convert degrees to radians
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
 
+
+#ifdef wxHAVE_RAW_BITMAP
 // our (limited) AlphaBlend() replacement
 static void
 wxAlphaBlend(wxDC& dc, int x, int y, int w, int h, const wxBitmap& bmp);
+#endif
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -656,7 +662,7 @@ void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
     wxCoord x2 = x1 + width,
             y2 = y1 + height;
 
-#if defined(__WIN32__) && !defined(__SC__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__SYMANTEC__) && !defined(__WXMICROWIN__)
     RECT rect;
     rect.left   = x1;
     rect.top    = y1;
@@ -1007,7 +1013,11 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         }
         else // use our own (probably much slower) implementation
         {
+#ifdef wxHAVE_RAW_BITMAP
             wxAlphaBlend(*this, x, y, width, height, bmp);
+#else
+            wxLogLastError(_T("AlphaBlend not available with this compiler setup"));
+#endif //#ifdef wxHAVE_RAW_BITMAP
         }
 
         return;
@@ -2299,6 +2309,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
 // wxAlphaBlend: our fallback if ::AlphaBlend() is unavailable
 // ----------------------------------------------------------------------------
 
+#ifdef wxHAVE_RAW_BITMAP
 static void
 wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
 {
@@ -2354,3 +2365,4 @@ wxAlphaBlend(wxDC& dc, int xDst, int yDst, int w, int h, const wxBitmap& bmpSrc)
     }
 }
 
+#endif // #ifdef wxHAVE_RAW_BITMAP
