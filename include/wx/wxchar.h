@@ -637,7 +637,11 @@
     #ifdef HAVE_WCSLEN
         #define wxWcslen wcslen
     #else
-        static inline size_t wxWcslen(const wchar_t *s)
+	#if defined( __WXMAC_XCODE__ ) && !defined( __cplusplus )
+	/* xcode native targets are giving multiply defined symbols on regex */
+		static
+	#endif
+        inline size_t wxWcslen(const wchar_t *s)
         {
             size_t n = 0;
             while ( *s++ )
