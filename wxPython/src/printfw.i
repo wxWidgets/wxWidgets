@@ -268,8 +268,6 @@ class wxPrintDialog : public wxDialog {
 public:
     wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
 
-    %pragma(python) addtomethod = "__init__:#wx._StdDialogCallbacks(self)"
-
     wxPrintDialogData& GetPrintDialogData();
     %new wxDC* GetPrintDC();
     int ShowModal();

@@ -458,7 +458,6 @@ class wxPrintDialog(wxPrintDialogPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = printfwc.new_wxPrintDialog(*_args,**_kwargs)
         self.thisown = 1
-        #wx._StdDialogCallbacks(self)
 
 
 
