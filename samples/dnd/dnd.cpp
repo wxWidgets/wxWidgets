@@ -110,10 +110,11 @@ public:
 
 private:
     wxListBox  *m_ctrlFile,
-    *m_ctrlText;
+               *m_ctrlText;
     wxTextCtrl *m_ctrlLog;
 
-    wxLog *m_pLog, *m_pLogPrev;
+    wxLog *m_pLog,
+          *m_pLogPrev;
 
     wxString  m_strText;
     wxBitmap  m_bitmap;
@@ -212,6 +213,7 @@ public:
                        const wxColour& col)
         : DnDShape(pos, size, col)
     {
+        wxLogMessage("DnDTriangularShape is being created");
     }
 
     virtual ~DnDTriangularShape()
@@ -248,6 +250,7 @@ public:
                         const wxColour& col)
         : DnDShape(pos, size, col)
     {
+        wxLogMessage("DnDRectangularShape is being created");
     }
 
     virtual ~DnDRectangularShape()
@@ -284,6 +287,7 @@ public:
                      const wxColour& col)
         : DnDShape(pos, size, col)
     {
+        wxLogMessage("DnDEllipticShape is being created");
     }
 
     virtual ~DnDEllipticShape()
@@ -345,8 +349,21 @@ public:
 
     virtual ~DnDShapeDataObject() { delete m_shape; }
 
-    // accessors
-    DnDShape *GetShape() const { return m_shape; }
+    // after a call to this function, the shape is owned by the caller and it
+    // is responsible for deleting it!
+    //
+    // NB: a better solution would be to make DnDShapes ref counted and this
+    //     is what should probably be done in a real life program, otherwise
+    //     the ownership problems become too complicated really fast
+    DnDShape *GetShape()
+    {
+        DnDShape *shape = m_shape;
+
+        m_shape = (DnDShape *)NULL;
+        m_hasBitmap = FALSE;
+
+        return shape;
+    }
 
     // implement base class pure virtuals
     // ----------------------------------
@@ -499,7 +516,7 @@ public:
 
     void OnDrag(wxMouseEvent& event);
     void OnPaint(wxPaintEvent& event);
-    void OnDrop(long x, long y, DnDShape *shape);
+    void OnDrop(wxCoord x, wxCoord y, DnDShape *shape);
 
 private:
     DnDShape *m_shape;
@@ -1277,15 +1294,20 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     //else: status text already set
 }
 
-void DnDShapeFrame::OnDrop(long x, long y, DnDShape *shape)
+void DnDShapeFrame::OnDrop(wxCoord x, wxCoord y, DnDShape *shape)
 {
     ms_lastDropTarget = this;
 
+    wxPoint pt(x, y);
+#ifdef __WXMSW__    //temporary hack (FIXME)
+    pt = ScreenToClient(pt);
+#endif
+
     wxString s;
-    s.Printf("Shape dropped at (%ld, %ld)", x, y);
+    s.Printf("Shape dropped at (%ld, %ld)", pt.x, pt.y);
     SetStatusText(s);
 
-    shape->Move(ScreenToClient(wxPoint(x, y)));
+    shape->Move(pt);
     SetShape(shape);
 }
 
