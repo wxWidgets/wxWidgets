@@ -199,6 +199,9 @@ public:
         }
     }
 
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+    
     wxHtmlContainerCell* GetContainer();
     wxHtmlContainerCell* OpenContainer();
     wxHtmlContainerCell *SetContainer(wxHtmlContainerCell *c);
@@ -865,6 +868,9 @@ public:
         }
     }
 
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+    
     DocDeclStr(
         void, SetTitle(const wxString& title),
         "", "");
@@ -952,6 +958,10 @@ public:
                 delete [] temp;
         }
     }
+
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+    
     int Render(int x, int y, int from = 0, int dont_render = False, int to = INT_MAX,
                //int *known_pagebreaks = NULL, int number_of_pages = 0
                int* choices=NULL, int LCOUNT = 0
@@ -993,6 +1003,10 @@ public:
                 delete [] temp;
         }
     }
+
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+    
     void SetMargins(float top = 25.2, float bottom = 25.2,
                     float left = 25.2, float right = 25.2,
                     float spaces = 5);
@@ -1033,6 +1047,9 @@ public:
         }
     }
 
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+    
     wxPrintData *GetPrintData() {return m_PrintData;}
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
 

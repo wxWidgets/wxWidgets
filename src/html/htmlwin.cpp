@@ -36,10 +36,10 @@
 #include "wx/dataobj.h"
 #include "wx/timer.h"
 #include "wx/dcmemory.h"
+#include "wx/settings.h"
 
 #include "wx/arrimpl.cpp"
 #include "wx/listimpl.cpp"
-
 
 
 #if wxUSE_CLIPBOARD
@@ -249,6 +249,22 @@ void wxHtmlWindow::SetFonts(wxString normal_face, wxString fixed_face, const int
     if (!op.IsEmpty()) LoadPage(op);
 }
 
+void wxHtmlWindow::NormalizeFontSizes(int size)
+{
+    int f_sizes[7];
+    if (size == -1)
+        size = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT).GetPointSize();
+
+    f_sizes[0] = int(size * 0.6);
+    f_sizes[1] = int(size * 0.8);
+    f_sizes[2] = size;
+    f_sizes[3] = int(size * 1.2);
+    f_sizes[4] = int(size * 1.4);
+    f_sizes[5] = int(size * 1.6);
+    f_sizes[6] = int(size * 1.8);
+    
+    SetFonts(wxEmptyString, wxEmptyString, f_sizes);
+}
 
 
 bool wxHtmlWindow::SetPage(const wxString& source)

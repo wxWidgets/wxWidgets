@@ -59,6 +59,9 @@ public:
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
 
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+
     // [x,y] is position of upper-left corner of printing rectangle (see SetSize)
     // from is y-coordinate of the very first visible cell
     // to is y-coordinate of the next following page break, if any
@@ -141,6 +144,9 @@ public:
 
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
+
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
 
     void SetMargins(float top = 25.2, float bottom = 25.2, float left = 25.2, float right = 25.2, 
                     float spaces = 5);
@@ -237,6 +243,9 @@ public:
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = 0);
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used)
 
+    void NormalizeFontSizes(int size=-1);
+    // Sets font sizes to be relative to the given size or the system default size
+    
     wxPrintData *GetPrintData();
     wxPageSetupDialogData *GetPageSetupData() {return m_PageSetupData;}
             // return page setting data objects. 

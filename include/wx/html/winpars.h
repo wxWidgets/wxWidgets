@@ -72,6 +72,9 @@ public:
     // Sets fonts to be used when displaying HTML page. (if size null then default sizes used).
     void SetFonts(wxString normal_face, wxString fixed_face, const int *sizes = NULL);
 
+    // Sets font sizes to be relative to the given size or the system default size
+    void NormalizeFontSizes(int size=-1);
+    
     // Adds tags module. see wxHtmlTagsModule for details.
     static void AddModule(wxHtmlTagsModule *module);
 
