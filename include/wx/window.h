@@ -364,15 +364,23 @@ public:
         // set min/max size of the window
     virtual void SetSizeHints( int minW, int minH,
                                int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
-                               int incW = wxDefaultCoord, int incH = wxDefaultCoord );
+                               int incW = wxDefaultCoord, int incH = wxDefaultCoord )
+    {
+        DoSetSizeHints(minW, minH, maxW, maxH, incW, incH);
+    }
+    
     void SetSizeHints( const wxSize& minSize,
                        const wxSize& maxSize=wxDefaultSize,
                        const wxSize& incSize=wxDefaultSize)
     {
-        SetSizeHints(minSize.x, minSize.y,
-                     maxSize.x, maxSize.y,
-                     incSize.x, incSize.y);
+        DoSetSizeHints(minSize.x, minSize.y,
+                       maxSize.x, maxSize.y,
+                       incSize.x, incSize.y);
     }
+    
+    virtual void DoSetSizeHints(int minW, int minH,
+                                int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
+                               int incW = wxDefaultCoord, int incH = wxDefaultCoord );
 
     virtual void SetVirtualSizeHints( int minW, int minH,
                                       int maxW = wxDefaultCoord, int maxH = wxDefaultCoord );

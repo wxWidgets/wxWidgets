@@ -144,7 +144,7 @@ public:
 #endif
 
     // no size hints
-    virtual void SetSizeHints( int WXUNUSED(minW),
+    virtual void DoSetSizeHints( int WXUNUSED(minW),
                                int WXUNUSED(minH),
                                int WXUNUSED(maxW) = -1,
                                int WXUNUSED(maxH) = -1,

@@ -156,7 +156,7 @@ public:
     void ReleaseMouse();
     void Raise();
     void Lower(void);
-    void SetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
+    void DoSetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
     
     // MDI operations
     virtual void Maximize();

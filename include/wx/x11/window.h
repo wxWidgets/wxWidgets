@@ -82,13 +82,10 @@ public:
     virtual void ScrollWindow( int dx, int dy,
         const wxRect* rect = (wxRect *) NULL );
     
-    virtual void SetSizeHints(int minW, int minH,
+    virtual void DoSetSizeHints(int minW, int minH,
         int maxW = -1, int maxH = -1,
         int incW = -1, int incH = -1);
-    void SetSizeHints( const wxSize& minSize,
-                       const wxSize& maxSize=wxDefaultSize,
-                       const wxSize& incSize=wxDefaultSize)
-        { wxWindowBase::SetSizeHints(minSize, maxSize, incSize); }
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
 #endif // wxUSE_DRAG_AND_DROP

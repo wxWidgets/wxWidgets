@@ -80,7 +80,7 @@ public:
 
  
      // set min/max size of the slider
-     virtual void SetSizeHints( int minW, int minH,
+     virtual void DoSetSizeHints( int minW, int minH,
                                 int maxW = -1, int maxH = -1,
                                 int incW = -1, int incH = -1 );
  
