@@ -168,6 +168,11 @@ int _System soclose(int);
   signal(SIGPIPE, old_handler);             \
 }
 
+#ifdef MSG_NOSIGNAL
+#  define GSOCKET_MSG_NOSIGNAL MSG_NOSIGNAL
+#else /* MSG_NOSIGNAL not available (FreeBSD including OS X) */
+#  define GSOCKET_MSG_NOSIGNAL 0
+#endif /* MSG_NOSIGNAL */
 
 #ifndef __GSOCKET_STANDALONE__
 #  include "wx/unix/gsockunx.h"
@@ -491,6 +496,12 @@ GSocketError GSocket::SetServer()
     m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
+
+  /* FreeBSD variants can't use MSG_NOSIGNAL, and instead use a socket option */
+#ifdef SO_NOSIGPIPE
+  setsockopt(m_fd, SOL_SOCKET, SO_NOSIGPIPE, (const char*)&arg, sizeof(u_long));
+#endif
+
   ioctl(m_fd, FIONBIO, &arg);
   gs_gui_functions->Enable_Events(this);
 
@@ -540,8 +551,10 @@ GSocket *GSocket::WaitConnection()
 
   assert(this);
 
+#ifndef __DARWIN__
   /* Reenable CONNECTION events */
   Enable(GSOCK_CONNECTION);
+#endif
 
   /* If the socket has already been created, we exit immediately */
   if (m_fd == INVALID_SOCKET || !m_server)
@@ -568,6 +581,11 @@ GSocket *GSocket::WaitConnection()
   }
 
   connection->m_fd = accept(m_fd, &from, (SOCKLEN_T *) &fromlen);
+
+#ifdef __DARWIN__
+  /* Reenable CONNECTION events */
+  Enable(GSOCK_CONNECTION);
+#endif
 
   if (connection->m_fd == INVALID_SOCKET)
   {
@@ -680,15 +698,25 @@ GSocketError GSocket::Connect(GSocketStream stream)
     m_error = GSOCK_IOERR;
     return GSOCK_IOERR;
   }
+
+  /* FreeBSD variants can't use MSG_NOSIGNAL, and instead use a socket option */
+#ifdef SO_NOSIGPIPE
+  setsockopt(m_fd, SOL_SOCKET, SO_NOSIGPIPE, (const char*)&arg, sizeof(u_long));
+#endif
+
 #if defined(__EMX__) || defined(__VISAGECPP__)
   ioctl(m_fd, FIONBIO, (char*)&arg, sizeof(arg));
 #else
   ioctl(m_fd, FIONBIO, &arg);
 #endif
-  gs_gui_functions->Enable_Events(this);
 
   /* Connect it to the peer address, with a timeout (see below) */
   ret = connect(m_fd, m_peer->m_addr, m_peer->m_len);
+
+  if (m_non_blocking)
+  {
+    gs_gui_functions->Enable_Events(this);
+  }
 
   if (ret == -1)
   {
@@ -713,6 +741,8 @@ GSocketError GSocket::Connect(GSocketStream stream)
         SOCKOPTLEN_T len = sizeof(error);
 
         getsockopt(m_fd, SOL_SOCKET, SO_ERROR, (char*) &error, &len);
+
+        gs_gui_functions->Enable_Events(this);
 
         if (!error)
           return GSOCK_NOERROR;
@@ -841,7 +871,7 @@ int GSocket::Read(char *buffer, int size)
 
   if (ret == -1)
   {
-    if (errno == EWOULDBLOCK)
+    if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
       m_error = GSOCK_WOULDBLOCK;
     else
       m_error = GSOCK_IOERR;
@@ -885,7 +915,7 @@ int GSocket::Write(const char *buffer, int size)
 
   if (ret == -1)
   {
-    if (errno == EWOULDBLOCK)
+    if ((errno == EWOULDBLOCK) || (errno == EAGAIN))	  
     {
       m_error = GSOCK_WOULDBLOCK;
       GSocket_Debug(( "GSocket_Write error WOULDBLOCK\n" ));
@@ -967,7 +997,9 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
     {
       char c;
 
-      if (recv(m_fd, &c, 1, MSG_PEEK) > 0)
+      int num = recv(m_fd, &c, 1, MSG_PEEK | GSOCKET_MSG_NOSIGNAL);
+
+      if (num > 0)
       {
         result |= GSOCK_INPUT_FLAG;
       }
@@ -978,7 +1010,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
           result |= GSOCK_CONNECTION_FLAG;
           m_detected |= GSOCK_CONNECTION_FLAG;
         }
-        else
+        else if ((errno != EWOULDBLOCK) && (errno != EAGAIN) && (errno != EINTR))
         {
           m_detected = GSOCK_LOST_FLAG;
           m_establishing = false;
@@ -1279,7 +1311,12 @@ GSocketError GSocket::Output_Timeout()
 
 int GSocket::Recv_Stream(char *buffer, int size)
 {
-  return recv(m_fd, buffer, size, 0);
+  int ret;
+  do 
+  {
+    ret = recv(m_fd, buffer, size, GSOCKET_MSG_NOSIGNAL);
+  } while (ret == -1 && errno == EINTR);
+  return ret;
 }
 
 int GSocket::Recv_Dgram(char *buffer, int size)
@@ -1291,7 +1328,10 @@ int GSocket::Recv_Dgram(char *buffer, int size)
 
   fromlen = sizeof(from);
 
-  ret = recvfrom(m_fd, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
+  do 
+  {
+    ret = recvfrom(m_fd, buffer, size, 0, &from, (SOCKLEN_T *) &fromlen);
+  } while (ret == -1 && errno == EINTR);
 
   if (ret == -1)
     return -1;
@@ -1323,11 +1363,14 @@ int GSocket::Send_Stream(const char *buffer, int size)
   int ret;
 
 #ifndef __VISAGECPP__
-  MASK_SIGNAL();
-  ret = send(m_fd, buffer, size, 0);
+   MASK_SIGNAL();
+#endif 
+  do 
+  {
+    ret = send(m_fd, (char *)buffer, size, GSOCKET_MSG_NOSIGNAL);
+  } while (ret == -1 && errno == EINTR);
+#ifndef __VISAGECPP__
   UNMASK_SIGNAL();
-#else
-  ret = send(m_fd, (char *)buffer, size, 0);
 #endif
 
   return ret;
@@ -1354,10 +1397,13 @@ int GSocket::Send_Dgram(const char *buffer, int size)
 
 #ifndef __VISAGECPP__
   MASK_SIGNAL();
-  ret = sendto(m_fd, buffer, size, 0, addr, len);
+#endif
+  do 
+  {
+    ret = sendto(m_fd, (char *)buffer, size, 0, addr, len);
+  } while (ret == -1 && errno == EINTR);
+#ifndef __VISAGECPP__
   UNMASK_SIGNAL();
-#else
-  ret = sendto(m_fd, (char *)buffer, size, 0, addr, len);
 #endif
 
   /* Frees memory allocated from _GAddress_translate_to */
@@ -1369,6 +1415,12 @@ int GSocket::Send_Dgram(const char *buffer, int size)
 void GSocket::Detected_Read()
 {
   char c;
+
+  /* Safeguard against straggling call to Detected_Read */
+  if (m_fd == INVALID_SOCKET)
+  {
+    return;
+  }
 
   /* If we have already detected a LOST event, then don't try
    * to do any further processing.
@@ -1382,7 +1434,9 @@ void GSocket::Detected_Read()
     return;
   }
 
-  if (recv(m_fd, &c, 1, MSG_PEEK) > 0)
+  int num =  recv(m_fd, &c, 1, MSG_PEEK | GSOCKET_MSG_NOSIGNAL);
+
+  if (num > 0)
   {
     CALL_CALLBACK(this, GSOCK_INPUT);
   }
@@ -1394,8 +1448,15 @@ void GSocket::Detected_Read()
     }
     else
     {
-      CALL_CALLBACK(this, GSOCK_LOST);
-      Shutdown();
+      if ((errno == EWOULDBLOCK) || (errno == EAGAIN) || (errno == EINTR)) 
+      {
+        CALL_CALLBACK(this, GSOCK_INPUT);
+      }
+      else 
+      {
+        CALL_CALLBACK(this, GSOCK_LOST);
+        Shutdown();
+      } 
     }
   }
 }
