@@ -14,6 +14,19 @@ from events import *
 from streams import *
 
 from utils import *
+class wxSystemSettingsPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxSystemSettings instance at %s>" % (self.this,)
+class wxSystemSettings(wxSystemSettingsPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 class wxToolTipPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -1066,18 +1079,6 @@ wxResourceParseFile = misc2c.wxResourceParseFile
 
 wxResourceParseString = misc2c.wxResourceParseString
 
-def wxSystemSettings_GetSystemColour(*_args, **_kwargs):
-    val = apply(misc2c.wxSystemSettings_GetSystemColour,_args,_kwargs)
-    if val: val = wxColourPtr(val); val.thisown = 1
-    return val
-
-def wxSystemSettings_GetSystemFont(*_args, **_kwargs):
-    val = apply(misc2c.wxSystemSettings_GetSystemFont,_args,_kwargs)
-    if val: val = wxFontPtr(val); val.thisown = 1
-    return val
-
-wxSystemSettings_GetSystemMetric = misc2c.wxSystemSettings_GetSystemMetric
-
 wxCaret_GetBlinkTime = misc2c.wxCaret_GetBlinkTime
 
 wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
@@ -1129,6 +1130,32 @@ def wxWaveData(*_args, **_kwargs):
     val = apply(misc2c.wxWaveData,_args,_kwargs)
     if val: val = wxWavePtr(val); val.thisown = 1
     return val
+
+def wxSystemSettings_GetColour(*_args, **_kwargs):
+    val = apply(misc2c.wxSystemSettings_GetColour,_args,_kwargs)
+    if val: val = wxColourPtr(val); val.thisown = 1
+    return val
+
+def wxSystemSettings_GetFont(*_args, **_kwargs):
+    val = apply(misc2c.wxSystemSettings_GetFont,_args,_kwargs)
+    if val: val = wxFontPtr(val); val.thisown = 1
+    return val
+
+wxSystemSettings_GetMetric = misc2c.wxSystemSettings_GetMetric
+
+wxSystemSettings_HasFeature = misc2c.wxSystemSettings_HasFeature
+
+def wxSystemSettings_GetSystemColour(*_args, **_kwargs):
+    val = apply(misc2c.wxSystemSettings_GetSystemColour,_args,_kwargs)
+    if val: val = wxColourPtr(val); val.thisown = 1
+    return val
+
+def wxSystemSettings_GetSystemFont(*_args, **_kwargs):
+    val = apply(misc2c.wxSystemSettings_GetSystemFont,_args,_kwargs)
+    if val: val = wxFontPtr(val); val.thisown = 1
+    return val
+
+wxSystemSettings_GetSystemMetric = misc2c.wxSystemSettings_GetSystemMetric
 
 wxToolTip_Enable = misc2c.wxToolTip_Enable
 
@@ -1182,16 +1209,6 @@ wxMimeTypesManager_IsOfType = misc2c.wxMimeTypesManager_IsOfType
 
 #-------------- VARIABLE WRAPPERS ------------------
 
-wxSYS_WHITE_BRUSH = misc2c.wxSYS_WHITE_BRUSH
-wxSYS_LTGRAY_BRUSH = misc2c.wxSYS_LTGRAY_BRUSH
-wxSYS_GRAY_BRUSH = misc2c.wxSYS_GRAY_BRUSH
-wxSYS_DKGRAY_BRUSH = misc2c.wxSYS_DKGRAY_BRUSH
-wxSYS_BLACK_BRUSH = misc2c.wxSYS_BLACK_BRUSH
-wxSYS_NULL_BRUSH = misc2c.wxSYS_NULL_BRUSH
-wxSYS_HOLLOW_BRUSH = misc2c.wxSYS_HOLLOW_BRUSH
-wxSYS_WHITE_PEN = misc2c.wxSYS_WHITE_PEN
-wxSYS_BLACK_PEN = misc2c.wxSYS_BLACK_PEN
-wxSYS_NULL_PEN = misc2c.wxSYS_NULL_PEN
 wxSYS_OEM_FIXED_FONT = misc2c.wxSYS_OEM_FIXED_FONT
 wxSYS_ANSI_FIXED_FONT = misc2c.wxSYS_ANSI_FIXED_FONT
 wxSYS_ANSI_VAR_FONT = misc2c.wxSYS_ANSI_VAR_FONT
@@ -1225,6 +1242,7 @@ wxSYS_COLOUR_3DDKSHADOW = misc2c.wxSYS_COLOUR_3DDKSHADOW
 wxSYS_COLOUR_3DLIGHT = misc2c.wxSYS_COLOUR_3DLIGHT
 wxSYS_COLOUR_INFOTEXT = misc2c.wxSYS_COLOUR_INFOTEXT
 wxSYS_COLOUR_INFOBK = misc2c.wxSYS_COLOUR_INFOBK
+wxSYS_COLOUR_LISTBOX = misc2c.wxSYS_COLOUR_LISTBOX
 wxSYS_COLOUR_DESKTOP = misc2c.wxSYS_COLOUR_DESKTOP
 wxSYS_COLOUR_3DFACE = misc2c.wxSYS_COLOUR_3DFACE
 wxSYS_COLOUR_3DSHADOW = misc2c.wxSYS_COLOUR_3DSHADOW
@@ -1268,6 +1286,8 @@ wxSYS_NETWORK_PRESENT = misc2c.wxSYS_NETWORK_PRESENT
 wxSYS_PENWINDOWS_PRESENT = misc2c.wxSYS_PENWINDOWS_PRESENT
 wxSYS_SHOW_SOUNDS = misc2c.wxSYS_SHOW_SOUNDS
 wxSYS_SWAP_BUTTONS = misc2c.wxSYS_SWAP_BUTTONS
+wxSYS_CAN_DRAW_FRAME_DECORATIONS = misc2c.wxSYS_CAN_DRAW_FRAME_DECORATIONS
+wxSYS_CAN_ICONIZE_FRAME = misc2c.wxSYS_CAN_ICONIZE_FRAME
 wxLOG_FatalError = misc2c.wxLOG_FatalError
 wxLOG_Error = misc2c.wxLOG_Error
 wxLOG_Warning = misc2c.wxLOG_Warning

@@ -20,6 +20,9 @@ class wxImageHandlerPtr(wxObjectPtr):
     def GetMimeType(self, *_args, **_kwargs):
         val = apply(imagec.wxImageHandler_GetMimeType,(self,) + _args, _kwargs)
         return val
+    def CanRead(self, *_args, **_kwargs):
+        val = apply(imagec.wxImageHandler_CanRead,(self,) + _args, _kwargs)
+        return val
     def SetName(self, *_args, **_kwargs):
         val = apply(imagec.wxImageHandler_SetName,(self,) + _args, _kwargs)
         return val
@@ -78,6 +81,20 @@ class wxBMPHandlerPtr(wxImageHandlerPtr):
 class wxBMPHandler(wxBMPHandlerPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(imagec.new_wxBMPHandler,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxICOHandlerPtr(wxBMPHandlerPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxICOHandler instance at %s>" % (self.this,)
+class wxICOHandler(wxICOHandlerPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(imagec.new_wxICOHandler,_args,_kwargs)
         self.thisown = 1
 
 
@@ -298,6 +315,11 @@ def wxImageFromBitmap(*_args, **_kwargs):
     if val: val = wxImagePtr(val); val.thisown = 1
     return val
 
+def wxImageFromData(*_args, **_kwargs):
+    val = apply(imagec.wxImageFromData,_args,_kwargs)
+    if val: val = wxImagePtr(val); val.thisown = 1
+    return val
+
 wxInitAllImageHandlers = imagec.wxInitAllImageHandlers
 
 def wxBitmapFromImage(*_args, **_kwargs):
@@ -306,6 +328,8 @@ def wxBitmapFromImage(*_args, **_kwargs):
     return val
 
 wxImage_CanRead = imagec.wxImage_CanRead
+
+wxImage_GetImageCount = imagec.wxImage_GetImageCount
 
 wxImage_AddHandler = imagec.wxImage_AddHandler
 

@@ -2065,6 +2065,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxID_HELP_COMMANDS", PyInt_FromLong((long) wxID_HELP_COMMANDS));
 	 PyDict_SetItemString(d,"wxID_HELP_PROCEDURES", PyInt_FromLong((long) wxID_HELP_PROCEDURES));
 	 PyDict_SetItemString(d,"wxID_HELP_CONTEXT", PyInt_FromLong((long) wxID_HELP_CONTEXT));
+	 PyDict_SetItemString(d,"wxID_CLOSE_ALL", PyInt_FromLong((long) wxID_CLOSE_ALL));
 	 PyDict_SetItemString(d,"wxID_CUT", PyInt_FromLong((long) wxID_CUT));
 	 PyDict_SetItemString(d,"wxID_COPY", PyInt_FromLong((long) wxID_COPY));
 	 PyDict_SetItemString(d,"wxID_PASTE", PyInt_FromLong((long) wxID_PASTE));

@@ -5658,6 +5658,71 @@ static PyObject *_wrap_wxWindow_GetAcceleratorTable(PyObject *self, PyObject *ar
     return _resultobj;
 }
 
+#define wxWindow_GetDefaultItem(_swigobj)  (_swigobj->GetDefaultItem())
+static PyObject *_wrap_wxWindow_GetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxButton * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetDefaultItem",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetDefaultItem. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (wxButton *)wxWindow_GetDefaultItem(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxWindow_SetDefaultItem(_swigobj,_swigarg0)  (_swigobj->SetDefaultItem(_swigarg0))
+static PyObject *_wrap_wxWindow_SetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxWindow * _arg0;
+    wxButton * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","btn", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxWindow_SetDefaultItem",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_SetDefaultItem. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxButton_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_SetDefaultItem. Expected _wxButton_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        wxWindow_SetDefaultItem(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static void *SwigwxPanelTowxWindow(void *ptr) {
     wxPanel *src;
     wxWindow *dest;
@@ -5842,71 +5907,6 @@ static PyObject *_wrap_wxPanel_InitDialog(PyObject *self, PyObject *args, PyObje
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxPanel_InitDialog(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPanel_GetDefaultItem(_swigobj)  (_swigobj->GetDefaultItem())
-static PyObject *_wrap_wxPanel_GetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxButton * _result;
-    wxPanel * _arg0;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPanel_GetDefaultItem",_kwnames,&_argo0)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPanel_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPanel_GetDefaultItem. Expected _wxPanel_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxButton *)wxPanel_GetDefaultItem(_arg0);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-    return _resultobj;
-}
-
-#define wxPanel_SetDefaultItem(_swigobj,_swigarg0)  (_swigobj->SetDefaultItem(_swigarg0))
-static PyObject *_wrap_wxPanel_SetDefaultItem(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxPanel * _arg0;
-    wxButton * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","btn", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxPanel_SetDefaultItem",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPanel_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPanel_SetDefaultItem. Expected _wxPanel_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxButton_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPanel_SetDefaultItem. Expected _wxButton_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxPanel_SetDefaultItem(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -9967,12 +9967,12 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxScrolledWindow_Create", (PyCFunction) _wrap_wxScrolledWindow_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPreScrolledWindow", (PyCFunction) _wrap_new_wxPreScrolledWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxScrolledWindow", (PyCFunction) _wrap_new_wxScrolledWindow, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPanel_SetDefaultItem", (PyCFunction) _wrap_wxPanel_SetDefaultItem, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPanel_GetDefaultItem", (PyCFunction) _wrap_wxPanel_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPanel_InitDialog", (PyCFunction) _wrap_wxPanel_InitDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPanel_Create", (PyCFunction) _wrap_wxPanel_Create, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPrePanel", (PyCFunction) _wrap_new_wxPrePanel, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_SetDefaultItem", (PyCFunction) _wrap_wxWindow_SetDefaultItem, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetDefaultItem", (PyCFunction) _wrap_wxWindow_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetAcceleratorTable", (PyCFunction) _wrap_wxWindow_GetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetAcceleratorTable", (PyCFunction) _wrap_wxWindow_SetAcceleratorTable, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_PrevControlId", (PyCFunction) _wrap_wxWindow_PrevControlId, METH_VARARGS | METH_KEYWORDS },

@@ -212,6 +212,51 @@ def wxPreMiniFrame(*_args,**_kwargs):
     return val
 
 
+class wxSplashScreenWindowPtr(wxWindowPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetBitmap(self, *_args, **_kwargs):
+        val = apply(framesc.wxSplashScreenWindow_SetBitmap,(self,) + _args, _kwargs)
+        return val
+    def GetBitmap(self, *_args, **_kwargs):
+        val = apply(framesc.wxSplashScreenWindow_GetBitmap,(self,) + _args, _kwargs)
+        if val: val = wxBitmapPtr(val) 
+        return val
+    def __repr__(self):
+        return "<C wxSplashScreenWindow instance at %s>" % (self.this,)
+class wxSplashScreenWindow(wxSplashScreenWindowPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(framesc.new_wxSplashScreenWindow,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxSplashScreenPtr(wxFramePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetSplashStyle(self, *_args, **_kwargs):
+        val = apply(framesc.wxSplashScreen_GetSplashStyle,(self,) + _args, _kwargs)
+        return val
+    def GetSplashWindow(self, *_args, **_kwargs):
+        val = apply(framesc.wxSplashScreen_GetSplashWindow,(self,) + _args, _kwargs)
+        if val: val = wxSplashScreenWindowPtr(val) 
+        return val
+    def GetTimeout(self, *_args, **_kwargs):
+        val = apply(framesc.wxSplashScreen_GetTimeout,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxSplashScreen instance at %s>" % (self.this,)
+class wxSplashScreen(wxSplashScreenPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(framesc.new_wxSplashScreen,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -227,3 +272,8 @@ wxFULLSCREEN_NOBORDER = framesc.wxFULLSCREEN_NOBORDER
 wxFULLSCREEN_NOCAPTION = framesc.wxFULLSCREEN_NOCAPTION
 wxFULLSCREEN_ALL = framesc.wxFULLSCREEN_ALL
 wxTOPLEVEL_EX_DIALOG = framesc.wxTOPLEVEL_EX_DIALOG
+wxSPLASH_CENTRE_ON_PARENT = framesc.wxSPLASH_CENTRE_ON_PARENT
+wxSPLASH_CENTRE_ON_SCREEN = framesc.wxSPLASH_CENTRE_ON_SCREEN
+wxSPLASH_NO_CENTRE = framesc.wxSPLASH_NO_CENTRE
+wxSPLASH_TIMEOUT = framesc.wxSPLASH_TIMEOUT
+wxSPLASH_NO_TIMEOUT = framesc.wxSPLASH_NO_TIMEOUT

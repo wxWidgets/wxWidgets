@@ -76,6 +76,9 @@ class wxConfigBasePtr :
     def ReadFloat(self, *_args, **_kwargs):
         val = apply(utilsc.wxConfigBase_ReadFloat,(self,) + _args, _kwargs)
         return val
+    def ReadBool(self, *_args, **_kwargs):
+        val = apply(utilsc.wxConfigBase_ReadBool,(self,) + _args, _kwargs)
+        return val
     def SetExpandEnvVars(self, *_args, **_kwargs):
         val = apply(utilsc.wxConfigBase_SetExpandEnvVars,(self,) + _args, _kwargs)
         return val
@@ -105,6 +108,9 @@ class wxConfigBasePtr :
         return val
     def WriteFloat(self, *_args, **_kwargs):
         val = apply(utilsc.wxConfigBase_WriteFloat,(self,) + _args, _kwargs)
+        return val
+    def WriteBool(self, *_args, **_kwargs):
+        val = apply(utilsc.wxConfigBase_WriteBool,(self,) + _args, _kwargs)
         return val
     def GetEntryType(self, *_args, **_kwargs):
         val = apply(utilsc.wxConfigBase_GetEntryType,(self,) + _args, _kwargs)

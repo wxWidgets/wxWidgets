@@ -1094,7 +1094,11 @@ static PyObject *_wrap_wxConfigBase_Read(PyObject *self, PyObject *args, PyObjec
     return _resultobj;
 }
 
-#define wxConfigBase_ReadInt(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Read(_swigarg0,_swigarg1))
+static long  wxConfigBase_ReadInt(wxConfigBase *self,const wxString & key,long  defaultVal) {
+            long rv;
+            self->Read(key, &rv, defaultVal);
+            return rv;
+        }
 static PyObject *_wrap_wxConfigBase_ReadInt(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     long  _result;
@@ -1147,7 +1151,11 @@ static PyObject *_wrap_wxConfigBase_ReadInt(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
-#define wxConfigBase_ReadFloat(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Read(_swigarg0,_swigarg1))
+static double  wxConfigBase_ReadFloat(wxConfigBase *self,const wxString & key,double  defaultVal) {
+            double rv;
+            self->Read(key, &rv, defaultVal);
+            return rv;
+        }
 static PyObject *_wrap_wxConfigBase_ReadFloat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     double  _result;
@@ -1193,6 +1201,65 @@ static PyObject *_wrap_wxConfigBase_ReadFloat(PyObject *self, PyObject *args, Py
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("d",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+static bool  wxConfigBase_ReadBool(wxConfigBase *self,const wxString & key,bool  defaultVal) {
+            bool rv;
+            self->Read(key, &rv, defaultVal);
+            return rv;
+        }
+static PyObject *_wrap_wxConfigBase_ReadBool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxConfigBase * _arg0;
+    wxString * _arg1;
+    bool  _arg2 = (bool ) FALSE;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    int tempbool2 = (int) FALSE;
+    char *_kwnames[] = { "self","key","defaultVal", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO|i:wxConfigBase_ReadBool",_kwnames,&_argo0,&_obj1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxConfigBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxConfigBase_ReadBool. Expected _wxConfigBase_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxConfigBase_ReadBool(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -1646,6 +1713,61 @@ static PyObject *_wrap_wxConfigBase_WriteFloat(PyObject *self, PyObject *args, P
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
         _result = (bool )wxConfigBase_WriteFloat(_arg0,*_arg1,_arg2);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxConfigBase_WriteBool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Write(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxConfigBase_WriteBool(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxConfigBase * _arg0;
+    wxString * _arg1;
+    bool  _arg2;
+    PyObject * _argo0 = 0;
+    PyObject * _obj1 = 0;
+    int tempbool2;
+    char *_kwnames[] = { "self","key","value", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxConfigBase_WriteBool",_kwnames,&_argo0,&_obj1,&tempbool2)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxConfigBase_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxConfigBase_WriteBool. Expected _wxConfigBase_p.");
+        return NULL;
+        }
+    }
+{
+#if PYTHON_API_VERSION >= 1009
+    char* tmpPtr; int tmpSize;
+    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
+        return NULL;
+    _arg1 = new wxString(tmpPtr, tmpSize);
+#else
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
+#endif
+}
+    _arg2 = (bool ) tempbool2;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = (bool )wxConfigBase_WriteBool(_arg0,*_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -7854,6 +7976,7 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxConfigBase_RenameGroup", (PyCFunction) _wrap_wxConfigBase_RenameGroup, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_RenameEntry", (PyCFunction) _wrap_wxConfigBase_RenameEntry, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_GetEntryType", (PyCFunction) _wrap_wxConfigBase_GetEntryType, METH_VARARGS | METH_KEYWORDS },
+	 { "wxConfigBase_WriteBool", (PyCFunction) _wrap_wxConfigBase_WriteBool, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_WriteFloat", (PyCFunction) _wrap_wxConfigBase_WriteFloat, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_WriteInt", (PyCFunction) _wrap_wxConfigBase_WriteInt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_Write", (PyCFunction) _wrap_wxConfigBase_Write, METH_VARARGS | METH_KEYWORDS },
@@ -7864,6 +7987,7 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxConfigBase_SetRecordDefaults", (PyCFunction) _wrap_wxConfigBase_SetRecordDefaults, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_SetPath", (PyCFunction) _wrap_wxConfigBase_SetPath, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_SetExpandEnvVars", (PyCFunction) _wrap_wxConfigBase_SetExpandEnvVars, METH_VARARGS | METH_KEYWORDS },
+	 { "wxConfigBase_ReadBool", (PyCFunction) _wrap_wxConfigBase_ReadBool, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_ReadFloat", (PyCFunction) _wrap_wxConfigBase_ReadFloat, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_ReadInt", (PyCFunction) _wrap_wxConfigBase_ReadInt, METH_VARARGS | METH_KEYWORDS },
 	 { "wxConfigBase_Read", (PyCFunction) _wrap_wxConfigBase_Read, METH_VARARGS | METH_KEYWORDS },

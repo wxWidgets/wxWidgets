@@ -202,7 +202,9 @@ public:
            int desiredWidth = -1, int desiredHeight = -1);
     ~wxIcon();
 
+#ifndef __WXMAC__
     bool LoadFile(const wxString& name, long flags);
+#endif
 
     // wxGDIImage methods
 #ifdef __WXMSW__
