@@ -3259,6 +3259,21 @@ void wxWindow::SetWidgetStyle()
             style->fg[GTK_STATE_PRELIGHT] = *m_foregroundColour.GetColor();
             style->fg[GTK_STATE_ACTIVE] = *m_foregroundColour.GetColor();
         }
+	else
+        {
+            // Try to restore the gtk default style.  This is still a little
+            // oversimplified for what is probably really needed here for controls
+            // other than buttons, but is better than not being able to (re)set a
+            // control's foreground colour to *wxBLACK -- RL
+            GtkStyle *def = gtk_rc_get_style( m_widget );
+
+            if (!def)
+                def = gtk_widget_get_default_style();
+
+            style->fg[GTK_STATE_NORMAL] = def->fg[GTK_STATE_NORMAL];
+            style->fg[GTK_STATE_PRELIGHT] = def->fg[GTK_STATE_PRELIGHT];
+            style->fg[GTK_STATE_ACTIVE] = def->fg[GTK_STATE_ACTIVE];
+        }
     }
 
     if (m_backgroundColour.Ok())
@@ -3274,7 +3289,29 @@ void wxWindow::SetWidgetStyle()
             style->base[GTK_STATE_ACTIVE] = *m_backgroundColour.GetColor();
             style->bg[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
             style->base[GTK_STATE_INSENSITIVE] = *m_backgroundColour.GetColor();
-       }
+        }
+        else
+        {
+            // Try to restore the gtk default style.  This is still a little
+            // oversimplified for what is probably really needed here for controls
+            // other than buttons, but is better than not being able to (re)set a
+            // control's background colour to default grey and means resetting a
+	    // button to wxSYS_COLOUR_BTNFACE will restore its usual highlighting
+            // behavior -- RL
+            GtkStyle *def = gtk_rc_get_style( m_widget );
+
+            if (!def)
+                def = gtk_widget_get_default_style();
+
+            style->bg[GTK_STATE_NORMAL] = def->bg[GTK_STATE_NORMAL];
+            style->base[GTK_STATE_NORMAL] = def->base[GTK_STATE_NORMAL];
+            style->bg[GTK_STATE_PRELIGHT] = def->bg[GTK_STATE_PRELIGHT];
+            style->base[GTK_STATE_PRELIGHT] = def->base[GTK_STATE_PRELIGHT];
+            style->bg[GTK_STATE_ACTIVE] = def->bg[GTK_STATE_ACTIVE];
+            style->base[GTK_STATE_ACTIVE] = def->base[GTK_STATE_ACTIVE];
+            style->bg[GTK_STATE_INSENSITIVE] = def->bg[GTK_STATE_INSENSITIVE];
+            style->base[GTK_STATE_INSENSITIVE] = def->base[GTK_STATE_INSENSITIVE];
+        }
     }
 }
 
