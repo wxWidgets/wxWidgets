@@ -1166,6 +1166,11 @@ class wxRegion(wxRegionPtr):
 
 
 
+def wxRegionFromPoints(*_args,**_kwargs):
+    val = wxRegionPtr(apply(gdic.new_wxRegionFromPoints,_args,_kwargs))
+    val.thisown = 1
+    return val
+
 
 class wxRegionIteratorPtr(wxObjectPtr):
     def __init__(self,this):

@@ -101,9 +101,6 @@ public:
                 const wxBitmap& bitmap = wxNullBitmap,
                 const char* resource = NULL);
 
-    // common part of ctors:
-    void Init();
-
     // these functions are used by the wizard to show another page when the
     // user chooses "Back" or "Next" button
     virtual wxWizardPage *GetPrev() const;
@@ -269,9 +266,6 @@ public:
 
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
     %pragma(python) addtomethod = "wxPreWizardPageSimple:val._setOORInfo(val)"
-
-    // common part of ctors:
-    void Init();
 
     // the pointers may be also set later - but before starting the wizard
     void SetPrev(wxWizardPage *prev);
