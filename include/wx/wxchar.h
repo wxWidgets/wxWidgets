@@ -594,6 +594,7 @@
         #define  wxFgetchar  fgetchar
         #define  wxFgets     fgets
         #define  wxFputc     fputc
+        #define  wxFputs     fputs
         #define  wxFputchar  fputchar
         #define  wxFprintf   fprintf
         #define  wxFscanf    fscanf

@@ -99,6 +99,11 @@ typedef double SDOUBLE;
 typedef unsigned int UINT;
 #define ULONG UDWORD
 
+// Not available in iODBC
+#ifndef __WXMSW__
+typedef UCHAR SQLTCHAR;
+#endif
+
 #ifndef wxODBC_FWD_ONLY_CURSORS
 #define wxODBC_FWD_ONLY_CURSORS 1
 #endif
