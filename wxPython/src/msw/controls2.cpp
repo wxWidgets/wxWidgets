@@ -8952,42 +8952,6 @@ static PyObject *_wrap_wxTreeCtrl_ScrollTo(PyObject *self, PyObject *args, PyObj
     return _resultobj;
 }
 
-#define wxTreeCtrl_EditLabel(_swigobj,_swigarg0)  (_swigobj->EditLabel(_swigarg0))
-static PyObject *_wrap_wxTreeCtrl_EditLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxTextCtrl * _result;
-    wxPyTreeCtrl * _arg0;
-    wxTreeItemId * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","item", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_EditLabel",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_EditLabel. Expected _wxPyTreeCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EditLabel. Expected _wxTreeItemId_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxTextCtrl *)wxTreeCtrl_EditLabel(_arg0,*_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}{ _resultobj = wxPyMake_wxObject(_result); }
-    return _resultobj;
-}
-
 #define wxTreeCtrl_GetEditControl(_swigobj)  (_swigobj->GetEditControl())
 static PyObject *_wrap_wxTreeCtrl_GetEditControl(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -9013,6 +8977,42 @@ static PyObject *_wrap_wxTreeCtrl_GetEditControl(PyObject *self, PyObject *args,
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{ _resultobj = wxPyMake_wxObject(_result); }
+    return _resultobj;
+}
+
+#define wxTreeCtrl_EditLabel(_swigobj,_swigarg0)  (_swigobj->EditLabel(_swigarg0))
+static PyObject *_wrap_wxTreeCtrl_EditLabel(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxPyTreeCtrl * _arg0;
+    wxTreeItemId * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","item", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTreeCtrl_EditLabel",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_EditLabel. Expected _wxPyTreeCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxTreeItemId_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EditLabel. Expected _wxTreeItemId_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxTreeCtrl_EditLabel(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -10892,8 +10892,8 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_SetItemBold", (PyCFunction) _wrap_wxTreeCtrl_SetItemBold, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SortChildren", (PyCFunction) _wrap_wxTreeCtrl_SortChildren, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EndEditLabel", (PyCFunction) _wrap_wxTreeCtrl_EndEditLabel, METH_VARARGS | METH_KEYWORDS },
-	 { "wxTreeCtrl_GetEditControl", (PyCFunction) _wrap_wxTreeCtrl_GetEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EditLabel", (PyCFunction) _wrap_wxTreeCtrl_EditLabel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTreeCtrl_GetEditControl", (PyCFunction) _wrap_wxTreeCtrl_GetEditControl, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_ScrollTo", (PyCFunction) _wrap_wxTreeCtrl_ScrollTo, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_EnsureVisible", (PyCFunction) _wrap_wxTreeCtrl_EnsureVisible, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTreeCtrl_SelectItem", (PyCFunction) _wrap_wxTreeCtrl_SelectItem, METH_VARARGS | METH_KEYWORDS },

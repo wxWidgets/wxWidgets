@@ -2463,6 +2463,35 @@ static PyObject *_wrap_wxBoxSizer_GetOrientation(PyObject *self, PyObject *args,
     return _resultobj;
 }
 
+#define wxBoxSizer_SetOrientation(_swigobj,_swigarg0)  (_swigobj->SetOrientation(_swigarg0))
+static PyObject *_wrap_wxBoxSizer_SetOrientation(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxBoxSizer * _arg0;
+    int  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","orient", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxBoxSizer_SetOrientation",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxBoxSizer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxBoxSizer_SetOrientation. Expected _wxBoxSizer_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxBoxSizer_SetOrientation(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxBoxSizer_RecalcSizes(_swigobj)  (_swigobj->RecalcSizes())
 static PyObject *_wrap_wxBoxSizer_RecalcSizes(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3393,6 +3422,7 @@ static PyMethodDef sizerscMethods[] = {
 	 { "new_wxStaticBoxSizer", (PyCFunction) _wrap_new_wxStaticBoxSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_CalcMin", (PyCFunction) _wrap_wxBoxSizer_CalcMin, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_RecalcSizes", (PyCFunction) _wrap_wxBoxSizer_RecalcSizes, METH_VARARGS | METH_KEYWORDS },
+	 { "wxBoxSizer_SetOrientation", (PyCFunction) _wrap_wxBoxSizer_SetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "wxBoxSizer_GetOrientation", (PyCFunction) _wrap_wxBoxSizer_GetOrientation, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBoxSizer", (PyCFunction) _wrap_new_wxBoxSizer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPySizer__setCallbackInfo", (PyCFunction) _wrap_wxPySizer__setCallbackInfo, METH_VARARGS | METH_KEYWORDS },

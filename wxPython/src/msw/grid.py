@@ -255,6 +255,12 @@ class wxGridCellEditorPtr :
     def SetControl(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetControl,(self,) + _args, _kwargs)
         return val
+    def GetCellAttr(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_GetCellAttr,(self,) + _args, _kwargs)
+        return val
+    def SetCellAttr(self, *_args, **_kwargs):
+        val = apply(gridc.wxGridCellEditor_SetCellAttr,(self,) + _args, _kwargs)
+        return val
     def SetParameters(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellEditor_SetParameters,(self,) + _args, _kwargs)
         return val
