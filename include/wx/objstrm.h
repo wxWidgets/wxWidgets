@@ -23,9 +23,9 @@
 class wxObjectStreamInfo : public wxObject {
  public:
   wxString object_name;
-  int n_children;
+  int n_children, children_removed;
   wxList children;
-  wxObject *parent;
+  wxObjectStreamInfo *parent;
   wxObject *object;
 };
 
@@ -56,7 +56,9 @@ class wxObjectInputStream : public wxFilterInputStream {
   wxObjectInputStream(wxInputStream& s);
 
   wxObject *GetChild(int no) const;
-  wxObject *GetParent() const { return m_current_info->parent; }
+  int NumberOfChildren() const { return m_current_info->n_children; }
+  void RemoveChildren(int nb);
+  wxObject *GetParent() const;
   wxObject *LoadObject();
 
   wxObject *SolveName(const wxString& objName) const;

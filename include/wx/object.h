@@ -179,8 +179,8 @@ class WXDLLEXPORT wxObject
 #endif
 
 #ifdef USE_STORABLE_CLASSES
-  virtual void StoreObject( wxObjectOutputStream &WXUNUSED(stream) ) {};
-  virtual void LoadObject( wxObjectInputStream &WXUNUSED(stream) ) {};
+  virtual void StoreObject( wxObjectOutputStream &stream );
+  virtual void LoadObject( wxObjectInputStream &stream );
 #endif
 
   // make a 'clone' of the object

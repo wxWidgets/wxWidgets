@@ -202,12 +202,14 @@ wxInputStream::wxInputStream()
 {
   m_i_destroybuf = TRUE;
   m_i_streambuf = new wxStreamBuffer(*this);
+  m_eof = FALSE;
 }
 
 wxInputStream::wxInputStream(wxStreamBuffer *buffer)
 {
   m_i_destroybuf = FALSE;
   m_i_streambuf = buffer;
+  m_eof = FALSE;
 }
 
 wxInputStream::~wxInputStream()

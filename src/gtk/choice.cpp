@@ -179,9 +179,9 @@ wxString wxChoice::GetStringSelection(void) const
 
 int wxChoice::Number(void) const
 {
-  GtkMenu *menu = GTK_MENU( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
+  GtkMenuShell *menu_shell = GTK_MENU_SHELL( gtk_option_menu_get_menu( GTK_OPTION_MENU(m_widget) ) );
   int count = 0;
-  GList *child = menu->children;
+  GList *child = menu_shell->children;
   while (child)
   {
     count++;

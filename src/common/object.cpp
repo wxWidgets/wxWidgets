@@ -221,11 +221,56 @@ wxObject *wxCreateDynamicObject(char *name)
 
 #ifdef USE_STORABLE_CLASSES
 
+#include "wx/serbase.h"
+#include "wx/dynlib.h"
+#include "wx/msgdlg.h"
+
 wxObject* wxCreateStoredObject( wxInputStream &stream )
 {
   wxObjectInputStream obj_s(stream);
   return obj_s.LoadObject();
 };
+
+void wxObject::StoreObject( wxObjectOutputStream& stream )
+{
+  wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
+  wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
+  WXSERIAL(wxObject) *serial =
+                           (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
+
+  if (!serial) {
+    wxString message;
+
+    message.Printf("Can't find the serialization object (%s) for the object %s",
+                   WXSTRINGCAST obj_name,                                                          WXSTRINGCAST GetClassInfo()->GetClassName());
+    wxMessageBox(message, "Alert !");
+    return;
+  }
+
+  serial->SetObject(this);
+  serial->StoreObject(stream);
+}
+
+void wxObject::LoadObject( wxObjectInputStream& stream )
+{
+  wxString obj_name = wxString(GetClassInfo()->GetClassName()) + "_Serialize";
+  wxLibrary *lib = wxTheLibraries.LoadLibrary("wxserial");
+  WXSERIAL(wxObject) *serial =
+                           (WXSERIAL(wxObject) *)lib->CreateObject( obj_name );
+
+  if (!serial) {
+    wxString message;
+
+    message.Printf("Can't find the serialization object (%s) for the object %s",
+                   WXSTRINGCAST obj_name,
+                   WXSTRINGCAST GetClassInfo()->GetClassName());
+    wxMessageBox(message, "Alert !");
+    return;
+  }
+
+  serial->SetObject(this);
+  serial->LoadObject(stream);
+}
 
 #endif
 

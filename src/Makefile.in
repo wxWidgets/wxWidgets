@@ -130,6 +130,8 @@ LIB_CPP_SRC=\
  generic/tabg.cpp \
  generic/textdlgg.cpp \
  generic/treectrl.cpp
+
+# common/dynlib.cpp  Disabled until I write support for DLL on all platforms
  
 LIB_C_SRC=\
  common/extended.c \

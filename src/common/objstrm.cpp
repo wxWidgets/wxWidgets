@@ -19,6 +19,8 @@
 #define WXOBJ_BEGIN "OBEGIN"
 #define WXOBJ_BEG_LEN 6
 
+#define TAG_EMPTY_OBJECT "NULL"
+
 // ----------------------------------------------------------------------------
 // wxObjectOutputStream
 // ----------------------------------------------------------------------------
@@ -42,8 +44,15 @@ void wxObjectOutputStream::WriteObjectDef(wxObjectStreamInfo& info)
   wxDataOutputStream data_s(*this); 
 
   Write(WXOBJ_BEGIN, WXOBJ_BEG_LEN);
-  data_s.WriteString(info.object->GetClassInfo()->GetClassName());
+
+  if (info.object) {
+    data_s.WriteString(info.object->GetClassInfo()->GetClassName());
+  } else {
+    data_s.WriteString(TAG_EMPTY_OBJECT);
+  }
+
   data_s.WriteString(GetObjectName(info.object));
+
   // I assume an object will not have millions of children
   data_s.Write8(info.children.Number());
 }
@@ -58,7 +67,7 @@ void wxObjectOutputStream::AddChild(wxObject *obj)
   info = new wxObjectStreamInfo;
   info->n_children = 0;
   info->object = obj;
-  info->parent = m_current_info->object; // Not useful here.
+  info->parent = m_current_info; // Not useful here.
   m_current_info->n_children++;
   m_current_info->children.Append(info);
 }
@@ -69,7 +78,8 @@ void wxObjectOutputStream::ProcessObjectDef(wxObjectStreamInfo *info)
 
   m_current_info = info;
   // First stage: get children of obj
-  info->object->StoreObject(*this);
+  if (info->object)
+    info->object->StoreObject(*this);
 
   // Prepare and write the sub-entry about the child obj.
   WriteObjectDef(*info);
@@ -88,7 +98,8 @@ void wxObjectOutputStream::ProcessObjectData(wxObjectStreamInfo *info)
 
   m_current_info = info;
 
-  info->object->StoreObject(*this);
+  if (info->object)
+    info->object->StoreObject(*this);
 
   while (node) {
     ProcessObjectData((wxObjectStreamInfo *)node->Data());
@@ -145,24 +156,54 @@ wxObject *wxObjectInputStream::SolveName(const wxString& name) const
   return NULL;
 }
 
+wxObject *wxObjectInputStream::GetParent() const
+{
+  if (!m_current_info->parent)
+    return NULL;
+
+  return m_current_info->parent->object;
+}
+
 wxObject *wxObjectInputStream::GetChild(int no) const
 {
-  return m_current_info->children.Nth(no);
+  wxNode *node = m_current_info->children.Nth(m_current_info->children_removed+no);
+  wxObjectStreamInfo *info;
+
+  if (!node)
+    return NULL;
+
+  info = (wxObjectStreamInfo *)node->Data();
+
+  return info->object;
+}
+
+void wxObjectInputStream::RemoveChildren(int nb)
+{
+  m_current_info->children_removed += nb;
 }
 
 bool wxObjectInputStream::ReadObjectDef(wxObjectStreamInfo *info)
 {
   wxDataInputStream data_s(*this);
   char sig[WXOBJ_BEG_LEN+1];
+  wxString class_name;
 
   Read(sig, WXOBJ_BEG_LEN);
   sig[WXOBJ_BEG_LEN] = 0;
   if (wxString(sig) != WXOBJ_BEGIN)
     return FALSE;
-  info->object = wxCreateDynamicObject( WXSTRINGCAST data_s.ReadString());
+
+  class_name = data_s.ReadString();
+  printf("class_name = %s\n", WXSTRINGCAST class_name);
+  if (class_name == TAG_EMPTY_OBJECT)
+    info->object = NULL;
+  else
+    info->object = wxCreateDynamicObject( WXSTRINGCAST class_name);
   info->object_name = data_s.ReadString();
+  printf("object_name = %s\n", WXSTRINGCAST info->object_name);
   info->n_children = data_s.Read8();
-  info->children = wxList();
+  info->children_removed = 0;
+  printf("n_children = %d\n", info->n_children);
 
   return TRUE;
 }
@@ -198,10 +239,10 @@ void wxObjectInputStream::ProcessObjectData(wxObjectStreamInfo *info)
 
   m_current_info = info;
 
-  info->object->LoadObject(*this);
+  if (info->object)
+    info->object->LoadObject(*this);
   while (node) {
-    c_info = (wxObjectStreamInfo *)node->Data();
-    c_info->object->LoadObject(*this);
+    ProcessObjectData((wxObjectStreamInfo *)node->Data());
     node = node->Next();
   }
 }

@@ -78,8 +78,8 @@ class WXDLLEXPORT wxInputStream {
   wxInputStream& Read(wxOutputStream& stream_out);
 
   // Position functions
-  off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
-  off_t TellI() const;
+  virtual off_t SeekI(off_t pos, wxSeekMode mode = wxFromStart);
+  virtual off_t TellI() const;
 
   // State functions
   bool Eof() const { return m_eof; }
@@ -174,6 +174,7 @@ class WXDLLEXPORT wxFilterInputStream: public wxInputStream {
 
   virtual bool Eof() const { return m_parent_i_stream->Eof(); } 
   virtual size_t LastRead() const { return m_parent_i_stream->LastRead(); } 
+  virtual off_t TellI() const { return m_parent_i_stream->TellI(); }
 
  protected:
   virtual size_t DoRead(void *buffer, size_t size);
@@ -191,9 +192,9 @@ class WXDLLEXPORT wxFilterOutputStream: public wxOutputStream {
 
   virtual bool Bad() const { return m_parent_o_stream->Bad(); }
   virtual size_t LastWrite() const { return m_parent_o_stream->LastWrite(); }
+  virtual off_t TellO() const { return m_parent_o_stream->TellO(); }
 
  protected:
-
   // The forward is implicitely done by wxStreamBuffer.
 
   virtual size_t DoWrite(const void *buffer, size_t size);

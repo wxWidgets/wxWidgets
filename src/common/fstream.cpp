@@ -23,8 +23,6 @@
 #pragma hdrstop
 #endif
 
-#define BUF_TEMP_SIZE 10000
-
 // ----------------------------------------------------------------------------
 // wxFileInputStream
 // ----------------------------------------------------------------------------
@@ -46,7 +44,10 @@ char wxFileInputStream::Peek()
 
 size_t wxFileInputStream::DoRead(void *buffer, size_t size)
 {
-  return wxFile::Read(buffer, size);
+  size_t ret = wxFile::Read(buffer, size);
+  m_eof = wxFile::Eof();
+
+  return ret;
 }
 
 off_t wxFileInputStream::DoSeekInput(off_t pos, wxSeekMode mode)
