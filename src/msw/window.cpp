@@ -1486,17 +1486,33 @@ long wxWindow::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
         return MSWGetDlgCode();
 
     case WM_SETCURSOR:
-        if ( wxIsBusy() )
         {
-            extern HCURSOR gs_wxBusyCursor; // from msw\utils.cpp
+            HCURSOR hcursor = 0;
+            if ( wxIsBusy() )
+            {
+                extern HCURSOR gs_wxBusyCursor; // from msw\utils.cpp
 
-            ::SetCursor(gs_wxBusyCursor);
+                hcursor = gs_wxBusyCursor;
+            }
+            else
+            {
+                extern wxCursor *g_globalCursor; // from msw\data.cpp
 
-            // returning TRUE stops the DefWindowProc() from further processing
-            // this message - exactly what we need because we've just set the
-            // cursor
-            return TRUE;
+                if ( g_globalCursor && g_globalCursor->Ok() )
+                    hcursor = (HCURSOR)g_globalCursor->GetHCURSOR();
+            }
+
+            if ( hcursor )
+            {
+                ::SetCursor(hcursor);
+
+                // returning TRUE stops the DefWindowProc() from further
+                // processing this message - exactly what we need because we've
+                // just set the cursor
+                return TRUE;
+            }
         }
+
         break;  // leave it to DefWindowProc()
 
     default:

@@ -6,7 +6,7 @@
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:       wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -52,8 +52,8 @@ wxCursorRefData::wxCursorRefData(void)
 
 wxCursorRefData::~wxCursorRefData(void)
 {
-	if ( m_hCursor && m_destroyCursor)
-		::DestroyCursor((HICON) m_hCursor);
+    if ( m_hCursor && m_destroyCursor)
+        ::DestroyCursor((HICON) m_hCursor);
 }
 
 // Cursors
@@ -85,14 +85,14 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
   {
 #if wxUSE_RESOURCE_LOADING_IN_MSW
     M_CURSORDATA->m_hCursor = (WXHCURSOR) ReadCursorFile((char *)(const char *)cursor_file, wxGetInstance(), &M_CURSORDATA->m_width, &M_CURSORDATA->m_height);
-	M_CURSORDATA->m_destroyCursor = TRUE;
+    M_CURSORDATA->m_destroyCursor = TRUE;
 #endif
   }
   else if (flags & wxBITMAP_TYPE_ICO)
   {
 #if wxUSE_RESOURCE_LOADING_IN_MSW
     M_CURSORDATA->m_hCursor = (WXHCURSOR) IconToCursor((char *)(const char *)cursor_file, wxGetInstance(), hotSpotX, hotSpotY, &M_CURSORDATA->m_width, &M_CURSORDATA->m_height);
-	M_CURSORDATA->m_destroyCursor = TRUE;
+    M_CURSORDATA->m_destroyCursor = TRUE;
 #endif
   }
   else if (flags & wxBITMAP_TYPE_BMP)
@@ -109,7 +109,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     pnt.x = hotSpotX;
     pnt.y = hotSpotY;
     M_CURSORDATA->m_hCursor = (WXHCURSOR) MakeCursorFromBitmap(wxGetInstance(), hBitmap, &pnt);
-	M_CURSORDATA->m_destroyCursor = TRUE;
+    M_CURSORDATA->m_destroyCursor = TRUE;
     DeleteObject(hBitmap);
     if (M_CURSORDATA->m_hCursor)
       M_CURSORDATA->m_ok = TRUE;
@@ -239,7 +239,7 @@ wxCursor::wxCursor(int cursor_type)
 
 wxCursor::~wxCursor(void)
 {
-//	FreeResource(TRUE);
+//    FreeResource(TRUE);
 }
 
 bool wxCursor::FreeResource(bool WXUNUSED(force))
@@ -247,7 +247,7 @@ bool wxCursor::FreeResource(bool WXUNUSED(force))
   if (M_CURSORDATA && M_CURSORDATA->m_hCursor && M_CURSORDATA->m_destroyCursor)
   {
     DestroyCursor((HCURSOR) M_CURSORDATA->m_hCursor);
-	M_CURSORDATA->m_hCursor = 0;
+    M_CURSORDATA->m_hCursor = 0;
   }
   return TRUE;
 }
@@ -255,7 +255,7 @@ bool wxCursor::FreeResource(bool WXUNUSED(force))
 void wxCursor::SetHCURSOR(WXHCURSOR cursor)
 {
   if ( !M_CURSORDATA )
-	m_refData = new wxCursorRefData;
+    m_refData = new wxCursorRefData;
 
   M_CURSORDATA->m_hCursor = cursor;
 }
@@ -263,12 +263,15 @@ void wxCursor::SetHCURSOR(WXHCURSOR cursor)
 // Global cursor setting
 void wxSetCursor(const wxCursor& cursor)
 {
-  extern wxCursor *g_globalCursor;
-  if ( g_globalCursor )
-    (*g_globalCursor) = cursor;
+    extern wxCursor *g_globalCursor;
 
-  if (cursor.Ok() && cursor.GetHCURSOR())
-    ::SetCursor((HCURSOR) cursor.GetHCURSOR());
+    if ( cursor.Ok() && cursor.GetHCURSOR() )
+    {
+        ::SetCursor((HCURSOR) cursor.GetHCURSOR());
+
+        if ( g_globalCursor )
+            (*g_globalCursor) = cursor;
+    }
 }
 
 
