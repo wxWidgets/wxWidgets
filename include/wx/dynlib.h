@@ -243,7 +243,11 @@ public:
     static void *RawGetSymbol(wxDllType handle, const wxString& name);
     void *RawGetSymbol(const wxString& name) const
     {
+#if defined (__WXPM__) || defined(__EMX__)
+        return GetSymbol(name);
+#else
         return RawGetSymbol(m_handle, name);
+#endif
     }
 
     // return all modules/shared libraries in the address space of this process
