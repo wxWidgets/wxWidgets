@@ -1028,7 +1028,6 @@ WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile classes],
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(wcsrtombs,     [  --enable-wcsrtombs      use wcsrtombs instead of buggy (GNU libc1/Linux libc5) wcstombs], wxUSE_WCSRTOMBS)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
-WX_ARG_ENABLE(joystick,      [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(filesystem,    [  --enable-filesystem     use virtual file systems classes], wxUSE_FILESYSTEM)
 WX_ARG_ENABLE(fs_inet,       [  --enable-fs_inet        use virtual HTTP/FTP filesystems], wxUSE_FS_INET)
@@ -1208,6 +1207,7 @@ WX_ARG_ENABLE(splines,     [  --enable-splines        use spline drawing code], 
 WX_ARG_ENABLE(validators,  [  --enable-validators     use wxValidator and derived classes], wxUSE_VALIDATORS)
 WX_ARG_ENABLE(busyinfo,    [  --enable-busyinfo       use wxBusyInfo], wxUSE_BUSYINFO)
 WX_ARG_ENABLE(plot,        [  --enable-plot           use wxPlot], wxUSE_PLOT)
+WX_ARG_ENABLE(joystick,    [  --enable-joystick       compile in joystick support (Linux only)], wxUSE_JOYSTICK)
 
 dnl ---------------------------------------------------------------------------
 dnl support for image formats that do not rely on external library
@@ -2270,52 +2270,73 @@ AC_FUNC_VPRINTF
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
 
-dnl check for vsnprintf() - a safe version of vsprintf()
-dnl
-dnl NB: do it using C++ compiler as on some systems it is present in the
-dnl     libraries, but not declared in the header
-dnl
-dnl NB2: we might also check for it with AC_LANG_C if it is not found with
-dnl      AC_LANG_CPLUSPLUS and declare it ourselves if it is found in that
-dnl      case...
-AC_CHECK_FUNCS(vsnprintf,
-               AC_DEFINE(HAVE_VSNPRINTF),
-               AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
-              )
+dnl check for vsscanf() and vsnprintf() - on some platforms (Linux, glibc
+dnl 2.1.1 for the first one, HP-UX for the second) it's available in the
+dnl library but the prototype is missing, so we can't use AC_CHECK_FUNCS here,
+dnl do it manually
 
-dnl check for vsscanf() - on some platforms (Linux, glibc 2.1.1) it's
-dnl available in the library but the prototype is missing, so we can't use
-dnl AC_CHECK_FUNCS here, do it manually
+dnl we use AC_TRY_COMPILE() here instead of AC_TRY_RUN() to make the checks
+dnl work for cross-compilation, but AC_TRY_COMPILE() normally only compiles
+dnl one function while we need at least 2 - hence the ugly hack below. To
+dnl understand why it works, remember that AC_TRY_COMPILE() just prepends
+dnl "int main() {" in the beginning of the code and "; return 0; }" at the
+dnl end...
+
+dnl check for vsnprintf() - a safe version of vsprintf()
+AC_CACHE_CHECK([for vsnprintf], wx_cv_func_vsnprintf,
+[
+  AC_TRY_COMPILE([
+                    #include <stdio.h>
+                    #include <stdarg.h>
+                 ], [
+                    int wx_test_vsnprintf(const char *, ...);
+
+                    wx_test_vsnprintf("%s");
+                    return 0;
+                 }
+
+                 int wx_test_vsnprintf(const char *fmt, ...)
+                 {
+                    char *s;
+
+                    va_list argp;
+                    va_start(argp, fmt);
+                    vsnprintf(s, 42, fmt, argp);
+                    va_end(argp);
+                 ], [
+                    AC_DEFINE(HAVE_VSNPRINTF)
+                    wx_cv_func_vsnprintf=yes
+                 ], [
+                    AC_MSG_WARN(unsafe function sprintf will be used instead of snprintf)
+                    wx_cv_func_vsnprintf=no
+                 ])
+])
+
+dnl check for vsscanf()
 AC_CACHE_CHECK([for vsscanf], wx_cv_func_vsscanf,
 [
-  AC_TRY_RUN(
-             [
-                #include <stdio.h>
-                #include <stdarg.h>
+  AC_TRY_COMPILE([
+                    #include <stdio.h>
+                    #include <stdarg.h>
+                ], [
+                    int wx_test_vsscanf(const char *, ...);
 
-                int try_vsscanf(const char *format, ...)
-                {
-                  va_list ap;
-                  va_start(ap, format);
-
-                  vsscanf("17", format, ap);
-
-                  va_end(ap);
+                    wx_test_vsscanf("%d");
+                    return 0;
                 }
 
-                int main()
+                int wx_test_vsscanf(const char *fmt, ...)
                 {
-                  int i;
-                  try_vsscanf("%d", &i);
-                  return i == 17 ? 0 : 1;
-                }
-             ], [
-                AC_DEFINE(HAVE_VSSCANF)
-                wx_cv_func_vsscanf=yes
-             ],
-                wx_cv_func_vsscanf=no,
-                wx_cv_func_vsscanf=no
-             )
+                    va_list argp;
+                    va_start(argp, fmt);
+                    vsscanf("42", fmt, argp);
+                    va_end(argp);
+                ], [
+                    AC_DEFINE(HAVE_VSSCANF)
+                    wx_cv_func_vsscanf=yes
+                ], [
+                    wx_cv_func_vsscanf=no
+                ])
 ])
 
 AC_LANG_RESTORE
