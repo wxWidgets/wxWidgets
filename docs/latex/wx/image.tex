@@ -791,7 +791,7 @@ Example:
     // rescale it to have size of 32*32
     if ( bmp.GetWidth() != 32 || bmp.GetHeight() != 32 )
     {
-        wxImage image(bmp);
+        wxImage image = bmp.ConvertToImage();
         bmp = wxBitmap(image.Scale(32, 32));
 
         // another possibility:
