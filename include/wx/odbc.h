@@ -28,15 +28,14 @@
 #ifdef __UNIX__
 extern "C"
 {
-    #include "../../src/iodbc/isql.h"
-    #include "../../src/iodbc/isqlext.h"
-    #include "../../src/iodbc/odbc_funcs.h"
-    #include "../../src/iodbc/odbc_types.h"
+    #include "wx/isql.h"
+    #include "wx/isqlext.h"
 
     typedef float   SFLOAT;
     typedef double  SDOUBLE;
 
     #define ULONG UDWORD
+    #define SQL_SQLSTATE_SIZE 5
 }
 #else // !Unix
     #include <sqlext.h>
