@@ -290,9 +290,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
 
         if( err )
         {
-            failed = TRUE;
-            wxLogError(_("Couldn't find symbol '%s' in a dynamic library"),
-                       err);
+            wxLogError(wxT("%s"), err);
         }
 #else
         failed = TRUE;

@@ -337,10 +337,7 @@ void *wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name, bool *su
         const wxChar *err = dlerror();
         if( err )
         {
-            failed = TRUE;
-            wxLogError( msg, err );
-            wxLogError(_("Couldn't find symbol '%s' in a dynamic library"),
-                       err);
+            wxLogError(wxT("%s"), err);
         }
 #else
         failed = TRUE;
