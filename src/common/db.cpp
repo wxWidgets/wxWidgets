@@ -984,7 +984,7 @@ bool wxDb::getDbInfo(void)
 {
     SWORD cb;
     RETCODE retcode;
-    bool failOnDataTypeUnsupported = True;  // This is replaced by a parameter to this function in 2.5.x
+    bool failOnDataTypeUnsupported = true;  // This is replaced by a parameter to this function in 2.5.x
 
     retcode = SQLGetInfo(hdbc, SQL_SERVER_NAME, (UCHAR*) dbInf.serverName, 80, &cb);
     if (retcode != SQL_SUCCESS && retcode != SQL_SUCCESS_WITH_INFO )
