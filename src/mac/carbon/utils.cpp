@@ -461,34 +461,37 @@ int wxDisplayDepth()
 // Get size of display
 void wxDisplaySize(int *width, int *height)
 {
-	BitMap screenBits;
-	GetQDGlobalsScreenBits( &screenBits );
-
-    *width = screenBits.bounds.right - screenBits.bounds.left  ;
-    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
-#if TARGET_CARBON
- 	SInt16 mheight ;
- 	GetThemeMenuBarHeight( &mheight ) ;
-     *height -= mheight ;
-#else
-     *height -= LMGetMBarHeight() ;
-#endif
+  wxClientDisplayRect( NULL , NULL , width , height ) ;
 }
 
 void wxDisplaySizeMM(int *width, int *height)
 {
    wxDisplaySize(width, height);
+   // on mac 72 is fixed (at least now ;-)
+   *width *= 25.4 / 72 ;
+   *height *= 25.4 / 72 ;
 }
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-    // This is supposed to return desktop dimensions minus any window
-    // manager panels, menus, taskbars, etc.  If there is a way to do that
-    // for this platform please fix this function, otherwise it defaults
-    // to the entire desktop.
+  	BitMap screenBits;
+  	GetQDGlobalsScreenBits( &screenBits );
+
     if (x) *x = 0;
     if (y) *y = 0;
-    wxDisplaySize(width, height);
+
+    *width = screenBits.bounds.right - screenBits.bounds.left  ;
+    *height = screenBits.bounds.bottom - screenBits.bounds.top ;
+
+   	SInt16 mheight ;
+  #if TARGET_CARBON
+   	GetThemeMenuBarHeight( &mheight ) ;
+  #else
+    mheight = LMGetMBarHeight() ;
+  #endif
+    *height -= mheight ;
+    if ( y )
+      *y = mheight ;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
