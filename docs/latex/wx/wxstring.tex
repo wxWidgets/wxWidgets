@@ -970,8 +970,18 @@ Truncate the string to the given length.
 
 \func{void}{UngetWriteBuf}{\void}
 
-Puts the string back into a reasonable state, after
+\func{void}{UngetWriteBuf}{\param{size\_t }{len}}
+
+Puts the string back into a reasonable state (in which it can be used
+normally), after
 \rtfsp\helpref{wxString::GetWriteBuf}{wxstringgetwritebuf} was called.
+
+The version of the function without the {\it len} parameter will calculate the
+new string length itself assuming that the string is terminated by the first
+{\tt NUL} character in it while the second one will use the specified length
+and thus is the only version which should be used with the strings with
+embedded {\tt NUL}s (it is also slightly more efficient as {\tt strlen()} 
+doesn't have to be called).
 
 \membersection{wxString::Upper}\label{wxstringupper}
 
