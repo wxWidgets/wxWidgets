@@ -193,7 +193,27 @@ public:
     %extend {
         PyObject* GetLineControlPoints() {
             wxList* list = self->GetLineControlPoints();
-            return wxPy_ConvertShapeList(list);
+            return wxPy_ConvertRealPointList(list);
+        }
+
+        // part of Patch# 893337
+        void SetLineControlPoints(PyObject* list) {
+            wxList* real_point_list = wxPy_wxRealPoint_ListHelper(list);
+            self->MakeLineControlPoints((int)(real_point_list->GetCount()));
+            wxList* old_control_points = self->GetLineControlPoints();
+            wxNode* old_node = old_control_points->GetFirst();
+            wxNode* real_node = real_point_list->GetFirst();
+            while(old_node)
+            {
+                wxRealPoint* old_point = (wxRealPoint*)old_node->GetData();
+                wxRealPoint* new_point = (wxRealPoint*)real_node->GetData();
+                old_point->x = new_point->x;
+                old_point->y = new_point->y;
+                old_node = old_node->GetNext();
+                real_node = real_node->GetNext();
+            }
+            self->ClearPointList(*real_point_list);
+            delete real_point_list;
         }
     }
 
@@ -282,21 +302,7 @@ public:
     %extend {
         PyObject* GetPoints() {
             wxList* list = self->GetPoints();
-            PyObject*   pyList;
-            PyObject*   pyObj;
-            wxObject*   wxObj;
-            wxNode*     node = list->GetFirst();
-
-            bool blocked = wxPyBeginBlockThreads();
-            pyList = PyList_New(0);
-            while (node) {
-                wxObj = node->GetData();
-                pyObj = wxPyConstructObject(wxObj, wxT("wxRealPoint"), 0);
-                PyList_Append(pyList, pyObj);
-                node = node->GetNext();
-            }
-            wxPyEndBlockThreads(blocked);
-            return pyList;
+            return wxPy_ConvertRealPointList(list);
         }
 
         PyObject* GetOriginalPoints() {

@@ -101,7 +101,7 @@ wxList* wxPy_wxListHelper(PyObject* pyList, const wxChar* className);
 wxList* wxPy_wxRealPoint_ListHelper(PyObject* pyList);
 PyObject* wxPyMake_wxShapeEvtHandler(wxShapeEvtHandler* source);
 PyObject* wxPy_ConvertShapeList(wxListBase* list);
-
+PyObject* wxPy_ConvertRealPointList(wxListBase* list);
 
 
 //---------------------------------------------------------------------------
