@@ -10,8 +10,12 @@
     <set var="LIB_REGEX">
         <if cond="wxUSE_REGEX=='builtin'">wxregex</if>
     </set>
+    <set var="INC_REGEX">
+        <if cond="wxUSE_REGEX=='builtin'">$(SRCDIR)/src/regex</if>
+    </set>
 
-    <lib id="wxregex" cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
+    <lib id="wxregex" template="anylib"
+         cond="wxUSE_REGEX=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             src/regex/regcomp.c

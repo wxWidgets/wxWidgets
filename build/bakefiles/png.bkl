@@ -10,9 +10,14 @@
     <set var="LIB_PNG">
         <if cond="wxUSE_LIBPNG=='builtin'">wxpng</if>
     </set>
+    <set var="INC_PNG">
+        <if cond="wxUSE_LIBPNG=='builtin'">$(SRCDIR)/src/png</if>
+    </set>
 
-    <lib id="wxpng" cond="wxUSE_LIBPNG=='builtin' and BUILDING_LIB=='1'">
+    <lib id="wxpng" template="anylib"
+         cond="wxUSE_LIBPNG=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
+        <include>$(INC_ZLIB)</include>
         <sources>
 		    src/png/png.c
 		    src/png/pngerror.c

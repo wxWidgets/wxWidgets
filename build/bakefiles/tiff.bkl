@@ -10,10 +10,20 @@
     <set var="LIB_TIFF">
         <if cond="wxUSE_LIBTIFF=='builtin'">wxtiff</if>
     </set>
+    <set var="INC_TIFF">
+        <if cond="wxUSE_LIBTIFF=='builtin'">$(SRCDIR)/src/tiff</if>
+    </set>
 
-    <lib id="wxtiff" cond="wxUSE_LIBTIFF=='builtin' and BUILDING_LIB=='1'">
+    <set var="TIFF_PLATFORM_SRC">
+        <if cond="PLATFORM_UNIX=='1'">src/tiff/tif_unix.c</if>
+        <if cond="PLATFORM_WIN32=='1'">src/tiff/tif_win32.c</if>
+    </set>
+    
+    <lib id="wxtiff" template="anylib"
+         cond="wxUSE_LIBTIFF=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
+            $(TIFF_PLATFORM_SRC)
 		    src/tiff/tif_aux.c
 		    src/tiff/tif_close.c
 		    src/tiff/tif_codec.c
@@ -42,7 +52,6 @@
 		    src/tiff/tif_strip.c
 		    src/tiff/tif_thunder.c
 		    src/tiff/tif_tile.c
-		    src/tiff/tif_unix.c
 		    src/tiff/tif_version.c
 		    src/tiff/tif_warning.c
 		    src/tiff/tif_write.c

@@ -10,8 +10,12 @@
     <set var="LIB_ZLIB">
         <if cond="wxUSE_ZLIB=='builtin'">wxzlib</if>
     </set>
+    <set var="INC_ZLIB">
+        <if cond="wxUSE_ZLIB=='builtin'">$(SRCDIR)/src/zlib</if>
+    </set>
 
-    <lib id="wxzlib" cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
+    <lib id="wxzlib" teplate="anylib"
+         cond="wxUSE_ZLIB=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             src/zlib/adler32.c

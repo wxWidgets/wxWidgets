@@ -10,8 +10,12 @@
     <set var="LIB_JPEG">
         <if cond="wxUSE_LIBJPEG=='builtin'">wxjpeg</if>
     </set>
+    <set var="INC_JPEG">
+        <if cond="wxUSE_LIBJPEG=='builtin'">$(SRCDIR)/src/jpeg</if>
+    </set>
 
-    <lib id="wxjpeg" cond="wxUSE_LIBJPEG=='builtin' and BUILDING_LIB=='1'">
+    <lib id="wxjpeg" template="anylib"
+         cond="wxUSE_LIBJPEG=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
             src/jpeg/jcomapi.c

@@ -5,13 +5,20 @@
         <option name="wxUSE_ODBC"/>
     </if>
     <if cond="FORMAT!='autoconf'">
-        <set var="wxUSE_ODBC">builtin</set>
+        <set var="wxUSE_ODBC">
+            <if cond="PLATFORM_UNIX=='1'">builtin</if>
+            <if cond="PLATFORM_UNIX=='0'">0</if>
+        </set>
     </if>
     <set var="LIB_ODBC">
         <if cond="wxUSE_ODBC=='builtin'">wxodbc</if>
     </set>
+    <set var="INC_ODBC">
+        <if cond="wxUSE_ODBC=='builtin'">$(SRCDIR)/src/odbc</if>
+    </set>
 
-    <lib id="wxodbc" cond="wxUSE_ODBC=='builtin' and BUILDING_LIB=='1'">
+    <lib id="wxodbc" template="anylib"
+         cond="wxUSE_ODBC=='builtin' and BUILDING_LIB=='1'">
         <dirname>$(LIBDIRNAME)</dirname>
         <sources>
  		    src/iodbc/catalog.c
