@@ -9,6 +9,14 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "grid.h"
 #endif
@@ -39,8 +47,10 @@
 #include "wx/generic/grid.h"
 
 // ----------------------------------------------------------------------------
-// array classes instantiation
+// array classes
 // ----------------------------------------------------------------------------
+
+WX_DEFINE_ARRAY(wxGridCellAttr *, wxArrayAttrs);
 
 struct wxGridCellWithAttr
 {
@@ -156,10 +166,12 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// ----------------------------------------------------------------------------
 // the internal data representation used by wxGridCellAttrProvider
-//
-// TODO make it more efficient
-class WXDLLEXPORT wxGridCellAttrProviderData
+// ----------------------------------------------------------------------------
+
+// this class stores attributes set for cells
+class WXDLLEXPORT wxGridCellAttrData
 {
 public:
     void SetAttr(wxGridCellAttr *attr, int row, int col);
@@ -170,6 +182,30 @@ private:
     int FindIndex(int row, int col) const;
 
     wxGridCellWithAttrArray m_attrs;
+};
+
+// this class stores attributes set for rows or columns
+class WXDLLEXPORT wxGridRowOrColAttrData
+{
+public:
+    ~wxGridRowOrColAttrData();
+
+    void SetAttr(wxGridCellAttr *attr, int rowOrCol);
+    wxGridCellAttr *GetAttr(int rowOrCol) const;
+
+private:
+    wxArrayInt m_rowsOrCols;
+    wxArrayAttrs m_attrs;
+};
+
+// NB: this is just a wrapper around 3 objects: one which stores cell
+//     attributes, and 2 others for row/col ones
+class WXDLLEXPORT wxGridCellAttrProviderData
+{
+public:
+    wxGridCellAttrData m_cellAttrs;
+    wxGridRowOrColAttrData m_rowAttrs,
+                           m_colAttrs;
 };
 
 // ----------------------------------------------------------------------------
@@ -266,11 +302,10 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
 }
 
 // ----------------------------------------------------------------------------
-// wxGridCellAttrProviderData
+// wxGridCellAttrData
 // ----------------------------------------------------------------------------
 
-void wxGridCellAttrProviderData::SetAttr(wxGridCellAttr *attr,
-                                         int row, int col)
+void wxGridCellAttrData::SetAttr(wxGridCellAttr *attr, int row, int col)
 {
     int n = FindIndex(row, col);
     if ( n == wxNOT_FOUND )
@@ -293,7 +328,7 @@ void wxGridCellAttrProviderData::SetAttr(wxGridCellAttr *attr,
     }
 }
 
-wxGridCellAttr *wxGridCellAttrProviderData::GetAttr(int row, int col) const
+wxGridCellAttr *wxGridCellAttrData::GetAttr(int row, int col) const
 {
     wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
 
@@ -307,7 +342,7 @@ wxGridCellAttr *wxGridCellAttrProviderData::GetAttr(int row, int col) const
     return attr;
 }
 
-int wxGridCellAttrProviderData::FindIndex(int row, int col) const
+int wxGridCellAttrData::FindIndex(int row, int col) const
 {
     size_t count = m_attrs.GetCount();
     for ( size_t n = 0; n < count; n++ )
@@ -320,6 +355,59 @@ int wxGridCellAttrProviderData::FindIndex(int row, int col) const
     }
 
     return wxNOT_FOUND;
+}
+
+// ----------------------------------------------------------------------------
+// wxGridRowOrColAttrData
+// ----------------------------------------------------------------------------
+
+wxGridRowOrColAttrData::~wxGridRowOrColAttrData()
+{
+    size_t count = m_attrs.Count();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        m_attrs[n]->DecRef();
+    }
+}
+
+wxGridCellAttr *wxGridRowOrColAttrData::GetAttr(int rowOrCol) const
+{
+    wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
+
+    int n = m_rowsOrCols.Index(rowOrCol);
+    if ( n != wxNOT_FOUND )
+    {
+        attr = m_attrs[(size_t)n];
+        attr->IncRef();
+    }
+
+    return attr;
+}
+
+void wxGridRowOrColAttrData::SetAttr(wxGridCellAttr *attr, int rowOrCol)
+{
+    int n = m_rowsOrCols.Index(rowOrCol);
+    if ( n == wxNOT_FOUND )
+    {
+        // add the attribute
+        m_rowsOrCols.Add(rowOrCol);
+        m_attrs.Add(attr);
+    }
+    else
+    {
+        if ( attr )
+        {
+            // change the attribute
+            m_attrs[(size_t)n] = attr;
+        }
+        else
+        {
+            // remove this attribute
+            m_attrs[(size_t)n]->DecRef();
+            m_rowsOrCols.RemoveAt((size_t)n);
+            m_attrs.RemoveAt((size_t)n);
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -343,7 +431,27 @@ void wxGridCellAttrProvider::InitData()
 
 wxGridCellAttr *wxGridCellAttrProvider::GetAttr(int row, int col) const
 {
-    return m_data ? m_data->GetAttr(row, col) : (wxGridCellAttr *)NULL;
+    wxGridCellAttr *attr = (wxGridCellAttr *)NULL;
+    if ( m_data )
+    {
+        // first look for the attribute of this specific cell
+        attr = m_data->m_cellAttrs.GetAttr(row, col);
+
+        if ( !attr )
+        {
+            // then look for the col attr (col attributes are more common than
+            // the row ones, hence they have priority)
+            attr = m_data->m_colAttrs.GetAttr(col);
+        }
+
+        if ( !attr )
+        {
+            // finally try the row attributes
+            attr = m_data->m_rowAttrs.GetAttr(row);
+        }
+    }
+
+    return attr;
 }
 
 void wxGridCellAttrProvider::SetAttr(wxGridCellAttr *attr,
@@ -352,8 +460,28 @@ void wxGridCellAttrProvider::SetAttr(wxGridCellAttr *attr,
     if ( !m_data )
         InitData();
 
-    m_data->SetAttr(attr, row, col);
+    m_data->m_cellAttrs.SetAttr(attr, row, col);
 }
+
+void wxGridCellAttrProvider::SetRowAttr(wxGridCellAttr *attr, int row)
+{
+    if ( !m_data )
+        InitData();
+
+    m_data->m_rowAttrs.SetAttr(attr, row);
+}
+
+void wxGridCellAttrProvider::SetColAttr(wxGridCellAttr *attr, int col)
+{
+    if ( !m_data )
+        InitData();
+
+    m_data->m_colAttrs.SetAttr(attr, col);
+}
+
+// ----------------------------------------------------------------------------
+// wxGridTableBase
+// ----------------------------------------------------------------------------
 
 //////////////////////////////////////////////////////////////////////
 //
@@ -387,11 +515,39 @@ wxGridCellAttr *wxGridTableBase::GetAttr(int row, int col)
         return (wxGridCellAttr *)NULL;
 }
 
-void wxGridTableBase::SetAttr(wxGridCellAttr *attr, int row, int col )
+void wxGridTableBase::SetAttr(wxGridCellAttr* attr, int row, int col)
 {
     if ( m_attrProvider )
     {
         m_attrProvider->SetAttr(attr, row, col);
+    }
+    else
+    {
+        // as we take ownership of the pointer and don't store it, we must
+        // free it now
+        attr->SafeDecRef();
+    }
+}
+
+void wxGridTableBase::SetRowAttr(wxGridCellAttr *attr, int row)
+{
+    if ( m_attrProvider )
+    {
+        m_attrProvider->SetRowAttr(attr, row);
+    }
+    else
+    {
+        // as we take ownership of the pointer and don't store it, we must
+        // free it now
+        attr->SafeDecRef();
+    }
+}
+
+void wxGridTableBase::SetColAttr(wxGridCellAttr *attr, int col)
+{
+    if ( m_attrProvider )
+    {
+        m_attrProvider->SetColAttr(attr, col);
     }
     else
     {
@@ -4744,7 +4900,7 @@ void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert )
 }
 
 // ----------------------------------------------------------------------------
-// setting cell attributes: this is forwarded to the table
+// attribute support: cache, automatic provider creation, ...
 // ----------------------------------------------------------------------------
 
 bool wxGrid::CanHaveAttributes()
@@ -4843,6 +4999,34 @@ wxGridCellAttr *wxGrid::GetOrCreateCellAttr(int row, int col) const
     }
 
     return attr;
+}
+
+// ----------------------------------------------------------------------------
+// setting cell attributes: this is forwarded to the table
+// ----------------------------------------------------------------------------
+
+void wxGrid::SetRowAttr(int row, wxGridCellAttr *attr)
+{
+    if ( CanHaveAttributes() )
+    {
+        m_table->SetRowAttr(attr, row);
+    }
+    else
+    {
+        attr->SafeDecRef();
+    }
+}
+
+void wxGrid::SetColAttr(int col, wxGridCellAttr *attr)
+{
+    if ( CanHaveAttributes() )
+    {
+        m_table->SetColAttr(attr, col);
+    }
+    else
+    {
+        attr->SafeDecRef();
+    }
 }
 
 void wxGrid::SetCellBackgroundColour( int row, int col, const wxColour& colour )

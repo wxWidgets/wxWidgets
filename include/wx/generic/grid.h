@@ -199,7 +199,10 @@ private:
 // implementation note: we separate it from wxGridTableBase because we wish to
 // avoid deriving a new table class if possible, and sometimes it will be
 // enough to just derive another wxGridCellAttrProvider instead
-
+//
+// the default implementation is reasonably efficient for the generic case,
+// but you might still wish to implement your own for some specific situations
+// if you have performance problems with the stock one
 class WXDLLEXPORT wxGridCellAttrProvider
 {
 public:
@@ -209,8 +212,11 @@ public:
     // DecRef() must be called on the returned pointer
     virtual wxGridCellAttr *GetAttr(int row, int col) const;
 
-    // takes ownership of the pointer, don't call DecRef() on it
+    // all these functions take ownership of the pointer, don't call DecRef()
+    // on it
     virtual void SetAttr(wxGridCellAttr *attr, int row, int col);
+    virtual void SetRowAttr(wxGridCellAttr *attr, int row);
+    virtual void SetColAttr(wxGridCellAttr *attr, int col);
 
 private:
     void InitData();
@@ -270,8 +276,10 @@ public:
     // overridden to handle attributes directly in this class.
     virtual wxGridCellAttr *GetAttr( int row, int col );
 
-    // takes ownership of the pointer
-    virtual void SetAttr(wxGridCellAttr *attr, int row, int col );
+    // these functions take ownership of the pointer
+    virtual void SetAttr(wxGridCellAttr* attr, int row, int col);
+    virtual void SetRowAttr(wxGridCellAttr *attr, int row);
+    virtual void SetColAttr(wxGridCellAttr *attr, int col);
 
 private:
     wxGrid * m_view;
@@ -673,6 +681,10 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
+
+    // this sets the specified attribute for all cells in this row/col
+    void     SetRowAttr(int row, wxGridCellAttr *attr);
+    void     SetColAttr(int col, wxGridCellAttr *attr);
 
     void     EnableGridLines( bool enable = TRUE );
     bool     GridLinesEnabled() { return m_gridLinesEnabled; }

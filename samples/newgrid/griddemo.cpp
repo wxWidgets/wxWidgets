@@ -201,6 +201,14 @@ GridFrame::GridFrame()
     grid->SetCellAlignment(4, 4, wxCENTRE, wxCENTRE);
     grid->SetCellRenderer(4, 4, new MyGridCellRenderer);
 
+    wxGridCellAttr *attr;
+    attr = new wxGridCellAttr;
+    attr->SetTextColour(*wxBLUE);
+    grid->SetColAttr(5, attr);
+    attr = new wxGridCellAttr;
+    attr->SetBackgroundColour(*wxBLUE);
+    grid->SetRowAttr(5, attr);
+
     wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
     topSizer->Add( grid,
                    1,
@@ -447,14 +455,20 @@ void GridFrame::SetCellFgColour( wxCommandEvent& WXUNUSED(ev) )
 {
     wxColour col = wxGetColourFromUser(this);
     if ( col.Ok() )
+    {
         grid->SetDefaultCellTextColour(col);
+        grid->Refresh();
+    }
 }
 
 void GridFrame::SetCellBgColour( wxCommandEvent& WXUNUSED(ev) )
 {
     wxColour col = wxGetColourFromUser(this);
     if ( col.Ok() )
+    {
         grid->SetDefaultCellBackgroundColour(col);
+        grid->Refresh();
+    }
 }
 
 void GridFrame::OnLabelLeftClick( wxGridEvent& ev )
@@ -573,6 +587,9 @@ void GridFrame::OnQuit( wxCommandEvent& WXUNUSED(ev) )
 // MyGridCellRenderer
 // ----------------------------------------------------------------------------
 
+// do something that the default renderer doesn't here just to show that it is
+// possible to alter the appearance of the cell beyond what the attributes
+// allow
 void MyGridCellRenderer::Draw(wxGrid& grid,
                               wxDC& dc,
                               const wxRect& rect,
