@@ -1,7 +1,8 @@
 
 5th January: wxWindows 2.2.4 released
 
-Small Postscript bouding box fix.
+Corrected wxMenuItem::GetLabel() to handle deliberate '-'
+characters correctly.
 
 Patch for better 8-bit-display support.
 
