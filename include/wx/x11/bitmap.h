@@ -12,7 +12,7 @@
 #ifndef _WX_BITMAP_H_
 #define _WX_BITMAP_H_
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
 #pragma interface "bitmap.h"
 #endif
 

@@ -11,7 +11,7 @@
 #ifndef __X11TEXTCTRLH__
 #define __X11TEXTCTRLH__
 
-#ifdef __GNUG__
+#if defined(__GNUG__) && !defined(__APPLE__)
     #pragma interface "textctrl.h"
 #endif
 
