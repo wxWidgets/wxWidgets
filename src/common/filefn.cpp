@@ -1371,7 +1371,7 @@ static wxString gs_dirPath;
 
 wxString wxFindFirstFile(const wxChar *spec, int flags)
 {
-    gs_dirPath = wxPathOnly(spec);
+    wxSplitPath(spec, &gs_dirPath, NULL, NULL);
     if ( gs_dirPath.IsEmpty() )
         gs_dirPath = wxT(".");
     if ( gs_dirPath.Last() != wxFILE_SEP_PATH )
