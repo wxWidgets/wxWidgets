@@ -106,6 +106,11 @@ inline int WXDLLEXPORT Stricmp(const char *psz1, const char *psz2)
   #error  "Please define string case-insensitive compare for your OS/compiler"
 #endif  // OS/compiler
 }
+wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
+wxString WXDLLEXPORT operator+(const wxString& string, char ch);
+wxString WXDLLEXPORT operator+(char ch, const wxString& string);
+wxString WXDLLEXPORT operator+(const wxString& string, const char *psz);
+wxString WXDLLEXPORT operator+(const char *psz, const wxString& string);
 
 // ----------------------------------------------------------------------------
 // global data
@@ -360,15 +365,15 @@ public:
     /** @name return resulting string */
     //@{
       ///
-  friend wxString operator+(const wxString& string1,  const wxString& string2);
+  friend wxString WXDLLEXPORT operator+(const wxString& string1,  const wxString& string2);
       ///
-  friend wxString operator+(const wxString& string, char ch);
+  friend wxString WXDLLEXPORT operator+(const wxString& string, char ch);
       ///
-  friend wxString operator+(char ch, const wxString& string);
+  friend wxString WXDLLEXPORT operator+(char ch, const wxString& string);
       ///
-  friend wxString operator+(const wxString& string, const char *psz);
+  friend wxString WXDLLEXPORT operator+(const wxString& string, const char *psz);
       ///
-  friend wxString operator+(const char *psz, const wxString& string);
+  friend wxString WXDLLEXPORT operator+(const char *psz, const wxString& string);
     //@}
   //@}
 

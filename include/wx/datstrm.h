@@ -18,7 +18,7 @@
 
 #include <wx/stream.h>
 
-class wxDataInputStream: public wxFilterInputStream {
+class WXDLLEXPORT wxDataInputStream: public wxFilterInputStream {
 public:
   wxDataInputStream(wxInputStream& s);
   virtual ~wxDataInputStream();
@@ -31,7 +31,7 @@ public:
   wxString ReadString();
 };
 
-class wxDataOutputStream: public wxFilterOutputStream {
+class WXDLLEXPORT wxDataOutputStream: public wxFilterOutputStream {
  public:
   wxDataOutputStream(wxOutputStream& s);
   virtual ~wxDataOutputStream();
