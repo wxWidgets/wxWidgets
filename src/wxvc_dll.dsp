@@ -587,6 +587,10 @@ SOURCE=.\generic\dragimgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\fdrepdlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File
