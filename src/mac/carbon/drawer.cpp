@@ -4,8 +4,8 @@
 //              Drawer windows appear under their parent window and
 //              behave like a drawer, opening and closing to reveal
 //              content that does not need to be visible at all times.
-// Author:      Jason Bagley
-// Modified by:
+// Author:      Jason Bagley & Ryan Norton 
+// Modified by: 
 // Created:     2004-30-01
 // RCS-ID:      $Id$
 // Copyright:   (c) Jason Bagley; Art & Logic, Inc.
@@ -22,10 +22,6 @@
 #include "wx/mac/private.h"
 
 #if defined( __WXMAC__ ) && TARGET_API_MAC_OSX && ( MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_2 )
-
-// TODO:
-// ¥ Contents do not draw on drawer opening. They do when a window is deactivated
-//   with the drawer open, and contents stay visible thereafter.
 
 IMPLEMENT_DYNAMIC_CLASS(wxDrawerWindow, wxWindow)
 
