@@ -107,7 +107,9 @@ wxGTK:
 
 wxHTML:
 
-- fixed wxHtmlHelpController's cache files on big endian machines
+- fixed wxHtmlHelpController's cache files handling on big endian machines
+- added blocking and redirecting capabilities to wxHtmlWindow via
+  wxHtmlWindow::OnOpeningURL()
 
 2.3.2
 -----
