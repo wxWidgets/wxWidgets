@@ -30,8 +30,8 @@ swig-1.3.24.patch
     making a copy.
 
     Part of my autodoc patch was disabled becuase a unit-test failed.
-    I was not able to duplicate the failure so I re-enabled that
-    section of code in this patch.
+    It turns out that the failure was due to a name clash in the unit
+    test itself, so I re-enabled that section of code in this patch.
 
     Don't generate the autodocs string for a class if it has a
     docstring attribute.
