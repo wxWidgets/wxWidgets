@@ -47,6 +47,7 @@ typedef wxString wxArtID;
 #define wxART_CMN_DIALOG           wxART_MAKE_CLIENT_ID(wxART_CMN_DIALOG)      
 #define wxART_HELP_BROWSER         wxART_MAKE_CLIENT_ID(wxART_HELP_BROWSER)    
 #define wxART_MESSAGE_BOX          wxART_MAKE_CLIENT_ID(wxART_MESSAGE_BOX)     
+#define wxART_BUTTON               wxART_MAKE_CLIENT_ID(wxART_BUTTON)
 
 #define wxART_OTHER                wxART_MAKE_CLIENT_ID(wxART_OTHER)           
 
@@ -119,6 +120,8 @@ protected:
     friend class wxArtProviderModule;
     // Initializes default provider
     static void InitStdProvider();
+    // Initializes platform's native provider, if available (e.g. GTK2)
+    static void InitNativeProvider();
     // Destroy caches & all providers
     static void CleanUpProviders();
 
