@@ -267,8 +267,8 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
     {
         m_parent->AddChild(this);
         m_parent->CocoaAddChild(this);
+        SetInitialFrameRect(pos,size);
     }
-    SetInitialFrameRect(pos,size);
 
     return TRUE;
 }
