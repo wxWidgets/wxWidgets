@@ -165,7 +165,8 @@ public:
                                    const wxString& label,
                                    const wxBitmap& bitmap,
                                    const wxRect& rect,
-                                   int flags);
+                                   int flags = 0,
+                                   long style = 0);
 
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
@@ -1632,7 +1633,8 @@ void wxGTKRenderer::DrawToolBarButton(wxDC& dc,
                                       const wxString& label,
                                       const wxBitmap& bitmap,
                                       const wxRect& rectOrig,
-                                      int flags)
+                                      int flags,
+                                      long style)
 {
     // we don't draw the separators at all
     if ( !label.empty() || bitmap.Ok() )

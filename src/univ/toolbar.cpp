@@ -72,6 +72,24 @@ public:
         // no position yet
         m_x =
         m_y = -1;
+        m_width =
+        m_height = 0;
+
+        // not pressed yet
+        m_isInverted = FALSE;
+        
+        // mouse not here yet
+        m_underMouse = FALSE;
+    }
+
+    wxToolBarTool(wxToolBar *tbar, wxControl *control)
+        : wxToolBarToolBase(tbar, control)
+    {
+        // no position yet
+        m_x =
+        m_y = -1;
+        m_width =
+        m_height = 0;
 
         // not pressed yet
         m_isInverted = FALSE;
@@ -96,9 +114,11 @@ public:
     bool IsUnderMouse() { return m_underMouse; }
 
 public:
-    // the tool position (the size is known by the toolbar itself)
-    int m_x,
-        m_y;
+    // the tool position (for controls)
+    wxCoord m_x;
+    wxCoord m_y;
+    wxCoord m_width;
+    wxCoord m_height;
 
 private:
     // TRUE if the tool is pressed
@@ -330,9 +350,7 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
 
 wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
 {
-    wxFAIL_MSG( wxT("Toolbar doesn't support controls yet (TODO)") );
-
-    return NULL;
+    return new wxToolBarTool(this, control);
 }
 
 // ----------------------------------------------------------------------------
@@ -358,13 +376,39 @@ wxRect wxToolBar::GetToolRect(wxToolBarToolBase *toolBase) const
 
     if ( IsVertical() )
     {
-        rect.width = m_defaultWidth;
-        rect.height = tool->IsSeparator() ? m_widthSeparator : m_defaultHeight;
+		if (tool->IsButton())
+        {
+            rect.width = m_defaultWidth;
+            rect.height = m_defaultHeight;
+        }
+        else if (tool->IsSeparator())
+        {
+            rect.width = m_defaultWidth;
+            rect.height = m_widthSeparator;
+        }
+        else // control
+        {
+            rect.width = tool->m_width;
+            rect.height = tool->m_height;
+        }
     }
     else // horizontal
     {
-        rect.width = tool->IsSeparator() ? m_widthSeparator : m_defaultWidth;
-        rect.height = m_defaultHeight;
+        if (tool->IsButton())
+        {
+            rect.width = m_defaultWidth;
+            rect.height = m_defaultHeight;
+        }
+        else if (tool->IsSeparator())
+        {
+            rect.width = m_widthSeparator;
+            rect.height = m_defaultHeight;
+        }
+        else // control
+        {
+            rect.width = tool->m_width;
+            rect.height = tool->m_height;
+        }
     }
 
     rect.width += 2*m_xMargin;
@@ -410,7 +454,25 @@ void wxToolBar::DoLayout()
         tool->m_y = y;
 
         // TODO ugly number fiddling
-        *pCur += ( tool->IsSeparator() ? m_widthSeparator : (widthTool+2) ) + margin;
+        if (tool->IsButton())
+        {
+            *pCur += widthTool;
+        }
+        else if (tool->IsSeparator())
+        {
+            *pCur += m_widthSeparator;
+        }
+        else if (!IsVertical()) // horizontal control
+        {
+            wxControl *control = tool->GetControl();
+            wxSize size = control->GetSize();
+            tool->m_y += (m_defaultHeight - size.y)/2;
+            tool->m_width = size.x;
+            tool->m_height = size.y;
+
+            *pCur += tool->m_width;
+        }
+        *pCur += margin;
     }
 
     // calculate the total toolbar size
@@ -562,7 +624,15 @@ void wxToolBar::DoDraw(wxControlRenderer *renderer)
         }
         //else: leave both the label and the bitmap invalid to draw a separator
 
-        rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags);
+        if ( !tool->IsControl() )
+        {
+            rend->DrawToolBarButton(dc, label, bitmap, rectTool, flags, tool->GetStyle());
+        }
+        else // control
+        {
+            wxControl *control = tool->GetControl();
+            control->Move(tool->m_x, tool->m_y);
+        }
     }
 }
 

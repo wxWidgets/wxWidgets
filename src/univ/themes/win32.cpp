@@ -239,7 +239,8 @@ public:
                                    const wxString& label,
                                    const wxBitmap& bitmap,
                                    const wxRect& rect,
-                                   int flags);
+                                   int flags = 0,
+                                   long style = 0);
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect& rect,
@@ -2407,9 +2408,10 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
                                         const wxString& label,
                                         const wxBitmap& bitmap,
                                         const wxRect& rectOrig,
-                                        int flags)
+                                        int flags,
+                                        long style)
 {
-    if ( !label.empty() || bitmap.Ok() )
+    if (style == wxTOOL_STYLE_BUTTON)
     {
         wxRect rect = rectOrig;
         rect.Deflate(BORDER_THICKNESS);
@@ -2425,7 +2427,7 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
 
         dc.DrawLabel(label, bitmap, rect, wxALIGN_CENTRE);
     }
-    else // a separator
+    else if (style == wxTOOL_STYLE_SEPARATOR)
     {
         // leave a small gap aroudn the line, also account for the toolbar
         // border itself
@@ -2433,6 +2435,7 @@ void wxWin32Renderer::DrawToolBarButton(wxDC& dc,
                          rectOrig.y + 2*BORDER_THICKNESS,
                          rectOrig.GetBottom() - BORDER_THICKNESS);
     }
+    // don't draw wxTOOL_STYLE_CONTROL
 }
 
 // ----------------------------------------------------------------------------

@@ -203,7 +203,8 @@ public:
                                    const wxString& label,
                                    const wxBitmap& bitmap,
                                    const wxRect& rect,
-                                   int flags = 0) = 0;
+                                   int flags = 0,
+                                   long style = 0) = 0;
 
     // draw a (part of) line in the text control
     virtual void DrawTextLine(wxDC& dc,
@@ -621,8 +622,9 @@ public:
                                    const wxString& label,
                                    const wxBitmap& bitmap,
                                    const wxRect& rect,
-                                   int flags = 0)
-        { m_renderer->DrawToolBarButton(dc, label, bitmap, rect, flags); }
+                                   int flags = 0,
+                                   long style = 0)
+        { m_renderer->DrawToolBarButton(dc, label, bitmap, rect, flags, style); }
     virtual void DrawTextLine(wxDC& dc,
                               const wxString& text,
                               const wxRect& rect,
