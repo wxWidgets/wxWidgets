@@ -97,28 +97,44 @@ void wxURI::Clear()
 // This creates the URI - all we do here is call the main parsing method 
 // ---------------------------------------------------------------------------
 
-void wxURI::Create(const wxString& uri)
+const wxChar* wxURI::Create(const wxString& uri)
 {   
     if (m_fields)
         Clear();
 
-    Parse(uri);    
+    return Parse(uri);    
 } 
 
 // ---------------------------------------------------------------------------
-// Escape/Unescape/IsEscape
+// Escape/TranslateEscape/IsEscape
 //
-// Unescape unencodes a 3 character URL escape sequence 
+// TranslateEscape unencodes a 3 character URL escape sequence 
 // Escape encodes an invalid URI character into a 3 character sequence
 // IsEscape determines if the input string contains an escape sequence,
 // if it does, then it moves the input string past the escape sequence
 // ---------------------------------------------------------------------------
 
-wxChar wxURI::Unescape(const wxChar* s)
+wxChar wxURI::TranslateEscape(const wxChar* s)
 {
     wxASSERT_MSG(IsHex(*s) && IsHex(*(s+1)), wxT("Invalid escape!"));
 
     return CharToHex(*s) * 0x10 + CharToHex(*++s);
+}
+
+wxString wxURI::Unescape(const wxString& uri)
+{
+    wxString new_uri;
+
+    for(size_t i = 0; i < uri.length(); ++i)
+    {
+        if (uri[i] == wxT('%'))
+        {
+            new_uri += wxURI::TranslateEscape( &(uri.c_str()[i+1]) );
+            i += 2;
+        }
+    }
+
+    return new_uri;
 }
 
 void wxURI::Escape(wxString& s, const wxChar& c)
@@ -141,13 +157,13 @@ bool wxURI::IsEscape(const wxChar*& uri)
 }
 
 // ---------------------------------------------------------------------------
-// Get
+// BuildURI
 //
-// Get() actually builds the entire URI into a useable 
+// BuildURI() builds the entire URI into a useable 
 // representation, including proper identification characters such as slashes
 // ---------------------------------------------------------------------------
 
-wxString wxURI::Get() const
+wxString wxURI::BuildURI() const
 {   
     wxString ret;
 
@@ -174,6 +190,40 @@ wxString wxURI::Get() const
 
     if (HasFragment())
         ret = ret + wxT("#") + m_fragment;
+
+    return ret;
+}
+
+wxString wxURI::BuildUnescapedURI() const
+{
+    wxString ret;
+
+    if (HasScheme())
+        ret = ret + m_scheme + wxT(":");
+
+    if (HasServer())
+    {
+        ret += wxT("//");
+
+        if (HasUser())
+            ret = ret + wxURI::Unescape(m_user) + wxT("@");
+
+        if (m_hostType == wxURI_REGNAME)
+            ret += wxURI::Unescape(m_server);
+        else
+            ret += m_server;
+
+        if (HasPort())
+            ret = ret + wxT(":") + m_port;
+    }
+
+    ret += wxURI::Unescape(m_path);
+
+    if (HasQuery())
+        ret = ret + wxT("?") + wxURI::Unescape(m_query);
+
+    if (HasFragment())
+        ret = ret + wxT("#") + wxURI::Unescape(m_fragment);
 
     return ret;
 }
@@ -1057,7 +1107,7 @@ bool wxURI::ParseIPvFuture(const wxChar*& uri)
 // Misc methods - IsXXX and CharToHex
 // ---------------------------------------------------------------------------
 
-int wxURI::CharToHex(const wxChar& c)
+wxInt32 wxURI::CharToHex(const wxChar& c)
 {
 	if ((c >= 'A') && (c <= 'Z'))	return c - 'A' + 0x0A;
 	if ((c >= 'a') && (c <= 'z'))	return c - 'a' + 0x0a;
@@ -1125,93 +1175,25 @@ bool wxURI::IsDigit(const wxChar& c)
 //
 //                        wxURL Compatability
 //
-// TODO:  Use wxURI instead here...
 // ---------------------------------------------------------------------------
 
 #if wxUSE_URL
 
+#if WXWIN_COMPATIBILITY_2_4
+
 #include "wx/url.h"
 
-wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* delims)
+wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* WXUNUSED(delims))
 {
-  wxString out_str;
-  wxString hexa_code;
-  size_t i;
-
-  for (i = 0; i < uri.Len(); i++)
-  {
-    wxChar c = uri.GetChar(i);
-
-    if (c == wxT(' '))
-    {
-      // GRG, Apr/2000: changed to "%20" instead of '+'
-
-      out_str += wxT("%20");
-    }
-    else
-    {
-      // GRG, Apr/2000: modified according to the URI definition (RFC 2396)
-      //
-      // - Alphanumeric characters are never escaped
-      // - Unreserved marks are never escaped
-      // - Delimiters must be escaped if they appear within a component
-      //     but not if they are used to separate components. Here we have
-      //     no clear way to distinguish between these two cases, so they
-      //     are escaped unless they are passed in the 'delims' parameter
-      //     (allowed delimiters).
-
-      static const wxChar marks[] = wxT("-_.!~*()'");
-
-      if ( !wxIsalnum(c) && !wxStrchr(marks, c) && !wxStrchr(delims, c) )
-      {
-        hexa_code.Printf(wxT("%%%02X"), c);
-        out_str += hexa_code;
-      }
-      else
-      {
-        out_str += c;
-      }
-    }
-  }
-
-  return out_str;
+    return wxURI(uri).BuildURI();
 }
 
 wxString wxURL::ConvertFromURI(const wxString& uri)
 {
-  wxString new_uri;
-
-  size_t i = 0;
-  while (i < uri.Len())
-  {
-    int code;
-    if (uri[i] == wxT('%'))
-    {
-      i++;
-      if (uri[i] >= wxT('A') && uri[i] <= wxT('F'))
-        code = (uri[i] - wxT('A') + 10) * 16;
-      else if (uri[i] >= wxT('a') && uri[i] <= wxT('f'))
-        code = (uri[i] - wxT('a') + 10) * 16;
-      else
-        code = (uri[i] - wxT('0')) * 16;
-
-      i++;
-      if (uri[i] >= wxT('A') && uri[i] <= wxT('F'))
-        code += (uri[i] - wxT('A')) + 10;
-      else if (uri[i] >= wxT('a') && uri[i] <= wxT('f'))
-        code += (uri[i] - wxT('a')) + 10;
-      else
-        code += (uri[i] - wxT('0'));
-
-      i++;
-      new_uri += (wxChar)code;
-      continue;
-    }
-    new_uri += uri[i];
-    i++;
-  }
-  return new_uri;
+    return wxURI::Unescape(uri);
 }
+
+#endif //WXWIN_COMPATIBILITY_2_4
 
 #endif //wxUSE_URL
 

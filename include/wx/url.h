@@ -72,11 +72,16 @@ public:
     void SetProxy(const wxString& url_proxy);
 #endif // wxUSE_SOCKETS
 
+#if WXWIN_COMPATIBILITY_2_4
+    //Use wxURI instead - delims is ignored
     static wxString ConvertToValidURI(
                         const wxString& uri,
                         const wxChar* delims = wxT(";/?:@&=+$,")
                     );
+
+    //Use wxURI::Unescape instead
     static wxString ConvertFromURI(const wxString& uri);
+#endif
 
 protected:
     static wxProtoInfo *ms_protocols;

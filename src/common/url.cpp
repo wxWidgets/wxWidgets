@@ -62,14 +62,14 @@ wxURL::wxURL(const wxString& url) : wxURI(url)
 
 wxURL::wxURL(const wxURI& url) : wxURI(url)
 {
-    Init(url.Get());
+    Init(url.BuildURI());
     ParseURL();
 }
 
 wxURL& wxURL::operator = (const wxURI& url)
 {
     wxURI::operator = (url);
-    Init(url.Get());
+    Init(url.BuildURI());
     ParseURL();
     return *this;
 }

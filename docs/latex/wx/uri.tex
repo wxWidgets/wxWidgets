@@ -88,6 +88,28 @@ Copies this URI from another URI.
 \docparam{uri}{URI (Uniform Resource Identifier) to initialize with}
 
 
+\membersection{wxURI::BuildURI}\label{wxuribuilduri}
+
+\constfunc{wxString}{BuildURI}{\void}
+
+Builds the URI from its individual components and adds proper seperators.
+
+If the URI is not a reference or is not resolved, 
+the URI that is returned from Get is the same one 
+passed to Create.
+
+
+\membersection{wxURI::BuildUnescapedURI}\label{wxuribuildunescapeduri}
+
+\constfunc{wxString}{BuildUnescapedURI}{\void}
+
+Builds the URI from its individual components, adds proper seperators, and
+returns escape sequences to normal characters.
+
+Note that it is preferred to call this over Unescape(BuildURI()) since
+BuildUnescapedURI performs some optimizations over the plain method.
+
+
 \membersection{wxURI::Create}\label{wxuricreate}
 
 \func{void}{Create}{\param{const wxChar* }{uri}}
@@ -96,15 +118,6 @@ Creates this URI from the string \arg{uri}.
 
 \docparam{uri}{string to initialize from}
 
-\membersection{wxURI::Get}\label{wxuriget}
-
-\constfunc{wxString}{Get}{\void}
-
-Obtains the full URI.
-
-If the URI is not a reference or is not resolved, 
-the URI that is returned from Get is the same one 
-passed to Create.
 
 \membersection{wxURI::GetFragment}\label{wxurigetfragment}
 
@@ -299,4 +312,19 @@ of the base's is merged with this URI's path, resulting in the URI
 \docparam{flags}{Currently either \texttt{wxURI\_STRICT} or $0$, in non strict
 mode some compatability layers are enabled to allow loopholes from RFCs prior
 to 2396}
+
+\membersection{wxURI::Unescape}\label{wxuriunescape}
+
+\func{wxString}{Unescape}{\param{const wxString\& }{uri}}
+
+Translates all escape sequences (% hex hex) of \arg{uri} into
+normal characters and returns the result.
+
+This is the preferred over wxURL::ConvertFromURI.
+
+If you want to unescape an entire wxURI, use BuildUnescapedURI instead,
+as it performs some optimizations over this method.
+
+\docparam{uri}{string with escaped characters to convert}
+
 

@@ -61,7 +61,7 @@ public:
 
     virtual ~wxURI();
 
-    void Create(const wxString& uri);
+    const wxChar* Create(const wxString& uri);
 
     bool HasScheme() const      {   return (m_fields & wxURI_SCHEME) == wxURI_SCHEME;       }
     bool HasUser() const        {   return (m_fields & wxURI_USER) == wxURI_USER;           }
@@ -80,7 +80,8 @@ public:
     const wxString& GetServer() const           {   return m_server;    }
     const wxURIHostType& GetHostType() const    {   return m_hostType;  }
 
-    wxString Get() const;
+    wxString BuildURI() const;
+    wxString BuildUnescapedURI() const;
 
     void Resolve(const wxURI& base, int flags = wxURI_STRICT);
     bool IsReference() const;
@@ -88,6 +89,8 @@ public:
     wxURI& operator = (const wxURI& uri);
     wxURI& operator = (const wxString& string);
     bool operator == (const wxURI& uri) const;
+
+    static wxString Unescape (const wxString& szEscapedURI);
     
 protected:
     wxURI& Assign(const wxURI& uri);
@@ -112,16 +115,14 @@ protected:
     static bool ParseIPv6address(const wxChar*& uri);
     static bool ParseIPvFuture(const wxChar*& uri);
 
-
     static void Normalize(wxChar* uri, bool bIgnoreLeads = false);
     static void UpTree(const wxChar* uristart, const wxChar*& uri);
 
-    static wxChar Unescape(const wxChar* s);
+    static wxChar TranslateEscape(const wxChar* s);
     static void Escape  (wxString& s, const wxChar& c);
     static bool IsEscape(const wxChar*& uri);
 
-    static int CharToHex(const wxChar& c);
-	
+    static wxInt32 CharToHex(const wxChar& c);
 
     static bool IsUnreserved (const wxChar& c);
     static bool IsReserved (const wxChar& c);

@@ -26,7 +26,7 @@
 #include "wx/cppunit.h"
 
 // Test wxURL & wxURI compat?
-#define TEST_URL 0
+#define TEST_URL 1
 
 // ----------------------------------------------------------------------------
 // test class
@@ -65,7 +65,7 @@ private:
     void Assignment();
     void Comparison();
 
-#if 1
+#if TEST_URL
     void URLCompat();
 #endif
 
@@ -159,14 +159,14 @@ void URITestCase::Paths()
         uri->GetPath() == wxT("/path/"));
  
     URI_TEST("path/john/../../../joe", 
-        uri->Get() == wxT("../joe"));
+        uri->BuildURI() == wxT("../joe"));
 }
 #undef URI_TEST
 
 #define URI_TEST_RESOLVE(string, eq, strict) \
         uri = new wxURI(wxT(string));\
         uri->Resolve(masteruri, strict);\
-        CPPUNIT_ASSERT(uri->Get() == wxT(eq));\
+        CPPUNIT_ASSERT(uri->BuildURI() == wxT(eq));\
         delete uri;
 
 #define URI_TEST(string, eq) \
@@ -267,7 +267,7 @@ void URITestCase::Assignment()
 
     uri2 = uri1;
 
-    CPPUNIT_ASSERT(uri1.Get() == uri2.Get());
+    CPPUNIT_ASSERT(uri1.BuildURI() == uri2.BuildURI());
 }
 
 void URITestCase::Comparison()
@@ -305,6 +305,9 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( uricopy == url );
     CPPUNIT_ASSERT( uricopy == urlcopy );
     CPPUNIT_ASSERT( uricopy == uri );
+#if WXWIN_COMPATIBILITY_2_4
+    CPPUNIT_ASSERT( wxURL::ConvertFromURI(wxT("%20%41%20")) == wxT(" A ") );
+#endif
 }
 
 #endif
