@@ -15,6 +15,11 @@
 #   include "wx/os2/fontdlg.h"
 #endif
 
+// get the colour from user and return it
+wxFont WXDLLEXPORT
+wxGetFontFromUser(wxWindow *parent = (wxWindow *)NULL,
+                  const wxFont& fontInit = wxNullFont);
+
 #endif // wxUSE_FONTDLG
 
 #endif

@@ -68,6 +68,7 @@
 
 #if wxUSE_GUI
     #include "wx/colordlg.h"
+    #include "wx/fontdlg.h"
     #include "wx/notebook.h"
     #include "wx/frame.h"
     #include "wx/statusbr.h"
@@ -962,26 +963,48 @@ wxString wxGetPasswordFromUser(const wxString& message,
 
 wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 {
-      wxColourData data;
-      data.SetChooseFull(TRUE);
-      if ( colInit.Ok() )
-      {
-          data.SetColour((wxColour &)colInit); // const_cast
-      }
+    wxColourData data;
+    data.SetChooseFull(TRUE);
+    if ( colInit.Ok() )
+    {
+        data.SetColour((wxColour &)colInit); // const_cast
+    }
 
-      wxColour colRet;
-      wxColourDialog dialog(parent, &data);
-      if ( dialog.ShowModal() == wxID_OK )
-      {
-          colRet = dialog.GetColourData().GetColour();
-      }
-      //else: leave it invalid
+    wxColour colRet;
+    wxColourDialog dialog(parent, &data);
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        colRet = dialog.GetColourData().GetColour();
+    }
+    //else: leave it invalid
 
-      return colRet;
+    return colRet;
 }
 
 #endif // wxUSE_COLOURDLG
 
+#if wxUSE_FONTDLG
+
+wxFont wxGetFontFromUser(wxWindow *parent, const wxFont& fontInit)
+{
+    wxFontData data;
+    if ( fontInit.Ok() )
+    {
+        data.SetInitialFont(fontInit);
+    }
+
+    wxFont fontRet;
+    wxFontDialog dialog(parent, &data);
+    if ( dialog.ShowModal() == wxID_OK )
+    {
+        fontRet = dialog.GetFontData().GetChosenFont();
+    }
+    //else: leave it invalid
+
+    return fontRet;
+}
+
+#endif // wxUSE_FONTDLG
 // ----------------------------------------------------------------------------
 // missing C RTL functions (FIXME shouldn't be here at all)
 // ----------------------------------------------------------------------------
