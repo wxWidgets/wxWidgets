@@ -7,8 +7,7 @@ current tip from it (different tip each time it is called).
 You will never use this class yourself, but you need it to show startup tips
 with wxShowTip. Also, if you want to get the tips text from elsewhere than a
 simple text file, you will want to derive a new class from wxTipProvider and
-use it instead of the one returned by 
-\helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider}.
+use it instead of the one returned by \helpref{wxCreateFileTipProvider}{wxcreatefiletipprovider}.
 
 \wxheading{Derived from}
 
@@ -32,14 +31,14 @@ Constructor.
 
 \docparam{currentTip}{The starting tip index.}
 
-\membersection{wxTipProvider::GetTip}{wxtipprovidergettip}
+\membersection{wxTipProvider::GetTip}\label{wxtipprovidergettip}
 
 \func{wxString}{GetTip}{\void}
 
 Return the text of the current tip and pass to the next one. This function is
 pure virtual, it should be implemented in the derived classes.
 
-\membersection{wxCurrentTipProvider::GetCurrentTip}{wxtipprovidergetcurrenttip}
+\membersection{wxCurrentTipProvider::GetCurrentTip}\label{wxtipprovidergetcurrenttip}
 
 \constfunc{size\_t}{GetCurrentTip}{\void}
 

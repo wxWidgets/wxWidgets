@@ -54,9 +54,9 @@ be available.
 
 Destroys the wxDataInputStream object.
 
-\membersection{wxDataInputStream::BidEndianOrdered}
+\membersection{wxDataInputStream::BigEndianOrdered}
 
-\func{void}{BidEndianOrdered}{\param{bool}{ be_order}}
+\func{void}{BigEndianOrdered}{\param{bool}{ be_order}}
 
 If {\it be_order} is TRUE, all data will be read in big-endian
 order, such as written by programs on a big endian architecture 
@@ -118,7 +118,7 @@ See also \helpref{wxDataInputStream}{wxdatainputstream}.
 
 \membersection{wxDataOutputStream::wxDataOutputStream}\label{wxdataoutputstreamconstr}
 
-\func{}{wxDataInputStream}{\param{wxOutputStream\&}{ stream}}
+\func{}{wxDataOutputStream}{\param{wxOutputStream\&}{ stream}}
 
 Constructs a datastream object from an output stream. Only write methods will
 be available.
@@ -133,9 +133,9 @@ be available.
 
 Destroys the wxDataOutputStream object.
 
-\membersection{wxDataOutputStream::BidEndianOrdered}
+\membersection{wxDataOutputStream::BigEndianOrdered}
 
-\func{void}{BidEndianOrdered}{\param{bool}{ be_order}}
+\func{void}{BigEndianOrdered}{\param{bool}{ be_order}}
 
 If {\it be_order} is TRUE, all data will be written in big-endian
 order, e.g. for reading on a Sparc or from Java-Streams (which

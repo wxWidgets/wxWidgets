@@ -48,6 +48,8 @@ include/wx/install-sh
 
 docs/motif/*.txt
 docs/motif/makewxmotif
+docs/motif2/*.txt
+docs/motif2/COPYING.LIB
 
 lib/dummy
 

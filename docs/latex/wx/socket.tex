@@ -10,7 +10,7 @@
 
 \wxheading{See also}
 
-\helpref{GSocket for wxWindows}{gsocketforwx}
+GSocket for wxWindows
 
 % ---------------------------------------------------------------------------
 % Event handling
@@ -81,13 +81,12 @@ Destroys the wxSocketBase object.
 \func{void}{SetNotify}{\param{GSocketEventFlags}{ event_flags}}
 
 SetNotify setups which socket events are to be sent to the event handler.
-For more information on socket events see
-\helpref{GSocket events}{gsocketforwxevents}.
+For more information on socket events see GSocket events.
 
 %
 % Notify
 %
-\membersection{wxSocketBase::Notify}\label{wxsocketbasesetnotify}
+\membersection{wxSocketBase::Notify}\label{wxsocketbasenotify}
 
 \func{void}{Notify}{\param{bool}{ notify}}
 
@@ -145,7 +144,7 @@ Returns the number of bytes read or written by the last IO call.
 
 \constfunc{GSocketError}{LastError}{\void}
 
-Returns an error in the GSocket format. See \helpref{GSocket errors}{gsocketforwxerrs}. 
+Returns an error in the GSocket format. See GSocket errors.
 
 % ---------------------------------------------------------------------------
 % IO calls

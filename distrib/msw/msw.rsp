@@ -1,5 +1,7 @@
-docs/msw/*.txt
 docs/licence.txt
+docs/msw/*.txt
+docs/wine/*.txt
+docs/wine/COPYING.LIB
 
 distrib/msw/*.rsp
 distrib/msw/*.bat

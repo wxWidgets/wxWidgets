@@ -1,20 +1,10 @@
-install-sh
-Makefile
-template.mak
-configure
-configure.in
-config.guess
-config.sub
-wx-config.in
-mkinstalldirs
-wxGTK.spec
-
 distrib/gtk/copy_src
 distrib/gtk/README.txt
 distrib/gtk/Setup
 
 docs/gtk/*.html
 docs/gtk/*.txt
+docs/gtk/COPYING.LIB
 docs/gtk/makewxgtk
 
 include/wx/gtk/*.h

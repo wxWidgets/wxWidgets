@@ -6,7 +6,7 @@ scroll positions, thumb sizes and ranges according to the area in view.
 
 As with all windows, an application can draw onto a wxScrolledWindow using a \helpref{device context}{dcoverview}.
 
-You have the option of handling the \helpref{OnPaint}{wxscrolledwindowonpaint} handler
+You have the option of handling the OnPaint handler
 or overriding the \helpref{OnDraw}{wxscrolledwindowondraw} function, which is passed
 a pre-scrolled device context (prepared by \helpref{PrepareDC}{wxscrolledwindowpreparedc}).
 
@@ -207,7 +207,7 @@ Motif only: TRUE if the window has a backing bitmap.
 Call this function to prepare the device context for drawing a scrolled image. It
 sets the device origin according to the current scroll position.
 
-PrepareDC is called automatically within the default \helpref{wxScrolledWindow::OnPaint}{wxscrolledwindowonpaint} event
+PrepareDC is called automatically within the default wxScrolledWindow::OnPaint event
 handler, so your \helpref{wxScrolledWindow::OnDraw}{wxscrolledwindowondraw} override
 will be passed a 'pre-scrolled' device context. However, if you wish to draw from
 outside of OnDraw (via OnPaint), or you wish to implement OnPaint yourself, you must
