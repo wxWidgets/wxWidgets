@@ -155,6 +155,9 @@ void MyMiniFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 void MyMiniFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
 {
   button->Reparent( main_frame );
+
+  // we need to force the frame to size its (new) child correctly
+  main_frame->SendSizeEvent();
 }
 
 // MyMainFrame
@@ -185,7 +188,12 @@ void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
                  "You don't want to make this button an orphan, do you?",
                  "You got to be kidding");
   else
+  {
     button->Reparent( mini_frame );
+
+    // same as above
+    mini_frame->SendSizeEvent();
+  }
 }
 
 
