@@ -634,9 +634,12 @@ wxMultiCellCanvas :: wxMultiCellCanvas(wxWindow *par, int numRows, int numCols)
 //---------------------------------------------------------------------------
 wxString itoa(int x)
 {
+/*
 	char    bfr[255];
 	sprintf(bfr, "%d", x);
 	return bfr;
+*/
+	return wxString::Format(wxT("%d"), x);
 }
 //---------------------------------------------------------------------------
 void wxMultiCellCanvas :: Add(wxWindow *win, unsigned int row, unsigned int col)
@@ -659,7 +662,7 @@ void wxMultiCellCanvas :: CalculateConstraints()
 			if (!m_cells[CELL_LOC(row, col)])
 			{
 				// Create an empty static text field as a placeholder
-				m_cells[CELL_LOC(row, col)] = new wxCell(new wxStaticText(m_parent, -1, ""));
+				m_cells[CELL_LOC(row, col)] = new wxCell(new wxStaticText(m_parent, -1, wxT("")));
 			}
 			wxFlexGridSizer::Add(m_cells[CELL_LOC(row, col)]->m_window);
 		}

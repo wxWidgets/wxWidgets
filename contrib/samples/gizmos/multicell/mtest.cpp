@@ -48,12 +48,12 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
-	MyFrame *frame = new MyFrame(1, (wxFrame *) NULL, (char *) "wxMultiCellSizer Sample", wxPoint(50, 50), wxDefaultSize); //, wxSize(600, 500));
+	MyFrame *frame = new MyFrame(1, (wxFrame *) NULL, wxT("wxMultiCellSizer Sample"), wxPoint(50, 50), wxDefaultSize); //, wxSize(600, 500));
 
 	frame->Show(TRUE);
 
 	SetTopWindow(frame);
-	frame = new MyFrame(2, (wxFrame *) NULL, (char *) "wxMultiCellCanvas Sample", wxPoint(100, 100), wxSize(600, 500));
+	frame = new MyFrame(2, (wxFrame *) NULL, wxT("wxMultiCellCanvas Sample"), wxPoint(100, 100), wxSize(600, 500));
 
 	frame->Show(TRUE);
 
@@ -78,56 +78,56 @@ wxFrame(frame, -1, title, pos, size, wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCRO
 		sizer->SetRowHeight(8,5,FALSE);
 		// add first row
 		sizer->Add(
-				  new wxButton( this, -1, "B1 - 0,0, horizontal resizable" ),
+				  new wxButton( this, -1,wxT( "B1 - 0,0, horizontal resizable")),
 				  0, 0, 0, new wxMultiCellItemHandle(0,0,1,1, wxDefaultSize, wxHORIZONTAL_RESIZABLE, wxSize(2,2)));
 		sizer->Add(
-				  new wxButton( this, -1, "B2 - 0,1, vertical resizable" ),
+				  new wxButton( this, -1, wxT("B2 - 0,1, vertical resizable")),
 				  0, 0, 0, new wxMultiCellItemHandle(0,1,1,1, wxDefaultSize, wxVERTICAL_RESIZABLE, wxSize(2, 2)));
 		sizer->Add(
-				  new wxButton( this, -1, "B3 - 0,2" ),
+				  new wxButton( this, -1, wxT("B3 - 0,2")),
 				  0, 0, 0, new wxMultiCellItemHandle(0,2,1,1, wxDefaultSize, wxNOT_RESIZABLE, wxSize(1,1), wxALIGN_CENTER_HORIZONTAL)); //, wxALIGN_CENTER));
 		sizer->Add(
-				  new wxStaticText(this, -1, "jbb 0,3, lower-right"),
+				  new wxStaticText(this, -1, wxT("jbb 0,3, lower-right")),
 				  0, 0, 0, new wxMultiCellItemHandle(0,3,1,1, wxDefaultSize, wxNOT_RESIZABLE, wxSize(1,1), wxALIGN_BOTTOM | wxALIGN_RIGHT));
 
 		// add button for secord row
 		sizer->Add(
-				  new wxTextCtrl(this, -1, "Text control - 1,0, 4 cols wide"),
+				  new wxTextCtrl(this, -1, wxT("Text control - 1,0, 4 cols wide")),
 				  0, 0, 0, new wxMultiCellItemHandle(1,0,1,4));
 
 		// add buttons for next row
 		sizer->Add(
-				  new wxButton( this, -1, "B6 - 2,0, 2 cols wide" ),
+				  new wxButton( this, -1, wxT("B6 - 2,0, 2 cols wide")),
 				  0, 0, 0, new wxMultiCellItemHandle(2,0,1,2));
 		sizer->Add(
-				  new wxButton( this, -1, "B7 - 2,3" ),
+				  new wxButton( this, -1, wxT("B7 - 2,3")),
 				  0, 0, 0, new wxMultiCellItemHandle(2,3,1,1));
 
 		// and last additions
 		sizer->Add(
-				  new wxButton( this, -1, "B8 - 3,0, 4 rows high, vert resizable" ),
+				  new wxButton( this, -1, wxT("B8 - 3,0, 4 rows high, vert resizable")),
 				  0, 0, 0, new wxMultiCellItemHandle(3,0,4,1,wxDefaultSize, wxVERTICAL_RESIZABLE));
 		sizer->Add(
-				  new wxButton( this, -1, "B9 - 3,2, 2 cols wide, vert resizable" ),
+				  new wxButton( this, -1, wxT("B9 - 3,2, 2 cols wide, vert resizable")),
 				  0, 0, 0, new wxMultiCellItemHandle(3,2,1,2,wxDefaultSize, wxVERTICAL_RESIZABLE));
 		sizer->Add(
-				  new wxButton( this, -1, "B10 - 4,1, 3 cols wide, vert resizable" ),
+				  new wxButton( this, -1, wxT("B10 - 4,1, 3 cols wide, vert resizable")),
 				  0, 0, 0, new wxMultiCellItemHandle(4,1,1,3,wxDefaultSize, wxVERTICAL_RESIZABLE));
 
 		sizer->Add(
-				  new wxButton( this, -1, "B11 - 5,1, 3 cols wide" ),
+				  new wxButton( this, -1, wxT("B11 - 5,1, 3 cols wide")),
 				  0, 0, 0, new wxMultiCellItemHandle(5,1,1,3));
 
 		sizer->Add(
-				  new wxButton( this, -1, "B12 - 6,1, 3 cols wide" ),
+				  new wxButton( this, -1, wxT("B12 - 6,1, 3 cols wide")),
 				  0, 0, 0, new wxMultiCellItemHandle(6,1,1,3));
 
 		sizer->Add(
-				  new wxButton( this, -1, "B13 - 7,1, 2 cols wide" ),
+				  new wxButton( this, -1, wxT("B13 - 7,1, 2 cols wide")),
 				  0, 0, 0, new wxMultiCellItemHandle(7,1,1,2));
 
 		sizer->Add(
-				  new wxButton( this, -1, "B14 - 8,1, 3 cols wide" ),
+				  new wxButton( this, -1, wxT("B14 - 8,1, 3 cols wide")),
 				  0, 0, 0, new wxMultiCellItemHandle(8,1,1,3));
 
 		SetAutoLayout( TRUE );
@@ -145,44 +145,44 @@ wxFrame(frame, -1, title, pos, size, wxDEFAULT_FRAME_STYLE | wxVSCROLL | wxHSCRO
 
 		// add first row
 		sizer->Add(
-				  new wxButton( this, -1, "Button 1" ),
+				  new wxButton( this, -1, wxT("Button 1")),
 				  0, 0);
 		sizer->Add(
-				  new wxButton( this, -1, "Button 2" ),
+				  new wxButton( this, -1, wxT("Button 2")),
 				  0, 1);
 		sizer->Add(
-				  new wxButton( this, -1, "Button 3" ),
+				  new wxButton( this, -1, wxT("Button 3")),
 				  0, 2);
 		sizer->Add(
-				  new wxStaticText(this, -1, "jbb test"),
+				  new wxStaticText(this, -1, wxT("jbb test")),
 				  0, 3);
 
 		sizer->Add(
-				  new wxStaticText(this, -1, "jbb test 2"),
+				  new wxStaticText(this, -1, wxT("jbb test 2")),
 				  0, 4);
 
 		// add button for secord row
 		sizer->Add(
-				  new wxTextCtrl(this, -1, "Text control"),
+				  new wxTextCtrl(this, -1, wxT("Text control")),
 				  1, 0);
 
 		// add buttons for next row
 		sizer->Add(
-				  new wxButton( this, -1, "Button 6" ),
+				  new wxButton( this, -1, wxT("Button 6")),
 				  2, 0);
 		sizer->Add(
-				  new wxButton( this, -1, "Button 7" ),
+				  new wxButton( this, -1, wxT("Button 7")),
 				  2, 3);
 
 		// and last additions
 		sizer->Add(
-				  new wxButton( this, -1, "Button 8" ),
+				  new wxButton( this, -1, wxT("Button 8")),
 				  3, 0);
 		sizer->Add(
-				  new wxButton( this, -1, "Button 9" ),
+				  new wxButton( this, -1, wxT("Button 9")),
 				  3, 1);
 		sizer->Add(
-				  new wxButton( this, -1, "Button 10" ),
+				  new wxButton( this, -1, wxT("Button 10")),
 				  4, 1);
 
 		sizer->CalculateConstraints();

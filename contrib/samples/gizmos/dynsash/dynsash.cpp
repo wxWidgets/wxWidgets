@@ -39,7 +39,7 @@ class SashHtmlWindow : public wxHtmlWindow {
 public:
     SashHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                    const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-                   long style = wxHW_SCROLLBAR_NEVER, const wxString& name = "sashHtmlWindow");
+                   long style = wxHW_SCROLLBAR_NEVER, const wxString& name = wxT("sashHtmlWindow"));
 
     wxSize DoGetBestSize() const;
 
@@ -51,19 +51,18 @@ private:
 
 IMPLEMENT_APP(Demo)
 
-char *HTML_content =
-"<P><H1>wxDynamicSashWindow demo</H1>"
+wxChar *HTML_content =
+wxT("<P><H1>wxDynamicSashWindow demo</H1>"
 "<P>Here is an example of how you can use <TT>wxDynamicSashWindow</TT> to allow your users to "
 "dynamically split and unify the views of your windows.  Try dragging out a few splits "
 "and then reunifying the window."
 "<P>Also, see the <TT>dynsash_switch</TT> sample for an example of an application which "
-"manages the scrollbars provided by <TT>wxDynamicSashWindow</TT> itself."
-;
+"manages the scrollbars provided by <TT>wxDynamicSashWindow</TT> itself.");
 
 bool Demo::OnInit() {
     wxInitAllImageHandlers();
 
-    wxFrame *frame = new wxFrame(NULL, -1, "Dynamic Sash Demo");
+    wxFrame *frame = new wxFrame(NULL, -1, wxT("Dynamic Sash Demo"));
     frame->SetSize(480, 480);
 
     wxDynamicSashWindow *sash = new wxDynamicSashWindow(frame, -1);

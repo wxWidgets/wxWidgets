@@ -69,15 +69,15 @@ SwitchView::SwitchView(wxDynamicSashWindow *win) {
 
     m_dyn_sash = win;
 
-    m_bar = new wxWindow(this, -1, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER, "bar");
+    m_bar = new wxWindow(this, -1, wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER, wxT("bar"));
     m_choice = new wxChoice(m_bar, -1);
     m_choice->SetEventHandler(this);
-    m_view = new wxWindow(this, -1, wxDefaultPosition, wxDefaultSize, 0, "view");
+    m_view = new wxWindow(this, -1, wxDefaultPosition, wxDefaultSize, 0, wxT("view"));
     m_view->SetBackgroundColour(*wxWHITE);
     m_view->SetEventHandler(this);
 
-    m_choice->Append("Triangle");
-    m_choice->Append("Square");
+    m_choice->Append(wxT("Triangle"));
+    m_choice->Append(wxT("Square"));
     m_choice->SetSelection(0);
 
     wxLayoutConstraints *layout;
@@ -222,7 +222,7 @@ bool SwitchDemo::OnInit() {
     wxFrame *frame;
     wxDynamicSashWindow *dyn;
 
-    frame = new wxFrame(NULL, -1, "Dynamic Sash Window Switch Demo");
+    frame = new wxFrame(NULL, -1, wxT("Dynamic Sash Window Switch Demo"));
     dyn = new wxDynamicSashWindow(frame, -1, wxDefaultPosition, wxDefaultSize, wxCLIP_CHILDREN);
     new SwitchView(dyn);
 

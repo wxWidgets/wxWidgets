@@ -133,7 +133,7 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // create the main application window
-    MyFrame *frame = new MyFrame("Tree Testing",
+    MyFrame *frame = new MyFrame(wxT("Tree Testing"),
                                  wxPoint(50, 50), wxSize(450, 340));
 
     // and show it (the frames, unlike simple controls, are not shown when
@@ -190,18 +190,18 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     SetIcon(wxICON(mondrian));
 
     // create a menu bar
-    wxMenu *menuFile = new wxMenu("", wxMENU_TEAROFF);
+    wxMenu *menuFile = new wxMenu(wxT(""), wxMENU_TEAROFF);
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, "&About...\tCtrl-A", "Show about dialog");
+    helpMenu->Append(Minimal_About, wxT("&About...\tCtrl-A"), wxT("Show about dialog"));
 
-    menuFile->Append(Minimal_Quit, "E&xit\tAlt-X", "Quit this program");
+    menuFile->Append(Minimal_Quit, wxT("E&xit\tAlt-X"), wxT("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, "&File");
-    menuBar->Append(helpMenu, "&Help");
+    menuBar->Append(menuFile, wxT("&File"));
+    menuBar->Append(helpMenu, wxT("&Help"));
 
     // ... and attach this menu bar to the frame
     SetMenuBar(menuBar);
@@ -219,10 +219,10 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxString msg;
-    msg.Printf( _T("This is the about dialog of splittree sample.\n")
-                _T("Welcome to %s"), wxVERSION_STRING);
+    msg.Printf( wxT("This is the about dialog of splittree sample.\n")
+                wxT("Welcome to %s"), wxVERSION_STRING);
 
-    wxMessageBox(msg, "About Tree Test", wxOK | wxICON_INFORMATION, this);
+    wxMessageBox(msg, wxT("About Tree Test"), wxOK | wxICON_INFORMATION, this);
 }
 
 /*
