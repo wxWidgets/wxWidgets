@@ -139,6 +139,7 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
     if (source[i] == '/') { m_Ending = TRUE; i++; }
     else m_Ending = FALSE;
 
+    // find tag's name and convert it to uppercase:
     while ((i < end_pos) && 
                ((c = source[i++]) != ' ' && c != '\r' && c != '\n' && c != '\t' &&
                 c != '>')) 
@@ -147,6 +148,9 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
         m_Name += c;
     }
 
+    // if the tag has parameters, read them and "normalize" them,
+    // i.e. convert to uppercase, replace whitespaces by spaces and 
+    // remove whitespaces around '=':
     if (source[i-1] != '>')
         while ((i < end_pos) && ((c = source[i++]) != '>')) 
 	    {
@@ -155,6 +159,19 @@ wxHtmlTag::wxHtmlTag(const wxString& source, int pos, int end_pos, wxHtmlTagsCac
             m_Params += c;
             if (c == '"') 
 	        {
+                // remove spaces around the '=' character:
+                if (m_Params.Length() > 1 && 
+                    m_Params[m_Params.Length()-2] == ' ')
+                {
+                    m_Params.RemoveLast();
+                    while (m_Params.Length() > 0 && m_Params.Last() == ' ') 
+                        m_Params.RemoveLast();
+                    m_Params += '"';
+                }
+                while ((i < end_pos) && (source[i++] == ' ')) {}
+                if (i < end_pos) i--;
+            
+                // ...and copy the value to m_Params:
                 while ((i < end_pos) && ((c = source[i++]) != '"')) m_Params += c;
                 m_Params += c;
             }
