@@ -19,6 +19,8 @@
 #include "wx/setup.h"
 
 #if wxUSE_WX_RESOURCES
+
+#include "wx/bitmap.h"
 #include <stdio.h>
 
 // A few further types not in wx_types.h
