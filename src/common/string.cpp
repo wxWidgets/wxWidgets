@@ -890,10 +890,13 @@ size_t wxString::find(const wxString& str, size_t nStart) const
   return p == NULL ? npos : p - c_str();
 }
 
+// VC++ 1.5 can't cope with the default argument in the header.
+#if ! (defined(_MSC_VER) && !defined(__WIN32__))
 size_t wxString::find(const char* sz, size_t nStart, size_t n) const
 {
   return find(wxString(sz, n == npos ? 0 : n), nStart);
 }
+#endif
         
 size_t wxString::find(char ch, size_t nStart) const
 {
@@ -919,6 +922,8 @@ size_t wxString::rfind(const wxString& str, size_t nStart) const
   return npos;
 }
         
+// VC++ 1.5 can't cope with the default argument in the header.
+#if ! (defined(_MSC_VER) && !defined(__WIN32__))
 size_t wxString::rfind(const char* sz, size_t nStart, size_t n) const
 {
   return rfind(wxString(sz, n == npos ? 0 : n), nStart);
@@ -932,6 +937,7 @@ size_t wxString::rfind(char ch, size_t nStart) const
   
   return p == NULL ? npos : p - c_str();
 }
+#endif
 
 wxString wxString::substr(size_t nStart, size_t nLen) const
 {
