@@ -630,6 +630,8 @@ bool wxToolBar::Realize()
                             // default to be consistent with wxGTK and the menu
                             // radio items
                             button.fsState |= TBSTATE_CHECKED;
+
+                            tool->Toggle(TRUE);
                         }
 
                         isRadio = TRUE;
@@ -828,6 +830,13 @@ bool wxToolBar::MSWCommand(WXUINT WXUNUSED(cmd), WXWORD id)
     }
 
     bool toggled = tool->IsToggled();
+
+    // avoid sending the event when a radio button is released, this is not
+    // interesting
+    if ( tool->CanBeToggled() && tool->GetKind() == wxITEM_RADIO && !toggled )
+    {
+        return;
+    }
 
     // OnLeftClick() can veto the button state change - for buttons which may
     // be toggled only, of couse
