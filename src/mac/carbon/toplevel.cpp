@@ -581,7 +581,13 @@ void wxTopLevelWindowMac::MacActivate( WXEVENTREF ev , bool inIsActivating )
     
     UMAHighlightAndActivateWindow( (WindowRef)m_macWindow , inIsActivating ) ;
     
-    MacSuperEnabled( inIsActivating ) ;
+    // Early versions of MacOS X don't refresh backgrounds properly,
+    // so refresh the whole window on activation and deactivation.
+    long osVersion = UMAGetSystemVersion();
+    if (osVersion >= 0x1000 && osVersion < 0x1020)
+        Refresh(TRUE);
+    else
+        MacSuperEnabled( inIsActivating ) ;
 }
 
 void wxTopLevelWindowMac::MacKeyDown( WXEVENTREF ev ) 
