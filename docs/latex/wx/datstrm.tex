@@ -96,14 +96,19 @@ Writes the double {\it f} to the stream using the IEEE format.
 
 \membersection{wxDataStream::WriteString}
 
-\func{void}{wxDataStream::WriteString}{{\param const wxString& }{string}}
+\func{void}{wxDataStream::WriteString}{{\param const wxString\& }{string}}
 
 Writes {\it string} to the stream. Actually, this method writes the size of
 the string before writing {\it string} itself.
 
 \membersection{wxDataStream::WriteLine}
 
-\func{void}{wxDataStream::WriteLine}{{\param const wxString& }{string}}
+\func{void}{wxDataStream::WriteLine}{{\param const wxString\& }{string}}
 
 Writes {\it string} as a line. Depending on the operating system, it adds
 \\n or \\r\\n.
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "referenc"
+%%% End: 
