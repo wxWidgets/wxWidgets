@@ -31,6 +31,8 @@
 #include "wx/process.h"
 #include "wx/variant.h"
 #include "wx/cmdline.h"
+#include "wx/msgdlg.h"
+#include "wx/log.h"
 
 #endif
 

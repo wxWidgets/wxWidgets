@@ -18,6 +18,7 @@
 
 #include "wx/docview.h"
 #include "wx/help.h"
+#include "wx/app.h"
 
 #ifdef __WXMSW__
 #include "wx/msw/helpchm.h"

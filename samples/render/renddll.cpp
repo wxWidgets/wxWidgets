@@ -63,6 +63,16 @@ public:
     {
     }
 
+    // draw a combobox dropdown button
+    //
+    // flags may only use wxCONTROL_PRESSED
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0)
+    {
+    }
+
     // get the splitter parameters: the x field of the returned point is the
     // sash width and the y field is the border width
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win)

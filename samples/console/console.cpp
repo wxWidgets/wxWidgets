@@ -4403,7 +4403,9 @@ int main(int argc, char **argv)
 #endif
 
 #ifdef TEST_STACKWALKER
+#if wxUSE_STACKWALKER
     TestStackWalk(argv[0]);
+#endif
 #endif // TEST_STACKWALKER
 
 #ifdef TEST_STDPATHS

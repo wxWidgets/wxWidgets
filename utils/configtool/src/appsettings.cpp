@@ -29,6 +29,7 @@
 #include "wx/effects.h"
 #include "wx/spinctrl.h"
 #include "wx/tooltip.h"
+#include "wx/settings.h"
 
 #endif
 

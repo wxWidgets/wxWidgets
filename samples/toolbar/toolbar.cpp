@@ -628,7 +628,8 @@ void MyFrame::OnToolLeftClick(wxCommandEvent& event)
 void MyFrame::OnToolRightClick(wxCommandEvent& event)
 {
     m_textWindow->AppendText(
-            wxString::Format(_T("Tool %d right clicked.\n"), event.GetInt()));
+            wxString::Format(_T("Tool %d right clicked.\n"),
+                             (int) event.GetInt()));
 }
 
 void MyFrame::OnCombo(wxCommandEvent& event)

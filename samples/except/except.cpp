@@ -43,6 +43,7 @@
 
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
+    #include "wx/icon.h"
 #endif
 
 // ----------------------------------------------------------------------------

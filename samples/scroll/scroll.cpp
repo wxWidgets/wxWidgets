@@ -830,7 +830,6 @@ void MyAutoTimedScrollingWindow::OnDraw(wxDC& dc)
     // draw the characters
     // 1. for each update region
     for (wxRegionIterator upd(GetUpdateRegion()); upd; ++upd) {
-        wxSize clientSize = GetClientSize();
         wxRect updRect = upd.GetRect();
         wxRect updRectInGChars(DeviceCoordsToGraphicalChars(updRect));
         // 2. for each row of chars in the update region

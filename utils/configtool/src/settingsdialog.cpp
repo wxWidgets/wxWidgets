@@ -27,6 +27,9 @@
 #include "wx/scrolwin.h"
 #include "wx/spinctrl.h"
 #include "wx/spinbutt.h"
+#include "wx/sizer.h"
+#include "wx/statbox.h"
+#include "wx/dirdlg.h"
 
 #endif
 

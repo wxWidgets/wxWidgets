@@ -373,7 +373,7 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
         delete frmt;
     }
     
-    data << (fmt_data.GetSize() + m_sndformat->GetBytesFromTime(time));
+    data << (wxUint32)(fmt_data.GetSize() + m_sndformat->GetBytesFromTime(time));
 
     // We, finally, copy the header block to the output stream 
     {
