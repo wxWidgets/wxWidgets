@@ -85,16 +85,7 @@ public:
     }
 
 protected:
-    // event handlers
-#ifdef __WXMSW__
-    // Under MSW, we catch the kill focus event
     void OnKillFocus(wxFocusEvent& event);
-#else
-    // Under GTK+, event a transient popup window
-    // is a toplevel window so we need to catch
-    // deactivate events
-    void OnActivate(wxActivateEvent &event);
-#endif
     void OnKeyDown(wxKeyEvent& event);
 
 private:
@@ -113,11 +104,7 @@ BEGIN_EVENT_TABLE(wxPopupWindowHandler, wxEvtHandler)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
-#ifdef __WXMSW__
     EVT_KILL_FOCUS(wxPopupFocusHandler::OnKillFocus)
-#else
-    EVT_ACTIVATE(wxPopupFocusHandler::OnActivate)
-#endif
     EVT_KEY_DOWN(wxPopupFocusHandler::OnKeyDown)
 END_EVENT_TABLE()
 
@@ -258,7 +245,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
     delete m_handlerPopup;
     m_handlerPopup = new wxPopupWindowHandler(this);
 
-    m_child->CaptureMouse();
+    // m_child->CaptureMouse();
     m_child->PushEventHandler(m_handlerPopup);
 
     m_focus = winFocus ? winFocus : this;
@@ -474,7 +461,6 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 // wxPopupFocusHandler
 // ----------------------------------------------------------------------------
 
-#ifdef __WXMSW__
 void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
     // when we lose focus we always disappear - unless it goes to the popup (in
@@ -489,13 +475,6 @@ void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 
     m_popup->DismissAndNotify();
 }
-#else
-void wxPopupFocusHandler::OnActivate(wxActivateEvent &event)
-{
-    if (event.GetActive())
-        m_popup->DismissAndNotify();
-}
-#endif
 
 void wxPopupFocusHandler::OnKeyDown(wxKeyEvent& event)
 {

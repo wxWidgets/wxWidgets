@@ -35,6 +35,39 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
+// "button_press"
+//-----------------------------------------------------------------------------
+
+static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPopupWindow* win )
+{
+    GtkWidget *child = gtk_get_event_widget (gdk_event);
+
+  /* We don't ask for button press events on the grab widget, so
+   *  if an event is reported directly to the grab widget, it must
+   *  be on a window outside the application (and thus we remove
+   *  the popup window). Otherwise, we check if the widget is a child
+   *  of the grab widget, and only remove the popup window if it
+   *  is not.
+   */
+    if (child != widget)
+    {
+        while (child)
+	    {
+	        if (child == widget)
+	            return FALSE;
+            child = child->parent;
+        }
+    }
+
+    wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
+    event.SetEventObject( win );
+
+    (void)win->GetEventHandler()->ProcessEvent( event );
+
+    return TRUE;
+}
+
+//-----------------------------------------------------------------------------
 // "focus" from m_window
 //-----------------------------------------------------------------------------
 
@@ -103,11 +136,7 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
     gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
 
-    /* GTK's shrinking/growing policy */
-    if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
-    else
-        gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
+    gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
 
     return FALSE;
 }
@@ -193,14 +222,17 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     gtk_signal_connect( GTK_OBJECT(m_widget), "realize",
                         GTK_SIGNAL_FUNC(gtk_dialog_realized_callback), (gpointer) this );
 
-    /* the user resized the frame by dragging etc. */
+    // the user resized the frame by dragging etc.
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
         GTK_SIGNAL_FUNC(gtk_dialog_size_callback), (gpointer)this );
 
-    /* disable native tab traversal */
+    // disable native tab traversal
     gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
         GTK_SIGNAL_FUNC(gtk_dialog_focus_callback), (gpointer)this );
 
+    g_signal_connect (GTK_OBJECT(m_widget), "button_press_event",
+		    G_CALLBACK(gtk_popup_button_press), (gpointer)this );
+        
     return TRUE;
 }
 
