@@ -161,14 +161,26 @@
 // defined as wchar_t, wxString will use Unicode internally. If you set this
 // to 1, you must use wxT() macro for all literal strings in the program.
 //
-// Unicode is currently only fully supported under Windows NT/2000 (Windows 9x
+// Unicode is currently only fully supported under Windows NT/2000/XP (Windows 9x
 // doesn't support it and the programs compiled in Unicode mode will not run
 // under 9x).
 //
 // Default is 0
 //
-// Recommended setting: 0 (unless you only plan to use Windows NT/2000)
+// Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
 #define wxUSE_UNICODE 0
+
+// Set wxUSE_UNICODE_MSLU to 1 if you want to compile wxWindows in Unicode mode
+// and be able to run compiled apps under Windows 9x as well as NT/2000/XP. This
+// setting enables use of unicows.dll from MSLU (MS Layer for Unicode, see
+// http://www.microsoft.com/globaldev/Articles/mslu_announce.asp). Note that you
+// will have to modify the makefiles to include unicows.lib import library as the first
+// library.
+//
+// Default is 0
+//
+// Recommended setting: 0
+#define wxUSE_UNICODE_MSLU 0
 
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without
 // compiling the program in Unicode mode. More precisely, it will be possible

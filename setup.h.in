@@ -607,6 +607,11 @@
 #define wxUSE_UNICODE 0
 
 /*
+ * Use MS Layer for Unicode on Win9X (Win32 only)?
+ */
+#define wxUSE_UNICODE_MSLU 0
+
+/*
  * Work around a bug in GNU libc 5.x wcstombs() implementation.
  *
  * Note that you must link your programs with libc.a if you enable this and you
