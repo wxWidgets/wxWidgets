@@ -2587,7 +2587,7 @@ if test "$wxUSE_LIBPNG" = "yes" -o "$wxUSE_LIBPNG" = "sys" ; then
   AC_DEFINE(wxUSE_LIBPNG)
   dnl for the check below to have a chance to succeed, we must already have
   dnl libz somewhere
-  if test "$wxUSE_ZLIB" != "sys" ; then
+  if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
     AC_MSG_WARN([--with-libpng=sys doesn't work without --with-zlib=sys, will compile the built-in libpng instead])
     wxUSE_LIBPNG=yes
   fi
