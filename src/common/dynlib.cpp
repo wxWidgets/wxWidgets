@@ -336,7 +336,7 @@ void *wxDynamicLibrary::GetSymbol(const wxString &name, bool *success) const
     strcpy( (char *)symName, name );
     c2pstr( (char *)symName );
 #endif
-    if( FindSymbol( dllHandle, symName, &symAddress, &symClass ) == noErr )
+    if( FindSymbol( m_handle, symName, &symAddress, &symClass ) == noErr )
         symbol = (void *)symAddress;
 
 #elif defined(__WXPM__) || defined(__EMX__)

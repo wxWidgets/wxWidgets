@@ -49,6 +49,7 @@
 #elif defined(__DARWIN__)
     typedef void               *wxDllType;
 #elif defined(__WXMAC__)
+    #include <CodeFragments.h>
     typedef CFragConnectionID   wxDllType;
 #else
     #error "Dynamic Loading classes can't be compiled on this platform, sorry."
