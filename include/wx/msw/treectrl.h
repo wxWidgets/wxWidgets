@@ -446,10 +446,14 @@ protected:
     // refresh a single item
     void RefreshItem(const wxTreeItemId& item);
 
-    wxTextCtrl  *m_textCtrl;        // used while editing the item label
+    // data used only while editing the item label:
+    wxTextCtrl  *m_textCtrl;        // text control in which it is edited
+    wxTreeItemId m_idEdited;        // the item being edited
+
     wxImageList *m_imageListNormal, // images for tree elements
                 *m_imageListState;  // special images for app defined states
-    bool         m_ownsImageListNormal, m_ownsImageListState;
+    bool         m_ownsImageListNormal,
+                 m_ownsImageListState;
 
 private:
     // the common part of all ctors
