@@ -67,6 +67,7 @@ bool gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(
 BEGIN_EVENT_TABLE(wxFrame, wxWindow)
   EVT_CLOSE(wxFrame::OnCloseWindow)
   EVT_SIZE(wxFrame::OnSize)
+  EVT_IDLE(wxFrame::OnIdle)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxFrame,wxWindow)
@@ -359,4 +360,55 @@ wxString wxFrame::GetTitle(void) const
 {
   return (wxString&)m_title;
 };
+
+void wxFrame::OnIdle(wxIdleEvent& WXUNUSED(event))
+{
+  DoMenuUpdates();
+}
+
+// Query app for menu item updates (called from OnIdle)
+void wxFrame::DoMenuUpdates(void)
+{
+  wxMenuBar* bar = GetMenuBar();
+  if (!bar) return;
+
+  wxNode *node = bar->m_menus.First();
+  while (node)
+  {
+    wxMenu* menu = (wxMenu*)node->Data();
+    DoMenuUpdates(menu);
+    
+    node = node->Next();
+  };
+}
+
+void wxFrame::DoMenuUpdates(wxMenu* menu)
+{
+  wxNode* node = menu->m_items.First();
+  while (node)
+  {
+    wxMenuItem* item = (wxMenuItem*) node->Data();
+    if ( !item->IsSeparator() )
+    {
+        wxWindowID id = item->GetId();
+      wxUpdateUIEvent event(id);
+      event.SetEventObject( this );
+
+      if (GetEventHandler()->ProcessEvent(event))
+      {
+        if (event.GetSetText())
+          menu->SetLabel(id, event.GetText());
+        if (event.GetSetChecked())
+          menu->Check(id, event.GetChecked());
+        if (event.GetSetEnabled())
+          menu->Enable(id, event.GetEnabled());
+      }
+
+      if (item->GetSubMenu())
+        DoMenuUpdates(item->GetSubMenu());
+    }
+    node = node->Next();
+  }
+}
+
 

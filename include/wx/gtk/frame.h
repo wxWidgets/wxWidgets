@@ -69,10 +69,13 @@ class wxFrame: public wxWindow
     void SetTitle( const wxString &title );
     wxString GetTitle(void) const;
     void OnActivate( wxActivateEvent &WXUNUSED(event) ) {};
+    void OnIdle( wxIdleEvent &event );
     
   //private:    
     
     void GtkOnSize( int x, int y, int width, int height );
+    void DoMenuUpdates(void);
+    void DoMenuUpdates(wxMenu* menu);
     
   private:
   

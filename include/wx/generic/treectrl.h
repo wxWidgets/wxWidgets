@@ -276,6 +276,9 @@ public:
   void DeleteItem( long item );
   void DeleteChildren( long item );
   bool DeleteAllItems();
+  bool ExpandItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_EXPAND);   }
+  bool CollapseItem(long item) { return ExpandItem(item, wxTREE_EXPAND_COLLAPSE); }
+  bool ToggleItem(long item)   { return ExpandItem(item, wxTREE_EXPAND_TOGGLE);   }
   bool ExpandItem( long item, int action );
   bool GetItem( wxTreeItem &info ) const;
   long GetItemData( long item ) const;
@@ -302,9 +305,9 @@ public:
   void OnChar( wxKeyEvent &event );
   void OnMouse( const wxMouseEvent &event );
 
-  void SetImageList(wxImageList *imageList) { m_imageList = imageList; }
-  wxImageList *GetImageList() const { return m_imageList; }
-
+  wxImageList *GetImageList(int which = wxIMAGE_LIST_NORMAL) const;
+  void SetImageList(wxImageList *imageList, int which = wxIMAGE_LIST_NORMAL);
+  
 private:
   wxGenericTreeItem   *m_anchor;
   wxGenericTreeItem   *m_current;
@@ -318,6 +321,7 @@ private:
   wxPaintDC           *m_dc;
   wxBrush             *m_hilightBrush;
   wxImageList         *m_imageList;
+  wxImageList         *m_smallImageList;
 
   void CalculateLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, int &y );
   void CalculatePositions();

@@ -18,6 +18,10 @@
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
+
+extern wxList wxPendingDelete;
+
+//-----------------------------------------------------------------------------
 // delete
 
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
@@ -167,6 +171,14 @@ bool wxDialog::OnClose(void)
   return FALSE;
 }
 
+bool wxDialog::Destroy(void)
+{
+  if (!wxPendingDelete.Member(this))
+    wxPendingDelete.Append(this);
+
+  return TRUE;
+}
+
 void wxDialog::OnCloseWindow(wxCloseEvent& event)
 {
   if (GetEventHandler()->OnClose() || event.GetForce())
@@ -204,8 +216,8 @@ int wxDialog::ShowModal(void)
 
 void wxDialog::EndModal( int retCode )
 {
-  gtk_main_quit();
   SetReturnCode( retCode );
+  gtk_main_quit();
 };
 
 void wxDialog::InitDialog(void)

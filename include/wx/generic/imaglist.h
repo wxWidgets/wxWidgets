@@ -40,6 +40,13 @@
 #define wxIMAGELIST_DRAW_SELECTED       0x0004
 #define wxIMAGELIST_DRAW_FOCUSED        0x0008
 
+// Flag values for Set/GetImageList
+enum {
+    wxIMAGE_LIST_NORMAL, // Normal icons
+    wxIMAGE_LIST_SMALL,  // Small icons
+    wxIMAGE_LIST_STATE   // State icons: unimplemented (see WIN32 documentation)
+};
+
 class wxImageList: public wxObject
 {
    DECLARE_DYNAMIC_CLASS(wxImageList)

@@ -126,7 +126,7 @@ bool MyApp::OnInit(void)
   
   file_menu->AppendSeparator();
   file_menu->Append(wxID_EXIT, "E&xit");
-
+  
   // A nice touch: a history of files visited. Use this menu.
   m_docManager->FileHistoryUseMenu(file_menu);
 

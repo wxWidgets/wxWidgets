@@ -51,7 +51,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 {
   m_needParent = FALSE;
   
-  PreCreation( parent, -1, pos, wxDefaultSize, style, "filedialog" );
+  PreCreation( parent, -1, pos, wxDefaultSize, style | wxDIALOG_MODAL, "filedialog" );
   m_message = message;
   m_path = "";
   m_fileName = defaultFileName;

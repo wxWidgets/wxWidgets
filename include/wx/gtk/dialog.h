@@ -65,6 +65,7 @@ class wxDialog: public wxWindow
     void OnCancel( wxCommandEvent &event );
     void OnOk( wxCommandEvent &event );
     void OnPaint(wxPaintEvent& event);
+    bool Destroy(void);
     void OnCloseWindow(wxCloseEvent& event);
 /*
     void OnCharHook(wxKeyEvent& event);
@@ -74,11 +75,6 @@ class wxDialog: public wxWindow
     virtual void EndModal(int retCode);
     virtual bool IsModal(void) const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
     virtual void InitDialog(void);
-/*
-    void OnOK(wxCommandEvent& event);
-    void OnApply(wxCommandEvent& event);
-    void OnCancel(wxCommandEvent& event);
-*/
     
   private:
   

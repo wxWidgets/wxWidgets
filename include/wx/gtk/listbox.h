@@ -76,6 +76,7 @@ class wxListBox: public wxControl
   private:
   
     GtkList   *m_list;
+    wxList     m_clientData;
     
   public:
   

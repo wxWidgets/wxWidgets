@@ -137,7 +137,7 @@ wxMenu::wxMenu( const wxString &title )
 void wxMenu::AppendSeparator(void)
 {
   wxMenuItem *mitem = new wxMenuItem();
-  mitem->m_id = -1;
+  mitem->m_id = ID_SEPARATOR;
   mitem->m_text = "";
   mitem->m_helpStr = "";
   mitem->m_isCheckMenu = FALSE;
@@ -217,6 +217,11 @@ int wxMenu::FindItem( const wxString itemString ) const
     node = node->Next();
   };
   return -1;
+};
+
+void wxMenu::Check( int WXUNUSED(id), bool WXUNUSED(Flag) )
+{
+  // I'm just too lazy
 };
 
 void wxMenu::Enable( int id, bool enable )

@@ -30,6 +30,12 @@ class wxMenuItem;
 class wxMenu;
 
 //-----------------------------------------------------------------------------
+// const
+//-----------------------------------------------------------------------------
+
+#define   ID_SEPARATOR    (-1)
+
+//-----------------------------------------------------------------------------
 // wxMenuBar
 //-----------------------------------------------------------------------------
 
@@ -69,6 +75,14 @@ class wxMenuItem: public wxObject
     wxString      m_helpStr;
     
     GtkWidget    *m_menuItem;  // GtkMenuItem
+    
+  bool              IsSeparator() const { return m_id == ID_SEPARATOR;  }
+  bool              IsEnabled()   const { return m_isEnabled;  }
+  bool              IsChecked()   const { return m_checked;  }
+
+  int               GetId()       const { return m_id;    }
+  const wxString&   GetHelp()     const { return m_helpStr;   }
+  wxMenu           *GetSubMenu()  const { return m_subMenu;  }
   
 };
 
@@ -86,6 +100,7 @@ class wxMenu: public wxEvtHandler
       wxMenu *subMenu, const wxString &helpStr = "" );
     int FindItem( const wxString itemString ) const;
     void Break(void) {};
+    void Check(int id, bool Flag);
     void Enable( int id, bool enable );
     bool Enabled( int id ) const;
     void SetLabel( int id, const wxString &label );

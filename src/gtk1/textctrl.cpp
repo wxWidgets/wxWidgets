@@ -33,6 +33,9 @@ END_EVENT_TABLE()
 
 wxTextCtrl::wxTextCtrl(void) : streambuf()
 {
+    if( allocate() )
+	setp(base(),ebuf());
+ 
   m_modified = FALSE;
 };
 
@@ -40,6 +43,9 @@ wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
       const wxPoint &pos, const wxSize &size,
       int style, const wxString &name ) : streambuf()
 {
+    if( allocate() )
+	setp(base(),ebuf());
+ 
   m_modified = FALSE;
   Create( parent, id, value, pos, size, style, name );
 };
@@ -273,65 +279,6 @@ void wxTextCtrl::OnChar( wxKeyEvent &WXUNUSED(event) )
 
 int wxTextCtrl::overflow(int c)
 {
-  // Make sure there is a holding area
-  if ( allocate()==EOF )
-  {
-    wxError("Streambuf allocation failed","Internal error");
-    return EOF;
-  }
-
-  // Verify that there are no characters in get area
-  if ( gptr() && gptr() < egptr() )
-  {
-     wxError("Who's trespassing my get area?","Internal error");
-     return EOF;
-  }
-
-  // Reset get area
-  setg(0,0,0);
-
-  // Make sure there is a put area
-  if ( ! pptr() )
-  {
-/* This doesn't seem to be fatal so comment out error message */
-//    wxError("Put area not opened","Internal error");
-    setp( base(), base() );
-  }
-
-  // Determine how many characters have been inserted but no consumed
-  int plen = pptr() - pbase();
-
-  // Now Jerry relies on the fact that the buffer is at least 2 chars
-  // long, but the holding area "may be as small as 1" ???
-  // And we need an additional \0, so let's keep this inefficient but
-  // safe copy.
-
-  // If c!=EOF, it is a character that must also be comsumed
-  int xtra = c==EOF? 0 : 1;
-
-  // Write temporary C-string to wxTextWindow
-  {
-  char *txt = new char[plen+xtra+1];
-  memcpy(txt, pbase(), plen);
-  txt[plen] = (char)c;     // append c
-  txt[plen+xtra] = '\0';   // append '\0' or overwrite c
-    // If the put area already contained \0, output will be truncated there
-  WriteText(txt);
-    delete[] txt;
-  }
-
-  // Reset put area
-  setp(pbase(), epptr());
-
-#if defined(__WATCOMC__)
-  return __NOT_EOF;
-#elif defined(zapeof)     // HP-UX (all cfront based?)
-  return zapeof(c);
-#else
-  return c!=EOF ? c : 0;  // this should make everybody happy
-#endif
-
-/* OLD CODE
   int len = pptr() - pbase();
   char *txt = new char[len+1];
   strncpy(txt, pbase(), len);
@@ -340,22 +287,10 @@ int wxTextCtrl::overflow(int c)
   setp(pbase(), epptr());
   delete[] txt;
   return EOF;
-*/
 };
 
 int wxTextCtrl::sync(void)
 {
-  // Verify that there are no characters in get area
-  if ( gptr() && gptr() < egptr() )
-  {
-     wxError("Who's trespassing my get area?","Internal error");
-     return EOF;
-  }
-
-  if ( pptr() && pptr() > pbase() ) return overflow(EOF);
-
-  return 0;
-/* OLD CODE
   int len = pptr() - pbase();
   char *txt = new char[len+1];
   strncpy(txt, pbase(), len);
@@ -364,7 +299,6 @@ int wxTextCtrl::sync(void)
   setp(pbase(), epptr());
   delete[] txt;
   return 0;
-*/
 };
 
 int wxTextCtrl::underflow(void)

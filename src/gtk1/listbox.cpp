@@ -92,6 +92,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   
     gtk_container_add( GTK_CONTAINER(m_list), list_item );
     
+    m_clientData.Append( (wxObject*)NULL );
+    
     gtk_widget_show( list_item );
   };
  
@@ -112,22 +114,44 @@ void wxListBox::Append( const wxString &item )
   
   gtk_container_add( GTK_CONTAINER(m_list), list_item );
     
+  m_clientData.Append( (wxObject*)NULL );
+  
   gtk_widget_show( list_item );
 };
 
-void wxListBox::Append( const wxString &WXUNUSED(item), char *WXUNUSED(clientData) )
+void wxListBox::Append( const wxString &item, char *clientData )
 {
-  wxFAIL_MSG("wxListBox::Append(clientdata) not implemented");
+  GtkWidget *list_item;
+  list_item = gtk_list_item_new_with_label( item ); 
+  
+ gtk_signal_connect( GTK_OBJECT(list_item), "select", 
+    GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
+  
+  gtk_container_add( GTK_CONTAINER(m_list), list_item );
+  
+  m_clientData.Append( (wxObject*)clientData );
+  
+  gtk_widget_show( list_item );
 };
 
 void wxListBox::Clear(void)
 {
   gtk_list_clear_items( m_list, 0, Number() );
+  
+  m_clientData.Clear();
 };
 
 void wxListBox::Delete( int n )
 {
   gtk_list_clear_items( m_list, n, n );
+  
+  wxNode *node = m_clientData.Nth( n );
+  if (!node)
+  {
+    wxFAIL_MSG("wxListBox::Delete wrong index");
+  }
+  else
+    m_clientData.DeleteNode( node );
 };
 
 void wxListBox::Deselect( int n )
@@ -150,10 +174,10 @@ int wxListBox::FindString( const wxString &item ) const
   return -1;
 };
 
-char *wxListBox::GetClientData( int WXUNUSED(n) ) const
+char *wxListBox::GetClientData( int n ) const
 {
-  wxFAIL_MSG("wxListBox::GetClientData not implemented");
-
+  wxNode *node = m_clientData.Nth( n );
+  if (node) return ((char*)node->Data());
   return NULL;
 };
 
@@ -250,8 +274,10 @@ void wxListBox::Set( int WXUNUSED(n), const wxString *WXUNUSED(choices) )
 {
 };
 
-void wxListBox::SetClientData( int WXUNUSED(n), char *WXUNUSED(clientData) )
+void wxListBox::SetClientData( int n, char *clientData )
 {
+  wxNode *node = m_clientData.Nth( n );
+  if (node) node->SetData( (wxObject*)clientData );
 };
 
 void wxListBox::SetFirstItem( int WXUNUSED(n) )

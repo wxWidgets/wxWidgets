@@ -236,13 +236,16 @@ long wxGenericTreeItem::HitTest( const wxPoint& point, int &flags )
   }
   else
   {
-    wxNode *node = m_children.First();
-    while (node)
+    if (!m_isCollapsed)
     {
-      wxGenericTreeItem *child = (wxGenericTreeItem*)node->Data();
-      long res = child->HitTest( point, flags );
-      if (res != -1) return res;
-      node = node->Next();
+      wxNode *node = m_children.First();
+      while (node)
+      {
+        wxGenericTreeItem *child = (wxGenericTreeItem*)node->Data();
+        long res = child->HitTest( point, flags );
+        if (res != -1) return res;
+        node = node->Next();
+      };
     };
   };
   return -1;
@@ -352,6 +355,8 @@ wxTreeCtrl::wxTreeCtrl()
   m_isCreated = FALSE;
   m_dc = NULL;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
+  m_imageList = NULL;
+  m_smallImageList = NULL;
 };
 
 wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
@@ -369,6 +374,8 @@ wxTreeCtrl::wxTreeCtrl(wxWindow *parent, wxWindowID id,
   m_isCreated = FALSE;
   m_dc = NULL;
   m_hilightBrush = new wxBrush( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_HIGHLIGHT), wxSOLID );
+  m_imageList = NULL;
+  m_smallImageList = NULL;
   Create( parent, id, pos, size, style, name );
 };
 
@@ -437,6 +444,8 @@ long wxTreeCtrl::InsertItem( long parent, const wxString& label, int image,
   {
     CalculatePositions();
 
+    if (!p->HasChildren()) p->m_hasChildren = TRUE;
+    
     int ch = 0;
     GetClientSize( NULL, &ch );
 
@@ -515,6 +524,8 @@ long wxTreeCtrl::InsertItem( long parent, wxTreeItem &info, long WXUNUSED(insert
   if (p)
   {
     CalculatePositions();
+    
+    if (!p->HasChildren()) p->m_hasChildren = TRUE;
 
     int ch = 0;
     GetClientSize( NULL, &ch );
@@ -581,6 +592,8 @@ bool wxTreeCtrl::ExpandItem( long item, int action )
         node = node->Next();
       };
 
+      CalculatePositions();
+      
       i->SendCollapse( this );
       break;
     }
@@ -757,6 +770,26 @@ long wxTreeCtrl::HitTest( const wxPoint& point, int &flags )
   return m_anchor->HitTest( point, flags );
 };
 
+wxImageList *wxTreeCtrl::GetImageList( int which ) const
+{
+  if (which == wxIMAGE_LIST_NORMAL) return m_imageList;
+  return m_smallImageList;
+};
+
+void wxTreeCtrl::SetImageList( wxImageList *imageList, int which )
+{
+  if (which == wxIMAGE_LIST_NORMAL)
+  {
+    if (m_imageList) delete m_imageList;
+    m_imageList = imageList;
+  }
+  else
+  {
+    if (m_smallImageList) delete m_smallImageList;
+    m_smallImageList = imageList;
+  };
+};
+
 void wxTreeCtrl::AdjustMyScrollbars()
 {
   if (m_anchor)
@@ -810,13 +843,18 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
       {
         dc.SetTextForeground( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_HIGHLIGHTTEXT ) );
         dc.SetBrush( *m_hilightBrush );
-        if (m_hasFocus)
-          dc.SetPen( *wxBLACK_PEN );
-        else
-          dc.SetPen( *wxWHITE_PEN );
         long tw, th;
         dc.GetTextExtent( item->m_text, &tw, &th );
-        dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
+        if (m_hasFocus)
+	{
+          dc.SetPen( *wxBLACK_PEN );
+          dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
+	}
+	else
+	{
+	  dc.SetPen( *wxTRANSPARENT_PEN );
+          dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
+	}
         dc.DrawText( item->m_text, item->m_x, item->m_y );
 
         dc.SetPen( *wxBLACK_PEN );
@@ -825,7 +863,7 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
       }
       else
       {
-        dc.SetPen( *wxWHITE_PEN );
+	dc.SetPen( *wxTRANSPARENT_PEN );
         long tw, th;
         dc.GetTextExtent( item->m_text, &tw, &th );
         dc.DrawRectangle( item->m_x-2, item->m_y-2, tw+4, th+4 );
@@ -835,19 +873,23 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxPaintDC &dc, int level, 
   };
 
   if (item->NumberOfVisibleChildren() == 0) return;
-    
+
+  int semiOldY = y;    
+  
   wxNode *node = item->m_children.First();
   while (node)
   {
     wxGenericTreeItem *child = (wxGenericTreeItem *)node->Data();
 
     y += m_lineHeight;
+    semiOldY = y;
+    
     PaintLevel( child, dc, level+1, y );
       
     node = node->Next();
   };
 
-  dc.DrawLine( horizX+15, oldY+5, horizX+15, y );
+  dc.DrawLine( horizX+15, oldY+5, horizX+15, semiOldY );
 }
 
 void wxTreeCtrl::OnPaint( const wxPaintEvent &WXUNUSED(event) )

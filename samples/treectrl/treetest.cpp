@@ -73,10 +73,13 @@ bool MyApp::OnInit(void)
   // Make an image list containing small icons
   m_imageListNormal = new wxImageList(16, 16, TRUE);
 
+#ifdef __WXMSW__
   wxIcon icon1("icon1", wxBITMAP_TYPE_ICO_RESOURCE);
   m_imageListNormal->Add(icon1);
   wxIcon icon2("icon2", wxBITMAP_TYPE_ICO_RESOURCE);
   m_imageListNormal->Add(icon2);
+#else
+#endif
 
   // Make a menubar
   wxMenu *file_menu = new wxMenu;
