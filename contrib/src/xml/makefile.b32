@@ -9,34 +9,19 @@
 
 WXDIR = $(WXWIN)
 
+expat_dir = $(WXDIR)\contrib\src\xml\expat
+XMLPARSEDIR = $(expat_dir)\xmlparse 
+XMLTOKDIR = $(expat_dir)\xmltok
 
-# Do not specify the 'libxml' directory on
-# this -I line, as the #includes use
-# <libxml/xxxx.h>.  If your libxml is installed
-# in "d:\libxml\libxml2-2.1.1\libxml" you would use:
-# wxLIBXMLDIR=/Id:\libxml\libxml2-2.1.1\include
-wxLIBXMLDIR=/Ic:\progra~1\libxml\libxml2-2.3.3\include
+EXPAT_DEFS=-I$(expat_dir)\xmlparse -I$(expat_dir)\xmltok
+EXPAT_OBJECTS=xmltok.obj xmlrole.obj xmlparse.obj
 
-!if "$(wxLIBXMLDIR)" == ""
-!message
-!message SETUP REQUIRED
-!message
-!message You must set the wxLIBXMLDIR variable in makefile.b32 before compiling
-!message
-!message If you do not have the libxml library, you will need to obtain & install
-!message it before compiling the wxXML code.  You can obtain libxml from:
-!message http://www.xmlsoft.org
-!message
-!error
-!endif
-
-# Set this to where your libxml directory is
-EXTRACPPFLAGS=$(wxLIBXMLDIR)
-
+EXTRACPPFLAGS=$(wxLIBXMLDIR) $(EXPAT_DEFS)
 
 LIBTARGET=$(WXDIR)\lib\wxxml.lib
 
-OBJECTS=xml.obj xmlbin.obj xmlbinz.obj xmlpars.obj xmlres.obj xmlrsall.obj \
+OBJECTS=$(EXPAT_OBJECTS) \
+        xml.obj xmlbin.obj xmlbinz.obj xmlexpat.obj xmlwrite.obj xmlres.obj xmlrsall.obj \
         xh_bttn.obj xh_chckb.obj xh_chckl.obj xh_choic.obj xh_combo.obj xh_dlg.obj \
         xh_gauge.obj xh_html.obj xh_menu.obj xh_notbk.obj xh_panel.obj xh_radbt.obj \
         xh_radbx.obj xh_sizer.obj xh_slidr.obj xh_spin.obj xh_stbmp.obj xh_sttxt.obj \
@@ -45,4 +30,11 @@ OBJECTS=xml.obj xmlbin.obj xmlbinz.obj xmlpars.obj xmlres.obj xmlrsall.obj \
         xh_tree.obj xh_unkwn.obj xh_frame.obj
 
 !include $(WXDIR)\src\makelib.b32
+
+{$(XMLPARSEDIR)}.c.obj:
+	bcc32 $(EXPAT_DEFS) -c -w-ccc -w-rch -w-par {$< }
+
+{$(XMLTOKDIR)}.c.obj:
+	bcc32 $(EXPAT_DEFS) -c -w-ccc -w-rch -w-par {$< }
+
 

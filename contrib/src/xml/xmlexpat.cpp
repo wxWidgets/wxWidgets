@@ -148,10 +148,10 @@ static void DefaultHnd(void *userData, const char *s, int len)
         int pos;
         pos = buf.Find(wxT("encoding="));
         if (pos != wxNOT_FOUND)
-            ctx->encoding = buf.Mid(pos + 10).BeforeFirst(buf[pos+9]);
+            ctx->encoding = buf.Mid(pos + 10).BeforeFirst(buf.c_str()[pos+9]);
         pos = buf.Find(wxT("version="));
         if (pos != wxNOT_FOUND)
-            ctx->version = buf.Mid(pos + 9).BeforeFirst(buf[pos+8]);
+            ctx->version = buf.Mid(pos + 9).BeforeFirst(buf.c_str()[pos+8]);
     }    
 }
 

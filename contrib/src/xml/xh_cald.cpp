@@ -20,6 +20,7 @@
 #endif
 
 #include "wx/xml/xh_cald.h"
+#include "wx/event.h"
 #include "wx/calctrl.h"
 
 
