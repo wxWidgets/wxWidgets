@@ -4599,6 +4599,7 @@ static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args, PyObject *
     long  _arg3 = (long ) 0;
     long  _arg4 = (long ) 0;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points","xoffset","yoffset", NULL };
 
@@ -4614,18 +4615,13 @@ static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args, PyObject *
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4650,6 +4646,7 @@ static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args, PyObject
     long  _arg4 = (long ) 0;
     int  _arg5 = (int ) wxODDEVEN_RULE;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points","xoffset","yoffset","fill_style", NULL };
 
@@ -4665,18 +4662,13 @@ static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args, PyObject
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
@@ -4844,6 +4836,7 @@ static PyObject *_wrap_wxDC_DrawSpline(PyObject *self, PyObject *args, PyObject 
     int  _arg1;
     wxPoint * _arg2;
     PyObject * _argo0 = 0;
+    int  NPOINTS;
     PyObject * _obj2 = 0;
     char *_kwnames[] = { "self","points", NULL };
 
@@ -4859,18 +4852,13 @@ static PyObject *_wrap_wxDC_DrawSpline(PyObject *self, PyObject *args, PyObject 
     }
     if (_obj2)
 {
-    _arg2 = wxPoint_LIST_helper(_obj2);
-    if (_arg2 == NULL) {
-        return NULL;
-    }
+    _arg2 = wxPoint_LIST_helper(_obj2, &NPOINTS);
+	if (_arg2 == NULL) {
+		return NULL;
+	}
 }
 {
-    if (_obj2) {
-        _arg1 = PyList_Size(_obj2);
-    }
-    else {
-        _arg1 = 0;
-    }
+	_arg1 = NPOINTS;
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
