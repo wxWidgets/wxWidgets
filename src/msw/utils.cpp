@@ -178,6 +178,9 @@ bool wxGetHostName(wxChar *buf, int maxSize)
 // get full hostname (with domain name if possible)
 bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
+// This breaks _at least_ mingw!!
+#if 0
+
 #if defined(__WIN32__) && !defined(__TWIN32__)
     // TODO should use GetComputerNameEx() when available
     WSADATA wsa;
@@ -216,6 +219,8 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
         }
     }
 #endif // Win32
+
+#endif // 0
 
     return wxGetHostName(buf, maxSize);
 }
@@ -584,7 +589,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
             *majorVsn = info.dwMajorVersion;
         if (minorVsn)
             *minorVsn = info.dwMinorVersion;
-
+        
         switch ( info.dwPlatformId )
         {
             case VER_PLATFORM_WIN32s:
