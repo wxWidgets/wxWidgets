@@ -406,7 +406,10 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         {
             ControlPartCode part ;
             ControlRef control = wxMacFindControlUnderMouse( windowMouseLocation , window , &part ) ;
-            currentMouseWindow = wxFindControlFromMacControl( control ) ;
+            if ( control == 0 )
+                currentMouseWindow = (wxWindow*) data ;
+            else
+                currentMouseWindow = wxFindControlFromMacControl( control ) ;
         }        
     }
 
@@ -966,7 +969,7 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     // the frame window event handler
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     MacInstallTopLevelWindowEventHandler() ;
-    
+
     m_macFocus = NULL ;
 
     if ( HasFlag(wxFRAME_SHAPED) )
@@ -1213,8 +1216,9 @@ static void wxShapedMacWindowContentRegion(WindowRef window, RgnHandle rgn)
     wxTopLevelWindowMac* win = wxFindWinFromMacWindow(window);
     if (win)
     {
-        wxRect r = win->GetRect();
-        SetRectRgn(rgn, r.GetLeft(), r.GetTop(), r.GetRight(), r.GetBottom());
+        Rect r ;
+        wxShapedMacWindowGetPos(window, &r ) ;
+        RectRgn( rgn , &r ) ;
     }
 }
 
