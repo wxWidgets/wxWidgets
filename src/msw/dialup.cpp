@@ -38,6 +38,10 @@
     #include "wx/event.h"
 #endif
 
+#include "wx/timer.h"
+#include "wx/app.h"
+#include "wx/generic/choicdgg.h"
+
 #include "wx/msw/private.h"  // must be before #include "dynlib.h"
 
 #if !wxUSE_DYNLIB_CLASS
