@@ -138,15 +138,8 @@ wxString wxFileSystemHandler::FindNext()
 // wxLocalFSHandler
 //--------------------------------------------------------------------------------
 
-class wxLocalFSHandler : public wxFileSystemHandler
-{
-    public:
-        virtual bool CanOpen(const wxString& location);
-        virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
-        virtual wxString FindFirst(const wxString& spec, int flags = 0);
-        virtual wxString FindNext();
-};
 
+wxString wxLocalFSHandler::ms_root;
 
 bool wxLocalFSHandler::CanOpen(const wxString& location)
 {
@@ -156,23 +149,23 @@ bool wxLocalFSHandler::CanOpen(const wxString& location)
 wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
 {
     // location has Unix path separators
-    wxString right = GetRightLocation(location);
-    wxFileName fn( right, wxPATH_UNIX );
+    wxString right = ms_root + GetRightLocation(location);
+    wxFileName fn(right, wxPATH_UNIX);
     
-    if (!wxFileExists( fn.GetFullPath() ))
+    if (!wxFileExists(fn.GetFullPath()))
         return (wxFSFile*) NULL;
         
-    return new wxFSFile(new wxFileInputStream( fn.GetFullPath() ),
+    return new wxFSFile(new wxFileInputStream(fn.GetFullPath()),
                         right,
                         GetMimeTypeFromExt(location),
                         GetAnchor(location),
-                        wxDateTime(wxFileModificationTime( fn.GetFullPath() )));
+                        wxDateTime(wxFileModificationTime(fn.GetFullPath())));
 
 }
 
 wxString wxLocalFSHandler::FindFirst(const wxString& spec, int flags)
 {
-    wxString right = GetRightLocation(spec);
+    wxString right = ms_root + GetRightLocation(spec);
     return wxFindFirstFile(right, flags);
 }
 

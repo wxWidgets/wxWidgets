@@ -43,42 +43,39 @@ class wxFileSystem;
 
 class WXDLLEXPORT wxFSFile : public wxObject
 {
-    private:
-        wxInputStream *m_Stream;
-        wxString m_Location;
-        wxString m_MimeType;
-        wxString m_Anchor;
-        wxDateTime m_Modif;
+public:
+    wxFSFile(wxInputStream *stream, const wxString& loc, 
+             const wxString& mimetype, const wxString& anchor,
+             wxDateTime modif)
+    {
+        m_Stream = stream;
+        m_Location = loc;
+        m_MimeType = mimetype; m_MimeType.MakeLower();
+        m_Anchor = anchor;
+        m_Modif = modif;
+    }
+    virtual ~wxFSFile() { if (m_Stream) delete m_Stream; }
 
-    public:
-        wxFSFile(wxInputStream *stream, const wxString& loc, 
-                 const wxString& mimetype, const wxString& anchor,
-                 wxDateTime modif)
-            {
-                m_Stream = stream;
-                m_Location = loc;
-                m_MimeType = mimetype; m_MimeType.MakeLower();
-                m_Anchor = anchor;
-                m_Modif = modif;
-            }
-        virtual ~wxFSFile()
-            {
-                if (m_Stream) delete m_Stream;
-            }
+    // returns stream. This doesn't _create_ stream, it only returns
+    // pointer to it!!
+    wxInputStream *GetStream() const {return m_Stream;}
 
-        wxInputStream *GetStream() const {return m_Stream;}
-                // returns stream. This doesn't _create_ stream, it only returns
-                // pointer to it!!
+    // returns file's mime type
+    const wxString& GetMimeType() const {return m_MimeType;}
 
-        const wxString& GetMimeType() const {return m_MimeType;}
-                // returns file's mime type
+    // returns the original location (aka filename) of the file
+    const wxString& GetLocation() const {return m_Location;}
 
-        const wxString& GetLocation() const {return m_Location;}
-                // returns the original location (aka filename) of the file
+    const wxString& GetAnchor() const {return m_Anchor;}
 
-        const wxString& GetAnchor() const {return m_Anchor;}
-        
-        wxDateTime GetModificationTime() const {return m_Modif;}
+    wxDateTime GetModificationTime() const {return m_Modif;}
+
+private:
+    wxInputStream *m_Stream;
+    wxString m_Location;
+    wxString m_MimeType;
+    wxString m_Anchor;
+    wxDateTime m_Modif;
 };
 
 
@@ -94,47 +91,47 @@ class WXDLLEXPORT wxFSFile : public wxObject
 
 class WXDLLEXPORT wxFileSystemHandler : public wxObject
 {
+public:
+    wxFileSystemHandler() : wxObject() {}
+
+    // returns TRUE if this handler is able to open given location
+    virtual bool CanOpen(const wxString& location) = 0;
+
+    // opens given file and returns pointer to input stream.
+    // Returns NULL if opening failed.
+    // The location is always absolute path.
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) = 0;
+
+    // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
+    // the query to directories or wxFILE for files only or 0 for either.
+    // Returns filename or empty string if no more matching file exists
+    virtual wxString FindFirst(const wxString& spec, int flags = 0);
+    virtual wxString FindNext();
+
+protected:
+    // returns protocol ("file", "http", "tar" etc.) The last (most right)
+    // protocol is used:
+    // {it returns "tar" for "file:subdir/archive.tar.gz#tar:/README.txt"}
+    wxString GetProtocol(const wxString& location) const;
+
+    // returns left part of address:
+    // {it returns "file:subdir/archive.tar.gz" for "file:subdir/archive.tar.gz#tar:/README.txt"}
+    wxString GetLeftLocation(const wxString& location) const;
+
+    // returns anchor part of address:
+    // {it returns "anchor" for "file:subdir/archive.tar.gz#tar:/README.txt#anchor"}
+    // NOTE:  anchor is NOT a part of GetLeftLocation()'s return value
+    wxString GetAnchor(const wxString& location) const;
+
+    // returns right part of address:
+    // {it returns "/README.txt" for "file:subdir/archive.tar.gz#tar:/README.txt"}
+    wxString GetRightLocation(const wxString& location) const;
+
+    // Returns MIME type of the file - w/o need to open it
+    // (default behaviour is that it returns type based on extension)
+    wxString GetMimeTypeFromExt(const wxString& location);
+
     DECLARE_ABSTRACT_CLASS(wxFileSystemHandler)
-
-    public:
-        wxFileSystemHandler() : wxObject() {}
-
-        virtual bool CanOpen(const wxString& location) = 0;
-                // returns TRUE if this handler is able to open given location
-
-        virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location) = 0;
-                // opens given file and returns pointer to input stream.
-                // Returns NULL if opening failed.
-                // The location is always absolute path.
-
-        virtual wxString FindFirst(const wxString& spec, int flags = 0);
-        virtual wxString FindNext();
-                // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
-                // the query to directories or wxFILE for files only or 0 for either.
-                // Returns filename or empty string if no more matching file exists
-
-    protected:
-        wxString GetProtocol(const wxString& location) const;
-                // returns protocol ("file", "http", "tar" etc.) The last (most right)
-                // protocol is used:
-                // {it returns "tar" for "file:subdir/archive.tar.gz#tar:/README.txt"}
-
-        wxString GetLeftLocation(const wxString& location) const;
-                // returns left part of address:
-                // {it returns "file:subdir/archive.tar.gz" for "file:subdir/archive.tar.gz#tar:/README.txt"}
-
-        wxString GetAnchor(const wxString& location) const;
-                // returns anchor part of address:
-                // {it returns "anchor" for "file:subdir/archive.tar.gz#tar:/README.txt#anchor"}
-                // NOTE:  anchor is NOT a part of GetLeftLocation()'s return value
-
-        wxString GetRightLocation(const wxString& location) const;
-                // returns right part of address:
-                // {it returns "/README.txt" for "file:subdir/archive.tar.gz#tar:/README.txt"}
-
-        wxString GetMimeTypeFromExt(const wxString& location);
-                // Returns MIME type of the file - w/o need to open it
-                // (default behaviour is that it returns type based on extension)
 };
 
 
@@ -148,54 +145,53 @@ class WXDLLEXPORT wxFileSystemHandler : public wxObject
 
 class WXDLLEXPORT wxFileSystem : public wxObject
 {
+public:
+    wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_Handlers.DeleteContents(TRUE); m_FindFileHandler = NULL;}
+
+    // sets the current location. Every call to OpenFile is
+    // relative to this location.
+    // NOTE !!
+    // unless is_dir = TRUE 'location' is *not* the directory but
+    // file contained in this directory
+    // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
+    void ChangePathTo(const wxString& location, bool is_dir = FALSE);
+
+    wxString GetPath() const {return m_Path;}
+
+    // opens given file and returns pointer to input stream.
+    // Returns NULL if opening failed.
+    // It first tries to open the file in relative scope
+    // (based on ChangePathTo()'s value) and then as an absolute
+    // path.
+    wxFSFile* OpenFile(const wxString& location);
+
+    // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
+    // the query to directories or wxFILE for files only or 0 for either.
+    // Returns filename or empty string if no more matching file exists
+    wxString FindFirst(const wxString& spec, int flags = 0);
+    wxString FindNext();
+
+    // Adds FS handler.
+    // In fact, this class is only front-end to the FS hanlers :-)
+    static void AddHandler(wxFileSystemHandler *handler);
+
+    // remove all items from the m_Handlers list
+    static void CleanUpHandlers();
+
+protected:
+    wxString m_Path;
+            // the path (location) we are currently in
+            // this is path, not file!
+            // (so if you opened test/demo.htm, it is
+            // "test/", not "test/demo.htm")
+    wxString m_LastName;
+            // name of last opened file (full path)
+    static wxList m_Handlers;
+            // list of FS handlers
+    wxFileSystemHandler *m_FindFileHandler;
+            // handler that succeed in FindFirst query
+
     DECLARE_DYNAMIC_CLASS(wxFileSystem)
-
-    public:
-        wxFileSystem() : wxObject() {m_Path = m_LastName = wxEmptyString; m_Handlers.DeleteContents(TRUE); m_FindFileHandler = NULL;}
-
-        void ChangePathTo(const wxString& location, bool is_dir = FALSE);
-                // sets the current location. Every call to OpenFile is
-                // relative to this location.
-                // NOTE !!
-                // unless is_dir = TRUE 'location' is *not* the directory but
-                // file contained in this directory
-                // (so ChangePathTo("dir/subdir/xh.htm") sets m_Path to "dir/subdir/")
-
-        wxString GetPath() const {return m_Path;}
-
-        wxFSFile* OpenFile(const wxString& location);
-                // opens given file and returns pointer to input stream.
-                // Returns NULL if opening failed.
-                // It first tries to open the file in relative scope
-                // (based on ChangePathTo()'s value) and then as an absolute
-                // path.
-                
-        wxString FindFirst(const wxString& spec, int flags = 0);
-        wxString FindNext();
-                // Finds first/next file that matches spec wildcard. flags can be wxDIR for restricting
-                // the query to directories or wxFILE for files only or 0 for either.
-                // Returns filename or empty string if no more matching file exists
-         
-
-        static void AddHandler(wxFileSystemHandler *handler);
-                // Adds FS handler.
-                // In fact, this class is only front-end to the FS hanlers :-)
-
-        static void CleanUpHandlers();
-                // remove all items from the m_Handlers list
-
-    private:
-        wxString m_Path;
-                // the path (location) we are currently in
-                // this is path, not file!
-                // (so if you opened test/demo.htm, it is
-                // "test/", not "test/demo.htm")
-        wxString m_LastName;
-                // name of last opened file (full path)
-        static wxList m_Handlers;
-                // list of FS handlers
-        wxFileSystemHandler *m_FindFileHandler;
-                // handler that succeed in FindFirst query
 };
 
 
@@ -221,6 +217,27 @@ special characters :
         HEY! Don't use \ even if you're on Windows!
 
 */
+
+
+class wxLocalFSHandler : public wxFileSystemHandler
+{
+public:
+    virtual bool CanOpen(const wxString& location);
+    virtual wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
+    virtual wxString FindFirst(const wxString& spec, int flags = 0);
+    virtual wxString FindNext();
+    
+    // wxLocalFSHandler will prefix all filenames with 'root' before accessing
+    // files on disk. This effectively makes 'root' the top-level directory
+    // and prevents access to files outside this directory.  
+    // (This is similar to Unix command 'chroot'.)
+    static void Chroot(const wxString& root) { ms_root = root; }
+    
+protected:
+    static wxString ms_root;
+};
+
+
 
 #endif
   // wxUSE_FILESYSTEM
