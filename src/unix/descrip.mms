@@ -45,7 +45,8 @@ OBJECTS = \
 		gsocket.obj,\
 		mimetype.obj,\
 		threadpsx.obj,\
-		utilsunx.obj
+		utilsunx.obj,\
+		utilsx11.obj
 
 SOURCES = \
 		dialup.cpp,\
@@ -55,7 +56,8 @@ SOURCES = \
 		gsocket.c,\
 		mimetype.cpp,\
 		threadpsx.cpp,\
-		utilsunx.cpp
+		utilsunx.cpp,\
+		utilsx11.cpp
 
 all : $(SOURCES)
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS)
@@ -79,3 +81,4 @@ gsocket.obj : gsocket.c
 mimetype.obj : mimetype.cpp
 threadpsx.obj : threadpsx.cpp
 utilsunx.obj : utilsunx.cpp
+utilsx11.obj : utilsx11.cpp

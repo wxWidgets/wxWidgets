@@ -16,8 +16,14 @@
 #include "wx/image.h"
 #include "wx/icon.h"
 
+#ifdef __VMS
+#pragma message disable nosimpint
+#endif
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#ifdef __VMS
+#pragma message enable nosimpint
+#endif
 
 void wxSetIconsX11( WXDisplay* display, WXWindow window,
                     const wxIconBundle& ib )
