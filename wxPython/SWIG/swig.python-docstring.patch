@@ -4,7 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.40
 diff -u -4 -r1.40 python.cxx
 --- Source/Modules/python.cxx	24 Jan 2004 00:25:31 -0000	1.40
-+++ Source/Modules/python.cxx	22 Apr 2004 16:38:43 -0000
++++ Source/Modules/python.cxx	28 Apr 2004 22:20:03 -0000
 @@ -8,9 +8,9 @@
   * Copyright (C) 1999-2000.  The University of Chicago
   * See the file LICENSE for information on usage and redistribution.
@@ -239,7 +239,7 @@ diff -u -4 -r1.40 python.cxx
 +          break;
 +        
 +        case AUTODOC_STATICFUNC:
-+          Printf(doc, "%s.%s(%s)", class_name, symname, make_autodocParmList(n, showTypes));
++          Printf(doc, "%s(%s)", symname, make_autodocParmList(n, showTypes));
 +          if (type) Printf(doc, " -> %s", type);
 +          break;
 +                      
