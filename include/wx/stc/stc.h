@@ -254,10 +254,8 @@ public:
     int      GetFirstVisibleLine();
     bool     GetModified();
     int      GetLineCount();
-    wxRect   GetRect();
     int      GetLineFromPos(int pos);
     int      GetLineStartPos(int line);
-    int      GetLineLengthAtPos(int pos);
     int      GetLineLength(int line);
 #ifdef SWIG
     wxString GetCurrentLineText(int* OUTPUT);
@@ -266,7 +264,6 @@ public:
 #endif
     int      GetCurrentLine();
     int      PositionFromPoint(wxPoint pt);
-    int      LineFromPoint(wxPoint pt);
     wxPoint  PointFromPosition(int pos);
     int      GetCurrentPos();
     int      GetAnchor();
@@ -283,7 +280,6 @@ public:
     void     ScrollToColumn(int column);
     void     EnsureCaretVisible();
     void     SetCaretPolicy(int policy, int slop=0);
-    int      GetSelectionType();
     int      GetLinesOnScreen();
     bool     IsSelectionRectangle();
     void     SetUseHorizontalScrollBar(bool use);

@@ -34,6 +34,7 @@ OBJECTS = \
 	KeyWords.obj		\
 	LexCPP.obj		\
 	LexHTML.obj		\
+	LexLua.obj		\
 	LexOthers.obj		\
 	LexPerl.obj		\
 	LexPython.obj		\
@@ -41,6 +42,7 @@ OBJECTS = \
 	LexVB.obj		\
 	LineMarker.obj		\
 	PropSet.obj		\
+	PosRegExp.obj		\
 	ScintillaBase.obj	\
 	Style.obj		\
 	UniConversion.obj	\

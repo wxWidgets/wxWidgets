@@ -14,13 +14,13 @@ Style::Style() {
 	aliasOfDefaultFont = true;
 	Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
 	        Platform::DefaultFontSize(), 0, SC_CHARSET_DEFAULT,
-		false, false, false, false);
+		false, false, false, false, true);
 }
 	
 Style::Style(const Style &source) {
 	Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
 	        0, 0, 0,
-		false, false, false, false);
+		false, false, false, false, true);
 	fore.desired = source.fore.desired;
 	back.desired = source.back.desired;
 	characterSet = source.characterSet;
@@ -29,6 +29,7 @@ Style::Style(const Style &source) {
 	size = source.size;
 	eolFilled = source.eolFilled;
 	underline = source.underline;
+    visible = source.visible;
 }
 
 Style::~Style() {
@@ -44,7 +45,7 @@ Style &Style::operator=(const Style &source) {
 		return *this;
 	Clear(Colour(0,0,0), Colour(0xff,0xff,0xff),
 	        0, 0, SC_CHARSET_DEFAULT,
-		false, false, false, false);
+		false, false, false, false, true);
 	fore.desired = source.fore.desired;
 	back.desired = source.back.desired;
 	characterSet = source.characterSet;
@@ -53,12 +54,13 @@ Style &Style::operator=(const Style &source) {
 	size = source.size;
 	eolFilled = source.eolFilled;
 	underline = source.underline;
+    visible = source.visible;
 	return *this;
 }
 
 void Style::Clear(Colour fore_, Colour back_, int size_, 
 	const char *fontName_, int characterSet_,
-	bool bold_, bool italic_, bool eolFilled_, bool underline_) {
+	bool bold_, bool italic_, bool eolFilled_, bool underline_, bool visible_) {
 	fore.desired = fore_;
 	back.desired = back_;
 	characterSet = characterSet_;
@@ -68,6 +70,7 @@ void Style::Clear(Colour fore_, Colour back_, int size_,
 	fontName = fontName_;
 	eolFilled = eolFilled_;
 	underline = underline_;
+    visible = visible_;
 	if (aliasOfDefaultFont)
 		font.SetID(0);
 	else 

@@ -283,18 +283,18 @@ void ScintillaWX::ClaimSelection() {
 }
 
 
-LRESULT ScintillaWX::DefWndProc(UINT /*iMessage*/, WPARAM /*wParam*/, LPARAM /*lParam*/) {
+long ScintillaWX::DefWndProc(unsigned int /*iMessage*/, unsigned long /*wParam*/, long /*lParam*/) {
     return 0;
 }
 
-LRESULT ScintillaWX::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
-    switch (iMessage) {
-    case EM_CANPASTE:
-        return CanPaste();
-    default:
+long ScintillaWX::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
+//      switch (iMessage) {
+//      case EM_CANPASTE:
+//          return CanPaste();
+//      default:
         return ScintillaBase::WndProc(iMessage, wParam, lParam);
-    }
-    return 0;
+//      }
+//      return 0;
 }
 
 
@@ -415,6 +415,29 @@ void ScintillaWX::DoAddChar(char ch) {
 }
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt) {
+    switch (key) {
+        case WXK_DOWN: key = SCK_DOWN; break;
+        case WXK_UP: key = SCK_UP; break;
+        case WXK_LEFT: key = SCK_LEFT; break;
+        case WXK_RIGHT: key = SCK_RIGHT; break;
+        case WXK_HOME: key = SCK_HOME; break;
+        case WXK_END: key = SCK_END; break;
+        case WXK_PRIOR: key = SCK_PRIOR; break;
+        case WXK_NEXT: key = SCK_NEXT; break;
+        case WXK_DELETE: key = SCK_DELETE; break;
+        case WXK_INSERT: key = SCK_INSERT; break;
+        case WXK_ESCAPE: key = SCK_ESCAPE; break;
+        case WXK_BACK: key = SCK_BACK; break;
+        case WXK_TAB: key = SCK_TAB; break;
+        case WXK_RETURN: key = SCK_RETURN; break;
+        case WXK_ADD: key = SCK_ADD; break;
+        case WXK_SUBTRACT: key = SCK_SUBTRACT; break;
+        case WXK_DIVIDE: key = SCK_DIVIDE; break;
+        case WXK_CONTROL: key = 0; break;
+        case WXK_ALT: key = 0; break;
+        case WXK_SHIFT: key = 0; break;
+    }
+
     return KeyDown(key, shift, ctrl, alt);
 }
 

@@ -27,12 +27,14 @@ OBJECTS = \
 	$(D)\KeyWords.obj	\
 	$(D)\LexCPP.obj		\
 	$(D)\LexHTML.obj	\
+	$(D)\LexLua.obj		\
 	$(D)\LexOthers.obj	\
 	$(D)\LexPerl.obj	\
 	$(D)\LexPython.obj	\
 	$(D)\LexSQL.obj		\
 	$(D)\LexVB.obj		\
 	$(D)\LineMarker.obj	\
+	$(D)\PosRegExp.obj	\
 	$(D)\PropSet.obj	\
 	$(D)\ScintillaBase.obj	\
 	$(D)\Style.obj		\

@@ -22,7 +22,7 @@ protected:
 public:
 	WindowAccessor(WindowID id_, PropSet &props_) : 
 		Accessor(), id(id_), props(props_), 
-		lenDoc(-1), validLen(0), chFlags(0) {
+		lenDoc(-1), validLen(0), chFlags(0), chWhile(0) {
 	}
 	~WindowAccessor();
 	char StyleAt(int position);

@@ -54,7 +54,7 @@ int Document::AddRef() {
 	return refCount++;
 }
 
-// Decrease reference count and return its provius value.
+// Decrease reference count and return its previous value.
 // Delete the document if reference count reaches zero.
 int Document::Release() {
 	int curRefCount = --refCount;
@@ -201,8 +201,8 @@ bool Document::IsCrLf(int pos) {
 	return (cb.CharAt(pos) == '\r') && (cb.CharAt(pos + 1) == '\n');
 }
 
-bool Document::IsDBCS(int pos) {
 #if PLAT_WIN
+bool Document::IsDBCS(int pos) {
 	if (dbcsCodePage) {
 		if (SC_CP_UTF8 == dbcsCodePage) {
 			unsigned char ch = static_cast<unsigned char>(cb.CharAt(pos));
@@ -224,10 +224,14 @@ bool Document::IsDBCS(int pos) {
 		}
 	}
 	return false;
-#else
-	return false;
-#endif
 }
+#else
+// PLAT_GTK or PLAT_WX
+// TODO: support DBCS under GTK+ and WX
+bool Document::IsDBCS(int) {
+	return false;
+}
+#endif
 
 int Document::LenChar(int pos) {
 	if (IsCrLf(pos)) {
@@ -334,6 +338,8 @@ void Document::ModifiedAt(int pos) {
 
 // Unlike Undo, Redo, and InsertStyledString, the pos argument is a cell number not a char number
 void Document::DeleteChars(int pos, int len) {
+    if ((pos + len) > Length())
+        return;
 	if (cb.IsReadOnly() && enteredReadOnlyCount==0) {
 		enteredReadOnlyCount++;
 		NotifyModifyAttempt();
@@ -590,12 +596,33 @@ void Document::SetLineIndentation(int line, int indent) {
 }
 
 int Document::GetLineIndentPosition(int line) {
+    if (line < 0)
+        return 0;
 	int pos = LineStart(line);
 	int length = Length();
 	while ((pos < length) && isindentchar(cb.CharAt(pos))) {
 		pos++;
 	}
 	return pos;
+}
+
+int Document::GetColumn(int pos) {
+	int column = 0;
+	int line = LineFromPosition(pos);
+	if ((line >= 0) && (line < LinesTotal())) {
+		for (int i=LineStart(line);i<pos;i++) {
+			char ch = cb.CharAt(i);
+			if (ch == '\t')
+				column = NextTab(column, tabInChars);
+			else if (ch == '\r')
+				return column;
+			else if (ch == '\n')
+				return column;
+			else
+				column++;
+		}
+	}
+	return column;
 }
 
 void Document::Indent(bool forwards, int lineBottom, int lineTop) {
@@ -690,25 +717,29 @@ int Document::NextWordStart(int pos, int delta) {
 	return pos;
 }
 
-bool Document::IsWordAt(int start, int end) {
-	int lengthDoc = Length();
-	if (start > 0) {
-		char ch = CharAt(start - 1);
-		if (IsWordChar(ch))
-			return false;
-	}
-	if (end < lengthDoc - 1) {
-		char ch = CharAt(end);
-		if (IsWordChar(ch))
-			return false;
+bool Document::IsWordStartAt(int pos) {
+	if (pos > 0) {
+		return !IsWordChar(CharAt(pos - 1));
 	}
 	return true;
+}
+
+bool Document::IsWordEndAt(int pos) {
+	if (pos < Length() - 1) {
+		return !IsWordChar(CharAt(pos));
+	}
+	return true;
+}
+
+bool Document::IsWordAt(int start, int end) {
+	return IsWordStartAt(start) && IsWordEndAt(end);
 }
 
 // Find text in document, supporting both forward and backward
 // searches (just pass minPos > maxPos to do a backward search)
 // Has not been tested with backwards DBCS searches yet.
-long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitive, bool word) {
+long Document::FindText(int minPos, int maxPos, const char *s, 
+	bool caseSensitive, bool word, bool wordStart) {
  	bool forward = minPos <= maxPos;
 	int increment = forward ? 1 : -1;
 
@@ -738,8 +769,10 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
 						found = false;
 				}
 				if (found) {
-					if ((!word) || IsWordAt(pos, pos + lengthFind))
-						return pos;
+					if ((!word && !wordStart) ||
+						word && IsWordAt(pos, pos + lengthFind) ||
+						wordStart && IsWordStartAt(pos))
+ 						return pos;
 				}
 			}
 		} else {
@@ -751,8 +784,10 @@ long Document::FindText(int minPos, int maxPos, const char *s, bool caseSensitiv
 						found = false;
 				}
 				if (found) {
-					if ((!word) || IsWordAt(pos, pos + lengthFind))
-						return pos;
+					if (!(word && wordStart) ||
+						word && IsWordAt(pos, pos + lengthFind) ||
+						wordStart && IsWordStartAt(pos))
+ 						return pos;
 				}
 			}
 		}

@@ -107,7 +107,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 		state = SCE_PL_DEFAULT;
 	}
 	styler.StartAt(startPos);
-	char chPrev = ' ';
+	char chPrev = styler.SafeGetCharAt(startPos - 1);
 	char chNext = styler[startPos];
 	styler.StartSegment(startPos);
 	for (int i = startPos; i < lengthDoc; i++) {
@@ -230,7 +230,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				quotes = 0;
 				sookedpos = 0;
 				sooked[sookedpos] = '\0';
-			} else if (ch == '=' && isalpha(chNext)) {
+			} else if (ch == '=' && (chPrev == '\r' || chPrev == '\n') && isalpha(chNext)) {
 				styler.ColourTo(i - 1, state);
 				state = SCE_PL_POD;
 				quotes = 0;
@@ -284,7 +284,7 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 					state = SCE_PL_DEFAULT;
 				}
 			} else if (state == SCE_PL_HERE) {
-				if (isalnum(ch) && quotes < 2) {
+				if ((isalnum(ch) || ch == '_') && quotes < 2) {
 					sooked[sookedpos++] = ch;
 					sooked[sookedpos] = '\0';
 					if (quotes == 0)
@@ -292,14 +292,17 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 				} else {
 					quotes++;
 				}
-				if (quotes > 1 && isMatch(styler, lengthDoc, i, sooked) && (chPrev == '\n' || chPrev == '\r') ) {
-					styler.ColourTo(i + sookedpos - 1, SCE_PL_HERE);
+				if ((quotes > 1) && 
+					(chPrev == '\n' || chPrev == '\r') &&
+					isMatch(styler, lengthDoc, i, sooked)) {
 					i += sookedpos;
 					chNext = styler.SafeGetCharAt(i);
 					if (chNext == '\n' || chNext == '\r') {
+						styler.ColourTo(i - 1, SCE_PL_HERE);
 						state = SCE_PL_DEFAULT;
 					}
-					chNext = ' ';
+					ch = chNext;
+					chNext = styler.SafeGetCharAt(i + 1);
 				}
 			} else if (state == SCE_PL_STRING) {
 				if (ch == '\\') {
@@ -338,13 +341,13 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 					chNext = styler.SafeGetCharAt(i + 1);
 				}
 			} else if (state == SCE_PL_POD) {
-				if (ch == '=') {
+				if (ch == '=' && (chPrev == '\r' || chPrev == '\n')) {
 					if (isMatch(styler, lengthDoc, i, "=cut")) {
 						styler.ColourTo(i - 1 + 4, state);
 						i += 4;
 						state = SCE_PL_DEFAULT;
-						chNext = ' ';
-						ch = ' ';
+						ch = styler.SafeGetCharAt(i);
+						chNext = styler.SafeGetCharAt(i + 1);
 					}
 				}
 			} else if (state == SCE_PL_SCALAR) {
@@ -409,7 +412,32 @@ static void ColourisePerlDoc(unsigned int startPos, int length, int initStyle,
 					quoteDown = opposite(ch);
 					quotes++;
 				} else {
-					if (ch == quoteDown && chPrev != '\\') {
+					if (quotes == 0 && quoteRep == 1) {
+						/* We matched something like s(...) or tr{...}
+						* and are looking for the next matcher characters,
+						* which could be either bracketed ({...}) or non-bracketed
+						* (/.../).
+						*
+						* Number-signs are problematic.  If they occur after
+						* the close of the first part, treat them like
+						* a quoteUp char, even if they actually start comments.
+						*
+						* If we find an alnum, we end the regsubst, and punt.
+						*
+						* Eric Promislow   ericp@activestate.com  Aug 9,2000
+						*/
+						if (isspace(ch)) {
+							// Keep going
+						} else if (isalnum(ch)) {
+							styler.ColourTo(i, state);
+							state = SCE_PL_DEFAULT;
+							ch = ' ';
+						} else {
+							quoteUp = ch;
+							quoteDown = opposite(ch);
+							quotes++;
+						}
+					} else if (ch == quoteDown && chPrev != '\\') {
 						quotes--;
 						if (quotes == 0) {
 							quoteRep--;

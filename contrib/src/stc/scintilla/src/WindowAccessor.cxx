@@ -4,6 +4,7 @@
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h> 
 #include <stdio.h>
 
@@ -17,25 +18,26 @@
 WindowAccessor::~WindowAccessor() {
 }
 
+#if PLAT_WIN 
 bool WindowAccessor::InternalIsLeadByte(char ch) {
-#if PLAT_GTK
-	// TODO: support DBCS under GTK+
-	return false;
-#elif PLAT_WIN 
 	if (SC_CP_UTF8 == codePage)
 		// For lexing, all characters >= 0x80 are treated the
 		// same so none is considered a lead byte.
 		return false;	
 	else
 		return IsDBCSLeadByteEx(codePage, ch);
-#elif PLAT_WX 
-	return false;
-#endif 
 }
+#else
+// PLAT_GTK or PLAT_WX
+// TODO: support DBCS under GTK+ and WX
+bool WindowAccessor::InternalIsLeadByte(char) {
+	return false;
+}
+#endif 
 
 void WindowAccessor::Fill(int position) {
 	if (lenDoc == -1)
-		lenDoc = Platform::SendScintilla(id, WM_GETTEXTLENGTH, 0, 0);
+		lenDoc = Platform::SendScintilla(id, SCI_GETTEXTLENGTH, 0, 0);
 	startPos = position - slopSize;
 	if (startPos + bufferSize > lenDoc)
 		startPos = lenDoc - bufferSize;
@@ -45,8 +47,8 @@ void WindowAccessor::Fill(int position) {
 	if (endPos > lenDoc)
 		endPos = lenDoc;
 
-	TEXTRANGE tr = {{startPos, endPos}, buf};
-	Platform::SendScintilla(id, EM_GETTEXTRANGE, 0, reinterpret_cast<LPARAM>(&tr));
+	TextRange tr = {{startPos, endPos}, buf};
+	Platform::SendScintilla(id, SCI_GETTEXTRANGE, 0, reinterpret_cast<long>(&tr));
 }
 
 char WindowAccessor::StyleAt(int position) {
@@ -55,11 +57,11 @@ char WindowAccessor::StyleAt(int position) {
 }
 
 int WindowAccessor::GetLine(int position) {
-	return Platform::SendScintilla(id, EM_LINEFROMCHAR, position, 0);
+	return Platform::SendScintilla(id, SCI_LINEFROMPOSITION, position, 0);
 }
 
 int WindowAccessor::LineStart(int line) {
-	return Platform::SendScintilla(id, EM_LINEINDEX, line, 0);
+	return Platform::SendScintilla(id, SCI_POSITIONFROMLINE, line, 0);
 }
 
 int WindowAccessor::LevelAt(int line) {
@@ -68,7 +70,7 @@ int WindowAccessor::LevelAt(int line) {
 
 int WindowAccessor::Length() { 
 	if (lenDoc == -1) 
-		lenDoc = Platform::SendScintilla(id, WM_GETTEXTLENGTH, 0, 0);
+		lenDoc = Platform::SendScintilla(id, SCI_GETTEXTLENGTH, 0, 0);
 	return lenDoc; 
 }
 
@@ -121,7 +123,7 @@ void WindowAccessor::Flush() {
 	lenDoc = -1;
 	if (validLen > 0) {
 		Platform::SendScintilla(id, SCI_SETSTYLINGEX, validLen, 
-			reinterpret_cast<LPARAM>(styleBuf));
+			reinterpret_cast<long>(styleBuf));
 		validLen = 0;
 	}
 }

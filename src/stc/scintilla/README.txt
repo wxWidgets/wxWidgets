@@ -3,6 +3,5 @@ scintilla/include directories from the Scintilla/SCiTE source
 distribution.  All other code needed to implement Scintilla on top of
 wxWindows is located in the directory above this one.
 
-The current version of the Scintilla code is 1.25+ (from their CVS on
-5-19-2000).
+The current version of the Scintilla code is 1.32
 

@@ -4,6 +4,7 @@
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #include <stdlib.h>
+#include <string.h>
 #include <ctype.h> 
 #include <stdio.h>
 
@@ -20,21 +21,22 @@
 DocumentAccessor::~DocumentAccessor() {
 }
 
+#if PLAT_WIN 
 bool DocumentAccessor::InternalIsLeadByte(char ch) {
-#if PLAT_GTK
-	// TODO: support DBCS under GTK+
-	return false;
-#elif PLAT_WIN 
 	if (SC_CP_UTF8 == codePage)
 		// For lexing, all characters >= 0x80 are treated the
 		// same so none is considered a lead byte.
 		return false;	
 	else
 		return IsDBCSLeadByteEx(codePage, ch);
-#elif PLAT_WX 
-	return false;
-#endif 
 }
+#else
+// PLAT_GTK or PLAT_WX
+// TODO: support DBCS under GTK+ and WX
+bool DocumentAccessor::InternalIsLeadByte(char) {
+	return false;
+}
+#endif 
 
 void DocumentAccessor::Fill(int position) {
 	if (lenDoc == -1)
