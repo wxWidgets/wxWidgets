@@ -808,7 +808,7 @@ void wxStyledTextCtrl::SetMarginSensitive(int margin, bool sensitive) {
 
 
 bool wxStyledTextCtrl::GetMarginSensitive(int margin) {
-    return SendMsg(SCI_GETMARGINSENSITIVEN, margin);
+    return SendMsg(SCI_GETMARGINSENSITIVEN, margin) != 0;
 }
 
 
@@ -1103,6 +1103,74 @@ void* wxStyledTextCtrl::GetDocument() {
 
 void wxStyledTextCtrl::SetDocument(void* document) {
     SendMsg(SCI_SETDOCPOINTER, 0, (long)document);
+}
+
+
+//----------------------------------------------------------------------
+// Folding
+
+int  wxStyledTextCtrl::VisibleFromDocLine(int docLine) {
+    return SendMsg(SCI_VISIBLEFROMDOCLINE, docLine);
+}
+
+
+int  wxStyledTextCtrl::DocLineFromVisible(int displayLine) {
+    return SendMsg(SCI_DOCLINEFROMVISIBLE, displayLine);
+}
+
+
+int  wxStyledTextCtrl::SetFoldLevel(int line, int level) {
+    return SendMsg(SCI_SETFOLDLEVEL, line, level);
+}
+
+
+int  wxStyledTextCtrl::GetFoldLevel(int line) {
+    return SendMsg(SCI_GETFOLDLEVEL,  line);
+}
+
+
+int  wxStyledTextCtrl::GetLastChild(int line) {
+    return SendMsg(SCI_GETLASTCHILD,  line);
+}
+
+
+int  wxStyledTextCtrl::GetFoldParent(int line) {
+    return SendMsg(SCI_GETFOLDPARENT,  line);
+}
+
+
+void wxStyledTextCtrl::ShowLines(int lineStart, int lineEnd) {
+    SendMsg(SCI_SHOWLINES, lineStart, lineEnd);
+}
+
+
+void wxStyledTextCtrl::HideLines(int lineStart, int lineEnd) {
+    SendMsg(SCI_HIDELINES, lineStart, lineEnd);
+}
+
+
+bool wxStyledTextCtrl::GetLineVisible(int line) {
+    return SendMsg(SCI_GETLINEVISIBLE, line) != 0;
+}
+
+
+void wxStyledTextCtrl::SetFoldExpanded(int line) {
+    SendMsg(SCI_SETFOLDEXPANDED, line);
+}
+
+
+bool wxStyledTextCtrl::GetFoldExpanded(int line) {
+    return SendMsg(SCI_GETFOLDEXPANDED, line) != 0;
+}
+
+
+void wxStyledTextCtrl::ToggleFold(int line) {
+    SendMsg(SCI_TOGGLEFOLD, line);
+}
+
+
+void wxStyledTextCtrl::EnsureVisible(int line) {
+    SendMsg(SCI_ENSUREVISIBLE, line);
 }
 
 

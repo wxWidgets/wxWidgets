@@ -386,7 +386,20 @@ public:
     // TODO: create a wx wrapper for Scintilla's document class
 
 
-    // TODO: Folding
+    // Folding
+    int      VisibleFromDocLine(int docLine);
+    int      DocLineFromVisible(int displayLine);
+    int      SetFoldLevel(int line, int level);
+    int      GetFoldLevel(int line);
+    int      GetLastChild(int line);
+    int      GetFoldParent(int line);
+    void     ShowLines(int lineStart, int lineEnd);
+    void     HideLines(int lineStart, int lineEnd);
+    bool     GetLineVisible(int line);
+    void     SetFoldExpanded(int line);
+    bool     GetFoldExpanded(int line);
+    void     ToggleFold(int line);
+    void     EnsureVisible(int line);
 
 
     // Long Lines
