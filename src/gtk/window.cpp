@@ -145,16 +145,15 @@ static gint gtk_debug_focus_in_callback( GtkWidget *WXUNUSED(widget),
                                          GdkEvent *WXUNUSED(event),
                                          const wxChar *name )
 {
-    // to enable logging of the focus events replace 0 with 1
-#if 0
+/*
     static bool s_done = FALSE;
     if ( !s_done )
     {
         wxLog::AddTraceMask("focus");
         s_done = TRUE;
     }
-#endif
     wxLogTrace(_T("FOCUS NOW AT: %s"), name);
+*/
 
     return FALSE;
 }
@@ -656,7 +655,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
         wxPrintf( win->GetClassInfo()->GetClassName() );
     wxPrintf( _T(".\n") );
 */
-
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
