@@ -423,6 +423,9 @@ void wxMenuItem::SetText(
 
     wxMenuItemBase::SetText(sText);
     OWNER_DRAWN_ONLY(wxOwnerDrawn::SetName(sText));
+#if  wxUSE_OWNER_DRAWN
+    SetAccelString(rText.AfterFirst(_T('\t')));
+#endif // wxUSE_OWNER_DRAWN
 
     HWND                            hMenu = GetHmenuOf(m_parentMenu);
 
