@@ -13,10 +13,6 @@
 #ifndef _WX_APP_H_BASE_
 #define _WX_APP_H_BASE_
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-    #pragma interface "appbase.h"
-#endif
-
 // ----------------------------------------------------------------------------
 // headers we have to include here
 // ----------------------------------------------------------------------------
