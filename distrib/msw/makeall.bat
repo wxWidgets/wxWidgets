@@ -36,6 +36,17 @@ if not direxist %BUILDDEST% mkdir /S %BUILDDEST%
 
 :dovc6
 
+cd %WXDIR%\samples
+erase /S *.exe
+cd %WXDIR%\demos
+erase /S *.exe
+cd %WXDIR%\contrib\samples
+erase /S *.exe
+cd %WXDIR%\utils\dialoged\src
+erase /S *.exe
+cd %WXDIR%\utils\tex2rtf\src
+erase /S *.exe
+
 echo Starting wxWindows build at %_TIME, %_DATE
 
 Rem First, VC++ 6.
@@ -77,14 +88,20 @@ cd %WXDIR%\samples
 nmake -f makefile.vc clean FINAL=1
 nmake -f makefile.vc FINAL=1
 Rem Copy all executables to VC6Release
-copy /S *.exe %BUILDDEST%\VC6Release
+Rem Euch, this is the only way I can think of right now
+Rem to copy them to the same directory. Daft but...
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 cd %WXDIR%\demos
 nmake -f makefile.vc clean FINAL=1
 nmake -f makefile.vc FINAL=1
 Rem Copy all executables to VC6Release
-copy /S *.exe %BUILDDEST%\VC6Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\VC6Release
 nmake -f makefile.vc clean FINAL=1
 
 Rem Compile OGL
@@ -204,14 +221,18 @@ cd %WXDIR%\samples
 make -f makefile.b32 clean FINAL=1
 make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC55Release
-copy /S *.exe %BUILDDEST%\BC55Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
 make -f makefile.b32 clean FINAL=1
 
 cd %WXDIR%\demos
 make -f makefile.b32 clean FINAL=1
 make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC55Release
-copy /S *.exe %BUILDDEST%\BC55Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC55Release
 make -f makefile.b32 clean FINAL=1
 
 Rem Compile OGL
@@ -332,14 +353,18 @@ cd %WXDIR%\samples
 make -f makefile.b32 clean FINAL=1
 make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC50Release
-copy /S *.exe %BUILDDEST%\BC50Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC50Release
 make -f makefile.b32 clean FINAL=1
 
 cd %WXDIR%\demos
 make -f makefile.b32 clean FINAL=1
 make -f makefile.b32 FINAL=1
 Rem Copy all executables to BC50Release
-copy /S *.exe %BUILDDEST%\BC50Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\BC50Release
 make -f makefile.b32 clean FINAL=1
 
 Rem Compile OGL
@@ -446,14 +471,18 @@ cd %WXDIR%\samples
 make -f makefile.g95 clean FINAL=1
 make -f makefile.g95 FINAL=1
 Rem Copy all executables to Cygwin11Release
-copy /S *.exe %BUILDDEST%\Cygwin11Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
 make -f makefile.g95 clean FINAL=1
 
 cd %WXDIR%\demos
 make -f makefile.g95 clean FINAL=1
 make -f makefile.g95 FINAL=1
 Rem Copy all executables to Cygwin11Release
-copy /S *.exe %BUILDDEST%\Cygwin11Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Cygwin11Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile OGL
@@ -522,14 +551,18 @@ cd %WXDIR%\samples
 make -f makefile.g95 clean FINAL=1
 make -f makefile.g95 FINAL=1
 Rem Copy all executables to Ming2952Release
-copy /S *.exe %BUILDDEST%\Ming2952Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 cd %WXDIR%\demos
 make -f makefile.g95 clean FINAL=1
 make -f makefile.g95 FINAL=1
 Rem Copy all executables to Ming2952Release
-copy /S *.exe %BUILDDEST%\Ming2952Release
+erase %TEMP%\temp.zip
+zip16 -r %TEMP%\temp.zip *.exe
+unzip32 %TEMP%\temp.zip -d %BUILDDEST%\Ming2952Release
 make -f makefile.g95 clean FINAL=1
 
 Rem Compile OGL
