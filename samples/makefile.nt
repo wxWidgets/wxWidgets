@@ -42,11 +42,7 @@ all:
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\printing
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\tbarsmpl
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\tbar95
-        nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
-        cd $(WXDIR)\samples\tbarmsw
+        cd $(WXDIR)\samples\toolbar
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.nt DEBUG_FLAGS=$(DEBUG_FLAGS) LINK_DEBUG_FLAGS=$(LINK_DEBUG_FLAGS)
@@ -106,11 +102,7 @@ clean:
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\printing
         nmake -f makefile.nt clean
-        cd $(WXDIR)\samples\tbarsmpl
-        nmake -f makefile.nt clean
-        cd $(WXDIR)\samples\tbarmsw
-        nmake -f makefile.nt clean
-        cd $(WXDIR)\samples\tbar95
+        cd $(WXDIR)\samples\toolbar
         nmake -f makefile.nt clean
         cd $(WXDIR)\samples\dialogs
         nmake -f makefile.nt clean

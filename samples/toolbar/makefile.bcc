@@ -1,0 +1,75 @@
+#
+# File:		makefile.bcc
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxButtonbar sample
+
+!if "$(BCCDIR)" == ""
+!error You must define the BCCDIR variable in autoexec.bat, e.g. BCCDIR=d:\bc4
+!endif
+
+!if "$(WXWIN)" == ""
+!error You must define the WXWIN variable in autoexec.bat, e.g. WXWIN=c:\wx
+!endif
+
+# Change WXDIR to wherever wxWindows is found
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makebcc.env
+
+WXLIB = $(WXDIR)\lib\wx.lib
+WXINC = $(WXDIR)\include
+CFG=$(WXDIR)\src\wxwin.cfg
+
+BUTTNBARDIR = $(WXDIR)\samples\toolbar
+THISDIR = $(BUTTNBARDIR)
+
+INC=
+
+LIBS=$(WXLIB) mathwl cwl import
+
+!ifndef FINAL
+FINAL=0
+!endif
+
+!if "$(FINAL)" == "0"
+LINKFLAGS=/v/Vt /Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
+OPT = -Od
+DEBUG_FLAGS= -v
+!else
+LINKFLAGS=/Twe /L$(WXDIR)\lib;$(BCCDIR)\lib
+OPT = -O2
+DEBUG_FLAGS=
+!endif
+CPPFLAGS=$(DEBUG_FLAGS) $(OPT) $(INC) @$(CFG)
+CFLAGS=$(DEBUG_FLAGS) $(OPT) @$(CFG)
+
+OBJECTS = test.obj
+
+all:    test.exe
+
+.$(SRCSUFF).obj:
+	bcc $(CPPFLAGS) -c {$< }
+
+test.res :      test.rc $(WXDIR)\include\msw\wx.rc
+    rc /i$(BCCDIR)\include /i$(WXDIR)\include\msw /i$(WXDIR)\contrib\fafa -r test
+
+test.exe:      test.obj test.def test.res
+        tlink $(LINKFLAGS) @&&!
+c0wl.obj test.obj
+test
+nul
+$(LIBS)
+test.def
+!
+        rc -K test.res
+
+clean:
+        -erase *.obj
+        -erase *.exe
+
+

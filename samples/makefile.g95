@@ -26,9 +26,7 @@ all:
 	        cd $(WXDIR)/samples/minimal; make -f makefile.g95
 	        cd $(WXDIR)/samples/layout; make -f makefile.g95
 	        cd $(WXDIR)/samples/printing; make -f makefile.g95
-	        cd $(WXDIR)/samples/tbarsmpl; make -f makefile.g95
-	        cd $(WXDIR)/samples/tbar95; make -f makefile.g95
-	        cd $(WXDIR)/samples/tbarmsw; make -f makefile.g95
+	        cd $(WXDIR)/samples/toolbar; make -f makefile.g95
 	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95
 	        cd $(WXDIR)/samples/docview; make -f makefile.g95
 	        cd $(WXDIR)/samples/controls; make -f makefile.g95
@@ -48,9 +46,7 @@ clean:
 	        cd $(WXDIR)/samples/minimal; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/layout; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/printing; make -f makefile.g95 clean
-	        cd $(WXDIR)/samples/tbarsmpl; make -f makefile.g95 clean
-	        cd $(WXDIR)/samples/tbarmsw; make -f makefile.g95 clean
-	        cd $(WXDIR)/samples/tbar95; make -f makefile.g95 clean
+	        cd $(WXDIR)/samples/toolbar; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/dialogs; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/resource; make -f makefile.g95 clean
 	        cd $(WXDIR)/samples/listctrl; make -f makefile.g95 clean
