@@ -74,6 +74,9 @@ public:
 
     virtual ~wxPaintDC();
 
+    // find the entry for this DC in the cache (keyed by the window)
+    static WXHDC FindDCInCache(wxWindow* win);
+
 protected:
     static wxArrayDCInfo ms_cache;
 

@@ -262,3 +262,20 @@ wxPaintDCInfo *wxPaintDC::FindInCache(size_t *index) const
 
     return info;
 }
+
+// find the entry for this DC in the cache (keyed by the window)
+WXHDC wxPaintDC::FindDCInCache(wxWindow* win)
+{
+    wxPaintDCInfo *info = NULL;
+    size_t nCache = ms_cache.GetCount();
+    for ( size_t n = 0; n < nCache; n++ )
+    {
+        info = &ms_cache[n];
+        if ( info->hwnd == win->GetHWND() )
+        {
+            return info->hdc;
+        }
+    }
+    return 0;
+}
+

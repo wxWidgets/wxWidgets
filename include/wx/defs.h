@@ -1087,6 +1087,7 @@ enum wxStretch
 #define wxTR_MULTIPLE        0x0020
 #define wxTR_EXTENDED        0x0040
 #define wxTR_HAS_VARIABLE_ROW_HEIGHT 0x0080
+#define wxTR_NO_LINES        0x0100
 
 /*
  * wxListCtrl flags

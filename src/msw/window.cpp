@@ -2952,6 +2952,16 @@ bool wxWindow::HandlePaint()
     return GetEventHandler()->ProcessEvent(event);
 }
 
+// Can be called from an application's OnPaint handler
+void wxWindow::OnPaint(wxPaintEvent& event)
+{
+    HDC hDC = (HDC) wxPaintDC::FindDCInCache((wxWindow*) event.GetEventObject());
+    if (hDC != 0)
+    {
+        MSWDefWindowProc(WM_PAINT, (WPARAM) hDC, 0);
+    }
+}
+
 bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
 {
     // Prevents flicker when dragging
