@@ -48,6 +48,7 @@ public:
 			WindowRef							m_macWindow ;
 			ControlHandle					m_macRootControl ;
 			wxWindow*							m_macFocus ;
+			bool                                m_macHasReceivedFirstActivate ;
 	} MacWindowData ;
 	
 	

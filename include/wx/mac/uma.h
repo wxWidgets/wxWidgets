@@ -28,8 +28,12 @@
         #include <Carbon/Carbon.h>
     #endif
 #else
-    #define UMA_USE_APPEARANCE 0
+    #define UMA_USE_APPEARANCE 1
     #define UMA_USE_WINDOWMGR 0
+#endif
+
+#if UMA_USE_APPEARANCE == 0 
+    #pragma error "wxMac needs appearance"
 #endif
 
 #if !UMA_USE_8_6 && UMA_USE_WINDOWMGR
@@ -101,6 +105,8 @@ void			UMACloseWindow(WindowRef inWindowRef) ;
 
 void 			UMADrawControl( ControlHandle inControl ) ;
 
+void 			UMAEnableControl( ControlHandle inControl ) ;
+void			UMADisableControl( ControlHandle inControl ) ;
 void 			UMAActivateControl( ControlHandle inControl ) ;
 void			UMADeactivateControl( ControlHandle inControl ) ;
 void			UMAApplyThemeBackground			(ThemeBackgroundKind 	inKind,

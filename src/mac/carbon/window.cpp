@@ -152,6 +152,20 @@ void wxWindow::Init()
 // Destructor
 wxWindow::~wxWindow()
 {
+    // deleting a window while it is shown invalidates the region
+    if ( IsShown() ) {
+        wxWindow* iter = this ;
+        while( iter ) {
+            if ( iter->m_macWindowData )
+            {
+                Refresh() ;
+                break ;
+            }
+            iter = iter->GetParent() ;
+            
+        }
+    }
+    
     m_isBeingDeleted = TRUE;
 
 	if ( s_lastMouseWindow == this )
@@ -754,11 +768,7 @@ bool wxWindow::Show(bool show)
 	}
 	MacSuperShown( show ) ;
 	Refresh() ;
-    /*
-    // this will be done by the activate event
-	if(m_macWindowData)
-		MacUpdateImmediately() ;
-    */
+
     return TRUE;
 }
 
@@ -899,6 +909,9 @@ void wxWindow::MacEraseBackground( Rect *rect )
 
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
+//    if ( !IsShown() )
+//        return ;
+        
 	wxMacDrawingHelper focus( this ) ;
 	if ( focus.Ok() )
 	{
@@ -1143,6 +1156,7 @@ void  wxWindow::MacCreateRealWindow( const wxString& title,
 	UMACreateRootControl( m_macWindowData->m_macWindow , &m_macWindowData->m_macRootControl ) ;
 
 	m_macWindowData->m_macFocus = NULL ;
+	m_macWindowData->m_macHasReceivedFirstActivate = true ;
 }
 
 void wxWindow::MacPaint( wxPaintEvent &event ) 
@@ -1694,8 +1708,12 @@ void wxWindow::MacFireMouseEvent( EventRecord *ev )
 				else
 					event.SetEventType(wxEVT_LEFT_DCLICK ) ;
 			}
+		    lastWhen = 0 ;
 		}
-		lastWhen = ev->when ;
+		else
+		{
+		    lastWhen = ev->when ;
+		}
 		lastWhere = localwhere ;
 	}
 
@@ -1768,15 +1786,18 @@ void wxWindow::MacMouseMoved( EventRecord *ev , short part)
 }
 void wxWindow::MacActivate( EventRecord *ev , bool inIsActivating )
 {
+    if ( !m_macWindowData->m_macHasReceivedFirstActivate )
+        m_macWindowData->m_macHasReceivedFirstActivate = true ;
+    
 	wxActivateEvent event(wxEVT_ACTIVATE, inIsActivating , m_windowId);
 	event.m_timeStamp = ev->when ;
 	event.SetEventObject(this);
 	
 	GetEventHandler()->ProcessEvent(event);
 	
+    Refresh() ;
 	UMAHighlightAndActivateWindow( m_macWindowData->m_macWindow , inIsActivating ) ;
-	Refresh() ;
-	MacUpdateImmediately() ;
+//	MacUpdateImmediately() ;
 }
 
 void wxWindow::MacRedraw( RgnHandle updatergn , long time)
@@ -1942,7 +1963,7 @@ void wxWindow::MacUpdateImmediately()
 	            GetPortVisibleRegion( GetWindowPort( window ), region );
 
 				// if windowshade gives incompatibility , take the follwing out
-	            if ( !EmptyRgn( region ) )
+	            if ( !EmptyRgn( region ) && win->m_macWindowData->m_macHasReceivedFirstActivate )
 	            {
 					win->MacRedraw( region , wxTheApp->sm_lastMessageTime ) ;
 	            }
@@ -1973,7 +1994,7 @@ void wxWindow::MacUpdate( EventRecord *ev )
             GetPortVisibleRegion( GetWindowPort( window ), region );
 
 			// if windowshade gives incompatibility , take the follwing out
-            if ( !EmptyRgn( region ) )
+            if ( !EmptyRgn( region ) && win->m_macWindowData->m_macHasReceivedFirstActivate )
             {
 				MacRedraw( region , ev->when ) ;
             }

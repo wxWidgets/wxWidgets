@@ -136,6 +136,7 @@ void wxControl::SetLabel(const wxString& title)
 #endif
 		::SetControlTitle( m_macControl , maclabel ) ;
 	}
+	Refresh() ;
 }
 
 wxSize wxControl::DoGetBestSize() const
@@ -270,6 +271,7 @@ void wxControl::MacPostControlCreate()
 	m_macControlIsShown  = true ;
 	MacAdjustControlRect() ;
 	wxAssociateControlWithMacControl( m_macControl , this ) ;
+	UMAShowControl( m_macControl ) ;
 }
 
 void wxControl::MacAdjustControlRect() 
@@ -358,15 +360,7 @@ void wxControl::MacSuperChangedPosition()
 	
 		if ( mac_x != former_mac_x || mac_y != former_mac_y )
 		{
-			{
-				Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
-				InvalWindowRect( rootwindow , &inval ) ;
-			}
 	  		UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y + m_macVerticalBorder ) ;
-			{
-				Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
-				InvalWindowRect( rootwindow , &inval ) ;
-			}
 		}
 		if ( wxrootwindow->IsKindOf( CLASSINFO( wxDialog ) ) )
 		{
@@ -494,15 +488,7 @@ void  wxControl::DoSetSize(int x, int y,
 	
 	if ( mac_x != former_mac_x || mac_y != former_mac_y )
 	{
-		{
-			Rect inval = { former_mac_y , former_mac_x , former_mac_y + m_height , former_mac_x + m_width } ;
-			InvalWindowRect( macrootwindow, &inval ) ;
-		}
   		UMAMoveControl( m_macControl , mac_x + m_macHorizontalBorder , mac_y  + m_macVerticalBorder ) ;
-		{
-			Rect inval = { mac_y , mac_x , mac_y + m_height , mac_x + m_width } ;
-			InvalWindowRect(macrootwindow, &inval ) ;
-		}
 	}
 
 	if ( actualX != former_x || actualY != former_y )
@@ -579,21 +565,10 @@ bool  wxControl::Enable(bool enable)
 
 	if ( m_macControl )
 	{
-		
-		if ( UMAHasAppearance() )
-		{
-			if ( enable )
-				::ActivateControl( m_macControl ) ;
-			else
-				::DeactivateControl( m_macControl ) ;
-		}
+		if ( enable )
+		    UMAActivateControl( m_macControl ) ;
 		else
-		{
-			if ( enable )
-				::HiliteControl( m_macControl , 0 ) ;
-			else
-				::HiliteControl( m_macControl , 255 ) ;
-		}
+		    UMADeactivateControl( m_macControl ) ;
 	}
 	return TRUE ;
 }

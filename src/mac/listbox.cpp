@@ -67,7 +67,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 	
 	MacPreControlCreate( parent , id ,  "" , pos , size ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , true , kwxMacListWithVerticalScrollbar , 0 , 0, 
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , title , false , kwxMacListWithVerticalScrollbar , 0 , 0, 
 	  	kControlListBoxProc , (long) this ) ;
 	
 	long	result ;

@@ -310,7 +310,7 @@ bool wxToolBar::Realize()
 				
 			if ( icon )
 			{
-				m_macToolHandle = UMANewControl( window , &toolrect , "\p" , true , 0 , 
+				m_macToolHandle = UMANewControl( window , &toolrect , "\p" , false , 0 , 
 					behaviour + kControlContentPictHandle , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
 				ControlButtonContentInfo info ;
 				
@@ -321,9 +321,10 @@ bool wxToolBar::Realize()
 			}
 			else
 			{
-						m_macToolHandle = UMANewControl( window , &toolrect , "\p" , true , 0 , 
+						m_macToolHandle = UMANewControl( window , &toolrect , "\p" , false , 0 , 
 						behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
 			}
+			UMAShowControl( m_macToolHandle ) ;
 			m_macToolHandles.Add( m_macToolHandle ) ;
 			tool->m_index = m_macToolHandles.Count() -1 ;
 			if ( !tool->IsEnabled() )

@@ -107,7 +107,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 	MacPreControlCreate( parent , id ,  "" , pos , mySize ,style, validator , name , &bounds , title ) ;
 
-	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , true , 0 , 0 , 1, 
+	m_macControl = UMANewControl( parent->GetMacRootWindow() , &bounds , "\p" , false , 0 , 0 , 1, 
 	  	( style & wxTE_PASSWORD ) ? kControlEditTextPasswordProc : kControlEditTextProc , (long) this ) ;
 	MacPostControlCreate() ;
 
