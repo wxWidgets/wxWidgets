@@ -44,6 +44,7 @@ class GridFrame : public wxFrame
     void AutoSizeCols( wxCommandEvent& );
     void SetLabelColour( wxCommandEvent& );
     void SetLabelTextColour( wxCommandEvent& );
+    void SetLabelFont(wxCommandEvent &);
     void SetRowLabelHorizAlignment( wxCommandEvent& );
     void SetRowLabelVertAlignment( wxCommandEvent& );
     void SetColLabelHorizAlignment( wxCommandEvent& );
@@ -107,6 +108,7 @@ public:
         ID_AUTOSIZECOLS,
         ID_SETLABELCOLOUR,
         ID_SETLABELTEXTCOLOUR,
+        ID_SETLABEL_FONT,
         ID_ROWLABELALIGN,
         ID_ROWLABELHORIZALIGN,
         ID_ROWLABELVERTALIGN,

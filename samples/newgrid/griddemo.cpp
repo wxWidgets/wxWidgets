@@ -29,10 +29,10 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+    #include "wx/wx.h"
+    #include "wx/colordlg.h"
+    #include "wx/fontdlg.h"
 #endif
-
-#include "wx/colordlg.h"
 
 #include "wx/grid.h"
 #include "wx/generic/gridctrl.h"
@@ -76,6 +76,7 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_AUTOSIZECOLS, GridFrame::AutoSizeCols )
     EVT_MENU( ID_SETLABELCOLOUR, GridFrame::SetLabelColour )
     EVT_MENU( ID_SETLABELTEXTCOLOUR, GridFrame::SetLabelTextColour )
+    EVT_MENU( ID_SETLABEL_FONT, GridFrame::SetLabelFont )
     EVT_MENU( ID_ROWLABELHORIZALIGN, GridFrame::SetRowLabelHorizAlignment )
     EVT_MENU( ID_ROWLABELVERTALIGN, GridFrame::SetRowLabelVertAlignment )
     EVT_MENU( ID_COLLABELHORIZALIGN, GridFrame::SetColLabelHorizAlignment )
@@ -169,11 +170,12 @@ GridFrame::GridFrame()
     colLabelMenu->Append( ID_COLLABELVERTALIGN, "&Vertical" );
 
     wxMenu *colMenu = new wxMenu;
-    colMenu->Append( ID_SETLABELCOLOUR, "Set &label colour" );
-    colMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour" );
-    colMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour" );
-    colMenu->Append( ID_SET_CELL_FG_COLOUR, "Set cell &foreground colour" );
-    colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour" );
+    colMenu->Append( ID_SETLABELCOLOUR, "Set &label colour..." );
+    colMenu->Append( ID_SETLABELTEXTCOLOUR, "Set label &text colour..." );
+    colMenu->Append( ID_SETLABEL_FONT, "Set label fo&nt..." );
+    colMenu->Append( ID_GRIDLINECOLOUR, "&Grid line colour..." );
+    colMenu->Append( ID_SET_CELL_FG_COLOUR, "Set cell &foreground colour..." );
+    colMenu->Append( ID_SET_CELL_BG_COLOUR, "Set cell &background colour..." );
 
     wxMenu *editMenu = new wxMenu;
     editMenu->Append( ID_INSERTROW, "Insert &row" );
@@ -459,6 +461,14 @@ void GridFrame::SetLabelTextColour( wxCommandEvent& WXUNUSED(ev) )
     }
 }
 
+void GridFrame::SetLabelFont( wxCommandEvent& WXUNUSED(ev) )
+{
+    wxFont font = wxGetFontFromUser(this);
+    if ( font.Ok() )
+    {
+        grid->SetLabelFont(font);
+    }
+}
 
 void GridFrame::SetRowLabelHorizAlignment( wxCommandEvent& WXUNUSED(ev) )
 {
