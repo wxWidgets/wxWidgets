@@ -119,6 +119,10 @@ public:
     wxWindow     *m_owner;
     wxRegion      m_currentClippingRegion;
     wxRegion      m_paintClippingRegion;
+#ifdef __WXGTK20__
+    PangoContext *m_context;
+    PangoFontDescription *m_fontdesc;
+#endif
 
     void SetUpDC();
     void Destroy();
