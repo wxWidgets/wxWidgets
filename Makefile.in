@@ -20281,6 +20281,11 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/event/makefile.unx $(DISTDIR)/samples/event
 	cp $(SAMPDIR)/event/*.cpp $(DISTDIR)/samples/event
 
+	mkdir $(DISTDIR)/samples/except
+	cp $(SAMPDIR)/except/Makefile.in $(DISTDIR)/samples/except
+	cp $(SAMPDIR)/except/makefile.unx $(DISTDIR)/samples/except
+	cp $(SAMPDIR)/except/*.cpp $(DISTDIR)/samples/except
+
 	mkdir $(DISTDIR)/samples/exec
 	cp $(SAMPDIR)/exec/Makefile.in $(DISTDIR)/samples/exec
 	cp $(SAMPDIR)/exec/makefile.unx $(DISTDIR)/samples/exec
