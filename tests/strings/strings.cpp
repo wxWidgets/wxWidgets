@@ -40,6 +40,9 @@ private:
         CPPUNIT_TEST( PChar );
         CPPUNIT_TEST( Format );
         CPPUNIT_TEST( Constructors );
+#if wxUSE_WCHAR_T
+        CPPUNIT_TEST( ConstructorsWithConversion );
+#endif
         CPPUNIT_TEST( Extraction );
         CPPUNIT_TEST( Find );
         CPPUNIT_TEST( Tokenizer );
@@ -52,6 +55,9 @@ private:
     void PChar();
     void Format();
     void Constructors();
+#if wxUSE_WCHAR_T
+    void ConstructorsWithConversion();
+#endif
     void Extraction();
     void Find();
     void SingleTokenizerTest( wxChar *str, wxChar *delims, size_t count , wxStringTokenizerMode mode );
@@ -137,6 +143,34 @@ void StringTestCase::Constructors()
     const wxChar *end = wxStrchr(s, _T('!'));
     TEST_CTOR((start, end), _T("really"));
 }
+
+#if wxUSE_WCHAR_T
+void StringTestCase::ConstructorsWithConversion()
+{
+    // Déj`a in UTF-8 and wchar_t:
+    const char utf8[] = {0x44,0xC3,0xA9,0x6A,0xC3,0xA0,0};
+    const wchar_t wchar[] = {0x44,0xE9,0x6A,0xE0,0};
+    const char utf8sub[] = {0x44,0xC3,0xA9,0x6A,0}; // "Dej"
+    
+    wxString s1(utf8, wxConvUTF8);
+    wxString s2(wchar, wxConvUTF8);
+
+#if wxUSE_UNICODE
+    CPPUNIT_ASSERT( s1 == wchar );
+    CPPUNIT_ASSERT( s2 == wchar );
+#else
+    CPPUNIT_ASSERT( s1 == utf8 );
+    CPPUNIT_ASSERT( s2 == utf8 );
+#endif
+
+    wxString sub(utf8sub, wxConvUTF8); // "Dej" substring
+    wxString s3(utf8, wxConvUTF8, 4);
+    wxString s4(wchar, wxConvUTF8, 3);
+
+    CPPUNIT_ASSERT( s3 == sub );
+    CPPUNIT_ASSERT( s4 == sub );    
+}
+#endif
 
 void StringTestCase::Extraction()
 {
