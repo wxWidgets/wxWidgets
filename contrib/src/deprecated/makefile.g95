@@ -17,14 +17,11 @@ include $(WXDIR)/src/makelib.g95
 y_tab.$(OBJSUFF):    y_tab.c lex_yy.c
 	$(CCLEX) -c $(ALL_CPPFLAGS) $(ALL_CFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ y_tab.c
 
-#$(COMMDIR)/y_tab.$(OBJSUFF):    $(COMMDIR)/y_tab.c $(COMMDIR)/lex_yy.c
-#	$(CCLEX) -c $(ALL_CPPFLAGS) $(ALL_CFLAGS) -DUSE_DEFINE -DYY_USE_PROTOS -o $@ $(COMMDIR)/y_tab.c
-#
-#$(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
-#	$(COPY) ../common/dosyacc.c ../common/y_tab.c
-#
-#$(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
-#	$(COPY) ../common/doslex.c ../common/lex_yy.c
+y_tab.c:     dosyacc.c
+	$(COPY) dosyacc.c y_tab.c
+
+lex_yy.c:    doslex.c
+	$(COPY) doslex.c lex_yy.c
 
 # Replace lex with flex if you run into compilation
 # problems with lex_yy.c. See also note about LEX_SCANNER

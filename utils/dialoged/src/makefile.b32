@@ -12,6 +12,7 @@
 # WXWIN and BCCDIR are set by parent make
 
 WXDIR = $(WXWIN)
+EXTRALIBS=$(WXDIR)\lib\wxdeprecated.lib
 
 TARGET=dialoged
 OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj\

@@ -10,7 +10,7 @@
 WXDIR = ../../../..
 
 TARGET=studio
-EXTRALIBS=-logl
+EXTRALIBS=-logl -lwxdeprecated
 OBJECTS = $(TARGET).o doc.o shapes.o symbols.o view.o cspalette.o\
   mainfrm.o project.o dialogs.o csprint.o
 

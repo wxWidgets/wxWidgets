@@ -11,7 +11,7 @@ WXDIR = ../../../..
 
 TARGET=ogledit
 # EXTRACPPFLAGS=-I../../src
-EXTRALIBS=-logl
+EXTRALIBS=-logl -lwxdeprecated
 OBJECTS = $(TARGET).o doc.o view.o palette.o
 
 include $(WXDIR)/src/makeprog.g95

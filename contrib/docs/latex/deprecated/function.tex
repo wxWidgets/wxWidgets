@@ -12,6 +12,7 @@ the corresponding topic.
 %\helpref{wxLoadUserResource}{wxloaduserresource}\\
 %\helpref{wxMakeMetafilePlaceable}{wxmakemetafileplaceable}\\
 %\helpref{wxNewId}{wxnewid}\\
+\helpref{wxLoadFromResource}{wxloadfromresource}\\
 \helpref{wxResourceAddIdentifier}{wxresourceaddidentifier}\\
 \helpref{wxResourceClear}{wxresourceclear}\\
 \helpref{wxResourceCreateBitmap}{wxresourcecreatebitmap}\\
@@ -156,6 +157,28 @@ as wxWriteResource and wxGetResource. It is just an unfortunate clash of termino
 
 See also \helpref{wxWindow::LoadFromResource}{wxwindowloadfromresource} for
 loading from resource data.
+
+\membersection{wxLoadFromResource}\label{wxloadfromresource}
+
+\func{virtual bool}{LoadFromResource}{\param{wxWindow* thisWindow}, \param{wxWindow* }{parent},\rtfsp
+\param{const wxString\& }{resourceName}, \param{const wxResourceTable* }{resourceTable = NULL}}
+
+Loads a panel or dialog from a resource file.
+
+\wxheading{Parameters}
+
+\docparam{thisWindow}{Window to load the resource into.}
+
+\docparam{parent}{Parent window.}
+
+\docparam{resourceName}{The name of the resource to load.}
+
+\docparam{resourceTable}{The resource table to load it from. If this is NULL, the
+default resource table will be used.}
+
+\wxheading{Return value}
+
+{\tt true} if the operation succeeded, otherwise {\tt false}.
 
 \membersection{::wxResourceAddIdentifier}\label{wxresourceaddidentifier}
 

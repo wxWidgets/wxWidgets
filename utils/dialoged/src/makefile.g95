@@ -12,6 +12,8 @@ WXDIR = ../../..
 TARGET=dialoged
 OBJECTS = $(TARGET).o reseditr.o dlghndlr.o reswrite.o\
   winprop.o edtree.o edlist.o symbtabl.o winstyle.o
+EXTRAINC = -I$(WXDIR)/contrib/include
+EXTRALIBS = -lwxdeprecated
 
 include $(WXDIR)/src/makeprog.g95
 

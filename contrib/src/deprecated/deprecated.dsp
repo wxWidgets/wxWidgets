@@ -85,6 +85,7 @@ LIB32=link.exe -lib
 # Begin Source File
 
 SOURCE=.\dosyacc.c
+# ADD CPP /D "USE_DEFINE" /D "YY_USE_PROTOS"
 # End Source File
 # Begin Source File
 

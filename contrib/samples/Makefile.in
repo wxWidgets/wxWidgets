@@ -1,6 +1,6 @@
 # $Id$
 
-CONTRIB_SAMPLES=fl gizmos mmedia net ogl plot stc svg xrc #applet
+CONTRIB_SAMPLES=fl gizmos mmedia net ogl plot stc svg xrc deprecated #applet
 
 all:
 	@for d in $(CONTRIB_SAMPLES); do (cd $$d && $(MAKE)); done

@@ -116,16 +116,6 @@ public:
 
     virtual ~wxWindowBase();
 
-#if wxUSE_WX_RESOURCES
-    // these functions are implemented in resource.cpp and resourc2.cpp
-    virtual bool LoadFromResource(wxWindow *parent,
-                                  const wxString& resourceName,
-                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
-    virtual wxControl *CreateItem(const wxItemResource* childResource,
-                                  const wxItemResource* parentResource,
-                                  const wxResourceTable *table = (const wxResourceTable *) NULL);
-#endif // wxUSE_WX_RESOURCES
-
     // deleting the window
     // -------------------
 

@@ -10,7 +10,7 @@
 WXDIR = $(WXWIN)
 
 TARGET=ogledit
-EXTRALIBS=$(WXDIR)\lib\ogl.lib
+EXTRALIBS=$(WXDIR)\lib\ogl.lib $(WXDIR)\lib\wxdeprecated.lib
 OBJECTS = $(TARGET).obj doc.obj view.obj palette.obj
 
 !include $(WXDIR)\src\makeprog.b32
