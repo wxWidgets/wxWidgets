@@ -39,6 +39,12 @@
     #error "menu sample requires wxUSE_MENUS=1"
 #endif // wxUSE_MENUS
 
+// not all ports have support for EVT_CONTEXT_MENU yet, don't define
+// USE_CONTEXT_MENU for those which don't
+#if !defined(__WXMOTIF__) && !defined(__WXPM__)
+    #define USE_CONTEXT_MENU
+#endif
+
 #include "copy.xpm"
 
 // ----------------------------------------------------------------------------
@@ -98,7 +104,7 @@ protected:
     void OnUpdateSubMenuCheck(wxUpdateUIEvent& event);
     void OnUpdateSubMenuRadio(wxUpdateUIEvent& event);
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__ )
+#if USE_CONTEXT_MENU
     void OnContextMenu(wxContextMenuEvent& event)
         { ShowContextMenu(ScreenToClient(event.GetPosition())); }
 #else
@@ -261,7 +267,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_UPDATE_UI(Menu_Menu_Check, MyFrame::OnUpdateCheckMenuItemUI)
 
-#if defined( __WXMSW__ ) || defined( __WXMAC__ )
+#if USE_CONTEXT_MENU
     EVT_CONTEXT_MENU(MyFrame::OnContextMenu)
 #else
     EVT_RIGHT_UP(MyFrame::OnRightUp)
@@ -832,7 +838,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
     {
         size_t menuindex;
         int index = wxNOT_FOUND;
-        
+
         for (menuindex = 0; (menuindex < count) && (index == wxNOT_FOUND); ++menuindex)
         {
             index = mbar->FindMenuItem(mbar->GetMenu(menuindex)->GetTitle(), label);
@@ -901,7 +907,7 @@ void MyFrame::LogMenuOpenOrClose(const wxMenuEvent& event, const wxChar *what)
         << _T("menu has been ")
         << what
         << _T(".");
-           
+
     wxLogStatus(this, msg.c_str());
 }
 
