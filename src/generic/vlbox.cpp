@@ -574,6 +574,8 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
 void wxVListBox::OnLeftDown(wxMouseEvent& event)
 {
+    SetFocus();
+    
     int item = HitTest(event.GetPosition());
 
     if ( item != wxNOT_FOUND )
