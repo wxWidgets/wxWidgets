@@ -12,21 +12,128 @@
 #ifndef _WX_SETUP_H_
 #define _WX_SETUP_H_
 
-/*
- * General features
- *
- */
+// ----------------------------------------------------------------------------
+// global settings
+// ----------------------------------------------------------------------------
+
+// define this to 0 when building wxBase library
+#define wxUSE_GUI            1
  
+// ----------------------------------------------------------------------------
+// compatibility settings
+// ----------------------------------------------------------------------------
+
+// This setting determines the compatibility with 1.68 API:
+// Level 0: no backward compatibility, all new features
+// Level 1: some extra methods are defined for compatibility.
+//
+// Default is 0.
+//
+// Recommended setting: 0 (in fact the compatibility code is now very minimal
+// so there is little advantage to setting it to 1.
+#define WXWIN_COMPATIBILITY  0
+
 #define WORDS_BIGENDIAN 1
 
-#define wxUSE_CONFIG           1
-                                // Use wxConfig, with CreateConfig in wxApp
+// ----------------------------------------------------------------------------
+// non GUI features selection
+// ----------------------------------------------------------------------------
 
-#define WXWIN_COMPATIBILITY  0
-                                // Compatibility with 1.66 API.
-                                // Level 0: no backward compatibility, all new features
-                                // Level 1: wxDC, OnSize (etc.) compatibility, but
-                                //          some new features such as event tables
+// Set wxUSE_LONGLONG to 1 to compile the wxLongLong class. This is a 64 bit
+// integer which is implemented in terms of native 64 bit integers if any or
+// uses emulation otherwise.
+//
+// This class is required by wxDateTime and so you should enable it if you want
+// to use wxDateTime. For most modern platforms, it will use the native 64 bit
+// integers in which case (almost) all of its functions are inline and it
+// almost does not take any space, so there should be no reason to switch it
+// off.
+//
+// Recommended setting: 1
+#define wxUSE_LONGLONG      1
+
+
+// Set wxUSE_TIMEDATE to 1 to compile the wxDateTime and related classes which
+// allow to manipulate dates, times and time intervals. wxDateTime replaces the
+// old wxTime and wxDate classes which are still provided for backwards
+// compatibility (and implemented in terms of wxDateTime).
+//
+// Note that this class is relatively new and is still officially in alpha
+// stage because some features are not yet (fully) implemented. It is already
+// quite useful though and should only be disabled if you are aiming at
+// absolutely minimal version of the library.
+//
+// Requires: wxUSE_LONGLONG
+//
+// Recommended setting: 1
+#define wxUSE_TIMEDATE      1
+
+// Setting wxUSE_CONFIG to 1 enables the use of wxConfig and related classes
+// which allow the application to store its settings in the persistent
+// storage. Setting this to 1 will also enable on-demand creation of the
+// global config object in wxApp.
+//
+// See also wxUSE_CONFIG_NATIVE below.
+//
+// Recommended setting: 1
+#define wxUSE_CONFIG           1
+
+// ----------------------------------------------------------------------------
+// Optional controls
+// ----------------------------------------------------------------------------
+
+// wxToolBar related settings: if wxUSE_TOOLBAR is 0, don't compile any toolbar
+// classes at all. Otherwise, use the native toolbar class unless
+// wxUSE_TOOLBAR_NATIVE is 0. Additionally, the generic toolbar class which
+// supports some features which might not be supported by the native wxToolBar
+// class may be compiled in if wxUSE_TOOLBAR_SIMPLE is 1.
+//
+// Default is 1 for all settings.
+//
+// Recommended setting: 1 for wxUSE_TOOLBAR and wxUSE_TOOLBAR_NATIVE and 0 for
+// wxUSE_TOOLBAR_SIMPLE (the default is 1 mainly for backwards compatibility).
+#define wxUSE_TOOLBAR 1
+#define wxUSE_TOOLBAR_NATIVE 1
+#define wxUSE_TOOLBAR_SIMPLE 0
+
+// wxNotebook is a control with several "tabs" located on one of its sides. It
+// may be used ot logically organise the data presented to the user instead of
+// putting everything in one huge dialog. It replaces wxTabControl and related
+// classes of wxWin 1.6x.
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_NOTEBOOK 1
+
+
+// The corresponding controls will be compiled in if wxUSE_<CONTROL> is set to
+// 1 and not compiled into the library otherwise.
+//
+// Default is 1 for everything.
+//
+// Recommended setting: 1 (library might fail to compile for some combinations
+// of disabled controls) 
+#define wxUSE_COMBOBOX     1
+#define wxUSE_CHOICE       1
+#define wxUSE_RADIOBTN     1
+#define wxUSE_RADIOBOX     1
+#define wxUSE_SCROLLBAR    1
+#define wxUSE_CHECKBOX     1
+#define wxUSE_LISTBOX      1
+#define wxUSE_SPINBTN      1
+#define wxUSE_SPINCTRL     1
+#define wxUSE_STATLINE     1
+#define wxUSE_CHECKLISTBOX 1
+#define wxUSE_CHOICE       1
+#define wxUSE_CARET        1
+#define wxUSE_SLIDER       1
+
+// ----------------------------------------------------------------------------
+// Postscript support settings
+// ----------------------------------------------------------------------------
+
+
 #define wxUSE_POSTSCRIPT  0
                         	// 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 0

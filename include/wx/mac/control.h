@@ -16,6 +16,8 @@
 #pragma interface "control.h"
 #endif
 
+WXDLLEXPORT_DATA(extern const wxChar*) wxControlNameStr;
+
 // General item class
 class WXDLLEXPORT wxControl : public wxControlBase
 {
@@ -24,6 +26,12 @@ class WXDLLEXPORT wxControl : public wxControlBase
 public:
    wxControl();
    virtual ~wxControl();
+
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxControlNameStr);
 
    // Simulates an event
    virtual void Command(wxCommandEvent& event) { ProcessCommand(event); }
@@ -88,7 +96,7 @@ protected:
 		int							m_macVerticalBorder ;
    wxList m_subControls;
 
-   virtual wxSize DoGetBestSize();
+   virtual wxSize DoGetBestSize() const ;
 
 private:
    DECLARE_EVENT_TABLE()

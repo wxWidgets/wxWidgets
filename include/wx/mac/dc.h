@@ -168,6 +168,17 @@ class WXDLLEXPORT wxDC: public wxObject
     virtual void GetTextExtent( const wxString &string, long *width, long *height,
                      long *descent = NULL, long *externalLeading = NULL,
                      wxFont *theFont = NULL, bool use16 = FALSE ) const ;
+    virtual void GetTextExtent( const wxString &string, int *width, int *height,
+                     int *descent = NULL, int *externalLeading = NULL,
+                     wxFont *theFont = NULL, bool use16 = FALSE ) const 
+    {
+    	long lwidth,lheight,ldescent,lexternal ;
+    	GetTextExtent( string, &lwidth,&lheight,&ldescent,&lexternal,theFont,use16 ) ;
+    	*width = lwidth ;
+    	*height = lheight ;
+    	if (descent) *descent = ldescent ;
+    	if (externalLeading) *externalLeading = lexternal ;
+    }
     virtual wxCoord GetCharWidth(void) const;
     virtual wxCoord GetCharHeight(void) const;
     

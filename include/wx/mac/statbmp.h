@@ -54,6 +54,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
 
   // overriden base class virtuals
   virtual bool AcceptsFocus() const { return FALSE; }
+	wxSize DoGetBestSize() const ;
 
  protected:
   wxBitmap m_messageBitmap;

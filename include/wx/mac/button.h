@@ -48,7 +48,7 @@ class WXDLLEXPORT wxButton: public wxControl
   virtual void SetDefault();
   virtual void Command(wxCommandEvent& event);
 protected:
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const ;
 };
 
 #endif

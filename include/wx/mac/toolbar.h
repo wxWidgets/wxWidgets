@@ -31,12 +31,14 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
    * Public interface
    */
 
-  wxToolBar();
+   wxToolBar() { Init(); }
+
 
   inline wxToolBar(wxWindow *parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr)
   {
+    Init();
     Create(parent, id, pos, size, style, name);
   }
   ~wxToolBar();
@@ -45,36 +47,43 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
             long style = wxNO_BORDER|wxTB_HORIZONTAL,
             const wxString& name = wxToolBarNameStr);
 
-  // If pushedBitmap is NULL, a reversed version of bitmap is
-  // created and used as the pushed/toggled image.
-  // If toggle is TRUE, the button toggles between the two states.
-  wxToolBarTool *AddTool(int toolIndex, const wxBitmap& bitmap, const wxBitmap& pushedBitmap = wxNullBitmap,
-               bool toggle = FALSE, long xPos = -1, long yPos = -1, wxObject *clientData = NULL,
-               const wxString& helpString1 = "", const wxString& helpString2 = "");
+    // override/implement base class virtuals
+    virtual wxToolBarToolBase *FindToolForPosition(wxCoord x, wxCoord y) const;
 
-  // Set default bitmap size
-  void SetToolBitmapSize(const wxSize& size);
-  void EnableTool(int toolIndex, bool enable); // additional drawing on enabling
-  void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on
-  void ClearTools();
+    virtual bool Realize();
 
-  // The button size is bigger than the bitmap size
-  wxSize GetToolSize() const;
+    virtual void SetToolBitmapSize(const wxSize& size);
+    virtual wxSize GetToolSize() const;
 
-  wxSize GetMaxSize() const;
+    virtual void SetRows(int nRows);
 
   // Add all the buttons
-  virtual bool CreateTools();
- 	virtual void LayoutButtons() {}
 
-  // The post-tool-addition call. TODO: do here whatever's
-  // necessary for completing the toolbar construction.
-  bool Realize() { return CreateTools(); };
 	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 protected:
+    // common part of all ctors
+    void Init();
+
+    // implement base class pure virtuals
+    virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
+    virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
+
+    virtual void DoEnableTool(wxToolBarToolBase *tool, bool enable);
+    virtual void DoToggleTool(wxToolBarToolBase *tool, bool toggle);
+    virtual void DoSetToggle(wxToolBarToolBase *tool, bool toggle);
+
+    virtual wxToolBarToolBase *CreateTool(int id,
+                                          const wxBitmap& bitmap1,
+                                          const wxBitmap& bitmap2,
+                                          bool toggle,
+                                          wxObject *clientData,
+                                          const wxString& shortHelpString,
+                                          const wxString& longHelpString);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control);
+
 	wxArrayPtrVoid	m_macToolHandles ;
 
-DECLARE_EVENT_TABLE()
+	DECLARE_EVENT_TABLE()
 };
 
 #endif // wxUSE_TOOLBAR

@@ -138,7 +138,7 @@ protected:
     int m_noItems;
     int m_selected;
 
-    virtual wxSize DoGetBestSize();
+    virtual wxSize DoGetBestSize() const ;
 
 #if wxUSE_OWNER_DRAWN
     // control items
