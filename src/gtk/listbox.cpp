@@ -947,7 +947,7 @@ void wxListBox::GtkDisableEvents()
         gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
           GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
-        if (HasFlag(wxLB_MULTIPLE))
+        if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
             gtk_signal_disconnect_by_func( GTK_OBJECT(child->data),
               GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
@@ -963,7 +963,7 @@ void wxListBox::GtkEnableEvents()
         gtk_signal_connect( GTK_OBJECT(child->data), "select",
           GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
 
-        if (HasFlag(wxLB_MULTIPLE))
+        if (HasFlag(wxLB_MULTIPLE) || HasFlag(wxLB_EXTENDED))
             gtk_signal_connect( GTK_OBJECT(child->data), "deselect",
               GTK_SIGNAL_FUNC(gtk_listitem_deselect_callback), (gpointer)this );
 
