@@ -864,6 +864,11 @@ enum wxBorder
 // parent is destroyed before the child
 #define wxWS_EX_TRANSIENT               0x00000004
 
+// Use this style to add a context-sensitive help to the window (currently for
+// Win32 only and it doesn't work if wxMINIMIZE_BOX or wxMAXIMIZE_BOX are used)
+#define wxFRAME_EX_CONTEXTHELP  0x00000004
+#define wxDIALOG_EX_CONTEXTHELP 0x00000004
+
 /*
  * wxFrame/wxDialog style flags
  */
@@ -893,10 +898,6 @@ enum wxBorder
 
 // deprecated flag, don't use any more, defined for compatibility only
 #define wxFRAME_FLOAT_ON_PARENT 0
-
-// Context-sensitive help
-#define wxFRAME_EX_CONTEXTHELP  0x00000004
-#define wxDIALOG_EX_CONTEXTHELP 0x00000004
 
 /*
  * MDI parent frame style flags
