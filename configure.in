@@ -1810,7 +1810,9 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
+dnl add 64 bit versions for Linux on AMD (this is not perfect but well...)
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` " \
+    /usr/lib64 /usr/X11R6/lib64
 
 dnl ------------------------------------------------------------------------
 dnl Check for libraries

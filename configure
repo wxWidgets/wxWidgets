@@ -18857,7 +18857,8 @@ SEARCH_INCLUDE="\
                               \
     /usr/openwin/share/include"
 
-SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` "
+SEARCH_LIB="`echo "$SEARCH_INCLUDE" | sed s/include/lib/g` " \
+    /usr/lib64 /usr/X11R6/lib64
 
 
 cat >confcache <<\_ACEOF
