@@ -16,7 +16,6 @@
 #include "wx/intl.h"
 #include "wx/generic/msgdlgg.h"
 
-
 #include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
@@ -120,12 +119,13 @@ void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFileDialog *dialo
 // wxFileDialog
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxFileDialogBase)
 
 wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
                             const wxString& defaultDir, const wxString& defaultFileName,
                             const wxString& wildCard,
                             long style, const wxPoint& pos )
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
 {
     m_needParent = FALSE;
 
@@ -135,14 +135,6 @@ wxFileDialog::wxFileDialog( wxWindow *parent, const wxString& message,
         wxFAIL_MSG( wxT("wxXX creation failed") );
         return;
     }
-
-    m_message = message;
-    m_path = wxT("");
-    m_fileName = defaultFileName;
-    m_dir = defaultDir;
-    m_wildCard = wildCard;
-    m_dialogStyle = style;
-    m_filterIndex = 1;
 
     m_widget = gtk_file_selection_new( m_message.mbc_str() );
 

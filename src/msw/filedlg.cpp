@@ -33,7 +33,6 @@
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
-    #include "wx/dialog.h"
     #include "wx/filedlg.h"
     #include "wx/filefn.h"
     #include "wx/intl.h"
@@ -76,11 +75,7 @@
 // implementation
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// wxWin macros
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_CLASS(wxFileDialog, wxDialog)
+IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 // ----------------------------------------------------------------------------
 // wxFileDialog
@@ -92,18 +87,12 @@ wxFileDialog::wxFileDialog(wxWindow *parent,
                            const wxString& defaultFileName,
                            const wxString& wildCard,
                            long style,
-                           const wxPoint& WXUNUSED(pos))
+                           const wxPoint& pos)
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
+
 {
-    m_message = message;
-    m_dialogStyle = style;
     if ( ( m_dialogStyle & wxMULTIPLE ) && ( m_dialogStyle & wxSAVE ) )
         m_dialogStyle &= ~wxMULTIPLE;
-    m_parent = parent;
-    m_path = wxEmptyString;
-    m_fileName = defaultFileName;
-    m_dir = defaultDir;
-    m_wildCard = wildCard;
-    m_filterIndex = 0;
 }
 
 void wxFileDialog::GetPaths(wxArrayString& paths) const
@@ -350,8 +339,6 @@ int wxFileDialog::ShowModal()
         }
         else
         {
-            const wxChar* extension = NULL;
-
             //=== Adding the correct extension >>=================================
 
             m_filterIndex = (int)of.nFilterIndex - 1;
@@ -360,39 +347,15 @@ int wxFileDialog::ShowModal()
                  (of.nFileExtension && fileNameBuffer[of.nFileExtension] == wxT('\0')) )
             {
                 // User has typed a filename without an extension:
+                const wxChar* extension = filterBuffer;
+                int   maxFilter = (int)(of.nFilterIndex*2L) - 1;
 
-                // A filename can end in a "." here ("abc."), this means it
-                // does not have an extension. Because later on a "." with
-                // the default extension is appended we remove the "." if
-                // filename ends with one (We don't want files called
-                // "abc..ext")
-                int idx = wxStrlen(fileNameBuffer) - 1;
-                if ( fileNameBuffer[idx] == wxT('.') )
-                {
-                    fileNameBuffer[idx] = wxT('\0');
-                }
+                for( int i = 0; i < maxFilter; i++ )           // get extension
+                    extension = extension + wxStrlen( extension ) + 1;
 
-                int   maxFilter = (int)(of.nFilterIndex*2L-1L);
-                extension = filterBuffer;
-
-                for( int i = 0; i < maxFilter; i++ ) {          // get extension
-                    extension = extension + wxStrlen( extension ) +1;
-                }
-
-                extension = wxStrrchr( extension, wxT('.') );
-                if (  extension                                 // != "blabla"
-                        && !wxStrrchr( extension, wxT('*') )       // != "blabla.*"
-                        && !wxStrrchr( extension, wxT('?') )       // != "blabla.?"
-                        && extension[1]                           // != "blabla."
-                        && extension[1] != wxT(' ') )              // != "blabla. "
-                {
-                    // now concat extension to the fileName:
-                    m_fileName = wxString(fileNameBuffer) + extension;
-
-                    int len = wxStrlen( fileNameBuffer );
-                    wxStrncpy( fileNameBuffer + len, extension, wxMAXPATH - len );
-                    fileNameBuffer[ wxMAXPATH -1 ] = wxT('\0');
-                }
+                m_fileName = AppendExtension(fileNameBuffer, extension);
+                wxStrncpy(fileNameBuffer, m_fileName.c_str(), wxMin(m_fileName.Len(), wxMAXPATH-1));
+                fileNameBuffer[wxMin(m_fileName.Len(), wxMAXPATH-1)] = wxT('\0');
             }
 
             m_path = fileNameBuffer;

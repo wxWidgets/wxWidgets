@@ -47,6 +47,7 @@
 #include "wx/mimetype.h"
 #include "wx/image.h"
 #include "wx/choice.h"
+#include "wx/filedlg.h"  // for wxFileDialogBase::ParseWildcard
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
@@ -100,9 +101,6 @@ extern bool wxIsDriveAvailable(const wxString& dirName);
 #ifdef GetFirstChild
 #undef GetFirstChild
 #endif
-
-// declared in filedlg.h, defined in fldlgcmn.cpp
-extern int wxParseFileFilter(const wxString& filterStr, wxArrayString& descriptions, wxArrayString& filters);
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, DOS, WXPM, MAC, UNIX (returns "/")
@@ -1046,7 +1044,7 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
 
 int wxGenericDirCtrl::ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions)
 {
-    return wxParseFileFilter(filterStr, descriptions, filters );
+    return wxFileDialogBase::ParseWildcard(filterStr, descriptions, filters );
 }
 
 void wxGenericDirCtrl::DoResize()

@@ -21,7 +21,6 @@
 
 #include "wx/defs.h"
 #include "wx/utils.h"
-#include "wx/dialog.h"
 #include "wx/filedlg.h"
 #include "wx/intl.h"
 #include "wx/app.h"
@@ -47,7 +46,7 @@
 
 #include "wx/motif/private.h"
 
-IMPLEMENT_CLASS(wxFileDialog, wxDialog)
+IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 
 #define DEFAULT_FILE_SELECTOR_SIZE 0
 // Let Motif defines the size of File
@@ -115,16 +114,9 @@ static wxString ParseWildCard( const wxString& wild )
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
                            const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
                            long style, const wxPoint& pos)
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
 {
-    m_message = message;
-    m_dialogStyle = style;
-    m_parent = parent;
-    m_path = "";
-    m_fileName = defaultFileName;
-    m_dir = defaultDir;
-    m_wildCard = wildCard;
     m_filterIndex = 1;
-    m_pos = pos;
 }
 
 static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)

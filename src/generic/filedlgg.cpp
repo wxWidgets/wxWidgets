@@ -810,7 +810,7 @@ wxFileCtrl::~wxFileCtrl()
 #define  ID_ACTIVATED     (wxID_FILEDLGG + 11)
 #define  ID_CHECK         (wxID_FILEDLGG + 12)
 
-IMPLEMENT_DYNAMIC_CLASS(wxGenericFileDialog,wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericFileDialog, wxFileDialogBase)
 
 BEGIN_EVENT_TABLE(wxGenericFileDialog,wxDialog)
         EVT_BUTTON(ID_LIST_MODE, wxGenericFileDialog::OnList)
@@ -837,9 +837,11 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                            const wxString& wildCard,
                            long style,
                            const wxPoint& pos )
-            : wxDialog( parent, -1, message, pos, wxDefaultSize,
-                        wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER )
+                    :wxFileDialogBase(parent, message, defaultDir, defaultFile, wildCard, style, pos)
 {
+    wxDialog::Create( parent, -1, message, pos, wxDefaultSize,
+                      wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER );
+
     if (wxConfig::Get(FALSE))
     {
         wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"),
@@ -848,15 +850,11 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
                               &ms_lastShowHidden);
     }
 
-    m_message = message;
-    m_dialogStyle = style;
-
     if (m_dialogStyle == 0)
         m_dialogStyle = wxOPEN;
     if ((m_dialogStyle & wxMULTIPLE ) && !(m_dialogStyle & wxOPEN))
         m_dialogStyle |= wxOPEN;
 
-    m_dir = defaultDir;
     if ((m_dir.empty()) || (m_dir == wxT(".")))
     {
         m_dir = wxGetCwd();
@@ -869,29 +867,12 @@ wxGenericFileDialog::wxGenericFileDialog(wxWindow *parent,
     m_path = m_dir;
     m_path += wxFILE_SEP_PATH;
     m_path += defaultFile;
-    m_fileName = defaultFile;
-    m_wildCard = wildCard;
-    m_filterIndex = 0;
     m_filterExtension = wxEmptyString;
 
     // interpret wildcards
-
-    if (m_wildCard.IsEmpty())
-        m_wildCard = _("All files (*)|*");
-
     wxArrayString wildDescriptions, wildFilters;
-    int wild_count = wxParseFileFilter(m_wildCard, wildDescriptions, wildFilters);
-
+    int wild_count = ParseWildcard(m_wildCard, wildDescriptions, wildFilters);
     wxASSERT_MSG(wild_count > 0, wxT("Wrong file type descripition") );
-
-    // if error parsing, add default back
-    if (wildFilters.GetCount() < 1u)
-    {
-        wild_count = 1;
-        m_wildCard = _("All files (*)|*");
-        wildDescriptions.Add(_("All files (*)"));
-        wildFilters.Add(wxT("*"));
-    }
 
     // layout
 
@@ -1212,13 +1193,7 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     //     file without extension as well?
     if ( !(m_dialogStyle & wxOPEN) || !wxFileExists(filename) )
     {
-        wxString ext;
-        wxSplitPath(filename, NULL, NULL, &ext);
-        if ( ext.empty() )
-        {
-            // append the first extension of the filter string
-            filename += m_filterExtension.BeforeFirst(_T(';'));
-        }
+        filename = AppendExtension(filename, m_filterExtension);
     }
 
     // check that the file [doesn't] exist if necessary

@@ -18,8 +18,10 @@
 #pragma interface "filedlg.h"
 #endif
 
+#include "wx/dialog.h"
+
 //----------------------------------------------------------------------------
-// wxFileDialog data and generic functions
+// wxFileDialog data
 //----------------------------------------------------------------------------
 
 enum
@@ -36,14 +38,73 @@ enum
 WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorPromptStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxFileSelectorDefaultWildcardStr;
 
-// Parses the filterStr, returning the number of filters.
-// Returns 0 if none or if there's a problem, they arrays will contain an equal
-// number of items found before the error.
-// filterStr is in the form:
-// "All files (*.*)|*.*|Image Files (*.jpeg *.png)|*.jpg;*.png"
-extern int wxParseFileFilter(const wxString& filterStr,
+//----------------------------------------------------------------------------
+// wxFileDialogBase
+//----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxFileDialogBase: public wxDialog
+{
+public:
+    wxFileDialogBase () {}
+
+    wxFileDialogBase(wxWindow *parent,
+                 const wxString& message = wxFileSelectorPromptStr,
+                 const wxString& defaultDir = wxEmptyString,
+                 const wxString& defaultFile = wxEmptyString,
+                 const wxString& wildCard = wxFileSelectorDefaultWildcardStr,
+                 long style = 0,
+                 const wxPoint& pos = wxDefaultPosition);
+
+    virtual void SetMessage(const wxString& message) { m_message = message; }
+    virtual void SetPath(const wxString& path) { m_path = path; }
+    virtual void SetDirectory(const wxString& dir) { m_dir = dir; }
+    virtual void SetFilename(const wxString& name) { m_fileName = name; }
+    virtual void SetWildcard(const wxString& wildCard) { m_wildCard = wildCard; }
+    virtual void SetStyle(long style) { m_dialogStyle = style; }
+    virtual void SetFilterIndex(int filterIndex) { m_filterIndex = filterIndex; }
+
+    virtual wxString GetMessage() const { return m_message; }
+    virtual wxString GetPath() const { return m_path; }
+    virtual void GetPaths(wxArrayString& paths) const { paths.Empty(); paths.Add(m_path); }
+    virtual wxString GetDirectory() const { return m_dir; }
+    virtual wxString GetFilename() const { return m_fileName; }
+    virtual void GetFilenames(wxArrayString& files) const { files.Empty(); files.Add(m_fileName); }
+    virtual wxString GetWildcard() const { return m_wildCard; }
+    virtual long GetStyle() const { return m_dialogStyle; }
+    virtual int GetFilterIndex() const { return m_filterIndex; }
+
+    // Utility functions
+
+    // Parses the wildCard, returning the number of filters.
+    // Returns 0 if none or if there's a problem,
+    // The arrays will contain an equal number of items found before the error.
+    // wildCard is in the form:
+    // "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
+    static int ParseWildcard(const wxString& wildCard,
                              wxArrayString& descriptions,
                              wxArrayString& filters);
+
+    // Append first extension to filePath from a ';' separated extensionList
+    // if filePath = "path/foo.bar" just return it as is
+    // if filePath = "foo[.]" and extensionList = "*.jpg;*.png" return "foo.jpg"
+    // if the extension is "*.j?g" (has wildcards) or "jpg" then return filePath
+    static wxString AppendExtension(const wxString &filePath,
+                                    const wxString &extensionList);
+
+protected:
+    wxString      m_message;
+    long          m_dialogStyle;
+    wxWindow     *m_parent;
+    wxString      m_dir;
+    wxString      m_path;       // Full path
+    wxString      m_fileName;
+    wxString      m_wildCard;
+    int           m_filterIndex;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxFileDialogBase)
+    DECLARE_NO_COPY_CLASS(wxFileDialogBase)
+};
 
 //----------------------------------------------------------------------------
 // wxFileDialog convenience functions

@@ -26,7 +26,7 @@
 #endif
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxFileDialog, wxDialog)
+IMPLEMENT_CLASS(wxFileDialog, wxFileDialogBase)
 #endif
 
 // begin wxmac
@@ -277,16 +277,9 @@ static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dat
 wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         const wxString& defaultDir, const wxString& defaultFileName, const wxString& wildCard,
         long style, const wxPoint& pos)
+             :wxFileDialogBase(parent, message, defaultDir, defaultFileName, wildCard, style, pos)
 {
     wxASSERT_MSG( NavServicesAvailable() , wxT("Navigation Services are not running") ) ;
-    m_message = message;
-    m_dialogStyle = style;
-    m_parent = parent;
-    m_path = wxT("");
-    m_fileName = defaultFileName;
-    m_dir = defaultDir;
-    m_wildCard = wildCard;
-    m_filterIndex = 0;
 }
 
 pascal Boolean CrossPlatformFilterCallback (
