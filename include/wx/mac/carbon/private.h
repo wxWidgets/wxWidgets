@@ -28,6 +28,7 @@
 #    include <ControlDefinitions.h>
 #    include <LowMem.h>
 #    include <Gestalt.h>
+#    include <FixMath.h>
 #endif
 
 #if UNIVERSAL_INTERFACES_VERSION < 0x0340
@@ -42,7 +43,6 @@
 #include "wx/mac/corefoundation/cfstring.h"
 #endif
 
-#include <FixMath.h>
 #ifndef FixedToInt
 // as macro in FixMath.h for 10.3
 inline Fixed    IntToFixed( int inInt )
