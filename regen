@@ -12,7 +12,7 @@ if test "x$1" = "x"; then
     exit 1
 fi
 
-CONFIG_FILES=$1
+CONFIG_FILES=$*
 CONFIG_HEADERS=
 export CONFIG_FILES CONFIG_HEADERS
 ./config.status
