@@ -156,7 +156,9 @@ public:
    virtual void SetConnectCommand(const wxString &command, const wxString &hupcmd)
       { m_ConnectCommand = command; m_HangUpCommand = hupcmd; }
 
-private:
+//private: -- Sun CC 4.2 objects to using NetConnection enum as the return
+//            type if it is declared private
+
    // the possible results of testing for Online() status
    enum NetConnection
    {
@@ -174,6 +176,7 @@ private:
        NetDevice_LAN     = 0x0004   //         a network card
    };
 
+private:
    // the current status
    NetConnection m_IsOnline;
 
