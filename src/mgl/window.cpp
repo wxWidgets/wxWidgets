@@ -117,6 +117,7 @@ bool wxCreateMGL_WM()
     
 #if wxUSE_SYSTEM_OPTIONS
     // FIXME_MGL -- so what is The Proper Way?
+    width=800, height=600;
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-width") )
         width = wxSystemOptions::GetOptionInt(wxT("mgl.screen-width"));
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-height") )
@@ -180,6 +181,7 @@ static wxWindowMGL* wxGetTopLevelParent(wxWindowMGL *win)
 static void wxWindowPainter(window_t *wnd, MGLDC *dc)
 {
     wxWindowMGL *w = (wxWindow*) wnd->userData;
+    
     if ( w && !(w->GetWindowStyle() & wxTRANSPARENT_WINDOW) )
     {
         MGLDevCtx ctx(dc);
@@ -639,7 +641,7 @@ void wxWindowMGL::SetFocus()
 #endif // wxUSE_CARET
 
     wxWindowMGL *active = wxGetTopLevelParent(this);
-    if ( active != gs_activeFrame )
+    if ( !(m_windowStyle & wxPOPUP_WINDOW) && active != gs_activeFrame )
     {
         if ( gs_activeFrame )
         {
@@ -656,7 +658,7 @@ void wxWindowMGL::SetFocus()
     
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    AddPendingEvent(event);
 }
 
 void wxWindowMGL::KillFocus()
@@ -675,17 +677,9 @@ void wxWindowMGL::KillFocus()
         caret->OnKillFocus();
 #endif // wxUSE_CARET
 
-    if ( IsTopLevel() )
-    {
-        // FIXME_MGL - this is wrong, see wxGTK!
-        wxActivateEvent event(wxEVT_ACTIVATE, FALSE, GetId());
-        event.SetEventObject(this);
-        GetEventHandler()->ProcessEvent(event);
-    }
-
     wxFocusEvent event(wxEVT_KILL_FOCUS, GetId());
     event.SetEventObject(this);
-    GetEventHandler()->ProcessEvent(event);
+    AddPendingEvent(event);
 }
 
 // ----------------------------------------------------------------------------
@@ -1055,6 +1049,7 @@ void wxWindowMGL::Clear()
     dc.Clear();
 }
 
+#include "wx/menu.h"
 void wxWindowMGL::Refresh(bool eraseBack, const wxRect *rect)
 {
     if ( m_eraseBackground == -1 )

@@ -82,8 +82,6 @@ bool wxTopLevelWindowMGL::Create(wxWindow *parent,
     wxTopLevelWindows.Append(this);
 
     m_title = title;
-    
-    // FIXME_MGL -- should activate itself when shown!
 
     return TRUE;
 }
@@ -139,8 +137,9 @@ bool wxTopLevelWindowMGL::ShowFullScreen(bool show, long style)
 bool wxTopLevelWindowMGL::Show(bool show)
 {
     bool ret = wxTopLevelWindowBase::Show(show);
-    if ( ret && show )
+    if ( ret && show && AcceptsFocus() )
         SetFocus();
+        // FIXME_MGL -- don't do this for popup windows?
     return ret;
 }
 
