@@ -17,15 +17,7 @@
 #include <stdlib.h>
 
 #ifndef XMLPARSEAPI
-#if defined(_MSC_EXTENSIONS) && !defined(__BEOS__) && !defined(__CYGWIN__)
-#ifdef XML_STATIC
-#define XMLPARSEAPI(type) type __cdecl
-#else
-#define XMLPARSEAPI(type) __declspec(dllimport) type __cdecl
-#endif
-#else
 #define XMLPARSEAPI(type) type
-#endif
 #endif  /* not defined XMLPARSEAPI */
 
 #ifdef __cplusplus
