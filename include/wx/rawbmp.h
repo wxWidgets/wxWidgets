@@ -623,26 +623,29 @@ struct WXDLLEXPORT wxPixelDataOut<wxBitmap>
     };
 };
 
+#ifdef __VISUALC__
+    // typedef-name 'foo' used as synonym for class-name 'bar'
+    // (VC++ gives this warning each time wxPixelData::Base is used but it
+    //  doesn't make any sense here -- what's wrong with using typedef instead
+    //  of class, this is what it is here for!)
+    #pragma warning(disable: 4097)
+#endif // __VISUALC__
 
 template <class Image, class PixelFormat = wxPixelFormatFor<Image> >
 class wxPixelData :
-    public wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>
+    public wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat>
 {
 public:
-    wxPixelData(Image& image)
-        : wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>(image)
-        {
-        }
+    typedef wxPixelDataOut<Image>::template wxPixelDataIn<PixelFormat> Base;
+
+    wxPixelData(Image& image) : Base(image) { }
+
+    wxPixelData(Image& i, const wxRect& rect) : Base(i, rect) { }
 
     wxPixelData(Image& i, const wxPoint& pt, const wxSize& sz)
-        : wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>(i, pt, sz)
-        {
-        }
-
-    wxPixelData(Image& i, const wxRect& rect)
-        : wxPixelDataOut<Image>::wxPixelDataIn<PixelFormat>(i, rect)
-        {
-        }
+        : Base(i, pt, sz)
+    {
+    }
 };
 
 
@@ -674,6 +677,7 @@ struct WXDLLEXPORT wxPixelIterator : wxPixelData<Image, PixelFormat>::Iterator
 
 #ifdef __VISUALC__
     #pragma warning(default: 4355)
+    #pragma warning(default: 4097)
 #endif
 
 #endif // _WX_RAWBMP_H_BASE_
