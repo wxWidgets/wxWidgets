@@ -93,7 +93,7 @@ Reads a double (IEEE encoded) from the stream.
 
 \membersection{wxDataInputStream::ReadString}
 
-\func{wxString}{wxDataInputStream::ReadString}{\void}
+\func{wxString}{ReadString}{\void}
 
 Reads a string from a stream. Actually, this function first reads a long integer
 specifying the length of the string (without the last null character) and then
@@ -152,31 +152,31 @@ little-endian order.
  
 \membersection{wxDataOutputStream::Write8}
 
-\func{void}{wxDataOutputStream::Write8}{{\param wxUint8 }{i8}}
+\func{void}{Write8}{{\param wxUint8 }{i8}}
 
 Writes the single byte {\it i8} to the stream.
 
 \membersection{wxDataOutputStream::Write16}
 
-\func{void}{wxDataOutputStream::Write16}{{\param wxUint16 }{i16}}
+\func{void}{Write16}{{\param wxUint16 }{i16}}
 
 Writes the 16 bit integer {\it i16} to the stream.
 
 \membersection{wxDataOutputStream::Write32}
 
-\func{void}{wxDataOutputStream::Write32}{{\param wxUint32 }{i32}}
+\func{void}{Write32}{{\param wxUint32 }{i32}}
 
 Writes the 32 bit integer {\it i32} to the stream.
 
 \membersection{wxDataOutputStream::WriteDouble}
 
-\func{void}{wxDataOutputStream::WriteDouble}{{\param double }{f}}
+\func{void}{WriteDouble}{{\param double }{f}}
 
 Writes the double {\it f} to the stream using the IEEE format.
 
 \membersection{wxDataOutputStream::WriteString}
 
-\func{void}{wxDataOutputStream::WriteString}{{\param const wxString\& }{string}}
+\func{void}{WriteString}{{\param const wxString\& }{string}}
 
 Writes {\it string} to the stream. Actually, this method writes the size of
 the string before writing {\it string} itself.
