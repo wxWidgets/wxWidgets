@@ -719,25 +719,32 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
 
 size_t wxInputStream::GetWBack(void *buf, size_t bsize)
 {
-    size_t toget = m_wbacksize-m_wbackcur;
-
     if (!m_wback)
         return 0;
 
-    if (bsize < toget)
-       toget = bsize;
+    // how many bytes do we have in the buffer?
+    size_t toget = m_wbacksize - m_wbackcur;
 
-    memcpy(buf, (m_wback+m_wbackcur), toget);
+    if ( bsize < toget )
+    {
+        // we won't read everything
+        toget = bsize;
+    }
+
+    // copy the data from the cache 
+    memcpy(buf, m_wback + m_wbackcur, toget);
 
     m_wbackcur += toget;
-    if (m_wbackcur == m_wbacksize)
+    if ( m_wbackcur == m_wbacksize )
     {
+        // TODO: should we really free it here all the time? maybe keep it?
         free(m_wback);
         m_wback = NULL;
         m_wbacksize = 0;
         m_wbackcur = 0;
     }
 
+    // return the number of bytes copied
     return toget;
 }
 
@@ -1028,19 +1035,26 @@ char wxBufferedInputStream::Peek()
 
 wxInputStream& wxBufferedInputStream::Read(void *buf, size_t size)
 {
-    size_t retsize;
+    // reset the error flag
+    m_lasterror = wxStream_NOERROR;
 
-    retsize = GetWBack(buf, size);
-    m_lastcount = retsize;
-    if ( retsize == size )
+    // first read from the already cached data
+    m_lastcount = GetWBack(buf, size);
+
+    // do we have to read anything more?
+    if ( m_lastcount < size )
     {
-        m_lasterror = wxStream_NOERROR;
-        return *this;
-    }
-    size -= retsize;
-    buf = (char *)buf + retsize;
+        size -= m_lastcount;
+        buf = (char *)buf + m_lastcount;
 
-    m_i_streambuf->Read(buf, size);
+        // the call to wxStreamBuffer::Read() below will reset our m_lastcount,
+        // so save it
+        size_t countOld = m_lastcount;
+
+        m_i_streambuf->Read(buf, size);
+
+        m_lastcount += countOld;
+    }
 
     return *this;
 }
