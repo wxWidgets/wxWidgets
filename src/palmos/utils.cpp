@@ -187,9 +187,19 @@ void wxBell()
 
 wxString wxGetOsDescription()
 {
-    wxString str;
+    wxString strOS = _T("PalmOS");
 
-    return str;
+    char *version = SysGetOSVersionString();
+    if(version)
+    {
+        wxString str = wxString::FromAscii(version);
+        if(!str.empty())
+        {
+            strOS << _(" ") << str;
+        }
+    }
+
+    return strOS;
 }
 
 wxToolkitInfo& wxAppTraits::GetToolkitInfo()
