@@ -8,7 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-!include ../../../build/config.bcc
+!include ../../../../build/config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -20,18 +20,19 @@ BCCDIR = $(MAKEDIR)\..
 
 ### Variables: ###
 
-ANITEST_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
-	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
-	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\include \
-	-I$(LIBDIRNAME) -I.\..\..\..\src\tiff -I.\..\..\..\src\jpeg \
-	-I.\..\..\..\src\png -I.\..\..\..\src\zlib -I.\..\..\..\src\regex \
-	-I.\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I.\..\..\include $(CXXFLAGS)
-ANITEST_OBJECTS =  \
-	$(OBJS)\anitest_anitest.obj
 LIBDIRNAME = \
-	.\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+	.\..\..\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+PROPLIST_CXXFLAGS = $(CPPFLAGS) $(__RUNTIME_LIBS_6) $(__DEBUGINFO) \
+	$(__OPTIMIZEFLAG_2) -tWM -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\..\..\include \
+	-I$(LIBDIRNAME) -I.\..\..\..\..\src\tiff -I.\..\..\..\..\src\jpeg \
+	-I.\..\..\..\..\src\png -I.\..\..\..\..\src\zlib -I.\..\..\..\..\src\regex \
+	-I.\..\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I.\..\..\..\include \
+	$(CXXFLAGS)
+PROPLIST_OBJECTS =  \
+	$(OBJS)\proplist_proplist.obj
 
 ### Conditionally set variables: ###
 
@@ -144,24 +145,20 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\anitest.exe data
+all: $(OBJS)\proplist.exe
 
-$(OBJS)\anitest_anitest.obj: .\anitest.cpp
-	$(CXX) -q -c -P -o$@ $(ANITEST_CXXFLAGS) $**
+$(OBJS)\proplist_proplist.obj: .\proplist.cpp
+	$(CXX) -q -c -P -o$@ $(PROPLIST_CXXFLAGS) $**
 
-$(OBJS)\anitest_anitest.res: .\anitest.rc
-	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\src\tiff -i.\..\..\..\src\jpeg -i.\..\..\..\src\png -i.\..\..\..\src\zlib  -i.\..\..\..\src\regex -i.\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) -i.\..\..\include $**
-
-$(OBJS)\anitest.exe: $(ANITEST_OBJECTS)  $(OBJS)\anitest_anitest.res
-	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
-	c0w32.obj $(ANITEST_OBJECTS),$@,, wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_animate.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\anitest_anitest.res
-|
+$(OBJS)\proplist_proplist.res: .\proplist.rc
+	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) -i.\..\..\..\..\include -i$(LIBDIRNAME) -i.\..\..\..\..\src\tiff -i.\..\..\..\..\src\jpeg -i.\..\..\..\..\src\png -i.\..\..\..\..\src\zlib  -i.\..\..\..\..\src\regex -i.\..\..\..\..\src\expat\lib -i. $(__DLLFLAG_p_1) -i.\..\..\..\include $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
-	-if exist $(OBJS)\anitest.exe del $(OBJS)\anitest.exe
+	-if exist $(OBJS)\proplist.exe del $(OBJS)\proplist.exe
 
-data: 
-	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (bttrfly.gif hooked.gif tbttrfly.gif mondrian.ico) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+$(OBJS)\proplist.exe: $(PROPLIST_OBJECTS)  $(OBJS)\proplist_proplist.res
+	ilink32 -Tpe -q $(LDFLAGS) $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa  @&&|
+	c0w32.obj $(PROPLIST_OBJECTS),$@,, wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_deprecated.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib  cw32mt$(__RUNTIME_LIBS_7).lib,, $(OBJS)\proplist_proplist.res
+|

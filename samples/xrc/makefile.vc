@@ -171,10 +171,10 @@ __WXUNIV_DEFINE_p_1 = /d __WXUNIVERSAL__
 ____DEBUGINFO_2_p = /D_DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_2_p = /DNDEBUG
+____DEBUGINFO_2_p = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_2_p = /DNDEBUG
+____DEBUGINFO_2_p = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
 ____DEBUGINFO_2_p = /D_DEBUG
@@ -183,16 +183,16 @@ ____DEBUGINFO_2_p = /D_DEBUG
 ____DEBUGINFO_2_p_1 = /d _DEBUG
 !endif
 !if "$(BUILD)" == "release" && "$(DEBUG_INFO)" == "default"
-____DEBUGINFO_2_p_1 = /d NDEBUG
+____DEBUGINFO_2_p_1 = 
 !endif
 !if "$(DEBUG_INFO)" == "0"
-____DEBUGINFO_2_p_1 = /d NDEBUG
+____DEBUGINFO_2_p_1 = 
 !endif
 !if "$(DEBUG_INFO)" == "1"
 ____DEBUGINFO_2_p_1 = /d _DEBUG
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p = /DNDEBUG
+____DEBUGRUNTIME_2_p = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p = /D_DEBUG
@@ -201,7 +201,7 @@ ____DEBUGRUNTIME_2_p = /D_DEBUG
 ____DEBUGRUNTIME_2_p = $(____DEBUGINFO_2_p)
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "0"
-____DEBUGRUNTIME_2_p_1 = /d NDEBUG
+____DEBUGRUNTIME_2_p_1 = 
 !endif
 !if "$(DEBUG_RUNTIME_LIBS)" == "1"
 ____DEBUGRUNTIME_2_p_1 = /d _DEBUG

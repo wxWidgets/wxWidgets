@@ -11,6 +11,7 @@
         <wx-lib>animate</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
+        <win32-res>anitest.rc</win32-res>
     </exe>
 
     <wx-data id="data">
