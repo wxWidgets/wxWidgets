@@ -107,6 +107,7 @@ GENERICOBJS= $(MSWDIR)\busyinfo.obj \
 
 COMMONOBJS = \
 		$(MSWDIR)\y_tab.obj \
+		$(MSWDIR)\accesscmn.obj \
 		$(MSWDIR)\appcmn.obj \
 		$(MSWDIR)\artprov.obj \
 		$(MSWDIR)\artstd.obj \
@@ -130,6 +131,7 @@ COMMONOBJS = \
 		$(MSWDIR)\dobjcmn.obj \
 		$(MSWDIR)\docmdi.obj \
 		$(MSWDIR)\docview.obj \
+		$(MSWDIR)\dpycmn.obj \
 		$(MSWDIR)\dseldlg.obj \
 		$(MSWDIR)\dynarray.obj \
 		$(MSWDIR)\dynlib.obj \
@@ -234,7 +236,6 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\colour.obj \
 		$(MSWDIR)\combobox.obj \
 		$(MSWDIR)\control.obj \
-		$(MSWDIR)\curico.obj \
 		$(MSWDIR)\cursor.obj \
 		$(MSWDIR)\data.obj \
 		$(MSWDIR)\dc.obj \
@@ -368,8 +369,6 @@ $(MSWDIR)\colour.obj: $(MSWDIR)\colour.$(SRCSUFF)
 $(MSWDIR)\combobox.obj: $(MSWDIR)\combobox.$(SRCSUFF)
 
 $(MSWDIR)\control.obj: $(MSWDIR)\control.$(SRCSUFF)
-
-$(MSWDIR)\curico.obj: $(MSWDIR)\curico.$(SRCSUFF)
 
 $(MSWDIR)\cursor.obj: $(MSWDIR)\cursor.$(SRCSUFF)
 
@@ -518,6 +517,8 @@ $(MSWDIR)\window.obj: $(MSWDIR)\window.$(SRCSUFF)
 ########################################################
 # Common objects (always compiled)
 
+$(MSWDIR)\accesscmn.obj: $(COMMDIR)\accesscmn.$(SRCSUFF)
+
 $(MSWDIR)\appcmn.obj: $(COMMDIR)\appcmn.$(SRCSUFF)
 
 $(MSWDIR)\artprov.obj: $(COMMDIR)\artprov.$(SRCSUFF)
@@ -563,6 +564,8 @@ $(MSWDIR)\dobjcmn.obj: $(COMMDIR)\dobjcmn.$(SRCSUFF)
 $(MSWDIR)\docmdi.obj: $(COMMDIR)\docmdi.$(SRCSUFF)
 
 $(MSWDIR)\docview.obj: $(COMMDIR)\docview.$(SRCSUFF)
+
+$(MSWDIR)\dpycmn.obj: $(COMMDIR)\dpycmn.$(SRCSUFF)
 
 $(MSWDIR)\dseldlg.obj: $(COMMDIR)\dseldlg.$(SRCSUFF)
 

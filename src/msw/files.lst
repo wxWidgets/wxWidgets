@@ -32,6 +32,7 @@ ALL_SOURCES = \
 		generic/treectlg.cpp \
 		generic/treelay.cpp \
 		generic/wizard.cpp \
+		common/accesscmn.cpp \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
@@ -58,6 +59,7 @@ ALL_SOURCES = \
 		common/dobjcmn.cpp \
 		common/docmdi.cpp \
 		common/docview.cpp \
+		common/dpycmn.cpp \
 		common/dseldlg.cpp \
 		common/dynarray.cpp \
 		common/dynlib.cpp \
@@ -163,6 +165,7 @@ ALL_SOURCES = \
 		common/zipstrm.cpp \
 		common/zstream.cpp \
 		msw/accel.cpp \
+		msw/ole/access.cpp \
 		msw/app.cpp \
 		msw/ole/automtn.cpp \
 		msw/bitmap.cpp \
@@ -178,7 +181,6 @@ ALL_SOURCES = \
 		msw/colour.cpp \
 		msw/combobox.cpp \
 		msw/control.cpp \
-		msw/curico.cpp \
 		msw/cursor.cpp \
 		msw/data.cpp \
 		msw/ole/dataobj.cpp \
@@ -193,6 +195,7 @@ ALL_SOURCES = \
 		msw/dib.cpp \
 		msw/dir.cpp \
 		msw/dirdlg.cpp \
+		msw/display.cpp \
 		msw/dragimag.cpp \
 		msw/ole/dropsrc.cpp \
 		msw/ole/droptgt.cpp \
@@ -294,6 +297,7 @@ ALL_SOURCES = \
 
 ALL_HEADERS = \
 		accel.h \
+		access.h \
 		app.h \
 		arrimpl.cpp \
 		artprov.h \
@@ -350,6 +354,7 @@ ALL_HEADERS = \
 		dir.h \
 		dirctrl.h \
 		dirdlg.h \
+		display.h \
 		dnd.h \
 		docmdi.h \
 		docview.h \
@@ -424,6 +429,7 @@ ALL_HEADERS = \
 		listimpl.cpp \
 		log.h \
 		longlong.h \
+		math.h \
 		matrix.h \
 		mdi.h \
 		memconf.h \
@@ -459,6 +465,7 @@ ALL_HEADERS = \
 		quantize.h \
 		radiobox.h \
 		radiobut.h \
+		rawbmp.h \
 		regex.h \
 		region.h \
 		resource.h \
@@ -536,6 +543,7 @@ ALL_HEADERS = \
 		zipstrm.h \
 		zstream.h \
 		msw/accel.h \
+		msw/access.h \
 		msw/app.h \
 		msw/bitmap.h \
 		msw/bmpbuttn.h \
@@ -550,8 +558,6 @@ ALL_HEADERS = \
 		msw/colour.h \
 		msw/combobox.h \
 		msw/control.h \
-		msw/curico.h \
-		msw/curicop.h \
 		msw/cursor.h \
 		msw/dc.h \
 		msw/dcclient.h \
@@ -629,6 +635,7 @@ ALL_HEADERS = \
 		msw/wave.h \
 		msw/window.h \
 		msw/winundef.h \
+		msw/ole/access.h \
 		msw/ole/automtn.h \
 		msw/ole/dataform.h \
 		msw/ole/dataobj.h \
@@ -701,6 +708,7 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
+		accesscmn.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -727,6 +735,7 @@ COMMONOBJS = \
 		dobjcmn.o \
 		docmdi.o \
 		docview.o \
+		dpycmn.o \
 		dseldlg.o \
 		dynarray.o \
 		dynlib.o \
@@ -881,7 +890,6 @@ GUIOBJS = \
 		colour.o \
 		combobox.o \
 		control.o \
-		curico.o \
 		cursor.o \
 		data.o \
 		dc.o \
@@ -895,6 +903,7 @@ GUIOBJS = \
 		dib.o \
 		dir.o \
 		dirdlg.o \
+		display.o \
 		dragimag.o \
 		enhmeta.o \
 		evtloop.o \
@@ -988,6 +997,7 @@ GUI_LOWLEVEL_OBJS = \
 		dialup.o \
 		dib.o \
 		dirdlg.o \
+		display.o \
 		enhmeta.o \
 		evtloop.o \
 		font.o \
@@ -1044,6 +1054,7 @@ HTMLOBJS = \
 		winpars.o
 
 OLEOBJS = \
+		access.o \
 		automtn.o \
 		dataobj.o \
 		dropsrc.o \

@@ -304,7 +304,6 @@ MSWOBJS     = \
 		$(MSWDIR)/colour.$(OBJSUFF) \
 		$(MSWDIR)/combobox.$(OBJSUFF) \
 		$(MSWDIR)/control.$(OBJSUFF) \
-		$(MSWDIR)/curico.$(OBJSUFF) \
 		$(MSWDIR)/cursor.$(OBJSUFF) \
 		$(MSWDIR)/data.$(OBJSUFF) \
 		$(MSWDIR)/dc.$(OBJSUFF) \

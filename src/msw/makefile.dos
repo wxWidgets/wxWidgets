@@ -91,6 +91,7 @@ GENERICOBJS= $(GENDIR)\busyinfo.obj \
 # we can't have all objects in one list because the library becomes too big
 COMMONOBJS1 = \
 		$(COMMDIR)\y_tab.obj \
+		$(COMMDIR)\accesscmn.obj \
 		$(COMMDIR)\appcmn.obj \
 		$(COMMDIR)\artprov.obj \
 		$(COMMDIR)\artstd.obj \
@@ -115,6 +116,7 @@ COMMONOBJS1 = \
 		$(COMMDIR)\dobjcmn.obj \
 		$(COMMDIR)\docmdi.obj \
 		$(COMMDIR)\docview.obj \
+		$(COMMDIR)\dpycmn.obj \
 		$(COMMDIR)\dseldlg.obj \
 		$(COMMDIR)\dynarray.obj \
 		$(COMMDIR)\dynlib.obj \
@@ -222,7 +224,6 @@ MSWOBJS1 = $(MSWDIR)\accel.obj \
 		$(MSWDIR)\colour.obj \
 		$(MSWDIR)\combobox.obj \
 		$(MSWDIR)\control.obj \
-		$(MSWDIR)\curico.obj \
 		$(MSWDIR)\cursor.obj \
 		$(MSWDIR)\data.obj \
 		$(MSWDIR)\dc.obj \
@@ -442,11 +443,6 @@ $(MSWDIR)/control.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
-$(MSWDIR)/curico.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
 $(MSWDIR)/cursor.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -498,11 +494,6 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(MSWDIR)/dib.obj:     $*.$(SRCSUFF)
-        cl @<<
-$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
-<<
-
-$(MSWDIR)/dibutils.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
@@ -807,6 +798,11 @@ $(MSWDIR)/window.obj:     $*.$(SRCSUFF)
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
+$(COMMDIR)/accesscmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
 $(COMMDIR)/appcmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
@@ -923,6 +919,11 @@ $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<
 
 $(COMMDIR)/docview.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(COMMDIR)/dpycmn.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
 <<

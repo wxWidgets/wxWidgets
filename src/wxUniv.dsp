@@ -85,6 +85,10 @@ LIB32=link.exe -lib
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\common\accesscmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\appcmn.cpp
 # End Source File
 # Begin Source File
@@ -190,6 +194,10 @@ SOURCE=.\common\docmdi.cpp
 # Begin Source File
 
 SOURCE=.\common\docview.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dpycmn.cpp
 # End Source File
 # Begin Source File
 
@@ -960,6 +968,10 @@ SOURCE=.\msw\dirdlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\msw\display.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\msw\enhmeta.cpp
 # End Source File
 # Begin Source File
@@ -1331,6 +1343,10 @@ SOURCE=..\include\wx\accel.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\access.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\app.h
 # End Source File
 # Begin Source File
@@ -1548,6 +1564,10 @@ SOURCE=..\include\wx\dirctrl.h
 # Begin Source File
 
 SOURCE=..\include\wx\dirdlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\display.h
 # End Source File
 # Begin Source File
 
@@ -1843,6 +1863,10 @@ SOURCE=..\include\wx\longlong.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\math.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\matrix.h
 # End Source File
 # Begin Source File
@@ -1980,6 +2004,10 @@ SOURCE=..\include\wx\radiobox.h
 # Begin Source File
 
 SOURCE=..\include\wx\radiobut.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\rawbmp.h
 # End Source File
 # Begin Source File
 

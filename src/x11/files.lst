@@ -79,6 +79,7 @@ ALL_SOURCES = \
 		generic/treectlg.cpp \
 		generic/treelay.cpp \
 		generic/wizard.cpp \
+		common/accesscmn.cpp \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
@@ -106,6 +107,7 @@ ALL_SOURCES = \
 		common/dobjcmn.cpp \
 		common/docmdi.cpp \
 		common/docview.cpp \
+		common/dpycmn.cpp \
 		common/dseldlg.cpp \
 		common/dynarray.cpp \
 		common/dynlib.cpp \
@@ -243,6 +245,7 @@ ALL_SOURCES = \
 
 ALL_HEADERS = \
 		accel.h \
+		access.h \
 		app.h \
 		arrimpl.cpp \
 		artprov.h \
@@ -299,6 +302,7 @@ ALL_HEADERS = \
 		dir.h \
 		dirctrl.h \
 		dirdlg.h \
+		display.h \
 		dnd.h \
 		docmdi.h \
 		docview.h \
@@ -373,6 +377,7 @@ ALL_HEADERS = \
 		listimpl.cpp \
 		log.h \
 		longlong.h \
+		math.h \
 		matrix.h \
 		mdi.h \
 		memconf.h \
@@ -408,6 +413,7 @@ ALL_HEADERS = \
 		quantize.h \
 		radiobox.h \
 		radiobut.h \
+		rawbmp.h \
 		regex.h \
 		region.h \
 		resource.h \
@@ -649,6 +655,7 @@ GUI_LOWLEVEL_OBJS = \
 		window.o
 
 COMMONOBJS = \
+		accesscmn.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -676,6 +683,7 @@ COMMONOBJS = \
 		dobjcmn.o \
 		docmdi.o \
 		docview.o \
+		dpycmn.o \
 		dseldlg.o \
 		dynarray.o \
 		dynlib.o \

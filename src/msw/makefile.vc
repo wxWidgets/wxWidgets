@@ -287,7 +287,6 @@ MSWOBJS = $(MSWDIR)\$D\accel.obj \
 		$(MSWDIR)\$D\colour.obj \
 		$(MSWDIR)\$D\combobox.obj \
 		$(MSWDIR)\$D\control.obj \
-		$(MSWDIR)\$D\curico.obj \
 		$(MSWDIR)\$D\cursor.obj \
 		$(MSWDIR)\$D\data.obj \
 		$(OLEDIR)\$D\dataobj.obj \

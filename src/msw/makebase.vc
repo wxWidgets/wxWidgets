@@ -143,16 +143,12 @@ MSWOBJS = ..\msw\$D\dde.obj \
 
 OBJECTS = $(COMMONOBJS) $(MSWOBJS) 
 
-ARCHINCDIR=$(WXDIR)\lib\$(_WXINC_BUILD)$(_WXINC_DLLSUFFIX)$(_WXINC_SUFFIX)$(LIBEXT)
+ARCHINCDIR=$(WXDIR)\lib\base$(INCEXT)
 SETUP_H=$(ARCHINCDIR)\wx\setup.h
 
 # Normal, static library
 #all:    dirs $(SETUP_H) $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg tiff $(LIBTARGET)
 all:    dirs $(SETUP_H) $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) zlib $(LIBTARGET)
-
-$(ARCHINCDIR)\wx:
-    mkdir $(ARCHINCDIR)
-    mkdir $(ARCHINCDIR)\wx
 
 $(WXDIR)\include\wx\msw\setup.h:
     cd $(WXDIR)\include\wx\msw
@@ -162,7 +158,7 @@ $(WXDIR)\include\wx\msw\setup.h:
 $(SETUP_H): $(WXDIR)\include\wx\msw\setup.h
     copy $(WXDIR)\include\wx\msw\setup.h $@
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(ARCHINCDIR)\wx $(WXDIR)\$D
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D 
 
 $D:
     mkdir $D
@@ -172,9 +168,6 @@ $(COMMDIR)\$D:
 
 $(MSWDIR)\$D:
     mkdir $(MSWDIR)\$D
-
-$(WXDIR)\$D:
-    mkdir $(WXDIR)\$D
 
 ### Static library
 
@@ -201,7 +194,7 @@ $(CPPFLAGS2) /c ..\common\y_tab.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
 ..\common\lex_yy.c:    ..\common\doslex.c
     copy "..\common"\doslex.c "..\common"\lex_yy.c
 
-$(OBJECTS): $(SETUP_H)
+$(OBJECTS): $(WXDIR)/include/wx/setup.h
 
 ..\common\$D\unzip.obj:     ..\common\unzip.c
         cl @<<

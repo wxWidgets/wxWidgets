@@ -856,6 +856,10 @@ SOURCE=..\include\wx\longlong.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\math.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\memconf.h
 # End Source File
 # Begin Source File

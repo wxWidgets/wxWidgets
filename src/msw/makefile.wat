@@ -82,6 +82,7 @@ NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
 
 COMMONOBJS = &
 	$(OUTPUTDIR)\y_tab.obj &
+	$(OUTPUTDIR)\accesscmn.obj &
 	$(OUTPUTDIR)\appcmn.obj &
 	$(OUTPUTDIR)\artprov.obj &
 	$(OUTPUTDIR)\artstd.obj &
@@ -108,6 +109,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\dobjcmn.obj &
 	$(OUTPUTDIR)\docmdi.obj &
 	$(OUTPUTDIR)\docview.obj &
+	$(OUTPUTDIR)\dpycmn.obj &
 	$(OUTPUTDIR)\dseldlg.obj &
 	$(OUTPUTDIR)\dynarray.obj &
 	$(OUTPUTDIR)\dynlib.obj &
@@ -214,6 +216,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\zstream.obj
 
 MSWOBJS = $(OUTPUTDIR)\accel.obj &
+	$(OUTPUTDIR)\access.obj &
 	$(OUTPUTDIR)\app.obj &
 	$(OUTPUTDIR)\automtn.obj &
 	$(OUTPUTDIR)\bitmap.obj &
@@ -229,7 +232,6 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\colour.obj &
 	$(OUTPUTDIR)\combobox.obj &
 	$(OUTPUTDIR)\control.obj &
-	$(OUTPUTDIR)\curico.obj &
 	$(OUTPUTDIR)\cursor.obj &
 	$(OUTPUTDIR)\data.obj &
 	$(OUTPUTDIR)\dataobj.obj &
@@ -244,6 +246,7 @@ MSWOBJS = $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\dib.obj &
 	$(OUTPUTDIR)\dir.obj &
 	$(OUTPUTDIR)\dirdlg.obj &
+	$(OUTPUTDIR)\display.obj &
 	$(OUTPUTDIR)\dragimag.obj &
 	$(OUTPUTDIR)\dropsrc.obj &
 	$(OUTPUTDIR)\droptgt.obj &
@@ -380,6 +383,9 @@ cleanall:   clean
 $(OUTPUTDIR)\accel.obj:     $(MSWDIR)\accel.cpp
   *$(CXX) $(CXXFLAGS) $<
 
+$(OUTPUTDIR)\access.obj:     $(OLEDIR)\access.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
 $(OUTPUTDIR)\app.obj:     $(MSWDIR)\app.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -425,9 +431,6 @@ $(OUTPUTDIR)\combobox.obj:     $(MSWDIR)\combobox.cpp
 $(OUTPUTDIR)\control.obj:     $(MSWDIR)\control.cpp
   *$(CXX) $(CXXFLAGS) $<
 
-$(OUTPUTDIR)\curico.obj:     $(MSWDIR)\curico.cpp
-  *$(CXX) $(CXXFLAGS) $<
-
 $(OUTPUTDIR)\cursor.obj:     $(MSWDIR)\cursor.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -468,6 +471,9 @@ $(OUTPUTDIR)\dir.obj:     $(MSWDIR)\dir.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\dirdlg.obj:     $(MSWDIR)\dirdlg.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\display.obj:     $(MSWDIR)\display.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\dragimag.obj:     $(MSWDIR)\dragimag.cpp
@@ -709,6 +715,9 @@ $(OUTPUTDIR)\window.obj:     $(MSWDIR)\window.cpp
 ########################################################
 # Common objects (always compiled)
 
+$(OUTPUTDIR)\accesscmn.obj:     $(COMMDIR)\accesscmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
 $(OUTPUTDIR)\appcmn.obj:     $(COMMDIR)\appcmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -785,6 +794,9 @@ $(OUTPUTDIR)\docmdi.obj:     $(COMMDIR)\docmdi.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\docview.obj:     $(COMMDIR)\docview.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
+$(OUTPUTDIR)\dpycmn.obj:     $(COMMDIR)\dpycmn.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 $(OUTPUTDIR)\dseldlg.obj:     $(COMMDIR)\dseldlg.cpp
