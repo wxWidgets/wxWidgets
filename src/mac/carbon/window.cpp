@@ -350,14 +350,23 @@ void wxWindowMac::DoScreenToClient(int *x, int *y) const
     if(x)   *x = localwhere.h ;
     if(y)   *y = localwhere.v ;
     
-    MacRootWindowToClient( x , y ) ;
+    MacRootWindowToWindow( x , y ) ;
+    if ( x )
+			x -= MacGetLeftBorderSize() ;
+    if ( y )
+			y -= MacGetTopBorderSize() ;
 }
 
 void wxWindowMac::DoClientToScreen(int *x, int *y) const
 {
     WindowRef window = (WindowRef) MacGetRootWindow() ;
     
-    MacClientToRootWindow( x , y ) ;
+    if ( x )
+			x += MacGetLeftBorderSize() ;
+    if ( y )
+			y += MacGetTopBorderSize() ;
+			
+    MacWindowToRootWindow( x , y ) ;
     
     Point       localwhere = { 0,0 };
     if(x)   localwhere.h = * x ;
@@ -1349,6 +1358,7 @@ bool wxWindowMac::MacGetWindowFromPoint( const wxPoint &screenpoint , wxWindowMa
         if ( win )
         {
             point = win->ScreenToClient( point ) ;
+            point += win->GetClientAreaOrigin() ;
             return win->MacGetWindowFromPointSub( point , outWin ) ;
         }
     }
