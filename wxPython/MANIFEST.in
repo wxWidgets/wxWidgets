@@ -29,6 +29,7 @@ include demo/data/*.txt
 include demo/data/*.i
 include demo/data/*.h
 include demo/data/*.py
+include demo/data/*.wav
 
 include samples/doodle/*.txt
 include samples/doodle/*.py
