@@ -86,6 +86,15 @@
 #include "wx/chkconf.h"
 
 /*
+   some compilers don't support iostream.h any longer, so override the users
+   setting here in such case.
+ */
+#if defined(_MSC_VER) && (_MSC_VER >= 1310)
+    #undef wxUSE_IOSTREAMH
+    #define wxUSE_IOSTREAMH 0
+#endif /* compilers not supporting iostream.h */
+
+/*
    old C++ headers (like <iostream.h>) declare classes in the global namespace
    while the new, standard ones (like <iostream>) do it in std:: namespace
 
@@ -93,9 +102,9 @@
    either case
  */
 #if !wxUSE_IOSTREAMH
-  #define wxSTD std::
+    #define wxSTD std::
 #else
- #define wxSTD
+    #define wxSTD
 #endif
 
 /*

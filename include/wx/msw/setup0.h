@@ -906,7 +906,9 @@
 #define REMOVE_UNUSED_ARG   1
 
 // VC++ 4.2 and above allows <iostream> and <iostream.h> but you can't mix
-// them. Set to 1 for <iostream.h>, 0 for <iostream>
+// them. Set to 1 for <iostream.h>, 0 for <iostream>. Note that VC++ 7.1
+// and later doesn't support wxUSE_IOSTREAMH == 1 and so <iostream> will be
+// used anyhow.
 //
 // Default is 1.
 //
