@@ -18,7 +18,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/plot.h"
+#include "wx/plot/plot.h"
 
 #include "wx/image.h"
 #include "wx/listctrl.h"

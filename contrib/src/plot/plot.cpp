@@ -50,6 +50,32 @@
 #endif
 
 //----------------------------------------------------------------------------
+// event types
+//----------------------------------------------------------------------------
+
+int wxEVT_PLOT_SEL_CHANGING = wxNewId();
+int wxEVT_PLOT_SEL_CHANGED = wxNewId();
+int wxEVT_PLOT_CLICKED = wxNewId();
+int wxEVT_PLOT_DOUBLECLICKED = wxNewId();
+int wxEVT_PLOT_ZOOM_IN = wxNewId();
+int wxEVT_PLOT_ZOOM_OUT = wxNewId();
+int wxEVT_PLOT_VALUE_SEL_CREATING = wxNewId();
+int wxEVT_PLOT_VALUE_SEL_CREATED = wxNewId();
+int wxEVT_PLOT_VALUE_SEL_CHANGING = wxNewId();
+int wxEVT_PLOT_VALUE_SEL_CHANGED = wxNewId();
+int wxEVT_PLOT_AREA_SEL_CREATING = wxNewId();
+int wxEVT_PLOT_AREA_SEL_CREATED = wxNewId();
+int wxEVT_PLOT_AREA_SEL_CHANGING = wxNewId();
+int wxEVT_PLOT_AREA_SEL_CHANGED = wxNewId();
+int wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxNewId();
+int wxEVT_PLOT_END_X_LABEL_EDIT = wxNewId();
+int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxNewId();
+int wxEVT_PLOT_END_Y_LABEL_EDIT = wxNewId();
+int wxEVT_PLOT_BEGIN_TITLE_EDIT = wxNewId();
+int wxEVT_PLOT_END_TITLE_EDIT = wxNewId();
+int wxEVT_PLOT_AREA_CREATE = wxNewId();
+
+//----------------------------------------------------------------------------
 // accessor functions for the bitmaps (may return NULL, check for it!)
 //----------------------------------------------------------------------------
 
@@ -59,32 +85,6 @@ static wxBitmap *GetZoomInBitmap();
 static wxBitmap *GetZoomOutBitmap();
 static wxBitmap *GetUpBitmap();
 static wxBitmap *GetDownBitmap();
-
-//----------------------------------------------------------------------------
-// event types
-//----------------------------------------------------------------------------
-
-int wxEVT_PLOT_SEL_CHANGING;
-int wxEVT_PLOT_SEL_CHANGED;
-int wxEVT_PLOT_CLICKED;
-int wxEVT_PLOT_DOUBLECLICKED;
-int wxEVT_PLOT_ZOOM_IN;
-int wxEVT_PLOT_ZOOM_OUT;
-int wxEVT_PLOT_VALUE_SEL_CREATING;
-int wxEVT_PLOT_VALUE_SEL_CREATED;
-int wxEVT_PLOT_VALUE_SEL_CHANGING;
-int wxEVT_PLOT_VALUE_SEL_CHANGED;
-int wxEVT_PLOT_AREA_SEL_CREATING;
-int wxEVT_PLOT_AREA_SEL_CREATED;
-int wxEVT_PLOT_AREA_SEL_CHANGING;
-int wxEVT_PLOT_AREA_SEL_CHANGED;
-int wxEVT_PLOT_BEGIN_X_LABEL_EDIT;
-int wxEVT_PLOT_END_X_LABEL_EDIT;
-int wxEVT_PLOT_BEGIN_Y_LABEL_EDIT;
-int wxEVT_PLOT_END_Y_LABEL_EDIT;
-int wxEVT_PLOT_BEGIN_TITLE_EDIT;
-int wxEVT_PLOT_END_TITLE_EDIT;
-int wxEVT_PLOT_AREA_CREATE;
 
 //-----------------------------------------------------------------------------
 // consts
@@ -1152,53 +1152,4 @@ static wxBitmap *GetDownBitmap()
 
     return s_bitmap;
 }
-
-
-//----------------------------------------------------------------------------
-// wxPlotModule
-//----------------------------------------------------------------------------
-
-class wxPlotModule : public wxModule
-{
-public:
-    bool OnInit();
-    void OnExit();
-
-private:
-    DECLARE_CLASS(wxPlotModule)
-};
-
-IMPLEMENT_DYNAMIC_CLASS(wxPlotModule, wxModule)
-
-bool wxPlotModule::OnInit()
-{
-    wxEVT_PLOT_SEL_CHANGING = wxNewId();
-    wxEVT_PLOT_SEL_CHANGED = wxNewId();
-    wxEVT_PLOT_CLICKED = wxNewId();
-    wxEVT_PLOT_DOUBLECLICKED = wxNewId();
-    wxEVT_PLOT_ZOOM_IN = wxNewId();
-    wxEVT_PLOT_ZOOM_OUT = wxNewId();
-    wxEVT_PLOT_VALUE_SEL_CREATING = wxNewId();
-    wxEVT_PLOT_VALUE_SEL_CREATED = wxNewId();
-    wxEVT_PLOT_VALUE_SEL_CHANGING = wxNewId();
-    wxEVT_PLOT_VALUE_SEL_CHANGED = wxNewId();
-    wxEVT_PLOT_AREA_SEL_CREATING = wxNewId();
-    wxEVT_PLOT_AREA_SEL_CREATED = wxNewId();
-    wxEVT_PLOT_AREA_SEL_CHANGING = wxNewId();
-    wxEVT_PLOT_AREA_SEL_CHANGED = wxNewId();
-    wxEVT_PLOT_BEGIN_X_LABEL_EDIT = wxNewId();
-    wxEVT_PLOT_END_X_LABEL_EDIT = wxNewId();
-    wxEVT_PLOT_BEGIN_Y_LABEL_EDIT = wxNewId();
-    wxEVT_PLOT_END_Y_LABEL_EDIT = wxNewId();
-    wxEVT_PLOT_BEGIN_TITLE_EDIT = wxNewId();
-    wxEVT_PLOT_END_TITLE_EDIT = wxNewId();
-    wxEVT_PLOT_AREA_CREATE = wxNewId();
-    
-    return TRUE;
-}
-
-void wxPlotModule::OnExit()
-{
-}
-
 
