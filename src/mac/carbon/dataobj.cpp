@@ -254,8 +254,8 @@ wxBitmapDataObject::wxBitmapDataObject(
     Init();
     if ( m_bitmap.Ok() )
     {
-        m_pictHandle = wxMacCreatePicHandle( rBitmap ) ;
-        m_pictCreated = true ;
+        m_pictHandle = m_bitmap.GetBitmapData()->GetPictHandle() ;
+        m_pictCreated = false ;
     }
 }
 
@@ -272,8 +272,8 @@ void wxBitmapDataObject::SetBitmap(
     wxBitmapDataObjectBase::SetBitmap(rBitmap);
     if ( m_bitmap.Ok() )
     {
-        m_pictHandle = wxMacCreatePicHandle( rBitmap ) ;
-        m_pictCreated = true ;
+        m_pictHandle = m_bitmap.GetBitmapData()->GetPictHandle() ;
+        m_pictCreated = false ;
     }
 }
 

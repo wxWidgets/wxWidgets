@@ -192,7 +192,10 @@ void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
 {
     UnRef() ;
     
-    m_refData = new wxIconRefData( (WXHICON) wxMacCreateIconRef( bmp ) ) ;
+    // as the bitmap owns that ref, we have to acquire it as well
+    IconRef iconRef = bmp.GetBitmapData()->GetIconRef() ;
+    AcquireIconRef( iconRef ) ;
+    m_refData = new wxIconRefData( (WXHICON) iconRef ) ;
     M_ICONDATA->SetWidth( bmp.GetWidth() ) ;
     M_ICONDATA->SetHeight( bmp.GetHeight() ) ;
 }
