@@ -214,15 +214,19 @@ not been defined. And Make in some circumstances as well...
 * General options
 -------------------
 
-The confiugre options have not yet been thoroughly tested
-in wxWindows snapshot 6.
+Given below are the commands to change the default behaviour,
+i.e. if it says "--disable-threads" it means that threads
+are enabled by default.
+
+Many of the confiugre options have been thoroughly tested
+in wxWindows snapshot 6, but not yet all (ODBC not).
 
 Normally, you won't have to choose a toolkit, because when
 you download wxGTK, it will default to --with-gtk etc. But
 if you use all of our CVS repository you have to choose a 
 toolkit. You must do this by running configure with either of:
 
-        --with-gtk               Use the GIMP ToolKit (GTK)
+        --without-gtk            Don't use the GIMP ToolKit (GTK)
 	
 	--with-motif             Use either Motif or Lesstif
 	                         Configure will look for both. 
@@ -264,8 +268,8 @@ The following options handle the kind of library you want to build.
 * Feature Options
 -------------------
 
-The confiugre options have not yet been thoroughly tested
-in wxWindows snapshot 6. ODBC not at all.
+Many of the confiugre options have been thoroughly tested
+in wxWindows snapshot 6, but not yet all (ODBC not).
 
 When producing an executable that is linked statically with wxGTK
 you'll be surprised at its immense size. This can sometimes be
@@ -277,9 +281,9 @@ are
 	
 	--without-libjpeg	Disables JPEG image format code.
 	
-	--without-odbc          Disables ODBC code.
+{	--without-odbc          Disables ODBC code. Not yet. }
 	
-        --disable-wxresources   Disables the use of *.wxr type
+        --disable-resources     Disables the use of *.wxr type
 	                        resources.
 		
 	--disable-threads       Disables threads. Will also
@@ -294,6 +298,16 @@ are
 	--disable-serial        Disables object instance serialiasation.
 	
 	--disable-streams       Disables the wxStream classes.
+	
+	--disable-file          Disables the wxFile class.
+	
+	--disable-textfile      Disables the wxTextFile class.
+	
+	--disable-intl          Disables the internationalisation.
+	
+	--disable-validators    Disables validators.
+	
+	--disable-accel         Disables accel.
 	
 Apart from disabling certain features you can very often "strip"
 the program of its debugging information resulting in a significant

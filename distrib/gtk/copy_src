@@ -17,8 +17,8 @@ cd ../..
 cp wxGTK.spec ~/wxgtk_dist/wxGTK
 cp Makefile.am ~/wxgtk_dist/wxGTK
 cp acconfig.h ~/wxgtk_dist/wxGTK
-cp aclocal.m4 ~/wxgtk_dist/wxGTK
 cp acinclude.m4 ~/wxgtk_dist/wxGTK
+cp aclocal.m4 ~/wxgtk_dist/wxGTK
 cp configure.in ~/wxgtk_dist/wxGTK
 cp configure ~/wxgtk_dist/wxGTK
 cp config.sub ~/wxgtk_dist/wxGTK

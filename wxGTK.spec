@@ -27,10 +27,10 @@ Motif/LessTif, MS Windows, Mac) from the same source code.
 
 %prep
 %setup -n wxGTK
-./configure --prefix=%{pref} --with-threads
+./configure --prefix=%{pref} --enable-threads
 
 %build
-make
+cd src && make
 
 %install
 rm -rf $RPM_BUILD_ROOT

@@ -1206,7 +1206,7 @@ dnl ---------------------------------------------------------------------------
 dnl thread support for Unix (always available under Win32)
 dnl ---------------------------------------------------------------------------
 
-if test "$wxUSE_UNIX" = 1; then
+if test "$USE_UNIX" = 1; then
 
 dnl the code below:
 dnl   defines THREADS_OBJ which contains the object files to build
@@ -1216,16 +1216,16 @@ dnl   defines wxUSE_THREADS=1 if thread support is activated
 THREADS_LINK=""
 THREADS_OBJ=""
 
-if test "$wxUSE_THREADS" = "yes"; then
-  if test "$wxUSE_WINE" = 1; then
-    AC_MSG_WARN([Threads are not supported under WINE])
-    wxUSE_THREADS="no"
-   fi
+if test "$wxUSE_THREADS" = "yes" ; then
+    if test "$wxUSE_WINE" = 1 ; then
+        AC_MSG_WARN([Threads are not supported under WINE])
+        wxUSE_THREADS="no"
+    fi
 fi
 
-if test "$wxUSE_THREADS" = "yes"; then
+if test "$wxUSE_THREADS" = "yes" ; then
     dnl find if POSIX threads are available
-
+    
     dnl standard lib name is pthread
     dnl We no longer test for pthread-0.7 as it breaks compilation on some
     dnl glibc2 systems, especially for static linkage.
@@ -1246,13 +1246,13 @@ if test "$wxUSE_THREADS" = "yes"; then
         ])
 fi
 
-if test -z "$THREADS_OBJ"; then
-  wxUSE_THREADS=no
-  AC_MSG_WARN(No thread support on this system)
+if test -z "$THREADS_OBJ" ; then
+    wxUSE_THREADS=no
+    AC_MSG_WARN(No thread support on this system)
 fi
 
 dnl do other tests only if we are using threads
-if test "$wxUSE_THREADS" = "yes"; then
+if test "$wxUSE_THREADS" = "yes" ; then
   dnl  LTLIBOBJS="$LTLIBOBJS $THREADS_OBJ"
 
   dnl define autoconf macro to check for given function in both pthread and
@@ -1316,6 +1316,7 @@ if test "$wxUSE_THREADS" = "yes"; then
   THREADS_LINK="-l$THREADS_LINK"
 fi
 
+dnl from if USE_UNIX
 fi
 
 if test "$wxUSE_THREADS" = "yes"; then
@@ -1352,42 +1353,42 @@ if test "$wxUSE_DEBUG_INFO" = "yes" ; then
 fi
 
 if test "$wxUSE_DEBUG_FLAG" = "yes" ; then
-  AC_DEFINE(WXDEBUG)
-  WXDEBUG_DEFINE="-D__WXDEBUG__"
+    AC_DEFINE(WXDEBUG)
+    WXDEBUG_DEFINE="-D__WXDEBUG__"
 else
-  WXDEBUG_DEFINE="-DGTK_NO_CHECK_CASTS"
+    WXDEBUG_DEFINE="-DGTK_NO_CHECK_CASTS"
 fi
 
 if test "$wxUSE_MEM_TRACING" = "yes" ; then
-  AC_DEFINE(wxUSE_MEMORY_TRACING)
-  AC_DEFINE(wxUSE_GLOBAL_MEMORY_OPERATORS)
-  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS memcheck"
+    AC_DEFINE(wxUSE_MEMORY_TRACING)
+    AC_DEFINE(wxUSE_GLOBAL_MEMORY_OPERATORS)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS memcheck"
 fi
 
 if test "$wxUSE_DMALLOC" = "yes" ; then
-  DMALLOC_LINK="-ldmalloc"
+    DMALLOC_LINK="-ldmalloc"
 fi
 
 PROFILE=
 if test "$wxUSE_PROFILE" = "yes" ; then
-  PROFILE="-pg"
+    PROFILE="-pg"
 fi
 
 CXXFLAGS=`echo "${CXXFLAGS}" | sed "s/\-O.//g" `
 CFLAGS=`echo "${CFLAGS}" | sed "s/\-O.//g" `
 if test "$wxUSE_OPTIMISE" = "no" ; then
-  OPTIMISE=
+    OPTIMISE=
 else
-  if test "$GCC" = yes ; then
-    OPTIMISE="-O2 -fno-rtti -fno-exceptions"
-    case "${host}" in
-      i586-*-*|i686-*-* )
-        OPTIMISE="${OPTIMISE} "
-    ;;
-    esac
-  else
-    OPTIMISE="-O"
-  fi
+    if test "$GCC" = yes ; then
+        OPTIMISE="-O2 -fno-rtti -fno-exceptions"
+        case "${host}" in
+            i586-*-*|i686-*-* )
+            OPTIMISE="${OPTIMISE} "
+        ;;
+        esac
+    else
+        OPTIMISE="-O"
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1726,7 +1727,7 @@ if test "$wxUSE_X_RESOURCES" = "yes"; then
 fi
 
 dnl ---------------------------------------------------------------------------
-dnl IPC: IPC, d-n-d, clipboard, ...
+dnl IPC: IPC, Drag'n'Drop, Clipboard, ...
 dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_IPC" = "yes"; then
