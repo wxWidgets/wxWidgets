@@ -1090,18 +1090,25 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& itemId,
     wxCHECK_RET( itemId.IsOk(), _T("invalid tree item") );
 
     bool is_single=!(GetWindowStyleFlag() & wxTR_MULTIPLE);
+    wxGenericTreeItem *item = itemId.m_pItem;
 
     //wxCHECK_RET( ( (!unselect_others) && is_single),
     //           _T("this is a single selection tree") );
 
     // to keep going anyhow !!!
     if (is_single)
-    {
+      { 
+        if (item->HasHilight()) return; // nothing to do
         unselect_others=TRUE;
         extended_select=FALSE;
-    }
-
-    wxGenericTreeItem *item = itemId.m_pItem;
+      }
+    else // check if selection will really change
+      if (unselect_others && item->HasHilight())
+      {
+	// selection change if there is more than one item currently selected
+	wxArrayTreeItemIds selected_items;
+	if (GetSelections(selected_items)==1) return;
+      }
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, GetId() );
     event.m_item = item;
@@ -1174,14 +1181,13 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
 
     // first expand all parent branches
     wxGenericTreeItem *parent = gitem->GetParent();
-    while ( parent && !parent->IsExpanded() )
+    while ( parent )
     {
-        Expand(parent);
-
+	Expand(parent);
         parent = parent->GetParent();
     }
 
-    if (parent) CalculatePositions();
+    //if (parent) CalculatePositions();
 
     ScrollTo(item);
 }
@@ -1429,9 +1435,9 @@ void wxTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level, int &
     item->SetCross( horizX+m_indent, y );
 
     int exposed_x = dc.LogicalToDeviceX( 0 );
-    int exposed_y = dc.LogicalToDeviceY( item->GetY()-2 );
+    int exposed_y = dc.LogicalToDeviceY( item->GetY() );
 
-    if (IsExposed( exposed_x, exposed_y, 10000, GetLineHeight(item)+4 ))  // 10000 = very much
+    if (IsExposed( exposed_x, exposed_y, 10000, GetLineHeight(item) ))  // 10000 = very much
     {
         int startX = horizX;
         int endX = horizX + (m_indent-5);
@@ -2031,7 +2037,7 @@ void wxTreeCtrl::CalculatePositions()
     //if(GetImageList() == NULL)
     // m_lineHeight = (int)(dc.GetCharHeight() + 4);
 
-    int y = 2; //GetLineHeight(m_anchor) / 2 + 2;
+    int y = 2; 
     CalculateLevel( m_anchor, dc, 0, y ); // start recursion
 }
 
@@ -2060,10 +2066,14 @@ void wxTreeCtrl::RefreshLine( wxGenericTreeItem *item )
     wxClientDC dc(this);
     PrepareDC( dc );
 
+    int cw = 0;
+    int ch = 0;
+    GetClientSize( &cw, &ch );
+
     wxRect rect;
-    rect.x = dc.LogicalToDeviceX( item->GetX() - 2 );
-    rect.y = dc.LogicalToDeviceY( item->GetY());
-    rect.width = 1000;
+    rect.x = dc.LogicalToDeviceX( 0 );
+    rect.y = dc.LogicalToDeviceY( item->GetY() );
+    rect.width = cw;
     rect.height = GetLineHeight(item); //dc.GetCharHeight() + 6;
 
     Refresh( TRUE, &rect );
