@@ -368,6 +368,13 @@ working with controls that contain large amounts of text.
 Gets the current selection span. If the returned values are equal, there was
 no selection.
 
+Please note that the indices returned may be used with the other wxTextctrl
+methods but don't necessarily represent the correct indices into the string
+returned by \helpref{GetValue()}{wxtextctrlgetvalue} for multiline controls
+under Windows, you should use another version of 
+\helpref{GetSelection()}{wxtextctrlgetselectionstring} to get the selected
+text.
+
 \wxheading{Parameters}
 
 \docparam{from}{The returned first position.}
@@ -379,6 +386,13 @@ consisting of the from and to values.}
 
 \perlnote{In wxPerl this method takes no parameter and returns a
 2-element list {\tt ( from, to )}.}
+
+\membersection{wxTextCtrl::GetSelection}\label{wxtextctrlgetselectionstring}
+
+\func{virtual wxString}{GetSelection}{\void}
+
+Gets the text currently selected in the control. If there is no selection, the
+returned string is empty.
 
 \membersection{wxTextCtrl::GetValue}\label{wxtextctrlgetvalue}
 

@@ -685,6 +685,18 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
         case WXK_F7:
             ShowPosition(10);
             break;
+
+        case WXK_F10:
+            {
+                long from, to;
+                GetSelection(&from, &to);
+
+                wxString sel = GetSelection();
+
+                wxLogMessage(_T("Selection: from %ld to %ld."), from, to);
+                wxLogMessage(_T("Selection = '%s' (len = %u)"),
+                             sel.c_str(), sel.length());
+            }
     }
 
     if ( ms_logKey )

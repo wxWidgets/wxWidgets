@@ -244,6 +244,20 @@ void wxTextCtrlBase::SelectAll()
     SetSelection(0, GetLastPosition());
 }
 
+wxString wxTextCtrlBase::GetSelection() const
+{
+    long from, to;
+    GetSelection(&from, &to);
+
+    wxString sel;
+    if ( from < to )
+    {
+        sel = GetValue().Mid(from, to - from);
+    }
+
+    return sel;
+}
+
 #else // !wxUSE_TEXTCTRL
 
 // define this one even if !wxUSE_TEXTCTRL because it is also used by other

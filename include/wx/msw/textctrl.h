@@ -55,8 +55,8 @@ public:
     virtual bool IsModified() const;
     virtual bool IsEditable() const;
 
-    // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(long* from, long* to) const;
+    virtual wxString GetSelection() const;
 
     // operations
     // ----------

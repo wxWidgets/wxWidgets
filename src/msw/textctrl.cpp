@@ -648,6 +648,34 @@ void wxTextCtrl::GetSelection(long* from, long* to) const
     }
 }
 
+wxString wxTextCtrl::GetSelection() const
+{
+    // the base class version works correctly for the rich text controls
+    // because there the lines are terminated with just '\r' which means that
+    // the string length is not changed in the result of the translations doen
+    // in GetValue() but for the normal ones when we replace "\r\n" with '\n'
+    // we break the indices
+#if wxUSE_RICHEDIT
+    if ( m_isRich )
+        return wxTextCtrlBase::GetSelection();
+#endif // wxUSE_RICHEDIT
+
+    long from, to;
+    GetSelection(&from, &to);
+
+    wxString str;
+    if ( from < to )
+    {
+        str = wxGetWindowText(GetHWND()).Mid(from, to - from);
+
+        // and now that we have the correct selection, convert it to the
+        // correct format
+        str = wxTextFile::Translate(str, wxTextFileType_Unix);
+    }
+
+    return str;
+}
+
 bool wxTextCtrl::IsEditable() const
 {
     long style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
