@@ -227,6 +227,10 @@ public:
     void SetLinkColor(const wxColour& clr);
     wxColour GetActualColor();
     void SetActualColor(const wxColour& clr);
+    %pythoncode {
+        GetActualColour = GetActualColor
+        SetActualColour = SetActualColor
+    }
     void SetLink(const wxString& link);
     wxFont* CreateCurrentFont();
     wxHtmlLinkInfo GetLink();
@@ -606,7 +610,7 @@ public:
 
 class wxHtmlColourCell : public wxHtmlCell {
 public:
-    wxHtmlColourCell(wxColour clr, int flags = wxHTML_CLR_FOREGROUND);
+    wxHtmlColourCell(const wxColour& clr, int flags = wxHTML_CLR_FOREGROUND);
 
 };
 
