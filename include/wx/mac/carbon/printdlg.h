@@ -22,22 +22,6 @@
 #include "wx/cmndata.h"
 #include "wx/printdlg.h"
 #include "wx/prntbase.h"
-
-//----------------------------------------------------------------------------
-// wxMacPrintNativeData
-//----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxMacPrintNativeData: public wxPrintNativeDataBase
-{
-public:
-    wxMacPrintNativeData() {};
-    virtual ~wxMacPrintNativeData() {};
-    
-    virtual bool TransferTo( wxPrintData &data ) { return true; }
-    virtual bool TransferFrom( const wxPrintData &data ) { return true; }
-    
-    virtual bool Ok() const { return true; }
-};
     
 /*
  * wxMacPrintDialog

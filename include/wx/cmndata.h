@@ -147,12 +147,6 @@ private:
  * Encapsulates printer information (not printer dialog information)
  */
 
-#ifdef __WXMAC__
-
-class wxNativePrintData ;
-
-#endif
-
 enum wxPrintBin
 {
     wxPRINTBIN_DEFAULT,
@@ -251,11 +245,6 @@ public:
     // Holds the native print data
     wxPrintNativeDataBase *GetNativeData() const { return m_nativeData; }
 
-public:
-#if defined(__WXMAC__)
-    wxNativePrintData* m_nativePrintData ;
-#endif
-
 private:
     wxPrintBin      m_bin;
     wxPrintMode     m_printMode;
@@ -340,11 +329,6 @@ public:
     void operator=(const wxPrintDialogData& data);
     void operator=(const wxPrintData& data); // Sets internal m_printData member
 
-#if defined(__WXMAC__)
-    void ConvertToNative();
-    void ConvertFromNative();
-#endif
-
 private:
     int             m_printFromPage;
     int             m_printToPage;
@@ -422,11 +406,6 @@ public:
     void EnablePaper(bool flag) { m_enablePaper = flag; };
     void EnablePrinter(bool flag) { m_enablePrinter = flag; };
     void EnableHelp(bool flag) { m_enableHelp = flag; };
-
-#if defined(__WXMAC__)
-    void ConvertToNative();
-    void ConvertFromNative();
-#endif
 
     // Use paper size defined in this object to set the wxPrintData
     // paper id

@@ -54,6 +54,7 @@
 #include "wx/msw/printdlg.h"
 #elif defined(__WXMAC__)
 #include "wx/mac/printdlg.h"
+#include "wx/mac/private/print.h"
 #else
 #include "wx/generic/prntdlgg.h"
 #endif
@@ -246,7 +247,7 @@ wxPrintNativeDataBase *wxNativePrintFactory::CreatePrintNativeData()
 #if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
     return new wxWindowsPrintNativeData;
 #elif defined(__WXMAC__)
-    return new wxMacPrintNativeData;
+    return new wxMacCarbonPrintData;
 #else
     return new wxPostScriptPrintNativeData;
 #endif

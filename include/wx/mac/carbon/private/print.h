@@ -13,6 +13,7 @@
 #define _WX_MAC_PRIVATE_PRINT_H_
 
 #include "wx/cmndata.h"
+#include "wx/print.h"
 #include "wx/mac/private.h"
 
 #if TARGET_CARBON && !defined(__DARWIN__)
@@ -27,53 +28,30 @@
 #error "only Carbon Printing Session API is supported"
 #endif
 
-class wxNativePrintData
-{
-public :
-                            wxNativePrintData() {}
-    virtual                 ~wxNativePrintData() {}
-    
-    virtual void            TransferFrom( wxPrintData * ) = 0 ;
-    virtual void            TransferTo( wxPrintData * ) = 0 ;
-    
-    virtual void            TransferFrom( wxPageSetupDialogData * ) = 0 ;
-    virtual void            TransferTo( wxPageSetupDialogData * ) = 0 ;
-    
-    virtual void            TransferFrom( wxPrintDialogData * ) = 0 ;
-    virtual void            TransferTo( wxPrintDialogData * ) = 0 ;
-    
-    virtual void            CopyFrom( wxNativePrintData * ) = 0;
- 
-    virtual int             ShowPrintDialog() = 0 ;
-    virtual int             ShowPageSetupDialog() = 0 ;
-   
-    static wxNativePrintData* Create() ;
-} ;
-
-class wxMacCarbonPrintData : public wxNativePrintData 
+class WXDLLEXPORT wxMacCarbonPrintData : public wxPrintNativeDataBase 
 {
 public :
                             wxMacCarbonPrintData() ;
-                            ~wxMacCarbonPrintData() ;
-                            
-    virtual void            TransferFrom( wxPrintData * ) ;
-    virtual void            TransferTo( wxPrintData * )  ;
+    virtual                 ~wxMacCarbonPrintData() ;
+
+    virtual bool            TransferTo( wxPrintData &data );
+    virtual bool            TransferFrom( const wxPrintData &data );
+
+    virtual bool            Ok() const ;
     
     virtual void            TransferFrom( wxPageSetupDialogData * )  ;
     virtual void            TransferTo( wxPageSetupDialogData * ) ;
     
     virtual void            TransferFrom( wxPrintDialogData * )  ;
     virtual void            TransferTo( wxPrintDialogData * ) ;
-    
-    virtual void            CopyFrom( wxNativePrintData * ) ;
-    virtual int             ShowPrintDialog() ;
-    virtual int             ShowPageSetupDialog() ;
 private :
     virtual void            ValidateOrCreate() ;
 public :
     PMPrintSession			m_macPrintSession ;
     PMPageFormat            m_macPageFormat ;
     PMPrintSettings         m_macPrintSettings ;
+private:
+    DECLARE_DYNAMIC_CLASS(wxMacCarbonPrintData)
 } ;
 
 #endif

@@ -71,10 +71,41 @@ wxMacPrintDialog::~wxMacPrintDialog()
 
 int wxMacPrintDialog::ShowModal()
 {
-    m_printDialogData.ConvertToNative() ;
-    int result = m_printDialogData.GetPrintData().m_nativePrintData->ShowPrintDialog() ;
+    m_printDialogData.GetPrintData().ConvertToNative();
+    ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferFrom( &m_printDialogData ) ;
+    
+    int result = wxID_CANCEL ;
+    OSErr err = noErr ;
+    wxString message ;
+    
+    Boolean        accepted;
+    
+    err = PMSessionPrintDialog( ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPrintSession,
+        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPrintSettings,
+        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->m_macPageFormat,
+        &accepted);
+    if ((err == noErr) && !accepted)
+    {
+        err = kPMCancel; // user clicked Cancel button
+    }
+
+    if  ( err == noErr )
+    {
+        result = wxID_OK ;
+    }
+
+    if ((err != noErr) && (err != kPMCancel))
+    {
+        message.Printf( wxT("Print Error %d"), err ) ;
+        wxMessageDialog dialog( NULL , message  , wxEmptyString, wxICON_HAND | wxOK) ;
+        dialog.ShowModal();
+    }
+
     if ( result == wxID_OK )
-        m_printDialogData.ConvertFromNative() ;
+    {
+        m_printDialogData.GetPrintData().ConvertFromNative();
+        ((wxMacCarbonPrintData*)m_printDialogData.GetPrintData().GetNativeData())->TransferTo( &m_printDialogData ) ;
+    }
     
     return result ;
 }
@@ -117,13 +148,42 @@ wxPageSetupData& wxMacPageSetupDialog::GetPageSetupDialogData()
 
 int wxMacPageSetupDialog::ShowModal()
 {
-    m_pageSetupData.ConvertToNative();
+    m_pageSetupData.GetPrintData().ConvertToNative();
+    ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferFrom( &m_pageSetupData ) ;
+
+    int      result = wxID_CANCEL ;
+    OSErr    err = noErr ;
+    wxString message ;
     
-    int result = m_pageSetupData.GetPrintData().m_nativePrintData->ShowPageSetupDialog();
-    
+    Boolean        accepted;
+
+    err = PMSessionPageSetupDialog( ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->m_macPrintSession,
+        ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->m_macPageFormat,
+        &accepted);
+    if ((err == noErr) && !accepted)
+    {
+        err = kPMCancel; // user clicked Cancel button
+    }
+
+    //  If the user did not cancel, flatten and save the PageFormat object
+    //  with our document.
+    if (err == noErr) 
+    {
+        result = wxID_OK ;
+    }
+    if ((err != noErr) && (err != kPMCancel))
+    {
+        message.Printf( wxT("Print Error %d"), err ) ;
+        wxMessageDialog dialog( NULL , message , wxEmptyString, wxICON_HAND | wxOK) ;
+        dialog.ShowModal();
+    }
+
     if (result == wxID_OK )
-        m_pageSetupData.ConvertFromNative();
-        
+    {
+        m_pageSetupData.GetPrintData().ConvertFromNative();
+        m_pageSetupData.SetPaperSize( m_pageSetupData.GetPrintData().GetPaperSize() ) ;
+        ((wxMacCarbonPrintData*)m_pageSetupData.GetPrintData().GetNativeData())->TransferTo( &m_pageSetupData ) ;
+    }   
     return result;
 }
 

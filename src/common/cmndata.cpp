@@ -158,9 +158,6 @@ wxFontDialogBase::~wxFontDialogBase()
 
 wxPrintData::wxPrintData()
 {
-#ifdef __WXMAC__
-    m_nativePrintData = wxNativePrintData::Create() ;
-#endif
     m_bin = wxPRINTBIN_DEFAULT;
     m_printMode = wxPRINT_MODE_PRINTER;
     m_printOrientation = wxPORTRAIT;
@@ -212,28 +209,16 @@ wxPrintData::~wxPrintData()
 
     if (m_privData)
         delete [] m_privData;
-
-#ifdef __WXMAC__
-    delete m_nativePrintData ;
-#endif
 }
 
 void wxPrintData::ConvertToNative()
 {
-#ifdef __WXMAC__
-    m_nativePrintData->TransferFrom( this ) ;
-#else
     m_nativeData->TransferFrom( *this ) ;
-#endif
 }
 
 void wxPrintData::ConvertFromNative()
 {
-#ifdef __WXMAC__
-    m_nativePrintData->TransferTo( this ) ;
-#else
     m_nativeData->TransferTo( *this ) ;
-#endif
 }
 
 void wxPrintData::operator=(const wxPrintData& data)
@@ -273,10 +258,6 @@ void wxPrintData::operator=(const wxPrintData& data)
         m_privData = new char[m_privDataLen];
         memcpy( m_privData, data.GetPrivData(), m_privDataLen );
     }
-
-#ifdef __WXMAC__
-    m_nativePrintData->CopyFrom( data.m_nativePrintData ) ;
-#endif
 }
 
 // Is this data OK for showing the print dialog?
@@ -510,23 +491,6 @@ wxPrintDialogData::~wxPrintDialogData()
 {
 }
 
-#ifdef __WXMAC__
-
-void wxPrintDialogData::ConvertToNative()
-{
-    m_printData.ConvertToNative();
-    m_printData.m_nativePrintData->TransferFrom( this ) ;
-}
-
-void wxPrintDialogData::ConvertFromNative()
-{
-    m_printData.ConvertFromNative();
-    m_printData.m_nativePrintData->TransferTo( this ) ;
-}
-
-#endif
-
-
 void wxPrintDialogData::operator=(const wxPrintDialogData& data)
 {
     m_printFromPage = data.m_printFromPage;
@@ -639,36 +603,6 @@ wxPageSetupDialogData& wxPageSetupDialogData::operator=(const wxPrintData& data)
 
     return *this;
 }
-
-#ifdef __WXMAC__
-void wxPageSetupDialogData::ConvertToNative()
-{
-    m_printData.ConvertToNative();
-    m_printData.m_nativePrintData->TransferFrom( this ) ;
-}
-
-void wxPageSetupDialogData::ConvertFromNative()
-{
-    m_printData.ConvertFromNative ();
-    m_paperSize = m_printData.GetPaperSize() ;
-    CalculateIdFromPaperSize();
-    m_printData.m_nativePrintData->TransferTo( this ) ;
-    // adjust minimal values
-
-    if ( m_marginTopLeft.x < m_minMarginTopLeft.x )
-        m_marginTopLeft.x = m_minMarginTopLeft.x;
-
-    if ( m_marginBottomRight.x < m_minMarginBottomRight.x )
-        m_marginBottomRight.x = m_minMarginBottomRight.x;
-
-    if ( m_marginTopLeft.y < m_minMarginTopLeft.y )
-        m_marginTopLeft.y = m_minMarginTopLeft.y;
-
-    if ( m_marginBottomRight.y < m_minMarginBottomRight.y )
-        m_marginBottomRight.y = m_minMarginBottomRight.y;
-}
-#endif
-
 
 // If a corresponding paper type is found in the paper database, will set the m_printData
 // paper size id member as well.
