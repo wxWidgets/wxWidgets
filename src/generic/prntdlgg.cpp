@@ -74,21 +74,22 @@
 
 #if wxUSE_POSTSCRIPT
 
-    IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
-    IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
+IMPLEMENT_CLASS(wxGenericPrintDialog, wxDialog)
+IMPLEMENT_CLASS(wxGenericPrintSetupDialog, wxDialog)
 
-    BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxDialog)
-        EVT_BUTTON(wxID_OK, wxGenericPrintDialog::OnOK)
-        EVT_BUTTON(wxPRINTID_SETUP, wxGenericPrintDialog::OnSetup)
-        EVT_RADIOBOX(wxPRINTID_RANGE, wxGenericPrintDialog::OnRange)
-    END_EVENT_TABLE()
-#endif
+BEGIN_EVENT_TABLE(wxGenericPrintDialog, wxDialog)
+    EVT_BUTTON(wxID_OK, wxGenericPrintDialog::OnOK)
+    EVT_BUTTON(wxPRINTID_SETUP, wxGenericPrintDialog::OnSetup)
+    EVT_RADIOBOX(wxPRINTID_RANGE, wxGenericPrintDialog::OnRange)
+END_EVENT_TABLE()
 
-    IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
+#endif // wxUSE_POSTSCRIPT
 
-    BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
-        EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
-    END_EVENT_TABLE()
+IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
+
+BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
+    EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
+END_EVENT_TABLE()
 
 // ----------------------------------------------------------------------------
 // global vars
@@ -319,8 +320,6 @@ void wxGenericPrintDialog::OnSetup(wxCommandEvent& WXUNUSED(event))
 
 bool wxGenericPrintDialog::TransferDataToWindow()
 {
-    char buf[10];
-
     if(m_printDialogData.GetFromPage() != 0)
     {
        if(m_fromText)
@@ -329,10 +328,10 @@ bool wxGenericPrintDialog::TransferDataToWindow()
           {
              m_fromText->Enable(TRUE);
              m_toText->Enable(TRUE);
-             sprintf(buf, "%d", m_printDialogData.GetFromPage());
-             m_fromText->SetValue(buf);
-             sprintf(buf, "%d", m_printDialogData.GetToPage());
-             m_toText->SetValue(buf);
+             m_fromText->SetValue(
+                 wxString::Format(_T("%d"), m_printDialogData.GetFromPage()));
+             m_toText->SetValue(
+                wxString::Format(_T("%d"), m_printDialogData.GetToPage()));
              if(m_rangeRadioBox)
                 if (m_printDialogData.GetAllPages())
                    m_rangeRadioBox->SetSelection(0);
@@ -351,8 +350,8 @@ bool wxGenericPrintDialog::TransferDataToWindow()
           }
        }
     }
-    sprintf(buf, "%d", m_printDialogData.GetNoCopies());
-    m_noCopiesText->SetValue(buf);
+    m_noCopiesText->SetValue(
+        wxString::Format(_T("%d"), m_printDialogData.GetNoCopies()));
 
     m_printToFileCheckBox->SetValue(m_printDialogData.GetPrintToFile());
     m_printToFileCheckBox->Enable(m_printDialogData.GetEnablePrintToFile());
