@@ -1,0 +1,126 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        mediactrl.tex
+%% Purpose:     wxMediaCtrl docs
+%% Author:      Ryan Norton <wxprojects@comcast.net>
+%% Modified by:
+%% Created:     11/7/2004
+%% RCS-ID:      $Id$
+%% Copyright:   (c) Ryan Norton
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxMediaCtrl}}\label{wxmediactrl}
+
+Plays movies - Currently Windows and Mac only.
+
+\wxheading{Derived from}
+
+\helpref{wxControl}{wxcontrol}
+
+\wxheading{Include files}
+
+<wx/mediactrl.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxMediaCtrl::wxMediaCtrl}\label{wxmediactrlwxmediactrl}
+
+\func{}{wxMediaCtrl}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{long }{driver = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+
+\func{}{wxMediaCtrl}{\void}
+
+Contructors
+
+\docparam{parent}{parent of this control.  Must not be NULL.}
+\docparam{id}{id to use for events}
+\docparam{fileName}{If not empty, loads this file and starts playing it immediately.}
+\docparam{pos}{Position to put control at.}
+\docparam{size}{Size to put the control at and to stretch movie to.}
+\docparam{style}{Optional styles.}
+\docparam{driver}{Reserved for future use.}
+\docparam{name}{Window name.}
+
+
+\membersection{wxMediaCtrl::Create}\label{wxmediactrlcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id}, \param{const wxString\& }{fileName}, \param{const wxString\& }{label = wxT("")}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{long }{driver = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+Creates this control.  Returns \tt{false} if it can't load the movie located at \tt{fileName}
+
+
+\docparam{parent}{parent of this control.  Must not be NULL.}
+\docparam{id}{id to use for events}
+\docparam{fileName}{If not empty, loads this file and starts playing it immediately.}
+\docparam{pos}{Position to put control at.}
+\docparam{size}{Size to put the control at and to stretch movie to.}
+\docparam{driver}{Reserved for future use.}
+\docparam{style}{Optional styles.}
+\docparam{driver}{Reserved for future use.}
+\docparam{name}{Window name.}
+
+
+\membersection{wxMediaCtrl::GetDuration}\label{wxmediactrlgetduration}
+
+\func{long}{GetDuration}{\void}
+
+Obtains the length - the total amount of time the movie has
+
+
+\membersection{wxMediaCtrl::GetPosition}\label{wxmediactrlgetposition}
+
+\func{long}{GetPosition}{\void}
+
+Obtains the current position in time within the movie.
+
+
+\membersection{wxMediaCtrl::GetState}\label{wxmediactrlgetstate}
+
+\func{wxMediaCtrlState}{GetState}{\void}
+
+Obtains the state the playback of the movie is in - 
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxMEDIASTATE\_STOPPED}}{The movie has stopped.}
+\twocolitem{{\bf wxMEDIASTATE\_PAUSED}}{The movie is paused.}
+\twocolitem{{\bf wxMEDIASTATE\_PLAYING}}{The movie is currently playing.}
+\end{twocollist}
+
+
+\membersection{wxMediaCtrl::Load}\label{wxmediactrlload}
+
+\func{bool}{Load}{\param{const wxString\& }{fileName}}
+
+Loads the file that \tt{fileName} refers to.
+
+Unlike Create, you must manually call Play() to start playing the file.
+
+
+\membersection{wxMediaCtrl::Pause}\label{wxmediactrlpause}
+
+\func{bool}{Pause}{\void}
+
+Pauses playback of the movie.
+
+
+\membersection{wxMediaCtrl::Play}\label{wxmediactrlplay}
+
+\func{bool}{Play}{\void}
+
+Resumes playback of the movie.
+
+
+\membersection{wxMediaCtrl::SetPosition}\label{wxmediactrlsetposition}
+
+\func{bool}{SetPosition}{\param{long }{where}}
+
+Seeks to a position within the movie.
+
+
+\membersection{wxMediaCtrl::Stop}\label{wxmediactrlstop}
+
+\func{bool}{Stop}{\void}
+
+Stops the movie and rewinds the movie to the start.
