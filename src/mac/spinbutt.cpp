@@ -95,6 +95,8 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 {
 	m_min = minVal;
 	m_max = maxVal;
+    SetControlMaximum( m_macControl , maxVal ) ;
+    SetControlMinimum(  m_macControl , minVal ) ;
 }
 
 void wxSpinButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 
@@ -102,6 +104,7 @@ void wxSpinButton::MacHandleControlClick( ControlHandle control , SInt16 control
 	if ( m_macControl == NULL )
 		return ;
 	
+	int oldValue = m_value ;
   wxEventType scrollEvent = wxEVT_NULL;
   int nScrollInc = 0;
 
@@ -135,11 +138,26 @@ void wxSpinButton::MacHandleControlClick( ControlHandle control , SInt16 control
       m_value = m_max;
   }
   	
-  wxScrollEvent event(scrollEvent, m_windowId);
+  wxSpinEvent event(scrollEvent, m_windowId);
 
   event.SetPosition(m_value);
   event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
+  if ((GetEventHandler()->ProcessEvent( event )) &&
+        !event.IsAllowed() )
+  {
+  	m_value = oldValue ;
+  }
+  SetControlValue(  m_macControl , m_value ) ;
+
+    /* always send a thumbtrack event */
+    if (scrollEvent != wxEVT_SCROLL_THUMBTRACK)
+    {
+        scrollEvent = wxEVT_SCROLL_THUMBTRACK;
+        wxSpinEvent event2( scrollEvent, GetId());
+        event2.SetPosition( m_value );
+        event2.SetEventObject( this );
+        GetEventHandler()->ProcessEvent( event2 );
+    }
 }
 
 // ----------------------------------------------------------------------------
