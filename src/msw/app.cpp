@@ -708,7 +708,7 @@ int wxEntry(WXHINSTANCE hInstance)
 
 //// Static member initialization
 
-wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
+wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {
