@@ -179,6 +179,36 @@ when GetString is called from an event handler.
 Added wx.SL_INVERSE style which will cause wx.Slider to invert the min
 and max ends of the slider.  (Only for wxGTK so far.)
 
+Several patches applied, such as #1111174, #1110252 and others, that
+make the generic wx.TreeCtrl (used on wxGTK and wxMac) be more
+conistent with the wxMSW native wx.TreeCtrl.
+
+wxMac:  wx.DC implemented using CoreGraphics  
+        ??? NEED MORE DETAILS HERE ???
+
+XRCed:
+    * Edit->Locate command (Ctrl-L) for quick selection of items.
+      Works with event-handling controls (buttons, text fields) but
+      not with labels/sizers.
+    * Some improvements: relative paths for files supplied as command-
+      line argument work correctly, notebook panels are highlighted
+      better.
+
+wxMac: Fixed a long-standing issue where wxSlider controls with a
+hardcoded size would misplace their labels behind the slider control.
+
+wx.HtmlListBox fixed so calling RefreshLine(s) will cause the data for
+that line to be refetched from the derived class.
+
+The default DoGetBestSize now includes the difference (if any) between
+the client size and total size of the window.  Code that sets the
+client size using the best size, or that added extra space to sizers
+to compensate for this bug may need to be changed.
+
+Can suppress themed notebook page with wxNB_NOPAGETHEME or
+setting system option msw.notebook.themed-background to 0
+
+
 
 
 
@@ -212,8 +242,8 @@ button and wxWidgets will choose the stock label to go with it
 automatically.  Additionally on the platforms that have a native
 concept of a stock button (currently only GTK2) then the native stock
 button will be used.  For example, the following will result in a
-button with "Cancel" as the label and an accelerator on the "C", and
-if run on wxGTK2 then there will also be an image of a red X::
+button with "Cancel" as the label and if run on wxGTK2 then there will
+also be an image of a red X::
 
        b = wx.Button(parent, wx.ID_CANCEL) 
 
