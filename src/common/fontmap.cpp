@@ -398,6 +398,12 @@ wxString wxFontMapper::GetEncodingName(wxFontEncoding encoding)
 wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
                                                bool interactive)
 {
+    // a special pseudo encoding which means "don't ask me about this charset
+    // any more" - we need it to avoid driving the user crazy with asking him
+    // time after time about the same charset which he [presumably] doesn't
+    // have the fonts fot
+    static const int wxFONTENCODING_UNKNOWN = -2;
+
     wxFontEncoding encoding = wxFONTENCODING_SYSTEM;
 
     // we're going to modify it, make a copy
@@ -414,6 +420,12 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         long value = config->Read(charset, -1l);
         if ( value != -1 )
         {
+            if ( value == wxFONTENCODING_UNKNOWN )
+            {
+                // don't try to find it, in particular don't ask the user
+                return wxFONTENCODING_SYSTEM;
+            }
+
             if ( value >= 0 && value <= wxFONTENCODING_MAX )
             {
                 encoding = (wxFontEncoding)value;
@@ -440,7 +452,7 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
 
         RestorePath(pathOld);
     }
-#endif
+#endif // wxUSE_CONFIG
 
     // if didn't find it there, try to recognize it ourselves
     if ( encoding == wxFONTENCODING_SYSTEM )
@@ -590,24 +602,25 @@ wxFontEncoding wxFontMapper::CharsetToEncoding(const wxString& charset,
         if ( n != -1 )
         {
             encoding = gs_encodings[n];
+        }
 
 #if wxUSE_CONFIG
         // save the result in the config now
-            if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
+        if ( ChangePath(FONTMAPPER_CHARSET_PATH, &pathOld) )
+        {
+            wxConfigBase *config = GetConfig();
+
+            // remember the alt encoding for this charset - or remember that
+            // we don't know it
+            long value = n == -1 ? wxFONTENCODING_UNKNOWN : (long)encoding;
+            if ( !config->Write(charset, value) )
             {
-                wxConfigBase *config = GetConfig();
-
-                // remember the alt encoding for this charset
-                if ( !config->Write(charset, (long)encoding) )
-                {
-                    wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset.c_str());
-                }
-
-                RestorePath(pathOld);
+                wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset.c_str());
             }
-#endif // wxUSE_CONFIG
+
+            RestorePath(pathOld);
         }
-        //else: cancelled
+#endif // wxUSE_CONFIG
     }
 #endif // wxUSE_GUI
 
