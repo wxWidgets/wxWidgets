@@ -132,6 +132,7 @@ All (GUI):
 - added option to generate C++ headers to wxrc utility (Eduardo Marques)
 - added wxDC::DrawPolyPolygon() for MSW/PS (Carl-Friedrich Braun)
 - wxBufferedDC now allows to preserve the background and is documented
+- added wxDC::GetPartialTextExtents
 
 wxMSW:
 

@@ -637,6 +637,22 @@ Returns true if device context optimization is on.
 See \helpref{wxDC::SetOptimization}{wxsetoptimization} for details.
 
 
+\membersection{wxDC::GetPartialTextExtents}\label{wxdcgetpartialtextextents}
+
+\constfunc{bool}{GetPartialTextExtents}{\param{const wxString\&  }{text}, 
+\param{wxArrayInt\& }{widths}}
+
+Fills the {\it widths} array with the widths from the begining of 
+{\it text} to the coresponding character of {\it text}.  The generic
+version simply builds a running total of the widths of each character
+using \helpref{GetTextExtent}{wxdcgettextextent}, however if the
+various platforms have a native API function that is faster or more
+accurate than the generic implementaiton then it should be used
+instead. 
+
+\pythonnote{This method only takes the {\it text} parameter and
+  returns a Python list of integers.}
+
 \membersection{wxDC::GetPen}\label{wxdcgetpen}
 
 \func{wxPen\&}{GetPen}{\void}
