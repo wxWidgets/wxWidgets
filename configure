@@ -9203,6 +9203,15 @@ fi
 fi
 echo "$ac_t""$INSTALL" 1>&6
 
+#Make path Absolute if not already
+case ${INSTALL} in
+  /* ) # Absolute
+     ;;
+  *)     
+     INSTALL=`pwd`/${INSTALL} ;;
+esac
+
+
 # Use test -z because SunOS4 sh mishandles braces in ${var-val}.
 # It thinks the first close brace ends the variable substitution.
 test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'

@@ -1188,6 +1188,16 @@ AC_CHECK_PROG(AR, ar, ar, ar)
 dnl install checks
 dnl   defines INSTALL with the appropriate command
 AC_PROG_INSTALL
+
+dnl   make install path absolute (if not already); will fail with MSDOS paths
+case ${INSTALL} in
+  /* ) # Absolute
+     ;;
+  *)     
+     INSTALL=`pwd`/${INSTALL} ;;
+esac
+
+
 case "${host}" in
 
     dnl The other BSD's should probably go in here too, since this is
