@@ -218,6 +218,7 @@ ALL_BASE_HEADERS =  \
 	wx/buffer.h \
 	wx/build.h \
 	wx/chkconf.h \
+	wx/clntdata.h \
 	wx/cmdline.h \
 	wx/confbase.h \
 	wx/config.h \
@@ -329,6 +330,7 @@ ALL_HEADERS =  \
 	$(ALL_GUI_HEADERS)
 ALL_BASE_SOURCES =  \
 	src/common/appbase.cpp \
+	src/common/clntdata.cpp \
 	src/common/cmdline.cpp \
 	src/common/config.cpp \
 	src/common/datetime.cpp \
@@ -452,6 +454,7 @@ MONODLL_CXXFLAGS = $(__monodll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-DwxUSE_BASE=1 -DWXMAKINGDLL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 MONODLL_OBJECTS =  \
 	monodll_appbase.o \
+	monodll_clntdata.o \
 	monodll_cmdline.o \
 	monodll_config.o \
 	monodll_datetime.o \
@@ -535,6 +538,7 @@ MONOLIB_CXXFLAGS = $(__monolib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-DwxUSE_BASE=1 $(CPPFLAGS) $(CXXFLAGS)
 MONOLIB_OBJECTS =  \
 	monolib_appbase.o \
+	monolib_clntdata.o \
 	monolib_cmdline.o \
 	monolib_config.o \
 	monolib_datetime.o \
@@ -619,6 +623,7 @@ BASEDLL_CXXFLAGS = $(__basedll_PCH_INC) -D__WX$(TOOLKIT)__ \
 	$(CXXFLAGS)
 BASEDLL_OBJECTS =  \
 	basedll_appbase.o \
+	basedll_clntdata.o \
 	basedll_cmdline.o \
 	basedll_config.o \
 	basedll_datetime.o \
@@ -687,6 +692,7 @@ BASELIB_CXXFLAGS = $(__baselib_PCH_INC) -D__WX$(TOOLKIT)__ \
 	-DwxUSE_GUI=0 -DwxUSE_BASE=1 $(CPPFLAGS) $(CXXFLAGS)
 BASELIB_OBJECTS =  \
 	baselib_appbase.o \
+	baselib_clntdata.o \
 	baselib_cmdline.o \
 	baselib_config.o \
 	baselib_datetime.o \
@@ -1966,7 +1972,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/checklst.h \
 	wx/choicdlg.h \
 	wx/choice.h \
-	wx/clntdata.h \
 	wx/cmndata.h \
 	wx/combobox.h \
 	wx/control.h \
@@ -2332,7 +2337,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_bookctrl.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
-	monodll_clntdata.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
 	monodll_containr.o \
@@ -2479,7 +2483,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_bookctrl.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
-	monodll_clntdata.o \
 	monodll_cmdproc.o \
 	monodll_cmndata.o \
 	monodll_containr.o \
@@ -3194,7 +3197,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_bookctrl.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
-	monolib_clntdata.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
 	monolib_containr.o \
@@ -3341,7 +3343,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_bookctrl.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
-	monolib_clntdata.o \
 	monolib_cmdproc.o \
 	monolib_cmndata.o \
 	monolib_containr.o \
@@ -4228,7 +4229,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_bookctrl.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
-	coredll_clntdata.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
 	coredll_containr.o \
@@ -4375,7 +4375,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_bookctrl.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
-	coredll_clntdata.o \
 	coredll_cmdproc.o \
 	coredll_cmndata.o \
 	coredll_containr.o \
@@ -4957,7 +4956,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_bookctrl.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
-	corelib_clntdata.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
 	corelib_containr.o \
@@ -5104,7 +5102,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_bookctrl.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
-	corelib_clntdata.o \
 	corelib_cmdproc.o \
 	corelib_cmndata.o \
 	corelib_containr.o \
@@ -7845,6 +7842,9 @@ wxexpat_xmltok.o: $(srcdir)/src/expat/lib/xmltok.c
 monodll_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
+monodll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
 monodll_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -10452,9 +10452,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1@monodll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
 @COND_USE_GUI_1@monodll_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
@@ -10792,6 +10789,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monolib_appbase.o: $(srcdir)/src/common/appbase.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+monolib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 monolib_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(MONOLIB_ODEP)
@@ -13401,9 +13401,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_USE_GUI_1@monolib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 @COND_USE_GUI_1@monolib_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -13743,6 +13740,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 basedll_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
+basedll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
+
 basedll_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -14044,6 +14044,9 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
 baselib_appbase.o: $(srcdir)/src/common/appbase.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
+
+baselib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_cmdline.o: $(srcdir)/src/common/cmdline.cpp $(BASELIB_ODEP)
@@ -16617,9 +16620,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_USE_GUI_1@coredll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
-
 @COND_USE_GUI_1@coredll_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
@@ -19051,9 +19051,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_clipcmn.o: $(srcdir)/src/common/clipcmn.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
-
-@COND_USE_GUI_1@corelib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_USE_GUI_1@corelib_cmdproc.o: $(srcdir)/src/common/cmdproc.cpp $(CORELIB_ODEP)

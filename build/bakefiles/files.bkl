@@ -142,6 +142,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="BASE_CMN_SRC" hints="files">
     src/common/appbase.cpp
+    src/common/clntdata.cpp
     src/common/cmdline.cpp
     src/common/config.cpp
     src/common/datetime.cpp
@@ -209,6 +210,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/buffer.h
     wx/build.h
     wx/chkconf.h
+    wx/clntdata.h
     wx/cmdline.h
     wx/confbase.h
     wx/config.h
@@ -381,7 +383,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/bookctrl.cpp
     src/common/choiccmn.cpp
     src/common/clipcmn.cpp
-    src/common/clntdata.cpp
     src/common/cmdproc.cpp
     src/common/cmndata.cpp
     src/common/containr.cpp
@@ -477,7 +478,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/checklst.h
     wx/choicdlg.h
     wx/choice.h
-    wx/clntdata.h
     wx/cmndata.h
     wx/combobox.h
     wx/control.h
