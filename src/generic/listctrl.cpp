@@ -4299,7 +4299,7 @@ long wxListMainWindow::FindItem( const wxPoint& pt )
     GetItemPosition( GetItemCount()-1, p );
     if( p.y == 0 )
         return topItem;
-    long id = (long) floor( pt.y*(GetItemCount()-topItem-1)/p.y+topItem );
+    long id = (long) floor( pt.y*double(GetItemCount()-topItem-1)/p.y+topItem );
     if( id >= 0 && id < (long)GetItemCount() )
         return id;
 
