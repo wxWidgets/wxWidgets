@@ -66,6 +66,7 @@ public:
     // implementation only from now on
     // -------------------------------
 
+    void         AlterChildPos(void);
     // override some more virtuals
     virtual bool Show(bool bShow = TRUE);
 

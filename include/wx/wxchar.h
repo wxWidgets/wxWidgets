@@ -281,8 +281,8 @@ typedef  _TUCHAR     wxUChar;
 #      define wxUSE_WCHAR_T 0
 #    elif defined(__WATCOMC__)
 #      define wxUSE_WCHAR_T 0
-#    elif defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
-#      define wxUSE_WCHAR_T 1
+#    elif defined(__VISAGECPP__) && (__IBMCPP__ < 400)
+#      define wxUSE_WCHAR_T 0
 #    else
   // add additional compiler checks if this fails
 #      define wxUSE_WCHAR_T 1

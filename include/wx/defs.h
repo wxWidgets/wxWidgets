@@ -70,7 +70,7 @@
 // using this macro allows constuctions like "wxSTD iostream" to work in
 // either case
 #if !wxUSE_IOSTREAMH
- #define wxSTD std::
+  #define wxSTD std::
 #else
  #define wxSTD
 #endif
@@ -1951,7 +1951,7 @@ typedef struct tagLOGPALETTE
 #elif defined(__WIN32__)
     typedef int (__stdcall *WXFARPROC)();
 #elif defined(__WXPM__)
-#  if (defined(__VISAGECPP__) && (__IBMCPP__ < 400 || __IBMC__ < 400 )) || defined (__WATCOMC__)
+#  if (defined(__VISAGECPP__) && (__IBMCPP__ < 400)) || defined (__WATCOMC__)
     // VA 3.0 for some reason needs base data types when typedefing a proc proto???
     typedef void* (_System *WXFARPROC)(unsigned long, unsigned long, void*, void*);
 #  else

@@ -106,7 +106,7 @@ protected:
     wxFunction                      m_callback;     // Callback associated with the window
 #endif // WXWIN_COMPATIBILITY
 
-protected:
+public:
     //
     // For controls like radiobuttons which are really composite
     //
@@ -132,7 +132,14 @@ protected:
     //
     WXDWORD GetExStyle(WXDWORD& rStyle) const;
 
+    inline int  GetXComp(void) const {return m_nXComp;}
+    inline int  GetYComp(void) const {return m_nYComp;}
+    inline void SetXComp(const int nXComp) {m_nXComp = nXComp;}
+    inline void SetYComp(const int nYComp) {m_nYComp = nYComp;}
+
 private:
+    int                             m_nXComp;
+    int                             m_nYComp;
    DECLARE_EVENT_TABLE()
 }; // end of wxControl
 

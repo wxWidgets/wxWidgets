@@ -20,48 +20,74 @@ WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 class WXDLLEXPORT wxButton: public wxButtonBase
 {
  public:
-  inline wxButton() {}
-  inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
+    inline wxButton() {}
+    inline wxButton( wxWindow*          pParent
+                    ,wxWindowID         vId
+                    ,const wxString&    rsLabel
+                    ,const wxPoint&     rPos = wxDefaultPosition
+                    ,const wxSize&      rSize = wxDefaultSize
+                    ,long               lStyle = 0
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+                    ,const wxValidator& rValidator = wxDefaultValidator
 #endif
-           const wxString& name = wxButtonNameStr)
-  {
-      Create(parent, id, label, pos, size, style, validator, name);
-  }
-
-  bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
+                    ,const wxString&    rsName = wxButtonNameStr
+                   )
+    {
+        Create( pParent
+               ,vId
+               ,rsLabel
+               ,rPos
+               ,rSize
+               ,lStyle
 #if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
+               ,rValidator
 #endif
-           const wxString& name = wxButtonNameStr);
+               ,rsName
+              );
+    }
 
-  virtual ~wxButton();
+    bool Create( wxWindow*          pParent
+                ,wxWindowID         vId
+                ,const wxString&    rsLabel
+                ,const wxPoint&     rPos = wxDefaultPosition
+                ,const wxSize&      rSize = wxDefaultSize
+                ,long               lStyle = 0
+#if wxUSE_VALIDATORS
+                ,const wxValidator& rValidator = wxDefaultValidator
+#endif
+                ,const wxString&    rsName = wxButtonNameStr
+               );
 
-  virtual void SetDefault();
+    virtual ~wxButton();
 
-  static wxSize GetDefaultSize();
+    virtual void     SetDefault(void);
+    static wxSize    GetDefaultSize(void);
+    virtual void     Command(wxCommandEvent& rEvent);
+    virtual bool     OS2Command( WXUINT uParam
+                                ,WXWORD vId
+                               );
+    virtual WXHBRUSH OnCtlColor( WXHDC    hDC
+                                ,WXHWND   hWnd
+                                ,WXUINT   uCtlColor
+                                ,WXUINT   uMessage
+                                ,WXWPARAM wParam
+                                ,WXLPARAM lParam
+                               );
+    void          MakeOwnerDrawn(void);
 
-  virtual void Command(wxCommandEvent& event);
-  virtual bool OS2Command(WXUINT param, WXWORD id);
-  virtual WXHBRUSH OnCtlColor(WXHDC pDC,
-                              WXHWND pWnd,
-                              WXUINT nCtlColor,
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam);
+    virtual MRESULT WindowProc( WXUINT   uMsg
+                               ,WXWPARAM wParam
+                               ,WXLPARAM lParam
+                              );
+
 protected:
-    // send a notification event, return TRUE if processed
-    bool SendClickEvent();
 
-    virtual wxSize DoGetBestSize() const;
+    bool           SendClickEvent(void);
+    virtual wxSize DoGetBestSize(void) const;
 private:
   DECLARE_DYNAMIC_CLASS(wxButton)
-};
+}; // end of CLASS wxButton
 
 #endif
     // _WX_BUTTON_H_
+

@@ -368,11 +368,7 @@ public:
     bool HandleSysCommand( WXWPARAM wParam
                           ,WXLPARAM lParam
                          );
-    bool HandleWindowParams( PWNDPARAMS pParams
-                            ,WXLPARAM   lParam
-                           );
     bool HandlePaletteChanged();
-    bool HandlePresParamChanged(WXWPARAM wParam);
     bool HandleSysColorChange(void);
     bool HandleCtlColor(WXHBRUSH* hBrush);
     bool HandleSetFocus(WXHWND hWnd);
@@ -387,14 +383,14 @@ public:
                          ,int    nY
                          ,WXUINT uFlags
                         );
-    bool HandleChar( WXWORD   wParam
+    bool HandleChar( WXDWORD  wParam
                     ,WXLPARAM lParam
                     ,bool     bIsASCII = FALSE
                    );
     bool HandleKeyDown( WXWORD   wParam
                        ,WXLPARAM lParam
                       );
-    bool HandleKeyUp( WXWORD   wParam
+    bool HandleKeyUp( WXDWORD  wParam
                      ,WXLPARAM lParam
                     );
     bool HandleQueryDragIcon(WXHICON* phIcon);
