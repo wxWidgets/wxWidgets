@@ -337,6 +337,7 @@ void wxTextCtrl::SetValue( const wxString &value )
     {
         gtk_entry_set_text( GTK_ENTRY(m_text), tmp.mbc_str() );
     }
+    m_modified = FALSE;
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
