@@ -65,6 +65,8 @@ public:
 
 #ifndef __WXMAC__
     bool IsOk() const;
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
+    
     bool IsIconInstalled() const;
 
     bool SetIcon(const wxIcon& icon, const wxString& tooltip = wxPyEmptyString);
