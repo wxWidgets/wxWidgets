@@ -53,16 +53,11 @@ public:
             long style = wxDEFAULT_FRAME_STYLE | wxTINY_CAPTION_HORIZ,
             const wxString& name = wxFrameNameStr);
 
-    // implementation
+ // implementation
+ 
     bool   m_isDragging;
     int    m_oldX,m_oldY;
     int    m_diffX,m_diffY;
-
-    void DrawFrame( int x, int y );
-    void OnPaint( wxPaintEvent &event );
-    void OnMouse( wxMouseEvent &event );
-
-    DECLARE_EVENT_TABLE()
 };
 
 #endif

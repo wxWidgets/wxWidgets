@@ -505,11 +505,20 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 	    client_area_y_offset += hh;
         }
     
-        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_wxwindow, 0, client_area_y_offset );
+        int client_x = m_miniEdge;
+	int client_y = client_area_y_offset + m_miniEdge + m_miniTitle;
+        gtk_myfixed_move( GTK_MYFIXED(m_mainWidget), m_wxwindow, client_x, client_y );
+
+        int client_w = m_width - 2*m_miniEdge;
+	int client_h = m_height - client_area_y_offset- 2*m_miniEdge - m_miniTitle;
+        gtk_widget_set_usize( m_wxwindow, client_w, client_h );
+    }
+    else
+    {
+        /* if there is no m_mainWidget between m_widget and m_wxwindow there
+	   is no need to set the size or position of m_wxwindow. */
     }
     
-    gtk_widget_set_usize( m_wxwindow, m_width, m_height-client_area_y_offset );
-
     if (m_frameStatusBar)
     {
         int xx = 0 + m_miniEdge;
