@@ -166,9 +166,10 @@ public:
         // get a temp file name starting with thespecified prefix
     void AssignTempFileName( const wxString &prefix );
 
-    // directory creation and removal
-    bool Mkdir( int perm = 0777 );
-    static bool Mkdir( const wxString &dir, int perm = 0777 );
+    // directory creation and removal.
+    // if full is TRUE, will try to make each directory in the path.
+    bool Mkdir( int perm = 0777, bool full = FALSE);
+    static bool Mkdir( const wxString &dir, int perm = 0777, bool full = FALSE );
 
     bool Rmdir();
     static bool Rmdir( const wxString &dir );

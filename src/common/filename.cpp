@@ -204,14 +204,46 @@ void wxFileName::AssignTempFileName( const wxString &prefix )
 // directory operations
 // ----------------------------------------------------------------------------
 
-bool wxFileName::Mkdir( int perm )
+bool wxFileName::Mkdir( int perm, bool full )
 {
-    return wxFileName::Mkdir( GetFullPath(), perm );
+    return wxFileName::Mkdir( GetFullPath(), perm, full );
 }
 
-bool wxFileName::Mkdir( const wxString &dir, int perm )
+bool wxFileName::Mkdir( const wxString &dir, int perm, bool full )
 {
-    return ::wxMkdir( dir, perm );
+    if (full)
+    {
+        wxFileName filename(dir);
+        wxArrayString dirs = filename.GetDirs();
+
+        size_t count = dirs.GetCount();
+        size_t i;
+        wxString currPath;
+        int noErrors = 0;
+        for ( i = 0; i < count; i++ )
+        {
+            currPath += dirs[i];
+
+            if (currPath.Last() == wxT(':'))
+            {
+                // Can't create a root directory so continue to next dir
+                currPath += wxFILE_SEP_PATH;
+                continue;
+            }
+
+            if (!DirExists(currPath))
+                if (!wxMkdir(currPath, perm))
+                    noErrors ++;
+
+            if ( (i < (count-1)) )
+                currPath += wxFILE_SEP_PATH;
+        }
+
+        return (noErrors == 0);
+
+    }
+    else
+        return ::wxMkdir( dir, perm );
 }
 
 bool wxFileName::Rmdir()
