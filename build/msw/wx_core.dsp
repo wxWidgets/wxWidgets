@@ -1954,6 +1954,7 @@ SOURCE=..\..\src\msw\gdiobj.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\gsockmsw.cpp
+# SUBTRACT CPP /YX /Yc /Yu
 # End Source File
 # Begin Source File
 
