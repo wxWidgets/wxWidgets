@@ -5497,9 +5497,6 @@ if test "$wxUSE_GUI" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs \
                      drawing dynamic erase event exec font image \
                      minimal propsize rotate shaped widgets"
-
-    dnl this is needed to be able to find AFM files
-    CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
     SAMPLES_SUBDIRS="console"
 fi

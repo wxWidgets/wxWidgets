@@ -22576,8 +22576,6 @@ if test "$wxUSE_GUI" = "yes"; then
             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs \
                      drawing dynamic erase event exec font image \
                      minimal propsize rotate shaped widgets"
-
-        CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
     SAMPLES_SUBDIRS="console"
 fi
@@ -22628,7 +22626,7 @@ TOOLKIT_LOWERCASE=`echo $TOOLKIT | tr [A-Z] [a-z]`
     # Extract the first word of "ranlib", so it can be a program name with args.
 set dummy ranlib; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:22632: checking for $ac_word" >&5
+echo "configure:22630: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_RANLIB'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -22667,7 +22665,7 @@ fi
 # SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
 # ./install, which can be erroneously created by make from ./install.sh.
 echo $ac_n "checking for a BSD compatible install""... $ac_c" 1>&6
-echo "configure:22671: checking for a BSD compatible install" >&5
+echo "configure:22669: checking for a BSD compatible install" >&5
 if test -z "$INSTALL"; then
 if eval "test \"`echo '$''{'ac_cv_path_install'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -22720,7 +22718,7 @@ test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL_PROGRAM}'
 test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
     echo $ac_n "checking whether ln -s works""... $ac_c" 1>&6
-echo "configure:22724: checking whether ln -s works" >&5
+echo "configure:22722: checking whether ln -s works" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_LN_S'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -22742,7 +22740,7 @@ fi
 
 
     echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:22746: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:22744: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -22777,7 +22775,7 @@ fi
         # Extract the first word of "ar", so it can be a program name with args.
 set dummy ar; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:22781: checking for $ac_word" >&5
+echo "configure:22779: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AR'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -22807,7 +22805,7 @@ fi
         # Extract the first word of "strip", so it can be a program name with args.
 set dummy strip; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:22811: checking for $ac_word" >&5
+echo "configure:22809: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_STRIP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -22848,7 +22846,7 @@ fi
     fi
     
         echo $ac_n "checking if make is GNU make""... $ac_c" 1>&6
-echo "configure:22852: checking if make is GNU make" >&5
+echo "configure:22850: checking if make is GNU make" >&5
 if eval "test \"`echo '$''{'wx_cv_prog_makeisgnu'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -22955,13 +22953,13 @@ echo "$ac_t""$wx_cv_prog_makeisgnu" 1>&6
       *-*-linux* )
         if test "x$GCC" != "xyes"; then
             echo $ac_n "checking for Intel compiler""... $ac_c" 1>&6
-echo "configure:22959: checking for Intel compiler" >&5
+echo "configure:22957: checking for Intel compiler" >&5
 if eval "test \"`echo '$''{'bakefile_cv_prog_icc'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
   
                 cat > conftest.$ac_ext <<EOF
-#line 22965 "configure"
+#line 22963 "configure"
 #include "confdefs.h"
 
 int main() {
@@ -22972,7 +22970,7 @@ int main() {
                     
 ; return 0; }
 EOF
-if { (eval echo configure:22976: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
+if { (eval echo configure:22974: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   bakefile_cv_prog_icc=yes
 else
@@ -23104,7 +23102,7 @@ EOF
                                     # Extract the first word of "makeC++SharedLib", so it can be a program name with args.
 set dummy makeC++SharedLib; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:23108: checking for $ac_word" >&5
+echo "configure:23106: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_AIX_CXX_LD'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -23223,7 +23221,7 @@ fi
                 # Extract the first word of "windres", so it can be a program name with args.
 set dummy windres; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:23227: checking for $ac_word" >&5
+echo "configure:23225: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_RESCOMP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -23257,7 +23255,7 @@ fi
             # Extract the first word of "Rez", so it can be a program name with args.
 set dummy Rez; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:23261: checking for $ac_word" >&5
+echo "configure:23259: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_RESCOMP'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -23287,7 +23285,7 @@ fi
             # Extract the first word of "SetFile", so it can be a program name with args.
 set dummy SetFile; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6
-echo "configure:23291: checking for $ac_word" >&5
+echo "configure:23289: checking for $ac_word" >&5
 if eval "test \"`echo '$''{'ac_cv_prog_SETFILE'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
 else
@@ -23622,7 +23620,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:23626: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:23624: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
