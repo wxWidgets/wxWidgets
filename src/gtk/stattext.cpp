@@ -67,7 +67,8 @@ bool wxStaticText::Create(wxWindow *parent,
     else // wxALIGN_LEFT is 0
       justify = GTK_JUSTIFY_LEFT;
     gtk_label_set_justify(GTK_LABEL(m_widget), justify);
-
+    gtk_misc_set_alignment(GTK_MISC(m_widget), 0.0, 0.0);
+    
     GtkRequisition req;
     (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
 
