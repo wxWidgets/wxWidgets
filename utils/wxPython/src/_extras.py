@@ -462,6 +462,20 @@ def EVT_GRID_LABEL_RCLICK(win, fn):
     win.Connect(-1, -1, wxEVT_GRID_LABEL_RCLICK, fn)
 
 
+# wxSashWindow
+def EVT_SASH_DRAGGED(win, id, func):
+    win.Connect(id, -1, wxEVT_SASH_DRAGGED, func)
+
+def EVT_SASH_DRAGGED_RANGE(win, id1, id2, func):
+    win.Connect(id1, id2, wxEVT_SASH_DRAGGED, func)
+
+def EVT_QUERY_LAYOUT_INFO(win, func):
+    win.Connect(-1, -1, wxEVT_EVT_QUERY_LAYOUT_INFO, func)
+
+def EVT_CALCULATE_LAYOUT(win, func):
+    win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
+
+
 
 
 #----------------------------------------------------------------------
@@ -490,9 +504,11 @@ wxNamedColor = wxNamedColour
 
 wxPyDefaultPosition.Set(-1,-1)
 wxPyDefaultSize.Set(-1,-1)
+
 # aliases so that C++ documentation applies:
 wxDefaultPosition = wxPyDefaultPosition
-wxDefaultSize = wxPyDefaultSize
+wxDefaultSize     = wxPyDefaultSize
+
 #----------------------------------------------------------------------
 
 ## class wxPyStdOutWindow(wxFrame):
@@ -560,6 +576,12 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.9  1999/01/30 07:30:09  RD
+# Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+#
+# Various cleanup, tweaks, minor additions, etc. to maintain
+# compatibility with the current wxWindows.
+#
 # Revision 1.8  1999/01/29 21:13:42  HH
 # Added aliases for wxDefaultPosition and wxDefaultSize (from wxPy..) in _extras,
 # so that C++ documentation applies.

@@ -114,7 +114,7 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
 
-    void AddSeparator(void);
+    void AddSeparator();
 
     // Ignoge the clientData for now...
     %addmethods {
@@ -131,7 +131,17 @@ public:
                                  isToggle, xPos, yPos, NULL,
                                  shortHelpString, longHelpString);
         }
+
+        wxToolBarTool* AddSimpleTool(int toolIndex,
+                               const wxBitmap& bitmap,
+                               const wxString& shortHelpString = wxPyEmptyStr,
+                               const wxString& longHelpString = wxPyEmptyStr) {
+            return self->AddTool(toolIndex, bitmap, wxNullBitmap,
+                                 FALSE, -1, -1, NULL,
+                                 shortHelpString, longHelpString);
+        }
     }
+
 
 //    void DrawTool(wxMemoryDC& memDC, wxToolBarTool* tool);
     void EnableTool(int toolIndex, const bool enable);
@@ -157,7 +167,7 @@ public:
     //void OnRightClick(int toolIndex, float x, float y);
 
     bool Realize();
-    
+
     void SetToolLongHelp(int toolIndex, const wxString& helpString);
     void SetToolShortHelp(int toolIndex, const wxString& helpString);
     void SetMargins(const wxSize& size);
@@ -201,7 +211,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.5  1999/01/30 07:30:15  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.4  1998/12/17 14:07:43  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.3  1998/12/15 20:41:23  RD

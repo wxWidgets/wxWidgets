@@ -115,7 +115,7 @@ enum {
     wxMINOR_VERSION,
     wxRELEASE_NUMBER,
 
-    NOT_FOUND,
+    wxNOT_FOUND,
 
     wxVSCROLL,
     wxHSCROLL,
@@ -154,6 +154,7 @@ enum {
     wxDEFAULT_DIALOG_STYLE,
 
     wxFRAME_TOOL_WINDOW,
+    wxCLIP_CHILDREN,
 
     wxRETAINED,
     wxBACKINGSTORE,
@@ -264,12 +265,14 @@ enum {
     wxSIZE_AUTO,
     wxSIZE_USE_EXISTING,
     wxSIZE_ALLOW_MINUS_ONE,
+#ifndef __WXGTK__
     wxDF_TEXT,
     wxDF_BITMAP,
     wxDF_METAFILE,
     wxDF_DIB,
     wxDF_OEMTEXT,
     wxDF_FILENAME,
+#endif
     wxPORTRAIT,
     wxLANDSCAPE,
     wxID_OPEN,
@@ -693,6 +696,7 @@ enum wxEventType {
  wxEVT_COMMAND_TAB_SEL_CHANGING,
  wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
  wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+
 };
 
 
@@ -701,6 +705,12 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1999/01/30 07:30:08  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.9  1998/12/15 20:41:13  RD
 // Changed the import semantics from "from wxPython import *" to "from
 // wxPython.wx import *"  This is for people who are worried about

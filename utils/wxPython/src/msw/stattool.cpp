@@ -1033,6 +1033,70 @@ static PyObject *_wrap_wxToolBar_AddTool(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static wxToolBarTool * wxToolBar_AddSimpleTool(wxToolBar *self,int  toolIndex,const wxBitmap & bitmap,const wxString & shortHelpString,const wxString & longHelpString) {
+            return self->AddTool(toolIndex, bitmap, wxNullBitmap,
+                                 FALSE, -1, -1, NULL,
+                                 shortHelpString, longHelpString);
+        }
+static PyObject *_wrap_wxToolBar_AddSimpleTool(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxToolBarTool * _result;
+    wxToolBar * _arg0;
+    int  _arg1;
+    wxBitmap * _arg2;
+    wxString * _arg3 = &wxPyEmptyStr;
+    wxString * _arg4 = &wxPyEmptyStr;
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    PyObject * _obj3 = 0;
+    PyObject * _obj4 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sis|OO:wxToolBar_AddSimpleTool",&_argc0,&_arg1,&_argc2,&_obj3,&_obj4)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolBar_AddSimpleTool. Expected _wxToolBar_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxToolBar_AddSimpleTool. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_obj3)
+{
+    if (!PyString_Check(_obj3)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg3 = new wxString(PyString_AsString(_obj3));
+}
+    if (_obj4)
+{
+    if (!PyString_Check(_obj4)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg4 = new wxString(PyString_AsString(_obj4));
+}
+    _result = (wxToolBarTool *)wxToolBar_AddSimpleTool(_arg0,_arg1,*_arg2,*_arg3,*_arg4);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolBarTool_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj3)
+        delete _arg3;
+}
+{
+    if (_obj4)
+        delete _arg4;
+}
+    return _resultobj;
+}
+
 #define wxToolBar_EnableTool(_swigobj,_swigarg0,_swigarg1)  (_swigobj->EnableTool(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxToolBar_EnableTool(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1530,6 +1594,7 @@ static PyMethodDef stattoolcMethods[] = {
 	 { "wxToolBar_GetToolSize", _wrap_wxToolBar_GetToolSize, 1 },
 	 { "wxToolBar_FindToolForPosition", _wrap_wxToolBar_FindToolForPosition, 1 },
 	 { "wxToolBar_EnableTool", _wrap_wxToolBar_EnableTool, 1 },
+	 { "wxToolBar_AddSimpleTool", _wrap_wxToolBar_AddSimpleTool, 1 },
 	 { "wxToolBar_AddTool", _wrap_wxToolBar_AddTool, 1 },
 	 { "wxToolBar_AddSeparator", _wrap_wxToolBar_AddSeparator, 1 },
 	 { "new_wxToolBar", _wrap_new_wxToolBar, 1 },

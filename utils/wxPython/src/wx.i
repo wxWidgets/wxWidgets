@@ -36,6 +36,7 @@
 %import cmndlgs.i
 %import stattool.i
 %import frames.i
+%import windows3.i
 #ifndef SEPARATE
 %import utils.i
 #endif
@@ -46,7 +47,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.5.2"
+#define __version__ "0.5.3"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -114,6 +115,8 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
 extern "C" SWIGEXPORT(void,initutilsc)();
+extern "C" SWIGEXPORT(void,initwindows3c)();
+
 
 %}
 
@@ -137,6 +140,7 @@ extern "C" SWIGEXPORT(void,initutilsc)();
     initcmndlgsc();
     initstattoolc();
     initframesc();
+    initwindows3c();
 #ifndef SEPARATE
     initutilsc();
 #endif
@@ -152,7 +156,14 @@ extern "C" SWIGEXPORT(void,initutilsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.4  1999/01/30 07:30:16  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.3  1998/12/17 17:52:21  RD
+//
 // wxPython 0.5.2
 // Minor fixes and SWIG code generation for RR's changes.  MSW and GTK
 // versions are much closer now!

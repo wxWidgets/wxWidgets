@@ -22,7 +22,7 @@ class TestSimpleControlsDlg(wxDialog):
     def __init__(self, parent, log):
         self.log = log
         wxDialog.__init__(self, parent, -1, "Test Simple Controls",
-                          wxPyDefaultPosition, wxSize(350, 350))
+                          wxDefaultPosition, wxSize(350, 350))
 
 
         sampleList = ['zero', 'one', 'two', 'three', 'four', 'five',
@@ -40,14 +40,14 @@ class TestSimpleControlsDlg(wxDialog):
         EVT_CHECKBOX(self, 20, self.EvtCheckBox)
         y_pos = y_pos + delta
 
-        rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(80, y_pos), wxPyDefaultSize,
+        rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(80, y_pos), wxDefaultSize,
                         sampleList, 3, wxRA_HORIZONTAL| wxNO_BORDER)
         EVT_RADIOBOX(self, 30, self.EvtRadioBox)
         width, height = rb.GetSizeTuple()
         y_pos = y_pos + height + 5
 
         wxStaticText(self, -1, "wxChoice", wxPoint(5, y_pos), wxSize(75, 20))
-        wxChoice(self, 40, wxPoint(80, y_pos), wxSize(95, 20), #wxPyDefaultSize,
+        wxChoice(self, 40, wxPoint(80, y_pos), wxSize(95, 20), #wxDefaultSize,
                  sampleList)
         EVT_CHOICE(self, 40, self.EvtChoice)
         y_pos = y_pos + delta
@@ -59,7 +59,7 @@ class TestSimpleControlsDlg(wxDialog):
         y_pos = y_pos + delta
 
         wxStaticText(self, -1, "wxListBox", wxPoint(5, y_pos), wxSize(75, 18))
-        lb = wxListBox(self, 60, wxPoint(80, y_pos), wxPyDefaultSize,
+        lb = wxListBox(self, 60, wxPoint(80, y_pos), wxDefaultSize,
                        sampleList, wxLB_SINGLE)
         EVT_LISTBOX(self, 60, self.EvtListBox)
         EVT_LISTBOX_DCLICK(self, 60, self.EvtListBoxDClick)
@@ -70,7 +70,7 @@ class TestSimpleControlsDlg(wxDialog):
 
 
         y_pos = y_pos + 15
-        wxButton(self, wxID_OK, ' OK ', wxPoint(80, y_pos), wxPyDefaultSize).SetDefault()
+        wxButton(self, wxID_OK, ' OK ', wxPoint(80, y_pos), wxDefaultSize).SetDefault()
         wxButton(self, wxID_CANCEL, ' Cancel ', wxPoint(140, y_pos))
 
 
@@ -114,12 +114,12 @@ class TestTimer(wxTimer):
 class TestLayoutConstraints(wxFrame):
     def __init__(self, parent):
         wxFrame.__init__(self, parent, -1, 'Test Layout Constraints',
-                         wxPyDefaultPosition, wxSize(500, 300))
+                         wxDefaultPosition, wxSize(500, 300))
 
         self.SetAutoLayout(true)
         EVT_BUTTON(self, 100, self.OnButton)
 
-        self.panelA = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize,
+        self.panelA = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
                                wxSIMPLE_BORDER)
         self.panelA.SetBackgroundColour(wxBLUE)
         lc = wxLayoutConstraints()
@@ -129,7 +129,7 @@ class TestLayoutConstraints(wxFrame):
         lc.right.PercentOf(self, wxRight, 50)
         self.panelA.SetConstraints(lc)
 
-        self.panelB = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize,
+        self.panelB = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
                                wxSIMPLE_BORDER)
         self.panelB.SetBackgroundColour(wxRED)
         lc = wxLayoutConstraints()
@@ -139,7 +139,7 @@ class TestLayoutConstraints(wxFrame):
         lc.left.RightOf(self.panelA, 10)
         self.panelB.SetConstraints(lc)
 
-        self.panelC = wxWindow(self, -1, wxPyDefaultPosition, wxPyDefaultSize,
+        self.panelC = wxWindow(self, -1, wxDefaultPosition, wxDefaultSize,
                                wxSIMPLE_BORDER)
         self.panelC.SetBackgroundColour(wxWHITE)
         lc = wxLayoutConstraints()
@@ -165,7 +165,7 @@ class TestLayoutConstraints(wxFrame):
         lc.width.AsIs       ()
         b.SetConstraints(lc);
 
-        self.panelD = wxWindow(self.panelC, -1, wxPyDefaultPosition, wxPyDefaultSize,
+        self.panelD = wxWindow(self.panelC, -1, wxDefaultPosition, wxDefaultSize,
                             wxSIMPLE_BORDER)
         self.panelD.SetBackgroundColour(wxGREEN)
         wxStaticText(self.panelD, -1, "Panel D", wxPoint(4, 4)).SetBackgroundColour(wxGREEN)
@@ -199,7 +199,7 @@ class TestLayoutConstraints(wxFrame):
 class TestGrid(wxFrame):
     def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, 'Test Grid',
-                         wxPyDefaultPosition, wxSize(500, 300))
+                         wxDefaultPosition, wxSize(500, 300))
         self.log = log
 
         grid = wxGrid(self, -1)
@@ -244,14 +244,14 @@ class TestGrid(wxFrame):
 class ColoredPanel(wxWindow):
     def __init__(self, parent, color):
         wxWindow.__init__(self, parent, -1,
-                          wxPyDefaultPosition, wxPyDefaultSize, wxRAISED_BORDER)
+                          wxDefaultPosition, wxDefaultSize, wxRAISED_BORDER)
         self.SetBackgroundColour(color)
 
 
 class TestNotebookWindow(wxFrame):
     def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, 'Test wxNotebook',
-                         wxPyDefaultPosition, wxPyDefaultSize)
+                         wxDefaultPosition, wxDefaultSize)
 
         nb = wxNotebook(self, -1)
 
@@ -305,7 +305,7 @@ class TestNotebookWindow(wxFrame):
 class TestSplitterWindow(wxFrame):
     def __init__(self, parent):
         wxFrame.__init__(self, parent, -1, 'Test wxSplitterWindow',
-                         wxPyDefaultPosition, wxSize(500, 300))
+                         wxDefaultPosition, wxSize(500, 300))
 
         splitter = wxSplitterWindow(self, -1)
 
@@ -374,7 +374,7 @@ class CustomStatusBar(wxStatusBar):
 class TestCustomStatusBar(wxFrame):
     def __init__(self, parent):
         wxFrame.__init__(self, parent, -1, 'Test Custom StatusBar',
-                         wxPyDefaultPosition, wxSize(500, 300))
+                         wxDefaultPosition, wxSize(500, 300))
         wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
         self.sb = CustomStatusBar(self)
@@ -390,18 +390,20 @@ class TestCustomStatusBar(wxFrame):
 class TestToolBar(wxFrame):
     def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, 'Test ToolBar',
-                         wxPyDefaultPosition, wxSize(500, 300))
+                         wxDefaultPosition, wxSize(500, 300))
         self.log = log
 
         wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
 
         tb = self.CreateToolBar(wxTB_HORIZONTAL|wxNO_BORDER)
-        #tb = wxToolBar(self, -1, wxPyDefaultPosition, wxPyDefaultSize,
+        #tb = wxToolBar(self, -1, wxDefaultPosition, wxDefaultSize,
         #               wxTB_HORIZONTAL | wxNO_BORDER | wxTB_FLAT)
         #self.SetToolBar(tb)
 
+        self.CreateStatusBar()
+
         tb.AddTool(10, wxNoRefBitmap('bitmaps/new.bmp',   wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, false, -1, -1, "New")
+                        wxNullBitmap, false, -1, -1, "New", "Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
@@ -492,10 +494,139 @@ class TestTreeCtrlPanel(wxPanel):
 class TestTreeCtrl(wxFrame):
     def __init__(self, parent, log):
         wxFrame.__init__(self, parent, -1, 'Test TreeCtrl',
-                         wxPyDefaultPosition, wxSize(250, 300))
+                         wxDefaultPosition, wxSize(250, 300))
 
         p = TestTreeCtrlPanel(self, log)
 
+
+#---------------------------------------------------------------------------
+
+class TestSashWindow(wxMDIParentFrame):
+    NEW_WINDOW       = 5000
+    TOGGLE_WINDOW    = 5001
+    QUIT             = 5002
+    ID_WINDOW_TOP    = 5100
+    ID_WINDOW_LEFT1  = 5101
+    ID_WINDOW_LEFT2  = 5102
+    ID_WINDOW_BOTTOM = 5103
+
+
+    def __init__(self, parent, log):
+        wxMDIParentFrame.__init__(self, parent, -1, 'Test Sash Window',
+                                  wxDefaultPosition, wxSize(250, 300))
+
+        self.log = log
+        menu = wxMenu()
+        menu.Append(self.NEW_WINDOW, "&New Window")
+        menu.Append(self.TOGGLE_WINDOW, "&Toggle window")
+        menu.Append(self.QUIT, "E&xit")
+
+        menubar = wxMenuBar()
+        menubar.Append(menu, "&File")
+
+        self.SetMenuBar(menubar)
+        self.CreateStatusBar()
+
+        EVT_MENU(self, self.NEW_WINDOW,    self.OnNewWindow)
+        EVT_MENU(self, self.TOGGLE_WINDOW, self.OnToggleWindow)
+        EVT_MENU(self, self.QUIT,          self.OnQuit)
+
+        EVT_SASH_DRAGGED_RANGE(self, self.ID_WINDOW_TOP,
+                               self.ID_WINDOW_BOTTOM, self.OnSashDrag)
+
+
+        # Create some layout windows
+        # A window like a toolbar
+        win = wxSashLayoutWindow(self, self.ID_WINDOW_TOP, wxDefaultPosition,
+                                 wxSize(200, 30), wxNO_BORDER|wxSW_3D)
+        win.SetDefaultSize(wxSize(1000, 30))
+        win.SetOrientation(wxLAYOUT_HORIZONTAL)
+        win.SetAlignment(wxLAYOUT_TOP)
+        win.SetBackgroundColour(wxColour(255, 0, 0))
+        win.SetSashVisible(wxSASH_BOTTOM, true)
+
+        self.topWindow = win
+
+
+        # A window like a statusbar
+        win = wxSashLayoutWindow(self, self.ID_WINDOW_BOTTOM,
+                                 wxDefaultPosition, wxSize(200, 30),
+                                 wxNO_BORDER|wxSW_3D)
+        win.SetDefaultSize(wxSize(1000, 30))
+        win.SetOrientation(wxLAYOUT_HORIZONTAL)
+        win.SetAlignment(wxLAYOUT_BOTTOM)
+        win.SetBackgroundColour(wxColour(0, 0, 255))
+        win.SetSashVisible(wxSASH_TOP, true)
+
+        self.bottomWindow = win
+
+
+        # A window to the left of the client window
+        win =  wxSashLayoutWindow(self, self.ID_WINDOW_LEFT1,
+                                  wxDefaultPosition, wxSize(200, 30),
+                                  wxNO_BORDER|wxSW_3D)
+        win.SetDefaultSize(wxSize(120, 1000))
+        win.SetOrientation(wxLAYOUT_VERTICAL)
+        win.SetAlignment(wxLAYOUT_LEFT)
+        win.SetBackgroundColour(wxColour(0, 255, 0))
+        win.SetSashVisible(wxSASH_RIGHT, TRUE)
+        win.SetExtraBorderSize(10)
+
+        textWindow = wxTextCtrl(win, -1, "", wxDefaultPosition, wxDefaultSize,
+                                wxTE_MULTILINE|wxSUNKEN_BORDER)
+        textWindow.SetValue("A help window")
+
+        self.leftWindow1 = win
+
+
+        # Another window to the left of the client window
+        win = wxSashLayoutWindow(self, self.ID_WINDOW_LEFT2,
+                                 wxDefaultPosition, wxSize(200, 30),
+                                 wxNO_BORDER|wxSW_3D)
+        win.SetDefaultSize(wxSize(120, 1000))
+        win.SetOrientation(wxLAYOUT_VERTICAL)
+        win.SetAlignment(wxLAYOUT_LEFT)
+        win.SetBackgroundColour(wxColour(0, 255, 255))
+        win.SetSashVisible(wxSASH_RIGHT, TRUE)
+
+        self.leftWindow2 = win
+
+
+    def OnNewWindow(self, event):
+        pass
+
+    def OnToggleWindow(self, event):
+        pass
+
+    def OnQuit(self, event):
+        self.Close(true)
+
+    def OnSashDrag(self, event):
+        if event.GetDragStatus() == wxSASH_STATUS_OUT_OF_RANGE:
+            return
+
+        eID = event.GetId()
+        if eID == self.ID_WINDOW_TOP:
+            self.topWindow.SetDefaultSize(wxSize(1000, event.GetDragRect().height))
+
+        elif eID == self.ID_WINDOW_LEFT1:
+            self.leftWindow1.SetDefaultSize(wxSize(event.GetDragRect().width, 1000))
+
+
+        elif eID == self.ID_WINDOW_LEFT2:
+            self.leftWindow2.SetDefaultSize(wxSize(event.GetDragRect().width, 1000))
+
+        elif eID == self.ID_WINDOW_BOTTOM:
+            self.bottomWindow.SetDefaultSize(wxSize(1000, event.GetDragRect().height))
+
+        wxLayoutAlgorithm().LayoutMDIFrame(self)
+
+        # Leaves bits of itself behind sometimes
+        self.GetClientWindow().Refresh()
+
+
+    def OnSize(self, event):
+        wxLayoutAlgorithm().LayoutMDIFrame(self)
 
 #---------------------------------------------------------------------------
 #---------------------------------------------------------------------------
@@ -503,7 +634,7 @@ class TestTreeCtrl(wxFrame):
 
 class AppFrame(wxFrame):
     def __init__(self, parent, id, title):
-        wxFrame.__init__(self, parent, id, title, wxPyDefaultPosition,
+        wxFrame.__init__(self, parent, id, title, wxDefaultPosition,
                          wxSize(420, 200))
         if wxPlatform == '__WXMSW__':
             self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
@@ -519,7 +650,7 @@ class AppFrame(wxFrame):
         self.mainmenu.Append(menu, '&Tests')
         self.SetMenuBar(self.mainmenu)
 
-        self.log = wxTextCtrl(self, -1, '', wxPyDefaultPosition, wxPyDefaultSize,
+        self.log = wxTextCtrl(self, -1, '', wxDefaultPosition, wxDefaultSize,
                               wxTE_MULTILINE|wxTE_READONLY)
         self.log.WriteText('Test 4:\n')
         (w, self.charHeight) = self.log.GetTextExtent('X')
@@ -608,6 +739,10 @@ class AppFrame(wxFrame):
         mID = NewId()
         menu.Append(mID, 'T&ree Control')
         EVT_MENU(self, mID, self.OnTestTreeCtrl)
+
+        mID = NewId()
+        menu.Append(mID, 'S&ash Window and Layout Algorithm')
+        EVT_MENU(self, mID, self.OnTestSashWindow)
 
         return menu
 
@@ -755,6 +890,9 @@ class AppFrame(wxFrame):
         win = TestTreeCtrl(self, self)
         win.Show(true)
 
+    def OnTestSashWindow(self, event):
+        win = TestSashWindow(self, self)
+        win.Show(true)
 
 #---------------------------------------------------------------------------
 
@@ -804,6 +942,12 @@ if __name__ == '__main__':
 #----------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.12  1999/01/30 07:31:33  RD
+# Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+#
+# Various cleanup, tweaks, minor additions, etc. to maintain
+# compatibility with the current wxWindows.
+#
 # Revision 1.11  1999/01/29 16:17:59  HH
 # In test4's toolbar sample, changed NULL to wxNullBitmap to prevent SIGSEVS
 # with wxGTK. The sample works now.

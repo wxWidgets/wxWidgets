@@ -56,7 +56,7 @@ TARGET = wxc
 OBJECTS = wx.obj         helpers.obj    windows.obj    events.obj     \
 	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
 	  controls2.obj  windows2.obj   cmndlgs.obj    stattool.obj   \
-	  frames.obj \
+	  frames.obj     windows3.obj \
 !if "$(SEPARATE)" == "0"
 	  utils.obj
 !else
@@ -72,7 +72,8 @@ PYMODULES = $(TARGETDIR)\wx.py        $(TARGETDIR)\events.py    \
 	    $(TARGETDIR)\controls.py  $(TARGETDIR)\controls2.py \
             $(TARGETDIR)\windows2.py  $(TARGETDIR)\cmndlgs.py   \
 	    $(TARGETDIR)\stattool.py  $(TARGETDIR)\frames.py    \
-	    $(TARGETDIR)\utils.py     $(TARGETDIR)\__init__.py
+	    $(TARGETDIR)\utils.py     $(TARGETDIR)\windows3.py  \
+	    $(TARGETDIR)\__init__.py
 
 
 #----------------------------------------------------------------------
@@ -204,6 +205,7 @@ $(GENCODEDIR)\wx.cpp $(GENCODEDIR)\wx.py : wx.i my_typemaps.i _defs.i _extras.py
 # will write the shadow file to the right directory.
 $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py  : windows3.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py    : events.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py      : misc.i       my_typemaps.i _defs.i
 $(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py       : gdi.i        my_typemaps.i _defs.i
@@ -225,6 +227,7 @@ $(GENCODEDIR)/utils.cpp    $(GENCODEDIR)/utils.py    : utils.i     my_typemaps.i
 $(TARGETDIR)\wx.py        : $(GENCODEDIR)\wx.py
 $(TARGETDIR)\windows.py   : $(GENCODEDIR)\windows.py
 $(TARGETDIR)\windows2.py  : $(GENCODEDIR)\windows2.py
+$(TARGETDIR)\windows3.py  : $(GENCODEDIR)\windows3.py
 $(TARGETDIR)\events.py    : $(GENCODEDIR)\events.py
 $(TARGETDIR)\misc.py      : $(GENCODEDIR)\misc.py
 $(TARGETDIR)\gdi.py       : $(GENCODEDIR)\gdi.py
@@ -238,10 +241,35 @@ $(TARGETDIR)\utils.py     : $(GENCODEDIR)\utils.py
 $(TARGETDIR)\__init__.py  : __init__.py
 
 
+SOURCES = $(GENCODEDIR)\wx.cpp        $(GENCODEDIR)\wx.py       \
+	  $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py  \
+	  $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py \
+	  $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py \
+	  $(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py   \
+	  $(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py     \
+	  $(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py      \
+	  $(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py      \
+	  $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py \
+	  $(GENCODEDIR)/controls2.cpp $(GENCODEDIR)/controls2.py\
+	  $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py  \
+	  $(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py \
+	  $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py   \
+	  $(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py    \
+
+
+sources : $(SOURCES)
+
 #------------------------------------------------------------------------
 #
 # $Log$
+# Revision 1.9  1999/01/30 07:30:13  RD
+# Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+#
+# Various cleanup, tweaks, minor additions, etc. to maintain
+# compatibility with the current wxWindows.
+#
 # Revision 1.8  1998/12/21 19:58:06  RD
+#
 # Now compiles with /GX- on MSW.
 #
 # Revision 1.7  1998/12/15 20:41:20  RD

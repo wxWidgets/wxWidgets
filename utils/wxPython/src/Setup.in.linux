@@ -34,11 +34,11 @@ TARGETDIR=..
 
 wxc	wx.cpp helpers.cpp windows.cpp events.cpp misc.cpp gdi.cpp \
 	mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
-	frames.cpp stattool.cpp utils.cpp \
+	frames.cpp stattool.cpp utils.cpp windows3.cpp \
 	# CFLAGS
 	-I. -I$(WXWIN)/include -I/usr/lib/glib/include -I$(WXWIN)/src \
 	-I/usr/X11R6/include -DSWIG_GLOBAL -D__WXGTK__ \
 	#-D__WXDEBUG__ \
 	# LFLAGS
 	-L$(WXWIN)/lib/Linux -L/usr/X11R6/lib \
-	-lwx_gtk -lgtk -lgdk -lglib -lXext -lX11
+	-lwx_gtk2 -lgtk -lgdk -lglib -lXext -lX11

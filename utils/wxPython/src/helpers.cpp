@@ -17,6 +17,10 @@
 #undef LoadAccelerators
 #endif
 
+#ifdef __WXGTK__
+#include "gtk/gtk.h"
+#endif
+
 #undef DEBUG
 #include <Python.h>
 #include "helpers.h"
@@ -71,7 +75,6 @@ int  wxPyApp::MainLoop(void) {
 void wxPyApp::AfterMainLoop(void) {
     // more stuff from wxEntry...
 
-#ifdef __WXMSW__
     if (wxPythonApp->GetTopWindow()) {
         // Forcibly delete the window.
         if (wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)) ||
@@ -85,18 +88,12 @@ void wxPyApp::AfterMainLoop(void) {
             wxPythonApp->SetTopWindow(NULL);
         }
     }
-#endif
 #ifdef __WXGTK__
       wxPythonApp->DeletePendingObjects();
 #endif
 
     wxPythonApp->OnExit();
-#ifdef __WXMSW__
     wxApp::CleanUp();
-#endif
-#ifdef __WXGTK__
-    wxApp::CommonCleanUp();
-#endif
 //    delete wxPythonApp;
 }
 
@@ -120,9 +117,8 @@ void __wxPreStart()
 #ifdef __WXMSW__
     wxApp::Initialize();
 #endif
-#ifdef __WXGTK__
-    wxClassInfo::InitializeClasses();
 
+#ifdef __WXGTK__
     PyObject* sysargv = PySys_GetObject("argv");
     int argc = PyList_Size(sysargv);
     char** argv = new char*[argc+1];
@@ -131,10 +127,11 @@ void __wxPreStart()
         argv[x] = PyString_AsString(PyList_GetItem(sysargv, x));
     argv[argc] = NULL;
 
+    gtk_set_locale();
     gtk_init( &argc, &argv );
     delete [] argv;
 
-    wxApp::CommonInit();
+    wxApp::Initialize();     // may return FALSE. Should we check?
 #endif
 
 }
@@ -183,12 +180,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     if (! bResult) {
         wxPythonApp->DeletePendingObjects();
         wxPythonApp->OnExit();
-#ifdef __WXMSW__
         wxApp::CleanUp();
-#endif
-#ifdef __WXGTK__
-        wxApp::CommonCleanUp();
-#endif
         PyErr_SetString(PyExc_SystemExit, "OnInit returned false, exiting...");
         return NULL;
     }
@@ -590,7 +582,14 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.17  1999/01/30 07:30:12  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.16  1998/12/17 14:07:39  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.15  1998/12/15 20:41:19  RD

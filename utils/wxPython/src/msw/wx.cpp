@@ -33,14 +33,11 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.4  1999/01/14 14:33:56  VZ
- * 1. NOT_FOUND -> wxNOT_FOUND
- * 2. wxString::Left(), Right(), Before(), After() clean up
- * 3. wxLocale updates
+ * Revision 1.5  1999/01/30 07:31:09  RD
+ * Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
  *
- * Revision 1.3  1998/12/21 19:59:01  RD
- *
- * Now compiles with /GX- on MSW.
+ * Various cleanup, tweaks, minor additions, etc. to maintain
+ * compatibility with the current wxWindows.
  *
  ************************************************************************/
 
@@ -635,6 +632,8 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 extern "C" SWIGEXPORT(void,initstattoolc)();
 extern "C" SWIGEXPORT(void,initframesc)();
 extern "C" SWIGEXPORT(void,initutilsc)();
+extern "C" SWIGEXPORT(void,initwindows3c)();
+
 
 static int _wrap_wxPyDefaultPosition_set(PyObject *val) {
 
@@ -1222,7 +1221,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxMAJOR_VERSION", PyInt_FromLong((long) wxMAJOR_VERSION));
 	 PyDict_SetItemString(d,"wxMINOR_VERSION", PyInt_FromLong((long) wxMINOR_VERSION));
 	 PyDict_SetItemString(d,"wxRELEASE_NUMBER", PyInt_FromLong((long) wxRELEASE_NUMBER));
-	 PyDict_SetItemString(d,"wxNOT_FOUND", PyInt_FromLong((long) NOT_FOUND));
+	 PyDict_SetItemString(d,"wxNOT_FOUND", PyInt_FromLong((long) wxNOT_FOUND));
 	 PyDict_SetItemString(d,"wxVSCROLL", PyInt_FromLong((long) wxVSCROLL));
 	 PyDict_SetItemString(d,"wxHSCROLL", PyInt_FromLong((long) wxHSCROLL));
 	 PyDict_SetItemString(d,"wxCAPTION", PyInt_FromLong((long) wxCAPTION));
@@ -1258,6 +1257,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxDEFAULT_FRAME_STYLE", PyInt_FromLong((long) wxDEFAULT_FRAME_STYLE));
 	 PyDict_SetItemString(d,"wxDEFAULT_DIALOG_STYLE", PyInt_FromLong((long) wxDEFAULT_DIALOG_STYLE));
 	 PyDict_SetItemString(d,"wxFRAME_TOOL_WINDOW", PyInt_FromLong((long) wxFRAME_TOOL_WINDOW));
+	 PyDict_SetItemString(d,"wxCLIP_CHILDREN", PyInt_FromLong((long) wxCLIP_CHILDREN));
 	 PyDict_SetItemString(d,"wxRETAINED", PyInt_FromLong((long) wxRETAINED));
 	 PyDict_SetItemString(d,"wxBACKINGSTORE", PyInt_FromLong((long) wxBACKINGSTORE));
 	 PyDict_SetItemString(d,"wxTB_3DBUTTONS", PyInt_FromLong((long) wxTB_3DBUTTONS));
@@ -1729,7 +1729,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_TAB_SEL_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_TAB_SEL_CHANGING));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING", PyInt_FromLong((long) wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.2"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("0.5.3"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1753,6 +1753,7 @@ SWIGEXPORT(void,initwxc)() {
     initcmndlgsc();
     initstattoolc();
     initframesc();
+    initwindows3c();
 #ifndef SEPARATE
     initutilsc();
 #endif
@@ -1792,12 +1793,15 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_wxSashWindow","_class_wxSashWindow",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
+	 SWIG_RegisterMapping("_class_wxSashEvent","_wxSashEvent",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_wxListEvent","_class_wxListEvent",0);
 	 SWIG_RegisterMapping("_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_wxSashLayoutWindow","_class_wxSashLayoutWindow",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
@@ -1818,9 +1822,11 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
+	 SWIG_RegisterMapping("_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
 	 SWIG_RegisterMapping("_class_wxNotebookEvent","_wxNotebookEvent",0);
+	 SWIG_RegisterMapping("_class_wxSashWindow","_wxSashWindow",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
@@ -1832,6 +1838,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
 	 SWIG_RegisterMapping("_wxSizeEvent","_class_wxSizeEvent",0);
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
+	 SWIG_RegisterMapping("_class_wxSashLayoutWindow","_wxSashLayoutWindow",0);
 	 SWIG_RegisterMapping("_class_wxButton","_wxButton",0);
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_wxTreeItemData","_class_wxTreeItemData",0);
@@ -1856,6 +1863,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxListItem","_class_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
+	 SWIG_RegisterMapping("_wxCalculateLayoutEvent","_class_wxCalculateLayoutEvent",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
@@ -1907,6 +1915,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxStaticText","_wxStaticText",0);
 	 SWIG_RegisterMapping("_class_wxFont","_wxFont",0);
 	 SWIG_RegisterMapping("_class_wxCloseEvent","_wxCloseEvent",0);
+	 SWIG_RegisterMapping("_wxSashEvent","_class_wxSashEvent",0);
 	 SWIG_RegisterMapping("_class_wxMenuEvent","_wxMenuEvent",0);
 	 SWIG_RegisterMapping("_wxClientDC","_class_wxClientDC",0);
 	 SWIG_RegisterMapping("_wxMouseEvent","_class_wxMouseEvent",0);
@@ -1945,14 +1954,17 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxListItem","_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_class_wxFileDialog","_wxFileDialog",0);
+	 SWIG_RegisterMapping("_wxQueryLayoutInfoEvent","_class_wxQueryLayoutInfoEvent",0);
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
 	 SWIG_RegisterMapping("_class_wxStaticBox","_wxStaticBox",0);
+	 SWIG_RegisterMapping("_wxLayoutAlgorithm","_class_wxLayoutAlgorithm",0);
 	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
+	 SWIG_RegisterMapping("_class_wxCalculateLayoutEvent","_wxCalculateLayoutEvent",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
 	 SWIG_RegisterMapping("_class_wxNotebook","_wxNotebook",0);
@@ -2031,6 +2043,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxMoveEvent","_class_wxMoveEvent",0);
 	 SWIG_RegisterMapping("_wxColourData","_class_wxColourData",0);
 	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
+	 SWIG_RegisterMapping("_class_wxQueryLayoutInfoEvent","_wxQueryLayoutInfoEvent",0);
 	 SWIG_RegisterMapping("_class_wxEraseEvent","_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_wxMDIClientWindow","_class_wxMDIClientWindow",0);
 	 SWIG_RegisterMapping("_class_wxFontDialog","_wxFontDialog",0);

@@ -115,7 +115,7 @@ public:
 //---------------------------------------------------------------------------
 // Dialog Functions
 
-char* wxFileSelector(char* message,
+wxString wxFileSelector(char* message,
                         char* default_path = NULL,
                         char* default_filename = NULL,
                         char* default_extension = NULL,
@@ -251,9 +251,9 @@ public:
 
     void Above(wxWindow *otherWin, int margin=0);
     void Absolute(int value);
-    void AsIs(void);
+    void AsIs();
     void Below(wxWindow *otherWin, int margin=0);
-    void Unconstrained(void);
+    void Unconstrained();
     void LeftOf(wxWindow *otherWin, int margin=0);
     void PercentOf(wxWindow *otherWin, wxEdge edge, int percent);
     void RightOf(wxWindow *otherWin, int margin=0);
@@ -360,7 +360,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.10  1999/01/30 07:30:14  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.9  1998/12/16 22:10:55  RD
+//
 // Tweaks needed to be able to build wxPython with wxGTK.
 //
 // Revision 1.8  1998/12/15 20:41:22  RD

@@ -34,7 +34,7 @@ TARGETDIR=..
 
 wxc 	wx.cpp helpers.cpp windows.cpp events.cpp misc.cpp gdi.cpp \
 	mdi.cpp controls.cpp controls2.cpp windows2.cpp cmndlgs.cpp \
-	frames.cpp stattool.cpp utils.cpp \
+	frames.cpp stattool.cpp utils.cpp windows3.cpp \
 	# CFLAGS
 	-I. -I$(WXWIN)/include -I/usr/local/lib/glib/include -I$(WXWIN)/src \
 	-I/usr/X/include -DSWIG_GLOBAL -D__WXGTK__ \
@@ -42,4 +42,4 @@ wxc 	wx.cpp helpers.cpp windows.cpp events.cpp misc.cpp gdi.cpp \
 	# LFLAGS
 	-L$(WXWIN)/lib/solaris2.6 -L/usr/X/lib \
 	-L/usr/local/lib/gcc-lib/sparc-sun-solaris2.6/2.8.1 \
-	-lwx_gtk -lgtk -lgdk -lglib -lXext -lX11 -lstdc++ -lgcc
+	-lwx_gtk2 -lgtk -lgdk -lglib -lXext -lX11 -lstdc++ -lgcc

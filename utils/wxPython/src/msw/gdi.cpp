@@ -56,7 +56,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include "helpers.h"
 #include <wx/metafile.h>
 #ifndef __WXMSW__
-#include <wx/postscrp.h>
+#include <wx/dcps.h>
 #endif
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {

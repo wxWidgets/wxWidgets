@@ -42,6 +42,15 @@ application will cause problems.  However there is a plan to support
 this in the future.
 
 
+What's new in 0.5.3
+-------------------
+Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+
+Various cleanup, tweaks, minor additions, etc. to maintain
+compatibility with the current wxWindows.
+
+
+
 What's new in 0.5.0
 -------------------
 Changed the import semantics from "from wxPython import *" to "from
@@ -55,7 +64,7 @@ Made the events work for wxGrid.
 
 Added wxConfig.
 
-Added wxMiniFrame for wxGTK, (untested.)
+Added wxMiniFrame for wxGTK.
 
 Changed many of the args and return values that were pointers to gdi
 objects to references to reflect changes in the wxWindows API.

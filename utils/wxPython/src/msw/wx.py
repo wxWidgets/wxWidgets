@@ -23,6 +23,8 @@ from windows2 import *
 
 from cmndlgs import *
 
+from windows3 import *
+
 from utils import *
 class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
@@ -114,7 +116,7 @@ _wxSetDictionary = wxc._wxSetDictionary
 wxMAJOR_VERSION = wxc.wxMAJOR_VERSION
 wxMINOR_VERSION = wxc.wxMINOR_VERSION
 wxRELEASE_NUMBER = wxc.wxRELEASE_NUMBER
-NOT_FOUND = wxc.NOT_FOUND
+wxNOT_FOUND = wxc.wxNOT_FOUND
 wxVSCROLL = wxc.wxVSCROLL
 wxHSCROLL = wxc.wxHSCROLL
 wxCAPTION = wxc.wxCAPTION
@@ -150,6 +152,7 @@ wxDIALOG_MODELESS = wxc.wxDIALOG_MODELESS
 wxDEFAULT_FRAME_STYLE = wxc.wxDEFAULT_FRAME_STYLE
 wxDEFAULT_DIALOG_STYLE = wxc.wxDEFAULT_DIALOG_STYLE
 wxFRAME_TOOL_WINDOW = wxc.wxFRAME_TOOL_WINDOW
+wxCLIP_CHILDREN = wxc.wxCLIP_CHILDREN
 wxRETAINED = wxc.wxRETAINED
 wxBACKINGSTORE = wxc.wxBACKINGSTORE
 wxTB_3DBUTTONS = wxc.wxTB_3DBUTTONS
@@ -1093,6 +1096,20 @@ def EVT_GRID_LABEL_RCLICK(win, fn):
     win.Connect(-1, -1, wxEVT_GRID_LABEL_RCLICK, fn)
 
 
+# wxSashWindow
+def EVT_SASH_DRAGGED(win, id, func):
+    win.Connect(id, -1, wxEVT_SASH_DRAGGED, func)
+
+def EVT_SASH_DRAGGED_RANGE(win, id1, id2, func):
+    win.Connect(id1, id2, wxEVT_SASH_DRAGGED, func)
+
+def EVT_QUERY_LAYOUT_INFO(win, func):
+    win.Connect(-1, -1, wxEVT_EVT_QUERY_LAYOUT_INFO, func)
+
+def EVT_CALCULATE_LAYOUT(win, func):
+    win.Connect(-1, -1, wxEVT_EVT_CALCULATE_LAYOUT, func)
+
+
 
 
 #----------------------------------------------------------------------
@@ -1121,6 +1138,10 @@ wxNamedColor = wxNamedColour
 
 wxPyDefaultPosition.Set(-1,-1)
 wxPyDefaultSize.Set(-1,-1)
+
+# aliases so that C++ documentation applies:
+wxDefaultPosition = wxPyDefaultPosition
+wxDefaultSize     = wxPyDefaultSize
 
 #----------------------------------------------------------------------
 
@@ -1189,8 +1210,15 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.3  1998/12/21 19:59:03  RD
-# Now compiles with /GX- on MSW.
+# Revision 1.4  1999/01/30 07:31:12  RD
+# Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+#
+# Various cleanup, tweaks, minor additions, etc. to maintain
+# compatibility with the current wxWindows.
+#
+# Revision 1.8  1999/01/29 21:13:42  HH
+# Added aliases for wxDefaultPosition and wxDefaultSize (from wxPy..) in _extras,
+# so that C++ documentation applies.
 #
 # Revision 1.7  1998/11/25 08:45:21  RD
 #

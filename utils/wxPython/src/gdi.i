@@ -17,7 +17,7 @@
 #include "helpers.h"
 #include <wx/metafile.h>
 #ifndef __WXMSW__
-#include <wx/postscrp.h>
+#include <wx/dcps.h>
 #endif
 %}
 
@@ -147,7 +147,9 @@ public:
 
     wxString GetFaceName();
     int GetFamily();
+#ifdef __WXMSW__
     int GetFontId();
+#endif
     int GetPointSize();
     int GetStyle();
     bool GetUnderlined();
@@ -217,7 +219,7 @@ public:
     void SetJoin(int join_style);
     void SetStyle(int style);
     void SetWidth(int width);
-    
+
 #ifdef __WXMSW__
             // **** This one needs to return a list of ints (wxDash)
     int GetDashes(wxDash **dashes);
@@ -502,7 +504,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.12  1999/01/30 07:30:11  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.11  1998/12/18 15:49:05  RR
+//
 //   wxClipboard now serves the primary selection as well
 //   wxPython fixes
 //   warning mesages

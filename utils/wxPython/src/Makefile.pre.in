@@ -334,7 +334,7 @@ PYMODULES = $(GENCODEDIR)/wx.py        $(GENCODEDIR)/events.py    \
 	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \
             $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
             $(GENCODEDIR)/frames.py    $(GENCODEDIR)/stattool.py   \
-	    $(GENCODEDIR)/utils.py    \
+	    $(GENCODEDIR)/utils.py     $(GENCODEDIR)/windows3.py  \
 	    __init__.py
 
 
@@ -354,6 +354,7 @@ $(GENCODEDIR)/wx.cpp $(GENCODEDIR)/wx.py : wx.i my_typemaps.i _defs.i _extras.py
 # define some dependencies
 $(GENCODEDIR)/windows.cpp   $(GENCODEDIR)/windows.py   : windows.i    my_typemaps.i _defs.i
 $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemaps.i _defs.i
+$(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py  : windows3.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py    : events.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py      : misc.i       my_typemaps.i _defs.i
 $(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py       : gdi.i        my_typemaps.i _defs.i
@@ -373,7 +374,7 @@ wxInstall :	sharedmods $(PYMODULES)
 	if test ! -d $(TARGETDIR) ; then \
 		mkdir $(TARGETDIR) ; else true ; fi
 	if [ "$(SHAREDMODS)" != "" ]; then \
-		-chmod 755 $(SHAREDMODS); \
+		 chmod 755 $(SHAREDMODS); \
 		 cp $(SHAREDMODS) $(TARGETDIR); fi
 	-for i in $(PYMODULES); do \
 		cp $$i $(TARGETDIR); \

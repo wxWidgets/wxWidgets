@@ -244,6 +244,7 @@ public:
     void SetItemImage(const wxTreeItemId& item, int image);
     void SetItemSelectedImage(const wxTreeItemId& item, int image);
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
+    void SetItemHasChildren(const wxTreeItemId& item, bool hasChildren = TRUE);
 
     bool IsVisible(const wxTreeItemId& item);
     bool ItemHasChildren(const wxTreeItemId& item);
@@ -281,6 +282,7 @@ public:
                             wxTreeItemData *data = NULL);
 
     void Delete(const wxTreeItemId& item);
+    void DeleteChildren(const wxTreeItemId& item);
     void DeleteAllItems();
 
     void Expand(const wxTreeItemId& item);
@@ -369,7 +371,14 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1999/01/30 07:30:10  RD
+// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
+//
+// Various cleanup, tweaks, minor additions, etc. to maintain
+// compatibility with the current wxWindows.
+//
 // Revision 1.13  1998/12/17 14:07:34  RR
+//
 //   Removed minor differences between wxMSW and wxGTK
 //
 // Revision 1.12  1998/12/16 22:10:52  RD
