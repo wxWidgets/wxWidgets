@@ -42,6 +42,8 @@ class RunDemoApp(wxApp):
         wxInitAllImageHandlers()
         wxLog_SetActiveTarget(wxLogStderr())
 
+        #self.SetAssertMode(wxPYAPP_ASSERT_DIALOG)
+
         frame = wxFrame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(0,0),
                         style=wxNO_FULL_REPAINT_ON_RESIZE|wxDEFAULT_FRAME_STYLE)
         frame.CreateStatusBar()

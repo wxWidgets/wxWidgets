@@ -2,6 +2,8 @@
 from wxPython.wx import *
 from wxPython.stc import *
 
+import images
+
 #----------------------------------------------------------------------
 
 debug = 1
@@ -212,7 +214,8 @@ def runTest(frame, nb, log):
     # setup some markers
     ed.SetMarginType(1, wxSTC_MARGIN_SYMBOL)
     ed.MarkerDefine(0, wxSTC_MARK_ROUNDRECT, "#CCFF00", "RED")
-    ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
+    #ed.MarkerDefine(1, wxSTC_MARK_CIRCLE, "FOREST GREEN", "SIENNA")
+    ed.MarkerDefineBitmap(1, images.getFolder1Bitmap())
     ed.MarkerDefine(2, wxSTC_MARK_SHORTARROW, "blue", "blue")
     ed.MarkerDefine(3, wxSTC_MARK_ARROW, "#00FF00", "#00FF00")
 
