@@ -211,6 +211,31 @@ private:
     bool m_deferred;
 };
 
+#ifdef __WXGTK20__
+
+// ----------------------------------------------------------------------------
+// wxConvBrokenFileNames is made for GTK2 in Unicode mode when
+// files are accidentally written in an encoding which is not
+// the system encoding. Typically, the system encoding will be
+// UTF8 but there might be files stored in ISO8859-1 on disk.
+// ----------------------------------------------------------------------------
+
+class wxConvBrokenFileNames : public wxMBConv
+{
+public:
+    wxConvBrokenFileNames();
+    virtual ~wxConvBrokenFileNames() { delete m_conv; }
+
+    virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
+    virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
+
+private:
+    // the conversion object we forward to
+    wxMBConv *m_conv;
+};
+#endif
+// __WXGTK20__
+
 // ----------------------------------------------------------------------------
 // declare predefined conversion objects
 // ----------------------------------------------------------------------------
