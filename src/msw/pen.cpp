@@ -31,6 +31,8 @@
 
 #include "wx/msw/private.h"
 
+int wx2msPenStyle(int wx_style);
+
 IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
 
 wxPenRefData::wxPenRefData()
