@@ -113,6 +113,17 @@ bool wxNotebookBase::DeletePage(int nPage)
     return TRUE;
 }
 
+wxNotebookPage *wxNotebookBase::DoRemovePage(int nPage)
+{
+    wxCHECK_MSG( nPage >= 0 && (size_t)nPage < m_pages.GetCount(), NULL,
+                 _T("invalid page index in wxNotebookBase::DoRemovePage()") );
+
+    wxNotebookPage *pageRemoved = m_pages[nPage];
+    m_pages.Remove(nPage);
+
+    return pageRemoved;
+}
+
 int wxNotebookBase::GetNextPage(bool forward) const
 {
     int nPage;

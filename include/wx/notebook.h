@@ -155,7 +155,7 @@ public:
 
 protected:
     // remove the page and return a pointer to it
-    virtual wxNotebookPage *DoRemovePage(int page) = 0;
+    virtual wxNotebookPage *DoRemovePage(int page);
 
     // common part of all ctors
     void Init();

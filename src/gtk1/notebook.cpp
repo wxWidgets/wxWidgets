@@ -522,14 +522,11 @@ bool wxNotebook::DeleteAllPages()
 
     wxASSERT_MSG( GetPageCount() == 0, _T("all pages must have been deleted") );
 
-    return TRUE;
+    return wxNotebookBase::DeleteAllPages();
 }
 
 bool wxNotebook::DeletePage( int page )
 {
-    wxGtkNotebookPage* nb_page = GetNotebookPage(page);
-    wxCHECK_MSG( nb_page, FALSE, _T("invalid page in wxNotebook::DeletePage") );
-
     // GTK sets GtkNotebook.cur_page to NULL before sending the switch page
     // event so we have to store the selection internally
     if ( m_selection == -1 )
@@ -542,25 +539,23 @@ bool wxNotebook::DeletePage( int page )
         }
     }
 
-    m_pagesData.DeleteObject( nb_page );
-
+    // it will call our DoRemovePage() to do the real work
     return wxNotebookBase::DeletePage(page);
 }
 
 wxNotebookPage *wxNotebook::DoRemovePage( int page )
 {
-    wxGtkNotebookPage* nb_page = GetNotebookPage(page);
+    wxNotebookPage *client = wxNotebookBase::DoRemovePage(page);
+    if ( !client )
+        return NULL;
 
-    wxCHECK_MSG( nb_page, NULL, _T("wxNotebook::RemovePage: invalid page") );
-
-    wxNotebookPage *client = GetPage(page);
     gtk_widget_ref( client->m_widget );
     gtk_widget_unrealize( client->m_widget );
     gtk_widget_unparent( client->m_widget );
 
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
 
-    m_pagesData.DeleteObject( nb_page );
+    m_pagesData.DeleteObject(GetNotebookPage(page));
 
     return client;
 }
