@@ -715,6 +715,9 @@ Returns time of last modification of given file.
 
 \func{char *}{wxFileNameFromPath}{\param{char *}{path}}
 
+{\bf NB:} This function is obsolete, please use 
+\helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
+
 Returns the filename for a full path. The second form returns a pointer to
 temporary storage that should not be deallocated.
 
@@ -824,7 +827,7 @@ Returns a string containing the current (or working) directory.
 
 \func{wxString}{wxGetWorkingDirectory}{\param{char *}{buf=NULL}, \param{int }{sz=1000}}
 
-This function is obsolete: use \helpref{wxGetCwd}{wxgetcwd} instead.
+{\bf NB:} This function is obsolete: use \helpref{wxGetCwd}{wxgetcwd} instead.
 
 Copies the current working directory into the buffer if supplied, or
 copies the working directory into new storage (which you must delete yourself)
@@ -848,7 +851,7 @@ if the buffer is NULL.
 %%
 %% It is the application's responsibility to create and delete the file.
 
-These functions are obsolete, please use\rtfsp
+{\bf NB:} These functions are obsolete, please use\rtfsp
 \helpref{wxFileName::CreateTempFileName}{wxfilenamecreatetempfilename}\rtfsp
 instead.
 
@@ -905,6 +908,9 @@ Under MS Windows, the current drive is also changed if {\it dir} contains a driv
 \membersection{::wxSplitPath}\label{wxsplitfunction}
 
 \func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
+
+{\bf NB:} This function is obsolete, please use 
+\helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.
 
 This function splits a full file name into components: the path (including possible disk/drive
 specification under Windows), the base name and the extension. Any of the output parameters
@@ -1170,23 +1176,23 @@ case-sensitive comparison.
 \func{bool}{wxStringMatch}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2},\\
   \param{bool}{ subString = TRUE}, \param{bool}{ exact = FALSE}}
 
+{\bf NB:} This function is obsolete, use \helpref{wxString::Find}{wxstringfind} instead.
+
 Returns {\tt TRUE} if the substring {\it s1} is found within {\it s2},
 ignoring case if {\it exact} is FALSE. If {\it subString} is {\tt FALSE},
 no substring matching is done.
 
-This function is obsolete, use \helpref{wxString::Find}{wxstringfind} instead.
-
 \membersection{::wxStringEq}\label{wxstringeq}
 
 \func{bool}{wxStringEq}{\param{const wxString\& }{s1}, \param{const wxString\& }{s2}}
+
+{\bf NB:} This function is obsolete, use \helpref{wxString}{wxstring} instead.
 
 A macro defined as:
 
 \begin{verbatim}
 #define wxStringEq(s1, s2) (s1 && s2 && (strcmp(s1, s2) == 0))
 \end{verbatim}
-
-This function is obsolete, use \helpref{wxString}{wxstring} instead.
 
 \membersection{::wxStrlen}\label{wxstrlen}
 
@@ -1865,7 +1871,7 @@ See also \helpref{wxCursor}{wxcursor}, \helpref{wxWindow::SetCursor}{wxwindowset
 
 \section{Printer settings}\label{printersettings}
 
-These routines are obsolete and should no longer be used!
+{\bf NB:} These routines are obsolete and should no longer be used!
 
 The following functions are used to control PostScript printing. Under
 Windows, PostScript output can only be sent to a file.
@@ -2342,7 +2348,7 @@ See also \helpref{wxGetDisplayName}{wxgetdisplayname}.
 
 \func{void}{wxStripMenuCodes}{\param{char *}{in}, \param{char *}{out}}
 
-This function is obsolete, please use 
+{\bf NB:} This function is obsolete, please use 
 \helpref{wxMenuItem::GetLabelFromText}{wxmenuitemgetlabelfromtext} instead.
 
 Strips any menu codes from {\it in} and places the result
@@ -2971,7 +2977,8 @@ standard one (installed by wxWindows in the beginning of the program).
 
 \func{void}{wxDebugMsg}{\param{const wxString\& }{fmt}, \param{...}{}}
 
-{\bf This function is deprecated, use \helpref{wxLogDebug}{wxlogdebug} instead!}
+{\bf NB:} This function is now obsolete, replaced by \helpref{Log
+functions}{logfunctions} and \helpref{wxLogDebug}{wxlogdebug} in particular.
 
 Display a debugging message; under Windows, this will appear on the
 debugger command window, and under Unix, it will be written to standard
@@ -2986,8 +2993,6 @@ each wxDebugMsg call. wxDebugMsg seems to be broken under WIN32s
 (at least for Watcom C++): preformat your messages and use OutputDebugString
 instead.
 
-This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
-
 \wxheading{Include files}
 
 <wx/utils.h>
@@ -2996,7 +3001,7 @@ This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}
 
 \func{void}{wxError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Internal Error"}}
 
-This function is now obsolete, please use \helpref{wxLogError}{wxlogerror} 
+{\bf NB:} This function is now obsolete, please use \helpref{wxLogError}{wxlogerror} 
 instead.
 
 Displays {\it msg} and continues. This writes to standard error under
@@ -3011,7 +3016,7 @@ wxWindows errors. See also \helpref{wxFatalError}{wxfatalerror}.
 
 \func{void}{wxFatalError}{\param{const wxString\& }{msg}, \param{const wxString\& }{title = "wxWindows Fatal Error"}}
 
-This function is now obsolete, please use 
+{\bf NB:} This function is now obsolete, please use 
 \helpref{wxLogFatalError}{wxlogfatalerror} instead.
 
 Displays {\it msg} and exits. This writes to standard error under Unix,
@@ -3228,10 +3233,10 @@ Returns the error message corresponding to the given system error code. If
 
 \func{}{WXTRACE}{formatString, ...}
 
+{\bf NB:} This macro is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 Calls wxTrace with printf-style variable argument syntax. Output
 is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
-
-This macro is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \wxheading{Include files}
 
@@ -3241,13 +3246,13 @@ This macro is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \func{}{WXTRACELEVEL}{level, formatString, ...}
 
+{\bf NB:} This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 Calls wxTraceLevel with printf-style variable argument syntax. Output
 is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
 The first argument should be the level at which this information is appropriate.
 It will only be output if the level returned by wxDebugContext::GetLevel is equal to or greater than
 this value.
-
-This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \wxheading{Include files}
 
@@ -3257,10 +3262,10 @@ This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}
 
 \func{void}{wxTrace}{\param{const wxString\& }{fmt}, \param{...}{}}
 
+{\bf NB:} This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 Takes printf-style variable argument syntax. Output
 is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
-
-This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \wxheading{Include files}
 
@@ -3270,13 +3275,13 @@ This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}
 
 \func{void}{wxTraceLevel}{\param{int}{ level}, \param{const wxString\& }{fmt}, \param{...}{}}
 
+{\bf NB:} This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
+
 Takes printf-style variable argument syntax. Output
 is directed to the current output stream (see \helpref{wxDebugContext}{wxdebugcontextoverview}).
 The first argument should be the level at which this information is appropriate.
 It will only be output if the level returned by wxDebugContext::GetLevel is equal to or greater than
 this value.
-
-This function is now obsolete, replaced by \helpref{Log functions}{logfunctions}.
 
 \wxheading{Include files}
 
