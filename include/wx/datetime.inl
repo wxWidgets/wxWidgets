@@ -287,7 +287,8 @@ wxDateTime& wxDateTime::operator+=(const wxDateSpan& diff)
 wxDateTime wxDateTime::ToTimezone(const wxDateTime::TimeZone& tz,
                                   bool noDST) const
 {
-    return wxDateTime(*this).MakeTimezone(tz, noDST);
+    wxDateTime dt(*this);
+    return dt.MakeTimezone(tz, noDST);
 }
 
 // ----------------------------------------------------------------------------

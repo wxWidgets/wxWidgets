@@ -58,7 +58,8 @@
     // both warning and pragma warning are not portable, but at least an
     // unknown pragma should never be an error.
     // Err, actually, Watcom C++ doesn't like it.
-#ifndef __WATCOMC__
+    // (well, if the compilers are _that_ broken, I'm removing it (VZ))
+#if 0 //ndef __WATCOMC__
     #pragma warning "Your compiler does not appear to support 64 bit "\
                     "integers, using emulation class instead."
 #endif

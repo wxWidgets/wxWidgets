@@ -279,7 +279,7 @@ wxLongLongWx& wxLongLongWx::operator-=(const wxLongLongWx& ll)
     if (previous < ll.m_lo)
         m_hi--;
 
-    return *this;;
+    return *this;
 }
 
 // pre decrement
@@ -571,14 +571,14 @@ void *wxLongLongWx::asArray(void) const
 {
     static unsigned char temp[8];
 
-    temp[0] = (m_hi >> 24) & 0xFF;
-    temp[1] = (m_hi >> 16) & 0xFF;
-    temp[2] = (m_hi >> 8)  & 0xFF;
-    temp[3] = (m_hi >> 0)  & 0xFF;
-    temp[4] = (m_lo >> 24) & 0xFF;
-    temp[5] = (m_lo >> 16) & 0xFF;
-    temp[6] = (m_lo >> 8)  & 0xFF;
-    temp[7] = (m_lo >> 0)  & 0xFF;
+    temp[0] = (char)((m_hi >> 24) & 0xFF);
+    temp[1] = (char)((m_hi >> 16) & 0xFF);
+    temp[2] = (char)((m_hi >> 8)  & 0xFF);
+    temp[3] = (char)((m_hi >> 0)  & 0xFF);
+    temp[4] = (char)((m_lo >> 24) & 0xFF);
+    temp[5] = (char)((m_lo >> 16) & 0xFF);
+    temp[6] = (char)((m_lo >> 8)  & 0xFF);
+    temp[7] = (char)((m_lo >> 0)  & 0xFF);
 
     return temp;
 }

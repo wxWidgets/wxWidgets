@@ -58,7 +58,11 @@
 /* Define if lex declares yytext as a char * by default, not a char[].  */
 #undef YYTEXT_POINTER
 
+/* Define this if your version of GTK+ is greater than 1.2 */
 #undef __WXGTK12__
+
+/* Define this if your version of GTK+ is greater than 1.3 */
+#undef __WXGTK13__
 
 /*
  * Define to 1 for Unix[-like] system

@@ -97,7 +97,7 @@ void wxUsleep(unsigned long milliseconds)
 {
 #if defined(HAVE_NANOSLEEP)
     timespec tmReq;
-    tmReq.tv_sec = milliseconds / 1000;
+    tmReq.tv_sec = (time_t)(milliseconds / 1000);
     tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
 
     // we're not interested in remaining time nor in return value
@@ -126,7 +126,7 @@ void wxUsleep(unsigned long milliseconds)
 
 int wxKill(long pid, wxSignal sig)
 {
-    return kill(pid, (int)sig);
+    return kill((pid_t)pid, (int)sig);
 }
 
 #define WXEXECUTE_NARGS   127

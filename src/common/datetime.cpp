@@ -1147,9 +1147,6 @@ wxDateTime& wxDateTime::ResetTime()
 
 wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
 {
-#ifdef __VMS__
-   int time2;
-#endif
     wxASSERT_MSG( IsValid(), _T("invalid wxDateTime") );
 
     time_t time = GetTicks();
@@ -1167,9 +1164,9 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         }
         else
         {
-            time += tz.GetOffset();
+            time += (time_t)tz.GetOffset();
 #ifdef __VMS__ // time is unsigned so avoid warning
-            time2 = (int) time;
+            int time2 = (int) time;
             if ( time2 >= 0 )
 #else
             if ( time >= 0 )
@@ -1679,9 +1676,6 @@ wxDateTime& wxDateTime::MakeTimezone(const TimeZone& tz, bool noDST)
 
 wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 {
-#ifdef __VMS__
-   int time2;
-#endif
     wxCHECK_MSG( format, _T(""), _T("NULL format in wxDateTime::Format") );
 
     time_t time = GetTicks();
@@ -1701,8 +1695,8 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
         {
             time += tz.GetOffset();
 
-#ifdef __VMS__ /* time is unsigned so VMS gives a warning on the original */
-            time2 = (int) time;
+#ifdef __VMS__ // time is unsigned so avoid the warning
+            int time2 = (int) time;
             if ( time2 >= 0 )
 #else
             if ( time >= 0 )

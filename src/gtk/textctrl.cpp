@@ -100,17 +100,27 @@ wxTextCtrl::wxTextCtrl()
     m_modified = FALSE;
 }
 
-wxTextCtrl::wxTextCtrl( wxWindow *parent, wxWindowID id, const wxString &value,
-      const wxPoint &pos, const wxSize &size,
-      int style, const wxValidator& validator, const wxString &name )
+wxTextCtrl::wxTextCtrl( wxWindow *parent,
+                        wxWindowID id,
+                        const wxString &value,
+                        const wxPoint &pos,
+                        const wxSize &size,
+                        long style,
+                        const wxValidator& validator,
+                        const wxString &name )
 {
     m_modified = FALSE;
     Create( parent, id, value, pos, size, style, validator, name );
 }
 
-bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
-      const wxPoint &pos, const wxSize &size,
-      int style, const wxValidator& validator, const wxString &name )
+bool wxTextCtrl::Create( wxWindow *parent,
+                         wxWindowID id,
+                         const wxString &value,
+                         const wxPoint &pos,
+                         const wxSize &size,
+                         long style,
+                         const wxValidator& validator,
+                         const wxString &name )
 {
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
@@ -119,7 +129,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxTextCtrl creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
 
@@ -247,7 +257,7 @@ bool wxTextCtrl::Create( wxWindow *parent, wxWindowID id, const wxString &value,
     SetForegroundColour( parent->GetForegroundColour() );
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
-    
+
     Show( TRUE );
 
     return TRUE;
@@ -330,7 +340,7 @@ void wxTextCtrl::WriteText( const wxString &text )
     {
         /* this moves the cursor pos to behind the inserted text */
         gint len = GTK_EDITABLE(m_text)->current_pos;
-        
+
 #if wxUSE_UNICODE
         wxWX2MBbuf buf = text.mbc_str();
         gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
@@ -781,13 +791,13 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
         wxWindow *top_frame = m_parent;
         while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
             top_frame = top_frame->GetParent();
-	GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
-	
-	if (window->default_widget)
+        GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+
+        if (window->default_widget)
         {
             gtk_widget_activate (window->default_widget);
-	    return;
-	}
+            return;
+        }
     }
 
     key_event.Skip();
@@ -945,11 +955,11 @@ void wxTextCtrl::OnInternalIdle()
     if (cursor.Ok())
     {
         GdkWindow *window = (GdkWindow*) NULL;
-	if (HasFlag(wxTE_MULTILINE))
+        if (HasFlag(wxTE_MULTILINE))
             window = GTK_TEXT(m_text)->text_area;
         else
             window = GTK_ENTRY(m_text)->text_area;
-	    
+
         if (window)
             gdk_window_set_cursor( window, cursor.GetCursor() );
 

@@ -5,7 +5,7 @@
 // Modified by:
 // Created:     28/06/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Guilhem Lavaux 
+// Copyright:   (c) Guilhem Lavaux
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
@@ -86,22 +86,17 @@ double wxDataInputStream::ReadDouble()
 
 wxString wxDataInputStream::ReadString()
 {
-  wxString wx_string;
-  char *string;
-  unsigned long len;
+  wxString s;
+  size_t len;
 
   len = Read32();
-  string = new char[len+1];
 
-  m_input->Read(string, len);
+  m_input->Read(s.GetWriteBuf(len), len);
+  s.UngetWriteBuf();
 
-  string[len] = 0;
-  wx_string = string;
-  delete string;
-
-  return wx_string;
+  return s;
 }
-  
+
 wxDataInputStream& wxDataInputStream::operator>>(wxString& s)
 {
   s = ReadString();
@@ -285,4 +280,4 @@ wxDataOutputStream& wxDataOutputStream::operator<<(float f)
 
 #endif
   // wxUSE_STREAMS
-  
+

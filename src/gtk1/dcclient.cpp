@@ -792,13 +792,13 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
        properties (see wxXt implementation) */
     if (m_font.GetUnderlined())
     {
-        long width = gdk_string_width( font, text.mbc_str() );
-        long ul_y = y + font->ascent;
+        wxCoord width = gdk_string_width( font, text.mbc_str() );
+        wxCoord ul_y = y + font->ascent;
         if (font->descent > 0) ul_y++;
         gdk_draw_line( m_window, m_textGC, x, ul_y, x + width, ul_y);
     }
 
-    long w, h;
+    wxCoord w, h;
     GetTextExtent (text, &w, &h);
     CalcBoundingBox (x + w, y + h);
     CalcBoundingBox (x, y);
@@ -821,8 +821,8 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
     wxCHECK_RET( font, wxT("invalid font") );
 
     // the size of the text
-    int w = gdk_string_width( font, text.mbc_str() );
-    int h = font->ascent + font->descent;
+    wxCoord w = gdk_string_width( font, text.mbc_str() );
+    wxCoord h = font->ascent + font->descent;
 
     // draw the string normally
     wxBitmap src(w, h);

@@ -643,7 +643,7 @@ wxItemResource *wxResourceInterpretDialog(wxResourceTable& table, wxExpr *expr, 
   if (useDefaults != 0)
     dialogItem->SetResourceStyle(dialogItem->GetResourceStyle() | wxRESOURCE_USE_DEFAULTS);
 
-  long id = 0;
+  int id = 0;
   expr->GetAttributeValue(wxT("id"), id);
   dialogItem->SetId(id);
 
@@ -2190,8 +2190,8 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
         return wxBitmap(item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3()) ;
 #else
         wxLogWarning(_("No XBM facility available!"));
-#endif
         break;
+#endif
       }
       case wxBITMAP_TYPE_XPM_DATA:
       {
@@ -2206,13 +2206,12 @@ wxBitmap wxResourceCreateBitmap(const wxString& resource, wxResourceTable *table
         return wxBitmap((char **)item->GetValue1());
 #else
         wxLogWarning(_("No XPM facility available!"));
-#endif
         break;
+#endif
       }
       default:
       {
         return wxBitmap(name, bitmapType);
-        break;
       }
     }
     return wxNullBitmap;
@@ -2345,8 +2344,8 @@ wxIcon wxResourceCreateIcon(const wxString& resource, wxResourceTable *table)
         return wxIcon((const char **)item->GetValue1(), (int)item->GetValue2(), (int)item->GetValue3());
 #else
         wxLogWarning(_("No XBM facility available!"));
-#endif
         break;
+#endif
       }
       case wxBITMAP_TYPE_XPM_DATA:
       {

@@ -313,7 +313,7 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
    if ( async )
    {
       m_DialProcess = new wxDialProcess(this);
-      m_DialPId = wxExecute(cmd, FALSE, m_DialProcess);
+      m_DialPId = (int)wxExecute(cmd, FALSE, m_DialProcess);
       if(m_DialPId == 0)
       {
          delete m_DialProcess;
@@ -533,6 +533,9 @@ wxDialUpManagerImpl::CheckIfconfig(void)
       cmd << " -a";
 #elif defined(__LINUX__) || defined (__FREEBSD__) || defined(__SGI__)
       // nothing to be added to ifconfig
+#elif defined(__HPUX__)
+      // VZ: a wild guess (but without it, ifconfig fails completely)
+      cmd << _T(" ppp0");
 #else
 #     pragma warning "No ifconfig information for this OS."
       m_CanUseIfconfig = 0;
@@ -564,6 +567,9 @@ wxDialUpManagerImpl::CheckIfconfig(void)
                     || strstr(output,"pl"); // plip
 #elif defined(__SGI__)  // IRIX
                rc = strstr(output, "ppp"); // PPP
+#elif defined(__HPUX__)
+               // if could run ifconfig on interface, then it exists
+               rc = TRUE;
 #endif
             }
             file.Close();
@@ -575,7 +581,8 @@ wxDialUpManagerImpl::CheckIfconfig(void)
          m_CanUseIfconfig = 0; // don´t try again
       (void) wxRemoveFile(tmpfile);
    }
-      return rc;
+
+   return rc;
 }
 
 int
@@ -607,6 +614,8 @@ wxDialUpManagerImpl::CheckPing(void)
    // nothing to add to ping command
 #elif defined(__LINUX__)
    cmd << "-c 1 "; // only ping once
+#elif defined(__HPUX__)
+   cmd << "64 1 "; // only ping once (need also specify the packet size)
 #else
 #   pragma warning "No Ping information for this OS."
    m_CanUsePing = 0;

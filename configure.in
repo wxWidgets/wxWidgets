@@ -1445,6 +1445,7 @@ GUI_TK_LIBRARY=
 GUI_TK_LINK=
 
 WXGTK12=
+WXGTK13=
 
 WXWINE=
 
@@ -1488,9 +1489,17 @@ if test "$wxUSE_CYGWIN" = 1 || test "$wxUSE_MINGW" = 1 ; then
 fi
 
 if test "$wxUSE_GTK" = 1; then
-    dnl avoid calling AM_PATH_GTK twice, so check first for the newer version and
-    dnl only then, if it wasn't found, for an older one
+    dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
+    dnl and only then, if it wasn't found, for an older one
     AM_PATH_GTK(1.2.1, WXGTK12=1, AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?))
+dnl it doesn't really work with 1.3.0 now...
+dnl    AM_PATH_GTK(1.3.0,
+dnl        WXGTK13=1,
+dnl        AM_PATH_GTK(1.2.1,
+dnl            WXGTK12=1,
+dnl            AC_MSG_ERROR(Is gtk-config in path and GTK+ is version 1.2.1 or above?)
+dnl        )
+dnl    )
 
     TOOLKIT_INCLUDE="$GTK_CFLAGS"
     GUI_TK_LIBRARY="$GTK_LIBS -lgthread"
@@ -2232,6 +2241,11 @@ else
         AC_MSG_RESULT(no)
     fi
   fi
+fi
+
+if test "$WXGTK13" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK13__,$WXGTK13)
+  WXGTK12=1
 fi
 
 if test "$WXGTK12" = 1 ; then

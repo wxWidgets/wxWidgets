@@ -295,7 +295,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
                 wxString s = item->GetText();
-                long lw,lh;
+                wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 if (lw > m_spacing) m_bound_all.width = lw;
             }
@@ -308,14 +308,14 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
             {
                 wxListItemData *item = (wxListItemData*)node->Data();
                 wxString s = item->GetText();
-                long lw,lh;
+                wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 m_bound_all.width = lw;
                 m_bound_all.height = lh;
                 if (item->HasImage())
                 {
-                    int w = 0;
-                    int h = 0;
+                    wxCoord w = 0;
+                    wxCoord h = 0;
                     m_owner->GetImageSize( item->GetImage(), w, h );
                     m_bound_all.width += 4 + w;
                     if (h > m_bound_all.height) m_bound_all.height = h;
@@ -334,7 +334,7 @@ void wxListLineData::CalculateSize( wxDC *dc, int spacing )
                 wxString s;
                 item->GetText( s );
                 if (s.IsNull()) s = "H";
-                long lw,lh;
+                wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 item->SetSize( item->GetWidth(), lh );
                 m_bound_all.width += lw;
@@ -384,7 +384,7 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
                 {
                     wxString s;
                     item->GetText( s );
-                    long lw,lh;
+                    wxCoord lw,lh;
                     dc->GetTextExtent( s, &lw, &lh );
                     if (m_bound_all.width > m_spacing)
                         m_bound_label.x = m_bound_all.x;
@@ -432,7 +432,7 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
         }
         case wxLC_REPORT:
         {
-            long lw,lh;
+            wxCoord lw,lh;
             dc->GetTextExtent( "H", &lw, &lh );
             m_bound_all.x = 0;
             m_bound_all.y -= 0;
@@ -448,7 +448,7 @@ void wxListLineData::SetPosition( wxDC *dc, int x, int y, int window_width )
                 wxString s;
                 item->GetText( s );
                 if (s.IsEmpty()) s = wxT("H");
-                long lw,lh;
+                wxCoord lw,lh;
                 dc->GetTextExtent( s, &lw, &lh );
                 m_bound_label.width = lw;
                 m_bound_label.height = lh;
@@ -1828,8 +1828,8 @@ void wxListMainWindow::GetImageSize( int index, int &width, int &height )
 int wxListMainWindow::GetTextLength( wxString &s )
 {
     wxClientDC dc( this );
-    long lw = 0;
-    long lh = 0;
+    wxCoord lw = 0;
+    wxCoord lh = 0;
     dc.GetTextExtent( s, &lw, &lh );
     return lw + 6;
 }
@@ -1909,7 +1909,7 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
             {
                 wxListItemData *item = (wxListItemData*)n->Data();
                 int current = 0, ix = 0, iy = 0;
-                long lx = 0, ly = 0;
+                wxCoord lx = 0, ly = 0;
                 if (item->HasImage())
                 {
                     GetImageSize( item->GetImage(), ix, iy );

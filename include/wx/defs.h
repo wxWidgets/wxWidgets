@@ -1794,9 +1794,15 @@ typedef struct _GdkColor        GdkColor;
 typedef struct _GdkColormap     GdkColormap;
 typedef struct _GdkFont         GdkFont;
 typedef struct _GdkGC           GdkGC;
-typedef struct _GdkWindow       GdkWindow;
-typedef struct _GdkWindow       GdkBitmap;
-typedef struct _GdkWindow       GdkPixmap;
+#ifdef __WXGTK13__
+    typedef struct _GdkDrawable     GdkWindow;
+    typedef struct _GdkDrawable     GdkBitmap;
+    typedef struct _GdkDrawable     GdkPixmap;
+#else
+    typedef struct _GdkWindow       GdkWindow;
+    typedef struct _GdkWindow       GdkBitmap;
+    typedef struct _GdkWindow       GdkPixmap;
+#endif
 typedef struct _GdkCursor       GdkCursor;
 typedef struct _GdkRegion       GdkRegion;
 typedef struct _GdkDragContext  GdkDragContext;

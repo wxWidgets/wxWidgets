@@ -147,15 +147,15 @@ void wxCalendarCtrl::Init()
     }
 }
 
-bool wxCalendarCtrl::Create(wxWindow *parent,
-                            wxWindowID id,
+bool wxCalendarCtrl::Create(wxWindow * WXUNUSED(parent),
+                            wxWindowID WXUNUSED(id),
                             const wxDateTime& date,
-                            const wxPoint& pos,
+                            const wxPoint& WXUNUSED(pos),
                             const wxSize& size,
                             long style,
-                            const wxString& name)
+                            const wxString& WXUNUSED(name))
 {
-    SetWindowStyle(style | (wxBORDER | wxWANTS_CHARS));
+    SetWindowStyle(style | (wxRAISED_BORDER | wxWANTS_CHARS));
 
     m_date = date.IsValid() ? date : wxDateTime::Today();
 
@@ -422,7 +422,7 @@ void wxCalendarCtrl::RecalcGeometry()
 // drawing
 // ----------------------------------------------------------------------------
 
-void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
+void wxCalendarCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
@@ -614,7 +614,7 @@ void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
 {
     wxDateTime::Tm tm = m_date.GetTm();
 
-    int year = event.GetInt();
+    int year = (int)event.GetInt();
     if ( tm.mday > wxDateTime::GetNumberOfDays(tm.mon, year) )
     {
         tm.mday = wxDateTime::GetNumberOfDays(tm.mon, year);

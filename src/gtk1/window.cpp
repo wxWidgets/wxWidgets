@@ -944,8 +944,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
 
-    event.m_x = (long)gdk_event->x;
-    event.m_y = (long)gdk_event->y;
+    event.m_x = (wxCoord)gdk_event->x;
+    event.m_y = (wxCoord)gdk_event->y;
 
     // Some control don't have their own X window and thus cannot get
     // any events.
@@ -1071,8 +1071,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
-    event.m_x = (long)gdk_event->x;
-    event.m_y = (long)gdk_event->y;
+    event.m_x = (wxCoord)gdk_event->x;
+    event.m_y = (wxCoord)gdk_event->y;
 
     // Some control don't have their own X window and thus cannot get
     // any events.
@@ -1191,8 +1191,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
 
-    event.m_x = (long)gdk_event->x;
-    event.m_y = (long)gdk_event->y;
+    event.m_x = (wxCoord)gdk_event->x;
+    event.m_y = (wxCoord)gdk_event->y;
 
     // Some control don't have their own X window and thus cannot get
     // any events.
@@ -1406,8 +1406,8 @@ static gint gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     event.m_middleDown = (state & GDK_BUTTON2_MASK);
     event.m_rightDown = (state & GDK_BUTTON3_MASK);
 
-    event.m_x = (long)x;
-    event.m_y = (long)y;
+    event.m_x = x;
+    event.m_y = y;
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
@@ -1452,8 +1452,8 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
     event.m_middleDown = (state & GDK_BUTTON2_MASK);
     event.m_rightDown = (state & GDK_BUTTON3_MASK);
 
-    event.m_x = (long)x;
-    event.m_y = (long)y;
+    event.m_x = x;
+    event.m_y = y;
 
     if (win->GetEventHandler()->ProcessEvent( event ))
     {

@@ -188,12 +188,12 @@ public:
     wxListItemAttr *GetAttributes() const { return m_attr; }
     bool HasAttributes() const { return m_attr != NULL; }
 
-    const wxColour& GetTextColour() const
+    wxColour GetTextColour() const
         { return HasAttributes() ? m_attr->GetTextColour() : wxNullColour; }
-    const wxColour& GetBackgroundColour() const
+    wxColour GetBackgroundColour() const
         { return HasAttributes() ? m_attr->GetBackgroundColour()
                                  : wxNullColour; }
-    const wxFont& GetFont() const
+    wxFont GetFont() const
         { return HasAttributes() ? m_attr->GetFont() : wxNullFont; }
 
     // these members are public for compatibility

@@ -208,7 +208,7 @@ static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButto
     int y = (int)gdk_event->y;
     
     DrawFrame( widget, win->m_oldX, win->m_oldY, win->m_width, win->m_height );
-    gdk_pointer_ungrab ( GDK_CURRENT_TIME );
+    gdk_pointer_ungrab ( (guint32)GDK_CURRENT_TIME );
     int org_x = 0;    
     int org_y = 0;
     gdk_window_get_origin( widget->window, &org_x, &org_y );

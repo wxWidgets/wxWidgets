@@ -72,7 +72,7 @@ _tiffSeekProc(thandle_t handle, toff_t off, int whence)
         case SEEK_END: mode = wxFromEnd; break;
         default:       mode = wxFromCurrent; break;
     }
-    
+
     return (toff_t)stream->SeekI( (off_t)off, mode );
 }
 
@@ -90,13 +90,17 @@ _tiffSizeProc(thandle_t handle)
 }
 
 static int
-_tiffMapProc(thandle_t WXUNUSED(handle), tdata_t* pbase, toff_t* psize)
+_tiffMapProc(thandle_t WXUNUSED(handle),
+             tdata_t* WXUNUSED(pbase),
+             toff_t* WXUNUSED(psize))
 {
     return 0;
 }
 
 static void
-_tiffUnmapProc(thandle_t WXUNUSED(handle), tdata_t base, toff_t size)
+_tiffUnmapProc(thandle_t WXUNUSED(handle),
+               tdata_t WXUNUSED(base),
+               toff_t WXUNUSED(size))
 {
 }
 
@@ -111,7 +115,7 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 
     if (tif)
         tif->tif_fd = (int) &stream;
-	
+
     return tif;
 }
 
@@ -119,124 +123,124 @@ TIFFwxOpen(wxInputStream &stream, const char* name, const char* mode)
 bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbose, int index )
 {
     image->Destroy();
-    
+
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
-    
+
     if (!tif)
     {
         if (verbose)
             wxLogError( _("TIFF: Error loading image.") );
-	    
-	return FALSE;
+
+        return FALSE;
     }
-    
+
     if (!TIFFSetDirectory( tif, (tdir_t)index ))
     {
         if (verbose)
             wxLogError( _("Invalid TIFF image index.") );
-	    
+
         TIFFClose( tif );
-	
-	return FALSE;
+
+        return FALSE;
     }
 
     uint32 w, h;
-    size_t npixels;
+    uint32 npixels;
     uint32 *raster;
-    
+
     TIFFGetField( tif, TIFFTAG_IMAGEWIDTH, &w );
     TIFFGetField( tif, TIFFTAG_IMAGELENGTH, &h );
-    
+
     npixels = w * h;
-    
+
     raster = (uint32*) _TIFFmalloc( npixels * sizeof(uint32) );
-    
+
     if (!raster)
     {
         if (verbose)
             wxLogError( _("TIFF: Couldn't allocate memory.") );
-	    
-	return FALSE;
+
+        return FALSE;
     }
 
     image->Create( w, h );
-    if (!image->Ok()) 
+    if (!image->Ok())
     {
         if (verbose)
             wxLogError( _("TIFF: Couldn't allocate memory.") );
-	    
-	_TIFFfree( raster );
-	
+
+        _TIFFfree( raster );
+
         return FALSE;
     }
-    
+
     if (!TIFFReadRGBAImage( tif, w, h, raster, 0 ))
     {
         if (verbose)
             wxLogError( _("TIFF: Error reading image.") );
-	    
-	_TIFFfree( raster );
-	image->Destroy();
-	
-	return FALSE;
+
+        _TIFFfree( raster );
+        image->Destroy();
+
+        return FALSE;
     }
-    
+
     bool hasmask = FALSE;
-    
+
     unsigned char *ptr = image->GetData();
     uint32 pos = 0;
-    
+
     for (uint32 i = 0; i < h; i++)
     {
         for (uint32 j = 0; w < h; j++)
-	{
-	    unsigned char alpha = (unsigned char)(raster[pos] >> 24);
-	    if (alpha < 127)
-	    {
-	        hasmask = TRUE;
-		ptr[0] = image->GetMaskRed();
-		ptr++;
-		ptr[0] = image->GetMaskGreen();
-		ptr++;
-		ptr[0] = image->GetMaskBlue();
-		ptr++;
-	    }
-	    else
-	    {
-	        ptr[0] = (unsigned char)(raster[pos] >> 16);
-		ptr++;
-	        ptr[0] = (unsigned char)(raster[pos] >> 8);
-		ptr++;
-	        ptr[0] = (unsigned char)(raster[pos]);
-		ptr++;
-	    }
-	    pos++;
-	}
+        {
+            unsigned char alpha = (unsigned char)(raster[pos] >> 24);
+            if (alpha < 127)
+            {
+                hasmask = TRUE;
+                ptr[0] = image->GetMaskRed();
+                ptr++;
+                ptr[0] = image->GetMaskGreen();
+                ptr++;
+                ptr[0] = image->GetMaskBlue();
+                ptr++;
+            }
+            else
+            {
+                ptr[0] = (unsigned char)(raster[pos] >> 16);
+                ptr++;
+                ptr[0] = (unsigned char)(raster[pos] >> 8);
+                ptr++;
+                ptr[0] = (unsigned char)(raster[pos]);
+                ptr++;
+            }
+            pos++;
+        }
     }
-    
+
     _TIFFfree( raster );
-    
+
     TIFFClose( tif );
-	
+
     image->SetMask( hasmask );
-    
+
     return TRUE;
 }
 
 int wxTIFFHandler::GetImageCount( wxInputStream& stream )
 {
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
-    
+
     if (!tif)
-	return 0;
+        return 0;
 
     int dircount = 0;  // according to the libtiff docs, dircount should be set to 1 here???
     do {
         dircount++;
     } while (TIFFReadDirectory(tif));
-    
+
     TIFFClose( tif );
-    
+
     return dircount;
 }
 
@@ -251,7 +255,7 @@ bool wxTIFFHandler::DoCanRead( wxInputStream& stream )
 
     stream.Read(&hdr, 2);
     stream.SeekI(-2, wxFromCurrent);
-    
+
     return ((hdr[0] == 0x49 && hdr[1] == 0x49) ||
             (hdr[0] == 0x4D && hdr[1] == 0x4D));
 }

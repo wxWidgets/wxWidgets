@@ -431,7 +431,7 @@ void wxFileCtrl::MakeDir()
     wxListItem item;
     item.m_itemId = 0;
     item.m_col = 0;
-    int id = Add( fd, item );
+    long id = Add( fd, item );
 
     if (id != -1)
     {
@@ -450,7 +450,7 @@ void wxFileCtrl::GoToParentDir()
         m_dirName = wxPathOnly( m_dirName );
         if (m_dirName.IsEmpty()) m_dirName = wxT("/");
         Update();
-        int id = FindItem( 0, fname );
+        long id = FindItem( 0, fname );
         if (id != -1)
         {
             SetItemState( id, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
@@ -715,9 +715,10 @@ wxFileDialog::~wxFileDialog()
 
 void wxFileDialog::OnChoice( wxCommandEvent &event )
 {
-    wxString *str = (wxString*) m_choice->GetClientData( event.GetInt() );
+    int index = (int)event.GetInt();
+    wxString *str = (wxString*) m_choice->GetClientData( index );
     m_list->SetWild( *str );
-    m_filterIndex = event.GetInt();
+    m_filterIndex = index;
 }
 
 void wxFileDialog::OnCheck( wxCommandEvent &event )

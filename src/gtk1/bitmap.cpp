@@ -19,7 +19,14 @@
 
 #include <gdk/gdk.h>
 #include <gdk/gdkprivate.h>
-#include <gdk/gdkx.h>
+
+// in GTK+ 1.3 gdk_root_parent was renamed into gdk_parent_root
+#ifdef __WXGTK13__
+    #define gdk_root_parent gdk_parent_root
+#else // GTK+ <= 1.2
+    // need to get the declaration of gdk_root_parent from private header
+    #include <gdk/gdkx.h>
+#endif // GTK+ 1.3/1.2
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -52,7 +59,7 @@ wxMask::wxMask( const wxBitmap& bitmap )
 
 wxMask::~wxMask()
 {
-    if (m_bitmap) 
+    if (m_bitmap)
         gdk_bitmap_unref( m_bitmap );
 }
 
@@ -64,14 +71,14 @@ bool wxMask::Create( const wxBitmap& bitmap,
         gdk_bitmap_unref( m_bitmap );
         m_bitmap = (GdkBitmap*) NULL;
     }
-    
+
     wxImage image( bitmap );
     if (!image.Ok()) return FALSE;
-    
+
     GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
     m_bitmap = gdk_pixmap_new( parent, image.GetWidth(), image.GetHeight(), 1 );
     GdkGC *gc = gdk_gc_new( m_bitmap );
-    
+
     GdkColor color;
     color.red = 65000;
     color.green = 65000;
@@ -80,14 +87,14 @@ bool wxMask::Create( const wxBitmap& bitmap,
     gdk_gc_set_foreground( gc, &color );
     gdk_gc_set_fill( gc, GDK_SOLID );
     gdk_draw_rectangle( m_bitmap, gc, TRUE, 0, 0, image.GetWidth(), image.GetHeight() );
-    
+
     unsigned char *data = image.GetData();
     int index = 0;
-    
+
     unsigned char red = colour.Red();
     unsigned char green = colour.Green();
     unsigned char blue = colour.Blue();
-    
+
     GdkVisual *visual = gdk_visual_get_system();
     int bpp = visual->depth;
     if ((bpp == 16) && (visual->red_mask != 0xf800)) bpp = 15;
@@ -103,33 +110,33 @@ bool wxMask::Create( const wxBitmap& bitmap,
         blue = blue & 0xfc;
         green = green & 0xf8;
     }
-    
+
     color.red = 0;
     color.green = 0;
     color.blue = 0;
     color.pixel = 0;
     gdk_gc_set_foreground( gc, &color );
-    
+
     for (int j = 0; j < image.GetHeight(); j++)
     {
         int start_x = -1;
         int i;
         for (i = 0; i < image.GetWidth(); i++)
         {
-	        if ((data[index] == red) &&
-	            (data[index+1] == green) &&
-	            (data[index+2] == blue))
-	        {
-	            if (start_x == -1)
-		        start_x = i;
-	        }
-	        else
-	        {
-	            if (start_x != -1)
-		        {
-		            gdk_draw_line( m_bitmap, gc, start_x, j, i-1, j );
-		            start_x = -1;
-        	    }
+            if ((data[index] == red) &&
+                (data[index+1] == green) &&
+                (data[index+2] == blue))
+            {
+                if (start_x == -1)
+                start_x = i;
+            }
+            else
+            {
+                if (start_x != -1)
+                {
+                    gdk_draw_line( m_bitmap, gc, start_x, j, i-1, j );
+                    start_x = -1;
+                }
             }
             index += 3;
         }
@@ -387,39 +394,39 @@ void wxBitmap::SetMask( wxMask *mask )
 wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 {
     wxCHECK_MSG( Ok() &&
-                 (rect.x >= 0) && (rect.y >= 0) && 
-		         (rect.x+rect.width <= M_BMPDATA->m_width) && (rect.y+rect.height <= M_BMPDATA->m_height),
+                 (rect.x >= 0) && (rect.y >= 0) &&
+                 (rect.x+rect.width <= M_BMPDATA->m_width) && (rect.y+rect.height <= M_BMPDATA->m_height),
                  wxNullBitmap, wxT("invalid bitmap or bitmap region") );
-    
+
     wxBitmap ret( rect.width, rect.height, M_BMPDATA->m_bpp );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
-    
+
     if (ret.GetPixmap())
     {
         GdkGC *gc = gdk_gc_new( ret.GetPixmap() );
-	    gdk_draw_pixmap( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-	    gdk_gc_destroy( gc );
+        gdk_draw_pixmap( ret.GetPixmap(), gc, GetPixmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
+        gdk_gc_destroy( gc );
     }
     else
     {
         GdkGC *gc = gdk_gc_new( ret.GetBitmap() );
-	    gdk_draw_bitmap( ret.GetBitmap(), gc, GetBitmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
-	    gdk_gc_destroy( gc );
+        gdk_draw_bitmap( ret.GetBitmap(), gc, GetBitmap(), rect.x, rect.y, 0, 0, rect.width, rect.height );
+        gdk_gc_destroy( gc );
     }
-    
+
     if (GetMask())
     {
         wxMask *mask = new wxMask;
         GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
         mask->m_bitmap = gdk_pixmap_new( parent, rect.width, rect.height, 1 );
-	
+
         GdkGC *gc = gdk_gc_new( mask->m_bitmap );
-	    gdk_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, 0, 0, rect.x, rect.y, rect.width, rect.height );
-	    gdk_gc_destroy( gc );
-	
-	    ret.SetMask( mask );
+        gdk_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, 0, 0, rect.x, rect.y, rect.width, rect.height );
+        gdk_gc_destroy( gc );
+
+        ret.SetMask( mask );
     }
-    
+
     return ret;
 }
 

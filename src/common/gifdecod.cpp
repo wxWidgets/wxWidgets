@@ -588,7 +588,7 @@ int wxGIFDecoder::ReadGIF()
             ppimg = &pimg->next;
 
             /* allocate memory for image and palette */
-            pimg->p   = (unsigned char *) malloc(size);
+            pimg->p   = (unsigned char *) malloc((size_t)size);
             pimg->pal = (unsigned char *) malloc(768);
 
             if ((!pimg->p) || (!pimg->pal))

@@ -360,8 +360,13 @@ wxString::wxString(const wchar_t *pwz)
 // allocates memory needed to store a C string of length nLen
 void wxString::AllocBuffer(size_t nLen)
 {
-  wxASSERT( nLen >  0         );    //
-  wxASSERT( nLen <= INT_MAX-1 );    // max size (enough room for 1 extra)
+  // allocating 0 sized buffer doesn't make sense, all empty strings should
+  // reuse g_strEmpty
+  wxASSERT( nLen >  0 );
+
+  // make sure that we don't overflow
+  wxASSERT( nLen < (INT_MAX / sizeof(wxChar)) -
+                   (sizeof(wxStringData) + EXTRA_ALLOC + 1) );
 
   STATISTICS_ADD(Length, nLen);
 

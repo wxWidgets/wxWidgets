@@ -56,7 +56,7 @@ void WXSERIAL(wxList)::StoreObject(wxObjectOutputStream& s)
 
   if (lst_object->GetKeyType() == wxKEY_INTEGER) {
     while (node) {
-      data_s.Write32(node->GetKeyInteger());
+      data_s.Write32((size_t)node->GetKeyInteger());
       node = node->Next();
     }
   } else {

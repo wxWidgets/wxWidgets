@@ -463,7 +463,7 @@ void wxComboBox::Copy()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-#if (GTK_MINOR_VERSION > 0)
+#if defined(__WXGTK13__) || (GTK_MINOR_VERSION > 0)
     gtk_editable_copy_clipboard( GTK_EDITABLE(entry) );
 #else
     gtk_editable_copy_clipboard( GTK_EDITABLE(entry), 0 );
@@ -475,7 +475,7 @@ void wxComboBox::Cut()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-#if (GTK_MINOR_VERSION > 0)
+#if defined(__WXGTK13__) || (GTK_MINOR_VERSION > 0)
     gtk_editable_cut_clipboard( GTK_EDITABLE(entry) );
 #else
     gtk_editable_cut_clipboard( GTK_EDITABLE(entry), 0 );
@@ -487,7 +487,7 @@ void wxComboBox::Paste()
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );
 
     GtkWidget *entry = GTK_COMBO(m_widget)->entry;
-#if (GTK_MINOR_VERSION > 0)
+#if defined(__WXGTK13__) || (GTK_MINOR_VERSION > 0)
     gtk_editable_paste_clipboard( GTK_EDITABLE(entry) );
 #else
     gtk_editable_paste_clipboard( GTK_EDITABLE(entry), 0 );

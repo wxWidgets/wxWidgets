@@ -413,7 +413,7 @@ void wxBoxSizer::RecalcSizes()
 
 	if (m_orient == wxVERTICAL)
 	{
-	    long height = size.y;
+	    wxCoord height = size.y;
 	    if (item->GetOption())
 	    {
 	        height = (delta * weight) + extra;
@@ -438,7 +438,7 @@ void wxBoxSizer::RecalcSizes()
 	}
 	else
 	{
-	    long width = size.x;
+	    wxCoord width = size.x;
 	    if (item->GetOption())
 	    {
 	        width = (delta * weight) + extra;

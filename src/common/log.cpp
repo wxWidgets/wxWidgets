@@ -535,7 +535,7 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
     wxConvCurrent->MB2WC(s_szBuf, strerror(nErrCode), WXSIZEOF(s_szBuf) -1);
     return s_szBuf;
 #else
-    return strerror(nErrCode);
+    return strerror((int)nErrCode);
 #endif
 #endif  // Win/Unix
 }
