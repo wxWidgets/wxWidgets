@@ -1,31 +1,44 @@
-.TH wxWindows 1 "15 Feb 2000" "wxGTK 2.2"
+.TH wx-config 1 "15 Feb 2000" "Debian GNU/Linux" "wxWindows 2.2"
 .SH NAME
-wx-config - script to get information about the installed version of wxGTK
+wx-config - generate compile time info for wxWindows
 .SH SYNOPSIS
 .nh
+.B wxbase-config
+.br
+.B wxgtk-config
 .HP
 .B wx-config
 [\-\-version] [\-\-libs] [\-\-cflags] [\-\-cc] [\-\-cxx] [\-\-ld]
 [\-\-prefix\fI[=DIR]\fP] [\-\-exec\-prefix\fI[=DIR]\fP]
-.hy
 .SH DESCRIPTION
+\fIwx-config\fP is a tool to determine the compiler and linker
+flags required for applications using the \fIwxWindows\fP toolkit(s).
 .PP
-\fIwx-config\fP is a tool used to determine the compiler and
-linker flags that should be used to compile and link programs
-that use \fIwxGTK\fP.
-.
+\fIwx-config\fP is normally a symlink to one of the port-specific
+versions like \fIwxbase-config\fP or \fIwxgtk-config\fP which
+designates the default port to compile applications with.
+You can override this default either by using one of the specific
+versions directly, or by changing which version the symlink points to.
+On Debian systems this can be done using the
+.BR update-alternatives (8)
+mechanism.
+.hy
 .SH OPTIONS
 .l
 \fIwx-config\fP accepts the following options:
 .TP 8
 .B  \-\-version
-Report the currently installed version of \fIwxGTK\fP.
+What to
+.B ALWAYS
+include in a bug report.
+.br
+( But of course you already knew that ... )
 .TP 8
 .B  \-\-libs
-Output the linker flags necessary to link a \fIwxGTK\fP program.
+Generate linker flags for a \fIwxWindows\fP program.
 .TP 8
 .B  \-\-cflags
-Output the compiler flags necessary to compile a \fIwxGTK\fP program.
+Generate compiler flags for the same.
 .TP 8
 .B  \-\-cc
 Output the name of the C compiler \fB$(CC)\fP.
@@ -37,27 +50,34 @@ Output the name of the C++ compiler \fB$(CXX)\fP.
 Output the Linker command \fB$(LD)\fP.
 .TP 8
 .B  \-\-prefix=PREFIX
-If specified, use PREFIX instead of the installation prefix that \fIwxGTK\fP
+If specified, use PREFIX instead of the installation prefix that \fIwxWindows\fP
 was built with when computing the output for the \-\-cflags and
 \-\-libs options. This option is also used for the exec prefix
 if \-\-exec\-prefix was not specified. This option must be specified
 before any \-\-libs or \-\-cflags options.
 .br
-(Translation:  this is the root path to the \fIwxGTK\fP headers -- [Ron])
+.nh
+.HP
+(Translation:  this is the root path to the \fIwxWindows\fP headers -- [Ron])
+.hy
 .TP 8
 .B  \-\-exec\-prefix=PREFIX
 If specified, use PREFIX instead of the installation exec prefix that
-\fIwxGTK\fP was built with when computing the output for the \-\-cflags
+\fIwxWindows\fP was built with when computing the output for the \-\-cflags
 and \-\-libs options.  This option must be specified before any
 \-\-libs or \-\-cflags options.
 .br
-(Translation:  this is the root path to the \fIwxGTK\fP library -- [Ron])
+.nh
+.HP
+(Translation:  this is the root path to the \fIwxWindows\fP library -- [Ron])
+.hy
 .SH SEE ALSO
-.BR gtk-config (1)
+.BR gtk-config (1),
+.BR update-alternatives (8)
 .SH COPYRIGHT
 This manpage was copied whole-heartedly from the \fBgtk-config\fP(1) manpage
 by Brian Bassett <brianb@debian.org> for the Debian GNU/Linux distribution of
-wxGTK.  It was then updated to include new options and otherwise kicked about
+wxGTK.  It was then updated to include new options and otherwise bastardised
 generally by Ron Lee <ron@debian.org>
 
 The original gtk-config manpage copyright:

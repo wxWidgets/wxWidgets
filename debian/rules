@@ -152,7 +152,7 @@ install: build
 		echo "generating control file $(package_wxbase_lib).$$f"; \
 		cp debian/libwxbase.$$f debian/$(package_wxbase_lib).$$f; \
 	done;
-	@for f in dirs docs files links; do \
+	@for f in dirs docs files links postinst prerm; do \
 		echo "generating control file $(package_wxbase_dev).$$f"; \
 		cp debian/libwxbase-dev.$$f debian/$(package_wxbase_dev).$$f; \
 	done;
@@ -160,7 +160,7 @@ install: build
 		echo "generating control file $(package_gtk_lib).$$f"; \
 		cp debian/libwxgtk.$$f debian/$(package_gtk_lib).$$f; \
 	done;
-	@for f in dirs docs files; do \
+	@for f in dirs docs files links postinst prerm; do \
 		echo "generating control file $(package_gtk_dev).$$f"; \
 		cp debian/libwxgtk-dev.$$f debian/$(package_gtk_dev).$$f; \
 	done;
@@ -180,9 +180,10 @@ install: build
 	dh_installdirs
 	cd $(objdir_gtk_shared) \
 		&& $(MAKE) install prefix=`pwd`/../debian/tmp/usr
+	rm -f debian/tmp/usr/bin/wx-config
 	cp $(objdir_gtk_static)/lib/*.a debian/tmp/usr/lib
 	cp -a $(objdir_wxbase_shared)/lib/* debian/tmp/usr/lib
-	cp $(objdir_wxbase_shared)/wx-config debian/tmp/usr/bin/wxbase-config
+	cp $(objdir_wxbase_shared)/wxbase-config debian/tmp/usr/bin/
 	cp $(objdir_wxbase_static)/lib/*.a debian/tmp/usr/lib
 	cd utils/wxPython/src \
 		&& ../distrib/build.py -i \

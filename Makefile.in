@@ -302,17 +302,19 @@ CREATE_LINKS: @WX_LIBRARY_NAME_SHARED@
 	@$(RM) ./lib/@WX_LIBRARY_LINK1@
 	@$(RM) ./lib/@WX_LIBRARY_LINK2@
 	@$(RM) ./lib/@WX_LIBRARY_LINK3@
-	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK1@
-	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK2@
-	$(LN_S) @WX_TARGET_LIBRARY@ ./lib/@WX_LIBRARY_LINK3@
+	cd lib \
+		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK1@ \
+		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK2@ \
+		&& $(LN_S) @WX_TARGET_LIBRARY@ @WX_LIBRARY_LINK3@
 	
 CREATE_INSTALLED_LINKS: preinstall
 	$(RM) $(libdir)/@WX_LIBRARY_LINK1@
 	$(RM) $(libdir)/@WX_LIBRARY_LINK2@
 	$(RM) $(libdir)/@WX_LIBRARY_LINK3@
-	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK1@
-	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK2@
-	$(LN_S) @WX_LIBRARY_NAME_SHARED@ $(libdir)/@WX_LIBRARY_LINK3@
+	cd $(libdir) \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK1@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK2@ \
+		&& $(LN_S) @WX_LIBRARY_NAME_SHARED@ @WX_LIBRARY_LINK3@
 	
 $(OBJECTS):	$(WXDIR)/include/wx/defs.h $(WXDIR)/include/wx/object.h
 
@@ -349,7 +351,7 @@ afminstall: preinstall
 
 # this is the real install target: copies the library, wx-config and the
 # headers to the installation directory
-preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
+preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx@TOOLKIT_DIR@-config
 	@echo " "
 	@echo " Installing wxWindows..."
 	@echo " "
@@ -358,7 +360,8 @@ preinstall: $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(top_builddir)/wx-config
 	$(INSTALL) -d $(bindir)
 	$(INSTALL) -d $(libdir)
 
-	$(INSTALL_SCRIPT) $(top_builddir)/wx-config $(bindir)/wx-config
+	$(INSTALL_SCRIPT) $(top_builddir)/wx@TOOLKIT_DIR@-config $(bindir)/wx@TOOLKIT_DIR@-config
+	cd $(bindir) && rm -f wx-config && $(LN_S) wx@TOOLKIT_DIR@-config wx-config
 	$(INSTALL_PROGRAM) $(top_builddir)/lib/@WX_TARGET_LIBRARY@ $(libdir)/@WX_TARGET_LIBRARY@
 
 	$(INSTALL) -d $(libdir)/wx
@@ -403,11 +406,13 @@ uninstall:
 	@echo " Removing helper files..."
 	@$(RM) $(libdir)/wx/include/wx/@TOOLKIT_DIR@/setup.h
 	@$(RM) $(bindir)/wx-config
+	@$(RM) $(bindir)/wx@TOOLKIT_DIR@-config
 	@$(RM) $(datadir)/wx/afm/*
 	@$(RM) $(datadir)/wx/gs_afm/*
-	@rmdir $(datadir)/wx/gs_afm
-	@rmdir $(datadir)/wx/afm
-	@rmdir $(datadir)/wx
+# FIXME: wxBase doesnt install these next 3 dirs.
+	@-rmdir $(datadir)/wx/gs_afm
+	@-rmdir $(datadir)/wx/afm
+	@-rmdir $(datadir)/wx
 	@echo " Removing headers..."
 	@list='$(HEADERS)'; for p in $$list; do \
 	  $(RM) $(includedir)/wx/$$p; \

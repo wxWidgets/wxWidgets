@@ -1,0 +1,7 @@
+#! /bin/sh
+set -e
+
+update-alternatives --install /usr/bin/wx-config wx-config /usr/bin/wxgtk-config 50
+
+#DEBHELPER#
+

@@ -11,11 +11,13 @@
 
 /* compatibility code, to be removed asap: */
 
-#if !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXQT__) && !defined(__WXSTUBS__) && !defined(__WXMAC__) && !defined(__WXPM__)
-#error No __WXxxx__ define set! Please define one of __WXGTK__,__WXMSW__,__WXMOTIF__,__WXMAC__,__WXQT__,__WXPM__,__WXSTUBS__
+#if !defined(__WXBASE__) && !defined(__WXMSW__) && !defined(__WXGTK__) && !defined(__WXMOTIF__) && !defined(__WXQT__) && !defined(__WXSTUBS__) && !defined(__WXMAC__) && !defined(__WXPM__)
+#error No __WXxxx__ define set! Please define one of __WXBASE__,__WXGTK__,__WXMSW__,__WXMOTIF__,__WXMAC__,__WXQT__,__WXPM__,__WXSTUBS__
 #endif
 
-#ifdef __VMS
+#ifdef __WXBASE__
+#include "wx/base/setup.h"
+#elif defined(__VMS)
 #include "wx_root:[wxwindows]setup.h"
 #elif defined(__WXMSW__)
 #include "wx/msw/setup.h"

@@ -1868,9 +1868,10 @@ fi
     GUIDIST="${GUIDIST} SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST"
     DISTDIR="wx\$(TOOLKIT)"
 else
-    dnl leave all TOOLKIT_XXX vars empty
-
     USE_GUI=0
+
+    TOOLKIT_DIR="base"
+    TOOLKIT_DEF="-D__WXBASE__"
 
     dnl the sources, their dependenices and the headers
     ALL_OBJECTS="\$(BASE_OBJS) \${BASE_UNIX_OBJS}"
@@ -3537,6 +3538,8 @@ AC_OUTPUT([
           ],
           [
             chmod +x wx-config
+            mv wx-config wx${TOOLKIT_DIR}-config
+            ${LN_S} wx${TOOLKIT_DIR}-config wx-config
             
             dnl the debian installer wants setup.h to be in the lib subdir
             dnl so we *copy* it there
@@ -3559,9 +3562,9 @@ AC_OUTPUT([
             if test -f setup.h; then
                 cp -f setup.h lib/wx/include/wx/${TOOLKIT_DIR}/setup.h
             fi
-            
+
             dnl *move* setup.h to its final place
-            
+
             if test ! -d include; then
               mkdir include
             fi
@@ -3578,6 +3581,7 @@ AC_OUTPUT([
           ],
           [
             TOOLKIT_DIR="${TOOLKIT_DIR}"
+            LN_S="${LN_S}"
           ]
          )
 
