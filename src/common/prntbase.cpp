@@ -544,6 +544,7 @@ wxFrame(parent, -1, title, pos, size, style, name)
     m_printPreview = preview;
     m_controlBar = NULL;
     m_previewCanvas = NULL;
+    m_windowDisabler = NULL;
 
     // Give the application icon
 #ifdef __WXMSW__
@@ -559,11 +560,8 @@ wxPreviewFrame::~wxPreviewFrame()
 
 void wxPreviewFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
-    // MakeModal doesn't work on wxMac, especially when there
-    // are multiple top-level windows.
-#ifndef __WXMAC__
-    MakeModal(FALSE);
-#endif
+    if (m_windowDisabler)
+        delete m_windowDisabler;
 
     // Need to delete the printout and the print preview
     wxPrintout *printout = m_printPreview->GetPrintout();
@@ -598,11 +596,7 @@ void wxPreviewFrame::Initialize()
     SetAutoLayout( TRUE );
     SetSizer( item0 );
 
-    // MakeModal doesn't work on wxMac, especially when there
-    // are multiple top-level windows.
-#ifndef __WXMAC__
-    MakeModal(TRUE);
-#endif
+    m_windowDisabler = new wxWindowDisabler(this);
 
     Layout();
 

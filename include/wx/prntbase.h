@@ -212,6 +212,7 @@ protected:
     wxPreviewCanvas*      m_previewCanvas;
     wxPreviewControlBar*  m_controlBar;
     wxPrintPreviewBase*   m_printPreview;
+    wxWindowDisabler*     m_windowDisabler;
 
 private:
     DECLARE_CLASS(wxPreviewFrame)
