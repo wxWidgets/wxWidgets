@@ -85,9 +85,16 @@ place, then do the same for wxPython.
                       
 
    On OS X of course you'll want to use --with-mac instead of
-   --with-gtk.  For GTK2 and unicode add::
+   --with-gtk.  
+
+   By default GTK2 will be selected if it is on your build system.  To
+   force the use of GTK 1.2.x then add::
+
+		      --disable-gtk2 \
+
+   To make the wxWidgets build be Unicode enabled (strongly
+   recommended if you are building with GTK2) then add::
                          
-                      --enable-gtk2 \
                       --enable-unicode \
 
    Notice that I used a prefix of /opt/wx/2.5.  You can use whatever
@@ -168,10 +175,17 @@ place, then do the same for wxPython.
 
          WX_CONFIG=/opt/wx/2.5/bin/wx-config
 
-   If you are building with GTK2 then add the following flags to the
-   command line::
+   By default setup.py will assume that you built wxWidgets to use
+   GTK2.  If you built wxWidgets to use GTK 1.2.x then you should add
+   this flag to the command-line::
 
-         WXPORT=gtk2 UNICODE=1
+	 WXPORT=gtk2 
+
+   If you woudl like to do a Unicode enabled build (all strings sent
+   to or retruned from wx functions are Unicode objects) and your
+   wxWidgets was built with unicod enabled then add this flag::
+
+         UNICODE=1
 
    If you are wanting to have the source files regenerated with swig,
    then you need to turn on the USE_SWIG flag and optionally tell it

@@ -39,7 +39,7 @@ VER_MAJOR        = 2      # The first three must match wxWidgets
 VER_MINOR        = 5
 VER_RELEASE      = 2
 VER_SUBREL       = 3      # wxPython release num for x.y.z release of wxWidgets
-VER_FLAGS        = "p"     # release flags, such as prerelease num, unicode, etc.
+VER_FLAGS        = ""     # release flags, such as prerelease num, unicode, etc.
 
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
@@ -129,7 +129,7 @@ WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
                    # version, port, etc. and it will be looked for on the
                    # default $PATH.
 
-WXPORT = 'gtk'     # On Linux/Unix there are several ports of wxWidgets available.
+WXPORT = 'gtk2'    # On Linux/Unix there are several ports of wxWidgets available.
                    # Setting this value lets you select which will be used for
                    # the wxPython build.  Possibilites are 'gtk', 'gtk2' and
                    # 'x11'.  Curently only gtk and gtk2 works.

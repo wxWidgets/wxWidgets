@@ -36,8 +36,8 @@ OTHERFLAGS=""
 PORTFLAGS=""
 
 
-if [ "$1" = "gtk1" ]; then 
-    PORTFLAGS=""
+if [ "$1" = "gtk1" -o "$1" = "gtk" ]; then 
+    PORTFLAGS="WXPORT=gtk UNICODE=0"
     shift
 elif [ "$1" = "gtk2" ]; then 
     PORTFLAGS="WXPORT=gtk2 UNICODE=1"
