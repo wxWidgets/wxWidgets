@@ -258,7 +258,12 @@ private:
 
 wxDialUpManagerImpl::wxDialUpManagerImpl()
 {
-   m_IsOnline = -2; // -1 or -2, unknown
+   /* The isOnline flag can have the following values internally:
+      0  : not connected
+      1  : connected
+      -1 : unknown/undefined status
+   */
+   m_IsOnline = -1; 
    m_DialProcess = NULL;
    m_timer = NULL;
    m_CanUseIfconfig = -1; // unknown
@@ -298,7 +303,6 @@ wxDialUpManagerImpl::Dial(const wxString &isp,
 {
    if(m_IsOnline == 1)
       return FALSE;
-   m_IsOnline = -1;
    m_ISPname = isp;
    wxString cmd;
    if(m_ConnectCommand.Find(wxT("%s")))
@@ -333,7 +337,6 @@ wxDialUpManagerImpl::HangUp(void)
       wxLogError(_("Already dialling ISP."));
       return FALSE;
    }
-   m_IsOnline = -1;
    wxString cmd;
    if(m_HangUpCommand.Find(wxT("%s")))
       cmd.Printf(m_HangUpCommand,m_ISPname.c_str(), m_DialProcess);
@@ -405,7 +408,12 @@ wxDialUpManagerImpl::CheckStatus(bool fromAsync) const
    ( /* non-const */ (wxDialUpManagerImpl *)this)->CheckStatusInternal();
 
    // now send the events as appropriate:
-   if(m_IsOnline != oldIsOnline && m_IsOnline != -1 && oldIsOnline != -2) // -2: first time!
+   if(m_IsOnline != oldIsOnline // it changed
+      && ( m_IsOnline == 1      // and it is a defined status
+           || m_IsOnline == 0)
+      // only send events for well defined transitions
+      && ( oldIsOnline == 1 || oldIsOnline == 0) 
+      )
    {
       wxDialUpEvent event(m_IsOnline, ! fromAsync);
       (void)wxTheApp->ProcessEvent(event);
