@@ -1492,6 +1492,11 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
     NMHDR *nmhdr = (NMHDR *)lParam;
 
+    // if your compiler is as broken as this, you should really change it: this
+    // code is needed for normal operation! #ifdef below is only useful for
+    // automatic rebuilds which are done with a very old compiler version
+#ifdef LVM_FIRST
+
     // check for messages from the header (in report view)
     HWND hwndHdr = ListView_GetHeader(GetHwnd());
 
@@ -1573,7 +1578,9 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 return wxControl::MSWOnNotify(idCtrl, lParam, result);
         }
     }
-    else if ( nmhdr->hwndFrom == GetHwnd() )
+    else
+#endif // defined(LVM_FIRST)
+        if ( nmhdr->hwndFrom == GetHwnd() )
     {
         // almost all messages use NM_LISTVIEW
         NM_LISTVIEW *nmLV = (NM_LISTVIEW *)nmhdr;
