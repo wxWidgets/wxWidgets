@@ -165,7 +165,7 @@ bool wxMemoryFSHandler::CheckHash(const wxString& filename)
     {
         wxString s;
         s.Printf(_("Failed to store image '%s' to memory VFS!"), filename.c_str());
-        printf("'%s'\n", s.c_str());
+        wxPrintf(wxT("'%s'\n"), s.c_str());
         wxLogError(s);
     }
 }

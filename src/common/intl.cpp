@@ -292,7 +292,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
 
     // LC_PATH is a standard env var containing the search path for the .mo
     // files
-    const wxChar *pszLcPath = wxGetenv("LC_PATH");
+    const wxChar *pszLcPath = wxGetenv(wxT("LC_PATH"));
     if ( pszLcPath != NULL )
         searchPath << GetAllMsgCatalogSubdirs(pszLcPath, lang);
 

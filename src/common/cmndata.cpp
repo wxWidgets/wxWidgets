@@ -668,7 +668,7 @@ void wxPrintData::ConvertFromNative()
             // Not sure if we should check for this mismatch
 //            wxASSERT_MSG( (m_printerName == "" || (devName == m_printerName)), "Printer name obtained from DEVMODE and DEVNAMES were different!");
 
-            if (printerName != "")
+            if (printerName != wxT(""))
                 m_printerName = printerName;
 
             GlobalUnlock(hDevNames);

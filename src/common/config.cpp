@@ -42,7 +42,6 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <ctype.h>    // for isalnum()
 
 // ----------------------------------------------------------------------------
 // global and class static variables
@@ -292,13 +291,13 @@ wxString wxExpandEnvVars(const wxString& str)
   for ( size_t n = 0; n < str.Len(); n++ ) {
     switch ( str[n] ) {
 #ifdef  __WXMSW__
-      case '%':
+      case wxT('%'):
 #endif  //WINDOWS
-      case '$':
+      case wxT('$'):
         {
           Bracket bracket;
           #ifdef  __WXMSW__
-            if ( str[n] == '%' )
+            if ( str[n] == wxT('%') )
               bracket = Bracket_Windows;
             else
           #endif  //WINDOWS
@@ -307,12 +306,12 @@ wxString wxExpandEnvVars(const wxString& str)
           }
           else {
             switch ( str[n + 1] ) {
-              case '(':
+              case wxT('('):
                 bracket = Bracket_Normal;
                 n++;                   // skip the bracket
                 break;
 
-              case '{':
+              case wxT('{'):
                 bracket = Bracket_Curly;
                 n++;                   // skip the bracket
                 break;
@@ -324,7 +323,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           m = n + 1;
 
-          while ( m < str.Len() && (isalnum(str[m]) || str[m] == '_') )
+          while ( m < str.Len() && (wxIsalnum(str[m]) || str[m] == wxT('_')) )
             m++;
 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
@@ -363,7 +362,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
       case '\\':
         // backslash can be used to suppress special meaning of % and $
-        if ( n != str.Len() && (str[n + 1] == '%' || str[n + 1] == '$') ) {
+        if ( n != str.Len() && (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {
           strResult += str[++n];
 
           break;
