@@ -159,8 +159,9 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
   if (newSize.y == -1) newSize.y = height;
   SetSize( newSize.x, newSize.y );
   
-  gtk_myfixed_put( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x, m_y );
-  gtk_widget_set_usize( m_widget, m_width, m_height );
+  m_parent->AddChild( this );
+
+  (m_parent->m_insertCallback)( m_parent, this );
   
   PostCreation();
   
