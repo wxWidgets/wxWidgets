@@ -767,7 +767,7 @@
 #define wxUSE_SPLASH 1
 
 // wizards
-#define wxUSE_WIZARDDLG 0 //? error '_wxArraywxArrayPages' redefinition
+#define wxUSE_WIZARDDLG 1
 
 // ----------------------------------------------------------------------------
 // Metafiles support
