@@ -111,7 +111,7 @@ void wxButton::SetDefault()
 {
     wxWindow *parent = GetParent();
     if ( parent )
-        panel->SetDefaultItem(this);
+        parent->SetDefaultItem(this);
 
     // We initially do not set XmNdefaultShadowThickness, to have small buttons.
     // Unfortunately, buttons are now mis-aligned. We try to correct this
