@@ -115,16 +115,6 @@
     typedef long off_t;
 #endif
 
-#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
-//
-// VisualAge C++ V4.0 cannot have any external linkage const decs
-// in headers included by more than one primary source
-//
-extern const off_t wxInvalidOffset;
-#else
-const off_t wxInvalidOffset = (off_t)-1;
-#endif
-
 enum wxSeekMode
 {
   wxFromStart,
@@ -317,7 +307,7 @@ enum wxSeekMode
 
     // It's a private define, undefine it so nobody gets tempted to use it
     #undef __HUGEFILES_SUPPORTED
-#else
+#else // Unix platforms using configure
     typedef off_t wxFileOffset;
     #ifdef _LARGE_FILES
         #define wxFileOffsetFmtSpec wxLongLongFmtSpec
@@ -353,8 +343,17 @@ enum wxSeekMode
         #define   wxStat       stat
         #define   wxAccess     access
     #endif
+#endif // platforms
 
-#endif  // VC++
+#if defined(__VISAGECPP__) && __IBMCPP__ >= 400
+//
+// VisualAge C++ V4.0 cannot have any external linkage const decs
+// in headers included by more than one primary source
+//
+extern const wxFileOffset wxInvalidOffset;
+#else
+const wxFileOffset wxInvalidOffset = (wxFileOffset)-1;
+#endif
 
 // ----------------------------------------------------------------------------
 // functions
