@@ -1464,32 +1464,41 @@ PNG_INCLUDE=
 PNG_LINK=
 if test "$wxUSE_LIBPNG" != "no" ; then
     AC_DEFINE(wxUSE_LIBPNG)
+    
+    if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBPNG" = "builtin" ; then
+        AC_MSG_WARN([wxMGL doesn't work with builtin png library, will use MGL one instead])
+        wxUSE_LIBPNG=sys
+    fi
 
     dnl for the check below to have a chance to succeed, we must already have
-    dnl libz somewhere
-    if test "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
+    dnl libz somewhere (don't do this when bulding wxMGL since its libpng
+    dnl doesn't depend on zlib)
+    if test "$wxUSE_MGL" != 1 -a "$wxUSE_LIBPNG" = "sys" -a "$wxUSE_ZLIB" != "sys" ; then
         AC_MSG_WARN([system png library doesn't work without system zlib, will use built-in instead])
         wxUSE_LIBPNG=builtin
     fi
 
-    if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
-        AC_CHECK_HEADER(png.h,
-                        AC_CHECK_LIB(png, png_check_sig,
-                                     PNG_LINK=" -lpng",
-                                     ,
-                                     [-lz -lm])
-                       )
+    if test "$wxUSE_MGL" != 1 ; then
+        dnl Don't check for libpng when building wxMGL, libmgl contains it
+        if test "$wxUSE_LIBPNG" = "sys" -o "$wxUSE_LIBPNG" = "yes" ; then
+            AC_CHECK_HEADER(png.h,
+                            AC_CHECK_LIB(png, png_check_sig,
+                                         PNG_LINK=" -lpng",
+                                         ,
+                                         [-lz -lm])
+                           )
 
-        if test "x$PNG_LINK" = "x" ; then
-            if test "$wxUSE_LIBPNG" = "sys" ; then
-                AC_MSG_ERROR([system png library not found! Use --with-libpng=builtin to use built-in version])
+            if test "x$PNG_LINK" = "x" ; then
+                if test "$wxUSE_LIBPNG" = "sys" ; then
+                    AC_MSG_ERROR([system png library not found! Use --with-libpng=builtin to use built-in version])
+                else
+                    AC_MSG_WARN([system png library not found, will use built-in instead])
+                    wxUSE_LIBPNG=builtin
+                fi
             else
-                AC_MSG_WARN([system png library not found, will use built-in instead])
-                wxUSE_LIBPNG=builtin
+                dnl we are using the system library
+                wxUSE_LIBPNG=yes
             fi
-        else
-            dnl we are using the system library
-            wxUSE_LIBPNG=yes
         fi
     fi
 
@@ -1509,40 +1518,48 @@ JPEG_LINK=
 if test "$wxUSE_LIBJPEG" != "no" ; then
     AC_DEFINE(wxUSE_LIBJPEG)
 
-    if test "$wxUSE_LIBJPEG" = "sys" -o "$wxUSE_LIBJPEG" = "yes" ; then
-        dnl can't use AC_CHECK_HEADER as jconfig.h defines things like
-        dnl HAVE_STDLIB_H which are already defined and this provokes
-        dnl a compiler warning which configure considers as an error...
-        AC_MSG_CHECKING(for jpeglib.h)
-        AC_CACHE_VAL(ac_cv_header_jpeglib_h,
-            AC_TRY_COMPILE(
-                [
-                    #undef HAVE_STDLIB_H
-                    #include <stdio.h>
-                    #include <jpeglib.h>
-                ],
-                [
-                ],
-                ac_cv_header_jpeglib_h=yes,
-                ac_cv_header_jpeglib_h=no
+    if test "$wxUSE_MGL" = 1 -a "$wxUSE_LIBJPEG" = "builtin" ; then
+        AC_MSG_WARN([wxMGL doesn't work with builtin jpeg library, will use MGL one instead])
+        wxUSE_LIBJPEG=sys
+    fi
+
+    if test "$wxUSE_MGL" != 1 ; then
+        dnl Don't check for libjpeg when building wxMGL, libmgl contains it
+        if test "$wxUSE_LIBJPEG" = "sys" -o "$wxUSE_LIBJPEG" = "yes" ; then
+            dnl can't use AC_CHECK_HEADER as jconfig.h defines things like
+            dnl HAVE_STDLIB_H which are already defined and this provokes
+            dnl a compiler warning which configure considers as an error...
+            AC_MSG_CHECKING(for jpeglib.h)
+            AC_CACHE_VAL(ac_cv_header_jpeglib_h,
+                AC_TRY_COMPILE(
+                    [
+                        #undef HAVE_STDLIB_H
+                        #include <stdio.h>
+                        #include <jpeglib.h>
+                    ],
+                    [
+                    ],
+                    ac_cv_header_jpeglib_h=yes,
+                    ac_cv_header_jpeglib_h=no
+                )
             )
-        )
-        AC_MSG_RESULT($ac_cv_header_jpeglib_h)
+            AC_MSG_RESULT($ac_cv_header_jpeglib_h)
 
-        if test "$ac_cv_header_jpeglib_h" = "yes"; then
-            AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK=" -ljpeg")
-        fi
-
-        if test "x$JPEG_LINK" = "x" ; then
-            if test "$wxUSE_LIBJPEG" = "sys" ; then
-                AC_MSG_ERROR([system jpeg library not found! Use --with-libjpeg=builtin to use built-in version])
-            else
-                AC_MSG_WARN([system jpeg library not found, will use built-in instead])
-                wxUSE_LIBJPEG=builtin
+            if test "$ac_cv_header_jpeglib_h" = "yes"; then
+                AC_CHECK_LIB(jpeg, jpeg_read_header, JPEG_LINK=" -ljpeg")
             fi
-        else
-            dnl we are using the system library
-            wxUSE_LIBJPEG=sys
+
+            if test "x$JPEG_LINK" = "x" ; then
+                if test "$wxUSE_LIBJPEG" = "sys" ; then
+                    AC_MSG_ERROR([system jpeg library not found! Use --with-libjpeg=builtin to use built-in version])
+                else
+                    AC_MSG_WARN([system jpeg library not found, will use built-in instead])
+                    wxUSE_LIBJPEG=builtin
+                fi
+            else
+                dnl we are using the system library
+                wxUSE_LIBJPEG=sys
+            fi
         fi
     fi
 
