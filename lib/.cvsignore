@@ -1,5 +1,6 @@
 bcc_lib
 vc_lib
+vc_dll
 wat_lib
 Linux
 linux-gnu
