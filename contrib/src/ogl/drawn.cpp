@@ -1817,7 +1817,7 @@ void wxPseudoMetaFile::Copy(wxPseudoMetaFile& copy)
 
 bool wxPseudoMetaFile::LoadFromMetaFile(char *filename, double *rwidth, double *rheight)
 {
-  if (!FileExists(filename))
+  if (!wxFileExists(filename))
     return NULL;
 
   wxXMetaFile *metaFile = new wxXMetaFile;
