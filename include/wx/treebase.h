@@ -20,8 +20,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// Not defined in setup.h so removing for now
-// #if wxUSE_TREECTRL
+#if wxUSE_TREECTRL
 
 #include "wx/control.h"
 #include "wx/event.h"
@@ -302,9 +301,8 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
 #define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTreeEventFunction) & fn, NULL ),
 
-// #endif // wxUSE_TREECTRL
+#endif // wxUSE_TREECTRL
 
 #endif
     // _WX_TREEBASE_H_
-
 

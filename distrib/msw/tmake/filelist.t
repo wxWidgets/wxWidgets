@@ -43,6 +43,10 @@
             $wxMOTIF{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "R" ) {
             $wxGTK{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "V" ) {
+            $wxUNIV{$fields[0]} = $fields[2];
+        } elsif ( $fields[1] eq "Z" ) {
+            $wxMGL{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "O" ) {
             $wxOS2PM{$fields[0]} = $fields[2];
         } elsif ( $fields[1] eq "H" ) {

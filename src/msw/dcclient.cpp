@@ -64,7 +64,7 @@ WX_DEFINE_OBJARRAY(wxArrayDCInfo);
 
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
-IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
+IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxClientDC)
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -102,7 +102,6 @@ wxWindowDC::wxWindowDC(wxWindow *canvas)
 
     // m_bOwnsDC was already set to false in the base class ctor, so the DC
     // will be released (and not deleted) in ~wxDC
-
     InitDC();
 }
 
@@ -136,6 +135,29 @@ wxClientDC::wxClientDC(wxWindow *canvas)
     // will be released (and not deleted) in ~wxDC
 
     InitDC();
+}
+
+void wxClientDC::InitDC()
+{
+    wxWindowDC::InitDC();
+
+    // in wxUniv build we must manually do some DC adjustments usually
+    // performed by Windows for us
+#ifdef __WXUNIVERSAL__
+    wxPoint ptOrigin = m_canvas->GetClientAreaOrigin();
+    if ( ptOrigin.x || ptOrigin.y )
+    {
+        // no need to shift DC origin if shift is null
+        SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    }
+
+    // clip the DC to avoid overwriting the non client area
+    SetClippingRegion(wxPoint(0, 0), m_canvas->GetClientSize());
+#endif // __WXUNIVERSAL__
+}
+
+wxClientDC::~wxClientDC()
+{
 }
 
 // ----------------------------------------------------------------------------
@@ -193,6 +215,7 @@ wxPaintDC::wxPaintDC(wxWindow *canvas)
         ms_cache.Add(new wxPaintDCInfo(m_canvas, this));
     }
 
+    // (re)set the DC parameters
     InitDC();
 }
 

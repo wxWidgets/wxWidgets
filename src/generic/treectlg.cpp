@@ -25,8 +25,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_TREECTRL
 
 #include "wx/generic/treectlg.h"
 #include "wx/imaglist.h"
@@ -1582,7 +1584,7 @@ void wxGenericTreeCtrl::ScrollTo(const wxTreeItemId &item)
 
     int start_x = 0;
     int start_y = 0;
-    ViewStart( &start_x, &start_y );
+    GetViewStart( &start_x, &start_y );
     start_y *= PIXELS_PER_UNIT;
 
     int client_h = 0;
@@ -2741,3 +2743,4 @@ void wxGenericTreeCtrl::RefreshLine( wxGenericTreeItem *item )
     Refresh( TRUE, &rect );
 }
 
+#endif // wxUSE_TREECTRL

@@ -77,7 +77,6 @@ license is as follows:
 #  include "wx/defs.h"
 #endif
 
-#if wxUSE_IMAGE && wxUSE_XPM
 
 #include "wx/imagxpm.h"
 #include "wx/wfstream.h"
@@ -222,4 +221,3 @@ bool wxXPMHandler::DoCanRead(wxInputStream& stream)
 
 #endif  // wxUSE_STREAMS
 
-#endif // wxUSE_XPM && wxUSE_IMAGE

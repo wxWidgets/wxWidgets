@@ -63,6 +63,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxKeyEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxSizeEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxPaintEvent, wxEvent)
+    IMPLEMENT_DYNAMIC_CLASS(wxNcPaintEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxEraseEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxMoveEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxFocusEvent, wxEvent)
@@ -484,7 +485,8 @@ bool wxMouseEvent::ButtonDown(int but) const
 // or any button up event (but = -1)
 bool wxMouseEvent::ButtonUp(int but) const
 {
-    switch (but) {
+    switch (but)
+    {
         case -1:
             return (LeftUp() || MiddleUp() || RightUp());
         case 1:
@@ -503,7 +505,8 @@ bool wxMouseEvent::ButtonUp(int but) const
 // True if the given button is currently changing state
 bool wxMouseEvent::Button(int but) const
 {
-    switch (but) {
+    switch (but)
+    {
         case -1:
             return (ButtonUp(-1) || ButtonDown(-1) || ButtonDClick(-1));
         case 1:
@@ -521,7 +524,8 @@ bool wxMouseEvent::Button(int but) const
 
 bool wxMouseEvent::ButtonIsDown(int but) const
 {
-    switch (but) {
+    switch (but)
+    {
         case -1:
             return (LeftIsDown() || MiddleIsDown() || RightIsDown());
         case 1:
@@ -535,6 +539,19 @@ bool wxMouseEvent::ButtonIsDown(int but) const
     }
 
     return FALSE;
+}
+
+int wxMouseEvent::GetButton() const
+{
+    for ( int i = 1; i <= 3; i++ )
+    {
+        if ( Button(i) )
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }
 
 // Find the logical position of the event given the DC
@@ -874,7 +891,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
 {
 #if wxUSE_GUI
     // check that our flag corresponds to reality
-    wxASSERT( m_isWindow == IsKindOf(CLASSINFO(wxWindow)) );
+    wxASSERT_MSG( m_isWindow == IsKindOf(CLASSINFO(wxWindow)),
+                  _T("this should [not] be a window but it is [not]") );
 #endif // wxUSE_GUI
 
     // An event handler can be enabled or disabled

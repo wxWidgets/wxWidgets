@@ -506,8 +506,6 @@ public:
 
 class WXDLLEXPORT wxScrollWinEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxScrollWinEvent)
-
 public:
     wxScrollWinEvent(wxEventType commandType = wxEVT_NULL,
                      int pos = 0, int orient = 0);
@@ -523,9 +521,12 @@ public:
     void SetPosition(int pos) { m_commandInt = pos; }
 
     void CopyObject(wxObject& object_dest) const;
+
 public:
     int               m_commandInt;    // Additional information
     long              m_extraLong;
+
+    DECLARE_DYNAMIC_CLASS(wxScrollWinEvent)
 };
 
 // Mouse event class
@@ -559,8 +560,6 @@ public:
 
 class WXDLLEXPORT wxMouseEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxMouseEvent)
-
 public:
     wxMouseEvent(wxEventType mouseType = wxEVT_NULL);
 
@@ -581,6 +580,9 @@ public:
 
     // Was the given button 1,2,3 or any in Down state?
     bool ButtonIsDown(int but) const;
+
+    // Get the button which is changing state (-1 if none)
+    int GetButton() const;
 
     // Find state of shift/control keys
     bool ControlDown() const { return m_controlDown; }
@@ -706,6 +708,9 @@ public:
     int           m_wheelRotation;
     int           m_wheelDelta;
     int           m_linesPerAction;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxMouseEvent)
 };
 
 // Cursor set event
@@ -886,6 +891,15 @@ public:
 #endif // debug
 };
 
+class WXDLLEXPORT wxNcPaintEvent : public wxEvent
+{
+public:
+    wxNcPaintEvent(int id = 0) : wxEvent(id) { SetEventType(wxEVT_NC_PAINT); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxNcPaintEvent)
+};
+
 // Erase background event class
 /*
  wxEVT_ERASE_BACKGROUND
@@ -913,11 +927,22 @@ public:
 
 class WXDLLEXPORT wxFocusEvent : public wxEvent
 {
-    DECLARE_DYNAMIC_CLASS(wxFocusEvent)
-
 public:
-    wxFocusEvent(wxEventType type = wxEVT_NULL, int Id = 0)
-        { m_eventType = type; m_id = Id; }
+    wxFocusEvent(wxEventType type = wxEVT_NULL, int id = 0)
+        { m_eventType = type; m_id = id; m_win = NULL; }
+
+    // the window associated with this event is the window which had focus
+    // before for SET event and the window which will have focus for the KILL
+    // one
+    //
+    // NB: it may be NULL in both cases!
+    wxWindow *GetWindow() const { return m_win; }
+    void SetWindow(wxWindow *win) { m_win = win; }
+
+private:
+    wxWindow *m_win;
+
+    DECLARE_DYNAMIC_CLASS(wxFocusEvent)
 };
 
 // Activate event class
@@ -1777,6 +1802,7 @@ typedef void (wxEvtHandler::*wxContextMenuEventFunction)(wxContextMenuEvent&);
 #define EVT_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_QUERY_END_SESSION(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_QUERY_END_SESSION, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCloseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_PAINT(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL ),
+#define EVT_NC_PAINT(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_NC_PAINT, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxPaintEventFunction) & func, (wxObject *) NULL ),
 #define EVT_ERASE_BACKGROUND(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_ERASE_BACKGROUND, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxEraseEventFunction) & func, (wxObject *) NULL ),
 #define EVT_CHAR(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_CHAR, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),
 #define EVT_KEY_DOWN(func)  DECLARE_EVENT_TABLE_ENTRY( wxEVT_KEY_DOWN, -1, -1, (wxObjectEventFunction) (wxEventFunction) (wxCharEventFunction) & func, (wxObject *) NULL ),

@@ -21,6 +21,9 @@
 #endif
 
 #include "wx/defs.h"
+
+#if wxUSE_TEXTCTRL
+
 #include "wx/control.h"         // the base class
 
 // 16-bit Borland 4.0 doesn't seem to allow multiple inheritance with wxWindow
@@ -171,9 +174,9 @@ public:
     virtual void Cut() = 0;
     virtual void Paste() = 0;
 
-    virtual bool CanCopy() const = 0;
-    virtual bool CanCut() const = 0;
-    virtual bool CanPaste() const = 0;
+    virtual bool CanCopy() const;
+    virtual bool CanCut() const;
+    virtual bool CanPaste() const;
 
     // Undo/redo
     virtual void Undo() = 0;
@@ -189,6 +192,7 @@ public:
     virtual long GetLastPosition() const = 0;
 
     virtual void SetSelection(long from, long to) = 0;
+    virtual void SelectAll();
     virtual void SetEditable(bool editable) = 0;
 
     // streambuf methods
@@ -223,7 +227,7 @@ protected:
 private:
 #ifndef NO_TEXT_WINDOW_STREAM
 #if !wxUSE_IOSTREAMH
-  char *m_streambuf;
+    char *m_streambuf;
 #endif
 #endif
 };
@@ -232,7 +236,9 @@ private:
 // include the platform-dependent class definition
 // ----------------------------------------------------------------------------
 
-#if defined(__WXMSW__)
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/textctrl.h"
+#elif defined(__WXMSW__)
     #include "wx/msw/textctrl.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/textctrl.h"
@@ -247,6 +253,8 @@ private:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/textctrl.h"
 #endif
+
+#endif // wxUSE_TEXTCTRL
 
 #endif
     // _WX_TEXTCTRL_H_BASE_

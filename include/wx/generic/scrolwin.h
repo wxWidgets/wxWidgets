@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/generic/scrolwin.h
-// Purpose:     wxScrolledWindow class
+// Purpose:     wxGenericScrolledWindow class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
@@ -30,25 +30,32 @@ WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 #define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)
 #endif
 
+// avoid triggering this stupid VC++ warning
+#ifdef __VISUALC__
+    #pragma warning(disable:4355) // 'this' used in base member initializer list
+#endif
+
 // ----------------------------------------------------------------------------
 // wxGenericScrolledWindow
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGenericScrolledWindow : public wxPanel
+class WXDLLEXPORT wxGenericScrolledWindow : public wxPanel,
+                                            public wxScrollHelper
 {
 public:
-    wxGenericScrolledWindow();
+    wxGenericScrolledWindow() : wxScrollHelper(this) { }
     wxGenericScrolledWindow(wxWindow *parent,
                      wxWindowID id = -1,
                      const wxPoint& pos = wxDefaultPosition,
                      const wxSize& size = wxDefaultSize,
                      long style = wxScrolledWindowStyle,
                      const wxString& name = wxPanelNameStr)
+        : wxScrollHelper(this)
     {
         Create(parent, id, pos, size, style, name);
     }
 
-    ~wxGenericScrolledWindow();
+    virtual ~wxGenericScrolledWindow();
 
     bool Create(wxWindow *parent,
                 wxWindowID id,
@@ -57,100 +64,15 @@ public:
                 long style = wxScrolledWindowStyle,
                 const wxString& name = wxPanelNameStr);
 
-    // Normally the wxGenericScrolledWindow will scroll itself, but in
-    // some rare occasions you might want it to scroll another
-    // window (e.g. a child of it in order to scroll only a portion
-    // the area between the scrollbars (spreadsheet: only cell area
-    // will move).
-    virtual void SetTargetWindow( wxWindow *target );
-    virtual wxWindow *GetTargetWindow();
-
-    // Number of pixels per user unit (0 or -1 for no scrollbar)
-    // Length of virtual canvas in user units
-    // Length of page in user units
-    virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
-                             int noUnitsX, int noUnitsY,
-                             int xPos = 0, int yPos = 0,
-                             bool noRefresh = FALSE );
-
-    // Physically scroll the window
-    virtual void Scroll(int x_pos, int y_pos);
-
-#if WXWIN_COMPATIBILITY
-    virtual void GetScrollUnitsPerPage(int *x_page, int *y_page) const;
-    virtual void CalcUnscrolledPosition(int x, int y, float *xx, float *yy) const;
-#endif
-
-    int GetScrollPageSize(int orient) const;
-    void SetScrollPageSize(int orient, int pageSize);
-
-    virtual void GetScrollPixelsPerUnit(int *x_unit, int *y_unit) const;
-
-    // Enable/disable Windows scrolling in either direction.
-    // If TRUE, wxWindows scrolls the canvas and only a bit of
-    // the canvas is invalidated; no Clear() is necessary.
-    // If FALSE, the whole canvas is invalidated and a Clear() is
-    // necessary. Disable for when the scroll increment is used
-    // to actually scroll a non-constant distance
-    virtual void EnableScrolling(bool x_scrolling, bool y_scrolling);
-
-    // Get the view start
-    virtual void GetViewStart(int *x, int *y) const;
-    // Compatibility
-    void ViewStart(int *x, int *y) const
-       { GetViewStart( x, y ); }
-
-    // Actual size in pixels when scrolling is taken into account
-    virtual void GetVirtualSize(int *x, int *y) const;
-
-    // Set the scale factor, used in PrepareDC
-    void SetScale(double xs, double ys) { m_scaleX = xs; m_scaleY = ys; }
-    double GetScaleX() const { return m_scaleX; }
-    double GetScaleY() const { return m_scaleY; }
-
-    virtual void CalcScrolledPosition(int x, int y, int *xx, int *yy) const;
-    virtual void CalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
-
-    // Adjust the scrollbars
-    virtual void AdjustScrollbars(void);
-
-    // Override this function to draw the graphic (or just process EVT_PAINT)
-    virtual void OnDraw(wxDC& WXUNUSED(dc)) {};
-
-    // Override this function if you don't want to have wxGenericScrolledWindow
-    // automatically change the origin according to the scroll position.
-    virtual void PrepareDC(wxDC& dc);
-
-    // implementation from now on
-    void OnScroll(wxScrollWinEvent& event);
-    void OnSize(wxSizeEvent& event);
-    void OnPaint(wxPaintEvent& event);
-    void OnChar(wxKeyEvent& event);
-    void OnMouseWheel(wxMouseEvent& event);
-
-    // Calculate scroll increment
-    virtual int CalcScrollInc(wxScrollWinEvent& event);
-
-protected:
-    wxWindow             *m_targetWindow;
-    int                   m_xScrollPixelsPerLine;
-    int                   m_yScrollPixelsPerLine;
-    bool                  m_xScrollingEnabled;
-    bool                  m_yScrollingEnabled;
-    int                   m_xScrollPosition;
-    int                   m_yScrollPosition;
-    int                   m_xScrollLines;
-    int                   m_yScrollLines;
-    int                   m_xScrollLinesPerPage;
-    int                   m_yScrollLinesPerPage;
-    double                m_scaleX;
-    double                m_scaleY;
-    int                   m_wheelRotation;
+    virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }
 
 private:
-    DECLARE_EVENT_TABLE()
     DECLARE_ABSTRACT_CLASS(wxGenericScrolledWindow)
 };
+
+#ifdef __VISUALC__
+    #pragma warning(default:4355)
+#endif
 
 #endif
     // _WX_GENERIC_SCROLLWIN_H_

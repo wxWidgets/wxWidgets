@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LISTBOX
+
 #ifndef WX_PRECOMP
     #include "wx/listbox.h"
 #endif
@@ -78,6 +80,31 @@ bool wxListBoxBase::SetStringSelection(const wxString& s, bool select)
     return TRUE;
 }
 
+void wxListBoxBase::DeselectAll(int itemToLeaveSelected)
+{
+    if ( HasMultipleSelection() )
+    {
+        wxArrayInt selections;
+        GetSelections(selections);
+
+        size_t count = selections.GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            int item = selections[n];
+            if ( item != itemToLeaveSelected )
+                Deselect(item);
+        }
+    }
+    else // single selection
+    {
+        int sel = GetSelection();
+        if ( sel != -1 && sel != itemToLeaveSelected )
+        {
+            Deselect(sel);
+        }
+    }
+}
+
 // ----------------------------------------------------------------------------
 // misc
 // ----------------------------------------------------------------------------
@@ -88,6 +115,10 @@ void wxListBoxBase::Command(wxCommandEvent& event)
     (void)ProcessEvent(event);
 }
 
+// ----------------------------------------------------------------------------
+// SetFirstItem() and such
+// ----------------------------------------------------------------------------
+
 void wxListBoxBase::SetFirstItem(const wxString& s)
 {
     int n = FindString(s);
@@ -96,3 +127,17 @@ void wxListBoxBase::SetFirstItem(const wxString& s)
 
     DoSetFirstItem(n);
 }
+
+void wxListBoxBase::AppendAndEnsureVisible(const wxString& s)
+{
+    Append(s);
+    EnsureVisible(GetCount() - 1);
+}
+
+void wxListBoxBase::EnsureVisible(int WXUNUSED(n))
+{
+    // the base class version does nothing (the only alternative would be to
+    // call SetFirstItem() but this is probably even more stupid)
+}
+
+#endif // wxUSE_LISTBOX

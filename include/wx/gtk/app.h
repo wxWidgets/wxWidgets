@@ -74,7 +74,7 @@ public:
     unsigned char  *m_colorCube;
 
 private:
-    /// Set to TRUE while we are in wxYield().
+    // Set to TRUE while we are in wxYield().
     bool m_suppressIdleEvents;
 
 private:

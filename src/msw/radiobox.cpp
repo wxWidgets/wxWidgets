@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_RADIOBOX
+
 #ifndef WX_PRECOMP
     #include "wx/bitmap.h"
     #include "wx/brush.h"
@@ -97,6 +99,21 @@ static WXFARPROC s_wndprocRadioBtn = (WXFARPROC)NULL;
 // ---------------------------------------------------------------------------
 // wxRadioBox
 // ---------------------------------------------------------------------------
+
+int wxRadioBox::GetCount() const
+{
+    return m_noItems;
+}
+
+int wxRadioBox::GetColumnCount() const
+{
+    return GetNumHor();
+}
+
+int wxRadioBox::GetRowCount() const
+{
+    return GetNumVer();
+}
 
 // returns the number of rows
 int wxRadioBox::GetNumVer() const
@@ -314,39 +331,12 @@ wxRadioBox::~wxRadioBox()
 
 }
 
-wxString wxRadioBox::GetLabel(int item) const
-{
-    wxCHECK_MSG( item >= 0 && item < m_noItems, wxT(""), wxT("invalid radiobox index") );
-
-    return wxGetWindowText(m_radioButtons[item]);
-}
-
-void wxRadioBox::SetLabel(int item, const wxString& label)
+void wxRadioBox::SetString(int item, const wxString& label)
 {
     wxCHECK_RET( item >= 0 && item < m_noItems, wxT("invalid radiobox index") );
 
     m_radioWidth[item] = m_radioHeight[item] = -1;
     SetWindowText((HWND)m_radioButtons[item], label.c_str());
-}
-
-void wxRadioBox::SetLabel(int WXUNUSED(item), wxBitmap *WXUNUSED(bitmap))
-{
-    /*
-       m_radioWidth[item] = bitmap->GetWidth() + FB_MARGIN;
-       m_radioHeight[item] = bitmap->GetHeight() + FB_MARGIN;
-     */
-    wxFAIL_MSG(wxT("not implemented"));
-}
-
-int wxRadioBox::FindString(const wxString& s) const
-{
-    for (int i = 0; i < m_noItems; i++)
-    {
-        if ( s == wxGetWindowText(m_radioButtons[i]) )
-            return i;
-    }
-
-    return wxNOT_FOUND;
 }
 
 void wxRadioBox::SetSelection(int N)
@@ -370,9 +360,12 @@ int wxRadioBox::GetSelection() const
 }
 
 // Find string for position
-wxString wxRadioBox::GetString(int N) const
+wxString wxRadioBox::GetString(int item) const
 {
-    return wxGetWindowText(m_radioButtons[N]);
+    wxCHECK_MSG( item >= 0 && item < m_noItems, wxEmptyString,
+                 wxT("invalid radiobox index") );
+
+    return wxGetWindowText(m_radioButtons[item]);
 }
 
 // ----------------------------------------------------------------------------
@@ -704,35 +697,12 @@ void wxRadioBox::Show(int item, bool show)
     ::ShowWindow((HWND)m_radioButtons[item], show ? SW_SHOW : SW_HIDE);
 }
 
-// For single selection items only
-wxString wxRadioBox::GetStringSelection() const
-{
-    wxString result;
-    int sel = GetSelection();
-    if (sel > -1)
-        result = GetString(sel);
-
-    return result;
-}
-
-bool wxRadioBox::SetStringSelection(const wxString& s)
-{
-    int sel = FindString (s);
-    if (sel > -1)
-    {
-        SetSelection (sel);
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
 bool wxRadioBox::ContainsHWND(WXHWND hWnd) const
 {
-    int i;
-    for (i = 0; i < Number(); i++)
+    size_t count = GetCount();
+    for ( size_t i = 0; i < count; i++ )
     {
-        if (GetRadioButtons()[i] == hWnd)
+        if ( GetRadioButtons()[i] == hWnd )
             return TRUE;
     }
 
@@ -943,72 +913,40 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
                 int selOld = radiobox->GetSelection();
                 int selNew = selOld;
 
-                // wrapping will be handled below for the cases when we
-                // add/substract more than 1 but here otherwise as it's simpler
                 switch ( wParam )
                 {
                     case VK_UP:
-                        if ( horz )
-                            selNew -= cols;
-                        else
-                        {
-                            if ( selNew )
-                                selNew--;
-                            else
-                                selNew = num - 1;
-                        }
+                        dir = wxUP;
                         break;
 
                     case VK_LEFT:
-                        if ( horz )
-                        {
-                            if ( selNew )
-                                selNew--;
-                            else
-                                selNew = num - 1;
-                        }
-                        else
-                            selNew -= rows;
+                        dir = wxLEFT;
                         break;
 
                     case VK_DOWN:
-                        if ( horz )
-                            selNew += cols;
-                        else
-                        {
-                            if ( ++selNew == num )
-                                selNew = 0;
-                        }
+                        dir = wxDOWN;
                         break;
 
                     case VK_RIGHT:
-                        if ( horz )
-                        {
-                            if ( ++selNew == num )
-                                selNew = 0;
-                        }
-                        else
-                            selNew += rows;
+                        dir = wxRIGHT;
                         break;
 
                     default:
                         processed = FALSE;
+
+                        // just to suppress the compiler warning
+                        dir = wxALL;
                 }
 
                 if ( processed )
                 {
-                    // ensure that selNew is in range [0..num)
-                    if ( selNew >= num )
-                    {
-                        selNew -= num;
-
-                        int dim = horz ? cols : rows;
-                        selNew += dim - 1;
-                        selNew %= dim;
-                    }
-                    else if ( selNew < 0 )
-                    {
-                        selNew += num;
+                    int selOld = radiobox->GetSelection();
+                    int selNew = radiobox->GetNextItem
+                                 (
+                                  selOld,
+                                  dir,
+                                  radiobox->GetWindowStyle()
+                                 );
 
                         int dim = horz ? cols : rows;
                         if ( selNew % dim == 0 )
@@ -1082,3 +1020,4 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
 
 #endif // __WIN32__
 
+#endif // wxUSE_RADIOBOX

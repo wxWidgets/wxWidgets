@@ -12,9 +12,11 @@
 #pragma implementation "choice.h"
 #endif
 
-#include "wx/choice.h"
+#include "wx/defs.h"
 
 #if wxUSE_CHOICE
+
+#include "wx/choice.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>

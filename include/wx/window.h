@@ -72,6 +72,14 @@ WXDLLEXPORT_DATA(extern wxWindowList) wxTopLevelWindows;
 // TODO move into a separate header?
 // ----------------------------------------------------------------------------
 
+// what kind of client data do we have?
+enum wxClientDataType
+{
+    wxClientData_None,    // we don't know yet because we don't have it at all
+    wxClientData_Object,  // our client data is typed and we own it
+    wxClientData_Void     // client data is untyped and we don't own it
+};
+
 class wxClientData
 {
 public:
@@ -104,8 +112,6 @@ private:
 
 class WXDLLEXPORT wxWindowBase : public wxEvtHandler
 {
-    DECLARE_ABSTRACT_CLASS(wxWindowBase);
-
 public:
     // creating the window
     // -------------------
@@ -203,11 +209,11 @@ public:
     void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
         { DoSetSize(rect.x, rect.y, rect.width, rect.height, sizeFlags); }
 
-    void Move( int x, int y )
-        { DoSetSize( x, y, -1, -1, wxSIZE_USE_EXISTING ); }
+    void Move(int x, int y, int flags = wxSIZE_USE_EXISTING)
+        { DoSetSize(x, y, -1, -1, flags); }
 
-    void Move(const wxPoint& pt)
-        { Move(pt.x, pt.y); }
+    void Move(const wxPoint& pt, int flags = wxSIZE_USE_EXISTING)
+        { Move(pt.x, pt.y, flags); }
 
         // Z-order
     virtual void Raise() = 0;
@@ -257,6 +263,17 @@ public:
         DoGetClientSize(& w, & h);
 
         return wxSize(w, h);
+    }
+
+        // get the origin of the client area of the window relative to the
+        // window top left corner (the client area may be shifted because of
+        // the borders, scrollbars, other decorations...)
+    virtual wxPoint GetClientAreaOrigin() const;
+
+        // get the client rectangle in window (i.e. client) coordinates
+    wxRect GetClientRect() const
+    {
+        return wxRect(GetClientAreaOrigin(), GetClientSize());
     }
 
         // get the size best suited for the window (in fact, minimal
@@ -348,6 +365,11 @@ public:
         // can this window have focus?
     virtual bool AcceptsFocus() const { return IsShown() && IsEnabled(); }
 
+        // can this window be given focus by keyboard navigation? if not, the
+        // only way to give it focus (provided it accepts it at all) is to
+        // click it
+    virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
+
     // parent/children relations
     // -------------------------
 
@@ -392,8 +414,8 @@ public:
     void PushEventHandler( wxEvtHandler *handler );
     wxEvtHandler *PopEventHandler( bool deleteHandler = FALSE );
 
-    // validators and client data
-    // --------------------------
+    // validators
+    // ----------
 
 #if wxUSE_VALIDATORS
         // a window may have an associated validator which is used to control
@@ -401,6 +423,9 @@ public:
     virtual void SetValidator( const wxValidator &validator );
     virtual wxValidator *GetValidator() { return m_windowValidator; }
 #endif // wxUSE_VALIDATORS
+
+    // client data
+    // -----------
 
         // each window may have associated client data: either a pointer to
         // wxClientData object in which case it is managed by the window (i.e.
@@ -462,6 +487,13 @@ public:
     virtual void CaptureMouse() = 0;
     virtual void ReleaseMouse() = 0;
 
+        // get the window which currently captures the mouse or NULL
+    static wxWindow *GetCapture();
+
+        // does this window have the capture?
+    virtual bool HasCapture() const
+        { return (wxWindow *)this == GetCapture(); }
+
     // painting the window
     // -------------------
 
@@ -469,6 +501,13 @@ public:
         // will be repainted
     virtual void Refresh( bool eraseBackground = TRUE,
                           const wxRect *rect = (const wxRect *) NULL ) = 0;
+
+        // a less awkward wrapper for Refresh
+    void RefreshRect(const wxRect& rect) { Refresh(TRUE, &rect); }
+
+        // repaint all invalid areas of the window immediately
+    virtual void Update() { }
+
         // clear the window entirely
     virtual void Clear() = 0;
 
@@ -479,6 +518,9 @@ public:
         // repainted by the program
     const wxRegion& GetUpdateRegion() const { return m_updateRegion; }
     wxRegion& GetUpdateRegion() { return m_updateRegion; }
+
+        // get the update rectangleregion bounding box in client coords
+    wxRect GetUpdateClientRect() const;
 
         // these functions verify whether the given point/rectangle belongs to
         // (or at least intersects with) the update region
@@ -533,11 +575,16 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const = 0;
 
+    // client <-> screen coords
+    // ------------------------
+
         // translate to/from screen/client coordinates (pointers may be NULL)
     void ClientToScreen( int *x, int *y ) const
         { DoClientToScreen(x, y); }
     void ScreenToClient( int *x, int *y ) const
         { DoScreenToClient(x, y); }
+
+        // wxPoint interface to do the same thing
     wxPoint ClientToScreen(const wxPoint& pt) const
     {
         int x = pt.x, y = pt.y;
@@ -554,23 +601,43 @@ public:
         return wxPoint(x, y);
     }
 
+        // test where the given (in client coords) point lies
+    wxHitTest HitTest(wxCoord x, wxCoord y) const
+        { return DoHitTest(x, y); }
+
+    wxHitTest HitTest(const wxPoint& pt) const
+        { return DoHitTest(pt.x, pt.y); }
+
     // misc
     // ----
 
+    // get the window border style: uses the current style and falls back to
+    // the default style for this class otherwise (see GetDefaultBorder())
+    wxBorder GetBorder() const;
+
     void UpdateWindowUI();
 
+#if wxUSE_MENUS
     bool PopupMenu( wxMenu *menu, const wxPoint& pos )
         { return DoPopupMenu(menu, pos.x, pos.y); }
     bool PopupMenu( wxMenu *menu, int x, int y )
         { return DoPopupMenu(menu, x, y); }
+#endif // wxUSE_MENUS
 
     // scrollbars
     // ----------
 
+        // does the window have the scrollbar for this orientation?
+    bool HasScrollbar(int orient) const
+    {
+        return (m_windowStyle &
+                (orient == wxHORIZONTAL ? wxHSCROLL : wxVSCROLL)) != 0;
+    }
+
         // configure the window scrollbars
     virtual void SetScrollbar( int orient,
                                int pos,
-                               int thumbVisible,
+                               int thumbvisible,
                                int range,
                                bool refresh = TRUE ) = 0;
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE ) = 0;
@@ -783,28 +850,29 @@ protected:
     // ctor
     void InitBase();
 
+    // override this to change the default (i.e. used when no style is
+    // specified) border for the window class
+    virtual wxBorder GetDefaultBorder() const;
+
     // get the default size for the new window if no explicit size given
     // FIXME why 20 and not 30, 10 or ...?
     static int WidthDefault(int w) { return w == -1 ? 20 : w; }
     static int HeightDefault(int h) { return h == -1 ? 20 : h; }
 
-    // sets the size to be size but take width and/or height from
-    // DoGetBestSize() if width/height of size is -1
-    //
-    // NB: when calling this function from the ctor, the DoGetBestSize() of
-    //     the class with the same name as the ctor, not the real (most
-    //     derived) one - but this is what we usually want
-    void SetSizeOrDefault(const wxSize& size = wxDefaultSize)
+    // set the best size for the control if the default size was given:
+    // replaces the fields of size == -1 with the best values for them and
+    // calls SetSize() if needed
+    void SetBestSize(const wxSize& size)
     {
         if ( size.x == -1 || size.y == -1 )
         {
-            wxSize sizeDef = GetBestSize();
-            SetSize( size.x == -1 ? sizeDef.x : size.x,
-                     size.y == -1 ? sizeDef.y : size.y);
-        }
-        else
-        {
-            SetSize(size);
+            wxSize sizeBest = DoGetBestSize();
+            if ( size.x != -1 )
+                sizeBest.x = size.x;
+            if ( size.y != -1 )
+                sizeBest.y = size.y;
+
+            SetSize(sizeBest);
         }
     }
 
@@ -823,6 +891,8 @@ protected:
     // coordinates translation
     virtual void DoClientToScreen( int *x, int *y ) const = 0;
     virtual void DoScreenToClient( int *x, int *y ) const = 0;
+
+    virtual wxHitTest DoHitTest(wxCoord x, wxCoord y) const;
 
     // retrieve the position/size of the window
     virtual void DoGetPosition( int *x, int *y ) const = 0;
@@ -854,7 +924,9 @@ protected:
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_MENUS
     virtual bool DoPopupMenu( wxMenu *menu, int x, int y ) = 0;
+#endif // wxUSE_MENUS
 
     // client data accessors
     virtual void DoSetClientObject( wxClientData *data );
@@ -864,18 +936,14 @@ protected:
     virtual void *DoGetClientData() const;
 
     // what kind of data do we have?
-    enum wxClientDataType
-    {
-        ClientData_None,    // we don't know yet because we don't have it at all
-        ClientData_Object,  // our client data is typed and we own it
-        ClientData_Void     // client data is untyped and we don't own it
-    } m_clientDataType;
+    wxClientDataType m_clientDataType;
 
 private:
     // contains the last id generated by NewControlId
     static int ms_lastControlId;
 
-    DECLARE_NO_COPY_CLASS(wxWindowBase);
+    DECLARE_ABSTRACT_CLASS(wxWindowBase)
+    DECLARE_NO_COPY_CLASS(wxWindowBase)
     DECLARE_EVENT_TABLE()
 };
 
@@ -883,11 +951,20 @@ private:
 // now include the declaration of wxWindow class
 // ----------------------------------------------------------------------------
 
+// include the declaration of the platform-specific class
 #if defined(__WXMSW__)
+    #if !defined(__WXUNIVERSAL__)
+        #define wxWindowMSW wxWindow
+        #define sm_classwxWindowMSW sm_classwxWindow
+    #endif // wxUniv
     #include "wx/msw/window.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/window.h"
 #elif defined(__WXGTK__)
+    #if !defined(__WXUNIVERSAL__)
+        #define wxWindowGTK wxWindow
+        #define sm_classwxWindowGTK sm_classwxWindow
+    #endif // wxUniv
     #include "wx/gtk/window.h"
 #elif defined(__WXQT__)
     #include "wx/qt/window.h"
@@ -896,6 +973,12 @@ private:
 #elif defined(__WXPM__)
     #include "wx/os2/window.h"
 #endif
+
+// for wxUniversal, we now derive the real wxWindow from wxWindow<platform>,
+// for the native ports we already have defined it above
+#if defined(__WXUNIVERSAL__)
+    #include "wx/univ/window.h"
+#endif // wxUniv
 
 // ----------------------------------------------------------------------------
 // inline functions which couldn't be declared in the class body because of
@@ -919,6 +1002,9 @@ WXDLLEXPORT extern wxWindow* wxFindWindowAtPointer(wxPoint& pt);
 
 // Get the current mouse position.
 WXDLLEXPORT extern wxPoint wxGetMousePosition();
+
+// get the currently active window of this application or NULL
+WXDLLEXPORT extern wxWindow *wxGetActiveWindow();
 
 // deprecated (doesn't start with 'wx' prefix), use wxWindow::NewControlId()
 inline int NewControlId() { return wxWindowBase::NewControlId(); }

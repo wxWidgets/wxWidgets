@@ -28,6 +28,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_DRAGIMAGE
+
 #ifndef WX_PRECOMP
 #include <stdio.h>
 #include "wx/setup.h"
@@ -498,3 +500,4 @@ wxRect wxGenericDragImage::GetImageRect(const wxPoint& pos) const
     }
 }
 
+#endif // wxUSE_DRAGIMAGE

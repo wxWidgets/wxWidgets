@@ -20,6 +20,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TIMER
+
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
     #include "wx/window.h"
@@ -136,3 +138,5 @@ UINT WINAPI _EXPORT wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD)
 
     return 0;
 }
+
+#endif // wxUSE_TIMER

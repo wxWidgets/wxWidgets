@@ -324,7 +324,6 @@ bool wxBitmap::CreateFromXpm( const char **bits )
     return TRUE;
 }
 
-
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )

@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_FILEDLG
+
 #ifndef __UNIX__
 #error wxFileDialog currently only supports unix
 #endif
@@ -1320,3 +1322,5 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialogGenericModule, wxModule)
+
+#endif // wxUSE_FILEDLG

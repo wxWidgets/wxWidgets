@@ -46,6 +46,8 @@
     #include "wx/button.h"
 #endif // WX_PRECOMP
 
+#if wxUSE_LOGGUI || wxUSE_LOGWINDOW
+
 #include "wx/file.h"
 #include "wx/textfile.h"
 #include "wx/statline.h"
@@ -199,28 +201,6 @@ void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
 }
 
 // ----------------------------------------------------------------------------
-// wxLogTextCtrl implementation
-// ----------------------------------------------------------------------------
-
-wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
-{
-    m_pTextCtrl = pTextCtrl;
-}
-
-void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
-{
-    wxString msg;
-    TimeStamp(&msg);
-#ifdef __WXMAC__
-    msg << szString << wxT('\r');
-#else
-    msg << szString << wxT('\n');
-#endif
-
-    m_pTextCtrl->AppendText(msg);
-}
-
-// ----------------------------------------------------------------------------
 // wxLogGui implementation (FIXME MT-unsafe)
 // ----------------------------------------------------------------------------
 
@@ -266,7 +246,7 @@ void wxLogGui::Flush()
         titleFormat = _("%s Information");
         style = wxICON_INFORMATION;
     }
-    
+
     wxString title;
     title.Printf(titleFormat, appName.c_str());
 
@@ -1071,4 +1051,34 @@ static int OpenLogFile(wxFile& file, wxString *pFilename)
 
 #endif // wxUSE_FILE
 
-#endif // wxUSE_LOG
+#endif // !(wxUSE_LOGGUI || wxUSE_LOGWINDOW)
+
+#if wxUSE_TEXTCTRL
+
+// ----------------------------------------------------------------------------
+// wxLogTextCtrl implementation
+// ----------------------------------------------------------------------------
+
+wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
+{
+    m_pTextCtrl = pTextCtrl;
+}
+
+void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+{
+    wxString msg;
+    TimeStamp(&msg);
+
+#ifdef __WXMAC__
+    // VZ: this is a bug in wxMac, it *must* accept '\n' as new line, the
+    //     translation must be done in wxTextCtrl, not here! (FIXME)
+    msg << szString << wxT('\r');
+#else
+    msg << szString << wxT('\n');
+#endif
+
+    m_pTextCtrl->AppendText(msg);
+}
+
+#endif // wxUSE_TEXTCTRL
+

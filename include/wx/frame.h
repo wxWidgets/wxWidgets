@@ -27,8 +27,8 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxStatusLineNameStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxToolBarNameStr;
-WXDLLEXPORT_DATA(extern wxWindow*) wxWndHook;
 
+class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxMenuBar;
 class WXDLLEXPORT wxStatusBar;
 class WXDLLEXPORT wxToolBar;
@@ -104,8 +104,10 @@ public:
     // menu bar functions
     // ------------------
 
+#if wxUSE_MENUS
     virtual void SetMenuBar(wxMenuBar *menubar) = 0;
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
+#endif // wxUSE_MENUS
 
     // call this to simulate a menu command
     bool Command(int id) { return ProcessCommand(id); }
@@ -172,13 +174,16 @@ public:
     void OnCloseWindow(wxCloseEvent& event);
     void OnMenuHighlight(wxMenuEvent& event);
     void OnSize(wxSizeEvent& event);
+
     // this should go away, but for now it's called from docview.cpp,
     // so should be there for all platforms
     void OnActivate(wxActivateEvent &WXUNUSED(event)) { }
 
+#if wxUSE_MENUS
     // send wxUpdateUIEvents for all menu items (called from OnIdle())
     void DoMenuUpdates();
     void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
+#endif // wxUSE_MENUS
 
 protected:
     // the frame main menu/status/tool bars
@@ -188,7 +193,15 @@ protected:
     // main menubar, statusbar and toolbar (if any)
     void DeleteAllBars();
 
+    // test whether this window makes part of the frame
+    virtual bool IsOneOfBars(const wxWindow *win) const;
+
+#if wxUSE_MENUS
+    // override to update menu bar position when the frame size changes
+    virtual void PositionMenuBar() { }
+
     wxMenuBar *m_frameMenuBar;
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     // override to update status bar position (or anything else) when
@@ -226,11 +239,21 @@ protected:
 
 // include the real class declaration
 #if defined(__WXMSW__)
+    #ifndef __WXUNIVERSAL__
+        #define wxFrameMSW wxFrame
+        #define sm_classwxFrameMSW sm_classwxFrame
+    #endif
     #include "wx/msw/frame.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/frame.h"
 #elif defined(__WXGTK__)
+    #ifndef __WXUNIVERSAL__
+        #define wxFrameGTK wxFrame
+        #define sm_classwxFrameGTK sm_classwxFrame
+    #endif
     #include "wx/gtk/frame.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/frame.h"
 #elif defined(__WXQT__)
     #include "wx/qt/frame.h"
 #elif defined(__WXMAC__)
@@ -239,6 +262,10 @@ protected:
     #include "wx/os2/frame.h"
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/frame.h"
+#endif
+
+#ifdef __WXUNIVERSAL__
+    #include "wx/univ/frame.h"
 #endif
 
 #endif

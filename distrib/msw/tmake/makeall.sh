@@ -66,6 +66,10 @@ do
 	    echo "Generating $topdir/src/motif/files.lst for Motif and Configure..."
 	    tmake -t motif wxwin.pro -o $topdir/src/motif/files.lst;;
 
+	univ.t)
+	    echo "Generating $topdir/src/univ/files.lst for wxUniversal..."
+	    tmake -t univ wxwin.pro -o $topdir/src/univ/files.lst;;
+
 	unx.t)
 	    echo "Generating $topdir/src/os2/files.lst for OS/2 PM and Configure..."
 	    tmake -t os2 wxwin.pro -o $topdir/src/os2/files.lst;;

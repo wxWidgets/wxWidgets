@@ -29,8 +29,6 @@ class wxControl;
 // wxControl
 //-----------------------------------------------------------------------------
 
-extern const wxChar* wxControlNameStr;
-
 class wxControl : public wxControlBase
 {
 public:

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider95.h
+// Name:        wx/msw/slider95.h
 // Purpose:     wxSlider95 class
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _SLIDER95_H_
@@ -16,15 +16,9 @@
 #pragma interface "slider95.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxSliderNameStr;
-
 // Slider
-class WXDLLEXPORT wxSlider95 : public wxControl
+class WXDLLEXPORT wxSlider95 : public wxSliderBase
 {
-    DECLARE_DYNAMIC_CLASS(wxSlider95)
-
 public:
     wxSlider95();
 
@@ -103,6 +97,8 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
+
+    DECLARE_DYNAMIC_CLASS(wxSlider95)
 };
 
 #endif

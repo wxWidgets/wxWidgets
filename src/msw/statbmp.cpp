@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STATBMP
+
 #include "wx/window.h"
 #include "wx/msw/private.h"
 
@@ -270,3 +272,4 @@ long wxStaticBitmap::MSWWindowProc(WXUINT nMsg,
     return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
+#endif // wxUSE_STATBMP

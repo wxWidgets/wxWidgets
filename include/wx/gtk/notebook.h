@@ -15,23 +15,6 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-
-#if wxUSE_NOTEBOOK
-
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/control.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxImageList;
-class wxNotebook;
-
-typedef wxWindow wxNotebookPage;  // so far, any window can be a page
-
 //-----------------------------------------------------------------------------
 // internal class
 //-----------------------------------------------------------------------------
@@ -42,7 +25,7 @@ class wxGtkNotebookPage;
 // wxNotebook
 //-----------------------------------------------------------------------------
 
-class wxNotebook : public wxControl
+class wxNotebook : public wxNotebookBase
 {
 public:
       // default for dynamic class
@@ -66,15 +49,11 @@ public:
 
   // accessors
   // ---------
-    // get number of pages in the dialog
-  int GetPageCount() const;
 
     // set the currently selected page, return the index of the previously
     // selected one (or -1 on error)
     // NB: this function will _not_ generate wxEVT_NOTEBOOK_PAGE_xxx events
   int SetSelection(int nPage);
-    // cycle thru the tabs
-  void AdvanceSelection(bool bForward = TRUE);
     // get the currently selected page
   int GetSelection() const;
 
@@ -90,16 +69,10 @@ public:
     // associate image list with a control
   void SetImageList(wxImageList* imageList);
   void AssignImageList(wxImageList* imageList);
-    // get pointer (may be NULL) to the associated image list
-  wxImageList *GetImageList() const { return m_imageList; }
 
     // sets/returns item's image index in the current image list
   int  GetPageImage(int nPage) const;
   bool SetPageImage(int nPage, int nImage);
-
-    // currently it's always 1 because wxGTK doesn't support multi-row
-    // tab controls
-  int GetRowCount() const;
 
   // control the appearance of the notebook pages
     // set the size (the same for all pages)
@@ -111,13 +84,11 @@ public:
 
   // operations
   // ----------
-    // remove one page from the notebook but do not destroy it
-  bool RemovePage(int nPage);
     // remove one page from the notebook
   bool DeletePage(int nPage);
     // remove all pages
   bool DeleteAllPages();
-  
+
     // adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
     bool AddPage( wxNotebookPage *win,
@@ -130,9 +101,6 @@ public:
                      const wxString& strText,
                      bool bSelect = FALSE,
                      int imageId = -1 );
-
-    // get the panel which represents the given page
-    wxNotebookPage *GetPage(int nPage) const;
 
     // handler for tab navigation
     // --------------------------
@@ -148,7 +116,7 @@ public:
 
     void ApplyWidgetStyle();
 
-    // report if window belongs to notebook  
+    // report if window belongs to notebook
     bool IsOwnGtkWindow( GdkWindow *window );
 
     // common part of all ctors
@@ -157,7 +125,6 @@ public:
     // helper function
     wxGtkNotebookPage* GetNotebookPage(int page) const;
 
-    wxImageList*    m_imageList;
     bool            m_ownsImageList;
     wxList          m_pages;
 
@@ -165,12 +132,14 @@ public:
     // selection internally instead of querying the notebook for it
     int             m_selection;
 
+protected:
+    // remove one page from the notebook but do not destroy it
+    virtual wxNotebookPage *DoRemovePage(int nPage);
+
 private:
     DECLARE_DYNAMIC_CLASS(wxNotebook)
     DECLARE_EVENT_TABLE()
 };
-
-#endif
 
 #endif
     // __GTKNOTEBOOKH__

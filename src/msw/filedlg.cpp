@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_FILEDLG
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/msgdlg.h"
@@ -512,4 +514,5 @@ WXDLLEXPORT wxString wxSaveFileSelector(const wxChar *what,
     return wxDefaultFileSelector(FALSE, what, extension, default_name, parent);
 }
 
+#endif // wxUSE_FILEDLG
 

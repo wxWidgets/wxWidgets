@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        control.cpp
+// Name:        msw/control.cpp
 // Purpose:     wxControl class
 // Author:      Julian Smart
 // Modified by:
@@ -10,21 +10,23 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "control.h"
+    #pragma implementation "control.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
 
+#if wxUSE_CONTROLS
+
 #ifndef WX_PRECOMP
-#include "wx/event.h"
-#include "wx/app.h"
-#include "wx/dcclient.h"
-#include "wx/log.h"
+    #include "wx/event.h"
+    #include "wx/app.h"
+    #include "wx/dcclient.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/control.h"
@@ -305,3 +307,4 @@ void wxFindMaxSize(WXHWND wnd, RECT *rect)
         rect->bottom = bottom;
 }
 
+#endif // wxUSE_CONTROLS

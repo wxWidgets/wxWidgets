@@ -24,14 +24,15 @@
 
 // for compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/module.h"
 
 #ifdef __BORLANDC__
-  #pragma hdrstop
+    #pragma hdrstop
 #endif
 
+#if wxUSE_MIMETYPE
+
 #ifndef WX_PRECOMP
-  #include "wx/defs.h"
+    #include "wx/module.h"
 #endif
 
 #ifndef WX_PRECOMP
@@ -630,3 +631,5 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxMimeTypeCmnModule, wxModule)
+
+#endif // wxUSE_MIMETYPE

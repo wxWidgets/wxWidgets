@@ -1039,6 +1039,10 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 
     bool ok = TRUE;
 
+    // SelectObject() will fail
+    wxASSERT_MSG( !bitmap.GetSelectedInto(),
+                  _T("bitmap can't be selected in another DC") );
+
     HGDIOBJ hbmpSrcOld = ::SelectObject(srcDC, GetHbitmapOf(bitmap));
     if ( !hbmpSrcOld )
     {

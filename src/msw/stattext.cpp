@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_STATTEXT
+
 #ifndef WX_PRECOMP
 #include "wx/event.h"
 #include "wx/app.h"
@@ -177,4 +179,4 @@ long wxStaticText::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
   return wxWindow::MSWWindowProc(nMsg, wParam, lParam);
 }
 
-
+#endif // wxUSE_STATTEXT

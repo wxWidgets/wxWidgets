@@ -28,6 +28,8 @@
   #pragma hdrstop
 #endif
 
+#if wxUSE_FONTMAP
+
 #ifndef WX_PRECOMP
   #include "wx/font.h"
 #endif
@@ -259,3 +261,4 @@ int CALLBACK wxFontEnumeratorProc(LPLOGFONT lplf, LPTEXTMETRIC lptm,
     return fontEnum->OnFont(lplf, lptm);
 }
 
+#endif // wxUSE_FONTMAP

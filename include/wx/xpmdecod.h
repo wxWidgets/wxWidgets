@@ -16,7 +16,6 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_IMAGE && wxUSE_XPM
 
 class WXDLLEXPORT wxImage;
 class WXDLLEXPORT wxInputStream;
@@ -43,6 +42,5 @@ public:
 };
 
 
-#endif  // wxUSE_IMAGE && wxUSE_XPM
 #endif  // _WX_GIFDECOD_H_
 

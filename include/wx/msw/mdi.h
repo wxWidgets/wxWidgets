@@ -98,11 +98,12 @@ public:
     virtual bool MSWTranslateMessage(WXMSG* msg);
 
 protected:
+#if wxUSE_MENUS_NATIVE
     virtual void InternalSetMenuBar();
+#endif // wxUSE_MENUS_NATIVE
 
     wxMDIClientWindow *             m_clientWindow;
     wxMDIChildFrame *               m_currentChild;
-//    WXHMENU                         m_windowMenu;
     wxMenu*                         m_windowMenu;
 
     // TRUE if MDI Frame is intercepting commands, not child

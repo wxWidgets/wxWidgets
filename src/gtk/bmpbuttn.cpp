@@ -11,9 +11,11 @@
 #pragma implementation "bmpbuttn.h"
 #endif
 
-#include "wx/bmpbuttn.h"
+#include "wx/defs.h"
 
 #if wxUSE_BMPBUTTON
+
+#include "wx/bmpbuttn.h"
 
 #include <gdk/gdk.h>
 #include <gtk/gtk.h>
@@ -119,9 +121,6 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    m_marginX =
-    m_marginY = 0;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
@@ -129,10 +128,10 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
         return FALSE;
     }
 
-    m_bitmap   = bitmap;
-    m_disabled = bitmap;
-    m_focus    = bitmap;
-    m_selected = bitmap;
+    m_bmpNormal   =
+    m_bmpDisabled =
+    m_bmpFocus    =
+    m_bmpSelected = bitmap;
 
     m_widget = gtk_button_new();
 
@@ -141,7 +140,7 @@ bool wxBitmapButton::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bi
        gtk_button_set_relief( GTK_BUTTON(m_widget), GTK_RELIEF_NONE );
 #endif
 
-    if (m_bitmap.Ok())
+    if (m_bmpNormal.Ok())
     {
         wxSize newSize = size;
         int border = (style & wxNO_BORDER) ? 4 : 10;
@@ -205,7 +204,7 @@ void wxBitmapButton::ApplyWidgetStyle()
 
 void wxBitmapButton::SetBitmap()
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid button") );
+    wxCHECK_RET( m_widget != NULL, wxT("invalid bitmap button") );
 
     wxBitmap the_one;
     if (!m_isEnabled)
@@ -215,9 +214,21 @@ void wxBitmapButton::SetBitmap()
     else if (m_hasFocus)
         the_one = m_focus;
     else
-        the_one = m_bitmap;
+    {
+        if (m_isSelected)
+        {
+            the_one = m_bmpSelected;
+        }
+        else
+        {
+            if (m_hasFocus)
+                the_one = m_bmpFocus;
+            else
+                the_one = m_bmpNormal;
+        }
+    }
 
-    if (!the_one.Ok()) the_one = m_bitmap;
+    if (!the_one.Ok()) the_one = m_bmpNormal;
     if (!the_one.Ok()) return;
 
     GdkBitmap *mask = (GdkBitmap *) NULL;

@@ -256,6 +256,22 @@ public:
     void DrawRotatedText(const wxString& text, const wxPoint& pt, double angle)
         { DoDrawRotatedText(text, pt.x, pt.y, angle); }
 
+    // this version puts both optional bitmap and the text into the given
+    // rectangle and aligns is as specified by alignment parameter; it also
+    // will emphasize the character with the given index if it is != -1 and
+    // return the bounding rectangle if required
+    virtual void DrawLabel(const wxString& text,
+                           const wxBitmap& image,
+                           const wxRect& rect,
+                           int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                           int indexAccel = -1,
+                           wxRect *rectBounding = NULL);
+
+    void DrawLabel(const wxString& text, const wxRect& rect,
+                   int alignment = wxALIGN_LEFT | wxALIGN_TOP,
+                   int indexAccel = -1)
+        { DrawLabel(text, wxNullBitmap, rect, alignment, indexAccel); }
+
     bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
               wxDC *source, wxCoord xsrc, wxCoord ysrc,
               int rop = wxCOPY, bool useMask = FALSE)
@@ -332,12 +348,20 @@ public:
     virtual wxCoord GetCharHeight() const = 0;
     virtual wxCoord GetCharWidth() const = 0;
 
+    // only works for single line strings
     void GetTextExtent(const wxString& string,
                        wxCoord *x, wxCoord *y,
                        wxCoord *descent = NULL,
                        wxCoord *externalLeading = NULL,
                        wxFont *theFont = NULL) const
         { DoGetTextExtent(string, x, y, descent, externalLeading, theFont); }
+
+    // works for single as well as multi-line strings
+    virtual void GetMultiLineTextExtent(const wxString& text,
+                                        wxCoord *width,
+                                        wxCoord *height,
+                                        wxCoord *heightLine = NULL,
+                                        wxFont *font = NULL);
 
     // size and resolution
     // -------------------
@@ -711,6 +735,8 @@ private:
     #include "wx/motif/dc.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dc.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/dc.h"
 #elif defined(__WXQT__)
     #include "wx/qt/dc.h"
 #elif defined(__WXMAC__)
@@ -720,6 +746,35 @@ private:
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/dc.h"
 #endif
+
+// ----------------------------------------------------------------------------
+// helper class: you can use it to temporarily change the DC text colour and
+// restore it automatically when the object goes out of scope
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxDCTextColourChanger
+{
+public:
+    wxDCTextColourChanger(wxDC& dc) : m_dc(dc) { }
+
+    ~wxDCTextColourChanger()
+    {
+        if ( m_colFgOld.Ok() )
+            m_dc.SetTextForeground(m_colFgOld);
+    }
+
+    void Set(const wxColour& col)
+    {
+        if ( !m_colFgOld.Ok() )
+            m_colFgOld = m_dc.GetTextForeground();
+        m_dc.SetTextForeground(col);
+    }
+
+private:
+    wxDC& m_dc;
+
+    wxColour m_colFgOld;
+};
 
 #endif
     // _WX_DC_H_BASE_

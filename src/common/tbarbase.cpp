@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_TOOLBAR
+
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 #endif
@@ -39,21 +41,17 @@
 #include <windows.h>
 #endif
 
-#if wxUSE_TOOLBAR
-
 #include "wx/tbarbase.h"
 
 // ----------------------------------------------------------------------------
 // wxWindows macros
 // ----------------------------------------------------------------------------
 
-#if !USE_SHARED_LIBRARY
-    BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
-        EVT_IDLE(wxToolBarBase::OnIdle)
-    END_EVENT_TABLE()
-#endif
-
 IMPLEMENT_CLASS(wxToolBarBase, wxControl)
+
+BEGIN_EVENT_TABLE(wxToolBarBase, wxControl)
+    EVT_IDLE(wxToolBarBase::OnIdle)
+END_EVENT_TABLE()
 
 #include "wx/listimpl.cpp"
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bmpbuttn.cpp
+// Name:        src/msw/bmpbuttn.cpp
 // Purpose:     wxBitmapButton
 // Author:      Julian Smart
 // Modified by:
@@ -17,8 +17,10 @@
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
 #endif
+
+#if wxUSE_BMPBUTTON
 
 #ifndef WX_PRECOMP
     #include "wx/bmpbuttn.h"
@@ -38,7 +40,7 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
            const wxValidator& validator,
            const wxString& name)
 {
-  m_buttonBitmap = bitmap;
+  m_bmpNormal = bitmap;
   SetName(name);
 
 #if wxUSE_VALIDATORS
@@ -50,8 +52,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
   m_backgroundColour = parent->GetBackgroundColour();
   m_foregroundColour = parent->GetForegroundColour();
   m_windowStyle = style;
-  m_marginX = 0;
-  m_marginY = 0;
 
   if ( style & wxBU_AUTODRAW )
   {
@@ -114,11 +114,6 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
   return TRUE;
 }
 
-void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
-{
-  m_buttonBitmap = bitmap;
-}
-
 // VZ: should be at the very least less than wxDEFAULT_BUTTON_MARGIN
 #define FOCUS_MARGIN 3
 
@@ -144,14 +139,14 @@ bool wxBitmapButton::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     // choose the bitmap to use depending on the button state
     wxBitmap* bitmap;
 
-    if ( isSelected && m_buttonBitmapSelected.Ok() )
-        bitmap = &m_buttonBitmapSelected;
-    else if ((state & ODS_FOCUS) && m_buttonBitmapFocus.Ok())
-        bitmap = &m_buttonBitmapFocus;
-    else if ((state & ODS_DISABLED) && m_buttonBitmapDisabled.Ok())
-        bitmap = &m_buttonBitmapDisabled;
+    if ( isSelected && m_bmpSelected.Ok() )
+        bitmap = &m_bmpSelected;
+    else if ((state & ODS_FOCUS) && m_bmpFocus.Ok())
+        bitmap = &m_bmpFocus;
+    else if ((state & ODS_DISABLED) && m_bmpDisabled.Ok())
+        bitmap = &m_bmpDisabled;
     else
-        bitmap = &m_buttonBitmap;
+        bitmap = &m_bmpNormal;
 
     if ( !bitmap->Ok() )
         return FALSE;
@@ -388,3 +383,5 @@ void wxBitmapButton::SetDefault()
 {
     wxButton::SetDefault();
 }
+
+#endif // wxUSE_BMPBUTTON

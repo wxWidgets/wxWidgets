@@ -59,7 +59,7 @@
 
 // wxDataObject is tied to OLE/drag and drop implementation, therefore so are
 // the functions using wxDataObject in wxClipboard
-#define wxUSE_DATAOBJ wxUSE_DRAG_AND_DROP
+//#define wxUSE_DATAOBJ wxUSE_DRAG_AND_DROP
 
 #if wxUSE_DATAOBJ
     #include "wx/dataobj.h"

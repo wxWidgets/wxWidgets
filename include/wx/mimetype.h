@@ -23,6 +23,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_MIMETYPE
+
 // the things we really need
 #include "wx/string.h"
 #include "wx/dynarray.h"
@@ -384,6 +386,8 @@ private:
 
 // the default mime manager for wxWindows programs
 WXDLLEXPORT_DATA(extern wxMimeTypesManager *) wxTheMimeTypesManager;
+
+#endif // wxUSE_MIMETYPE
 
 #endif
   //_WX_MIMETYPE_H_

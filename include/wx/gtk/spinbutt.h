@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        spinbutt.h
+// Name:        wx/gtk/spinbutt.h
 // Purpose:     wxSpinButton class
 // Author:      Robert Roebling
 // Modified by:
@@ -8,18 +8,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKSPINBUTTH__
-#define __GTKSPINBUTTH__
+#ifndef _WX_GTK_SPINBUTT_H_
+#define _WX_GTK_SPINBUTT_H_
 
 #ifdef __GNUG__
 #pragma interface
 #endif
-
-#include "wx/defs.h"
-
-#if wxUSE_SPINBTN
-
-#include "wx/control.h"
 
 //-----------------------------------------------------------------------------
 // wxSpinButton
@@ -29,16 +23,22 @@ class wxSpinButton : public wxSpinButtonBase
 {
 public:
     wxSpinButton() { }
-    wxSpinButton( wxWindow *parent, wxWindowID id = -1,
-            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton")
+    wxSpinButton(wxWindow *parent,
+                 wxWindowID id = -1,
+                 const wxPoint& pos = wxDefaultPosition,
+                 const wxSize& size = wxDefaultSize,
+                 long style = wxSP_VERTICAL,
+                 const wxString& name = wxSPIN_BUTTON_NAME)
     {
         Create(parent, id, pos, size, style, name);
     }
 
-    bool Create( wxWindow *parent, wxWindowID id = -1,
-            const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
-            long style = wxSP_VERTICAL, const wxString& name = "wxSpinButton" );
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxSP_VERTICAL,
+                const wxString& name = wxSPIN_BUTTON_NAME);
 
     virtual int GetValue() const;
     virtual void SetValue( int value );
@@ -64,7 +64,4 @@ private:
 };
 
 #endif
-  // wxUSE_SPINBTN
-
-#endif
-    // __GTKSPINBUTTH__
+    // _WX_GTK_SPINBUTT_H_

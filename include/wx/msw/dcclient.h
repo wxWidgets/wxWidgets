@@ -62,11 +62,16 @@ public:
     // Create a DC corresponding to the client area of the window
     wxClientDC(wxWindow *win);
 
+    virtual ~wxClientDC();
+
+protected:
+    void InitDC();
+
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 };
 
-class WXDLLEXPORT wxPaintDC : public wxWindowDC
+class WXDLLEXPORT wxPaintDC : public wxClientDC
 {
 public:
     wxPaintDC();

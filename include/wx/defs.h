@@ -279,11 +279,11 @@
     #error "Target can't be both X and Windows"
 #elif !defined(__WXMOTIF__) && !defined(__WXMSW__) && !defined(__WXGTK__) && \
       !defined(__WXPM__) && !defined(__WXMAC__) && !defined(__X__) && \
-      !defined(__WXQT__) && !defined(__WXSTUBS__) && wxUSE_GUI
+      !defined(__WXQT__) && !defined(__WXMGL__) && wxUSE_GUI
     #ifdef __UNIX__
-        #error "No Target! You should wx-config program for compilation flags!"
+        #error "No Target! You should use wx-config program for compilation flags!"
     #else // !Unix
-        #error "No Target! You should supplied makefiles for compilation!"
+        #error "No Target! You should use supplied makefiles for compilation!"
     #endif // Unix/!Unix
 #endif
 
@@ -862,7 +862,10 @@ enum wxAlignment
     wxALIGN_CENTRE_VERTICAL   = wxALIGN_CENTER_VERTICAL,
 
     wxALIGN_CENTER            = (wxALIGN_CENTER_HORIZONTAL | wxALIGN_CENTER_VERTICAL),
-    wxALIGN_CENTRE            = wxALIGN_CENTER
+    wxALIGN_CENTRE            = wxALIGN_CENTER,
+
+    // a mask to extract alignment from the combination of flags
+    wxALIGN_MASK              = 0x0f00
 };
 
 enum wxStretch
@@ -872,7 +875,26 @@ enum wxStretch
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000,
-    wxADJUST_MINSIZE          = 0x8000
+    wxADJUST_MINSIZE          = 0x8000,
+    wxTILE                    = 0xc000
+};
+
+// border flags: the values are chosen for backwards compatibility
+enum wxBorder
+{
+    // this is different from wxBORDER_NONE as by default the controls do have
+    // border
+    wxBORDER_DEFAULT = 0,
+
+    wxBORDER_NONE   = 0x00200000,
+    wxBORDER_STATIC = 0x01000000,
+    wxBORDER_SIMPLE = 0x02000000,
+    wxBORDER_RAISED = 0x04000000,
+    wxBORDER_SUNKEN = 0x08000000,
+    wxBORDER_DOUBLE = 0x10000000,
+
+    // a mask to extract border style from the combination of flags
+    wxBORDER_MASK   = 0x1f200000
 };
 
 // ----------------------------------------------------------------------------
@@ -899,30 +921,40 @@ enum wxStretch
 #define wxHSCROLL               0x40000000
 #define wxCAPTION               0x20000000
 
-// New styles
-#define wxDOUBLE_BORDER         0x10000000
-#define wxSUNKEN_BORDER         0x08000000
-#define wxRAISED_BORDER         0x04000000
-#define wxBORDER                0x02000000
-#define wxSIMPLE_BORDER         wxBORDER
-#define wxSTATIC_BORDER         0x01000000
-#define wxTRANSPARENT_WINDOW    0x00100000
-#define wxNO_BORDER             0x00200000
+// New styles (border styles are now in their own enum)
+#define wxDOUBLE_BORDER         wxBORDER_DOUBLE
+#define wxSUNKEN_BORDER         wxBORDER_SUNKEN
+#define wxRAISED_BORDER         wxBORDER_RAISED
+#define wxBORDER                wxBORDER_SIMPLE
+#define wxSIMPLE_BORDER         wxBORDER_SIMPLE
+#define wxSTATIC_BORDER         wxBORDER_STATIC
+#define wxNO_BORDER             wxBORDER_NONE
 
 // Override CTL3D etc. control colour processing to allow own background
 // colour.
-// OBSOLETE - use wxNO_3D instead
-#define wxUSER_COLOURS          0x00800000
 // Override CTL3D or native 3D styles for children
 #define wxNO_3D                 0x00800000
+
+// OBSOLETE - use wxNO_3D instead
+#define wxUSER_COLOURS          wxNO_3D
+
+// wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed,
+// disable it - but still show (see also wxLB_ALWAYS_SB style)
+//
+// NB: as this style is only supported by wxUniversal so far as it doesn't use
+//     wxUSER_COLOURS/wxNO_3D, we reuse the same style value
+#define wxALWAYS_SHOW_SB        0x00800000
 
 // Clip children when painting, which reduces flicker in e.g. frames and
 // splitter windows, but can't be used in a panel where a static box must be
 // 'transparent' (panel paints the background for it)
 #define wxCLIP_CHILDREN         0x00400000
+
 // Note we're reusing the wxCAPTION style because we won't need captions
 // for subwindows/controls
 #define wxCLIP_SIBLINGS         0x20000000
+
+#define wxTRANSPARENT_WINDOW    0x00100000
 
 // Add this style to a panel to get tab traversal working outside of dialogs
 // (on by default for wxPanel, wxDialog, wxScrolledWindow)
@@ -932,9 +964,14 @@ enum wxStretch
 // Windows, it won't normally get the dialog navigation key events)
 #define wxWANTS_CHARS           0x00040000
 
-// Make window retained (mostly Motif, I think)
+// Make window retained (mostly Motif, I think) -- obsolete (VZ)?
 #define wxRETAINED              0x00020000
 #define wxBACKINGSTORE          wxRETAINED
+
+// set this flag to create a special popup window: it will be always shown on
+// top of other windows, will capture the mouse and will be dismissed when the
+// mouse is clicked outside of it or if it loses focus in any other way
+#define wxPOPUP_WINDOW          0x00020000
 
 // don't invalidate the whole window (resulting in a PAINT event) when the
 // window is resized (currently, makes sense for wxMSW only)
@@ -1062,7 +1099,8 @@ enum wxStretch
 #define wxLB_NEEDED_SB      0x0200
 #define wxLB_ALWAYS_SB      0x0400
 #define wxLB_HSCROLL        wxHSCROLL
-
+// always show an entire number of rows
+#define wxLB_INT_HEIGHT     0x0800
 /*
  * wxTextCtrl style flags
  */
@@ -1077,10 +1115,18 @@ enum wxStretch
 #define wxTE_RICH           0x0080
 #define wxTE_NO_VSCROLL     0x0100
 #define wxTE_AUTO_SCROLL    0x0200
-#define wxPROCESS_ENTER     0x0400
-#define wxPASSWORD          0x0800
-#define wxTE_PROCESS_ENTER  wxPROCESS_ENTER
-#define wxTE_PASSWORD       wxPASSWORD
+#define wxTE_PROCESS_ENTER  0x0400
+#define wxTE_PASSWORD       0x0800
+
+// use wxHSCROLL to not wrap text at all, wxTE_LINEWRAP to wrap it at any
+// position and wxTE_WORDWRAP to wrap at words boundary
+#define wxTE_DONTWRAP       wxHSCROLL
+#define wxTE_LINEWRAP       0x0800
+#define wxTE_WORDWRAP       0x0000  // it's just == !wxHSCROLL
+
+// deprecated synonyms
+#define wxPROCESS_ENTER     wxTE_PROCESS_ENTER
+#define wxPASSWORD          wxTE_PASSWORD
 
 /*
  * wxComboBox style flags
@@ -1093,9 +1139,15 @@ enum wxStretch
 /*
  * wxRadioBox style flags
  */
+// should we number the items from left to right or from top to bottom in a 2d
+// radiobox?
+#define wxRA_LEFTTORIGHT    0x0001
+#define wxRA_TOPTOBOTTOM    0x0002
+
 // New, more intuitive names to specify majorDim argument
 #define wxRA_SPECIFY_COLS   wxHORIZONTAL
 #define wxRA_SPECIFY_ROWS   wxVERTICAL
+
 // Old names for compatibility
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL
@@ -1121,8 +1173,8 @@ enum wxStretch
 #define wxSL_VERTICAL        wxVERTICAL   // 8
 // The next one is obsolete - use scroll events instead
 #define wxSL_NOTIFY_DRAG     0x0000
-#define wxSL_AUTOTICKS       0x0010
-// #define wxSL_MANUALTICKS     0x0010
+#define wxSL_TICKS           0x0010
+#define wxSL_AUTOTICKS       wxSL_TICKS // we don't support manual ticks
 #define wxSL_LABELS          0x0020
 #define wxSL_LEFT            0x0040
 #define wxSL_TOP             0x0080
@@ -1228,9 +1280,11 @@ enum wxStretch
  * wxNotebook flags
  */
 #define wxNB_FIXEDWIDTH       0x0010
+#define wxNB_TOP              0x0000    // default
 #define wxNB_LEFT             0x0020
 #define wxNB_RIGHT            0x0040
 #define wxNB_BOTTOM           0x0080
+#define wxNB_MULTILINE        0x0100
 
 /*
  * wxStatusBar95 flags
@@ -1241,6 +1295,11 @@ enum wxStretch
  * wxStaticText flags
  */
 #define wxST_NO_AUTORESIZE    0x0001
+
+/*
+ * wxStaticBitmap flags
+ */
+#define wxBI_EXPAND           wxEXPAND
 
 /*
  * wxStaticLine flags
@@ -1379,6 +1438,36 @@ enum wxStretch
 // IDs used by generic file dialog (11 consecutive starting from this value)
 #define wxID_FILEDLGG           5900
 #define wxID_HIGHEST            5999
+
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+// hit test results
+enum wxHitTest
+{
+    wxHT_NOWHERE,
+
+    // scrollbar
+    wxHT_SCROLLBAR_FIRST = wxHT_NOWHERE,
+    wxHT_SCROLLBAR_ARROW_LINE_1,    // left or upper arrow to scroll by line
+    wxHT_SCROLLBAR_ARROW_LINE_2,    // right or down
+    wxHT_SCROLLBAR_ARROW_PAGE_1,    // left or upper arrow to scroll by page
+    wxHT_SCROLLBAR_ARROW_PAGE_2,    // right or down
+    wxHT_SCROLLBAR_THUMB,           // on the thumb
+    wxHT_SCROLLBAR_BAR_1,           // bar to the left/above the thumb
+    wxHT_SCROLLBAR_BAR_2,           // bar to the right/below the thumb
+    wxHT_SCROLLBAR_LAST,
+
+    // window
+    wxHT_WINDOW_OUTSIDE,            // not in this window at all
+    wxHT_WINDOW_INSIDE,             // in the client area
+    wxHT_WINDOW_VERT_SCROLLBAR,     // on the vertical scrollbar
+    wxHT_WINDOW_HORZ_SCROLLBAR,     // on the horizontal scrollbar
+    wxHT_WINDOW_CORNER,             // on the corner between 2 scrollbars
+
+    wxHT_MAX
+};
 
 // ----------------------------------------------------------------------------
 // Possible SetSize flags
@@ -2029,6 +2118,10 @@ typedef struct _PangoFontDescription PangoFontDescription;
 #endif
 #endif // GTK
 
+#ifdef __WXMGL__
+typedef void *WXWidget; // FIXME_MGL - type-safe
+#endif // MGL
+
 // This is required because of clashing macros in windows.h, which may be
 // included before or after wxWindows classes, and therefore must be
 // disabled here before any significant wxWindows headers are included.
@@ -2070,7 +2163,7 @@ typedef struct _PangoFontDescription PangoFontDescription;
 #define DECLARE_NO_COPY_CLASS(classname)        \
     private:                                    \
         classname(const classname&);            \
-        classname& operator=(const classname&)
+        classname& operator=(const classname&);
 
 #endif
     // _WX_DEFS_H_

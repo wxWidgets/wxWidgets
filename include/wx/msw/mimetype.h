@@ -18,6 +18,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_MIMETYPE
+
 #include "wx/mimetype.h"
 
 // ----------------------------------------------------------------------------
@@ -117,6 +119,7 @@ public:
     wxFileType *CreateFileType(const wxString& filetype, const wxString& ext);
 };
 
+#endif // wxUSE_MIMETYPE
 
 #endif
   //_MIMETYPE_IMPL_H

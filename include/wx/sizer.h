@@ -26,13 +26,9 @@
 // classes
 //---------------------------------------------------------------------------
 
-class wxStaticBox;
-class wxNotebook;
-
 class wxSizerItem;
 class wxSizer;
 class wxBoxSizer;
-class wxStaticBoxSizer;
 
 //---------------------------------------------------------------------------
 // wxSizerItem
@@ -152,29 +148,29 @@ public:
         { DoSetMinSize( width, height ); }
     void SetMinSize( wxSize size )
         { DoSetMinSize( size.x, size.y ); }
-    
+
     /* Searches recursively */
     bool SetItemMinSize( wxWindow *window, int width, int height )
         { return DoSetItemMinSize( window, width, height ); }
     bool SetItemMinSize( wxWindow *window, wxSize size )
         { return DoSetItemMinSize( window, size.x, size.y ); }
-        
+
     /* Searches recursively */
     bool SetItemMinSize( wxSizer *sizer, int width, int height )
         { return DoSetItemMinSize( sizer, width, height ); }
     bool SetItemMinSize( wxSizer *sizer, wxSize size )
         { return DoSetItemMinSize( sizer, size.x, size.y ); }
-        
+
     bool SetItemMinSize( int pos, int width, int height )
         { return DoSetItemMinSize( pos, width, height ); }
     bool SetItemMinSize( int pos, wxSize size )
         { return DoSetItemMinSize( pos, size.x, size.y ); }
-        
+
     wxSize GetSize()
         { return m_size; }
     wxPoint GetPosition()
         { return m_position; }
-        
+
     /* Calculate the minimal size or return m_minSize if bigger. */
     wxSize GetMinSize();
 
@@ -205,7 +201,7 @@ protected:
     virtual bool DoSetItemMinSize( wxWindow *window, int width, int height );
     virtual bool DoSetItemMinSize( wxSizer *sizer, int width, int height );
     virtual bool DoSetItemMinSize( int pos, int width, int height );
-        
+
 private:
     DECLARE_CLASS(wxSizer);
 };
@@ -219,7 +215,7 @@ class WXDLLEXPORT wxGridSizer: public wxSizer
 public:
     wxGridSizer( int rows, int cols, int vgap, int hgap );
     wxGridSizer( int cols, int vgap = 0, int hgap = 0 );
-    
+
     void RecalcSizes();
     wxSize CalcMin();
 
@@ -231,15 +227,15 @@ public:
     int GetRows()               { return m_rows; }
     int GetVGap()               { return m_vgap; }
     int GetHGap()               { return m_hgap; }
-    
+
 protected:
     int    m_rows;
     int    m_cols;
     int    m_vgap;
     int    m_hgap;
-    
+
     void SetItemBounds( wxSizerItem *item, int x, int y, int w, int h );
-    
+
 private:
     DECLARE_CLASS(wxGridSizer);
 };
@@ -254,10 +250,10 @@ public:
     wxFlexGridSizer( int rows, int cols, int vgap, int hgap );
     wxFlexGridSizer( int cols, int vgap = 0, int hgap = 0 );
     ~wxFlexGridSizer();
-    
+
     void RecalcSizes();
     wxSize CalcMin();
-    
+
     void AddGrowableRow( size_t idx );
     void RemoveGrowableRow( size_t idx );
     void AddGrowableCol( size_t idx );
@@ -268,9 +264,9 @@ protected:
     int         *m_colWidths;
     wxArrayInt  m_growableRows;
     wxArrayInt  m_growableCols;
-    
+
     void CreateArrays();
-    
+
 private:
     DECLARE_CLASS(wxFlexGridSizer);
 };
@@ -297,7 +293,7 @@ protected:
     int m_minHeight;
     int m_fixedWidth;
     int m_fixedHeight;
-    
+
 private:
     DECLARE_CLASS(wxBoxSizer);
 };
@@ -305,6 +301,10 @@ private:
 //---------------------------------------------------------------------------
 // wxStaticBoxSizer
 //---------------------------------------------------------------------------
+
+#if wxUSE_STATBOX
+
+class WXDLLEXPORT wxStaticBox;
 
 class WXDLLEXPORT wxStaticBoxSizer: public wxBoxSizer
 {
@@ -319,16 +319,20 @@ public:
 
 protected:
     wxStaticBox   *m_staticBox;
-    
+
 private:
     DECLARE_CLASS(wxStaticBoxSizer);
 };
+
+#endif // wxUSE_STATBOX
 
 //---------------------------------------------------------------------------
 // wxNotebookSizer
 //---------------------------------------------------------------------------
 
 #if wxUSE_NOTEBOOK
+
+class WXDLLEXPORT wxNotebook;
 
 class WXDLLEXPORT wxNotebookSizer: public wxSizer
 {
@@ -343,12 +347,12 @@ public:
 
 protected:
     wxNotebook   *m_notebook;
-   
+
 private:
     DECLARE_CLASS(wxNotebookSizer);
 };
 
-#endif
+#endif // wxUSE_NOTEBOOK
 
 
 #endif

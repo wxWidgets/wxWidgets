@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.h
+// Name:        wx/msw/button.h
 // Purpose:     wxButton class
 // Author:      Julian Smart
 // Modified by:
@@ -16,40 +16,38 @@
 #pragma interface "button.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const wxChar*) wxButtonNameStr;
-
 // ----------------------------------------------------------------------------
 // Pushbutton
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxButton : public wxControl
+class WXDLLEXPORT wxButton : public wxButtonBase
 {
-DECLARE_DYNAMIC_CLASS(wxButton)
-
 public:
     wxButton() { }
-    wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = 0,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxButtonNameStr)
+    wxButton(wxWindow *parent,
+             wxWindowID id,
+             const wxString& label,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxButtonNameStr)
     {
         Create(parent, id, label, pos, size, style, validator, name);
     }
 
-    bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize, long style = 0,
-            const wxValidator& validator = wxDefaultValidator,
-            const wxString& name = wxButtonNameStr);
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxButtonNameStr);
 
     virtual ~wxButton();
 
     virtual void SetDefault();
-
-    static wxSize GetDefaultSize();
 
     // implementation from now on
     virtual void Command(wxCommandEvent& event);
@@ -72,6 +70,9 @@ protected:
     bool SendClickEvent();
 
     virtual wxSize DoGetBestSize() const;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
 #endif

@@ -309,11 +309,6 @@ END_EVENT_TABLE()
 
 wxApp::wxApp()
 {
-    wxTheApp = this;
-
-    m_topWindow = (wxWindow *) NULL;
-    m_exitOnFrameDelete = TRUE;
-
     m_idleTag = 0;
     wxapp_install_idle_handler();
 
@@ -323,8 +318,6 @@ wxApp::wxApp()
 #endif
 
     m_colorCube = (unsigned char*) NULL;
-
-    m_useBestVisual = FALSE;
 }
 
 wxApp::~wxApp()
@@ -340,6 +333,9 @@ wxApp::~wxApp()
 
 bool wxApp::OnInitGui()
 {
+    if ( !wxAppBase::OnInitGui() )
+        return FALSE;
+
     GdkVisual *visual = gdk_visual_get_system();
 
     /* on some machines, the default visual is just 256 colours, so

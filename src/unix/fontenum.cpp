@@ -73,11 +73,13 @@ static char **CreateFontList(wxChar spacing,
     wxNativeEncodingInfo info;
     wxGetNativeFontEncoding(encoding, &info);
 
+#if wxUSE_FONTMAP
     if ( !wxTestFontEncoding(info) )
     {
         // ask font mapper for a replacement
         (void)wxTheFontMapper->GetAltForEncoding(encoding, &info);
     }
+#endif // wxUSE_FONTMAP
 
     wxString pattern;
     pattern.Printf(wxT("-*-*-*-*-*-*-*-*-*-*-%c-*-%s-%s"),

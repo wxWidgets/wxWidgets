@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        gtk/timer.cpp
-// Purpose:
+// Purpose:     wxTimer implementation
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
@@ -12,15 +12,19 @@
 #pragma implementation "timer.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_TIMER
+
 #include "wx/timer.h"
 
 #include "gtk/gtk.h"
 
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxTimer
-//-----------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer,wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 
 static gint timeout_callback( gpointer data )
 {
@@ -70,4 +74,6 @@ void wxTimer::Stop()
         m_tag = -1;
     }
 }
+
+#endif // wxUSE_TIMER
 

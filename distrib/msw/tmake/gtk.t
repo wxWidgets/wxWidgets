@@ -44,7 +44,12 @@
 
         $project{"GTK_SOURCES"} .= "gtk/" . $file . " ";
         $project{"GUIOBJS"} .= $fileobj . " ";
-        $project{"GUIDEPS"} .= $filedep . " "
+        $project{"GUIDEPS"} .= $filedep . " ";
+
+        if ( $wxGTK{$file} =~ /\bL\b/ ) {
+            $project{"GUI_LOWLEVEL_OBJS"} .= $fileobj . " ";
+            $project{"GUI_LOWLEVEL_DEPS"} .= $filedep . " ";
+        }
     }
 
     foreach $file (sort keys %wxUNIX) {
@@ -64,7 +69,7 @@
         $project{"HTMLOBJS"} .= $fileobj . " ";
         $project{"HTMLDEPS"} .= $filedep . " "
     }
-    
+
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
         next if $wxWXINCLUDE{$file} =~ /\bR\b/;
@@ -117,6 +122,12 @@ GUIOBJS = \
 
 GUIDEPS = \
 		#$ ExpandList("GUIDEPS");
+
+GUI_LOWLEVEL_OBJS = \
+		#$ ExpandList("GUI_LOWLEVEL_OBJS");
+
+GUI_LOWLEVEL_DEPS = \
+		#$ ExpandList("GUI_LOWLEVEL_DEPS");
 
 UNIXOBJS = \
 		#$ ExpandList("UNIXOBJS");

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MENUS
+
 #ifndef WX_PRECOMP
     #include "wx/frame.h"
     #include "wx/menu.h"
@@ -431,69 +433,19 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     // NB: VC++ generates wrong assembler for `if ( id != idMenuTitle )'!!
     if ( id != (WXWORD)idMenuTitle )
     {
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED);
-        event.SetEventObject( this );
-        event.SetId( id );
-
         // VZ: previosuly, the command int was set to id too which was quite
         //     useless anyhow (as it could be retrieved using GetId()) and
         //     uncompatible with wxGTK, so now we use the command int instead
         //     to pass the checked status
-        event.SetInt(::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
-
-        ProcessCommand(event);
+        SendEvent(id, ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND) & MF_CHECKED);
     }
 
     return TRUE;
 }
 
-bool wxMenu::ProcessCommand(wxCommandEvent & event)
-{
-    bool processed = FALSE;
-
-#if wxUSE_MENU_CALLBACK
-    // Try a callback
-    if (m_callback)
-    {
-        (void)(*(m_callback))(*this, event);
-        processed = TRUE;
-    }
-#endif // wxUSE_MENU_CALLBACK
-
-    // Try the menu's event handler
-    if ( !processed && GetEventHandler())
-    {
-        processed = GetEventHandler()->ProcessEvent(event);
-    }
-
-    // Try the window the menu was popped up from (and up through the
-    // hierarchy)
-    wxWindow *win = GetInvokingWindow();
-    if ( !processed && win )
-        processed = win->GetEventHandler()->ProcessEvent(event);
-
-    return processed;
-}
-
 // ---------------------------------------------------------------------------
 // other
 // ---------------------------------------------------------------------------
-
-void wxMenu::Attach(wxMenuBar *menubar)
-{
-    // menu can be in at most one menubar because otherwise they would both
-    // delete the menu pointer
-    wxASSERT_MSG( !m_menuBar, wxT("menu belongs to 2 menubars, expect a crash") );
-
-    m_menuBar = menubar;
-}
-
-void wxMenu::Detach()
-{
-    wxASSERT_MSG( m_menuBar, wxT("can't detach menu if it's not attached") );
-
-    m_menuBar = NULL;
-}
 
 wxWindow *wxMenu::GetWindow() const
 {
@@ -512,7 +464,6 @@ wxWindow *wxMenu::GetWindow() const
 void wxMenuBar::Init()
 {
     m_eventHandler = this;
-    m_menuBarFrame = NULL;
     m_hMenu = 0;
 }
 
@@ -553,7 +504,7 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-    DrawMenuBar(GetHwndOf(m_menuBarFrame));
+    DrawMenuBar(GetHwndOf(GetFrame()));
 }
 
 WXHMENU wxMenuBar::Create()
@@ -820,7 +771,7 @@ void wxMenuBar::RebuildAccelTable()
 
 void wxMenuBar::Attach(wxFrame *frame)
 {
-//    wxASSERT_MSG( !IsAttached(), wxT("menubar already attached!") );
+    wxMenuBarBase::Attach(frame);
 
     m_menuBarFrame = frame;
 
@@ -831,44 +782,9 @@ void wxMenuBar::Attach(wxFrame *frame)
 
 void wxMenuBar::Detach()
 {
-//    ::DestroyMenu((HMENU)m_hMenu);
     m_hMenu = (WXHMENU)NULL;
-    m_menuBarFrame = NULL;
+
+    wxMenuBarBase::Detach();
 }
 
-
-// ---------------------------------------------------------------------------
-// wxMenuBar searching for menu items
-// ---------------------------------------------------------------------------
-
-// Find the itemString in menuString, and return the item id or wxNOT_FOUND
-int wxMenuBar::FindMenuItem(const wxString& menuString,
-                            const wxString& itemString) const
-{
-    wxString menuLabel = wxStripMenuCodes(menuString);
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; i < count; i++ )
-    {
-        wxString title = wxStripMenuCodes(m_titles[i]);
-        if ( menuLabel == title )
-            return m_menus[i]->FindItem(itemString);
-    }
-
-    return wxNOT_FOUND;
-}
-
-wxMenuItem *wxMenuBar::FindItem(int id, wxMenu **itemMenu) const
-{
-    if ( itemMenu )
-        *itemMenu = NULL;
-
-    wxMenuItem *item = NULL;
-    size_t count = GetMenuCount();
-    for ( size_t i = 0; !item && (i < count); i++ )
-    {
-        item = m_menus[i]->FindItem(id, itemMenu);
-    }
-
-    return item;
-}
-
+#endif // wxUSE_MENUS

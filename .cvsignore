@@ -37,6 +37,9 @@ base
 gtk
 motif
 win32
+univ
+univ-debug
+univ-release
 base-debug
 gtk-debug
 motif-debug
@@ -46,3 +49,5 @@ gtk-release
 motif-release
 win32-release
 *tags
+log
+univtags.cmd

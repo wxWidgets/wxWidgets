@@ -13,7 +13,9 @@
 #  M	/src/msw
 #  X	/src/motif   X for Xt
 #  U	/src/unix
+#  V	/src/univ    V for VZ
 #  R	/src/gtk     R for Robert
+#  Z	/src/mgl     Z for v.slavik@volny.cZ
 #  O	/src/os2
 #  H	/src/html
 #  W	/include/wx
@@ -44,6 +46,7 @@
 #  P	Not required for the os2Pm port
 #		(unfortunately I can't use O since that is
 #		 in use already - and above I can't use P :-( )
+#  L	Low level GUI toolkit file, used by wxUniversal as well
 #
 #  WX	Base header
 #  GTK	GTK header
@@ -59,6 +62,7 @@
 
 # File name 	Type	Flags
 
+accel.cpp	G	U,X,P
 busyinfo.cpp	G
 calctrl.cpp	G
 caret.cpp	G	U
@@ -83,6 +87,7 @@ listctrl.cpp	G	16
 logg.cpp	G
 msgdlgg.cpp	G	G
 notebook.cpp	G	16,R,P
+paletteg.cpp	G	U,X,P
 panelg.cpp	G
 printps.cpp	G	PS
 prntdlgg.cpp	G	PS,U
@@ -109,6 +114,7 @@ wizard.cpp	G
 appcmn.cpp	C	B
 choiccmn.cpp	C
 cmdline.cpp	C	B
+cmdproc.cpp	C
 cmndata.cpp	C
 clipcmn.cpp	C
 config.cpp	C	B
@@ -157,6 +163,7 @@ imagbmp.cpp	C
 image.cpp	C
 imagall.cpp	C
 imaggif.cpp	C
+imagxpm.cpp	C
 imagjpeg.cpp	C	32
 imagtiff.cpp	C	32
 imagpcx.cpp	C	32
@@ -335,51 +342,77 @@ utilsunx.cpp	U	B
 gsocket.c	U	B
 mimetype.cpp	U	B
 
+bmpbuttn.cpp	V
+button.cpp	V
+checkbox.cpp	V
+checklst.cpp	V
+cmdproc.cpp	V
+colschem.cpp	V
+control.cpp	V
+framuniv.cpp	V
+inphand.cpp	V
+listbox.cpp	V
+radiobox.cpp	V
+radiobut.cpp	V
+renderer.cpp	V
+scrarrow.cpp	V
+scrolbar.cpp	V
+scrthumb.cpp	V
+slider.cpp	V
+spinbutt.cpp	V
+statbmp.cpp	V
+statbox.cpp	V
+statline.cpp	V
+stattext.cpp	V
+textctrl.cpp	V
+theme.cpp	V
+gtk.cpp	V
+winuniv.cpp	V
+win32.cpp	V
+
 gsockgtk.c	R
-win_gtk.c	R
-accel.cpp	R
-app.cpp	R
-bitmap.cpp	R
+win_gtk.c	R	L
+app.cpp	R	L
+bitmap.cpp	R	L
 bmpbuttn.cpp	R
-brush.cpp	R
+brush.cpp	R	L
 button.cpp	R
 checkbox.cpp	R
 checklst.cpp	R
 choice.cpp	R
-clipbrd.cpp	R
-colour.cpp	R
+clipbrd.cpp	R	L
+colour.cpp	R	L
 combobox.cpp	R
 control.cpp	R
-cursor.cpp	R
-data.cpp	R
-dataobj.cpp	R
-dc.cpp	R
-dcclient.cpp	R
-dcmemory.cpp	R
-dcscreen.cpp	R
-dialog.cpp	R
+cursor.cpp	R	L
+data.cpp	R	L
+dataobj.cpp	R	L
+dc.cpp	R	L
+dcclient.cpp	R	L
+dcmemory.cpp	R	L
+dcscreen.cpp	R	L
+dialog.cpp	R	L
 dnd.cpp	R
-font.cpp	R
+font.cpp	R	L
 fontdlg.cpp	R
-frame.cpp	R
+frame.cpp	R	L
 gauge.cpp	R
-gdiobj.cpp	R
-icon.cpp	R
+gdiobj.cpp	R	L
+icon.cpp	R	L
 joystick.cpp	R
 listbox.cpp	R
-main.cpp	R
+main.cpp	R	L
 mdi.cpp	R
 menu.cpp	R
 minifram.cpp	R
 notebook.cpp	R
-paletteg.cpp	G	U,X,P
-pen.cpp	R
+pen.cpp	R	L
 radiobox.cpp	R
 radiobut.cpp	R
-region.cpp	R
+region.cpp	R	L
 scrolbar.cpp	R
 scrolwin.cpp	R
-settings.cpp	R
+settings.cpp	R	L
 slider.cpp	R
 spinbutt.cpp	R
 spinctrl.cpp	R
@@ -390,12 +423,12 @@ stattext.cpp	R
 tbargtk.cpp	R
 textctrl.cpp	R
 tglbtn.cpp	R
-timer.cpp	R
+timer.cpp	R	L
 tooltip.cpp	R
-utilsgtk.cpp	R
+utilsgtk.cpp	R	L
 utilsres.cpp	R
 wave.cpp	R
-window.cpp	R
+window.cpp	R	L
 
 gsockmot.c	X	S
 accel.cpp	X
@@ -570,6 +603,7 @@ choicdlg.h	W
 choice.h	W
 clipbrd.h	W
 cmdline.h	W	B
+cmdproc.cpp	W
 cmndata.h	W
 colordlg.h	W
 colour.h	W
@@ -649,6 +683,7 @@ helpxlp.h	W
 icon.h	W
 image.h	W
 imaggif.h	W
+imagxpm.h	W
 imagbmp.h	W
 imagpng.h	W
 imagpcx.h	W
@@ -1144,5 +1179,33 @@ tabg.h	N	16
 textdlgg.h	N
 treectlg.h	N	16
 wizard.h	N
+
+# wxMGL:
+colour.cpp	Z	L
+dc.cpp	Z	L
+gdiobj.cpp	Z	L
+palette.cpp	Z	L
+region.cpp	Z	L
+brush.cpp	Z	L
+pen.cpp	Z	L
+font.cpp	Z	L
+data.cpp	Z	L
+#fontenum.cpp	Z	L
+#fontutil.cpp	Z	L
+app.cpp	Z	L
+bitmap.cpp	Z	L
+clipbrd.cpp	Z	L
+cursor.cpp	Z	L
+dcclient.cpp	Z	L
+dcmemory.cpp	Z	L
+dcscreen.cpp	Z	L
+dialog.cpp	Z	L
+frame.cpp	Z	L
+icon.cpp	Z	L
+settings.cpp	Z	L
+timer.cpp	Z	L
+window.cpp	Z	L
+utils.cpp	Z	L
+bmpbase.cpp	Z	L
 
 # vi: set noet ts=16 nolist:

@@ -772,7 +772,7 @@ void wxOnAssert(const wxChar *szFile, int nLine, const wxChar *szMsg)
         // send it to the normal log destination
         wxLogDebug(szBuf);
 
-#if wxUSE_GUI || defined(__WXMSW__)
+#if (wxUSE_GUI && wxUSE_MSGDLG) || defined(__WXMSW__)
         // this message is intentionally not translated - it is for
         // developpers only
         wxStrcat(szBuf, wxT("\nDo you want to stop the program?\nYou can also choose [Cancel] to suppress further warnings."));

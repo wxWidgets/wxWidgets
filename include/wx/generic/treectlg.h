@@ -16,6 +16,8 @@
     #pragma interface "treectlg.h"
 #endif
 
+#if wxUSE_TREECTRL
+
 #include "wx/defs.h"
 #include "wx/string.h"
 #include "wx/object.h"
@@ -449,6 +451,8 @@ public:
 };
 
 #endif
+
+#endif // wxUSE_TREECTRL
 
 #endif // _GENERIC_TREECTRL_H_
 

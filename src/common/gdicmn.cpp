@@ -113,12 +113,61 @@ wxRect wxRect::operator + (const wxRect& rect) const
     return wxRect(x1, y1, x2-x1, y2-y1);
 }
 
+wxRect& wxRect::Inflate(wxCoord dx, wxCoord dy)
+{
+    x -= dx;
+    y -= dy;
+    width += 2*dx;
+    height += 2*dy;
+
+    // check that we didn't make the rectangle invalid by accident (you almost
+    // never want to have negative coords and never want negative size)
+    wxASSERT_MSG( x >= 0 && y >= 0 && width >= 0 && height >= 0,
+                  _T("wxRect::Inflate() resulted in an invalid rectangle!") );
+
+    return *this;
+}
+
 bool wxRect::Inside(int cx, int cy) const
 {
     return ( (cx >= x) && (cy >= y)
           && ((cy - y) < height)
           && ((cx - x) < width)
           );
+}
+
+wxRect& wxRect::Intersect(const wxRect& rect)
+{
+    int x2 = GetRight(),
+        y2 = GetBottom();
+
+    if ( x < rect.x )
+        x = rect.x;
+    if ( y < rect.y )
+        y = rect.y;
+    if ( x2 > rect.GetRight() )
+        x2 = rect.GetRight();
+    if ( y2 > rect.GetBottom() )
+        y2 = rect.GetBottom();
+
+    width = x2 - x + 1;
+    height = y2 - y + 1;
+
+    if ( width <= 0 || height <= 0 )
+    {
+        width =
+        height = 0;
+    }
+
+    return *this;
+}
+
+bool wxRect::Intersects(const wxRect& rect) const
+{
+    wxRect r = Intersect(rect);
+
+    // if there is no intersection, both width and height are 0
+    return r.width != 0;
 }
 
 wxColourDatabase::wxColourDatabase (int type) : wxList (type)
@@ -281,6 +330,9 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
   return NULL;
 #endif
 #ifdef __WXPM__
+  return NULL;
+#endif
+#ifdef __WXMGL__
   return NULL;
 #endif
 

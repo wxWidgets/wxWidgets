@@ -152,6 +152,9 @@ enum wxStockCursor
 #elif defined(__WXPM__)
     // Load from a resource
     #define wxICON(X) wxIcon("" #X "")
+#elif defined(__WXMGL__)
+    // Load from a resource
+    #define wxICON(X) wxIcon("" #X "")
 #elif defined(__WXGTK__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )
@@ -167,7 +170,7 @@ enum wxStockCursor
    under Unix bitmaps live in XPMs and under Windows they're in ressources.
  */
 
-#if defined(__WXMSW__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXPM__) || defined(__WXMGL__)
     #define wxBITMAP(name) wxBitmap(#name, wxBITMAP_TYPE_RESOURCE)
 #elif defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__)
     // Initialize from an included XPM
@@ -183,6 +186,7 @@ enum wxStockCursor
 // ---------------------------------------------------------------------------
 // wxSize
 // ---------------------------------------------------------------------------
+
 class WXDLLEXPORT wxSize
 {
 public:
@@ -196,7 +200,9 @@ public:
     wxSize(int xx, int yy) { Set(xx, yy); }
 
     // no copy ctor or assignment operator - the defaults are ok
+
     bool operator==(const wxSize& sz) const { return x == sz.x && y == sz.y; }
+    bool operator!=(const wxSize& sz) const { return x != sz.x || y != sz.y; }
 
     // FIXME are these really useful? If they're, we should have += &c as well
     wxSize operator+(const wxSize& sz) { return wxSize(x + sz.x, y + sz.y); }
@@ -301,23 +307,49 @@ public:
     void SetTop(int top) { y = top; }
     void SetBottom(int bottom) { height = bottom - y + 1; }
 
-    void Inflate(wxCoord dx, wxCoord dy)
+    // operations with rect
+    wxRect& Inflate(wxCoord dx, wxCoord dy);
+    wxRect& Inflate(wxCoord d) { return Inflate(d, d); }
+    wxRect Inflate(wxCoord dx, wxCoord dy) const
     {
-        x -= dx;
-        y -= dy;
-        width += 2*dx;
-        height += 2*dy;
+        wxRect r = *this;
+        r.Inflate(dx, dy);
+        return r;
     }
 
-    void Inflate(wxCoord d) { Inflate(d, d); }
+    wxRect& Deflate(wxCoord dx, wxCoord dy) { return Inflate(-dx, -dy); }
+    wxRect& Deflate(wxCoord d) { return Inflate(-d); }
+    wxRect Deflate(wxCoord dx, wxCoord dy) const
+    {
+        wxRect r = *this;
+        r.Deflate(dx, dy);
+        return r;
+    }
 
+    void Offset(wxCoord dx, wxCoord dy) { x += dx; y += dy; }
+    void Offset(const wxPoint& pt) { Offset(pt.x, pt.y); }
+
+    wxRect& Intersect(const wxRect& rect);
+    wxRect Intersect(const wxRect& rect) const
+    {
+        wxRect r = *this;
+        r.Intersect(rect);
+        return r;
+    }
+
+    wxRect operator+(const wxRect& rect) const;
+    wxRect& operator+=(const wxRect& rect);
+
+    // compare rectangles
     bool operator==(const wxRect& rect) const;
     bool operator!=(const wxRect& rect) const { return !(*this == rect); }
 
-    bool Inside(int cx, int cy) const;
+    // return TRUE if the point is (not strcitly) inside the rect
+    bool Inside(int x, int y) const;
     bool Inside(const wxPoint& pt) const { return Inside(pt.x, pt.y); }
-    wxRect operator+(const wxRect& rect) const;
-    wxRect& operator+=(const wxRect& rect);
+
+    // return TRUE if the rectangles have a non empty intersection
+    bool Intersects(const wxRect& rect) const;
 
 public:
     int x, y, width, height;

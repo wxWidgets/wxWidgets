@@ -293,6 +293,9 @@ private:
 #define GetHfont()              ((HFONT)GetHFONT())
 #define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
 
+#define GetHrgn()               ((HRGN)GetHRGN())
+#define GetHrgnOf(rgn)          ((HRGN)(rgn).GetHRGN())
+
 #endif // wxUSE_GUI
 
 // ---------------------------------------------------------------------------

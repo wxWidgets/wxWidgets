@@ -36,9 +36,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/toolbar.h"
-#include "wx/statusbr.h"
-
 #include "wx/generic/panelg.h"
 
 // ----------------------------------------------------------------------------
@@ -65,7 +62,9 @@ END_EVENT_TABLE()
 void wxPanel::Init()
 {
     m_winLastFocused = (wxWindow *)NULL;
+#if wxUSE_BUTTON
     m_btnDefault = (wxButton *)NULL;
+#endif // wxUSE_BUTTON
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,
@@ -243,7 +242,7 @@ void wxPanel::OnNavigationKey( wxNavigationKeyEvent& event )
 
         wxWindow *child = node->GetData();
 
-        if ( child->AcceptsFocus() )
+        if ( child->AcceptsFocusFromKeyboard() )
         {
             m_winLastFocused = child;  // should be redundant, but it is not
 
@@ -359,7 +358,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         // It might happen that the window got reparented or no longer accepts
         // the focus.
         if ( (*childLastFocused)->GetParent() == win &&
-             (*childLastFocused)->AcceptsFocus() )
+             (*childLastFocused)->AcceptsFocusFromKeyboard() )
         {
             wxLogTrace(_T("focus"),
                        _T("SetFocusToChild() => last child (0x%08x)."),
@@ -381,15 +380,7 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
     {
         wxWindow *child = node->GetData();
 
-        if ( child->AcceptsFocus()
-             && !child->IsTopLevel()
-#if wxUSE_TOOLBAR
-             && !wxDynamicCast(child, wxToolBar)
-#endif // wxUSE_TOOLBAR
-#if wxUSE_STATUSBAR
-             && !wxDynamicCast(child, wxStatusBar)
-#endif // wxUSE_STATUSBAR
-           )
+        if ( child->AcceptsFocusFromKeyboard() && !child->IsTopLevel() )
         {
             wxLogTrace(_T("focus"),
                        _T("SetFocusToChild() => first child (0x%08x)."),

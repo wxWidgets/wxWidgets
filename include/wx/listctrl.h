@@ -16,6 +16,8 @@
     #pragma interface "listctrlbase.h"
 #endif
 
+#if wxUSE_LISTCTRL
+
 // ----------------------------------------------------------------------------
 // types
 // ----------------------------------------------------------------------------
@@ -338,6 +340,8 @@ typedef void (wxEvtHandler::*wxListEventFunction)(wxListEvent&);
 #define EVT_LIST_ITEM_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_LIST_ITEM_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL ),
 #define EVT_LIST_ITEM_ACTIVATED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_LIST_ITEM_ACTIVATED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxListEventFunction) & fn, (wxObject *) NULL ),
+
+#endif // wxUSE_LISTCTRL
 
 #endif
     // _WX_LISTCTRL_H_BASE_

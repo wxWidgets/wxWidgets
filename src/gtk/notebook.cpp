@@ -404,25 +404,6 @@ int wxNotebook::SetSelection( int page )
     return selOld;
 }
 
-void wxNotebook::AdvanceSelection( bool forward )
-{
-    wxCHECK_RET( m_widget != NULL, wxT("invalid notebook") );
-
-    int max = GetPageCount();
-    if ( !max )
-    {
-        // nothing to do with empty notebook
-        return;
-    }
-
-    int sel = GetSelection();
-
-    if (forward)
-        SetSelection( sel == max - 1 ? 0 : sel + 1 );
-    else
-        SetSelection( sel == 0 ? max - 1 : sel - 1 );
-}
-
 void wxNotebook::SetImageList( wxImageList* imageList )
 {
     if (m_ownsImageList) delete m_imageList;
@@ -584,11 +565,11 @@ bool wxNotebook::DeletePage( int page )
     return TRUE;
 }
 
-bool wxNotebook::RemovePage( int page )
+wxNotebookPage *wxNotebook::DoRemovePage( int page )
 {
     wxGtkNotebookPage* nb_page = GetNotebookPage(page);
 
-    wxCHECK_MSG( nb_page, FALSE, _T("wxNotebook::RemovePage: invalid page") );
+    wxCHECK_MSG( nb_page, NULL, _T("wxNotebook::RemovePage: invalid page") );
 
     gtk_widget_ref( nb_page->m_client->m_widget );
     gtk_widget_unrealize( nb_page->m_client->m_widget );
@@ -596,9 +577,10 @@ bool wxNotebook::RemovePage( int page )
         
     gtk_notebook_remove_page( GTK_NOTEBOOK(m_widget), page );
 
+    wxNotebookPage *pageRemoved = (wxNotebookPage *)m_pages[page];
     m_pages.DeleteObject( nb_page );
 
-    return TRUE;
+    return pageRemoved;
 }
 
 bool wxNotebook::InsertPage( int position, wxNotebookPage* win, const wxString& text,
@@ -698,17 +680,6 @@ void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
         AdvanceSelection( event.GetDirection() );
     else
         event.Skip();
-}
-
-wxNotebookPage *wxNotebook::GetPage( int page ) const
-{
-    wxCHECK_MSG( m_widget != NULL, (wxWindow*) NULL, wxT("invalid notebook") );
-
-    wxGtkNotebookPage* nb_page = GetNotebookPage(page);
-    if (!nb_page)
-        return (wxNotebookPage *) NULL;
-    else
-        return nb_page->m_client;
 }
 
 #if wxUSE_CONSTRAINTS

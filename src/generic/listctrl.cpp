@@ -19,6 +19,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_LISTCTRL
+
 #include "wx/dcscreen.h"
 #include "wx/app.h"
 #include "wx/listctrl.h"
@@ -3139,7 +3141,7 @@ void wxListMainWindow::SortItems( wxListCtrlCompare fn, long data )
 
 void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
 {
-     wxScrolledWindow::OnScroll( event ) ;
+    HandleOnScroll( event );
 
 #if wxUSE_GENERIC_LIST_EXTENSIONS
 
@@ -3150,7 +3152,7 @@ void wxListMainWindow::OnScroll(wxScrollWinEvent& event)
             {
                     lc->m_headerWin->Refresh() ;
 #ifdef __WXMAC__
-                        lc->m_headerWin->MacUpdateImmediately() ;
+                    lc->m_headerWin->MacUpdateImmediately() ;
 #endif
             }
     }
@@ -3901,3 +3903,5 @@ void wxListCtrl::SetFocus()
     if ( FindFocus() != this )
         m_mainWin->SetFocus();
 }
+
+#endif // wxUSE_LISTCTRL

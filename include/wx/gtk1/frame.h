@@ -26,24 +26,22 @@ class wxMenuBar;
 class wxToolBar;
 class wxStatusBar;
 
-class wxFrame;
-
 //-----------------------------------------------------------------------------
-// wxFrame
+// wxFrameGTK
 //-----------------------------------------------------------------------------
 
-class wxFrame : public wxFrameBase
+class wxFrameGTK : public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
-    wxFrame(wxWindow *parent,
-            wxWindowID id,
-            const wxString& title,
-            const wxPoint& pos = wxDefaultPosition,
-            const wxSize& size = wxDefaultSize,
-            long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr)
+    wxFrameGTK() { Init(); }
+    wxFrameGTK(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = wxDEFAULT_FRAME_STYLE,
+               const wxString& name = wxFrameNameStr)
     {
         Init();
 
@@ -58,7 +56,7 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxFrame();
+    virtual ~wxFrameGTK();
 
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = TRUE);
@@ -72,7 +70,9 @@ public:
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual bool IsFullScreen() const { return m_fsIsShowing; };
 
+#if wxUSE_MENUS
     virtual void SetMenuBar( wxMenuBar *menuBar );
+#endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
     virtual void PositionStatusBar();
@@ -138,7 +138,7 @@ protected:
     bool          m_isIconized;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrameGTK)
 };
 
 #endif // __GTKFRAMEH__

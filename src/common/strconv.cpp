@@ -627,7 +627,7 @@ public:
     {
         size_t len =
             MultiByteToWideChar(CodePage, 0, psz, -1, buf, buf ? n : 0);
-        //VS: returns # of written chars for buf!=NULL and *size* 
+        //VS: returns # of written chars for buf!=NULL and *size*
         //    needed buffer for buf==NULL
         return len ? (buf ? len : len-1) : (size_t)-1;
     }
@@ -636,7 +636,7 @@ public:
     {
         size_t len = WideCharToMultiByte(CodePage, 0, psz, -1, buf,
                                          buf ? n : 0, NULL, NULL);
-        //VS: returns # of written chars for buf!=NULL and *size* 
+        //VS: returns # of written chars for buf!=NULL and *size*
         //    needed buffer for buf==NULL
         return len ? (buf ? len : len-1) : (size_t)-1;
     }
@@ -647,7 +647,9 @@ public:
 public:
     long CodePage;
 };
-#endif
+#endif // __WIN32__
+
+#if wxUSE_FONTMAP
 
 class EC_CharSet : public wxCharacterSet
 {
@@ -692,6 +694,8 @@ public:
     wxEncodingConverter m2w, w2m;
 };
 
+#endif // wxUSE_FONTMAP
+
 static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
 {
     wxCharacterSet *cset = NULL;
@@ -709,7 +713,9 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
         }
     }
 
-    if (cset && cset->usable()) return cset;
+    if (cset && cset->usable())
+        return cset;
+
     if (cset)
     {
         delete cset;
@@ -724,9 +730,11 @@ static wxCharacterSet *wxGetCharacterSet(const wxChar *name)
     delete cset;
 #endif // __WIN32__
 
+#if wxUSE_FONTMAP
     cset = new EC_CharSet(name);
     if (cset->usable())
         return cset;
+#endif // wxUSE_FONTMAP
 
     delete cset;
     wxLogError(_("Unknown encoding '%s'!"), name);
@@ -854,10 +862,10 @@ public:
 class EC_CharSetConverter
 {
 public:
-    EC_CharSetConverter(EC_CharSet*from,EC_CharSet*to)
+    EC_CharSetConverter(EC_CharSet* from,EC_CharSet* to)
         { cnv.Init(from->enc,to->enc); }
 
-    size_t Convert(char*buf, const char*psz, size_t n)
+    size_t Convert(char* buf, const char* psz, size_t n)
     {
         size_t inbuf = strlen(psz);
         if (buf) cnv.Convert(psz,buf);

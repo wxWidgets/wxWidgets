@@ -1,6 +1,8 @@
 #ifndef _WX_FILEDLG_H_BASE_
 #define _WX_FILEDLG_H_BASE_
 
+#if wxUSE_FILEDLG
+
 enum
 {
     wxOPEN              = 0x0001,
@@ -32,6 +34,7 @@ enum
 #include "wx/stubs/filedlg.h"
 #endif
 
+#endif // wxUSE_FILEDLG
 
 #endif
     // _WX_FILEDLG_H_BASE_

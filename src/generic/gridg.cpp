@@ -25,6 +25,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_GRID
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dcclient.h"
@@ -2852,3 +2854,4 @@ void *wxGenericGrid::GetCellData(int row, int col)
     return rc;
 }
 
+#endif // wxUSE_GRID

@@ -29,6 +29,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_LISTCTRL
+
 #ifdef __WIN95__
 
 #ifndef WX_PRECOMP
@@ -2021,3 +2023,4 @@ wxListEvent::wxListEvent(wxEventType commandType, int id)
 
 #endif // __WIN95__
 
+#endif // wxUSE_LISTCTRL

@@ -22,6 +22,8 @@
 
 #include "wx/defs.h"
 
+#if wxUSE_TOOLBAR
+
 #include "wx/bitmap.h"
 #include "wx/list.h"
 #include "wx/control.h"
@@ -410,8 +412,8 @@ public:
     // Do the toolbar button updates (check for EVT_UPDATE_UI handlers)
     virtual void DoToolbarUpdates();
 
-    // Don't want toolbars to accept the focus
-    virtual bool AcceptsFocus() const { return FALSE; }
+    // don't want toolbars to accept the focus by tabbing to them
+    virtual bool AcceptsFocusFromKeyboard() const { return FALSE; }
 
 protected:
     // to implement in derived classes
@@ -472,6 +474,8 @@ private:
     DECLARE_EVENT_TABLE()
     DECLARE_CLASS(wxToolBarBase)
 };
+
+#endif // wxUSE_TOOLBAR
 
 #endif
     // _WX_TBARBASE_H_

@@ -140,7 +140,7 @@ private:
 class wxClientDC : public wxWindowDC
 {
 public:
-    wxClientDC() { }
+    wxClientDC();
     wxClientDC( wxWindow *win );
 
 protected:

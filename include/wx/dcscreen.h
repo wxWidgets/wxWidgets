@@ -7,6 +7,8 @@
 #include "wx/motif/dcscreen.h"
 #elif defined(__WXGTK__)
 #include "wx/gtk/dcscreen.h"
+#elif defined(__WXMGL__)
+#include "wx/mgl/dcscreen.h"
 #elif defined(__WXQT__)
 #include "wx/qt/dcscreen.h"
 #elif defined(__WXMAC__)

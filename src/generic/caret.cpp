@@ -209,8 +209,17 @@ void wxCaret::Refresh()
         if ( m_xOld == -1 && m_yOld == -1 )
         {
             // save the part we're going to overdraw
+
+            int x = m_x,
+                y = m_y;
+#if defined(__WXGTK__) && !defined(__WX_DC_BLIT_FIXED__)
+            wxPoint pt = dcWin.GetDeviceOrigin();
+            x += pt.x;
+            y += pt.y;
+#endif // broken wxGTK wxDC::Blit
             dcMem.Blit(0, 0, m_width, m_height,
-                       &dcWin, m_x, m_y);
+                       &dcWin, x, y);
+
             m_xOld = m_x;
             m_yOld = m_y;
         }

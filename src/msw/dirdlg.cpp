@@ -16,6 +16,7 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
+
 #ifdef __GNUG__
     #pragma implementation "dirdlg.h"
 #endif
@@ -26,6 +27,8 @@
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_DIRDLG
 
 #if defined(__WIN95__) && !defined(__GNUWIN32_OLD__)
 
@@ -189,3 +192,5 @@ static void ItemListFree(LPITEMIDLIST pidl)
 #else
     #include "../generic/dirdlgg.cpp"
 #endif // compiler/platform on which the code here compiles
+
+#endif // wxUSE_DIRDLG

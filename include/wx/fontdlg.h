@@ -1,6 +1,8 @@
 #ifndef _WX_FONTDLG_H_BASE_
 #define _WX_FONTDLG_H_BASE_
 
+#if wxUSE_FONTDLG
+
 #if defined(__WXMSW__)
 #include "wx/msw/fontdlg.h"
 #elif defined(__WXMOTIF__)
@@ -24,6 +26,8 @@
 #   define wxFontDialog wxGenericFontDialog
 #   define sm_classwxFontDialog sm_classwxGenericFontDialog
 #endif
+
+#endif // wxUSE_FONTDLG
 
 #endif
     // _WX_FONTDLG_H_BASE_

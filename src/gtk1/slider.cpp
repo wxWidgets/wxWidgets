@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        slider.cpp
+// Name:        gtk/slider.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -33,7 +33,7 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
+extern bool g_blockEventsOnDrag;
 
 static const float sensitivity = 0.02;
 
@@ -64,9 +64,8 @@ static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
     double dvalue = adjust->value;
     int value = (int)(dvalue < 0 ? dvalue - 0.5 : dvalue + 0.5);
 
-    int orient = wxHORIZONTAL;
-    if ( (win->GetWindowStyleFlag() & wxSB_VERTICAL) == wxSB_VERTICAL)
-        orient = wxVERTICAL;
+    int orient = win->GetWindowStyleFlag() & wxSL_VERTICAL ? wxVERTICAL
+                                                           : wxHORIZONTAL;
 
     wxScrollEvent event( command, win->GetId(), value, orient );
     event.SetEventObject( win );
@@ -243,41 +242,6 @@ void wxSlider::SetLineSize( int WXUNUSED(lineSize) )
 int wxSlider::GetLineSize() const
 {
     return 0;
-}
-
-void wxSlider::SetTick( int WXUNUSED(tickPos) )
-{
-}
-
-void wxSlider::SetTickFreq( int WXUNUSED(n), int WXUNUSED(pos) )
-{
-}
-
-int wxSlider::GetTickFreq() const
-{
-    return 0;
-}
-
-void wxSlider::ClearTicks()
-{
-}
-
-void wxSlider::SetSelection( int WXUNUSED(minPos), int WXUNUSED(maxPos) )
-{
-}
-
-int wxSlider::GetSelEnd() const
-{
-    return 0;
-}
-
-int wxSlider::GetSelStart() const
-{
-    return 0;
-}
-
-void wxSlider::ClearSel()
-{
 }
 
 bool wxSlider::IsOwnGtkWindow( GdkWindow *window )

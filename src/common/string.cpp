@@ -1854,6 +1854,8 @@ wxArrayString& wxArrayString::operator=(const wxArrayString& src)
 
   Copy(src);
 
+  m_autoSort = src.m_autoSort;
+
   return *this;
 }
 

@@ -926,27 +926,6 @@ void wxTextCtrl::Paste()
 #endif
 }
 
-bool wxTextCtrl::CanCopy() const
-{
-    // Can copy if there's a selection
-    long from, to;
-    GetSelection(& from, & to);
-    return (from != to) ;
-}
-
-bool wxTextCtrl::CanCut() const
-{
-    // Can cut if there's a selection
-    long from, to;
-    GetSelection(& from, & to);
-    return (from != to) && (IsEditable());
-}
-
-bool wxTextCtrl::CanPaste() const
-{
-    return IsEditable() ;
-}
-
 // Undo/redo
 void wxTextCtrl::Undo()
 {

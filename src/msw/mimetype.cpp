@@ -20,7 +20,9 @@
   #pragma hdrstop
 #endif
 
-// this is Win32 only code
+#if wxUSE_MIMETYPE
+
+// Doesn't compile in WIN16 mode
 #ifndef __WIN16__
 
 #ifndef WX_PRECOMP
@@ -827,3 +829,5 @@ bool wxFileTypeImpl::RemoveDescription()
 
 #endif
   // __WIN16__
+
+#endif // wxUSE_MIMETYPE

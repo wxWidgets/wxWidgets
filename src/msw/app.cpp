@@ -239,7 +239,7 @@ bool wxApp::Initialize()
 
 #endif // __WIN95__
 
-#if wxUSE_OLE
+#if wxUSE_OLE || wxUSE_DRAG_AND_DROP || wxUSE_DATAOBJ
 
 #ifdef __WIN16__
     // for OLE, enlarge message queue to be as large as possible
@@ -250,6 +250,7 @@ bool wxApp::Initialize()
     // we need to initialize OLE library
     if ( FAILED(::OleInitialize(NULL)) )
         wxLogError(_("Cannot initialize OLE"));
+
 #endif // wxUSE_OLE
 
 #if wxUSE_CTL3D
@@ -257,7 +258,7 @@ bool wxApp::Initialize()
         wxLogError(wxT("Cannot register CTL3D"));
 
     Ctl3dAutoSubclass(wxhInstance);
-#endif
+#endif // wxUSE_CTL3D
 
     // VZ: these icons are not in wx.rc anyhow (but should they?)!
 #if 0
@@ -598,13 +599,14 @@ void wxApp::CleanUp()
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
     delete wxPendingEvents;
+
 #if wxUSE_THREADS
     delete wxPendingEventsLocker;
-    // If we don't do the following, we get an apparent memory leak.
+    // If we don't do the following, we get an apparent memory leak
 #if wxUSE_VALIDATORS
     ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
-#endif
-#endif
+#endif // wxUSE_VALIDATORS
+#endif // wxUSE_THREADS
 
     wxClassInfo::CleanUpClasses();
 
@@ -642,8 +644,7 @@ int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
 
 int WXDLLEXPORT wxEntryInitGui()
 {
-    wxTheApp->OnInitGui();
-    return 0;
+    return wxTheApp->OnInitGui();
 }
 
 void WXDLLEXPORT wxEntryCleanup()
@@ -713,10 +714,6 @@ int wxEntry(WXHINSTANCE hInstance,
         wxTheApp->ConvertToStandardCommandArgs(lpCmdLine);
         wxTheApp->m_nCmdShow = nCmdShow;
 
-        // GUI-specific initialisation. In fact on Windows we don't have any,
-        // but this call is provided for compatibility across platforms.
-        wxEntryInitGui();
-
         // We really don't want timestamps by default, because it means
         // we can't simply double-click on the error message and get to that
         // line in the source. So VC++ at least, let's have a sensible default.
@@ -736,7 +733,7 @@ int wxEntry(WXHINSTANCE hInstance,
         wxTheApp->SetExitOnFrameDelete(FALSE);
 
         // init the app
-        retValue = wxTheApp->OnInit() ? 0 : -1;
+        retValue = wxEntryInitGui() && wxTheApp->OnInit() ? 0 : -1;
 
         // restore the old flag value
         wxTheApp->SetExitOnFrameDelete(exitOnLastFrameDelete);
@@ -848,14 +845,9 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 wxApp::wxApp()
 {
-    m_topWindow = NULL;
-    wxTheApp = this;
-    m_wantDebugOutput = TRUE;
-
     argc = 0;
     argv = NULL;
     m_printMode = wxPRINT_WINDOWS;
-    m_exitOnFrameDelete = TRUE;
     m_auto3D = TRUE;
 }
 

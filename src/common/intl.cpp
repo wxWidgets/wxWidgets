@@ -508,8 +508,6 @@ const char *wxMsgCatalog::GetString(const char *szOrig) const
 
 void wxMsgCatalog::ConvertEncoding()
 {
-    wxFontEncoding enc;
-
     // first, find encoding header:
     const char *hdr = StringAtOfs(m_pOrigTable, 0);
     if ( hdr == NULL || hdr[0] != 0 ) {
@@ -526,7 +524,8 @@ void wxMsgCatalog::ConvertEncoding()
     while (header[n] != wxT('\n'))
         charset << header[n++];
 
-    enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
+#if wxUSE_FONTMAP
+    wxFontEncoding enc = wxTheFontMapper->CharsetToEncoding(charset, FALSE);
     if ( enc == wxFONTENCODING_SYSTEM )
         return; // unknown encoding
 
@@ -546,6 +545,7 @@ void wxMsgCatalog::ConvertEncoding()
 
     for (size_t i = 0; i < m_numStrings; i++)
         converter.Convert((char*)StringAtOfs(m_pTransTable, i));
+#endif // wxUSE_FONTMAP
 }
 
 
@@ -989,7 +989,7 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     {
         return (wxFontEncoding)(wxFONTENCODING_CP1250 + codepage - 1250);
     }
-#elif defined(__UNIX_LIKE__)
+#elif defined(__UNIX_LIKE__) && wxUSE_FONTMAP
     wxString encname = GetSystemEncodingName();
     if ( !encname.empty() )
     {

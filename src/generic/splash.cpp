@@ -20,6 +20,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_SPLASH
+
 #ifndef WX_PRECOMP
 #include "wx/wx.h"
 #endif
@@ -169,3 +171,4 @@ void wxSplashScreenWindow::OnChar(wxKeyEvent& WXUNUSED(event))
     GetParent()->Close(TRUE);
 }
 
+#endif // wxUSE_SPLASH

@@ -28,6 +28,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_MENUS
+
 #ifndef WX_PRECOMP
     #include "wx/font.h"
     #include "wx/bitmap.h"
@@ -150,18 +152,6 @@ wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
     return wxStripMenuCodes(text);
 }
 
-// accelerators
-// ------------
-
-#if wxUSE_ACCEL
-
-wxAcceleratorEntry *wxMenuItem::GetAccel() const
-{
-    return wxGetAccelFromString(GetText());
-}
-
-#endif // wxUSE_ACCEL
-
 // change item state
 // -----------------
 
@@ -275,3 +265,5 @@ wxMenuItem *wxMenuItemBase::New(wxMenu *parentMenu,
 {
     return new wxMenuItem(parentMenu, id, name, help, isCheckable, subMenu);
 }
+
+#endif // wxUSE_MENUS

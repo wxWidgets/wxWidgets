@@ -88,6 +88,8 @@ public:
     #include "wx/motif/clipbrd.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/clipbrd.h"
+#elif defined(__WXMGL__)
+    #include "wx/mgl/clipbrd.h"
 #elif defined(__WXQT__)
     #include "wx/gtk/clipbrd.h"
 #elif defined(__WXMAC__)

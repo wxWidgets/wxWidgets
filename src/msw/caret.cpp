@@ -132,6 +132,17 @@ void wxCaret::DoShow()
     wxASSERT_MSG( GetWindow(), wxT("caret without window cannot be shown") );
     wxASSERT_MSG( IsOk(), wxT("caret of zero size cannot be shown") );
 
+    // we might not have created the caret yet if we had got the focus first
+    // and the caret was shown later - so do it now if we have the focus but
+    // not the caret
+    if ( !m_hasCaret && (wxWindow::FindFocus() == GetWindow()) )
+    {
+        if ( MSWCreateCaret() )
+        {
+            DoMove();
+        }
+    }
+
     if ( m_hasCaret )
     {
         CALL_CARET_API(ShowCaret, (GetWinHwnd(GetWindow())));
@@ -158,7 +169,10 @@ void wxCaret::DoMove()
         wxASSERT_MSG( wxWindow::FindFocus() == GetWindow(),
                       wxT("how did we lose focus?") );
 
-        CALL_CARET_API(SetCaretPos, (m_x, m_y));
+        // for compatibility with the generic version, the coordinates are
+        // client ones
+        wxPoint pt = GetWindow()->GetClientAreaOrigin();
+        CALL_CARET_API(SetCaretPos, (m_x + pt.x, m_y + pt.y));
     }
     //else: we don't have caret right now, nothing to do (this does happen)
 }

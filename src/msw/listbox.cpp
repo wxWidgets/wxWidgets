@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        listbox.cpp
+// Name:        src/msw/listbox.cpp
 // Purpose:     wxListBox
 // Author:      Julian Smart
 // Modified by: Vadim Zeitlin (owner drawn stuff)
@@ -20,8 +20,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/window.h"
-#include "wx/msw/private.h"
+#if wxUSE_LISTBOX
 
 #ifndef WX_PRECOMP
 #include "wx/listbox.h"
@@ -31,6 +30,9 @@
 #include "wx/dc.h"
 #include "wx/utils.h"
 #endif
+
+#include "wx/window.h"
+#include "wx/msw/private.h"
 
 #include <windowsx.h>
 
@@ -454,11 +456,6 @@ void wxListBox::DoSetItemClientData(int n, void *clientData)
         wxLogDebug(wxT("LB_SETITEMDATA failed"));
 }
 
-bool wxListBox::HasMultipleSelection() const
-{
-    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
-}
-
 // Return number of selections and an array of selected integers
 int wxListBox::GetSelections(wxArrayInt& aSelections) const
 {
@@ -541,9 +538,9 @@ void wxListBox::SetString(int N, const wxString& s)
 
     void *oldData = NULL;
     wxClientData *oldObjData = NULL;
-    if ( m_clientDataItemsType == ClientData_Void )
+    if ( m_clientDataItemsType == wxClientData_Void )
         oldData = GetClientData(N);
-    else if ( m_clientDataItemsType == ClientData_Object )
+    else if ( m_clientDataItemsType == wxClientData_Object )
         oldObjData = GetClientObject(N);
 
     // delete and recreate it
@@ -785,5 +782,6 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
                              (wxOwnerDrawn::wxODStatus)pStruct->itemState);
 }
 
-#endif
-    // wxUSE_OWNER_DRAWN
+#endif // wxUSE_OWNER_DRAWN
+
+#endif // wxUSE_LISTBOX
