@@ -579,7 +579,7 @@ void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 }
 
 // set the frame title indicating the current number of threads
-void MyFrame::OnIdle(wxIdleEvent &event)
+void MyFrame::OnIdle(wxIdleEvent& event)
 {
     wxCriticalSectionLocker enter(wxGetApp().m_critsect);
 
@@ -600,6 +600,8 @@ void MyFrame::OnIdle(wxIdleEvent &event)
         wxLogStatus(this, wxT("%u threads total, %u running."), nCount, nRunning);
     }
     //else: avoid flicker - don't print anything
+
+    event.Skip();
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
