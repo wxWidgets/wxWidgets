@@ -8,6 +8,7 @@ A few little but annoying bug fixes.
 
 Updated pycolourchooser.
 
+Updated to 0.9b of PyCrust.
 
 
 
