@@ -36,44 +36,6 @@ class WXDLLEXPORT wxFileDropTarget;
 class WXDLLEXPORT wxDropSource;
 
 //-------------------------------------------------------------------------
-// wxDataFormat (internal)
-//-------------------------------------------------------------------------
-
-class wxDataFormat : public wxObject
-{
-    DECLARE_CLASS( wxDataFormat )
-
-public:
-    wxDataFormat();
-    wxDataFormat( wxDataFormatId type );
-    wxDataFormat( const wxString &id );
-    wxDataFormat( const wxChar *id );
-    wxDataFormat( const wxDataFormat &format );
-
-    void SetType( wxDataFormatId type );
-    wxDataFormatId GetType() const;
-
-    /* the string Id identifies the format of clipboard or DnD data. a word
-     * processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
-     * to the clipboard - the latter with the Id "application/wxword", an
-     * image manipulation program would put a wxBitmapDataObject and a
-     * wxPrivateDataObject to the clipboard - the latter with "image/png". */
-
-    wxString GetId() const;
-    void SetId( const wxChar *id );
-
-    // implicit conversion to wxDataFormatId
-    operator wxDataFormatId() const { return m_type; }
-
-    bool operator==(wxDataFormatId type) const { return m_type == type; }
-    bool operator!=(wxDataFormatId type) const { return m_type != type; }
-
-private:
-    wxDataFormatId  m_type;
-    wxString    m_id;
-};
-
-//-------------------------------------------------------------------------
 // wxDataBroker (internal)
 //-------------------------------------------------------------------------
 
@@ -123,7 +85,7 @@ public:
 // wxDataObject
 //-------------------------------------------------------------------------
 
-class WXDLLEXPORT wxDataObject: public wxObject
+class WXDLLEXPORT wxDataObject: public wxDataObjectBase
 {
 public:
   // all data formats (values are the same as in windows.h, do not change!)
@@ -165,34 +127,7 @@ public:
     // get the (total) size of data
   virtual size_t GetDataSize() const = 0;
     // copy raw data to provided pointer
-  virtual void GetDataHere(void *pBuf) const = 0;
-
-};
-
-// ----------------------------------------------------------------------------
-// wxTextDataObject is a specialization of wxDataObject for text data
-// ----------------------------------------------------------------------------
-
-class WXDLLEXPORT wxTextDataObject : public wxDataObject
-{
-public:
-  // ctors
-  wxTextDataObject() { }
-  wxTextDataObject(const wxString& strText) : m_strText(strText) { }
-  void Init(const wxString& strText) { m_strText = strText; }
-
-  // implement base class pure virtuals
-  virtual wxDataFormat GetPreferredFormat() const
-    { return wxDF_TEXT; }
-  virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDF_TEXT; }
-  virtual size_t GetDataSize() const
-    { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
-  virtual void GetDataHere(void *pBuf) const
-    { memcpy(pBuf, m_strText.c_str(), GetDataSize()); }
-
-private:
-  wxString  m_strText;
+  virtual bool GetDataHere(void *pBuf) const = 0;
 
 };
 
@@ -212,10 +147,10 @@ public:
   virtual wxDataFormat GetPreferredFormat() const
     { return wxDF_FILENAME; }
   virtual bool IsSupportedFormat(wxDataFormat format) const
-    { return format == wxDF_FILENAME; }
+    { return format == (unsigned short)wxDF_FILENAME; }
   virtual size_t GetDataSize() const
     { return m_files.Len() + 1; } // +1 for trailing '\0'of course
-  virtual void GetDataHere(void *pBuf) const
+  virtual bool GetDataHere(void *pBuf) const
     { memcpy(pBuf, m_files.c_str(), GetDataSize()); }
 
 private:

@@ -140,14 +140,14 @@ COMMONOBJS = \
   ..\common\$D\config.obj \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\date.obj \
-  ..\common\$D\datastrm.obj \
-  ..\common\$D\dcbase.obj \
+  ..\common\$D\datstrm.obj \
   ..\common\$D\db.obj \
   ..\common\$D\dbtable.obj \
+  ..\common\$D\dcbase.obj \
   ..\common\$D\dlgcmn.obj \
+  ..\common\$D\dobjcmn.obj \
   ..\common\$D\docmdi.obj \
   ..\common\$D\docview.obj \
-  ..\common\$D\docmdi.obj \
   ..\common\$D\dynarray.obj \
   ..\common\$D\dynlib.obj \
   ..\common\$D\event.obj \
@@ -175,7 +175,6 @@ COMMONOBJS = \
   ..\common\$D\imagpcx.obj \
   ..\common\$D\imagpng.obj \
   ..\common\$D\imagpnm.obj \
-  ..\common\$D\init.obj \
   ..\common\$D\intl.obj \
   ..\common\$D\ipcbase.obj \
   ..\common\$D\layout.obj \
@@ -194,7 +193,6 @@ COMMONOBJS = \
   ..\common\$D\prntbase.obj \
   ..\common\$D\process.obj \
   ..\common\$D\protocol.obj \
-  ..\common\$D\resourc2.obj \
   ..\common\$D\resource.obj \
   ..\common\$D\sckaddr.obj \
   ..\common\$D\sckfile.obj \
@@ -208,8 +206,6 @@ COMMONOBJS = \
   ..\common\$D\string.obj \
   ..\common\$D\tbarbase.obj \
   ..\common\$D\tbarsmpl.obj \
-  ..\common\$D\textfile.obj \
-  ..\common\$D\textsmpl.obj \
   ..\common\$D\textcmn.obj \
   ..\common\$D\textfile.obj \
   ..\common\$D\time.obj \
@@ -238,14 +234,14 @@ COMLIBOBJS1 = \
   config.obj \
   ctrlcmn.obj \
   date.obj \
-  datastrm.obj \
-  dcbase.obj \
+  datstrm.obj \
   db.obj \
   dbtable.obj \
+  dcbase.obj \
   dlgcmn.obj \
+  dobjcmn.obj \
   docmdi.obj \
   docview.obj \
-  docmdi.obj \
   dynarray.obj \
   dynlib.obj \
   event.obj \
@@ -273,14 +269,13 @@ COMLIBOBJS1 = \
   imagpcx.obj \
   imagpng.obj \
   imagpnm.obj \
-  init.obj \
   intl.obj \
   ipcbase.obj \
-  layout.obj
+  layout.obj \
+  list.obj \
+  log.obj
 
 COMLIBOBJS2 = \
-  list.obj \
-  log.obj \
   longlong.obj \
   matrix.obj \
   memory.obj \
@@ -294,7 +289,6 @@ COMLIBOBJS2 = \
   prntbase.obj \
   process.obj \
   protocol.obj \
-  resourc2.obj \
   resource.obj \
   sckaddr.obj \
   sckfile.obj \
@@ -308,8 +302,6 @@ COMLIBOBJS2 = \
   string.obj \
   tbarbase.obj \
   tbarsmpl.obj \
-  textfile.obj \
-  textsmpl.obj \
   textcmn.obj \
   textfile.obj \
   time.obj \
@@ -329,7 +321,7 @@ COMLIBOBJS2 = \
   wxexpr.obj \
   y_tab.obj \
   zipstrm.obj \
-  zstream.obj \
+  zstream.obj
 
 OS2OBJS = \
   ..\os2\$D\accel.obj \
@@ -540,14 +532,14 @@ $(COMLIBOBJS1):
   copy ..\common\$D\config.obj
   copy ..\common\$D\ctrlcmn.obj
   copy ..\common\$D\date.obj
-  copy ..\common\$D\datastrm.obj
-  copy ..\common\$D\dcbase.obj
+  copy ..\common\$D\datstrm.obj
   copy ..\common\$D\db.obj
   copy ..\common\$D\dbtable.obj
+  copy ..\common\$D\dcbase.obj
   copy ..\common\$D\dlgcmn.obj
+  copy ..\common\$D\dobjcmn.obj
   copy ..\common\$D\docmdi.obj
   copy ..\common\$D\docview.obj
-  copy ..\common\$D\docmdi.obj
   copy ..\common\$D\dynarray.obj
   copy ..\common\$D\dynlib.obj
   copy ..\common\$D\event.obj
@@ -575,62 +567,58 @@ $(COMLIBOBJS1):
   copy ..\common\$D\imagpcx.obj
   copy ..\common\$D\imagpng.obj
   copy ..\common\$D\imagpnm.obj
-  copy ..\common\$D\init.obj
   copy ..\common\$D\intl.obj
   copy ..\common\$D\ipcbase.obj
   copy ..\common\$D\layout.obj
-
-$(COMLIBOBJS2):
   copy ..\common\$D\list.obj
   copy ..\common\$D\log.obj
-  copy ..\common\$D\longlong.obj
-  copy ..\common\$D\matrix.obj
-  copy ..\common\$D\memory.obj
-  copy ..\common\$D\mimetype.obj
-  copy ..\common\$D\module.obj
-  copy ..\common\$D\mstream.obj
-  copy ..\common\$D\object.obj
-  copy ..\common\$D\objstrm.obj
-  copy ..\common\$D\odbc.obj
-  copy ..\common\$D\paper.obj
-  copy ..\common\$D\prntbase.obj
-  copy ..\common\$D\process.obj
-  copy ..\common\$D\protocol.obj
-  copy ..\common\$D\resourc2.obj
-  copy ..\common\$D\resource.obj
-  copy ..\common\$D\sckaddr.obj
-  copy ..\common\$D\sckfile.obj
-  copy ..\common\$D\sckipc.obj
-  copy ..\common\$D\sckstrm.obj
-  copy ..\common\$D\serbase.obj
-  copy ..\common\$D\sizer.obj
-  copy ..\common\$D\socket.obj
-  copy ..\common\$D\strconv.obj
-  copy ..\common\$D\stream.obj
-  copy ..\common\$D\string.obj
-  copy ..\common\$D\tbarbase.obj
-  copy ..\common\$D\tbarsmpl.obj
-  copy ..\common\$D\textfile.obj
-  copy ..\common\$D\textsmpl.obj
-  copy ..\common\$D\textcmn.obj
-  copy ..\common\$D\textfile.obj
-  copy ..\common\$D\time.obj
-  copy ..\common\$D\timercmn.obj
-  copy ..\common\$D\tokenzr.obj
-  copy ..\common\$D\txtstrm.obj
-  copy ..\common\$D\unzip.obj
-  copy ..\common\$D\url.obj
-  copy ..\common\$D\utilscmn.obj
-  copy ..\common\$D\valgen.obj
-  copy ..\common\$D\validate.obj
-  copy ..\common\$D\valtext.obj
-  copy ..\common\$D\variant.obj
-  copy ..\common\$D\wfstream.obj
-  copy ..\common\$D\wincmn.obj
-  copy ..\common\$D\wxchar.obj
-  copy ..\common\$D\wxexpr.obj
-  copy ..\common\$D\y_tab.obj
-  copy ..\common\$D\zipstrm.obj
+
+$(COMLIBOBJS2):
+  copy ..\common\$D\longlong.obj \
+  copy ..\common\$D\matrix.obj \
+  copy ..\common\$D\memory.obj \
+  copy ..\common\$D\mimetype.obj \
+  copy ..\common\$D\module.obj \
+  copy ..\common\$D\mstream.obj \
+  copy ..\common\$D\object.obj \
+  copy ..\common\$D\objstrm.obj \
+  copy ..\common\$D\odbc.obj \
+  copy ..\common\$D\paper.obj \
+  copy ..\common\$D\prntbase.obj \
+  copy ..\common\$D\process.obj \
+  copy ..\common\$D\protocol.obj \
+  copy ..\common\$D\resource.obj \
+  copy ..\common\$D\sckaddr.obj \
+  copy ..\common\$D\sckfile.obj \
+  copy ..\common\$D\sckipc.obj \
+  copy ..\common\$D\sckstrm.obj \
+  copy ..\common\$D\serbase.obj \
+  copy ..\common\$D\sizer.obj \
+  copy ..\common\$D\socket.obj \
+  copy ..\common\$D\strconv.obj \
+  copy ..\common\$D\stream.obj \
+  copy ..\common\$D\string.obj \
+  copy ..\common\$D\tbarbase.obj \
+  copy ..\common\$D\tbarsmpl.obj \
+  copy ..\common\$D\textcmn.obj \
+  copy ..\common\$D\textfile.obj \
+  copy ..\common\$D\time.obj \
+  copy ..\common\$D\timercmn.obj \
+  copy ..\common\$D\tokenzr.obj \
+  copy ..\common\$D\txtstrm.obj \
+  copy ..\common\$D\unzip.obj \
+  copy ..\common\$D\url.obj \
+  copy ..\common\$D\utilscmn.obj \
+  copy ..\common\$D\valgen.obj \
+  copy ..\common\$D\validate.obj \
+  copy ..\common\$D\valtext.obj \
+  copy ..\common\$D\variant.obj \
+  copy ..\common\$D\wfstream.obj \
+  copy ..\common\$D\wincmn.obj \
+  copy ..\common\$D\wxchar.obj \
+  copy ..\common\$D\wxexpr.obj \
+  copy ..\common\$D\y_tab.obj \
+  copy ..\common\$D\zipstrm.obj \
   copy ..\common\$D\zstream.obj
 
 $(GENLIBOBJS):
