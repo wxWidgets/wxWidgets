@@ -325,57 +325,41 @@ void ScintillaWX::DoPaint(wxDC* dc, wxRect rect) {
 
 void ScintillaWX::DoHScroll(int type, int pos) {
     int xPos = xOffset;
-    switch (type) {
-    case wxEVT_SCROLLWIN_LINEUP:
+    if (type == wxEVT_SCROLLWIN_LINEUP)
         xPos -= H_SCROLL_STEP;
-        break;
-    case wxEVT_SCROLLWIN_LINEDOWN:
+    else if (type == wxEVT_SCROLLWIN_LINEDOWN)
         xPos += H_SCROLL_STEP;
-        break;
-    case wxEVT_SCROLLWIN_PAGEUP:
+    else if (type == wxEVT_SCROLLWIN_PAGEUP)
         xPos -= H_SCROLL_PAGE;
-        break;
-    case wxEVT_SCROLLWIN_PAGEDOWN:
+    else if (type == wxEVT_SCROLLWIN_PAGEDOWN)
         xPos += H_SCROLL_PAGE;
-        break;
-    case wxEVT_SCROLLWIN_TOP:
+    else if (type == wxEVT_SCROLLWIN_TOP)
         xPos = 0;
-        break;
-    case wxEVT_SCROLLWIN_BOTTOM:
+    else if (type == wxEVT_SCROLLWIN_BOTTOM)
         xPos = H_SCROLL_MAX;
-        break;
-    case wxEVT_SCROLLWIN_THUMBTRACK:
+    else if (type == wxEVT_SCROLLWIN_THUMBTRACK)
         xPos = pos;
-        break;
-    }
+
     HorizontalScrollTo(xPos);
 }
 
 void ScintillaWX::DoVScroll(int type, int pos) {
     int topLineNew = topLine;
-    switch (type) {
-    case wxEVT_SCROLLWIN_LINEUP:
+    if (type == wxEVT_SCROLLWIN_LINEUP)
         topLineNew -= 1;
-        break;
-    case wxEVT_SCROLLWIN_LINEDOWN:
+    else if (type == wxEVT_SCROLLWIN_LINEDOWN)
         topLineNew += 1;
-        break;
-    case wxEVT_SCROLLWIN_PAGEUP:
+    else if (type ==  wxEVT_SCROLLWIN_PAGEUP)
         topLineNew -= LinesToScroll();
-        break;
-    case wxEVT_SCROLLWIN_PAGEDOWN:
+    else if (type ==  wxEVT_SCROLLWIN_PAGEDOWN)
         topLineNew += LinesToScroll();
-        break;
-    case wxEVT_SCROLLWIN_TOP:
+    else if (type ==  wxEVT_SCROLLWIN_TOP)
         topLineNew = 0;
-        break;
-    case wxEVT_SCROLLWIN_BOTTOM:
+    else if (type ==  wxEVT_SCROLLWIN_BOTTOM)
         topLineNew = MaxScrollPos();
-        break;
-    case wxEVT_SCROLLWIN_THUMBTRACK:
+    else if (type ==   wxEVT_SCROLLWIN_THUMBTRACK)
         topLineNew = pos;
-        break;
-    }
+
     ScrollTo(topLineNew);
 }
 

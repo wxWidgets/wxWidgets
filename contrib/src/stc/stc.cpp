@@ -1539,16 +1539,38 @@ void wxStyledTextCtrl::OnMouseRightUp(wxMouseEvent& evt) {
     m_swx->DoContextMenu(Point(pt.x, pt.y));
 }
 
+
 void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     long key = evt.KeyCode();
-    if ((key > WXK_ESCAPE) &&
-        (key != WXK_DELETE) && (key < 255) &&
-        !evt.ControlDown() && !evt.AltDown()) {
+    switch (key) {
+        // Special handling for charcters that must be typed with AltGr down on
+        // foreign keyboards.  (Comes to us as Ctrl+Alt, and so would get
+        // filtered out by the default case below.)
+        //
+        // There should be a better way to do this...
+        //
+        case '\\':
+        case '|':
+        case '@':
+        case '#':
+        case '¬':
+        case '[':
+        case ']':
+        case '{':
+        case '}':
+        case '?':
+            m_swx->DoAddChar(key);
+            break;
 
-        m_swx->DoAddChar(key);
-    }
-    else {
-        evt.Skip();
+        default:
+            if ((key > WXK_ESCAPE) && (key != WXK_DELETE) && (key < 255) &&
+                !evt.ControlDown() && !evt.AltDown()) {
+
+                m_swx->DoAddChar(key);
+            }
+            else {
+                evt.Skip();
+            }
     }
 }
 
@@ -1560,6 +1582,7 @@ void wxStyledTextCtrl::OnKeyDown(wxKeyEvent& evt) {
     if (! processed)
         evt.Skip();
 }
+
 
 void wxStyledTextCtrl::OnLoseFocus(wxFocusEvent& evt) {
     m_swx->DoLoseFocus();

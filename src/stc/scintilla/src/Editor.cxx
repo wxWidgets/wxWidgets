@@ -14,7 +14,7 @@
 
 #if PLAT_WX || PLAT_GTK
 #include "WinDefs.h"
-#endif 
+#endif
 
 #include "ContractionState.h"
 #include "SVector.h"
@@ -106,7 +106,7 @@ Editor::Editor() {
 
 #ifdef MACRO_SUPPORT
 	recordingMacro = 0;
-#endif 
+#endif
 	foldFlags = 0;
 }
 
@@ -303,8 +303,22 @@ int Editor::PositionFromLineX(int line, int x) {
 }
 
 void Editor::RedrawRect(PRectangle rc) {
-	//Platform::DebugPrintf("Redraw %d %d - %d %d\n", rc.left, rc.top, rc.right, rc.bottom);
-	wDraw.InvalidateRectangle(rc);
+    //Platform::DebugPrintf("Redraw %d %d - %d %d\n", rc.left, rc.top, rc.right, rc.bottom);
+
+    // Clip the redraw rectangle into the client area
+    PRectangle rcClient = GetClientRectangle();
+    if (rc.top < rcClient.top)
+        rc.top = rcClient.top;
+    if (rc.bottom > rcClient.bottom)
+        rc.bottom = rcClient.bottom;
+    if (rc.left < rcClient.left)
+        rc.left = rcClient.left;
+    if (rc.right > rcClient.right)
+        rc.right = rcClient.right;
+
+    if ((rc.bottom > rc.top) && (rc.right > rc.left)) {
+        wDraw.InvalidateRectangle(rc);
+    }
 }
 
 void Editor::Redraw() {
@@ -659,10 +673,10 @@ void Editor::PaintSelMargin(Surface *surfWindow, PRectangle &rc) {
 			if (vs.ms[margin].symbol) {
 				/* alternate scheme:
 				if (vs.ms[margin].mask & SC_MASK_FOLDERS)
-					surface->FillRectangle(rcSelMargin, vs.styles[STYLE_DEFAULT].back.allocated); 
+					surface->FillRectangle(rcSelMargin, vs.styles[STYLE_DEFAULT].back.allocated);
 				else
 					// Required because of special way brush is created for selection margin
-					surface->FillRectangle(rcSelMargin, pixmapSelPattern); 
+					surface->FillRectangle(rcSelMargin, pixmapSelPattern);
 				*/
 				if (vs.ms[margin].mask & SC_MASK_FOLDERS)
 					// Required because of special way brush is created for selection margin
@@ -1653,7 +1667,7 @@ void Editor::NotifyChar(char ch) {
 		txt[1] = '\0';
 		NotifyMacroRecord(SCI_REPLACESEL, 0, reinterpret_cast<long>(txt));
 	}
-#endif 
+#endif
 }
 
 void Editor::NotifySavePoint(bool isSavePoint) {
@@ -1939,7 +1953,7 @@ void Editor::NotifyMacroRecord(unsigned int iMessage, unsigned long wParam, long
 	scn.lParam = lParam;
 	NotifyParent(scn);
 }
-#endif 
+#endif
 
 // Force scroll and keep position relative to top of window
 void Editor::PageMove(int direction, bool extend) {
@@ -3019,7 +3033,7 @@ long Editor::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
 #ifdef MACRO_SUPPORT
 	if (recordingMacro)
 		NotifyMacroRecord(iMessage, wParam, lParam);
-#endif 
+#endif
 
 	switch (iMessage) {
 
@@ -3411,9 +3425,9 @@ long Editor::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
 			return SEL_EMPTY;
 		else
 			return SEL_TEXT;
-#else 
+#else
 		return 0;
-#endif 
+#endif
 
 	case EM_HIDESELECTION:
 		hideSelection = wParam;
@@ -3447,7 +3461,7 @@ long Editor::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
 			vs.rightMarginWidth = vs.aveCharWidth / 2;
 		}
 		InvalidateStyleRedraw();
-#endif 
+#endif
 		break;
 
 	case SCI_SETMARGINLEFT:
@@ -4238,10 +4252,10 @@ long Editor::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
 	case SCI_SETOVERTYPE:
 		inOverstrike = wParam;
 		break;
-	
+
 	case SCI_GETOVERTYPE:
 		return inOverstrike ? TRUE : FALSE;
-	
+
 #ifdef MACRO_SUPPORT
 	case SCI_STARTRECORD:
 		recordingMacro = 1;
@@ -4250,7 +4264,7 @@ long Editor::WndProc(unsigned int iMessage, unsigned long wParam, long lParam) {
 	case SCI_STOPRECORD:
 		recordingMacro = 0;
 		return 0;
-#endif 
+#endif
 
 	default:
 		return DefWndProc(iMessage, wParam, lParam);
