@@ -226,11 +226,11 @@ bool wxToolBar::Create(wxWindow *parent,
 {
     // common initialisation
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
-        return FALSE;
+        return false;
 
     // MSW-specific initialisation
     if ( !MSWCreateToolbar(pos, size, menuBar) )
-        return FALSE;
+        return false;
 
     // set up the colors and fonts
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_MENUBAR));
@@ -243,7 +243,7 @@ bool wxToolBar::Create(wxWindow *parent,
 #define TBSTYLE_NO_DROPDOWN_ARROW 0x0080
 #endif
 
-bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuBar* menuBar)
+bool wxToolBar::MSWCreateToolbar(const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size), wxMenuBar* menuBar)
 {
     SetMenuBar(menuBar);
     if (m_menuBar)
@@ -269,7 +269,7 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size, wxMenuB
     if (!SHCreateMenuBar(&mbi))
     {
         wxFAIL_MSG( _T("SHCreateMenuBar failed") );
-        return FALSE;
+        return false;
     }
     
     SetHWND((WXHWND) mbi.hwndMB);
@@ -494,7 +494,7 @@ bool wxToolBar::DoDeleteTool(size_t pos, wxToolBarToolBase *tool)
         {
             wxLogLastError(wxT("TB_DELETEBUTTON"));
 
-            return FALSE;
+            return false;
         }
     }
 
@@ -600,7 +600,7 @@ bool wxToolBar::Realize()
     // this array will hold the indices of all controls in the toolbar
     wxArrayInt controlIds;
 
-    bool lastWasRadio = FALSE;
+    bool lastWasRadio = false;
     int i = 0;
     wxToolBarToolsList::Node* node;
     for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
@@ -613,7 +613,7 @@ bool wxToolBar::Realize()
 
         wxZeroMemory(button);
 
-        bool isRadio = FALSE;
+        bool isRadio = false;
         switch ( tool->GetStyle() )
         {
             case wxTOOL_STYLE_CONTROL:
@@ -646,7 +646,7 @@ bool wxToolBar::Realize()
                     button.iBitmap = winceId;
                 }
                 else
-                    processedThis = FALSE;
+                    processedThis = false;
 
                 if ( tool->IsEnabled() )
                     button.fsState |= TBSTATE_ENABLED;
