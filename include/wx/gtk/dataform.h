@@ -52,13 +52,13 @@ public:
 
     // implementation
     wxDataFormatId GetType() const;
+    void SetType( wxDataFormatId type );
 
 private:
     wxDataFormatId   m_type;
     NativeFormat     m_format;
 
     void PrepareFormats();
-    void SetType( wxDataFormatId type );
 };
 
 #endif // _WX_GTK_DATAFORM_H
