@@ -303,7 +303,7 @@ class WXDLLEXPORT wxStdComboBoxInputHandler : public wxStdInputHandler
 public:
     wxStdComboBoxInputHandler(wxInputHandler *inphand);
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
                            bool pressed);
 };

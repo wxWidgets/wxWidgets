@@ -24,6 +24,8 @@ class WXDLLEXPORT wxRenderer;
 // it
 #include "wx/univ/inphand.h"
 
+#include "wx/univ/inpcons.h"
+
 // ----------------------------------------------------------------------------
 // wxControlAction: the action is currently just a string which identifies it,
 // later it might become an atom (i.e. an opaque handler to string).
@@ -40,7 +42,7 @@ typedef wxString wxControlAction;
 // wxControl: the base class for all GUI controls
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxControl : public wxControlBase
+class WXDLLEXPORT wxControl : public wxControlBase, public wxInputConsumer
 {
 public:
     wxControl() { Init(); }
@@ -85,38 +87,11 @@ public:
         return m_indexAccel == -1 ? _T('\0') : m_label[m_indexAccel];
     }
 
-    // get the input handler of this control
-    wxInputHandler *GetInputHandler() const { return m_handler; }
-
-    // perform a control-dependent action: an action may have an optional
-    // numeric and another (also optional) string argument whose interpretation
-    // depends on the action
-    //
-    // NB: we might use ellipsis in PerformAction() declaration but this
-    //     wouldn't be more efficient than always passing 2 unused parameters
-    //     but would be more difficult. Another solution would be to have
-    //     several overloaded versions but this will expose the problem of
-    //     virtual function hiding we don't have here.
-    virtual bool PerformAction(const wxControlAction& action,
-                               long numArg = -1l,
-                               const wxString& strArg = wxEmptyString);
+    virtual wxWindow *GetInputWindow() const { return (wxWindow*)this; }
 
 protected:
-    // event handlers
-    void OnMouse(wxMouseEvent& event);
-    void OnKeyDown(wxKeyEvent& event);
-    void OnKeyUp(wxKeyEvent& event);
-    void OnFocus(wxFocusEvent& event);
-    void OnActivate(wxActivateEvent& event);
-
     // common part of all ctors
     void Init();
-
-    // create input handler by name
-    void CreateInputHandler(const wxString& inphandler);
-
-    // input processor (never deleted, the theme deletes it itself)
-    wxInputHandler *m_handler;
 
 private:
     // label and accel info
@@ -125,6 +100,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxControl)
     DECLARE_EVENT_TABLE()
+    WX_DECLARE_INPUT_CONSUMER()
 };
 
 #endif // _WX_UNIV_CONTROL_H_

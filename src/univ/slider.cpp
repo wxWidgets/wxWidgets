@@ -916,7 +916,7 @@ bool wxSlider::OnPageScroll(int pageInc)
 // wxStdSliderButtonInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxStdSliderButtonInputHandler::HandleKey(wxControl *control,
+bool wxStdSliderButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                                               const wxKeyEvent& event,
                                               bool pressed)
 {
@@ -956,19 +956,19 @@ bool wxStdSliderButtonInputHandler::HandleKey(wxControl *control,
 
         if ( !!action )
         {
-            control->PerformAction(action);
+            consumer->PerformAction(action);
 
             return TRUE;
         }
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdSliderButtonInputHandler::HandleMouse(wxControl *control,
+bool wxStdSliderButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
                                                 const wxMouseEvent& event)
 {
-    wxSlider *slider = wxStaticCast(control, wxSlider);
+    wxSlider *slider = wxStaticCast(consumer->GetInputWindow(), wxSlider);
 
     if ( slider->GetThumb().HandleMouse(event) )
     {
@@ -976,13 +976,13 @@ bool wxStdSliderButtonInputHandler::HandleMouse(wxControl *control,
         return FALSE;
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdSliderButtonInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdSliderButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                     const wxMouseEvent& event)
 {
-    wxSlider *slider = wxStaticCast(control, wxSlider);
+    wxSlider *slider = wxStaticCast(consumer->GetInputWindow(), wxSlider);
 
     if ( slider->GetThumb().HandleMouseMove(event) )
     {
@@ -990,10 +990,10 @@ bool wxStdSliderButtonInputHandler::HandleMouseMove(wxControl *control,
         return FALSE;
     }
 
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdSliderButtonInputHandler::HandleFocus(wxControl *control,
+bool wxStdSliderButtonInputHandler::HandleFocus(wxInputConsumer *consumer,
                                                 const wxFocusEvent& event)
 {
     // slider's appearance changes when it gets/loses focus

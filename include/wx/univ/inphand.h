@@ -17,7 +17,7 @@
     #pragma interface "inphand.h"
 #endif
 
-#include "wx/control.h"         // for wxControlAction(s)
+#include "wx/univ/inpcons.h"         // for wxControlAction(s)
 
 // ----------------------------------------------------------------------------
 // types of the standard input handlers which can be passed to
@@ -41,23 +41,23 @@
 // wxInputHandler: maps the events to the actions
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxInputHandler
+class WXDLLEXPORT wxInputHandler : public wxObject
 {
 public:
     // map a keyboard event to one or more actions (pressed == TRUE if the key
     // was pressed, FALSE if released), returns TRUE if something was done
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
                            bool pressed) = 0;
 
     // map a mouse (click) event to one or more actions
-    virtual bool HandleMouse(wxControl *control,
+    virtual bool HandleMouse(wxInputConsumer *consumer,
                              const wxMouseEvent& event) = 0;
 
     // handle mouse movement (or enter/leave) event: it is separated from
     // HandleMouse() for convenience as many controls don't care about mouse
     // movements at all
-    virtual bool HandleMouseMove(wxControl *control,
+    virtual bool HandleMouseMove(wxInputConsumer *consumer,
                                  const wxMouseEvent& event);
 
     // do something with focus set/kill event: this is different from
@@ -65,12 +65,12 @@ public:
     // focus
     //
     // return TRUE to refresh the control, FALSE otherwise
-    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
 
     // react to the app getting/losing activation
     //
     // return TRUE to refresh the control, FALSE otherwise
-    virtual bool HandleActivation(wxControl *control, bool activated);
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
 
     // virtual dtor for any base class
     virtual ~wxInputHandler();
@@ -86,28 +86,28 @@ class WXDLLEXPORT wxStdInputHandler : public wxInputHandler
 public:
     wxStdInputHandler(wxInputHandler *handler) : m_handler(handler) { }
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
                            bool pressed)
     {
-        return m_handler ? m_handler->HandleKey(control, event, pressed)
+        return m_handler ? m_handler->HandleKey(consumer, event, pressed)
                          : FALSE;
     }
 
-    virtual bool HandleMouse(wxControl *control,
+    virtual bool HandleMouse(wxInputConsumer *consumer,
                              const wxMouseEvent& event)
     {
-        return m_handler ? m_handler->HandleMouse(control, event) : FALSE;
+        return m_handler ? m_handler->HandleMouse(consumer, event) : FALSE;
     }
 
-    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event)
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event)
     {
-        return m_handler ? m_handler->HandleMouseMove(control, event) : FALSE;
+        return m_handler ? m_handler->HandleMouseMove(consumer, event) : FALSE;
     }
 
-    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event)
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event)
     {
-        return m_handler ? m_handler->HandleFocus(control, event) : FALSE;
+        return m_handler ? m_handler->HandleFocus(consumer, event) : FALSE;
     }
 
 private:

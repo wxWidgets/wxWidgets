@@ -370,7 +370,7 @@ wxStdSpinButtonInputHandler(wxInputHandler *inphand)
 {
 }
 
-bool wxStdSpinButtonInputHandler::HandleKey(wxControl *control,
+bool wxStdSpinButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                                             const wxKeyEvent& event,
                                             bool pressed)
 {
@@ -392,19 +392,19 @@ bool wxStdSpinButtonInputHandler::HandleKey(wxControl *control,
 
         if ( !!action )
         {
-            control->PerformAction(action);
+            consumer->PerformAction(action);
 
             return TRUE;
         }
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdSpinButtonInputHandler::HandleMouse(wxControl *control,
+bool wxStdSpinButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
                                               const wxMouseEvent& event)
 {
-    wxSpinButton *spinbtn = wxStaticCast(control, wxSpinButton);
+    wxSpinButton *spinbtn = wxStaticCast(consumer->GetInputWindow(), wxSpinButton);
 
     if ( spinbtn->GetArrows().HandleMouse(event) )
     {
@@ -412,13 +412,13 @@ bool wxStdSpinButtonInputHandler::HandleMouse(wxControl *control,
         return FALSE;
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdSpinButtonInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdSpinButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                   const wxMouseEvent& event)
 {
-    wxSpinButton *spinbtn = wxStaticCast(control, wxSpinButton);
+    wxSpinButton *spinbtn = wxStaticCast(consumer->GetInputWindow(), wxSpinButton);
 
     if ( spinbtn->GetArrows().HandleMouseMove(event) )
     {
@@ -426,7 +426,7 @@ bool wxStdSpinButtonInputHandler::HandleMouseMove(wxControl *control,
         return FALSE;
     }
 
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
 

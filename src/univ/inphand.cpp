@@ -41,19 +41,19 @@
 // wxInputHandler
 // ----------------------------------------------------------------------------
 
-bool wxInputHandler::HandleMouseMove(wxControl * WXUNUSED(control),
+bool wxInputHandler::HandleMouseMove(wxInputConsumer * WXUNUSED(consumer),
                                      const wxMouseEvent& WXUNUSED(event))
 {
     return FALSE;
 }
 
-bool wxInputHandler::HandleFocus(wxControl *WXUNUSED(control),
+bool wxInputHandler::HandleFocus(wxInputConsumer *WXUNUSED(consumer),
                                  const wxFocusEvent& WXUNUSED(event))
 {
     return FALSE;
 }
 
-bool wxInputHandler::HandleActivation(wxControl *WXUNUSED(control),
+bool wxInputHandler::HandleActivation(wxInputConsumer *WXUNUSED(consumer),
                                       bool WXUNUSED(activated))
 {
     return FALSE;

@@ -830,7 +830,7 @@ wxStdComboBoxInputHandler::wxStdComboBoxInputHandler(wxInputHandler *inphand)
 {
 }
 
-bool wxStdComboBoxInputHandler::HandleKey(wxControl *control,
+bool wxStdComboBoxInputHandler::HandleKey(wxInputConsumer *consumer,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
@@ -850,13 +850,13 @@ bool wxStdComboBoxInputHandler::HandleKey(wxControl *control,
 
         if ( !!action )
         {
-            control->PerformAction(action);
+            consumer->PerformAction(action);
 
             return TRUE;
         }
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
 #endif // wxUSE_COMBOBOX

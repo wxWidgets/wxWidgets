@@ -46,16 +46,10 @@
 IMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow)
 
 BEGIN_EVENT_TABLE(wxControl, wxControlBase)
-    EVT_KEY_DOWN(wxControl::OnKeyDown)
-    EVT_KEY_UP(wxControl::OnKeyUp)
-
-    EVT_MOUSE_EVENTS(wxControl::OnMouse)
-
-    EVT_SET_FOCUS(wxControl::OnFocus)
-    EVT_KILL_FOCUS(wxControl::OnFocus)
-
-    EVT_ACTIVATE(wxControl::OnActivate)
+    WX_EVENT_TABLE_INPUT_CONSUMER(wxControl)
 END_EVENT_TABLE()
+
+WX_FORWARD_TO_INPUT_CONSUMER(wxControl)
 
 // ----------------------------------------------------------------------------
 // creation
@@ -65,7 +59,7 @@ void wxControl::Init()
 {
     m_indexAccel = -1;
 
-    m_handler = (wxInputHandler *)NULL;
+    m_inputHandler = (wxInputHandler *)NULL;
 }
 
 bool wxControl::Create(wxWindow *parent,
@@ -151,77 +145,6 @@ void wxControl::SetLabel(const wxString& label)
 wxString wxControl::GetLabel() const
 {
     return m_label;
-}
-
-// ----------------------------------------------------------------------------
-// focus/activation handling
-// ----------------------------------------------------------------------------
-
-void wxControl::OnFocus(wxFocusEvent& event)
-{
-    if ( m_handler && m_handler->HandleFocus(this, event) )
-        Refresh();
-    else
-        event.Skip();
-}
-
-void wxControl::OnActivate(wxActivateEvent& event)
-{
-    if ( m_handler && m_handler->HandleActivation(this, event.GetActive()) )
-        Refresh();
-    else
-        event.Skip();
-}
-
-// ----------------------------------------------------------------------------
-// input processing
-// ----------------------------------------------------------------------------
-
-void wxControl::CreateInputHandler(const wxString& inphandler)
-{
-    m_handler = wxTheme::Get()->GetInputHandler(inphandler);
-}
-
-void wxControl::OnKeyDown(wxKeyEvent& event)
-{
-    if ( !m_handler || !m_handler->HandleKey(this, event, TRUE) )
-        event.Skip();
-}
-
-void wxControl::OnKeyUp(wxKeyEvent& event)
-{
-    if ( !m_handler || !m_handler->HandleKey(this, event, FALSE) )
-        event.Skip();
-}
-
-void wxControl::OnMouse(wxMouseEvent& event)
-{
-    if ( m_handler )
-    {
-        if ( event.Moving() || event.Entering() || event.Leaving() )
-        {
-            if ( m_handler->HandleMouseMove(this, event) )
-                return;
-        }
-        else // a click action
-        {
-            if ( m_handler->HandleMouse(this, event) )
-                return;
-        }
-    }
-
-    event.Skip();
-}
-
-// ----------------------------------------------------------------------------
-// the actions
-// ----------------------------------------------------------------------------
-
-bool wxControl::PerformAction(const wxControlAction& action,
-                              long numArg,
-                              const wxString& strArg)
-{
-    return FALSE;
 }
 
 #endif // wxUSE_CONTROLS

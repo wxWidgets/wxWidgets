@@ -211,26 +211,26 @@ wxStdCheckListboxInputHandler(wxInputHandler *inphand)
 {
 }
 
-bool wxStdCheckListboxInputHandler::HandleKey(wxControl *control,
+bool wxStdCheckListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                                               const wxKeyEvent& event,
                                               bool pressed)
 {
     if ( pressed && (event.GetKeyCode() == WXK_SPACE) )
-        control->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE);
+        consumer->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE);
 
-    return wxStdListboxInputHandler::HandleKey(control, event, pressed);
+    return wxStdListboxInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdCheckListboxInputHandler::HandleMouse(wxControl *control,
+bool wxStdCheckListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
                                                 const wxMouseEvent& event)
 {
     if ( event.LeftDown() || event.LeftDClick() )
     {
-        wxCheckListBox *lbox = wxStaticCast(control, wxCheckListBox);
+        wxCheckListBox *lbox = wxStaticCast(consumer->GetInputWindow(), wxCheckListBox);
         int x, y;
 
         wxPoint pt = event.GetPosition();
-        pt -= control->GetClientAreaOrigin();
+        pt -= consumer->GetInputWindow()->GetClientAreaOrigin();
         lbox->CalcUnscrolledPosition(pt.x, pt.y, &x, &y);
 
         wxRenderer *renderer = lbox->GetRenderer();
@@ -248,7 +248,7 @@ bool wxStdCheckListboxInputHandler::HandleMouse(wxControl *control,
         }
     }
 
-    return wxStdListboxInputHandler::HandleMouse(control, event);
+    return wxStdListboxInputHandler::HandleMouse(consumer, event);
 }
 
 #endif // wxUSE_CHECKLISTBOX

@@ -1281,14 +1281,14 @@ wxStdNotebookInputHandler::wxStdNotebookInputHandler(wxInputHandler *inphand)
 {
 }
 
-bool wxStdNotebookInputHandler::HandleKey(wxControl *control,
+bool wxStdNotebookInputHandler::HandleKey(wxInputConsumer *consumer,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
     // ignore the key releases
     if ( pressed )
     {
-        wxNotebook *notebook = wxStaticCast(control, wxNotebook);
+        wxNotebook *notebook = wxStaticCast(consumer->GetInputWindow(), wxNotebook);
 
         int page = 0;
         wxControlAction action;
@@ -1327,57 +1327,57 @@ bool wxStdNotebookInputHandler::HandleKey(wxControl *control,
 
         if ( !!action )
         {
-            return control->PerformAction(action, page);
+            return consumer->PerformAction(action, page);
         }
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdNotebookInputHandler::HandleMouse(wxControl *control,
+bool wxStdNotebookInputHandler::HandleMouse(wxInputConsumer *consumer,
                                             const wxMouseEvent& event)
 {
     if ( event.ButtonDown(1) )
     {
-        wxNotebook *notebook = wxStaticCast(control, wxNotebook);
+        wxNotebook *notebook = wxStaticCast(consumer->GetInputWindow(), wxNotebook);
         int page = notebook->HitTest(event.GetPosition());
         if ( page != -1 )
         {
-            control->PerformAction(wxACTION_NOTEBOOK_GOTO, page);
+            consumer->PerformAction(wxACTION_NOTEBOOK_GOTO, page);
 
             return FALSE;
         }
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdNotebookInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdNotebookInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                 const wxMouseEvent& event)
 {
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdNotebookInputHandler::HandleFocus(wxControl *control,
+bool wxStdNotebookInputHandler::HandleFocus(wxInputConsumer *consumer,
                                             const wxFocusEvent& event)
 {
-    HandleFocusChange(control);
+    HandleFocusChange(consumer);
 
     return FALSE;
 }
 
-bool wxStdNotebookInputHandler::HandleActivation(wxControl *control,
+bool wxStdNotebookInputHandler::HandleActivation(wxInputConsumer *consumer,
                                                  bool WXUNUSED(activated))
 {
     // we react to the focus change in the same way as to the [de]activation
-    HandleFocusChange(control);
+    HandleFocusChange(consumer);
 
     return FALSE;
 }
 
-void wxStdNotebookInputHandler::HandleFocusChange(wxControl *control)
+void wxStdNotebookInputHandler::HandleFocusChange(wxInputConsumer *consumer)
 {
-    wxNotebook *notebook = wxStaticCast(control, wxNotebook);
+    wxNotebook *notebook = wxStaticCast(consumer->GetInputWindow(), wxNotebook);
     notebook->RefreshCurrent();
 }
 

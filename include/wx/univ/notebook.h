@@ -259,17 +259,17 @@ class WXDLLEXPORT wxStdNotebookInputHandler : public wxStdInputHandler
 public:
     wxStdNotebookInputHandler(wxInputHandler *inphand);
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
                            bool pressed);
-    virtual bool HandleMouse(wxControl *control,
+    virtual bool HandleMouse(wxInputConsumer *consumer,
                              const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxControl *control, const wxMouseEvent& event);
-    virtual bool HandleFocus(wxControl *control, const wxFocusEvent& event);
-    virtual bool HandleActivation(wxControl *control, bool activated);
+    virtual bool HandleMouseMove(wxInputConsumer *consumer, const wxMouseEvent& event);
+    virtual bool HandleFocus(wxInputConsumer *consumer, const wxFocusEvent& event);
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
 
 protected:
-    void HandleFocusChange(wxControl *control);
+    void HandleFocusChange(wxInputConsumer *consumer);
 };
 
 #endif // _WX_UNIV_NOTEBOOK_H_

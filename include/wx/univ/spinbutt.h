@@ -107,12 +107,12 @@ class WXDLLEXPORT wxStdSpinButtonInputHandler : public wxStdInputHandler
 public:
     wxStdSpinButtonInputHandler(wxInputHandler *inphand);
 
-    virtual bool HandleKey(wxControl *control,
+    virtual bool HandleKey(wxInputConsumer *consumer,
                            const wxKeyEvent& event,
                            bool pressed);
-    virtual bool HandleMouse(wxControl *control,
+    virtual bool HandleMouse(wxInputConsumer *consumer,
                              const wxMouseEvent& event);
-    virtual bool HandleMouseMove(wxControl *control,
+    virtual bool HandleMouseMove(wxInputConsumer *consumer,
                                  const wxMouseEvent& event);
 };
 

@@ -4709,7 +4709,7 @@ wxTextPos wxStdTextCtrlInputHandler::HitTest(const wxTextCtrl *text,
     return pos;
 }
 
-bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
+bool wxStdTextCtrlInputHandler::HandleKey(wxInputConsumer *consumer,
                                           const wxKeyEvent& event,
                                           bool pressed)
 {
@@ -4826,22 +4826,22 @@ bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
 
     if ( (action != wxACTION_NONE) && (action != wxACTION_TEXT_PREFIX_SEL) )
     {
-        control->PerformAction(action, -1, str);
+        consumer->PerformAction(action, -1, str);
 
         return TRUE;
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdTextCtrlInputHandler::HandleMouse(wxControl *control,
+bool wxStdTextCtrlInputHandler::HandleMouse(wxInputConsumer *consumer,
                                             const wxMouseEvent& event)
 {
     if ( event.LeftDown() )
     {
         wxASSERT_MSG( !m_winCapture, _T("left button going down twice?") );
 
-        wxTextCtrl *text = wxStaticCast(control, wxTextCtrl);
+        wxTextCtrl *text = wxStaticCast(consumer->GetInputWindow(), wxTextCtrl);
 
         m_winCapture = text;
         m_winCapture->CaptureMouse();
@@ -4857,7 +4857,7 @@ bool wxStdTextCtrlInputHandler::HandleMouse(wxControl *control,
     else if ( event.LeftDClick() )
     {
         // select the word the cursor is on
-        control->PerformAction(wxACTION_TEXT_SEL_WORD);
+        consumer->PerformAction(wxACTION_TEXT_SEL_WORD);
     }
     else if ( event.LeftUp() )
     {
@@ -4870,10 +4870,10 @@ bool wxStdTextCtrlInputHandler::HandleMouse(wxControl *control,
         }
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdTextCtrlInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdTextCtrlInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                 const wxMouseEvent& event)
 {
     if ( m_winCapture )
@@ -4887,13 +4887,13 @@ bool wxStdTextCtrlInputHandler::HandleMouseMove(wxControl *control,
         }
     }
 
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdTextCtrlInputHandler::HandleFocus(wxControl *control,
+bool wxStdTextCtrlInputHandler::HandleFocus(wxInputConsumer *consumer,
                                             const wxFocusEvent& event)
 {
-    wxTextCtrl *text = wxStaticCast(control, wxTextCtrl);
+    wxTextCtrl *text = wxStaticCast(consumer->GetInputWindow(), wxTextCtrl);
 
     // the selection appearance changes depending on whether we have the focus
     text->RefreshSelection();

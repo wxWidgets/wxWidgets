@@ -655,7 +655,7 @@ void wxStdScrollBarInputHandler::HandleThumbMove(wxScrollBar *scrollbar,
     scrollbar->PerformAction(wxACTION_SCROLL_THUMB_MOVE, thumbPos);
 }
 
-bool wxStdScrollBarInputHandler::HandleKey(wxControl *control,
+bool wxStdScrollBarInputHandler::HandleKey(wxInputConsumer *consumer,
                                            const wxKeyEvent& event,
                                            bool pressed)
 {
@@ -677,16 +677,16 @@ bool wxStdScrollBarInputHandler::HandleKey(wxControl *control,
 
         if ( !!action )
         {
-            control->PerformAction(action);
+            consumer->PerformAction(action);
 
             return TRUE;
         }
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
+bool wxStdScrollBarInputHandler::HandleMouse(wxInputConsumer *consumer,
                                              const wxMouseEvent& event)
 {
     // is this a click event from an acceptable button?
@@ -694,7 +694,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
     if ( (btn != -1) && IsAllowedButton(btn) )
     {
         // determine which part of the window mouse is in
-        wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+        wxScrollBar *scrollbar = wxStaticCast(consumer->GetInputWindow(), wxScrollBar);
         wxHitTest ht = m_renderer->HitTestScrollbar
                                    (
                                     scrollbar,
@@ -708,7 +708,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
             if ( !m_winCapture )
             {
                 m_btnCapture = btn;
-                m_winCapture = control;
+                m_winCapture = consumer->GetInputWindow();
                 m_winCapture->CaptureMouse();
 
                 // generate the command
@@ -735,7 +735,7 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
                         break;
 
                     case wxHT_SCROLLBAR_THUMB:
-                        control->PerformAction(wxACTION_SCROLL_THUMB_DRAG);
+                        consumer->PerformAction(wxACTION_SCROLL_THUMB_DRAG);
                         m_ofsMouse = GetMouseCoord(scrollbar, event) -
                                      m_renderer->ScrollbarToPixel(scrollbar);
 
@@ -793,13 +793,13 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
         }
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdScrollBarInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdScrollBarInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                  const wxMouseEvent& event)
 {
-    wxScrollBar *scrollbar = wxStaticCast(control, wxScrollBar);
+    wxScrollBar *scrollbar = wxStaticCast(consumer->GetInputWindow(), wxScrollBar);
 
     if ( m_winCapture )
     {

@@ -1236,7 +1236,7 @@ wxStdListboxInputHandler::SetupCapture(wxListBox *lbox,
     return action;
 }
 
-bool wxStdListboxInputHandler::HandleKey(wxControl *control,
+bool wxStdListboxInputHandler::HandleKey(wxInputConsumer *consumer,
                                          const wxKeyEvent& event,
                                          bool pressed)
 {
@@ -1244,7 +1244,7 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
     if ( pressed && !event.AltDown() )
     {
         bool isMoveCmd = TRUE;
-        int style = control->GetWindowStyle();
+        int style = consumer->GetInputWindow()->GetWindowStyle();
 
         wxControlAction action;
         wxString strArg;
@@ -1284,24 +1284,24 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
 
         if ( !!action )
         {
-            control->PerformAction(action, -1, strArg);
+            consumer->PerformAction(action, -1, strArg);
 
             if ( isMoveCmd )
             {
                 if ( style & wxLB_SINGLE )
                 {
                     // the current item is always the one selected
-                    control->PerformAction(wxACTION_LISTBOX_SELECT);
+                    consumer->PerformAction(wxACTION_LISTBOX_SELECT);
                 }
                 else if ( style & wxLB_EXTENDED )
                 {
                     if ( event.ShiftDown() )
-                        control->PerformAction(wxACTION_LISTBOX_EXTENDSEL);
+                        consumer->PerformAction(wxACTION_LISTBOX_EXTENDSEL);
                     else
                     {
                         // select the item and make it the new selection anchor
-                        control->PerformAction(wxACTION_LISTBOX_SELECT);
-                        control->PerformAction(wxACTION_LISTBOX_ANCHOR);
+                        consumer->PerformAction(wxACTION_LISTBOX_SELECT);
+                        consumer->PerformAction(wxACTION_LISTBOX_ANCHOR);
                     }
                 }
                 //else: nothing to do for multiple selection listboxes
@@ -1311,13 +1311,13 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
         }
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
+bool wxStdListboxInputHandler::HandleMouse(wxInputConsumer *consumer,
                                            const wxMouseEvent& event)
 {
-    wxListBox *lbox = wxStaticCast(control, wxListBox);
+    wxListBox *lbox = wxStaticCast(consumer->GetInputWindow(), wxListBox);
     int item = HitTest(lbox, event);
     wxControlAction action;
 
@@ -1357,16 +1357,16 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
         return TRUE;
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdListboxInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                                const wxMouseEvent& event)
 {
     wxWindow *winCapture = wxWindow::GetCapture();
     if ( winCapture && (event.GetEventObject() == winCapture) )
     {
-        wxListBox *lbox = wxStaticCast(control, wxListBox);
+        wxListBox *lbox = wxStaticCast(consumer->GetInputWindow(), wxListBox);
 
         if ( !m_btnCapture || !m_trackMouseOutside )
         {
@@ -1404,7 +1404,7 @@ bool wxStdListboxInputHandler::HandleMouseMove(wxControl *control,
         }
     }
 
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
 #endif // wxUSE_LISTBOX

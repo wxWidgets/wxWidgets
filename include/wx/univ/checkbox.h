@@ -155,7 +155,7 @@ public:
 
     // we have to override this one as wxStdButtonInputHandler version works
     // only with the buttons
-    virtual bool HandleActivation(wxControl *control, bool activated);
+    virtual bool HandleActivation(wxInputConsumer *consumer, bool activated);
 };
 
 #endif // _WX_UNIV_CHECKBOX_H_

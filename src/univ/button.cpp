@@ -258,22 +258,22 @@ wxStdButtonInputHandler::wxStdButtonInputHandler(wxInputHandler *handler)
     m_winHasMouse = FALSE;
 }
 
-bool wxStdButtonInputHandler::HandleKey(wxControl *control,
+bool wxStdButtonInputHandler::HandleKey(wxInputConsumer *consumer,
                                         const wxKeyEvent& event,
                                         bool pressed)
 {
     int keycode = event.GetKeyCode();
     if ( keycode == WXK_SPACE || keycode == WXK_RETURN )
     {
-        control->PerformAction(wxACTION_BUTTON_TOGGLE);
+        consumer->PerformAction(wxACTION_BUTTON_TOGGLE);
 
         return TRUE;
     }
 
-    return wxStdInputHandler::HandleKey(control, event, pressed);
+    return wxStdInputHandler::HandleKey(consumer, event, pressed);
 }
 
-bool wxStdButtonInputHandler::HandleMouse(wxControl *control,
+bool wxStdButtonInputHandler::HandleMouse(wxInputConsumer *consumer,
                                           const wxMouseEvent& event)
 {
     // the button has 2 states: pressed and normal with the following
@@ -288,11 +288,11 @@ bool wxStdButtonInputHandler::HandleMouse(wxControl *control,
     {
         if ( event.ButtonDown(1) )
         {
-            m_winCapture = control;
+            m_winCapture = consumer->GetInputWindow();
             m_winCapture->CaptureMouse();
             m_winHasMouse = TRUE;
 
-            control->PerformAction(wxACTION_BUTTON_PRESS);
+            consumer->PerformAction(wxACTION_BUTTON_PRESS);
 
             return TRUE;
         }
@@ -307,7 +307,7 @@ bool wxStdButtonInputHandler::HandleMouse(wxControl *control,
             if ( m_winHasMouse )
             {
                 // this will generate a click event
-                control->PerformAction(wxACTION_BUTTON_TOGGLE);
+                consumer->PerformAction(wxACTION_BUTTON_TOGGLE);
 
                 return TRUE;
             }
@@ -316,10 +316,10 @@ bool wxStdButtonInputHandler::HandleMouse(wxControl *control,
         }
     }
 
-    return wxStdInputHandler::HandleMouse(control, event);
+    return wxStdInputHandler::HandleMouse(consumer, event);
 }
 
-bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
+bool wxStdButtonInputHandler::HandleMouseMove(wxInputConsumer *consumer,
                                               const wxMouseEvent& event)
 {
     // we only have to do something when the mouse leaves/enters the pressed
@@ -333,8 +333,8 @@ bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
             m_winHasMouse = FALSE;
 
             // we do have a pressed button, so release it
-            control->SetCurrent(FALSE);
-            control->PerformAction(wxACTION_BUTTON_RELEASE);
+            consumer->GetInputWindow()->SetCurrent(FALSE);
+            consumer->PerformAction(wxACTION_BUTTON_RELEASE);
 
             return TRUE;
         }
@@ -347,17 +347,17 @@ bool wxStdButtonInputHandler::HandleMouseMove(wxControl *control,
 
             // we did have a pressed button which we released when leaving the
             // window, press it again
-            control->SetCurrent(TRUE);
-            control->PerformAction(wxACTION_BUTTON_PRESS);
+            consumer->GetInputWindow()->SetCurrent(TRUE);
+            consumer->PerformAction(wxACTION_BUTTON_PRESS);
 
             return TRUE;
         }
     }
 
-    return wxStdInputHandler::HandleMouseMove(control, event);
+    return wxStdInputHandler::HandleMouseMove(consumer, event);
 }
 
-bool wxStdButtonInputHandler::HandleFocus(wxControl *control,
+bool wxStdButtonInputHandler::HandleFocus(wxInputConsumer *consumer,
                                           const wxFocusEvent& event)
 {
     // buttons change appearance when they get/lose focus, so return TRUE to
@@ -365,12 +365,12 @@ bool wxStdButtonInputHandler::HandleFocus(wxControl *control,
     return TRUE;
 }
 
-bool wxStdButtonInputHandler::HandleActivation(wxControl *control,
+bool wxStdButtonInputHandler::HandleActivation(wxInputConsumer *consumer,
                                                bool activated)
 {
     // the default button changes appearance when the app is [de]activated, so
     // return TRUE to refresh
-    return wxStaticCast(control, wxButton)->IsDefault();
+    return wxStaticCast(consumer->GetInputWindow(), wxButton)->IsDefault();
 }
 
 #endif // wxUSE_BUTTON
