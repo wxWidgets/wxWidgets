@@ -219,13 +219,13 @@ wxHTMLHelpControllerBase::DisplayContents()
    bool rc = FALSE;
    wxString file;
    file << m_MapFile << WXEXTHELP_SEPARATOR << contents;
-   if(file.Contains('#'))
-      file = file.BeforeLast('#');
+   if(file.Contains(_T('#')))
+      file = file.BeforeLast(_T('#'));
    if(contents.Length() && wxFileExists(file))
       rc = DisplaySection(CONTENTS_ID);
    
    // if not found, open homemade toc:
-   return rc ? TRUE : KeywordSearch("");
+   return rc ? TRUE : KeywordSearch(_T(""));
 }
 
 bool
