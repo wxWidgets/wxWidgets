@@ -26,7 +26,8 @@ COMTEMPTGT1=$(WXDIR)\lib\wxcom1.lib
 COMTEMPTGT2=$(WXDIR)\lib\wxcom2.lib
 GENTEMPTGT=$(WXDIR)\lib\wxgen.lib
 NONESTEMPTGT=$(WXDIR)\lib\wxnones.lib
-OS2TEMPTGT=$(WXDIR)\lib\wxos2.lib
+OS2TEMPTGT1=$(WXDIR)\lib\wxos21.lib
+OS2TEMPTGT2=$(WXDIR)\lib\wxos22.lib
 DUMMYOBJ=$D\dummy.obj
 !endif
 
@@ -344,7 +345,7 @@ OS2OBJS = \
   ..\os2\$D\radiobut.obj \
   ..\os2\$D\window.obj
 
-OS2LIBOBJS = \
+OS2LIBOBJS1 = \
   accel.obj \
   app.obj \
   bitmap.obj \
@@ -389,7 +390,9 @@ OS2LIBOBJS = \
   metafile.obj \
   minifram.obj \
   msgdlg.obj \
-  nativdlg.obj \
+  nativdlg.obj
+
+OS2LIBOBJS2 = \
   notebook.obj \
   ownerdrw.obj \
   palette.obj \
@@ -544,7 +547,7 @@ $(GENLIBOBJS):
   copy ..\generic\$D\tipdlg.obj
   copy ..\generic\$D\busyinfo.obj
 
-$(OS2LIBOBJS):
+$(OS2LIBOBJS1):
   copy ..\os2\$D\accel.obj
   copy ..\os2\$D\app.obj
   copy ..\os2\$D\bitmap.obj
@@ -590,9 +593,11 @@ $(OS2LIBOBJS):
   copy ..\os2\$D\minifram.obj
   copy ..\os2\$D\msgdlg.obj
   copy ..\os2\$D\nativdlg.obj
+
+$(OS2LIBOBJS2):
   copy ..\os2\$D\notebook.obj
   copy ..\os2\$D\ownerdrw.obj
-  copy ..\os2\$D\pallet.obj
+  copy ..\os2\$D\palette.obj
   copy ..\os2\$D\pen.obj
   copy ..\os2\$D\pnghand.obj
   copy ..\os2\$D\print.obj
@@ -663,9 +668,16 @@ $(WXDIR)\lib\wxnones.lib: $(NONESSENTIALOBJS)
     $**;
 <<
 
-$(WXDIR)\lib\wxos2.lib: $(OS2LIBOBJS)
- touch $(WXDIR)\lib\wxos2.lib
- del $(WXDIR)\lib\wxos2.lib
+$(WXDIR)\lib\wxos21.lib: $(OS2LIBOBJS1)
+ touch $(WXDIR)\lib\wxos21.lib
+ del $(WXDIR)\lib\wxos21.lib
+ ilib $(LIBFLAGS) $@ @<<
+    $**;
+<<
+
+$(WXDIR)\lib\wxos22.lib: $(OS2LIBOBJS2)
+ touch $(WXDIR)\lib\wxos22.lib
+ del $(WXDIR)\lib\wxos22.lib
  ilib $(LIBFLAGS) $@ @<<
     $**;
 <<
@@ -677,7 +689,8 @@ $(WXDIR)\lib\wx.lib: \
   $(COMTEMPTGT2) \
   $(GENTEMPTGT) \
   $(NONESTEMPTGT) \
-  $(OS2TEMPTGT) \
+  $(OS2TEMPTGT1) \
+  $(OS2TEMPTGT2) \
   $(PERIPH_LIBS)
  touch $(LIBTARGET)
  del $(LIBTARGET)
@@ -688,7 +701,8 @@ $(WXDIR)\lib\wx.lib: \
   del $(COMTEMPTGT2)
   del $(GENTEMPTGT)
   del $(NONESTEMPTGT)
-  del $(OS2TEMPTGT)
+  del $(OS2TEMPTGT1)
+  del $(OS2TEMPTGT2)
 
 !else
 

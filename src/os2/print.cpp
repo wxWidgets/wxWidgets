@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        print.cpp
 // Purpose:     Print framework
-// Author:      AUTHOR
+// Author:      David Webster
 // Modified by:
-// Created:     ??/??/98
+// Created:     10/14/99
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
-// Licence:   	wxWindows licence
+// Copyright:   (c) David Webster
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #include "wx/wxprec.h"
@@ -21,8 +21,7 @@
 
 
 #include "wx/os2/print.h"
-#include "wx/print.h"
-#include "wx/generic/printdlg.h"
+#include "wx/generic/prntdlgg.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxPrinter, wxPrinterBase)
@@ -32,9 +31,9 @@ IMPLEMENT_CLASS(wxPrintPreview, wxPrintPreviewBase)
 /*
  * Printer
  */
- 
+
 wxPrinter::wxPrinter(wxPrintData *data):
-  wxPrinterBase(data)
+  wxPrinterBase((wxPrintDialogData*)data)
 {
 }
 
@@ -48,17 +47,25 @@ bool wxPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt)
     return FALSE;
 }
 
-bool wxPrinter::PrintDialog(wxWindow *parent)
+wxDC* wxPrinter::PrintDialog(wxWindow *parent)
 {
+// TODO:
+/*
     wxPrintDialog dialog(parent, & m_printData);
-    return (dialog.ShowModal() == wxID_OK);
+    return (dialog.GetPrintDC());
+*/
+    return NULL;
 }
 
 bool wxPrinter::Setup(wxWindow *parent)
 {
+// TODO:
+/*
     wxPrintDialog dialog(parent, & m_printData);
     dialog.GetPrintData().SetSetupDialog(TRUE);
     return (dialog.ShowModal() == wxID_OK);
+*/
+    return FALSE;
 }
 
 /*
@@ -79,8 +86,9 @@ bool wxPrintPreview::Print(bool interactive)
 {
     if (!m_printPrintout)
         return FALSE;
-    wxPrinter printer(&m_printData);
-    return printer.Print(m_previewFrame, m_printPrintout, interactive);
+//    wxPrinter printer(&m_printData);
+//    return printer.Print(m_previewFrame, m_printPrintout, interactive);
+    return FALSE;
 }
 
 void wxPrintPreview::DetermineScaling()

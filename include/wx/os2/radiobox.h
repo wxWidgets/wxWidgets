@@ -43,6 +43,8 @@ public:
              const wxValidator& val = wxDefaultValidator, const wxString& name = wxRadioBoxNameStr);
 
   virtual bool OS2Command(WXUINT param, WXWORD id);
+  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+                              WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
   int FindString(const wxString& s) const;
   void SetSelection(int N);
@@ -52,10 +54,9 @@ public:
   void GetSize(int *x, int *y) const;
   void GetPosition(int *x, int *y) const;
 
-  void SetLabel(const wxString& label);
-  void SetLabel(int item, const wxString& label) ;
+  void SetLabel(int item, const wxString& label);
+  void SetLabel(int item, wxBitmap *bitmap);
   wxString GetLabel(int item) const;
-  wxString GetLabel() const;
   bool Show(bool show);
   void SetFocus();
   bool Enable(bool enable);
@@ -72,6 +73,24 @@ public:
   inline int GetNumberOfRowsOrCols() const { return m_noRowsOrCols; }
   inline void SetNumberOfRowsOrCols(int n) { m_noRowsOrCols = n; }
 
+  // implementation only from now on
+  // -------------------------------
+
+  WXHWND *GetRadioButtons() const { return m_radioButtons; }
+  bool ContainsHWND(WXHWND hWnd) const;
+  void SendNotificationEvent();
+
+  // get the number of buttons per column/row
+  int GetNumVer() const;
+  int GetNumHor() const;
+
+#if WXWIN_COMPATIBILITY
+  wxRadioBox(wxWindow *parent, wxFunction func, const char *title,
+             int x = -1, int y = -1, int width = -1, int height = -1,
+             int n = 0, char **choices = NULL,
+             int majorDim = 0, long style = wxRA_HORIZONTAL, const char *name = wxRadioBoxNameStr);
+#endif // WXWIN_COMPATIBILITY
+
 protected:
   void SubclassRadioButton(WXHWND hWndBtn);
 
@@ -87,6 +106,11 @@ protected:
   virtual void DoSetSize(int x, int y,
                          int width, int height,
                          int sizeFlags = wxSIZE_AUTO);
+private:
+  virtual void SetLabel(const wxString& label)
+  { wxWindowBase::SetLabel(label); }
+  wxString GetLabel() const
+  { return(wxWindowBase::GetLabel()); }
 };
 
 #endif

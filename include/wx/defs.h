@@ -1517,6 +1517,8 @@ typedef long            WXLPARAM;
 #  define WXLPARAM      MPARAM
 #  define RECT          RECTL
 #  define LOGFONT       FATTRS
+#  define LOWORD        SHORT1FROMMP
+#  define HIWORD        SHORT2FROMMP
 #endif
 typedef unsigned long   WXCOLORREF;
 typedef void *          WXRGNDATA;

@@ -96,6 +96,11 @@ MRESULT wxWndProc( HWND hWnd
                   ,MPARAM mp1
                   ,MPARAM mp2
                  );
+
+#ifdef  __WXDEBUG__
+    const char *wxGetMessageName(int message);
+#endif  //__WXDEBUG__
+
 void wxRemoveHandleAssociation(wxWindow *win);
 void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win);
 wxWindow *wxFindWinFromHandle(WXHWND hWnd);
@@ -258,6 +263,11 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 
     parent->AddChild(this);
 
+    bool want3D;
+    WXDWORD exStyle = 0; // TODO: Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
+    DWORD   msflags = 0;
+
+
     // TODO: PM Specific initialization
     OS2Create(m_windowId, parent, wxCanvasClassName, this, NULL,
               pos.x, pos.y,
@@ -275,7 +285,7 @@ void wxWindow::SetFocus()
     // TODO:
 }
 
-wxWindow* wxWindow::FindFocus()
+wxWindow* wxWindowBase::FindFocus()
 {
     wxWindow*                       window = NULL;
     // TODO:
@@ -306,7 +316,7 @@ void wxWindow::Lower()
 
 void wxWindow::SetTitle( const wxString& title)
 {
-    SetWindowText(GetHwnd(), title.c_str());
+// TODO:    SetWindowText(GetHwnd(), title.c_str());
 }
 
 wxString wxWindow::GetTitle() const
@@ -373,6 +383,7 @@ int  wxWindow::GetScrollPage(int orient) const
     // TODO:
     return(1);
 }
+#endif // WXWIN_COMPATIBILITY
 
 int  wxWindow::GetScrollPos(int orient) const
 {
@@ -831,7 +842,7 @@ void wxWindow::UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
 void wxWindow::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
                               WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd)
 {
-    *nCtlColor = CTLCOLOR_BTN;
+    *nCtlColor = 0; // TODO: CTLCOLOR_BTN;
     *hwnd = (WXHWND)lParam;
     *hdc = (WXHDC)wParam;
 }
@@ -839,7 +850,7 @@ void wxWindow::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
 void wxWindow::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
                                 WXWORD *item, WXWORD *flags, WXHMENU *hmenu)
 {
-    *item = (WXWORD)wParam;
+    *item = (WXWORD)LOWORD(wParam);
     *flags = HIWORD(wParam);
     *hmenu = (WXHMENU)lParam;
 }
@@ -886,7 +897,7 @@ MRESULT wxWndProc(HWND hWnd, UINT message, MPARAM wParam, MPARAM lParam)
     {
         // FIXME: why do we do this?
         wnd->SetHWND((WXHWND) hWnd);
-        rc = wnd->OS2DefWindowProc(message, wParam, lParam );
+        rc = wnd->OS2DefWindowProc(hWnd, message, wParam, lParam );
         wnd->SetHWND(0);
     }
     else
@@ -894,7 +905,7 @@ MRESULT wxWndProc(HWND hWnd, UINT message, MPARAM wParam, MPARAM lParam)
         if ( wnd )
             rc = wnd->OS2WindowProc(hWnd, message, wParam, lParam);
         else
-            rc = DefWindowProc( hWnd, message, wParam, lParam );
+            rc = 0; //TODO: DefWindowProc( hWnd, message, wParam, lParam );
     }
 
     return rc;
@@ -1249,11 +1260,11 @@ MRESULT wxWindow::OS2WindowProc(HWND hWnd, WXUINT message, WXWPARAM wParam, WXLP
         rc.result = MSWDefWindowProc(message, wParam, lParam);
     }
 */
-    return rc.result;
+    return (MRESULT)0;
 }
 
 // Dialog window proc
-MRESULT wxDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+MRESULT wxDlgProc(HWND hWnd, UINT message, MPARAM wParam, MPARAM lParam)
 {
    // TODO:
 /*
@@ -1273,7 +1284,6 @@ MRESULT wxDlgProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     return (MRESULT)0;
 }
 
-wxList *wxWinHandleList = NULL;
 wxWindow *wxFindWinFromHandle(WXHWND hWnd)
 {
     wxNode *node = wxWinHandleList->Find((long)hWnd);
@@ -1551,7 +1561,7 @@ bool wxWindow::HandleDestroy()
 #if wxUSE_DRAG_AND_DROP
     if ( m_dropTarget != NULL )
     {
-        m_dropTarget->Revoke(m_hWnd);
+//        m_dropTarget->Revoke(m_hWnd);
 
         delete m_dropTarget;
         m_dropTarget = NULL;
@@ -1570,12 +1580,16 @@ bool wxWindow::HandleActivate(int state,
                               bool WXUNUSED(minimized),
                               WXHWND WXUNUSED(activate))
 {
+    // TODO:
+    /*
     wxActivateEvent event(wxEVT_ACTIVATE,
                           (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),
                           m_windowId);
     event.SetEventObject(this);
 
     return GetEventHandler()->ProcessEvent(event);
+    */
+    return FALSE;
 }
 
 bool wxWindow::HandleSetFocus(WXHWND WXUNUSED(hwnd))
@@ -1654,6 +1668,8 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
     if ( GetHWND() == hWnd )
     {
         // don't set cursor when the mouse is not in the client part
+// TODO
+/*
         if ( nHitTest == HTCLIENT || nHitTest == HTERROR )
         {
             HCURSOR hcursor = 0;
@@ -1692,6 +1708,7 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
                 return TRUE;
             }
         }
+*/
     }
 
     return FALSE;
@@ -1701,7 +1718,7 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
 // owner drawn stuff
 // ---------------------------------------------------------------------------
 
-bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
+bool wxWindow::OS2OnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 {
    // TODO:
 /*
@@ -1789,7 +1806,8 @@ bool wxWindow::HandleCtlColor(WXHBRUSH *brush,
                               WXLPARAM lParam)
 {
     WXHBRUSH hBrush = 0;
-
+// TODO:
+/*
     if ( nCtlColor == CTLCOLOR_DLG )
     {
         hBrush = OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
@@ -1805,6 +1823,8 @@ bool wxWindow::HandleCtlColor(WXHBRUSH *brush,
         *brush = hBrush;
 
     return hBrush != 0;
+*/
+    return FALSE;
 }
 
 // Define for each class of dialog and control
@@ -1861,14 +1881,14 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 bool wxWindow::HandlePaint()
 {
    // TODO:
-   Return FALSE;
+   return FALSE;
 }
 
 bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
 {
     // Prevents flicker when dragging
-    if ( ::IsIconic(GetHwnd()) )
-        return TRUE;
+//  if ( ::IsIconic(GetHwnd()) )
+//      return TRUE;
 
     wxDC dc;
 
@@ -1930,6 +1950,8 @@ bool wxWindow::HandleSize(int w, int h, WXUINT WXUNUSED(flag))
 
 bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
 {
+// TODO:
+/*
     MINMAXINFO *info = (MINMAXINFO *)mmInfo;
 
     bool rc = FALSE;
@@ -1959,6 +1981,8 @@ bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
     }
 
     return rc;
+*/
+    return FALSE;
 }
 
 // ---------------------------------------------------------------------------
@@ -1972,7 +1996,7 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
         wxMenu *popupMenu = wxCurrentPopupMenu;
         wxCurrentPopupMenu = NULL;
 
-        return popupMenu->MSWCommand(cmd, id);
+        return popupMenu->OS2Command(cmd, id);
     }
 
     wxWindow *win = FindItem(id);
@@ -1982,7 +2006,7 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
     }
 
     if ( win )
-        return win->MSWCommand(cmd, id);
+        return win->OS2Command(cmd, id);
 
     return FALSE;
 }
@@ -1999,6 +2023,8 @@ bool wxWindow::HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam)
 
 void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
 {
+// TODO:
+/*
     event.m_x = x;
     event.m_y = y;
     event.m_shiftDown = ((flags & MK_SHIFT) != 0);
@@ -2014,7 +2040,7 @@ void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
     m_lastMouseY = y;
     m_lastMouseEvent = event.GetEventType();
 #endif // wxUSE_MOUSEEVENT_HACK
-
+*/
 }
 
 bool wxWindow::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
@@ -2119,7 +2145,7 @@ bool wxWindow::OS2OnScroll(int orientation, WXWORD wParam,
     {
         wxWindow *child = wxFindWinFromHandle(control);
         if ( child )
-            return child->MSWOnScroll(orientation, wParam, pos, control);
+            return child->OS2OnScroll(orientation, wParam, pos, control);
     }
 
     wxScrollWinEvent event;
@@ -2311,8 +2337,8 @@ wxWindow *wxGetActiveWindow()
 
 // Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
 // in active frames and dialogs, regardless of where the focus is.
-static HHOOK wxTheKeyboardHook = 0;
-static FARPROC wxTheKeyboardHookProc = 0;
+//static HHOOK wxTheKeyboardHook = 0;
+//static FARPROC wxTheKeyboardHookProc = 0;
 int wxKeyboardHook(int nCode, WORD wParam, DWORD lParam);
 
 void wxSetKeyboardHook(bool doIt)
@@ -2748,4 +2774,6 @@ const char *wxGetMessageName(int message)
 */
    return NULL;
 }
+
+#endif // __WXDEBUG__
 

@@ -23,7 +23,7 @@
 #include "wx/brush.h"
 #endif
 
-#include "wx/msw/private.h"
+#include "wx/os2/private.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxRadioButton, wxControl)
