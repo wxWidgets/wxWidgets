@@ -2781,7 +2781,7 @@ loading from resource data.
 \func{bool}{wxResourceAddIdentifier}{\param{const wxString\& }{name}, \param{int }{value}}
 
 Used for associating a name with an integer identifier (equivalent to dynamically\rtfsp
-\tt{#}defining a name to an integer). Unlikely to be used by an application except
+{\tt\#}defining a name to an integer). Unlikely to be used by an application except
 perhaps for implementing resource functionality for interpreted languages.
 
 \membersection{::wxResourceClear}\label{wxresourceclear}
@@ -2947,7 +2947,7 @@ load an entire {\tt .wxr file} into a string.
 
 \func{bool}{wxResourceRegisterBitmapData}{\param{const wxString\& }{name}, \param{char **}{xpm\_data}}
 
-Makes \tt{#}included XBM or XPM bitmap data known to the wxWindows resource system.
+Makes {\tt\#}included XBM or XPM bitmap data known to the wxWindows resource system.
 This is required if other resources will use the bitmap data, since otherwise there
 is no connection between names used in resources, and the global bitmap data.
 

@@ -73,7 +73,7 @@ enum wxDirTraverseResult
 
 \membersection{wxDirTraverser::OnFile}\label{wxdirtraverseronfile}
 
-\func{virtual wxDirTraverseResult}{OnFile}{\param{const wxString& }{filename}}
+\func{virtual wxDirTraverseResult}{OnFile}{\param{const wxString\& }{filename}}
 
 This function is called for each file. It may return {\tt wxDIR\_STOP} to abort
 traversing (for example, if the file being searched is found) or 
@@ -81,7 +81,7 @@ traversing (for example, if the file being searched is found) or
 
 \membersection{wxDirTraverser::OnDir}\label{wxdirtraverserondir}
 
-\func{virtual wxDirTraverseResult}{OnDir}{\param{const wxString& }{dirname}}
+\func{virtual wxDirTraverseResult}{OnDir}{\param{const wxString\& }{dirname}}
 
 This function is called for each directory. It may return {\tt wxSIR\_STOP} 
 to abort traversing completely, {\tt wxDIR\_IGNORE} to skip this directory but

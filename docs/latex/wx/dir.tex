@@ -128,7 +128,7 @@ to \helpref{GetFirst}{wxdirgetfirst}.
 
 \membersection{wxDir::HasFiles}\label{wxdirhasfiles}
 
-\func{bool}{HasFiles}{\param{const wxString& }{filespec = wxEmptyString}}
+\func{bool}{HasFiles}{\param{const wxString\& }{filespec = wxEmptyString}}
 
 Returns {\tt TRUE} if the directory contains any files matching the given 
 {\it filespec}. If {\it filespec} is empty, look for any files at all. In any
@@ -136,7 +136,7 @@ case, even hidden files are taken into account.
 
 \membersection{wxDir::HasSubDirs}\label{wxdirhassubdirs}
 
-\func{bool}{HasSubDirs}{\param{const wxString& }{dirspec = wxEmptyString}}
+\func{bool}{HasSubDirs}{\param{const wxString\& }{dirspec = wxEmptyString}}
 
 Returns {\tt TRUE} if the directory contains any subdirectories (if a non
 empty {\it filespec} is given, only check for directories matching it).
@@ -144,7 +144,7 @@ The hidden subdirectories are taken into account as well.
 
 \membersection{wxDir::Traverse}\label{wxdirtraverse}
 
-\func{size\_t}{Traverse}{\param{wxDirTraverser& }{sink}, \param{const wxString& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
+\func{size\_t}{Traverse}{\param{wxDirTraverser\& }{sink}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
 
 Enumerate all files and directories under the given directory recursively
 calling the element of the provided \helpref{wxDirTraverser}{wxdirtraverser} 
@@ -166,7 +166,7 @@ See also: \helpref{GetAllFiles}{wxdirgetallfiles}
 
 \membersection{wxDir::GetAllFiles}\label{wxdirgetallfiles}
 
-\func{static size\_t}{GetAllFiles}{\param{const wxString& }{dirname}, \param{wxArrayString *}{files}, \param{const wxString& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
+\func{static size\_t}{GetAllFiles}{\param{const wxString\& }{dirname}, \param{wxArrayString *}{files}, \param{const wxString\& }{filespec = wxEmptyString}, \param{int }{flags = wxDIR\_DEFAULT}}
 
 The function appends the names of all the files under directory {\it dirname} 
 to the array {\it files} (note that its old contents is preserved). Only files

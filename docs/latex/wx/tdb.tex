@@ -301,7 +301,7 @@ similar to those used throughout wxWindows, as well as to preface all wxODBC
 classes names and functions with a wxDb preface.  Because this renaming would 
 affect applications written using the v2.0 names, this compile-time directive 
 was added to allow those programs written for v2.0 to still compile using the 
-old naming conventions.  These deprecated names are all #define'd to their 
+old naming conventions.  These deprecated names are all {\tt\#}define'd to their 
 corresponding new function names at the end of the db.cpp/dbtable.cpp source 
 files.  These deprecated class/function names should not be used in future 
 development, as at some point in the future they will be removed.  The default 
@@ -347,7 +347,7 @@ to when first starting to use the classes.  Throughout the steps, small
 snippets of code are shown to show the syntax of performing the step.  A 
 complete code snippet is provided at the end of this overview that shows a 
 complete working flow of all these steps (see 
-\helpref{wxODBC - Sample Code #1}{wxodbcsamplecode1}).
+\helpref{wxODBC - Sample Code {\tt\#}1}{wxodbcsamplecode1}).
 
 
 {\bf Define datasource connection information}
@@ -956,7 +956,7 @@ The ODBC classes support for Unicode is yet in early experimental stage and
 hasn't been tested extensively. It might work for you or it might not: please
 report the bugs/problems you have encountered in the latter case.
 
-\subsection{wxODBC - Sample Code #1}\label{wxodbcsamplecode1}
+\subsection{wxODBC - Sample Code {\tt\#}1}\label{wxodbcsamplecode1}
 
 Simplest example of establishing/opening a connection to an ODBC datasource, 
 binding variables to the columns for read/write usage, opening an 
@@ -1308,31 +1308,31 @@ for selection and the columns returned may be specified.
 
 Examples:
 
-\tt{SELECT * FROM Book}
+{\tt SELECT * FROM Book}
 
 Selects all rows and columns from table Book.
 
-\tt{SELECT Title, RetailPriceAmount FROM Book WHERE RetailPriceAmount > 20.0}
+{\tt SELECT Title, RetailPriceAmount FROM Book WHERE RetailPriceAmount > 20.0}
 
 Selects columns Title and RetailPriceAmount from table Book, returning only
 the rows that match the WHERE clause.
 
-\tt{SELECT * FROM Book WHERE CatCode = 'LL' OR CatCode = 'RR'}
+{\tt SELECT * FROM Book WHERE CatCode = 'LL' OR CatCode = 'RR'}
 
 Selects all columns from table Book, returning only
 the rows that match the WHERE clause.
 
-\tt{SELECT * FROM Book WHERE CatCode IS NULL}
+{\tt SELECT * FROM Book WHERE CatCode IS NULL}
 
 Selects all columns from table Book, returning only rows where the CatCode column
 is NULL.
 
-\tt{SELECT * FROM Book ORDER BY Title}
+{\tt SELECT * FROM Book ORDER BY Title}
 
 Selects all columns from table Book, ordering by Title, in ascending order. To specify
 descending order, add DESC after the ORDER BY Title clause.
 
-\tt{SELECT Title FROM Book WHERE RetailPriceAmount >= 20.0 AND RetailPriceAmount <= 35.0}
+{\tt SELECT Title FROM Book WHERE RetailPriceAmount >= 20.0 AND RetailPriceAmount <= 35.0}
 
 Selects records where RetailPriceAmount conforms to the WHERE expression.
 
@@ -1342,7 +1342,7 @@ Updates records in a table.
 
 Example:
 
-\tt{UPDATE Incident SET X = 123 WHERE ASSET = 'BD34'}
+{\tt UPDATE Incident SET X = 123 WHERE ASSET = 'BD34'}
 
 This example sets a field in column `X' to the number 123, for the record
 where the column ASSET has the value `BD34'.

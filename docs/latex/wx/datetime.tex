@@ -659,7 +659,7 @@ Same as \helpref{Set}{wxdatetimesetdate}
 
 \membersection{wxDateTime::SetToCurrent}\label{wxdatetimesettocurrent}
 
-\func{wxDateTime&}{SetToCurrent}{\void}
+\func{wxDateTime\&}{SetToCurrent}{\void}
 
 Sets the date and time of to the current values. Same as assigning the result
 of \helpref{Now()}{wxdatetimenow} to this object.
@@ -885,25 +885,25 @@ calculations make sense for it).
 
 \membersection{wxDateTime::IsEqualTo}\label{wxdatetimeisequalto}
 
-\constfunc{bool}{IsEqualTo}{\param{const wxDateTime& }{datetime}}
+\constfunc{bool}{IsEqualTo}{\param{const wxDateTime\& }{datetime}}
 
 Returns {\tt TRUE} if the two dates are strictly identical.
 
 \membersection{wxDateTime::IsEarlierThan}\label{wxdatetimeisearlierthan}
 
-\constfunc{bool}{IsEarlierThan}{\param{const wxDateTime& }{datetime}}
+\constfunc{bool}{IsEarlierThan}{\param{const wxDateTime\& }{datetime}}
 
 Returns {\tt TRUE} if this date precedes the given one.
 
 \membersection{wxDateTime::IsLaterThan}\label{wxdatetimeislaterthan}
 
-\constfunc{bool}{IsLaterThan}{\param{const wxDateTime& }{datetime}}
+\constfunc{bool}{IsLaterThan}{\param{const wxDateTime\& }{datetime}}
 
 Returns {\tt TRUE} if this date is later than the given one.
 
 \membersection{wxDateTime::IsStrictlyBetween}\label{wxdatetimeisstrictlybetween}
 
-\constfunc{bool}{IsStrictlyBetween}{\param{const wxDateTime& }{t1}, \param{const wxDateTime& }{t2}}
+\constfunc{bool}{IsStrictlyBetween}{\param{const wxDateTime\& }{t1}, \param{const wxDateTime\& }{t2}}
 
 Returns {\tt TRUE} if this date lies strictly between the two others,
 
@@ -913,7 +913,7 @@ Returns {\tt TRUE} if this date lies strictly between the two others,
 
 \membersection{wxDateTime::IsBetween}\label{wxdatetimeisbetween}
 
-\constfunc{bool}{IsBetween}{\param{const wxDateTime& }{t1}, \param{const wxDateTime& }{t2}}
+\constfunc{bool}{IsBetween}{\param{const wxDateTime\& }{t1}, \param{const wxDateTime\& }{t2}}
 
 Returns {\tt TRUE} if \helpref{IsStrictlyBetween}{wxdatetimeisstrictlybetween}
 is {\tt TRUE} or if the date is equal to one of the limi values.
@@ -924,13 +924,13 @@ is {\tt TRUE} or if the date is equal to one of the limi values.
 
 \membersection{wxDateTime::IsSameDate}\label{wxdatetimeissamedate}
 
-\constfunc{bool}{IsSameDate}{\param{const wxDateTime& }{dt}}
+\constfunc{bool}{IsSameDate}{\param{const wxDateTime\& }{dt}}
 
 Returns {\tt TRUE} if the date is the same without comparing the time parts.
 
 \membersection{wxDateTime::IsSameTime}\label{wxdatetimeissametime}
 
-\constfunc{bool}{IsSameTime}{\param{const wxDateTime& }{dt}}
+\constfunc{bool}{IsSameTime}{\param{const wxDateTime\& }{dt}}
 
 Returns {\tt TRUE} if the time is the same (although dates may differ).
 

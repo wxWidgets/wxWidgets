@@ -61,13 +61,13 @@ calculate their size (such as a checkbox) whereas others (such as a listbox)
 don't have any natural width or height and thus require an explicit size. Some controls
 can calculate their height, but not their width (e.g. a single line text control):
 
-\center{
-\image{}{sizer03.gif}
+\newcommand{\myimage}[1]{\mbox{\image{0cm;0cm}{#1}}}
 
-\image{}{sizer04.gif}
-
-\image{}{sizer05.gif}
-}
+\begin{center}
+\myimage{sizer03.eps}\gifsep
+\myimage{sizer04.eps}\gifsep
+\myimage{sizer05.eps}
+\end{center}
 
 {\bf A border:} The border is just empty space and is used to separate dialog items
 in a dialog. This border can either be all around, or at any combination of sides
@@ -75,13 +75,11 @@ such as only above and below the control. The thickness of this border must be s
 explicitly, typically 5 points. The following samples show dialogs with only one
 dialog item (a button) and a border of 0, 5, and 10 pixels around the button:
 
-\center{
-\image{}{sizer00.gif}
-
-\image{}{sizer01.gif}
-
-\image{}{sizer02.gif}
-}
+\begin{center}
+\myimage{sizer00.eps}\gifsep
+\myimage{sizer01.eps}\gifsep
+\myimage{sizer02.eps}
+\end{center}
 
 {\bf An alignment:} Often, a dialog item is given more space than its minimal size
 plus its border. Depending on what flags are used for the respective dialog
@@ -91,9 +89,9 @@ the centre of the available space or to either side of the space. The following
 sample shows a listbox and three buttons in a horizontal box sizer; one button
 is centred, one is aligned at the top, one is aligned at the bottom:
 
-\center{
-\image{}{sizer06.gif}
-}
+\begin{center}
+\myimage{sizer06.eps}
+\end{center}
 
 {\bf A stretch factor:} If a sizer contains more than one child and it is offered
 more space than its children and their borders need, the question arises how to
@@ -108,9 +106,9 @@ three buttons, the first one has a stretch factor of 1 and thus gets stretched,
 whereas the other two buttons have a stretch factor of zero and keep their
 initial width:
 
-\center{
-\image{}{sizer07.gif}
-}
+\begin{center}
+\myimage{sizer07.eps}
+\end{center}
 
 Within wxDesigner, this stretch factor gets set from the {\it Option} menu.
 
@@ -127,18 +125,18 @@ stretch factor determines how much the child can be stretched horizontally.
 The following sample shows the same dialog as in the last sample,
 only the box sizer is a vertical box sizer now:
 
-\center{
-\image{}{sizer08.gif}
-}
+\begin{center}
+\myimage{sizer08.eps}
+\end{center}
 
 \wxheading{wxStaticBoxSizer}
 
 \helpref{wxStaticBoxSixer}{wxstaticboxsizer} is the same as a wxBoxSizer, but surrounded by a
 static box. Here is a sample:
 
-\center{
-\image{}{sizer09.gif}
-}
+\begin{center}
+\myimage{sizer09.eps}
+\end{center}
 
 \wxheading{wxGridSizer}
 
@@ -148,9 +146,9 @@ this case the text control in the left bottom border. Either the number
 of columns or the number or rows is fixed and the grid sizer will grow
 in the respectively other orientation if new children are added:
 
-\center{
-\image{}{sizer10.gif}
-}
+\begin{center}
+\myimage{sizer10.eps}
+\end{center}
 
 For programming information, see \helpref{wxGridSizer}{wxgridsizer}.
 
@@ -164,9 +162,9 @@ rows can be declared to be stretchable if the sizer is assigned
 a size different from that which it requested. The following sample shows
 the same dialog as the one above, but using a flex grid sizer:
 
-\center{
-\image{}{sizer11.gif}
-}
+\begin{center}
+\myimage{sizer11.eps}
+\end{center}
 
 \wxheading{wxNotebookSizer}
 

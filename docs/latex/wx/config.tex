@@ -257,7 +257,7 @@ Currently, only two types of data are supported: string and long (but it might
 change in the near future). To work with other types: for {\it int} or {\it
 bool} you can work with function taking/returning {\it long} and just use the
 casts. Better yet, just use {\it long} for all variables which you're going to
-save in the config file: chances are that \tt{sizeof(bool) == sizeof(int) == sizeof(long)} anyhow on your system. For {\it float}, {\it double} and, in
+save in the config file: chances are that {\tt sizeof(bool) == sizeof(int) == sizeof(long)} anyhow on your system. For {\it float}, {\it double} and, in
 general, any other type you'd have to translate them to/from string
 representation and use string functions.
 
@@ -309,8 +309,8 @@ config file:
   UserData = %windir%\\data.dat
 \end{verbatim}
 % $ % help EMACS syntax highlighting...
-the call to \tt{config->Read("UserData")} will return something like
-\tt{"/home/zeitlin/data"} if you're lucky enough to run a Linux system ;-)
+the call to {\tt config->Read("UserData")} will return something like
+{\tt "/home/zeitlin/data"} if you're lucky enough to run a Linux system ;-)
 
 Although this feature is very useful, it may be annoying if you read a value
 which containts '\$' or '\%' symbols (\% is used for environment variables

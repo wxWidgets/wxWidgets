@@ -125,7 +125,7 @@ means that you can't use {\tt --it}, {\tt it + 3}, {\tt it1 - it2}.
 The size parameter is just an hint, the table will resize automatically
 to preserve performance.
 
-\func{}{wxHashMap}{\param{const wxHashMap&}{ map}}
+\func{}{wxHashMap}{\param{const wxHashMap\&}{ map}}
 
 Copy constructor.
 
@@ -146,7 +146,7 @@ Removes all elements from the hash map.
 
 \membersection{wxHashMap::count}
 
-\constfunc{size\_type}{count}{\param{const key\_type&}{ key}}
+\constfunc{size\_type}{count}{\param{const key\_type\&}{ key}}
 
 Counts the number of elements with the given key present in the map.
 This function can actually return 0 or 1.
@@ -168,7 +168,7 @@ Returns an iterator pointing at the one-after-the-last element of the hash map
 
 \membersection{wxHashMap::erase}
 
-\func{size\_type}{erase}{\param{const key\_type&}{ key}}
+\func{size\_type}{erase}{\param{const key\_type\&}{ key}}
 
 Erases the element with the given key, and returns the number of element
 erased ( either 0 or 1 ).
@@ -182,9 +182,9 @@ the iterator is no longer valid and must not be used.
 
 \membersection{wxHashMap::find}
 
-\func{iterator}{find}{\param{const key\_type&}{ key}}
+\func{iterator}{find}{\param{const key\_type\&}{ key}}
 
-\constfunc{const\_iterator}{find}{\param{const key\_type&}{ key}}
+\constfunc{const\_iterator}{find}{\param{const key\_type\&}{ key}}
 
 If an element with the given key is present, the functions returns
 an iterator pointing at that element, otherwise an invalid iterator
@@ -192,13 +192,13 @@ is returned ( i.e. hashmap.find( non\_existent\_key ) == hashmap.end() ).
 
 \membersection{wxHashMap::insert}
 
-\func{void}{insert}{\param{const value\_type&}{ v}}
+\func{void}{insert}{\param{const value\_type\&}{ v}}
 
 Inserts the given value in the hash map.
 
 \membersection{wxHashMap::operator[]}
 
-\func{mapped\_type&}{operator[]}{\param{const key\_type&}{ key}}
+\func{mapped\_type\&}{operator[]}{\param{const key\_type\&}{ key}}
 
 Use it as an array subscript. The only difference is that if the
 given key is not present in the hash map, an element with the

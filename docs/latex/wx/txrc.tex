@@ -72,14 +72,14 @@ These are the typical steps for using XRC files in your application.
 \item call {\tt wxXmlResource::Get()->InitAllHandlers()} from your wxApp::OnInit function,
 and then call {\tt wxXmlResource::Get()->Load("myfile.xrc")} to load the resource file;
 \item to create a dialog from a resource, create it using the default constructor, and then
-load using for example {\tt wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1");}
+load using for example {\tt wxXmlResource::Get()->LoadDialog(\&dlg, this, "dlg1");}
 \item set up event tables as usual but use the {\tt XRCID(str)} macro to translate from XRC string names
 to a suitable integer identifier, for example {\tt EVT\_MENU(XRCID("quit"), MyFrame::OnQuit)}.
 \end{itemize}
 
 To create an XRC file, use one of the following methods.
 
-\begin{itemize}\itemsep=0
+\begin{itemize}\itemsep=0pt
 \item Create the file by hand;
 \item use \urlref{wxDesigner}{http://www.roebling.de}, a commercial dialog designer/RAD tool;
 \item use \urlref{XRCed}{http://www.mema.ucl.ac.be/~rolinsky/xrced/}, a wxPython-based
@@ -104,7 +104,7 @@ TODO: is the compiled binary format XMB or XRS? How do you handle a C++ resource
 To compile binary resource files, use the command-line wxrc utility. It takes a single file parameter (the
 input XRC file) and the following switches and options.
 
-\begin{itemize}\itemsep=0
+\begin{itemize}\itemsep=0pt
 \item -h (--help): show a help message
 \item -v (--verbose): show verbose logging information
 \item -c (--cpp-code): write C++ source rather than a RSC file

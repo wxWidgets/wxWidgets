@@ -25,13 +25,13 @@ try to use it, you will get link errors.
 
 \wxheading{Data structures}
 
-\begin{enumerate}
+\begin{verbatim}
 enum wxXmlResourceFlags
 {
     wxXRC\_USE\_LOCALE     = 1,
     wxXRC\_NO\_SUBCLASSING = 2
 };
-\end{enumerate}
+\end{verbatim}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -126,7 +126,7 @@ Returns flags, which may be a bitlist of wxXRC\_USE\_LOCALE and wxXRC\_NO\_SUBCL
 
 \constfunc{long}{GetVersion}{\void}
 
-Returns version information (a.b.c.d = d+ 256*c + 256\tt{^}2*b + 256\tt{^}3*a).
+Returns version information (a.b.c.d = d+ 256*c + 256\textasciicircum2*b + 256\textasciitilde3*a).
 
 \membersection{wxXmlResource::GetXRCID}\label{wxxmlresourcegetxmlid}
 
