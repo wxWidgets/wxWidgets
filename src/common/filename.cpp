@@ -998,7 +998,7 @@ bool wxFileName::IsAbsolute(wxPathFormat format) const
 
 bool wxFileName::MakeRelativeTo(const wxString& pathBase, wxPathFormat format)
 {
-    wxFileName fnBase(pathBase, format);
+    wxFileName fnBase = wxFileName::DirName(pathBase, format);
 
     // get cwd only once - small time saving
     wxString cwd = wxGetCwd();
