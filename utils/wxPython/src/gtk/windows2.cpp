@@ -3514,6 +3514,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxGridEvent",SwigwxGridEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxGridEvent",SwigwxGridEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
+	 SWIG_RegisterMapping("_wxCheckListBox","_class_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_wxGridEvent","_class_wxGridEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
@@ -3525,6 +3526,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
@@ -3592,6 +3594,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
 	 SWIG_RegisterMapping("_class_wxFocusEvent","_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
@@ -3659,6 +3662,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
+	 SWIG_RegisterMapping("_class_wxCheckListBox","_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_class_wxGridEvent","_wxGridEvent",0);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxNotebookEvent",SwigwxNotebookEventTowxCommandEvent);

@@ -1783,6 +1783,152 @@ static PyObject *_wrap_wxFont_GetWeight(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxFont_SetFaceName(_swigobj,_swigarg0)  (_swigobj->SetFaceName(_swigarg0))
+static PyObject *_wrap_wxFont_SetFaceName(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    wxString * _arg1;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxFont_SetFaceName",&_argc0,&_obj1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetFaceName. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+    wxFont_SetFaceName(_arg0,*_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxFont_SetFamily(_swigobj,_swigarg0)  (_swigobj->SetFamily(_swigarg0))
+static PyObject *_wrap_wxFont_SetFamily(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxFont_SetFamily",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetFamily. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    wxFont_SetFamily(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_SetPointSize(_swigobj,_swigarg0)  (_swigobj->SetPointSize(_swigarg0))
+static PyObject *_wrap_wxFont_SetPointSize(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxFont_SetPointSize",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetPointSize. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    wxFont_SetPointSize(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_SetStyle(_swigobj,_swigarg0)  (_swigobj->SetStyle(_swigarg0))
+static PyObject *_wrap_wxFont_SetStyle(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxFont_SetStyle",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetStyle. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    wxFont_SetStyle(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_SetUnderlined(_swigobj,_swigarg0)  (_swigobj->SetUnderlined(_swigarg0))
+static PyObject *_wrap_wxFont_SetUnderlined(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxFont_SetUnderlined",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetUnderlined. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    wxFont_SetUnderlined(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxFont_SetWeight(_swigobj,_swigarg0)  (_swigobj->SetWeight(_swigarg0))
+static PyObject *_wrap_wxFont_SetWeight(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxFont_SetWeight",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFont_SetWeight. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    wxFont_SetWeight(_arg0,_arg1);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define new_wxColour(_swigarg0,_swigarg1,_swigarg2) (new wxColour(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_new_wxColour(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -4795,6 +4941,12 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxColour_Red", _wrap_wxColour_Red, 1 },
 	 { "delete_wxColour", _wrap_delete_wxColour, 1 },
 	 { "new_wxColour", _wrap_new_wxColour, 1 },
+	 { "wxFont_SetWeight", _wrap_wxFont_SetWeight, 1 },
+	 { "wxFont_SetUnderlined", _wrap_wxFont_SetUnderlined, 1 },
+	 { "wxFont_SetStyle", _wrap_wxFont_SetStyle, 1 },
+	 { "wxFont_SetPointSize", _wrap_wxFont_SetPointSize, 1 },
+	 { "wxFont_SetFamily", _wrap_wxFont_SetFamily, 1 },
+	 { "wxFont_SetFaceName", _wrap_wxFont_SetFaceName, 1 },
 	 { "wxFont_GetWeight", _wrap_wxFont_GetWeight, 1 },
 	 { "wxFont_GetUnderlined", _wrap_wxFont_GetUnderlined, 1 },
 	 { "wxFont_GetStyle", _wrap_wxFont_GetStyle, 1 },

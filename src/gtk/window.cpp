@@ -1616,8 +1616,8 @@ void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
 
         if ((m_minWidth != -1) && (m_width < m_minWidth)) m_width = m_minWidth;
         if ((m_minHeight != -1) && (m_height < m_minHeight)) m_height = m_minHeight;
-        if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_minWidth;
-        if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_minHeight;
+        if ((m_maxWidth != -1) && (m_width > m_maxWidth)) m_width = m_maxWidth;
+        if ((m_maxHeight != -1) && (m_height > m_maxHeight)) m_height = m_maxHeight;
 
         wxPoint pt( m_parent->GetClientAreaOrigin() );
         gtk_myfixed_move( GTK_MYFIXED(m_parent->m_wxwindow), m_widget, m_x+pt.x, m_y+pt.y );

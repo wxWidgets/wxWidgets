@@ -3826,6 +3826,30 @@ static PyObject *_wrap_wxMenuBar_FindMenuItem(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxMenuBar_FindItemForId(_swigobj,_swigarg0)  (_swigobj->FindItemForId(_swigarg0))
+static PyObject *_wrap_wxMenuBar_FindItemForId(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxMenuItem * _result;
+    wxMenuBar * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxMenuBar_FindItemForId",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMenuBar_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenuBar_FindItemForId. Expected _wxMenuBar_p.");
+        return NULL;
+        }
+    }
+    _result = (wxMenuItem *)wxMenuBar_FindItemForId(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenuItem_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxMenuBar_GetMenuCount(_swigobj)  (_swigobj->GetMenuCount())
 static PyObject *_wrap_wxMenuBar_GetMenuCount(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -4178,6 +4202,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuItem_IsSeparator", _wrap_wxMenuItem_IsSeparator, 1 },
 	 { "wxMenuBar_GetMenu", _wrap_wxMenuBar_GetMenu, 1 },
 	 { "wxMenuBar_GetMenuCount", _wrap_wxMenuBar_GetMenuCount, 1 },
+	 { "wxMenuBar_FindItemForId", _wrap_wxMenuBar_FindItemForId, 1 },
 	 { "wxMenuBar_FindMenuItem", _wrap_wxMenuBar_FindMenuItem, 1 },
 	 { "wxMenuBar_Enabled", _wrap_wxMenuBar_Enabled, 1 },
 	 { "wxMenuBar_Enable", _wrap_wxMenuBar_Enable, 1 },

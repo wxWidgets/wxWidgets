@@ -162,6 +162,24 @@ class wxFontPtr :
     def GetWeight(self):
         val = gdic.wxFont_GetWeight(self.this)
         return val
+    def SetFaceName(self,arg0):
+        val = gdic.wxFont_SetFaceName(self.this,arg0)
+        return val
+    def SetFamily(self,arg0):
+        val = gdic.wxFont_SetFamily(self.this,arg0)
+        return val
+    def SetPointSize(self,arg0):
+        val = gdic.wxFont_SetPointSize(self.this,arg0)
+        return val
+    def SetStyle(self,arg0):
+        val = gdic.wxFont_SetStyle(self.this,arg0)
+        return val
+    def SetUnderlined(self,arg0):
+        val = gdic.wxFont_SetUnderlined(self.this,arg0)
+        return val
+    def SetWeight(self,arg0):
+        val = gdic.wxFont_SetWeight(self.this,arg0)
+        return val
     def __repr__(self):
         return "<C wxFont instance>"
 class wxFont(wxFontPtr):

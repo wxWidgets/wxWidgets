@@ -86,8 +86,10 @@ class wxRadioBox: public wxControl
     
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
+    wxSize LayoutItems();
     
     bool             m_alreadySent;
+    int              m_majorDim;
     wxList           m_boxes;
     
   DECLARE_EVENT_TABLE()    

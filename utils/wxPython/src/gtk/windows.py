@@ -546,6 +546,10 @@ class wxMenuBarPtr(wxEvtHandlerPtr):
     def FindMenuItem(self,arg0,arg1):
         val = windowsc.wxMenuBar_FindMenuItem(self.this,arg0,arg1)
         return val
+    def FindItemForId(self,arg0):
+        val = windowsc.wxMenuBar_FindItemForId(self.this,arg0)
+        val = wxMenuItemPtr(val)
+        return val
     def GetMenuCount(self):
         val = windowsc.wxMenuBar_GetMenuCount(self.this)
         return val
