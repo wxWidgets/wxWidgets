@@ -45,8 +45,9 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-#define SWIG_PackData        SWIG_Python_PackData
-#define SWIG_UnpackData      SWIG_Python_UnpackData
+#define SWIG_PackData        SWIG_Python_PackData 
+#define SWIG_UnpackData      SWIG_Python_UnpackData 
+
 
 /***********************************************************************
  * common.swg for wxPython
@@ -859,6 +860,61 @@ static PyObject *_wrap_CalendarEvent_GetDate(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDateTime, 0);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_CalendarEvent_SetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
+    wxDateTime *arg2 = 0 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "date", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarEvent_SetDate",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetDate((wxDateTime const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_CalendarEvent_SetWeekDay(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "wd", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:CalendarEvent_SetWeekDay",kwnames,&obj0,&arg2)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetWeekDay((wxDateTime::WeekDay )arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
     return resultobj;
     fail:
     return NULL;
@@ -1895,6 +1951,60 @@ static PyObject *_wrap_CalendarCtrl_Show(PyObject *self, PyObject *args, PyObjec
 }
 
 
+static PyObject *_wrap_CalendarCtrl_GetMonthControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
+    wxControl *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetMonthControl",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxControl *)((wxCalendarCtrl const *)arg1)->GetMonthControl();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_CalendarCtrl_GetYearControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxCalendarCtrl *arg1 = (wxCalendarCtrl *) 0 ;
+    wxControl *result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetYearControl",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxControl *)((wxCalendarCtrl const *)arg1)->GetYearControl();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject * CalendarCtrl_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
@@ -1925,6 +2035,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CalendarDateAttr_swigregister", CalendarDateAttr_swigregister, METH_VARARGS },
 	 { (char *)"new_CalendarEvent", (PyCFunction) _wrap_new_CalendarEvent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CalendarEvent_GetDate", (PyCFunction) _wrap_CalendarEvent_GetDate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_SetDate", (PyCFunction) _wrap_CalendarEvent_SetDate, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarEvent_SetWeekDay", (PyCFunction) _wrap_CalendarEvent_SetWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CalendarEvent_GetWeekDay", (PyCFunction) _wrap_CalendarEvent_GetWeekDay, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CalendarEvent_swigregister", CalendarEvent_swigregister, METH_VARARGS },
 	 { (char *)"new_CalendarCtrl", (PyCFunction) _wrap_new_CalendarCtrl, METH_VARARGS | METH_KEYWORDS },
@@ -1956,6 +2068,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"CalendarCtrl_HitTest", (PyCFunction) _wrap_CalendarCtrl_HitTest, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CalendarCtrl_Enable", (PyCFunction) _wrap_CalendarCtrl_Enable, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CalendarCtrl_Show", (PyCFunction) _wrap_CalendarCtrl_Show, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetMonthControl", (PyCFunction) _wrap_CalendarCtrl_GetMonthControl, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"CalendarCtrl_GetYearControl", (PyCFunction) _wrap_CalendarCtrl_GetYearControl, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"CalendarCtrl_swigregister", CalendarCtrl_swigregister, METH_VARARGS },
 	 { NULL, NULL }
 };

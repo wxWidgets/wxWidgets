@@ -1072,6 +1072,22 @@ class Rect(object):
         """SetSize(Size s)"""
         return _core.Rect_SetSize(*args, **kwargs)
 
+    def GetTopLeft(*args, **kwargs):
+        """GetTopLeft() -> Point"""
+        return _core.Rect_GetTopLeft(*args, **kwargs)
+
+    def SetTopLeft(*args, **kwargs):
+        """SetTopLeft(Point p)"""
+        return _core.Rect_SetTopLeft(*args, **kwargs)
+
+    def GetBottomRight(*args, **kwargs):
+        """GetBottomRight() -> Point"""
+        return _core.Rect_GetBottomRight(*args, **kwargs)
+
+    def SetBottomRight(*args, **kwargs):
+        """SetBottomRight(Point p)"""
+        return _core.Rect_SetBottomRight(*args, **kwargs)
+
     def GetLeft(*args, **kwargs):
         """GetLeft() -> int"""
         return _core.Rect_GetLeft(*args, **kwargs)

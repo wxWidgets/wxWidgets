@@ -130,6 +130,14 @@ class CalendarEvent(core.CommandEvent):
         """GetDate() -> DateTime"""
         return _calendar.CalendarEvent_GetDate(*args, **kwargs)
 
+    def SetDate(*args, **kwargs):
+        """SetDate(DateTime date)"""
+        return _calendar.CalendarEvent_SetDate(*args, **kwargs)
+
+    def SetWeekDay(*args, **kwargs):
+        """SetWeekDay(wxDateTime::WeekDay wd)"""
+        return _calendar.CalendarEvent_SetWeekDay(*args, **kwargs)
+
     def GetWeekDay(*args, **kwargs):
         """GetWeekDay() -> wxDateTime::WeekDay"""
         return _calendar.CalendarEvent_GetWeekDay(*args, **kwargs)
@@ -283,6 +291,14 @@ class CalendarCtrl(core.Control):
     def Show(*args, **kwargs):
         """Show(bool show=True) -> bool"""
         return _calendar.CalendarCtrl_Show(*args, **kwargs)
+
+    def GetMonthControl(*args, **kwargs):
+        """GetMonthControl() -> Control"""
+        return _calendar.CalendarCtrl_GetMonthControl(*args, **kwargs)
+
+    def GetYearControl(*args, **kwargs):
+        """GetYearControl() -> Control"""
+        return _calendar.CalendarCtrl_GetYearControl(*args, **kwargs)
 
 
 class CalendarCtrlPtr(CalendarCtrl):

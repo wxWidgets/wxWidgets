@@ -79,9 +79,9 @@ class Colour(core.Object):
         """Set(unsigned char red, unsigned char green, unsigned char blue)"""
         return _gdi.Colour_Set(*args, **kwargs)
 
-    def SetRBG(*args, **kwargs):
-        """SetRBG(unsigned long colRGB)"""
-        return _gdi.Colour_SetRBG(*args, **kwargs)
+    def SetRGB(*args, **kwargs):
+        """SetRGB(unsigned long colRGB)"""
+        return _gdi.Colour_SetRGB(*args, **kwargs)
 
     def __eq__(*args, **kwargs):
         """__eq__(Colour colour) -> bool"""
@@ -90,6 +90,10 @@ class Colour(core.Object):
     def __ne__(*args, **kwargs):
         """__ne__(Colour colour) -> bool"""
         return _gdi.Colour___ne__(*args, **kwargs)
+
+    def InitFromName(*args, **kwargs):
+        """InitFromName(wxString colourName)"""
+        return _gdi.Colour_InitFromName(*args, **kwargs)
 
     def Get(*args, **kwargs):
         """Get() -> PyObject"""
@@ -230,6 +234,10 @@ class Pen(GDIObject):
     def GetDashes(*args, **kwargs):
         """GetDashes() -> PyObject"""
         return _gdi.Pen_GetDashes(*args, **kwargs)
+
+    def GetDashCount(*args, **kwargs):
+        """GetDashCount() -> int"""
+        return _gdi.Pen_GetDashCount(*args, **kwargs)
 
     def GetStipple(*args, **kwargs):
         """GetStipple() -> Bitmap"""

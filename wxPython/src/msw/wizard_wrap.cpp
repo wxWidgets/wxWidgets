@@ -45,8 +45,9 @@ private:
 #define SWIG_TypeName        SWIG_Python_TypeName
 #define SWIG_TypeQuery       SWIG_Python_TypeQuery
 #define SWIG_TypeClientData  SWIG_Python_TypeClientData
-#define SWIG_PackData        SWIG_Python_PackData
-#define SWIG_UnpackData      SWIG_Python_UnpackData
+#define SWIG_PackData        SWIG_Python_PackData 
+#define SWIG_UnpackData      SWIG_Python_UnpackData 
+
 
 /***********************************************************************
  * common.swg for wxPython
