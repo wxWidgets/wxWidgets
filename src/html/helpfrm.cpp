@@ -754,7 +754,7 @@ void wxHtmlHelpFrame::CreateContents()
     //     set its icon accordingly
     bool imaged[MAX_ROOTS]; 
     m_ContentsBox->DeleteAllItems();
-    
+
     // Don't show (Help) root if there's only one boook
     if (booksCnt > 1)
     {
@@ -773,8 +773,10 @@ void wxHtmlHelpFrame::CreateContents()
             if (booksCnt == 1)
             {
                 roots[0] = roots[1] = m_ContentsBox->AddRoot(
-                                         it->m_Name, IMG_Page, -1,
+                                         it->m_Name, IMG_Book, -1,
                                          new wxHtmlHelpTreeItemData(i));
+                imaged[0] = imaged[1] = TRUE;
+                m_ContentsBox->SetItemBold(roots[1], TRUE);
             }
             // multiple books:
             else
