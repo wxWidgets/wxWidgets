@@ -157,9 +157,6 @@ int wxNotebook::GetRowCount() const
 
 int wxNotebook::SetSelection(size_t nPage)
 {
-    if (nPage == -1)
-      return 0;
-
     wxASSERT( IS_VALID_PAGE(nPage) );
 
 #if defined (__WIN16__)
@@ -340,18 +337,18 @@ wxWindow* wxNotebook::DoRemovePage(size_t nPage)
     {
       // Only change the selection if the page we
       // deleted was the selection.
-      if (nPage == m_nSelection)
+      if (nPage == (size_t)m_nSelection)
       {
          m_nSelection = -1;
          // Select the first tab. Generates a ChangePage.
-         m_tabView->SetTabSelection((int) (long) GetPage(0), TRUE);
+         m_tabView->SetTabSelection(0, TRUE);
       }
       else
       {
 	// We must adjust which tab we think is selected.
         // If greater than the page we deleted, it must be moved down
         // a notch.
-        if (m_nSelection > nPage)
+        if (size_t(m_nSelection) > nPage)
           m_nSelection -- ;
       }
     }
