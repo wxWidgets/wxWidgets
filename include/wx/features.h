@@ -27,5 +27,13 @@
     #undef wxHAS_RAW_KEY_CODES
 #endif
 
+// taskbar is only implemented in wxMSW and X11 ports
+#if defined(__WXMSW__) || \
+        defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__X11__)
+    #define wxHAS_TASK_BAR_ICON
+#else
+    #undef wxHAS_TASK_BAR_ICON
+#endif
+
 #endif // _WX_FEATURES_H_
 

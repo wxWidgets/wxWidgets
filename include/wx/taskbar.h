@@ -1,6 +1,10 @@
 #ifndef _WX_TASKBAR_H_BASE_
 #define _WX_TASKBAR_H_BASE_
 
+#include "wx/defs.h"
+
+#ifdef wxHAS_TASK_BAR_ICON
+
 #include "wx/event.h"
 
 // ----------------------------------------------------------------------------
@@ -22,7 +26,6 @@ class WXDLLEXPORT wxTaskBarIconBase : public wxEvtHandler
     #include "wx/unix/taskbarx11.h"
 #endif
 
-#if !defined(__WXCOCOA__) // && !defined(__WXOS2__) etc...
 // ----------------------------------------------------------------------------
 // wxTaskBarIcon events
 // ----------------------------------------------------------------------------
@@ -58,6 +61,7 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_TASKBAR_RIGHT_DCLICK(fn) DECLARE_EVENT_TABLE_ENTRY(wxEVT_TASKBAR_RIGHT_DCLICK, -1, -1, (wxObjectEventFunction) (wxEventFunction) &fn, NULL),
 
 #endif
-    // !defined(__WXCOCOA__)
+    // wxHAS_TASK_BAR_ICON
+
 #endif
     // _WX_TASKBAR_H_BASE_
