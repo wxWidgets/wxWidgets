@@ -51,6 +51,8 @@ extern bool           g_blockEventsOnDrag;
 extern bool           g_blockEventsOnScroll;
 extern wxCursor       g_globalCursor;
 extern wxWindowGTK   *g_delayedFocus;
+extern wxWindowGTK   *g_focusWindow;
+extern wxWindowGTK   *g_focusWindowLast;
 
 static bool       g_hasDoubleClicked = FALSE;
 
@@ -85,6 +87,68 @@ extern "C" gint wxlistbox_idle_callback( gpointer gdata )
     gdk_threads_leave();
 
     return TRUE;
+}
+
+//-----------------------------------------------------------------------------
+// "focus_in_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_listitem_focus_in_callback( GtkWidget *widget,
+                                          GdkEvent *WXUNUSED(event),
+                                          wxWindow *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    g_focusWindowLast =
+    g_focusWindow = win;
+
+    // does the window itself think that it has the focus?
+    if ( !win->m_hasFocus )
+    {
+        // not yet, notify it
+        win->m_hasFocus = TRUE;
+        
+        wxChildFocusEvent eventChildFocus(win);
+        (void)win->GetEventHandler()->ProcessEvent(eventChildFocus);
+
+        wxFocusEvent eventFocus(wxEVT_SET_FOCUS, win->GetId());
+        eventFocus.SetEventObject(win);
+
+        (void)win->GetEventHandler()->ProcessEvent(eventFocus);
+    }
+
+    return FALSE;
+}
+
+//-----------------------------------------------------------------------------
+// "focus_out_event"
+//-----------------------------------------------------------------------------
+
+static gint gtk_listitem_focus_out_callback( GtkWidget *widget, GdkEventFocus *gdk_event, wxWindowGTK *win )
+{
+    if (g_isIdle)
+        wxapp_install_idle_handler();
+
+    g_focusWindow = (wxWindowGTK *)NULL;
+
+    // don't send the window a kill focus event if it thinks that it doesn't
+    // have focus already
+    if ( win->m_hasFocus )
+    {
+        win->m_hasFocus = FALSE;
+
+        wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
+        event.SetEventObject( win );
+
+        // even if we did process the event in wx code, still let GTK itself
+        // process it too as otherwise bad things happen, especially in GTK2
+        // where the text control simply aborts the program if it doesn't get
+        // the matching focus out event
+        (void)win->GetEventHandler()->ProcessEvent( event );
+    }
+
+    return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -606,6 +670,14 @@ void wxListBox::GtkAddItem( const wxString &item, int pos )
                            "key_press_event",
                            (GtkSignalFunc)gtk_listbox_key_press_callback,
                            (gpointer)this );
+
+
+    gtk_signal_connect( GTK_OBJECT(list_item), "focus_in_event",
+            GTK_SIGNAL_FUNC(gtk_listitem_focus_in_callback), (gpointer)this );
+
+    gtk_signal_connect( GTK_OBJECT(list_item), "focus_out_event",
+            GTK_SIGNAL_FUNC(gtk_listitem_focus_out_callback), (gpointer)this );
+
 
     ConnectWidget( list_item );
 
