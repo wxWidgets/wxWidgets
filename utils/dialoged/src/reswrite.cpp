@@ -36,9 +36,7 @@
 
 #include "reseditr.h"
 
-#if ( !defined(__WXMSW__) && defined(__WXMAC__) ) || defined( __VMS )
-static char wxBuffer[512];
-#endif
+static char deBuffer[512];
 
 char *SafeString(char *s);
 char *SafeWord(const wxString& s);
@@ -573,10 +571,10 @@ char *SafeString(const wxString& s)
         return "NULL";
     else
     {
-        strcpy(wxBuffer, "\"");
-        strcat(wxBuffer, s);
-        strcat(wxBuffer, "\"");
-        return wxBuffer;
+        strcpy(deBuffer, "\"");
+        strcat(deBuffer, s);
+        strcat(deBuffer, "\"");
+        return deBuffer;
     }
 }
 
@@ -590,7 +588,7 @@ char *SafeWord(const wxString& s)
         return "''";
     else
     {
-        dp = wxBuffer;
+        dp = deBuffer;
         cp = s.c_str();
         *dp++ = '\'';
         while(*cp != 0) {
@@ -608,7 +606,7 @@ char *SafeWord(const wxString& s)
         *dp++ = '\'';
         *dp++ = 0;
         
-        return wxBuffer;
+        return deBuffer;
     }
 }
 
