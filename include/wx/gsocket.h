@@ -26,7 +26,13 @@
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
 #include <stddef.h>
-#ifndef __WXMAC__
+
+/*
+   Including sys/types.h under cygwin results in the warnings about "fd_set
+   having been defined in sys/types.h" when winsock.h is included later and
+   doesn't seem to be necessary anyhow. It's not needed under Mac neither.
+ */
+#if !defined(__WXMAC__) && !defined(__CYGWIN__)
 #include <sys/types.h>
 #endif
 
