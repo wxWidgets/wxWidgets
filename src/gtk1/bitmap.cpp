@@ -243,15 +243,24 @@ wxBitmap::wxBitmap()
 
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
-    wxCHECK_RET( (width > 0) && (height > 0), wxT("invalid bitmap size") )
+    Create( width, height, depth );
+
+    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+}
+
+bool wxBitmap::Create( int width, int height, int depth )
+{
+    UnRef();
+
+    wxCHECK_MSG( (width > 0) && (height > 0), FALSE, wxT("invalid bitmap size") )
 
     GdkVisual *visual = gdk_window_get_visual( wxRootWindow->window );
     wxASSERT( visual );
 
     if (depth == -1) depth = visual->depth;
 
-    wxCHECK_RET( (depth == visual->depth) ||
-                 (depth == 1), wxT("invalid bitmap depth") )
+    wxCHECK_MSG( (depth == visual->depth) ||
+                 (depth == 1), FALSE, wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
     M_BMPDATA->m_mask = (wxMask *) NULL;
@@ -268,9 +277,8 @@ wxBitmap::wxBitmap( int width, int height, int depth )
         M_BMPDATA->m_bpp = visual->depth;
     }
 
-    if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+    return Ok();
 }
-
 bool wxBitmap::CreateFromXpm( const char **bits )
 {
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )

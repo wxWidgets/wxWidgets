@@ -74,6 +74,8 @@ public:
     bool operator != ( const wxBitmap& bmp );
     bool Ok() const;
 
+    bool Create(int width, int height, int depth = -1);
+    
     int GetHeight() const;
     int GetWidth() const;
     int GetDepth() const;
