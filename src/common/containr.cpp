@@ -342,8 +342,13 @@ bool wxControlContainer::DoSetFocus()
     wxLogTrace(_T("focus"), _T("SetFocus on wxPanel 0x%08lx."),
                (unsigned long)m_winParent->GetHandle());
 
+    // FIXME: this recursion protection is needed for wxMac,
+    // but on Windows (at least), it breaks focus handling.
+    // This needs to be investigated further.
+#ifdef __WXMAC__
     if (m_inSetFocus)
         return true;
+#endif    
 
     m_inSetFocus = true;
     
