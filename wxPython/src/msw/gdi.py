@@ -244,6 +244,66 @@ class wxCursor(wxCursorPtr):
 
 
 
+class wxNativeFontInfoPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def FromString(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_FromString,(self,) + _args, _kwargs)
+        return val
+    def ToString(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo_ToString,(self,) + _args, _kwargs)
+        return val
+    def __str__(self, *_args, **_kwargs):
+        val = apply(gdic.wxNativeFontInfo___str__,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxNativeFontInfo instance at %s>" % (self.this,)
+class wxNativeFontInfo(wxNativeFontInfoPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
+class wxFontMapperPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self,gdic=gdic):
+        if self.thisown == 1 :
+            gdic.delete_wxFontMapper(self)
+    def GetAltForEncoding(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_GetAltForEncoding,(self,) + _args, _kwargs)
+        return val
+    def IsEncodingAvailable(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_IsEncodingAvailable,(self,) + _args, _kwargs)
+        return val
+    def CharsetToEncoding(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_CharsetToEncoding,(self,) + _args, _kwargs)
+        return val
+    def SetDialogParent(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_SetDialogParent,(self,) + _args, _kwargs)
+        return val
+    def SetDialogTitle(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_SetDialogTitle,(self,) + _args, _kwargs)
+        return val
+    def SetConfig(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_SetConfig,(self,) + _args, _kwargs)
+        return val
+    def SetConfigPath(self, *_args, **_kwargs):
+        val = apply(gdic.wxFontMapper_SetConfigPath,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxFontMapper instance at %s>" % (self.this,)
+class wxFontMapper(wxFontMapperPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxFontMapper,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxFontPtr(wxGDIObjectPtr):
     def __init__(self,this):
         self.this = this
@@ -254,50 +314,54 @@ class wxFontPtr(wxGDIObjectPtr):
     def Ok(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_Ok,(self,) + _args, _kwargs)
         return val
-    def GetFaceName(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_GetFaceName,(self,) + _args, _kwargs)
+    def GetPointSize(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetPointSize,(self,) + _args, _kwargs)
         return val
     def GetFamily(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetFamily,(self,) + _args, _kwargs)
         return val
-    def GetFontId(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_GetFontId,(self,) + _args, _kwargs)
-        return val
-    def GetPointSize(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_GetPointSize,(self,) + _args, _kwargs)
-        return val
     def GetStyle(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetStyle,(self,) + _args, _kwargs)
-        return val
-    def GetUnderlined(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_GetUnderlined,(self,) + _args, _kwargs)
         return val
     def GetWeight(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetWeight,(self,) + _args, _kwargs)
         return val
+    def GetUnderlined(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetUnderlined,(self,) + _args, _kwargs)
+        return val
+    def GetFaceName(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetFaceName,(self,) + _args, _kwargs)
+        return val
     def GetEncoding(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetEncoding,(self,) + _args, _kwargs)
         return val
-    def SetFaceName(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_SetFaceName,(self,) + _args, _kwargs)
-        return val
-    def SetFamily(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_SetFamily,(self,) + _args, _kwargs)
+    def GetNativeFontInfo(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_GetNativeFontInfo,(self,) + _args, _kwargs)
+        if val: val = wxNativeFontInfoPtr(val) 
         return val
     def SetPointSize(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetPointSize,(self,) + _args, _kwargs)
         return val
+    def SetFamily(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_SetFamily,(self,) + _args, _kwargs)
+        return val
     def SetStyle(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetStyle,(self,) + _args, _kwargs)
-        return val
-    def SetUnderlined(self, *_args, **_kwargs):
-        val = apply(gdic.wxFont_SetUnderlined,(self,) + _args, _kwargs)
         return val
     def SetWeight(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetWeight,(self,) + _args, _kwargs)
         return val
+    def SetFaceName(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_SetFaceName,(self,) + _args, _kwargs)
+        return val
+    def SetUnderlined(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_SetUnderlined,(self,) + _args, _kwargs)
+        return val
     def SetEncoding(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_SetEncoding,(self,) + _args, _kwargs)
+        return val
+    def SetNativeFontInfo(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_SetNativeFontInfo,(self,) + _args, _kwargs)
         return val
     def GetFamilyString(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetFamilyString,(self,) + _args, _kwargs)
@@ -316,6 +380,11 @@ class wxFont(wxFontPtr):
         self.thisown = 1
 
 
+
+def wxFontFromNativeInfo(*_args,**_kwargs):
+    val = wxFontPtr(apply(gdic.new_wxFontFromNativeInfo,_args,_kwargs))
+    val.thisown = 1
+    return val
 
 
 class wxFontListPtr(wxObjectPtr):
@@ -1169,10 +1238,6 @@ def wxStockCursor(*_args, **_kwargs):
     if val: val = wxCursorPtr(val); val.thisown = 1
     return val
 
-wxFont_GetDefaultEncoding = gdic.wxFont_GetDefaultEncoding
-
-wxFont_SetDefaultEncoding = gdic.wxFont_SetDefaultEncoding
-
 def wxNamedColour(*_args, **_kwargs):
     val = apply(gdic.wxNamedColour,_args,_kwargs)
     if val: val = wxColourPtr(val); val.thisown = 1
@@ -1183,10 +1248,36 @@ def wxMemoryDCFromDC(*_args, **_kwargs):
     if val: val = wxMemoryDCPtr(val); val.thisown = 1
     return val
 
+wxFontMapper_GetEncodingName = gdic.wxFontMapper_GetEncodingName
+
+wxFontMapper_GetEncodingDescription = gdic.wxFontMapper_GetEncodingDescription
+
+wxFontMapper_GetDefaultConfigPath = gdic.wxFontMapper_GetDefaultConfigPath
+
+wxFont_GetDefaultEncoding = gdic.wxFont_GetDefaultEncoding
+
+wxFont_SetDefaultEncoding = gdic.wxFont_SetDefaultEncoding
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxFONTFAMILY_DEFAULT = gdic.wxFONTFAMILY_DEFAULT
+wxFONTFAMILY_DECORATIVE = gdic.wxFONTFAMILY_DECORATIVE
+wxFONTFAMILY_ROMAN = gdic.wxFONTFAMILY_ROMAN
+wxFONTFAMILY_SCRIPT = gdic.wxFONTFAMILY_SCRIPT
+wxFONTFAMILY_SWISS = gdic.wxFONTFAMILY_SWISS
+wxFONTFAMILY_MODERN = gdic.wxFONTFAMILY_MODERN
+wxFONTFAMILY_TELETYPE = gdic.wxFONTFAMILY_TELETYPE
+wxFONTFAMILY_MAX = gdic.wxFONTFAMILY_MAX
+wxFONTSTYLE_NORMAL = gdic.wxFONTSTYLE_NORMAL
+wxFONTSTYLE_ITALIC = gdic.wxFONTSTYLE_ITALIC
+wxFONTSTYLE_SLANT = gdic.wxFONTSTYLE_SLANT
+wxFONTSTYLE_MAX = gdic.wxFONTSTYLE_MAX
+wxFONTWEIGHT_NORMAL = gdic.wxFONTWEIGHT_NORMAL
+wxFONTWEIGHT_LIGHT = gdic.wxFONTWEIGHT_LIGHT
+wxFONTWEIGHT_BOLD = gdic.wxFONTWEIGHT_BOLD
+wxFONTWEIGHT_MAX = gdic.wxFONTWEIGHT_MAX
 wxFONTENCODING_SYSTEM = gdic.wxFONTENCODING_SYSTEM
 wxFONTENCODING_DEFAULT = gdic.wxFONTENCODING_DEFAULT
 wxFONTENCODING_ISO8859_1 = gdic.wxFONTENCODING_ISO8859_1
@@ -1204,6 +1295,7 @@ wxFONTENCODING_ISO8859_12 = gdic.wxFONTENCODING_ISO8859_12
 wxFONTENCODING_ISO8859_13 = gdic.wxFONTENCODING_ISO8859_13
 wxFONTENCODING_ISO8859_14 = gdic.wxFONTENCODING_ISO8859_14
 wxFONTENCODING_ISO8859_15 = gdic.wxFONTENCODING_ISO8859_15
+wxFONTENCODING_ISO8859_MAX = gdic.wxFONTENCODING_ISO8859_MAX
 wxFONTENCODING_KOI8 = gdic.wxFONTENCODING_KOI8
 wxFONTENCODING_ALTERNATIVE = gdic.wxFONTENCODING_ALTERNATIVE
 wxFONTENCODING_BULGARIAN = gdic.wxFONTENCODING_BULGARIAN
@@ -1212,9 +1304,19 @@ wxFONTENCODING_CP850 = gdic.wxFONTENCODING_CP850
 wxFONTENCODING_CP852 = gdic.wxFONTENCODING_CP852
 wxFONTENCODING_CP855 = gdic.wxFONTENCODING_CP855
 wxFONTENCODING_CP866 = gdic.wxFONTENCODING_CP866
+wxFONTENCODING_CP874 = gdic.wxFONTENCODING_CP874
 wxFONTENCODING_CP1250 = gdic.wxFONTENCODING_CP1250
 wxFONTENCODING_CP1251 = gdic.wxFONTENCODING_CP1251
 wxFONTENCODING_CP1252 = gdic.wxFONTENCODING_CP1252
+wxFONTENCODING_CP1253 = gdic.wxFONTENCODING_CP1253
+wxFONTENCODING_CP1254 = gdic.wxFONTENCODING_CP1254
+wxFONTENCODING_CP1255 = gdic.wxFONTENCODING_CP1255
+wxFONTENCODING_CP1256 = gdic.wxFONTENCODING_CP1256
+wxFONTENCODING_CP1257 = gdic.wxFONTENCODING_CP1257
+wxFONTENCODING_CP12_MAX = gdic.wxFONTENCODING_CP12_MAX
+wxFONTENCODING_UTF7 = gdic.wxFONTENCODING_UTF7
+wxFONTENCODING_UTF8 = gdic.wxFONTENCODING_UTF8
+wxFONTENCODING_UNICODE = gdic.wxFONTENCODING_UNICODE
 wxFONTENCODING_MAX = gdic.wxFONTENCODING_MAX
 cvar = gdic.cvar
 wxNORMAL_FONT = wxFontPtr(gdic.cvar.wxNORMAL_FONT)

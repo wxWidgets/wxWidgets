@@ -37,7 +37,7 @@ using wxColumnSorterMixin.
 
 Added wxGenBitmapTextButton, TablePrint, etc. contribs from Lorne White.
 
-
+Added wxNativeFontInfo and wxFontMapper.
 
 
 2.3.1

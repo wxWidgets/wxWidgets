@@ -20,6 +20,10 @@
 #ifndef __WXMSW__
 #include <wx/dcps.h>
 #endif
+#include <wx/fontmap.h>
+#include <wx/fontenc.h>
+#include <wx/fontmap.h>
+#include <wx/fontutil.h>
 %}
 
 //----------------------------------------------------------------------
@@ -291,6 +295,38 @@ public:
 //----------------------------------------------------------------------
 
 
+enum wxFontFamily
+{
+    wxFONTFAMILY_DEFAULT = wxDEFAULT,
+    wxFONTFAMILY_DECORATIVE = wxDECORATIVE,
+    wxFONTFAMILY_ROMAN = wxROMAN,
+    wxFONTFAMILY_SCRIPT = wxSCRIPT,
+    wxFONTFAMILY_SWISS = wxSWISS,
+    wxFONTFAMILY_MODERN = wxMODERN,
+    wxFONTFAMILY_TELETYPE = wxTELETYPE,
+    wxFONTFAMILY_MAX
+};
+
+// font styles
+enum wxFontStyle
+{
+    wxFONTSTYLE_NORMAL = wxNORMAL,
+    wxFONTSTYLE_ITALIC = wxITALIC,
+    wxFONTSTYLE_SLANT = wxSLANT,
+    wxFONTSTYLE_MAX
+};
+
+// font weights
+enum wxFontWeight
+{
+    wxFONTWEIGHT_NORMAL = wxNORMAL,
+    wxFONTWEIGHT_LIGHT = wxLIGHT,
+    wxFONTWEIGHT_BOLD = wxBOLD,
+    wxFONTWEIGHT_MAX
+};
+
+
+// font encodings
 enum wxFontEncoding
 {
     wxFONTENCODING_SYSTEM = -1,     // system default
@@ -300,7 +336,7 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_1,       // West European (Latin1)
     wxFONTENCODING_ISO8859_2,       // Central and East European (Latin2)
     wxFONTENCODING_ISO8859_3,       // Esperanto (Latin3)
-    wxFONTENCODING_ISO8859_4,       // Baltic languages (Estonian) (Latin4)
+    wxFONTENCODING_ISO8859_4,       // Baltic (old) (Latin4)
     wxFONTENCODING_ISO8859_5,       // Cyrillic
     wxFONTENCODING_ISO8859_6,       // Arabic
     wxFONTENCODING_ISO8859_7,       // Greek
@@ -311,9 +347,10 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
                                     // here anyhow to make all ISO8859
                                     // consecutive numbers
-    wxFONTENCODING_ISO8859_13,      // Latin7
+    wxFONTENCODING_ISO8859_13,      // Baltic (Latin7)
     wxFONTENCODING_ISO8859_14,      // Latin8
     wxFONTENCODING_ISO8859_15,      // Latin9 (a.k.a. Latin0, includes euro)
+    wxFONTENCODING_ISO8859_MAX,
 
     // Cyrillic charset soup (see http://czyborra.com/charsets/cyrillic.html)
     wxFONTENCODING_KOI8,            // we don't support any of KOI8 variants
@@ -328,12 +365,135 @@ enum wxFontEncoding
     wxFONTENCODING_CP855,           // another cyrillic encoding
     wxFONTENCODING_CP866,           // and another one
         // and for Windows
+    wxFONTENCODING_CP874,           // WinThai
     wxFONTENCODING_CP1250,          // WinLatin2
     wxFONTENCODING_CP1251,          // WinCyrillic
     wxFONTENCODING_CP1252,          // WinLatin1
+    wxFONTENCODING_CP1253,          // WinGreek (8859-7)
+    wxFONTENCODING_CP1254,          // WinTurkish
+    wxFONTENCODING_CP1255,          // WinHebrew
+    wxFONTENCODING_CP1256,          // WinArabic
+    wxFONTENCODING_CP1257,          // WinBaltic (same as Latin 7)
+    wxFONTENCODING_CP12_MAX,
+
+    wxFONTENCODING_UTF7,            // UTF-7 Unicode encoding
+    wxFONTENCODING_UTF8,            // UTF-8 Unicode encoding
+
+    wxFONTENCODING_UNICODE,         // Unicode - currently used only by
+                                    // wxEncodingConverter class
 
     wxFONTENCODING_MAX
 };
+
+
+
+// wxNativeFontInfo is platform-specific font representation: this struct
+// should be considered as opaque font description only used by the native
+// functions, the user code can only get the objects of this type from
+// somewhere and pass it somewhere else (possibly save them somewhere using
+// ToString() and restore them using FromString())
+struct wxNativeFontInfo
+{
+    // it is important to be able to serialize wxNativeFontInfo objects to be
+    // able to store them (in config file, for example)
+    bool FromString(const wxString& s);
+    wxString ToString() const;
+
+    %addmethods {
+        wxString __str__() {
+            return self->ToString();
+        }
+    }
+};
+
+
+// wxFontMapper manages user-definable correspondence between logical font
+// names and the fonts present on the machine.
+//
+// The default implementations of all functions will ask the user if they are
+// not capable of finding the answer themselves and store the answer in a
+// config file (configurable via SetConfigXXX functions). This behaviour may
+// be disabled by giving the value of FALSE to "interactive" parameter.
+// However, the functions will always consult the config file to allow the
+// user-defined values override the default logic and there is no way to
+// disable this - which shouldn't be ever needed because if "interactive" was
+// never TRUE, the config file is never created anyhow.
+class  wxFontMapper
+{
+public:
+    wxFontMapper();
+    ~wxFontMapper();
+
+
+    // find an alternative for the given encoding (which is supposed to not be
+    // available on this system). If successful, return TRUE and rwxFontEcoding
+    // that can be used it wxFont ctor otherwise return FALSE
+    //bool GetAltForEncoding(wxFontEncoding encoding,
+    //                       wxFontEncoding *alt_encoding,
+    //                       const wxString& facename = wxEmptyString,
+    //                       bool interactive = TRUE);
+
+
+    // Find an alternative for the given encoding (which is supposed to not be
+    // available on this system). If successful, returns the encoding otherwise
+    // returns None.
+    %addmethods {
+        PyObject* GetAltForEncoding(wxFontEncoding encoding,
+                                    const wxString& facename = wxEmptyString,
+                                    bool interactive = TRUE) {
+            wxFontEncoding alt_enc;
+            if (self->GetAltForEncoding(encoding, &alt_enc, facename, interactive))
+                return PyInt_FromLong(alt_enc);
+            else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+    }
+
+
+    // checks whether given encoding is available in given face or not.
+    // If no facename is given,
+    bool IsEncodingAvailable(wxFontEncoding encoding,
+                             const wxString& facename = wxEmptyString);
+
+    // returns the encoding for the given charset (in the form of RFC 2046) or
+    // wxFONTENCODING_SYSTEM if couldn't decode it
+    wxFontEncoding CharsetToEncoding(const wxString& charset,
+                                     bool interactive = TRUE);
+
+    // return internal string identifier for the encoding (see also
+    // GetEncodingDescription())
+    static wxString GetEncodingName(wxFontEncoding encoding);
+
+    // return user-readable string describing the given encoding
+    //
+    // NB: hard-coded now, but might change later (read it from config?)
+    static wxString GetEncodingDescription(wxFontEncoding encoding);
+
+    // the parent window for modal dialogs
+    void SetDialogParent(wxWindow *parent);
+
+    // the title for the dialogs (note that default is quite reasonable)
+    void SetDialogTitle(const wxString& title);
+
+    // functions which allow to configure the config object used: by default,
+    // the global one (from wxConfigBase::Get() will be used) and the default
+    // root path for the config settings is the string returned by
+    // GetDefaultConfigPath()
+
+
+    // set the config object to use (may be NULL to use default)
+    void SetConfig(wxConfigBase *config);
+
+    // set the root config path to use (should be an absolute path)
+    void SetConfigPath(const wxString& prefix);
+
+    // return default config path
+    static const wxChar *GetDefaultConfigPath();
+};
+
+
 
 
 class wxFont : public wxGDIObject {
@@ -341,40 +501,38 @@ public:
     wxFont( int pointSize, int family, int style, int weight,
             int underline=FALSE, char* faceName = "",
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
+
+    %name(wxFontFromNativeInfo)wxFont(const wxNativeFontInfo& info);
+
     ~wxFont();
 
-    bool Ok();
-    wxString GetFaceName();
-    int GetFamily();
-#ifdef __WXMSW__
-    int GetFontId();
-#endif
-    int GetPointSize();
-    int GetStyle();
-    bool GetUnderlined();
-    int GetWeight();
-    wxFontEncoding GetEncoding();
-    void SetFaceName(const wxString& faceName);
-    void SetFamily(int family);
+    bool Ok() const;
+    int GetPointSize() const;
+    int GetFamily() const;
+    int GetStyle() const;
+    int GetWeight() const;
+    bool GetUnderlined() const;
+    wxString GetFaceName() const;
+    wxFontEncoding GetEncoding() const;
+    wxNativeFontInfo* GetNativeFontInfo() const;
+
     void SetPointSize(int pointSize);
+    void SetFamily(int family);
     void SetStyle(int style);
-    void SetUnderlined(bool underlined);
     void SetWeight(int weight);
+    void SetFaceName(const wxString& faceName);
+    void SetUnderlined(bool underlined);
     void SetEncoding(wxFontEncoding encoding);
-    wxString GetFamilyString();
-    wxString GetStyleString();
-    wxString GetWeightString();
+    void SetNativeFontInfo(const wxNativeFontInfo& info);
+
+    wxString GetFamilyString() const;
+    wxString GetStyleString() const;
+    wxString GetWeightString() const;
+
+    static wxFontEncoding GetDefaultEncoding();
+    static void SetDefaultEncoding(wxFontEncoding encoding);
+
 };
-
-%inline %{
-    wxFontEncoding wxFont_GetDefaultEncoding() {
-        return wxFont::GetDefaultEncoding();
-    }
-
-    void wxFont_SetDefaultEncoding(wxFontEncoding encoding) {
-        wxFont::SetDefaultEncoding(encoding);
-    }
-%}
 
 
 class wxFontList : public wxObject {
