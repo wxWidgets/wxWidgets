@@ -129,16 +129,20 @@ void wxScrolledWindow::SetScrollbars (int pixelsPerUnitX, int pixelsPerUnitY,
                int noUnitsX, int noUnitsY,
                int xPos, int yPos, bool noRefresh )
 {
+    int xpos, ypos;
+
+    CalcUnscrolledPosition(xPos, yPos, &xpos, &ypos);
     bool do_refresh =
     (
       (noUnitsX != 0 && m_xScrollLines == 0) ||
-      (noUnitsX < m_xScrollLines) ||
+      (noUnitsX < m_xScrollLines && xpos > pixelsPerUnitX*noUnitsX) || 
+
       (noUnitsY != 0 && m_yScrollLines == 0) ||
-      (noUnitsY < m_yScrollLines) ||
+      (noUnitsY < m_yScrollLines && ypos > pixelsPerUnitY*noUnitsY) ||
       (xPos != m_xScrollPosition) ||
-      (yPos != m_yScrollPosition) ||
-      (pixelsPerUnitX != m_xScrollPixelsPerLine) ||
-      (pixelsPerUnitY != m_yScrollPixelsPerLine)
+      (yPos != m_yScrollPosition)
+//       (pixelsPerUnitX != m_xScrollPixelsPerLine) ||
+//       (pixelsPerUnitY != m_yScrollPixelsPerLine)
     );
 
     m_xScrollPixelsPerLine = pixelsPerUnitX;
