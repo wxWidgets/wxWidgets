@@ -129,11 +129,18 @@ int TestApp::OnRun()
             runner.addTest(test.release());
     }
 
+#if wxUSE_LOG
     // Switch off logging unless --verbose
     wxLog::EnableLogging(wxLog::GetVerbose());
+#endif // wxUSE_LOG
 
-    return m_list || runner.run("", false, true, !wxLog::GetVerbose()) ?
-        EXIT_SUCCESS : EXIT_FAILURE;
+    return m_list || runner.run("", false, true, 
+#if wxUSE_LOG
+        !wxLog::GetVerbose()
+#else
+        true
+#endif // wxUSE_LOG
+    ) ? EXIT_SUCCESS : EXIT_FAILURE;
 }
 
 // List the tests
