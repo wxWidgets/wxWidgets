@@ -64,9 +64,15 @@ function usage {
     echo "   skiplinux    Don't do the remote Linux build"
     echo "   skipclean    Don't do the cleanup step on the remote builds"
     echo "   skipupload   Don't upload the builds to starship"
+    echo "   parallel     parallelize the builds where possible"
     echo ""
+}
 
 
+
+function PrefixLines {
+    label=$1
+    tee tmp/$label.log | awk "{ print \"** $label: \" \$0; fflush();  }"
 }
 
 # ---------------------------------------------------------------------------
@@ -92,6 +98,7 @@ skiposx=no
 skiplinux=no
 skipclean=no
 skipupload=no
+parallel=no
 
 for flag in $*; do
     case $flag in 
@@ -111,6 +118,8 @@ for flag in $*; do
 	skiplinux)   skiplinux=yes               ;;
 	skipclean)   skipclean=yes               ;;
 	skipupload)  skipupload=yes              ;;
+	parallel)    parallel=yes                ;;
+	noparallel)  parallel=no                 ;;
 
 	help) usage; exit 1                      ;;
 	*)    echo "Unknown flag \"$flag\""
@@ -193,7 +202,20 @@ fi
 # ---------------------------------------------------------------------------
 # Windows build
 
-if [ $skipwin != yes ]; then
+function DoWindowsBuild {
+    set -o errexit
+
+    # test if the target machine is online
+    if ping -q -c1 -w1 $WIN_HOST > /dev/null; then
+	echo "-----------------------------------------------------------------"
+	echo " The $WIN_HOST machine is online, Windows build continuing..."
+	echo "-----------------------------------------------------------------"
+    else
+	echo "-----------------------------------------------------------------"
+	echo "The $WIN_HOST machine is offline, skipping the Windows build."
+	echo "-----------------------------------------------------------------"
+	return 0
+    fi
     echo "-=-=- Starting Windows build..."
 
     echo "Copying source file and build script..."
@@ -209,6 +231,15 @@ if [ $skipwin != yes ]; then
      echo "Fetching the results..."
      scp "$WIN_HOST:$WIN_BUILD/wxPython*-win32*"  $STAGING_DIR
      ssh $WIN_HOST "rm $WIN_BUILD/wxPython*-win32*"
+}
+
+if [ $skipwin != yes ]; then
+    if [ $parallel = no ]; then
+	DoWindowsBuild
+    else
+	DoWindowsBuild 2>&1 | PrefixLines $WIN_HOST &
+	winPID=$!
+    fi
 fi
 
 
@@ -218,6 +249,8 @@ fi
 function DoOSXBuild {
     local host=$1
     local flavor=$2
+
+    set -o errexit
 
     # test if the target machine is online
     if ping -q -c1 -w1 $host > /dev/null; then
@@ -255,11 +288,15 @@ function DoOSXBuild {
 
 
 if [ $skiposx != yes ]; then
-
-    DoOSXBuild $OSX_HOST_jaguar jaguar
-    DoOSXBuild $OSX_HOST_panther panther
-
+    if [ $parallel = no ]; then
+	DoOSXBuild $OSX_HOST_jaguar jaguar
+	DoOSXBuild $OSX_HOST_panther panther
+    else
+	DoOSXBuild $OSX_HOST_jaguar jaguar   2>&1 | PrefixLines $OSX_HOST_jaguar  &
+	DoOSXBuild $OSX_HOST_panther panther 2>&1 | PrefixLines $OSX_HOST_panther &
+    fi
 fi
+
 
 
 # ---------------------------------------------------------------------------
@@ -270,11 +307,15 @@ fi
 # binary RPMs is a very simple followup step.  But then add to that
 # the fact that we need to build on more than one distro...
 
+
+
 function DoLinuxBuild {
     local host=$1
     local reltag=$2
     shift;shift
     local pyver=$@
+
+    set -o errexit
 
     # test if the target machine is online
     if ping -q -c1 -w1 $host > /dev/null; then
@@ -304,13 +345,48 @@ function DoLinuxBuild {
 
 }
 
+
+
+
 if [ $skiplinux != yes ]; then
 
-    DoLinuxBuild co-rh9 rh9 $PYVER
-    DoLinuxBuild co-fc2 fc2 2.3
+    if [ $parallel = no ]; then
+	DoLinuxBuild co-rh9    rh9    $PYVER
+	DoLinuxBuild co-fc2    fc2    2.3
+	DoLinuxBuild co-mdk92  mdk92  2.3
+	DoLinuxBuild co-mdk101 mdk101 2.3
+    else
 
+        # Since the linux builds are currently done in coLinux
+        # 'machines' running on the WIN_HOST let's wait for the
+        # windows build to be done before launching them
+
+	#if [ -n $winPID ]; then
+	#    wait $winPID
+	#fi
+
+	(DoLinuxBuild co-rh9    rh9    $PYVER 2>&1 | PrefixLines co-rh9 &; \
+	 DoLinuxBuild co-fc2    fc2    2.3    2>&1 | PrefixLines co-fc2    ) &
+
+	wait $!  # wait for the previous two to complete before starting the next two
+
+	(DoLinuxBuild co-mdk92  mdk92  2.3    2>&1 | PrefixLines co-mdk92  &; \
+	 DoLinuxBuild co-mdk101 mdk101 2.3    2>&1 | PrefixLines co-mdk101    ) &
+    fi
 fi
 
+
+# ---------------------------------------------------------------------------
+
+if [ $parallel = yes ]; then
+
+    # TODO:  Figure out how to test if all the builds were successful
+
+    echo "***********************************"
+    echo " Waiting for builds to complete... "
+    echo "***********************************"
+    wait
+fi
 
 # ---------------------------------------------------------------------------
 # Final disposition of build results...
