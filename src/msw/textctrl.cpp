@@ -378,29 +378,34 @@ wxString wxTextCtrl::GetValue() const
 #if wxUSE_RICHEDIT
     if ( m_isRich )
     {
-        int len = GetWindowTextLength(GetHwnd()) + 1;
-
         wxString str;
-        wxChar *p = str.GetWriteBuf(len);
 
-        TEXTRANGE textRange;
-        textRange.chrg.cpMin = 0;
-        textRange.chrg.cpMax = -1;
-        textRange.lpstrText = p;
-
-        (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
-
-        // believe it or not, but EM_GETTEXTRANGE uses just CR ('\r') for the
-        // newlines which is neither Unix nor Windows style (Win95 with
-        // riched20.dll shows this behaviour) - convert it to something
-        // reasonable
-        for ( ; *p; p++ )
+        int len = GetWindowTextLength(GetHwnd());
+        if ( len )
         {
-            if ( *p == _T('\r') )
-                *p = _T('\n');
-        }
+            // alloc one extra WORD as needed by the control
+            wxChar *p = str.GetWriteBuf(++len);
 
-        str.UngetWriteBuf();
+            TEXTRANGE textRange;
+            textRange.chrg.cpMin = 0;
+            textRange.chrg.cpMax = -1;
+            textRange.lpstrText = p;
+
+            (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
+
+            // believe it or not, but EM_GETTEXTRANGE uses just CR ('\r') for
+            // the newlines which is neither Unix nor Windows style (Win95 with
+            // riched20.dll shows this behaviour) - convert it to something
+            // reasonable
+            for ( ; *p; p++ )
+            {
+                if ( *p == _T('\r') )
+                    *p = _T('\n');
+            }
+
+            str.UngetWriteBuf();
+        }
+        //else: no text at all, leave the string empty
 
         return str;
     }
