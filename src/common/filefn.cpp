@@ -1021,11 +1021,9 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 
-#ifdef __UNIX__
     // reset the umask as we want to create the file with exactly the same
     // permissions as the original one
-    mode_t oldUmask = umask( 0 );
-#endif // __UNIX__
+    wxCHANGE_UMASK(0);
 
     // create file2 with the same permissions than file1 and open it for
     // writing
@@ -1033,11 +1031,6 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     wxFile fileOut;
     if ( !fileOut.Create(file2, overwrite, fbuf.st_mode & 0777) )
         return false;
-
-#ifdef __UNIX__
-    /// restore the old umask
-    umask(oldUmask);
-#endif // __UNIX__
 
     // copy contents of file1 to file2
     char buf[4096];

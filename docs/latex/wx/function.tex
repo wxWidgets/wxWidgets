@@ -31,6 +31,7 @@ the corresponding topic.
 \helpref{wxBITMAP}{wxbitmapmacro}\\
 \helpref{wxBeginBusyCursor}{wxbeginbusycursor}\\
 \helpref{wxBell}{wxbell}\\
+\helpref{wxCHANGE\_UMASK}{wxchangeumask}\\
 \helpref{wxCHECK}{wxcheck}\\
 \helpref{wxCHECK2\_MSG}{wxcheck2msg}\\
 \helpref{wxCHECK2}{wxcheck2}\\
@@ -890,7 +891,7 @@ threads.
 
 \wxheading{Include files}
 
-<wx/utils.h>
+<wx/filefn.h>
 
 \wxheading{See also}
 
@@ -1030,6 +1031,18 @@ Returns the directory part of the filename.
 
 Converts a Unix to a DOS filename by replacing forward
 slashes with backslashes.
+
+
+\membersection{wxCHANGE\_UMASK}\label{wxchangeumask}
+
+\func{}{wxCHANGE\_UMASK}{\param{int }{mask}}
+
+Under Unix this macro changes the current process umask to the given value,
+unless it is equal to $-1$ in which case nothing is done, and restores it to
+the original value on scope exit. It works by declaring a variable which sets
+umask to \arg{mask} in its constructor and restores it in its destructor.
+
+Under other platforms this macro expands to nothing.
 
 
 \membersection{::wxConcatFiles}\label{wxconcatfiles}

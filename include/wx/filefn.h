@@ -549,6 +549,41 @@ WXDLLIMPEXP_BASE int wxParseCommonDialogsFilter(const wxString& wildCard, wxArra
 // classes
 // ----------------------------------------------------------------------------
 
+#ifdef __UNIX__
+
+// set umask to the given value in ctor and reset it to the old one in dtor
+class WXDLLIMPEXP_BASE wxUmaskChanger
+{
+public:
+    // change the umask to the given one if it is not -1: this allows to write
+    // the same code whether you really want to change umask or not, as is in
+    // wxFileConfig::Flush() for example
+    wxUmaskChanger(int umaskNew)
+    {
+        m_umaskOld = umaskNew == -1 ? -1 : umask((mode_t)umaskNew);
+    }
+
+    ~wxUmaskChanger()
+    {
+        if ( m_umaskOld != -1 )
+            umask((mode_t)m_umaskOld);
+    }
+
+private:
+    int m_umaskOld;
+};
+
+// this macro expands to an "anonymous" wxUmaskChanger object under Unix and
+// nothing elsewhere
+#define wxCHANGE_UMASK(m) wxUmaskChanger wxMAKE_UNIQUE_NAME(umaskChanger_)(m)
+
+#else // !__UNIX__
+
+#define wxCHANGE_UMASK(m)
+
+#endif // __UNIX__/!__UNIX__
+
+
 // Path searching
 class WXDLLIMPEXP_BASE wxPathList : public wxStringList
 {

@@ -39,6 +39,7 @@
 #include  "wx/memtext.h"
 #include  "wx/config.h"
 #include  "wx/fileconf.h"
+#include  "wx/filefn.h"
 
 #if wxUSE_STREAMS
     #include  "wx/stream.h"
@@ -60,12 +61,6 @@
 
 #include  <stdlib.h>
 #include  <ctype.h>
-
-// headers needed for umask()
-#ifdef __UNIX__
-    #include <sys/types.h>
-    #include <sys/stat.h>
-#endif // __UNIX__
 
 // ----------------------------------------------------------------------------
 // macros
@@ -476,7 +471,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 #if wxUSE_STREAMS
 
 wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
-        : m_conv(conv)
+            : m_conv(conv)
 {
     // always local_file when this constructor is called (?)
     SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
@@ -965,14 +960,8 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   if ( LineListIsEmpty() || !m_pRootGroup->IsDirty() || !m_strLocalFile )
     return true;
 
-#ifdef __UNIX__
   // set the umask if needed
-  mode_t umaskOld = 0;
-  if ( m_umask != -1 )
-  {
-      umaskOld = umask((mode_t)m_umask);
-  }
-#endif // __UNIX__
+  wxCHANGE_UMASK(m_umask);
 
   wxTempFile file(m_strLocalFile);
 
@@ -1015,14 +1004,6 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
         }
     }
 #endif // __WXMAC__
-
-#ifdef __UNIX__
-  // restore the old umask if we changed it
-  if ( m_umask != -1 )
-  {
-      (void)umask(umaskOld);
-  }
-#endif // __UNIX__
 
   return ret;
 }
