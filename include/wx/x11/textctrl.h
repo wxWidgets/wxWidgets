@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.h
+// Name:        wx/x11/textctrl.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
@@ -43,9 +43,9 @@ class wxSourceUndoStep: public wxObject
 {
 public:
     wxSourceUndoStep( wxSourceUndo type, int y1, int y2, wxTextCtrl *owner );
-    
+
     void Undo();
-    
+
     wxSourceUndo    m_type;
     int             m_y1;
     int             m_y2;
@@ -63,7 +63,7 @@ public:
     {
         m_text = text;
     }
-    
+
     wxString       m_text;
 };
 
@@ -102,12 +102,12 @@ public:
                 long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString &name = wxTextCtrlNameStr);
-               
+
     // required for scrolling with wxScrollHelper
     // ------------------------------------------
 
     virtual void PrepareDC(wxDC& dc) { DoPrepareDC(dc); }
-    
+
     // implement base class pure virtuals
     // ----------------------------------
 
@@ -123,11 +123,11 @@ public:
 
     // more readable flag testing methods
     // ----------------------------------
-    
+
     bool IsSingleLine() const { return !(GetWindowStyle() & wxTE_MULTILINE); }
     bool IsPassword() const { return (GetWindowStyle() & wxTE_PASSWORD) != 0; }
     bool WrapLines() const { return FALSE; }
-    
+
     // If the return values from and to are the same, there is no selection.
     virtual void GetSelection(long* from, long* to) const;
 
@@ -182,7 +182,7 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
-    virtual bool Enable( bool enable );
+    virtual bool Enable( bool enable = TRUE );
 
     void OnCut(wxCommandEvent& event);
     void OnCopy(wxCommandEvent& event);
@@ -210,36 +210,36 @@ public:
     virtual bool ScrollPages(int pages);
 
     // not part of the wxTextCtrl API from now on..
-    
+
     void SetLanguage( wxSourceLanguage lang = wxSOURCE_LANG_NONE );
 
     void Delete();
     void DeleteLine();
-    
+
     void Indent();
     void Unindent();
-    
+
     bool HasSelection();
     void ClearSelection();
-    
+
     int GetCursorX()                        { return m_cursorX; }
     int GetCursorY()                        { return m_cursorY; }
     bool IsModified()                       { return m_modified; }
     bool OverwriteMode()                    { return m_overwrite; }
 
     // implementation from now on...
-    
+
     int PosToPixel( int line, int pos );
     int PixelToPos( int line, int pixel );
 
     void SearchForBrackets();
-    
+
     void DoChar( char c );
     void DoBack();
     void DoDelete();
     void DoReturn();
     void DoDClick();
-    
+
     wxString GetNextToken( wxString &line, size_t &pos );
 
     void DrawLinePart( wxDC &dc, int x, int y, const wxString &toDraw, const wxString &origin, const wxColour &colour);
@@ -251,12 +251,12 @@ public:
     void OnIdle( wxIdleEvent &event );
     void OnSetFocus( wxFocusEvent& event );
     void OnKillFocus( wxFocusEvent& event );
-    
+
     void RefreshLine( int n );
     void RefreshDown( int n );
     void MoveCursor( int new_x, int new_y, bool shift = FALSE, bool centre = FALSE );
     void MyAdjustScrollbars();
-    
+
 protected:
     // common part of all ctors
     void Init();
@@ -271,38 +271,38 @@ protected:
     wxColour           m_sourceColour;
     wxColour           m_commentColour;
     wxColour           m_stringColour;
-    
+
     int                m_cursorX;
     int                m_cursorY;
-    
+
     int                m_selStartX,m_selStartY;
     int                m_selEndX,m_selEndY;
-    
+
     int                m_lineHeight;
     int                m_charWidth;
-    
+
     int                m_longestLine;
-    
+
     bool               m_overwrite;
     bool               m_modified;
     bool               m_editable;
     bool               m_ignoreInput;
-    
+
     wxArrayString      m_keywords;
     wxColour           m_keywordColour;
-    
+
     wxArrayString      m_defines;
     wxColour           m_defineColour;
-    
+
     wxArrayString      m_variables;
     wxColour           m_variableColour;
-    
+
     wxSourceLanguage   m_lang;
-    
+
     wxList             m_undos;
-    
+
     bool               m_capturing;
-    
+
     int                m_bracketX;
     int                m_bracketY;
 

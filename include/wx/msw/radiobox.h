@@ -66,9 +66,9 @@ public:
     virtual int GetColumnCount() const;
     virtual int GetRowCount() const;
 
-    bool Show(bool show);
+    virtual bool Show(bool show = TRUE);
     void SetFocus();
-    bool Enable(bool enable);
+    virtual bool Enable(bool enable = TRUE);
     void SetLabelFont(const wxFont& WXUNUSED(font)) {};
     void SetButtonFont(const wxFont& font) { SetFont(font); }
 

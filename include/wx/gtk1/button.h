@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        button.h
+// Name:        wx/gtk/button.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __GTKBUTTONH__
@@ -39,7 +39,7 @@ class wxButton: public wxControl
 {
 public:
     wxButton();
-    inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
+    wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
@@ -47,23 +47,25 @@ public:
     {
       Create(parent, id, label, pos, size, style, validator, name);
     }
-    ~wxButton();
+    virtual ~wxButton();
+
     bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
+
     virtual void SetDefault();
-    void SetLabel( const wxString &label );
-    bool Enable( bool enable );
+    virtual void SetLabel( const wxString &label );
+    virtual bool Enable( bool enable = TRUE );
 
     static wxSize GetDefaultSize();
-    
+
     // implementation
     // --------------
-  
-    void ApplyWidgetStyle();    
-    
+
+    void ApplyWidgetStyle();
+
 protected:
     virtual wxSize DoGetBestSize() const;
 

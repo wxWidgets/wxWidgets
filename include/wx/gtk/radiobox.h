@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        radiobox.h
+// Name:        wx/gtk/radiobox.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:           wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -42,7 +42,7 @@ public:
         Create( parent, id, title, pos, size, n, choices, majorDim, style, val, name );
     }
 
-    ~wxRadioBox();
+    virtual ~wxRadioBox();
     bool Create(wxWindow *parent,
                 wxWindowID id,
                 const wxString& title,
@@ -81,10 +81,10 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_2
 
     // we have to override those to avoid virtual function name hiding
-    wxString GetLabel() const { return wxControl::GetLabel(); }
-    void SetLabel( const wxString& label );
-    bool Show( bool show );
-    bool Enable( bool enable );
+    virtual wxString GetLabel() const { return wxControl::GetLabel(); }
+    virtual void SetLabel( const wxString& label );
+    virtual bool Show( bool show = TRUE );
+    virtual bool Enable( bool enable = TRUE );
 
     // implementation
     // --------------

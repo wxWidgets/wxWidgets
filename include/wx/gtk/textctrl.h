@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        textctrl.h
+// Name:        wx/gtk/textctrl.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
@@ -14,12 +14,6 @@
 #ifdef __GNUG__
     #pragma interface "textctrl.h"
 #endif
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxTextCtrl;
 
 //-----------------------------------------------------------------------------
 // wxTextCtrl
@@ -114,7 +108,7 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
-    virtual bool Enable( bool enable );
+    virtual bool Enable( bool enable = TRUE );
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );

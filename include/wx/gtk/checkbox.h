@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        checkbox.h
+// Name:        wx/gtk/checkbox.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -42,8 +42,8 @@ public:
     void SetValue( bool state );
     bool GetValue() const;
 
-    void SetLabel( const wxString& label );
-    bool Enable( bool enable );
+    virtual void SetLabel( const wxString& label );
+    virtual bool Enable( bool enable = TRUE );
 
     // implementation
     // --------------
@@ -54,7 +54,7 @@ public:
 
     GtkWidget *m_widgetCheckbox;
     GtkWidget *m_widgetLabel;
-    
+
     bool       m_blockEvent;
 
 protected:

@@ -58,10 +58,10 @@ public:
     virtual int GetRowCount() const ;
 
 
-	bool Enable(bool enable);
-	wxString GetLabel() const;
-	void SetLabel(const wxString& label) ;
-	bool Show(bool show);
+	virtual bool Enable(bool enable = TRUE);
+	virtual wxString GetLabel() const;
+	virtual void SetLabel(const wxString& label) ;
+	virtual bool Show(bool show = TRUE);
 
 // Other external functions 
 	void Command(wxCommandEvent& event);
