@@ -155,6 +155,7 @@ wx_include_HEADERS = \
  thread.h \
  time.h \
  timer.h \
+ tipdlg.h \
  tokenzr.h \
  toolbar.h \
  tooltip.h \

@@ -25,7 +25,6 @@ wx_gtk_include_HEADERS = \
  dc.h \
  dcclient.h \
  dcmemory.h \
- dcps.h \
  dcscreen.h \
  dialog.h \
  dnd.h \
