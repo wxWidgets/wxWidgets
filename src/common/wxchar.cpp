@@ -1392,8 +1392,8 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 // missing C RTL functions
 // ----------------------------------------------------------------------------
 
-#if defined( __MWERKS__ ) && !defined(__MACH__)
-#if __MSL__ < 0x00008000
+#if (defined(__MWERKS__) && !defined(__MACH__) && (__MSL__ < 0x00008000)) || \
+     defined(__WXWINCE__)
 char *strdup(const char *s)
 {
     char *dest = (char*) malloc( strlen( s ) + 1 ) ;
@@ -1402,21 +1402,15 @@ char *strdup(const char *s)
     return dest ;
 }
 #endif
+
+#if (defined(__MWERKS__) && !defined(__MACH__)) || defined(__WXWINCE__)
 int isascii( int c )
 {
-        return ( c >= 0 && c < 128 ) ;
+    return ( c >= 0 && c < 128 );
 }
-#endif // __MWERKS__
+#endif
 
-#ifdef __WXWINCE__
-char* strdup(const char* s)
-{
-    char *dest = (char*) malloc( strlen( s ) + 1 ) ;
-    if ( dest )
-        strcpy( dest , s ) ;
-    return dest ;
-}
-
+#if defined(__WXWINCE__)
 void *calloc( size_t num, size_t size )
 {
     void** ptr = (void **)malloc(num * size);
@@ -1428,11 +1422,4 @@ int isspace(int c)
 {
     return (c == ' ');
 }
-
-int isascii( int c )
-{
-        return ( c >= 0 && c < 128 ) ;
-}
 #endif
-
-
