@@ -1597,8 +1597,6 @@ bool wxMCIMediaBackend::Load(const wxString& fileName)
     ::SetWindowLong(m_hNotifyWnd, GWL_USERDATA,
                        (LONG) this);
 
-    m_ctrl->Show(false);
-
     //
     //Here, if the parent of the control has a sizer - we
     //tell it to recalculate the size of this control since
