@@ -75,7 +75,6 @@ class BoldProcessor : public wxHtmlProcessor
             r.Replace(wxT("<B>"), wxEmptyString);
             r.Replace(wxT("</b>"), wxEmptyString);
             r.Replace(wxT("</B>"), wxEmptyString);
-            printf("called\n");
             return r;
         }       
 };
@@ -229,5 +228,4 @@ void MyFrame::OnProcessor(wxCommandEvent& WXUNUSED(event))
 {
     m_Processor->Enable(!m_Processor->IsEnabled());
     m_Html->LoadPage(m_Html->GetOpenedPage());
-    printf("%i\n", m_Processor->IsEnabled());
 }
