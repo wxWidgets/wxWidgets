@@ -484,7 +484,9 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
 
     // first of all, check whether we hadn't been cancelled already and don't
     // start the user code at all then
-    if ( thread->m_internal->GetState() == STATE_EXITED )
+    bool isExited = (thread->m_internal->GetState() == STATE_EXITED);
+
+    if ( isExited )
     {
         rc = (THREAD_RETVAL)-1;
     }
@@ -499,17 +501,23 @@ THREAD_RETVAL THREAD_CALLCONV wxThreadInternal::WinThreadStart(void *param)
         }
 
         rc = (THREAD_RETVAL)thread->Entry();
-
-        // enter m_critsect before changing the thread state
-        wxCriticalSectionLocker lock(thread->m_critsect);
-
-        thread->m_internal->SetState(STATE_EXITED);
     }
 
     thread->OnExit();
 
+    // save IsDetached because thread object can be deleted by joinable
+    // threads after state is changed to STATE_EXITED.
+    bool isDetached = thread->IsDetached();
+
+    if (!isExited)
+    {
+        // enter m_critsect before changing the thread state
+        wxCriticalSectionLocker lock(thread->m_critsect);
+        thread->m_internal->SetState(STATE_EXITED);
+    }
+
     // the thread may delete itself now if it wants, we don't need it any more
-    thread->m_internal->LetDie();
+    if (isDetached) thread->m_internal->LetDie();
 
     return rc;
 }
