@@ -39,6 +39,9 @@ src/expat/xmlwf/*.c
 src/expat/xmlwf/*.h
 src/expat/xmlwf/*.cxx
 
+src/xml/xml.cpp
+include/wx/xml/*.h
+
 contrib/docs/html/xrc/*.htm
 contrib/docs/html/xrc/*.gif
 contrib/docs/html/xrc/*.png

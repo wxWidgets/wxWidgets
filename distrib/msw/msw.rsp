@@ -75,6 +75,7 @@ src/msw/*.prj
 
 include/wx/msw/*.h
 include/wx/msw/*.rc
+include/wx/msw/wx.manifest
 include/wx/msw/ctl3d/*.h
 include/wx/msw/gnuwin32/*.h
 include/wx/msw/gnuwin32/*.def
