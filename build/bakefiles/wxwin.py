@@ -129,8 +129,8 @@ def headersOnly(files):
     
     def callback(cond, sources):
         prf = suf = ''
-        if sources[0].isspace(): prefix=' '
-        if sources[-1].isspace(): suffix=' '
+        if sources[0].isspace(): prf=' '
+        if sources[-1].isspace(): suf=' '
         retval = []
         for s in sources.split():
             if s.endswith('.h'):
