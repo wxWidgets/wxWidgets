@@ -381,6 +381,7 @@ class __ToggleMixin:
     def OnLeftDown(self, event):
         if not self.IsEnabled():
             return
+        self.saveUp = self.up
         self.up = not self.up
         self.CaptureMouse()
         self.SetFocus()
@@ -389,7 +390,8 @@ class __ToggleMixin:
     def OnLeftUp(self, event):
         if not self.IsEnabled():
             return
-        self.Notify()
+        if self.up != self.saveUp:
+            self.Notify()
         self.ReleaseMouse()
         self.Refresh()
 
