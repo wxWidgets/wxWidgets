@@ -100,7 +100,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 void wxButton::SetDefault()
 {
     wxWindow *parent = GetParent();
-    wxPanel *panel = wxDynamicCast(panel, wxPanel);
+    wxPanel *panel = wxDynamicCast(parent, wxPanel);
     if ( panel )
         panel->SetDefaultItem(this);
 
