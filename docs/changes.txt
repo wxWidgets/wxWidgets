@@ -50,9 +50,10 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
   the only incompatibility being that Next() returns a wxHashTable::Node*
   instead of a wxNode*.
 - non-const wxDC methods GetBackground(), GetBrush(), GetFont() and GetPen()
-  don't exist any more, please fix your code -- it never worked correctly
-  anyhow if you modified the objects returned by these methods so you should
-  simply switch to using const methods.
+  as well as wxWindow methods GetFont() and GetCursor() don't exist any more,
+  please fix your code -- it never worked correctly anyhow if you modified the
+  objects returned by these methods so you should simply switch to using const
+  methods.
 - EVT_XXX macros are now type-safe; code that uses wrong type for event
   handler's argument will no longer compile.
 - Identical functionality of wxFileDialog::ParseWildcard,
