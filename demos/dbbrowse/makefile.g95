@@ -10,7 +10,7 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
-TARGET=dbbrowser
+TARGET=dbbrowse
 OBJECTS = dbbrowse.o     doc.o        pgmctrl.o tabpgwin.o \
           browsedb.o     dbtree.o     dbgrid.o  dlguser.o
 
