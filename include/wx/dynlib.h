@@ -69,21 +69,18 @@ class WXDLLIMPEXP_BASE wxDynamicLibraryDetailsCreator;
 enum wxDLFlags
 {
     wxDL_LAZY       = 0x00000001,   // resolve undefined symbols at first use
+                                    // (only works on some Unix versions)
     wxDL_NOW        = 0x00000002,   // resolve undefined symbols on load
+                                    // (default, always the case under Win32)
     wxDL_GLOBAL     = 0x00000004,   // export extern symbols to subsequently
                                     // loaded libs.
-    wxDL_VERBATIM   = 0x00000008,   // Attempt to load the supplied library
+    wxDL_VERBATIM   = 0x00000008,   // attempt to load the supplied library
                                     // name without appending the usual dll
                                     // filename extension.
-
     wxDL_NOSHARE    = 0x00000010,   // load new DLL, don't reuse already loaded
+                                    // (only for wxPluginManager)
 
-    // FIXME: why? (VZ)
-#ifdef __osf__
-    wxDL_DEFAULT    = wxDL_LAZY
-#else
-    wxDL_DEFAULT    = wxDL_LAZY | wxDL_GLOBAL
-#endif
+    wxDL_DEFAULT    = wxDL_NOW      // default flags correspond to Win32
 };
 
 enum wxDynamicLibraryCategory
