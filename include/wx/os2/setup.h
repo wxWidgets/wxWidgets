@@ -16,6 +16,9 @@
 // global settings
 // ----------------------------------------------------------------------------
 
+// define this to 1 if you want icons to behave as bitmaps
+#define wxICON_IS_BITMAP     0
+
 // define this to 0 when building wxBase library
 #define wxUSE_GUI            1
 

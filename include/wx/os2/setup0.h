@@ -16,6 +16,9 @@
 // global settings
 // ----------------------------------------------------------------------------
 
+// define this to 1 if you want icons to behave as bitmaps
+#define wxICON_IS_BITMAP     0
+
 // define this to 0 when building wxBase library
 #define wxUSE_GUI            1
 
@@ -163,7 +166,7 @@
                                   // Some databases/ODBC drivers only allow forward scrolling cursors.
                                   // Unless you specifically want to use backward scrolling
                                   // cursors, and you know that all of the databases/ODBC drivers
-                                  // that you will use these odbc classes with allow backward 
+                                  // that you will use these odbc classes with allow backward
                                   // scrolling cursors, this setting should remain set to 1
                                   // for maximum database/driver compatibilty
 

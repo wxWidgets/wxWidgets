@@ -185,13 +185,14 @@ bool wxApp::RegisterWindowClasses(
   HAB                               vHab
 )
 {
+    APIRET                          rc;
 
-    if (!::WinRegisterClass( vHab
-                            ,wxFrameClassName
-                            ,(PFNWP)wxWndProc
-                            ,CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST | CS_CLIPCHILDREN | CS_FRAME
-                            ,0
-                           ))
+    if ((rc = ::WinRegisterClass( vHab
+                                 ,wxFrameClassName
+                                 ,(PFNWP)wxWndProc
+                                 ,CS_SIZEREDRAW | CS_SYNCPAINT | CS_HITTEST | CS_CLIPCHILDREN | CS_FRAME
+                                 ,0
+                                )) != 0)
     {
         wxLogLastError("RegisterClass(frame)");
 

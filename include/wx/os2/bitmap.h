@@ -1,9 +1,9 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.h
+// Name:        wx/os2/bitmap.h
 // Purpose:     wxBitmap class
 // Author:      David Webster
 // Modified by:
-// Created:     10/13/99
+// Created:     11/28/99
 // RCS-ID:      $Id$
 // Copyright:   (c) David Webster
 // Licence:     wxWindows licence
@@ -12,196 +12,337 @@
 #ifndef _WX_BITMAP_H_
 #define _WX_BITMAP_H_
 
-#include "wx/gdiobj.h"
+#ifdef __GNUG__
+    #pragma interface "bitmap.h"
+#endif
+
+#include "wx/os2/gdiimage.h"
 #include "wx/gdicmn.h"
 #include "wx/palette.h"
 
-// Bitmap
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxControl;
 class WXDLLEXPORT wxBitmap;
 class WXDLLEXPORT wxBitmapHandler;
 class WXDLLEXPORT wxIcon;
+class WXDLLEXPORT wxMask;
 class WXDLLEXPORT wxCursor;
 class WXDLLEXPORT wxControl;
 
-// A mask is a mono bitmap used for drawing bitmaps
-// transparently.
-class WXDLLEXPORT wxMask: public wxObject
+// ----------------------------------------------------------------------------
+// Bitmap data
+//
+// NB: this class is private, but declared here to make it possible inline
+//     wxBitmap functions accessing it
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxBitmapRefData : public wxGDIImageRefData
 {
-  DECLARE_DYNAMIC_CLASS(wxMask)
-
-public:
-  wxMask();
-
-  // Construct a mask from a bitmap and a colour indicating
-  // the transparent area
-  wxMask(const wxBitmap& bitmap, const wxColour& colour);
-
-  // Construct a mask from a bitmap and a palette index indicating
-  // the transparent area
-  wxMask(const wxBitmap& bitmap, int paletteIndex);
-
-  // Construct a mask from a mono bitmap (copies the bitmap).
-  wxMask(const wxBitmap& bitmap);
-
-  ~wxMask();
-
-  bool Create(const wxBitmap& bitmap, const wxColour& colour);
-  bool Create(const wxBitmap& bitmap, int paletteIndex);
-  bool Create(const wxBitmap& bitmap);
-
-  // Implementation
-  inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
-  inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
-protected:
-  WXHBITMAP m_maskBitmap;
-};
-
-class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
-{
-    friend class WXDLLEXPORT wxBitmap;
-    friend class WXDLLEXPORT wxIcon;
-    friend class WXDLLEXPORT wxCursor;
 public:
     wxBitmapRefData();
-    ~wxBitmapRefData();
+    virtual ~wxBitmapRefData() { Free(); }
+
+    virtual void Free();
 
 public:
-  int           m_width;
-  int           m_height;
-  int           m_depth;
-  bool          m_ok;
-  int           m_numColors;
-  wxPalette     m_bitmapPalette;
-  int           m_quality;
+    int                             m_nNumColors;
+    wxPalette                       m_vBitmapPalette;
+    int                             m_nQuality;
 
-  WXHBITMAP     m_hBitmap;
-  wxDC *        m_selectedInto; // So bitmap knows whether it's been selected into
+    // OS2-specific
+    // ------------
 
-  wxMask *      m_bitmapMask; // Optional mask
+    wxDC*                           m_pSelectedInto;
+    HPS                             m_hPresentationSpace;
+
+    // optional mask for transparent drawing
+    wxMask*                         m_pBitmapMask;
 };
 
-#define M_BITMAPDATA ((wxBitmapRefData *)m_refData)
+// ----------------------------------------------------------------------------
+// wxBitmap: a mono or colour bitmap
+// ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxBitmapHandler: public wxObject
+class WXDLLEXPORT wxBitmap : public wxGDIImage
 {
-  DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
 public:
-  wxBitmapHandler() { m_name = ""; m_extension = ""; m_type = 0; };
+    // default ctor creates an invalid bitmap, you must Create() it later
+    wxBitmap() { Init(); }
 
-  virtual bool Create(wxBitmap *bitmap, void *data, long flags, int width, int height, int depth = 1);
-  virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
-      int desiredWidth, int desiredHeight);
-  virtual bool SaveFile(wxBitmap *bitmap, const wxString& name, int type, const wxPalette *palette = NULL);
+    // Copy constructors
+    inline wxBitmap(const wxBitmap& rBitmap)
+      { Init(); Ref(rBitmap); }
 
-  inline void SetName(const wxString& name) { m_name = name; }
-  inline void SetExtension(const wxString& ext) { m_extension = ext; }
-  inline void SetType(long type) { m_type = type; }
-  inline wxString GetName() const { return m_name; }
-  inline wxString GetExtension() const { return m_extension; }
-  inline long GetType() const { return m_type; }
-protected:
-  wxString  m_name;
-  wxString  m_extension;
-  long      m_type;
-};
+    // Initialize with raw data
+    wxBitmap( const char bits[]
+             ,int        nWidth
+             ,int        nHeight
+             ,int        nDepth = 1
+            );
 
-#define M_BITMAPHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
+    // Initialize with XPM data
+    wxBitmap( char**     ppData
+             ,wxControl* pAnItem = NULL
+            );
 
-class WXDLLEXPORT wxBitmap: public wxGDIObject
-{
-  DECLARE_DYNAMIC_CLASS(wxBitmap)
+    // Load a file or resource
+    wxBitmap( const wxString& rName
+             ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
+            );
 
-  friend class WXDLLEXPORT wxBitmapHandler;
+    // New constructor for generalised creation from data
+    wxBitmap( void* pData
+             ,long  lType
+             ,int   nWidth
+             ,int   nHeight
+             ,int   nDepth = 1
+            );
 
-public:
-  wxBitmap(); // Platform-specific
+    // If depth is omitted, will create a bitmap compatible with the display
+    wxBitmap( int nWidth
+             ,int nHeight
+             ,int nDepth = -1
+            );
 
-  // Copy constructors
-  wxBitmap(const wxBitmap& bitmap);
+    // we must have this, otherwise icons are silently copied into bitmaps using
+    // the copy ctor but the resulting bitmap is invalid!
+    inline wxBitmap(const wxIcon& rIcon)
+      { Init(); CopyFromIcon(rIcon); }
 
-  // Initialize with raw data
-  wxBitmap(const char bits[], int width, int height, int depth = 1);
+    wxBitmap& operator=(const wxBitmap& rBitmap)
+    {
+        if ( m_refData != rBitmap.m_refData )
+            Ref(rBitmap);
+        return(*this);
+    }
 
-  // Initialize with XPM data
-  wxBitmap(char **data, wxControl *anItem = NULL);
+    wxBitmap& operator=(const wxIcon& rIcon)
+    {
+        (void)CopyFromIcon(rIcon);
 
-  // Load a file or resource
-  wxBitmap(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
+        return(*this);
+    }
 
-  // New constructor for generalised creation from data
-  wxBitmap(void *data, long type, int width, int height, int depth = 1);
+    wxBitmap& operator=(const wxCursor& rCursor)
+    {
+        (void)CopyFromCursor(rCursor);
+        return (*this);
+    }
 
-  // If depth is omitted, will create a bitmap compatible with the display
-  wxBitmap(int width, int height, int depth = -1);
-  ~wxBitmap();
+    virtual ~wxBitmap();
 
-  virtual bool Create(int width, int height, int depth = -1);
-  virtual bool Create(void *data, long type, int width, int height, int depth = 1);
-  virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
-  virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
+    // copies the contents and mask of the given (colour) icon to the bitmap
+    bool CopyFromIcon(const wxIcon& rIcon);
 
-  inline bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
-  inline int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }
-  inline int GetHeight() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_height : 0); }
-  inline int GetDepth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_depth : 0); }
-  inline int GetQuality() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_quality : 0); }
-  void SetWidth(int w);
-  void SetHeight(int h);
-  void SetDepth(int d);
-  void SetQuality(int q);
-  void SetOk(bool isOk);
+    // copies the contents and mask of the given cursor to the bitmap
+    bool CopyFromCursor(const wxCursor& rCursor);
+
+    virtual bool Create( int nWidth
+                        ,int nHeight
+                        ,int nDepth = -1
+                       );
+    virtual bool Create( void* pData
+                        ,long  lType
+                        ,int   nWidth
+                        ,int   nHeight
+                        ,int   nDepth = 1
+                       );
+    virtual bool LoadFile( const wxString& rName
+                          ,long            lType = wxBITMAP_TYPE_BMP_RESOURCE
+                         );
+    virtual bool SaveFile( const wxString&  rName
+                          ,int              lType
+                          ,const wxPalette* pCmap = NULL
+                         );
+
+    inline wxBitmapRefData* GetBitmapData() const
+      { return (wxBitmapRefData *)m_refData; }
+
+    inline int GetQuality() const
+      { return (GetBitmapData() ? GetBitmapData()->m_quality : 0); }
+
+    void SetQuality(int nQ);
+
+    wxPalette* GetPalette() const
+      { return (GetBitmapData() ? (& GetBitmapData()->m_bitmapPalette) : (wxPalette*) NULL); }
+
+    void       SetPalette(const wxPalette& rPalette);
+
+    inline wxMask* GetMask() const
+      { return (GetBitmapData() ? GetBitmapData()->m_bitmapMask : (wxMask*) NULL); }
+
+    void SetMask(wxMask* pMask) ;
+
+    inline bool operator==(const wxBitmap& rBitmap)
+      { return m_refData == rBitmap.m_refData; }
+
+    inline bool operator!=(const wxBitmap& rBitmap)
+      { return m_refData != rBitmap.m_refData; }
+
+#if WXWIN_COMPATIBILITY_2
+    void SetOk(bool bIsOk);
+#endif // WXWIN_COMPATIBILITY_2
 
 #if WXWIN_COMPATIBILITY
-  inline wxPalette *GetColourMap(void) const { return GetPalette(); }
-  void SetColourMap(wxPalette *cmap) { SetPalette(*cmap); };
-#endif
-  inline wxPalette* GetPalette() const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
-  void SetPalette(const wxPalette& palette);
+    inline wxPalette* GetColourMap() const
+      { return GetPalette(); }
 
-  inline wxMask *GetMask() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_bitmapMask : (wxMask*) NULL); }
-  void SetMask(wxMask *mask) ;
+    inline void       SetColourMap(wxPalette* pCmap)
+      { SetPalette(*pCmap); };
 
-  inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
+#endif // WXWIN_COMPATIBILITY
 
-  inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
-  inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
-
-  // Format handling
-  static inline wxList& GetHandlers() { return sm_handlers; }
-  static void AddHandler(wxBitmapHandler *handler);
-  static void InsertHandler(wxBitmapHandler *handler);
-  static bool RemoveHandler(const wxString& name);
-  static wxBitmapHandler *FindHandler(const wxString& name);
-  static wxBitmapHandler *FindHandler(const wxString& extension, long bitmapType);
-  static wxBitmapHandler *FindHandler(long bitmapType);
-
-  static void InitStandardHandlers();
-  static void CleanUpHandlers();
-protected:
-  static wxList sm_handlers;
-
-  // Implementation
+    // Implementation
 public:
-  void SetHBITMAP(WXHBITMAP bmp);
-  inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
-  inline void SetSelectedInto(wxDC *dc) { if (M_BITMAPDATA) M_BITMAPDATA->m_selectedInto = dc; }
-  inline wxDC *GetSelectedInto(void) const { return (M_BITMAPDATA ? M_BITMAPDATA->m_selectedInto : (wxDC*) NULL); }
-  bool FreeResource(bool force = FALSE);
+    inline void SetHBITMAP(WXHBITMAP hHmp)
+      { SetHandle((WXHANDLE)bmp); }
 
-  // Creates a bitmap that matches the device context's depth, from
-  // an arbitray bitmap. At present, the original bitmap must have an
-  // associated palette. (TODO: use a default palette if no palette exists.)
-  // This function is necessary for you to Blit an arbitrary bitmap (which may have
-  // the wrong depth). wxDC::SelectObject will compare the depth of the bitmap
-  // with the DC's depth, and create a new bitmap if the depths differ.
-  // Eventually we should perhaps make this a public API function so that
-  // an app can efficiently produce bitmaps of the correct depth.
-  // The Windows solution is to use SetDibBits to blit an arbotrary DIB directly to a DC, but
-  // this is too Windows-specific, hence this solution of quietly converting the wxBitmap.
-  // Contributed by Frederic Villeneuve <frederic.villeneuve@natinst.com>
-  wxBitmap GetBitmapForDC(wxDC& dc) const;
+    inline WXHBITMAP GetHBITMAP() const
+      { return (WXHBITMAP)GetHandle(); }
+
+    inline void  SetSelectedInto(wxDC* pDc)
+      { if (GetBitmapData()) GetBitmapData()->m_selectedInto = pDc; }
+
+    inline wxDC* GetSelectedInto() const
+      { return (GetBitmapData() ? GetBitmapData()->m_selectedInto : (wxDC*) NULL); }
+
+    // Creates a bitmap that matches the device context's depth, from an
+    // arbitray bitmap. At present, the original bitmap must have an associated
+    // palette. (TODO: use a default palette if no palette exists.) This
+    // function is necessary for you to Blit an arbitrary bitmap (which may
+    // have the wrong depth). wxDC::SelectObject will compare the depth of the
+    // bitmap with the DC's depth, and create a new bitmap if the depths
+    // differ. Eventually we should perhaps make this a public API function so
+    // that an app can efficiently produce bitmaps of the correct depth. The
+    // Windows solution is to use SetDibBits to blit an arbotrary DIB directly
+    // to a DC, but this is too Windows-specific, hence this solution of
+    // quietly converting the wxBitmap. Contributed by Frederic Villeneuve
+    // <frederic.villeneuve@natinst.com>
+    wxBitmap GetBitmapForDC(wxDC& rDc) const;
+
+protected:
+    // common part of all ctors
+    void Init();
+
+    inline virtual wxGDIImageRefData* CreateData() const
+        { return new wxBitmapRefData; }
+
+private:
+    bool CopyFromIconOrCursor(const wxGDIImage& rIcon);
+
+    DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
+
+// ----------------------------------------------------------------------------
+// wxMask: a mono bitmap used for drawing bitmaps transparently.
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxMask : public wxObject
+{
+public:
+    wxMask();
+
+    // Construct a mask from a bitmap and a colour indicating the transparent
+    // area
+    wxMask( const wxBitmap& rBitmap
+           ,const wxColour& rColour
+          );
+
+    // Construct a mask from a bitmap and a palette index indicating the
+    // transparent area
+    wxMask( const wxBitmap& rBitmap
+           ,int             nPaletteIndex
+          );
+
+    // Construct a mask from a mono bitmap (copies the bitmap).
+    wxMask(const wxBitmap& rBitmap);
+
+    // construct a mask from the givne bitmap handle
+    wxMask(WXHBITMAP hBmp)
+      { m_hMaskBitmap = hBmp; }
+
+    virtual ~wxMask();
+
+    bool Create( const wxBitmap& bitmap
+                ,const wxColour& rColour
+               );
+    bool Create( const wxBitmap& rBitmap
+                ,int             nPaletteIndex
+               );
+    bool Create(const wxBitmap& rBitmap);
+
+    // Implementation
+    WXHBITMAP GetMaskBitmap() const
+      { return m_hMaskBitmap; }
+    void SetMaskBitmap(WXHBITMAP hBmp)
+      { m_hMaskBitmap = hBmp; }
+
+protected:
+    WXHBITMAP                       m_hMaskBitmap;
+    DECLARE_DYNAMIC_CLASS(wxMask)
+};
+
+// ----------------------------------------------------------------------------
+// wxBitmapHandler is a class which knows how to load/save bitmaps to/from file
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxBitmapHandler : public wxGDIImageHandler
+{
+public:
+    inline wxBitmapHandler()
+      { m_lType = wxBITMAP_TYPE_INVALID; }
+
+    inline wxBitmapHandler( const wxString& rName
+                    ,const wxString& rExt
+                    ,long            lType
+                   )
+                   : wxGDIImageHandler( rName
+                                       ,rExt
+                                       ,lType)
+    {
+    }
+
+    // keep wxBitmapHandler derived from wxGDIImageHandler compatible with the
+    // old class which worked only with bitmaps
+    virtual bool Create( wxBitmap* pBitmap
+                        ,void*     pData
+                        ,long      lFlags
+                        ,int       nWidth
+                        ,int       nHeight
+                        ,int       nDepth = 1
+                       );
+    virtual bool LoadFile( wxBitmap*       pBitmap
+                          ,const wxString& rName
+                          ,long            lFlags
+                          ,int             nDesiredWidth
+                          ,int             nDesiredHeight
+                         );
+    virtual bool SaveFile( wxBitmap*        pBitmap
+                          ,const wxString&  rName
+                          ,int              lType
+                          ,const wxPalette* pPalette = NULL
+                         );
+
+    virtual bool Create( wxGDIImage* pImage
+                        ,void*       pData
+                        ,long        lFlags
+                        ,int         nWidth
+                        ,int         nHeight
+                        ,int         nDepth = 1
+                       );
+    virtual bool Load( wxGDIImage*     pImage
+                      ,const wxString& rName
+                      ,long            lFlags
+                      ,int             nDesiredWidth
+                      ,int             nDesiredHeight
+                     );
+    virtual bool Save(wxGDIImage*     pImage
+                      const wxString& rName
+                      int             lType
+                     );
+private:
+    DECLARE_DYNAMIC_CLASS(wxBitmapHandler)
+};
+
 #endif
   // _WX_BITMAP_H_

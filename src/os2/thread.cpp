@@ -596,68 +596,17 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         }
 
 #if wxUSE_GUI
-        // we can't just wait for the thread to terminate because it might be
-        // calling some GUI functions and so it will never terminate before we
-        // process the Windows messages that result from these functions
-        ULONG                       ulrc;
-        do
+        // need a way to finish GUI processing before killing the thread
+        // until then we just exit
+
+        if ((gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread())
         {
-            ulrc = ::MsgWaitForMultipleObjects
-                     (
-                       1,              // number of objects to wait for
-                       &hThread,       // the objects
-                       FALSE,          // don't wait for all objects
-                       INFINITE,       // no timeout
-                       QS_ALLEVENTS    // return as soon as there are any events
-                     );
-
-            switch ( result )
-            {
-                case 0xFFFFFFFF:
-                    // error
-                    wxLogSysError(_("Can not wait for thread termination"));
-                    Kill();
-                    return wxTHREAD_KILLED;
-
-                case WAIT_OBJECT_0:
-                    // thread we're waiting for terminated
-                    break;
-
-                case WAIT_OBJECT_0 + 1:
-                    // new message arrived, process it
-                    if ( !wxTheApp->DoMessage() )
-                    {
-                        // WM_QUIT received: kill the thread
-                        Kill();
-
-                        return wxTHREAD_KILLED;
-                    }
-
-                    if ( IsMain() )
-                    {
-                        // give the thread we're waiting for chance to exit
-                        // from the GUI call it might have been in
-                        if ( (gs_nWaitingForGui > 0) && wxGuiOwnedByMainThread() )
-                        {
-                            wxMutexGuiLeave();
-                        }
-                    }
-
-                    break;
-
-                default:
-                    wxFAIL_MSG(wxT("unexpected result of MsgWaitForMultipleObject"));
-            }
-        } while ( result != WAIT_OBJECT_0 );
-#else // !wxUSE_GUI
-        // simply wait for the thread to terminate
-        //
-        // OTOH, even console apps create windows (in wxExecute, for WinSock
-        // &c), so may be use MsgWaitForMultipleObject() too here?
-        if ( WaitForSingleObject(hThread, INFINITE) != WAIT_OBJECT_0 )
-        {
-            wxFAIL_MSG(wxT("unexpected result of WaitForSingleObject"));
+            wxMutexGuiLeave();
         }
+#else // !wxUSE_GUI
+
+        // can't wait for yourself to end under OS/2 so just quit
+
 #endif // wxUSE_GUI/!wxUSE_GUI
 
         if ( IsMain() )
@@ -670,19 +619,10 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
         }
     }
 
-    if ( !::GetExitCodeThread(hThread, (LPDWORD)&rc) )
+    ::DosExit(0, 0);
+    // probably won't get this far, but
+    if (IsDetached())
     {
-        wxLogLastError("GetExitCodeThread");
-
-        rc = (ExitCode)-1;
-    }
-
-    if ( IsDetached() )
-    {
-        // if the thread exits normally, this is done in WinThreadStart, but in
-        // this case it would have been too early because
-        // MsgWaitForMultipleObject() would fail if the therad handle was
-        // closed while we were waiting on it, so we must do it here
         delete this;
     }
 
@@ -701,14 +641,19 @@ wxThreadError wxThread::Kill()
         return wxTHREAD_NOT_RUNNING;
 
     ::DosKillThread(m_internal->GetHandle());
-    delete this;
+    m_internal->Free();
+    if (IsDetached())
+    {
+        delete this;
+    }
     return wxTHREAD_NO_ERROR;
 }
 
 void wxThread::Exit(
-  void*                             pStatus
+  ExitCode                          pStatus
 )
 {
+    m_internal->Free();
     delete this;
     ::DosExit(EXIT_THREAD, ULONG(pStatus));
     wxFAIL_MSG(wxT("Couldn't return from DosExit()!"));
@@ -730,11 +675,18 @@ unsigned int wxThread::GetPriority() const
     return m_internal->GetPriority();
 }
 
+unsigned long wxThread::GetId() const
+{
+    wxCriticalSectionLocker lock((wxCriticalSection &)m_critsect); // const_cast
+
+    return (unsigned long)m_internal->GetId();
+}
+
 bool wxThread::IsRunning() const
 {
     wxCriticalSectionLocker         lock((wxCriticalSection &)m_critsect);
 
-    return m_internal->GetState() == STATE_RUNNING;
+    return(m_internal->GetState() == STATE_RUNNING);
 }
 
 bool wxThread::IsAlive() const
@@ -757,11 +709,6 @@ bool wxThread::TestDestroy()
     wxCriticalSectionLocker         lock((wxCriticalSection &)m_critsect);
 
     return m_internal->GetState() == STATE_CANCELED;
-}
-
-wxThread::~wxThread()
-{
-    delete m_internal;
 }
 
 // ----------------------------------------------------------------------------

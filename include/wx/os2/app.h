@@ -22,6 +22,7 @@ class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
 
 WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
+HAB                             vHabmain;
 
 // Force an exit from main loop
 void WXDLLEXPORT wxExit(void);
@@ -100,7 +101,6 @@ protected:
 
     DECLARE_EVENT_TABLE()
 private:
-    HAB                             m_vHab;
     HMQ                             m_hMq;
     QMSG                            m_vMsg;
 };
