@@ -424,9 +424,25 @@ void MyCanvas::DrawTestPoly(wxDC& dc)
                 _T("hatched"), 10, 10);
     dc.DrawText(_T("except for the central region and the right ")
                 _T("one entirely hatched"), 10, 30);
+    dc.DrawText(_T("The third star only has a hatched outline"), 10, 50);
 
-    dc.DrawPolygon(WXSIZEOF(star), star);
-    dc.DrawPolygon(WXSIZEOF(star), star, 160, 0, wxWINDING_RULE);
+    dc.DrawPolygon(WXSIZEOF(star), star, 0, 30);
+    dc.DrawPolygon(WXSIZEOF(star), star, 160, 30, wxWINDING_RULE);
+
+    wxPoint star2[10];
+    star2[0] = wxPoint(0, 100);
+    star2[1] = wxPoint(-59, -81);
+    star2[2] = wxPoint(95, 31);
+    star2[3] = wxPoint(-95, 31);
+    star2[4] = wxPoint(59, -81);
+    star2[5] = wxPoint(0, 80);
+    star2[6] = wxPoint(-47, -64);
+    star2[7] = wxPoint(76, 24);
+    star2[8] = wxPoint(-76, 24);
+    star2[9] = wxPoint(47, -64);
+    int count[2] = {5, 5};
+
+    dc.DrawPolyPolygon(WXSIZEOF(count), count, star2, 450, 150);
 }
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )

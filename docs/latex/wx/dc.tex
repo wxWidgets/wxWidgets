@@ -395,11 +395,34 @@ of wxPoint objects.}
 
 \membersection{wxDC::DrawPolyPolygon}\label{wxdcdrawpolypolygon}
 
-\func{void}{DrawPolyPolygon}{\param{int }{n}, \param{int }{start[]}, \param{wxPoint }{points[]}, \param{wxCoord }{xoffset}, \param{wxCoord }{yoffset}, \param{int }{fillStyle = \texttt{wxODDEVEN\_RULE}}}
+\func{void}{DrawPolyPolygon}{\param{int}{ n}, \param{int}{ count[]}, \param{wxPoint}{ points[]}, \param{wxCoord}{ xoffset = 0}, \param{wxCoord}{ yoffset = 0},\\
+  \param{int }{fill\_style = wxODDEVEN\_RULE}}
 
-Draw many polygons at once. For the platforms providing a native implementation
-of this function (Windows and PostScript-based wxDC), this is more efficient
-than using \helpref{DrawPolygon}{wxdcdrawpolygon} in a loop.
+Draws two or more filled polygons using an array of {\it points}, adding the
+optional offset coordinates.
+
+Notice that for the platforms providing a native implementation
+of this function (Windows and PostScript-based wxDC currently), this is more
+efficient than using \helpref{DrawPolygon}{wxdcdrawpolygon} in a loop.
+
+{\it n} specifies the number of polygons to draw, the array {\it count} of size 
+{\it n} specifies the number of points in each of the polygons in the 
+{\it points} array.
+
+The last argument specifies the fill rule: {\bf wxODDEVEN\_RULE} (the default)
+or {\bf wxWINDING\_RULE}.
+
+The current pen is used for drawing the outline, and the current brush for
+filling the shape.  Using a transparent brush suppresses filling.
+
+The polygons maybe disjoint or overlapping. Each polygon specified in a call to
+{\bf DrawPolyPolygon} must be closed. Unlike polygons created by the
+\helpref{DrawPolygon}{wxdcdrawpolygon} member function, the polygons created by
+{\bf DrawPolyPolygon} are not closed automatically.
+
+\pythonnote{Not implemented yet}
+
+\perlnote{Not implemented yet}
 
 
 \membersection{wxDC::DrawPoint}\label{wxdcdrawpoint}
