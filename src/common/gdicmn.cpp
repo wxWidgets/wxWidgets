@@ -146,7 +146,7 @@ void wxColourDatabase::Initialize ()
   cdef cc;
   static cdef table[]={
   
-#ifdef __WXMSW__
+// #ifdef __WXMSW__
    {"AQUAMARINE",112, 219, 147},
    {"BLACK",0, 0, 0},
    {"BLUE", 0, 0, 255},
@@ -218,7 +218,7 @@ void wxColourDatabase::Initialize ()
    {"WHITE", 255, 255, 255},
    {"YELLOW", 255, 255, 0},
    {"YELLOW GREEN", 153, 204, 50},
-#endif
+// #endif
 
 #if defined(__WXGTK__) || defined(__X__)
    {"MEDIUM GOLDENROD", 234, 234, 173},
@@ -303,10 +303,11 @@ wxString wxColourDatabase::FindName (const wxColour& colour) const
   unsigned char red = colour.Red ();
   unsigned char green = colour.Green ();
   unsigned char blue = colour.Blue ();
-
+  
   for (wxNode * node = First (); node; node = node->Next ())
   {
       wxColour *col = (wxColour *) node->Data ();
+      
       if (col->Red () == red && col->Green () == green && col->Blue () == blue)
 	{
 	  char *found = node->key.string;

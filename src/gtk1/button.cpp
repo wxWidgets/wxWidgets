@@ -21,13 +21,22 @@
 class wxButton;
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxButton
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxButton,wxControl)
 
-void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
+static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
 {
+  if (!button->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
   event.SetEventObject(button);
   button->GetEventHandler()->ProcessEvent(event);

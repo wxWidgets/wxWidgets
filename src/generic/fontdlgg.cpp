@@ -116,12 +116,14 @@ static wxString wxColourDialogNames[NUM_COLS]={"ORANGE",
 
 wxGenericFontDialog::wxGenericFontDialog(void)
 {
+  m_useEvents = FALSE;
   dialogParent = NULL;
 }
 
 wxGenericFontDialog::wxGenericFontDialog(wxWindow *parent, wxFontData *data):
   wxDialog(parent, -1, "Font", wxPoint(0, 0), wxSize(600, 600), wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
 {
+  m_useEvents = FALSE;
   Create(parent, data);
 }
 
@@ -243,15 +245,14 @@ void wxGenericFontDialog::CreateWidgets(void)
   wxButton *okButton = new wxButton(this, wxID_OK, "OK", wxPoint(5, by));
   (void) new wxButton(this, wxID_OK, "Cancel", wxPoint(50, by));
 
-  familyChoice->SetStringSelection(wxFontFamilyIntToString(dialogFont.GetFamily()));
+  familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
   styleChoice->SetStringSelection(wxFontStyleIntToString(dialogFont.GetStyle()));
   weightChoice->SetStringSelection(wxFontWeightIntToString(dialogFont.GetWeight()));
   wxString name(wxTheColourDatabase->FindName(fontData.fontColour));
   colourChoice->SetStringSelection(name);
     
   underLineCheckBox->SetValue(dialogFont.GetUnderlined());
-
-  pointSizeChoice->SetSelection(dialogFont.GetPointSize());
+  pointSizeChoice->SetSelection(dialogFont.GetPointSize()-1);
 
   okButton->SetDefault();
 
@@ -260,6 +261,8 @@ void wxGenericFontDialog::CreateWidgets(void)
   Centre(wxBOTH);
 
   wxEndBusyCursor();
+  
+  m_useEvents = TRUE;
 }
 
 void wxGenericFontDialog::InitializeFont(void)
@@ -278,7 +281,6 @@ void wxGenericFontDialog::InitializeFont(void)
     fontUnderline = fontData.initialFont.GetUnderlined();
   }
   dialogFont = wxFont(fontSize, fontFamily, fontStyle, fontWeight, (fontUnderline != 0));
-
 }
 
 void wxGenericFontDialog::PaintFontBackground(wxDC& dc)
@@ -313,6 +315,8 @@ void wxGenericFontDialog::PaintFont(wxDC& dc)
 
 void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
 {
+  if (!m_useEvents) return;
+  
   int fontFamily = wxFontFamilyStringToInt(WXSTRINGCAST familyChoice->GetStringSelection());
   int fontWeight = wxFontWeightStringToInt(WXSTRINGCAST weightChoice->GetStringSelection());
   int fontStyle = wxFontStyleStringToInt(WXSTRINGCAST styleChoice->GetStringSelection());

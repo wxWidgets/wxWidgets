@@ -19,11 +19,20 @@
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxRadioBox
 //-----------------------------------------------------------------------------
 
-void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioBox *rb )
+static void gtk_radiobutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxRadioBox *rb )
 {
+  if (!rb->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   if (rb->m_alreadySent)
   {
     rb->m_alreadySent = FALSE;

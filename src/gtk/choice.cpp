@@ -16,11 +16,20 @@
 #include "wx/choice.h"
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxChoice
 //-----------------------------------------------------------------------------
 
-void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
+static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
+  if (!choice->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   wxCommandEvent event(wxEVT_COMMAND_CHOICE_SELECTED, choice->GetId() );
   event.SetInt( choice->GetSelection() );
   wxString tmp( choice->GetStringSelection() );

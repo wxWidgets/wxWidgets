@@ -29,6 +29,9 @@ extern bool   g_blockEventsOnDrag;
 
 static void gtk_combo_clicked_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
+  if (!combo->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   if (combo->m_alreadySent)
   {
     combo->m_alreadySent = FALSE;
@@ -90,14 +93,14 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id, const wxString& value,
     GtkWidget *list_item;
     list_item = gtk_list_item_new_with_label( choices[i] ); 
   
-    gtk_signal_connect( GTK_OBJECT(list_item), "select", 
-      GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
-  
     gtk_container_add( GTK_CONTAINER(list), list_item );
     
     m_clientData.Append( (wxObject*)NULL );
     
     gtk_widget_show( list_item );
+    
+    gtk_signal_connect( GTK_OBJECT(list_item), "select", 
+      GTK_SIGNAL_FUNC(gtk_combo_clicked_callback), (gpointer)this );
   };
   
   PostCreation();

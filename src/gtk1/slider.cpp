@@ -17,19 +17,19 @@
 #include "wx/utils.h"
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxSlider
 //-----------------------------------------------------------------------------
 
-void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
+static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
 { 
-/*
-  printf( "OnScroll from " );
-  if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-    printf( win->GetClassInfo()->GetClassName() );
-  printf( ".\n" );
-*/
-  
   if (!win->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
     
   float diff = win->m_adjust->value - win->m_oldPos;
   if (fabs(diff) < 0.2) return;

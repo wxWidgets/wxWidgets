@@ -44,7 +44,7 @@ PlayerSelectionDialog::PlayerSelectionDialog(
 							ScoreFile* file
 							) :
 	wxDialog(parent, -1, "Player Selection",
-			wxDefaultPosition, wxSize(250, 200),
+			wxDefaultPosition, wxSize(320, 200),
 			wxDIALOG_MODAL | wxDEFAULT_DIALOG_STYLE),
 	m_scoreFile(file)
 {

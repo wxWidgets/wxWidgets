@@ -54,6 +54,7 @@ class WXDLLEXPORT wxGenericFontDialog: public wxDialog
   wxChoice *colourChoice;
   wxCheckBox *underLineCheckBox;
   wxChoice   *pointSizeChoice;
+  bool       m_useEvents;
 
 //  static bool fontDialogCancelled;
  public:

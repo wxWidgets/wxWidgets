@@ -21,13 +21,22 @@
 class wxBitmapButton;
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxBitmapButton
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
 
-void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
+static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
+  if (!button->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, button->GetId());
   event.SetEventObject(button);
   button->GetEventHandler()->ProcessEvent(event);

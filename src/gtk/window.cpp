@@ -256,7 +256,12 @@ gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gd
   event.m_x = 0;
   event.m_y = 0;
   event.SetEventObject( win );
-  return win->ProcessEvent( event );
+  
+  bool ret = win->ProcessEvent( event );
+/*
+  if (ret) printf( "found.\n") ;
+*/
+  return ret;
 };
 
 //-----------------------------------------------------------------------------
@@ -627,6 +632,8 @@ void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
 void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWindow *win )
 {
+  if (!win->HasVMT()) return;
+  
   if (win->GetDropTarget())
   {
     int x = 0;
@@ -662,8 +669,8 @@ bool gtk_window_destroy_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSE
 bool gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
   if (widget->window != gdk_event->window) return TRUE;
-  
-  if (g_blockEventsOnDrag) return FALSE;
+  if (g_blockEventsOnDrag) return TRUE;
+  if (!win->HasVMT()) return TRUE;
   
   if (widget->window)
     gdk_window_set_cursor( widget->window, win->m_cursor->GetCursor() );
@@ -679,8 +686,8 @@ bool gtk_window_enter_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, 
 bool gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxWindow *win )
 {
   if (widget->window != gdk_event->window) return TRUE;
-  
-  if (g_blockEventsOnDrag) return FALSE;
+  if (!win->HasVMT()) return TRUE;
+  if (g_blockEventsOnDrag) return TRUE;
   
   if (widget->window)
     gdk_window_set_cursor( widget->window, wxSTANDARD_CURSOR->GetCursor() );
@@ -804,6 +811,8 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
     
   m_wxwindow = gtk_myfixed_new();
   
+  if (m_wxwindow) GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+    
   if (m_windowStyle & wxTAB_TRAVERSAL == wxTAB_TRAVERSAL)
     GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
   else
@@ -1059,18 +1068,16 @@ void wxWindow::ImplementSetSize(void)
 
 void wxWindow::ImplementSetPosition(void)
 {
+  if (IS_KIND_OF(this,wxFrame) || IS_KIND_OF(this,wxDialog))
+  {
+    if ((m_x != -1) || (m_y != -1))
+      gtk_widget_set_uposition( m_widget, m_x, m_y );
+    return;
+  }
+  
   if (!m_parent)
   {
-    if (IsKindOf(CLASSINFO(wxFrame)) ||
-        IsKindOf(CLASSINFO(wxDialog)))
-    {
-      if ((m_x != -1) || (m_y != -1))
-        gtk_widget_set_uposition( m_widget, m_x, m_y );
-    }
-    else
-    {
-      printf( "wxWindow::SetSize error.\n" );
-    }
+    printf( "wxWindow::SetSize error.\n" );
     return;
   }
   
@@ -1325,7 +1332,7 @@ void wxWindow::ScreenToClient( int *x, int *y )
 
 void wxWindow::Centre( int direction )
 {
-  if (this->IsKindOf(CLASSINFO(wxDialog)) || this->IsKindOf(CLASSINFO(wxFrame)))
+  if (IS_KIND_OF(this,wxDialog) || IS_KIND_OF(this,wxFrame))
   {
     if (direction & wxHORIZONTAL == wxHORIZONTAL) m_x = (gdk_screen_width () - m_width) / 2;
     if (direction & wxVERTICAL == wxVERTICAL) m_y = (gdk_screen_height () - m_height) / 2;

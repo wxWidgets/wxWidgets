@@ -16,11 +16,20 @@
 #include "wx/checkbox.h"
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxCheckBox
 //-----------------------------------------------------------------------------
 
-void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckBox *cb )
+static void gtk_checkbox_clicked_callback( GtkWidget *WXUNUSED(widget), wxCheckBox *cb )
 {
+  if (!cb->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   wxCommandEvent event(wxEVT_COMMAND_CHECKBOX_CLICKED, cb->GetId());
   event.SetInt( cb->GetValue() );
   event.SetEventObject(cb);

@@ -17,11 +17,20 @@
 #include "wx/listbox.h"
 
 //-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern bool   g_blockEventsOnDrag;
+
+//-----------------------------------------------------------------------------
 // wxListBox
 //-----------------------------------------------------------------------------
 
-void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
+static void gtk_listitem_select_callback( GtkWidget *widget, wxListBox *listbox )
 {
+  if (!listbox->HasVMT()) return;
+  if (g_blockEventsOnDrag) return;
+  
   wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
   
   event.SetInt( listbox->GetIndex( widget ) );
@@ -84,11 +93,11 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     GtkWidget *list_item;
     list_item = gtk_list_item_new_with_label( choices[i] ); 
   
+    gtk_container_add( GTK_CONTAINER(m_list), list_item );
+    
     gtk_signal_connect( GTK_OBJECT(list_item), "select", 
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
-    gtk_container_add( GTK_CONTAINER(m_list), list_item );
-    
     m_clientData.Append( (wxObject*)NULL );
     
     gtk_widget_show( list_item );
