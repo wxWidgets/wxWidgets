@@ -181,7 +181,7 @@ bool wxTaskBarIcon::SetIcon(const wxIcon& icon, const wxString& tooltip)
 
     CGImageRef pImage;
     
-#if wxMAC_USE_CORE_GRAPHICS        
+#if 1 // is always available under OSX now       
     pImage = (CGImageRef) bmp.CGImageCreate() ;
 #else
     WXHBITMAP iconport ;
