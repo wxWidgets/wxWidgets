@@ -963,7 +963,7 @@ class Shape(ShapeEvtHandler):
             if line in linesAtThisAttachment:
                 # Done this one
                 del linesAtThisAttachment[linesAtThisAttachment.index(line)]
-                self._lines.Append(line)
+                self._lines.append(line)
 
         # Now add any lines that haven't been listed in linesToSort
         self._lines += linesAtThisAttachment
