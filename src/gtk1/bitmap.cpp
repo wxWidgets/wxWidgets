@@ -865,6 +865,12 @@ void wxBitmap::SetMask( wxMask *mask )
     M_BMPDATA->m_mask = mask;
 }
 
+bool wxBitmap::CopyFromIcon(const wxIcon& icon)
+{
+    *this = icon;
+    return TRUE;
+}
+
 wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
 {
     wxCHECK_MSG( Ok() &&
