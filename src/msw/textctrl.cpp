@@ -1291,6 +1291,13 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
         }
 #endif // wxUSE_RICHEDIT
 
+        // remove the '\n' at the end, if any (this is how this function is
+        // supposed to work according to the docs)
+        if ( buf[len - 1] == _T('\n') )
+        {
+            len--;
+        }
+
         buf[len] = 0;
         tmp.SetLength(len);
     }
