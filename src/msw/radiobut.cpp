@@ -138,6 +138,8 @@ bool wxRadioButton::Create(wxWindow *parent,
 
     if ( HasFlag(wxCLIP_SIBLINGS) )
         msStyle |= WS_CLIPSIBLINGS;
+    if ( HasFlag(wxALIGN_RIGHT) )
+        msStyle |= BS_LEFTTEXT | BS_RIGHT;
 
     if ( !MSWCreateControl(_T("BUTTON"), msStyle, pos, size, label, 0) )
         return false;
