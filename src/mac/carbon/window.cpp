@@ -53,8 +53,10 @@
 #include <ToolUtils.h>
 #endif
 
+#if TARGET_API_MAC_OSX
 #ifndef __HIVIEW__
 	#include <HIToolbox/HIView.h>
+#endif
 #endif
 
 #if  wxUSE_DRAG_AND_DROP
