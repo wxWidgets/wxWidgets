@@ -858,45 +858,7 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 
 void wxWindowMac::MacUpdateControlFont() 
 {
-	ControlFontStyleRec	fontStyle;
-        wxFont myfont = GetFont();
-	if ( myfont.MacGetThemeFontID() != kThemeCurrentPortFont )
-	{
-	    switch( myfont.MacGetThemeFontID() )
-	    {
-	        case kThemeSmallSystemFont :    fontStyle.font = kControlFontSmallSystemFont ;  break ;
-	        case 109 /*mini font */ :       fontStyle.font = -5 ;                           break ;
-	        case kThemeSystemFont :         fontStyle.font = kControlFontBigSystemFont ;    break ;
-	        default :                       fontStyle.font = kControlFontBigSystemFont ;    break ;
-	    }
-	    fontStyle.flags = kControlUseFontMask ; 
-	}
-	else
-	{
-	    fontStyle.font = myfont.MacGetFontNum() ;
-	    fontStyle.style = myfont.MacGetFontStyle() ;
-	    fontStyle.size = myfont.MacGetFontSize() ;
-	    fontStyle.flags = kControlUseFontMask | kControlUseFaceMask | kControlUseSizeMask ;
-	}
-
-    fontStyle.just = teJustLeft ;
-    fontStyle.flags |= kControlUseJustMask ;
-    if ( ( GetWindowStyle() & wxALIGN_MASK ) & wxALIGN_CENTER_HORIZONTAL )
-        fontStyle.just = teJustCenter ;
-    else if ( ( GetWindowStyle() & wxALIGN_MASK ) & wxALIGN_RIGHT )
-        fontStyle.just = teJustRight ;
-
-    
-    // we only should do this in case of a non-standard color, as otherwise 'disabled' controls
-    // won't get grayed out by the system anymore
-    
-    if ( GetForegroundColour() != *wxBLACK )
-    {
-        fontStyle.foreColor = MAC_WXCOLORREF(GetForegroundColour().GetPixel() ) ;
-        fontStyle.flags |= kControlUseForeColorMask ;
-    }
-	
-	::SetControlFontStyle( *m_peer , &fontStyle );
+    m_peer->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
 	Refresh() ;
 }
 
