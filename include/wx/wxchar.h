@@ -25,9 +25,15 @@
 #if defined(__VISUALC__) && defined(__WIN32__)
 
 #include <tchar.h>
+#if wxUSE_UNICODE // temporary - preserve binary compatibility
 typedef  _TCHAR      wxChar;
 typedef  _TSCHAR     wxSChar;
 typedef  _TUCHAR     wxUChar;
+#else
+#define wxChar char
+#define wxSChar signed char
+#define wxUChar unsigned char
+#endif
 
    // ctype.h functions
 #define  wxIsalnum   _istalnum
@@ -173,9 +179,15 @@ typedef unsigned __WCHAR_TYPE__ wxUChar;
 #endif
 #else//!Unicode
 
+#if 0 // temporary - preserve binary compatibilty
 typedef char            wxChar;
 typedef signed char     wxSChar;
 typedef unsigned char   wxUChar;
+#else
+#define wxChar char
+#define wxSChar signed char
+#define wxUChar unsigned char
+#endif
 
 #define _T(x)           x
 
