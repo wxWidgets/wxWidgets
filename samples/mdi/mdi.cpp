@@ -282,8 +282,13 @@ void MyFrame::OnSize(wxSizeEvent& event)
 
     textWindow->SetSize(0, 0, 200, h);
     GetClientWindow()->SetSize(200, 0, w - 200, h);
-    
+
+    // FIXME: On wxX11, we need the MDI frame to process this
+    // event, but on other platforms this should not
+    // be done.
+#ifdef __WXX11__   
     event.Skip();
+#endif
 }
 
 void MyFrame::InitToolBar(wxToolBar* toolBar)
