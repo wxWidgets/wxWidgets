@@ -1461,11 +1461,12 @@ dnl   defines INSTALL with the appropriate command
 AC_PROG_INSTALL
 case "${host}" in
 
-    dnl  The other BSD's should probably go in here too, since this is
-    dnl  to workaround a strange static lib BSDism.
+    dnl The other BSD's should probably go in here too, since this is
+    dnl to workaround a strange static lib BSDism.
+    dnl Mac OS X install seems to ignore -p option...
     powerpc-*-darwin* )
-        INSTALL_PROGRAM="$INSTALL_PROGRAM -p"
-        INSTALL_DATA="$INSTALL_DATA -p"
+        INSTALL_PROGRAM="cp -p"
+        INSTALL_DATA="cp -p"
         ;;
     *)
         ;;

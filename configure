@@ -8567,9 +8567,9 @@ test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
 
 case "${host}" in
 
-            powerpc-*-darwin* )
-        INSTALL_PROGRAM="$INSTALL_PROGRAM -p"
-        INSTALL_DATA="$INSTALL_DATA -p"
+                powerpc-*-darwin* )
+        INSTALL_PROGRAM="cp -p"
+        INSTALL_DATA="cp -p"
         ;;
     *)
         ;;
