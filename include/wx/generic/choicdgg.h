@@ -18,6 +18,7 @@
 
 #include "wx/setup.h"
 #include "wx/dialog.h"
+#include "wx/listbox.h"
 
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
