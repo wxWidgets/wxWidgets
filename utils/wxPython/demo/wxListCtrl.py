@@ -49,13 +49,19 @@ class TestListCtrlPanel(wxPanel):
         self.currentItem = 0
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
         EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
-        EVT_COMMAND_RIGHT_CLICK(self.list, tID, self.OnRightClick)
         EVT_RIGHT_DOWN(self.list, self.OnRightDown)
+
+        # for wxMSW
+        EVT_COMMAND_RIGHT_CLICK(self.list, tID, self.OnRightClick)
+
+        # for wxGTK
+        EVT_RIGHT_UP(self.list, self.OnRightClick)
 
 
     def OnRightDown(self, event):
         self.x = event.GetX()
-        self.log.WriteText("x = %d\n" % self.x)
+        self.y = event.GetY()
+        self.log.WriteText("x, y = %s\n" % str((self.x, self.y)))
         event.Skip()
 
     def OnItemSelected(self, event):
@@ -68,18 +74,17 @@ class TestListCtrlPanel(wxPanel):
 
     def OnRightClick(self, event):
         self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
-        menu = wxPyMenu()
+        self.menu = wxMenu()
         tPopupID1 = 0
         tPopupID2 = 1
         tPopupID3 = 2
-        menu.Append(tPopupID1, "One")
-        menu.Append(tPopupID2, "Two")
-        menu.Append(tPopupID3, "Three")
+        self.menu.Append(tPopupID1, "One")
+        self.menu.Append(tPopupID2, "Two")
+        self.menu.Append(tPopupID3, "Three")
         EVT_MENU(self, tPopupID1, self.OnPopupOne)
         EVT_MENU(self, tPopupID2, self.OnPopupTwo)
         EVT_MENU(self, tPopupID3, self.OnPopupThree)
-        pos = self.list.GetItemPosition(self.currentItem)
-        self.PopupMenu(menu, self.x, pos.y)
+        self.PopupMenu(self.menu, self.x, self.y)
 
     def OnPopupOne(self, event):
         self.log.WriteText("Popup one\n")

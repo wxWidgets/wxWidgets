@@ -154,6 +154,7 @@ class wxPythonDemo(wxFrame):
         numLines = h/self.charHeight
         x, y = self.log.PositionToXY(self.log.GetLastPosition())
         self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
+        self.log.SetInsertionPointEnd()
 
     def write(self, txt):
         self.WriteText(txt)
