@@ -231,6 +231,6 @@ Depends: wxwin=V-headers (= ${Source-Version})
 Conflicts: wxwin-headers-msw
 Replaces: wxwin-headers-msw
 Provides: wxwin-headers-msw
-Description: wxWindows headers for mingw32msvc-cross
+Description: Extra wxWindows headers for mingw32msvc-cross
  Headers required by the wxWindows mingw32msvc-cross libraries.
 
