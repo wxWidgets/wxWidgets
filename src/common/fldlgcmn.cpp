@@ -43,24 +43,39 @@ wxFileDialogBase::wxFileDialogBase(wxWindow *parent,
                                    const wxString& wildCard,
                                    long style,
                                    const wxPoint& WXUNUSED(pos))
+                : m_message(message),
+                  m_dir(defaultDir),
+                  m_fileName(defaultFile)
 {
     m_parent = parent;
-    m_message = message;
-    m_dir = defaultDir;
-    m_fileName = defaultFile;
-    if (wildCard.IsEmpty())
-        m_wildCard = wxFileSelectorDefaultWildcardStr;
-      else
-        m_wildCard = wildCard ;
     m_dialogStyle = style;
-    m_path = wxT("");
     m_filterIndex = 0;
 
-    // convert m_wildCard from "*.bar" to "Files (*.bar)|*.bar"
-    if ( m_wildCard.Find(wxT('|')) == wxNOT_FOUND )
+    if ( wildCard.empty() )
     {
-        m_wildCard = wxString::Format(_("Files (%s)|%s"),
-                                        m_wildCard.c_str(), m_wildCard.c_str());
+        m_wildCard = wxString::Format(_("All files (%s)|%s"),
+                                      wxFileSelectorDefaultWildcardStr,
+                                      wxFileSelectorDefaultWildcardStr);
+    }
+    else // have wild card
+    {
+        // convert m_wildCard from "*.bar" to "bar files (*.bar)|*.bar"
+        if ( m_wildCard.Find(wxT('|')) == wxNOT_FOUND )
+        {
+            wxString::size_type nDot = m_wildCard.find(_T("*."));
+            if ( nDot != wxString::npos )
+                nDot++;
+            else
+                nDot = 0;
+
+            m_wildCard = wxString::Format
+                         (
+                            _("%s files (%s)|%s"),
+                            m_wildCard.c_str() + nDot,
+                            m_wildCard.c_str(),
+                            m_wildCard.c_str()
+                         );
+        }
     }
 }
 
