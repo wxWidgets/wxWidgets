@@ -1786,11 +1786,6 @@ void wxWindowOS2::DoSetClientSize(
     GetEventHandler()->ProcessEvent(vEvent);
 } // end of wxWindowOS2::DoSetClientSize
 
-wxPoint wxWindowOS2::GetClientAreaOrigin() const
-{
-    return wxPoint(0, 0);
-} // end of wxWindowOS2::GetClientAreaOrigin
-
 // ---------------------------------------------------------------------------
 // text metrics
 // ---------------------------------------------------------------------------
