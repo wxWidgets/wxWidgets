@@ -490,7 +490,7 @@ void SliderWidgetsPage::OnSlider(wxScrollEvent& event)
         If this assert is triggered, there is an unknown slider event which
         should be added to the above eventNames array.
     */
-    wxASSERT_MSG(index >= 0 && index < WXSIZEOF(eventNames),
+    wxASSERT_MSG(index >= 0 && (size_t)index < WXSIZEOF(eventNames),
                  wxT("Unknown slider event") );
 
 

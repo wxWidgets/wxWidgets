@@ -707,8 +707,8 @@ void MyTextCtrl::OnKeyDown(wxKeyEvent& event)
                 wxLogMessage( _T("Current position: %ld\nCurrent line, column: (%ld, %ld)\nNumber of lines: %ld\nCurrent line length: %ld\nTotal text length: %u (%ld)"),
                         pos,
                         line, column,
-                        GetNumberOfLines(),
-                        GetLineLength(line),
+                        (long) GetNumberOfLines(),
+                        (long) GetLineLength(line),
                         GetValue().length(),
                         GetLastPosition());
             }
@@ -1204,7 +1204,7 @@ void MyFrame::OnIdle( wxIdleEvent& event )
 #endif
                 s_windowFocus
 #ifdef __WXMSW__
-                , s_windowFocus->GetHWND()
+                , (unsigned int) s_windowFocus->GetHWND()
 #endif
                   );
 

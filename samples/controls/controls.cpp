@@ -272,7 +272,7 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxRadioBoxNameStr)
         : wxRadioBox(parent, id, title, pos, size, n, choices, majorDim,
-                     style, validator, name) { }
+                     style, validator, name) { SetForegroundColour(*wxRED); }
 
 protected:
     void OnFocusGot(wxFocusEvent& event)
@@ -682,6 +682,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
     (void)new MyRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, "T&his", wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
+    m_radio->SetForegroundColour(*wxRED);
 
 #if wxUSE_TOOLTIPS
     m_combo->SetToolTip("This is a natural\ncombobox - can you believe me?");
@@ -709,6 +710,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1),
                              wxSL_AUTOTICKS | wxSL_LABELS );
     m_slider->SetTickFreq(40, 0);
+    m_slider->SetToolTip(_T("This is a sliding slider"));
+
     (void)new wxStaticBox( panel, -1, "&Explanation",
                            wxPoint(230,10), wxSize(270,130),
                            wxALIGN_CENTER );
@@ -1224,6 +1227,8 @@ void MyPanel::OnRadioButtons( wxCommandEvent &event )
             }
         case ID_RADIOBOX_FONT:
             {
+                    m_radio->SetForegroundColour(*wxGREEN);
+
                 m_radio->SetFont( *wxITALIC_FONT );
                 break;
             }
@@ -1562,7 +1567,7 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 #endif
                 s_windowFocus->GetClassInfo()->GetClassName()
 #ifdef __WXMSW__
-                , s_windowFocus->GetHWND()
+                , (unsigned int) s_windowFocus->GetHWND()
 #endif
                   );
 

@@ -700,7 +700,8 @@ void TextWidgetsPage::OnButtonLoad(wxCommandEvent& WXUNUSED(event))
         {
             long elapsed = sw.Time();
             wxLogMessage(_T("Loaded file '%s' in %lu.%us"),
-                         filename.c_str(), elapsed / 1000, elapsed % 1000);
+                         filename.c_str(), elapsed / 1000,
+                         (unsigned int) elapsed % 1000);
         }
     }
 }
