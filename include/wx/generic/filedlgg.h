@@ -166,6 +166,8 @@ public:
     void OnNew( wxCommandEvent &event );
     void OnChoice( wxCommandEvent &event );
     void OnTextEnter( wxCommandEvent &event );
+    
+    void HandleAction( const wxString &fn );
 
 protected:
     wxString       m_message;

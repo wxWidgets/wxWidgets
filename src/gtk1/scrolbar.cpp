@@ -40,38 +40,27 @@ extern bool   g_blockEventsOnScroll;
 // "value_changed"
 //-----------------------------------------------------------------------------
 
-static void gtk_scrollbar_callback( GtkWidget *WXUNUSED(widget), wxScrollBar *win )
+static void gtk_scrollbar_callback( GtkAdjustment *adjust, wxScrollBar *win )
 { 
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
     
-    float diff = win->m_adjust->value - win->m_oldPos;
+    float diff = adjust->value - win->m_oldPos;
     if (fabs(diff) < 0.2) return;
-    win->m_oldPos = win->m_adjust->value;
-  
-    wxEventType command = wxEVT_NULL;
-  
-    float line_step = win->m_adjust->step_increment;
-    float page_step = win->m_adjust->page_increment;
-  
-    if (win->IsScrolling())
-    {
-        command = wxEVT_SCROLL_THUMBTRACK;
-    }
-    else
-    {
-        if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-        else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-        else command = wxEVT_SCROLL_THUMBTRACK;
-    }
+    
+    win->m_oldPos = adjust->value;
 
-    int value = (int)(win->m_adjust->value+0.5);
+    GtkRange *range = GTK_RANGE( win->m_widget );
+
+    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
+    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLL_LINEUP;
+    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLL_LINEDOWN;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLL_PAGEUP;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLL_PAGEDOWN;
+    
+    int value = (int)ceil(adjust->value);
       
     int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
   

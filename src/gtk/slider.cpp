@@ -38,31 +38,27 @@ extern bool   g_blockEventsOnDrag;
 // "value_changed"
 //-----------------------------------------------------------------------------
 
-static void gtk_slider_callback( GtkWidget *WXUNUSED(widget), wxSlider *win )
+static void gtk_slider_callback( GtkAdjustment *adjust, wxSlider *win )
 { 
     if (g_isIdle) wxapp_install_idle_handler();
 
     if (!win->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
-    
-    float diff = win->m_adjust->value - win->m_oldPos;
-    if (fabs(diff) < 0.2) return;
-    win->m_oldPos = win->m_adjust->value;
-  
-    wxEventType command = wxEVT_NULL;
-  
-    float line_step = win->m_adjust->step_increment;
-    float page_step = win->m_adjust->page_increment;
-  
-    if (fabs(win->m_adjust->value-win->m_adjust->lower) < 0.2) command = wxEVT_SCROLL_BOTTOM;
-    else if (fabs(win->m_adjust->value-win->m_adjust->upper) < 0.2) command = wxEVT_SCROLL_TOP;
-    else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLL_LINEDOWN;
-    else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLL_LINEUP;
-    else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLL_PAGEDOWN;
-    else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLL_PAGEUP;
-    else command = wxEVT_SCROLL_THUMBTRACK;
 
-    int value = (int)ceil(win->m_adjust->value);
+    float diff = adjust->value - win->m_oldPos;
+    if (fabs(diff) < 0.2) return;
+    
+    win->m_oldPos = adjust->value;
+
+    GtkRange *range = GTK_RANGE( win->m_widget );
+
+    wxEventType command = wxEVT_SCROLL_THUMBTRACK;
+    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLL_LINEUP;
+    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLL_LINEDOWN;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLL_PAGEUP;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLL_PAGEDOWN;
+    
+    int value = (int)ceil(adjust->value);
       
     int orient = wxHORIZONTAL;
     if (win->GetWindowStyleFlag() & wxSB_VERTICAL == wxSB_VERTICAL) orient = wxVERTICAL;

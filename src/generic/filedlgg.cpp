@@ -700,11 +700,9 @@ void wxFileDialog::OnChoice( wxCommandEvent &event )
     m_list->SetWild( *str );
 }
 
-void wxFileDialog::OnActivated( wxListEvent &WXUNUSED(event) )
+void wxFileDialog::OnActivated( wxListEvent &event )
 {
-    wxCommandEvent cevent(wxEVT_COMMAND_BUTTON_CLICKED, wxID_OK);
-    cevent.SetEventObject( this );
-    GetEventHandler()->ProcessEvent( cevent );
+    HandleAction( event.m_item.m_text );
 }
 
 void wxFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
@@ -716,13 +714,23 @@ void wxFileDialog::OnTextEnter( wxCommandEvent &WXUNUSED(event) )
 
 void wxFileDialog::OnSelected( wxListEvent &event )
 {
-    if (FindFocus() == m_list)
-        m_text->SetValue( event.m_item.m_text );
+    if (FindFocus() != m_list) return;
+    
+    wxString filename( event.m_item.m_text );
+    if (filename == _T("..")) return;
+    
+    wxString dir;
+    m_list->GetDir( dir );
+    if (dir != _T("/")) dir += _T("/");
+    dir += filename;
+    if (wxDirExists(dir)) return;
+    
+    m_text->SetValue( filename );
 }
 
-void wxFileDialog::OnListOk( wxCommandEvent &event )
+void wxFileDialog::HandleAction( const wxString &fn )
 {
-    wxString filename( m_text->GetValue() );
+    wxString filename( fn );
     wxString dir;
     m_list->GetDir( dir );
     if (filename.IsEmpty()) return;
@@ -777,10 +785,6 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     if (wxDirExists(filename))
     {
         m_list->GoToDir( filename );
-        if (filename == _T("/"))
-            m_text->SetValue( _T("") );
-        else
-            m_text->SetValue( _T("..") );
         m_list->GetDir( dir );
         m_static->SetLabel( dir );
         return;
@@ -808,6 +812,11 @@ void wxFileDialog::OnListOk( wxCommandEvent &event )
     }
 
     SetPath( filename );
+}
+
+void wxFileDialog::OnListOk( wxCommandEvent &event )
+{
+    HandleAction( m_text->GetValue() );
     event.Skip();
 }
 

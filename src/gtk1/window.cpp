@@ -1543,9 +1543,6 @@ static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindow *win )
     else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
     
-//    if (fabs(adjust->value-adjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
-//    if (fabs(adjust->value-adjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
-
     int value = (int)(adjust->value+0.5);
 
     wxScrollWinEvent event( command, value, wxVERTICAL );
@@ -1579,9 +1576,6 @@ static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindow *win )
     else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
     else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
     
-//    if (fabs(adjust->value-adjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
-//    if (fabs(adjust->value-adjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
-
     int value = (int)(adjust->value+0.5);
 
     wxScrollWinEvent event( command, value, wxHORIZONTAL );
@@ -1663,13 +1657,6 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 //  a different window than the slider
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
-
-//    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
-//
-//    if (widget == GTK_RANGE(scrolledWindow->vscrollbar))
-//        gtk_signal_emit_by_name( GTK_OBJECT(win->m_hAdjust), "value_changed" );
-//    else
-//        gtk_signal_emit_by_name( GTK_OBJECT(win->m_vAdjust), "value_changed" );
 
     win->SetScrolling( FALSE );
 
