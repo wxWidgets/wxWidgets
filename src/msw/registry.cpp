@@ -210,7 +210,7 @@ wxRegKey::wxRegKey(const wxRegKey& keyParent, const wxString& strKey)
         : m_strKey(keyParent.m_strKey)
 {
   // combine our name with parent's to get the full name
-  if ( !strKey.IsEmpty() && strKey[0] != REG_SEPARATOR )
+  if ( !m_strKey.IsEmpty() && strKey[0] != REG_SEPARATOR )
       m_strKey  += REG_SEPARATOR;
 
   m_strKey += strKey;
