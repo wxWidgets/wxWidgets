@@ -621,7 +621,7 @@ swig_args = ['-c++',
 
              '-I./src',
              '-D'+WXPLAT,
-             '-c'
+             '-noruntime'
              ]
 if UNICODE:
     swig_args.append('-DwxUSE_UNICODE')

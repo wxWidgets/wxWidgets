@@ -8,7 +8,6 @@
  *
  ************************************************************************/
 
-
 #include "Python.h"
 
 #ifdef __cplusplus
@@ -39,8 +38,6 @@ typedef struct swig_const_info {
     swig_type_info **ptype;
 } swig_const_info;
 
-
-
 /* Common SWIG API */
 #define SWIG_ConvertPtr(obj, pp, type, flags) \
   SWIG_Python_ConvertPtr(obj, pp, type, flags)
@@ -56,33 +53,26 @@ typedef struct swig_const_info {
   SWIG_Python_addvarlink(p, name, get_attr, set_attr)
 #define SWIG_ConvertPacked(obj, ptr, sz, ty, flags) \
   SWIG_Python_ConvertPacked(obj, ptr, sz, ty, flags)
-#define SWIG_PackData(c, ptr, sz) \
-  SWIG_Python_PackData(c, ptr, sz)
-#define SWIG_UnpackData(c, ptr, sz) \
-  SWIG_Python_UnpackData(c, ptr, sz)
 #define SWIG_NewPackedObj(ptr, sz, type) \
   SWIG_Python_NewPackedObj(ptr, sz, type)
 #define SWIG_InstallConstants(d, constants) \
   SWIG_Python_InstallConstants(d, constants)
 
 
-SWIGEXPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
-SWIGEXPORT(void *)	      SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(int)               SWIG_Python_ConvertPtr(PyObject *, void **, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPointerObj(void *, swig_type_info *,int own);
+SWIGIMPORT(void *)            SWIG_Python_MustGetPtr(PyObject *, swig_type_info *, int, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_newvarlink(void);
+SWIGIMPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
+SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
+SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
+SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
-SWIGEXPORT(PyObject *)        SWIG_Python_newvarlink(void);
-SWIGEXPORT(void)              SWIG_Python_addvarlink(PyObject *, char *, PyObject *(*)(void), int (*)(PyObject *));
-SWIGEXPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int sz, swig_type_info *, int);
-SWIGEXPORT(char *)            SWIG_Python_PackData(char *c, void *, int);
-SWIGEXPORT(char *)            SWIG_Python_UnpackData(char *c, void *, int);
-SWIGEXPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
-SWIGEXPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
 
 /* Contract support */
 
 #define SWIG_contract_assert(expr, msg) if (!(expr)) { PyErr_SetString(PyExc_RuntimeError, (char *) msg ); goto fail; } else
-
 
 #ifdef __cplusplus
 }

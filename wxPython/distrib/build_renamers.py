@@ -36,7 +36,7 @@ swig_args = ['-c++',
              '-xmllite',
 
              '-I./src',
-             '-c'
+             '-noruntime'
              ]
 
 
