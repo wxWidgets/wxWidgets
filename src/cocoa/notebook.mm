@@ -260,6 +260,7 @@ bool wxNotebook::SetPageImage(size_t nPage, int nImage)
 
 int wxNotebook::SetSelection(size_t nPage)
 {
+    wxAutoNSAutoreleasePool pool;
     [GetNSTabView() selectTabViewItemAtIndex:nPage];
     return GetSelection();
 }
