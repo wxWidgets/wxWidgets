@@ -658,8 +658,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         // and now repaint the uncovered area
 
-        // FIXME: we repaint the intersection of these rectangles twice - is
-        //        it bad?
+        // FIXME: We repaint the intersection of these rectangles twice - is
+        //        it bad? I don't think so as it is rare to scroll the window
+        //        diagonally anyhow and so adding extra logic to compute
+        //        rectangle intersection is probably not worth the effort
 
         wxRect rect;
         rect.x = ptOrigin.x + ptSource.x;
@@ -670,7 +672,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             if ( dx < 0 )
             {
                 // refresh the area along the right border
-                rect.x += size.x;
+                rect.x += size.x + dx;
                 rect.width = -dx;
             }
             else
@@ -693,7 +695,7 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             if ( dy < 0 )
             {
                 // refresh the area along the bottom border
-                rect.y += size.y;
+                rect.y += size.y + dy;
                 rect.height = -dy;
             }
             else
