@@ -139,7 +139,6 @@ void OwnerDrawnFrame::InitMenu()
     pItem = new wxMenuItem(file_menu, Menu_Test1, _T("&Uncheckable"), _T("red item"));
     pItem->SetFont(*wxITALIC_FONT);
     pItem->SetTextColour(wxColor(255, 0, 0));
-    pItem->SetMarginWidth(23);
     file_menu->Append(pItem);
 
     pItem = new wxMenuItem(file_menu, Menu_Test2, _T("&Checkable"),
@@ -216,8 +215,7 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
     SetStatusText(_T("no selection"), 0);
 
     // make a panel with some controls
-    wxPanel *pPanel = new wxPanel(this, -1, wxPoint(0, 0), 
-                                  wxSize(400, 200), wxTAB_TRAVERSAL);
+    wxPanel *pPanel = new wxPanel(this);
 
     // check list box
     static const wxChar* aszChoices[] = { _T("Hello"), _T("world"), _T("and"), 
@@ -271,12 +269,10 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
             pPanel,              // parent
             Control_Listbox2,    // control id
             wxPoint(220, 10),    // listbox position
-            wxDefaultSize,       // listbox size
-            WXSIZEOF(aszColors),   // number of strings
+            wxSize(200, 200),    // listbox size
+            WXSIZEOF(aszColors), // number of strings
             astrChoices,         // array of strings
-            wxLB_OWNERDRAW,      // owner-drawn
-            wxDefaultValidator,  //
-            wxListBoxNameStr
+            wxLB_OWNERDRAW       // owner-drawn
         );
 
     for ( ui = 0; ui < WXSIZEOF(aszColors); ui++ )
