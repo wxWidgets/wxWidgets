@@ -757,6 +757,9 @@ void DateTimeTestCase::TestDSTBug()
     CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetSecond());
     CPPUNIT_ASSERT_EQUAL(0, (int)dt.GetMillisecond());
 
+    dt.Set(1, 0, 0, 0);
+    CPPUNIT_ASSERT_EQUAL(1, (int)dt.GetHour());
+
     /////////////////////////
     // Test Today()
 #ifdef CHANGE_SYSTEM_DATE
