@@ -30,6 +30,13 @@ Creates a dummy input stream.
 
 Destructor.
 
+\membersection{wxInputStream::CanRead}\label{wxinputstreamcanread}
+
+\constfunc{bool}{CanRead}{\void}
+
+Returns true if some data is available in the stream right now, so that
+calling \helpref{Read()}{wxinputstreamread} wouldn't block.
+
 \membersection{wxInputStream::GetC}\label{wxinputstreamgetc}
 
 \func{char}{GetC}{\void}
@@ -43,7 +50,7 @@ If EOF, return value is undefined and LastRead() will return 0 and not 1.
 
 \membersection{wxInputStream::Eof}\label{wxinputstreameof}
 
-\constfunc{wxInputStream}{Eof}{\void}
+\constfunc{bool}{Eof}{\void}
 
 Returns true if the end of stream has been reached.
 
