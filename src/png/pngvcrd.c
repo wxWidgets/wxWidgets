@@ -36,56 +36,56 @@ png_mmx_support(void)
 {
   int mmx_supported_local = 0;
   _asm {
-    push ebx          //CPUID will trash these
+    push ebx          /*CPUID will trash these */
     push ecx
     push edx
 
-    pushfd            //Save Eflag to stack
-    pop eax           //Get Eflag from stack into eax
-    mov ecx, eax      //Make another copy of Eflag in ecx
-    xor eax, 0x200000 //Toggle ID bit in Eflag [i.e. bit(21)]
-    push eax          //Save modified Eflag back to stack
+    pushfd            /*Save Eflag to stack */
+    pop eax           /*Get Eflag from stack into eax */
+    mov ecx, eax      /*Make another copy of Eflag in ecx */
+    xor eax, 0x200000 /*Toggle ID bit in Eflag [i.e. bit(21)] */
+    push eax          /*Save modified Eflag back to stack */
 
-    popfd             //Restored modified value back to Eflag reg
-    pushfd            //Save Eflag to stack
-    pop eax           //Get Eflag from stack
-    push ecx          // save original Eflag to stack
-    popfd             // restore original Eflag
-    xor eax, ecx      //Compare the new Eflag with the original Eflag
-    jz NOT_SUPPORTED  //If the same, CPUID instruction is not supported,
-                      //skip following instructions and jump to
-                      //NOT_SUPPORTED label
+    popfd             /*Restored modified value back to Eflag reg */
+    pushfd            /*Save Eflag to stack */
+    pop eax           /*Get Eflag from stack */
+    push ecx          /* save original Eflag to stack */
+    popfd             /* restore original Eflag */
+    xor eax, ecx      /*Compare the new Eflag with the original Eflag */
+    jz NOT_SUPPORTED  /*If the same, CPUID instruction is not supported, */
+                      /*skip following instructions and jump to */
+                      /*NOT_SUPPORTED label */
 
-    xor eax, eax      //Set eax to zero
+    xor eax, eax      /*Set eax to zero */
 
-    _asm _emit 0x0f   //CPUID instruction  (two bytes opcode)
+    _asm _emit 0x0f   /*CPUID instruction  (two bytes opcode) */
     _asm _emit 0xa2
 
-    cmp eax, 1        //make sure eax return non-zero value
-    jl NOT_SUPPORTED  //If eax is zero, mmx not supported
+    cmp eax, 1        /*make sure eax return non-zero value */
+    jl NOT_SUPPORTED  /*If eax is zero, mmx not supported */
 
-    xor eax, eax      //set eax to zero
-    inc eax           //Now increment eax to 1.  This instruction is
-                      //faster than the instruction "mov eax, 1"
+    xor eax, eax      /*set eax to zero */
+    inc eax           /*Now increment eax to 1.  This instruction is */
+                      /*faster than the instruction "mov eax, 1" */
 
-    _asm _emit 0x0f   //CPUID instruction
+    _asm _emit 0x0f   /*CPUID instruction */
     _asm _emit 0xa2
 
-    and edx, 0x00800000  //mask out all bits but mmx bit(24)
-    cmp edx, 0        // 0 = mmx not supported
-    jz  NOT_SUPPORTED // non-zero = Yes, mmx IS supported
+    and edx, 0x00800000  /*mask out all bits but mmx bit(24) */
+    cmp edx, 0        /* 0 = mmx not supported */
+    jz  NOT_SUPPORTED /* non-zero = Yes, mmx IS supported */
 
-    mov  mmx_supported_local, 1  //set return value to 1
+    mov  mmx_supported_local, 1  /*set return value to 1 */
 
 NOT_SUPPORTED:
-    mov  eax, mmx_supported_local  //move return value to eax
-    pop edx          //CPUID trashed these
+    mov  eax, mmx_supported_local  /*move return value to eax */
+    pop edx          /*CPUID trashed these */
     pop ecx
     pop ebx
   }
 
-  //mmx_supported_local=0; // test code for force don't support MMX
-  //printf("MMX : %u (1=MMX supported)\n",mmx_supported_local);
+  /*mmx_supported_local=0; // test code for force don't support MMX */
+  /*printf("MMX : %u (1=MMX supported)\n",mmx_supported_local); */
 
   mmx_supported = mmx_supported_local;
   return mmx_supported_local;
@@ -314,26 +314,26 @@ png_combine_row(png_structp png_ptr, png_bytep row, int mask)
                dstptr = row;
                m = 0x80;
                unmask = ~mask;
-               len  = png_ptr->width &~7;  //reduce to multiple of 8
-               diff = png_ptr->width & 7;  //amount lost
+               len  = png_ptr->width &~7;  /*reduce to multiple of 8 */
+               diff = png_ptr->width & 7;  /*amount lost */
 
                _asm
                {
-                  movd       mm7, unmask   //load bit pattern
-                  psubb      mm6,mm6       //zero mm6
+                  movd       mm7, unmask   /*load bit pattern */
+                  psubb      mm6,mm6       /*zero mm6 */
                   punpcklbw  mm7,mm7
                   punpcklwd  mm7,mm7
-                  punpckldq  mm7,mm7       //fill register with 8 masks
+                  punpckldq  mm7,mm7       /*fill register with 8 masks */
 
                   movq       mm0,mask0
 
-                  pand       mm0,mm7       //nonzero if keep byte
-                  pcmpeqb    mm0,mm6       //zeros->1s, v versa
+                  pand       mm0,mm7       /*nonzero if keep byte */
+                  pcmpeqb    mm0,mm6       /*zeros->1s, v versa */
 
-                  mov        ecx,len       //load length of line (pixels)
-                  mov        esi,srcptr    //load source
-                  mov        ebx,dstptr    //load dest
-                  cmp        ecx,0         //lcr
+                  mov        ecx,len       /*load length of line (pixels) */
+                  mov        esi,srcptr    /*load source */
+                  mov        ebx,dstptr    /*load dest */
+                  cmp        ecx,0         /*lcr */
                   je         mainloop8end
 
 mainloop8:
@@ -344,9 +344,9 @@ mainloop8:
                   por        mm4,mm6
                   movq       [ebx],mm4
 
-                  add        esi,8         //inc by 8 bytes processed
+                  add        esi,8         /*inc by 8 bytes processed */
                   add        ebx,8
-                  sub        ecx,8         //dec by 8 pixels processed
+                  sub        ecx,8         /*dec by 8 pixels processed */
 
                   ja         mainloop8
 mainloop8end:
@@ -356,11 +356,11 @@ mainloop8end:
                   jz         end8
 
                   mov        edx,mask
-                  sal        edx,24        //make low byte the high byte
+                  sal        edx,24        /*make low byte the high byte */
 
 secondloop8:
-                  sal        edx,1         //move high bit to CF
-                  jnc        skip8         //if CF = 0
+                  sal        edx,1         /*move high bit to CF */
+                  jnc        skip8         /*if CF = 0 */
                   mov        al,[esi]
                   mov        [ebx],al
 skip8:
@@ -397,7 +397,7 @@ end8:
             } /* end of else */
 
             break;
-         }       // end 8 bpp
+         }       /* end 8 bpp */
 
          case 16:
          {
@@ -419,11 +419,11 @@ end8:
                diff = (png_ptr->width)&7;
                _asm
                {
-                  movd       mm7, unmask       //load bit pattern
-                  psubb      mm6,mm6           //zero mm6
+                  movd       mm7, unmask       /*load bit pattern */
+                  psubb      mm6,mm6           /*zero mm6 */
                   punpcklbw  mm7,mm7
                   punpcklwd  mm7,mm7
-                  punpckldq  mm7,mm7           //fill register with 8 masks
+                  punpckldq  mm7,mm7           /*fill register with 8 masks */
 
                   movq       mm0,mask0
                   movq       mm1,mask1
@@ -434,10 +434,10 @@ end8:
                   pcmpeqb    mm0,mm6
                   pcmpeqb    mm1,mm6
 
-                  mov        ecx,len           //load length of line
-                  mov        esi,srcptr        //load source
-                  mov        ebx,dstptr        //load dest
-                  cmp        ecx,0             //lcr
+                  mov        ecx,len           /*load length of line */
+                  mov        esi,srcptr        /*load source */
+                  mov        ebx,dstptr        /*load dest */
+                  cmp        ecx,0             /*lcr */
                   jz         mainloop16end
 
 mainloop16:
@@ -457,9 +457,9 @@ mainloop16:
                   por        mm5,mm7
                   movq       [ebx+8],mm5
 
-                  add        esi,16            //inc by 16 bytes processed
+                  add        esi,16            /*inc by 16 bytes processed */
                   add        ebx,16
-                  sub        ecx,8             //dec by 8 pixels processed
+                  sub        ecx,8             /*dec by 8 pixels processed */
 
                   ja         mainloop16
 
@@ -469,10 +469,10 @@ mainloop16end:
                   jz         end16
 
                   mov        edx,mask
-                  sal        edx,24            //make low byte the high byte
+                  sal        edx,24            /*make low byte the high byte */
 secondloop16:
-                  sal        edx,1             //move high bit to CF
-                  jnc        skip16            //if CF = 0
+                  sal        edx,1             /*move high bit to CF */
+                  jnc        skip16            /*if CF = 0 */
                   mov        ax,[esi]
                   mov        [ebx],ax
 skip16:
@@ -509,7 +509,7 @@ end16:
             } /* end of else */
 
             break;
-         }       // end 16 bpp
+         }       /* end 16 bpp */
 
          case 24:
          {
@@ -518,7 +518,7 @@ end16:
             png_uint_32 len;
             int unmask, diff;
 
-            __int64 mask2=0x0101010202020404,  //24bpp
+            __int64 mask2=0x0101010202020404,  /*24bpp */
                     mask1=0x0408080810101020,
                     mask0=0x2020404040808080;
 
@@ -534,11 +534,11 @@ end16:
             {
                _asm
                {
-                  movd       mm7, unmask       //load bit pattern
-                  psubb      mm6,mm6           //zero mm6
+                  movd       mm7, unmask       /*load bit pattern */
+                  psubb      mm6,mm6           /*zero mm6 */
                   punpcklbw  mm7,mm7
                   punpcklwd  mm7,mm7
-                  punpckldq  mm7,mm7           //fill register with 8 masks
+                  punpckldq  mm7,mm7           /*fill register with 8 masks */
 
                   movq       mm0,mask0
                   movq       mm1,mask1
@@ -552,9 +552,9 @@ end16:
                   pcmpeqb    mm1,mm6
                   pcmpeqb    mm2,mm6
 
-                  mov        ecx,len           //load length of line
-                  mov        esi,srcptr        //load source
-                  mov        ebx,dstptr        //load dest
+                  mov        ecx,len           /*load length of line */
+                  mov        esi,srcptr        /*load source */
+                  mov        ebx,dstptr        /*load dest */
                   cmp        ecx,0
                   jz         mainloop24end
 
@@ -584,9 +584,9 @@ mainloop24:
                   por        mm6,mm4
                   movq       [ebx+16],mm6
 
-                  add        esi,24            //inc by 24 bytes processed
+                  add        esi,24            /*inc by 24 bytes processed */
                   add        ebx,24
-                  sub        ecx,8             //dec by 8 pixels processed
+                  sub        ecx,8             /*dec by 8 pixels processed */
 
                   ja         mainloop24
 
@@ -596,10 +596,10 @@ mainloop24end:
                   jz         end24
 
                   mov        edx,mask
-                  sal        edx,24            //make low byte the high byte
+                  sal        edx,24            /*make low byte the high byte */
 secondloop24:
-                  sal        edx,1             //move high bit to CF
-                  jnc        skip24            //if CF = 0
+                  sal        edx,1             /*move high bit to CF */
+                  jnc        skip24            /*if CF = 0 */
                   mov        ax,[esi]
                   mov        [ebx],ax
                   xor        eax,eax
@@ -640,7 +640,7 @@ end24:
             } /* end of else */
 
             break;
-         }       // end 24 bpp
+         }       /* end 24 bpp */
 
          case 32:
          {
@@ -649,7 +649,7 @@ end24:
             png_uint_32 len;
             int unmask, diff;
 
-            __int64 mask3=0x0101010102020202,  //32bpp
+            __int64 mask3=0x0101010102020202,  /*32bpp */
                     mask2=0x0404040408080808,
                     mask1=0x1010101020202020,
                     mask0=0x4040404080808080;
@@ -666,11 +666,11 @@ end24:
             {
                _asm
                {
-                  movd       mm7, unmask       //load bit pattern
-                  psubb      mm6,mm6           //zero mm6
+                  movd       mm7, unmask       /*load bit pattern */
+                  psubb      mm6,mm6           /*zero mm6 */
                   punpcklbw  mm7,mm7
                   punpcklwd  mm7,mm7
-                  punpckldq  mm7,mm7           //fill register with 8 masks
+                  punpckldq  mm7,mm7           /*fill register with 8 masks */
 
                   movq       mm0,mask0
                   movq       mm1,mask1
@@ -687,11 +687,11 @@ end24:
                   pcmpeqb    mm2,mm6
                   pcmpeqb    mm3,mm6
 
-                  mov        ecx,len           //load length of line
-                  mov        esi,srcptr        //load source
-                  mov        ebx,dstptr        //load dest
+                  mov        ecx,len           /*load length of line */
+                  mov        esi,srcptr        /*load source */
+                  mov        ebx,dstptr        /*load dest */
 
-                  cmp        ecx,0             //lcr
+                  cmp        ecx,0             /*lcr */
                   jz         mainloop32end
 
 mainloop32:
@@ -727,9 +727,9 @@ mainloop32:
                   por        mm7,mm5
                   movq       [ebx+24],mm7
 
-                  add        esi,32            //inc by 32 bytes processed
+                  add        esi,32            /*inc by 32 bytes processed */
                   add        ebx,32
-                  sub        ecx,8             //dec by 8 pixels processed
+                  sub        ecx,8             /*dec by 8 pixels processed */
 
                   ja         mainloop32
 
@@ -739,10 +739,10 @@ mainloop32end:
                   jz         end32
 
                   mov        edx,mask
-                  sal        edx,24            //make low byte the high byte
+                  sal        edx,24            /*make low byte the high byte */
 secondloop32:
-                  sal        edx,1             //move high bit to CF
-                  jnc        skip32            //if CF = 0
+                  sal        edx,1             /*move high bit to CF */
+                  jnc        skip32            /*if CF = 0 */
                   mov        eax,[esi]
                   mov        [ebx],eax
 skip32:
@@ -780,7 +780,7 @@ end32:
             } /* end of else */
 
             break;
-         }       // end 32 bpp
+         }       /* end 32 bpp */
 
          case 48:
          {
@@ -807,11 +807,11 @@ end32:
                diff = (png_ptr->width)&7;
                _asm
                {
-                  movd       mm7, unmask       //load bit pattern
-                  psubb      mm6,mm6           //zero mm6
+                  movd       mm7, unmask       /*load bit pattern */
+                  psubb      mm6,mm6           /*zero mm6 */
                   punpcklbw  mm7,mm7
                   punpcklwd  mm7,mm7
-                  punpckldq  mm7,mm7           //fill register with 8 masks
+                  punpckldq  mm7,mm7           /*fill register with 8 masks */
 
                   movq       mm0,mask0
                   movq       mm1,mask1
@@ -834,9 +834,9 @@ end32:
                   pcmpeqb    mm4,mm6
                   pcmpeqb    mm5,mm6
 
-                  mov        ecx,len           //load length of line
-                  mov        esi,srcptr        //load source
-                  mov        ebx,dstptr        //load dest
+                  mov        ecx,len           /*load length of line */
+                  mov        esi,srcptr        /*load source */
+                  mov        ebx,dstptr        /*load dest */
 
                   cmp        ecx,0
                   jz         mainloop48end
@@ -884,9 +884,9 @@ mainloop48:
                   por        mm7,mm6
                   movq       [ebx+40],mm7
 
-                  add        esi,48            //inc by 32 bytes processed
+                  add        esi,48            /*inc by 32 bytes processed */
                   add        ebx,48
-                  sub        ecx,8             //dec by 8 pixels processed
+                  sub        ecx,8             /*dec by 8 pixels processed */
 
                   ja         mainloop48
 mainloop48end:
@@ -896,11 +896,11 @@ mainloop48end:
                   jz         end48
 
                   mov        edx,mask
-                  sal        edx,24            //make low byte the high byte
+                  sal        edx,24            /*make low byte the high byte */
 
 secondloop48:
-                  sal        edx,1             //move high bit to CF
-                  jnc        skip48            //if CF = 0
+                  sal        edx,1             /*move high bit to CF */
+                  jnc        skip48            /*if CF = 0 */
                   mov        eax,[esi]
                   mov        [ebx],eax
 skip48:
@@ -938,7 +938,7 @@ end48:
             } /* end of else */
 
             break;
-         }       // end 48 bpp
+         }       /* end 48 bpp */
 
          default:
          {
@@ -947,7 +947,7 @@ end48:
             png_size_t pixel_bytes;
             int offset_table[7] = {0, 4, 0, 2, 0, 1, 0};
             unsigned int i;
-            register int disp = png_pass_inc[png_ptr->pass];  // get the offset
+            register int disp = png_pass_inc[png_ptr->pass];  /* get the offset */
             register unsigned int incr1, initial_val, final_val;
 
             pixel_bytes = (png_ptr->row_info.pixel_depth >> 3);
@@ -1170,10 +1170,10 @@ png_do_read_interlace(png_structp png_ptr)
             break;
          }
 
-         default:         // This is the place where the routine is modified
+         default:         /* This is the place where the routine is modified */
          {
             __int64 const4 = 0x0000000000FFFFFF;
-            // __int64 const5 = 0x000000FFFFFF0000;  // unused...
+            /* __int64 const5 = 0x000000FFFFFF0000;  // unused... */
             __int64 const6 = 0x00000000000000FF;
             png_bytep sptr, dp;
             png_uint_32 i;
@@ -1184,11 +1184,11 @@ png_do_read_interlace(png_structp png_ptr)
 
             sptr = row + (width - 1) * pixel_bytes;
             dp = row + (final_width - 1) * pixel_bytes;
-            // New code by Nirav Chhatrapati - Intel Corporation
-            // sign fix by GRR
-            // NOTE:  there is NO MMX code for 48-bit and 64-bit images
+            /* New code by Nirav Chhatrapati - Intel Corporation */
+            /* sign fix by GRR */
+            /* NOTE:  there is NO MMX code for 48-bit and 64-bit images */
 
-            // use MMX routine if machine supports it
+            /* use MMX routine if machine supports it */
             if ((png_ptr->asm_flags & PNG_ASM_FLAG_MMX_READ_INTERLACE)
                 /* && mmx_supported */ )
             {
@@ -1201,7 +1201,7 @@ png_do_read_interlace(png_structp png_ptr)
                         mov esi, sptr
                         mov edi, dp
                         mov ecx, width
-                        sub edi, 21   // (png_pass_inc[pass] - 1)*pixel_bytes
+                        sub edi, 21   /* (png_pass_inc[pass] - 1)*pixel_bytes */
 loop_pass0:
                         movd mm0, [esi]     ; X X X X X v2 v1 v0
                         pand mm0, const4    ; 0 0 0 0 0 v2 v1 v0
@@ -1223,7 +1223,7 @@ loop_pass0:
                         sub esi, 3
                         movq [edi], mm0
                         sub edi, 24
-                        //sub esi, 3
+                        /*sub esi, 3 */
                         dec ecx
                         jnz loop_pass0
                         EMMS
@@ -1236,7 +1236,7 @@ loop_pass0:
                         mov esi, sptr
                         mov edi, dp
                         mov ecx, width
-                        sub edi, 9   // (png_pass_inc[pass] - 1)*pixel_bytes
+                        sub edi, 9   /* (png_pass_inc[pass] - 1)*pixel_bytes */
 loop_pass2:
                         movd mm0, [esi]     ; X X X X X v2 v1 v0
                         pand mm0, const4    ; 0 0 0 0 0 v2 v1 v0
@@ -1262,7 +1262,7 @@ loop_pass2:
                      int width_mmx = ((width >> 1) << 1) - 8;
                      if (width_mmx < 0)
                          width_mmx = 0;
-                     width -= width_mmx;        // 8 or 9 pix, 24 or 27 bytes
+                     width -= width_mmx;        /* 8 or 9 pix, 24 or 27 bytes */
                      if (width_mmx)
                      {
                         _asm
@@ -1441,12 +1441,12 @@ loop1_pass4:
                            movq mm0, [esi]     ; v0 v1 v2 v3 v4 v5 v6 v7
                            movq mm1, mm0       ; v0 v1 v2 v3 v4 v5 v6 v7
                            punpcklbw mm0, mm0  ; v4 v4 v5 v5 v6 v6 v7 v7
-                           //movq mm1, mm0     ; v0 v0 v1 v1 v2 v2 v3 v3
+                           /*movq mm1, mm0     ; v0 v0 v1 v1 v2 v2 v3 v3 */
                            punpckhbw mm1, mm1  ;v0 v0 v1 v1 v2 v2 v3 v3
                            movq [edi+8], mm1   ; move to memory v0 v1 v2 and v3
                            sub esi, 8
                            movq [edi], mm0     ; move to memory v4 v5 v6 and v7
-                           //sub esi, 4
+                           /*sub esi, 4 */
                            sub edi, 16
                            sub ecx, 8
                            jnz loop1_pass4
@@ -1502,8 +1502,8 @@ loop2_pass0:
                         }
                      }
 
-                     sptr -= (width_mmx*2 - 2);            // sign fixed
-                     dp -= (width_mmx*16 - 2);            // sign fixed
+                     sptr -= (width_mmx*2 - 2);            /* sign fixed */
+                     dp -= (width_mmx*16 - 2);            /* sign fixed */
                      for (i = width; i; i--)
                      {
                         png_byte v[8];
@@ -1539,7 +1539,7 @@ loop2_pass2:
                            movq [edi], mm0
                            sub esi, 4
                            movq [edi + 8], mm1
-                           //sub esi, 4
+                           /*sub esi, 4 */
                            sub edi, 16
                            sub ecx, 2
                            jnz loop2_pass2
@@ -1547,8 +1547,8 @@ loop2_pass2:
                         }
                      }
 
-                     sptr -= (width_mmx*2 - 2);            // sign fixed
-                     dp -= (width_mmx*8 - 2);            // sign fixed
+                     sptr -= (width_mmx*2 - 2);            /* sign fixed */
+                     dp -= (width_mmx*8 - 2);            /* sign fixed */
                      for (i = width; i; i--)
                      {
                         png_byte v[8];
@@ -1562,7 +1562,7 @@ loop2_pass2:
                         }
                      }
                   }
-                  else if (width)  // pass == 4 or 5
+                  else if (width)  /* pass == 4 or 5 */
                   {
                      int width_mmx = ((width >> 1) << 1) ;
                      width -= width_mmx;
@@ -1587,8 +1587,8 @@ loop2_pass4:
                         }
                      }
 
-                     sptr -= (width_mmx*2 - 2);            // sign fixed
-                     dp -= (width_mmx*4 - 2);            // sign fixed
+                     sptr -= (width_mmx*2 - 2);            /* sign fixed */
+                     dp -= (width_mmx*4 - 2);            /* sign fixed */
                      for (i = width; i; i--)
                      {
                         png_byte v[8];
@@ -1640,8 +1640,8 @@ loop4_pass0:
                         }
                      }
 
-                     sptr -= (width_mmx*4 - 4);            // sign fixed
-                     dp -= (width_mmx*32 - 4);            // sign fixed
+                     sptr -= (width_mmx*4 - 4);            /* sign fixed */
+                     dp -= (width_mmx*32 - 4);            /* sign fixed */
                      for (i = width; i; i--)
                      {
                         png_byte v[8];
@@ -1685,8 +1685,8 @@ loop4_pass2:
                         }
                      }
 
-                     sptr -= (width_mmx*4 - 4);            // sign fixed
-                     dp -= (width_mmx*16 - 4);            // sign fixed
+                     sptr -= (width_mmx*4 - 4);            /* sign fixed */
+                     dp -= (width_mmx*16 - 4);            /* sign fixed */
                      for (i = width; i; i--)
                      {
                         png_byte v[8];
@@ -1700,7 +1700,7 @@ loop4_pass2:
                         }
                      }
                   }
-                  else if (width)  // pass == 4 or 5
+                  else if (width)  /* pass == 4 or 5 */
                   {
                      int width_mmx = ((width >> 1) << 1) ;
                      width -= width_mmx;
@@ -1728,8 +1728,8 @@ loop4_pass4:
                         }
                      }
 
-                     sptr -= (width_mmx*4 - 4);          // sign fixed
-                     dp -= (width_mmx*8 - 4);            // sign fixed
+                     sptr -= (width_mmx*4 - 4);          /* sign fixed */
+                     dp -= (width_mmx*8 - 4);            /* sign fixed */
                      for (i = width; i; i--)
                      {
                         png_byte v[8];
@@ -1883,8 +1883,8 @@ loop4_pass4:
 #endif /* PNG_READ_INTERLACING_SUPPORTED */
 
 
-// These variables are utilized in the functions below.  They are declared
-// globally here to ensure alignment on 8-byte boundaries.
+/* These variables are utilized in the functions below.  They are declared */
+/* globally here to ensure alignment on 8-byte boundaries. */
 
 union uAll {
    __int64 use;
@@ -1894,7 +1894,7 @@ union uAll {
   ActiveMask, ActiveMask2, ActiveMaskEnd, ShiftBpp, ShiftRem;
 
 
-// Optimized code for PNG Average filter decoder
+/* Optimized code for PNG Average filter decoder */
 void /* PRIVATE */
 png_read_filter_row_mmx_avg(png_row_infop row_info, png_bytep row
                             , png_bytep prev_row)
@@ -1902,141 +1902,141 @@ png_read_filter_row_mmx_avg(png_row_infop row_info, png_bytep row
    int bpp;
    png_uint_32 FullLength;
    png_uint_32 MMXLength;
-   //png_uint_32 len;
+   /*png_uint_32 len; */
    int diff;
 
-   bpp = (row_info->pixel_depth + 7) >> 3; // Get # bytes per pixel
-   FullLength  = row_info->rowbytes; // # of bytes to filter
+   bpp = (row_info->pixel_depth + 7) >> 3; /* Get # bytes per pixel */
+   FullLength  = row_info->rowbytes; /* # of bytes to filter */
    _asm {
-         // Init address pointers and offset
-         mov edi, row          // edi ==> Avg(x)
-         xor ebx, ebx          // ebx ==> x
+         /* Init address pointers and offset */
+         mov edi, row          /* edi ==> Avg(x) */
+         xor ebx, ebx          /* ebx ==> x */
          mov edx, edi
-         mov esi, prev_row           // esi ==> Prior(x)
-         sub edx, bpp          // edx ==> Raw(x-bpp)
+         mov esi, prev_row           /* esi ==> Prior(x) */
+         sub edx, bpp          /* edx ==> Raw(x-bpp) */
 
          xor eax, eax
-         // Compute the Raw value for the first bpp bytes
-         //    Raw(x) = Avg(x) + (Prior(x)/2)
+         /* Compute the Raw value for the first bpp bytes */
+         /*    Raw(x) = Avg(x) + (Prior(x)/2) */
 davgrlp:
-         mov al, [esi + ebx]   // Load al with Prior(x)
+         mov al, [esi + ebx]   /* Load al with Prior(x) */
          inc ebx
-         shr al, 1             // divide by 2
-         add al, [edi+ebx-1]   // Add Avg(x); -1 to offset inc ebx
+         shr al, 1             /* divide by 2 */
+         add al, [edi+ebx-1]   /* Add Avg(x); -1 to offset inc ebx */
          cmp ebx, bpp
-         mov [edi+ebx-1], al    // Write back Raw(x);
-                            // mov does not affect flags; -1 to offset inc ebx
+         mov [edi+ebx-1], al    /* Write back Raw(x); */
+                            /* mov does not affect flags; -1 to offset inc ebx */
          jb davgrlp
-         // get # of bytes to alignment
-         mov diff, edi         // take start of row
-         add diff, ebx         // add bpp
-         add diff, 0xf         // add 7 + 8 to incr past alignment boundary
-         and diff, 0xfffffff8  // mask to alignment boundary
-         sub diff, edi         // subtract from start ==> value ebx at alignment
+         /* get # of bytes to alignment */
+         mov diff, edi         /* take start of row */
+         add diff, ebx         /* add bpp */
+         add diff, 0xf         /* add 7 + 8 to incr past alignment boundary */
+         and diff, 0xfffffff8  /* mask to alignment boundary */
+         sub diff, edi         /* subtract from start ==> value ebx at alignment */
          jz davggo
-         // fix alignment
-         // Compute the Raw value for the bytes upto the alignment boundary
-         //    Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2)
+         /* fix alignment */
+         /* Compute the Raw value for the bytes upto the alignment boundary */
+         /*    Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2) */
          xor ecx, ecx
 davglp1:
          xor eax, eax
-         mov cl, [esi + ebx]        // load cl with Prior(x)
-         mov al, [edx + ebx]  // load al with Raw(x-bpp)
+         mov cl, [esi + ebx]        /* load cl with Prior(x) */
+         mov al, [edx + ebx]  /* load al with Raw(x-bpp) */
          add ax, cx
          inc ebx
-         shr ax, 1            // divide by 2
-         add al, [edi+ebx-1]  // Add Avg(x); -1 to offset inc ebx
-         cmp ebx, diff              // Check if at alignment boundary
-         mov [edi+ebx-1], al        // Write back Raw(x);
-                            // mov does not affect flags; -1 to offset inc ebx
-         jb davglp1               // Repeat until at alignment boundary
+         shr ax, 1            /* divide by 2 */
+         add al, [edi+ebx-1]  /* Add Avg(x); -1 to offset inc ebx */
+         cmp ebx, diff              /* Check if at alignment boundary */
+         mov [edi+ebx-1], al        /* Write back Raw(x); */
+                            /* mov does not affect flags; -1 to offset inc ebx */
+         jb davglp1               /* Repeat until at alignment boundary */
 davggo:
          mov eax, FullLength
          mov ecx, eax
-         sub eax, ebx          // subtract alignment fix
-         and eax, 0x00000007   // calc bytes over mult of 8
-         sub ecx, eax          // drop over bytes from original length
+         sub eax, ebx          /* subtract alignment fix */
+         and eax, 0x00000007   /* calc bytes over mult of 8 */
+         sub ecx, eax          /* drop over bytes from original length */
          mov MMXLength, ecx
-   } // end _asm block
-   // Now do the math for the rest of the row
+   } /* end _asm block */
+   /* Now do the math for the rest of the row */
    switch ( bpp )
    {
       case 3:
       {
          ActiveMask.use  = 0x0000000000ffffff;
-         ShiftBpp.use = 24;    // == 3 * 8
-         ShiftRem.use = 40;    // == 64 - 24
+         ShiftBpp.use = 24;    /* == 3 * 8 */
+         ShiftRem.use = 40;    /* == 64 - 24 */
          _asm {
-            // Re-init address pointers and offset
+            /* Re-init address pointers and offset */
             movq mm7, ActiveMask
-            mov ebx, diff      // ebx ==> x = offset to alignment boundary
+            mov ebx, diff      /* ebx ==> x = offset to alignment boundary */
             movq mm5, LBCarryMask
-            mov edi, row       // edi ==> Avg(x)
+            mov edi, row       /* edi ==> Avg(x) */
             movq mm4, HBClearMask
-            mov esi, prev_row        // esi ==> Prior(x)
-            // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes
-                               // (we correct position in loop below)
+            mov esi, prev_row        /* esi ==> Prior(x) */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
+            movq mm2, [edi + ebx - 8]  /* Load previous aligned 8 bytes */
+                               /* (we correct position in loop below) */
 davg3lp:
-            movq mm0, [edi + ebx]      // Load mm0 with Avg(x)
-            // Add (Prev_row/2) to Average
+            movq mm0, [edi + ebx]      /* Load mm0 with Avg(x) */
+            /* Add (Prev_row/2) to Average */
             movq mm3, mm5
-            psrlq mm2, ShiftRem      // Correct position Raw(x-bpp) data
-            movq mm1, [esi + ebx]    // Load mm1 with Prior(x)
+            psrlq mm2, ShiftRem      /* Correct position Raw(x-bpp) data */
+            movq mm1, [esi + ebx]    /* Load mm1 with Prior(x) */
             movq mm6, mm7
-            pand mm3, mm1      // get lsb for each prev_row byte
-            psrlq mm1, 1       // divide prev_row bytes by 2
-            pand  mm1, mm4     // clear invalid bit 7 of each byte
-            paddb mm0, mm1     // add (Prev_row/2) to Avg for each byte
-            // Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry
-            movq mm1, mm3      // now use mm1 for getting LBCarrys
-            pand mm1, mm2      // get LBCarrys for each byte where both
-                               // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1       // divide raw bytes by 2
-            pand  mm2, mm4     // clear invalid bit 7 of each byte
-            paddb mm2, mm1     // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6      // Leave only Active Group 1 bytes to add to Avg
-            paddb mm0, mm2     // add (Raw/2) + LBCarrys to Avg for each Active
-                               //  byte
-            // Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry
-            psllq mm6, ShiftBpp  // shift the mm6 mask to cover bytes 3-5
-            movq mm2, mm0        // mov updated Raws to mm2
-            psllq mm2, ShiftBpp  // shift data to position correctly
-            movq mm1, mm3        // now use mm1 for getting LBCarrys
-            pand mm1, mm2      // get LBCarrys for each byte where both
-                               // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1       // divide raw bytes by 2
-            pand  mm2, mm4     // clear invalid bit 7 of each byte
-            paddb mm2, mm1     // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6      // Leave only Active Group 2 bytes to add to Avg
-            paddb mm0, mm2     // add (Raw/2) + LBCarrys to Avg for each Active
-                               //  byte
+            pand mm3, mm1      /* get lsb for each prev_row byte */
+            psrlq mm1, 1       /* divide prev_row bytes by 2 */
+            pand  mm1, mm4     /* clear invalid bit 7 of each byte */
+            paddb mm0, mm1     /* add (Prev_row/2) to Avg for each byte */
+            /* Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry */
+            movq mm1, mm3      /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2      /* get LBCarrys for each byte where both */
+                               /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1       /* divide raw bytes by 2 */
+            pand  mm2, mm4     /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1     /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6      /* Leave only Active Group 1 bytes to add to Avg */
+            paddb mm0, mm2     /* add (Raw/2) + LBCarrys to Avg for each Active */
+                               /*  byte */
+            /* Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry */
+            psllq mm6, ShiftBpp  /* shift the mm6 mask to cover bytes 3-5 */
+            movq mm2, mm0        /* mov updated Raws to mm2 */
+            psllq mm2, ShiftBpp  /* shift data to position correctly */
+            movq mm1, mm3        /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2      /* get LBCarrys for each byte where both */
+                               /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1       /* divide raw bytes by 2 */
+            pand  mm2, mm4     /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1     /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6      /* Leave only Active Group 2 bytes to add to Avg */
+            paddb mm0, mm2     /* add (Raw/2) + LBCarrys to Avg for each Active */
+                               /*  byte */
 
-            // Add 3rd active group (Raw(x-bpp)/2) to Average with LBCarry
-            psllq mm6, ShiftBpp  // shift the mm6 mask to cover the last two
-                                 // bytes
-            movq mm2, mm0        // mov updated Raws to mm2
-            psllq mm2, ShiftBpp  // shift data to position correctly
-                              // Data only needs to be shifted once here to
-                              // get the correct x-bpp offset.
-            movq mm1, mm3     // now use mm1 for getting LBCarrys
-            pand mm1, mm2     // get LBCarrys for each byte where both
-                              // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1      // divide raw bytes by 2
-            pand  mm2, mm4    // clear invalid bit 7 of each byte
-            paddb mm2, mm1    // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6     // Leave only Active Group 2 bytes to add to Avg
+            /* Add 3rd active group (Raw(x-bpp)/2) to Average with LBCarry */
+            psllq mm6, ShiftBpp  /* shift the mm6 mask to cover the last two */
+                                 /* bytes */
+            movq mm2, mm0        /* mov updated Raws to mm2 */
+            psllq mm2, ShiftBpp  /* shift data to position correctly */
+                              /* Data only needs to be shifted once here to */
+                              /* get the correct x-bpp offset. */
+            movq mm1, mm3     /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2     /* get LBCarrys for each byte where both */
+                              /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1      /* divide raw bytes by 2 */
+            pand  mm2, mm4    /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1    /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6     /* Leave only Active Group 2 bytes to add to Avg */
             add ebx, 8
-            paddb mm0, mm2    // add (Raw/2) + LBCarrys to Avg for each Active
-                              // byte
+            paddb mm0, mm2    /* add (Raw/2) + LBCarrys to Avg for each Active */
+                              /* byte */
 
-            // Now ready to write back to memory
+            /* Now ready to write back to memory */
             movq [edi + ebx - 8], mm0
-            // Move updated Raw(x) to use as Raw(x-bpp) for next loop
+            /* Move updated Raw(x) to use as Raw(x-bpp) for next loop */
             cmp ebx, MMXLength
-            movq mm2, mm0     // mov updated Raw(x) to mm2
+            movq mm2, mm0     /* mov updated Raw(x) to mm2 */
             jb davg3lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
@@ -2045,314 +2045,314 @@ davg3lp:
       case 7:
       case 5:
       {
-         ActiveMask.use  = 0xffffffffffffffff;  // use shift below to clear
-                                                // appropriate inactive bytes
+         ActiveMask.use  = 0xffffffffffffffff;  /* use shift below to clear */
+                                                /* appropriate inactive bytes */
          ShiftBpp.use = bpp << 3;
          ShiftRem.use = 64 - ShiftBpp.use;
          _asm {
             movq mm4, HBClearMask
-            // Re-init address pointers and offset
-            mov ebx, diff       // ebx ==> x = offset to alignment boundary
-            // Load ActiveMask and clear all bytes except for 1st active group
+            /* Re-init address pointers and offset */
+            mov ebx, diff       /* ebx ==> x = offset to alignment boundary */
+            /* Load ActiveMask and clear all bytes except for 1st active group */
             movq mm7, ActiveMask
-            mov edi, row         // edi ==> Avg(x)
+            mov edi, row         /* edi ==> Avg(x) */
             psrlq mm7, ShiftRem
-            mov esi, prev_row    // esi ==> Prior(x)
+            mov esi, prev_row    /* esi ==> Prior(x) */
             movq mm6, mm7
             movq mm5, LBCarryMask
-            psllq mm6, ShiftBpp  // Create mask for 2nd active group
-            // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes
-                                 // (we correct position in loop below)
+            psllq mm6, ShiftBpp  /* Create mask for 2nd active group */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
+            movq mm2, [edi + ebx - 8]  /* Load previous aligned 8 bytes */
+                                 /* (we correct position in loop below) */
 davg4lp:
             movq mm0, [edi + ebx]
-            psrlq mm2, ShiftRem  // shift data to position correctly
+            psrlq mm2, ShiftRem  /* shift data to position correctly */
             movq mm1, [esi + ebx]
-            // Add (Prev_row/2) to Average
+            /* Add (Prev_row/2) to Average */
             movq mm3, mm5
-            pand mm3, mm1     // get lsb for each prev_row byte
-            psrlq mm1, 1      // divide prev_row bytes by 2
-            pand  mm1, mm4    // clear invalid bit 7 of each byte
-            paddb mm0, mm1    // add (Prev_row/2) to Avg for each byte
-            // Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry
-            movq mm1, mm3     // now use mm1 for getting LBCarrys
-            pand mm1, mm2     // get LBCarrys for each byte where both
-                              // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1      // divide raw bytes by 2
-            pand  mm2, mm4    // clear invalid bit 7 of each byte
-            paddb mm2, mm1    // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm7     // Leave only Active Group 1 bytes to add to Avg
-            paddb mm0, mm2    // add (Raw/2) + LBCarrys to Avg for each Active
-                              // byte
-            // Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry
-            movq mm2, mm0     // mov updated Raws to mm2
-            psllq mm2, ShiftBpp // shift data to position correctly
+            pand mm3, mm1     /* get lsb for each prev_row byte */
+            psrlq mm1, 1      /* divide prev_row bytes by 2 */
+            pand  mm1, mm4    /* clear invalid bit 7 of each byte */
+            paddb mm0, mm1    /* add (Prev_row/2) to Avg for each byte */
+            /* Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry */
+            movq mm1, mm3     /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2     /* get LBCarrys for each byte where both */
+                              /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1      /* divide raw bytes by 2 */
+            pand  mm2, mm4    /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1    /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm7     /* Leave only Active Group 1 bytes to add to Avg */
+            paddb mm0, mm2    /* add (Raw/2) + LBCarrys to Avg for each Active */
+                              /* byte */
+            /* Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry */
+            movq mm2, mm0     /* mov updated Raws to mm2 */
+            psllq mm2, ShiftBpp /* shift data to position correctly */
             add ebx, 8
-            movq mm1, mm3     // now use mm1 for getting LBCarrys
-            pand mm1, mm2     // get LBCarrys for each byte where both
-                              // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1      // divide raw bytes by 2
-            pand  mm2, mm4    // clear invalid bit 7 of each byte
-            paddb mm2, mm1    // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6     // Leave only Active Group 2 bytes to add to Avg
-            paddb mm0, mm2    // add (Raw/2) + LBCarrys to Avg for each Active
-                              // byte
+            movq mm1, mm3     /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2     /* get LBCarrys for each byte where both */
+                              /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1      /* divide raw bytes by 2 */
+            pand  mm2, mm4    /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1    /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6     /* Leave only Active Group 2 bytes to add to Avg */
+            paddb mm0, mm2    /* add (Raw/2) + LBCarrys to Avg for each Active */
+                              /* byte */
             cmp ebx, MMXLength
-            // Now ready to write back to memory
+            /* Now ready to write back to memory */
             movq [edi + ebx - 8], mm0
-            // Prep Raw(x-bpp) for next loop
-            movq mm2, mm0     // mov updated Raws to mm2
+            /* Prep Raw(x-bpp) for next loop */
+            movq mm2, mm0     /* mov updated Raws to mm2 */
             jb davg4lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
       case 2:
       {
          ActiveMask.use  = 0x000000000000ffff;
-         ShiftBpp.use = 16;   // == 2 * 8     [BUGFIX]
-         ShiftRem.use = 48;   // == 64 - 16   [BUGFIX]
+         ShiftBpp.use = 16;   /* == 2 * 8     [BUGFIX] */
+         ShiftRem.use = 48;   /* == 64 - 16   [BUGFIX] */
          _asm {
-            // Load ActiveMask
+            /* Load ActiveMask */
             movq mm7, ActiveMask
-            // Re-init address pointers and offset
-            mov ebx, diff     // ebx ==> x = offset to alignment boundary
+            /* Re-init address pointers and offset */
+            mov ebx, diff     /* ebx ==> x = offset to alignment boundary */
             movq mm5, LBCarryMask
-            mov edi, row      // edi ==> Avg(x)
+            mov edi, row      /* edi ==> Avg(x) */
             movq mm4, HBClearMask
-            mov esi, prev_row  // esi ==> Prior(x)
-            // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes
-                              // (we correct position in loop below)
+            mov esi, prev_row  /* esi ==> Prior(x) */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
+            movq mm2, [edi + ebx - 8]  /* Load previous aligned 8 bytes */
+                              /* (we correct position in loop below) */
 davg2lp:
             movq mm0, [edi + ebx]
-            psrlq mm2, ShiftRem  // shift data to position correctly   [BUGFIX]
+            psrlq mm2, ShiftRem  /* shift data to position correctly   [BUGFIX] */
             movq mm1, [esi + ebx]
-            // Add (Prev_row/2) to Average
+            /* Add (Prev_row/2) to Average */
             movq mm3, mm5
-            pand mm3, mm1     // get lsb for each prev_row byte
-            psrlq mm1, 1      // divide prev_row bytes by 2
-            pand  mm1, mm4    // clear invalid bit 7 of each byte
+            pand mm3, mm1     /* get lsb for each prev_row byte */
+            psrlq mm1, 1      /* divide prev_row bytes by 2 */
+            pand  mm1, mm4    /* clear invalid bit 7 of each byte */
             movq mm6, mm7
-            paddb mm0, mm1    // add (Prev_row/2) to Avg for each byte
-            // Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry
-            movq mm1, mm3     // now use mm1 for getting LBCarrys
-            pand mm1, mm2     // get LBCarrys for each byte where both
-                              // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1      // divide raw bytes by 2
-            pand  mm2, mm4    // clear invalid bit 7 of each byte
-            paddb mm2, mm1    // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6     // Leave only Active Group 1 bytes to add to Avg
-            paddb mm0, mm2 // add (Raw/2) + LBCarrys to Avg for each Active byte
-            // Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry
-            psllq mm6, ShiftBpp // shift the mm6 mask to cover bytes 2 & 3
-            movq mm2, mm0       // mov updated Raws to mm2
-            psllq mm2, ShiftBpp // shift data to position correctly
-            movq mm1, mm3       // now use mm1 for getting LBCarrys
-            pand mm1, mm2       // get LBCarrys for each byte where both
-                                // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1        // divide raw bytes by 2
-            pand  mm2, mm4      // clear invalid bit 7 of each byte
-            paddb mm2, mm1      // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6       // Leave only Active Group 2 bytes to add to Avg
-            paddb mm0, mm2 // add (Raw/2) + LBCarrys to Avg for each Active byte
+            paddb mm0, mm1    /* add (Prev_row/2) to Avg for each byte */
+            /* Add 1st active group (Raw(x-bpp)/2) to Average with LBCarry */
+            movq mm1, mm3     /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2     /* get LBCarrys for each byte where both */
+                              /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1      /* divide raw bytes by 2 */
+            pand  mm2, mm4    /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1    /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6     /* Leave only Active Group 1 bytes to add to Avg */
+            paddb mm0, mm2 /* add (Raw/2) + LBCarrys to Avg for each Active byte */
+            /* Add 2nd active group (Raw(x-bpp)/2) to Average with LBCarry */
+            psllq mm6, ShiftBpp /* shift the mm6 mask to cover bytes 2 & 3 */
+            movq mm2, mm0       /* mov updated Raws to mm2 */
+            psllq mm2, ShiftBpp /* shift data to position correctly */
+            movq mm1, mm3       /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2       /* get LBCarrys for each byte where both */
+                                /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1        /* divide raw bytes by 2 */
+            pand  mm2, mm4      /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1      /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6       /* Leave only Active Group 2 bytes to add to Avg */
+            paddb mm0, mm2 /* add (Raw/2) + LBCarrys to Avg for each Active byte */
 
-            // Add rdd active group (Raw(x-bpp)/2) to Average with LBCarry
-            psllq mm6, ShiftBpp // shift the mm6 mask to cover bytes 4 & 5
-            movq mm2, mm0       // mov updated Raws to mm2
-            psllq mm2, ShiftBpp // shift data to position correctly
-                                // Data only needs to be shifted once here to
-                                // get the correct x-bpp offset.
-            movq mm1, mm3       // now use mm1 for getting LBCarrys
-            pand mm1, mm2       // get LBCarrys for each byte where both
-                                // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1        // divide raw bytes by 2
-            pand  mm2, mm4      // clear invalid bit 7 of each byte
-            paddb mm2, mm1      // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6       // Leave only Active Group 2 bytes to add to Avg
-            paddb mm0, mm2 // add (Raw/2) + LBCarrys to Avg for each Active byte
+            /* Add rdd active group (Raw(x-bpp)/2) to Average with LBCarry */
+            psllq mm6, ShiftBpp /* shift the mm6 mask to cover bytes 4 & 5 */
+            movq mm2, mm0       /* mov updated Raws to mm2 */
+            psllq mm2, ShiftBpp /* shift data to position correctly */
+                                /* Data only needs to be shifted once here to */
+                                /* get the correct x-bpp offset. */
+            movq mm1, mm3       /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2       /* get LBCarrys for each byte where both */
+                                /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1        /* divide raw bytes by 2 */
+            pand  mm2, mm4      /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1      /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6       /* Leave only Active Group 2 bytes to add to Avg */
+            paddb mm0, mm2 /* add (Raw/2) + LBCarrys to Avg for each Active byte */
 
-            // Add 4th active group (Raw(x-bpp)/2) to Average with LBCarry
-            psllq mm6, ShiftBpp  // shift the mm6 mask to cover bytes 6 & 7
-            movq mm2, mm0        // mov updated Raws to mm2
-            psllq mm2, ShiftBpp  // shift data to position correctly
-                                 // Data only needs to be shifted once here to
-                                 // get the correct x-bpp offset.
+            /* Add 4th active group (Raw(x-bpp)/2) to Average with LBCarry */
+            psllq mm6, ShiftBpp  /* shift the mm6 mask to cover bytes 6 & 7 */
+            movq mm2, mm0        /* mov updated Raws to mm2 */
+            psllq mm2, ShiftBpp  /* shift data to position correctly */
+                                 /* Data only needs to be shifted once here to */
+                                 /* get the correct x-bpp offset. */
             add ebx, 8
-            movq mm1, mm3    // now use mm1 for getting LBCarrys
-            pand mm1, mm2    // get LBCarrys for each byte where both
-                             // lsb's were == 1 (Only valid for active group)
-            psrlq mm2, 1     // divide raw bytes by 2
-            pand  mm2, mm4   // clear invalid bit 7 of each byte
-            paddb mm2, mm1   // add LBCarrys to (Raw(x-bpp)/2) for each byte
-            pand mm2, mm6    // Leave only Active Group 2 bytes to add to Avg
-            paddb mm0, mm2 // add (Raw/2) + LBCarrys to Avg for each Active byte
+            movq mm1, mm3    /* now use mm1 for getting LBCarrys */
+            pand mm1, mm2    /* get LBCarrys for each byte where both */
+                             /* lsb's were == 1 (Only valid for active group) */
+            psrlq mm2, 1     /* divide raw bytes by 2 */
+            pand  mm2, mm4   /* clear invalid bit 7 of each byte */
+            paddb mm2, mm1   /* add LBCarrys to (Raw(x-bpp)/2) for each byte */
+            pand mm2, mm6    /* Leave only Active Group 2 bytes to add to Avg */
+            paddb mm0, mm2 /* add (Raw/2) + LBCarrys to Avg for each Active byte */
 
             cmp ebx, MMXLength
-            // Now ready to write back to memory
+            /* Now ready to write back to memory */
             movq [edi + ebx - 8], mm0
-            // Prep Raw(x-bpp) for next loop
-            movq mm2, mm0    // mov updated Raws to mm2
+            /* Prep Raw(x-bpp) for next loop */
+            movq mm2, mm0    /* mov updated Raws to mm2 */
             jb davg2lp
-        } // end _asm block
+        } /* end _asm block */
       }
       break;
 
-      case 1:                 // bpp == 1
+      case 1:                 /* bpp == 1 */
       {
          _asm {
-            // Re-init address pointers and offset
-            mov ebx, diff     // ebx ==> x = offset to alignment boundary
-            mov edi, row      // edi ==> Avg(x)
-            cmp ebx, FullLength  // Test if offset at end of array
+            /* Re-init address pointers and offset */
+            mov ebx, diff     /* ebx ==> x = offset to alignment boundary */
+            mov edi, row      /* edi ==> Avg(x) */
+            cmp ebx, FullLength  /* Test if offset at end of array */
             jnb davg1end
-            // Do Paeth decode for remaining bytes
-            mov esi, prev_row    // esi ==> Prior(x)
+            /* Do Paeth decode for remaining bytes */
+            mov esi, prev_row    /* esi ==> Prior(x) */
             mov edx, edi
-            xor ecx, ecx         // zero ecx before using cl & cx in loop below
-            sub edx, bpp         // edx ==> Raw(x-bpp)
+            xor ecx, ecx         /* zero ecx before using cl & cx in loop below */
+            sub edx, bpp         /* edx ==> Raw(x-bpp) */
 davg1lp:
-            // Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2)
+            /* Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2) */
             xor eax, eax
-            mov cl, [esi + ebx]  // load cl with Prior(x)
-            mov al, [edx + ebx]  // load al with Raw(x-bpp)
+            mov cl, [esi + ebx]  /* load cl with Prior(x) */
+            mov al, [edx + ebx]  /* load al with Raw(x-bpp) */
             add ax, cx
             inc ebx
-            shr ax, 1            // divide by 2
-            add al, [edi+ebx-1]  // Add Avg(x); -1 to offset inc ebx
-            cmp ebx, FullLength  // Check if at end of array
-            mov [edi+ebx-1], al  // Write back Raw(x);
-                         // mov does not affect flags; -1 to offset inc ebx
+            shr ax, 1            /* divide by 2 */
+            add al, [edi+ebx-1]  /* Add Avg(x); -1 to offset inc ebx */
+            cmp ebx, FullLength  /* Check if at end of array */
+            mov [edi+ebx-1], al  /* Write back Raw(x); */
+                         /* mov does not affect flags; -1 to offset inc ebx */
             jb davg1lp
 davg1end:
-         } // end _asm block
+         } /* end _asm block */
       }
       return;
 
-      case 8:             // bpp == 8
+      case 8:             /* bpp == 8 */
       {
          _asm {
-            // Re-init address pointers and offset
-            mov ebx, diff           // ebx ==> x = offset to alignment boundary
+            /* Re-init address pointers and offset */
+            mov ebx, diff           /* ebx ==> x = offset to alignment boundary */
             movq mm5, LBCarryMask
-            mov edi, row            // edi ==> Avg(x)
+            mov edi, row            /* edi ==> Avg(x) */
             movq mm4, HBClearMask
-            mov esi, prev_row       // esi ==> Prior(x)
-            // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm2, [edi + ebx - 8]  // Load previous aligned 8 bytes
-                                // (NO NEED to correct position in loop below)
+            mov esi, prev_row       /* esi ==> Prior(x) */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
+            movq mm2, [edi + ebx - 8]  /* Load previous aligned 8 bytes */
+                                /* (NO NEED to correct position in loop below) */
 davg8lp:
             movq mm0, [edi + ebx]
             movq mm3, mm5
             movq mm1, [esi + ebx]
             add ebx, 8
-            pand mm3, mm1       // get lsb for each prev_row byte
-            psrlq mm1, 1        // divide prev_row bytes by 2
-            pand mm3, mm2       // get LBCarrys for each byte where both
-                                // lsb's were == 1
-            psrlq mm2, 1        // divide raw bytes by 2
-            pand  mm1, mm4      // clear invalid bit 7 of each byte
-            paddb mm0, mm3      // add LBCarrys to Avg for each byte
-            pand  mm2, mm4      // clear invalid bit 7 of each byte
-            paddb mm0, mm1      // add (Prev_row/2) to Avg for each byte
-            paddb mm0, mm2      // add (Raw/2) to Avg for each byte
+            pand mm3, mm1       /* get lsb for each prev_row byte */
+            psrlq mm1, 1        /* divide prev_row bytes by 2 */
+            pand mm3, mm2       /* get LBCarrys for each byte where both */
+                                /* lsb's were == 1 */
+            psrlq mm2, 1        /* divide raw bytes by 2 */
+            pand  mm1, mm4      /* clear invalid bit 7 of each byte */
+            paddb mm0, mm3      /* add LBCarrys to Avg for each byte */
+            pand  mm2, mm4      /* clear invalid bit 7 of each byte */
+            paddb mm0, mm1      /* add (Prev_row/2) to Avg for each byte */
+            paddb mm0, mm2      /* add (Raw/2) to Avg for each byte */
             cmp ebx, MMXLength
             movq [edi + ebx - 8], mm0
-            movq mm2, mm0       // reuse as Raw(x-bpp)
+            movq mm2, mm0       /* reuse as Raw(x-bpp) */
             jb davg8lp
-        } // end _asm block
+        } /* end _asm block */
       }
       break;
-      default:                  // bpp greater than 8
+      default:                  /* bpp greater than 8 */
       {
         _asm {
             movq mm5, LBCarryMask
-            // Re-init address pointers and offset
-            mov ebx, diff       // ebx ==> x = offset to alignment boundary
-            mov edi, row        // edi ==> Avg(x)
+            /* Re-init address pointers and offset */
+            mov ebx, diff       /* ebx ==> x = offset to alignment boundary */
+            mov edi, row        /* edi ==> Avg(x) */
             movq mm4, HBClearMask
             mov edx, edi
-            mov esi, prev_row   // esi ==> Prior(x)
-            sub edx, bpp        // edx ==> Raw(x-bpp)
+            mov esi, prev_row   /* esi ==> Prior(x) */
+            sub edx, bpp        /* edx ==> Raw(x-bpp) */
 davgAlp:
             movq mm0, [edi + ebx]
             movq mm3, mm5
             movq mm1, [esi + ebx]
-            pand mm3, mm1       // get lsb for each prev_row byte
+            pand mm3, mm1       /* get lsb for each prev_row byte */
             movq mm2, [edx + ebx]
-            psrlq mm1, 1        // divide prev_row bytes by 2
-            pand mm3, mm2       // get LBCarrys for each byte where both
-                                // lsb's were == 1
-            psrlq mm2, 1        // divide raw bytes by 2
-            pand  mm1, mm4      // clear invalid bit 7 of each byte
-            paddb mm0, mm3      // add LBCarrys to Avg for each byte
-            pand  mm2, mm4      // clear invalid bit 7 of each byte
-            paddb mm0, mm1      // add (Prev_row/2) to Avg for each byte
+            psrlq mm1, 1        /* divide prev_row bytes by 2 */
+            pand mm3, mm2       /* get LBCarrys for each byte where both */
+                                /* lsb's were == 1 */
+            psrlq mm2, 1        /* divide raw bytes by 2 */
+            pand  mm1, mm4      /* clear invalid bit 7 of each byte */
+            paddb mm0, mm3      /* add LBCarrys to Avg for each byte */
+            pand  mm2, mm4      /* clear invalid bit 7 of each byte */
+            paddb mm0, mm1      /* add (Prev_row/2) to Avg for each byte */
             add ebx, 8
-            paddb mm0, mm2      // add (Raw/2) to Avg for each byte
+            paddb mm0, mm2      /* add (Raw/2) to Avg for each byte */
             cmp ebx, MMXLength
             movq [edi + ebx - 8], mm0
             jb davgAlp
-        } // end _asm block
+        } /* end _asm block */
       }
       break;
-   }                         // end switch ( bpp )
+   }                         /* end switch ( bpp ) */
 
    _asm {
-         // MMX acceleration complete now do clean-up
-         // Check if any remaining bytes left to decode
-         mov ebx, MMXLength    // ebx ==> x = offset bytes remaining after MMX
-         mov edi, row          // edi ==> Avg(x)
-         cmp ebx, FullLength   // Test if offset at end of array
+         /* MMX acceleration complete now do clean-up */
+         /* Check if any remaining bytes left to decode */
+         mov ebx, MMXLength    /* ebx ==> x = offset bytes remaining after MMX */
+         mov edi, row          /* edi ==> Avg(x) */
+         cmp ebx, FullLength   /* Test if offset at end of array */
          jnb davgend
-         // Do Paeth decode for remaining bytes
-         mov esi, prev_row     // esi ==> Prior(x)
+         /* Do Paeth decode for remaining bytes */
+         mov esi, prev_row     /* esi ==> Prior(x) */
          mov edx, edi
-         xor ecx, ecx          // zero ecx before using cl & cx in loop below
-         sub edx, bpp          // edx ==> Raw(x-bpp)
+         xor ecx, ecx          /* zero ecx before using cl & cx in loop below */
+         sub edx, bpp          /* edx ==> Raw(x-bpp) */
 davglp2:
-         // Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2)
+         /* Raw(x) = Avg(x) + ((Raw(x-bpp) + Prior(x))/2) */
          xor eax, eax
-         mov cl, [esi + ebx]   // load cl with Prior(x)
-         mov al, [edx + ebx]   // load al with Raw(x-bpp)
+         mov cl, [esi + ebx]   /* load cl with Prior(x) */
+         mov al, [edx + ebx]   /* load al with Raw(x-bpp) */
          add ax, cx
          inc ebx
-         shr ax, 1              // divide by 2
-         add al, [edi+ebx-1]    // Add Avg(x); -1 to offset inc ebx
-         cmp ebx, FullLength    // Check if at end of array
-         mov [edi+ebx-1], al    // Write back Raw(x);
-                          // mov does not affect flags; -1 to offset inc ebx
+         shr ax, 1              /* divide by 2 */
+         add al, [edi+ebx-1]    /* Add Avg(x); -1 to offset inc ebx */
+         cmp ebx, FullLength    /* Check if at end of array */
+         mov [edi+ebx-1], al    /* Write back Raw(x); */
+                          /* mov does not affect flags; -1 to offset inc ebx */
          jb davglp2
 davgend:
-         emms             // End MMX instructions; prep for possible FP instrs.
-   } // end _asm block
+         emms             /* End MMX instructions; prep for possible FP instrs. */
+   } /* end _asm block */
 }
 
-// Optimized code for PNG Paeth filter decoder
+/* Optimized code for PNG Paeth filter decoder */
 void /* PRIVATE */
 png_read_filter_row_mmx_paeth(png_row_infop row_info, png_bytep row,
                               png_bytep prev_row)
 {
    png_uint_32 FullLength;
    png_uint_32 MMXLength;
-   //png_uint_32 len;
+   /*png_uint_32 len; */
    int bpp;
    int diff;
-   //int ptemp;
+   /*int ptemp; */
    int patemp, pbtemp, pctemp;
 
-   bpp = (row_info->pixel_depth + 7) >> 3; // Get # bytes per pixel
-   FullLength  = row_info->rowbytes; // # of bytes to filter
+   bpp = (row_info->pixel_depth + 7) >> 3; /* Get # bytes per pixel */
+   FullLength  = row_info->rowbytes; /* # of bytes to filter */
    _asm
    {
-         xor ebx, ebx        // ebx ==> x offset
+         xor ebx, ebx        /* ebx ==> x offset */
          mov edi, row
-         xor edx, edx        // edx ==> x-bpp offset
+         xor edx, edx        /* edx ==> x-bpp offset */
          mov esi, prev_row
          xor eax, eax
 
-         // Compute the Raw value for the first bpp bytes
-         // Note: the formula works out to be always
-         //   Paeth(x) = Raw(x) + Prior(x)      where x < bpp
+         /* Compute the Raw value for the first bpp bytes */
+         /* Note: the formula works out to be always */
+         /*   Paeth(x) = Raw(x) + Prior(x)      where x < bpp */
 dpthrlp:
          mov al, [edi + ebx]
          add al, [esi + ebx]
@@ -2360,290 +2360,290 @@ dpthrlp:
          cmp ebx, bpp
          mov [edi + ebx - 1], al
          jb dpthrlp
-         // get # of bytes to alignment
-         mov diff, edi         // take start of row
-         add diff, ebx         // add bpp
+         /* get # of bytes to alignment */
+         mov diff, edi         /* take start of row */
+         add diff, ebx         /* add bpp */
          xor ecx, ecx
-         add diff, 0xf         // add 7 + 8 to incr past alignment boundary
-         and diff, 0xfffffff8  // mask to alignment boundary
-         sub diff, edi         // subtract from start ==> value ebx at alignment
+         add diff, 0xf         /* add 7 + 8 to incr past alignment boundary */
+         and diff, 0xfffffff8  /* mask to alignment boundary */
+         sub diff, edi         /* subtract from start ==> value ebx at alignment */
          jz dpthgo
-         // fix alignment
+         /* fix alignment */
 dpthlp1:
          xor eax, eax
-         // pav = p - a = (a + b - c) - a = b - c
-         mov al, [esi + ebx]   // load Prior(x) into al
-         mov cl, [esi + edx]   // load Prior(x-bpp) into cl
-         sub eax, ecx          // subtract Prior(x-bpp)
-         mov patemp, eax       // Save pav for later use
+         /* pav = p - a = (a + b - c) - a = b - c */
+         mov al, [esi + ebx]   /* load Prior(x) into al */
+         mov cl, [esi + edx]   /* load Prior(x-bpp) into cl */
+         sub eax, ecx          /* subtract Prior(x-bpp) */
+         mov patemp, eax       /* Save pav for later use */
          xor eax, eax
-         // pbv = p - b = (a + b - c) - b = a - c
-         mov al, [edi + edx]   // load Raw(x-bpp) into al
-         sub eax, ecx          // subtract Prior(x-bpp)
+         /* pbv = p - b = (a + b - c) - b = a - c */
+         mov al, [edi + edx]   /* load Raw(x-bpp) into al */
+         sub eax, ecx          /* subtract Prior(x-bpp) */
          mov ecx, eax
-         // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
-         add eax, patemp       // pcv = pav + pbv
-         // pc = abs(pcv)
+         /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
+         add eax, patemp       /* pcv = pav + pbv */
+         /* pc = abs(pcv) */
          test eax, 0x80000000
          jz dpthpca
-         neg eax               // reverse sign of neg values
+         neg eax               /* reverse sign of neg values */
 dpthpca:
-         mov pctemp, eax       // save pc for later use
-         // pb = abs(pbv)
+         mov pctemp, eax       /* save pc for later use */
+         /* pb = abs(pbv) */
          test ecx, 0x80000000
          jz dpthpba
-         neg ecx               // reverse sign of neg values
+         neg ecx               /* reverse sign of neg values */
 dpthpba:
-         mov pbtemp, ecx       // save pb for later use
-         // pa = abs(pav)
+         mov pbtemp, ecx       /* save pb for later use */
+         /* pa = abs(pav) */
          mov eax, patemp
          test eax, 0x80000000
          jz dpthpaa
-         neg eax               // reverse sign of neg values
+         neg eax               /* reverse sign of neg values */
 dpthpaa:
-         mov patemp, eax       // save pa for later use
-         // test if pa <= pb
+         mov patemp, eax       /* save pa for later use */
+         /* test if pa <= pb */
          cmp eax, ecx
          jna dpthabb
-         // pa > pb; now test if pb <= pc
+         /* pa > pb; now test if pb <= pc */
          cmp ecx, pctemp
          jna dpthbbc
-         // pb > pc; Raw(x) = Paeth(x) + Prior(x-bpp)
-         mov cl, [esi + edx]  // load Prior(x-bpp) into cl
+         /* pb > pc; Raw(x) = Paeth(x) + Prior(x-bpp) */
+         mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
          jmp dpthpaeth
 dpthbbc:
-         // pb <= pc; Raw(x) = Paeth(x) + Prior(x)
-         mov cl, [esi + ebx]   // load Prior(x) into cl
+         /* pb <= pc; Raw(x) = Paeth(x) + Prior(x) */
+         mov cl, [esi + ebx]   /* load Prior(x) into cl */
          jmp dpthpaeth
 dpthabb:
-         // pa <= pb; now test if pa <= pc
+         /* pa <= pb; now test if pa <= pc */
          cmp eax, pctemp
          jna dpthabc
-         // pa > pc; Raw(x) = Paeth(x) + Prior(x-bpp)
-         mov cl, [esi + edx]  // load Prior(x-bpp) into cl
+         /* pa > pc; Raw(x) = Paeth(x) + Prior(x-bpp) */
+         mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
          jmp dpthpaeth
 dpthabc:
-         // pa <= pc; Raw(x) = Paeth(x) + Raw(x-bpp)
-         mov cl, [edi + edx]  // load Raw(x-bpp) into cl
+         /* pa <= pc; Raw(x) = Paeth(x) + Raw(x-bpp) */
+         mov cl, [edi + edx]  /* load Raw(x-bpp) into cl */
 dpthpaeth:
          inc ebx
          inc edx
-         // Raw(x) = (Paeth(x) + Paeth_Predictor( a, b, c )) mod 256
+         /* Raw(x) = (Paeth(x) + Paeth_Predictor( a, b, c )) mod 256 */
          add [edi + ebx - 1], cl
          cmp ebx, diff
          jb dpthlp1
 dpthgo:
          mov ecx, FullLength
          mov eax, ecx
-         sub eax, ebx          // subtract alignment fix
-         and eax, 0x00000007   // calc bytes over mult of 8
-         sub ecx, eax          // drop over bytes from original length
+         sub eax, ebx          /* subtract alignment fix */
+         and eax, 0x00000007   /* calc bytes over mult of 8 */
+         sub ecx, eax          /* drop over bytes from original length */
          mov MMXLength, ecx
-   } // end _asm block
-   // Now do the math for the rest of the row
+   } /* end _asm block */
+   /* Now do the math for the rest of the row */
    switch ( bpp )
    {
       case 3:
       {
          ActiveMask.use = 0x0000000000ffffff;
          ActiveMaskEnd.use = 0xffff000000000000;
-         ShiftBpp.use = 24;    // == bpp(3) * 8
-         ShiftRem.use = 40;    // == 64 - 24
+         ShiftBpp.use = 24;    /* == bpp(3) * 8 */
+         ShiftRem.use = 40;    /* == 64 - 24 */
          _asm
          {
             mov ebx, diff
             mov edi, row
             mov esi, prev_row
             pxor mm0, mm0
-            // PRIME the pump (load the first Raw(x-bpp) data set
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
             movq mm1, [edi+ebx-8]
 dpth3lp:
-            psrlq mm1, ShiftRem     // shift last 3 bytes to 1st 3 bytes
-            movq mm2, [esi + ebx]   // load b=Prior(x)
-            punpcklbw mm1, mm0      // Unpack High bytes of a
-            movq mm3, [esi+ebx-8]   // Prep c=Prior(x-bpp) bytes
-            punpcklbw mm2, mm0      // Unpack High bytes of b
-            psrlq mm3, ShiftRem     // shift last 3 bytes to 1st 3 bytes
-            // pav = p - a = (a + b - c) - a = b - c
+            psrlq mm1, ShiftRem     /* shift last 3 bytes to 1st 3 bytes */
+            movq mm2, [esi + ebx]   /* load b=Prior(x) */
+            punpcklbw mm1, mm0      /* Unpack High bytes of a */
+            movq mm3, [esi+ebx-8]   /* Prep c=Prior(x-bpp) bytes */
+            punpcklbw mm2, mm0      /* Unpack High bytes of b */
+            psrlq mm3, ShiftRem     /* shift last 3 bytes to 1st 3 bytes */
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            punpcklbw mm3, mm0      // Unpack High bytes of c
-            // pbv = p - b = (a + b - c) - b = a - c
+            punpcklbw mm3, mm0      /* Unpack High bytes of c */
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
 
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4    // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4    /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4       // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5    // Create mask pbv bytes < 0
+            pand mm0, mm4       /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5    /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5       // Only pbv bytes < 0 in mm0
+            pand mm7, mm5       /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6    // Create mask pcv bytes < 0
-            pand mm0, mm6       // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6    /* Create mask pcv bytes < 0 */
+            pand mm0, mm6       /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5    // pa > pb?
+            pcmpgtw mm7, mm5    /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6       // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6       /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             paddw mm7, mm3
             pxor mm0, mm0
             packuswb mm7, mm1
-            movq mm3, [esi + ebx]   // load c=Prior(x-bpp)
+            movq mm3, [esi + ebx]   /* load c=Prior(x-bpp) */
             pand mm7, ActiveMask
-            movq mm2, mm3           // load b=Prior(x) step 1
-            paddb mm7, [edi + ebx]  // add Paeth predictor with Raw(x)
-            punpcklbw mm3, mm0      // Unpack High bytes of c
-            movq [edi + ebx], mm7   // write back updated value
-            movq mm1, mm7           // Now mm1 will be used as Raw(x-bpp)
-            // Now do Paeth for 2nd set of bytes (3-5)
-            psrlq mm2, ShiftBpp     // load b=Prior(x) step 2
-            punpcklbw mm1, mm0      // Unpack High bytes of a
+            movq mm2, mm3           /* load b=Prior(x) step 1 */
+            paddb mm7, [edi + ebx]  /* add Paeth predictor with Raw(x) */
+            punpcklbw mm3, mm0      /* Unpack High bytes of c */
+            movq [edi + ebx], mm7   /* write back updated value */
+            movq mm1, mm7           /* Now mm1 will be used as Raw(x-bpp) */
+            /* Now do Paeth for 2nd set of bytes (3-5) */
+            psrlq mm2, ShiftBpp     /* load b=Prior(x) step 2 */
+            punpcklbw mm1, mm0      /* Unpack High bytes of a */
             pxor mm7, mm7
-            punpcklbw mm2, mm0      // Unpack High bytes of b
-            // pbv = p - b = (a + b - c) - b = a - c
+            punpcklbw mm2, mm0      /* Unpack High bytes of b */
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
-            // pav = p - a = (a + b - c) - a = b - c
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
             psubw mm5, mm3
             psubw mm4, mm3
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) =
-            //       pav + pbv = pbv + pav
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = */
+            /*       pav + pbv = pbv + pav */
             movq mm6, mm5
             paddw mm6, mm4
 
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm5       // Create mask pbv bytes < 0
-            pcmpgtw mm7, mm4       // Create mask pav bytes < 0
-            pand mm0, mm5          // Only pbv bytes < 0 in mm0
-            pand mm7, mm4          // Only pav bytes < 0 in mm7
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm5       /* Create mask pbv bytes < 0 */
+            pcmpgtw mm7, mm4       /* Create mask pav bytes < 0 */
+            pand mm0, mm5          /* Only pbv bytes < 0 in mm0 */
+            pand mm7, mm4          /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm0
             psubw mm4, mm7
             psubw mm5, mm0
             psubw mm4, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6       // Create mask pcv bytes < 0
-            pand mm0, mm6          // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6       /* Create mask pcv bytes < 0 */
+            pand mm0, mm6          /* Only pav bytes < 0 in mm7 */
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5       // pa > pb?
+            pcmpgtw mm7, mm5       /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6       // pab > pc?
-            movq mm2, [esi + ebx]  // load b=Prior(x)
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6       /* pab > pc? */
+            movq mm2, [esi + ebx]  /* load b=Prior(x) */
             pand mm3, mm7
             pandn mm7, mm0
             pxor mm1, mm1
             paddw mm7, mm3
             pxor mm0, mm0
             packuswb mm7, mm1
-            movq mm3, mm2           // load c=Prior(x-bpp) step 1
+            movq mm3, mm2           /* load c=Prior(x-bpp) step 1 */
             pand mm7, ActiveMask
-            punpckhbw mm2, mm0      // Unpack High bytes of b
-            psllq mm7, ShiftBpp     // Shift bytes to 2nd group of 3 bytes
-             // pav = p - a = (a + b - c) - a = b - c
+            punpckhbw mm2, mm0      /* Unpack High bytes of b */
+            psllq mm7, ShiftBpp     /* Shift bytes to 2nd group of 3 bytes */
+             /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            paddb mm7, [edi + ebx]  // add Paeth predictor with Raw(x)
-            psllq mm3, ShiftBpp     // load c=Prior(x-bpp) step 2
-            movq [edi + ebx], mm7   // write back updated value
+            paddb mm7, [edi + ebx]  /* add Paeth predictor with Raw(x) */
+            psllq mm3, ShiftBpp     /* load c=Prior(x-bpp) step 2 */
+            movq [edi + ebx], mm7   /* write back updated value */
             movq mm1, mm7
-            punpckhbw mm3, mm0      // Unpack High bytes of c
-            psllq mm1, ShiftBpp     // Shift bytes
-                                    // Now mm1 will be used as Raw(x-bpp)
-            // Now do Paeth for 3rd, and final, set of bytes (6-7)
+            punpckhbw mm3, mm0      /* Unpack High bytes of c */
+            psllq mm1, ShiftBpp     /* Shift bytes */
+                                    /* Now mm1 will be used as Raw(x-bpp) */
+            /* Now do Paeth for 3rd, and final, set of bytes (6-7) */
             pxor mm7, mm7
-            punpckhbw mm1, mm0      // Unpack High bytes of a
+            punpckhbw mm1, mm0      /* Unpack High bytes of a */
             psubw mm4, mm3
-            // pbv = p - b = (a + b - c) - b = a - c
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
             pxor mm0, mm0
             paddw mm6, mm5
 
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4    // Create mask pav bytes < 0
-            pcmpgtw mm7, mm5    // Create mask pbv bytes < 0
-            pand mm0, mm4       // Only pav bytes < 0 in mm7
-            pand mm7, mm5       // Only pbv bytes < 0 in mm0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4    /* Create mask pav bytes < 0 */
+            pcmpgtw mm7, mm5    /* Create mask pbv bytes < 0 */
+            pand mm0, mm4       /* Only pav bytes < 0 in mm7 */
+            pand mm7, mm5       /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6    // Create mask pcv bytes < 0
-            pand mm0, mm6       // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6    /* Create mask pcv bytes < 0 */
+            pand mm0, mm6       /* Only pav bytes < 0 in mm7 */
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5    // pa > pb?
+            pcmpgtw mm7, mm5    /* pa > pb? */
             movq mm0, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
             pandn mm0, mm1
             pandn mm7, mm4
             paddw mm0, mm2
             paddw mm7, mm5
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6    // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6    /* pab > pc? */
             pand mm3, mm7
             pandn mm7, mm0
             paddw mm7, mm3
             pxor mm1, mm1
             packuswb mm1, mm7
-            // Step ebx to next set of 8 bytes and repeat loop til done
+            /* Step ebx to next set of 8 bytes and repeat loop til done */
             add ebx, 8
             pand mm1, ActiveMaskEnd
-            paddb mm1, [edi + ebx - 8] // add Paeth predictor with Raw(x)
+            paddb mm1, [edi + ebx - 8] /* add Paeth predictor with Raw(x) */
 
             cmp ebx, MMXLength
-            pxor mm0, mm0              // pxor does not affect flags
-            movq [edi + ebx - 8], mm1  // write back updated value
-                                 // mm1 will be used as Raw(x-bpp) next loop
-                           // mm3 ready to be used as Prior(x-bpp) next loop
+            pxor mm0, mm0              /* pxor does not affect flags */
+            movq [edi + ebx - 8], mm1  /* write back updated value */
+                                 /* mm1 will be used as Raw(x-bpp) next loop */
+                           /* mm3 ready to be used as Prior(x-bpp) next loop */
             jb dpth3lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
@@ -2653,146 +2653,146 @@ dpth3lp:
       {
          ActiveMask.use  = 0x00000000ffffffff;
          ActiveMask2.use = 0xffffffff00000000;
-         ShiftBpp.use = bpp << 3;    // == bpp * 8
+         ShiftBpp.use = bpp << 3;    /* == bpp * 8 */
          ShiftRem.use = 64 - ShiftBpp.use;
          _asm
          {
             mov ebx, diff
             mov edi, row
             mov esi, prev_row
-            // PRIME the pump (load the first Raw(x-bpp) data set
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
             movq mm1, [edi+ebx-8]
             pxor mm0, mm0
 dpth6lp:
-            // Must shift to position Raw(x-bpp) data
+            /* Must shift to position Raw(x-bpp) data */
             psrlq mm1, ShiftRem
-            // Do first set of 4 bytes
-            movq mm3, [esi+ebx-8]      // read c=Prior(x-bpp) bytes
-            punpcklbw mm1, mm0      // Unpack Low bytes of a
-            movq mm2, [esi + ebx]   // load b=Prior(x)
-            punpcklbw mm2, mm0      // Unpack Low bytes of b
-            // Must shift to position Prior(x-bpp) data
+            /* Do first set of 4 bytes */
+            movq mm3, [esi+ebx-8]      /* read c=Prior(x-bpp) bytes */
+            punpcklbw mm1, mm0      /* Unpack Low bytes of a */
+            movq mm2, [esi + ebx]   /* load b=Prior(x) */
+            punpcklbw mm2, mm0      /* Unpack Low bytes of b */
+            /* Must shift to position Prior(x-bpp) data */
             psrlq mm3, ShiftRem
-            // pav = p - a = (a + b - c) - a = b - c
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            punpcklbw mm3, mm0      // Unpack Low bytes of c
-            // pbv = p - b = (a + b - c) - b = a - c
+            punpcklbw mm3, mm0      /* Unpack Low bytes of c */
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4    // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4    /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4       // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5    // Create mask pbv bytes < 0
+            pand mm0, mm4       /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5    /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5       // Only pbv bytes < 0 in mm0
+            pand mm7, mm5       /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6    // Create mask pcv bytes < 0
-            pand mm0, mm6       // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6    /* Create mask pcv bytes < 0 */
+            pand mm0, mm6       /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5    // pa > pb?
+            pcmpgtw mm7, mm5    /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6    // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6    /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             paddw mm7, mm3
             pxor mm0, mm0
             packuswb mm7, mm1
-            movq mm3, [esi + ebx - 8]  // load c=Prior(x-bpp)
+            movq mm3, [esi + ebx - 8]  /* load c=Prior(x-bpp) */
             pand mm7, ActiveMask
             psrlq mm3, ShiftRem
-            movq mm2, [esi + ebx]      // load b=Prior(x) step 1
-            paddb mm7, [edi + ebx]     // add Paeth predictor with Raw(x)
+            movq mm2, [esi + ebx]      /* load b=Prior(x) step 1 */
+            paddb mm7, [edi + ebx]     /* add Paeth predictor with Raw(x) */
             movq mm6, mm2
-            movq [edi + ebx], mm7      // write back updated value
+            movq [edi + ebx], mm7      /* write back updated value */
             movq mm1, [edi+ebx-8]
             psllq mm6, ShiftBpp
             movq mm5, mm7
             psrlq mm1, ShiftRem
             por mm3, mm6
             psllq mm5, ShiftBpp
-            punpckhbw mm3, mm0         // Unpack High bytes of c
+            punpckhbw mm3, mm0         /* Unpack High bytes of c */
             por mm1, mm5
-            // Do second set of 4 bytes
-            punpckhbw mm2, mm0         // Unpack High bytes of b
-            punpckhbw mm1, mm0         // Unpack High bytes of a
-            // pav = p - a = (a + b - c) - a = b - c
+            /* Do second set of 4 bytes */
+            punpckhbw mm2, mm0         /* Unpack High bytes of b */
+            punpckhbw mm1, mm0         /* Unpack High bytes of a */
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            // pbv = p - b = (a + b - c) - b = a - c
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4       // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4       /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4          // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5       // Create mask pbv bytes < 0
+            pand mm0, mm4          /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5       /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5          // Only pbv bytes < 0 in mm0
+            pand mm7, mm5          /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6       // Create mask pcv bytes < 0
-            pand mm0, mm6          // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6       /* Create mask pcv bytes < 0 */
+            pand mm0, mm6          /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5       // pa > pb?
+            pcmpgtw mm7, mm5       /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6           // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6           /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             pxor mm1, mm1
             paddw mm7, mm3
             pxor mm0, mm0
-            // Step ex to next set of 8 bytes and repeat loop til done
+            /* Step ex to next set of 8 bytes and repeat loop til done */
             add ebx, 8
             packuswb mm1, mm7
-            paddb mm1, [edi + ebx - 8]     // add Paeth predictor with Raw(x)
+            paddb mm1, [edi + ebx - 8]     /* add Paeth predictor with Raw(x) */
             cmp ebx, MMXLength
-            movq [edi + ebx - 8], mm1      // write back updated value
-                                // mm1 will be used as Raw(x-bpp) next loop
+            movq [edi + ebx - 8], mm1      /* write back updated value */
+                                /* mm1 will be used as Raw(x-bpp) next loop */
             jb dpth6lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
@@ -2804,130 +2804,130 @@ dpth6lp:
             mov edi, row
             mov esi, prev_row
             pxor mm0, mm0
-            // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm1, [edi+ebx-8]    // Only time should need to read
-                                     //  a=Raw(x-bpp) bytes
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
+            movq mm1, [edi+ebx-8]    /* Only time should need to read */
+                                     /*  a=Raw(x-bpp) bytes */
 dpth4lp:
-            // Do first set of 4 bytes
-            movq mm3, [esi+ebx-8]    // read c=Prior(x-bpp) bytes
-            punpckhbw mm1, mm0       // Unpack Low bytes of a
-            movq mm2, [esi + ebx]    // load b=Prior(x)
-            punpcklbw mm2, mm0       // Unpack High bytes of b
-            // pav = p - a = (a + b - c) - a = b - c
+            /* Do first set of 4 bytes */
+            movq mm3, [esi+ebx-8]    /* read c=Prior(x-bpp) bytes */
+            punpckhbw mm1, mm0       /* Unpack Low bytes of a */
+            movq mm2, [esi + ebx]    /* load b=Prior(x) */
+            punpcklbw mm2, mm0       /* Unpack High bytes of b */
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            punpckhbw mm3, mm0       // Unpack High bytes of c
-            // pbv = p - b = (a + b - c) - b = a - c
+            punpckhbw mm3, mm0       /* Unpack High bytes of c */
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4       // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4       /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4          // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5       // Create mask pbv bytes < 0
+            pand mm0, mm4          /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5       /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5          // Only pbv bytes < 0 in mm0
+            pand mm7, mm5          /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6       // Create mask pcv bytes < 0
-            pand mm0, mm6          // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6       /* Create mask pcv bytes < 0 */
+            pand mm0, mm6          /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5       // pa > pb?
+            pcmpgtw mm7, mm5       /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6       // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6       /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             paddw mm7, mm3
             pxor mm0, mm0
             packuswb mm7, mm1
-            movq mm3, [esi + ebx]      // load c=Prior(x-bpp)
+            movq mm3, [esi + ebx]      /* load c=Prior(x-bpp) */
             pand mm7, ActiveMask
-            movq mm2, mm3              // load b=Prior(x) step 1
-            paddb mm7, [edi + ebx]     // add Paeth predictor with Raw(x)
-            punpcklbw mm3, mm0         // Unpack High bytes of c
-            movq [edi + ebx], mm7      // write back updated value
-            movq mm1, mm7              // Now mm1 will be used as Raw(x-bpp)
-            // Do second set of 4 bytes
-            punpckhbw mm2, mm0         // Unpack Low bytes of b
-            punpcklbw mm1, mm0         // Unpack Low bytes of a
-            // pav = p - a = (a + b - c) - a = b - c
+            movq mm2, mm3              /* load b=Prior(x) step 1 */
+            paddb mm7, [edi + ebx]     /* add Paeth predictor with Raw(x) */
+            punpcklbw mm3, mm0         /* Unpack High bytes of c */
+            movq [edi + ebx], mm7      /* write back updated value */
+            movq mm1, mm7              /* Now mm1 will be used as Raw(x-bpp) */
+            /* Do second set of 4 bytes */
+            punpckhbw mm2, mm0         /* Unpack Low bytes of b */
+            punpcklbw mm1, mm0         /* Unpack Low bytes of a */
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            // pbv = p - b = (a + b - c) - b = a - c
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4       // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4       /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4          // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5       // Create mask pbv bytes < 0
+            pand mm0, mm4          /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5       /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5          // Only pbv bytes < 0 in mm0
+            pand mm7, mm5          /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6       // Create mask pcv bytes < 0
-            pand mm0, mm6          // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6       /* Create mask pcv bytes < 0 */
+            pand mm0, mm6          /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5       // pa > pb?
+            pcmpgtw mm7, mm5       /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6       // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6       /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             pxor mm1, mm1
             paddw mm7, mm3
             pxor mm0, mm0
-            // Step ex to next set of 8 bytes and repeat loop til done
+            /* Step ex to next set of 8 bytes and repeat loop til done */
             add ebx, 8
             packuswb mm1, mm7
-            paddb mm1, [edi + ebx - 8]     // add Paeth predictor with Raw(x)
+            paddb mm1, [edi + ebx - 8]     /* add Paeth predictor with Raw(x) */
             cmp ebx, MMXLength
-            movq [edi + ebx - 8], mm1      // write back updated value
-                                // mm1 will be used as Raw(x-bpp) next loop
+            movq [edi + ebx - 8], mm1      /* write back updated value */
+                                /* mm1 will be used as Raw(x-bpp) next loop */
             jb dpth4lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
-      case 8:                          // bpp == 8
+      case 8:                          /* bpp == 8 */
       {
          ActiveMask.use  = 0x00000000ffffffff;
          _asm {
@@ -2935,134 +2935,134 @@ dpth4lp:
             mov edi, row
             mov esi, prev_row
             pxor mm0, mm0
-            // PRIME the pump (load the first Raw(x-bpp) data set
-            movq mm1, [edi+ebx-8]      // Only time should need to read
-                                       //  a=Raw(x-bpp) bytes
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
+            movq mm1, [edi+ebx-8]      /* Only time should need to read */
+                                       /*  a=Raw(x-bpp) bytes */
 dpth8lp:
-            // Do first set of 4 bytes
-            movq mm3, [esi+ebx-8]      // read c=Prior(x-bpp) bytes
-            punpcklbw mm1, mm0         // Unpack Low bytes of a
-            movq mm2, [esi + ebx]      // load b=Prior(x)
-            punpcklbw mm2, mm0         // Unpack Low bytes of b
-            // pav = p - a = (a + b - c) - a = b - c
+            /* Do first set of 4 bytes */
+            movq mm3, [esi+ebx-8]      /* read c=Prior(x-bpp) bytes */
+            punpcklbw mm1, mm0         /* Unpack Low bytes of a */
+            movq mm2, [esi + ebx]      /* load b=Prior(x) */
+            punpcklbw mm2, mm0         /* Unpack Low bytes of b */
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            punpcklbw mm3, mm0         // Unpack Low bytes of c
-            // pbv = p - b = (a + b - c) - b = a - c
+            punpcklbw mm3, mm0         /* Unpack Low bytes of c */
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4       // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4       /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4          // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5       // Create mask pbv bytes < 0
+            pand mm0, mm4          /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5       /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5          // Only pbv bytes < 0 in mm0
+            pand mm7, mm5          /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6       // Create mask pcv bytes < 0
-            pand mm0, mm6          // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6       /* Create mask pcv bytes < 0 */
+            pand mm0, mm6          /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5       // pa > pb?
+            pcmpgtw mm7, mm5       /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6       // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6       /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             paddw mm7, mm3
             pxor mm0, mm0
             packuswb mm7, mm1
-            movq mm3, [esi+ebx-8]    // read c=Prior(x-bpp) bytes
+            movq mm3, [esi+ebx-8]    /* read c=Prior(x-bpp) bytes */
             pand mm7, ActiveMask
-            movq mm2, [esi + ebx]    // load b=Prior(x)
-            paddb mm7, [edi + ebx]   // add Paeth predictor with Raw(x)
-            punpckhbw mm3, mm0       // Unpack High bytes of c
-            movq [edi + ebx], mm7    // write back updated value
-            movq mm1, [edi+ebx-8]    // read a=Raw(x-bpp) bytes
+            movq mm2, [esi + ebx]    /* load b=Prior(x) */
+            paddb mm7, [edi + ebx]   /* add Paeth predictor with Raw(x) */
+            punpckhbw mm3, mm0       /* Unpack High bytes of c */
+            movq [edi + ebx], mm7    /* write back updated value */
+            movq mm1, [edi+ebx-8]    /* read a=Raw(x-bpp) bytes */
 
-            // Do second set of 4 bytes
-            punpckhbw mm2, mm0       // Unpack High bytes of b
-            punpckhbw mm1, mm0       // Unpack High bytes of a
-            // pav = p - a = (a + b - c) - a = b - c
+            /* Do second set of 4 bytes */
+            punpckhbw mm2, mm0       /* Unpack High bytes of b */
+            punpckhbw mm1, mm0       /* Unpack High bytes of a */
+            /* pav = p - a = (a + b - c) - a = b - c */
             movq mm4, mm2
-            // pbv = p - b = (a + b - c) - b = a - c
+            /* pbv = p - b = (a + b - c) - b = a - c */
             movq mm5, mm1
             psubw mm4, mm3
             pxor mm7, mm7
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
             movq mm6, mm4
             psubw mm5, mm3
-            // pa = abs(p-a) = abs(pav)
-            // pb = abs(p-b) = abs(pbv)
-            // pc = abs(p-c) = abs(pcv)
-            pcmpgtw mm0, mm4       // Create mask pav bytes < 0
+            /* pa = abs(p-a) = abs(pav) */
+            /* pb = abs(p-b) = abs(pbv) */
+            /* pc = abs(p-c) = abs(pcv) */
+            pcmpgtw mm0, mm4       /* Create mask pav bytes < 0 */
             paddw mm6, mm5
-            pand mm0, mm4          // Only pav bytes < 0 in mm7
-            pcmpgtw mm7, mm5       // Create mask pbv bytes < 0
+            pand mm0, mm4          /* Only pav bytes < 0 in mm7 */
+            pcmpgtw mm7, mm5       /* Create mask pbv bytes < 0 */
             psubw mm4, mm0
-            pand mm7, mm5          // Only pbv bytes < 0 in mm0
+            pand mm7, mm5          /* Only pbv bytes < 0 in mm0 */
             psubw mm4, mm0
             psubw mm5, mm7
             pxor mm0, mm0
-            pcmpgtw mm0, mm6       // Create mask pcv bytes < 0
-            pand mm0, mm6          // Only pav bytes < 0 in mm7
+            pcmpgtw mm0, mm6       /* Create mask pcv bytes < 0 */
+            pand mm0, mm6          /* Only pav bytes < 0 in mm7 */
             psubw mm5, mm7
             psubw mm6, mm0
-            //  test pa <= pb
+            /*  test pa <= pb */
             movq mm7, mm4
             psubw mm6, mm0
-            pcmpgtw mm7, mm5       // pa > pb?
+            pcmpgtw mm7, mm5       /* pa > pb? */
             movq mm0, mm7
-            // use mm7 mask to merge pa & pb
+            /* use mm7 mask to merge pa & pb */
             pand mm5, mm7
-            // use mm0 mask copy to merge a & b
+            /* use mm0 mask copy to merge a & b */
             pand mm2, mm0
             pandn mm7, mm4
             pandn mm0, mm1
             paddw mm7, mm5
             paddw mm0, mm2
-            //  test  ((pa <= pb)? pa:pb) <= pc
-            pcmpgtw mm7, mm6       // pab > pc?
+            /*  test  ((pa <= pb)? pa:pb) <= pc */
+            pcmpgtw mm7, mm6       /* pab > pc? */
             pxor mm1, mm1
             pand mm3, mm7
             pandn mm7, mm0
             pxor mm1, mm1
             paddw mm7, mm3
             pxor mm0, mm0
-            // Step ex to next set of 8 bytes and repeat loop til done
+            /* Step ex to next set of 8 bytes and repeat loop til done */
             add ebx, 8
             packuswb mm1, mm7
-            paddb mm1, [edi + ebx - 8]     // add Paeth predictor with Raw(x)
+            paddb mm1, [edi + ebx - 8]     /* add Paeth predictor with Raw(x) */
             cmp ebx, MMXLength
-            movq [edi + ebx - 8], mm1      // write back updated value
-                            // mm1 will be used as Raw(x-bpp) next loop
+            movq [edi + ebx - 8], mm1      /* write back updated value */
+                            /* mm1 will be used as Raw(x-bpp) next loop */
             jb dpth8lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
-      case 1:                // bpp = 1
-      case 2:                // bpp = 2
-      default:               // bpp > 8
+      case 1:                /* bpp = 1 */
+      case 2:                /* bpp = 2 */
+      default:               /* bpp > 8 */
       {
          _asm {
             mov ebx, diff
@@ -3070,186 +3070,186 @@ dpth8lp:
             jnb dpthdend
             mov edi, row
             mov esi, prev_row
-            // Do Paeth decode for remaining bytes
+            /* Do Paeth decode for remaining bytes */
             mov edx, ebx
-            xor ecx, ecx        // zero ecx before using cl & cx in loop below
-            sub edx, bpp        // Set edx = ebx - bpp
+            xor ecx, ecx        /* zero ecx before using cl & cx in loop below */
+            sub edx, bpp        /* Set edx = ebx - bpp */
 dpthdlp:
             xor eax, eax
-            // pav = p - a = (a + b - c) - a = b - c
-            mov al, [esi + ebx]        // load Prior(x) into al
-            mov cl, [esi + edx]        // load Prior(x-bpp) into cl
-            sub eax, ecx                 // subtract Prior(x-bpp)
-            mov patemp, eax                 // Save pav for later use
+            /* pav = p - a = (a + b - c) - a = b - c */
+            mov al, [esi + ebx]        /* load Prior(x) into al */
+            mov cl, [esi + edx]        /* load Prior(x-bpp) into cl */
+            sub eax, ecx                 /* subtract Prior(x-bpp) */
+            mov patemp, eax                 /* Save pav for later use */
             xor eax, eax
-            // pbv = p - b = (a + b - c) - b = a - c
-            mov al, [edi + edx]        // load Raw(x-bpp) into al
-            sub eax, ecx                 // subtract Prior(x-bpp)
+            /* pbv = p - b = (a + b - c) - b = a - c */
+            mov al, [edi + edx]        /* load Raw(x-bpp) into al */
+            sub eax, ecx                 /* subtract Prior(x-bpp) */
             mov ecx, eax
-            // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
-            add eax, patemp                 // pcv = pav + pbv
-            // pc = abs(pcv)
+            /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
+            add eax, patemp                 /* pcv = pav + pbv */
+            /* pc = abs(pcv) */
             test eax, 0x80000000
             jz dpthdpca
-            neg eax                     // reverse sign of neg values
+            neg eax                     /* reverse sign of neg values */
 dpthdpca:
-            mov pctemp, eax             // save pc for later use
-            // pb = abs(pbv)
+            mov pctemp, eax             /* save pc for later use */
+            /* pb = abs(pbv) */
             test ecx, 0x80000000
             jz dpthdpba
-            neg ecx                     // reverse sign of neg values
+            neg ecx                     /* reverse sign of neg values */
 dpthdpba:
-            mov pbtemp, ecx             // save pb for later use
-            // pa = abs(pav)
+            mov pbtemp, ecx             /* save pb for later use */
+            /* pa = abs(pav) */
             mov eax, patemp
             test eax, 0x80000000
             jz dpthdpaa
-            neg eax                     // reverse sign of neg values
+            neg eax                     /* reverse sign of neg values */
 dpthdpaa:
-            mov patemp, eax             // save pa for later use
-            // test if pa <= pb
+            mov patemp, eax             /* save pa for later use */
+            /* test if pa <= pb */
             cmp eax, ecx
             jna dpthdabb
-            // pa > pb; now test if pb <= pc
+            /* pa > pb; now test if pb <= pc */
             cmp ecx, pctemp
             jna dpthdbbc
-            // pb > pc; Raw(x) = Paeth(x) + Prior(x-bpp)
-            mov cl, [esi + edx]  // load Prior(x-bpp) into cl
+            /* pb > pc; Raw(x) = Paeth(x) + Prior(x-bpp) */
+            mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
             jmp dpthdpaeth
 dpthdbbc:
-            // pb <= pc; Raw(x) = Paeth(x) + Prior(x)
-            mov cl, [esi + ebx]        // load Prior(x) into cl
+            /* pb <= pc; Raw(x) = Paeth(x) + Prior(x) */
+            mov cl, [esi + ebx]        /* load Prior(x) into cl */
             jmp dpthdpaeth
 dpthdabb:
-            // pa <= pb; now test if pa <= pc
+            /* pa <= pb; now test if pa <= pc */
             cmp eax, pctemp
             jna dpthdabc
-            // pa > pc; Raw(x) = Paeth(x) + Prior(x-bpp)
-            mov cl, [esi + edx]  // load Prior(x-bpp) into cl
+            /* pa > pc; Raw(x) = Paeth(x) + Prior(x-bpp) */
+            mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
             jmp dpthdpaeth
 dpthdabc:
-            // pa <= pc; Raw(x) = Paeth(x) + Raw(x-bpp)
-            mov cl, [edi + edx]  // load Raw(x-bpp) into cl
+            /* pa <= pc; Raw(x) = Paeth(x) + Raw(x-bpp) */
+            mov cl, [edi + edx]  /* load Raw(x-bpp) into cl */
 dpthdpaeth:
             inc ebx
             inc edx
-            // Raw(x) = (Paeth(x) + Paeth_Predictor( a, b, c )) mod 256
+            /* Raw(x) = (Paeth(x) + Paeth_Predictor( a, b, c )) mod 256 */
             add [edi + ebx - 1], cl
             cmp ebx, FullLength
             jb dpthdlp
 dpthdend:
-         } // end _asm block
+         } /* end _asm block */
       }
-      return;                   // No need to go further with this one
-   }                         // end switch ( bpp )
+      return;                   /* No need to go further with this one */
+   }                         /* end switch ( bpp ) */
    _asm
    {
-         // MMX acceleration complete now do clean-up
-         // Check if any remaining bytes left to decode
+         /* MMX acceleration complete now do clean-up */
+         /* Check if any remaining bytes left to decode */
          mov ebx, MMXLength
          cmp ebx, FullLength
          jnb dpthend
          mov edi, row
          mov esi, prev_row
-         // Do Paeth decode for remaining bytes
+         /* Do Paeth decode for remaining bytes */
          mov edx, ebx
-         xor ecx, ecx         // zero ecx before using cl & cx in loop below
-         sub edx, bpp         // Set edx = ebx - bpp
+         xor ecx, ecx         /* zero ecx before using cl & cx in loop below */
+         sub edx, bpp         /* Set edx = ebx - bpp */
 dpthlp2:
          xor eax, eax
-         // pav = p - a = (a + b - c) - a = b - c
-         mov al, [esi + ebx]  // load Prior(x) into al
-         mov cl, [esi + edx]  // load Prior(x-bpp) into cl
-         sub eax, ecx         // subtract Prior(x-bpp)
-         mov patemp, eax      // Save pav for later use
+         /* pav = p - a = (a + b - c) - a = b - c */
+         mov al, [esi + ebx]  /* load Prior(x) into al */
+         mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
+         sub eax, ecx         /* subtract Prior(x-bpp) */
+         mov patemp, eax      /* Save pav for later use */
          xor eax, eax
-         // pbv = p - b = (a + b - c) - b = a - c
-         mov al, [edi + edx]  // load Raw(x-bpp) into al
-         sub eax, ecx         // subtract Prior(x-bpp)
+         /* pbv = p - b = (a + b - c) - b = a - c */
+         mov al, [edi + edx]  /* load Raw(x-bpp) into al */
+         sub eax, ecx         /* subtract Prior(x-bpp) */
          mov ecx, eax
-         // pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv
-         add eax, patemp      // pcv = pav + pbv
-         // pc = abs(pcv)
+         /* pcv = p - c = (a + b - c) -c = (a - c) + (b - c) = pav + pbv */
+         add eax, patemp      /* pcv = pav + pbv */
+         /* pc = abs(pcv) */
          test eax, 0x80000000
          jz dpthpca2
-         neg eax              // reverse sign of neg values
+         neg eax              /* reverse sign of neg values */
 dpthpca2:
-         mov pctemp, eax      // save pc for later use
-         // pb = abs(pbv)
+         mov pctemp, eax      /* save pc for later use */
+         /* pb = abs(pbv) */
          test ecx, 0x80000000
          jz dpthpba2
-         neg ecx              // reverse sign of neg values
+         neg ecx              /* reverse sign of neg values */
 dpthpba2:
-         mov pbtemp, ecx      // save pb for later use
-         // pa = abs(pav)
+         mov pbtemp, ecx      /* save pb for later use */
+         /* pa = abs(pav) */
          mov eax, patemp
          test eax, 0x80000000
          jz dpthpaa2
-         neg eax              // reverse sign of neg values
+         neg eax              /* reverse sign of neg values */
 dpthpaa2:
-         mov patemp, eax      // save pa for later use
-         // test if pa <= pb
+         mov patemp, eax      /* save pa for later use */
+         /* test if pa <= pb */
          cmp eax, ecx
          jna dpthabb2
-         // pa > pb; now test if pb <= pc
+         /* pa > pb; now test if pb <= pc */
          cmp ecx, pctemp
          jna dpthbbc2
-         // pb > pc; Raw(x) = Paeth(x) + Prior(x-bpp)
-         mov cl, [esi + edx]  // load Prior(x-bpp) into cl
+         /* pb > pc; Raw(x) = Paeth(x) + Prior(x-bpp) */
+         mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
          jmp dpthpaeth2
 dpthbbc2:
-         // pb <= pc; Raw(x) = Paeth(x) + Prior(x)
-         mov cl, [esi + ebx]        // load Prior(x) into cl
+         /* pb <= pc; Raw(x) = Paeth(x) + Prior(x) */
+         mov cl, [esi + ebx]        /* load Prior(x) into cl */
          jmp dpthpaeth2
 dpthabb2:
-         // pa <= pb; now test if pa <= pc
+         /* pa <= pb; now test if pa <= pc */
          cmp eax, pctemp
          jna dpthabc2
-         // pa > pc; Raw(x) = Paeth(x) + Prior(x-bpp)
-         mov cl, [esi + edx]  // load Prior(x-bpp) into cl
+         /* pa > pc; Raw(x) = Paeth(x) + Prior(x-bpp) */
+         mov cl, [esi + edx]  /* load Prior(x-bpp) into cl */
          jmp dpthpaeth2
 dpthabc2:
-         // pa <= pc; Raw(x) = Paeth(x) + Raw(x-bpp)
-         mov cl, [edi + edx]  // load Raw(x-bpp) into cl
+         /* pa <= pc; Raw(x) = Paeth(x) + Raw(x-bpp) */
+         mov cl, [edi + edx]  /* load Raw(x-bpp) into cl */
 dpthpaeth2:
          inc ebx
          inc edx
-         // Raw(x) = (Paeth(x) + Paeth_Predictor( a, b, c )) mod 256
+         /* Raw(x) = (Paeth(x) + Paeth_Predictor( a, b, c )) mod 256 */
          add [edi + ebx - 1], cl
          cmp ebx, FullLength
          jb dpthlp2
 dpthend:
-         emms             // End MMX instructions; prep for possible FP instrs.
-   } // end _asm block
+         emms             /* End MMX instructions; prep for possible FP instrs. */
+   } /* end _asm block */
 }
 
-// Optimized code for PNG Sub filter decoder
+/* Optimized code for PNG Sub filter decoder */
 void /* PRIVATE */
 png_read_filter_row_mmx_sub(png_row_infop row_info, png_bytep row)
 {
-   //int test;
+   /*int test; */
    int bpp;
    png_uint_32 FullLength;
    png_uint_32 MMXLength;
    int diff;
 
-   bpp = (row_info->pixel_depth + 7) >> 3; // Get # bytes per pixel
-   FullLength  = row_info->rowbytes - bpp; // # of bytes to filter
+   bpp = (row_info->pixel_depth + 7) >> 3; /* Get # bytes per pixel */
+   FullLength  = row_info->rowbytes - bpp; /* # of bytes to filter */
    _asm {
         mov edi, row
-        mov esi, edi               // lp = row
-        add edi, bpp               // rp = row + bpp
+        mov esi, edi               /* lp = row */
+        add edi, bpp               /* rp = row + bpp */
         xor eax, eax
-        // get # of bytes to alignment
-        mov diff, edi               // take start of row
-        add diff, 0xf               // add 7 + 8 to incr past
-                                        // alignment boundary
+        /* get # of bytes to alignment */
+        mov diff, edi               /* take start of row */
+        add diff, 0xf               /* add 7 + 8 to incr past */
+                                        /* alignment boundary */
         xor ebx, ebx
-        and diff, 0xfffffff8        // mask to alignment boundary
-        sub diff, edi               // subtract from start ==> value
-                                        //  ebx at alignment
+        and diff, 0xfffffff8        /* mask to alignment boundary */
+        sub diff, edi               /* subtract from start ==> value */
+                                        /*  ebx at alignment */
         jz dsubgo
-        // fix alignment
+        /* fix alignment */
 dsublp1:
         mov al, [esi+ebx]
         add [edi+ebx], al
@@ -3259,79 +3259,79 @@ dsublp1:
 dsubgo:
         mov ecx, FullLength
         mov edx, ecx
-        sub edx, ebx                  // subtract alignment fix
-        and edx, 0x00000007           // calc bytes over mult of 8
-        sub ecx, edx                  // drop over bytes from length
+        sub edx, ebx                  /* subtract alignment fix */
+        and edx, 0x00000007           /* calc bytes over mult of 8 */
+        sub ecx, edx                  /* drop over bytes from length */
         mov MMXLength, ecx
-   } // end _asm block
+   } /* end _asm block */
 
-   // Now do the math for the rest of the row
+   /* Now do the math for the rest of the row */
    switch ( bpp )
    {
         case 3:
         {
          ActiveMask.use  = 0x0000ffffff000000;
-         ShiftBpp.use = 24;       // == 3 * 8
-         ShiftRem.use  = 40;      // == 64 - 24
+         ShiftBpp.use = 24;       /* == 3 * 8 */
+         ShiftRem.use  = 40;      /* == 64 - 24 */
          _asm {
             mov edi, row
-            movq mm7, ActiveMask  // Load ActiveMask for 2nd active byte group
-            mov esi, edi              // lp = row
-            add edi, bpp          // rp = row + bpp
+            movq mm7, ActiveMask  /* Load ActiveMask for 2nd active byte group */
+            mov esi, edi              /* lp = row */
+            add edi, bpp          /* rp = row + bpp */
             movq mm6, mm7
             mov ebx, diff
-            psllq mm6, ShiftBpp   // Move mask in mm6 to cover 3rd active
-                                  // byte group
-            // PRIME the pump (load the first Raw(x-bpp) data set
+            psllq mm6, ShiftBpp   /* Move mask in mm6 to cover 3rd active */
+                                  /* byte group */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
             movq mm1, [edi+ebx-8]
 dsub3lp:
-            psrlq mm1, ShiftRem   // Shift data for adding 1st bpp bytes
-                          // no need for mask; shift clears inactive bytes
-            // Add 1st active group
+            psrlq mm1, ShiftRem   /* Shift data for adding 1st bpp bytes */
+                          /* no need for mask; shift clears inactive bytes */
+            /* Add 1st active group */
             movq mm0, [edi+ebx]
             paddb mm0, mm1
-            // Add 2nd active group
-            movq mm1, mm0         // mov updated Raws to mm1
-            psllq mm1, ShiftBpp   // shift data to position correctly
-            pand mm1, mm7         // mask to use only 2nd active group
+            /* Add 2nd active group */
+            movq mm1, mm0         /* mov updated Raws to mm1 */
+            psllq mm1, ShiftBpp   /* shift data to position correctly */
+            pand mm1, mm7         /* mask to use only 2nd active group */
             paddb mm0, mm1
-            // Add 3rd active group
-            movq mm1, mm0         // mov updated Raws to mm1
-            psllq mm1, ShiftBpp   // shift data to position correctly
-            pand mm1, mm6         // mask to use only 3rd active group
+            /* Add 3rd active group */
+            movq mm1, mm0         /* mov updated Raws to mm1 */
+            psllq mm1, ShiftBpp   /* shift data to position correctly */
+            pand mm1, mm6         /* mask to use only 3rd active group */
             add ebx, 8
             paddb mm0, mm1
             cmp ebx, MMXLength
-            movq [edi+ebx-8], mm0     // Write updated Raws back to array
-            // Prep for doing 1st add at top of loop
+            movq [edi+ebx-8], mm0     /* Write updated Raws back to array */
+            /* Prep for doing 1st add at top of loop */
             movq mm1, mm0
             jb dsub3lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
       case 1:
       {
-         // Placed here just in case this is a duplicate of the
-         // non-MMX code for the SUB filter in png_read_filter_row below
+         /* Placed here just in case this is a duplicate of the */
+         /* non-MMX code for the SUB filter in png_read_filter_row below */
          //
-         //         png_bytep rp;
-         //         png_bytep lp;
-         //         png_uint_32 i;
-         //         bpp = (row_info->pixel_depth + 7) >> 3;
-         //         for (i = (png_uint_32)bpp, rp = row + bpp, lp = row;
-         //            i < row_info->rowbytes; i++, rp++, lp++)
-         //      {
-         //            *rp = (png_byte)(((int)(*rp) + (int)(*lp)) & 0xff);
-         //      }
+         /*         png_bytep rp; */
+         /*         png_bytep lp; */
+         /*         png_uint_32 i; */
+         /*         bpp = (row_info->pixel_depth + 7) >> 3; */
+         /*         for (i = (png_uint_32)bpp, rp = row + bpp, lp = row; */
+         /*            i < row_info->rowbytes; i++, rp++, lp++) */
+         /*      { */
+         /*            *rp = (png_byte)(((int)(*rp) + (int)(*lp)) & 0xff); */
+         /*      } */
          _asm {
             mov ebx, diff
             mov edi, row
             cmp ebx, FullLength
             jnb dsub1end
-            mov esi, edi          // lp = row
+            mov esi, edi          /* lp = row */
             xor eax, eax
-            add edi, bpp      // rp = row + bpp
+            add edi, bpp      /* rp = row + bpp */
 dsub1lp:
             mov al, [esi+ebx]
             add [edi+ebx], al
@@ -3339,7 +3339,7 @@ dsub1lp:
             cmp ebx, FullLength
             jb dsub1lp
 dsub1end:
-         } // end _asm block
+         } /* end _asm block */
       }
       return;
 
@@ -3353,77 +3353,77 @@ dsub1end:
          _asm {
             mov edi, row
             mov ebx, diff
-            mov esi, edi               // lp = row
-            add edi, bpp           // rp = row + bpp
-            // PRIME the pump (load the first Raw(x-bpp) data set
+            mov esi, edi               /* lp = row */
+            add edi, bpp           /* rp = row + bpp */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
             movq mm1, [edi+ebx-8]
 dsub4lp:
-            psrlq mm1, ShiftRem // Shift data for adding 1st bpp bytes
-                          // no need for mask; shift clears inactive bytes
+            psrlq mm1, ShiftRem /* Shift data for adding 1st bpp bytes */
+                          /* no need for mask; shift clears inactive bytes */
             movq mm0, [edi+ebx]
             paddb mm0, mm1
-            // Add 2nd active group
-            movq mm1, mm0          // mov updated Raws to mm1
-            psllq mm1, ShiftBpp    // shift data to position correctly
-                                   // there is no need for any mask
-                                   // since shift clears inactive bits/bytes
+            /* Add 2nd active group */
+            movq mm1, mm0          /* mov updated Raws to mm1 */
+            psllq mm1, ShiftBpp    /* shift data to position correctly */
+                                   /* there is no need for any mask */
+                                   /* since shift clears inactive bits/bytes */
             add ebx, 8
             paddb mm0, mm1
             cmp ebx, MMXLength
             movq [edi+ebx-8], mm0
-            movq mm1, mm0          // Prep for doing 1st add at top of loop
+            movq mm1, mm0          /* Prep for doing 1st add at top of loop */
             jb dsub4lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
       case 2:
       {
          ActiveMask.use  = 0x00000000ffff0000;
-         ShiftBpp.use = 16;       // == 2 * 8
-         ShiftRem.use = 48;       // == 64 - 16
+         ShiftBpp.use = 16;       /* == 2 * 8 */
+         ShiftRem.use = 48;       /* == 64 - 16 */
          _asm {
-            movq mm7, ActiveMask  // Load ActiveMask for 2nd active byte group
+            movq mm7, ActiveMask  /* Load ActiveMask for 2nd active byte group */
             mov ebx, diff
             movq mm6, mm7
             mov edi, row
-            psllq mm6, ShiftBpp     // Move mask in mm6 to cover 3rd active
-                                    //  byte group
-            mov esi, edi            // lp = row
+            psllq mm6, ShiftBpp     /* Move mask in mm6 to cover 3rd active */
+                                    /*  byte group */
+            mov esi, edi            /* lp = row */
             movq mm5, mm6
-            add edi, bpp            // rp = row + bpp
-            psllq mm5, ShiftBpp     // Move mask in mm5 to cover 4th active
-                                    //  byte group
-            // PRIME the pump (load the first Raw(x-bpp) data set
+            add edi, bpp            /* rp = row + bpp */
+            psllq mm5, ShiftBpp     /* Move mask in mm5 to cover 4th active */
+                                    /*  byte group */
+            /* PRIME the pump (load the first Raw(x-bpp) data set */
             movq mm1, [edi+ebx-8]
 dsub2lp:
-            // Add 1st active group
-            psrlq mm1, ShiftRem     // Shift data for adding 1st bpp bytes
-                                    // no need for mask; shift clears inactive
-                                    //  bytes
+            /* Add 1st active group */
+            psrlq mm1, ShiftRem     /* Shift data for adding 1st bpp bytes */
+                                    /* no need for mask; shift clears inactive */
+                                    /*  bytes */
             movq mm0, [edi+ebx]
             paddb mm0, mm1
-            // Add 2nd active group
-            movq mm1, mm0           // mov updated Raws to mm1
-            psllq mm1, ShiftBpp     // shift data to position correctly
-            pand mm1, mm7           // mask to use only 2nd active group
+            /* Add 2nd active group */
+            movq mm1, mm0           /* mov updated Raws to mm1 */
+            psllq mm1, ShiftBpp     /* shift data to position correctly */
+            pand mm1, mm7           /* mask to use only 2nd active group */
             paddb mm0, mm1
-            // Add 3rd active group
-            movq mm1, mm0           // mov updated Raws to mm1
-            psllq mm1, ShiftBpp     // shift data to position correctly
-            pand mm1, mm6           // mask to use only 3rd active group
+            /* Add 3rd active group */
+            movq mm1, mm0           /* mov updated Raws to mm1 */
+            psllq mm1, ShiftBpp     /* shift data to position correctly */
+            pand mm1, mm6           /* mask to use only 3rd active group */
             paddb mm0, mm1
-            // Add 4th active group
-            movq mm1, mm0           // mov updated Raws to mm1
-            psllq mm1, ShiftBpp     // shift data to position correctly
-            pand mm1, mm5           // mask to use only 4th active group
+            /* Add 4th active group */
+            movq mm1, mm0           /* mov updated Raws to mm1 */
+            psllq mm1, ShiftBpp     /* shift data to position correctly */
+            pand mm1, mm5           /* mask to use only 4th active group */
             add ebx, 8
             paddb mm0, mm1
             cmp ebx, MMXLength
-            movq [edi+ebx-8], mm0   // Write updated Raws back to array
-            movq mm1, mm0           // Prep for doing 1st add at top of loop
+            movq [edi+ebx-8], mm0   /* Write updated Raws back to array */
+            movq mm1, mm0           /* Prep for doing 1st add at top of loop */
             jb dsub2lp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
       case 8:
@@ -3431,44 +3431,44 @@ dsub2lp:
          _asm {
             mov edi, row
             mov ebx, diff
-            mov esi, edi            // lp = row
-            add edi, bpp            // rp = row + bpp
+            mov esi, edi            /* lp = row */
+            add edi, bpp            /* rp = row + bpp */
             mov ecx, MMXLength
-            movq mm7, [edi+ebx-8]   // PRIME the pump (load the first
-                                    // Raw(x-bpp) data set
-            and ecx, 0x0000003f     // calc bytes over mult of 64
+            movq mm7, [edi+ebx-8]   /* PRIME the pump (load the first */
+                                    /* Raw(x-bpp) data set */
+            and ecx, 0x0000003f     /* calc bytes over mult of 64 */
 dsub8lp:
-            movq mm0, [edi+ebx]     // Load Sub(x) for 1st 8 bytes
+            movq mm0, [edi+ebx]     /* Load Sub(x) for 1st 8 bytes */
             paddb mm0, mm7
-            movq mm1, [edi+ebx+8]   // Load Sub(x) for 2nd 8 bytes
-            movq [edi+ebx], mm0    // Write Raw(x) for 1st 8 bytes
-                                   // Now mm0 will be used as Raw(x-bpp) for
-                                   // the 2nd group of 8 bytes.  This will be
-                                   // repeated for each group of 8 bytes with
-                                   // the 8th group being used as the Raw(x-bpp)
-                                   // for the 1st group of the next loop.
+            movq mm1, [edi+ebx+8]   /* Load Sub(x) for 2nd 8 bytes */
+            movq [edi+ebx], mm0    /* Write Raw(x) for 1st 8 bytes */
+                                   /* Now mm0 will be used as Raw(x-bpp) for */
+                                   /* the 2nd group of 8 bytes.  This will be */
+                                   /* repeated for each group of 8 bytes with */
+                                   /* the 8th group being used as the Raw(x-bpp) */
+                                   /* for the 1st group of the next loop. */
             paddb mm1, mm0
-            movq mm2, [edi+ebx+16]  // Load Sub(x) for 3rd 8 bytes
-            movq [edi+ebx+8], mm1   // Write Raw(x) for 2nd 8 bytes
+            movq mm2, [edi+ebx+16]  /* Load Sub(x) for 3rd 8 bytes */
+            movq [edi+ebx+8], mm1   /* Write Raw(x) for 2nd 8 bytes */
             paddb mm2, mm1
-            movq mm3, [edi+ebx+24]  // Load Sub(x) for 4th 8 bytes
-            movq [edi+ebx+16], mm2  // Write Raw(x) for 3rd 8 bytes
+            movq mm3, [edi+ebx+24]  /* Load Sub(x) for 4th 8 bytes */
+            movq [edi+ebx+16], mm2  /* Write Raw(x) for 3rd 8 bytes */
             paddb mm3, mm2
-            movq mm4, [edi+ebx+32]  // Load Sub(x) for 5th 8 bytes
-            movq [edi+ebx+24], mm3  // Write Raw(x) for 4th 8 bytes
+            movq mm4, [edi+ebx+32]  /* Load Sub(x) for 5th 8 bytes */
+            movq [edi+ebx+24], mm3  /* Write Raw(x) for 4th 8 bytes */
             paddb mm4, mm3
-            movq mm5, [edi+ebx+40]  // Load Sub(x) for 6th 8 bytes
-            movq [edi+ebx+32], mm4  // Write Raw(x) for 5th 8 bytes
+            movq mm5, [edi+ebx+40]  /* Load Sub(x) for 6th 8 bytes */
+            movq [edi+ebx+32], mm4  /* Write Raw(x) for 5th 8 bytes */
             paddb mm5, mm4
-            movq mm6, [edi+ebx+48]  // Load Sub(x) for 7th 8 bytes
-            movq [edi+ebx+40], mm5  // Write Raw(x) for 6th 8 bytes
+            movq mm6, [edi+ebx+48]  /* Load Sub(x) for 7th 8 bytes */
+            movq [edi+ebx+40], mm5  /* Write Raw(x) for 6th 8 bytes */
             paddb mm6, mm5
-            movq mm7, [edi+ebx+56]  // Load Sub(x) for 8th 8 bytes
-            movq [edi+ebx+48], mm6  // Write Raw(x) for 7th 8 bytes
+            movq mm7, [edi+ebx+56]  /* Load Sub(x) for 8th 8 bytes */
+            movq [edi+ebx+48], mm6  /* Write Raw(x) for 7th 8 bytes */
             add ebx, 64
             paddb mm7, mm6
             cmp ebx, ecx
-            movq [edi+ebx-8], mm7   // Write Raw(x) for 8th 8 bytes
+            movq [edi+ebx-8], mm7   /* Write Raw(x) for 8th 8 bytes */
             jb dsub8lp
             cmp ebx, MMXLength
             jnb dsub8lt8
@@ -3477,45 +3477,45 @@ dsub8lpA:
             add ebx, 8
             paddb mm0, mm7
             cmp ebx, MMXLength
-            movq [edi+ebx-8], mm0   // use -8 to offset early add to ebx
-            movq mm7, mm0           // Move calculated Raw(x) data to mm1 to
-                                    // be the new Raw(x-bpp) for the next loop
+            movq [edi+ebx-8], mm0   /* use -8 to offset early add to ebx */
+            movq mm7, mm0           /* Move calculated Raw(x) data to mm1 to */
+                                    /* be the new Raw(x-bpp) for the next loop */
             jb dsub8lpA
 dsub8lt8:
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
-      default:                // bpp greater than 8 bytes
+      default:                /* bpp greater than 8 bytes */
       {
          _asm {
             mov ebx, diff
             mov edi, row
-            mov esi, edi           // lp = row
-            add edi, bpp           // rp = row + bpp
+            mov esi, edi           /* lp = row */
+            add edi, bpp           /* rp = row + bpp */
 dsubAlp:
             movq mm0, [edi+ebx]
             movq mm1, [esi+ebx]
             add ebx, 8
             paddb mm0, mm1
             cmp ebx, MMXLength
-            movq [edi+ebx-8], mm0  // mov does not affect flags; -8 to offset
-                                   //  add ebx
+            movq [edi+ebx-8], mm0  /* mov does not affect flags; -8 to offset */
+                                   /*  add ebx */
             jb dsubAlp
-         } // end _asm block
+         } /* end _asm block */
       }
       break;
 
-   } // end switch ( bpp )
+   } /* end switch ( bpp ) */
 
    _asm {
         mov ebx, MMXLength
         mov edi, row
         cmp ebx, FullLength
         jnb dsubend
-        mov esi, edi               // lp = row
+        mov esi, edi               /* lp = row */
         xor eax, eax
-        add edi, bpp               // rp = row + bpp
+        add edi, bpp               /* rp = row + bpp */
 dsublp2:
         mov al, [esi+ebx]
         add [edi+ebx], al
@@ -3523,20 +3523,20 @@ dsublp2:
         cmp ebx, FullLength
         jb dsublp2
 dsubend:
-        emms             // End MMX instructions; prep for possible FP instrs.
-   } // end _asm block
+        emms             /* End MMX instructions; prep for possible FP instrs. */
+   } /* end _asm block */
 }
 
-// Optimized code for PNG Up filter decoder
+/* Optimized code for PNG Up filter decoder */
 void /* PRIVATE */
 png_read_filter_row_mmx_up(png_row_infop row_info, png_bytep row,
    png_bytep prev_row)
 {
    png_uint_32 len;
-   len  = row_info->rowbytes;       // # of bytes to filter
+   len  = row_info->rowbytes;       /* # of bytes to filter */
    _asm {
       mov edi, row
-      // get # of bytes to alignment
+      /* get # of bytes to alignment */
       mov ecx, edi
       xor ebx, ebx
       add ecx, 0x7
@@ -3545,22 +3545,22 @@ png_read_filter_row_mmx_up(png_row_infop row_info, png_bytep row,
       mov esi, prev_row
       sub ecx, edi
       jz dupgo
-      // fix alignment
+      /* fix alignment */
 duplp1:
       mov al, [edi+ebx]
       add al, [esi+ebx]
       inc ebx
       cmp ebx, ecx
-      mov [edi + ebx-1], al  // mov does not affect flags; -1 to offset inc ebx
+      mov [edi + ebx-1], al  /* mov does not affect flags; -1 to offset inc ebx */
       jb duplp1
 dupgo:
       mov ecx, len
       mov edx, ecx
-      sub edx, ebx                  // subtract alignment fix
-      and edx, 0x0000003f           // calc bytes over mult of 64
-      sub ecx, edx                  // drop over bytes from length
-      // Unrolled loop - use all MMX registers and interleave to reduce
-      // number of branch instructions (loops) and reduce partial stalls
+      sub edx, ebx                  /* subtract alignment fix */
+      and edx, 0x0000003f           /* calc bytes over mult of 64 */
+      sub ecx, edx                  /* drop over bytes from length */
+      /* Unrolled loop - use all MMX registers and interleave to reduce */
+      /* number of branch instructions (loops) and reduce partial stalls */
 duploop:
       movq mm1, [esi+ebx]
       movq mm0, [edi+ebx]
@@ -3595,54 +3595,54 @@ duploop:
       add ebx, 64
       paddb mm6, mm7
       cmp ebx, ecx
-      movq [edi+ebx-8], mm6 // (+56)movq does not affect flags;
-                                     // -8 to offset add ebx
+      movq [edi+ebx-8], mm6 /* (+56)movq does not affect flags; */
+                                     /* -8 to offset add ebx */
       jb duploop
 
-      cmp edx, 0                     // Test for bytes over mult of 64
+      cmp edx, 0                     /* Test for bytes over mult of 64 */
       jz dupend
 
 
-      // 2 lines added by lcreeve@netins.net
-      // (mail 11 Jul 98 in png-implement list)
-      cmp edx, 8 //test for less than 8 bytes
+      /* 2 lines added by lcreeve@netins.net */
+      /* (mail 11 Jul 98 in png-implement list) */
+      cmp edx, 8 /*test for less than 8 bytes */
       jb duplt8
 
 
       add ecx, edx
-      and edx, 0x00000007           // calc bytes over mult of 8
-      sub ecx, edx                  // drop over bytes from length
+      and edx, 0x00000007           /* calc bytes over mult of 8 */
+      sub ecx, edx                  /* drop over bytes from length */
       jz duplt8
-      // Loop using MMX registers mm0 & mm1 to update 8 bytes simultaneously
+      /* Loop using MMX registers mm0 & mm1 to update 8 bytes simultaneously */
 duplpA:
       movq mm1, [esi+ebx]
       movq mm0, [edi+ebx]
       add ebx, 8
       paddb mm0, mm1
       cmp ebx, ecx
-      movq [edi+ebx-8], mm0 // movq does not affect flags; -8 to offset add ebx
+      movq [edi+ebx-8], mm0 /* movq does not affect flags; -8 to offset add ebx */
       jb duplpA
-      cmp edx, 0            // Test for bytes over mult of 8
+      cmp edx, 0            /* Test for bytes over mult of 8 */
       jz dupend
 duplt8:
       xor eax, eax
-      add ecx, edx          // move over byte count into counter
-      // Loop using x86 registers to update remaining bytes
+      add ecx, edx          /* move over byte count into counter */
+      /* Loop using x86 registers to update remaining bytes */
 duplp2:
       mov al, [edi + ebx]
       add al, [esi + ebx]
       inc ebx
       cmp ebx, ecx
-      mov [edi + ebx-1], al // mov does not affect flags; -1 to offset inc ebx
+      mov [edi + ebx-1], al /* mov does not affect flags; -1 to offset inc ebx */
       jb duplp2
 dupend:
-      // Conversion of filtered row completed
-      emms          // End MMX instructions; prep for possible FP instrs.
-   } // end _asm block
+      /* Conversion of filtered row completed */
+      emms          /* End MMX instructions; prep for possible FP instrs. */
+   } /* end _asm block */
 }
 
 
-// Optimized png_read_filter_row routines
+/* Optimized png_read_filter_row routines */
 void /* PRIVATE */
 png_read_filter_row(png_structp png_ptr, png_row_infop row_info, png_bytep
    row, png_bytep prev_row, int filter)
@@ -3796,7 +3796,7 @@ png_read_filter_row(png_structp png_ptr, png_row_infop row_info, png_bytep
                rp++;
             }
 
-            for (i = 0; i < istop; i++)   // use leftover rp,pp
+            for (i = 0; i < istop; i++)   /* use leftover rp,pp */
             {
                int a, b, c, pa, pb, pc, p;
 
