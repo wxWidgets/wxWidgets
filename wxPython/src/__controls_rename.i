@@ -50,6 +50,7 @@
 %rename(TE_LINEWRAP)                        wxTE_LINEWRAP;
 %rename(TE_WORDWRAP)                        wxTE_WORDWRAP;
 %rename(TE_RICH2)                           wxTE_RICH2;
+%rename(TE_CAPITALIZE)                      wxTE_CAPITALIZE;
 %rename(TEXT_ALIGNMENT_DEFAULT)             wxTEXT_ALIGNMENT_DEFAULT;
 %rename(TEXT_ALIGNMENT_LEFT)                wxTEXT_ALIGNMENT_LEFT;
 %rename(TEXT_ALIGNMENT_CENTRE)              wxTEXT_ALIGNMENT_CENTRE;
