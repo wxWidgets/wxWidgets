@@ -40,7 +40,7 @@
 #include "wx/log.h"
 
 // For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXGTK__)) && wxUSE_POSTSCRIPT
+#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXPM__)) && wxUSE_POSTSCRIPT
     #define wxCOMPATIBILITY_WITH_PRINTSETUPDATA 1
 #endif
 

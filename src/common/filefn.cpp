@@ -132,7 +132,7 @@ static wxChar wxFileFunctionsBuffer[4*_MAXPATHLEN];
 
 #if defined(__VISAGECPP__) && __IBMCPP__ >= 400
 //
-// VisualAge C++ V4.0 cannot have any external linkage const decs 
+// VisualAge C++ V4.0 cannot have any external linkage const decs
 // in headers included by more than one primary source
 //
 const off_t wxInvalidOffset = (off_t)-1;
@@ -1311,7 +1311,7 @@ wxString wxFindNextFile()
           nextDir = readdir(gs_dirStream) )
     {
         if (wxMatchWild(name, nextDir->d_name, FALSE) &&   // RR: added FALSE to find hidden files
-	    strcmp(nextDir->d_name, ".") && 
+	    strcmp(nextDir->d_name, ".") &&
 	    strcmp(nextDir->d_name, "..") )
         {
             result.Empty();
@@ -1416,7 +1416,7 @@ wxString wxFindNextFile()
 			
 		if ( ( g_iter.m_CPB.dirInfo.ioFlAttrib & ioDirMask) == 0 && !(g_iter_flags & wxFILE ) )
 			continue ;
-			 
+			
 		// hit !
 		break ;
 	}
@@ -1430,7 +1430,7 @@ wxString wxFindNextFile()
 								   g_iter.m_dirId,
 								   g_iter.m_name,
 								   &spec) ;
-								  
+								
 	return wxMacFSSpec2UnixFilename( &spec ) ;
 }
 
@@ -1524,6 +1524,7 @@ wxString wxFindFirstFile(const wxChar *spec, int flags)
     return result;
 }
 
+
 wxString wxFindNextFile()
 {
     wxString result;
@@ -1595,7 +1596,51 @@ try_again:
     return result;
 }
 
-#endif // Unix/Windows
+#elif defined(__WXPM__)
+
+wxString wxFindFirstFile(const wxChar *spec, int flags)
+{
+    wxString result;
+
+    /*
+    // TODO: figure something out here for OS/2
+    gs_strFileSpec = spec;
+    gs_findFlags = flags;
+
+    // Find path only so we can concatenate found file onto path
+    wxString path(wxPathOnly(gs_strFileSpec));
+    if ( !path.IsEmpty() )
+        result << path << wxT('\\');
+
+    int flag = _A_NORMAL;
+    if (flags & wxDIR)
+        flag = _A_SUBDIR;
+
+    if (_dos_findfirst(WXSTRINGCAST spec, flag, &gs_findDataStruct) == 0)
+    {
+        char attrib;
+        attrib = gs_findDataStruct.attrib;
+
+        if (attrib & _A_SUBDIR) {
+            if (!(gs_findFlags & wxDIR))
+                return wxFindNextFile();
+        } else if (gs_findFlags && !(gs_findFlags & wxFILE))
+            return wxFindNextFile();
+
+        result += gs_findDataStruct.name;
+    }
+    */
+    return result;
+}
+
+wxString wxFindNextFile()
+{
+    wxString result;
+    // TODO:
+    return result;
+}
+
+#endif // Unix/Windows/OS/2
 
 // Get current working directory.
 // If buf is NULL, allocates space using new, else
@@ -1627,9 +1672,9 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #ifdef _MSC_VER
   if (_getcwd(buf, sz) == NULL) {
 #elif defined( __WXMAC__)
-	enum 
-	{ 
-		SFSaveDisk = 0x214, CurDirStore = 0x398 
+	enum
+	{
+		SFSaveDisk = 0x214, CurDirStore = 0x398
 	};
 	FSSpec cwdSpec ;
 	

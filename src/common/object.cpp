@@ -375,9 +375,18 @@ void wxObject::UnRef()
         wxASSERT_MSG( m_refData->m_count > 0, _T("invalid ref data count") );
 
         if ( !--m_refData->m_count )
+#if defined(__VISAGECPP__) && IBMCPP < 400
+            //
+            // don't know what is going on with VA 3.0 but its got some memory problems here
+            // this delete causes a trap in CPPOOM3.DLL
+            //
+            {
+            }
+#else
             delete m_refData;
 
         m_refData = (wxObjectRefData *) NULL;
+#endif
     }
 }
 
