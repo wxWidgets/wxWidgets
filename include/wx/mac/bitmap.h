@@ -69,7 +69,7 @@ protected:
   WXHBITMAP m_maskBitmap;
 };
 
-enum { kMacBitmapTypeUnknownType , kMacBitmapTypeGrafWorld, kMacBitmapTypePict } ;
+enum { kMacBitmapTypeUnknownType , kMacBitmapTypeGrafWorld, kMacBitmapTypePict , kMacBitmapTypeIcon } ;
 
 class WXDLLEXPORT wxBitmapRefData: public wxGDIRefData
 {
@@ -92,6 +92,7 @@ public:
 	int						m_bitmapType ;
 	PicHandle			m_hPict ;
 	WXHBITMAP     m_hBitmap;
+	WXHICON m_hIcon ;
   wxMask *      m_bitmapMask; // Optional mask
 };
 
@@ -211,6 +212,8 @@ protected:
 public:
   void SetHBITMAP(WXHBITMAP bmp);
   WXHBITMAP GetHBITMAP() const;
+  void SetHICON(WXHICON ico);
+  inline WXHICON GetHICON() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hIcon : 0); }
   
   PicHandle GetPict() const;
 

@@ -747,7 +747,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     panel = new wxPanel(m_notebook);
 
-#if !defined(__WXMOTIF__) && !defined(__WXMAC__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
+#if !defined(__WXMOTIF__) && !defined(__WIN16__)  // wxStaticBitmap not working under Motif yet; and icons not allowed under WIN16.
     wxIcon icon = wxTheApp->GetStdIcon(wxICON_INFORMATION);
     wxStaticBitmap *bmpStatic = new wxStaticBitmap(panel, -1, icon,
                                                    wxPoint(10, 10));

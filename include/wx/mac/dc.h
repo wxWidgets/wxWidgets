@@ -72,7 +72,7 @@ class WXDLLEXPORT wxDC: public wxDCBase
 
     virtual void Clear();
 
-    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; };
+    virtual bool StartDoc( const wxString& WXUNUSED(message) ) { return TRUE; }
     virtual void EndDoc(void) {};
     
     virtual void StartPage(void) {};
@@ -235,21 +235,22 @@ protected:
                                wxCoord xoffset, wxCoord yoffset,
                                int fillStyle = wxODDEVEN_RULE);
 
-
-
-//
-
-  public:
-//begin wxmac
+  protected:
+    //begin wxmac
+    // Variables used for scaling
     double       m_mm_to_pix_x,m_mm_to_pix_y; 
-    bool         m_needComputeScaleX,m_needComputeScaleY;         // not yet used
-    long         m_internalDeviceOriginX,m_internalDeviceOriginY;   // If un-scrolled is non-zero or
-								    // d.o. changes with scrolling.
-								    // Set using SetInternalDeviceOrigin().
+    // not yet used
+    bool         m_needComputeScaleX,m_needComputeScaleY;         
+    // If un-scrolled is non-zero or d.o. changes with scrolling.
+	// Set using SetInternalDeviceOrigin().
+	long         m_internalDeviceOriginX,m_internalDeviceOriginY;  
+	 // To be set by external classes such as wxScrolledWindow
+	 // using SetDeviceOrigin()
+    long         m_externalDeviceOriginX,m_externalDeviceOriginY;  
+                                                                    
+    // Begin implementation for Mac
+    public:
 								    
-    long         m_externalDeviceOriginX,m_externalDeviceOriginY;   // To be set by external classes
-                                                                    // such as wxScrolledWindow
-								    // using SetDeviceOrigin()
 	GrafPtr				m_macPort ;
 	GWorldPtr			m_macMask ;
 

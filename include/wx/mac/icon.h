@@ -18,21 +18,6 @@
 
 #include "wx/bitmap.h"
 
-class WXDLLEXPORT wxIconRefData: public wxBitmapRefData
-{
-    friend class WXDLLEXPORT wxBitmap;
-    friend class WXDLLEXPORT wxIcon;
-public:
-    wxIconRefData();
-    ~wxIconRefData();
-
-public:
-  WXHICON m_hIcon;
-};
-
-#define M_ICONDATA ((wxIconRefData *)m_refData)
-#define M_ICONHANDLERDATA ((wxIconRefData *)bitmap->GetRefData())
-
 // Icon
 class WXDLLEXPORT wxIcon: public wxBitmap
 {
@@ -44,8 +29,8 @@ public:
   // Copy constructors
   inline wxIcon(const wxIcon& icon) { Ref(icon); }
 
-  wxIcon( const char **bits, int width=-1, int height=-1 );
-  wxIcon( char **bits, int width=-1, int height=-1 );
+  wxIcon( const char **data );
+  wxIcon( char **data );
   wxIcon(const char bits[], int width, int height);
   wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_ICON_RESOURCE,
     int desiredWidth = -1, int desiredHeight = -1);
@@ -59,11 +44,6 @@ public:
   inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
   inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
   inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
-
-  void SetHICON(WXHICON ico);
-  inline WXHICON GetHICON() const { return (M_ICONDATA ? M_ICONDATA->m_hIcon : 0); }
-
-  virtual bool Ok() const { return (m_refData != NULL) ; }
 };
 
 /*

@@ -39,12 +39,11 @@ wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
   m_ok = FALSE;
 };
 
-wxMemoryDC::~wxMemoryDC(void)
+wxMemoryDC::~wxMemoryDC()
 {
 	if ( m_selected.Ok() )
 	{
-		wxBitmapRefData * bmap = (wxBitmapRefData*) (m_selected.GetRefData()) ;
-		UnlockPixels( GetGWorldPixMap(  (CGrafPtr) bmap->m_hBitmap ) ) ;
+ 		UnlockPixels( GetGWorldPixMap(m_selected.GetHBITMAP()) );
 	}
 };
 
@@ -52,16 +51,14 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
 	if ( m_selected.Ok() )
 	{
-		wxBitmapRefData * bmap = (wxBitmapRefData*) (m_selected.GetRefData()) ;
-		UnlockPixels( GetGWorldPixMap(  (CGrafPtr) bmap->m_hBitmap ) ) ;
+ 		UnlockPixels( GetGWorldPixMap(m_selected.GetHBITMAP()) );
 	}
-  m_selected = bitmap;
-  if (m_selected.Ok())
-  {
-		wxBitmapRefData * bmap = (wxBitmapRefData*) (m_selected.GetRefData()) ;
-		if ( bmap->m_hBitmap )
+    m_selected = bitmap;
+    if (m_selected.Ok())
+    {
+		if ( m_selected.GetHBITMAP() )
 		{
-			m_macPort = (GrafPtr) bmap->m_hBitmap ;
+			m_macPort = (GrafPtr) m_selected.GetHBITMAP() ;
 			LockPixels( GetGWorldPixMap(  (CGrafPtr)  m_macPort ) ) ;
 			wxMask * mask = bitmap.GetMask() ;
 			if ( mask )
@@ -69,18 +66,17 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 				m_macMask = mask->GetMaskBitmap() ;
 			}
  			m_ok = TRUE ;
-			// SetBackground(wxBrush(*wxWHITE, wxSOLID));
  		}
  		else
  		{
-	    m_ok = FALSE;
+	        m_ok = FALSE;
  		}
   }
   else
   {
     m_ok = FALSE;
-  };
-};
+  }
+}
 
 void wxMemoryDC::DoGetSize( int *width, int *height ) const
 {
@@ -93,7 +89,7 @@ void wxMemoryDC::DoGetSize( int *width, int *height ) const
   {
     if (width) (*width) = 0;
     if (height) (*height) = 0;
-  };
-};
+  }
+}
 
 

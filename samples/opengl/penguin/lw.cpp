@@ -25,8 +25,11 @@
 #include <stdio.h>
 #include <math.h>
 
+#ifndef __WXMAC__
+// does this not give redefine errors on other platforms ?
 #define wxInt32 int
 #define wxUint32 unsigned int
+#endif
 
 #ifndef FALSE
 #define FALSE 0
@@ -57,12 +60,23 @@ static wxInt32 read_char(FILE *f)
 
 static wxInt32 read_short(FILE *f)
 {
-  return (read_char(f)<<8) | read_char(f);
+    // the execution path was not always correct
+    // when using the direct evaluation in the return statement
+    wxInt32 first = read_char(f) ;
+    wxInt32 second = read_char(f) ;
+    
+  return (first<<8) | second ;
 }
 
 static wxInt32 read_long(FILE *f)
 {
-  return (read_char(f)<<24) | (read_char(f)<<16) | (read_char(f)<<8) | read_char(f);
+    // the execution path was not always correct
+    // when using the direct evaluation in the return statement
+    wxInt32 first = read_char(f) ;
+    wxInt32 second = read_char(f) ;
+    wxInt32 third = read_char(f) ;
+    wxInt32 fourth = read_char(f) ;
+  return (first<<24) | (second<<16) | (third<<8) | fourth ;
 }
 
 static GLfloat read_float(FILE *f)

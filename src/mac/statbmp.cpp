@@ -42,7 +42,6 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     m_foregroundColour = parent->GetForegroundColour() ;
 
     m_messageBitmap = bitmap;
-
     if ( id == -1 )
   	    m_windowId = (int)NewControlId();
     else
@@ -66,19 +65,20 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
     m_messageBitmap = bitmap;
     SetSizeOrDefault();
 }
+
 void wxStaticBitmap::OnPaint( wxPaintEvent &event ) 
 {
     wxPaintDC dc(this);
     PrepareDC(dc);
-	dc.SetPalette( *m_messageBitmap.GetPalette() ) ;
-	dc.DrawBitmap( m_messageBitmap , 0 , 0 , TRUE ) ;
+
+    dc.DrawBitmap( m_messageBitmap , 0 , 0 , TRUE ) ;
 }
 
 wxSize wxStaticBitmap::DoGetBestSize() const
 {
-    if ( m_messageBitmap.Ok() )
-        return wxSize(m_messageBitmap.GetWidth(), m_messageBitmap.GetHeight());
-    else
-        return wxSize(16, 16);  // completely arbitrary
+   if ( m_messageBitmap.Ok() )
+       return wxSize(m_messageBitmap.GetWidth(), m_messageBitmap.GetHeight());
+   else
+       return wxSize(16, 16);  // completely arbitrary
 }
 

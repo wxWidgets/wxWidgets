@@ -201,6 +201,7 @@ wxBitmapRefData::wxBitmapRefData()
     m_bitmapMask = NULL;
     m_hBitmap = NULL ;
     m_hPict = NULL ;
+    m_hIcon = NULL ;
     m_bitmapType = kMacBitmapTypeUnknownType ;
 }
 
@@ -226,6 +227,13 @@ wxBitmapRefData::~wxBitmapRefData()
 				}
 			}
 			break ;
+		case kMacBitmapTypeIcon :
+        	if ( m_hIcon )
+        	{
+        		DisposeCIcon( m_hIcon ) ;
+        		m_hIcon = NULL ;
+        	}
+		
 		default :
 			// unkown type ?
 			break ;
@@ -488,7 +496,7 @@ void wxBitmap::SetHBITMAP(WXHBITMAP bmp)
 {
     M_BITMAPDATA->m_bitmapType = kMacBitmapTypeGrafWorld ;
     M_BITMAPDATA->m_hBitmap = bmp ;
-		M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
+	M_BITMAPDATA->m_ok = (M_BITMAPDATA->m_hBitmap != NULL ) ;
 }
 
 bool wxBitmap::LoadFile(const wxString& filename, long type)
