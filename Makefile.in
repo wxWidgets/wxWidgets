@@ -2932,8 +2932,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS =  \
 	monodll_statusbr.o \
 	monodll_tabg.o \
 	monodll_timer.o \
-	monodll_gsockosx.o \
 	monodll_cfstring.o \
+	monodll_gsockosx.o \
 	monodll_stdpaths_cf.o \
 	monodll_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS)
@@ -3020,7 +3020,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_frame.o \
 	monodll_gauge.o \
 	monodll_gdiobj.o \
-	monodll_gsockosx.o \
 	monodll_hid.o \
 	monodll_icon.o \
 	monodll_listbox.o \
@@ -3068,6 +3067,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_tabg.o \
 	monodll_snglinst.o \
 	monodll_webkit.o \
+	monodll_gsockosx.o \
 	monodll_utilsexc_cf.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS =  \
@@ -3907,8 +3907,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1 =  \
 	monolib_statusbr.o \
 	monolib_tabg.o \
 	monolib_timer.o \
-	monolib_gsockosx.o \
 	monolib_cfstring.o \
+	monolib_gsockosx.o \
 	monolib_stdpaths_cf.o \
 	monolib_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_1)
@@ -3995,7 +3995,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_frame.o \
 	monolib_gauge.o \
 	monolib_gdiobj.o \
-	monolib_gsockosx.o \
 	monolib_hid.o \
 	monolib_icon.o \
 	monolib_listbox.o \
@@ -4043,6 +4042,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_tabg.o \
 	monolib_snglinst.o \
 	monolib_webkit.o \
+	monolib_gsockosx.o \
 	monolib_utilsexc_cf.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_1 =  \
@@ -5064,8 +5064,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2 =  \
 	coredll_statusbr.o \
 	coredll_tabg.o \
 	coredll_timer.o \
-	coredll_gsockosx.o \
 	coredll_cfstring.o \
+	coredll_gsockosx.o \
 	coredll_stdpaths_cf.o \
 	coredll_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_2)
@@ -5152,7 +5152,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_frame.o \
 	coredll_gauge.o \
 	coredll_gdiobj.o \
-	coredll_gsockosx.o \
 	coredll_hid.o \
 	coredll_icon.o \
 	coredll_listbox.o \
@@ -5200,6 +5199,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_tabg.o \
 	coredll_snglinst.o \
 	coredll_webkit.o \
+	coredll_gsockosx.o \
 	coredll_utilsexc_cf.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_2 =  \
@@ -5811,8 +5811,8 @@ COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3 =  \
 	corelib_statusbr.o \
 	corelib_tabg.o \
 	corelib_timer.o \
-	corelib_gsockosx.o \
 	corelib_cfstring.o \
+	corelib_gsockosx.o \
 	corelib_stdpaths_cf.o \
 	corelib_utilsexc_cf.o
 @COND_TOOLKIT_COCOA@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_COCOA___GUI_SRC_OBJECTS_3)
@@ -5899,7 +5899,6 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_frame.o \
 	corelib_gauge.o \
 	corelib_gdiobj.o \
-	corelib_gsockosx.o \
 	corelib_hid.o \
 	corelib_icon.o \
 	corelib_listbox.o \
@@ -5947,6 +5946,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_tabg.o \
 	corelib_snglinst.o \
 	corelib_webkit.o \
+	corelib_gsockosx.o \
 	corelib_utilsexc_cf.o
 @COND_TOOLKIT_MAC@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___GUI_SRC_OBJECTS_3 =  \
@@ -11391,10 +11391,10 @@ monodll_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monodll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(MONODLL_ODEP)
@@ -14670,10 +14670,10 @@ monolib_gprint.o: $(srcdir)/src/gtk/gnome/gprint.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@monolib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(MONOLIB_ODEP)
@@ -18237,10 +18237,10 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@coredll_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(COREDLL_ODEP)
@@ -20733,10 +20733,10 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@corelib_treectrl.o: $(srcdir)/src/msw/treectrl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_WINCE_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_gsockosx.o: $(srcdir)/src/mac/carbon/gsockosx.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_gsockosx.o: $(srcdir)/src/mac/corefoundation/gsockosx.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_utilsexc_cf.o: $(srcdir)/src/mac/corefoundation/utilsexc_cf.cpp $(CORELIB_ODEP)

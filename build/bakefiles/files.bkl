@@ -1647,7 +1647,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/frame.cpp
     src/mac/carbon/gauge.cpp
     src/mac/carbon/gdiobj.cpp
-    src/mac/carbon/gsockosx.cpp
     src/mac/carbon/hid.cpp
     src/mac/carbon/icon.cpp
     src/mac/carbon/listbox.cpp
@@ -1701,6 +1700,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="MAC_OSX_SRC" hints="files">
     <!-- Shared wxMac and wxCocoa files -->
+    src/mac/corefoundation/gsockosx.cpp
     src/mac/corefoundation/utilsexc_cf.cpp
 </set>
 
@@ -1983,10 +1983,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/statusbr.cpp
     src/generic/tabg.cpp
     src/generic/timer.cpp
-    <!-- wxMac stuff used by wxCocoa: -->
-    src/mac/carbon/gsockosx.cpp
     <!-- Shared wxMac and wxCocoa files -->
     src/mac/corefoundation/cfstring.cpp
+    src/mac/corefoundation/gsockosx.cpp
     src/mac/corefoundation/stdpaths_cf.cpp
     src/mac/corefoundation/utilsexc_cf.cpp
 </set>
