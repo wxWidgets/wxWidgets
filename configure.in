@@ -519,6 +519,7 @@ dnl   defines WORDS_BIGENDIAN if system is big endian
 AC_CHECK_SIZEOF(int *)
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)
+AC_CHECK_SIZEOF(long long)
 dnl   defines the size of certain types of variables in SIZEOF_???
 
 dnl ############################
