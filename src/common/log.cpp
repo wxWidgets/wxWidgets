@@ -828,7 +828,7 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
                     "\nYou can also choose [Cancel] to suppress "
                     "further warnings."));
 
-    switch ( wxMessageBox(_("Debug"), szBuf, 
+    switch ( wxMessageBox(szBuf, _("Debug"),
                           wxYES_NO | wxCANCEL | wxICON_STOP ) ) {
       case wxYES:
         #ifdef __WINDOWS__
