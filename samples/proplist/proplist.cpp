@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        proplist.cpp
 // Purpose:     Property sheet test implementation
 // Author:      Julian Smart
 // Modified by:
@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "test.h"
+#pragma implementation "proplist.h"
 #endif
 
 // For compilers that support precompilation, includes "wx/wx.h".
@@ -24,7 +24,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "test.h"
+#include "proplist.h"
 
 IMPLEMENT_APP(MyApp)
 

@@ -1,4 +1,4 @@
-NAME         TEST
+NAME         Proplist
 DESCRIPTION  'wxProperty test'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'

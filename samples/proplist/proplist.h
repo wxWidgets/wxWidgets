@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.h
+// Name:        proplist.h
 // Purpose:     Property sheet sample
 // Author:      Julian Smart
 // Modified by:
@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma interface "test.h"
+#pragma interface "proplist.h"
 #endif
 
 #ifndef _PROPTEST_H_
