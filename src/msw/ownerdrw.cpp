@@ -98,14 +98,22 @@ size_t wxOwnerDrawn::ms_nLastMarginWidth = 0;
 // -------
 
 // get size of the item
+// The item size includes the menu string, the accel string,
+// the bitmap and size for a submenu expansion arrow...
 bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 {
   wxMemoryDC dc;
 
   wxString str = wxStripMenuCodes(m_strName);
 
-  // # without this menu items look too tightly packed (at least under Windows)
-  str += wxT('W'); // 'W' is typically the widest letter
+  // if we have a valid accel string, then pad out
+  // the menu string so the menu and accel string are not
+  // placed ontop of eachother.
+  if ( !m_strAccel.empty() )
+   {
+       str.Pad(str.Length()%8);
+       str += m_strAccel;
+   }
 
   if (m_font.Ok())
       dc.SetFont(GetFont());
@@ -121,8 +129,12 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
       int accel_width, accel_height;
       dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
-      *pwidth += (accel_width + 16);
+      *pwidth += accel_width;
   }
+
+  // add space at the end of the menu for the submenu expansion arrow
+  // this will also allow offsetting the accel string from the right edge
+  *pwidth += GetDefaultMarginWidth()*1.5;
 
   // JACS: items still look too tightly packed, so adding 5 pixels.
   (*pheight) = (*pheight) + 5;
@@ -143,14 +155,21 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
       // Does BMP encroach on default check menu position?
       size_t adjustedWidth = m_bmpChecked.GetWidth() +
                              (wxSystemSettings::GetMetric(wxSYS_EDGE_X) * 2);
-      if (ms_nDefaultMarginWidth < adjustedWidth)
-          *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
+//      if (ms_nDefaultMarginWidth < adjustedWidth)
+//          *pwidth += adjustedWidth - ms_nDefaultMarginWidth;
 
       // Do we need to widen margin to fit BMP?
       if ((size_t)GetMarginWidth() != adjustedWidth)
           SetMarginWidth(adjustedWidth);
+        
+      // add the size of the bitmap to our total size...
+      *pwidth += GetMarginWidth(); 
   }
 
+  // add the size of the bitmap to our total size - even if we don't have
+  // a bitmap we leave room for one...
+  *pwidth += GetMarginWidth();
+  
   // make sure that this item is at least as
   // tall as the user's system settings specify
   if (*pheight < m_nMinHeight)
@@ -255,22 +274,26 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
     wxString strMenuText = m_strName.BeforeFirst('\t');
 
-    ::DrawState(hdc, NULL, NULL,
+    SIZE sizeRect;
+    GetTextExtentPoint32(hdc,strMenuText.c_str(), strMenuText.Length(),&sizeRect);
+    ::DrawState(hdc, NULL, NULL, 
                 (LPARAM)strMenuText.c_str(), strMenuText.length(),
-                x, rc.y + 1, rc.GetWidth(), rc.GetHeight(),
+                x, rc.y+((rc.GetHeight()-sizeRect.cy)/2.0)-1, // centre text vertically
+                rc.GetWidth()-GetMarginWidth(), sizeRect.cy,
                 DST_PREFIXTEXT |
                 (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
 
     if ( !m_strAccel.empty() )
     {
-        int accel_width, accel_height;
-        dc.GetTextExtent(m_strAccel, &accel_width, &accel_height);
-
-        ::DrawState(hdc, NULL, NULL,
+        // right align accel string with right edge of menu ( offset by the margin width )
+        ::SetTextAlign(hdc, TA_RIGHT);
+        ::DrawState(hdc, NULL, NULL, 
                     (LPARAM)m_strAccel.c_str(), m_strAccel.length(),
-                    rc.GetRight() - accel_width - 16, rc.y + 1, 0, 0,
+                    rc.GetWidth()-(GetMarginWidth()), rc.y+(rc.GetHeight()-sizeRect.cy)/2.0, 
+                    rc.GetWidth()-GetMarginWidth(), sizeRect.cy,
                     DST_TEXT |
                     (((st & wxODDisabled) && !(st & wxODSelected)) ? DSS_DISABLED : 0));
+        ::SetTextAlign(hdc, TA_LEFT);
     }
 
     (void)SelectObject(hdc, hPrevBrush);
@@ -337,7 +360,13 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
               &dcMem, 0, 0, wxCOPY, TRUE /* use mask */);
 
       if ( st & wxODSelected ) {
-
+        #ifdef  O_DRAW_NATIVE_API
+          RECT rectBmp = { rc.GetLeft(), rc.GetTop(),
+                           rc.GetLeft() + GetMarginWidth(),
+                           rc.GetTop() + m_nHeight-1 };
+          SetBkColor(hdc, colBack);
+          DrawEdge(hdc, &rectBmp, EDGE_RAISED, BF_SOFT | BF_RECT);
+        #else
           int x1, y1, x2, y2;
           x1 = rc.x;
           y1 = rc.y;
@@ -350,6 +379,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
           dc.SetPen(*wxGREY_PEN);
           dc.DrawLine(x1, y2-1, x2, y2-1);
           dc.DrawLine(x2, y1, x2, y2);
+        #endif  //O_DRAW_NATIVE_API
       }
     }
   }
