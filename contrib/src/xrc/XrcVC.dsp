@@ -294,6 +294,10 @@ SOURCE=.\xh_wizrd.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\xh_statbar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\xml.cpp
 # End Source File
 # Begin Source File

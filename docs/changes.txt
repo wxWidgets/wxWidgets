@@ -195,6 +195,7 @@ Generic:
 - file dialog and directory dialog now support drive letters on OS/2
 - fixed scrollbar problem in wxGrid (not showing scrollbars
   when sizing smaller) (Shane Harper)
+- Added wxStatusBar support to XRC (Brian Ravnsgaard Riis)
 
 Unix:
 

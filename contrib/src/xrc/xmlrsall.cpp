@@ -99,4 +99,7 @@ void wxXmlResource::InitAllHandlers()
 #if wxUSE_WIZARDDLG
     AddHandler(new wxWizardXmlHandler);
 #endif
+#if wxUSE_STATUSBAR
+    AddHandler(new wxStatusBarXmlHandler);
+#endif
 }
