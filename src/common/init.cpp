@@ -68,13 +68,13 @@ public:
 
 // we need a special kind of auto pointer to wxApp which not only deletes the
 // pointer it holds in its dtor but also resets the global application pointer
-wxDECLARE_SCOPED_PTR(wxApp, wxAppPtrBase);
-wxDEFINE_SCOPED_PTR(wxApp, wxAppPtrBase);
+wxDECLARE_SCOPED_PTR(wxAppConsole, wxAppPtrBase);
+wxDEFINE_SCOPED_PTR(wxAppConsole, wxAppPtrBase);
 
 class wxAppPtr : public wxAppPtrBase
 {
 public:
-    wxEXPLICIT wxAppPtr(wxApp *ptr = NULL) : wxAppPtrBase(ptr) { }
+    wxEXPLICIT wxAppPtr(wxAppConsole *ptr = NULL) : wxAppPtrBase(ptr) { }
     ~wxAppPtr()
     {
         if ( get() )
@@ -85,7 +85,7 @@ public:
         }
     }
 
-    void Set(wxApp *ptr)
+    void Set(wxAppConsole *ptr)
     {
         reset(ptr);
 
@@ -100,13 +100,13 @@ public:
 class wxCallAppCleanup
 {
 public:
-    wxCallAppCleanup(wxApp *app) : m_app(app) { }
+    wxCallAppCleanup(wxAppConsole *app) : m_app(app) { }
     ~wxCallAppCleanup() { if ( m_app ) m_app->CleanUp(); }
 
     void Dismiss() { m_app = NULL; }
 
 private:
-    wxApp *m_app;
+    wxAppConsole *m_app;
 };
 
 // another tiny class which simply exists to ensure that wxEntryCleanup is
