@@ -699,10 +699,13 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
     // now try the default mappings:
     wxFontEncodingArray equiv = wxEncodingConverter::GetAllEquivalents(encoding);
     size_t count = equiv.GetCount();
-    for ( size_t i = (equiv[0] == encoding) ? 1 : 0; i < count; i++ )
+    if ( count )
     {
-        if ( TestAltEncoding(configEntry, equiv[i], info) )
-            return TRUE;
+        for ( size_t i = (equiv[0] == encoding) ? 1 : 0; i < count; i++ )
+        {
+            if ( TestAltEncoding(configEntry, equiv[i], info) )
+                return TRUE;
+        }
     }
 
     return FALSE;
