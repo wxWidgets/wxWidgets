@@ -92,11 +92,9 @@ wxHtmlParser::~wxHtmlParser()
 
 wxObject* wxHtmlParser::Parse(const wxString& source)
 {
-    wxObject *result;
-
     InitParser(source);
     DoParsing();
-    result = GetProduct();
+    wxObject *result = GetProduct();
     DoneParser();
     return result;
 }
@@ -104,6 +102,7 @@ wxObject* wxHtmlParser::Parse(const wxString& source)
 void wxHtmlParser::InitParser(const wxString& source)
 {
     SetSource(source);
+    m_stopParsing = FALSE;
 }
 
 void wxHtmlParser::DoneParser()
@@ -292,6 +291,8 @@ void wxHtmlParser::DoParsing(int begin_pos, int end_pos)
             wxHtmlTag *t = m_CurTag;
             m_CurTag = m_CurTag->GetNextTag();
             AddTag(*t);
+            if (m_stopParsing)
+                return;
         }
         else break;
     }
@@ -304,7 +305,11 @@ void wxHtmlParser::AddTag(const wxHtmlTag& tag)
 
     h = (wxHtmlTagHandler*) m_HandlersHash.Get(tag.GetName());
     if (h)
+    {
         inner = h->HandleTag(tag);
+        if (m_stopParsing)
+            return;
+    }
     if (!inner)
     {
         if (tag.HasEnding())
@@ -839,7 +844,7 @@ class wxMetaTagHandler : public wxHtmlTagHandler
 {
 public:
     wxMetaTagHandler(wxString *retval) : wxHtmlTagHandler(), m_retval(retval) {}
-    wxString GetSupportedTags() { return wxT("META"); }
+    wxString GetSupportedTags() { return wxT("META,BODY"); }
     bool HandleTag(const wxHtmlTag& tag);
 
 private:
@@ -848,6 +853,12 @@ private:
 
 bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
 {
+    if (tag.GetName() == _T("BODY"))
+    {
+//        m_Parser->StopParsing();
+        return FALSE;
+    }
+
     if (tag.HasParam(_T("HTTP-EQUIV")) &&
         tag.GetParam(_T("HTTP-EQUIV")) == _T("Content-Type") &&
         tag.HasParam(_T("CONTENT")))
@@ -856,6 +867,7 @@ bool wxMetaTagHandler::HandleTag(const wxHtmlTag& tag)
         if (content.Left(19) == _T("text/html; charset="))
         {
             *m_retval = content.Mid(19);
+//            m_Parser->StopParsing();
         }
     }
     return FALSE;
