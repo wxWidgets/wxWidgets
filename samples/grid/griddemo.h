@@ -12,10 +12,6 @@
 #ifndef griddemo_h
 #define griddemo_h
 
-#if !defined(wxUSE_NEW_GRID) || !(wxUSE_NEW_GRID)
-    #error "This sample requires the new wxGrid class."
-#endif
-
 class wxGrid;
 
 class GridApp : public wxApp
