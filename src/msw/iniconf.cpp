@@ -439,7 +439,7 @@ bool wxIniConfig::DeleteAll()
   wxString strFile = szBuf;
   strFile << '\\' << m_strLocalFilename;
 
-  if ( !wxRemoveFile(strFile) ) {
+  if ( wxFile::Exists(strFile) && !wxRemoveFile(strFile) ) {
     wxLogSysError(_("Can't delete the INI file '%s'"), strFile.c_str());
     return FALSE;
   }
