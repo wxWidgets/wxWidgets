@@ -52,11 +52,7 @@ static const int                    idMenuTitle = -2;
 //
 // The unique ID for Menus
 //
-#ifdef __VISAGECPP__
 USHORT                              wxMenu::m_nextMenuId = 0;
-#else
-static USHORT                       wxMenu::m_nextMenuId = 0;
-#endif
 
 // ----------------------------------------------------------------------------
 // macros
