@@ -88,7 +88,7 @@ public:
         SetBitmapSelected(bmpPressed);
         SetBitmapDisabled(bmpDisabled);
 
-//        SetSize(bmpNormal.GetWidth(), bmpNormal.GetHeight());
+        SetSize(bmpNormal.GetWidth(), bmpNormal.GetHeight());
     }
 
 protected:
@@ -304,7 +304,7 @@ void wxComboControl::DoMoveWindow(int x, int y, int width, int height)
 
     wxCoord wText = width - sizeBtn.x;
     m_text->SetSize(x, y, wText, height);
-    m_btn->SetSize(x + wText, y, -1, height);
+    m_btn->SetSize(x + wText, y, sizeBtn.x, height);
 }
 
 // ----------------------------------------------------------------------------
