@@ -105,7 +105,8 @@ bool WXDLLEXPORT wxOKlibc()
     // this is UTF-8 allright, check whether that's what we want
     char *cur_locale = setlocale(LC_CTYPE, NULL);
     if ((strlen(cur_locale) < 4) ||
-	(strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8"))) {
+	(strcasecmp(cur_locale + strlen(cur_locale) - 4, "utf8")) ||
+	(strcasecmp(cur_locale + strlen(cur_locale) - 5, "utf-8"))) {
       // nope, don't use libc conversion
       return FALSE;
     }

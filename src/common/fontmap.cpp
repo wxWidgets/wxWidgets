@@ -161,8 +161,8 @@ static const wxChar* gs_encodingNames[] =
     wxT( "windows-1256" ),
     wxT( "windows-1257" ),
     wxT( "windows-437" ),
-    wxT( "utf7" ),
-    wxT( "utf8" ),
+    wxT( "utf-7" ),
+    wxT( "utf-8" ),
 };
 
 // ----------------------------------------------------------------------------

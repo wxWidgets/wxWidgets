@@ -192,16 +192,14 @@ bool wxGetNativeFontEncoding(wxFontEncoding encoding,
             break;
 
         case wxFONTENCODING_UTF8:
-            // FIXME: this is probably false, but this is how they are called on
-            //        my system and I don't know what the standard XFLD is (VZ)
-            info->xregistry = wxT("iso646.1991");
+            info->xregistry = wxT("iso10646");
             info->xencoding = wxT("*");
             break;
 
         case wxFONTENCODING_KOI8:
             info->xregistry = wxT("koi8");
 
-            // we don't make distinction between koi8-r and koi8-u (so far)
+            // we don't make distinction between koi8-r, koi8-u and koi8-ru (so far)
             info->xencoding = wxT("*");
             break;
 
