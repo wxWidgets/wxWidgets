@@ -1042,9 +1042,9 @@ wxBitmap wxBitmap::Rescale( int clipx, int clipy, int clipwidth, int clipheight,
 
     // accel table filled with clipped values
     for (int x = 0; x < width; x++)
-        tablex[x] = (int) floor(0.5 + scx * (x+clipx));
+        tablex[x] = (int) (scx * (x+clipx));
     for (int y = 0; y < height; y++)
-        tabley[y] = (int) floor(0.5 + scy * (y+clipy));
+        tabley[y] = (int) (scy * (y+clipy));
 
     // Main rescaling routine starts here
     for (int h = 0; h < height; h++)
