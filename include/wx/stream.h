@@ -20,6 +20,10 @@
 #include <wx/object.h>
 #include <wx/string.h>
 
+#ifdef    _MSC_VER
+  #define   off_t       _off_t
+#endif
+
 /*
  * wxStream: base classes
  */
