@@ -58,7 +58,9 @@ class wxCheckBox: public wxControl
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxCheckBoxNameStr );
     void SetValue( bool state );
-    bool GetValue(void) const;
+    bool GetValue() const;
+    
+    void SetLabel( const wxString& label );
     void SetFont( const wxFont &font );
     void Enable( bool enable );
 };

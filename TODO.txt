@@ -38,5 +38,6 @@ Implement wxPalette
 Implement wxDirDialog
 Implement CopyOnWrite (unshare) for GDI objects
 Support cooperation between Qt and wxWindows
+Fix toolbar tips
 TrueType support (just kidding)
 

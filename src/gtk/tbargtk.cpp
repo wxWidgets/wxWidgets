@@ -78,7 +78,7 @@ static gint gtk_toolbar_enter_callback( GtkWidget *WXUNUSED(widget),
   
   tool->m_owner->OnMouseEnter( tool->m_index );
   
-  return TRUE;
+  return FALSE;
 }
 
 //-----------------------------------------------------------------------------
@@ -188,8 +188,9 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   GtkToolbarChildType ctype = GTK_TOOLBAR_CHILD_BUTTON;
   if (toggle) ctype = GTK_TOOLBAR_CHILD_TOGGLEBUTTON;
 
-  tool->m_item = gtk_toolbar_append_element( m_toolbar, ctype, (GtkWidget *) NULL, (const char *) NULL, helpString1, "", tool_pixmap, 
-                                             (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
+  tool->m_item = gtk_toolbar_append_element( 
+    m_toolbar, ctype, (GtkWidget *) NULL, (const char *) NULL,  helpString1, "",  
+    tool_pixmap,  (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
 
   gtk_signal_connect( GTK_OBJECT(tool->m_item), "enter_notify_event", 
       GTK_SIGNAL_FUNC(gtk_toolbar_enter_callback), (gpointer)tool );

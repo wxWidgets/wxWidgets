@@ -83,10 +83,18 @@ void wxCheckBox::SetValue( bool state )
     gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(m_widget), GTK_STATE_NORMAL );
 }
 
-bool wxCheckBox::GetValue(void) const
+bool wxCheckBox::GetValue() const
 {
   GtkToggleButton *tb = GTK_TOGGLE_BUTTON(m_widget);
   return tb->active;
+}
+
+void wxCheckBox::SetLabel( const wxString& label )
+{
+  wxControl::SetLabel( label );
+  GtkButton *bin = GTK_BUTTON( m_widget );
+  GtkLabel *g_label = GTK_LABEL( bin->child );
+  gtk_label_set( g_label, GetLabel() );
 }
 
 void wxCheckBox::Enable( bool enable )

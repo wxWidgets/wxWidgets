@@ -1719,7 +1719,7 @@ BEGIN_EVENT_TABLE(wxPropertyStringListEditorDialog, wxDialog)
     EVT_BUTTON(wxID_PROP_SL_ADD,		wxPropertyStringListEditorDialog::OnAdd)
     EVT_BUTTON(wxID_PROP_SL_DELETE,		wxPropertyStringListEditorDialog::OnDelete)
     EVT_LISTBOX(wxID_PROP_SL_STRINGS,	wxPropertyStringListEditorDialog::OnStrings)
-    EVT_TEXT(wxID_PROP_SL_TEXT,			wxPropertyStringListEditorDialog::OnText)
+    EVT_TEXT_ENTER(wxID_PROP_SL_TEXT,			wxPropertyStringListEditorDialog::OnText)
 END_EVENT_TABLE()
 
 class wxPropertyStringListEditorText: public wxTextCtrl
