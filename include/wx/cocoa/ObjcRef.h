@@ -64,7 +64,7 @@ class wxObjcAutoRef: public wxObjcAutoRefFromAlloc<T>
 public:
     wxObjcAutoRef(T p = 0)
     :   wxObjcAutoRefFromAlloc<T>(p)
-    {   ObjcRetain(m_ptr); }
+    {   ObjcRetain(wxObjcAutoRefFromAlloc<T>::m_ptr); }
     ~wxObjcAutoRef() {}
     wxObjcAutoRef(const wxObjcAutoRef& otherRef)
     :   wxObjcAutoRefFromAlloc<T>(otherRef)
