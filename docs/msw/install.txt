@@ -135,6 +135,9 @@ Makefile notes:
   this manifested in unexpected link errors or warnings. This problem
   doesn't occur when using project files to build wxWindows.
 
+  To build Unicode versions of the libraries, add UNICODE=1
+  to the nmake invocation ( default is UNICODE=0 ).
+
   Note that the wxWindows core library allows you to have debug
   and release libraries available simultaneously, by compiling the
   objects in different subdirectories, whereas samples must be
@@ -407,12 +410,15 @@ releases, and Mingw32.
 Thanks are due to Keith Garry Boyce (garp@opustel.com), Cygnus
 and others for making it all possible.
 
-Both Cygwin and Mingw32 (the minimal distribution of Cygwin) can be used
-with the same makefiles.
+Both Cygwin and MinGW can be used with the same makefiles.
+
+NOTE: some notes specific to old Cygwin ( < 1.1.x )
+      and MinGW ( < 1.0 ) are at the end of this section
+      ( see OLD VERSIONS )
 
 Here are the steps required:
 
-- Retrieve and install the latest beta of Cygwin, or Mingw32, as per the
+- Retrieve and install the latest version of Cygwin, or Mingw32, as per the
   instructions with either of these packages.
 
 - If using Mingw32, you need some extra files to use the wxWindows
@@ -424,35 +430,36 @@ Here are the steps required:
   These should be extracted to the Mingw32 directory. If you have 
   already downloaded rm, cp, mv from elsewhere, you won't need this.
 
-  If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
-  must hand-patch with Mingw32-gcc295.patches (located in the
-  top-level of the wxWindows 2 installation). Mingw32 2.95.2
-  and above contain the fixes already.
-
-- Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
-  to set up appropriate variables, if necessary mounting drives.
-  Run it before compiling.
-
-- For Cygwin, make sure there's a \tmp directory on your
-  Windows drive or bison will crash (actually you don't need
-  bison for ordinary wxWindows compilation: a pre-generated .c file is
-  supplied).
-
-- Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
-  the file to either 1 (you have Mingw32 or Cygwin 1.x releases) or 0
-  (if you have Cygwin betas). If using Mingw32, also set the
-  MINGW32VERSION variable appropriately.
-
 - Set your WXWIN variable to where wxWindows is installed.
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
   backslashes.
 
 - Use the makefile.g95 files for compiling wxWindows and samples,
-  e.g.:
+  e.g. to compile a debugging version of wxWindows:
   > cd c:\wx\src\msw
   > make -f makefile.g95
   > cd c:\wx\samples\minimal
   > make -f makefile.g95
+
+  to compile with optimizations:
+  > cd c:\wx\src\msw
+  > make -f makefile.g95 FINAL=1
+  > cd c:\wx\samples\minimal
+  > make -f makefile.g95 FINAL=1
+
+  to compile a DLL:
+  > cd c:\wx\src\msw
+  > make -f makefile.g95 WXMAKINGDLL=1
+  > cd c:\wx\samples\minimal
+  > make -f makefile.g95 WXUSINGDLL=1
+
+  to compile the Unicode version:
+  > cd c:\wx\src\msw
+  > make -f makefile.g95 UNICODE=1
+  > cd c:\wx\samples\minimal
+  > make -f makefile.g95 UNICODE=1
+
+  Options can be combined ( e.g.: UNICODE=1 FINAL=1 )
 
   Ignore the warning about the default entry point.
 
@@ -460,13 +467,12 @@ Here are the steps required:
 
 - With Cygwin, you can invoke gdb --nw myfile.exe to
   debug an executable. If there are memory leaks, they will be
-  flagged when the program quits.
-
-- If using GnuWin32 b18, you will need to copy windres.exe
-  from e.g. the Mingw32 distribution, to a directory in your path.
+  flagged when the program quits. You can use Cygwin gdb
+  to debug MinGW executables.
 
 All targets have 'clean' targets to allow removal of object files
-and other intermediate compiler files.
+and other intermediate compiler files and 'cleanall' targets to
+allow removal of all object files and library files.
 
 Notes:
 
@@ -508,10 +514,34 @@ Notes:
 
    and similarly for glu[32].def.
 
+OLD VERSIONS:
+
+- If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
+  must hand-patch with Mingw32-gcc295.patches (located in the
+  top-level of the wxWindows 2 installation). Mingw32 2.95.2
+  and above contain the fixes already.
+
+- Modify the file wx/src/cygnus.bat (or mingw32.bat or mingegcs.bat)
+  to set up appropriate variables, if necessary mounting drives.
+  Run it before compiling.
+
+- For Cygwin, make sure there's a \tmp directory on your
+  Windows drive or bison will crash (actually you don't need
+  bison for ordinary wxWindows compilation: a pre-generated .c file is
+  supplied).
+
+- Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
+  the file to either 1 (you have Mingw32 or Cygwin 1.x releases) or 0
+  (if you have Cygwin betas). If using Mingw32, also set the
+  MINGW32VERSION variable appropriately.
+
+- If using GnuWin32 b18, you will need to copy windres.exe
+  from e.g. the Mingw32 distribution, to a directory in your path.
+
 References:
 
  - The Cygwin site is at
-     http://sourceware.cygnus.com
+     http://sources.redhat.com/cygwin
  - Mingw32 is available at:
      ftp://www.mingw.org
 
