@@ -18,7 +18,7 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/wxchar.h"
+#include "wx/string.h"
 
 #include <limits.h>     // for LONG_MAX
 
@@ -203,6 +203,7 @@ public:
         // negation operator
     wxLongLongNative operator-() const
         { return wxLongLongNative(-m_ll); }
+    wxLongLongNative& Negate() { m_ll = -m_ll; return *this; }
 
         // subtraction
     wxLongLongNative operator-(const wxLongLongNative& ll) const
@@ -303,6 +304,10 @@ public:
         { return m_ll >= l; }
 
     // miscellaneous
+
+        // return the string representation of this number
+    wxString ToString() const;
+
         // conversion to byte array: returns a pointer to static buffer!
     void *asArray() const;
 
@@ -489,11 +494,15 @@ public:
                 wxLongLongWx& remainder) const;
 
     // input/output
+
+    // return the string representation of this number
+    wxString ToString() const;
+
+    void *asArray() const;
+
 #if wxUSE_STD_IOSTREAM
     friend wxSTD ostream& operator<<(wxSTD ostream&, const wxLongLongWx&);
 #endif // wxUSE_STD_IOSTREAM
-
-    void *asArray() const;
 
 private:
     // long is at least 32 bits, so represent our 64bit number as 2 longs

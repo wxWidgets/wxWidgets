@@ -57,27 +57,6 @@ void *wxLongLongNative::asArray() const
     return temp;
 }
 
-#if wxUSE_STD_IOSTREAM
-
-// input/output
-wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLongNative& ll)
-{
-    char result[65];
-
-    memset(result, 'A', 64);
-
-    result[64] = '\0';
-
-    for (int i = 0; i < 64; i++)
-    {
-        result[63 - i] = '0' + (char) ((ll.GetValue() >> i) & 1);
-    }
-
-    return o << result;
-}
-
-#endif // wxUSE_STD_IOSTREAM
-
 #endif // wxUSE_LONGLONG_NATIVE
 
 // ============================================================================
@@ -478,7 +457,7 @@ void wxLongLongWx::Divide(const wxLongLongWx& divisorIn,
     //     Use of this program, for any purpose, is granted the author, Ian
     //     Kaplan, as long as this copyright notice is included in the source
     //     code or any source code derived from this program. The user assumes
-    //     all responsibility for using this code. 
+    //     all responsibility for using this code.
 
     // init everything
     wxLongLongWx dividend = *this,
@@ -592,7 +571,7 @@ wxLongLongWx& wxLongLongWx::operator/=(const wxLongLongWx& ll)
     Divide(ll, quotient, remainder);
 
     *this = quotient;
-    
+
     return *this;
 }
 
@@ -626,27 +605,54 @@ void *wxLongLongWx::asArray(void) const
     return temp;
 }
 
+#endif // wxUSE_LONGLONG_WX
+
+wxString
+#ifdef wxUSE_LONGLONG_NATIVE
+wxLongLongNative
+#else
+wxLognLongWx
+#endif
+::ToString() const
+{
+    // TODO: this is awfully inefficient, anything better?
+    wxString result;
+
+    wxLongLong ll = *this;
+
+    bool neg;
+    if ( ll < 0 )
+    {
+        ll.Negate();
+        neg = TRUE;
+    }
+    else
+    {
+        neg = FALSE;
+    }
+
+    while ( ll != 0 )
+    {
+        result.Prepend((wxChar)(_T('0') + (ll % 10).ToLong()));
+        ll /= 10;
+    }
+
+    if ( result.empty() )
+        result = _T('0');
+    else if ( neg )
+        result.Prepend(_T('-'));
+
+    return result;
+}
+
 #if wxUSE_STD_IOSTREAM
 
 // input/output
-wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLongWx& ll)
+wxSTD ostream& operator<< (wxSTD ostream& o, const wxLongLong& ll)
 {
-    char result[65];
-
-    memset(result, 'A', 64);
-
-    result[64] = '\0';
-
-    for (int i = 0; i < 32; i++)
-    {
-        result[31 - i] = (char) ('0' + (int) ((ll.m_hi >> i) & 1));
-        result[63 - i] = (char) ('0' + (int) ((ll.m_lo >> i) & 1));
-    }
-
-    return o << result;
+    return o << ll.ToString();
 }
-#endif // wxUSE_STD_IOSTREAM
 
-#endif // wxUSE_LONGLONG_NATIVE
+#endif // wxUSE_STD_IOSTREAM
 
 #endif // wxUSE_LONGLONG

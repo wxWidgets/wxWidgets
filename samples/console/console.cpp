@@ -44,7 +44,7 @@
 //#define TEST_ARRAYS
 //#define TEST_CHARSET
 //#define TEST_CMDLINE
-#define TEST_DATETIME
+//#define TEST_DATETIME
 //#define TEST_DIR
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
@@ -58,7 +58,7 @@
 //#define TEST_LIST
 //#define TEST_LOCALE
 //#define TEST_LOG
-//#define TEST_LONGLONG
+#define TEST_LONGLONG
 //#define TEST_MIME
 //#define TEST_PATHLIST
 //#define TEST_REGCONF
@@ -1364,6 +1364,35 @@ static void TestMimeAssociate()
 
 #include <wx/utils.h>
 
+static void TestDiskInfo()
+{
+    puts("*** Testing wxGetDiskSpace() ***\n");
+
+    for ( ;; )
+    {
+        char pathname[128];
+        printf("\nEnter a directory name: ");
+        if ( !fgets(pathname, WXSIZEOF(pathname), stdin) )
+            break;
+
+        // kill the last '\n'
+        pathname[strlen(pathname) - 1] = 0;
+
+        wxLongLong total, free;
+        if ( !wxGetDiskSpace(pathname, &total, &free) )
+        {
+            wxPuts(_T("ERROR: wxGetDiskSpace failed."));
+        }
+        else
+        {
+            wxPrintf(_T("%s total bytes, %s free bytes on '%s'.\n"),
+                    total.ToString().c_str(),
+                    free.ToString().c_str(),
+                    pathname);
+        }
+    }
+}
+
 static void TestOsInfo()
 {
     puts("*** Testing OS info functions ***\n");
@@ -1409,6 +1438,17 @@ static void TestUserInfo()
 
 // get a random 64 bit number
 #define RAND_LL()   MAKE_LL(rand(), rand(), rand(), rand())
+
+static const long testLongs[] =
+{
+    0,
+    1,
+    -1,
+    LONG_MAX,
+    LONG_MIN,
+    0x1234,
+    -0x1234
+};
 
 #if wxUSE_LONGLONG_WX
 inline bool operator==(const wxLongLongWx& a, const wxLongLongNative& b)
@@ -1635,17 +1675,6 @@ static void TestLongLongComparison()
 #if wxUSE_LONGLONG_WX
     puts("*** Testing wxLongLong comparison ***\n");
 
-    static const long testLongs[] =
-    {
-        0,
-        1,
-        -1,
-        LONG_MAX,
-        LONG_MIN,
-        0x1234,
-        -0x1234
-    };
-
     static const long ls[2] =
     {
         0x1234,
@@ -1654,7 +1683,7 @@ static void TestLongLongComparison()
 
     wxLongLongWx lls[2];
     lls[0] = ls[0];
-    lls[1] = ls[1]; 
+    lls[1] = ls[1];
 
     for ( size_t n = 0; n < WXSIZEOF(testLongs); n++ )
     {
@@ -1679,6 +1708,23 @@ static void TestLongLongComparison()
         }
     }
 #endif // wxUSE_LONGLONG_WX
+}
+
+static void TestLongLongPrint()
+{
+    wxPuts(_T("*** Testing wxLongLong printing ***\n"));
+
+    for ( size_t n = 0; n < WXSIZEOF(testLongs); n++ )
+    {
+        wxLongLong ll = testLongs[n];
+        wxPrintf(_T("%ld == %s\n"), testLongs[n], ll.ToString().c_str());
+    }
+
+    wxLongLong ll(0x12345678, 0x87654321);
+    wxPrintf(_T("0x1234567887654321 = %s\n"), ll.ToString().c_str());
+
+    ll.Negate();
+    wxPrintf(_T("-0x1234567887654321 = %s\n"), ll.ToString().c_str());
 }
 
 #undef MAKE_LL
@@ -5084,8 +5130,9 @@ int main(int argc, char **argv)
         TestAddition();
         TestLongLongConversion();
         TestBitOperations();
+        TestLongLongComparison();
     }
-    TestLongLongComparison();
+    TestLongLongPrint();
 #endif // TEST_LONGLONG
 
 #ifdef TEST_HASH
@@ -5105,8 +5152,12 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_INFO_FUNCTIONS
-    TestOsInfo();
-    TestUserInfo();
+    TestDiskInfo();
+    if ( 0 )
+    {
+        TestOsInfo();
+        TestUserInfo();
+    }
 #endif // TEST_INFO_FUNCTIONS
 
 #ifdef TEST_PATHLIST
