@@ -79,7 +79,9 @@ static inline int wxMacTabMargin(long nbStyle, long side)
 #if wxMAC_EDGE_TO_EDGE
             otherMargin = 0;
 #else
-            otherMargin = 20;
+//            otherMargin = 20;
+            // JACS - this seems fine on 10.3; 20 is way too much
+            otherMargin = 8;
 #endif
         }
         else
