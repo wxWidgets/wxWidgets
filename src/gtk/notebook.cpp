@@ -51,8 +51,8 @@ public:
   /*
      mark page as "added' to the notebook, return FALSE if the page was
      already added
-   */ 
-   
+   */
+
   bool Add()
   {
     if ( WasAdded() )
@@ -113,7 +113,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
     }
 
     win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
-  
+
     if (win->GetAutoLayout()) win->Layout();
 }
 
@@ -121,34 +121,34 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 // "key_press_event"
 //-----------------------------------------------------------------------------
 
-static gint 
+static gint
 gtk_notebook_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxNotebook *notebook )
 {
     if (g_blockEventsOnDrag) return FALSE;
 
     if (!notebook->HasVMT()) return FALSE;
-    
+
     /* this code makes jumping down from the handles of the notebooks
        to the actual items in the visible notebook page possible with
        the down-arrow key */
 
     if (gdk_event->keyval != GDK_Down) return FALSE;
-    
+
     if (notebook != notebook->FindFocus()) return FALSE;
-    
+
     if (notebook->m_pages.GetCount() == 0) return FALSE;
-    
+
     wxNode *node = notebook->m_pages.Nth( notebook->GetSelection() );
-    
+
     if (!node) return FALSE;
-    
+
     wxNotebookPage *page = (wxNotebookPage*) node->Data();
-    
+
     // don't let others the key event
     gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "key_press_event" );
-    
+
     page->m_client->SetFocus();
-    
+
     return TRUE;
 }
 
@@ -191,7 +191,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
 BEGIN_EVENT_TABLE(wxNotebook, wxControl)
     EVT_NAVIGATION_KEY(wxNotebook::OnNavigationKey)
 END_EVENT_TABLE()
-    
+
 void wxNotebook::Init()
 {
     m_imageList = (wxImageList *) NULL;
@@ -291,12 +291,12 @@ int wxNotebook::GetPageCount() const
     // count only the pages which were already added to the notebook for MSW
     // compatibility (and, in fact, this behaviour makes more sense anyhow
     // because only the added pages are shown)
-    
+
     int n = 0;
     for ( wxNode *node = m_pages.First(); node; node = node->Next() )
     {
         wxNotebookPage *page = (wxNotebookPage*)node->Data();
-	
+
         if (page->WasAdded()) n++;
     }
 
@@ -399,12 +399,10 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
 
     wxNotebookPage* nb_page = GetNotebookPage(page);
 
-    if (!nb_page) return FALSE;
+    wxCHECK_MSG( nb_page, FALSE, _T("SetPageText: invalid page index") );
 
     nb_page->m_text = text;
 
-    if (nb_page->m_text.IsEmpty()) nb_page->m_text = _T("");
- 
     gtk_label_set(nb_page->m_label, nb_page->m_text.mbc_str());
    
     return TRUE;
@@ -413,47 +411,47 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
 bool wxNotebook::SetPageImage( int page, int image )
 {
     /* HvdH 28-12-98: now it works, but it's a bit of a kludge */
-    
+
     wxNotebookPage* nb_page = GetNotebookPage(page);
 
     if (!nb_page) return FALSE;
- 
+
     /* Optimization posibility: return immediately if image unchanged.
      * Not enabled because it may break existing (stupid) code that
      * manipulates the imagelist to cycle images */
- 
+
     /* if (image == nb_page->m_image) return TRUE; */
- 
-    /* For different cases: 
+
+    /* For different cases:
        1) no image -> no image
        2) image -> no image
        3) no image -> image
        4) image -> image */
-       
+
     if (image == -1 && nb_page->m_image == -1)
         return TRUE; /* Case 1): Nothing to do. */
- 
+
     GtkWidget *pixmapwid = (GtkWidget*) NULL;
- 
-    if (nb_page->m_image != -1) 
+
+    if (nb_page->m_image != -1)
     {
         /* Case 2) or 4). There is already an image in the gtkhbox. Let's find it */
-	
+
         GList *child = gtk_container_children(GTK_CONTAINER(nb_page->m_box));
         while (child)
 	{
-            if (GTK_IS_PIXMAP(child->data)) 
+            if (GTK_IS_PIXMAP(child->data))
 	    {
  	        pixmapwid = GTK_WIDGET(child->data);
  	        break;
             }
 	    child = child->next;
 	}
-	
+
         /* We should have the pixmap widget now */
-        wxASSERT(pixmapwid != NULL); 
-	
-        if (image == -1) 
+        wxASSERT(pixmapwid != NULL);
+
+        if (image == -1)
 	{
             /* If there's no new widget, just remove the old from the box */
             gtk_container_remove(GTK_CONTAINER(nb_page->m_box), pixmapwid);
@@ -462,34 +460,34 @@ bool wxNotebook::SetPageImage( int page, int image )
             return TRUE; /* Case 2) */
         }
     }
-   
+
     /* Only cases 3) and 4) left */
     wxASSERT( m_imageList != NULL ); /* Just in case */
-   
+
     /* Construct the new pixmap */
     const wxBitmap *bmp = m_imageList->GetBitmap(image);
     GdkPixmap *pixmap = bmp->GetPixmap();
     GdkBitmap *mask = (GdkBitmap*) NULL;
-    if ( bmp->GetMask() ) 
+    if ( bmp->GetMask() )
     {
         mask = bmp->GetMask()->GetBitmap();
     }
- 
-    if (pixmapwid == NULL) 
+
+    if (pixmapwid == NULL)
     {
         /* Case 3) No old pixmap. Create a new one and prepend it to the hbox */
         pixmapwid = gtk_pixmap_new (pixmap, mask );
-	
+
         /* CHECKME: Are these pack flags okay? */
         gtk_box_pack_start(GTK_BOX(nb_page->m_box), pixmapwid, FALSE, FALSE, 3);
         gtk_widget_show(pixmapwid);
     }
-    else 
+    else
     {
         /* Case 4) Simply replace the pixmap */
         gtk_pixmap_set(GTK_PIXMAP(pixmapwid), pixmap, mask);
     }
-    
+
     nb_page->m_image = image;
 
     return TRUE;
@@ -635,9 +633,9 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
 
 void wxNotebook::OnNavigationKey(wxNavigationKeyEvent& event)
 {
-    if (event.IsWindowChange()) 
+    if (event.IsWindowChange())
         AdvanceSelection( event.GetDirection() );
-    else 
+    else
         event.Skip();
 }
 
