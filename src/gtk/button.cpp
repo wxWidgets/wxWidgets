@@ -107,6 +107,21 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
 
     m_widget = gtk_button_new_with_label("");
 
+    float x_alignment = 0.5;
+    if (HasFlag(wxBU_LEFT))
+        x_alignment = 0.0;
+    else if (HasFlag(wxBU_RIGHT))
+        x_alignment = 1.0;
+
+    float y_alignment = 0.5;
+    if (HasFlag(wxBU_TOP))
+        y_alignment = 0.0;
+    else if (HasFlag(wxBU_BOTTOM))
+        y_alignment = 1.0;
+
+    gtk_misc_set_alignment (GTK_MISC (BUTTON_CHILD (m_widget)),
+			    x_alignment, y_alignment);
+                
     SetLabel( label );
 
     if (style & wxNO_BORDER)
