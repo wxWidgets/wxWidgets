@@ -72,10 +72,11 @@ extern bool g_isIdle;
 // data
 //-----------------------------------------------------------------------------
 
-extern bool   g_blockEventsOnDrag;
-extern bool   g_blockEventsOnScroll;
+extern bool       g_blockEventsOnDrag;
+extern bool       g_blockEventsOnScroll;
+extern wxCursor   g_globalCursor;
 
-static bool   g_hasDoubleClicked = FALSE;
+static bool       g_hasDoubleClicked = FALSE;
 
 //-----------------------------------------------------------------------------
 // "button_release_event"
@@ -1003,6 +1004,32 @@ void wxListBox::ApplyWidgetStyle()
 
         child = child->next;
     }
+}
+
+void wxListBox::OnInternalIdle()
+{
+    wxCursor cursor = m_cursor;
+    if (g_globalCursor.Ok()) cursor = g_globalCursor;
+
+    if (m_widget->window && cursor.Ok() && m_currentGdkCursor != cursor)
+    {
+        m_currentGdkCursor = cursor;
+	
+	gdk_window_set_cursor( GTK_WIDGET(m_list)->window, m_currentGdkCursor.GetCursor() );
+
+        GList *child = m_list->children;
+        while (child)
+        {
+            GtkBin *bin = GTK_BIN( child->data );
+            GtkWidget *label = GTK_WIDGET( bin->child );
+	    
+	    gdk_window_set_cursor( label->window, m_currentGdkCursor.GetCursor() );
+
+            child = child->next;
+        }
+    }
+
+    UpdateWindowUI();
 }
 
 #endif

@@ -73,12 +73,12 @@ IMPLEMENT_APP(MyApp)
 IMPLEMENT_DYNAMIC_CLASS(MyCanvas, wxScrolledWindow)
 
 BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
-  EVT_PAINT(MyCanvas::OnPaint)
+//  EVT_PAINT(MyCanvas::OnPaint)
 END_EVENT_TABLE()
 
 MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
                     const wxPoint &pos, const wxSize &size )
-        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL )
+        : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER | wxTAB_TRAVERSAL, "test canvas" )
 {
     wxString choices[] =
     {
@@ -103,7 +103,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
   wxListCtrl *m_listCtrl = new wxListCtrl(
 	this, -1, wxPoint(200, 10), wxSize(180, 120),
-	wxLC_REPORT | wxSUNKEN_BORDER | wxLC_SINGLE_SEL );
+	wxLC_REPORT | wxSIMPLE_BORDER | wxLC_SINGLE_SEL );
 
   m_listCtrl->InsertColumn(0, "First", wxLIST_FORMAT_LEFT, 90);
   m_listCtrl->InsertColumn(1, "Last", wxLIST_FORMAT_LEFT, 90);
@@ -117,8 +117,26 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   m_listCtrl->SetItemState( 3, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED );
 
   (void) new wxListBox( this, -1, wxPoint(200,180), wxSize(180,120), 5, choices, wxLB_ALWAYS_SB );
+
+  wxWindow *test = new wxWindow( this, -1, wxPoint(10, 400), wxSize(130,120), wxSIMPLE_BORDER | wxTAB_TRAVERSAL );
+  test->SetBackgroundColour( "WHEAT" );
+  wxButton *test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
   
+  test = new wxWindow( this, -1, wxPoint(160, 400), wxSize(130,120), wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
+  test->SetBackgroundColour( "WHEAT" );
+  test->SetCursor( wxCursor( wxCURSOR_NO_ENTRY ) );
+  test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
+  test2->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
+  
+  test = new wxWindow( this, -1, wxPoint(310, 400), wxSize(130,120), wxRAISED_BORDER | wxTAB_TRAVERSAL );
+  test->SetBackgroundColour( "WHEAT" );
+  test->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
+  test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
+  test2->SetCursor( wxCursor( wxCURSOR_NO_ENTRY ) );
+
   SetBackgroundColour( "WHEAT" );
+  
+  SetCursor( wxCursor( wxCURSOR_IBEAM ) );
 }
 
 MyCanvas::~MyCanvas()

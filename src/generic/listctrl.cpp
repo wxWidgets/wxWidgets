@@ -1455,15 +1455,15 @@ void wxListMainWindow::MoveToFocus()
     {
         int y_s = m_yScroll*GetScrollPos( wxVERTICAL );
         if ((y > y_s) && (y+h < y_s+h_p)) return;
-        if (y-y_s < 5) { Scroll( -1, (y-5-h_p/2)/m_yScroll ); Refresh(); }
-        if (y+h+5 > y_s+h_p) { Scroll( -1, (y+h-h_p/2+h+15)/m_yScroll); Refresh(); }
+        if (y-y_s < 5) { Scroll( -1, (y-5-h_p/2)/m_yScroll ); }
+        if (y+h+5 > y_s+h_p) { Scroll( -1, (y+h-h_p/2+h+15)/m_yScroll); }
     }
     else
     {
         int x_s = m_xScroll*GetScrollPos( wxHORIZONTAL );
         if ((x > x_s) && (x+w < x_s+w_p)) return;
-        if (x-x_s < 5) { Scroll( (x-5)/m_xScroll, -1 ); Refresh(); }
-        if (x+w-5 > x_s+w_p) { Scroll( (x+w-w_p+15)/m_xScroll, -1 ); Refresh(); }
+        if (x-x_s < 5) { Scroll( (x-5)/m_xScroll, -1 ); }
+        if (x+w-5 > x_s+w_p) { Scroll( (x+w-w_p+15)/m_xScroll, -1 ); }
     }
 }
 

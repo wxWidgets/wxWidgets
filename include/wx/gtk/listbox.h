@@ -116,6 +116,7 @@ public:
     GtkWidget *GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );
     void ApplyWidgetStyle();
+    void OnInternalIdle();
 
 #if wxUSE_TOOLTIPS
     void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );

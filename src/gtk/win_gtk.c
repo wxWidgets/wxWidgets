@@ -156,7 +156,7 @@ gtk_myfixed_init (GtkMyFixed *myfixed)
 #endif
 
 #if (GTK_MINOR_VERSION > 0)
-    myfixed->shadow_type = GTK_SHADOW_NONE;
+    myfixed->shadow_type = GTK_MYSHADOW_NONE;
 #endif
 
     myfixed->children = NULL;
@@ -182,13 +182,13 @@ gtk_myfixed_scroll_set_adjustments (GtkMyFixed     *myfixed,
 }
 
 void 
-gtk_myfixed_set_shadow_type (GtkMyFixed    *myfixed,
-			     GtkShadowType  type)
+gtk_myfixed_set_shadow_type (GtkMyFixed      *myfixed,
+			     GtkMyShadowType  type)
 {
     g_return_if_fail (myfixed != NULL);
     g_return_if_fail (GTK_IS_MYFIXED (myfixed));
 
-    if ((GtkShadowType) myfixed->shadow_type != type)
+    if ((GtkMyShadowType) myfixed->shadow_type != type)
     {
         myfixed->shadow_type = type;
 
@@ -415,8 +415,21 @@ gtk_myfixed_realize (GtkWidget *widget)
     attributes.width = widget->allocation.width;
     attributes.height = widget->allocation.height;
 
-    if (myfixed->shadow_type != GTK_SHADOW_NONE)
+    if (myfixed->shadow_type == GTK_MYSHADOW_NONE)
     {
+        /* no border, no changes to sizes */
+    } else
+    if (myfixed->shadow_type == GTK_MYSHADOW_THIN)
+    {
+        /* GTK_MYSHADOW_THIN == wxSIMPLE_BORDER */
+        attributes.x += 1;
+        attributes.y += 1;
+        attributes.width -= 2;
+        attributes.height -= 2;
+    } else
+    {
+        /* GTK_MYSHADOW_IN == wxSUNKEN_BORDER */
+        /* GTK_MYSHADOW_OUT == wxRAISED_BORDER */
         attributes.x += 2;
         attributes.y += 2;
         attributes.width -= 4;
@@ -511,8 +524,11 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
   
     widget->allocation = *allocation;
 #if (GTK_MINOR_VERSION > 0)
-    if (myfixed->shadow_type == GTK_SHADOW_NONE)
+    if (myfixed->shadow_type == GTK_MYSHADOW_NONE)
         border = 0;
+    else
+    if (myfixed->shadow_type == GTK_MYSHADOW_THIN)
+        border = 1;
     else
         border = 2;
 #else

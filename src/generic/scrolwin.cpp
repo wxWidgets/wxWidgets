@@ -468,12 +468,11 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
     }
     
-    // BAD, BAD, can cause event loops if called from OnPaint(). KB.
-    // Refresh();
     
 #ifdef __WXMSW__
-    // Necessary?
     ::UpdateWindow ((HWND) GetHWND());
+#else
+    Refresh();
 #endif
 }
 

@@ -632,6 +632,17 @@ static void draw_frame( GtkWidget *widget, wxWindow *win )
                          win->m_width-dw, win->m_height-dh );
         return;
     }
+    
+    if (win->HasFlag(wxSIMPLE_BORDER))
+    {
+        GdkGC *gc = gdk_gc_new( widget->window );
+        gdk_gc_set_foreground( gc, &widget->style->black );
+        gdk_draw_rectangle( widget->window, gc, FALSE, 
+                         dx, dy,
+                         win->m_width-dw-1, win->m_height-dh-1 );
+        gdk_gc_unref( gc );
+        return;
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -1227,7 +1238,7 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
     if (g_blockEventsOnScroll) return FALSE;
-
+    
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
     if (gdk_event->is_hint)
@@ -1509,7 +1520,7 @@ static gint gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_
 // "value_changed" from m_vAdjust
 //-----------------------------------------------------------------------------
 
-static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
+static void gtk_window_vscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -1517,32 +1528,25 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
     if (g_blockEventsOnDrag) return;
 
     if (!win->m_hasVMT) return;
-
-    float diff = win->m_vAdjust->value - win->m_oldVerticalPos;
+    
+    float diff = adjust->value - win->m_oldVerticalPos;
     if (fabs(diff) < 0.2) return;
-    win->m_oldVerticalPos = win->m_vAdjust->value;
+    
+    win->m_oldVerticalPos = adjust->value;
 
-    wxEventType command = wxEVT_NULL;
+    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
+    GtkRange *range = GTK_RANGE( scrolledWindow->vscrollbar );
+    
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
+    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+    
+//    if (fabs(adjust->value-adjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
+//    if (fabs(adjust->value-adjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
 
-    float line_step = win->m_vAdjust->step_increment;
-    float page_step = win->m_vAdjust->page_increment;
-
-    if (win->IsScrolling())
-    {
-        command = wxEVT_SCROLLWIN_THUMBTRACK;
-    }
-    else
-    {
-        if (fabs(win->m_vAdjust->value-win->m_vAdjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
-        else if (fabs(win->m_vAdjust->value-win->m_vAdjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
-        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEDOWN;
-        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEUP;
-        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEDOWN;
-        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEUP;
-        else command = wxEVT_SCROLLWIN_THUMBTRACK;
-    }
-
-    int value = (int)(win->m_vAdjust->value+0.5);
+    int value = (int)(adjust->value+0.5);
 
     wxScrollWinEvent event( command, value, wxVERTICAL );
     event.SetEventObject( win );
@@ -1553,7 +1557,7 @@ static void gtk_window_vscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 // "value_changed" from m_hAdjust
 //-----------------------------------------------------------------------------
 
-static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *win )
+static void gtk_window_hscroll_callback( GtkAdjustment *adjust, wxWindow *win )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -1561,31 +1565,24 @@ static void gtk_window_hscroll_callback( GtkWidget *WXUNUSED(widget), wxWindow *
     if (g_blockEventsOnDrag) return;
     if (!win->m_hasVMT) return;
 
-    float diff = win->m_hAdjust->value - win->m_oldHorizontalPos;
+    float diff = adjust->value - win->m_oldHorizontalPos;
     if (fabs(diff) < 0.2) return;
-    win->m_oldHorizontalPos = win->m_hAdjust->value;
+    
+    win->m_oldHorizontalPos = adjust->value;
 
-    wxEventType command = wxEVT_NULL;
+    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
+    GtkRange *range = GTK_RANGE( scrolledWindow->hscrollbar );
+    
+    wxEventType command = wxEVT_SCROLLWIN_THUMBTRACK;
+    if      (range->scroll_type == GTK_SCROLL_STEP_BACKWARD) command = wxEVT_SCROLLWIN_LINEUP;
+    else if (range->scroll_type == GTK_SCROLL_STEP_FORWARD)  command = wxEVT_SCROLLWIN_LINEDOWN;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_BACKWARD) command = wxEVT_SCROLLWIN_PAGEUP;
+    else if (range->scroll_type == GTK_SCROLL_PAGE_FORWARD)  command = wxEVT_SCROLLWIN_PAGEDOWN;
+    
+//    if (fabs(adjust->value-adjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
+//    if (fabs(adjust->value-adjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
 
-    float line_step = win->m_hAdjust->step_increment;
-    float page_step = win->m_hAdjust->page_increment;
-
-    if (win->IsScrolling())
-    {
-        command = wxEVT_SCROLLWIN_THUMBTRACK;
-    }
-    else
-    {
-        if (fabs(win->m_hAdjust->value-win->m_hAdjust->lower) < 0.2) command = wxEVT_SCROLLWIN_BOTTOM;
-        else if (fabs(win->m_hAdjust->value-win->m_hAdjust->upper) < 0.2) command = wxEVT_SCROLLWIN_TOP;
-        else if (fabs(diff-line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEDOWN;
-        else if (fabs(diff+line_step) < 0.2) command = wxEVT_SCROLLWIN_LINEUP;
-        else if (fabs(diff-page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEDOWN;
-        else if (fabs(diff+page_step) < 0.2) command = wxEVT_SCROLLWIN_PAGEUP;
-        else command = wxEVT_SCROLLWIN_THUMBTRACK;
-    }
-
-    int value = (int)(win->m_hAdjust->value+0.5);
+    int value = (int)(adjust->value+0.5);
 
     wxScrollWinEvent event( command, value, wxHORIZONTAL );
     event.SetEventObject( win );
@@ -1644,7 +1641,7 @@ static gint gtk_scrollbar_button_press_callback( GtkRange *WXUNUSED(widget),
         wxapp_install_idle_handler();
 
 //  don't test here as we can release the mouse while being over
-//  a different window then the slider
+//  a different window than the slider
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
 
@@ -1663,16 +1660,16 @@ static gint gtk_scrollbar_button_release_callback( GtkRange *widget,
 {
 
 //  don't test here as we can release the mouse while being over
-//  a different window then the slider
+//  a different window than the slider
 //
 //    if (gdk_event->window != widget->slider) return FALSE;
 
-    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
-
-    if (widget == GTK_RANGE(scrolledWindow->vscrollbar))
-        gtk_signal_emit_by_name( GTK_OBJECT(win->m_hAdjust), "value_changed" );
-    else
-        gtk_signal_emit_by_name( GTK_OBJECT(win->m_vAdjust), "value_changed" );
+//    GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(win->m_widget);
+//
+//    if (widget == GTK_RANGE(scrolledWindow->vscrollbar))
+//        gtk_signal_emit_by_name( GTK_OBJECT(win->m_hAdjust), "value_changed" );
+//    else
+//        gtk_signal_emit_by_name( GTK_OBJECT(win->m_vAdjust), "value_changed" );
 
     win->SetScrolling( FALSE );
 
@@ -1693,7 +1690,7 @@ wxWindow *wxWindowBase::FindFocus()
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-/* we cannot set colours, fonts and cursors before the widget has
+/* we cannot set colours and fonts before the widget has
    been realized, so we do this directly after realization */
 
 static gint
@@ -1710,8 +1707,6 @@ gtk_window_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 
     if (win->m_delayedForegroundColour)
         win->SetForegroundColour( win->GetForegroundColour() );
-
-    win->SetCursor( win->GetCursor() );
 
     wxWindowCreateEvent event( win );
     event.SetEventObject( win );
@@ -1800,6 +1795,8 @@ void wxWindow::Init()
     m_isStaticBox = FALSE;
     m_isRadioButton = FALSE;
     m_acceptsFocus = FALSE;
+    
+    m_cursor = *wxSTANDARD_CURSOR;
 }
 
 wxWindow::wxWindow()
@@ -1864,15 +1861,19 @@ bool wxWindow::Create( wxWindow *parent, wxWindowID id,
 
     if (HasFlag(wxRAISED_BORDER))
     {
-        gtk_myfixed_set_shadow_type( myfixed, GTK_SHADOW_OUT );
+        gtk_myfixed_set_shadow_type( myfixed, GTK_MYSHADOW_OUT );
     }
     else if (HasFlag(wxSUNKEN_BORDER))
     {
-        gtk_myfixed_set_shadow_type( myfixed, GTK_SHADOW_IN );
+        gtk_myfixed_set_shadow_type( myfixed, GTK_MYSHADOW_IN );
+    }
+    else if (HasFlag(wxSIMPLE_BORDER))
+    {
+        gtk_myfixed_set_shadow_type( myfixed, GTK_MYSHADOW_THIN );
     }
     else
     {
-        gtk_myfixed_set_shadow_type( myfixed, GTK_SHADOW_NONE );
+        gtk_myfixed_set_shadow_type( myfixed, GTK_MYSHADOW_NONE );
     }
 #else // GTK_MINOR_VERSION == 0
     GtkViewport *viewport = GTK_VIEWPORT(scrolledWindow->viewport);
@@ -2052,7 +2053,7 @@ void wxWindow::PostCreation()
           GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 
 #if (GTK_MINOR_VERSION > 0)
-        /* these are called when the "sunken" or "raised" borders are drawn */
+        /* these are called when the "sunken", "raised" or "simple" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
@@ -2227,14 +2228,17 @@ void wxWindow::OnInternalIdle()
                 cursor = *wxSTANDARD_CURSOR;
 
             window = m_widget->window;
-            if (window)
+            if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
                 gdk_window_set_cursor( window, cursor.GetCursor() );
+
         }
         else
         {
+
             GdkWindow *window = m_widget->window;
-            if (window)
+            if ((window) && !(GTK_WIDGET_NO_WINDOW(m_widget)))
                gdk_window_set_cursor( window, cursor.GetCursor() );
+
         }
     }
 
@@ -2282,9 +2286,15 @@ void wxWindow::DoSetClientSize( int width, int height )
 #else
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
         {
-            /* when using GTK 1.2 we set the border size to 2 */
+            /* when using GTK 1.2 we set the shadow border size to 2 */
             dw += 2 * 2;
             dh += 2 * 2;
+        }
+        if (HasFlag(wxSIMPLE_BORDER))
+        {
+            /* when using GTK 1.2 we set the simple border size to 1 */
+            dw += 1 * 2;
+            dh += 1 * 2;
         }
 #endif
 
@@ -2351,9 +2361,15 @@ void wxWindow::DoGetClientSize( int *width, int *height ) const
 #else
         if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
         {
-            /* when using GTK 1.2 we set the border size to 2 */
+            /* when using GTK 1.2 we set the shadow border size to 2 */
             dw += 2 * 2;
             dh += 2 * 2;
+        }
+        if (HasFlag(wxSIMPLE_BORDER))
+        {
+            /* when using GTK 1.2 we set the simple border size to 1 */
+            dw += 1 * 2;
+            dh += 1 * 2;
         }
 #endif
         if (HasScrolling())
@@ -2615,29 +2631,7 @@ bool wxWindow::SetCursor( const wxCursor &cursor )
 {
     wxCHECK_MSG( (m_widget != NULL), FALSE, _T("invalid window") );
 
-    if (!wxWindowBase::SetCursor(cursor))
-    {
-        // don't leave if the GTK widget has just
-        // been realized
-        if (!m_delayedCursor) return FALSE;
-    }
-
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window)
-    {
-        // indicate that a new style has been set
-        // but it couldn't get applied as the
-        // widget hasn't been realized yet.
-        m_delayedCursor = TRUE;
-
-        // pretend we have done something
-        return TRUE;
-    }
-
-//    gdk_window_set_cursor( connect_widget->window, GetCursor().GetCursor() );
-
-    // cursor was set
-    return TRUE;
+    return wxWindowBase::SetCursor( cursor );
 }
 
 void wxWindow::WarpPointer( int x, int y )
@@ -2956,7 +2950,7 @@ bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 
 bool wxWindow::SetFont( const wxFont &font )
 {
-    wxCHECK_MSG( m_widget != NULL, FALSE, _T(        "invalid window") );
+    wxCHECK_MSG( m_widget != NULL, FALSE, _T("invalid window") );
 
     if (!wxWindowBase::SetFont(font))
     {
@@ -3121,8 +3115,10 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
         m_vAdjust->value = fpos;
     }
 
-    if (!m_isScrolling)  /* prevent recursion */
+/*
+    if (!m_isScrolling)
     {
+*/
         if (m_wxwindow->window)
         {
             if (orient == wxHORIZONTAL)
@@ -3130,7 +3126,9 @@ void wxWindow::SetScrollPos( int orient, int pos, bool WXUNUSED(refresh) )
             else
                 gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "value_changed" );
         }
+/*
     }
+*/
 }
 
 int wxWindow::GetScrollThumb( int orient ) const

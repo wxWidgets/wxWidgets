@@ -305,7 +305,6 @@ fontdlg.cpp	R
 frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
-gsockgtk.c	R
 icon.cpp	R
 listbox.cpp	R
 main.cpp	R

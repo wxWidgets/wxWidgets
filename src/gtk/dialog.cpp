@@ -20,6 +20,11 @@
 #include "wx/gtk/win_gtk.h"
 #include "wx/cursor.h"
 
+/*
+#include "gdk/gdkprivate.h"
+#include "gdk/gdkx.h"
+*/
+
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -32,6 +37,33 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 extern wxList wxPendingDelete;
+
+/*
+//-----------------------------------------------------------------------------
+// instruct X to set the WM hint for positioning
+//-----------------------------------------------------------------------------
+
+extern "C" {
+
+static void gdk_window_set_position_hint( GdkWindow *window, gint x, gint y )
+{
+  GdkWindowPrivate *priv;
+  XSizeHints size_hints;
+  
+  g_return_if_fail (window != NULL);
+  
+  priv = (GdkWindowPrivate*) window;
+  if (priv->destroyed) return;
+  
+  size_hints.flags = PPosition;
+  size_hints.x = x;
+  size_hints.y = y;
+   
+  XSetWMNormalHints (priv->xdisplay, priv->xwindow, &size_hints);
+}
+
+}
+*/
 
 //-----------------------------------------------------------------------------
 // "delete_event"
@@ -117,6 +149,10 @@ gtk_dialog_realized_callback( GtkWidget *widget, wxDialog *win )
        the dialog before it is shown, so I set the
        position in "realize" and "map" */
     gtk_widget_set_uposition( widget, win->m_x, win->m_y );
+
+/*
+    gdk_window_set_position_hint( widget->window, win->m_x, win->m_y );
+*/
 
     /* reset the icon */
     if (win->m_icon != wxNullIcon)
@@ -546,6 +582,8 @@ void wxDialog::OnInternalIdle()
 {
     if (!m_sizeSet && GTK_WIDGET_REALIZED(m_wxwindow))
         GtkOnSize( m_x, m_y, m_width, m_height );
+
+    wxWindow::OnInternalIdle();
 }
 
 bool wxDialog::Show( bool show )

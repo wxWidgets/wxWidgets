@@ -800,6 +800,8 @@ void wxFrame::OnInternalIdle()
 #if wxUSE_STATUSBAR
     if (m_frameStatusBar) m_frameStatusBar->OnInternalIdle();
 #endif
+
+    wxWindow::OnInternalIdle();
 }
 
 void wxFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )

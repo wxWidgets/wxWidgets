@@ -44,6 +44,27 @@ extern bool g_isIdle;
 extern wxList wxPendingDelete;
 
 //-----------------------------------------------------------------------------
+// "switch_page"
+//-----------------------------------------------------------------------------
+
+static void gtk_mdi_page_change_callback(GtkNotebook *WXUNUSED(widget),
+                                              GtkNotebookPage *WXUNUSED(page),
+                                              gint page,
+                                              wxMDIParentFrame *parent )
+{
+    if (g_isIdle) 
+        wxapp_install_idle_handler();
+
+    wxMDIChildFrame *child = parent->GetActiveChild();
+    
+    if (!child) return;
+
+    wxActivateEvent event( wxEVT_ACTIVATE, TRUE, child->GetId() );
+    event.SetEventObject( child);
+    child->GetEventHandler()->ProcessEvent( event );
+}
+
+//-----------------------------------------------------------------------------
 // wxMDIParentFrame
 //-----------------------------------------------------------------------------
 
@@ -417,6 +438,9 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     }
 
     m_widget = gtk_notebook_new();
+
+    gtk_signal_connect( GTK_OBJECT(m_widget), "switch_page",
+      GTK_SIGNAL_FUNC(gtk_mdi_page_change_callback), (gpointer)parent );
 
     gtk_notebook_set_scrollable( GTK_NOTEBOOK(m_widget), 1 );
 
