@@ -9,7 +9,7 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlpars.h"
 #endif
 
 #include "wx/wxprec.h"

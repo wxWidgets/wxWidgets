@@ -10,8 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
-#pragma interface
+#pragma implementation "dcpsg.h"
 #endif
 
 #include "wx/wxprec.h"

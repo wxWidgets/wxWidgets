@@ -9,7 +9,7 @@
 
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "htmlfilt.h"
 #endif
 
 #include "wx/wxprec.h"

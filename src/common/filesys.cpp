@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "filesys.h"
 #endif
 
 #include "wx/wxprec.h"

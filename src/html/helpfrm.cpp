@@ -10,7 +10,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation
+#pragma implementation "helpfrm.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h"
