@@ -113,6 +113,7 @@ pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long re
 pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
+pascal OSErr AEHandlePreferences( const AppleEvent *event , AppleEvent *reply , long refcon ) ;
 
 
 pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
@@ -137,6 +138,22 @@ pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long WX
 {
     // GD: UNUSED wxApp* app = (wxApp*) refcon ;
     return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
+}
+
+pascal OSErr AEHandlePreferences( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+{
+    // GD: UNUSED wxApp* app = (wxApp*) refcon ;
+
+    wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
+    wxMenu* menu = NULL ;
+    wxMenuItem* item = NULL ;
+    if ( mbar )
+    {
+        item = mbar->FindItem( wxApp::s_macPreferencesMenuItemId , &menu ) ;
+    }
+    if ( item != NULL && menu != NULL && mbar != NULL )
+		menu->SendEvent( wxApp::s_macPreferencesMenuItemId ,  -1 ) ;
+	return noErr ;
 }
 
 // new virtual public method in wxApp
@@ -1183,14 +1200,26 @@ bool wxApp::Initialized()
 
 int wxApp::MainLoop()
 {
-  m_keepGoing = TRUE;
+	m_keepGoing = TRUE;
 
-  while (m_keepGoing)
-  {
-        MacDoOneEvent() ;
-  }
+#if TARGET_CARBON
+	if ( UMAGetSystemVersion() >= 0x1000 )
+	{
+		if ( s_macPreferencesMenuItemId )
+		{
+			EnableMenuCommand( NULL , kHICommandPreferences ) ;
+		    AEInstallEventHandler( kCoreEventClass , kAEShowPreferences ,
+		                           NewAEEventHandlerUPP(AEHandlePreferences) ,
+		                           (long) wxTheApp , FALSE ) ;
+		}
+	}
+#endif
+	while (m_keepGoing)
+	{
+	    MacDoOneEvent() ;
+	}
 
-  return 0;
+	return 0;
 }
 
 // Returns TRUE if more time is needed.
