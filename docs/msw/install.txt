@@ -484,9 +484,12 @@ Here are the steps required:
 
 - If using Mingw32, you need some extra files to use the wxWindows
   makefiles. You can find these files in ports/mingw32 on the
-  wxWindows ftp site or CD-ROM, as extra.zip. These should be extracted
-  to the Mingw32 directory. If you have alread downloaded rm, cp, mv
-  from elsewhere, you won't need this.
+  wxWindows ftp site or CD-ROM, as extra.zip. 
+
+  ftp://ftp.remstar.com/pub/wxwin/ports/mingw32/extra.zip
+  
+  These should be extracted to the Mingw32 directory. If you have 
+  already downloaded rm, cp, mv from elsewhere, you won't need this.
 
   If using Mingw32 2.95 and below with wxWindows 2.1 or above, you
   must hand-patch with Mingw32-gcc295.patches (located in the
