@@ -288,6 +288,7 @@ COMMONOBJS = \
   ..\common\$D\strconv.obj \
   ..\common\$D\stream.obj \
   ..\common\$D\string.obj \
+  ..\common\$D\sysopt.obj \
   ..\common\$D\tbarbase.obj \
   ..\common\$D\textcmn.obj \
   ..\common\$D\textfile.obj \
@@ -409,6 +410,7 @@ COMLIBOBJS3 = \
   strconv.obj \
   stream.obj \
   string.obj \
+  sysopt.obj \
   tbarbase.obj \
   textcmn.obj \
   textfile.obj \
@@ -758,6 +760,7 @@ $(COMLIBOBJS3):
   copy ..\common\$D\strconv.obj
   copy ..\common\$D\stream.obj
   copy ..\common\$D\string.obj
+  copy ..\common\$D\sysopt.obj
   copy ..\common\$D\tbarbase.obj
   copy ..\common\$D\textcmn.obj
   copy ..\common\$D\textfile.obj

@@ -617,6 +617,43 @@ void wxFrameOS2::SetMenuBar(
     }
 } // end of wxFrameOS2::SetMenuBar
 
+void wxFrameOS2::AttachMenuBar(
+  wxMenuBar*                        pMenubar
+)
+{
+    m_frameMenuBar = pMenubar;
+
+    if (!pMenubar)
+    {
+        //
+        // Actually remove the menu from the frame
+        //
+        m_hMenu = (WXHMENU)0;
+        InternalSetMenuBar();
+    }
+    else // Set new non NULL menu bar
+    {
+        //
+        // Can set a menubar several times.
+        //
+        if (pMenubar->GetHMenu())
+        {
+            m_hMenu = pMenubar->GetHMenu();
+        }
+        else
+        {
+            if (pMenubar->IsAttached())
+                pMenubar->Detach();
+
+            m_hMenu = pMenubar->Create();
+
+            if (!m_hMenu)
+                return;
+        }
+        InternalSetMenuBar();
+    }
+} // end of wxFrameOS2::AttachMenuBar
+
 void wxFrameOS2::InternalSetMenuBar()
 {
     ERRORID                         vError;

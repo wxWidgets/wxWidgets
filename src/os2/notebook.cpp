@@ -275,7 +275,7 @@ bool wxNotebook::DeletePage(int nPage)
     // TODO: delete native widget page
 
     delete m_aPages[nPage];
-    m_aPages.Remove(nPage);
+    m_aPages.RemoveAt(nPage);
 
     return TRUE;
 }
@@ -285,7 +285,7 @@ bool wxNotebook::RemovePage(int nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), FALSE, wxT("notebook page out of range") );
 
-    m_aPages.Remove(nPage);
+    m_aPages.RemoveAt(nPage);
 
     return TRUE;
 }

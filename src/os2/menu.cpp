@@ -244,7 +244,7 @@ void wxMenu::UpdateAccel(
         if (pAccel)
             m_vAccels[n] = pAccel;
         else
-            m_vAccels.Remove(n);
+            m_vAccels.RemoveAt(n);
     }
 
     if (IsAttached())
@@ -448,7 +448,7 @@ wxMenuItem* wxMenu::DoRemove(
     if (n != wxNOT_FOUND)
     {
         delete m_vAccels[n];
-        m_vAccels.Remove(n);
+        m_vAccels.RemoveAt(n);
     }
 
 #endif // wxUSE_ACCEL

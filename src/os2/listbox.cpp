@@ -209,7 +209,7 @@ void wxListBox::Delete(int N)
 
 #if wxUSE_OWNER_DRAWN
     delete m_aItems[N];
-    m_aItems.Remove(N);
+    m_aItems.RemoveAt(N);
 #else // !wxUSE_OWNER_DRAWN
     if ( HasClientObjectData() )
     {

@@ -335,7 +335,7 @@ wxPaintDC::~wxPaintDC()
             ::WinEndPaint(m_hPS);
             m_hPS          = m_hOldPS;
             m_bIsPaintTime = FALSE;
-            ms_cache.Remove(nIndex);
+            ms_cache.RemoveAt(nIndex);
         }
         //else: cached DC entry is still in use
 

@@ -149,6 +149,192 @@ int SetBkMode(
 // implementation
 // ===========================================================================
 
+#if wxUSE_DC_CACHEING
+
+/*
+ * This implementation is a bit ugly and uses the old-fashioned wxList class, so I will
+ * improve it in due course, either using arrays, or simply storing pointers to one
+ * entry for the bitmap, and two for the DCs. -- JACS
+ */
+
+// ---------------------------------------------------------------------------
+// wxDCCacheEntry
+// ---------------------------------------------------------------------------
+
+wxList wxDC::m_svBitmapCache;
+wxList wxDC::m_svDCCache;
+
+wxDCCacheEntry::wxDCCacheEntry(
+  WXHBITMAP                         hBitmap
+, int                               nWidth
+, int                               nHeight
+, int                               nDepth
+)
+{
+    m_hBitmap = hBitmap;
+    m_hPS     = NULLHANDLE;
+    m_nWidth  = nWidth;
+    m_nHeight = nHeight;
+    m_nDepth  = nDepth;
+} // end of wxDCCacheEntry::wxDCCacheEntry
+
+wxDCCacheEntry::wxDCCacheEntry(
+  HPS                               hPS
+, int                               nDepth
+)
+{
+    m_hBitmap = NULLHANDLE;
+    m_hPS     = hPS;
+    m_nWidth  = 0;
+    m_nHeight = 0;
+    m_nDepth  = nDepth;
+} // end of wxDCCacheEntry::wxDCCacheEntry
+
+wxDCCacheEntry::~wxDCCacheEntry()
+{
+    if (m_hBitmap)
+        ::GpiDeleteBitmap(m_hBitmap);
+    if (m_hPS)
+        ::GpiDestroyPS(m_hPS);
+} // end of wxDCCacheEntry::~wxDCCacheEntry
+
+wxDCCacheEntry* wxDC::FindBitmapInCache(
+  HPS                               hPS
+, int                               nWidth
+, int                               nHeight
+)
+{
+    int                             nDepth = 24 // we'll fix this later ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
+    wxNode*                         pNode = m_svBitmapCache.First();
+    BITMAPINFOHEADER2               vBmpHdr;
+
+    while(pNode)
+    {
+        wxDCCacheEntry*             pEntry = (wxDCCacheEntry*)pNode->Data();
+
+        if (pEntry->m_nDepth == nDepth)
+        {
+            memset(&vBmpHdr, 0, sizeof(BITMAPINFOHEADER2));
+
+            if (pEntry->m_nWidth < nWidth || pEntry->m_nHeight < nHeight)
+            {
+                ::GpiDeleteBitmap((HBITMAP)pEntry->m_hBitmap);
+                vBmpHdr.cbFix     = sizeof(BITMAPINFOHEADER2);
+                vBmpHdr.cx        = nWidth;
+                vBmpHdr.cy        = nHeight;
+                vBmpHdr.cPlanes   = 1;
+                vBmpHdr.cBitCount = nDepth;
+
+                pEntry->m_hBitmap = (WXHBITMAP) ::GpiCreateBitmap( hPS
+                                                                  ,&vBmpHdr
+                                                                  ,0L, NULL, NULL
+                                                                 );
+                if (!pEntry->m_hBitmap)
+                {
+                    wxLogLastError(wxT("CreateCompatibleBitmap"));
+                }
+                pEntry->m_nWidth  = nWidth;
+                pEntry->m_nHeight = nHeight;
+                return pEntry;
+            }
+            return pEntry;
+        }
+        pNode = pNode->Next();
+    }
+    memset(&vBmpHdr, 0, sizeof(BITMAPINFOHEADER2));
+    vBmpHdr.cbFix     = sizeof(BITMAPINFOHEADER2);
+    vBmpHdr.cx        = nWidth;
+    vBmpHdr.cy        = nHeight;
+    vBmpHdr.cPlanes   = 1;
+    vBmpHdr.cBitCount = nDepth;
+
+    WXHBITMAP                       hBitmap = (WXHBITMAP) ::GpiCreateBitmap( hPS
+                                                                            ,&vBmpHdr
+                                                                            ,0L, NULL, NULL
+                                                                           );
+    if (!hBitmap)
+    {
+        wxLogLastError(wxT("CreateCompatibleBitmap"));
+    }
+    wxDCCacheEntry*                 pEntry = new wxDCCacheEntry( hBitmap
+                                                                ,nWidth
+                                                                ,nHeight
+                                                                ,nDepth
+                                                               );
+    AddToBitmapCache(pEntry);
+    return pEntry;
+} // end of FindBitmapInCache
+
+wxDCCacheEntry* wxDC::FindDCInCache(
+  wxDCCacheEntry*                   pNotThis
+, HPS                               hPS
+)
+{
+    int                             nDepth = 24; // we'll fix this up later ::GetDeviceCaps((HDC) dc, PLANES) * ::GetDeviceCaps((HDC) dc, BITSPIXEL);
+    wxNode*                         pNode = m_svDCCache.First();
+
+    while(pNode)
+    {
+        wxDCCacheEntry*             pEntry = (wxDCCacheEntry*)pNode->Data();
+
+        //
+        // Don't return the same one as we already have
+        //
+        if (!pNotThis || (pNotThis != pEntry))
+        {
+            if (pEntry->m_nDepth == nDepth)
+            {
+                return pEntry;
+            }
+        }
+        pNode = pNode->Next();
+    }
+    wxDCCacheEntry*                 pEntry = new wxDCCacheEntry( hPS
+                                                                ,nDepth
+                                                               );
+    AddToDCCache(pEntry);
+    return pEntry;
+} // end of wxDC::FindDCInCache
+
+void wxDC::AddToBitmapCache(
+  wxDCCacheEntry*                   pEntry
+)
+{
+    m_svBitmapCache.Append(pEntry);
+} // end of wxDC::AddToBitmapCache
+
+void wxDC::AddToDCCache(
+  wxDCCacheEntry*                   pEntry
+)
+{
+    m_svDCCache.Append(pEntry);
+} // end of wxDC::AddToDCCache
+
+void wxDC::ClearCache()
+{
+    m_svBitmapCache.DeleteContents(TRUE);
+    m_svBitmapCache.Clear();
+    m_svBitmapCache.DeleteContents(FALSE);
+    m_svDCCache.DeleteContents(TRUE);
+    m_svDCCache.Clear();
+    m_svDCCache.DeleteContents(FALSE);
+} // end of wxDC::ClearCache
+
+// Clean up cache at app exit
+class wxDCModule : public wxModule
+{
+public:
+    virtual bool OnInit() { return TRUE; }
+    virtual void OnExit() { wxDC::ClearCache(); }
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxDCModule)
+}; // end of CLASS wxDCModule
+
+IMPLEMENT_DYNAMIC_CLASS(wxDCModule, wxModule)
+
+#endif // ndef for wxUSE_DC_CACHEING
+
 // ---------------------------------------------------------------------------
 // wxDC
 // ---------------------------------------------------------------------------
@@ -1745,6 +1931,8 @@ bool wxDC::DoBlit(
 , wxCoord                           vYsrc
 , int                               nRop
 , bool                              bUseMask
+, wxCoord                           vXsrcMask
+, wxCoord                           vYsrcMask
 )
 {
     wxMask*                         pMask = NULL;
@@ -1827,13 +2015,9 @@ bool wxDC::DoBlit(
         HPS                             hPSBuffer;
         DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
         BITMAPINFOHEADER2               vBmpHdr;
+        HBITMAP                         hBufBitmap;
         SIZEL                           vSize = {0, 0};
         LONG                            rc;
-
-        hDCMask = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
-        hDCBuffer = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
-        hPSMask = ::GpiCreatePS(vHabmain, hDCMask, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
-        hPSBuffer = ::GpiCreatePS(vHabmain, hDCBuffer, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
 
         memset(&vBmpHdr, 0, sizeof(BITMAPINFOHEADER2));
         vBmpHdr.cbFix     = sizeof(BITMAPINFOHEADER2);
@@ -1842,7 +2026,37 @@ bool wxDC::DoBlit(
         vBmpHdr.cPlanes   = 1;
         vBmpHdr.cBitCount = 24;
 
-        HBITMAP                         hBufBitmap = ::GpiCreateBitmap(GetHPS(), &vBmpHdr, 0L, NULL, NULL);
+#if wxUSE_DC_CACHEING
+        if (TRUE)
+        {
+            //
+            // create a temp buffer bitmap and DCs to access it and the mask
+            //
+            wxDCCacheEntry*         pDCCacheEntry1    = FindDCInCache( NULL
+                                                                      ,pSource->GetHPS()
+                                                                     );
+            wxDCCacheEntry*         pDCCacheEntry2    = FindDCInCache( pDCCacheEntry1
+                                                                      ,GetHPS()
+                                                                     );
+            wxDCCacheEntry*         pBitmapCacheEntry = FindBitmapInCache( GetHPS()
+                                                                          ,vWidth
+                                                                          ,vHeight
+                                                                         );
+
+            hPSMask = pDCCacheEntry1->m_hPS;
+            hDCBuffer = (HDC)pDCCacheEntry2->m_hPS;
+            hBufBitmap = (HBITMAP)pBitmapCacheEntry->m_hBitmap;
+        }
+        else
+#endif
+        {
+            hDCMask = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
+            hDCBuffer = ::DevOpenDC(vHabmain, OD_MEMORY, "*", 5L, (PDEVOPENDATA)&vDOP, NULLHANDLE);
+            hPSMask = ::GpiCreatePS(vHabmain, hDCMask, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+            hPSBuffer = ::GpiCreatePS(vHabmain, hDCBuffer, &vSize, PU_PELS | GPIT_MICRO | GPIA_ASSOC);
+            hBufBitmap = ::GpiCreateBitmap(GetHPS(), &vBmpHdr, 0L, NULL, NULL);
+        }
+
         POINTL                          aPoint1[4] = { 0, 0
                                                       ,vWidth, vHeight
                                                       ,vXdest, vYdest
@@ -1961,11 +2175,13 @@ bool wxDC::DoBlit(
         //
         ::GpiSetBitmap(hPSMask, NULLHANDLE);
         ::GpiSetBitmap(hPSBuffer, NULLHANDLE);
+#if !wxUSE_DC_CACHEING
         ::GpiDestroyPS(hPSMask);
         ::GpiDestroyPS(hPSBuffer);
         ::DevCloseDC(hDCMask);
         ::DevCloseDC(hDCBuffer);
         ::GpiDeleteBitmap(hBufBitmap);
+#endif
         bSuccess = TRUE;
     }
     else // no mask, just BitBlt() it
