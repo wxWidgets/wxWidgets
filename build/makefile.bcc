@@ -8,86 +8,7 @@
 BCCDIR = $(MAKEDIR)\..
 !endif
 
-# -------------------------------------------------------------------------
-# These are configurable options:
-# -------------------------------------------------------------------------
-
-# Type of compiled binaries [debug,release]
-!ifndef BUILD
-BUILD = release
-!endif
-# C compiler 
-!ifndef CC
-CC = bcc32
-!endif
-# Name of your custom configuration. This affects directory
-#            where object files are stored as well as the location of
-#            compiled .lib files and setup.h under the lib/ toplevel directory. 
-!ifndef CFG
-CFG = 
-!endif
-# Standard flags for CC 
-!ifndef CFLAGS
-CFLAGS = 
-!endif
-# Standard preprocessor flags (common for CC and CXX) 
-!ifndef CPPFLAGS
-CPPFLAGS = -a4 -g0 -I$(BCCDIR)\include
-!endif
-# C++ compiler 
-!ifndef CXX
-CXX = bcc32
-!endif
-# Standard flags for C++ 
-!ifndef CXXFLAGS
-CXXFLAGS = 
-!endif
-# Standard linker flags 
-!ifndef LDFLAGS
-LDFLAGS = -L$(BCCDIR)\lib
-!endif
-# Multiple libraries or single huge monolithic one? [0,1]
-!ifndef MONOLITHIC
-MONOLITHIC = 1
-!endif
-# Is this official build by wxWindows developers? [0,1]
-!ifndef OFFICIAL_BUILD
-OFFICIAL_BUILD = 0
-!endif
-# Version of C runtime library to use. You can change this to
-#                static if SHARED=0, but it is highly recommended to not do
-#                it if SHARED=1 unless you know what you are doing. [dynamic,static]
-!ifndef RUNTIME_LIBS
-RUNTIME_LIBS = dynamic
-!endif
-# What type of library to build? [0,1]
-!ifndef SHARED
-SHARED = 1
-!endif
-# Compile Unicode build of wxWindows? [0,1]
-!ifndef UNICODE
-UNICODE = 0
-!endif
-# Build GUI libraries? [0,1]
-!ifndef USE_GUI
-USE_GUI = 1
-!endif
-# Build wxHTML library (USE_GUI must be 1)? [0,1]
-!ifndef USE_HTML
-USE_HTML = 1
-!endif
-# Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
-!ifndef USE_OPENGL
-USE_OPENGL = 1
-!endif
-# Use this to name your customized DLLs differently 
-!ifndef VENDOR
-VENDOR = custom
-!endif
-# Build wxUniversal instead of native port? [0,1]
-!ifndef WXUNIV
-WXUNIV = 0
-!endif
+!include config.bcc
 
 # -------------------------------------------------------------------------
 # Do not modify the rest of this file!
@@ -7389,7 +7310,7 @@ $(OBJS)\wxzlib_zutil.obj: ..\src\zlib\zutil.c
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\baselib_dummy.obj $(OBJS)\baselib_dummy.obj $(OBJS)\baselib_appbase.obj $(OBJS)\baselib_clntdata.obj $(OBJS)\baselib_cmdline.obj $(OBJS)\baselib_config.obj $(OBJS)\baselib_datetime.obj $(OBJS)\baselib_datstrm.obj $(OBJS)\baselib_db.obj $(OBJS)\baselib_dbtable.obj $(OBJS)\baselib_dircmn.obj $(OBJS)\baselib_dynarray.obj $(OBJS)\baselib_dynlib.obj $(OBJS)\baselib_dynload.obj $(OBJS)\baselib_encconv.obj $(OBJS)\baselib_extended.obj $(OBJS)\baselib_ffile.obj $(OBJS)\baselib_file.obj $(OBJS)\baselib_fileconf.obj $(OBJS)\baselib_filefn.obj $(OBJS)\baselib_filename.obj $(OBJS)\baselib_filesys.obj $(OBJS)\baselib_fmapbase.obj $(OBJS)\baselib_fs_inet.obj $(OBJS)\baselib_fs_zip.obj $(OBJS)\baselib_ftp.obj $(OBJS)\baselib_hash.obj $(OBJS)\baselib_hashmap.obj $(OBJS)\baselib_http.obj $(OBJS)\baselib_init.obj $(OBJS)\baselib_intl.obj $(OBJS)\baselib_ipcbase.obj $(OBJS)\baselib_list.obj $(OBJS)\baselib_log.obj $(OBJS)\baselib_longlong.obj $(OBJS)\baselib_memory.obj $(OBJS)\baselib_mimecmn.obj $(OBJS)\baselib_module.obj $(OBJS)\baselib_mstream.obj $(OBJS)\baselib_object.obj $(OBJS)\baselib_process.obj $(OBJS)\baselib_protocol.obj $(OBJS)\baselib_regex.obj $(OBJS)\baselib_sckaddr.obj $(OBJS)\baselib_sckfile.obj $(OBJS)\baselib_sckipc.obj $(OBJS)\baselib_sckstrm.obj $(OBJS)\baselib_socket.obj $(OBJS)\baselib_stopwatch.obj $(OBJS)\baselib_strconv.obj $(OBJS)\baselib_stream.obj $(OBJS)\baselib_string.obj $(OBJS)\baselib_sysopt.obj $(OBJS)\baselib_textbuf.obj $(OBJS)\baselib_textfile.obj $(OBJS)\baselib_tokenzr.obj $(OBJS)\baselib_txtstrm.obj $(OBJS)\baselib_unzip.obj $(OBJS)\baselib_url.obj $(OBJS)\baselib_variant.obj $(OBJS)\baselib_wfstream.obj $(OBJS)\baselib_wxchar.obj $(OBJS)\baselib_zipstrm.obj $(OBJS)\baselib_zstream.obj $(OBJS)\baselib_gsocket.obj $(OBJS)\baselib_gsockmsw.obj $(OBJS)\baselib_basemsw.obj $(OBJS)\baselib_dde.obj $(OBJS)\baselib_dir.obj $(OBJS)\baselib_mimetype.obj $(OBJS)\baselib_regconf.obj $(OBJS)\baselib_registry.obj $(OBJS)\baselib_snglinst.obj $(OBJS)\baselib_thread.obj $(OBJS)\baselib_utils.obj $(OBJS)\baselib_utilsexc.obj $(OBJS)\baselib_crashrpt.obj $(OBJS)\baselib_event.obj $(OBJS)\baselib_fs_mem.obj $(OBJS)\baselib_msgout.obj $(OBJS)\baselib_utilscmn.obj $(OBJS)\baselib_main.obj $(OBJS)\baselib_mslu.obj $(OBJS)\baselib_volume.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\baselib_dummy.obj $(OBJS)\baselib_appbase.obj $(OBJS)\baselib_clntdata.obj $(OBJS)\baselib_cmdline.obj $(OBJS)\baselib_config.obj $(OBJS)\baselib_datetime.obj $(OBJS)\baselib_datstrm.obj $(OBJS)\baselib_db.obj $(OBJS)\baselib_dbtable.obj $(OBJS)\baselib_dircmn.obj $(OBJS)\baselib_dynarray.obj $(OBJS)\baselib_dynlib.obj $(OBJS)\baselib_dynload.obj $(OBJS)\baselib_encconv.obj $(OBJS)\baselib_extended.obj $(OBJS)\baselib_ffile.obj $(OBJS)\baselib_file.obj $(OBJS)\baselib_fileconf.obj $(OBJS)\baselib_filefn.obj $(OBJS)\baselib_filename.obj $(OBJS)\baselib_filesys.obj $(OBJS)\baselib_fmapbase.obj $(OBJS)\baselib_fs_inet.obj $(OBJS)\baselib_fs_zip.obj $(OBJS)\baselib_ftp.obj $(OBJS)\baselib_hash.obj $(OBJS)\baselib_hashmap.obj $(OBJS)\baselib_http.obj $(OBJS)\baselib_init.obj $(OBJS)\baselib_intl.obj $(OBJS)\baselib_ipcbase.obj $(OBJS)\baselib_list.obj $(OBJS)\baselib_log.obj $(OBJS)\baselib_longlong.obj $(OBJS)\baselib_memory.obj $(OBJS)\baselib_mimecmn.obj $(OBJS)\baselib_module.obj $(OBJS)\baselib_mstream.obj $(OBJS)\baselib_object.obj $(OBJS)\baselib_process.obj $(OBJS)\baselib_protocol.obj $(OBJS)\baselib_regex.obj $(OBJS)\baselib_sckaddr.obj $(OBJS)\baselib_sckfile.obj $(OBJS)\baselib_sckipc.obj $(OBJS)\baselib_sckstrm.obj $(OBJS)\baselib_socket.obj $(OBJS)\baselib_stopwatch.obj $(OBJS)\baselib_strconv.obj $(OBJS)\baselib_stream.obj $(OBJS)\baselib_string.obj $(OBJS)\baselib_sysopt.obj $(OBJS)\baselib_textbuf.obj $(OBJS)\baselib_textfile.obj $(OBJS)\baselib_tokenzr.obj $(OBJS)\baselib_txtstrm.obj $(OBJS)\baselib_unzip.obj $(OBJS)\baselib_url.obj $(OBJS)\baselib_variant.obj $(OBJS)\baselib_wfstream.obj $(OBJS)\baselib_wxchar.obj $(OBJS)\baselib_zipstrm.obj $(OBJS)\baselib_zstream.obj $(OBJS)\baselib_gsocket.obj $(OBJS)\baselib_gsockmsw.obj $(OBJS)\baselib_basemsw.obj $(OBJS)\baselib_dde.obj $(OBJS)\baselib_dir.obj $(OBJS)\baselib_mimetype.obj $(OBJS)\baselib_regconf.obj $(OBJS)\baselib_registry.obj $(OBJS)\baselib_snglinst.obj $(OBJS)\baselib_thread.obj $(OBJS)\baselib_utils.obj $(OBJS)\baselib_utilsexc.obj $(OBJS)\baselib_crashrpt.obj $(OBJS)\baselib_event.obj $(OBJS)\baselib_fs_mem.obj $(OBJS)\baselib_msgout.obj $(OBJS)\baselib_utilscmn.obj $(OBJS)\baselib_main.obj $(OBJS)\baselib_mslu.obj $(OBJS)\baselib_volume.obj
 |
 !endif
@@ -7429,7 +7350,7 @@ clean:
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1"
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\corelib_dummy.obj $(OBJS)\corelib_dummy.obj $(OBJS)\corelib_event.obj $(OBJS)\corelib_fs_mem.obj $(OBJS)\corelib_msgout.obj $(OBJS)\corelib_utilscmn.obj $(OBJS)\corelib_main.obj $(OBJS)\corelib_mslu.obj $(OBJS)\corelib_volume.obj $(____CORE_SRC_FILENAMES_3_OBJECTS)
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\corelib_dummy.obj $(OBJS)\corelib_event.obj $(OBJS)\corelib_fs_mem.obj $(OBJS)\corelib_msgout.obj $(OBJS)\corelib_utilscmn.obj $(OBJS)\corelib_main.obj $(OBJS)\corelib_mslu.obj $(OBJS)\corelib_volume.obj $(____CORE_SRC_FILENAMES_3_OBJECTS)
 |
 !endif
@@ -7445,7 +7366,7 @@ clean:
 !if "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gl.lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\gllib_dummy.obj $(OBJS)\gllib_dummy.obj $(OBJS)\gllib_glcanvas.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\gllib_dummy.obj $(OBJS)\gllib_glcanvas.obj
 |
 !endif
@@ -7461,7 +7382,7 @@ clean:
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_HTML)" == "1"
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\htmllib_dummy.obj $(OBJS)\htmllib_dummy.obj $(OBJS)\htmllib_helpbest.obj $(OBJS)\htmllib_helpdata.obj $(OBJS)\htmllib_helpfrm.obj $(OBJS)\htmllib_helpctrl.obj $(OBJS)\htmllib_htmlcell.obj $(OBJS)\htmllib_htmlfilt.obj $(OBJS)\htmllib_htmlpars.obj $(OBJS)\htmllib_htmltag.obj $(OBJS)\htmllib_htmlwin.obj $(OBJS)\htmllib_winpars.obj $(OBJS)\htmllib_m_fonts.obj $(OBJS)\htmllib_m_hline.obj $(OBJS)\htmllib_m_image.obj $(OBJS)\htmllib_m_layout.obj $(OBJS)\htmllib_m_links.obj $(OBJS)\htmllib_m_list.obj $(OBJS)\htmllib_m_dflist.obj $(OBJS)\htmllib_m_pre.obj $(OBJS)\htmllib_m_tables.obj $(OBJS)\htmllib_m_style.obj $(OBJS)\htmllib_htmprint.obj $(OBJS)\htmllib_htmllbox.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\htmllib_dummy.obj $(OBJS)\htmllib_helpbest.obj $(OBJS)\htmllib_helpdata.obj $(OBJS)\htmllib_helpfrm.obj $(OBJS)\htmllib_helpctrl.obj $(OBJS)\htmllib_htmlcell.obj $(OBJS)\htmllib_htmlfilt.obj $(OBJS)\htmllib_htmlpars.obj $(OBJS)\htmllib_htmltag.obj $(OBJS)\htmllib_htmlwin.obj $(OBJS)\htmllib_winpars.obj $(OBJS)\htmllib_m_fonts.obj $(OBJS)\htmllib_m_hline.obj $(OBJS)\htmllib_m_image.obj $(OBJS)\htmllib_m_layout.obj $(OBJS)\htmllib_m_links.obj $(OBJS)\htmllib_m_list.obj $(OBJS)\htmllib_m_dflist.obj $(OBJS)\htmllib_m_pre.obj $(OBJS)\htmllib_m_tables.obj $(OBJS)\htmllib_m_style.obj $(OBJS)\htmllib_htmprint.obj $(OBJS)\htmllib_htmllbox.obj
 |
 !endif
@@ -7483,7 +7404,7 @@ clean:
 !if "$(MONOLITHIC)" == "1" && "$(SHARED)" == "0"
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\monolib_dummy.obj $(OBJS)\monolib_dummy.obj $(OBJS)\monolib_appbase.obj $(OBJS)\monolib_clntdata.obj $(OBJS)\monolib_cmdline.obj $(OBJS)\monolib_config.obj $(OBJS)\monolib_datetime.obj $(OBJS)\monolib_datstrm.obj $(OBJS)\monolib_db.obj $(OBJS)\monolib_dbtable.obj $(OBJS)\monolib_dircmn.obj $(OBJS)\monolib_dynarray.obj $(OBJS)\monolib_dynlib.obj $(OBJS)\monolib_dynload.obj $(OBJS)\monolib_encconv.obj $(OBJS)\monolib_extended.obj $(OBJS)\monolib_ffile.obj $(OBJS)\monolib_file.obj $(OBJS)\monolib_fileconf.obj $(OBJS)\monolib_filefn.obj $(OBJS)\monolib_filename.obj $(OBJS)\monolib_filesys.obj $(OBJS)\monolib_fmapbase.obj $(OBJS)\monolib_fs_inet.obj $(OBJS)\monolib_fs_zip.obj $(OBJS)\monolib_ftp.obj $(OBJS)\monolib_hash.obj $(OBJS)\monolib_hashmap.obj $(OBJS)\monolib_http.obj $(OBJS)\monolib_init.obj $(OBJS)\monolib_intl.obj $(OBJS)\monolib_ipcbase.obj $(OBJS)\monolib_list.obj $(OBJS)\monolib_log.obj $(OBJS)\monolib_longlong.obj $(OBJS)\monolib_memory.obj $(OBJS)\monolib_mimecmn.obj $(OBJS)\monolib_module.obj $(OBJS)\monolib_mstream.obj $(OBJS)\monolib_object.obj $(OBJS)\monolib_process.obj $(OBJS)\monolib_protocol.obj $(OBJS)\monolib_regex.obj $(OBJS)\monolib_sckaddr.obj $(OBJS)\monolib_sckfile.obj $(OBJS)\monolib_sckipc.obj $(OBJS)\monolib_sckstrm.obj $(OBJS)\monolib_socket.obj $(OBJS)\monolib_stopwatch.obj $(OBJS)\monolib_strconv.obj $(OBJS)\monolib_stream.obj $(OBJS)\monolib_string.obj $(OBJS)\monolib_sysopt.obj $(OBJS)\monolib_textbuf.obj $(OBJS)\monolib_textfile.obj $(OBJS)\monolib_tokenzr.obj $(OBJS)\monolib_txtstrm.obj $(OBJS)\monolib_unzip.obj $(OBJS)\monolib_url.obj $(OBJS)\monolib_variant.obj $(OBJS)\monolib_wfstream.obj $(OBJS)\monolib_wxchar.obj $(OBJS)\monolib_zipstrm.obj $(OBJS)\monolib_zstream.obj $(OBJS)\monolib_gsocket.obj $(OBJS)\monolib_gsockmsw.obj $(OBJS)\monolib_basemsw.obj $(OBJS)\monolib_dde.obj $(OBJS)\monolib_dir.obj $(OBJS)\monolib_mimetype.obj $(OBJS)\monolib_regconf.obj $(OBJS)\monolib_registry.obj $(OBJS)\monolib_snglinst.obj $(OBJS)\monolib_thread.obj $(OBJS)\monolib_utils.obj $(OBJS)\monolib_utilsexc.obj $(OBJS)\monolib_crashrpt.obj $(OBJS)\monolib_event.obj $(OBJS)\monolib_fs_mem.obj $(OBJS)\monolib_msgout.obj $(OBJS)\monolib_utilscmn.obj $(OBJS)\monolib_main.obj $(OBJS)\monolib_mslu.obj $(OBJS)\monolib_volume.obj $(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS)
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\monolib_dummy.obj $(OBJS)\monolib_appbase.obj $(OBJS)\monolib_clntdata.obj $(OBJS)\monolib_cmdline.obj $(OBJS)\monolib_config.obj $(OBJS)\monolib_datetime.obj $(OBJS)\monolib_datstrm.obj $(OBJS)\monolib_db.obj $(OBJS)\monolib_dbtable.obj $(OBJS)\monolib_dircmn.obj $(OBJS)\monolib_dynarray.obj $(OBJS)\monolib_dynlib.obj $(OBJS)\monolib_dynload.obj $(OBJS)\monolib_encconv.obj $(OBJS)\monolib_extended.obj $(OBJS)\monolib_ffile.obj $(OBJS)\monolib_file.obj $(OBJS)\monolib_fileconf.obj $(OBJS)\monolib_filefn.obj $(OBJS)\monolib_filename.obj $(OBJS)\monolib_filesys.obj $(OBJS)\monolib_fmapbase.obj $(OBJS)\monolib_fs_inet.obj $(OBJS)\monolib_fs_zip.obj $(OBJS)\monolib_ftp.obj $(OBJS)\monolib_hash.obj $(OBJS)\monolib_hashmap.obj $(OBJS)\monolib_http.obj $(OBJS)\monolib_init.obj $(OBJS)\monolib_intl.obj $(OBJS)\monolib_ipcbase.obj $(OBJS)\monolib_list.obj $(OBJS)\monolib_log.obj $(OBJS)\monolib_longlong.obj $(OBJS)\monolib_memory.obj $(OBJS)\monolib_mimecmn.obj $(OBJS)\monolib_module.obj $(OBJS)\monolib_mstream.obj $(OBJS)\monolib_object.obj $(OBJS)\monolib_process.obj $(OBJS)\monolib_protocol.obj $(OBJS)\monolib_regex.obj $(OBJS)\monolib_sckaddr.obj $(OBJS)\monolib_sckfile.obj $(OBJS)\monolib_sckipc.obj $(OBJS)\monolib_sckstrm.obj $(OBJS)\monolib_socket.obj $(OBJS)\monolib_stopwatch.obj $(OBJS)\monolib_strconv.obj $(OBJS)\monolib_stream.obj $(OBJS)\monolib_string.obj $(OBJS)\monolib_sysopt.obj $(OBJS)\monolib_textbuf.obj $(OBJS)\monolib_textfile.obj $(OBJS)\monolib_tokenzr.obj $(OBJS)\monolib_txtstrm.obj $(OBJS)\monolib_unzip.obj $(OBJS)\monolib_url.obj $(OBJS)\monolib_variant.obj $(OBJS)\monolib_wfstream.obj $(OBJS)\monolib_wxchar.obj $(OBJS)\monolib_zipstrm.obj $(OBJS)\monolib_zstream.obj $(OBJS)\monolib_gsocket.obj $(OBJS)\monolib_gsockmsw.obj $(OBJS)\monolib_basemsw.obj $(OBJS)\monolib_dde.obj $(OBJS)\monolib_dir.obj $(OBJS)\monolib_mimetype.obj $(OBJS)\monolib_regconf.obj $(OBJS)\monolib_registry.obj $(OBJS)\monolib_snglinst.obj $(OBJS)\monolib_thread.obj $(OBJS)\monolib_utils.obj $(OBJS)\monolib_utilsexc.obj $(OBJS)\monolib_crashrpt.obj $(OBJS)\monolib_event.obj $(OBJS)\monolib_fs_mem.obj $(OBJS)\monolib_msgout.obj $(OBJS)\monolib_utilscmn.obj $(OBJS)\monolib_main.obj $(OBJS)\monolib_mslu.obj $(OBJS)\monolib_volume.obj $(____MONOLIB_GUI_SRC_FILENAMES_1_OBJECTS)
 |
 !endif
@@ -7498,30 +7419,30 @@ setup_h: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDL
 
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxjpeg$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\wxjpeg_jcomapi.obj $(OBJS)\wxjpeg_jutils.obj $(OBJS)\wxjpeg_jerror.obj $(OBJS)\wxjpeg_jmemmgr.obj $(OBJS)\wxjpeg_jmemnobs.obj $(OBJS)\wxjpeg_jcapimin.obj $(OBJS)\wxjpeg_jcapistd.obj $(OBJS)\wxjpeg_jctrans.obj $(OBJS)\wxjpeg_jcparam.obj $(OBJS)\wxjpeg_jdatadst.obj $(OBJS)\wxjpeg_jcinit.obj $(OBJS)\wxjpeg_jcmaster.obj $(OBJS)\wxjpeg_jcmarker.obj $(OBJS)\wxjpeg_jcmainct.obj $(OBJS)\wxjpeg_jcprepct.obj $(OBJS)\wxjpeg_jccoefct.obj $(OBJS)\wxjpeg_jccolor.obj $(OBJS)\wxjpeg_jcsample.obj $(OBJS)\wxjpeg_jchuff.obj $(OBJS)\wxjpeg_jcphuff.obj $(OBJS)\wxjpeg_jcdctmgr.obj $(OBJS)\wxjpeg_jfdctfst.obj $(OBJS)\wxjpeg_jfdctflt.obj $(OBJS)\wxjpeg_jfdctint.obj $(OBJS)\wxjpeg_jdapimin.obj $(OBJS)\wxjpeg_jdapistd.obj $(OBJS)\wxjpeg_jdtrans.obj $(OBJS)\wxjpeg_jdatasrc.obj $(OBJS)\wxjpeg_jdmaster.obj $(OBJS)\wxjpeg_jdinput.obj $(OBJS)\wxjpeg_jdmarker.obj $(OBJS)\wxjpeg_jdhuff.obj $(OBJS)\wxjpeg_jdphuff.obj $(OBJS)\wxjpeg_jdmainct.obj $(OBJS)\wxjpeg_jdcoefct.obj $(OBJS)\wxjpeg_jdpostct.obj $(OBJS)\wxjpeg_jddctmgr.obj $(OBJS)\wxjpeg_jidctfst.obj $(OBJS)\wxjpeg_jidctflt.obj $(OBJS)\wxjpeg_jidctint.obj $(OBJS)\wxjpeg_jidctred.obj $(OBJS)\wxjpeg_jdsample.obj $(OBJS)\wxjpeg_jdcolor.obj $(OBJS)\wxjpeg_jquant1.obj $(OBJS)\wxjpeg_jquant2.obj $(OBJS)\wxjpeg_jdmerge.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\wxjpeg_jcomapi.obj $(OBJS)\wxjpeg_jutils.obj $(OBJS)\wxjpeg_jerror.obj $(OBJS)\wxjpeg_jmemmgr.obj $(OBJS)\wxjpeg_jmemnobs.obj $(OBJS)\wxjpeg_jcapimin.obj $(OBJS)\wxjpeg_jcapistd.obj $(OBJS)\wxjpeg_jctrans.obj $(OBJS)\wxjpeg_jcparam.obj $(OBJS)\wxjpeg_jdatadst.obj $(OBJS)\wxjpeg_jcinit.obj $(OBJS)\wxjpeg_jcmaster.obj $(OBJS)\wxjpeg_jcmarker.obj $(OBJS)\wxjpeg_jcmainct.obj $(OBJS)\wxjpeg_jcprepct.obj $(OBJS)\wxjpeg_jccoefct.obj $(OBJS)\wxjpeg_jccolor.obj $(OBJS)\wxjpeg_jcsample.obj $(OBJS)\wxjpeg_jchuff.obj $(OBJS)\wxjpeg_jcphuff.obj $(OBJS)\wxjpeg_jcdctmgr.obj $(OBJS)\wxjpeg_jfdctfst.obj $(OBJS)\wxjpeg_jfdctflt.obj $(OBJS)\wxjpeg_jfdctint.obj $(OBJS)\wxjpeg_jdapimin.obj $(OBJS)\wxjpeg_jdapistd.obj $(OBJS)\wxjpeg_jdtrans.obj $(OBJS)\wxjpeg_jdatasrc.obj $(OBJS)\wxjpeg_jdmaster.obj $(OBJS)\wxjpeg_jdinput.obj $(OBJS)\wxjpeg_jdmarker.obj $(OBJS)\wxjpeg_jdhuff.obj $(OBJS)\wxjpeg_jdphuff.obj $(OBJS)\wxjpeg_jdmainct.obj $(OBJS)\wxjpeg_jdcoefct.obj $(OBJS)\wxjpeg_jdpostct.obj $(OBJS)\wxjpeg_jddctmgr.obj $(OBJS)\wxjpeg_jidctfst.obj $(OBJS)\wxjpeg_jidctflt.obj $(OBJS)\wxjpeg_jidctint.obj $(OBJS)\wxjpeg_jidctred.obj $(OBJS)\wxjpeg_jdsample.obj $(OBJS)\wxjpeg_jdcolor.obj $(OBJS)\wxjpeg_jquant1.obj $(OBJS)\wxjpeg_jquant2.obj $(OBJS)\wxjpeg_jdmerge.obj
 |
 
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxpng$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\wxpng_png.obj $(OBJS)\wxpng_pngerror.obj $(OBJS)\wxpng_pnggccrd.obj $(OBJS)\wxpng_pngget.obj $(OBJS)\wxpng_pngmem.obj $(OBJS)\wxpng_pngpread.obj $(OBJS)\wxpng_pngread.obj $(OBJS)\wxpng_pngrio.obj $(OBJS)\wxpng_pngrtran.obj $(OBJS)\wxpng_pngrutil.obj $(OBJS)\wxpng_pngset.obj $(OBJS)\wxpng_pngtrans.obj $(OBJS)\wxpng_pngvcrd.obj $(OBJS)\wxpng_pngwio.obj $(OBJS)\wxpng_pngwrite.obj $(OBJS)\wxpng_pngwtran.obj $(OBJS)\wxpng_pngwutil.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\wxpng_png.obj $(OBJS)\wxpng_pngerror.obj $(OBJS)\wxpng_pnggccrd.obj $(OBJS)\wxpng_pngget.obj $(OBJS)\wxpng_pngmem.obj $(OBJS)\wxpng_pngpread.obj $(OBJS)\wxpng_pngread.obj $(OBJS)\wxpng_pngrio.obj $(OBJS)\wxpng_pngrtran.obj $(OBJS)\wxpng_pngrutil.obj $(OBJS)\wxpng_pngset.obj $(OBJS)\wxpng_pngtrans.obj $(OBJS)\wxpng_pngvcrd.obj $(OBJS)\wxpng_pngwio.obj $(OBJS)\wxpng_pngwrite.obj $(OBJS)\wxpng_pngwtran.obj $(OBJS)\wxpng_pngwutil.obj
 |
 
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxregex$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\wxregex_regcomp.obj $(OBJS)\wxregex_regexec.obj $(OBJS)\wxregex_regerror.obj $(OBJS)\wxregex_regfree.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\wxregex_regcomp.obj $(OBJS)\wxregex_regexec.obj $(OBJS)\wxregex_regerror.obj $(OBJS)\wxregex_regfree.obj
 |
 
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxtiff$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\wxtiff_tif_win32.obj $(OBJS)\wxtiff_tif_aux.obj $(OBJS)\wxtiff_tif_close.obj $(OBJS)\wxtiff_tif_codec.obj $(OBJS)\wxtiff_tif_compress.obj $(OBJS)\wxtiff_tif_dir.obj $(OBJS)\wxtiff_tif_dirinfo.obj $(OBJS)\wxtiff_tif_dirread.obj $(OBJS)\wxtiff_tif_dirwrite.obj $(OBJS)\wxtiff_tif_dumpmode.obj $(OBJS)\wxtiff_tif_error.obj $(OBJS)\wxtiff_tif_fax3.obj $(OBJS)\wxtiff_tif_fax3sm.obj $(OBJS)\wxtiff_tif_getimage.obj $(OBJS)\wxtiff_tif_jpeg.obj $(OBJS)\wxtiff_tif_flush.obj $(OBJS)\wxtiff_tif_lzw.obj $(OBJS)\wxtiff_tif_luv.obj $(OBJS)\wxtiff_tif_next.obj $(OBJS)\wxtiff_tif_open.obj $(OBJS)\wxtiff_tif_packbits.obj $(OBJS)\wxtiff_tif_pixarlog.obj $(OBJS)\wxtiff_tif_predict.obj $(OBJS)\wxtiff_tif_print.obj $(OBJS)\wxtiff_tif_read.obj $(OBJS)\wxtiff_tif_swab.obj $(OBJS)\wxtiff_tif_strip.obj $(OBJS)\wxtiff_tif_thunder.obj $(OBJS)\wxtiff_tif_tile.obj $(OBJS)\wxtiff_tif_version.obj $(OBJS)\wxtiff_tif_warning.obj $(OBJS)\wxtiff_tif_write.obj $(OBJS)\wxtiff_tif_zip.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\wxtiff_tif_win32.obj $(OBJS)\wxtiff_tif_aux.obj $(OBJS)\wxtiff_tif_close.obj $(OBJS)\wxtiff_tif_codec.obj $(OBJS)\wxtiff_tif_compress.obj $(OBJS)\wxtiff_tif_dir.obj $(OBJS)\wxtiff_tif_dirinfo.obj $(OBJS)\wxtiff_tif_dirread.obj $(OBJS)\wxtiff_tif_dirwrite.obj $(OBJS)\wxtiff_tif_dumpmode.obj $(OBJS)\wxtiff_tif_error.obj $(OBJS)\wxtiff_tif_fax3.obj $(OBJS)\wxtiff_tif_fax3sm.obj $(OBJS)\wxtiff_tif_getimage.obj $(OBJS)\wxtiff_tif_jpeg.obj $(OBJS)\wxtiff_tif_flush.obj $(OBJS)\wxtiff_tif_lzw.obj $(OBJS)\wxtiff_tif_luv.obj $(OBJS)\wxtiff_tif_next.obj $(OBJS)\wxtiff_tif_open.obj $(OBJS)\wxtiff_tif_packbits.obj $(OBJS)\wxtiff_tif_pixarlog.obj $(OBJS)\wxtiff_tif_predict.obj $(OBJS)\wxtiff_tif_print.obj $(OBJS)\wxtiff_tif_read.obj $(OBJS)\wxtiff_tif_swab.obj $(OBJS)\wxtiff_tif_strip.obj $(OBJS)\wxtiff_tif_thunder.obj $(OBJS)\wxtiff_tif_tile.obj $(OBJS)\wxtiff_tif_version.obj $(OBJS)\wxtiff_tif_warning.obj $(OBJS)\wxtiff_tif_write.obj $(OBJS)\wxtiff_tif_zip.obj
 |
 
 ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxzlib$(WXDEBUGFLAG).lib: ..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h $(OBJS)\wxzlib_adler32.obj $(OBJS)\wxzlib_compress.obj $(OBJS)\wxzlib_crc32.obj $(OBJS)\wxzlib_gzio.obj $(OBJS)\wxzlib_uncompr.obj $(OBJS)\wxzlib_deflate.obj $(OBJS)\wxzlib_trees.obj $(OBJS)\wxzlib_zutil.obj $(OBJS)\wxzlib_inflate.obj $(OBJS)\wxzlib_infblock.obj $(OBJS)\wxzlib_inftrees.obj $(OBJS)\wxzlib_infcodes.obj $(OBJS)\wxzlib_infutil.obj $(OBJS)\wxzlib_inffast.obj
 	if exist $@ del $@
-	tlib /a $@ @&&|
+	tlib /a /p2048 $@ @&&|
 	$(OBJS)\wxzlib_adler32.obj $(OBJS)\wxzlib_compress.obj $(OBJS)\wxzlib_crc32.obj $(OBJS)\wxzlib_gzio.obj $(OBJS)\wxzlib_uncompr.obj $(OBJS)\wxzlib_deflate.obj $(OBJS)\wxzlib_trees.obj $(OBJS)\wxzlib_zutil.obj $(OBJS)\wxzlib_inflate.obj $(OBJS)\wxzlib_infblock.obj $(OBJS)\wxzlib_inftrees.obj $(OBJS)\wxzlib_infcodes.obj $(OBJS)\wxzlib_infutil.obj $(OBJS)\wxzlib_inffast.obj
 |
