@@ -1905,6 +1905,76 @@ static PyObject *_wrap_wxFontEnumerator_EnumerateEncodings(PyObject *self, PyObj
     return _resultobj;
 }
 
+static PyObject * wxPyFontEnumerator_GetEncodings(wxPyFontEnumerator *self) {
+            wxArrayString* arr = self->GetEncodings();
+            PyObject* list = PyList_New(0);
+            for (size_t x=0; x<arr->GetCount(); x++)
+                PyList_Append(list, PyString_FromString((*arr)[x]));
+            return list;
+        }
+static PyObject *_wrap_wxFontEnumerator_GetEncodings(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPyFontEnumerator * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFontEnumerator_GetEncodings",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator_GetEncodings. Expected _wxPyFontEnumerator_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxPyFontEnumerator_GetEncodings(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject * wxPyFontEnumerator_GetFacenames(wxPyFontEnumerator *self) {
+            wxArrayString* arr = self->GetFacenames();
+            PyObject* list = PyList_New(0);
+            for (size_t x=0; x<arr->GetCount(); x++)
+                PyList_Append(list, PyString_FromString((*arr)[x]));
+            return list;
+        }
+static PyObject *_wrap_wxFontEnumerator_GetFacenames(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxPyFontEnumerator * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxFontEnumerator_GetFacenames",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyFontEnumerator_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxFontEnumerator_GetFacenames. Expected _wxPyFontEnumerator_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxPyFontEnumerator_GetFacenames(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 #define new_wxBusyCursor(_swigarg0) (new wxBusyCursor(_swigarg0))
 static PyObject *_wrap_new_wxBusyCursor(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -1969,6 +2039,8 @@ static PyObject *_wrap_delete_wxBusyCursor(PyObject *self, PyObject *args, PyObj
 static PyMethodDef misc2cMethods[] = {
 	 { "delete_wxBusyCursor", (PyCFunction) _wrap_delete_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxBusyCursor", (PyCFunction) _wrap_new_wxBusyCursor, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontEnumerator_GetFacenames", (PyCFunction) _wrap_wxFontEnumerator_GetFacenames, METH_VARARGS | METH_KEYWORDS },
+	 { "wxFontEnumerator_GetEncodings", (PyCFunction) _wrap_wxFontEnumerator_GetEncodings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_EnumerateEncodings", (PyCFunction) _wrap_wxFontEnumerator_EnumerateEncodings, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator_EnumerateFacenames", (PyCFunction) _wrap_wxFontEnumerator_EnumerateFacenames, METH_VARARGS | METH_KEYWORDS },
 	 { "wxFontEnumerator__setSelf", (PyCFunction) _wrap_wxFontEnumerator__setSelf, METH_VARARGS | METH_KEYWORDS },

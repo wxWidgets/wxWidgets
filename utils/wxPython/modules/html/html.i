@@ -475,7 +475,7 @@ enum {
 
 class wxHtmlPrintout : public wxPyPrintout {
 public:
-    wxHtmlPrintout(const wxString& title = "Printout");
+    wxHtmlPrintout(const char* title = "Printout");
     ~wxHtmlPrintout();
 
     void SetHtmlText(const wxString& html,
@@ -493,7 +493,7 @@ public:
 
 class wxHtmlEasyPrinting {
 public:
-    wxHtmlEasyPrinting(const wxString& name = "Printing",
+    wxHtmlEasyPrinting(const char* name = "Printing",
                        wxFrame *parent_frame = NULL);
     ~wxHtmlEasyPrinting();
 

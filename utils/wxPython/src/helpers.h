@@ -66,10 +66,10 @@ PyObject* __wxSetDictionary(PyObject*, PyObject* args);
 
 void wxPyEventThunker(wxObject*, wxEvent& event);
 
-HELPEREXPORT PyObject* wxPyConstructObject(void* ptr, char* className);
+HELPEREXPORT PyObject* wxPyConstructObject(void* ptr, const char* className);
 HELPEREXPORT bool wxPyRestoreThread();
 HELPEREXPORT void wxPySaveThread(bool doSave);
-HELPEREXPORT PyObject* wxPy_ConvertList(wxListBase* list, char* className);
+HELPEREXPORT PyObject* wxPy_ConvertList(wxListBase* list, const char* className);
 
 //----------------------------------------------------------------------
 // These are helpers used by the typemaps
@@ -181,6 +181,46 @@ private:
     PyObject*   m_lastFound;
 };
 
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+// These classes can be derived from in Python and passed through the event
+// system without loosing anything.  They do this by keeping a reference to
+// themselves and some special case handling in wxPyCallback::EventThunker.
+
+
+class wxPySelfRef {
+public:
+    wxPySelfRef();
+    ~wxPySelfRef();
+
+    void SetSelf(PyObject* self, bool clone=FALSE);
+    PyObject* GetSelf() const;
+
+protected:
+    PyObject*   m_self;
+    bool        m_cloned;
+};
+
+
+class wxPyEvent : public wxEvent, public wxPySelfRef {
+    DECLARE_DYNAMIC_CLASS(wxPyEvent)
+public:
+    wxPyEvent(int id=0);
+    ~wxPyEvent();
+
+    void CopyObject(wxObject& dest) const;
+};
+
+
+class wxPyCommandEvent : public wxCommandEvent, public wxPySelfRef {
+    DECLARE_DYNAMIC_CLASS(wxPyCommandEvent)
+public:
+    wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0);
+    ~wxPyCommandEvent();
+
+    void CopyObject(wxObject& dest) const;
+};
 
 
 //---------------------------------------------------------------------------

@@ -36,6 +36,8 @@ class TestHtmlPanel(wxPanel):
         self.html.SetRelatedFrame(frame, "wxPython: (A Demonstration) -- %s")
         self.html.SetRelatedStatusBar(0)
 
+        self.printer = wxHtmlEasyPrinting()
+
         self.box = wxBoxSizer(wxVERTICAL)
         self.box.Add(self.html, 1, wxGROW)
 
@@ -58,6 +60,10 @@ class TestHtmlPanel(wxPanel):
 
         btn = wxButton(self, 1205, "Forward")
         EVT_BUTTON(self, 1205, self.OnForward)
+        subbox.Add(btn, 1, wxGROW | wxALL, 2)
+
+        btn = wxButton(self, 1207, "Print")
+        EVT_BUTTON(self, 1207, self.OnPrint)
         subbox.Add(btn, 1, wxGROW | wxALL, 2)
 
         btn = wxButton(self, 1206, "View Source")
@@ -115,6 +121,9 @@ class TestHtmlPanel(wxPanel):
         dlg.ShowModal()
         dlg.Destroy()
 
+
+    def OnPrint(self, event):
+        self.printer.PrintFile(self.html.GetOpenedPage())
 
 #----------------------------------------------------------------------
 

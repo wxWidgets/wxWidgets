@@ -57,8 +57,12 @@ glcanvas.py
 glcanvas.pyc
 glcanvasc.ilk
 glcanvasc.pyd
+gpl.txt
 image.py
 image.pyc
+lgpl.txt
+licence.txt
+licendoc.txt
 mdi.py
 mdi.py
 mdi.pyc
@@ -71,6 +75,7 @@ misc.pyc
 misc.pyc
 misc.pyo
 misc.pyo
+preamble.txt
 printfw.py
 stattool.py
 stattool.py
@@ -101,6 +106,7 @@ windows2.pyo
 windows3.py
 windows3.pyc
 windows3.pyo
+writings
 wx.py
 wx.py
 wx.pyc

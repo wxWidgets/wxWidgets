@@ -42,7 +42,7 @@ _treeList = [
 
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
-                        'wxImage', 'PrintFramework', 'wxOGL']),
+                        'wxImage', 'PrintFramework', 'wxOGL', 'PythonEvents']),
 
     ('wxPython Library', ['OldSizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',

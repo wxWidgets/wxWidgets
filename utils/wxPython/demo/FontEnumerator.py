@@ -3,14 +3,14 @@ from wxPython.wx import *
 
 #----------------------------------------------------------------------
 
-class MyFontEnumerator(wxFontEnumerator):
-    def __init__(self, list):
-        wxFontEnumerator.__init__(self)
-        self.list = list
+## class MyFontEnumerator(wxFontEnumerator):
+##     def __init__(self, list):
+##         wxFontEnumerator.__init__(self)
+##         self.list = list
 
-    def OnFacename(self, face):
-        self.list.append(face)
-        return true
+##     def OnFacename(self, face):
+##         self.list.append(face)
+##         return true
 
 
 
@@ -18,9 +18,14 @@ class TestPanel(wxPanel):
     def __init__(self, parent, log):
         wxPanel.__init__(self, parent, -1)
 
-        list = []
-        e = MyFontEnumerator(list)
+##         list = []
+##         e = MyFontEnumerator(list)
+##         e.EnumerateFacenames()
+
+        e = wxFontEnumerator()
         e.EnumerateFacenames()
+        list = e.GetFacenames()
+
         list.sort()
 
         wxStaticText(self, -1, "Face names:", wxPoint(15, 50), wxSize(65, 18))

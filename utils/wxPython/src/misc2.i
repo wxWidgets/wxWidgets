@@ -320,6 +320,26 @@ public:
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
         bool fixedWidthOnly = FALSE);
     bool EnumerateEncodings(const char* facename = "");
+
+    //wxArrayString* GetEncodings();
+    //wxArrayString* GetFacenames();
+    %addmethods {
+        PyObject* GetEncodings() {
+            wxArrayString* arr = self->GetEncodings();
+            PyObject* list = PyList_New(0);
+            for (size_t x=0; x<arr->GetCount(); x++)
+                PyList_Append(list, PyString_FromString((*arr)[x]));
+            return list;
+        }
+
+        PyObject* GetFacenames() {
+            wxArrayString* arr = self->GetFacenames();
+            PyObject* list = PyList_New(0);
+            for (size_t x=0; x<arr->GetCount(); x++)
+                PyList_Append(list, PyString_FromString((*arr)[x]));
+            return list;
+        }
+    }
 };
 
 //----------------------------------------------------------------------

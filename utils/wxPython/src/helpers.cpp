@@ -259,7 +259,7 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 
 //---------------------------------------------------------------------------
 
-PyObject* wxPyConstructObject(void* ptr, char* className) {
+PyObject* wxPyConstructObject(void* ptr, const char* className) {
     char    buff[64];               // should always be big enough...
     char    swigptr[64];
 
@@ -354,7 +354,14 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 
     bool doSave = wxPyRestoreThread();
-    arg = wxPyConstructObject((void*)&event, event.GetClassInfo()->GetClassName());
+    wxString className = event.GetClassInfo()->GetClassName();
+
+    if (className == "wxPyEvent")
+        arg = ((wxPyEvent*)&event)->GetSelf();
+    else if (className == "wxPyCommandEvent")
+        arg = ((wxPyCommandEvent*)&event)->GetSelf();
+    else
+        arg = wxPyConstructObject((void*)&event, className);
 
     tuple = PyTuple_New(1);
     PyTuple_SET_ITEM(tuple, 0, arg);
@@ -438,6 +445,78 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
+// These classes can be derived from in Python and passed through the event
+// system without loosing anything.  They do this by keeping a reference to
+// themselves and some special case handling in wxPyCallback::EventThunker.
+
+
+wxPySelfRef::wxPySelfRef() {
+    //m_self = Py_None;         // **** We don't do normal ref counting to prevent
+    //Py_INCREF(m_self);        //      circular loops...
+    m_cloned = false;
+}
+
+wxPySelfRef::~wxPySelfRef() {
+    bool doSave = wxPyRestoreThread();
+    if (m_cloned)
+        Py_DECREF(m_self);
+    wxPySaveThread(doSave);
+}
+
+void wxPySelfRef::SetSelf(PyObject* self, bool clone) {
+    bool doSave = wxPyRestoreThread();
+    if (m_cloned)
+        Py_DECREF(m_self);
+    m_self = self;
+    if (clone) {
+        Py_INCREF(m_self);
+        m_cloned = TRUE;
+    }
+    wxPySaveThread(doSave);
+}
+
+PyObject* wxPySelfRef::GetSelf() const {
+    Py_INCREF(m_self);
+    return m_self;
+}
+
+
+wxPyEvent::wxPyEvent(int id)
+    : wxEvent(id) {
+}
+
+wxPyEvent::~wxPyEvent() {
+}
+
+// This one is so the event object can be Cloned...
+void wxPyEvent::CopyObject(wxObject& dest) const {
+    wxEvent::CopyObject(dest);
+    ((wxPyEvent*)&dest)->SetSelf(m_self, TRUE);
+}
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyEvent, wxEvent);
+
+
+wxPyCommandEvent::wxPyCommandEvent(wxEventType commandType, int id)
+    : wxCommandEvent(commandType, id) {
+}
+
+wxPyCommandEvent::~wxPyCommandEvent() {
+}
+
+void wxPyCommandEvent::CopyObject(wxObject& dest) const {
+    wxCommandEvent::CopyObject(dest);
+    ((wxPyCommandEvent*)&dest)->SetSelf(m_self, TRUE);
+}
+
+
+IMPLEMENT_DYNAMIC_CLASS(wxPyCommandEvent, wxCommandEvent);
+
+
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 
 wxPyTimer::wxPyTimer(PyObject* callback) {
@@ -474,7 +553,7 @@ void wxPyTimer::Notify() {
 //---------------------------------------------------------------------------
 // Convert a wxList to a Python List
 
-PyObject* wxPy_ConvertList(wxListBase* list, char* className) {
+PyObject* wxPy_ConvertList(wxListBase* list, const char* className) {
     PyObject*   pyList;
     PyObject*   pyObj;
     wxObject*   wxObj;

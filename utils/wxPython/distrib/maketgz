@@ -12,10 +12,15 @@ if [ -z $1 ]; then
 fi
 
 if [ ! -d wxPython ]; then
-    echo "Please run this script from the directory containing the wxPython sources."
+    echo "Please run this script from the directory containing the wxPython directory."
     exit 1
 fi
 
+cp $WXWIN\docs\gpl.txt wxPython
+cp $WXWIN\docs\lgpl.txt wxPython
+cp $WXWIN\docs\licence.txt wxPython
+cp $WXWIN\docs\licendoc.txt wxPython
+cp $WXWIN\docs\preamble.txt wxPython
 
 rm -f wxPython/distrib/filelist
 for x in `cat wxPython/distrib/wxPython.rsp`; do

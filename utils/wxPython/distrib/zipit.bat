@@ -1,6 +1,11 @@
 
 @echo off
 
+copy %WXWIN%\docs\gpl.txt wxPython
+copy %WXWIN%\docs\lgpl.txt wxPython
+copy %WXWIN%\docs\licence.txt wxPython
+copy %WXWIN%\docs\licendoc.txt wxPython
+copy %WXWIN%\docs\preamble.txt wxPython
 
 zip -@ -r wxPython\wxPython-src-%1.zip < wxPython\distrib\wxPython.rsp
 

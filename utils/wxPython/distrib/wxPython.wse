@@ -815,8 +815,8 @@ item: Install File
   Flags=0000001010000011
 end
 item: Install File
-  Source=e:\projects\wx\lib\wx21b10.dll
-  Destination=%SYS%\wx21b10.dll
+  Source=e:\projects\wx\lib\wx21_11.dll
+  Destination=%SYS%\wx21_11.dll
   Flags=0000001010010010
 end
 item: Install File

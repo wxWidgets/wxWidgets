@@ -82,6 +82,10 @@ Added wxFontEnumerator.
 
 Many updates to wxMenu, wxMenuBar.
 
+wxPyEvent and wxPyCommandEvent derived classes now give you the actual
+Python object in the event handler.
+
+
 
 
 

@@ -109,6 +109,12 @@ class wxFontEnumeratorPtr :
     def EnumerateEncodings(self, *_args, **_kwargs):
         val = apply(misc2c.wxFontEnumerator_EnumerateEncodings,(self,) + _args, _kwargs)
         return val
+    def GetEncodings(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFontEnumerator_GetEncodings,(self,) + _args, _kwargs)
+        return val
+    def GetFacenames(self, *_args, **_kwargs):
+        val = apply(misc2c.wxFontEnumerator_GetFacenames,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxFontEnumerator instance at %s>" % (self.this,)
 class wxFontEnumerator(wxFontEnumeratorPtr):
