@@ -6,10 +6,11 @@
     Name: {group}\Tex2rtf Help; Filename: {app}\bin\tex2rtf.chm; WorkingDir: {app}\bin; IconIndex: 0; Flags: useapppaths
     Name: {group}\Changes; Filename: {app}\docs\changes.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
     Name: {group}\Readme; Filename: {app}\docs\readme.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
-    Name: {group}\Debug View; Filename: {app}\bin\DBGVIEW.EXE; WorkingDir: {app}\bin; IconFilename: {app}\bin\DBGVIEW.EXE; IconIndex: 0
+;    Name: {group}\Debug View; Filename: {app}\bin\DBGVIEW.EXE; WorkingDir: {app}\bin; IconFilename: {app}\bin\DBGVIEW.EXE; IconIndex: 0
     Name: {group}\Compiling wxWindows; Filename: {app}\docs\msw\install.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
-    Name: {group}\wxWindows Help; Filename: {app}\docs\htmlhelp\wx.chm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
-    Name: {group}\HTML Docs Index; Filename: {app}\docs\html\index.htm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\wxWindows Manual; Filename: {app}\docs\htmlhelp\wx.chm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Tutorial; Filename: {app}\docs\pdf\wxTutorial.pdf; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+    Name: {group}\Document Index; Filename: {app}\docs\html\index.htm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
     Name: {group}\Widgets Sample; Filename: {app}\bin\widgets.exe; WorkingDir: {app}\bin; IconFilename: {app}\bin\widgets.exe; IconIndex: 0
 
 [INI]

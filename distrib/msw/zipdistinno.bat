@@ -51,6 +51,7 @@ if not direxist %webfiles% goto end
 echo Copying FAQ and other files from %webfiles
 copy %webfiles%\site\faq*.htm %src\docs\html
 copy %webfiles%\site\platform.htm %src\docs\html
+copy %webfiles%\site\i18n.htm %src\docs\html
 
 cd %src
 echo Zipping...
@@ -153,10 +154,10 @@ zip32 -@ %dest\wxWindows-%version%-CW.zip < %src\distrib\msw\cw.rsp
 call %WXWIN%\distrib\msw\rearchive wxWindows-%version%-CW.zip wxWindows-%version% %dest%
 
 rem Dialog Editor source and binary
-erase %dest\dialoged-source.zip
-zip32 -@ %dest\dialoged-source.zip < %src\distrib\msw\dialoged.rsp
-zip32 -j %dest\dialoged-%version%.zip %dest\dialoged-source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
-erase %dest\dialoged-source.zip
+Rem erase %dest\dialoged-source.zip
+Rem zip32 -@ %dest\dialoged-source.zip < %src\distrib\msw\dialoged.rsp
+Rem zip32 -j %dest\dialoged-%version%.zip %dest\dialoged-source.zip %src\bin\dialoged.exe %src\docs\winhelp\dialoged.hlp %src\docs\winhelp\dialoged.cnt
+Rem erase %dest\dialoged-source.zip
 
 copy %src\docs\changes.txt %dest\changes-%version%.txt
 copy %src\docs\msw\install.txt %dest\install-msw-%version%.txt
@@ -180,10 +181,9 @@ if "%inno" == "0" goto end
 
 Rem Make dialoged-win32.zip and tex2rtf-win32.zip
 
-cd %src\bin
-
-zip32 %dest\dialoged-win32-%version%.zip dialoged.*
-zip32 %dest\tex2rtf-win32-%version%.zip tex2rtf.*
+Rem cd %src\bin
+Rem zip32 %dest\dialoged-win32-%version%.zip dialoged.*
+Rem zip32 %dest\tex2rtf-win32-%version%.zip tex2rtf.*
 
 cd %dest
 
@@ -230,6 +230,9 @@ copy %src\demos\life\breeder.lif bin
 copy %src\docs\htmlhelp\dialoged.chm bin
 copy %src\docs\htmlhelp\tex2rtf.chm bin
 
+if not direxist docs\pdf mkdir docs\pdf
+copy %src\docs\pdf\wxTutorial.pdf docs\pdf
+
 Rem Make wxMSW-xxx.zip
 cd %dest%
 zip32 -r wxMSW-%version%.zip wxWindows-%version%/*
@@ -252,6 +255,9 @@ cd %dest
 
 rem Put all the setup files into a single zip archive.
 zip32 wxMSW-%version%-setup.zip readme-%version%.txt setup*.*
+
+erase /Y wxWindows-%version%-win.zip
+erase /Y wxWindows-%version%-ExtraDoc.zip
 
 echo wxWindows archived.
 

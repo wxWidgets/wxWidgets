@@ -56,6 +56,9 @@ docs/html/*.png
 docs/html/icons/*.gif
 docs/html/icons/*.png
 docs/html/icons/*.jpg
+docs/html/images/*.gif
+docs/html/images/*.png
+docs/html/images/*.jpg
 docs/tech/*.txt
 docs/tech/*.htm
 
