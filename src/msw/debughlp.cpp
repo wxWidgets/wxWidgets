@@ -305,46 +305,53 @@ wxDbgHelpDLL::DumpField(PSYMBOL_INFO pSym, void *pVariable, unsigned level)
             break;
 
         case SYMBOL_TAG_DATA:
-            wxDbgHelpDLL::DataKind kind;
-            if ( !DoGetTypeInfo(pSym, TI_GET_DATAKIND, &kind) ||
-                    kind != DATA_MEMBER )
+            if ( !pVariable )
             {
-                // maybe it's a static member? we're not interested in them...
-                break;
+                s = _T("NULL");
             }
-
-            // get the offset of the child member, relative to its parent
-            DWORD ofs = 0;
-            if ( !DoGetTypeInfo(pSym, TI_GET_OFFSET, &ofs) )
-                break;
-
-            pVariable = (void *)((DWORD_PTR)pVariable + ofs);
-
-
-            // now pass to the type representing the type of this member
-            SYMBOL_INFO sym = *pSym;
-            if ( !DoGetTypeInfo(pSym, TI_GET_TYPEID, &sym.TypeIndex) )
-                break;
-
-            ULONG64 size;
-            DoGetTypeInfo(&sym, TI_GET_LENGTH, &size);
-
-            switch ( DereferenceSymbol(&sym, &pVariable) )
+            else // valid location
             {
-                case SYMBOL_TAG_BASE_TYPE:
-                    {
-                        BasicType bt = GetBasicType(&sym);
-                        if ( bt )
-                        {
-                            s = DumpBaseType(bt, size, pVariable);
-                        }
-                    }
+                wxDbgHelpDLL::DataKind kind;
+                if ( !DoGetTypeInfo(pSym, TI_GET_DATAKIND, &kind) ||
+                        kind != DATA_MEMBER )
+                {
+                    // maybe it's a static member? we're not interested in them...
+                    break;
+                }
+
+                // get the offset of the child member, relative to its parent
+                DWORD ofs = 0;
+                if ( !DoGetTypeInfo(pSym, TI_GET_OFFSET, &ofs) )
                     break;
 
-                case SYMBOL_TAG_UDT:
-                case SYMBOL_TAG_BASE_CLASS:
-                    s = DumpUDT(&sym, pVariable, level);
+                pVariable = (void *)((DWORD_PTR)pVariable + ofs);
+
+
+                // now pass to the type representing the type of this member
+                SYMBOL_INFO sym = *pSym;
+                if ( !DoGetTypeInfo(pSym, TI_GET_TYPEID, &sym.TypeIndex) )
                     break;
+
+                ULONG64 size;
+                DoGetTypeInfo(&sym, TI_GET_LENGTH, &size);
+
+                switch ( DereferenceSymbol(&sym, &pVariable) )
+                {
+                    case SYMBOL_TAG_BASE_TYPE:
+                        {
+                            BasicType bt = GetBasicType(&sym);
+                            if ( bt )
+                            {
+                                s = DumpBaseType(bt, size, pVariable);
+                            }
+                        }
+                        break;
+
+                    case SYMBOL_TAG_UDT:
+                    case SYMBOL_TAG_BASE_CLASS:
+                        s = DumpUDT(&sym, pVariable, level);
+                        break;
+                }
             }
 
             if ( !s.empty() )
@@ -458,7 +465,16 @@ wxDbgHelpDLL::DereferenceSymbol(PSYMBOL_INFO pSym, void **ppData)
         // remove one level of indirection except for the char strings: we want
         // to dump "char *" and not a single "char" for them
         if ( ppData && *ppData && GetBasicType(pSym) != BASICTYPE_CHAR )
-            *ppData = (void *)*((DWORD_PTR *)*ppData);
+        {
+            DWORD_PTR *pData = (DWORD_PTR *)*ppData;
+
+            if ( ::IsBadReadPtr(pData, sizeof(DWORD_PTR *)) )
+            {
+                break;
+            }
+
+            *ppData = (void *)*pData;
+        }
     }
 
     return tag;
