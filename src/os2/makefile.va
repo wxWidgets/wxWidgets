@@ -770,16 +770,16 @@ $(WXDIR)\lib\wx.lib: \
 !else
 
 # Update the import library
-$(WXDIR)\lib\wx200.lib: $(OBJECTS)
-    implib $(WXDIR)\lib\wx200.lib $(WXDIR)\lib\wx200.def
+$(WXDIR)\lib\wx210.lib: $(OBJECTS)
+    implib $(WXDIR)\lib\wx210.lib $(WXDIR)\lib\wx210.def
 
 # Update the dynamic link library
-$(WXDIR)\lib\wx200.dll: $(OBJECTS) $(WXDIR)\lib\wx200.lib
+$(WXDIR)\lib\wx200.dll: $(OBJECTS) $(WXDIR)\lib\wx210.lib
     icc @<<
     /B" $(LINKFLAGS)" /Fe$@
     $(LIBS)
     $(OBJECTS)
-    $(WXDIR)\lib\wx200.def
+    $(WXDIR)\lib\wx210.def
 <<
 
 !endif

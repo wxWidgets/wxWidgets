@@ -131,10 +131,17 @@ bool wxShell(const wxString& command)
 }
 
 // Get free memory in bytes, or -1 if cannot determine amount (e.g. on UNIX)
-long wxGetFreeMemory()
+long wxGetFreeMemory(void *memptr)
 {
-    // return (long)GetFreeSpace(0);
-    return 0L;
+    ULONG                           lSize;
+    ULONG                           lMemFlags;
+    APIRET                          rc;
+
+    lMemFlags = PAG_FREE;
+    rc = ::DosQueryMem(memptr, &lSize, &lMemFlags);
+    if (rc != 0)
+        return -1L;
+    return (long)lSize;
 }
 
 // Sleep for nSecs seconds. Attempt a Windows implementation using timers.
@@ -159,19 +166,7 @@ void wxUsleep(unsigned long milliseconds)
 
 void wxSleep(int nSecs)
 {
-  if (inTimer)
-    return;
-
-  wxTheSleepTimer = new wxSleepTimer;
-  inTimer = TRUE;
-  wxTheSleepTimer->Start(nSecs*1000);
-  while (inTimer)
-  {
-    if (wxTheApp->Pending())
-      wxTheApp->Dispatch();
-  }
-  delete wxTheSleepTimer;
-  wxTheSleepTimer = NULL;
+    ::DosSleep( 1000*nSecs );
 }
 
 // Consume all events until no more left
@@ -256,61 +251,91 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 #if wxUSE_RESOURCES
 bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file)
 {
-// TODO:
-/*
-  if (file != "")
-    return (WritePrivateProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)value, (PCSZ)WXSTRINGCAST file) != 0);
-  else
-    return (WriteProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)WXSTRINGCAST value) != 0);
-*/
+    HAB                             hab;
+    HINI                            hIni;
+
+    if (file != "")
+    {
+        hIni = ::PrfOpenProfile(hab, (PSZ)WXSTRINGCAST file);
+        if (hIni != 0L)
+        {
+            return (::PrfWriteProfileString( hIni
+                                            ,(PSZ)WXSTRINGCAST section
+                                            ,(PSZ)WXSTRINGCAST entry
+                                            ,(PSZ)WXSTRINGCAST value
+                                           ));
+        }
+    }
+    else
+        return (::PrfWriteProfileString( HINI_PROFILE
+                                        ,(PSZ)WXSTRINGCAST section
+                                        ,(PSZ)WXSTRINGCAST entry
+                                        ,(PSZ)WXSTRINGCAST value
+                                       ));
     return FALSE;
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file)
 {
-  wxChar buf[50];
-  wxSprintf(buf, "%.4f", value);
-  return wxWriteResource(section, entry, buf, file);
+    wxChar buf[50];
+    wxSprintf(buf, "%.4f", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file)
 {
-  wxChar buf[50];
-  wxSprintf(buf, "%ld", value);
-  return wxWriteResource(section, entry, buf, file);
+    wxChar buf[50];
+    wxSprintf(buf, "%ld", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file)
 {
-  wxChar buf[50];
-  wxSprintf(buf, "%d", value);
-  return wxWriteResource(section, entry, buf, file);
+    wxChar buf[50];
+    wxSprintf(buf, "%d", value);
+    return wxWriteResource(section, entry, buf, file);
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file)
 {
-  static const wxChar defunkt[] = _T("$$default");
-// TODO:
-/*
-  if (file != "")
-  {
-    int n = GetPrivateProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (PCSZ)defunkt,
-                                    (PSZ)wxBuffer, 1000, (PCSZ)WXSTRINGCAST file);
-    if (n == 0 || wxStrcmp(wxBuffer, defunkt) == 0)
-     return FALSE;
-  }
-  else
-  {
-    int n = GetProfileString((PCSZ)WXSTRINGCAST section, (PCSZ)WXSTRINGCAST entry, (LPCTSTR)defunkt,
-                                    (PSZ)wxBuffer, 1000);
-    if (n == 0 || wxStrcmp(wxBuffer, defunkt) == 0)
-      return FALSE;
-  }
-  if (*value) delete[] (*value);
-      *value = copystring(wxBuffer);
-      return TRUE;
-*/
-    return FALSE;
+    HAB                             hab;
+    HINI                            hIni;
+    static const wxChar             defunkt[] = _T("$$default");
+
+    if (file != "")
+    {
+        hIni = ::PrfOpenProfile(hab, (PSZ)WXSTRINGCAST file);
+        if (hIni != 0L)
+        {
+            ULONG n = ::PrfQueryProfileString( hIni
+                                              ,(PSZ)WXSTRINGCAST section
+                                              ,(PSZ)WXSTRINGCAST entry
+                                              ,(PSZ)defunkt
+                                              ,(void*)wxBuffer
+                                              ,1000
+                                             );
+            if (n == 0L || wxStrcmp(wxBuffer, defunkt) == 0)
+                return FALSE;
+        }
+        else
+            return FALSE;
+    }
+    else
+    {
+        ULONG n = ::PrfQueryProfileString( HINI_PROFILE
+                                          ,(PSZ)WXSTRINGCAST section
+                                          ,(PSZ)WXSTRINGCAST entry
+                                          ,(PSZ)defunkt
+                                          ,(void*)wxBuffer
+                                          ,1000
+                                         );
+        if (n == 0L || wxStrcmp(wxBuffer, defunkt) == 0)
+            return FALSE;
+    }
+    if (*value)
+        delete[] (*value);
+    *value = copystring(wxBuffer);
+    return TRUE;
 }
 
 bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file)
@@ -499,18 +524,18 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
 
 void wxGetMousePosition( int* x, int* y )
 {
-  POINTL pt;
-  ::WinQueryPointerPos( HWND_DESKTOP, & pt );
-  *x = pt.x;
-  *y = pt.y;
+    POINTL pt;
+    ::WinQueryPointerPos( HWND_DESKTOP, & pt );
+    *x = pt.x;
+    *y = pt.y;
 };
 
 // Return TRUE if we have a colour display
 bool wxColourDisplay()
 {
-  bool flag;
-  // TODO:  use DosQueryDevCaps to figure it out
-  return flag;
+    bool flag;
+    // TODO:  use DosQueryDevCaps to figure it out
+    return flag;
 }
 
 // Returns depth of screen
