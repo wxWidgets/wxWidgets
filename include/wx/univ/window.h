@@ -73,6 +73,8 @@ public:
                 long style = 0,
                 const wxString& name = wxPanelNameStr);
 
+    virtual ~wxWindow();
+
     // background pixmap support
     // -------------------------
 

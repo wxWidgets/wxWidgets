@@ -122,13 +122,13 @@ bool wxWindow::Create(wxWindow *parent,
                       const wxString& name)
 {
     long actualStyle = style;
-    
+
     // FIXME: may need this on other platforms
 #ifdef __WXMSW__
     actualStyle &= ~wxVSCROLL;
     actualStyle &= ~wxHSCROLL;
-#endif    
-    
+#endif
+
     // we add wxCLIP_CHILDREN to get the same ("natural") behaviour under MSW
     // as under the other platforms
     if ( !wxWindowNative::Create(parent, id, pos, size,
@@ -169,7 +169,7 @@ bool wxWindow::Create(wxWindow *parent,
         SetInsertIntoMain( false );
 #endif
     }
-    
+
     if (m_scrollbarHorz || m_scrollbarVert)
     {
         // position it/them
@@ -177,6 +177,18 @@ bool wxWindow::Create(wxWindow *parent,
     }
 
     return true;
+}
+
+wxWindow::~wxWindow()
+{
+    m_isBeingDeleted = true;
+
+    // we have to destroy our children before we're destroyed because our
+    // children suppose that we're of type wxWindow, not just wxWindowNative,
+    // and so bad things may happen if they're deleted from the base class dtor
+    // as by then we're not a wxWindow any longer and wxUniv-specific virtual
+    // functions can't be called
+    DestroyChildren();
 }
 
 // ----------------------------------------------------------------------------
@@ -426,11 +438,11 @@ void wxWindow::Refresh(bool eraseBackground, const wxRect *rectClient)
     while ( node )
     {
         wxWindow *win = node->GetData();
-        // Only refresh sub controls when it is visible 
+        // Only refresh sub controls when it is visible
         // and when it is in the update region.
         if(!win->IsKindOf(CLASSINFO(wxTopLevelWindow)) && win->IsShown() && wxRegion(rectWin).Contains(win->GetRect()) != wxOutRegion)
             win->Refresh(eraseBackground, &rectWin);
-            
+
         node = node->GetNext();
     }
 }
