@@ -71,6 +71,7 @@ public:
     void FilesOpen(wxCommandEvent& event);
     void FileSave(wxCommandEvent& event);
     void DirChoose(wxCommandEvent& event);
+    void DirChooseNew(wxCommandEvent& event);
     void GenericDirChoose(wxCommandEvent& event);
     void ShowTip(wxCommandEvent& event);
     void ModalDlg(wxCommandEvent& event);
@@ -96,6 +97,8 @@ public:
     void OnExit(wxCommandEvent& event);
 
 private:
+    void DoDirChoose(int style);
+
     MyModelessDialog *m_dialog;
 
 #if wxUSE_FINDREPLDLG
@@ -137,6 +140,7 @@ enum
     DIALOGS_FILES_OPEN,
     DIALOGS_FILE_SAVE,
     DIALOGS_DIR_CHOOSE,
+    DIALOGS_DIRNEW_CHOOSE,
     DIALOGS_GENERIC_DIR_CHOOSE,
     DIALOGS_TIP,
     DIALOGS_NUM_ENTRY,

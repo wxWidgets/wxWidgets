@@ -71,6 +71,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
     EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
     EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_DIRNEW_CHOOSE,                 MyFrame::DirChooseNew)
 #if defined(__WXMSW__) || defined(__WXMAC__)
     EVT_MENU(DIALOGS_GENERIC_DIR_CHOOSE,            MyFrame::GenericDirChoose)
 #endif // wxMSW || wxMAC
@@ -142,8 +143,8 @@ bool MyApp::OnInit()
 
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
   file_menu->Append(DIALOGS_CHOOSE_FONT_GENERIC, _T("Choose f&ont (generic)"));
-
 #endif
+
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_LOG_DIALOG, _T("&Log dialog\tCtrl-L"));
   file_menu->Append(DIALOGS_MESSAGE_BOX, _T("&Message box\tCtrl-M"));
@@ -160,9 +161,12 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_FILES_OPEN,  _T("Open &files\tCtrl-Q"));
   file_menu->Append(DIALOGS_FILE_SAVE,  _T("Sa&ve file\tCtrl-S"));
   file_menu->Append(DIALOGS_DIR_CHOOSE,  _T("&Choose a directory\tCtrl-D"));
+  file_menu->Append(DIALOGS_DIRNEW_CHOOSE,  _T("Choose a directory (with \"Ne&w\" button)\tShift-Ctrl-D"));
 #if defined(__WXMSW__) || defined(__WXMAC__)
   file_menu->Append(DIALOGS_GENERIC_DIR_CHOOSE,  _T("&Choose a directory (generic implementation)"));
 #endif // wxMSW || wxMAC
+  file_menu->AppendSeparator();
+
 #if wxUSE_PROGRESSDLG
   file_menu->Append(DIALOGS_PROGRESS, _T("Pro&gress dialog\tCtrl-G"));
 #endif // wxUSE_PROGRESSDLG
@@ -174,9 +178,11 @@ bool MyApp::OnInit()
   file_menu->Append(DIALOGS_REPLACE, _T("Find and &replace dialog\tShift-Ctrl-F"), _T(""), TRUE);
 #endif // wxUSE_FINDREPLDLG
   file_menu->AppendSeparator();
+
   file_menu->Append(DIALOGS_MODAL, _T("Mo&dal dialog\tCtrl-W"));
   file_menu->Append(DIALOGS_MODELESS, _T("Modeless &dialog\tCtrl-Z"), _T(""), TRUE);
   file_menu->AppendSeparator();
+
   file_menu->Append(wxID_EXIT, _T("E&xit\tAlt-X"));
   wxMenuBar *menu_bar = new wxMenuBar;
   menu_bar->Append(file_menu, _T("&File"));
@@ -551,18 +557,28 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
     }
 }
 
-void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::DoDirChoose(int style)
 {
     // pass some initial dir to wxDirDialog
     wxString dirHome;
     wxGetHomeDir(&dirHome);
 
-    wxDirDialog dialog(this, _T("Testing directory picker"), dirHome);
+    wxDirDialog dialog(this, _T("Testing directory picker"), dirHome, style);
 
     if (dialog.ShowModal() == wxID_OK)
     {
         wxLogMessage(_T("Selected path: %s"), dialog.GetPath().c_str());
     }
+}
+
+void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
+{
+    DoDirChoose(wxDD_DEFAULT_STYLE & ~wxDD_NEW_DIR_BUTTON);
+}
+
+void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
+{
+    DoDirChoose(wxDD_NEW_DIR_BUTTON);
 }
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
