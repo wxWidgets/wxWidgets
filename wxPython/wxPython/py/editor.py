@@ -258,6 +258,7 @@ class EditorNotebookFrame(EditorFrame):
         self.crust.filling.SetSashPosition(200)
         self.notebook.AddPage(page=self.crust, text='PyCrust', select=True)
         self.setEditor(self.crust.editor)
+        self.crust.editor.SetFocus()
 
     def _editorChange(self, editor):
         """Editor change signal receiver."""
