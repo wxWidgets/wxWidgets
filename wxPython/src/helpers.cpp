@@ -362,6 +362,10 @@ void __wxPreStart(PyObject* moduleDict)
     PyEval_InitThreads();
     wxPyTStates = new wxPyThreadStateArray;
     wxPyTMutex = new wxMutex;
+
+    // Save the current (main) thread state in our array
+    PyThreadState* tstate = wxPyBeginAllowThreads();
+    wxPyEndAllowThreads(tstate);
 #endif
 
     // Ensure that the build options in the DLL (or whatever) match this build
