@@ -27,6 +27,7 @@
 
 #include "wx/string.h"
 #include "wx/file.h"
+#include "wx/log.h"
 #include "wx/app.h"
 
 // without this pragma, the stupid compiler precompiles #defines below so that
