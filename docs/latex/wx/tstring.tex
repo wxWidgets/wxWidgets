@@ -6,8 +6,9 @@ Classes: \helpref{wxString}{wxstring}, \helpref{wxArrayString}{wxarraystring}, \
 
 wxString is a class which represents a character string of arbitrary length (limited by 
 {\it MAX\_INT} which is usually 2147483647 on 32 bit machines) and containing
-arbitrary characters. The ASCII NUL character is allowed, although care should be
-taken when passing strings containing it to other functions.
+arbitrary characters. The ASCII NUL character is allowed, but be aware that
+in the current string implementation some methods might not work correctly
+in this case.
 
 wxString works with both ASCII (traditional, 7 or 8 bit, characters) as well as
 Unicode (wide characters) strings.

@@ -97,7 +97,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_HASHSET
+    #define TEST_STRINGS
 
     static const bool TEST_ALL = false;
 #endif
@@ -6551,6 +6551,20 @@ void is(int line, const wxString& got, const wxString& expected,
     }
 }
 
+#if 0
+void is(int line, const wxChar* got, const wxChar* expected,
+        const wxString& msg = wxEmptyString)
+{
+    bool isOk = wxStrcmp( got, expected ) == 0;
+    ok(line, isOk, msg);
+    if( !isOk )
+    {
+        wxPuts(_T("Got: ") + wxString(got));
+        wxPuts(_T("Expected: ") + wxString(expected));
+    }
+}
+#endif
+
 void is(int line, const wxChar& got, const wxChar& expected,
         const wxString& msg = wxEmptyString)
 {
@@ -6558,10 +6572,25 @@ void is(int line, const wxChar& got, const wxChar& expected,
     ok(line, isOk, msg);
     if( !isOk )
     {
-        wxPuts("Got: " + got);
-        wxPuts("Expected: " + expected);
+        wxPuts(_T("Got: ") + got);
+        wxPuts(_T("Expected: ") + expected);
     }
 }
+
+void is(int line, size_t got, size_t expected,
+        const wxString& msg = wxEmptyString)
+{
+    bool isOk = got == expected;
+    ok(line, isOk, msg);
+    if( !isOk )
+    {
+        wxPuts(wxString::Format(_T("Got: %ld"), got));
+        wxPuts(wxString::Format(_T("Expected: %ld"), expected));
+    }
+}
+
+#define is_m( got, expected, message ) is( __LINE__, (got), (expected), (message) )
+#define is_nom( got, expected ) is( __LINE__, (got), (expected), wxEmptyString )
 
 void TestStdString()
 {
@@ -6652,6 +6681,77 @@ void TestStdString()
     is( __LINE__, *it2, _T('g') );
     ok( __LINE__, it3 == s7.end() );
 
+    // find
+    //       0         1         2
+    //       01234567890123456789012345
+    s1 = _T("abcdefgABCDEFGabcABCabcABC");
+    s2 = _T("gAB");
+
+    is_nom( s1.find(_T('A')), 7u );
+    is_nom( s1.find(_T('A'), 7), 7u );
+    is_nom( s1.find(_T('Z')), wxString::npos );
+    is_nom( s1.find(_T('C'), 22), 25u );
+
+    is_nom( s1.find(_T("gAB")), 6u );
+    is_nom( s1.find(_T("gAB"), 7), wxString::npos );
+    is_nom( s1.find(_T("gAB"), 6), 6u );
+
+    is_nom( s1.find(_T("gABZZZ"), 2, 3), 6u );
+    is_nom( s1.find(_T("gABZZZ"), 7, 3), wxString::npos );
+
+    is_nom( s1.find(s2), 6u );
+    is_nom( s1.find(s2, 7), wxString::npos );
+    is_nom( s1.find(s2, 6), 6u );
+
+    // find_first_not_of
+    //       0         1         2         3
+    //       01234567890123456789012345678901234
+    s1 = _T("aaaaaabcdefghlkjiaaaaaabcdbcdbcdbcd");
+    s2 = _T("aaaaaa");
+
+    is_nom( s1.find_first_not_of(_T('a')), 6u );
+    is_nom( s1.find_first_not_of(_T('a'), 7), 7u );
+    is_nom( s2.find_first_not_of(_T('a')), wxString::npos );
+
+    is_nom( s1.find_first_not_of(_T("abde"), 4), 7u );
+    is_nom( s1.find_first_not_of(_T("abde"), 7), 7u );
+    is_nom( s1.find_first_not_of(_T("abcdefghijkl")), wxString::npos );
+
+    is_nom( s1.find_first_not_of(_T("abcdefghi"), 0, 4), 9u );
+
+    // find_first_of
+    is_nom( s1.find_first_of(_T('c')), 7u );
+    is_nom( s1.find_first_of(_T('v')), wxString::npos );
+    is_nom( s1.find_first_of(_T('c'), 10), 24u );
+
+    is_nom( s1.find_first_of(_T("ijkl")), 13u );
+    is_nom( s1.find_first_of(_T("ddcfg"), 17), 24u );
+    is_nom( s1.find_first_of(_T("ddcfga"), 17, 5), 24u );
+
+    // find_last_not_of
+    //       0         1         2         3
+    //       01234567890123456789012345678901234
+    s1 = _T("aaaaaabcdefghlkjiaaaaaabcdbcdbcdbcd");
+    s2 = _T("aaaaaa");
+
+    is_nom( s2.find_last_not_of(_T('a')), wxString::npos );
+    is_nom( s1.find_last_not_of(_T('d')), 33u );
+    is_nom( s1.find_last_not_of(_T('d'), 25), 24u );
+
+    is_nom( s1.find_last_not_of(_T("bcd")), 22u );
+    is_nom( s1.find_last_not_of(_T("abc"), 24), 16u );
+
+    is_nom( s1.find_last_not_of(_T("abcdefghijklmnopqrstuv"), 24, 3), 16u );
+
+    // find_last_of
+    is_nom( s2.find_last_of(_T('c')), wxString::npos );
+    is_nom( s1.find_last_of(_T('a')), 22u );
+    is_nom( s1.find_last_of(_T('b'), 24), 23u );
+
+    is_nom( s1.find_last_of(_T("ijklm")), 16u );
+    is_nom( s1.find_last_of(_T("ijklma"), 33, 4), 16u );
+    is_nom( s1.find_last_of(_T("a"), 17), 17u );
+
     // test insert
     s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = _T("aaaa");
     s9 = s10 = _T("cdefg");
@@ -6701,6 +6801,49 @@ void TestStdString()
     is( __LINE__, s5, _T("QertyRTYUIOP") );
     is( __LINE__, s6, s9);
     is( __LINE__, s7, _T("QWwertyP") );
+
+    // rfind
+    //       0         1         2
+    //       01234567890123456789012345
+    s1 = _T("abcdefgABCDEFGabcABCabcABC");
+    s2 = _T("gAB");
+
+    is_nom( s1.rfind(_T('A')), 23u );
+    is_nom( s1.rfind(_T('A'), 7), 7u );
+    is_nom( s1.rfind(_T('Z')), wxString::npos );
+    is_nom( s1.rfind(_T('C'), 22), 19u );
+
+    is_nom( s1.rfind(_T("cAB")), 22u );
+    is_nom( s1.rfind(_T("cAB"), 15), wxString::npos );
+    is_nom( s1.rfind(_T("cAB"), 21), 16u );
+
+    is_nom( s1.rfind(_T("gABZZZ"), 7, 3), 6u );
+    is_nom( s1.rfind(_T("gABZZZ"), 5, 3), wxString::npos );
+
+    is_nom( s1.rfind(s2), 6u );
+    is_nom( s1.rfind(s2, 5), wxString::npos );
+    is_nom( s1.rfind(s2, 6), 6u );
+
+    // resize
+    s1 = s2 = s3 = s4 = _T("abcABCdefDEF");
+
+    s1.resize( 12 );
+    s2.resize( 10 );
+    s3.resize( 14, _T(' ') );
+    s4.resize( 14, _T('W') );
+
+    is_nom( s1, _T("abcABCdefDEF") );
+    is_nom( s2, _T("abcABCdefD") );
+    is_nom( s3, _T("abcABCdefDEF  ") );
+    is_nom( s4, _T("abcABCdefDEFWW") );
+
+    // substr
+    s1 = _T("abcdefgABCDEFG");
+
+    is_nom( s1.substr( 0, 14 ), s1 );
+    is_nom( s1.substr( 1, 13 ), _T("bcdefgABCDEFG") );
+    is_nom( s1.substr( 1, 20 ), _T("bcdefgABCDEFG") );
+    is_nom( s1.substr( 14, 30 ), _T("") );
 
     wxPuts(_T("*** Testing std::string operations finished ***\n"));
 }

@@ -479,18 +479,36 @@ size_t wxStringBase::find(wxChar ch, size_t nStart) const
 
 size_t wxStringBase::rfind(const wxStringBase& str, size_t nStart) const
 {
-  wxASSERT( str.GetStringData()->IsValid() );
-  wxASSERT( nStart == npos || nStart <= length() );
+    wxASSERT( str.GetStringData()->IsValid() );
+    wxASSERT( nStart == npos || nStart <= length() );
 
-  // TODO could be made much quicker than that
-  const wxChar *p = c_str() + (nStart == npos ? length() : nStart);
-  while ( p >= c_str() + str.length() ) {
-    if ( wxStrncmp(p - str.length(), str.c_str(), str.length()) == 0 )
-      return p - str.length() - c_str();
-    p--;
-  }
+    if ( length() >= str.length() )
+    {
+        // avoids a corner case later
+        if ( length() == 0 && str.length() == 0 )
+            return 0;
 
-  return npos;
+        // "top" is the point where search starts from
+        size_t top = length() - str.length();
+
+        if ( nStart == npos )
+            nStart = length() - 1;
+        if ( nStart < top )
+            top = nStart;
+
+        const wxChar *cursor = c_str() + top;
+        do
+        {
+            if ( memcmp(cursor, str.c_str(),
+                        str.length() * sizeof(wxChar)) == 0 )
+            {
+                return cursor - c_str();
+            }
+            --cursor;
+        } while ( cursor > c_str() );
+    }
+    
+    return npos;
 }
 
 size_t wxStringBase::rfind(const wxChar* sz, size_t nStart, size_t n) const
@@ -530,11 +548,17 @@ size_t wxStringBase::find_first_of(const wxChar* sz, size_t nStart) const
         return npos;
 }
 
+size_t wxStringBase::find_first_of(const wxChar* sz, size_t nStart,
+                                   size_t n) const
+{
+    return find_first_of(wxStringBase(sz, n), nStart);
+}
+
 size_t wxStringBase::find_last_of(const wxChar* sz, size_t nStart) const
 {
     if ( nStart == npos )
     {
-        nStart = length();
+        nStart = length() - 1;
     }
     else
     {
@@ -542,13 +566,19 @@ size_t wxStringBase::find_last_of(const wxChar* sz, size_t nStart) const
                         _T("invalid index in find_last_of()") );
     }
 
-    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart; p >= c_str(); --p )
     {
         if ( wxStrchr(sz, *p) )
             return p - c_str();
     }
 
     return npos;
+}
+
+size_t wxStringBase::find_last_of(const wxChar* sz, size_t nStart,
+                                   size_t n) const
+{
+    return find_last_of(wxStringBase(sz, n), nStart);
 }
 
 size_t wxStringBase::find_first_not_of(const wxChar* sz, size_t nStart) const
@@ -566,7 +596,13 @@ size_t wxStringBase::find_first_not_of(const wxChar* sz, size_t nStart) const
     if ( nAccept >= length() - nStart )
         return npos;
     else
-        return nAccept;
+        return nStart + nAccept;
+}
+
+size_t wxStringBase::find_first_not_of(const wxChar* sz, size_t nStart,
+                                       size_t n) const
+{
+    return find_first_not_of(wxStringBase(sz, n), nStart);
 }
 
 size_t wxStringBase::find_first_not_of(wxChar ch, size_t nStart) const
@@ -586,14 +622,14 @@ size_t wxStringBase::find_last_not_of(const wxChar* sz, size_t nStart) const
 {
     if ( nStart == npos )
     {
-        nStart = length();
+        nStart = length() - 1;
     }
     else
     {
         wxASSERT( nStart <= length() );
     }
 
-    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart; p >= c_str(); --p )
     {
         if ( !wxStrchr(sz, *p) )
             return p - c_str();
@@ -602,18 +638,24 @@ size_t wxStringBase::find_last_not_of(const wxChar* sz, size_t nStart) const
     return npos;
 }
 
+size_t wxStringBase::find_last_not_of(const wxChar* sz, size_t nStart,
+                                      size_t n) const
+{
+    return find_last_not_of(wxStringBase(sz, n), nStart);
+}
+
 size_t wxStringBase::find_last_not_of(wxChar ch, size_t nStart) const
 {
     if ( nStart == npos )
     {
-        nStart = length();
+        nStart = length() - 1;
     }
     else
     {
         wxASSERT( nStart <= length() );
     }
 
-    for ( const wxChar *p = c_str() + nStart - 1; p >= c_str(); p-- )
+    for ( const wxChar *p = c_str() + nStart; p >= c_str(); --p )
     {
         if ( *p != ch )
             return p - c_str();
@@ -2170,6 +2212,13 @@ void wxArrayString::Remove(const wxChar *sz)
                wxT("removing inexistent element in wxArrayString::Remove") );
 
   RemoveAt(iIndex);
+}
+
+void wxArrayString::assign(const_iterator first, const_iterator last)
+{
+    reserve(last - first);
+    for(; first != last; ++first)
+        push_back(*first);
 }
 
 // ----------------------------------------------------------------------------

@@ -523,6 +523,7 @@ public:
     { return find_first_of(str.c_str(), nStart); }
     // same as above
   size_t find_first_of(const wxChar* sz, size_t nStart = 0) const;
+  size_t find_first_of(const wxChar* sz, size_t nStart, size_t n) const;
     // same as find(char, size_t)
   size_t find_first_of(wxChar c, size_t nStart = 0) const
     { return find(c, nStart); }
@@ -531,6 +532,7 @@ public:
     { return find_last_of(str.c_str(), nStart); }
     // same as above
   size_t find_last_of (const wxChar* sz, size_t nStart = npos) const;
+  size_t find_last_of(const wxChar* sz, size_t nStart, size_t n) const;
     // same as above
   size_t find_last_of(wxChar c, size_t nStart = npos) const
     { return rfind(c, nStart); }
@@ -542,13 +544,15 @@ public:
     { return find_first_not_of(str.c_str(), nStart); }
     // same as above
   size_t find_first_not_of(const wxChar* sz, size_t nStart = 0) const;
+  size_t find_first_not_of(const wxChar* sz, size_t nStart, size_t n) const;
     // same as above
   size_t find_first_not_of(wxChar ch, size_t nStart = 0) const;
     //  as strcspn()
   size_t find_last_not_of(const wxStringBase& str, size_t nStart = npos) const
-    { return find_first_not_of(str.c_str(), nStart); }
+    { return find_last_not_of(str.c_str(), nStart); }
     // same as above
   size_t find_last_not_of(const wxChar* sz, size_t nStart = npos) const;
+  size_t find_last_not_of(const wxChar* sz, size_t nStart, size_t n) const;
     // same as above
   size_t find_last_not_of(wxChar ch, size_t nStart = npos) const;
 
