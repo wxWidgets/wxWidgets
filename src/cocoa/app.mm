@@ -13,8 +13,6 @@
 #ifndef WX_PRECOMP
     #include "wx/defs.h"
     #include "wx/app.h"
-    #include "wx/frame.h"
-    #include "wx/dialog.h"
     #include "wx/dc.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -33,8 +31,6 @@
 
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSRunLoop.h>
-#import <Foundation/NSArray.h>
-#import <Foundation/NSAutoreleasePool.h>
 #import <Foundation/NSThread.h>
 #import <AppKit/NSEvent.h>
 #import <Foundation/NSString.h>
