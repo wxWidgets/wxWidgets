@@ -315,6 +315,8 @@ wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
     m_signY = -1;  // default y-axis bottom up -> top down
 
     m_printData = printData;
+
+    m_ok = TRUE;
 }
 
 wxPostScriptDC::~wxPostScriptDC ()

@@ -67,6 +67,7 @@ LIB_CPP_SRC=\
  ../common/valtext.cpp \
  ../common/variant.cpp \
  ../common/wxexpr.cpp \
+ ../common/wxchar.cpp \
  ../common/socket.cpp \
  ../common/sckaddr.cpp \
  ../common/sckipc.cpp \

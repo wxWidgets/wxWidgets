@@ -29,6 +29,7 @@ rm -f $2/tex2rtf2.tgz
 rm -f $2/ogl3.tgz
 rm -f $2/treedraw.tar.gz
 rm -f $2/glcanvas.tar.gz
+rm -f $2/jpeg.tgz
 
 echo Tarring...
 
@@ -97,5 +98,11 @@ ls `cat $1/distrib/msw/wxtree.rsp` > /tmp/wxtree.txt
 tar cvf $2/treedraw.tar -T /tmp/wxtree.txt
 gzip $2/treedraw.tar
 mv $2/treedraw.tar.gz $2/treedraw.tgz
+
+### JPEG
+ls `cat $1/distrib/msw/jpeg.rsp` > /tmp/jpeg.txt
+tar cvf $2/jpeg.tar -T /tmp/jpeg.txt
+gzip $2/jpeg.tar
+mv $2/jpeg.tar.gz $2/jpeg.tgz
 
 echo Done!

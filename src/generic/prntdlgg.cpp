@@ -242,7 +242,10 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
         wxThePrintSetupData->SetPrinterFile(f);
     }
     else
+    {
+        m_printDialogData.GetPrintData().SetPrintMode(wxPRINT_MODE_PRINTER);
         wxThePrintSetupData->SetPrinterMode(wxPRINT_MODE_PRINTER);
+    }
 
     EndModal(wxID_OK);
 }
@@ -354,7 +357,8 @@ TODO: collate and noCopies should be duplicated across dialog data and print dat
 
 wxDC *wxGenericPrintDialog::GetPrintDC()
 {
-    return new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
+  //    return new wxPostScriptDC(wxThePrintSetupData->GetPrinterFile(), FALSE, (wxWindow *) NULL);
+  return new wxPostScriptDC(GetPrintDialogData().GetPrintData());
 }
 
 // ----------------------------------------------------------------------------

@@ -17,6 +17,13 @@
 #include "wx/wxchar.h"
 #include <string.h> // strdup
 
+// wchar.h isn't available on my system (Linux, g++ 2.7.2). JACS.
+#ifdef __LINUX__
+#include <wcstr.h>
+#else
+#include <wchar.h>  // wchar_t
+#endif
+
 // ----------------------------------------------------------------------------
 // Special classes for (wide) character strings: they use malloc/free instead
 // of new/delete

@@ -42,7 +42,7 @@ class DnDText : public wxTextDropTarget
 public:
   DnDText(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropText(int x, int y, const char *psz );
+  virtual bool OnDropText(long x, long y, const char *psz );
 
 private:
   wxListBox *m_pOwner;
@@ -53,7 +53,7 @@ class DnDFile : public wxFileDropTarget
 public:
   DnDFile(wxListBox *pOwner) { m_pOwner = pOwner; }
 
-  virtual bool OnDropFiles(int x, int y,
+  virtual bool OnDropFiles(long x, long y,
                            size_t nFiles, const char * const aszFiles[] );
 
 private:
@@ -349,14 +349,14 @@ DnDFrame::~DnDFrame()
 // ----------------------------------------------------------------------------
 // Notifications called by the base class
 // ----------------------------------------------------------------------------
-bool DnDText::OnDropText(int, int, const char *psz)
+bool DnDText::OnDropText(long, long, const char *psz)
 {
   m_pOwner->Append(psz);
 
   return TRUE;
 }
 
-bool DnDFile::OnDropFiles(int, int, size_t nFiles,
+bool DnDFile::OnDropFiles(long, long, size_t nFiles,
                           const char * const aszFiles[])
 {
   wxString str;
