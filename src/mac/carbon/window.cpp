@@ -1213,9 +1213,13 @@ void wxWindowMac::DoGetPosition(int *x, int *y) const
 {
     Rect bounds ;
     m_peer->GetRect( &bounds ) ;
-
+    
     int x1 = bounds.left ;
     int y1 = bounds.top ;
+
+    // get the wx window position from the native one
+    x1 -= MacGetLeftBorderSize() ;
+    y1 -= MacGetTopBorderSize() ;
 
     if ( !IsTopLevel() )
     {
