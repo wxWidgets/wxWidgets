@@ -494,5 +494,7 @@ wxThePenList = wx.gdi.ThePenList
 wxTheBrushList = wx.gdi.TheBrushList
 wxTheColourDatabase = wx.gdi.TheColourDatabase
 wxEffects = wx.gdi.Effects
+wxColor = wx.gdi.Color
+wxNamedColor = wx.gdi.NamedColor
 
 

@@ -1012,6 +1012,8 @@ for k, v in wx.core.__dict__.iteritems():
         d[k] = v
     elif k.startswith('WXK'):
         d[k] = v
+    elif k.startswith('__version__'):
+        d[k] = v
 del d, k, v
 
 

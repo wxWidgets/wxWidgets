@@ -164,6 +164,11 @@ def SystemSettings_SetScreenType(*args, **kwargs):
     """SystemSettings_SetScreenType(wxSystemScreenType screen)"""
     return _misc.SystemSettings_SetScreenType(*args, **kwargs)
 
+# backwards compatibility aliasses
+SystemSettings_GetSystemColour = SystemSettings_GetColour
+SystemSettings_GetSystemFont   = SystemSettings_GetFont
+SystemSettings_GetSystemMetric = SystemSettings_GetMetric
+
 class SystemOptions(core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSystemOptions instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

@@ -24849,7 +24849,7 @@ static PyObject *_wrap_Menu_Append(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help",(char *) "kind", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help",(char *) "kind", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|Oi:Menu_Append",kwnames,&obj0,&arg2,&obj2,&obj3,&arg5)) goto fail;
@@ -24933,7 +24933,7 @@ static PyObject *_wrap_Menu_AppendCheckItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_AppendCheckItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -24993,7 +24993,7 @@ static PyObject *_wrap_Menu_AppendRadioItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_AppendRadioItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -25055,7 +25055,7 @@ static PyObject *_wrap_Menu_AppendMenu(PyObject *self, PyObject *args, PyObject 
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "submenu",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "submenu",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiOO|O:Menu_AppendMenu",kwnames,&obj0,&arg2,&obj2,&obj3,&obj4)) goto fail;
@@ -25202,7 +25202,7 @@ static PyObject *_wrap_Menu_Insert(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "help",(char *) "kind", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "help",(char *) "kind", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiO|Oi:Menu_Insert",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&arg6)) goto fail;
@@ -25294,7 +25294,7 @@ static PyObject *_wrap_Menu_InsertCheckItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiO|O:Menu_InsertCheckItem",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4)) goto fail;
@@ -25358,7 +25358,7 @@ static PyObject *_wrap_Menu_InsertRadioItem(PyObject *self, PyObject *args, PyOb
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiO|O:Menu_InsertRadioItem",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4)) goto fail;
@@ -25424,7 +25424,7 @@ static PyObject *_wrap_Menu_InsertMenu(PyObject *self, PyObject *args, PyObject 
     PyObject * obj4 = 0 ;
     PyObject * obj5 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "pos",(char *) "itemid",(char *) "text",(char *) "submenu",(char *) "help", NULL 
+        (char *) "self",(char *) "pos",(char *) "id",(char *) "text",(char *) "submenu",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOiOO|O:Menu_InsertMenu",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&obj5)) goto fail;
@@ -25515,7 +25515,7 @@ static PyObject *_wrap_Menu_Prepend(PyObject *self, PyObject *args, PyObject *kw
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help",(char *) "kind", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help",(char *) "kind", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|Oi:Menu_Prepend",kwnames,&obj0,&arg2,&obj2,&obj3,&arg5)) goto fail;
@@ -25599,7 +25599,7 @@ static PyObject *_wrap_Menu_PrependCheckItem(PyObject *self, PyObject *args, PyO
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_PrependCheckItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -25659,7 +25659,7 @@ static PyObject *_wrap_Menu_PrependRadioItem(PyObject *self, PyObject *args, PyO
     PyObject * obj2 = 0 ;
     PyObject * obj3 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO|O:Menu_PrependRadioItem",kwnames,&obj0,&arg2,&obj2,&obj3)) goto fail;
@@ -25721,7 +25721,7 @@ static PyObject *_wrap_Menu_PrependMenu(PyObject *self, PyObject *args, PyObject
     PyObject * obj3 = 0 ;
     PyObject * obj4 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "text",(char *) "submenu",(char *) "help", NULL 
+        (char *) "self",(char *) "id",(char *) "text",(char *) "submenu",(char *) "help", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiOO|O:Menu_PrependMenu",kwnames,&obj0,&arg2,&obj2,&obj3,&obj4)) goto fail;
@@ -25776,7 +25776,7 @@ static PyObject *_wrap_Menu_Remove(PyObject *self, PyObject *args, PyObject *kwa
     wxMenuItem *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_Remove",kwnames,&obj0,&arg2)) goto fail;
@@ -25834,7 +25834,7 @@ static PyObject *_wrap_Menu_Delete(PyObject *self, PyObject *args, PyObject *kwa
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_Delete",kwnames,&obj0,&arg2)) goto fail;
@@ -25912,7 +25912,7 @@ static PyObject *_wrap_Menu_DestroyId(PyObject *self, PyObject *args, PyObject *
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_DestroyId",kwnames,&obj0,&arg2)) goto fail;
@@ -26057,7 +26057,7 @@ static PyObject *_wrap_Menu_FindItemById(PyObject *self, PyObject *args, PyObjec
     wxMenuItem *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_FindItemById",kwnames,&obj0,&arg2)) goto fail;
@@ -26117,7 +26117,7 @@ static PyObject *_wrap_Menu_Enable(PyObject *self, PyObject *args, PyObject *kwa
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "enable", NULL 
+        (char *) "self",(char *) "id",(char *) "enable", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_Enable",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26145,7 +26145,7 @@ static PyObject *_wrap_Menu_IsEnabled(PyObject *self, PyObject *args, PyObject *
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_IsEnabled",kwnames,&obj0,&arg2)) goto fail;
@@ -26172,7 +26172,7 @@ static PyObject *_wrap_Menu_Check(PyObject *self, PyObject *args, PyObject *kwar
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "check", NULL 
+        (char *) "self",(char *) "id",(char *) "check", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_Check",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26200,7 +26200,7 @@ static PyObject *_wrap_Menu_IsChecked(PyObject *self, PyObject *args, PyObject *
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_IsChecked",kwnames,&obj0,&arg2)) goto fail;
@@ -26228,7 +26228,7 @@ static PyObject *_wrap_Menu_SetLabel(PyObject *self, PyObject *args, PyObject *k
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "label", NULL 
+        (char *) "self",(char *) "id",(char *) "label", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_SetLabel",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26267,7 +26267,7 @@ static PyObject *_wrap_Menu_GetLabel(PyObject *self, PyObject *args, PyObject *k
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_GetLabel",kwnames,&obj0,&arg2)) goto fail;
@@ -26301,7 +26301,7 @@ static PyObject *_wrap_Menu_SetHelpString(PyObject *self, PyObject *args, PyObje
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "helpString", NULL 
+        (char *) "self",(char *) "id",(char *) "helpString", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:Menu_SetHelpString",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -26340,7 +26340,7 @@ static PyObject *_wrap_Menu_GetHelpString(PyObject *self, PyObject *args, PyObje
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:Menu_GetHelpString",kwnames,&obj0,&arg2)) goto fail;
@@ -27220,7 +27220,7 @@ static PyObject *_wrap_MenuBar_FindItemById(PyObject *self, PyObject *args, PyOb
     wxMenuItem *result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_FindItemById",kwnames,&obj0,&arg2)) goto fail;
@@ -27290,7 +27290,7 @@ static PyObject *_wrap_MenuBar_Enable(PyObject *self, PyObject *args, PyObject *
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "enable", NULL 
+        (char *) "self",(char *) "id",(char *) "enable", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_Enable",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27319,7 +27319,7 @@ static PyObject *_wrap_MenuBar_Check(PyObject *self, PyObject *args, PyObject *k
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "check", NULL 
+        (char *) "self",(char *) "id",(char *) "check", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_Check",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27347,7 +27347,7 @@ static PyObject *_wrap_MenuBar_IsChecked(PyObject *self, PyObject *args, PyObjec
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_IsChecked",kwnames,&obj0,&arg2)) goto fail;
@@ -27373,7 +27373,7 @@ static PyObject *_wrap_MenuBar_IsEnabled(PyObject *self, PyObject *args, PyObjec
     bool result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_IsEnabled",kwnames,&obj0,&arg2)) goto fail;
@@ -27401,7 +27401,7 @@ static PyObject *_wrap_MenuBar_SetLabel(PyObject *self, PyObject *args, PyObject
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "label", NULL 
+        (char *) "self",(char *) "id",(char *) "label", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_SetLabel",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27440,7 +27440,7 @@ static PyObject *_wrap_MenuBar_GetLabel(PyObject *self, PyObject *args, PyObject
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_GetLabel",kwnames,&obj0,&arg2)) goto fail;
@@ -27474,7 +27474,7 @@ static PyObject *_wrap_MenuBar_SetHelpString(PyObject *self, PyObject *args, PyO
     PyObject * obj0 = 0 ;
     PyObject * obj2 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid",(char *) "helpString", NULL 
+        (char *) "self",(char *) "id",(char *) "helpString", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OiO:MenuBar_SetHelpString",kwnames,&obj0,&arg2,&obj2)) goto fail;
@@ -27513,7 +27513,7 @@ static PyObject *_wrap_MenuBar_GetHelpString(PyObject *self, PyObject *args, PyO
     wxString result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuBar_GetHelpString",kwnames,&obj0,&arg2)) goto fail;
@@ -27782,7 +27782,7 @@ static PyObject *_wrap_MenuItem_SetId(PyObject *self, PyObject *args, PyObject *
     int arg2 ;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
-        (char *) "self",(char *) "itemid", NULL 
+        (char *) "self",(char *) "id", NULL 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"Oi:MenuItem_SetId",kwnames,&obj0,&arg2)) goto fail;

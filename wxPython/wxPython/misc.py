@@ -497,5 +497,8 @@ wxTheClipboard = wx.misc.TheClipboard
 wxClipboardLocker = wx.misc.ClipboardLocker
 wxPyTimer = wx.misc.PyTimer
 wxPyDropTarget = wx.misc.PyDropTarget
+wxSystemSettings_GetSystemColour = wx.misc.SystemSettings_GetSystemColour
+wxSystemSettings_GetSystemFont = wx.misc.SystemSettings_GetSystemFont
+wxSystemSettings_GetSystemMetric = wx.misc.SystemSettings_GetSystemMetric
 
 
