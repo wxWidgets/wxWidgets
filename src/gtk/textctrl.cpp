@@ -964,15 +964,22 @@ void wxTextCtrl::OnChar( wxKeyEvent &key_event )
 
     if ((key_event.KeyCode() == WXK_RETURN) && !(m_windowStyle & wxTE_MULTILINE))
     {
+        // This will invoke the dialog default action, such
+        // as the clicking the default button.
+    
         wxWindow *top_frame = m_parent;
         while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
             top_frame = top_frame->GetParent();
-        GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
-
-        if (window->default_widget)
+        
+        if (top_frame && GTK_IS_WINDOW(top_frame->m_widget))
         {
-            gtk_widget_activate (window->default_widget);
-            return;
+            GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+
+            if (window->default_widget)
+            {
+                gtk_widget_activate (window->default_widget);
+                return;
+            }
         }
     }
 

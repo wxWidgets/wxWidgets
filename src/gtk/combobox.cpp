@@ -615,7 +615,26 @@ void wxComboBox::OnChar( wxKeyEvent &event )
                 event.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( event );
             }
-            //else: do nothing, this will open the listbox
+            else
+            {
+                // This will invoke the dialog default action, such
+                // as the clicking the default button.
+    
+                wxWindow *top_frame = m_parent;
+                while (top_frame->GetParent() && !(top_frame->IsTopLevel()))
+                top_frame = top_frame->GetParent();
+        
+                if (top_frame && GTK_IS_WINDOW(top_frame->m_widget))
+                {
+                    GtkWindow *window = GTK_WINDOW(top_frame->m_widget);
+
+                    if (window->default_widget)
+                    {
+                        gtk_widget_activate (window->default_widget);
+                        return;
+                    }
+                }
+            }
         }
     }
 
