@@ -25,8 +25,9 @@ enum		DialogModes {mView,mCreate,mEdit,mSearch};
 #define ABOUT_DEMO			300
 
 // this seems to be missing, Robert Roebling (?)
+#ifndef MAX_PATH
 #define MAX_PATH   200
-
+#endif
 
 // Name of the table to be created/opened
 const char	CONTACT_TABLE_NAME[]		=	"contacts";
