@@ -24,6 +24,8 @@
 
 wxTextCtrlXmlHandler::wxTextCtrlXmlHandler() : wxXmlResourceHandler() 
 {
+    XRC_ADD_STYLE(wxTE_AUTO_SCROLL);
+    XRC_ADD_STYLE(wxTE_NO_VSCROLL);
     XRC_ADD_STYLE(wxTE_PROCESS_ENTER);
     XRC_ADD_STYLE(wxTE_PROCESS_TAB);
     XRC_ADD_STYLE(wxTE_MULTILINE);
