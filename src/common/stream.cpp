@@ -627,6 +627,16 @@ wxStreamBase::~wxStreamBase()
 {
 }
 
+off_t wxStreamBase::OnSysSeek(off_t WXUNUSED(seek), wxSeekMode WXUNUSED(mode))
+{
+    return wxInvalidOffset;
+}
+
+off_t wxStreamBase::OnSysTell() const
+{
+    return wxInvalidOffset;
+}
+
 // ----------------------------------------------------------------------------
 // wxInputStream
 // ----------------------------------------------------------------------------
