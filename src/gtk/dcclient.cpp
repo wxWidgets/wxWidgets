@@ -951,7 +951,7 @@ void wxWindowDC::DoDrawEllipse( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
             gdk_draw_arc( m_window, m_penGC, FALSE, xx, yy, ww, hh, 0, 360*64 );
     }
 
-    CalcBoundingBox( x - width, y - height );
+    CalcBoundingBox( x, y );
     CalcBoundingBox( x + width, y + height );
 }
 
