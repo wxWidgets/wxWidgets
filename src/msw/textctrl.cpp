@@ -438,6 +438,10 @@ void wxTextCtrl::SetValue(const wxString& value)
 
         WriteText(value);
 
+        // mark the control as being not dirty - we changed its text, not the
+        // user
+        DiscardEdits();
+
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
