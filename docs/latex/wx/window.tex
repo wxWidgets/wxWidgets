@@ -536,8 +536,9 @@ a 2-element list {\tt ( width, height )}.}
 
 \constfunc{virtual wxSize}{GetClientSize}{\void}
 
-This gets the size of the window `client area' in pixels.  The client area is the
-area which may be drawn on by the programmer, excluding title bar, border etc.
+This gets the size of the window `client area' in pixels.
+The client area is the area which may be drawn on by the programmer,
+excluding title bar, border, scrollbars, etc.
 
 \wxheading{Parameters}
 
@@ -552,6 +553,10 @@ implements the following methods:\par
 \twocolitem{{\bf GetClientSize()}}{Returns a wxSize object}
 \end{twocollist}}
 }
+
+\wxheading{See also}
+
+\helpref{GetSize}{wxwindowgetsize}
 
 \membersection{wxWindow::GetConstraints}\label{wxwindowgetconstraints}
 
@@ -773,7 +778,8 @@ Returns the built-in scrollbar range.
 
 \constfunc{virtual wxSize}{GetSize}{\void}
 
-This gets the size of the entire window in pixels.
+This gets the size of the entire window in pixels,
+including title bar, border, scrollbars, etc.
 
 \wxheading{Parameters}
 
@@ -797,6 +803,10 @@ method:\par
  {\tt ( width, height )}}
 \end{twocollist}
 }}
+
+\wxheading{See also}
+
+\helpref{GetClientSize}{wxwindowgetclientsize}
 
 \membersection{wxWindow::GetSizer}\label{wxwindowgetsizer}
 
