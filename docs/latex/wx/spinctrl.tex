@@ -115,6 +115,17 @@ Gets the value of the spin control.
 
 Sets range of allowable values.
 
+\membersection{wxSpinCtrl::SetSelection}\label{wxspinctrlsetselection}
+
+\func{void}{SetSelection}{\param{long }{from}, \param{long }{to}}
+
+Select the text in the text part of the control between  positions 
+{\it from} (inclusive) and {\it to} (exclusive). This is similar to 
+\helpref{wxTextCtrl::SetSelection}{wxtextctrlsetselection}.
+
+{\bf NB:} this is currently only implemented for Windows and generic versions
+of the control.
+
 \membersection{wxSpinCtrl::GetMin}\label{wxspinctrlgetmin}
 
 \constfunc{int}{GetMin}{\void}
