@@ -396,9 +396,17 @@ bool wxTextCtrl::Create( wxWindow *parent,
     /* we don't set a valid background colour, because the window
        manager should use a default one */
     m_backgroundColour = wxColour();
-    SetForegroundColour( parent->GetForegroundColour() );
+
+    wxColour colFg = parent->GetForegroundColour();
+    SetForegroundColour( colFg );
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
+
+    // FIXME: is the bg colour correct here?
+    wxTextAttr attrDef( colFg,
+                        wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW),
+                        parent->GetFont() );
+    SetDefaultStyle( attrDef );
 
     Show( TRUE );
 
@@ -481,33 +489,53 @@ void wxTextCtrl::WriteText( const wxString &text )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if (text.IsEmpty()) return;
+    if ( text.empty() )
+        return;
 
-    if (m_windowStyle & wxTE_MULTILINE)
+#if wxUSE_UNICODE
+    wxWX2MBbuf buf = text.mbc_str();
+    const char *txt = buf;
+    size_t txtlen = strlen(buf);
+#else
+    const char *txt = text;
+    size_t txtlen = text.length();
+#endif
+
+    if ( m_windowStyle & wxTE_MULTILINE )
     {
         /* this moves the cursor pos to behind the inserted text */
         gint len = GTK_EDITABLE(m_text)->current_pos;
 
-#if wxUSE_UNICODE
-        wxWX2MBbuf buf = text.mbc_str();
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
-#else
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
-#endif
+        // if we have any special style, use it
+        if ( !m_defaultStyle.IsDefault() )
+        {
+            GdkFont *font = m_defaultStyle.HasFont()
+                                ? m_defaultStyle.GetFont().GetInternalFont()
+                                : NULL;
+
+            GdkColor *colFg = m_defaultStyle.HasTextColour()
+                                ? m_defaultStyle.GetTextColour().GetColor()
+                                : NULL;
+
+            GdkColor *colBg = m_defaultStyle.HasBackgroundColour()
+                                ? m_defaultStyle.GetBackgroundColour().GetColor()
+                                : NULL;
+
+            gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, txtlen );
+        }
+        else // no style
+        {
+            gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
+        }
 
         /* bring editable's cursor uptodate. bug in GTK. */
         GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
-    else
+    else // single line
     {
         /* this moves the cursor pos to behind the inserted text */
         gint len = GTK_EDITABLE(m_text)->current_pos;
-#if wxUSE_UNICODE
-        wxWX2MBbuf buf = text.mbc_str();
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
-#else
-        gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
-#endif
+        gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
 
         /* bring editable's cursor uptodate. bug in GTK. */
         GTK_EDITABLE(m_text)->current_pos += text.Len();
@@ -521,40 +549,49 @@ void wxTextCtrl::AppendText( const wxString &text )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    if (text.IsEmpty()) return;
+    if ( text.empty() )
+        return;
+
+#if wxUSE_UNICODE
+    wxWX2MBbuf buf = text.mbc_str();
+    const char *txt = buf;
+    size_t txtlen = strlen(buf);
+#else
+    const char *txt = text;
+    size_t txtlen = text.length();
+#endif
 
     if (m_windowStyle & wxTE_MULTILINE)
     {
-        bool hasSpecialAttributes = m_font.Ok() ||
-    	                            m_foregroundColour.Ok();
-        if ( hasSpecialAttributes )
+        if ( !m_defaultStyle.IsDefault() )
         {
-             gtk_text_insert( GTK_TEXT(m_text),
-                              m_font.GetInternalFont(),
-                              m_foregroundColour.GetColor(),
-                              m_backgroundColour.Ok() ?
-			         m_backgroundColour.GetColor(): NULL,
-                              text.mbc_str(), text.length());
+            GdkFont *font = m_defaultStyle.HasFont()
+                                ? m_defaultStyle.GetFont().GetInternalFont()
+                                : NULL;
 
+            GdkColor *colFg = m_defaultStyle.HasTextColour()
+                                ? m_defaultStyle.GetTextColour().GetColor()
+                                : NULL;
+
+            GdkColor *colBg = m_defaultStyle.HasBackgroundColour()
+                                ? m_defaultStyle.GetBackgroundColour().GetColor()
+                                : NULL;
+
+            gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, txtlen );
         }
-        else
+        else // no style
         {
             /* we'll insert at the last position */
             gint len = gtk_text_get_length( GTK_TEXT(m_text) );
-#if wxUSE_UNICODE
-            wxWX2MBbuf buf = text.mbc_str();
-            gtk_editable_insert_text( GTK_EDITABLE(m_text), buf, strlen(buf), &len );
-#else
-            gtk_editable_insert_text( GTK_EDITABLE(m_text), text, text.Length(), &len );
-#endif
+            gtk_editable_insert_text( GTK_EDITABLE(m_text), txt, txtlen, &len );
         }
 
         /* bring editable's cursor uptodate. bug in GTK. */
         GTK_EDITABLE(m_text)->current_pos = gtk_text_get_point( GTK_TEXT(m_text) );
     }
-    else
+    else // single line
     {
-        gtk_entry_append_text( GTK_ENTRY(m_text), text.mbc_str() );
+        gtk_entry_append_text( GTK_ENTRY(m_text), txt );
     }
 }
 
@@ -1072,6 +1109,17 @@ void wxTextCtrl::UpdateFontIfNeeded()
         ChangeFontGlobally();
 }
 
+bool wxTextCtrl::SetForegroundColour(const wxColour& colour)
+{
+    if ( !wxControl::SetForegroundColour(colour) )
+        return FALSE;
+
+    // update default fg colour too
+    m_defaultStyle.SetTextColour(colour);
+
+    return TRUE;
+}
+
 bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
 {
     wxCHECK_MSG( m_text != NULL, FALSE, wxT("invalid text ctrl") );
@@ -1102,7 +1150,70 @@ bool wxTextCtrl::SetBackgroundColour( const wxColour &colour )
         gdk_window_clear( window );
     }
 
+    // change active background color too
+    m_defaultStyle.SetBackgroundColour( colour );
+
     return TRUE;
+}
+
+bool wxTextCtrl::SetStyle( long start, long end, const wxTextAttr &style )
+{
+    /* VERY dirty way to do that - removes the required text and re-adds it
+       with styling (FIXME) */
+    if ( m_windowStyle & wxTE_MULTILINE )
+    {
+        if ( style.IsDefault() )
+        {
+            // nothing to do
+            return TRUE;
+        }
+
+        gint l = gtk_text_get_length( GTK_TEXT(m_text) );
+
+        wxCHECK_MSG( start >= 0 && end <= l, FALSE,
+                     _T("invalid range in wxTextCtrl::SetStyle") );
+
+        gint old_pos = gtk_editable_get_position( GTK_EDITABLE(m_text) );
+        char *text = gtk_editable_get_chars( GTK_EDITABLE(m_text), start, end );
+        wxString tmp(text,*wxConvCurrent);
+        g_free( text );
+
+        gtk_editable_delete_text( GTK_EDITABLE(m_text), start, end );
+        gtk_editable_set_position( GTK_EDITABLE(m_text), start );
+
+#if wxUSE_UNICODE
+        wxWX2MBbuf buf = tmp.mbc_str();
+        const char *txt = buf;
+        size_t txtlen = strlen(buf);
+#else
+        const char *txt = tmp;
+        size_t txtlen = tmp.length();
+#endif
+
+        GdkFont *font = style.HasFont()
+                            ? style.GetFont().GetInternalFont()
+                            : NULL;
+
+        GdkColor *colFg = style.HasTextColour()
+                            ? style.GetTextColour().GetColor()
+                            : NULL;
+
+        GdkColor *colBg = style.HasBackgroundColour()
+                            ? style.GetBackgroundColour().GetColor()
+                            : NULL;
+
+        gtk_text_insert( GTK_TEXT(m_text), font, colFg, colBg, txt, txtlen );
+
+        /* does not seem to help under GTK+ 1.2 !!!
+        gtk_editable_set_position( GTK_EDITABLE(m_text), old_pos ); */
+        SetInsertionPoint( old_pos );
+        return TRUE;
+    }
+    else // singe line
+    {
+        // cannot do this for GTK+'s Entry widget
+        return FALSE;
+    }
 }
 
 void wxTextCtrl::ApplyWidgetStyle()

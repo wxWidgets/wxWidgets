@@ -79,6 +79,10 @@ public:
     virtual void WriteText(const wxString& text);
     virtual void AppendText(const wxString& text);
 
+    // apply text attribute to the range of text (only works with richedit
+    // controls)
+    virtual bool SetStyle(long start, long end, const wxTextAttr& style);
+
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
@@ -130,8 +134,9 @@ public:
     void OnUpdateUndo(wxUpdateUIEvent& event);
     void OnUpdateRedo(wxUpdateUIEvent& event);
 
-    bool SetFont( const wxFont &font );
-    bool SetBackgroundColour(const wxColour &colour);
+    bool SetFont(const wxFont& font);
+    bool SetForegroundColour(const wxColour& colour);
+    bool SetBackgroundColour(const wxColour& colour);
 
     GtkWidget* GetConnectWidget();
     bool IsOwnGtkWindow( GdkWindow *window );

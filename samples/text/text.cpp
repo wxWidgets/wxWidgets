@@ -186,7 +186,7 @@ bool MyApp::OnInit()
 {
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL,
-            "Text wxWindows sample", 50, 50, 660, 420);
+            "Text wxWindows sample", 50, 50, 700, 420);
     frame->SetSizeHints( 500, 400 );
 
     wxMenu *file_menu = new wxMenu;
@@ -643,19 +643,23 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                                 "and a very very very very very "
                                 "very very very long line to test"
                                 "wxHSCROLL style",
-                                wxPoint(450, 10), wxSize(200, 230),
+                                wxPoint(450, 10), wxSize(230, 230),
                                 wxTE_RICH | wxTE_MULTILINE | wxHSCROLL);
-#ifdef __WXMSW__
+
     m_textrich->SetStyle(0, 10, *wxRED);
     m_textrich->SetStyle(10, 20, *wxBLUE);
     m_textrich->SetStyle(30, 40,
                          wxTextAttr(*wxGREEN, wxNullColour, *wxITALIC_FONT));
+    m_textrich->SetDefaultStyle(wxTextAttr());
+    m_textrich->AppendText(_T("\n\nFirst 10 characters should be in red\n"));
+    m_textrich->AppendText(_T("Next 10 characters should be in blue\n"));
+    m_textrich->AppendText(_T("Next 10 characters should be normal\n"));
+    m_textrich->AppendText(_T("And the next 10 characters should be green and italic\n"));
+    m_textrich->SetDefaultStyle(wxTextAttr(*wxCYAN, *wxBLUE));
+    m_textrich->AppendText(_T("This text should be cyan on blue\n"));
     m_textrich->SetDefaultStyle(*wxBLUE);
-    m_textrich->AppendText(_T("\nIs this text really in blue?"));
-#else
-    m_textrich->SetForegroundColour(wxColour(0, 255, 255));
-    m_textrich->SetBackgroundColour(*wxBLUE);
-#endif
+    m_textrich->AppendText(_T("And this should be in blue and the text you ")
+                           _T("type should be in blue as well"));
 }
 
 void MyPanel::OnSize( wxSizeEvent &event )

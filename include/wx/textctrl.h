@@ -80,9 +80,16 @@ public:
     bool HasBackgroundColour() const { return m_colBack.Ok(); }
     bool HasFont() const { return m_font.Ok(); }
 
+    // setters
     const wxColour& GetTextColour() const { return m_colText; }
     const wxColour& GetBackgroundColour() const { return m_colBack; }
     const wxFont& GetFont() const { return m_font; }
+
+    // returns false if we have any attributes set, true otherwise
+    bool IsDefault() const
+    {
+        return !HasTextColour() && !HasBackgroundColour() && !HasFont();
+    }
 
 private:
     wxColour m_colText,
