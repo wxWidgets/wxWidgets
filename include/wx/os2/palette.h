@@ -22,7 +22,7 @@ class WXDLLEXPORT wxPaletteRefData: public wxGDIRefData
 public:
     wxPaletteRefData();
     ~wxPaletteRefData();
-protected:
+// protected:
     WXHPALETTE                      m_hPalette;
     HPS                             m_hPS;
 }; // end of CLASS wxPaletteRefData
