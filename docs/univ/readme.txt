@@ -48,15 +48,16 @@ toolkit.
 If compiling from CVS, please copy include/wx/univ/setup0.h
 to include/wx/univ/setup.h before following these steps.
 
-a) Using Visual C++ 6.0
+a) Using Visual C++ 6.0/7.x
 
-   Simply open the src/wxUniv.dsw file in DevStudio and build it.
-   Then open the widgetsUniv.dsp file in samples/widgets to build
-   the widgets sample.
+   Follow wxMSW instructions but make sure to choose one of the "Universal" 
+   configurations before building.
 
 b) Cygwin
 
    Please refer to the Unix section below
+
+** the instructions may be out of date as for wxWindows 2.5.1+ **
 
 c) Other compilers
    Borland: 
