@@ -52,6 +52,8 @@ wxScrolledWindow::wxScrolledWindow(void)
   m_yScrollLines = 0;
   m_xScrollLinesPerPage = 0;
   m_yScrollLinesPerPage = 0;
+  m_scaleX = 1.0;
+  m_scaleY = 1.0;
 }
 
 bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
@@ -70,6 +72,8 @@ bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
   m_yScrollLines = 0;
   m_xScrollLinesPerPage = 0;
   m_yScrollLinesPerPage = 0;
+  m_scaleX = 1.0;
+  m_scaleY = 1.0;
 
   return wxWindow::Create(parent, id, pos, size, style, name);
 }
@@ -352,6 +356,7 @@ void wxScrolledWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 void wxScrolledWindow::PrepareDC(wxDC& dc)
 {
 	dc.SetDeviceOrigin(- m_xScrollPosition * m_xScrollPixelsPerLine, - m_yScrollPosition * m_yScrollPixelsPerLine);
+    dc.SetUserScale(m_scaleX, m_scaleY);
 }
 
 #if WXWIN_COMPATIBILITY
