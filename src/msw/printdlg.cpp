@@ -6,21 +6,26 @@
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// ===========================================================================
+// declarations
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// headers
+// ---------------------------------------------------------------------------
+
 #ifdef __GNUG__
-#pragma implementation "printdlg.h"
+    #pragma implementation "printdlg.h"
 #endif
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
-#endif
-
-#ifndef WX_PRECOMP
+    #pragma hdrstop
 #endif
 
 #include "wx/printdlg.h"
@@ -28,7 +33,7 @@
 
 // Have to emulate page setup dialog for Win16
 #if !defined(__WIN95__)
-#include "wx/generic/prntdlgg.h"
+    #include "wx/generic/prntdlgg.h"
 #endif
 
 #include <stdlib.h>
@@ -36,7 +41,7 @@
 #include <commdlg.h>
 
 #ifndef __WIN32__
-#include <print.h>
+    #include <print.h>
 #endif
 
 // Clash with Windows header files
@@ -44,23 +49,42 @@
 #undef StartDoc
 #endif
 
+// ---------------------------------------------------------------------------
+// wxWin macros
+// ---------------------------------------------------------------------------
+
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxPrintDialog, wxDialog)
-IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
+    IMPLEMENT_DYNAMIC_CLASS(wxPrintDialog, wxDialog)
+    IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
 #endif
 
-wxPrintDialog::wxPrintDialog(void):
-wxDialog()
+// ===========================================================================
+// implementation
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// wxPrintDialog
+// ---------------------------------------------------------------------------
+
+wxPrintDialog::wxPrintDialog()
 {
     m_dialogParent = NULL;
     m_printerDC = NULL;
     m_destroyDC = TRUE;
 }
 
-wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintDialogData* data):
-wxDialog()
+wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintDialogData* data)
 {
     Create(p, data);
+}
+
+wxPrintDialog::wxPrintDialog(wxWindow *p, wxPrintData* data)
+{
+    wxPrintDialogData data2;
+    if ( data )
+        data2 = *data;
+
+    Create(p, &data2);
 }
 
 bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
@@ -71,22 +95,22 @@ bool wxPrintDialog::Create(wxWindow *p, wxPrintDialogData* data)
 
     if ( data )
         m_printDialogData = *data;
-    
+
     m_printDialogData.SetOwnerWindow(p);
 
     return TRUE;
 }
 
-wxPrintDialog::~wxPrintDialog(void)
+wxPrintDialog::~wxPrintDialog()
 {
     if (m_destroyDC && m_printerDC)
         delete m_printerDC;
 }
 
-int wxPrintDialog::ShowModal(void)
+int wxPrintDialog::ShowModal()
 {
     m_printDialogData.ConvertToNative();
-    
+
     bool ret = (PrintDlg( (PRINTDLG *)m_printDialogData.GetNativeData() ) != 0);
     if ( ret != FALSE && ((PRINTDLG *)m_printDialogData.GetNativeData())->hDC)
     {
@@ -97,17 +121,11 @@ int wxPrintDialog::ShowModal(void)
     }
     else
     {
-    /*
-    char buf[256];
-    DWORD exError = CommDlgExtendedError();
-    sprintf(buf, "ret = %d, ex error = %d", (int) ret, (int) exError);
-    wxMessageBox(buf);
-        */
         return wxID_CANCEL;
     }
 }
 
-wxDC *wxPrintDialog::GetPrintDC(void)
+wxDC *wxPrintDialog::GetPrintDC()
 {
     if (m_printerDC)
     {
@@ -118,18 +136,16 @@ wxDC *wxPrintDialog::GetPrintDC(void)
         return (wxDC*) NULL;
 }
 
-/*
-* wxPageSetupDialog
-*/
+// ---------------------------------------------------------------------------
+// wxPageSetupDialog
+// ---------------------------------------------------------------------------
 
-wxPageSetupDialog::wxPageSetupDialog(void):
-wxDialog()
+wxPageSetupDialog::wxPageSetupDialog()
 {
     m_dialogParent = NULL;
 }
 
-wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupData *data):
-wxDialog()
+wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupData *data)
 {
     Create(p, data);
 }
@@ -137,21 +153,21 @@ wxDialog()
 bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupData *data)
 {
     m_dialogParent = p;
-    
+
     if (data)
         m_pageSetupData = (*data);
-    
+
 #if defined(__WIN95__)
     m_pageSetupData.SetOwnerWindow(p);
 #endif
     return TRUE;
 }
 
-wxPageSetupDialog::~wxPageSetupDialog(void)
+wxPageSetupDialog::~wxPageSetupDialog()
 {
 }
 
-int wxPageSetupDialog::ShowModal(void)
+int wxPageSetupDialog::ShowModal()
 {
 #ifdef __WIN95__
     m_pageSetupData.ConvertToNative();
