@@ -35,12 +35,12 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
         return false;
 
     wxSize size = s ;
-
+    /*
     if ( size.x == wxDefaultSize.x && size.y == wxDefaultSize.y)
     {
         size = wxSize( 200 , 16 ) ;
     }
-    
+    */
     Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     m_peer = new wxMacControl() ;
     verify_noerr ( CreateProgressBarControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , 
