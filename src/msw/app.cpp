@@ -348,17 +348,20 @@ bool wxApp::RegisterWindowClasses()
 void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
 {
   // Split command line into tokens, as in usual main(argc, argv)
-  char **command = new char*[50]; // VZ: sure? why not 25 or 73 and a half??
-
-  int count = 0;
+  int para,count = 0;
   char *buf = new char[strlen(lpCmdLine) + 1];
 
+	para=0;
   /* Model independent strcpy */
-  int i;
-  for (i = 0; (buf[i] = lpCmdLine[i]) != 0; i++)
+  unsigned int i;
+  for (i = 0; i<strlen(lpCmdLine); i++)
   {
-    /* loop */;
+		buf[i]=lpCmdLine[i];
+		if (isspace(lpCmdLine[i]))
+			para++;
   }
+	buf[i]=0;
+  char **command = new char*[para+2];
 
   // Get application name
   char name[260]; // 260 is MAX_PATH value from windef.h
@@ -413,11 +416,12 @@ void wxApp::ConvertToStandardCommandArgs(char* lpCmdLine)
   wxTheApp->argc = count;
 
   for (i = 0; i < count; i++)
-  {
     wxTheApp->argv[i] = copystring(command[i]);
 
-    delete [] command[i];
-  }
+#if !defined(__GNUWIN32__)
+// use copystring than delete this pointer 
+	delete [] command[0];
+#endif
 
   delete [] command;
   delete [] buf;
