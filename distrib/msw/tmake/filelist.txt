@@ -91,9 +91,9 @@ laywin.cpp	Generic
 listctrl.cpp	Generic	NotWin32
 logg.cpp	Generic
 msgdlgg.cpp	Generic	Generic
-notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
+notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 numdlgg.cpp	Generic
-paletteg.cpp	Generic	NotMSW,NotX,NotX11,NotOS2,NotMGL,NotMac,NotMicro
+paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotX11,NotMac,NotMicro
 panelg.cpp	Generic
 printps.cpp	Generic	NotMSW,NotX11
 prntdlgg.cpp	Generic	NotMSW
@@ -106,9 +106,9 @@ scrlwing.cpp	Generic
 spinctlg.cpp	Generic
 splash.cpp	Generic
 splitter.cpp	Generic
-statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
-statusbr.cpp	Generic	NotMGL,NotMicro
-tabg.cpp	Generic	NotWin32,NotOS2,NotX11
+statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotX11,NotMac,NotMicro
+statusbr.cpp	Generic	NotMGL,NotX11,NotMicro
+tabg.cpp	Generic	NotWin32,NotOS2
 tbarsmpl.cpp	Generic
 textdlgg.cpp	Generic
 tipdlg.cpp	Generic

@@ -99,6 +99,10 @@ do
 	    echo "Generating $topdir/src/mgl/files.lst for MGL and Configure..."
 	    tmake -t mgl wxwin.pro -o $topdir/src/mgl/files.lst;;
 
+	x11.t)
+	    echo "Generating $topdir/src/x11/files.lst for X11 and Configure..."
+	    tmake -t x11 wxwin.pro -o $topdir/src/x11/files.lst;;
+
 	watmgl.t)
 	    echo "Generating $topdir/src/mgl/makefile.wat for Watcom C++ and MGL+DOS..."
 	    tmake -t watmgl wxwin.pro -o $topdir/src/mgl/makefile.wat;;

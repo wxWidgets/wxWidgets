@@ -17,7 +17,7 @@
     $project{"GUIOBJS"} .= "xmcombo.o ";
 
     foreach $file (sort keys %wxGeneric) {
-        next if $wxGeneric{$file} =~ /\bX\b/;
+        next if $wxGeneric{$file} =~ /\bNotX\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
@@ -26,7 +26,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\bX\b/;
+        next if $wxCommon{$file} =~ /\bNotX\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
@@ -56,7 +56,7 @@
     }
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
-        next if $wxWXINCLUDE{$file} =~ /\bX\b/;
+        next if $wxWXINCLUDE{$file} =~ /\bNotX\b/;
 
         $project{"MOTIF_HEADERS"} .= $file . " "
     }

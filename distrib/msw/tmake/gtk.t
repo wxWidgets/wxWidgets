@@ -16,7 +16,7 @@
     $project{"COMMONOBJS"} .= "parser.o ";
 
     foreach $file (sort keys %wxGeneric) {
-        next if $wxGeneric{$file} =~ /\bR\b/;
+        next if $wxGeneric{$file} =~ /\bNotGTK\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
@@ -35,7 +35,7 @@
     }
 
     foreach $file (sort keys %wxCommon) {
-        next if $wxCommon{$file} =~ /\bR\b/;
+        next if $wxCommon{$file} =~ /\bNotGTK\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
 
@@ -70,7 +70,7 @@
 
     #! find all our headers
     foreach $file (sort keys %wxWXINCLUDE) {
-        next if $wxWXINCLUDE{$file} =~ /\bR\b/;
+        next if $wxWXINCLUDE{$file} =~ /\bNotGTK\b/;
 
         $project{"GTK_HEADERS"} .= $file . " "
     }
