@@ -35,6 +35,11 @@ typedef int socklen_t ;
 #include <wx/timer.h>
 #include <wx/utils.h>
 
+// IRIX requires bstring.h be included to use select()
+#ifdef sgi
+    #include <bstring.h>
+#endif // IRIX
+
 // Not enough OS behaviour defined for wxStubs
 #ifndef __WXSTUBS__
 
