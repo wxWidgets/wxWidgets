@@ -1049,16 +1049,16 @@ wxString wxGridCellFloatEditor::GetString() const
     if ( m_width == -1 )
     {
         // default width/precision
-        fmt = _T("%g");
+        fmt = _T("%f");
     }
     else if ( m_precision == -1 )
     {
         // default precision
-        fmt.Printf(_T("%%%d.g"), m_width);
+        fmt.Printf(_T("%%%d.f"), m_width);
     }
     else
     {
-        fmt.Printf(_T("%%%d.%dg"), m_width, m_precision);
+        fmt.Printf(_T("%%%d.%df"), m_width, m_precision);
     }
 
     return wxString::Format(fmt, m_valueOld);
@@ -5110,7 +5110,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                         SetCurrentCell( coords );
                         if ( m_selection )
                         {
-                            if ( m_selection->GetSelectionMode() != 
+                            if ( m_selection->GetSelectionMode() !=
                                     wxGrid::wxGridSelectCells )
                             {
                                 HighlightBlock( coords, coords );

@@ -477,7 +477,7 @@ public:
     virtual void StartingKey(wxKeyEvent& event);
 
     virtual wxGridCellEditor *Clone() const
-        { return new wxGridCellFloatEditor; }
+        { return new wxGridCellFloatEditor(m_width, m_precision); }
 
     // parameters string format is "width,precision"
     virtual void SetParameters(const wxString& params);
