@@ -487,7 +487,7 @@ static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNU
 static long map_to_unmodified_wx_keysym( GdkEventKey *event )
 {
     KeySym keysym = event->keyval;
-    guint key_code = 0;
+    long key_code;
 
     switch (keysym)
     {
@@ -581,21 +581,19 @@ static long map_to_unmodified_wx_keysym( GdkEventKey *event )
         case GDK_F11:           key_code = WXK_F11;         break;
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
-        {
-        if (event->length == 1)
-        {
-            key_code = toupper( (unsigned char)*event->string );
-        }
-        else if ((keysym & 0xFF) == keysym)
+            if ( (keysym & 0xFF) == keysym )
             {
                 guint upper = gdk_keyval_to_upper( (guint)keysym );
-                keysym = (upper != 0 ? upper : keysym ); /* to be MSW compatible */
-                key_code = (guint)keysym;
+                key_code = upper ? upper : keysym;
             }
-        }
+            else
+            {
+                // unknown key code
+                key_code = 0;
+            }
     }
 
-    return (key_code);
+    return key_code;
 }
 
 static long map_to_wx_keysym( GdkEventKey *event )
@@ -686,18 +684,18 @@ static long map_to_wx_keysym( GdkEventKey *event )
         case GDK_F12:           key_code = WXK_F12;         break;
         default:
         {
-        if (event->length == 1)
-        {
-            key_code = (unsigned char)*event->string;
-        }
-        else if ((keysym & 0xFF) == keysym)
+            if (event->length == 1)
+            {
+                key_code = (unsigned char)*event->string;
+            }
+            else if ((keysym & 0xFF) == keysym)
             {
                 key_code = (guint)keysym;
             }
         }
     }
 
-    return (key_code);
+    return key_code;
 }
 
 //-----------------------------------------------------------------------------
@@ -967,6 +965,9 @@ static void gtk_window_draw_callback( GtkWidget *widget,
 // "key_press_event" from any window
 //-----------------------------------------------------------------------------
 
+// turn on to see the key event codes on the console
+#undef DEBUG_KEY_EVENTS
+
 static gint gtk_window_key_press_callback( GtkWidget *widget,
                                            GdkEventKey *gdk_event,
                                            wxWindow *win )
@@ -980,23 +981,23 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     if (g_blockEventsOnDrag) return FALSE;
 
 
-/*
-    wxString tmp;
-    tmp += (char)gdk_event->keyval;
-    printf( "KeyDown-Code is: %s.\n", tmp.c_str() );
-    printf( "KeyDown-ScanCode is: %d.\n", gdk_event->keyval );
-*/
-
     int x = 0;
     int y = 0;
     GdkModifierType state;
-    if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+    if (gdk_event->window)
+        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     bool ret = FALSE;
 
     long key_code = map_to_unmodified_wx_keysym( gdk_event );
+
+#ifdef DEBUG_KEY_EVENTS
+    wxPrintf(_T("Key press event: %d => %ld\n"), gdk_event->keyval, key_code);
+#endif // DEBUG_KEY_EVENTS
+
     /* sending unknown key events doesn't really make sense */
-    if (key_code == 0) return FALSE;
+    if (key_code == 0)
+        return FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     event.SetTimestamp( gdk_event->time );
@@ -1031,39 +1032,37 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     }
 #endif // wxUSE_ACCEL
 
-    /* wxMSW doesn't send char events with Alt pressed */
     /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
        will only be sent if it is not in an accelerator table. */
-    key_code = map_to_wx_keysym( gdk_event );
-
-    if ( (!ret) &&
-         (key_code != 0))
+    if ( !ret )
     {
-        wxKeyEvent event2( wxEVT_CHAR );
-        event2.SetTimestamp( gdk_event->time );
-        event2.m_shiftDown = (gdk_event->state & GDK_SHIFT_MASK);
-        event2.m_controlDown = (gdk_event->state & GDK_CONTROL_MASK);
-        event2.m_altDown = (gdk_event->state & GDK_MOD1_MASK);
-        event2.m_metaDown = (gdk_event->state & GDK_MOD2_MASK);
-        event2.m_keyCode = key_code;
-        event2.m_scanCode = gdk_event->keyval;
-        event2.m_x = x;
-        event2.m_y = y;
-        event2.SetEventObject( win );
-        ret = win->GetEventHandler()->ProcessEvent( event2 );
+        key_code = map_to_wx_keysym( gdk_event );
+
+        if ( key_code )
+        {
+#ifdef DEBUG_KEY_EVENTS
+            wxPrintf(_T("Char event: %ld\n"), key_code);
+#endif // DEBUG_KEY_EVENTS
+
+            // reuse the ame event object, just change its type and use the
+            // translated keycode instead of the raw one
+            event.SetEventType(wxEVT_CHAR);
+            event.m_keyCode = key_code;
+
+            ret = win->GetEventHandler()->ProcessEvent( event );
+        }
     }
 
     /* win is a control: tab can be propagated up */
-    if ( (!ret) &&
+    if ( !ret &&
          ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
 // VZ: testing for wxTE_PROCESS_TAB shouldn't be done here the control may
 //     have this style, yet choose not to process this particular TAB in which
 //     case TAB must still work as a navigational character
 #if 0
-         (!win->HasFlag(wxTE_PROCESS_TAB)) &&
+         !win->HasFlag(wxTE_PROCESS_TAB) &&
 #endif // 0
-         (win->GetParent()) &&
-         (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+         win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
     {
         wxNavigationKeyEvent new_event;
         new_event.SetEventObject( win->GetParent() );
@@ -1076,7 +1075,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     }
 
     /* generate wxID_CANCEL if <esc> has been pressed (typically in dialogs) */
-    if ( (!ret) &&
+    if ( !ret &&
          (gdk_event->keyval == GDK_Escape) )
     {
         wxCommandEvent new_event(wxEVT_COMMAND_BUTTON_CLICKED,wxID_CANCEL);
@@ -1084,10 +1083,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
         ret = win->GetEventHandler()->ProcessEvent( new_event );
     }
 
-#if (GTK_MINOR_VERSION > 0)
-    /* Pressing F10 will activate the menu bar of the top frame. */
     /* Doesn't work. */
-/*
+#if 0 // (GTK_MINOR_VERSION > 0)
+    /* Pressing F10 will activate the menu bar of the top frame. */
     if ( (!ret) &&
          (gdk_event->keyval == GDK_F10) )
     {
@@ -1113,8 +1111,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
             ancestor = ancestor->GetParent();
         }
     }
-*/
-#endif
+#endif // 0
 
     if (ret)
     {
@@ -1139,20 +1136,11 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-/*
-    printf( "KeyUp-ScanCode is: %d.\n", gdk_event->keyval );
-    if (gdk_event->state & GDK_SHIFT_MASK)
-      printf( "ShiftDown.\n" );
-    else
-      printf( "ShiftUp.\n" );
-    if (gdk_event->state & GDK_CONTROL_MASK)
-      printf( "ControlDown.\n" );
-    else
-      printf( "ControlUp.\n" );
-    printf( "\n" );
-*/
-
     long key_code = map_to_unmodified_wx_keysym( gdk_event );
+
+#ifdef DEBUG_KEY_EVENTS
+    wxPrintf(_T("Key release event: %d => %ld\n"), gdk_event->keyval, key_code);
+#endif // DEBUG_KEY_EVENTS
 
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
@@ -1160,7 +1148,8 @@ static gint gtk_window_key_release_callback( GtkWidget *widget, GdkEventKey *gdk
     int x = 0;
     int y = 0;
     GdkModifierType state;
-    if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
+    if (gdk_event->window)
+        gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
     wxKeyEvent event( wxEVT_KEY_UP );
     event.SetTimestamp( gdk_event->time );
@@ -1772,7 +1761,7 @@ static gint gtk_window_focus_out_callback( GtkWidget *widget, GdkEvent *WXUNUSED
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
-    wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
+    //wxASSERT_MSG( wxGetTopLevelParent(win) == g_activeFrame, wxT("unfocusing window that haven't gained focus properly") )
     g_activeFrameLostFocus = TRUE;
 
     // VZ: this is really weird but GTK+ seems to call us from inside
