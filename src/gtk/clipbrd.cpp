@@ -167,6 +167,9 @@ wxClipboard::wxClipboard()
 {
   m_data = (wxDataObject*) NULL;
   
+  m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
+  gtk_widget_realize( m_clipboardWidget );
+
   gtk_signal_connect( GTK_OBJECT(m_clipboardWidget), 
                       "selection_clear_event",
 		      GTK_SIGNAL_FUNC( selection_clear ), 
@@ -232,7 +235,6 @@ void wxClipboard::SetData( wxDataObject *data )
   
   m_clipboardWidget = gtk_window_new( GTK_WINDOW_POPUP );
   gtk_widget_realize( m_clipboardWidget );
-
 
   if (m_data) delete m_data;
   m_data = data;
