@@ -100,14 +100,19 @@ while test $# -gt 0; do
       fi
 
       if test $static_flag = yes ; then
-          echo "$libs @LDFLAGS@ @WXCONFIG_LIBS@ @LIBS@ @DMALLOC_LIBS@"
+          echo "$libs @LDFLAGS@ @libdir@/@WXCONFIG_LIBS_STATIC@ @LIBS@ @DMALLOC_LIBS@"
       else
           echo $libs @LDFLAGS@ @WXCONFIG_LIBS@ @DMALLOC_LIBS@
       fi
 
       ;;
     --gl-libs)
-      echo @LDFLAGS_GL@ @WXCONFIG_LIBS_GL@
+      if test $static_flag = yes -a "x" != "x@WXCONFIG_LIBS_STATIC_GL@" ; then
+          gllibs="@libdir@/@WXCONFIG_LIBS_STATIC_GL@"
+      else
+          gllibs="@WXCONFIG_LIBS_GL@"
+      fi
+      echo @LDFLAGS_GL@ "$gllibs"
       ;;
     --cc)
       echo $CC

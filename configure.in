@@ -2443,9 +2443,11 @@ WX_LIBRARY_NAME_STATIC_GL="lib${WX_LIBRARY_GL}.a"
 
 dnl define which libs wx-config should link.
 WXCONFIG_LIBS="-l${WX_LIBRARY}"
+WXCONFIG_LIBS_STATIC="lib${WX_LIBRARY}.a"
 
 if test "$wxUSE_OPENGL" = "yes"; then
-    WXCONFIG_LIBS_GL="-l${WX_LIBRARY_GL} $OPENGL_LIBS"
+    WXCONFIG_LIBS_GL="-l${WX_LIBRARY_GL} ${OPENGL_LIBS}"
+    WXCONFIG_LIBS_STATIC_GL="lib${WX_LIBRARY_GL}.a ${OPENGL_LIBS}"
 fi
 
 
@@ -2592,6 +2594,7 @@ if test "$wxUSE_SHARED" = "yes"; then
 
     dnl do not alter the LIBRARY_TYPE strings "so" and "a", they are magic
     WX_TARGET_LIBRARY_TYPE="so"
+    INSTALL_LIBRARY='$(INSTALL_PROGRAM)'
 fi
 
 dnl do not 'else' this, it may be changed in the above conditional.
@@ -2618,6 +2621,7 @@ if test "$wxUSE_SHARED" = "no"; then
     WX_TARGET_LIBRARY_GL="${WX_LIBRARY_NAME_STATIC_GL}"
 
     WX_TARGET_LIBRARY_TYPE="a"
+    INSTALL_LIBRARY='$(INSTALL_DATA)'
 fi
 
 if test "$wxUSE_MAC" = 1; then
@@ -4783,6 +4787,8 @@ AC_SUBST(host_alias)
 AC_SUBST(cross_compiling)
 AC_SUBST(WXCONFIG_LIBS)
 AC_SUBST(WXCONFIG_LIBS_GL)
+AC_SUBST(WXCONFIG_LIBS_STATIC)
+AC_SUBST(WXCONFIG_LIBS_STATIC_GL)
 AC_SUBST(WXCONFIG_INCLUDE)
 
 dnl what to compile
@@ -4822,6 +4828,8 @@ AC_SUBST(AS)
 AC_SUBST(NM)
 AC_SUBST(LD)
 AC_SUBST(MAKEINFO)
+AC_SUBST(INSTALL_LIBRARY)
+
 
 
 dnl MAKE_SET will be replaced with "MAKE=..." or nothing if make sets MAKE
