@@ -4270,7 +4270,7 @@ bool wxWindowMSW::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
 // ---------------------------------------------------------------------------
 
 bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
-                           WXWORD pos, WXHWND control)
+                              WXWORD pos, WXHWND control)
 {
     if ( control )
     {
