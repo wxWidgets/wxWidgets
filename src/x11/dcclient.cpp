@@ -1232,6 +1232,10 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
+    XCharStruct overall_return;
+    int direction, slen, ascent, descent;
+    (void)XTextExtents((XFontStruct*) xfont, (char*) (const char*) text, slen, &direction,
+                               &ascent, &descent, &overall_return);
 #if 0
     wxCoord width = gdk_string_width( font, text.mbc_str() );
     wxCoord height = font->ascent + font->descent;
@@ -1248,7 +1252,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
         XDrawString( (Display*) m_display, (Window) m_window, 
-            (GC) m_textGC, x, y, text.c_str(), text.Len() );
+            (GC) m_textGC, x, y + ascent, text.c_str(), text.Len() );
 	wxLogDebug("Drawing text %s at %d, %d", text.c_str(), x, y);
 	}
 
