@@ -482,9 +482,9 @@ else
   OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) $(DIRDLGOBJ)
 endif
 
-ARCHINCDIR=$(subst /,\,$(WXDIR))\lib\msw$(INCEXT)
+ARCHINCDIR=$(subst /,\,$(WXDIR))/lib/msw$(INCEXT)
 
-SETUP_H=$(ARCHINCDIR)\wx\setup.h
+SETUP_H=$(ARCHINCDIR)/wx/setup.h
 
 ifndef WXMAKINGDLL
 all:    $(SETUP_H) $(OBJECTS) $(WXLIB) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(REGEXLIB)
@@ -492,12 +492,12 @@ else
 all:    $(SETUP_H) $(OBJECTS) $(ZLIBLIB) $(PNGLIB) $(JPEGLIB) $(TIFFLIB) $(REGEXLIB) $(WXDLL)
 endif
 
-$(ARCHINCDIR)\wx:
+$(ARCHINCDIR)/wx:
 	mkdir $(ARCHINCDIR)
-	mkdir $(ARCHINCDIR)\wx
+	mkdir $(ARCHINCDIR)/wx
 
-$(SETUP_H): $(ARCHINCDIR)\wx
-	$(COPY) $(WXDIR)\include\wx\msw\setup.h $@
+$(SETUP_H): $(ARCHINCDIR)/wx
+	$(COPY) $(WXDIR)/include/wx/msw/setup.h $@
 
 ifndef WXMAKINGDLL
 
