@@ -331,7 +331,7 @@ void wxSpinCtrl::SetTextValue(int val)
     m_text->SetSelection(0, -1);
 
     // and give focus to the control!
-    m_text->SetFocus();
+    // m_text->SetFocus();    Why???? TODO.
 }
 
 void wxSpinCtrl::SetValue(int val)
