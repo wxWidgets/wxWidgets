@@ -49,8 +49,6 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     m_parent = parent;
     if (m_parent) m_parent->AddChild( this );
 
-    wxTopLevelWindows.Append(this);
-    
     Display *xdisplay = wxGlobalDisplay();
     int xscreen = DefaultScreen( xdisplay );
     Visual *xvisual = DefaultVisual( xdisplay, xscreen );

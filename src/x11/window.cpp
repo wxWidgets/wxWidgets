@@ -293,43 +293,46 @@ void wxWindowX11::DoCaptureMouse()
 {
     if ((g_captureWindow != NULL) && (g_captureWindow != this))
     {
-	wxASSERT_MSG(FALSE, "Trying to capture before mouse released.");
+        wxASSERT_MSG(FALSE, "Trying to capture before mouse released.");
 
-	// Core dump now
-	int *tmp = NULL;
-	(*tmp) = 1;
-	return;
+        // Core dump now
+        int *tmp = NULL;
+        (*tmp) = 1;
+        return;
     }
     
-    if ( m_winCaptured )
+    if (m_winCaptured)
         return;
+
+    Window xwindow = (Window) GetMainWindow();
 
     g_captureWindow = (wxWindow*) this;
 
-    if (GetMainWindow())
+    if (xwindow)
     {
-        int res = XGrabPointer(wxGlobalDisplay(), (Window) GetMainWindow(),
+        int res = XGrabPointer(wxGlobalDisplay(), xwindow,
             FALSE,
             ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask,
             GrabModeAsync,
 	        GrabModeAsync,
             None,
             None, /* cursor */ // TODO: This may need to be set to the cursor of this window
-            CurrentTime);
+            CurrentTime );
 
         if (res != GrabSuccess)
         {
-	    wxString msg;
-	    msg.Printf("Failed to grab pointer for window %s", this->GetClassInfo()->GetClassName());
-	    wxLogDebug(msg);
-	    if (res == GrabNotViewable)
-	    {
-		wxLogDebug("This is not a viewable window - perhaps not shown yet?");
-	    }
-	    g_captureWindow = NULL;
+            wxString msg;
+            msg.Printf("Failed to grab pointer for window %s", this->GetClassInfo()->GetClassName());
+            wxLogDebug(msg);
+            if (res == GrabNotViewable)
+            {
+                wxLogDebug("This is not a viewable window - perhaps not shown yet?");
+            }
+            g_captureWindow = NULL;
             return;
         }
-	wxLogDebug("Grabbed pointer");
+
+        wxLogDebug("Grabbed pointer");
 
 #if 0
         res = XGrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
@@ -351,11 +354,8 @@ void wxWindowX11::DoCaptureMouse()
 
 #if 0
         res = XGrabKeyboard(wxGlobalDisplay(), (Window) GetMainWindow(),
-#if 0
             ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | Mod3Mask | Mod4Mask | Mod5Mask,
-#else
             FALSE,
-#endif
             GrabModeAsync,
 	        GrabModeAsync,
             CurrentTime);
@@ -364,10 +364,8 @@ void wxWindowX11::DoCaptureMouse()
         {
             wxLogDebug("Failed to grab keyboard.");
             XUngrabPointer(wxGlobalDisplay(), CurrentTime);
-#if 0
             XUngrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
                 (Window) GetMainWindow());
-#endif
             return;
         }
 #endif
@@ -379,18 +377,18 @@ void wxWindowX11::DoCaptureMouse()
 void wxWindowX11::DoReleaseMouse()
 {
     g_captureWindow = NULL;
+    
     if ( !m_winCaptured )
         return;
 
-    Window wMain = (Window)GetMainWindow();
+    Window xwindow = (Window) GetMainWindow();
 
-    if ( wMain )
+    if (xwindow)
     {
-        XUngrabPointer(wxGlobalDisplay(), wMain);
+        XUngrabPointer( wxGlobalDisplay(), CurrentTime );
 #if 0
-        XUngrabButton(wxGlobalDisplay(), AnyButton, AnyModifier,
-                wMain);
-        XUngrabKeyboard(wxGlobalDisplay(), CurrentTime);
+        XUngrabButton( wxGlobalDisplay(), AnyButton, AnyModifier, xwindow);
+        XUngrabKeyboard( wxGlobalDisplay(), CurrentTime );
 #endif
     }
     wxLogDebug("Ungrabbed pointer");
