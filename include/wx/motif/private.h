@@ -39,6 +39,12 @@ class WXDLLEXPORT wxColour;
 #define wxCHECK_LESSTIF() ( defined(LesstifVersion) && LesstifVersion > 0 )
 
 // ----------------------------------------------------------------------------
+// Miscellaneous functions
+// ----------------------------------------------------------------------------
+
+WXWidget wxCreateBorderWidget( WXWidget parent, long style );
+
+// ----------------------------------------------------------------------------
 // common callbacks
 // ----------------------------------------------------------------------------
 

@@ -40,6 +40,8 @@
 #include "wx/unix/execute.h"
 
 #include <Xm/Xm.h>
+#include <Xm/Frame.h>
+
 #include "wx/motif/private.h"
 
 #if wxUSE_RESOURCES
@@ -1210,4 +1212,47 @@ wxBitmap wxCreateMaskedBitmap(const wxBitmap& bitmap, wxColour& colour)
                 &srcDC, 0, 0, wxCOPY, TRUE);
 
     return newBitmap;
+}
+
+// ----------------------------------------------------------------------------
+// Miscellaneous functions
+// ----------------------------------------------------------------------------
+
+WXWidget wxCreateBorderWidget( WXWidget parent, long style )
+{
+    Widget borderWidget = (Widget)NULL, parentWidget = (Widget)parent;
+
+    if (style & wxSIMPLE_BORDER)
+    {
+        borderWidget = XtVaCreateManagedWidget
+                                   (
+                                    "simpleBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_ETCHED_IN,
+                                    XmNshadowThickness, 1,
+                                    NULL
+                                   );
+    }
+    else if (style & wxSUNKEN_BORDER)
+    {
+        borderWidget = XtVaCreateManagedWidget
+                                   (
+                                    "sunkenBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_IN,
+                                    NULL
+                                   );
+    }
+    else if (style & wxRAISED_BORDER)
+    {
+        borderWidget = XtVaCreateManagedWidget
+                                   (
+                                    "raisedBorder",
+                                    xmFrameWidgetClass, parentWidget,
+                                    XmNshadowType, XmSHADOW_OUT,
+                                    NULL
+                                   );
+    }
+
+    return borderWidget;
 }

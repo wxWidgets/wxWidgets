@@ -277,36 +277,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     XtAppAddActions ((XtAppContext) wxTheApp->GetAppContext(), actions, 1);
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
-    
-    if (style & wxSIMPLE_BORDER)
-    {
-        m_borderWidget = (WXWidget)XtVaCreateManagedWidget
-                                   (
-                                    "canvasBorder",
-                                    xmFrameWidgetClass, parentWidget,
-                                    XmNshadowType, XmSHADOW_IN,
-                                    XmNshadowThickness, 1,
-                                    NULL
-                                   );
-    } else if (style & wxSUNKEN_BORDER)
-    {
-        m_borderWidget = (WXWidget)XtVaCreateManagedWidget
-                                   (
-                                    "canvasBorder",
-                                    xmFrameWidgetClass, parentWidget,
-                                    XmNshadowType, XmSHADOW_IN,
-                                    NULL
-                                   );
-    } else if (style & wxRAISED_BORDER)
-    {
-        m_borderWidget = (WXWidget)XtVaCreateManagedWidget
-                                   (
-                                    "canvasBorder",
-                                    xmFrameWidgetClass, parentWidget,
-                                    XmNshadowType, XmSHADOW_OUT,
-                                    NULL
-                                   );
-    }
+    m_borderWidget = wxCreateBorderWidget( (WXWidget)parentWidget, style );
 
     m_scrolledWindow = (WXWidget)XtVaCreateManagedWidget
                                  (
@@ -360,12 +331,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback ((Widget) m_drawingArea, XmNexposeCallback, (XtCallbackProc) wxCanvasRepaintProc, (XtPointer) this);
     XtAddCallback ((Widget) m_drawingArea, XmNinputCallback, (XtCallbackProc) wxCanvasInputEvent, (XtPointer) this);
 
-    // TODO?
-#if 0
-    display = XtDisplay (scrolledWindow);
-    xwindow = XtWindow (drawingArea);
-#endif // 0
-
     XtAddEventHandler(
                       (Widget)m_drawingArea,
                        PointerMotionHintMask | EnterWindowMask |
@@ -385,13 +350,6 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                              (Widget)m_scrolledWindow,
                              (Widget) 0, (Widget) 0,
                              (Widget) m_drawingArea);
-
-#if 0
-    if (m_hScrollBar)
-        XtRealizeWidget ((Widget) m_hScrollBar);
-    if (m_vScrollBar)
-        XtRealizeWidget ((Widget) m_vScrollBar);
-#endif // 0
 
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
