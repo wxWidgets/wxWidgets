@@ -636,9 +636,9 @@ enum
 
 typedef float wxFloat32 ;
 #if defined( __WXMAC__ )  && defined (__MWERKS__)
-    typedef short double	wxFloat64;
+    typedef short double wxFloat64;
 #else
-    typedef double			wxFloat64;
+    typedef double wxFloat64;
 #endif
 
 #if defined( __WXMAC__ )  && !defined( __POWERPC__ )
@@ -668,30 +668,30 @@ typedef float wxFloat32 ;
 #if defined (__MWERKS__) && ( (__MWERKS__ < 0x0900) || macintosh )
 // assembler versions for these
 #ifdef __POWERPC__
-	inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i )
-		{return (__lhbrx( &i , 0 ) ) ;}
-	inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i )
-		{return (__lhbrx( &i , 0 ) ) ;}
-	inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i )
-		{return (__lwbrx( &i , 0 ) ) ;}
-	inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i )
-		{return (__lwbrx( &i , 0 ) ) ;}
+    inline wxUint16 wxUINT16_SWAP_ALWAYS( wxUint16 i )
+        {return (__lhbrx( &i , 0 ) ) ;}
+    inline wxInt16 wxINT16_SWAP_ALWAYS( wxInt16 i )
+        {return (__lhbrx( &i , 0 ) ) ;}
+    inline wxUint32 wxUINT32_SWAP_ALWAYS( wxUint32 i )
+        {return (__lwbrx( &i , 0 ) ) ;}
+    inline wxInt32 wxINT32_SWAP_ALWAYS( wxInt32 i )
+        {return (__lwbrx( &i , 0 ) ) ;}
 #else
-	#pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
-	pascal wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value)
-		= { 0xE158 };
-	
-	#pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
-	pascal wxInt16 wxUINT16_SWAP_ALWAYS(wxInt16 value)
-		= { 0xE158 };
+    #pragma parameter __D0 wxUINT16_SWAP_ALWAYS(__D0)
+    pascal wxUint16 wxUINT16_SWAP_ALWAYS(wxUint16 value)
+        = { 0xE158 };
 
-	#pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
-	pascal wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value)
-		= { 0xE158, 0x4840, 0xE158 };
+    #pragma parameter __D0 wxINT16_SWAP_ALWAYS(__D0)
+    pascal wxInt16 wxUINT16_SWAP_ALWAYS(wxInt16 value)
+        = { 0xE158 };
 
-	#pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
-	pascal wxInt32 wxUINT32_SWAP_ALWAYS(wxInt32 value)
-		= { 0xE158, 0x4840, 0xE158 };
+    #pragma parameter __D0 wxUINT32_SWAP_ALWAYS (__D0)
+    pascal wxUint32 wxUINT32_SWAP_ALWAYS(wxUint32 value)
+        = { 0xE158, 0x4840, 0xE158 };
+
+    #pragma parameter __D0 wxINT32_SWAP_ALWAYS (__D0)
+    pascal wxInt32 wxUINT32_SWAP_ALWAYS(wxInt32 value)
+        = { 0xE158, 0x4840, 0xE158 };
 
 #endif
 #else // !MWERKS
@@ -1651,28 +1651,28 @@ typedef enum {
 
 #ifdef __WXMAC__
 
-typedef WindowPtr   	WXHWND;
-typedef Handle   			WXHANDLE;
-typedef CIconHandle		WXHICON;
+typedef WindowPtr       WXHWND;
+typedef Handle               WXHANDLE;
+typedef CIconHandle        WXHICON;
 //typedef unsigned long   WXHFONT;
-typedef MenuHandle   	WXHMENU;
+typedef MenuHandle       WXHMENU;
 //typedef unsigned long   WXHPEN;
 //typedef unsigned long   WXHBRUSH;
 //typedef unsigned long   WXHPALETTE;
-typedef CursHandle   	WXHCURSOR;
-typedef RgnHandle   	WXHRGN;
+typedef CursHandle       WXHCURSOR;
+typedef RgnHandle       WXHRGN;
 //typedef unsigned long   WXHACCEL;
 //typedef unsigned long   WXHINSTANCE;
 typedef GWorldPtr   WXHBITMAP;
 //typedef unsigned long   WXHIMAGELIST;
 //typedef unsigned long   WXHGLOBAL;
-typedef GrafPtr   		WXHDC;
+typedef GrafPtr           WXHDC;
 typedef unsigned int    WXUINT;
 typedef unsigned long   WXDWORD;
 typedef unsigned short  WXWORD;
 //typedef unsigned int    WXWPARAM;
 //typedef long            WXLPARAM;
-typedef RGBColor   		WXCOLORREF;
+typedef RGBColor           WXCOLORREF;
 //typedef void *          WXRGNDATA;
 //typedef void *          WXMSG;
 //typedef unsigned long   WXHCONV;
@@ -1806,7 +1806,9 @@ typedef WXHWND WXWidget;
         #endif
     #endif // no FAR
 #else // Win32
-    #define FAR
+    #ifndef FAR
+        #define FAR
+    #endif
 #endif // Win16/32
 
 #endif // MSW
@@ -1874,8 +1876,8 @@ typedef struct _GtkTooltips       GtkTooltips;
 typedef struct _GtkNotebook       GtkNotebook;
 typedef struct _GtkNotebookPage   GtkNotebookPage;
 typedef struct _GtkAccelGroup     GtkAccelGroup;
-typedef	struct _GtkItemFactory    GtkItemFactory;
-typedef	struct _GtkSelectionData  GtkSelectionData;
+typedef struct _GtkItemFactory    GtkItemFactory;
+typedef struct _GtkSelectionData  GtkSelectionData;
 
 typedef GtkWidget *WXWidget;
 #endif // GTK
