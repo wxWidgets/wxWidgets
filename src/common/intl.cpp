@@ -887,7 +887,8 @@ public:
               wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
-    void FillHash(wxMessagesHash& hash, bool convertEncoding) const;
+    void FillHash(wxMessagesHash& hash, const wxString& msgIdCharset,
+                  bool convertEncoding) const;
 
 private:
     // this implementation is binary compatible with GNU gettext() version 0.10
@@ -963,7 +964,8 @@ class wxMsgCatalog
 {
 public:
     // load the catalog from disk (szDirPrefix corresponds to language)
-    bool Load(const wxChar *szDirPrefix, const wxChar *szName, bool bConvertEncoding = FALSE);
+    bool Load(const wxChar *szDirPrefix, const wxChar *szName,
+              const wxChar *msgIdCharset = NULL, bool bConvertEncoding = false);
 
     // get name of the catalog
     wxString GetName() const { return m_name; }
@@ -1214,7 +1216,9 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
   return true;
 }
 
-void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) const
+void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
+                                const wxString& msgIdCharset,
+                                bool convertEncoding) const
 {
 #if wxUSE_WCHAR_T
     wxCSConv *csConv = NULL;
@@ -1222,7 +1226,15 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
         csConv = new wxCSConv(m_charset);
 
     wxMBConv& inputConv = csConv ? *((wxMBConv*)csConv) : *wxConvCurrent;
+
+    wxCSConv *sourceConv = NULL;
+    if ( !msgIdCharset.empty() && (m_charset != msgIdCharset) )
+        sourceConv = new wxCSConv(msgIdCharset);
+
 #elif wxUSE_FONTMAP
+    wxASSERT_MSG( msgIdCharset == NULL,
+                  _T("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
+    
     wxEncodingConverter converter;
     if ( convertEncoding )
     {
@@ -1259,11 +1271,17 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     for (size_t i = 0; i < m_numStrings; i++)
     {
         const char *data = StringAtOfs(m_pOrigTable, i);
-#if wxUSE_WCHAR_T
+#if wxUSE_UNICODE
         wxString msgid(data, inputConv);
 #else
-        wxString msgid(data);
+        wxString msgid;
+#if wxUSE_WCHAR_T
+        if ( convertEncoding && sourceConv )
+            msgid = wxString(inputConv.cMB2WC(data), *sourceConv);
+        else
 #endif
+            msgid = data;
+#endif // wxUSE_UNICODE
 
         data = StringAtOfs(m_pTransTable, i);
         size_t length = Swap(m_pTransTable[i].nLen);
@@ -1300,6 +1318,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
     }
 
 #if wxUSE_WCHAR_T
+    delete sourceConv;
     delete csConv;
 #endif
 }
@@ -1310,7 +1329,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash, bool convertEncoding) cons
 // ----------------------------------------------------------------------------
 
 bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
-                        bool bConvertEncoding)
+                        const wxChar *msgIdCharset, bool bConvertEncoding)
 {
     wxMsgCatalogFile file;
 
@@ -1318,7 +1337,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
 
     if ( file.Load(szDirPrefix, szName, m_pluralFormsCalculator) )
     {
-        file.FillHash(m_messages, bConvertEncoding);
+        file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
         return TRUE;
     }
 
@@ -2491,26 +2510,46 @@ bool wxLocale::IsLoaded(const wxChar *szDomain) const
 // add a catalog to our linked list
 bool wxLocale::AddCatalog(const wxChar *szDomain)
 {
+    return AddCatalog(szDomain, wxLANGUAGE_ENGLISH, NULL);
+}
+
+// add a catalog to our linked list
+bool wxLocale::AddCatalog(const wxChar *szDomain,
+                          wxLanguage    msgIdLanguage,
+                          const wxChar *msgIdCharset)
+
+{
   wxMsgCatalog *pMsgCat = new wxMsgCatalog;
 
-  if ( pMsgCat->Load(m_strShort, szDomain, m_bConvertEncoding) ) {
+  if ( pMsgCat->Load(m_strShort, szDomain, msgIdCharset, m_bConvertEncoding) ) {
     // add it to the head of the list so that in GetString it will
     // be searched before the catalogs added earlier
     pMsgCat->m_pNext = m_pMsgCat;
     m_pMsgCat = pMsgCat;
 
-    return TRUE;
+    return true;
   }
   else {
     // don't add it because it couldn't be loaded anyway
     delete pMsgCat;
 
-    // it's OK to not load English catalog, the texts are embedded in
-    // the program:
-    if (m_strShort.Mid(0, 2) == wxT("en"))
-        return TRUE;
+    // It is OK to not load catalog if the msgid language and m_language match,
+    // in which case we can directly display the texts embedded in program's
+    // source code:
+    if (m_language == msgIdLanguage)
+        return true;
 
-    return FALSE;
+    // If there's no exact match, we may still get partial match where the
+    // (basic) language is same, but the country differs. For example, it's
+    // permitted to use en_US strings from sources even if m_language is en_GB:
+    const wxLanguageInfo *msgIdLangInfo = GetLanguageInfo(msgIdLanguage);
+    if ( msgIdLangInfo &&
+         msgIdLangInfo->CanonicalName.Mid(0, 2) == m_strShort.Mid(0, 2) )
+    {
+        return true;
+    }
+
+    return false;
   }
 }
 

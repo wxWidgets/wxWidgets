@@ -88,6 +88,29 @@ user's operating system. This is default behaviour of the
 \helpref{wxLocale}{wxlocale} class; you can disable it by {\bf not} passing
 {\tt wxLOCALE\_CONV\_ENCODING} to \helpref{wxLocale::Init}{wxlocaleinit}.
 
+\wxheading{Non-English strings or 8-bit characters in the source code}
+
+By convention, you should only use characters without diacritics (i.e. 7-bit
+ASCII strings) for msgids in the source code and write them in English.
+
+If you port software to wxWindows, you may be confronted with legacy source
+code containing non-English string literals. Instead of translating the strings
+in the source code to English and putting the original strings into message
+catalog, you may configure wxWidgets to use non-English msgids and translate to
+English using message catalogs:
+
+\begin{enumerate}
+\item{If you use the program {\tt xgettext} to extract the strings from
+the source code, specify the option {\tt --from-code=<source code charset>}.}
+\item{Specify the source code language and charset as arguments to
+\helpref{wxLocale::AddCatalog}{wxlocaleaddcatalog}. For example:
+\begin{verbatim}
+locale.AddCatalog(_T("myapp"),
+                  wxLANGUAGE_GERMAN, _T("iso-8859-1"));
+\end{verbatim}
+}
+\end{enumerate}
+
 \wxheading{Font mapping}
 
 You can use \helpref{wxMBConv classes}{mbconvclasses} and 
