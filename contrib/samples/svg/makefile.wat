@@ -5,7 +5,7 @@ WXDIR = $(%WXWIN)
 
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 PROGRAM = svgtest
-EXTRALIBS = $(WXDIR)\lib\svg_w.lib
+EXTRALIBS = $(WXDIR)\lib\dcsvg_w.lib
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 
 !include $(WXDIR)\src\makeprog.wat

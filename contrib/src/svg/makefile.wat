@@ -3,7 +3,7 @@
 WXDIR = ..\..\..
 EXTRACPPFLAGS = -I$(WXDIR)\contrib\include
 
-LIBTARGET = $(WXDIR)\lib\svg_w.lib
+LIBTARGET = $(WXDIR)\lib\dcsvg_w.lib
 
 OBJECTS =  &
     $(OUTPUTDIR)\dcsvg.obj &
