@@ -379,7 +379,7 @@ void wxScrolledWindow::AdjustScrollbars()
         if( m_hAdjust->value + m_hAdjust->page_size > m_hAdjust->upper )
         {
             m_hAdjust->value = m_hAdjust->upper - m_hAdjust->page_size;
-            m_targetWindow->ScrollWindow( (m_xScrollPosition - m_hAdjust->value) * m_xScrollPixelsPerLine, 0 );
+            m_targetWindow->ScrollWindow( (int) (m_xScrollPosition - m_hAdjust->value) * m_xScrollPixelsPerLine, 0 );
             m_xScrollPosition = (int)m_hAdjust->value;
         }
     }
@@ -397,7 +397,7 @@ void wxScrolledWindow::AdjustScrollbars()
         if( m_vAdjust->value + m_vAdjust->page_size > m_vAdjust->upper )
         {
             m_vAdjust->value = m_vAdjust->upper - m_vAdjust->page_size;
-            m_targetWindow->ScrollWindow( 0, (m_yScrollPosition - m_vAdjust->value) * m_yScrollPixelsPerLine );
+            m_targetWindow->ScrollWindow( 0, (int) (m_yScrollPosition - m_vAdjust->value) * m_yScrollPixelsPerLine );
             m_yScrollPosition = (int)m_vAdjust->value;
         }
     }
