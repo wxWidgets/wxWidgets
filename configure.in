@@ -701,6 +701,8 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_TEXTDLG=no
   DEFAULT_wxUSE_STARTUP_TIPS=no
   DEFAULT_wxUSE_PROGRESSDLG=no
+  DEFAULT_wxUSE_WIZARDDLG=no
+
   DEFAULT_wxUSE_MENUS=no
   DEFAULT_wxUSE_MINIFRAME=no
   DEFAULT_wxUSE_HTML=no
@@ -1212,7 +1214,7 @@ WX_ARG_ENABLE(tbarsmpl,    [  --enable-tbarsmpl       use wxToolBarSimple class]
 WX_ARG_ENABLE(treectrl,    [  --enable-treectrl       use wxTreeCtrl class], wxUSE_TREECTRL)
 
 dnl ---------------------------------------------------------------------------
-dnl misc GUI options
+dnl common dialogs
 dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(commondlg,   [  --enable-commondlg      use common dialogs (wxDirDialog, wxProgressDialog, wxTextDialog, ...)], wxUSE_COMMONDLGS)
@@ -1226,6 +1228,12 @@ WX_ARG_ENABLE(numberdlg,   [  --enable-numberdlg      use wxNumberEntryDialog], 
 WX_ARG_ENABLE(textdlg,     [  --enable-textdlg        use wxTextDialog], wxUSE_TEXTDLG)
 WX_ARG_ENABLE(tipdlg,      [  --enable-tipdlg         use startup tips], wxUSE_STARTUP_TIPS)
 WX_ARG_ENABLE(progressdlg, [  --enable-progressdlg    use wxProgressDialog], wxUSE_PROGRESSDLG)
+WX_ARG_ENABLE(wizarddlg,   [  --enable-wizarddlg      use wxWizard], wxUSE_WIZARDDLG)
+
+dnl ---------------------------------------------------------------------------
+dnl misc GUI options
+dnl ---------------------------------------------------------------------------
+
 WX_ARG_ENABLE(menus,       [  --enable-menus          use wxMenu/wxMenuBar/wxMenuItem classes], wxUSE_MENUS)
 WX_ARG_ENABLE(miniframe,   [  --enable-miniframe      use wxMiniFrame class], wxUSE_MINIFRAME)
 WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], wxUSE_HTML)
@@ -4314,6 +4322,11 @@ fi
 
 if test "$wxUSE_TEXTDLG" = "yes"; then
     AC_DEFINE(wxUSE_TEXTDLG)
+fi
+
+if test "$wxUSE_WIZARDDLG" = "yes"; then
+    AC_DEFINE(wxUSE_WIZARDDLG)
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wizard"
 fi
 
 dnl ---------------------------------------------------------------------------
