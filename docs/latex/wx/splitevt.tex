@@ -9,6 +9,7 @@ in assert failure (in debug mode) and will return meaningless results.
 
 \wxheading{Derived from}
 
+\helpref{wxNotifyEvent}{wxnotifyevent}\\
 \helpref{wxCommandEvent}{wxcommandevent}\\
 \helpref{wxEvent}{wxevent}\\
 \helpref{wxObject}{wxobject}
@@ -25,20 +26,23 @@ functions that take a wxSplitterEvent argument.
 \twocolwidtha{10cm}
 \begin{twocollist}\itemsep=0pt
 \twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGING(id, func)}}{The sash
-position is in the process of being changed. May be used to modify the
-position of the tracking bar to properly reflect the position that
-would be set if the drag were to be completed at this point. Processes
-a wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGING event.}
+position is in the process of being changed. You may prevent this change
+from happening by calling \helpref{Veto}{wxnotifyeventveto} or you may also
+modify the position of the tracking bar to properly reflect the position that
+would be set if the drag were to be completed at this point. Processes a
+wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGING event.}
 \twocolitem{{\bf EVT\_SPLITTER\_SASH\_POS\_CHANGED(id, func)}}{The sash
 position was changed. May be used to modify the sash position before
 it is set, or to prevent the change from taking place.
 Processes a wxEVT\_COMMAND\_SPLITTER\_SASH\_POS\_CHANGED event.}
 \twocolitem{{\bf EVT\_SPLITTER\_UNSPLIT(id, func)}}{The splitter has been just
-unsplit. Processes a wxEVT\_COMMAND\_SPLITTER\_UNSPLIT event.}
+unsplit. Processes a wxEVT\_COMMAND\_SPLITTER\_UNSPLIT event. This event can't
+be vetoed.}
 \twocolitem{{\bf EVT\_SPLITTER\_DOUBLECLICKED(id, func)}}{The sash was double
 clicked. The default behaviour is to unsplit the window when this happens
-(unless the minimum pane size has been set to a value greater than zero).
-Processes a wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED event.}
+(unless the minimum pane size has been set to a value greater than zero). This
+won't happen if you veto this event. Processes a
+wxEVT\_COMMAND\_SPLITTER\_DOUBLECLICKED event.}
 \end{twocollist}%
 
 \wxheading{See also}

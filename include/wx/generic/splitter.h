@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        splitter.h
+// Name:        wx/splitter.h
 // Purpose:     wxSplitterWindow class
 // Author:      Julian Smart
 // Modified by:
@@ -154,22 +154,28 @@ public:
     void SetMinimumPaneSize(int min);
     int GetMinimumPaneSize() const { return m_minimumPaneSize; }
 
+    // NB: the OnXXX() functions below are for backwards compatibility only,
+    //     don't use them in new code but handle the events instead!
+
+    // called when the sash position is about to change, may return a new value
+    // for the sash or -1 to prevent the change from happening at all
+    virtual int OnSashPositionChanging(int newSashPosition);
+
     // Called when the sash position is about to be changed, return
     // FALSE from here to prevent the change from taking place.
     // Repositions sash to minimum position if pane would be too small.
     // newSashPosition here is always positive or zero.
-    virtual bool OnSashPositionChange(int WXUNUSED(newSashPosition))
-        { return TRUE; }
+    virtual bool OnSashPositionChange(int newSashPosition);
 
     // If the sash is moved to an extreme position, a subwindow
     // is removed from the splitter window, and the app is
     // notified. The app should delete or hide the window.
-    virtual void OnUnsplit(wxWindow *WXUNUSED(removed)) { }
+    virtual void OnUnsplit(wxWindow *removed);
 
     // Called when the sash is double-clicked.
     // The default behaviour is to remove the sash if the
     // minimum pane size is zero.
-    virtual void OnDoubleClickSash(int WXUNUSED(x), int WXUNUSED(y)) { }
+    virtual void OnDoubleClickSash(int x, int y);
 
 ////////////////////////////////////////////////////////////////////////////
 // Implementation
@@ -208,14 +214,14 @@ public:
     bool GetNeedUpdating() const { return m_needUpdating ; }
 
 protected:
-    // our event handlers
-    void OnSashPosChanged(wxSplitterEvent& event);
-    void OnSashPosChanging(wxSplitterEvent& event);
-    void OnDoubleClick(wxSplitterEvent& event);
-    void OnUnsplitEvent(wxSplitterEvent& event);
+    // event handlers
+#ifdef __WXMSW__
     void OnSetCursor(wxSetCursorEvent& event);
+#endif // wxMSW
 
-    void SendUnsplitEvent(wxWindow *winRemoved);
+    // send the given event, return FALSE if the event was processed and vetoed
+    // by the user code
+    inline bool DoSendEvent(wxSplitterEvent& event);
 
 protected:
     // common part of all ctors
@@ -275,12 +281,12 @@ private:
 // usual wxWin convention, but the three event types have different kind of
 // data associated with them, so the accessors can be only used if the real
 // event type matches with the one for which the accessors make sense
-class WXDLLEXPORT wxSplitterEvent : public wxCommandEvent
+class WXDLLEXPORT wxSplitterEvent : public wxNotifyEvent
 {
 public:
     wxSplitterEvent(wxEventType type = wxEVT_NULL,
                     wxSplitterWindow *splitter = (wxSplitterWindow *)NULL)
-        : wxCommandEvent(type)
+        : wxNotifyEvent(type)
     {
         SetEventObject(splitter);
         if (splitter) m_id = splitter->GetId();
