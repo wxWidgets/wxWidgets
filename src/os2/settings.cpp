@@ -18,9 +18,9 @@
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/gdicmn.h"
-#include "wx/module.h"
 #endif
 
+#include "wx/module.h"
 #include "wx/settings.h"
 #include "wx/window.h"
 #include "wx/os2/private.h"
