@@ -134,7 +134,8 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     m_listCtrl = new CleverListCtrl(this, wxID_ELD_LISTCTRL, 
                                     wxDefaultPosition, wxDefaultSize,
                                     wxLC_REPORT | wxLC_NO_HEADER | 
-                                    wxLC_SINGLE_SEL | wxSUNKEN_BORDER);
+                                    wxLC_SINGLE_SEL | wxSUNKEN_BORDER |
+									wxLC_EDIT_LABELS);
     wxArrayString empty_ar;
     SetStrings(empty_ar);
     
@@ -142,6 +143,7 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
 
     SetAutoLayout(TRUE);
     SetSizer(sizer);
+	Layout();
 }
 
 void wxEditableListBox::SetStrings(const wxArrayString& strings)
