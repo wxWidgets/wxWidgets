@@ -41,21 +41,11 @@
 #endif
 
 #include "wx/msw/private.h"
-
-#ifdef __WXWINCE__
-#include <winreg.h>
-#include <objbase.h>
-#include <shlguid.h>
-#endif
-#include <shlobj.h> // Win95 shell
+#include "wx/msw/wrapshl.h"
 
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
-
-#ifndef MAX_PATH
-    #define MAX_PATH 4096      // be generous
-#endif
 
 #ifndef BIF_NEWDIALOGSTYLE
     #define BIF_NEWDIALOGSTYLE 0x0040
@@ -78,9 +68,6 @@ IMPLEMENT_CLASS(wxDirDialog, wxDialog)
 // ----------------------------------------------------------------------------
 // private functions prototypes
 // ----------------------------------------------------------------------------
-
-// free the parameter
-static void ItemListFree(LPITEMIDLIST pidl);
 
 // the callback proc for the dir dlg
 static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp,
@@ -186,12 +173,9 @@ int wxDirDialog::ShowModal()
     }
 
     // do show the dialog
-    LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+    wxItemIdList pidl(SHBrowseForFolder(&bi));
 
-    if ( bi.pidlRoot )
-    {
-        ItemListFree((LPITEMIDLIST)bi.pidlRoot);
-    }
+    wxItemIdList::Free((LPITEMIDLIST)bi.pidlRoot);
 
     if ( !pidl )
     {
@@ -199,18 +183,9 @@ int wxDirDialog::ShowModal()
         return wxID_CANCEL;
     }
 
-    BOOL ok = SHGetPathFromIDList(pidl, wxStringBuffer(m_path, MAX_PATH));
+    m_path = pidl.GetPath();
 
-    ItemListFree(pidl);
-
-    if ( !ok )
-    {
-        wxLogLastError(wxT("SHGetPathFromIDList"));
-
-        return wxID_CANCEL;
-    }
-
-    return wxID_OK;
+    return m_path.empty() ? wxID_CANCEL : wxID_OK;
 }
 
 // ----------------------------------------------------------------------------
@@ -222,15 +197,16 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
 {
     switch(uMsg)
     {
+#ifdef BFFM_SETSELECTION
         case BFFM_INITIALIZED:
             // sent immediately after initialisation and so we may set the
             // initial selection here
             //
             // wParam = TRUE => lParam is a string and not a PIDL
-#ifndef __WXWINCE__
             ::SendMessage(hwnd, BFFM_SETSELECTION, TRUE, pData);
-#endif
             break;
+#endif // BFFM_SETSELECTION
+
 
         case BFFM_SELCHANGED:
             // note that this doesn't work with the new style UI (MSDN doesn't
@@ -268,24 +244,6 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
     return 0;
 }
 
-
-static void ItemListFree(LPITEMIDLIST pidl)
-{
-    if ( pidl )
-    {
-        LPMALLOC pMalloc;
-        SHGetMalloc(&pMalloc);
-        if ( pMalloc )
-        {
-            pMalloc->Free(pidl);
-            pMalloc->Release();
-        }
-        else
-        {
-            wxLogLastError(wxT("SHGetMalloc"));
-        }
-    }
-}
 
 #else
     #include "../generic/dirdlgg.cpp"
