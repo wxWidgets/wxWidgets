@@ -85,6 +85,7 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
                                 (int)alloc->width,
                                 (int)alloc->height );
 */
+				
         win->m_width = alloc->width;
         win->m_height = alloc->height;
         win->UpdateSize();
@@ -667,7 +668,7 @@ void wxFrame::DoSetClientSize( int width, int height )
         }
 #endif
 
-    wxWindow::DoSetClientSize( width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle );
+    DoSetSize( -1, -1, width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0 );
 }
 
 void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )
@@ -685,7 +686,7 @@ void wxFrame::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height
 
     m_width = width;
     m_height = height;
-
+    
     /* space occupied by m_frameToolBar and m_frameMenuBar */
     int client_area_y_offset = 0;
 
@@ -979,16 +980,13 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     if (m_frameToolBar)
     {
         /* insert into toolbar area if not already there */
-        if (m_frameToolBar->m_widget->parent != m_mainWidget)
+        if ((m_frameToolBar->m_widget->parent) &&
+            (m_frameToolBar->m_widget->parent != m_mainWidget))
         {
-	    gtk_widget_ref( m_frameToolBar->m_widget );
-	    gtk_widget_unparent( m_frameToolBar->m_widget );
-	    
-            m_insertInClientArea = TRUE;
-	    wxInsertChildInFrame( this, m_frameToolBar );
-            m_insertInClientArea = FALSE;
-	    
-	    gtk_widget_unref( m_frameToolBar->m_widget );
+            GetChildren().DeleteObject( m_frameToolBar );
+	
+	    gtk_widget_reparent( m_frameToolBar->m_widget, m_mainWidget );
+	    UpdateSize();
 	}
     }
 }

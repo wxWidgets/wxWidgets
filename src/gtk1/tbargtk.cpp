@@ -309,6 +309,11 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
 
     tool->m_item = item;
 
+    GtkRequisition req;
+    (* GTK_WIDGET_CLASS( GTK_OBJECT(m_widget)->klass )->size_request ) (m_widget, &req );
+    m_width = req.width;
+    m_height = req.height;
+
     gtk_signal_connect( GTK_OBJECT(tool->m_item),
                         "enter_notify_event", 
                         GTK_SIGNAL_FUNC(gtk_toolbar_enter_callback),

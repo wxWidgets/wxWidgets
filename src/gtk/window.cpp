@@ -132,7 +132,7 @@
    clicking on a scrollbar belonging to scrolled window will inevitably move
    the window. In wxWindows, the scrollbar will only emit an event, send this
    to (normally) a wxScrolledWindow and that class will call ScrollWindow()
-   which actually move the window and its subchildren. Note that GtkMyFixed
+   which actually moves the window and its subchildren. Note that GtkMyFixed
    memorizes how much it has been scrolled but that wxWindows forgets this
    so that the two coordinates systems have to be kept in synch. This is done
    in various places using the myfixed->xoffset and myfixed->yoffset values.
@@ -148,7 +148,7 @@
    and then iterates down the respective size events to all window. This has
    the disadvantage, that windows might get size events before the GTK widget
    actually has the reported size. This doesn't normally pose any problem, but
-   the OpenGl drawing routines rely in correct behaviour. Therefore, I have
+   the OpenGl drawing routines rely on correct behaviour. Therefore, I have
    added the m_nativeSizeEvents flag, which is true only for the OpenGL canvas,
    i.e. the wxGLCanvas will emit a size event, when (and not before) the X11
    window that is used for OpenGl output really has that size (as reported by
@@ -823,12 +823,11 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     GdkModifierType state;
     if (gdk_event->window) gdk_window_get_pointer(gdk_event->window, &x, &y, &state);
 
+    bool ret = FALSE;
+    
     long key_code = map_to_unmodified_wx_keysym( gdk_event->keyval );
-
     /* sending unknown key events doesn't really make sense */
     if (key_code == 0) return FALSE;
-
-    bool ret = FALSE;
 
     wxKeyEvent event( wxEVT_KEY_DOWN );
     event.SetTimestamp( gdk_event->time );
@@ -842,8 +841,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
     event.m_y = y;
     event.SetEventObject( win );
     ret = win->GetEventHandler()->ProcessEvent( event );
-
-    key_code = map_to_wx_keysym( gdk_event->keyval );
 
 #if wxUSE_ACCEL
     if (!ret)
@@ -862,10 +859,14 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         }
     }
 #endif // wxUSE_ACCEL
+
     /* wxMSW doesn't send char events with Alt pressed */
     /* Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
-       will only be sent if it is not a menu accelerator. */
-    if ((key_code != 0) && ! ret )
+       will only be sent if it is not in an accelerator table. */
+    key_code = map_to_wx_keysym( gdk_event->keyval );
+    
+    if ( (!ret) &&
+         (key_code != 0))
     {
         wxKeyEvent event2( wxEVT_CHAR );
         event2.SetTimestamp( gdk_event->time );
@@ -878,7 +879,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
         event2.m_x = x;
         event2.m_y = y;
         event2.SetEventObject( win );
-        ret = (ret || win->GetEventHandler()->ProcessEvent( event2 ));
+        ret = win->GetEventHandler()->ProcessEvent( event2 );
     }
 
     /* win is a control: tab can be propagated up */
@@ -906,6 +907,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
 
 #if (GTK_MINOR_VERSION > 0)
     /* pressing F10 will activate the menu bar of the top frame */
+/*
     if ( (!ret) &&
          (gdk_event->keyval == GDK_F10) )
     {
@@ -921,10 +923,9 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
                     wxNode *node = menubar->GetMenus().First();
                     if (node)
                     {
-                        // doesn't work correctly
-            // wxMenu *firstMenu = (wxMenu*) node->Data();
-                        // gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
-                        // ret = TRUE;
+                        wxMenu *firstMenu = (wxMenu*) node->Data();
+                        gtk_menu_item_select( GTK_MENU_ITEM(firstMenu->m_owner) );
+                        ret = TRUE;
                         break;
                     }
                 }
@@ -932,6 +933,7 @@ static gint gtk_window_key_press_callback( GtkWidget *widget, GdkEventKey *gdk_e
             ancestor = ancestor->GetParent();
         }
     }
+*/
 #endif
 
 /*
@@ -2255,7 +2257,7 @@ void wxWindow::OnInternalIdle()
 
     if (cursor.Ok())
     {
-        /* I now set the cursor the anew in every OnInternalIdle call
+        /* I now set the cursor anew in every OnInternalIdle call
 	   as setting the cursor in a parent window also effects the
 	   windows above so that checking for the current cursor is
 	   not possible. */
@@ -2640,7 +2642,7 @@ bool wxWindow::Reparent( wxWindowBase *newParentBase )
 
     if (oldParent)
     {
-        gtk_container_remove( GTK_CONTAINER(oldParent->m_wxwindow), m_widget );
+        gtk_container_remove( GTK_CONTAINER(m_widget->parent), m_widget );
     }
 
     wxASSERT( GTK_IS_WIDGET(m_widget) );

@@ -358,6 +358,8 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
 {
     LogEvent( _T("Char"), event);
 
+/*  How are we supposed to test wxTE_PROCESS_TAB with this code?
+
     if ( event.KeyCode() == WXK_TAB )
     {
         WriteText("\t");
@@ -366,6 +368,8 @@ void MyTextCtrl::OnChar(wxKeyEvent& event)
     {
         event.Skip();
     }
+*/
+    event.Skip();
 }
 
 void MyTextCtrl::OnKeyUp(wxKeyEvent& event)

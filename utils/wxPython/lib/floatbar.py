@@ -104,8 +104,9 @@ class wxFloatBar(wxToolBar):
             self.floatframe.SetToolBar(self)
             self.oldcolor = self.GetBackgroundColour()
             barsize = self.GetSizeTuple()
-            self.floatframe.SetSize(wxSize(barsize[0], barsize[1] + self.titleheight))
-            self.floatframe.SetClientSize(wxSize(barsize[0], barsize[1]))
+#            self.floatframe.SetSize(wxSize(barsize[0], barsize[1] + self.titleheight))
+#            self.floatframe.SetClientSize(wxSize(barsize[0], barsize[1]))
+            self.floatframe.SetClientSize(wxSize(50,200))
             newpos = self.parentframe.GetPosition()
             newpos.y = newpos.y + self.titleheight
             self.floatframe.SetPosition(newpos)
