@@ -332,6 +332,9 @@ class wxStopWatchPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self,misc2c=misc2c):
+        if self.thisown == 1 :
+            misc2c.delete_wxStopWatch(self)
     def Start(self, *_args, **_kwargs):
         val = apply(misc2c.wxStopWatch_Start,(self,) + _args, _kwargs)
         return val
@@ -1144,18 +1147,6 @@ def wxSystemSettings_GetFont(*_args, **_kwargs):
 wxSystemSettings_GetMetric = misc2c.wxSystemSettings_GetMetric
 
 wxSystemSettings_HasFeature = misc2c.wxSystemSettings_HasFeature
-
-def wxSystemSettings_GetSystemColour(*_args, **_kwargs):
-    val = apply(misc2c.wxSystemSettings_GetSystemColour,_args,_kwargs)
-    if val: val = wxColourPtr(val); val.thisown = 1
-    return val
-
-def wxSystemSettings_GetSystemFont(*_args, **_kwargs):
-    val = apply(misc2c.wxSystemSettings_GetSystemFont,_args,_kwargs)
-    if val: val = wxFontPtr(val); val.thisown = 1
-    return val
-
-wxSystemSettings_GetSystemMetric = misc2c.wxSystemSettings_GetSystemMetric
 
 wxToolTip_Enable = misc2c.wxToolTip_Enable
 

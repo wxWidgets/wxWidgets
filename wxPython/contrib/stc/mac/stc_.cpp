@@ -11338,7 +11338,7 @@ SWIGEXPORT(void) initstc_c() {
 	 PyDict_SetItemString(d,"wxSTC_NNCRONTAB_STRING", PyInt_FromLong((long) 8));
 	 PyDict_SetItemString(d,"wxSTC_NNCRONTAB_ENVIRONMENT", PyInt_FromLong((long) 9));
 	 PyDict_SetItemString(d,"wxSTC_NNCRONTAB_IDENTIFIER", PyInt_FromLong((long) 10));
-	 PyDict_SetItemString(d,"wxSTC_MASK_FOLDERS", PyInt_FromLong((long) ((1<<(30))|(1<<(31)))));
+	 PyDict_SetItemString(d,"wxSTC_MASK_FOLDERS", PyInt_FromLong((long) ((1<<(30))|(1<<(31))|(1<<(29))|(1<<(28))|(1<<(27))|(1<<(26))|(1<<(25)))));
 	 PyDict_SetItemString(d,"wxSTCNameStr", PyString_FromString("wxSTCNameStr"));
 	 PyDict_SetItemString(d,"wxEVT_STC_CHANGE", PyInt_FromLong((long) wxEVT_STC_CHANGE));
 	 PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", PyInt_FromLong((long) wxEVT_STC_STYLENEEDED));
