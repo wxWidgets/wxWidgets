@@ -222,8 +222,8 @@ copy %src\docs\base\readme.txt %dest\readme-base-%version%.txt
 copy %src\docs\os2\install.txt %dest\install-os2-%version%.txt
 copy %src\docs\univ\readme.txt %dest\readme-univ-%version%.txt
 copy %src\docs\readme_vms.txt %dest\readme-vms-%version%.txt
-copy %src\docs\motif\makewxmotif %dest\makewxmotif-%version%
-copy %src\docs\gtk\makewxgtk %dest\makewxgtk-%version%
+Rem copy %src\docs\motif\makewxmotif %dest\makewxmotif-%version%
+Rem copy %src\docs\gtk\makewxgtk %dest\makewxgtk-%version%
 
 Rem Skip Inno Setup if inno is 0.
 if "%inno" == "0" goto end
