@@ -18,10 +18,10 @@ details.
 
 Note that it generates makefiles for samples and contrib libraries, too.
 
-IMPORTANT NOTE: Don't forget to run autoconf in wxWindows root directory if
-                you changed any conditional variable or target condition
-                in .bkl files! You will know that this happened if
-                $(wx)/autoconf_inc.m4 content changed.
+IMPORTANT NOTE: Don't forget to run autoconf in wxWindows root directory
+                (after running Bakefile) if you changed any conditional
+                variable or target condition in .bkl files! You will know that
+                this happened if $(wx)/autoconf_inc.m4 content changed.
 
 You can use Bakefile to generate makefiles or projects customized to your
 needs, too. See Bakefiles.bkgen for details on bakefile commands used to
