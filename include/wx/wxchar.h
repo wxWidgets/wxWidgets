@@ -372,7 +372,7 @@
     /* there are no env vars at all under CE, so no _tgetenv neither */
     #ifdef __WXWINCE__
         /* can't define as inline function as this is a C file... */
-        #define wxGetenv(name)  NULL
+        #define wxGetenv(name)  ((wxChar *)NULL)
     #else
         #define  wxGetenv    _tgetenv
     #endif
