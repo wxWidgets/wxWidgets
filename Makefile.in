@@ -1374,7 +1374,7 @@ clean:
 	$(RM) *.d
 	$(RM) parser.c
 	$(RM) lexer.c
-	$(RM) -r ./lib/wx/*
+	# $(RM) -r ./lib/wx/*
 	$(RM) ./lib/lib*
 
 cleanall: clean
