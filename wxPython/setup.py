@@ -870,6 +870,7 @@ if BUILD_STC:
                      '%s/scintilla/src/LexLua.cxx' % STCLOC,
                      '%s/scintilla/src/LexMatlab.cxx' % STCLOC,
                      '%s/scintilla/src/LexOthers.cxx' % STCLOC,
+                     '%s/scintilla/src/LexPOV.cxx' % STCLOC,
                      '%s/scintilla/src/LexPascal.cxx' % STCLOC,
                      '%s/scintilla/src/LexPerl.cxx' % STCLOC,
                      '%s/scintilla/src/LexPython.cxx' % STCLOC,
