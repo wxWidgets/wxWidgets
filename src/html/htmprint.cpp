@@ -36,6 +36,7 @@
 #include "wx/html/htmprint.h"
 #include "wx/wxhtml.h"
 #include "wx/wfstream.h"
+#include "wx/module.h"
 
 
 //--------------------------------------------------------------------------------
@@ -139,25 +140,12 @@ int wxHtmlDCRenderer::GetTotalHeight()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 //--------------------------------------------------------------------------------
 // wxHtmlPrintout
 //--------------------------------------------------------------------------------
 
 
+wxList wxHtmlPrintout::m_Filters;
 
 wxHtmlPrintout::wxHtmlPrintout(const wxString& title) : wxPrintout(title)
 {
@@ -179,7 +167,17 @@ wxHtmlPrintout::~wxHtmlPrintout()
     delete m_RendererHdr;
 }
 
+void wxHtmlPrintout::CleanUpStatics()
+{
+    m_Filters.DeleteContents(TRUE);
+    m_Filters.Clear();
+}
 
+// Adds input filter
+void wxHtmlPrintout::AddFilter(wxHtmlFilter *filter)
+{
+    m_Filters.Append(filter);
+}
 
 bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
 {
@@ -291,9 +289,26 @@ void wxHtmlPrintout::SetHtmlFile(const wxString& htmlfile)
         return;
     }
 
-    wxHtmlFilterHTML filter;
-    wxString doc = filter.ReadFile(*ff);
-    
+    bool done = FALSE;
+    wxHtmlFilterHTML defaultFilter;
+    wxString doc;
+
+    wxNode* node = m_Filters.GetFirst();
+    while (node)
+    {
+        wxHtmlFilter *h = (wxHtmlFilter*) node->GetData();
+        if (h->CanRead(*ff))
+        {
+            doc = h->ReadFile(*ff);
+            done = TRUE;
+            break;
+        }
+        node = node->GetNext();
+    }
+
+    if (!done)
+        doc = defaultFilter.ReadFile(*ff);
+        
     SetHtmlText(doc, htmlfile, FALSE);
     delete ff;
 }
@@ -626,6 +641,21 @@ wxHtmlPrintout *wxHtmlEasyPrinting::CreatePrintout()
 
     return p;
 }
+
+// A module to allow initialization/cleanup
+// without calling these functions from app.cpp or from
+// the user's application.
+
+class wxHtmlPrintingModule: public wxModule
+{
+DECLARE_DYNAMIC_CLASS(wxHtmlPrintingModule)
+public:
+    wxHtmlPrintingModule() : wxModule() {}
+    bool OnInit() { return TRUE; }
+    void OnExit() { wxHtmlPrintout::CleanUpStatics(); }
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlPrintingModule, wxModule)
 
 
 // This hack forces the linker to always link in m_* files

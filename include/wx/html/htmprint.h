@@ -21,6 +21,7 @@
 
 #include "wx/html/htmlcell.h"
 #include "wx/html/winpars.h"
+#include "wx/html/htmlfilt.h"
 
 #include "wx/print.h"
 #include "wx/printdlg.h"
@@ -152,6 +153,12 @@ public:
     void GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo);
     bool OnBeginDocument(int startPage, int endPage);
 
+    // Adds input filter
+    static void AddFilter(wxHtmlFilter *filter);
+
+    // Cleanup
+    static void CleanUpStatics();
+
 private:
 
     void RenderPage(wxDC *dc, int page);
@@ -173,6 +180,9 @@ private:
     int m_HeaderHeight, m_FooterHeight;
     wxHtmlDCRenderer *m_Renderer, *m_RendererHdr;
     float m_MarginTop, m_MarginBottom, m_MarginLeft, m_MarginRight, m_MarginSpace;
+
+    // list of HTML filters
+    static wxList m_Filters;
 
     DECLARE_NO_COPY_CLASS(wxHtmlPrintout)
 };

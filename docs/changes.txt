@@ -96,6 +96,8 @@ All GUI ports:
   to allow better rich text support.
 - implemented wxFlexGridSizer::Show() (Wade Brainerd)
 - Added m_ prefix to wxColourData and wxFontData members
+- Added wxHtmlPrintout::AddFilter so HTML printing can be subject to
+  custom filters as well as HTML viewing.
 
 Unix:
 
