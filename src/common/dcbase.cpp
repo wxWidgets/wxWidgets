@@ -146,7 +146,7 @@ wxDCBase::DoDrawPolyPolygon(int n,
         DoDrawLines(count[i], pts+j, xoffset, yoffset);
         j += count[i];
     }
-    delete pts;
+    delete[] pts;
 }
 
 // ----------------------------------------------------------------------------
