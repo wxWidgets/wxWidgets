@@ -80,9 +80,6 @@ static int rgMonthDays[13] =
 static BOOL OleDateFromTm(WORD wYear, WORD wMonth, WORD wDay,
 	WORD wHour, WORD wMinute, WORD wSecond, DATE& dtDest);
 static BOOL TmFromOleDate(DATE dtSrc, struct tm& tmDest);
-static void TmConvertToStandardFormat(struct tm& tmSrc);
-static double DoubleFromDate(DATE dt);
-static DATE DateFromDouble(double dbl);
 
 static void ClearVariant(VARIANTARG *pvarg) ;
 static void ReleaseVariant(VARIANTARG *pvarg) ;
@@ -493,7 +490,6 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 		return FALSE;
 
 	CLSID clsId;
-	IUnknown * pUnk = NULL;
 
 	BasicString unicodeName((const char*) classId);
 	
@@ -753,7 +749,7 @@ static wxString ConvertStringFromOle(BSTR bStr)
 {
 	int len = SysStringLen(bStr) + 1;
 	char    *buf = new char[len];
-	int i = wcstombs( buf, bStr, len);
+	(void)wcstombs( buf, bStr, len);
 
 	wxString str(buf);
 	delete[] buf;
@@ -969,6 +965,8 @@ DoTime:
 	return TRUE;
 }
 
+// this function is not used
+#if 0
 void TmConvertToStandardFormat(struct tm& tmSrc)
 {
 	// Convert afx internal tm to format expected by runtimes (_tcsftime, etc)
@@ -1001,6 +999,7 @@ DATE DateFromDouble(double dbl)
 	double temp = floor(dbl); // dbl is now whole part
 	return temp + (temp - dbl);
 }
+#endif // 0
 
 /*
  *  ClearVariant

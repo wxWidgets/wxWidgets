@@ -371,7 +371,7 @@ void wxPropertyValue::Copy(wxPropertyValue& copyFrom)
     case wxPropertyValueStringPtr:
     {
       wxChar** s = copyFrom.StringValuePtr();
-      (*this) = s;
+      (*this) = s != 0;
       return ;
     }
       
@@ -1024,7 +1024,7 @@ void wxPropertyValidatorRegistry::ClearRegistry(void)
 {
   BeginFind();
   wxNode *node;
-  while ((node = Next()))
+  while ((node = Next()) != NULL)
   {
     delete (wxPropertyValidator *)node->Data();
   }
