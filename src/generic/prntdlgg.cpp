@@ -90,7 +90,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
 
   yPos += 35;
 
-  wxString choices[2];
+  wxString *choices = new wxString[2];
   choices[0] = _("All");
   choices[1] = _("Pages");
   
@@ -139,6 +139,7 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent, wxPrintData* data):
 
   // Calls wxWindow::OnInitDialog and then wxGenericPrintDialog::TransferDataToWindow
   InitDialog();
+  delete[] choices;
 }
 
 int wxGenericPrintDialog::ShowModal(void)
@@ -317,7 +318,7 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
 
   paperTypeChoice = CreatePaperTypeChoice(&xPos, &yPos);
 
-  wxString choices[2];
+  wxString *choices =  new wxString[2];
   choices[0] = _("Portrait");
   choices[1] = _("Landscape");
 
@@ -351,6 +352,7 @@ wxGenericPrintSetupDialog::wxGenericPrintSetupDialog(wxWindow *parent, wxPrintSe
   Centre(wxBOTH);
 
   InitDialog();
+  delete[] choices;
 }
 
 wxGenericPrintSetupDialog::~wxGenericPrintSetupDialog(void)
