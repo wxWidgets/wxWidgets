@@ -90,11 +90,13 @@ public:                                                             \
   void Alloc(size_t uiSize);                                        \
   void Shrink();                                                    \
                                                                     \
-  size_t  GetCount() const { return m_nCount; }                     \
-  bool  IsEmpty() const { return m_nCount == 0; }                   \
-  size_t  Count() const { return m_nCount; }                        \
+  size_t GetCount() const { return m_nCount; }                      \
+  void SetCount(size_t n, T defval = T(0));                         \
+  bool IsEmpty() const { return m_nCount == 0; }                    \
+  size_t Count() const { return m_nCount; }                         \
                                                                     \
   typedef T base_type;                                              \
+                                                                    \
 protected:                                                          \
   T& Item(size_t uiIndex) const                                     \
     { wxASSERT( uiIndex < m_nCount ); return m_pItems[uiIndex]; }   \
@@ -112,8 +114,8 @@ protected:                                                          \
   void Sort(CMPFUNC fnCompare);                                     \
                                                                     \
 private:                                                            \
-                                                                    \
-  void    Grow(size_t nIncrement = 0);                              \
+  void Grow(size_t nIncrement = 0);                                 \
+  bool Realloc(size_t nSize);                                       \
                                                                     \
   size_t  m_nSize,                                                  \
           m_nCount;                                                 \

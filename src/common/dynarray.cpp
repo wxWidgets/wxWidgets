@@ -106,6 +106,23 @@ name& name::operator=(const name& src)                                      \
   return *this;                                                             \
 }                                                                           \
                                                                             \
+/* allocate new buffer of the given size and move our data to it */         \
+bool name::Realloc(size_t nSize)                                            \
+{                                                                           \
+  T *pNew = new T[nSize];                                                   \
+  /* only grow if allocation succeeded */                                   \
+  if ( !pNew )                                                              \
+      return false;                                                         \
+                                                                            \
+  m_nSize = nSize;                                                          \
+  /* copy data to new location */                                           \
+  memcpy(pNew, m_pItems, m_nCount*sizeof(T));                               \
+  delete [] m_pItems;                                                       \
+  m_pItems = pNew;                                                          \
+                                                                            \
+  return true;                                                              \
+}                                                                           \
+                                                                            \
 /* grow the array */                                                        \
 void name::Grow(size_t nIncrement)                                          \
 {                                                                           \
@@ -131,17 +148,32 @@ void name::Grow(size_t nIncrement)                                          \
         ndefIncrement = ARRAY_MAXSIZE_INCREMENT;                            \
       if ( nIncrement < ndefIncrement )                                     \
         nIncrement = ndefIncrement;                                         \
-      T *pNew = new T[m_nSize + nIncrement];                                \
-      /* only grow if allocation succeeded */                               \
-      if ( pNew ) {                                                         \
-          m_nSize += nIncrement;                                            \
-          /* copy data to new location */                                   \
-          memcpy(pNew, m_pItems, m_nCount*sizeof(T));                       \
-          delete [] m_pItems;                                               \
-          m_pItems = pNew;                                                  \
-      }                                                                     \
+      Realloc(m_nSize + nIncrement);                                        \
     }                                                                       \
   }                                                                         \
+}                                                                           \
+                                                                            \
+/* make sure that the array has at least count elements */                  \
+void name::SetCount(size_t count, T defval)                                 \
+{                                                                           \
+    if ( m_nSize < count )                                                  \
+    {                                                                       \
+        /* need to realloc memory: don't overallocate it here as if */      \
+        /* SetCount() is called, it probably means that the caller  */      \
+        /* knows in advance how many elements there will be in the  */      \
+        /* array and so it won't be necessary to realloc it later   */      \
+        if ( !Realloc(count) )                                              \
+        {                                                                   \
+            /* out of memory -- what can we do? */                          \
+            return;                                                         \
+        }                                                                   \
+    }                                                                       \
+                                                                            \
+    /* add new elements if we extend the array */                           \
+    while ( m_nCount < count )                                              \
+    {                                                                       \
+        m_pItems[m_nCount++] = defval;                                      \
+    }                                                                       \
 }                                                                           \
                                                                             \
 /* dtor */                                                                  \
