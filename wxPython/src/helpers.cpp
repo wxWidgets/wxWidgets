@@ -470,8 +470,10 @@ void __wxPyPreStart(PyObject* moduleDict)
 
 void __wxPyCleanup() {
     wxPyDoingCleanup = TRUE;
-    if (wxPyDoCleanup)
+    if (wxPyDoCleanup) {
+        wxPyDoCleanup = FALSE;
         wxEntryCleanup();
+    }
 #ifdef WXP_WITH_THREAD
     delete wxPyTMutex;
     wxPyTMutex = NULL;
@@ -2152,34 +2154,10 @@ bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
 
 //----------------------------------------------------------------------
 
-bool wxSize_helper(PyObject* source, wxSize** obj) {
 
-    // If source is an object instance then it may already be the right type
-    if (wxPySwigInstance_Check(source)) {
-        wxSize* ptr;
-        if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxSize")))
-            goto error;
-        *obj = ptr;
-        return TRUE;
-    }
-    // otherwise a 2-tuple of integers is expected
-    else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
-        PyObject* o1 = PySequence_GetItem(source, 0);
-        PyObject* o2 = PySequence_GetItem(source, 1);
-        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
-            Py_DECREF(o1);
-            Py_DECREF(o2);
-            goto error;
-        }
-        **obj = wxSize(PyInt_AsLong(o1), PyInt_AsLong(o2));
-        Py_DECREF(o1);
-        Py_DECREF(o2);
-        return TRUE;
-    }
-
- error:
-    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxSize object.");
-    return FALSE;
+bool wxSize_helper(PyObject* source, wxSize** obj)
+{
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxSize"));
 }
 
 
@@ -2198,36 +2176,10 @@ bool wxSize_typecheck(PyObject* source) {
 }
 
 
-bool wxPoint_helper(PyObject* source, wxPoint** obj) {
-
-    // If source is an object instance then it may already be the right type
-    if (wxPySwigInstance_Check(source)) {
-        wxPoint* ptr;
-        if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxPoint")))
-            goto error;
-        *obj = ptr;
-        return TRUE;
-    }
-    // otherwise a length-2 sequence of integers is expected
-    if (PySequence_Check(source) && PySequence_Length(source) == 2) {
-        PyObject* o1 = PySequence_GetItem(source, 0);
-        PyObject* o2 = PySequence_GetItem(source, 1);
-        // This should really check for integers, not numbers -- but that would break code.
-        if (!PyNumber_Check(o1) || !PyNumber_Check(o2)) {
-            Py_DECREF(o1);
-            Py_DECREF(o2);
-            goto error;
-        }
-        **obj = wxPoint(PyInt_AsLong(o1), PyInt_AsLong(o2));
-        Py_DECREF(o1);
-        Py_DECREF(o2);
-        return TRUE;
-    }
- error:
-    PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of integers or a wxPoint object.");
-    return FALSE;
+bool wxPoint_helper(PyObject* source, wxPoint** obj)
+{
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxPoint"));
 }
-
 
 bool wxPoint_typecheck(PyObject* source) {
     void* ptr;
