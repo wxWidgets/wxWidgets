@@ -41,6 +41,7 @@ const int LINE4 = 8;
 const int LINE5 = 16;
 const int LINE6 = 32;
 const int LINE7 = 64;
+const int DECIMALSIGN = 128;
 
 const int DIGIT0 = LINE1 | LINE2 | LINE3 | LINE4 | LINE5 | LINE6;
 const int DIGIT1 = LINE2 | LINE3;
@@ -139,7 +140,7 @@ void wxLEDNumberCtrl::SetValue(wxString const &Value, bool Redraw)
         {
             for(size_t i=0; i<Value.Length(); i++) {
                 wxChar ch = Value[i];
-                wxASSERT_MSG((ch>='0' && ch<='9') || ch=='-' || ch==' ',
+                wxASSERT_MSG((ch>='0' && ch<='9') || ch=='-' || ch==' ' || ch=='.',
                              wxT("wxLEDNumberCtrl can only display numeric string values."));
             }
         }
@@ -186,14 +187,16 @@ void wxLEDNumberCtrl::OnPaint(wxPaintEvent &WXUNUSED(event))
 
     // Iterate each digit in the value, and draw.
     const int DigitCount = m_Value.Len();
-    for (int i = 0; i < DigitCount; ++i)
+    for (int offset=0, i = 0; offset < DigitCount; ++offset, ++i)
     {
+        char c = m_Value.GetChar(offset);
+
         // Draw faded lines if wanted.
-        if (m_DrawFaded)
+        if (m_DrawFaded && (c != '.'))
             DrawDigit(MemDc, DIGITALL, i);
 
         // Draw the digits.
-        switch (m_Value.GetChar(i))
+        switch (c)
         {
             case '0' :
                 DrawDigit(MemDc, DIGIT0, i);
@@ -228,6 +231,11 @@ void wxLEDNumberCtrl::OnPaint(wxPaintEvent &WXUNUSED(event))
             case '-' :
                 DrawDigit(MemDc, DASH, i);
                 break;
+            case '.' :
+                // Display the decimal in the previous segment
+                i--;
+                DrawDigit(MemDc, DECIMALSIGN, i);
+                break;
             case ' ' :
                 // just skip it
                 break;
@@ -251,17 +259,14 @@ void wxLEDNumberCtrl::DrawDigit(wxDC &Dc, int Digit, int Column)
 
     if (Digit == DIGITALL)
     {
-        const int R = LineColor.Red() / 3;
-        const int G = LineColor.Green() / 3;
-        const int B = LineColor.Blue() / 3;
+        const int R = LineColor.Red() / 16;
+        const int G = LineColor.Green() / 16;
+        const int B = LineColor.Blue() / 16;
 
         LineColor.Set(R, G, B);
     }
 
-    int XPos = m_LeftStartPos;
-
-    if (Column > 0)
-        XPos += (Column * m_LineLength) + (m_DigitMargin) * Column;
+    int XPos = m_LeftStartPos + Column * (m_LineLength + m_DigitMargin);
 
     // Create a pen and draw the lines.
     wxPen Pen(LineColor, m_LineWidth, wxSOLID);
@@ -270,31 +275,31 @@ void wxLEDNumberCtrl::DrawDigit(wxDC &Dc, int Digit, int Column)
     if ((Digit & LINE1))
     {
         Dc.DrawLine(XPos + m_LineMargin*2, m_LineMargin,
-            XPos + m_LineLength, m_LineMargin);
+            XPos + m_LineLength + m_LineMargin*2, m_LineMargin);
     }
 
     if (Digit & LINE2)
     {
-        Dc.DrawLine(XPos + m_LineLength + m_LineMargin, m_LineMargin*2,
-            XPos + m_LineLength + m_LineMargin, m_LineLength + (m_LineMargin*2));
+        Dc.DrawLine(XPos + m_LineLength + m_LineMargin*3, m_LineMargin*2,
+            XPos + m_LineLength + m_LineMargin*3, m_LineLength + (m_LineMargin*2));
     }
 
     if (Digit & LINE3)
     {
-        Dc.DrawLine(XPos + m_LineLength + m_LineMargin, m_LineLength + (m_LineMargin*4),
-            XPos + m_LineLength + m_LineMargin, m_LineLength*2 + (m_LineMargin*3));
+        Dc.DrawLine(XPos + m_LineLength + m_LineMargin*3, m_LineLength + (m_LineMargin*4),
+            XPos + m_LineLength + m_LineMargin*3, m_LineLength*2 + (m_LineMargin*4));
     }
 
     if (Digit & LINE4)
     {
-        Dc.DrawLine(XPos + m_LineMargin*2, m_LineLength*2 + (m_LineMargin*4),
-            XPos + m_LineLength, m_LineLength*2 + (m_LineMargin*4));
+        Dc.DrawLine(XPos + m_LineMargin*2, m_LineLength*2 + (m_LineMargin*5),
+            XPos + m_LineLength + m_LineMargin*2, m_LineLength*2 + (m_LineMargin*5));
     }
 
     if (Digit & LINE5)
     {
         Dc.DrawLine(XPos + m_LineMargin, m_LineLength + (m_LineMargin*4),
-            XPos + m_LineMargin, m_LineLength*2 + (m_LineMargin*3));
+            XPos + m_LineMargin, m_LineLength*2 + (m_LineMargin*4));
     }
 
     if (Digit & LINE6)
@@ -306,7 +311,13 @@ void wxLEDNumberCtrl::DrawDigit(wxDC &Dc, int Digit, int Column)
     if (Digit & LINE7)
     {
         Dc.DrawLine(XPos + m_LineMargin*2, m_LineLength + (m_LineMargin*3),
-            XPos + m_LineMargin + m_LineLength - m_LineMargin, m_LineLength + (m_LineMargin*3));
+            XPos + m_LineMargin*2 + m_LineLength, m_LineLength + (m_LineMargin*3));
+    }
+
+    if (Digit & DECIMALSIGN)
+    {
+        Dc.DrawLine(XPos + m_LineLength + m_LineMargin*4, m_LineLength*2 + (m_LineMargin*5),
+            XPos + m_LineLength + m_LineMargin*4, m_LineLength*2 + (m_LineMargin*5));
     }
 
     Dc.SetPen(wxNullPen);
@@ -315,32 +326,60 @@ void wxLEDNumberCtrl::DrawDigit(wxDC &Dc, int Digit, int Column)
 
 void wxLEDNumberCtrl::RecalcInternals(const wxSize &CurrentSize)
 {
+    // Dimensions of LED segments
+    //
+    // Size of character is based on the HEIGH of the widget, NOT the width.
+    // Segment height is calculated as follows:
+    // Each segment is m_LineLength pixels long.
+    // There is m_LineMargin pixels at the top and bottom of each line segment
+    // There is m_LineMargin pixels at the top and bottom of each digit
+    //
+    //  Therefore, the heigth of each character is:
+    //  m_LineMargin                            : Top digit boarder
+    //  m_LineMargin+m_LineLength+m_LineMargin  : Top half of segment
+    //  m_LineMargin+m_LineLength+m_LineMargin  : Bottom half of segment
+    //  m_LineMargin                            : Bottom digit boarder
+    //  ----------------------
+    //  m_LineMargin*6 + m_LineLength*2 == Total height of digit.
+    //  Therefore, (m_LineMargin*6 + m_LineLength*2) must equal Height
+    //
+    //  Spacing between characters can then be calculated as follows:
+    //  m_LineMargin                            : before the digit,
+    //  m_LineMargin+m_LineLength+m_LineMargin  : for the digit width
+    //  m_LineMargin                            : after the digit
+    //  = m_LineMargin*4 + m_LineLength
     const int Height = CurrentSize.GetHeight();
 
-    if ((Height * 0.07) < 1)
+    if ((Height * 0.075) < 1)
         m_LineMargin = 1;
     else
-        m_LineMargin = (int)(Height * 0.07);
+        m_LineMargin = (int)(Height * 0.075);
 
-    if ((Height * 0.35) < 1)
+    if ((Height * 0.275) < 1)
         m_LineLength = 1;
     else
-        m_LineLength = (int)(Height * 0.35);
+        m_LineLength = (int)(Height * 0.275);
 
     m_LineWidth = m_LineMargin;
 
     m_DigitMargin = m_LineMargin * 4;
 
-    const int ValueWidth = (m_LineLength + m_DigitMargin) * m_Value.Len();
+    // Count the number of characters in the string; '.' characters are not
+    // included because they do not take up space in the display
+    int count = 0;
+    for (unsigned int i = 0; i < m_Value.Len(); i++)
+        if (m_Value.GetChar(i) != '.')
+            count++;
+    const int ValueWidth = (m_LineLength + m_DigitMargin) * count;
     const int ClientWidth = CurrentSize.GetWidth();
 
     switch (m_Alignment)
     {
         case wxLED_ALIGN_LEFT :
-            m_LeftStartPos = 0;
+            m_LeftStartPos = m_LineMargin;
             break;
         case wxLED_ALIGN_RIGHT :
-            m_LeftStartPos = ClientWidth - ValueWidth;
+            m_LeftStartPos = ClientWidth - ValueWidth - m_LineMargin;
             break;
         case wxLED_ALIGN_CENTER :
             m_LeftStartPos = (ClientWidth - ValueWidth) / 2;
