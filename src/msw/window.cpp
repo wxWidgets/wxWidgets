@@ -528,7 +528,12 @@ bool wxWindowMSW::Create(wxWindow *parent,
         msflags |= WS_VISIBLE;
     }
 
-    return MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle);
+    if ( !MSWCreate(wxCanvasClassName, NULL, pos, size, msflags, exstyle) )
+        return false;
+
+    InheritAttributes();
+
+    return true;
 }
 
 // ---------------------------------------------------------------------------
