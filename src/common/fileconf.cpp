@@ -527,7 +527,8 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, wxMBConv& conv)
     }
 
     // also add whatever we have left in the translated string.
-    memText.AddLine(strTrans);
+    if ( !strTrans.empty() )
+        memText.AddLine(strTrans);
 
     // Finally we can parse it all.
     Parse(memText, true /* local */);
