@@ -1506,16 +1506,17 @@ long wxListCtrl::InsertItem(wxListItem& info)
         if (info.m_mask & wxLIST_MASK_DATA)
             data->lParam = info.m_data;
 
-    // check whether it has any custom attributes
-    if ( info.HasAttributes() )
-    {
+        // check whether it has any custom attributes
+        if ( info.HasAttributes() )
+        {
             // take copy of attributes
             data->attr = new wxListItemAttr(*info.GetAttributes());
-    }
+        }
     };
 
     long rv = ListView_InsertItem(GetHwnd(), & item);
-    m_count += 1;
+
+    m_count++;
     wxASSERT_MSG( m_count == ListView_GetItemCount(GetHwnd()),
                   wxT("m_count should match ListView_GetItemCount"));
 
