@@ -102,16 +102,7 @@ wxMutex::wxMutex()
 {
     p_internal = new wxMutexInternal;
     
-#if 0
-    /* I don't know where this function is supposed to exist,
-       and NP actually means non-portable, RR. */
-    pthread_mutexattr_t attr_type;
-    pthread_mutexattr_settype( &attr_type, PTHREAD_MUTEX_FAST_NP );
-
-    pthread_mutex_init( &(p_internal->p_mutex), (const pthread_mutexattr_t*) &attr_type );
-#else
     pthread_mutex_init( &(p_internal->p_mutex), (const pthread_mutexattr_t*) NULL );
-#endif
     m_locked = 0;
 }
 

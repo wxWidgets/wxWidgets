@@ -12,6 +12,7 @@
 
 #if wxUSE_SOCKETS
 
+#include <stddef.h>
 #include <sys/types.h>
 
 #if !defined(__cplusplus)
@@ -49,7 +50,8 @@ typedef enum {
   GSOCK_INVSOCK,
   GSOCK_NOHOST,
   GSOCK_INVPORT,
-  GSOCK_TRYAGAIN,
+  GSOCK_WOULDBLOCK,
+  GSOCK_TIMEOUT,
   GSOCK_MEMERR
 } GSocketError;
 

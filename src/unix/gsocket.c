@@ -90,7 +90,7 @@ GSocket *GSocket_new()
 
   socket->m_fd                  = -1;
   for (i=0;i<GSOCK_MAX_EVENT;i++) {
-    socket->m_fbacks[i]         = NULL;
+    socket->m_cbacks[i]         = NULL;
     socket->m_iocalls[i]        = FALSE;
   }
   socket->m_local               = NULL;
@@ -551,7 +551,7 @@ GSocketError GSocket_GetError(GSocket *socket)
 /* Callbacks */
 
 /* 
-   Only one fallback is possible for each event (INPUT, OUTPUT, CONNECTION)
+   Only one callback is possible for each event (INPUT, OUTPUT, CONNECTION)
    INPUT: The function is called when there is at least a byte in the 
           input buffer
    OUTPUT: The function is called when the system is sure the next write call
@@ -570,7 +570,7 @@ GSocketError GSocket_GetError(GSocket *socket)
                 CONNECTION -> GSocket_Accept()
 */
 void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
-			 GSocketCallback fallback, char *cdata)
+			 GSocketCallback callback, char *cdata)
 {
   int count;
 
@@ -580,7 +580,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
     /* We test each flag and, if it is enabled, we enable the corresponding
        event */
     if ((event & (1 << count)) != 0) {
-      socket->m_fbacks[count] = fallback;
+      socket->m_cbacks[count] = callback;
       socket->m_data[count] = cdata;
       _GSocket_Enable(socket, count);
     }
@@ -588,7 +588,7 @@ void GSocket_SetCallback(GSocket *socket, GSocketEventFlags event,
 }
 
 /*
-  UnsetCallback will disables all fallbacks specified by "event".
+  UnsetCallback will disables all callbacks specified by "event".
   NOTE: event may be a combination of flags
 */
 void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
@@ -600,16 +600,16 @@ void GSocket_UnsetCallback(GSocket *socket, GSocketEventFlags event)
   for (count=0;count<GSOCK_MAX_EVENT;count++) {
     if ((event & (1 << count)) != 0) {
       _GSocket_Disable(socket, count);
-      socket->m_fbacks[count] = NULL;
+      socket->m_cbacks[count] = NULL;
     }
   }
 }
 
 #define CALL_FALLBACK(socket, event) \
 if (socket->m_iocalls[event] && \
-    socket->m_fbacks[event]) {\
+    socket->m_cbacks[event]) {\
   _GSocket_Disable(socket, event); \
-  socket->m_fbacks[event](socket, event, \
+  socket->m_cbacks[event](socket, event, \
                    socket->m_data[event]); \
 }
 
@@ -623,48 +623,36 @@ if (socket->m_iocalls[event] && \
   signal(SIGPIPE, old_handler); \
 }
 
-#if 0
-#ifndef CAN_USE_TIMEOUT
-
 #define ENABLE_TIMEOUT(socket) \
 { \
   struct itimerval old_ival, new_ival; \
   void (*old_timer_sig)(int); \
 \
-  new_ival.it_interval.tv_sec = socket->m_timeout / 1000; \
-  new_ival.it_interval.tv_usec = (socket->m_timeout % 1000) * 1000; \
-  setitimer(ITIMER_REAL, &new_ival, &old_ival); \
-  old_timer_sig = signal(SIGALRM, SIG_DFL);
+  old_timer_sig = signal(SIGALRM, SIG_DFL); \
+  siginterrupt(SIGALRM, 1); \
+  new_ival.it_value.tv_sec = socket->m_timeout / 1000; \
+  new_ival.it_value.tv_usec = (socket->m_timeout % 1000) * 1000; \
+  new_ival.it_interval.tv_sec = 0; \
+  new_ival.it_interval.tv_usec = 0; \
+  setitimer(ITIMER_REAL, &new_ival, &old_ival);
 
 #define DISABLE_TIMEOUT(socket) \
   signal(SIGALRM, old_timer_sig); \
+  siginterrupt(SIGALRM, 0); \
   setitimer(ITIMER_REAL, &old_ival, NULL); \
 }
-
-#else
-
-#define ENABLE_TIMEOUT(s)
-#define DISABLE_TIMEOUT(s)
-
-#endif
-
-#endif
-
-/* Temporary */
-#define ENABLE_TIMEOUT(s)
-#define DISABLE_TIMEOUT(s)
 
 void _GSocket_Enable(GSocket *socket, GSocketEvent event)
 {
   socket->m_iocalls[event] = TRUE;
-  if (socket->m_fbacks[event])
+  if (socket->m_cbacks[event])
     _GSocket_Install_Callback(socket, event);
 }
 
 void _GSocket_Disable(GSocket *socket, GSocketEvent event)
 {
   socket->m_iocalls[event] = FALSE;
-  if (socket->m_fbacks[event])
+  if (socket->m_cbacks[event])
     _GSocket_Uninstall_Callback(socket, event);
 }
 
@@ -683,7 +671,7 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
     return -1;
   }
   if (errno == EWOULDBLOCK) {
-    socket->m_error = GSOCK_TRYAGAIN;
+    socket->m_error = GSOCK_WOULDBLOCK;
     return -1;
   }
   return ret;
@@ -707,7 +695,7 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
     return -1;
   }
   if (errno == EWOULDBLOCK) {
-    socket->m_error = GSOCK_TRYAGAIN;
+    socket->m_error = GSOCK_WOULDBLOCK;
     return -1;
   }
 
@@ -739,7 +727,7 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
     return -1;
   }
   if (errno == EWOULDBLOCK) {
-    socket->m_error = GSOCK_TRYAGAIN;
+    socket->m_error = GSOCK_WOULDBLOCK;
     return -1;
   }
   return ret;
@@ -773,7 +761,7 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
   if (errno == EWOULDBLOCK) {
-    socket->m_error = GSOCK_TRYAGAIN;
+    socket->m_error = GSOCK_WOULDBLOCK;
     return -1;
   }
 

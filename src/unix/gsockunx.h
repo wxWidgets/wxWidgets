@@ -29,7 +29,7 @@ struct _GSocket {
   unsigned long m_timeout;
 
   /* Callbacks */
-  GSocketCallback m_fbacks[GSOCK_MAX_EVENT];
+  GSocketCallback m_cbacks[GSOCK_MAX_EVENT];
   char *m_data[GSOCK_MAX_EVENT];
 
   /* IO calls associated */
