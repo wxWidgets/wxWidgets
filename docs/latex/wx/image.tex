@@ -187,6 +187,10 @@ on program start-up to look up colors. This ensures a very fast conversion, but
 the image quality won't be perfect (and could be better for photo images using more
 sophisticated dithering algorithms).
 
+On Windows, if there is a palette present (set with SetPalette), it will be used when
+creating the wxBitmap (most useful in 8-bit display mode). On other platforms,
+the palette is currently ignored.
+
 \membersection{wxImage::Copy}\label{wximagecopy}
 
 \constfunc{wxImage}{Copy}{\void}
@@ -308,6 +312,15 @@ Gets the green value of the mask colour.
 \constfunc{unsigned char}{GetMaskRed}{\void}
 
 Gets the red value of the mask colour.
+
+\membersection{wxImage::GetPalette}\label{wximagegetpalette}
+
+\constfunc{const wxPalette\&}{GetPalette}{\void}
+
+Returns the palette associated with the image. Currently the palette is only
+used in ConvertToBitmap under Windows.
+
+Eventually wxImage handlers will set the palette if one exists in the image file.
 
 \membersection{wxImage::GetSubImage}\label{wximagegetsubimage}
 
@@ -596,6 +609,12 @@ Specifies whether there is a mask or not. The area of the mask is determined by 
 \func{void}{SetMaskColour}{\param{unsigned char }{red}, \param{unsigned char }{blue}, \param{unsigned char }{green}}
 
 Sets the mask colour for this image (and tells the image to use the mask).
+
+\membersection{wxImage::SetPalette}\label{wximagesetpalette}
+
+\func{void}{SetPalette}{\param{const wxPalette\&}{ palette}}
+
+Associates a palette with the image. Currently, the palette is not used.
 
 \membersection{wxImage::SetRGB}\label{wximagesetrgb}
 
