@@ -1,501 +1,256 @@
-#!/bin/bash
-# ---------------------------------------------------------------------------
-# Master build script for building all the installers and such on all the 
-# build machines in my lab, and then distributing the results as needed.
-# ---------------------------------------------------------------------------
+#!/usr/bin/python
+#----------------------------------------------------------------------
+# Name:        build-all.py
+# Purpose:     Master build script for building all the installers and
+#              such on all the build machines in my lab, and then 
+#              distributing the results as needed.
+#
+#              This will replace the build-all bash script and is
+#              needed because the needs of the build have outgrown
+#              what I can do with bash.
+#
+# Author:      Robin Dunn
+#
+# Created:     05-Nov-2004
+# RCS-ID:      $Id$
+# Copyright:   (c) 2004 by Total Control Software
+# Licence:     wxWindows license
+#----------------------------------------------------------------------
 
-set -o errexit
-#set -o xtrace
+import sys
+import os
+import time
+from taskrunner import Job, Task, TaskRunner
 
-# ---------------------------------------------------------------------------
-# Some control variables...
+#----------------------------------------------------------------------
+# Configuration items
+
+class Config:
+    def write(self, filename="config", outfile=None):
+        if outfile is None:
+            f = file(filename, "w")
+        else:
+            f = outfile
+        for k, v in self.__dict__.items():
+            f.write('%s="%s"\n' % (k, v))
+
+config = Config()
 
 # the local spot that we put everything when done, before possibly copying 
 # to remote hosts
-STAGING_DIR=./BUILD
+config.STAGING_DIR = "./BUILD"
 
 
 # host name of the machine to use for windows builds
-WIN_HOST=beast
+config.WIN_HOST = "beast"
 # Where is the build dir from the remote machine's perspective?
-WIN_BUILD=/c/BUILD
+config.WIN_BUILD = "/c/BUILD"
 
 
 # Just like the above
-OSX_HOST_panther=bigmac
-OSX_HOST_jaguar=whopper
-OSX_BUILD=/BUILD
+config.OSX_HOST_panther = "bigmac"
+config.OSX_HOST_jaguar = "whopper"
+config.OSX_BUILD = "/BUILD"
 
 
 # Alsmost the same...  See below for hosts and other info
-LINUX_BUILD=/tmp/BUILD
+config.LINUX_BUILD = "/tmp/BUILD"
 
 
 # Upload server locations
-UPLOAD_HOST=starship.python.net
-UPLOAD_DAILY_ROOT=/home/crew/robind/public_html/wxPython/daily
-UPLOAD_PREVIEW_ROOT=/home/crew/robind/public_html/wxPython/preview
+config.UPLOAD_HOST = "starship.python.net"
+config.UPLOAD_DAILY_ROOT = "/home/crew/robind/public_html/wxPython/daily"
+config.UPLOAD_PREVIEW_ROOT = "/home/crew/robind/public_html/wxPython/preview"
+
+# defaults for build options
+config.KIND = "dryrun"
+config.PYVER = "2.3"
+config.skipsource = "no"
+config.onlysource = "no"
+config.skipdocs = "no"
+config.skipwin = "no"
+config.skiposx = "no"
+config.skiplinux = "no"
+config.skipclean = "no"
+config.skipupload = "no"
+config.skipnewdocs = "no"
 
 
+#----------------------------------------------------------------------
+# Define all the build tasks
 
-# ---------------------------------------------------------------------------
-# functions
+class Job(Job):
+    LOGBASE = "./tmp"
 
-function usage {
-    echo ""
-    echo "Usage: $0 [command flags...]"
-    echo ""
-    echo "build types:"
-    echo "   dryrun       Do the build, but don't copy anywhere (default)"
-    echo "   daily        Do a daily build, copy to starship"
-    echo "   release      Do a normal release (cantidate) build, copy to starship"
-    echo ""
-    echo "optional command flags:"
-    echo "   2.2          Build for Python 2.2 (default=off)"
-    echo "   2.3          Build for Python 2.3 (default=on)"
-    echo "   all          Build for all supported Python versions"
-    echo ""
-    echo "   skipsource   Don't build the source archives, use the ones"
-    echo "                already in the staging dir."
-    echo "   onlysource   Exit after building the source and docs archives"
-    echo "   skipdocs     Don't rebuild the docs"
-    echo "   skipwin      Don't do the remote Windows build"
-    echo "   skiposx      Don't do the remote OSX build"
-    echo "   skiplinux    Don't do the remote Linux build"
-    echo "   skipclean    Don't do the cleanup step on the remote builds"
-    echo "   skipupload   Don't upload the builds to starship"
-    echo "   parallel     parallelize the builds where possible"
-    echo ""
-}
+CFGFILE = "./tmp/config"
 
 
+# Things that need to be done before any of the builds
+initialTask = Task([ Job("", ["distrib/all/build-setup", CFGFILE]),
+                     Job("", ["distrib/all/build-docs", CFGFILE]),
+                     Job("", ["distrib/all/build-sources", CFGFILE]),
+                     ])
 
-function PrefixLines {
-    label=$1
-    tee tmp/$label.log | awk "{ print \"** $label: \" \$0; fflush();  }"
-}
+# Build tasks.  Anything that can be done in parallel (depends greatly
+# on the nature of the build machine configurations...) is a separate
+# task.
+windowsTask = Task( Job("beast", ["distrib/all/build-windows", CFGFILE]) )
 
-# ---------------------------------------------------------------------------
+jaguarTask =  Task( Job(config.OSX_HOST_jaguar,
+                        ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_jaguar, "jaguar"]) )
 
-# Make sure we are running in the right directory.  TODO: make this
-# test more robust.  Currenly we just test for the presence of
-# 'wxPython' and 'wx' subdirs.
-if [ ! -d wxPython -o ! -d wx ]; then  
-    echo "Please run this script from the root wxPython directory."
-    exit 1
-fi
+pantherTask =  Task( Job(config.OSX_HOST_panther,
+                         ["distrib/all/build-osx", CFGFILE, config.OSX_HOST_panther, "panther"]) )
 
+rpmTask = Task([ Job("co-rh9",    ["distrib/all/build-rpm", CFGFILE, "none", "co-rh9",    "rh9",   config.PYVER]),
+                 Job("co-fc2",    ["distrib/all/build-rpm", CFGFILE, "beast", "co-fc2",   "fc2",   "2.3"]),
+                 Job("co-mdk92",  ["distrib/all/build-rpm", CFGFILE, "none",  "co-mdk92", "mdk92", "2.3"]),
+                 Job("co-mdk101", ["distrib/all/build-rpm", CFGFILE, "none",  "co-mdk101","mdk101","2.3"]),
+                 ])
 
+buildTasks = [ windowsTask,
+               jaguarTask,
+               pantherTask,
+               rpmTask,
+               ]
 
-# Set defaults and check the command line options
-KIND=dryrun
-PYVER=2.3
-skipsource=no
-onlysource=no
-skipdocs=no
-skipwin=no
-skiposx=no
-skiplinux=no
-skipclean=no
-skipupload=no
-parallel=no
-
-for flag in $*; do
-    case $flag in 
-	dryrun)   KIND=dryrun                    ;;
-	daily)    KIND=daily                     ;;
-	release)  KIND=release                   ;;
-
-	2.2)      PYVER=2.2                      ;;
-	2.3)      PYVER=2.3                      ;;
-	all)      PYVER="2.2 2.3"                ;;
-
-	skipsource)  skipsource=yes              ;;
-	onlysource)  onlysource=yes              ;;
-	skipdocs)    skipdocs=yes                ;;
-	skipwin)     skipwin=yes                 ;;
-	skiposx)     skiposx=yes                 ;;
-	skiplinux)   skiplinux=yes               ;;
-	skipclean)   skipclean=yes               ;;
-	skipupload)  skipupload=yes              ;;
-	parallel)    parallel=yes                ;;
-	noparallel)  parallel=no                 ;;
-
-	help) usage; exit 1                      ;;
-	*)    echo "Unknown flag \"$flag\""
-	      usage
-	      exit 1
-    esac
-done
+# Finalization.  This is for things that must wait until all the
+# builds are done, such as copying the isntallers someplace, sending
+# emails, etc.
+finalizationTask = Task( Job("", ["distrib/all/build-finalize", CFGFILE]) )
 
 
-# ensure the staging area exists
-if [ ! -d $STAGING_DIR ]; then 
-    mkdir -p $STAGING_DIR
-fi
+#----------------------------------------------------------------------
 
-# Figure out the wxPython version number, possibly adjusted for being a daily build
-if [ $KIND = daily ]; then
-    DAILY=`date +%Y%m%d`   # should it include the hour too?  2-digit year?
-    echo $DAILY > DAILY_BUILD
-fi
-VERSION=`python -c "import setup;print setup.VERSION"`
-
-
-#echo VERSION=$VERSION
-#exit 0
-
-
-echo "Getting started at " `date`
-
-# ---------------------------------------------------------------------------
-# Make the sources and other basic stuff.
-
-if [ $skipsource != yes -o $onlysource = yes ]; then
-
-    # clean out the local dist dir
-    rm -f dist/*
-
-    if [ $skipdocs != yes ]; then 
-        # Regenerate the reST docs
-	echo "Regenerating the reST docs..."
-	cd docs
-	for x in *.txt; do
-	    docutils-html $x `basename $x .txt`.html
-	done
-	cd -
-	
-        # build the doc and demo tarballs
-	distrib/makedemo
-	distrib/makedocs
-
-        # build the new docs too
-	docs/bin/everything
-    fi
-
-    # make the source tarball and srpm
-    distrib/makerpm 2.3 srpm
-
-    # Copy everything to the staging dir
-    echo "Moving stuff to $STAGING_DIR..."
-    mv dist/* $STAGING_DIR
-
-    if [ $skipdocs != yes ]; then 
-	for doc in CHANGES BUILD INSTALL MigrationGuide default; do
-	    cp docs/$doc.* $STAGING_DIR
-	done
-    fi
-
-    # cleanup
-    echo "Cleaning up..."
-    rm -f dist/*
-fi 
-
-if [ $KIND = daily ]; then
-    rm DAILY_BUILD
-fi
-
-if [ $onlysource = yes ]; then
-    exit 0
-fi
-
-# ---------------------------------------------------------------------------
-# Windows build
-
-function DoWindowsBuild {
-    set -o errexit
-
-    # test if the target machine is online
-    if ping -q -c1 -w1 $WIN_HOST > /dev/null; then
-	echo "-----------------------------------------------------------------"
-	echo " The $WIN_HOST machine is online, Windows build continuing..."
-	echo "-----------------------------------------------------------------"
-    else
-	echo "-----------------------------------------------------------------"
-	echo "The $WIN_HOST machine is offline, skipping the Windows build."
-	echo "-----------------------------------------------------------------"
-	return 0
-    fi
-    echo "-=-=- Starting Windows build..."
-
-    echo "Copying source file and build script..."
-    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
-	distrib/all/build-windows \
-	$WIN_HOST:$WIN_BUILD
+def usage():
+    print ""
+    print "Usage: build-all [command flags...]"
+    print ""
+    print "build types:"
+    print "   dryrun       Do the build, but don't copy anywhere (default)"
+    print "   daily        Do a daily build, copy to starship"
+    print "   release      Do a normal release (cantidate) build, copy to starship"
+    print ""
+    print "optional command flags:"
+    print "   2.2          Build for Python 2.2 (default=off)"
+    print "   2.3          Build for Python 2.3 (default=on)"
+    print "   all          Build for all supported Python versions"
+    print ""
+    print "   skipsource   Don't build the source archives, use the ones"
+    print "                already in the staging dir."
+    print "   onlysource   Exit after building the source and docs archives"
+    print "   skipdocs     Don't rebuild the docs"
+    print "   skipwin      Don't do the remote Windows build"
+    print "   skiposx      Don't do the remote OSX build"
+    print "   skiplinux    Don't do the remote Linux build"
+    print "   skipclean    Don't do the cleanup step on the remote builds"
+    print "   skipupload   Don't upload the builds to starship"
+    print ""
     
-     echo "Running build script on $WIN_HOST..."
-     wxdir=$WIN_BUILD/wxPython-src-$VERSION
-     cmd=./build-windows
-     ssh $WIN_HOST "cd $WIN_BUILD && $cmd $wxdir $WIN_BUILD $skipclean $VERSION $PYVER && rm $cmd"
 
-     echo "Fetching the results..."
-     scp "$WIN_HOST:$WIN_BUILD/wxPython*-win32*"  $STAGING_DIR
-     ssh $WIN_HOST "rm $WIN_BUILD/wxPython*-win32*"
-}
+#----------------------------------------------------------------------
 
-if [ $skipwin != yes ]; then
-    if [ $parallel = no ]; then
-	DoWindowsBuild
-    else
-	DoWindowsBuild 2>&1 | PrefixLines $WIN_HOST &
-	winPID=$!
-    fi
-fi
+def main(args):
+    # Make sure we are running in the right directory.  TODO: make
+    # this test more robust.  Currenly we just test for the presence
+    # of 'wxPython' and 'wx' subdirs.
+    if not os.path.isdir("wxPython") or not os.path.isdir("wx"):
+        print "Please run this script from the root wxPython directory."
+        sys.exit(1)
 
+    # Check command line flags
+    for flag in args:
+        if flag in ["dryrun", "daily", "release"]:
+            config.KIND = flag
 
-# ---------------------------------------------------------------------------
-# OSX build
+        elif flag in ["2.2", "2.3"]:
+            config.PYVER = flag
+        elif flag == "all":
+            config.PYVER = "2.2 2.3"
 
-function DoOSXBuild {
-    local host=$1
-    local flavor=$2
-
-    set -o errexit
-
-    # test if the target machine is online
-    if ping -q -c1 -w1 $host > /dev/null; then
-	echo "-----------------------------------------------------------------"
-	echo " The $host machine is online, OSX-$flavor build continuing..."
-	echo "-----------------------------------------------------------------"
-    else
-	echo "-----------------------------------------------------------------"
-	echo "The $host machine is offline, skipping the OSX-$flavor build."
-	echo "-----------------------------------------------------------------"
-	return 0
-    fi
-
-    echo "-=-=- Starting OSX-$flavor build on $host..."
-
-    echo "Copying source files and build script..."
-    ssh root@$host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/* || true"
-    #ssh root@$host "mkdir -p $OSX_BUILD  || true"
-    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
-	$STAGING_DIR/wxPython-docs-$VERSION.tar.gz \
-	$STAGING_DIR/wxPython-demo-$VERSION.tar.gz \
-	distrib/all/build-osx \
-	root@$host:$OSX_BUILD
-
-     echo "Running build script on $host..."
-     wxdir=$OSX_BUILD/wxPython-src-$VERSION
-     cmd=./build-osx
-     ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $PYVER && rm $cmd"
-
-     echo "Fetching the results..."
-     scp "root@$host:$OSX_BUILD/wxPython*-osx*"  $STAGING_DIR
-     ssh root@$host "rm $OSX_BUILD/wxPython*-osx*"
-
-}
+        elif flag == "skipsource":
+            config.skipsource = "yes"
+            
+        elif flag == "onlysource":
+            config.onlysource = "yes"
+            
+        elif flag == "skipdocs":
+            config.skipdocs = "yes"
+            
+        elif flag == "skipnewdocs":
+            config.skipnewdocs = "yes"
+            
+        elif flag == "skipwin":
+            config.skipwin = "yes"
+            
+        elif flag == "skiposx":
+            config.skiposx = "yes"
+            
+        elif flag == "skiplinux":
+            config.skiplinux = "yes"
+            
+        elif flag == "skipclean":
+            config.skipclean = "yes"
+            
+        elif flag == "skipupload":
+            config.skipupload = "yes"
+            
+        else:
+            print 'Unknown flag: "%s"' % flag
+            usage()
+            sys.exit(2)
 
 
-if [ $skiposx != yes ]; then
-    if [ $parallel = no ]; then
-	DoOSXBuild $OSX_HOST_jaguar jaguar
-	DoOSXBuild $OSX_HOST_panther panther
-    else
-	DoOSXBuild $OSX_HOST_jaguar jaguar   2>&1 | PrefixLines $OSX_HOST_jaguar  &
-	DoOSXBuild $OSX_HOST_panther panther 2>&1 | PrefixLines $OSX_HOST_panther &
-    fi
-fi
+    # ensure the staging area exists
+    if not os.path.exists(config.STAGING_DIR):
+        os.makedirs(config.STAGING_DIR)
+
+    # Figure out the wxPython version number, possibly adjusted for being a daily build
+    if config.KIND == "daily":
+        t = time.localtime()
+        config.DAILY = time.strftime("%Y%m%d")   # should it include the hour too?  2-digit year?
+        file("DAILY_BUILD", "w").write(config.DAILY)
+    sys.path.append('.')
+    import setup
+    config.VERSION = setup.VERSION
+
+    # write the config file where the build scripts can find it
+    config.write(CFGFILE)
+    print "Build getting started at: ", time.ctime()
 
 
+    # Run the first task, which will create the docs and sources tarballs
+    tr = TaskRunner(initialTask)
+    rc = tr.run()
 
-# ---------------------------------------------------------------------------
-# Linux build
+    # cleanup the DAILY_BUILD file
+    if config.KIND == "daily":
+        os.unlink("DAILY_BUILD")
 
-# The remote Linux builds are different than those above.  The source
-# RPMs were already built in the source step, and so building the
-# binary RPMs is a very simple followup step.  But then add to that
-# the fact that we need to build on more than one distro...
+    # Quit now?
+    if rc != 0 or config.onlysource == "yes":
+        sys.exit(rc)
 
 
+    # Run the main build tasks
+    tr = TaskRunner(buildTasks)
+    rc = tr.run()
+    if rc != 0:
+        sys.exit(rc)
 
-function DoLinuxBuild {
-    local host=$1
-    local reltag=$2
-    shift;shift
-    local pyver=$@
 
-    set -o errexit
+    # when all the builds are done, run the finalization task
+    tr = TaskRunner(finalizationTask)
+    rc = tr.run()
+    if rc != 0:
+        sys.exit(rc)
 
-    # test if the target machine is online
-    if ping -q -c1 -w1 $host > /dev/null; then
-	echo "-----------------------------------------------------------------"
-	echo " The $host machine is online, build continuing..."
-	echo "-----------------------------------------------------------------"
-    else
-	echo "-----------------------------------------------------------------"
-	echo "The $host machine is offline, skipping the binary RPM build."
-	echo "-----------------------------------------------------------------"
-	return 0
-    fi
-	
-    echo "Copying source files and build script..."
-    ssh root@$host "mkdir -p $LINUX_BUILD && rm -rf $LINUX_BUILD/*"
-    scp $STAGING_DIR/wxPython-src* $STAGING_DIR/wxPython.spec\
-	distrib/all/build-linux \
-	root@$host:$LINUX_BUILD
-
-    echo "Running build script on $host..."
-    cmd=./build-linux
-    ssh root@$host "cd $LINUX_BUILD && ./build-linux $reltag $skipclean $VERSION $pyver"
     
-    echo "Fetching the results..."
-    scp "root@$host:$LINUX_BUILD/wxPython*.i[0-9]86.rpm"  $STAGING_DIR
-    ssh root@$host "rm $LINUX_BUILD/wxPython*.i[0-9]86.rpm"
-
-}
+    print "Build finished at: ", time.ctime()
+    sys.exit(0)
 
 
 
 
-if [ $skiplinux != yes ]; then
-
-    if [ $parallel = no ]; then
-	DoLinuxBuild co-rh9    rh9    $PYVER
-	DoLinuxBuild co-fc2    fc2    2.3
-	DoLinuxBuild co-mdk92  mdk92  2.3
-	DoLinuxBuild co-mdk101 mdk101 2.3
-    else
-
-        # Since the linux builds are currently done in coLinux
-        # 'machines' running on the WIN_HOST let's wait for the
-        # windows build to be done before launching them
-
-	#if [ -n $winPID ]; then
-	#    wait $winPID
-	#fi
-
-	DoLinuxBuild co-rh9    rh9    $PYVER 2>&1 | PrefixLines co-rh9 & 
-	DoLinuxBuild co-fc2    fc2    2.3    2>&1 | PrefixLines co-fc2 &
-
-	wait $!  # wait for the previous two to complete before starting the next two
-
-	DoLinuxBuild co-mdk92  mdk92  2.3    2>&1 | PrefixLines co-mdk92  & 
-	DoLinuxBuild co-mdk101 mdk101 2.3    2>&1 | PrefixLines co-mdk101 & 
-    fi
-fi
-
-
-# ---------------------------------------------------------------------------
-
-if [ $parallel = yes ]; then
-
-    # TODO:  Figure out how to test if all the builds were successful
-
-    echo "***********************************"
-    echo " Waiting for builds to complete... "
-    echo "***********************************"
-    wait
-fi
-
-# ---------------------------------------------------------------------------
-# Final disposition of build results...
-
-chmod a+r $STAGING_DIR/*
-
-if [ $KIND = dryrun ]; then
-    # we're done
-    echo "Finished at " `date`
-    exit 0
-fi
-
-
-if [ $KIND = daily ]; then 
-
-    echo "Copying to the local file server..."
-    destdir=/stuff/temp/$VERSION
-    mkdir -p $destdir
-    cp $STAGING_DIR/* $destdir
-
-    if [ $skipupload != yes ]; then 
-	destdir=$UPLOAD_DAILY_ROOT/$DAILY
-	echo "Copying to the starship at $destdir..."
-	ssh $UPLOAD_HOST "mkdir -p $destdir"
-	scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
-	ssh $UPLOAD_HOST "cd $destdir && ls -al"
-
-
-        # TODO: something to remove old builds from starship, keeping 
-        # only N days worth
-
-        # Send email to wxPython-dev
-	DATE=`date`
-	TO=wxPython-dev@lists.wxwidgets.org
-
-	cat <<EOF  | /usr/sbin/sendmail  $TO
-From: R'bot <rbot@wxpython.org>
-To: $TO
-Subject: $DAILY test build uploaded
-Date: $DATE
-
-Hi,
-
-A new test build of wxPython has been uploaded to starship.  
-
-   Version: $VERSION
-   URL:     http://starship.python.net/crew/robind/wxPython/daily/$DAILY
-   Changes: http://starship.python.net/crew/robind/wxPython/daily/$DAILY/CHANGES.html
-
-Have fun!
-R'bot
-
-EOF
-    fi
-
-    echo "Cleaning up staging dir..."
-    rm $STAGING_DIR/*
-    rmdir $STAGING_DIR
-
-    echo "Finished at " `date`
-    exit 0
-fi
-
-
-if [ $KIND = release ]; then 
-
-    echo "Copying to the local file server..."
-    destdir=/stuff/Development/wxPython/dist/$VERSION
-    mkdir -p $destdir
-    cp $STAGING_DIR/* $destdir
-
-    if [ $skipupload != yes ]; then 
-	echo "Copying to the starship..."
-	destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
-	ssh $UPLOAD_HOST "mkdir -p $destdir"
-	scp $STAGING_DIR/* $UPLOAD_HOST:/$destdir
-
-        # Send email to wxPython-dev
-	DATE=`date`
-	TO=wxPython-dev@lists.wxwidgets.org
-
-	cat <<EOF  | /usr/sbin/sendmail  $TO
-From: R'bot <rbot@wxpython.org>
-To: $TO
-Subject: $VERSION release candidate build uploaded
-Date: $DATE
-
-Hi,
-
-A new RC build of wxPython has been uploaded to starship.  
-
-   Version: $VERSION
-   URL:     http://starship.python.net/crew/robind/wxPython/preview/$VERSION
-   Changes: http://starship.python.net/crew/robind/wxPython/preview/$VERSION/CHANGES.html
-
-Have fun!
-R'bot
-
-EOF
-
-    fi
-
-    echo "Cleaning up staging dir..."
-    rm $STAGING_DIR/*
-    rmdir $STAGING_DIR
-
-    echo "Finished at " `date`
-    exit 0
-fi
-
-
-# ---------------------------------------------------------------------------
+if __name__ == "__main__":
+    main(sys.argv[1:])

@@ -1,128 +1,32 @@
 #!/bin/bash
-# ---------------------------------------------------------------------------
-# Build wxWidgets and wxPython on a Windows box.  This is normally called 
-# from build-all but it should be able to be used standalone too...
-# 
-# The command line must have the following parameters:
-#
-#    1. the path to the base of the wx source tree
-#    2. the path of where to put the resulting installers
-#    3. skipclean flag (yes|no)
-#    4. the VERSION
-#    5. the remaining args are the versions of Python to build for
-#
-# ---------------------------------------------------------------------------
+#----------------------------------------------------------------------
 
 set -o errexit
-#set -o xtrace
 
-echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
+# read the config variables from the file given on the command line
+. $1
 
-if [ $# -lt 5 ]; then
-    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER..."
-    exit 1
+
+if [ $skipwin != yes ]; then
+    # test if the target machine is online
+    if ping -q -c1 -w1 $WIN_HOST > /dev/null; then
+	echo " The $WIN_HOST machine is online, Windows build continuing..."
+    else
+	echo "The $WIN_HOST machine is **OFFLINE**, skipping the Windows build."
+	return 0
+    fi
+
+    echo "Copying source file and build script..."
+    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
+	distrib/all/do-build-windows \
+	$WIN_HOST:$WIN_BUILD
+    
+     echo "Running build script on $WIN_HOST..."
+     wxdir=$WIN_BUILD/wxPython-src-$VERSION
+     cmd=./do-build-windows
+     ssh $WIN_HOST "cd $WIN_BUILD && $cmd $wxdir $WIN_BUILD $skipclean $VERSION $PYVER && rm $cmd"
+
+     echo "Fetching the results..."
+     scp "$WIN_HOST:$WIN_BUILD/wxPython*-win32*"  $STAGING_DIR
+     ssh $WIN_HOST "rm $WIN_BUILD/wxPython*-win32*"
 fi
-
-WXDIR=$1
-DESTDIR=$2
-SKIPCLEAN=$3
-VERSION=$4
-shift;shift;shift;shift
-PYVER=$@
-
-
-# WXDIR is the cygwin path, WXWIN is the DOS path
-WXWIN_OLD=$WXWIN
-WXWIN=`cygpath -w $WXDIR`
-export WXWIN
-
-
-# # Fix the PATH.  (Why is this needed??)
-# PATH=/usr/local/bin:/usr/bin:/bin:/usr/X11R6/bin:/home/robind/bin:.:$WXDIR/lib/vc_dll:$PATH
-# export PATH
-# echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-# echo $PATH
-# echo "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-="
-# exit 0
-
-
-# untar the source 
-echo "Unarchiving wxPython-src-$VERSION.tar.gz"
-cd $DESTDIR
-tar xzf wxPython-src-$VERSION.tar.gz 
-rm wxPython-src-$VERSION.tar.gz
-
-
-# Fix line endings
-echo "Converting wxPython line endings to CRLF..."
-cd $WXDIR
-names=`find wxPython -name "*.py" -o -name "*.txt" -o -name "*.htm*" -o -name "*.css" -o -name "*.xml" `
-unix2dos -D $names
-
-
-# change to the right spot in the source tree and copy our build scripts
-echo "Setting up for the build..."
-cd $WXDIR/build/msw
-cp $WXDIR/wxPython/distrib/msw/.m* .
-
-
-# replace some settings in setup0.h and write to setup.h
-cat > .my.sedexpr  <<EOF
-s/wxDIALOG_UNIT_COMPATIBILITY *1/wxDIALOG_UNIT_COMPATIBILITY 0/g
-s/wxUSE_DEBUG_CONTEXT *0/wxUSE_DEBUG_CONTEXT 1/g
-s/wxUSE_MEMORY_TRACING *0/wxUSE_MEMORY_TRACING 1/g
-s/wxUSE_DIALUP_MANAGER *1/wxUSE_DIALUP_MANAGER 0/g
-s/wxUSE_GLCANVAS *0/wxUSE_GLCANVAS 1/g
-s/wxUSE_POSTSCRIPT *0/wxUSE_POSTSCRIPT 1/g
-s/wxUSE_AFM_FOR_POSTSCRIPT *1/wxUSE_AFM_FOR_POSTSCRIPT 0/g
-s/wxUSE_DISPLAY *0/wxUSE_DISPLAY 1/g
-EOF
-cat $WXDIR/include/wx/msw/setup0.h | sed -f .my.sedexpr > $WXDIR/include/wx/msw/setup.h
-rm .my.sedexpr
-
-
-echo "Building the wx DLLs..."
-.make hybrid
-.make hybrid-uni
-
-
-#echo "Building the wx tools..."
-#.make_tools
-
-# cheat and just copy the .CHM files from the regular project dir
-# TODO:  Copy over the wxPython-docs fle and run hhc on the contents of that.
-mkdir -p $WXDIR/docs/htmlhelp
-cp `cygpath $WXWIN_OLD/docs/htmlhelp`/*.chm $WXDIR/docs/htmlhelp
-
-
-echo "Building wxPython and installers..."
-cd $WXDIR/wxPython
-mkdir -p dist
-
-for ver in $PYVER; do
-    echo $ver
-    b $ver d USE_SWIG=0
-    b $ver h USE_SWIG=0 EP_ADD_OPTS=1
-    b $ver r USE_SWIG=0
-    b $ver d UNICODE=1 USE_SWIG=0
-    b $ver h UNICODE=1 USE_SWIG=0 EP_ADD_OPTS=1
-    b $ver r UNICODE=1 USE_SWIG=0
-done
-
-echo "Building the developer package..."
-WXWIN=`cygpath -w $WXDIR`
-export WXWIN
-4nt /c distrib/makedev.bat $VERSION
-
-
-echo "Copying installers to $DESTDIR..."
-mv dist/wxPython* $DESTDIR
-cd $DESTDIR
-
-
-if [ $SKIPCLEAN != yes ]; then 
-    echo "Cleaning up..."
-    rm -r $WXDIR || true
-fi
-
-echo "-=-=-=-  Goodbye!  -=-=-=-"

@@ -42,7 +42,11 @@ function DoRPMBuild {
     # $1 : python version
     # $2 : port
     # $3 : unicode
-    
+
+    echo "-=-=-=-=-=-=-=-=-=-=-"
+    echo $1 $2 $3 
+    echo "-=-=-=-=-=-=-=-=-=-=-"
+
     $RPMBUILD --define "_topdir $PWD/$rpmtop" \
 	--define "_tmppath $PWD/$rpmtop/tmp" \
 	--define "release ${RELEASE}_py$1" \
