@@ -66,6 +66,7 @@ public:
 };
 
 #define M_REGION (((wxRegionRefData*)m_refData)->m_region)
+#define M_REGION_OF(rgn) (((wxRegionRefData*)(rgn.m_refData))->m_region)
 
 //-----------------------------------------------------------------------------
 // wxRegion
@@ -146,6 +147,8 @@ void wxRegion::Clear()
 
 bool wxRegion::Offset(wxCoord x, wxCoord y)
 {
+    wxCHECK_MSG( M_REGION, FALSE, _T("invalid wxRegion") );
+
     if ( !x && !y )
     {
         // nothing to do
@@ -164,62 +167,85 @@ bool wxRegion::Offset(wxCoord x, wxCoord y)
     return TRUE;
 }
 
-// Combine rectangle (x, y, w, h) with this.
-bool wxRegion::Combine(wxCoord x, wxCoord y, wxCoord width, wxCoord height, wxRegionOp op)
+// combine another region with this one
+bool wxRegion::Combine(const wxRegion& rgn, wxRegionOp op)
 {
-    AllocExclusive();
-
-    HRGN rectRegion = ::CreateRectRgn(x, y, x + width, y + height);
-
-    int mode = 0;
-    switch (op)
+    // we can't use the API functions if we don't have a valid region handle
+    if ( !m_refData )
     {
-        case wxRGN_AND: mode = RGN_AND; break ;
-        case wxRGN_OR: mode = RGN_OR; break ;
-        case wxRGN_XOR: mode = RGN_XOR; break ;
-        case wxRGN_DIFF: mode = RGN_DIFF; break ;
-        case wxRGN_COPY:
-        default:
-            mode = RGN_COPY; break ;
+        // combining with an empty/invalid region works differently depending
+        // on the operation
+        switch ( op )
+        {
+            case wxRGN_COPY:
+            case wxRGN_OR:
+            case wxRGN_XOR:
+                *this = rgn;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unknown region operation") );
+                // fall through
+
+            case wxRGN_AND:
+            case wxRGN_DIFF:
+                // leave empty/invalid
+                return FALSE;
+        }
+    }
+    else // we have a valid region
+    {
+        int mode;
+        switch ( op )
+        {
+            case wxRGN_AND:
+                mode = RGN_AND;
+                break;
+
+            case wxRGN_OR:
+                mode = RGN_OR;
+                break;
+
+            case wxRGN_XOR:
+                mode = RGN_XOR;
+                break;
+
+            case wxRGN_DIFF:
+                mode = RGN_DIFF;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unknown region operation") );
+                // fall through
+
+            case wxRGN_COPY:
+                mode = RGN_COPY;
+                break;
+        }
+
+        if ( ::CombineRgn(M_REGION, M_REGION, M_REGION_OF(rgn), mode) == ERROR )
+        {
+            wxLogLastError(_T("CombineRgn"));
+
+            return FALSE;
+        }
     }
 
-    bool success = ::CombineRgn(M_REGION, M_REGION, rectRegion, mode) != ERROR;
-    if ( !success )
-    {
-        wxLogLastError(_T("CombineRgn"));
-    }
-
-    ::DeleteObject(rectRegion);
-
-    return success;
+    return TRUE;
 }
 
-// Union /e region with this.
-bool wxRegion::Combine(const wxRegion& region, wxRegionOp op)
+// Combine rectangle (x, y, w, h) with this.
+bool wxRegion::Combine(wxCoord x, wxCoord y,
+                       wxCoord width, wxCoord height,
+                       wxRegionOp op)
 {
-    if (region.Empty())
-        return FALSE;
-
-    AllocExclusive();
-
-    int mode = 0;
-    switch (op)
-    {
-        case wxRGN_AND: mode = RGN_AND; break ;
-        case wxRGN_OR: mode = RGN_OR; break ;
-        case wxRGN_XOR: mode = RGN_XOR; break ;
-        case wxRGN_DIFF: mode = RGN_DIFF; break ;
-        case wxRGN_COPY:
-        default:
-            mode = RGN_COPY; break ;
-    }
-
-    return (ERROR != ::CombineRgn(M_REGION, M_REGION, ((wxRegionRefData*)region.m_refData)->m_region, mode));
+    return Combine(wxRegion(x, y, width, height), op);
 }
 
 bool wxRegion::Combine(const wxRect& rect, wxRegionOp op)
 {
-    return Combine(rect.GetLeft(), rect.GetTop(), rect.GetWidth(), rect.GetHeight(), op);
+    return Combine(rect.GetLeft(), rect.GetTop(),
+                   rect.GetWidth(), rect.GetHeight(), op);
 }
 
 //-----------------------------------------------------------------------------
@@ -383,7 +409,7 @@ void wxRegionIterator::Reset(const wxRegion& region)
 
         m_rects = new wxRect[header->nCount];
 
-        RECT* rect = (RECT*) ((char*)rgnData + sizeof(RGNDATAHEADER)) ;
+        RECT* rect = (RECT*) ((char*)rgnData + sizeof(RGNDATAHEADER));
         size_t i;
         for (i = 0; i < header->nCount; i++)
         {
@@ -446,7 +472,7 @@ wxCoord wxRegionIterator::GetY() const
 wxCoord wxRegionIterator::GetW() const
 {
     if (m_current < m_numRects)
-        return m_rects[m_current].width ;
+        return m_rects[m_current].width;
     return 0;
 }
 
