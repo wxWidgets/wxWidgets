@@ -234,6 +234,11 @@ wxPaintDC::~wxPaintDC()
             ::EndPaint(GetWinHwnd(m_canvas), &g_paintStruct);
 
             ms_cache.Remove(index);
+
+            // Reduce the number of bogus reports of non-freed memory
+            // at app exit
+            if (ms_cache.IsEmpty())
+                ms_cache.Clear();
         }
         //else: cached DC entry is still in use
 
