@@ -20,18 +20,21 @@
 #include <windows.h>
 #endif
 
-#include "wx/defs.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+#pragma hdrstop
+#endif
+
+#ifndef WX_PRECOMP
+#include "wx/wx.h"
+#endif
 
 #include "lw.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-
-#if !defined(__WXMAC__)
-// these must be defined in the precompiled headers under CodeWarrior
-#define wxInt32 int
-#define wxUint32 unsigned int
-#endif
 
 #ifndef FALSE
 #define FALSE 0
