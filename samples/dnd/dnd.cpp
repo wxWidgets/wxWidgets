@@ -39,12 +39,7 @@
 // file names) we drop on them
 // ----------------------------------------------------------------------------
 
-// FIXME this is ugly and should be fixed in the library itself
-#ifdef __WXMSW__
-    typedef long wxDropPointCoord;
-#else // wxGTK
-    typedef int wxDropPointCoord;
-#endif // MSW/GTK
+typedef long wxDropPointCoord;
 
 class DnDText : public wxTextDropTarget
 {
@@ -206,80 +201,14 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL);
 
     m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
-            wxTE_MULTILINE | wxTE_READONLY |
-            wxSUNKEN_BORDER );
-
-    // redirect log messages to the text window (don't forget to delete it!)
-    m_pLog = new wxLogTextCtrl(m_ctrlLog);
-    m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
-
-    // associate drop targets with 2 text controls
-    m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-    m_ctrlText->SetDropTarget( new DnDText(m_ctrlText) );
-
-    wxLayoutConstraints *c;
-
-    // Top-left listbox
-    c = new wxLayoutConstraints;
-    c->left.SameAs(this, wxLeft);
-    c->top.SameAs(this, wxTop);
-    c->right.PercentOf(this, wxRight, 50);
-    c->height.PercentOf(this, wxHeight, 40);
-    m_ctrlFile->SetConstraints(c);
-
-    // Top-right listbox
-    c = new wxLayoutConstraints;
-    c->left.SameAs    (m_ctrlFile, wxRight);
-    c->top.SameAs     (this, wxTop);
-    c->right.SameAs   (this, wxRight);
-    c->height.PercentOf(this, wxHeight, 40);
-    m_ctrlText->SetConstraints(c);
-
-    // Lower text control
-    c = new wxLayoutConstraints;
-    c->left.SameAs    (this, wxLeft);
-    c->right.SameAs   (this, wxRight);
-    c->height.PercentOf(this, wxHeight, 40);
-    c->top.SameAs(m_ctrlText, wxBottom);
-    m_ctrlLog->SetConstraints(c);
-
-  // construct menu
-  wxMenu *file_menu = new wxMenu;
-  file_menu->Append(Menu_Drag, "&Test drag...");
-  file_menu->AppendSeparator();
-  file_menu->Append(Menu_Quit, "E&xit");
-
-  wxMenu *log_menu = new wxMenu;
-  log_menu->Append(Menu_Clear, "Clear");
-
-  wxMenu *help_menu = new wxMenu;
-  help_menu->Append(Menu_Help, "&Help...");
-  help_menu->AppendSeparator();
-  help_menu->Append(Menu_About, "&About");
-
-  wxMenuBar *menu_bar = new wxMenuBar;
-  menu_bar->Append(file_menu, "&File");
-  menu_bar->Append(log_menu,  "&Log");
-  menu_bar->Append(help_menu, "&Help");
-
-  SetMenuBar(menu_bar);
-
-  // make a panel with 3 subwindows
-  wxPoint pos(0, 0);
-  wxSize  size(400, 200);
-
-  wxString strFile("Drop files here!"), strText("Drop text on me");
-
-  m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL);
-  m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL);
-
-  m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
                                wxTE_MULTILINE | wxTE_READONLY |
                                wxSUNKEN_BORDER );
 
-  // redirect log messages to the text window (don't forget to delete it!)
+#if wxUSE_STD_IOSTREAM  
+// redirect log messages to the text window (don't forget to delete it!)
   m_pLog = new wxLogTextCtrl(m_ctrlLog);
   m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
+#endif
 
   // associate drop targets with 2 text controls
   m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
@@ -427,10 +356,12 @@ void DnDFrame::OnRightDown(wxMouseEvent &event )
 
 DnDFrame::~DnDFrame()
 {
+#if wxUSE_STD_IOSTREAM  
     if ( m_pLog != NULL ) {
         if ( wxLog::SetActiveTarget(m_pLogPrev) == m_pLog )
             delete m_pLog;
     }
+#endif
 }
 
 // ---------------------------------------------------------------------------

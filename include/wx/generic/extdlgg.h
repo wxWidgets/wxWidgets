@@ -62,6 +62,14 @@ public:
         { m_clientWindow = clientWindow; }
     wxWindow *GetClientWindow() 
         { return m_clientWindow; }
+    void SetClientWindowMargin( int margin )
+        { m_clientWindowMargin = margin; }
+    int GetClientWindowMargin()
+        { return m_clientWindowMargin; }
+    void SetSpacePerButton( wxSize space )
+        { m_spacePerButton = space; }
+    wxSize GetSpacePerButton()
+        { return m_spacePerButton; }
 
     void AddButton( wxButton *button );
 
@@ -77,7 +85,7 @@ public:
     void OnYes(wxCommandEvent& event);
     void OnNo(wxCommandEvent& event);
     void OnCancel(wxCommandEvent& event);
-
+    
 protected:
     wxWindow      *m_clientWindow;
     long           m_extraStyle;
@@ -85,7 +93,9 @@ protected:
 #if wxUSE_STATLINE
     wxStaticLine  *m_statLine;
 #endif
-    
+    int            m_clientWindowMargin;    
+    wxSize         m_spacePerButton;
+
     wxSize LayoutButtons();
 
 private:

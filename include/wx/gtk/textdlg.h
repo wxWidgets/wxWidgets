@@ -18,6 +18,7 @@
 
 #include "wx/setup.h"
 #include "wx/dialog.h"
+#include "wx/extdlg.h"
 
 // Handy dialog functions (will be converted into classes at some point)
 WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;

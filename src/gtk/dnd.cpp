@@ -337,17 +337,17 @@ void wxDropTarget::OnLeave()
 {
 }
 
-bool wxDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
 {
     return TRUE;
 }
 
-bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
 {
     return FALSE;
 }
 
-bool wxDropTarget::OnData( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxDropTarget::OnData( long WXUNUSED(x), long WXUNUSED(y) )
 {
     return FALSE;
 }
@@ -472,12 +472,12 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 // wxTextDropTarget
 //-------------------------------------------------------------------------
 
-bool wxTextDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxTextDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
 {
     return IsSupported( wxDF_TEXT );
 }
 
-bool wxTextDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxTextDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
 {
     if (IsSupported( wxDF_TEXT ))
     {
@@ -488,7 +488,7 @@ bool wxTextDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
     return FALSE;
 }
 
-bool wxTextDropTarget::OnData( int x, int y )
+bool wxTextDropTarget::OnData( long x, long y )
 {
     wxTextDataObject data;
     if (!GetData( &data )) return FALSE;
@@ -512,12 +512,12 @@ wxPrivateDropTarget::wxPrivateDropTarget( const wxString &id )
     m_id = id;
 }
 
-bool wxPrivateDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxPrivateDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
 {
     return IsSupported( m_id );
 }
 
-bool wxPrivateDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxPrivateDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
 {
     if (!IsSupported( m_id ))
     {
@@ -528,7 +528,7 @@ bool wxPrivateDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
     return FALSE;
 }
 
-bool wxPrivateDropTarget::OnData( int x, int y )
+bool wxPrivateDropTarget::OnData( long x, long y )
 {
     if (!IsSupported( m_id )) return FALSE;
 
@@ -544,12 +544,12 @@ bool wxPrivateDropTarget::OnData( int x, int y )
 // A drop target which accepts files (dragged from File Manager or Explorer)
 //----------------------------------------------------------------------------
 
-bool wxFileDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
+bool wxFileDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
 {
     return IsSupported( wxDF_FILENAME );
 }
 
-bool wxFileDropTarget::OnDrop( int x, int y )
+bool wxFileDropTarget::OnDrop( long x, long y )
 {
     if (IsSupported( wxDF_FILENAME ))
     {
@@ -560,7 +560,7 @@ bool wxFileDropTarget::OnDrop( int x, int y )
     return FALSE;
 }
 
-bool wxFileDropTarget::OnData( int x, int y )
+bool wxFileDropTarget::OnData( long x, long y )
 {
     wxFileDataObject data;
     if (!GetData( &data )) return FALSE;

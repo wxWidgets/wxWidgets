@@ -57,17 +57,17 @@ public:
   /* may be overridden to reject certain formats or drops
      on certain areas. always returns TRUE by default
      indicating that you'd accept the data from the drag. */
-  virtual bool OnMove( int x, int y );
+  virtual bool OnMove( long x, long y );
     
   /* has to be overridden to accept a drop event. call 
      IsSupported() to ask which formats are available
      and then call RequestData() to indicate the format 
      you request. */
-  virtual bool OnDrop( int x, int y );
+  virtual bool OnDrop( long x, long y );
   
   /* this gets called once the data has actually arrived. get
      it with GetData(). this has to be overridden. */
-  virtual bool OnData( int x, int y );
+  virtual bool OnData( long x, long y );
 
   /* called from within OnDrop() to request a certain format
      from the drop event. */
@@ -106,12 +106,12 @@ public:
 
   wxTextDropTarget() {}
 
-  virtual bool OnMove( int x, int y );
-  virtual bool OnDrop( int x, int y );
-  virtual bool OnData( int x, int y );
+  virtual bool OnMove( long x, long y );
+  virtual bool OnDrop( long x, long y );
+  virtual bool OnData( long x, long y );
     
   /* you have to override OnDropData to get at the text */
-  virtual bool OnDropText( int x, int y, const wxChar *text ) = 0;
+  virtual bool OnDropText( long x, long y, const wxChar *text ) = 0;
     
 };
 
@@ -129,12 +129,12 @@ public:
   /* see SetId() below for explanation */
   wxPrivateDropTarget( const wxString &id );
   
-  virtual bool OnMove( int x, int y );
-  virtual bool OnDrop( int x, int y );
-  virtual bool OnData( int x, int y );
+  virtual bool OnMove( long x, long y );
+  virtual bool OnDrop( long x, long y );
+  virtual bool OnData( long x, long y );
   
   /* you have to override OnDropData to get at the data */
-  virtual bool OnDropData( int x, int y, void *data, size_t size ) = 0;
+  virtual bool OnDropData( long x, long y, void *data, size_t size ) = 0;
     
   /* the string ID identifies the format of clipboard or DnD data. a word
      processor would e.g. add a wxTextDataObject and a wxPrivateDataObject
@@ -158,12 +158,12 @@ public:
     
   wxFileDropTarget() {}
     
-  virtual bool OnMove( int x, int y );
-  virtual bool OnDrop( int x, int y );
-  virtual bool OnData( int x, int y );
+  virtual bool OnMove( long x, long y );
+  virtual bool OnDrop( long x, long y );
+  virtual bool OnData( long x, long y );
   
   /* you have to override OnDropFiles to get at the file names */
-  virtual bool OnDropFiles( int x, int y, size_t nFiles, const wxChar * const aszFiles[] ) = 0;
+  virtual bool OnDropFiles( long x, long y, size_t nFiles, const wxChar * const aszFiles[] ) = 0;
 
 };
 

@@ -60,6 +60,8 @@ class wxButton: public wxControl
     void SetDefault();
     void SetLabel( const wxString &label );
     bool Enable( bool enable );
+
+    static wxSize GetDefaultSize();
     
   // implementation        
   

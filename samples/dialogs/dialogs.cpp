@@ -117,8 +117,8 @@ void MyFrame::ExtDialog(wxCommandEvent& WXUNUSED(event) )
     // other platforms. Also, it will not be resizable
     // anywhere.
     
-    wxExtDialog dialog( this, -1, "Test 1 for wxExtDialog", 
-      wxOK|wxFORWARD|wxBACKWARD );
+    wxExtDialog dialog( this, -1, "Test 1 for wxExtDialog", wxOK|wxFORWARD|wxBACKWARD );
+    dialog.AddButton( new wxButton( &dialog, -1, "Custom") );
 
     dialog.SetClientWindow( new wxTextCtrl( &dialog, -1, "Test", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE ) );
 
@@ -133,7 +133,8 @@ void MyFrame::ExtDialog(wxCommandEvent& WXUNUSED(event) )
     // all platforms.
     
     wxExtDialog dialog2( this, -1, "Test 2 for wxExtDialog", 
-      wxOK|wxFORWARD|wxBACKWARD|wxCANCEL, wxDefaultPosition, wxSize(400,170),
+      wxOK|wxFORWARD|wxBACKWARD|wxCANCEL, 
+      wxDefaultPosition, wxSize(400,170),
       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxED_BUTTONS_RIGHT | wxED_STATIC_LINE | wxED_CLIENT_MARGIN );
 
     dialog2.SetClientWindow( new wxTextCtrl( &dialog2, -1, "Test", wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE ) );

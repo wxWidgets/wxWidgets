@@ -37,8 +37,6 @@
 // wxExtDialog
 //-----------------------------------------------------------------------------
 
-#define STATIC_LINE_MARGIN   15
-#define CLIENT_AREA_MARGIN   10
 #define BUTTON_AREA_MARGIN   10
 
 #if !USE_SHARED_LIBRARY
@@ -70,6 +68,28 @@ bool wxExtDialog::Create( wxWindow *parent, wxWindowID id,
       
     m_extraStyle = extraStyle;
     
+    m_clientWindowMargin = 10;
+    
+    if (m_windowStyle & wxED_BUTTONS_RIGHT)
+    {
+        m_spacePerButton.x = wxButton::GetDefaultSize().x + 18;
+        m_spacePerButton.y = wxButton::GetDefaultSize().y + 8;
+    }
+    else
+    {
+        m_spacePerButton.x = wxButton::GetDefaultSize().x + 8;
+        m_spacePerButton.y = wxButton::GetDefaultSize().y + 18;
+    }
+
+#if defined(__WXGTK__) || defined(__WXMOTIF__)
+    // Under Motif and GTK, the default button has a big frame around
+    // it and to avoid overlapping buttons we make the margin bigger.
+    // We could give other platforms a bigger margin as well, but this
+    // wouldn't be standard L&F.
+    m_spacePerButton.x += 10;
+    m_spacePerButton.y += 10;
+#endif
+	
     wxButton *ok = (wxButton *) NULL;
     wxButton *cancel = (wxButton *) NULL;
     wxButton *yes = (wxButton *) NULL;
@@ -112,7 +132,10 @@ bool wxExtDialog::Create( wxWindow *parent, wxWindowID id,
         AddButton( new wxButton( this, wxID_SETUP, _("Setup")  ) );
 
     if (m_extraStyle & wxMORE) 
-        AddButton( new wxButton( this, wxID_MORE, _("More..")  ) );
+        AddButton( new wxButton( this, wxID_MORE, _("More...")  ) );
+
+    if (m_extraStyle & wxHELP)
+        AddButton( new wxButton( this, wxID_HELP, _("Help")  ) );
 
     if (m_extraStyle & wxCANCEL) 
     {
@@ -211,10 +234,10 @@ void wxExtDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
     if (m_clientWindow)
     {
         if (m_windowStyle & wxED_CLIENT_MARGIN)
-	  m_clientWindow->SetSize( CLIENT_AREA_MARGIN,
-	                           CLIENT_AREA_MARGIN,
-				   client_size.x - 2*CLIENT_AREA_MARGIN,
-				   client_size.y - 2*CLIENT_AREA_MARGIN );
+	  m_clientWindow->SetSize( m_clientWindowMargin,
+	                           m_clientWindowMargin,
+				   client_size.x - 2*m_clientWindowMargin,
+				   client_size.y - 2*m_clientWindowMargin );
 	else
           m_clientWindow->SetSize( 0, 0, client_size.x, client_size.y );
 	
@@ -249,29 +272,22 @@ wxSize wxExtDialog::GetButtonAreaSize()
     
     wxSize ret(0,0);
 
-    // this routine can be improved to measure the string length
-    // of the button text or the bitmap size if using wxBmpButton
-    // or to query the standard button size somehow.
-    
-    int button_size_and_margin_x = 110;
-    int button_size_and_margin_y = 44;
-	
     if (m_windowStyle & wxED_BUTTONS_RIGHT)
     {
-	ret.x = button_size_and_margin_x;
-        ret.y = m_buttons.GetCount()*button_size_and_margin_y + 2*BUTTON_AREA_MARGIN;
+	ret.x = m_spacePerButton.x;
+        ret.y = m_buttons.GetCount()*m_spacePerButton.y + 2*BUTTON_AREA_MARGIN;
 #if wxUSE_STATLINE
         if (m_statLine)
-	    ret.x += STATIC_LINE_MARGIN;
+	    ret.x += wxStaticLine::GetDefaultSize();
 #endif
     }
     else
     {
-        ret.x = m_buttons.GetCount()*button_size_and_margin_x + 2*BUTTON_AREA_MARGIN;
-	ret.y = button_size_and_margin_y;
+        ret.x = m_buttons.GetCount()*m_spacePerButton.x + 2*BUTTON_AREA_MARGIN;
+	ret.y = m_spacePerButton.y;
 #if wxUSE_STATLINE
         if (m_statLine)
-	    ret.y += STATIC_LINE_MARGIN;
+	    ret.y += wxStaticLine::GetDefaultSize();
 #endif
     }
     
@@ -288,6 +304,11 @@ wxSize wxExtDialog::LayoutButtons()
     if (m_windowStyle & wxED_BUTTONS_RIGHT)
     {
         area_used.y = client_area.y;
+	wxSize area_used_by_buttons( area_used );
+#if wxUSE_STATLINE
+        if (m_statLine)
+	    area_used_by_buttons.x -= wxStaticLine::GetDefaultSize();
+#endif
 
         int space_for_each_button = (client_area.y-2*BUTTON_AREA_MARGIN) / m_buttons.GetCount();
         int n = 0;
@@ -297,12 +318,12 @@ wxSize wxExtDialog::LayoutButtons()
             wxButton *button = (wxButton*)node->Data();
 	    
 	    wxSize button_size( button->GetSize() );
-	    if (button_size.x < 80) button_size.x = 80;
+	    if (button_size.x < wxButton::GetDefaultSize().x) button_size.x = wxButton::GetDefaultSize().x;
 	    
 	    int center_of_button_y = n*space_for_each_button + space_for_each_button/2;
 	    int button_y = BUTTON_AREA_MARGIN + center_of_button_y - button_size.y/2;
 	    
-	    int center_of_button_x = client_area.x - area_used.x/2;
+	    int center_of_button_x = client_area.x - area_used_by_buttons.x/2;
 	    int button_x = center_of_button_x - button_size.x/2;
 	    
             button->SetSize( button_x, button_y, button_size.x, button_size.y );
@@ -313,7 +334,7 @@ wxSize wxExtDialog::LayoutButtons()
        
 #if wxUSE_STATLINE
         if (m_statLine)
-	    m_statLine->SetSize( client_area.x - area_used.x, 
+	    m_statLine->SetSize( client_area.x - area_used_by_buttons.x - wxStaticLine::GetDefaultSize(), 
 	                         0, 
 				 wxStaticLine::GetDefaultSize(), 
 				 client_area.y );
@@ -322,6 +343,11 @@ wxSize wxExtDialog::LayoutButtons()
     else
     {
         area_used.x = client_area.x;
+	wxSize area_used_by_buttons( area_used );
+#if wxUSE_STATLINE
+        if (m_statLine)
+	    area_used_by_buttons.y -= wxStaticLine::GetDefaultSize();
+#endif
 
         int space_for_each_button = (client_area.x-2*BUTTON_AREA_MARGIN) / m_buttons.GetCount();
         int n = 0;
@@ -331,12 +357,12 @@ wxSize wxExtDialog::LayoutButtons()
             wxButton *button = (wxButton*)node->Data();
 	    
 	    wxSize button_size( button->GetSize() );
-	    if (button_size.x < 80) button_size.x = 80;
+	    if (button_size.x < wxButton::GetDefaultSize().x) button_size.x = wxButton::GetDefaultSize().x;
 	    
 	    int center_of_button_x = n*space_for_each_button + space_for_each_button/2;
 	    int button_x = BUTTON_AREA_MARGIN + center_of_button_x - button_size.x/2;
 	    
-	    int center_of_button_y = client_area.y - area_used.y/2;
+	    int center_of_button_y = client_area.y - area_used_by_buttons.y/2;
 	    int button_y = center_of_button_y - button_size.y/2;
 	    
             button->SetSize( button_x, button_y, button_size.x, button_size.y );
@@ -348,7 +374,7 @@ wxSize wxExtDialog::LayoutButtons()
 #if wxUSE_STATLINE
         if (m_statLine)
 	    m_statLine->SetSize( 0, 
-	                         client_area.y - area_used.y,
+	                         client_area.y - area_used_by_buttons.y - wxStaticLine::GetDefaultSize(),
 				 client_area.x, 
 				 wxStaticLine::GetDefaultSize() );
 #endif

@@ -120,6 +120,11 @@ void wxButton::SetDefault(void)
     SetSize( m_x, m_y, m_width, m_height );
 }
 
+static wxSize wxButton::GetDefaultSize()
+{
+    return wxSize(80,26);
+}
+
 void wxButton::SetLabel( const wxString &label )
 {
     wxCHECK_RET( m_widget != NULL, _T("invalid button") );
