@@ -246,7 +246,9 @@ wxString wxStandardPaths::GetUserConfigDir() const
 
 wxString wxStandardPaths::GetDataDir() const
 {
-    return AppendAppName(DoGetDirectory(CSIDL_PROGRAM_FILES));
+    // under Windows each program is usually installed in its own directory and
+    // so its datafiles are in the same directory as its main executable
+    return wxFileName(wxGetFullModuleName()).GetPath();
 }
 
 wxString wxStandardPaths::GetUserDataDir() const
