@@ -669,8 +669,6 @@ channel and will now only create a mask when all the pixels in the
 image are either fully transparent or fully opaque.  In addition, the
 wx.DC.DrawBitmap and wx.DC.Blit methods are able to correctly blend
 the pixels in the image with partially transparent alpha values.
-(Currently only on MSW and Mac, if anybody knows how to do it for GTK
-then please submit a patch!)
 
 If you are using a PNG with an alpha channel but you need to have a
 wx.Mask like you automatically got in 2.4 then you can do one of the
