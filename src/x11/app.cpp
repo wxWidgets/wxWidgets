@@ -388,13 +388,10 @@ wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NUL
 
 wxApp::wxApp()
 {
-    m_topWindow = NULL;
-    wxTheApp = this;
-    m_className = "";
-    m_wantDebugOutput = TRUE ;
-    m_appName = "";
+    // TODO: parse the command line
     argc = 0;
     argv = NULL;
+
     m_mainColormap = (WXColormap) NULL;
     m_topLevelWidget = (WXWindow) NULL;
     m_maxRequestSize = 0;
