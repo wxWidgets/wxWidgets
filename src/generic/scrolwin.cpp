@@ -437,6 +437,7 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
 
     if (x_pos != -1)
     {
+        int old_x = m_xScrollPosition;
         m_xScrollPosition = x_pos;
     
 	// Calculate page size i.e. number of scroll units you get on the
@@ -450,9 +451,12 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_xScrollPosition = wxMax( 0, m_xScrollPosition );
       
         SetScrollPos( wxHORIZONTAL, m_xScrollPosition, TRUE );
+	
+	ScrollWindow( (old_x-m_xScrollPosition)*m_xScrollPixelsPerLine, 0 );
     }
     if (y_pos != -1)
     {
+        int old_y = m_yScrollPosition;
         m_yScrollPosition = y_pos;
 	
 	// Calculate page size i.e. number of scroll units you get on the
@@ -466,13 +470,15 @@ void wxScrolledWindow::Scroll( int x_pos, int y_pos )
         m_yScrollPosition = wxMax( 0, m_yScrollPosition );
 	
         SetScrollPos( wxVERTICAL, m_yScrollPosition, TRUE );
+	
+	ScrollWindow( 0, (old_y-m_yScrollPosition)*m_yScrollPixelsPerLine );
     }
     
     
 #ifdef __WXMSW__
-    ::UpdateWindow ((HWND) GetHWND());
+//    ::UpdateWindow ((HWND) GetHWND());
 #else
-    Refresh();
+//    Refresh();
 #endif
 }
 

@@ -14,6 +14,7 @@
 #include "wx/dcclient.h"
 #include "wx/dcmemory.h"
 #include "wx/image.h"
+#include "wx/gtk/win_gtk.h"
 #include <math.h>               // for floating-point functions
 
 #include "gdk/gdk.h"
@@ -118,7 +119,8 @@ wxWindowDC::wxWindowDC( wxWindow *window )
 
     wxASSERT_MSG( widget, wxT("DC needs a widget") );
 
-    m_window = widget->window;
+    GtkMyFixed *myfixed = GTK_MYFIXED( widget );
+    m_window = myfixed->bin_window;
 
     /* not realized ? */
     if (!m_window)

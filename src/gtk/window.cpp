@@ -211,6 +211,109 @@ extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
 //-----------------------------------------------------------------------------
+// local code (see below)
+//-----------------------------------------------------------------------------
+
+#if (GTK_MINOR_VERSION > 0)
+
+static void draw_frame( GtkWidget *widget, wxWindow *win )
+{
+    if (!win->m_hasVMT)
+        return;
+
+    int dw = 0;
+    int dh = 0;
+
+    if (win->HasScrolling())
+    {
+        GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
+        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(widget)->klass );
+
+/*
+            GtkWidget *hscrollbar = scroll_window->hscrollbar;
+            GtkWidget *vscrollbar = scroll_window->vscrollbar;
+
+            we use this instead:  range.slider_width = 11 + 2*2pts edge
+*/
+
+        if (scroll_window->vscrollbar_visible)
+        {
+            dw += 15;   /* dw += vscrollbar->allocation.width; */
+            dw += scroll_class->scrollbar_spacing;
+        }
+
+        if (scroll_window->hscrollbar_visible)
+        {
+            dh += 15;   /* dh += hscrollbar->allocation.height; */
+            dh += scroll_class->scrollbar_spacing;
+        }
+    }
+
+    int dx = 0;
+    int dy = 0;
+    if (GTK_WIDGET_NO_WINDOW (widget))
+    {
+        dx += widget->allocation.x;
+        dy += widget->allocation.y;
+    }
+
+    if (win->HasFlag(wxRAISED_BORDER))
+    {
+        gtk_draw_shadow( widget->style,
+                         widget->window,
+                         GTK_STATE_NORMAL,
+                         GTK_SHADOW_OUT,
+                         dx, dy,
+                         win->m_width-dw, win->m_height-dh );
+        return;
+    }
+
+    if (win->HasFlag(wxSUNKEN_BORDER))
+    {
+        gtk_draw_shadow( widget->style,
+                         widget->window,
+                         GTK_STATE_NORMAL,
+                         GTK_SHADOW_IN,
+                         dx, dy,
+                         win->m_width-dw, win->m_height-dh );
+        return;
+    }
+    
+    if (win->HasFlag(wxSIMPLE_BORDER))
+    {
+        GdkGC *gc;
+	gc = gdk_gc_new( widget->window );
+        gdk_gc_set_foreground( gc, &widget->style->black );
+        gdk_draw_rectangle( widget->window, gc, FALSE, 
+                         dx, dy,
+                         win->m_width-dw-1, win->m_height-dh-1 );
+        gdk_gc_unref( gc );
+        return;
+    }
+}
+
+//-----------------------------------------------------------------------------
+// "expose_event" of m_widget
+//-----------------------------------------------------------------------------
+
+static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindow *win )
+{
+    if (gdk_event->count > 0) return;
+    draw_frame( widget, win );
+}
+
+//-----------------------------------------------------------------------------
+// "draw" of m_wxwindow
+//-----------------------------------------------------------------------------
+
+static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxWindow *win )
+{
+    draw_frame( widget, win );
+}
+
+#endif // GTK_MINOR_VERSION > 0
+
+//-----------------------------------------------------------------------------
 // key event conversion routines
 //-----------------------------------------------------------------------------
 
@@ -565,117 +668,12 @@ static long map_to_wx_keysym( KeySym keysym )
 }
 
 //-----------------------------------------------------------------------------
-// local code (see below)
-//-----------------------------------------------------------------------------
-
-#if (GTK_MINOR_VERSION > 0)
-
-static void draw_frame( GtkWidget *widget, wxWindow *win )
-{
-    if (!win->m_hasVMT)
-        return;
-
-    int dw = 0;
-    int dh = 0;
-
-    if (win->HasScrolling())
-    {
-        GtkScrolledWindow *scroll_window = GTK_SCROLLED_WINDOW(widget);
-        GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT(widget)->klass );
-
-/*
-            GtkWidget *hscrollbar = scroll_window->hscrollbar;
-            GtkWidget *vscrollbar = scroll_window->vscrollbar;
-
-            we use this instead:  range.slider_width = 11 + 2*2pts edge
-*/
-
-        if (scroll_window->vscrollbar_visible)
-        {
-            dw += 15;   /* dw += vscrollbar->allocation.width; */
-            dw += scroll_class->scrollbar_spacing;
-        }
-
-        if (scroll_window->hscrollbar_visible)
-        {
-            dh += 15;   /* dh += hscrollbar->allocation.height; */
-            dh += scroll_class->scrollbar_spacing;
-        }
-    }
-
-    int dx = 0;
-    int dy = 0;
-    if (GTK_WIDGET_NO_WINDOW (widget))
-    {
-        dx += widget->allocation.x;
-        dy += widget->allocation.y;
-    }
-
-    if (win->HasFlag(wxRAISED_BORDER))
-    {
-        gtk_draw_shadow( widget->style,
-                         widget->window,
-                         GTK_STATE_NORMAL,
-                         GTK_SHADOW_OUT,
-                         dx, dy,
-                         win->m_width-dw, win->m_height-dh );
-        return;
-    }
-
-    if (win->HasFlag(wxSUNKEN_BORDER))
-    {
-        gtk_draw_shadow( widget->style,
-                         widget->window,
-                         GTK_STATE_NORMAL,
-                         GTK_SHADOW_IN,
-                         dx, dy,
-                         win->m_width-dw, win->m_height-dh );
-        return;
-    }
-    
-    if (win->HasFlag(wxSIMPLE_BORDER))
-    {
-        GdkGC *gc = gdk_gc_new( widget->window );
-        gdk_gc_set_foreground( gc, &widget->style->black );
-        gdk_draw_rectangle( widget->window, gc, FALSE, 
-                         dx, dy,
-                         win->m_width-dw-1, win->m_height-dh-1 );
-        gdk_gc_unref( gc );
-        return;
-    }
-}
-
-//-----------------------------------------------------------------------------
-// "expose_event" of m_widget
-//-----------------------------------------------------------------------------
-
-static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxWindow *win )
-{
-    if (gdk_event->count > 0) return;
-    draw_frame( widget, win );
-}
-
-//-----------------------------------------------------------------------------
-// "draw" of m_wxwindow
-//-----------------------------------------------------------------------------
-
-static void gtk_window_own_draw_callback( GtkWidget *widget, GdkRectangle *WXUNUSED(rect), wxWindow *win )
-{
-    draw_frame( widget, win );
-}
-
-#endif // GTK_MINOR_VERSION > 0
-
-//-----------------------------------------------------------------------------
 // "expose_event" of m_wxwindow
 //-----------------------------------------------------------------------------
 
 static void gtk_window_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxWindow *win )
 {
     if (!win->m_hasVMT)
-        return;
-
-    if (gdk_event->window != win->m_wxwindow->window)
         return;
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -715,10 +713,6 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     if (!win->m_hasVMT)
         return;
 
-    GtkMyFixed *myfixed = GTK_MYFIXED (widget);
-    if (!myfixed->children) 
-        return; /* mini optimisation */
-	 
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
 
@@ -2042,7 +2036,7 @@ void wxWindow::PostCreation()
           GTK_SIGNAL_FUNC(gtk_window_draw_callback), (gpointer)this );
 	  
 #if (GTK_MINOR_VERSION > 0)
-        /* these are called when the "sunken", "raised" or "simple" borders are drawn */
+        /* these are called when the "sunken" or "raised" borders are drawn */
         gtk_signal_connect( GTK_OBJECT(m_widget), "expose_event",
           GTK_SIGNAL_FUNC(gtk_window_own_expose_callback), (gpointer)this );
 
@@ -2212,7 +2206,7 @@ void wxWindow::OnInternalIdle()
 	   
         if (m_wxwindow)
         {
-            GdkWindow *window = m_wxwindow->window;
+            GdkWindow *window = GTK_MYFIXED(m_wxwindow)->bin_window;
             if (window)
                 gdk_window_set_cursor( window, cursor.GetCursor() );
 
@@ -2410,7 +2404,7 @@ void wxWindow::DoClientToScreen( int *x, int *y ) const
 
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
-        source = m_wxwindow->window;
+        source = GTK_MYFIXED(m_wxwindow)->bin_window;
     else
         source = m_widget->window;
 
@@ -2439,7 +2433,7 @@ void wxWindow::DoScreenToClient( int *x, int *y ) const
 
     GdkWindow *source = (GdkWindow *) NULL;
     if (m_wxwindow)
-        source = m_wxwindow->window;
+        source = GTK_MYFIXED(m_wxwindow)->bin_window;
     else
         source = m_widget->window;
 
@@ -2642,13 +2636,17 @@ void wxWindow::WarpPointer( int x, int y )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (connect_widget->window)
-    {
-        /* we provide this function ourselves as it is
-           missing in GDK */
-        gdk_window_warp_pointer( connect_widget->window, x, y );
-    }
+    /* we provide this function ourselves as it is
+       missing in GDK (top of this file)  */
+    
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_MYFIXED(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+	
+    if (window)
+        gdk_window_warp_pointer( window, x, y );
 }
 
 void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
@@ -2661,13 +2659,13 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
     {
         if (rect)
         {
-            gdk_window_clear_area( m_wxwindow->window,
+            gdk_window_clear_area( GTK_MYFIXED(m_wxwindow)->bin_window,
                                    rect->x, rect->y,
                                    rect->width, rect->height );
         }
         else
         {
-            gdk_window_clear( m_wxwindow->window );
+            gdk_window_clear( GTK_MYFIXED(m_wxwindow)->bin_window );
         }
     }
 
@@ -2756,8 +2754,13 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         if (!m_delayedBackgroundColour) return FALSE;
     }
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window)
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_MYFIXED(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+	
+    if (!window)
     {
         // indicate that a new style has been set
         // but it couldn't get applied as the
@@ -2768,13 +2771,13 @@ bool wxWindow::SetBackgroundColour( const wxColour &colour )
         return TRUE;
     }
 
-    if (m_wxwindow && m_wxwindow->window)
+    if (m_wxwindow)
     {
         /* wxMSW doesn't clear the window here. I don't do that either to
           provide compatibility. call Clear() to do the job. */
 
-        m_backgroundColour.CalcPixel( gdk_window_get_colormap( m_wxwindow->window ) );
-        gdk_window_set_background( m_wxwindow->window, m_backgroundColour.GetColor() );
+        m_backgroundColour.CalcPixel( gdk_window_get_colormap( window ) );
+        gdk_window_set_background( window, m_backgroundColour.GetColor() );
     }
 
     wxColour sysbg = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_BTNFACE );
@@ -2803,8 +2806,13 @@ bool wxWindow::SetForegroundColour( const wxColour &colour )
         if (!m_delayedForegroundColour) return FALSE;
     }
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window)
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_MYFIXED(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+	
+    if (!window)
     {
         // indicate that a new style has been set
         // but it couldn't get applied as the
@@ -2973,7 +2981,9 @@ GtkWidget* wxWindow::GetConnectWidget()
 
 bool wxWindow::IsOwnGtkWindow( GdkWindow *window )
 {
-    if (m_wxwindow) return (window == m_wxwindow->window);
+    if (m_wxwindow) 
+        return (window == GTK_MYFIXED(m_wxwindow)->bin_window);
+    
     return (window == m_widget->window);
 }
 
@@ -2988,8 +2998,13 @@ bool wxWindow::SetFont( const wxFont &font )
         if (!m_delayedFont) return FALSE;
     }
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window)
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_MYFIXED(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+	
+    if (!window)
     {
         // indicate that a new style has been set
         // but it couldn't get applied as the
@@ -3021,10 +3036,15 @@ void wxWindow::CaptureMouse()
 
     wxCHECK_RET( g_captureWindow == NULL, wxT("CaptureMouse called twice") );
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window) return;
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_MYFIXED(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+	
+    if (!window) return;
 
-    gdk_pointer_grab( connect_widget->window, FALSE,
+    gdk_pointer_grab( window, FALSE,
                       (GdkEventMask)
                          (GDK_BUTTON_PRESS_MASK |
                           GDK_BUTTON_RELEASE_MASK |
@@ -3042,8 +3062,13 @@ void wxWindow::ReleaseMouse()
 
     wxCHECK_RET( g_captureWindow, wxT("ReleaseMouse called twice") );
 
-    GtkWidget *connect_widget = GetConnectWidget();
-    if (!connect_widget->window) return;
+    GdkWindow *window = (GdkWindow*) NULL;
+    if (m_wxwindow)
+        window = GTK_MYFIXED(m_wxwindow)->bin_window;
+    else
+        window = GetConnectWidget()->window;
+	
+    if (!window) return;
 
     gdk_pointer_ungrab ( GDK_CURRENT_TIME );
     g_captureWindow = (wxWindow*) NULL;
@@ -3203,6 +3228,9 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
 
+    gtk_myfixed_scroll( GTK_MYFIXED(m_wxwindow), -dx, -dy );
+
+/*
     if (!m_scrollGC)
     {
         m_scrollGC = gdk_gc_new( m_wxwindow->window );
@@ -3252,6 +3280,7 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
         Refresh( TRUE, &rect );
     }
+*/
 }
 
 void wxWindow::SetScrolling(bool scroll)

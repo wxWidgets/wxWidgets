@@ -36,66 +36,68 @@ typedef enum
 
 typedef struct _GtkMyFixed        GtkMyFixed;
 typedef struct _GtkMyFixedClass   GtkMyFixedClass;
-typedef struct _GtkMyFixedChild   GtkMyFixedChild;
 
 struct _GtkMyFixed
 {
   GtkContainer container;
   GList *children;
-#if (GTK_MINOR_VERSION > 0)
   GtkMyShadowType shadow_type;
-#endif
+  
+  guint width;
+  guint height;
+
+  guint xoffset;
+  guint yoffset;
+
+  GdkWindow *bin_window;
+
+  GdkVisibilityState visibility;
+  gulong configure_serial;
+  gint scroll_x;
+  gint scroll_y;
 };
 
 struct _GtkMyFixedClass
 {
   GtkContainerClass parent_class;
 
-#if (GTK_MINOR_VERSION > 0)
   void  (*set_scroll_adjustments)   (GtkMyFixed     *myfixed,
 				     GtkAdjustment  *hadjustment,
 				     GtkAdjustment  *vadjustment);
-#endif
-};
-
-struct _GtkMyFixedChild
-{
-  GtkWidget *widget;
-  gint16 x;
-  gint16 y;
-  gint16 width;
-  gint16 height;
 };
 
 guint      gtk_myfixed_get_type        (void);
 GtkWidget* gtk_myfixed_new             (void);
-#if (GTK_MINOR_VERSION > 0)
 void       gtk_myfixed_set_shadow_type (GtkMyFixed     *myfixed,
 				        GtkMyShadowType  type);
-#endif
+					
+void       gtk_myfixed_scroll          	(GtkMyFixed     *myfixed,	
+                                         gint         dx,
+                                         gint         dy);
+					
 void       gtk_myfixed_put             (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
-                                        gint16         x,
-                                        gint16         y,
-					gint16         width,
-					gint16         height);
+                                        gint         x,
+                                        gint         y,
+					gint         width,
+					gint         height);
 
 void       gtk_myfixed_move            (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
-                                        gint16         x,
-                                        gint16         y );
+                                        gint         x,
+                                        gint         y );
 					
 void       gtk_myfixed_resize          (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
-                                        gint16         width,
-                                        gint16         height );
+                                        gint         width,
+                                        gint         height );
 					
 void       gtk_myfixed_set_size        (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
-                                        gint16         x,
-                                        gint16         y,
-                                        gint16         width,
-                                        gint16         height);
+                                        gint         x,
+                                        gint         y,
+                                        gint         width,
+                                        gint         height);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

@@ -62,7 +62,7 @@ wxOS2 -a wxWindows wxWindows/docs !wxWindows/docs/latex !wxWindows/docs/motif \
       !wxWindows/include/wx/qt !wxWindows/include/wx/stubs !wxWindows/include/wx/unix \
       wxWindows/include/wx/generic wxWindows/include/wx/os2 wxWindows/include/wx/protocol
       wxWindows/include/wx/html \
-      wxWindows/src !wxWindows/src/Makefile !wxWindows/src/Makefile.in !wxWindows/src/gdk_implib \
+      wxWindows/src !wxWindows/src/Makefile !wxWindows/src/Makefile.in \
       !wxWindows/src/mac !wxWindows/src/motif !wxWindows/src/msw !wxWindows/src/png \
       !wxWindows/src/qt !wxWindows/src/stubs !wxWindows/src/unix !wxWindows/src/zlib \
       !wxWindows/src/iodbc
