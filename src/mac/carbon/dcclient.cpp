@@ -23,6 +23,7 @@
 #include "wx/settings.h"
 #include "wx/math.h"
 #include "wx/mac/private.h"
+#include "wx/log.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -125,7 +126,6 @@ wxWindowDC::wxWindowDC(wxWindow *window)
         if (!rootwindow)
             return;
         WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
-        wxSize size = window->GetClientSize() ;
         int x , y ;
         x = y = 0 ;
         window->MacWindowToRootWindow( &x , &y ) ;
@@ -198,7 +198,6 @@ wxClientDC::wxClientDC(wxWindow *window)
             return;
         WindowRef windowref = (WindowRef) rootwindow->MacGetWindowRef() ;
         wxPoint origin = window->GetClientAreaOrigin() ;
-        wxSize size = window->GetClientSize() ;
         int x , y ;
         x = origin.x ;
         y = origin.y ;
