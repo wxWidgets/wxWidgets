@@ -76,14 +76,11 @@ Height member.
 
 \constfunc{wxRect}{Deflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
 
-Decrease the rectangle size by {\it dx} in x direction and {\it dy} in y
-direction. Both (or one of) parameters may be negative to increase the
-rectngle size. This method is the opposite of \helpref{Inflate}{wxrectinflate}.
+Decrease the rectangle size.
 
-The second form uses the same {\it diff} for both {\it dx} and {\it dy}.
-
-The first two versions modify the rectangle in place, the last one returns a
-new rectangle leaving this one unchanged.
+This method is the opposite from \helpref{Inflate}{wxrectinflate}:
+Deflate(a, b) is equivalent to Inflate(-a, -b).
+Please refer to \helpref{Inflate}{wxrectinflate} for full description.
 
 \wxheading{See also}
 
@@ -182,14 +179,38 @@ Gets the y member.
 
 \constfunc{wxRect}{Inflate}{\param{wxCoord }{dx}, \param{wxCoord }{dy}}
 
-Increase the rectangle size by {\it dx} in x direction and {\it dy} in y
-direction. Both (or one of) parameters may be negative to decrease the
-rectangle size.
+Increases the size of the rectangle.
 
 The second form uses the same {\it diff} for both {\it dx} and {\it dy}.
 
 The first two versions modify the rectangle in place, the last one returns a
 new rectangle leaving this one unchanged.
+
+The left border is moved farther left and the right border is moved farther
+right by {\it dx}. The upper border is moved farther up and the bottom border
+is moved farther down by {\it dy}. (Note the the width and height of the
+rectangle thus change by 2*{\it dx} and 2*{\it dy}, respectively.) If one or
+both of {\it dx} and {\it dy} are negative, the opposite happens: the rectangle
+size decreases in the respective direction.
+
+Inflating and deflating behaves ``naturally''. Defined more precisely, that
+means:
+\begin{enumerate}
+    \item ``Real'' inflates (that is, {\it dx} and/or {\it dy} >= 0) are not
+        constrained. Thus inflating a rectangle can cause its upper left corner
+        to move into the negative numbers. (the versions prior to 2.5.4 forced
+        the top left coordinate to not fall below (0, 0), which implied a
+        forced move of the rectangle.)
+
+    \item Deflates are clamped to not reduce the width or height of the
+        rectangle below zero. In such cases, the top-left corner is nonetheless
+        handled properly. For example, a rectangle at (10, 10) with size (20,
+        40) that is inflated by (-15, -15) will become located at (20, 25) at
+        size (0, 10). Finally, observe that the width and height are treated
+        independently. In the above example, the width is reduced by 20,
+        whereas the height is reduced by the full 30 (rather than also stopping
+        at 20, when the width reached zero).
+\end{enumerate}
 
 \wxheading{See also}
 

@@ -163,23 +163,33 @@ wxRect& wxRect::Union(const wxRect& rect)
 
 wxRect& wxRect::Inflate(wxCoord dx, wxCoord dy)
 {
-    x -= dx;
-    y -= dy;
-    width += 2*dx;
-    height += 2*dy;
+     if (-2*dx>width)
+     {
+         // Don't allow deflate to eat more width than we have,
+         // a well-defined rectangle cannot have negative width.
+         x+=width/2;
+         width=0;
+     }
+     else
+     {
+         // The inflate is valid.
+         x-=dx;
+         width+=2*dx;
+     }
 
-    // check that we didn't make the rectangle invalid by accident (you almost
-    // never want to have negative coords and never want negative size)
-    if ( x < 0 )
-        x = 0;
-    if ( y < 0 )
-        y = 0;
-
-    // what else can we do?
-    if ( width < 0 )
-        width = 0;
-    if ( height < 0 )
-        height = 0;
+     if (-2*dy>height)
+     {
+         // Don't allow deflate to eat more height than we have,
+         // a well-defined rectangle cannot have negative height.
+         y+=height/2;
+         height=0;
+     }
+     else
+     {
+         // The inflate is valid.
+         y-=dy;
+         height+=2*dy;
+     }
 
     return *this;
 }

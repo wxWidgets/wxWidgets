@@ -32,10 +32,12 @@ public:
 
 private:
     CPPUNIT_TEST_SUITE( RectTestCase );
+        CPPUNIT_TEST( InflateDeflate );
         CPPUNIT_TEST( Operators );
         CPPUNIT_TEST( Union );
     CPPUNIT_TEST_SUITE_END();
 
+    void InflateDeflate();
     void Operators();
     void Union();
 
@@ -47,6 +49,22 @@ CPPUNIT_TEST_SUITE_REGISTRATION( RectTestCase );
 
 // also include in it's own registry so that these tests can be run alone
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( RectTestCase, "RectTestCase" );
+
+void RectTestCase::InflateDeflate()
+{
+    // This is the rectangle from the example in the documentation of wxRect::Inflate().
+    const wxRect r1(10, 10, 20, 40);
+
+    CPPUNIT_ASSERT(r1.Inflate( 10,  10)==wxRect(  0,   0, 40,  60));
+    CPPUNIT_ASSERT(r1.Inflate( 20,  30)==wxRect(-10, -20, 60, 100));
+    CPPUNIT_ASSERT(r1.Inflate(-10, -10)==wxRect( 20,  20,  0,  20));
+    CPPUNIT_ASSERT(r1.Inflate(-15, -15)==wxRect( 20,  25,  0,  10));
+
+    CPPUNIT_ASSERT(r1.Inflate( 10,  10)==r1.Deflate(-10, -10));
+    CPPUNIT_ASSERT(r1.Inflate( 20,  30)==r1.Deflate(-20, -30));
+    CPPUNIT_ASSERT(r1.Inflate(-10, -10)==r1.Deflate( 10,  10));
+    CPPUNIT_ASSERT(r1.Inflate(-15, -15)==r1.Deflate( 15,  15));
+}
 
 void RectTestCase::Operators()
 {
