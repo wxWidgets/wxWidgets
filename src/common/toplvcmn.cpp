@@ -265,4 +265,9 @@ void wxTopLevelWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
     }
 }
 
-// vi:sts=4:sw=4:et
+void wxTopLevelWindowBase::RequestUserAttention(int flags)
+{
+    // it's probably better than do nothing, isn't it?
+    Raise();
+}
+
