@@ -95,6 +95,11 @@ protected:
                                wxSocketNotify, char *);
 
 private:
+  //
+  // We're hiding an Execute method in ConnectionBase
+  //s
+  virtual bool Execute(const wxString& str)
+  { return Execute(str, -1, wxIPC_TEXT); }
 };
 
 class wxTCPServer: public wxServerBase
