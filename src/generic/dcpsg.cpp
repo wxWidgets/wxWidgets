@@ -355,12 +355,12 @@ void wxPostScriptDC::DoSetClippingRegion (wxCoord x, wxCoord y, wxCoord w, wxCoo
 
     m_clipping = TRUE;
 
-    PsPrintf( wxT("gsave\n newpath\n"
-                  "%d %d moveto\n"
-                  "%d %d lineto\n"
-                  "%d %d lineto\n"
-                  "%d %d lineto\n"
-                  "closepath clip newpath\n"),
+    PsPrintf( wxT("gsave\n newpath\n")
+              wxT("%d %d moveto\n")
+              wxT("%d %d lineto\n")
+              wxT("%d %d lineto\n")
+              wxT("%d %d lineto\n")
+              wxT("closepath clip newpath\n"),
             LogicalToDeviceX(x),   LogicalToDeviceY(y),
             LogicalToDeviceX(x+w), LogicalToDeviceY(y),
             LogicalToDeviceX(x+w), LogicalToDeviceY(y+h),
@@ -413,10 +413,10 @@ void wxPostScriptDC::DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
 
     SetPen( m_pen );
 
-    PsPrintf( wxT("newpath\n"
-                  "%d %d moveto\n"
-                  "%d %d lineto\n"
-                  "stroke\n"),
+    PsPrintf( wxT("newpath\n")
+              wxT("%d %d moveto\n")
+              wxT("%d %d lineto\n")
+              wxT("stroke\n"),
             LogicalToDeviceX(x1), LogicalToDeviceY(y1),
             LogicalToDeviceX(x2), LogicalToDeviceY (y2) );
 
@@ -462,11 +462,11 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     {
         SetBrush( m_brush );
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d %d %d %d ellipse\n"
-                      "%d %d lineto\n"
-                      "closepath\n"
-                      "fill\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d %d %d %d ellipse\n")
+                  wxT("%d %d lineto\n")
+                  wxT("closepath\n")
+                  wxT("fill\n"),
                 LogicalToDeviceX(xc), LogicalToDeviceY(yc), LogicalToDeviceXRel(radius), LogicalToDeviceYRel(radius), (wxCoord)alpha1, (wxCoord) alpha2,
                 LogicalToDeviceX(xc), LogicalToDeviceY(yc) );
 
@@ -478,11 +478,11 @@ void wxPostScriptDC::DoDrawArc (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2, 
     {
         SetPen( m_pen );
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d %d %d %d ellipse\n"
-                      "%d %d lineto\n"
-                      "stroke\n"
-                      "fill\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d %d %d %d ellipse\n")
+                  wxT("%d %d lineto\n")
+                  wxT("stroke\n")
+                  wxT("fill\n"),
                 LogicalToDeviceX(xc), LogicalToDeviceY(yc), LogicalToDeviceXRel(radius), LogicalToDeviceYRel(radius), (wxCoord)alpha1, (wxCoord) alpha2,
                 LogicalToDeviceX(xc), LogicalToDeviceY(yc) );
 
@@ -510,8 +510,8 @@ void wxPostScriptDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
     {
         SetBrush( m_brush );
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d %d %d %d true ellipticarc\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d %d %d %d true ellipticarc\n"),
                   LogicalToDeviceX(x+w/2), LogicalToDeviceY(y+h/2),
                   LogicalToDeviceXRel(w/2), LogicalToDeviceYRel(h/2),
                   (wxCoord)sa, (wxCoord)ea );
@@ -524,8 +524,8 @@ void wxPostScriptDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,d
     {
         SetPen( m_pen );
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d %d %d %d false ellipticarc\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d %d %d %d false ellipticarc\n"),
                 LogicalToDeviceX(x+w/2), LogicalToDeviceY(y+h/2),
                 LogicalToDeviceXRel(w/2), LogicalToDeviceYRel(h/2),
                 (wxCoord)sa, (wxCoord)ea );
@@ -543,10 +543,10 @@ void wxPostScriptDC::DoDrawPoint (wxCoord x, wxCoord y)
 
     SetPen (m_pen);
 
-    PsPrintf( wxT("newpath\n"
-                  "%d %d moveto\n"
-                  "%d %d lineto\n"
-                  "stroke\n"),
+    PsPrintf( wxT("newpath\n")
+              wxT("%d %d moveto\n")
+              wxT("%d %d lineto\n")
+              wxT("stroke\n"),
             LogicalToDeviceX(x),   LogicalToDeviceY(y),
             LogicalToDeviceX(x+1), LogicalToDeviceY(y) );
 
@@ -718,13 +718,13 @@ void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoo
     {
         SetBrush( m_brush );
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d moveto\n"
-                      "%d %d lineto\n"
-                      "%d %d lineto\n"
-                      "%d %d lineto\n"
-                      "closepath\n"
-                      "fill\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d moveto\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d lineto\n")
+                  wxT("closepath\n")
+                  wxT("fill\n"),
                 LogicalToDeviceX(x),         LogicalToDeviceY(y),
                 LogicalToDeviceX(x + width), LogicalToDeviceY(y),
                 LogicalToDeviceX(x + width), LogicalToDeviceY(y + height),
@@ -738,13 +738,13 @@ void wxPostScriptDC::DoDrawRectangle (wxCoord x, wxCoord y, wxCoord width, wxCoo
     {
         SetPen (m_pen);
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d moveto\n"
-                      "%d %d lineto\n"
-                      "%d %d lineto\n"
-                      "%d %d lineto\n"
-                      "closepath\n"
-                      "stroke\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d moveto\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d lineto\n")
+                  wxT("closepath\n")
+                  wxT("stroke\n"),
                 LogicalToDeviceX(x),         LogicalToDeviceY(y),
                 LogicalToDeviceX(x + width), LogicalToDeviceY(y),
                 LogicalToDeviceX(x + width), LogicalToDeviceY(y + height),
@@ -774,17 +774,17 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
         SetBrush( m_brush );
 
         /* Draw rectangle anticlockwise */
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d 90 180 arc\n"
-                      "%d %d moveto\n"
-                      "%d %d %d 180 270 arc\n"
-                      "%d %d lineto\n"
-                      "%d %d %d 270 0 arc\n"
-                      "%d %d lineto\n"
-                      "%d %d %d 0 90 arc\n"
-                      "%d %d lineto\n"
-                      "closepath\n"
-                      "fill\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d 90 180 arc\n")
+                  wxT("%d %d moveto\n")
+                  wxT("%d %d %d 180 270 arc\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d %d 270 0 arc\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d %d 0 90 arc\n")
+                  wxT("%d %d lineto\n")
+                  wxT("closepath\n")
+                  wxT("fill\n"),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
                 LogicalToDeviceX(x), LogicalToDeviceY(y + rad),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
@@ -803,17 +803,17 @@ void wxPostScriptDC::DoDrawRoundedRectangle (wxCoord x, wxCoord y, wxCoord width
         SetPen (m_pen);
 
         /* Draw rectangle anticlockwise */
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d 90 180 arc\n"
-                      "%d %d moveto\n"
-                      "%d %d %d 180 270 arc\n"
-                      "%d %d lineto\n"
-                      "%d %d %d 270 0 arc\n"
-                      "%d %d lineto\n"
-                      "%d %d %d 0 90 arc\n"
-                      "%d %d lineto\n"
-                      "closepath\n"
-                      "stroke\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d 90 180 arc\n")
+                  wxT("%d %d moveto\n")
+                  wxT("%d %d %d 180 270 arc\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d %d 270 0 arc\n")
+                  wxT("%d %d lineto\n")
+                  wxT("%d %d %d 0 90 arc\n")
+                  wxT("%d %d lineto\n")
+                  wxT("closepath\n")
+                  wxT("stroke\n"),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + rad), LogicalToDeviceXRel(rad),
                 LogicalToDeviceX(x), LogicalToDeviceY(y + rad),
                 LogicalToDeviceX(x + rad), LogicalToDeviceY(y + height - rad), LogicalToDeviceXRel(rad),
@@ -836,9 +836,9 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
     {
         SetBrush (m_brush);
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d %d 0 360 ellipse\n"
-                      "fill\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d %d 0 360 ellipse\n")
+                  wxT("fill\n"),
                 LogicalToDeviceX(x + width / 2), LogicalToDeviceY(y + height / 2),
                 LogicalToDeviceXRel(width / 2), LogicalToDeviceYRel(height / 2) );
 
@@ -850,9 +850,9 @@ void wxPostScriptDC::DoDrawEllipse (wxCoord x, wxCoord y, wxCoord width, wxCoord
     {
         SetPen (m_pen);
 
-        PsPrintf( wxT("newpath\n"
-                      "%d %d %d %d 0 360 ellipse\n"
-                      "stroke\n"),
+        PsPrintf( wxT("newpath\n")
+                  wxT("%d %d %d %d 0 360 ellipse\n")
+                  wxT("stroke\n"),
                 LogicalToDeviceX(x + width / 2), LogicalToDeviceY(y + height / 2),
                 LogicalToDeviceXRel(width / 2), LogicalToDeviceYRel(height / 2) );
 
@@ -888,18 +888,18 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
     wxCoord xx = LogicalToDeviceX(x);
     wxCoord yy = LogicalToDeviceY(y + bitmap.GetHeight());
 
-    PsPrintf( wxT("/origstate save def\n"
-                  "20 dict begin\n"
-                  "/pix %d string def\n"
-                  "/grays %d string def\n"
-                  "/npixels 0 def\n"
-                  "/rgbindx 0 def\n"
-                  "%d %d translate\n"
-                  "%d %d scale\n"
-                  "%d %d 8\n"
-                  "[%d 0 0 %d 0 %d]\n"
-                  "{currentfile pix readhexstring pop}\n"
-                  "false 3 colorimage\n"),
+    PsPrintf( wxT("/origstate save def\n")
+              wxT("20 dict begin\n")
+              wxT("/pix %d string def\n")
+              wxT("/grays %d string def\n")
+              wxT("/npixels 0 def\n")
+              wxT("/rgbindx 0 def\n")
+              wxT("%d %d translate\n")
+              wxT("%d %d scale\n")
+              wxT("%d %d 8\n")
+              wxT("[%d 0 0 %d 0 %d]\n")
+              wxT("{currentfile pix readhexstring pop}\n")
+              wxT("false 3 colorimage\n"),
             w, w, xx, yy, ww, hh, w, h, w, -h, h );
 
     unsigned char* data = image.GetData();
@@ -1634,9 +1634,9 @@ void wxPostScriptDC::DoDrawSpline( wxList *points )
          #endif
          (double)(y1 + d) / 2;
 
-    PsPrintf( wxT("newpath\n"
-                  "%d %d moveto\n"
-                  "%d %d lineto\n"),
+    PsPrintf( wxT("newpath\n")
+              wxT("%d %d moveto\n")
+              wxT("%d %d lineto\n"),
             LogicalToDeviceX((wxCoord)x1), LogicalToDeviceY((wxCoord)y1),
             LogicalToDeviceX((wxCoord)x3), LogicalToDeviceY((wxCoord)y3) );
 
