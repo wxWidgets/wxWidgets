@@ -558,6 +558,9 @@ void wxComboBox::SelectAll()
 
 bool wxComboBox::CanUndo() const
 {
+    if (!IsEditable())
+        return false;
+    
     HWND hEditWnd = (HWND) GetEditHWND() ;
     if ( hEditWnd )
         return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
@@ -567,6 +570,9 @@ bool wxComboBox::CanUndo() const
 
 bool wxComboBox::CanRedo() const
 {
+    if (!IsEditable())
+        return false;
+    
     HWND hEditWnd = (HWND) GetEditHWND() ;
     if ( hEditWnd )
         return ::SendMessage(hEditWnd, EM_CANUNDO, 0, 0) != 0;
@@ -589,7 +595,7 @@ bool wxComboBox::CanCopy() const
 
 bool wxComboBox::CanCut() const
 {
-    return CanCopy() && IsEditable();
+    return IsEditable() && CanCopy() ;
 }
 
 bool wxComboBox::CanPaste() const
