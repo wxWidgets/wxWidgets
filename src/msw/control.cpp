@@ -156,7 +156,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     InheritAttributes();
 
     // set the size now if no initial size specified
-    if ( w == 0 || h == 0 )
+    if ( w <= 0 || h <= 0 )
     {
         SetBestSize(size);
     }
