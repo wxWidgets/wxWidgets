@@ -39,6 +39,9 @@
 
 #define USE_HTML_HELP 1
 
+// Use old-style HTML help if 1
+#define USE_OLD_HTML_HELP 0
+
 #if !wxUSE_HTML
 #undef USE_HTML_HELP
 #define USE_HTML_HELP 0
@@ -49,7 +52,10 @@
 #include <wx/filesys.h>
 #include <wx/fs_zip.h>
 
+#if USE_OLD_HTML_HELP
 #include "wx/generic/helpwxht.h"
+#endif
+
 #include "wx/html/helpctrl.h"
 #endif
 
@@ -88,7 +94,9 @@ public:
     wxHelpController& GetHelpController() { return m_help; }
 
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
     wxHelpControllerHtml& GetHtmlHelpController() { return m_htmlHelp; }
+#endif
     wxHtmlHelpController& GetAdvancedHtmlHelpController() { return m_advancedHtmlHelp; }
 #endif
 
@@ -104,7 +112,9 @@ private:
    wxHelpController         m_help;
 
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
    wxHelpControllerHtml     m_htmlHelp;
+#endif
    wxHtmlHelpController     m_advancedHtmlHelp;
 #endif
 
@@ -227,6 +237,7 @@ bool MyApp::OnInit()
     }
 
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
     // initialise the standard HTML help system: this means that the HTML docs are in the
     // subdirectory doc for platforms using HTML help
     if ( !frame->GetHtmlHelpController().Initialize("doc") )
@@ -235,6 +246,7 @@ bool MyApp::OnInit()
 
         return FALSE;
     }
+#endif
 
     // initialise the advanced HTML help system: this means that the HTML docs are in .htb
     // (zipped) form
@@ -269,12 +281,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(HelpDemo_Help_Help, "&About Help Demo...");
     menuFile->Append(HelpDemo_Help_Search, "&Search help...");
 #if USE_HTML_HELP
+#if USE_OLD_HTML_HELP
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Html_Help_Index, "HTML &Help Index...");
     menuFile->Append(HelpDemo_Html_Help_Classes, "HTML &Help on Classes...");
     menuFile->Append(HelpDemo_Html_Help_Functions, "HTML &Help on Functions...");
     menuFile->Append(HelpDemo_Html_Help_Help, "HTML &About Help Demo...");
     menuFile->Append(HelpDemo_Html_Help_Search, "HTML &Search help...");
+#endif
     menuFile->AppendSeparator();
     menuFile->Append(HelpDemo_Advanced_Html_Help_Index, "Advanced HTML &Help Index...");
     menuFile->Append(HelpDemo_Advanced_Html_Help_Classes, "Advanced HTML &Help on Classes...");
@@ -331,7 +345,7 @@ void MyFrame::OnHelp(wxCommandEvent& event)
 
 void MyFrame::OnHtmlHelp(wxCommandEvent& event)
 {
-#if USE_HTML_HELP
+#if USE_HTML_HELP && USE_OLD_HTML_HELP
     ShowHelp(event.GetId(), m_htmlHelp);
 #endif
 }

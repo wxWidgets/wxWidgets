@@ -12,7 +12,7 @@
 WXDIR = $(WXWIN)
 
 PROGRAM=demo
-EXTRALIBS=htmlhelp.lib
+#EXTRALIBS=htmlhelp.lib
 OBJECTS = $(PROGRAM).obj
 
 !include $(WXDIR)\src\makeprog.vc
