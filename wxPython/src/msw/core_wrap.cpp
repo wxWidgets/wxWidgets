@@ -835,6 +835,8 @@ wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsigned ch
  static const wxString wxPyIMAGE_OPTION_BMP_FORMAT(wxIMAGE_OPTION_BMP_FORMAT); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_X(wxIMAGE_OPTION_CUR_HOTSPOT_X); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_Y(wxIMAGE_OPTION_CUR_HOTSPOT_Y); 
+ static const wxString wxPyIMAGE_OPTION_RESOLUTION(wxIMAGE_OPTION_RESOLUTION); 
+ static const wxString wxPyIMAGE_OPTION_RESOLUTIONUNIT(wxIMAGE_OPTION_RESOLUTIONUNIT); 
 void wxEvtHandler_Connect(wxEvtHandler *self,int id,int lastId,int eventType,PyObject *func){
             if (PyCallable_Check(func)) {
                 self->Connect(id, lastId, eventType,
@@ -9904,6 +9906,34 @@ static PyObject *_wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_get() {
     PyObject *pyobj;
     
     pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_CUR_HOTSPOT_Y, SWIGTYPE_p_wxString, 0);
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_RESOLUTION_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTION is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_RESOLUTION_get() {
+    PyObject *pyobj;
+    
+    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_RESOLUTION, SWIGTYPE_p_wxString, 0);
+    return pyobj;
+}
+
+
+static int _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable IMAGE_OPTION_RESOLUTIONUNIT is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get() {
+    PyObject *pyobj;
+    
+    pyobj = SWIG_NewPointerObj((void *) &wxPyIMAGE_OPTION_RESOLUTIONUNIT, SWIGTYPE_p_wxString, 0);
     return pyobj;
 }
 
@@ -35199,6 +35229,8 @@ static swig_const_info swig_const_table[] = {
 { SWIG_PY_INT,     (char *)"FromStart", (long) wxFromStart, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"FromCurrent", (long) wxFromCurrent, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"FromEnd", (long) wxFromEnd, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"IMAGE_RESOLUTION_INCHES", (long) wxIMAGE_RESOLUTION_INCHES, 0, 0, 0},
+{ SWIG_PY_INT,     (char *)"IMAGE_RESOLUTION_CM", (long) wxIMAGE_RESOLUTION_CM, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BMP_24BPP", (long) wxBMP_24BPP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BMP_8BPP", (long) wxBMP_8BPP, 0, 0, 0},
 { SWIG_PY_INT,     (char *)"BMP_8BPP_GREY", (long) wxBMP_8BPP_GREY, 0, 0, 0},
@@ -35411,6 +35443,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_BMP_FORMAT",_wrap_IMAGE_OPTION_BMP_FORMAT_get, _wrap_IMAGE_OPTION_BMP_FORMAT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_CUR_HOTSPOT_X",_wrap_IMAGE_OPTION_CUR_HOTSPOT_X_get, _wrap_IMAGE_OPTION_CUR_HOTSPOT_X_set);
     SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_CUR_HOTSPOT_Y",_wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_get, _wrap_IMAGE_OPTION_CUR_HOTSPOT_Y_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTION",_wrap_IMAGE_OPTION_RESOLUTION_get, _wrap_IMAGE_OPTION_RESOLUTION_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"IMAGE_OPTION_RESOLUTIONUNIT",_wrap_IMAGE_OPTION_RESOLUTIONUNIT_get, _wrap_IMAGE_OPTION_RESOLUTIONUNIT_set);
     SWIG_addvarlink(SWIG_globals,(char*)"DefaultValidator",_wrap_DefaultValidator_get, _wrap_DefaultValidator_set);
     
     __wxPyPreStart(d);     // initialize threading and some globals and such
