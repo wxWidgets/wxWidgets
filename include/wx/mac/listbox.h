@@ -149,7 +149,7 @@ protected:
     int             MacGetSelections(wxArrayInt& aSelections) const ;
     bool            MacIsSelected( int n ) const ;
     void            MacScrollTo( int n ) ;
-    void            OnSize( const wxSizeEvent &size ) ;
+    void            OnSize( wxSizeEvent &size ) ;
     void            MacDoClick() ;
     void            MacDoDoubleClick() ;
 

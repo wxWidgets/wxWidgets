@@ -823,7 +823,7 @@ void wxListBox::MacScrollTo( int n )
     // TODO implement scrolling
 }
 
-void wxListBox::OnSize( const wxSizeEvent &event)
+void wxListBox::OnSize( wxSizeEvent &event)
 {
     Point pt;
     
