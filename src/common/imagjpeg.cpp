@@ -27,10 +27,25 @@
 #include "wx/debug.h"
 #include "wx/log.h"
 #include "wx/app.h"
+
+// NB: Some compilers define boolean type in Windows headers (e.g. Watcom C++).
+//     This causes a conflict with jmorecfg.h header from libjpeg, so we have
+//     to make sure libjpeg won't try to define boolean itself. This is done by
+//     defining HAVE_BOOLEAN.
+//
+//     TODO: include windows.h for MetroWerks and Watcom only after 2.3.2 release!
+#if defined(__WXMSW__)
+    #if defined(__MWERKS__) || defined(__WATCOMC__)
+        #define HAVE_BOOLEAN
+    #endif
+    #include <windows.h>
+#endif // __WXMSW__
+
 extern "C"
 {
     #include "jpeglib.h"
 }
+
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
 #include "wx/intl.h"
@@ -45,10 +60,6 @@ extern "C"
 #ifdef FAR
 #undef FAR
 #endif
-#endif
-
-#ifdef __WXMSW__
-#include <windows.h>
 #endif
 
 //-----------------------------------------------------------------------------
