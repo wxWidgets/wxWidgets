@@ -665,7 +665,24 @@ MOTIF_DIST: ALL_GUI_DIST
 	cp $(MOTIFDIR)/xmcombo/copying.txt $(DISTDIR)/src/motif/xmcombo
 
 MACX_DIST: ALL_GUI_DIST
-	echo "Apple Mac OS X specific distribution not complete"
+	cp $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
+	cp $(MACDIR)/files.lst $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.cpp $(DISTDIR)/src/mac
+	cp $(MACDIR)/*.c $(DISTDIR)/src/mac
+	mkdir $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.cpp $(DISTDIR)/src/mac/morefile
+	mkdir $(DISTDIR)/src/mac/cdef
+	cp $(MACDIR)/cdef/*.h $(DISTDIR)/src/mac/cdef
+	cp $(MACDIR)/cdef/*.cpp $(DISTDIR)/src/mac/cdef
+	cp $(MACDIR)/cdef/*.mcp $(DISTDIR)/src/mac/cdef
+	mkdir $(DISTDIR)/src/mac/ldef
+	cp $(MACDIR)/ldef/*.h $(DISTDIR)/src/mac/ldef
+	cp $(MACDIR)/ldef/*.cpp $(DISTDIR)/src/mac/ldef
+	cp $(MACDIR)/ldef/*.mcp $(DISTDIR)/src/mac/cdef
+	mkdir $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
 
 MSW_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
