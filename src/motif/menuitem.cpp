@@ -157,7 +157,7 @@ void wxMenuItem::Check(bool bDoCheck)
 /* static */
 wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
-    return wxStripMenuCodes(m_text);
+    return wxStripMenuCodes(text);
 }
 
 // ----------------------------------------------------------------------------
