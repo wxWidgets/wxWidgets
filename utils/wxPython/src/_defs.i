@@ -327,9 +327,11 @@ enum {
     wxHIDE_READONLY,
     wxOVERWRITE_PROMPT,
 
+#ifdef __WXMSW__
     wxACCEL_ALT,
     wxACCEL_CTRL,
     wxACCEL_SHIFT,
+#endif
 
 };
 
@@ -693,6 +695,9 @@ enum wxEventType {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.3  1998/08/14 23:36:33  RD
+// Beginings of wxGTK compatibility
+//
 // Revision 1.2  1998/08/14 03:16:35  RD
 // removed some definitions that got removed from defs.h
 //

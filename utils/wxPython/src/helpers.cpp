@@ -14,6 +14,11 @@
 #include <Python.h>
 #include "helpers.h"
 
+#ifdef __WXGTK__
+#ifdef USE_GDK_IMLIB
+#include "gdk_imlib/gdk_imlib.h"
+#endif
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -65,7 +70,7 @@ void wxPyApp::AfterMainLoop(void) {
     wxApp::CleanUp();
 #endif
 #ifdef __WXGTK__
-    wxApp::CommonCleanup();
+    wxApp::CommonCleanUp();
 #endif
     delete wxPythonApp;
 }
@@ -137,7 +142,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     wxApp::CleanUp();
 #endif
 #ifdef __WXGTK__
-    wxApp::CommonCleanup();
+    wxApp::CommonCleanUp();
 #endif
         PyErr_SetString(PyExc_SystemExit, "OnInit returned false, exiting...");
         return NULL;
@@ -335,6 +340,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 //---------------------------------------------------------------------------
 
+#ifdef __WXMSW__
 wxPyMenu::wxPyMenu(const wxString& title, PyObject* _func)
     : wxMenu(title, (wxFunction)(func ? MenuCallback : NULL)), func(0) {
 
@@ -367,6 +373,7 @@ void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
     Py_DECREF(evtobj);
     Py_DECREF(menuobj);
 }
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -936,6 +943,7 @@ wxString* wxString_LIST_helper(PyObject* source) {
 }
 
 
+#ifdef __WXMSW__
 wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     if (!PyList_Check(source)) {
         PyErr_SetString(PyExc_TypeError, "Expected a list object.");
@@ -975,7 +983,7 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     return temp;
 }
 
-
+#endif
 
 //----------------------------------------------------------------------
 // A WinMain for when wxWindows and Python are linked together in a single
@@ -1052,6 +1060,9 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/14 23:36:36  RD
+// Beginings of wxGTK compatibility
+//
 // Revision 1.1  1998/08/09 08:25:51  RD
 // Initial version
 //

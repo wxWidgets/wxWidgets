@@ -74,6 +74,7 @@ public:
 
 //---------------------------------------------------------------------------
 
+#ifdef __WXMSW__
 class wxPyMenu : public wxMenu {
 public:
     wxPyMenu(const wxString& title = "", PyObject* func=NULL);
@@ -83,6 +84,7 @@ private:
     static void MenuCallback(wxMenu& menu, wxCommandEvent& evt);
     PyObject*   func;
 };
+#endif
 
 //---------------------------------------------------------------------------
 
@@ -101,6 +103,9 @@ private:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/14 23:36:37  RD
+// Beginings of wxGTK compatibility
+//
 // Revision 1.1  1998/08/09 08:25:51  RD
 // Initial version
 //

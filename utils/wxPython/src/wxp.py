@@ -25,9 +25,6 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def GetAppName(self):
         val = wxpc.wxPyApp_GetAppName(self.this)
         return val
-    def GetAuto3D(self):
-        val = wxpc.wxPyApp_GetAuto3D(self.this)
-        return val
     def GetClassName(self):
         val = wxpc.wxPyApp_GetClassName(self.this)
         return val
@@ -61,9 +58,6 @@ class wxPyAppPtr(wxEvtHandlerPtr):
         return val
     def SetAppName(self,arg0):
         val = wxpc.wxPyApp_SetAppName(self.this,arg0)
-        return val
-    def SetAuto3D(self,arg0):
-        val = wxpc.wxPyApp_SetAuto3D(self.this,arg0)
         return val
     def SetClassName(self,arg0):
         val = wxpc.wxPyApp_SetClassName(self.this,arg0)
@@ -317,9 +311,6 @@ wxOPEN = wxpc.wxOPEN
 wxSAVE = wxpc.wxSAVE
 wxHIDE_READONLY = wxpc.wxHIDE_READONLY
 wxOVERWRITE_PROMPT = wxpc.wxOVERWRITE_PROMPT
-wxACCEL_ALT = wxpc.wxACCEL_ALT
-wxACCEL_CTRL = wxpc.wxACCEL_CTRL
-wxACCEL_SHIFT = wxpc.wxACCEL_SHIFT
 ERR_PARAM = wxpc.ERR_PARAM
 ERR_NODATA = wxpc.ERR_NODATA
 ERR_CANCEL = wxpc.ERR_CANCEL
@@ -1380,8 +1371,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.2  1998/08/14 03:16:39  RD
-# removed some definitions that got removed from defs.h
+# Revision 1.3  1998/08/14 23:36:49  RD
+# Beginings of wxGTK compatibility
 #
 # Revision 1.1  1998/08/09 08:25:49  RD
 # Initial version

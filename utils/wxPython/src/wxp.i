@@ -49,12 +49,10 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "0.3.0"
+#define __version__ "0.3.1"
 
-//%readonly
-    wxPoint     wxPyDefaultPosition;
-    wxSize      wxPyDefaultSize;
-//%readwrite
+wxPoint     wxPyDefaultPosition;
+wxSize      wxPyDefaultSize;
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
@@ -70,7 +68,9 @@ public:
 
 
     wxString GetAppName();
+#ifdef __WXMSW__
     bool GetAuto3D();
+#endif
     wxString GetClassName();
     bool GetExitOnFrameDelete();
     int GetPrintMode();
@@ -84,7 +84,9 @@ public:
     bool Pending();
 
     void SetAppName(const wxString& name);
+#ifdef __WXMSW__
     void SetAuto3D(bool auto3D);
+#endif
     void SetClassName(const wxString& name);
     void SetExitOnFrameDelete(bool flag);
     void SetPrintMode(int mode);
@@ -176,6 +178,9 @@ extern "C" SWIGEXPORT(void,initcmndlgsc)();
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/14 23:36:49  RD
+// Beginings of wxGTK compatibility
+//
 // Revision 1.1  1998/08/09 08:25:53  RD
 // Initial version
 //

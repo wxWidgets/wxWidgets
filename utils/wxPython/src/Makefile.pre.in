@@ -314,7 +314,7 @@ distclean:	clobber
 # Custom rules and dependencies added for wxPython
 #
 
-SWIGFLAGS=-c++ -shadow -python -dnone
+SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__
 
 ifndef FINAL
 PYEXT=pyc

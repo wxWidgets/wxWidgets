@@ -22,7 +22,9 @@ extern char** string_LIST_helper(PyObject* source);
 extern wxPoint* wxPoint_LIST_helper(PyObject* source);
 extern wxBitmap** wxBitmap_LIST_helper(PyObject* source);
 extern wxString* wxString_LIST_helper(PyObject* source);
+#ifdef __WXMSW__
 extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
+#endif
 
 %}
 
@@ -186,6 +188,9 @@ static char* wxStringErrorMsg = "string type is required for parameter";
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.2  1998/08/14 23:36:39  RD
+// Beginings of wxGTK compatibility
+//
 // Revision 1.1  1998/08/09 08:25:52  RD
 // Initial version
 //
