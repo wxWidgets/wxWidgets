@@ -1,0 +1,955 @@
+#
+# File:		makefile.nt
+# Author:	Julian Smart
+# Created:	1997
+# Updated:
+# Copyright:	(c) 1997, Julian Smart
+#
+# "%W% %G%"
+#
+# Makefile : Builds wxWindows stubs library wxstubs.lib for VC++ (32-bit)
+# Arguments:
+#
+# FINAL=1 argument to nmake to build version with no debugging info.
+#
+
+!include <ntwin32.mak>
+
+APPVER=3.50 # 4.0
+# This means 'enable Windows 95 features' (in wxWindows and in VC++ 4.0).
+WINVERSION=-DWINVER=0x0400
+
+# On Alpha machines, change to CPU=ALPHA
+CPU=i386
+
+# Suffixes
+OBJSUFF=obj
+SRCSUFF=cpp
+
+WINFLAGS=-c -W3 -Dtry=__try -Dexcept=__except -Dleave=__leave -Dfinally=__finally -DCRTAPI1=_cdecl -DCRTAPI2=_cdecl -nologo -D_X86_=1 $(WINVERSION) -D__WIN32__ -D__WINDOWS__
+WINLINKFLAGS=/INCREMENTAL:NO /NOLOGO -align:0x1000 -machine:$(CPU) -subsystem:windows,$(APPVER)
+WINLIBS=kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib oldnames.lib\
+ comctl32.lib ctl3d32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib # libci.lib # libci.lib required for VC++ 4.2
+
+# Change this to your WXWIN directory
+WXDIR=$(WXWIN)
+
+WXSRC=$(WXDIR)\src\stubs
+WXINC=$(WXDIR)\include
+WXBASESRC=$(WXDIR)\src\common
+
+WXLIB=$(WXDIR)\lib\wxstubs.lib
+
+EXTRADLLFLAGS=
+
+INC=-I$(WXINC) -I$(WXDIR)/src/png -I$(WXDIR)/src/zlib $(EXTRAINC)
+LIBS = $(EXTRALIBS) $(WXLIB) $(WINLIBS)
+
+!ifndef FINAL
+FINAL=0
+DEBUG=1
+!endif
+
+# Set this to 1 if you don't want to use precompiled headers
+NOPCH=1
+
+OPTIONS=
+
+!if "$(FINAL)" == "0"
+OPT = /Od /Gy
+# ***N.B.*** to save space/time, comment out /FR to avoid browse info (.sbr files) being generated
+DEBUG_FLAGS= /Zi # /FR
+LINK_DEBUG_FLAGS=-debug:full -debugtype:cv # /PDB:NONE
+CRTFLAG=/MD
+!else
+# /O1 - smallest code
+# /O2 - fastest code
+OPT = /O1 # /O2 # /Od
+DEBUG_FLAGS=
+LINK_DEBUG_FLAGS=/RELEASE
+CRTFLAG=/MD
+!endif
+
+PCH=
+PRECOMP=
+MAKEPRECOMP=
+
+CPPFLAGS=$(WINFLAGS) $(DEBUG_FLAGS) $(PRECOMP) $(EXTRAFLAGS) /D__WXSTUBS__ /DDEBUG=1 $(INC) $(OPT) $(CRTFLAG) /GX /D__WXDEBUG__ /DWXDEBUG=1
+# If you don't include wxprec.h, use CPPFLAGS2
+CPPFLAGS2=$(WINFLAGS) $(DEBUG_FLAGS) /D__WXSTUBS__ /DDEBUG=1 $(INC) $(EXTRAFLAGS) $(OPT) $(CRTFLAG) /GX /D__WXDEBUG__ /DWXDEBUG=1
+LINKFLAGS=$(LINK_DEBUG_FLAGS) $(WINLINKFLAGS) -entry:WinMainCRTStartup
+
+THISDIR=$(WXWIN)\src\stubs
+
+LIBTARGET=$(WXLIB)
+
+# Please set these according to the settings in wx_setup.h, so we can include
+# the appropriate libraries in wx.lib
+
+PERIPH_LIBS=
+PERIPH_TARGET=
+PERIPH_CLEAN_TARGET=
+
+GENDIR=..\generic
+COMMDIR=..\common
+STUBSDIR=.
+
+DOCDIR = $(WXDIR)\docs
+
+GENERICOBJS= \
+  $(GENDIR)\choicdgg.obj \
+  $(GENDIR)\colrdlgg.obj \
+  $(GENDIR)\fontdlgg.obj \
+  $(GENDIR)\gridg.obj \
+  $(GENDIR)\msgdlgg.obj \
+  $(GENDIR)\panelg.obj \
+  $(GENDIR)\printps.obj \
+  $(GENDIR)\prntdlgg.obj \
+  $(GENDIR)\scrolwin.obj \
+  $(GENDIR)\splitter.obj \
+  $(GENDIR)\statusbr.obj \
+  $(GENDIR)\tabg.obj \
+  $(GENDIR)\textdlgg.obj
+
+#  $(GENDIR)\helpxlp.obj \
+
+COMMONOBJS = \
+  $(COMMDIR)\cmndata.obj \
+  $(COMMDIR)\config.obj \
+  $(COMMDIR)\docview.obj \
+  $(COMMDIR)\docmdi.obj \
+  $(COMMDIR)\dynarray.obj \
+  $(COMMDIR)\event.obj \
+  $(COMMDIR)\file.obj \
+  $(COMMDIR)\filefn.obj \
+  $(COMMDIR)\fileconf.obj \
+  $(COMMDIR)\framecmn.obj \
+  $(COMMDIR)\gdicmn.obj \
+  $(COMMDIR)\intl.obj \
+  $(COMMDIR)\ipcbase.obj \
+  $(COMMDIR)\helpbase.obj \
+  $(COMMDIR)\layout.obj \
+  $(COMMDIR)\log.obj \
+  $(COMMDIR)\memory.obj \
+  $(COMMDIR)\module.obj \
+  $(COMMDIR)\object.obj \
+  $(COMMDIR)\postscrp.obj \
+  $(COMMDIR)\prntbase.obj \
+  $(COMMDIR)\resource.obj \
+  $(COMMDIR)\tbarbase.obj \
+  $(COMMDIR)\tbarsmpl.obj \
+  $(COMMDIR)\textfile.obj \
+  $(COMMDIR)\timercmn.obj \
+  $(COMMDIR)\utilscmn.obj \
+  $(COMMDIR)\validate.obj \
+  $(COMMDIR)\valtext.obj \
+  $(COMMDIR)\date.obj \
+  $(COMMDIR)\hash.obj \
+  $(COMMDIR)\list.obj \
+  $(COMMDIR)\string.obj \
+  $(COMMDIR)\time.obj \
+  $(COMMDIR)\wxexpr.obj \
+  $(COMMDIR)\y_tab.obj \
+  $(COMMDIR)\extended.obj \
+  $(COMMDIR)\process.obj \
+  $(COMMDIR)\fstream.obj \
+  $(COMMDIR)\mstream.obj \
+  $(COMMDIR)\zstream.obj \
+  $(COMMDIR)\stream.obj \
+  $(COMMDIR)\datstrm.obj \
+  $(COMMDIR)\wincmn.obj
+
+#  $(COMMDIR)\odbc.obj \
+
+STUBSOBJS = \
+  $(STUBSDIR)\accel.obj \
+  $(STUBSDIR)\app.obj \
+  $(STUBSDIR)\bitmap.obj \
+  $(STUBSDIR)\bmpbuttn.obj \
+  $(STUBSDIR)\brush.obj \
+  $(STUBSDIR)\button.obj \
+  $(STUBSDIR)\checkbox.obj \
+  $(STUBSDIR)\checklst.obj \
+  $(STUBSDIR)\choice.obj \
+  $(STUBSDIR)\clipbrd.obj \
+  $(STUBSDIR)\colordlg.obj \
+  $(STUBSDIR)\colour.obj \
+  $(STUBSDIR)\combobox.obj \
+  $(STUBSDIR)\control.obj \
+  $(STUBSDIR)\cursor.obj \
+  $(STUBSDIR)\data.obj \
+  $(STUBSDIR)\dc.obj \
+  $(STUBSDIR)\dcmemory.obj \
+  $(STUBSDIR)\dcclient.obj \
+  $(STUBSDIR)\dcscreen.obj \
+  $(STUBSDIR)\dialog.obj \
+  $(STUBSDIR)\dirdlg.obj \
+  $(STUBSDIR)\filedlg.obj \
+  $(STUBSDIR)\font.obj \
+  $(STUBSDIR)\fontdlg.obj \
+  $(STUBSDIR)\frame.obj \
+  $(STUBSDIR)\gauge.obj \
+  $(STUBSDIR)\gdiobj.obj \
+  $(STUBSDIR)\helpxxxx.obj \
+  $(STUBSDIR)\icon.obj \
+  $(STUBSDIR)\imaglist.obj \
+  $(STUBSDIR)\joystick.obj \
+  $(STUBSDIR)\listbox.obj \
+  $(STUBSDIR)\listctrl.obj \
+  $(STUBSDIR)\main.obj \
+  $(STUBSDIR)\mdi.obj \
+  $(STUBSDIR)\menu.obj \
+  $(STUBSDIR)\menuitem.obj \
+  $(STUBSDIR)\metafile.obj \
+  $(STUBSDIR)\minifram.obj \
+  $(STUBSDIR)\msgdlg.obj \
+  $(STUBSDIR)\notebook.obj \
+  $(STUBSDIR)\palette.obj \
+  $(STUBSDIR)\pen.obj \
+  $(STUBSDIR)\printdlg.obj \
+  $(STUBSDIR)\print.obj \
+  $(STUBSDIR)\radiobox.obj \
+  $(STUBSDIR)\radiobut.obj \
+  $(STUBSDIR)\region.obj \
+  $(STUBSDIR)\scrolbar.obj \
+  $(STUBSDIR)\settings.obj \
+  $(STUBSDIR)\slider.obj \
+  $(STUBSDIR)\spinbutt.obj \
+  $(STUBSDIR)\statbmp.obj \
+  $(STUBSDIR)\statbox.obj \
+  $(STUBSDIR)\statusbr.obj \
+  $(STUBSDIR)\stattext.obj \
+  $(STUBSDIR)\tabctrl.obj \
+  $(STUBSDIR)\taskbar.obj \
+  $(STUBSDIR)\toolbar.obj \
+  $(STUBSDIR)\textctrl.obj \
+  $(STUBSDIR)\thread.obj \
+  $(STUBSDIR)\timer.obj \
+  $(STUBSDIR)\treectrl.obj \
+  $(STUBSDIR)\utils.obj \
+  $(STUBSDIR)\utilsexc.obj \
+  $(STUBSDIR)\wave.obj \
+  $(STUBSDIR)\window.obj
+
+
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(STUBSOBJS)
+
+# Normal, static library
+all:    $(OBJECTS) $(PERIPH_TARGET) $(LIBTARGET)
+
+$(WXDIR)\lib\wxstubs.lib:      $(OBJECTS) $(PERIPH_LIBS)
+	-erase $(LIBTARGET)
+	$(implib) @<<
+-out:$@
+-machine:$(CPU)
+$(OBJECTS) $(PERIPH_LIBS)
+<<
+
+########################################################
+# Windows-specific objects
+
+$(STUBSDIR)/accel.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/app.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/bitmap.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/bmpbuttn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/brush.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/button.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/choice.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/checkbox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/checklst.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/clipbrd.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/colordlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/colour.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/combobox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/control.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/cursor.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/data.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dcmemory.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dcclient.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dcprint.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dcscreen.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dialog.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/dirdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/filedlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/font.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/fontdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/frame.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/gauge.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/gdiobj.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/icon.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/imaglist.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/joystick.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/listbox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(STUBSDIR)/listctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /Fo$@ /c /Tp $*.$(SRCSUFF)
+<<
+
+$(STUBSDIR)/main.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/mdi.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/menu.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/menuitem.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/metafile.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/minifram.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/msgdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/notebook.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/palette.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/pen.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/printdlg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/print.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/radiobox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/radiobut.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/region.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/scrolbar.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/settings.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/slider.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/spinbutt.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/statbmp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/statbox.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/statusbr.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/stattext.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/tabctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/taskbar.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/toolbar.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/textctrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/thread.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/timer.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/treectrl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/utils.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/utilsexc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/wave.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(STUBSDIR)/window.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+########################################################
+# Common objects (always compiled)
+
+$(COMMDIR)/cmndata.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/config.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/db.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/dbtable.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/docview.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/docmdi.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/dynarray.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/event.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/file.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/fileconf.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/filefn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/framecmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/gdicmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/intl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/ipcbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/helpbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/layout.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/log.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/memory.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/module.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/object.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/odbc.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/postscrp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/prntbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/resource.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/tbarbase.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/tbarsmpl.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/textfile.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/timercmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/utilscmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/validate.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/valtext.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/date.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/wxexpr.obj:     $*.$(SRCSUFF)
+        echo $(CPPFLAGS)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/hash.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/list.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/string.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/matrix.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+#$(COMMDIR)/wxstrgnu/wxstrgnu.obj:     $*.$(SRCSUFF)
+#        cl @<<
+#$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+#<<
+
+#$(COMMDIR)/wxstrgnu/wxregex.obj:     $*.$(SRCSUFF)
+#        cl @<<
+#$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+#<<
+
+$(COMMDIR)/time.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\stream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\fstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\mstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\zstream.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)\datstrm.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/extended.obj:     $*.c
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.c /Fo$@
+<<
+
+$(COMMDIR)/process.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/wincmn.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS2) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/y_tab.obj:     $*.c $(COMMDIR)/lex_yy.c
+        cl @<<
+$(CPPFLAGS2) /c $*.c -DUSE_DEFINE -DYY_USE_PROTOS /Fo$@
+<<
+
+$(COMMDIR)/y_tab.c:     $(COMMDIR)/dosyacc.c
+        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+
+$(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
+    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
+
+########################################################
+# Generic objects (not always compiled, depending on
+# whether platforms have native implementations)
+
+$(GENDIR)/choicdgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/colrdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/fontdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/gridg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/helpxlp.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/msgdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/panelg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/printps.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/prntdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/scrolwin.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/splitter.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/statusbr.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/tabg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(GENDIR)/textdlgg.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(OBJECTS):	$(WXDIR)/include/wx/stubs/setup.h
+
+clean: $(PERIPH_CLEAN_TARGET)
+        -erase *.obj
+        -erase $(LIBTARGET)
+        -erase $(WXDIR)\lib\*.pdb
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.pch
+        cd $(WXDIR)\src\stubs
+        cd $(GENDIR)
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.obj
+        cd $(WXDIR)\src\stubs
+        cd $(COMMDIR)
+        -erase *.pdb
+        -erase *.sbr
+        -erase *.obj
+        -erase y_tab.c
+        -erase lex_yy.c
+        cd $(WXDIR)\src\stubs
+
+cleanall: clean
+

@@ -1,0 +1,14 @@
+# File:		makefile.vc  For stectrl
+# Author:	Robin Dunn
+# Created:	1-Feb-2000
+# Updated:
+
+WXDIR = $(WXWIN)
+PROGRAM = xmldemo
+
+OBJECTS = $(PROGRAM).obj
+EXTRALIBS = $(WXDIR)\contrib\lib\wxxml$(LIBEXT).lib
+EXTRAINC = -I$(WXDIR)\contrib\include
+
+!include $(WXDIR)\src\makeprog.vc
+

@@ -1,0 +1,76 @@
+#
+# File:		makefile.b32
+# Author:	Julian Smart
+# Created:	1999
+# Updated:	
+# Copyright:
+#
+# Makefile : Builds sample for 32-bit BC++
+
+WXDIR = $(WXWIN)
+
+EXTRACPPFLAGS = /I"..\incace" /I".."
+TARGET=sfx
+OBJECTS = wxmain.obj instsup.obj install.obj globals.obj uac_comm.obj uac_crc.obj uac_crt.obj uac_dcpr.obj uac_sys.obj unace.obj
+
+WXDIR = $(WXWIN)
+!include $(WXDIR)\src\makeb32.env
+
+LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib jpeg xpm tiff odbc32
+
+# Note: you may need to remove some libraries for earlier versions of BC++, as below
+#LIBS=$(WXLIB) $(EXTRALIBS) cw32mt import32 ole2w32 winpng zlib xpm tiff
+
+!if "$(FINAL)" == "0"
+#LINKFLAGS=/v /c /Tpe $(LNKCFG) $(EXTRALINKFLAGS)
+LINKFLAGS=/v /c /aa -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
+OPT = -Od
+DEBUG_FLAGS= -v
+!else
+#LINKFLAGS=/Tpe +$(LNKCFG) $(EXTRALINKFLAGS)
+LINKFLAGS=/aa -L$(WXLIBDIR);$(WXLIBDIR2);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk $(EXTRALINKFLAGS)
+OPT = -O2
+DEBUG_FLAGS =
+!endif
+
+CPPFLAGS=$(DEBUG_FLAGS) $(EXTRACPPFLAGS) $(OPT) @$(CFG)
+
+all: $(TARGET).exe $(EXTRATARGETS)
+
+$(TARGET).exe:	$(OBJECTS) $(TARGET).res
+  $(LINK) $(LINKFLAGS) @&&!
+c0w32.obj $(OBJECTS)
+$(TARGET)
+nul
+$(LIBS)
+
+$(TARGET).res
+!
+
+.$(SRCSUFF).obj:
+	bcc32 $(CPPFLAGS) -c {$< }
+
+install.obj: ..\install.c
+	bcc32 $(CPPFLAGS) -P- -c ..\install.c
+        
+wxmain.obj: ..\wxmain.cpp
+	bcc32 $(CPPFLAGS) -P- -c ..\wxmain.cpp
+        
+instsup.obj: ..\instsup.cpp
+	bcc32 $(CPPFLAGS) -P- -c ..\instsup.cpp
+        
+.c.obj:
+	bcc32 $(CPPFLAGS) -P- -c {$< }
+
+$(TARGET).res :      $(TARGET).rc $(WXDIR)\include\wx\msw\wx.rc
+	    brc32 -r /i$(BCCDIR)\include /i$(WXDIR)\include /i$(WXDIR)\contrib\include $(TARGET)
+
+clean:
+        -erase *.obj
+        -erase *.exe
+        -erase *.res
+        -erase *.map
+        -erase *.rws
+        -erase *.tds
+        -erase *.il?
+

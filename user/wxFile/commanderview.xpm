@@ -1,0 +1,31 @@
+/* XPM */
+static char * commanderview_xpm[] = {
+"22 22 3 1",
+" 	c None",
+".	c #000000000000",
+"X	c #FFFFFFFFFFFF",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"  .................   ",
+"  .XXXXXXX.XXXXXXX.   ",
+"  .XX...XX.XX...XX.   ",
+"  .XXXXXXX.XXXXXXX.   ",
+"  .XX...XX.XX..XXX.   ",
+"  .XXXXXXX.XXXXXXX.   ",
+"  .XX..XXX.XX...XX.   ",
+"  .XXXXXXX.XXXXXXX.   ",
+"  .XX...XX.XX...XX.   ",
+"  .XXXXXXX.XXXXXXX.   ",
+"  .XX...XX.XX...XX.   ",
+"  .XXXXXXX.XXXXXXX.   ",
+"  .................   ",
+"                      ",
+"                      ",
+"                      ",
+"                      "};
+
+
+

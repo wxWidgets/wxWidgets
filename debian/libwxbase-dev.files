@@ -1,0 +1,4 @@
+usr/bin/wxbase-config
+usr/lib/wx/include/wx/base/setup.h
+usr/lib/libwx_base*.so
+

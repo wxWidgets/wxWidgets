@@ -1,0 +1,30 @@
+/* XPM */
+static char * singleview_xpm[] = {
+"22 22 3 1",
+" 	c None",
+".	c #000000000000",
+"X	c #FFFFFFFFFFFF",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"                      ",
+"  .................   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX.....XXX....X.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXXXX..XXX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX..XXXXXX...XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX.....XXX...XX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .XX...XXXXXXXXXX.   ",
+"  .XXXXXXXXXXXXXXX.   ",
+"  .................   ",
+"                      ",
+"                      ",
+"                      ",
+"                      "};
+
+

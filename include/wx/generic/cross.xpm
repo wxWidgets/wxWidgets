@@ -1,0 +1,32 @@
+/* XPM */
+static char *cross_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"10 10 16 1",
+"  c Gray0",
+". c #bf0000",
+"X c #00bf00",
+"o c #bfbf00",
+"O c #0000bf",
+"+ c #bf00bf",
+"@ c #00bfbf",
+"# c None",
+"$ c #808080",
+"% c Red",
+"& c Green",
+"* c Yellow",
+"= c Blue",
+"- c Magenta",
+"; c Cyan",
+": c Gray100",
+/* pixels */
+" ######## ",
+"   ####   ",
+"#   ##   #",
+"##      ##",
+"###    ###",
+"###    ###",
+"##      ##",
+"#   ##   #",
+"   ####   ",
+"  ######  "
+};
