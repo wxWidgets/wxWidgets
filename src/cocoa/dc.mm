@@ -28,7 +28,7 @@
 #import <AppKit/NSTypesetter.h>
 #import <AppKit/NSImage.h>
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxCocoaDCStack);
 
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)

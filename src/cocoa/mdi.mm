@@ -23,7 +23,7 @@
 // #import <AppKit/NSApplication.h>
 // #import <AppKit/NSView.h>
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxCocoaMDIChildFrameList);
 
 WX_DECLARE_HASH_MAP(int, wxMDIChildFrame*, wxIntegerHash, wxIntegerEqual, wxIntMDIChildFrameHashMap);
