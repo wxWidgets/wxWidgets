@@ -31,8 +31,11 @@
 
 #include "wx/ogl/ogl.h"
 
+#if wxUSE_PROLOGIO
 static void IntToHex(unsigned int dec, wxChar *buf);
 static unsigned long HexToInt(wxChar *buf);
+#endif
+
 extern wxChar *oglBuffer;
 
 #define gyTYPE_PEN   40
@@ -1121,13 +1124,11 @@ wxExpr *wxOpPolyDraw::WriteExpr(wxPseudoMetaFile *WXUNUSED(image))
     long signedY = (long)(m_points[i].y*100.0);
 
     // Scale to 0 -> 64K
-    long unSignedX = (long)(signedX + 32767.0);
-    long unSignedY = (long)(signedY + 32767.0);
+    unsigned int unSignedX = (unsigned int)(signedX + 32767.0);
+    unsigned int unSignedY = (unsigned int)(signedY + 32767.0);
 
-//    IntToHex((unsigned int)signedX, buf2);
-//    IntToHex((unsigned int)signedY, buf3);
-    IntToHex((int)unSignedX, buf2);
-    IntToHex((int)unSignedY, buf3);
+    IntToHex(unSignedX, buf2);
+    IntToHex(unSignedY, buf3);
 
     // Don't overrun the buffer
     if ((i*8) < 3000)
@@ -1273,6 +1274,8 @@ bool wxOpPolyDraw::GetPerimeterPoint(double x1, double y1,
  *
  */
 
+#if wxUSE_PROLOGIO
+
 static char hexArray[] = {
     _T('0'), _T('1'), _T('2'), _T('3'), _T('4'), _T('5'), _T('6'), _T('7'),
     _T('8'), _T('9'), _T('A'), _T('B'), _T('C'), _T('D'), _T('E'), _T('F') };
@@ -1344,6 +1347,8 @@ static unsigned long HexToInt(wxChar *buf)
   unsigned long n = (long)(d1 + d2 + d3 + d4) ;
   return n;
 }
+
+#endif // wxUSE_PROLOGIO
 
 /*
  * wxPseudo meta-file
