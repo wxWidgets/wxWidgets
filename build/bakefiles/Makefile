@@ -17,6 +17,10 @@ COMPAT_TARGETS = ../../src/wxWindows.dsp
 AUTOCONF_ALL = \
 	../../Makefile.in \
 	../../contrib/samples/animate/Makefile.in \
+	../../contrib/samples/deprecated/proplist/Makefile.in \
+	../../contrib/samples/deprecated/resource/Makefile.in \
+	../../contrib/samples/deprecated/treelay/Makefile.in \
+	../../contrib/samples/fl/Makefile.in \
 	../../contrib/samples/svg/Makefile.in \
 	../../contrib/samples/xrc/Makefile.in \
 	../../contrib/src/animate/Makefile.in \
@@ -31,6 +35,12 @@ AUTOCONF_ALL = \
 	../../contrib/src/svg/Makefile.in \
 	../../contrib/src/xrc/Makefile.in \
 	../../contrib/utils/wxrc/Makefile.in \
+	../../demos/bombs/Makefile.in \
+	../../demos/dbbrowse/Makefile.in \
+	../../demos/forty/Makefile.in \
+	../../demos/fractal/Makefile.in \
+	../../demos/life/Makefile.in \
+	../../demos/poem/Makefile.in \
 	../../samples/Makefile.in \
 	../../samples/access/Makefile.in \
 	../../samples/artprov/Makefile.in \
@@ -127,9 +137,19 @@ BORLAND_ALL = \
 	../../contrib/build/svg/makefile.bcc \
 	../../contrib/build/xrc/makefile.bcc \
 	../../contrib/samples/animate/makefile.bcc \
+	../../contrib/samples/deprecated/proplist/makefile.bcc \
+	../../contrib/samples/deprecated/resource/makefile.bcc \
+	../../contrib/samples/deprecated/treelay/makefile.bcc \
+	../../contrib/samples/fl/makefile.bcc \
 	../../contrib/samples/svg/makefile.bcc \
 	../../contrib/samples/xrc/makefile.bcc \
 	../../contrib/utils/wxrc/makefile.bcc \
+	../../demos/bombs/makefile.bcc \
+	../../demos/dbbrowse/makefile.bcc \
+	../../demos/forty/makefile.bcc \
+	../../demos/fractal/makefile.bcc \
+	../../demos/life/makefile.bcc \
+	../../demos/poem/makefile.bcc \
 	../../samples/access/makefile.bcc \
 	../../samples/artprov/makefile.bcc \
 	../../samples/calendar/makefile.bcc \
@@ -227,9 +247,19 @@ MINGW_ALL = \
 	../../contrib/build/svg/makefile.gcc \
 	../../contrib/build/xrc/makefile.gcc \
 	../../contrib/samples/animate/makefile.gcc \
+	../../contrib/samples/deprecated/proplist/makefile.gcc \
+	../../contrib/samples/deprecated/resource/makefile.gcc \
+	../../contrib/samples/deprecated/treelay/makefile.gcc \
+	../../contrib/samples/fl/makefile.gcc \
 	../../contrib/samples/svg/makefile.gcc \
 	../../contrib/samples/xrc/makefile.gcc \
 	../../contrib/utils/wxrc/makefile.gcc \
+	../../demos/bombs/makefile.gcc \
+	../../demos/dbbrowse/makefile.gcc \
+	../../demos/forty/makefile.gcc \
+	../../demos/fractal/makefile.gcc \
+	../../demos/life/makefile.gcc \
+	../../demos/poem/makefile.gcc \
 	../../samples/access/makefile.gcc \
 	../../samples/artprov/makefile.gcc \
 	../../samples/calendar/makefile.gcc \
@@ -327,9 +357,19 @@ MSVC_ALL = \
 	../../contrib/build/svg/makefile.vc \
 	../../contrib/build/xrc/makefile.vc \
 	../../contrib/samples/animate/makefile.vc \
+	../../contrib/samples/deprecated/proplist/makefile.vc \
+	../../contrib/samples/deprecated/resource/makefile.vc \
+	../../contrib/samples/deprecated/treelay/makefile.vc \
+	../../contrib/samples/fl/makefile.vc \
 	../../contrib/samples/svg/makefile.vc \
 	../../contrib/samples/xrc/makefile.vc \
 	../../contrib/utils/wxrc/makefile.vc \
+	../../demos/bombs/makefile.vc \
+	../../demos/dbbrowse/makefile.vc \
+	../../demos/forty/makefile.vc \
+	../../demos/fractal/makefile.vc \
+	../../demos/life/makefile.vc \
+	../../demos/poem/makefile.vc \
 	../../samples/access/makefile.vc \
 	../../samples/artprov/makefile.vc \
 	../../samples/calendar/makefile.vc \
@@ -427,9 +467,19 @@ MSVC6PRJ_ALL = \
 	../../contrib/build/svg/svg.dsw \
 	../../contrib/build/xrc/xrc.dsw \
 	../../contrib/samples/animate/anitest.dsw \
+	../../contrib/samples/deprecated/proplist/proplist.dsw \
+	../../contrib/samples/deprecated/resource/resource.dsw \
+	../../contrib/samples/deprecated/treelay/treelay.dsw \
+	../../contrib/samples/fl/fl.dsw \
 	../../contrib/samples/svg/svgtest.dsw \
 	../../contrib/samples/xrc/xrcdemo.dsw \
 	../../contrib/utils/wxrc/wxrc.dsw \
+	../../demos/bombs/bombs.dsw \
+	../../demos/dbbrowse/dbbrowse.dsw \
+	../../demos/forty/forty.dsw \
+	../../demos/fractal/fractal.dsw \
+	../../demos/life/life.dsw \
+	../../demos/poem/poem.dsw \
 	../../samples/access/access.dsw \
 	../../samples/artprov/artprov.dsw \
 	../../samples/calendar/calendar.dsw \
@@ -524,9 +574,19 @@ WATCOM_ALL = \
 	../../contrib/build/svg/makefile.wat \
 	../../contrib/build/xrc/makefile.wat \
 	../../contrib/samples/animate/makefile.wat \
+	../../contrib/samples/deprecated/proplist/makefile.wat \
+	../../contrib/samples/deprecated/resource/makefile.wat \
+	../../contrib/samples/deprecated/treelay/makefile.wat \
+	../../contrib/samples/fl/makefile.wat \
 	../../contrib/samples/svg/makefile.wat \
 	../../contrib/samples/xrc/makefile.wat \
 	../../contrib/utils/wxrc/makefile.wat \
+	../../demos/bombs/makefile.wat \
+	../../demos/dbbrowse/makefile.wat \
+	../../demos/forty/makefile.wat \
+	../../demos/fractal/makefile.wat \
+	../../demos/life/makefile.wat \
+	../../demos/poem/makefile.wat \
 	../../samples/access/makefile.wat \
 	../../samples/artprov/makefile.wat \
 	../../samples/calendar/makefile.wat \
@@ -626,6 +686,10 @@ clean:
 	rm -f $(COMPAT_TARGETS)
 	rm -f ../../Makefile.in
 	rm -f ../../contrib/samples/animate/Makefile.in
+	rm -f ../../contrib/samples/deprecated/proplist/Makefile.in
+	rm -f ../../contrib/samples/deprecated/resource/Makefile.in
+	rm -f ../../contrib/samples/deprecated/treelay/Makefile.in
+	rm -f ../../contrib/samples/fl/Makefile.in
 	rm -f ../../contrib/samples/svg/Makefile.in
 	rm -f ../../contrib/samples/xrc/Makefile.in
 	rm -f ../../contrib/src/animate/Makefile.in
@@ -640,6 +704,12 @@ clean:
 	rm -f ../../contrib/src/svg/Makefile.in
 	rm -f ../../contrib/src/xrc/Makefile.in
 	rm -f ../../contrib/utils/wxrc/Makefile.in
+	rm -f ../../demos/bombs/Makefile.in
+	rm -f ../../demos/dbbrowse/Makefile.in
+	rm -f ../../demos/forty/Makefile.in
+	rm -f ../../demos/fractal/Makefile.in
+	rm -f ../../demos/life/Makefile.in
+	rm -f ../../demos/poem/Makefile.in
 	rm -f ../../samples/Makefile.in
 	rm -f ../../samples/access/Makefile.in
 	rm -f ../../samples/artprov/Makefile.in
@@ -735,9 +805,19 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.bcc
 	rm -f ../../contrib/build/xrc/makefile.bcc
 	rm -f ../../contrib/samples/animate/makefile.bcc
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.bcc
+	rm -f ../../contrib/samples/deprecated/resource/makefile.bcc
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.bcc
+	rm -f ../../contrib/samples/fl/makefile.bcc
 	rm -f ../../contrib/samples/svg/makefile.bcc
 	rm -f ../../contrib/samples/xrc/makefile.bcc
 	rm -f ../../contrib/utils/wxrc/makefile.bcc
+	rm -f ../../demos/bombs/makefile.bcc
+	rm -f ../../demos/dbbrowse/makefile.bcc
+	rm -f ../../demos/forty/makefile.bcc
+	rm -f ../../demos/fractal/makefile.bcc
+	rm -f ../../demos/life/makefile.bcc
+	rm -f ../../demos/poem/makefile.bcc
 	rm -f ../../samples/access/makefile.bcc
 	rm -f ../../samples/artprov/makefile.bcc
 	rm -f ../../samples/calendar/makefile.bcc
@@ -834,9 +914,19 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.gcc
 	rm -f ../../contrib/build/xrc/makefile.gcc
 	rm -f ../../contrib/samples/animate/makefile.gcc
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.gcc
+	rm -f ../../contrib/samples/deprecated/resource/makefile.gcc
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.gcc
+	rm -f ../../contrib/samples/fl/makefile.gcc
 	rm -f ../../contrib/samples/svg/makefile.gcc
 	rm -f ../../contrib/samples/xrc/makefile.gcc
 	rm -f ../../contrib/utils/wxrc/makefile.gcc
+	rm -f ../../demos/bombs/makefile.gcc
+	rm -f ../../demos/dbbrowse/makefile.gcc
+	rm -f ../../demos/forty/makefile.gcc
+	rm -f ../../demos/fractal/makefile.gcc
+	rm -f ../../demos/life/makefile.gcc
+	rm -f ../../demos/poem/makefile.gcc
 	rm -f ../../samples/access/makefile.gcc
 	rm -f ../../samples/artprov/makefile.gcc
 	rm -f ../../samples/calendar/makefile.gcc
@@ -933,9 +1023,19 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.vc
 	rm -f ../../contrib/build/xrc/makefile.vc
 	rm -f ../../contrib/samples/animate/makefile.vc
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.vc
+	rm -f ../../contrib/samples/deprecated/resource/makefile.vc
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.vc
+	rm -f ../../contrib/samples/fl/makefile.vc
 	rm -f ../../contrib/samples/svg/makefile.vc
 	rm -f ../../contrib/samples/xrc/makefile.vc
 	rm -f ../../contrib/utils/wxrc/makefile.vc
+	rm -f ../../demos/bombs/makefile.vc
+	rm -f ../../demos/dbbrowse/makefile.vc
+	rm -f ../../demos/forty/makefile.vc
+	rm -f ../../demos/fractal/makefile.vc
+	rm -f ../../demos/life/makefile.vc
+	rm -f ../../demos/poem/makefile.vc
 	rm -f ../../samples/access/makefile.vc
 	rm -f ../../samples/artprov/makefile.vc
 	rm -f ../../samples/calendar/makefile.vc
@@ -1032,9 +1132,19 @@ clean:
 	rm -f ../../contrib/build/svg/svg.dsw
 	rm -f ../../contrib/build/xrc/xrc.dsw
 	rm -f ../../contrib/samples/animate/anitest.dsw
+	rm -f ../../contrib/samples/deprecated/proplist/proplist.dsw
+	rm -f ../../contrib/samples/deprecated/resource/resource.dsw
+	rm -f ../../contrib/samples/deprecated/treelay/treelay.dsw
+	rm -f ../../contrib/samples/fl/fl.dsw
 	rm -f ../../contrib/samples/svg/svgtest.dsw
 	rm -f ../../contrib/samples/xrc/xrcdemo.dsw
 	rm -f ../../contrib/utils/wxrc/wxrc.dsw
+	rm -f ../../demos/bombs/bombs.dsw
+	rm -f ../../demos/dbbrowse/dbbrowse.dsw
+	rm -f ../../demos/forty/forty.dsw
+	rm -f ../../demos/fractal/fractal.dsw
+	rm -f ../../demos/life/life.dsw
+	rm -f ../../demos/poem/poem.dsw
 	rm -f ../../samples/access/access.dsw
 	rm -f ../../samples/artprov/artprov.dsw
 	rm -f ../../samples/calendar/calendar.dsw
@@ -1128,9 +1238,19 @@ clean:
 	rm -f ../../contrib/build/svg/makefile.wat
 	rm -f ../../contrib/build/xrc/makefile.wat
 	rm -f ../../contrib/samples/animate/makefile.wat
+	rm -f ../../contrib/samples/deprecated/proplist/makefile.wat
+	rm -f ../../contrib/samples/deprecated/resource/makefile.wat
+	rm -f ../../contrib/samples/deprecated/treelay/makefile.wat
+	rm -f ../../contrib/samples/fl/makefile.wat
 	rm -f ../../contrib/samples/svg/makefile.wat
 	rm -f ../../contrib/samples/xrc/makefile.wat
 	rm -f ../../contrib/utils/wxrc/makefile.wat
+	rm -f ../../demos/bombs/makefile.wat
+	rm -f ../../demos/dbbrowse/makefile.wat
+	rm -f ../../demos/forty/makefile.wat
+	rm -f ../../demos/fractal/makefile.wat
+	rm -f ../../demos/life/makefile.wat
+	rm -f ../../demos/poem/makefile.wat
 	rm -f ../../samples/access/makefile.wat
 	rm -f ../../samples/artprov/makefile.wat
 	rm -f ../../samples/calendar/makefile.wat
@@ -1474,6 +1594,86 @@ Makefile: regenMakefile.py
 	touch $@
 
 
+../../contrib/samples/deprecated/proplist/Makefile.in: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.bcc: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.vc: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.gcc: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/makefile.wat: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+../../contrib/samples/deprecated/proplist/proplist.dsw: $(SDEPS) ../../contrib/samples/deprecated/proplist/proplist.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/proplist/proplist.bkl
+	touch $@
+
+
+../../contrib/samples/deprecated/resource/Makefile.in: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+../../contrib/samples/deprecated/resource/makefile.bcc: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+../../contrib/samples/deprecated/resource/makefile.vc: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+../../contrib/samples/deprecated/resource/makefile.gcc: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+../../contrib/samples/deprecated/resource/makefile.wat: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+../../contrib/samples/deprecated/resource/resource.dsw: $(SDEPS) ../../contrib/samples/deprecated/resource/resource.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/resource/resource.bkl
+	touch $@
+
+
+../../contrib/samples/deprecated/treelay/Makefile.in: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.bcc: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.vc: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.gcc: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/makefile.wat: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+../../contrib/samples/deprecated/treelay/treelay.dsw: $(SDEPS) ../../contrib/samples/deprecated/treelay/treelay.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../../ ../../contrib/samples/deprecated/treelay/treelay.bkl
+	touch $@
+
+
+../../contrib/samples/fl/Makefile.in: $(SDEPS) ../../contrib/samples/fl/fl.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/fl/fl.bkl
+	touch $@
+../../contrib/samples/fl/makefile.bcc: $(SDEPS) ../../contrib/samples/fl/fl.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/fl/fl.bkl
+	touch $@
+../../contrib/samples/fl/makefile.vc: $(SDEPS) ../../contrib/samples/fl/fl.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/fl/fl.bkl
+	touch $@
+../../contrib/samples/fl/makefile.gcc: $(SDEPS) ../../contrib/samples/fl/fl.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/fl/fl.bkl
+	touch $@
+../../contrib/samples/fl/makefile.wat: $(SDEPS) ../../contrib/samples/fl/fl.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../../ ../../contrib/samples/fl/fl.bkl
+	touch $@
+../../contrib/samples/fl/fl.dsw: $(SDEPS) ../../contrib/samples/fl/fl.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../contrib/samples/fl/fl.bkl
+	touch $@
+
+
 ../../contrib/samples/svg/Makefile.in: $(SDEPS) ../../contrib/samples/svg/svgtest.bkl
 	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../contrib/samples/svg/svgtest.bkl
 	touch $@
@@ -1531,6 +1731,126 @@ Makefile: regenMakefile.py
 	touch $@
 ../../contrib/utils/wxrc/wxrc.dsw: $(SDEPS) ../../contrib/utils/wxrc/wxrc.bkl
 	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../../ ../../contrib/utils/wxrc/wxrc.bkl
+	touch $@
+
+
+../../demos/bombs/Makefile.in: $(SDEPS) ../../demos/bombs/bombs.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/bombs/bombs.bkl
+	touch $@
+../../demos/bombs/makefile.bcc: $(SDEPS) ../../demos/bombs/bombs.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/bombs/bombs.bkl
+	touch $@
+../../demos/bombs/makefile.vc: $(SDEPS) ../../demos/bombs/bombs.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/bombs/bombs.bkl
+	touch $@
+../../demos/bombs/makefile.gcc: $(SDEPS) ../../demos/bombs/bombs.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/bombs/bombs.bkl
+	touch $@
+../../demos/bombs/makefile.wat: $(SDEPS) ../../demos/bombs/bombs.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/bombs/bombs.bkl
+	touch $@
+../../demos/bombs/bombs.dsw: $(SDEPS) ../../demos/bombs/bombs.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../demos/bombs/bombs.bkl
+	touch $@
+
+
+../../demos/dbbrowse/Makefile.in: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+../../demos/dbbrowse/makefile.bcc: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+../../demos/dbbrowse/makefile.vc: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+../../demos/dbbrowse/makefile.gcc: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+../../demos/dbbrowse/makefile.wat: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+../../demos/dbbrowse/dbbrowse.dsw: $(SDEPS) ../../demos/dbbrowse/dbbrowse.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../demos/dbbrowse/dbbrowse.bkl
+	touch $@
+
+
+../../demos/forty/Makefile.in: $(SDEPS) ../../demos/forty/forty.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/forty/forty.bkl
+	touch $@
+../../demos/forty/makefile.bcc: $(SDEPS) ../../demos/forty/forty.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/forty/forty.bkl
+	touch $@
+../../demos/forty/makefile.vc: $(SDEPS) ../../demos/forty/forty.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/forty/forty.bkl
+	touch $@
+../../demos/forty/makefile.gcc: $(SDEPS) ../../demos/forty/forty.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/forty/forty.bkl
+	touch $@
+../../demos/forty/makefile.wat: $(SDEPS) ../../demos/forty/forty.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/forty/forty.bkl
+	touch $@
+../../demos/forty/forty.dsw: $(SDEPS) ../../demos/forty/forty.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../demos/forty/forty.bkl
+	touch $@
+
+
+../../demos/fractal/Makefile.in: $(SDEPS) ../../demos/fractal/fractal.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/fractal/fractal.bkl
+	touch $@
+../../demos/fractal/makefile.bcc: $(SDEPS) ../../demos/fractal/fractal.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/fractal/fractal.bkl
+	touch $@
+../../demos/fractal/makefile.vc: $(SDEPS) ../../demos/fractal/fractal.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/fractal/fractal.bkl
+	touch $@
+../../demos/fractal/makefile.gcc: $(SDEPS) ../../demos/fractal/fractal.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/fractal/fractal.bkl
+	touch $@
+../../demos/fractal/makefile.wat: $(SDEPS) ../../demos/fractal/fractal.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/fractal/fractal.bkl
+	touch $@
+../../demos/fractal/fractal.dsw: $(SDEPS) ../../demos/fractal/fractal.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../demos/fractal/fractal.bkl
+	touch $@
+
+
+../../demos/life/Makefile.in: $(SDEPS) ../../demos/life/life.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/life/life.bkl
+	touch $@
+../../demos/life/makefile.bcc: $(SDEPS) ../../demos/life/life.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/life/life.bkl
+	touch $@
+../../demos/life/makefile.vc: $(SDEPS) ../../demos/life/life.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/life/life.bkl
+	touch $@
+../../demos/life/makefile.gcc: $(SDEPS) ../../demos/life/life.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/life/life.bkl
+	touch $@
+../../demos/life/makefile.wat: $(SDEPS) ../../demos/life/life.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/life/life.bkl
+	touch $@
+../../demos/life/life.dsw: $(SDEPS) ../../demos/life/life.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../demos/life/life.bkl
+	touch $@
+
+
+../../demos/poem/Makefile.in: $(SDEPS) ../../demos/poem/poem.bkl
+	$(BAKEFILE) -fautoconf -o$@  -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4 ../../demos/poem/poem.bkl
+	touch $@
+../../demos/poem/makefile.bcc: $(SDEPS) ../../demos/poem/poem.bkl
+	$(BAKEFILE) -fborland -o$@  -DOPTIONS_FILE=../../build/config.bcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/poem/poem.bkl
+	touch $@
+../../demos/poem/makefile.vc: $(SDEPS) ../../demos/poem/poem.bkl
+	$(BAKEFILE) -fmsvc -o$@  -DOPTIONS_FILE=../../build/config.vc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/poem/poem.bkl
+	touch $@
+../../demos/poem/makefile.gcc: $(SDEPS) ../../demos/poem/poem.bkl
+	$(BAKEFILE) -fmingw -o$@  -DOPTIONS_FILE=../../build/config.gcc -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/poem/poem.bkl
+	touch $@
+../../demos/poem/makefile.wat: $(SDEPS) ../../demos/poem/poem.bkl
+	$(BAKEFILE) -fwatcom -o$@  -DOPTIONS_FILE=../../build/config.wat -DWRITE_OPTIONS_FILE=0 -DWXTOPDIR=../../ ../../demos/poem/poem.bkl
+	touch $@
+../../demos/poem/poem.dsw: $(SDEPS) ../../demos/poem/poem.bkl
+	$(BAKEFILE) -fmsvc6prj -o$@  $(DSWFLAGS) -DWXTOPDIR=../../ ../../demos/poem/poem.bkl
 	touch $@
 
 
