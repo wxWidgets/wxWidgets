@@ -143,6 +143,9 @@ public:
 
    	virtual bool MacCanFocus() const { return true ; }
     
+    virtual void 	 MacSuperShown( bool show ) ;
+    virtual bool	 Show(bool show = TRUE) ;
+
 protected:
   virtual wxSize DoGetBestSize() const;
 
