@@ -1192,7 +1192,10 @@ void wxGridCellBoolEditor::BeginEdit(int row, int col, wxGrid* grid)
     if (grid->GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL))
         m_startValue = grid->GetTable()->GetValueAsBool(row, col);
     else
-        m_startValue = !!grid->GetTable()->GetValue(row, col);
+    {
+        wxString cellval( grid->GetTable()->GetValue(row, col) );
+        m_startValue = !( !cellval || (cellval == "0") );
+    }
     CBox()->SetValue(m_startValue);
     CBox()->SetFocus();
 }
@@ -1800,7 +1803,10 @@ void wxGridCellBoolRenderer::Draw(wxGrid& grid,
     if ( grid.GetTable()->CanGetValueAs(row, col, wxGRID_VALUE_BOOL) )
         value = grid.GetTable()->GetValueAsBool(row, col);
     else
-        value = !!grid.GetTable()->GetValue(row, col);
+    {
+        wxString cellval( grid.GetTable()->GetValue(row, col) );
+        value = !( !cellval || (cellval == "0") );
+    }
 
     if ( value )
     {
@@ -3567,7 +3573,6 @@ void wxGrid::Init()
     m_inOnKeyDown = FALSE;
     m_batchCount = 0;
 
-    // default margins (usually needed to allow resizing the last column/row)
     m_extraWidth =
     m_extraHeight = 50;
 
@@ -3663,30 +3668,38 @@ void wxGrid::CalcDimensions()
         ch -= m_colLabelHeight;
 
     // grid total size
-    int w = m_numCols > 0 ? GetColRight(m_numCols - 1) + m_extraWidth : 0;
-    int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) + m_extraHeight : 0;
-
-    // maybe we don't need scrollbars at all? and if we do, transform w and h
-    // from pixels into logical units
-    if ( w <= cw )
-        w = 0;
-    else
-        w /= GRID_SCROLL_LINE;
-    if ( h <= ch )
-        h = 0;
-    else
-        h /= GRID_SCROLL_LINE;
+    int w = m_numCols > 0 ? GetColRight(m_numCols - 1) + m_extraWidth + 1 : 0;
+    int h = m_numRows > 0 ? GetRowBottom(m_numRows - 1) + m_extraHeight + 1 : 0;
 
     // preserve (more or less) the previous position
     int x, y;
     GetViewStart( &x, &y );
-    if ( x > w )
-        x = w;
-    if ( y > h )
-        y = h;
+    // maybe we don't need scrollbars at all? and if we do, transform w and h
+    // from pixels into logical units
+    if ( w <= cw )
+    {
+        w = 0; x= 0;
+    }
+    else
+    {
+	w = (w + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
+	if ( x >= w )
+	    x = w - 1;
+    }
+    if ( h <= ch )
+    {
+	h = 0; y = 0;
+    }
+    else
+    {
+	h = (h + GRID_SCROLL_LINE - 1)/GRID_SCROLL_LINE;
+	if ( y >= h )
+	    y = h - 1;
+    }
 
     // do set scrollbar parameters
-    SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE, w, h, x, y );
+    SetScrollbars( GRID_SCROLL_LINE, GRID_SCROLL_LINE,
+		   w, h, x, y, GetBatchCount() );
 }
 
 
@@ -4004,8 +4017,7 @@ bool wxGrid::Redimension( wxGridTableMessage& msg )
                 m_colLabelWin->Refresh();
             }
         }
-
-	result = TRUE;
+        result = TRUE;
         break;
     }
 
@@ -4606,7 +4618,9 @@ void wxGrid::ChangeCursorMode(CursorMode mode,
                cursorModes[m_cursorMode], cursorModes[mode]);
 #endif // __WXDEBUG__
 
-    if ( mode == m_cursorMode )
+    if ( mode == m_cursorMode &&
+         win == m_winCapture &&
+         captureMouse == (m_winCapture != NULL))
         return;
 
     if ( !win )
@@ -5282,7 +5296,6 @@ bool wxGrid::SendEvent( const wxEventType type,
                                  mouseEv.ShiftDown(),
                                  mouseEv.AltDown(),
                                  mouseEv.MetaDown() );
-
         return GetEventHandler()->ProcessEvent(gridEvt);
     }
     else if ( type == wxEVT_GRID_RANGE_SELECT )
@@ -5313,7 +5326,6 @@ bool wxGrid::SendEvent( const wxEventType type,
                              mouseEv.ShiftDown(),
                              mouseEv.AltDown(),
                              mouseEv.MetaDown() );
-
         return GetEventHandler()->ProcessEvent(gridEvt);
     }
 }
@@ -7939,8 +7951,8 @@ void wxGrid::SetDefaultRowSize( int height, bool resizeExistingRows )
     if ( resizeExistingRows )
     {
         InitRowHeights();
-
-        CalcDimensions();
+	if ( !GetBatchCount() )
+	    CalcDimensions();
     }
 }
 
@@ -7963,7 +7975,8 @@ void wxGrid::SetRowSize( int row, int height )
     {
         m_rowBottoms[i] += diff;
     }
-    CalcDimensions();
+    if ( !GetBatchCount() )
+        CalcDimensions();
 }
 
 void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
@@ -7973,8 +7986,8 @@ void wxGrid::SetDefaultColSize( int width, bool resizeExistingCols )
     if ( resizeExistingCols )
     {
         InitColWidths();
-
-        CalcDimensions();
+	if ( !GetBatchCount() )
+	    CalcDimensions();
     }
 }
 
@@ -7999,7 +8012,8 @@ void wxGrid::SetColSize( int col, int width )
     {
         m_colRights[i] += diff;
     }
-    CalcDimensions();
+    if ( !GetBatchCount() )
+        CalcDimensions();
 }
 
 
@@ -8101,11 +8115,34 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
         }
     }
 
-    if ( column )
+    if ( column ){
         SetColSize(col, extentMax);
-    else
+        if ( !GetBatchCount() )
+        {
+	    int cw, ch, dummy;
+	    m_gridWin->GetClientSize( &cw, &ch );
+	    wxRect rect ( CellToRect( 0, col ) );
+	    rect.y = 0;
+	    CalcScrolledPosition(rect.x, 0, &rect.x, &dummy);
+	    rect.width = cw - rect.x;
+	    rect.height = m_colLabelHeight;
+	    m_colLabelWin->Refresh( TRUE, &rect );
+	}
+    }
+    else{
         SetRowSize(row, extentMax);
-
+        if ( !GetBatchCount() )
+        {
+	    int cw, ch, dummy;
+	    m_gridWin->GetClientSize( &cw, &ch );
+	    wxRect rect ( CellToRect( row, 0 ) );
+	    rect.x = 0;
+	    CalcScrolledPosition(0, rect.y, &dummy, &rect.y);
+	    rect.width = m_rowLabelWidth;
+            rect.height = ch - rect.y;
+	    m_rowLabelWin->Refresh( TRUE, &rect );
+	}
+    }
     if ( setAsMin )
     {
         if ( column )
@@ -8119,6 +8156,8 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
 {
     int width = m_rowLabelWidth;
 
+    if ( !calcOnly )
+        BeginBatch();
     for ( int col = 0; col < m_numCols; col++ )
     {
         if ( !calcOnly )
@@ -8128,7 +8167,8 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
 
         width += GetColWidth(col);
     }
-
+    if ( !calcOnly )
+        EndBatch();
     return width;
 }
 
@@ -8136,6 +8176,8 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 {
     int height = m_colLabelHeight;
 
+    if ( !calcOnly )
+        BeginBatch();
     for ( int row = 0; row < m_numRows; row++ )
     {
         if ( !calcOnly )
@@ -8145,7 +8187,8 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 
         height += GetRowHeight(row);
     }
-
+    if ( !calcOnly )
+        EndBatch();
     return height;
 }
 
