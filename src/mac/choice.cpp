@@ -91,7 +91,8 @@ void wxChoice::Delete(int n)
 
     ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
     m_strings.Remove( n ) ;
-	  SetControlMaximum( m_macControl , Number()) ;
+    m_datas.Remove( n ) ;
+	SetControlMaximum( m_macControl , Number()) ;
 }
 
 void wxChoice::Clear()
@@ -104,7 +105,7 @@ void wxChoice::Clear()
 	  }
     m_strings.Empty() ;
     m_datas.Empty() ;
-	  SetControlMaximum( m_macControl , 0 ) ;
+	SetControlMaximum( m_macControl , 0 ) ;
 }
 
 void wxChoice::Free()
