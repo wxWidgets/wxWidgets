@@ -1557,7 +1557,18 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
                         }
                         else if ( lDlgCode & DLGC_BUTTON )
                         {
-                            // buttons want process Enter themselevs
+                            // let IsDialogMessage() handle this for all
+                            // buttons except the owner-drawn ones which it
+                            // just seems to ignore
+                            long style = ::GetWindowLong(msg->hwnd, GWL_STYLE);
+                            if ( (style & BS_OWNERDRAW) == BS_OWNERDRAW )
+                            {
+                                // emulate the button click
+                                wxWindow *btn = wxFindWinFromHandle((WXHWND)msg->hwnd);
+                                if ( btn )
+                                    btn->MSWCommand(BN_CLICKED, 0 /* unused */);
+                            }
+
                             bProcess = FALSE;
                         }
                         else
