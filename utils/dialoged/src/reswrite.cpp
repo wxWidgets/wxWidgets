@@ -221,6 +221,19 @@ bool wxResourceTableWithSaving::SaveResource(ostream& stream, wxItemResource *it
         OutputFont(stream, item->GetFont());
       }
     }
+  else if (itemType == "wxRadioButton")
+    {
+      GenerateRadioButtonStyleString(item->GetStyle(), styleBuf);
+      stream << "wxRadioButton, " << SafeWord(item->GetTitle()) << ", '" << styleBuf << "', ";
+      stream << SafeWord(item->GetName()) << ", " << item->GetX() << ", " << item->GetY() << ", ";
+      stream << item->GetWidth() << ", " << item->GetHeight();
+      stream << ", " << item->GetValue1();
+      if (item->GetFont())
+      {
+        stream << ",\\\n      ";
+        OutputFont(stream, item->GetFont());
+      }
+    }
   else if (itemType == "wxStaticBox")
     {
       GenerateGroupBoxStyleString(item->GetStyle(), styleBuf);
@@ -610,6 +623,15 @@ void wxResourceTableWithSaving::GenerateButtonStyleString(long windowStyle, char
 }
 
 void wxResourceTableWithSaving::GenerateCheckBoxStyleString(long windowStyle, char *buf)
+{
+  buf[0] = 0;
+  GenerateItemStyleString(windowStyle, buf);
+  
+  if (strlen(buf) == 0)
+    strcat(buf, "0");
+}
+
+void wxResourceTableWithSaving::GenerateRadioButtonStyleString(long windowStyle, char *buf)
 {
   buf[0] = 0;
   GenerateItemStyleString(windowStyle, buf);

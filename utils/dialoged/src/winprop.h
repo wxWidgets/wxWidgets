@@ -253,6 +253,20 @@ class wxCheckBoxPropertyInfo: public wxItemPropertyInfo
   bool InstantiateResource(wxItemResource *resource);
 };
 
+// For radiobutton items
+class wxRadioButtonPropertyInfo: public wxItemPropertyInfo
+{
+ protected:
+ public:
+  wxRadioButtonPropertyInfo(wxWindow *win, wxItemResource *res = NULL):
+    wxItemPropertyInfo(win, res) {}
+  ~wxRadioButtonPropertyInfo(void) {}
+  wxProperty *GetProperty(wxString& name);
+  bool SetProperty(wxString& name, wxProperty *property);
+  void GetPropertyNames(wxStringList& names);
+  bool InstantiateResource(wxItemResource *resource);
+};
+
 // For gauge items
 class wxGaugePropertyInfo: public wxItemPropertyInfo
 {
@@ -313,5 +327,70 @@ int wxStringToFontWeight(wxString& val);
 int wxStringToFontStyle(wxString& val);
 int wxStringToFontFamily(wxString& val);
 
-#endif
+/*
+ * A validator to allow editing symbol/id pairs
+ */
 
+class wxResourceSymbolValidator: public wxPropertyListValidator
+{
+  DECLARE_DYNAMIC_CLASS(wxResourceSymbolValidator)
+ protected:
+ public:
+   wxResourceSymbolValidator(long flags = 0);
+
+   ~wxResourceSymbolValidator(void);
+
+   // Called when TICK is pressed or focus is lost.
+   // Return FALSE if value didn't check out; signal to restore old value.
+   bool OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+   // Called when TICK is pressed or focus is lost or view wants to update
+   // the property list.
+   // Does the transferance from the property editing area to the property itself
+   bool OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+   bool OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+   bool OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+   bool OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+
+   // Called when the edit (...) button is pressed.
+   void OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow);
+};
+
+/*
+ * A dialog for editing symbol/id pairs
+ */
+
+class wxResourceSymbolDialog: public wxDialog
+{
+public:
+    wxResourceSymbolDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
+        const wxPoint& pos = wxDefaultPosition,
+        const wxSize& size = wxDefaultSize, long style = wxDEFAULT_DIALOG_STYLE);
+
+    void Init();
+
+    inline void SetSymbol(const wxString& symbol) { m_symbolName = symbol; }
+    inline void SetId(long id) { m_symbolId = id; }
+
+    inline wxString GetSymbol() const { return m_symbolName; }
+    inline long GetId() const { return m_symbolId; }
+
+    bool CheckValues();
+    void OnOK(wxCommandEvent& event);
+
+protected:
+    wxString        m_symbolName;
+    long            m_symbolId;
+    wxComboBox*     m_nameCtrl;
+    wxTextCtrl*     m_idCtrl;
+
+DECLARE_EVENT_TABLE()
+};
+
+#define ID_SYMBOLNAME_COMBOBOX  100
+#define ID_SYMBOLID_TEXTCTRL    101
+
+#endif
+ // _WINPROP_H_

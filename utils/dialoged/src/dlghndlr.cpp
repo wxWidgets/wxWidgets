@@ -37,7 +37,6 @@
 
 #include "reseditr.h"
 #include "winprop.h"
-#include "editrpal.h"
 #include "dlghndlr.h"
 #include "edlist.h"
 
@@ -175,6 +174,9 @@ void wxResourceEditorDialogHandler::OnLeftClick(int x, int y, int keys)
           break;
         case RESED_RADIOBOX:
           resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxRadioBox", x, y);
+          break;
+        case RESED_RADIOBUTTON:
+          resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxRadioButton", x, y);
           break;
         case RESED_LISTBOX:
           resourceManager->CreatePanelItem(handlerResource, handlerDialog, "wxListBox", x, y);
@@ -321,7 +323,8 @@ void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int x, int 
     wxResourceManager::GetCurrentResourceManager()->EditWindow(item);
     return;
   }
-  
+
+/*
   // If this is a wxStaticBox and the pointer isn't an arrow, chances
   // are that we really meant to place an item on the panel.
   // Fake this event.
@@ -330,6 +333,7 @@ void wxResourceEditorDialogHandler::OnItemLeftClick(wxControl *item, int x, int 
     OnLeftClick(x,  y, keys);
     return;
   }
+*/
   
   wxResourceEditorControlHandler *childHandler = (wxResourceEditorControlHandler *)item->GetEventHandler();
 

@@ -55,7 +55,6 @@
 
 #include "reseditr.h"
 #include "winprop.h"
-#include "editrpal.h"
 #include "dlghndlr.h"
 #include "edtree.h"
 #include "edlist.h"
@@ -93,10 +92,10 @@ wxResourceManager::wxResourceManager():
   m_popupMenu = NULL;
   m_editorResourceTree = NULL;
   m_editorControlList = NULL;
-  m_editorPalette = NULL;
   m_nameCounter = 1;
   m_modified = FALSE;
   m_currentFilename = "";
+  m_symbolFilename = "";
   m_editorToolBar = NULL;
 
   // Default window positions
@@ -228,7 +227,6 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *parent, const ch
     m_editorFrame->SetMenuBar(menuBar);
 
     m_editorToolBar = (EditorToolBar *)OnCreateToolBar(m_editorFrame);
-//    m_editorPalette = OnCreatePalette(m_editorFrame);
     m_editorControlList = new wxResourceEditorControlList(m_editorFrame, IDC_LISTCTRL, wxPoint(0, 0), wxSize(-1, -1));
     m_editorResourceTree = new wxResourceEditorProjectTree(m_editorFrame, IDC_TREECTRL, wxPoint(0, 0), wxSize(-1, -1),
       wxTR_HAS_BUTTONS);
@@ -245,17 +243,7 @@ bool wxResourceManager::ShowResourceEditor(bool show, wxWindow *parent, const ch
     c->width.Unconstrained();
     c->height.Absolute(28);
     m_editorToolBar->SetConstraints(c);
-/*
-    // Constraints for palette
-    c = new wxLayoutConstraints;
-    c->left.SameAs       (m_editorFrame, wxLeft, 0);
-    c->top.SameAs        (m_editorToolBar, wxBottom, 0);
-    c->right.SameAs      (m_editorFrame, wxRight, 0);
-    c->bottom.Unconstrained();
-    c->width.Unconstrained();
-    c->height.Absolute(34);
-    m_editorPalette->SetConstraints(c);
-*/
+
     // Constraints for listbox
     c = new wxLayoutConstraints;
     c->left.SameAs       (m_editorFrame, wxLeft, 0);
@@ -397,6 +385,58 @@ bool wxResourceManager::New(bool loadFromFile, const wxString& filename)
     SetFrameTitle(m_currentFilename);
 
     UpdateResourceList();
+
+    // Construct include filename from this file
+    m_symbolFilename = m_currentFilename;
+
+	if (m_symbolFilename[0] == 'c')
+	{
+	}
+
+	wxString stringA("123456.45");
+	wxString stringB("");
+	stringB = str;
+
+	size_t i = 0;
+	char c = stringB[i];
+#if 0
+	size_t len = stringB.Length();
+	size_t i = len-1;
+	while (i > 0)
+	{
+		//    if (buffer.GetChar(i) == '.')
+		if (stringB[i] == '.')
+		{
+			stringB = stringB.Left(i);
+			break;
+		}
+		i --;
+	}
+#endif
+
+#if 0	
+	size_t len = m_symbolFilename.Length();
+	size_t i = len-1;
+	while (i > 0)
+	{
+		//    if (buffer.GetChar(i) == '.')
+		if (m_symbolFilename[i] == '.')
+		{
+			m_symbolFilename = m_symbolFilename.Left(i);
+			break;
+		}
+		i --;
+	}
+#endif
+//    wxStripExtension(m_symbolFilename);
+    m_symbolFilename += ".h";
+
+    if (!m_symbolTable.ReadIncludeFile(m_symbolFilename))
+    {
+        wxString str("Could not find include file ");
+        str += m_symbolFilename;
+        wxMessageBox(str, "Dialog Editor Warning", MB_OK);
+    }
   }
   else
   {
@@ -425,6 +465,7 @@ bool wxResourceManager::Clear(bool deleteWindows, bool force)
   ClearCurrentDialog();
   DisassociateWindows();
 
+  m_symbolTable.Clear();
   m_resourceTable.ClearTable();
   UpdateResourceList();
 
@@ -545,10 +586,18 @@ bool wxResourceManager::SaveInfoAndDeleteHandler(wxWindow* win)
 // variable.
 bool wxResourceManager::DeleteWindow(wxWindow* win)
 {
+    bool clearDisplay = FALSE;
     if (m_editorPanel->m_childWindow == win)
+    {
         m_editorPanel->m_childWindow = NULL;
+        clearDisplay = TRUE;
+    }
 
     win->Destroy();
+
+    if (clearDisplay)
+        m_editorPanel->Clear();
+
     return TRUE;
 }
 
@@ -815,7 +864,7 @@ void wxResourceManager::AddItemsRecursively(long parent, wxItemResource *resourc
 bool wxResourceManager::EditSelectedResource()
 {
   int sel = m_editorResourceTree->GetSelection();
-  if (sel > -1)
+  if (sel != 0)
   {
     wxItemResource *res = (wxItemResource *)m_editorResourceTree->GetItemData(sel);
     return Edit(res);
@@ -972,6 +1021,14 @@ bool wxResourceManager::CreatePanelItem(wxItemResource *panelResource, wxPanel *
 	     wxHORIZONTAL, wxDefaultValidator, buf);
       res->SetStringValues(new wxStringList("One", "Two", NULL));
     }
+  else if (itemType == "wxRadioButton")
+    {
+      MakeUniqueName("radiobutton", buf);
+      res->SetName(buf);
+      wxString names[] = { "One", "Two" };
+      newItem = new wxRadioButton(panel, -1, "Radiobutton", wxPoint(x, y), wxSize(-1, -1),
+	     0, wxDefaultValidator, buf);
+    }
   else if (itemType == "wxChoice")
     {
       MakeUniqueName("choice", buf);
@@ -1040,6 +1097,33 @@ void wxResourceManager::ClearCurrentDialog()
     m_editorPanel->m_childWindow = NULL;
     m_editorPanel->Clear();
   }
+}
+
+bool wxResourceManager::TestCurrentDialog(wxWindow* parent)
+{
+  if (m_editorPanel->m_childWindow)
+  {
+    wxItemResource* item = FindResourceForWindow(m_editorPanel->m_childWindow);
+    if (!item)
+        return FALSE;
+
+    // Make sure the resources are up-to-date w.r.t. the window
+    InstantiateResourceFromWindow(item, m_editorPanel->m_childWindow, TRUE);
+
+    wxDialog* dialog = new wxDialog;
+    long oldStyle = item->GetStyle();
+    bool success = FALSE;
+    item->SetStyle(wxDEFAULT_DIALOG_STYLE);
+    if (dialog->LoadFromResource(parent, item->GetName(), & m_resourceTable))
+    {
+        dialog->Centre();
+        dialog->ShowModal();
+        success = TRUE;
+    }
+    item->SetStyle(oldStyle);
+    return success;
+  }
+  return FALSE;
 }
 
 // Find the first dialog or panel for which
@@ -1467,7 +1551,7 @@ wxWindow *wxResourceManager::RecreateWindowFromResource(wxWindow *win, wxWindowP
 bool wxResourceManager::DeleteSelection()
 {
   int sel = m_editorResourceTree->GetSelection();
-  if (sel > -1)
+  if (sel != 0)
   {
     wxItemResource *res = (wxItemResource *)m_editorResourceTree->GetItemData(sel);
     wxWindow *win = FindWindowForResource(res);
@@ -1597,6 +1681,10 @@ wxWindowPropertyInfo *wxResourceManager::CreatePropertyInfoForWindow(wxWindow *w
   else if (win->IsKindOf(CLASSINFO(wxRadioBox)))
         {
           info = new wxRadioBoxPropertyInfo(win);
+        }
+  else if (win->IsKindOf(CLASSINFO(wxRadioButton)))
+        {
+          info = new wxRadioButtonPropertyInfo(win);
         }
   else if (win->IsKindOf(CLASSINFO(wxChoice)))
         {
@@ -1729,7 +1817,7 @@ void wxResourceEditorFrame::OnAbout(wxCommandEvent& event)
 
 void wxResourceEditorFrame::OnTest(wxCommandEvent& event)
 {
-    // TODO should show the current dialog
+    manager->TestCurrentDialog(this);
 }
 
 void wxResourceEditorFrame::OnContents(wxCommandEvent& event)
@@ -1773,7 +1861,6 @@ bool wxResourceEditorFrame::OnClose()
   }
   manager->SetEditorFrame(NULL);
   manager->SetEditorToolBar(NULL);
-  manager->SetEditorPalette(NULL);
 
   return TRUE;
 }

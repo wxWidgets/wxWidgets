@@ -26,6 +26,7 @@
 #include "wx/imaglist.h"
 
 #include "proplist.h"
+#include "symbtabl.h"
 
 #define RESED_DELETE            1
 #define RESED_RECREATE          3
@@ -66,7 +67,6 @@
  */
 
 class wxResourceEditorFrame;
-class EditorToolPalette;
 class EditorToolBar;
 class wxWindowPropertyInfo;
 class wxResourceEditorProjectTree;
@@ -125,6 +125,7 @@ class wxResourceTableWithSaving: public wxResourceTable
   void GenerateTextStyleString(long windowStyle, char *buf);
   void GenerateButtonStyleString(long windowStyle, char *buf);
   void GenerateCheckBoxStyleString(long windowStyle, char *buf);
+  void GenerateRadioButtonStyleString(long windowStyle, char *buf);
   void GenerateListBoxStyleString(long windowStyle, char *buf);
   void GenerateSliderStyleString(long windowStyle, char *buf);
   void GenerateGroupBoxStyleString(long windowStyle, char *buf);
@@ -180,7 +181,6 @@ public:
    virtual wxMenuBar *OnCreateEditorMenuBar(wxFrame *parent);
    virtual wxResourceEditorScrolledWindow *OnCreateEditorPanel(wxFrame *parent);
    virtual wxToolBarBase *OnCreateToolBar(wxFrame *parent);
-   virtual EditorToolPalette *OnCreatePalette(wxFrame *parent);
 
    // Create a window information object for the give window
    wxWindowPropertyInfo* CreatePropertyInfoForWindow(wxWindow *win);
@@ -193,8 +193,8 @@ public:
    virtual bool Edit(wxItemResource *res);
    virtual bool CreateNewPanel();
    virtual bool CreatePanelItem(wxItemResource *panelResource, wxPanel *panel, char *itemType, int x = 10, int y = 10, bool isBitmap = FALSE);
-
    virtual bool DeleteSelection();
+   virtual bool TestCurrentDialog(wxWindow* parent);
 
    // Saves the window info into the resource, and deletes the
    // handler. Doesn't actually disassociate the window from
@@ -253,11 +253,9 @@ public:
 // Accessors
    inline void SetEditorFrame(wxFrame *fr) { m_editorFrame = fr; }
    inline void SetEditorToolBar(EditorToolBar *tb) { m_editorToolBar = tb; }
-   inline void SetEditorPalette(EditorToolPalette *pal) { m_editorPalette = pal; }
    inline wxFrame *GetEditorFrame() const { return m_editorFrame; }
    inline wxResourceEditorProjectTree *GetEditorResourceTree() const { return m_editorResourceTree; }
    inline wxResourceEditorControlList *GetEditorControlList() const { return m_editorControlList; }
-   inline EditorToolPalette *GetEditorPalette() const { return m_editorPalette; }
    inline wxList& GetSelections() { return m_selections; }
    inline wxMenu *GetPopupMenu() const { return m_popupMenu; }
    inline wxHelpController *GetHelpController() const { return m_helpController; }
@@ -268,8 +266,11 @@ public:
    inline wxResourceTable& GetResourceTable() { return m_resourceTable; }
    inline wxHashTable& GetResourceAssociations() { return m_resourceAssociations; }
 
-   inline wxString& GetCurrentFilename() { return m_currentFilename; }
+   inline wxString GetCurrentFilename() const { return m_currentFilename; }
    static wxResourceManager* GetCurrentResourceManager() { return sm_currentResourceManager; }
+
+   inline void SetSymbolFilename(const wxString& s) { m_symbolFilename = s; }
+   inline wxString GetSymbolFilename() const { return m_symbolFilename; }
 
    inline wxRect& GetPropertyWindowSize() { return m_propertyWindowSize; }
    inline wxRect& GetResourceEditorWindowSize() { return m_resourceEditorWindowSize; }
@@ -283,7 +284,6 @@ public:
    wxMenu*                          m_popupMenu;
    wxResourceEditorProjectTree*     m_editorResourceTree;
    wxResourceEditorControlList*     m_editorControlList;
-   EditorToolPalette*               m_editorPalette;
    EditorToolBar*                   m_editorToolBar;
    int                              m_nameCounter;
    bool                             m_modified;
@@ -300,6 +300,11 @@ public:
    wxRect                           m_propertyWindowSize;
    wxRect                           m_resourceEditorWindowSize;
    static wxResourceManager*        sm_currentResourceManager;
+
+   // Symbol table with identifiers for controls
+   wxResourceSymbolTable            m_symbolTable;
+   // Filename for include file, e.g. resource.h
+   wxString                         m_symbolFilename;
 };
 
 

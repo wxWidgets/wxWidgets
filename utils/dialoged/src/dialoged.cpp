@@ -34,6 +34,8 @@ MyApp::MyApp(void)
 
 wxResourceManager *theResourceManager = NULL;
 
+#include "symbtabl.h"
+
 bool MyApp::OnInit(void)
 {
     theResourceManager = new wxResourceManager;

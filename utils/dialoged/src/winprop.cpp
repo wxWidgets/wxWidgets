@@ -40,7 +40,6 @@
 #endif
 
 #include "reseditr.h"
-#include "editrpal.h"
 #include "winprop.h"
 
 // Causes immediate feedback.
@@ -144,6 +143,7 @@ bool wxPropertyInfo::Edit(wxWindow *parent, const wxString& title)
   propDialog->m_registry.RegisterValidator((wxString)"bool", new wxBoolListValidator);
   propDialog->m_registry.RegisterValidator((wxString)"filename", new wxFilenameListValidator);
   propDialog->m_registry.RegisterValidator((wxString)"stringlist", new wxListOfStringsListValidator);
+  propDialog->m_registry.RegisterValidator((wxString)"window_id", new wxResourceSymbolValidator);
 
   propDialog->m_propInfo = this;
   propDialog->m_propSheet = propSheet;
@@ -290,6 +290,11 @@ wxProperty *wxWindowPropertyInfo::GetProperty(wxString& name)
     propertyWindow->GetSize(&width, &height);
     return new wxProperty("height", (long)height, "integer");
   }
+  else if (name == "id")
+  {
+    wxString symbolName("TODO");
+    return new wxProperty("id", symbolName, "window_id");
+  }
   else
     return NULL;
 }
@@ -382,12 +387,18 @@ bool wxWindowPropertyInfo::SetProperty(wxString& name, wxProperty *property)
     }
     return TRUE;
   }
+  else if (name == "id")
+  {
+    // TODO
+    return TRUE;
+  }
   else
     return FALSE;
 }
 
 void wxWindowPropertyInfo::GetPropertyNames(wxStringList& names)
 {
+  names.Add("id");
   names.Add("name");
   names.Add("x");
   names.Add("y");
@@ -1148,6 +1159,45 @@ bool wxCheckBoxPropertyInfo::InstantiateResource(wxItemResource *resource)
 }
 
 /*
+ * Radiobutton item
+ */
+
+wxProperty *wxRadioButtonPropertyInfo::GetProperty(wxString& name)
+{
+  wxRadioButton *checkBox = (wxRadioButton *)propertyWindow;
+  if (name == "value")
+    return new wxProperty("value", checkBox->GetValue(), "bool");
+  else
+    return wxItemPropertyInfo::GetProperty(name);
+}
+
+bool wxRadioButtonPropertyInfo::SetProperty(wxString& name, wxProperty *property)
+{
+  wxRadioButton *checkBox = (wxRadioButton *)propertyWindow;
+  if (name == "value")
+  {
+    checkBox->SetValue((bool)property->GetValue().BoolValue());
+    return TRUE;
+  }
+  else
+    return wxItemPropertyInfo::SetProperty(name, property);
+}
+
+void wxRadioButtonPropertyInfo::GetPropertyNames(wxStringList& names)
+{
+  names.Add("label");
+  names.Add("value");
+  wxItemPropertyInfo::GetPropertyNames(names);
+}
+
+bool wxRadioButtonPropertyInfo::InstantiateResource(wxItemResource *resource)
+{
+  wxRadioButton *cbox = (wxRadioButton *)propertyWindow;
+  resource->SetValue1(cbox->GetValue());
+  return wxItemPropertyInfo::InstantiateResource(resource);
+}
+
+/*
  * Slider item
  */
 
@@ -1654,3 +1704,178 @@ int wxStringToFontFamily(wxString& val)
   else if (val == "wxTELETYPE") return wxTELETYPE;
   else return wxSWISS;
 }
+
+///
+/// Resource symbol validator
+/// 
+IMPLEMENT_DYNAMIC_CLASS(wxResourceSymbolValidator, wxPropertyListValidator)
+
+wxResourceSymbolValidator::wxResourceSymbolValidator(long flags):
+  wxPropertyListValidator(flags)
+{
+}
+
+wxResourceSymbolValidator::~wxResourceSymbolValidator(void)
+{
+}
+
+bool wxResourceSymbolValidator::OnCheckValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
+{
+  return TRUE;
+}
+
+// Called when TICK is pressed or focus is lost or view wants to update
+// the property list.
+// Does the transferance from the property editing area to the property itself
+bool wxResourceSymbolValidator::OnRetrieveValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
+{
+  if (!view->GetValueText())
+    return FALSE;
+  wxString value(view->GetValueText()->GetValue());
+  property->GetValue() = value ;
+  return TRUE;
+}
+
+// Called when TICK is pressed or focus is lost or view wants to update
+// the property list.
+// Does the transferance from the property editing area to the property itself
+bool wxResourceSymbolValidator::OnDisplayValue(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
+{
+  if (!view->GetValueText())
+    return FALSE;
+  wxString str(property->GetValue().GetStringRepresentation());
+  view->GetValueText()->SetValue(str);
+  return TRUE;
+}
+
+// Called when the property is double clicked. Extra functionality can be provided,
+// cycling through possible values.
+bool wxResourceSymbolValidator::OnDoubleClick(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
+{
+  if (!view->GetValueText())
+    return FALSE;
+  OnEdit(property, view, parentWindow);
+  return TRUE;
+}
+
+bool wxResourceSymbolValidator::OnPrepareControls(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
+{
+  if (view->GetConfirmButton())
+    view->GetConfirmButton()->Enable(TRUE);
+  if (view->GetCancelButton())
+    view->GetCancelButton()->Enable(TRUE);
+  if (view->GetEditButton())
+    view->GetEditButton()->Enable(TRUE);
+  if (view->GetValueText())
+    view->GetValueText()->Enable((GetFlags() & wxPROP_ALLOW_TEXT_EDITING) == wxPROP_ALLOW_TEXT_EDITING);
+  return TRUE;
+}
+
+void wxResourceSymbolValidator::OnEdit(wxProperty *property, wxPropertyListView *view, wxWindow *parentWindow)
+{
+  if (!view->GetValueText())
+    return;
+
+  wxResourceSymbolDialog* dialog = new wxResourceSymbolDialog(parentWindow, -1, "Edit Symbol");
+
+  dialog->SetSymbol(property->GetValue().StringValue());
+
+  // TODO: split name/id pair e.g. "IDC_TEXT=123" or get from symbol table - which?
+  dialog->SetId(1234);
+
+  dialog->Init();
+
+  if (dialog->ShowModal())
+  {
+    wxString symbolName(dialog->GetSymbol());
+    long id = dialog->GetId();
+    dialog->Destroy();
+
+    // TODO: set id somewhere
+    property->GetValue() = wxString(symbolName);
+
+    view->DisplayProperty(property);
+    view->UpdatePropertyDisplayInList(property);
+    view->OnPropertyChanged(property);
+  }
+
+#if 0
+  char *s = wxFileSelector(
+     filenameMessage.GetData(),
+     wxPathOnly(property->GetValue().StringValue()),
+     wxFileNameFromPath(property->GetValue().StringValue()),
+     NULL,
+     filenameWildCard.GetData(),
+     0,
+     parentWindow);
+  if (s)
+  {
+    property->GetValue() = wxString(s);
+    view->DisplayProperty(property);
+    view->UpdatePropertyDisplayInList(property);
+    view->OnPropertyChanged(property);
+  }
+#endif
+}
+
+BEGIN_EVENT_TABLE(wxResourceSymbolDialog, wxDialog)
+    EVT_BUTTON(wxID_OK, wxResourceSymbolDialog::OnOK)
+END_EVENT_TABLE()
+
+wxResourceSymbolDialog::wxResourceSymbolDialog(wxWindow* parent, const wxWindowID id, const wxString& title, const wxPoint& pos,
+        const wxSize& size, long style):
+    wxDialog(parent, id, title, pos, size, style)
+{
+    int x = 5;
+    int y = 5;
+
+    (void) new wxStaticText(this, -1, "Name: ", wxPoint(x, y));
+
+    x += 80;
+
+    m_nameCtrl = new wxComboBox(this, ID_SYMBOLNAME_COMBOBOX, "",
+        wxPoint(x, y), wxSize(200, -1), 0, NULL, wxCB_DROPDOWN);
+
+    y += 30;
+    x = 5;
+
+    (void) new wxStaticText(this, -1, "Id: ", wxPoint(x, y));
+
+    x += 80;
+
+    m_idCtrl = new wxTextCtrl(this, ID_SYMBOLID_TEXTCTRL, "",
+        wxPoint(x, y), wxSize(200, -1));
+
+    y += 30;
+    x = 5;
+    (void) new wxButton(this, wxID_OK, "OK", wxPoint(x, y), wxSize(90, -1));
+
+    x += 120;
+    (void) new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(x, y), wxSize(90, -1));
+
+    Fit();
+    Centre();
+}
+
+void wxResourceSymbolDialog::Init()
+{
+    wxString defaultId;
+    defaultId.Printf("%ld", m_symbolId);
+
+    m_nameCtrl->SetValue(m_symbolName);
+    m_idCtrl->SetValue(defaultId);
+}
+
+void wxResourceSymbolDialog::OnOK(wxCommandEvent& event)
+{
+    if (CheckValues())
+    {
+        wxDialog::OnOK(event);
+    }
+}
+
+bool wxResourceSymbolDialog::CheckValues()
+{
+    return TRUE;
+}
+

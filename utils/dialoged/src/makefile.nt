@@ -25,7 +25,8 @@ LOCALDOCDIR=$(WXDIR)\utils\dialoged\docs
 
 PROGRAM=dialoged
  
-OBJECTS = dialoged.obj editrpal.obj reseditr.obj dlghndlr.obj reswrite.obj winprop.obj edtree.obj edlist.obj
+OBJECTS = dialoged.obj reseditr.obj dlghndlr.obj reswrite.obj\
+  winprop.obj edtree.obj edlist.obj symbtabl.obj
 
 all:    wxprop dialoged.exe
 
@@ -47,32 +48,27 @@ $(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res
 $(LIBS)
 <<
 
-dialoged.obj:      winprop.h reseditr.h editrpal.h dialoged.$(SRCSUFF) $(DUMMYOBJ)
+dialoged.obj:      winprop.h reseditr.h dialoged.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-winprop.obj:      winprop.h reseditr.h editrpal.h winprop.$(SRCSUFF) $(DUMMYOBJ)
+winprop.obj:      winprop.h reseditr.h winprop.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-editrpal.obj:      winprop.h reseditr.h editrpal.h editrpal.$(SRCSUFF) $(DUMMYOBJ)
+reswrite.obj:      winprop.h reseditr.h reswrite.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-reswrite.obj:      winprop.h reseditr.h editrpal.h reswrite.$(SRCSUFF) $(DUMMYOBJ)
+reseditr.obj:      winprop.h reseditr.h reseditr.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-reseditr.obj:      winprop.h reseditr.h editrpal.h reseditr.$(SRCSUFF) $(DUMMYOBJ)
-        $(cc) @<<
-$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
-<<
-
-edtree.obj:      winprop.h reseditr.h editrpal.h edtree.h edtree.$(SRCSUFF) $(DUMMYOBJ)
+edtree.obj:      winprop.h reseditr.h edtree.h edtree.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
@@ -82,7 +78,12 @@ edlist.obj:      winprop.h reseditr.h edlist.h edlist.$(SRCSUFF) $(DUMMYOBJ)
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
 
-dlghndlr.obj:      winprop.h reseditr.h editrpal.h dlghndlr.$(SRCSUFF) $(DUMMYOBJ)
+dlghndlr.obj:      winprop.h reseditr.h dlghndlr.$(SRCSUFF) $(DUMMYOBJ)
+        $(cc) @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
+<<
+
+symbtabl.obj:      symbtabl.h symbtabl.$(SRCSUFF) $(DUMMYOBJ)
         $(cc) @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF)
 <<
