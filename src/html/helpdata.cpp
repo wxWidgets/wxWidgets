@@ -829,7 +829,7 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
 
     if (!m_CaseSensitive)
         for (i = 0; i < lng; i++)
-            tmp[size_t(i)] = (char)tolower(tmp[i]);
+            tmp[(size_t)i] = (char)tolower(tmp[(size_t)i]);
 
     if (m_WholeWords)
     {
