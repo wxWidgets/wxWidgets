@@ -36,8 +36,9 @@
     #include "wx/intl.h"
     #include "wx/frame.h"
     #include "wx/containr.h"        // wxSetFocusToChild()
-    #include "wx/module.h"
 #endif //WX_PRECOMP
+
+#include "wx/module.h"
 
 #include "wx/msw/private.h"
 
