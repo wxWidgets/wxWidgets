@@ -1385,11 +1385,13 @@ The application must check for an empty return value (the user pressed
 Cancel). For example:
 
 \begin{verbatim}
-const wxString& s = wxFileSelector("Choose a file to open");
-if (s)
+wxString filename = wxFileSelector("Choose a file to open");
+if ( !filename.empty() )
 {
-  ...
+    // work with the file
+    ...
 }
+//else: cancelled by user
 \end{verbatim}
 
 \wxheading{Include files}
