@@ -372,9 +372,9 @@ void wxXmlResource::UpdateResources()
 }
 
 
-wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent, 
-                                         const wxString& name, 
-                                         const wxString& classname, 
+wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
+                                         const wxString& name,
+                                         const wxString& classname,
                                          bool recursive)
 {
     wxString dummy;
@@ -384,10 +384,10 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
     // where the resource is most commonly looked for):
     for (node = parent->GetChildren(); node; node = node->GetNext())
     {
-        if ( node->GetType() == wxXML_ELEMENT_NODE && 
-                 (node->GetName() == wxT("object") || 
+        if ( node->GetType() == wxXML_ELEMENT_NODE &&
+                 (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) &&
-                (!classname || 
+                (!classname ||
                  node->GetPropVal(wxT("class"), wxEmptyString) == classname) &&
                 node->GetPropVal(wxT("name"), &dummy) && dummy == name )
             return node;
@@ -396,8 +396,8 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
     if ( recursive )
         for (node = parent->GetChildren(); node; node = node->GetNext())
         {
-            if ( node->GetType() == wxXML_ELEMENT_NODE && 
-                 (node->GetName() == wxT("object") || 
+            if ( node->GetType() == wxXML_ELEMENT_NODE &&
+                 (node->GetName() == wxT("object") ||
                   node->GetName() == wxT("object_ref")) )
             {
                 wxXmlNode* found = DoFindResource(node, name, classname, TRUE);
@@ -409,7 +409,7 @@ wxXmlNode *wxXmlResource::DoFindResource(wxXmlNode *parent,
    return NULL;
 }
 
-wxXmlNode *wxXmlResource::FindResource(const wxString& name, 
+wxXmlNode *wxXmlResource::FindResource(const wxString& name,
                                        const wxString& classname,
                                        bool recursive)
 {
@@ -421,7 +421,7 @@ wxXmlNode *wxXmlResource::FindResource(const wxString& name,
         if ( m_data[f].Doc == NULL || m_data[f].Doc->GetRoot() == NULL )
             continue;
 
-        wxXmlNode* found = DoFindResource(m_data[f].Doc->GetRoot(), 
+        wxXmlNode* found = DoFindResource(m_data[f].Doc->GetRoot(),
                                           name, classname, recursive);
         if ( found )
         {
@@ -445,7 +445,7 @@ static void MergeNodes(wxXmlNode& dest, wxXmlNode& with)
         wxXmlProperty *dprop;
         for (dprop = dest.GetProperties(); dprop; dprop = dprop->GetNext())
         {
-       
+
             if ( dprop->GetName() == prop->GetName() )
             {
                 dprop->SetValue(prop->GetValue());
@@ -494,7 +494,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent, wx
 
         if ( !refNode )
         {
-            wxLogError(_("Referenced object node with ref=\"%s\" not found!"), 
+            wxLogError(_("Referenced object node with ref=\"%s\" not found!"),
                        refName.c_str());
             return NULL;
         }
@@ -543,7 +543,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
     wxWindow *myParentAW = m_parentAsWindow, *myInstanceAW = m_instanceAsWindow;
 
     m_instance = instance;
-    if (!m_instance && node->HasProp(wxT("subclass")) && 
+    if (!m_instance && node->HasProp(wxT("subclass")) &&
         !(m_resource->GetFlags() & wxXRC_NO_SUBCLASSING))
     {
         wxString subclass = node->GetPropVal(wxT("subclass"), wxEmptyString);
@@ -551,7 +551,7 @@ wxObject *wxXmlResourceHandler::CreateResource(wxXmlNode *node, wxObject *parent
 
         if (classInfo)
             m_instance = classInfo->CreateObject();
-        
+
         if (!m_instance)
         {
             wxLogError(_("Subclass '%s' not found for resource '%s', not subclassing!"),
@@ -638,8 +638,8 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
     const wxChar *dt;
     wxChar amp_char;
 
-    // VS: First version of XRC resources used $ instead of & (which is 
-    //     illegal in XML), but later I realized that '_' fits this purpose 
+    // VS: First version of XRC resources used $ instead of & (which is
+    //     illegal in XML), but later I realized that '_' fits this purpose
     //     much better (because &File means "File with F underlined").
     if (m_resource->CompareVersion(2,3,0,1) < 0)
         amp_char = wxT('$');
@@ -668,7 +668,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
             }
         else str2 << *dt;
     }
-    
+
     if (translate && m_resource->GetFlags() & wxXRC_USE_LOCALE)
         return wxGetTranslation(str2);
     else
@@ -775,7 +775,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param, wxSize size)
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
-    return img.ConvertToBitmap();
+    return wxBitmap(img);
 }
 
 
