@@ -414,6 +414,26 @@ bool wxTextCtrl::Create( wxWindow *parent,
             gtk_entry_set_editable( GTK_ENTRY(m_text), FALSE );
 #ifdef __WXGTK20__
         else
+#ifdef __WXGTK20__
+    if (multi_line)
+    {
+        if (style & wxTE_RIGHT)
+            gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_RIGHT );
+        else if (style & wxTE_CENTRE)
+            gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_CENTER );
+        // Left justify (alignment) is the default and we don't need to apply GTK_JUSTIFY_LEFT
+    }
+    // gtk_entry_set_alignment was introduced in gtk+-2.3.5
+#if GTK_CHECK_VERSION(2, 3, 5)
+    else
+    {
+        if (style & wxTE_RIGHT)
+            gtk_entry_set_alignment( GTK_ENTRY(m_text), 1.0 );
+        else if (style & wxTE_CENTRE)
+            gtk_entry_set_alignment( GTK_ENTRY(m_text), 0.5 );
+    }
+#endif // gtk+-2.3.5
+#endif // __WXGTK20__
             gtk_text_view_set_editable( GTK_TEXT_VIEW( m_text), FALSE);
 #else
     }

@@ -141,6 +141,10 @@ wxMSW:
 - fixed wxFileDataObject in Unicode build (Alex D)
 - subdindented paragraphs support (Tim Kosse)
 
+wxGTK:
+
+- added support for wxTE_RIGHT and wxTE_CENTRE styles under GTK2 (Mart Raudsepp)
+
 wxMotif:
 
 - removed wxMenuItem::DeleteSubMenu()
