@@ -38,6 +38,7 @@ wxDialogXmlHandler::wxDialogXmlHandler() : wxXmlResourceHandler()
     XRC_ADD_STYLE(wxCLOSE_BOX);
     XRC_ADD_STYLE(wxDIALOG_MODAL);
     XRC_ADD_STYLE(wxDIALOG_MODELESS);
+    XRC_ADD_STYLE(wxDIALOG_NO_PARENT);
 
     XRC_ADD_STYLE(wxNO_3D);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
