@@ -88,6 +88,8 @@ public:
     long          m_fsSaveStyle;
     long          m_fsSaveFlag;
     wxRect        m_fsSaveFrame;
+    
+    long          m_gdkFunc, m_gdkDecor; // m_windowStyle translated to GDK's terms
 
 protected:
     // common part of all ctors

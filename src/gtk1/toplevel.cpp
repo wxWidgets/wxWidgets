@@ -133,7 +133,7 @@ static gint gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WX
         wxapp_install_idle_handler();
 
     if (win->IsEnabled() &&
-        (g_openDialogs == 0 || (win->GetExtraStyle() & wxTLW_EX_DIALOG)))
+        (g_openDialogs == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)))
         win->Close();
 
     return TRUE;
@@ -188,48 +188,15 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget), wxTopLevelWindowGTK *
     if (g_isIdle)
         wxapp_install_idle_handler();
 
-    if ((win->m_miniEdge > 0) || (win->HasFlag(wxSIMPLE_BORDER)) || (win->HasFlag(wxNO_BORDER)))
-    {
-        /* This is a mini-frame or a borderless frame. */
-        gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)0 );
-        gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)0 );
-    }
-    else
-    {
-        /* All this is for Motif Window Manager "hints" and is supposed to be
-           recognized by other WM as well. Not tested. */
-        long decor = (long) GDK_DECOR_BORDER;
-        long func = (long) GDK_FUNC_MOVE;
-
-        if ((win->GetWindowStyle() & wxCAPTION) != 0)
-            decor |= GDK_DECOR_TITLE;
-        if ((win->GetWindowStyle() & wxSYSTEM_MENU) != 0)
-        {
-            decor |= GDK_DECOR_MENU;
-            func |= GDK_FUNC_CLOSE;
-        }
-        if ((win->GetWindowStyle() & wxMINIMIZE_BOX) != 0)
-        {
-            func |= GDK_FUNC_MINIMIZE;
-            decor |= GDK_DECOR_MINIMIZE;
-        }
-        if ((win->GetWindowStyle() & wxMAXIMIZE_BOX) != 0)
-        {
-            func |= GDK_FUNC_MAXIMIZE;
-            decor |= GDK_DECOR_MAXIMIZE;
-        }
-        if ((win->GetWindowStyle() & wxRESIZE_BORDER) != 0)
-        {
-           func |= GDK_FUNC_RESIZE;
-           decor |= GDK_DECOR_RESIZEH;
-        }
-
-        gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
-        gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
-    }
+    /* All this is for Motif Window Manager "hints" and is supposed to be
+       recognized by other WM as well. Not tested. */
+    gdk_window_set_decorations(win->m_widget->window, 
+                               (GdkWMDecoration)win->m_gdkDecor);
+    gdk_window_set_functions(win->m_widget->window, 
+                               (GdkWMFunction)win->m_gdkFunc);
 
     /* GTK's shrinking/growing policy */
-    if ((win->GetWindowStyle() & wxRESIZE_BORDER) == 0)
+    if ((win->m_gdkFunc & GDK_FUNC_RESIZE) == 0)
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 0, 0, 1);
     else
         gtk_window_set_policy(GTK_WINDOW(win->m_widget), 1, 1, 1);
@@ -368,15 +335,16 @@ void wxTopLevelWindowGTK::Init()
     m_isIconized = FALSE;
     m_fsIsShowing = FALSE;
     m_themeEnabled = TRUE;
+    m_gdkDecor = m_gdkFunc = 0;
 }
 
 bool wxTopLevelWindowGTK::Create( wxWindow *parent,
-                      wxWindowID id,
-                      const wxString& title,
-                      const wxPoint& pos,
-                      const wxSize& sizeOrig,
-                      long style,
-                      const wxString &name )
+                                  wxWindowID id,
+                                  const wxString& title,
+                                  const wxPoint& pos,
+                                  const wxSize& sizeOrig,
+                                  long style,
+                                  const wxString &name )
 {
     // always create a frame of some reasonable, even if arbitrary, size (at
     // least for MSW compatibility)
@@ -410,7 +378,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     if (style & wxFRAME_TOOL_WINDOW)
         win_type = GTK_WINDOW_POPUP;
         
-    if (GetExtraStyle() & wxTLW_EX_DIALOG)
+    if (GetExtraStyle() & wxTOPLEVEL_EX_DIALOG)
         win_type = GTK_WINDOW_DIALOG;
 
     m_widget = gtk_window_new( win_type );
@@ -494,6 +462,44 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     /* disable native tab traversal */
     gtk_signal_connect( GTK_OBJECT(m_widget), "focus",
         GTK_SIGNAL_FUNC(gtk_frame_focus_callback), (gpointer)this );
+
+
+    /* decorations */
+    if ((m_miniEdge > 0) || (style & wxSIMPLE_BORDER) || (style & wxNO_BORDER))
+    {
+        m_gdkDecor = 0;
+        m_gdkFunc = 0;
+    }
+    else
+    {
+        m_gdkDecor = (long) GDK_DECOR_BORDER;
+        m_gdkFunc = (long) GDK_FUNC_MOVE;
+    
+        // All this is for Motif Window Manager "hints" and is supposed to be
+        // recognized by other WM as well. Not tested. 
+        if ((style & wxCAPTION) != 0)
+            m_gdkDecor |= GDK_DECOR_TITLE;
+        if ((style & wxSYSTEM_MENU) != 0)
+        {
+            m_gdkFunc |= GDK_FUNC_CLOSE;
+            m_gdkDecor |= GDK_DECOR_MENU;
+        }
+        if ((style & wxMINIMIZE_BOX) != 0)
+        {
+            m_gdkFunc |= GDK_FUNC_MINIMIZE;
+            m_gdkDecor |= GDK_DECOR_MINIMIZE;
+        }
+        if ((style & wxMAXIMIZE_BOX) != 0)
+        {
+            m_gdkFunc |= GDK_FUNC_MAXIMIZE;
+            m_gdkDecor |= GDK_DECOR_MAXIMIZE;
+        }
+        if ((style & wxRESIZE_BORDER) != 0)
+        {
+           m_gdkFunc |= GDK_FUNC_RESIZE;
+           m_gdkDecor |= GDK_DECOR_RESIZEH;
+        }
+    }
 
     return TRUE;
 }
