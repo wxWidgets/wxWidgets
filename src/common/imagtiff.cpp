@@ -271,7 +271,7 @@ bool wxTIFFHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     return TRUE;
 }
 
-int wxTIFFHandler::GetImagesCount( wxInputStream& stream )
+int wxTIFFHandler::GetImageCount( wxInputStream& stream )
 {
     TIFF *tif = TIFFwxOpen( stream, "image", "r" );
 

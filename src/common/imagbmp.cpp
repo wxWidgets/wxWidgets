@@ -1174,7 +1174,7 @@ bool wxICOHandler::LoadFile(wxImage *image, wxInputStream& stream,
     return bResult;
 }
 
-int wxICOHandler::GetImagesCount(wxInputStream& stream)
+int wxICOHandler::GetImageCount(wxInputStream& stream)
 {
     ICONDIR IconDir;
     stream.SeekI(0);

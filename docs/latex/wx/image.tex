@@ -324,11 +324,11 @@ chararcters in RGBGBRGB... format.
 
 Returns the green intensity at the given coordinate.
 
-\membersection{wxImage::GetImagesCount}\label{wximagegetimagescount}
+\membersection{wxImage::GetImageCount}\label{wximagegetimagecount}
 
-\func{static int}{GetImagesCount}{\param{const wxString\&}{ filename}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+\func{static int}{GetImageCount}{\param{const wxString\&}{ filename}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
 
-\func{static int}{GetImagesCount}{\param{wxInputStream\&}{ stream}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
+\func{static int}{GetImageCount}{\param{wxInputStream\&}{ stream}, \param{long}{ type = wxBITMAP\_TYPE\_ANY}}
 
 If the image file contains more than one image and the image handler is capable 
 of retrieving these individually, this function will return the number of
@@ -943,9 +943,9 @@ Gets the name of this handler.
 
 Gets the file extension associated with this handler.
 
-\membersection{wxImageHandler::GetImagesCount}\label{wximagehandlergetimagescount}
+\membersection{wxImageHandler::GetImageCount}\label{wximagehandlergetimagecount}
 
-\func{int}{GetImagesCount}{\param{wxInputStream\&}{ stream}}
+\func{int}{GetImageCount}{\param{wxInputStream\&}{ stream}}
 
 If the image file contains more than one image and the image handler is capable 
 of retrieving these individually, this function will return the number of

@@ -46,7 +46,7 @@ public:
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
 
-    virtual int GetImagesCount( wxInputStream& stream );
+    virtual int GetImageCount( wxInputStream& stream );
 
     bool CanRead( wxInputStream& stream ) { return DoCanRead(stream); }
     bool CanRead( const wxString& name );
@@ -164,13 +164,13 @@ public:
                           unsigned char mr, unsigned char mg, unsigned char mb);
 
     static bool CanRead( const wxString& name );
-    static int GetImagesCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
+    static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     virtual bool LoadFile( const wxString& name, const wxString& mimetype, int index = -1 );
 
 #if wxUSE_STREAMS
     static bool CanRead( wxInputStream& stream );
-    static int GetImagesCount( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
+    static int GetImageCount( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY );
     virtual bool LoadFile( wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1 );
     virtual bool LoadFile( wxInputStream& stream, const wxString& mimetype, int index = -1 );
 #endif

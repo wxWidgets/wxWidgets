@@ -87,7 +87,7 @@ public:
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=TRUE );
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=TRUE, int index=0 );
     virtual bool DoCanRead( wxInputStream& stream );
-    virtual int GetImagesCount( wxInputStream& stream );
+    virtual int GetImageCount( wxInputStream& stream );
 #endif // wxUSE_STREAMS
 
 private:

@@ -970,11 +970,11 @@ bool wxImage::CanRead( const wxString &name )
 #endif
 }
 
-int wxImage::GetImagesCount( const wxString &name, long type )
+int wxImage::GetImageCount( const wxString &name, long type )
 {
 #if wxUSE_STREAMS
   wxFileInputStream stream(name);
-  return GetImagesCount(stream, type);
+  return GetImageCount(stream, type);
 #else
   return 0;
 #endif
@@ -996,7 +996,7 @@ bool wxImage::CanRead( wxInputStream &stream )
     return FALSE;
 }
 
-int wxImage::GetImagesCount( wxInputStream &stream, long type )
+int wxImage::GetImageCount( wxInputStream &stream, long type )
 {
     wxImageHandler *handler;
 
@@ -1008,7 +1008,7 @@ int wxImage::GetImagesCount( wxInputStream &stream, long type )
         {
              handler=(wxImageHandler*)node->GetData();
              if ( handler->CanRead(stream) )
-                 return handler->GetImagesCount(stream);
+                 return handler->GetImageCount(stream);
 
         }
 
@@ -1026,7 +1026,7 @@ int wxImage::GetImagesCount( wxInputStream &stream, long type )
 
     if ( handler->CanRead(stream) )
     {
-        return handler->GetImagesCount(stream);
+        return handler->GetImageCount(stream);
     }
     else
     {
@@ -1086,7 +1086,7 @@ bool wxImage::LoadFile( wxInputStream& stream, const wxString& mimetype, int ind
         return FALSE;
     }
 
-    return handler->LoadFile( this, stream, index );
+    return handler->LoadFile( this, stream, TRUE/*verbose*/, index );
 }
 
 bool wxImage::SaveFile( wxOutputStream& stream, int type )
@@ -1239,7 +1239,7 @@ bool wxImageHandler::SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSE
     return FALSE;
 }
 
-int wxImageHandler::GetImagesCount( wxInputStream& WXUNUSED(stream) )
+int wxImageHandler::GetImageCount( wxInputStream& WXUNUSED(stream) )
 {
     return 1;
 }
