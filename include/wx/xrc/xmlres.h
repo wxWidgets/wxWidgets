@@ -93,7 +93,8 @@ WX_DECLARE_USER_EXPORTED_OBJARRAY(wxXmlResourceDataRecord,
 enum wxXmlResourceFlags
 {
     wxXRC_USE_LOCALE     = 1,
-    wxXRC_NO_SUBCLASSING = 2
+    wxXRC_NO_SUBCLASSING = 2,
+    wxXRC_NO_RELOADING   = 4
 };
 
 // This class holds XML resources from one or more .xml files

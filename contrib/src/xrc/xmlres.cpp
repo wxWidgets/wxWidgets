@@ -343,7 +343,7 @@ bool wxXmlResource::UpdateResources()
     {
         modif = (m_data[i].Doc == NULL);
 
-        if (!modif)
+        if (!modif && !(m_flags & wxXRC_NO_RELOADING))
         {
 #           if wxUSE_FILESYSTEM
             file = fsys.OpenFile(m_data[i].File);
@@ -362,6 +362,9 @@ bool wxXmlResource::UpdateResources()
 
         if (modif)
         {
+            wxLogTrace(_T("xrc"),
+                       _T("opening file '%s'"), m_data[i].File.c_str());
+
             wxInputStream *stream = NULL;
 
 #           if wxUSE_FILESYSTEM
