@@ -204,7 +204,7 @@ swig_files = [ 'wx.i', 'windows.i', 'windows2.i', 'windows3.i', 'events.i',
                'controls2.i', 'cmndlgs.i', 'stattool.i', 'frames.i', 'image.i',
                'printfw.i', 'sizers.i', 'clip_dnd.i',
                'filesys.i', 'streams.i',
-#               'grid.i', 'html.i', 'htmlhelp.i', 'calendar.i', 'utils.i',
+               ##'grid.i', 'html.i', 'htmlhelp.i', 'calendar.i', 'utils.i',
                ]
 
 swig_sources = run_swig(swig_files, 'src', GENDIR, PKGDIR,
