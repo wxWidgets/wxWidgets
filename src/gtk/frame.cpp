@@ -694,7 +694,7 @@ void wxFrame::SetStatusBar(wxStatusBar *statbar)
     
     wxFrameBase::SetStatusBar(statbar);
     
-    if (hadStatBar && !m_frameToolBar) 
+    if (hadStatBar && !m_frameStatusBar) 
         GtkUpdateSize();
 }
 
