@@ -7,6 +7,9 @@ On Windows, the WIN32 API is used to do achieve smooth dragging. On other platfo
 wxGenericDragImage is used. Applications may also prefer to use
 wxGenericDragImage on Windows, too.
 
+\pythonnote{wxPython uses wxGenericDragImage on all platforms, but
+uses the wxDragImage name.}
+
 To use this class, when you wish to start dragging an image, create a wxDragImage
 object and store it somewhere you can access it as the drag progresses.
 Call BeginDrag to start, and EndDrag to stop the drag. To move the image,
@@ -48,18 +51,26 @@ Constructs a drag image from a bitmap and optional cursor.
 
 Constructs a drag image from an icon and optional cursor.
 
+\pythonnote{This constructor is called wxDragIcon in wxPython.}
+
 \func{}{wxDragImage}{\param{const wxString\& }{text}, \param{const wxCursor\& }{cursor = wxNullCursor},
  \param{const wxPoint& }{hotspot = wxPoint(0, 0)}}
 
 Constructs a drag image from a text string and optional cursor.
 
+\pythonnote{This constructor is called wxDragString in wxPython.}
+
 \func{}{wxDragImage}{\param{const wxTreeCtrl\& }{treeCtrl}, \param{wxTreeItemId\& }{id}}
 
 Constructs a drag image from the text in the given tree control item, and optional cursor.
 
+\pythonnote{This constructor is called wxDragTreeItem in wxPython.}
+
 \func{}{wxDragImage}{\param{const wxListCtrl\& }{treeCtrl}, \param{long }{id}}
 
 Constructs a drag image from the text in the given tree control item, and optional cursor.
+
+\pythonnote{This constructor is called wxDragListItem in wxPython.}
 
 \wxheading{Parameters}
 
@@ -90,7 +101,7 @@ Start dragging the image, using the first window to capture the mouse and the se
 to specify the bounding area. This form is equivalent to using the first form,
 but more convenient than working out the bounding rectangle explicitly.
 
-You need to then call \helpref{wxDragImage::Show}{wxdragimageshow} 
+You need to then call \helpref{wxDragImage::Show}{wxdragimageshow}
 and \helpref{wxDragImage::Move}{wxdragimagemove} to show the image on the screen.
 
 Call \helpref{wxDragImage::EndDrag}{wxdragimageenddrag} when the drag has finished.
@@ -130,14 +141,14 @@ Note that this call automatically calls ReleaseMouse.
 \func{bool}{Hide}{\void}
 
 Hides the image. You may wish to call this before updating the window
-contents (perhaps highlighting an item). Then call \helpref{wxDragImage::Move}{wxdragimagemove} 
+contents (perhaps highlighting an item). Then call \helpref{wxDragImage::Move}{wxdragimagemove}
 and \helpref{wxDragImage::Show}{wxdragimageshow}.
 
 \membersection{wxDragImage::Move}\label{wxdragimagemove}
 
 \func{bool}{Move}{\param{const wxPoint\& }{pt}}
 
-Call this to move the image to a new position. The image will only be shown if 
+Call this to move the image to a new position. The image will only be shown if
 \helpref{wxDragImage::Show}{wxdragimageshow} has been called previously (for example
 at the start of the drag).
 
