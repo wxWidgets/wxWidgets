@@ -296,6 +296,7 @@
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
+    src/generic/htmllbox.cpp
     src/generic/laywin.cpp
     src/generic/logg.cpp
     src/generic/numdlgg.cpp
@@ -311,6 +312,8 @@
     src/generic/tipdlg.cpp
     src/generic/tipwin.cpp
     src/generic/treectlg.cpp
+    src/generic/vlbox.cpp
+    src/generic/vscroll.cpp
     src/generic/wizard.cpp
     src/common/appcmn.cpp
     src/common/fontmap.cpp
