@@ -620,9 +620,6 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     if (g_isIdle)
         wxapp_install_idle_handler();
         
-    if (win->m_queuedFullRedraw)
-        return TRUE;
-
 /*
     if (win->GetName() == wxT("htmlWindow"))
     {
@@ -636,48 +633,52 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
     }
 */
                                 
-    win->GetUpdateRegion().Union( gdk_event->area.x,
-                                  gdk_event->area.y,
-                                  gdk_event->area.width,
-                                  gdk_event->area.height );
-
-
-    if (gdk_event->count > 0)
-        return TRUE;
-
-    wxEraseEvent eevent( win->GetId() );
-    eevent.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent(eevent);
-
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
-    win->GetUpdateRegion().Clear();
-    
-    /* The following code will result in all window-less widgets
-       being redrawn if the wxWindows class is given a chance to
-       paint *anything* because it will then be allowed to paint
-       over the window-less widgets */
-       
-    GtkPizza *pizza = GTK_PIZZA (widget);
-        
-    GList *children = pizza->children;
-    while (children)
+    if (!win->m_queuedFullRedraw)
     {
-        GtkPizzaChild *child = (GtkPizzaChild*) children->data;
-        children = children->next;
 
-        GdkEventExpose child_event = *gdk_event;
+        win->GetUpdateRegion().Union( gdk_event->area.x,
+                                      gdk_event->area.y,
+                                      gdk_event->area.width,
+                                      gdk_event->area.height );
 
-        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
-            GTK_WIDGET_DRAWABLE (child->widget))
+        if (gdk_event->count == 0)
         {
-            child_event.area.x = child->widget->allocation.x;
-            child_event.area.y = child->widget->allocation.y;
-            child_event.area.width = child->widget->allocation.width;
-            child_event.area.height = child->widget->allocation.height;
-            gtk_widget_event (child->widget, (GdkEvent*) &child_event);
+            wxEraseEvent eevent( win->GetId() );
+            eevent.SetEventObject( win );
+            win->GetEventHandler()->ProcessEvent(eevent);
+
+            wxPaintEvent event( win->GetId() );
+            event.SetEventObject( win );
+            win->GetEventHandler()->ProcessEvent( event );
+
+            win->GetUpdateRegion().Clear();
+        }
+    
+        /* The following code will result in all window-less widgets
+           being redrawn if the wxWindows class is given a chance to
+           paint *anything* because it will then be allowed to paint
+           over the window-less widgets */
+       
+        GtkPizza *pizza = GTK_PIZZA (widget);
+        
+        GList *children = pizza->children;
+        while (children)
+        {
+            GtkPizzaChild *child = (GtkPizzaChild*) children->data;
+            children = children->next;
+
+            GdkEventExpose child_event = *gdk_event;
+
+            if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+                GTK_WIDGET_DRAWABLE (child->widget) /* &&
+                gtk_widget_intersect (child->widget, &gdk_event->area, &child_event.area)*/ )
+            {
+                child_event.area.x = child->widget->allocation.x;
+                child_event.area.y = child->widget->allocation.y;
+                child_event.area.width = child->widget->allocation.width;
+                child_event.area.height = child->widget->allocation.height;
+                gtk_widget_event (child->widget, (GdkEvent*) &child_event);
+            }
         }
     }
         
@@ -690,8 +691,9 @@ static int gtk_window_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_ev
 
 /* GTK thinks it is clever and filters out a certain amount of "unneeded"
    expose events. We need them, of course, so we override the main event
-   procedure in GtkWidget by giving our own handler for all system events,
-   looking for the expose events and then we can always send them. */
+   procedure in GtkWidget by giving our own handler for all system events.
+   There, we look for expose events ourselves whereas all other events are
+   handled normally. */
 
 gint gtk_window_event_event_callback( GtkWidget *widget, GdkEventExpose *event, wxWindow *win )
 {
@@ -701,7 +703,6 @@ gint gtk_window_event_event_callback( GtkWidget *widget, GdkEventExpose *event, 
         return ret;
     }
 
-    
     return FALSE;
 }
 
@@ -719,18 +720,6 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     if (g_isIdle)
         wxapp_install_idle_handler();
         
-    if (win->m_queuedFullRedraw)
-        return;
-
-    GtkPizza *pizza = GTK_PIZZA (widget);
-        
-    if ( !(GTK_WIDGET_APP_PAINTABLE (widget)) &&
-         (pizza->clear_on_draw))
-    {
-        gdk_window_clear_area( pizza->bin_window,
-                               rect->x, rect->y, rect->width, rect->height);
-    }
-    
 /*
     if (win->GetName() == wxT("htmlWindow"))
     {
@@ -744,33 +733,45 @@ static void gtk_window_draw_callback( GtkWidget *widget, GdkRectangle *rect, wxW
     }
 */
    
-    win->GetUpdateRegion().Union( rect->x, rect->y,
-                                  rect->width, rect->height );
-
-    win->m_clipPaintRegion = TRUE;
-    
-    wxEraseEvent eevent( win->GetId() );
-    eevent.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent(eevent);
-
-    wxPaintEvent event( win->GetId() );
-    event.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( event );
-
-    win->GetUpdateRegion().Clear();
-    
-    win->m_clipPaintRegion = FALSE;
-    
-    GList *children = pizza->children;
-    while (children)
+    GtkPizza *pizza = GTK_PIZZA (widget);
+        
+    if (!win->m_queuedFullRedraw)
     {
-        GtkPizzaChild *child = (GtkPizzaChild*) children->data;
-        children = children->next;
-
-        GdkRectangle child_area;
-        if (gtk_widget_intersect (child->widget, rect, &child_area))
+        if (!(GTK_WIDGET_APP_PAINTABLE (widget)) &&
+             (pizza->clear_on_draw))
         {
-            gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
+            gdk_window_clear_area( pizza->bin_window,
+                               rect->x, rect->y, rect->width, rect->height);
+        }
+    
+        win->GetUpdateRegion().Union( rect->x, rect->y, rect->width, rect->height );
+
+        win->m_clipPaintRegion = TRUE;
+    
+        wxEraseEvent eevent( win->GetId() );
+        eevent.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent(eevent);
+
+        wxPaintEvent event( win->GetId() );
+        event.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( event );
+
+        win->GetUpdateRegion().Clear();
+    
+        win->m_clipPaintRegion = FALSE;
+    
+    
+        GList *children = pizza->children;
+        while (children)
+        {
+            GtkPizzaChild *child = (GtkPizzaChild*) children->data;
+            children = children->next;
+
+            GdkRectangle child_area;
+            if (gtk_widget_intersect (child->widget, rect, &child_area))
+            {
+                gtk_widget_draw (child->widget, &child_area /* (GdkRectangle*) NULL*/ );
+            }
         }
     }
 }
@@ -1921,8 +1922,8 @@ gtk_wxwindow_realized_callback( GtkWidget * WXUNUSED_UNLESS_XIM(widget),
     if ((colormap = gtk_widget_get_colormap (widget)) !=
 	    gtk_widget_get_default_colormap ())
     {
-	attrmask |= GDK_IC_PREEDIT_COLORMAP;
-	attr->preedit_colormap = colormap;
+	    attrmask |= GDK_IC_PREEDIT_COLORMAP;
+	    attr->preedit_colormap = colormap;
     }
 
     attrmask |= GDK_IC_PREEDIT_FOREGROUND;
@@ -2291,6 +2292,9 @@ void wxWindow::PostCreation()
         if (!m_noExpose)
         {
             /* these get reported to wxWindows -> wxPaintEvent */
+            
+            gtk_pizza_set_external( GTK_PIZZA(m_wxwindow), TRUE );
+
             gtk_signal_connect( GTK_OBJECT(m_wxwindow), "event",
                 GTK_SIGNAL_FUNC(gtk_window_event_event_callback), (gpointer)this );
 
@@ -2573,7 +2577,7 @@ void wxWindow::OnInternalIdle()
             m_updateRegion.Clear();
             m_updateRegion.Union( 0,0,m_width,m_height );
             gtk_widget_draw( m_wxwindow, (GdkRectangle*) NULL );
-            
+
             GdkEventMask mask = gdk_window_get_events( GTK_PIZZA(m_wxwindow)->bin_window );
             mask = (GdkEventMask)(mask | GDK_EXPOSURE_MASK);
             gdk_window_set_events( GTK_PIZZA(m_wxwindow)->bin_window, mask );

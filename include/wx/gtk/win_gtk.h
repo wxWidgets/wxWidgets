@@ -67,6 +67,7 @@ struct _GtkPizza
   
     gboolean clear_on_draw;
     gboolean use_filter;
+    gboolean external_expose;
 };
 
 struct _GtkPizzaClass
@@ -89,6 +90,9 @@ void       gtk_pizza_set_clear       (GtkPizza          *pizza,
 					
 void       gtk_pizza_set_filter      (GtkPizza          *pizza,
                                       gboolean           use);		
+					
+void       gtk_pizza_set_external    (GtkPizza          *pizza,
+                                      gboolean           expose);		
 					
 void       gtk_pizza_scroll          (GtkPizza          *pizza,	
                                       gint               dx,

@@ -191,6 +191,7 @@ gtk_pizza_init (GtkPizza *pizza)
 
     pizza->clear_on_draw = TRUE;
     pizza->use_filter = TRUE;
+    pizza->external_expose = FALSE;
 }
 
 GtkWidget*
@@ -250,6 +251,16 @@ gtk_pizza_set_filter (GtkPizza  *pizza,
     pizza->use_filter = use;
 }	
 					
+void       
+gtk_pizza_set_external (GtkPizza  *pizza,
+                        gboolean   expose)
+{
+    g_return_if_fail (pizza != NULL);
+    g_return_if_fail (GTK_IS_PIZZA (pizza));
+
+    pizza->external_expose = expose;
+}
+
 void
 gtk_pizza_put (GtkPizza   *pizza,
                GtkWidget  *widget,
@@ -652,16 +663,77 @@ static void
 gtk_pizza_draw (GtkWidget    *widget,
                 GdkRectangle *area)
 {
-    /* We handle all draws events in window.cpp now. */
-    return;
+    GtkPizza *pizza;
+    GtkPizzaChild *child;
+    GdkRectangle child_area;
+    GList *children;
+
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_PIZZA (widget));
+
+    pizza = GTK_PIZZA (widget);
+
+    /* Sometimes, We handle all expose events in window.cpp now. */
+    if (pizza->external_expose)
+        return;
+
+    children = pizza->children;
+    if ( !(GTK_WIDGET_APP_PAINTABLE (widget)) &&
+         (pizza->clear_on_draw))
+    {
+        gdk_window_clear_area( pizza->bin_window,
+                                area->x, area->y, area->width, area->height);
+    }
+
+    while (children)
+    {
+        child = children->data;
+        children = children->next;
+
+        if (gtk_widget_intersect (child->widget, area, &child_area))
+            gtk_widget_draw (child->widget, &child_area);
+    }
 }
 
 static gint
 gtk_pizza_expose (GtkWidget      *widget,
                   GdkEventExpose *event)
 {
-    /* We handle all expose events in window.cpp now. */
-    return FALSE;
+    GtkPizza *pizza;
+    GtkPizzaChild *child;
+    GdkEventExpose child_event;
+    GList *children;
+
+    g_return_val_if_fail (widget != NULL, FALSE);
+    g_return_val_if_fail (GTK_IS_PIZZA (widget), FALSE);
+    g_return_val_if_fail (event != NULL, FALSE);
+
+    pizza = GTK_PIZZA (widget);
+
+    /* Sometimes, We handle all expose events in window.cpp now. */
+    if (pizza->external_expose)
+        return;
+
+    if (event->window != pizza->bin_window)
+        return FALSE;
+
+    children = pizza->children;
+    while (children)
+    {
+        child = children->data;
+        children = children->next;
+
+        child_event = *event;
+
+        if (GTK_WIDGET_NO_WINDOW (child->widget) &&
+            GTK_WIDGET_DRAWABLE (child->widget) &&
+            gtk_widget_intersect (child->widget, &event->area, &child_event.area))
+        {
+            gtk_widget_event (child->widget, (GdkEvent*) &child_event);
+        }
+    }
+    
+    return TRUE;
 }
 
 static void
