@@ -48,7 +48,6 @@
         $fileflags =~ s/Socket/S/;
         $fileflags =~ s/NotMSW/U/;
         $fileflags =~ s/NotGTK/R/;
-        $fileflags =~ s/NotX11/X11/;
         $fileflags =~ s/NotX/X/;
         $fileflags =~ s/NotOS2/P/;
         $fileflags =~ s/LowLevel/L/;

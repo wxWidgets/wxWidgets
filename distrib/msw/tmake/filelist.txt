@@ -95,7 +95,7 @@ notebook.cpp	Generic	NotWin32,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
 numdlgg.cpp	Generic
 paletteg.cpp	Generic	NotMSW,NotX,NotOS2,NotMGL,NotMac,NotMicro
 panelg.cpp	Generic
-printps.cpp	Generic	NotMSW
+printps.cpp	Generic	NotMSW,NotX11
 prntdlgg.cpp	Generic	NotMSW
 progdlgg.cpp	Generic
 prop.cpp	Generic
@@ -108,7 +108,7 @@ splash.cpp	Generic
 splitter.cpp	Generic
 statline.cpp	Generic	NotMSW,NotGTK,NotOS2,NotMGL,NotMac,NotMicro
 statusbr.cpp	Generic	NotMGL,NotMicro
-tabg.cpp	Generic	NotWin32,NotOS2
+tabg.cpp	Generic	NotWin32,NotOS2,NotX11
 tbarsmpl.cpp	Generic
 textdlgg.cpp	Generic
 tipdlg.cpp	Generic
