@@ -33,19 +33,22 @@ IMPLEMENT_APP(MyApp)
 // MyFrame
 //-----------------------------------------------------------------------------
 
-   enum ids{ ID_ADD_SAMPLE = 1, ID_CLEAR, ID_PRINT,
-             ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
-             ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
-             ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT,
-             ID_PASTE_PRIMARY,
-             ID_FIND,
-             ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
-             ID_TEST, ID_LINEBREAKS_TEST, ID_LONG_TEST, ID_URL_TEST };
+enum ids
+{
+    ID_ADD_SAMPLE = 1, ID_CLEAR, ID_PRINT,
+    ID_PRINT_SETUP, ID_PAGE_SETUP, ID_PREVIEW, ID_PRINT_PS,
+    ID_PRINT_SETUP_PS, ID_PAGE_SETUP_PS,ID_PREVIEW_PS,
+    ID_WRAP, ID_NOWRAP, ID_PASTE, ID_COPY, ID_CUT,
+    ID_PASTE_PRIMARY,
+    ID_FIND,
+    ID_WXLAYOUT_DEBUG, ID_QUIT, ID_CLICK, ID_HTML, ID_TEXT,
+    ID_TEST, ID_LINEBREAKS_TEST, ID_LONG_TEST, ID_URL_TEST
+};
 
 
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
-   BEGIN_EVENT_TABLE(MyFrame,wxFrame)
+BEGIN_EVENT_TABLE(MyFrame,wxFrame)
    EVT_MENU(ID_PRINT, MyFrame::OnPrint)
    EVT_MENU(ID_PREVIEW, MyFrame::OnPrintPreview)
    EVT_MENU(ID_PRINT_SETUP, MyFrame::OnPrintSetup)
@@ -57,7 +60,7 @@ IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
    EVT_MENU    (-1,       MyFrame::OnCommand)
    EVT_COMMAND (-1,-1,    MyFrame::OnCommand)
    EVT_CHAR    (  wxLayoutWindow::OnChar  )
-   END_EVENT_TABLE()
+END_EVENT_TABLE()
 
 
 MyFrame::MyFrame(void) :
@@ -119,8 +122,8 @@ MyFrame::MyFrame(void) :
    m_lwin->SetMouseTracking(true);
    m_lwin->SetEditable(true);
    m_lwin->SetWrapMargin(40);
-   m_lwin->Clear(wxROMAN,16,wxNORMAL,wxNORMAL, false);
    m_lwin->SetFocus();
+   Clear();
 
    // create and set the background bitmap (this will result in a lattice)
    static const int sizeBmp = 10;

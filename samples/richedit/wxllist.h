@@ -520,12 +520,14 @@ public:
    /** Finds the object which covers the screen position xpos in this
        line.
        @param dc the wxDC to use for calculations
+       @param llist the layout list to which this line belongs
        @param xpos the screen x coordinate
        @param offset where to store the difference between xpos and
        the object's head
        @return iterator to the object or NULLIT
    */
    wxLayoutObjectList::iterator FindObjectScreen(wxDC &dc,
+                                                 wxLayoutList *llist,
                                                  CoordType xpos,
                                                  CoordType *offset,
                                                  bool *found = NULL) const ;
@@ -541,9 +543,16 @@ public:
        functions to export the list.
        @return iterator to the first object
    */
-   wxLayoutObjectList::iterator GetFirstObject(void)
+   wxLayoutObjectList::iterator GetFirstObject(void) const
       {
          return m_ObjectList.begin();
+      }
+
+   /** Get the last object in the list.
+    */
+   wxLayoutObjectList::iterator GetLastObject(void) const
+      {
+         return m_ObjectList.tail();
       }
 
    /** Deletes this line, returns pointer to next line.
@@ -600,13 +609,14 @@ public:
        for that position
        @return pointer to the object
    */
-   wxLayoutObject * FindObjectScreen(wxDC &dc, CoordType xpos, bool
-                                     *found = NULL);
+   wxLayoutObject * FindObjectScreen(wxDC &dc,
+                                     CoordType xpos,
+                                     bool *found = NULL);
    /** This sets the style info for the beginning of this line.
        @param si styleinfo structure
     */
    void ApplyStyle(const wxLayoutStyleInfo &si)
-      {   m_StyleInfo = si; }
+      { m_StyleInfo = si; }
 
    //@}
 
@@ -1122,6 +1132,26 @@ public:
    // for wxLayoutLine usage only
    void IncNumLines() { m_numLines++; }
    void DecNumLines() { m_numLines--; }
+
+   /// get the line by number
+   wxLayoutLine *GetLine(CoordType index) const
+   {
+       wxASSERT_MSG( (0 <= index) && (index < (CoordType)m_numLines),
+                     "invalid index" );
+
+       wxLayoutLine *line;
+       CoordType n = index;
+       for ( line = m_FirstLine; line && n-- > 0; line = line->GetNextLine() )
+           ;
+
+       if ( line )
+       {
+          // should be the right one
+          wxASSERT( line->GetLineNumber() == index );
+       }
+
+       return line;
+   }
 
 private:
    /// Clear the list.

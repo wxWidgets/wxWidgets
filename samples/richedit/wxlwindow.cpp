@@ -140,7 +140,8 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
                                  wxDefaultPosition, wxDefaultSize,
                                  wxHSCROLL | wxVSCROLL |
                                  wxBORDER |
-                                 wxWANTS_CHARS)
+                                 wxWANTS_CHARS),
+                m_llist(NULL)
 {
    SetStatusBar(NULL); // don't use statusbar
    m_Editable = false;
@@ -156,14 +157,18 @@ wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
    m_BGbitmap = NULL;
    m_ScrollToCursor = false;
    SetWrapMargin(0);
+
+   // initially the list is empty, so why would we need the scrollbars?
+#if 0
    wxPoint max = m_llist->GetSize();
    SetScrollbars(X_SCROLL_PAGE, Y_SCROLL_PAGE,
                  max.x / X_SCROLL_PAGE + 1, max.y / Y_SCROLL_PAGE + 1);
    EnableScrolling(true, true);
    m_maxx = max.x + X_SCROLL_PAGE;
    m_maxy = max.y + Y_SCROLL_PAGE;
+#endif // 0
 
-   // no scrollbars initially (BTW, why then we do all the stuff above?)
+   // no scrollbars initially
    m_hasHScrollbar =
    m_hasVScrollbar = false;
 
@@ -579,6 +584,18 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
                   m_llist->WrapLine(m_WrapMargin);
                m_llist->LineBreak();
                break;
+
+            case WXK_TAB:
+               {
+                   // TODO should be configurable
+                   static const int tabSize = 8;
+
+                   CoordType x = m_llist->GetCursorPos().x;
+                   size_t numSpaces = tabSize - x % tabSize;
+                   m_llist->Insert(wxString(' ', numSpaces));
+               }
+               break;
+
             default:
                if((!(event.ControlDown() || event.AltDown() || event.MetaDown()))
                   && (keyCode < 256 && keyCode >= 32)
@@ -640,19 +657,10 @@ wxLayoutWindow::ScrollToCursor(void)
    WXLO_DEBUG(("ScrollToCursor: ViewStart is %d/%d", x0, y0));
 
    // Get the size of the visible window:
-   GetClientSize(&x1,&y1);
+   GetClientSize(&x1, &y1);
 
-   // notice that the client size may be (0, 0)...
-   wxASSERT(x1 >= 0 && y1 >= 0);
-
-   // VZ: I think this is false - if you do it here, ResizeScrollbars() won't
-   //     call SetScrollbars() later
-#if 0
-   // As we have the values anyway, use them to avoid unnecessary scrollbar
-   // updates.
-   if(x1 > m_maxx) m_maxx = x1;
-   if(y1 > m_maxy) m_maxy = y1;
-#endif // 0
+   // update the cursor screen position
+   m_llist->Layout(dc);
 
    // Make sure that the scrollbars are at a position so that the cursor is
    // visible if we are editing
@@ -860,9 +868,12 @@ wxLayoutWindow::InternalPaint(const wxRect *updateRect)
 void
 wxLayoutWindow::OnSize(wxSizeEvent &event)
 {
-    ResizeScrollbars();
+   if ( m_llist )
+   {
+      ResizeScrollbars();
+   }
 
-    event.Skip();
+   event.Skip();
 }
 
 // change the range and position of scrollbars

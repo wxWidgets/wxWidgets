@@ -41,10 +41,9 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str)
    if ( !str )
       return;
 
-   // we change the string temporarily inside this function
-   wxString& s = (wxString &)str; // const_cast
-
-   char * cptr = s.GetWriteBuf(s.Len());
+   // we change the string only temporarily inside this function
+   // VZ: I still don't like it... the string data may be shared...
+   char * cptr = (char *)str.c_str(); // const_cast
    const char * begin = cptr;
    char  backup;
 
@@ -70,8 +69,6 @@ void wxLayoutImportText(wxLayoutList *list, wxString const &str)
          break;
       cptr++;
    }
-
-   s.UngetWriteBuf();
 }
 
 static
