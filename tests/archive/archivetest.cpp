@@ -21,13 +21,24 @@
 
 #define WX_TEST_ARCHIVE_ITERATOR
 
+// This sample uses some advanced typedef syntax that messes
+// up MSVC 6 - turn off its warning about it
+#if defined _MSC_VER
+#pragma warning (disable:4284)
+#endif
+
 #include "wx/zipstrm.h"
 #include "wx/mstream.h"
 #include "wx/wfstream.h"
 #include "wx/dir.h"
 #include <string>
 #include <list>
+#include <map>
 #include <sys/stat.h>
+
+using std::string;
+using std::auto_ptr;
+
 
 // Check whether member templates can be used
 //
@@ -200,7 +211,7 @@ wxFileOffset TestOutputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
         }
         if (pos < 0 || pos > SEEK_LIMIT)
             return wxInvalidOffset;
-        m_pos = pos;
+        m_pos = (size_t)pos;
         return m_pos;
     }
     return wxInvalidOffset;
@@ -339,7 +350,7 @@ wxFileOffset TestInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
         }
         if (pos < 0 || pos > TestOutputStream::SEEK_LIMIT)
             return wxInvalidOffset;
-        m_pos = pos;
+        m_pos = (size_t)pos;
         return m_pos;
     }
     return wxInvalidOffset;
@@ -526,9 +537,9 @@ template <class Classes>
 class ArchiveTestCase : public CppUnit::TestCase
 {
 public:
-    ArchiveTestCase(const wxString& name,
+    ArchiveTestCase(string name,
                     int id,
-                    typename Classes::ClassFactoryT *factory,
+                    wxArchiveClassFactory *factory,
                     int options,
                     const wxString& archiver = wxEmptyString,
                     const wxString& unarchiver = wxEmptyString);
@@ -591,7 +602,7 @@ protected:
 
     typedef std::map<wxString, TestEntry*> TestEntries;
     TestEntries m_testEntries;              // test data
-    std::auto_ptr<ClassFactoryT> m_factory; // factory to make classes
+    auto_ptr<ClassFactoryT> m_factory;      // factory to make classes
     int m_options;                          // test options
     wxDateTime m_timeStamp;                 // timestamp to give test entries
     int m_id;                               // select between the possibilites
@@ -599,21 +610,32 @@ protected:
     wxString m_unarchiver;                  // external unarchiver
 };
 
+// Constructor
+// The only way I could get this to compile on VC++ 5.0 was to pass 'factory'
+// as a wxArchiveFactory* then cast it, even then only with some ifdefing.
+//
 template <class Classes>
-ArchiveTestCase<Classes>::ArchiveTestCase(const wxString& name,
-                int id,
-                typename Classes::ClassFactoryT *factory,
-                int options,
-                const wxString& archiver,
-                const wxString& unarchiver)
-                : CppUnit::TestCase(std::string(name.mb_str())),
-                    m_factory(factory),
-                    m_options(options),
-                    m_timeStamp(1, wxDateTime::Mar, 2005, 12, 0),
-                    m_id(id),
-                    m_archiver(archiver),
-                    m_unarchiver(unarchiver)
+ArchiveTestCase<Classes>::ArchiveTestCase(
+    string name,
+    int id,
+    wxArchiveClassFactory *factory,
+    int options,
+    const wxString& archiver,
+    const wxString& unarchiver)
+  :
+    CppUnit::TestCase(name),
+#if defined _MSC_VER && _MSC_VER < 1300
+    m_factory(dynamic_cast<Classes::ClassFactoryT*>(factory)),
+#else
+    m_factory(dynamic_cast<typename Classes::ClassFactoryT*>(factory)),
+#endif
+    m_options(options),
+    m_timeStamp(1, wxDateTime::Mar, 2005, 12, 0),
+    m_id(id),
+    m_archiver(archiver),
+    m_unarchiver(unarchiver)
 {
+    wxASSERT(m_factory.get() != NULL);
 }
     
 template <class Classes>
@@ -721,7 +743,7 @@ TestEntry& ArchiveTestCase<Classes>::Add(const char *name,
 template <class Classes>
 void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out)
 {
-    std::auto_ptr<OutputStreamT> arc(m_factory->NewStream(out));
+    auto_ptr<OutputStreamT> arc(m_factory->NewStream(out));
     TestEntries::iterator it;
 
     OnCreateArchive(*arc);
@@ -744,12 +766,12 @@ void ArchiveTestCase<Classes>::CreateArchive(wxOutputStream& out)
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
-        std::string error_entry((_T(" '") + name + _T("'")).mb_str());
-        std::string error_context(" failed for entry" + error_entry);
+        string error_entry((_T(" '") + name + _T("'")).mb_str());
+        string error_context(" failed for entry" + error_entry);
 
         if ((choices & 2) || testEntry.IsText()) {
             // try PutNextEntry(EntryT *pEntry)
-            std::auto_ptr<EntryT> entry(m_factory->NewEntry());
+            auto_ptr<EntryT> entry(m_factory->NewEntry());
             entry->SetName(name, wxPATH_UNIX);
             if (setIsDir)
                 entry->SetIsDir();
@@ -860,9 +882,9 @@ template <class Classes>
 void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
                                              wxOutputStream& out)
 {
-    std::auto_ptr<InputStreamT> arcIn(m_factory->NewStream(in));
-    std::auto_ptr<OutputStreamT> arcOut(m_factory->NewStream(out));
-    std::auto_ptr<EntryT> entry;
+    auto_ptr<InputStreamT> arcIn(m_factory->NewStream(in));
+    auto_ptr<OutputStreamT> arcOut(m_factory->NewStream(out));
+    ;
 
     const wxString deleteName = _T("bin/bin1000");
     const wxString renameFrom = _T("zero/zero1024");
@@ -872,14 +894,19 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
 
     arcOut->CopyArchiveMetaData(*arcIn);
 
-    while (entry.reset(arcIn->GetNextEntry()), entry.get() != NULL) {
-        OnSetNotifier(*entry);
-        wxString name = entry->GetName(wxPATH_UNIX);
+    auto_ptr<EntryT>* pEntry;
+
+    for (pEntry = new auto_ptr<EntryT>(arcIn->GetNextEntry()) ; 
+         pEntry->get() != NULL ; 
+         delete pEntry, pEntry = new auto_ptr<EntryT>(arcIn->GetNextEntry())) 
+    {
+        OnSetNotifier(**pEntry);
+        wxString name = (*pEntry)->GetName(wxPATH_UNIX);
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
-        std::string error_entry((_T(" '") + name + _T("'")).mb_str());
-        std::string error_context(" failed for entry" + error_entry);
+        string error_entry((_T(" '") + name + _T("'")).mb_str());
+        string error_context(" failed for entry" + error_entry);
 
         if (name == deleteName) {
             TestEntries::iterator it = m_testEntries.find(name);
@@ -892,7 +919,7 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
         }
         else {
             if (name == renameFrom) {
-                entry->SetName(renameTo);
+                (*pEntry)->SetName(renameTo);
                 TestEntries::iterator it = m_testEntries.find(renameFrom);
                 CPPUNIT_ASSERT_MESSAGE(
                     "rename failed (already renamed?) for" + error_entry,
@@ -903,9 +930,11 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
             }
 
             CPPUNIT_ASSERT_MESSAGE("CopyEntry" + error_context,
-                arcOut->CopyEntry(entry.release(), *arcIn));
+                arcOut->CopyEntry(pEntry->release(), *arcIn));
         }
     }
+
+    delete pEntry;
 
     // check that the deletion and rename were done
     CPPUNIT_ASSERT(m_testEntries.count(deleteName) == 0);
@@ -917,13 +946,13 @@ void ArchiveTestCase<Classes>::ModifyArchive(wxInputStream& in,
 
     // try adding a new entry
     TestEntry& testEntry = Add(newName.mb_str(), newData);
-    entry.reset(m_factory->NewEntry());
-    entry->SetName(newName);
-    entry->SetDateTime(testEntry.GetDateTime());
-    entry->SetSize(testEntry.GetLength());
-    OnCreateEntry(*arcOut, testEntry, entry.get());
-    OnSetNotifier(*entry);
-    CPPUNIT_ASSERT(arcOut->PutNextEntry(entry.release()));
+    auto_ptr<EntryT> newentry(m_factory->NewEntry());
+    newentry->SetName(newName);
+    newentry->SetDateTime(testEntry.GetDateTime());
+    newentry->SetSize(testEntry.GetLength());
+    OnCreateEntry(*arcOut, testEntry, newentry.get());
+    OnSetNotifier(*newentry);
+    CPPUNIT_ASSERT(arcOut->PutNextEntry(newentry.release()));
     CPPUNIT_ASSERT(arcOut->Write(newData, strlen(newData)).IsOk());
 
     // should work with or without explicit Close
@@ -940,7 +969,7 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in)
     typedef std::list<EntryPtr> Entries;
     typedef typename Entries::iterator EntryIter;
 
-    std::auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
+    auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
     int expectedTotal = m_testEntries.size();
     EntryPtr entry;
     Entries entries;
@@ -953,8 +982,8 @@ void ArchiveTestCase<Classes>::ExtractArchive(wxInputStream& in)
 
         // provide some context for the error message so that we know which
         // iteration of the loop we were on
-        std::string error_entry((_T(" '") + name + _T("'")).mb_str());
-        std::string error_context(" failed for entry" + error_entry);
+        string error_entry((_T(" '") + name + _T("'")).mb_str());
+        string error_context(" failed for entry" + error_entry);
 
         TestEntries::iterator it = m_testEntries.find(name);
         CPPUNIT_ASSERT_MESSAGE(
@@ -1091,8 +1120,8 @@ void ArchiveTestCase<Classes>::VerifyDir(wxString& path, size_t rootlen /*=0*/)
 
             // provide some context for the error message so that we know which
             // iteration of the loop we were on
-            std::string error_entry((_T(" '") + name + _T("'")).mb_str());
-            std::string error_context(" failed for entry" + error_entry);
+            string error_entry((_T(" '") + name + _T("'")).mb_str());
+            string error_context(" failed for entry" + error_entry);
 
             TestEntries::iterator it = m_testEntries.find(name);
             CPPUNIT_ASSERT_MESSAGE(
@@ -1140,7 +1169,7 @@ void ArchiveTestCase<Classes>::TestIterator(wxInputStream& in)
     typedef std::list<EntryT*> ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
 
-    std::auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
+    auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
     size_t count = 0;
 
 #ifdef WXARC_MEMBER_TEMPLATES
@@ -1152,7 +1181,7 @@ void ArchiveTestCase<Classes>::TestIterator(wxInputStream& in)
 #endif
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it) {
-        std::auto_ptr<EntryT> entry(*it);
+        auto_ptr<EntryT> entry(*it);
         count += m_testEntries.count(entry->GetName(wxPATH_UNIX));
     }
 
@@ -1169,7 +1198,7 @@ void ArchiveTestCase<Classes>::TestPairIterator(wxInputStream& in)
     typedef std::map<wxString, EntryT*> ArchiveCatalog;
     typedef typename ArchiveCatalog::iterator CatalogIter;
 
-    std::auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
+    auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
     size_t count = 0;
 
 #ifdef WXARC_MEMBER_TEMPLATES
@@ -1177,11 +1206,11 @@ void ArchiveTestCase<Classes>::TestPairIterator(wxInputStream& in)
 #else
     ArchiveCatalog cat;
     for (PairIterT i(*arc); i != PairIterT(); ++i)
-        cat.push_back(*i);
+        cat.insert(*i);
 #endif
 
     for (CatalogIter it = cat.begin(); it != cat.end(); ++it) {
-        std::auto_ptr<EntryT> entry(it->second);
+        auto_ptr<EntryT> entry(it->second);
         count += m_testEntries.count(entry->GetName(wxPATH_UNIX));
     }
 
@@ -1198,7 +1227,7 @@ void ArchiveTestCase<Classes>::TestSmartIterator(wxInputStream& in)
     typedef typename ArchiveCatalog::iterator CatalogIter;
     typedef wxArchiveIterator<InputStreamT, Ptr<EntryT> > Iter;
 
-    std::auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
+    auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
 
 #ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((Iter)*arc, Iter());
@@ -1224,14 +1253,14 @@ void ArchiveTestCase<Classes>::TestSmartPairIterator(wxInputStream& in)
     typedef wxArchiveIterator<InputStreamT,
                 std::pair<wxString, Ptr<EntryT> > > PairIter;
 
-    std::auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
+    auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
 
 #ifdef WXARC_MEMBER_TEMPLATES
     ArchiveCatalog cat((PairIter)*arc, PairIter());
 #else
     ArchiveCatalog cat;
     for (PairIter i(*arc); i != PairIter(); ++i)
-        cat.push_back(*i);
+        cat.insert(*i);
 #endif
 
     CPPUNIT_ASSERT(m_testEntries.size() == cat.size());
@@ -1251,8 +1280,8 @@ void ArchiveTestCase<Classes>::ReadSimultaneous(TestInputStream& in)
 
     // create two archive input streams
     TestInputStream in2(in);
-    std::auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
-    std::auto_ptr<InputStreamT> arc2(m_factory->NewStream(in2));
+    auto_ptr<InputStreamT> arc(m_factory->NewStream(in));
+    auto_ptr<InputStreamT> arc2(m_factory->NewStream(in2));
 
     // load the catalog
 #ifdef WXARC_MEMBER_TEMPLATES
@@ -1260,7 +1289,7 @@ void ArchiveTestCase<Classes>::ReadSimultaneous(TestInputStream& in)
 #else
     ArchiveCatalog cat;
     for (PairIter i(*arc); i != PairIter(); ++i)
-        cat.push_back(*i);
+        cat.insert(*i);
 #endif
 
     // the names of two entries to read
@@ -1330,7 +1359,7 @@ void ArchiveTestCase<Classes>::OnSetNotifier(EntryT& entry)
 class ZipTestCase : public ArchiveTestCase<ZipClasses>
 {
 public:
-    ZipTestCase(const wxString& name,
+    ZipTestCase(string name,
                 int id,
                 int options,
                 const wxString& archiver = wxEmptyString,
@@ -1408,8 +1437,9 @@ void ZipTestCase::OnEntryExtracted(wxZipEntry& entry,
 {
     // provide some context for the error message so that we know which
     // iteration of the loop we were on
-    std::string error_entry((_T(" '") + entry.GetName() + _T("'")).mb_str());
-    std::string error_context(" failed for entry" + error_entry);
+    wxString name = _T(" '") + entry.GetName() + _T("'");
+    string error_entry(name.mb_str());
+    string error_context(" failed for entry" + error_entry);
 
     CPPUNIT_ASSERT_MESSAGE("GetComment" + error_context,
         entry.GetComment() == testEntry.GetComment());
@@ -1456,8 +1486,8 @@ void ZipTestCase::OnSetNotifier(EntryT& entry)
 class ZipPipeTestCase : public CppUnit::TestCase
 {
 public:
-    ZipPipeTestCase(const wxString& name, int options) :
-        CppUnit::TestCase(std::string(name.mb_str())), m_options(options) { }
+    ZipPipeTestCase(string name, int options) :
+        CppUnit::TestCase(name), m_options(options) { }
 
 protected:
     void runTest();
@@ -1480,7 +1510,7 @@ void ZipPipeTestCase::runTest()
     TestInputStream in(out);
     wxZipInputStream zip(in);
 
-    std::auto_ptr<wxZipEntry> entry(zip.GetNextEntry());
+    auto_ptr<wxZipEntry> entry(zip.GetNextEntry());
     CPPUNIT_ASSERT(entry.get() != NULL);
 
     if ((m_options & PipeIn) == 0)
@@ -1516,11 +1546,11 @@ private:
     void AddCmd(wxArrayString& cmdlist, const wxString& cmd);
     bool IsInPath(const wxString& cmd);
 
-    wxString Description(const wxString& type,
-                         int options,
-                         bool genericInterface = false,
-                         const wxString& archiver = wxEmptyString,
-                         const wxString& unarchiver = wxEmptyString);
+    string Description(const wxString& type,
+                       int options,
+                       bool genericInterface = false,
+                       const wxString& archiver = wxEmptyString,
+                       const wxString& unarchiver = wxEmptyString);
 };
 
 ArchiveTestSuite::ArchiveTestSuite()
@@ -1569,13 +1599,13 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                     // unzip doesn't support piping in the zip
                     if ((options & PipeIn) && !i->empty())
                         continue;
-#ifdef WXARC_NO_POPEN 
+#ifdef WXARC_NO_POPEN
                     // if no popen then can use piped output of zip
                     if ((options & PipeOut) && !j->empty())
                         continue;
 #endif
-                    wxString name = Description(_T("wxZip"), options, 
-                                                genInterface != 0, *j, *i);
+                    string name = Description(_T("wxZip"), options, 
+                                              genInterface != 0, *j, *i);
 
                     if (genInterface)
                         addTest(new ArchiveTestCase<ArchiveClasses>(
@@ -1588,11 +1618,11 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                     m_id++;
                 }
 
-#ifndef WXARC_NO_POPEN 
+#ifndef WXARC_NO_POPEN
     // if have popen then can check the piped output of 'zip - -'
     if (IsInPath(_T("zip")))
         for (int options = 0; options <= PipeIn; options += PipeIn) {
-            wxString name = Description(_T("ZipPipeTestCase"), options);
+            string name = Description(_T("ZipPipeTestCase"), options);
             addTest(new ZipPipeTestCase(name, options));
             m_id++;
         }
@@ -1603,11 +1633,11 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
 
 // make a display string for the option bits
 //
-wxString ArchiveTestSuite::Description(const wxString& type,
-                                       int options,
-                                       bool genericInterface,
-                                       const wxString& archiver,
-                                       const wxString& unarchiver)
+string ArchiveTestSuite::Description(const wxString& type,
+                                     int options,
+                                     bool genericInterface,
+                                     const wxString& archiver,
+                                     const wxString& unarchiver)
 {
     wxString descr;
     descr << m_id << _T(" ");
@@ -1635,7 +1665,7 @@ wxString ArchiveTestSuite::Description(const wxString& type,
 
     descr << optstr;
 
-    return descr;
+    return (const char*)descr.mb_str();
 }
 
 // register in the unnamed registry so that these tests are run by default

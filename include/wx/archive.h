@@ -284,14 +284,12 @@ public:
         return it;
     }
 
-    friend bool operator ==(const wxArchiveIterator& i,
-                            const wxArchiveIterator& j) {
-        return i.m_rep == j.m_rep;
+    bool operator ==(const wxArchiveIterator& j) {
+        return (*this).m_rep == j.m_rep;
     }
 
-    friend bool operator !=(const wxArchiveIterator& i,
-                            const wxArchiveIterator& j) {
-        return !(i == j);
+    bool operator !=(const wxArchiveIterator& j) {
+        return !(*this == j);
     }
 
 private:
