@@ -59,6 +59,11 @@ wxHTTP::~wxHTTP()
     delete string;
     node = node->Next();
   }
+
+  if (m_addr) {
+      delete m_addr;
+      m_addr = NULL;
+  }
 }
 
 wxString wxHTTP::GetContentType()
