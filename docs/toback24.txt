@@ -129,16 +129,6 @@ Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.234; previous revision: 1.233
 
-13. wxMSW::wxStaticText::GetBestSize() was wrong by '&' width
-
-http://sf.net/tracker/index.php?func=detail&aid=667324&group_id=9863&atid=109863
-
-Checking in docs/changes.txt;
-/pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
-new revision: 1.235; previous revision: 1.234
-
-src/msw/stattext.cpp: 1.33 -> 1.35
-
 14. wxMSW::wxFrame::Maximize(FALSE) would maximize the window if called before
     showing it
 
