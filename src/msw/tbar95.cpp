@@ -1196,7 +1196,7 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
         {
             COLORREF pixel = ::GetPixel(hdcMem, i, j);
 
-            for ( size_t k = 0; k < numColours; k++ )
+            for ( size_t k = 0; k < WXSIZEOF(ColorMap); k++ )
             {
                 COLORREF col = ColorMap[k].from;
                 if ( abs(GetRValue(pixel) - GetRValue(col)) < 10 &&
