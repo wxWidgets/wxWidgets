@@ -539,18 +539,22 @@ ALL_DIST: distclean
 	mkdir $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.mcp $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
 	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/*.{i,}h $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/*.h $(DISTDIR)/src/regex
 	cp $(REGEXDIR)/*.c $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/{Makefile,COPYRIGHT,README,WHATSNEW} $(DISTDIR)/src/regex
-	cp $(REGEXDIR)/{mkh,tests} $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/Makefile $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/COPYRIGHT $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/README $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/WHATSNEW $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/mkh $(DISTDIR)/src/regex
+	cp $(REGEXDIR)/tests $(DISTDIR)/src/regex
 
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
 ALL_GUI_DIST: ALL_DIST
-	cp $(WXDIR)/wx$(TOOLKIT).spec $(DISTDIR)
 	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp $(DOCDIR)/$(TOOLKITDIR)/install.txt $(DISTDIR)/INSTALL.txt
 	cp $(DOCDIR)/$(TOOLKITDIR)/changes.txt $(DISTDIR)/CHANGES.txt
@@ -599,12 +603,15 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(HTMLDIR)/bitmaps/*.xpm $(DISTDIR)/src/html/bitmaps
 	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
 	cp $(PNGDIR)/*.c $(DISTDIR)/src/png
+	cp $(PNGDIR)/*.mcp $(DISTDIR)/src/png
 	cp $(PNGDIR)/README $(DISTDIR)/src/png
 	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
+	cp $(JPEGDIR)/*.mcp $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
 	cp $(TIFFDIR)/*.h $(DISTDIR)/src/tiff
 	cp $(TIFFDIR)/*.c $(DISTDIR)/src/tiff
+	cp $(TIFFDIR)/*.mcp $(DISTDIR)/src/tiff
 	cp $(TIFFDIR)/README $(DISTDIR)/src/tiff
 	cp $(ODBCDIR)/*.h $(DISTDIR)/src/iodbc
 	cp $(ODBCDIR)/*.c $(DISTDIR)/src/iodbc
@@ -621,10 +628,11 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx/unix
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
+	cp $(WXDIR)/wxBase.spec $(DISTDIR)
 	cp @PORT_FILES@ $(DISTDIR)
 	cp $(WXDIR)/@RPM_FILES@ $(DISTDIR)/@RPM_FILES@
-	cp $(WXDIR)/@RPM_SPEC@ $(DISTDIR)/@RPM_SPEC@
-	cp $(WXDIR)/wxBase*.ds[pw] $(DISTDIR)
+	cp $(WXDIR)/wxBase*.dsp $(DISTDIR)
+	cp $(WXDIR)/wxBase*.dsw $(DISTDIR)
 	cp $(DOCDIR)/changes.txt $(DISTDIR)/CHANGES.txt
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
@@ -650,6 +658,7 @@ BASE_DIST: ALL_DIST
 	cp $(SAMPDIR)/console/testdata.fc $(DISTDIR)/samples/console
 
 GTK_DIST: ALL_GUI_DIST
+	cp $(WXDIR)/wxGTK.spec $(DISTDIR)
 	cp $(INCDIR)/wx/gtk/*.h $(DISTDIR)/include/wx/gtk
 	cp $(INCDIR)/wx/gtk/*.xpm $(DISTDIR)/include/wx/gtk
 	cp $(GTKDIR)/files.lst $(DISTDIR)/src/gtk
@@ -673,23 +682,23 @@ MOTIF_DIST: ALL_GUI_DIST
 
 MACX_DIST: ALL_GUI_DIST
 	cp $(INCDIR)/wx/mac/*.h $(DISTDIR)/include/wx/mac
+	cp $(SRCDIR)/*.mcp $(DISTDIR)/src
 	cp $(MACDIR)/files.lst $(DISTDIR)/src/mac
 	cp $(MACDIR)/*.cpp $(DISTDIR)/src/mac
 	cp $(MACDIR)/*.c $(DISTDIR)/src/mac
 	mkdir $(DISTDIR)/src/mac/morefile
 	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
-	cp $(MACDIR)/morefile/*.cpp $(DISTDIR)/src/mac/morefile
+	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
 	mkdir $(DISTDIR)/src/mac/cdef
 	cp $(MACDIR)/cdef/*.h $(DISTDIR)/src/mac/cdef
-	cp $(MACDIR)/cdef/*.cpp $(DISTDIR)/src/mac/cdef
+	cp $(MACDIR)/cdef/*.c $(DISTDIR)/src/mac/cdef
 	cp $(MACDIR)/cdef/*.mcp $(DISTDIR)/src/mac/cdef
 	mkdir $(DISTDIR)/src/mac/ldef
 	cp $(MACDIR)/ldef/*.h $(DISTDIR)/src/mac/ldef
-	cp $(MACDIR)/ldef/*.cpp $(DISTDIR)/src/mac/ldef
+	cp $(MACDIR)/ldef/*.c $(DISTDIR)/src/mac/ldef
 	cp $(MACDIR)/ldef/*.mcp $(DISTDIR)/src/mac/cdef
-	mkdir $(DISTDIR)/src/mac/morefile
-	cp $(MACDIR)/morefile/*.c $(DISTDIR)/src/mac/morefile
-	cp $(MACDIR)/morefile/*.h $(DISTDIR)/src/mac/morefile
+	mkdir $(DISTDIR)/src/mac/macsock
+	cp $(MACDIR)/macsock/*.lib $(DISTDIR)/src/mac/macsock
 
 MSW_DIST: ALL_GUI_DIST
 	cp $(WXDIR)/wxWINE.spec $(DISTDIR)
@@ -782,6 +791,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/Makefile.in $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/makefile.unx $(DISTDIR)/samples/calendar
+	cp $(SAMPDIR)/calendar/*.mcp $(DISTDIR)/samples/calendar
 	cp $(SAMPDIR)/calendar/*.cpp $(DISTDIR)/samples/calendar
 
 	mkdir $(DISTDIR)/samples/caret
@@ -793,6 +803,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/Makefile.in $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/makefile.unx $(DISTDIR)/samples/checklst
+	cp $(SAMPDIR)/checklst/*.mcp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.cpp $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.xpm $(DISTDIR)/samples/checklst
 	cp $(SAMPDIR)/checklst/*.mms $(DISTDIR)/samples/checklst
@@ -800,6 +811,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/Makefile.in $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/makefile.unx $(DISTDIR)/samples/config
+	cp $(SAMPDIR)/config/*.mcp $(DISTDIR)/samples/config
 	cp $(SAMPDIR)/config/*.cpp $(DISTDIR)/samples/config
 
 	mkdir $(DISTDIR)/samples/console
@@ -811,6 +823,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/controls/icons
 	cp $(SAMPDIR)/controls/Makefile.in $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/makefile.unx $(DISTDIR)/samples/controls
+	cp $(SAMPDIR)/controls/*.mcp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.cpp $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.xpm $(DISTDIR)/samples/controls
 	cp $(SAMPDIR)/controls/*.mms $(DISTDIR)/samples/controls
@@ -826,6 +839,7 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/Makefile.in $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/makefile.unx $(DISTDIR)/samples/dialogs
+	cp $(SAMPDIR)/dialogs/*.mcp $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.cpp $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.h $(DISTDIR)/samples/dialogs
 	cp $(SAMPDIR)/dialogs/*.txt $(DISTDIR)/samples/dialogs
@@ -1218,7 +1232,9 @@ SAMPLES_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/samples/widgets
 	mkdir $(DISTDIR)/samples/widgets/icons
 	cp $(SAMPDIR)/widgets/Makefile.in $(DISTDIR)/samples/widgets
-	cp $(SAMPDIR)/widgets/*.{cpp,h,rc} $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.cpp $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.h $(DISTDIR)/samples/widgets
+	cp $(SAMPDIR)/widgets/*.rc $(DISTDIR)/samples/widgets
 	cp $(SAMPDIR)/widgets/icons/*.xpm $(DISTDIR)/samples/widgets/icons
 
 UTILS_DIST: ALL_GUI_DIST
