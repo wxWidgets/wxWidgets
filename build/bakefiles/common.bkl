@@ -525,7 +525,9 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <mac_version>$(WXMACVERSION)</mac_version>
 
         <!-- version info resources: -->
-        <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
+        <if cond="FORMAT not in ['rpmspec','wx24dsp']"> <!-- FIXME: fix for bkl-0.1.7 only, remove the cond later -->
+            <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
+        </if>
         <win32-res>src/msw/version.rc</win32-res>
     </template>
 
