@@ -52,6 +52,7 @@
 #endif
 
 // use debug CRT functions for memory leak detections in VC++
+/* This still doesn't work for me, Vadim.
 #if defined(__WXDEBUG__) && defined(_MSC_VER)
   // VC++ uses this macro as debug/release mode indicator
   #ifndef _DEBUG
@@ -60,6 +61,7 @@
 
   #include <crtdbg.h>
 #endif
+*/
 
 extern char *wxBuffer;
 extern char *wxOsVersion;
@@ -111,12 +113,14 @@ bool wxApp::Initialize()
 {
   wxBuffer = new char[1500];
 
+/*
   #if defined(__WXDEBUG__) && defined(_MSC_VER)
     // do check for memory leaks on program exit
     // (another useful flag is _CRTDBG_DELAY_FREE_MEM_DF which doesn't free
     //  deallocated memory which may be used to simulate low-memory condition)
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_LEAK_CHECK_DF);
   #endif // debug build under MS VC++
+*/
 
   #if (WXDEBUG && USE_MEMORY_TRACING) || USE_DEBUG_CONTEXT
     #if defined(_WINDLL)
