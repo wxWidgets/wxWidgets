@@ -498,6 +498,7 @@ bool wxListCtrl::GetItem(wxListItem& info) const
 #endif
 
     lvItem.iItem = info.m_itemId;
+    lvItem.iSubItem = info.m_col;
 
     if ( info.m_mask & wxLIST_MASK_TEXT )
     {
