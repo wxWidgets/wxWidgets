@@ -186,6 +186,7 @@ void wxFontRefData::Init(int pointSize,
     // And set its values    
     switch (m_family)
     {
+        case wxFONTFAMILY_MODERN:
         case wxFONTFAMILY_TELETYPE:
            pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
            break;
