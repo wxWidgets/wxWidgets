@@ -272,6 +272,7 @@ public:
     unsigned char *GetAlpha() const;    // may return NULL!
     bool HasAlpha() const { return GetAlpha() != NULL; }
     void SetAlpha(unsigned char *alpha = NULL);
+    void InitAlpha();
 
     // Mask functions
     void SetMaskColour( unsigned char r, unsigned char g, unsigned char b );

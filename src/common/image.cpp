@@ -912,6 +912,44 @@ unsigned char *wxImage::GetAlpha() const
     return M_IMGDATA->m_alpha;
 }
 
+void wxImage::InitAlpha()
+{
+    wxCHECK_RET( !HasAlpha(), wxT("image already has an alpha channel") );
+
+    // initialize memory for alpha channel
+    SetAlpha();
+
+    unsigned char *alpha = M_IMGDATA->m_alpha;
+    const size_t lenAlpha = M_IMGDATA->m_width * M_IMGDATA->m_height;
+
+    static const unsigned char ALPHA_TRANSPARENT = 0;
+    static const unsigned char ALPHA_OPAQUE = 0xff;
+    if ( HasMask() )
+    {
+        // use the mask to initialize the alpha channel.
+        const unsigned char * const alphaEnd = alpha + lenAlpha;
+
+        const unsigned char mr = M_IMGDATA->m_maskRed;
+        const unsigned char mg = M_IMGDATA->m_maskGreen;
+        const unsigned char mb = M_IMGDATA->m_maskBlue;
+        for ( unsigned char *src = M_IMGDATA->m_data;
+              alpha < alphaEnd;
+              src += 3, alpha++ )
+        {
+            *alpha = (src[0] == mr && src[1] == mg && src[2] == mb)
+                            ? ALPHA_TRANSPARENT
+                            : ALPHA_OPAQUE;
+        }
+
+        M_IMGDATA->m_hasMask = false;
+    }
+    else // no mask
+    {
+        // make the image fully opaque
+        memset(alpha, ALPHA_OPAQUE, lenAlpha);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // mask support
 // ----------------------------------------------------------------------------

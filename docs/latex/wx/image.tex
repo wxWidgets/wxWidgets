@@ -639,6 +639,16 @@ Returns true if the given option is present. The function is case-insensitive to
 \helpref{wxImage::GetOptionInt}{wximagegetoptionint}
 
 
+\membersection{wxImage::InitAlpha}\label{wximageinitalpha}
+
+\func{void}{InitAlpha}{\void}
+
+Initializes the image alpha channel data. It is an error to call it
+if the image already has alpha data. If it doesn't, alpha data will be
+by default initialized to all pixels being fully opaque. But if the image has a
+a mask colour, all mask pixels will be completely transparent.
+
+
 \membersection{wxImage::InitStandardHandlers}\label{wximageinitstandardhandlers}
 
 \func{static void}{InitStandardHandlers}{\void}

@@ -53,6 +53,7 @@ All:
 - "Alt" key (VK_MENU) now results in WXK_ALT keyboard event, not WXK_MENU
 - wxFFile::ReadAll() now takes an optional wxMBConv parameter
 - wxCommandProcessor::MarkAsSaved() and IsDirty() added (Angela Wrobel)
+- added wxStackWalker and related classes (Win32 and some Unix versions only)
 
 
 All (GUI):
@@ -74,6 +75,7 @@ All (GUI):
   of the progress (with new "Skip" button in dialog)
 - wxGenericListCtrl::SetItemState(-1) now changes the state of all items as
   in wxMSW version (Gunnar Roth)
+- added wxImage::InitAlpha()
 
 Unix:
 
