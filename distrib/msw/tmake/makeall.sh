@@ -90,6 +90,10 @@ do
 	mgl.t)
 	    echo "Generating $topdir/src/mgl/files.lst for MGL and Configure..."
 	    tmake -t mgl wxwin.pro -o $topdir/src/mgl/files.lst;;
+
+	watmgl.t)
+	    echo "Generating $topdir/src/mgl/makefile.wat for Watcom C++ and MGL+DOS..."
+	    tmake -t watmgl wxwin.pro -o $topdir/src/mgl/makefile.wat;;
     esac
 done
 
