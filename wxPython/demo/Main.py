@@ -67,6 +67,7 @@ _treeList = [
         'FindReplaceDialog',
         'FontDialog',
         'MessageDialog',
+        'MultiChoiceDialog',
         'PageSetupDialog',
         'PrintDialog',
         'ProgressDialog',
