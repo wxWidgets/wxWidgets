@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.2.5"
+VERSION          = "2.2.6"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "robin@alldunn.com"
@@ -28,11 +28,11 @@ on.
 """
 
 
-BUILD_GLCANVAS = 0 #1 # If true, build the contrib/glcanvas extension module
+BUILD_GLCANVAS = 1 # If true, build the contrib/glcanvas extension module
 BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 CORE_ONLY = 0      # if true, don't build any of the above
-GL_ONLY = 0 #1 #0        # Only used when making the -gl RPM.  See the "b" script
+GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
                    # for the ugly details
 
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
@@ -60,7 +60,7 @@ HYBRID = 0         # If set and not debug or FINAL, then build a
                    # wxWindows must have been built with /MD, not /MDd
                    # (using FINAL=hybrid will do it.)
 
-WXDLLVER = '22_5'  # Version part of DLL name
+WXDLLVER = '22_6'  # Version part of DLL name
 
 
 #----------------------------------------------------------------------
@@ -99,7 +99,7 @@ sys.argv = filter(None, sys.argv)
 
 
 if CORE_ONLY:
-    BUILD_GLCANVAS = 0 #0
+    BUILD_GLCANVAS = 0
     BUILD_OGL = 0
     BUILD_STC = 0
 

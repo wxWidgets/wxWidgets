@@ -29,7 +29,7 @@ sit back and enjoy.  Be sure to take a peek at the source code for each
 demo item so you can learn how to use the classes yourself.</p>
 
 <p><b>wxPython</b> is brought to you by <b>Robin Dunn</b> and<br>
-<b>Total Control Software</b>, Copyright (c) 1997-2000.</p>
+<b>Total Control Software</b>, Copyright (c) 1997-2001.</p>
 
 <p>
 <font size="-1">Please see <i>license.txt</i> for licensing information.</font>

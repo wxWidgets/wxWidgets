@@ -50,11 +50,11 @@ multiple sources.  See the http://wxPython.org/ for details on various
 sources of help, but probably the best source is the wxPython-users
 mail list.  You can view the archive or subscribe by going to
 
-       http://lists.sourceforge.net/mailman/listinfo/wxpython-users
+       http://lists.wxwindows.org/mailman/listinfo/wxpython-users
 
 Or you can send mail directly to the list using this address:
 
-       wxpython-users@lists.sourceforge.net
+       wxpython-users@lists.wxwindows.org
 
 
 Other Info
