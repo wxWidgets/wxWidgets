@@ -26,8 +26,6 @@
 
 #if defined(__WIN32__) && !defined(__WXUNIVERSAL__)
     #include "wx/msw/listctrl.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/listctrl.h"
 #else
     #include "wx/generic/listctrl.h"
 #endif

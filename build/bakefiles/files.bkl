@@ -1357,6 +1357,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
     src/generic/imaglist.cpp
+    src/generic/listctrl.cpp
     src/generic/mdig.cpp
     src/generic/msgdlgg.cpp
     src/generic/prntdlgg.cpp
@@ -1400,7 +1401,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/icon.cpp
     src/os2/iniconf.cpp
     src/os2/listbox.cpp
-    src/os2/listctrl.cpp
     src/os2/main.cpp
     src/os2/menu.cpp
     src/os2/menuitem.cpp
@@ -1430,7 +1430,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/os2/toolbar.cpp
     src/os2/tooltip.cpp
     src/os2/toplevel.cpp
-    src/os2/treectrl.cpp
     src/os2/utilsgui.cpp
     src/os2/window.cpp
 </set>
@@ -1439,6 +1438,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/colrdlgg.h
     wx/generic/dirdlgg.h
     wx/generic/fdrepdlg.h
+    wx/generic/listctrl.h
     wx/generic/mdig.h
     wx/generic/statusbr.h
     wx/os2/accel.h
@@ -1476,7 +1476,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/icon.h
     wx/os2/iniconf.h
     wx/os2/listbox.h
-    wx/os2/listctrl.h
     wx/os2/menu.h
     wx/os2/menuitem.h
     wx/os2/metafile.h
@@ -1508,7 +1507,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/toolbar.h
     wx/os2/tooltip.h
     wx/os2/toplevel.h
-    wx/msw/treectrl.h
     wx/os2/window.h
 </set>
 
