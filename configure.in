@@ -19,11 +19,37 @@ dnl the file passed to AC_INIT should be speicific to our package
 AC_INIT(wx-config.in)
 
 AC_CANONICAL_HOST
-AM_INIT_AUTOMAKE(wxWindows, 2.1.0)
+
+dnl When making releases do:
+dnl
+dnl WX_RELEASE_NUMBER += 1
+dnl WX_INTERFACE_AGE += 1
+dnl WX_BINARY_AGE += 1
+dnl
+dnl if any functions have been added, do:
+dnl
+dnl WX_INTERFACE_AGE = 1
 
 WX_MAJOR_VERSION_NUMBER=2
 WX_MINOR_VERSION_NUMBER=1
 WX_RELEASE_NUMBER=0
+
+WX_INTERFACE_AGE=0
+WX_BINARY_AGE=0
+
+WX_VERSION=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER.$WX_RELEASE_NUMBER
+
+AM_INIT_AUTOMAKE(wxWindows, $WX_VERSION)
+
+dnl libtool versioning
+LT_RELEASE=$WX_MAJOR_VERSION_NUMBER.$WX_MINOR_VERSION_NUMBER
+LT_CURRENT=`expr $WX_RELEASE_NUMBER - $WX_INTERFACE_AGE`
+LT_REVISION=$WX_INTERFACE_AGE
+LT_AGE=`expr $WX_BINARY_AGE - $WX_INTERFACE_AGE`
+AC_SUBST(LT_RELEASE)
+AC_SUBST(LT_CURRENT)
+AC_SUBST(LT_REVISION)
+AC_SUBST(LT_AGE)
 
 dnl FIXME this hack suppresses automake 1.4 warning about @LTLIBOBJS@ being
 dnl       never defined in configure.in (remove these lines to see what I'm
@@ -999,7 +1025,10 @@ dnl the symbol which allows conditional compilation for the given toolkit
 TOOLKIT_DEF=-D__WX${TOOLKIT}__
 
 dnl the name of the (libtool) library
-WX_LIBRARY_NAME="libwx_${TOOLKIT_DIR}2.la"
+WX_LIBRARY_NAME="libwx_${TOOLKIT_DIR}.la"
+
+dnl the name of the library to be linked reported by wx-config
+WX_LIBRARY="wx_${TOOLKIT_DIR}"
 
 dnl ------------------------------------------------------------------------
 dnl Check for headers
@@ -1015,7 +1044,7 @@ dnl defines HAVE_WCSTR_H
 AC_CHECK_HEADERS(wcstr.h)
 dnl defines HAVE_FNMATCH_H
 AC_CHECK_HEADERS(fnmatch.h)
-dnl defines HAVE_XKBLIB_H
+dnl defines HAVE_X11_XKBLIB_H
 AC_CHECK_HEADERS(X11/XKBlib.h)
 
 dnl ---------------------------------------------------------------------------
@@ -1860,6 +1889,7 @@ AC_SUBST(WX_MAJOR_VERSION_NUMBER)
 AC_SUBST(WX_MINOR_VERSION_NUMBER)
 AC_SUBST(WX_RELEASE_NUMBER)
 AC_SUBST(WX_LIBRARY_NAME)
+AC_SUBST(WX_LIBRARY)
 
 dnl suppress libtool's informational messages - they duplicate its command line
 LIBTOOL="$LIBTOOL --silent"

@@ -8,6 +8,10 @@ SUBDIRS = generic @TOOLKIT_DIR@ @INCLUDE_SUBDIRS@
 
 wx_includedir = ${includedir}/wx
 wx_include_HEADERS = \
+\
+ arrimpl.cpp \
+ listimpl.cpp \
+\
  accel.h \
  app.h \
  bitmap.h \

@@ -1,3 +1,13 @@
+
+AUTOMAKE_OPTIONS = 1.4 
+# no-dependencies
+
 SUBDIRS = include src samples # utils user docs
 
-pkgdata_SCRIPTS = wx-config
+bin_SCRIPTS = wx-config
+
+configincludedir = $(libdir)/wx/include/wx/$(TOOLKIT_DIR)
+
+configinclude_DATA = \
+	setup.h
+

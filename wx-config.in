@@ -36,7 +36,7 @@ while test $# -gt 0; do
       echo $exec_prefix
       ;;
     --version)
-      echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@
+      echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
       ;;
     --cflags)
       if test @includedir@ != /usr/include ; then
@@ -44,14 +44,14 @@ while test $# -gt 0; do
           includes=-I@includedir@
         fi
       fi
-      includes="$includes -I@datadir@/@PACKAGE@/include"
+      includes="$includes -I@libdir@/wx/include"
       echo $includes @WXDEBUG_DEFINE@ @TOOLKIT_DEF@ @TOOLKIT_INCLUDE@
       ;;
     --libs)
       if test @libdir@ != /usr/lib ; then
         libs="-L@libdir@"
       fi
-      echo $libs -lwx_@WX_LIBRARY@ @EXTRA_LIBS@
+      echo $libs -l@WX_LIBRARY@ @EXTRA_LIBS@
       ;;
     *)
       echo "${usage}" 1>&2

@@ -14,10 +14,10 @@ VPATH = .:${srcdir}:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
 EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 
 lib_LTLIBRARIES = @WX_LIBRARY_NAME@
-EXTRA_LTLIBRARIES = libwx_gtk2.la libwx_motif2.la
+EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la
 
 # these are the common files which always make part of the library
-libwx_gtk2_la_SOURCES = \
+libwx_gtk_la_SOURCES = \
 \
  win_gtk.c \
  extended.c \
@@ -206,6 +206,8 @@ lexer.c: $(srcdir)/../common/lexer.l
 	sed -e "s/unput/PROIO_unput/g"      > lexer.c
 	@$(RM) lex.yy.c
 
-libwx_gtk2_la_LDFLAGS = -rpath @libdir@ -release @WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
-libwx_gtk2_la_LIBADD = $(LTLIBOBJS)
-libwx_gtk2_la_DEPENDENCIES = $(libwx_gtk2_la_LIBADD) lexer.l parser.y
+libwx_gtk_la_LDFLAGS = -rpath @libdir@ \
+	-version-info $(LT_CURRENT):$(LT_REVISION):$(LT_AGE) \
+	-release $(LT_RELEASE)
+libwx_gtk_la_LIBADD = $(LTLIBOBJS)
+libwx_gtk_la_DEPENDENCIES = $(libwx_gtk_la_LIBADD) lexer.l parser.y
