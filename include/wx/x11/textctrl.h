@@ -210,6 +210,8 @@ public:
     virtual bool ScrollPages(int pages);
 
     // not part of the wxTextCtrl API from now on..
+    
+    void SetLanguage( wxSourceLanguage lang = wxSOURCE_LANG_NONE );
 
     void Delete();
     void DeleteLine();
@@ -238,9 +240,12 @@ public:
     void DoReturn();
     void DoDClick();
     
-    wxString GetNextToken( wxString &line, int &pos );
+    wxString GetNextToken( wxString &line, size_t &pos );
+
+    void DrawLinePart( wxDC &dc, int x, int y, const wxString &toDraw, const wxString &origin, const wxColour &colour);
     void DrawLine( wxDC &dc, int x, int y, const wxString &line, int lineNum );
     void OnPaint( wxPaintEvent &event );
+    void OnEraseBackground( wxEraseEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnChar( wxKeyEvent &event );
     void OnIdle( wxIdleEvent &event );

@@ -131,6 +131,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl,wxControl)
 
 BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_PAINT(wxTextCtrl::OnPaint)
+    EVT_ERASE_BACKGROUND(wxTextCtrl::OnEraseBackground)
     EVT_CHAR(wxTextCtrl::OnChar)
     EVT_MOUSE_EVENTS(wxTextCtrl::OnMouse)
     EVT_IDLE(wxTextCtrl::OnIdle)
@@ -395,13 +396,14 @@ int wxTextCtrl::PosToPixel( int line, int pos )
 {
     // TODO add support for Tabs
 
-    if (line >= m_lines.GetCount()) return 0;
+    if (line >= (int)m_lines.GetCount()) return 0;
+    if (pos < 0) return 0;
     
     wxString text = m_lines[line].m_text;
     
     if (text.IsEmpty()) return 0;
     
-    if (pos < text.Len())
+    if (pos < (int)text.Len())
         text.Remove( pos, text.Len()-pos );
         
     int w = 0;
@@ -415,7 +417,7 @@ int wxTextCtrl::PixelToPos( int line, int pixel )
 {
     if (pixel < 2) return 0;
     
-    if (line >= m_lines.GetCount()) return 0;
+    if (line >= (int)m_lines.GetCount()) return 0;
     
     wxString text = m_lines[line].m_text;
     
@@ -433,6 +435,191 @@ int wxTextCtrl::PixelToPos( int line, int pixel )
     }
     
     return 0;
+}
+
+void wxTextCtrl::SetLanguage( wxSourceLanguage lang )
+{
+    m_lang = lang;
+    
+    m_keywords.Clear();
+
+    if (m_lang == wxSOURCE_LANG_PYTHON)
+    {
+        m_keywords.Add( "class" );
+        m_keywords.Add( "__init__" );
+        m_keywords.Add( "return" );
+        m_keywords.Add( "def" );
+        m_keywords.Add( "try" );
+        m_keywords.Add( "except" );
+        m_keywords.Add( "if" );
+        m_keywords.Add( "else" );
+        m_keywords.Add( "finally" );
+        m_keywords.Add( "for" );
+        m_keywords.Add( "if" );
+        m_keywords.Add( "elif" );
+        m_keywords.Add( "in" );
+        m_keywords.Add( "and" );
+        m_keywords.Add( "del" );
+        m_keywords.Add( "is" );
+        m_keywords.Add( "raise" );
+        m_keywords.Add( "assert" );
+        m_keywords.Add( "lambda" );
+        m_keywords.Add( "break" );
+        m_keywords.Add( "global" );
+        m_keywords.Add( "not" );
+        m_keywords.Add( "or" );
+        m_keywords.Add( "while" );
+        m_keywords.Add( "continue" );
+        m_keywords.Add( "exec" );
+        m_keywords.Add( "pass" );
+        m_keywords.Add( "print" );
+    } else
+    if (m_lang == wxSOURCE_LANG_PERL)
+    {
+        m_keywords.Add( "main" );
+        m_keywords.Add( "sub" );
+        m_keywords.Add( "shift" );
+        m_keywords.Add( "push" );
+        m_keywords.Add( "split" );
+        m_keywords.Add( "join" );
+        m_keywords.Add( "chop" );
+        m_keywords.Add( "grep" );
+        m_keywords.Add( "open" );
+        m_keywords.Add( "print" );
+        m_keywords.Add( "sprint" );
+        m_keywords.Add( "printf" );
+        m_keywords.Add( "sprintf" );
+        m_keywords.Add( "my" );
+        m_keywords.Add( "local" );
+        m_keywords.Add( "exit" );
+        m_keywords.Add( "die" );
+        m_keywords.Add( "return" );
+        m_keywords.Add( "for" );
+        m_keywords.Add( "foreach" );
+        m_keywords.Add( "while" );
+        m_keywords.Add( "unless" );
+        m_keywords.Add( "if" );
+        m_keywords.Add( "next" );
+        m_keywords.Add( "last" );
+        m_keywords.Add( "else" );
+        m_keywords.Add( "elsif" );
+        m_keywords.Add( "ne" );
+        m_keywords.Add( "qe" );
+    }
+    else
+    if (m_lang == wxSOURCE_LANG_CPP)
+    {
+        m_keywords.Add( "class" );
+        m_keywords.Add( "return" );
+        m_keywords.Add( "if" );
+        m_keywords.Add( "then" );
+        m_keywords.Add( "else" );
+        m_keywords.Add( "struct" );
+        m_keywords.Add( "enum" );
+        m_keywords.Add( "while" );
+        m_keywords.Add( "do" );
+        m_keywords.Add( "for" );
+        m_keywords.Add( "continue" );
+        m_keywords.Add( "break" );
+        m_keywords.Add( "switch" );
+        m_keywords.Add( "case" );
+        m_keywords.Add( "goto" );
+        m_keywords.Add( "label" );
+        m_keywords.Add( "inline" );
+        m_keywords.Add( "operator" );
+        m_keywords.Add( "virtual" );
+        m_keywords.Add( "private" );
+        m_keywords.Add( "public" );
+        m_keywords.Add( "protected" );
+        m_keywords.Add( "friend" );
+        m_keywords.Add( "exception" );
+        m_keywords.Add( "throw" );
+        m_keywords.Add( "catch" );
+        m_keywords.Add( "delete" );
+        m_keywords.Add( "new" );
+        m_keywords.Add( "default" );
+        m_keywords.Add( "overload" );
+        m_keywords.Add( "using" );
+        m_keywords.Add( "template" );
+        m_keywords.Add( "try" );
+        m_keywords.Add( "typedef" );
+        m_keywords.Add( "union" );
+        m_keywords.Add( "volatile" );
+        m_keywords.Add( "asm" );
+    }
+    
+    m_defines.Clear();
+
+    if (m_lang == wxSOURCE_LANG_PYTHON)
+    {
+        m_defines.Add( "from" );
+        m_defines.Add( "import" );
+    } else
+    if (m_lang == wxSOURCE_LANG_PERL)
+    {
+        m_defines.Add( "use" );
+        m_defines.Add( "do" );
+        m_defines.Add( "package" );
+        m_defines.Add( "defined" );
+    } else
+    if (m_lang == wxSOURCE_LANG_CPP)
+    {
+        m_defines.Add( "#define" );
+        m_defines.Add( "#if" );
+        m_defines.Add( "#ifndef" );
+        m_defines.Add( "#ifdef" );
+        m_defines.Add( "#else" );
+        m_defines.Add( "#elif" );
+        m_defines.Add( "#endif" );
+        m_defines.Add( "#pragma" );
+        m_defines.Add( "#include" );
+    }
+
+    m_variables.Clear();
+    
+    if (m_lang == wxSOURCE_LANG_PYTHON)
+    {
+        m_variables.Add( "nil" );
+        m_variables.Add( "None" );
+        m_variables.Add( "self" );
+        m_variables.Add( "false" );
+        m_variables.Add( "true" );
+    } else
+    if (m_lang == wxSOURCE_LANG_PERL)
+    {
+        m_variables.Add( "undef" );
+        m_variables.Add( "class" );
+        m_variables.Add( "this" );
+        m_variables.Add( "IN" );
+        m_variables.Add( "OUT" );
+        m_variables.Add( "STDIN" );
+        m_variables.Add( "STDOUT" );
+        m_variables.Add( "STDERR" );
+    } else
+    if (m_lang == wxSOURCE_LANG_CPP)
+    {
+        m_variables.Add( "int" );
+        m_variables.Add( "bool" );
+        m_variables.Add( "void" );
+        m_variables.Add( "long" );
+        m_variables.Add( "short" );
+        m_variables.Add( "const" );
+        m_variables.Add( "signed" );
+        m_variables.Add( "unsigned" );
+        m_variables.Add( "char" );
+        m_variables.Add( "size_t" );
+        m_variables.Add( "wchar_t" );
+        m_variables.Add( "NULL" );
+        m_variables.Add( "this" );
+        m_variables.Add( "TRUE" );
+        m_variables.Add( "FALSE" );
+        m_variables.Add( "float" );
+        m_variables.Add( "double" );
+        m_variables.Add( "register" );
+        m_variables.Add( "extern" );
+        m_variables.Add( "static" );
+        m_variables.Add( "sizeof" );
+    }
 }
 
 void wxTextCtrl::WriteText(const wxString& text2)
@@ -1112,6 +1299,9 @@ void wxTextCtrl::DoChar( char c )
     CalcScrolledPosition( x, y, &x, &y );
     wxRect rect( x+2, y+2, 10000, m_lineHeight );
     Refresh( TRUE, &rect );
+    // refresh whole line for syntax colour highlighting
+    rect.x = 0;
+    Refresh( FALSE, &rect );
     
     int size_x = 0;
     int size_y = 0;
@@ -1168,6 +1358,9 @@ void wxTextCtrl::DoBack()
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 10000, m_lineHeight );
         Refresh( TRUE, &rect );
+        // refresh whole line for syntax colour highlighting
+        rect.x = 0;
+        Refresh( FALSE, &rect );
     }
 }
 
@@ -1208,6 +1401,9 @@ void wxTextCtrl::DoDelete()
         CalcScrolledPosition( x, y, &x, &y );
         wxRect rect( x+2, y+2, 10000, m_lineHeight );
         Refresh( TRUE, &rect );
+        // refresh whole line for syntax colour highlighting
+        rect.x = 0;
+        Refresh( FALSE, &rect );
     }
 }
 
@@ -1304,17 +1500,17 @@ void wxTextCtrl::DoDClick()
     }
 }
 
-wxString wxTextCtrl::GetNextToken( wxString &line, int &pos )
+wxString wxTextCtrl::GetNextToken( wxString &line, size_t &pos )
 {
     wxString ret;
-    int len = (int)line.Len();
-    for (int p = pos; p < len; p++)
+    size_t len = line.Len();
+    for (size_t p = pos; p < len; p++)
     {
         if ((m_lang == wxSOURCE_LANG_PYTHON) || (m_lang == wxSOURCE_LANG_PERL))
         {
             if (line[p] == '#')
             {
-                for (int q = p; q < len; q++)
+                for (size_t q = p; q < len; q++)
                     ret.Append( line[q] );
                 pos = p;
                 return ret;
@@ -1324,7 +1520,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, int &pos )
         {
             if ((line[p] == '/') && (p+1 < len) && (line[p+1] == '/'))
             {
-                for (int q = p; q < len; q++)
+                for (size_t q = p; q < len; q++)
                     ret.Append( line[q] );
                 pos = p;
                 return ret;
@@ -1334,7 +1530,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, int &pos )
         if (line[p] == '"')
         {
             ret.Append( line[p] );
-            for (int q = p+1; q < len; q++)
+            for (size_t q = p+1; q < len; q++)
             {
                 ret.Append( line[q] );
                 if ((line[q] == '"') && ((line[q-1] != '\\') || (q >= 2 && line[q-2] == '\\')))
@@ -1347,7 +1543,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, int &pos )
         if (line[p] == '\'')
         {
             ret.Append( line[p] );
-            for (int q = p+1; q < len; q++)
+            for (size_t q = p+1; q < len; q++)
             {
                 ret.Append( line[q] );
                 if ((line[q] == '\'') && ((line[q-1] != '\\') || (q >= 2 && line[q-2] == '\\')))
@@ -1363,7 +1559,7 @@ wxString wxTextCtrl::GetNextToken( wxString &line, int &pos )
             (line[p] == '#'))
         {
            ret.Append( line[p] );
-           for (int q = p+1; q < len; q++)
+           for (size_t q = p+1; q < len; q++)
            {
                 if (((line[q] >= 'a') && (line[q] <= 'z')) ||
                    ((line[q] >= 'A') && (line[q] <= 'Z')) ||
@@ -1385,6 +1581,44 @@ wxString wxTextCtrl::GetNextToken( wxString &line, int &pos )
     }
     
     return ret;
+}
+
+void wxTextCtrl::OnEraseBackground( wxEraseEvent &event )
+{
+    event.Skip();
+}
+
+void wxTextCtrl::DrawLinePart( wxDC &dc, int x, int y, const wxString &toDraw, const wxString &origin, const wxColour &colour )
+{
+    size_t pos = 0;
+    size_t len = origin.Len();
+    dc.SetTextForeground( colour );
+    while (pos < len)
+    {
+        while (toDraw[pos] == wxT(' '))
+        {
+            pos++;
+            if (pos == len) return;
+        }
+        
+        size_t start = pos;
+        
+        wxString current;
+        current += toDraw[pos];
+        pos++;
+        while ( (toDraw[pos] == origin[pos]) && (pos < len))
+        {
+            current += toDraw[pos];
+            pos++;
+        }
+        
+        int xx = 0;
+        wxString tmp = origin.Left( start );
+        GetTextExtent( tmp, &xx, NULL, NULL, NULL );
+        xx += x;
+        int yy = y;
+        dc.DrawText( current, xx, yy );
+    }
 }
 
 void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int lineNum )
@@ -1417,6 +1651,7 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
     wxString variable( ' ', line.Len() );
     wxString comment( ' ', line.Len() );
     wxString my_string( ' ', line.Len() );
+    wxString selection( ' ', line.Len() );
     
     if (m_lang != wxSOURCE_LANG_NONE)
     {
@@ -1433,89 +1668,80 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
             }
         }
     
-        int pos = 0;
-        wxString token( GetNextToken( line, pos) );
+        size_t pos = 0;
+        wxString token( GetNextToken( line, pos ) );
         while (!token.IsNull())
         {
             if (m_keywords.Index( token ) != wxNOT_FOUND)
             {
-                int end_pos = pos + (int)token.Len();
-                for (int i = pos; i < end_pos; i++)
+                size_t end_pos = pos + token.Len();
+                for (size_t i = pos; i < end_pos; i++)
                 {
-                    keyword.SetChar( i, line[i] );
-                    line.SetChar( i, ' ' );
+                    keyword[i] = line[i];
+                    line[i] = ' ';
                 }
             } else
             if (m_defines.Index( token ) != wxNOT_FOUND)
             {
-                int end_pos = pos + (int)token.Len();
-                for (int i = pos; i < end_pos; i++)
+                size_t end_pos = pos + token.Len();
+                for (size_t i = pos; i < end_pos; i++)
                 {
-                    define.SetChar( i, line[i] );
-                    line.SetChar( i, ' ' );
+                    define[i] = line[i];
+                    line[i] = ' ';
                 }
             } else
             if ((m_variables.Index( token ) != wxNOT_FOUND) ||
                 ((token.Len() > 2) && (token[0] == 'w') && (token[1] == 'x')))
             {
-                int end_pos = pos + (int)token.Len();
-                for (int i = pos; i < end_pos; i++)
+                size_t end_pos = pos + token.Len();
+                for (size_t i = pos; i < end_pos; i++)
                 {
-                    variable.SetChar( i, line[i] );
-                    line.SetChar( i, ' ' );
+                    variable[i] = line[i];
+                    line[i] = ' ';
                 }
             } else
             if ((token.Len() >= 2) && (token[0] == '/') && (token[1] == '/') && (m_lang == wxSOURCE_LANG_CPP))
             {
-                int end_pos = pos + (int)token.Len();
-                for (int i = pos; i < end_pos; i++)
+                size_t end_pos = pos + token.Len();
+                for (size_t i = pos; i < end_pos; i++)
                 {
-                    comment.SetChar( i, line[i] );
-                    line.SetChar( i, ' ' );
+                    comment[i] = line[i];
+                    line[i] = ' ';
                 }
             } else
             if ((token[0] == '#') &&
                 ((m_lang == wxSOURCE_LANG_PYTHON) || (m_lang == wxSOURCE_LANG_PERL)))
             {
-                int end_pos = pos + (int)token.Len();
-                for (int i = pos; i < end_pos; i++)
+                size_t end_pos = pos + token.Len();
+                for (size_t i = pos; i < end_pos; i++)
                 {
-                    comment.SetChar( i, line[i] );
-                    line.SetChar( i, ' ' );
+                    comment[i] = line[i];
+                    line[i] = ' ';
                 }
-                
             } else
             if ((token[0] == '"') || (token[0] == '\''))
             {
-                int end_pos = pos + (int)token.Len();
-                for (int i = pos; i < end_pos; i++)
+                size_t end_pos = pos + token.Len();
+                for (size_t i = pos; i < end_pos; i++)
                 {
-                    my_string.SetChar( i, line[i] );
-                    line.SetChar( i, ' ' );
+                    my_string[i] = line[i];
+                    line[i] = ' ';
                 }
             }
             pos += token.Len();
-            token = GetNextToken( line, pos);
+            token = GetNextToken( line, pos );
         }
     }
 
     if ((lineNum < selStartY) || (lineNum > selEndY))
     {
-        dc.DrawText( line, x, y );
-        if (m_lang != wxSOURCE_LANG_NONE)
-        {
-            dc.SetTextForeground( m_keywordColour );
-            dc.DrawText( keyword, x, y );
-            dc.SetTextForeground( m_defineColour );
-            dc.DrawText( define, x, y );
-            dc.SetTextForeground( m_variableColour );
-            dc.DrawText( variable, x, y );
-            dc.SetTextForeground( m_commentColour );
-            dc.DrawText( comment, x, y );
-            dc.SetTextForeground( m_stringColour );
-            dc.DrawText( my_string, x, y );
-            dc.SetTextForeground( *wxBLACK );
-        }
+        DrawLinePart( dc, x, y, line, line2, *wxBLACK );
+        DrawLinePart( dc, x, y, selection, line2, *wxWHITE );
+        DrawLinePart( dc, x, y, keyword, line2, m_keywordColour );
+        DrawLinePart( dc, x, y, define, line2, m_defineColour );
+        DrawLinePart( dc, x, y, variable, line2, m_variableColour );
+        DrawLinePart( dc, x, y, comment, line2, m_commentColour );
+        DrawLinePart( dc, x, y, my_string, line2, m_stringColour );
         return;
     }
     
@@ -1527,35 +1753,20 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         int ww = PosToPixel( lineNum, selEndX ) - xx;
         dc.DrawRectangle( xx+2, lineNum*m_lineHeight+2, ww, m_lineHeight );
         
-        if (m_lang != wxSOURCE_LANG_NONE)
+        for (size_t i = (size_t)selStartX; i < (size_t)selEndX; i++)
         {
-            int i;
-            wxString tmp1( line );
-            wxString tmp2( line );
-            
-            for (i = selStartX; i < selEndX; i++)
-                if ((int)tmp1.Len() > i)
-                    tmp1.SetChar( i, ' ' );
-            dc.DrawText( tmp1, x, y );
-            for (i = 0; i < selStartX; i++)
-                if ((int)tmp2.Len() > i)
-                    tmp2.SetChar( i, ' ' );
-            for (i = selEndX; i < (int)tmp2.Len(); i++)
-                if ((int)tmp2.Len() > i)
-                    tmp2.SetChar( i, ' ' );
-            dc.SetTextForeground( *wxWHITE );
-            dc.DrawText( tmp2, x, y );
-            dc.SetTextForeground( *wxBLACK );
+            selection[i] = line[i];
+            line[i] = ' ';
         }
     } else
     if ((lineNum > selStartY) && (lineNum < selEndY))
     {
         dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
-        if (m_lang != wxSOURCE_LANG_NONE)
+        
+        for (size_t i = 0; i < line.Len(); i++)
         {
-            dc.SetTextForeground( *wxWHITE );
-            dc.DrawText( line, x, y );
-            dc.SetTextForeground( *wxBLACK );
+            selection[i] = line[i];
+            line[i] = ' ';
         }
     } else
     if (lineNum == selStartY)
@@ -1564,20 +1775,10 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         int xx = PosToPixel( lineNum, selStartX );
         dc.DrawRectangle( xx+2, lineNum*m_lineHeight+2, 10000, m_lineHeight );
         
-        if (m_lang != wxSOURCE_LANG_NONE)
+        for (size_t i = (size_t)selStartX; i < line.Len(); i++)
         {
-            int i;
-            wxString tmp1( line );
-            wxString tmp2( line );
-            for (i = selStartX; i < (int)tmp1.Len(); i++)
-                tmp1.SetChar( i, ' ' );
-            dc.DrawText( tmp1, x, y );
-            for (i = 0; i < selStartX; i++)
-                if ((int)tmp2.Len() > i)
-                    tmp2.SetChar( i, ' ' );
-            dc.SetTextForeground( *wxWHITE );
-            dc.DrawText( tmp2, x, y );
-            dc.SetTextForeground( *wxBLACK );
+            selection[i] = line[i];
+            line[i] = ' ';
         }
     } else
     if (lineNum == selEndY)
@@ -1586,41 +1787,20 @@ void wxTextCtrl::DrawLine( wxDC &dc, int x, int y, const wxString &line2, int li
         int ww = PosToPixel( lineNum, selEndX );
         dc.DrawRectangle( 0+2, lineNum*m_lineHeight+2, ww, m_lineHeight );
         
-        if (m_lang != wxSOURCE_LANG_NONE)
+        for (size_t i = 0; i < (size_t)selEndX; i++)
         {
-            int i;
-            wxString tmp1( line );
-            wxString tmp2( line );
-            for (i = 0; i < selEndX; i++)
-                if ((int)tmp1.Len() > i)
-                   tmp1.SetChar( i, ' ' );
-            dc.DrawText( tmp1, x, y );
-            for (i = selEndX; i < (int)tmp2.Len(); i++)
-                tmp2.SetChar( i, ' ' );
-            dc.SetTextForeground( *wxWHITE );
-            dc.DrawText( tmp2, x, y );
-            dc.SetTextForeground( *wxBLACK );
+            selection[i] = line[i];
+            line[i] = ' ';
         }
     }
     
-    if (m_lang == wxSOURCE_LANG_NONE)
-    {
-        dc.DrawText( line, x, y );
-    }
-    else
-    {
-        dc.SetTextForeground( m_keywordColour );
-        dc.DrawText( keyword, x, y );
-        dc.SetTextForeground( m_defineColour );
-        dc.DrawText( define, x, y );
-        dc.SetTextForeground( m_variableColour );
-        dc.DrawText( variable, x, y );
-        dc.SetTextForeground( m_commentColour );
-        dc.DrawText( comment, x, y );
-        dc.SetTextForeground( m_stringColour );
-        dc.DrawText( my_string, x, y );
-        dc.SetTextForeground( *wxBLACK );
-    }
+    DrawLinePart( dc, x, y, line, line2, *wxBLACK );
+    DrawLinePart( dc, x, y, selection, line2, *wxWHITE );
+    DrawLinePart( dc, x, y, keyword, line2, m_keywordColour );
+    DrawLinePart( dc, x, y, define, line2, m_defineColour );
+    DrawLinePart( dc, x, y, variable, line2, m_variableColour );
+    DrawLinePart( dc, x, y, comment, line2, m_commentColour );
+    DrawLinePart( dc, x, y, my_string, line2, m_stringColour );
 }
 
 void wxTextCtrl::OnPaint( wxPaintEvent &event )
@@ -2004,12 +2184,13 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
     if ((new_x == m_cursorX) && (new_y == m_cursorY)) return;
 
     bool no_cursor_refresh = FALSE;
+    bool has_selection = HasSelection();
 
     if (shift)
     {
         int x,y,w,h;
         
-        if (!HasSelection())
+        if (!has_selection)
         {
             m_selStartX = m_cursorX;
             m_selStartY = m_cursorY;
@@ -2023,6 +2204,13 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
             }
             else if (new_y == m_selStartY)
             {
+                x = PosToPixel( new_y, m_selStartX );
+                w = PosToPixel( new_y, new_x ) - x;
+                if (w < 0)
+                {
+                    x += w;
+                    w = -w + 2; // +2 for the cursor
+                }
                 y = m_selStartY*m_lineHeight;
                 h = m_lineHeight;
             }
@@ -2086,7 +2274,7 @@ void wxTextCtrl::MoveCursor( int new_x, int new_y, bool shift, bool centre )
     }
     else
     {
-        if (HasSelection())
+        if (has_selection)
         {
             int ry1 = m_selEndY;
             int ry2 = m_selStartY;
