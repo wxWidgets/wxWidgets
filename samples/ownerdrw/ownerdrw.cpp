@@ -26,7 +26,7 @@
 
 #include  "wx/ownerdrw.h"
 #include  "wx/menuitem.h"
-#include  "wx/msw/checklst.h"
+#include  "wx/checklst.h"
 
 // Define a new application type
 class OwnerDrawnApp: public wxApp
@@ -50,7 +50,7 @@ public:
     void OnListboxSelect    (wxCommandEvent& event);
     void OnCheckboxToggle   (wxCommandEvent& event);
     void OnListboxDblClick  (wxCommandEvent& event);
-    bool OnClose            ()                        { return TRUE; }
+    bool OnClose            ()                        { return true; }
 
     DECLARE_EVENT_TABLE()
 
@@ -94,23 +94,25 @@ bool OwnerDrawnApp::OnInit(void)
 
     SetTopWindow(pFrame);
 
-    return TRUE;
+    return true;
 }
 
 // create the menu bar for the main frame
 void OwnerDrawnFrame::InitMenu()
 {
     // Make a menubar
-    wxMenu *file_menu = new wxMenu,
-           *sub_menu  = new wxMenu;
+    wxMenuItem *pItem;
+    wxMenu *file_menu = new wxMenu;
+
+#ifndef __WXUNIVERSAL__
+    wxMenu *sub_menu  = new wxMenu;
 
     // vars used for menu construction
-    wxMenuItem *pItem;
-    wxFont fontLarge(18, wxROMAN, wxNORMAL, wxBOLD, FALSE),
-           fontUlined(12, wxDEFAULT, wxNORMAL, wxNORMAL, TRUE),
-           fontItalic(12, wxMODERN, wxITALIC, wxBOLD, FALSE),
+    wxFont fontLarge(18, wxROMAN, wxNORMAL, wxBOLD, false),
+           fontUlined(12, wxDEFAULT, wxNORMAL, wxNORMAL, true),
+           fontItalic(12, wxMODERN, wxITALIC, wxBOLD, false),
            // should be at least of the size of bitmaps
-           fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, FALSE);
+           fontBmp(14, wxDEFAULT, wxNORMAL, wxNORMAL, false);
 
     // sorry for my artistic skills...
     wxBitmap bmpBell(_T("bell")),
@@ -145,12 +147,12 @@ void OwnerDrawnFrame::InitMenu()
                            _T("checkable item"), wxITEM_CHECK);
     pItem->SetFont(*wxSMALL_FONT);
     file_menu->Append(pItem);
-    file_menu->Check(Menu_Test2, TRUE);
+    file_menu->Check(Menu_Test2, true);
 
     pItem = new wxMenuItem(file_menu, Menu_Test3, _T("&Disabled"), _T("disabled item"));
     pItem->SetFont(*wxNORMAL_FONT);
     file_menu->Append(pItem);
-    file_menu->Enable(Menu_Test3, FALSE);
+    file_menu->Enable(Menu_Test3, false);
 
     file_menu->AppendSeparator();
 
@@ -187,6 +189,8 @@ void OwnerDrawnFrame::InitMenu()
     file_menu->Append(pAboutItem);
 
     file_menu->AppendSeparator();
+#endif
+
     pItem = new wxMenuItem(file_menu, Menu_Quit, _T("&Quit"), _T("Normal item"),
                            wxITEM_NORMAL);
     file_menu->Append(pItem);
@@ -200,7 +204,7 @@ void OwnerDrawnFrame::InitMenu()
 // main frame constructor
 OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
                                  int x, int y, int w, int h)
-         : wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
+         : wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     // set the icon
     SetIcon(wxIcon(_T("mondrian")));
@@ -241,7 +245,9 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
 
     for ( ui = 0; ui < WXSIZEOF(aszChoices); ui += 2 )
     {
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
         m_pListBox->GetItem(ui)->SetBackgroundColour(wxColor(200, 200, 200));
+#endif
     }
 
     m_pListBox->Check(2);
@@ -250,12 +256,6 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
     static const wxChar* aszColors[] = { _T("Red"), _T("Blue"), _T("Pink"),
                                          _T("Green"), _T("Yellow"), 
                                          _T("Black"), _T("Violet")  };
-    struct { unsigned int r, g, b; } aColors[] =
-        {
-            {255,0,0}, {0,0,255}, {255,128,192},
-            {0,255,0}, {255,255,128}, 
-            {0,0,0}, {128,0,255}
-        };
 
     astrChoices = new wxString[WXSIZEOF(aszColors)];
 
@@ -275,6 +275,15 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
             wxLB_OWNERDRAW       // owner-drawn
         );
 
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
+
+    struct { unsigned int r, g, b; } aColors[] =
+        {
+            {255,0,0}, {0,0,255}, {255,128,192},
+            {0,255,0}, {255,255,128}, 
+            {0,0,0}, {128,0,255}
+        };
+
     for ( ui = 0; ui < WXSIZEOF(aszColors); ui++ )
     {
         pListBox->GetItem(ui)->SetTextColour(wxColor(aColors[ui].r,
@@ -285,12 +294,15 @@ OwnerDrawnFrame::OwnerDrawnFrame(wxFrame *frame, wxChar *title,
         {
             pListBox->GetItem(ui)->SetBackgroundColour(wxColor(0, 0, 0));
         }
-
     }
+
+#else
+    wxUnusedVar( pListBox );
+#endif
 
     delete[] astrChoices;
 
-    Show(TRUE);
+    Show(true);
 }
 
 OwnerDrawnFrame::~OwnerDrawnFrame()
@@ -299,7 +311,7 @@ OwnerDrawnFrame::~OwnerDrawnFrame()
 
 void OwnerDrawnFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+    Close(true);
 }
 
 void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& WXUNUSED(event))
@@ -307,7 +319,7 @@ void OwnerDrawnFrame::OnMenuToggle(wxCommandEvent& WXUNUSED(event))
     // This example shows the use of bitmaps in ownerdrawn menuitems and is not a good
     // example on how to enable and disable menuitems - this should be done with the help of
     // EVT_UPDATE_UI and EVT_UPDATE_UI_RANGE !
-    pAboutItem->Enable( pAboutItem->IsEnabled() ? FALSE : TRUE );
+    pAboutItem->Enable( pAboutItem->IsEnabled() ? false : true );
 }
 
 void OwnerDrawnFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
