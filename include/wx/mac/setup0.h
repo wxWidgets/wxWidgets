@@ -12,6 +12,9 @@
 #ifndef _WX_SETUP_H_
 #define _WX_SETUP_H_
 
+
+/* --- start common options --- */
+
 // ----------------------------------------------------------------------------
 // global settings
 // ----------------------------------------------------------------------------
@@ -75,11 +78,7 @@
 // Default is 1.
 //
 // Recommended setting: 1 but see comment above
-#ifndef __MWERKS__
 #define wxUSE_DEBUG_CONTEXT       0
-#else
-#define wxUSE_DEBUG_CONTEXT       1
-#endif
 
 // If 1, enables debugging versions of wxObject::new and wxObject::delete *IF*
 // __WXDEBUG__ is also defined.
@@ -216,11 +215,7 @@
 #define wxUSE_STREAMS       1
 
 // Use standard C++ streams if 1. If 0, use wxWin streams implementation.
-#ifndef __MWERKS__
 #define wxUSE_STD_IOSTREAM  0
-#else
-#define wxUSE_STD_IOSTREAM  1
-#endif
 
 // Use serialization (requires utils/serialize)
 #define wxUSE_SERIAL        0
@@ -943,6 +938,39 @@
 // If 1, enables provision of run-time type information.
 // NOW MANDATORY: don't change.
 #define wxUSE_DYNAMIC_CLASSES     1
+
+/* --- end common options --- */
+
+// ----------------------------------------------------------------------------
+// Mac-specific settings
+// ----------------------------------------------------------------------------
+
+// override some settings for Metrowerks
+//
+// VZ: isn't this file only used when building with Metrowerks anyhow?
+#ifdef __MWERKS__
+    #undef wxUSE_DEBUG_CONTEXT
+    #define wxUSE_DEBUG_CONTEXT 1
+
+    #undef wxUSE_STD_IOSTREAM
+    #define wxUSE_STD_IOSTREAM  1
+#endif
+
+// things not implemented under Mac
+#undef wxUSE_POPUPWIN
+#define wxUSE_POPUPWIN 0
+
+#undef wxUSE_TIPWINDOW
+#define wxUSE_TIPWINDOW 0
+
+#undef wxUSE_TOGGLEBTN
+#define wxUSE_TOGGLEBTN 0
+
+// wxWebKit is a wrapper for Apple's WebKit framework, use it if you want to
+// embed the Safari browser control
+// 0 by default because of Jaguar compatibility problems
+#define wxUSE_WEBKIT        0
+
 
 // Set to 0 for no libmspack
 #define wxUSE_LIBMSPACK     0
