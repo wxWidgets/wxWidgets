@@ -32,10 +32,18 @@
 // check that the page index is valid
 #define IS_VALID_PAGE(nPage) (((nPage) >= 0) && ((nPage) < GetPageCount()))
 
+#ifdef __WXMAC_X__
+  // I got these values for Mac OS X from the Appearance mgr docs. (Mark Newsam)
+const short kwxMacTabLeftMargin = 20 ;
+const short kwxMacTabTopMargin = 38 ;
+const short kwxMacTabRightMargin = 20 ;
+const short kwxMacTabBottomMargin = 12 ;
+#else
 const short kwxMacTabLeftMargin = 16 ;
 const short kwxMacTabTopMargin = 30 ;
 const short kwxMacTabRightMargin = 16 ;
 const short kwxMacTabBottomMargin = 16 ;
+#endif
 
 // ----------------------------------------------------------------------------
 // event table
@@ -68,6 +76,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxNotebookEvent, wxCommandEvent)
 // common part of all ctors
 void wxNotebook::Init()
 {
+#ifdef __WXMAC_X__
+    m_macHorizontalBorder = 7;
+    m_macVerticalBorder = 8;
+#endif
     m_pImageList = NULL;
     m_nSelection = -1;
 }
@@ -135,15 +147,16 @@ int wxNotebook::SetSelection(int nPage)
     wxASSERT( IS_VALID_PAGE(nPage) );
 
     ChangePage(m_nSelection, nPage);
-		SetControlValue( m_macControl , m_nSelection + 1 ) ;
-//	Boolean enabled = true ;
-	
-//	SetControlData( m_macControl, m_nSelection + 1, kControlTabEnabledFlagTag, sizeof( Boolean ), (Ptr)&enabled );
+	SetControlValue( m_macControl , m_nSelection + 1 ) ;
+
     return m_nSelection;
 }
 
 void wxNotebook::AdvanceSelection(bool bForward)
 {
+    if (GetPageCount() == 0) {
+        return;
+    }
     int nSel = GetSelection();
     int nMax = GetPageCount() - 1;
     if ( bForward )
@@ -156,16 +169,19 @@ bool wxNotebook::SetPageText(int nPage, const wxString& strText)
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
-    // TODO
-    return FALSE;
+    wxNotebookPage *page = m_aPages[nPage];
+    page->SetLabel(strText);
+    MacSetupTabs();
+
+    return true;
 }
 
 wxString wxNotebook::GetPageText(int nPage) const
 {
     wxASSERT( IS_VALID_PAGE(nPage) );
 
-    // TODO
-    return wxString("");
+    wxNotebookPage *page = m_aPages[nPage];
+    return page->GetLabel();
 }
 
 int wxNotebook::GetPageImage(int nPage) const
@@ -199,12 +215,19 @@ bool wxNotebook::DeletePage(int nPage)
 {
     wxCHECK( IS_VALID_PAGE(nPage), FALSE );
 
-    // TODO: delete native widget page
-
     delete m_aPages[nPage];
     m_aPages.Remove(nPage);
 
-    return TRUE;
+    MacSetupTabs();
+
+    if(m_nSelection >= GetPageCount()) {
+        m_nSelection = GetPageCount() - 1;
+    }
+    if(m_nSelection >= 0) {
+        m_aPages[m_nSelection]->Show(true);
+    }
+
+    return true;
 }
 
 // remove one page from the notebook, without deleting the window
@@ -229,6 +252,8 @@ bool wxNotebook::DeleteAllPages()
 
     m_aPages.Clear();
 
+    MacSetupTabs();
+
     return TRUE;
 }
 
@@ -251,38 +276,68 @@ bool wxNotebook::InsertPage(int nPage,
     wxASSERT( pPage != NULL );
     wxCHECK( IS_VALID_PAGE(nPage) || nPage == GetPageCount(), FALSE );
 
-		ControlTabInfoRec tie ;
-		Boolean enabled = true ;
-		if ( nPage + 1 > GetControlMaximum( m_macControl ) )
-		{
-			SetControlMaximum( m_macControl , nPage + 1 ) ;
-		}
-		
-		tie.version = 0 ;
-		tie.iconSuiteID = 0 ;
-#if TARGET_CARBON
-		c2pstrcpy( (StringPtr) tie.name , strText ) ;
-#else
-		strcpy( (char *) tie.name , strText ) ;
-		c2pstr( (char *) tie.name ) ;
-#endif
-		SetControlData( m_macControl, nPage + 1, kControlTabInfoTag , sizeof( ControlTabInfoRec) , (char*) &tie ) ;
-		SetControlData( m_macControl, m_nSelection + 1, kControlTabEnabledFlagTag, sizeof( Boolean ), (Ptr)&enabled );
+    pPage->SetLabel(strText);
 
     // save the pointer to the page
     m_aPages.Insert(pPage, nPage);
 
-    // some page must be selected: either this one or the first one if there is 
-    // still no selection
-    if ( bSelect )
+    MacSetupTabs();
+
+    if ( bSelect ) {
         m_nSelection = nPage;
-    else if ( m_nSelection == -1 )
+    }
+    else if ( m_nSelection == -1 ) {
         m_nSelection = 0;
+    }
+    else if (m_nSelection >= nPage) {
+        m_nSelection++;
+    }
+    // don't show pages by default (we'll need to adjust their size first)
+    pPage->Show( false ) ;
 
-  	// don't show pages by default (we'll need to adjust their size first)
-	 	pPage->Show( FALSE ) ;
+    int h, w;
+    GetSize(&w, &h);
+    pPage->SetSize(kwxMacTabLeftMargin, kwxMacTabTopMargin,
+                   w - kwxMacTabLeftMargin - kwxMacTabRightMargin,
+                   h - kwxMacTabTopMargin - kwxMacTabBottomMargin );
+    if ( pPage->GetAutoLayout() ) {
+        pPage->Layout();
+    }
 
-    return TRUE;
+    return true;
+}
+
+/* Added by Mark Newsam
+ * When a page is added or deleted to the notebook this function updates
+ * information held in the m_macControl so that it matches the order
+ * the user would expect.
+ */
+void wxNotebook::MacSetupTabs()
+{
+    SetControlMaximum( m_macControl , GetPageCount() ) ;
+
+    wxNotebookPage *page;
+    ControlTabInfoRec info;
+    Boolean enabled = true;
+    for(int ii = 0; ii < GetPageCount(); ii++)
+    {
+        page = m_aPages[ii];
+        info.version = 0;
+        info.iconSuiteID = 0;
+#if TARGET_CARBON
+		c2pstrcpy( (StringPtr) info.name , page->GetLabel() ) ;
+#else
+		strcpy( (char *) info.name , page->GetLabel() ) ;
+		c2pstr( (char *) info.name ) ;
+#endif
+        SetControlData( m_macControl, ii+1, kControlTabInfoTag,
+                        sizeof( ControlTabInfoRec) , (char*) &info ) ;
+        SetControlData( m_macControl, ii+1, kControlTabEnabledFlagTag,
+                        sizeof( Boolean ), (Ptr)&enabled );
+    }
+    Rect bounds;
+    GetControlBounds(m_macControl, &bounds);
+    InvalWindowRect(GetMacRootWindow(), &bounds);
 }
 
 // ----------------------------------------------------------------------------
@@ -314,11 +369,12 @@ void wxNotebook::OnSize(wxSizeEvent& event)
     unsigned int nCount = m_aPages.Count();
     for ( unsigned int nPage = 0; nPage < nCount; nPage++ ) {
         wxNotebookPage *pPage = m_aPages[nPage];
-        pPage->SetSize(kwxMacTabLeftMargin, kwxMacTabTopMargin, w - kwxMacTabLeftMargin - kwxMacTabRightMargin,
-        	h - kwxMacTabTopMargin - kwxMacTabBottomMargin );
-//        pPage->SetSize(0, 0, w, h);
-        if ( pPage->GetAutoLayout() )
+        pPage->SetSize(kwxMacTabLeftMargin, kwxMacTabTopMargin,
+                       w - kwxMacTabLeftMargin - kwxMacTabRightMargin,
+                       h - kwxMacTabTopMargin - kwxMacTabBottomMargin );
+        if ( pPage->GetAutoLayout() ) {
             pPage->Layout();
+        }
     }
 
     // Processing continues to next OnSize
@@ -388,17 +444,18 @@ void wxNotebook::Command(wxCommandEvent& event)
 // hide the currently active panel and show the new one
 void wxNotebook::ChangePage(int nOldSel, int nSel)
 {
-  // it's not an error (the message may be generated by the tab control itself)
-  // and it may happen - just do nothing
-  if ( nSel == nOldSel )
-  {
-    wxNotebookPage *pPage = m_aPages[nSel];
-   	pPage->Show(FALSE);
-   	pPage->Show(TRUE);
- 	pPage->SetFocus();
-    return;
-  }
+    // it's not an error (the message may be generated by the tab control itself)
+    // and it may happen - just do nothing
+    if ( nSel == nOldSel )
+    {
+        wxNotebookPage *pPage = m_aPages[nSel];
+        pPage->Show(FALSE);
+        pPage->Show(TRUE);
+        pPage->SetFocus();
+        return;
+    }
 
+    // Hide previous page
     if ( nOldSel != -1 ) {
         m_aPages[nOldSel]->Show(FALSE);
     }

@@ -144,12 +144,13 @@ public:
   virtual bool DoPhase(int nPhase);
 
 protected:
-	virtual void 						MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
   // common part of all ctors
   void Init();
 
   // helper functions
   void ChangePage(int nOldSel, int nSel); // change pages
+  void MacSetupTabs();
 
   wxImageList  *m_pImageList; // we can have an associated image list
   wxArrayPages  m_aPages;     // array of pages
