@@ -10,7 +10,11 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-%module webkit
+%define DOCSTRING
+"wx.webkit.WebKitCtrl for Mac OSX."
+%enddef
+
+%module(package="wx", docstring=DOCSTRING) webkit
 
 %{
 
@@ -83,16 +87,46 @@ public:
     wxString GetPageSource() { return wxEmptyString; }
     void SetPageSource(wxString& source, const wxString& baseUrl = wxEmptyString) {}
 };
+
+
+enum {
+    wxWEBKIT_STATE_START = 0,
+    wxWEBKIT_STATE_NEGOTIATING = 0,
+    wxWEBKIT_STATE_REDIRECTING = 0,
+    wxWEBKIT_STATE_TRANSFERRING = 0,
+    wxWEBKIT_STATE_STOP = 0,
+    wxWEBKIT_STATE_FAILED = 0,
+};
+
+class wxWebKitStateChangedEvent : public wxCommandEvent
+{
+public:
+    wxWebKitStateChangedEvent( wxWindow* win =  NULL )
+    { wxPyRaiseNotImplemented(); }
+
+    int GetState() { return 0 }
+    void SetState(const int state) {}
+    wxString GetURL() { return wxEmptyString; }
+    void SetURL(const wxString& url) {}
+};
+
+ 
 #endif
 %}
 
-// Now define it for SWIG.
+// Now define it for SWIG, usign either the real class or the dummy above.
+
+MustHaveApp(wxWebKitCtrl);
+
 class wxWebKitCtrl : public wxControl
 {
 public:
+    %pythonAppend wxWebKitCtrl         "self._setOORInfo(self)"
+    %pythonAppend wxWebKitCtrl()       ""
+    
     wxWebKitCtrl(wxWindow *parent,
-                    wxWindowID winID,
-                    const wxString& strURL,
+                    wxWindowID winID = -1,
+                    const wxString& strURL = wxPyEmptyString,
                     const wxPoint& pos = wxDefaultPosition,
                     const wxSize& size = wxDefaultSize, long style = 0,
                     const wxValidator& validator = wxDefaultValidator,
@@ -102,8 +136,8 @@ public:
 
     
     bool Create(wxWindow *parent,
-                wxWindowID winID,
-                const wxString& strURL,
+                wxWindowID winID = -1,
+                const wxString& strURL = wxPyEmptyString,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize, long style = 0,
                 const wxValidator& validator = wxDefaultValidator,
@@ -123,6 +157,43 @@ public:
 };
 
 
+//---------------------------------------------------------------------------
+
+
+enum {
+    wxWEBKIT_STATE_START,
+    wxWEBKIT_STATE_NEGOTIATING,
+    wxWEBKIT_STATE_REDIRECTING,
+    wxWEBKIT_STATE_TRANSFERRING,
+    wxWEBKIT_STATE_STOP,
+    wxWEBKIT_STATE_FAILED,
+};
+
+
+%constant wxEventType wxEVT_WEBKIT_STATE_CHANGED;
+
+
+class wxWebKitStateChangedEvent : public wxCommandEvent
+{
+public:
+    wxWebKitStateChangedEvent( wxWindow* win =  NULL );
+
+    int GetState();
+    void SetState(const int state);
+    wxString GetURL();
+    void SetURL(const wxString& url);
+};
+
+
+%pythoncode %{
+    EVT_WEBKIT_STATE_CHANGED = wx.PyEventBinder(wxEVT_WEBKIT_STATE_CHANGED)
+%}
+
+
+//---------------------------------------------------------------------------
+
 %init %{
 
 %}
+
+//---------------------------------------------------------------------------
