@@ -350,7 +350,7 @@ void wxToolTip::SetWindow(wxWindow *win)
     wxControl *control = wxDynamicCast(m_window, wxControl);
     if ( control )
     {
-        const wxArrayLong subcontrols = control->GetSubcontrols();
+        const wxArrayLong& subcontrols = control->GetSubcontrols();
         size_t count = subcontrols.GetCount();
         for ( size_t n = 0; n < count; n++ )
         {

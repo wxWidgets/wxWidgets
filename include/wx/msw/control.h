@@ -58,7 +58,7 @@ public:
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
     virtual bool MSWOnMeasure(WXMEASUREITEMSTRUCT *WXUNUSED(item)) { return FALSE; };
 
-    wxArrayLong GetSubcontrols() { return m_subControls; }
+    const wxArrayLong& GetSubcontrols() const { return m_subControls; }
 
     void OnEraseBackground(wxEraseEvent& event);
 
