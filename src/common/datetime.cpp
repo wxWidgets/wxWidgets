@@ -3371,24 +3371,16 @@ const wxChar *wxDateTime::ParseTime(const wxChar *time)
         }
     }
 
-    // try all time formats we may think about starting with the standard one
-    const wxChar *result = ParseFormat(time, _T("%X"));
+    // try all time formats we may think about in the order from longest to
+    // shortest
+
+    // 12hour with AM/PM?
+    const wxChar *result = ParseFormat(time, _T("%I:%M:%S %p"));
+
     if ( !result )
     {
         // normally, it's the same, but why not try it?
         result = ParseFormat(time, _T("%H:%M:%S"));
-    }
-
-    if ( !result )
-    {
-        // 12hour with AM/PM?
-        result = ParseFormat(time, _T("%I:%M:%S %p"));
-    }
-
-    if ( !result )
-    {
-        // without seconds?
-        result = ParseFormat(time, _T("%H:%M"));
     }
 
     if ( !result )
@@ -3399,14 +3391,27 @@ const wxChar *wxDateTime::ParseTime(const wxChar *time)
 
     if ( !result )
     {
-        // just the hour?
-        result = ParseFormat(time, _T("%H"));
+        // without seconds?
+        result = ParseFormat(time, _T("%H:%M"));
     }
 
     if ( !result )
     {
         // just the hour and AM/PM?
         result = ParseFormat(time, _T("%I %p"));
+    }
+
+    if ( !result )
+    {
+        // just the hour?
+        result = ParseFormat(time, _T("%H"));
+    }
+
+    if ( !result )
+    {
+        // parse the standard format: normally it is one of the formats above
+        // but it may be set to something completely different by the user
+        result = ParseFormat(time, _T("%X"));
     }
 
     // TODO: parse timezones
