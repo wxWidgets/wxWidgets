@@ -408,8 +408,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
 
     wxString strPath;
     ::GetModuleFileName(::GetModuleHandle(NULL),
-                        strPath.GetWriteBuf(MAX_PATH), MAX_PATH);
-    strPath.UngetWriteBuf();
+                        wxStringBuffer(strPath, MAX_PATH), MAX_PATH);
 
     // extract the dir name
     wxSplitPath(strPath, &strDir, NULL, NULL);
@@ -593,8 +592,8 @@ bool wxGetEnv(const wxString& var, wxString *value)
 
     if ( value )
     {
-        (void)::GetEnvironmentVariable(var, value->GetWriteBuf(dwRet), dwRet);
-        value->UngetWriteBuf();
+        (void)::GetEnvironmentVariable(var, wxStringBuffer(*value, dwRet),
+                                       dwRet);
     }
 
     return TRUE;

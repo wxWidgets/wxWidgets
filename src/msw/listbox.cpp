@@ -454,8 +454,7 @@ wxString wxListBox::GetString(int N) const
 
     // +1 for terminating NUL
     wxString result;
-    ListBox_GetText(GetHwnd(), N, result.GetWriteBuf(len + 1));
-    result.UngetWriteBuf();
+    ListBox_GetText(GetHwnd(), N, wxStringBuffer(result, len + 1));
 
     return result;
 }

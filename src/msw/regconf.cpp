@@ -245,7 +245,8 @@ void wxRegConfig::SetPath(const wxString& strPath)
         size_t len = strFullPath.length();
         const wxChar *end = src + len;
 
-        wxChar *dst = m_strPath.GetWriteBuf(len);
+        wxStringBufferLength buf(m_strPath, len);
+        wxChar *dst = buf;
         wxChar *start = dst;
 
         for ( ; src < end; src++, dst++ )
@@ -337,8 +338,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
         }
 
         *dst = _T('\0');
-
-        m_strPath.UngetWriteBuf(dst - start);
+        buf.SetLength(dst - start);
     }
 
 #ifdef WX_DEBUG_SET_PATH
@@ -355,7 +355,8 @@ void wxRegConfig::SetPath(const wxString& strPath)
         size_t len = m_strPath.length();
 
         const wxChar *src = m_strPath.c_str();
-        wxChar *dst = strRegPath.GetWriteBuf(len);
+        wxStringBufferLength buf(strRegPath, len);
+        wxChar *dst = buf;
 
         const wxChar *end = src + len;
         for ( ; src < end; src++, dst++ )
@@ -366,7 +367,7 @@ void wxRegConfig::SetPath(const wxString& strPath)
                 *dst = *src;
         }
 
-        strRegPath.UngetWriteBuf(len);
+        buf.SetLength(len);
     }
 
     // this is not needed any longer as we don't create keys unnecessarily any

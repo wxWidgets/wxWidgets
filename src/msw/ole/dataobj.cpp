@@ -157,8 +157,7 @@ wxString wxDataFormat::GetId() const
     wxCHECK_MSG( !IsStandard(), s,
                  wxT("name of predefined format cannot be retrieved") );
 
-    int len = ::GetClipboardFormatName(m_format, s.GetWriteBuf(max), max);
-    s.UngetWriteBuf();
+    int len = ::GetClipboardFormatName(m_format, wxStringBuffer(s, max), max);
 
     if ( !len )
     {
@@ -999,8 +998,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
         // +1 for terminating NUL
         len = ::DragQueryFile(hdrop, n, NULL, 0) + 1;
 
-        UINT len2 = ::DragQueryFile(hdrop, n, str.GetWriteBuf(len), len);
-        str.UngetWriteBuf();
+        UINT len2 = ::DragQueryFile(hdrop, n, wxStringBuffer(str, len), len);
         m_filenames.Add(str);
 
         if ( len2 != len - 1 ) {
@@ -1171,8 +1169,7 @@ wxString wxURLDataObject::GetURL() const
 
     size_t len = m_dataObjectLast->GetDataSize();
 
-    m_dataObjectLast->GetDataHere(url.GetWriteBuf(len));
-    url.UngetWriteBuf();
+    m_dataObjectLast->GetDataHere(wxStringBuffer(url, len));
 
     return url;
 }

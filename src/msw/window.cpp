@@ -3383,9 +3383,7 @@ bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 
         // and now get the file name
         ::DragQueryFile(hFilesInfo, wIndex,
-                        files[wIndex].GetWriteBuf(len), len);
-
-        files[wIndex].UngetWriteBuf();
+                        wxStringBuffer(files[wIndex], len), len);
     }
     DragFinish (hFilesInfo);
 

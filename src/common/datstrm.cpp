@@ -110,15 +110,13 @@ wxString wxDataInputStream::ReadString()
   if (len > 0)
   {
 #if wxUSE_UNICODE
-    char *tmp = new char[len + 1];
-    m_input->Read(tmp, len);
-    tmp[len] = 0;
-    wxString ret( (const wxChar*) m_conv.cMB2WX(tmp) );
-    delete[] tmp;
+    wxCharBuffer tmp(len + 1);
+    m_input->Read(tmp.data(), len);
+    tmp.data()[len] = '\0';
+    wxString ret(m_conv.cMB2WX(tmp.data()));
 #else
     wxString ret;
-    m_input->Read( ret.GetWriteBuf(len), len);
-    ret.UngetWriteBuf();
+    m_input->Read( wxStringBuffer(ret, len), len);
 #endif
     return ret;
   }

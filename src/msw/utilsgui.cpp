@@ -99,7 +99,7 @@ bool wxGetResource(const wxString& section, const wxString& entry, wxChar **valu
             return FALSE;
     }
     if (*value) delete[] (*value);
-    *value = copystring(buf);
+    *value = wxStrcpy(new wxChar[wxStrlen(buf) + 1], buf);
     return TRUE;
 }
 
@@ -361,8 +361,7 @@ wxString WXDLLEXPORT wxGetWindowText(WXHWND hWnd)
     if ( hWnd )
     {
         int len = GetWindowTextLength((HWND)hWnd) + 1;
-        ::GetWindowText((HWND)hWnd, str.GetWriteBuf(len), len);
-        str.UngetWriteBuf();
+        ::GetWindowText((HWND)hWnd, wxStringBuffer(str, len), len);
     }
 
     return str;
@@ -380,9 +379,8 @@ wxString WXDLLEXPORT wxGetWindowClass(WXHWND hWnd)
 
         for ( ;; )
         {
-            int count = ::GetClassName((HWND)hWnd, str.GetWriteBuf(len), len);
+            int count = ::GetClassName((HWND)hWnd, wxStringBuffer(str, len), len);
 
-            str.UngetWriteBuf();
             if ( count == len )
             {
                 // the class name might have been truncated, retry with larger

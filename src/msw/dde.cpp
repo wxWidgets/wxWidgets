@@ -965,8 +965,7 @@ static wxString DDEStringFromAtom(HSZ hsz)
     static const size_t len = 256;
 
     wxString s;
-    (void)DdeQueryString(DDEIdInst, hsz, s.GetWriteBuf(len), len, DDE_CP);
-    s.UngetWriteBuf();
+    (void)DdeQueryString(DDEIdInst, hsz, wxStringBuffer(s, len), len, DDE_CP);
 
     return s;
 }

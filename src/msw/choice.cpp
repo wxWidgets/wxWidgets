@@ -251,8 +251,6 @@ wxString wxChoice::GetString(int n) const
         {
             wxLogLastError(wxT("SendMessage(CB_GETLBTEXT)"));
         }
-
-        str.UngetWriteBuf();
     }
 
     return str;

@@ -872,14 +872,12 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
             strValue.Empty();
         }
         else {
-            RegString pBuf = (RegString)strValue.GetWriteBuf(dwSize);
             m_dwLastError = RegQueryValueEx((HKEY) m_hKey,
                                             WXSTRINGCAST szValue,
                                             RESERVED,
                                             &dwType,
-                                            pBuf,
+                                            (RegString)(wxChar*)wxStringBuffer(strValue, dwSize),
                                             &dwSize);
-            strValue.UngetWriteBuf();
 
             // expand the var expansions in the string unless disabled
 #ifndef __WXWINCE__
@@ -893,10 +891,9 @@ bool wxRegKey::QueryValue(const wxChar *szValue,
                     ok = ::ExpandEnvironmentStrings
                            (
                             strValue,
-                            strExpValue.GetWriteBuf(dwExpSize),
+                            wxStringBuffer(strExpValue, dwExpSize),
                             dwExpSize
                            ) != 0;
-                    strExpValue.UngetWriteBuf();
                     strValue = strExpValue;
                 }
 

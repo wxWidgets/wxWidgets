@@ -1347,10 +1347,9 @@ wxString wxFileName::GetShortPath() const
         ok = ::GetShortPathName
                (
                 path,
-                pathOut.GetWriteBuf(sz),
+                wxStringBuffer(pathOut, sz),
                 sz
                ) != 0;
-        pathOut.UngetWriteBuf();
     }
     if (ok)
         return pathOut;
@@ -1406,11 +1405,9 @@ wxString wxFileName::GetLongPath() const
                         ok = (*s_pfnGetLongPathName)
                                 (
                                 path,
-                                pathOut.GetWriteBuf(sz),
+                                wxStringBuffer(pathOut, sz),
                                 sz
                                 ) != 0;
-                        pathOut.UngetWriteBuf();
-
                         success = true;
                     }
                 }
@@ -1541,7 +1538,7 @@ void wxFileName::SplitPath(const wxString& fullpathWithVolume,
                 fullpath[posFirstSlash] = wxFILE_SEP_DSK;
 
                 // UNC paths are always absolute, right? (FIXME)
-                fullpath.insert(posFirstSlash + 1, wxFILE_SEP_PATH_DOS);
+                fullpath.insert(posFirstSlash + 1, 1, wxFILE_SEP_PATH_DOS);
             }
         }
     }

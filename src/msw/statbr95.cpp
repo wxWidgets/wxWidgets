@@ -191,8 +191,7 @@ wxString wxStatusBar95::GetStatusText(int nField) const
     int len = StatusBar_GetTextLen(GetHwnd(), nField);
     if ( len > 0 )
     {
-        StatusBar_GetText(GetHwnd(), nField, str.GetWriteBuf(len));
-        str.UngetWriteBuf();
+        StatusBar_GetText(GetHwnd(), nField, wxStringBuffer(str, len));
     }
 
     return str;

@@ -468,29 +468,31 @@ wxString wxTextCtrl::GetRange(long from, long to) const
         int len = GetWindowTextLength(GetHwnd());
         if ( len > from )
         {
-            // alloc one extra WORD as needed by the control
-            wxChar *p = str.GetWriteBuf(++len);
-
-            TEXTRANGE textRange;
-            textRange.chrg.cpMin = from;
-            textRange.chrg.cpMax = to == -1 ? len : to;
-            textRange.lpstrText = p;
-
-            (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
-
-            if ( m_verRichEdit > 1 )
             {
-                // RichEdit 2.0 uses just CR ('\r') for the newlines which is
-                // neither Unix nor Windows style - convert it to something
-                // reasonable
-                for ( ; *p; p++ )
+                // alloc one extra WORD as needed by the control
+                wxStringBuffer tmp(str, ++len);
+                wxChar *p = tmp;
+
+                TEXTRANGE textRange;
+                textRange.chrg.cpMin = from;
+                textRange.chrg.cpMax = to == -1 ? len : to;
+                textRange.lpstrText = p;
+
+                (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE,
+                                  0, (LPARAM)&textRange);
+
+                if ( m_verRichEdit > 1 )
                 {
-                    if ( *p == _T('\r') )
-                        *p = _T('\n');
+                    // RichEdit 2.0 uses just CR ('\r') for the
+                    // newlines which is neither Unix nor Windows
+                    // style - convert it to something reasonable
+                    for ( ; *p; p++ )
+                    {
+                        if ( *p == _T('\r') )
+                            *p = _T('\n');
+                    }
                 }
             }
-
-            str.UngetWriteBuf();
 
             if ( m_verRichEdit == 1 )
             {
@@ -1196,13 +1198,16 @@ wxString wxTextCtrl::GetLineText(long lineNo) const
     len += sizeof(WORD);
 
     wxString str;
-    wxChar *buf = str.GetWriteBuf(len);
+    {
+        wxStringBufferLength tmp(str, len);
+        wxChar *buf = tmp;
 
-    *(WORD *)buf = (WORD)len;
-    len = (size_t)::SendMessage(GetHwnd(), EM_GETLINE, lineNo, (LPARAM)buf);
-    buf[len] = 0;
-
-    str.UngetWriteBuf(len);
+        *(WORD *)buf = (WORD)len;
+        len = (size_t)::SendMessage(GetHwnd(), EM_GETLINE,
+                                    lineNo, (LPARAM)buf);
+        buf[len] = 0;
+        tmp.SetLength(len);
+    }
 
     return str;
 }

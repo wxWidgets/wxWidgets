@@ -148,9 +148,7 @@ wxString wxRegExImpl::GetErrorMsg(int errorcode) const
 
         msg = wxString(buf.data(), wxConvLibc);
 #else // !Unicode
-        (void)regerror(errorcode, &m_RegEx, msg.GetWriteBuf(len), len);
-
-        msg.UngetWriteBuf();
+        (void)regerror(errorcode, &m_RegEx, wxStringBuffer(msg, len), len);
 #endif // Unicode/!Unicode
     }
     else // regerror() returned 0
