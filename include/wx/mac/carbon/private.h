@@ -47,9 +47,6 @@
 #include "wx/mac/corefoundation/cfstring.h"
 #endif
 
-//forward declarations
-class wxTopLevelWindowMac;
-
 #ifndef FixedToInt
 // as macro in FixMath.h for 10.3
 inline Fixed    IntToFixed( int inInt )
@@ -67,6 +64,7 @@ inline int    FixedToInt( Fixed inFixed )
 
 #include "wx/dc.h"
 #include "wx/window.h"
+#include "wx/toplevel.h"
 
 class wxMacPortStateHelper 
 {
@@ -403,6 +401,11 @@ private :
     WindowRef m_data ;
 } ;
 
+void wxMacRectToNative( const wxRect *wx , Rect *n ) ;
+void wxMacNativeToRect( const Rect *n , wxRect* wx ) ;
+void wxMacPointToNative( const wxPoint* wx , Point *n ) ;
+void wxMacNativeToPoint( const Point *n , wxPoint* wx ) ;
+
 wxWindow *              wxFindControlFromMacControl(ControlRef inControl ) ;
 wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow ) ;
 wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef) ;
@@ -411,10 +414,12 @@ extern wxWindow* g_MacLastWindow ;
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
 Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true ) ;
 
+ControlActionUPP GetwxMacLiveScrollbarActionProc() ;
+
 class wxMacControl
 {
 public :
-    wxMacControl( wxWindow* peer) ;    
+    wxMacControl( wxWindow* peer , bool isRootControl = false ) ;    
     wxMacControl( wxWindow* peer , ControlRef control ) ;
     wxMacControl( wxWindow* peer , WXWidget control ) ;
     virtual ~wxMacControl() ;
@@ -513,12 +518,20 @@ public :
     virtual void SetDrawingEnabled( bool enable ) ;
 #ifdef __WXMAC_OSX__
     virtual bool GetNeedsDisplay() const ;
-    virtual void SetNeedsDisplay( bool needsDisplay , RgnHandle where = NULL ) ;
 #endif
+    // where is in native window relative coordinates
+    virtual void SetNeedsDisplay( RgnHandle where ) ;
+    // where is in native window relative coordinates
+    virtual void SetNeedsDisplay( Rect* where = NULL ) ;
+
     virtual void ScrollRect( const wxRect &rect , int dx , int dy ) ;
 
+    // in native parent window relative coordinates
     virtual void GetRect( Rect *r ) ;
+
+    // in native parent window relative coordinates
     virtual void SetRect( Rect *r ) ;
+
     virtual void GetRectInWindowCoords( Rect *r ) ;
     virtual void GetBestRect( Rect *r ) ;
     virtual void SetTitle( const wxString &title ) ;
@@ -561,6 +574,7 @@ public :
     
     virtual OSStatus SetTabEnabled( SInt16 tabNo , bool enable ) ;
     bool    IsCompositing() { return m_isCompositing ; }
+    bool    IsRootControl() { return m_isRootControl ; }
 protected :
     ControlRef  m_controlRef ;
     wxFont      m_font ;
@@ -568,6 +582,7 @@ protected :
     wxWindow*   m_peer ;
     bool        m_needsFocusRect ;
     bool        m_isCompositing ;
+    bool        m_isRootControl ;
 } ;
 
 #if wxMAC_USE_CORE_GRAPHICS
@@ -729,7 +744,20 @@ private :
     int m_height ;
 };
 
+// toplevel.cpp
+
+ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, Point location , WindowRef window , ControlPartCode *outPart ) ;
+
 #endif // wxUSE_GUI
+
+#define wxMAC_DEFINE_PROC_GETTER( UPP , x ) \
+UPP Get##x()                                \
+{                                           \
+    static UPP sHandler = NULL;             \
+    if ( sHandler == NULL )                 \
+        sHandler = New##UPP( x );           \
+    return sHandler;                        \
+}
 
 //---------------------------------------------------------------------------
 // wxMac string conversions
@@ -740,10 +768,6 @@ void wxMacCleanupConverters() ;
 
 void wxMacStringToPascal( const wxString&from , StringPtr to ) ;
 wxString wxMacMakeStringFromPascal( ConstStringPtr from ) ;
-
-// toplevel.cpp
-
-ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, Point location , WindowRef window , ControlPartCode *outPart ) ;
 
 // filefn.cpp
 
