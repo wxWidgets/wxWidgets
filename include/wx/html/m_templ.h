@@ -32,7 +32,6 @@ I STRONGLY recommend reading and understanding these macros!!
     class HTML_Handler_##name : public wxHtmlWinTagHandler                \
     {                                                                     \
         public:                                                           \
-            HTML_Handler_##name() : wxHtmlWinTagHandler() {}              \
             wxString GetSupportedTags() {return wxT(tags);}
 
 
@@ -52,7 +51,6 @@ I STRONGLY recommend reading and understanding these macros!!
 
 
 #define TAG_HANDLER_END(name)                                             \
-        DECLARE_NO_COPY_CLASS(HTML_Handler_##name)                        \
     };
 
 
