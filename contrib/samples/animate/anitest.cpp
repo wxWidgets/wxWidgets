@@ -71,7 +71,7 @@ bool MyApp::OnInit()
 
     // Give it an icon
 #ifdef __WXMSW__
-    frame->SetIcon(wxIcon("mdi_icn"));
+    frame->SetIcon(wxIcon(_T("mdi_icn")));
 #else
     frame->SetIcon(wxIcon( mondrian_xpm ));
 #endif
@@ -144,7 +144,7 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
                        _T("About Animation Demo"));
 }
 
-void MyFrame::OnOpen(wxCommandEvent& event)
+void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
 {
     wxFileDialog dialog(this, _T("Please choose an animated GIF"),
         wxEmptyString, wxEmptyString, wxT("*.gif"), wxOPEN);
@@ -180,10 +180,10 @@ MyCanvas::MyCanvas(wxWindow *parent, const wxPoint& pos, const wxSize& size)
                            wxNO_FULL_REPAINT_ON_RESIZE |
                            wxVSCROLL | wxHSCROLL)
 {
-    SetBackgroundColour(wxColour("YELLOW"));
+    SetBackgroundColour(wxColour(_T("YELLOW")));
 }
 
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 #if 0
