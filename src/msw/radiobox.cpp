@@ -165,9 +165,6 @@ bool wxRadioBox::Create(wxWindow *parent,
     wxUnusedVar(val);
 #endif // wxUSE_VALIDATORS/!wxUSE_VALIDATORS
 
-    // and now create the buttons
-    HWND hwndParent = GetHwndOf(parent);
-
     m_radioButtons = new wxSubwindows(n);
     m_radioWidth = new int[n];
     m_radioHeight = new int[n];
@@ -186,7 +183,7 @@ bool wxRadioBox::Create(wxWindow *parent,
                                       choices[i],
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
-                                      hwndParent,
+                                      GetHwnd(),
                                       (HMENU)newId,
                                       wxGetInstance(),
                                       NULL);
@@ -209,7 +206,7 @@ bool wxRadioBox::Create(wxWindow *parent,
     (void)::CreateWindow(_T("BUTTON"),
                          wxEmptyString,
                          WS_GROUP | BS_AUTORADIOBUTTON | WS_CHILD,
-                         0, 0, 0, 0, hwndParent,
+                         0, 0, 0, 0, GetHwnd(),
                          (HMENU)NewControlId(), wxGetInstance(), NULL);
 
     m_radioButtons->SetFont(GetFont());
@@ -515,8 +512,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if (y == wxDefaultCoord && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
         yy = currentY;
 
-    int y_offset = yy;
-    int x_offset = xx;
+    int y_offset = 0;
+    int x_offset = 0;
 
     int cx1, cy1;
     wxGetCharSize(m_hWnd, &cx1, &cy1, GetFont());
@@ -819,5 +816,55 @@ LRESULT APIENTRY _EXPORT wxRadioBtnWndProc(HWND hwnd,
     return ::CallWindowProc(CASTWNDPROC s_wndprocRadioBtn, hwnd, message, wParam, lParam);
 }
 
+WXHRGN wxRadioBox::MSWCalculateClippingRegion()
+{
+    RECT rc;
+    ::GetWindowRect(GetHwnd(), &rc);
+    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+
+    size_t count = GetCount();
+    for ( size_t i = 0; i < count; ++i )
+    {
+        ::GetWindowRect((*m_radioButtons)[i], &rc);
+        HRGN hrgnchild = ::CreateRectRgnIndirect(&rc);
+        ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+        ::DeleteObject(hrgnchild);
+    }
+
+    ::GetWindowRect(GetHwnd(), &rc);
+    ::OffsetRgn(hrgn, -rc.left, -rc.top);
+
+    return hrgn;
+}
+
+WXLRESULT wxRadioBox::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+{
+#ifndef __WXWINCE__
+    if ( nMsg == WM_PRINTCLIENT )
+    {
+        // first check to see if a parent window knows how to paint us better
+        for ( wxWindow *win = GetParent(); win; win = win->GetParent() )
+            if ( win->MSWPrintChild(this, wParam, lParam) )
+                return true;
+
+        // nope, so lets do it ourselves
+        RECT rc;
+        WXHBRUSH hbr = DoMSWControlColor((HDC)wParam, wxNullColour);
+        if ( !hbr )
+        {
+            wxBrush *brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
+            hbr = (WXHBRUSH)brush->GetResourceHandle();
+        }
+
+        ::GetClientRect(GetHwnd(), &rc);
+        ::FillRect((HDC)wParam, &rc, (HBRUSH)hbr);
+
+        return true;
+    }
+#endif
+    // __WXWINCE__
+
+    return wxStaticBox::MSWWindowProc(nMsg, wParam, lParam);
+}
 #endif // wxUSE_RADIOBOX
 

@@ -38,14 +38,9 @@
 #include "wx/statbox.h"
 #include "wx/notebook.h"
 #include "wx/sysopt.h"
+#include "wx/image.h"
 
 #include "wx/msw/private.h"
-
-// under CE this style is not defined but we don't need to make static boxes
-// transparent there neither
-#ifndef WS_EX_TRANSPARENT
-    #define WS_EX_TRANSPARENT 0
-#endif
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -103,6 +98,10 @@ wxCONSTRUCTOR_6( wxStaticBox , wxWindow* , Parent , wxWindowID , Id , wxString ,
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
 #endif
 
+BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
+    EVT_PAINT(wxStaticBox::OnPaint)
+END_EVENT_TABLE()
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -132,8 +131,12 @@ WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     long styleWin = wxStaticBoxBase::MSWGetStyle(style, exstyle);
 
+    // no need for it anymore, must be removed for wxRadioBox child
+    // buttons to be able to repaint themselves
+    styleWin &= ~WS_CLIPCHILDREN;
+
     if ( exstyle )
-        *exstyle = WS_EX_TRANSPARENT;
+        *exstyle = 0;
 
     return styleWin | BS_GROUPBOX;
 }
@@ -192,6 +195,131 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     if ( !GetLabel().empty() )
         *borderTop += GetCharHeight()/3;
 #endif // !wxDIALOG_UNIT_COMPATIBILITY
+}
+
+// rc must be in client coords!
+void wxStaticBox::MSWClipBoxRegion(HRGN hrgn, const RECT *rc)
+{
+    HRGN hrgnchild;
+
+    // top
+    hrgnchild = ::CreateRectRgn(0, 0, rc->right, 14);
+    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    ::DeleteObject(hrgnchild);
+
+    // bottom
+    hrgnchild = ::CreateRectRgn(0, rc->bottom - 7, rc->right, rc->bottom);
+    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    ::DeleteObject(hrgnchild);
+
+    // left
+    hrgnchild = ::CreateRectRgn(0, 0, 7, rc->bottom);
+    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    ::DeleteObject(hrgnchild);
+
+    // right
+    hrgnchild = ::CreateRectRgn(rc->right - 7, 0, rc->right, rc->bottom);
+    ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+    ::DeleteObject(hrgnchild);
+}
+
+WXHRGN wxStaticBox::MSWCalculateClippingRegion()
+{
+    RECT rc;
+    ::GetWindowRect(GetHwnd(), &rc);
+    HRGN hrgn = ::CreateRectRgn(rc.left, rc.top, rc.right + 1, rc.bottom + 1);
+
+    wxWindowList::compatibility_iterator node = GetParent()->GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow *child = node->GetData();
+
+        // can't just test for (this != child) here since if a wxStaticBox
+        // overlaps another wxStaticBox then neither are drawn. The overlapping
+        // region will flicker but we shouldn't have overlapping windows anyway.
+        if ( !child->IsKindOf(CLASSINFO(wxStaticBox)) )
+        {
+            ::GetWindowRect(GetHwndOf(child), &rc);
+            if ( RectInRegion(hrgn, &rc) )
+            {
+                // need to remove WS_CLIPSIBLINGS from all sibling windows
+                // that are within this staticbox if set
+                LONG style = ::GetWindowLong(GetHwndOf(child), GWL_STYLE);
+                if ( style & WS_CLIPSIBLINGS )
+                {
+                    style &= ~WS_CLIPSIBLINGS;
+                    ::SetWindowLong(GetHwndOf(child), GWL_STYLE, style);
+
+                    // MSDN: "If you have changed certain window data using
+                    // SetWindowLong, you must call SetWindowPos to have the
+                    // changes take effect."
+                    ::SetWindowPos(GetHwndOf(child), NULL, 0, 0, 0, 0,
+                                   SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER |
+                                   SWP_FRAMECHANGED);
+                }
+
+                HRGN hrgnchild = ::CreateRectRgnIndirect(&rc);
+                ::CombineRgn(hrgn, hrgn, hrgnchild, RGN_DIFF);
+                ::DeleteObject(hrgnchild);
+            }
+        }
+
+        node = node->GetNext();
+    }
+    ::GetWindowRect(GetHwnd(), &rc);
+    ::OffsetRgn(hrgn, -rc.left, -rc.top);
+
+    return hrgn;
+}
+
+void wxStaticBox::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+    RECT rc;
+    ::GetClientRect(GetHwnd(), &rc);
+
+    // paint the actual box
+    wxMemoryDC memdc;
+    wxBitmap bitmap(rc.right, rc.bottom);
+    memdc.SelectObject(bitmap);
+
+    // get bg brush
+    WXHBRUSH hbr = DoMSWControlColor(GetHdcOf(memdc), wxNullColour);
+    if ( !hbr )
+    {
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
+        hbr = (WXHBRUSH)brush->GetResourceHandle();
+    }
+
+    // draw solid box, but only blit the good bits
+    ::FillRect(GetHdcOf(memdc), &rc, (HBRUSH)hbr);
+    MSWDefWindowProc(WM_PAINT, (WPARAM)GetHdcOf(memdc), 0);
+
+    // top
+    dc.Blit(7, 0, rc.right - 7, 14, &memdc, 7, 0);
+    // bottom
+    dc.Blit(7, rc.bottom - 7, rc.right - 7, rc.bottom, &memdc, 7, rc.bottom - 7);
+    // left
+    dc.Blit(0, 0, 7, rc.bottom, &memdc, 0, 0);
+    // right
+    dc.Blit(rc.right - 7, 0, rc.right, rc.bottom, &memdc, rc.right - 7, 0);
+
+    // paint the inner
+    HRGN hrgn = (HRGN)MSWCalculateClippingRegion();
+    // now remove the box itself
+    MSWClipBoxRegion(hrgn, &rc);
+
+    hbr = DoMSWControlColor(GetHdcOf(dc), wxNullColour);
+    if ( !hbr )
+    {
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(GetBackgroundColour(), wxSOLID);
+        hbr = (WXHBRUSH)brush->GetResourceHandle();
+    }
+
+    ::SelectClipRgn(GetHdcOf(dc), hrgn);
+    ::FillRect(GetHdcOf(dc), &rc, (HBRUSH)hbr);
+    ::SelectClipRgn(GetHdcOf(dc), NULL);
+    ::DeleteObject(hrgn);
 }
 
 #endif // wxUSE_STATBOX

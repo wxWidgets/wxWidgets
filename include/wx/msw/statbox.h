@@ -48,8 +48,12 @@ protected:
     virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
+    virtual WXHRGN MSWCalculateClippingRegion();
+    virtual void MSWClipBoxRegion(HRGN hrgn, const RECT *rc);
+    void OnPaint(wxPaintEvent& event);
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // _WX_MSW_STATBOX_H_

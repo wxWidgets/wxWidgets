@@ -13,8 +13,8 @@ All:
 - Added wxTempFileOutputStream by Stas Sergeev.
 - Fixed wxDateTime::SetToWeekDayInSameWeek(Sun, Monday_First).
 - Added WXK_SPECIAL keycodes for special hardware buttons.
-- Fixed bug with wxFile::Seek(-1, wxFromCurrent)
-- Added wxString/C array constructors to wxArrayString
+- Fixed bug with wxFile::Seek(-1, wxFromCurrent).
+- Added wxString/C array constructors to wxArrayString.
 
 All (GUI):
 
@@ -26,29 +26,31 @@ All (GUI):
 - Restored ability to set a custom splitter sash size with SetSashSize.
 - Fixed wxScrolledWindow sizer behaviour so that the virtual size
   isn't used to set the window size.
-- Added wxTE_BESTWRAP (based on patch by Mart Raudsepp)
+- Added wxTE_BESTWRAP (based on patch by Mart Raudsepp).
 - wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED is now only sent once at the end of
-  splitter dragging and not after each CHANGING event (Jacobo Vilella Vilahur)
+  splitter dragging and not after each CHANGING event (Jacobo Vilella Vilahur).
 
 Unix:
 
-- Fixed build on Linux/AMD64
+- Fixed build on Linux/AMD64.
 
 wxMSW:
 
-- Added "orient" parameter to wxMDIParentFrame::Tile()
-- wxTextCtrl with wxTE_RICH2 style now uses RichEdit 4.1 if available
-- fix handling Alt-key events in wxComboBox (reported by Joakim Roubert)
-- wxWindow::Refresh() refreshes the window children as well
+- Added "orient" parameter to wxMDIParentFrame::Tile().
+- wxTextCtrl with wxTE_RICH2 style now uses RichEdit 4.1 if available.
+- fix handling Alt-key events in wxComboBox (reported by Joakim Roubert).
+- wxWindow::Refresh() refreshes the window children as well.
+- Improved static box and radio box refresh and background colour
+  handling (Jamie Gadd).
 
 wxGTK:
 
-- Improved wxSystemSettings::GetMetric() to work better with X11. (Mart Raudsepp)
+- Improved wxSystemSettings::GetMetric() to work better with X11 (Mart Raudsepp).
 - Corrected wxListBox selection handling.
 - Corrected default button size handling for different themes.
 - Corrected splitter sash size and look for different themes.
 - Fixed keyboard input for dead-keys.
-- Added support for more wrapping styles (Mart Raudsepp)
+- Added support for more wrapping styles (Mart Raudsepp).
 
 wxMac:
 
