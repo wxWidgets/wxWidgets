@@ -2262,21 +2262,11 @@ Now obsolete: use \helpref{wxWindow::Close}{wxwindowclose} instead.
 
 \func{void}{wxPostEvent}{\param{wxEvtHandler *}{dest}, \param{wxEvent\& }{event}}
 
-This function posts the event to the specified {\it dest} object. The
-difference between sending an event and posting it is that in the first case
-the event is processed before the function returns (in wxWindows, event sending
-is done with \helpref{ProcessEvent}{wxevthandlerprocessevent} function), but in
-the second, the function returns immediately and the event will be processed
-sometime later - usually during the next even loop iteration.
-
-Note that a copy of the {\it event} is made by the function, so the original
-copy can be deleted as soon as function returns. This function can also be used
-to send events between different threads safely. As this function makes a
-copy of the event, the event needs to have a fully implemented Clone() method,
-which may not be the case for all event in wxWindows.
-
-See also \helpref{AddPendingEvent}{wxevthandleraddpendingevent} (which this function
-uses internally).
+In a GUI application, this function posts {\it event} to the specified {\it dest}
+object using \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}.
+Otherwise, it dispatches {\it event} immediately using
+\helpref{wxEvtHandler::ProcessEvent}{wxevthandlerprocessevent}.
+See the respective documentation for details (and caveats).
 
 \wxheading{Include files}
 
