@@ -40,23 +40,21 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    Rect bounds ;
-    Str255 title ;
-
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
-
-    m_macControl = ::NewControl(MAC_WXHWND(parent->MacGetRootWindow()) ,
-                                &bounds , title , false , 0 , 0 , 100, 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl(MAC_WXHWND(parent->MacGetTopLevelWindowRef()) ,
+                                &bounds , "\p" , true , 0 , 0 , 100, 
                                 kControlScrollBarLiveProc , (long) this) ;
 
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
+    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
 
-    ::SetControlAction( (ControlHandle) m_macControl , wxMacLiveScrollbarActionUPP ) ;
+    ::SetControlAction( (ControlRef) m_macControl , wxMacLiveScrollbarActionUPP ) ;
 
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
 
     return TRUE;
 }
@@ -67,12 +65,12 @@ wxScrollBar::~wxScrollBar()
 
 void wxScrollBar::SetThumbPosition(int viewStart)
 {
-    ::SetControl32BitValue( (ControlHandle) m_macControl , viewStart ) ;
+    ::SetControl32BitValue( (ControlRef) m_macControl , viewStart ) ;
 }
 
 int wxScrollBar::GetThumbPosition() const
 {
-    return ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
+    return ::GetControl32BitValue( (ControlRef) m_macControl ) ;
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
@@ -84,15 +82,15 @@ void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageS
 
       int range1 = wxMax((m_objectSize - m_viewSize), 0) ;
 
-    SetControl32BitMaximum( (ControlHandle) m_macControl , range1 ) ;
-    SetControl32BitMinimum( (ControlHandle) m_macControl , 0 ) ;
-    SetControl32BitValue( (ControlHandle) m_macControl , position ) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , range1 ) ;
+    SetControl32BitMinimum( (ControlRef) m_macControl , 0 ) ;
+    SetControl32BitValue( (ControlRef) m_macControl , position ) ;
 
     if ( UMAGetAppearanceVersion() >= 0x0110  )
     {
         if ( SetControlViewSize != (void*) kUnresolvedCFragSymbolAddress )
         {
-                SetControlViewSize( (ControlHandle) m_macControl , m_viewSize ) ;
+                SetControlViewSize( (ControlRef) m_macControl , m_viewSize ) ;
         }
     }
     if ( refresh )
@@ -108,12 +106,12 @@ void wxScrollBar::Command(wxCommandEvent& event)
 
 void wxScrollBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) 
 {
-    if ( (ControlHandle) m_macControl == NULL )
+    if ( (ControlRef) m_macControl == NULL )
         return ;
     
-    int position = GetControl32BitValue( (ControlHandle) m_macControl) ;
-    int minPos = GetControl32BitMinimum( (ControlHandle) m_macControl) ;
-    int maxPos = GetControl32BitMaximum( (ControlHandle) m_macControl) ;
+    int position = GetControl32BitValue( (ControlRef) m_macControl) ;
+    int minPos = GetControl32BitMinimum( (ControlRef) m_macControl) ;
+    int maxPos = GetControl32BitMaximum( (ControlRef) m_macControl) ;
     
     wxEventType scrollEvent = wxEVT_NULL;
     int nScrollInc = 0;

@@ -165,21 +165,13 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded )
     } ;
     int noOfFontDescriptions = sizeof( fontDescriptions ) / sizeof(TXNMacOSPreferredFontDescription) ;
 
-      // kTXNAlwaysUseQuickDrawTextMask might be desirable because of speed increases but it crashes the app under OS X upon key stroke
-#if 0
-    // leads to unexpected content for clients, TODO configurable
-    OptionBits options = kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask ;
-#else
     OptionBits options = 0 ;
-#endif
 
-#if TARGET_CARBON
-    if ( !UMAHasAquaLayout() )
-#endif
+    if ( UMAGetSystemVersion() < 0x1000 )
     {
         options |= kTXNAlwaysUseQuickDrawTextMask ;
     }
-      TXNInitTextension(fontDescriptions,  noOfFontDescriptions, options );
+    TXNInitTextension(fontDescriptions,  noOfFontDescriptions, options );
   }
 
 
@@ -517,7 +509,7 @@ void UMASetWTitle( WindowRef inWindowRef , const wxString& title , wxFontEncodin
 
 // appearance additions
 
-void UMASetControlTitle( ControlHandle inControl , const wxString& title , wxFontEncoding encoding)
+void UMASetControlTitle( ControlRef inControl , const wxString& title , wxFontEncoding encoding)
 {
 #if TARGET_CARBON
     SetControlTitleWithCFString( inControl , wxMacCFStringHolder(title , encoding) ) ;
@@ -528,8 +520,9 @@ void UMASetControlTitle( ControlHandle inControl , const wxString& title , wxFon
 #endif
 }
 
-void UMAActivateControl( ControlHandle inControl )
+void UMAActivateControl( ControlRef inControl )
 {
+#if !TARGET_API_MAC_OSX
     // we have to add the control after again to the update rgn
     // otherwise updates get lost
     if ( !IsControlActive( inControl ) )
@@ -537,17 +530,24 @@ void UMAActivateControl( ControlHandle inControl )
         bool visible = IsControlVisible( inControl ) ;
         if ( visible )
             SetControlVisibility( inControl , false , false ) ;
+#endif    
         ::ActivateControl( inControl ) ;
+#if !TARGET_API_MAC_OSX
         if ( visible ) {
             SetControlVisibility( inControl , true , false ) ;
+        
             Rect ctrlBounds ;
-            InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+            InvalWindowRect(GetControlOwner(inControl),UMAGetControlBoundsInWindowCoords(inControl,&ctrlBounds) ) ;
         }
     }
+#endif    
 }
 
-void UMADrawControl( ControlHandle inControl )
+void UMADrawControl( ControlRef inControl )
 {
+#if TARGET_API_MAC_CARBON
+    ::Draw1Control( inControl );
+#else
     WindowRef theWindow = GetControlOwner(inControl) ;
     wxMacPortStateHelper help( (GrafPtr) GetWindowPort(theWindow) ) ;
     RgnHandle updateRgn = NewRgn() ;
@@ -558,72 +558,85 @@ void UMADrawControl( ControlHandle inControl )
     ::DrawControlInCurrentPort( inControl ) ;
     InvalWindowRgn( theWindow, updateRgn) ;
     DisposeRgn( updateRgn ) ;
+#endif
 }
 
-void UMAMoveControl( ControlHandle inControl , short x , short y )
+void UMAMoveControl( ControlRef inControl , short x , short y )
 {
+#if !TARGET_API_MAC_OSX
     bool visible = IsControlVisible( inControl ) ;
     if ( visible ) {
         SetControlVisibility( inControl , false , false ) ;
         Rect ctrlBounds ;
         InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
     }
+#endif    
     ::MoveControl( inControl , x , y ) ;
+#if !TARGET_API_MAC_OSX
     if ( visible ) {
         SetControlVisibility( inControl , true , false ) ;
         Rect ctrlBounds ;
         InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
     }
+#endif
 }
 
-void UMASizeControl( ControlHandle inControl , short x , short y )
+void UMASizeControl( ControlRef inControl , short x , short y )
 {
+#if !TARGET_API_MAC_OSX
     bool visible = IsControlVisible( inControl ) ;
     if ( visible ) {
         SetControlVisibility( inControl , false , false ) ;
         Rect ctrlBounds ;
         InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
     }
+#endif
     ::SizeControl( inControl , x , y ) ;
+#if !TARGET_API_MAC_OSX
     if ( visible ) {
         SetControlVisibility( inControl , true , false ) ;
         Rect ctrlBounds ;
         InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
     }
+#endif
 }
 
-void UMADeactivateControl( ControlHandle inControl )
+void UMADeactivateControl( ControlRef inControl )
 {
+#if !TARGET_API_MAC_OSX
     // we have to add the control after again to the update rgn
     // otherwise updates get lost
     bool visible = IsControlVisible( inControl ) ;
     if ( visible )
         SetControlVisibility( inControl , false , false ) ;
+#endif
     ::DeactivateControl( inControl ) ;
+#if !TARGET_API_MAC_OSX
     if ( visible ) {
         SetControlVisibility( inControl , true , false ) ;
         Rect ctrlBounds ;
-        InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+        InvalWindowRect(GetControlOwner(inControl),UMAGetControlBoundsInWindowCoords(inControl,&ctrlBounds) ) ;
     }
+#endif
 }
 // shows the control and adds the region to the update region
-void UMAShowControl                        (ControlHandle             inControl)
+void UMAShowControl                        (ControlRef             inControl)
 {
     SetControlVisibility( inControl , true , false ) ;
     Rect ctrlBounds ;
-    InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+    InvalWindowRect(GetControlOwner(inControl),UMAGetControlBoundsInWindowCoords(inControl,&ctrlBounds) ) ;
 }
 
-// shows the control and adds the region to the update region
-void UMAHideControl                        (ControlHandle             inControl)
+// hides the control and adds the region to the update region
+void UMAHideControl                        (ControlRef             inControl)
 {
     SetControlVisibility( inControl , false , false ) ;
     Rect ctrlBounds ;
-    InvalWindowRect(GetControlOwner(inControl),GetControlBounds(inControl,&ctrlBounds) ) ;
+    InvalWindowRect(GetControlOwner(inControl),UMAGetControlBoundsInWindowCoords(inControl,&ctrlBounds) ) ;
 }
 // keyboard focus
 OSErr UMASetKeyboardFocus                (WindowPtr                 inWindow,
-                                 ControlHandle             inControl,
+                                 ControlRef             inControl,
                                  ControlFocusPart         inPart)
 {
     OSErr err = noErr;
@@ -636,7 +649,6 @@ OSErr UMASetKeyboardFocus                (WindowPtr                 inWindow,
     SetPort( port ) ;
     return err ;
 }
-
 
 // events
 void UMAUpdateControls( WindowPtr inWindow , RgnHandle inRgn )
@@ -682,7 +694,7 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
         GetPort( &port ) ;
         SetPortWindowPort( inWindowRef ) ;
         HiliteWindow( inWindowRef , inActivate ) ;
-        ControlHandle control = NULL ;
+        ControlRef control = NULL ;
         ::GetRootControl( inWindowRef , & control ) ;
         if ( control )
         {
@@ -794,6 +806,29 @@ OSStatus UMAPutScrap( Size size , OSType type , void *data )
 #endif
     return err ;
 }
+
+Rect* UMAGetControlBoundsInWindowCoords(ControlRef theControl, Rect *bounds)
+{
+    wxWindow* win = wxFindControlFromMacControl( theControl ) ;
+    
+    GetControlBounds( theControl , bounds ) ;
+#if TARGET_API_MAC_OSX
+    if ( win != NULL && win->MacGetTopLevelWindow() != NULL )   
+    {
+        int x , y ;
+        x = 0 ;
+        y = 0 ;
+        
+        win->GetParent()->MacWindowToRootWindow( &x , & y ) ;
+        bounds->left += x ;
+        bounds->right += x ;
+        bounds->top += y ;
+        bounds->bottom += y ;
+    }
+#endif
+    return bounds ;
+}
+
 
 #endif  // wxUSE_GUI
 

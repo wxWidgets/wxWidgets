@@ -49,7 +49,7 @@ wxGLContext::wxGLContext(
 {
     m_window = win;
     
-    m_drawable = (AGLDrawable) UMAGetWindowPort(MAC_WXHWND(win->MacGetRootWindow()));
+    m_drawable = (AGLDrawable) UMAGetWindowPort(MAC_WXHWND(win->MacGetTopLevelWindowRef()));
     
     m_glContext = aglCreateContext(fmt, other ? other->m_glContext : NULL);
     wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
@@ -262,7 +262,7 @@ void wxGLCanvas::SetViewport()
 	    int width, height;
 	    GetClientSize(& width, & height);
 	    Rect bounds ;
-	    GetWindowPortBounds( MAC_WXHWND(MacGetRootWindow()) , &bounds ) ;
+	    GetWindowPortBounds( MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds ) ;
 	    GLint parms[4] ;
 	    parms[0] = x ;
 	    parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
@@ -331,7 +331,7 @@ bool wxGLCanvas::Show(bool show)
     }
     else
     {
-        if ( MacIsReallyShown() && !m_macCanvasIsShown )
+        if ( IsControlVisible( (ControlRef) m_macControl ) && !m_macCanvasIsShown )
         {
             m_macCanvasIsShown = true ;
             SetViewport() ;
@@ -352,7 +352,7 @@ void wxGLCanvas::MacSuperShown( bool show )
     }
     else
     {
-        if ( MacIsReallyShown() && !m_macCanvasIsShown )
+        if ( IsControlVisible( (ControlRef) m_macControl ) && !m_macCanvasIsShown )
         {
             m_macCanvasIsShown = true ;
             SetViewport() ;

@@ -29,12 +29,13 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
-    if ( !wxGaugeBase::Create(parent, id, range, pos, s, style, validator, name) )
+    m_macIsUserPane = FALSE ;
+    
+    if ( !wxGaugeBase::Create(parent, id, range, pos, s, style & 0xE0FFFFFF, validator, name) )
         return false;
 
     wxSize size = s ;
-    Rect bounds ;
-    Str255 title ;
+
     m_rangeMax = range ;
     m_gaugePos = 0 ;
     
@@ -43,12 +44,11 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
         size = wxSize( 200 , 16 ) ;
     }
     
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style & 0xE0FFFFFF /* no borders on mac */ , validator , name , &bounds , title ) ;
-    
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , range, 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , range, 
         kControlProgressBarProc , (long) this ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
     return TRUE;
 }
@@ -64,13 +64,13 @@ void wxGauge::SetBezelFace(int w)
 void wxGauge::SetRange(int r)
 {
     m_rangeMax = r;
-    ::SetControl32BitMaximum( (ControlHandle) m_macControl , m_rangeMax ) ;
+    ::SetControl32BitMaximum( (ControlRef) m_macControl , m_rangeMax ) ;
 }
 
 void wxGauge::SetValue(int pos)
 {
     m_gaugePos = pos;
-       ::SetControl32BitValue( (ControlHandle) m_macControl , m_gaugePos ) ;
+       ::SetControl32BitValue( (ControlRef) m_macControl , m_gaugePos ) ;
 }
 
 int wxGauge::GetShadowWidth() const

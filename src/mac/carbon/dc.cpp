@@ -104,31 +104,8 @@ private :
 typedef wxMacPortSetter wxMacFastPortSetter ;
 #endif
 
-#if 0
-
-// start moving to a dual implementation for QD and CGContextRef
-
-class wxMacGraphicsContext
-{
-public :
-    void DrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask ) = 0 ;
-    void SetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord height ) = 0 ;
-    void SetClippingRegion( const wxRegion &region  ) = 0 ;
-    void DestroyClippingRegion() = 0 ;
-    void SetTextForeground( const wxColour &col ) = 0 ;
-    void SetTextBackground( const wxColour &col ) = 0 ;
-    void SetLogicalScale( double x , double y ) = 0 ;
-    void SetUserScale( double x , double y ) = 0;
-} ;
-
-class wxMacQuickDrawContext : public wxMacGraphicsContext
-{
-public :
-} ;
-
-#endif
-
-wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) 
+wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win ) :
+    wxMacPortSaver( (GrafPtr) GetWindowPort((WindowRef) win->MacGetTopLevelWindowRef()) )
 {
     m_formerClip = NewRgn() ;
     m_newClip = NewRgn() ;
@@ -136,29 +113,14 @@ wxMacWindowClipper::wxMacWindowClipper( const wxWindow* win )
     
     if ( win )
     {
-#if 0
-        // this clipping area was set to the parent window's drawing area, lead to problems
-        // with MacOSX controls drawing outside their wx' rectangle
-        RgnHandle insidergn = NewRgn() ;
-        int x = 0 , y = 0;
-        wxWindow *parent = win->GetParent() ;
-        parent->MacWindowToRootWindow( &x,&y ) ;
-        wxSize size = parent->GetSize() ;
-        SetRectRgn( insidergn , parent->MacGetLeftBorderSize() , parent->MacGetTopBorderSize() , 
-            size.x - parent->MacGetRightBorderSize(), 
-            size.y - parent->MacGetBottomBorderSize()) ;
-        CopyRgn( (RgnHandle) parent->MacGetVisibleRegion(false).GetWXHRGN() , m_newClip ) ;
-        SectRgn( m_newClip , insidergn , m_newClip ) ;
-        OffsetRgn( m_newClip , x , y ) ;
-        SetClip( m_newClip ) ;
-        DisposeRgn( insidergn ) ;
-#else
         int x = 0 , y = 0;
         win->MacWindowToRootWindow( &x,&y ) ;
-        CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion().GetWXHRGN() , m_newClip ) ;
-        OffsetRgn( m_newClip , x , y ) ;
+        // get area including focus rect
+        CopyRgn( (RgnHandle) ((wxWindow*)win)->MacGetVisibleRegion(true).GetWXHRGN() , m_newClip ) ;
+        if ( !EmptyRgn( m_newClip ) )
+            OffsetRgn( m_newClip , x , y ) ;
+
         SetClip( m_newClip ) ;
-#endif  
     }
 }
 
@@ -616,20 +578,6 @@ void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
     m_externalDeviceOriginY = y;
     ComputeScaleAndOrigin();
 }
-
-#if 0
-void wxDC::SetInternalDeviceOrigin( long x, long y )
-{
-    m_internalDeviceOriginX = x;
-    m_internalDeviceOriginY = y;
-    ComputeScaleAndOrigin();
-}
-void wxDC::GetInternalDeviceOrigin( long *x, long *y )
-{
-    if (x) *x = m_internalDeviceOriginX;
-    if (y) *y = m_internalDeviceOriginY;
-}
-#endif
 
 void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
@@ -1358,7 +1306,7 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
                               double angle)
 {
     wxCHECK_RET( Ok(), wxT("wxDC::DoDrawRotatedText  Invalid window dc") );
-
+/*
     if (angle == 0.0 )
     {
         DrawText(str, x, y);
@@ -1367,14 +1315,14 @@ void  wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
     if ( str.Length() == 0 )
         return ;
-        
+*/      
     wxMacFastPortSetter helper(this) ;
     MacInstallFont() ;
 
     if ( 0 )
     {
         m_macFormerAliasState = IsAntiAliasedTextEnabled(&m_macFormerAliasSize);
-        SetAntiAliasedTextEnabled(true, SInt16(m_scaleY * m_font.GetMacFontSize()));
+        SetAntiAliasedTextEnabled(true, SInt16(m_scaleY * m_font.MacGetFontSize()));
         m_macAliasWasEnabled = true ;
     }
     OSStatus status = noErr ;
@@ -1470,76 +1418,8 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     {
         ::TextMode( srcCopy ) ;
     }
-    int length = strtext.Length() ;
-
-    int laststop = 0 ;
-    int i = 0 ;
     int line = 0 ;
     {
-#if 0 // we don't have to do all that here
-        while( i < length )
-        {
-            if( strtext[i] == 13 || strtext[i] == 10)
-            {
-                wxString linetext = strtext.Mid( laststop , i - laststop ) ;
-#if TARGET_CARBON
-                if ( useDrawThemeText )
-                {
-                    Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
-                    wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
-                    if ( m_backgroundMode != wxTRANSPARENT )
-                    {
-                        Point bounds={0,0} ;
-                        Rect background = frame ;
-                        SInt16 baseline ;
-                        ::GetThemeTextDimensions( mString,
-                            kThemeCurrentPortFont,
-                            kThemeStateActive,
-                            false,
-                            &bounds,
-                            &baseline );
-                        background.right = background.left + bounds.h ;
-                        background.bottom = background.top + bounds.v ;
-                        ::EraseRect( &background ) ;
-                    }
-                    ::DrawThemeTextBox( mString,
-                        kThemeCurrentPortFont,
-                        kThemeStateActive,
-                        false,
-                        &frame,
-                        teJustLeft,
-                        nil );
-                    line++ ;
-                }
-                else
-#endif
-                {
-                    wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
-                    ::DrawText( text , 0 , strlen(text) ) ;
-                    if ( m_backgroundMode != wxTRANSPARENT )
-                    {
-                        Point bounds={0,0} ;
-                        Rect background = frame ;
-                        SInt16 baseline ;
-                        ::GetThemeTextDimensions( mString,
-                            kThemeCurrentPortFont,
-                            kThemeStateActive,
-                            false,
-                            &bounds,
-                            &baseline );
-                        background.right = background.left + bounds.h ;
-                        background.bottom = background.top + bounds.v ;
-                        ::EraseRect( &background ) ;
-                    }
-                    line++ ;
-                    ::MoveTo( xx , yy + line*(fi.descent + fi.ascent + fi.leading) );
-                }
-                laststop = i+1 ;
-            }
-            i++ ;
-        }
-        wxString linetext = strtext.Mid( laststop , i - laststop ) ;
-#endif // 0
         wxString linetext = strtext ;
 #if TARGET_CARBON
         if ( useDrawThemeText )
@@ -1553,7 +1433,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 Rect background = frame ;
                 SInt16 baseline ;
                 ::GetThemeTextDimensions( mString,
-                    kThemeCurrentPortFont,
+                    m_font.MacGetThemeFontID() ,
                     kThemeStateActive,
                     false,
                     &bounds,
@@ -1563,7 +1443,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 ::EraseRect( &background ) ;
             }
             ::DrawThemeTextBox( mString,
-                kThemeCurrentPortFont,
+                m_font.MacGetThemeFontID() ,
                 kThemeStateActive,
                 false,
                 &frame,
@@ -1620,60 +1500,21 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         *descent =YDEV2LOGREL( fi.descent );
     if ( externalLeading )
         *externalLeading = YDEV2LOGREL( fi.leading ) ;
-    int length = strtext.Length() ;
 
-    int laststop = 0 ;
-    int i = 0 ;
     int curwidth = 0 ;
     if ( width )
     {
         *width = 0 ;
-#if 0 // apparently we don't have to do all that
-        while( i < length )
-        {
-            if( strtext[i] == 13 || strtext[i] == 10)
-            {
-                wxString linetext = strtext.Mid( laststop , i - laststop ) ;
-                if ( height )
-                    *height += YDEV2LOGREL( fi.descent + fi.ascent + fi.leading ) ;
-#if TARGET_CARBON
-                if ( useGetThemeText )
-                {
-                    Point bounds={0,0} ;
-                    SInt16 baseline ;
-                    wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
-                    ::GetThemeTextDimensions( mString,
-                        kThemeCurrentPortFont,
-                        kThemeStateActive,
-                        false,
-                        &bounds,
-                        &baseline );
-                    curwidth = bounds.h ;
-                }
-                else
-#endif
-                {
-                    wxCharBuffer text = linetext.mb_str(wxConvLocal) ; 
-                    curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
-                }
-                if ( curwidth > *width )
-                    *width = XDEV2LOGREL( curwidth ) ;
-                laststop = i+1 ;
-            }
-            i++ ;
-        }
-        
-        wxString linetext = strtext.Mid( laststop , i - laststop ) ;
-#endif // 0
         wxString linetext = strtext ;
-#if TARGET_CARBON
+
         if ( useGetThemeText )
         {
             Point bounds={0,0} ;
             SInt16 baseline ;
             wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
+            ThemeFontID themeFont = m_font.MacGetThemeFontID() ;
             ::GetThemeTextDimensions( mString,
-                kThemeCurrentPortFont,
+                themeFont ,
                 kThemeStateActive,
                 false,
                 &bounds,
@@ -1681,7 +1522,6 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
             curwidth = bounds.h ;
         }
         else
-#endif
         {
             wxCharBuffer text = linetext.mb_str(wxConvLocal) ;  
             curwidth = ::TextWidth( text , 0 , strlen(text) ) ;
@@ -1729,7 +1569,7 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
             SInt16 baseline ;
             wxMacCFStringHolder mString(str, m_font.GetEncoding());
             ::GetThemeTextDimensions( mString,
-                                      kThemeCurrentPortFont,
+                                      m_font.MacGetThemeFontID(),
                                       kThemeStateActive,
                                       false,
                                       &bounds,
@@ -1778,7 +1618,7 @@ wxCoord   wxDC::GetCharWidth(void) const
         SInt16 baseline ;
         CFStringRef mString = CFStringCreateWithBytes( NULL , (UInt8*) text , 1 , CFStringGetSystemEncoding(), false ) ;
         ::GetThemeTextDimensions( mString,
-            kThemeCurrentPortFont,
+            m_font.MacGetThemeFontID(),
             kThemeStateActive,
             false,
             &bounds,
@@ -1827,9 +1667,9 @@ void wxDC::MacInstallFont() const
     MacSetupBackgroundForCurrentPort(m_backgroundBrush) ;
     if ( m_font.Ok() )
     {
-        ::TextFont( m_font.GetMacFontNum() ) ;
-        ::TextSize( (short)(m_scaleY * m_font.GetMacFontSize()) ) ;
-        ::TextFace( m_font.GetMacFontStyle() ) ;
+        ::TextFont( m_font.MacGetFontNum() ) ;
+        ::TextSize( (short)(m_scaleY * m_font.MacGetFontSize()) ) ;
+        ::TextFace( m_font.MacGetFontStyle() ) ;
         m_macFontInstalled = true ;
         m_macBrushInstalled = false ;
         m_macPenInstalled = false ;
@@ -1898,9 +1738,9 @@ void wxDC::MacInstallFont() const
     }
     ::PenMode( mode ) ;
     OSStatus status = noErr ;
-    Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.GetMacFontSize()) ) ;
-    Style qdStyle = m_font.GetMacFontStyle() ;
-    ATSUFontID    atsuFont = m_font.GetMacATSUFontID() ;
+    Fixed atsuSize = IntToFixed( int(m_scaleY * m_font.MacGetFontSize()) ) ;
+    Style qdStyle = m_font.MacGetATSUAdditionalQDStyles() ;
+    ATSUFontID    atsuFont = m_font.MacGetATSUFontID() ;
     status = ::ATSUCreateStyle((ATSUStyle *)&m_macATSUIStyle) ;
     wxASSERT_MSG( status == noErr , wxT("couldn't create ATSU style") ) ;
     ATSUAttributeTag atsuTags[] =
@@ -2077,13 +1917,13 @@ void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background )
     {
         case kwxMacBrushTheme :
         {
-            ::SetThemeBackground( background.GetMacTheme() , wxDisplayDepth() , true ) ;
+            ::SetThemeBackground( background.MacGetTheme() , wxDisplayDepth() , true ) ;
             break ;
         }
         case kwxMacBrushThemeBackground :
         {
             Rect extent ;
-            ThemeBackgroundKind bg = background.GetMacThemeBackground( &extent ) ;
+            ThemeBackgroundKind bg = background.MacGetThemeBackground( &extent ) ;
             ::ApplyThemeBackground( bg , &extent ,kThemeStateActive , wxDisplayDepth() , true ) ;
             break ;
         }

@@ -25,34 +25,25 @@ IMPLEMENT_DYNAMIC_CLASS(wxButton, wxControl)
 #include "wx/mac/uma.h"
 // Button
 
-static const int kMacOSXHorizontalBorder = 2 ;
-static const int kMacOSXVerticalBorder = 4 ;
-
 bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxPoint& pos,
            const wxSize& size, long style,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxButtonBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
-
-    Rect bounds ;
-    Str255 title ;
-
-    if ( UMAHasAquaLayout() )
-    {
-        m_macHorizontalBorder = kMacOSXHorizontalBorder;
-        m_macVerticalBorder = kMacOSXVerticalBorder;
-    }
     
-    MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
+    m_label = label ;
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
           kControlPushButtonProc , (long) this ) ;
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
+    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
   return TRUE;
 }
@@ -72,13 +63,13 @@ void wxButton::SetDefault()
     if ( btnOldDefault && btnOldDefault->m_macControl )
     {
           inData = 0;
-        ::SetControlData( (ControlHandle) btnOldDefault->m_macControl , kControlButtonPart ,
+        ::SetControlData( (ControlRef) btnOldDefault->m_macControl , kControlButtonPart ,
                            kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
     }
-    if ( (ControlHandle) m_macControl )
+    if ( (ControlRef) m_macControl )
     {
           inData = 1;
-        ::SetControlData(  (ControlHandle) m_macControl , kControlButtonPart ,
+        ::SetControlData(  (ControlRef) m_macControl , kControlButtonPart ,
                            kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)(&inData) ) ;
     }
 }
@@ -87,8 +78,25 @@ wxSize wxButton::DoGetBestSize() const
 {
   wxSize sz = GetDefaultSize() ;
   
-  int wBtn = m_label.Length() * 8 + 12 + 2 * kMacOSXHorizontalBorder ;
-    
+  int charspace = 8 ;
+  if ( GetWindowVariant() == wxWINDOW_VARIANT_NORMAL || GetWindowVariant() == wxWINDOW_VARIANT_LARGE )
+  {
+    sz.y = 20 ;
+    charspace = 10 ;
+  }
+  else if ( GetWindowVariant() == wxWINDOW_VARIANT_SMALL )
+  {
+    sz.y = 17 ;
+    charspace = 8 ;
+  }
+  else if ( GetWindowVariant() == wxWINDOW_VARIANT_MINI )
+  {
+    sz.y = 15 ;
+    charspace = 8 ;
+  }
+  
+  int wBtn = m_label.Length() * charspace + 12 ;
+ 
   if (wBtn > sz.x) sz.x = wBtn;
   
   return sz ;
@@ -98,24 +106,18 @@ wxSize wxButton::GetDefaultSize()
 {
     int wBtn = 70 ; 
     int hBtn = 20 ;
-
-    if ( UMAHasAquaLayout() )
-    {
-        wBtn += 2 * kMacOSXHorizontalBorder ;
-        hBtn += 2 * kMacOSXVerticalBorder ;
-    }
-
+    
     return wxSize(wBtn, hBtn);
 }
 
 void wxButton::Command (wxCommandEvent & event)
 {
-    if ( (ControlHandle) m_macControl )
+    if ( (ControlRef) m_macControl )
     {
-        HiliteControl(  (ControlHandle) m_macControl , kControlButtonPart ) ;
+        HiliteControl(  (ControlRef) m_macControl , kControlButtonPart ) ;
         unsigned long finalTicks ;
         Delay( 8 , &finalTicks ) ;
-        HiliteControl(  (ControlHandle) m_macControl , 0 ) ;
+        HiliteControl(  (ControlRef) m_macControl , 0 ) ;
     }
     ProcessCommand (event);
 }

@@ -29,6 +29,8 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
            const wxValidator& validator,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     // since bitmapbuttonbase is subclass of button calling wxBitmapButtonBase::Create
     // essentially creates an additional button
     if ( !wxControl::Create(parent, id, pos, size,
@@ -60,30 +62,28 @@ bool wxBitmapButton::Create(wxWindow *parent, wxWindowID id, const wxBitmap& bit
             height = newSize.y;
     }
 
-    Rect bounds ;
-    Str255 title ;
     m_bmpNormal = bitmap;
+    
     wxBitmapRefData * bmap = NULL ;
     
     if ( m_bmpNormal.Ok() )
         bmap = (wxBitmapRefData*) ( m_bmpNormal.GetRefData()) ;
     
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , wxSize( width , height ) ,style, validator , name , &bounds , title ) ;
-
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 
         kControlBehaviorOffsetContents + 
             ( bmap && bmap->m_bitmapType == kMacBitmapTypeIcon ? 
             kControlContentCIconHandle : kControlContentPictHandle ) , 0, 
           (( style & wxBU_AUTODRAW ) ? kControlBevelButtonSmallBevelProc : kControlBevelButtonNormalBevelProc ), (long) this ) ;
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
+    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
     
     ControlButtonContentInfo info ;
     wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
     if ( info.contentType != kControlNoContent )
     {
-        ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+        ::SetControlData( (ControlRef) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
 
     return TRUE;
 }
@@ -96,7 +96,7 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
     wxMacCreateBitmapButton( &info , m_bmpNormal ) ;
     if ( info.contentType != kControlNoContent )
     {
-        ::SetControlData( (ControlHandle) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
+        ::SetControlData( (ControlRef) m_macControl , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
 }
 

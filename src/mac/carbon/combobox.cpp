@@ -204,7 +204,9 @@ void wxComboBox::DoMoveWindow(int x, int y, int width, int height) {
 
     if ( m_text == NULL )
     {
-        m_choice->SetSize(0, 0 , width, -1);
+        // we might not be fully constructed yet, therefore watch out...
+        if ( m_choice )
+            m_choice->SetSize(0, 0 , width, -1);
     }
     else
     {

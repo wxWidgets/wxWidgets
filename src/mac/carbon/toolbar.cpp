@@ -62,8 +62,8 @@ public:
             DisposeControl( m_controlHandle ) ;
     }
     
-    ControlHandle   GetControlHandle() { return m_controlHandle ; }
-    void SetControlHandle( ControlHandle handle ) { m_controlHandle = handle ; }
+    WXWidget GetControlHandle() { return (WXWidget) m_controlHandle ; }
+    void SetControlHandle( ControlRef handle ) { m_controlHandle = handle ; }
 
     void SetSize(const wxSize& size) ;
     void SetPosition( const wxPoint& position ) ;
@@ -94,11 +94,63 @@ private :
     {
         m_controlHandle = NULL ;
     }
-    ControlHandle m_controlHandle ;
+    ControlRef m_controlHandle ;
 
     wxCoord     m_x;
     wxCoord     m_y;
 };
+
+static const EventTypeSpec eventList[] =
+{
+	{ kEventClassControl , kEventControlHit } ,
+} ;
+
+static pascal OSStatus wxMacToolBarToolControlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    wxMacCarbonEvent cEvent( event ) ;
+    
+    ControlRef controlRef ;
+
+    cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
+
+    switch( GetEventKind( event ) )
+    {
+        case kEventControlHit :
+            {
+                wxToolBarTool* tbartool = (wxToolBarTool*)data ;
+                if ( tbartool->CanBeToggled() )
+                {
+                    tbartool->Toggle( GetControl32BitValue( (ControlRef) tbartool->GetControlHandle() ) ) ;
+                }
+                ((wxToolBar*)tbartool->GetToolBar())->OnLeftClick( tbartool->GetId() , tbartool -> IsToggled() ) ;
+
+                result = noErr; 
+            }
+            break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+pascal OSStatus wxMacToolBarToolEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+
+    switch ( GetEventClass( event ) )
+    {
+        case kEventClassControl :
+            result = wxMacToolBarToolControlEventHandler( handler, event, data ) ;
+            break ;
+        default :
+            break ;
+    }
+    return result ;
+}
+
+DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacToolBarToolEventHandler )
 
 // ============================================================================
 // implementation
@@ -125,12 +177,14 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
     {
         int x , y ;
         x = y = 0 ;
-        WindowRef rootwindow = (WindowRef) GetToolBar()->MacGetRootWindow() ;    
+        int mac_x = position.x ;
+        int mac_y = position.y ;
+#if !TARGET_API_MAC_OSX
+        WindowRef rootwindow = (WindowRef) GetToolBar()->MacGetTopLevelWindowRef() ;    
         GetToolBar()->MacWindowToRootWindow( &x , &y ) ;
-        int mac_x = x + position.x ;
-        int mac_y = y + position.y ;
-        
-
+        mac_x += x;
+        mac_y += y;
+#endif
         Rect contrlRect ;       
         GetControlBounds( m_controlHandle , &contrlRect ) ; 
         int former_mac_x = contrlRect.left ;
@@ -139,15 +193,7 @@ void wxToolBarTool::SetPosition(const wxPoint& position)
         
         if ( mac_x != former_mac_x || mac_y != former_mac_y )
         {
-            {
-                Rect inval = { former_mac_y , former_mac_x , former_mac_y + sz.y , former_mac_x + sz.x } ;
-                InvalWindowRect( rootwindow , &inval ) ;
-            }
             UMAMoveControl( m_controlHandle , mac_x , mac_y ) ;
-            {
-                Rect inval = { mac_y , mac_x , mac_y + sz.y , mac_x + sz.x } ;
-                InvalWindowRect( rootwindow , &inval ) ;
-            }
         }
     }
     else if ( IsControl() )
@@ -177,7 +223,7 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     
     if (id == wxID_SEPARATOR) return;
     
-    WindowRef window = (WindowRef) tbar->MacGetRootWindow() ;    
+    WindowRef window = (WindowRef) tbar->MacGetTopLevelWindowRef() ;    
     wxSize toolSize = tbar->GetToolSize() ;    
     Rect toolrect = { 0, 0 , toolSize.y , toolSize.x } ;
     
@@ -190,16 +236,18 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
     
     if ( info.contentType != kControlNoContent ) 
     {
-        m_controlHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
+        m_controlHandle = ::NewControl( window , &toolrect , "\p" , true , 0 , 
                                         behaviour + info.contentType , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
         
         ::SetControlData( m_controlHandle , kControlButtonPart , kControlBevelButtonContentTag , sizeof(info) , (char*) &info ) ;
     }
     else
     {
-        m_controlHandle = ::NewControl( window , &toolrect , "\p" , false , 0 , 
+        m_controlHandle = ::NewControl( window , &toolrect , "\p" , true , 0 , 
                                         behaviour  , 0 , kControlBevelButtonNormalBevelProc , (long) this ) ;
     }
+    InstallControlEventHandler( (ControlRef) m_controlHandle, GetwxMacToolBarToolEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, this,NULL);
     UMAShowControl( m_controlHandle ) ;
     if ( !IsEnabled() )
     {
@@ -214,7 +262,7 @@ wxToolBarTool::wxToolBarTool(wxToolBar *tbar,
         ::SetControl32BitValue( m_controlHandle , 0 ) ;
     }
     
-    ControlHandle container = (ControlHandle) tbar->MacGetContainerForEmbedding() ;
+    ControlRef container = (ControlRef) tbar->GetHandle() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     ::EmbedControl( m_controlHandle , container ) ;
 }
@@ -249,42 +297,8 @@ void wxToolBar::Init()
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {  
-    int x = pos.x;
-    int y = pos.y;
-    int width = size.x;
-    int height = size.y;
-    
-    if (width <= 0)
-        width = 100;
-    if (height <= 0)
-        height = 30;
-    if (x < 0)
-        x = 0;
-    if (y < 0)
-        y = 0;
-    
-    SetName(name);
-    
-    m_windowStyle = style;
-    parent->AddChild(this);
-    
-    m_backgroundColour = parent->GetBackgroundColour() ;
-    m_foregroundColour = parent->GetForegroundColour() ;
-    
-    if (id == -1)
-        m_windowId = NewControlId();
-    else
-        m_windowId = id;
-    
-    {
-        m_width = size.x ;
-        m_height = size.y ;
-        int x = pos.x ;
-        int y = pos.y ;
-        AdjustForParentClientOrigin(x, y, wxSIZE_USE_EXISTING);
-        m_x = x ;
-        m_y = y ;
-    }
+    if ( !wxToolBarBase::Create( parent , id , pos , size , style ) )
+        return FALSE ;
     
     return TRUE;
 }
@@ -376,7 +390,7 @@ bool wxToolBar::Realize()
         m_maxWidth = maxWidth ;
     }
     
-    SetSize(maxWidth, maxHeight);
+    SetSize( maxWidth, maxHeight );
     
     return TRUE;
 }
@@ -404,7 +418,7 @@ void wxToolBar::MacHandleControlClick( WXWidget control , wxInt16 controlpart , 
            {
                 if ( tool->CanBeToggled() )
                 {
-                    tool->Toggle( GetControl32BitValue( (ControlHandle) control ) ) ;
+                    tool->Toggle( GetControl32BitValue( (ControlRef) control ) ) ;
                 }
                 OnLeftClick( tool->GetId() , tool -> IsToggled() ) ;
                 break ;
@@ -471,9 +485,9 @@ void wxToolBar::DoEnableTool(wxToolBarToolBase *t, bool enable)
     else if ( tool->IsButton() )
     {
         if ( enable )
-            UMAActivateControl( tool->GetControlHandle() ) ;
+            UMAActivateControl( (ControlRef) tool->GetControlHandle() ) ;
         else
-            UMADeactivateControl( tool->GetControlHandle() ) ;
+            UMADeactivateControl( (ControlRef) tool->GetControlHandle() ) ;
     }
 }
 
@@ -485,7 +499,7 @@ void wxToolBar::DoToggleTool(wxToolBarToolBase *t, bool toggle)
     wxToolBarTool *tool = (wxToolBarTool *)t;
     if ( tool->IsButton() )
     {
-        ::SetControl32BitValue( tool->GetControlHandle() , toggle ) ;
+        ::SetControl32BitValue( (ControlRef) tool->GetControlHandle() , toggle ) ;
     }
 }
 
@@ -547,10 +561,19 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 {
     wxPaintDC dc(this) ;
     wxMacPortSetter helper(&dc) ;
+    int w, h ;
+    GetSize( &w , &h ) ;
     
     Rect toolbarrect = { dc.YLOG2DEVMAC(0) , dc.XLOG2DEVMAC(0) , 
-        dc.YLOG2DEVMAC(m_height) , dc.XLOG2DEVMAC(m_width) } ;
+        dc.YLOG2DEVMAC(h) , dc.XLOG2DEVMAC(w) } ;
+/*
+    if( toolbarrect.left < 0 )
+        toolbarrect.left = 0 ;
+    if ( toolbarrect.top < 0 )
+        toolbarrect.top = 0 ;
+*/
     UMADrawThemePlacard( &toolbarrect , IsEnabled() ? kThemeStateActive : kThemeStateInactive) ;
+/*
     {
         wxToolBarToolsList::Node *node;
         for ( node = m_tools.GetFirst(); node; node = node->GetNext() )
@@ -558,10 +581,12 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
             wxToolBarTool* tool = (wxToolBarTool*) node->GetData() ; 
             if ( tool->IsButton() )
             {
-               UMADrawControl( tool->GetControlHandle() ) ;
+               UMADrawControl( (ControlRef) tool->GetControlHandle() ) ;
             }
         }
     }
+*/
+    event.Skip() ;
 }
 
 void  wxToolBar::OnMouse( wxMouseEvent &event ) 
@@ -574,10 +599,10 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
         
         MacClientToRootWindow( &x , &y ) ;
             
-        ControlHandle   control ;
+        ControlRef   control ;
         Point       localwhere ;
         SInt16      controlpart ;
-        WindowRef   window = (WindowRef) MacGetRootWindow() ;
+        WindowRef   window = (WindowRef) MacGetTopLevelWindowRef() ;
         
         localwhere.h = x ;
         localwhere.v = y ;
@@ -608,7 +633,7 @@ void  wxToolBar::OnMouse( wxMouseEvent &event )
                     wxTheApp->s_lastMouseDown = 0 ;
                     if ( control && controlpart != kControlNoPart ) // otherwise we will get the event twice
                     {
-                        MacHandleControlClick( control , controlpart , false /* not down anymore */ ) ;
+                        MacHandleControlClick((WXWidget)  control , controlpart , false /* not down anymore */ ) ;
                     }
                 }
             }

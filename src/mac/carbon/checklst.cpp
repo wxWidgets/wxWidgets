@@ -70,7 +70,7 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
                                      ListHandle listHandle )
 {
     wxCheckListBox*          list;
-    list = (wxCheckListBox*) GetControlReference( (ControlHandle) GetListRefCon(listHandle) );
+    list = (wxCheckListBox*) GetControlReference( (ControlRef) GetListRefCon(listHandle) );
     if ( list == NULL )
         return ;
     
@@ -109,9 +109,9 @@ static pascal void wxMacCheckListDefinition( short message, Boolean isSelected, 
             const wxFont& font = list->GetFont();
             if ( font.Ok() )
             {
-                ::TextFont( font.GetMacFontNum() ) ;
-                ::TextSize( font.GetMacFontSize())  ;
-                ::TextFace( font.GetMacFontStyle() ) ;
+                ::TextFont( font.MacGetFontNum() ) ;
+                ::TextSize( font.MacGetFontSize())  ;
+                ::TextFace( font.MacGetFontStyle() ) ;
             }
                        
             ThemeButtonDrawInfo info ;
@@ -201,6 +201,8 @@ bool wxCheckListBox::Create(wxWindow *parent,
                             const wxValidator& validator,
                             const wxString &name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxCheckListBoxBase::Create(parent, id, pos, size,
                                      n, choices, style, validator, name) )
         return false;
@@ -220,7 +222,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     const wxFont& font = GetFont();
 
     FontInfo finfo;
-    FetchFontInfo(font.GetMacFontNum(),font.GetMacFontSize(),font.GetMacFontStyle(),&finfo);
+    FetchFontInfo(font.MacGetFontNum(),font.MacGetFontSize(),font.MacGetFontStyle(),&finfo);
     
     m_TextBaseLineOffset= finfo.leading+finfo.ascent;
     m_checkBoxHeight= finfo.leading+finfo.ascent+finfo.descent;
@@ -231,10 +233,8 @@ bool wxCheckListBox::Create(wxWindow *parent,
         m_checkBoxHeight= h;
     }
         
-    Rect bounds ;
-    Str255 title ;
-    
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
+
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
 
     ListDefSpec listDef;
     listDef.defType = kListDefUserProcType;
@@ -248,24 +248,24 @@ bool wxCheckListBox::Create(wxWindow *parent,
     Size asize;
 
 
-    CreateListBoxControl( MAC_WXHWND(parent->MacGetRootWindow()), &bounds, false, 0, 1, false, true,
+    CreateListBoxControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()), &bounds, false, 0, 1, false, true,
                           m_checkBoxHeight+2, 14, false, &listDef, (ControlRef *)&m_macControl );
 
-    GetControlData( (ControlHandle) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
+    GetControlData( (ControlRef) m_macControl, kControlNoPart, kControlListBoxListHandleTag,
                    sizeof(ListHandle), (Ptr) &m_macList, &asize);
 
-    SetControlReference( (ControlHandle) m_macControl, (long) this);
-    SetControlVisibility( (ControlHandle) m_macControl, false, false);
+    SetControlReference( (ControlRef) m_macControl, (long) this);
+    SetControlVisibility( (ControlRef) m_macControl, false, false);
 
 #else
 
     long    result ;
 
     wxStAppResource resload ;
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false ,
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true ,
                   kwxMacListWithVerticalScrollbar , 0 , 0, 
                   kControlListBoxProc , (long) this ) ;
-    ::GetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
+    ::GetControlData( (ControlRef) m_macControl , kControlNoPart , kControlListBoxListHandleTag ,
                sizeof( ListHandle ) , (char*) &m_macList  , &result ) ;
 
     HLock( (Handle) m_macList ) ;
@@ -298,7 +298,7 @@ bool wxCheckListBox::Create(wxWindow *parent,
     }
     SetListSelectionFlags((ListHandle)m_macList, options);
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
     for ( int i = 0 ; i < n ; i++ )
     {

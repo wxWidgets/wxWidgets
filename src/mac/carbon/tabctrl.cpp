@@ -34,21 +34,19 @@ wxTabCtrl::wxTabCtrl()
 bool wxTabCtrl::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxControl::Create(parent, id, pos, size,
                             style, wxDefaultValidator, name) )
         return false;
 
-    Rect bounds ;
-    Str255 title ;
-    
     m_imageList = NULL;
     
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
-    
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
         kControlTabSmallProc , (long) this ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     return TRUE ;
 }
 

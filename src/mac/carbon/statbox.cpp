@@ -20,11 +20,6 @@
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxStaticBox, wxControl)
-
-BEGIN_EVENT_TABLE(wxStaticBox, wxControl)
-    EVT_ERASE_BACKGROUND(wxStaticBox::OnEraseBackground)
-END_EVENT_TABLE()
-
 #endif
 
 /*
@@ -38,19 +33,20 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxControl::Create(parent, id, pos, size,
                             style, wxDefaultValidator, name) )
         return false;
 
-    Rect bounds ;
-    Str255 title ;
+    m_label = label ;
+
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     
-    MacPreControlCreate( parent , id ,  label , pos , size ,style, wxDefaultValidator , name , &bounds , title ) ;
-    
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
         kControlGroupBoxTextTitleProc , (long) this ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
     return TRUE;
 }

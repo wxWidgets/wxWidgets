@@ -164,7 +164,7 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
     RealizeResource();
 }
 
-void wxBrush::SetMacTheme(ThemeBrush macThemeBrush)
+void wxBrush::MacSetTheme(ThemeBrush macThemeBrush)
 {
     Unshare();
 
@@ -174,7 +174,7 @@ void wxBrush::SetMacTheme(ThemeBrush macThemeBrush)
     RealizeResource();
 }
 
-void wxBrush::SetMacThemeBackground(unsigned long macThemeBackground, const WXRECTPTR extent)
+void wxBrush::MacSetThemeBackground(unsigned long macThemeBackground, const WXRECTPTR extent)
 {
     Unshare();
 
@@ -189,7 +189,7 @@ bool wxBrush::RealizeResource()
     return TRUE;
 }
 
-unsigned long wxBrush::GetMacThemeBackground( WXRECTPTR extent)  const 
+unsigned long wxBrush::MacGetThemeBackground( WXRECTPTR extent)  const 
 {
   if ( M_BRUSHDATA && M_BRUSHDATA->m_macBrushKind == kwxMacBrushThemeBackground )
   {
@@ -203,7 +203,7 @@ unsigned long wxBrush::GetMacThemeBackground( WXRECTPTR extent)  const
   }
 }
 
-short wxBrush::GetMacTheme() const 
+short wxBrush::MacGetTheme() const 
 { 
     return (M_BRUSHDATA ? ( M_BRUSHDATA->m_macBrushKind == kwxMacBrushTheme ? M_BRUSHDATA->m_macThemeBrush : kThemeBrushBlack) : kThemeBrushBlack); 
 }

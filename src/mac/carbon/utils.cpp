@@ -456,7 +456,6 @@ void wxDisplaySizeMM(int *width, int *height)
 
 void wxClientDisplayRect(int *x, int *y, int *width, int *height)
 {
-#if TARGET_CARBON
     Rect r ;
     GetAvailableWindowPositioningBounds( GetMainDevice() , &r ) ;
     if ( x )
@@ -467,32 +466,6 @@ void wxClientDisplayRect(int *x, int *y, int *width, int *height)
         *width = r.right - r.left ;
     if ( height )
         *height = r.bottom - r.top ;
-#else
-    BitMap screenBits;
-    GetQDGlobalsScreenBits( &screenBits );
-
-    if (x) *x = 0;
-    if (y) *y = 0;
-
-    if (width != NULL) {
-        *width = screenBits.bounds.right - screenBits.bounds.left  ;
-    }
-    if (height != NULL) {
-        *height = screenBits.bounds.bottom - screenBits.bounds.top ;
-    }
-
-    SInt16 mheight ;
-#if TARGET_CARBON
-    GetThemeMenuBarHeight( &mheight ) ;
-#else
-    mheight = LMGetMBarHeight() ;
-#endif
-    if (height != NULL) {
-        *height -= mheight ;
-    }
-    if (y)
-        *y = mheight ;
-#endif
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
@@ -559,6 +532,15 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
 //---------------------------------------------------------------------------
 // wxMac Specific utility functions
 //---------------------------------------------------------------------------
+
+Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size ) 
+{
+    int x ,y , w ,h ;
+    
+    window->MacGetBoundsForControl( pos , size , x , y, w, h ) ;
+    Rect bounds =  { y , x , y+h , x+w  };
+    return bounds ;
+}
 
 void wxMacStringToPascal( const wxString&from , StringPtr to )
 {
@@ -1250,6 +1232,21 @@ void wxMacConvertNewlines10To13( wxChar * data )
     }
 }
 #endif
+
+// ----------------------------------------------------------------------------
+// Carbon Event Support
+// ----------------------------------------------------------------------------
+
+
+OSStatus wxMacCarbonEvent::GetParameter(EventParamName inName, EventParamType inDesiredType, UInt32 inBufferSize, void * outData)
+{
+    return ::GetEventParameter( m_eventRef , inName , inDesiredType , NULL , inBufferSize , NULL , outData ) ;   
+}
+
+OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType inType, UInt32 inBufferSize, void * inData)
+{
+    return ::SetEventParameter( m_eventRef , inName , inType , inBufferSize , inData ) ;   
+}
 
 // ----------------------------------------------------------------------------
 // debugging support

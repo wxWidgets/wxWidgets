@@ -87,7 +87,7 @@ void _GSocket_GUI_Cleanup(void)
 
 int _GSocket_GUI_Init_Socket(GSocket *socket)
 {
-    struct MacGSocketData *data = (struct MacGSocketData *) malloc(sizeof(struct MacGSocketData));
+    struct MacGSocketData *data = (struct MacGSocketData *)malloc(sizeof(struct MacGSocketData));
     if (data)
     {
         socket->m_gui_dependent = (char*)data;

@@ -30,18 +30,19 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
-
-    Rect bounds ;
-    Str255 title ;
     
-    MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
+    m_label = label ;
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
           kControlRadioButtonProc , (long) this ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
 
   m_cycle = this ;
   
@@ -72,10 +73,10 @@ bool wxRadioButton::Create(wxWindow *parent, wxWindowID id,
 void wxRadioButton::SetValue(bool val)
 {
     wxRadioButton *cycle;
-      if ( GetControl32BitValue( (ControlHandle) m_macControl ) == val )
+      if ( GetControl32BitValue( (ControlRef) m_macControl ) == val )
         return ;
         
-   ::SetControl32BitValue( (ControlHandle) m_macControl , val ) ;
+   ::SetControl32BitValue( (ControlRef) m_macControl , val ) ;
    if (val) 
    {
            cycle=this->NextInCycle();
@@ -91,7 +92,7 @@ void wxRadioButton::SetValue(bool val)
 
 bool wxRadioButton::GetValue() const
 {
-    return ::GetControl32BitValue( (ControlHandle) m_macControl ) ;
+    return ::GetControl32BitValue( (ControlRef) m_macControl ) ;
 }
 
 void wxRadioButton::Command (wxCommandEvent & event)

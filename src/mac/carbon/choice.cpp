@@ -60,23 +60,22 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxChoiceBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    Rect bounds ;
-    Str255 title ;
-
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style, validator , name , &bounds , title ) ;
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , -12345 , 0 ,
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , -12345 , 0 ,
         kControlPopupButtonProc + kControlPopupFixedWidthVariant , (long) this ) ;
 
     m_macPopUpMenuHandle =  NewUniqueMenu() ;
-    SetControlData( (ControlHandle) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
-    SetControl32BitMinimum( (ControlHandle) m_macControl , 0 ) ;
-    SetControl32BitMaximum( (ControlHandle) m_macControl , 0) ;
+    SetControlData( (ControlRef) m_macControl , kControlNoPart , kControlPopupButtonMenuHandleTag , sizeof( MenuHandle ) , (char*) &m_macPopUpMenuHandle) ;
+    SetControl32BitMinimum( (ControlRef) m_macControl , 0 ) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , 0) ;
     if ( n > 0 )
-        SetControl32BitValue( (ControlHandle) m_macControl , 1 ) ;
-    MacPostControlCreate() ;
+        SetControl32BitValue( (ControlRef) m_macControl , 1 ) ;
+    MacPostControlCreate(pos,size) ;
     // TODO wxCB_SORT
     for ( int i = 0; i < n; i++ )
     {
@@ -95,7 +94,7 @@ int wxChoice::DoAppend(const wxString& item)
     m_datas.Add( NULL ) ;
     int index = m_strings.GetCount()  - 1  ;
     DoSetItemClientData( index , NULL ) ;
-    SetControl32BitMaximum( (ControlHandle) m_macControl , GetCount()) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , GetCount()) ;
     return index ;
 }
 
@@ -111,7 +110,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     m_strings.Insert( item, pos ) ;
     m_datas.Insert( NULL, pos ) ;
     DoSetItemClientData( pos , NULL ) ;
-    SetControl32BitMaximum( (ControlHandle) m_macControl , pos) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , pos) ;
     return pos ;
 }
 
@@ -125,7 +124,7 @@ void wxChoice::Delete(int n)
     ::DeleteMenuItem( MAC_WXHMENU(m_macPopUpMenuHandle) , n + 1) ;
     m_strings.RemoveAt( n ) ;
     m_datas.RemoveAt( n ) ;
-    SetControl32BitMaximum( (ControlHandle) m_macControl , GetCount()) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , GetCount()) ;
 }
 
 void wxChoice::Clear()
@@ -137,7 +136,7 @@ void wxChoice::Clear()
     }
     m_strings.Empty() ;
     m_datas.Empty() ;
-    SetControl32BitMaximum( (ControlHandle) m_macControl , 0 ) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , 0 ) ;
 }
 
 void wxChoice::FreeData()
@@ -157,12 +156,12 @@ void wxChoice::FreeData()
 // ----------------------------------------------------------------------------
 int wxChoice::GetSelection() const
 {
-    return GetControl32BitValue( (ControlHandle) m_macControl ) -1 ;
+    return GetControl32BitValue( (ControlRef) m_macControl ) -1 ;
 }
 
 void wxChoice::SetSelection(int n)
 {
-    SetControl32BitValue( (ControlHandle) m_macControl , n + 1 ) ;
+    SetControl32BitValue( (ControlRef) m_macControl , n + 1 ) ;
 }
 
 // ----------------------------------------------------------------------------
@@ -258,12 +257,12 @@ wxSize wxChoice::DoGetBestSize() const
     lbHeight = metric ;
 #endif
     {
-        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetRootWindow() ) ) ;
+        wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef) MacGetTopLevelWindowRef() ) ) ;
         if ( m_font.Ok() )
         {
-            ::TextFont( m_font.GetMacFontNum() ) ;
-            ::TextSize( m_font.GetMacFontSize() ) ;
-            ::TextFace( m_font.GetMacFontStyle() ) ;
+            ::TextFont( m_font.MacGetFontNum() ) ;
+            ::TextSize( m_font.MacGetFontSize() ) ;
+            ::TextFace( m_font.MacGetFontStyle() ) ;
         }
         else
         {

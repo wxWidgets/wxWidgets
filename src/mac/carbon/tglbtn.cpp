@@ -56,25 +56,19 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxControl::Create(parent, id, pos, size, style, validator, name) )
         return false;
-
-    Rect bounds ;
-    Str255 title ;
-
-    if ( UMAHasAquaLayout() )
-    {
-        m_macHorizontalBorder = kMacOSXHorizontalBorder;
-        m_macVerticalBorder = kMacOSXVerticalBorder;
-    }
     
-    MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
+    m_label = label ;
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , kControlBehaviorToggles , 1, 
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , kControlBehaviorToggles , 1, 
           kControlBevelButtonNormalBevelProc  , (long) this ) ;
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
+    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
   return TRUE;
 }
@@ -88,22 +82,17 @@ wxSize wxToggleButton::DoGetBestSize() const
     if (lBtn > wBtn) 
         wBtn = lBtn;
 
-    if ( UMAHasAquaLayout() )
-    {
-        wBtn += 2 * kMacOSXHorizontalBorder ;
-        hBtn += 2 * kMacOSXVerticalBorder ;
-    }
     return wxSize ( wBtn , hBtn ) ;
 }
 
 void wxToggleButton::SetValue(bool val)
 {
-    ::SetControl32BitValue( (ControlHandle) m_macControl , val ) ;
+    ::SetControl32BitValue( (ControlRef) m_macControl , val ) ;
 }
 
 bool wxToggleButton::GetValue() const
 {
-    return GetControl32BitValue( (ControlHandle) m_macControl ) ;
+    return GetControl32BitValue( (ControlRef) m_macControl ) ;
 }
 
 void wxToggleButton::Command(wxCommandEvent & event)

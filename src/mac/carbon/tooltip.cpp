@@ -154,7 +154,7 @@ void wxToolTip::RelayEvent( wxWindow *win , wxMouseEvent &event )
                 s_ToolTipArea = wxRect2DInt( event.m_x - 2 , event.m_y - 2 , 4 , 4 ) ;
                 s_LastWindowEntered = win ;
                 
-                WindowRef window = MAC_WXHWND( win->MacGetRootWindow() ) ;
+                WindowRef window = MAC_WXHWND( win->MacGetTopLevelWindowRef() ) ;
                 int x = event.m_x ;
                 int y = event.m_y ;
                 wxPoint local( x , y ) ;

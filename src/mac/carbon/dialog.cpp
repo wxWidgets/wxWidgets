@@ -57,16 +57,15 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
            long style,
            const wxString& name)
 {
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+    SetExtraStyle(GetExtraStyle() | wxTOPLEVEL_EX_DIALOG);
 
+    // All dialogs should really have this style
+    style |= wxTAB_TRAVERSAL;
 
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
 
-    MacCreateRealWindow( title , pos , size , MacRemoveBordersFromStyle(style) & ~(wxYES|wxOK|wxNO|wxCANCEL) , name ) ;
-
-    m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
-    SetThemeWindowBackground( (WindowRef) m_macWindow , m_macWindowBackgroundTheme , false ) ;
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
     return TRUE;
 }

@@ -112,6 +112,8 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
                         int majorDim, long style,
                         const wxValidator& val, const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxControl::Create(parent, id, pos, size, style, val, name) )
         return false;
 
@@ -127,12 +129,15 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         m_majorDim = majorDim ;
     
     
-    Rect bounds ;
-    Str255 title ;
-    
-    MacPreControlCreate( parent , id ,  wxStripMenuCodes(label) , pos , size ,style, val , name , &bounds , title ) ;
-    
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 1, 
+    m_label = label ;
+
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    if( bounds.right <= bounds.left )
+        bounds.right = bounds.left + 100 ;
+    if ( bounds.bottom <= bounds.top )
+        bounds.bottom = bounds.top + 100 ;
+   
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 1, 
         kControlGroupBoxTextTitleProc , (long) this ) ;
     
     for (i = 0; i < n; i++)
@@ -152,7 +157,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     }
     
     SetSelection(0);
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
     return TRUE;
 }
@@ -421,8 +426,8 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int eachWidth[128],eachHeight[128];
     int totWidth,totHeight;
     
-    SetFont(GetParent()->GetFont());
     GetTextExtent(wxT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), &charWidth, &charHeight);
+
     charWidth/=52;
     
     maxWidth=-1;
@@ -436,14 +441,16 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
         if (maxHeight<eachHeight[i]) maxHeight = eachHeight[i];
           }
     
-    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight ;
-    totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
+    totHeight = GetRowCount() * ( maxHeight ) ;
+    totWidth  = GetColumnCount() * (maxWidth + charWidth) ;
+
+    wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth , totHeight ) ) ;
     
     // only change our width/height if asked for
     if ( width == -1 )
     {
         if ( sizeFlags & wxSIZE_AUTO_WIDTH )
-            width = totWidth ;
+            width = sz.x ;
         else
             width = widthOld;
     }
@@ -451,7 +458,7 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     if ( height == -1 )
     {
         if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
-            height = totHeight ;
+            height = sz.y ;
         else
             height = heightOld;
     }
@@ -463,13 +470,9 @@ void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     int x_start,y_start;
     
     
-    x_start = charWidth;
-    y_start = 15 ;
-    if ( UMAGetSystemVersion() >= 0x1030 )
-    {
-		//need to add a few more pixels for the top border on panther
-		y_start = y_start + 5; //how many exactly should this be to meet the HIG?
-    }
+    x_start = 0;
+    y_start = 0 ;
+
     x_offset = x_start;
     y_offset = y_start;
     
@@ -510,6 +513,7 @@ wxSize wxRadioBox::DoGetBestSize() const
     wxFont font = GetParent()->GetFont();
     GetTextExtent(wxT("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"),
         &charWidth, &charHeight, NULL, NULL, &font);
+
     charWidth /= 52;
     
     maxWidth = -1;
@@ -517,21 +521,20 @@ wxSize wxRadioBox::DoGetBestSize() const
     
     for (int i = 0 ; i < m_noItems; i++)
     {
-        GetTextExtent(GetString(i), &eachWidth, &eachHeight);
+        GetTextExtent(GetString(i), &eachWidth, &eachHeight,NULL, NULL, &font);
         eachWidth  = (int)(eachWidth + RADIO_SIZE) ;
         eachHeight = (int)((3 * eachHeight) / 2);
         if (maxWidth < eachWidth)     maxWidth = eachWidth;
         if (maxHeight < eachHeight)   maxHeight = eachHeight;
     }
     
-    totHeight = GetRowCount() * (maxHeight + charHeight/2) + charHeight ;
-    totWidth  = GetColumnCount() * (maxWidth + charWidth) + charWidth;
+    totHeight = GetRowCount() * (maxHeight ) ;
+    totWidth  = GetColumnCount() * (maxWidth + charWidth) ;
     
-    if ( UMAGetSystemVersion() >= 0x1030 )
-    {
-        //need to add a few more pixels for the static boxborder on panther
-        totHeight = totHeight + 10; //how many exactly should this be to meet the HIG?
-    }
+    wxSize sz = DoGetSizeFromClientSize( wxSize( totWidth , totHeight ) ) ;
+    totWidth = sz.x ;
+    totHeight = sz.y ;
+    
     // handle radio box title as well
     GetTextExtent(GetTitle(), &eachWidth, NULL);
     eachWidth  = (int)(eachWidth + RADIO_SIZE) + 3 * charWidth ;

@@ -114,11 +114,7 @@ bool wxTimer::Start(int milliseconds,bool mode)
     wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeout") );
     wxCHECK_MSG( m_info->m_task.tmAddr == NULL , FALSE, wxT("attempting to restart a timer") );
 
-#if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
     m_info->m_task.tmAddr = NewTimerUPP( MacTimerProc ) ;
-#else
-    m_info->m_task.tmAddr = NewTimerProc( MacTimerProc ) ;
-#endif
     m_info->m_task.tmWakeUp = 0 ;
     m_info->m_task.tmReserved = 0 ;
     m_info->m_task.qType = 0 ;

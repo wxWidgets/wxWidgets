@@ -62,31 +62,6 @@ void wxFrame::Init()
 #endif
 }
 
-wxPoint wxFrame::GetClientAreaOrigin() const
-{
-    // on mac we are at position -1,-1 with the control
-    wxPoint pt(0, 0);
-
-#if wxUSE_TOOLBAR
-    if ( GetToolBar() )
-    {
-        int w, h;
-        GetToolBar()->GetSize(& w, & h);
-
-        if ( GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL )
-        {
-            pt.x += w - 1;
-        }
-        else
-        {
-            pt.y += h - 1 ;
-        }
-    }
-#endif // wxUSE_TOOLBAR
-
-    return pt;
-}
-
 bool wxFrame::Create(wxWindow *parent,
            wxWindowID id,
            const wxString& title,
@@ -95,15 +70,11 @@ bool wxFrame::Create(wxWindow *parent,
            long style,
            const wxString& name)
 {
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
     
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style, name) )
         return FALSE;
     
-    MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
-
-    m_macWindowBackgroundTheme = kThemeBrushDocumentWindowBackground ;
-    SetThemeWindowBackground( (WindowRef) m_macWindow , m_macWindowBackgroundTheme , false ) ;
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE));
 
     wxModelessWindows.Append(this);
     
@@ -254,22 +225,34 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
 void wxFrame::DoGetClientSize(int *x, int *y) const
 {
-    wxWindow::DoGetClientSize( x , y ) ;
+    wxTopLevelWindow::DoGetClientSize( x , y ) ;
     
 #if wxUSE_STATUSBAR
     if ( GetStatusBar() && y )
     {
         int statusX, statusY;
-        GetStatusBar()->GetClientSize(&statusX, &statusY);
-        *y -= statusY;
+        GetStatusBar()->GetSize(&statusX, &statusY);
+        if ( y) *y -= statusY;
     }
 #endif // wxUSE_STATUSBAR
     
-    wxPoint pt(GetClientAreaOrigin());
-    if ( y )
-        *y -= pt.y;
-    if ( x ) 
-        *x -= pt.x;
+#if wxUSE_TOOLBAR
+    wxToolBar *toolbar = GetToolBar();
+    if ( toolbar && toolbar->IsShown() )
+    {
+        int w, h;
+        toolbar->GetSize(&w, &h);
+
+        if ( toolbar->GetWindowStyleFlag() & wxTB_VERTICAL )
+        {
+            if ( x )  *x -= w;
+        }
+        else
+        {
+            if ( y )  *y -= h;
+        }
+    }
+#endif // wxUSE_TOOLBAR
 }
 
 void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
@@ -278,6 +261,10 @@ void wxFrame::DoSetClientSize(int clientwidth, int clientheight)
     int currentwidth , currentheight ;
     
     GetClientSize( &currentclientwidth , &currentclientheight ) ;
+    if ( clientwidth == -1 )
+        clientwidth = currentclientwidth ;
+    if ( clientheight == -1 )
+        clientheight = currentclientheight ;
     GetSize( &currentwidth , &currentheight ) ;
     
     // find the current client size
@@ -306,8 +293,7 @@ void wxFrame::PositionToolBar()
 {
     int cw, ch;
 
-    cw = m_width ;
-    ch = m_height ;
+    GetSize( &cw , &ch ) ;
 
     if ( GetStatusBar() )
     {
@@ -318,20 +304,21 @@ void wxFrame::PositionToolBar()
 
     if (GetToolBar())
     {
-        int tw, th;
+        int tx, ty, tw, th;
+        tx = ty = 0 ;
+        
         GetToolBar()->GetSize(& tw, & th);
-
         if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
         {
             // Use the 'real' position. wxSIZE_NO_ADJUSTMENTS
             // means, pretend we don't have toolbar/status bar, so we
             // have the original client size.
-            GetToolBar()->SetSize(-1, -1, tw, ch + 2 , wxSIZE_NO_ADJUSTMENTS | wxSIZE_ALLOW_MINUS_ONE );
+            GetToolBar()->SetSize(tx , ty , tw, ch , wxSIZE_NO_ADJUSTMENTS );
         }
         else
         {
             // Use the 'real' position
-            GetToolBar()->SetSize(-1, -1, cw + 2, th, wxSIZE_NO_ADJUSTMENTS | wxSIZE_ALLOW_MINUS_ONE );
+            GetToolBar()->SetSize(tx , ty , cw , th, wxSIZE_NO_ADJUSTMENTS );
         }
     }
 }

@@ -31,13 +31,12 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
            const wxValidator& validator,
            const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxCheckBoxBase::Create(parent, id, pos, size, style, validator, name) )
         return false;
 
-    Rect bounds ;
-    Str255 title ;
-    
-    MacPreControlCreate( parent , id ,  label , pos , size ,style, validator , name , &bounds , title ) ;
+    m_label = label ;
 
     SInt16 maxValue = 1 /* kControlCheckboxCheckedValue */;
     if (style & wxCHK_3STATE)
@@ -45,10 +44,12 @@ bool wxCheckBox::Create(wxWindow *parent, wxWindowID id, const wxString& label,
         maxValue = 2 /* kControlCheckboxMixedValue */;
     }
 
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , maxValue, 
+
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , maxValue, 
           kControlCheckBoxProc , (long) this ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
 
   return TRUE;
 }
@@ -85,12 +86,12 @@ void wxCheckBox::Command (wxCommandEvent & event)
 
 wxCheckBoxState wxCheckBox::DoGet3StateValue() const
 {
-    return (wxCheckBoxState) ::GetControl32BitValue( (ControlHandle) m_macControl );
+    return (wxCheckBoxState) ::GetControl32BitValue( (ControlRef) m_macControl );
 }
 
 void wxCheckBox::DoSet3StateValue(wxCheckBoxState val)
 {
-    ::SetControl32BitValue( (ControlHandle) m_macControl , (int) val) ;
+    ::SetControl32BitValue( (ControlRef) m_macControl , (int) val) ;
     MacRedrawControl() ;
 }
 

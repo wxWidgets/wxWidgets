@@ -236,11 +236,6 @@ bool wxClipboard::AddData( wxDataObject *data )
                     wxT("wxClipboard now supports atom %s"),
                     array[i].GetId().c_str() );
 
-#if !TARGET_CARBON
-        OSErr err = noErr ;
-#else
-        OSStatus err = noErr ;
-#endif
         size_t sz = data->GetDataSize( array[i] ) ;
         void* buf = malloc( sz + 1 ) ;
         if ( buf )

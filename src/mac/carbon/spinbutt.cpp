@@ -38,6 +38,8 @@ wxSpinButton::wxSpinButton()
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
         long style, const wxString& name)
 {
+    m_macIsUserPane = FALSE ;
+    
     if ( !wxSpinButtonBase::Create(parent, id, pos, size,
                                    style, wxDefaultValidator, name) )
         return false;
@@ -48,17 +50,14 @@ bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, c
     if (!parent)
         return FALSE;
     
-    Rect bounds ;
-    Str255 title ;
+    Rect bounds = wxMacGetBoundsForControl( this , pos , size ) ;
     
-    MacPreControlCreate( parent , id ,  wxEmptyString , pos , size ,style,*( (wxValidator*) NULL ) , name , &bounds , title ) ;
-    
-    m_macControl = ::NewControl( MAC_WXHWND(parent->MacGetRootWindow()) , &bounds , title , false , 0 , 0 , 100, 
+    m_macControl = (WXWidget) ::NewControl( MAC_WXHWND(parent->MacGetTopLevelWindowRef()) , &bounds , "\p" , true , 0 , 0 , 100, 
         kControlLittleArrowsProc , (long) this ) ;
     
-    wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
+    wxASSERT_MSG( (ControlRef) m_macControl != NULL , wxT("No valid mac control") ) ;
     
-    MacPostControlCreate() ;
+    MacPostControlCreate(pos,size) ;
     
     return TRUE;
 }
@@ -94,8 +93,8 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 {
     m_min = minVal;
     m_max = maxVal;
-    SetControl32BitMaximum( (ControlHandle) m_macControl , maxVal ) ;
-    SetControl32BitMinimum((ControlHandle) m_macControl , minVal ) ;
+    SetControl32BitMaximum( (ControlRef) m_macControl , maxVal ) ;
+    SetControl32BitMinimum((ControlRef) m_macControl , minVal ) ;
 }
 
 void wxSpinButton::MacHandleValueChanged( int inc )
@@ -138,7 +137,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
     {
         m_value = oldValue ;
     }
-    SetControl32BitValue( (ControlHandle) m_macControl , m_value ) ;
+    SetControl32BitValue( (ControlRef) m_macControl , m_value ) ;
     
     /* always send a thumbtrack event */
     if (scrollEvent != wxEVT_SCROLL_THUMBTRACK)
@@ -153,7 +152,7 @@ void wxSpinButton::MacHandleValueChanged( int inc )
 
 void wxSpinButton::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown)) 
 {
-    if ( (ControlHandle) m_macControl == NULL )
+    if ( (ControlRef) m_macControl == NULL )
         return ;
     
     int nScrollInc = 0;

@@ -463,7 +463,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(DragTrackingMessage theMessage, Wind
             {
                 wxPoint point(localMouse.h , localMouse.v) ;
                 wxWindow *win = NULL ;
-                toplevel->MacGetWindowFromPointSub( point , &win ) ;
+                // TODO toplevel->MacGetWindowFromPointSub( point , &win ) ;
                 int localx , localy ;
                 localx = localMouse.h ;
                 localy = localMouse.v ;

@@ -50,17 +50,23 @@ bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id,
                             long style ,
                             const wxString& name)
 {
-    return wxStatusBarGeneric::Create( parent , id , style , name ) ;
+    if( !wxStatusBarGeneric::Create( parent , id , style , name ) )
+        return FALSE ;
+    
+    m_macBackgroundBrush.MacSetTheme( kThemeBrushDialogBackgroundActive ) ;    
+    
+    return TRUE ;
 }
 
 void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
 {
     int leftMargin = 2;
-    
+    int w, h ;
+    GetSize( &w , &h ) ;
     wxRect rect;
     GetFieldRect(i, rect);
     
-    if ( !IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
+    if ( !IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) )
     {
         dc.SetTextForeground( wxColour( 0x80 , 0x80 , 0x80 ) ) ;
     }
@@ -74,7 +80,7 @@ void wxStatusBarMac::DrawFieldText(wxDC& dc, int i)
     int xpos = rect.x + leftMargin + 1 ;
     int ypos = 1 ;
     
-    dc.SetClippingRegion(rect.x, 0, rect.width, m_height);
+    dc.SetClippingRegion(rect.x, 0, rect.width, h);
     
     dc.DrawText(text, xpos, ypos);
     
@@ -94,8 +100,10 @@ void wxStatusBarMac::SetStatusText(const wxString& text, int number)
     m_statusStrings[number] = text;
     wxRect rect;
     GetFieldRect(number, rect);
+    int w, h ;
+    GetSize( &w , &h ) ;
     rect.y=0;
-    rect.height = m_height ;
+    rect.height = h ;
     Refresh( TRUE , &rect ) ;
     Update();
 }
@@ -107,8 +115,10 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
     int major,minor;
     wxGetOsVersion( &major, &minor );
+    int w, h ;
+    GetSize( &w , &h ) ;
 
-	if ( IsWindowHilited( MAC_WXHWND( MacGetRootWindow() ) ) )
+	if ( IsWindowHilited( MAC_WXHWND( MacGetTopLevelWindowRef() ) ) )
 	{
 		wxPen white( wxWHITE , 1 , wxSOLID ) ;
         if (major >= 10) 
@@ -122,10 +132,10 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
             dc.SetPen(black);
     	}
 		dc.DrawLine(0, 0 ,
-		       m_width , 0);
+		       w , 0);
 		dc.SetPen(white);
 		dc.DrawLine(0, 1 ,
-		       m_width , 1);
+		       w , 1);
 	}
 	else
 	{
@@ -136,7 +146,7 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
             dc.SetPen(wxPen(wxColour(0x80,0x80,0x80),1,wxSOLID));
 
 		dc.DrawLine(0, 0 ,
-		       m_width , 0);
+		       w , 0);
 	}
 
 	int i;
@@ -146,10 +156,4 @@ void wxStatusBarMac::OnPaint(wxPaintEvent& WXUNUSED(event) )
 
 	for ( i = 0; i < m_nFields; i ++ )
 		DrawField(dc, i);
-}
-
-void wxStatusBarMac::MacSuperEnabled( bool enabled ) 
-{
-    Refresh(FALSE) ;
-    wxWindow::MacSuperEnabled( enabled ) ;
 }
