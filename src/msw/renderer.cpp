@@ -126,6 +126,10 @@ wxRendererNative& wxRendererMSW::Get()
     return s_rendererMSW;
 }
 
+#if defined(__WXWINCE__) && !defined(DFCS_FLAT)
+#define DFCS_FLAT 0
+#endif
+
 void
 wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
                                       wxDC& dc,
