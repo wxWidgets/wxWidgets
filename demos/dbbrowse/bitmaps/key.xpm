@@ -1,5 +1,5 @@
 /* XPM */
-static char* XpmKEY_xpm[] = {
+static char* KEY_xpm[] = {
 "16 16 7 1",
 "  c #000000",
 "! c #008000",

@@ -1,5 +1,5 @@
 /* XPM */
-static char* TAB[] = {
+static char* TAB_xpm[] = {
 "16 16 7 1",
 "  c #000000",
 "! c #800080",

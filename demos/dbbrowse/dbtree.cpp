@@ -68,7 +68,19 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
   p_imageListNormal = new wxImageList(16, 16, TRUE);
   
   // should correspond to TreeIc_xxx enum
- #if defined(__WXMSW__)
+
+#if !defined(__WXMSW__)
+#include "bitmaps/logo.xpm"
+#include "bitmaps/dsnclose.xpm"
+#include "bitmaps/dsnopen.xpm"
+#include "bitmaps/tab.xpm"
+#include "bitmaps/key.xpm"
+#include "bitmaps/keyf.xpm"
+#include "bitmaps/d_open.xpm"
+#include "bitmaps/d_closed.xpm" 
+#include "bitmaps/col.xpm"
+#endif
+
    p_imageListNormal->Add(wxICON(Logo));
    p_imageListNormal->Add(wxICON(DsnClosed));
    p_imageListNormal->Add(wxICON(DsnOpen));
@@ -78,16 +90,10 @@ DBTree::DBTree(wxWindow *parent, const wxWindowID id,const wxPoint& pos, const w
    p_imageListNormal->Add(wxICON(KEYF));
    p_imageListNormal->Add(wxICON(DocOpen));
    p_imageListNormal->Add(wxICON(DocOpen));
- #else
- #include "bitmaps/logo.xpm"
- #include "bitmaps/dsnclose.xpm"
- #include "bitmaps/dsnopen.xpm"
- #include "bitmaps/tab.xpm"
- #include "bitmaps/key.xpm"
- #include "bitmaps/keyf.xpm"
- #include "bitmaps/d_open.xpm"
- #include "bitmaps/d_closed.xpm"
-#endif
+
+ 
+
+
   
   SetImageList(p_imageListNormal);
   ct_BrowserDB = NULL;
