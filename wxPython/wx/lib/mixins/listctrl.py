@@ -383,8 +383,8 @@ from bisect import bisect
 
 
 class TextEditMixin:
-    """
-    A mixin class that handles enables any text in any column of a
+    """    
+    A mixin class that enables any text in any column of a
     multi-column listctrl to be edited by clicking on the given row
     and column.  You close the text editor by hitting the ENTER key or
     clicking somewhere else on the listctrl. You switch to the next
@@ -393,11 +393,11 @@ class TextEditMixin:
     To use the mixin you have to include it in the class definition
     and call the __init__ function::
 
-        class TestListCtrl(wx.ListCtrl, TextEdit):
+        class TestListCtrl(wx.ListCtrl, TextEditMixin):
             def __init__(self, parent, ID, pos=wx.DefaultPosition,
                          size=wx.DefaultSize, style=0):
                 wx.ListCtrl.__init__(self, parent, ID, pos, size, style)
-                TextEdit.__init__(self) 
+                TextEditMixin.__init__(self) 
 
 
     Authors:     Steve Zatz, Pim Van Heuven (pim@think-wize.com)
