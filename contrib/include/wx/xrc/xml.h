@@ -77,7 +77,6 @@ public:
     wxXmlProperty(const wxString& name, const wxString& value,
                   wxXmlProperty *next)
             : m_name(name), m_value(value), m_next(next) {}
-    ~wxXmlProperty() { delete m_next; }
 
     wxString GetName() const { return m_name; }
     wxString GetValue() const { return m_value; }
@@ -116,7 +115,7 @@ public:
     wxXmlNode(wxXmlNode *parent,wxXmlNodeType type,
               const wxString& name, const wxString& content,
               wxXmlProperty *props, wxXmlNode *next);
-    ~wxXmlNode() { delete m_properties; delete m_next; delete m_children; }
+    ~wxXmlNode();
 
     // copy ctor & operator=. Note that this does NOT copy syblings
     // and parent pointer, i.e. m_parent and m_next will be NULL
