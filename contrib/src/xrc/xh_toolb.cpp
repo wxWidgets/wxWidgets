@@ -101,8 +101,8 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
             {
                 wxObject *created = CreateResFromNode(n, toolbar, NULL);
                 wxControl *control = wxDynamicCast(created, wxControl);
-                if (IsOfClass(n, wxT("tool")) &&
-                    IsOfClass(n, wxT("separator")) &&
+                if (!IsOfClass(n, wxT("tool")) &&
+                    !IsOfClass(n, wxT("separator")) &&
                     control != NULL)
                     toolbar->AddControl(control);
             }
