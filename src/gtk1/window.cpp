@@ -1219,6 +1219,26 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
     
 #endif  // #ifndef  __WXGTK20__
 
+#if wxUSE_ACCEL
+    if (!ret)
+    {
+        wxWindowGTK *ancestor = win;
+        while (ancestor)
+        {
+            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
+            if (command != -1)
+            {
+                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
+                ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
+                break;
+            }
+            if (ancestor->IsTopLevel())
+                break;
+            ancestor = ancestor->GetParent();
+        }
+    }
+#endif // wxUSE_ACCEL
+
     // Only send wxEVT_CHAR event if not processed yet. Thus, ALT-x
     // will only be sent if it is not in an accelerator table.
     if (!ret)
@@ -1267,25 +1287,6 @@ static gint gtk_window_key_press_callback( GtkWidget *widget,
 
 
 
-#if wxUSE_ACCEL
-    if (!ret)
-    {
-        wxWindowGTK *ancestor = win;
-        while (ancestor)
-        {
-            int command = ancestor->GetAcceleratorTable()->GetCommand( event );
-            if (command != -1)
-            {
-                wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                ret = ancestor->GetEventHandler()->ProcessEvent( command_event );
-                break;
-            }
-            if (ancestor->IsTopLevel())
-                break;
-            ancestor = ancestor->GetParent();
-        }
-    }
-#endif // wxUSE_ACCEL
 
 
     // win is a control: tab can be propagated up
