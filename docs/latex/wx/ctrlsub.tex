@@ -307,8 +307,10 @@ pointers had been associated with the control items before.
 
 \func{void}{SetSelection}{\param{int}{ n}}
 
-Sets the choice by passing the desired string position. This does not cause
-any command events to get emitted.
+Sets the selection to the given item \arg{n} or removes the selection entirely
+if \arg{n} $==$ \textt{wxNOT\_FOUND}.
+
+Note that this does not cause any command events to be emitted.
 
 \wxheading{Parameters}
 
