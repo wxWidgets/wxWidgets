@@ -104,10 +104,6 @@ public:
     // implementation
     // --------------
 
-    // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize()
-    virtual void DoMoveWindow(int x, int y, int width, int height);
-    
     virtual WXWidget GetHandle() const { return m_widget; }
 
     // also sets the global flag
@@ -224,6 +220,7 @@ public:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );

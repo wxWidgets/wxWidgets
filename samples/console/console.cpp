@@ -426,6 +426,13 @@ static void TestTimeZones()
     printf("Current time in Paris:\t%s\n", now.Format("%c", wxDateTime::CET).c_str());
     printf("               Moscow:\t%s\n", now.Format("%c", wxDateTime::MSK).c_str());
     printf("             New York:\t%s\n", now.Format("%c", wxDateTime::EST).c_str());
+
+    wxDateTime::Tm tm = now.GetTm();
+    if ( wxDateTime(tm) != now )
+    {
+        printf("ERROR: got %s instead of %s\n",
+               wxDateTime(tm).Format().c_str(), now.Format().c_str());
+    }
 }
 
 // test some minimal support for the dates outside the standard range
@@ -666,7 +673,9 @@ static void TestTimeWNumber()
     struct WeekNumberTestData
     {
         Date date;                          // the date
-        wxDateTime::wxDateTime_t week;      // the week number
+        wxDateTime::wxDateTime_t week;      // the week number in the year
+        wxDateTime::wxDateTime_t wmon;      // the week number in the month
+        wxDateTime::wxDateTime_t wmon2;     // same but week starts with Sun
         wxDateTime::wxDateTime_t dnum;      // day number in the year
     };
 
@@ -679,6 +688,18 @@ from string import *
 monthNames = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ]
 wdayNames = [ 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ]
 
+def GetMonthWeek(dt):
+    weekNumMonth = dt.iso_week[1] - DateTime(dt.year, dt.month, 1).iso_week[1] + 1
+    if weekNumMonth < 0:
+        weekNumMonth = weekNumMonth + 53
+    return weekNumMonth
+    
+def GetLastSundayBefore(dt):
+    if dt.iso_week[2] == 7:
+        return dt
+    else:
+        return dt - DateTimeDelta(dt.iso_week[2])
+
 for n in range(20):
     year = randint(1900, 2100)
     month = randint(1, 12)
@@ -686,34 +707,54 @@ for n in range(20):
     dt = DateTime(year, month, day)
     dayNum = dt.day_of_year
     weekNum = dt.iso_week[1]
+    weekNumMonth = GetMonthWeek(dt)
 
-    data = { 'day': rjust(`day`, 2), 'month': monthNames[month - 1], 'year': year, 'weekNum': rjust(`weekNum`, 2), 'dayNum': rjust(`dayNum`, 3) }
+    weekNumMonth2 = 0
+    dtSunday = GetLastSundayBefore(dt)
 
-    print "{ { %(day)s, wxDateTime::%(month)s, %(year)d }, %(weekNum)s, "\
+    while dtSunday >= GetLastSundayBefore(DateTime(dt.year, dt.month, 1)):
+        weekNumMonth2 = weekNumMonth2 + 1
+        dtSunday = dtSunday - DateTimeDelta(7)
+
+    data = { 'day': rjust(`day`, 2), \
+             'month': monthNames[month - 1], \
+             'year': year, \
+             'weekNum': rjust(`weekNum`, 2), \
+             'weekNumMonth': weekNumMonth, \
+             'weekNumMonth2': weekNumMonth2, \
+             'dayNum': rjust(`dayNum`, 3) }
+
+    print "        { { %(day)s, "\
+          "wxDateTime::%(month)s, "\
+          "%(year)d }, "\
+          "%(weekNum)s, "\
+          "%(weekNumMonth)s, "\
+          "%(weekNumMonth2)s, "\
           "%(dayNum)s }," % data
+
     */
     static const WeekNumberTestData weekNumberTestDates[] =
     {
-        { {  2, wxDateTime::Jul, 2093 }, 27, 183 },
-        { { 25, wxDateTime::Jun, 1986 }, 26, 176 },
-        { { 15, wxDateTime::Jun, 2014 }, 24, 166 },
-        { { 20, wxDateTime::Jul, 2018 }, 29, 201 },
-        { {  3, wxDateTime::Aug, 2074 }, 31, 215 },
-        { { 26, wxDateTime::Jul, 2012 }, 30, 208 },
-        { {  4, wxDateTime::Nov, 1915 }, 44, 308 },
-        { { 11, wxDateTime::Feb, 2035 },  6,  42 },
-        { { 15, wxDateTime::Feb, 1942 },  7,  46 },
-        { {  5, wxDateTime::Jan, 2087 },  1,   5 },
-        { {  6, wxDateTime::Nov, 2016 }, 44, 311 },
-        { {  6, wxDateTime::Jun, 2057 }, 23, 157 },
-        { { 25, wxDateTime::Feb, 1976 },  9,  56 },
-        { { 12, wxDateTime::Jan, 2073 },  2,  12 },
-        { { 12, wxDateTime::Sep, 2040 }, 37, 256 },
-        { { 15, wxDateTime::Jul, 1931 }, 29, 196 },
-        { { 23, wxDateTime::Mar, 2084 }, 12,  83 },
-        { { 12, wxDateTime::Dec, 1970 }, 50, 346 },
-        { {  6, wxDateTime::Sep, 1996 }, 36, 250 },
-        { {  7, wxDateTime::Jan, 2076 },  2,   7 },
+        { { 27, wxDateTime::Dec, 1966 }, 52, 5, 5, 361 },
+        { { 22, wxDateTime::Jul, 1926 }, 29, 4, 4, 203 },
+        { { 22, wxDateTime::Oct, 2076 }, 43, 4, 4, 296 },
+        { {  1, wxDateTime::Jul, 1967 }, 26, 1, 1, 182 },
+        { {  8, wxDateTime::Nov, 2004 }, 46, 2, 2, 313 },
+        { { 21, wxDateTime::Mar, 1920 }, 12, 3, 4,  81 },
+        { {  7, wxDateTime::Jan, 1965 },  1, 2, 2,   7 },
+        { { 19, wxDateTime::Oct, 1999 }, 42, 4, 4, 292 },
+        { { 13, wxDateTime::Aug, 1955 }, 32, 2, 2, 225 },
+        { { 18, wxDateTime::Jul, 2087 }, 29, 3, 3, 199 },
+        { {  2, wxDateTime::Sep, 2028 }, 35, 1, 1, 246 },
+        { { 28, wxDateTime::Jul, 1945 }, 30, 5, 4, 209 },
+        { { 15, wxDateTime::Jun, 1901 }, 24, 3, 3, 166 },
+        { { 10, wxDateTime::Oct, 1939 }, 41, 3, 2, 283 },
+        { {  3, wxDateTime::Dec, 1965 }, 48, 1, 1, 337 },
+        { { 23, wxDateTime::Feb, 1940 },  8, 4, 4,  54 },
+        { {  2, wxDateTime::Jan, 1987 },  1, 1, 1,   2 },
+        { { 11, wxDateTime::Aug, 2079 }, 32, 2, 2, 223 },
+        { {  2, wxDateTime::Feb, 2063 },  5, 1, 1,  33 },
+        { { 16, wxDateTime::Oct, 1942 }, 42, 3, 3, 289 },
     };
 
     for ( size_t n = 0; n < WXSIZEOF(weekNumberTestDates); n++ )
@@ -723,8 +764,11 @@ for n in range(20):
 
         wxDateTime dt = d.DT();
 
-        wxDateTime::wxDateTime_t week = dt.GetWeekOfYear(),
-                                 dnum = dt.GetDayOfYear();
+        wxDateTime::wxDateTime_t
+            week = dt.GetWeekOfYear(wxDateTime::Monday_First),
+            wmon = dt.GetWeekOfMonth(wxDateTime::Monday_First),
+            wmon2 = dt.GetWeekOfMonth(wxDateTime::Sunday_First),
+            dnum = dt.GetDayOfYear();
 
         printf("%s: the day number is %d",
                d.FormatDate().c_str(), dnum);
@@ -737,7 +781,27 @@ for n in range(20):
             printf(" (ERROR: should be %d)", wn.dnum);
         }
 
-        printf(", week number is %d", week);
+        printf(", week in month is %d", wmon);
+        if ( wmon == wn.wmon )
+        {
+            printf(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %d)", wn.wmon);
+        }
+
+        printf(" or %d", wmon2);
+        if ( wmon2 == wn.wmon2 )
+        {
+            printf(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %d)", wn.wmon2);
+        }
+
+        printf(", week in year is %d", week);
         if ( week == wn.week )
         {
             puts(" (ok)");
@@ -988,6 +1052,101 @@ static void TestTimeParse()
             printf("bad format (%s)\n",
                    parseTestDates[n].good ? "ERROR" : "ok");
         }
+    }
+}
+
+static void TestInteractive()
+{
+    puts("\n*** interactive wxDateTime tests ***");
+
+    char buf[128];
+
+    for ( ;; )
+    {
+        printf("Enter a date: ");
+        if ( !fgets(buf, WXSIZEOF(buf), stdin) )
+            break;
+
+        wxDateTime dt;
+        if ( !dt.ParseDate(buf) )
+        {
+            puts("failed to parse the date");
+
+            continue;
+        }
+
+        printf("%s: day %u, week of month %u/%u, week of year %u\n",
+               dt.FormatISODate().c_str(),
+               dt.GetDayOfYear(),
+               dt.GetWeekOfMonth(wxDateTime::Monday_First),
+               dt.GetWeekOfMonth(wxDateTime::Sunday_First),
+               dt.GetWeekOfYear(wxDateTime::Monday_First));
+    }
+
+    puts("\n*** done ***");
+}
+
+static void TestTimeArithmetics()
+{
+    puts("\n*** testing arithmetic operations on wxDateTime ***");
+
+    static const struct
+    {
+        wxDateSpan span;
+        const char *name;
+    } testArithmData[] = 
+    {
+        { wxDateSpan::Day(),           "day"                                },
+        { wxDateSpan::Week(),          "week"                               },
+        { wxDateSpan::Month(),         "month"                              },
+        { wxDateSpan::Year(),          "year"                               },
+        { wxDateSpan(1, 2, 3, 4),      "year, 2 months, 3 weeks, 4 days"    },
+    };
+    
+    wxDateTime dt(29, wxDateTime::Dec, 1999), dt1, dt2;
+
+    for ( size_t n = 0; n < WXSIZEOF(testArithmData); n++ )
+    {
+        wxDateSpan span = testArithmData[n].span;
+        dt1 = dt + span;
+        dt2 = dt - span;
+
+        const char *name = testArithmData[n].name;
+        printf("%s + %s = %s, %s - %s = %s\n",
+               dt.FormatISODate().c_str(), name, dt1.FormatISODate().c_str(),
+               dt.FormatISODate().c_str(), name, dt2.FormatISODate().c_str());
+
+        printf("Going back: %s", (dt1 - span).FormatISODate().c_str());
+        if ( dt1 - span == dt )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %s)\n", dt.FormatISODate().c_str());
+        }
+
+        printf("Going forward: %s", (dt2 + span).FormatISODate().c_str());
+        if ( dt2 + span == dt )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %s)\n", dt.FormatISODate().c_str());
+        }
+
+        printf("Double increment: %s", (dt2 + 2*span).FormatISODate().c_str());
+        if ( dt2 + 2*span == dt1 )
+        {
+            puts(" (ok)");
+        }
+        else
+        {
+            printf(" (ERROR: should be %s)\n", dt2.FormatISODate().c_str());
+        }
+
+        puts("");
     }
 }
 
@@ -1479,20 +1638,23 @@ int main(int argc, char **argv)
 #endif // TEST_MIME
 
 #ifdef TEST_TIME
-    if ( 1 )
+    if ( 0 )
     {
-    TestTimeSet();
-    TestTimeStatic();
-    TestTimeZones();
-    TestTimeRange();
-    TestTimeTicks();
-    TestTimeJDN();
-    TestTimeDST();
-    TestTimeWDays();
-    TestTimeWNumber();
-    TestTimeParse();
-    TestTimeFormat();
+        TestTimeSet();
+        TestTimeStatic();
+        TestTimeRange();
+        TestTimeZones();
+        TestTimeTicks();
+        TestTimeJDN();
+        TestTimeDST();
+        TestTimeWDays();
+        TestTimeWNumber();
+        TestTimeParse();
+        TestTimeFormat();
+        TestTimeArithmetics();
     }
+    if ( 0 )
+        TestInteractive();
 #endif // TEST_TIME
 
     wxUninitialize();

@@ -65,7 +65,7 @@
     #include "wx/spinctrl.h"
 #endif // wxUSE_SPINCTRL
 
-#include "wx/generic/calctrl.h"
+#include "wx/calctrl.h"
 
 //----------------------------------------------------------------------
 // class definitions
@@ -113,6 +113,8 @@ public:
     void OnEnableAll(wxCommandEvent& event);
     void OnChangeColour(wxCommandEvent& event);
 
+    void OnCalendarChange(wxCalendarEvent& event);
+
     wxListBox     *m_listbox,
                   *m_listboxSorted;
     wxChoice      *m_choice,
@@ -140,6 +142,9 @@ public:
     wxNotebook    *m_notebook;
 
     wxStaticText  *m_label;
+
+    wxCalendarCtrl *m_calendar;
+    wxStaticText   *m_date;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -260,7 +265,7 @@ bool MyApp::OnInit()
     frame->Show(TRUE);
     frame->SetCursor(wxCursor(wxCURSOR_HAND));
 
-    frame->GetPanel()->m_notebook->SetSelection(5);
+    frame->GetPanel()->m_notebook->SetSelection(6);
 
     SetTopWindow(frame);
 
@@ -323,6 +328,8 @@ const int  ID_SPINCTRL          = 185;
 
 const int  ID_CHANGE_COLOUR     = 200;
 
+const int  ID_CALENDAR          = 210;
+
 BEGIN_EVENT_TABLE(MyPanel, wxPanel)
 EVT_SIZE      (                         MyPanel::OnSize)
 EVT_NOTEBOOK_PAGE_CHANGING(ID_NOTEBOOK, MyPanel::OnPageChanging)
@@ -373,12 +380,15 @@ EVT_SPINCTRL  (ID_SPINCTRL,             MyPanel::OnSpinCtrl)
 #endif // wxUSE_SPINCTRL
 EVT_BUTTON    (ID_BUTTON_LABEL,         MyPanel::OnUpdateLabel)
 EVT_CHECKBOX  (ID_CHANGE_COLOUR,        MyPanel::OnChangeColour)
+EVT_CALENDAR  (ID_CALENDAR,             MyPanel::OnCalendarChange)
 END_EVENT_TABLE()
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) ),
          m_text(NULL), m_notebook(NULL)
 {
+    wxLayoutConstraints *c;
+
     m_text = new wxTextCtrl( this, -1, "This is the log window.\n", wxPoint(0,50), wxSize(100,50), wxTE_MULTILINE );
     //  m_text->SetBackgroundColour("wheat");
 
@@ -643,55 +653,74 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
 
+    // wxCalendarCtrl
+
     panel = new wxPanel(m_notebook);
-    (void)new wxCalendarCtrl(panel, -1);
+    panel->SetAutoLayout( TRUE );
+
+    wxString date;
+    date.Printf("Selected date: %s",
+                wxDateTime::Today().FormatISODate().c_str());
+    m_date = new wxStaticText(panel, -1, date);
+    m_calendar = new wxCalendarCtrl(panel, ID_CALENDAR);
+
+    c = new wxLayoutConstraints;
+    c->left.SameAs( panel, wxLeft, 10 );
+    c->centreY.SameAs( m_calendar, wxCentreY );
+    c->height.AsIs();
+    c->width.AsIs();
+
+    m_date->SetConstraints(c);
+
+    c = new wxLayoutConstraints;
+    c->left.SameAs( m_date, wxRight, 10 );
+    c->top.SameAs( panel, wxTop, 10 );
+    c->height.AsIs();
+    c->width.AsIs();
+
+    m_calendar->SetConstraints(c);
+
     m_notebook->AddPage(panel, "wxCalendar");
 
-// --------------- TEST CODE ----------------------
+    // layout constraints
 
-  // layout constraints
+    panel = new wxPanel(m_notebook);
+    panel->SetAutoLayout( TRUE );
 
-  panel = new wxPanel(m_notebook);
-  panel->SetAutoLayout( TRUE );
+    c = new wxLayoutConstraints;
+    c->top.SameAs( panel, wxTop, 10 );
+    c->height.AsIs( );
+    c->left.SameAs( panel, wxLeft, 10 );
+    c->width.PercentOf( panel, wxWidth, 40 );
 
-  wxLayoutConstraints *c;
-  c = new wxLayoutConstraints;
-  c->top.SameAs( panel, wxTop, 10 );
-  c->height.AsIs( );
-  c->left.SameAs( panel, wxLeft, 10 );
-  c->width.PercentOf( panel, wxWidth, 40 );
+    wxButton *pMyButton = new wxButton(panel, -1, "Test Button" );
+    pMyButton->SetConstraints( c );
 
-  wxButton *pMyButton = new wxButton(panel, -1, "Test Button" );
-  pMyButton->SetConstraints( c );
+    c = new wxLayoutConstraints;
+    c->top.SameAs( panel, wxTop, 10 );
+    c->bottom.SameAs( panel, wxBottom, 10 );
+    c->right.SameAs( panel, wxRight, 10 );
+    c->width.PercentOf( panel, wxWidth, 40 );
 
-  c = new wxLayoutConstraints;
-  c->top.SameAs( panel, wxTop, 10 );
-  c->bottom.SameAs( panel, wxBottom, 10 );
-  c->right.SameAs( panel, wxRight, 10 );
-  c->width.PercentOf( panel, wxWidth, 40 );
+    wxButton *pMyButton2 = new wxButton(panel, -1, "Test Button 2" );
+    pMyButton2->SetConstraints( c );
 
-  wxButton *pMyButton2 = new wxButton(panel, -1, "Test Button 2" );
-  pMyButton2->SetConstraints( c );
+    m_notebook->AddPage(panel, "wxLayoutConstraint");
 
-  m_notebook->AddPage(panel, "wxLayoutConstraint");
+    // sizer
 
-  // sizer
+    panel = new wxPanel(m_notebook);
+    panel->SetAutoLayout( TRUE );
 
-  panel = new wxPanel(m_notebook);
-  panel->SetAutoLayout( TRUE );
+    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
 
-  wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
+    sizer->Add( new wxButton(panel, -1, "Test Button" ), 3, wxALL, 10 );
+    sizer->Add( 20,20, 1 );
+    sizer->Add( new wxButton(panel, -1, "Test Button 2" ), 3, wxGROW|wxALL, 10 );
 
-  sizer->Add( new wxButton(panel, -1, "Test Button" ), 3, wxALL, 10 );
-  sizer->Add( 20,20, 1 );
-  sizer->Add( new wxButton(panel, -1, "Test Button 2" ), 3, wxGROW|wxALL, 10 );
+    panel->SetSizer( sizer );
 
-  panel->SetSizer( sizer );
-
-  m_notebook->AddPage(panel, "wxSizer");
-
-// --------------- TEST CODE ----------------------
-
+    m_notebook->AddPage(panel, "wxSizer");
 }
 
 void MyPanel::OnSize( wxSizeEvent& WXUNUSED(event) )
@@ -727,6 +756,14 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
 void MyPanel::OnPageChanged( wxNotebookEvent &event )
 {
     *m_text << "Notebook selection is " << event.GetSelection() << "\n";
+}
+
+void MyPanel::OnCalendarChange(wxCalendarEvent& event)
+{
+    wxString s;
+    s.Printf("Selected date: %s", event.GetDate().FormatISODate().c_str());
+
+    m_date->SetLabel(s);
 }
 
 void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))

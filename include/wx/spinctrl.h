@@ -12,8 +12,7 @@
 #ifndef _WX_SPINCTRL_H_
 #define _WX_SPINCTRL_H_
 
-#include "wx/control.h"
-#include "wx/event.h"
+#include "wx/spinbutt.h"        // should make wxSpinEvent visible to the app
 
 // ----------------------------------------------------------------------------
 // a spin ctrl is a text control with a spin button which is usually used to

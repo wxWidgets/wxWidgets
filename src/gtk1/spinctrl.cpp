@@ -75,9 +75,12 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    wxSize new_size = size;
+    wxSize new_size = size,
+           sizeBest = DoGetBestSize();
+    if (new_size.x == -1)
+        new_size.x = sizeBest.x;
     if (new_size.y == -1)
-        new_size.y = 26;
+        new_size.y = sizeBest.y;
 
     if (!PreCreation( parent, pos, new_size ) ||
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
@@ -217,6 +220,11 @@ void wxSpinCtrl::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+
+wxSize wxSpinCtrl::DoGetBestSize() const
+{
+    return wxSize(95, 26);
 }
 
 #endif

@@ -57,6 +57,7 @@
 # File name 	Type	Flags
 
 busyinfo.cpp	G
+calctrl.cpp	G
 caret.cpp	G	U
 choicdgg.cpp	G
 colrdlgg.cpp	G	G
@@ -518,6 +519,7 @@ brush.h	W
 buffer.h	W
 busyinfo.h	W
 button.h	W
+calctrl.h	W
 caret.h	W
 checkbox.h	W
 checklst.h	W
@@ -1033,6 +1035,7 @@ winpars.h	L
 m_templ.h	L
 htmprint.h	L
 
+calctrl.h	N
 caret.h	N
 choicdgg.h	N
 colrdlgg.h	N

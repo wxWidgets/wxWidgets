@@ -101,19 +101,21 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     m_needParent = TRUE;
     m_acceptsFocus = TRUE;
 
-    wxSize newSize( size );
+    wxSize newSize = size,
+           bestSize = DoGetBestSize();
+
     if (newSize.x == -1)
-	newSize.x = 80;
+        newSize.x = bestSize.x;
     if (newSize.y == -1)
-	newSize.y = 26;
+        newSize.y = bestSize.y;
     if (newSize.y > 30)
-	newSize.y = 30;
-	
+        newSize.y = 30;
+
     if (!PreCreation( parent, pos, newSize ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxComboBox creation failed") );
-	return FALSE;
+        return FALSE;
     }
 
     m_widget = gtk_combo_new();
@@ -126,7 +128,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
     for (int i = 0; i < n; i++)
     {
         /* don't send first event, which GTK sends aways when
-	   inserting the first item */
+           inserting the first item */
         m_alreadySent = TRUE;
 
         GtkWidget *list_item = gtk_list_item_new_with_label( choices[i].mbc_str() );
@@ -663,6 +665,7 @@ bool wxComboBox::IsOwnGtkWindow( GdkWindow *window )
 
 wxSize wxComboBox::DoGetBestSize() const
 {
+    // totally bogus - should measure the strings in the combo!
     return wxSize(100, 26);
 }
 

@@ -1250,69 +1250,61 @@ void wxWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     GetSize(& oldW, & oldH);
     GetPosition(& oldX, & oldY);
 
-    bool useOldPos = FALSE;
-    bool useOldSize = FALSE;
+    if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    {
+        if ( x == -1 )
+            x = oldX;
+        if ( y == -1 )
+            y = oldY;
+    }
 
-    if ((x == -1) && (x == -1) && ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0))
-        useOldPos = TRUE;
-    else if (x == oldX && y == oldY)
-        useOldPos = TRUE;
+    if ( width == -1 )
+        width = oldW;
+    if ( height == -1 )
+        height = oldH;
 
-    if ((width == -1) && (height == -1))
-        useOldSize = TRUE;
-    else if (width == oldW && height == oldH)
-        useOldSize = TRUE;
+    bool nothingChanged = (x == oldX) && (y == oldY) &&
+                          (width == oldW) && (height == oldH);
 
     if (!wxNoOptimize::CanOptimize())
     {
-        useOldSize = FALSE; useOldPos = FALSE;
+        nothingChanged = FALSE;
     }
 
-    if (useOldPos && useOldSize)
-        return;
-
-    if (m_drawingArea)
+    if ( !nothingChanged )
     {
-        CanvasSetSize(x, y, width, height, sizeFlags);
-        return;
-    }
-    Widget widget = (Widget) GetTopWidget();
-    if (!widget)
-        return;
+        if (m_drawingArea)
+        {
+            CanvasSetSize(x, y, width, height, sizeFlags);
+            return;
+        }
 
-    bool managed = XtIsManaged( widget );
-    if (managed)
-        XtUnmanageChild(widget);
+        Widget widget = (Widget) GetTopWidget();
+        if (!widget)
+            return;
 
-    int xx = x; int yy = y;
-    AdjustForParentClientOrigin(xx, yy, sizeFlags);
+        bool managed = XtIsManaged( widget );
+        if (managed)
+            XtUnmanageChild(widget);
 
-    if (!useOldPos)
-    {
-        if (x > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-            XtVaSetValues(widget, XmNx, xx, NULL);
-        if (y > -1 || (sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-            XtVaSetValues(widget, XmNy, yy, NULL);
-    }
-    if (!useOldSize)
-    {
-        if (width > -1)
-            XtVaSetValues(widget, XmNwidth, width, NULL);
-        if (height > -1)
-            XtVaSetValues(widget, XmNheight, height, NULL);
-    }
+        int xx = x;
+        int yy = y;
+        AdjustForParentClientOrigin(xx, yy, sizeFlags);
 
-    if (managed)
-        XtManageChild(widget);
+        DoMoveWindow(xx, yy, width, height);
 
-    // How about this bit. Maybe we don't need to generate size events
-    // all the time -- they'll be generated when the window is sized anyway.
+        if (managed)
+            XtManageChild(widget);
+
+        // How about this bit. Maybe we don't need to generate size events
+        // all the time -- they'll be generated when the window is sized anyway.
 #if 0
-    wxSizeEvent sizeEvent(wxSize(width, height), GetId());
-    sizeEvent.SetEventObject(this);
+        wxSizeEvent sizeEvent(wxSize(width, height), GetId());
+        sizeEvent.SetEventObject(this);
 
-      GetEventHandler()->ProcessEvent(sizeEvent);
+        GetEventHandler()->ProcessEvent(sizeEvent);
 #endif // 0
+    }
 }
 
 void wxWindow::DoSetClientSize(int width, int height)
@@ -1382,6 +1374,16 @@ void wxWindow::SetSizeHints(int minW, int minH, int maxW, int maxH, int incW, in
         XtVaSetValues(widget, XmNwidthInc, incW, NULL);
     if (incH > -1)
         XtVaSetValues(widget, XmNheightInc, incH, NULL);
+}
+
+void wxWindow::DoMoveWindow(int x, int y, int width, int height)
+{
+    XtVaSetValues(GetWidget(),
+                  XmNx, xx,
+                  XmNy, yy,
+                  XmNwidth, width,
+                  XmNheight, height,
+                  NULL);
 }
 
 // ---------------------------------------------------------------------------

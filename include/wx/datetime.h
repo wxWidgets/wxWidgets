@@ -363,6 +363,14 @@ public:
         Name_Abbr = 0x02        // return abbreviated name
     };
 
+        // flags for GetWeekOfYear and GetWeekOfMonth
+    enum WeekFlags
+    {
+        Default_First,   // Sunday_First for US, Monday_First for the rest
+        Monday_First,    // week starts with a Monday
+        Sunday_First     // week starts with a Sunday
+    };
+
     // helper classes
     // ------------------------------------------------------------------------
 
@@ -767,10 +775,12 @@ public:
     wxDateTime_t GetDayOfYear(const TimeZone& tz = Local) const;
         // get the week number since the year start (1..52 or 53, 0 if date is
         // invalid)
-    wxDateTime_t GetWeekOfYear(const TimeZone& tz = Local) const;
+    wxDateTime_t GetWeekOfYear(WeekFlags flags = Monday_First,
+                               const TimeZone& tz = Local) const;
         // get the week number since the month start (1..5, 0 if date is
         // invalid)
-    wxDateTime_t GetWeekOfMonth(const TimeZone& tz = Local) const;
+    wxDateTime_t GetWeekOfMonth(WeekFlags flags = Monday_First,
+                                const TimeZone& tz = Local) const;
 
         // is this date a work day? This depends on a country, of course,
         // because the holidays are different in different countries
@@ -881,6 +891,9 @@ public:
     wxString FormatDate() const { return Format(_T("%x")); }
         // preferred time representation for the current locale
     wxString FormatTime() const { return Format(_T("%X")); }
+        // return the string representing the date in ISO 8601 format
+        // (YYYY-MM-DD)
+    wxString FormatISODate() const { return Format(_T("%Y-%m-%d")); }
 
     // implementation
     // ------------------------------------------------------------------------

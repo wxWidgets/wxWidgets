@@ -99,10 +99,11 @@ bool wxSpinButton::Create(wxWindow *parent,
 {
     m_needParent = TRUE;
 
-    wxSize new_size = size;
-    new_size.x = 15;
+    wxSize new_size = size,
+           sizeBest = DoGetBestSize();
+    new_size.x = sizeBest.x;            // override width always
     if (new_size.y == -1)
-        new_size.y = 26;
+        new_size.y = sizeBest.y;
 
     if (!PreCreation( parent, pos, new_size ) ||
         !CreateBase( parent, id, pos, new_size, style, wxDefaultValidator, name ))
@@ -197,7 +198,7 @@ void wxSpinButton::OnSize( wxSizeEvent &WXUNUSED(event) )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid spin button") );
 
-    m_width = 15;
+    m_width = DoGetBestSize().x;
     gtk_widget_set_usize( m_widget, m_width, m_height );
 }
 
@@ -210,6 +211,11 @@ void wxSpinButton::ApplyWidgetStyle()
 {
     SetWidgetStyle();
     gtk_widget_set_style( m_widget, m_widgetStyle );
+}
+
+wxSize wxSpinButton::DoGetBestSize() const
+{
+    return wxSize(15, 26);
 }
 
 #endif

@@ -35,13 +35,18 @@ bool wxDateTime::IsInStdRange() const
 /* static */
 wxDateTime wxDateTime::Now()
 {
-    return wxDateTime(GetTimeNow());
+    return wxDateTime(*GetTmNow());
 }
 
 /* static */
 wxDateTime wxDateTime::Today()
 {
-    return wxDateTime((time_t)(86400*(GetTimeNow() / 86400)));
+    struct tm *tm = GetTmNow();
+    tm->tm_hour =
+    tm->tm_min =
+    tm->tm_sec = 0;
+
+    return wxDateTime(*tm);
 }
 
 wxDateTime& wxDateTime::Set(time_t timet)
@@ -55,7 +60,7 @@ wxDateTime& wxDateTime::Set(time_t timet)
 
 wxDateTime& wxDateTime::SetToCurrent()
 {
-    return Set(GetTimeNow());
+    return *this = Now();
 }
 
 wxDateTime::wxDateTime(time_t timet)

@@ -43,6 +43,9 @@ public:
                  const wxSize &size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
                  const wxString &name = wxStaticTextNameStr );
+
+    // overriden base class virtuals
+    virtual bool AcceptsFocus() const { return FALSE; }
 };
 
 #endif // _WX_MSW_STATLINE_H_

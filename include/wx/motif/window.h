@@ -313,6 +313,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+    virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 
 #if wxUSE_TOOLTIPS

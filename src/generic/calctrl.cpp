@@ -29,9 +29,12 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dcclient.h"
+    #include "wx/settings.h"
+    #include "wx/brush.h"
 #endif //WX_PRECOMP
 
-#include "wx/generic/calctrl.h"
+#include "wx/calctrl.h"
 
 // ----------------------------------------------------------------------------
 // wxWin macros
@@ -40,7 +43,12 @@
 BEGIN_EVENT_TABLE(wxCalendarCtrl, wxControl)
     EVT_PAINT(wxCalendarCtrl::OnPaint)
 
+    EVT_CHAR(wxCalendarCtrl::OnChar)
+
     EVT_LEFT_DOWN(wxCalendarCtrl::OnClick)
+
+    EVT_COMBOBOX(-1, wxCalendarCtrl::OnMonthChange)
+    EVT_SPINCTRL(-1, wxCalendarCtrl::OnYearChange)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxCalendarCtrl, wxControl)
@@ -60,6 +68,12 @@ void wxCalendarCtrl::Init()
 
     m_widthCol =
     m_heightRow = 0;
+
+    wxDateTime::WeekDay wd;
+    for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+    {
+        m_weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr);
+    }
 }
 
 bool wxCalendarCtrl::Create(wxWindow *parent,
@@ -71,6 +85,31 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
                             const wxString& name)
 {
     m_date = date.IsValid() ? date : wxDateTime::Today();
+
+    wxString monthNames[12];
+    wxDateTime::Month m;
+    for ( m = wxDateTime::Jan; m < wxDateTime::Inv_Month; wxNextMonth(m) )
+    {
+        monthNames[m] = wxDateTime::GetMonthName(m);
+    }
+
+    m_comboMonth = new wxComboBox(parent, -1,
+                                  monthNames[m_date.GetMonth()],
+                                  wxDefaultPosition,
+                                  wxDefaultSize,
+                                  WXSIZEOF(monthNames), monthNames,
+                                  wxCB_READONLY);
+
+    m_spinYear = new wxSpinCtrl(parent, -1,
+                                m_date.Format(_T("%Y")),
+                                wxDefaultPosition,
+                                wxDefaultSize,
+                                wxSP_ARROW_KEYS,
+                                -4300, 10000, m_date.GetYear());
+
+    // we want to process the events from these controls
+    m_comboMonth->PushEventHandler(this);
+    m_spinYear->PushEventHandler(this);
 
     wxSize sizeReal;
     if ( size.x == -1 || size.y == -1 )
@@ -89,8 +128,74 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
     SetSize(sizeReal);
 
     SetBackgroundColour(*wxWHITE);
+    SetFont(*wxSWISS_FONT);
 
     return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// changing date
+// ----------------------------------------------------------------------------
+
+void wxCalendarCtrl::SetDate(const wxDateTime& date)
+{
+    if ( m_date.GetMonth() == date.GetMonth() &&
+         m_date.GetYear() == date.GetYear() )
+    {
+        // just change the day
+        ChangeDay(date);
+    }
+    else
+    {
+        // change everything
+        m_date = date;
+
+        // update the controls
+        m_comboMonth->SetSelection(m_date.GetMonth());
+        m_spinYear->SetValue(m_date.Format(_T("%Y")));
+
+        // update the calendar
+        Refresh();
+    }
+}
+
+void wxCalendarCtrl::ChangeDay(const wxDateTime& date)
+{
+    if ( m_date != date )
+    {
+        // we need to refresh the row containing the old date and the one
+        // containing the new one
+        wxDateTime dateOld = m_date;
+        m_date = date;
+
+        RefreshDate(dateOld);
+
+        // if the date is in the same row, it was already drawn correctly
+        if ( GetWeek(m_date) != GetWeek(dateOld) )
+        {
+            RefreshDate(m_date);
+        }
+    }
+}
+
+void wxCalendarCtrl::SetDateAndNotify(const wxDateTime& date)
+{
+    wxDateTime::Tm tm1 = m_date.GetTm(),
+                   tm2 = date.GetTm();
+
+    wxEventType type;
+    if ( tm1.year != tm2.year )
+        type = wxEVT_CALENDAR_YEAR_CHANGED;
+    else if ( tm1.mon != tm2.mon )
+        type = wxEVT_CALENDAR_MONTH_CHANGED;
+    else if ( tm1.mday != tm2.mday )
+        type = wxEVT_CALENDAR_DAY_CHANGED;
+    else
+        return;
+
+    SetDate(date);
+
+    GenerateEvent(type);
 }
 
 // ----------------------------------------------------------------------------
@@ -102,7 +207,14 @@ wxDateTime wxCalendarCtrl::GetStartDate() const
     wxDateTime::Tm tm = m_date.GetTm();
 
     wxDateTime date = wxDateTime(1, tm.mon, tm.year);
-    date.SetToPrevWeekDay(wxDateTime::Sun);
+    if ( date.GetWeekDay() != wxDateTime::Sun )
+    {
+        date.SetToPrevWeekDay(wxDateTime::Sun);
+
+        // be sure to do it or it might gain 1 hour if DST changed in between
+        date.ResetTime();
+    }
+    //else: we already have it
 
     return date;
 }
@@ -112,13 +224,37 @@ bool wxCalendarCtrl::IsDateShown(const wxDateTime& date) const
     return date.GetMonth() == m_date.GetMonth();
 }
 
+size_t wxCalendarCtrl::GetWeek(const wxDateTime& date) const
+{
+    return date.GetWeekOfMonth(wxDateTime::Sunday_First);
+}
+
 // ----------------------------------------------------------------------------
 // size management
 // ----------------------------------------------------------------------------
 
+// this is a composite control and it must arrange its parts each time its
+// size or position changes: the combobox and spinctrl are along the top of
+// the available area and the calendar takes up therest of the space
+
+// the constants used for the layout
+#define VERT_MARGIN     5           // distance between combo and calendar
+#define HORZ_MARGIN    15           //                            spin
+
 wxSize wxCalendarCtrl::DoGetBestSize() const
 {
-    return wxSize(230, 200);
+    // calc the size of the calendar
+    ((wxCalendarCtrl *)this)->RecalcGeometry(); // const_cast
+
+    wxCoord width = 7*m_widthCol,
+            height = 7*m_heightRow;
+
+    wxSize sizeCombo = m_comboMonth->GetBestSize(),
+           sizeSpin = m_spinYear->GetBestSize();
+
+    height += VERT_MARGIN + wxMax(sizeCombo.y, sizeSpin.y);
+
+    return wxSize(width, height);
 }
 
 void wxCalendarCtrl::DoSetSize(int x, int y,
@@ -130,7 +266,44 @@ void wxCalendarCtrl::DoSetSize(int x, int y,
 
 void wxCalendarCtrl::DoMoveWindow(int x, int y, int width, int height)
 {
-    wxControl::DoMoveWindow(x, y, width, height);
+    wxSize sizeCombo = m_comboMonth->GetSize();
+    m_comboMonth->Move(x, y);
+
+    int xDiff = sizeCombo.x + HORZ_MARGIN;
+    m_spinYear->SetSize(x + xDiff, y, width - xDiff, -1);
+
+    wxSize sizeSpin = m_spinYear->GetSize();
+    int yDiff = wxMax(sizeSpin.y, sizeCombo.y) + VERT_MARGIN;
+
+    wxControl::DoMoveWindow(x, y + yDiff, width, height - yDiff);
+}
+
+void wxCalendarCtrl::RecalcGeometry()
+{
+    if ( m_widthCol != 0 )
+        return;
+
+    wxClientDC dc(this);
+
+    dc.SetFont(m_font);
+
+    // determine the column width (we assume that the weekday names are always
+    // wider (in any language) than the numbers)
+    m_widthCol = 0;
+    wxDateTime::WeekDay wd;
+    for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+    {
+        wxCoord width;
+        dc.GetTextExtent(m_weekdays[wd], &width, &m_heightRow);
+        if ( width > m_widthCol )
+        {
+            m_widthCol = width;
+        }
+    }
+
+    // leave some margins
+    m_widthCol += 2;
+    m_heightRow += 2;
 }
 
 // ----------------------------------------------------------------------------
@@ -142,38 +315,29 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
     wxPaintDC dc(this);
 
     wxDateTime::WeekDay wd;
-    wxString weekdays[7];
 
-    dc.SetFont(*wxSWISS_FONT);
+    dc.SetFont(m_font);
 
-    // determine the column width (we assume that the weekday names are always
-    // wider (in any language) than the numbers)
-    m_widthCol = 0;
-    for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
-    {
-        weekdays[wd] = wxDateTime::GetWeekDayName(wd, wxDateTime::Name_Abbr);
+    RecalcGeometry();
 
-        wxCoord width;
-        dc.GetTextExtent(weekdays[wd], &width, &m_heightRow);
-        if ( width > m_widthCol )
-        {
-            m_widthCol = width;
-        }
-    }
-
-    // leave some margins
-    m_widthCol += 2;
-    m_heightRow += 2;
+    printf("--- starting to paint, selection: %s, week %u\n",
+           m_date.Format("%a %d-%m-%Y %H:%M:%S").c_str(),
+           GetWeek(m_date));
 
     // first draw the week days
-    dc.SetTextForeground(*wxBLUE);
-    dc.SetBrush(wxBrush(*wxLIGHT_GREY, wxSOLID));
-    dc.SetBackgroundMode(wxTRANSPARENT);
-    dc.SetPen(*wxWHITE_PEN);
-    dc.DrawRectangle(0, 0, 7*m_widthCol - 1, m_heightRow);
-    for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+    if ( IsExposed(0, 0, 7*m_widthCol, m_heightRow) )
     {
-        dc.DrawText(weekdays[wd], wd*m_widthCol + 1, 0);
+        puts("painting the header");
+
+        dc.SetTextForeground(*wxBLUE);
+        dc.SetBrush(wxBrush(*wxLIGHT_GREY, wxSOLID));
+        dc.SetBackgroundMode(wxTRANSPARENT);
+        dc.SetPen(*wxLIGHT_GREY_PEN);
+        dc.DrawRectangle(0, 0, 7*m_widthCol, m_heightRow);
+        for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
+        {
+            dc.DrawText(m_weekdays[wd], wd*m_widthCol + 1, 0);
+        }
     }
 
     // then the calendar itself
@@ -183,9 +347,22 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
     wxCoord y = m_heightRow;
 
     wxDateTime date = GetStartDate();
+    printf("starting calendar from %s\n",
+            date.Format("%a %d-%m-%Y %H:%M:%S").c_str());
+
     dc.SetBackgroundMode(wxSOLID);
-    for ( size_t nWeek = 0; nWeek < 6; nWeek++ )
+    for ( size_t nWeek = 1; nWeek <= 6; nWeek++, y += m_heightRow )
     {
+        // if the update region doesn't intersect this row, don't paint it
+        if ( !IsExposed(0, y, 7*m_widthCol, y + m_heightRow - 1) )
+        {
+            date += wxDateSpan::Week();
+
+            continue;
+        }
+
+        printf("painting week %d at y = %d\n", nWeek, y);
+
         for ( wd = wxDateTime::Sun; wd < wxDateTime::Inv_WeekDay; wxNextWDay(wd) )
         {
             if ( IsDateShown(date) )
@@ -205,7 +382,7 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
 
                 if ( isSel )
                 {
-                    dc.SetTextForeground(*wxBLACK);
+                    dc.SetTextForeground(m_foregroundColour);
                     dc.SetTextBackground(m_backgroundColour);
                 }
             }
@@ -213,9 +390,31 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
 
             date += wxDateSpan::Day();
         }
-
-        y += m_heightRow;
     }
+
+    puts("+++ finished painting");
+}
+
+void wxCalendarCtrl::RefreshDate(const wxDateTime& date)
+{
+    RecalcGeometry();
+
+    wxRect rect;
+
+    // always refresh the whole row at once because our OnPaint() will draw
+    // the whole row anyhow - and this allows the small optimisation in
+    // OnClick() below to work
+    rect.x = 0;
+    rect.y = m_heightRow * GetWeek(date);
+    rect.width = 7*m_widthCol;
+    rect.height = m_heightRow;
+
+    printf("*** refreshing week %d at (%d, %d)-(%d, %d)\n",
+           GetWeek(date),
+           rect.x, rect.y,
+           rect.x + rect.width, rect.y + rect.height);
+
+    Refresh(TRUE, &rect);
 }
 
 // ----------------------------------------------------------------------------
@@ -224,6 +423,8 @@ void wxCalendarCtrl::OnPaint(wxPaintEvent& event)
 
 void wxCalendarCtrl::OnClick(wxMouseEvent& event)
 {
+    RecalcGeometry();
+
     wxDateTime date;
     if ( !HitTest(event.GetPosition(), &date) )
     {
@@ -231,14 +432,16 @@ void wxCalendarCtrl::OnClick(wxMouseEvent& event)
     }
     else
     {
-        m_date = date;
+        ChangeDay(date);
 
-        Refresh();
+        GenerateEvent(wxEVT_CALENDAR_DAY_CHANGED);
     }
 }
 
 bool wxCalendarCtrl::HitTest(const wxPoint& pos, wxDateTime *date)
 {
+    RecalcGeometry();
+
     wxCoord y = pos.y;
     if ( y < m_heightRow )
         return FALSE;
@@ -254,5 +457,112 @@ bool wxCalendarCtrl::HitTest(const wxPoint& pos, wxDateTime *date)
 
     *date = GetStartDate();
     *date += wxDateSpan::Days(7*week + wday);
+
     return IsDateShown(*date);
+}
+
+// ----------------------------------------------------------------------------
+// subcontrols events handling
+// ----------------------------------------------------------------------------
+
+void wxCalendarCtrl::OnMonthChange(wxCommandEvent& event)
+{
+    wxDateTime::Tm tm = m_date.GetTm();
+
+    wxDateTime::Month mon = (wxDateTime::Month)event.GetInt();
+    if ( tm.mday > wxDateTime::GetNumberOfDays(mon, tm.year) )
+    {
+        tm.mday = wxDateTime::GetNumberOfDays(mon, tm.year);
+    }
+
+    SetDate(wxDateTime(tm.mday, mon, tm.year));
+
+    GenerateEvent(wxEVT_CALENDAR_MONTH_CHANGED);
+}
+
+void wxCalendarCtrl::OnYearChange(wxSpinEvent& event)
+{
+    wxDateTime::Tm tm = m_date.GetTm();
+
+    int year = event.GetInt();
+    if ( tm.mday > wxDateTime::GetNumberOfDays(tm.mon, year) )
+    {
+        tm.mday = wxDateTime::GetNumberOfDays(tm.mon, year);
+    }
+
+    SetDate(wxDateTime(tm.mday, tm.mon, year));
+
+    GenerateEvent(wxEVT_CALENDAR_YEAR_CHANGED);
+}
+
+// ----------------------------------------------------------------------------
+// keyboard interface
+// ----------------------------------------------------------------------------
+
+void wxCalendarCtrl::OnChar(wxKeyEvent& event)
+{
+    switch ( event.KeyCode() )
+    {
+        case _T('+'):
+        case WXK_ADD:
+            SetDateAndNotify(m_date + wxDateSpan::Year());
+            break;
+
+        case _T('-'):
+        case WXK_SUBTRACT:
+            SetDateAndNotify(m_date - wxDateSpan::Year());
+            break;
+
+        case WXK_PAGEDOWN:
+            SetDateAndNotify(m_date + wxDateSpan::Year());
+            break;
+
+        case WXK_PAGEUP:
+            SetDateAndNotify(m_date - wxDateSpan::Year());
+            break;
+
+        case WXK_RIGHT:
+            SetDateAndNotify(m_date + wxDateSpan::Day());
+            break;
+
+        case WXK_LEFT:
+            SetDateAndNotify(m_date - wxDateSpan::Day());
+            break;
+
+        case WXK_UP:
+            SetDateAndNotify(m_date - wxDateSpan::Week());
+            break;
+
+        case WXK_DOWN:
+            SetDateAndNotify(m_date + wxDateSpan::Week());
+            break;
+
+        case WXK_HOME:
+            SetDateAndNotify(wxDateTime::Today());
+            break;
+
+        default:
+            event.Skip();
+    }
+}
+
+// ----------------------------------------------------------------------------
+// wxCalendarEvent
+// ----------------------------------------------------------------------------
+
+void wxCalendarCtrl::GenerateEvent(wxEventType type)
+{
+    // we're called for a change in some particular date field but we always
+    // also generate a generic "changed" event
+    wxCalendarEvent event(this, type);
+    wxCalendarEvent event2(this, wxEVT_CALENDAR_SEL_CHANGED);
+
+    (void)GetEventHandler()->ProcessEvent(event);
+    (void)GetEventHandler()->ProcessEvent(event2);
+}
+
+wxCalendarEvent::wxCalendarEvent(wxCalendarCtrl *cal, wxEventType type)
+               : wxCommandEvent(type, cal->GetId())
+{
+    m_date = cal->GetDate();
 }

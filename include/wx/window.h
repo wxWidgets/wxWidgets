@@ -813,6 +813,12 @@ protected:
     // same as DoSetSize() for the client size
     virtual void DoSetClientSize(int width, int height) = 0;
 
+    // move the window to the specified location and resize it: this is called
+    // from both DoSetSize() and DoSetClientSize() and would usually just
+    // reposition this window except for composite controls which will want to
+    // arrange themselves inside the given rectangle
+    virtual void DoMoveWindow(int x, int y, int width, int height) = 0;
+
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif // wxUSE_TOOLTIPS

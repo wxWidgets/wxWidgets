@@ -55,6 +55,9 @@ public:
     GtkAdjustment  *m_adjust;
     float           m_oldPos;
 
+protected:
+    virtual wxSize DoGetBestSize() const;
+
 private:
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxSpinButton)

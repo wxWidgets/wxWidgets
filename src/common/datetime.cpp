@@ -442,14 +442,14 @@ void wxDateTime::Tm::AddMonths(int monDiff)
 void wxDateTime::Tm::AddDays(int dayDiff)
 {
     // normalize the days field
-    mday += dayDiff;
-    while ( mday < 1 )
+    while ( dayDiff + mday < 1 )
     {
         AddMonths(-1);
 
-        mday += GetNumOfDaysInMonth(year, mon);
+        dayDiff += GetNumOfDaysInMonth(year, mon);
     }
 
+    mday += dayDiff;
     while ( mday > GetNumOfDaysInMonth(year, mon) )
     {
         mday -= GetNumOfDaysInMonth(year, mon);
@@ -1035,8 +1035,7 @@ wxDateTime& wxDateTime::Set(wxDateTime_t hour,
                  _T("Invalid time in wxDateTime::Set()") );
 
     // get the current date from system
-    time_t timet = GetTimeNow();
-    struct tm *tm = localtime(&timet);
+    struct tm *tm = GetTmNow();
 
     wxCHECK_MSG( tm, wxInvalidDateTime, _T("localtime() failed") );
 
@@ -1125,6 +1124,23 @@ wxDateTime& wxDateTime::Set(double jdn)
     return *this;
 }
 
+wxDateTime& wxDateTime::ResetTime()
+{
+    Tm tm = GetTm();
+
+    if ( tm.hour || tm.min || tm.sec || tm.msec )
+    {
+        tm.msec =
+        tm.sec =
+        tm.min =
+        tm.hour = 0;
+
+        Set(tm);
+    }
+
+    return *this;
+}
+
 // ----------------------------------------------------------------------------
 // time_t <-> broken down time conversions
 // ----------------------------------------------------------------------------
@@ -1152,11 +1168,11 @@ wxDateTime::Tm wxDateTime::GetTm(const TimeZone& tz) const
         else
         {
             time += tz.GetOffset();
-#ifdef __VMS__ /* time is unsigned so VMS gives a warning on the original */
-	   time2 = (int) time;
-	   if ( time2 >= 0 )
+#ifdef __VMS__ // time is unsigned so avoid warning
+            time2 = (int) time;
+            if ( time2 >= 0 )
 #else
-	   if ( time >= 0 )
+            if ( time >= 0 )
 #endif
             {
                 tm = gmtime(&time);
@@ -1349,6 +1365,9 @@ wxDateTime& wxDateTime::Add(const wxDateSpan& diff)
 
     Set(tm);
 
+    wxASSERT_MSG( IsSameTime(tm),
+                  _T("Add(wxDateSpan) shouldn't modify time") );
+
     return *this;
 }
 
@@ -1508,48 +1527,50 @@ wxDateTime::wxDateTime_t wxDateTime::GetDayOfYear(const TimeZone& tz) const
     return gs_cumulatedDays[IsLeapYear(tm.year)][tm.mon] + tm.mday;
 }
 
-wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(const TimeZone& tz) const
+wxDateTime::wxDateTime_t wxDateTime::GetWeekOfYear(wxDateTime::WeekFlags flags,
+                                                   const TimeZone& tz) const
 {
-#if 1
-    // the first week of the year is the one which contains Jan, 4 (according
-    // to ISO standard rule), so the year day N0 = 4 + 7*W always lies in the
-    // week W+1. As any day N = 7*W + 4 + (N - 4)%7, it lies in the same week
-    // as N0 or in the next one.
-
-    // TODO this surely may be optimized - I got confused while writing it
+    if ( flags == Default_First )
+    {
+        flags = GetCountry() == USA ? Sunday_First : Monday_First;
+    }
 
     wxDateTime_t nDayInYear = GetDayOfYear(tz);
+    wxDateTime_t week;
 
-    // the week day of the day lying in the first week
-    WeekDay wdayStart = wxDateTime(4, Jan, GetYear()).GetWeekDay();
+    WeekDay wd = GetWeekDay(tz);
+    if ( flags == Sunday_First )
+    {
+        week = (nDayInYear - wd + 7) / 7;
+    }
+    else
+    {
+        // have to shift the week days values
+        week = (nDayInYear - (wd - 1 + 7) % 7 + 7) / 7;
+    }
 
-    wxDateTime_t week = (nDayInYear - 4) / 7 + 1;
-
-    // notice that Sunday shoould be counted as 7, not 0 here!
-    if ( ((nDayInYear - 4) % 7) + (!wdayStart ? 7 : wdayStart) > 7 )
+    // FIXME some more elegant way??
+    WeekDay wdYearStart = wxDateTime(1, Jan, GetYear()).GetWeekDay();
+    if ( wdYearStart == Wed || wdYearStart == Thu )
     {
         week++;
     }
 
     return week;
-#else // 0
-    // an attempt at doing it simpler - but this doesn't quite work...
-    return (WeekDay)((GetDayOfYear(tz) - (GetWeekDay(tz) - 1 + 7) % 7 + 7) / 7);
-#endif // 0/1
 }
 
-wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(const TimeZone& tz) const
+wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
+                                                    const TimeZone& tz) const
 {
-    size_t nWeek = 0;
-
-    wxDateTime dt(*this);
-    do
+    Tm tm = GetTm(tz);
+    wxDateTime dtMonthStart = wxDateTime(1, tm.mon, tm.year);
+    size_t nWeek = GetWeekOfYear(flags) - dtMonthStart.GetWeekOfYear(flags) + 1;
+    if ( nWeek < 0 )
     {
-        nWeek++;
-
-        dt -= wxTimeSpan::Week();
+        // this may happen for January when Jan, 1 is the last week of the
+        // previous year
+        nWeek += IsLeapYear(tm.year - 1) ? 53 : 52;
     }
-    while ( dt.GetMonth(tz) == GetMonth(tz) );
 
     return nWeek;
 }
@@ -1936,14 +1957,11 @@ restart:
                 break;
 
             case _T('U'):       // week number in the year (Sunday 1st week day)
-                {
-                    int week = (GetDayOfYear(tz) - tm.GetWeekDay() + 7) / 7;
-                    res += wxString::Format(fmt, week);
-                }
+                res += wxString::Format(fmt, GetWeekOfYear(Sunday_First, tz));
                 break;
 
             case _T('W'):       // week number in the year (Monday 1st week day)
-                res += wxString::Format(fmt, GetWeekOfYear(tz));
+                res += wxString::Format(fmt, GetWeekOfYear(Monday_First, tz));
                 break;
 
             case _T('w'):       // weekday as a number (0-6), Sunday = 0
@@ -2896,7 +2914,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     int year = 0;
 
     // tokenize the string
-    wxStringTokenizer tok(p, _T(",/-\t "));
+    wxStringTokenizer tok(p, _T(",/-\t\n "));
     while ( tok.HasMoreTokens() )
     {
         wxString token = tok.GetNextToken();

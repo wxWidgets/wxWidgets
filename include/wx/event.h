@@ -250,6 +250,12 @@ const wxEventType wxEVT_WIZARD_PAGE_CHANGED = wxEVT_FIRST + 900;
 const wxEventType wxEVT_WIZARD_PAGE_CHANGING = wxEVT_FIRST + 901;
 const wxEventType wxEVT_WIZARD_CANCEL = wxEVT_FIRST + 902;
 
+/* Calendar events */
+const wxEventType wxEVT_CALENDAR_SEL_CHANGED = wxEVT_FIRST + 950;
+const wxEventType wxEVT_CALENDAR_DAY_CHANGED = wxEVT_FIRST + 951;
+const wxEventType wxEVT_CALENDAR_MONTH_CHANGED = wxEVT_FIRST + 952;
+const wxEventType wxEVT_CALENDAR_YEAR_CHANGED = wxEVT_FIRST + 953;
+
 const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
 
 /* Compatibility */
