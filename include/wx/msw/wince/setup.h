@@ -444,7 +444,7 @@
 // Default is 1.
 //
 // Recommended setting: 1 
-#define wxUSE_MEDIACTRL     1
+#define wxUSE_MEDIACTRL     0
 
 // Use QuickTime
 //
@@ -458,7 +458,7 @@
 // Default is 0
 //
 // Recommended setting: 1 if the DirectX 7 SDK is installed (highly recommended), else 0
-#define wxUSE_DIRECTSHOW    1
+#define wxUSE_DIRECTSHOW    0
 
 // Use wxWidget's XRC XML-based resource system.  Recommended.
 //
