@@ -358,6 +358,12 @@ followed by a file selector.
 
 This function is used in wxDocManager::CreateDocument.
 
+\perlnote{In wxPerl {\tt templates} is a reference to a list of templates.
+If you override this method in your document manager it must return
+two values, eg:\par
+  (doctemplate, path) = My::DocManager->SelectDocumentPath( ... );
+}
+
 \membersection{wxDocManager::SelectDocumentType}
 
 \func{wxDocTemplate *}{SelectDocumentType}{\param{wxDocTemplate **}{templates},
@@ -374,6 +380,8 @@ This function is used in wxDocManager::CreateDocument.
 then this parameter indicates whether the list of templates that the user 
 will have to choose from is sorted or not when shown the choice box dialog.  
 Default is FALSE.}
+
+\perlnote{In wxPerl {\tt templates} is a reference to a list of templates.}
 
 \membersection{wxDocManager::SelectViewType}
 
@@ -393,6 +401,8 @@ those relevant to the document in question, and often there will only be one suc
 then this parameter indicates whether the list of templates that the user 
 will have to choose from is sorted or not when shown the choice box dialog.  
 Default is FALSE.}
+
+\perlnote{In wxPerl {\tt templates} is a reference to a list of templates.}
 
 \membersection{wxDocManager::SetLastDirectory}\label{wxdocmanagersetlastdirectory}
 
