@@ -1,27 +1,26 @@
 static char *dialog1 = "dialog(name = 'dialog1',\
-  style = 'wxCAPTION | wxDEFAULT_DIALOG_STYLE',\
+  style = 'wxRAISED_BORDER | wxCAPTION | wxTHICK_FRAME | wxSYSTEM_MENU',\
   title = 'Test dialog box',\
-  x = 312, y = 234, width = 400, height = 300,\
-  modal = 0,\
-  label_font = [10, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-  button_font = [10, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-  control = [wxGroupBox, 'Groupbox', '0', 'group6', 5, 4, 380, 262,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxRadioBox, 'Radiobox', 'wxHSCROLL | wxVERTICAL | wxVERTICAL_LABEL', 'radiobox2', 24, 23, 111, 63, ['One', 'Two', 'Three', 'Four'], 2,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxMultiText, 'Multitext', 'wxTE_MULTILINE', 'multitext3', 156, 126, 200, 70, 'wxWindows is a multi-platform, GUI toolkit.',\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxListBox, 'Listbox', 'wxVERTICAL_LABEL', 'listbox4', 156, 26, 200, 80, ['Apples', 'Pears', 'Bananas'], 'wxSINGLE',\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0],\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [1, wxButton, 'Press me', '0', 'button7', 33, 130, 84, 34,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [2, wxButton, 'Cancel', '0', 'button8', 34, 181, 84, 34,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxCheckBox, 'Checkbox', '0', 'checkbox9', 154, 220, 68, 14, 0,\
-      [11, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0]],\
-  control = [wxMessage, 'My message', '0', 'message10', 257, 218, 76, 13,\
-      [11, 'wxSWISS', 'wxITALIC', 'wxBOLD', 0]]).";
+  id = 100,\
+  x = 10, y = 10, width = 198, height = 147,\
+  background_colour = 'D6D6D6',\
+  use_dialog_units = 1,\
+  use_system_defaults = 0,\
+  font = [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss'],\
+  control = [101, wxStaticBox, 'wxStaticBox', '0', 'group6', 5, 7, 184, 103,\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [102, wxRadioBox, 'Radiobox', 'wxRA_HORIZONTAL', 'radiobox2', 15, 24, 36, 58, ['One', 'Two', 'Three', 'Four'], 1,\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [104, wxTextCtrl, '', 'wxTE_MULTILINE', 'multitext3', 62, 24, 67, 33, 'wxWindows rules!',\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [105, wxListBox, '', '0', 'listbox4', 62, 66, 67, 33, ['Apples', 'Bananas', 'Pears', 'Kiwis'],\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [106, wxCheckBox, 'Checkbox', '0', 'checkbox9', 141, 26, 36, 14, 0,\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [107, wxStaticText, 'My Message', '0', 'message10', 143, 57, 39, 12, '',\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [108, wxButton, 'Press me', '0', 'button7', 141, 81, 36, 13, '',\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']],\
+  control = [109, wxButton, 'Cancel', '0', 'button8', 62, 119, 55, 17, '',\
+      [12, 'wxSWISS', 'wxNORMAL', 'wxNORMAL', 0, 'Swiss']]).";
 

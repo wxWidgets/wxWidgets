@@ -35,6 +35,12 @@
 // in the program code/executable for UNIX and Windows
 // platforms.
 
+// In order to get the ID of the controls defined in the
+// dialog, we include the header automatically generated
+// by DialogEd
+
+#include "dialog1.h"
+
 // If you have a Windows compiler that can cope with long strings,
 // then you can always use the #include form for simplicity.
 
@@ -86,7 +92,7 @@ bool MyApp::OnInit(void)
 #endif
 
   // Create the main frame window
-  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "wxWindows Resource Sample", wxPoint(0, 0), wxSize(300, 250));
+  frame = new MyFrame((wxFrame *) NULL, -1, (char *) "wxWindows Resource Sample", wxPoint(-1, -1), wxSize(300, 250));
 
   // Give it a status line
   frame->CreateStatusBar(2);
@@ -160,7 +166,6 @@ void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event) )
         wxTextCtrl *text = (wxTextCtrl *)wxFindWindowByName("multitext3", dialog);
         if (text)
           text->SetValue("wxWindows resource demo");
-        dialog->SetModal(TRUE);
         dialog->ShowModal();
       }
       dialog->Close(TRUE);
