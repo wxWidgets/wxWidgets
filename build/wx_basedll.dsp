@@ -591,6 +591,10 @@ SOURCE=..\include\wx\msw\winundef.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\msw\wrapcctl.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\msw\wrapwin.h
 # End Source File
 # Begin Source File
