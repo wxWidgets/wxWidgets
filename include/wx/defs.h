@@ -30,7 +30,7 @@
 #if defined(__unix) || defined(__unix__) || defined(____SVR4____) || \
     defined(__LINUX__) || defined(__sgi ) || \
     defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
-    defined(__EMX__)
+    defined(__EMX__) || defined( __VMS )
 
     #define __UNIX_LIKE__
 
@@ -126,7 +126,9 @@
 // Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
 // so define it ourselves
 #ifdef __DECCXX
-    #define __cplusplus
+#ifndef VMS
+# define __cplusplus
+#endif
 #endif // __DECCXX
 
 // Resolves linking problems under HP-UX
@@ -299,7 +301,9 @@
     // NB: of course, this doesn't replace the standard type, because, for
     //     example, overloading based on bool/int parameter doesn't work and
     //     so should be avoided in portable programs
-    typedef unsigned int bool;
+#ifndef VMS
+typedef unsigned int bool;
+#endif
 #endif // bool
 
 typedef short int WXTYPE;
