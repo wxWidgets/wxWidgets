@@ -31,6 +31,8 @@ from image import *
 
 from printfw import *
 
+from sizers import *
+
 from oglbasic import *
 
 from oglshapes import *

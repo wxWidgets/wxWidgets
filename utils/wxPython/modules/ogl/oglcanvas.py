@@ -30,6 +30,8 @@ from windows3 import *
 from image import *
 
 from printfw import *
+
+from sizers import *
 import wx
 class wxDiagramPtr :
     def __init__(self,this):

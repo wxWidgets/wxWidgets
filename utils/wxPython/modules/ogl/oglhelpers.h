@@ -155,6 +155,18 @@ public:
     WXSHAPE_DEC_CALLBACKS();
 };
 
+class wxPyControlPoint : public wxControlPoint {
+public:
+    wxPyControlPoint(wxPyShapeCanvas *the_canvas = NULL,
+                     wxPyShape *object = NULL,
+                     double size = 0.0, double the_xoffset = 0.0,
+                     double the_yoffset = 0.0, int the_type = 0)
+        : wxControlPoint(the_canvas, object, size,
+                         the_xoffset, the_yoffset, the_type) {}
+
+    WXSHAPE_DEC_CALLBACKS();
+};
+
 
 
 class wxPyBitmapShape : public wxBitmapShape {

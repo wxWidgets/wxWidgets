@@ -31,6 +31,8 @@ from image import *
 
 from printfw import *
 
+from sizers import *
+
 from oglbasic import *
 import wx
 class wxPseudoMetaFilePtr :
@@ -277,6 +279,114 @@ class wxPyRectangleShapePtr(wxPyShapePtr):
 class wxPyRectangleShape(wxPyRectangleShapePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(oglshapesc.new_wxPyRectangleShape,_args,_kwargs)
+        self.thisown = 1
+        self._setSelf(self)
+
+
+
+
+class wxPyControlPointPtr(wxPyRectangleShapePtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def _setSelf(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint__setSelf,(self,) + _args, _kwargs)
+        return val
+    def SetCornerRadius(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_SetCornerRadius,(self,) + _args, _kwargs)
+        return val
+    def base_OnDelete(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDelete,(self,) + _args, _kwargs)
+        return val
+    def base_OnDraw(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDraw,(self,) + _args, _kwargs)
+        return val
+    def base_OnDrawContents(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDrawContents,(self,) + _args, _kwargs)
+        return val
+    def base_OnDrawBranches(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDrawBranches,(self,) + _args, _kwargs)
+        return val
+    def base_OnMoveLinks(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnMoveLinks,(self,) + _args, _kwargs)
+        return val
+    def base_OnErase(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnErase,(self,) + _args, _kwargs)
+        return val
+    def base_OnEraseContents(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnEraseContents,(self,) + _args, _kwargs)
+        return val
+    def base_OnHighlight(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnHighlight,(self,) + _args, _kwargs)
+        return val
+    def base_OnLeftClick(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnLeftClick,(self,) + _args, _kwargs)
+        return val
+    def base_OnLeftDoubleClick(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnLeftDoubleClick,(self,) + _args, _kwargs)
+        return val
+    def base_OnRightClick(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnRightClick,(self,) + _args, _kwargs)
+        return val
+    def base_OnSize(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnSize,(self,) + _args, _kwargs)
+        return val
+    def base_OnMovePre(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnMovePre,(self,) + _args, _kwargs)
+        return val
+    def base_OnMovePost(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnMovePost,(self,) + _args, _kwargs)
+        return val
+    def base_OnDragLeft(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDragLeft,(self,) + _args, _kwargs)
+        return val
+    def base_OnBeginDragLeft(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnBeginDragLeft,(self,) + _args, _kwargs)
+        return val
+    def base_OnEndDragLeft(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnEndDragLeft,(self,) + _args, _kwargs)
+        return val
+    def base_OnDragRight(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDragRight,(self,) + _args, _kwargs)
+        return val
+    def base_OnBeginDragRight(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnBeginDragRight,(self,) + _args, _kwargs)
+        return val
+    def base_OnEndDragRight(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnEndDragRight,(self,) + _args, _kwargs)
+        return val
+    def base_OnDrawOutline(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDrawOutline,(self,) + _args, _kwargs)
+        return val
+    def base_OnDrawControlPoints(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnDrawControlPoints,(self,) + _args, _kwargs)
+        return val
+    def base_OnEraseControlPoints(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnEraseControlPoints,(self,) + _args, _kwargs)
+        return val
+    def base_OnMoveLink(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnMoveLink,(self,) + _args, _kwargs)
+        return val
+    def base_OnSizingDragLeft(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnSizingDragLeft,(self,) + _args, _kwargs)
+        return val
+    def base_OnSizingBeginDragLeft(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnSizingBeginDragLeft,(self,) + _args, _kwargs)
+        return val
+    def base_OnSizingEndDragLeft(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnSizingEndDragLeft,(self,) + _args, _kwargs)
+        return val
+    def base_OnBeginSize(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnBeginSize,(self,) + _args, _kwargs)
+        return val
+    def base_OnEndSize(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyControlPoint_base_OnEndSize,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxPyControlPoint instance at %s>" % (self.this,)
+class wxPyControlPoint(wxPyControlPointPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(oglshapesc.new_wxPyControlPoint,_args,_kwargs)
         self.thisown = 1
         self._setSelf(self)
 

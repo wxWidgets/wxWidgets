@@ -137,9 +137,59 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnBeginSize(double w, double h);
+    void base_OnEndSize(double w, double h);
+//    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
+};
+
+//---------------------------------------------------------------------------
+
+%{
+    WXSHAPE_IMP_CALLBACKS(wxPyControlPoint, wxControlPoint);
+%}
+
+class wxPyControlPoint : public wxPyRectangleShape {
+public:
+    wxPyControlPoint(wxPyShapeCanvas *the_canvas = NULL,
+                     wxPyShape *object = NULL,
+                     double size = 0.0, double the_xoffset = 0.0,
+                     double the_yoffset = 0.0, int the_type = 0);
+
+    void _setSelf(PyObject* self);
+    %pragma(python) addtomethod = "__init__:self._setSelf(self)"
+
+    void SetCornerRadius(double radius);
+
+    void base_OnDelete();
+    void base_OnDraw(wxDC& dc);
+    void base_OnDrawContents(wxDC& dc);
+    void base_OnDrawBranches(wxDC& dc, bool erase = FALSE);
+    void base_OnMoveLinks(wxDC& dc);
+    void base_OnErase(wxDC& dc);
+    void base_OnEraseContents(wxDC& dc);
+    void base_OnHighlight(wxDC& dc);
+    void base_OnLeftClick(double x, double y, int keys = 0, int attachment = 0);
+    void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
+    void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
+    void base_OnSize(double x, double y);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = TRUE);
+    void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
+    void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
+    void base_OnDragRight(bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnBeginDragRight(double x, double y, int keys=0, int attachment = 0);
+    void base_OnEndDragRight(double x, double y, int keys=0, int attachment = 0);
+    void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
+    void base_OnDrawControlPoints(wxDC& dc);
+    void base_OnEraseControlPoints(wxDC& dc);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
@@ -187,9 +237,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
@@ -264,9 +314,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
@@ -376,9 +426,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
@@ -426,9 +476,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
@@ -500,9 +550,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);

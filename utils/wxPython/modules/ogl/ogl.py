@@ -31,6 +31,8 @@ from image import *
 
 from printfw import *
 
+from sizers import *
+
 from oglbasic import *
 
 from oglshapes import *
@@ -132,7 +134,7 @@ wxCircleShape =       wxPyCircleShape
 wxLineShape =         wxPyLineShape
 wxPolygonShape =      wxPyPolygonShape
 wxTextShape =         wxPyTextShape
-
+wxControlPoint =      wxPyControlPoint
 
 # Stuff these names into the wx namespace so wxPyConstructObject can find them
 import wx
@@ -152,4 +154,4 @@ wx.wxPyPolygonShapePtr    = wxPyPolygonShapePtr
 wx.wxPyTextShapePtr       = wxPyTextShapePtr
 wx.wxShapeRegionPtr       = wxShapeRegionPtr
 wx.wxOGLConstraintPtr     = wxOGLConstraintPtr
-wx.wxControlPointPtr      = wxControlPointPtr
+wx.wxControlPointPtr      = wxPyControlPointPtr

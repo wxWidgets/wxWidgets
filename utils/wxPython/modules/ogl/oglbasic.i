@@ -129,9 +129,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);
@@ -368,9 +368,9 @@ public:
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
     void base_OnMoveLink(wxDC& dc, bool moveControlPoints = TRUE);
-    void base_OnSizingDragLeft(wxControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingBeginDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
-    void base_OnSizingEndDragLeft(wxControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
+    void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginSize(double w, double h);
     void base_OnEndSize(double w, double h);
 //    void base_OnChangeAttachment(int attachment, wxPyLineShape* line, wxList& ordering);

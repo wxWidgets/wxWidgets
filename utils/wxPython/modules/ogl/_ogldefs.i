@@ -31,6 +31,7 @@ class wxShape;
 class wxShapeCanvas;
 class wxShapeEvtHandler;
 class wxTextShape;
+class wxControlPoint;
 
 class wxPyOGLConstraint;
 class wxPyBitmapShape;
@@ -49,6 +50,7 @@ class wxPyShape;
 class wxPyShapeCanvas;
 class wxPyShapeEvtHandler;
 class wxPyTextShape;
+class wxPyControlPoint;
 
 
 //---------------------------------------------------------------------------
