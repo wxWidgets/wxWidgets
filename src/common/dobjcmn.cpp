@@ -47,7 +47,7 @@ WX_DEFINE_LIST(wxSimpleDataObjectList);
 // ----------------------------------------------------------------------------
 
 static wxDataFormat dataFormatInvalid;
-const wxDataFormat& wxFormatInvalid = dataFormatInvalid;
+WXDLLEXPORT const wxDataFormat& wxFormatInvalid = dataFormatInvalid;
 
 // ============================================================================
 // implementation

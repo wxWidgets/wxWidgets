@@ -48,7 +48,7 @@
 #include "wx/spinctrl.h"
 
 // this is where wxGetNumberFromUser() is declared
-#include "wx/generic/textdlgg.h"
+#include "wx/textdlgg.h"
 
 #if !wxUSE_SPINCTRL
     // wxTextCtrl will do instead of wxSpinCtrl if we don't have it

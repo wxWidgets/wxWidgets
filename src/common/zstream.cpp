@@ -32,7 +32,7 @@
 // If we are building with configure (defines __WX_SETUP_H__), 
 // we trust the zlib path is given as a -I option.
 #if defined(__WXMSW__) && !defined(__WX_SETUP_H__)
-   #include "..\zlib\zlib.h"
+   #include "../zlib/zlib.h"
 #else
    #include "zlib.h"
 #endif
