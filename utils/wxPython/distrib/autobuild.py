@@ -6,8 +6,8 @@ from ftplib import FTP
 
 logfile = 'e:\\temp\\autobuild.log'
 WXDIR   = os.environ['WXWIN']
-dllVer  = '21_12'
-wxpVer  = '2.1.12'
+dllVer  = '21_13'
+wxpVer  = '2.1.13'
 dateSt  = time.strftime("%Y%m%d", time.localtime(time.time()))
 
 #----------------------------------------------------------------------
@@ -135,7 +135,7 @@ FINAL=1
             pass
 
 
-        logSeparator("Building source zip file...")
+        logSeparator("Building source and docs zip files...")
         os.chdir(WXDIR+'\\utils')
         do("wxPython\\distrib\\zipit.bat %s" % wxpVer)
         srcZName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-src-'+wxpVer+'.zip'
@@ -146,13 +146,22 @@ FINAL=1
         except:
             pass
 
+        srcDName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-docs-'+wxpVer+'.zip'
+        destDName = WXDIR+'\\utils\\wxPython\\distrib\\wxPython-docs-'+wxpVer+'-'+dateSt+'.zip'
+        validateFile(srcDName)
+        try:
+            os.rename(srcDName, destDName)
+        except:
+            pass
 
 
-        return
+        # #*#*#*#*#*  Comment this out to allow upload...
+        #return
 
         logSeparator("Uploading to website...")
         do('python d:\util32\sendwxp.py %s' % destName)
         do('python d:\util32\sendwxp.py %s' % destZName)
+        do('python d:\util32\sendwxp.py %s' % destDName)
         os.unlink(destName)
         os.unlink(destZName)
 

@@ -364,10 +364,19 @@ public:
 
     wxOGLConstraint * AddConstraint(wxOGLConstraint *constraint);
 
-    // **** Needs a typemap
+
     //wxOGLConstraint * AddConstraint(int type,
     //                                wxPyShape *constraining,
     //                                wxList& constrained);
+    %addmethods {
+        wxOGLConstraint * AddConstrainedShapes(int type, wxPyShape *constraining,
+                                               PyObject* constrained) {
+            wxList* list = wxPy_wxListHelper(constrained, "wxPyShape");
+            wxOGLConstraint* rv = self->AddConstraint(type, constraining, *list);
+            delete list;
+            return rv;
+        }
+    }
 
     %name(AddSimpleConstraint)wxOGLConstraint* AddConstraint(int type,
                                                              wxPyShape *constraining,

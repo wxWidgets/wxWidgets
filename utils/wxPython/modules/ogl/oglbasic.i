@@ -233,8 +233,29 @@ public:
     long GetId();
     void SetPen(wxPen *pen);
     void SetBrush(wxBrush *brush);
-    void SetClientData(wxObject *client_data);
-    wxObject *GetClientData() ;
+
+    // void SetClientData(wxObject *client_data);
+    // wxObject *GetClientData();
+    %addmethods {
+        void SetClientData(PyObject* userData) {
+            wxPyUserData* data = NULL;
+            if (userData)
+                data = new wxPyUserData(userData);
+            self->SetClientData(data);
+        }
+
+        PyObject* GetClientData() {
+            wxPyUserData* data = (wxPyUserData*)self->GetClientData();
+            if (data) {
+                Py_INCREF(data->m_obj);
+                return data->m_obj;
+            } else {
+                Py_INCREF(Py_None);
+                return Py_None;
+            }
+        }
+    }
+
     void Show(bool show);
     bool IsShown();
     void Move(wxDC& dc, double x1, double y1, bool display = TRUE);
@@ -294,11 +315,11 @@ public:
     void ReadRegions(wxExpr *clause);
 #endif
 
-    bool GetAttachmentPosition(int attachment, double *x, double *y,
+    bool GetAttachmentPosition(int attachment, double *OUTPUT, double *OUTPUT,
                                int nth = 0, int no_arcs = 1, wxPyLineShape *line = NULL);
     int GetNumberOfAttachments();
     bool AttachmentIsValid(int attachment);
-    bool GetAttachmentPositionEdge(int attachment, double *x, double *y,
+    bool GetAttachmentPositionEdge(int attachment, double *OUTPUT, double *OUTPUT,
                                    int nth = 0, int no_arcs = 1, wxPyLineShape *line = NULL);
     wxRealPoint CalcSimpleAttachment(const wxRealPoint& pt1, const wxRealPoint& pt2,
                                      int nth, int noArcs, wxPyLineShape* line);

@@ -106,8 +106,10 @@ class MyCanvas(wxScrolledWindow):
         if event.LeftDown():
             self.SetXY(event)
             self.curLine = []
+            self.CaptureMouse()
 
         elif event.Dragging():
+            print event.GetPosition()
             dc = wxClientDC(self)
             self.PrepareDC(dc)
             dc.BeginDrawing()
@@ -121,6 +123,7 @@ class MyCanvas(wxScrolledWindow):
         elif event.LeftUp():
             self.lines.append(self.curLine)
             self.curLine = []
+            self.ReleaseMouse()
 
 #---------------------------------------------------------------------------
 

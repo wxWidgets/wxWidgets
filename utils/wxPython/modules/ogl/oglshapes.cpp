@@ -7577,6 +7577,60 @@ static PyObject *_wrap_wxPyCompositeShape_AddConstraint(PyObject *self, PyObject
     return _resultobj;
 }
 
+static wxOGLConstraint * wxPyCompositeShape_AddConstrainedShapes(wxPyCompositeShape *self,int  type,wxPyShape * constraining,PyObject * constrained) {
+            wxList* list = wxPy_wxListHelper(constrained, "wxPyShape");
+            wxOGLConstraint* rv = self->AddConstraint(type, constraining, *list);
+            delete list;
+            return rv;
+        }
+static PyObject *_wrap_wxPyCompositeShape_AddConstrainedShapes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxOGLConstraint * _result;
+    wxPyCompositeShape * _arg0;
+    int  _arg1;
+    wxPyShape * _arg2;
+    PyObject * _arg3;
+    PyObject * _argo0 = 0;
+    PyObject * _argo2 = 0;
+    PyObject * _obj3 = 0;
+    char *_kwnames[] = { "self","type","constraining","constrained", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OiOO:wxPyCompositeShape_AddConstrainedShapes",_kwnames,&_argo0,&_arg1,&_argo2,&_obj3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyCompositeShape_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyCompositeShape_AddConstrainedShapes. Expected _wxPyCompositeShape_p.");
+        return NULL;
+        }
+    }
+    if (_argo2) {
+        if (_argo2 == Py_None) { _arg2 = NULL; }
+        else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxPyShape_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxPyCompositeShape_AddConstrainedShapes. Expected _wxPyShape_p.");
+        return NULL;
+        }
+    }
+{
+  _arg3 = _obj3;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxOGLConstraint *)wxPyCompositeShape_AddConstrainedShapes(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxOGLConstraint_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
+}
+
 #define wxPyCompositeShape_AddSimpleConstraint(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->AddConstraint(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxPyCompositeShape_AddSimpleConstraint(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -12179,6 +12233,7 @@ static PyMethodDef oglshapescMethods[] = {
 	 { "wxPyCompositeShape_ContainsDivision", (PyCFunction) _wrap_wxPyCompositeShape_ContainsDivision, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_CalculateSize", (PyCFunction) _wrap_wxPyCompositeShape_CalculateSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_AddSimpleConstraint", (PyCFunction) _wrap_wxPyCompositeShape_AddSimpleConstraint, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyCompositeShape_AddConstrainedShapes", (PyCFunction) _wrap_wxPyCompositeShape_AddConstrainedShapes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_AddConstraint", (PyCFunction) _wrap_wxPyCompositeShape_AddConstraint, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape_AddChild", (PyCFunction) _wrap_wxPyCompositeShape_AddChild, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyCompositeShape__setSelf", (PyCFunction) _wrap_wxPyCompositeShape__setSelf, METH_VARARGS | METH_KEYWORDS },

@@ -743,6 +743,10 @@ class wxPyCompositeShapePtr(wxPyRectangleShapePtr):
         val = apply(oglshapesc.wxPyCompositeShape_AddConstraint,(self,) + _args, _kwargs)
         if val: val = wxOGLConstraintPtr(val) 
         return val
+    def AddConstrainedShapes(self, *_args, **_kwargs):
+        val = apply(oglshapesc.wxPyCompositeShape_AddConstrainedShapes,(self,) + _args, _kwargs)
+        if val: val = wxOGLConstraintPtr(val) 
+        return val
     def AddSimpleConstraint(self, *_args, **_kwargs):
         val = apply(oglshapesc.wxPyCompositeShape_AddSimpleConstraint,(self,) + _args, _kwargs)
         if val: val = wxOGLConstraintPtr(val) 
