@@ -537,6 +537,15 @@ Gets the contents of the control. Notice that for a multiline text control,
 the lines will be separated by (Unix-style) $\backslash$n characters, even under
 Windows where they are separated by a $\backslash$r$\backslash$n sequence in the native control.
 
+\membersection{wxTextCtrl::IsEditable}\label{wxtextctrliseditable}
+
+\constfunc{bool}{IsEditable}{\void}
+
+Returns {\tt TRUE} if the controls contents may be edited by user (note that it
+always can be changed by the program), i.e. if the control hasn't been put in
+read-only mode by a previous call to 
+\helpref{SetEditable}{wxtextctrlseteditable}.
+
 \membersection{wxTextCtrl::IsModified}\label{wxtextctrlismodified}
 
 \constfunc{bool}{IsModified}{\void}
@@ -729,6 +738,10 @@ Makes the text item editable or read-only, overriding the {\bf wxTE\_READONLY} f
 \wxheading{Parameters}
 
 \docparam{editable}{If {\tt TRUE}, the control is editable. If {\tt FALSE}, the control is read-only.}
+
+\wxheading{See also}
+
+\helpref{IsEditable}{wxtextctrliseditable}
 
 \membersection{wxTextCtrl::SetInsertionPoint}\label{wxtextctrlsetinsertionpoint}
 
