@@ -40,11 +40,8 @@
 #include <errno.h>
 #include <stdarg.h>
 
-#define INCL_DOS
-#define INCL_PM
-#define INCL_GPI
-#include <os2.h>
 #define PURE_32
+
 #ifndef __EMX__
 #include <upm.h>
 #include <netcons.h>
@@ -236,7 +233,7 @@ void wxUsleep(
   unsigned long                     ulMilliseconds
 )
 {
-    ::DosSleep(ulMilliseconds);
+    ::DosSleep(ulMilliseconds/1000l);
 }
 
 void wxSleep(

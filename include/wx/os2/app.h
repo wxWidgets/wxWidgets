@@ -99,7 +99,6 @@ protected:
     DECLARE_EVENT_TABLE()
 private:
     HMQ                             m_hMq;
-    QMSG                            m_vMsg;
 };
 
 int WXDLLEXPORT wxEntry( int argc, char *argv[] );

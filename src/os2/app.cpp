@@ -386,6 +386,10 @@ void wxApp::CleanUp()
 
     wxClassInfo::CleanUpClasses();
 
+    // Delete Message queue
+    if (wxTheApp->m_hMq)
+        ::WinDestroyMsgQueue(wxTheApp->m_hMq);
+
     delete wxTheApp;
     wxTheApp = NULL;
 
@@ -522,6 +526,7 @@ wxApp::wxApp()
     m_nPrintMode = wxPRINT_WINDOWS;
     m_exitOnFrameDelete = TRUE;
     m_bAuto3D = TRUE;
+    m_hMq = 0;
 } // end of wxApp::wxApp
 
 wxApp::~wxApp()
@@ -554,8 +559,9 @@ bool wxApp::Initialized()
 //
 bool wxApp::DoMessage()
 {
-    BOOL                            bRc = ::WinGetMsg(vHabmain, &m_vMsg, HWND(NULL), 0, 0);
+    BOOL                            bRc = ::WinGetMsg(vHabmain, &svCurrentMsg, HWND(NULL), 0, 0);
 
+    wxUsleep(10000);
     if (bRc == 0)
     {
         // got WM_QUIT
@@ -624,7 +630,7 @@ bool wxApp::DoMessage()
 #endif // wxUSE_THREADS
 
         // Process the message
-        if (!ProcessMessage((WXMSG *)&svCurrentMsg) )
+        if (!ProcessMessage((WXMSG *)&svCurrentMsg))
         {
             ::WinDispatchMsg(vHabmain, (PQMSG)&svCurrentMsg);
         }
@@ -658,6 +664,7 @@ int wxApp::MainLoop()
 #endif // wxUSE_THREADS
         while (!Pending() && ProcessIdle())
         {
+	  wxUsleep(10000);
         }
         DoMessage();
     }
