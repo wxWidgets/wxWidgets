@@ -3373,7 +3373,7 @@ bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
     if ( (m_lastMouseEvent == wxEVT_RIGHT_DOWN ||
           m_lastMouseEvent == wxEVT_LEFT_DOWN ||
           m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
-         (m_lastMouseX == event.m_x && m_lastMouseY == event.m_y) )
+         (m_lastMouseX == x && m_lastMouseY == y) )
     {
         m_lastMouseEvent = wxEVT_MOTION;
 
