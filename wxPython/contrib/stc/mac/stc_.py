@@ -258,6 +258,9 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def MarkerPrevious(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_MarkerPrevious(self, *_args, **_kwargs)
         return val
+    def MarkerDefineBitmap(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_MarkerDefineBitmap(self, *_args, **_kwargs)
+        return val
     def SetMarginType(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetMarginType(self, *_args, **_kwargs)
         return val
@@ -469,6 +472,18 @@ class wxStyledTextCtrlPtr(wxControlPtr):
         return val
     def AutoCompGetDropRestOfWord(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_AutoCompGetDropRestOfWord(self, *_args, **_kwargs)
+        return val
+    def RegisterImage(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_RegisterImage(self, *_args, **_kwargs)
+        return val
+    def ClearRegisteredImages(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_ClearRegisteredImages(self, *_args, **_kwargs)
+        return val
+    def AutoCompGetTypeSeparator(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_AutoCompGetTypeSeparator(self, *_args, **_kwargs)
+        return val
+    def AutoCompSetTypeSeparator(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_AutoCompSetTypeSeparator(self, *_args, **_kwargs)
         return val
     def SetIndent(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetIndent(self, *_args, **_kwargs)
@@ -801,6 +816,39 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def TextHeight(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_TextHeight(self, *_args, **_kwargs)
         return val
+    def SetUseVerticalScrollBar(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetUseVerticalScrollBar(self, *_args, **_kwargs)
+        return val
+    def GetUseVerticalScrollBar(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetUseVerticalScrollBar(self, *_args, **_kwargs)
+        return val
+    def AppendText(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_AppendText(self, *_args, **_kwargs)
+        return val
+    def GetTwoPhaseDraw(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetTwoPhaseDraw(self, *_args, **_kwargs)
+        return val
+    def SetTwoPhaseDraw(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetTwoPhaseDraw(self, *_args, **_kwargs)
+        return val
+    def TargetFromSelection(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_TargetFromSelection(self, *_args, **_kwargs)
+        return val
+    def LinesJoin(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LinesJoin(self, *_args, **_kwargs)
+        return val
+    def LinesSplit(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LinesSplit(self, *_args, **_kwargs)
+        return val
+    def SetFoldMarginColour(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetFoldMarginColour(self, *_args, **_kwargs)
+        return val
+    def SetFoldMarginHiColour(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetFoldMarginHiColour(self, *_args, **_kwargs)
+        return val
+    def LineDuplicate(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_LineDuplicate(self, *_args, **_kwargs)
+        return val
     def HomeDisplay(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_HomeDisplay(self, *_args, **_kwargs)
         return val
@@ -955,11 +1003,20 @@ class wxStyledTextCtrlPtr(wxControlPtr):
     def GetXOffset(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_GetXOffset(self, *_args, **_kwargs)
         return val
+    def ChooseCaretX(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_ChooseCaretX(self, *_args, **_kwargs)
+        return val
     def SetXCaretPolicy(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetXCaretPolicy(self, *_args, **_kwargs)
         return val
     def SetYCaretPolicy(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_SetYCaretPolicy(self, *_args, **_kwargs)
+        return val
+    def SetPrintWrapMode(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_SetPrintWrapMode(self, *_args, **_kwargs)
+        return val
+    def GetPrintWrapMode(self, *_args, **_kwargs):
+        val = stc_c.wxStyledTextCtrl_GetPrintWrapMode(self, *_args, **_kwargs)
         return val
     def StartRecord(self, *_args, **_kwargs):
         val = stc_c.wxStyledTextCtrl_StartRecord(self, *_args, **_kwargs)
@@ -1215,6 +1272,7 @@ wxSTC_EOL_CRLF = stc_c.wxSTC_EOL_CRLF
 wxSTC_EOL_CR = stc_c.wxSTC_EOL_CR
 wxSTC_EOL_LF = stc_c.wxSTC_EOL_LF
 wxSTC_CP_UTF8 = stc_c.wxSTC_CP_UTF8
+wxSTC_CP_DBCS = stc_c.wxSTC_CP_DBCS
 wxSTC_MARKER_MAX = stc_c.wxSTC_MARKER_MAX
 wxSTC_MARK_CIRCLE = stc_c.wxSTC_MARK_CIRCLE
 wxSTC_MARK_ROUNDRECT = stc_c.wxSTC_MARK_ROUNDRECT
@@ -1241,6 +1299,7 @@ wxSTC_MARK_CIRCLEMINUSCONNECTED = stc_c.wxSTC_MARK_CIRCLEMINUSCONNECTED
 wxSTC_MARK_BACKGROUND = stc_c.wxSTC_MARK_BACKGROUND
 wxSTC_MARK_DOTDOTDOT = stc_c.wxSTC_MARK_DOTDOTDOT
 wxSTC_MARK_ARROWS = stc_c.wxSTC_MARK_ARROWS
+wxSTC_MARK_PIXMAP = stc_c.wxSTC_MARK_PIXMAP
 wxSTC_MARK_CHARACTER = stc_c.wxSTC_MARK_CHARACTER
 wxSTC_MARKNUM_FOLDEREND = stc_c.wxSTC_MARKNUM_FOLDEREND
 wxSTC_MARKNUM_FOLDEROPENMID = stc_c.wxSTC_MARKNUM_FOLDEROPENMID
@@ -1304,7 +1363,17 @@ wxSTC_FIND_REGEXP = stc_c.wxSTC_FIND_REGEXP
 wxSTC_FOLDLEVELBASE = stc_c.wxSTC_FOLDLEVELBASE
 wxSTC_FOLDLEVELWHITEFLAG = stc_c.wxSTC_FOLDLEVELWHITEFLAG
 wxSTC_FOLDLEVELHEADERFLAG = stc_c.wxSTC_FOLDLEVELHEADERFLAG
+wxSTC_FOLDLEVELBOXHEADERFLAG = stc_c.wxSTC_FOLDLEVELBOXHEADERFLAG
+wxSTC_FOLDLEVELBOXFOOTERFLAG = stc_c.wxSTC_FOLDLEVELBOXFOOTERFLAG
+wxSTC_FOLDLEVELCONTRACTED = stc_c.wxSTC_FOLDLEVELCONTRACTED
+wxSTC_FOLDLEVELUNINDENT = stc_c.wxSTC_FOLDLEVELUNINDENT
 wxSTC_FOLDLEVELNUMBERMASK = stc_c.wxSTC_FOLDLEVELNUMBERMASK
+wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED = stc_c.wxSTC_FOLDFLAG_LINEBEFORE_EXPANDED
+wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED = stc_c.wxSTC_FOLDFLAG_LINEBEFORE_CONTRACTED
+wxSTC_FOLDFLAG_LINEAFTER_EXPANDED = stc_c.wxSTC_FOLDFLAG_LINEAFTER_EXPANDED
+wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED = stc_c.wxSTC_FOLDFLAG_LINEAFTER_CONTRACTED
+wxSTC_FOLDFLAG_LEVELNUMBERS = stc_c.wxSTC_FOLDFLAG_LEVELNUMBERS
+wxSTC_FOLDFLAG_BOX = stc_c.wxSTC_FOLDFLAG_BOX
 wxSTC_TIME_FOREVER = stc_c.wxSTC_TIME_FOREVER
 wxSTC_WRAP_NONE = stc_c.wxSTC_WRAP_NONE
 wxSTC_WRAP_WORD = stc_c.wxSTC_WRAP_WORD
@@ -1389,6 +1458,11 @@ wxSTC_LEX_PHP = stc_c.wxSTC_LEX_PHP
 wxSTC_LEX_BAAN = stc_c.wxSTC_LEX_BAAN
 wxSTC_LEX_MATLAB = stc_c.wxSTC_LEX_MATLAB
 wxSTC_LEX_SCRIPTOL = stc_c.wxSTC_LEX_SCRIPTOL
+wxSTC_LEX_ASM = stc_c.wxSTC_LEX_ASM
+wxSTC_LEX_CPPNOCASE = stc_c.wxSTC_LEX_CPPNOCASE
+wxSTC_LEX_FORTRAN = stc_c.wxSTC_LEX_FORTRAN
+wxSTC_LEX_F77 = stc_c.wxSTC_LEX_F77
+wxSTC_LEX_CSS = stc_c.wxSTC_LEX_CSS
 wxSTC_LEX_AUTOMATIC = stc_c.wxSTC_LEX_AUTOMATIC
 wxSTC_P_DEFAULT = stc_c.wxSTC_P_DEFAULT
 wxSTC_P_COMMENTLINE = stc_c.wxSTC_P_COMMENTLINE
@@ -1614,6 +1688,7 @@ wxSTC_ERR_DIFF_CHANGED = stc_c.wxSTC_ERR_DIFF_CHANGED
 wxSTC_ERR_DIFF_ADDITION = stc_c.wxSTC_ERR_DIFF_ADDITION
 wxSTC_ERR_DIFF_DELETION = stc_c.wxSTC_ERR_DIFF_DELETION
 wxSTC_ERR_DIFF_MESSAGE = stc_c.wxSTC_ERR_DIFF_MESSAGE
+wxSTC_ERR_PHP = stc_c.wxSTC_ERR_PHP
 wxSTC_BAT_DEFAULT = stc_c.wxSTC_BAT_DEFAULT
 wxSTC_BAT_COMMENT = stc_c.wxSTC_BAT_COMMENT
 wxSTC_BAT_WORD = stc_c.wxSTC_BAT_WORD
@@ -1650,22 +1725,29 @@ wxSTC_AVE_DEFAULT = stc_c.wxSTC_AVE_DEFAULT
 wxSTC_AVE_COMMENT = stc_c.wxSTC_AVE_COMMENT
 wxSTC_AVE_NUMBER = stc_c.wxSTC_AVE_NUMBER
 wxSTC_AVE_WORD = stc_c.wxSTC_AVE_WORD
-wxSTC_AVE_KEYWORD = stc_c.wxSTC_AVE_KEYWORD
-wxSTC_AVE_STATEMENT = stc_c.wxSTC_AVE_STATEMENT
 wxSTC_AVE_STRING = stc_c.wxSTC_AVE_STRING
 wxSTC_AVE_ENUM = stc_c.wxSTC_AVE_ENUM
 wxSTC_AVE_STRINGEOL = stc_c.wxSTC_AVE_STRINGEOL
 wxSTC_AVE_IDENTIFIER = stc_c.wxSTC_AVE_IDENTIFIER
 wxSTC_AVE_OPERATOR = stc_c.wxSTC_AVE_OPERATOR
+wxSTC_AVE_WORD1 = stc_c.wxSTC_AVE_WORD1
+wxSTC_AVE_WORD2 = stc_c.wxSTC_AVE_WORD2
+wxSTC_AVE_WORD3 = stc_c.wxSTC_AVE_WORD3
+wxSTC_AVE_WORD4 = stc_c.wxSTC_AVE_WORD4
+wxSTC_AVE_WORD5 = stc_c.wxSTC_AVE_WORD5
+wxSTC_AVE_WORD6 = stc_c.wxSTC_AVE_WORD6
 wxSTC_ADA_DEFAULT = stc_c.wxSTC_ADA_DEFAULT
-wxSTC_ADA_COMMENT = stc_c.wxSTC_ADA_COMMENT
-wxSTC_ADA_NUMBER = stc_c.wxSTC_ADA_NUMBER
 wxSTC_ADA_WORD = stc_c.wxSTC_ADA_WORD
-wxSTC_ADA_STRING = stc_c.wxSTC_ADA_STRING
-wxSTC_ADA_CHARACTER = stc_c.wxSTC_ADA_CHARACTER
-wxSTC_ADA_OPERATOR = stc_c.wxSTC_ADA_OPERATOR
 wxSTC_ADA_IDENTIFIER = stc_c.wxSTC_ADA_IDENTIFIER
+wxSTC_ADA_NUMBER = stc_c.wxSTC_ADA_NUMBER
+wxSTC_ADA_DELIMITER = stc_c.wxSTC_ADA_DELIMITER
+wxSTC_ADA_CHARACTER = stc_c.wxSTC_ADA_CHARACTER
+wxSTC_ADA_CHARACTEREOL = stc_c.wxSTC_ADA_CHARACTEREOL
+wxSTC_ADA_STRING = stc_c.wxSTC_ADA_STRING
 wxSTC_ADA_STRINGEOL = stc_c.wxSTC_ADA_STRINGEOL
+wxSTC_ADA_LABEL = stc_c.wxSTC_ADA_LABEL
+wxSTC_ADA_COMMENTLINE = stc_c.wxSTC_ADA_COMMENTLINE
+wxSTC_ADA_ILLEGAL = stc_c.wxSTC_ADA_ILLEGAL
 wxSTC_BAAN_DEFAULT = stc_c.wxSTC_BAAN_DEFAULT
 wxSTC_BAAN_COMMENT = stc_c.wxSTC_BAAN_COMMENT
 wxSTC_BAAN_COMMENTDOC = stc_c.wxSTC_BAAN_COMMENTDOC
@@ -1733,6 +1815,45 @@ wxSTC_SCRIPTOL_WORD2 = stc_c.wxSTC_SCRIPTOL_WORD2
 wxSTC_SCRIPTOL_COMMENTDOCKEYWORD = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORD
 wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR = stc_c.wxSTC_SCRIPTOL_COMMENTDOCKEYWORDERROR
 wxSTC_SCRIPTOL_COMMENTBASIC = stc_c.wxSTC_SCRIPTOL_COMMENTBASIC
+wxSTC_ASM_DEFAULT = stc_c.wxSTC_ASM_DEFAULT
+wxSTC_ASM_COMMENT = stc_c.wxSTC_ASM_COMMENT
+wxSTC_ASM_NUMBER = stc_c.wxSTC_ASM_NUMBER
+wxSTC_ASM_STRING = stc_c.wxSTC_ASM_STRING
+wxSTC_ASM_OPERATOR = stc_c.wxSTC_ASM_OPERATOR
+wxSTC_ASM_IDENTIFIER = stc_c.wxSTC_ASM_IDENTIFIER
+wxSTC_ASM_CPUINSTRUCTION = stc_c.wxSTC_ASM_CPUINSTRUCTION
+wxSTC_ASM_MATHINSTRUCTION = stc_c.wxSTC_ASM_MATHINSTRUCTION
+wxSTC_ASM_REGISTER = stc_c.wxSTC_ASM_REGISTER
+wxSTC_ASM_DIRECTIVE = stc_c.wxSTC_ASM_DIRECTIVE
+wxSTC_ASM_DIRECTIVEOPERAND = stc_c.wxSTC_ASM_DIRECTIVEOPERAND
+wxSTC_F_DEFAULT = stc_c.wxSTC_F_DEFAULT
+wxSTC_F_COMMENT = stc_c.wxSTC_F_COMMENT
+wxSTC_F_NUMBER = stc_c.wxSTC_F_NUMBER
+wxSTC_F_STRING1 = stc_c.wxSTC_F_STRING1
+wxSTC_F_STRING2 = stc_c.wxSTC_F_STRING2
+wxSTC_F_STRINGEOL = stc_c.wxSTC_F_STRINGEOL
+wxSTC_F_OPERATOR = stc_c.wxSTC_F_OPERATOR
+wxSTC_F_IDENTIFIER = stc_c.wxSTC_F_IDENTIFIER
+wxSTC_F_WORD = stc_c.wxSTC_F_WORD
+wxSTC_F_WORD2 = stc_c.wxSTC_F_WORD2
+wxSTC_F_WORD3 = stc_c.wxSTC_F_WORD3
+wxSTC_F_PREPROCESSOR = stc_c.wxSTC_F_PREPROCESSOR
+wxSTC_F_OPERATOR2 = stc_c.wxSTC_F_OPERATOR2
+wxSTC_F_LABEL = stc_c.wxSTC_F_LABEL
+wxSTC_F_CONTINUATION = stc_c.wxSTC_F_CONTINUATION
+wxSTC_CSS_DEFAULT = stc_c.wxSTC_CSS_DEFAULT
+wxSTC_CSS_TAG = stc_c.wxSTC_CSS_TAG
+wxSTC_CSS_CLASS = stc_c.wxSTC_CSS_CLASS
+wxSTC_CSS_PSEUDOCLASS = stc_c.wxSTC_CSS_PSEUDOCLASS
+wxSTC_CSS_UNKNOWN_PSEUDOCLASS = stc_c.wxSTC_CSS_UNKNOWN_PSEUDOCLASS
+wxSTC_CSS_OPERATOR = stc_c.wxSTC_CSS_OPERATOR
+wxSTC_CSS_IDENTIFIER = stc_c.wxSTC_CSS_IDENTIFIER
+wxSTC_CSS_UNKNOWN_IDENTIFIER = stc_c.wxSTC_CSS_UNKNOWN_IDENTIFIER
+wxSTC_CSS_VALUE = stc_c.wxSTC_CSS_VALUE
+wxSTC_CSS_COMMENT = stc_c.wxSTC_CSS_COMMENT
+wxSTC_CSS_ID = stc_c.wxSTC_CSS_ID
+wxSTC_CSS_IMPORTANT = stc_c.wxSTC_CSS_IMPORTANT
+wxSTC_CSS_DIRECTIVE = stc_c.wxSTC_CSS_DIRECTIVE
 wxSTC_CMD_REDO = stc_c.wxSTC_CMD_REDO
 wxSTC_CMD_SELECTALL = stc_c.wxSTC_CMD_SELECTALL
 wxSTC_CMD_UNDO = stc_c.wxSTC_CMD_UNDO
@@ -1780,6 +1901,7 @@ wxSTC_CMD_DELWORDRIGHT = stc_c.wxSTC_CMD_DELWORDRIGHT
 wxSTC_CMD_LINECUT = stc_c.wxSTC_CMD_LINECUT
 wxSTC_CMD_LINEDELETE = stc_c.wxSTC_CMD_LINEDELETE
 wxSTC_CMD_LINETRANSPOSE = stc_c.wxSTC_CMD_LINETRANSPOSE
+wxSTC_CMD_LINEDUPLICATE = stc_c.wxSTC_CMD_LINEDUPLICATE
 wxSTC_CMD_LOWERCASE = stc_c.wxSTC_CMD_LOWERCASE
 wxSTC_CMD_UPPERCASE = stc_c.wxSTC_CMD_UPPERCASE
 wxSTC_CMD_LINESCROLLDOWN = stc_c.wxSTC_CMD_LINESCROLLDOWN
