@@ -96,7 +96,7 @@ int wxGetOsVersion(int *majorVsn, int *minorVsn)
 {
   if (majorVsn) *majorVsn = GTK_MAJOR_VERSION;
   if (minorVsn) *minorVsn = GTK_MINOR_VERSION;
-  
+
   return wxGTK;
 }
 
@@ -123,11 +123,11 @@ char *wxGetUserHome( const wxString &user )
 	{
             return ptr;
 	}
-        if ((ptr = getenv("USER")) != NULL || (ptr = getenv("LOGNAME")) != NULL) 
+        if ((ptr = getenv("USER")) != NULL || (ptr = getenv("LOGNAME")) != NULL)
 	{
             who = getpwnam(ptr);
         }
-	
+
         /* We now make sure the the user exists! */
         if (who == NULL)
 	{
@@ -299,10 +299,10 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
     wxCHECK_MSG( *argv, 0, "can't exec empty command" );
 
     /* Create pipes */
-    if (pipe(end_proc_detect) == -1) 
+    if (pipe(end_proc_detect) == -1)
     {
-      wxLogSysError( "Pipe creation failed" );
-      return 0;
+        wxLogSysError( "Pipe creation failed" );
+        return 0;
     }
 
     /* fork the process */
@@ -311,65 +311,68 @@ long wxExecute( char **argv, bool sync, wxProcess *process )
 #else
     pid_t pid = fork();
 #endif
-    if (pid == -1) 
+    if (pid == -1)
     {
         wxLogSysError( "Fork failed" );
         return 0;
     }
-    else if (pid == 0) 
+    else if (pid == 0)
     {
         // we're in child
         close(end_proc_detect[0]); // close reading side
-	// These three lines close the open file descriptors to
-	// to avoid any input/output which might block the process
-	// or irritate the user. If one wants proper IO for the sub-
-	// process, the "right thing to do" is to start an xterm executing
-	// it.
-	close(STDIN_FILENO);
-	close(STDOUT_FILENO);
-	close(STDERR_FILENO);
+
+        // These three lines close the open file descriptors to
+        // to avoid any input/output which might block the process
+        // or irritate the user. If one wants proper IO for the sub-
+        // process, the "right thing to do" is to start an xterm executing
+        // it.
+        close(STDIN_FILENO);
+        close(STDOUT_FILENO);
+        close(STDERR_FILENO);
+
         // some programs complain about sterr not being open, so
         // redirect them:
         open("/dev/null", O_RDONLY);  // stdin
-	open("/dev/null", O_WRONLY);  // stdout
-	open("/dev/null", O_WRONLY);  // stderr
-        
+        open("/dev/null", O_WRONLY);  // stdout
+        open("/dev/null", O_WRONLY);  // stderr
+
 
 #ifdef _AIX
         execvp ((const char *)*argv, (const char **)argv);
 #else
         execvp (*argv, argv);
 #endif
+
         // there is no return after successful exec()
         wxLogSysError( "Can't execute '%s'", *argv);
 
         _exit(-1);
     }
-    else 
+    else
     {
-      // we're in parent
-      close(end_proc_detect[1]); // close writing side
-      data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
-                                GTK_EndProcessDetector, (gpointer)data);
-      data->pid = pid;
-      if (!sync) 
-      {
-        data->process = process;
-      }
-      else 
-      {
-        data->process = (wxProcess *) NULL;
-        data->pid = -(data->pid);
+        // we're in parent
+        close(end_proc_detect[1]); // close writing side
+        data->tag = gdk_input_add(end_proc_detect[0], GDK_INPUT_READ,
+                GTK_EndProcessDetector, (gpointer)data);
+        data->pid = pid;
+        if (!sync)
+        {
+            data->process = process;
+        }
+        else
+        {
+            data->process = (wxProcess *) NULL;
+            data->pid = -(data->pid);
 
-        while (data->pid != 0)
-          wxYield();
+            while (data->pid != 0)
+                wxYield();
 
-        delete data;
-      }
+            delete data;
+        }
 
-      // @@@ our return value indicates success even if execvp() in the child
-      //     failed!
-      return pid;
+        // @@@ our return value indicates success even if execvp() in the child
+        //     failed!
+        return pid;
     }
 }
 
@@ -389,7 +392,7 @@ long wxExecute( const wxString& command, bool sync, wxProcess *process )
         /* loop */ ;
 
     long lRc = wxExecute(argv, sync, process);
-    
+
     delete [] tmp;
 
     return lRc;

@@ -946,11 +946,12 @@ arguments, terminated by NULL.
 If {\it sync} is FALSE (the default), flow of control immediately returns.
 If TRUE, the current application waits until the other program has terminated.
 
-If execution is asynchronous, the return value is the process id,
-otherwise it is a status value.  A zero value indicates that the command could not
-be executed.
+The return value is the process id, not the exit code of invoked program (for
+this you should use wxProcess). A zero value indicates that the command could
+not be executed.
 
-If callback isn't NULL and if execution is asynchronous, 
+If callback isn't NULL and if execution is asynchronous (note that callback
+parameter can not be non NULL for synchronous execution), 
 \helpref{wxProcess::OnTerminate}{wxprocessonterminate} will be called when
 the process finishes.
 

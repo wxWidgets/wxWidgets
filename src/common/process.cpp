@@ -2,11 +2,11 @@
 // Name:        process.cpp
 // Purpose:     Process termination classes
 // Author:      Guilhem Lavaux
-// Modified by:
+// Modified by: Vadim Zeitlin to check error codes, added Detach() method
 // Created:     24/06/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -31,15 +31,23 @@ IMPLEMENT_DYNAMIC_CLASS(wxProcessEvent, wxEvent)
 
 wxProcess::wxProcess(wxEvtHandler *parent, int id)
 {
-  if (parent)
-    SetNextHandler(parent);
+    if (parent)
+        SetNextHandler(parent);
 
-  m_id = id;
+    m_id = id;
 }
 
 void wxProcess::OnTerminate(int pid, int status)
 {
-  wxProcessEvent event(m_id, pid, status);
+    wxProcessEvent event(m_id, pid, status);
 
-  ProcessEvent(event);
+    if ( !ProcessEvent(event) )
+        delete this;
+    //else: the object which processed the event is responsible for deleting
+    //      us!
+}
+
+void wxProcess::Detach()
+{
+    SetNextHandler(NULL);
 }

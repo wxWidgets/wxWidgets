@@ -2,11 +2,11 @@
 // Name:        process.h
 // Purpose:     wxProcess class
 // Author:      Guilhem Lavaux
-// Modified by:
+// Modified by: Vadim Zeitlin to check error codes, added Detach() method
 // Created:     24/06/98
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Guilhem Lavaux
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_PROCESSH__
@@ -54,6 +54,10 @@ public:
     wxProcess(wxEvtHandler *parent = (wxEvtHandler *) NULL, int id = -1);
 
     virtual void OnTerminate(int pid, int status);
+
+    // detach from the parent - should be called by the parent if it's deleted
+    // before the process it started terminates
+    void Detach();
 
 protected:
     int m_id;

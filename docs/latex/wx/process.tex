@@ -1,8 +1,18 @@
 \section{\class{wxProcess}}\label{wxprocess}
 
-This class contains a method which is invoked when a process finishes.
-It can raise a \helpref{wxProcessEvent}{wxprocessevent} if wxProcess::OnTerminate
-isn't overriden.
+The objects of this class are used in conjonction with 
+\helpref{wxExecute}{wxexecute} function. When a wxProcess object is passed to
+wxExecute(), its \helpref{OnTerminate()}{wxprocessonterminate} virtual method
+is called when the process terminates. This allows the program to be
+(asynchronously) notified about the process termination and also retrieve its
+exit status which is unavailable from wxExecute() in the case of
+asynchronous execution.
+
+Please note that if the process termination notification is processed by the
+parent, it is responsible for deleting the wxProcess object which sent it.
+However, if it is not processed, the object will delete itself and so the
+library users should only delete those objects whose notifications have been
+processed (and call \helpref{Detach()}{wxprocessdetach} for others).
 
 \wxheading{Derived from}
 
@@ -22,6 +32,10 @@ Constructs a process object. {\it id} is only used in the case you want to
 use wxWindows events. It identifies this object, or another window that will
 receive the event.
 
+If the {\it parent} parameter is different from NULL, it will receive
+a wxEVT\_END\_PROCESS notification event (you should insert EVT\_END\_PROCESS
+macro in the event table of the parent to handle it) with the given {\it id}.
+
 \wxheading{Parameters}
 
 \docparam{parent}{The event handler parent.}
@@ -34,12 +48,28 @@ receive the event.
 
 Destroys the wxProcess object.
 
+\membersection{wxProcess::Detach}\label{wxprocessdetach}
+
+\func{void}{Detach}{\void}
+
+Normally, a wxProcess object is deleted by its parent when it receives the
+notification about the process termination. However, it might happen that the
+parent object is destroyed before the external process is terminated (e.g. a
+window from which this external process was launched is closed by the user)
+and in this case it {\bf should not delete} the wxProcess object, but 
+{\bf should call Detach()} instead. After the wxProcess object is detached
+from its parent, no notification events will be sent to the parent and the
+object will delete itself upon reception of the process termination
+notification.
+
 \membersection{wxProcess::OnTerminate}\label{wxprocessonterminate}
 
-\constfunc{void}{OnTerminate}{\param{int}{ pid}}
+\constfunc{void}{OnTerminate}{\param{int}{ pid}, \param{int}{ status}}
 
 It is called when the process with the pid {\it pid} finishes.
 It raises a wxWindows event when it isn't overriden.
 
-\docparam{pid}{The pid of the process which ends.}
+\docparam{pid}{The pid of the process which has just terminated.}
+
+\docparam{status}{The exit code of the process.}
 
