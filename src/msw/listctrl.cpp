@@ -1039,7 +1039,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
 
     findInfo.flags = LVFI_STRING;
     if ( partial )
-        findInfo.flags |= LVFI_STRING;
+        findInfo.flags |= LVFI_PARTIAL;
     findInfo.psz = WXSTRINGCAST str;
 
     return ListView_FindItem(GetHwnd(), (int) start, & findInfo);
