@@ -9,93 +9,116 @@
 // Licence:   	wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+
 #ifndef _WX_LISTBOX_H_
 #define _WX_LISTBOX_H_
 
 #ifdef __GNUG__
-#pragma interface "listbox.h"
+    #pragma interface "listbox.h"
 #endif
 
-#include "wx/control.h"
-#include "wx/dynarray.h"
+// ----------------------------------------------------------------------------
+// simple types
+// ----------------------------------------------------------------------------
 
-WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
+#if wxUSE_OWNER_DRAWN
+  class WXDLLEXPORT wxOwnerDrawn;
+
+  // define the array of list box items
+  #include  <wx/dynarray.h>
+
+  WX_DEFINE_EXPORTED_ARRAY(wxOwnerDrawn *, wxListBoxItemsArray);
+#endif // wxUSE_OWNER_DRAWN
 
 // forward decl for GetSelections()
-class WXDLLEXPORT wxArrayInt;
-
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
+class wxArrayInt;
 
 // List box item
 
 WX_DEFINE_ARRAY( char * , wxListDataArray ) ;
 
-class WXDLLEXPORT wxListBox: public wxControl
+// ----------------------------------------------------------------------------
+// List box control
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxListBox : public wxListBoxBase
 {
-  DECLARE_DYNAMIC_CLASS(wxListBox)
- public:
+public:
+    // ctors and such
+    wxListBox();
+    wxListBox(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxListBoxNameStr)
+    {
+        Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
 
-  wxListBox();
-  inline wxListBox(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr)
-  {
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-  }
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                int n = 0, const wxString choices[] = NULL,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxListBoxNameStr);
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr);
+    virtual ~wxListBox();
 
-  ~wxListBox();
+    // implement base class pure virtuals
+    virtual void Clear();
+    virtual void Delete(int n);
 
-  virtual void Append(const wxString& item);
-  virtual void Append(const wxString& item, char *clientData);
-  virtual void Set(int n, const wxString* choices, char **clientData = NULL);
-  virtual int FindString(const wxString& s) const ;
-  virtual void Clear();
-  virtual void SetSelection(int n, bool select = TRUE);
+    virtual int GetCount() const;
+    virtual wxString GetString(int n) const;
+    virtual void SetString(int n, const wxString& s);
+    virtual int FindString(const wxString& s) const;
 
-  virtual void Deselect(int n);
+    virtual bool IsSelected(int n) const;
+    virtual void SetSelection(int n, bool select = TRUE);
+    virtual int GetSelection() const;
+    virtual int GetSelections(wxArrayInt& aSelections) const;
 
-  // For single choice list item only
-  virtual int GetSelection() const ;
-  virtual void Delete(int n);
-  virtual char *GetClientData(int n) const ;
-  virtual void SetClientData(int n, char *clientData);
-  virtual void SetString(int n, const wxString& s);
+    virtual int DoAppend(const wxString& item);
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+    virtual void DoSetItems(const wxArrayString& items, void **clientData);
 
-  // For single or multiple choice list item
-  virtual int GetSelections(wxArrayInt& aSelections) const;
-  virtual bool Selected(int n) const ;
-  virtual wxString GetString(int n) const ;
+    virtual void DoSetFirstItem(int n);
 
-  // Set the specified item at the first visible item
-  // or scroll to max range.
-  virtual void SetFirstItem(int n) ;
-  virtual void SetFirstItem(const wxString& s) ;
+    virtual void DoSetItemClientData(int n, void* clientData);
+    virtual void* DoGetItemClientData(int n) const;
+    virtual void DoSetItemClientObject(int n, wxClientData* clientData);
+    virtual wxClientData* DoGetItemClientObject(int n) const;
 
-  virtual void InsertItems(int nItems, const wxString items[], int pos);
+    // wxCheckListBox support
+#if wxUSE_OWNER_DRAWN
+    // plug-in for derived classes
+    virtual wxOwnerDrawn *CreateItem(size_t n);
 
-  virtual wxString GetStringSelection() const ;
-  virtual bool SetStringSelection(const wxString& s, bool flag = TRUE);
-  virtual int Number() const ;
+    // allows to get the item and use SetXXX functions to set it's appearance
+    wxOwnerDrawn *GetItem(size_t n) const { return m_aItems[n]; }
 
-  void Command(wxCommandEvent& event);
+    // get the index of the given item
+    int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
+#endif // wxUSE_OWNER_DRAWN
 
-	void MacSetRedraw( bool doDraw ) ;
- protected:
-  int       m_noItems;
-  int       m_selected;
-  
+    // Windows-specific code to set the horizontal extent of the listbox, if
+    // necessary. If s is non-NULL, it's used to calculate the horizontal
+    // extent. Otherwise, all strings are used.
+    virtual void SetHorizontalExtent(const wxString& s = wxEmptyString);
+
+    // Windows callbacks
+
+    virtual void SetupColours();
+    virtual void	MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+
+  	ListHandle		m_macList ;
+	wxArrayString 	m_stringArray ;
+	wxListDataArray m_dataArray ;
+	void 			MacSetRedraw( bool doDraw ) ;
+protected:
 	void			MacDestroy() ;			
 	void			MacDelete( int n ) ;
 	void			MacInsert( int n , const char * text) ;
@@ -111,13 +134,25 @@ class WXDLLEXPORT wxListBox: public wxControl
 	void			MacDoClick() ;
 	void			MacDoDoubleClick() ;
 
- public :
-  ListHandle	m_macList ;
-	wxArrayString m_stringArray ;
-	wxListDataArray m_dataArray ;
-	
-    virtual void	MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
-DECLARE_EVENT_TABLE()
+    // do we have multiple selections?
+    bool HasMultipleSelection() const;
+
+    // free memory (common part of Clear() and dtor)
+    void Free();
+
+    int m_noItems;
+    int m_selected;
+
+    virtual wxSize DoGetBestSize();
+
+#if wxUSE_OWNER_DRAWN
+    // control items
+    wxListBoxItemsArray m_aItems;
+#endif
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxListBox)
+	DECLARE_EVENT_TABLE()
 };
 
 #endif

@@ -79,6 +79,8 @@ public:
     #include "wx/motif/dataform.h"
 #elif defined(__WXGTK__)
     #include "wx/gtk/dataform.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/dataform.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dataform.h"
 #endif
@@ -159,7 +161,7 @@ public:
 #elif defined(__WXQT__)
     #include "wx/qt/dnd.h"
 #elif defined(__WXMAC__)
-    #include "wx/mac/dnd.h"
+    #include "wx/mac/dataobj.h"
 #elif defined(__WXPM__)
     #include "wx/os2/dataobj.h"
 #elif defined(__WXSTUBS__)

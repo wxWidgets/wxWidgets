@@ -43,8 +43,12 @@ class WXDLLEXPORT wxButton: public wxControl
            const wxString& name = wxButtonNameStr);
 
 	virtual void MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
+    static wxSize GetDefaultSize();
+
   virtual void SetDefault();
   virtual void Command(wxCommandEvent& event);
+protected:
+    virtual wxSize DoGetBestSize();
 };
 
 #endif

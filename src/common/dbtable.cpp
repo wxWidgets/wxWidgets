@@ -81,6 +81,18 @@
 	#include "wx/dbtable.h"
 #endif
 
+#ifdef __MWERKS__
+#ifdef __WXMSW__
+#define stricmp _stricmp
+#define strnicmp _strnicmp
+#else
+int strcasecmp(const char *str_1, const char *str_2) ;
+int strncasecmp(const char *str_1, const char *str_2, size_t maxchar) ;
+#define stricmp strcasecmp
+#define strnicmp strncasecmp
+#endif
+#endif
+
 #ifdef __UNIX__
 // The HPUX preprocessor lines below were commented out on 8/20/97
 // because macros.h currently redefines DEBUG and is unneeded.

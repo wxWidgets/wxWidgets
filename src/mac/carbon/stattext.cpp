@@ -47,7 +47,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 void wxStaticText::SetLabel(const wxString& st , bool resize )
 {
-	m_label = st ;
+	SetTitle( st ) ;
 	wxString label ;
 	
 	if( wxApp::s_macDefaultEncodingIsPC )

@@ -16,15 +16,18 @@
 #include "wx/spinbutt.h"
 #include "wx/mac/uma.h"
 
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
-#endif
+// ============================================================================
+// implementation
+// ============================================================================
 
-wxSpinButton::wxSpinButton()
-{
-	m_min = 0;
-	m_max = 100;
-}
+// ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
+#if !USE_SHARED_LIBRARY
+    IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
+    IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
+#endif
 
 bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
@@ -76,14 +79,6 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
 {
 	m_min = minVal;
 	m_max = maxVal;
-}
-
-// Spin event
-IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent)
-
-wxSpinEvent::wxSpinEvent(wxEventType commandType, int id):
-  wxScrollEvent(commandType, id)
-{
 }
 
 void wxSpinButton::MacHandleControlClick( ControlHandle control , SInt16 controlpart ) 

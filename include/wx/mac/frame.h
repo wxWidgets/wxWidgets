@@ -125,8 +125,9 @@ public:
   void OnSysColourChanged(wxSysColourChangedEvent& event);
 
   // Query app for menu item updates (called from OnIdle)
-  void DoMenuUpdates();
-  void DoMenuUpdates(wxMenu* menu);
+    // Query app for menu item updates (called from OnIdle)
+    void DoMenuUpdates();
+    void DoMenuUpdates(wxMenu* menu, wxWindow* focusWin);
 
   // Checks if there is a toolbar, and returns the first free client position
   virtual wxPoint GetClientAreaOrigin() const;
@@ -136,7 +137,8 @@ public:
   // tooltip management
 #if wxUSE_TOOLTIPS
     wxMacToolTip* GetToolTipCtrl() const { return m_hwndToolTip; }
-    void SetToolTipCtrl(wxMacToolTip *tt) { m_hwndToolTip = wxMacToolTip; }
+    void SetToolTipCtrl(wxMacToolTip *tt) { m_hwndToolTip = tt; }
+    wxMacToolTip* m_hwndToolTip ;
 #endif // tooltips
 
 protected:

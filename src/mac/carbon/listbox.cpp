@@ -106,57 +106,120 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
 
 wxListBox::~wxListBox()
 {
-//	DisposeExtLDEFInfo( m_macList ) ;
+	Free() ;
+	DisposeExtLDEFInfo( m_macList ) ;
 }
 
-void wxListBox::SetFirstItem(int N)
+void wxListBox::Free()
+{
+#if wxUSE_OWNER_DRAWN
+    if ( m_windowStyle & wxLB_OWNERDRAW )
+    {
+        size_t uiCount = m_aItems.Count();
+        while ( uiCount-- != 0 ) {
+            delete m_aItems[uiCount];
+        }
+
+        m_aItems.Clear();
+    }
+    else
+#endif // wxUSE_OWNER_DRAWN
+    if ( HasClientObjectData() )
+    {
+        for ( size_t n = 0; n < (size_t)m_noItems; n++ )
+        {
+            delete GetClientObject(n);
+        }
+    }
+}
+
+void wxListBox::DoSetFirstItem(int N)
 {
 	MacScrollTo( N ) ;
 }
 
-void wxListBox::SetFirstItem(const wxString& s)
-{
-	MacScrollTo( FindString( s ) ) ;
-}
-
 void wxListBox::Delete(int N)
 {
-	m_dataArray.Remove( N ) ;
+    wxCHECK_RET( N >= 0 && N < m_noItems,
+                 wxT("invalid index in wxListBox::Delete") );
+
+#if wxUSE_OWNER_DRAWN
+    delete m_aItems[N];
+    m_aItems.Remove(N);
+#else // !wxUSE_OWNER_DRAWN
+    if ( HasClientObjectData() )
+    {
+        delete GetClientObject(N);
+    }
+#endif // wxUSE_OWNER_DRAWN/!wxUSE_OWNER_DRAWN
 	m_stringArray.Remove( N ) ;
   	m_noItems --;
 	
 	MacDelete( N ) ;
+    SetHorizontalExtent("");
 }
 
-void wxListBox::Append(const wxString& item)
+int wxListBox::DoAppend(const wxString& item)
 {
-	Append( item , NULL ) ;
-}
-
-void wxListBox::Append(const wxString& item, char *Client_data)
-{
+	int index = m_noItems ;
 	if( wxApp::s_macDefaultEncodingIsPC )
 	{
 		m_stringArray.Add( wxMacMakeMacStringFromPC( item ) ) ;
 	}
 	else
 		m_stringArray.Add( item ) ;
-	m_dataArray.Add( Client_data ) ;
-  	m_noItems ++;
-  	
+ 	m_noItems ++;
 	MacAppend( item ) ;
+
+    SetHorizontalExtent(item);
+
+	return index ;
 }
 
-void wxListBox::Set(int n, const wxString *choices, char** clientData)
-{
+void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
+{ 
+  MacSetRedraw( false ) ;
   Clear() ;  
+  int n = choices.GetCount();
+
   for( int i = 0 ; i < n ; ++i )
   {
   	if ( clientData )
+  	{
+#if wxUSE_OWNER_DRAWN
+            wxASSERT_MSG(clientData[i] == NULL,
+                         wxT("Can't use client data with owner-drawn listboxes"));
+#else // !wxUSE_OWNER_DRAWN
   		Append( choices[i] , clientData[0] ) ;
+ #endif
+  	}
   	else
   		Append( choices[i] ) ;
   }
+
+#if wxUSE_OWNER_DRAWN
+    if ( m_windowStyle & wxLB_OWNERDRAW ) {
+        // first delete old items
+        size_t ui = m_aItems.Count();
+        while ( ui-- != 0 ) {
+            delete m_aItems[ui];
+        }
+        m_aItems.Empty();
+
+        // then create new ones
+        for ( ui = 0; ui < (size_t)m_noItems; ui++ ) {
+            wxOwnerDrawn *pNewItem = CreateItem(ui);
+            pNewItem->SetName(choices[ui]);
+            m_aItems.Add(pNewItem);
+        }
+    }
+#endif // wxUSE_OWNER_DRAWN
+  MacSetRedraw( true ) ;
+}
+
+bool wxListBox::HasMultipleSelection() const
+{
+    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
 }
 
 int wxListBox::FindString(const wxString& st) const
@@ -192,10 +255,12 @@ int wxListBox::FindString(const wxString& st) const
 
 void wxListBox::Clear()
 {
+  Free();
   m_noItems = 0;
   m_stringArray.Empty() ;
   m_dataArray.Empty() ;
   MacClear() ;
+  SetHorizontalExtent();
 }
 
 void wxListBox::SetSelection(int N, bool select)
@@ -205,7 +270,7 @@ void wxListBox::SetSelection(int N, bool select)
 	MacSetSelection( N , select ) ;
 }
 
-bool wxListBox::Selected(int N) const
+bool wxListBox::IsSelected(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, FALSE,
                  "invalid index in wxListBox::Selected" );
@@ -213,28 +278,33 @@ bool wxListBox::Selected(int N) const
 	return MacIsSelected( N ) ;
 }
 
-void wxListBox::Deselect(int N)
-{
-    wxCHECK_RET( N >= 0 && N < m_noItems,
-                 "invalid index in wxListBox::Deselect" );
-
-    SetSelection( N , false ) ;
-}
-
-char *wxListBox::GetClientData(int N) const
+void *wxListBox::DoGetItemClientData(int N) const
 {
     wxCHECK_MSG( N >= 0 && N < m_noItems, NULL,
                  "invalid index in wxListBox::GetClientData" );
 
-    return m_dataArray[N];
+    return (void *)m_dataArray[N];
 }
 
-void wxListBox::SetClientData(int N, char *Client_data)
+void wxListBox::DoSetItemClientData(int N, void *Client_data)
 {
     wxCHECK_RET( N >= 0 && N < m_noItems,
                  "invalid index in wxListBox::SetClientData" );
 
-    m_dataArray[N] = Client_data ;
+#if wxUSE_OWNER_DRAWN
+    if ( m_windowStyle & wxLB_OWNERDRAW )
+    {
+        // client data must be pointer to wxOwnerDrawn, otherwise we would crash
+        // in OnMeasure/OnDraw.
+        wxFAIL_MSG(wxT("Can't use client data with owner-drawn listboxes"));
+    }
+#endif // wxUSE_OWNER_DRAWN
+    m_dataArray[N] = (char*) Client_data ;
+}
+
+void wxListBox::DoSetItemClientObject(int n, wxClientData* clientData)
+{
+    DoSetItemClientData(n, clientData);
 }
 
 // Return number of selections and an array of selected integers
@@ -277,8 +347,13 @@ wxString wxListBox::GetString(int N) const
 		return m_stringArray[N]  ;
 }
 
-void wxListBox::InsertItems(int nItems, const wxString items[], int pos)
+void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
 {
+    wxCHECK_RET( pos >= 0 && pos <= m_noItems,
+                 wxT("invalid index in wxListBox::InsertItems") );
+
+    int nItems = items.GetCount();
+
 	for ( int i = 0 ; i < nItems ; i++ )
 	{
 		m_stringArray.Insert( items[i] , pos + i ) ;
@@ -295,46 +370,11 @@ void wxListBox::SetString(int N, const wxString& s)
 	MacSet( N , s ) ;
 }
 
-int wxListBox::Number () const
+wxSize wxListBox::DoGetBestSize()
 {
-  return m_noItems;
+    return wxSize(100, 100);
 }
 
-// For single selection items only
-wxString wxListBox::GetStringSelection () const
-{
-  int sel = GetSelection ();
-  if (sel > -1)
-  {
-			return GetString (sel);
-  }
-  else
-    return wxString("");
-}
-
-bool wxListBox::SetStringSelection (const wxString& s, bool flag)
-{
-  int sel = FindString (s);
-  if (sel > -1)
-    {
-      SetSelection (sel, flag);
-      return TRUE;
-    }
-  else
-    return FALSE;
-}
-
-void wxListBox::Command (wxCommandEvent & event)
-{
-  if (event.m_extraLong)
-    SetSelection (event.m_commandInt);
-  else
-    {
-      Deselect (event.m_commandInt);
-      return;
-    }
-  ProcessCommand (event);
-}
 
 // ============================================================================
 // list box control implementation
@@ -484,29 +524,27 @@ void wxListBox::MacSetRedraw( bool doDraw )
 void wxListBox::MacDoClick()
 {
 	wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, m_windowId);
+    event.SetEventObject( this );
+
 	wxArrayInt aSelections;
-	int count = GetSelections(aSelections);
+	int n, count = GetSelections(aSelections);
 	if ( count > 0 )
 	{
 		  event.m_commandInt = aSelections[0] ;
-		  event.m_clientData = GetClientData(event.m_commandInt);
-		  wxString str(GetString(event.m_commandInt));
-		  if (str != "")
-		    event.m_commandString = copystring((char *)(const char *)str);
+          if ( HasClientObjectData() )
+              event.SetClientObject( GetClientObject(n) );
+          else if ( HasClientUntypedData() )
+              event.SetClientData( GetClientData(n) );
+          event.SetString( GetString(n) );
 	}
 	else
 	{
-		return ;
-		/*
-		  event.m_commandInt = -1 ;
-		  event.m_commandString = copystring("") ;
-		 */
+         n = -1;
 	}
 	
-	event.SetEventObject( this );
-	ProcessCommand(event);
-	if (event.m_commandString)
-	  delete[] event.m_commandString ;
+    event.m_commandInt = n;
+
+    GetEventHandler()->ProcessEvent(event);
 }
 
 void wxListBox::MacDoDoubleClick()

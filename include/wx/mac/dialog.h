@@ -20,79 +20,111 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxDialogNameStr;
 
+WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
+
+class WXDLLEXPORT wxMacToolTip ;
+
 // Dialog boxes
-class WXDLLEXPORT wxDialog: public wxPanel
+class WXDLLEXPORT wxDialog : public wxDialogBase
 {
-  DECLARE_DYNAMIC_CLASS(wxDialog)
+    DECLARE_DYNAMIC_CLASS(wxDialog)
+
 public:
+    wxDialog();
 
-  wxDialog();
+    // Constructor with a modal flag, but no window id - the old convention
+    wxDialog(wxWindow *parent,
+             const wxString& title, bool modal,
+             int x = -1, int y= -1, int width = 500, int height = 500,
+             long style = wxDEFAULT_DIALOG_STYLE,
+             const wxString& name = wxDialogNameStr)
+    {
+        long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
+        Create(parent, -1, title, wxPoint(x, y), wxSize(width, height),
+               style | modalStyle, name);
+    }
 
-  // Constructor with a modal flag, but no window id - the old convention
-  inline wxDialog(wxWindow *parent,
-           const wxString& title, bool modal,
-           int x = -1, int y= -1, int width = 500, int height = 500,
-           long style = wxDEFAULT_DIALOG_STYLE,
-           const wxString& name = wxDialogNameStr)
-  {
-      long modalStyle = modal ? wxDIALOG_MODAL : wxDIALOG_MODELESS ;
-      Create(parent, -1, title, wxPoint(x, y), wxSize(width, height), style|modalStyle, name);
-  }
+    // Constructor with no modal flag - the new convention.
+    wxDialog(wxWindow *parent, wxWindowID id,
+             const wxString& title,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = wxDEFAULT_DIALOG_STYLE,
+             const wxString& name = wxDialogNameStr)
+    {
+        Create(parent, id, title, pos, size, style, name);
+    }
 
-  // Constructor with no modal flag - the new convention.
-  inline wxDialog(wxWindow *parent, wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_DIALOG_STYLE,
-           const wxString& name = wxDialogNameStr)
-  {
-      Create(parent, id, title, pos, size, style, name);
-  }
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_DIALOG_STYLE,
+                const wxString& name = wxDialogNameStr);
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& title, // bool modal = FALSE, // TODO make this a window style?
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_DIALOG_STYLE,
-           const wxString& name = wxDialogNameStr);
+    ~wxDialog();
 
-  ~wxDialog();
+    virtual bool Destroy();
 
-  virtual bool Destroy();
-  bool Show(bool show);
-  void Fit();
+    virtual void DoSetClientSize(int width, int height);
 
-  void Iconize(bool iconize);
+    virtual void GetPosition(int *x, int *y) const;
 
-  virtual bool IsIconized() const;
-  void OnCharHook(wxKeyEvent& event);
-  void OnCloseWindow(wxCloseEvent& event);
+    bool Show(bool show);
+    bool IsShown() const;
+    void Iconize(bool iconize);
 
-  void SetModal(bool flag);
+#if WXWIN_COMPATIBILITY
+    bool Iconized() const { return IsIconized(); };
+#endif
 
-  virtual bool IsModal() const { return ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL); }
+    virtual bool IsIconized() const;
+    void Fit();
 
-  virtual int ShowModal();
-  virtual void EndModal(int retCode);
+    void SetTitle(const wxString& title);
+    wxString GetTitle() const ;
 
-  // Standard buttons
-  void OnOK(wxCommandEvent& event);
-  void OnApply(wxCommandEvent& event);
-  void OnCancel(wxCommandEvent& event);
+    void OnSize(wxSizeEvent& event);
+    bool OnClose();
+    void OnCharHook(wxKeyEvent& event);
+    void OnPaint(wxPaintEvent& event);
+    void OnCloseWindow(wxCloseEvent& event);
 
-	void OnSize(wxSizeEvent& event) ;
-  // Responds to colour changes
-  void OnSysColourChanged(wxSysColourChangedEvent& event);
+    void SetModal(bool flag);
 
-    // splits text up at newlines and places the
-    // lines into a vertical wxBoxSizer
-    wxSizer *CreateTextSizer( const wxString &message );
-    
-    // places buttons into a horizontal wxBoxSizer
-    wxSizer *CreateButtonSizer( long flags );
+    virtual void Centre(int direction = wxBOTH);
+    virtual bool IsModal() const;
 
-DECLARE_EVENT_TABLE()
+    // For now, same as Show(TRUE) but returns return code
+    virtual int ShowModal();
+    virtual void EndModal(int retCode);
+
+    // Standard buttons
+    void OnOK(wxCommandEvent& event);
+    void OnApply(wxCommandEvent& event);
+    void OnCancel(wxCommandEvent& event);
+
+    // Responds to colour changes
+    void OnSysColourChanged(wxSysColourChangedEvent& event);
+
+    // implementation
+    // --------------
+
+    bool IsModalShowing() const { return m_modalShowing; }
+
+  // tooltip management
+#if wxUSE_TOOLTIPS
+    wxMacToolTip* GetToolTipCtrl() const { return m_hwndToolTip; }
+    void SetToolTipCtrl(wxMacToolTip *tt) { m_hwndToolTip = tt; }
+    wxMacToolTip* m_hwndToolTip ;
+#endif // tooltips
+
+protected:
+    bool   m_modalShowing;
+    WXHWND m_hwndOldFocus;  // the window which had focus before we were shown
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

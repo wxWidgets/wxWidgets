@@ -69,19 +69,29 @@
 	typedef double SDOUBLE; 
 	typedef unsigned int UINT;
 	#define ULONG UDWORD
+#elif defined(__WXMAC__)
+	extern "C" {
+	#include "../../src/iodbc/isql.h"
+	#include "../../src/iodbc/isqlext.h"
+	}
+	typedef float SFLOAT; 
+	typedef double SDOUBLE; 
+	typedef unsigned int UINT;
+	#define ULONG UDWORD
 #else  // msw
 	#define ODBCVER 0x0250
 	#include <sql.h>
 	#include <sqlext.h>
 #endif
 
-#ifdef __UNIX__
+#ifdef __UNIX__ 
 #   ifndef strnicmp 
 #      define strnicmp strncasecmp 
 #   endif 
 #   ifndef stricmp 
 #      define stricmp strcasecmp 
 #   endif 
+#elif defined(__WXMAC__)
 #else 
 #   include <io.h> 
 #endif

@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        os2/dataobj.h
+// Name:        mac/dataobj.h
 // Purpose:     declaration of the wxDataObject
-// Author:      David Webster (adapted from Robert Roebling's gtk port)
+// Author:      Stefan Csomor 
 // Modified by:
 // Created:     10/21/99
 // RCS-ID:      $Id$
@@ -9,8 +9,8 @@
 // Licence:     wxWindows license
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_GTK_DATAOBJ_H_
-#define _WX_GTK_DATAOBJ_H_
+#ifndef _WX_MAC_DATAOBJ_H_
+#define _WX_MAC_DATAOBJ_H_
 
 #ifdef __GNUG__
     #pragma interface "dataobj.h"
@@ -28,5 +28,5 @@ public:
     virtual bool IsSupportedFormat( const wxDataFormat& format, Direction dir = Get ) const;
 };
 
-#endif // _WX_GTK_DATAOBJ_H_
+#endif // _WX_MAC_DATAOBJ_H_
 

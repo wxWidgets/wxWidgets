@@ -176,11 +176,16 @@ class WXDLLEXPORT wxPrintData: public wxObject
     void ConvertFromNative();
     void* GetNativeData() const { return m_devMode; }
     void SetNativeData(void* data) { m_devMode = data; }
+#elif defined( __WXMAC__)
+  void ConvertToNative();
+  void ConvertFromNative();
 #endif
 
 public:
 #ifdef __WXMSW__
     void*           m_devMode;
+#elif defined( __WXMAC__  )
+	THPrint 		m_macPrintInfo ;
 #endif
 
 private:
@@ -270,10 +275,15 @@ class WXDLLEXPORT wxPrintDialogData: public wxObject
     void ConvertFromNative();
     void SetOwnerWindow(wxWindow* win);
     void* GetNativeData() const { return m_printDlgData; }
+#elif defined( __WXMAC__)
+  void ConvertToNative();
+  void ConvertFromNative();
 #endif
 
 #ifdef __WXMSW__
     void*           m_printDlgData;
+#elif defined( __WXMAC__  )
+	THPrint 		m_macPrintInfo ;
 #endif
 
 private:
@@ -356,6 +366,9 @@ public:
     void ConvertFromNative();
     void SetOwnerWindow(wxWindow* win);
     void* GetNativeData() const { return m_pageSetupData; }
+#elif defined( __WXMAC__)
+  void ConvertToNative();
+  void ConvertFromNative();
 #endif
 
     // Use paper size defined in this object to set the wxPrintData
@@ -373,6 +386,8 @@ public:
 
 #if defined(__WIN95__)
     void*           m_pageSetupData;
+#elif defined( __WXMAC__  )
+	THPrint 	m_macPageSetupInfo ;
 #endif
 
 private:

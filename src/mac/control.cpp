@@ -53,7 +53,9 @@ wxControl::wxControl()
 		m_macVerticalBorder = 0 ;
     m_backgroundColour = *wxWHITE;
     m_foregroundColour = *wxBLACK;
-    m_callback = 0;
+#if WXWIN_COMPATIBILITY
+  m_callback = 0;
+#endif // WXWIN_COMPATIBILITY
 
 	if ( wxMacLiveScrollbarActionUPP == NULL )
 	{
@@ -63,13 +65,14 @@ wxControl::wxControl()
 
 wxControl::~wxControl()
 {
+    m_isBeingDeleted = TRUE;
     // If we delete an item, we should initialize the parent panel,
     // because it could now be invalid.
-    wxWindow *parent = (wxWindow *)GetParent();
-    if (parent)
+    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
+    if ( panel )
     {
-        if (parent->GetDefaultItem() == (wxButton*) this)
-            parent->SetDefaultItem(NULL);
+        if (panel->GetDefaultItem() == (wxButton*) this)
+            panel->SetDefaultItem(NULL);
     }
     if ( m_macControl )
     {
@@ -78,13 +81,19 @@ wxControl::~wxControl()
     }
 }
 
-void wxControl::SetLabel(const wxString& label)
+void wxControl::SetLabel(const wxString& title)
 {
-	m_label = label ;
+	m_label = title ;
 
 	if ( m_macControl )
 	{
 		Str255 maclabel ;
+		wxString label ;
+	
+		if( wxApp::s_macDefaultEncodingIsPC )
+			label = wxMacMakeMacStringFromPC( title ) ;
+		else
+			label = title ;
 		
 		strcpy( (char*) maclabel , label ) ;
 		c2pstr( (char*) maclabel ) ;
@@ -93,54 +102,29 @@ void wxControl::SetLabel(const wxString& label)
 	}
 }
 
-wxString wxControl::GetLabel() const
+wxSize wxControl::DoGetBestSize()
 {
-    return m_label ;
+    return wxSize(20, 20);
 }
 
-void wxControl::ProcessCommand (wxCommandEvent & event)
+bool wxControl::ProcessCommand (wxCommandEvent & event)
 {
   // Tries:
   // 1) A callback function (to become obsolete)
   // 2) OnCommand, starting at this window and working up parent hierarchy
   // 3) OnCommand then calls ProcessEvent to search the event tables.
-  if (m_callback)
+#if WXWIN_COMPATIBILITY
+    if ( m_callback )
     {
-      (void) (*(m_callback)) (*this, event);
+        (void)(*m_callback)(this, event);
+
+        return TRUE;
     }
     else
+#endif // WXWIN_COMPATIBILITY
     {
-      GetEventHandler()->OnCommand(*this, event);
+      return GetEventHandler()->ProcessEvent(event);
     }
-}
-
-void wxControl::Centre (int direction)
-{
-  int x, y, width, height, panel_width, panel_height, new_x, new_y;
-
-  wxWindow *parent = (wxWindow *) GetParent ();
-  if (!parent)
-    return;
-
-  parent->GetClientSize (&panel_width, &panel_height);
-  GetSize (&width, &height);
-  GetPosition (&x, &y);
-
-  new_x = x;
-  new_y = y;
-
-  if (direction & wxHORIZONTAL)
-    new_x = (int) ((panel_width - width) / 2);
-
-  if (direction & wxVERTICAL)
-    new_y = (int) ((panel_height - height) / 2);
-
-  SetSize (new_x, new_y, width, height);
-}
-
-void wxControl::SetClientSize (int width, int height)
-{
-  SetSize (-1, -1, width, height);
 }
 
 // ------------------------
@@ -352,6 +336,7 @@ void wxControl::MacSuperChangedPosition()
 
 void wxControl::MacSuperEnabled( bool enabled ) 
 {
+/*
 	if ( m_macControl )
 	{
 		if ( UMAHasAppearance() )
@@ -380,10 +365,12 @@ void wxControl::MacSuperEnabled( bool enabled )
 		}
 	}
 	wxWindow::MacSuperEnabled( enabled ) ;
+	*/
 }
 
 void  wxControl::MacSuperShown( bool show ) 
 {
+	/*
 	if ( m_macControl )
 	{
 		if ( !show )
@@ -398,6 +385,7 @@ void  wxControl::MacSuperShown( bool show )
 	}
 		
 	wxWindow::MacSuperShown( show ) ;
+	*/
 }
 
 void  wxControl::DoSetSize(int x, int y,
@@ -503,51 +491,45 @@ void  wxControl::DoSetSize(int x, int y,
 	}
 }
 
-void  wxControl::DoSetClientSize(int width, int height)
-{
-	DoSetSize( -1 , -1 , width , height ) ;
-}
-
 bool  wxControl::Show(bool show) 
 {
-	if ( m_macControl == NULL )
-		return wxWindow::Show( show ) ;
-	
-	if ( m_macShown == show )
-		return TRUE ;
-
-	if ( show )
-		::UMAShowControl( m_macControl ) ;
-	else
-		::UMAHideControl( m_macControl ) ;
-
-	return wxWindow::Show( show ) ;
+	if ( !wxWindow::Show( show ) )
+		return FALSE ;
+		
+	if ( m_macControl )
+	{
+		if ( show )
+			::UMAShowControl( m_macControl ) ;
+		else
+			::UMAHideControl( m_macControl ) ;
+	}
+	return TRUE ;
 }
 
-void  wxControl::Enable(bool enable) 
+bool  wxControl::Enable(bool enable) 
 {
-	if ( m_macControl == NULL )
-		return wxWindow::Enable( enable ) ;
-	
-	if ( m_macEnabled == enable )
-		return ;
+    if ( !wxWindow::Enable(enable) )
+        return FALSE;
 
-	if ( UMAHasAppearance() )
+	if ( m_macControl )
 	{
-		if ( enable )
-			::ActivateControl( m_macControl ) ;
+		
+		if ( UMAHasAppearance() )
+		{
+			if ( enable )
+				::ActivateControl( m_macControl ) ;
+			else
+				::DeactivateControl( m_macControl ) ;
+		}
 		else
-			::DeactivateControl( m_macControl ) ;
+		{
+			if ( enable )
+				::HiliteControl( m_macControl , 0 ) ;
+			else
+				::HiliteControl( m_macControl , 255 ) ;
+		}
 	}
-	else
-	{
-		if ( enable )
-			::HiliteControl( m_macControl , 0 ) ;
-		else
-			::HiliteControl( m_macControl , 255 ) ;
-	}
-
-	return wxWindow::Enable( enable ) ;
+	return TRUE ;
 }
 
 void wxControl::Refresh(bool eraseBack, const wxRect *rect)
@@ -579,9 +561,9 @@ void wxControl::OnPaint(wxPaintEvent& event)
 				wxWindow* parent = GetParent() ;
 				while ( parent )
 				{
-					if( parent->m_macWindowData )
+					if( parent->MacGetWindowData() )
 					{
-						UMASetThemeWindowBackground( win->m_macWindowData->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
+						UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , kThemeBrushDialogBackgroundActive , false ) ;
 						break ;
 					}
 					
@@ -596,13 +578,13 @@ void wxControl::OnPaint(wxPaintEvent& event)
 				} 
 				
 				UMADrawControl( m_macControl ) ;
-				UMASetThemeWindowBackground( win->m_macWindowData->m_macWindow , win->m_macWindowData->m_macWindowBackgroundTheme , false ) ;
+				UMASetThemeWindowBackground( win->MacGetWindowData()->m_macWindow , win->MacGetWindowData()->m_macWindowBackgroundTheme , false ) ;
 			}
 		}
 	}
 	else
 	{
-		wxWindow::OnPaint( event ) ;
+		// wxWindow::OnPaint( event ) ;
 	}
 }
 

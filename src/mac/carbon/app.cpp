@@ -1338,8 +1338,8 @@ void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
 	else
 	{
 		wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
-		if ( frontwindow && wxMenuBar::s_macInstalledMenuBar )
-			wxMenuBar::s_macInstalledMenuBar->MacMenuSelect( frontwindow->GetEventHandler() , 0 , macMenuId , macMenuItemNum ) ;
+		if ( frontwindow && wxMenuBar::MacGetInstalledMenuBar() )
+			wxMenuBar::MacGetInstalledMenuBar()->MacMenuSelect( frontwindow->GetEventHandler() , 0 , macMenuId , macMenuItemNum ) ;
 	}		
 	HiliteMenu(0);								
 }

@@ -108,7 +108,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
 	m_macWindowData->m_macWindowBackgroundTheme = kThemeBrushDialogBackgroundActive ;
 	UMACreateRootControl( m_macWindowData->m_macWindow , &m_macWindowData->m_macRootControl ) ;
 	m_macWindowData->m_macFocus = NULL ;
-	m_macShown = false ;
   return TRUE;
 }
 
@@ -127,10 +126,13 @@ void wxDialog::SetModal(bool flag)
 
 wxDialog::~wxDialog()
 {
+	m_isBeingDeleted = TRUE ;
     wxTopLevelWindows.DeleteObject(this);
 
-    if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
-      wxModelessWindows.DeleteObject(this);
+  m_modalShowing = FALSE;
+
+  if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
+    wxModelessWindows.DeleteObject(this);
 
     // If this is the last top-level window, exit.
     if (wxTheApp && (wxTopLevelWindows.Number() == 0))
@@ -176,37 +178,64 @@ extern bool s_macIsInModalLoop ;
 
 bool wxDialog::Show(bool show)
 {
-	if ( m_macShown == show )
-		return TRUE ;
+  m_isShown = show;
 
-	m_macShown = show ;
+  if (show)
+    InitDialog();
 
   bool modal =  ((GetWindowStyleFlag() & wxDIALOG_MODAL) == wxDIALOG_MODAL) ;
+
+#if WXGARBAGE_COLLECTION_ON /* MATTHEW: GC */
+  if (!modal) 
+  {
+    if (show) 
+    {
+      if (!wxModelessWindows.Find(this))
+        wxModelessWindows.Append(this);
+    } 
+    else
+      wxModelessWindows.DeleteObject(this);
+  }
+  if (show) 
+  {
+    if (!wxTopLevelWindows.Find(this))
+      	wxTopLevelWindows.Append(this);
+  } 
+  else
+    	wxTopLevelWindows.DeleteObject(this);
+#endif
 
 	if ( modal )
 	{
 		s_macIsInModalLoop = true ;
-	  if (show)
-	  {
-      // if we don't do it, some window might be deleted while we have pointers
-      // to them in our disabledWindows list and the program will crash when it
-      // will try to reenable them after the modal dialog end
-      wxTheApp->DeletePendingObjects();
+	  	if (show)
+	  	{
+     		if (m_modalShowing)
+      		{
+//        		BringWindowToTop((HWND) GetHWND());
+        		return TRUE;
+      		}
 
-    	UMAShowWindow( m_macWindowData->m_macWindow ) ;
-    	UMASelectWindow( m_macWindowData->m_macWindow ) ;
+      		m_modalShowing = TRUE;
+      		// if we don't do it, some window might be deleted while we have pointers
+      		// to them in our disabledWindows list and the program will crash when it
+      		// will try to reenable them after the modal dialog end
+     		wxTheApp->DeletePendingObjects();
 
-      if (!wxModalDialogs.Member(this))
-        wxModalDialogs.Append(this);
+    		UMAShowWindow( m_macWindowData->m_macWindow ) ;
+    		UMASelectWindow( m_macWindowData->m_macWindow ) ;
 
-      while (wxModalDialogs.Member(this) )
-      {
-      	wxTheApp->MacDoOneEvent() ;
-      }
+      	if (!wxModalDialogs.Member(this))
+        	wxModalDialogs.Append(this);
+
+      	while (wxModalDialogs.Member(this) )
+      	{
+      		wxTheApp->MacDoOneEvent() ;
+      	}
 	  }
 	  else
 	  {
-      wxModalDialogs.DeleteObject(this);
+      	wxModalDialogs.DeleteObject(this);
     	UMAHideWindow( m_macWindowData->m_macWindow ) ;
 	  }
 	  s_macIsInModalLoop = false ;
@@ -332,127 +361,5 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
 void wxDialog::Fit()
 {
   wxWindow::Fit();
-}
-
-wxSizer *wxDialog::CreateTextSizer( const wxString &message )
-{
-    wxBoxSizer *box = new wxBoxSizer( wxVERTICAL );
-    
-    // get line height for empty lines
-    int y = 0;
-    wxFont new_font( GetFont() );
-    if (!new_font.Ok()) new_font = *wxSWISS_FONT;
-    GetTextExtent( "H", (int*)NULL, &y, (int*)NULL, (int*)NULL, &new_font );
-    
-    wxString line;
-    for (size_t pos = 0; pos < message.Len(); pos++)
-    {
-        if (message[pos] == _T('\n'))
-        {
-            if (!line.IsEmpty())
-            {
-                wxStaticText *s1 = new wxStaticText( this, -1, line );
-		box->Add( s1 );
-                line = _T("");
-            }
-	    else
-	    {
-	        box->Add( 5, y );
-	    }
-        }
-        else
-        {
-            line += message[pos];
-        }
-    }
-    
-    // remaining text behind last '\n'
-    if (!line.IsEmpty())
-    {
-        wxStaticText *s2 = new wxStaticText( this, -1, line );
-	box->Add( s2 );
-    }
-    
-    return box;
-}
-    
-wxSizer *wxDialog::CreateButtonSizer( long flags )
-{
-    wxBoxSizer *box = new wxBoxSizer( wxHORIZONTAL );
-
-#if defined(__WXMSW__) || defined(__WXMAC__)
-    int margin = 6;
-#else
-    int margin = 10;
-#endif
-
-    wxButton *ok = (wxButton *) NULL;
-    wxButton *cancel = (wxButton *) NULL;
-    wxButton *yes = (wxButton *) NULL;
-    wxButton *no = (wxButton *) NULL;
-
-    // always show an OK button, unless only YES_NO is given
-    if ((flags & wxYES_NO) == 0) flags = flags | wxOK;
-    
-    if (flags & wxYES_NO) 
-    {
-        yes = new wxButton( this, wxID_YES, _("Yes") );
-        box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
-        no = new wxButton( this, wxID_NO, _("No") );
-        box->Add( no, 0, wxLEFT|wxRIGHT, margin );
-    } else 
-    if (flags & wxYES) 
-    {
-        yes = new wxButton( this, wxID_YES, _("Yes") );
-        box->Add( yes, 0, wxLEFT|wxRIGHT, margin );
-    } else 
-    if (flags & wxNO) 
-    {
-        no = new wxButton( this, wxID_NO, _("No") );
-        box->Add( no, 0, wxLEFT|wxRIGHT, margin );
-    }
-
-    if (flags & wxOK) 
-    {
-        ok = new wxButton( this, wxID_OK, _("OK") );
-        box->Add( ok, 0, wxLEFT|wxRIGHT, margin );
-    }
-
-    if (flags & wxFORWARD) 
-        box->Add( new wxButton( this, wxID_FORWARD, _("Forward")  ), 0, wxLEFT|wxRIGHT, margin ); 
-
-    if (flags & wxBACKWARD) 
-        box->Add( new wxButton( this, wxID_BACKWARD, _("Backward")  ), 0, wxLEFT|wxRIGHT, margin );
-
-    if (flags & wxSETUP) 
-        box->Add( new wxButton( this, wxID_SETUP, _("Setup")  ), 0, wxLEFT|wxRIGHT, margin );
-
-    if (flags & wxMORE) 
-        box->Add( new wxButton( this, wxID_MORE, _("More...")  ), 0, wxLEFT|wxRIGHT, margin );
-
-    if (flags & wxHELP)
-        box->Add( new wxButton( this, wxID_HELP, _("Help")  ), 0, wxLEFT|wxRIGHT, margin );
-
-    if (flags & wxCANCEL) 
-    {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel") );
-        box->Add( cancel, 0, wxLEFT|wxRIGHT, margin );
-    }
-
-    if ((flags & wxNO_DEFAULT) == 0)
-    {
-        if (ok)
-        {
-            ok->SetDefault();
-            ok->SetFocus();
-        }
-        else if (yes)
-        {
-            yes->SetDefault();
-            yes->SetFocus();
-        }
-    }
-    
-    return box;
 }
 

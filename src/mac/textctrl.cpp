@@ -409,73 +409,51 @@ void wxTextCtrl::OnDropFiles(wxDropFilesEvent& event)
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
-	bool handleIt = true ;
     switch( event.KeyCode() )
     {
         case WXK_RETURN:
         {
-/* Oh yes it will, because we also specify DLGC_WANTCHARS
-            wxASSERT_MSG( m_windowStyle & wxTE_PROCESS_ENTER,
-                          "this text ctrl should never receive return" );
-*/
-
-            if ( (m_windowStyle & wxTE_MULTILINE) == 0 )
+            if ( !(m_windowStyle & wxTE_MULTILINE) )
             {
-            	wxWindow* parent = GetParent() ;
-            	while( parent )
-            	{
-            		if ( parent->GetDefaultItem() )
-            		{
-            			wxButton *defaultBtn = parent->GetDefaultItem() ;
-							    wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, defaultBtn->GetId() );
-							    event.SetEventObject(defaultBtn);
-							    defaultBtn->Command(event);
-            			return ;
-					}
-            		parent = parent->GetParent() ;
-				} ;
+                wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
+                event.SetEventObject( this );
+                if ( GetEventHandler()->ProcessEvent(event) )
+                    return;
             }
+            //else: multiline controls need Enter for themselves
+
             break;
         }
         case WXK_TAB:
-            // only produce navigation event if we don't process TAB ourself or
-            // if it's a Shift-Tab keypress (we assume nobody will ever need
-            // this key combo for himself)
+            // always produce navigation event - even if we process TAB
+            // ourselves the fact that we got here means that the user code
+            // decided to skip processing of this TAB - probably to let it
+            // do its default job.
             //
             // NB: Notice that Ctrl-Tab is handled elsewhere and Alt-Tab is
             //     handled by Windows
-            if ( event.ShiftDown() || !(m_windowStyle & wxTE_PROCESS_TAB) )
             {
                 wxNavigationKeyEvent eventNav;
                 eventNav.SetDirection(!event.ShiftDown());
                 eventNav.SetWindowChange(FALSE);
                 eventNav.SetEventObject(this);
-    
+
                 if ( GetEventHandler()->ProcessEvent(eventNav) )
                     return;
             }
             break;
+
+        default:
+            event.Skip();
+            return;
     }
-    if ( handleIt )
-    {
-			EventRecord *ev = wxTheApp->MacGetCurrentEvent() ;
-			short keycode ;
-			short keychar ;
-			keychar = short(ev->message & charCodeMask);
-			keycode = short(ev->message & keyCodeMask) >> 8 ;
-			UMAHandleControlKey( m_macControl , keycode , keychar , ev->modifiers ) ;
-			if ( keychar >= 0x20 )
-			{
-      {
-        wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-        wxString val(GetValue());
-        if ( !val.IsNull() )
-          event.m_commandString = WXSTRINGCAST val;
-        event.SetEventObject( this );
-        ProcessCommand(event);
-      }
-			}
-		}
+
+    // don't just call event.Skip() because this will cause TABs and ENTERs
+    // be passed upwards and we don't always want this - instead process it
+    // right here
+
+    // FIXME
+    event.Skip();
 }
 // The streambuf code was partly taken from chapter 3 by Jerry Schwarz of
 // AT&T's "C++ Lanuage System Release 3.0 Library Manual" - Stein Somers

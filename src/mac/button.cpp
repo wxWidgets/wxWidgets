@@ -47,14 +47,23 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
 void wxButton::SetDefault()
 {
-  wxWindow *parent = (wxWindow *)GetParent();
-  if (parent)
-      parent->SetDefaultItem(this);
-
+    wxWindow *parent = GetParent();
+    wxButton *btnOldDefault = NULL;
+    wxPanel *panel = wxDynamicCast(parent, wxPanel);
+    if ( panel )
+    {
+        btnOldDefault = panel->GetDefaultItem();
+        panel->SetDefaultItem(this);
+    }
+  
+  if ( btnOldDefault && btnOldDefault->m_macControl )
+  {
+		UMASetControlData( btnOldDefault->m_macControl , kControlButtonPart , kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)0) ) ;
+  }
   if ( m_macControl )
   {
 		UMASetControlData( m_macControl , kControlButtonPart , kControlPushButtonDefaultTag , sizeof( Boolean ) , (char*)((Boolean)1) ) ;
-	}
+  }
 }
 
 void wxButton::Command (wxCommandEvent & event)

@@ -21,6 +21,7 @@
 // ---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxButton;
+class WXDLLEXPORT wxScrollBar;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -169,9 +170,9 @@ public:
     // simple accessors
     // ----------------
 
-    WXHWND GetHWND() const { return m_hWnd; }
-    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
-	virtual WXWidget GetHandle() const { return (WXWidget) GetHWND(); }
+//    WXHWND GetHWND() const { return m_hWnd; }
+//    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
+	virtual WXWidget GetHandle() const { return (WXWidget) NULL ; }
 
     bool GetUseCtl3D() const { return m_useCtl3D; }
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
@@ -226,12 +227,57 @@ public:
     // Responds to colour changes: passes event on to children.
     void OnSysColourChanged(wxSysColourChangedEvent& event);
 
-protected:
-    // the window handle
-    WXHWND                m_hWnd;
+public :
+	static bool							MacGetWindowFromPoint( const wxPoint &point , wxWindow** outWin ) ;
+	virtual void						MacActivate( EventRecord *ev , bool inIsActivating ) ;
+	virtual void						MacUpdate( EventRecord *ev ) ;
+	virtual void						MacUpdateImmediately() ;
+	virtual	void						MacRedraw( RgnHandle updatergn , long time) ;
+	virtual void						MacMouseDown( EventRecord *ev , short windowPart ) ;
+	virtual void						MacMouseUp( EventRecord *ev , short windowPart ) ;
+	virtual void						MacMouseMoved( EventRecord *ev , short windowPart ) ;
+	virtual void						MacKeyDown( EventRecord *ev ) ;
+	virtual bool						MacCanFocus() const { return true ; }
 
-    // the old window proc (we subclass all windows)
-    WXFARPROC             m_oldWndProc;
+	virtual void						MacFireMouseEvent( EventRecord *ev ) ;
+	virtual bool						MacDispatchMouseEvent(wxMouseEvent& event ) ;
+	virtual void						MacEraseBackground( Rect *rect ) ;
+	WindowRef								GetMacRootWindow() const  ;
+
+	virtual ControlHandle 	MacGetContainerForEmbedding() ;
+	virtual void 						MacSuperChangedPosition() ;
+
+	bool										MacSetupFocusPort() ;
+	bool										MacSetupDrawingPort() ;
+	bool										MacSetupFocusClientPort() ;
+	bool										MacSetupDrawingClientPort() ;
+	
+	virtual bool						MacSetPortFocusParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindow* rootwin )  ;
+	virtual bool						MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindow* rootwin )  ;
+
+	virtual void						MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindow** rootwin ) ;
+	virtual void						MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindow** rootwin) ;
+	MacWindowData*						MacGetWindowData() { return m_macWindowData ; }
+	static WindowRef					MacGetWindowInUpdate() { return s_macWindowInUpdate ; }
+	static wxWindow*					s_lastMouseWindow ;
+private:
+	virtual bool						MacGetWindowFromPointSub( const wxPoint &point , wxWindow** outWin ) ;
+protected:
+
+	MacWindowData*				m_macWindowData ;
+	static WindowRef			s_macWindowInUpdate ;
+
+	int 									m_x ;
+	int 									m_y ;	
+	int 									m_width ;
+	int 									m_height ;
+
+	wxScrollBar*					m_hScrollBar ;
+	wxScrollBar*					m_vScrollBar ;
+	wxString						m_label ;
+
+	void									MacCreateScrollBars( long style ) ;
+	void									MacRepositionScrollBars() ;
 
     // additional (MSW specific) flags
     bool                  m_useCtl3D:1; // Using CTL3D for this control
@@ -244,10 +290,7 @@ protected:
     int                   m_xThumbSize;
     int                   m_yThumbSize;
 
-    WXHMENU               m_hMenu; // Menu, if any
-
-    // the return value of WM_GETDLGCODE handler
-    long m_lDlgCode;
+//    WXHMENU               m_hMenu; // Menu, if any
 
     // implement the base class pure virtuals
     virtual void DoClientToScreen( int *x, int *y ) const;
