@@ -182,16 +182,16 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
     err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
     if (err != noErr)
         return err;
-    
+
     err = AECountItems(&docList, &itemsInList);
     if (err != noErr)
         return err;
-    
+
     ProcessSerialNumber PSN ;
     PSN.highLongOfPSN = 0 ;
     PSN.lowLongOfPSN = kCurrentProcess ;
     SetFrontProcess( &PSN ) ;
-    
+
     for (i = 1; i <= itemsInList; i++) {
         AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
         (Ptr) & theSpec, sizeof(theSpec), &actualSize);
@@ -214,16 +214,16 @@ short wxApp::MacHandleAEPDoc(const WXEVENTREF event , WXEVENTREF WXUNUSED(reply)
     err = AEGetParamDesc((AppleEvent *)event, keyDirectObject, typeAEList,&docList);
     if (err != noErr)
         return err;
-    
+
     err = AECountItems(&docList, &itemsInList);
     if (err != noErr)
         return err;
-    
+
     ProcessSerialNumber PSN ;
     PSN.highLongOfPSN = 0 ;
     PSN.lowLongOfPSN = kCurrentProcess ;
     SetFrontProcess( &PSN ) ;
-    
+
     for (i = 1; i <= itemsInList; i++) {
         AEGetNthPtr(&docList, i, typeFSS, &keywd, &returnedType,
         (Ptr) & theSpec, sizeof(theSpec), &actualSize);
@@ -1375,7 +1375,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 	// having a larger value here leads to large performance slowdowns
 	// so we cannot give background apps more processor time here
 	// we do so however having a large sleep value in the main event loop
-    sleepTime = 0 ; 
+    sleepTime = 0 ;
 
     while ( !IsExiting() && WaitNextEvent(everyEvent, &event,sleepTime, (RgnHandle) wxApp::s_macCursorRgn))
     {
@@ -1498,7 +1498,7 @@ void wxApp::MacHandleModifierEvents( WXEVENTREF evr )
         WaitNextEvent( 0 , &nev , 0 , NULL ) ;
         ev->modifiers = nev.modifiers ;
         // KeyModifiers unfortunately don't include btnState...
-//        ev->modifiers = GetCurrentKeyModifiers() ; 
+//        ev->modifiers = GetCurrentKeyModifiers() ;
     }
 #endif
     if ( ev->modifiers != s_lastModifiers && wxWindow::FindFocus() != NULL )
@@ -1692,8 +1692,8 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     &constraintRect , &newContentRect ) ;
                 if ( growResult )
                 {
-                    win->SetSize( newContentRect.left , newContentRect.top , 
-                        newContentRect.right - newContentRect.left , 
+                    win->SetSize( newContentRect.left , newContentRect.top ,
+                        newContentRect.right - newContentRect.left ,
                         newContentRect.bottom - newContentRect.top, wxSIZE_USE_EXISTING);
                 }
                 s_lastMouseDown = 0;
@@ -1732,7 +1732,7 @@ void wxApp::MacHandleMouseDownEvent( WXEVENTREF evr )
                     GrafPtr port ;
                     GetPort( &port ) ;
                     SetPortWindowPort(window) ;
-                
+
 	                if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )
 	                {
 	                    if ( s_macIsInModalLoop )
@@ -1920,7 +1920,7 @@ void wxApp::MacHandleKeyDownEvent( WXEVENTREF evr )
     else
     {
          wxWindow* focus = wxWindow::FindFocus() ;
- 
+
         if ( MacSendKeyDownEvent( focus , ev->message , ev->modifiers , ev->when , ev->where.h , ev->where.v ) == false )
         {
             // has not been handled -> perform default
@@ -1941,12 +1941,12 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 {
     if ( !focus )
         return false ;
-        
+
     short keycode ;
     short keychar ;
     keychar = short(keymessage & charCodeMask);
     keycode = short(keymessage & keyCodeMask) >> 8 ;
-    
+
     if ( modifiers & ( controlKey|shiftKey|optionKey ) )
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
@@ -1964,7 +1964,7 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
 		realkeyval = short(keymessage & charCodeMask) ;
 		keyval = wxToupper( keyval ) ;
 	}
-	
+
     wxKeyEvent event(wxEVT_KEY_DOWN);
     bool handled = false ;
     event.m_shiftDown = modifiers & shiftKey;
@@ -2105,7 +2105,7 @@ bool wxApp::MacSendKeyUpEvent( wxWindow* focus , long keymessage , long modifier
 
 	if ( keyval == keychar )
 	{
-		keyval = wxToupper( keyval ) ;	
+		keyval = wxToupper( keyval ) ;
 	}
     bool handled = false ;
 
@@ -2305,9 +2305,9 @@ void wxApp::MacHandleOSEvent( WXEVENTREF evr )
 				}
 				else
 				{
-					windowPart = ::FindWindow(ev->where, &window); 
+					windowPart = ::FindWindow(ev->where, &window);
 				}
-				
+
                 switch (windowPart)
                 {
                     case inContent :
@@ -2363,28 +2363,12 @@ void wxApp::MacHandleMenuSelect( int macMenuId , int macMenuItemNum )
         MenuCommand id ;
         GetMenuItemCommandID( GetMenuHandle(macMenuId) , macMenuItemNum , &id ) ;
         wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
-        wxMenu* menu = NULL ;
-        wxMenuItem* item = NULL ;
-        if ( mbar )
+        wxFrame* frame = mbar->GetFrame();
+        wxCHECK_RET( mbar != NULL && frame != NULL, wxT("error in menu item callback") );
+        if ( frame )
         {
-            item = mbar->FindItem( id , &menu ) ;
+            frame->ProcessCommand(id);
         }
-        wxCHECK_RET( item != NULL && menu != NULL && mbar != NULL, wxT("error in menu item callback") );
-            
-        if (item->IsCheckable())
-        {
-            item->Check( !item->IsChecked() ) ;
-        }
-		
-		menu->SendEvent( id , item->IsCheckable() ? item->IsChecked() : -1 ) ;
-		/*
-        wxWindow* frontwindow = wxFindWinFromMacWindow( ::FrontWindow() )  ;
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
-        event.m_timeStamp =  ((EventRecord*) MacGetCurrentEvent())->when ;
-        event.SetEventObject(menu);
-        event.SetInt(item->IsCheckable() ? item->IsChecked() : -1);
-        frontwindow->GetEventHandler()->ProcessEvent(event); 
-        */
     }
     HiliteMenu(0);
 }

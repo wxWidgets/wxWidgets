@@ -384,11 +384,12 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
         MenuCommand id ;
         GetMenuItemCommandID( GetMenuHandle(HiWord(menuResult)) , LoWord(menuResult) , &id ) ;
 
-        wxCommandEvent event(wxEVT_COMMAND_MENU_SELECTED, id );
-        event.m_timeStamp =  TickCount() ;
-        event.SetEventObject(this->GetEventHandler());
-        event.SetInt( id );
-        GetEventHandler()->ProcessEvent(event);
+        wxMenuItem* item = menu->FindChildItem(id);
+        if (item->IsCheckable())
+        {
+            item->Check( !item->IsChecked() );
+        }
+        menu->SendEvent(id, item->IsCheckable() ? item->IsChecked() : -1);
     }
     ::DeleteMenu( menu->MacGetMenuId() ) ;
     menu->SetInvokingWindow(NULL);
