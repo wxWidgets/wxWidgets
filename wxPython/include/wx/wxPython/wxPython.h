@@ -26,15 +26,14 @@
 // This needs to be called in modules that make calls to any of the functions
 // exported by the wxPython API.  It sets a static pointer to a structure of
 // function pointers located in the wx._core extension module.
-static void wxPyCoreAPI_IMPORT() {
+static bool wxPyCoreAPI_IMPORT() {
     wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("wx._core_", "_wxPyCoreAPI");
-    if (! wxPyCoreAPIPtr)
-        wxPyCoreAPIPtr = (wxPyCoreAPI*)PyCObject_Import("_core_", "_wxPyCoreAPI");
+    return wxPyCoreAPIPtr != NULL;
 }
 
 
 
-// The following macros call functions located in wx._core of the same name
+// The following macros call functions located in wx._core_ of the same name
 // via the API pointer retrieved above.
 
 
