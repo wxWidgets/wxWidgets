@@ -298,7 +298,7 @@ bool wxCheckListBox::Create(wxWindow *parent, wxWindowID id,
     return wxListBox::Create(parent, id, pos, size, n, choices,
                              style | wxLB_OWNERDRAW, validator, name);
 }
-                            
+
 
 
 void wxCheckListBox::Delete(int N)
@@ -408,15 +408,19 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
     if ( oper != None )
     {
         wxArrayInt selections;
-        int count;
+        int count = 0;
         if ( HasMultipleSelection() )
         {
             count = GetSelections(selections);
         }
         else
         {
-            count = 1;
-            selections.Add(GetSelection());
+            int sel = GetSelection();
+            if (sel != -1)
+            {
+                count = 1;
+                selections.Add(sel);
+            }
         }
 
         for ( int i = 0; i < count; i++ )
