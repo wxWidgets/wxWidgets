@@ -968,7 +968,7 @@ bool wxDialUpManagerMSW::IsAlwaysOnline() const
     wxDllType hDll = wxDllLoader::LoadLibrary(_T("WININET"), &ok);
     if ( ok )
     {
-        typedef BOOL (*INTERNETGETCONNECTEDSTATE)(LPDWORD, DWORD);
+        typedef BOOL (WINAPI *INTERNETGETCONNECTEDSTATE)(LPDWORD, DWORD);
         INTERNETGETCONNECTEDSTATE pfnInternetGetConnectedState;
 
         #define RESOLVE_FUNCTION(type, name) \
