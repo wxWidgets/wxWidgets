@@ -138,6 +138,11 @@ public:
     // Loads bitmap or icon resource from file:
     wxBitmap LoadBitmap(const wxString& name);
     wxIcon LoadIcon(const wxString& name);
+    
+    // Attaches unknown control into given panel/window/dialog:
+    // (unknown controls are used in conjunction with <object class="unknown">)
+    bool AttachUnknownControl(const wxString& name, wxWindow *control,
+                              wxWindow *parent = NULL);
 
     // Returns numeric ID that is equivalent to string id used in XML
     // resource. To be used in event tables

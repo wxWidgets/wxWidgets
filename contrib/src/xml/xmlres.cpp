@@ -195,6 +195,19 @@ wxIcon wxXmlResource::LoadIcon(const wxString& name)
     return rt;
 }
 
+bool wxXmlResource::AttachUnknownControl(const wxString& name, 
+                                         wxWindow *control, wxWindow *parent)
+{
+    if (parent == NULL)
+        parent = control->GetParent();
+    wxWindow *container = parent->FindWindow(name + wxT("_container"));
+    if (!container)
+    {
+        wxLogError(_("Cannot find container for unknown control '%s'."), name.c_str());
+        return FALSE;
+    }
+    return control->Reparent(container);
+}
 
 
 void wxXmlResource::ProcessPlatformProperty(wxXmlNode *node)
@@ -875,8 +888,6 @@ void wxXmlResourceHandler::CreateChildrenPrivately(wxObject *parent, wxXmlNode *
         n = n->GetNext();
     }
 }
-
-
 
 
 
