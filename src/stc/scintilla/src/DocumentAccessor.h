@@ -32,9 +32,9 @@ protected:
 	void Fill(int position);
 
 public:
-	DocumentAccessor(Document *pdoc_, PropSet &props_, WindowID id_=0) : 
+	DocumentAccessor(Document *pdoc_, PropSet &props_, WindowID id_=0) :
 		Accessor(), pdoc(pdoc_), props(props_), id(id_),
-		lenDoc(-1), validLen(0), chFlags(0), chWhile(0), 
+		lenDoc(-1), validLen(0), chFlags(0), chWhile(0),
 		startSeg(0), startPosStyling(0) {
 	}
 	~DocumentAccessor();
@@ -47,8 +47,8 @@ public:
 	void Flush();
 	int GetLineState(int line);
 	int SetLineState(int line, int state);
-	int GetPropertyInt(const char *key, int defaultValue=0) { 
-		return props.GetInt(key, defaultValue); 
+	int GetPropertyInt(const char *key, int defaultValue=0) {
+		return props.GetInt(key, defaultValue);
 	}
 	char *GetProperties() {
 		return props.ToString();

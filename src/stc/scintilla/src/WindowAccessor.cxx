@@ -7,7 +7,7 @@
 
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h> 
+#include <ctype.h>
 #include <stdio.h>
 
 #include "Platform.h"
@@ -24,7 +24,7 @@ bool WindowAccessor::InternalIsLeadByte(char ch) {
 	if (SC_CP_UTF8 == codePage)
 		// For lexing, all characters >= 0x80 are treated the
 		// same so none is considered a lead byte.
-		return false;	
+		return false;
 	else
 		return Platform::IsDBCSLeadByte(codePage, ch);
 }
@@ -71,10 +71,10 @@ int WindowAccessor::LevelAt(int line) {
 	return Platform::SendScintilla(id, SCI_GETFOLDLEVEL, line, 0);
 }
 
-int WindowAccessor::Length() { 
-	if (lenDoc == -1) 
+int WindowAccessor::Length() {
+	if (lenDoc == -1)
 		lenDoc = Platform::SendScintilla(id, SCI_GETTEXTLENGTH, 0, 0);
-	return lenDoc; 
+	return lenDoc;
 }
 
 int WindowAccessor::GetLineState(int line) {
@@ -125,7 +125,7 @@ void WindowAccessor::Flush() {
 	startPos = extremePosition;
 	lenDoc = -1;
 	if (validLen > 0) {
-		Platform::SendScintillaPointer(id, SCI_SETSTYLINGEX, validLen, 
+		Platform::SendScintillaPointer(id, SCI_SETSTYLINGEX, validLen,
 			styleBuf);
 		validLen = 0;
 	}
@@ -134,12 +134,12 @@ void WindowAccessor::Flush() {
 int WindowAccessor::IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsCommentLeader) {
 	int end = Length();
 	int spaceFlags = 0;
-	
-	// Determines the indentation level of the current line and also checks for consistent 
+
+	// Determines the indentation level of the current line and also checks for consistent
 	// indentation compared to the previous line.
-	// Indentation is judged consistent when the indentation whitespace of each line lines 
+	// Indentation is judged consistent when the indentation whitespace of each line lines
 	// the same or the indentation of one line is a prefix of the other.
-	
+
 	int pos = LineStart(line);
 	char ch = (*this)[pos];
 	int indent = 0;
@@ -166,7 +166,7 @@ int WindowAccessor::IndentAmount(int line, int *flags, PFNIsCommentLeader pfnIsC
 		}
 		ch = (*this)[++pos];
 	}
-	
+
 	*flags = spaceFlags;
 	indent += SC_FOLDLEVELBASE;
 	// if completely empty line or the start of a comment...
