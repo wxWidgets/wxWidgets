@@ -10,7 +10,7 @@
 #include "wx/stc/stc.h"
 
 Point Point::FromLong(long lpoint) {
-    return Point(lpoint & 0xFFFF, lpoint >> 32);
+    return Point(lpoint & 0xFFFF, lpoint >> 16);
 }
 
 wxRect wxRectFromPRectangle(PRectangle prc) {
@@ -406,7 +406,8 @@ void Window::InvalidateAll() {
 }
 
 void Window::InvalidateRectangle(PRectangle rc) {
-    id->Refresh(false, &wxRectFromPRectangle(rc));
+    wxRect r = wxRectFromPRectangle(rc);
+    id->Refresh(false, &r);
 }
 
 void Window::SetFont(Font &font) {
