@@ -705,9 +705,9 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
-void wxFrame::ScreenToClient(int *x, int *y) const
+void wxFrame::DoScreenToClient(int *x, int *y) const
 {
-    wxWindow::ScreenToClient(x, y);
+    wxWindow::DoScreenToClient(x, y);
 
     // We may be faking the client origin.
     // So a window that's really at (0, 30) may appear
@@ -717,7 +717,7 @@ void wxFrame::ScreenToClient(int *x, int *y) const
     *y -= pt.y;
 }
 
-void wxFrame::ClientToScreen(int *x, int *y) const
+void wxFrame::DoClientToScreen(int *x, int *y) const
 {
     // We may be faking the client origin.
     // So a window that's really at (0, 30) may appear
@@ -726,7 +726,7 @@ void wxFrame::ClientToScreen(int *x, int *y) const
     *x += pt1.x;
     *y += pt1.y;
 
-    wxWindow::ClientToScreen(x, y);
+    wxWindow::DoClientToScreen(x, y);
 }
 
 #if wxUSE_TOOLBAR

@@ -83,10 +83,17 @@ public:
 
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
-    
-    /// X11 has two clipboards which get selected by this call. Empty on MSW.
+
+    // flushes the clipboard: this means that the data which is currently on
+    // clipboard will stay available even after the application exits (possibly
+    // eating memory), otherwise the clipboard will be emptied on exit
+    virtual bool Flush();
+
+    // X11 has two clipboards which get selected by this call. Empty on MSW.
     void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
-    
+
+private:
+    bool m_clearOnExit;
 };
 
 // The global clipboard object

@@ -23,8 +23,12 @@ public:
     typedef unsigned int NativeFormat;
 
     wxDataFormat(NativeFormat format = wxDF_INVALID) { m_format = format; }
+    wxDataFormat(const wxChar *format) { SetId(format); }
+
     wxDataFormat& operator=(NativeFormat format)
         { m_format = format; return *this; }
+    wxDataFormat& operator=(const wxDataFormat& format)
+        { m_format = format.m_format; return *this; }
 
     // defautl copy ctor/assignment operators ok
 
@@ -62,14 +66,11 @@ private:
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
+
 struct IDataObject;
 
 // ----------------------------------------------------------------------------
 // wxDataObject is a "smart" and polymorphic piece of data.
-//
-// TODO it's currently "read-only" from COM point of view, i.e. we don't
-//      support SetData. We don't support all advise functions neither (but
-//      it's easy to do if we really want them)
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxDataObject
@@ -80,18 +81,26 @@ public:
     virtual ~wxDataObject();
 
     // pure virtuals to override
-        // get the best suited format for our data
+        // get the best suited format for rendering our data
     virtual wxDataFormat GetPreferredFormat() const = 0;
-        // get the number of formats we support
-    virtual size_t GetFormatCount() const
+        // get the number of formats we support: it is understood that if we
+        // can accept data in some format, then we can render data in this
+        // format as well, but the contrary is not necessarily true. For the
+        // default value of the argument, all formats we support should be
+        // returned, but if outputOnlyToo == FALSE, then we should only return
+        // the formats which our SetData() understands
+    virtual size_t GetFormatCount(bool outputOnlyToo = TRUE) const
         { return 1; }
         // return all formats in the provided array (of size GetFormatCount())
-    virtual void GetAllFormats(wxDataFormat *formats) const
+    virtual void GetAllFormats(wxDataFormat *formats,
+                              bool outputOnlyToo = TRUE) const
         { formats[0] = GetPreferredFormat(); }
         // get the (total) size of data for the given format
     virtual size_t GetDataSize(const wxDataFormat& format) const = 0;
         // copy raw data (in the specified format) to provided pointer
-    virtual void GetDataHere(const wxDataFormat& format, void *pBuf) const = 0;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const = 0;
+        // get data from the buffer (in the given format)
+    virtual bool SetData(const wxDataFormat& format, const void *buf) = 0;
 
     // accessors
         // retrieve IDataObject interface (for other OLE related classes)
@@ -104,6 +113,13 @@ public:
         // decide if we support this format (can be either standard or custom
         // format) -- now uses GetAllFormats()
     virtual bool IsSupportedFormat(const wxDataFormat& format) const;
+
+    // implementation only from now on
+    // -------------------------------
+
+    // tell the object that it should be now owned by IDataObject - i.e. when
+    // it is deleted, it should delete us as well
+    void SetAutoDelete();
 
 #ifdef __WXDEBUG__
     // function to return symbolic name of clipboard format (for debug messages)
@@ -133,8 +149,10 @@ public:
         { return format == wxDF_TEXT || format == wxDF_LOCALE; }
     virtual size_t GetDataSize(const wxDataFormat& format) const
         { return m_strText.Len() + 1; } // +1 for trailing '\0'of course
-    virtual void GetDataHere(const wxDataFormat& format, void *pBuf) const
-        { memcpy(pBuf, m_strText.c_str(), GetDataSize(format)); }
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const
+        { memcpy(buf, m_strText.c_str(), GetDataSize(format)); return TRUE; }
+    virtual bool SetData(const wxDataFormat& format, const void *buf)
+        { m_strText = (const wxChar *)buf; return TRUE; }
 
     // additional helpers
     void SetText(const wxString& strText) { m_strText = strText; }
@@ -145,15 +163,9 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// TODO: wx{Bitmap|Metafile|...}DataObject
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
 // wxBitmapDataObject is a specialization of wxDataObject for bitmap data
 // ----------------------------------------------------------------------------
 
-// TODO: implement OLE side of things. At present, it's just for clipboard
-// use.
 #include "wx/bitmap.h"
 
 class WXDLLEXPORT wxBitmapDataObject : public wxDataObject
@@ -168,12 +180,13 @@ public:
     const wxBitmap GetBitmap() const { return m_bitmap; }
 
     // implement base class pure virtuals
-    virtual wxDataFormat GetPreferredFormat() const
-        { return wxDF_BITMAP; }
-    virtual bool IsSupportedFormat(const wxDataFormat& format) const
-        { return format == wxDF_BITMAP; }
+    virtual wxDataFormat GetPreferredFormat() const { return wxDF_BITMAP; }
+    virtual size_t GetFormatCount(bool outputOnlyToo = TRUE) const;
+    virtual void GetAllFormats(wxDataFormat *formats,
+                               bool outputOnlyToo = TRUE) const;
     virtual size_t GetDataSize(const wxDataFormat& format) const;
-    virtual void GetDataHere(const wxDataFormat& format, void *pBuf) const;
+    virtual bool GetDataHere(const wxDataFormat& format, void *buf) const;
+    virtual bool SetData(const wxDataFormat& format, const void *buf);
 
 private:
     wxBitmap m_bitmap;

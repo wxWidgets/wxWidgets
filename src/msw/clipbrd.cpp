@@ -57,13 +57,23 @@
 #include "wx/msw/private.h"
 #include "wx/msw/dib.h"
 
-// wxDataObject is tied to OLE/drag and drop implementation,
-// therefore so is wxClipboard :-(
-#if wxUSE_DRAG_AND_DROP
+// wxDataObject is tied to OLE/drag and drop implementation, therefore so are
+// the functions using wxDataObject in wxClipboard
+#define wxUSE_DATAOBJ wxUSE_DRAG_AND_DROP
+
+#if wxUSE_DATAOBJ
     #include "wx/dataobj.h"
 
-    static bool wxSetClipboardData(wxDataObject *data);
+    // use OLE clipboard
+    #define wxUSE_OLE_CLIPBOARD 1
+#else // !wxUSE_DATAOBJ
+    // use Win clipboard API
+    #define wxUSE_OLE_CLIPBOARD 0
 #endif
+
+#if wxUSE_OLE_CLIPBOARD
+    #include <ole2.h>
+#endif // wxUSE_OLE_CLIPBOARD
 
 #ifdef __WIN16__
     #define memcpy hmemcpy
@@ -136,40 +146,11 @@ bool wxIsClipboardOpened()
 
 bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
 {
-    return ::IsClipboardFormatAvailable(dataFormat) != 0;
+    // for bitmaps, DIBs will also do
+    return (::IsClipboardFormatAvailable(dataFormat) != 0) ||
+           (dataFormat.GetFormatId() == CF_BITMAP &&
+            ::IsClipboardFormatAvailable(CF_DIB));
 }
-
-#if wxUSE_DRAG_AND_DROP
-static bool wxSetClipboardData(wxDataObject *data)
-{
-    wxDataFormat format = data->GetPreferredFormat();
-    size_t size = data->GetDataSize(format);
-    HANDLE hGlobal = ::GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE, size);
-    if ( !hGlobal )
-    {
-        wxLogSysError(_("Failed to allocate %dKb of memory for clipboard "
-                        "transfer."), size / 1024);
-
-        return FALSE;
-    }
-
-    LPVOID lpGlobalMemory = ::GlobalLock(hGlobal);
-
-    data->GetDataHere(format, lpGlobalMemory);
-
-    GlobalUnlock(hGlobal);
-
-    if ( !::SetClipboardData(format, hGlobal) )
-    {
-        wxLogSysError(_("Failed to set clipboard data in format %s"),
-                      wxDataObject::GetFormatName(format));
-
-        return FALSE;
-    }
-
-    return TRUE;
-}
-#endif // wxUSE_DRAG_AND_DROP
 
 bool wxSetClipboardData(wxDataFormat dataFormat,
                         const void *data,
@@ -223,7 +204,7 @@ bool wxSetClipboardData(wxDataFormat dataFormat,
                 // NULL palette means to use the system one
                 HANDLE hDIB = wxBitmapToDIB(hBitmap, (HPALETTE)NULL); 
                 handle = SetClipboardData(CF_DIB, hDIB);
-#endif
+#endif // wxUSE_IMAGE_LOADING_IN_MSW
                 break;
             }
 
@@ -442,20 +423,51 @@ wxClipboard* wxTheClipboard = (wxClipboard *)NULL;
 
 wxClipboard::wxClipboard()
 {
+    m_clearOnExit = FALSE;
 }
 
 wxClipboard::~wxClipboard()
 {
-    Clear();
+    if ( m_clearOnExit )
+    {
+        Clear();
+    }
 }
 
 void wxClipboard::Clear()
 {
+#if wxUSE_OLE_CLIPBOARD
+    if ( FAILED(OleSetClipboard(NULL)) )
+    {
+        wxLogLastError("OleSetClipboard(NULL)");
+    }
+#endif
+}
+
+bool wxClipboard::Flush()
+{
+    if ( FAILED(OleFlushClipboard()) )
+    {
+        wxLogLastError("OleFlushClipboard");
+
+        return FALSE;
+    }
+    else
+    {
+        m_clearOnExit = FALSE;
+
+        return TRUE;
+    }
 }
 
 bool wxClipboard::Open()
 {
+    // OLE opens clipboard for us
+#if wxUSE_OLE_CLIPBOARD
+    return TRUE;
+#else
     return wxOpenClipboard();
+#endif
 }
 
 bool wxClipboard::SetData( wxDataObject *data )
@@ -472,7 +484,32 @@ bool wxClipboard::AddData( wxDataObject *data )
 {
     wxCHECK_MSG( data, FALSE, wxT("data is invalid") );
 
-#if wxUSE_DRAG_AND_DROP
+#if wxUSE_OLE_CLIPBOARD
+    HRESULT hr = OleSetClipboard(data->GetInterface());
+    if ( FAILED(hr) )
+    {
+        wxLogSysError(hr, _("Failed to put data on the clipboard"));
+
+        // don't free anything in this case
+
+        return FALSE;
+    }
+
+    // we have a problem here because we should delete wxDataObject, but we
+    // can't do it because IDataObject which we just gave to the clipboard
+    // would try to use it when it will need the data. IDataObject is ref
+    // counted and so doesn't suffer from such problem, so we release it now
+    // and tell it to delete wxDataObject when it is deleted itself.
+    data->SetAutoDelete();
+
+    // we have to call either OleSetClipboard(NULL) or OleFlushClipboard() when
+    // using OLE clipboard when the app terminates - by default, we call
+    // OleSetClipboard(NULL) which won't waste RAM, but the app can call
+    // wxClipboard::Flush() to chaneg this
+    m_clearOnExit = TRUE;
+
+    return TRUE;
+#elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
     wxDataFormat format = data->GetFormat();
@@ -510,14 +547,17 @@ bool wxClipboard::AddData( wxDataObject *data )
         default:
             return wxSetClipboardData(data);
     }
-#else // !wxUSE_DRAG_AND_DROP
+#else // !wxUSE_DATAOBJ
     return FALSE;
-#endif // wxUSE_DRAG_AND_DROP/!wxUSE_DRAG_AND_DROP
+#endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
 }
 
 void wxClipboard::Close()
 {
+    // OLE closes clipboard for us
+#if !wxUSE_OLE_CLIPBOARD
     wxCloseClipboard();
+#endif
 }
 
 bool wxClipboard::IsSupported( wxDataFormat format )
@@ -527,9 +567,145 @@ bool wxClipboard::IsSupported( wxDataFormat format )
 
 bool wxClipboard::GetData( wxDataObject *data )
 {
+    wxCHECK_MSG( data, FALSE, wxT("invalid data object") );
+
+#if wxUSE_OLE_CLIPBOARD
+    IDataObject *pDataObject = NULL;
+    HRESULT hr = OleGetClipboard(&pDataObject);
+    if ( FAILED(hr) || !pDataObject )
+    {
+        wxLogSysError(hr, _("Failed to get data from the clipboard"));
+
+        return FALSE;
+    }
+
+    // build the list of supported formats
+    size_t nFormats = data->GetFormatCount(FALSE /* for SetData() */);
+    wxDataFormat format, *formats;
+    if ( nFormats == 1 )
+    {
+        // the most common case
+        formats = &format;
+    }
+    else
+    {
+        // bad luck, need to alloc mem
+        formats = new wxDataFormat[nFormats];
+    }
+
+    data->GetAllFormats(formats, FALSE);
+
+    // get the format enumerator
+    bool result = FALSE;
+    wxArrayInt supportedFormats;
+    IEnumFORMATETC *pEnumFormatEtc = NULL;
+    hr = pDataObject->EnumFormatEtc(DATADIR_GET, &pEnumFormatEtc);
+    if ( FAILED(hr) || !pEnumFormatEtc )
+    {
+        wxLogSysError(hr,
+                      _("Failed to retrieve the supported clipboard formats"));
+    }
+    else
+    {
+        // ask for the supported formats and see if there are any we support
+        FORMATETC formatEtc;
+        for ( ;; )
+        {
+            ULONG nCount;
+            hr = pEnumFormatEtc->Next(1, &formatEtc, &nCount);
+
+            // don't use FAILED() because S_FALSE would pass it
+            if ( hr != S_OK )
+            {
+                // no more formats
+                break;
+            }
+
+            CLIPFORMAT cf = formatEtc.cfFormat;
+
+#ifdef __WXDEBUG__
+            wxLogTrace(wxTRACE_OleCalls,
+                       wxT("Object on the clipboard supports format %s."),
+                       wxDataObject::GetFormatName(cf));
+#endif // Debug
+
+            // is supported?
+            for ( size_t n = 0; n < nFormats; n++ )
+            {
+                if ( formats[n].GetFormatId() == cf )
+                {
+                    if ( supportedFormats.Index(cf) == wxNOT_FOUND )
+                    {
+                        supportedFormats.Add(cf);
+                    }
+                }
+            }
+        }
+
+        pEnumFormatEtc->Release();
+    }
+
+    if ( formats != &format )
+    {
+        delete [] formats;
+    }
+    //else: we didn't allocate any memory
+
+    if ( !supportedFormats.IsEmpty() )
+    {
+        FORMATETC formatEtc;
+        formatEtc.ptd      = NULL;
+        formatEtc.dwAspect = DVASPECT_CONTENT;
+        formatEtc.lindex   = -1;
+        formatEtc.tymed    = TYMED_HGLOBAL;
+
+        size_t nSupportedFormats = supportedFormats.GetCount();
+        for ( size_t n = 0; !result && (n < nSupportedFormats); n++ )
+        {
+            STGMEDIUM medium;
+            formatEtc.cfFormat = supportedFormats[n];
+
+            // try to get data
+            hr = pDataObject->GetData(&formatEtc, &medium);
+            if ( FAILED(hr) )
+            {
+                // try other tymed for GDI objects
+                if ( formatEtc.cfFormat == CF_BITMAP )
+                {
+                    formatEtc.tymed = TYMED_HGLOBAL;
+                    hr = pDataObject->GetData(&formatEtc, &medium);
+                }
+            }
+
+            if ( SUCCEEDED(hr) )
+            {
+                // pass the data to the data object
+                hr = data->GetInterface()->SetData(&formatEtc, &medium, TRUE);
+                if ( FAILED(hr) )
+                {
+                    wxLogDebug(wxT("Failed to set data in wxIDataObject"));
+
+                    // IDataObject only takes the ownership of data if it
+                    // successfully got it - which is not the case here
+                    ReleaseStgMedium(&medium);
+                }
+                else
+                {
+                    result = TRUE;
+                }
+            }
+            //else: unsupported tymed?
+        }
+    }
+    //else: unsupported format
+
+    // clean up and return
+    pDataObject->Release();
+
+    return result;
+#elif wxUSE_DATAOBJ
     wxCHECK_MSG( wxIsClipboardOpened(), FALSE, wxT("clipboard not open") );
 
-#if wxUSE_DRAG_AND_DROP
     wxDataFormat format = data->GetFormat();
     switch ( format )
     {
@@ -593,9 +769,9 @@ bool wxClipboard::GetData( wxDataObject *data )
 
             return FALSE;
     }
-#else
+#else // !wxUSE_DATAOBJ
     return FALSE;
-#endif
+#endif // wxUSE_DATAOBJ/!wxUSE_DATAOBJ
 }
 
 //-----------------------------------------------------------------------------

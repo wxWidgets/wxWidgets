@@ -77,22 +77,14 @@ wxBitmapRefData::wxBitmapRefData()
 
 wxBitmapRefData::~wxBitmapRefData()
 {
-  if (m_selectedInto)
-  {
-    wxChar buf[200];
-    wxSprintf(buf, wxT("Bitmap was deleted without selecting out of wxMemoryDC %lX."), (unsigned long) m_selectedInto);
-    wxFatalError(buf);
-  }
-  if (m_hBitmap)
-  {
-    DeleteObject((HBITMAP) m_hBitmap);
-  }
-  m_hBitmap = 0 ;
+    wxASSERT_MSG( !m_selectedInto,
+                  wxT("deleting bitmap still selected into wxMemoryDC") );
 
-  if (m_bitmapMask)
-    delete m_bitmapMask;
-  m_bitmapMask = NULL;
+    if ( m_hBitmap)
+        DeleteObject((HBITMAP) m_hBitmap);
 
+    if ( m_bitmapMask )
+        delete m_bitmapMask;
 }
 
 // ----------------------------------------------------------------------------
@@ -143,12 +135,9 @@ bool wxBitmap::FreeResource(bool WXUNUSED(force))
   if ( !M_BITMAPDATA )
   return FALSE;
 
-  if (M_BITMAPDATA->m_selectedInto)
-  {
-    wxChar buf[200];
-    wxSprintf(buf, wxT("Bitmap %lX was deleted without selecting out of wxMemoryDC %lX."), (unsigned long) this, (unsigned long) M_BITMAPDATA->m_selectedInto);
-    wxFatalError(buf);
-  }
+  wxASSERT_MSG( !M_BITMAPDATA->m_selectedInto,
+                wxT("freeing bitmap still selected into wxMemoryDC") );
+
   if (M_BITMAPDATA->m_hBitmap)
   {
     DeleteObject((HBITMAP) M_BITMAPDATA->m_hBitmap);

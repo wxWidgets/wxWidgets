@@ -102,11 +102,12 @@ public:
     void OnPaste(wxCommandEvent& event);
     void OnCopyBitmap(wxCommandEvent& event);
     void OnPasteBitmap(wxCommandEvent& event);
-    void OnClipboardHasText(wxCommandEvent& event);
-    void OnClipboardHasBitmap(wxCommandEvent& event);
 
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
+
+    void OnUpdateUIPasteText(wxUpdateUIEvent& event);
+    void OnUpdateUIPasteBitmap(wxUpdateUIEvent& event);
 
     DECLARE_EVENT_TABLE()
 
@@ -146,11 +147,7 @@ public:
     }
 
     // the functions used for drag-and-drop: they dump and restore a shape into
-    // some bitwise-copiable data
-    //
-    // NB: here we profit from the fact that wxPoint, wxSize and wxColour are
-    //     POD (plain old data) and so can be copied directly - but it wouldn't
-    //     work for other types!
+    // some bitwise-copiable data (might use streams too...)
     // ------------------------------------------------------------------------
 
     // restore from buffer
@@ -178,6 +175,8 @@ public:
     const wxPoint& GetPosition() const { return m_pos; }
     const wxColour& GetColour() const { return m_col; }
     const wxSize& GetSize() const { return m_size; }
+
+    void Move(const wxPoint& pos) { m_pos = pos; }
 
     // to implement in derived classes
     virtual Kind GetKind() const = 0;
@@ -307,6 +306,9 @@ public:
         m_hasBitmap = FALSE;
     }
 
+    // accessors
+    DnDShape *GetShape() const { return m_shape; }
+
     // implement base class pure virtuals
     // ----------------------------------
 
@@ -315,16 +317,26 @@ public:
         return m_formatShape;
     }
 
-    virtual size_t GetFormatCount() const
+    virtual size_t GetFormatCount(bool outputOnlyToo) const
     {
-        // +1 for our custom format
-        return m_dataobj.GetFormatCount() + 1;
+        // our custom format is supported by both GetData() and SetData()
+        size_t nFormats = 1;
+        if ( outputOnlyToo )
+        {
+            // but the bitmap format(s) are only supported for output
+            nFormats += m_dataobj.GetFormatCount();
+        }
+
+        return nFormats;
     }
 
-    virtual void GetAllFormats(wxDataFormat *formats) const
+    virtual void GetAllFormats(wxDataFormat *formats, bool outputOnlyToo) const
     {
         formats[0] = m_formatShape;
-        m_dataobj.GetAllFormats(&formats[1]);
+        if ( outputOnlyToo )
+        {
+            m_dataobj.GetAllFormats(&formats[1]);
+        }
     }
 
     virtual size_t GetDataSize(const wxDataFormat& format) const
@@ -335,8 +347,6 @@ public:
         }
         else
         {
-            wxASSERT_MSG( format == wxDF_BITMAP, "unsupported format" );
-
             if ( !m_hasBitmap )
                 CreateBitmap();
 
@@ -344,11 +354,13 @@ public:
         }
     }
 
-    virtual void GetDataHere(const wxDataFormat& format, void *pBuf) const
+    virtual bool GetDataHere(const wxDataFormat& format, void *pBuf) const
     {
         if ( format == m_formatShape )
         {
             m_shape->GetDataHere(pBuf);
+
+            return TRUE;
         }
         else
         {
@@ -357,8 +369,21 @@ public:
             if ( !m_hasBitmap )
                 CreateBitmap();
 
-            m_dataobj.GetDataHere(format, pBuf);
+            return m_dataobj.GetDataHere(format, pBuf);
         }
+    }
+
+    virtual bool SetData(const wxDataFormat& format, const void *buf)
+    {
+        wxCHECK_MSG( format == m_formatShape, FALSE, "unsupported format" );
+
+        delete m_shape;
+        m_shape = DnDShape::New(buf);
+
+        // the shape has changed
+        m_hasBitmap = FALSE;
+
+        return TRUE;
     }
 
 private:
@@ -422,13 +447,24 @@ public:
     void SetShape(DnDShape *shape);
 
     // callbacks
+    void OnNewShape(wxCommandEvent& event);
+    void OnEditShape(wxCommandEvent& event);
+    void OnClearShape(wxCommandEvent& event);
+
+    void OnCopyShape(wxCommandEvent& event);
+    void OnPasteShape(wxCommandEvent& event);
+
+    void OnUpdateUICopy(wxUpdateUIEvent& event);
+    void OnUpdateUIPaste(wxUpdateUIEvent& event);
+
     void OnDrag(wxMouseEvent& event);
-    void OnEdit(wxMouseEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnDrop(long x, long y, DnDShape *shape);
 
 private:
     DnDShape *m_shape;
+
+    static DnDShapeFrame *ms_lastDropTarget;
 
     DECLARE_EVENT_TABLE()
 };
@@ -486,10 +522,13 @@ enum
     Menu_Paste,
     Menu_CopyBitmap,
     Menu_PasteBitmap,
-    Menu_HasText,
-    Menu_HasBitmap,
     Menu_ToBeGreyed,   /* for testing */
     Menu_ToBeDeleted,  /* for testing */
+    Menu_Shape_New = 500,
+    Menu_Shape_Edit,
+    Menu_Shape_Clear,
+    Menu_ShapeClipboard_Copy,
+    Menu_ShapeClipboard_Paste,
     Button_Colour = 1001
 };
 
@@ -504,8 +543,9 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_Paste,      DnDFrame::OnPaste)
     EVT_MENU(Menu_CopyBitmap, DnDFrame::OnCopyBitmap)
     EVT_MENU(Menu_PasteBitmap,DnDFrame::OnPasteBitmap)
-    EVT_MENU(Menu_HasText,    DnDFrame::OnClipboardHasText)
-    EVT_MENU(Menu_HasBitmap,  DnDFrame::OnClipboardHasBitmap)
+
+    EVT_UPDATE_UI(Menu_Paste,       DnDFrame::OnUpdateUIPasteText)
+    EVT_UPDATE_UI(Menu_PasteBitmap, DnDFrame::OnUpdateUIPasteBitmap)
 
     EVT_LEFT_DOWN(            DnDFrame::OnLeftDown)
     EVT_RIGHT_DOWN(           DnDFrame::OnRightDown)
@@ -513,8 +553,18 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(DnDShapeFrame, wxFrame)
-    EVT_RIGHT_DOWN(DnDShapeFrame::OnDrag)
-    EVT_LEFT_DCLICK(DnDShapeFrame::OnEdit)
+    EVT_MENU(Menu_Shape_New,    DnDShapeFrame::OnNewShape)
+    EVT_MENU(Menu_Shape_Edit,   DnDShapeFrame::OnEditShape)
+    EVT_MENU(Menu_Shape_Clear,  DnDShapeFrame::OnClearShape)
+
+    EVT_MENU(Menu_ShapeClipboard_Copy,  DnDShapeFrame::OnCopyShape)
+    EVT_MENU(Menu_ShapeClipboard_Paste, DnDShapeFrame::OnPasteShape)
+
+    EVT_UPDATE_UI(Menu_ShapeClipboard_Copy,  DnDShapeFrame::OnUpdateUICopy)
+    EVT_UPDATE_UI(Menu_ShapeClipboard_Paste, DnDShapeFrame::OnUpdateUIPaste)
+
+    EVT_LEFT_DOWN(DnDShapeFrame::OnDrag)
+
     EVT_PAINT(DnDShapeFrame::OnPaint)
 END_EVENT_TABLE()
 
@@ -567,7 +617,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     file_menu->Append(Menu_Quit, "E&xit");
 
     wxMenu *log_menu = new wxMenu;
-    log_menu->Append(Menu_Clear, "Clear");
+    log_menu->Append(Menu_Clear, "Clear\tDel");
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(Menu_Help, "&Help...");
@@ -578,11 +628,8 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     clip_menu->Append(Menu_Copy, "&Copy text\tCtrl+C");
     clip_menu->Append(Menu_Paste, "&Paste text\tCtrl+V");
     clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_CopyBitmap, "&Copy bitmap");
-    clip_menu->Append(Menu_PasteBitmap, "&Paste bitmap");
-    clip_menu->AppendSeparator();
-    clip_menu->Append(Menu_HasText, "Clipboard has &text\tCtrl+T");
-    clip_menu->Append(Menu_HasBitmap, "Clipboard has a &bitmap\tCtrl+B");
+    clip_menu->Append(Menu_CopyBitmap, "&Copy bitmap\tAlt+C");
+    clip_menu->Append(Menu_PasteBitmap, "&Paste bitmap\tAlt+V");
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, "&File");
@@ -598,12 +645,14 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
     wxString strFile("Drop files here!"), strText("Drop text on me");
 
-    m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL | wxLB_ALWAYS_SB );
-    m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL | wxLB_ALWAYS_SB );
+    m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile,
+                                wxLB_HSCROLL | wxLB_ALWAYS_SB );
+    m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText,
+                                wxLB_HSCROLL | wxLB_ALWAYS_SB );
 
     m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size,
-                               wxTE_MULTILINE | wxTE_READONLY |
-                               wxSUNKEN_BORDER );
+                                 wxTE_MULTILINE | wxTE_READONLY |
+                                 wxSUNKEN_BORDER );
 
     // redirect log messages to the text window and switch on OLE messages
     // logging
@@ -637,7 +686,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
     c = new wxLayoutConstraints;
     c->left.SameAs    (this, wxLeft);
     c->right.SameAs   (this, wxRight);
-    c->height.PercentOf(this, wxHeight, 30);
+    c->height.PercentOf(this, wxHeight, 50);
     c->top.SameAs(m_ctrlText, wxBottom);
     m_ctrlLog->SetConstraints(c);
 
@@ -659,50 +708,23 @@ void DnDFrame::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL, FALSE, "charter" ) );
     dc.DrawText( "Drag text from here!", 20, h-50 );
 
-    if (m_bitmap.Ok())
-        dc.DrawBitmap( m_bitmap, 280, h-120, TRUE );
+    if ( m_bitmap.Ok() )
+    {
+        // 4/5 is 80% taken by other windows, 20 is arbitrary margin
+        dc.DrawBitmap(m_bitmap,
+                      w - m_bitmap.GetWidth() - 20,
+                      (4*h)/5 + 20);
+    }
 }
 
-void DnDFrame::OnClipboardHasText(wxCommandEvent& WXUNUSED(event))
+void DnDFrame::OnUpdateUIPasteText(wxUpdateUIEvent& event)
 {
-    if ( !wxTheClipboard->Open() )
-    {
-        wxLogError( _T("Can't open clipboard.") );
-
-        return;
-    }
-
-    if ( !wxTheClipboard->IsSupported( wxDF_TEXT ) )
-    {
-        wxLogMessage( _T("No text on the clipboard") );
-    }
-    else
-    {
-        wxLogMessage( _T("There is text on the clipboard") );
-    }
-
-    wxTheClipboard->Close();
+    event.Enable( wxTheClipboard->IsSupported(wxDF_TEXT) );
 }
 
-void DnDFrame::OnClipboardHasBitmap(wxCommandEvent& WXUNUSED(event))
+void DnDFrame::OnUpdateUIPasteBitmap(wxUpdateUIEvent& event)
 {
-    if ( !wxTheClipboard->Open() )
-    {
-        wxLogError( _T("Can't open clipboard.") );
-
-        return;
-    }
-
-    if ( !wxTheClipboard->IsSupported( wxDF_BITMAP ) )
-    {
-        wxLogMessage( _T("No bitmap on the clipboard") );
-    }
-    else
-    {
-        wxLogMessage( _T("There is a bitmap on the clipboard") );
-    }
-
-    wxTheClipboard->Close();
+    event.Enable( wxTheClipboard->IsSupported(wxDF_BITMAP) );
 }
 
 void DnDFrame::OnNewFrame(wxCommandEvent& WXUNUSED(event))
@@ -1097,6 +1119,8 @@ void DnDShapeDialog::OnColour(wxCommandEvent& WXUNUSED(event))
 // DnDShapeFrame
 // ----------------------------------------------------------------------------
 
+DnDShapeFrame *DnDShapeFrame::ms_lastDropTarget = NULL;
+
 DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
              : wxFrame(parent, -1, "Shape Frame",
                        wxDefaultPosition, wxSize(250, 150))
@@ -1105,7 +1129,23 @@ DnDShapeFrame::DnDShapeFrame(wxFrame *parent)
 
     CreateStatusBar();
 
-    SetStatusText("Double click the frame to create a shape");
+    wxMenu *menuShape = new wxMenu;
+    menuShape->Append(Menu_Shape_New, "&New default shape\tCtrl-S");
+    menuShape->Append(Menu_Shape_Edit, "&Edit shape\tCtrl-E");
+    menuShape->AppendSeparator();
+    menuShape->Append(Menu_Shape_Clear, "&Clear shape\tDel");
+
+    wxMenu *menuClipboard = new wxMenu;
+    menuClipboard->Append(Menu_ShapeClipboard_Copy, "&Copy\tCtrl-C");
+    menuClipboard->Append(Menu_ShapeClipboard_Paste, "&Paste\tCtrl-V");
+
+    wxMenuBar *menubar = new wxMenuBar;
+    menubar->Append(menuShape, "&Shape");
+    menubar->Append(menuClipboard, "&Clipboard");
+
+    SetMenuBar(menubar);
+
+    SetStatusText("Press Ctrl-S to create a new shape");
 
     SetDropTarget(new DnDShapeDropTarget(this));
 
@@ -1156,7 +1196,11 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
 
         case wxDragMove:
             pc = "moved";
-            SetShape(NULL);
+            if ( ms_lastDropTarget != this )
+            {
+                // don't delete the shape if we dropped it on ourselves!
+                SetShape(NULL);
+            }
             break;
 
         case wxDragCancel:
@@ -1171,7 +1215,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
     //else: status text already set
 }
 
-void DnDShapeFrame::OnEdit(wxMouseEvent& event)
+void DnDShapeFrame::OnEditShape(wxCommandEvent& event)
 {
     DnDShapeDialog dlg(this, m_shape);
     if ( dlg.ShowModal() == wxID_OK )
@@ -1180,9 +1224,50 @@ void DnDShapeFrame::OnEdit(wxMouseEvent& event)
 
         if ( m_shape )
         {
-            SetStatusText("Right click now drag the shape to another frame");
+            SetStatusText("You can now drag the shape to another frame");
         }
     }
+}
+
+void DnDShapeFrame::OnNewShape(wxCommandEvent& event)
+{
+    SetShape(new DnDEllipticShape(wxPoint(10, 10), wxSize(80, 60), *wxRED));
+
+    SetStatusText("You can now drag the shape to another frame");
+}
+
+void DnDShapeFrame::OnClearShape(wxCommandEvent& event)
+{
+    SetShape(NULL);
+}
+
+void DnDShapeFrame::OnCopyShape(wxCommandEvent& event)
+{
+    if ( m_shape )
+        wxTheClipboard->AddData(new DnDShapeDataObject(m_shape));
+}
+
+void DnDShapeFrame::OnPasteShape(wxCommandEvent& event)
+{
+    DnDShapeDataObject shapeDataObject(NULL);
+    if ( wxTheClipboard->GetData(&shapeDataObject) )
+    {
+        SetShape(shapeDataObject.GetShape());
+    }
+    else
+    {
+        wxLogStatus("No shape on the clipboard");
+    }
+}
+
+void DnDShapeFrame::OnUpdateUICopy(wxUpdateUIEvent& event)
+{
+    event.Enable( m_shape != NULL );
+}
+
+void DnDShapeFrame::OnUpdateUIPaste(wxUpdateUIEvent& event)
+{
+    event.Enable( wxTheClipboard->IsSupported(wxDataFormat(shapeFormatId)) );
 }
 
 void DnDShapeFrame::OnPaint(wxPaintEvent& event)
@@ -1195,10 +1280,13 @@ void DnDShapeFrame::OnPaint(wxPaintEvent& event)
 
 void DnDShapeFrame::OnDrop(long x, long y, DnDShape *shape)
 {
+    ms_lastDropTarget = this;
+
     wxString s;
-    s.Printf("Drop occured at (%ld, %ld)", x, y);
+    s.Printf("Shape dropped at (%ld, %ld)", x, y);
     SetStatusText(s);
 
+    shape->Move(ScreenToClient(wxPoint(x, y)));
     SetShape(shape);
 }
 
@@ -1238,9 +1326,15 @@ DnDShape *DnDShape::New(const void *buf)
 
 void DnDShapeDataObject::CreateBitmap() const
 {
-    wxBitmap bitmap;
+    wxPoint pos = m_shape->GetPosition();
+    wxSize size = m_shape->GetSize();
+    int x = pos.x + size.x,
+        y = pos.y + size.y;
+    wxBitmap bitmap(x, y);
     wxMemoryDC dc;
     dc.SelectObject(bitmap);
+    dc.SetBrush(wxBrush("white", wxSOLID));
+    dc.Clear();
     m_shape->Draw(dc);
     dc.SelectObject(wxNullBitmap);
 
