@@ -13164,7 +13164,7 @@ fi
 if test "$wxUSE_MAC" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__POWERPC__ -DTARGET_CARBON"
   CFLAGS="${CFLAGS} -fno-common -fpascal-strings"
-  CPPFLAGS="${CPPFLAGS} -fno-common -fpascal-strings"
+  CPPFLAGS="${CPPFLAGS} -cpp-precomp -fno-common -fpascal-strings"
   # Extract the first word of "Rez", so it can be a program name with args.
 set dummy Rez; ac_word=$2
 echo $ac_n "checking for $ac_word""... $ac_c" 1>&6

@@ -2971,7 +2971,7 @@ fi
 if test "$wxUSE_MAC" = 1 ; then
   TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__POWERPC__ -DTARGET_CARBON"
   CFLAGS="${CFLAGS} -fno-common -fpascal-strings"
-  CPPFLAGS="${CPPFLAGS} -fno-common -fpascal-strings"
+  CPPFLAGS="${CPPFLAGS} -cpp-precomp -fno-common -fpascal-strings"
   AC_CHECK_PROG(REZ, Rez, Rez, /Developer/Tools/Rez)
   AC_CHECK_PROG(DEREZ, Derez, Derez, /Developer/Tools/Derez)
   RESCOMP=${REZ}
