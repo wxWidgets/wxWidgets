@@ -295,7 +295,7 @@ case "${host}" in
     DEFAULT_DEFAULT_wxUSE_PM=1
     dnl "c++" wrapper is not always available, so always use plain gcc.
     CXX=gcc
-    LDFLAGS="$LDFLAGS -Zcrtdll -Zsysv-signals"
+    LDFLAGS="$LDFLAGS -Zcrtdll"
     dnl
     dnl Some special code that's automatically added by autoconf-2.57 for OS/2
     dnl and hopefully also by autoconf-2.58 and newer on all other platforms.
@@ -1499,7 +1499,7 @@ case "${host}" in
           dnl Include resources for the "native" port (wxPM).
           RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
-      AC_CACHE_CHECK([for gcc 3 or later], wx_cv_gcc3,[
+      AC_CACHE_CHECK([for gcc version], wx_cv_gccversion,[
           AC_TRY_COMPILE([],
               [
                   #if (__GNUC__ < 3)
@@ -1507,17 +1507,35 @@ case "${host}" in
                   #endif
               ],
               [
-                  wx_cv_gcc3=yes
+                  AC_TRY_COMPILE([],
+                      [
+                          #if (__GNUC__==3) && ((__GNUC_MINOR__ < 2) || ((__GNUC_MINOR__==2) && (__GNUC_PATCHLEVEL__<2)))
+                              #error intermediate gcc
+                          #endif
+                      ],
+                      [
+                         wx_cv_gccversion=Innotek
+                      ],
+                      [
+                         wx_cv_gccversion=3
+                      ]
+                  )
               ],
               [
-                  wx_cv_gcc3=no
+                  wx_cv_gccversion=2
               ]
           )
       ])
-      if test "$wx_cv_gcc3" = "no"; then
+      if test "$wx_cv_gccversion" = "2"; then
           LIBS="$LIBS -lstdcpp"
+          LDFLAGS="$LDFLAGS -Zsysv-signals"
       else
-          LIBS="$LIBS -lstdcxx"
+          if test "$wx_cv_gccversion" = "3"; then
+              LIBS="$LIBS -lstdcxx"
+              LDFLAGS="$LDFLAGS -Zsysv-signals"
+          else
+              LIBS="$LIBS -lstdc++"
+          fi
       fi
       dnl (end of OS/2-only piece)
   ;;
