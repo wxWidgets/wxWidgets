@@ -1061,9 +1061,6 @@
 // (notably, wxNotebook pages)
 #define wxUSE_UXTHEME_AUTO      0
 
-// Set to 1 if you're developing for MS SmartPhone
-#define wxUSE_SMARTPHONE        0
-
 // Set to 1 if you want to maintain a PocketPC-style UI on
 // Windows CE .NET. If 0, wxWindows will use a commandbar
 // for the menubar, and a normal separate toolbar as per the
