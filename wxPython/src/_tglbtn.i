@@ -71,6 +71,7 @@ public:
                    const wxString& name = wxPyToggleButtonNameStr);
     %name(PreToggleButton)wxToggleButton();
 
+#ifndef __WXMAC__
     bool Create(wxWindow *parent,
                    wxWindowID id,
                    const wxString& label,
@@ -80,7 +81,6 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxPyToggleButtonNameStr);
 
-#ifndef __WXMAC__
     void SetValue(bool value);
     bool GetValue() const ;
     void SetLabel(const wxString& label);

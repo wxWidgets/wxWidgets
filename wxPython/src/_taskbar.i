@@ -38,6 +38,7 @@ class wxTaskBarIconEvent : public wxEvent
 public:
     wxTaskBarIconEvent(wxEventType, wxTaskBarIcon *)
         { PyErr_SetNone(PyExc_NotImplementedError); }
+    virtual wxEvent* Clone() const { return NULL; }
 };
 
 enum {
