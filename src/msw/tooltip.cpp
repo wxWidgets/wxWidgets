@@ -36,11 +36,6 @@
     #include <commctrl.h>
 #endif
 
-#ifndef _WIN32_IE
-    // minimal set of features by default
-    #define _WIN32_IE 0x0200
-#endif
-
 // VZ: normally, the trick with subclassing the tooltip control and processing
 //     TTM_WINDOWFROMPOINT should work but, somehow, it doesn't. I leave the
 //     code here for now (but it's not compiled) in case we need it later.
@@ -295,10 +290,10 @@ void wxToolTip::Add(WXHWND hWnd)
 
         if ( index != wxNOT_FOUND )
         {
-#if _WIN32_IE >= 0x0300
+#ifdef TTM_SETMAXTIPWIDTH
             if ( wxTheApp->GetComCtl32Version() >= 470 )
             {
-                // use TTM_SETMAXWIDTH to make tooltip multiline using the
+                // use TTM_SETMAXTIPWIDTH to make tooltip multiline using the
                 // extent of its first line as max value
                 HFONT hfont = (HFONT)SendTooltipMessage(GetToolTipCtrl(),
                                                         WM_GETFONT,

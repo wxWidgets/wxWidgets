@@ -2543,7 +2543,9 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             }
             break;
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 && !wxUSE_COMCTL32_SAFELY && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
+            // instead of explicitly checking for _WIN32_IE, check if the
+            // required symbols are available in the headers
+#if defined(CDDS_PREPAINT) && !wxUSE_COMCTL32_SAFELY
         case NM_CUSTOMDRAW:
             {
                 LPNMTVCUSTOMDRAW lptvcd = (LPNMTVCUSTOMDRAW)lParam;
@@ -2638,7 +2640,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // we always process it
             return true;
-#endif // _WIN32_IE >= 0x300
+#endif // have owner drawn support in headers
 
         case NM_CLICK:
             {

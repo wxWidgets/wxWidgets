@@ -796,7 +796,7 @@ bool wxToolBar::Realize()
         int left = -1;
 
         // TB_SETBUTTONINFO message is only supported by comctl32.dll 4.71+
-#if defined(_WIN32_IE) && (_WIN32_IE >= 0x400 )
+#ifdef TB_SETBUTTONINFO
         // available in headers, now check whether it is available now
         // (during run-time)
         if ( wxTheApp->GetComCtl32Version() >= 471 )

@@ -636,12 +636,16 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
         }
     }
 
-#if _WIN32_IE >= 0x0300
+    // the column images were not supported in older versions but how to check
+    // for this? we can't use _WIN32_IE because we always define it to a very
+    // high value, so see if another symbol which is only defined starting from
+    // comctl32.dll 4.70 is available
+#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         item.m_image = lvCol.iImage;
     }
-#endif
+#endif // LVCOLUMN::iImage exists
 
     return success;
 }
@@ -2066,9 +2070,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 }
                 break;
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
-        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 0 ) )
-            case NM_CUSTOMDRAW:
+#ifdef NM_CUSTOMDRAW
                 *result = OnCustomDraw(lParam);
 
                 return TRUE;
@@ -2109,13 +2111,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         wxStrncpy(lvi.pszText, text, lvi.cchTextMax);
                     }
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
-        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 1 ) )
+                    // see comment at the end of wxListCtrl::GetColumn()
+#ifdef NM_CUSTOMDRAW
                     if ( lvi.mask & LVIF_IMAGE )
                     {
                         lvi.iImage = OnGetItemImage(item);
                     }
-#endif
+#endif // NM_CUSTOMDRAW
 
                     // a little dose of healthy paranoia: as we never use
                     // LVM_SETCALLBACKMASK we're not supposed to get these ones
@@ -2179,7 +2181,8 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     return processed;
 }
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300
+// see comment at the end of wxListCtrl::GetColumn()
+#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
 
 WXLPARAM wxListCtrl::OnCustomDraw(WXLPARAM lParam)
 {
@@ -2641,8 +2644,8 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
             lvCol.cx = item.m_width;
     }
 
-#if defined(_WIN32_IE) && _WIN32_IE >= 0x300 \
-        && !( defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 1, 1 ) )
+    // see comment at the end of wxListCtrl::GetColumn()
+#ifdef NM_CUSTOMDRAW // _WIN32_IE >= 0x0300
     if ( item.m_mask & wxLIST_MASK_IMAGE )
     {
         if ( wxTheApp->GetComCtl32Version() >= 470 )
@@ -2652,7 +2655,7 @@ static void wxConvertToMSWListCol(int WXUNUSED(col), const wxListItem& item,
         }
         //else: it doesn't support item images anyhow
     }
-#endif
+#endif // _WIN32_IE >= 0x0300
 }
 
 #endif // wxUSE_LISTCTRL
