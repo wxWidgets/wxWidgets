@@ -294,9 +294,9 @@ wxHelpControllerHtml::SetFrameParameters(const wxString &title,
 }
 
 wxFrame *
-wxHelpControllerHtml::GetFrameParameters(wxSize *size = NULL,
-                                         wxPoint *pos = NULL,
-                                         bool *newframe = NULL)
+wxHelpControllerHtml::GetFrameParameters(wxSize *size,
+                                         wxPoint *pos,
+                                         bool *newframe)
 {
    if(size) *size = m_FrameSize;
    if(pos) *pos = m_FramePosition;

@@ -50,7 +50,7 @@ bool wxSearchEngine::Scan(wxInputStream *stream)
     wxASSERT_MSG(m_Keyword != NULL, _("wxSearchEngine::LookFor must be called before scanning!"));
 
     int i, j;
-    int lng = stream -> StreamSize();
+    int lng = stream ->GetSize();
     int wrd = strlen(m_Keyword);
     bool found = FALSE;
     char *buf = (char*) malloc(lng + 1);

@@ -243,7 +243,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     if (fi == NULL) return FALSE;
     fsys.ChangePathTo(bookFull);
     s = fi -> GetStream();
-    sz = s -> StreamSize();
+    sz = s -> GetSize();
     buff = (char*) malloc(sz+1);
     buff[sz] = 0;
     s -> Read(buff, sz);
@@ -724,7 +724,7 @@ void wxHtmlHelpController::ReadCustomization(wxConfigBase *cfg, wxString path)
         cfg -> SetPath(path);
     }
 
-    m_Cfg.navig_on = (bool) cfg -> Read("hcNavigPanel", m_Cfg.navig_on);
+    m_Cfg.navig_on = cfg -> Read("hcNavigPanel", m_Cfg.navig_on) != 0;
     m_Cfg.sashpos = cfg -> Read("hcSashPos", m_Cfg.sashpos);
     m_Cfg.x = cfg -> Read("hcX", m_Cfg.x);
     m_Cfg.y = cfg -> Read("hcY", m_Cfg.y);

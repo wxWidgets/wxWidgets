@@ -158,7 +158,8 @@ bool wxFTP::SendCommand(const wxString& command, char exp_ret)
 
 bool wxFTP::GetResult(char exp)
 {
-  if ((m_lastError = GetLine(this, m_lastResult)))
+  m_lastError = GetLine(this, m_lastResult);
+  if ( m_lastError )
     return FALSE;
   if (m_lastResult.GetChar(0) != exp) {
     m_lastError = wxPROTO_PROTERR;
@@ -171,7 +172,8 @@ bool wxFTP::GetResult(char exp)
     key += _T(' ');
 
     while (m_lastResult.Index(key) != 0) {
-      if ((m_lastError = GetLine(this, m_lastResult)))
+      m_lastError = GetLine(this, m_lastResult);
+      if ( m_lastError )
         return FALSE;
     }
   }

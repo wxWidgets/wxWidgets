@@ -601,7 +601,7 @@ GSocketEventFlags wxSocketBase::EventToNotify(GSocketEvent evt)
     return GSOCK_OUTPUT_FLAG;
   case GSOCK_CONNECTION:
     return GSOCK_CONNECTION_FLAG;
-  case GSOCK_LOST_FLAG:
+  case GSOCK_LOST:
     return GSOCK_LOST_FLAG;
   default:
     return 0;

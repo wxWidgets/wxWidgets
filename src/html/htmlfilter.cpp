@@ -57,9 +57,9 @@ wxString wxHtmlFilterPlainText::ReadFile(const wxFSFile& file)
     wxString doc, doc2;
 
     if (s == NULL) return wxEmptyString;
-    src = new char[s -> StreamSize()+1];
-    src[s -> StreamSize()] = 0;
-    s -> Read(src, s -> StreamSize());
+    src = new char[s -> GetSize()+1];
+    src[s -> GetSize()] = 0;
+    s -> Read(src, s -> GetSize());
     doc = src;
     delete [] src;
 
@@ -137,9 +137,9 @@ wxString wxHtmlFilterHTML::ReadFile(const wxFSFile& file)
     wxString doc;
 
     if (s == NULL) return wxEmptyString;
-    src = (char*) malloc(s -> StreamSize() + 1);
-    src[s -> StreamSize()] = 0;
-    s -> Read(src, s -> StreamSize());
+    src = (char*) malloc(s -> GetSize() + 1);
+    src[s -> GetSize()] = 0;
+    s -> Read(src, s -> GetSize());
     doc = src;
     free(src);
 

@@ -129,7 +129,7 @@ void wxHtmlHelpController::LoadMSProject(HtmlBookRecord *book, wxFileSystem& fsy
 
     f = fsys.OpenFile(contentsfile);
     if (f) {
-        sz = f -> GetStream() -> StreamSize();
+        sz = f -> GetStream() -> GetSize();
         buf = (char*) malloc(sz+1);
         buf[sz] = 0;
         f -> GetStream() -> Read(buf, sz);
@@ -142,7 +142,7 @@ void wxHtmlHelpController::LoadMSProject(HtmlBookRecord *book, wxFileSystem& fsy
 
     f = fsys.OpenFile(indexfile);
     if (f) {
-        sz = f -> GetStream() -> StreamSize();
+        sz = f -> GetStream() -> GetSize();
         buf = (char*) malloc(sz+1);
         buf[sz] = 0;
         f -> GetStream() -> Read(buf, sz);
