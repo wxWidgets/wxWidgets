@@ -1122,11 +1122,13 @@ public:
     //
     void DrawTextRectangle( wxDC& dc, const wxString&, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
-                            int verticalAlignment = wxALIGN_TOP );
+                            int verticalAlignment = wxALIGN_TOP,
+                            int textOrientation = wxHORIZONTAL );
 
     void DrawTextRectangle( wxDC& dc, const wxArrayString& lines, const wxRect&,
                             int horizontalAlignment = wxALIGN_LEFT,
-                            int verticalAlignment = wxALIGN_TOP );
+                            int verticalAlignment = wxALIGN_TOP,
+                            int textOrientation = wxHORIZONTAL );
 
 
     // Split a string containing newline chararcters into an array of
@@ -1238,6 +1240,7 @@ public:
     wxFont   GetLabelFont() { return m_labelFont; }
     void     GetRowLabelAlignment( int *horiz, int *vert );
     void     GetColLabelAlignment( int *horiz, int *vert );
+    int      GetColLabelTextOrientation();
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour() { return m_gridLineColour; }
@@ -1252,6 +1255,7 @@ public:
     void     SetLabelFont( const wxFont& );
     void     SetRowLabelAlignment( int horiz, int vert );
     void     SetColLabelAlignment( int horiz, int vert );
+    void     SetColLabelTextOrientation( int textOrientation );
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
@@ -1327,6 +1331,12 @@ public:
     // auto size the grid, that is make the columns/rows of the "right" size
     // and also set the grid size to just fit its contents
     void     AutoSize();
+
+    // autosize row height depending on label text
+    void     AutoSizeRowLabelSize( int row );
+
+    // autosize column width depending on label text
+    void     AutoSizeColLabelSize( int col );
 
     // column won't be resized to be lesser width - this must be called during
     // the grid creation because it won't resize the column if it's already
@@ -1707,6 +1717,7 @@ protected:
     int        m_rowLabelVertAlign;
     int        m_colLabelHorizAlign;
     int        m_colLabelVertAlign;
+    int        m_colLabelTextOrientation;
 
     bool       m_defaultRowLabelValues;
     bool       m_defaultColLabelValues;

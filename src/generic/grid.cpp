@@ -3970,6 +3970,7 @@ void wxGrid::Init()
 
     m_colLabelHorizAlign = wxALIGN_CENTRE;
     m_colLabelVertAlign  = wxALIGN_CENTRE;
+    m_colLabelTextOrientation = wxHORIZONTAL;
 
     m_defaultColWidth  = WXGRID_DEFAULT_COL_WIDTH;
     m_defaultRowHeight = m_gridWin->GetCharHeight();
@@ -4005,10 +4006,8 @@ void wxGrid::Init()
 
     m_selectingTopLeft = wxGridNoCellCoords;
     m_selectingBottomRight = wxGridNoCellCoords;
-//  m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-//  m_selectionForeground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
-    m_selectionBackground = *wxBLACK;
-    m_selectionForeground = *wxWHITE;
+    m_selectionBackground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+    m_selectionForeground = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 
     m_editable = TRUE;  // default for whole grid
 
@@ -4792,10 +4791,19 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
     //
     else if (event.LeftDClick() )
     {
-        if ( YToEdgeOfRow(y) < 0 )
+        int row = YToEdgeOfRow(y);
+        if ( row < 0 )
         {
             row = YToRow(y);
             SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, row, -1, event );
+        }
+        else
+        {
+            // adjust row height depending on label text
+            AutoSizeRowLabelSize( row );
+
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin);
+            m_dragLastPos  = -1;
         }
     }
 
@@ -4998,10 +5006,19 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
     //
     if ( event.LeftDClick() )
     {
-        if ( XToEdgeOfCol(x) < 0 )
+        int col = XToEdgeOfCol(x);
+        if ( col < 0 )
         {
             col = XToCol(x);
             SendEvent( wxEVT_GRID_LABEL_LEFT_DCLICK, -1, col, event );
+        }
+        else
+        {
+            // adjust column width depending on label text
+            AutoSizeColLabelSize( col );
+
+            ChangeCursorMode(WXGRID_CURSOR_SELECT_CELL, m_colLabelWin);
+            m_dragLastPos  = -1;
         }
     }
 
@@ -7065,22 +7082,24 @@ void wxGrid::DrawColLabel( wxDC& dc, int col )
     dc.SetTextForeground( GetLabelTextColour() );
     dc.SetFont( GetLabelFont() );
 
-    int hAlign, vAlign;
+    int hAlign, vAlign, orient;
     GetColLabelAlignment( &hAlign, &vAlign );
+    orient = GetColLabelTextOrientation();
 
     wxRect rect;
     rect.SetX( colLeft + 2 );
     rect.SetY( 2 );
     rect.SetWidth( GetColWidth(col) - 4 );
     rect.SetHeight( m_colLabelHeight - 4 );
-    DrawTextRectangle( dc, GetColLabelValue( col ), rect, hAlign, vAlign );
+    DrawTextRectangle( dc, GetColLabelValue( col ), rect, hAlign, vAlign, orient );
 }
 
 void wxGrid::DrawTextRectangle( wxDC& dc,
                                 const wxString& value,
                                 const wxRect& rect,
                                 int horizAlign,
-                                int vertAlign )
+                                int vertAlign,
+                                int textOrientation )
 {
     wxArrayString lines;
 
@@ -7092,7 +7111,8 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                         lines,
                         rect,
                         horizAlign,
-                        vertAlign );
+                        vertAlign,
+                        textOrientation );
 
 }
 
@@ -7100,7 +7120,8 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
                                 const wxArrayString& lines,
                                 const wxRect& rect,
                                 int horizAlign,
-                                int vertAlign )
+                                int vertAlign,
+                                int textOrientation )
 {
     long textWidth, textHeight;
     long lineWidth, lineHeight;
@@ -7113,20 +7134,34 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
     {
       int l;
       float x, y;
+
+      if( textOrientation == wxHORIZONTAL )
       GetTextBoxSize(dc, lines, &textWidth, &textHeight);
+      else
+         GetTextBoxSize( dc, lines, &textHeight, &textWidth );
+
       switch( vertAlign )
       {
         case wxALIGN_BOTTOM:
+            if( textOrientation == wxHORIZONTAL )
           y = rect.y + (rect.height - textHeight - 1);
+            else
+               x = rect.x + rect.width - textWidth;
           break;
 
         case wxALIGN_CENTRE:
+            if( textOrientation == wxHORIZONTAL )
           y = rect.y + ((rect.height - textHeight)/2);
+            else
+               x = rect.x + ((rect.width - textWidth)/2);
           break;
 
         case wxALIGN_TOP:
         default:
+            if( textOrientation == wxHORIZONTAL )
           y = rect.y + 1;
+            else
+               x = rect.x + 1;
           break;
       }
 
@@ -7138,21 +7173,38 @@ void wxGrid::DrawTextRectangle( wxDC& dc,
         switch( horizAlign )
         {
           case wxALIGN_RIGHT:
+               if( textOrientation == wxHORIZONTAL )
             x = rect.x + (rect.width - lineWidth - 1);
+               else
+                  y = rect.y + lineWidth + 1;
             break;
 
           case wxALIGN_CENTRE:
+               if( textOrientation == wxHORIZONTAL )
             x = rect.x + ((rect.width - lineWidth)/2);
+               else
+                  y = rect.y + rect.height - ((rect.height - lineWidth)/2);
             break;
 
           case wxALIGN_LEFT:
           default:
+               if( textOrientation == wxHORIZONTAL )
             x = rect.x + 1;
+               else
+                  y = rect.y + rect.height - 1;
             break;
         }
 
+         if( textOrientation == wxHORIZONTAL )
+         {
         dc.DrawText( lines[l], (int)x, (int)y );
         y += lineHeight;
+      }
+         else
+         {
+            dc.DrawRotatedText( lines[l], (int)x, (int)y, 90.0 );
+            x += lineHeight;
+         }
       }
     }
     dc.DestroyClippingRegion();
@@ -8271,6 +8323,11 @@ void wxGrid::GetColLabelAlignment( int *horiz, int *vert )
     *vert  = m_colLabelVertAlign;
 }
 
+int wxGrid::GetColLabelTextOrientation()
+{
+    return m_colLabelTextOrientation;
+}
+
 wxString wxGrid::GetRowLabelValue( int row )
 {
     if ( m_table )
@@ -8445,6 +8502,26 @@ void wxGrid::SetColLabelAlignment( int horiz, int vert )
     if ( vert == wxALIGN_TOP || vert == wxALIGN_CENTRE || vert == wxALIGN_BOTTOM )
     {
         m_colLabelVertAlign = vert;
+    }
+
+    if ( !GetBatchCount() )
+    {
+        m_colLabelWin->Refresh();
+    }
+}
+
+// Note: 	under MSW, the default column label font must be changed because it
+//				does not support vertical printing
+//
+// Example: wxFont font(9, wxSWISS, wxNORMAL, wxBOLD);
+//				pGrid->SetLabelFont(font);
+//    		pGrid->SetColLabelTextOrientation(wxVERTICAL);
+//
+void wxGrid::SetColLabelTextOrientation( int textOrientation )
+{
+    if( textOrientation == wxHORIZONTAL || textOrientation == wxVERTICAL )
+    {
+        m_colLabelTextOrientation = textOrientation;
     }
 
     if ( !GetBatchCount() )
@@ -9324,7 +9401,11 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
     dc.SetFont( GetLabelFont() );
 
     if ( column )
+    {
         dc.GetTextExtent( GetColLabelValue(col), &w, &h );
+        if( GetColLabelTextOrientation() == wxVERTICAL )
+            w = h;
+    }
     else
         dc.GetTextExtent( GetRowLabelValue(row), &w, &h );
 
@@ -9507,6 +9588,55 @@ void wxGrid::AutoSize()
     EndBatch();
 
     SetClientSize(sizeFit);
+}
+
+void wxGrid::AutoSizeRowLabelSize( int row )
+{
+    wxArrayString lines;
+    long w, h;
+
+    // Hide the edit control, so it
+    // won't interfer with drag-shrinking.
+    if( IsCellEditControlShown() )
+    {
+        HideCellEditControl();
+        SaveEditControlValue();
+    }
+
+    // autosize row height depending on label text
+    StringToLines( GetRowLabelValue( row ), lines );
+    wxClientDC dc( m_rowLabelWin );
+    GetTextBoxSize( dc, lines, &w, &h);
+    if( h < m_defaultRowHeight )
+        h = m_defaultRowHeight;
+    SetRowSize(row, h);
+    ForceRefresh();
+}
+
+void wxGrid::AutoSizeColLabelSize( int col )
+{
+    wxArrayString lines;
+    long w, h;
+
+    // Hide the edit control, so it
+    // won't interfer with drag-shrinking.
+    if( IsCellEditControlShown() )
+    {
+        HideCellEditControl();
+        SaveEditControlValue();
+    }
+
+    // autosize column width depending on label text
+    StringToLines( GetColLabelValue( col ), lines );
+    wxClientDC dc( m_colLabelWin );
+    if( GetColLabelTextOrientation() == wxHORIZONTAL )
+        GetTextBoxSize( dc, lines, &w, &h);
+    else
+        GetTextBoxSize( dc, lines, &h, &w);
+    if( w < m_defaultColWidth )
+        w = m_defaultColWidth;
+    SetColSize(col, w);
+    ForceRefresh();
 }
 
 wxSize wxGrid::DoGetBestSize() const
