@@ -92,18 +92,26 @@
     <!-- copy setup.h on Windows: -->    
     <if cond="FORMAT!='autoconf' and TOOLKIT=='MSW'">
         <mkdir id="libdir">
+            <dir>$(LIBDIRNAME)</dir>
+        </mkdir>
+        <mkdir id="libdir_wx">
+            <depends>libdir</depends>
             <dir>$(LIBDIRNAME)/wx</dir>
         </mkdir>
+        
         <copy-file-to-file id="msw/setup.h">
             <src>$(SRCDIR)/include/wx/msw/setup0.h</src>
             <dst>$(SRCDIR)/include/wx/msw/setup.h</dst>
         </copy-file-to-file>
         <copy-file-to-file id="setup.h">
             <depends>msw/setup.h</depends>
-            <depends>libdir</depends>
+            <depends>libdir_wx</depends>
             <src>$(SRCDIR)/include/wx/msw/setup.h</src>
             <dst>$(LIBDIRNAME)/wx/setup.h</dst>            
         </copy-file-to-file>
+        <phony id="setup_h">
+            <depends>setup.h</depends>
+        </phony>
     </if>
 
 </makefile>
