@@ -1975,10 +1975,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
     PORT_FILES="\${top_srcdir}/src/\$(TOOLKITDIR)/files.lst"
 
     if test "$wxUSE_UNIVERSAL" = "yes"; then
-        dnl FIXME this should not be a permanent state of affairs.
-        wxUSE_MDI_ARCHITECTURE=no
-        AC_MSG_WARN(MDI is not supported for wxUNIVERSAL yet... disabling)
-
         ALL_OBJECTS="\$(GUI_LOWLEVEL_OBJS) \${UNIVOBJS}"
         PORT_FILES="${PORT_FILES} \${top_srcdir}/src/univ/files.lst"
         TOOLKIT_VPATH="\${top_srcdir}/src/univ${PATH_IFS}\${top_srcdir}/src/univ/themes${PATH_IFS}\${top_srcdir}/src/${TOOLKIT_DIR}"
@@ -3830,8 +3826,15 @@ if test "$wxUSE_CONSTRAINTS" = "yes"; then
 fi
 
 if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
-    AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
+    if test "$wxUSE_UNIVERSAL" = "yes"; then
+        AC_MSG_WARN(MDI is not supported for wxUNIVERSAL yet... disabled)
+        wxUSE_MDI_ARCHITECTURE=no
+    fi
+
+    if test "$wxUSE_MDI_ARCHITECTURE" = "yes"; then
+        AC_DEFINE(wxUSE_MDI_ARCHITECTURE)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS mdi"
+    fi
 fi
 
 if test "$wxUSE_DOC_VIEW_ARCHITECTURE" = "yes" ; then
@@ -3853,7 +3856,7 @@ if test "$wxUSE_HELP" = "yes"; then
                 AC_DEFINE(wxUSE_MS_HTML_HELP)
             ],
             [
-                AC_MSG_WARN([MS HTML Help cannot be used without htmlhelp.h, disabled])
+                AC_MSG_WARN([MS HTML Help cannot be used without htmlhelp.h... disabled])
                 wxUSE_MS_HTML_HELP=no
             ])
       fi
@@ -4164,8 +4167,8 @@ if test "$wxUSE_TEXTCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_TOGGLEBTN" = "yes"; then
-    if test "$wxUSE_MAC" = 1; then
-        AC_MSG_WARN([Toggle button is not yet supported under Mac OS X])
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_UNIVERSAL" = "yes"; then
+        AC_MSG_WARN([Toggle button not yet supported under Mac OS X or wxUNIVERSAL... disabled])
         wxUSE_TOGGLEBTN=no
     fi
 
