@@ -302,8 +302,10 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             size_t val = va_arg(argptr, size_t);
                             ::sprintf(szScratch, s_szFlags, val);
                         }
-
-                        APPEND_STR(wxConvLibc.cMB2WX(szScratch));
+                        {
+                            wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
+                            APPEND_STR(tmp);
+                        }
 
                         done = TRUE;
                         break;
@@ -323,8 +325,10 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             double val = va_arg(argptr, double);
                             ::sprintf(szScratch, s_szFlags, val);
                         }
-
-                        APPEND_STR(wxConvLibc.cMB2WX(szScratch));
+                        {
+                            wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
+                            APPEND_STR(tmp);
+                        }
 
                         done = TRUE;
                         break;
@@ -337,7 +341,8 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                             s_szFlags[flagofs] = '\0';
                             ::sprintf(szScratch, s_szFlags, val);
 
-                            APPEND_STR(wxConvLibc.cMB2WX(szScratch));
+                            wxMB2WXbuf tmp = wxConvLibc.cMB2WX(szScratch);
+                            APPEND_STR(tmp);
 
                             done = TRUE;
                         }
