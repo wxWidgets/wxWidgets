@@ -502,6 +502,9 @@ bool wxTempFile::Open(const wxString& strName)
     int access = wxS_DEFAULT;
 #ifdef __UNIX__
     // create the file with the same mode as the original one under Unix
+    mode_t umaskOld;
+    bool changedUmask;
+
     struct stat st;
     if ( stat(strName.fn_str(), &st) == 0 )
     {
@@ -510,22 +513,28 @@ bool wxTempFile::Open(const wxString& strName)
         // macros, so should not be less portable than using (not POSIX)
         // S_IFREG &c
         access = st.st_mode & 0777;
+
+        // we want to create the file with exactly the same access rights as
+        // the original one, so disable the user's umask for the moment
+        umaskOld = umask(0);
+        changedUmask = TRUE;
     }
     else
     {
-        wxLogLastError(_T("stat"));
+        // file probably didn't exist, just create with default mode _using_
+        // user's umask (new files creation should respet umask)
+        changedUmask = TRUE;
     }
-
-    // we want to create the file with exactly the same access rights as the
-    // original one, so disable the user's umask for the moment
-    mode_t umaskOld = umask(0);
 #endif // Unix
 
     bool ok =  m_file.Open(m_strTemp, wxFile::write, access);
 
 #ifdef __UNIX__
-    // restore umask now that the file is created
-    (void)umask(umaskOld);
+    if ( changedUmask )
+    {
+        // restore umask now that the file is created
+        (void)umask(umaskOld);
+    }
 #endif // Unix
 
     return ok;
