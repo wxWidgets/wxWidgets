@@ -199,6 +199,7 @@ COMMONOBJS = \
   ..\common\$D\cmndata.obj \
   ..\common\$D\cmdproc.obj \
   ..\common\$D\config.obj \
+  ..\common\$D\containr.obj \
   ..\common\$D\cshelp.obj \
   ..\common\$D\ctrlcmn.obj \
   ..\common\$D\ctrlsub.obj \
@@ -326,6 +327,7 @@ COMLIBOBJS1 = \
   cmndata.obj \
   cmdproc.obj \
   config.obj \
+  containr.obj \
   cshelp.obj \
   ctrlcmn.obj \
   ctrlsub.obj \
@@ -360,10 +362,10 @@ COMLIBOBJS1 = \
   fs_inet.obj \
   fs_mem.obj \
   fs_zip.obj \
-  ftp.obj \
-  gaugecmn.obj
+  ftp.obj
 
 COMLIBOBJS2 = \
+  gaugecmn.obj \
   gdicmn.obj \
   geometry.obj \
   gifdecod.obj \
@@ -404,10 +406,10 @@ COMLIBOBJS2 = \
   protocol.obj \
   quantize.obj \
   radiocmn.obj \
-  regex.obj \
-  resource.obj
+  regex.obj
 
 COMLIBOBJS3 = \
+  resource.obj \
   sckaddr.obj \
   sckfile.obj \
   sckipc.obj \
@@ -679,6 +681,7 @@ $(COMLIBOBJS1):
   copy ..\common\$D\cmndata.obj
   copy ..\common\$D\cmdproc.obj
   copy ..\common\$D\config.obj
+  copy ..\common\$D\containr.obj
   copy ..\common\$D\cshelp.obj
   copy ..\common\$D\ctrlcmn.obj
   copy ..\common\$D\ctrlsub.obj
@@ -714,9 +717,9 @@ $(COMLIBOBJS1):
   copy ..\common\$D\fs_mem.obj
   copy ..\common\$D\fs_zip.obj
   copy ..\common\$D\ftp.obj
-  copy ..\common\$D\gaugecmn.obj
 
 $(COMLIBOBJS2):
+  copy ..\common\$D\gaugecmn.obj
   copy ..\common\$D\gdicmn.obj
   copy ..\common\$D\geometry.obj
   copy ..\common\$D\gifdecod.obj
@@ -758,9 +761,9 @@ $(COMLIBOBJS2):
   copy ..\common\$D\quantize.obj
   copy ..\common\$D\radiocmn.obj
   copy ..\common\$D\regex.obj
-  copy ..\common\$D\resource.obj
 
 $(COMLIBOBJS3):
+  copy ..\common\$D\resource.obj
   copy ..\common\$D\sckaddr.obj
   copy ..\common\$D\sckfile.obj
   copy ..\common\$D\sckipc.obj

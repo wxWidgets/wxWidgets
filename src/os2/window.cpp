@@ -2006,17 +2006,9 @@ bool wxWindowOS2::OS2ProcessMessage(
                         }
                         else
                         {
-                            wxPanel*    pPanel = wxDynamicCast(this, wxPanel);
-                            wxButton*   pBtn = NULL;
-
-                            if (pPanel)
-                            {
-                                //
-                                // Panel may have a default button which should
-                                // be activated by Enter
-                                //
-                                pBtn = pPanel->GetDefaultItem();
-                            }
+                            wxButton*   pBtn = wxDynamicCast( GetDefaultItem()
+                                                             ,wxButton
+                                                            );
 
                             if (pBtn && pBtn->IsEnabled())
                             {
@@ -2893,32 +2885,6 @@ void wxWindowOS2::OnSetFocus(
   wxFocusEvent&                     rEvent
 )
 {
-    //
-    // Panel wants to track the window which was the last to have focus in it,
-    // so we want to set ourselves as the window which last had focus
-    //
-    // Notice that it's also important to do it upwards the tree becaus
-    // otherwise when the top level panel gets focus, it won't set it back to
-    // us, but to some other sibling
-    //
-    wxWindow*                       pWin = this;
-
-    while (pWin)
-    {
-        wxWindow*                   pParent = pWin->GetParent();
-        wxPanel*                    pPanel = wxDynamicCast( pParent
-                                                           ,wxPanel
-                                                          );
-        if (pPanel)
-        {
-            pPanel->SetLastFocus(pWin);
-        }
-        pWin = pParent;
-    }
-
-    wxLogTrace(_T("focus"), _T("%s (0x%08x) gets focus"),
-               GetClassInfo()->GetClassName(), GetHandle());
-
     rEvent.Skip();
 } // end of wxWindowOS2::OnSetFocus
 
@@ -2949,16 +2915,14 @@ bool wxWindowOS2::HandleSetFocus(
     }
 #endif // wxUSE_CARET
 
-    //
-    // Panel wants to track the window which was the last to have focus in it
-    //
-    wxPanel*                        pPanel = wxDynamicCast( GetParent()
-                                                           ,wxPanel
-                                                          );
-    if (pPanel)
+#if wxUSE_TEXTCTRL
+    // If it's a wxTextCtrl don't send the event as it will be done
+    // after the control gets to process it from EN_FOCUS handler
+    if ( wxDynamicCastThis(wxTextCtrl) )
     {
-        pPanel->SetLastFocus(this);
+        return FALSE;
     }
+#endif // wxUSE_TEXTCTRL
 
     wxFocusEvent                    vEvent(wxEVT_SET_FOCUS, m_windowId);
 

@@ -229,6 +229,24 @@ EXPORTS
       ;wxConfigBase::ms_bAutoCreate
       ms_bAutoCreate__12wxConfigBase
       __vft12wxConfigBase
+  ;From object file:  ..\common\containr.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxControlContainer::HandleOnFocus(wxFocusEvent&)
+      HandleOnFocus__18wxControlContainerFR12wxFocusEvent
+      ;wxControlContainer::DoSetFocus()
+      DoSetFocus__18wxControlContainerFv
+      ;wxControlContainer::wxControlContainer(wxWindow*)
+      __ct__18wxControlContainerFP8wxWindow
+      ;wxControlContainer::SetLastFocus(wxWindow*)
+      SetLastFocus__18wxControlContainerFP8wxWindow
+      ;wxControlContainer::HandleOnNavigationKey(wxNavigationKeyEvent&)
+      HandleOnNavigationKey__18wxControlContainerFR20wxNavigationKeyEvent
+      ;wxControlContainer::HandleOnWindowDestroy(wxWindowBase*)
+      HandleOnWindowDestroy__18wxControlContainerFP12wxWindowBase
+      ;wxControlContainer::SetFocusToChild()
+      SetFocusToChild__18wxControlContainerFv
+      ;wxSetFocusToChild(wxWindow*,wxWindow**)
+      wxSetFocusToChild__FP8wxWindowPP8wxWindow
   ;From object file:  ..\common\cshelp.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxContextHelpButton::wxContextHelpButton(wxWindow*,int,const wxPoint&,const wxSize&,long)
@@ -9004,10 +9022,6 @@ EXPORTS
       wxConstructorForwxPanel__Fv
       ;wxPanel::SetFocus()
       SetFocus__7wxPanelFv
-      ;wxPanel::SetFocusToChild()
-      SetFocusToChild__7wxPanelFv
-      ;wxSetFocusToChild(wxWindow*,wxWindow**)
-      wxSetFocusToChild__FP8wxWindowPP8wxWindow
   ;From object file:  ..\generic\printps.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxPostScriptPrintPreview::wxPostScriptPrintPreview(wxPrintout*,wxPrintout*,wxPrintDialogData*)
