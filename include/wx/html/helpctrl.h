@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        helpctrl.h
 // Purpose:     wxHtmlHelpController
-// Notes:       Based on htmlhelp.cpp, implementing a monolithic 
+// Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
 // Created:
@@ -25,6 +25,8 @@
 
 class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
 {
+    DECLARE_DYNAMIC_CLASS(wxHtmlHelpController)
+
 public:
     wxHtmlHelpController();
     virtual ~wxHtmlHelpController();
@@ -32,8 +34,8 @@ public:
     void SetTitleFormat(const wxString& format);
     void SetTempDir(const wxString& path) { m_helpData.SetTempDir(path); }
     bool AddBook(const wxString& book, bool show_wait_msg = FALSE);
-    bool Display(const wxString& x) { 
-	CreateHelpWindow(); return m_helpFrame->Display(x); 
+    bool Display(const wxString& x) {
+	CreateHelpWindow(); return m_helpFrame->Display(x);
     }
     bool Display(int id) {
 	CreateHelpWindow(); return m_helpFrame->Display(id);
@@ -58,9 +60,9 @@ public:
     virtual void ReadCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
     virtual void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
     virtual void CreateHelpWindow(bool show_progress = FALSE);
-    virtual void DestroyHelpWindow() { 
+    virtual void DestroyHelpWindow() {
 	//if (m_Config) WriteCustomization(m_Config, m_ConfigRoot);
-	if (m_helpFrame) m_helpFrame->Destroy(); 
+	if (m_helpFrame) m_helpFrame->Destroy();
     }
 protected:
     void OnCloseFrame(wxCloseEvent& evt) { m_helpFrame = NULL; evt.Skip(); }
@@ -72,6 +74,6 @@ protected:
     DECLARE_EVENT_TABLE()
 };
 
-#endif 
+#endif
 
 #endif // _WX_HELPCTRL_H_

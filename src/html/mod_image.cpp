@@ -26,7 +26,7 @@
 #include "wx/html/forcelink.h"
 #include "wx/html/mod_templ.h"
 
-#include "wx/wxhtml.h"
+
 #include "wx/image.h"
 #include "wx/dynarray.h"
 
@@ -140,12 +140,12 @@ wxString wxHtmlImageMapAreaCell::GetLink( int x, int y ) const
 						(coords[pointer] - yval)) >= wherex) ? 1 : 0;
 					}
 				}
-				
-				while (pointer < end) 
+
+				while (pointer < end)
 				{
 					yval = coords[pointer];
 					pointer += 2;
-					if (yval >= wherey) 
+					if (yval >= wherey)
 					{
 						while((pointer < end) && (coords[pointer] >= wherey))
 						{

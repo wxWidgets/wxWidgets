@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        helpctrl.cpp
 // Purpose:     wxHtmlHelpController
-// Notes:       Based on htmlhelp.cpp, implementing a monolithic 
+// Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
 // Created:
@@ -28,6 +28,8 @@
 #include "wx/html/helpctrl.h"
 #include "wx/wx.h"
 #include "wx/busyinfo.h"
+
+IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxEvtHandler)
 
 BEGIN_EVENT_TABLE(wxHtmlHelpController, wxEvtHandler)
     EVT_CLOSE(wxHtmlHelpController::OnCloseFrame)

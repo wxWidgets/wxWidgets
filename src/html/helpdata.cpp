@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        helpdata.cpp
 // Purpose:     wxHtmlHelpData
-// Notes:       Based on htmlhelp.cpp, implementing a monolithic 
+// Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
 // Created:
@@ -141,7 +141,7 @@ bool HP_TagHandler::HandleTag(const wxHtmlTag& tag)
     else { // "PARAM"
         if (m_Name == wxEmptyString && tag.GetParam("NAME") == "Name") m_Name = tag.GetParam("VALUE");
         if (tag.GetParam("NAME") == "Local") m_Page = tag.GetParam("VALUE");
-        if (tag.GetParam("NAME") == "ID") tag.ScanParam("VALUE", "%i", &m_ID); 
+        if (tag.GetParam("NAME") == "ID") tag.ScanParam("VALUE", "%i", &m_ID);
         return FALSE;
     }
 }
@@ -168,7 +168,7 @@ void HP_TagHandler::ReadIn(wxHtmlContentsItem* array, int size)
 
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpData, wxObject)
 
-wxHtmlHelpData::wxHtmlHelpData() 
+wxHtmlHelpData::wxHtmlHelpData()
 {
     m_TempPath = wxEmptyString;
 
@@ -205,7 +205,7 @@ bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys, c
     char *buf;
     int sz;
     wxString string;
-    
+
     HP_Parser parser;
     HP_TagHandler *handler = new HP_TagHandler(book);
     parser.AddTagHandler(handler);
@@ -338,15 +338,15 @@ void wxHtmlHelpData::SetTempDir(const wxString& path)
 }
 
 
-bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfile, 
-				  const wxString& indexfile, const wxString& deftopic, 
+bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfile,
+				  const wxString& indexfile, const wxString& deftopic,
 				  const wxString& path)
 {
     wxFileSystem fsys;
     wxFSFile *fi;
     wxHtmlBookRecord *bookr;
     wxString safetitle;
-    
+
     if (! path.IsEmpty())
 	    // workaround for bug in ChangePathTo(name, TRUE)
 	    fsys.ChangePathTo(path+"/gaga");
@@ -389,7 +389,7 @@ bool wxHtmlHelpData::AddBookParam(const wxString& title, const wxString& contfil
     m_BookRecords.Add(bookr);
     if (m_IndexCnt > 0)
         qsort(m_Index, m_IndexCnt, sizeof(wxHtmlContentsItem), IndexCompareFunc);
-    
+
     return TRUE;
 }
 
@@ -404,12 +404,12 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
     int sz;
     char *buff, *lineptr;
     char linebuf[300];
-     
+
     wxString title = _("noname"),
              safetitle,
              start = wxEmptyString,
              contents = wxEmptyString, index = wxEmptyString;
-    
+
     if (wxIsAbsolutePath(book)) bookFull = book;
     else bookFull = wxGetCwd() + "/" + book;
 
@@ -494,7 +494,7 @@ wxString wxHtmlHelpData::FindPageByName(const wxString& x)
 }
 
 wxString wxHtmlHelpData::FindPageById(int id)
-{   
+{
     int i;
     wxString url(wxEmptyString);
 
@@ -513,7 +513,7 @@ wxString wxHtmlHelpData::FindPageById(int id)
 //----------------------------------------------------------------------------------
 
 wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& keyword,
-				       const wxString& book = wxEmptyString)
+				       const wxString& book)
 {
     m_Data = data;
     m_Keyword = keyword;
@@ -529,7 +529,7 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
 		break;
 	    }
 	// check; we won't crash if the book doesn't exist, but it's Bad Anyway.
-	wxASSERT(bookr); 
+	wxASSERT(bookr);
     }
     if (! bookr) {
 	// no book specified; search all books
@@ -557,7 +557,7 @@ bool wxHtmlSearchStatus::Search()
     m_ContentsItem = NULL;
     m_Name = wxEmptyString;
 
-    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() + 
+    file = fsys.OpenFile(m_Data->m_Contents[i].m_Book -> GetBasePath() +
 			 m_Data->m_Contents[i].m_Page);
     if (file) {
 	if (m_LastPage != file->GetLocation()) {

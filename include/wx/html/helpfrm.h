@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        helpfrm.h
 // Purpose:     wxHtmlHelpFrame
-// Notes:       Based on htmlhelp.cpp, implementing a monolithic 
+// Notes:       Based on htmlhelp.cpp, implementing a monolithic
 //              HTML Help controller class,  by Vaclav Slavik
 // Author:      Harm van der Heijden and Vaclav Slavik
 // Created:
@@ -61,25 +61,25 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
 
 public:
     wxHtmlHelpFrame(wxHtmlHelpData* data = NULL) { Init(data); }
-    wxHtmlHelpFrame(wxWindow* parent, int wxWindowID, 
+    wxHtmlHelpFrame(wxWindow* parent, int wxWindowID,
 		    const wxString& title = wxEmptyString,
 		    int style = wxHF_DEFAULTSTYLE, wxHtmlHelpData* data = NULL);
     bool Create(wxWindow* parent, wxWindowID id, const wxString& title = wxEmptyString,
 		int style = wxHF_DEFAULTSTYLE);
     ~wxHtmlHelpFrame();
-    
+
     wxHtmlHelpData* GetData() { return m_Data; }
-    
+
     void SetTitleFormat(const wxString& format) {
-	if (m_HtmlWin) 
+	if (m_HtmlWin)
 	    m_HtmlWin->SetRelatedFrame(this, format);
 	m_TitleFormat = format;
     }
     // Sets format of title of the frame. Must contain exactly one "%s"
     // (for title of displayed HTML page)
-    
+
     bool Display(const wxString& x);
-    // Displays page x. If not found it will offect the user a choice of 
+    // Displays page x. If not found it will offect the user a choice of
     // searching books.
     // Looking for the page runs in these steps:
     // 1. try to locate file named x (if x is for example "doc/howto.htm")
@@ -89,13 +89,13 @@ public:
     bool Display(const int id);
     // Alternative version that works with numeric ID.
     // (uses extension to MS format, <param name="ID" value=id>, see docs)
-    
+
     bool DisplayContents();
     // Displays help window and focuses contents.
-    
+
     bool DisplayIndex();
     // Displays help window and focuses index.
-    
+
     bool KeywordSearch(const wxString& keyword);
     // Searches for keyword. Returns TRUE and display page if found, return
     // FALSE otherwise
@@ -136,7 +136,7 @@ public:
 	IMG_Folder,
 	IMG_Page
     };
-    
+
 protected:
     wxHtmlHelpData* m_Data;
     bool m_DataCreated; // m_Data created by frame, or supplied?
@@ -150,17 +150,17 @@ protected:
     wxListBox *m_IndexBox;
     wxTextCtrl *m_SearchText;
     wxButton *m_SearchButton;
-    wxListBox *m_SearchList; 
+    wxListBox *m_SearchList;
     wxChoice *m_SearchChoice;
 
-    struct {
+    struct WXDLLEXPORT _struct_Cfg {
 	long x, y, w, h;
 	long sashpos;
 	bool navig_on;
 	int style; // flags given to wxHtmlHelpFrame ctor
 	wxString titleformat;
     } m_Cfg;
-    // settings (window size, position, sash pos etc..)     
+    // settings (window size, position, sash pos etc..)
     wxConfigBase *m_Config;
     wxString m_ConfigRoot;
 
@@ -168,7 +168,7 @@ protected:
     int m_ContentsPage;
     int m_IndexPage;
     int m_SearchPage;
-    
+
 protected:
     void Init(wxHtmlHelpData* data = NULL);
 

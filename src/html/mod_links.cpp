@@ -25,7 +25,7 @@
 
 #include <wx/html/forcelink.h>
 #include <wx/html/mod_templ.h>
-#include <wx/wxhtml.h>
+
 
 FORCE_LINK_ME(mod_links)
 
@@ -34,16 +34,16 @@ class wxHtmlAnchorCell : public wxHtmlCell
 {
     private:
         wxString m_AnchorName;
-    
+
     public:
         wxHtmlAnchorCell(const wxString& name) : wxHtmlCell() {m_AnchorName = name;}
         virtual const wxHtmlCell* Find(int condition, const void* param) const
         {
             if ((condition == HTML_COND_ISANCHOR) && (m_AnchorName == (*((const wxString*)param))))
                 return this;
-            else 
+            else
                 return wxHtmlCell::Find(condition, param);
-        }       
+        }
 };
 
 
@@ -55,7 +55,7 @@ TAG_HANDLER_BEGIN(A, "A")
         if (tag.HasParam("NAME")) {
             m_WParser -> GetContainer() -> InsertCell(new wxHtmlAnchorCell(tag.GetParam("NAME")));
         }
-    
+
         if (tag.HasParam("HREF")) {
             wxString oldlnk = m_WParser -> GetLink();
             wxColour oldclr = m_WParser -> GetActualColor();
