@@ -245,6 +245,11 @@ class Publisher:
 # hiding the class object so it can't be instantiated any more.  From
 # this point forward any calls to Publisher() will invoke the __call__
 # of this instance which just returns itself.
+#
+# The only flaw with this approach is that you can't derive a new
+# class from Publisher without jumping through hoops.  If this ever
+# becomes an issue then a new Sing;eton implementaion will need to be
+# employed.
 Publisher = Publisher()
 
 
