@@ -2113,6 +2113,28 @@ wxAccStatus wxWindowAccessible::GetLocation(wxRect& rect, int elementId)
     if (!GetWindow())
         return wxACC_FAIL;
 
+    wxWindow* win = NULL;
+    if (elementId == 0)
+    {
+        win = GetWindow();
+    }
+    else
+    {
+        if (elementId <= (int) GetWindow()->GetChildren().GetCount())
+        {
+            win = (wxWindow*) GetWindow()->GetChildren().Nth(elementId-1)->GetData();
+        }
+        else
+            return wxACC_FAIL;
+    }
+    if (win)
+    {
+        rect = win->GetRect();
+        if (win->GetParent() && !win->IsKindOf(CLASSINFO(wxTopLevelWindow)))
+            rect.SetPosition(win->GetParent()->ClientToScreen(rect.GetPosition()));
+        return wxACC_OK;
+    }
+
     return wxACC_NOT_IMPLEMENTED;
 }
 
@@ -2123,6 +2145,86 @@ wxAccStatus wxWindowAccessible::Navigate(wxNavDir navDir, int fromId,
     wxASSERT( GetWindow() != NULL );
     if (!GetWindow())
         return wxACC_FAIL;
+
+    switch (navDir)
+    {
+    case wxNAVDIR_FIRSTCHILD:
+        {
+            if (GetWindow()->GetChildren().GetCount() == 0)
+                return wxACC_FALSE;
+            wxWindow* childWindow = (wxWindow*) GetWindow()->GetChildren().GetFirst()->GetData();
+            *toObject = childWindow->GetOrCreateAccessible();
+
+            return wxACC_OK;
+        }
+    case wxNAVDIR_LASTCHILD:
+        {
+            if (GetWindow()->GetChildren().GetCount() == 0)
+                return wxACC_FALSE;
+            wxWindow* childWindow = (wxWindow*) GetWindow()->GetChildren().GetLast()->GetData();
+            *toObject = childWindow->GetOrCreateAccessible();
+
+            return wxACC_OK;
+        }
+    case wxNAVDIR_RIGHT:
+    case wxNAVDIR_DOWN:
+    case wxNAVDIR_NEXT:
+        {
+            wxWindowList::Node *node = NULL;
+            if (fromId == 0)
+            {
+                // Can't navigate to sibling of this window
+                // if we're a top-level window.
+                if (!GetWindow()->GetParent())
+                    return wxACC_NOT_IMPLEMENTED;
+
+                node = GetWindow()->GetParent()->GetChildren().Find(GetWindow());
+            }
+            else
+            {
+                if (fromId <= (int) GetWindow()->GetChildren().GetCount())
+                    node = (wxWindowList::Node*) GetWindow()->GetChildren().Nth(fromId-1);
+            }
+
+            if (node && node->GetNext())
+            {
+                wxWindow* nextWindow = (wxWindow*) node->GetNext()->Data();
+                *toObject = nextWindow->GetOrCreateAccessible();
+                return wxACC_OK;
+            }
+            else
+                return wxACC_FALSE;
+        }
+    case wxNAVDIR_LEFT:
+    case wxNAVDIR_UP:
+    case wxNAVDIR_PREVIOUS:
+        {
+            wxWindowList::Node *node = NULL;
+            if (fromId == 0)
+            {
+                // Can't navigate to sibling of this window
+                // if we're a top-level window.
+                if (!GetWindow()->GetParent())
+                    return wxACC_NOT_IMPLEMENTED;
+
+                node = GetWindow()->GetParent()->GetChildren().Find(GetWindow());
+            }
+            else
+            {
+                if (fromId <= (int) GetWindow()->GetChildren().GetCount())
+                    node = (wxWindowList::Node*) GetWindow()->GetChildren().Nth(fromId-1);
+            }
+
+            if (node && node->GetPrevious())
+            {
+                wxWindow* previousWindow = (wxWindow*) node->GetPrevious()->Data();
+                *toObject = previousWindow->GetOrCreateAccessible();
+                return wxACC_OK;
+            }
+            else
+                return wxACC_FALSE;
+        }
+    }
 
     return wxACC_NOT_IMPLEMENTED;
 }
@@ -2190,7 +2292,7 @@ wxAccStatus wxWindowAccessible::GetParent(wxAccessible** parent)
         return wxACC_FAIL;
 
     wxWindow* parentWindow = GetWindow()->GetParent();
-    if (!parent)
+    if (!parentWindow)
     {
         *parent = NULL;
         return wxACC_OK;

@@ -25,6 +25,7 @@
 typedef enum
 {
     wxACC_FAIL,
+    wxACC_FALSE,
     wxACC_OK,
     wxACC_NOT_IMPLEMENTED,
     wxACC_NOT_SUPPORTED
