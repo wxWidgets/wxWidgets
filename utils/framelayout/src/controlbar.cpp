@@ -1563,11 +1563,9 @@ void wxFrameLayout::PushDefaultPlugins()
 {
 	// FIXME:: to much of the stuff for the default...
 
-	AddPlugin( CLASSINFO( cbSimpleCustomizationPlugin ) );
 	AddPlugin( CLASSINFO( cbRowLayoutPlugin       ) );
 	AddPlugin( CLASSINFO( cbBarDragPlugin         ) );
 	AddPlugin( CLASSINFO( cbPaneDrawPlugin ) );
-	AddPlugin( CLASSINFO( cbAntiflickerPlugin     ) );
 }
 
 void wxFrameLayout::AddPlugin( wxClassInfo* pPlInfo, int paneMask )
