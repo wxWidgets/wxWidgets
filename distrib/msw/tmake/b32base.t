@@ -132,12 +132,12 @@ makearchsetuph:
 $(ARCHINCDIR)\wx:
     -mkdir $(ARCHINCDIR)
     -mkdir $(ARCHINCDIR)\wx
-    -erase $(CFG)
+    -$(RM) $(CFG)
 
 !if "$(DLL)" == "0"
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-    -erase $(WXLIB)
+    -$(RM) $(WXLIB)
     tlib "$(WXLIB)" /P1024 @&&!
 +$(OBJECTS:.obj =.obj +) +$(PERIPH_LIBS:.lib =.lib +)
 !
@@ -145,8 +145,8 @@ $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
 !else
 
 $(LIBTARGET): $(DUMMY).obj $(OBJECTS)
-    -erase $(WXLIB)
-    -erase $(WXDLL)
+    -$(RM) $(WXLIB)
+    -$(RM) $(WXDLL)
         $(LINK) $(LINK_FLAGS) /L$(WXLIBDIR);$(BCCDIR)\lib;$(BCCDIR)\lib\psdk /v @&&!
 c0d32.obj $(OBJECTS)
 $(WXLIBDIR)\$(WXLIBNAME)
@@ -285,12 +285,12 @@ $(WIN95FLAG)
 ! $(CFG)
 
 clean: $(PERIPH_CLEAN_TARGET)
-    -erase $(WXLIBDIR)\wx.tds
-    -erase $(WXLIBDIR)\wx.il?
-    -erase *.obj
-    -erase *.pch
-    -erase *.csm
-    -erase "wx32.#??"
+    -$(RM) $(WXLIBDIR)\wx.tds
+    -$(RM) $(WXLIBDIR)\wx.il?
+    -$(RM) *.obj
+    -$(RM) *.pch
+    -$(RM) *.csm
+    -$(RM) "wx32.#??"
 
 cleanall: clean
 
