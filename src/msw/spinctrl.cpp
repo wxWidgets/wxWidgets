@@ -98,7 +98,12 @@ LRESULT APIENTRY _EXPORT wxBuddyTextWndProc(HWND hwnd,
             if (!(::IsWindow(hwnd) && ((wxSpinCtrl *)::GetWindowLong(hwnd, GWL_USERDATA)) == spin))
                 return 0;
             break;
+
+        case WM_GETDLGCODE:
+            // we want to get WXK_RETURN in order to generate the event for it
+            return DLGC_WANTCHARS;
     }
+
     return ::CallWindowProc(CASTWNDPROC spin->GetBuddyWndProc(),
                             hwnd, message, wParam, lParam);
 }
@@ -247,9 +252,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     if ( style & wxCLIP_SIBLINGS )
         msStyle |= WS_CLIPSIBLINGS;
-
-    // we want to get WXK_RETURN in order to generate the event for it
-    m_lDlgCode = DLGC_WANTCHARS;
 
     // create the text window
     m_hwndBuddy = (WXHWND)::CreateWindowEx
