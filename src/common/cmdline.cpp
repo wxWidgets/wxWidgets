@@ -850,14 +850,23 @@ int wxCmdLineParser::Parse(bool showUsage)
         }
     }
 
-    if ( !ok && (errorMsg.length() != 0 || helpRequested) )
+    // if there was an error during parsing the command line, show this error
+    // and also the usage message if it had been requested
+    if ( !ok && (!errorMsg.empty() || (helpRequested && showUsage)) )
     {
-        wxString usage;
         wxMessageOutput* msgOut = wxMessageOutput::Get();
-        wxASSERT(msgOut);
-        if ( showUsage ) usage = GetUsageString();
         if ( msgOut )
+        {
+            wxString usage;
+            if ( showUsage )
+                usage = GetUsageString();
+
             msgOut->Printf( wxT("%s%s"), usage.c_str(), errorMsg.c_str() );
+        }
+        else
+        {
+            wxFAIL_MSG( _T("no wxMessageOutput object?") );
+        }
     }
 
     return ok ? 0 : helpRequested ? -1 : 1;
@@ -869,10 +878,15 @@ int wxCmdLineParser::Parse(bool showUsage)
 
 void wxCmdLineParser::Usage()
 {
-    wxString usage = GetUsageString();
     wxMessageOutput* msgOut = wxMessageOutput::Get();
     if ( msgOut )
-        msgOut->Printf( wxT("%s"), usage.c_str() );
+    {
+        msgOut->Printf( wxT("%s"), GetUsageString().c_str() );
+    }
+    else
+    {
+        wxFAIL_MSG( _T("no wxMessageOutput object?") );
+    }
 }
 
 wxString wxCmdLineParser::GetUsageString()
@@ -893,7 +907,7 @@ wxString wxCmdLineParser::GetUsageString()
     wxString usage;
     wxArrayString namesOptions, descOptions;
 
-    if ( !!m_data->m_logo )
+    if ( !m_data->m_logo.empty() )
     {
         usage << m_data->m_logo << _T('\n');
     }
@@ -1029,9 +1043,17 @@ static wxString GetTypeName(wxCmdLineParamType type)
             wxFAIL_MSG( _T("unknown option type") );
             // still fall through
 
-        case wxCMD_LINE_VAL_STRING: s = _("str"); break;
-        case wxCMD_LINE_VAL_NUMBER: s = _("num"); break;
-        case wxCMD_LINE_VAL_DATE:   s = _("date"); break;
+        case wxCMD_LINE_VAL_STRING:
+            s = _("str");
+            break;
+
+        case wxCMD_LINE_VAL_NUMBER:
+            s = _("num");
+            break;
+
+        case wxCMD_LINE_VAL_DATE:
+            s = _("date");
+            break;
     }
 
     return s;
@@ -1094,7 +1116,7 @@ static wxString GetLongOptionName(const wxChar *p)
 
    In particular, to pass a single argument containing a space to the program
    it should be quoted:
-   
+
    myprog.exe foo bar       -> argc = 3, argv[1] = "foo", argv[2] = "bar"
    myprog.exe "foo bar"     -> argc = 2, argv[1] = "foo bar"
 
