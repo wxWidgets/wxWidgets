@@ -280,6 +280,13 @@ WXDLLEXPORT_DATA(extern const bool) wxFalse;
 
 #endif  // VC++
 
+#if _MSC_VER > 1010
+#undef try
+#undef except
+#undef finally
+#define except(x) catch(...)
+#endif
+
 // Callback function type definition
 typedef void (*wxFunction) (wxObject&, wxEvent&);
 
