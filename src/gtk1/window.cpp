@@ -4088,13 +4088,19 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
 
+    // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
+    
+#if 1
 
     m_clipPaintRegion = TRUE;
+    
     gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
+    
     m_clipPaintRegion = FALSE;
 
-/*
+#else
+
     if (m_children.GetCount() > 0)
     {
         gtk_pizza_scroll( GTK_PIZZA(m_wxwindow), -dx, -dy );
@@ -4144,7 +4150,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
         gdk_gc_unref( m_scrollGC );
     }
-*/
+#endif
 }
 
 // Find the wxWindow at the current mouse position, also returning the mouse
