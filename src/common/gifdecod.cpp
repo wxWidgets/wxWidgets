@@ -2,8 +2,8 @@
 // Name:        gifdecod.cpp
 // Purpose:     wxGIFDecoder, GIF reader for wxImage and wxAnimation
 // Author:      Guillermo Rodriguez Garcia <guille@iies.es>
-// Version:     3.02
-// Last rev:    1999/08/18
+// Version:     3.03
+// RCS-ID:      
 // Copyright:   (c) Guillermo Rodriguez Garcia
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -445,9 +445,12 @@ int wxGIFDecoder::dgif(IMAGEN *img, int interl, int bits)
 bool wxGIFDecoder::CanRead()
 {
     unsigned char buf[3];
+    off_t pos;
 
+    pos = m_f->TellI();
     m_f->SeekI(0, wxFromStart);
     m_f->Read(buf, 3);
+    m_f->SeekI(pos, wxFromStart);
 
     return (memcmp(buf, "GIF", 3) == 0);
 }
@@ -541,8 +544,10 @@ int wxGIFDecoder::ReadGIF()
                     /* This line should not be neccessary!
                      * Some images are not loaded correctly
                      * without it. A bug in wxStream?
+                     * Yes. Fixed now.
                      */
                     // m_f->SeekI(m_f->TellI(), wxFromStart);
+
                     m_f->SeekI(i, wxFromCurrent);
                 }
             }
