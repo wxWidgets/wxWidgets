@@ -164,6 +164,7 @@ wxMSW:
   aren't mangled if you set it to 0. The default is 1
 - Toolbar buttons are now centred if the bitmap size is smaller
   than the specified default size
+- Fixed a bug in wxSpinCtrl::DoGetBestSize that would make wxSpinCtrl too tall
 
 wxGTK:
 

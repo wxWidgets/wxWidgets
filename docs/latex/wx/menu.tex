@@ -665,12 +665,6 @@ that contains the menu bar. If you have a toolbar which uses the same identifier
 as your EVT\_MENU entries, events from the toolbar will also be processed by your
 EVT\_MENU event handlers.
 
-Note that menu commands (and UI update events for menus) are first sent to
-the focus window within the frame. If no window within the frame has the focus,
-then the events are sent directly to the frame. This allows command and UI update
-handling to be processed by specific windows and controls, and not necessarily
-by the application frame.
-
 {\bf Tip:} under Windows, if you discover that menu shortcuts (for example, Alt-F to show the file menu)
 are not working, check any EVT\_CHAR events you are handling in child windows.
 If you are not calling {\tt event.Skip()} for events that you don't process in these event handlers,

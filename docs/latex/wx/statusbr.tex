@@ -87,7 +87,7 @@ See \helpref{wxStatusBar::wxStatusBar}{wxstatusbarconstr} for details.
 
 \constfunc{virtual bool}{GetFieldRect}{\param{int}{ i}, \param{wxRect\&}{ rect}}
 
-Returns the size and position of a fields internal bounding rectangle.
+Returns the size and position of a field's internal bounding rectangle.
 
 \wxheading{Parameters}
 
@@ -114,7 +114,7 @@ Returns the number of fields in the status bar.
 
 \membersection{wxStatusBar::GetStatusText}\label{wxstatusbargetstatustext}
 
-\constfunc{virtual wxString}{GetStatusText}{\param{int}{ ir = 0}}
+\constfunc{virtual wxString}{GetStatusText}{\param{int}{ i = 0}}
 
 Returns the string associated with a status bar field.
 
@@ -171,7 +171,7 @@ in \helpref{SetStatusWidths}{wxstatusbarsetstatuswidths}}
 
 \func{void}{SetMinHeight}{\param{int}{ height}}
 
-Sets the minimal possible hight for the status bar. The real height may be
+Sets the minimal possible height for the status bar. The real height may be
 bigger than the height specified here depending on the size of the font used by
 the status bar.
 
