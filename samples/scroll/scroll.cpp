@@ -124,7 +124,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   
     m_button = new wxButton( this, ID_QUERYPOS, "Query position", wxPoint(10,110) );
   
-    (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,150) );
+    (void) new wxTextCtrl( this, -1, "wxTextCtrl", wxPoint(10,150), wxSize(80,-1) );
   
     (void) new wxRadioButton( this, -1, "Disable", wxPoint(10,190) );
   

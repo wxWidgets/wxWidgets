@@ -305,10 +305,13 @@ int wxScrolledWindow::CalcScrollInc(wxScrollWinEvent& event)
 }
 
 // Adjust the scrollbars - new version.
-void wxScrolledWindow::AdjustScrollbars(void)
+void wxScrolledWindow::AdjustScrollbars()
 {
     int w, h;
     GetClientSize(&w, &h);
+    
+    int oldXScroll = m_xScrollPosition;
+    int oldYScroll = m_yScrollPosition;
 
     if (m_xScrollLines > 0)
     {
@@ -352,6 +355,22 @@ void wxScrolledWindow::AdjustScrollbars(void)
     {
         m_yScrollPosition = 0;
         SetScrollbar (wxVERTICAL, 0, 0, 0, FALSE); 
+    }
+    
+    if (oldXScroll != m_xScrollPosition)
+    {
+       if (m_xScrollingEnabled)
+            ScrollWindow( m_xScrollPixelsPerLine * (oldXScroll-m_xScrollPosition), 0, (const wxRect *) NULL );
+       else
+            Refresh();
+    }
+    
+    if (oldYScroll != m_yScrollPosition)
+    {
+        if (m_yScrollingEnabled)
+            ScrollWindow( 0, m_yScrollPixelsPerLine * (oldYScroll-m_yScrollPosition), (const wxRect *) NULL );
+        else
+            Refresh();
     }
 }
 
