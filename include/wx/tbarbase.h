@@ -339,6 +339,9 @@ public:
     virtual int GetToolPacking() { return m_toolPacking; }
     virtual int GetToolSeparation() { return m_toolSeparation; }
 
+    // for compatibility
+    wxSize GetMargins() const { return GetToolMargins(); }
+
     // toolbar geometry
     // ----------------
 
