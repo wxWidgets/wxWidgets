@@ -40,6 +40,10 @@
     #include   <unistd.h>
 #endif
 
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
+
 IMPLEMENT_CLASS(wxExtHelpController, wxHTMLHelpControllerBase)
 
 /**

@@ -28,7 +28,9 @@
 #include "wx/html/htmlwin.h"
 #include "wx/html/forcelnk.h"
 
-
+#ifdef __WXMSW__
+#include <windows.h>
+#endif
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindow
