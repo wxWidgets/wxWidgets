@@ -373,10 +373,11 @@ void wxMacStringToPascal( const char * from , StringPtr to , bool pc2macEncoding
       CopyCStringToPascal( from , to ) ;
     }
 }
-
+#ifdef WXMAKINGDLL
 #ifndef __DARWIN__
 // we know it's there ;-)
 WXIMPORT char std::__throws_bad_alloc ;
+#endif
 #endif
 
 bool wxApp::Initialize()
@@ -509,6 +510,9 @@ bool wxApp::Initialize()
 #endif // wxUSE_LOG
 #endif
 
+  wxWinMacWindowList = new wxList(wxKEY_INTEGER);
+  wxWinMacControlList = new wxList(wxKEY_INTEGER);
+
   wxInitializeStockLists();
   wxInitializeStockObjects();
 
@@ -522,9 +526,6 @@ bool wxApp::Initialize()
   if (!wxModule::InitializeModules()) {
      return FALSE;
   }
-
-  wxWinMacWindowList = new wxList(wxKEY_INTEGER);
-  wxWinMacControlList = new wxList(wxKEY_INTEGER);
 
   wxMacCreateNotifierTable() ;
 
