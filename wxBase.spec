@@ -72,11 +72,10 @@ mkdir obj-shared
 cd obj-shared
 ../configure --prefix=%{pref} --disable-gui \
 %if %{unicode}
-             --enable-unicode \
+             --enable-unicode
 %else
-             --with-odbc \
+             --with-odbc
 %endif
-             --disable-std_iostreams
 $MAKE
 cd ..
 
@@ -84,11 +83,10 @@ mkdir obj-static
 cd obj-static
 ../configure --prefix=%{pref} --disable-shared --disable-gui \
 %if %{unicode}
-             --enable-unicode \
+             --enable-unicode
 %else
-             --with-odbc \
+             --with-odbc
 %endif
-             --disable-std_iostreams
 $MAKE
 cd ..
 
