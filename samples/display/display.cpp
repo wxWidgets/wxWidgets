@@ -17,36 +17,26 @@
 // headers
 // ----------------------------------------------------------------------------
 
-// for compilers that support precompilation, includes "wx/wx.h".from here
+// for compilers that support precompilation, includes "wx/wx.h"
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
 
-#if !wxUSE_DISPLAY
-    #error "To compile this sample you must build the library with wxUSE_DISPLAY set to 1"
-#endif
-
 // for all others, include the necessary headers explicitly
 #ifndef WX_PRECOMP
-    #include "wx/app.h"
-    #include "wx/stattext.h"
+    #include "wx/wx.h"
+#endif
 
-    #include "wx/layout.h"
-    #include "wx/intl.h"
-    #include "wx/menu.h"
-    #include "wx/sizer.h"
-    #include "wx/choice.h"
-    #include "wx/msgdlg.h"
-    #include "wx/log.h"
-    #include "wx/panel.h"
-    #include "wx/button.h"
+#if !wxUSE_DISPLAY
+    #error "To compile this sample you must build the library with wxUSE_DISPLAY set to 1"
 #endif
 
 #include "wx/notebook.h"
 
 #include "wx/display.h"
+
 
 // the application icon (under Windows and OS/2 it is in resources)
 #if defined(__WXGTK__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__) || defined(__WXX11__)
@@ -185,16 +175,16 @@ bool MyApp::OnInit()
 
     // create the main application window
     MyFrame *frame = new MyFrame(_("Display wxWindows Sample"),
-                                 wxPoint(50, 50), wxSize(450, 340));
+                                 wxDefaultPosition, wxDefaultSize);
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
     frame->Show();
 
     // success: wxApp::OnRun() will be called which will enter the main message
-    // loop and the application will run. If we returned FALSE here, the
+    // loop and the application will run. If we returned false here, the
     // application would exit immediately.
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -203,7 +193,7 @@ bool MyApp::OnInit()
 
 // frame constructor
 MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, long style)
-       : wxFrame(NULL, -1, title, pos, size, style)
+       : wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -234,40 +224,43 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
     CreateStatusBar();
 
     // create child controls
-    m_notebook = new wxNotebook(this, -1);
+
+    wxPanel *panel = new wxPanel(this, wxID_ANY);
+
+    m_notebook = new wxNotebook(panel, wxID_ANY);
     const size_t count = wxDisplay::GetCount();
     for ( size_t nDpy = 0; nDpy < count; nDpy++ )
     {
         wxDisplay display(nDpy);
 
-        wxWindow *page = new wxPanel(m_notebook, -1);
+        wxWindow *page = new wxPanel(m_notebook, wxID_ANY);
 
         // create 2 column flex grid sizer with growable 2nd column
         wxFlexGridSizer *sizer = new wxFlexGridSizer(2, 10, 20);
         sizer->AddGrowableCol(1);
 
         const wxRect r(display.GetGeometry());
-        sizer->Add(new wxStaticText(page, -1, _T("Origin: ")));
+        sizer->Add(new wxStaticText(page, wxID_ANY, _T("Origin: ")));
         sizer->Add(new wxStaticText
                        (
                         page,
-                        -1,
+                        wxID_ANY,
                         wxString::Format(_T("(%d, %d)"),
                                          r.x, r.y)
                        ));
 
-        sizer->Add(new wxStaticText(page, -1, _T("Size: ")));
+        sizer->Add(new wxStaticText(page, wxID_ANY, _T("Size: ")));
         sizer->Add(new wxStaticText
                        (
                         page,
-                        -1,
+                        wxID_ANY,
                         wxString::Format(_T("(%d, %d)"),
                                          r.width, r.height)
                        ));
 
 
-        sizer->Add(new wxStaticText(page, -1, _T("Name: ")));
-        sizer->Add(new wxStaticText(page, -1, display.GetName()));
+        sizer->Add(new wxStaticText(page, wxID_ANY, _T("Name: ")));
+        sizer->Add(new wxStaticText(page, wxID_ANY, display.GetName()));
 
         wxChoice *choiceModes = new wxChoice(page, Display_ChangeMode);
         const wxArrayVideoModes modes = display.GetModes();
@@ -280,16 +273,17 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                                 new MyVideoModeClientData(mode));
         }
 
-        sizer->Add(new wxStaticText(page, -1, _T("&Modes: ")));
+        sizer->Add(new wxStaticText(page, wxID_ANY, _T("&Modes: ")));
         sizer->Add(choiceModes, 0, wxEXPAND);
 
-        sizer->Add(new wxStaticText(page, -1, _T("Current: ")));
+        sizer->Add(new wxStaticText(page, wxID_ANY, _T("Current: ")));
         sizer->Add(new wxStaticText(page, Display_CurrentMode,
                                     VideoModeToText(display.GetCurrentMode())));
 
         // add it to another sizer to have borders around it and button below
         wxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
         sizerTop->Add(sizer, 1, wxALL | wxEXPAND, 10);
+
         sizerTop->Add(new wxButton(page, Display_ResetMode, _T("&Reset mode")),
                       0, wxALL | wxCENTRE, 5);
         page->SetSizer(sizerTop);
@@ -298,6 +292,11 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size, 
                             wxString::Format(_T("Display %lu"),
                                              (unsigned long)nDpy));
     }
+
+    wxNotebookSizer *notebookSizer = new wxNotebookSizer(m_notebook);
+    panel->SetSizer(notebookSizer);
+    notebookSizer->Fit(this);
+
 }
 
 wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
@@ -322,8 +321,8 @@ wxString MyFrame::VideoModeToText(const wxVideoMode& mode)
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    // TRUE is to force the frame to close
-    Close(TRUE);
+    // true is to force the frame to close
+    Close(true);
 }
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -388,7 +387,7 @@ void MyFrame::OnLeftClick(wxMouseEvent& event)
 void MyFrame::OnDisplayChanged(wxDisplayChangedEvent& event)
 {
     // update the current mode text
-    for ( int n = 0; n < m_notebook->GetPageCount(); n++ )
+    for ( size_t n = 0; n < m_notebook->GetPageCount(); n++ )
     {
         wxStaticText *label = wxDynamicCast(m_notebook->GetPage(n)->
                                                 FindWindow(Display_CurrentMode),
