@@ -252,6 +252,10 @@
 // i18n support: _() macro, wxLocale class. Requires wxFile
 #define wxUSE_INTL                1
 
+#define wxUSE_DYNAMIC_CLASSES     1
+                                // If 1, enables provision of run-time type information.
+                                // NOW MANDATORY: don't change.
+
 // ----------------------------------------------------------------------------
 // Optional controls
 // ----------------------------------------------------------------------------
@@ -495,7 +499,7 @@
                                 // of wxDB::GetDbConnection() to indicate whether the connection
                                 // (and any wxTable()s that use the connection) should support
                                 // forward only scrolling of cursors, or both forward and backward
-                                // Support for backward scrolling cursors is dependent on the 
+                                // Support for backward scrolling cursors is dependent on the
                                 // data source as well as the ODBC driver being used.
 
 // ----------------------------------------------------------------------------
