@@ -622,6 +622,18 @@ wxOwnerDrawn *wxListBox::CreateItem(size_t n)
 
 #endif  //USE_OWNER_DRAWN
 
+
+// Some custom controls depend on this
+/* static */ wxVisualAttributes
+wxListBox::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
+{
+    wxVisualAttributes attr;
+    attr.colFg = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT);
+    attr.colBg = wxSystemSettings::GetColour(wxSYS_COLOUR_LISTBOX);
+    attr.font  = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    return attr;
+}
+
 // ============================================================================
 // list box control implementation
 // ============================================================================

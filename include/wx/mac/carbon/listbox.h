@@ -125,6 +125,10 @@ public:
     int GetItemIndex(wxOwnerDrawn *item) const { return m_aItems.Index(item); }
 #endif // wxUSE_OWNER_DRAWN
 
+    
+    static wxVisualAttributes
+    GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
+    
     // Windows callbacks
 #if !__WXMAC_OSX__
     void OnChar(wxKeyEvent& event);
