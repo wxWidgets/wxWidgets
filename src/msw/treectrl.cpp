@@ -2572,16 +2572,13 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
             // an image depending on the expanded/collapsed state - bug in
             // comctl32.dll or our code?
             {
-                NM_TREEVIEW* tv = (NM_TREEVIEW*)lParam;
-                if ( tv->action == TVE_EXPAND )
-                {
-                    wxTreeItemId id = (WXHTREEITEM)tv->itemNew.hItem;
+                NM_TREEVIEW* tv = (NM_TREEVIEW *)lParam;
+                wxTreeItemId id = (WXHTREEITEM)tv->itemNew.hItem;
 
-                    int image = GetItemImage(id, wxTreeItemIcon_Expanded);
-                    if ( image != -1 )
-                    {
-                        RefreshItem(id);
-                    }
+                int image = GetItemImage(id, wxTreeItemIcon_Expanded);
+                if ( image != -1 )
+                {
+                    RefreshItem(id);
                 }
             }
             break;
@@ -2589,7 +2586,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
         case TVN_GETDISPINFO:
             // NB: so far the user can't set the image himself anyhow, so do it
             //     anyway - but this may change later
-//          if ( /* !processed && */ 1 )
+            //if ( /* !processed && */ 1 )
             {
                 wxTreeItemId item = event.m_item;
                 TV_DISPINFO *info = (TV_DISPINFO *)lParam;
