@@ -879,6 +879,8 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxListMainWindow)
     DECLARE_EVENT_TABLE()
+
+    friend class wxGenericListCtrl;
 };
 
 // ============================================================================
@@ -4882,7 +4884,9 @@ void wxGenericListCtrl::SetTextColour(const wxColour& col)
 
 long wxGenericListCtrl::GetTopItem() const
 {
-    return 0;
+    size_t top;
+    m_mainWin->GetVisibleLinesRange(&top, NULL);
+    return (long)top;
 }
 
 long wxGenericListCtrl::GetNextItem( long item, int geom, int state ) const
