@@ -159,7 +159,7 @@
    {
         wxBoxSizer *topsizer;
         wxHtmlWindow *html;
-        wxDialog dlg(this, -1, "About");
+        wxDialog dlg(this, -1, wxString("About"));
 
         topsizer = new wxBoxSizer(wxVERTICAL);
 
