@@ -39,6 +39,8 @@
 
 - (void)windowDidBecomeKey: (NSNotification *)notification;
 - (void)windowDidResignKey: (NSNotification *)notification;
+- (void)windowDidBecomeMain: (NSNotification *)notification;
+- (void)windowDidResignMain: (NSNotification *)notification;
 - (BOOL)windowShouldClose: (id)sender;
 @end //interface wxNSWindowDelegate
 
@@ -56,6 +58,20 @@
     wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
     wxCHECK_RET(win,"notificationDidResignKey received but no wxWindow exists");
     win->CocoaDelegate_windowDidResignKey();
+}
+
+- (void)windowDidBecomeMain: (NSNotification *)notification
+{
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxCHECK_RET(win,"notificationDidBecomeMain received but no wxWindow exists");
+    win->CocoaDelegate_windowDidBecomeMain();
+}
+
+- (void)windowDidResignMain: (NSNotification *)notification
+{
+    wxCocoaNSWindow *win = wxCocoaNSWindow::GetFromCocoa([notification object]);
+    wxCHECK_RET(win,"notificationDidResignMain received but no wxWindow exists");
+    win->CocoaDelegate_windowDidResignMain();
 }
 
 - (BOOL)windowShouldClose: (id)sender
@@ -108,6 +124,7 @@ void wxCocoaNSWindow::DisassociateNSWindow(WX_NSWindow cocoaNSWindow)
 }
 
 - (void)close;
+- (BOOL)canBecomeMainWindow;
 @end // wxPoserNSwindow
 
 WX_IMPLEMENT_POSER(wxPoserNSWindow);
@@ -120,6 +137,15 @@ WX_IMPLEMENT_POSER(wxPoserNSWindow);
     if(tlw)
         tlw->Cocoa_close();
     [super close];
+}
+
+- (BOOL)canBecomeMainWindow
+{
+    bool canBecome = false;
+    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(self);
+    if(!tlw || !tlw->Cocoa_canBecomeMainWindow(canBecome))
+        canBecome = [super canBecomeMainWindow];
+    return canBecome;
 }
 
 @end // implementation wxPoserNSWindow
