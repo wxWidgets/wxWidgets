@@ -230,11 +230,21 @@ long wxGetUTCTime()
 // Get local time as milliseconds since 00:00:00, Jan 1st 1970
 wxLongLong wxGetLocalTimeMillis()
 {
+    wxLongLong val = 1000l;
+
+#if defined(HAVE_GETTIMEOFDAY)
+    struct timeval tp;
+    if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
+    {
+        val *= tp.tv_sec;
+        return (val + (tp.tv_usec / 1000));
+    }
+#else
+
     // We use wxGetLocalTime() to get the seconds since
     // 00:00:00 Jan 1st 1970 and then whatever is available
     // to get millisecond resolution.
-    //
-    wxLongLong val = 1000l;
+    // THIS LEADS TO A BUG SINCE REFERENCE TIME ARE DIFFERENT
     val *= wxGetLocalTime();
 
     // If we got here, do not fail even if we can't get
@@ -248,21 +258,13 @@ wxLongLong wxGetLocalTimeMillis()
     DATETIME    dt;
     ::DosGetDateTime(&dt);
     return (val + dt.hundredths*10);
-#elif defined(HAVE_GETTIMEOFDAY)
-    struct timeval tp;
-    if ( wxGetTimeOfDay(&tp, (struct timezone *)NULL) != -1 )
-    {
-        val *= tp.tv_sec;
-        return (val + (tp.tv_usec / 1000));
-    }
 #elif defined(HAVE_FTIME)
     struct timeb tp;
     if ( ftime(&tp) == 0 )
     {
         return (val + tp.millitm);
     }
-#else
-#if !defined(__BORLANDC__) && !(defined(__VISUALC__) && defined(__WIN16__))
+#elif !defined(__BORLANDC__) && !(defined(__VISUALC__) && defined(__WIN16__))
     #warning "wxStopWatch will be up to second resolution!"
 #endif
 #endif
