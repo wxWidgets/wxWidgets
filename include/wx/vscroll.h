@@ -163,6 +163,9 @@ protected:
     // the event handlers
     void OnSize(wxSizeEvent& event);
     void OnScroll(wxScrollWinEvent& event);
+#if wxUSE_MOUSEWHEEL
+    void OnMouseWheel(wxMouseEvent& event);
+#endif
 
     // find the index of the line we need to show at the top of the window such
     // that the last (fully or partially) visible line is the given one
@@ -193,6 +196,10 @@ private:
     // partly, visible one)
     size_t m_nVisible;
 
+    // accumulated mouse wheel rotation
+#if wxUSE_MOUSEWHEEL
+    int m_sumWheelRotation;
+#endif
 
     DECLARE_EVENT_TABLE()
     DECLARE_NO_COPY_CLASS(wxVScrolledWindow)

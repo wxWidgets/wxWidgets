@@ -37,6 +37,9 @@
 BEGIN_EVENT_TABLE(wxVScrolledWindow, wxPanel)
     EVT_SIZE(wxVScrolledWindow::OnSize)
     EVT_SCROLLWIN(wxVScrolledWindow::OnScroll)
+#if wxUSE_MOUSEWHEEL
+    EVT_MOUSEWHEEL(wxVScrolledWindow::OnMouseWheel)
+#endif
 END_EVENT_TABLE()
 
 
@@ -60,6 +63,10 @@ void wxVScrolledWindow::Init()
     m_nVisible = 1;
 
     m_heightTotal = 0;
+
+#if wxUSE_MOUSEWHEEL
+    m_sumWheelRotation = 0;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -421,3 +428,25 @@ void wxVScrolledWindow::OnScroll(wxScrollWinEvent& event)
 #endif // __WXMAC__
 }
 
+#if wxUSE_MOUSEWHEEL
+
+void wxVScrolledWindow::OnMouseWheel(wxMouseEvent& event)
+{
+    m_sumWheelRotation += event.GetWheelRotation();
+    int delta = event.GetWheelDelta();
+
+    // how much to scroll this time
+    int units_to_scroll = -(m_sumWheelRotation/delta);
+    if ( !units_to_scroll )
+        return;
+
+    m_sumWheelRotation += units_to_scroll*delta;
+
+    if ( !event.IsPageScroll() )
+        ScrollLines( units_to_scroll*event.GetLinesPerAction() );
+    else
+        // scroll pages instead of lines
+        ScrollPages( units_to_scroll );
+}
+
+#endif
