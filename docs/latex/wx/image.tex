@@ -189,9 +189,13 @@ platform-dependent bitmap}
 \perlnote{Constructors supported by wxPerl are:\par
 \begin{itemize}
 \item{Wx::Image->new( bitmap )}
+\item{Wx::Image->new( icon )}
 \item{Wx::Image->new( width, height )}
-\item{Wx::Image->new( name, type )}
-\item{Wx::Image->new( name, mimetype )}
+\item{Wx::Image->new( width, height, data )}
+\item{Wx::Image->new( file, type, index )}
+\item{Wx::Image->new( file, mimetype, index )}
+\item{Wx::Image->new( stream, type, index )}
+\item{Wx::Image->new( stream, mimetype, index )}
 \end{itemize}
 }
 
