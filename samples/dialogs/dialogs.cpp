@@ -578,7 +578,7 @@ void MyFrame::DirChoose(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::DirChooseNew(wxCommandEvent& WXUNUSED(event) )
 {
-    DoDirChoose(wxDD_NEW_DIR_BUTTON);
+    DoDirChoose(wxDD_DEFAULT_STYLE | wxDD_NEW_DIR_BUTTON);
 }
 
 #if defined(__WXMSW__) || defined(__WXMAC__)
