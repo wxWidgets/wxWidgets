@@ -128,7 +128,7 @@
 #endif // ASCII/Unicode
 
 // structure passed to the secondary thread
-struct wxRasThreadData
+struct WXDLLEXPORT wxRasThreadData
 {
     wxRasThreadData()
     {
@@ -199,7 +199,7 @@ private:
     void CleanUpThreadData();
 
     // timer used for polling RAS status
-    class RasTimer : public wxTimer
+    class WXDLLEXPORT RasTimer : public wxTimer
     {
     public:
         RasTimer(wxDialUpManagerMSW *dialUpManager)

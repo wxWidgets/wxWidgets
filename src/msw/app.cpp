@@ -155,6 +155,10 @@ HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
+#if wxUSE_ON_FATAL_EXCEPTION
+    static bool gs_handleExceptions = FALSE;
+#endif
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -652,16 +656,15 @@ int wxEntry(WXHINSTANCE hInstance,
     wxDebugContext::SetCheckpoint();
 #endif
 #endif
-    // take everything into a try-except block in release build
+
+    // take everything into a try-except block to be able to call
+    // OnFatalException() if necessary
+
     // FIXME other compilers must support Win32 SEH (structured exception
     //       handling) too, just find the appropriate keyword in their docs!
     //       Please note that it's _not_ the same as C++ exceptions!
-#if !defined(__WXDEBUG__) && defined(__VISUALC__)
-    #define CATCH_PROGRAM_EXCEPTIONS
-
+#if wxUSE_ON_FATAL_EXCEPTION
     __try {
-#else
-    #undef  CATCH_PROGRAM_EXCEPTIONS
 #endif
         wxhInstance = (HINSTANCE) hInstance;
 
@@ -734,13 +737,12 @@ int wxEntry(WXHINSTANCE hInstance,
 
         return retValue;
 
-#ifdef CATCH_PROGRAM_EXCEPTIONS
+#if wxUSE_ON_FATAL_EXCEPTION
     }
-    __except ( EXCEPTION_EXECUTE_HANDLER ) {
-        /*
-           if ( wxTheApp )
+    __except ( gs_handleExceptions ? EXCEPTION_EXECUTE_HANDLER
+                                   : EXCEPTION_CONTINUE_SEARCH ) {
+        if ( wxTheApp )
            wxTheApp->OnFatalException();
-         */
 
         // using wxLog would be unsafe here
         ::MessageBox(NULL,
@@ -753,7 +755,7 @@ int wxEntry(WXHINSTANCE hInstance,
 
         // NOTREACHED
     }
-#endif // CATCH_PROGRAM_EXCEPTIONS
+#endif // wxUSE_ON_FATAL_EXCEPTION
 }
 
 // restore warning state
@@ -837,8 +839,7 @@ bool wxApp::Initialized()
         return TRUE;
     else
         return FALSE;
-#endif
-#ifdef _WINDLL // Assume initialized if DLL (no way of telling)
+#else // Assume initialized if DLL (no way of telling)
     return TRUE;
 #endif
 }
@@ -1278,6 +1279,20 @@ bool wxYield()
     wxLog::Resume();
 
     return TRUE;
+}
+
+bool wxHandleFatalExceptions(bool doit)
+{
+#if wxUSE_ON_FATAL_EXCEPTION
+    // assume this can only be called from the main thread
+    gs_handleExceptions = doit;
+
+    return TRUE;
+#else
+    wxFAIL_MSG(_T("set wxUSE_ON_FATAL_EXCEPTION to 1 to sue this function"));
+
+    return FALSE;
+#endif
 }
 
 //-----------------------------------------------------------------------------

@@ -2987,7 +2987,7 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     {
         wxString date = wxGetTranslation(literalDates[n].str);
         size_t len = date.length();
-        if ( wxString(p, len).CmpNoCase(date) == 0 )
+        if ( wxStrlen(p) >= len && (wxString(p, len).CmpNoCase(date) == 0) )
         {
             // nothing can follow this, so stop here
             p += len;

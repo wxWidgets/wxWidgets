@@ -139,7 +139,7 @@ SOURCE=.\src\msw\dummydll.cpp
 #$ ExpandGlue("WXGENERICSRCS", "# Begin Source File\n\nSOURCE=.\\src\\generic\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\generic\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCOMMONSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# End Source File\n");
 #$ ExpandGlue("WXCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
-#$ ExpandGlue("WXMSWCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\common\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
+#$ ExpandGlue("WXMSWCSRCS", "# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\msw\\", "\n# SUBTRACT CPP /YX /Yc /Yu\n# End Source File\n");
 #$ ExpandGlue("WXHTMLSRCS", "# Begin Source File\n\nSOURCE=.\\src\\html\\", "\n# End Source File\n# Begin Source File\n\nSOURCE=.\\src\\html\\", "\n# End Source File\n");
 
 # Begin Source File

@@ -1552,7 +1552,13 @@ Under Windows, this returns ``unknown''.
 
 \func{bool}{wxHandleFatalExceptions}{\param{bool}{ doIt = TRUE}}
 
-Call this from e.g. \helpref{wxApp::OnFatalException}{wxapponfatalexception}.
+If {\it doIt} is TRUE, the fatal exceptions (also known as general protection
+faults under Windows or segmentation violations in the Unix world) will be
+caught and passed to \helpref{wxApp::OnFatalException}{wxapponfatalexception}.
+By default, i.e. before this function is called, they will be handled in the
+normal way which usually just means that the application will be terminated.
+Calling wxHandleFatalExceptions() with {\it doIt} equal to FALSE will restore
+this default behaviour.
 
 \membersection{::wxKill}\label{wxkill}
 
