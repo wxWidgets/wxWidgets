@@ -32,6 +32,7 @@
     #include "wx/string.h"
     #include "wx/ffile.h"
     #include "wx/app.h"
+    #include "wx/intl.h"
     #if wxUSE_GUI
         #include "wx/msgdlg.h"
     #endif // wxUSE_GUI
@@ -104,7 +105,7 @@ void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
 
     wxString title;
     if ( wxTheApp )
-        title.Printf(_T("%s message"), wxTheApp->GetAppName().c_str());
+        title.Printf(_("%s message"), wxTheApp->GetAppName().c_str());
 
     ::wxMessageBox(out, title);
 }
