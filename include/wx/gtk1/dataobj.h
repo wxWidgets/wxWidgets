@@ -184,6 +184,8 @@ public:
     wxFileDataObject();
     
     void AddFile( const wxString &file );
+    void SetFiles( const wxString &files )
+        { m_files = files; }
     wxString GetFiles() const;
     
     virtual wxDataFormat GetPreferredFormat() const

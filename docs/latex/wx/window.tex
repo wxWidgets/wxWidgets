@@ -1719,8 +1719,9 @@ from within wxWindow::OnSize functions.}
 
 \wxheading{Remarks}
 
-Note that this function is actually disabled for wxWindow and only indirectly
-takes affect for children of wxDialog, wxFrame, wxNotebook and wxSplitterWindow.
+Note that this function is actually disabled for wxWindow (and wxPanel). It has
+effect for wxDialog, wxFrame and wxScrolledWindow as well as indirectly for
+children of wxNotebook and wxSplitterWindow.
 
 \wxheading{See also}
 

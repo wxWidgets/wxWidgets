@@ -188,14 +188,18 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
        this is only valid for the duration of this call */
     drop_target->SetDragContext( context );
 
+    bool ret = FALSE;
+
     if (drop_target->m_firstMotion)
     {
         /* the first "drag_motion" event substitutes a "drag_enter" event */
-        drop_target->OnEnter();
+        ret = drop_target->OnEnter( x, y );
     }
-
-    /* give program a chance to react (i.e. to say no by returning FALSE) */
-    bool ret = drop_target->OnMove( x, y );
+    else
+    {
+        /* give program a chance to react (i.e. to say no by returning FALSE) */
+        ret = drop_target->OnMove( x, y );
+    }
 
     /* we don't yet handle which "actions" (i.e. copy or move)
        the target accepts. so far we simply accept the
@@ -257,6 +261,27 @@ static gboolean target_drag_drop( GtkWidget *widget,
                           FALSE,        /* no success */
                           FALSE,        /* don't delete data on dropping side */
                           time );
+    }
+    else
+    {
+#if wxUSE_THREADS
+        /* disable GUI threads */
+        wxapp_uninstall_thread_wakeup();
+#endif
+
+        GdkAtom format = drop_target->GetMatchingPair();
+	wxASSERT( format );
+	
+        /* this should trigger an "drag_data_received" event */
+        gtk_drag_get_data( widget,
+                           context,
+                           format,
+                           time );
+
+#if wxUSE_THREADS
+        /* re-enable GUI threads */
+        wxapp_install_thread_wakeup();
+#endif
     }
 
     /* after this, invalidate the drop_target's GdkDragContext */
@@ -324,137 +349,114 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 // wxDropTarget
 //----------------------------------------------------------------------------
 
-wxDropTarget::wxDropTarget()
+wxDropTarget::wxDropTarget( wxDataObject *data )
 {
     m_firstMotion = TRUE;
     m_dragContext = (GdkDragContext*) NULL;
     m_dragWidget = (GtkWidget*) NULL;
     m_dragData = (GtkSelectionData*) NULL;
     m_dragTime = 0;
+    m_data = data;
 }
 
 wxDropTarget::~wxDropTarget()
 {
 }
 
-void wxDropTarget::OnEnter()
+bool wxDropTarget::OnEnter( int WXUNUSED(x), int WXUNUSED(y) )
 {
+    if (!m_data)
+        return FALSE;
+	
+    return (GetMatchingPair() != (GdkAtom) 0);
 }
 
 void wxDropTarget::OnLeave()
 {
 }
 
-bool wxDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
+bool wxDropTarget::OnMove( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (GetFormatCount() == 0)
+    if (!m_data)
         return FALSE;
 	
-    for (size_t i = 0; i < GetFormatCount(); i++)
-    {
-        if (IsSupported( GetFormat(i) ))
-	    return TRUE;
-    }
-    
-    return FALSE;
+    return (GetMatchingPair() != (GdkAtom) 0);
 }
 
-bool wxDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
+bool wxDropTarget::OnDrop( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    if (GetFormatCount() == 0)
+    if (!m_data)
         return FALSE;
 	
-    for (size_t i = 0; i < GetFormatCount(); i++)
-    {
-        if (IsSupported( GetFormat(i) ))
-	{
-            RequestData( GetFormat(i) );
-	    return TRUE;
-	}
-    }
-    
-    return FALSE;
+    return (GetMatchingPair() != (GdkAtom) 0);
 }
 
-bool wxDropTarget::OnData( long WXUNUSED(x), long WXUNUSED(y) )
+bool wxDropTarget::OnData( int WXUNUSED(x), int WXUNUSED(y) )
 {
-    return FALSE;
+    if (!m_data)
+        return FALSE;
+	
+    if (GetMatchingPair() == (GdkAtom) 0)
+        return FALSE;
+	
+    return GetData();
 }
 
-bool wxDropTarget::RequestData( wxDataFormat format )
+GdkAtom wxDropTarget::GetMatchingPair()
 {
-    if (!m_dragContext) return FALSE;
-    if (!m_dragWidget) return FALSE;
+    if (!m_data) 
+        return (GdkAtom) 0;
 
-/*
-    wxPrintf( wxT("format: %s.\n"), format.GetId().c_str() );
-    if (format.GetType() == wxDF_PRIVATE) wxPrintf( wxT("private data.\n") );
-    if (format.GetType() == wxDF_TEXT) wxPrintf( wxT("text data.\n") );
-*/
-
-#if wxUSE_THREADS
-    /* disable GUI threads */
-    wxapp_uninstall_thread_wakeup();
-#endif
-
-    /* this should trigger an "drag_data_received" event */
-    gtk_drag_get_data( m_dragWidget,
-                       m_dragContext,
-                       format,
-                       m_dragTime );
-
-#if wxUSE_THREADS
-    /* re-enable GUI threads */
-    wxapp_install_thread_wakeup();
-#endif
-
-    return TRUE;
-}
-
-bool wxDropTarget::IsSupported( wxDataFormat format )
-{
-    if (!m_dragContext) return FALSE;
+    if (!m_dragContext) 
+        return (GdkAtom) 0;
 
     GList *child = m_dragContext->targets;
     while (child)
     {
         GdkAtom formatAtom = (GdkAtom) GPOINTER_TO_INT(child->data);
+	wxDataFormat format( formatAtom );
 
 #ifdef __WXDEBUG__
         char *name = gdk_atom_name( formatAtom );
         if (name) wxLogDebug( "Drop target: drag has format: %s", name );
 #endif
+        if (m_data->IsSupportedFormat( format ))
+	    return formatAtom;
 
-        if (formatAtom == format) return TRUE;
         child = child->next;
     }
 
-    return FALSE;
+    return (GdkAtom) 0;
 }
 
-bool wxDropTarget::GetData( wxDataObject *data_object )
+bool wxDropTarget::GetData()
 {
-    if (!m_dragData) return FALSE;
+    if (!m_dragData) 
+        return FALSE;
 
-    if (m_dragData->target !=  data_object->GetFormat()) return FALSE;
+    if (!m_data) 
+        return FALSE;
 
-    if (data_object->GetFormat().GetType() == wxDF_TEXT)
+    wxDataFormat dragFormat( m_dragData->target );
+    
+    if (!m_data->IsSupportedFormat( dragFormat ))
+        return FALSE;
+
+    if (dragFormat.GetType() == wxDF_TEXT)
     {
-        wxTextDataObject *text_object = (wxTextDataObject*)data_object;
+        wxTextDataObject *text_object = (wxTextDataObject*)m_data;
         text_object->SetText( (const char*)m_dragData->data );
-    } else
-
-    if (data_object->GetFormat().GetType() == wxDF_FILENAME)
-    {
-    } else
-
-    if (data_object->GetFormat().GetType() == wxDF_PRIVATE)
-    {
-        wxPrivateDataObject *priv_object = (wxPrivateDataObject*)data_object;
-        priv_object->SetData( (const char*)m_dragData->data, (size_t)m_dragData->length );
+	return TRUE;
     }
 
-    return TRUE;
+    if (dragFormat.GetType() == wxDF_FILENAME)
+    {
+        wxFileDataObject *file_object = (wxFileDataObject*)m_data;
+        file_object->SetFiles( (const char*)m_dragData->data );
+	return TRUE;
+    }
+
+    return FALSE;
 }
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
@@ -507,100 +509,6 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 
     gtk_signal_connect( GTK_OBJECT(widget), "drag_data_received",
                       GTK_SIGNAL_FUNC(target_drag_data_received), (gpointer) this );
-}
-
-//-------------------------------------------------------------------------
-// wxTextDropTarget
-//-------------------------------------------------------------------------
-
-bool wxTextDropTarget::OnData( long x, long y )
-{
-    wxTextDataObject data;
-    if (!GetData( &data )) return FALSE;
-
-    OnDropText( x, y, data.GetText() );
-
-    return TRUE;
-}
-
-//-------------------------------------------------------------------------
-// wxPrivateDropTarget
-//-------------------------------------------------------------------------
-
-/*
-wxPrivateDropTarget::wxPrivateDropTarget()
-{
-    m_id = wxTheApp->GetAppName();
-}
-
-wxPrivateDropTarget::wxPrivateDropTarget( const wxString &id )
-{
-    m_id = id;
-}
-
-bool wxPrivateDropTarget::OnMove( long WXUNUSED(x), long WXUNUSED(y) )
-{
-    return IsSupported( m_id );
-}
-
-bool wxPrivateDropTarget::OnDrop( long WXUNUSED(x), long WXUNUSED(y) )
-{
-    if (!IsSupported( m_id ))
-    {
-        RequestData( m_id );
-        return FALSE;
-    }
-
-    return FALSE;
-}
-
-bool wxPrivateDropTarget::OnData( long x, long y )
-{
-    if (!IsSupported( m_id )) return FALSE;
-
-    wxPrivateDataObject data;
-    if (!GetData( &data )) return FALSE;
-
-    OnDropData( x, y, data.GetData(), data.GetSize() );
-
-    return TRUE;
-}
-*/
-
-//----------------------------------------------------------------------------
-// A drop target which accepts files (dragged from File Manager or Explorer)
-//----------------------------------------------------------------------------
-
-bool wxFileDropTarget::OnData( long x, long y )
-{
-    wxFileDataObject data;
-    if (!GetData( &data )) return FALSE;
-
-    // get number of substrings /root/mytext.txt/0/root/myothertext.txt/0/0
-    size_t number = 0;
-    size_t i;
-    size_t size = data.GetFiles().Length();
-    wxChar *text = WXSTRINGCAST data.GetFiles();
-    for ( i = 0; i < size; i++)
-        if (text[i] == 0) number++;
-
-    if (number == 0) return FALSE;
-
-    wxChar **files = new wxChar*[number];
-
-    text = WXSTRINGCAST data.GetFiles();
-    for (i = 0; i < number; i++)
-    {
-        files[i] = text;
-        int len = wxStrlen( text );
-        text += len+1;
-    }
-
-    OnDropFiles( x, y, number, files );
-
-    free( files );
-
-    return TRUE;
 }
 
 //----------------------------------------------------------------------------
