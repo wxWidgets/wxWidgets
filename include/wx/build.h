@@ -41,12 +41,24 @@
     #define __WX_BO_UNICODE "ANSI"
 #endif
 
-// GCC and Intel C++ share same C++ ABI, check if compiler versions are
-// compatible:
-#if (defined(__GNUG__) || defined(__INTEL_COMPILER) && \
-     defined(__GXX_ABI_VERSION))
+// GCC and Intel C++ share same C++ ABI (and possibly others in the future),
+// check if compiler versions are compatible:
+#if defined(__GXX_ABI_VERSION)
     #define __WX_BO_COMPILER \
             ",compiler with C++ ABI " __WX_BO_STRINGIZE(__GXX_ABI_VERSION)
+#elif defined(__INTEL_COMPILER)
+    #define __WX_BO_COMPILER ",Intel C++"
+#elif defined(__GNUG__)
+    #define __WX_BO_COMPILER ",GCC " \
+            __WX_BO_STRINGIZE(__GNUC__) "." __WX_BO_STRINGIZE(__GNUC_MINOR__)
+#elif defined(__VISUALC__)
+    #define __WX_BO_COMPILER ",Visual C++"
+#elif defined(__BORLANDC__)
+    #define __WX_BO_COMPILER ",Borland C++"
+#elif defined(__DIGITALMARS__)
+    #define __WX_BO_COMPILER ",DigitalMars"
+#elif defined(__WATCOMC__)
+    #define __WX_BO_COMPILER ",Watcom C++"
 #else
     #define __WX_BO_COMPILER
 #endif
