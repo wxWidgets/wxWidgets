@@ -504,6 +504,10 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     Init();
 
     long treeStyle = wxTR_HAS_BUTTONS | wxTR_HIDE_ROOT;
+    
+#ifdef __WXGTK20__
+    treeStyle |= wxTR_NO_LINES;
+#endif
 
     if (style & wxDIRCTRL_EDIT_LABELS)
         treeStyle |= wxTR_EDIT_LABELS;
@@ -549,7 +553,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
     m_rootId = m_treeCtrl->AddRoot( rootName, 3, -1, rootData);
     m_treeCtrl->SetItemHasChildren(m_rootId);
     ExpandDir(m_rootId); // automatically expand first level
-
+    
     // Expand and select the default path
     if (!m_defaultPath.empty())
     {
@@ -561,7 +565,7 @@ bool wxGenericDirCtrl::Create(wxWindow *parent,
         // On Unix, there's only one node under the (hidden) root node. It
         // represents the / path, so the user would always have to expand it;
         // let's do it ourselves
-        ExpandPath(wxT("/"));
+        ExpandPath( wxT("/") );
     }
 #endif
 
@@ -617,10 +621,15 @@ void wxGenericDirCtrl::SetupSections()
 
     size_t n, count = wxGetAvailableDrives(paths, names, icons);
 
+#ifdef __WXGTK20__
+    wxString home = wxGetHomeDir();
+    AddSection( home, _("Home directory"), 1);
+    home += wxT("/Desktop");
+    AddSection( home, _("Desktop"), 1);
+#endif
+
     for (n = 0; n < count; n++)
-    {
         AddSection(paths[n], names[n], icons[n]);
-    }
 }
 
 void wxGenericDirCtrl::OnBeginEditItem(wxTreeEvent &event)
@@ -1244,35 +1253,6 @@ void wxDirFilterListCtrl::FillFilterList(const wxString& filter, int defaultFilt
 // wxFileIconsTable icons
 // ----------------------------------------------------------------------------
 
-/* Open folder */
-static const char * file_icons_tbl_folder_open_xpm[] = {
-/* width height ncolors chars_per_pixel */
-"16 16 6 1",
-/* colors */
-"   s None  c None",
-".  c #000000",
-"+  c #c0c0c0",
-"@  c #808080",
-"#  c #ffff00",
-"$  c #ffffff",
-/* pixels */
-"                ",
-"   @@@@@        ",
-"  @$$$$$@       ",
-" @$#+#+#$@@@@@@ ",
-" @$+#+#+$$$$$$@.",
-" @$#+#+#+#+#+#@.",
-"@@@@@@@@@@@@@#@.",
-"@$$$$$$$$$$@@+@.",
-"@$#+#+#+#+##.@@.",
-" @$#+#+#+#+#+.@.",
-" @$+#+#+#+#+#.@.",
-"  @$+#+#+#+##@..",
-"  @@@@@@@@@@@@@.",
-"   .............",
-"                ",
-"                "};
-
 /* Computer */
 static const char * file_icons_tbl_computer_xpm[] = {
 "16 16 7 1",
@@ -1299,117 +1279,6 @@ static const char * file_icons_tbl_computer_xpm[] = {
 " .oXoXoXoXoXo.o ",
 ".XOXXXXXXXXX.o  ",
 "............o   "};
-
-/* Drive */
-static const char * file_icons_tbl_drive_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Black",
-"O    c Gray100",
-"+    c Green",
-"@    c #008000",
-"                ",
-"                ",
-"                ",
-"                ",
-"  ............. ",
-" .XXXXXXXXXXXX.o",
-".OOOOOOOOOOOO..o",
-".XXXXXXXXX+@X..o",
-".XXXXXXXXXXXX..o",
-".X..........X..o",
-".XOOOOOOOOOOX..o",
-"..............o ",
-" ooooooooooooo  ",
-"                ",
-"                ",
-"                "};
-
-/* CD-ROM */
-static const char *file_icons_tbl_cdrom_xpm[] = {
-"16 16 10 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Yellow",
-"O    c Blue",
-"+    c Black",
-"@    c Gray100",
-"#    c #008080",
-"$    c Green",
-"%    c #008000",
-"        ...     ",
-"      ..XoX..   ",
-"     .O.XoXXX+  ",
-"    ...O.oXXXX+ ",
-"    .O..X.XXXX+ ",
-"   ....X.+..XXX+",
-"   .XXX.+@+.XXX+",
-"   .X@XX.+.X@@X+",
-" .....X...#XX@+ ",
-".@@@...XXo.O@X+ ",
-".@XXX..XXoXOO+  ",
-".@++++..XoX+++  ",
-".@$%@@XX+++X.+  ",
-".............+  ",
-" ++++++++++++   ",
-"                "};
-
-/* Floppy */
-static const char * file_icons_tbl_floppy_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c Gray100",
-"o    c #c0c0c0",
-"O    c Black",
-"+    c Cyan",
-"@    c Red",
-"         ......X",
-"        .ooooooO",
-"        .+++++OO",
-"        .++++++O",
-"        .++++++O",
-"        .ooooooO",
-"  .......o....oO",
-" .oooooo.o.O.XoO",
-".XXXXXXXXOOOOOO ",
-".ooooooooo@o..O ",
-".ooo....oooo..O ",
-".o..OOOO...o..O ",
-".oooXXXXoooo..O ",
-".............O  ",
-" OOOOOOOOOOOO   ",
-"                "};
-
-/* Removeable */
-static const char * file_icons_tbl_removeable_xpm[] = {
-"16 16 7 1",
-"     s None    c None",
-".    c #808080",
-"X    c #c0c0c0",
-"o    c Black",
-"O    c Gray100",
-"+    c Red",
-"@    c #800000",
-"                ",
-"                ",
-"                ",
-"  ............. ",
-" .XXXXXXXXXXXX.o",
-".OOOOOOOOOOOO..o",
-".OXXXXXXXXXXX..o",
-".O+@.oooooo.X..o",
-".OXXOooooooOX..o",
-".OXXXOOOOOOXX..o",
-".OXXXXXXXXXXX..o",
-".O............o ",
-" ooooooooooooo  ",
-"                ",
-"                ",
-"                "};
 
 // ----------------------------------------------------------------------------
 // wxFileIconsTable & friends
@@ -1474,17 +1343,34 @@ void wxFileIconsTable::Create()
                                                    wxART_CMN_DIALOG,
                                                    wxSize(16, 16)));
     // folder_open
-    m_smallImageList->Add(wxIcon(file_icons_tbl_folder_open_xpm));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FOLDER_OPEN,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // computer
+#ifdef __WXGTK24__
+    // GTK24 uses this icon in the file open dialog
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
+#else
     m_smallImageList->Add(wxIcon(file_icons_tbl_computer_xpm));
+#endif
     // drive
-    m_smallImageList->Add(wxIcon(file_icons_tbl_drive_xpm));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_HARDDISK,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // cdrom
-    m_smallImageList->Add(wxIcon(file_icons_tbl_cdrom_xpm));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_CDROM,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // floppy
-    m_smallImageList->Add(wxIcon(file_icons_tbl_floppy_xpm));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_FLOPPY,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // removeable
-    m_smallImageList->Add(wxIcon(file_icons_tbl_removeable_xpm));
+    m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_REMOVABLE,
+                                                   wxART_CMN_DIALOG,
+                                                   wxSize(16, 16)));
     // file
     m_smallImageList->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE,
                                                    wxART_CMN_DIALOG,
