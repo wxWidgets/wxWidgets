@@ -240,7 +240,6 @@
                 <sys-lib>winspool</sys-lib>
                 <sys-lib>winmm</sys-lib>
                 <sys-lib>shell32</sys-lib>
-                <sys-lib>oldnames</sys-lib>
                 <sys-lib>comctl32</sys-lib>
                 <sys-lib>odbc32</sys-lib>
                 <sys-lib>ole32</sys-lib>
