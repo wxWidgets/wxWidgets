@@ -94,7 +94,10 @@ int XmlResApp::OnRun()
     {
         case -1:
             return 0;
+            #if 0
+            // break is unreachable because of return earlier
             break;
+            #endif
 
         case 0:
             retCode = 0;
@@ -104,12 +107,19 @@ int XmlResApp::OnRun()
             else
                 CompileRes();
             return retCode;
+            #if 0
+            // break is unreachable because of return earlier
             break;
+            #endif
 
+        #if 0
+        // default return moved outside of switch to avoid warning about lack of return in function
         default:
             return 1;
             break;
+        #endif
     }
+    return 1;
 }
 
 
