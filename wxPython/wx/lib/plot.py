@@ -1,6 +1,6 @@
 #-----------------------------------------------------------------------------
 # Name:        wx.lib.plot.py
-# Purpose:     
+# Purpose:     Line, Bar and Scatter Graphs
 #
 # Author:      Gordon Williams
 #
@@ -20,16 +20,22 @@
 #
 # o wxScrolledMessageDialog -> ScrolledMessageDialog
 #
+# Oct 6, 2004  Gordon Williams (g_will@cyberus.ca)
+#   - Added bar graph demo
+#   - Modified line end shape from round to square.
+#   - Removed FloatDCWrapper for conversion to ints and ints in arguments
+#
+
 
 """
 This is a simple light weight plotting module that can be used with
 Boa or easily integrated into your own wxPython application.  The
 emphasis is on small size and fast plotting for large data sets.  It
 has a reasonable number of features to do line and scatter graphs
-easily.  It is not as sophisticated or as powerful as SciPy Plt or
-Chaco.  Both of these are great packages but consume huge amounts of
-computer resources for simple plots.  They can be found at
-http://scipy.com
+easily as well as simple bar graphs.  It is not as sophisticated or 
+as powerful as SciPy Plt or Chaco.  Both of these are great packages 
+but consume huge amounts of computer resources for simple plots.
+They can be found at http://scipy.com
 
 This file contains two parts; first the re-usable library stuff, then,
 after a "if __name__=='__main__'" test, a simple frame and a few default
@@ -77,7 +83,7 @@ import  string
 import  time
 import  wx
 
-# Needs Numeric
+# Needs Numeric or numarray
 try:
     import Numeric
 except:
@@ -166,7 +172,9 @@ class PolyLine(PolyPoints):
         colour = self.attributes['colour']
         width = self.attributes['width'] * printerScale
         style= self.attributes['style']
-        dc.SetPen(wx.Pen(wx.NamedColour(colour), int(width), style))
+        pen = wx.Pen(wx.NamedColour(colour), width, style)
+        pen.SetCap(wx.CAP_BUTT)
+        dc.SetPen(pen)
         if coord == None:
             dc.DrawLines(self.scaled)
         else:
@@ -225,7 +233,7 @@ class PolyMarker(PolyPoints):
         fillstyle = self.attributes['fillstyle']
         marker = self.attributes['marker']
 
-        dc.SetPen(wx.Pen(wx.NamedColour(colour),int(width)))
+        dc.SetPen(wx.Pen(wx.NamedColour(colour), width))
         if fillcolour:
             dc.SetBrush(wx.Brush(wx.NamedColour(fillcolour),fillstyle))
         else:
@@ -704,7 +712,7 @@ class PlotCanvas(wx.Window):
             
         if dc == None:
             # allows using floats for certain functions 
-            dc = FloatDCWrapper(wx.BufferedDC(wx.ClientDC(self), self._Buffer))
+            dc = wx.BufferedDC(wx.ClientDC(self), self._Buffer)
             dc.Clear()
             
         dc.BeginDrawing()
@@ -1009,7 +1017,7 @@ class PlotCanvas(wx.Window):
         plr= Numeric.maximum(pt1,pt2) # Lower right corner
         rectWidth, rectHeight= plr-pul
         ptx,pty= pul
-        return int(ptx),int(pty),int(rectWidth),int(rectHeight) # return ints
+        return ptx, pty, rectWidth, rectHeight 
     
     def _axisInterval(self, spec, lower, upper):
         """Returns sensible axis range for given spec"""
@@ -1045,7 +1053,7 @@ class PlotCanvas(wx.Window):
     def _drawAxes(self, dc, p1, p2, scale, shift, xticks, yticks):
         
         penWidth= self.printerScale        # increases thickness for printing only
-        dc.SetPen(wx.Pen(wx.NamedColour('BLACK'),int(penWidth)))
+        dc.SetPen(wx.Pen(wx.NamedColour('BLACK'), penWidth))
         
         # set length of tick marks--long ones make grid
         if self._gridEnabled:
@@ -1139,7 +1147,7 @@ class PlotPrintout(wx.Printout):
         return (1, 1, 1, 1)  # disable page numbers
 
     def OnPrintPage(self, page):
-        dc = FloatDCWrapper(self.GetDC())  # allows using floats for certain functions
+        dc = self.GetDC()  # allows using floats for certain functions
 ##        print "PPI Printer",self.GetPPIPrinter()
 ##        print "PPI Screen", self.GetPPIScreen()
 ##        print "DC GetSize", dc.GetSize()
@@ -1192,34 +1200,6 @@ class PlotPrintout(wx.Printout):
         self.graph._setPrinterScale(1)
 
         return True
-
-# Hack to allow plotting real numbers for the methods listed.
-# All others passed directly to DC.
-# For Drawing it is used as
-# dc = FloatDCWrapper(wx.BufferedDC(wx.ClientDC(self), self._Buffer))
-# For printing is is used as
-# dc = FloatDCWrapper(self.GetDC()) 
-class FloatDCWrapper:
-    def __init__(self, aDC):
-        self.theDC = aDC
-
-    def DrawLine(self, x1,y1,x2,y2):
-        self.theDC.DrawLine(int(x1),int(y1), int(x2),int(y2))
-
-    def DrawText(self, txt, x, y):
-        self.theDC.DrawText(txt, int(x), int(y))
-
-    def DrawRotatedText(self, txt, x, y, angle):
-        self.theDC.DrawRotatedText(txt, int(x), int(y), angle)
-
-    def SetClippingRegion(self, x, y, width, height):
-        self.theDC.SetClippingRegion(int(x), int(y), int(width), int(height))
-
-    def SetDeviceOrigin(self, x, y):
-        self.theDC.SetDeviceOrigin(int(x), int(y))
-
-    def __getattr__(self, name):
-        return getattr(self.theDC, name)
 
 
 
@@ -1299,6 +1279,25 @@ def _draw5Objects():
     line1 = PolyLine(points, legend='Wide Line', colour='green', width=5)
     return PlotGraphics([line1], "Empty Plot With Just Axes", "Value X", "Value Y")
 
+def _draw6Objects():
+    # Bar graph
+    points1=[(1,0), (1,10)]
+    line1 = PolyLine(points1, colour='green', legend='Feb.', width=10)
+    points1g=[(2,0), (2,4)]
+    line1g = PolyLine(points1g, colour='red', legend='Mar.', width=10)
+    points1b=[(3,0), (3,6)]
+    line1b = PolyLine(points1b, colour='blue', legend='Apr.', width=10)
+
+    points2=[(4,0), (4,12)]
+    line2 = PolyLine(points2, colour='Yellow', legend='May', width=10)
+    points2g=[(5,0), (5,8)]
+    line2g = PolyLine(points2g, colour='orange', legend='June', width=10)
+    points2b=[(6,0), (6,4)]
+    line2b = PolyLine(points2b, colour='brown', legend='July', width=10)
+
+    return PlotGraphics([line1, line1g, line1b, line2, line2g, line2b],
+                        "Bar Graph - (Turn on Grid, Legend)", "Months", "Number of Students")
+
 
 class TestFrame(wx.Frame):
     def __init__(self, parent, id, title):
@@ -1336,6 +1335,9 @@ class TestFrame(wx.Frame):
         self.Bind(wx.EVT_MENU,self.OnPlotDraw4, id=209)
         menu.Append(210, 'Draw5', 'Draw plots5')
         self.Bind(wx.EVT_MENU,self.OnPlotDraw5, id=210)
+        menu.Append(260, 'Draw6', 'Draw plots6')
+        self.Bind(wx.EVT_MENU,self.OnPlotDraw6, id=260)
+       
 
         menu.Append(211, '&Redraw', 'Redraw plots')
         self.Bind(wx.EVT_MENU,self.OnPlotRedraw, id=211)
@@ -1428,6 +1430,15 @@ class TestFrame(wx.Frame):
         # make the axis X= (0,5), Y=(0,10)
         # (default with None is X= (-1,1), Y= (-1,1))
         self.client.Draw(drawObj, xAxis= (0,5), yAxis= (0,10))
+
+    def OnPlotDraw6(self, event):
+        #Bar Graph Example
+        self.resetDefaults()
+        #self.client.SetEnableLegend(True)   #turn on Legend
+        #self.client.SetEnableGrid(True)     #turn on Grid
+        self.client.SetXSpec('none')        #turns off x-axis scale
+        self.client.SetYSpec('auto')
+        self.client.Draw(_draw6Objects(), xAxis= (0,7))
 
     def OnPlotRedraw(self,event):
         self.client.Redraw()
