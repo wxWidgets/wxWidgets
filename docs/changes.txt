@@ -184,6 +184,7 @@ All:
 All (GUI):
 
 - rare crash in wxFontMapper fixed (Robert Vazan)
+- Added wxMenu::FindItemByPosition.
 
 Generic:
 
@@ -211,6 +212,7 @@ wxMotif:
 - fixed "make install"
 
 
+>>>>>>> 1.212.2.72
 2.4.1
 -----
 

@@ -533,6 +533,13 @@ wxMenuItem *wxMenuBase::FindChildItem(int id, size_t *ppos) const
     return item;
 }
 
+// find by position
+wxMenuItem* wxMenuBase::FindItemByPosition(size_t position) const
+{
+    if ( position >= m_items.GetCount()) return NULL;
+    return m_items.Item( position )->GetData();
+}
+
 // ----------------------------------------------------------------------------
 // wxMenu helpers used by derived classes
 // ----------------------------------------------------------------------------
