@@ -134,6 +134,12 @@ public:
 #ifdef __WXMAC__
     void MacSetMetalAppearance( bool on ) ;
     bool MacGetMetalAppearance() const ;
+#else
+    %extend {
+        // TODO: Should they raise not implemented or just NOP???
+        void MacSetMetalAppearance( bool on ) { /*wxPyRaiseNotImplemented();*/ }
+        bool MacGetMetalAppearance() const    { /*wxPyRaiseNotImplemented();*/ return false; }
+    }
 #endif
 };
 
