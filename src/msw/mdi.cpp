@@ -82,6 +82,7 @@ static const int IDM_WINDOWCASCADE = 4002;
 static const int IDM_WINDOWICONS = 4003;
 static const int IDM_WINDOWNEXT = 4004;
 static const int IDM_WINDOWTILEVERT = 4005;
+static const int IDM_WINDOWPREV = 4006;
 
 // This range gives a maximum of 500 MDI children. Should be enough :-)
 static const int wxFIRST_MDI_CHILD = 4100;
@@ -188,6 +189,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
       m_windowMenu->AppendSeparator();
       m_windowMenu->Append(IDM_WINDOWICONS, _("&Arrange Icons"));
       m_windowMenu->Append(IDM_WINDOWNEXT, _("&Next"));
+      m_windowMenu->Append(IDM_WINDOWPREV, _("&Previous"));
   }
 
   m_parentFrameActive = TRUE;
@@ -500,6 +502,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
 
     // is it one of standard MDI commands?
     WXWPARAM wParam = 0;
+    WXLPARAM lParam = 0;
     int msg;
     switch ( id )
     {
@@ -525,6 +528,12 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
 
         case IDM_WINDOWNEXT:
             msg = WM_MDINEXT;
+            lParam = 0;         // next child
+            break;
+
+        case IDM_WINDOWPREV:
+            msg = WM_MDINEXT;
+            lParam = 1;         // previous child
             break;
 
         default:
@@ -533,7 +542,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
 
     if ( msg )
     {
-        ::SendMessage(GetWinHwnd(GetClientWindow()), msg, wParam, 0);
+        ::SendMessage(GetWinHwnd(GetClientWindow()), msg, wParam, lParam);
 
         return TRUE;
     }

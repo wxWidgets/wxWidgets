@@ -44,6 +44,7 @@ static const int IDM_WINDOWCASCADE = 4002;
 static const int IDM_WINDOWICONS = 4003;
 static const int IDM_WINDOWNEXT = 4004;
 static const int IDM_WINDOWTILEVERT = 4005;
+static const int IDM_WINDOWPREV = 4006;
 
 // This range gives a maximum of 500 MDI children. Should be enough :-)
 static const int wxFIRST_MDI_CHILD = 4100;

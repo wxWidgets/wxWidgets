@@ -1,4 +1,3 @@
-
 <HTML>
 
 <HEAD>
@@ -24,18 +23,42 @@
 See also <a href="faq.htm">top-level FAQ page</a>.
 <hr>
 <h3>List of questions in this category</h3>
+
+<ul>
 <li><a href="#wxgtk">What is wxWindows 2 for GTK?</a></li>
+<li><a href="#locale">Why doesn&#39;t reading floating point numbers work when using wxWindows?</a></li>
 <li><a href="#gnome">Does wxGTK have GNOME support?</a></li>
 <li><a href="#redhat">Warning about GTK libraries supplied with RedHat</a></li>
 <li><a href="#wxgtk">What is wxWindows 2 for GTK?</a></li>
-<li><a href="#bincompat">What range of Intel Linux platforms will a given application binary be usable on?</li>
+<li><a href="#bincompat">What range of Intel Linux platforms will a given application binary be usable on?</a></li>
+</ul>
 
 <hr>
+
+<h3><a name="wxgtk">What is wxWindows 2 for GTK?</a></h3>
 
 wxWindows 2 for GTK is a port of wxWindows to the <a href="http://www.gimp.org/gtk" target=_top>GTK+ toolkit</a>,
 which is freely available for most flavours of Unix with X. wxWindows 2 for GTK is
 often abbreviated to wxGTK. wxGTK has a separate home page <a href="http://www.freiburg.linux.de/~wxxt" target=_top>here</a>.
 <P>
+
+<h3><a name="locale">Why doesn&#39;t reading floating point numbers work when using wxWindows?</a></h3>
+
+If your program reads the floating point numbers in the format <tt>123.45</tt>
+from a file, it may suddently start returning just <tt>123</tt> instead of the
+correct value on some systems -- which is all the more mysterious as the same
+code in a standalone program works just fine.
+
+<p>
+The explanation is that GTK+ changes the current locale on program startup. If
+the decimal point character in the current locale is not the period (for
+example, it is comma in the French locale), all the standard C functions won&#39;t
+recognize the numbers such as above as floating point ones any more.
+
+<p>
+The solution is to either use your own function for reading the floating point
+numbers (probably the best one) or to call <tt>setlocale(LC_NUMERIC, "C")</tt>
+before reading from file and restore the old locale back afterwards if needed.
 
 <h3><a name="gnome">Does wxGTK have GNOME support?</a></h3>
 

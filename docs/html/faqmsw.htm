@@ -1,4 +1,3 @@
-
 <HTML>
 
 <HEAD>
@@ -35,6 +34,7 @@ See also <a href="faq.htm">top-level FAQ page</a>.
 <li><a href="#dll">Can you compile wxWindows 2 as a DLL?</a></li>
 <li><a href="#exesize">How can I reduce executable size?</a></li>
 <li><a href="#mfc">Is wxWindows compatible with MFC?</a></li>
+<li><a href="#asuffix">Why do I get errors about FooBarA when I only use FooBar in my program?</a></li>
 <li><a href="#newerrors">Why my code fails to compile with strange errors about new operator?</a></li>
 <li><a href="#mfcport">How do I port MFC applications to wxWindows?</a></li>
 <li><a href="#crash">Why do I sometimes get bizarre crash problems using VC++ 5/6?</a></li>
@@ -216,6 +216,25 @@ There is a sample which demonstrates MFC and wxWindows code co-existing in the s
 application. However, don&#39;t expect to be able to enable wxWindows windows with OLE-2
 functionality using MFC.<P>
 
+<H3><a name="asuffix">Why do I get errors about FooBarA when I only use FooBar in my program?</H3>
+
+If you get errors like
+<p>
+<center>
+<tt>no matching function for call to &#39;wxDC::DrawTextA(const char[5], int,
+int)&#39;</tt>
+</center>
+<p>
+or similar ones for the other functions, i.e. the compiler error messages
+mention the function with the <tt>&#39;A&#39;</tt> suffix while you didn&#39;t
+use it in your code, the explanation is that you had included
+<tt>&#60;windows.h&#062;</tt> header which redefines many symbols to have such
+suffix (or <tt>&#39;W&#39;</tt> in the Unicode builds).
+
+<p>
+The fix is to either not include <tt>&#60;windows.h&#62;</tt> at all or include
+<tt>"wx/msw/winundef.h"</tt> immediately after it.
+
 <H3><a name="newerrors">Why my code fails to compile with strange errors about new operator?</a></H3>
 
 The most common cause of this problem is the memory debugging settings in
@@ -395,7 +414,7 @@ First, you can use wxRegKey directly, for example:
     regKey.SetName(idName);
 
     {
-        wxLogNull dummy; 
+        wxLogNull dummy;  
         if (!regKey.Create())
         {
             idName = wxT("HKEY_CURRENT_USER\\SOFTWARE\\My Company\\My Product\\Stuff\\");
