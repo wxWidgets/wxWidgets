@@ -1022,7 +1022,7 @@ $(WXDIR)\lib\wx23.dll: $(OBJECTS)
     $(OBJECTS)
     $(WXDIR)\src\os2\wx23.def
 <<
-    implib $(WXDIR)\src\os2\wx23.lib $(WXDIR)\src\os2\wx23.def
+    implib $(WXDIR)\lib\wx23.lib $(WXDIR)\src\os2\wx23.def
 
 !endif
 
