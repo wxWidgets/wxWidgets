@@ -48,6 +48,7 @@ ALL_SOURCES = \
 		generic/treectlg.cpp \
 		generic/treelay.cpp \
 		generic/wizard.cpp \
+		common/accesscmn.cpp \
 		common/appcmn.cpp \
 		common/artprov.cpp \
 		common/artstd.cpp \
@@ -212,6 +213,7 @@ ALL_SOURCES = \
 		gtk/mdi.cpp \
 		gtk/menu.cpp \
 		gtk/minifram.cpp \
+		gtk/msgdlg.cpp \
 		gtk/notebook.cpp \
 		gtk/pen.cpp \
 		gtk/popupwin.cpp \
@@ -272,6 +274,7 @@ ALL_SOURCES = \
 
 ALL_HEADERS = \
 		accel.h \
+		access.h \
 		app.h \
 		arrimpl.cpp \
 		artprov.h \
@@ -637,6 +640,7 @@ ALL_HEADERS = \
 		protocol/protocol.h
 
 COMMONOBJS = \
+		accesscmn.o \
 		appcmn.o \
 		artprov.o \
 		artstd.o \
@@ -850,6 +854,7 @@ GUIOBJS = \
 		mdi.o \
 		menu.o \
 		minifram.o \
+		msgdlg.o \
 		notebook.o \
 		pen.o \
 		popupwin.o \

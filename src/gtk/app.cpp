@@ -239,7 +239,11 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
         if (wxTopLevelWindows.GetCount() > 0)
         {
             wxWindow* win = (wxWindow*) wxTopLevelWindows.GetLast()->GetData();
+#ifdef __WXGTK20__
+            if (win->IsKindOf(CLASSINFO(wxMessageDialog)))
+#else
             if (win->IsKindOf(CLASSINFO(wxGenericMessageDialog)))
+#endif
                 win->OnInternalIdle();
         }
         return TRUE;
