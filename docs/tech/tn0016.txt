@@ -196,10 +196,10 @@ f) Update configure.in and wx-config.in to contain information about
      flags and libraries to ldflags_foo and ldlibs_foo variables in
      wx-config.in (both are optional).
 
-g) Update defs.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
-   #define WXMAKINGDLL_FOO inside first "#ifdef WXMAKINGDLL" block in defs.h)
-   and to define WXDLLIMPEXP_FOO and WXDLLIMPEXP_DATA_FOO. You can copy
-   e.g. WXDLLIMPEXP_NET definition, it is something like this:
+g) Update dlimpexp.h to define WXMAKINGDLL_FOO if WXMAKINGDLL is defined (add
+   #define WXMAKINGDLL_FOO inside first "#ifdef WXMAKINGDLL" block in
+   dlimpexp.h) and to define WXDLLIMPEXP_FOO and WXDLLIMPEXP_DATA_FOO. You
+   can copy e.g. WXDLLIMPEXP_NET definition, it is something like this:
         #ifdef WXMAKINGDLL_NET
             #define WXDLLIMPEXP_NET WXEXPORT
             #define WXDLLIMPEXP_DATA_NET(type) WXEXPORT type
