@@ -2553,6 +2553,42 @@ class TIFFHandlerPtr(TIFFHandler):
         self.__class__ = TIFFHandler
 _core_.TIFFHandler_swigregister(TIFFHandlerPtr)
 
+QUANTIZE_INCLUDE_WINDOWS_COLOURS = _core_.QUANTIZE_INCLUDE_WINDOWS_COLOURS
+QUANTIZE_FILL_DESTINATION_IMAGE = _core_.QUANTIZE_FILL_DESTINATION_IMAGE
+class Quantize(object):
+    """Performs quantization, or colour reduction, on a wxImage."""
+    def __init__(self): raise RuntimeError, "No constructor defined"
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxQuantize instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def Quantize(*args, **kwargs):
+        """
+        Quantize(Image src, Image dest, int desiredNoColours=236, int flags=wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE) -> bool
+
+        Reduce the colours in the source image and put the result into the
+        destination image, setting the palette in the destination if
+        needed. Both images may be the same, to overwrite the source image.
+        """
+        return _core_.Quantize_Quantize(*args, **kwargs)
+
+    Quantize = staticmethod(Quantize)
+
+class QuantizePtr(Quantize):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = Quantize
+_core_.Quantize_swigregister(QuantizePtr)
+
+def Quantize_Quantize(*args, **kwargs):
+    """
+    Quantize_Quantize(Image src, Image dest, int desiredNoColours=236, int flags=wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE) -> bool
+
+    Reduce the colours in the source image and put the result into the
+    destination image, setting the palette in the destination if
+    needed. Both images may be the same, to overwrite the source image.
+    """
+    return _core_.Quantize_Quantize(*args, **kwargs)
+
 #---------------------------------------------------------------------------
 
 class EvtHandler(Object):

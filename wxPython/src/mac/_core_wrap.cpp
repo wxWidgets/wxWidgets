@@ -250,11 +250,11 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxArrayString swig_types[41] 
 #define  SWIGTYPE_p_wxShowEvent swig_types[42] 
 #define  SWIGTYPE_p_wxToolTip swig_types[43] 
-#define  SWIGTYPE_p_wxMaximizeEvent swig_types[44] 
-#define  SWIGTYPE_p_wxIconizeEvent swig_types[45] 
-#define  SWIGTYPE_p_wxActivateEvent swig_types[46] 
-#define  SWIGTYPE_p_wxMoveEvent swig_types[47] 
-#define  SWIGTYPE_p_wxSizeEvent swig_types[48] 
+#define  SWIGTYPE_p_wxIconizeEvent swig_types[44] 
+#define  SWIGTYPE_p_wxActivateEvent swig_types[45] 
+#define  SWIGTYPE_p_wxMoveEvent swig_types[46] 
+#define  SWIGTYPE_p_wxSizeEvent swig_types[47] 
+#define  SWIGTYPE_p_wxMaximizeEvent swig_types[48] 
 #define  SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[49] 
 #define  SWIGTYPE_p_wxWindowCreateEvent swig_types[50] 
 #define  SWIGTYPE_p_wxIdleEvent swig_types[51] 
@@ -314,14 +314,15 @@ SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_con
 #define  SWIGTYPE_p_wxCommandEvent swig_types[105] 
 #define  SWIGTYPE_p_wxPyCommandEvent swig_types[106] 
 #define  SWIGTYPE_p_wxPyDropTarget swig_types[107] 
-#define  SWIGTYPE_p_wxChildFocusEvent swig_types[108] 
-#define  SWIGTYPE_p_wxFocusEvent swig_types[109] 
-#define  SWIGTYPE_p_wxDropFilesEvent swig_types[110] 
-#define  SWIGTYPE_p_wxControlWithItems swig_types[111] 
-#define  SWIGTYPE_p_wxColour swig_types[112] 
-#define  SWIGTYPE_p_wxValidator swig_types[113] 
-#define  SWIGTYPE_p_wxPyValidator swig_types[114] 
-static swig_type_info *swig_types[116];
+#define  SWIGTYPE_p_wxQuantize swig_types[108] 
+#define  SWIGTYPE_p_wxChildFocusEvent swig_types[109] 
+#define  SWIGTYPE_p_wxFocusEvent swig_types[110] 
+#define  SWIGTYPE_p_wxDropFilesEvent swig_types[111] 
+#define  SWIGTYPE_p_wxControlWithItems swig_types[112] 
+#define  SWIGTYPE_p_wxColour swig_types[113] 
+#define  SWIGTYPE_p_wxValidator swig_types[114] 
+#define  SWIGTYPE_p_wxPyValidator swig_types[115] 
+static swig_type_info *swig_types[117];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -1238,6 +1239,16 @@ wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,unsigned char red,unsigned ch
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_Y(wxIMAGE_OPTION_CUR_HOTSPOT_Y); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTION(wxIMAGE_OPTION_RESOLUTION); 
  static const wxString wxPyIMAGE_OPTION_RESOLUTIONUNIT(wxIMAGE_OPTION_RESOLUTIONUNIT); 
+
+#include <wx/quantize.h>
+
+bool Quantize_Quantize(wxImage const &src,wxImage &dest,int desiredNoColours,int flags){
+                return wxQuantize::Quantize(src, dest, 
+                                            //NULL, // palette
+                                            desiredNoColours,
+                                            NULL, // eightBitData
+                                            flags);
+        }
 void wxEvtHandler_Connect(wxEvtHandler *self,int id,int lastId,int eventType,PyObject *func){
             if (PyCallable_Check(func)) {
                 self->Connect(id, lastId, eventType,
@@ -11766,6 +11777,67 @@ static PyObject * TIFFHandler_swigregister(PyObject *self, PyObject *args) {
     PyObject *obj;
     if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
     SWIG_TypeClientData(SWIGTYPE_p_wxTIFFHandler, obj);
+    Py_INCREF(obj);
+    return Py_BuildValue((char *)"");
+}
+static PyObject *_wrap_Quantize_Quantize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = 0 ;
+    wxImage *arg2 = 0 ;
+    int arg3 = (int) 236 ;
+    int arg4 = (int) wxQUANTIZE_INCLUDE_WINDOWS_COLOURS|wxQUANTIZE_FILL_DESTINATION_IMAGE ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "src",(char *) "dest",(char *) "desiredNoColours",(char *) "flags", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:Quantize_Quantize",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxImage,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg1 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxImage,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
+    if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
+    }
+    if (obj2) {
+        arg3 = (int) SWIG_AsInt(obj2); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    if (obj3) {
+        arg4 = (int) SWIG_AsInt(obj3); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)Quantize_Quantize((wxImage const &)*arg1,*arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject * Quantize_swigregister(PyObject *self, PyObject *args) {
+    PyObject *obj;
+    if (!PyArg_ParseTuple(args,(char*)"O", &obj)) return NULL;
+    SWIG_TypeClientData(SWIGTYPE_p_wxQuantize, obj);
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
@@ -40236,6 +40308,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"XPMHandler_swigregister", XPMHandler_swigregister, METH_VARARGS },
 	 { (char *)"new_TIFFHandler", (PyCFunction) _wrap_new_TIFFHandler, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"TIFFHandler_swigregister", TIFFHandler_swigregister, METH_VARARGS },
+	 { (char *)"Quantize_Quantize", (PyCFunction) _wrap_Quantize_Quantize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Quantize_swigregister", Quantize_swigregister, METH_VARARGS },
 	 { (char *)"new_EvtHandler", (PyCFunction) _wrap_new_EvtHandler, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"EvtHandler_GetNextHandler", (PyCFunction) _wrap_EvtHandler_GetNextHandler, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"EvtHandler_GetPreviousHandler", (PyCFunction) _wrap_EvtHandler_GetPreviousHandler, METH_VARARGS | METH_KEYWORDS },
@@ -41696,11 +41770,11 @@ static swig_type_info _swigt__p_wxAppTraits[] = {{"_p_wxAppTraits", 0, "wxAppTra
 static swig_type_info _swigt__p_wxArrayString[] = {{"_p_wxArrayString", 0, "wxArrayString *", 0, 0, 0, 0},{"_p_wxArrayString", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxShowEvent[] = {{"_p_wxShowEvent", 0, "wxShowEvent *", 0, 0, 0, 0},{"_p_wxShowEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxToolTip[] = {{"_p_wxToolTip", 0, "wxToolTip *", 0, 0, 0, 0},{"_p_wxToolTip", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
-static swig_type_info _swigt__p_wxMaximizeEvent[] = {{"_p_wxMaximizeEvent", 0, "wxMaximizeEvent *", 0, 0, 0, 0},{"_p_wxMaximizeEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxIconizeEvent[] = {{"_p_wxIconizeEvent", 0, "wxIconizeEvent *", 0, 0, 0, 0},{"_p_wxIconizeEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxActivateEvent[] = {{"_p_wxActivateEvent", 0, "wxActivateEvent *", 0, 0, 0, 0},{"_p_wxActivateEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxMoveEvent[] = {{"_p_wxMoveEvent", 0, "wxMoveEvent *", 0, 0, 0, 0},{"_p_wxMoveEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxSizeEvent[] = {{"_p_wxSizeEvent", 0, "wxSizeEvent *", 0, 0, 0, 0},{"_p_wxSizeEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxMaximizeEvent[] = {{"_p_wxMaximizeEvent", 0, "wxMaximizeEvent *", 0, 0, 0, 0},{"_p_wxMaximizeEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxQueryNewPaletteEvent[] = {{"_p_wxQueryNewPaletteEvent", 0, "wxQueryNewPaletteEvent *", 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxWindowCreateEvent[] = {{"_p_wxWindowCreateEvent", 0, "wxWindowCreateEvent *", 0, 0, 0, 0},{"_p_wxWindowCreateEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxIdleEvent[] = {{"_p_wxIdleEvent", 0, "wxIdleEvent *", 0, 0, 0, 0},{"_p_wxIdleEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -41760,6 +41834,7 @@ static swig_type_info _swigt__p_wxPyApp[] = {{"_p_wxPyApp", 0, "wxPyApp *", 0, 0
 static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyCommandEvent[] = {{"_p_wxPyCommandEvent", 0, "wxPyCommandEvent *", 0, 0, 0, 0},{"_p_wxPyCommandEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxPyDropTarget[] = {{"_p_wxPyDropTarget", 0, "wxPyDropTarget *", 0, 0, 0, 0},{"_p_wxPyDropTarget", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxQuantize[] = {{"_p_wxQuantize", 0, "wxQuantize *", 0, 0, 0, 0},{"_p_wxQuantize", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxChildFocusEvent[] = {{"_p_wxChildFocusEvent", 0, "wxChildFocusEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxFocusEvent[] = {{"_p_wxFocusEvent", 0, "wxFocusEvent *", 0, 0, 0, 0},{"_p_wxFocusEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 static swig_type_info _swigt__p_wxDropFilesEvent[] = {{"_p_wxDropFilesEvent", 0, "wxDropFilesEvent *", 0, 0, 0, 0},{"_p_wxDropFilesEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
@@ -41813,11 +41888,11 @@ _swigt__p_wxAppTraits,
 _swigt__p_wxArrayString, 
 _swigt__p_wxShowEvent, 
 _swigt__p_wxToolTip, 
-_swigt__p_wxMaximizeEvent, 
 _swigt__p_wxIconizeEvent, 
 _swigt__p_wxActivateEvent, 
 _swigt__p_wxMoveEvent, 
 _swigt__p_wxSizeEvent, 
+_swigt__p_wxMaximizeEvent, 
 _swigt__p_wxQueryNewPaletteEvent, 
 _swigt__p_wxWindowCreateEvent, 
 _swigt__p_wxIdleEvent, 
@@ -41877,6 +41952,7 @@ _swigt__p_wxPyApp,
 _swigt__p_wxCommandEvent, 
 _swigt__p_wxPyCommandEvent, 
 _swigt__p_wxPyDropTarget, 
+_swigt__p_wxQuantize, 
 _swigt__p_wxChildFocusEvent, 
 _swigt__p_wxFocusEvent, 
 _swigt__p_wxDropFilesEvent, 
@@ -42522,6 +42598,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"BMP_4BPP", SWIG_FromInt((int)wxBMP_4BPP));
     PyDict_SetItemString(d,"BMP_1BPP", SWIG_FromInt((int)wxBMP_1BPP));
     PyDict_SetItemString(d,"BMP_1BPP_BW", SWIG_FromInt((int)wxBMP_1BPP_BW));
+    PyDict_SetItemString(d,"QUANTIZE_INCLUDE_WINDOWS_COLOURS", SWIG_FromInt((int)wxQUANTIZE_INCLUDE_WINDOWS_COLOURS));
+    PyDict_SetItemString(d,"QUANTIZE_FILL_DESTINATION_IMAGE", SWIG_FromInt((int)wxQUANTIZE_FILL_DESTINATION_IMAGE));
     PyDict_SetItemString(d,"EVENT_PROPAGATE_NONE", SWIG_FromInt((int)wxEVENT_PROPAGATE_NONE));
     PyDict_SetItemString(d,"EVENT_PROPAGATE_MAX", SWIG_FromInt((int)wxEVENT_PROPAGATE_MAX));
     PyDict_SetItemString(d, "wxEVT_NULL", PyInt_FromLong(wxEVT_NULL));
