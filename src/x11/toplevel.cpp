@@ -127,7 +127,9 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
     // TODO: if we want no border, caption etc.,
     // I think we set this to True to remove decorations
     // No. RR.
-    xattributes.override_redirect = False;
+    // Yes :-) JACS (because some WMs don't respect
+    // the hints)
+    xattributes.override_redirect = (style & wxNO_BORDER) ? True : False;
 #endif
     
 #if wxUSE_NANOX
