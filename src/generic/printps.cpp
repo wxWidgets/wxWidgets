@@ -171,7 +171,7 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
     wxProgressDialog *progressDialog = new wxProgressDialog (
        printout->GetTitle(),
        _("Printing..."),
-       maxPage-minPage,
+       maxPage-minPage+1,
        parent,
        /* disable parent only */ true,
        /* show abort button */ true);
