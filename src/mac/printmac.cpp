@@ -261,7 +261,11 @@ void wxMacCarbonPrintData::TransferFrom( wxPrintDialogData* data )
     PMSetPageRange( m_macPrintSettings , data->GetMinPage() , data->GetMaxPage() ) ;
     PMSetCopies( m_macPrintSettings , data->GetNoCopies() , false ) ;
     PMSetFirstPage( m_macPrintSettings , data->GetFromPage() , false ) ;
-    PMSetLastPage( m_macPrintSettings , data->GetToPage() , false ) ;
+
+    int toPage = data->GetToPage();
+    if (toPage < 1)
+        toPage = data->GetFromPage();
+    PMSetLastPage( m_macPrintSettings , toPage , false ) ;
 }
 
 void wxMacCarbonPrintData::CopyFrom( wxNativePrintData* d )
@@ -443,8 +447,11 @@ void wxMacClassicPrintData::TransferTo( wxPageSetupData* data )
 
 void wxMacClassicPrintData::TransferFrom( wxPrintDialogData* data )
 {
+    int toPage = data->GetToPage();
+    if (toPage < 1)
+        toPage = data->GetFromPage();
     (**m_macPrintSettings).prJob.iFstPage = data->GetFromPage() ;
-    (**m_macPrintSettings).prJob.iLstPage = data->GetToPage() ;
+    (**m_macPrintSettings).prJob.iLstPage = toPage;
 }
 
 void wxMacClassicPrintData::TransferTo( wxPrintDialogData* data )

@@ -252,6 +252,11 @@ void wxGenericPrintDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
     TransferDataFromWindow();
 
+    // An empty 'to' field signals printing just the
+    // 'from' page.
+    if (m_printDialogData.GetToPage() < 1)
+        m_printDialogData.SetToPage(m_printDialogData.GetFromPage());
+
     // There are some interactions between the global setup data
     // and the standard print dialog. The global printing 'mode'
     // is determined by whether the user checks Print to file
@@ -311,12 +316,12 @@ bool wxGenericPrintDialog::TransferDataToWindow()
           {
              m_fromText->Enable(TRUE);
              m_toText->Enable(TRUE);
-             m_fromText->SetValue(
-                 wxString::Format(_T("%d"), m_printDialogData.GetFromPage()));
-             m_toText->SetValue(
-                wxString::Format(_T("%d"), m_printDialogData.GetToPage()));
+             if (m_printDialogData.GetFromPage() > 0)
+                m_fromText->SetValue(wxString::Format(_T("%d"), m_printDialogData.GetFromPage()));
+             if (m_printDialogData.GetToPage() > 0)
+                m_toText->SetValue(wxString::Format(_T("%d"), m_printDialogData.GetToPage()));
              if(m_rangeRadioBox)
-                if (m_printDialogData.GetAllPages())
+                if (m_printDialogData.GetAllPages() || m_printDialogData.GetFromPage() == 0)
                    m_rangeRadioBox->SetSelection(0);
                 else
                    m_rangeRadioBox->SetSelection(1);
