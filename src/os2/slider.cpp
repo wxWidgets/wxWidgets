@@ -321,7 +321,7 @@ bool wxSlider::Create(
                                                                    ,(ULONG)lMsStyle          // Style flags
                                                                    ,0L, 0L, 0L, 0L           // Origin -- 0 size
                                                                    ,(HWND)GetHwndOf(pParent) // owner window handle (same as parent
-                                                                   ,HWND_TOP                 // initial z position
+                                                                   ,HWND_BOTTOM                 // initial z position
                                                                    ,(HMENU)m_windowId       // Window identifier
                                                                    ,&vSlData                 // Slider control data
                                                                    ,NULL                     // no Presentation parameters

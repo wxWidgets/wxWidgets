@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1951,7 +1951,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -4357,8 +4357,8 @@ EXPORTS
       OnSysTell__20wxMemoryOutputStreamCFv
   ;From object file:  ..\common\nbkbase.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxNotebookBase::SetImageList(wxGenericImageList*)
-      SetImageList__14wxNotebookBaseFP18wxGenericImageList
+      ;wxNotebookBase::AssignImageList(wxImageList*)
+      AssignImageList__14wxNotebookBaseFP11wxImageList
       __vft14wxNotebookBase8wxObject
       ;wxNotebookBase::DoRemovePage(int)
       DoRemovePage__14wxNotebookBaseFi
@@ -4366,8 +4366,8 @@ EXPORTS
       __dt__14wxNotebookBaseFv
       ;wxNotebookBase::GetNextPage(unsigned long) const
       GetNextPage__14wxNotebookBaseCFUl
-      ;wxNotebookBase::AssignImageList(wxGenericImageList*)
-      AssignImageList__14wxNotebookBaseFP18wxGenericImageList
+      ;wxNotebookBase::SetImageList(wxImageList*)
+      SetImageList__14wxNotebookBaseFP11wxImageList
       ;wxNotebookBase::DeletePage(int)
       DeletePage__14wxNotebookBaseFi
       ;wxNotebookBase::CalcSizeFromPage(const wxSize&)
@@ -6157,7 +6157,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -9024,12 +9024,14 @@ EXPORTS
       RemoveAll__18wxGenericImageListFv
       ;wxGenericImageList::Replace(int,const wxBitmap&)
       Replace__18wxGenericImageListFiRC8wxBitmap
+      ;wxImageList::sm_classwxImageList
+      sm_classwxImageList__11wxImageList
       ;wxGenericImageList::Remove(int)
       Remove__18wxGenericImageListFi
-      ;wxConstructorForwxGenericImageList()
-      wxConstructorForwxGenericImageList__Fv
       ;wxGenericImageList::~wxGenericImageList()
       __dt__18wxGenericImageListFv
+      ;wxConstructorForwxGenericImageList()
+      wxConstructorForwxGenericImageList__Fv
       __vft18wxGenericImageList8wxObject
       ;wxGenericImageList::Add(const wxBitmap&,const wxBitmap&)
       Add__18wxGenericImageListFRC8wxBitmapT1
@@ -9043,6 +9045,8 @@ EXPORTS
       GetBitmap__18wxGenericImageListCFi
       ;wxGenericImageList::Create(int,int,unsigned long,int)
       Create__18wxGenericImageListFiT1UlT1
+      ;wxConstructorForwxImageList()
+      wxConstructorForwxImageList__Fv
   ;From object file:  ..\generic\laywin.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSashLayoutWindow::OnCalculateLayout(wxCalculateLayoutEvent&)
@@ -9239,6 +9243,8 @@ EXPORTS
       CacheLineData__16wxListMainWindowFUi
       ;wxGenericListCtrl::GetNextItem(long,int,int) const
       GetNextItem__17wxGenericListCtrlCFliT2
+      ;wxConstructorForwxListCtrl()
+      wxConstructorForwxListCtrl__Fv
       list_ctrl_compare_func_2
       ;wxListMainWindow::~wxListMainWindow()
       __dt__16wxListMainWindowFv
@@ -9294,6 +9300,8 @@ EXPORTS
       sm_eventTableEntries__17wxGenericListCtrl
       ;wxListEvent::sm_classwxListEvent
       sm_classwxListEvent__11wxListEvent
+      ;wxListCtrl::sm_classwxListCtrl
+      sm_classwxListCtrl__10wxListCtrl
       __vft18wxListHeaderWindow8wxObject
       __vft17wxListRenameTimer8wxObject
       ;wxGenericListCtrl::SortItems(int(*)(long,long,long),long)
@@ -10385,8 +10393,6 @@ EXPORTS
       sm_classwxGenericTreeCtrl__17wxGenericTreeCtrl
       ;wxGenericTreeCtrl::TagNextChildren(wxGenericTreeItem*,wxGenericTreeItem*,unsigned long)
       TagNextChildren__17wxGenericTreeCtrlFP17wxGenericTreeItemT1Ul
-      ;wxGenericTreeCtrl::SetStateImageList(wxGenericImageList*)
-      SetStateImageList__17wxGenericTreeCtrlFP18wxGenericImageList
       ;wxGenericTreeCtrl::SetItemHasChildren(const wxTreeItemId&,unsigned long)
       SetItemHasChildren__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
       ;wxGenericTreeCtrl::ScrollTo(const wxTreeItemId&)
@@ -10401,6 +10407,8 @@ EXPORTS
       GetBoundingRect__17wxGenericTreeCtrlCFRC12wxTreeItemIdR6wxRectUl
       ;wxGenericTreeCtrl::DrawLine(const wxTreeItemId&,unsigned long)
       DrawLine__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
+      ;wxGenericTreeCtrl::AssignImageList(wxImageList*)
+      AssignImageList__17wxGenericTreeCtrlFP11wxImageList
       ;wxGenericTreeCtrl::GetLineHeight(wxGenericTreeItem*) const
       GetLineHeight__17wxGenericTreeCtrlCFP17wxGenericTreeItem
       ;wxGenericTreeCtrl::RefreshSubtree(wxGenericTreeItem*)
@@ -10434,8 +10442,6 @@ EXPORTS
       __vft17wxGenericTreeCtrl8wxObject
       ;wxGenericTreeCtrl::SetItemBold(const wxTreeItemId&,unsigned long)
       SetItemBold__17wxGenericTreeCtrlFRC12wxTreeItemIdUl
-      ;wxGenericTreeCtrl::SetButtonsImageList(wxGenericImageList*)
-      SetButtonsImageList__17wxGenericTreeCtrlFP18wxGenericImageList
       ;wxGenericTreeCtrl::OnKillFocus(wxFocusEvent&)
       OnKillFocus__17wxGenericTreeCtrlFR12wxFocusEvent
       ;wxGenericTreeCtrl::IsExpanded(const wxTreeItemId&) const
@@ -10478,10 +10484,10 @@ EXPORTS
       sm_eventTableEntries__17wxGenericTreeCtrl
       ;wxGenericTreeCtrl::SetItemFont(const wxTreeItemId&,const wxFont&)
       SetItemFont__17wxGenericTreeCtrlFRC12wxTreeItemIdRC6wxFont
-      ;wxGenericTreeCtrl::SetImageList(wxGenericImageList*)
-      SetImageList__17wxGenericTreeCtrlFP18wxGenericImageList
       ;wxGenericTreeCtrl::SetFont(const wxFont&)
       SetFont__17wxGenericTreeCtrlFRC6wxFont
+      ;wxGenericTreeCtrl::SetButtonsImageList(wxImageList*)
+      SetButtonsImageList__17wxGenericTreeCtrlFP11wxImageList
       ;wxGenericTreeCtrl::OnPaint(wxPaintEvent&)
       OnPaint__17wxGenericTreeCtrlFR12wxPaintEvent
       ;wxTreeTextCtrl::OnKeyUp(wxKeyEvent&)
@@ -10506,6 +10512,8 @@ EXPORTS
       DrawBorder__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxGenericTreeCtrl::Delete(const wxTreeItemId&)
       Delete__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::AssignButtonsImageList(wxImageList*)
+      AssignButtonsImageList__17wxGenericTreeCtrlFP11wxImageList
       ;wxGenericTreeCtrl::HitTest(const wxPoint&,int&)
       HitTest__17wxGenericTreeCtrlFRC7wxPointRi
       ;wxTreeTextCtrl::wxTreeTextCtrl(wxGenericTreeCtrl*,wxGenericTreeItem*)
@@ -10539,6 +10547,10 @@ EXPORTS
       Toggle__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxGenericTreeCtrl::SortChildren(const wxTreeItemId&)
       SortChildren__17wxGenericTreeCtrlFRC12wxTreeItemId
+      ;wxGenericTreeCtrl::SetStateImageList(wxImageList*)
+      SetStateImageList__17wxGenericTreeCtrlFP11wxImageList
+      ;wxGenericTreeCtrl::SetImageList(wxImageList*)
+      SetImageList__17wxGenericTreeCtrlFP11wxImageList
       ;wxGenericTreeCtrl::OnMouse(wxMouseEvent&)
       OnMouse__17wxGenericTreeCtrlFR12wxMouseEvent
       ;wxTreeTextCtrl::OnKillFocus(wxFocusEvent&)
@@ -10555,8 +10567,8 @@ EXPORTS
       Expand__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxGenericTreeItem::DeleteChildren(wxGenericTreeCtrl*)
       DeleteChildren__17wxGenericTreeItemFP17wxGenericTreeCtrl
-      ;wxGenericTreeCtrl::AssignButtonsImageList(wxGenericImageList*)
-      AssignButtonsImageList__17wxGenericTreeCtrlFP18wxGenericImageList
+      ;wxGenericTreeCtrl::AssignStateImageList(wxImageList*)
+      AssignStateImageList__17wxGenericTreeCtrlFP11wxImageList
       ;wxGenericTreeCtrl::SendDeleteEvent(wxGenericTreeItem*)
       SendDeleteEvent__17wxGenericTreeCtrlFP17wxGenericTreeItem
       ;wxGenericTreeCtrl::UnselectAllChildren(wxGenericTreeItem*)
@@ -10606,10 +10618,6 @@ EXPORTS
       EnsureVisible__17wxGenericTreeCtrlFRC12wxTreeItemId
       ;wxGenericTreeCtrl::CollapseAndReset(const wxTreeItemId&)
       CollapseAndReset__17wxGenericTreeCtrlFRC12wxTreeItemId
-      ;wxGenericTreeCtrl::AssignStateImageList(wxGenericImageList*)
-      AssignStateImageList__17wxGenericTreeCtrlFP18wxGenericImageList
-      ;wxGenericTreeCtrl::AssignImageList(wxGenericImageList*)
-      AssignImageList__17wxGenericTreeCtrlFP18wxGenericImageList
       ;wxGenericTreeItem::wxGenericTreeItem(wxGenericTreeItem*,const wxString&,int,int,wxTreeItemData*)
       __ct__17wxGenericTreeItemFP17wxGenericTreeItemRC8wxStringiT3P14wxTreeItemData
       ;wxGenericTreeCtrl::SelectItemRange(wxGenericTreeItem*,wxGenericTreeItem*)
@@ -13617,10 +13625,12 @@ EXPORTS
       CreateWindowFromHWND__8wxWindowFP8wxWindowUl
   ;From object file:  ..\os2\notebook.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxNotebook::OnSelChange(wxNotebookEvent&)
-      OnSelChange__10wxNotebookFR15wxNotebookEvent
+      ;wxNotebook::SetImageList(wxImageList*)
+      SetImageList__10wxNotebookFP11wxImageList
       ;wxNotebookEvent::sm_classwxNotebookEvent
       sm_classwxNotebookEvent__15wxNotebookEvent
+      ;wxNotebook::OnSelChange(wxNotebookEvent&)
+      OnSelChange__10wxNotebookFR15wxNotebookEvent
       ;wxNotebook::wxNotebook()
       __ct__10wxNotebookFv
       ;wxNotebook::DeleteAllPages()
@@ -13654,12 +13664,10 @@ EXPORTS
       __ct__10wxNotebookFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
       ;wxNotebook::sm_eventTableEntries
       sm_eventTableEntries__10wxNotebook
-      ;wxNotebook::SetImageList(wxGenericImageList*)
-      SetImageList__10wxNotebookFP18wxGenericImageList
-      ;wxNotebook::SetConstraintSizes(unsigned long)
-      SetConstraintSizes__10wxNotebookFUl
       ;wxNotebook::OnSetFocus(wxFocusEvent&)
       OnSetFocus__10wxNotebookFR12wxFocusEvent
+      ;wxNotebook::SetConstraintSizes(unsigned long)
+      SetConstraintSizes__10wxNotebookFUl
       ;wxNotebook::OnNavigationKey(wxNavigationKeyEvent&)
       OnNavigationKey__10wxNotebookFR20wxNavigationKeyEvent
       ;wxNotebook::GetPageText(int) const
