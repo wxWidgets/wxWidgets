@@ -36,62 +36,42 @@
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour
 // ----------------------------------------------------------------------------
-class WXDLLEXPORT wxMenuItem: public wxObject
+class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
 #if wxUSE_OWNER_DRAWN
                             , public wxOwnerDrawn
 #endif
 {
-DECLARE_DYNAMIC_CLASS(wxMenuItem)
-
 public:
-  // ctor & dtor
-  wxMenuItem(wxMenu *pParentMenu = NULL, int id = ID_SEPARATOR,
+    // ctor & dtor
+    wxMenuItem(wxMenu *pParentMenu = NULL, int id = ID_SEPARATOR,
              const wxString& strName = "", const wxString& wxHelp = "",
              bool bCheckable = FALSE, wxMenu *pSubMenu = NULL);
-  virtual ~wxMenuItem();
+    virtual ~wxMenuItem();
 
-  // accessors (some more are inherited from wxOwnerDrawn or are below)
-  bool              IsSeparator() const { return m_idItem == ID_SEPARATOR;  }
-  bool              IsEnabled()   const { return m_bEnabled;                }
-  bool              IsChecked()   const { return m_bChecked;                }
-  bool              IsSubMenu()   const { return GetSubMenu() != NULL;      }
+    // override base class virtuals
+    virtual void SetText(const wxString& strName);
+    virtual wxString GetLabel() const;
+    virtual void SetCheckable(bool checkable);
 
-  int               GetId()       const { return m_idItem;    }
-  const wxString&   GetHelp()     const { return m_strHelp;   }
-  wxMenu           *GetSubMenu()  const { return m_pSubMenu;  }
+    virtual void Enable(bool bDoEnable = TRUE);
+    virtual void Check(bool bDoCheck = TRUE);
+    virtual bool IsChecked() const;
 
-  // the id for a popup menu is really its menu handle (as required by
-  // ::AppendMenu() API)
-  int               GetRealId()   const;
+#if wxUSE_ACCEL
+    virtual wxAcceleratorEntry *GetAccel() const;
+#endif // wxUSE_ACCEL
 
-  // operations
-  void SetName(const wxString& strName);
-  void SetHelp(const wxString& strHelp) { m_strHelp = strHelp; }
+    // unfortunately needed to resolve ambiguity between
+    // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
+    bool IsCheckable() const { return wxMenuItemBase::IsCheckable(); }
 
-  void Enable(bool bDoEnable = TRUE);
-  void Check(bool bDoCheck = TRUE);
-
-  void DeleteSubMenu();
+    // the id for a popup menu is really its menu handle (as required by
+    // ::AppendMenu() API), so this function will return either the id or the
+    // menu handle depending on what we're
+    int GetRealId() const;
 
 private:
-  int         m_idItem;         // numeric id of the item
-  wxString    m_strHelp;        // associated help string
-  wxMenu     *m_pSubMenu,       // may be NULL
-             *m_pParentMenu;    // menu this item is contained in
-  bool        m_bEnabled,       // enabled or greyed?
-              m_bChecked;       // checked? (only if checkable)
-
-#if wxUSE_OWNER_DRAWN
-  // wxOwnerDrawn base class already has these variables - nothing to do
-
-#else   //!owner drawn
-  bool        m_bCheckable;     // can be checked?
-  wxString    m_strName;        // name or label of the item
-
-public:
-  const wxString&   GetName()     const { return m_strName;    }
-  bool              IsCheckable() const { return m_bCheckable; }
-#endif  //owner drawn
+    DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
 
 #endif  //_MENUITEM_H
