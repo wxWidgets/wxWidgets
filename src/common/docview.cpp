@@ -172,6 +172,8 @@ bool wxDocument::OnCloseDocument()
 // deleted.
 bool wxDocument::DeleteAllViews()
 {
+    wxDocManager* manager = GetDocumentManager();
+
     wxNode *node = m_documentViews.First();
     while (node)
     {
@@ -184,6 +186,11 @@ bool wxDocument::DeleteAllViews()
         delete view; // Deletes node implicitly
         node = next;
     }
+    // If we haven't yet deleted the document (for example
+    // if there were no views) then delete it.
+    if (manager->GetDocuments().Member(this))
+        delete this;
+
     return TRUE;
 }
 
@@ -655,7 +662,8 @@ wxDocument *wxDocTemplate::CreateDocument(const wxString& path, long flags)
         return doc;
     else
     {
-        delete doc;
+        if (GetDocumentManager()->GetDocuments().Member(doc))
+            doc->DeleteAllViews();
         return (wxDocument *) NULL;
     }
 }
@@ -1096,7 +1104,8 @@ wxDocument *wxDocManager::CreateDocument(const wxString& path, long flags)
             newDoc->SetDocumentTemplate(temp);
             if (!newDoc->OnOpenDocument(path2))
             {
-                delete newDoc;
+                newDoc->DeleteAllViews();
+                // delete newDoc; // Implicitly deleted by DeleteAllViews
                 return (wxDocument *) NULL;
             }
             AddFileToHistory(path2);
@@ -1340,7 +1349,7 @@ wxDocTemplate *wxDocManager::SelectDocumentPath(wxDocTemplate **templates,
                                         0,
                                         wxTheApp->GetTopWindow());
 
-    if (!pathTmp.IsEmpty())
+    if (!pathTmp.IsEmpty() && wxFileExists(pathTmp))
     {
         m_lastDirectory = wxPathOnly(pathTmp);
 

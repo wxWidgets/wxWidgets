@@ -214,21 +214,46 @@ bool wxGenericValidator::TransferToWindow(void)
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxChoice)) )
     {
         wxChoice* pControl = (wxChoice*) m_validatorWindow;
-	if (m_pInt)
-	{
-	    pControl->SetSelection(*m_pInt) ;
-	    return TRUE;
-	}
+        if (m_pInt)
+        {
+            pControl->SetSelection(*m_pInt) ;
+            return TRUE;
+        }
+        else if (m_pString)
+        {
+            if (pControl->FindString(* m_pString) > -1)
+            {
+                pControl->SetStringSelection(* m_pString);
+            }
+            return TRUE;
+        }
     } else
 #endif
+    if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
+    {
+        wxComboBox* pControl = (wxComboBox*) m_validatorWindow;
+        if (m_pInt)
+        {
+            pControl->SetSelection(*m_pInt) ;
+            return TRUE;
+        }
+        else if (m_pString)
+        {
+            if (pControl->FindString(* m_pString) > -1)
+            {
+                pControl->SetStringSelection(* m_pString);
+            }
+            return TRUE;
+        }
+    } else
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
     {
         wxStaticText* pControl = (wxStaticText*) m_validatorWindow;
-	if (m_pString)
-	{
-	    pControl->SetLabel(*m_pString) ;
-	    return TRUE;
-	}
+        if (m_pString)
+        {
+            pControl->SetLabel(*m_pString) ;
+            return TRUE;
+        }
     } else 
     if (m_validatorWindow->IsKindOf(CLASSINFO(wxTextCtrl)) )
     {
@@ -395,6 +420,11 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pString = pControl->GetValue() ;
       return TRUE;
     }
+    else if (m_pString)
+    {
+        *m_pString = pControl->GetStringSelection();
+        return TRUE;
+    }
   } else
 #endif
 #if wxUSE_CHOICE
@@ -406,8 +436,27 @@ bool wxGenericValidator::TransferFromWindow(void)
       *m_pInt = pControl->GetSelection() ;
       return TRUE;
     }
+    else if (m_pString)
+    {
+        *m_pString = pControl->GetStringSelection();
+        return TRUE;
+    }
   } else
 #endif
+ if (m_validatorWindow->IsKindOf(CLASSINFO(wxComboBox)) )
+  {
+    wxComboBox* pControl = (wxComboBox*) m_validatorWindow;
+	if (m_pInt)
+    {
+      *m_pInt = pControl->GetSelection() ;
+      return TRUE;
+    }
+    else if (m_pString)
+    {
+        *m_pString = pControl->SetStringSelection(* m_pString);
+        return TRUE;
+    }
+  } else
   if (m_validatorWindow->IsKindOf(CLASSINFO(wxStaticText)) )
   {
     wxStaticText* pControl = (wxStaticText*) m_validatorWindow;

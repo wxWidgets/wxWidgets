@@ -11,6 +11,9 @@ perfect because in this particular case it would be much better to just
 \helpref{Wait()}{wxthreadwait} for the worker thread, but if there are several
 worker threads it already makes much more sense).
 
+Once the thread(s) are signaled, the condition then resets to the not
+signaled state, ready to fire again.
+
 \wxheading{Derived from}
 
 None.
@@ -51,17 +54,15 @@ Signals the object.
 
 \membersection{wxCondition::Wait}\label{wxconditionwait}
 
-\func{void}{Wait}{\param{wxMutex\&}{ mutex}}
+\func{void}{Wait}{\void}
 
 Waits indefinitely.
 
-\func{bool}{Wait}{\param{wxMutex\&}{ mutex}, \param{unsigned long}{ sec}, \param{unsigned long}{ nsec}}
+\func{bool}{Wait}{\param{unsigned long}{ sec}, \param{unsigned long}{ nsec}}
 
 Waits until a signal is raised or the timeout has elapsed.
 
 \wxheading{Parameters}
-
-\docparam{mutex}{wxMutex object.}
 
 \docparam{sec}{Timeout in seconds}
 
