@@ -89,6 +89,7 @@ bakefile_gen -b ../../samples/scrollsub/scrollsub.bkl -f msevc4prj
 bakefile_gen -b ../../samples/shaped/shaped.bkl -f msevc4prj
 bakefile_gen -b ../../samples/sockets/sockets.bkl -f msevc4prj
 bakefile_gen -b ../../samples/sound/sound.bkl -f msevc4prj
+bakefile_gen -b ../../samples/splash/splash.bkl -f msevc4prj
 bakefile_gen -b ../../samples/splitter/splitter.bkl -f msevc4prj
 bakefile_gen -b ../../samples/statbar/statbar.bkl -f msevc4prj
 bakefile_gen -b ../../samples/tab/tab.bkl -f msevc4prj
