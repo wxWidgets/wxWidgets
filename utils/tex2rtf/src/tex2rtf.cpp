@@ -66,6 +66,27 @@ extern char *TexBibName;         // Bibliography output file name
 extern char *TexTmpBibName;      // Temporary bibliography output file name
 extern wxList ColourTable;
 extern TexChunk *TopLevel;
+extern char *PageStyle;
+extern char *BibliographyStyleString;
+extern char *DocumentStyleString;
+extern char *bitmapMethod;
+extern char *backgroundColourString;
+extern char *ContentsNameString;
+extern char *AbstractNameString;
+extern char *GlossaryNameString;
+extern char *ReferencesNameString;
+extern char *FiguresNameString;
+extern char *TablesNameString;
+extern char *FigureNameString;
+extern char *TableNameString;
+extern char *IndexNameString;
+extern char *ChapterNameString;
+extern char *SectionNameString;
+extern char *SubsectionNameString;
+extern char *SubsubsectionNameString;
+extern char *UpNameString;
+
+
 
 #if wxUSE_HELP
 wxHelpController *HelpInstance = NULL;
@@ -390,7 +411,10 @@ bool MyApp::OnInit()
       ReadCustomMacros((char*) (const char*) path);
 
     Go();
-    if (runTwice) Go();
+    if (runTwice) 
+    {
+        Go();
+    }
 #ifdef NO_GUI
     return 0;
 #else
@@ -506,6 +530,28 @@ int MyApp::OnExit()
       delete RTFCharset;
       RTFCharset = NULL;
     }
+
+    delete [] PageStyle;
+    delete [] BibliographyStyleString;
+    delete [] DocumentStyleString;
+    delete [] bitmapMethod;
+    delete [] backgroundColourString;
+    delete [] ContentsNameString;
+    delete [] AbstractNameString;
+    delete [] GlossaryNameString;
+    delete [] ReferencesNameString;
+    delete [] FiguresNameString;
+    delete [] TablesNameString;
+    delete [] FigureNameString;
+    delete [] TableNameString;
+    delete [] IndexNameString;
+    delete [] ChapterNameString;
+    delete [] SectionNameString;
+    delete [] SubsectionNameString;
+    delete [] SubsubsectionNameString;
+    delete [] UpNameString;
+    if (winHelpTitle)
+      delete[] winHelpTitle;
 
   // TODO: this simulates zero-memory leaks!
   // Otherwise there are just too many...

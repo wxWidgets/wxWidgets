@@ -28,6 +28,10 @@
 #include "tex2rtf.h"
 #include "table.h"
 
+
+extern wxHashTable TexReferences;
+
+
 extern void DecToHex(int, char *);
 void GenerateHTMLIndexFile(char *fname);
 

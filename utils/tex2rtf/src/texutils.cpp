@@ -432,7 +432,14 @@ void ReadTexReferences(char *filename)
         istr.get(ch);
       }
       section[i] = 0;
+
+      // gt - needed to trick the hash table "TexReferences" into deleting the key 
+      // strings it creates in the Put() function, but not the item that is
+      // created here, as that is destroyed elsewhere.  Without doing this, there
+      // were massive memory leaks
+      TexReferences.DeleteContents(TRUE);
       TexReferences.Put(label, new TexRef(label, file, section, sectionName));
+      TexReferences.DeleteContents(FALSE);
     }
   }
 }

@@ -387,20 +387,9 @@ class TexRef: public wxObject
   char *refFile;       // Reference filename (can be NULL)
   char *sectionNumber; // Section or figure number (as a string)
   char *sectionName; // name e.g. 'section'
-  TexRef(char *label, char *file, char *section, char *sectionN = NULL)
-  {
-    refLabel = copystring(label);
-    refFile = file ? copystring(file) : (char*) NULL;
-    sectionNumber = section ? copystring(section) : copystring("??");
-    sectionName = sectionN ? copystring(sectionN) : copystring("??");
-  }
-  ~TexRef(void)
-  {
-    delete[] refLabel; delete[] refFile; delete[] sectionNumber; delete[] sectionName;
-  }
+  TexRef(char *label, char *file, char *section, char *sectionN = NULL);
+  ~TexRef(void);
 };
-
-extern wxHashTable TexReferences;
 
 /*
  * Add a reference
@@ -511,6 +500,7 @@ class CustomMacro: public wxObject
     else
       macroBody = NULL;
   }
+  ~CustomMacro();
 };
 
 bool ReadCustomMacros(char *filename);

@@ -123,6 +123,10 @@ char            *followedLinkColourString = NULL;
 bool            combineSubSections = FALSE;
 bool            htmlWorkshopFiles = FALSE;
 
+extern int passNumber;
+
+extern wxHashTable TexReferences;
+
 /*
  * International support
  */
@@ -190,6 +194,32 @@ TexMacroDef *SoloBlockDef = NULL;
 TexMacroDef *VerbatimMacroDef = NULL;
 
 #define IncrementLineNumber() LineNumbers[CurrentInputIndex] ++
+
+
+TexRef::TexRef(char *label, char *file, char *section, char *sectionN)
+{
+    refLabel = copystring(label);
+    refFile = file ? copystring(file) : (char*) NULL;
+    sectionNumber = section ? copystring(section) : copystring("??");
+    sectionName = sectionN ? copystring(sectionN) : copystring("??");
+}
+
+TexRef::~TexRef(void)
+{
+    delete [] refLabel;      refLabel = NULL;
+    delete [] refFile;       refFile = NULL;
+    delete [] sectionNumber; sectionNumber = NULL;
+    delete [] sectionName;   sectionName = NULL;
+}
+
+
+CustomMacro::~CustomMacro()
+{
+    if (macroName)
+        delete [] macroName;
+    if (macroBody)
+        delete [] macroBody;
+}
 
 void TexOutput(char *s, bool ordinaryText)
 {
@@ -365,7 +395,7 @@ bool readInVerbatim = FALSE;  // Within a verbatim, but not nec. verbatiminput
 
 // Switched this off because e.g. \verb${$ causes it to fail. There is no
 // detection of \verb yet.
-#define CHECK_BRACES 0
+#define CHECK_BRACES 1
 
 unsigned long leftCurly = 0;
 unsigned long rightCurly = 0;
@@ -400,7 +430,7 @@ bool read_a_line(char *buf)
        if (rightCurly > leftCurly)
        {
            wxString errBuf;
-           errBuf.Printf("An extra right Curly brace ('}') was detected at line %l inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
+           errBuf.Printf("An extra right Curly brace ('}') was detected at line %lu inside file %s",LineNumbers[CurrentInputIndex], (const char*) currentFileName.c_str());
            OnError((char *)errBuf.c_str());
 
            // Reduce the count of right curly braces, so the mismatched count
@@ -1451,6 +1481,7 @@ int ParseMacroBody(char *macro_name, TexChunk *parent,
 
 bool TexLoadFile(char *filename)
 {
+  static char *line_buffer;
   stopRunning = FALSE;
   strcpy(TexFileRoot, filename);
   StripExtension(TexFileRoot);
@@ -1459,10 +1490,12 @@ bool TexLoadFile(char *filename)
 
   TexPathList.EnsureFileAccessible(filename);
 
+  if (line_buffer) 
+      delete line_buffer;
 #ifdef __WXMSW__
-  static char *line_buffer = new char[600];
+  line_buffer = new char[600];
 #else
-  static char *line_buffer = new char[11000];
+  line_buffer = new char[11000];
 #endif
   
   Inputs[0] = fopen(filename, "r");
@@ -1818,17 +1851,27 @@ void TexCleanUp(void)
   BibliographyStyleString = copystring("plain");
   DocumentStyleString = copystring("report");
   MinorDocumentStyleString = NULL;
-/* Don't want to remove custom macros after each pass.
-  SetFontSizes(10);
-  wxNode *node = CustomMacroList.First();
-  while (node)
+
+  // gt - Changed this so if this is the final pass
+  // then we DO want to remove these macros, so that
+  // memory is not MASSIVELY leaked if the user
+  // does not exit the program, but instead runs
+  // the program again
+  if ((passNumber == 1 && !runTwice) ||
+      (passNumber == 2 && runTwice))
   {
-    CustomMacro *macro = (CustomMacro *)node->Data();
-    delete macro;
-    delete node;
-    node = CustomMacroList.First();
+/* Don't want to remove custom macros after each pass.*/
+      SetFontSizes(10);
+      wxNode *node = CustomMacroList.First();
+      while (node)
+      {
+        CustomMacro *macro = (CustomMacro *)node->Data();
+        delete macro;
+        delete node;
+        node = CustomMacroList.First();
+      }
   }
-*/
+/**/
   TexReferences.BeginFind();
   wxNode *node = TexReferences.Next();
   while (node)
