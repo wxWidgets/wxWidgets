@@ -18,6 +18,7 @@
         scintilla/src/Document.cxx
         scintilla/src/DocumentAccessor.cxx
         scintilla/src/Editor.cxx
+        scintilla/src/ExternalLexer.cxx
         scintilla/src/Indicator.cxx
         scintilla/src/KeyMap.cxx
         scintilla/src/KeyWords.cxx
@@ -31,9 +32,11 @@
         scintilla/src/LexConf.cxx
         scintilla/src/LexCrontab.cxx
         scintilla/src/LexEiffel.cxx
+        scintilla/src/LexEScript.cxx
         scintilla/src/LexFortran.cxx
         scintilla/src/LexHTML.cxx
         scintilla/src/LexLisp.cxx
+        scintilla/src/LexLout.cxx
         scintilla/src/LexLua.cxx
         scintilla/src/LexMatlab.cxx
         scintilla/src/LexOthers.cxx
@@ -53,7 +56,7 @@
         scintilla/src/UniConversion.cxx
         scintilla/src/ViewStyle.cxx
         scintilla/src/WindowAccessor.cxx
-        scintilla/src/XPM.cxx 
+        scintilla/src/XPM.cxx
     </set>
 
     <headers template="wx_contrib_headers">
@@ -77,7 +80,7 @@
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </dll>
-    
+
     <lib id="stclib" template="wx_contrib_lib,stc_base" cond="SHARED=='0'"/>
 
 </makefile>

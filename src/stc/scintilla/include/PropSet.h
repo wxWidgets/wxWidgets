@@ -38,7 +38,7 @@ public:
 	void SetMultiple(const char *s);
 	SString Get(const char *key);
 	SString GetExpanded(const char *key);
-	SString Expand(const char *withVars);
+	SString Expand(const char *withVars, int maxExpands=100);
 	int GetInt(const char *key, int defaultValue=0);
 	SString GetWild(const char *keybase, const char *filename);
 	SString GetNewExpand(const char *keybase, const char *filename="");

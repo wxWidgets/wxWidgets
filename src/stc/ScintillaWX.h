@@ -100,6 +100,8 @@ public:
     virtual bool ModifyScrollBars(int nMax, int nPage);
     virtual void Copy();
     virtual void Paste();
+    virtual void CopyToClipboard(const SelectionText &selectedText);
+
     virtual void CreateCallTipWindow(PRectangle rc);
     virtual void AddToPopUp(const char *label, int cmd = 0, bool enabled = true);
     virtual void ClaimSelection();

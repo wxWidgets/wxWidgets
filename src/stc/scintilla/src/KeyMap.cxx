@@ -130,6 +130,7 @@ const KeyToCommand KeyMap::MapDefault[] = {
     //'L', 			SCI_CTRL,		SCI_FORMFEED,
     {'L', 			SCI_CTRL,	SCI_LINECUT},
     {'L', 			SCI_CSHIFT,	SCI_LINEDELETE},
+    {'T', 			SCI_CSHIFT,	SCI_LINECOPY},
     {'T', 			SCI_CTRL,	SCI_LINETRANSPOSE},
     {'D', 			SCI_CTRL,	SCI_LINEDUPLICATE},
     {'U', 			SCI_CTRL,	SCI_LOWERCASE},

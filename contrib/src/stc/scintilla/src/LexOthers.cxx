@@ -626,9 +626,20 @@ static const char * const emptyWordListDesc[] = {
 	0
 };
 
+static void ColouriseNullDoc(unsigned int startPos, int length, int, WordList *[],
+                            Accessor &styler) {
+	// Null language means all style bytes are 0 so just mark the end - no need to fill in.
+	if (length > 0) {
+		styler.StartAt(startPos + length - 1);
+		styler.StartSegment(startPos + length - 1);
+		styler.ColourTo(startPos + length - 1, 0);
+	}
+}
+
 LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch", 0, batchWordListDesc);
 LexerModule lmDiff(SCLEX_DIFF, ColouriseDiffDoc, "diff", 0, emptyWordListDesc);
 LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc, "props", 0, emptyWordListDesc);
 LexerModule lmMake(SCLEX_MAKEFILE, ColouriseMakeDoc, "makefile", 0, emptyWordListDesc);
 LexerModule lmErrorList(SCLEX_ERRORLIST, ColouriseErrorListDoc, "errorlist", 0, emptyWordListDesc);
 LexerModule lmLatex(SCLEX_LATEX, ColouriseLatexDoc, "latex", 0, emptyWordListDesc);
+LexerModule lmNull(SCLEX_NULL, ColouriseNullDoc, "null");

@@ -464,6 +464,7 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_LINEENDWRAPEXTEND 2452
 #define SCI_VCHOMEWRAP 2453
 #define SCI_VCHOMEWRAPEXTEND 2454
+#define SCI_LINECOPY 2455
 #define SCI_MOVECARETINSIDEVIEW 2401
 #define SCI_LINELENGTH 2350
 #define SCI_BRACEHIGHLIGHT 2351
@@ -535,6 +536,10 @@ typedef sptr_t (*SciFnDirect)(sptr_t ptr, unsigned int iMessage, uptr_t wParam, 
 #define SCI_PARADOWNEXTEND 2414
 #define SCI_PARAUP 2415
 #define SCI_PARAUPEXTEND 2416
+#define SCI_POSITIONBEFORE 2417
+#define SCI_POSITIONAFTER 2418
+#define SCI_COPYRANGE 2419
+#define SCI_COPYTEXT 2420
 #define SCI_STARTRECORD 3001
 #define SCI_STOPRECORD 3002
 #define SCI_SETLEXER 4001

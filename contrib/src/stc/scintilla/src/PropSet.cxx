@@ -9,7 +9,6 @@
 
 #include <stdlib.h>
 #include <string.h>
-//#include <ctype.h>
 #include <stdio.h>
 
 #include "Platform.h"
@@ -182,25 +181,26 @@ SString PropSet::GetExpanded(const char *key) {
 	return Expand(val.c_str());
 }
 
-SString PropSet::Expand(const char *withVars) {
+SString PropSet::Expand(const char *withVars, int maxExpands) {
 	char *base = StringDup(withVars);
 	char *cpvar = strstr(base, "$(");
-	int maxExpands = 1000;	// Avoid infinite expansion of recursive definitions
 	while (cpvar && (maxExpands > 0)) {
 		char *cpendvar = strchr(cpvar, ')');
-		if (cpendvar) {
-			int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
-			char *var = StringDup(cpvar + 2, lenvar);
-			SString val = GetExpanded(var);
-			size_t newlenbase = strlen(base) + val.length() - lenvar;
-			char *newbase = new char[newlenbase];
-			strncpy(newbase, base, cpvar - base);
-			strcpy(newbase + (cpvar - base), val.c_str());
-			strcpy(newbase + (cpvar - base) + val.length(), cpendvar + 1);
-			delete []var;
-			delete []base;
-			base = newbase;
-		}
+		if (!cpendvar)
+			break;
+		int lenvar = cpendvar - cpvar - 2;  	// Subtract the $()
+		char *var = StringDup(cpvar + 2, lenvar);
+		SString val = Get(var);
+		if (IncludesVar(val.c_str(), var))
+			break;
+		size_t newlenbase = strlen(base) + val.length() - lenvar;
+		char *newbase = new char[newlenbase];
+		strncpy(newbase, base, cpvar - base);
+		strcpy(newbase + (cpvar - base), val.c_str());
+		strcpy(newbase + (cpvar - base) + val.length(), cpendvar + 1);
+		delete []var;
+		delete []base;
+		base = newbase;
 		cpvar = strstr(base, "$(");
 		maxExpands--;
 	}

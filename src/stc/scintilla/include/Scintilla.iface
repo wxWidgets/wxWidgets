@@ -1231,6 +1231,9 @@ fun void LineEndWrapExtend=2452(,)
 fun void VCHomeWrap=2453(,)
 fun void VCHomeWrapExtend=2454(,)
 
+# Copy the line containing the caret.
+fun void LineCopy=2455(,)
+
 # Move the caret inside current view if it's not there already.
 fun void MoveCaretInsideView=2401(,)
 
@@ -1441,6 +1444,20 @@ fun void ParaDownExtend=2414(,)
 fun void ParaUp=2415(,)
 fun void ParaUpExtend=2416(,)
 
+# Given a valid document position, return the previous position taking code
+# page into account. Returns 0 if passed 0.
+fun position PositionBefore=2417(position pos,)
+
+# Given a valid document position, return the next position taking code
+# page into account. Maximum value returned is the last position in the document.
+fun position PositionAfter=2418(position pos,)
+
+# Copy a range of text to the clipboard. Positions are clipped into the document.
+fun void CopyRange=2419(position start, position end)
+
+# Copy argument text to the clipboard.
+fun void CopyText=2420(int length, string text)
+
 # Start notifying the container of all key presses and commands.
 fun void StartRecord=3001(,)
 
@@ -1466,7 +1483,6 @@ set void SetKeyWords=4005(int keywordSet, string keyWords)
 set void SetLexerLanguage=4006(, string language)
 
 # Load a lexer library (dll / so)
-# NOT YET IMPLEMENTED
 fun void LoadLexerLibrary=4007(, string path)
 
 # Notifications
@@ -1566,6 +1582,8 @@ val SCLEX_FORTRAN=36
 val SCLEX_F77=37
 val SCLEX_CSS=38
 val SCLEX_POV=39
+val SCLEX_LOUT=40
+val SCLEX_ESCRIPT=41
 
 # When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 # value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -1612,6 +1630,7 @@ val SCE_C_COMMENTLINEDOC=15
 val SCE_C_WORD2=16
 val SCE_C_COMMENTDOCKEYWORD=17
 val SCE_C_COMMENTDOCKEYWORDERROR=18
+val SCE_C_GLOBALCLASS=19
 # Lexical states for SCLEX_HTML, SCLEX_XML
 lex HTML=SCLEX_HTML SCE_H
 lex XML=SCLEX_XML SCE_H
@@ -2047,6 +2066,34 @@ val SCE_POV_OPERATOR=7
 val SCE_POV_IDENTIFIER=8
 val SCE_POV_BRACE=9
 val SCE_POV_WORD2=10
+# Lexical states for SCLEX_LOUT
+lex LOUT=SCLEX_LOUT SCE_LOUT_
+val SCE_LOUT_DEFAULT=0
+val SCE_LOUT_COMMENT=1
+val SCE_LOUT_NUMBER=2
+val SCE_LOUT_WORD=3
+val SCE_LOUT_WORD2=4
+val SCE_LOUT_WORD3=5
+val SCE_LOUT_WORD4=6
+val SCE_LOUT_STRING=7
+val SCE_LOUT_OPERATOR=8
+val SCE_LOUT_IDENTIFIER=9
+val SCE_LOUT_STRINGEOL=10
+# Lexical states for SCLEX_ESCRIPT
+lex ESCRIPT=SCLEX_ESCRIPT SCE_ESCRIPT_
+val SCE_ESCRIPT_DEFAULT=0
+val SCE_ESCRIPT_COMMENT=1
+val SCE_ESCRIPT_COMMENTLINE=2
+val SCE_ESCRIPT_COMMENTDOC=3
+val SCE_ESCRIPT_NUMBER=4
+val SCE_ESCRIPT_WORD=5
+val SCE_ESCRIPT_STRING=6
+val SCE_ESCRIPT_OPERATOR=7
+val SCE_ESCRIPT_IDENTIFIER=8
+val SCE_ESCRIPT_BRACE=9
+val SCE_ESCRIPT_WORD2=10
+val SCE_ESCRIPT_WORD3=11
+
 # Events
 
 evt void StyleNeeded=2000(int position)

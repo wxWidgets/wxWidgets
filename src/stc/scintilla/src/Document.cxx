@@ -265,7 +265,7 @@ int Document::LenChar(int pos) {
 		return 1;
 	}
 }
-
+#include <assert.h>
 // Normalise a position so that it is not halfway through a two byte character.
 // This can occur in two situations -
 // When lines are terminated with \r\n pairs which should be treated as one character.
@@ -273,17 +273,11 @@ int Document::LenChar(int pos) {
 // If moving, move the position in the indicated direction.
 int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 	//Platform::DebugPrintf("NoCRLF %d %d\n", pos, moveDir);
-	// If out of range, just return value - should be fixed up after
-	if (pos < 0)
-		return pos;
-	if (pos > Length())
-		return pos;
-
-	// Position 0 and Length() can not be between any two characters
-	if (pos == 0)
-		return pos;
-	if (pos == Length())
-		return pos;
+	// If out of range, just return minimum/maximum value.
+	if (pos <= 0)
+		return 0;
+	if (pos >= Length())
+		return Length();
 
 	// assert pos > 0 && pos < Length()
 	if (checkLineEnd && IsCrLf(pos - 1)) {
@@ -309,29 +303,26 @@ int Document::MovePositionOutsideChar(int pos, int moveDir, bool checkLineEnd) {
 		} else {
 			// Anchor DBCS calculations at start of line because start of line can
 			// not be a DBCS trail byte.
-			int startLine = pos;
-
-			while (startLine > 0 && cb.CharAt(startLine) != '\r' && cb.CharAt(startLine) != '\n')
-				startLine--;
-			while (startLine < pos) {
+			int posCheck = LineStart(LineFromPosition(pos));
+			while (posCheck < pos) {
 				char mbstr[maxBytesInDBCSCharacter+1];
 				int i;
 				for(i=0;i<Platform::DBCSCharMaxLength();i++) {
-					mbstr[i] = cb.CharAt(startLine+i);
+					mbstr[i] = cb.CharAt(posCheck+i);
 				}
 				mbstr[i] = '\0';
 
 				int mbsize = Platform::DBCSCharLength(dbcsCodePage, mbstr);
-				if (startLine + mbsize == pos) {
+				if (posCheck + mbsize == pos) {
 					return pos;
-				} else if (startLine + mbsize > pos) {
+				} else if (posCheck + mbsize > pos) {
 					if (moveDir > 0) {
-						return startLine + mbsize;
+						return posCheck + mbsize;
 					} else {
-						return startLine;
+						return posCheck;
 					}
 				}
-				startLine += mbsize;
+				posCheck += mbsize;
 			}
 		}
 	}
