@@ -795,8 +795,8 @@ void wxTextCtrl::Undo()
 {
     if (m_undos.GetCount() == 0) return;
     
-    wxNode *node = m_undos.Nth( m_undos.GetCount()-1 );
-    wxSourceUndoStep *undo = (wxSourceUndoStep*) node->Data();
+    wxList::Node *node = m_undos.Item( m_undos.GetCount()-1 );
+    wxSourceUndoStep *undo = (wxSourceUndoStep*) node->GetData();
     
     undo->Undo();
     
@@ -1938,8 +1938,8 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
         }
         default: 
         {
-            if (  (event.KeyCode() >= 'a') &&
-                  (event.KeyCode() <= 'z') &&
+            if (  (event.GetKeyCode() >= 'a') &&
+                  (event.GetKeyCode() <= 'z') &&
                   (event.AltDown()) )
             {
                 // Alt-F etc.
@@ -1947,13 +1947,13 @@ void wxTextCtrl::OnChar( wxKeyEvent &event )
                 return;
             }
             
-            if (  (event.KeyCode() >= 32) && 
-                  (event.KeyCode() <= 255) &&
+            if (  (event.GetKeyCode() >= 32) && 
+                  (event.GetKeyCode() <= 255) &&
                  !(event.ControlDown() && !event.AltDown()) ) // filters out Ctrl-X but leaves Alt-Gr
             {
                 if (HasSelection())
                     Delete();
-                DoChar( (char) event.KeyCode() );
+                DoChar( (char) event.GetKeyCode() );
                 return;
             }
         }
