@@ -55,7 +55,8 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
  layout->left.SameAs(m_Label1, wxRight, 10);
  layout->centreY.SameAs(m_Label1,wxCentreY);
  layout->width.Absolute(200);
- layout->height.Absolute(chSize);
+ //layout->height.Absolute(chSize);
+ layout->height.AsIs();
  m_UserName->SetConstraints(layout);
 
 
@@ -74,7 +75,8 @@ DlgUser::DlgUser(wxWindow *parent, MainDoc *p_Doc, const wxString& title) :
  layout->left.SameAs(m_UserName, wxLeft);
  layout->width.SameAs(m_UserName, wxWidth);
  layout->centreY.SameAs(m_Label2,wxCentreY);
- layout->height.Absolute(chSize);
+ //layout->height.Absolute(chSize);
+ layout->height.AsIs();
  m_Password->SetConstraints(layout);
 
  m_OK = new wxButton(this, wxID_OK, _("OK"));
