@@ -11,8 +11,7 @@
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
-
-VPATH = :$(top_srcdir)/samples/thread
+program_dir = samples/thread
 
 PROGRAM=test
 

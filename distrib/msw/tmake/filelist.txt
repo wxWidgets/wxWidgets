@@ -59,6 +59,8 @@ dcpsg.cpp	G	U
 dirdlgg.cpp	G	16
 fontdlgg.cpp	G	G
 gridg.cpp	G
+helphtml.cpp	G	G
+helpwxht.cpp	G	G
 helpxlp.cpp	G	G,R
 imaglist.cpp	G	16
 laywin.cpp	G

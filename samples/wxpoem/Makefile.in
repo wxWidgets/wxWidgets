@@ -11,8 +11,9 @@
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
+program_dir = samples/wxpoem
 
-VPATH = :$(top_srcdir)/samples/wxpoem
+DATAFILES = wxpoem.txt wxpoem.dat
 
 PROGRAM=wxpoem
 

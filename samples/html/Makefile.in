@@ -1,0 +1,10 @@
+#
+# Makefile : Builds html samples for Unix.
+#
+
+all:
+	cd about; make
+
+clean:
+	cd about; make clean
+

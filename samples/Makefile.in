@@ -3,7 +3,6 @@
 #
 
 all:
-	cp -u -r @top_srcdir@/samples ..
 	cd bombs; make
 	cd checklst; make
 	cd config; make

@@ -2728,7 +2728,11 @@ AC_OUTPUT([
 	    samples/validate/Makefile
 	    samples/wxpoem/Makefile
 	    samples/wxsocket/Makefile
+	    samples/html/Makefile
 	    samples/html/about/Makefile
+	    samples/html/help/Makefile
+	    samples/html/printing/Makefile
+	    samples/html/test/Makefile
           ],
           [
             chmod +x wx-config

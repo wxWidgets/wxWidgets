@@ -11,7 +11,7 @@
 
 top_srcdir = @top_srcdir@
 top_builddir = ../..
-
+program_dir = samples/wxsocket
 VPATH = :$(top_srcdir)/samples/wxsocket
 
 # Clears all default suffixes
