@@ -77,20 +77,21 @@ MyCanvas::MyCanvas( wxWindow *parent, const wxWindowID id, const wxPoint &pos, c
   : wxScrolledWindow( parent, id, pos, size, wxSUNKEN_BORDER ) 
 {
   wxImage image;
-  image.LoadFile( "../horse.png", wxBITMAP_TYPE_PNG );
-  my_horse = new wxBitmap( image );
-  
+
   wxBitmap bitmap( 100, 100 );
   
   wxMemoryDC dc;
   dc.SelectObject( bitmap );
-  dc.SetBrush( wxRED_BRUSH );
-  dc.SetPen( wxWHITE_PEN );
+  dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+  dc.SetPen( *wxTRANSPARENT_PEN );
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
   
   image = bitmap.ConvertToImage();
   image.SaveFile( "../test.png", wxBITMAP_TYPE_PNG );
+  
+  image.LoadFile( "../test.png", wxBITMAP_TYPE_PNG );
+  my_horse = new wxBitmap( image );
 }
 
 MyCanvas::~MyCanvas(void)
@@ -103,7 +104,13 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
   wxPaintDC dc( this );
   PrepareDC( dc );
 
-  dc.DrawBitmap( *my_horse, 30, 120 );
+  dc.DrawText( "Loaded image", 30, 100 );
+  if (my_horse->Ok()) dc.DrawBitmap( *my_horse, 30, 120 );
+  
+  dc.DrawText( "Drawn directly", 150, 100 );
+  dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+  dc.SetPen( *wxTRANSPARENT_PEN );
+  dc.DrawRectangle( 150, 120, 100, 100 );
 }
 
 // MyFrame
@@ -119,7 +126,7 @@ BEGIN_EVENT_TABLE(MyFrame,wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame(void) :
-  wxFrame( (wxFrame *) NULL, -1, (char *) "Robert's Test application", wxPoint(20,20), wxSize(470,360) )
+  wxFrame( (wxFrame *) NULL, -1, "wxImage sample", wxPoint(20,20), wxSize(470,360) )
 {
   wxMenu *file_menu = new wxMenu();
   file_menu->Append( ID_ABOUT, "About..");
@@ -142,7 +149,7 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
-  (void) wxMessageBox( "Image demo\nRobert Roebling (c) 1998", "About Image Demo", wxOK );
+  (void) wxMessageBox( "wxImage demo\nRobert Roebling (c) 1998", "About wxImage Demo", wxOK );
 }
 
 //-----------------------------------------------------------------------------
