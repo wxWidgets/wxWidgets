@@ -25,7 +25,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBarTool,wxObject)
 wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex,
       const wxBitmap& bitmap1, const  wxBitmap& bitmap2,
       bool toggle, wxObject *clientData,
-      const wxString& shortHelpString, const wxString& longHelpString )
+      const wxString& shortHelpString, const wxString& longHelpString,
+      GtkWidget *item  )
 {
   m_owner = owner;
   m_index = theIndex;
@@ -39,11 +40,12 @@ wxToolBarTool::wxToolBarTool( wxToolBar *owner, int theIndex,
   m_isMenuCommand = TRUE;
   m_clientData = clientData;
   m_deleteSecondBitmap = FALSE;
-};
+  m_item = item;
+}
 
 wxToolBarTool::~wxToolBarTool()
 {
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxToolBar
@@ -56,7 +58,7 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget), wxToolBarTool *to
   if (tool->m_isToggle) tool->m_toggleState = !tool->m_toggleState;
 
   tool->m_owner->OnLeftClick( tool->m_index, tool->m_toggleState );
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -67,18 +69,18 @@ END_EVENT_TABLE()
 
 wxToolBar::wxToolBar()
 {
-};
+}
 
 wxToolBar::wxToolBar( wxWindow *parent, wxWindowID id,
   const wxPoint& pos, const wxSize& size,
   long style, const wxString& name )
 {
   Create( parent, id, pos, size, style, name );
-};
+}
 
 wxToolBar::~wxToolBar()
 {
-};
+}
 
 bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
   const wxPoint& pos, const wxSize& size,
@@ -103,7 +105,7 @@ bool wxToolBar::Create( wxWindow *parent, wxWindowID id,
   Show( TRUE );
 
   return TRUE;
-};
+}
 
 bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
 {
@@ -115,7 +117,7 @@ bool wxToolBar::OnLeftClick( int toolIndex, bool toggleDown )
   GetEventHandler()->ProcessEvent(event);
 
   return TRUE;
-};
+}
 
 void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y) )
 {
@@ -124,7 +126,7 @@ void wxToolBar::OnRightClick( int toolIndex, float WXUNUSED(x), float WXUNUSED(y
   event.SetInt( toolIndex );
 
   GetEventHandler()->ProcessEvent(event);
-};
+}
 
 void wxToolBar::OnMouseEnter( int toolIndex )
 {
@@ -133,7 +135,7 @@ void wxToolBar::OnMouseEnter( int toolIndex )
   event.SetInt( toolIndex );
 
   GetEventHandler()->ProcessEvent(event);
-};
+}
 
 wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   const wxBitmap& pushedBitmap, bool toggle,
@@ -143,7 +145,7 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   if (!bitmap.Ok()) return NULL;
 
   wxToolBarTool *tool = new wxToolBarTool( this, toolIndex, bitmap, pushedBitmap, toggle,
-  clientData, helpString1, helpString2 );
+    clientData, helpString1, helpString2 );
 
   GdkPixmap *pixmap = bitmap.GetPixmap();
 
@@ -156,23 +158,23 @@ wxToolBarTool *wxToolBar::AddTool( int toolIndex, const wxBitmap& bitmap,
   GtkToolbarChildType ctype = GTK_TOOLBAR_CHILD_BUTTON;
   if (toggle) ctype = GTK_TOOLBAR_CHILD_TOGGLEBUTTON;
 
-  gtk_toolbar_append_element( m_toolbar,
-    ctype, NULL, NULL, helpString1, "", tool_pixmap, (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
+  tool->m_item = gtk_toolbar_append_element( m_toolbar, ctype, NULL, NULL, helpString1, "", tool_pixmap, 
+                                             (GtkSignalFunc)gtk_toolbar_callback, (gpointer)tool );
 
   m_tools.Append( tool );
 
   return tool;
-};
+}
 
 void wxToolBar::AddSeparator(void)
 {
   gtk_toolbar_append_space( m_toolbar );
-};
+}
 
 void wxToolBar::ClearTools(void)
 {
-  wxFAIL_MSG(_("wxToolBar::ClearTools not implemented"));
-};
+  wxFAIL_MSG( "wxToolBar::ClearTools not implemented" );
+}
 
 void wxToolBar::Realize(void)
 {
@@ -189,13 +191,13 @@ void wxToolBar::Realize(void)
     {
       int tool_height = tool->m_bitmap1.GetHeight();
       if (tool_height > m_height) m_height = tool_height;
-    };
+    }
     
     node = node->Next();
-  };
+  }
   
   m_height += 10;
-};
+}
 
 void wxToolBar::EnableTool(int toolIndex, bool enable)
 {
@@ -209,15 +211,31 @@ void wxToolBar::EnableTool(int toolIndex, bool enable)
       return;
     }
     node = node->Next();
-  };
-};
+  }
+  
+  wxFAIL_MSG( "wrong toolbar index" );
+}
 
-void wxToolBar::ToggleTool(int WXUNUSED(toolIndex), bool WXUNUSED(toggle) ) 
+void wxToolBar::ToggleTool( int toolIndex, bool toggle ) 
 {
-  wxFAIL_MSG(_("wxToolBar::ToggleTool not implemented"));
-};
+  wxNode *node = m_tools.First();
+  while (node)
+  {
+    wxToolBarTool *tool = (wxToolBarTool*)node->Data();
+    if (tool->m_index == toolIndex)
+    { 
+      tool->m_toggleState = toggle;
+      if ((tool->m_item) && (GTK_IS_TOGGLE_BUTTON(tool->m_item)))
+        gtk_toggle_button_set_state( GTK_TOGGLE_BUTTON(tool->m_item), toggle );
+      return;
+    }
+    node = node->Next();
+  }
+  
+  wxFAIL_MSG( "wrong toolbar index" );
+}
 
-wxObject *wxToolBar::GetToolClientData(int index) const
+wxObject *wxToolBar::GetToolClientData( int index ) const
 {
   wxNode *node = m_tools.First();
   while (node)
@@ -225,9 +243,12 @@ wxObject *wxToolBar::GetToolClientData(int index) const
     wxToolBarTool *tool = (wxToolBarTool*)node->Data();
     if (tool->m_index == index) return tool->m_clientData;;
     node = node->Next();
-  };
+  }
+  
+  wxFAIL_MSG( "wrong toolbar index" );
+  
   return (wxObject*)NULL;
-};
+}
 
 bool wxToolBar::GetToolState(int toolIndex) const
 {
@@ -237,9 +258,12 @@ bool wxToolBar::GetToolState(int toolIndex) const
     wxToolBarTool *tool = (wxToolBarTool*)node->Data();
     if (tool->m_index == toolIndex) return tool->m_toggleState;
     node = node->Next();
-  };
+  }
+  
+  wxFAIL_MSG( "wrong toolbar index" );
+  
   return FALSE;
-};
+}
 
 bool wxToolBar::GetToolEnabled(int toolIndex) const
 {
@@ -249,20 +273,23 @@ bool wxToolBar::GetToolEnabled(int toolIndex) const
     wxToolBarTool *tool = (wxToolBarTool*)node->Data();
     if (tool->m_index == toolIndex) return tool->m_enabled;
     node = node->Next();
-  };
+  }
+  
+  wxFAIL_MSG( "wrong toolbar index" );
+  
   return FALSE;
-};
+}
 
 void wxToolBar::SetMargins( int WXUNUSED(x), int WXUNUSED(y) )
 {
-};
+}
 
 void wxToolBar::SetToolPacking( int WXUNUSED(packing) )
 {
-};
+}
 
 void wxToolBar::SetToolSeparation( int separation )
 {
   gtk_toolbar_set_space_size( m_toolbar, separation );
-};
+}
 

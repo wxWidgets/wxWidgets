@@ -53,7 +53,8 @@ class wxToolBarTool: public wxObject
     wxToolBarTool( wxToolBar *owner, int theIndex = 0, 
       const wxBitmap& bitmap1 = wxNullBitmap, const wxBitmap& bitmap2 = wxNullBitmap,
       bool toggle = FALSE, wxObject *clientData = NULL, 
-      const wxString& shortHelpString = "", const wxString& longHelpString = "");
+      const wxString& shortHelpString = "", const wxString& longHelpString = "",
+      GtkWidget *item = NULL );
    ~wxToolBarTool(void);
 
   public:
@@ -71,6 +72,7 @@ class wxToolBarTool: public wxObject
     wxString              m_shortHelpString;
     wxString              m_longHelpString;
     wxToolBar            *m_owner;
+    GtkWidget            *m_item;
 };
 
 //-----------------------------------------------------------------------------
