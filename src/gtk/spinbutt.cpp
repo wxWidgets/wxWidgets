@@ -51,7 +51,7 @@ static void gtk_spinbutt_callback( GtkWidget *WXUNUSED(widget), wxSpinButton *wi
     else if (fabs(diff+page_step) < sensitivity) command = wxEVT_SCROLL_PAGEUP;
     else command = wxEVT_SCROLL_THUMBTRACK;
 
-    int value = ceil(win->m_adjust->value);
+    int value = (int)ceil(win->m_adjust->value);
 
     wxSpinEvent event( command, win->GetId());
     event.SetPosition( value );
@@ -123,21 +123,21 @@ int wxSpinButton::GetMin() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, "invalid spin button" );
 
-    return ceil(m_adjust->lower);
+    return (int)ceil(m_adjust->lower);
 }
 
 int wxSpinButton::GetMax() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, "invalid spin button" );
 
-    return ceil(m_adjust->upper);
+    return (int)ceil(m_adjust->upper);
 }
 
 int wxSpinButton::GetValue() const
 {
     wxCHECK_MSG( (m_widget != NULL), 0, "invalid spin button" );
 
-    return ceil(m_adjust->value);
+    return (int)ceil(m_adjust->value);
 }
 
 void wxSpinButton::SetValue( int value )
