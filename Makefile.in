@@ -179,20 +179,22 @@ ZLIBOBJS = \
 
 PNGOBJS = \
 		png.o \
+		pngerror.o \
+		pnggccrd.o \
+		pngget.o \
+		pngmem.o \
+		pngpread.o \
 		pngread.o \
+		pngrio.o \
 		pngrtran.o \
 		pngrutil.o \
-		pngpread.o \
+		pngset.o \
 		pngtrans.o \
+		pngvcrd.o \
+		pngwio.o \
 		pngwrite.o \
 		pngwtran.o \
-		pngwutil.o \
-		pngerror.o \
-		pngmem.o \
-		pngwio.o \
-		pngrio.o \
-		pngget.o \
-		pngset.o
+		pngwutil.o
 
 JPEGOBJS = \
 		jcomapi.o \

@@ -212,6 +212,7 @@ All (GUI):
 - wxHelpProvider::RemoveHelp added and called from ~wxWindowBase
   so that erroneous help strings are no longer found as the hash
   table fills up
+- updated libpng from 1.0.3 to 1.2.4
 
 wxMSW:
 
