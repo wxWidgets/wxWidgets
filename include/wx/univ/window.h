@@ -36,11 +36,13 @@ enum
     wxCONTROL_FOCUSED    = 0x00000002,  // currently has keyboard focus
     wxCONTROL_PRESSED    = 0x00000004,  // (button) is pressed
     wxCONTROL_ISDEFAULT  = 0x00000008,  // only applies to the buttons
+    wxCONTROL_ISSUBMENU  = wxCONTROL_ISDEFAULT, // only for menu items
     wxCONTROL_CURRENT    = 0x00000010,  // mouse is currently over the control
     wxCONTROL_SELECTED   = 0x00000020,  // selected item in e.g. listbox
     wxCONTROL_CHECKED    = 0x00000040,  // (check/radio button) is checked
+    wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
 
-    wxCONTROL_FLAGS_MASK = 0x0000007f,
+    wxCONTROL_FLAGS_MASK = 0x000000ff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally

@@ -190,6 +190,17 @@ public:
                                  const wxString& label,
                                  int flags = 0,
                                  int indexAccel = -1);
+    virtual wxCoord DrawMenuItem(wxDC& dc,
+                                 wxCoord y,
+                                 const wxMenuGeometryInfo& geometryInfo,
+                                 const wxString& label,
+                                 const wxString& accel,
+                                 const wxBitmap& bitmap = wxNullBitmap,
+                                 int flags = 0,
+                                 int indexAccel = -1);
+    virtual wxCoord DrawMenuSeparator(wxDC& dc,
+                                      wxCoord y,
+                                      const wxMenuGeometryInfo& geomInfo);
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -236,7 +247,10 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
+
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
+    virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
+                                                const wxMenu& menu) const;
 
     // helpers for "wxBitmap wxColourScheme::Get()"
     void DrawCheckBitmap(wxDC& dc, const wxRect& rect);
@@ -1741,9 +1755,40 @@ void wxGTKRenderer::DrawMenuBarItem(wxDC& dc,
     DrawLabel(dc, label, rect, flags, wxALIGN_CENTRE, indexAccel);
 }
 
+wxCoord wxGTKRenderer::DrawMenuItem(wxDC& dc,
+                                    wxCoord y,
+                                    const wxMenuGeometryInfo& geometryInfo,
+                                    const wxString& label,
+                                    const wxString& accel,
+                                    const wxBitmap& bitmap,
+                                    int flags,
+                                    int indexAccel)
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return 0;
+}
+
+wxCoord wxGTKRenderer::DrawMenuSeparator(wxDC& dc,
+                                         wxCoord y,
+                                         const wxMenuGeometryInfo& geomInfo)
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return 0;
+}
+
 wxSize wxGTKRenderer::GetMenuBarItemSize(const wxSize& sizeText) const
 {
     return sizeText;
+}
+
+wxMenuGeometryInfo *wxGTKRenderer::GetMenuGeometry(wxWindow *win,
+                                                   const wxMenu& menu) const
+{
+    wxFAIL_MSG(_T("TODO"));
+
+    return NULL;
 }
 
 // ----------------------------------------------------------------------------

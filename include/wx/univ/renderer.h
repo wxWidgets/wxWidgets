@@ -31,6 +31,7 @@
 class WXDLLEXPORT wxDC;
 class WXDLLEXPORT wxCheckListBox;
 class WXDLLEXPORT wxListBox;
+class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxScrollBar;
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxWindow;
@@ -222,6 +223,23 @@ public:
                                  int flags = 0,
                                  int indexAccel = -1) = 0;
 
+    // draw a menu item (also used for submenus if flags has ISSUBMENU flag)
+    //
+    // the geometryInfo is calculated by GetMenuGeometry() function from below
+    virtual wxCoord DrawMenuItem(wxDC& dc,
+                                 wxCoord y,
+                                 const wxMenuGeometryInfo& geometryInfo,
+                                 const wxString& label,
+                                 const wxString& accel,
+                                 const wxBitmap& bitmap = wxNullBitmap,
+                                 int flags = 0,
+                                 int indexAccel = -1) = 0;
+
+    // draw a menu bar separator
+    virtual wxCoord DrawMenuSeparator(wxDC& dc,
+                                      wxCoord y,
+                                      const wxMenuGeometryInfo& geomInfo) = 0;
+
     // misc functions
     // --------------
 
@@ -314,6 +332,14 @@ public:
 
     // get the size of rectangle to use in the menubar for the given text rect
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const = 0;
+
+    // get the struct storing all layout info needed to draw all menu items
+    // (this can't be calculated for each item separately as they should be
+    // aligned)
+    //
+    // the returned pointer must be deleted by the caller
+    virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
+                                                const wxMenu& menu) const = 0;
 
     // virtual dtor for any base class
     virtual ~wxRenderer();
@@ -516,12 +542,27 @@ public:
                                  int flags = 0)
         { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
                                       start, end, start, flags); }
+
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
                                  const wxString& label,
                                  int flags = 0,
                                  int indexAccel = -1)
         { m_renderer->DrawMenuBarItem(dc, rect, label, flags, indexAccel); }
+    virtual wxCoord DrawMenuItem(wxDC& dc,
+                                 wxCoord y,
+                                 const wxMenuGeometryInfo& gi,
+                                 const wxString& label,
+                                 const wxString& accel,
+                                 const wxBitmap& bitmap = wxNullBitmap,
+                                 int flags = 0,
+                                 int indexAccel = -1)
+        { return m_renderer->DrawMenuItem(dc, y, gi, label, accel,
+                                          bitmap, flags, indexAccel); }
+    virtual wxCoord DrawMenuSeparator(wxDC& dc,
+                                      wxCoord y,
+                                      const wxMenuGeometryInfo& geomInfo)
+        { return m_renderer->DrawMenuSeparator(dc, y, geomInfo); }
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -585,6 +626,9 @@ public:
         { return m_renderer->GetProgressBarStep(); }
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const
         { return m_renderer->GetMenuBarItemSize(sizeText); }
+    virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
+                                                const wxMenu& menu) const
+        { return m_renderer->GetMenuGeometry(win, menu); }
 
 protected:
     wxRenderer *m_renderer;

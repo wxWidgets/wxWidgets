@@ -362,7 +362,7 @@ void wxComboControl::ShowPopup()
         m_winPopup->SetClientSize(sizeReal);
     }
 
-    m_winPopup->Position();
+    m_winPopup->PositionNearCombo();
 
     // show it
     m_winPopup->Popup(m_text);

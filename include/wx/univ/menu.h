@@ -18,8 +18,27 @@
 
 #include "wx/dynarray.h"
 
+// fwd declarations
 struct WXDLLEXPORT wxMenuInfo;
 WX_DECLARE_OBJARRAY(wxMenuInfo, wxMenuInfoArray);
+
+class wxPopupMenuWindow;
+
+class WXDLLEXPORT wxRenderer;
+
+// ----------------------------------------------------------------------------
+// wxMenu helper classes, used in implementation only
+// ----------------------------------------------------------------------------
+
+// used by wxRenderer
+class WXDLLEXPORT wxMenuGeometryInfo
+{
+public:
+    // get the total size of the menu
+    virtual wxSize GetSize() const = 0;
+
+    virtual ~wxMenuGeometryInfo();
+};
 
 // ----------------------------------------------------------------------------
 // wxMenu
@@ -36,15 +55,59 @@ public:
 
     virtual ~wxMenu();
 
+    // called by wxMenuItem when an item of this menu changes
+    void RefreshItem(wxMenuItem *item);
+
+    // show this menu at the given position (in screen coords)
+    void Popup(const wxPoint& pos, const wxSize& size);
+
+    // dismiss the menu
+    void Dismiss();
+
 protected:
     // implement base class virtuals
     virtual bool DoAppend(wxMenuItem *item);
     virtual bool DoInsert(size_t pos, wxMenuItem *item);
     virtual wxMenuItem *DoRemove(wxMenuItem *item);
 
+    // called by wxPopupMenuWindow when the window is hidden
+    void OnDismiss();
+
+    // draw the menu
+    void DoDraw(wxControlRenderer *renderer);
+
+    // return true if the menu is currently shown on screen
+    bool IsShown() const;
+
+    // get the menu geometry info
+    const wxMenuGeometryInfo& GetGeometryInfo() const;
+
+    // forget old menu geometry info
+    void InvalidateGeometryInfo();
+
+    // get the parent window: either the menu bar or invoking window
+    inline wxWindow *GetParentWindow() const;
+
+    // get the renderer we use for drawing: either the one of the menu bar or
+    // the one of the window if we're a popup menu
+    wxRenderer *GetRenderer() const;
+
 private:
     // common part of all ctors
     void Init();
+
+    // the exact menu geometry is defined by a struct derived from this one
+    // which is opaque and defined by the renderer
+    wxMenuGeometryInfo *m_geometry;
+
+    // the menu shown on screen or NULL if not currently shown
+    wxPopupMenuWindow *m_popupMenu;
+
+    // is the popup window currently shown?
+    bool m_isShown;
+
+    // it calls our DoDraw()
+    friend wxPopupMenuWindow;
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
 };
@@ -74,6 +137,9 @@ public:
 
     virtual void Attach(wxFrame *frame);
     virtual void Detach();
+
+    // called by wxMenu when it is dismissed
+    void OnDismiss();
 
 protected:
     // common part of all ctors
@@ -112,6 +178,15 @@ protected:
     // refresh all items after this one (including it)
     void RefreshAllItemsAfter(size_t pos);
 
+    // popup the currently selected menu
+    void PopupMenu();
+
+    // hide the currently selected menu
+    void DismissMenu();
+
+    // do we show a menu currently?
+    bool IsShowingMenu() const { return m_menuShown != 0; }
+
     // the array containing extra menu info we need
     wxMenuInfoArray m_menuInfos;
 
@@ -124,6 +199,9 @@ private:
 
     // the last window which had focus before us
     wxWindow *m_focusOld;
+
+    // the currently shown menu or NULL
+    wxMenu *m_menuShown;
 
     DECLARE_EVENT_TABLE()
     DECLARE_DYNAMIC_CLASS(wxMenuBar)

@@ -12,9 +12,11 @@
 #ifndef _WX_POPUPWIN_H_BASE_
 #define _WX_POPUPWIN_H_BASE_
 
-#include "wx/window.h"
+#ifdef __GNUG__
+    #pragma interface "popupwin.h"
+#endif
 
-class WXDLLEXPORT wxComboControl;
+#include "wx/window.h"
 
 #if wxUSE_POPUPWIN
 
@@ -26,21 +28,23 @@ class WXDLLEXPORT wxComboControl;
 class WXDLLEXPORT wxPopupWindowBase : public wxWindow
 {
 public:
-    wxPopupWindowBase() { m_winParent = NULL; }
+    wxPopupWindowBase() { }
 
-    // create a popup: note that the parent window in the underlying low-level
-    // toolkit should be NULL regardless of the meaning of this parameter as
-    // this class works with screen coordinates - the parent given here is
-    // just used by Popup() for position calculations
-    bool Create(wxWindow *parent);
+    // create the popup window
+    //
+    // style may only contain border flags
+    bool Create(wxWindow *parent, int style = wxBORDER_NONE);
 
-    // move the popup window to the right position: either below or above the
-    // parent window depending on its location on the screen (the idea is that
-    // the popup must always be entirely visible)
-    virtual void Position();
-
-protected:
-    wxWindow *m_winParent;
+    // move the popup window to the right position, i.e. such that it is
+    // entirely visible
+    //
+    // the popup is positioned at ptOrigin + size if it opens below and to the
+    // right (default), at ptOrigin - sizePopup if it opens above and to the
+    // left &c
+    //
+    // the point must be given in screen coordinates!
+    virtual void Position(const wxPoint& ptOrigin,
+                          const wxSize& size);
 };
 
 // include the real class declaration
@@ -50,30 +54,30 @@ protected:
     #error "wxPopupWindow is not supported under this platform."
 #endif
 
-#endif // wxUSE_POPUPWIN
-
 // ----------------------------------------------------------------------------
-// wxPopupComboWindow: a wxPopupWindow which disappears automatically
+// wxPopupTransientWindow: a wxPopupWindow which disappears automatically
 // when the user clicks mouse outside it or if it loses focus in any other way
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPopupComboWindow : public wxPopupWindow
+class WXDLLEXPORT wxPopupTransientWindow : public wxPopupWindow
 {
 public:
-    wxPopupComboWindow(wxComboControl *parent);
-    virtual ~wxPopupComboWindow();
-
-    bool Create(wxComboControl *parent);
+    wxPopupTransientWindow(wxWindow *parent);
+    virtual ~wxPopupTransientWindow();
 
     // popup the window (this will show it too) and keep focus at winFocus
-    // (itself if it's NULL), dismiss the popup if we lose focus
-    virtual void Popup(wxWindow *focus);
+    // (or itself if it's NULL), dismiss the popup if we lose focus
+    virtual void Popup(wxWindow *focus = NULL);
 
     // hide the window
     virtual void Dismiss();
 
 protected:
-    // dismiss and notify the combo
+    // this is called when the popup is abotu disappeared because of anything
+    // else but direct call to Dismiss()
+    virtual void OnDismiss();
+
+    // dismiss and notify the derived class
     void DismissAndNotify();
 
     // remove our event handlers
@@ -88,6 +92,37 @@ protected:
     friend class wxPopupWindowHandler;
     friend class wxPopupFocusHandler;
 };
+
+#if wxUSE_COMBOBOX
+
+// ----------------------------------------------------------------------------
+// wxPopupComboWindow: wxPopupTransientWindow used by wxComboBox
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxComboBox;
+class WXDLLEXPORT wxComboControl;
+
+class WXDLLEXPORT wxPopupComboWindow : public wxPopupTransientWindow
+{
+public:
+    wxPopupComboWindow(wxComboControl *parent);
+
+    bool Create(wxComboControl *parent);
+
+    // position the window correctly relatively to the combo
+    void PositionNearCombo();
+
+protected:
+    // notify the combo here
+    virtual void OnDismiss();
+
+    // the parent combobox
+    wxComboControl *m_combo;
+};
+
+#endif // wxUSE_COMBOBOX
+
+#endif // wxUSE_POPUPWIN
 
 #endif // _WX_POPUPWIN_H_BASE_
 

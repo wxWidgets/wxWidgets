@@ -234,6 +234,17 @@ public:
                                  const wxString& label,
                                  int flags = 0,
                                  int indexAccel = -1);
+    virtual wxCoord DrawMenuItem(wxDC& dc,
+                                 wxCoord y,
+                                 const wxMenuGeometryInfo& geometryInfo,
+                                 const wxString& label,
+                                 const wxString& accel,
+                                 const wxBitmap& bitmap = wxNullBitmap,
+                                 int flags = 0,
+                                 int indexAccel = -1);
+    virtual wxCoord DrawMenuSeparator(wxDC& dc,
+                                      wxCoord y,
+                                      const wxMenuGeometryInfo& geomInfo);
 
     virtual void GetComboBitmaps(wxBitmap *bmpNormal,
                                  wxBitmap *bmpPressed,
@@ -279,7 +290,10 @@ public:
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
+
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const;
+    virtual wxMenuGeometryInfo *GetMenuGeometry(wxWindow *win,
+                                                const wxMenu& menu) const;
 
 protected:
     // helper of DrawLabel() and DrawCheckOrRadioButton()
@@ -2257,6 +2271,44 @@ void wxWin32Renderer::DrawSliderTicks(wxDC& dc,
 // menu and menubar
 // ----------------------------------------------------------------------------
 
+// wxWin32MenuGeometryInfo: the wxMenuGeometryInfo used by wxWin32Renderer
+class WXDLLEXPORT wxWin32MenuGeometryInfo : public wxMenuGeometryInfo
+{
+public:
+    virtual wxSize GetSize() const { return m_size; }
+
+    wxCoord GetLabelOffset() const { return m_ofsLabel; }
+    wxCoord GetAccelOffset() const { return m_ofsAccel; }
+
+    wxCoord GetItemHeight() const { return m_heightItem; }
+
+private:
+    // the total size of the menu
+    wxSize m_size;
+
+    // the offset of the start of the menu item label
+    wxCoord m_ofsLabel;
+
+    // the offset of the start of the accel label
+    wxCoord m_ofsAccel;
+
+    // the height of a normal (not separator) item
+    wxCoord m_heightItem;
+
+    friend wxMenuGeometryInfo *wxWin32Renderer::
+                GetMenuGeometry(wxWindow *, const wxMenu&) const;
+};
+
+// FIXME: all constants are hardcoded but shouldn't be
+static const wxCoord MENU_LEFT_MARGIN = 16;
+static const wxCoord MENU_RIGHT_MARGIN = 18;
+static const wxCoord MENU_VERT_MARGIN = 3;
+
+// the separator height in pixels: in fact, strangely enough, the real height
+// is 2 but Windows adds one extra pixel in the bottom margin, so take it into
+// account here
+static const wxCoord MENU_SEPARATOR_HEIGHT = 3;
+
 void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
                                       const wxRect& rectOrig,
                                       const wxString& label,
@@ -2283,6 +2335,55 @@ void wxWin32Renderer::DrawMenuBarItem(wxDC& dc,
               wxALIGN_CENTRE, indexAccel);
 }
 
+wxCoord wxWin32Renderer::DrawMenuItem(wxDC& dc,
+                                      wxCoord y,
+                                      const wxMenuGeometryInfo& gi,
+                                      const wxString& label,
+                                      const wxString& accel,
+                                      const wxBitmap& bitmap,
+                                      int flags,
+                                      int indexAccel)
+{
+    const wxWin32MenuGeometryInfo& geometryInfo =
+        (const wxWin32MenuGeometryInfo&)gi;
+
+    // draw the bitmap
+
+    // TODO
+
+    // draw the label
+    wxRect rect;
+    rect.x = geometryInfo.GetLabelOffset();
+    rect.y = y;
+    rect.SetRight(geometryInfo.GetAccelOffset());
+    rect.height = geometryInfo.GetItemHeight();
+
+    DrawLabel(dc, label, rect, flags, wxALIGN_CENTRE_VERTICAL, indexAccel);
+
+    // draw the accel string
+    rect.x = geometryInfo.GetAccelOffset();
+    rect.SetRight(geometryInfo.GetSize().x);
+
+    DrawLabel(dc, accel, rect, flags, wxALIGN_CENTRE_VERTICAL, indexAccel);
+
+    // draw the submenu indicator
+    if ( flags & wxCONTROL_ISSUBMENU )
+    {
+        // TODO
+    }
+
+    return rect.height + 2*MENU_VERT_MARGIN;
+}
+
+wxCoord wxWin32Renderer::DrawMenuSeparator(wxDC& dc,
+                                           wxCoord y,
+                                           const wxMenuGeometryInfo& geomInfo)
+{
+    DrawHorizontalLine(dc, y + MENU_VERT_MARGIN, 0, geomInfo.GetSize().x);
+
+    return MENU_SEPARATOR_HEIGHT + 2*MENU_VERT_MARGIN;
+}
+
 wxSize wxWin32Renderer::GetMenuBarItemSize(const wxSize& sizeText) const
 {
     wxSize size = sizeText;
@@ -2292,6 +2393,69 @@ wxSize wxWin32Renderer::GetMenuBarItemSize(const wxSize& sizeText) const
     size.y += 6;
 
     return size;
+}
+
+wxMenuGeometryInfo *wxWin32Renderer::GetMenuGeometry(wxWindow *win,
+                                                     const wxMenu& menu) const
+{
+    // prepare the dc: for now we draw all the items with the system font
+    wxClientDC dc(win);
+    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
+    // the height of a normal item
+    wxCoord heightText = dc.GetCharHeight();
+
+    // the total height
+    wxCoord height = 0;
+
+    // the max length of label and accel strings: the menu width is the sum of
+    // them, even if they're for different items (as the accels should be
+    // aligned)
+    wxCoord widthLabelMax = 0,
+            widthAccelMax = 0;
+
+    for ( wxMenuItemList::Node *node = menu.GetMenuItems().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxMenuItem *item = node->GetData();
+        if ( item->IsSeparator() )
+        {
+            height += MENU_SEPARATOR_HEIGHT;
+        }
+        else // not separator
+        {
+            height += heightText;
+
+            wxCoord widthLabel;
+            dc.GetTextExtent(item->GetLabel(), &widthLabel, NULL);
+            if ( widthLabel > widthLabelMax )
+            {
+                widthLabelMax = widthLabel;
+            }
+
+            wxCoord widthAccel;
+            dc.GetTextExtent(item->GetAccelString(), &widthAccel, NULL);
+            if ( widthAccel > widthAccelMax )
+            {
+                widthAccelMax = widthAccel;
+            }
+        }
+
+        height += 2*MENU_VERT_MARGIN;
+    }
+
+    // bundle the metrics into a struct and return it
+    wxWin32MenuGeometryInfo *gi = new wxWin32MenuGeometryInfo;
+
+    gi->m_ofsLabel = MENU_LEFT_MARGIN;
+    gi->m_ofsAccel = gi->m_ofsLabel + widthLabelMax;
+    gi->m_heightItem = heightText;
+
+    gi->m_size.x = gi->m_ofsAccel + widthAccelMax + MENU_RIGHT_MARGIN;
+    gi->m_size.y = height;
+
+    return gi;
 }
 
 // ----------------------------------------------------------------------------

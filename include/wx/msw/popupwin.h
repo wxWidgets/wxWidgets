@@ -23,14 +23,12 @@ public:
 
     wxPopupWindow(wxWindow *parent) { (void)Create(parent); }
 
-    bool Create(wxWindow *parent)
+    bool Create(wxWindow *parent, int flags = wxBORDER_NONE)
     {
         return wxPopupWindowBase::Create(parent) &&
                wxWindow::Create(parent, -1,
                                 wxDefaultPosition, wxDefaultSize,
-                                // don't use the border - child will have its
-                                // own
-                                wxBORDER_NONE | wxPOPUP_WINDOW);
+                                (flags & wxBORDER_MASK) | wxPOPUP_WINDOW);
     }
 };
 

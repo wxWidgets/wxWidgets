@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        common/popupcmn.cpp
-// Purpose:     implementation of wxPopupComboWindow
+// Purpose:     implementation of wxPopupTransientWindow
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     06.01.01
@@ -17,7 +17,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if 0 // def __GNUG__
+#ifdef __GNUG__
     #pragma implementation "popupwin.h"
 #endif
 
@@ -47,14 +47,14 @@
 class wxPopupWindowHandler : public wxEvtHandler
 {
 public:
-    wxPopupWindowHandler(wxPopupComboWindow *popup) { m_popup = popup; }
+    wxPopupWindowHandler(wxPopupTransientWindow *popup) { m_popup = popup; }
 
 protected:
     // event handlers
     void OnLeftDown(wxMouseEvent& event);
 
 private:
-    wxPopupComboWindow *m_popup;
+    wxPopupTransientWindow *m_popup;
 
     DECLARE_EVENT_TABLE()
 };
@@ -62,14 +62,14 @@ private:
 class wxPopupFocusHandler : public wxEvtHandler
 {
 public:
-    wxPopupFocusHandler(wxPopupComboWindow *popup) { m_popup = popup; }
+    wxPopupFocusHandler(wxPopupTransientWindow *popup) { m_popup = popup; }
 
 protected:
     // event handlers
     void OnKillFocus(wxFocusEvent& event);
 
 private:
-    wxPopupComboWindow *m_popup;
+    wxPopupTransientWindow *m_popup;
 
     DECLARE_EVENT_TABLE()
 };
@@ -94,49 +94,52 @@ END_EVENT_TABLE()
 // wxPopupWindowBase
 // ----------------------------------------------------------------------------
 
-bool wxPopupWindowBase::Create(wxWindow *parent)
+bool wxPopupWindowBase::Create(wxWindow* WXUNUSED(parent), int WXUNUSED(flags))
 {
-    m_winParent = parent;
-
     return TRUE;
 }
 
-void wxPopupWindowBase::Position()
+void wxPopupWindowBase::Position(const wxPoint& ptOrigin,
+                                 const wxSize& size)
 {
-    wxPoint ptOrigin = m_winParent->ClientToScreen(wxPoint(0, 0));
-    wxSize sizeScreen = wxGetDisplaySize();
-    wxCoord heightParent = m_winParent->GetSize().y,
-            heightSelf = GetSize().y;
+    wxSize sizeScreen = wxGetDisplaySize(),
+           sizeSelf = GetSize();
 
     // is there enough space to put the popup below the window (where we put it
     // by default)?
-    wxCoord y = ptOrigin.y + heightParent;
-    if ( y + heightSelf > sizeScreen.y )
+    wxCoord y = ptOrigin.y + size.y;
+    if ( y + sizeSelf.y > sizeScreen.y )
     {
         // check if there is enough space above
-        if ( ptOrigin.y > heightSelf )
+        if ( ptOrigin.y > sizeSelf.y )
         {
             // do position the control above the window
-            y -= heightParent + heightSelf;
+            y -= size.y + sizeSelf.y;
         }
         //else: not enough space below nor above, leave below
     }
 
-#ifdef __WXUNIVERSAL__
-    wxRect rectBorders = m_winParent->GetRenderer()->
-                            GetBorderDimensions(m_winParent->GetBorder());
-    ptOrigin.x -= rectBorders.x;
-    y -= rectBorders.y;
-#endif // __WXUNIVERSAL__
+    // now check left/right too
+    wxCoord x = ptOrigin.x + size.x;
+    if ( x + sizeSelf.x > sizeScreen.x )
+    {
+        // check if there is enough space to the left
+        if ( ptOrigin.x > sizeSelf.x )
+        {
+            // do position the control to the left
+            x -= size.x + sizeSelf.x;
+        }
+        //else: not enough space there neither, leave in default position
+    }
 
-    Move(ptOrigin.x, y);
+    Move(x, y);
 }
 
 // ----------------------------------------------------------------------------
-// wxPopupComboWindow
+// wxPopupTransientWindow
 // ----------------------------------------------------------------------------
 
-wxPopupComboWindow::wxPopupComboWindow(wxComboControl *parent)
+wxPopupTransientWindow::wxPopupTransientWindow(wxWindow *parent)
 {
     m_child =
     m_focus = (wxWindow *)NULL;
@@ -144,17 +147,12 @@ wxPopupComboWindow::wxPopupComboWindow(wxComboControl *parent)
     (void)Create(parent);
 }
 
-wxPopupComboWindow::~wxPopupComboWindow()
+wxPopupTransientWindow::~wxPopupTransientWindow()
 {
     PopHandlers();
 }
 
-bool wxPopupComboWindow::Create(wxComboControl *parent)
-{
-    return wxPopupWindow::Create(parent);
-}
-
-void wxPopupComboWindow::PopHandlers()
+void wxPopupTransientWindow::PopHandlers()
 {
     if ( m_child )
     {
@@ -170,7 +168,7 @@ void wxPopupComboWindow::PopHandlers()
     }
 }
 
-void wxPopupComboWindow::Popup(wxWindow *winFocus)
+void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 {
     const wxWindowList& children = GetChildren();
     if ( children.GetCount() )
@@ -187,19 +185,69 @@ void wxPopupComboWindow::Popup(wxWindow *winFocus)
     m_focus->PushEventHandler(new wxPopupFocusHandler(this));
 }
 
-void wxPopupComboWindow::Dismiss()
+void wxPopupTransientWindow::Dismiss()
 {
     PopHandlers();
 
     Hide();
 }
 
-void wxPopupComboWindow::DismissAndNotify()
+void wxPopupTransientWindow::DismissAndNotify()
 {
     Dismiss();
 
-    ((wxComboControl *)m_winParent)->OnDismiss();
+    OnDismiss();
 }
+
+void wxPopupTransientWindow::OnDismiss()
+{
+    // nothing to do here - but it may be interesting for derived class
+}
+
+#if wxUSE_COMBOBOX
+
+// ----------------------------------------------------------------------------
+// wxPopupComboWindow
+// ----------------------------------------------------------------------------
+
+wxPopupComboWindow::wxPopupComboWindow(wxComboControl *parent)
+                  : wxPopupTransientWindow(parent)
+{
+    m_combo = parent;
+}
+
+bool wxPopupComboWindow::Create(wxComboControl *parent)
+{
+    m_combo = parent;
+
+    return wxPopupWindow::Create(parent);
+}
+
+void wxPopupComboWindow::PositionNearCombo()
+{
+    // the origin point must be in screen coords
+    wxPoint ptOrigin = m_combo->ClientToScreen(wxPoint(0, 0));
+
+#ifdef __WXUNIVERSAL__
+    // account for the fact that (0, 0) is not the top left corner of the
+    // window: there is also the border
+    wxRect rectBorders = m_combo->GetRenderer()->
+                            GetBorderDimensions(m_combo->GetBorder());
+    ptOrigin.x -= rectBorders.x;
+    ptOrigin.y -= rectBorders.y;
+#endif // __WXUNIVERSAL__
+
+    // position below or above the combobox: the width is 0 to put it exactly
+    // below us, not to the left or to the right
+    Position(ptOrigin, wxSize(0, m_combo->GetSize().y));
+}
+
+void wxPopupComboWindow::OnDismiss()
+{
+    m_combo->OnDismiss();
+}
+
+#endif // wxUSE_COMBOBOX
 
 // ----------------------------------------------------------------------------
 // wxPopupWindowHandler

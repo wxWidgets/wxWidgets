@@ -38,7 +38,36 @@ public:
 
     virtual void Enable(bool enable = TRUE);
     virtual void Check(bool check = TRUE);
-    virtual bool IsChecked() const;
+
+    // we add some extra functions which are also available under MSW from
+    // wxOwnerDrawn class - they will be moved to wxMenuItemBase later
+    // hopefully
+    void SetBitmaps(const wxBitmap& bmpChecked,
+                    const wxBitmap& bmpUnchecked = wxNullBitmap);
+    const wxBitmap& GetBitmap(bool checked = TRUE) const
+      { return checked ? m_bmpChecked : m_bmpUnchecked; }
+
+    // wxUniv-specific methods for implementation only starting from here
+
+    // get the accel index of our label or -1 if none
+    int GetAccelIndex() const { return m_indexAccel; }
+
+    // get the accel string (displayed to the right of the label)
+    const wxString& GetAccelString() const { return m_strAccel; }
+
+protected:
+    // notify the menu about the change in this item
+    inline void NotifyMenu();
+
+    // the bitmaps (may be invalid, then they're not used)
+    wxBitmap m_bmpChecked,
+             m_bmpUnchecked;
+
+    // the position of the accelerator in our label, -1 if none
+    int m_indexAccel;
+
+    // the accel string (i.e. "Ctrl-Q" or "Alt-F1")
+    wxString m_strAccel;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
