@@ -58,10 +58,10 @@ class wxXmlResourceModule;
 //       - reset revision to 0 unless the first three are same as before,
 //         in which case you should increase revision by one
 #define WX_XMLRES_CURRENT_VERSION_MAJOR            2
-#define WX_XMLRES_CURRENT_VERSION_MINOR            3
-#define WX_XMLRES_CURRENT_VERSION_RELEASE          0
-#define WX_XMLRES_CURRENT_VERSION_REVISION         1
-#define WX_XMLRES_CURRENT_VERSION_STRING       _T("2.3.0.1")
+#define WX_XMLRES_CURRENT_VERSION_MINOR            5
+#define WX_XMLRES_CURRENT_VERSION_RELEASE          3
+#define WX_XMLRES_CURRENT_VERSION_REVISION         0
+#define WX_XMLRES_CURRENT_VERSION_STRING       _T("2.5.3.0")
 
 #define WX_XMLRES_CURRENT_VERSION \
                 (WX_XMLRES_CURRENT_VERSION_MAJOR * 256*256*256 + \

@@ -788,14 +788,34 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
             else
                 str2 << wxT('&') << *dt;
         }
-        // Remap \n to CR, \r to LF, \t to TAB:
+        // Remap \n to CR, \r to LF, \t to TAB, \\ to \:
         else if (*dt == wxT('\\'))
             switch (*(++dt))
             {
-                case wxT('n') : str2 << wxT('\n'); break;
-                case wxT('t') : str2 << wxT('\t'); break;
-                case wxT('r') : str2 << wxT('\r'); break;
-                default       : str2 << wxT('\\') << *dt; break;
+                case wxT('n'):
+                    str2 << wxT('\n');
+                    break;
+                    
+                case wxT('t'):
+                    str2 << wxT('\t');
+                    break;
+                    
+                case wxT('r'):
+                    str2 << wxT('\r');
+                    break;
+
+                case wxT('\\') :
+                    // "\\" wasn't translated to "\" prior to 2.5.3.0:
+                    if (m_resource->CompareVersion(2,5,3,0) >= 0)
+                    {
+                        str2 << wxT('\\');
+                        break;
+                    }
+                    // else fall-through to default: branch below
+    
+                default:
+                    str2 << wxT('\\') << *dt;
+                    break;
             }
         else str2 << *dt;
     }

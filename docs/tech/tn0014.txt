@@ -35,11 +35,11 @@ NODE, PROPERTY and VALUE in the XML sense:
 
 The term ATTRIBUTE is specific to XRC and refers to a subnode 
 of an <object> or <object_ref> node that is itself not <object> or <object_ref>. 
-In the example bellow, <pos>, <label> and <style> are attributes, while neither 
+In the example below, <pos>, <label> and <style> are attributes, while neither 
 <resource> nor either of <object>s is:
 
     <?xml version="1.0" encoding="utf-8">
-    <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
+    <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
         <object class="wxPanel">
             <style>wxSUNKEN_BORDER</style>             <!-- attr -->
             <object class="wxStaticText">
@@ -78,7 +78,7 @@ entitled "Version Note".
 
 The <resource> node contains namespace declaration, too:
 
-    <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.3.0.1">
+    <resource xmlns="http://www.wxwidgets.org/wxxrc" version="2.5.3.0">
 
 The <resource> node is only allowed to have <object> and <object_ref>
 subnodes, all of which must have the "name" property.
@@ -155,6 +155,8 @@ by XRC parser according to this table:
     "\n"   -> line break (C character '\n')
     "\r"   -> carriage return (C character '\r')
     "\t"   -> tabelator (C character '\t')
+    "\\"   -> "\"
+              (introduced in version 2.5.3.0, not done in earlier versions)
 
 Version Note:
     '$' was used instead of '_' prior to version 2.3.0.1.
@@ -214,7 +216,7 @@ Any of "stock_id" or "stock_client" properties or the filename may be omitted.
 XRC determines the bitmap to use according to this algorithm: 
   1. If there is non-empty "stock_id" property, query wxArtProvider for the
      bitmap (if there is no "stock_client", use default one, which is usually
-     wxART_OTHER; exceptions are noted in class-specific sections bellow). If
+     wxART_OTHER; exceptions are noted in class-specific sections below). If
      the query fails, continue to 2.
   2. Load the bitmap from the file in attribute value.
 
@@ -279,7 +281,7 @@ wxCheckList
 position                   Position                -1,-1
 size                       Size                    -1,-1
 style                      Style[wxCheckList]
-content                    (see bellow)            (empty)
+content                    (see below)             (empty)
 
 Optional "content" attribute does not have attribute value. Instead,
 arbitrary number of <item> nodes may be rooted under it (the control
