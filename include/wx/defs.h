@@ -84,6 +84,11 @@
 #   pragma warning(disable:4100)    // unreferenced formal parameter
 #   pragma warning(disable:4511)    // copy ctor couldn't be generated
 #   pragma warning(disable:4512)    // operator=() couldn't be generated
+#ifndef WIN32
+#   pragma warning(disable:4134)    // conversion between pointers to members of same class
+#   pragma warning(disable:4135)    // conversion between different integral types
+#   pragma warning(disable:4769)    // assignment of near pointer to long integer
+#endif
 #endif // __VISUALC__
 
 // suppress some Salford C++ warnings

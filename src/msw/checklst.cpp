@@ -155,9 +155,9 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
 #else
       // In WIN16, draw a cross
       HPEN blackPen = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
-      HPEN whiteBrush = GetStockObject(WHITE_BRUSH);
-      HPEN hPenOld = ::SelectObject(hdcMem, blackPen);
-      HPEN hBrushOld = ::SelectObject(hdcMem, whiteBrush);
+      HPEN whiteBrush = (HPEN)GetStockObject(WHITE_BRUSH);
+      HPEN hPenOld = (HPEN)::SelectObject(hdcMem, blackPen);
+      HPEN hBrushOld = (HPEN)::SelectObject(hdcMem, whiteBrush);
       ::SetROP2(hdcMem, R2_COPYPEN);
       Rectangle(hdcMem, 0, 0, nCheckWidth, nCheckHeight);
       MoveTo(hdcMem, 0, 0);

@@ -190,7 +190,11 @@ bool wxWindowsPrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt
     wxYield();
 
 #if defined(__BORLANDC__) || defined(__GNUWIN32__) || defined(__SALFORDC__) || !defined(__WIN32__)
+#ifdef STRICT
+    ::SetAbortProc((HDC) dc->GetHDC(), (ABORTPROC) m_lpAbortProc);
+#else
     ::SetAbortProc((HDC) dc->GetHDC(), (FARPROC) m_lpAbortProc);
+#endif
 #else
     ::SetAbortProc((HDC) dc->GetHDC(), (int (_stdcall *)
         // cast it to right type only if required

@@ -820,10 +820,17 @@ HCURSOR MakeCursorFromBitmap(HINSTANCE hInst, HBITMAP hBitmap, POINT *pPoint)
   DeleteObject(hXorBmp);
   ReleaseDC(NULL, hDC);
 #ifndef __WIN32__
+#ifdef STRICT
+  LocalUnlock(LocalHandle((void NEAR*) andBits));
+  LocalUnlock(LocalHandle((void NEAR*) xorBits));
+  LocalFree(LocalHandle((void NEAR*) andBits));
+  LocalFree(LocalHandle((void NEAR*) xorBits));
+#else
   LocalUnlock(LocalHandle((WORD) andBits));
   LocalUnlock(LocalHandle((WORD) xorBits));
   LocalFree(LocalHandle((WORD) andBits));
   LocalFree(LocalHandle((WORD) xorBits));
+#endif
 #else
   LocalUnlock(LocalHandle((LPCVOID) andBits));
   LocalUnlock(LocalHandle((LPCVOID) xorBits));
@@ -891,10 +898,17 @@ HICON MakeIconFromBitmap(HINSTANCE hInst, HBITMAP hBitmap)
   DeleteObject(hXorBmp);
   ReleaseDC((HWND) NULL, hDC);
 #ifndef __WIN32__
+#ifdef STRICT
+  LocalUnlock(LocalHandle((void NEAR*) andBits));
+  LocalUnlock(LocalHandle((void NEAR*) xorBits));
+  LocalFree(LocalHandle((void NEAR*) andBits));
+  LocalFree(LocalHandle((void NEAR*) xorBits));
+#else
   LocalUnlock(LocalHandle((WORD) andBits));
   LocalUnlock(LocalHandle((WORD) xorBits));
   LocalFree(LocalHandle((WORD) andBits));
   LocalFree(LocalHandle((WORD) xorBits));
+#endif
 #else
   LocalUnlock(LocalHandle((LPCVOID) andBits));
   LocalUnlock(LocalHandle((LPCVOID) xorBits));

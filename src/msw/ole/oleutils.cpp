@@ -79,6 +79,7 @@ const char *GetIidName(REFIID riid)
     ADD_KNOWN_IID(AdviseSink2),
     ADD_KNOWN_IID(BindCtx),
     ADD_KNOWN_IID(ClassFactory),
+#if !defined( __VISUALC__) || (__VISUALC__!=1010) 
     ADD_KNOWN_IID(ContinueCallback),
     ADD_KNOWN_IID(EnumOleDocumentViews),
     ADD_KNOWN_IID(OleCommandTarget),
@@ -86,6 +87,7 @@ const char *GetIidName(REFIID riid)
     ADD_KNOWN_IID(OleDocumentSite),
     ADD_KNOWN_IID(OleDocumentView),
     ADD_KNOWN_IID(Print),
+#endif
     ADD_KNOWN_IID(DataAdviseHolder),
     ADD_KNOWN_IID(DataObject),
     ADD_KNOWN_IID(Debug),

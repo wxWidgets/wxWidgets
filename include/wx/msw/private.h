@@ -77,8 +77,12 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
        typedef int (pascal * WndProcCast) ();
 #      define CASTWNDPROC (WndProcCast)
 #    else
-       typedef int (PASCAL * WndProcCast) ();
-#      define CASTWNDPROC (WndProcCast)
+#      if defined(__VISUALC__) && defined(STRICT)
+#        define CASTWNDPROC (WNDPROC)
+#      else
+         typedef int (PASCAL * WndProcCast) ();
+#        define CASTWNDPROC (WndProcCast)
+#      endif
 #    endif
 #    else
 #      define CASTWNDPROC
@@ -105,7 +109,9 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 #endif
 
 #if !defined(__WIN32__)  // 3.x uses FARPROC for dialogs
+#ifndef STRICT
     #define DLGPROC FARPROC
+#endif
 #endif
 
 #if wxUSE_PENWIN

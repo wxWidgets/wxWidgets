@@ -19,8 +19,8 @@ wxBitmap         *wxLoadBitmap(wxChar *filename, wxColourMap **colourmap = NULL)
 bool wxLoadIntoBitmap(wxChar *filename, wxBitmap *bitmap, wxColourMap **pal = NULL);
 
 HANDLE BitmapToDIB (HBITMAP hBitmap, HPALETTE hPal);
-BOOL   ReadDIB(LPTSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
-HANDLE ReadDIB2(LPTSTR lpFileName);
-LPSTR FindDIBBits (LPTSTR lpbi);
+BOOL   ReadDIB(LPSTR lpFileName, HBITMAP *bitmap, HPALETTE *palette);
+HANDLE ReadDIB2(LPSTR lpFileName);
+LPSTR FindDIBBits (LPSTR lpbi);
 HPALETTE MakeDIBPalette(LPBITMAPINFOHEADER lpInfo);
 

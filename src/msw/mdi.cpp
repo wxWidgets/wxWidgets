@@ -1002,7 +1002,7 @@ void wxMDIChildFrame::MSWDestroyWindow()
 #ifdef __WIN32__
     SendMessage((HWND) parent->GetClientWindow()->GetHWND(), WM_MDIDESTROY, (WPARAM)oldHandle, (LPARAM)0);
 #else
-    SendMessage((HWND) parent->GetClientWindow()->GetHWND(), WM_MDIDESTROY, (HWND)oldHandle, 0);
+    SendMessage((HWND) parent->GetClientWindow()->GetHWND(), WM_MDIDESTROY, (WPARAM)oldHandle, 0);
 #endif
     invalidHandle = 0;
 

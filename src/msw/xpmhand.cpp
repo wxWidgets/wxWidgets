@@ -39,7 +39,7 @@
 
 #if wxUSE_XPM_IN_MSW
 #define FOR_MSW 1
-#include "../src/xpm/xpm34.h"
+#include "../xpm/xpm34.h"
 #endif
 
 #include "wx/xpmhand.h"

@@ -317,7 +317,7 @@ long wxExecute(const wxString& command, bool sync, wxProcess *handler)
         int running;
         do {
             wxYield();
-            running = GetModuleUsage((HANDLE)instanceID);
+            running = GetModuleUsage((HINSTANCE)instanceID);
         } while (running);
     }
 

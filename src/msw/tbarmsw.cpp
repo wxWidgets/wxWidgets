@@ -347,7 +347,7 @@ wxToolBarTool *wxToolBarMSW::AddTool(int index, const wxBitmap& bitmap, const wx
   wxBitmap bitmap2;
   if (toggle)
   {
-    bitmap2.SetHBITMAP( (WXHBITMAP) CreateMappedBitmap(wxGetInstance(), (HBITMAP) ((wxBitmap& )bitmap).GetHBITMAP()));
+    bitmap2.SetHBITMAP( (WXHBITMAP) CreateMappedBitmap((WXHINSTANCE)wxGetInstance(), (WXHBITMAP) ((wxBitmap& )bitmap).GetHBITMAP()));
   }
 
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, bitmap2, toggle, xPos, yPos, helpString1, helpString2);
