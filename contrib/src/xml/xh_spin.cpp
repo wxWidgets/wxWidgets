@@ -55,7 +55,7 @@ wxObject *wxSpinButtonXmlHandler::DoCreateResource()
 
 bool wxSpinButtonXmlHandler::CanHandle(wxXmlNode *node)
 {
-    return node->GetName() == wxT("spinbutton");
+    return IsOfClass(node, wxT("wxSpinButton"));
 }
 
 #endif // wxUSE_SPINBTN
