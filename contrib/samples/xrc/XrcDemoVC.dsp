@@ -9,19 +9,19 @@ CFG=XrcDemoVC - Win32 Debug
 !MESSAGE use the Export Makefile command and run
 !MESSAGE 
 !MESSAGE NMAKE /f "XrcDemoVC.mak".
-!MESSAGE
+!MESSAGE 
 !MESSAGE You can specify a configuration when running NMAKE
 !MESSAGE by defining the macro CFG on the command line. For example:
 !MESSAGE 
 !MESSAGE NMAKE /f "XrcDemoVC.mak" CFG="XrcDemoVC - Win32 Debug"
-!MESSAGE
+!MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
 !MESSAGE "XrcDemoVC - Win32 Release" (based on "Win32 (x86) Application")
 !MESSAGE "XrcDemoVC - Win32 Debug" (based on "Win32 (x86) Application")
 !MESSAGE "XrcDemoVC - Win32 Debug DLL" (based on "Win32 (x86) Application")
 !MESSAGE "XrcDemoVC - Win32 Release DLL" (based on "Win32 (x86) Application")
-!MESSAGE
+!MESSAGE 
 
 # Begin Project
 # PROP AllowPerConfigDependencies 0
@@ -72,7 +72,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../../../include" /I "../../../contrib/include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /Yu"wx/wxprec.h" /FD /c
+# ADD CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /I "../../../include" /I "../../../contrib/include" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "__WINDOWS__" /D "__WXMSW__" /D DEBUG=1 /D "__WXDEBUG__" /D "__WIN95__" /D "__WIN32__" /D WINVER=0x0400 /D "STRICT" /FD /c
+# SUBTRACT CPP /YX /Yc /Yu
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
 # ADD BASE RSC /l 0x809 /d "_DEBUG"
@@ -147,7 +148,7 @@ LINK32=link.exe
 # Name "XrcDemoVC - Win32 Release DLL"
 # Begin Source File
 
-SOURCE=.\xmldemo.cpp
+SOURCE=.\xrcdemo.cpp
 
 !IF  "$(CFG)" == "XrcDemoVC - Win32 Release"
 
@@ -157,7 +158,6 @@ SOURCE=.\xmldemo.cpp
 
 !ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Debug DLL"
 
-# SUBTRACT BASE CPP /YX /Yc /Yu
 # SUBTRACT CPP /YX /Yc /Yu
 
 !ELSEIF  "$(CFG)" == "XrcDemoVC - Win32 Release DLL"
@@ -167,9 +167,7 @@ SOURCE=.\xmldemo.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\xmldemo.rc
-# ADD BASE RSC /l 0x809
-# ADD RSC /l 0x809 /i "../../../include" /i "../../../contrib/include"
+SOURCE=.\xrcdemo.rc
 # End Source File
 # End Target
 # End Project

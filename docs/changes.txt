@@ -10,6 +10,7 @@ wxBase:
 - Fixed new charset detection code (langinfo.h not included in intl.cpp;
   langinfo.h not neccessary in strconv.cpp)
 - ODBC Informix fixes (submitted by Roger Gammans)
+- Added wxDbGrid class for displaying ODBC tables
 - Added wxDir::Traverse
 
 All (GUI):

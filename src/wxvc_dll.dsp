@@ -140,6 +140,10 @@ SOURCE=.\common\db.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\dbgrid.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\dbtable.cpp
 # End Source File
 # Begin Source File

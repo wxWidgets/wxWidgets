@@ -357,7 +357,7 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     {
         wxUint32 cc;
 #ifdef WC_UTF16
-        size_t pa = decode_utf16(psz,cc);
+        size_t pa = decode_utf16((wchar_t*) psz,cc);
         psz += (pa == (size_t)-1) ? 1 : pa;
 #else
         cc=(*psz++) & 0x7fffffff;

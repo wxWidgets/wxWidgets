@@ -111,9 +111,6 @@ contrib/samples/stc/Makefile.in
 contrib/samples/applet/Makefile.in
 
 contrib/utils/Makefile.in
-contrib/utils/convertrc/Makefile.in
-contrib/utils/wxrc/Makefile.in
-contrib/utils/wxrcedit/Makefile.in
 
 descrip.mms
 lib/vms.opt
