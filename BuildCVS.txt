@@ -115,8 +115,37 @@ ftp server at ftp://sourceware.cygnus.com/pub/cygwin/.
 Of course, you can also build the library using plain makefiles (see
 section I).
 
-V) MacOS
+IV) Classic MacOS using CodeWarrior (eg MacOS 8.x/9.x)
 ----------------------------------------
+
+Refer to the readme.txt and install.txt files in docs/mac to build
+wxWindows under Classic Mac OS using CodeWarrior.
+
+If you are checking out the CVS sources using cvs under Mac OS X and
+compiling under Classic Mac OS, make sure that all text files have a
+Mac OS type of 'TEXT' otherwise CodeWarrior may ignore them. Checking
+out the CVS sources using cvs under Mac OS X creates untyped files
+which can lead to compialtion errors under CodeWarrior which are hard
+to track down.
+
+V) MacOS X using configure and the Developer Tools
+----------------------------------------
+
+You need to have the Developer Tools installed. If this is not the case,
+you will need to register at the Apple Developer web site (this is a free
+registration) in order to download the Developer Tools installer.
+
+In order to create configure, you need to have the
+GNU autoconf package (version 2.13 or 2.14) installed
+on your system and type run "autoconf" in the base
+directory (or run the autogen.sh script in the same
+directory, which just calls autoconf).
+
+-> type: mkdir macbuild
+-> type: cd macbuild
+-> type: ../configure --with-mac
+or type: ../configure
+-> type: make
 
 VI) OS/2
 ----------------------------------------
