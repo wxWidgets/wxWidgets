@@ -1162,15 +1162,6 @@ if BUILD_ART2D:
 # Tools and scripts
 #----------------------------------------------------------------------
 
-## TOOLS = [("wxPython/tools",        glob.glob("tools/*.py")),
-##          ("wxPython/tools/XRCed",  glob.glob("tools/XRCed/*.py") +
-##                                    glob.glob("tools/XRCed/*.xrc") +
-##                                    ["tools/XRCed/CHANGES",
-##                                     "tools/XRCed/TODO",
-##                                     "tools/XRCed/README"]),
-##          ]
-
-
 if NO_SCRIPTS:
     SCRIPTS = None
 else:
@@ -1183,6 +1174,13 @@ else:
                opj('scripts/pycrust'),
                opj('scripts/pycwrap'),
                ]
+
+
+DATA_FILES.append( ('wxPython/tools/XRCed', glob.glob('wxPython/tools/XRCed/*.txt') +
+                                            [ 'wxPython/tools/XRCed/xrced.xrc']))
+
+DATA_FILES.append( ('wxPython/lib/PyCrust', glob.glob('wxPython/lib/PyCrust/*.txt') +
+                                            glob.glob('wxPython/lib/PyCrust/*.ico')))
 
 
 #----------------------------------------------------------------------
