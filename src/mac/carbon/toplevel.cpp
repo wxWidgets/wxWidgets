@@ -332,6 +332,43 @@ static pascal OSStatus WindowEventHandler( EventHandlerCallRef handler , EventRe
                 result = noErr;
             }
             break ;
+        case kEventWindowBoundsChanging :
+            err = GetEventParameter( event, kEventParamAttributes, typeUInt32,
+                        NULL, sizeof( UInt32 ), NULL, &attributes );
+            if ( err == noErr )
+            {
+                Rect newContentRect ;
+
+                GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL,
+                    sizeof( newContentRect ), NULL, &newContentRect );
+                    
+                wxRect contentRect(newContentRect.left , newContentRect.top ,
+                    newContentRect.right - newContentRect.left ,
+                    newContentRect.bottom - newContentRect.top) ;
+                    
+                bool handled = false ;
+                if ((attributes & kWindowBoundsChangeSizeChanged) != 0) 
+                {
+                    wxSizeEvent event(contentRect , toplevelWindow->GetId());
+                    event.SetEventObject(toplevelWindow);
+                    handled = toplevelWindow->GetEventHandler()->ProcessEvent(event);
+                    contentRect = event.GetRect() ;
+                }
+                else if ( attributes & kWindowBoundsChangeOriginChanged != 0)
+                {
+                    wxMoveEvent event(contentRect , toplevelWindow->GetId());
+                    event.SetEventObject(toplevelWindow);
+                    handled = toplevelWindow->GetEventHandler()->ProcessEvent(event);
+                    contentRect = event.GetRect() ;
+                }
+                if ( handled )
+                {
+                    SetRect( &newContentRect , contentRect.GetLeft() , contentRect.GetTop() , contentRect.GetRight() , contentRect.GetBottom() ) ;
+                    SetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, sizeof( newContentRect ), &newContentRect );
+                }
+                result = noErr ;
+            }
+            break ;
         default :
             break ;
     }
@@ -702,17 +739,6 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     InstallStandardEventHandler( GetWindowEventTarget(MAC_WXHWND(m_macWindow)) ) ;
     InstallWindowEventHandler(MAC_WXHWND(m_macWindow), GetwxMacWindowEventHandlerUPP(),
         GetEventTypeCount(eventList), eventList, this, &((EventHandlerRef)m_macEventHandler));
-
-    // Patch 531199 also defined a window event handler, as follows:
-#if 0
-    // install a window event handler to send wxEVT_MOVING and wxEVT_SIZING events
-    EventTypeSpec events[] = { { kEventClassWindow, kEventWindowBoundsChanging } };
-    EventHandlerUPP	handlerProc = NewEventHandlerUPP( WindowHandler );
-    EventHandlerRef eventHandlerRef;
-    InstallWindowEventHandler( m_macWindowData->m_macWindow, handlerProc, GetEventTypeCount(events),
-        events, (void*)this, &eventHandlerRef);
-#endif
-
 #endif
     m_macFocus = NULL ;
 
