@@ -67,8 +67,8 @@ class wxCloseEventPtr(wxEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def CanVeto(self):
-        val = eventsc.wxCloseEvent_CanVeto(self.this)
+    def SetLoggingOff(self,arg0):
+        val = eventsc.wxCloseEvent_SetLoggingOff(self.this,arg0)
         return val
     def GetLoggingOff(self):
         val = eventsc.wxCloseEvent_GetLoggingOff(self.this)
@@ -76,20 +76,14 @@ class wxCloseEventPtr(wxEventPtr):
     def Veto(self,*args):
         val = apply(eventsc.wxCloseEvent_Veto,(self.this,)+args)
         return val
+    def CanVeto(self):
+        val = eventsc.wxCloseEvent_CanVeto(self.this)
+        return val
     def GetVeto(self):
         val = eventsc.wxCloseEvent_GetVeto(self.this)
         return val
-    def SetForce(self,arg0):
-        val = eventsc.wxCloseEvent_SetForce(self.this,arg0)
-        return val
     def SetCanVeto(self,arg0):
         val = eventsc.wxCloseEvent_SetCanVeto(self.this,arg0)
-        return val
-    def SetLoggingOff(self,arg0):
-        val = eventsc.wxCloseEvent_SetLoggingOff(self.this,arg0)
-        return val
-    def GetForce(self):
-        val = eventsc.wxCloseEvent_GetForce(self.this)
         return val
     def __repr__(self):
         return "<C wxCloseEvent instance>"
@@ -291,15 +285,6 @@ class wxKeyEventPtr(wxEventPtr):
         return val
     def KeyCode(self):
         val = eventsc.wxKeyEvent_KeyCode(self.this)
-        return val
-    def Position(self):
-        val = eventsc.wxKeyEvent_Position(self.this)
-        return val
-    def GetX(self):
-        val = eventsc.wxKeyEvent_GetX(self.this)
-        return val
-    def GetY(self):
-        val = eventsc.wxKeyEvent_GetY(self.this)
         return val
     def __repr__(self):
         return "<C wxKeyEvent instance>"
