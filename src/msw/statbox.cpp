@@ -40,7 +40,8 @@
 
 #include "wx/msw/private.h"
 
-// this is for Win CE
+// under CE this style is not defined but we don't need to make static boxes
+// transparent there neither
 #ifndef WS_EX_TRANSPARENT
     #define WS_EX_TRANSPARENT 0
 #endif
@@ -120,11 +121,20 @@ bool wxStaticBox::Create(wxWindow *parent,
     if ( !CreateControl(parent, id, pos, size, style, wxDefaultValidator, name) )
         return false;
 
-    if ( !MSWCreateControl(wxT("BUTTON"), BS_GROUPBOX, pos, size, label,
-                           WS_EX_TRANSPARENT) )
+    if ( !MSWCreateControl(wxT("BUTTON"), label, pos, size) )
         return false;
 
     return true;
+}
+
+WXDWORD wxStaticBox::MSWGetStyle(long style, WXDWORD *exstyle) const
+{
+    long styleWin = wxStaticBoxBase::MSWGetStyle(style, exstyle);
+
+    if ( exstyle )
+        *exstyle = WS_EX_TRANSPARENT;
+
+    return styleWin | BS_GROUPBOX;
 }
 
 wxSize wxStaticBox::DoGetBestSize() const

@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_STATBOX_H_
-#define _WX_STATBOX_H_
+#ifndef _WX_MSW_STATBOX_H_
+#define _WX_MSW_STATBOX_H_
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
     #pragma interface "statbox.h"
@@ -42,11 +42,12 @@ public:
 protected:
     virtual wxSize DoGetBestSize() const;
 
+    virtual WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
     virtual WXHBRUSH MSWGetBgBrushForSelf(wxWindow *parent, WXHDC hDC);
 
-private:
+
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticBox)
 };
 
-#endif
-    // _WX_STATBOX_H_
+#endif // _WX_MSW_STATBOX_H_
+
