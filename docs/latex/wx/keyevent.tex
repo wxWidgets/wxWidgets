@@ -168,7 +168,13 @@ Returns true if the control key was down at the time of the key event.
 
 Returns the virtual key code. ASCII events return normal ASCII values,
 while non-ASCII events return values such as {\bf WXK\_LEFT} for the
-left cursor key. See \helpref{Keycodes}{keycodes} for a full list of the virtual key codes.
+left cursor key. See \helpref{Keycodes}{keycodes} for a full list of
+the virtual key codes.
+
+Note that in Unicode build, the returned value is meaningful only if the
+user entered a character that can be represented in current locale's default
+charset. You can obtain the corresponding Unicode character using
+\helpref{GetUnicodeKey}{wxkeyeventgetunicodekey}.
 
 
 \membersection{wxKeyEvent::GetPosition}\label{wxkeyeventgetposition}
