@@ -219,16 +219,17 @@ void wxMDIParentFrame::ActivatePrevious()
 
 bool wxMDIParentFrame::Show( bool show )
 {
-    if ( !wxFrame::Show(show) )
-        return false;
-
     // don't really show the MDI frame unless it has any children other than
     // MDI children as it is pretty useless in this case
+
     if ( show )
     {
         // TODO: check for other children
         Move(-10000, -10000);
     }
+
+    if ( !wxFrame::Show(show) )
+        return false;
 
     return true;
 }
