@@ -7173,7 +7173,7 @@ clean : .SYMBOLIC
 ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h :  
 	if not exist ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h copy ..\include\wx\msw\setup.h ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h
 
-setup_h : .SYMBOLIC ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h
+setup_h : .SYMBOLIC ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx ..\include\wx\msw\setup.h ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wx\setup.h
 
 ..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)\wxexpat$(WXDEBUGFLAG).lib :  $(OBJS)\wxexpat_xmlparse.obj $(OBJS)\wxexpat_xmlrole.obj $(OBJS)\wxexpat_xmltok.obj
 	@%create $(OBJS)\wxexpat.lbc

@@ -110,6 +110,7 @@
         <copy-file-to-file-if-not-exist id="msw/setup.h">
             <src>$(SRCDIR)/include/wx/msw/setup0.h</src>
             <dst>$(SRCDIR)/include/wx/msw/setup.h</dst>
+            <dependency-of>setup_h</dependency-of>
         </copy-file-to-file-if-not-exist>
         <copy-file-to-file-if-not-exist id="setup.h">
             <dependency-of>setup_h</dependency-of>
