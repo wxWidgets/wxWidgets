@@ -1916,14 +1916,7 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         // here we try to do all the job which ::IsDialogMessage() usually does
         // internally
 #if 1
-        bool bProcess = TRUE;
-        if ( msg->message != WM_KEYDOWN )
-            bProcess = FALSE;
-
-        if ( bProcess && (HIWORD(msg->lParam) & KF_ALTDOWN) == KF_ALTDOWN )
-            bProcess = FALSE;
-
-        if ( bProcess )
+        if ( msg->message == WM_KEYDOWN )
         {
             bool bCtrlDown = wxIsCtrlDown();
             bool bShiftDown = wxIsShiftDown();
@@ -1940,6 +1933,8 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
             bool bForward = TRUE,
                  bWindowChange = FALSE;
 
+            // should we process this message specially?
+            bool bProcess = TRUE;
             switch ( msg->wParam )
             {
                 case VK_TAB:
@@ -2084,24 +2079,21 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
         // place edit control from being closed with Escape in a dialog
         if ( msg->message != WM_KEYDOWN || msg->wParam != VK_ESCAPE )
         {
-            // ::IsDialogMessage() can enter in an infinite loop when
-            // WS_EX_CONTROLPARENT is specified and the currently focused
-            // window is disabled or hidden, so don't call it in this case
+            // ::IsDialogMessage() can enter in an infinite loop when the
+            // currently focused window is disabled or hidden and its parent
+            // has WS_EX_CONTROLPARENT style, so don't call it in this case
             bool canSafelyCallIsDlgMsg = TRUE;
 
-            HWND hwndFocus = ::GetFocus();
-            while ( hwndFocus )
+            HWND hwnd = ::GetFocus();
+            if ( hwnd && !(::IsWindowEnabled(hwnd) && ::IsWindowVisible(hwnd)) )
             {
-                if ( !::IsWindowEnabled(hwndFocus) ||
-                        !::IsWindowVisible(hwndFocus) )
+                hwnd = ::GetParent(hwnd);
+                if ( hwnd &&
+                      (::GetWindowLong(hwnd, GWL_STYLE) & WS_EX_CONTROLPARENT) )
                 {
                     // it would enter an infinite loop if we do this!
                     canSafelyCallIsDlgMsg = FALSE;
-
-                    break;
                 }
-
-                hwndFocus = ::GetParent(hwndFocus);
             }
 
             if ( canSafelyCallIsDlgMsg && ::IsDialogMessage(GetHwnd(), msg) )
