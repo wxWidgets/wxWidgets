@@ -118,8 +118,8 @@ Architecture: any
 Section: interpreters
 Depends: python (>=2.2), python (<<2.3), ${shlibs:Depends}
 Suggests: wxwin=V-doc, wxwin=V-examples
-Conflicts: libwxgtk=V-python-contrib, python-wxwin
-Replaces: libwxgtk=V-python-contrib, python-wxwin
+Conflicts: libwxgtk=V-python-contrib, python-wxwin, libwxgtk2.2-python
+Replaces: libwxgtk=V-python-contrib, python-wxwin, libwxgtk2.2-python
 Description: wxWindows Cross-platform C++ GUI toolkit (wxPython binding)
  wxWindows is a class library for C++ providing GUI (Graphical User
  Interface) and other facilities on more than one platform.  Version =V
