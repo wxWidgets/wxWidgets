@@ -188,23 +188,23 @@ static size_t decode_utf16(const wchar_t* input, wxUint32& output)
 
 size_t wxMBConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
 {
-    return wxMB2WC(buf, psz, n)+1;
+    return wxMB2WC(buf, psz, n);
 }
 
 size_t wxMBConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 {
-    return wxWC2MB(buf, psz, n)+1;
+    return wxWC2MB(buf, psz, n);
 }
 
 const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
 {
     if (psz)
     {
-        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
+        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);  // return value excludes /0
         if (nLen == (size_t)-1)
             return wxWCharBuffer((wchar_t *) NULL);
-        wxWCharBuffer buf(nLen);
-        MB2WC((wchar_t *)(const wchar_t *) buf, psz, nLen);
+        wxWCharBuffer buf(nLen);                        // this allocates nLen1+
+        MB2WC((wchar_t *)(const wchar_t *) buf, psz, nLen+1);
         return buf;
     }
     else
@@ -215,11 +215,11 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
 {
     if (psz)
     {
-        size_t nLen = WC2MB((char *) NULL, psz, 0);
+        size_t nLen = WC2MB((char *) NULL, psz, 0);  // return value excludes /0
         if (nLen == (size_t)-1)
             return wxCharBuffer((char *) NULL);
-        wxCharBuffer buf(nLen);
-        WC2MB((char *)(const char *) buf, psz, nLen);
+        wxCharBuffer buf(nLen);                      // this allocates nLen+1
+        WC2MB((char *)(const char *) buf, psz, nLen+1);
         return buf;
     }
     else
@@ -425,6 +425,7 @@ size_t wxMBConvUTF8::WC2MB(char *buf, const wchar_t *psz, size_t n) const
     }
 
     if (buf && (len<n)) *buf = 0;
+    
     return len;
 }
 
