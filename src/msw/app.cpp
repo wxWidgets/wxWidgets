@@ -176,17 +176,38 @@ LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 // wxApp
 // ---------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
+IMPLEMENT_DYNAMIC_CLASS(wxApp, wxEvtHandler)
 
-    BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
-        EVT_IDLE(wxApp::OnIdle)
-        EVT_END_SESSION(wxApp::OnEndSession)
-        EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
-    END_EVENT_TABLE()
+BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
+    EVT_IDLE(wxApp::OnIdle)
+    EVT_END_SESSION(wxApp::OnEndSession)
+    EVT_QUERY_END_SESSION(wxApp::OnQueryEndSession)
+END_EVENT_TABLE()
 
 //// Initialize
 bool wxApp::Initialize()
 {
+    // the first thing to do is to check if we're trying to run an Unicode
+    // program under Win9x - if so, abort right now as it has no chance to
+    // work
+#if wxUSE_UNICODE
+    if ( wxGetOsVersion() != wxWINDOWS_NT )
+    {
+        // note that we can use MessageBoxW() as it's implemented even under
+        // Win9x - OTOH, we can't use wxGetTranslation() because the file APIs
+        // used by wxLocale are not
+        ::MessageBox
+        (
+         NULL,
+         _T("This program uses Unicode and requires Windows NT/2000.\nProgram aborted."),
+         _T("wxWindows Fatal Error"),
+         MB_ICONERROR | MB_OK
+        );
+
+        return FALSE;
+    }
+#endif // wxUSE_UNICODE
+
     // Some people may wish to use this, but
     // probably it shouldn't be here by default.
 #ifdef __WXDEBUG__
@@ -612,12 +633,12 @@ void wxApp::CleanUp()
 // Entry point helpers, used by wxPython
 //----------------------------------------------------------------------
 
-int  WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
+int WXDLLEXPORT wxEntryStart( int WXUNUSED(argc), char** WXUNUSED(argv) )
 {
     return wxApp::Initialize();
 }
 
-int  WXDLLEXPORT wxEntryInitGui()
+int WXDLLEXPORT wxEntryInitGui()
 {
     wxTheApp->OnInitGui();
     return 0;
