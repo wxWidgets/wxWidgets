@@ -251,7 +251,7 @@ size_t wxFFileInputStream::OnSysRead(void *buffer, size_t size)
 
 off_t wxFFileInputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 {
-    return ( m_file->Seek(pos, mode) ? pos : wxInvalidOffset );
+    return ( m_file->Seek(pos, mode) ? m_file->Tell() : wxInvalidOffset );
 }
 
 off_t wxFFileInputStream::OnSysTell() const
@@ -324,7 +324,7 @@ off_t wxFFileOutputStream::OnSysTell() const
 
 off_t wxFFileOutputStream::OnSysSeek(off_t pos, wxSeekMode mode)
 {
-    return ( m_file->Seek(pos, mode) ? pos : wxInvalidOffset );
+    return ( m_file->Seek(pos, mode) ? m_file->Tell() : wxInvalidOffset );
 }
 
 void wxFFileOutputStream::Sync()

@@ -34,13 +34,23 @@ Destructor.
 
 \func{char}{GetC}{\void}
 
-Returns the first character in the input queue and removes it.
+Returns the first character in the input queue and removes it, 
+blocking until it appears if necessary.
+
+\wxheading{Note}
+
+If EOF, return value is undefined and LastRead() will return 0 and not 1.
 
 \membersection{wxInputStream::Eof}\label{wxinputstreameof}
 
 \constfunc{wxInputStream}{Eof}{\void}
 
 Returns true if the end of stream has been reached.
+
+\wxheading{Note}
+
+This cannot be really implemented for all streams and CanRead() is more 
+reliable than Eof().
 
 \membersection{wxInputStream::LastRead}\label{wxinputstreamlastread}
 
@@ -53,6 +63,12 @@ Returns the last number of bytes read.
 \func{char}{Peek}{\void}
 
 Returns the first character in the input queue without removing it.
+
+\wxheading{Note}
+
+Blocks until something appears in the stream if necessary, if nothing
+ever does (i.e. EOF) LastRead() will return 0 (and the return value is
+undefined), otherwise LastRead() returns 1.
 
 \membersection{wxInputStream::Read}
 
@@ -84,6 +100,16 @@ any states of the stream right away.
 \func{off\_t}{SeekI}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
 
 Changes the stream current position.
+
+\wxheading{Parameters}
+
+\docparam{pos}{Offset to seek to.}
+
+\docparam{mode}{One of {\bf wxFromStart}, {\bf wxFromEnd}, {\bf wxFromCurrent}.}
+
+\wxheading{Return value}
+
+The new stream position or wxInvalidOffset on error.
 
 \membersection{wxInputStream::TellI}
 

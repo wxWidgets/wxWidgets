@@ -45,9 +45,19 @@ stream position.
 
 \membersection{wxOutputStream::SeekO}\label{wxoutputstreamseeko}
 
-\func{off\_t}{SeekO}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode}}
+\func{off\_t}{SeekO}{\param{off\_t}{ pos}, \param{wxSeekMode}{ mode = wxFromStart}}
 
 Changes the stream current position.
+
+\wxheading{Parameters}
+
+\docparam{pos}{Offset to seek to.}
+
+\docparam{mode}{One of {\bf wxFromStart}, {\bf wxFromEnd}, {\bf wxFromCurrent}.}
+
+\wxheading{Return value}
+
+The new stream position or wxInvalidOffset on error.
 
 \membersection{wxOutputStream::TellO}
 
