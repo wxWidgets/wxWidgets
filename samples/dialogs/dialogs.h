@@ -18,6 +18,12 @@
     #define USE_WXUNIVERSAL 0
 #endif
 
+#ifdef WXUSINGDLL
+    #define USE_DLL 1
+#else
+    #define USE_DLL 0
+#endif
+
 #if defined(__WXMSW__) && !defined(__WXWINCE__)
     #define USE_WXMSW 1
 #else
@@ -46,7 +52,8 @@
     (                                               \
         wxUSE_COLOURDLG &&                          \
         ( USE_WXMSW || USE_WXMAC ) &&               \
-        !USE_WXUNIVERSAL                            \
+        !USE_WXUNIVERSAL &&                         \
+        !USE_DLL                                    \
     )
 
 
@@ -54,21 +61,24 @@
     (                                               \
         wxUSE_DIRDLG &&                             \
         ( USE_WXMSW || USE_WXMAC ) &&               \
-        !USE_WXUNIVERSAL                            \
+        !USE_WXUNIVERSAL &&                         \
+        !USE_DLL                                    \
     )
 
 #define USE_FILEDLG_GENERIC                         \
     (                                               \
         wxUSE_FILEDLG &&                            \
         ( USE_WXMSW || USE_WXMAC || USE_WXPM ) &&   \
-        !USE_WXUNIVERSAL                            \
+        !USE_WXUNIVERSAL &&                         \
+        !USE_DLL                                    \
     )
 
 #define USE_FONTDLG_GENERIC                         \
     (                                               \
         wxUSE_FONTDLG &&                            \
         ( USE_WXMSW || USE_WXPM ) &&                \
-        !USE_WXUNIVERSAL                            \
+        !USE_WXUNIVERSAL &&                         \
+        !USE_DLL                                    \
     )
 
 

@@ -4,18 +4,18 @@
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <set var="GENERIC_FILES">
-        <if cond="TOOLKIT=='MSW' and WXUNIV=='0'">
+        <if cond="TOOLKIT=='MSW' and WXUNIV=='0' and SHARED=='0'">
             ../../src/generic/colrdlgg.cpp
             ../../src/generic/dirdlgg.cpp
             ../../src/generic/filedlgg.cpp
             ../../src/generic/fontdlgg.cpp
         </if>
-        <if cond="TOOLKIT=='MAC' and WXUNIV=='0'">
+        <if cond="TOOLKIT=='MAC' and WXUNIV=='0' and SHARED=='0'">
             ../../src/generic/colrdlgg.cpp
             ../../src/generic/dirdlgg.cpp
             ../../src/generic/filedlgg.cpp
         </if>
-        <if cond="TOOLKIT=='PM' and WXUNIV=='0'">
+        <if cond="TOOLKIT=='PM' and WXUNIV=='0' and SHARED=='0'">
             ../../src/generic/fontdlgg.cpp
             ../../src/generic/filedlgg.cpp
         </if>
