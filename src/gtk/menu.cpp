@@ -1475,9 +1475,11 @@ static wxString GetHotKey( const wxMenuItem& item )
                 hotkey << wxT("Down" );
                 break;
             case WXK_PAGEUP:
+            case WXK_PRIOR:
                 hotkey << wxT("Prior" );
                 break;
             case WXK_PAGEDOWN:
+            case WXK_NEXT:
                 hotkey << wxT("Next" );
                 break;
             case WXK_LEFT:
