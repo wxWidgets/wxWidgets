@@ -5127,10 +5127,16 @@ static PyObject *_wrap_wxDateTime___cmp__(PyObject *self, PyObject *args, PyObje
     return _resultobj;
 }
 
-#define wxDateTime_ParseRfc822Date(_swigobj,_swigarg0)  (_swigobj->ParseRfc822Date(_swigarg0))
+static int  wxDateTime_ParseRfc822Date(wxDateTime *self,const wxString & date) {
+            const wxChar* rv;
+            const wxChar* _date = date;
+            rv = self->ParseRfc822Date(_date);
+            if (rv == NULL) return -1;
+            return rv - _date;
+        }
 static PyObject *_wrap_wxDateTime_ParseRfc822Date(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    int  _result;
     wxDateTime * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
@@ -5154,31 +5160,28 @@ static PyObject *_wrap_wxDateTime_ParseRfc822Date(PyObject *self, PyObject *args
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxDateTime_ParseRfc822Date(_arg0,*_arg1));
+    _result = (int )wxDateTime_ParseRfc822Date(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
 }
-{
-    delete _result;
-}
     return _resultobj;
 }
 
-#define wxDateTime_ParseFormat(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->ParseFormat(_swigarg0,_swigarg1,_swigarg2))
+static int  wxDateTime_ParseFormat(wxDateTime *self,const wxString & date,const wxString & format,const wxDateTime & dateDef) {
+            const wxChar* rv;
+            const wxChar* _date = date;
+            rv = self->ParseFormat(_date, format, dateDef);
+            if (rv == NULL) return -1;
+            return rv - _date;
+        }
 static PyObject *_wrap_wxDateTime_ParseFormat(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    int  _result;
     wxDateTime * _arg0;
     wxString * _arg1;
     wxString * _arg2 = (wxString *) &wxPyDateFormatStr;
@@ -5219,17 +5222,11 @@ static PyObject *_wrap_wxDateTime_ParseFormat(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxDateTime_ParseFormat(_arg0,*_arg1,*_arg2,*_arg3));
+    _result = (int )wxDateTime_ParseFormat(_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
@@ -5238,16 +5235,19 @@ static PyObject *_wrap_wxDateTime_ParseFormat(PyObject *self, PyObject *args, Py
     if (_obj2)
         delete _arg2;
 }
-{
-    delete _result;
-}
     return _resultobj;
 }
 
-#define wxDateTime_ParseDateTime(_swigobj,_swigarg0)  (_swigobj->ParseDateTime(_swigarg0))
+static int  wxDateTime_ParseDateTime(wxDateTime *self,const wxString & datetime) {
+            const wxChar* rv;
+            const wxChar* _datetime = datetime;
+            rv = self->ParseDateTime(_datetime);
+            if (rv == NULL) return -1;
+            return rv - _datetime;
+        }
 static PyObject *_wrap_wxDateTime_ParseDateTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    int  _result;
     wxDateTime * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
@@ -5271,31 +5271,28 @@ static PyObject *_wrap_wxDateTime_ParseDateTime(PyObject *self, PyObject *args, 
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxDateTime_ParseDateTime(_arg0,*_arg1));
+    _result = (int )wxDateTime_ParseDateTime(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
 }
-{
-    delete _result;
-}
     return _resultobj;
 }
 
-#define wxDateTime_ParseDate(_swigobj,_swigarg0)  (_swigobj->ParseDate(_swigarg0))
+static int  wxDateTime_ParseDate(wxDateTime *self,const wxString & date) {
+            const wxChar* rv;
+            const wxChar* _date = date;
+            rv = self->ParseDate(_date);
+            if (rv == NULL) return -1;
+            return rv - _date;
+        }
 static PyObject *_wrap_wxDateTime_ParseDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    int  _result;
     wxDateTime * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
@@ -5319,31 +5316,28 @@ static PyObject *_wrap_wxDateTime_ParseDate(PyObject *self, PyObject *args, PyOb
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxDateTime_ParseDate(_arg0,*_arg1));
+    _result = (int )wxDateTime_ParseDate(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
 }
-{
-    delete _result;
-}
     return _resultobj;
 }
 
-#define wxDateTime_ParseTime(_swigobj,_swigarg0)  (_swigobj->ParseTime(_swigarg0))
+static int  wxDateTime_ParseTime(wxDateTime *self,const wxString & time) {
+            const wxChar* rv;
+            const wxChar* _time = time;
+            rv = self->ParseTime(_time);
+            if (rv == NULL) return -1;
+            return rv - _time;
+        }
 static PyObject *_wrap_wxDateTime_ParseTime(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxString * _result;
+    int  _result;
     wxDateTime * _arg0;
     wxString * _arg1;
     PyObject * _argo0 = 0;
@@ -5367,23 +5361,14 @@ static PyObject *_wrap_wxDateTime_ParseTime(PyObject *self, PyObject *args, PyOb
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = new wxString (wxDateTime_ParseTime(_arg0,*_arg1));
+    _result = (int )wxDateTime_ParseTime(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
-}{
-#if wxUSE_UNICODE
-    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
-#else
-    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
-#endif
-}
+}    _resultobj = Py_BuildValue("i",_result);
 {
     if (_obj1)
         delete _arg1;
-}
-{
-    delete _result;
 }
     return _resultobj;
 }
