@@ -9,7 +9,7 @@
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
-VERSION=2.0b9
+VERSION=2.1b1
 
 # Set WXDIR to the root wxWindows directory for your system
 WXDIR = $(WXWIN)
@@ -32,7 +32,7 @@ COMPILEPY=0
 
 # If your wxWindows is built as a DLL, set this to 1.  Using 0 or unset
 # means that wxWindows will be staticaly linked with wxPython.
-#WXUSINGDLL=1
+WXUSINGDLL=1
 
 # If you want to compile in code to aquire/release the Python
 # Interpreter Lock at the appropriate places
@@ -43,7 +43,7 @@ WXP_USE_THREAD=1
 WITH_GLCANVAS=1
 
 # (experimental)
-SEPARATE=0
+SEPARATE=1
 
 #----------------------------------------------------------------------
 
@@ -74,7 +74,7 @@ SWIGFLAGS=-c++ -shadow -python -dnone -D__WXMSW__ $(OTHERSWIGFLAGS)
 GENCODEDIR=msw
 
 
-!include $(WXDIR)\src\ntwxwin.mak
+!include $(WXDIR)\src\makevc.env
 
 #----------------------------------------------------------------------
 
@@ -83,7 +83,8 @@ TARGET = wxc
 OBJECTS = wx.obj         helpers.obj    windows.obj    events.obj     \
 	  misc.obj       gdi.obj        mdi.obj        controls.obj   \
 	  controls2.obj  windows2.obj   cmndlgs.obj    stattool.obj   \
-	  frames.obj     windows3.obj   image.obj  \
+	  frames.obj     windows3.obj   image.obj      printfw.obj      \
+	  misc2.obj	\
 !if "$(SEPARATE)" == "0"
 	  utils.obj \
 !if "$(WITH_GLCANVAS)" == "1"
@@ -110,6 +111,7 @@ PYMODULES = $(TARGETDIR)\wx.py        $(TARGETDIR)\events.py    \
 	    $(TARGETDIR)\stattool.py  $(TARGETDIR)\frames.py    \
 	    $(TARGETDIR)\windows3.py  $(TARGETDIR)\__init__.py  \
 	    $(TARGETDIR)\utils.py     $(TARGETDIR)\image.py     \
+	    $(TARGETDIR)\printfw.py   $(TARGETDIR)\misc2.py     \
 !if "$(WITH_GLCANVAS)" == "1"
             $(TARGETDIR)\glcanvas.py
 !endif
@@ -255,6 +257,7 @@ $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemap
 $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py  : windows3.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py    : events.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py      : misc.i       my_typemaps.i _defs.i
+$(GENCODEDIR)/misc2.cpp     $(GENCODEDIR)/misc2.py     : misc2.i      my_typemaps.i _defs.i
 $(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py       : gdi.i        my_typemaps.i _defs.i
 $(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py       : mdi.i        my_typemaps.i _defs.i
 $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py  : controls.i   my_typemaps.i _defs.i
@@ -263,6 +266,7 @@ $(GENCODEDIR)/cmndlgs.cpp   $(GENCODEDIR)/cmndlgs.py   : cmndlgs.i    my_typemap
 $(GENCODEDIR)/stattool.cpp  $(GENCODEDIR)/stattool.py  : stattool.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py    : frames.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/image.cpp     $(GENCODEDIR)/image.py     : image.i      my_typemaps.i _defs.i
+$(GENCODEDIR)/printfw.cpp   $(GENCODEDIR)/printfw.py   : printfw.i    my_typemaps.i _defs.i
 
 !if "$(SEPARATE)" == "1"
 $(GENCODEDIR)\utils.cpp $(GENCODEDIR)\utils.py : utils.i my_typemaps.i
@@ -286,6 +290,7 @@ $(TARGETDIR)\windows2.py  : $(GENCODEDIR)\windows2.py
 $(TARGETDIR)\windows3.py  : $(GENCODEDIR)\windows3.py
 $(TARGETDIR)\events.py    : $(GENCODEDIR)\events.py
 $(TARGETDIR)\misc.py      : $(GENCODEDIR)\misc.py
+$(TARGETDIR)\misc2.py     : $(GENCODEDIR)\misc2.py
 $(TARGETDIR)\gdi.py       : $(GENCODEDIR)\gdi.py
 $(TARGETDIR)\mdi.py       : $(GENCODEDIR)\mdi.py
 $(TARGETDIR)\controls.py  : $(GENCODEDIR)\controls.py
@@ -295,7 +300,8 @@ $(TARGETDIR)\frames.py    : $(GENCODEDIR)\frames.py
 $(TARGETDIR)\stattool.py  : $(GENCODEDIR)\stattool.py
 $(TARGETDIR)\__init__.py  : __init__.py
 $(TARGETDIR)\utils.py     : $(GENCODEDIR)\utils.py
-$(TARGETDIR)\image.py     : $(GENCODEDIR)\utils.py
+$(TARGETDIR)\image.py     : $(GENCODEDIR)\image.py
+$(TARGETDIR)\printfw.py   : $(GENCODEDIR)\printfw.py
 !if "$(WITH_GLCANVAS)" == "1"
 $(TARGETDIR)\glcanvas.py  : $(GENCODEDIR)\glcanvas.py
 !endif
@@ -307,6 +313,7 @@ SOURCES = $(GENCODEDIR)\wx.cpp        $(GENCODEDIR)\wx.py       \
 	  $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py \
 	  $(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py   \
 	  $(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py     \
+	  $(GENCODEDIR)/misc2.cpp     $(GENCODEDIR)/misc2.py     \
 	  $(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py      \
 	  $(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py      \
 	  $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py \
@@ -316,6 +323,7 @@ SOURCES = $(GENCODEDIR)\wx.cpp        $(GENCODEDIR)\wx.py       \
 	  $(GENCODEDIR)/frames.cpp    $(GENCODEDIR)/frames.py   \
 	  $(GENCODEDIR)/utils.cpp     $(GENCODEDIR)/utils.py    \
 	  $(GENCODEDIR)/image.cpp     $(GENCODEDIR)/image.py    \
+	  $(GENCODEDIR)/printfw.cpp   $(GENCODEDIR)/printfw.py  \
 !if "$(WITH_GLCANVAS)" == "1"
 	  $(GENCODEDIR)/glcanvas.cpp  $(GENCODEDIR)/glcanvas.py    \
 !endif

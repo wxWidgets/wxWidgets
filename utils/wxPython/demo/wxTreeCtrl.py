@@ -24,6 +24,26 @@ class TestTreeCtrlPanel(wxPanel):
         EVT_TREE_ITEM_COLLAPSED (self, tID, self.OnItemCollapsed)
         EVT_TREE_SEL_CHANGED    (self, tID, self.OnSelChanged)
 
+        EVT_LEFT_DCLICK(self.tree, self.OnLeftDClick)
+        EVT_RIGHT_DOWN(self.tree, self.OnRightClick)
+        EVT_RIGHT_UP(self.tree, self.OnRightUp)
+
+    def OnRightClick(self, event):
+        (x,y) = event.Position();
+        item = self.tree.HitTest(wxPoint(x,y))
+        self.log.WriteText("OnRightClick: %s\n" % self.tree.GetItemText(item))
+        self.tree.SelectItem(item)
+
+    def OnRightUp(self, event):
+        (x,y) = event.Position();
+        item = self.tree.HitTest(wxPoint(x,y))
+        self.log.WriteText("OnRightUp: %s\n" % self.tree.GetItemText(item))
+
+    def OnLeftDClick(self, event):
+        (x,y) = event.Position();
+        item = self.tree.HitTest(wxPoint(x,y))
+        self.log.WriteText("OnLeftDClick: %s\n" % self.tree.GetItemText(item))
+
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()

@@ -368,6 +368,9 @@ class wxDCPtr :
     def DrawArc(self,arg0,arg1,arg2,arg3,arg4,arg5):
         val = gdic.wxDC_DrawArc(self.this,arg0,arg1,arg2,arg3,arg4,arg5)
         return val
+    def DrawCircle(self,arg0,arg1,arg2):
+        val = gdic.wxDC_DrawCircle(self.this,arg0,arg1,arg2)
+        return val
     def DrawEllipse(self,arg0,arg1,arg2,arg3):
         val = gdic.wxDC_DrawEllipse(self.this,arg0,arg1,arg2,arg3)
         return val
@@ -464,8 +467,13 @@ class wxDCPtr :
         val = wxColourPtr(val)
         val.thisown = 1
         return val
+    def GetSizeTuple(self):
+        val = gdic.wxDC_GetSizeTuple(self.this)
+        return val
     def GetSize(self):
         val = gdic.wxDC_GetSize(self.this)
+        val = wxSizePtr(val)
+        val.thisown = 1
         return val
     def GetTextBackground(self):
         val = gdic.wxDC_GetTextBackground(self.this)

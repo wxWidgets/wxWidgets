@@ -51,23 +51,24 @@ class wxPalette;
 class wxWindow;
 class wxSize;
 class wxPoint;
+class wxGLCanvas;
 
 //---------------------------------------------------------------------------
 
 class wxGLContext {
 public:
-    wxGLContext(bool isRGB, wxWindow *win, const wxPalette& palette = wxNullPalette);
+    wxGLContext(bool isRGB, wxGLCanvas *win, const wxPalette& palette = wxNullPalette);
     ~wxGLContext();
 
     void SetCurrent();
     void SetColour(const char *colour);
     void SwapBuffers();
 
-    void SetupPixelFormat();
-    void SetupPalette(const wxPalette& palette);
-    wxPalette CreateDefaultPalette();
+//    void SetupPixelFormat();
+//    void SetupPalette(const wxPalette& palette);
+//    wxPalette CreateDefaultPalette();
 
-    wxPalette* GetPalette();
+//    wxPalette* GetPalette();
     wxWindow* GetWindow();
 };
 
@@ -1089,16 +1090,13 @@ void glVertexPointer (GLint size, GLenum type, GLsizei stride, const GLvoid *poi
 void glViewport (GLint x, GLint y, GLsizei width, GLsizei height);
 
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.2  1999/05/01 04:40:57  RD
-// wxPython 2.0b9, second phase (gtk)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.1  1999/04/30 03:29:18  RD
-//
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-//
+
+%init %{
+
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
+
+%}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------

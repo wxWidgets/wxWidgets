@@ -152,6 +152,7 @@ typedef int             wxWindowID;
 typedef unsigned int    uint;
 typedef signed   int    EBool;
 typedef unsigned int    size_t
+typedef int             wxPrintQuality;
 
 //---------------------------------------------------------------------------
 
@@ -202,6 +203,8 @@ enum {
     wxDEFAULT_DIALOG_STYLE,
 
     wxFRAME_TOOL_WINDOW,
+    wxFRAME_FLOAT_ON_PARENT,
+
     wxCLIP_CHILDREN,
 
     wxRETAINED,
@@ -242,6 +245,7 @@ enum {
     wxGA_PROGRESSBAR,
     wxGA_HORIZONTAL,
     wxGA_VERTICAL,
+    wxGA_SMOOTH,
     wxSL_HORIZONTAL,
     wxSL_VERTICAL,
     wxSL_AUTOTICKS,
@@ -321,6 +325,10 @@ enum {
 #endif
     wxPORTRAIT,
     wxLANDSCAPE,
+    wxPRINT_QUALITY_HIGH,
+    wxPRINT_QUALITY_MEDIUM,
+    wxPRINT_QUALITY_LOW,
+    wxPRINT_QUALITY_DRAFT,
     wxID_OPEN,
     wxID_CLOSE,
     wxID_NEW,
@@ -387,6 +395,12 @@ enum {
     wxACCEL_ALT,
     wxACCEL_CTRL,
     wxACCEL_SHIFT,
+
+    wxPD_AUTO_HIDE,
+    wxPD_APP_MODAL,
+    wxPD_CAN_ABORT,
+
+    wxNO_DEFAULT,
 };
 
 
@@ -647,6 +661,12 @@ typedef enum {
 
 } wxPaperSize ;
 
+typedef enum {
+    wxDUPLEX_SIMPLEX, // Non-duplex
+    wxDUPLEX_HORIZONTAL,
+    wxDUPLEX_VERTICAL
+} wxDuplexMode;
+
 
 
 #define FALSE 0
@@ -732,6 +752,17 @@ enum wxEventType {
  wxEVT_SCROLL_PAGEDOWN,
  wxEVT_SCROLL_THUMBTRACK,
 
+ /*
+  * Scrolled Window
+  */
+ wxEVT_SCROLLWIN_TOP,
+ wxEVT_SCROLLWIN_BOTTOM,
+ wxEVT_SCROLLWIN_LINEUP,
+ wxEVT_SCROLLWIN_LINEDOWN,
+ wxEVT_SCROLLWIN_PAGEUP,
+ wxEVT_SCROLLWIN_PAGEDOWN,
+ wxEVT_SCROLLWIN_THUMBTRACK,
+
  wxEVT_SIZE = wxEVT_FIRST + 200,
  wxEVT_MOVE,
  wxEVT_CLOSE_WINDOW,
@@ -772,6 +803,7 @@ enum wxEventType {
  wxEVT_INIT_DIALOG,
  wxEVT_IDLE,
  wxEVT_UPDATE_UI,
+
 
  /* Generic command events */
  // Note: a click is a higher-level event
@@ -814,113 +846,23 @@ enum wxEventType {
  wxEVT_COMMAND_LIST_KEY_DOWN,
  wxEVT_COMMAND_LIST_INSERT_ITEM,
  wxEVT_COMMAND_LIST_COL_CLICK,
+ wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
 
  /* Tab and notebook control event types */
  wxEVT_COMMAND_TAB_SEL_CHANGED,
  wxEVT_COMMAND_TAB_SEL_CHANGING,
  wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED,
- wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
+ wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING,
+
+ /* splitter window */
+ wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING,
+ wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED,
+ wxEVT_COMMAND_SPLITTER_UNSPLIT,
+ wxEVT_COMMAND_SPLITTER_DOUBLECLICKED,
 
 };
 
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.14  1999/05/02 02:06:15  RD
-// More for wxPython 2.0b9 (hopefully the last...)
-//
-// Revision 1.13  1999/04/30 03:29:18  RD
-//
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.12.4.2  1999/03/28 06:35:01  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.12.4.1  1999/03/27 23:29:13  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.12  1999/02/27 04:21:58  RD
-//
-// Added missing wxRA_SPECIFY_ROWS, wxRA_SPECIFY_COLS
-//
-// Revision 1.11  1999/02/20 09:02:54  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.10  1999/01/30 07:30:08  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-// Revision 1.9  1998/12/15 20:41:13  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.8  1998/11/15 23:03:42  RD
-// Removing some ifdef's for wxGTK
-//
-// Revision 1.7  1998/11/11 03:12:24  RD
-//
-// Additions for wxTreeCtrl
-//
-// Revision 1.6  1998/10/20 06:43:53  RD
-// New wxTreeCtrl wrappers (untested)
-// some changes in helpers
-// etc.
-//
-// Revision 1.5  1998/10/02 06:40:32  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.4  1998/08/18 19:48:11  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.3  1998/08/14 23:36:33  RD
-// Beginings of wxGTK compatibility
-//
-// Revision 1.2  1998/08/14 03:16:35  RD
-// removed some definitions that got removed from defs.h
-//
-// Revision 1.1  1998/08/09 08:25:49  RD
-// Initial version
-//
-//
+//----------------------------------------------------------------------

@@ -29,6 +29,12 @@ def _checkForCallback(obj, name, event, theID=-1):
     except: pass
     else:   obj.Connect(theID, -1, event, cb)
 
+##  def _checkClassCallback(obj, name):
+##      try:    cb = getattr(obj, name)
+##      except: pass
+##      else:   obj._addCallback(name, cb)
+
+
 def _StdWindowCallbacks(win):
     _checkForCallback(win, "OnChar",               wxEVT_CHAR)
     _checkForCallback(win, "OnSize",               wxEVT_SIZE)
@@ -136,6 +142,9 @@ def EVT_NAVIGATION_KEY(win, func):
 
 def EVT_IDLE(win, func):
     win.Connect(-1, -1, wxEVT_IDLE, func)
+
+def EVT_UPDATE_UI(win, id, func):
+    win.Connect(id, -1, wxEVT_UPDATE_UI, func)
 
 
 # Mouse Events
@@ -508,6 +517,9 @@ def EVT_LIST_SET_INFO(win, id, func):
 def EVT_LIST_ITEM_SELECTED(win, id, func):
     win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_SELECTED, func)
 
+def EVT_LIST_ITEM_ACTIVATED(win, id, func):
+    win.Connect(id, -1,  wxEVT_COMMAND_LIST_ITEM_ACTIVATED, func)
+
 def EVT_LIST_ITEM_DESELECTED(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_ITEM_DESELECTED, func)
 
@@ -519,6 +531,19 @@ def EVT_LIST_INSERT_ITEM(win, id, func):
 
 def EVT_LIST_COL_CLICK(win, id, func):
     win.Connect(id, -1, wxEVT_COMMAND_LIST_COL_CLICK, func)
+
+#wxSplitterWindow
+def EVT_SPLITTER_SASH_POS_CHANGING(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING, func)
+
+def EVT_SPLITTER_SASH_POS_CHANGED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED, func)
+
+def EVT_SPLITTER_UNSPLIT(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_UNSPLIT, func)
+
+def EVT_SPLITTER_DOUBLECLICKED(win, id, func):
+    win.Connect(id, -1, wxEVT_COMMAND_SPLITTER_DOUBLECLICKED, func)
 
 
 #----------------------------------------------------------------------
@@ -629,81 +654,3 @@ class wxApp(wxPyApp):
 
 
 #----------------------------------------------------------------------------
-#
-# $Log$
-# Revision 1.12  1999/04/30 03:29:18  RD
-# wxPython 2.0b9, first phase (win32)
-# Added gobs of stuff, see wxPython/README.txt for details
-#
-# Revision 1.11.4.2  1999/03/28 06:35:01  RD
-#
-# wxPython 2.0b8
-#     Python thread support
-#     various minor additions
-#     various minor fixes
-#
-# Revision 1.11.4.1  1999/03/27 23:29:13  RD
-#
-# wxPython 2.0b8
-#     Python thread support
-#     various minor additions
-#     various minor fixes
-#
-# Revision 1.11  1999/02/20 09:02:55  RD
-# Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-# window handle.  If you can get the window handle into the python code,
-# it should just work...  More news on this later.
-#
-# Added wxImageList, wxToolTip.
-#
-# Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-# wxRegConfig class.
-#
-# As usual, some bug fixes, tweaks, etc.
-#
-# Revision 1.10  1999/02/01 00:10:39  RD
-#
-# Added the missing EVT_LIST_ITEM_SELECTED and friends.
-#
-# Revision 1.9  1999/01/30 07:30:09  RD
-#
-# Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-#
-# Various cleanup, tweaks, minor additions, etc. to maintain
-# compatibility with the current wxWindows.
-#
-# Revision 1.8  1999/01/29 21:13:42  HH
-# Added aliases for wxDefaultPosition and wxDefaultSize (from wxPy..) in _extras,
-# so that C++ documentation applies.
-#
-# Revision 1.7  1998/11/25 08:45:21  RD
-#
-# Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-# Added events for wxGrid
-# Other various fixes and additions
-#
-# Revision 1.6  1998/11/16 00:00:52  RD
-# Generic treectrl for wxPython/GTK compiles...
-#
-# Revision 1.5  1998/10/20 07:38:02  RD
-# bug fix
-#
-# Revision 1.4  1998/10/20 06:43:54  RD
-# New wxTreeCtrl wrappers (untested)
-# some changes in helpers
-# etc.
-#
-# Revision 1.3  1998/10/02 06:40:33  RD
-#
-# Version 0.4 of wxPython for MSW.
-#
-# Revision 1.2  1998/08/18 19:48:12  RD
-# more wxGTK compatibility things.
-#
-# It builds now but there are serious runtime problems...
-#
-# Revision 1.1  1998/08/09 08:25:49  RD
-# Initial version
-#
-#
-

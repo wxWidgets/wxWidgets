@@ -324,20 +324,21 @@ distclean:	clobber
 # Custom rules and dependencies added for wxPython
 #
 
-WXP_VERSION=2.0b9
+WXP_VERSION=2.1b1
 
 SWIGFLAGS=-c++ -shadow -python -dnone -D__WXGTK__ $(SEPARATE)
 
 
-PYMODULES = $(GENCODEDIR)/wx.py        $(GENCODEDIR)/events.py    \
-	    $(GENCODEDIR)/windows.py   $(GENCODEDIR)/misc.py      \
-	    $(GENCODEDIR)/gdi.py       $(GENCODEDIR)/mdi.py       \
-	    $(GENCODEDIR)/controls.py  $(GENCODEDIR)/controls2.py \
-            $(GENCODEDIR)/windows2.py  $(GENCODEDIR)/cmndlgs.py   \
-            $(GENCODEDIR)/frames.py    $(GENCODEDIR)/stattool.py   \
-	    $(GENCODEDIR)/utils.py     $(GENCODEDIR)/windows3.py  \
-	    $(GENCODEDIR)/image.py     $(GENCODEDIR)/glcanvas.py  \
-	    __init__.py
+PYMODULES = $(TARGETDIR)\wx.py        $(TARGETDIR)\events.py    \
+	    $(TARGETDIR)\windows.py   $(TARGETDIR)\misc.py      \
+	    $(TARGETDIR)\gdi.py       $(TARGETDIR)\mdi.py       \
+	    $(TARGETDIR)\controls.py  $(TARGETDIR)\controls2.py \
+            $(TARGETDIR)\windows2.py  $(TARGETDIR)\cmndlgs.py   \
+	    $(TARGETDIR)\stattool.py  $(TARGETDIR)\frames.py    \
+	    $(TARGETDIR)\windows3.py  $(TARGETDIR)\__init__.py  \
+	    $(TARGETDIR)\utils.py     $(TARGETDIR)\image.py     \
+	    $(TARGETDIR)\printfw.py   $(TARGETDIR)\misc2.py     \
+            $(TARGETDIR)\glcanvas.py
 
 
 # Implicit rules to run SWIG
@@ -359,6 +360,7 @@ $(GENCODEDIR)/windows2.cpp  $(GENCODEDIR)/windows2.py  : windows2.i   my_typemap
 $(GENCODEDIR)/windows3.cpp  $(GENCODEDIR)/windows3.py  : windows3.i   my_typemaps.i _defs.i
 $(GENCODEDIR)/events.cpp    $(GENCODEDIR)/events.py    : events.i     my_typemaps.i _defs.i
 $(GENCODEDIR)/misc.cpp      $(GENCODEDIR)/misc.py      : misc.i       my_typemaps.i _defs.i
+$(GENCODEDIR)/misc2.cpp     $(GENCODEDIR)/misc2.py     : misc2.i      my_typemaps.i _defs.i
 $(GENCODEDIR)/gdi.cpp       $(GENCODEDIR)/gdi.py       : gdi.i        my_typemaps.i _defs.i
 $(GENCODEDIR)/mdi.cpp       $(GENCODEDIR)/mdi.py       : mdi.i        my_typemaps.i _defs.i
 $(GENCODEDIR)/controls.cpp  $(GENCODEDIR)/controls.py  : controls.i   my_typemaps.i _defs.i

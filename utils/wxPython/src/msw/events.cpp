@@ -3001,7 +3001,75 @@ static PyObject *_wrap_wxPyEvent_GetUserData(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static void *SwigwxNotifyEventTowxCommandEvent(void *ptr) {
+    wxNotifyEvent *src;
+    wxCommandEvent *dest;
+    src = (wxNotifyEvent *) ptr;
+    dest = (wxCommandEvent *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxNotifyEventTowxEvent(void *ptr) {
+    wxNotifyEvent *src;
+    wxEvent *dest;
+    src = (wxNotifyEvent *) ptr;
+    dest = (wxEvent *) src;
+    return (void *) dest;
+}
+
+#define wxNotifyEvent_IsAllowed(_swigobj)  (_swigobj->IsAllowed())
+static PyObject *_wrap_wxNotifyEvent_IsAllowed(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxNotifyEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxNotifyEvent_IsAllowed",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxNotifyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotifyEvent_IsAllowed. Expected _wxNotifyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxNotifyEvent_IsAllowed(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxNotifyEvent_Veto(_swigobj)  (_swigobj->Veto())
+static PyObject *_wrap_wxNotifyEvent_Veto(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxNotifyEvent * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxNotifyEvent_Veto",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxNotifyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxNotifyEvent_Veto. Expected _wxNotifyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxNotifyEvent_Veto(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef eventscMethods[] = {
+	 { "wxNotifyEvent_Veto", _wrap_wxNotifyEvent_Veto, 1 },
+	 { "wxNotifyEvent_IsAllowed", _wrap_wxNotifyEvent_IsAllowed, 1 },
 	 { "wxPyEvent_GetUserData", _wrap_wxPyEvent_GetUserData, 1 },
 	 { "wxPyEvent_SetUserData", _wrap_wxPyEvent_SetUserData, 1 },
 	 { "delete_wxPyEvent", _wrap_delete_wxPyEvent, 1 },
@@ -3119,6 +3187,8 @@ SWIGEXPORT(void,initeventsc)() {
  * (Used by the SWIG pointer type-checker).
  */
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
+	 SWIG_RegisterMapping("_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent);
+	 SWIG_RegisterMapping("_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent);
 	 SWIG_RegisterMapping("_wxEvent","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent);
@@ -3169,9 +3239,17 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
 	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
@@ -3180,6 +3258,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
@@ -3194,10 +3273,13 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxEvent);
+	 SWIG_RegisterMapping("_class_wxEvent","_wxNotifyEvent",SwigwxNotifyEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxPyEvent",SwigwxPyEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxPyEvent",SwigwxPyEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_class_wxSysColourChangedEvent",SwigwxSysColourChangedEventTowxEvent);
@@ -3246,6 +3328,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxEvent","_wxSizeEvent",SwigwxSizeEventTowxEvent);
 	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
+	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent);
+	 SWIG_RegisterMapping("_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxPyEvent",SwigwxPyEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_wxPyEvent",SwigwxPyEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);
@@ -3257,11 +3341,13 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
 	 SWIG_RegisterMapping("_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
@@ -3274,6 +3360,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
 	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -3295,6 +3382,7 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -3306,12 +3394,14 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxSpinEvent",SwigwxSpinEventTowxScrollEvent);
 	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
@@ -3332,6 +3422,8 @@ SWIGEXPORT(void,initeventsc)() {
 	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
 	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
 	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxNotifyEvent",SwigwxNotifyEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxPyEvent",SwigwxPyEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxPyEvent",SwigwxPyEventTowxCommandEvent);
 	 SWIG_RegisterMapping("_class_wxCommandEvent","_class_wxSpinEvent",SwigwxSpinEventTowxCommandEvent);

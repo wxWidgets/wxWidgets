@@ -1,6 +1,7 @@
-*.zip
 *.pyc
+*.pyd
 *.pyo
+*.zip
 .cvsignore
 .emacs.desktop
 __init__.py
@@ -48,6 +49,8 @@ gdi.pyo
 gdi.pyo
 glcanvas.py
 glcanvas.pyc
+glcanvasc.ilk
+glcanvasc.pyd
 image.py
 image.pyc
 mdi.py
@@ -62,6 +65,7 @@ misc.pyc
 misc.pyc
 misc.pyo
 misc.pyo
+printfw.py
 stattool.py
 stattool.py
 stattool.pyc
@@ -104,3 +108,7 @@ wxp.pyo
 wxpc.ilk
 wxpc.pdb
 wxpc.pyd
+*.py
+*.pyc
+*.pyo
+*.pyd

@@ -22,6 +22,12 @@ class wxSizePtr :
     def GetHeight(self):
         val = miscc.wxSize_GetHeight(self.this)
         return val
+    def SetWidth(self,arg0):
+        val = miscc.wxSize_SetWidth(self.this,arg0)
+        return val
+    def SetHeight(self,arg0):
+        val = miscc.wxSize_SetHeight(self.this,arg0)
+        return val
     def asTuple(self):
         val = miscc.wxSize_asTuple(self.this)
         return val
@@ -488,30 +494,6 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 
 
-class wxToolTipPtr :
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def SetTip(self,arg0):
-        val = miscc.wxToolTip_SetTip(self.this,arg0)
-        return val
-    def GetTip(self):
-        val = miscc.wxToolTip_GetTip(self.this)
-        return val
-    def GetWindow(self):
-        val = miscc.wxToolTip_GetWindow(self.this)
-        val = wxWindowPtr(val)
-        return val
-    def __repr__(self):
-        return "<C wxToolTip instance>"
-class wxToolTip(wxToolTipPtr):
-    def __init__(self,arg0) :
-        self.this = miscc.new_wxToolTip(arg0)
-        self.thisown = 1
-
-
-
-
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -588,24 +570,6 @@ wxEndBusyCursor = miscc.wxEndBusyCursor
 
 wxExecute = miscc.wxExecute
 
-def wxFindWindowByLabel(arg0,*args):
-    argl = map(None,args)
-    try: argl[0] = argl[0].this
-    except: pass
-    args = tuple(argl)
-    val = apply(miscc.wxFindWindowByLabel,(arg0,)+args)
-    val = wxWindowPtr(val)
-    return val
-
-def wxFindWindowByName(arg0,*args):
-    argl = map(None,args)
-    try: argl[0] = argl[0].this
-    except: pass
-    args = tuple(argl)
-    val = apply(miscc.wxFindWindowByName,(arg0,)+args)
-    val = wxWindowPtr(val)
-    return val
-
 def wxGetActiveWindow():
     val = miscc.wxGetActiveWindow()
     val = wxWindowPtr(val)
@@ -627,9 +591,13 @@ wxStartTimer = miscc.wxStartTimer
 
 wxGetOsVersion = miscc.wxGetOsVersion
 
+wxSleep = miscc.wxSleep
+
 wxYield = miscc.wxYield
 
 wxSafeYield = miscc.wxSafeYield
+
+wxEnableTopLevelWindows = miscc.wxEnableTopLevelWindows
 
 wxGetResource = miscc.wxGetResource
 
@@ -661,10 +629,6 @@ wxResourceParseData = miscc.wxResourceParseData
 wxResourceParseFile = miscc.wxResourceParseFile
 
 wxResourceParseString = miscc.wxResourceParseString
-
-wxToolTip_Enable = miscc.wxToolTip_Enable
-
-wxToolTip_SetDelay = miscc.wxToolTip_SetDelay
 
 
 

@@ -29,6 +29,8 @@
 %import gdi.i
 
 %pragma(python) code = "import wx"
+//%pragma(python) code = "import controls"
+//%pragma(python) code = "wxButtonPtr = controls.wxWindowPtr"
 
 //---------------------------------------------------------------------------
 
@@ -64,10 +66,10 @@ public:
     void CaptureMouse();
     void Center(int direction = wxHORIZONTAL);
     void Centre(int direction = wxHORIZONTAL);
+    void CentreOnParent(int direction = wxHORIZONTAL );
+    void CenterOnParent(int direction = wxHORIZONTAL );
     %name(ClientToScreenXY)void ClientToScreen(int *BOTH, int *BOTH);
-#ifndef __WXGTK__
     wxPoint ClientToScreen(const wxPoint& pt);
-#endif
     bool Close(int force = FALSE);
     bool Destroy();
     void DestroyChildren();
@@ -85,9 +87,6 @@ public:
     %name(GetClientSizeTuple) void GetClientSize(int *OUTPUT, int *OUTPUT);
     wxSize GetClientSize();
     wxLayoutConstraints * GetConstraints();
-#ifdef __WXMSW__
-    wxButton* GetDefaultItem();
-#endif
     //wxEvtHandler* GetEventHandler();
 
     wxFont& GetFont();
@@ -95,6 +94,7 @@ public:
     wxWindow * GetGrandParent();
     int GetId();
     wxString GetLabel();
+    void SetLabel(const wxString& label);
     wxString GetName();
     wxWindow * GetParent();
     %name(GetPositionTuple) void GetPosition(int *OUTPUT, int *OUTPUT);
@@ -111,10 +111,12 @@ public:
                        const wxFont* font = NULL); //, bool use16 = FALSE)
     wxString GetTitle();
     long GetWindowStyleFlag();
+    bool Hide();
     void InitDialog();
     bool IsEnabled();
     bool IsRetained();
     bool IsShown();
+    bool IsTopLevel();
     void Layout();
     bool LoadFromResource(wxWindow* parent, const wxString& resourceName, const wxResourceTable* resourceTable = NULL);
     void Lower();
@@ -129,10 +131,10 @@ public:
     void Raise();
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
     void ReleaseMouse();
+    bool Reparent( wxWindow* newParent );
+
     %name(ScreenToClientXY)void ScreenToClient(int *BOTH, int *BOTH);
-#ifndef __WXGTK__
     wxPoint ScreenToClient(const wxPoint& pt);
-#endif
 
     void ScrollWindow(int dx, int dy, const wxRect* rect = NULL);
     void SetAcceleratorTable(const wxAcceleratorTable& accel);
@@ -187,11 +189,17 @@ public:
 };
 
 %pragma(python) code = "
-def wxDLG_PNT(win, point):
-    return win.ConvertDialogPointToPixels(point)
+def wxDLG_PNT(win, point_or_x, y=None):
+    if y is None:
+        return win.ConvertDialogPointToPixels(point_or_x)
+    else:
+        return win.ConvertDialogPointToPixels(wxPoint(point_or_x, y))
 
-def wxDLG_SZE(win, size):
-    return win.ConvertDialogSizeToPixels(size)
+def wxDLG_SZE(win, size_width, height=None):
+    if height is None:
+        return win.ConvertDialogSizeToPixels(size_width)
+    else:
+        return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 "
 
 #ifdef __WXMSW__
@@ -227,7 +235,17 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void InitDialog();
+    wxButton* GetDefaultItem();
+    void SetDefaultItem(wxButton *btn);
 
+    // fix a SWIG turd...
+    %pragma(python) addtoclass = "
+    def GetDefaultItem(self):
+        import controls
+        val = windowsc.wxPanel_GetDefaultItem(self.this)
+        val = controls.wxButtonPtr(val)
+        return val
+"
 };
 
 //---------------------------------------------------------------------------
@@ -261,7 +279,7 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxScrolledWindow : public wxWindow {
+class wxScrolledWindow : public wxPanel {
 public:
     wxScrolledWindow(wxWindow* parent,
                      const wxWindowID id = -1,
@@ -401,7 +419,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.17  1999/06/22 07:03:03  RD
+// wxPython 2.1b1 for wxMSW  (wxGTK coming soon)
+// Lots of changes, see the README.txt for details...
+//
 // Revision 1.16  1999/05/15 00:56:04  RD
+//
 // fixes for GetReturnCode/SetReturnCode
 //
 // Revision 1.15  1999/04/30 03:29:19  RD

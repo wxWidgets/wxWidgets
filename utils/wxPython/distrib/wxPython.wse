@@ -1,7 +1,7 @@
 Document Type: WSE
 item: Global
   Version=6.01
-  Title=wxPython 2.0 Installation
+  Title=wxPython 2.1 Installation
   Flags=10010111
   Languages=65 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
   Japanese Font Name=MS Gothic
@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000001001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=wxPython-2.0b9.exe
+  EXE Filename=wxPython-2.1b1.exe
   FTP Cluster Size=20
   Per-User Version ID=1
   Dialogs Version=6
@@ -55,11 +55,12 @@ item: End Block
 end
 item: Set Variable
   Variable=APPTITLE
-  Value=wxPython 2.0
+  Value=wxPython 2.1
   Flags=10000000
 end
 item: Set Variable
   Variable=GROUP
+  Value=wxPython 2.1
   Flags=10000000
 end
 item: Set Variable
@@ -156,7 +157,6 @@ item: Set Variable
 end
 item: Set Variable
   Variable=COMPONENTS
-  Value=A
   Flags=10000000
 end
 item: Set Variable
@@ -643,168 +643,6 @@ item: Custom Dialog Set
   end
 end
 item: Custom Dialog Set
-  Name=Select Components
-  Display Variable=DISPLAY
-  Flags=00000001
-  item: Dialog
-    Title=Select Components
-    Title French=Sélectionner les éléments
-    Title German=Komponenten auswählen
-    Title Portuguese=Seleccionar Componentes
-    Title Spanish=Seleccione los Componentes
-    Title Italian=Seleziona Componenti
-    Title Danish=Vælg komponenter
-    Title Dutch=Selecteer onderdelen
-    Title Norwegian=Velg komponenter
-    Title Swedish=Välj komponenter
-    Width=280
-    Height=224
-    Font Name=Helv
-    Font Size=8
-    item: Push Button
-      Rectangle=172 185 214 199
-      Variable=DIRECTION
-      Value=N
-      Create Flags=01010000000000010000000000000001
-      Text=&Next >
-      Text French=&Suivant>
-      Text German=&Weiter>
-      Text Portuguese=&Próximo>
-      Text Spanish=&Siguiente >
-      Text Italian=&Avanti >
-      Text Danish=&Næste>
-      Text Dutch=&Volgende>
-      Text Norwegian=&Neste>
-      Text Swedish=&Nästa >
-    end
-    item: Push Button
-      Rectangle=130 185 172 199
-      Variable=DIRECTION
-      Value=B
-      Create Flags=01010000000000010000000000000000
-      Text=< &Back
-      Text French=<&Retour
-      Text German=<&Zurück
-      Text Portuguese=<&Retornar
-      Text Spanish=<&Retroceder
-      Text Italian=< &Indietro
-      Text Danish=<&Tilbage
-      Text Dutch=<&Terug
-      Text Norwegian=<&Tilbake
-      Text Swedish=< &Tillbaka
-    end
-    item: Push Button
-      Rectangle=222 185 264 199
-      Action=3
-      Create Flags=01010000000000010000000000000000
-      Text=Cancel
-      Text French=Annuler
-      Text German=Abbrechen
-      Text Portuguese=Cancelar
-      Text Spanish=Cancelar
-      Text Italian=Annulla
-      Text Danish=Annuller
-      Text Dutch=Annuleren
-      Text Norwegian=Avbryt
-      Text Swedish=Avbryt
-    end
-    item: Static
-      Rectangle=9 177 263 178
-      Action=3
-      Create Flags=01010000000000000000000000000111
-    end
-    item: Static
-      Rectangle=205 156 253 166
-      Variable=COMPONENTS
-      Value=MAINDIR
-      Create Flags=01010000000000000000000000000010
-    end
-    item: Static
-      Rectangle=205 148 253 157
-      Variable=COMPONENTS
-      Create Flags=01010000000000000000000000000010
-    end
-    item: Static
-      Rectangle=95 147 184 158
-      Create Flags=01010000000000000000000000000000
-      Text=Disk Space Required:
-      Text French=Espace disque requis
-      Text German=Benötigter Festplattenspeicher:
-      Text Portuguese=Espaço de disco necessário:
-      Text Spanish=Espacio de Disco Requerido:
-      Text Italian=Spazio su disco richiesto:
-      Text Danish=Nødvendig diskplads:
-      Text Dutch=Vereiste hoeveelheid schijfruimte
-      Text Norwegian=Diskplass nødvendig:
-      Text Swedish=Erforderligt diskutrymme
-    end
-    item: Static
-      Rectangle=95 157 190 167
-      Create Flags=01010000000000000000000000000000
-      Text=Disk Space Remaining:
-      Text French=Espace disque disponible
-      Text German=Verbleibender Festplattenspeicher:
-      Text Portuguese=Espaço de disco restante:
-      Text Spanish=Espacio de Disco Remanente:
-      Text Italian=Spazio su disco rimanente:
-      Text Danish=Ledig diskplads:
-      Text Dutch=Resterende schijfruimte
-      Text Norwegian=Ledig diskplass:
-      Text Swedish=Återstående diskutrymme
-    end
-    item: Static
-      Rectangle=90 138 264 168
-      Action=1
-      Create Flags=01010000000000000000000000000111
-    end
-    item: Static
-      Rectangle=90 8 260 41
-      Create Flags=01010000000000000000000000000000
-      Text=In the options list below, select the checkboxes for the options that you would like to have installed.  The disk space fields reflect the requirements of the options you have selected.
-      Text French=Dans la liste d'options suivante, veuillez sélectionner les cases des options que vous désirez installer. Le champ d'espace disque indique les conditions requises pour les options choisies
-      Text German=Wählen Sie in der Optionenliste unten die Kontrollkästchen für diejenigen Optionen, die Sie installieren möchten. Die Speicherfelder zeigen die benötigte Speicherkapazität für die gewählten Optionen an.
-      Text Portuguese=Na lista de opções abaixo, seleccione as caixas de verificação para as opções que gostaria de ter instalado. Os campos de espaço de disco reflectem os requerimentos das opções que seleccionou.
-      Text Spanish=En la lista de opciones que se ofrece a continuación, seleccione las casillas de comprobación para las opciones que desea instalar. Los campos del espacio en el disco reflejan los requerimientos de las opciones que ha seleccionado.
-      Text Italian=Nell’elenco delle opzioni sotto, marca le caselle di controllo delle opzioni che vuoi installare. I campi dello spazio sul disco riflettono i requisiti delle opzioni selezionate.
-      Text Danish=Marker afkrydsningsfelterne for de komponenter, der skal installeres, på listen herunder. Diskpladsfelterne angiver pladskravene for de valgte komponenter.
-      Text Dutch=Kruis in de onderstaande lijst het vakje aan naast de opties die u wilt installeren. Achter elke optie staat de benodigde schijfruimte vermeld.
-      Text Norwegian=I listen over alternativer nedenfor, klikk i kontrollrutene for de alternativene du ønsker å installere. Diskplassfeltene gjenspeiler kravene for de alternativene du har valgt.
-      Text Swedish=Kryssa för i rutorna nedan vilka alternativ du vill få installerade. I diskutrymmesfälten anges utrymmesbehoven för de alternativ du väljer.
-    end
-    item: Listbox
-      Rectangle=90 42 263 133
-      Variable=COMPONENTS
-      Create Flags=01010000101000010000000101010001
-      Flags=0000010001000111
-      Text=wxPython package  (you need this one!)
-      Text=wxPython documentation
-      Text=
-      Text French=wxPython package  (you need this one!)
-      Text French=wxPython documentation
-      Text French=
-      Text German=wxPython package  (you need this one!)
-      Text German=wxPython documentation
-      Text German=
-      Text Portuguese=%1%
-      Text Portuguese=
-      Text Spanish=wxPython package  (you need this one!)
-      Text Spanish=wxPython documentation
-      Text Spanish=
-      Text Italian=wxPython package  (you need this one!)
-      Text Italian=wxPython documentation
-      Text Italian=
-      Text Danish=%1%
-      Text Danish=
-      Text Dutch=%1%
-      Text Dutch=
-      Text Norwegian=%1%
-      Text Norwegian=
-      Text Swedish=%1%
-      Text Swedish=
-    end
-  end
-end
-item: Custom Dialog Set
   Name=Start Installation
   Display Variable=DISPLAY
   item: Dialog
@@ -966,10 +804,12 @@ item: Check Disk Space
 end
 item: Remark
 end
-item: If/While Statement
+remarked item: If/While Statement
   Variable=COMPONENTS
   Value=A
   Flags=00001010
+end
+remarked item: End Block
 end
 item: Install File
   Source=c:\WINNT\System32\Msvcirt.dll
@@ -980,6 +820,11 @@ item: Install File
   Source=c:\WINNT\System32\Msvcrt.dll
   Destination=%SYS%\Msvcrt.dll
   Flags=0000001010000011
+end
+item: Install File
+  Source=e:\projects\wx\lib\wx200.dll
+  Destination=%SYS%\wx200.dll
+  Flags=0000001010010010
 end
 item: Install File
   Source=e:\Projects\wx\utils\wxPython\*.py
@@ -1002,6 +847,12 @@ end
 item: Install File
   Source=e:\Projects\wx\utils\wxPython\lib\*.py
   Destination=%MAINDIR%\wxPython\lib
+  Description=wxPython Standard Library
+  Flags=0000000010000010
+end
+item: Install File
+  Source=e:\Projects\wx\utils\wxPython\lib\sizers\*.py
+  Destination=%MAINDIR%\wxPython\lib\sizers
   Description=wxPython Standard Library
   Flags=0000000010000010
 end
@@ -1041,28 +892,34 @@ item: Install File
   Description=Demos
   Flags=0000000010000010
 end
-item: End Block
+item: Remark
+end
+item: Install File
+  Source=E:\PROJECTS\wx\docs\html\wx\wx.chm
+  Destination=%MAINDIR%\wxPython\docs\wx.chm
+  Description=wxPython documentation
+  Flags=0000000010000010
 end
 item: Remark
 end
-item: If/While Statement
+remarked item: If/While Statement
   Variable=COMPONENTS
   Value=B
   Flags=00001010
 end
-item: Install File
+remarked item: Install File
   Source=e:\projects\wx\docs\html\wx\*.*
   Destination=%MAINDIR%\wxPython\docs
   Description=wxPython documentation
   Flags=0000000010000010
 end
-item: Install File
+remarked item: Install File
   Source=e:\projects\wx\docs\html\wx\wx.htm
   Destination=%MAINDIR%\wxPython\docs\index.htm
   Description=wxPython documentation
   Flags=0000000010000010
 end
-item: End Block
+remarked item: End Block
 end
 item: Remark
 end
@@ -1125,11 +982,6 @@ item: Edit Registry
   Root=2
 end
 item: Else Statement
-end
-item: Add ProgMan Icon
-  Group=%GROUP%
-  Icon Name=Uninstall %APPTITLE%
-  Command Line=%UNINSTALL_PATH% %INST_LOG_PATH%
 end
 item: End Block
 end
@@ -1219,7 +1071,41 @@ item: Set Variable
   Variable=GROUP
   Value=%GROUPDIR%\%GROUP%
 end
+item: Create Shortcut
+  Source=%UNINSTALL_PATH%
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\Uninstall %APPTITLE%.lnk
+  Command Options=%INST_LOG_PATH%
+  Icon Number=0
+end
+item: Create Shortcut
+  Source=pythonw.exe
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\Run the DEMO.lnk
+  Command Options=demo.py
+  Working Directory=%MAINDIR%\wxPython\demo
+  Icon Number=0
+end
+item: Create Shortcut
+  Source=%MAINDIR%\wxPython\docs\wx.chm
+  Destination=%CGROUPDIR%\%CGROUP_SAVE%\wxWindows User Guide.lnk
+  Icon Number=0
+end
 item: Else Statement
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=Uninstall %APPTITLE%
+  Command Line=%UNINSTALL_PATH% %INST_LOG_PATH%
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=Run the DEMO
+  Command Line=pythonw.exe demo.py
+  Default Directory=%MAINDIR%\wxPython\demo
+end
+item: Add ProgMan Icon
+  Group=%GROUP%
+  Icon Name=wxWindows User Guide
+  Command Line=%MAINDIR%\wxPython\docs\wx.chm
 end
 item: End Block
 end

@@ -31,6 +31,10 @@
 #define wxPy_END_ALLOW_THREADS
 #endif
 
+#ifdef WXP_WITH_THREAD
+extern PyThreadState*   wxPyEventThreadState;
+extern bool             wxPyInEvent;
+#endif
 
 //----------------------------------------------------------------------
 
@@ -133,44 +137,97 @@ private:
     PyObject* m_userData;
 };
 
+
+
+
+
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.7  1999/04/30 03:29:18  RD
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.6.4.1  1999/03/27 23:29:14  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.6  1998/11/25 08:45:26  RD
-//
-// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-// Added events for wxGrid
-// Other various fixes and additions
-//
-// Revision 1.5  1998/10/02 06:40:40  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.4  1998/08/27 21:59:09  RD
-// Some chicken-and-egg problems solved for wxPython on wxGTK
-//
-// Revision 1.3  1998/08/16 04:31:09  RD
-// More wxGTK work.
-//
-// Revision 1.2  1998/08/14 23:36:37  RD
-// Beginings of wxGTK compatibility
-//
-// Revision 1.1  1998/08/09 08:25:51  RD
-// Initial version
-//
-//
+// This class holds an instance of a Python Shadow Class object and assists
+// with looking up and invoking Python callback methods from C++ virtual
+// method redirections.  For all classes which have virtuals which should be
+// overridable in wxPython, a new subclass is created that contains a
+// wxPyCallbackList.  This list is used to hold references to the Python
+// methods.
+//---------------------------------------------------------------------------
+
+class wxPyCallbackHelper {
+public:
+    wxPyCallbackHelper();
+    ~wxPyCallbackHelper();
+
+    void        setSelf(PyObject* self);
+
+    bool        findCallback(const wxString& name);
+    int         callCallback(PyObject* argTuple);
+    PyObject*   callCallbackObj(PyObject* argTuple);
+
+private:
+    PyObject*   m_self;
+    PyObject*   m_lastFound;
+};
+
+
+
+//---------------------------------------------------------------------------
+// These macros are used to implement the virtual methods that should
+// redirect to a Python method if one exists.  The names designate the
+// return type, if any as well as any parameter types.
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK_BOOL_INTINT(PCLASS, CBNAME)                          \
+    bool CBNAME(int a, int b) {                                         \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            return m_myInst.callCallback(Py_BuildValue("(ii)",a,b));    \
+        else                                                            \
+            return PCLASS::CBNAME(a,b);                                 \
+    }                                                                   \
+    bool base_##CBNAME(int a, int b) {                                  \
+        return PCLASS::CBNAME(a,b);                                     \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK_BOOL_INT(PCLASS, CBNAME)                             \
+    bool CBNAME(int a) {                                                \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            return m_myInst.callCallback(Py_BuildValue("(i)",a));       \
+        else                                                            \
+            return PCLASS::CBNAME(a);                                   \
+    }                                                                   \
+    bool base_##CBNAME(int a) {                                         \
+        return PCLASS::CBNAME(a);                                       \
+    }
+
+#define PYCALLBACK_BOOL_INT_pure(PCLASS, CBNAME)                        \
+    bool CBNAME(int a) {                                                \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            return m_myInst.callCallback(Py_BuildValue("(i)",a));       \
+        else return false;                                              \
+    }
+
+
+//---------------------------------------------------------------------------
+
+#define PYCALLBACK__(PCLASS, CBNAME)                                    \
+    void CBNAME() {                                                     \
+        if (m_myInst.findCallback(#CBNAME))                             \
+            m_myInst.callCallback(Py_BuildValue("()"));                 \
+        else                                                            \
+            PCLASS::CBNAME();                                           \
+    }                                                                   \
+    void base_##CBNAME() {                                              \
+        PCLASS::CBNAME();                                               \
+    }
+
+//---------------------------------------------------------------------------
+
+#define PYPRIVATE                               \
+    void _setSelf(PyObject* self) {             \
+        m_myInst.setSelf(self);                 \
+    }                                           \
+    private: wxPyCallbackHelper m_myInst;
+
+//---------------------------------------------------------------------------
 
 #endif
 

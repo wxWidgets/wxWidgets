@@ -628,6 +628,25 @@ class wxPyEvent(wxPyEventPtr):
 
 
 
+class wxNotifyEventPtr(wxCommandEventPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def IsAllowed(self):
+        val = eventsc.wxNotifyEvent_IsAllowed(self.this)
+        return val
+    def Veto(self):
+        val = eventsc.wxNotifyEvent_Veto(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxNotifyEvent instance>"
+class wxNotifyEvent(wxNotifyEventPtr):
+    def __init__(self,this):
+        self.this = this
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------

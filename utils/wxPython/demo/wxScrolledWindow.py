@@ -8,6 +8,8 @@ class MyCanvas(wxScrolledWindow):
         wxScrolledWindow.__init__(self, parent, -1, wxPoint(0, 0), wxPyDefaultSize, wxSUNKEN_BORDER)
 
         self.lines = []
+        self.maxWidth  = 1000
+        self.maxHeight = 1000
 
         self.SetBackgroundColour(wxNamedColor("WHITE"))
         self.Connect(-1, -1, wxEVT_LEFT_DOWN, self.OnLeftButtonEvent)
@@ -15,10 +17,16 @@ class MyCanvas(wxScrolledWindow):
         self.Connect(-1, -1, wxEVT_MOTION,    self.OnLeftButtonEvent)
 
         self.SetCursor(wxStockCursor(wxCURSOR_PENCIL))
-        #bmp = wxBitmap('bitmaps/image.bmp', wxBITMAP_TYPE_BMP)
-        #self.bmp = bmp
+        bmp = wxBitmap('bitmaps/test2.bmp', wxBITMAP_TYPE_BMP)
+        self.bmp = bmp
 
-        self.SetScrollbars(20, 20, 50, 50)
+        self.SetScrollbars(20, 20, self.maxWidth/20, self.maxHeight/20)
+
+    def getWidth(self):
+        return self.maxWidth
+
+    def getHeight(self):
+        return self.maxHeight
 
 
     def OnPaint(self, event):
@@ -29,7 +37,6 @@ class MyCanvas(wxScrolledWindow):
 
     def DoDrawing(self, dc):
         dc.BeginDrawing()
-        #dc.Clear()
         pen1 = wxPen(wxNamedColour('RED'))
         dc.SetPen(pen1)
         dc.DrawRectangle(5, 5, 50, 50)
@@ -54,9 +61,9 @@ class MyCanvas(wxScrolledWindow):
         dc.SetPen(wxGREEN_PEN)
         dc.DrawSpline(lst+[(100,100)])
 
-        #dc.DrawBitmap(self.bmp, 200, 20)
-        #dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
-        #dc.DrawText("a bitmap", 200, 80)
+        dc.DrawBitmap(self.bmp, 200, 20)
+        dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
+        dc.DrawText("a bitmap", 200, 85)
 
         self.DrawSavedLines(dc)
         dc.EndDrawing()

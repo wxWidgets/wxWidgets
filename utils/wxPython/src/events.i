@@ -302,72 +302,13 @@ public:
 
 
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.8  1999/04/30 03:29:18  RD
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.7.4.1  1999/03/27 23:29:14  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.7  1999/02/20 09:02:57  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.6  1999/02/06 22:55:00  RD
-//
-// Follow up for changes in wxWindows to various event classes
-//
-// Revision 1.5  1998/12/15 20:41:17  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.4  1998/11/16 00:00:55  RD
-// Generic treectrl for wxPython/GTK compiles...
-//
-// Revision 1.3  1998/10/20 06:43:56  RD
-// New wxTreeCtrl wrappers (untested)
-// some changes in helpers
-// etc.
-//
-// Revision 1.2  1998/08/15 07:36:33  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.1  1998/08/09 08:25:50  RD
-// Initial version
-//
-//
+
+class wxNotifyEvent : public wxCommandEvent {
+public:
+    bool IsAllowed();
+    void Veto();
+};
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 

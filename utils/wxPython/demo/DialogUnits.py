@@ -35,14 +35,14 @@ class MyFrame(wxFrame):
         wxStaticText(panel, -1, "Size:",
                      wxDLG_PNT(panel, wxPoint(4, 4)),  wxDefaultSize)
         wxStaticText(panel, -1, "Pos:",
-                     wxDLG_PNT(panel, wxPoint(4, 14)), wxDefaultSize)
+                     wxDLG_PNT(panel, wxPoint(4, 16)), wxDefaultSize)
         self.sizeCtrl = wxTextCtrl(panel, -1, "",
                                    wxDLG_PNT(panel, wxPoint(24, 4)),
                                    wxDLG_SZE(panel, wxSize(36, -1)),
                                    wxTE_READONLY)
 
         self.posCtrl = wxTextCtrl(panel, -1, "",
-                                  wxDLG_PNT(panel, wxPoint(24, 14)),
+                                  wxDLG_PNT(panel, wxPoint(24, 16)),
                                   wxDLG_SZE(panel, wxSize(36, -1)),
                                   wxTE_READONLY)
 

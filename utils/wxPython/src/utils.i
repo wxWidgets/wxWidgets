@@ -128,57 +128,12 @@ public:
 
 
 //---------------------------------------------------------------------------
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.5  1999/05/01 04:40:57  RD
-// wxPython 2.0b9, second phase (gtk)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.4  1999/04/30 03:29:19  RD
-//
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.3.4.1  1999/03/27 23:29:15  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.3  1999/02/25 07:08:36  RD
-//
-// wxPython version 2.0b5
-//
-// Revision 1.2  1999/02/20 09:03:02  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.1  1998/12/15 20:41:23  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
+
+%init %{
+
+    wxClassInfo::CleanUpClasses();
+    wxClassInfo::InitializeClasses();
+
+%}
+
+//---------------------------------------------------------------------------

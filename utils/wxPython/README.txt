@@ -3,7 +3,7 @@ wxPython README
 
 Welcome to the wonderful world of wxPython!
 
-Now that you have installed the Win32 extension module, you can try it
+Once you have installed the wxPython extension module, you can try it
 out by going to the [install dir]\wxPython\demo directory and typing:
 
     python demo.py
@@ -16,6 +16,14 @@ to [install dir]\wxPython\docs\index.htm and you will then be looking
 at the docs for wxWindows.  For the most part you can use the C++ docs
 as most classes and methods are used identically.  Where there are
 differences they are documented with a "wxPython Note."
+
+On Win32 systems the binary self-installer creates a program group on
+the Start Menu that contains a link to running the demo and a link to
+the help file.  To help you save disk space I'm now using Microsoft's
+HTML Help format.  If your system doesn't know what to do with the help
+file, you can install the HTML Help Viewer as part of IE 4+, NT
+Service Pack 4+, or the HTML Workshop at
+http://msdn.microsoft.com/workshop/author/htmlhelp/download.asp.
 
 
 
@@ -33,6 +41,34 @@ going to
 Or you can send mail directly to the list using this address:
 
        wxpython-users@starship.python.net
+
+----------------------------------------------------------------------
+
+
+What's new in 2.1b1
+--------------------
+Fixed wxComboBox.SetSelection so that it actually sets the selected
+item.  (Actually just removed it from wxPython and let it default to
+wxChoice.SetSelection which was already doing the right thing.)
+
+Added the Printing Framework.
+
+Switched back to using the wxWindows DLL for the pre-built Win32
+version.  The problem was needing to reinitialize static class info
+data after loading each extension module.
+
+Lots of little tweaks and additions to reflect changes to various
+wxWindows classes.
+
+Fixed a bug with attaching objects to tree items.  Actually was a
+symptom of a larger problem with not obtaining the interpreter lock
+when doing any Py_DECREFs.
+
+wxSizer and friends.  Sizers are layout tools that manage a colection
+of windows and sizers.  Different types of sizers apply different
+types of layout algorithms.  You saw it here first!  These classes are
+not even in the wxWindows C++ library yet!
+
 
 
 What's new in 2.0b9
@@ -162,7 +198,6 @@ down a nasty DECREF bug.  Okay so I have to confess that it was just a
 DSM (Dumb Stupid Mistake) on my part but it was nasty none the less
 because the behavior was so different on different platforms.
 
-
 The dynamicly loaded module on Solaris is still segfaulting, so it
 must have been a different issue all along...
 
@@ -182,6 +217,7 @@ version segfault shortly after starting up.
 
 3. Varioius bug fixes, enhancements, etc.
 
+----------------------------------------------------------------------
 
 
 

@@ -57,7 +57,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/colordlg.h>
 #include <wx/dirdlg.h>
 #include <wx/fontdlg.h>
-#include <wx/printdlg.h>
+#include <wx/progdlg.h>
 
 static PyObject* l_output_helper(PyObject* target, PyObject* o) {
     PyObject*   o2;
@@ -2170,1738 +2170,6 @@ static PyObject *_wrap_wxFontDialog_ShowModal(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define new_wxPageSetupDialogData() (new wxPageSetupDialogData())
-static PyObject *_wrap_new_wxPageSetupDialogData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _result;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,":new_wxPageSetupDialogData")) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPageSetupDialogData *)new_wxPageSetupDialogData();
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPageSetupDialogData_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define delete_wxPageSetupDialogData(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPageSetupDialogData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:delete_wxPageSetupDialogData",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPageSetupDialogData. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxPageSetupDialogData(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnableHelp(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_EnableHelp",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_EnableHelp. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_EnableHelp(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_EnableMargins(_swigobj,_swigarg0)  (_swigobj->EnableMargins(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnableMargins(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_EnableMargins",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_EnableMargins. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_EnableMargins(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_EnableOrientation(_swigobj,_swigarg0)  (_swigobj->EnableOrientation(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnableOrientation(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_EnableOrientation",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_EnableOrientation. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_EnableOrientation(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_EnablePaper(_swigobj,_swigarg0)  (_swigobj->EnablePaper(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnablePaper(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_EnablePaper",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_EnablePaper. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_EnablePaper(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_EnablePrinter(_swigobj,_swigarg0)  (_swigobj->EnablePrinter(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_EnablePrinter(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_EnablePrinter",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_EnablePrinter. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_EnablePrinter(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetDefaultMinMargins(_swigobj)  (_swigobj->GetDefaultMinMargins())
-static PyObject *_wrap_wxPageSetupDialogData_GetDefaultMinMargins(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetDefaultMinMargins",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetDefaultMinMargins. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetDefaultMinMargins(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetEnableMargins(_swigobj)  (_swigobj->GetEnableMargins())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnableMargins(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetEnableMargins",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetEnableMargins. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetEnableMargins(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetEnableOrientation(_swigobj)  (_swigobj->GetEnableOrientation())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnableOrientation(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetEnableOrientation",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetEnableOrientation. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetEnableOrientation(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetEnablePaper(_swigobj)  (_swigobj->GetEnablePaper())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnablePaper(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetEnablePaper",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetEnablePaper. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetEnablePaper(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetEnablePrinter(_swigobj)  (_swigobj->GetEnablePrinter())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnablePrinter(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetEnablePrinter",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetEnablePrinter. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetEnablePrinter(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetEnableHelp(_swigobj)  (_swigobj->GetEnableHelp())
-static PyObject *_wrap_wxPageSetupDialogData_GetEnableHelp(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetEnableHelp",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetEnableHelp. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetEnableHelp(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetDefaultInfo(_swigobj)  (_swigobj->GetDefaultInfo())
-static PyObject *_wrap_wxPageSetupDialogData_GetDefaultInfo(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetDefaultInfo",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetDefaultInfo. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPageSetupDialogData_GetDefaultInfo(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetMarginTopLeft(_swigobj)  (_swigobj->GetMarginTopLeft())
-static PyObject *_wrap_wxPageSetupDialogData_GetMarginTopLeft(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPoint * _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetMarginTopLeft",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetMarginTopLeft. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxPoint (wxPageSetupDialogData_GetMarginTopLeft(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetMarginBottomRight(_swigobj)  (_swigobj->GetMarginBottomRight())
-static PyObject *_wrap_wxPageSetupDialogData_GetMarginBottomRight(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPoint * _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetMarginBottomRight",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetMarginBottomRight. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxPoint (wxPageSetupDialogData_GetMarginBottomRight(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetMinMarginTopLeft(_swigobj)  (_swigobj->GetMinMarginTopLeft())
-static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginTopLeft(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPoint * _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetMinMarginTopLeft",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetMinMarginTopLeft. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxPoint (wxPageSetupDialogData_GetMinMarginTopLeft(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetMinMarginBottomRight(_swigobj)  (_swigobj->GetMinMarginBottomRight())
-static PyObject *_wrap_wxPageSetupDialogData_GetMinMarginBottomRight(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPoint * _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetMinMarginBottomRight",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetMinMarginBottomRight. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxPoint (wxPageSetupDialogData_GetMinMarginBottomRight(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxPoint_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetPaperId(_swigobj)  (_swigobj->GetPaperId())
-static PyObject *_wrap_wxPageSetupDialogData_GetPaperId(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPaperSize  _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetPaperId",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetPaperId. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPaperSize )wxPageSetupDialogData_GetPaperId(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetPaperSize(_swigobj)  (_swigobj->GetPaperSize())
-static PyObject *_wrap_wxPageSetupDialogData_GetPaperSize(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxSize * _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetPaperSize",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetPaperSize. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxSize (wxPageSetupDialogData_GetPaperSize(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_GetPrintData(_swigobj)  (_swigobj->GetPrintData())
-static PyObject *_wrap_wxPageSetupDialogData_GetPrintData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintData * _result;
-    wxPageSetupDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialogData_GetPrintData",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_GetPrintData. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintData & _result_ref = wxPageSetupDialogData_GetPrintData(_arg0);
-    _result = (wxPrintData *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintData_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetDefaultInfo(_swigobj,_swigarg0)  (_swigobj->SetDefaultInfo(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetDefaultInfo(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_SetDefaultInfo",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetDefaultInfo. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetDefaultInfo(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetDefaultMinMargins(_swigobj,_swigarg0)  (_swigobj->SetDefaultMinMargins(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetDefaultMinMargins(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPageSetupDialogData_SetDefaultMinMargins",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetDefaultMinMargins. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetDefaultMinMargins(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetMarginTopLeft(_swigobj,_swigarg0)  (_swigobj->SetMarginTopLeft(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMarginTopLeft(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxPoint * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetMarginTopLeft",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetMarginTopLeft. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetMarginTopLeft. Expected _wxPoint_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetMarginTopLeft(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetMarginBottomRight(_swigobj,_swigarg0)  (_swigobj->SetMarginBottomRight(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMarginBottomRight(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxPoint * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetMarginBottomRight",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetMarginBottomRight. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetMarginBottomRight. Expected _wxPoint_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetMarginBottomRight(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetMinMarginTopLeft(_swigobj,_swigarg0)  (_swigobj->SetMinMarginTopLeft(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginTopLeft(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxPoint * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetMinMarginTopLeft",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetMinMarginTopLeft. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetMinMarginTopLeft. Expected _wxPoint_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetMinMarginTopLeft(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetMinMarginBottomRight(_swigobj,_swigarg0)  (_swigobj->SetMinMarginBottomRight(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetMinMarginBottomRight(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxPoint * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetMinMarginBottomRight",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetMinMarginBottomRight. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPoint_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetMinMarginBottomRight. Expected _wxPoint_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetMinMarginBottomRight(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetPaperId(_swigobj,_swigarg0)  (_swigobj->SetPaperId(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetPaperId(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxPaperSize * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetPaperId",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetPaperId. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPaperSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetPaperId. Expected _wxPaperSize_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetPaperId(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetPaperSize(_swigobj,_swigarg0)  (_swigobj->SetPaperSize(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetPaperSize(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxSize * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetPaperSize",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetPaperSize. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxSize_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetPaperSize. Expected _wxSize_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetPaperSize(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPageSetupDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
-static PyObject *_wrap_wxPageSetupDialogData_SetPrintData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _arg0;
-    wxPrintData * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPageSetupDialogData_SetPrintData",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialogData_SetPrintData. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPrintData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPageSetupDialogData_SetPrintData. Expected _wxPrintData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData_SetPrintData(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static void *SwigwxPageSetupDialogTowxDialog(void *ptr) {
-    wxPageSetupDialog *src;
-    wxDialog *dest;
-    src = (wxPageSetupDialog *) ptr;
-    dest = (wxDialog *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPageSetupDialogTowxPanel(void *ptr) {
-    wxPageSetupDialog *src;
-    wxPanel *dest;
-    src = (wxPageSetupDialog *) ptr;
-    dest = (wxPanel *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPageSetupDialogTowxWindow(void *ptr) {
-    wxPageSetupDialog *src;
-    wxWindow *dest;
-    src = (wxPageSetupDialog *) ptr;
-    dest = (wxWindow *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPageSetupDialogTowxEvtHandler(void *ptr) {
-    wxPageSetupDialog *src;
-    wxEvtHandler *dest;
-    src = (wxPageSetupDialog *) ptr;
-    dest = (wxEvtHandler *) src;
-    return (void *) dest;
-}
-
-#define new_wxPageSetupDialog(_swigarg0,_swigarg1) (new wxPageSetupDialog(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxPageSetupDialog(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialog * _result;
-    wxWindow * _arg0;
-    wxPageSetupDialogData * _arg1 = NULL;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s|s:new_wxPageSetupDialog",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPageSetupDialog. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPageSetupDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxPageSetupDialog. Expected _wxPageSetupDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPageSetupDialog *)new_wxPageSetupDialog(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPageSetupDialog_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialog_GetPageSetupData(_swigobj)  (_swigobj->GetPageSetupData())
-static PyObject *_wrap_wxPageSetupDialog_GetPageSetupData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPageSetupDialogData * _result;
-    wxPageSetupDialog * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialog_GetPageSetupData",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialog_GetPageSetupData. Expected _wxPageSetupDialog_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPageSetupDialogData & _result_ref = wxPageSetupDialog_GetPageSetupData(_arg0);
-    _result = (wxPageSetupDialogData *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPageSetupDialogData_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPageSetupDialog_ShowModal(_swigobj)  (_swigobj->ShowModal())
-static PyObject *_wrap_wxPageSetupDialog_ShowModal(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPageSetupDialog * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPageSetupDialog_ShowModal",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPageSetupDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPageSetupDialog_ShowModal. Expected _wxPageSetupDialog_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPageSetupDialog_ShowModal(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define new_wxPrintDialogData() (new wxPrintDialogData())
-static PyObject *_wrap_new_wxPrintDialogData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _result;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,":new_wxPrintDialogData")) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPrintDialogData *)new_wxPrintDialogData();
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintDialogData_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define delete_wxPrintDialogData(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPrintDialogData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:delete_wxPrintDialogData",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPrintDialogData. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxPrintDialogData(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnableHelp(_swigobj,_swigarg0)  (_swigobj->EnableHelp(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableHelp(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_EnableHelp",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableHelp. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_EnableHelp(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnablePageNumbers(_swigobj,_swigarg0)  (_swigobj->EnablePageNumbers(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePageNumbers(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_EnablePageNumbers",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePageNumbers. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_EnablePageNumbers(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnablePrintToFile(_swigobj,_swigarg0)  (_swigobj->EnablePrintToFile(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnablePrintToFile(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_EnablePrintToFile",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnablePrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_EnablePrintToFile(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_EnableSelection(_swigobj,_swigarg0)  (_swigobj->EnableSelection(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_EnableSelection(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_EnableSelection",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_EnableSelection. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_EnableSelection(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetAllPages(_swigobj)  (_swigobj->GetAllPages())
-static PyObject *_wrap_wxPrintDialogData_GetAllPages(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetAllPages",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetAllPages. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPrintDialogData_GetAllPages(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetCollate(_swigobj)  (_swigobj->GetCollate())
-static PyObject *_wrap_wxPrintDialogData_GetCollate(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetCollate",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetCollate. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPrintDialogData_GetCollate(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetFromPage(_swigobj)  (_swigobj->GetFromPage())
-static PyObject *_wrap_wxPrintDialogData_GetFromPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetFromPage",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetFromPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPrintDialogData_GetFromPage(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetMaxPage(_swigobj)  (_swigobj->GetMaxPage())
-static PyObject *_wrap_wxPrintDialogData_GetMaxPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetMaxPage",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMaxPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPrintDialogData_GetMaxPage(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetMinPage(_swigobj)  (_swigobj->GetMinPage())
-static PyObject *_wrap_wxPrintDialogData_GetMinPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetMinPage",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetMinPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPrintDialogData_GetMinPage(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetNoCopies(_swigobj)  (_swigobj->GetNoCopies())
-static PyObject *_wrap_wxPrintDialogData_GetNoCopies(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetNoCopies",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetNoCopies. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPrintDialogData_GetNoCopies(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetPrintData(_swigobj)  (_swigobj->GetPrintData())
-static PyObject *_wrap_wxPrintDialogData_GetPrintData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintData * _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetPrintData",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintData. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintData & _result_ref = wxPrintDialogData_GetPrintData(_arg0);
-    _result = (wxPrintData *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintData_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetPrintToFile(_swigobj)  (_swigobj->GetPrintToFile())
-static PyObject *_wrap_wxPrintDialogData_GetPrintToFile(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetPrintToFile",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetPrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxPrintDialogData_GetPrintToFile(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_GetToPage(_swigobj)  (_swigobj->GetToPage())
-static PyObject *_wrap_wxPrintDialogData_GetToPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialogData * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialogData_GetToPage",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_GetToPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPrintDialogData_GetToPage(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetCollate(_swigobj,_swigarg0)  (_swigobj->SetCollate(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetCollate(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetCollate",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetCollate. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetCollate(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetFromPage(_swigobj,_swigarg0)  (_swigobj->SetFromPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetFromPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetFromPage",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetFromPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetFromPage(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetMaxPage(_swigobj,_swigarg0)  (_swigobj->SetMaxPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMaxPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetMaxPage",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMaxPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetMaxPage(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetMinPage(_swigobj,_swigarg0)  (_swigobj->SetMinPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetMinPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetMinPage",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetMinPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetMinPage(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetNoCopies(_swigobj,_swigarg0)  (_swigobj->SetNoCopies(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetNoCopies(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetNoCopies",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetNoCopies. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetNoCopies(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetPrintData(_swigobj,_swigarg0)  (_swigobj->SetPrintData(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetPrintData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    wxPrintData * _arg1;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss:wxPrintDialogData_SetPrintData",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetPrintData. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPrintData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxPrintDialogData_SetPrintData. Expected _wxPrintData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetPrintData(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetPrintToFile(_swigobj,_swigarg0)  (_swigobj->SetPrintToFile(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetPrintToFile(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetPrintToFile",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetPrintToFile. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetPrintToFile(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetSetupDialog(_swigobj,_swigarg0)  (_swigobj->SetSetupDialog(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetSetupDialog(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    bool  _arg1;
-    char * _argc0 = 0;
-    int tempbool1;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetSetupDialog",&_argc0,&tempbool1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetSetupDialog. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-    _arg1 = (bool ) tempbool1;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetSetupDialog(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-#define wxPrintDialogData_SetToPage(_swigobj,_swigarg0)  (_swigobj->SetToPage(_swigarg0))
-static PyObject *_wrap_wxPrintDialogData_SetToPage(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _arg0;
-    int  _arg1;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"si:wxPrintDialogData_SetToPage",&_argc0,&_arg1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialogData_SetToPage. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData_SetToPage(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static void *SwigwxPrintDialogTowxDialog(void *ptr) {
-    wxPrintDialog *src;
-    wxDialog *dest;
-    src = (wxPrintDialog *) ptr;
-    dest = (wxDialog *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPrintDialogTowxPanel(void *ptr) {
-    wxPrintDialog *src;
-    wxPanel *dest;
-    src = (wxPrintDialog *) ptr;
-    dest = (wxPanel *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPrintDialogTowxWindow(void *ptr) {
-    wxPrintDialog *src;
-    wxWindow *dest;
-    src = (wxPrintDialog *) ptr;
-    dest = (wxWindow *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPrintDialogTowxEvtHandler(void *ptr) {
-    wxPrintDialog *src;
-    wxEvtHandler *dest;
-    src = (wxPrintDialog *) ptr;
-    dest = (wxEvtHandler *) src;
-    return (void *) dest;
-}
-
-#define new_wxPrintDialog(_swigarg0,_swigarg1) (new wxPrintDialog(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxPrintDialog(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialog * _result;
-    wxWindow * _arg0;
-    wxPrintDialogData * _arg1 = NULL;
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s|s:new_wxPrintDialog",&_argc0,&_argc1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of new_wxPrintDialog. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPrintDialogData_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of new_wxPrintDialog. Expected _wxPrintDialogData_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPrintDialog *)new_wxPrintDialog(_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintDialog_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPrintDialog_GetPrintDialogData(_swigobj)  (_swigobj->GetPrintDialogData())
-static PyObject *_wrap_wxPrintDialog_GetPrintDialogData(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPrintDialogData * _result;
-    wxPrintDialog * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialog_GetPrintDialogData",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialog_GetPrintDialogData. Expected _wxPrintDialog_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxPrintDialogData & _result_ref = wxPrintDialog_GetPrintDialogData(_arg0);
-    _result = (wxPrintDialogData *) &_result_ref;
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPrintDialogData_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPrintDialog_GetPrintDC(_swigobj)  (_swigobj->GetPrintDC())
-static PyObject *_wrap_wxPrintDialog_GetPrintDC(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxDC * _result;
-    wxPrintDialog * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialog_GetPrintDC",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialog_GetPrintDC. Expected _wxPrintDialog_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxDC *)wxPrintDialog_GetPrintDC(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxDC_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxPrintDialog_ShowModal(_swigobj)  (_swigobj->ShowModal())
-static PyObject *_wrap_wxPrintDialog_ShowModal(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    int  _result;
-    wxPrintDialog * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPrintDialog_ShowModal",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPrintDialog_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPrintDialog_ShowModal. Expected _wxPrintDialog_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPrintDialog_ShowModal(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static void *SwigwxMessageDialogTowxDialog(void *ptr) {
     wxMessageDialog *src;
     wxDialog *dest;
@@ -3997,70 +2265,143 @@ static PyObject *_wrap_wxMessageDialog_ShowModal(PyObject *self, PyObject *args)
     return _resultobj;
 }
 
+static void *SwigwxProgressDialogTowxFrame(void *ptr) {
+    wxProgressDialog *src;
+    wxFrame *dest;
+    src = (wxProgressDialog *) ptr;
+    dest = (wxFrame *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxProgressDialogTowxWindow(void *ptr) {
+    wxProgressDialog *src;
+    wxWindow *dest;
+    src = (wxProgressDialog *) ptr;
+    dest = (wxWindow *) src;
+    return (void *) dest;
+}
+
+static void *SwigwxProgressDialogTowxEvtHandler(void *ptr) {
+    wxProgressDialog *src;
+    wxEvtHandler *dest;
+    src = (wxProgressDialog *) ptr;
+    dest = (wxEvtHandler *) src;
+    return (void *) dest;
+}
+
+#define new_wxProgressDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4) (new wxProgressDialog(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+static PyObject *_wrap_new_wxProgressDialog(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxProgressDialog * _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    int  _arg2 = 100;
+    wxWindow * _arg3 = NULL;
+    int  _arg4 = (wxPD_AUTO_HIDE)|(wxPD_APP_MODAL);
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    char * _argc3 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"OO|isi:new_wxProgressDialog",&_obj0,&_obj1,&_arg2,&_argc3,&_arg4)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of new_wxProgressDialog. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxProgressDialog *)new_wxProgressDialog(*_arg0,*_arg1,_arg2,_arg3,_arg4);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxProgressDialog_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxProgressDialog_Update(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Update(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxProgressDialog_Update(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxProgressDialog * _arg0;
+    int  _arg1 = -1;
+    char * _arg2 = NULL;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s|is:wxProgressDialog_Update",&_argc0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxProgressDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProgressDialog_Update. Expected _wxProgressDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxProgressDialog_Update(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxProgressDialog_Resume(_swigobj)  (_swigobj->Resume())
+static PyObject *_wrap_wxProgressDialog_Resume(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxProgressDialog * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxProgressDialog_Resume",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxProgressDialog_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxProgressDialog_Resume. Expected _wxProgressDialog_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxProgressDialog_Resume(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyMethodDef cmndlgscMethods[] = {
+	 { "wxProgressDialog_Resume", _wrap_wxProgressDialog_Resume, 1 },
+	 { "wxProgressDialog_Update", _wrap_wxProgressDialog_Update, 1 },
+	 { "new_wxProgressDialog", _wrap_new_wxProgressDialog, 1 },
 	 { "wxMessageDialog_ShowModal", _wrap_wxMessageDialog_ShowModal, 1 },
 	 { "new_wxMessageDialog", _wrap_new_wxMessageDialog, 1 },
-	 { "wxPrintDialog_ShowModal", _wrap_wxPrintDialog_ShowModal, 1 },
-	 { "wxPrintDialog_GetPrintDC", _wrap_wxPrintDialog_GetPrintDC, 1 },
-	 { "wxPrintDialog_GetPrintDialogData", _wrap_wxPrintDialog_GetPrintDialogData, 1 },
-	 { "new_wxPrintDialog", _wrap_new_wxPrintDialog, 1 },
-	 { "wxPrintDialogData_SetToPage", _wrap_wxPrintDialogData_SetToPage, 1 },
-	 { "wxPrintDialogData_SetSetupDialog", _wrap_wxPrintDialogData_SetSetupDialog, 1 },
-	 { "wxPrintDialogData_SetPrintToFile", _wrap_wxPrintDialogData_SetPrintToFile, 1 },
-	 { "wxPrintDialogData_SetPrintData", _wrap_wxPrintDialogData_SetPrintData, 1 },
-	 { "wxPrintDialogData_SetNoCopies", _wrap_wxPrintDialogData_SetNoCopies, 1 },
-	 { "wxPrintDialogData_SetMinPage", _wrap_wxPrintDialogData_SetMinPage, 1 },
-	 { "wxPrintDialogData_SetMaxPage", _wrap_wxPrintDialogData_SetMaxPage, 1 },
-	 { "wxPrintDialogData_SetFromPage", _wrap_wxPrintDialogData_SetFromPage, 1 },
-	 { "wxPrintDialogData_SetCollate", _wrap_wxPrintDialogData_SetCollate, 1 },
-	 { "wxPrintDialogData_GetToPage", _wrap_wxPrintDialogData_GetToPage, 1 },
-	 { "wxPrintDialogData_GetPrintToFile", _wrap_wxPrintDialogData_GetPrintToFile, 1 },
-	 { "wxPrintDialogData_GetPrintData", _wrap_wxPrintDialogData_GetPrintData, 1 },
-	 { "wxPrintDialogData_GetNoCopies", _wrap_wxPrintDialogData_GetNoCopies, 1 },
-	 { "wxPrintDialogData_GetMinPage", _wrap_wxPrintDialogData_GetMinPage, 1 },
-	 { "wxPrintDialogData_GetMaxPage", _wrap_wxPrintDialogData_GetMaxPage, 1 },
-	 { "wxPrintDialogData_GetFromPage", _wrap_wxPrintDialogData_GetFromPage, 1 },
-	 { "wxPrintDialogData_GetCollate", _wrap_wxPrintDialogData_GetCollate, 1 },
-	 { "wxPrintDialogData_GetAllPages", _wrap_wxPrintDialogData_GetAllPages, 1 },
-	 { "wxPrintDialogData_EnableSelection", _wrap_wxPrintDialogData_EnableSelection, 1 },
-	 { "wxPrintDialogData_EnablePrintToFile", _wrap_wxPrintDialogData_EnablePrintToFile, 1 },
-	 { "wxPrintDialogData_EnablePageNumbers", _wrap_wxPrintDialogData_EnablePageNumbers, 1 },
-	 { "wxPrintDialogData_EnableHelp", _wrap_wxPrintDialogData_EnableHelp, 1 },
-	 { "delete_wxPrintDialogData", _wrap_delete_wxPrintDialogData, 1 },
-	 { "new_wxPrintDialogData", _wrap_new_wxPrintDialogData, 1 },
-	 { "wxPageSetupDialog_ShowModal", _wrap_wxPageSetupDialog_ShowModal, 1 },
-	 { "wxPageSetupDialog_GetPageSetupData", _wrap_wxPageSetupDialog_GetPageSetupData, 1 },
-	 { "new_wxPageSetupDialog", _wrap_new_wxPageSetupDialog, 1 },
-	 { "wxPageSetupDialogData_SetPrintData", _wrap_wxPageSetupDialogData_SetPrintData, 1 },
-	 { "wxPageSetupDialogData_SetPaperSize", _wrap_wxPageSetupDialogData_SetPaperSize, 1 },
-	 { "wxPageSetupDialogData_SetPaperId", _wrap_wxPageSetupDialogData_SetPaperId, 1 },
-	 { "wxPageSetupDialogData_SetMinMarginBottomRight", _wrap_wxPageSetupDialogData_SetMinMarginBottomRight, 1 },
-	 { "wxPageSetupDialogData_SetMinMarginTopLeft", _wrap_wxPageSetupDialogData_SetMinMarginTopLeft, 1 },
-	 { "wxPageSetupDialogData_SetMarginBottomRight", _wrap_wxPageSetupDialogData_SetMarginBottomRight, 1 },
-	 { "wxPageSetupDialogData_SetMarginTopLeft", _wrap_wxPageSetupDialogData_SetMarginTopLeft, 1 },
-	 { "wxPageSetupDialogData_SetDefaultMinMargins", _wrap_wxPageSetupDialogData_SetDefaultMinMargins, 1 },
-	 { "wxPageSetupDialogData_SetDefaultInfo", _wrap_wxPageSetupDialogData_SetDefaultInfo, 1 },
-	 { "wxPageSetupDialogData_GetPrintData", _wrap_wxPageSetupDialogData_GetPrintData, 1 },
-	 { "wxPageSetupDialogData_GetPaperSize", _wrap_wxPageSetupDialogData_GetPaperSize, 1 },
-	 { "wxPageSetupDialogData_GetPaperId", _wrap_wxPageSetupDialogData_GetPaperId, 1 },
-	 { "wxPageSetupDialogData_GetMinMarginBottomRight", _wrap_wxPageSetupDialogData_GetMinMarginBottomRight, 1 },
-	 { "wxPageSetupDialogData_GetMinMarginTopLeft", _wrap_wxPageSetupDialogData_GetMinMarginTopLeft, 1 },
-	 { "wxPageSetupDialogData_GetMarginBottomRight", _wrap_wxPageSetupDialogData_GetMarginBottomRight, 1 },
-	 { "wxPageSetupDialogData_GetMarginTopLeft", _wrap_wxPageSetupDialogData_GetMarginTopLeft, 1 },
-	 { "wxPageSetupDialogData_GetDefaultInfo", _wrap_wxPageSetupDialogData_GetDefaultInfo, 1 },
-	 { "wxPageSetupDialogData_GetEnableHelp", _wrap_wxPageSetupDialogData_GetEnableHelp, 1 },
-	 { "wxPageSetupDialogData_GetEnablePrinter", _wrap_wxPageSetupDialogData_GetEnablePrinter, 1 },
-	 { "wxPageSetupDialogData_GetEnablePaper", _wrap_wxPageSetupDialogData_GetEnablePaper, 1 },
-	 { "wxPageSetupDialogData_GetEnableOrientation", _wrap_wxPageSetupDialogData_GetEnableOrientation, 1 },
-	 { "wxPageSetupDialogData_GetEnableMargins", _wrap_wxPageSetupDialogData_GetEnableMargins, 1 },
-	 { "wxPageSetupDialogData_GetDefaultMinMargins", _wrap_wxPageSetupDialogData_GetDefaultMinMargins, 1 },
-	 { "wxPageSetupDialogData_EnablePrinter", _wrap_wxPageSetupDialogData_EnablePrinter, 1 },
-	 { "wxPageSetupDialogData_EnablePaper", _wrap_wxPageSetupDialogData_EnablePaper, 1 },
-	 { "wxPageSetupDialogData_EnableOrientation", _wrap_wxPageSetupDialogData_EnableOrientation, 1 },
-	 { "wxPageSetupDialogData_EnableMargins", _wrap_wxPageSetupDialogData_EnableMargins, 1 },
-	 { "wxPageSetupDialogData_EnableHelp", _wrap_wxPageSetupDialogData_EnableHelp, 1 },
-	 { "delete_wxPageSetupDialogData", _wrap_delete_wxPageSetupDialogData, 1 },
-	 { "new_wxPageSetupDialogData", _wrap_new_wxPageSetupDialogData, 1 },
 	 { "wxFontDialog_ShowModal", _wrap_wxFontDialog_ShowModal, 1 },
 	 { "wxFontDialog_GetFontData", _wrap_wxFontDialog_GetFontData, 1 },
 	 { "new_wxFontDialog", _wrap_new_wxFontDialog, 1 },
@@ -4138,16 +2479,24 @@ SWIGEXPORT(void,initcmndlgsc)() {
  * (Used by the SWIG pointer type-checker).
  */
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
+	 SWIG_RegisterMapping("_wxEvent","_class_wxEvent",0);
+	 SWIG_RegisterMapping("_class_wxActivateEvent","_wxActivateEvent",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
+	 SWIG_RegisterMapping("_wxMenuEvent","_class_wxMenuEvent",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_wxFontData","_class_wxFontData",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler);
+	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxFontDialog",SwigwxFontDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxFontDialog",SwigwxFontDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler);
@@ -4161,23 +2510,33 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxEvtHandler",0);
+	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxColourData","_wxColourData",0);
-	 SWIG_RegisterMapping("_class_wxPageSetupDialogData","_wxPageSetupDialogData",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
+	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
+	 SWIG_RegisterMapping("_wxStaticBox","_class_wxStaticBox",0);
+	 SWIG_RegisterMapping("_wxChoice","_class_wxChoice",0);
+	 SWIG_RegisterMapping("_wxSlider","_class_wxSlider",0);
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_wxImageList","_class_wxImageList",0);
-	 SWIG_RegisterMapping("_class_wxPrintDialogData","_wxPrintDialogData",0);
+	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
+	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
+	 SWIG_RegisterMapping("_class_wxGauge","_wxGauge",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxSingleChoiceDialog","_wxSingleChoiceDialog",0);
+	 SWIG_RegisterMapping("_wxProgressDialog","_class_wxProgressDialog",0);
+	 SWIG_RegisterMapping("_wxSpinEvent","_class_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
@@ -4185,12 +2544,11 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxMenuItem","_wxMenuItem",0);
+	 SWIG_RegisterMapping("_class_wxPaintEvent","_wxPaintEvent",0);
+	 SWIG_RegisterMapping("_wxSysColourChangedEvent","_class_wxSysColourChangedEvent",0);
+	 SWIG_RegisterMapping("_class_wxStatusBar","_wxStatusBar",0);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxMessageDialog",SwigwxMessageDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxMessageDialog",SwigwxMessageDialogTowxPanel);
-	 SWIG_RegisterMapping("_wxPanel","_class_wxPrintDialog",SwigwxPrintDialogTowxPanel);
-	 SWIG_RegisterMapping("_wxPanel","_wxPrintDialog",SwigwxPrintDialogTowxPanel);
-	 SWIG_RegisterMapping("_wxPanel","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxPanel);
-	 SWIG_RegisterMapping("_wxPanel","_wxPageSetupDialog",SwigwxPageSetupDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxFontDialog",SwigwxFontDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxFontDialog",SwigwxFontDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxPanel);
@@ -4204,15 +2562,16 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_wxPanel","_class_wxPanel",0);
+	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
+	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
+	 SWIG_RegisterMapping("_wxPyEvent","_class_wxPyEvent",0);
+	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
 	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
+	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog);
-	 SWIG_RegisterMapping("_class_wxDialog","_class_wxPrintDialog",SwigwxPrintDialogTowxDialog);
-	 SWIG_RegisterMapping("_class_wxDialog","_wxPrintDialog",SwigwxPrintDialogTowxDialog);
-	 SWIG_RegisterMapping("_class_wxDialog","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog);
-	 SWIG_RegisterMapping("_class_wxDialog","_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxFontDialog",SwigwxFontDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog);
@@ -4226,41 +2585,64 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxDialog","_class_wxColourDialog",SwigwxColourDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxColourDialog",SwigwxColourDialogTowxDialog);
 	 SWIG_RegisterMapping("_class_wxDialog","_wxDialog",0);
-	 SWIG_RegisterMapping("_wxPageSetupDialog","_class_wxPageSetupDialog",0);
+	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
+	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
+	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
+	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
+	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
 	 SWIG_RegisterMapping("_uint","_wxWindowID",0);
+	 SWIG_RegisterMapping("_class_wxEvent","_wxEvent",0);
+	 SWIG_RegisterMapping("_wxCheckListBox","_class_wxCheckListBox",0);
 	 SWIG_RegisterMapping("_wxRect","_class_wxRect",0);
+	 SWIG_RegisterMapping("_wxCommandEvent","_class_wxCommandEvent",0);
+	 SWIG_RegisterMapping("_wxSizeEvent","_class_wxSizeEvent",0);
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
+	 SWIG_RegisterMapping("_class_wxButton","_wxButton",0);
+	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_class_wxFontData","_wxFontData",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
-	 SWIG_RegisterMapping("_wxPrintDialog","_class_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxWindowDC","_class_wxWindowDC",0);
+	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
+	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
+	 SWIG_RegisterMapping("_wxToolBarTool","_class_wxToolBarTool",0);
 	 SWIG_RegisterMapping("_wxColourDialog","_class_wxColourDialog",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMessageDialog","_class_wxMessageDialog",0);
+	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_wxTextEntryDialog","_class_wxTextEntryDialog",0);
+	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
+	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
+	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
 	 SWIG_RegisterMapping("_class_wxRegion","_wxRegion",0);
+	 SWIG_RegisterMapping("_class_wxDropFilesEvent","_wxDropFilesEvent",0);
+	 SWIG_RegisterMapping("_wxStaticText","_class_wxStaticText",0);
 	 SWIG_RegisterMapping("_wxFont","_class_wxFont",0);
+	 SWIG_RegisterMapping("_wxCloseEvent","_class_wxCloseEvent",0);
 	 SWIG_RegisterMapping("_unsigned_long","_wxDash",0);
 	 SWIG_RegisterMapping("_unsigned_long","_long",0);
 	 SWIG_RegisterMapping("_class_wxRect","_wxRect",0);
 	 SWIG_RegisterMapping("_class_wxDC","_wxDC",0);
+	 SWIG_RegisterMapping("_class_wxProgressDialog","_wxProgressDialog",0);
 	 SWIG_RegisterMapping("_class_wxDirDialog","_wxDirDialog",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
+	 SWIG_RegisterMapping("_wxFocusEvent","_class_wxFocusEvent",0);
+	 SWIG_RegisterMapping("_wxMaximizeEvent","_class_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinButton","_wxSpinButton",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxMessageDialog",SwigwxMessageDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxMessageDialog",SwigwxMessageDialogTowxPanel);
-	 SWIG_RegisterMapping("_class_wxPanel","_class_wxPrintDialog",SwigwxPrintDialogTowxPanel);
-	 SWIG_RegisterMapping("_class_wxPanel","_wxPrintDialog",SwigwxPrintDialogTowxPanel);
-	 SWIG_RegisterMapping("_class_wxPanel","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxPanel);
-	 SWIG_RegisterMapping("_class_wxPanel","_wxPageSetupDialog",SwigwxPageSetupDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxFontDialog",SwigwxFontDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxFontDialog",SwigwxFontDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxPanel);
@@ -4274,13 +2656,20 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxPanel","_class_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxColourDialog",SwigwxColourDialogTowxPanel);
 	 SWIG_RegisterMapping("_class_wxPanel","_wxPanel",0);
+	 SWIG_RegisterMapping("_class_wxCheckBox","_wxCheckBox",0);
+	 SWIG_RegisterMapping("_wxComboBox","_class_wxComboBox",0);
+	 SWIG_RegisterMapping("_wxRadioButton","_class_wxRadioButton",0);
 	 SWIG_RegisterMapping("_class_wxMessageDialog","_wxMessageDialog",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
+	 SWIG_RegisterMapping("_class_wxTextCtrl","_wxTextCtrl",0);
 	 SWIG_RegisterMapping("_wxLayoutConstraints","_class_wxLayoutConstraints",0);
 	 SWIG_RegisterMapping("_wxMetaFileDC","_class_wxMetaFileDC",0);
 	 SWIG_RegisterMapping("_wxMenu","_class_wxMenu",0);
+	 SWIG_RegisterMapping("_class_wxMoveEvent","_wxMoveEvent",0);
+	 SWIG_RegisterMapping("_wxListBox","_class_wxListBox",0);
 	 SWIG_RegisterMapping("_wxScreenDC","_class_wxScreenDC",0);
 	 SWIG_RegisterMapping("_WXTYPE","_short",0);
 	 SWIG_RegisterMapping("_WXTYPE","_signed_short",0);
@@ -4289,12 +2678,10 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxBrush","_wxBrush",0);
 	 SWIG_RegisterMapping("_unsigned_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_unsigned_short","_short",0);
+	 SWIG_RegisterMapping("_class_wxWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxWindow);
+	 SWIG_RegisterMapping("_class_wxWindow","_wxProgressDialog",SwigwxProgressDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxMessageDialog",SwigwxMessageDialogTowxWindow);
-	 SWIG_RegisterMapping("_class_wxWindow","_class_wxPrintDialog",SwigwxPrintDialogTowxWindow);
-	 SWIG_RegisterMapping("_class_wxWindow","_wxPrintDialog",SwigwxPrintDialogTowxWindow);
-	 SWIG_RegisterMapping("_class_wxWindow","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow);
-	 SWIG_RegisterMapping("_class_wxWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxFontDialog",SwigwxFontDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxFontDialog",SwigwxFontDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow);
@@ -4308,24 +2695,34 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_class_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_class_wxWindow","_wxWindow",0);
-	 SWIG_RegisterMapping("_wxPrintDialogData","_class_wxPrintDialogData",0);
+	 SWIG_RegisterMapping("_class_wxStaticText","_wxStaticText",0);
 	 SWIG_RegisterMapping("_class_wxFont","_wxFont",0);
+	 SWIG_RegisterMapping("_class_wxCloseEvent","_wxCloseEvent",0);
+	 SWIG_RegisterMapping("_class_wxMenuEvent","_wxMenuEvent",0);
 	 SWIG_RegisterMapping("_wxClientDC","_class_wxClientDC",0);
+	 SWIG_RegisterMapping("_wxMouseEvent","_class_wxMouseEvent",0);
 	 SWIG_RegisterMapping("_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0);
 	 SWIG_RegisterMapping("_class_wxPoint","_wxPoint",0);
 	 SWIG_RegisterMapping("_wxRealPoint","_class_wxRealPoint",0);
+	 SWIG_RegisterMapping("_class_wxRadioBox","_wxRadioBox",0);
 	 SWIG_RegisterMapping("_signed_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_wxMemoryDC","_class_wxMemoryDC",0);
-	 SWIG_RegisterMapping("_class_wxPrintDialog","_wxPrintDialog",0);
 	 SWIG_RegisterMapping("_wxPaintDC","_class_wxPaintDC",0);
 	 SWIG_RegisterMapping("_class_wxWindowDC","_wxWindowDC",0);
+	 SWIG_RegisterMapping("_class_wxFocusEvent","_wxFocusEvent",0);
+	 SWIG_RegisterMapping("_class_wxMaximizeEvent","_wxMaximizeEvent",0);
+	 SWIG_RegisterMapping("_wxStatusBar","_class_wxStatusBar",0);
+	 SWIG_RegisterMapping("_class_wxToolBarTool","_wxToolBarTool",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_class_wxCursor","_wxCursor",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
 	 SWIG_RegisterMapping("_class_wxMetaFileDC","_wxMetaFileDC",0);
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
+	 SWIG_RegisterMapping("_wxControl","_class_wxControl",0);
+	 SWIG_RegisterMapping("_class_wxListBox","_wxListBox",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -4333,10 +2730,6 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxMessageDialog",SwigwxMessageDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_wxMessageDialog",SwigwxMessageDialogTowxDialog);
-	 SWIG_RegisterMapping("_wxDialog","_class_wxPrintDialog",SwigwxPrintDialogTowxDialog);
-	 SWIG_RegisterMapping("_wxDialog","_wxPrintDialog",SwigwxPrintDialogTowxDialog);
-	 SWIG_RegisterMapping("_wxDialog","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog);
-	 SWIG_RegisterMapping("_wxDialog","_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxFontDialog",SwigwxFontDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_wxFontDialog",SwigwxFontDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxDialog);
@@ -4356,43 +2749,71 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
+	 SWIG_RegisterMapping("_class_wxStaticBox","_wxStaticBox",0);
+	 SWIG_RegisterMapping("_class_wxScrollEvent","_wxScrollEvent",0);
+	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
+	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
 	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
+	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
+	 SWIG_RegisterMapping("_wxFrame","_class_wxProgressDialog",SwigwxProgressDialogTowxFrame);
+	 SWIG_RegisterMapping("_wxFrame","_wxProgressDialog",SwigwxProgressDialogTowxFrame);
+	 SWIG_RegisterMapping("_wxFrame","_class_wxFrame",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
 	 SWIG_RegisterMapping("_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_int","_unsigned_int",0);
 	 SWIG_RegisterMapping("_int","_signed_int",0);
+	 SWIG_RegisterMapping("_class_wxMouseEvent","_wxMouseEvent",0);
+	 SWIG_RegisterMapping("_class_wxSpinEvent","_wxSpinEvent",0);
+	 SWIG_RegisterMapping("_wxButton","_class_wxButton",0);
 	 SWIG_RegisterMapping("_wxSize","_class_wxSize",0);
 	 SWIG_RegisterMapping("_wxRegionIterator","_class_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxPrinterDC","_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxPaintDC","_wxPaintDC",0);
+	 SWIG_RegisterMapping("_class_wxSysColourChangedEvent","_wxSysColourChangedEvent",0);
+	 SWIG_RegisterMapping("_class_wxInitDialogEvent","_wxInitDialogEvent",0);
+	 SWIG_RegisterMapping("_class_wxComboBox","_wxComboBox",0);
+	 SWIG_RegisterMapping("_class_wxRadioButton","_wxRadioButton",0);
 	 SWIG_RegisterMapping("_class_wxLayoutConstraints","_wxLayoutConstraints",0);
+	 SWIG_RegisterMapping("_wxIconizeEvent","_class_wxIconizeEvent",0);
+	 SWIG_RegisterMapping("_class_wxControl","_wxControl",0);
+	 SWIG_RegisterMapping("_wxStaticBitmap","_class_wxStaticBitmap",0);
 	 SWIG_RegisterMapping("_class_wxIcon","_wxIcon",0);
 	 SWIG_RegisterMapping("_class_wxColour","_wxColour",0);
 	 SWIG_RegisterMapping("_class_wxScreenDC","_wxScreenDC",0);
-	 SWIG_RegisterMapping("_class_wxPageSetupDialog","_wxPageSetupDialog",0);
 	 SWIG_RegisterMapping("_wxPalette","_class_wxPalette",0);
+	 SWIG_RegisterMapping("_class_wxIdleEvent","_wxIdleEvent",0);
+	 SWIG_RegisterMapping("_wxEraseEvent","_class_wxEraseEvent",0);
+	 SWIG_RegisterMapping("_class_wxJoystickEvent","_wxJoystickEvent",0);
+	 SWIG_RegisterMapping("_class_wxMiniFrame","_wxMiniFrame",0);
 	 SWIG_RegisterMapping("_wxFontDialog","_class_wxFontDialog",0);
 	 SWIG_RegisterMapping("_wxRegion","_class_wxRegion",0);
+	 SWIG_RegisterMapping("_class_wxShowEvent","_wxShowEvent",0);
+	 SWIG_RegisterMapping("_wxActivateEvent","_class_wxActivateEvent",0);
+	 SWIG_RegisterMapping("_wxGauge","_class_wxGauge",0);
+	 SWIG_RegisterMapping("_class_wxCheckListBox","_wxCheckListBox",0);
+	 SWIG_RegisterMapping("_class_wxCommandEvent","_wxCommandEvent",0);
 	 SWIG_RegisterMapping("_class_wxClientDC","_wxClientDC",0);
+	 SWIG_RegisterMapping("_class_wxSizeEvent","_wxSizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxSize","_wxSize",0);
 	 SWIG_RegisterMapping("_class_wxBitmap","_wxBitmap",0);
 	 SWIG_RegisterMapping("_class_wxMemoryDC","_wxMemoryDC",0);
 	 SWIG_RegisterMapping("_wxMenuBar","_class_wxMenuBar",0);
 	 SWIG_RegisterMapping("_wxDirDialog","_class_wxDirDialog",0);
+	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler);
+	 SWIG_RegisterMapping("_wxEvtHandler","_wxProgressDialog",SwigwxProgressDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxMessageDialog",SwigwxMessageDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_wxEvtHandler","_wxPrintDialog",SwigwxPrintDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler);
-	 SWIG_RegisterMapping("_wxEvtHandler","_wxPageSetupDialog",SwigwxPageSetupDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxFontDialog",SwigwxFontDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxFontDialog",SwigwxFontDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxEvtHandler);
@@ -4407,21 +2828,22 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxColourDialog",SwigwxColourDialogTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxEvtHandler",0);
 	 SWIG_RegisterMapping("_wxMenuItem","_class_wxMenuItem",0);
+	 SWIG_RegisterMapping("_class_wxScrollBar","_wxScrollBar",0);
 	 SWIG_RegisterMapping("_class_wxColourDialog","_wxColourDialog",0);
 	 SWIG_RegisterMapping("_wxDash","_unsigned_long",0);
 	 SWIG_RegisterMapping("_wxDash","_long",0);
 	 SWIG_RegisterMapping("_class_wxScrolledWindow","_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_class_wxTextEntryDialog","_wxTextEntryDialog",0);
+	 SWIG_RegisterMapping("_wxKeyEvent","_class_wxKeyEvent",0);
+	 SWIG_RegisterMapping("_wxMoveEvent","_class_wxMoveEvent",0);
 	 SWIG_RegisterMapping("_wxColourData","_class_wxColourData",0);
-	 SWIG_RegisterMapping("_wxPageSetupDialogData","_class_wxPageSetupDialogData",0);
 	 SWIG_RegisterMapping("_class_wxPalette","_wxPalette",0);
+	 SWIG_RegisterMapping("_class_wxEraseEvent","_wxEraseEvent",0);
 	 SWIG_RegisterMapping("_class_wxFontDialog","_wxFontDialog",0);
+	 SWIG_RegisterMapping("_wxWindow","_class_wxProgressDialog",SwigwxProgressDialogTowxWindow);
+	 SWIG_RegisterMapping("_wxWindow","_wxProgressDialog",SwigwxProgressDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxMessageDialog",SwigwxMessageDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxMessageDialog",SwigwxMessageDialogTowxWindow);
-	 SWIG_RegisterMapping("_wxWindow","_class_wxPrintDialog",SwigwxPrintDialogTowxWindow);
-	 SWIG_RegisterMapping("_wxWindow","_wxPrintDialog",SwigwxPrintDialogTowxWindow);
-	 SWIG_RegisterMapping("_wxWindow","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow);
-	 SWIG_RegisterMapping("_wxWindow","_wxPageSetupDialog",SwigwxPageSetupDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxFontDialog",SwigwxFontDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxFontDialog",SwigwxFontDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxTextEntryDialog",SwigwxTextEntryDialogTowxWindow);
@@ -4435,4 +2857,7 @@ SWIGEXPORT(void,initcmndlgsc)() {
 	 SWIG_RegisterMapping("_wxWindow","_class_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_wxColourDialog",SwigwxColourDialogTowxWindow);
 	 SWIG_RegisterMapping("_wxWindow","_class_wxWindow",0);
+	 SWIG_RegisterMapping("_class_wxFrame","_class_wxProgressDialog",SwigwxProgressDialogTowxFrame);
+	 SWIG_RegisterMapping("_class_wxFrame","_wxProgressDialog",SwigwxProgressDialogTowxFrame);
+	 SWIG_RegisterMapping("_class_wxFrame","_wxFrame",0);
 }

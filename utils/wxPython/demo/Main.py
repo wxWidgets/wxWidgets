@@ -28,18 +28,19 @@ _treeList = [
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
                         'wxSingleChoiceDialog', 'wxTextEntryDialog',
                         'wxFontDialog', 'wxPageSetupDialog', 'wxPrintDialog',
-                        'wxMessageDialog']),
+                        'wxMessageDialog', 'wxProgressDialog']),
 
     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
                   'wxTreeCtrl', 'wxSpinButton', 'wxStaticText', 'wxStaticBitmap',
                   'wxRadioBox', 'wxSlider']),
 
-    ('Window Layout', ['wxLayoutConstraints']),
+    ('Window Layout', ['wxLayoutConstraints', 'Sizers']),
 
-    ('Micellaneous', ['wxTimer', 'wxGLCanvas', 'DialogUnits', 'wxImage']),
+    ('Miscellaneous', ['wxTimer', 'wxGLCanvas', 'DialogUnits', 'wxImage',
+                      'PrintFramework']),
 
-    ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
+    ('wxPython Library', ['Sizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot']),
@@ -83,6 +84,11 @@ class wxPythonDemo(wxFrame):
         self.mainmenu.Append(menu, '&Help')
         self.SetMenuBar(self.mainmenu)
 
+        selectedDemo = None
+        selectedDemoName = "Nada"
+        if len(sys.argv) == 2:
+            selectedDemoName = sys.argv[1]
+
         # Create a TreeCtrl
         tID = NewId()
         self.tree = wxTreeCtrl(splitter, tID)
@@ -90,12 +96,14 @@ class wxPythonDemo(wxFrame):
         for item in _treeList:
             child = self.tree.AppendItem(root, item[0])
             for childItem in item[1]:
-                self.tree.AppendItem(child, childItem)
+                theDemo = self.tree.AppendItem(child, childItem)
+                if childItem == selectedDemoName:
+                    selectedDemo = theDemo
+
         self.tree.Expand(root)
         EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
         EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
         EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)
-
 
         # Create a Notebook
         self.nb = wxNotebook(splitter2, -1)
@@ -109,12 +117,9 @@ class wxPythonDemo(wxFrame):
         # Set up a TextCtrl on the Demo Code Notebook page
         self.txt = wxTextCtrl(self.nb, -1, '', wxDefaultPosition, wxDefaultSize,
                               wxTE_MULTILINE|wxTE_READONLY|wxHSCROLL)
+        self.txt.SetFont(wxFont(9, wxMODERN, wxNORMAL, wxNORMAL, false))
         self.nb.AddPage(self.txt, "Demo Code")
 
-
-        # select initial items
-        self.nb.SetSelection(0)
-        self.tree.SelectItem(root)
 
         # Set up a log on the View Log Notebook page
         self.log = wxTextCtrl(splitter2, -1, '', wxDefaultPosition, wxDefaultSize,
@@ -134,6 +139,13 @@ class wxPythonDemo(wxFrame):
 
         # make our log window be stdout
         #sys.stdout = self
+
+        # select initial items
+        self.nb.SetSelection(0)
+        self.tree.SelectItem(root)
+        if selectedDemo:
+            self.tree.SelectItem(selectedDemo)
+            self.tree.EnsureVisible(selectedDemo)
 
     #---------------------------------------------
     def WriteText(self, text):
@@ -201,8 +213,13 @@ class wxPythonDemo(wxFrame):
     # Get the Demo files
     def GetDemoFile(self, filename):
         self.txt.Clear()
-        if not self.txt.LoadFile(filename):
+        #if not self.txt.LoadFile(filename):
+        #    self.txt.WriteText("Cannot open %s file." % filename)
+        try:
+            self.txt.SetValue(open(filename).read())
+        except IOException:
             self.txt.WriteText("Cannot open %s file." % filename)
+
 
         self.txt.SetInsertionPoint(0)
         self.txt.ShowPosition(0)

@@ -17,7 +17,7 @@
 #include <wx/colordlg.h>
 #include <wx/dirdlg.h>
 #include <wx/fontdlg.h>
-#include <wx/printdlg.h>
+#include <wx/progdlg.h>
 %}
 
 //----------------------------------------------------------------------
@@ -30,6 +30,7 @@
 %import misc.i
 %import gdi.i
 %import windows.i
+%import frames.i
 
 %pragma(python) code = "import wx"
 
@@ -198,99 +199,6 @@ public:
 
 //----------------------------------------------------------------------
 
-
-class wxPageSetupDialogData {
-public:
-    wxPageSetupDialogData();
-    ~wxPageSetupDialogData();
-
-    void EnableHelp(bool flag);
-    void EnableMargins(bool flag);
-    void EnableOrientation(bool flag);
-    void EnablePaper(bool flag);
-    void EnablePrinter(bool flag);
-    bool GetDefaultMinMargins();
-    bool GetEnableMargins();
-    bool GetEnableOrientation();
-    bool GetEnablePaper();
-    bool GetEnablePrinter();
-    bool GetEnableHelp();
-    bool GetDefaultInfo();
-    wxPoint GetMarginTopLeft();
-    wxPoint GetMarginBottomRight();
-    wxPoint GetMinMarginTopLeft();
-    wxPoint GetMinMarginBottomRight();
-    wxPaperSize GetPaperId();
-    wxSize GetPaperSize();
-    wxPrintData& GetPrintData();
-    void SetDefaultInfo(bool flag);
-    void SetDefaultMinMargins(bool flag);
-    void SetMarginTopLeft(const wxPoint& pt);
-    void SetMarginBottomRight(const wxPoint& pt);
-    void SetMinMarginTopLeft(const wxPoint& pt);
-    void SetMinMarginBottomRight(const wxPoint& pt);
-    void SetPaperId(wxPaperSize& id);
-    void SetPaperSize(const wxSize& size);
-    void SetPrintData(const wxPrintData& printData);
-};
-
-
-class wxPageSetupDialog : public wxDialog {
-public:
-    wxPageSetupDialog(wxWindow* parent, wxPageSetupDialogData* data = NULL);
-
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
-
-    wxPageSetupDialogData& GetPageSetupData();
-    int ShowModal();
-};
-
-//----------------------------------------------------------------------
-
-
-class wxPrintDialogData {
-public:
-    wxPrintDialogData();
-    ~wxPrintDialogData();
-
-    void EnableHelp(bool flag);
-    void EnablePageNumbers(bool flag);
-    void EnablePrintToFile(bool flag);
-    void EnableSelection(bool flag);
-    bool GetAllPages();
-    bool GetCollate();
-    int GetFromPage();
-    int GetMaxPage();
-    int GetMinPage();
-    int GetNoCopies();
-    wxPrintData& GetPrintData();
-    bool GetPrintToFile();
-    int GetToPage();
-    void SetCollate(bool flag);
-    void SetFromPage(int page);
-    void SetMaxPage(int page);
-    void SetMinPage(int page);
-    void SetNoCopies(int n);
-    void SetPrintData(const wxPrintData& printData);
-    void SetPrintToFile(bool flag);
-    void SetSetupDialog(bool flag);
-    void SetToPage(int page);
-};
-
-
-class wxPrintDialog : public wxDialog {
-public:
-    wxPrintDialog(wxWindow* parent, wxPrintDialogData* data = NULL);
-
-    %pragma(python) addtomethod = "__init__:wx._StdDialogCallbacks(self)"
-
-    wxPrintDialogData& GetPrintDialogData();
-    %new wxDC* GetPrintDC();
-    int ShowModal();
-};
-
-//----------------------------------------------------------------------
-
 class wxMessageDialog : public wxDialog {
 public:
     wxMessageDialog(wxWindow* parent,
@@ -306,64 +214,17 @@ public:
 
 //----------------------------------------------------------------------
 
+class wxProgressDialog : public wxFrame {
+public:
+    wxProgressDialog(const wxString& title,
+                     const wxString& message,
+                     int maximum = 100,
+                     wxWindow* parent = NULL,
+                     int style = wxPD_AUTO_HIDE | wxPD_APP_MODAL );
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.9  1999/04/30 03:29:18  RD
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.8  1998/12/17 14:07:25  RR
-//
-//   Removed minor differences between wxMSW and wxGTK
-//
-// Revision 1.7  1998/12/15 20:41:14  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.6  1998/11/25 08:45:22  RD
-//
-// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-// Added events for wxGrid
-// Other various fixes and additions
-//
-// Revision 1.5  1998/11/15 23:03:43  RD
-// Removing some ifdef's for wxGTK
-//
-// Revision 1.4  1998/10/02 06:40:34  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.3  1998/08/18 19:48:13  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.2  1998/08/15 07:36:25  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.1  1998/08/09 08:25:49  RD
-// Initial version
-//
-//
 
+    bool Update(int value = -1, const char* newmsg = NULL);
+    void Resume();
+}
+
+//----------------------------------------------------------------------

@@ -150,7 +150,8 @@ void __wxPreStart()
 
 
 #ifdef WXP_WITH_THREAD
-static PyThreadState *event_tstate = NULL;
+PyThreadState*  wxPyEventThreadState = NULL;
+bool            wxPyInEvent = false;
 #endif
 static char* __nullArgv[1] = { 0 };
 
@@ -163,7 +164,7 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     long        bResult;
 
 #ifdef WXP_WITH_THREAD
-    event_tstate = PyThreadState_Get();
+    wxPyEventThreadState = PyThreadState_Get();
 #endif
 
     if (!PyArg_ParseTuple(args, "O", &onInitFunc))
@@ -288,13 +289,15 @@ wxPyCallback::wxPyCallback(PyObject* func) {
 
 wxPyCallback::~wxPyCallback() {
 #ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(event_tstate);
+    //if (! wxPyInEvent)
+        PyEval_RestoreThread(wxPyEventThreadState);
 #endif
 
     Py_DECREF(m_func);
 
 #ifdef WXP_WITH_THREAD
-    PyEval_SaveThread();
+    //if (! wxPyInEvent)
+        PyEval_SaveThread();
 #endif
 }
 
@@ -311,7 +314,8 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 
 #ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(event_tstate);
+    PyEval_RestoreThread(wxPyEventThreadState);
+    wxPyInEvent = true;
 #endif
     arg = wxPyConstructObject((void*)&event, event.GetClassInfo()->GetClassName());
 
@@ -327,6 +331,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     }
 #ifdef WXP_WITH_THREAD
     PyEval_SaveThread();
+    wxPyInEvent = false;
 #endif
 }
 
@@ -343,32 +348,51 @@ wxPyMenu::wxPyMenu(const wxString& title, PyObject* _func)
 }
 
 wxPyMenu::~wxPyMenu() {
+#ifdef WXP_WITH_THREAD
+    //if (! wxPyInEvent)
+        PyEval_RestoreThread(wxPyEventThreadState);
+#endif
+
     if (func)
         Py_DECREF(func);
+
+#ifdef WXP_WITH_THREAD
+    //if (! wxPyInEvent)
+        PyEval_SaveThread();
+#endif
 }
 
 
 void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
+    PyObject* evtobj;
+    PyObject* menuobj;
+    PyObject* func;
+    PyObject* args;
+    PyObject* res;
+
 #ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(event_tstate);
+    PyEval_RestoreThread(wxPyEventThreadState);
+    wxPyInEvent = true;
 #endif
-    PyObject* evtobj  = wxPyConstructObject((void*)&evt, "wxCommandEvent");
-    PyObject* menuobj = wxPyConstructObject((void*)&menu, "wxMenu");
+    evtobj  = wxPyConstructObject((void*)&evt, "wxCommandEvent");
+    menuobj = wxPyConstructObject((void*)&menu, "wxMenu");
     if (PyErr_Occurred()) {
         // bail out if a problem
         PyErr_Print();
-        return;
+        goto done;
     }
     // Now call the callback...
-    PyObject* func = ((wxPyMenu*)&menu)->func;
-    PyObject* args = PyTuple_New(2);
+    func = ((wxPyMenu*)&menu)->func;
+    args = PyTuple_New(2);
     PyTuple_SET_ITEM(args, 0, menuobj);
     PyTuple_SET_ITEM(args, 1, evtobj);
-    PyObject* res  = PyEval_CallObject(func, args);
+    res  = PyEval_CallObject(func, args);
     Py_DECREF(args);
     Py_XDECREF(res); /* In case res is a NULL pointer */
+ done:
 #ifdef WXP_WITH_THREAD
     PyEval_SaveThread();
+    wxPyInEvent = false;
 #endif
 }
 
@@ -381,12 +405,23 @@ wxPyTimer::wxPyTimer(PyObject* callback) {
 }
 
 wxPyTimer::~wxPyTimer() {
+#ifdef WXP_WITH_THREAD
+    //if (! wxPyInEvent)
+        PyEval_RestoreThread(wxPyEventThreadState);
+#endif
+
     Py_DECREF(func);
+
+#ifdef WXP_WITH_THREAD
+    //if (! wxPyInEvent)
+        PyEval_SaveThread();
+#endif
 }
 
 void wxPyTimer::Notify() {
 #ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(event_tstate);
+    PyEval_RestoreThread(wxPyEventThreadState);
+    wxPyInEvent = true;
 #endif
     PyObject*   result;
     PyObject*   args = Py_BuildValue("()");
@@ -401,6 +436,7 @@ void wxPyTimer::Notify() {
     }
 #ifdef WXP_WITH_THREAD
     PyEval_SaveThread();
+    wxPyInEvent = false;
 #endif
 }
 
@@ -420,10 +456,18 @@ wxPyEvent::wxPyEvent(wxEventType commandType, PyObject* userData)
 
 
 wxPyEvent::~wxPyEvent() {
+#ifdef WXP_WITH_THREAD
+    //if (! wxPyInEvent)
+        PyEval_RestoreThread(wxPyEventThreadState);
+#endif
     if (m_userData != Py_None) {
         Py_DECREF(m_userData);
         m_userData = Py_None;
     }
+#ifdef WXP_WITH_THREAD
+    //if (! wxPyInEvent)
+        PyEval_SaveThread();
+#endif
 }
 
 
@@ -674,129 +718,83 @@ wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source) {
     return temp;
 }
 
+
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
+
+wxPyCallbackHelper::wxPyCallbackHelper() {
+    m_self = NULL;
+    m_lastFound = NULL;
+}
+
+
+wxPyCallbackHelper::~wxPyCallbackHelper() {
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(wxPyEventThreadState);
+#endif
+
+    Py_XDECREF(m_self);
+
+#ifdef WXP_WITH_THREAD
+    PyEval_SaveThread();
+#endif
+}
+
+void wxPyCallbackHelper::setSelf(PyObject* self) {
+    m_self = self;
+    Py_INCREF(m_self);
+}
+
+
+
+bool wxPyCallbackHelper::findCallback(const wxString& name) {
+    m_lastFound = NULL;
+    if (m_self && PyObject_HasAttrString(m_self, (char*)name.c_str()))
+        m_lastFound = PyObject_GetAttrString(m_self, (char*)name.c_str());
+
+    return m_lastFound != NULL;
+}
+
+
+int wxPyCallbackHelper::callCallback(PyObject* argTuple) {
+    PyObject*   result;
+    int         retval = FALSE;
+
+    result = callCallbackObj(argTuple);
+    if (result) {                       // Assumes an integer return type...
+        retval = PyInt_AsLong(result);
+        Py_DECREF(result);
+        PyErr_Clear();                  // forget about it if it's not...
+    }
+#ifdef WXP_WITH_THREAD
+    PyEval_SaveThread();
+#endif
+    return retval;
+}
+
+// Invoke the Python callable object, returning the raw PyObject return
+// value.  Caller should DECREF the return value and also call PyEval_SaveThread.
+PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
+#ifdef WXP_WITH_THREAD
+    PyEval_RestoreThread(wxPyEventThreadState);
+#endif
+    PyObject*   result;
+
+    result = PyEval_CallObject(m_lastFound, argTuple);
+    Py_DECREF(argTuple);
+    if (!result) {
+        PyErr_Print();
+    }
+    return result;
+}
+
+
+
+
+//----------------------------------------------------------------------
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.20  1999/04/30 03:29:18  RD
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.19.4.1  1999/03/27 23:29:14  RD
-//
-// wxPython 2.0b8
-//     Python thread support
-//     various minor additions
-//     various minor fixes
-//
-// Revision 1.19  1999/02/20 09:02:59  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.18  1999/01/30 08:17:27  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-// Revision 1.17  1999/01/30 07:30:12  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-// Revision 1.16  1998/12/17 14:07:39  RR
-//
-//   Removed minor differences between wxMSW and wxGTK
-//
-// Revision 1.15  1998/12/15 20:41:19  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.14  1998/11/25 08:45:25  RD
-//
-// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-// Added events for wxGrid
-// Other various fixes and additions
-//
-// Revision 1.13  1998/11/15 23:03:45  RD
-// Removing some ifdef's for wxGTK
-//
-// Revision 1.12  1998/11/03 09:21:08  RD
-// fixed a typo
-//
-// Revision 1.11  1998/10/20 06:43:58  RD
-// New wxTreeCtrl wrappers (untested)
-// some changes in helpers
-// etc.
-//
-// Revision 1.10  1998/10/02 06:40:39  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.9  1998/09/25 13:28:52  VZ
-//
-// USE_xxx constants renamed to wxUSE_xxx. This is an incompatible change, you
-// must recompile everything after upgrading!
-//
-// Revision 1.8  1998/08/27 21:59:08  RD
-// Some chicken-and-egg problems solved for wxPython on wxGTK
-//
-// Revision 1.7  1998/08/27 00:00:26  RD
-// - more tweaks
-// - have discovered some problems but not yet discovered solutions...
-//
-// Revision 1.6  1998/08/18 21:54:12  RD
-//
-// ifdef out some wxGTK specific code
-//
-// Revision 1.5  1998/08/18 19:48:17  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.4  1998/08/16 04:31:06  RD
-// More wxGTK work.
-//
-// Revision 1.3  1998/08/15 07:36:36  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.2  1998/08/14 23:36:36  RD
-// Beginings of wxGTK compatibility
-//
-// Revision 1.1  1998/08/09 08:25:51  RD
-// Initial version
-//
-//

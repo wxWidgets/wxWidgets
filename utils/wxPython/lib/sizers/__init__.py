@@ -5,15 +5,14 @@
 #
 # Author:       Robin Dunn
 #
-# Created:      8/8/98
+# Created:      18-May-1999
 # RCS-ID:       $Id$
 # Copyright:    (c) 1998 by Total Control Software
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
-# ensure the main extension module is loaded, in case the embedded modules
-# (such as utils,) are used standalone.  This hack should go away soon.
-import wxc
+from sizer   import *
+from box     import *
+from border  import *
 
 #----------------------------------------------------------------------------
-

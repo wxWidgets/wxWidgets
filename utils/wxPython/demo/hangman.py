@@ -386,9 +386,11 @@ class MyFrame(wxFrame):
 
     def OnChar(self, event):
         if not self.in_progress:
+            #print "new"
             self.OnGameNew(None)
             return
         key = event.KeyCode();
+        #print key
         if key >= ord('A') and key <= ord('Z'):
             key = key + ord('a') - ord('A')
         key = chr(key)

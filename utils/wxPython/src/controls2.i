@@ -47,6 +47,7 @@ enum {
     wxLIST_MASK_DATA,
     wxLIST_MASK_WIDTH,
     wxLIST_MASK_FORMAT,
+    wxLIST_MASK_STATE,
     wxLIST_STATE_DONTCARE,
     wxLIST_STATE_DROPHILITED,
     wxLIST_STATE_FOCUSED,
@@ -227,7 +228,7 @@ class wxTreeItemId {
 public:
     wxTreeItemId();
     ~wxTreeItemId();
-    bool IsOk() const { return m_itemId != 0; }
+    bool IsOk();
 
 };
 
@@ -244,7 +245,13 @@ public:
     }
 
     ~wxPyTreeItemData() {
+#ifdef WXP_WITH_THREAD
+        PyEval_RestoreThread(wxPyEventThreadState);
+#endif
 	Py_DECREF(m_obj);
+#ifdef WXP_WITH_THREAD
+        PyEval_SaveThread();
+#endif
     }
 
     PyObject* GetData() {
@@ -367,6 +374,8 @@ public:
     wxTreeItemId GetSelection();
     wxTreeItemId GetParent(const wxTreeItemId& item);
 
+    size_t GetChildrenCount(const wxTreeItemId& item, bool recursively = TRUE);
+
     wxTreeItemId GetFirstChild(const wxTreeItemId& item, long& INOUT);
     wxTreeItemId GetNextChild(const wxTreeItemId& item, long& INOUT);
     wxTreeItemId GetNextSibling(const wxTreeItemId& item);
@@ -429,7 +438,7 @@ public:
         val1.thisown = 1
         return (val1,val2)
     def GetNextChild(self,arg0,arg1):
-        val1, val2 = controls2c.wxTreeCtrl_GetFirstChild(self.this,arg0.this,arg1)
+        val1, val2 = controls2c.wxTreeCtrl_GetNextChild(self.this,arg0.this,arg1)
         val1 = wxTreeItemIdPtr(val1)
         val1.thisown = 1
         return (val1,val2)
@@ -494,109 +503,3 @@ public:
 //----------------------------------------------------------------------
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// $Log$
-// Revision 1.18  1999/05/02 02:06:15  RD
-// More for wxPython 2.0b9 (hopefully the last...)
-//
-// Revision 1.17  1999/04/30 03:29:18  RD
-//
-// wxPython 2.0b9, first phase (win32)
-// Added gobs of stuff, see wxPython/README.txt for details
-//
-// Revision 1.16  1999/02/25 07:08:32  RD
-//
-// wxPython version 2.0b5
-//
-// Revision 1.15  1999/02/20 09:02:56  RD
-// Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
-// window handle.  If you can get the window handle into the python code,
-// it should just work...  More news on this later.
-//
-// Added wxImageList, wxToolTip.
-//
-// Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
-// wxRegConfig class.
-//
-// As usual, some bug fixes, tweaks, etc.
-//
-// Revision 1.14  1999/01/30 07:30:10  RD
-//
-// Added wxSashWindow, wxSashEvent, wxLayoutAlgorithm, etc.
-//
-// Various cleanup, tweaks, minor additions, etc. to maintain
-// compatibility with the current wxWindows.
-//
-// Revision 1.13  1998/12/17 14:07:34  RR
-//
-//   Removed minor differences between wxMSW and wxGTK
-//
-// Revision 1.12  1998/12/16 22:10:52  RD
-//
-// Tweaks needed to be able to build wxPython with wxGTK.
-//
-// Revision 1.11  1998/12/15 20:41:16  RD
-// Changed the import semantics from "from wxPython import *" to "from
-// wxPython.wx import *"  This is for people who are worried about
-// namespace pollution, they can use "from wxPython import wx" and then
-// prefix all the wxPython identifiers with "wx."
-//
-// Added wxTaskbarIcon for wxMSW.
-//
-// Made the events work for wxGrid.
-//
-// Added wxConfig.
-//
-// Added wxMiniFrame for wxGTK, (untested.)
-//
-// Changed many of the args and return values that were pointers to gdi
-// objects to references to reflect changes in the wxWindows API.
-//
-// Other assorted fixes and additions.
-//
-// Revision 1.10  1998/11/25 08:45:23  RD
-//
-// Added wxPalette, wxRegion, wxRegionIterator, wxTaskbarIcon
-// Added events for wxGrid
-// Other various fixes and additions
-//
-// Revision 1.9  1998/11/16 00:00:54  RD
-// Generic treectrl for wxPython/GTK compiles...
-//
-// Revision 1.8  1998/11/11 04:40:20  RD
-// wxTreeCtrl now works (sort of) for wxPython-GTK.  This is the new
-// TreeCtrl in src/gtk/treectrl.cpp not the old generic one.
-//
-// Revision 1.7  1998/11/11 03:12:25  RD
-//
-// Additions for wxTreeCtrl
-//
-// Revision 1.6  1998/10/20 06:43:55  RD
-// New wxTreeCtrl wrappers (untested)
-// some changes in helpers
-// etc.
-//
-// Revision 1.5  1998/10/07 07:34:33  RD
-// Version 0.4.1 for wxGTK
-//
-// Revision 1.4  1998/10/02 06:40:36  RD
-//
-// Version 0.4 of wxPython for MSW.
-//
-// Revision 1.3  1998/08/18 19:48:15  RD
-// more wxGTK compatibility things.
-//
-// It builds now but there are serious runtime problems...
-//
-// Revision 1.2  1998/08/15 07:36:30  RD
-// - Moved the header in the .i files out of the code that gets put into
-// the .cpp files.  It caused CVS conflicts because of the RCS ID being
-// different each time.
-//
-// - A few minor fixes.
-//
-// Revision 1.1  1998/08/09 08:25:49  RD
-// Initial version
-//
-//

@@ -26,7 +26,9 @@
 
 #ifdef __WXGTK__
 #include <wx/checklst.h>
+#include <wx/statline.h>
 #endif
+
 %}
 
 //----------------------------------------------------------------------
@@ -144,7 +146,7 @@ public:
 
 //----------------------------------------------------------------------
 
-class wxComboBox : public wxControl {
+class wxComboBox : public wxChoice {
 public:
     wxComboBox(wxWindow* parent, wxWindowID id, char* value = "",
                const wxPoint& pos = wxPyDefaultPosition,
@@ -178,7 +180,7 @@ public:
     // TODO:    void SetClientData(const int n, char* data);
     void SetInsertionPoint(long pos);
     void SetInsertionPointEnd();
-    void SetSelection(int n, bool select = TRUE);
+    //void SetSelection(int n, int select = TRUE);  **** Just use the one in wxChoice
     %name(SetMark)void SetSelection(long from, long to);
     void SetValue(const wxString& text);
 };
@@ -217,6 +219,19 @@ public:
                 char* name = "staticBox");
 };
 
+
+//----------------------------------------------------------------------
+
+#ifdef __WXGTK__
+class wxStaticLine : public wxControl {
+public:
+    wxStaticLine( wxWindow *parent, wxWindowID id,
+                  const wxPoint &pos = wxPyDefaultPosition,
+                  const wxSize &size = wxPyDefaultSize,
+                  long style = wxLI_HORIZONTAL,
+                  const char* name = wxStaticTextNameStr );
+};
+#endif
 
 //----------------------------------------------------------------------
 
@@ -430,15 +445,15 @@ public:
     void Enable(bool enable);
     %name(EnableItem)void Enable(int n, bool enable);
     int FindString(const wxString& string);
-#ifdef __WXMSW__
-    wxString GetLabel();
-#endif
+
+//***    wxString GetLabel();
+//***    void SetLabel(const wxString& label);
+
     %name(GetItemLabel)wxString GetLabel(int n);
     int GetSelection();
     wxString GetString(int n);
     wxString GetStringSelection();
     int Number();
-    void SetLabel(const wxString& label);
     %name(SetItemLabel)void SetLabel(int n, const wxString& label);
     void SetSelection(int n);
     void SetStringSelection(const wxString& string);
@@ -506,7 +521,12 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14  1999/06/22 07:03:02  RD
+// wxPython 2.1b1 for wxMSW  (wxGTK coming soon)
+// Lots of changes, see the README.txt for details...
+//
 // Revision 1.13  1999/04/30 21:13:43  RD
+//
 // wxPython 2.0b9, first phase (win32)
 // Added gobs of stuff, see wxPython/README.txt for details
 //

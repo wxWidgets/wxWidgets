@@ -6,11 +6,17 @@ from misc import *
 from gdi import *
 import wx
 
-def wxDLG_PNT(win, point):
-    return win.ConvertDialogPointToPixels(point)
+def wxDLG_PNT(win, point_or_x, y=None):
+    if y is None:
+        return win.ConvertDialogPointToPixels(point_or_x)
+    else:
+        return win.ConvertDialogPointToPixels(wxPoint(point_or_x, y))
 
-def wxDLG_SZE(win, size):
-    return win.ConvertDialogSizeToPixels(size)
+def wxDLG_SZE(win, size_width, height=None):
+    if height is None:
+        return win.ConvertDialogSizeToPixels(size_width)
+    else:
+        return win.ConvertDialogSizeToPixels(wxSize(size_width, height))
 
 class wxEvtHandlerPtr :
     def __init__(self,this):
@@ -43,6 +49,12 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def Centre(self,*args):
         val = apply(windowsc.wxWindow_Centre,(self.this,)+args)
+        return val
+    def CentreOnParent(self,*args):
+        val = apply(windowsc.wxWindow_CentreOnParent,(self.this,)+args)
+        return val
+    def CenterOnParent(self,*args):
+        val = apply(windowsc.wxWindow_CenterOnParent,(self.this,)+args)
         return val
     def ClientToScreenXY(self,arg0,arg1):
         val = windowsc.wxWindow_ClientToScreenXY(self.this,arg0,arg1)
@@ -101,10 +113,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = windowsc.wxWindow_GetConstraints(self.this)
         val = wxLayoutConstraintsPtr(val)
         return val
-    def GetDefaultItem(self):
-        val = windowsc.wxWindow_GetDefaultItem(self.this)
-        val = wxButtonPtr(val)
-        return val
     def GetFont(self):
         val = windowsc.wxWindow_GetFont(self.this)
         val = wxFontPtr(val)
@@ -123,6 +131,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def GetLabel(self):
         val = windowsc.wxWindow_GetLabel(self.this)
+        return val
+    def SetLabel(self,arg0):
+        val = windowsc.wxWindow_SetLabel(self.this,arg0)
         return val
     def GetName(self):
         val = windowsc.wxWindow_GetName(self.this)
@@ -143,9 +154,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = windowsc.wxWindow_GetRect(self.this)
         val = wxRectPtr(val)
         val.thisown = 1
-        return val
-    def GetReturnCode(self):
-        val = windowsc.wxWindow_GetReturnCode(self.this)
         return val
     def GetScrollThumb(self,arg0):
         val = windowsc.wxWindow_GetScrollThumb(self.this,arg0)
@@ -180,6 +188,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetWindowStyleFlag(self):
         val = windowsc.wxWindow_GetWindowStyleFlag(self.this)
         return val
+    def Hide(self):
+        val = windowsc.wxWindow_Hide(self.this)
+        return val
     def InitDialog(self):
         val = windowsc.wxWindow_InitDialog(self.this)
         return val
@@ -191,6 +202,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def IsShown(self):
         val = windowsc.wxWindow_IsShown(self.this)
+        return val
+    def IsTopLevel(self):
+        val = windowsc.wxWindow_IsTopLevel(self.this)
         return val
     def Layout(self):
         val = windowsc.wxWindow_Layout(self.this)
@@ -226,6 +240,9 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def ReleaseMouse(self):
         val = windowsc.wxWindow_ReleaseMouse(self.this)
         return val
+    def Reparent(self,arg0):
+        val = windowsc.wxWindow_Reparent(self.this,arg0.this)
+        return val
     def ScreenToClientXY(self,arg0,arg1):
         val = windowsc.wxWindow_ScreenToClientXY(self.this,arg0,arg1)
         return val
@@ -253,9 +270,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetConstraints(self,arg0):
         val = windowsc.wxWindow_SetConstraints(self.this,arg0.this)
         return val
-    def SetDoubleClick(self,arg0):
-        val = windowsc.wxWindow_SetDoubleClick(self.this,arg0)
-        return val
     def SetFocus(self):
         val = windowsc.wxWindow_SetFocus(self.this)
         return val
@@ -270,9 +284,6 @@ class wxWindowPtr(wxEvtHandlerPtr):
         return val
     def SetName(self,arg0):
         val = windowsc.wxWindow_SetName(self.this,arg0)
-        return val
-    def SetReturnCode(self,arg0):
-        val = windowsc.wxWindow_SetReturnCode(self.this,arg0)
         return val
     def SetScrollbar(self,arg0,arg1,arg2,arg3,*args):
         val = apply(windowsc.wxWindow_SetScrollbar,(self.this,arg0,arg1,arg2,arg3,)+args)
@@ -383,8 +394,22 @@ class wxPanelPtr(wxWindowPtr):
     def InitDialog(self):
         val = windowsc.wxPanel_InitDialog(self.this)
         return val
+    def GetDefaultItem(self):
+        val = windowsc.wxPanel_GetDefaultItem(self.this)
+        val = wxButtonPtr(val)
+        return val
+    def SetDefaultItem(self,arg0):
+        val = windowsc.wxPanel_SetDefaultItem(self.this,arg0.this)
+        return val
     def __repr__(self):
         return "<C wxPanel instance>"
+    
+    def GetDefaultItem(self):
+        import controls
+        val = windowsc.wxPanel_GetDefaultItem(self.this)
+        val = controls.wxButtonPtr(val)
+        return val
+
 class wxPanel(wxPanelPtr):
     def __init__(self,arg0,arg1,*args) :
         argl = map(None,args)
@@ -434,6 +459,12 @@ class wxDialogPtr(wxPanelPtr):
     def ShowModal(self):
         val = windowsc.wxDialog_ShowModal(self.this)
         return val
+    def GetReturnCode(self):
+        val = windowsc.wxDialog_GetReturnCode(self.this)
+        return val
+    def SetReturnCode(self,arg0):
+        val = windowsc.wxDialog_SetReturnCode(self.this,arg0)
+        return val
     def __repr__(self):
         return "<C wxDialog instance>"
 class wxDialog(wxDialogPtr):
@@ -451,7 +482,7 @@ class wxDialog(wxDialogPtr):
 
 
 
-class wxScrolledWindowPtr(wxWindowPtr):
+class wxScrolledWindowPtr(wxPanelPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0

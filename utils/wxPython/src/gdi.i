@@ -273,6 +273,7 @@ public:
     long DeviceToLogicalY(long y);
     long DeviceToLogicalYRel(long y);
     void DrawArc(long x1, long y1, long x2, long y2, long xc, long yc);
+    void DrawCircle(long x, long y, long radius);
     void DrawEllipse(long x, long y, long width, long height);
     void DrawEllipticArc(long x, long y, long width, long height, long start, long end);
     void DrawIcon(const wxIcon& icon, long x, long y);
@@ -307,7 +308,8 @@ public:
             return wc;
         }
     }
-    void GetSize(int* OUTPUT, int* OUTPUT); //void GetSize(long* OUTPUT, long* OUTPUT);
+    %name(GetSizeTuple)void GetSize(int* OUTPUT, int* OUTPUT);
+    wxSize GetSize();
     wxColour& GetTextBackground();
     void GetTextExtent(const wxString& string, long *OUTPUT, long *OUTPUT);
     %name(GetFullTextExtent)void GetTextExtent(const wxString& string,

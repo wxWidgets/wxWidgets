@@ -44,6 +44,23 @@ class TestListCtrlPanel(wxPanel):
         self.list.SetColumnWidth(1, wxLIST_AUTOSIZE)
         self.list.SetColumnWidth(2, wxLIST_AUTOSIZE)
 
+        self.list.SetItemState(5, wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED)
+
+        self.currentItem = 0
+        EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
+        EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
+        EVT_COMMAND_RIGHT_CLICK(self.list, tID, self.OnRightClick)
+
+    def OnItemSelected(self, event):
+        self.currentItem = event.m_itemIndex
+        self.log.WriteText("OnItemSelected: %s\n" % self.list.GetItemText(self.currentItem))
+
+    def OnDoubleClick(self, event):
+        self.log.WriteText("OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem))
+
+    def OnRightClick(self, event):
+        self.log.WriteText("OnRightClick %s\n" % self.list.GetItemText(self.currentItem))
+
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()

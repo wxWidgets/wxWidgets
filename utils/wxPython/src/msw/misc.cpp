@@ -121,14 +121,6 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         wxGetResource(section, entry, &retval, file);
         return retval;
     }
-
-    void wxToolTip_Enable(bool flag) {
-        wxToolTip::Enable(flag);
-    }
-
-    void wxToolTip_SetDelay(long milliseconds) {
-        wxToolTip::SetDelay(milliseconds);
-    }
 static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxString * _result;
@@ -702,84 +694,6 @@ static PyObject *_wrap_wxExecute(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static PyObject *_wrap_wxFindWindowByLabel(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxWindow * _result;
-    wxString * _arg0;
-    wxWindow * _arg1 = NULL;
-    PyObject * _obj0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"O|s:wxFindWindowByLabel",&_obj0,&_argc1)) 
-        return NULL;
-{
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
-}
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFindWindowByLabel. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxWindow *)wxFindWindowByLabel(*_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxFindWindowByName(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxWindow * _result;
-    wxString * _arg0;
-    wxWindow * _arg1 = NULL;
-    PyObject * _obj0 = 0;
-    char * _argc1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"O|s:wxFindWindowByName",&_obj0,&_argc1)) 
-        return NULL;
-{
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
-}
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxFindWindowByName. Expected _wxWindow_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxWindow *)wxFindWindowByName(*_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
 static PyObject *_wrap_wxGetActiveWindow(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxWindow * _result;
@@ -988,6 +902,23 @@ static PyObject *_wrap_wxGetOsVersion(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static PyObject *_wrap_wxSleep(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _arg0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"i:wxSleep",&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSleep(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxYield(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     bool  _result;
@@ -1017,6 +948,25 @@ static PyObject *_wrap_wxSafeYield(PyObject *self, PyObject *args) {
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxEnableTopLevelWindows(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _arg0;
+    int tempbool0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"i:wxEnableTopLevelWindows",&tempbool0)) 
+        return NULL;
+    _arg0 = (bool ) tempbool0;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxEnableTopLevelWindows(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -1219,42 +1169,6 @@ static PyObject *_wrap_wxResourceParseString(PyObject *self, PyObject *args) {
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxToolTip_Enable(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _arg0;
-    int tempbool0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"i:wxToolTip_Enable",&tempbool0)) 
-        return NULL;
-    _arg0 = (bool ) tempbool0;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolTip_Enable(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-    return _resultobj;
-}
-
-static PyObject *_wrap_wxToolTip_SetDelay(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    long  _arg0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"l:wxToolTip_SetDelay",&_arg0)) 
-        return NULL;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolTip_SetDelay(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -1480,6 +1394,108 @@ static PyObject *_wrap_wxSize_GetY(PyObject *self, PyObject *args) {
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxSize_GetWidth(_swigobj)  (_swigobj->GetWidth())
+static PyObject *_wrap_wxSize_GetWidth(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxSize * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSize_GetWidth",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_GetWidth. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxSize_GetWidth(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxSize_GetHeight(_swigobj)  (_swigobj->GetHeight())
+static PyObject *_wrap_wxSize_GetHeight(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxSize * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxSize_GetHeight",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_GetHeight. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxSize_GetHeight(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxSize_SetWidth(_swigobj,_swigarg0)  (_swigobj->SetWidth(_swigarg0))
+static PyObject *_wrap_wxSize_SetWidth(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSize * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxSize_SetWidth",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_SetWidth. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSize_SetWidth(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxSize_SetHeight(_swigobj,_swigarg0)  (_swigobj->SetHeight(_swigarg0))
+static PyObject *_wrap_wxSize_SetHeight(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxSize * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxSize_SetHeight",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxSize_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxSize_SetHeight. Expected _wxSize_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxSize_SetHeight(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -4014,138 +4030,7 @@ static PyObject *_wrap_new_wxAcceleratorTable(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define new_wxToolTip(_swigarg0) (new wxToolTip(_swigarg0))
-static PyObject *_wrap_new_wxToolTip(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxToolTip * _result;
-    wxString * _arg0;
-    PyObject * _obj0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"O:new_wxToolTip",&_obj0)) 
-        return NULL;
-{
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxToolTip *)new_wxToolTip(*_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxToolTip_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
-#define wxToolTip_SetTip(_swigobj,_swigarg0)  (_swigobj->SetTip(_swigarg0))
-static PyObject *_wrap_wxToolTip_SetTip(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxToolTip * _arg0;
-    wxString * _arg1;
-    char * _argc0 = 0;
-    PyObject * _obj1 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sO:wxToolTip_SetTip",&_argc0,&_obj1)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_SetTip. Expected _wxToolTip_p.");
-        return NULL;
-        }
-    }
-{
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxToolTip_SetTip(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
-{
-    if (_obj1)
-        delete _arg1;
-}
-    return _resultobj;
-}
-
-#define wxToolTip_GetTip(_swigobj)  (_swigobj->GetTip())
-static PyObject *_wrap_wxToolTip_GetTip(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxString * _result;
-    wxToolTip * _arg0;
-    char * _argc0 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxToolTip_GetTip",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_GetTip. Expected _wxToolTip_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = new wxString (wxToolTip_GetTip(_arg0));
-
-    wxPy_END_ALLOW_THREADS;
-}{
-    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
-}
-{
-    delete _result;
-}
-    return _resultobj;
-}
-
-#define wxToolTip_GetWindow(_swigobj)  (_swigobj->GetWindow())
-static PyObject *_wrap_wxToolTip_GetWindow(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxWindow * _result;
-    wxToolTip * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxToolTip_GetWindow",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxToolTip_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxToolTip_GetWindow. Expected _wxToolTip_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxWindow *)wxToolTip_GetWindow(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxWindow_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
 static PyMethodDef misccMethods[] = {
-	 { "wxToolTip_GetWindow", _wrap_wxToolTip_GetWindow, 1 },
-	 { "wxToolTip_GetTip", _wrap_wxToolTip_GetTip, 1 },
-	 { "wxToolTip_SetTip", _wrap_wxToolTip_SetTip, 1 },
-	 { "new_wxToolTip", _wrap_new_wxToolTip, 1 },
 	 { "new_wxAcceleratorTable", _wrap_new_wxAcceleratorTable, 1 },
 	 { "wxAcceleratorEntry_GetCommand", _wrap_wxAcceleratorEntry_GetCommand, 1 },
 	 { "wxAcceleratorEntry_GetKeyCode", _wrap_wxAcceleratorEntry_GetKeyCode, 1 },
@@ -4240,8 +4125,10 @@ static PyMethodDef misccMethods[] = {
 	 { "wxRealPoint_x_get", _wrap_wxRealPoint_x_get, 1 },
 	 { "wxRealPoint_x_set", _wrap_wxRealPoint_x_set, 1 },
 	 { "wxSize_asTuple", _wrap_wxSize_asTuple, 1 },
-	 { "wxSize_GetHeight", _wrap_wxSize_GetY, 1 },
-	 { "wxSize_GetWidth", _wrap_wxSize_GetX, 1 },
+	 { "wxSize_SetHeight", _wrap_wxSize_SetHeight, 1 },
+	 { "wxSize_SetWidth", _wrap_wxSize_SetWidth, 1 },
+	 { "wxSize_GetHeight", _wrap_wxSize_GetHeight, 1 },
+	 { "wxSize_GetWidth", _wrap_wxSize_GetWidth, 1 },
 	 { "wxSize_GetY", _wrap_wxSize_GetY, 1 },
 	 { "wxSize_GetX", _wrap_wxSize_GetX, 1 },
 	 { "wxSize_Set", _wrap_wxSize_Set, 1 },
@@ -4255,8 +4142,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxSize_y_set", _wrap_wxSize_y_set, 1 },
 	 { "wxSize_x_get", _wrap_wxSize_x_get, 1 },
 	 { "wxSize_x_set", _wrap_wxSize_x_set, 1 },
-	 { "wxToolTip_SetDelay", _wrap_wxToolTip_SetDelay, 1 },
-	 { "wxToolTip_Enable", _wrap_wxToolTip_Enable, 1 },
 	 { "wxResourceParseString", _wrap_wxResourceParseString, 1 },
 	 { "wxResourceParseFile", _wrap_wxResourceParseFile, 1 },
 	 { "wxResourceParseData", _wrap_wxResourceParseData, 1 },
@@ -4267,8 +4152,10 @@ static PyMethodDef misccMethods[] = {
 	 { "wxResourceClear", _wrap_wxResourceClear, 1 },
 	 { "wxResourceAddIdentifier", _wrap_wxResourceAddIdentifier, 1 },
 	 { "wxGetResource", _wrap_wxGetResource, 1 },
+	 { "wxEnableTopLevelWindows", _wrap_wxEnableTopLevelWindows, 1 },
 	 { "wxSafeYield", _wrap_wxSafeYield, 1 },
 	 { "wxYield", _wrap_wxYield, 1 },
+	 { "wxSleep", _wrap_wxSleep, 1 },
 	 { "wxGetOsVersion", _wrap_wxGetOsVersion, 1 },
 	 { "wxStartTimer", _wrap_wxStartTimer, 1 },
 	 { "wxShell", _wrap_wxShell, 1 },
@@ -4278,8 +4165,6 @@ static PyMethodDef misccMethods[] = {
 	 { "wxGetFreeMemory", _wrap_wxGetFreeMemory, 1 },
 	 { "wxGetElapsedTime", _wrap_wxGetElapsedTime, 1 },
 	 { "wxGetActiveWindow", _wrap_wxGetActiveWindow, 1 },
-	 { "wxFindWindowByName", _wrap_wxFindWindowByName, 1 },
-	 { "wxFindWindowByLabel", _wrap_wxFindWindowByLabel, 1 },
 	 { "wxExecute", _wrap_wxExecute, 1 },
 	 { "wxEndBusyCursor", _wrap_wxEndBusyCursor, 1 },
 	 { "wxDisplaySize", _wrap_wxDisplaySize, 1 },
@@ -4336,19 +4221,26 @@ SWIGEXPORT(void,initmiscc)() {
  */
 	 SWIG_RegisterMapping("_wxAcceleratorTable","_class_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_signed_long","_long",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_signed_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_unsigned_int",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_wxWindowID",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_uint",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
+	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
-	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
+	 SWIG_RegisterMapping("_size_t","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_size_t","_unsigned_int",0);
 	 SWIG_RegisterMapping("_size_t","_int",0);
 	 SWIG_RegisterMapping("_size_t","_wxWindowID",0);
 	 SWIG_RegisterMapping("_size_t","_uint",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
-	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
+	 SWIG_RegisterMapping("_uint","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_uint","_size_t",0);
 	 SWIG_RegisterMapping("_uint","_unsigned_int",0);
 	 SWIG_RegisterMapping("_uint","_int",0);
@@ -4357,6 +4249,7 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_wxPoint","_class_wxPoint",0);
 	 SWIG_RegisterMapping("_wxPyTimer","_class_wxPyTimer",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
 	 SWIG_RegisterMapping("_EBool","_int",0);
 	 SWIG_RegisterMapping("_EBool","_wxWindowID",0);
@@ -4365,6 +4258,7 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_class_wxRect","_wxRect",0);
 	 SWIG_RegisterMapping("_class_wxPyTimer","_wxPyTimer",0);
 	 SWIG_RegisterMapping("_wxAcceleratorEntry","_class_wxAcceleratorEntry",0);
+	 SWIG_RegisterMapping("_signed_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_signed_int","_EBool",0);
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
@@ -4380,6 +4274,7 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_signed_short","_short",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorEntry","_wxAcceleratorEntry",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
+	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
 	 SWIG_RegisterMapping("_unsigned_int","_uint",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxWindowID",0);
@@ -4387,12 +4282,14 @@ SWIGEXPORT(void,initmiscc)() {
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
+	 SWIG_RegisterMapping("_wxWindowID","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_wxWindowID","_size_t",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_signed_int",0);
 	 SWIG_RegisterMapping("_wxWindowID","_unsigned_int",0);
+	 SWIG_RegisterMapping("_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_int","_size_t",0);
 	 SWIG_RegisterMapping("_int","_EBool",0);
 	 SWIG_RegisterMapping("_int","_uint",0);
