@@ -695,6 +695,7 @@ void wxToolBar::OnPaint (
         return;
     nCount++;
 
+    ::WinFillRect(vDc.GetHPS(), &vDc.m_vRclPaint, GetBackgroundColour().GetPixel());
     for ( wxToolBarToolsList::Node* pNode = m_tools.GetFirst();
           pNode;
           pNode = pNode->GetNext() )
