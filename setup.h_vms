@@ -921,11 +921,6 @@
 #define wxUSE_ZIPSTREAM 1
 
 /*
- * Use gzip streams, requires wxUSE_ZLIB
- */
-#define wxUSE_GZSTREAM 1
-
-/*
  * wxPalette class
  */
 #define wxUSE_PALETTE 1

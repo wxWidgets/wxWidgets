@@ -79,10 +79,8 @@ WXZLIB_OBJECTS =  \
 	wxzlib_trees.o \
 	wxzlib_zutil.o \
 	wxzlib_inflate.o \
-	wxzlib_infblock.o \
+	wxzlib_infback.o \
 	wxzlib_inftrees.o \
-	wxzlib_infcodes.o \
-	wxzlib_infutil.o \
 	wxzlib_inffast.o
 WXPNG_CFLAGS =     $(__INC_ZLIB_p)  $(____SHARED) $(CPPFLAGS) $(CFLAGS)
 WXPNG_OBJECTS =  \
@@ -249,7 +247,6 @@ ALL_BASE_HEADERS =  \
 	wx/fontmap.h \
 	wx/fs_mem.h \
 	wx/fs_zip.h \
-	wx/gzstream.h \
 	wx/hash.h \
 	wx/hashmap.h \
 	wx/hashset.h \
@@ -350,7 +347,6 @@ ALL_BASE_SOURCES =  \
 	src/common/filesys.cpp \
 	src/common/fmapbase.cpp \
 	src/common/fs_zip.cpp \
-	src/common/gzstream.cpp \
 	src/common/hash.cpp \
 	src/common/hashmap.cpp \
 	src/common/init.cpp \
@@ -474,7 +470,6 @@ MONODLL_OBJECTS =  \
 	monodll_filesys.o \
 	monodll_fmapbase.o \
 	monodll_fs_zip.o \
-	monodll_gzstream.o \
 	monodll_hash.o \
 	monodll_hashmap.o \
 	monodll_init.o \
@@ -558,7 +553,6 @@ MONOLIB_OBJECTS =  \
 	monolib_filesys.o \
 	monolib_fmapbase.o \
 	monolib_fs_zip.o \
-	monolib_gzstream.o \
 	monolib_hash.o \
 	monolib_hashmap.o \
 	monolib_init.o \
@@ -643,7 +637,6 @@ BASEDLL_OBJECTS =  \
 	basedll_filesys.o \
 	basedll_fmapbase.o \
 	basedll_fs_zip.o \
-	basedll_gzstream.o \
 	basedll_hash.o \
 	basedll_hashmap.o \
 	basedll_init.o \
@@ -712,7 +705,6 @@ BASELIB_OBJECTS =  \
 	baselib_filesys.o \
 	baselib_fmapbase.o \
 	baselib_fs_zip.o \
-	baselib_gzstream.o \
 	baselib_hash.o \
 	baselib_hashmap.o \
 	baselib_init.o \
@@ -7438,16 +7430,10 @@ wxzlib_zutil.o: $(srcdir)/src/zlib/zutil.c
 wxzlib_inflate.o: $(srcdir)/src/zlib/inflate.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
 
-wxzlib_infblock.o: $(srcdir)/src/zlib/infblock.c
+wxzlib_infback.o: $(srcdir)/src/zlib/infback.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
 
 wxzlib_inftrees.o: $(srcdir)/src/zlib/inftrees.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
-
-wxzlib_infcodes.o: $(srcdir)/src/zlib/infcodes.c
-	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
-
-wxzlib_infutil.o: $(srcdir)/src/zlib/infutil.c
 	$(CCC) -c -o $@ $(WXZLIB_CFLAGS) $<
 
 wxzlib_inffast.o: $(srcdir)/src/zlib/inffast.c
@@ -7859,9 +7845,6 @@ monodll_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
-
-monodll_gzstream.o: $(srcdir)/src/common/gzstream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 monodll_hash.o: $(srcdir)/src/common/hash.cpp $(MONODLL_ODEP)
@@ -10789,9 +10772,6 @@ monolib_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(MONOLIB_ODEP)
 monolib_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
-monolib_gzstream.o: $(srcdir)/src/common/gzstream.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
-
 monolib_hash.o: $(srcdir)/src/common/hash.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
@@ -13717,9 +13697,6 @@ basedll_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(BASEDLL_ODEP)
 basedll_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
-basedll_gzstream.o: $(srcdir)/src/common/gzstream.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
-
 basedll_hash.o: $(srcdir)/src/common/hash.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $<
 
@@ -14021,9 +13998,6 @@ baselib_fmapbase.o: $(srcdir)/src/common/fmapbase.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_fs_zip.o: $(srcdir)/src/common/fs_zip.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
-
-baselib_gzstream.o: $(srcdir)/src/common/gzstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $<
 
 baselib_hash.o: $(srcdir)/src/common/hash.cpp $(BASELIB_ODEP)

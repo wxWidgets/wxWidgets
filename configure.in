@@ -480,7 +480,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_FS_ZIP=no
   DEFAULT_wxUSE_BUSYINFO=no
   DEFAULT_wxUSE_ZIPSTREAM=no
-  DEFAULT_wxUSE_GZSTREAM=no
   DEFAULT_wxUSE_VALIDATORS=no
 
   DEFAULT_wxUSE_ACCEL=no
@@ -663,7 +662,6 @@ else
   DEFAULT_wxUSE_FS_ZIP=yes
   DEFAULT_wxUSE_BUSYINFO=yes
   DEFAULT_wxUSE_ZIPSTREAM=yes
-  DEFAULT_wxUSE_GZSTREAM=yes
   DEFAULT_wxUSE_VALIDATORS=yes
 
   DEFAULT_wxUSE_ACCEL=yes
@@ -883,7 +881,6 @@ WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Un
 WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
 WX_ARG_ENABLE(zipstream,     [  --enable-zipstream      use wxZipInputStream], wxUSE_ZIPSTREAM)
-WX_ARG_ENABLE(gzstream,      [  --enable-gzstream       use wxGzipInputStream], wxUSE_GZSTREAM)
 
 WX_ARG_ENABLE(url,           [  --enable-url            use wxURL class], wxUSE_URL)
 WX_ARG_ENABLE(protocol,      [  --enable-protocol       use wxProtocol class], wxUSE_PROTOCOL)
@@ -4646,10 +4643,6 @@ fi
 
 if test "$wxUSE_ZIPSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_ZIPSTREAM)
-fi
-
-if test "$wxUSE_GZSTREAM" = "yes"; then
-  AC_DEFINE(wxUSE_GZSTREAM)
 fi
 
 if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes"; then

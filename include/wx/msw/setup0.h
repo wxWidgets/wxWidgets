@@ -395,11 +395,8 @@
 #define wxUSE_ZIPSTREAM     1
 
 // Set to 1 to compile wxZlibInput/OutputStream classes. Also required by
-// wxUSE_LIBPNG and wxUSE_GZSTREAM.
+// wxUSE_LIBPNG
 #define wxUSE_ZLIB          1
-
-// Set to 1 to compile wxGzipInput/OutputStream classes. Requires wxUSE_ZLIB.
-#define wxUSE_GZSTREAM      1
 
 // If enabled, the code written by Apple will be used to write, in a portable
 // way, float on the disk. See extended.c for the license which is different
