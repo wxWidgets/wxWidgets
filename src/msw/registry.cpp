@@ -376,31 +376,36 @@ bool wxRegKey::GetKeyInfo(size_t *pnSubKeys,
 // opens key (it's not an error to call Open() on an already opened key)
 bool wxRegKey::Open()
 {
-  if ( IsOpened() )
-    return TRUE;
+    if ( IsOpened() )
+        return TRUE;
 
-  HKEY tmpKey;
-  m_dwLastError = RegOpenKeyEx((HKEY) m_hRootKey, m_strKey,
-      0, 0, &tmpKey);
-  if ( m_dwLastError != ERROR_SUCCESS ) {
-    wxLogSysError(m_dwLastError, _("Can't open registry key '%s'"),
-                  GetName().c_str());
-    return FALSE;
-  }
-  else
-  {
+    HKEY tmpKey;
+    m_dwLastError = ::RegOpenKeyEx
+                    (
+                        (HKEY) m_hRootKey,
+                        m_strKey,
+                        RESERVED,
+                        KEY_ALL_ACCESS,
+                        &tmpKey
+                    );
+
+    if ( m_dwLastError != ERROR_SUCCESS )
+    {
+        wxLogSysError(m_dwLastError, _("Can't open registry key '%s'"),
+                      GetName().c_str());
+        return FALSE;
+    }
+
     m_hKey = (WXHKEY) tmpKey;
     return TRUE;
-  }
 }
 
 // creates key, failing if it exists and !bOkIfExists
 bool wxRegKey::Create(bool bOkIfExists)
 {
   // check for existence only if asked (i.e. order is important!)
-  if ( !bOkIfExists && Exists() ) {
+  if ( !bOkIfExists && Exists() )
     return FALSE;
-  }
 
   if ( IsOpened() )
     return TRUE;
@@ -1083,16 +1088,25 @@ bool wxRegKey::IsNumericValue(const wxChar *szValue) const
 
 bool KeyExists(WXHKEY hRootKey, const wxChar *szKey)
 {
-  // don't close this key itself for the case of empty szKey!
-  if ( wxIsEmpty(szKey) )
-    return TRUE;
+    // don't close this key itself for the case of empty szKey!
+    if ( wxIsEmpty(szKey) )
+        return TRUE;
 
-  HKEY hkeyDummy;
-  if ( RegOpenKeyEx( (HKEY) hRootKey, szKey, 0, 0, &hkeyDummy) == ERROR_SUCCESS ) {
-    RegCloseKey(hkeyDummy);
-    return TRUE;
-  }
-  else
+    HKEY hkeyDummy;
+    if ( ::RegOpenKeyEx
+         (
+            (HKEY)hRootKey,
+            szKey,
+            RESERVED,
+            KEY_ALL_ACCESS,
+            &hkeyDummy
+         ) == ERROR_SUCCESS )
+    {
+        ::RegCloseKey(hkeyDummy);
+
+        return TRUE;
+    }
+
     return FALSE;
 }
 
