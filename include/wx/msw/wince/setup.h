@@ -1059,6 +1059,22 @@
 /* --- end common options --- */
 
 // ----------------------------------------------------------------------------
+// general Windows-specific stuff
+// ----------------------------------------------------------------------------
+
+// Set this to 1 for generic OLE support: this is required for drag-and-drop,
+// clipboard, OLE Automation. Only set it to 0 if your compiler is very old and
+// can't compile/doesn't have the OLE headers.
+//
+// Default is 1.
+//
+// Recommended setting: 1
+#define wxUSE_OLE           1
+
+// Set this to 1 to enable wxDIB (don't change unless you have reason to)
+#define wxUSE_WXDIB 1
+
+// ----------------------------------------------------------------------------
 // Windows CE specific stuff
 // ----------------------------------------------------------------------------
 
