@@ -673,7 +673,7 @@
 #define wxUSE_WCHAR_T 0
 
 /*
- * Compile wxWindows in Unicode mode (Win32 only for now)?
+ * Compile wxWindows in Unicode mode?
  */
 #define wxUSE_UNICODE 0
 
