@@ -5749,7 +5749,7 @@ if test "$wxUSE_POPUPWIN" = "yes"; then
     fi
 fi
 
-if test "$wxUSE_DIALUP" = "yes"; then
+if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
         AC_MSG_WARN([Dialup manager not yet supported under Mac OS X... disabled])
     else

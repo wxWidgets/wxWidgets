@@ -38141,7 +38141,7 @@ _ACEOF
     fi
 fi
 
-if test "$wxUSE_DIALUP" = "yes"; then
+if test "$wxUSE_DIALUP_MANAGER" = "yes"; then
     if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
         { echo "$as_me:$LINENO: WARNING: Dialup manager not yet supported under Mac OS X... disabled" >&5
 echo "$as_me: WARNING: Dialup manager not yet supported under Mac OS X... disabled" >&2;}
