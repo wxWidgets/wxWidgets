@@ -92,7 +92,7 @@ public:
     virtual int OnRun();
 };
 
-IMPLEMENT_APP(HelpGenApp);
+// IMPLEMENT_APP(HelpGenApp);
 
 // -----------------------------------------------------------------------------
 // private functions
@@ -785,6 +785,21 @@ int HelpGenApp::OnRun()
     }
 
     return 0;
+}
+
+int main(int argc, char **argv)
+{
+    wxInitializer initializer;
+    if ( !initializer )
+    {
+        fprintf(stderr, "Failed to initialize the wxWindows library, aborting.");
+
+        return -1;
+    }
+	HelpGenApp app;
+	app.argc = argc;
+	app.argv = argv;
+	return app.OnRun();
 }
 
 // -----------------------------------------------------------------------------
@@ -2134,6 +2149,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.18  2002/01/03 12:02:47  JS
+   Added main() and corrected VC++ project settings
+
    Revision 1.17  2001/11/30 21:43:35  VZ
    now the methods are sorted in the correct order in the generated docs
 
