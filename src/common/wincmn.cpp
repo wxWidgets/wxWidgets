@@ -303,7 +303,7 @@ void wxWindowBase::Centre(int direction)
     int widthParent, heightParent;
 
     wxWindow *parent = GetParent();
-    if ( parent )
+    if ( (direction & wxCENTER_FRAME) && parent )
     {
         parent->GetClientSize(&widthParent, &heightParent);
     }
