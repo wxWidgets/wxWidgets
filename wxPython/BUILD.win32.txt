@@ -49,9 +49,11 @@ To build the version of wxWindows/wxPython that uses the unicode
 version of the Win32 APIs, just follow the steps below with these
 changes:
 
-    a. You'll need the MSLU lib and dll, which is part of the new
-       Platform SDK from Microsoft.  See MSDN.microsoft.com for
-       details.
+    a. You'll need the MSLU runtime DLL and import lib. The former can
+       be downloaded from Microsoft, the latter is part of the latest
+       Platform SDK from Microsoft (see msdn.microsoft.com for
+       details).  An alternative implementation of import lib can be
+       downloaded from http://libunicows.sourceforge.net
 
     b. Add "UNICODE=1 MSLU=1" to the nmake command line when building
        wxWindows.
