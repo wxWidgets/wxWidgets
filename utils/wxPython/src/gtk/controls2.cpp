@@ -118,6 +118,28 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 static char* wxStringErrorMsg = "string type is required for parameter";
 
 extern wxValidator wxPyDefaultValidator;
+#define wxListItem_m_mask_set(_swigobj,_swigval) (_swigobj->m_mask = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_mask_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListItem * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListItem_m_mask_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_mask_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListItem_m_mask_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 #define wxListItem_m_mask_get(_swigobj) ((long ) _swigobj->m_mask)
 static PyObject *_wrap_wxListItem_m_mask_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -135,6 +157,28 @@ static PyObject *_wrap_wxListItem_m_mask_get(PyObject *self, PyObject *args) {
         }
     }
     _result = (long )wxListItem_m_mask_get(_arg0);
+    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxListItem_m_itemId_set(_swigobj,_swigval) (_swigobj->m_itemId = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_itemId_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListItem * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListItem_m_itemId_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_itemId_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListItem_m_itemId_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
@@ -160,6 +204,28 @@ static PyObject *_wrap_wxListItem_m_itemId_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListItem_m_col_set(_swigobj,_swigval) (_swigobj->m_col = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_col_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxListItem * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListItem_m_col_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_col_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxListItem_m_col_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxListItem_m_col_get(_swigobj) ((int ) _swigobj->m_col)
 static PyObject *_wrap_wxListItem_m_col_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -178,6 +244,28 @@ static PyObject *_wrap_wxListItem_m_col_get(PyObject *self, PyObject *args) {
     }
     _result = (int )wxListItem_m_col_get(_arg0);
     _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxListItem_m_state_set(_swigobj,_swigval) (_swigobj->m_state = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_state_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListItem * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListItem_m_state_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_state_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListItem_m_state_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -202,6 +290,28 @@ static PyObject *_wrap_wxListItem_m_state_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListItem_m_stateMask_set(_swigobj,_swigval) (_swigobj->m_stateMask = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_stateMask_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListItem * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListItem_m_stateMask_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_stateMask_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListItem_m_stateMask_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 #define wxListItem_m_stateMask_get(_swigobj) ((long ) _swigobj->m_stateMask)
 static PyObject *_wrap_wxListItem_m_stateMask_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -220,6 +330,42 @@ static PyObject *_wrap_wxListItem_m_stateMask_get(PyObject *self, PyObject *args
     }
     _result = (long )wxListItem_m_stateMask_get(_arg0);
     _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxListItem_m_text_set(_swigobj,_swigval) (_swigobj->m_text = *(_swigval),_swigval)
+static PyObject *_wrap_wxListItem_m_text_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxListItem * _arg0;
+    wxString * _arg1;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sO:wxListItem_m_text_set",&_argc0,&_obj1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_text_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+    _result = (wxString *)wxListItem_m_text_set(_arg0,_arg1);
+{
+    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
     return _resultobj;
 }
 
@@ -246,6 +392,28 @@ static PyObject *_wrap_wxListItem_m_text_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListItem_m_image_set(_swigobj,_swigval) (_swigobj->m_image = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_image_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxListItem * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListItem_m_image_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_image_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxListItem_m_image_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxListItem_m_image_get(_swigobj) ((int ) _swigobj->m_image)
 static PyObject *_wrap_wxListItem_m_image_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -264,6 +432,28 @@ static PyObject *_wrap_wxListItem_m_image_get(PyObject *self, PyObject *args) {
     }
     _result = (int )wxListItem_m_image_get(_arg0);
     _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxListItem_m_data_set(_swigobj,_swigval) (_swigobj->m_data = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_data_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListItem * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListItem_m_data_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_data_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListItem_m_data_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -288,6 +478,28 @@ static PyObject *_wrap_wxListItem_m_data_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListItem_m_format_set(_swigobj,_swigval) (_swigobj->m_format = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_format_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxListItem * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListItem_m_format_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_format_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxListItem_m_format_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxListItem_m_format_get(_swigobj) ((int ) _swigobj->m_format)
 static PyObject *_wrap_wxListItem_m_format_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -305,6 +517,28 @@ static PyObject *_wrap_wxListItem_m_format_get(PyObject *self, PyObject *args) {
         }
     }
     _result = (int )wxListItem_m_format_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxListItem_m_width_set(_swigobj,_swigval) (_swigobj->m_width = _swigval,_swigval)
+static PyObject *_wrap_wxListItem_m_width_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxListItem * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListItem_m_width_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListItem_m_width_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxListItem_m_width_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -382,6 +616,28 @@ static void *SwigwxListEventTowxEvent(void *ptr) {
     return (void *) dest;
 }
 
+#define wxListEvent_m_code_set(_swigobj,_swigval) (_swigobj->m_code = _swigval,_swigval)
+static PyObject *_wrap_wxListEvent_m_code_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxListEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListEvent_m_code_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_code_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxListEvent_m_code_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxListEvent_m_code_get(_swigobj) ((int ) _swigobj->m_code)
 static PyObject *_wrap_wxListEvent_m_code_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -403,6 +659,28 @@ static PyObject *_wrap_wxListEvent_m_code_get(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListEvent_m_itemIndex_set(_swigobj,_swigval) (_swigobj->m_itemIndex = _swigval,_swigval)
+static PyObject *_wrap_wxListEvent_m_itemIndex_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListEvent * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListEvent_m_itemIndex_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_itemIndex_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListEvent_m_itemIndex_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 #define wxListEvent_m_itemIndex_get(_swigobj) ((long ) _swigobj->m_itemIndex)
 static PyObject *_wrap_wxListEvent_m_itemIndex_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -420,6 +698,28 @@ static PyObject *_wrap_wxListEvent_m_itemIndex_get(PyObject *self, PyObject *arg
         }
     }
     _result = (long )wxListEvent_m_itemIndex_get(_arg0);
+    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxListEvent_m_oldItemIndex_set(_swigobj,_swigval) (_swigobj->m_oldItemIndex = _swigval,_swigval)
+static PyObject *_wrap_wxListEvent_m_oldItemIndex_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxListEvent * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListEvent_m_oldItemIndex_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_oldItemIndex_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (long )wxListEvent_m_oldItemIndex_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
@@ -445,6 +745,28 @@ static PyObject *_wrap_wxListEvent_m_oldItemIndex_get(PyObject *self, PyObject *
     return _resultobj;
 }
 
+#define wxListEvent_m_col_set(_swigobj,_swigval) (_swigobj->m_col = _swigval,_swigval)
+static PyObject *_wrap_wxListEvent_m_col_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxListEvent * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListEvent_m_col_set",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_col_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxListEvent_m_col_set(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxListEvent_m_col_get(_swigobj) ((int ) _swigobj->m_col)
 static PyObject *_wrap_wxListEvent_m_col_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -462,6 +784,30 @@ static PyObject *_wrap_wxListEvent_m_col_get(PyObject *self, PyObject *args) {
         }
     }
     _result = (int )wxListEvent_m_col_get(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxListEvent_m_cancelled_set(_swigobj,_swigval) (_swigobj->m_cancelled = _swigval,_swigval)
+static PyObject *_wrap_wxListEvent_m_cancelled_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxListEvent * _arg0;
+    bool  _arg1;
+    char * _argc0 = 0;
+    int tempbool1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxListEvent_m_cancelled_set",&_argc0,&tempbool1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_cancelled_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    _arg1 = (bool ) tempbool1;
+    _result = (bool )wxListEvent_m_cancelled_set(_arg0,_arg1);
     _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
@@ -487,6 +833,37 @@ static PyObject *_wrap_wxListEvent_m_cancelled_get(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxListEvent_m_pointDrag_set(_swigobj,_swigval) (_swigobj->m_pointDrag = *(_swigval),_swigval)
+static PyObject *_wrap_wxListEvent_m_pointDrag_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPoint * _result;
+    wxListEvent * _arg0;
+    wxPoint * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxListEvent_m_pointDrag_set",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_pointDrag_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListEvent_m_pointDrag_set. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+    _result = (wxPoint *)wxListEvent_m_pointDrag_set(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxListEvent_m_pointDrag_get(_swigobj) (&_swigobj->m_pointDrag)
 static PyObject *_wrap_wxListEvent_m_pointDrag_get(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -506,6 +883,37 @@ static PyObject *_wrap_wxListEvent_m_pointDrag_get(PyObject *self, PyObject *arg
     }
     _result = (wxPoint *)wxListEvent_m_pointDrag_get(_arg0);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxPoint_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define wxListEvent_m_item_set(_swigobj,_swigval) (_swigobj->m_item = *(_swigval),_swigval)
+static PyObject *_wrap_wxListEvent_m_item_set(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxListItem * _result;
+    wxListEvent * _arg0;
+    wxListItem * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxListEvent_m_item_set",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListEvent_m_item_set. Expected _wxListEvent_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxListItem_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxListEvent_m_item_set. Expected _wxListItem_p.");
+        return NULL;
+        }
+    }
+    _result = (wxListItem *)wxListEvent_m_item_set(_arg0,_arg1);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxListItem_p");
     _resultobj = Py_BuildValue("s",_ptemp);
     return _resultobj;
 }
@@ -612,7 +1020,7 @@ static PyObject *_wrap_wxListCtrl_Arrange(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     bool  _result;
     wxListCtrl * _arg0;
-    int  _arg1 = wxLIST_ALIGN_DEFAULT;
+    int  _arg1 = (wxLIST_ALIGN_DEFAULT);
     char * _argc0 = 0;
 
     self = self;
@@ -1034,7 +1442,7 @@ static PyObject *_wrap_wxListCtrl_GetItemRect(PyObject *self, PyObject *args) {
     wxRect * _result;
     wxListCtrl * _arg0;
     long  _arg1;
-    int  _arg2 = wxLIST_RECT_BOUNDS;
+    int  _arg2 = (wxLIST_RECT_BOUNDS);
     char * _argc0 = 0;
     char _ptemp[128];
 
@@ -1154,8 +1562,8 @@ static PyObject *_wrap_wxListCtrl_GetNextItem(PyObject *self, PyObject *args) {
     long  _result;
     wxListCtrl * _arg0;
     long  _arg1;
-    int  _arg2 = wxLIST_NEXT_ALL;
-    int  _arg3 = wxLIST_STATE_DONTCARE;
+    int  _arg2 = (wxLIST_NEXT_ALL);
+    int  _arg3 = (wxLIST_STATE_DONTCARE);
     char * _argc0 = 0;
 
     self = self;
@@ -1290,7 +1698,7 @@ static PyObject *_wrap_wxListCtrl_InsertColumn(PyObject *self, PyObject *args) {
     wxListCtrl * _arg0;
     long  _arg1;
     wxString * _arg2;
-    int  _arg3 = wxLIST_FORMAT_LEFT;
+    int  _arg3 = (wxLIST_FORMAT_LEFT);
     int  _arg4 = -1;
     char * _argc0 = 0;
     PyObject * _obj2 = 0;
@@ -1607,8 +2015,8 @@ static PyObject *_wrap_wxListCtrl_SetItem(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxListCtrl_SetItemString(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->SetItem(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
-static PyObject *_wrap_wxListCtrl_SetItemString(PyObject *self, PyObject *args) {
+#define wxListCtrl_SetStringItem(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3)  (_swigobj->SetItem(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_wxListCtrl_SetStringItem(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     long  _result;
     wxListCtrl * _arg0;
@@ -1620,11 +2028,11 @@ static PyObject *_wrap_wxListCtrl_SetItemString(PyObject *self, PyObject *args) 
     PyObject * _obj3 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"sliO|i:wxListCtrl_SetItemString",&_argc0,&_arg1,&_arg2,&_obj3,&_arg4)) 
+    if(!PyArg_ParseTuple(args,"sliO|i:wxListCtrl_SetStringItem",&_argc0,&_arg1,&_arg2,&_obj3,&_arg4)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SetItemString. Expected _wxListCtrl_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_SetStringItem. Expected _wxListCtrl_p.");
         return NULL;
         }
     }
@@ -1635,7 +2043,7 @@ static PyObject *_wrap_wxListCtrl_SetItemString(PyObject *self, PyObject *args) 
     }
     _arg3 = new wxString(PyString_AsString(_obj3));
 }
-    _result = (long )wxListCtrl_SetItemString(_arg0,_arg1,_arg2,*_arg3,_arg4);
+    _result = (long )wxListCtrl_SetStringItem(_arg0,_arg1,_arg2,*_arg3,_arg4);
     _resultobj = Py_BuildValue("l",_result);
 {
     if (_obj3)
@@ -3833,7 +4241,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_SetItemPosition", _wrap_wxListCtrl_SetItemPosition, 1 },
 	 { "wxListCtrl_SetItemImage", _wrap_wxListCtrl_SetItemImage, 1 },
 	 { "wxListCtrl_SetItemData", _wrap_wxListCtrl_SetItemData, 1 },
-	 { "wxListCtrl_SetItemString", _wrap_wxListCtrl_SetItemString, 1 },
+	 { "wxListCtrl_SetStringItem", _wrap_wxListCtrl_SetStringItem, 1 },
 	 { "wxListCtrl_SetItem", _wrap_wxListCtrl_SetItem, 1 },
 	 { "wxListCtrl_SetImageList", _wrap_wxListCtrl_SetImageList, 1 },
 	 { "wxListCtrl_SetColumnWidth", _wrap_wxListCtrl_SetColumnWidth, 1 },
@@ -3874,24 +4282,41 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_Arrange", _wrap_wxListCtrl_Arrange, 1 },
 	 { "new_wxListCtrl", _wrap_new_wxListCtrl, 1 },
 	 { "wxListEvent_m_item_get", _wrap_wxListEvent_m_item_get, 1 },
+	 { "wxListEvent_m_item_set", _wrap_wxListEvent_m_item_set, 1 },
 	 { "wxListEvent_m_pointDrag_get", _wrap_wxListEvent_m_pointDrag_get, 1 },
+	 { "wxListEvent_m_pointDrag_set", _wrap_wxListEvent_m_pointDrag_set, 1 },
 	 { "wxListEvent_m_cancelled_get", _wrap_wxListEvent_m_cancelled_get, 1 },
+	 { "wxListEvent_m_cancelled_set", _wrap_wxListEvent_m_cancelled_set, 1 },
 	 { "wxListEvent_m_col_get", _wrap_wxListEvent_m_col_get, 1 },
+	 { "wxListEvent_m_col_set", _wrap_wxListEvent_m_col_set, 1 },
 	 { "wxListEvent_m_oldItemIndex_get", _wrap_wxListEvent_m_oldItemIndex_get, 1 },
+	 { "wxListEvent_m_oldItemIndex_set", _wrap_wxListEvent_m_oldItemIndex_set, 1 },
 	 { "wxListEvent_m_itemIndex_get", _wrap_wxListEvent_m_itemIndex_get, 1 },
+	 { "wxListEvent_m_itemIndex_set", _wrap_wxListEvent_m_itemIndex_set, 1 },
 	 { "wxListEvent_m_code_get", _wrap_wxListEvent_m_code_get, 1 },
+	 { "wxListEvent_m_code_set", _wrap_wxListEvent_m_code_set, 1 },
 	 { "delete_wxListItem", _wrap_delete_wxListItem, 1 },
 	 { "new_wxListItem", _wrap_new_wxListItem, 1 },
 	 { "wxListItem_m_width_get", _wrap_wxListItem_m_width_get, 1 },
+	 { "wxListItem_m_width_set", _wrap_wxListItem_m_width_set, 1 },
 	 { "wxListItem_m_format_get", _wrap_wxListItem_m_format_get, 1 },
+	 { "wxListItem_m_format_set", _wrap_wxListItem_m_format_set, 1 },
 	 { "wxListItem_m_data_get", _wrap_wxListItem_m_data_get, 1 },
+	 { "wxListItem_m_data_set", _wrap_wxListItem_m_data_set, 1 },
 	 { "wxListItem_m_image_get", _wrap_wxListItem_m_image_get, 1 },
+	 { "wxListItem_m_image_set", _wrap_wxListItem_m_image_set, 1 },
 	 { "wxListItem_m_text_get", _wrap_wxListItem_m_text_get, 1 },
+	 { "wxListItem_m_text_set", _wrap_wxListItem_m_text_set, 1 },
 	 { "wxListItem_m_stateMask_get", _wrap_wxListItem_m_stateMask_get, 1 },
+	 { "wxListItem_m_stateMask_set", _wrap_wxListItem_m_stateMask_set, 1 },
 	 { "wxListItem_m_state_get", _wrap_wxListItem_m_state_get, 1 },
+	 { "wxListItem_m_state_set", _wrap_wxListItem_m_state_set, 1 },
 	 { "wxListItem_m_col_get", _wrap_wxListItem_m_col_get, 1 },
+	 { "wxListItem_m_col_set", _wrap_wxListItem_m_col_set, 1 },
 	 { "wxListItem_m_itemId_get", _wrap_wxListItem_m_itemId_get, 1 },
+	 { "wxListItem_m_itemId_set", _wrap_wxListItem_m_itemId_set, 1 },
 	 { "wxListItem_m_mask_get", _wrap_wxListItem_m_mask_get, 1 },
+	 { "wxListItem_m_mask_set", _wrap_wxListItem_m_mask_set, 1 },
 	 { NULL, NULL }
 };
 static PyObject *SWIG_globals;
@@ -3903,6 +4328,48 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("controls2c", controls2cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxLIST_MASK_TEXT", PyInt_FromLong((long) wxLIST_MASK_TEXT));
+	 PyDict_SetItemString(d,"wxLIST_MASK_IMAGE", PyInt_FromLong((long) wxLIST_MASK_IMAGE));
+	 PyDict_SetItemString(d,"wxLIST_MASK_DATA", PyInt_FromLong((long) wxLIST_MASK_DATA));
+	 PyDict_SetItemString(d,"wxLIST_MASK_WIDTH", PyInt_FromLong((long) wxLIST_MASK_WIDTH));
+	 PyDict_SetItemString(d,"wxLIST_MASK_FORMAT", PyInt_FromLong((long) wxLIST_MASK_FORMAT));
+	 PyDict_SetItemString(d,"wxLIST_STATE_DONTCARE", PyInt_FromLong((long) wxLIST_STATE_DONTCARE));
+	 PyDict_SetItemString(d,"wxLIST_STATE_DROPHILITED", PyInt_FromLong((long) wxLIST_STATE_DROPHILITED));
+	 PyDict_SetItemString(d,"wxLIST_STATE_FOCUSED", PyInt_FromLong((long) wxLIST_STATE_FOCUSED));
+	 PyDict_SetItemString(d,"wxLIST_STATE_SELECTED", PyInt_FromLong((long) wxLIST_STATE_SELECTED));
+	 PyDict_SetItemString(d,"wxLIST_STATE_CUT", PyInt_FromLong((long) wxLIST_STATE_CUT));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_ABOVE", PyInt_FromLong((long) wxLIST_HITTEST_ABOVE));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_BELOW", PyInt_FromLong((long) wxLIST_HITTEST_BELOW));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_NOWHERE", PyInt_FromLong((long) wxLIST_HITTEST_NOWHERE));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_ONITEMICON", PyInt_FromLong((long) wxLIST_HITTEST_ONITEMICON));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_ONITEMLABEL", PyInt_FromLong((long) wxLIST_HITTEST_ONITEMLABEL));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_ONITEMRIGHT", PyInt_FromLong((long) wxLIST_HITTEST_ONITEMRIGHT));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_ONITEMSTATEICON", PyInt_FromLong((long) wxLIST_HITTEST_ONITEMSTATEICON));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_TOLEFT", PyInt_FromLong((long) wxLIST_HITTEST_TOLEFT));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_TORIGHT", PyInt_FromLong((long) wxLIST_HITTEST_TORIGHT));
+	 PyDict_SetItemString(d,"wxLIST_HITTEST_ONITEM", PyInt_FromLong((long) wxLIST_HITTEST_ONITEM));
+	 PyDict_SetItemString(d,"wxLIST_NEXT_ABOVE", PyInt_FromLong((long) wxLIST_NEXT_ABOVE));
+	 PyDict_SetItemString(d,"wxLIST_NEXT_ALL", PyInt_FromLong((long) wxLIST_NEXT_ALL));
+	 PyDict_SetItemString(d,"wxLIST_NEXT_BELOW", PyInt_FromLong((long) wxLIST_NEXT_BELOW));
+	 PyDict_SetItemString(d,"wxLIST_NEXT_LEFT", PyInt_FromLong((long) wxLIST_NEXT_LEFT));
+	 PyDict_SetItemString(d,"wxLIST_NEXT_RIGHT", PyInt_FromLong((long) wxLIST_NEXT_RIGHT));
+	 PyDict_SetItemString(d,"wxLIST_ALIGN_DEFAULT", PyInt_FromLong((long) wxLIST_ALIGN_DEFAULT));
+	 PyDict_SetItemString(d,"wxLIST_ALIGN_LEFT", PyInt_FromLong((long) wxLIST_ALIGN_LEFT));
+	 PyDict_SetItemString(d,"wxLIST_ALIGN_TOP", PyInt_FromLong((long) wxLIST_ALIGN_TOP));
+	 PyDict_SetItemString(d,"wxLIST_ALIGN_SNAP_TO_GRID", PyInt_FromLong((long) wxLIST_ALIGN_SNAP_TO_GRID));
+	 PyDict_SetItemString(d,"wxLIST_FORMAT_LEFT", PyInt_FromLong((long) wxLIST_FORMAT_LEFT));
+	 PyDict_SetItemString(d,"wxLIST_FORMAT_RIGHT", PyInt_FromLong((long) wxLIST_FORMAT_RIGHT));
+	 PyDict_SetItemString(d,"wxLIST_FORMAT_CENTRE", PyInt_FromLong((long) wxLIST_FORMAT_CENTRE));
+	 PyDict_SetItemString(d,"wxLIST_FORMAT_CENTER", PyInt_FromLong((long) wxLIST_FORMAT_CENTER));
+	 PyDict_SetItemString(d,"wxLIST_AUTOSIZE", PyInt_FromLong((long) wxLIST_AUTOSIZE));
+	 PyDict_SetItemString(d,"wxLIST_AUTOSIZE_USEHEADER", PyInt_FromLong((long) wxLIST_AUTOSIZE_USEHEADER));
+	 PyDict_SetItemString(d,"wxLIST_RECT_BOUNDS", PyInt_FromLong((long) wxLIST_RECT_BOUNDS));
+	 PyDict_SetItemString(d,"wxLIST_RECT_ICON", PyInt_FromLong((long) wxLIST_RECT_ICON));
+	 PyDict_SetItemString(d,"wxLIST_RECT_LABEL", PyInt_FromLong((long) wxLIST_RECT_LABEL));
+	 PyDict_SetItemString(d,"wxLIST_FIND_UP", PyInt_FromLong((long) wxLIST_FIND_UP));
+	 PyDict_SetItemString(d,"wxLIST_FIND_DOWN", PyInt_FromLong((long) wxLIST_FIND_DOWN));
+	 PyDict_SetItemString(d,"wxLIST_FIND_LEFT", PyInt_FromLong((long) wxLIST_FIND_LEFT));
+	 PyDict_SetItemString(d,"wxLIST_FIND_RIGHT", PyInt_FromLong((long) wxLIST_FIND_RIGHT));
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
@@ -3927,6 +4394,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
 	 SWIG_RegisterMapping("_class_wxTreeCtrl","_wxTreeCtrl",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
@@ -3938,6 +4406,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
+	 SWIG_RegisterMapping("_wxImageList","_class_wxImageList",0);
 	 SWIG_RegisterMapping("_wxDropFilesEvent","_class_wxDropFilesEvent",0);
 	 SWIG_RegisterMapping("_wxBitmapButton","_class_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
@@ -3954,6 +4423,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxInitDialogEvent","_class_wxInitDialogEvent",0);
 	 SWIG_RegisterMapping("_wxCheckBox","_class_wxCheckBox",0);
 	 SWIG_RegisterMapping("_wxTextCtrl","_class_wxTextCtrl",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxKeyEvent","_wxKeyEvent",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
@@ -4080,6 +4550,7 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxJoystickEvent","_class_wxJoystickEvent",0);
 	 SWIG_RegisterMapping("_class_wxChoice","_wxChoice",0);
 	 SWIG_RegisterMapping("_class_wxSlider","_wxSlider",0);
+	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxBitmapButton","_wxBitmapButton",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);

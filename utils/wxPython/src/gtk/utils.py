@@ -10,6 +10,9 @@ class wxConfigPtr :
     def DontCreateOnDemand(self):
         val = utilsc.wxConfig_DontCreateOnDemand(self.this)
         return val
+    def DeleteAll(self):
+        val = utilsc.wxConfig_DeleteAll(self.this)
+        return val
     def DeleteEntry(self,arg0,*args):
         val = apply(utilsc.wxConfig_DeleteEntry,(self.this,arg0,)+args)
         return val

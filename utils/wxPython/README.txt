@@ -73,7 +73,15 @@ in the wxWindows documentation tree specifically about wxPython, and I
 have added notes within the class references about where wxPython
 diverges from wxWindows.
 
-[[  What else have I done??? ]]
+Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a
+window handle.  If you can get the window handle into the python code,
+it should just work...  More news on this later.
+
+Added wxImageList, wxToolTip.
+
+Re-enabled wxConfig.DeleteAll() since it is reportedly fixed for the
+wxRegConfig class.
+
 
 As usual, some bug fixes, tweaks, etc.
 

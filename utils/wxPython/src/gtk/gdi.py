@@ -450,6 +450,13 @@ class wxDCPtr :
     def GetTextExtent(self,arg0):
         val = gdic.wxDC_GetTextExtent(self.this,arg0)
         return val
+    def GetFullTextExtent(self,arg0,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(gdic.wxDC_GetFullTextExtent,(self.this,arg0,)+args)
+        return val
     def GetTextForeground(self):
         val = gdic.wxDC_GetTextForeground(self.this)
         val = wxColourPtr(val)
@@ -671,6 +678,41 @@ class wxPalette(wxPalettePtr):
 
 
 
+class wxImageListPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self):
+        if self.thisown == 1 :
+            gdic.delete_wxImageList(self.this)
+    def Add(self,arg0):
+        val = gdic.wxImageList_Add(self.this,arg0.this)
+        return val
+    def Replace(self,arg0,arg1):
+        val = gdic.wxImageList_Replace(self.this,arg0,arg1.this)
+        return val
+    def Draw(self,arg0,arg1,arg2,arg3,*args):
+        val = apply(gdic.wxImageList_Draw,(self.this,arg0,arg1.this,arg2,arg3,)+args)
+        return val
+    def GetImageCount(self):
+        val = gdic.wxImageList_GetImageCount(self.this)
+        return val
+    def Remove(self,arg0):
+        val = gdic.wxImageList_Remove(self.this,arg0)
+        return val
+    def RemoveAll(self):
+        val = gdic.wxImageList_RemoveAll(self.this)
+        return val
+    def __repr__(self):
+        return "<C wxImageList instance>"
+class wxImageList(wxImageListPtr):
+    def __init__(self,arg0,arg1,*args) :
+        self.this = apply(gdic.new_wxImageList,(arg0,arg1,)+args)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -754,5 +796,13 @@ wxNullIcon = wxIconPtr(gdic.cvar.wxNullIcon)
 wxNullCursor = wxCursorPtr(gdic.cvar.wxNullCursor)
 wxNullPen = wxPenPtr(gdic.cvar.wxNullPen)
 wxNullBrush = wxBrushPtr(gdic.cvar.wxNullBrush)
+wxNullPalette = wxPalettePtr(gdic.cvar.wxNullPalette)
 wxNullFont = wxFontPtr(gdic.cvar.wxNullFont)
 wxNullColour = wxColourPtr(gdic.cvar.wxNullColour)
+wxIMAGELIST_DRAW_NORMAL = gdic.wxIMAGELIST_DRAW_NORMAL
+wxIMAGELIST_DRAW_TRANSPARENT = gdic.wxIMAGELIST_DRAW_TRANSPARENT
+wxIMAGELIST_DRAW_SELECTED = gdic.wxIMAGELIST_DRAW_SELECTED
+wxIMAGELIST_DRAW_FOCUSED = gdic.wxIMAGELIST_DRAW_FOCUSED
+wxIMAGE_LIST_NORMAL = gdic.wxIMAGE_LIST_NORMAL
+wxIMAGE_LIST_SMALL = gdic.wxIMAGE_LIST_SMALL
+wxIMAGE_LIST_STATE = gdic.wxIMAGE_LIST_STATE

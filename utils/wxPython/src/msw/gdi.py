@@ -735,6 +735,16 @@ class wxImageListPtr :
     def AddIcon(self,arg0):
         val = gdic.wxImageList_AddIcon(self.this,arg0.this)
         return val
+    def Replace(self,arg0,arg1,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(gdic.wxImageList_Replace,(self.this,arg0,arg1.this,)+args)
+        return val
+    def ReplaceIcon(self,arg0,arg1):
+        val = gdic.wxImageList_ReplaceIcon(self.this,arg0,arg1.this)
+        return val
     def Draw(self,arg0,arg1,arg2,arg3,*args):
         val = apply(gdic.wxImageList_Draw,(self.this,arg0,arg1.this,arg2,arg3,)+args)
         return val
@@ -746,16 +756,6 @@ class wxImageListPtr :
         return val
     def RemoveAll(self):
         val = gdic.wxImageList_RemoveAll(self.this)
-        return val
-    def Replace(self,arg0,arg1,*args):
-        argl = map(None,args)
-        try: argl[0] = argl[0].this
-        except: pass
-        args = tuple(argl)
-        val = apply(gdic.wxImageList_Replace,(self.this,arg0,arg1.this,)+args)
-        return val
-    def ReplaceIcon(self,arg0,arg1):
-        val = gdic.wxImageList_ReplaceIcon(self.this,arg0,arg1.this)
         return val
     def __repr__(self):
         return "<C wxImageList instance>"

@@ -10,7 +10,7 @@ def wxDLG_PNT(win, point):
     return win.ConvertDialogPointToPixels(point)
 
 def wxDLG_SZE(win, size):
-    return win.ConvertDialogPointToPixels(size)
+    return win.ConvertDialogSizeToPixels(size)
 
 class wxEvtHandlerPtr :
     def __init__(self,this):
@@ -41,8 +41,8 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Centre(self,*args):
         val = apply(windowsc.wxWindow_Centre,(self.this,)+args)
         return val
-    def ClientToScreen(self,arg0,arg1):
-        val = windowsc.wxWindow_ClientToScreen(self.this,arg0,arg1)
+    def ClientToScreenXY(self,arg0,arg1):
+        val = windowsc.wxWindow_ClientToScreenXY(self.this,arg0,arg1)
         return val
     def Close(self,*args):
         val = apply(windowsc.wxWindow_Close,(self.this,)+args)
@@ -56,8 +56,8 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Enable(self,arg0):
         val = windowsc.wxWindow_Enable(self.this,arg0)
         return val
-    def FindWindowByID(self,arg0):
-        val = windowsc.wxWindow_FindWindowByID(self.this,arg0)
+    def FindWindowById(self,arg0):
+        val = windowsc.wxWindow_FindWindowById(self.this,arg0)
         val = wxWindowPtr(val)
         return val
     def FindWindowByName(self,arg0):
@@ -152,6 +152,13 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetTextExtent(self,arg0):
         val = windowsc.wxWindow_GetTextExtent(self.this,arg0)
         return val
+    def GetFullTextExtent(self,arg0,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(windowsc.wxWindow_GetFullTextExtent,(self.this,arg0,)+args)
+        return val
     def GetTitle(self):
         val = windowsc.wxWindow_GetTitle(self.this)
         return val
@@ -182,8 +189,8 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def MakeModal(self,arg0):
         val = windowsc.wxWindow_MakeModal(self.this,arg0)
         return val
-    def Move(self,arg0,arg1):
-        val = windowsc.wxWindow_Move(self.this,arg0,arg1)
+    def MoveXY(self,arg0,arg1):
+        val = windowsc.wxWindow_MoveXY(self.this,arg0,arg1)
         return val
     def PopupMenu(self,arg0,arg1,arg2):
         val = windowsc.wxWindow_PopupMenu(self.this,arg0.this,arg1,arg2)
@@ -201,8 +208,8 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def ReleaseMouse(self):
         val = windowsc.wxWindow_ReleaseMouse(self.this)
         return val
-    def ScreenToClient(self,arg0,arg1):
-        val = windowsc.wxWindow_ScreenToClient(self.this,arg0,arg1)
+    def ScreenToClientXY(self,arg0,arg1):
+        val = windowsc.wxWindow_ScreenToClientXY(self.this,arg0,arg1)
         return val
     def ScrollWindow(self,arg0,arg1,*args):
         argl = map(None,args)
@@ -262,8 +269,8 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def SetSizeHints(self,*args):
         val = apply(windowsc.wxWindow_SetSizeHints,(self.this,)+args)
         return val
-    def SetClientSize(self,arg0,arg1):
-        val = windowsc.wxWindow_SetClientSize(self.this,arg0,arg1)
+    def SetClientSizeWH(self,arg0,arg1):
+        val = windowsc.wxWindow_SetClientSizeWH(self.this,arg0,arg1)
         return val
     def SetCursor(self,arg0):
         val = windowsc.wxWindow_SetCursor(self.this,arg0.this)
@@ -305,6 +312,16 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = windowsc.wxWindow_ConvertPixelSizeToDialog(self.this,arg0.this)
         val = wxSizePtr(val)
         val.thisown = 1
+        return val
+    def SetToolTipString(self,arg0):
+        val = windowsc.wxWindow_SetToolTipString(self.this,arg0)
+        return val
+    def SetToolTip(self,arg0):
+        val = windowsc.wxWindow_SetToolTip(self.this,arg0.this)
+        return val
+    def GetToolTip(self):
+        val = windowsc.wxWindow_GetToolTip(self.this)
+        val = wxToolTipPtr(val)
         return val
     def __repr__(self):
         return "<C wxWindow instance>"

@@ -239,6 +239,27 @@ static PyObject *_wrap_wxConfig_DontCreateOnDemand(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
+#define wxConfig_DeleteAll(_swigobj)  (_swigobj->DeleteAll())
+static PyObject *_wrap_wxConfig_DeleteAll(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxConfig * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxConfig_DeleteAll",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxConfig_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxConfig_DeleteAll. Expected _wxConfig_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxConfig_DeleteAll(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxConfig_DeleteEntry(_swigobj,_swigarg0,_swigarg1)  (_swigobj->DeleteEntry(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxConfig_DeleteEntry(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1143,6 +1164,7 @@ static PyMethodDef utilscMethods[] = {
 	 { "wxConfig_Exists", _wrap_wxConfig_Exists, 1 },
 	 { "wxConfig_DeleteGroup", _wrap_wxConfig_DeleteGroup, 1 },
 	 { "wxConfig_DeleteEntry", _wrap_wxConfig_DeleteEntry, 1 },
+	 { "wxConfig_DeleteAll", _wrap_wxConfig_DeleteAll, 1 },
 	 { "wxConfig_DontCreateOnDemand", _wrap_wxConfig_DontCreateOnDemand, 1 },
 	 { "delete_wxConfig", _wrap_delete_wxConfig, 1 },
 	 { "new_wxConfig", _wrap_new_wxConfig, 1 },

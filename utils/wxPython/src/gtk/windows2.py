@@ -402,10 +402,11 @@ class wxNotebookPtr(wxControlPtr):
         val = windows2c.wxNotebook_GetPageText(self.this,arg0)
         return val
     def SetImageList(self,arg0):
-        val = windows2c.wxNotebook_SetImageList(self.this,arg0)
+        val = windows2c.wxNotebook_SetImageList(self.this,arg0.this)
         return val
     def GetImageList(self):
         val = windows2c.wxNotebook_GetImageList(self.this)
+        val = wxImageListPtr(val)
         return val
     def GetPageImage(self,arg0):
         val = windows2c.wxNotebook_GetPageImage(self.this,arg0)

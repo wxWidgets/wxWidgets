@@ -5353,6 +5353,74 @@ static PyObject *_wrap_wxImageList_AddIcon(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxImageList_Replace(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Replace(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImageList * _arg0;
+    int  _arg1;
+    wxBitmap * _arg2;
+    wxBitmap * _arg3 = &wxNullBitmap;
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    char * _argc3 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sis|s:wxImageList_Replace",&_argc0,&_arg1,&_argc2,&_argc3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_Replace. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Replace. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    if (_argc3) {
+        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxImageList_Replace. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxImageList_Replace(_arg0,_arg1,*_arg2,*_arg3);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_ReplaceIcon(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Replace(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxImageList_ReplaceIcon(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImageList * _arg0;
+    int  _arg1;
+    wxIcon * _arg2;
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sis:wxImageList_ReplaceIcon",&_argc0,&_arg1,&_argc2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_ReplaceIcon. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxIcon_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_ReplaceIcon. Expected _wxIcon_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxImageList_ReplaceIcon(_arg0,_arg1,*_arg2);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxImageList_Draw(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Draw(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
 static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -5453,81 +5521,13 @@ static PyObject *_wrap_wxImageList_RemoveAll(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxImageList_Replace(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->Replace(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxImageList * _arg0;
-    int  _arg1;
-    wxBitmap * _arg2;
-    wxBitmap * _arg3 = &wxNullBitmap;
-    char * _argc0 = 0;
-    char * _argc2 = 0;
-    char * _argc3 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sis|s:wxImageList_Replace",&_argc0,&_arg1,&_argc2,&_argc3)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_Replace. Expected _wxImageList_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Replace. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    if (_argc3) {
-        if (SWIG_GetPtr(_argc3,(void **) &_arg3,"_wxBitmap_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxImageList_Replace. Expected _wxBitmap_p.");
-        return NULL;
-        }
-    }
-    _result = (bool )wxImageList_Replace(_arg0,_arg1,*_arg2,*_arg3);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
-#define wxImageList_ReplaceIcon(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Replace(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxImageList_ReplaceIcon(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    bool  _result;
-    wxImageList * _arg0;
-    int  _arg1;
-    wxIcon * _arg2;
-    char * _argc0 = 0;
-    char * _argc2 = 0;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"sis:wxImageList_ReplaceIcon",&_argc0,&_arg1,&_argc2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_ReplaceIcon. Expected _wxImageList_p.");
-        return NULL;
-        }
-    }
-    if (_argc2) {
-        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxIcon_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_ReplaceIcon. Expected _wxIcon_p.");
-        return NULL;
-        }
-    }
-    _result = (bool )wxImageList_ReplaceIcon(_arg0,_arg1,*_arg2);
-    _resultobj = Py_BuildValue("i",_result);
-    return _resultobj;
-}
-
 static PyMethodDef gdicMethods[] = {
-	 { "wxImageList_ReplaceIcon", _wrap_wxImageList_ReplaceIcon, 1 },
-	 { "wxImageList_Replace", _wrap_wxImageList_Replace, 1 },
 	 { "wxImageList_RemoveAll", _wrap_wxImageList_RemoveAll, 1 },
 	 { "wxImageList_Remove", _wrap_wxImageList_Remove, 1 },
 	 { "wxImageList_GetImageCount", _wrap_wxImageList_GetImageCount, 1 },
 	 { "wxImageList_Draw", _wrap_wxImageList_Draw, 1 },
+	 { "wxImageList_ReplaceIcon", _wrap_wxImageList_ReplaceIcon, 1 },
+	 { "wxImageList_Replace", _wrap_wxImageList_Replace, 1 },
 	 { "wxImageList_AddIcon", _wrap_wxImageList_AddIcon, 1 },
 	 { "wxImageList_AddWithColourMask", _wrap_wxImageList_AddWithColourMask, 1 },
 	 { "wxImageList_Add", _wrap_wxImageList_Add, 1 },

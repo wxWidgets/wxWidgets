@@ -10,16 +10,28 @@ class wxSizePtr :
     def Set(self,arg0,arg1):
         val = miscc.wxSize_Set(self.this,arg0,arg1)
         return val
+    def GetX(self):
+        val = miscc.wxSize_GetX(self.this)
+        return val
+    def GetY(self):
+        val = miscc.wxSize_GetY(self.this)
+        return val
     def GetWidth(self):
         val = miscc.wxSize_GetWidth(self.this)
         return val
     def GetHeight(self):
         val = miscc.wxSize_GetHeight(self.this)
         return val
-    def __str__(self):
-        val = miscc.wxSize___str__(self.this)
+    def asTuple(self):
+        val = miscc.wxSize_asTuple(self.this)
         return val
     def __setattr__(self,name,value):
+        if name == "x" :
+            miscc.wxSize_x_set(self.this,value)
+            return
+        if name == "y" :
+            miscc.wxSize_y_set(self.this,value)
+            return
         if name == "width" :
             miscc.wxSize_width_set(self.this,value)
             return
@@ -28,6 +40,10 @@ class wxSizePtr :
             return
         self.__dict__[name] = value
     def __getattr__(self,name):
+        if name == "x" : 
+            return miscc.wxSize_x_get(self.this)
+        if name == "y" : 
+            return miscc.wxSize_y_get(self.this)
         if name == "width" : 
             return miscc.wxSize_width_get(self.this)
         if name == "height" : 
@@ -35,6 +51,8 @@ class wxSizePtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxSize instance>"
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
 class wxSize(wxSizePtr):
     def __init__(self,*args) :
         self.this = apply(miscc.new_wxSize,()+args)
@@ -84,8 +102,8 @@ class wxPointPtr :
     def Set(self,arg0,arg1):
         val = miscc.wxPoint_Set(self.this,arg0,arg1)
         return val
-    def __str__(self):
-        val = miscc.wxPoint___str__(self.this)
+    def asTuple(self):
+        val = miscc.wxPoint_asTuple(self.this)
         return val
     def __setattr__(self,name,value):
         if name == "x" :
@@ -103,6 +121,8 @@ class wxPointPtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxPoint instance>"
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
 class wxPoint(wxPointPtr):
     def __init__(self,*args) :
         self.this = apply(miscc.new_wxPoint,()+args)
@@ -164,6 +184,9 @@ class wxRectPtr :
     def GetRight(self):
         val = miscc.wxRect_GetRight(self.this)
         return val
+    def asTuple(self):
+        val = miscc.wxRect_asTuple(self.this)
+        return val
     def __setattr__(self,name,value):
         if name == "x" :
             miscc.wxRect_x_set(self.this,value)
@@ -190,6 +213,8 @@ class wxRectPtr :
         raise AttributeError,name
     def __repr__(self):
         return "<C wxRect instance>"
+    def __str__(self): return str(self.asTuple())
+    def __repr__(self): return str(self.asTuple())
 class wxRect(wxRectPtr):
     def __init__(self,*args) :
         self.this = apply(miscc.new_wxRect,()+args)
@@ -460,6 +485,30 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
 
 
 
+class wxToolTipPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetTip(self,arg0):
+        val = miscc.wxToolTip_SetTip(self.this,arg0)
+        return val
+    def GetTip(self):
+        val = miscc.wxToolTip_GetTip(self.this)
+        return val
+    def GetWindow(self):
+        val = miscc.wxToolTip_GetWindow(self.this)
+        val = wxWindowPtr(val)
+        return val
+    def __repr__(self):
+        return "<C wxToolTip instance>"
+class wxToolTip(wxToolTipPtr):
+    def __init__(self,arg0) :
+        self.this = miscc.new_wxToolTip(arg0)
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
@@ -588,6 +637,10 @@ wxResourceParseData = miscc.wxResourceParseData
 wxResourceParseFile = miscc.wxResourceParseFile
 
 wxResourceParseString = miscc.wxResourceParseString
+
+wxToolTip_Enable = miscc.wxToolTip_Enable
+
+wxToolTip_SetDelay = miscc.wxToolTip_SetDelay
 
 
 

@@ -55,6 +55,7 @@ extern PyObject *SWIG_newvarlink(void);
 
 #include "helpers.h"
 #include <wx/metafile.h>
+#include <wx/imaglist.h>
 #ifndef __WXMSW__
 #include <wx/dcps.h>
 #endif
@@ -145,6 +146,8 @@ static char* wxStringErrorMsg = "string type is required for parameter";
     wxMemoryDC* wxMemoryDCFromDC(wxDC* oldDC) {
         return new wxMemoryDC(oldDC);
     }
+
+#if 0
 extern wxFont * wxNORMAL_FONT; 
 extern wxFont * wxSMALL_FONT; 
 extern wxFont * wxITALIC_FONT; 
@@ -187,6 +190,8 @@ extern wxBrush  wxNullBrush;
 extern wxPalette  wxNullPalette; 
 extern wxFont  wxNullFont; 
 extern wxColour  wxNullColour; 
+
+#endif
 static PyObject *_wrap_wxEmptyBitmap(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxBitmap * _result;
@@ -3597,7 +3602,7 @@ static PyObject *_wrap_wxDC_GetTextBackground(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxDC_GetTextExtent(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->GetTextExtent(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
+#define wxDC_GetTextExtent(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->GetTextExtent(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxDC * _arg0;
@@ -3606,10 +3611,6 @@ static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
     long  temp;
     long * _arg3;
     long  temp0;
-    long * _arg4;
-    long  temp1;
-    long * _arg5;
-    long  temp2;
     char * _argc0 = 0;
     PyObject * _obj1 = 0;
 
@@ -3619,12 +3620,6 @@ static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
 }
 {
   _arg3 = &temp0;
-}
-{
-  _arg4 = &temp1;
-}
-{
-  _arg5 = &temp2;
 }
     if(!PyArg_ParseTuple(args,"sO:wxDC_GetTextExtent",&_argc0,&_obj1)) 
         return NULL;
@@ -3641,7 +3636,79 @@ static PyObject *_wrap_wxDC_GetTextExtent(PyObject *self, PyObject *args) {
     }
     _arg1 = new wxString(PyString_AsString(_obj1));
 }
-    wxDC_GetTextExtent(_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5);
+    wxDC_GetTextExtent(_arg0,*_arg1,_arg2,_arg3);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg2));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    PyObject *o;
+    o = PyInt_FromLong((long) (*_arg3));
+    _resultobj = t_output_helper(_resultobj, o);
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+    return _resultobj;
+}
+
+#define wxDC_GetFullTextExtent(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->GetTextExtent(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxDC_GetFullTextExtent(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxDC * _arg0;
+    wxString * _arg1;
+    long * _arg2;
+    long  temp;
+    long * _arg3;
+    long  temp0;
+    long * _arg4;
+    long  temp1;
+    long * _arg5;
+    long  temp2;
+    wxFont * _arg6 = NULL;
+    char * _argc0 = 0;
+    PyObject * _obj1 = 0;
+    char * _argc6 = 0;
+
+    self = self;
+{
+  _arg2 = &temp;
+}
+{
+  _arg3 = &temp0;
+}
+{
+  _arg4 = &temp1;
+}
+{
+  _arg5 = &temp2;
+}
+    if(!PyArg_ParseTuple(args,"sO|s:wxDC_GetFullTextExtent",&_argc0,&_obj1,&_argc6)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDC_GetFullTextExtent. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1));
+}
+    if (_argc6) {
+        if (SWIG_GetPtr(_argc6,(void **) &_arg6,"_wxFont_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxDC_GetFullTextExtent. Expected _wxFont_p.");
+        return NULL;
+        }
+    }
+    wxDC_GetFullTextExtent(_arg0,*_arg1,_arg2,_arg3,_arg4,_arg5,_arg6);
     Py_INCREF(Py_None);
     _resultobj = Py_None;
 {
@@ -4809,7 +4876,216 @@ static PyObject *_wrap_wxPalette_Ok(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define new_wxImageList(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxImageList(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_new_wxImageList(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxImageList * _result;
+    int  _arg0;
+    int  _arg1;
+    bool  _arg2 = (1);
+    int  _arg3 = 1;
+    int tempbool2;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ii|ii:new_wxImageList",&_arg0,&_arg1,&tempbool2,&_arg3)) 
+        return NULL;
+    _arg2 = (bool ) tempbool2;
+    _result = (wxImageList *)new_wxImageList(_arg0,_arg1,_arg2,_arg3);
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxImageList_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define delete_wxImageList(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxImageList(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxImageList * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_wxImageList",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxImageList. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    delete_wxImageList(_arg0);
+    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxImageList_Add(_swigobj,_swigarg0)  (_swigobj->Add(_swigarg0))
+static PyObject *_wrap_wxImageList_Add(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxImageList * _arg0;
+    wxBitmap * _arg1;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:wxImageList_Add",&_argc0,&_argc1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_Add. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxImageList_Add. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxImageList_Add(_arg0,*_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_Replace(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Replace(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxImageList_Replace(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImageList * _arg0;
+    int  _arg1;
+    wxBitmap * _arg2;
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sis:wxImageList_Replace",&_argc0,&_arg1,&_argc2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_Replace. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxBitmap_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Replace. Expected _wxBitmap_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxImageList_Replace(_arg0,_arg1,*_arg2);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_Draw(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5)  (_swigobj->Draw(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4,_swigarg5))
+static PyObject *_wrap_wxImageList_Draw(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImageList * _arg0;
+    int  _arg1;
+    wxDC * _arg2;
+    int  _arg3;
+    int  _arg4;
+    int  _arg5 = (wxIMAGELIST_DRAW_NORMAL);
+    bool  _arg6 = (0);
+    char * _argc0 = 0;
+    char * _argc2 = 0;
+    int tempbool6;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sisii|ii:wxImageList_Draw",&_argc0,&_arg1,&_argc2,&_arg3,&_arg4,&_arg5,&tempbool6)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_Draw. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxDC_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxImageList_Draw. Expected _wxDC_p.");
+        return NULL;
+        }
+    }
+    _arg6 = (bool ) tempbool6;
+    _result = (bool )wxImageList_Draw(_arg0,_arg1,*_arg2,_arg3,_arg4,_arg5,_arg6);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_GetImageCount(_swigobj)  (_swigobj->GetImageCount())
+static PyObject *_wrap_wxImageList_GetImageCount(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    wxImageList * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxImageList_GetImageCount",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_GetImageCount. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    _result = (int )wxImageList_GetImageCount(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_Remove(_swigobj,_swigarg0)  (_swigobj->Remove(_swigarg0))
+static PyObject *_wrap_wxImageList_Remove(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImageList * _arg0;
+    int  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"si:wxImageList_Remove",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_Remove. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxImageList_Remove(_arg0,_arg1);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxImageList_RemoveAll(_swigobj)  (_swigobj->RemoveAll())
+static PyObject *_wrap_wxImageList_RemoveAll(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxImageList * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxImageList_RemoveAll",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImageList_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImageList_RemoveAll. Expected _wxImageList_p.");
+        return NULL;
+        }
+    }
+    _result = (bool )wxImageList_RemoveAll(_arg0);
+    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static PyMethodDef gdicMethods[] = {
+	 { "wxImageList_RemoveAll", _wrap_wxImageList_RemoveAll, 1 },
+	 { "wxImageList_Remove", _wrap_wxImageList_Remove, 1 },
+	 { "wxImageList_GetImageCount", _wrap_wxImageList_GetImageCount, 1 },
+	 { "wxImageList_Draw", _wrap_wxImageList_Draw, 1 },
+	 { "wxImageList_Replace", _wrap_wxImageList_Replace, 1 },
+	 { "wxImageList_Add", _wrap_wxImageList_Add, 1 },
+	 { "delete_wxImageList", _wrap_delete_wxImageList, 1 },
+	 { "new_wxImageList", _wrap_new_wxImageList, 1 },
 	 { "wxPalette_Ok", _wrap_wxPalette_Ok, 1 },
 	 { "wxPalette_GetRGB", _wrap_wxPalette_GetRGB, 1 },
 	 { "wxPalette_GetPixel", _wrap_wxPalette_GetPixel, 1 },
@@ -4852,6 +5128,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxDC_LogicalToDeviceXRel", _wrap_wxDC_LogicalToDeviceXRel, 1 },
 	 { "wxDC_LogicalToDeviceX", _wrap_wxDC_LogicalToDeviceX, 1 },
 	 { "wxDC_GetTextForeground", _wrap_wxDC_GetTextForeground, 1 },
+	 { "wxDC_GetFullTextExtent", _wrap_wxDC_GetFullTextExtent, 1 },
 	 { "wxDC_GetTextExtent", _wrap_wxDC_GetTextExtent, 1 },
 	 { "wxDC_GetTextBackground", _wrap_wxDC_GetTextBackground, 1 },
 	 { "wxDC_GetSize", _wrap_wxDC_GetSize, 1 },
@@ -5020,6 +5297,13 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_addvarlink(SWIG_globals,"wxNullPalette",_wrap_wxNullPalette_get, _wrap_wxNullPalette_set);
 	 SWIG_addvarlink(SWIG_globals,"wxNullFont",_wrap_wxNullFont_get, _wrap_wxNullFont_set);
 	 SWIG_addvarlink(SWIG_globals,"wxNullColour",_wrap_wxNullColour_get, _wrap_wxNullColour_set);
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_NORMAL", PyInt_FromLong((long) wxIMAGELIST_DRAW_NORMAL));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_TRANSPARENT", PyInt_FromLong((long) wxIMAGELIST_DRAW_TRANSPARENT));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_SELECTED", PyInt_FromLong((long) wxIMAGELIST_DRAW_SELECTED));
+	 PyDict_SetItemString(d,"wxIMAGELIST_DRAW_FOCUSED", PyInt_FromLong((long) wxIMAGELIST_DRAW_FOCUSED));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_NORMAL", PyInt_FromLong((long) wxIMAGE_LIST_NORMAL));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_SMALL", PyInt_FromLong((long) wxIMAGE_LIST_SMALL));
+	 PyDict_SetItemString(d,"wxIMAGE_LIST_STATE", PyInt_FromLong((long) wxIMAGE_LIST_STATE));
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).
@@ -5029,12 +5313,14 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
 	 SWIG_RegisterMapping("_long","_wxDash",0);
 	 SWIG_RegisterMapping("_long","_unsigned_long",0);
 	 SWIG_RegisterMapping("_long","_signed_long",0);
+	 SWIG_RegisterMapping("_wxImageList","_class_wxImageList",0);
 	 SWIG_RegisterMapping("_class_wxAcceleratorTable","_wxAcceleratorTable",0);
 	 SWIG_RegisterMapping("_wxDC","_class_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
 	 SWIG_RegisterMapping("_wxDC","_wxPostScriptDC",SwigwxPostScriptDCTowxDC);
@@ -5051,6 +5337,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_wxDC","_class_wxDC",0);
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_class_wxPostScriptDC","_wxPostScriptDC",0);
+	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
@@ -5122,6 +5409,7 @@ SWIGEXPORT(void,initgdic)() {
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
 	 SWIG_RegisterMapping("_short","_signed_short",0);
+	 SWIG_RegisterMapping("_class_wxImageList","_wxImageList",0);
 	 SWIG_RegisterMapping("_wxWindowID","_EBool",0);
 	 SWIG_RegisterMapping("_wxWindowID","_uint",0);
 	 SWIG_RegisterMapping("_wxWindowID","_int",0);
