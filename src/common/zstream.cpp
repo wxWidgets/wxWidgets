@@ -89,15 +89,19 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
       m_inflate->next_in = m_z_buffer;
       m_inflate->avail_in = m_parent_i_stream->LastRead();
 
-      if (m_parent_i_stream->LastError() != wxStream_NOERROR)
-        return (size - m_inflate->avail_in);
+      if (m_parent_i_stream->LastError() != wxStream_NOERROR &&
+          m_parent_i_stream->LastError() != wxStream_EOF)
+      { 
+        m_lasterror = m_parent_i_stream->LastError();
+        return 0; // failed to read anything
+      }
     }
     err = inflate(m_inflate, Z_FINISH);
     if (err == Z_STREAM_END)
-      return (size - m_inflate->avail_in);
+      return (size - m_inflate->avail_out);
   }
 
-  return size-m_inflate->avail_in;
+  return size-m_inflate->avail_out;
 }
 
 //////////////////////
