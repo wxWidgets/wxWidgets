@@ -733,6 +733,7 @@ int wxXmlResourceHandler::GetID()
     stdID(wxID_STATIC); stdID(wxID_FORWARD); stdID(wxID_BACKWARD);
     stdID(wxID_DEFAULT); stdID(wxID_MORE); stdID(wxID_SETUP);
     stdID(wxID_RESET); stdID(wxID_HELP_CONTEXT);
+    stdID(wxID_CLOSE_ALL);
 #undef stdID
     else return wxXmlResource::GetXRCID(sid);
 }
