@@ -38,11 +38,9 @@
 #endif //WX_PRECOMP
 
 #include "wx/x11/private.h"
-#include "X11/Xatom.h"
-#include "X11/Xutil.h"
 
-// list of all frames and modeless dialogs
-// wxWindowList wxModelessWindows;
+
+bool wxMWMIsRunning(Window w);
 
 // ----------------------------------------------------------------------------
 // wxTopLevelWindowX11 creation
@@ -256,8 +254,7 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
             wmHints->icon_mask = (Pixmap) icon.GetMask()->GetPixmap();
         }
 
-        XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(),
-            wmHints);
+        XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(), wmHints);
         XFree(wmHints);
     }
 }

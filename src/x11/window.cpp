@@ -325,7 +325,11 @@ void wxWindowX11::DoCaptureMouse()
         }
 
         res = XGrabKeyboard(wxGlobalDisplay(), (Window) GetMainWindow(),
+#if 0
+            ShiftMask | LockMask | ControlMask | Mod1Mask | Mod2Mask | Mod3Mask | Mod4Mask | Mod5Mask,
+#else
             FALSE,
+#endif
             GrabModeAsync,
 	        GrabModeAsync,
             CurrentTime);
@@ -1309,8 +1313,9 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
     if (!GetMainWindow())
         return FALSE;
 
+    wxColour colour( col );
     XSetWindowAttributes attrib;
-    attrib.background_pixel = ((wxColour&)col).AllocColour(wxGlobalDisplay());
+    attrib.background_pixel = colour.AllocColour(wxGlobalDisplay());
 
     XChangeWindowAttributes(wxGlobalDisplay(),
         (Window) GetMainWindow(),

@@ -42,6 +42,9 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     // All dialogs should really have this style
     m_windowStyle = style;
     m_windowStyle |= wxTAB_TRAVERSAL;
+    
+    wxPoint pos( 20,20 );
+    wxSize size( 20,20 );
 
     m_parent = parent;
     if (m_parent) m_parent->AddChild( this );
