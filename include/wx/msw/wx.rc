@@ -138,3 +138,10 @@ wxDISABLE_BUTTON_BITMAP         BITMAP  "wx/msw/disable.bmp"
 tick_bmp                BITMAP  "wx/msw/tick.bmp"
 cross_bmp               BITMAP  "wx/msw/cross.bmp"
 
+// For src/generic/plot.cpp
+plot_up.bmp             BITMAP  "wx/msw/plot_up.bmp"
+plot_dwn.bmp            BITMAP  "wx/msw/plot_dwn.bmp"
+plot_enl.bmp            BITMAP  "wx/msw/plot_enl.bmp"
+plot_shr.bmp            BITMAP  "wx/msw/plot_shr.bmp"
+plot_zin.bmp            BITMAP  "wx/msw/plot_zin.bmp"
+plot_zot.bmp            BITMAP  "wx/msw/plot_zot.bmp"

@@ -29,7 +29,14 @@
 
 class wxImageList;
 class wxNotebook;
-class wxNotebookPage;
+
+typedef wxWindow wxNotebookPage;  // so far, any window can be a page
+
+//-----------------------------------------------------------------------------
+// internal class
+//-----------------------------------------------------------------------------
+
+class wxGtkNotebookPage;
 
 //-----------------------------------------------------------------------------
 // wxNotebook
@@ -112,19 +119,19 @@ public:
   
     // adds a new page to the notebook (it will be deleted ny the notebook,
     // don't delete it yourself). If bSelect, this page becomes active.
-  bool AddPage( wxWindow *win,
-                const wxString& strText,
-                bool select = FALSE,
-                int imageId = -1 );
+    bool AddPage( wxNotebookPage *win,
+                  const wxString& strText,
+                  bool select = FALSE,
+                  int imageId = -1 );
     // the same as AddPage(), but adds it at the specified position
-  bool InsertPage( int position,
-                   wxWindow *win,
-                   const wxString& strText,
-                   bool bSelect = FALSE,
-                   int imageId = -1 );
+    bool InsertPage( int position,
+                     wxNotebookPage *win,
+                     const wxString& strText,
+                     bool bSelect = FALSE,
+                     int imageId = -1 );
 
     // get the panel which represents the given page
-  wxWindow *GetPage(int nPage) const;
+    wxNotebookPage *GetPage(int nPage) const;
 
     // handler for tab navigation
     // --------------------------
@@ -144,7 +151,7 @@ public:
     void Init();
 
     // helper function
-    wxNotebookPage* GetNotebookPage(int page) const;
+    wxGtkNotebookPage* GetNotebookPage(int page) const;
 
     wxImageList*    m_imageList;
     wxList          m_pages;
