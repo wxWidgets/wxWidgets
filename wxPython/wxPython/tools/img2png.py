@@ -37,6 +37,9 @@ import img2img
 from wxPython import wx
 
 def main():
+    # some bitmap related things need to have a wxApp initialized...
+    if wx.wxGetApp() is None:
+        app = wx.wxPySimpleApp()
     img2img.main(sys.argv[1:], wx.wxBITMAP_TYPE_PNG, ".png", __doc__)
 
 if __name__ == '__main__':

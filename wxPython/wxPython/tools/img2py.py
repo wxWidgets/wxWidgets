@@ -115,6 +115,10 @@ def main(args):
         print __doc__
         return
 
+    # some bitmap related things need to have a wxApp initialized...
+    if wx.wxGetApp() is None:
+        app = wx.wxPySimpleApp()
+
     append = 0
     compressed = 1
     maskClr = None
