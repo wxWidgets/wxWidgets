@@ -463,7 +463,7 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
                                          PULARGE_INTEGER);
 
     GetDiskFreeSpaceEx_t
-        pGetDiskFreeSpaceEx = ::GetProcAddress
+        pGetDiskFreeSpaceEx = (GetDiskFreeSpaceEx_t)::GetProcAddress
                               (
                                 ::GetModuleHandle(_T("kernel32.dll")),
 #if wxUSE_UNICODE
@@ -501,6 +501,10 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
     else
 #endif // Win32
     {
+        // there's a problem with drives larger than 2GB, GetDiskFreeSpaceEx()
+        // should be used instead - but if it's not available, fall back on
+        // GetDiskFreeSpace() nevertheless...
+
         DWORD lSectorsPerCluster,
               lBytesPerSector,
               lNumberOfFreeClusters,
@@ -519,8 +523,6 @@ bool wxGetDiskSpace(const wxString& path, wxLongLong *pTotal, wxLongLong *pFree)
             return FALSE;
         }
 
-        // there's a problem with drives larger than 2GB on non Win32!!
-        // let's calculate it, nevertheless....
         wxLongLong lBytesPerCluster = lSectorsPerCluster;
         lBytesPerCluster *= lBytesPerSector;
 
