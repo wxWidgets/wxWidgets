@@ -1042,6 +1042,7 @@ mdi.h	GTKH
 menu.h	GTKH
 menuitem.h	GTKH
 minifram.h	GTKH
+msgdlg.h	GTKH
 notebook.h	GTKH
 pen.h	GTKH
 popupwin.h	GTKH
