@@ -65,6 +65,17 @@ class WXDLLEXPORT wxTextCtrlCommandProcessor;
 #define wxACTION_TEXT_REDO          _T("redo")
 
 // ----------------------------------------------------------------------------
+// wxTextCtrl types
+// ----------------------------------------------------------------------------
+
+// wxTextPos is the position in the text
+typedef long wxTextPos;
+
+// wxTextCoord is the line or row number (which should have been unsigned but
+// is long for backwards compatibility)
+typedef long wxTextCoord;
+
+// ----------------------------------------------------------------------------
 // wxTextCtrl::HitTest return values
 // ----------------------------------------------------------------------------
 
@@ -118,23 +129,23 @@ public:
     virtual wxString GetValue() const;
     virtual void SetValue(const wxString& value);
 
-    virtual int GetLineLength(long lineNo) const;
-    virtual wxString GetLineText(long lineNo) const;
+    virtual int GetLineLength(wxTextCoord lineNo) const;
+    virtual wxString GetLineText(wxTextCoord lineNo) const;
     virtual int GetNumberOfLines() const;
 
     virtual bool IsModified() const;
     virtual bool IsEditable() const;
 
     // If the return values from and to are the same, there is no selection.
-    virtual void GetSelection(long* from, long* to) const;
+    virtual void GetSelection(wxTextPos* from, wxTextPos* to) const;
 
     // operations
     // ----------
 
     // editing
     virtual void Clear();
-    virtual void Replace(long from, long to, const wxString& value);
-    virtual void Remove(long from, long to);
+    virtual void Replace(wxTextPos from, wxTextPos to, const wxString& value);
+    virtual void Remove(wxTextPos from, wxTextPos to);
 
     // clears the dirty flag
     virtual void DiscardEdits();
@@ -147,10 +158,15 @@ public:
     // translate between the position (which is just an index in the text ctrl
     // considering all its contents as a single strings) and (x, y) coordinates
     // which represent column and line.
-    virtual long XYToPosition(long x, long y) const;
-    virtual bool PositionToXY(long pos, long *x, long *y) const;
+    virtual wxTextPos XYToPosition(wxTextCoord x, wxTextCoord y) const;
+    virtual bool PositionToXY(wxTextPos pos,
+                              wxTextCoord *x, wxTextCoord *y) const;
 
-    virtual void ShowPosition(long pos);
+    // wxUniv-specific: find a screen position (in client coordinates) of the
+    // given text position
+    bool PositionToPixelXY(wxTextPos pos, wxCoord *x, wxCoord *y) const;
+
+    virtual void ShowPosition(wxTextPos pos);
 
     // Clipboard operations
     virtual void Copy();
@@ -165,12 +181,12 @@ public:
     virtual bool CanRedo() const;
 
     // Insertion point
-    virtual void SetInsertionPoint(long pos);
+    virtual void SetInsertionPoint(wxTextPos pos);
     virtual void SetInsertionPointEnd();
-    virtual long GetInsertionPoint() const;
-    virtual long GetLastPosition() const;
+    virtual wxTextPos GetInsertionPoint() const;
+    virtual wxTextPos GetLastPosition() const;
 
-    virtual void SetSelection(long from, long to);
+    virtual void SetSelection(wxTextPos from, wxTextPos to);
     virtual void SetEditable(bool editable);
 
     // wxUniv-specific methods
@@ -180,11 +196,10 @@ public:
     virtual void ShowCaret(bool show = TRUE);
     void HideCaret() { ShowCaret(FALSE); }
     void CreateCaret(); // for the current font size
-    wxCoord GetCaretPosition(long pos = -1) const; // in pixels, def => current
 
     // helpers for cursor movement
-    long GetWordStart() const;
-    long GetWordEnd() const;
+    wxTextPos GetWordStart() const;
+    wxTextPos GetWordEnd() const;
 
     // selection helpers
     bool HasSelection() const
@@ -202,7 +217,7 @@ public:
     // NB: pt is in device coords (not adjusted for the client area origin nor
     //     for the scrolling)
     wxTextCtrlHitTestResult HitTest(const wxPoint& pt,
-                                    long *col, long *row) const;
+                                    wxTextCoord *col, wxTextCoord *row) const;
 
     // find the character at this position in the given line, return value as
     // for HitTest()
@@ -210,14 +225,14 @@ public:
     // NB: x is the logical coord (client and unscrolled)
     wxTextCtrlHitTestResult HitTestLine(const wxString& line,
                                         wxCoord x,
-                                        long *colOut) const;
+                                        wxTextCoord *colOut) const;
 
     // bring the given position into view
     void ShowHorzPosition(wxCoord pos);
 
     // scroll the window horizontally so that the first character shown is in
     // position pos
-    void ScrollText(long col);
+    void ScrollText(wxTextCoord col);
 
     // adjust the DC for horz text control scrolling too
     virtual void DoPrepareDC(wxDC& dc);
@@ -245,7 +260,7 @@ protected:
     // draw the text
     void DrawTextLine(wxDC& dc, const wxRect& rect,
                       const wxString& text,
-                      long selStart, long selEnd);
+                      wxTextPos selStart, wxTextPos selEnd);
 
     void DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate);
 
@@ -271,6 +286,12 @@ protected:
     // get the logical text width (accounting for scrolling)
     wxCoord GetTotalWidth() const;
 
+    // find the number of rows in this line (only if WrapLines())
+    wxTextCoord GetRowsPerLine(wxTextCoord line) const;
+
+    // get total number of rows before the given line
+    wxTextCoord GetNumberOfRowsBefore(wxTextCoord line) const;
+
     // the text area is the part of the window in which the text can be
     // displayed, i.e. part of it inside the margins and the real text area is
     // the area in which the text *is* currently displayed: for example, in the
@@ -284,17 +305,17 @@ protected:
 
     // refresh the text in the given range (in logical coords) of this line, if
     // width is 0, refresh to the end of line
-    void RefreshPixelRange(long line, wxCoord start, wxCoord width);
+    void RefreshPixelRange(wxTextCoord line, wxCoord start, wxCoord width);
 
     // refresh the text in the given range (in text coords) in this line
-    void RefreshColRange(long line, long start, long count);
+    void RefreshColRange(wxTextCoord line, wxTextPos start, size_t count);
 
     // refresh the text from in the given line range (inclusive)
-    void RefreshLineRange(long lineFirst, long lineLast);
+    void RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast);
 
     // refresh the text in the given range which can span multiple lines
     // (this method accepts arguments in any order)
-    void RefreshTextRange(long start, long end);
+    void RefreshTextRange(wxTextPos start, wxTextPos end);
 
     // get the text to show: either the text itself or the text replaced with
     // starts for wxTE_PASSWORD control
@@ -305,7 +326,8 @@ protected:
 
     // get the start and end of the selection for this line: if the line is
     // outside the selection, both will be -1 and FALSE will be returned
-    bool GetSelectedPartOfLine(long line, int *start, int *end) const;
+    bool GetSelectedPartOfLine(wxTextCoord line,
+                               wxTextPos *start, wxTextPos *end) const;
 
     // update the text rect: the zone inside our client rect (its coords are
     // client coords) which contains the text
@@ -316,7 +338,7 @@ protected:
 
     // move caret to the given position unconditionally
     // (SetInsertionPoint() does nothing if the position didn't change)
-    void DoSetInsertionPoint(long pos);
+    void DoSetInsertionPoint(wxTextPos pos);
 
     // set the caret to its initial (default) position
     void InitInsertionPoint();
@@ -332,16 +354,24 @@ protected:
     }
 
     // update the max width after the given line was modified
-    void UpdateMaxWidth(long line);
+    void UpdateMaxWidth(wxTextCoord line);
 
     // HitTest2() is more efficient than 2 consecutive HitTest()s with the same
     // line (i.e. y) and it also returns the offset of the starting position in
     // pixels
     wxTextCtrlHitTestResult HitTest2(wxCoord y,
-                                     wxCoord x1, wxCoord x2,
-                                     long *row,
-                                     long *colStart, long *colEnd,
-                                     wxCoord *ofsStart) const;
+                                     wxCoord x1,
+                                     wxCoord x2,
+                                     wxTextCoord *row,
+                                     wxTextCoord *colStart,
+                                     wxTextCoord *colEnd,
+                                     wxTextCoord *colRowStart) const;
+
+    // HitTest() version for use in wxTextCtrl: it takes the text coordinates
+    // (i.e. coords relative to the text rect)
+    wxTextCtrlHitTestResult HitTestClient(wxCoord x, wxCoord y,
+                                          wxTextCoord *col,
+                                          wxTextCoord *row) const;
 
     // event handlers
     void OnIdle(wxIdleEvent& event);
@@ -381,17 +411,17 @@ private:
     wxArrayString m_lines;
 
     // current position
-    long m_curPos,
-         m_curCol,
-         m_curRow;
+    wxTextPos m_curPos;
+    wxTextCoord m_curCol,
+                m_curRow;
 
     // last position (only used by GetLastPosition())
-    long m_posLast;
+    wxTextPos m_posLast;
 
     // selection
-    long m_selAnchor,
-         m_selStart,
-         m_selEnd;
+    wxTextPos m_selAnchor,
+              m_selStart,
+              m_selEnd;
 
     // flags
     bool m_isModified:1,
@@ -405,12 +435,12 @@ private:
 
     // the position of the first visible pixel and the first visible column
     wxCoord m_ofsHorz;
-    long m_colStart;
+    wxTextCoord m_colStart;
 
     // and the last ones (m_posLastVisible is the width but m_colLastVisible
     // is an absolute value)
     wxCoord m_posLastVisible;
-    long m_colLastVisible;
+    wxTextCoord m_colLastVisible;
 
     // this section is for the controls with scrollbar(s)
 
@@ -426,7 +456,7 @@ private:
     wxCoord m_widthMax;
 
     // the index of the line which has the length of m_widthMax
-    long m_lineLongest;
+    wxTextCoord m_lineLongest;
 
     // the object to which we delegate our undo/redo implementation
     wxTextCtrlCommandProcessor *m_cmdProcessor;

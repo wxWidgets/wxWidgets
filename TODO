@@ -14,6 +14,7 @@ samples:
 
 wxTextCtrl
 
+*   adjust refresh/scroll for WrapLines() case
 *!  display corrupted when typing text in quickly (caret problem?)
 *   caret leaves traces under wxGTK
 ?   text ctrl display pb when text is truncated
@@ -35,6 +36,7 @@ All
 
 MSW
 
+*   text control scrollbar has text cursor
     scrollbar behaves strangely in log lbox with many strings
 
 GTK

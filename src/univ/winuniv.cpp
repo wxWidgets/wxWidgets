@@ -632,6 +632,7 @@ void wxWindow::SetScrollbar(int orient,
             if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
             {
                 // just disable the scrollbar
+                scrollbar->SetScrollbar(pos, pageSize, range, pageSize, refresh);
                 scrollbar->Disable();
             }
             else // really remove the scrollbar

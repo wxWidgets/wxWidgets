@@ -10,13 +10,12 @@
 /////////////////////////////////////////////////////////////////////////////
 
 /*
-   Search for "OPT" for possible optimizations
+   TODO
 
-   A possible global optimization would be to always store the coords in the
-   text in triplets (pos, col, line) and update them simultaneously instead of
-   recalculating col and line from pos each time it is needed. Currently we
-   only do it for the current position but we might also do it for the
-   selection start and end.
+!  1. update vert scrollbar when any line length changes for WrapLines()
+   2. cursor movement ("Hello,^" -> "^verse!" on Arrow Down)?
+   3. split file into chunks
+!  4. rewrite Replace() refresh logic to deal with wrapping lines
  */
 
 /*
@@ -79,6 +78,16 @@
    but much more logical IMHO).
  */
 
+/*
+   Search for "OPT" for possible optimizations
+
+   A possible global optimization would be to always store the coords in the
+   text in triplets (pos, col, line) and update them simultaneously instead of
+   recalculating col and line from pos each time it is needed. Currently we
+   only do it for the current position but we might also do it for the
+   selection start and end.
+ */
+
 // ============================================================================
 // declarations
 // ============================================================================
@@ -136,11 +145,11 @@
 // ----------------------------------------------------------------------------
 
 // exchange two positions so that from is always less than or equal to to
-static inline void OrderPositions(long& from, long& to)
+static inline void OrderPositions(wxTextPos& from, wxTextPos& to)
 {
     if ( from > to )
     {
-        long tmp = from;
+        wxTextPos tmp = from;
         from = to;
         to = tmp;
     }
@@ -207,14 +216,14 @@ private:
     wxString m_text;
 
     // the position where we inserted the text
-    long m_from;
+    wxTextPos m_from;
 };
 
 // remove text command
 class wxTextCtrlRemoveCommand : public wxTextCtrlCommand
 {
 public:
-    wxTextCtrlRemoveCommand(long from, long to)
+    wxTextCtrlRemoveCommand(wxTextPos from, wxTextPos to)
         : wxTextCtrlCommand(wxTEXT_COMMAND_REMOVE)
     {
         m_from = from;
@@ -227,7 +236,7 @@ public:
 
 private:
     // the range of text to delete
-    long m_from,
+    wxTextPos m_from,
          m_to;
 
     // the text which was deleted when this command was Do()ne
@@ -432,10 +441,10 @@ void wxTextCtrl::Clear()
     SetValue(_T(""));
 }
 
-void wxTextCtrl::Replace(long from, long to, const wxString& text)
+void wxTextCtrl::Replace(wxTextPos from, wxTextPos to, const wxString& text)
 {
-    long colStart, colEnd,
-         lineStart, lineEnd;
+    wxTextCoord colStart, colEnd,
+                lineStart, lineEnd;
 
     if ( (from > to) ||
          !PositionToXY(from, &colStart, &lineStart) ||
@@ -455,230 +464,6 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     if ( (size_t)to < textTotal.length() )
         textTotalNew += textTotal.c_str() + (size_t)to;
 #endif // WXDEBUG_TEXT_REPLACE
-
-    // the first attempt at implementing Replace() - it was meant to be more
-    // efficient than the current code but it also is much more complicated
-    // and, worse, still has a few bugs and so as I'm not even sure any more
-    // that it is really more efficient, I'm dropping it in favour of much
-    // simpler code below
-#if 0
-/*
-   The algorithm of Replace():
-
-    1. change the line where replacement starts
-        a) keep the text in the beginning of it unchanged
-        b) replace the middle (if lineEnd == lineStart) or everything to the
-           end with the first line of replacement text
-
-    2. delete all lines between lineStart and lineEnd (excluding)
-
-    3. insert the lines of the replacement text
-
-    4. change the line where replacement ends:
-        a) remove the part which is in replacement range
-        b) insert the last line of replacement text
-        c) insert the end of the first line if lineEnd == lineStart
-        d) keep the end unchanged
-
-   In the code below the steps 2 and 3 are merged and are done in parallel for
-   efficiency reasons (it is better to change lines in place rather than
-   remove/insert them from a potentially huge array)
- */
-
-    // break the replacement text into lines
-    wxArrayString lines = wxStringTokenize(text, _T("\n"),
-                                           wxTOKEN_RET_EMPTY_ALL);
-    size_t nReplaceCount = lines.GetCount();
-
-    // first deal with the starting line: (1) take the part before the text
-    // being replaced
-    wxString lineFirstOrig = GetLineText(lineStart);
-    wxString lineFirst(lineFirstOrig, (size_t)colStart);
-
-    // remember the start of the update region for later use
-    wxCoord startNewText = GetTextWidth(lineFirst);
-
-    // (2) add the text which replaces this part
-    if ( !lines.IsEmpty() )
-    {
-        lineFirst += lines[0u];
-    }
-
-    // (3) and add the text which is left if we replace text only in this line
-    wxString lineFirstEnd;
-    if ( lineEnd == lineStart )
-    {
-        wxASSERT_MSG((size_t)colEnd <= lineFirstOrig.length(), _T("logic bug"));
-
-        lineFirstEnd = lineFirstOrig.c_str() + (size_t)colEnd;
-
-        if ( nReplaceCount == 1 )
-        {
-            // we keep everything on this line
-            lineFirst += lineFirstEnd;
-        }
-        else
-        {
-            lineEnd++;
-        }
-    }
-
-    // (4) refresh the part of the line which changed
-
-    // we usually refresh till the end of line except of the most common case
-    // when some text is appended to the end of it in which case we refresh
-    // just the newly appended text
-    wxCoord widthNewText;
-    if ( (lineEnd == lineStart) &&
-            ((size_t)colStart == lineFirstOrig.length()) )
-    {
-        // text appended, not replaced, so refresh only the new text
-        widthNewText = GetTextWidth(lines[0u]);
-    }
-    else
-    {
-        // refresh till the end of line as all its tail changed
-
-        // OPT: should only refresh the part occupied by the text, but OTOH
-        //      the line won't be really repainted beyond it anyhow due to the
-        //      checks in DoDrawTextInRect(), so is it really worth it?
-
-        widthNewText = 0;
-    }
-
-    RefreshPixelRange(lineStart, startNewText, widthNewText);
-
-    // (5) modify the line
-    if ( IsSingleLine() )
-    {
-        SetSLValue(lineFirst);
-
-        // force m_colLastVisible update
-        m_colLastVisible = -1;
-
-        // consistency check: when replacing text in a single line control, we
-        // shouldn't have more than one line
-        wxASSERT_MSG(lines.GetCount() <= 1,
-                     _T("can't have more than one line in this wxTextCtrl"));
-
-        // update the current position
-        DoSetInsertionPoint(from + text.length());
-
-        // and the selection (do it after setting the cursor to have correct value
-        // for selection anchor)
-        ClearSelection();
-
-        // nothing more can happen to us, so bail out
-        return;
-    }
-    else // multiline
-    {
-        m_lines[lineStart] = lineFirst;
-    }
-
-    // now replace all intermediate lines entirely
-
-    bool refreshAllBelow = FALSE;
-
-    // (1) modify all lines which are really repaced
-    size_t nReplaceLine = 1;
-    for ( long line = lineStart + 1; line < lineEnd; line++ )
-    {
-        if ( nReplaceLine < nReplaceCount )
-        {
-            // replace line
-            m_lines[line] = lines[nReplaceLine++];
-        }
-        else // no more replacement text - remove line(s)
-        {
-            // (2) remove all lines for which there is no more replacement
-            //     text (this is slightly more efficient than continuing to
-            //     run the loop)
-
-            // adjust the index by the number of lines removed
-            lineEnd -= lineEnd - line;
-
-            // and remove them
-            while ( line < lineEnd )
-            {
-                m_lines.RemoveAt(line++);
-            }
-
-            // the lines below will scroll up
-            refreshAllBelow = TRUE;
-        }
-    }
-
-    // all the rest is only necessary if there is more than one line of
-    // replacement text
-    if ( nReplaceCount > 1 )
-    {
-        // (3) if there are still lines left in the replacement text, insert
-        //     them before modifying the last line
-        if ( nReplaceLine < nReplaceCount - 1 )
-        {
-            // the lines below will scroll down
-            refreshAllBelow = TRUE;
-
-            while ( nReplaceLine < nReplaceCount - 1 ) // OPT: insert all at once?
-            {
-                // insert line and adjust for index change by incrementing lineEnd
-                m_lines.Insert(lines[nReplaceLine++], lineEnd++);
-            }
-        }
-
-        // (4) refresh the lines: if we had replaced exactly the same number of
-        //     lines that we had before, we can just refresh these lines,
-        //     otherwise the lines below will change as well, so we have to
-        //     refresh them too
-        if ( refreshAllBelow || (lineStart < lineEnd - 1) )
-        {
-            RefreshLineRange(lineStart + 1, refreshAllBelow ? -1 : lineEnd - 1);
-        }
-
-        // now deal with the last line: (1) replace its beginning with the end
-        // of the replacement text
-        wxString lineLast;
-        if ( nReplaceLine < nReplaceCount )
-        {
-            wxASSERT_MSG(nReplaceLine == nReplaceCount - 1, _T("logic error"));
-
-            lineLast = lines[nReplaceLine];
-        }
-
-        // (2) add the text which was at the end of first line if we replaced
-        //     its middle with multiline text
-        if ( lineEnd == lineStart )
-        {
-            lineLast += lineFirstEnd;
-        }
-
-        // (3) add the tail of the old last line if anything is left
-        if ( (size_t)lineEnd < m_lines.GetCount() )
-        {
-            wxString lineLastOrig = GetLineText(lineEnd);
-            if ( (size_t)colEnd < lineLastOrig.length() )
-            {
-                lineLast += lineLastOrig.c_str() + (size_t)colEnd;
-            }
-
-            m_lines[lineEnd] = lineLast;
-        }
-        else // the number of lines increased, just append the new one
-        {
-            m_lines.Add(lineLast);
-        }
-
-        // (4) always refresh the last line entirely if it hadn't been already
-        //     refreshed above
-        if ( !refreshAllBelow )
-        {
-            RefreshPixelRange(lineEnd, 0, 0); // entire line
-        }
-    }
-    //else: only one line of replacement text
-
-#else // 1 (new replacement code)
 
     if ( IsSingleLine() )
     {
@@ -730,7 +515,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
 
         // (1) join lines
         wxString textOrig;
-        long line;
+        wxTextCoord line;
         for ( line = lineStart; line <= lineEnd; line++ )
         {
             if ( line > lineStart )
@@ -816,7 +601,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
                 // (4b) delete all extra lines (note that we need to delete
                 //      them backwards because indices shift while we do it)
                 bool deletedLongestLine = FALSE;
-                for ( long lineDel = lineEnd; lineDel >= line; lineDel-- )
+                for ( wxTextCoord lineDel = lineEnd; lineDel >= line; lineDel-- )
                 {
                     if ( lineDel == m_lineLongest )
                     {
@@ -864,7 +649,6 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
             // the vert scrollbar might [dis]appear
             m_updateScrollbarY = TRUE;
         }
-#endif // 0/1
 
         // update the (cached) last position
         m_posLast += text.length() - to + from;
@@ -885,7 +669,7 @@ void wxTextCtrl::Replace(long from, long to, const wxString& text)
     ClearSelection();
 }
 
-void wxTextCtrl::Remove(long from, long to)
+void wxTextCtrl::Remove(wxTextPos from, wxTextPos to)
 {
     // Replace() only works with correctly ordered arguments, so exchange them
     // if necessary
@@ -912,7 +696,7 @@ void wxTextCtrl::AppendText(const wxString& text)
 // current position
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::SetInsertionPoint(long pos)
+void wxTextCtrl::SetInsertionPoint(wxTextPos pos)
 {
     wxCHECK_RET( pos >= 0 && pos <= GetLastPosition(),
                  _T("insertion point position out of range") );
@@ -935,7 +719,7 @@ void wxTextCtrl::InitInsertionPoint()
     ClearSelection();
 }
 
-void wxTextCtrl::DoSetInsertionPoint(long pos)
+void wxTextCtrl::DoSetInsertionPoint(wxTextPos pos)
 {
     wxASSERT_MSG( pos >= 0 && pos <= GetLastPosition(),
                  _T("DoSetInsertionPoint() can only be called with valid pos") );
@@ -951,14 +735,14 @@ void wxTextCtrl::SetInsertionPointEnd()
     SetInsertionPoint(GetLastPosition());
 }
 
-long wxTextCtrl::GetInsertionPoint() const
+wxTextPos wxTextCtrl::GetInsertionPoint() const
 {
     return m_curPos;
 }
 
-long wxTextCtrl::GetLastPosition() const
+wxTextPos wxTextCtrl::GetLastPosition() const
 {
-    long pos;
+    wxTextPos pos;
     if ( IsSingleLine() )
     {
         pos = GetSLValue().length();
@@ -996,7 +780,7 @@ long wxTextCtrl::GetLastPosition() const
 // selection
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::GetSelection(long* from, long* to) const
+void wxTextCtrl::GetSelection(wxTextPos* from, wxTextPos* to) const
 {
     if ( from )
         *from = m_selStart;
@@ -1016,8 +800,8 @@ wxString wxTextCtrl::GetSelectionText() const
         }
         else // multiline
         {
-            long colStart, lineStart,
-                 colEnd, lineEnd;
+            wxTextCoord colStart, lineStart,
+                        colEnd, lineEnd;
             PositionToXY(m_selStart, &colStart, &lineStart);
             PositionToXY(m_selEnd, &colEnd, &lineEnd);
 
@@ -1034,7 +818,7 @@ wxString wxTextCtrl::GetSelectionText() const
                 sel += _T('\n');
 
                 // all intermediate ones
-                for ( long line = lineStart + 1; line < lineEnd; line++ )
+                for ( wxTextCoord line = lineStart + 1; line < lineEnd; line++ )
                 {
                     sel << m_lines[line] << _T('\n');
                 }
@@ -1048,7 +832,7 @@ wxString wxTextCtrl::GetSelectionText() const
     return sel;
 }
 
-void wxTextCtrl::SetSelection(long from, long to)
+void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
 {
     if ( from == -1 || to == from )
     {
@@ -1058,7 +842,7 @@ void wxTextCtrl::SetSelection(long from, long to)
     {
         if ( from >= to )
         {
-            long tmp = from;
+            wxTextPos tmp = from;
             from = to;
             to = tmp;
         }
@@ -1070,8 +854,8 @@ void wxTextCtrl::SetSelection(long from, long to)
         {
             // we need to use temp vars as RefreshTextRange() may call DoDraw()
             // directly and so m_selStart/End must be reset by then
-            long selStartOld = m_selStart,
-                 selEndOld = m_selEnd;
+            wxTextPos selStartOld = m_selStart,
+                      selEndOld = m_selEnd;
 
             m_selStart = from;
             m_selEnd = to;
@@ -1109,8 +893,8 @@ void wxTextCtrl::ClearSelection()
     {
         // we need to use temp vars as RefreshTextRange() may call DoDraw()
         // directly (see above as well)
-        long selStart = m_selStart,
-             selEnd = m_selEnd;
+        wxTextPos selStart = m_selStart,
+                  selEnd = m_selEnd;
 
         // no selection any more
         m_selStart =
@@ -1132,7 +916,8 @@ void wxTextCtrl::RemoveSelection()
     Remove(m_selStart, m_selEnd);
 }
 
-bool wxTextCtrl::GetSelectedPartOfLine(long line, int *start, int *end) const
+bool wxTextCtrl::GetSelectedPartOfLine(wxTextCoord line,
+                                       wxTextPos *start, wxTextPos *end) const
 {
     if ( start )
         *start = -1;
@@ -1145,7 +930,7 @@ bool wxTextCtrl::GetSelectedPartOfLine(long line, int *start, int *end) const
         return FALSE;
     }
 
-    long lineStart, colStart;
+    wxTextCoord lineStart, colStart;
     PositionToXY(m_selStart, &colStart, &lineStart);
     if ( lineStart > line )
     {
@@ -1153,7 +938,7 @@ bool wxTextCtrl::GetSelectedPartOfLine(long line, int *start, int *end) const
         return FALSE;
     }
 
-    long lineEnd, colEnd;
+    wxTextCoord lineEnd, colEnd;
     PositionToXY(m_selEnd, &colEnd, &lineEnd);
     if ( lineEnd < line )
     {
@@ -1232,7 +1017,7 @@ void wxTextCtrl::SetEditable(bool editable)
     o   Start of the next line is the last position of the previous line + 1
  */
 
-int wxTextCtrl::GetLineLength(long line) const
+int wxTextCtrl::GetLineLength(wxTextCoord line) const
 {
     if ( IsSingleLine() )
     {
@@ -1249,7 +1034,7 @@ int wxTextCtrl::GetLineLength(long line) const
     }
 }
 
-wxString wxTextCtrl::GetLineText(long line) const
+wxString wxTextCtrl::GetLineText(wxTextCoord line) const
 {
     if ( IsSingleLine() )
     {
@@ -1272,7 +1057,7 @@ int wxTextCtrl::GetNumberOfLines() const
     return IsSingleLine() ? 1 : m_lines.GetCount();
 }
 
-long wxTextCtrl::XYToPosition(long x, long y) const
+wxTextPos wxTextCtrl::XYToPosition(wxTextCoord x, wxTextCoord y) const
 {
     // note that this method should accept any values of x and y and return -1
     // if they are out of range
@@ -1288,7 +1073,7 @@ long wxTextCtrl::XYToPosition(long x, long y) const
             return GetLastPosition();
         }
 
-        long pos = 0;
+        wxTextPos pos = 0;
         for ( size_t nLine = 0; nLine < (size_t)y; nLine++ )
         {
             // +1 is because the positions at the end of this line and of the
@@ -1307,7 +1092,8 @@ long wxTextCtrl::XYToPosition(long x, long y) const
     }
 }
 
-bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
+bool wxTextCtrl::PositionToXY(wxTextPos pos,
+                              wxTextCoord *x, wxTextCoord *y) const
 {
     if ( IsSingleLine() )
     {
@@ -1323,13 +1109,13 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     }
     else // multiline
     {
-        long posCur = 0;
+        wxTextPos posCur = 0;
         size_t nLineCount = m_lines.GetCount();
         for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
         {
             // +1 is because the start the start of the next line is one
             // position after the end of this one
-            long posNew = posCur + m_lines[nLine].length() + 1;
+            wxTextPos posNew = posCur + m_lines[nLine].length() + 1;
             if ( posNew > pos )
             {
                 // we've found the line, now just calc the column
@@ -1357,21 +1143,125 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
     }
 }
 
+wxTextCoord wxTextCtrl::GetRowsPerLine(wxTextCoord line) const
+{
+    wxCoord wLine = m_rectText.width,
+            wLineTotal = GetTextWidth(GetLineText(line));
+
+    // an empty line still has 1 row in it
+    return wLineTotal == 0 ? 1 : (wLineTotal + wLine - 1) / wLine;
+}
+
+wxTextCoord wxTextCtrl::GetNumberOfRowsBefore(wxTextCoord lineMax) const
+{
+    if ( !WrapLines() )
+        return lineMax;
+
+    size_t nRows = 0;
+    for ( wxTextCoord n = 0; n < lineMax; n++ )
+    {
+        nRows += GetRowsPerLine(n);
+    }
+
+    return nRows;
+}
+
+bool wxTextCtrl::PositionToPixelXY(wxTextPos pos,
+                                   wxCoord *xOut, wxCoord *yOut) const
+{
+    wxTextCoord col, line;
+
+    // optimization for special (but common) case when we already have the col
+    // and line
+    if ( pos == m_curPos )
+    {
+        col = m_curCol;
+        line = m_curRow;
+    }
+    else // must really calculate col/line from pos
+    {
+        if ( !PositionToXY(pos, &col, &line) )
+            return FALSE;
+    }
+
+    int hLine = GetCharHeight();
+    wxCoord x, y;
+    wxString textLine = GetLineText(line);
+    if ( IsSingleLine() || !WrapLines() )
+    {
+        x = GetTextWidth(textLine.Left(col));
+        y = line*hLine;
+    }
+    else // difficult case: multline control with line wrap
+    {
+        // first find the start of this line
+        y = 0;
+        for ( wxTextCoord lineCur = 0; lineCur < line; lineCur++ )
+        {
+            y += GetRowsPerLine(lineCur)*hLine;
+        }
+
+        // now find in which row of this line the position lies
+        wxTextCoord colRowStart = 0;
+        for ( ;; )
+        {
+            int rowLen = GetPartOfWrappedLine(textLine.c_str() + colRowStart,
+                                              m_rectText.width);
+
+            // the test is quite interesting because the last position in any
+            // but the last row of the line is invalid: you can't put the
+            // cursor there, for example, as it's really the same position as
+            // the first position of the next row - but the last position of
+            // the last row is perfectly fine as it's different from the
+            // starting position from the next line
+            //
+            // NB: this is compatible with Windows behaviour except that
+            //     Windows has a bug: you can position the cursor in such
+            //     invalid position by clicking the mouse there even if you
+            //     can't reach this position from keyboard!
+            wxTextCoord colNextRow = colRowStart + rowLen;
+            if ( (col < colNextRow) ||
+                    (col == colNextRow &&
+                     (size_t)colNextRow == textLine.length()) )
+            {
+                // we found the right row
+                break;
+            }
+
+            // go further down
+            colRowStart = colNextRow;
+            y += hLine;
+        }
+
+        // x is the width of the text before this position in this row
+        x = GetTextWidth(textLine.Mid(colRowStart, col - colRowStart));
+    }
+
+    // finally translate the logical text rect coords into physical client
+    // coords
+    CalcScrolledPosition(m_rectText.x + x - m_ofsHorz,
+                         m_rectText.y + y,
+                         xOut,
+                         yOut);
+
+    return TRUE;
+}
+
 // pos may be -1 to show the current position
-void wxTextCtrl::ShowPosition(long pos)
+void wxTextCtrl::ShowPosition(wxTextPos pos)
 {
     HideCaret();
 
     if ( IsSingleLine() )
     {
-        ShowHorzPosition(GetCaretPosition(pos));
+        ShowHorzPosition(GetTextWidth(GetSLValue().Left(pos)));
     }
     else if ( m_scrollRangeX || m_scrollRangeY ) // multiline with scrollbars
     {
         int xStart, yStart;
         GetViewStart(&xStart, &yStart);
 
-        long row, col;
+        wxTextCoord row, col;
         if ( (pos == -1) || (pos == m_curPos) )
         {
             row = m_curRow;
@@ -1397,7 +1287,22 @@ void wxTextCtrl::ShowPosition(long pos)
             }
             else // we are currently in or below the view area
             {
-                int yEnd = yStart + rectText.height / GetCharHeight() - 1;
+                // find the last row currently shown
+                wxTextCoord yEnd;
+
+                if ( WrapLines() )
+                {
+                    // to find the last row we need to use the generic HitTest
+                    HitTestClient(0, rectText.height, NULL, &yEnd);
+                    yEnd--;
+                }
+                else
+                {
+                    // finding the last line is easy if each line has exactly
+                    // one row
+                    yEnd = yStart + rectText.height / GetCharHeight() - 1;
+                }
+
                 if ( yEnd < row )
                 {
                     // scroll down: the current item should appear at the
@@ -1470,7 +1375,7 @@ static inline bool IsWordChar(wxChar ch)
     return !wxIsspace(ch);
 }
 
-long wxTextCtrl::GetWordStart() const
+wxTextPos wxTextCtrl::GetWordStart() const
 {
     if ( m_curPos == -1 || m_curPos == 0 )
         return 0;
@@ -1505,7 +1410,7 @@ long wxTextCtrl::GetWordStart() const
     return (m_curPos - m_curCol) + p - p0;
 }
 
-long wxTextCtrl::GetWordEnd() const
+wxTextPos wxTextCtrl::GetWordEnd() const
 {
     if ( m_curPos == -1 )
         return 0;
@@ -1515,7 +1420,7 @@ long wxTextCtrl::GetWordEnd() const
     {
         // if we're on the last position in the line, go to the next one - if
         // it exists
-        long pos = m_curPos;
+        wxTextPos pos = m_curPos;
         if ( pos < GetLastPosition() )
             pos++;
 
@@ -1875,10 +1780,21 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
 
     // the text which we can keep in this ROW
     wxString str;
-    for ( wxCoord w = 0; w < width; )
+    for ( wxCoord w = 0; *text && (w <= width); )
     {
         str += *text++;
         dc.GetTextExtent(str, &w, NULL);
+    }
+
+    if ( *text )
+    {
+        // if we wrapped, the last letter was one too much
+        if ( str.length() > 1 )
+        {
+            // remove it
+            str.erase(str.length() - 1, 1);
+        }
+        //else: but always keep at least one letter in each row
     }
 
     return str.length();
@@ -1886,7 +1802,7 @@ size_t wxTextCtrl::GetPartOfWrappedLine(const wxChar* text,
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
                                                 wxCoord x,
-                                                long *colOut) const
+                                                wxTextCoord *colOut) const
 {
     wxTextCtrlHitTestResult res = wxTE_HT_ON_TEXT;
 
@@ -1902,7 +1818,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
     {
         // clicking beyond the end of line is equivalent to clicking at
         // the end of it
-        col = line.length();
+        col = line.length() - 1;
 
         res = wxTE_HT_AFTER;
     }
@@ -1930,9 +1846,14 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
             col = line.length();
         }
 
-        // matchDir is -1 if we must move left, +1 to move right and 0 when
-        // we're exactly on the character we need
-        int matchDir = 0;
+        // matchDir is the direction in which we should move to reach the
+        // character containing the given position
+        enum
+        {
+            Match_Left  = -1,
+            Match_None  = 0,
+            Match_Right = 1
+        } matchDir = Match_None;
         for ( ;; )
         {
             // check that we didn't go beyond the line boundary
@@ -1951,7 +1872,7 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
             dc.GetTextExtent(strBefore, &width, NULL);
             if ( width > x )
             {
-                if ( matchDir == 1 )
+                if ( matchDir == Match_Right )
                 {
                     // we were going to the right and, finally, moved beyond
                     // the original position - stop on the previous one
@@ -1960,34 +1881,34 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
                     break;
                 }
 
-                if ( matchDir == 0 )
+                if ( matchDir == Match_None )
                 {
                     // we just started iterating, now we know that we should
                     // move to the left
-                    matchDir = -1;
+                    matchDir = Match_Left;
                 }
                 //else: we are still to the right of the target, continue
             }
             else // width < x
             {
                 // invert the logic above
-                if ( matchDir == -1 )
+                if ( matchDir == Match_Left )
                 {
                     // with the exception that we don't need to backtrack here
                     break;
                 }
 
-                if ( matchDir == 0 )
+                if ( matchDir == Match_None )
                 {
                     // go to the right
-                    matchDir = 1;
+                    matchDir = Match_Right;
                 }
             }
 
             // this is not supposed to happen
             wxASSERT_MSG( matchDir, _T("logic error in wxTextCtrl::HitTest") );
 
-            if ( matchDir == 1 )
+            if ( matchDir == Match_Right )
                 col++;
             else
                 col--;
@@ -2025,35 +1946,64 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTestLine(const wxString& line,
 }
 
 wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
-                                            long *colOut, long *rowOut) const
+                                            wxTextCoord *colOut,
+                                            wxTextCoord *rowOut) const
+{
+    return HitTest2(pos.y, pos.x, 0, rowOut, colOut, NULL, NULL);
+}
+
+wxTextCtrlHitTestResult wxTextCtrl::HitTestClient(wxCoord x, wxCoord y,
+                                                  wxTextCoord *col,
+                                                  wxTextCoord *row) const
+{
+    // OPT this is a bit silly: we undo this in HitTest(), so it would be
+    //     better to factor out the common functionality into a separate
+    //     function (OTOH it won't probably save us that much)
+    wxPoint pt(x, y);
+    pt += GetClientAreaOrigin();
+    pt += m_rectText.GetPosition();
+    return HitTest(pt, col, row);
+}
+
+wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y0,
+                                             wxCoord x10,
+                                             wxCoord x20,
+                                             wxTextCoord *rowOut,
+                                             wxTextCoord *colStart,
+                                             wxTextCoord *colEnd,
+                                             wxTextCoord *colRowStartOut) const
 {
     // is the point in the text area or to the right or below it?
     wxTextCtrlHitTestResult res = wxTE_HT_ON_TEXT;
 
-    // we accept the window coords and adjust for both the client and text area
-    // offsets ourselves
-    int x, y;
-    wxPoint pt = GetClientAreaOrigin();
-    pt += m_rectText.GetPosition();
-    CalcUnscrolledPosition(pos.x - pt.x, pos.y - pt.y, &x, &y);
+    // translate the window coords x0 and y0 into the client coords in the text
+    // area by adjusting for both the client and text area offsets
+    wxPoint pt = GetClientAreaOrigin() + m_rectText.GetPosition();
+    int x1, y;
+    CalcUnscrolledPosition(x10 - pt.x, y0 - pt.y, &x1, &y);
 
-    // calculate the row
-    int row;
+    // calculate the row (it is really a LINE, not a ROW)
+    wxTextCoord row;
 
-    size_t ofsLineStart = 0; // used only for WrapLines() case
+    // these vars are used only for WrapLines() case
+    wxTextCoord colRowStart = 0;
+    size_t rowLen = 0;
+
+    if ( colRowStartOut )
+        *colRowStartOut = 0;
 
     int hLine = GetCharHeight();
-    int rowMax = GetNumberOfLines() - 1;
+    wxTextCoord rowLast = GetNumberOfLines() - 1;
     if ( IsSingleLine() || !WrapLines() )
     {
         // in this case row calculation is simple as all lines have the
         // same height
         row = y / hLine;
-        if ( row > rowMax )
+        if ( row > rowLast )
         {
             // clicking below the text is the same as clicking on the last
             // line
-            row = rowMax;
+            row = rowLast;
 
             res = wxTE_HT_AFTER;
         }
@@ -2075,129 +2025,125 @@ wxTextCtrlHitTestResult wxTextCtrl::HitTest(const wxPoint& pos,
         //      with y / hLine first and then scan from there, this is
         //      probably much more efficient when there is a lot of text
 
-        wxString textLine;
-        row = 0;
-        int nRowInLine = 0,
-            nRowsPerLine = 0;
-        wxCoord wLine = m_rectText.width;
-        for ( int yCur = 0; yCur < y; yCur += hLine )
-        {
-            if ( nRowInLine == nRowsPerLine )
-            {
-                // pass to the next line
-                row++;
-                if ( row > rowMax )
-                {
-                    // no next line
-                    row = rowMax;
+        bool found = FALSE; // have we found the row containing this point?
 
-                    res = wxTE_HT_AFTER;
+        // go down LINE and by ROW inside each line until we reach y or exhaust
+        // all text
+        wxString textLine;
+        int yCur = 0;
+        for ( row = 0; row <= rowLast; row++ )
+        {
+            textLine = GetLineText(row);
+            size_t nRowInLine,
+                   nRowsPerLine = GetRowsPerLine(row);
+            for ( nRowInLine = 0; nRowInLine < nRowsPerLine; nRowInLine++ )
+            {
+                int yCurNew = yCur + hLine;
+                if ( yCurNew > y )
+                {
+                    // point is in this row
+                    found = TRUE;
+
                     break;
                 }
 
-                textLine = GetLineText(row);
-                wxCoord widthLineTotal = GetTextWidth(textLine);
-                nRowsPerLine = widthLineTotal == 0
-                                ? 1
-                                : (widthLineTotal + wLine - 1) / wLine;
+                yCur = yCurNew;
 
-                // the offset of the start of the ROW in which y is from the
-                // start of this LINE
-                ofsLineStart = 0;
+                rowLen = GetPartOfWrappedLine(textLine.c_str() + colRowStart,
+                                              m_rectText.width);
+                colRowStart += rowLen;
             }
-            else
+
+            // we shouldn't increase LINE in the outer for loop if we found
+            // match inside this one
+            if ( found )
             {
-                // pass to the next row in this line
-                ofsLineStart += GetPartOfWrappedLine
-                                (
-                                 textLine.c_str() + ofsLineStart,
-                                 wLine
-                                );
-                nRowInLine++;
+                break;
             }
+
+            // we didn't find the correct row yet so reset colRowStart and
+            // rowLen: they don't have any meaning without a valid row
+            colRowStart = 0;
+            rowLen = 0;
+        }
+
+        if ( row > rowLast )
+        {
+            // we are beyond the last line
+            res = wxTE_HT_AFTER;
+        }
+        else if ( !rowLen )
+        {
+            // find the length of the first row of the line we just found
+            rowLen = GetPartOfWrappedLine(GetLineText(row), m_rectText.width);
         }
     }
 
     if ( res == wxTE_HT_ON_TEXT )
     {
         // now find the position in the line
-        wxString line;
-        if ( ofsLineStart )
+        wxString lineText = GetLineText(row),
+                 rowText;
+
+        if ( colRowStart || rowLen )
         {
-            // look in this row only, not in whole line (well, we leave the
-            // tail unchanged, but it shouldn't hurt)
-            line = GetLineText(row).c_str() + ofsLineStart;
+            // look in this row only, not in whole line
+            rowText = lineText.Mid(colRowStart, rowLen);
         }
         else
         {
             // just take the whole string
-            line = GetLineText(row);
+            rowText = lineText;
         }
 
-        res = HitTestLine(GetTextToShow(line), x, colOut);
-
-        if ( colOut )
+        if ( colStart )
         {
-            // take into account that the line may not start in the beginning
-            // of the string
-            *colOut += ofsLineStart;
+            res = HitTestLine(GetTextToShow(rowText), x1, colStart);
+
+            if ( colRowStart )
+            {
+                if ( colRowStartOut )
+                {
+                    // give them the column offset in this ROW in pixels
+                    *colRowStartOut = colRowStart;
+                }
+
+                // take into account that the ROW doesn't start in the
+                // beginning of the LINE
+                *colStart += colRowStart;
+            }
+
+            if ( colEnd )
+            {
+                // the hit test result we return is for x1, so throw out
+                // the result for x2 here
+                int x2 = x1 + x20 - x10;
+                (void)HitTestLine(GetTextToShow(rowText), x2, colEnd);
+
+                *colEnd += colRowStart;
+            }
         }
     }
     else // before/after vertical text span
     {
-        if ( colOut )
+        if ( colStart )
         {
             // fill the column with the first/last position in the
             // corresponding line
             if ( res == wxTE_HT_BEFORE )
-                *colOut = 0;
+                *colStart = 0;
             else // res == wxTE_HT_AFTER
-                *colOut = GetLineText(GetNumberOfLines() - 1).length();
+                *colStart = GetLineText(GetNumberOfLines() - 1).length();
         }
     }
 
     if ( rowOut )
+    {
+        // give them the row in text coords (as is)
         *rowOut = row;
+    }
 
     return res;
-}
-
-// TODO: implement HitTest() via HitTest2(), not the other way round!
-
-wxTextCtrlHitTestResult wxTextCtrl::HitTest2(wxCoord y,
-                                             wxCoord x1,
-                                             wxCoord x2,
-                                             long *row,
-                                             long *colStart,
-                                             long *colEnd,
-                                             wxCoord *ofsStart) const
-{
-    wxTextCtrlHitTestResult htr = HitTest(wxPoint(x1, y), colStart, row);
-    if ( htr == wxTE_HT_AFTER )
-    {
-        // if the start is after the text, the end is too
-        return wxTE_HT_AFTER;
-    }
-
-    if ( colEnd )
-    {
-        (void)HitTest(wxPoint(x2, y), colEnd, NULL);
-    }
-
-    if ( ofsStart )
-    {
-        long colStartRow;
-        (void)HitTest(wxPoint(GetRealTextArea().x + GetClientAreaOrigin().x, y),
-                      &colStartRow, NULL);
-        wxASSERT_MSG( colStartRow <= *colStart, _T("are they on same line?") );
-
-        wxString s = GetLineText(*row);
-
-        *ofsStart = GetTextWidth(s.Mid((size_t)colStartRow,
-                                       (size_t)(*colStart - colStartRow)));
-    }
-
-    return htr;
 }
 
 // ----------------------------------------------------------------------------
@@ -2231,7 +2177,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
     if ( pos < m_ofsHorz )
     {
         // scroll backwards
-        long col;
+        wxTextCoord col;
         HitTestLine(GetSLValue(), pos, &col);
         ScrollText(col);
     }
@@ -2250,7 +2196,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
         if ( pos > m_ofsHorz + width)
         {
             // scroll forward
-            long col;
+            wxTextCoord col;
             HitTestLine(GetSLValue(), pos - width, &col);
             ScrollText(col + 1);
         }
@@ -2259,7 +2205,7 @@ void wxTextCtrl::ShowHorzPosition(wxCoord pos)
 
 // scroll the window horizontally so that the first visible character becomes
 // the one at this position
-void wxTextCtrl::ScrollText(long col)
+void wxTextCtrl::ScrollText(wxTextCoord col)
 {
     wxASSERT_MSG( IsSingleLine(),
                   _T("ScrollText() is for single line controls only") );
@@ -2376,7 +2322,7 @@ void wxTextCtrl::DoPrepareDC(wxDC& dc)
     }
 }
 
-void wxTextCtrl::UpdateMaxWidth(long line)
+void wxTextCtrl::UpdateMaxWidth(wxTextCoord line)
 {
     // check if the max width changes after this line was modified
     wxCoord widthMaxOld = m_widthMax,
@@ -2448,9 +2394,9 @@ void wxTextCtrl::UpdateScrollbars()
     wxSize size = GetRealTextArea().GetSize();
 
     // is our height enough to show all items?
-    int nLines = GetNumberOfLines();
+    wxTextCoord nRows = GetNumberOfRowsBefore(GetNumberOfLines());
     wxCoord lineHeight = GetCharHeight();
-    bool showScrollbarY = nLines*lineHeight > size.y;
+    bool showScrollbarY = nRows*lineHeight > size.y;
 
     // is our width enough to show the longest line?
     wxCoord charWidth, maxWidth;
@@ -2473,7 +2419,7 @@ void wxTextCtrl::UpdateScrollbars()
     int scrollRangeX = showScrollbarX
                         ? (maxWidth + 2*charWidth - 1) / charWidth
                         : 0;
-    int scrollRangeY = showScrollbarY ? nLines : 0;
+    int scrollRangeY = showScrollbarY ? nRows : 0;
 
     if ( (scrollRangeY != m_scrollRangeY) || (scrollRangeX != m_scrollRangeX) )
     {
@@ -2509,7 +2455,7 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
 // refresh
 // ----------------------------------------------------------------------------
 
-void wxTextCtrl::RefreshLineRange(long lineFirst, long lineLast)
+void wxTextCtrl::RefreshLineRange(wxTextCoord lineFirst, wxTextCoord lineLast)
 {
     wxASSERT_MSG( lineFirst <= lineLast, _T("no lines to refresh") );
 
@@ -2517,10 +2463,12 @@ void wxTextCtrl::RefreshLineRange(long lineFirst, long lineLast)
     // rect.x is already 0
     rect.width = m_rectText.width;
     wxCoord h = GetCharHeight();
-    rect.y = lineFirst*h;
+    rect.y = GetNumberOfRowsBefore(lineFirst)*h;
 
     // don't refresh beyond the window boundary
-    wxCoord bottom = (lineLast + 1)*h;
+    if ( lineLast > GetNumberOfLines() - 1 )
+        lineLast = GetNumberOfLines() - 1;
+    wxCoord bottom = GetNumberOfRowsBefore(lineLast + 1)*h;
     if ( bottom > m_rectText.height )
         bottom = m_rectText.height;
 
@@ -2529,7 +2477,7 @@ void wxTextCtrl::RefreshLineRange(long lineFirst, long lineLast)
     RefreshTextRect(rect);
 }
 
-void wxTextCtrl::RefreshTextRange(long start, long end)
+void wxTextCtrl::RefreshTextRange(wxTextPos start, wxTextPos end)
 {
     wxCHECK_RET( start != -1 && end != -1,
                  _T("invalid RefreshTextRange() arguments") );
@@ -2537,14 +2485,14 @@ void wxTextCtrl::RefreshTextRange(long start, long end)
     // accept arguments in any order as it is more conenient for the caller
     OrderPositions(start, end);
 
-    long colStart, lineStart;
+    wxTextPos colStart, lineStart;
     if ( !PositionToXY(start, &colStart, &lineStart) )
     {
         // the range is entirely beyond the end of the text, nothing to do
         return;
     }
 
-    long colEnd, lineEnd;
+    wxTextCoord colEnd, lineEnd;
     if ( !PositionToXY(end, &colEnd, &lineEnd) )
     {
         // the range spans beyond the end of text, refresh to the end
@@ -2553,13 +2501,13 @@ void wxTextCtrl::RefreshTextRange(long start, long end)
     }
 
     // refresh all lines one by one
-    for ( long line = lineStart; line <= lineEnd; line++ )
+    for ( wxTextCoord line = lineStart; line <= lineEnd; line++ )
     {
         // refresh the first line from the start of the range to the end, the
         // intermediate ones entirely and the last one from the beginning to
         // the end of the range
-        long posStart = line == lineStart ? colStart : 0;
-        long posCount;
+        wxTextPos posStart = line == lineStart ? colStart : 0;
+        size_t posCount;
         if ( (line != lineEnd) || (colEnd == -1) )
         {
             // intermediate line or the last one but we need to refresh it
@@ -2576,7 +2524,9 @@ void wxTextCtrl::RefreshTextRange(long start, long end)
     }
 }
 
-void wxTextCtrl::RefreshColRange(long line, long start, long count)
+void wxTextCtrl::RefreshColRange(wxTextCoord line,
+                                 wxTextPos start,
+                                 size_t count)
 {
     wxString text = GetLineText(line);
 
@@ -2585,25 +2535,63 @@ void wxTextCtrl::RefreshColRange(long line, long start, long count)
                       GetTextWidth(text.Mid((size_t)start, (size_t)count)));
 }
 
-void wxTextCtrl::RefreshPixelRange(long line, wxCoord start, wxCoord width)
+// this method accepts "logical" coords in the sense that they are coordinates
+// in a logical line but it can span several rows if we wrap lines and
+// RefreshPixelRange() will then refresh several rows
+void wxTextCtrl::RefreshPixelRange(wxTextCoord line,
+                                   wxCoord start,
+                                   wxCoord width)
 {
+    // special case: width == 0 means to refresh till the end of line
+    if ( width == 0 )
+    {
+        if ( WrapLines() )
+        {
+            // if we need to refresh until the end of line, refresh all text
+            // below because the next lines might have changed - we have no way
+            // to know if they did or not
+            RefreshLineRange(line, GetNumberOfLines());
+
+            return;
+        }
+        else
+        {
+            // refresh till the end of line
+            width = GetTotalWidth() - start;
+        }
+    }
+
     wxCoord h = GetCharHeight();
     wxRect rect;
     rect.x = start;
-    rect.y = line*h;
-
-    if ( width == 0 )
-    {
-        // till the end of line
-        rect.width = GetTotalWidth() - rect.x;
-    }
-    else
-    {
-        // only part of line
-        rect.width = width;
-    }
-
+    rect.y = GetNumberOfRowsBefore(line)*h;
     rect.height = h;
+
+    if ( WrapLines() )
+    {
+        wxCoord wLine = m_rectText.width;
+
+        // find the row where we start to refresh
+        while ( rect.x > wLine )
+        {
+            rect.x -= wLine;
+            rect.y += h;
+        }
+
+        // now refresh all lines except the last one
+        while ( width > wLine )
+        {
+            rect.width = GetTotalWidth() - rect.x;
+            RefreshTextRect(rect);
+            rect.x = 0;
+            width -= wLine;
+            rect.y += h;
+        }
+
+        // the code below will refresh the line too
+    }
+
+    rect.width = width;
 
     RefreshTextRect(rect);
 }
@@ -2658,7 +2646,7 @@ wxString wxTextCtrl::GetTextToShow(const wxString& text) const
 
 void wxTextCtrl::DrawTextLine(wxDC& dc, const wxRect& rect,
                               const wxString& text,
-                              long selStart, long selEnd)
+                              wxTextPos selStart, wxTextPos selEnd)
 {
     if ( selStart == -1 )
     {
@@ -2722,11 +2710,11 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
     // calculate the range lineStart..lineEnd of lines to redraw
     wxPoint pt = rectUpdate.GetPosition();
-    long lineStart;
+    wxTextCoord lineStart;
     (void)HitTest(pt, NULL, &lineStart);
 
     pt.y += rectUpdate.height;
-    long lineEnd;
+    wxTextCoord lineEnd;
     (void)HitTest(pt, NULL, &lineEnd);
 
     // prepare for drawing
@@ -2742,16 +2730,15 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
 
     // do draw the invalidated parts of each line: note that we iterate here
     // over ROWs, not over LINEs
-    for ( long line = lineStart;
-          line <= lineEnd;
+    for ( wxTextCoord line = lineStart;
+          y < rectUpdate.y + rectUpdate.height;
           rectText.y += hLine,
           y += hLine )
     {
         // calculate the update rect in text positions for this line
-        long colStart, colEnd;
-        wxCoord ofsStart;
+        wxTextCoord colStart, colEnd, colRowStart;
         if ( HitTest2(y, x1, x2,
-                      &line, &colStart, &colEnd, &ofsStart) == wxTE_HT_AFTER )
+                      &line, &colStart, &colEnd, &colRowStart) == wxTE_HT_AFTER )
         {
             wxASSERT_MSG( line <= lineEnd, _T("how did we get that far?") );
 
@@ -2807,11 +2794,12 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
         wxString textLine = GetTextToShow(GetLineText(line));
         wxString text = textLine.Mid(colStart, colEnd - colStart + 1);
 
-        // now deal with the selection
-        int selStart, selEnd;
-        GetSelectedPartOfLine(line, &selStart, &selEnd);
-
-        if ( selStart != -1 )
+        // now deal with the selection: only do something if at least part of
+        // the line is selected and if this part is (at least partly) in the
+        // current row
+        wxTextPos selStart, selEnd;
+        if ( GetSelectedPartOfLine(line, &selStart, &selEnd) &&
+             (selStart <= colEnd) && (selEnd >= colRowStart) )
         {
             // these values are relative to the start of the line while the
             // string passed to DrawTextLine() is only part of it, so adjust
@@ -2826,7 +2814,10 @@ void wxTextCtrl::DoDrawTextInRect(wxDC& dc, const wxRect& rectUpdate)
                 selEnd = text.length();
         }
 
-        // calculate the logical text coords
+        // calculate the physical text coords
+        wxCoord ofsStart = GetTextWidth(
+                                    textLine.Mid(colRowStart,
+                                                 colStart - colRowStart));
         rectText.x = m_rectText.x + ofsStart;
         rectText.width = GetTextWidth(text);
 
@@ -2913,6 +2904,9 @@ bool wxTextCtrl::SetFont(const wxFont& font)
     InitInsertionPoint();
     ClearSelection();
 
+    // update geometry parameters
+    UpdateTextRect();
+    UpdateScrollbars();
     RecalcMaxWidth();
 
     Refresh();
@@ -2952,25 +2946,18 @@ void wxTextCtrl::CreateCaret()
     SetCaret(caret);
 }
 
-wxCoord wxTextCtrl::GetCaretPosition(long pos) const
-{
-    wxString textBeforeCaret(GetLineText(m_curRow),
-                             (size_t)(pos == -1 ? m_curCol : pos));
-
-    return GetTextWidth(textBeforeCaret);
-}
-
 void wxTextCtrl::ShowCaret(bool show)
 {
     wxCaret *caret = GetCaret();
     if ( caret )
     {
-        // position it correctly (taking scrolling into account)
+        // (re)position caret correctly
         wxCoord xCaret, yCaret;
-        CalcScrolledPosition(m_rectText.x + GetCaretPosition() - m_ofsHorz,
-                             m_rectText.y + m_curRow*GetCharHeight(),
-                             &xCaret,
-                             &yCaret);
+        if ( !PositionToPixelXY(m_curPos, &xCaret, &yCaret) )
+        {
+            wxFAIL_MSG( _T("Caret can't be beyond the text!") );
+        }
+
         caret->Move(xCaret, yCaret);
 
         // and show it there
@@ -3017,9 +3004,9 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
     // set newPos to -2 as it can't become equal to it in the assignments below
     // (but it can become -1)
-    static const long INVALID_POS_VALUE = -2;
+    static const wxTextPos INVALID_POS_VALUE = -2;
 
-    long newPos = INVALID_POS_VALUE;
+    wxTextPos newPos = INVALID_POS_VALUE;
 
     if ( action == wxACTION_TEXT_HOME )
     {
@@ -3124,14 +3111,14 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
         if ( newPos < 0 )
             newPos = 0;
 
-        long posLast = GetLastPosition();
+        wxTextPos posLast = GetLastPosition();
         if ( newPos > posLast )
             newPos = posLast;
 
         if ( del )
         {
             // if we have the selection, remove just it
-            long from, to;
+            wxTextPos from, to;
             if ( HasSelection() )
             {
                 from = m_selStart;
@@ -3252,13 +3239,22 @@ wxStdTextCtrlInputHandler::wxStdTextCtrlInputHandler(wxInputHandler *inphand)
 }
 
 /* static */
-long wxStdTextCtrlInputHandler::HitTest(const wxTextCtrl *text,
-                                        const wxPoint& pos)
+wxTextPos wxStdTextCtrlInputHandler::HitTest(const wxTextCtrl *text,
+                                             const wxPoint& pt)
 {
-    long col, row;
-    (void)text->HitTest(pos, &col, &row);
+    wxTextCoord col, row;
+    wxTextCtrlHitTestResult ht = text->HitTest(pt, &col, &row);
 
-    return text->XYToPosition(col, row);
+    wxTextPos pos = text->XYToPosition(col, row);
+
+    // if the point is after the last column we must adjust the position to be
+    // the last position in the line (unless it is already the last)
+    if ( (ht == wxTE_HT_AFTER) && (pos < text->GetLastPosition()) )
+    {
+        pos++;
+    }
+
+    return pos;
 }
 
 bool wxStdTextCtrlInputHandler::HandleKey(wxControl *control,
@@ -3388,7 +3384,7 @@ bool wxStdTextCtrlInputHandler::HandleMouse(wxControl *control,
 
         text->HideCaret();
 
-        long pos = HitTest(text, event.GetPosition());
+        wxTextPos pos = HitTest(text, event.GetPosition());
         if ( pos != -1 )
         {
             text->PerformAction(wxACTION_TEXT_ANCHOR_SEL, pos);
@@ -3420,7 +3416,7 @@ bool wxStdTextCtrlInputHandler::HandleMouseMove(wxControl *control,
     {
         // track it
         wxTextCtrl *text = wxStaticCast(m_winCapture, wxTextCtrl);
-        long pos = HitTest(text, event.GetPosition());
+        wxTextPos pos = HitTest(text, event.GetPosition());
         if ( pos != -1 )
         {
             text->PerformAction(wxACTION_TEXT_EXTEND_SEL, pos);
