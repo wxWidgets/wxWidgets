@@ -472,11 +472,13 @@ public:
    Backward compatibility macros. Do *NOT* use, they may disappear in future
    versions of the XRC library!
    ------------------------------------------------------------------------- */
-#define ADD_STYLE         XRC_ADD_STYLE
-#define wxTheXmlResource  wxXmlResource::Get()
-#define XMLID             XRCID
-#define XMLCTRL           XRCCTRL
-#define GetXMLID          GetXRCID
+#if WXWIN_COMPATIBILITY_2_4
+    #define ADD_STYLE         XRC_ADD_STYLE
+    #define wxTheXmlResource  wxXmlResource::Get()
+    #define XMLID             XRCID
+    #define XMLCTRL           XRCCTRL
+    #define GetXMLID          GetXRCID
+#endif
 
 
 #endif // _WX_XMLRES_H_
