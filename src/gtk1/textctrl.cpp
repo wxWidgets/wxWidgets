@@ -393,7 +393,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
     gtk_signal_connect( GTK_OBJECT(m_text), "changed",
       GTK_SIGNAL_FUNC(gtk_text_changed_callback), (gpointer)this);
 
-    SetBackgroundColour( wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW) );
+    /* we don't set a valid background colour, because the window
+       manager should use a default one */
+    m_backgroundColour = wxColour();
     SetForegroundColour( parent->GetForegroundColour() );
 
     m_cursor = wxCursor( wxCURSOR_IBEAM );
@@ -524,14 +526,14 @@ void wxTextCtrl::AppendText( const wxString &text )
     if (m_windowStyle & wxTE_MULTILINE)
     {
         bool hasSpecialAttributes = m_font.Ok() ||
-                                    m_foregroundColour.Ok() ||
-                                    m_backgroundColour.Ok();
+    	                            m_foregroundColour.Ok();
         if ( hasSpecialAttributes )
         {
              gtk_text_insert( GTK_TEXT(m_text),
                               m_font.GetInternalFont(),
                               m_foregroundColour.GetColor(),
-                              m_backgroundColour.GetColor(),
+                              m_backgroundColour.Ok() ?
+			         m_backgroundColour.GetColor(): NULL,
                               text.mbc_str(), text.length());
 
         }
