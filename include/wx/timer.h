@@ -1,12 +1,13 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/timer.h
-// Purpose:     wxTimer class and global time-related functions
-// Author:      Julian Smart
-// Modified by:
+// Purpose:     wxTimer, wxStopWatch and global time-related functions
+// Author:      Julian Smart (wxTimer), Sylvain Bougnoux (wxStopWatch)
+// Modified by: Vadim Zeitlin (wxTimerBase)
+//              Guillermo Rodriguez (global clean up)
 // Created:     04/01/98
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:   	wxWindows license
+// Copyright:   (c) wxWindows team
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TIMER_H_BASE_
@@ -19,6 +20,7 @@
 #include "wx/setup.h"
 #include "wx/object.h"
 #include "wx/longlong.h"
+#include "wx/event.h"
 
 // ----------------------------------------------------------------------------
 // wxTimer
@@ -28,7 +30,22 @@
 class WXDLLEXPORT wxTimerBase : public wxObject
 {
 public:
-    wxTimerBase() { m_oneShot = FALSE; m_milli = 0; }
+    // ctors and initializers
+    // ----------------------
+
+    // default: if you don't call SetOwner(), your only chance to get timer
+    // notifications is to override Notify() in the derived class
+    wxTimerBase() { Init(); SetOwner(NULL); }
+
+    // ctor which allows to avoid having to override Notify() in the derived
+    // class: the owner will get timer notifications which can be handled with
+    // EVT_TIMER
+    wxTimerBase(wxEvtHandler *owner, int id = -1)
+        { Init(); SetOwner(owner, -1); }
+
+    // same as ctor above
+    void SetOwner(wxEvtHandler *owner, int id = -1)
+        { m_owner = owner; m_idTimer = id; }
 
     // working with the timer
     // ----------------------
@@ -51,8 +68,9 @@ public:
     // stop the timer
     virtual void Stop() = 0;
 
-    // override this in your wxTimer-derived class
-    virtual void Notify() = 0;
+    // override this in your wxTimer-derived class if you want to process timer
+    // messages in it, use non default ctor or SetOwner() otherwise
+    virtual void Notify();
 
     // getting info
     // ------------
@@ -73,9 +91,19 @@ public:
 #endif // WXWIN_COMPATIBILITY_2
 
 protected:
+    // common part of all ctors
+    void Init() { m_oneShot = FALSE; m_milli = 0; }
+
+    wxEvtHandler *m_owner;
+    int     m_idTimer;
+
     int     m_milli;        // the timer interval
     bool    m_oneShot;      // TRUE if one shot
 };
+
+// ----------------------------------------------------------------------------
+// wxTimer itself
+// ----------------------------------------------------------------------------
 
 #if defined(__WXMSW__)
     #include "wx/msw/timer.h"
@@ -94,12 +122,39 @@ protected:
 #endif
 
 // ----------------------------------------------------------------------------
-// wxStopWatch
+// wxTimerEvent
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxTimerEvent : public wxEvent
+{
+public:
+    wxTimerEvent(int id = 0, int interval = 0) : wxEvent(id)
+    {
+        m_eventType = wxEVT_TIMER;
+
+        m_interval = interval;
+    }
+
+    // accessors
+    int GetInterval() const { return m_interval; }
+
+private:
+    int m_interval;
+
+    DECLARE_DYNAMIC_CLASS(wxTimerEvent)
+};
+
+typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
+
+#define EVT_TIMER(id, func) { wxEVT_TIMER, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxTimerEventFunction) & func, NULL},
+
+// ----------------------------------------------------------------------------
+// wxStopWatch: measure time intervals with up to 1ms resolution
 // ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxStopWatch
 {
-public: 
+public:
     // ctor starts the stop watch
     wxStopWatch()        { Start(); }
     void Start(long t = 0);
@@ -112,21 +167,20 @@ public:
 protected:
     // returns the elapsed time since t0
     long GetElapsedTime() const;
-    
+
 private:
     wxLongLong m_t0;      // the time of the last Start()
     long m_pause;         // the time of the last Pause() or 0
 };
 
 
-// Starts a global timer 
+// Starts a global timer
 // -- DEPRECATED: use wxStopWatch instead
 void WXDLLEXPORT wxStartTimer();
 
 // Gets elapsed milliseconds since last wxStartTimer or wxGetElapsedTime
 // -- DEPRECATED: use wxStopWatch instead
 long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
-
 
 // ----------------------------------------------------------------------------
 // global time functions

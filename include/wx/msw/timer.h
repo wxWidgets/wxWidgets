@@ -21,7 +21,9 @@ class WXDLLEXPORT wxTimer : public wxTimerBase
 friend void wxProcessTimer(wxTimer& timer);
 
 public:
-    wxTimer();
+    wxTimer() { Init(); }
+    wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id)
+        { Init(); }
     ~wxTimer();
 
     virtual bool Start(int milliseconds = -1, bool oneShot = FALSE);
@@ -30,6 +32,8 @@ public:
     virtual bool IsRunning() const { return m_id != 0; }
 
 protected:
+    void Init();
+
     long m_id;
 
 private:

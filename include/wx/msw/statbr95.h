@@ -16,38 +16,57 @@
 #pragma interface "statbr95.h"
 #endif
 
-#if       wxUSE_NATIVE_STATUSBAR
+#if wxUSE_NATIVE_STATUSBAR
 
-class WXDLLEXPORT wxStatusBar95 : public wxStatusBar
+class WXDLLEXPORT wxStatusBar95 : public wxStatusBarBase
 {
-  DECLARE_DYNAMIC_CLASS(wxStatusBar95);
-
 public:
-  // ctors
-  wxStatusBar95();
-  wxStatusBar95(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
+    // ctors and such
+    wxStatusBar95();
+    wxStatusBar95(wxWindow *parent,
+                  wxWindowID id = -1,
+                  long style = wxST_SIZEGRIP,
+                  const wxString& name = wxEmptyString)
+    {
+        (void)Create(parent, id, style, name);
+    }
 
-  // create status line
-  bool Create(wxWindow *parent, wxWindowID id = -1, long style = wxST_SIZEGRIP);
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                long style = wxST_SIZEGRIP,
+                const wxString& name = wxEmptyString);
 
-  // a status line can have several (<256) fields numbered from 0
-  virtual void SetFieldsCount(int number = 1, const int widths[] = NULL);
+    virtual ~wxStatusBar95();
 
-  // each field of status line has it's own text
-  virtual void     SetStatusText(const wxString& text, int number = 0);
-  virtual wxString GetStatusText(int number = 0) const;
+    // a status line can have several (<256) fields numbered from 0
+    virtual void SetFieldsCount(int number = 1, const int *widths = NULL);
 
-  // set status line fields' widths
-  virtual void SetStatusWidths(int n, const int widths_field[]);
+    // each field of status line has it's own text
+    virtual void     SetStatusText(const wxString& text, int number = 0);
+    virtual wxString GetStatusText(int number = 0) const;
 
-  // we're going to process WM_SIZE (of the parent window)
-  void OnSize(wxSizeEvent& event);
+    // set status line fields' widths
+    virtual void SetStatusWidths(int n, const int widths_field[]);
 
-  DECLARE_EVENT_TABLE()
+    // sets the minimal vertical size of the status bar
+    virtual void SetMinHeight(int height);
+
+    // get the position and size of the field's internal bounding rectangle
+    virtual bool GetFieldRect(int i, wxRect& rect) const;
+
+    // get the border size
+    virtual int GetBorderX() const;
+    virtual int GetBorderY() const;
+
+    void OnSize(wxSizeEvent& event);
 
 protected:
-  void CopyFieldsWidth(const int widths[]);
-  void SetFieldsWidth();
+    void CopyFieldsWidth(const int widths[]);
+    void SetFieldsWidth();
+
+private:
+    DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxStatusBar95);
 };
 
 #endif  // wxUSE_NATIVE_STATUSBAR

@@ -43,10 +43,7 @@
 
 #if wxUSE_STATUSBAR
     #include "wx/statusbr.h"
-
-    #if wxUSE_NATIVE_STATUSBAR
-        #include "wx/msw/statbr95.h"
-    #endif
+    #include "wx/generic/statusbr.h"
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_TOOLBAR
@@ -354,14 +351,27 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number,
 #if wxUSE_NATIVE_STATUSBAR
     if ( UsesNativeStatusBar() )
     {
-        statusBar = new wxStatusBar95(this, id, style);
+        statusBar = (wxStatusBar *)new wxStatusBar95(this, id, style);
 
         statusBar->SetFieldsCount(number);
     }
     else
 #endif
     {
-        statusBar = wxFrameBase::OnCreateStatusBar(number, style, id, name);
+        statusBar = (wxStatusBar *)new wxStatusBarGeneric(this, id, style, name);
+
+        // Set the height according to the font and the border size
+        wxClientDC dc(statusBar);
+        dc.SetFont(statusBar->GetFont());
+
+        wxCoord y;
+        dc.GetTextExtent(_T("X"), NULL, &y );
+
+        int height = (int)( (11*y)/10 + 2*statusBar->GetBorderY());
+
+        statusBar->SetSize(-1, -1, -1, height);
+
+        statusBar->SetFieldsCount(number);
     }
 
     return statusBar;
@@ -369,12 +379,22 @@ wxStatusBar *wxFrame::OnCreateStatusBar(int number,
 
 void wxFrame::PositionStatusBar()
 {
-    // native status bar positions itself
-    if ( m_frameStatusBar
+    if ( !m_frameStatusBar )
+        return;
+
+    // native status bar positions itself, but we must forward the WM_SIZE
+    // messages to it
 #if wxUSE_NATIVE_STATUSBAR
-         && !m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95))
-#endif
-       )
+    wxStatusBar95 *sb = wxDynamicCast(m_frameStatusBar, wxStatusBar95);
+    if ( sb )
+    {
+        wxSizeEvent event(GetSize(), sb->GetId());
+        event.SetEventObject(sb);
+
+        sb->GetEventHandler()->ProcessEvent(event);
+    }
+    else
+#endif // wxUSE_NATIVE_STATUSBAR
     {
         int w, h;
         GetClientSize(&w, &h);
@@ -772,17 +792,6 @@ bool wxFrame::HandleSize(int x, int y, WXUINT id)
 
     if ( !m_iconized )
     {
-        // forward WM_SIZE to status bar control
-#if wxUSE_NATIVE_STATUSBAR
-        if (m_frameStatusBar && m_frameStatusBar->IsKindOf(CLASSINFO(wxStatusBar95)))
-        {
-            wxSizeEvent event(wxSize(x, y), m_frameStatusBar->GetId());
-            event.SetEventObject( m_frameStatusBar );
-
-            ((wxStatusBar95 *)m_frameStatusBar)->OnSize(event);
-        }
-#endif // wxUSE_NATIVE_STATUSBAR
-
         PositionStatusBar();
         PositionToolBar();
 

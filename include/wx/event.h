@@ -69,8 +69,9 @@ extern const wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
 extern const wxEventType wxEVT_COMMAND_TOOL_ENTER;
 extern const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
 
-/* Sockets send events, too */
+/* Sockets and timers send events, too */
 extern const wxEventType wxEVT_SOCKET;
+extern const wxEventType wxEVT_TIMER;
 
 /* Mouse event types */
 extern const wxEventType wxEVT_LEFT_DOWN;
@@ -282,6 +283,9 @@ const wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED =          wxEVT_FIRST + 18;
 
 /* Sockets send events, too */
 const wxEventType wxEVT_SOCKET =                            wxEVT_FIRST + 50;
+
+/* And timers do as well */
+const wxEventType wxEVT_TIMER =                             wxEVT_FIRST + 80;
 
 /* Mouse event types */
 const wxEventType wxEVT_LEFT_DOWN =                         wxEVT_FIRST + 100;

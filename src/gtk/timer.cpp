@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.cpp
+// Name:        gtk/timer.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -42,11 +42,10 @@ static gint timeout_callback( gpointer data )
     return TRUE;
 }
 
-wxTimer::wxTimer()
+void wxTimer::Init()
 {
     m_tag = -1;
     m_milli = 1000;
-    m_oneShot = FALSE;
 }
 
 wxTimer::~wxTimer()

@@ -1,10 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.h
+// Name:        wx/gtk/timer.h
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 
@@ -22,7 +22,9 @@
 class wxTimer : public wxTimerBase
 {
 public:
-    wxTimer();
+    wxTimer() { Init(); }
+    wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id)
+        { Init(); }
     ~wxTimer();
 
     virtual bool Start( int millisecs = -1, bool oneShot = FALSE );
@@ -31,6 +33,8 @@ public:
     virtual bool IsRunning() const { return m_tag != -1; }
 
 protected:
+    void Init();
+
     int  m_tag;
 
 private:

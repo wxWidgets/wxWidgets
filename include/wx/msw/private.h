@@ -226,6 +226,15 @@ inline void wxRGBToColour(wxColour& c, COLORREF rgb)
     c.Set(GetRValue(rgb), GetGValue(rgb), GetBValue(rgb));
 }
 
+// copy Windows RECT to our wxRect
+inline void wxCopyRECTToRect(const RECT& r, wxRect& rect)
+{
+    rect.y = r.top;
+    rect.x = r.left;
+    rect.width = r.right - r.left;
+    rect.height = r.bottom - r.top;
+}
+
 // translations between HIMETRIC units (which OLE likes) and pixels (which are
 // liked by all the others) - implemented in msw/utilsexc.cpp
 extern void HIMETRICToPixel(LONG *x, LONG *y);

@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        statusbr.cpp
-// Purpose:     wxStatusBar class implementation
+// Name:        generic/statusbr.cpp
+// Purpose:     wxStatusBarGeneric class implementation
 // Author:      Julian Smart
 // Modified by:
 // Created:     01/02/97
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
-// Licence:       wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
@@ -19,6 +19,8 @@
 #ifdef __BORLANDC__
 #pragma hdrstop
 #endif
+
+//#if !defined(__WIN32__) || !wxUSE_NATIVE_STATUSBAR
 
 #ifndef WX_PRECOMP
 #include "wx/setup.h"
@@ -34,18 +36,22 @@
 #include "wx/msw/winundef.h"
 #endif
 
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxStatusBarGeneric, wxWindow)
 
-BEGIN_EVENT_TABLE(wxStatusBar, wxWindow)
-    EVT_PAINT(wxStatusBar::OnPaint)
-    EVT_SYS_COLOUR_CHANGED(wxStatusBar::OnSysColourChanged)
+#if !defined(__WIN32__) || !wxUSE_NATIVE_STATUSBAR
+    IMPLEMENT_DYNAMIC_CLASS(wxStatusBar, wxStatusBarGeneric)
+#endif // Win32 && wxUSE_NATIVE_STATUSBAR
+
+BEGIN_EVENT_TABLE(wxStatusBarGeneric, wxWindow)
+    EVT_PAINT(wxStatusBarGeneric::OnPaint)
+    EVT_SYS_COLOUR_CHANGED(wxStatusBarGeneric::OnSysColourChanged)
 END_EVENT_TABLE()
 
 // Default status border dimensions
 #define         wxTHICK_LINE_BORDER 2
 #define         wxTHICK_LINE_WIDTH  1
 
-wxStatusBar::wxStatusBar(void)
+wxStatusBarGeneric::wxStatusBarGeneric()
 {
   m_statusWidths = (int *) NULL;
   m_statusStrings = (wxString *) NULL;
@@ -54,7 +60,7 @@ wxStatusBar::wxStatusBar(void)
   m_borderY = wxTHICK_LINE_BORDER;
 }
 
-wxStatusBar::~wxStatusBar(void)
+wxStatusBarGeneric::~wxStatusBarGeneric()
 {
 #   ifdef __WXMSW__
         SetFont(wxNullFont);
@@ -66,11 +72,10 @@ wxStatusBar::~wxStatusBar(void)
         delete[] m_statusStrings;
 }
 
-bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+bool wxStatusBarGeneric::Create(wxWindow *parent,
+                         wxWindowID id,
+                         long style,
+                         const wxString& name)
 {
   m_statusWidths = (int *) NULL;
   m_statusStrings = (wxString *) NULL;
@@ -78,7 +83,9 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
   m_borderX = wxTHICK_LINE_BORDER;
   m_borderY = wxTHICK_LINE_BORDER;
 
-  bool success = wxWindow::Create(parent, id, pos, size, style | wxTAB_TRAVERSAL, name);
+  bool success = wxWindow::Create(parent, id,
+                                  wxDefaultPosition, wxDefaultSize,
+                                  style | wxTAB_TRAVERSAL, name);
 
   // Don't wish this to be found as a child
 #ifndef __WXMAC__
@@ -91,7 +98,7 @@ bool wxStatusBar::Create(wxWindow *parent, wxWindowID id,
   return success;
 }
 
-void wxStatusBar::SetFieldsCount(int number, const int widths[])
+void wxStatusBarGeneric::SetFieldsCount(int number, const int widths[])
 {
   m_nFields = number;
 
@@ -107,11 +114,11 @@ void wxStatusBar::SetFieldsCount(int number, const int widths[])
   for (i = 0; i < number; i++)
     m_statusStrings[i] = "";
 
-    if ( widths )
-          SetStatusWidths(number, widths);
+  if ( widths )
+      SetStatusWidths(number, widths);
 }
 
-void wxStatusBar::SetStatusText(const wxString& text, int number)
+void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 {
   if ((number < 0) || (number >= m_nFields))
     return;
@@ -119,23 +126,17 @@ void wxStatusBar::SetStatusText(const wxString& text, int number)
   m_statusStrings[number] = text;
 
   Refresh();
-
-#ifdef __WXMSW__
-  // For some reason, this can cause major GDI problems - graphics
-  // all over the place. E.g. in print previewing.
-//  ::UpdateWindow((HWND) GetHWND());
-#endif
 }
 
-wxString wxStatusBar::GetStatusText(int n) const
+wxString wxStatusBarGeneric::GetStatusText(int n) const
 {
-  if ((n < 0) || (n >= m_nFields))
-    return wxString("");
-  else
+    wxCHECK_MSG( (n >= 0) && (n < m_nFields), wxEmptyString,
+                 _T("invalid status bar field index") );
+
     return m_statusStrings[n];
 }
 
-void wxStatusBar::SetStatusWidths(int n, const int widths_field[])
+void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 {
   // only set status widths, when n == number of statuswindows
   if (n == m_nFields)
@@ -162,7 +163,7 @@ void wxStatusBar::SetStatusWidths(int n, const int widths_field[])
   }
 }
 
-void wxStatusBar::OnPaint(wxPaintEvent& WXUNUSED(event) )
+void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
 {
   wxPaintDC dc(this);
 
@@ -179,7 +180,7 @@ void wxStatusBar::OnPaint(wxPaintEvent& WXUNUSED(event) )
 #   endif // MSW
 }
 
-void wxStatusBar::DrawFieldText(wxDC& dc, int i)
+void wxStatusBarGeneric::DrawFieldText(wxDC& dc, int i)
 {
   int leftMargin = 2;
 
@@ -194,7 +195,7 @@ void wxStatusBar::DrawFieldText(wxDC& dc, int i)
 
   int xpos = rect.x + leftMargin;
   int ypos = (int) (((rect.height - y) / 2 ) + rect.y + 0.5) ;
-  
+
 #if defined( __WXGTK__ ) || defined(__WXMAC__)
   xpos++;
   ypos++;
@@ -207,7 +208,7 @@ void wxStatusBar::DrawFieldText(wxDC& dc, int i)
   dc.DestroyClippingRegion();
 }
 
-void wxStatusBar::DrawField(wxDC& dc, int i)
+void wxStatusBarGeneric::DrawField(wxDC& dc, int i)
 {
   wxRect rect;
   GetFieldRect(i, rect);
@@ -238,10 +239,10 @@ void wxStatusBar::DrawField(wxDC& dc, int i)
 }
 
   // Get the position and size of the field's internal bounding rectangle
-bool wxStatusBar::GetFieldRect(int n, wxRect& rect) const
+bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 {
-  if ((n < 0) || (n >= m_nFields))
-    return FALSE;
+  wxCHECK_MSG( (n >= 0) && (n < m_nFields), FALSE,
+               _T("invalid status bar field index") );
 
   int width, height;
   GetClientSize(&width, &height);
@@ -308,7 +309,7 @@ bool wxStatusBar::GetFieldRect(int n, wxRect& rect) const
 }
 
 // Initialize colours
-void wxStatusBar::InitColours(void)
+void wxStatusBarGeneric::InitColours()
 {
     // Shadow colours
 #if defined(__WIN95__)
@@ -327,7 +328,7 @@ void wxStatusBar::InitColours(void)
 }
 
 // Responds to colour changes, and passes event on to children.
-void wxStatusBar::OnSysColourChanged(wxSysColourChangedEvent& event)
+void wxStatusBarGeneric::OnSysColourChanged(wxSysColourChangedEvent& event)
 {
     InitColours();
     Refresh();
@@ -336,3 +337,18 @@ void wxStatusBar::OnSysColourChanged(wxSysColourChangedEvent& event)
     wxWindow::OnSysColourChanged(event);
 }
 
+void wxStatusBarGeneric::SetMinHeight(int height)
+{
+    // check that this min height is not less than minimal height for the
+    // current font
+    wxClientDC dc(this);
+    wxCoord y;
+    dc.GetTextExtent( _T("X"), NULL, &y );
+
+    if ( height > (11*y)/10 )
+    {
+        SetSize(-1, -1, -1, height + 2*m_borderY);
+    }
+}
+
+//#endif // Win32 && wxUSE_NATIVE_STATUSBAR

@@ -51,7 +51,7 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
     #define _EXPORT _export
 #endif
 
-    IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
+IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 
 // ============================================================================
 // implementation
@@ -61,7 +61,7 @@ UINT WINAPI _EXPORT wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 // wxTimer class
 // ----------------------------------------------------------------------------
 
-wxTimer::wxTimer()
+void wxTimer::Init()
 {
     m_id = 0;
 }

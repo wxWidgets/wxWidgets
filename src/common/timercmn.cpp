@@ -11,7 +11,7 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart and Markus Holzem
 //              (c) 1999 Guillermo Rodriguez <guille@iies.es>
-// Licence:   	wxWindows license
+// Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
 // ============================================================================
@@ -58,6 +58,12 @@
 #endif
 
 // ----------------------------------------------------------------------------
+// wxWin macros
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent)
+
+// ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
@@ -72,11 +78,29 @@
     #endif
 #endif // HAVE_GETTIMEOFDAY
 
+// ----------------------------------------------------------------------------
+// prototypes
+// ----------------------------------------------------------------------------
+
+wxLongLong wxGetLocalTimeMillis();
+
 // ============================================================================
 // implementation
 // ============================================================================
 
-wxLongLong wxGetLocalTimeMillis();
+// ----------------------------------------------------------------------------
+// wxTimerBase
+// ----------------------------------------------------------------------------
+
+void wxTimerBase::Notify()
+{
+    // the base class version generates an event if it has owner - which it
+    // should because otherwise nobody can process timer events
+    wxCHECK_RET( m_owner, _T("wxTimer::Notify() should be overridden.") );
+
+    wxTimerEvent event(m_idTimer, m_milli);
+    (void)m_owner->ProcessEvent(event);
+}
 
 // ----------------------------------------------------------------------------
 // wxStopWatch
