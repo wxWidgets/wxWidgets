@@ -6,7 +6,7 @@
 # 
 # 
 # 
-PROGRAM = demo 
+PROGRAM = nettest 
 OBJECTS = $(OUTPUTDIR)\$(PROGRAM).obj 
 # 
 !include $(%WXWIN)\src\makeprog.wat 
