@@ -4,10 +4,6 @@ wxWindows 2.2 Change Log
 INCOMPATIBLE CHANGES
 --------------------
 
-All:
-
-- the command events are not propagated past the first top level parent
-
 wxMSW:
 
 - wxListCtrl::Find() parameter meaning changed, see docs for details
@@ -17,7 +13,7 @@ wxMSW:
 OTHER CHANGES
 -------------
 
-2.2.8
+2.2.9
 -----
 
 All:
@@ -60,6 +56,11 @@ wxGTK:
 - corrected radio button event sending
 - fixed slider value rounding, wxGA_VERTICAL style is now supported
 - fixed tree control invalid pointer after drag bug
+
+2.2.8
+-----
+
+There was no official wxWindows 2.2.8 release.
 
 2.2.7
 -----
