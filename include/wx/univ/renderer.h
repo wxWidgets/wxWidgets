@@ -228,25 +228,29 @@ public:
     // draw the slider shaft
     virtual void DrawSliderShaft(wxDC& dc,
                                  const wxRect& rect,
+                                 int lenThumb,
                                  wxOrientation orient,
                                  int flags = 0,
+                                 long style = 0,
                                  wxRect *rectShaft = NULL) = 0;
 
     // draw the slider thumb
     virtual void DrawSliderThumb(wxDC& dc,
                                  const wxRect& rect,
                                  wxOrientation orient,
-                                 int flags = 0) = 0;
+                                 int flags = 0,
+                                 long style = 0) = 0;
 
     // draw the slider ticks
     virtual void DrawSliderTicks(wxDC& dc,
                                  const wxRect& rect,
-                                 const wxSize& sizeThumb,
+                                 int lenThumb,
                                  wxOrientation orient,
                                  int start,
                                  int end,
                                  int step = 1,
-                                 int flags = 0) = 0;
+                                 int flags = 0,
+                                 long style = 0) = 0;
 
     // draw a menu bar item
     virtual void DrawMenuBarItem(wxDC& dc,
@@ -405,10 +409,13 @@ public:
 
     // get the slider shaft rect from the total slider rect
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
-                                      wxOrientation orient) const = 0;
+                                      int lenThumb,
+                                      wxOrientation orient,
+                                      long style = 0) const = 0;
 
     // get the size of the slider thumb for the given total slider rect
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      int lenThumb,
                                       wxOrientation orient) const = 0;
 
     // get the size of one progress bar step (in horz and vertical directions)
@@ -637,25 +644,29 @@ public:
 
     virtual void DrawSliderShaft(wxDC& dc,
                                  const wxRect& rect,
+                                 int lenThumb,
                                  wxOrientation orient,
                                  int flags = 0,
+                                 long style = 0,
                                  wxRect *rectShaft = NULL)
-        { m_renderer->DrawSliderShaft(dc, rect, orient, flags, rectShaft); }
+        { m_renderer->DrawSliderShaft(dc, rect, lenThumb, orient, flags, style, rectShaft); }
     virtual void DrawSliderThumb(wxDC& dc,
                                  const wxRect& rect,
                                  wxOrientation orient,
-                                 int flags = 0)
-        { m_renderer->DrawSliderThumb(dc, rect, orient, flags); }
+                                 int flags = 0,
+                                 long style = 0)
+        { m_renderer->DrawSliderThumb(dc, rect, orient, flags, style); }
     virtual void DrawSliderTicks(wxDC& dc,
                                  const wxRect& rect,
-                                 const wxSize& sizeThumb,
+                                 int lenThumb,
                                  wxOrientation orient,
                                  int start,
                                  int end,
                                  int step = 1,
-                                 int flags = 0)
-        { m_renderer->DrawSliderTicks(dc, rect, sizeThumb, orient,
-                                      start, end, step, flags); }
+                                 int flags = 0,
+                                 long style = 0)
+        { m_renderer->DrawSliderTicks(dc, rect, lenThumb, orient,
+                                      start, end, start, flags, style); }
 
     virtual void DrawMenuBarItem(wxDC& dc,
                                  const wxRect& rect,
@@ -778,11 +789,14 @@ public:
     virtual wxCoord GetSliderTickLen() const
         { return m_renderer->GetSliderTickLen(); }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
-                                      wxOrientation orient) const
-        { return m_renderer->GetSliderShaftRect(rect, orient); }
+                                      int lenThumb,
+                                      wxOrientation orient,
+                                      long style = 0) const
+        { return m_renderer->GetSliderShaftRect(rect, lenThumb, orient, style); }
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      int lenThumb,
                                       wxOrientation orient) const
-        { return m_renderer->GetSliderThumbSize(rect, orient); }
+        { return m_renderer->GetSliderThumbSize(rect, lenThumb, orient); }
     virtual wxSize GetProgressBarStep() const
         { return m_renderer->GetProgressBarStep(); }
     virtual wxSize GetMenuBarItemSize(const wxSize& sizeText) const

@@ -184,21 +184,25 @@ public:
 
     virtual void DrawSliderShaft(wxDC& dc,
                                  const wxRect& rect,
+                                 int lenThumb,
                                  wxOrientation orient,
                                  int flags = 0,
+                                 long style = 0,
                                  wxRect *rectShaft = NULL);
     virtual void DrawSliderThumb(wxDC& dc,
                                  const wxRect& rect,
                                  wxOrientation orient,
-                                 int flags = 0);
+                                 int flags = 0,
+                                 long style = 0);
     virtual void DrawSliderTicks(wxDC& dc,
                                  const wxRect& rect,
-                                 const wxSize& sizeThumb,
+                                 int lenThumb,
                                  wxOrientation orient,
                                  int start,
                                  int end,
-                                 int step,
-                                 int flags)
+                                 int step = 1,
+                                 int flags = 0,
+                                 long style = 0)
     {
         // we don't have the ticks in GTK version
     }
@@ -305,8 +309,11 @@ public:
     virtual wxCoord GetSliderDim() const { return 15; }
     virtual wxCoord GetSliderTickLen() const { return 0; }
     virtual wxRect GetSliderShaftRect(const wxRect& rect,
-                                      wxOrientation orient) const;
+                                      int lenThumb,
+                                      wxOrientation orient,
+                                      long style = 0) const;
     virtual wxSize GetSliderThumbSize(const wxRect& rect,
+                                      int lenThumb,
                                       wxOrientation orient) const;
     virtual wxSize GetProgressBarStep() const { return wxSize(16, 32); }
 
@@ -1865,13 +1872,14 @@ void wxGTKRenderer::DrawTab(wxDC& dc,
 // ----------------------------------------------------------------------------
 
 wxSize wxGTKRenderer::GetSliderThumbSize(const wxRect& rect,
+                                         int lenThumb,
                                          wxOrientation orient) const
 {
     static const wxCoord SLIDER_THUMB_LENGTH = 30;
 
     wxSize size;
 
-    wxRect rectShaft = GetSliderShaftRect(rect, orient);
+    wxRect rectShaft = GetSliderShaftRect(rect, lenThumb, orient);
     if ( orient == wxHORIZONTAL )
     {
         size.x = wxMin(SLIDER_THUMB_LENGTH, rectShaft.width);
@@ -1887,15 +1895,19 @@ wxSize wxGTKRenderer::GetSliderThumbSize(const wxRect& rect,
 }
 
 wxRect wxGTKRenderer::GetSliderShaftRect(const wxRect& rect,
-                                         wxOrientation WXUNUSED(orient)) const
+                                         int lenThumb,
+                                         wxOrientation WXUNUSED(orient),
+                                         long style) const
 {
     return rect.Deflate(2*BORDER_THICKNESS, 2*BORDER_THICKNESS);
 }
 
 void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
                                     const wxRect& rectOrig,
+                                    int lenThumb,
                                     wxOrientation orient,
                                     int flags,
+                                    long style,
                                     wxRect *rectShaft)
 {
     wxRect rect = rectOrig;
@@ -1922,7 +1934,8 @@ void wxGTKRenderer::DrawSliderShaft(wxDC& dc,
 void wxGTKRenderer::DrawSliderThumb(wxDC& dc,
                                     const wxRect& rectOrig,
                                     wxOrientation orient,
-                                    int flags)
+                                    int flags,
+                                    long style)
 {
     // draw the thumb border
     wxRect rect = rectOrig;
