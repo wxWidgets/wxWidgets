@@ -21,10 +21,10 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 
-#include "gdk/gdk.h"
-#include "gtk/gtk.h"
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
-#include "gdk/gdkkeysyms.h"
+#include <gdk/gdkkeysyms.h>
 
 //-----------------------------------------------------------------------------
 // idle system

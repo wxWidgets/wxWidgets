@@ -15,7 +15,7 @@
 
 #include "wx/palette.h"
 
-#include "gdk/gdk.h"
+#include <gdk/gdk.h>
 
 //-----------------------------------------------------------------------------
 // wxPalette

@@ -20,9 +20,9 @@
 #include "gtk/gtk.h"
 #include "wx/gtk/win_gtk.h"
 
-#include "gdk/gdk.h"
-#include "gdk/gdkprivate.h"
-#include "gdk/gdkx.h"
+#include <gdk/gdk.h>
+#include <gdk/gdkprivate.h>
+#include <gdk/gdkx.h>
 
 //-----------------------------------------------------------------------------
 // idle system
