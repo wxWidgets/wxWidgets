@@ -1147,7 +1147,21 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
     else
     {
-        gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
+#if GTK_CHECK_VERSION(2,2,0)
+        if (use_bitmap.HasPixbuf())
+        {
+            gdk_draw_pixbuf(m_window, m_penGC,
+                            use_bitmap.GetPixbuf(),
+                            0, 0, xx, yy, -1, -1,
+                            GDK_RGB_DITHER_NORMAL, xx, yy);
+        }
+        else
+#endif
+        {
+            gdk_draw_pixmap(m_window, m_penGC,
+                            use_bitmap.GetPixmap(),
+                            0, 0, xx, yy, -1, -1);
+        }
     }
 
     // remove mask again if any

@@ -21,6 +21,10 @@
 #include "wx/palette.h"
 #include "wx/gdiobj.h"
 
+#ifdef __WXGTK20__
+typedef struct _GdkPixbuf GdkPixbuf;
+#endif
+
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
@@ -109,9 +113,17 @@ public:
     void SetDepth( int depth );
     void SetPixmap( GdkPixmap *pixmap );
     void SetBitmap( GdkBitmap *bitmap );
+#ifdef __WXGTK20__
+    void SetPixbuf(GdkPixbuf *pixbuf);
+#endif
 
     GdkPixmap *GetPixmap() const;
     GdkBitmap *GetBitmap() const;
+    bool HasPixmap() const;
+#ifdef __WXGTK20__
+    bool HasPixbuf() const;
+    GdkPixbuf *GetPixbuf() const;
+#endif
     
     // Basically, this corresponds to Win32 StretchBlt()
     wxBitmap Rescale( int clipx, int clipy, int clipwidth, int clipheight, int width, int height );
@@ -120,6 +132,25 @@ protected:
     bool CreateFromImage(const wxImage& image, int depth);
 
 private:
+    // to be called from CreateFromImage only!
+    bool CreateFromImageAsBitmap(const wxImage& image);
+    bool CreateFromImageAsPixmap(const wxImage& image);
+
+#ifdef __WXGTK20__
+    bool CreateFromImageAsPixbuf(const wxImage& image);
+
+    enum Representation
+    {
+        Pixmap,
+        Pixbuf
+    };
+    // removes other representations from memory, keeping only 'keep'
+    // (wxBitmap may keep same bitmap e.g. as both pixmap and pixbuf):
+    void PurgeOtherRepresentations(Representation keep);
+
+    friend class wxMemoryDC;
+#endif
+    
     DECLARE_DYNAMIC_CLASS(wxBitmap)
 };
 
