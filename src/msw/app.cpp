@@ -43,11 +43,13 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/dynarray.h"
+    #include "wx/wxchar.h"
 #endif
 
-#include "wx/msw/private.h"
 #include "wx/log.h"
 #include "wx/module.h"
+
+#include "wx/msw/private.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -83,6 +85,7 @@
 #endif
 
 #include "wx/msw/msvcrt.h"
+
 
 // ---------------------------------------------------------------------------
 // global variables

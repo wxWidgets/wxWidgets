@@ -19,6 +19,7 @@ EXTRA_LTLIBRARIES = libwx_gtk.la libwx_motif.la libwx_msw.la
 # these are the common files which always make part of the library
 libwx_msw_la_SOURCES = \
 \
+ winestub.c \
  extended.c \
  parser.c \
 \
@@ -94,7 +95,6 @@ libwx_msw_la_SOURCES = \
  gridg.cpp \
  laywin.cpp \
  panelg.cpp \
- printps.cpp \
  progdlgg.cpp \
  prop.cpp \
  propform.cpp \
@@ -116,6 +116,7 @@ libwx_msw_la_SOURCES = \
  checkbox.cpp \
  choice.cpp \
  clipbrd.cpp \
+ colordlg.cpp \
  colour.cpp \
  combobox.cpp \
  control.cpp \
@@ -127,9 +128,9 @@ libwx_msw_la_SOURCES = \
  dcscreen.cpp \
  dcprint.cpp \
  dialog.cpp \
- dirdlg \
  filedlg.cpp \
  font.cpp \
+ fontdlg.cpp \
  frame.cpp \
  gauge95.cpp \
  gdiobj.cpp \
@@ -145,6 +146,8 @@ libwx_msw_la_SOURCES = \
  notebook.cpp \
  ownerdrw.cpp \
  palette.cpp \
+ printdlg.cpp \
+ printwin.cpp \
  pen.cpp \
  radiobox.cpp \
  radiobut.cpp \
@@ -166,7 +169,8 @@ libwx_msw_la_SOURCES = \
  utils.cpp \
  utilsexc.cpp \
  wave.cpp \
- window.cpp
+ window.cpp \
+ nativdlg.cpp
 
 # these are the sources which we build by our own rules
 #

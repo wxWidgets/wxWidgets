@@ -40,7 +40,7 @@
 
 #if !defined(_WINDLL)
 
-#ifdef __TWIN32__
+#if defined(__TWIN32__) || defined(__WXWINE__)
 
 extern "C"
 BOOL PASCAL WinMain(HANDLE hInstance, HANDLE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)

@@ -20,7 +20,7 @@
     #pragma interface "window.h"
 #endif
 
-#include "wx/msw/winundef.h"
+// #include "wx/msw/winundef.h"
 
 // VZ: apparently some version of Windows send extra mouse move messages after
 //     a mouse click. My tests under NT 4.0 and 95 didn't show it so I'm

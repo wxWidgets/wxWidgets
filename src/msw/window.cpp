@@ -2458,13 +2458,13 @@ bool wxWindow::HandleSetCursor(WXHWND hWnd,
     return FALSE;
 }
 
-#if wxUSE_OWNER_DRAWN
 // ---------------------------------------------------------------------------
 // owner drawn stuff
 // ---------------------------------------------------------------------------
 
 bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
 {
+#if wxUSE_OWNER_DRAWN
     // is it a menu item?
     if ( id == 0 )
     {
@@ -2494,11 +2494,14 @@ bool wxWindow::MSWOnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
         return ((wxControl *)item)->MSWOnDraw(itemStruct);
     }
     else
+#endif
         return FALSE;
+
 }
 
 bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
+#if wxUSE_OWNER_DRAWN
     // is it a menu item?
     if ( id == 0 )
     {
@@ -2516,10 +2519,9 @@ bool wxWindow::MSWOnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
     {
         return ((wxControl *)item)->MSWOnMeasure(itemStruct);
     }
-
+#endif  // owner-drawn menus
     return FALSE;
 }
-#endif  // owner-drawn menus
 
 // ---------------------------------------------------------------------------
 // colours and palettes

@@ -951,17 +951,27 @@ if test "$wxUSE_WINE" = 1; then
     AC_MSG_CHECKING(for Xpm library)
     WX_PATH_FIND_LIBRARIES($SEARCH_LIB,Xpm)
     if test "$ac_find_libraries" != "" ; then
-        WX_LINK_PATH_EXIST($ac_find_libraries,$GUI_TK_LIBRARY)
-        CHECK_LINK="$GUI_TK_LIBRARY $ac_path_to_link"
-        XPM_LINK="-lXpm "
+        GUI_TK_LIBRARY="-L$ac_find_libraries"
+        XPM_LINK="-lXpm"
         AC_DEFINE(wxHAVE_LIB_XPM)
         AC_MSG_RESULT(found at $ac_find_libraries)
     else
         AC_MSG_RESULT(no)
         AC_MSG_WARN(library will be compiled without support for images in XPM format)
     fi
+    
+    MESA_LINK=""
+    AC_MSG_CHECKING(for Mesa library)
+    WX_PATH_FIND_LIBRARIES($SEARCH_LIB,MesaGL)
+    if test "$ac_find_libraries" != "" ; then
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
+        MESA_LINK="-lMesaGL"
+        AC_MSG_RESULT(found at $ac_find_libraries)
+    else
+        AC_MSG_ERROR(no)
+    fi
 
-    GUI_TK_LINK="-lwine $XPM_LINK -lXmu -lX11 -lm"
+    GUI_TK_LINK="-lwine $MESA_LINK $XPM_LINK -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses -ldl -lm"
     GUI_TK_LIBRARY="$GUI_TK_LIBRARY $GUI_TK_LINK"
     WXWINE=1
     TOOLKIT=MSW

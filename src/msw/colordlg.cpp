@@ -36,7 +36,7 @@
 
 #include <windows.h>
 
-#if !defined(__WIN32__) || defined(__SALFORDC__)
+#if !defined(__WIN32__) || defined(__SALFORDC__) || defined(__WXWINE__)
 #include <commdlg.h>
 #endif
 

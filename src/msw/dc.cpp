@@ -28,10 +28,8 @@
     #pragma hdrstop
 #endif
 
-#include "wx/frame.h"
-#include "wx/msw/private.h"
-
 #ifndef WX_PRECOMP
+    #include "wx/window.h"
     #include "wx/dc.h"
     #include "wx/utils.h"
     #include "wx/dialog.h"
@@ -39,6 +37,7 @@
     #include "wx/bitmap.h"
     #include "wx/dcmemory.h"
     #include "wx/log.h"
+    #include "wx/icon.h"
 #endif
 
 #include "wx/dcprint.h"
@@ -53,6 +52,8 @@
 #ifndef __WIN32__
     #include <print.h>
 #endif
+
+#include "wx/msw/private.h"
 
 #if !USE_SHARED_LIBRARY
     IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
