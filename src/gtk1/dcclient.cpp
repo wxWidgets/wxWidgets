@@ -1284,10 +1284,6 @@ void wxWindowDC::SetLogicalFunction( int function )
         
         // unsupported by GTK
         case wxNOR:          mode = GDK_COPY;          break;
-
-        // these are actually ternary ROPs
-        case wxSRC_AND:      mode = GDK_AND;           break;
-        case wxSRC_OR:       mode = GDK_OR;            break;
 #endif
         default:
         {

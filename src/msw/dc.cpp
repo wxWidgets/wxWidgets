@@ -1002,34 +1002,14 @@ void wxDC::SetRop(WXHDC dc)
 
     int c_rop;
     
-    // These may be wrong
     switch (m_logicalFunction)
     {
-        //    case wxXOR: c_rop = R2_XORPEN; break;
-    case wxXOR: c_rop = R2_NOTXORPEN; break;
-    case wxINVERT: c_rop = R2_NOT; break;
-    case wxOR_REVERSE: c_rop = R2_MERGEPENNOT; break;
-    case wxAND_REVERSE: c_rop = R2_MASKPENNOT; break;
-    case wxCLEAR: c_rop = R2_WHITE; break;
-    case wxSET: c_rop = R2_BLACK; break;
-    case wxSRC_INVERT: c_rop = R2_NOTCOPYPEN; break;
-    case wxOR_INVERT: c_rop = R2_MERGENOTPEN; break;
-    case wxAND: c_rop = R2_MASKPEN; break;
-    case wxOR: c_rop = R2_MERGEPEN; break;
-    case wxAND_INVERT: c_rop = R2_MASKNOTPEN; break;
-    case wxEQUIV:
-    case wxNAND:
-    case wxCOPY:
-    
-#if 0
-        // these probably wouldn't be wrong, RR
-
 	    case wxXOR:          c_rop = R2_XORPEN;        break;
 	    case wxINVERT:       c_rop = R2_NOT;           break;
 	    case wxOR_REVERSE:   c_rop = R2_MERGEPENNOT;   break;
 	    case wxAND_REVERSE:  c_rop = R2_MASKPENNOT;    break;
-	    case wxCLEAR:        c_rop = R2_BLACK;         break;
-	    case wxSET:          c_rop = R2_WHITE;         break;
+	    case wxCLEAR:        c_rop = R2_WHITE;         break;
+	    case wxSET:          c_rop = R2_BLACK;         break;
 	    case wxOR_INVERT:    c_rop = R2_MERGENOTPEN;   break;
 	    case wxAND:          c_rop = R2_MASKPEN;       break;
 	    case wxOR:           c_rop = R2_MERGEPEN;      break;
@@ -1039,17 +1019,12 @@ void wxDC::SetRop(WXHDC dc)
 	    case wxCOPY:         c_rop = R2_COPYPEN;       break;
 	    case wxNO_OP:        c_rop = R2_NOP;           break;
 	    case wxSRC_INVERT:   c_rop = R2_NOTCOPYPEN;    break;
-        
-        // what is this one?
-        case wxNOR:          c_rop = R2_COPYPEN;       break;
-
-        // these are actually ternary ROPs
-        case wxSRC_AND:      c_rop = R2_MASKPEN;       break;
-        case wxSRC_OR:       c_rop = R2_MERGEPEN;      break;
-#endif
-    
-    default:
-        c_rop = R2_COPYPEN; break;
+        case wxNOR:          c_rop = R2_NOTMERGEPEN;   break;
+        default:
+        {
+           wxFAIL_MSG( wxT("unsupported logical function") );
+           break;
+        }
     }
     SetROP2((HDC) dc, c_rop);
 }
@@ -1300,19 +1275,32 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         ::SetBkColor(GetHdc(), m_textBackgroundColour.GetPixel() );
     }
 
-    DWORD dwRop = rop == wxCOPY ? SRCCOPY :
-                  rop == wxCLEAR ? WHITENESS :
-                  rop == wxSET ? BLACKNESS :
-                  rop == wxINVERT ? DSTINVERT :
-                  rop == wxAND ? MERGECOPY :
-                  rop == wxOR ? MERGEPAINT :
-                  rop == wxSRC_INVERT ? NOTSRCCOPY :
-                  rop == wxXOR ? SRCINVERT :
-                  rop == wxOR_REVERSE ? MERGEPAINT :
-                  rop == wxAND_REVERSE ? SRCERASE :
-                  rop == wxSRC_OR ? SRCPAINT :
-                  rop == wxSRC_AND ? SRCAND :
-                  SRCCOPY;
+    DWORD dwRop = SRCCOPY;
+    switch (rop)
+    {
+	    case wxXOR:          dwRop = SRCINVERT;        break;
+	    case wxINVERT:       dwRop = DSTINVERT;        break;
+	    case wxOR_REVERSE:   dwRop = 0x00DD0228;       break;
+	    case wxAND_REVERSE:  dwRop = SRCERASE;         break;
+	    case wxCLEAR:        dwRop = BLACKNESS;        break;
+	    case wxSET:          dwRop = WHITENESS;        break;
+	    case wxOR_INVERT:    dwRop = MERGEPAINT;       break;
+	    case wxAND:          dwRop = SRCAND;           break;
+	    case wxOR:           dwRop = SRCPAINT;         break;
+	    case wxEQUIV:        dwRop = 0x00990066;       break;
+	    case wxNAND:         dwRop = 0x007700E6;       break;
+	    case wxAND_INVERT:   dwRop = 0x00220326;       break;
+	    case wxCOPY:         dwRop = SRCCOPY;          break;
+	    case wxNO_OP:        dwRop = 0x00AA0029;       break;
+	    case wxSRC_INVERT:   dwRop = NOTSRCCOPY;       break;
+        case wxNOR:          dwRop = NOTSRCCOPY;       break;
+        default:
+        {
+           wxFAIL_MSG( wxT("unsupported logical function") );
+           break;
+        }
+    }
+
 
     bool success;
 
