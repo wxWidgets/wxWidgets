@@ -780,7 +780,7 @@ class FileHistory(_core.Object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileHistory instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(self, int maxFiles=9) -> FileHistory"""
+        """__init__(self, int maxFiles=9, int idBase=ID_FILE1) -> FileHistory"""
         newobj = _misc_.new_FileHistory(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -2455,6 +2455,7 @@ ART_FRAME_ICON = cvar.ART_FRAME_ICON
 ART_CMN_DIALOG = cvar.ART_CMN_DIALOG
 ART_HELP_BROWSER = cvar.ART_HELP_BROWSER
 ART_MESSAGE_BOX = cvar.ART_MESSAGE_BOX
+ART_BUTTON = cvar.ART_BUTTON
 ART_OTHER = cvar.ART_OTHER
 ART_ADD_BOOKMARK = cvar.ART_ADD_BOOKMARK
 ART_DEL_BOOKMARK = cvar.ART_DEL_BOOKMARK

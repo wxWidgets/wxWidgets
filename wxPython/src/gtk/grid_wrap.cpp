@@ -11251,6 +11251,90 @@ static PyObject *_wrap_Grid_CanDragGridSize(PyObject *self, PyObject *args, PyOb
 }
 
 
+static PyObject *_wrap_Grid_EnableDragCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGrid *arg1 = (wxGrid *) 0 ;
+    bool arg2 = (bool) True ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "enable", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Grid_EnableDragCell",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj1) {
+        arg2 = (bool) SWIG_AsBool(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->EnableDragCell(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Grid_DisableDragCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGrid *arg1 = (wxGrid *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Grid_DisableDragCell",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->DisableDragCell();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Grid_CanDragCell(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxGrid *arg1 = (wxGrid *) 0 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Grid_CanDragCell",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxGrid,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->CanDragCell();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_Grid_SetAttr(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxGrid *arg1 = (wxGrid *) 0 ;
@@ -15953,6 +16037,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Grid_EnableDragGridSize", (PyCFunction) _wrap_Grid_EnableDragGridSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_DisableDragGridSize", (PyCFunction) _wrap_Grid_DisableDragGridSize, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_CanDragGridSize", (PyCFunction) _wrap_Grid_CanDragGridSize, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_EnableDragCell", (PyCFunction) _wrap_Grid_EnableDragCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_DisableDragCell", (PyCFunction) _wrap_Grid_DisableDragCell, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Grid_CanDragCell", (PyCFunction) _wrap_Grid_CanDragCell, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetAttr", (PyCFunction) _wrap_Grid_SetAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetRowAttr", (PyCFunction) _wrap_Grid_SetRowAttr, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Grid_SetColAttr", (PyCFunction) _wrap_Grid_SetColAttr, METH_VARARGS | METH_KEYWORDS },
@@ -17326,6 +17413,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_SHOWN", PyInt_FromLong(wxEVT_GRID_EDITOR_SHOWN));
     PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_HIDDEN", PyInt_FromLong(wxEVT_GRID_EDITOR_HIDDEN));
     PyDict_SetItemString(d, "wxEVT_GRID_EDITOR_CREATED", PyInt_FromLong(wxEVT_GRID_EDITOR_CREATED));
+    PyDict_SetItemString(d, "wxEVT_GRID_CELL_BEGIN_DRAG", PyInt_FromLong(wxEVT_GRID_CELL_BEGIN_DRAG));
     
     
 }

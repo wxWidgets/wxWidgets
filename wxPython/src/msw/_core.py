@@ -1588,6 +1588,8 @@ class FSFile(Object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
+        self.thisown = 0   # It will normally be deleted by the user of the wxFileSystem
+
     def __del__(self, destroy=_core_.delete_FSFile):
         """__del__(self)"""
         try:
@@ -2059,6 +2061,20 @@ class Image(Object):
         success flag and rgb values.
         """
         return _core_.Image_FindFirstUnusedColour(*args, **kwargs)
+
+    def ConvertAlphaToMask(*args, **kwargs):
+        """
+        ConvertAlphaToMask(self, byte threshold=128) -> bool
+
+        If the image has alpha channel, this method converts it to mask. All pixels
+        with alpha value less than ``threshold`` are replaced with mask colour and the
+        alpha channel is removed. Mask colour is chosen automatically using
+        `FindFirstUnusedColour`.
+
+        If the image image doesn't have alpha channel, ConvertAlphaToMask does
+        nothing.
+        """
+        return _core_.Image_ConvertAlphaToMask(*args, **kwargs)
 
     def SetMaskFromImage(*args, **kwargs):
         """SetMaskFromImage(self, Image mask, byte mr, byte mg, byte mb) -> bool"""

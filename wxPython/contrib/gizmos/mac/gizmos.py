@@ -131,7 +131,7 @@ class EditableListBox(_windows.Panel):
         return _gizmos.EditableListBox_GetStrings(*args, **kwargs)
 
     def GetListCtrl(*args, **kwargs):
-        """GetListCtrl(self) -> wxListCtrl"""
+        """GetListCtrl(self) -> ListCtrl"""
         return _gizmos.EditableListBox_GetListCtrl(*args, **kwargs)
 
     def GetDelButton(*args, **kwargs):

@@ -1021,6 +1021,7 @@ PyObject *wxMimeTypesManager_EnumAllFileTypes(wxMimeTypesManager *self){
  static const wxString wxPyART_CMN_DIALOG(wxART_CMN_DIALOG); 
  static const wxString wxPyART_HELP_BROWSER(wxART_HELP_BROWSER); 
  static const wxString wxPyART_MESSAGE_BOX(wxART_MESSAGE_BOX); 
+ static const wxString wxPyART_BUTTON(wxART_BUTTON); 
  static const wxString wxPyART_OTHER(wxART_OTHER); 
  static const wxString wxPyART_ADD_BOOKMARK(wxART_ADD_BOOKMARK); 
  static const wxString wxPyART_DEL_BOOKMARK(wxART_DEL_BOOKMARK); 
@@ -5597,20 +5598,26 @@ static PyObject * StopWatch_swigregister(PyObject *self, PyObject *args) {
 static PyObject *_wrap_new_FileHistory(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     int arg1 = (int) 9 ;
+    int arg2 = (int) wxID_FILE1 ;
     wxFileHistory *result;
     PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
     char *kwnames[] = {
-        (char *) "maxFiles", NULL 
+        (char *) "maxFiles",(char *) "idBase", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_FileHistory",kwnames,&obj0)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_FileHistory",kwnames,&obj0,&obj1)) goto fail;
     if (obj0) {
         arg1 = (int) SWIG_AsInt(obj0); 
         if (PyErr_Occurred()) SWIG_fail;
     }
+    if (obj1) {
+        arg2 = (int) SWIG_AsInt(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (wxFileHistory *)new wxFileHistory(arg1);
+        result = (wxFileHistory *)new wxFileHistory(arg1,arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -13785,6 +13792,26 @@ static PyObject *_wrap_ART_MESSAGE_BOX_get() {
         pyobj = PyUnicode_FromWideChar((&wxPyART_MESSAGE_BOX)->c_str(), (&wxPyART_MESSAGE_BOX)->Len());
 #else
         pyobj = PyString_FromStringAndSize((&wxPyART_MESSAGE_BOX)->c_str(), (&wxPyART_MESSAGE_BOX)->Len());
+#endif
+    }
+    return pyobj;
+}
+
+
+static int _wrap_ART_BUTTON_set(PyObject *_val) {
+    PyErr_SetString(PyExc_TypeError,"Variable ART_BUTTON is read-only.");
+    return 1;
+}
+
+
+static PyObject *_wrap_ART_BUTTON_get() {
+    PyObject *pyobj;
+    
+    {
+#if wxUSE_UNICODE
+        pyobj = PyUnicode_FromWideChar((&wxPyART_BUTTON)->c_str(), (&wxPyART_BUTTON)->Len());
+#else
+        pyobj = PyString_FromStringAndSize((&wxPyART_BUTTON)->c_str(), (&wxPyART_BUTTON)->Len());
 #endif
     }
     return pyobj;
@@ -29906,6 +29933,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     SWIG_addvarlink(SWIG_globals,(char*)"ART_CMN_DIALOG",_wrap_ART_CMN_DIALOG_get, _wrap_ART_CMN_DIALOG_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_HELP_BROWSER",_wrap_ART_HELP_BROWSER_get, _wrap_ART_HELP_BROWSER_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_MESSAGE_BOX",_wrap_ART_MESSAGE_BOX_get, _wrap_ART_MESSAGE_BOX_set);
+    SWIG_addvarlink(SWIG_globals,(char*)"ART_BUTTON",_wrap_ART_BUTTON_get, _wrap_ART_BUTTON_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_OTHER",_wrap_ART_OTHER_get, _wrap_ART_OTHER_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_ADD_BOOKMARK",_wrap_ART_ADD_BOOKMARK_get, _wrap_ART_ADD_BOOKMARK_set);
     SWIG_addvarlink(SWIG_globals,(char*)"ART_DEL_BOOKMARK",_wrap_ART_DEL_BOOKMARK_get, _wrap_ART_DEL_BOOKMARK_set);

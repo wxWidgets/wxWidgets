@@ -1631,6 +1631,18 @@ class Grid(_windows.ScrolledWindow):
         """CanDragGridSize(self) -> bool"""
         return _grid.Grid_CanDragGridSize(*args, **kwargs)
 
+    def EnableDragCell(*args, **kwargs):
+        """EnableDragCell(self, bool enable=True)"""
+        return _grid.Grid_EnableDragCell(*args, **kwargs)
+
+    def DisableDragCell(*args, **kwargs):
+        """DisableDragCell(self)"""
+        return _grid.Grid_DisableDragCell(*args, **kwargs)
+
+    def CanDragCell(*args, **kwargs):
+        """CanDragCell(self) -> bool"""
+        return _grid.Grid_CanDragCell(*args, **kwargs)
+
     def SetAttr(*args, **kwargs):
         """SetAttr(self, int row, int col, GridCellAttr attr)"""
         return _grid.Grid_SetAttr(*args, **kwargs)
@@ -2285,6 +2297,7 @@ wxEVT_GRID_SELECT_CELL = _grid.wxEVT_GRID_SELECT_CELL
 wxEVT_GRID_EDITOR_SHOWN = _grid.wxEVT_GRID_EDITOR_SHOWN
 wxEVT_GRID_EDITOR_HIDDEN = _grid.wxEVT_GRID_EDITOR_HIDDEN
 wxEVT_GRID_EDITOR_CREATED = _grid.wxEVT_GRID_EDITOR_CREATED
+wxEVT_GRID_CELL_BEGIN_DRAG = _grid.wxEVT_GRID_CELL_BEGIN_DRAG
 EVT_GRID_CELL_LEFT_CLICK = wx.PyEventBinder( wxEVT_GRID_CELL_LEFT_CLICK )
 EVT_GRID_CELL_RIGHT_CLICK = wx.PyEventBinder( wxEVT_GRID_CELL_RIGHT_CLICK )
 EVT_GRID_CELL_LEFT_DCLICK = wx.PyEventBinder( wxEVT_GRID_CELL_LEFT_DCLICK )
@@ -2301,6 +2314,7 @@ EVT_GRID_SELECT_CELL = wx.PyEventBinder( wxEVT_GRID_SELECT_CELL )
 EVT_GRID_EDITOR_SHOWN = wx.PyEventBinder( wxEVT_GRID_EDITOR_SHOWN )
 EVT_GRID_EDITOR_HIDDEN = wx.PyEventBinder( wxEVT_GRID_EDITOR_HIDDEN )
 EVT_GRID_EDITOR_CREATED = wx.PyEventBinder( wxEVT_GRID_EDITOR_CREATED )
+EVT_GRID_CELL_BEGIN_DRAG = wx.PyEventBinder( wxEVT_GRID_CELL_BEGIN_DRAG )
 
 
 # The same as above but with the ability to specify an identifier
@@ -2320,5 +2334,7 @@ EVT_GRID_CMD_SELECT_CELL =         wx.PyEventBinder( wxEVT_GRID_SELECT_CELL,    
 EVT_GRID_CMD_EDITOR_SHOWN =        wx.PyEventBinder( wxEVT_GRID_EDITOR_SHOWN,       1 )
 EVT_GRID_CMD_EDITOR_HIDDEN =       wx.PyEventBinder( wxEVT_GRID_EDITOR_HIDDEN,      1 )
 EVT_GRID_CMD_EDITOR_CREATED =      wx.PyEventBinder( wxEVT_GRID_EDITOR_CREATED,     1 )
+EVT_GRID_CMD_CELL_BEGIN_DRAG =     wx.PyEventBinder( wxEVT_GRID_CELL_BEGIN_DRAG,    1 )
+    
 
 

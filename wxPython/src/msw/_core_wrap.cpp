@@ -6678,7 +6678,7 @@ static PyObject *_wrap_FileSystemHandler_OpenFile(PyObject *self, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -7183,7 +7183,7 @@ static PyObject *_wrap_FileSystem_OpenFile(PyObject *self, PyObject *args, PyObj
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp2)
@@ -7529,7 +7529,7 @@ static PyObject *_wrap_InternetFSHandler_OpenFile(PyObject *self, PyObject *args
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -7655,7 +7655,7 @@ static PyObject *_wrap_ZipFSHandler_OpenFile(PyObject *self, PyObject *args, PyO
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -8044,7 +8044,7 @@ static PyObject *_wrap_MemoryFSHandler_OpenFile(PyObject *self, PyObject *args, 
         if (PyErr_Occurred()) SWIG_fail;
     }
     {
-        resultobj = wxPyMake_wxObject(result, 0); 
+        resultobj = wxPyMake_wxObject(result, 1); 
     }
     {
         if (temp3)
@@ -9456,6 +9456,40 @@ static PyObject *_wrap_Image_FindFirstUnusedColour(PyObject *self, PyObject *arg
     {
         PyObject *o = PyInt_FromLong((long) (*arg4));
         resultobj = t_output_helper(resultobj,o);
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_Image_ConvertAlphaToMask(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxImage *arg1 = (wxImage *) 0 ;
+    byte arg2 = (byte) 128 ;
+    bool result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "threshold", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Image_ConvertAlphaToMask",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxImage,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if (obj1) {
+        arg2 = (byte) SWIG_AsUnsignedChar(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (bool)(arg1)->ConvertAlphaToMask(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
     }
     return resultobj;
     fail:
@@ -40736,6 +40770,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_GetAlpha", (PyCFunction) _wrap_Image_GetAlpha, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_HasAlpha", (PyCFunction) _wrap_Image_HasAlpha, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_FindFirstUnusedColour", (PyCFunction) _wrap_Image_FindFirstUnusedColour, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"Image_ConvertAlphaToMask", (PyCFunction) _wrap_Image_ConvertAlphaToMask, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_SetMaskFromImage", (PyCFunction) _wrap_Image_SetMaskFromImage, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_CanRead", (PyCFunction) _wrap_Image_CanRead, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"Image_GetImageCount", (PyCFunction) _wrap_Image_GetImageCount, METH_VARARGS | METH_KEYWORDS },
