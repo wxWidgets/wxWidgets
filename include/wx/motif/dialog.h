@@ -16,8 +16,6 @@
 #pragma interface "dialog.h"
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxDialogNameStr;
-
 class WXDLLEXPORT wxEventLoop;
 
 // Dialog boxes

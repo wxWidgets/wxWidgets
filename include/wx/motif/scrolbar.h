@@ -18,8 +18,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxScrollBarNameStr;
-
 // Scrollbar item
 class WXDLLEXPORT wxScrollBar: public wxControl
 {

@@ -20,6 +20,8 @@
 #include "wx/containr.h"
 #include "wx/toplevel.h"
 
+WXDLLEXPORT_DATA(extern const wxChar*) wxDialogNameStr;
+
 class WXDLLEXPORT wxDialogBase : public wxTopLevelWindow
 {
 public:

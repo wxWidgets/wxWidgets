@@ -18,8 +18,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxCheckBoxNameStr;
-
 // Checkbox item (single checkbox)
 class WXDLLEXPORT wxCheckBox: public wxCheckBoxBase
 {

@@ -18,8 +18,6 @@
 
 #include "wx/control.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxSliderNameStr;
-
 // Slider
 class WXDLLEXPORT wxSlider: public wxSliderBase
 {

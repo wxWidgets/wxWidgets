@@ -19,12 +19,8 @@
 #include "wx/ctrlsub.h"
 #include "wx/clntdata.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxListBoxNameStr;
-
 // forward decl for GetSelections()
 class WXDLLEXPORT wxArrayInt;
-
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // List box item
 class WXDLLEXPORT wxListBox: public wxListBoxBase

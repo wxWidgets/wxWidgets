@@ -27,9 +27,6 @@ but wxMDIChildFrame::GetParent should return the parent frame.
 #include "wx/frame.h"
 #include "wx/notebook.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
-WXDLLEXPORT_DATA(extern const char*) wxStatusLineNameStr;
-
 class WXDLLEXPORT wxMDIClientWindow;
 class WXDLLEXPORT wxMDIChildFrame;
 

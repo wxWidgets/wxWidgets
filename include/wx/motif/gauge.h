@@ -16,8 +16,6 @@
 #pragma interface "gauge.h"
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxGaugeNameStr;
-
 // Group box
 class WXDLLEXPORT wxGauge : public wxGaugeBase
 {

@@ -16,7 +16,6 @@
 #pragma interface "textctrl.h"
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // Single-line text item

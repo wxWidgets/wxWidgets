@@ -18,8 +18,6 @@
 
 #include "wx/motif/bmpmotif.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
-
 #define wxDEFAULT_BUTTON_MARGIN 4
 
 class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase

@@ -16,8 +16,6 @@
 #pragma interface "statbox.h"
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxStaticBoxNameStr;
-
 // Group box
 class WXDLLEXPORT wxStaticBox: public wxStaticBoxBase
 {

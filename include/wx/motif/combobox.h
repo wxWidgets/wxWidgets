@@ -18,9 +18,6 @@
 
 #include "wx/choice.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxComboBoxNameStr;
-WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
-
 // Combobox item
 class WXDLLEXPORT wxComboBox: public wxChoice
 {

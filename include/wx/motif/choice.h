@@ -16,8 +16,6 @@
 #pragma interface "choice.h"
 #endif
 
-WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
-
 #include "wx/clntdata.h"
 #include "wx/dynarray.h"
 
