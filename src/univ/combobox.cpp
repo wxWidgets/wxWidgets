@@ -193,7 +193,7 @@ BEGIN_EVENT_TABLE(wxComboTextCtrl, wxTextCtrl)
     EVT_TEXT(-1, wxComboTextCtrl::OnText)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl);
+IMPLEMENT_DYNAMIC_CLASS(wxComboBox, wxControl)
 
 // ============================================================================
 // implementation
