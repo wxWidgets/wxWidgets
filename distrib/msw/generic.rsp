@@ -311,7 +311,6 @@ samples/mdi/bitmaps/*.xbm
 samples/minimal/*.cpp
 samples/minimal/*.h
 samples/minimal/*.def
-samples/minimal/Makefile.in
 samples/minimal/makefile*
 samples/minimal/*.xbm
 samples/minimal/*.xpm

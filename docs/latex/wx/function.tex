@@ -359,7 +359,7 @@ the front when the dialog box is popped up.
 Pops up a file selector box. In Windows, this is the common file selector
 dialog. In X, this is a file selector box with somewhat less functionality.
 The path and filename are distinct elements of a full file pathname.
-If path is NULL, the current directory will be used. If filename is NULL,
+If path is empty, the current directory will be used. If filename is empty,
 no default filename will be supplied. The wildcard determines what files
 are displayed in the file selector, and file extension supplies a type
 extension for the required filename. Flags may be a combination of wxOPEN,
@@ -380,7 +380,7 @@ types of file with a description for each, such as:
  "BMP files (*.bmp) | *.bmp | GIF files (*.gif) | *.gif"
 \end{verbatim}
 
-The application must check for a NULL return value (the user pressed
+The application must check for an empty return value (the user pressed
 Cancel). For example:
 
 \begin{verbatim}
