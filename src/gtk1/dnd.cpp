@@ -117,10 +117,7 @@ static void target_drag_leave( GtkWidget *WXUNUSED(widget),
 
     /* we don't need return values. this event is just for
        information */
-    bool tmp = g_blockEventsOnDrag;
-    g_blockEventsOnDrag = FALSE;
     drop_target->OnLeave();
-    g_blockEventsOnDrag = tmp;
 
     /* this has to be done because GDK has no "drag_enter" event */
     drop_target->m_firstMotion = TRUE;
@@ -159,18 +156,12 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
     if (drop_target->m_firstMotion)
     {
         /* the first "drag_motion" event substitutes a "drag_enter" event */
-        bool tmp = g_blockEventsOnDrag;
-        g_blockEventsOnDrag = FALSE;
         result = drop_target->OnEnter( x, y, result );
-        g_blockEventsOnDrag = tmp;
     }
     else
     {
         /* give program a chance to react (i.e. to say no by returning FALSE) */
-        bool tmp = g_blockEventsOnDrag;
-        g_blockEventsOnDrag = FALSE;
         result = drop_target->OnDragOver( x, y, result );
-        g_blockEventsOnDrag = tmp;
     }
 
     bool ret = wxIsDragResultOk( result );
@@ -235,10 +226,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
     if (context->suggested_action == GDK_ACTION_COPY) result = wxDragCopy;
 */
 
-    bool tmp = g_blockEventsOnDrag;
-    g_blockEventsOnDrag = FALSE;
     bool ret = drop_target->OnDrop( x, y );
-    g_blockEventsOnDrag = tmp;
 
     if (!ret)
     {
@@ -748,7 +736,8 @@ wxDragResult wxDropSource::DoDragDrop( bool allowMove )
     if (m_data->GetFormatCount() == 0)
         return (wxDragResult) wxDragNone;
 
-    g_blockEventsOnDrag = TRUE;
+    // disabled for now
+    g_blockEventsOnDrag = FALSE;
 
     RegisterWindow();
 
