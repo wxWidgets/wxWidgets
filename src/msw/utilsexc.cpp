@@ -33,6 +33,7 @@
     #include "wx/app.h"
     #include "wx/intl.h"
     #include "wx/log.h"
+    #include "wx/frame.h"
 #endif
 
 #ifdef __WIN32__
