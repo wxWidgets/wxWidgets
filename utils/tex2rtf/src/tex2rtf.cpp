@@ -60,6 +60,13 @@ int passNumber = 1;
 
 #ifndef NO_GUI
 
+extern char *BigBuffer;
+extern char *TexFileRoot;
+extern char *TexBibName;         // Bibliography output file name
+extern char *TexTmpBibName;      // Temporary bibliography output file name
+extern wxList ColourTable;
+extern TexChunk *TopLevel;
+
 #if wxUSE_HELP
 wxHelpController *HelpInstance = NULL;
 #endif // wxUSE_HELP
@@ -133,6 +140,8 @@ bool MyApp::OnInit()
   TmpFrameContentsName = new char[300];
   WinHelpContentsFileName = new char[300];
   RefName = new char[300];
+
+  ColourTable.DeleteContents(TRUE);
 
   int n = 1;
 
@@ -427,6 +436,77 @@ int MyApp::OnExit()
   delete HelpInstance;
 #endif // wxUSE_HELP
 
+    if (BigBuffer)
+    {
+      delete BigBuffer;
+      BigBuffer = NULL;
+    }
+    if (currentArgData)
+    {
+      delete currentArgData;
+      currentArgData = NULL;
+    }
+    if (TexFileRoot)
+    {
+      delete TexFileRoot;
+      TexFileRoot = NULL;
+    }
+    if (TexBibName)
+    {
+      delete TexBibName;
+      TexBibName = NULL;
+    }
+    if (TexTmpBibName)
+    {
+      delete TexTmpBibName;
+      TexTmpBibName = NULL;
+    }
+    if (FileRoot)
+    {
+      delete FileRoot;
+      FileRoot = NULL;
+    }
+    if (ContentsName)
+    {
+      delete ContentsName;
+      ContentsName = NULL;
+    }
+    if (TmpContentsName)
+    {
+      delete TmpContentsName;
+      TmpContentsName = NULL;
+    }
+    if (TmpFrameContentsName)
+    {
+      delete TmpFrameContentsName;
+      TmpFrameContentsName = NULL;
+    }
+    if (WinHelpContentsFileName)
+    {
+      delete WinHelpContentsFileName;
+      WinHelpContentsFileName = NULL;
+    }
+    if (RefName)
+    {
+      delete RefName;
+      RefName = NULL;
+    }
+    if (TopLevel)
+    {
+      delete TopLevel;
+      TopLevel = NULL;
+    }
+    if (MacroFile)
+    {
+      delete MacroFile;
+      MacroFile = NULL;
+    }
+    if (RTFCharset)
+    {
+      delete RTFCharset;
+      RTFCharset = NULL;
+    }
+
   // TODO: this simulates zero-memory leaks!
   // Otherwise there are just too many...
 #ifndef __WXGTK__
@@ -497,7 +577,8 @@ void MyFrame::OnCloseWindow(wxCloseEvent& event)
 
 void MyFrame::OnExit(wxCommandEvent& event)
 {
-    this->Destroy();
+  Close();
+//    this->Destroy();
 }
 
 void MyFrame::OnGo(wxCommandEvent& event)
