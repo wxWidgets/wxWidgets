@@ -1862,6 +1862,8 @@ typedef unsigned long   Atom;  /* this might fail on a few architectures */
 
 #ifdef __WXGTK__
 /* Stand-ins for GLIB types */
+typedef char           gchar;
+typedef signed char    gint8;
 typedef int            gint;
 typedef unsigned       guint;
 typedef unsigned long  gulong;

@@ -21,15 +21,13 @@
 #include "wx/gdiobj.h"
 #include "wx/gdicmn.h"
 
-#include <gtk/gtk.h>  // only needed for wxGTKDash, should it go elsewhere..
-
 //-----------------------------------------------------------------------------
 // classes
 //-----------------------------------------------------------------------------
 
 class wxPen;
 
-#if GTK_CHECK_VERSION(1,2,7)
+#ifdef __WXGTK127__
 typedef    gint8 wxGTKDash;
 #else
 typedef    gchar wxGTKDash;

@@ -70,7 +70,8 @@ rm -rf $RPM_BUILD_ROOT
 %doc COPYING.LIB INSTALL.txt LICENCE.txt README.txt SYMBOLS.txt TODO.txt
 %dir %{pref}/share/wx
 %{pref}/share/wx/*
-%attr(755, -, -) %{pref}/lib/libwx_gtk*
+%attr(755, -, -) %{pref}/lib/libwx_gtk.*
+%attr(755, -, -) %{pref}/lib/libwx_gtk-2.1.*
 
 %files devel
 %defattr (644, root, root, 755)

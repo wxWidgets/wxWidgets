@@ -245,7 +245,6 @@ wxFont wxSystemSettings::GetSystemFont( int index )
                     if (def)
                         gdk_font =  def->font;
                 }
-#endif
                 if (gdk_font)
                 {
                     GSList *font_list = ((GdkFontPrivate*)gdk_font)->names;
@@ -255,6 +254,7 @@ wxFont wxSystemSettings::GetSystemFont( int index )
                     g_systemFont = new wxFont( font_string, font_data );
                 }
                 else
+#endif
                 {
                     g_systemFont = new wxFont( 12, wxSWISS, wxNORMAL, wxNORMAL );
                 }

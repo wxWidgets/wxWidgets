@@ -1531,6 +1531,7 @@ GUI_TK_LIBRARY=
 GUI_TK_LINK=
 
 WXGTK12=
+WXGTK127=
 WXGTK13=
 
 WXWINE=
@@ -1591,6 +1592,7 @@ fi
 if test "$wxUSE_GTK" = 1; then
     dnl avoid calling AM_PATH_GTK twice, so check first for the newer version
     dnl and only then, if it wasn't found, for an older one
+    AM_PATH_GTK(1.2.7, WXGTK127=1)
     AM_PATH_GTK(1.2.3, WXGTK12=1)
 
     if test "$WXGTK12" != 1; then
@@ -2549,6 +2551,10 @@ fi
 
 if test "$WXGTK12" = 1 ; then
   AC_DEFINE_UNQUOTED(__WXGTK12__,$WXGTK12)
+fi
+
+if test "$WXGTK127" = 1 ; then
+  AC_DEFINE_UNQUOTED(__WXGTK127__,$WXGTK127)
 fi
 
 if test "$WXWINE" = 1 ; then
