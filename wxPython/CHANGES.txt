@@ -6,6 +6,7 @@ CHANGES.txt for wxPython
 -------
 Added missing wxRect methods
 
+Add OOR support for wxApp objects too.
 
 
 

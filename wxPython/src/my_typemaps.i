@@ -402,6 +402,8 @@ $function
 %typemap(python, out) wxMenu*                   { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxValidator*              { $target = wxPyMake_wxObject($source); }
 
+%typemap(python, out) wxApp*                    { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxPyApp*                  { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxDC*                     { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxFSFile*                 { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxFileSystem*             { $target = wxPyMake_wxObject($source); }

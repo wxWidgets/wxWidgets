@@ -157,7 +157,6 @@ _wxSetDictionary = wxc._wxSetDictionary
 
 def wxGetApp(*_args, **_kwargs):
     val = apply(wxc.wxGetApp,_args,_kwargs)
-    if val: val = wxPyAppPtr(val)
     return val
 
 wxApp_CleanUp = wxc.wxApp_CleanUp
