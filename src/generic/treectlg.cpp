@@ -2449,6 +2449,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, GetId());
             nevent.m_item = (long) item;
             nevent.m_code = 0;
+            nevent.m_pointDrag = wxPoint(x, y);
             nevent.SetEventObject(this);
             GetEventHandler()->ProcessEvent(nevent);
         }
@@ -2501,6 +2502,7 @@ void wxGenericTreeCtrl::OnMouse( wxMouseEvent &event )
                 wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, GetId() );
                 nevent.m_item = (long) item;
                 nevent.m_code = 0;
+                nevent.m_pointDrag = wxPoint(x, y);
                 nevent.SetEventObject( this );
                 GetEventHandler()->ProcessEvent( nevent );
             }

@@ -2225,6 +2225,9 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                         eventType = (int)hdr->code == NM_DBLCLK
                                     ? wxEVT_COMMAND_TREE_ITEM_ACTIVATED
                                     : wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
+
+                        event.m_pointDrag.x = tvhti.pt.x;
+                        event.m_pointDrag.y = tvhti.pt.y;
                     }
 
                     break;
