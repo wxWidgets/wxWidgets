@@ -374,8 +374,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
 {
     wxToolBarTool *tool = (wxToolBarTool *)toolBase;
 
-    // we have inserted a space before all the tools
-    if (m_xMargin > 1) pos++;
+    // if we have inserted a space before all the tools we must change the GTK
+    // index by 1
+    size_t posGtk = m_xMargin > 1 ? pos + 1 : pos;
 
     if ( tool->IsButton() )
     {
@@ -454,7 +455,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                   tool->m_pixmap,
                                   (GtkSignalFunc)gtk_toolbar_callback,
                                   (gpointer)tool,
-                                  pos
+                                  posGtk
                                );
 
                 if ( !tool->m_item )
@@ -476,7 +477,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
             break;
 
         case wxTOOL_STYLE_SEPARATOR:
-            gtk_toolbar_insert_space( m_toolbar, pos );
+            gtk_toolbar_insert_space( m_toolbar, posGtk );
 
             // skip the rest
             return TRUE;
@@ -487,7 +488,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                        tool->GetControl()->m_widget,
                                        (const char *) NULL,
                                        (const char *) NULL,
-                                       pos
+                                       posGtk
                                       );
             break;
     }
@@ -586,7 +587,8 @@ void wxToolBar::SetMargins( int x, int y )
     wxCHECK_RET( GetToolsCount() == 0,
                  wxT("wxToolBar::SetMargins must be called before adding tools.") );
 
-    if (x > 1) gtk_toolbar_append_space( m_toolbar );  // oh well
+    if (x > 1)
+        gtk_toolbar_append_space( m_toolbar );  // oh well
 
     m_xMargin = x;
     m_yMargin = y;
