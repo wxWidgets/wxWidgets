@@ -1,7 +1,7 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.5.2.3
+2.5.2.4
 -------
 
 wx.ADJUST_MINSIZE is now the default behaviour for window items in
