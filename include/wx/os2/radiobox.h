@@ -12,14 +12,12 @@
 #ifndef _WX_RADIOBOX_H_
 #define _WX_RADIOBOX_H_
 
-#include "wx/control.h"
-
 WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
 
 // List box item
 class WXDLLEXPORT wxBitmap ;
 
-class WXDLLEXPORT wxRadioBox: public wxControl
+class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase
 {
   DECLARE_DYNAMIC_CLASS(wxRadioBox)
 public:
@@ -53,7 +51,11 @@ public:
   int FindString(const wxString& s) const;
   void SetSelection(int N);
   int GetSelection() const;
+  virtual int GetCount() const;
   wxString GetString(int N) const;
+  virtual void SetString(int n, const wxString& label);
+  virtual int GetColumnCount() const;
+  virtual int GetRowCount() const;
 
   void GetSize(int *x, int *y) const;
   void GetPosition(int *x, int *y) const;

@@ -21,9 +21,8 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
 
-class WXDLLEXPORT wxStaticBitmap: public wxControl
+class WXDLLEXPORT wxStaticBitmap : public wxStaticBitmapBase
 {
-    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
  public:
     inline wxStaticBitmap() { Init(); }
 
@@ -56,7 +55,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
     // vice versa
     const wxIcon& GetIcon() const
       { wxASSERT( m_bIsIcon ); return *(wxIcon *)m_pImage; }
-    const wxBitmap& GetBitmap() const
+    wxBitmap GetBitmap() const
       { wxASSERT( !m_bIsIcon ); return *(wxBitmap *)m_pImage; }
 
     // overriden base class virtuals
@@ -76,6 +75,8 @@ protected:
     // we can have either an icon or a bitmap
     bool                            m_bIsIcon;
     wxGDIImage*                     m_pImage;
+private:
+    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 };
 
 #endif

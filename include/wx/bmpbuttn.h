@@ -69,6 +69,10 @@ protected:
     // the margins around the bitmap
     int m_marginX,
         m_marginY;
+private:
+    // Prevent Virtual function hiding warnings
+    void SetLabel(const wxString& rsLabel)
+    { wxWindowBase::SetLabel(rsLabel); }
 };
 
 #if defined(__WXUNIVERSAL__)

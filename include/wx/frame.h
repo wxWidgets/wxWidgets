@@ -318,6 +318,28 @@ protected:
     #endif
 #elif defined(__WXPM__)
     #include "wx/os2/frame.h"
+    #ifndef __WXUNIVERSAL__
+
+    class WXDLLEXPORT wxFrame : public wxFrameOS2
+    {
+    public:
+        // construction
+        wxFrame() { Init(); }
+        wxFrame(wxWindow *parent,
+                   wxWindowID id,
+                   const wxString& title,
+                   const wxPoint& pos = wxDefaultPosition,
+                   const wxSize& size = wxDefaultSize,
+                   long style = wxDEFAULT_FRAME_STYLE,
+                   const wxString& name = wxFrameNameStr)
+        {
+            Init();
+            Create(parent, id, title, pos, size, style, name);
+        }
+        DECLARE_DYNAMIC_CLASS(wxFrame)
+    };
+    #endif
+
 #elif defined(__WXSTUBS__)
     #include "wx/stubs/frame.h"
 #endif

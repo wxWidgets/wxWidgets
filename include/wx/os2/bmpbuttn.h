@@ -18,7 +18,7 @@ WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
 #define wxDEFAULT_BUTTON_MARGIN 4
 
-class WXDLLEXPORT wxBitmapButton: public wxButton
+class WXDLLEXPORT wxBitmapButton: public wxBitmapButtonBase
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapButton)
  public:

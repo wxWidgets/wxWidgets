@@ -17,19 +17,19 @@
 //
 #include "wx/os2/wxOs2.h"
 
-class WXDLLEXPORT wxFrame : public wxFrameBase
+class WXDLLEXPORT wxFrameOS2 : public wxFrameBase
 {
 public:
     // construction
-    wxFrame() { Init(); }
-    wxFrame( wxWindow*       pParent
-            ,wxWindowID      vId
-            ,const wxString& rsTitle
-            ,const wxPoint&  rPos = wxDefaultPosition
-            ,const wxSize&   rSize = wxDefaultSize
-            ,long            lStyle = wxDEFAULT_FRAME_STYLE
-            ,const wxString& rsName = wxFrameNameStr
-           )
+    wxFrameOS2() { Init(); }
+    wxFrameOS2( wxWindow*       pParent
+               ,wxWindowID      vId
+               ,const wxString& rsTitle
+               ,const wxPoint&  rPos = wxDefaultPosition
+               ,const wxSize&   rSize = wxDefaultSize
+               ,long            lStyle = wxDEFAULT_FRAME_STYLE
+               ,const wxString& rsName = wxFrameNameStr
+              )
     {
         Init();
 
@@ -45,7 +45,7 @@ public:
                 ,const wxString& rsName = wxFrameNameStr
                );
 
-    virtual ~wxFrame();
+    virtual ~wxFrameOS2();
 
     // implement base class pure virtuals
     virtual void Maximize(bool bMaximize = TRUE);
@@ -242,7 +242,7 @@ private:
     SWP                             m_vSwpToolBar;
 
     DECLARE_EVENT_TABLE()
-    DECLARE_DYNAMIC_CLASS(wxFrame)
+    DECLARE_DYNAMIC_CLASS(wxFrameOS2)
 };
 
 #endif

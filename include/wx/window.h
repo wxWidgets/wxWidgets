@@ -981,6 +981,12 @@ private:
     #endif // wxUniv
     #include "wx/mac/window.h"
 #elif defined(__WXPM__)
+    #ifdef __WXUNIVERSAL__
+        #define wxWindowNative wxWindowOS2
+    #else // !wxUniv
+        #define wxWindowOS2 wxWindow
+        #define sm_classwxWindowOS2 sm_classwxWindow
+    #endif // wxUniv/!wxUniv
     #include "wx/os2/window.h"
 #endif
 

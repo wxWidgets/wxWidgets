@@ -12,12 +12,12 @@
 #ifndef _WX_SCROLBAR_H_
 #define _WX_SCROLBAR_H_
 
-#include "wx/control.h"
+#include "wx/scrolbar.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxScrollBarNameStr;
 
 // Scrollbar item
-class WXDLLEXPORT wxScrollBar: public wxControl
+class WXDLLEXPORT wxScrollBar: public wxScrollBarBase
 {
   DECLARE_DYNAMIC_CLASS(wxScrollBar)
 

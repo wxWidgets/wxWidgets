@@ -157,6 +157,8 @@ public:
     const wxBitmap& GetSelectedBitmap(void) const { return m_vSelectedBitmap; }
     wxBitmap&       GetSelectedBitmap(void) { return m_vSelectedBitmap; }
 
+    void            UpdateClipBox();
+
 protected:
     virtual void DoFloodFill( wxCoord         vX
                              ,wxCoord         vY

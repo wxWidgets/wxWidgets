@@ -52,15 +52,18 @@ class WXDLLEXPORT wxClientDC : public wxWindowDC
 {
 public:
     wxClientDC();
+    virtual ~wxClientDC();
 
-    // Create a DC corresponding to the client area of the window
     wxClientDC(wxWindow *win);
+
+protected:
+    void InitDC(void);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxClientDC)
 }; // end of CLASS wxClientDC
 
-class WXDLLEXPORT wxPaintDC : public wxWindowDC
+class WXDLLEXPORT wxPaintDC : public wxClientDC
 {
 public:
     wxPaintDC();

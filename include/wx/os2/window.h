@@ -44,21 +44,21 @@ enum
 // wxWindow declaration for OS/2 PM
 // ---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxWindow : public wxWindowBase
+class WXDLLEXPORT wxWindowOS2 : public wxWindowBase
 {
 public:
-    wxWindow()
+    wxWindowOS2()
     {
         Init();
     }
 
-    wxWindow( wxWindow*       pParent
-             ,wxWindowID      vId
-             ,const wxPoint&  rPos = wxDefaultPosition
-             ,const wxSize&   rSize = wxDefaultSize
-             ,long            lStyle = 0
-             ,const wxString& rName = wxPanelNameStr
-            )
+    wxWindowOS2( wxWindow*       pParent
+                ,wxWindowID      vId
+                ,const wxPoint&  rPos = wxDefaultPosition
+                ,const wxSize&   rSize = wxDefaultSize
+                ,long            lStyle = 0
+                ,const wxString& rName = wxPanelNameStr
+               )
     {
         Init();
         Create( pParent
@@ -70,7 +70,7 @@ public:
               );
     }
 
-    virtual ~wxWindow();
+    virtual ~wxWindowOS2();
 
     bool Create( wxWindow*       pParent
                 ,wxWindowID      vId
@@ -550,8 +550,8 @@ private:
     // the helper functions used by HandleChar/KeyXXX methods
     wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
 
-    DECLARE_DYNAMIC_CLASS(wxWindow);
-    DECLARE_NO_COPY_CLASS(wxWindow);
+    DECLARE_DYNAMIC_CLASS(wxWindowOS2);
+    DECLARE_NO_COPY_CLASS(wxWindowOS2)
     DECLARE_EVENT_TABLE()
 private:
     HWND                            m_hWndScrollBarHorz;

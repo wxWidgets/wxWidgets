@@ -17,7 +17,7 @@
 
 #include "wx/dynarray.h"
 #include "wx/string.h"
-#include "wx/control.h"
+#include "wx/notebook.h"
 
 // ----------------------------------------------------------------------------
 // types
@@ -38,7 +38,7 @@ WX_DEFINE_ARRAY(wxNotebookPage *, wxArrayNBPages);
 // FIXME this class should really derive from wxTabCtrl, but the interface is not
 //       exactly the same, so I can't do it right now and instead we reimplement
 //       part of wxTabCtrl here
-class WXDLLEXPORT wxNotebook : public wxControl
+class WXDLLEXPORT wxNotebook : public wxNotebookBase
 {
 public:
   // ctors

@@ -189,6 +189,10 @@ protected:
     friend wxListMainWindow;
 
 private:
+    // Virtual function hiding supression
+    void Update(void)
+    { wxWindowBase::Update(); }
+
     // create the header window
     void CreateHeaderWindow();
 

@@ -36,7 +36,6 @@
 
 #define wxUSE_CONFIG           1
                                 // Use wxConfig, with CreateConfig in wxApp
-
 #define wxUSE_POSTSCRIPT  1
                             // 0 for no PostScript device context
 #define wxUSE_AFM_FOR_POSTSCRIPT 1

@@ -42,14 +42,5 @@ protected:
     wxWindow*                       m_pParent;
 }; // end of CLASS wxMessageDialog
 
-
-int WXDLLEXPORT wxMessageBox( const wxString& rsMessage
-                             ,const wxString& rsCaption = wxMessageBoxCaptionStr
-                             ,long            lStyle = wxOK|wxCENTRE
-                             ,wxWindow*       pParent = NULL
-                             ,int             nX = -1
-                             ,int             nY = -1
-                            );
-
 #endif
     // _WX_MSGBOXDLG_H_

@@ -51,47 +51,5 @@ class WXDLLEXPORT wxRadioButton: public wxControl
   void Command(wxCommandEvent& event);
 };
 
-// Not implemented
-class WXDLLEXPORT wxBitmap ;
-
-WXDLLEXPORT_DATA(extern const char*) wxBitmapRadioButtonNameStr;
-
-class WXDLLEXPORT wxBitmapRadioButton: public wxRadioButton
-{
-  DECLARE_DYNAMIC_CLASS(wxBitmapRadioButton)
- protected:
-  wxBitmap *theButtonBitmap;
- public:
-  inline wxBitmapRadioButton() { theButtonBitmap = NULL; }
-  inline wxBitmapRadioButton(wxWindow *parent, wxWindowID id,
-           const wxBitmap *label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-#if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
-#endif
-           const wxString& name = wxBitmapRadioButtonNameStr)
-  {
-      Create(parent, id, label, pos, size, style, validator, name);
-  }
-
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxBitmap *label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-#if wxUSE_VALIDATORS
-           const wxValidator& validator = wxDefaultValidator,
-#endif
-           const wxString& name = wxBitmapRadioButtonNameStr);
-
-  virtual void SetLabel(const wxBitmap *label);
-  virtual void SetValue(bool val) ;
-  virtual bool GetValue() const ;
-private:
-  // virtual function hiding suppression, do not use
-  virtual void SetLabel(const wxString& label)
-  { wxRadioButton::SetLabel(label); };
-};
-
 #endif
     // _WX_RADIOBUT_H_

@@ -116,6 +116,10 @@ private:
    class WXDLLEXPORT wxWindowDisabler *m_winDisabler;
 
    DECLARE_EVENT_TABLE()
+private:
+    // Virtual function hiding supression
+    void Update()
+    { wxWindowBase::Update(); }
 };
 #endif
 
