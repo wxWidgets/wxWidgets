@@ -103,13 +103,21 @@
 #undef __WINDOWS__
 #endif
 
+#ifndef __WIN95__
 #undef __WIN95__
+#endif
 #ifndef __WIN32__
 #undef __WIN32__
 #endif
+#ifndef __GNUWIN32__
 #undef __GNUWIN32__
+#endif
+#ifndef STRICT
 #undef STRICT
+#endif
+#ifndef WINVER
 #undef WINVER
+#endif
 
 /* enable native status bar under Win32 */
 #if defined(__WIN95__) && !defined(__WXUNIVERSAL__)
