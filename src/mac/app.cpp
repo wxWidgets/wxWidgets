@@ -21,6 +21,7 @@
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/cursor.h"
+#include "wx/intl.h"
 #include "wx/icon.h"
 #include "wx/palette.h"
 #include "wx/dc.h"
@@ -356,6 +357,7 @@ bool wxApp::Initialize()
 #endif
 
 
+#ifndef __UNIX__
   // test the minimal configuration necessary
 
 	long theSystem ;
@@ -392,6 +394,7 @@ bool wxApp::Initialize()
 		}
 	}
 	*/
+#endif
 
 	// if we encountered any problems so far, give the error code and exit immediately
 
