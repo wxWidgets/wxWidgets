@@ -404,6 +404,11 @@ void wxQTMediaBackend::FinishLoad()
         Rect bounds = wxMacGetBoundsForControl(m_ctrl, 
                                                m_ctrl->GetPosition(),
                                                m_ctrl->GetSize());
+                                               
+    //Dispose of old control for new one
+    if (GetControlPeer(m_ctrl) && GetControlPeer(m_ctrl)->Ok() )
+        GetControlPeer(m_ctrl)->Dispose();
+        
     //Options-
     //kMovieControlOptionXXX
     //HideController - hide the movie controller
