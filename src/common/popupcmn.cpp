@@ -81,6 +81,7 @@ public:
 protected:
     // event handlers
     void OnKillFocus(wxFocusEvent& event);
+    void OnKeyUp(wxKeyEvent& event);
 
 private:
     wxPopupTransientWindow *m_popup;
@@ -98,6 +99,7 @@ END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxPopupFocusHandler, wxEvtHandler)
     EVT_KILL_FOCUS(wxPopupFocusHandler::OnKillFocus)
+    EVT_KEY_UP(wxPopupFocusHandler::OnKeyUp)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -204,7 +206,7 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
         m_child = this;
     }
 
-    // we can't capture mouse before the window is shown in wxGTL
+    // we can't capture mouse before the window is shown in wxGTK
 #ifdef __WXGTK__
     Show();
 #endif
@@ -217,8 +219,23 @@ void wxPopupTransientWindow::Popup(wxWindow *winFocus)
 #endif
 
     m_focus = winFocus ? winFocus : this;
-    m_focus->PushEventHandler(new wxPopupFocusHandler(this));
     m_focus->SetFocus();
+
+    // FIXME: I don't know why does this happen but sometimes SetFocus() simply
+    //        refuses to work under MSW - no error happens but the focus is not
+    //        given to the window, i.e. the assert below is triggered
+    //
+    //        Try work around this as we can...
+#if 0
+    wxASSERT_MSG( FindFocus() == m_focus, _T("setting focus failed") );
+#else
+    m_focus = FindFocus();
+#endif
+
+    if ( m_focus )
+    {
+        m_focus->PushEventHandler(new wxPopupFocusHandler(this));
+    }
 }
 
 void wxPopupTransientWindow::Dismiss()
@@ -362,12 +379,20 @@ void wxPopupWindowHandler::OnLeftDown(wxMouseEvent& event)
 
 void wxPopupFocusHandler::OnKillFocus(wxFocusEvent& event)
 {
-    // when we lose focus we always disappear
-
-    // But if m_popup was about to get the focus,
-    // don't disappear.
-    if (event.GetWindow() != m_popup)
+    // when we lose focus we always disappear - unless it goes to the popup (in
+    // which case we don't really lose it)
+    if ( event.GetWindow() != m_popup )
         m_popup->DismissAndNotify();
+}
+
+void wxPopupFocusHandler::OnKeyUp(wxKeyEvent& event)
+{
+    // let the window have it first, it might process the keys
+    if ( !m_popup->ProcessEvent(event) )
+    {
+        // by default, dismiss the popup
+        m_popup->DismissAndNotify();
+    }
 }
 
 #endif // wxUSE_POPUPWIN
