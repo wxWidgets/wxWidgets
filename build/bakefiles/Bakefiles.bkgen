@@ -72,6 +72,12 @@
         msvc6prj,msevc4prj,cbuilderx,cbx_unix
     </del-formats>
 
+    <!-- WinCE can't have console apps: -->
+    <del-formats files="../../samples/console/*">msevc4prj</del-formats>
+    <del-formats files="../../utils/HelpGen/src/*">msevc4prj</del-formats>
+    <del-formats files="../../contrib/utils/wxrc/*">msevc4prj</del-formats>
+    <del-formats files="../../tests/*">msevc4prj</del-formats>
+
     
     <!-- Default flags (for all formats and bakefiles): -->
     <add-flags>-Iformats</add-flags>
