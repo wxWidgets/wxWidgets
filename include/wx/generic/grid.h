@@ -1138,6 +1138,7 @@ public:
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour() { return m_gridLineColour; }
+    wxColour GetCellHighlightColour() { return m_cellHighlightColour; }
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
@@ -1149,6 +1150,7 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
+    void     SetCellHighlightColour( const wxColour& );
 
     void     EnableDragRowSize( bool enable = TRUE );
     void     DisableDragRowSize() { EnableDragRowSize( FALSE ); }
@@ -1586,6 +1588,7 @@ protected:
 
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
+    wxColour   m_cellHighlightColour;
 
     // common part of AutoSizeColumn/Row() and GetBestSize()
     int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = TRUE);

@@ -3284,6 +3284,7 @@ void wxGrid::Init()
 
     m_gridLineColour = wxColour( 128, 128, 255 );
     m_gridLinesEnabled = TRUE;
+    m_cellHighlightColour = m_gridLineColour;
 
     m_cursorMode  = WXGRID_CURSOR_SELECT_CELL;
     m_winCapture = (wxWindow *)NULL;
@@ -5503,7 +5504,7 @@ void wxGrid::DrawCellHighlight( wxDC& dc, const wxGridCellAttr *attr )
     // hmmm... what could we do here to show that the cell is disabled?
     // for now, I just draw a thinner border than for the other ones, but
     // it doesn't look really good
-    dc.SetPen(wxPen(m_gridLineColour, attr->IsReadOnly() ? 1 : 3, wxSOLID));
+    dc.SetPen(wxPen(m_cellHighlightColour, attr->IsReadOnly() ? 1 : 3, wxSOLID));
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     dc.DrawRectangle(rect);
@@ -6969,6 +6970,21 @@ void wxGrid::SetGridLineColour( const wxColour& colour )
         wxClientDC dc( m_gridWin );
         PrepareDC( dc );
         DrawAllGridLines( dc, wxRegion() );
+    }
+}
+
+
+void wxGrid::SetCellHighlightColour( const wxColour& colour )
+{
+    if ( m_cellHighlightColour != colour )
+    {
+        m_cellHighlightColour = colour;
+
+        wxClientDC dc( m_gridWin );
+        PrepareDC( dc );
+        wxGridCellAttr* attr = GetCellAttr(m_currentCellCoords);
+        DrawCellHighlight(dc, attr);
+        attr->DecRef();
     }
 }
 
