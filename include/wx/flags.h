@@ -158,7 +158,7 @@ private :
 };
 
 #define WX_DEFINE_FLAGS( flags ) \
-    struct flags \
+    struct WXDLLEXPORT flags \
     {\
     flags(long data=0) :m_data(data) {} \
         long m_data ;\

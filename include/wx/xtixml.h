@@ -22,9 +22,9 @@
 
 #include "wx/xtistrm.h"
 
-class wxXmlNode ;
+class WXDLLIMPEXP_XML wxXmlNode ;
 
-class wxXmlWriter : public wxWriter
+class WXDLLIMPEXP_XML wxXmlWriter : public wxWriter
 {
 public :
 
@@ -84,7 +84,7 @@ private :
 wxXmlReader handles streaming in a class from XML
 */
 
-class wxXmlReader : public wxReader
+class WXDLLIMPEXP_XML wxXmlReader : public wxReader
 {
 public:
     wxXmlReader(wxXmlNode *parent) { m_parent = parent ; }

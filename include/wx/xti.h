@@ -255,7 +255,7 @@ void wxFlagsFromString(const wxString &s , e &data )
     wxArrayString array ;
     wxSetStringToArray( s , array ) ;
     wxString flag;
-    for ( int i = 0 ; i < array.Count() ; ++i )
+    for ( size_t i = 0 ; i < array.Count() ; ++i )
     {
         flag = array[i] ;
         int ivalue ;
@@ -705,6 +705,7 @@ class wxSetter##property : public wxSetter \
 { \
 public: \
     wxSetter##property() : wxSetter( #setterMethod ) {} \
+    ~wxSetter() {} \
     void Set( wxObject *object, const wxxVariant &variantValue ) const \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
@@ -720,6 +721,7 @@ class wxGetter##property : public wxGetter \
 { \
 public : \
     wxGetter##property() : wxGetter( #gettermethod ) {} \
+    ~wxGetter() {} \
     void Get( const wxObject *object , wxxVariant &result) const \
 { \
     const Klass *obj = dynamic_cast<const Klass*>(object) ;  \
@@ -732,6 +734,7 @@ class wxAdder##property : public wxAdder \
 { \
 public: \
     wxAdder##property() : wxAdder( #addermethod ) {} \
+    ~wxAdder() {} \
     void Add( wxObject *object, const wxxVariant &variantValue ) const \
 { \
     Klass *obj = dynamic_cast<Klass*>(object) ;  \
@@ -747,6 +750,7 @@ class wxCollectionGetter##property : public wxCollectionGetter \
 { \
 public : \
     wxCollectionGetter##property() : wxCollectionGetter( #gettermethod ) {} \
+    ~wxCollectionGetter() {} \
     void Get( const wxObject *object , wxxVariantArray &result) const \
 { \
     const Klass *obj = dynamic_cast<const Klass*>(object) ;  \
@@ -892,6 +896,8 @@ public :
        {
            Insert(iter);
        }
+
+       ~wxPropertyInfo() ;
 
        // return the class this property is declared in
        const wxClassInfo*   GetDeclaringClass() const { return m_itsClass ; }
@@ -1048,6 +1054,8 @@ public :
                i->m_next = this ;
            }
        }
+
+       ~wxHandlerInfo() ;
 
        // return the name of this handler
        const wxString&		GetName() const { return m_name ; }
@@ -1354,6 +1362,8 @@ typedef bool (*wxObjectStreamingCallback) ( const wxObject *, wxWriter * , wxPer
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
+    friend class WXDLLEXPORT wxPropertyInfo ;
+    friend class WXDLLEXPORT wxHandlerInfo ;
 public:
     wxClassInfo(const wxClassInfo **_Parents,
         const wxChar *_UnitName,

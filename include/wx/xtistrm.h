@@ -43,10 +43,10 @@ Main interfaces for streaming out objects.
 // or modify the value before it is streamed-out.
 // ----------------------------------------------------------------------------
 
-class wxWriter ;
-class wxReader ;
+class WXDLLIMPEXP_BASE wxWriter ;
+class WXDLLIMPEXP_BASE wxReader ;
 
-class wxPersister
+class WXDLLIMPEXP_BASE wxPersister
 {
 public :
     // will be called before an object is written, may veto by returning false
@@ -74,7 +74,7 @@ public :
             const wxObject *&WXUNUSED(eventSink) , const wxHandlerInfo* &WXUNUSED(handlerInfo) ) { } 
 } ;
 
-class wxWriter : public wxObject
+class WXDLLIMPEXP_BASE wxWriter : public wxObject
 {
 public :
     wxWriter() ;
@@ -152,14 +152,14 @@ private :
 Streaming callbacks for depersisting XML to code, or running objects
 */
 
-class wxDepersister ;
+class WXDLLIMPEXP_BASE wxDepersister ;
 
 /*
 wxReader handles streaming in a class from a arbitrary format. While walking through
 it issues calls out to interfaces to depersist the guts from the underlying storage format.
 */
 
-class wxReader : public wxObject
+class WXDLLIMPEXP_BASE wxReader : public wxObject
 {
 public :
     wxReader() ;
@@ -185,7 +185,7 @@ private :
 // When generating code, these will just create statements of C++
 // code to create the objects.
 
-class wxDepersister
+class WXDLLIMPEXP_BASE wxDepersister
 {
 public :
     // allocate the new object on the heap, that object will have the passed in ID
@@ -246,7 +246,8 @@ wxRuntimeDepersister implements the callbacks that will depersist
 an object into a running memory image, as opposed to writing
 C++ initialization code to bring the object to life.
 */
-class wxRuntimeDepersister : public wxDepersister
+
+class WXDLLIMPEXP_BASE wxRuntimeDepersister : public wxDepersister
 {
     struct wxRuntimeDepersisterInternal ;
     wxRuntimeDepersisterInternal * m_data ;
@@ -314,12 +315,13 @@ public :
 
 /*
 wxDepersisterCode implements the callbacks that will depersist
-an object into a C++ initialization function.
+an object into a C++ initialization function. this will move to 
+a utility lib soon
 */
 
-class wxTextOutputStream ;
+class WXDLLIMPEXP_BASE wxTextOutputStream ;
 
-class wxCodeDepersister : public wxDepersister
+class WXDLLIMPEXP_BASE wxCodeDepersister : public wxDepersister
 {
 private :
     struct wxCodeDepersisterInternal ;
