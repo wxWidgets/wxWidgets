@@ -549,7 +549,7 @@ void wxWindowBase::SetCaret(wxCaret *caret)
     if ( m_caret )
     {
         wxASSERT_MSG( m_caret->GetWindow() == this,
-                      "caret should be created associated to this window" );
+                      _T("caret should be created associated to this window") );
     }
 }
 #endif // wxUSE_CARET
