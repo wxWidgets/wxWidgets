@@ -106,6 +106,24 @@ public:
             memcpy(copy, data, width*height*3);
             return new wxImage(width, height, copy, false);
         }
+        %name(ImageFromDataWithAlpha) wxImage(int width, int height,
+                                              unsigned char* data, unsigned char* alpha) {
+            // Copy the source data so the wxImage can clean it up later
+            unsigned char* dcopy = (unsigned char*)malloc(width*height*3);
+            if (dcopy == NULL) {
+                PyErr_NoMemory();
+                return NULL;
+            }
+            memcpy(dcopy, data, width*height*3);
+            unsigned char* acopy = (unsigned char*)malloc(width*height);
+            if (acopy == NULL) {
+                PyErr_NoMemory();
+                return NULL;
+            }
+            memcpy(acopy, alpha, width*height);
+            
+            return new wxImage(width, height, dcopy, acopy, false);
+        }
     }
 
     void Create( int width, int height );
