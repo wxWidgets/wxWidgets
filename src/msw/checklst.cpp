@@ -395,7 +395,7 @@ void wxCheckListBox::OnKeyDown(wxKeyEvent& event)
         Clear
     } oper;
 
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case WXK_SPACE:
             oper = Toggle;

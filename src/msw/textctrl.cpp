@@ -1347,7 +1347,7 @@ bool wxTextCtrl::MSWShouldPreProcessMessage(WXMSG* pMsg)
 
 void wxTextCtrl::OnChar(wxKeyEvent& event)
 {
-    switch ( event.KeyCode() )
+    switch ( event.GetKeyCode() )
     {
         case WXK_RETURN:
             if ( !(m_windowStyle & wxTE_MULTILINE) )
