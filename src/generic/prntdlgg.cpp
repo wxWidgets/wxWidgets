@@ -268,6 +268,7 @@ void wxGenericPrintDialog::OnRange(wxCommandEvent& event)
 
 void wxGenericPrintDialog::OnSetup(wxCommandEvent& WXUNUSED(event))
 {
+   *wxThePrintSetupData = m_printDialogData.GetPrintData();
     wxGenericPrintSetupDialog *genericPrintSetupDialog =
         new wxGenericPrintSetupDialog(this, wxThePrintSetupData);
     int ret = genericPrintSetupDialog->ShowModal();
