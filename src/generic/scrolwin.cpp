@@ -25,15 +25,16 @@
 #endif
 
 #include "wx/generic/scrolwin.h"
+#include "wx/panel.h"
 
 #if !USE_SHARED_LIBRARY
-BEGIN_EVENT_TABLE(wxScrolledWindow, wxWindow)
+BEGIN_EVENT_TABLE(wxScrolledWindow, wxPanel)
     EVT_SCROLLWIN(wxScrolledWindow::OnScroll)
     EVT_SIZE(wxScrolledWindow::OnSize)
     EVT_PAINT(wxScrolledWindow::OnPaint)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxScrolledWindow, wxPanel)
 #endif
 
 #ifdef __WXMSW__
@@ -80,7 +81,7 @@ bool wxScrolledWindow::Create(wxWindow *parent, wxWindowID id,
     m_scaleX = 1.0;
     m_scaleY = 1.0;
 
-    return wxWindow::Create(parent, id, pos, size, style, name);
+    return wxPanel::Create(parent, id, pos, size, style, name);
 }
 
 /*

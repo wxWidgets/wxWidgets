@@ -17,10 +17,11 @@
 #endif
 
 #include "wx/window.h"
+#include "wx/panel.h"
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
-class WXDLLEXPORT wxScrolledWindow: public wxWindow
+class WXDLLEXPORT wxScrolledWindow: public wxPanel
 {
   DECLARE_ABSTRACT_CLASS(wxScrolledWindow)
 

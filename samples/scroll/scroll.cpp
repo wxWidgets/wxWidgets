@@ -19,6 +19,7 @@
 #endif
 
 #include "wx/image.h"
+#include "wx/listctrl.h"
 
 // derived classes
 
@@ -97,8 +98,24 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   (void) new wxComboBox( this, -1, "This", wxPoint(10,130), wxDefaultSize, 5, choices );
   
   (void) new wxRadioBox( this, -1, "This", wxPoint(10,200), wxDefaultSize, 5, choices );
+
+  wxListCtrl *m_listCtrl = new wxListCtrl(
+	this, -1, wxPoint(200, 10), wxSize(180, 120),
+	wxLC_REPORT | wxSUNKEN_BORDER);
+
+  m_listCtrl->InsertColumn(0, "First", wxLIST_FORMAT_LEFT, 90);
+  m_listCtrl->InsertColumn(1, "Last", wxLIST_FORMAT_LEFT, 90);
+
+  for ( int i=0; i < 30; i++)
+  {
+      char buf[20];
+      sprintf(buf, "Item %d", i);
+      m_listCtrl->InsertItem(i, buf);
+  }
+
+  (void) new wxListBox( this, -1, wxPoint(200,180), wxSize(180,120), 5, choices, wxLB_ALWAYS_SB );
   
-  SetBackgroundColour( *wxWHITE );
+  SetBackgroundColour( "WHEAT" );
 }
 
 MyCanvas::~MyCanvas()

@@ -59,76 +59,75 @@ static GtkContainerClass *parent_class = NULL;
 guint
 gtk_myfixed_get_type ()
 {
-  static guint myfixed_type = 0;
+    static guint myfixed_type = 0;
 
-  if (!myfixed_type)
+    if (!myfixed_type)
     {
-      GtkTypeInfo myfixed_info =
-      {
-	"GtkMyFixed",
-	sizeof (GtkMyFixed),
-	sizeof (GtkMyFixedClass),
-	(GtkClassInitFunc) gtk_myfixed_class_init,
-	(GtkObjectInitFunc) gtk_myfixed_init,
+        GtkTypeInfo myfixed_info =
+        {
+	   "GtkMyFixed",
+	   sizeof (GtkMyFixed),
+	   sizeof (GtkMyFixedClass),
+	   (GtkClassInitFunc) gtk_myfixed_class_init,
+	   (GtkObjectInitFunc) gtk_myfixed_init,
 #if (GTK_MINOR_VERSION > 0)
-	/* reserved_1 */ NULL,
-        /* reserved_2 */ NULL,
-        (GtkClassInitFunc) NULL,
+	   /* reserved_1 */ NULL,
+           /* reserved_2 */ NULL,
+           (GtkClassInitFunc) NULL,
 #else
-        (GtkArgSetFunc) NULL,
-        (GtkArgGetFunc) NULL,
+           (GtkArgSetFunc) NULL,
+           (GtkArgGetFunc) NULL,
 #endif
-      };
-
-      myfixed_type = gtk_type_unique (gtk_container_get_type (), &myfixed_info);
+        };
+        myfixed_type = gtk_type_unique (gtk_container_get_type (), &myfixed_info);
     }
-
-  return myfixed_type;
+    
+    return myfixed_type;
 }
 
 static void
 gtk_myfixed_class_init (GtkMyFixedClass *klass)
 {
-  GtkObjectClass *object_class;
-  GtkWidgetClass *widget_class;
-  GtkContainerClass *container_class;
+    GtkObjectClass *object_class;
+    GtkWidgetClass *widget_class;
+    GtkContainerClass *container_class;
 
-  object_class = (GtkObjectClass*) klass;
-  widget_class = (GtkWidgetClass*) klass;
-  container_class = (GtkContainerClass*) klass;
+    object_class = (GtkObjectClass*) klass;
+    widget_class = (GtkWidgetClass*) klass;
+    container_class = (GtkContainerClass*) klass;
   
 #if (GTK_MINOR_VERSION > 0)
-  parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
+    parent_class = gtk_type_class (GTK_TYPE_CONTAINER);
 #else
-  parent_class = gtk_type_class (gtk_container_get_type ());
+    parent_class = gtk_type_class (gtk_container_get_type ());
 #endif
 
-  widget_class->map = gtk_myfixed_map;
+    widget_class->map = gtk_myfixed_map;
 #if (GTK_MINOR_VERSION == 0)
-  widget_class->unmap = gtk_myfixed_unmap;
+    widget_class->unmap = gtk_myfixed_unmap;
 #endif
-  widget_class->realize = gtk_myfixed_realize;
-  widget_class->size_request = gtk_myfixed_size_request;
-  widget_class->size_allocate = gtk_myfixed_size_allocate;
-  widget_class->draw = gtk_myfixed_draw;
-  widget_class->expose_event = gtk_myfixed_expose;
+    widget_class->realize = gtk_myfixed_realize;
+    widget_class->size_request = gtk_myfixed_size_request;
+    widget_class->size_allocate = gtk_myfixed_size_allocate;
+    widget_class->draw = gtk_myfixed_draw;
+    widget_class->expose_event = gtk_myfixed_expose;
 
-  container_class->add = gtk_myfixed_add;
-  container_class->remove = gtk_myfixed_remove;
+    container_class->add = gtk_myfixed_add;
+    container_class->remove = gtk_myfixed_remove;
 #if (GTK_MINOR_VERSION > 0)
-  container_class->forall = gtk_myfixed_foreach;
+    container_class->forall = gtk_myfixed_foreach;
 #else
-  container_class->foreach = gtk_myfixed_foreach;
+    container_class->foreach = gtk_myfixed_foreach;
 #endif
 
 #if (GTK_MINOR_VERSION > 0)
-  container_class->child_type = gtk_myfixed_child_type;
+    container_class->child_type = gtk_myfixed_child_type;
 #endif
 
 #if (GTK_MINOR_VERSION > 0)
-  klass->set_scroll_adjustments = gtk_myfixed_scroll_set_adjustments;
+    klass->set_scroll_adjustments = gtk_myfixed_scroll_set_adjustments;
 
-  widget_class->set_scroll_adjustments_signal =
+    widget_class->set_scroll_adjustments_signal =
     gtk_signal_new ("set_scroll_adjustments",
 		    GTK_RUN_LAST,
 		    object_class->type,
@@ -142,124 +141,125 @@ gtk_myfixed_class_init (GtkMyFixedClass *klass)
 static GtkType
 gtk_myfixed_child_type (GtkContainer     *container)
 {
-  return GTK_TYPE_WIDGET;
+    return GTK_TYPE_WIDGET;
 }
 #endif
 
 static void
 gtk_myfixed_init (GtkMyFixed *myfixed)
 {
-  GTK_WIDGET_UNSET_FLAGS (myfixed, GTK_NO_WINDOW);
+    GTK_WIDGET_UNSET_FLAGS (myfixed, GTK_NO_WINDOW);
   
 #if (GTK_MINOR_VERSION == 0)
-  GTK_WIDGET_SET_FLAGS (myfixed, GTK_BASIC);
+    GTK_WIDGET_SET_FLAGS (myfixed, GTK_BASIC);
 #endif
 
 #if (GTK_MINOR_VERSION > 0)
-  myfixed->shadow_type = GTK_SHADOW_NONE;
+    myfixed->shadow_type = GTK_SHADOW_NONE;
 #endif
 
-  myfixed->children = NULL;
+    myfixed->children = NULL;
 }
 
 GtkWidget*
 gtk_myfixed_new ()
 {
-  GtkMyFixed *myfixed;
+    GtkMyFixed *myfixed;
 
-  myfixed = gtk_type_new (gtk_myfixed_get_type ());
+    myfixed = gtk_type_new (gtk_myfixed_get_type ());
   
-  return GTK_WIDGET (myfixed);
+    return GTK_WIDGET (myfixed);
 }
 
 #if (GTK_MINOR_VERSION > 0)
-void  gtk_myfixed_scroll_set_adjustments (GtkMyFixed     *myfixed,
-					       GtkAdjustment *hadj,
-					       GtkAdjustment *vadj)
+void  
+gtk_myfixed_scroll_set_adjustments (GtkMyFixed     *myfixed,
+				    GtkAdjustment  *hadj,
+				    GtkAdjustment  *vadj)
 {
    /* OK, this is embarassing, but this function has to be here */
 }
 
 void 
-gtk_myfixed_set_shadow_type (GtkMyFixed   *myfixed,
-			      GtkShadowType  type)
+gtk_myfixed_set_shadow_type (GtkMyFixed    *myfixed,
+			     GtkShadowType  type)
 {
-  g_return_if_fail (myfixed != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+    g_return_if_fail (myfixed != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (myfixed));
 
-  if ((GtkShadowType) myfixed->shadow_type != type)
+    if ((GtkShadowType) myfixed->shadow_type != type)
     {
-      myfixed->shadow_type = type;
+        myfixed->shadow_type = type;
 
-      if (GTK_WIDGET_VISIBLE (myfixed))
+        if (GTK_WIDGET_VISIBLE (myfixed))
 	{
-	  gtk_widget_size_allocate (GTK_WIDGET (myfixed), &(GTK_WIDGET (myfixed)->allocation));
-	  gtk_widget_queue_draw (GTK_WIDGET (myfixed));
+	    gtk_widget_size_allocate (GTK_WIDGET (myfixed), &(GTK_WIDGET (myfixed)->allocation));
+	    gtk_widget_queue_draw (GTK_WIDGET (myfixed));
 	}
     }
 }
 #endif
 
 void
-gtk_myfixed_put (GtkMyFixed   *myfixed,
-                 GtkWidget      *widget,
+gtk_myfixed_put (GtkMyFixed    *myfixed,
+                 GtkWidget     *widget,
                  gint16         x,
                  gint16         y,
 	         gint16         width,
 	         gint16         height)
 {
-  GtkMyFixedChild *child_info;
+    GtkMyFixedChild *child_info;
 
-  g_return_if_fail (myfixed != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
-  g_return_if_fail (widget != NULL);
+    g_return_if_fail (myfixed != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+    g_return_if_fail (widget != NULL);
 
-  child_info = g_new (GtkMyFixedChild, 1);
-  child_info->widget = widget;
-  child_info->x = x;
-  child_info->y = y;
-  child_info->width = width;
-  child_info->height = height;
+    child_info = g_new (GtkMyFixedChild, 1);
+    child_info->widget = widget;
+    child_info->x = x;
+    child_info->y = y;
+    child_info->width = width;
+    child_info->height = height;
   
-  gtk_widget_set_parent (widget, GTK_WIDGET (myfixed));
+    gtk_widget_set_parent (widget, GTK_WIDGET (myfixed));
 
-  myfixed->children = g_list_append (myfixed->children, child_info); 
+    myfixed->children = g_list_append (myfixed->children, child_info); 
 
-  if (GTK_WIDGET_REALIZED (myfixed))
-    gtk_widget_realize (widget);
+    if (GTK_WIDGET_REALIZED (myfixed))
+        gtk_widget_realize (widget);
 
-  if (GTK_WIDGET_VISIBLE (myfixed) && GTK_WIDGET_VISIBLE (widget))
+    if (GTK_WIDGET_VISIBLE (myfixed) && GTK_WIDGET_VISIBLE (widget))
     {
-      if (GTK_WIDGET_MAPPED (myfixed))
-	gtk_widget_map (widget);
+        if (GTK_WIDGET_MAPPED (myfixed))
+	    gtk_widget_map (widget);
       
-      gtk_widget_queue_resize (GTK_WIDGET (myfixed));
+        gtk_widget_queue_resize (GTK_WIDGET (myfixed));
     }
 }
 
 void
-gtk_myfixed_move (GtkMyFixed     *myfixed,
-                  GtkWidget      *widget,
+gtk_myfixed_move (GtkMyFixed    *myfixed,
+                  GtkWidget     *widget,
                   gint16         x,
                   gint16         y)
 {
-  GtkMyFixedChild *child;
-  GList *children;
+    GtkMyFixedChild *child;
+    GList *children;
 
-  g_return_if_fail (myfixed != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
-  g_return_if_fail (widget != NULL);
+    g_return_if_fail (myfixed != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+    g_return_if_fail (widget != NULL);
 
-  children = myfixed->children;
-  while (children)
+    children = myfixed->children;
+    while (children)
     {
-      child = children->data;
-      children = children->next;
+        child = children->data;
+        children = children->next;
       
-      if (child->widget == widget)
+        if (child->widget == widget)
         {
-           gtk_myfixed_set_size( myfixed, widget, x, y, child->width, child->height );
-	   break;
+            gtk_myfixed_set_size( myfixed, widget, x, y, child->width, child->height );
+	    break;
 	}
     }
 }
@@ -270,78 +270,85 @@ gtk_myfixed_resize (GtkMyFixed     *myfixed,
 		    gint16         width,
 		    gint16         height)
 {
-  GtkMyFixedChild *child;
-  GList *children;
+    GtkMyFixedChild *child;
+    GList *children;
 
-  g_return_if_fail (myfixed != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
-  g_return_if_fail (widget != NULL);
+    g_return_if_fail (myfixed != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+    g_return_if_fail (widget != NULL);
 
-  children = myfixed->children;
-  while (children)
+    children = myfixed->children;
+    while (children)
     {
-      child = children->data;
-      children = children->next;
+        child = children->data;
+        children = children->next;
       
-      if (child->widget == widget)
+        if (child->widget == widget)
         {
-           gtk_myfixed_set_size( myfixed, widget, child->x, child->y, width, height );
-	   break;
+             gtk_myfixed_set_size( myfixed, widget, child->x, child->y, width, height );
+	     break;
 	}
     }
 }
 
 void
-gtk_myfixed_set_size (GtkMyFixed     *myfixed,
-                      GtkWidget      *widget,
+gtk_myfixed_set_size (GtkMyFixed    *myfixed,
+                      GtkWidget     *widget,
                       gint16         x,
                       gint16         y,
 		      gint16         width,
 		      gint16         height)
 {
-  GtkMyFixedChild *child;
-  GList *children;
-  GtkAllocation child_allocation;
+    GtkMyFixedChild *child;
+    GList *children;
+    GtkAllocation child_allocation;
 
-  g_return_if_fail (myfixed != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
-  g_return_if_fail (widget != NULL);
+    g_return_if_fail (myfixed != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (myfixed));
+    g_return_if_fail (widget != NULL);
 
-  children = myfixed->children;
-  while (children)
+    children = myfixed->children;
+    while (children)
     {
-      child = children->data;
-      children = children->next;
+        child = children->data;
+        children = children->next;
 
-      if (child->widget == widget)
+        if (child->widget == widget)
         {
-	  if ((child->x == x) && 
-	      (child->y == y) &&
-	      (child->width == width) && 
-	      (child->height == height)) return;
+	    if ((child->x == x) && 
+	        (child->y == y) &&
+	        (child->width == width) && 
+	        (child->height == height)) return;
 	  
-          child->x = x;
-          child->y = y;
-          child->width = width;
-          child->height = height;
+            child->x = x;
+            child->y = y;
+            child->width = width;
+            child->height = height;
 
-          if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
-	  {
-             if ((child->width > 1) && (child->height > 1) && (GTK_WIDGET_REALIZED(widget)))
-	     {
-                child_allocation.x = child->x;
-                child_allocation.y = child->y;
-                child_allocation.width = child->width;
-                child_allocation.height = child->height;
-                gtk_widget_size_allocate (widget, &child_allocation);
-             } 
-	     else 
-	     {
-                gtk_widget_queue_resize (GTK_WIDGET (myfixed));
-	     }
-	  }
-
-          break;
+            if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
+	    {
+                if ((child->width > 1) && (child->height > 1) && (GTK_WIDGET_REALIZED(widget)))
+	        {
+                    child_allocation.x = child->x;
+                    child_allocation.y = child->y;
+                    child_allocation.width = MAX( child->width, 1 );
+                    child_allocation.height = MAX( child->height, 1 );
+		
+		    /* work around for GTK bug when moving widgets outside
+		       the X window -> do NOT move them entirely outside */
+		    if (child_allocation.y + child_allocation.height < 0)
+		        child_allocation.y = -child_allocation.height;
+		    if (child_allocation.x + child_allocation.width < 0)
+		        child_allocation.x = -child_allocation.width;
+		
+                    gtk_widget_size_allocate (widget, &child_allocation);
+                } 
+	        else 
+	        {
+                    gtk_widget_queue_resize (GTK_WIDGET (myfixed));
+	        } 
+	    }
+            break;
         }
     }
 }
@@ -349,220 +356,224 @@ gtk_myfixed_set_size (GtkMyFixed     *myfixed,
 static void
 gtk_myfixed_map (GtkWidget *widget)
 {
-  GtkMyFixed *myfixed;
-  GtkMyFixedChild *child;
-  GList *children;
+    GtkMyFixed *myfixed;
+    GtkMyFixedChild *child;
+    GList *children;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (widget));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (widget));
 
-  GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
-  myfixed = GTK_MYFIXED (widget);
+    GTK_WIDGET_SET_FLAGS (widget, GTK_MAPPED);
+    myfixed = GTK_MYFIXED (widget);
 
-  children = myfixed->children;
-  while (children)
+    children = myfixed->children;
+    while (children)
     {
-      child = children->data;
-      children = children->next;
+        child = children->data;
+        children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget) &&
-	  !GTK_WIDGET_MAPPED (child->widget))
-	gtk_widget_map (child->widget);
+        if (GTK_WIDGET_VISIBLE (child->widget) && !GTK_WIDGET_MAPPED (child->widget))
+	    gtk_widget_map (child->widget);
     }
     
-  gdk_window_show (widget->window);
+    gdk_window_show (widget->window);
 }
 
 #if (GTK_MINOR_VERSION == 0)
 static void
 gtk_myfixed_unmap (GtkWidget *widget)
 {
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (widget));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (widget));
 
-  GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
+    GTK_WIDGET_UNSET_FLAGS (widget, GTK_MAPPED);
 }
 #endif
 
 static void
 gtk_myfixed_realize (GtkWidget *widget)
 {
-  GtkMyFixed *myfixed;
-  GdkWindowAttr attributes;
-  gint attributes_mask;
+    GtkMyFixed *myfixed;
+    GdkWindowAttr attributes;
+    gint attributes_mask;
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (widget));
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (widget));
 
-  myfixed = GTK_MYFIXED (widget);
+    myfixed = GTK_MYFIXED (widget);
   
-  GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
+    GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
-  attributes.window_type = GDK_WINDOW_CHILD;
+    attributes.window_type = GDK_WINDOW_CHILD;
   
 #if (GTK_MINOR_VERSION > 0)
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = widget->allocation.width;
-  attributes.height = widget->allocation.height;
+    attributes.x = widget->allocation.x;
+    attributes.y = widget->allocation.y;
+    attributes.width = widget->allocation.width;
+    attributes.height = widget->allocation.height;
 
-  if (myfixed->shadow_type != GTK_SHADOW_NONE)
-  {
-      attributes.x += 2;
-      attributes.y += 2;
-      attributes.width -= 4;
-      attributes.height -= 4;
-  }
+    if (myfixed->shadow_type != GTK_SHADOW_NONE)
+    {
+        attributes.x += 2;
+        attributes.y += 2;
+        attributes.width -= 4;
+        attributes.height -= 4;
+    }
     
-  if (attributes.width < 2) attributes.width = 2;
-  if (attributes.height < 2) attributes.height = 2;
+    if (attributes.width < 2) attributes.width = 2;
+    if (attributes.height < 2) attributes.height = 2;
 #else
-  attributes.x = widget->allocation.x;
-  attributes.y = widget->allocation.y;
-  attributes.width = 32000;
-  attributes.height = 32000;
+    attributes.x = widget->allocation.x;
+    attributes.y = widget->allocation.y;
+    attributes.width = 32000;
+    attributes.height = 32000;
 #endif
-  attributes.wclass = GDK_INPUT_OUTPUT;
-  attributes.visual = gtk_widget_get_visual (widget);
-  attributes.colormap = gtk_widget_get_colormap (widget);
-  attributes.event_mask = gtk_widget_get_events (widget);
-  attributes.event_mask |= 
-  GDK_EXPOSURE_MASK	|
-  GDK_POINTER_MOTION_MASK	|
-  GDK_POINTER_MOTION_HINT_MASK  |
-  GDK_BUTTON_MOTION_MASK	|
-  GDK_BUTTON1_MOTION_MASK	|
-  GDK_BUTTON2_MOTION_MASK	|
-  GDK_BUTTON3_MOTION_MASK	|
-  GDK_BUTTON_PRESS_MASK		|
-  GDK_BUTTON_RELEASE_MASK	|
-  GDK_KEY_PRESS_MASK		|
-  GDK_KEY_RELEASE_MASK		|
-  GDK_ENTER_NOTIFY_MASK		|
-  GDK_LEAVE_NOTIFY_MASK		|
-  GDK_FOCUS_CHANGE_MASK;
+    attributes.wclass = GDK_INPUT_OUTPUT;
+    attributes.visual = gtk_widget_get_visual (widget);
+    attributes.colormap = gtk_widget_get_colormap (widget);
+    attributes.event_mask = gtk_widget_get_events (widget);
+    attributes.event_mask |= 
+       GDK_EXPOSURE_MASK	|
+       GDK_POINTER_MOTION_MASK	|
+       GDK_POINTER_MOTION_HINT_MASK  |
+       GDK_BUTTON_MOTION_MASK	|
+       GDK_BUTTON1_MOTION_MASK	|
+       GDK_BUTTON2_MOTION_MASK	|
+       GDK_BUTTON3_MOTION_MASK	|
+       GDK_BUTTON_PRESS_MASK	|
+       GDK_BUTTON_RELEASE_MASK	|
+       GDK_KEY_PRESS_MASK	|
+       GDK_KEY_RELEASE_MASK	|
+       GDK_ENTER_NOTIFY_MASK	|
+       GDK_LEAVE_NOTIFY_MASK	|
+       GDK_FOCUS_CHANGE_MASK;
+    attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
 
-  attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_VISUAL | GDK_WA_COLORMAP;
-
-  widget->window = gdk_window_new (gtk_widget_get_parent_window (widget), &attributes, 
-				   attributes_mask);
-  gdk_window_set_user_data (widget->window, widget);
+    widget->window = gdk_window_new( gtk_widget_get_parent_window (widget), &attributes, 
+				     attributes_mask);
+    gdk_window_set_user_data (widget->window, widget);
     
-  widget->style = gtk_style_attach (widget->style, widget->window);
-  gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
+    widget->style = gtk_style_attach (widget->style, widget->window);
+    gtk_style_set_background (widget->style, widget->window, GTK_STATE_NORMAL);
 }
 
 static void
 gtk_myfixed_size_request (GtkWidget      *widget,
-			GtkRequisition *requisition)
+			  GtkRequisition *requisition)
 {
-  GtkMyFixed *myfixed;
-  GtkMyFixedChild *child;
-  GList *children;
-  GtkRequisition child_requisition;
+    GtkMyFixed *myfixed;
+    GtkMyFixedChild *child;
+    GList *children;
+    GtkRequisition child_requisition;
   
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (widget));
-  g_return_if_fail (requisition != NULL);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (widget));
+    g_return_if_fail (requisition != NULL);
 
-  myfixed = GTK_MYFIXED (widget);
+    myfixed = GTK_MYFIXED (widget);
   
-  children = myfixed->children;
-  while (children)
+    children = myfixed->children;
+    while (children)
     {
-      child = children->data;
-      children = children->next;
+        child = children->data;
+        children = children->next;
 
-      if (GTK_WIDGET_VISIBLE (child->widget))
+        if (GTK_WIDGET_VISIBLE (child->widget))
 	{
-          gtk_widget_size_request (child->widget, &child_requisition);
+            gtk_widget_size_request (child->widget, &child_requisition);
 	}
     }
     
-  /* request very little, I'm not sure if requesting nothing
-     will always have positive effects on stability... */
-  requisition->width = 2;
-  requisition->height = 2;
+    /* request very little, I'm not sure if requesting nothing
+       will always have positive effects on stability... */
+    requisition->width = 2;
+    requisition->height = 2;
 }
 
 static void
 gtk_myfixed_size_allocate (GtkWidget     *widget,
 			   GtkAllocation *allocation)
 {
-  GtkMyFixed *myfixed;
-  gint border;
-  GtkMyFixedChild *child;
-  GtkAllocation child_allocation; 
-  GList *children; 
+    GtkMyFixed *myfixed;
+    gint border;
+    GtkMyFixedChild *child;
+    GtkAllocation child_allocation; 
+    GList *children; 
 
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED(widget));
-  g_return_if_fail (allocation != NULL);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED(widget));
+    g_return_if_fail (allocation != NULL);
 
-  myfixed = GTK_MYFIXED (widget);
+    myfixed = GTK_MYFIXED (widget);
   
     widget->allocation = *allocation;
 #if (GTK_MINOR_VERSION > 0)
-  if (myfixed->shadow_type == GTK_SHADOW_NONE)
+    if (myfixed->shadow_type == GTK_SHADOW_NONE)
+        border = 0;
+    else
+        border = 2;
+#else
     border = 0;
-  else
-    border = 2;
-#else
-  border = 0;
 #endif
 
-  if (GTK_WIDGET_REALIZED (widget))
-  {
-    gdk_window_move_resize( widget->window, 
-                            allocation->x+border, allocation->y+border, 
-#if (GTK_MINOR_VERSION > 0)
-			    allocation->width-border*2, allocation->height-border*2
-#else
-			    32000, 32000
-#endif
-                           );
-  }
-
-  children = myfixed->children;
-  while (children)
+    if (GTK_WIDGET_REALIZED (widget))
     {
-      child = children->data;
-      children = children->next;
+        gdk_window_move_resize( widget->window, 
+                                allocation->x+border, allocation->y+border, 
+#if (GTK_MINOR_VERSION > 0)
+			        allocation->width-border*2, allocation->height-border*2
+#else
+			        32000, 32000
+#endif
+                              );
+    }
+
+    children = myfixed->children;
+    while (children)
+    {
+        child = children->data;
+        children = children->next;
  
-      /* please look at the text in wxWindow::DoSetSize() on why the
-         test GTK_WIDGET_REALIZED() has to be here */
-      if (GTK_WIDGET_VISIBLE (child->widget))
-      { 
-/*
-        if (GTK_IS_NOTEBOOK(child->widget) && !GTK_WIDGET_REALIZED(child->widget))
-	{
-	  gtk_widget_queue_resize( child->widget );
-	}
-	else
-*/
-	{
-	  child_allocation.x = child->x;
-	  child_allocation.y = child->y;
-	  child_allocation.width = child->width;
-	  child_allocation.height = child->height;
-	  gtk_widget_size_allocate (child->widget, &child_allocation);
-	}
-     }
-   }
+        /* please look at the text in wxWindow::DoSetSize() on why the
+           test GTK_WIDGET_REALIZED() has to be here */
+        if (GTK_WIDGET_VISIBLE (child->widget))
+        { 
+/*          if (GTK_IS_NOTEBOOK(child->widget) && !GTK_WIDGET_REALIZED(child->widget))
+            {
+	        gtk_widget_queue_resize( child->widget );
+	    }
+	    else */
+	    {
+	        child_allocation.x = child->x;
+	        child_allocation.y = child->y;
+                child_allocation.width = MAX( child->width, 1 );
+                child_allocation.height = MAX( child->height, 1 );
+		
+		/* work around for GTK bug when moving widgets outside
+		   the X window -> do NOT move them entirely outside */
+		if (child_allocation.y + child_allocation.height < 0)
+		    child_allocation.y = -child_allocation.height;
+		if (child_allocation.x + child_allocation.width < 0)
+		    child_allocation.x = -child_allocation.width;
+	  
+	        gtk_widget_size_allocate (child->widget, &child_allocation);
+ 	    }
+        }
+    }
 }
 
 static void
 gtk_myfixed_paint (GtkWidget    *widget,
 		   GdkRectangle *area)
 {
-  g_return_if_fail (widget != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (widget));
-  g_return_if_fail (area != NULL);
+    g_return_if_fail (widget != NULL);
+    g_return_if_fail (GTK_IS_MYFIXED (widget));
+    g_return_if_fail (area != NULL);
 
-  if (GTK_WIDGET_DRAWABLE (widget))
-      gdk_window_clear_area (widget->window,
-			     area->x, area->y,
-			     area->width, area->height);
+    if (GTK_WIDGET_DRAWABLE (widget))
+        gdk_window_clear_area (widget->window,
+			       area->x, area->y,
+			       area->width, area->height);
 }
 
 static void
