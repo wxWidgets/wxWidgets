@@ -13,6 +13,8 @@
 #include "wx/listbox.h"
 #include "wx/log.h"
 
+#import <AppKit/NSView.h>
+
 IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
 BEGIN_EVENT_TABLE(wxListBox, wxListBoxBase)
 END_EVENT_TABLE()
@@ -29,6 +31,9 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
     if(!CreateControl(parent,winid,pos,size,style,validator,name))
         return false;
 
+    SetNSView([[NSView alloc] initWithFrame: NSMakeRect(10,10,20,20)]);
+    [m_cocoaNSView release];
+
     if(m_parent)
         m_parent->CocoaAddChild(this);
     return true;
@@ -37,6 +42,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID winid,
 wxListBox::~wxListBox()
 {
     CocoaRemoveFromParent();
+    SetNSView(NULL);
 }
 
 // pure virtuals from wxListBoxBase
