@@ -596,14 +596,22 @@ static void TestFileConfRead()
 
 #include <wx/filename.h>
 
-static const wxChar *filenames[] =
+static struct FileNameInfo
 {
-    _T("/usr/bin/ls"),
-    _T("/usr/bin/"),
-    _T("~/.zshrc"),
-    _T("../../foo"),
-    _T("~/foo.bar"),
-    _T("/tmp/wxwin.tar.bz"),
+    const wxChar *fullname;
+    const wxChar *path;
+    const wxChar *name;
+    const wxChar *ext;
+} filenames[] =
+{
+    { _T("/usr/bin/ls"), _T("/usr/bin"), _T("ls"), _T("") },
+    { _T("/usr/bin/"), _T("/usr/bin"), _T(""), _T("") },
+    { _T("~/.zshrc"), _T("~"), _T(".zshrc"), _T("") },
+    { _T("../../foo"), _T("../.."), _T("foo"), _T("") },
+    { _T("foo.bar"), _T(""), _T("foo"), _T("bar") },
+    { _T("~/foo.bar"), _T("~"), _T("foo"), _T("bar") },
+    { _T("Mahogany-0.60/foo.bar"), _T("Mahogany-0.60"), _T("foo"), _T("bar") },
+    { _T("/tmp/wxwin.tar.bz"), _T("/tmp"), _T("wxwin.tar"), _T("bz") },
 };
 
 static void TestFileNameConstruction()
@@ -612,7 +620,7 @@ static void TestFileNameConstruction()
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
-        wxFileName fn(filenames[n], wxPATH_UNIX);
+        wxFileName fn(filenames[n].fullname, wxPATH_UNIX);
 
         printf("Filename: '%s'\t", fn.GetFullPath().c_str());
         if ( !fn.Normalize(wxPATH_NORM_ALL, _T(""), wxPATH_UNIX) )
@@ -634,10 +642,19 @@ static void TestFileNameSplit()
 
     for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
     {
+        const FileNameInfo &fni = filenames[n];
         wxString path, name, ext;
-        wxFileName::SplitPath(filenames[n], &path, &name, &ext);
-        printf("%s -> path = '%s', name = '%s', ext = '%s'\n",
-               filenames[n], path.c_str(), name.c_str(), ext.c_str());
+        wxFileName::SplitPath(fni.fullname, &path, &name, &ext);
+
+        printf("%s -> path = '%s', name = '%s', ext = '%s'",
+               fni.fullname, path.c_str(), name.c_str(), ext.c_str());
+        if ( path != fni.path )
+            printf(" (ERROR: path = '%s')", fni.path);
+        if ( name != fni.name )
+            printf(" (ERROR: name = '%s')", fni.name);
+        if ( ext != fni.ext )
+            printf(" (ERROR: ext = '%s')", fni.ext);
+        puts("");
     }
 
     puts("");

@@ -512,7 +512,10 @@ void wxFileName::SplitPath(const wxString& fullpath,
         }
     }
 
-    if ( (posLastDot != wxString::npos) && (posLastDot < posLastSlash) )
+    // if we do have a dot and a slash, check that the dot is in the name part
+    if ( (posLastDot != wxString::npos) &&
+         (posLastSlash != wxString::npos) &&
+         (posLastDot < posLastSlash) )
     {
         // the dot is part of the path, not the start of the extension
         posLastDot = wxString::npos;
@@ -538,9 +541,20 @@ void wxFileName::SplitPath(const wxString& fullpath,
         // take all characters starting from the one after the last slash and
         // up to, but excluding, the last dot
         size_t nStart = posLastSlash == wxString::npos ? 0 : posLastSlash + 1;
-        size_t count = posLastDot == wxString::npos
-                        ? wxString::npos
-                        : posLastDot - posLastSlash - 1;
+        size_t count;
+        if ( posLastDot == wxString::npos )
+        {
+            // take all until the end
+            count = wxString::npos;
+        }
+        else if ( posLastSlash == wxString::npos )
+        {
+            count = posLastDot;
+        }
+        else // have both dot and slash
+        {
+            count = posLastDot - posLastSlash - 1;
+        }
 
         *pstrName = fullpath.Mid(nStart, count);
     }
