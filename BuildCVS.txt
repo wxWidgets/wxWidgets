@@ -51,7 +51,10 @@ Instructions are similar to those for Regular Mingw32 except
   PLEASE APPLY THESE PATCHES BY HAND! There are apparently a few
   different versions of the headers floating around.
 
-->copy wxWin\src\makeg295.env to wxWin\src\makeg95.env
+->Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
+  the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
+  If using MINGW32, also set the MINGW32VERSION variable
+  appropriately.
 
 
 c) Build instructions
@@ -81,7 +84,6 @@ c) Build instructions
 
 -> type: cd c:\wxWin\src\msw
 -> type: make -f makefile.g95  (if using GNU tools)
-or type: make -f makefile.g295 (if using Mingw32/gcc-2.95)
 or type: make -f makefile.vc   (if using MS VC++)
 
 

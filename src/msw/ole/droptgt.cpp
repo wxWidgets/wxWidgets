@@ -417,7 +417,7 @@ wxDataFormat wxDropTarget::GetSupportedFormat(IDataObject *pIDataSource) const
         delete [] formats;
     }
 
-    return n < nFormats ? format : wxDF_INVALID;
+    return (n < nFormats) ? (wxDataFormat) format : (wxDataFormat) wxDF_INVALID;
 }
 
 // ----------------------------------------------------------------------------

@@ -211,9 +211,15 @@ Compiling using the makefiles:
    'make -f makefile.b32 FINAL=1'
    for the library and samples.
 
-Note: the wxWindows library and (some) samples compile in 16-bit mode
+Note (1): the wxWindows library and (some) samples compile in 16-bit mode
 using makefile.bcc, but at present the wxWindows resource system is switched
 off in this mode. See issues.txt for details.
+
+Note (2): the wxWindows makefiles assume byte structure alignment. Please
+make sure that your own project or makefile settings use the
+same alignment, or you could experience mysterious crashes. To
+change the alignment, add a suitable option to the $(CFG) target code
+in src/msw/makefile.b32.
 
 Compiling using the IDE files:
 
@@ -342,10 +348,10 @@ Here are the steps required:
 - For Cygwin, make sure there's a \tmp directory on your
   Windows drive or bison will crash.
 
-- makeg95.env configuation:
-
 - Edit wx/src/makeg95.env and set the MINGW32 variable at the top of
   the file to either 1 (you have Mingw32) or 0 (you have Cygwin32).
+  If using MINGW32, also set the MINGW32VERSION variable
+  appropriately.
 
 - Mingw32 may not support winsock.h, so if you have a problem
   here, comment out socket-related files in src/msw/makefile.g95.

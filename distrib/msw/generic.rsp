@@ -919,3 +919,15 @@ samples/wizard/*.png
 samples/wizard/*.ico
 samples/wizard/*.txt
 
+samples/console/*.cpp
+samples/console/*.h
+samples/console/makefile*
+samples/console/*.rc
+samples/console/*.def
+samples/console/*.bmp
+samples/console/*.xpm
+samples/console/*.xbm
+samples/console/*.png
+samples/console/*.ico
+samples/console/*.txt
+

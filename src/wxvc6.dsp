@@ -93,6 +93,10 @@ SOURCE=.\common\choiccmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\clipcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\cmndata.cpp
 # End Source File
 # Begin Source File
@@ -122,6 +126,10 @@ SOURCE=.\common\dbtable.cpp
 # Begin Source File
 
 SOURCE=.\common\dcbase.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\dobjcmn.cpp
 # End Source File
 # Begin Source File
 

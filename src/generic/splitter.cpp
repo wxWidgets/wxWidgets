@@ -31,6 +31,7 @@
 #include "wx/string.h"
 #include "wx/splitter.h"
 #include "wx/dcscreen.h"
+#include "wx/settings.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_DYNAMIC_CLASS(wxSplitterWindow, wxWindow)

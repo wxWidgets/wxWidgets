@@ -28,22 +28,39 @@
         next if $wxCommon{$file} =~ /\b(16)\b/;
 
         #! needs extra files (sql*.h) so not compiled by default.
-        next if $file =~ /^odbc\./;
+        #! next if $file =~ /^odbc\./;
 
-        $file =~ s/cp?p?$/\$(OBJSUFF)/;
-        $project{"WXCOMMONOBJS"} .= '$(COMMDIR)/' . $file . " "
+        if ( $file =~ /^odbc\./ )
+        {
+          $file =~ s/cp?p?$/\$(OBJSUFF)/;
+          $project{"ADVANCEDOBJS"} .= '$(COMMDIR)/' . $file . " "
+        }
+        else
+        {
+          $file =~ s/cp?p?$/\$(OBJSUFF)/;
+          $project{"WXCOMMONOBJS"} .= '$(COMMDIR)/' . $file . " "
+        }
     }
 
     foreach $file (sort keys %wxMSW) {
-        #! Mingw32 doesn't have the OLE headers and has some troubles with
-        #! socket code
-        next if $wxMSW{$file} =~ /\b(O|16)\b/;
-
         #! native wxDirDlg can't be compiled due to GnuWin32/OLE limitations,
         next if $file =~ /^dirdlg\./;
 
-        $file =~ s/cp?p?$/\$(OBJSUFF)/;
-        $project{"WXMSWOBJS"} .= '$(MSWDIR)/' . $file . " "
+        next if $wxMSW{$file} =~ /\b(16)\b/;
+
+        #! Mingw32 doesn't have the OLE headers and has some troubles with
+        #! socket code, so put in  ADVANCEDOBJS
+        if ( $wxMSW{$file} =~ /\b(O)\b/ )
+        {
+          $file =~ s/cp?p?$/\$(OBJSUFF)/;
+          $project{"ADVANCEDOBJS"} .= '$(MSWDIR)/ole/' . $file . " "
+        }
+        else
+        {
+          $file =~ s/cp?p?$/\$(OBJSUFF)/;
+          $project{"WXMSWOBJS"} .= '$(MSWDIR)/' . $file . " "
+        }
+
     }
 
     foreach $file (sort keys %wxHTML) {
@@ -101,6 +118,9 @@ HTMLOBJS = \
 
 MSWOBJS     = \
 		#$ ExpandList("WXMSWOBJS");
+
+ADVANCEDOBJS     = \
+		#$ ExpandList("ADVANCEDOBJS");
 
 ZLIBOBJS    = \
 		$(ZLIBDIR)/adler32.$(OBJSUFF) \
@@ -197,7 +217,20 @@ XPMOBJECTS = 	$(XPMDIR)/crbuffri.o\
 		$(XPMDIR)/wrffrp.o $(XPMDIR)/wrffri.o
 
 OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
+	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) # $(ADVANCEDOBJS) # $(XPMOBJECTS)
+
+ifeq ($(MINGW32),1)
+  ifeq ($(MINGW32VERSION),2.95)
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
+	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) $(ADVANCEDOBJS) # $(XPMOBJECTS)   
+  else
+    OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
 	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) # $(XPMOBJECTS)
+  endif
+else
+  OBJECTS = $(MSWOBJS) $(COMMONOBJS) $(GENERICOBJS) $(HTMLOBJS) \
+	  $(JPEGOBJS) $(PNGOBJS) $(ZLIBOBJS) # $(XPMOBJECTS)
+endif
 
 all:    $(OBJECTS) $(WXLIB)
 
@@ -247,21 +280,21 @@ $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
 #	mv y.tab.c $(COMMDIR)/y_tab.c
 
 clean:
-	-erase *.o
-	-erase *.bak
-	-erase core
-	-erase ..\common\y_tab.c
-	-erase ..\common\lex_yy.c
-	-erase ..\common\*.o
-	-erase ..\common\*.bak
-	-erase ..\generic\*.o
-	-erase ..\generic\*.bak
-	-erase ..\html\*.o
-	-erase ..\png\*.o
-	-erase ..\png\*.bak
-	-erase ..\zlib\*.o
-	-erase ..\zlib\*.bak
-	-erase ..\jpeg\*.o
-	-erase ..\..\lib\libwx.a
+	rm -f *.o
+	rm -f *.bak
+	rm -f core
+	rm -f ..\common\y_tab.c
+	rm -f ..\common\lex_yy.c
+	rm -f ..\common\*.o
+	rm -f ..\common\*.bak
+	rm -f ..\generic\*.o
+	rm -f ..\generic\*.bak
+	rm -f ..\html\*.o
+	rm -f ..\png\*.o
+	rm -f ..\png\*.bak
+	rm -f ..\zlib\*.o
+	rm -f ..\zlib\*.bak
+	rm -f ..\jpeg\*.o
+	rm -f ..\..\lib\libwx.a
 
 cleanall: clean
