@@ -142,7 +142,7 @@ public:
 
     // Removes all handlers
     void ClearHandlers();
-    
+
     // Registers subclasses factory for use in XRC. This function is not meant
     // for public use, please see the comment above wxXmlSubclassFactory
     // definition.
@@ -458,7 +458,7 @@ protected:
 
 
 // FIXME -- remove this $%^#$%#$@# as soon as Ron checks his changes in!!
-void wxXmlInitResourceModule();
+WXDLLIMPEXP_XRC void wxXmlInitResourceModule();
 
 
 // This class is used to create instances of XRC "object" nodes with "subclass"

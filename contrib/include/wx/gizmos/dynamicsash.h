@@ -137,7 +137,7 @@ typedef void (wxEvtHandler::*wxDynamicSashUnifyEventFunction)(wxDynamicSashSplit
 /*
     wxDynamicSashWindow.  See above.
 */
-extern const wxChar* WXDLLIMPEXP_GIZMOS wxDynamicSashWindowNameStr;
+WXDLLIMPEXP_GIZMOS extern const wxChar* wxDynamicSashWindowNameStr;
 
 class WXDLLIMPEXP_GIZMOS wxDynamicSashWindow : public wxWindow {
 public:
