@@ -70,7 +70,13 @@ class wxInetCacheNode : public wxObject
 bool wxInternetFSHandler::CanOpen(const wxString& location)
 {
     wxString p = GetProtocol(location);
-    return (p == wxT("http")) || (p == wxT("ftp"));
+    if ((p == wxT("http")) || (p == wxT("ftp"))) 
+    {
+        wxURL url(GetProtocol(location) + wxT(":") + GetRightLocation(location));
+        return (url.GetError() == wxURL_NOERR);
+    }
+    else 
+        return FALSE;
 }
 
 
@@ -87,27 +93,30 @@ wxFSFile* wxInternetFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxStri
     if (info == NULL)
     {
         wxURL url(right);
-        s = url.GetInputStream();
-        content = url.GetProtocol().GetContentType();
-        if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
-        if (s)
+        if (url.GetError() == wxURL_NOERR) 
         {
-            wxChar buf[256];
+            s = url.GetInputStream();
+            content = url.GetProtocol().GetContentType();
+            if (content == wxEmptyString) content = GetMimeTypeFromExt(location);
+            if (s)
+            {
+                wxChar buf[256];
 
-            wxGetTempFileName( wxT("wxhtml"), buf);
-            info = new wxInetCacheNode(buf, content);
-            m_Cache.Put(right, info);
+                wxGetTempFileName( wxT("wxhtml"), buf);
+                info = new wxInetCacheNode(buf, content);
+                m_Cache.Put(right, info);
 
-            {   // ok, now copy it:
-                wxFileOutputStream sout((wxString)buf);
-                s -> Read(sout); // copy the stream
+                {   // ok, now copy it:
+                    wxFileOutputStream sout((wxString)buf);
+                    s -> Read(sout); // copy the stream
+                }
+                delete s;
             }
-            delete s;
+            else
+                return (wxFSFile*) NULL; // we can't open the URL
         }
         else
-        {
-            return (wxFSFile*) NULL; // we can't open the URL
-        }
+            return (wxFSFile*) NULL; // incorrect URL
     }
 
     // Load item from cache:
