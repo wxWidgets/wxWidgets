@@ -14,6 +14,10 @@ INCOMPATIBLE CHANGES SINCE 2.2.x
     your code without this define as it won't be default any longer in
     2.6 release.
 
+    NB: if you want to build your program with different major versions
+        of wxWindows you will probably find the wxCHECK_VERSION() macro
+        (see the documentation) useful.
+
 
 wxBase:
 
