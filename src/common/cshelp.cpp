@@ -352,7 +352,7 @@ void wxSimpleHelpProvider::AddHelp(wxWindowBase *window, const wxString& text)
 
 void wxSimpleHelpProvider::AddHelp(wxWindowID id, const wxString& text)
 {
-    wxLongToStringHashMap::const_key_type key = (wxLongToStringHashMap::const_key_type)id;
+    wxLongToStringHashMap::key_type key = (wxLongToStringHashMap::key_type)id;
     m_hashIds.erase(key);
     m_hashIds[key] = text;
 }

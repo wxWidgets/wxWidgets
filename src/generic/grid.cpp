@@ -9541,7 +9541,7 @@ void wxGrid::SetColSize( int col, int width )
 void wxGrid::SetColMinimalWidth( int col, int width )
 {
     if (width > GetColMinimalAcceptableWidth()) {
-        wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)col;
+        wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)col;
         m_colMinWidths[key] = width;
     }
 }
@@ -9549,21 +9549,21 @@ void wxGrid::SetColMinimalWidth( int col, int width )
 void wxGrid::SetRowMinimalHeight( int row, int width )
 {
     if (width > GetRowMinimalAcceptableHeight()) {
-        wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)row;
+        wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)row;
         m_rowMinHeights[key] = width;
     }
 }
 
 int wxGrid::GetColMinimalWidth(int col) const
 {
-    wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)col;
+    wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)col;
     wxLongToLongHashMap::const_iterator it = m_colMinWidths.find(key);
     return it != m_colMinWidths.end() ? (int)it->second : m_minAcceptableColWidth;
 }
 
 int wxGrid::GetRowMinimalHeight(int row) const
 {
-    wxLongToLongHashMap::const_key_type key = (wxLongToLongHashMap::const_key_type)row;
+    wxLongToLongHashMap::key_type key = (wxLongToLongHashMap::key_type)row;
     wxLongToLongHashMap::const_iterator it = m_rowMinHeights.find(key);
     return it != m_rowMinHeights.end() ? (int)it->second : m_minAcceptableRowHeight;
 }
