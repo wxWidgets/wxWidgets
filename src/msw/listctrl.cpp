@@ -321,10 +321,11 @@ bool wxListCtrl::DoCreateControl(int x, int y, int w, int h)
     DWORD wstyle = m_baseStyle;
 
     WXDWORD exStyle = 0;
-    (void) MSWGetStyle(GetWindowStyle(), & exStyle) ;
+    WXDWORD standardStyle = MSWGetStyle(GetWindowStyle(), & exStyle) ;
 
     long oldStyle = 0; // Dummy
     wstyle |= ConvertToMSWStyle(oldStyle, m_windowStyle);
+    wstyle |= standardStyle;
 
     // Create the ListView control.
     m_hWnd = (WXHWND)CreateWindowEx(exStyle,
