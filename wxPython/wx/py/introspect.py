@@ -12,6 +12,7 @@ import inspect
 import sys
 import tokenize
 import types
+import wx
 
 def getAutoCompleteList(command='', locals=None, includeMagic=1, 
                         includeSingle=1, includeDouble=1):
@@ -291,7 +292,14 @@ def getRoot(command, terminator=None):
 
 def getTokens(command):
     """Return list of token tuples for command."""
-    command = str(command)  # In case the command is unicode, which fails.
+
+    # In case the command is unicode try encoding it
+    if type(command) == unicode:
+        try:
+            command = command.encode(wx.GetDefaultPyEncoding())
+        except UnicodeEncodeError:
+            pass # otherwise leave it alone
+                
     f = cStringIO.StringIO(command)
     # tokens is a list of token tuples, each looking like: 
     # (type, string, (srow, scol), (erow, ecol), line)

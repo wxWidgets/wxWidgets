@@ -9,7 +9,7 @@ import sys
 from code import InteractiveInterpreter
 import dispatcher
 import introspect
-
+import wx
 
 class Interpreter(InteractiveInterpreter):
     """Interpreter based on code.InteractiveInterpreter."""
@@ -53,7 +53,14 @@ class Interpreter(InteractiveInterpreter):
         command we keep appending the pieces to the last list in
         commandBuffer until we have a complete command. If not, we
         delete that last list."""
-        command = str(command)  # In case the command is unicode.
+
+        # In case the command is unicode try encoding it
+        if type(command) == unicode:
+            try:
+                command = command.encode(wx.GetDefaultPyEncoding())
+            except UnicodeEncodeError:
+                pass # otherwise leave it alone
+                
         if not self.more:
             try: del self.commandBuffer[-1]
             except IndexError: pass
