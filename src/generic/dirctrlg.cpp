@@ -579,7 +579,10 @@ void wxGenericDirCtrl::ShowHidden( bool show )
 {
     m_showHidden = show;
 
-    // reparse FIXME
+    wxString path = GetPath();
+    m_treeCtrl->Collapse(m_treeCtrl->GetRootItem());
+    m_treeCtrl->Expand(m_treeCtrl->GetRootItem());
+    SetPath(path);
 }
 
 void wxGenericDirCtrl::AddSection(const wxString& path, const wxString& name, int imageId)
