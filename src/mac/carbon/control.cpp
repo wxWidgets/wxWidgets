@@ -313,7 +313,8 @@ void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString l
 void wxControl::MacPostControlCreate()
 {
     wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
-    
+    DoSetWindowVariant( m_windowVariant ) ;
+   /* 
     if ( IsKindOf( CLASSINFO( wxScrollBar ) ) )
     {
         // no font
@@ -338,6 +339,7 @@ void wxControl::MacPostControlCreate()
         
         ::SetControlFontStyle( (ControlHandle) m_macControl , &controlstyle ) ;
     }
+    */
     ControlHandle container = (ControlHandle) GetParent()->MacGetContainerForEmbedding() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     ::EmbedControl( (ControlHandle) m_macControl , container ) ;
@@ -750,3 +752,58 @@ void wxControl::MacHandleControlClick( WXWidget control , wxInt16 controlpart , 
     wxASSERT_MSG( (ControlHandle) m_macControl != NULL , wxT("No valid mac control") ) ;
 }
 
+void wxControl::DoSetWindowVariant( wxWindowVariant variant )
+{
+    if ( m_macControl == NULL )
+    {
+        wxWindow::SetWindowVariant( variant ) ;
+        return ;
+        
+    }
+    m_windowVariant = variant ; 
+
+	ControlSize size ;
+	ControlFontStyleRec	fontStyle;
+	fontStyle.flags = kControlUseFontMask  ;
+
+    // we will get that from the settings later
+    // and make this NORMAL later, but first 
+    // we have a few calculations that we must fix
+
+    if ( variant == wxWINDOW_VARIANT_DEFAULT )
+        variant = wxWINDOW_VARIANT_SMALL ;
+    
+    switch ( variant )
+    {
+        case wxWINDOW_VARIANT_NORMAL :
+            size = kControlSizeNormal; 
+	        fontStyle.font = kControlFontBigSystemFont;
+            break ;
+        case wxWINDOW_VARIANT_SMALL :
+            size = kControlSizeSmall; 
+	        fontStyle.font = kControlFontSmallSystemFont;
+            break ;
+        case wxWINDOW_VARIANT_MINI :
+           if (UMAGetSystemVersion() >= 0x1030 )
+            {
+                size = 3 ; // not always defined in the header 
+	            fontStyle.font = -5 ; // not always defined in the header 
+            }
+            else
+            {
+                size = kControlSizeSmall; 
+	            fontStyle.font = kControlFontSmallSystemFont;
+            }
+            break;
+            break ;
+        case wxWINDOW_VARIANT_LARGE :
+            size = kControlSizeLarge; 
+	        fontStyle.font = kControlFontBigSystemFont;
+            break ;
+        default:
+            wxFAIL_MSG(_T("unexpected window variant"));
+            break ;
+    }
+	::SetControlData( (ControlHandle) m_macControl , kControlEntireControl, kControlSizeTag, sizeof( ControlSize ), &size );
+	::SetControlFontStyle( (ControlHandle) m_macControl , &fontStyle );
+}

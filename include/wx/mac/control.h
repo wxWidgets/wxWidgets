@@ -57,7 +57,8 @@ public:
    
    virtual bool             Enable(bool enable = TRUE) ;
    virtual bool             Show(bool show = TRUE) ;
-
+   virtual void             DoSetWindowVariant( wxWindowVariant variant ) ;
+ 
    virtual void         MacRedrawControl () ;
    virtual void      MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
    virtual void             MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString label ,

@@ -96,6 +96,17 @@ WXDLLEXPORT_DATA(extern wxWindowList) wxTopLevelWindows;
 // temporarily switches event handlers).
 // ----------------------------------------------------------------------------
 
+// different window variants, on platforms like eg mac uses different rendering sizes
+
+enum wxWindowVariant 
+{
+    wxWINDOW_VARIANT_DEFAULT,       // Default size (usually == normal, may be set by a wxSystemOptions entry)
+    wxWINDOW_VARIANT_NORMAL,        // Normal size
+    wxWINDOW_VARIANT_SMALL,         // Smaller size (about 25 % smaller than normal )
+    wxWINDOW_VARIANT_MINI,          // Mini size (about 33 % smaller than normal )
+    wxWINDOW_VARIANT_LARGE,         // Large size (about 25 % larger than normal )
+};
+
 class WXDLLEXPORT wxWindowBase : public wxEvtHandler
 {
 public:
@@ -157,6 +168,11 @@ public:
         // same as the window title/label
     virtual void SetName( const wxString &name ) { m_windowName = name; }
     virtual wxString GetName() const { return m_windowName; }
+
+    // sets the window variant, calls internally DoSetVariant if variant has changed
+    void SetWindowVariant( wxWindowVariant variant ) ;
+    wxWindowVariant GetWindowVariant() const { return m_windowVariant ; }
+        
 
         // window id uniquely identifies the window among its siblings unless
         // it is -1 which means "don't care"
@@ -1034,6 +1050,8 @@ protected:
     int                   m_minVirtualHeight;
     int                   m_maxVirtualWidth;
     int                   m_maxVirtualHeight;
+    
+    wxWindowVariant       m_windowVariant ;
 
     // override this to change the default (i.e. used when no style is
     // specified) border for the window class
@@ -1132,6 +1150,8 @@ protected:
     virtual void AdjustForParentClientOrigin(int& x, int& y,
                                              int sizeFlags = 0) const;
 
+    // implements the window variants
+    virtual void DoSetWindowVariant( wxWindowVariant variant ) ;
 
 private:
 

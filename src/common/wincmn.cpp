@@ -186,11 +186,13 @@ wxWindowBase::wxWindowBase()
 #endif
 
     m_virtualSize = wxDefaultSize;
-
+    
     m_minVirtualWidth =
     m_minVirtualHeight =
     m_maxVirtualWidth =
     m_maxVirtualHeight = -1;
+
+    m_windowVariant = wxWINDOW_VARIANT_DEFAULT ;
 
     // Whether we're using the current theme for this window (wxGTK only for now)
     m_themeEnabled = false;
@@ -619,6 +621,43 @@ void wxWindowBase::SetSizeHints(int minW, int minH,
     m_maxWidth = maxW;
     m_minHeight = minH;
     m_maxHeight = maxH;
+}
+
+void wxWindowBase::SetWindowVariant( wxWindowVariant variant )
+{
+    if ( m_windowVariant == variant )
+        return ;
+    
+    m_windowVariant = variant ; 
+
+    DoSetWindowVariant( variant ) ;
+    return ;
+}
+
+void wxWindowBase::DoSetWindowVariant( wxWindowVariant variant )
+{
+    wxFont font = wxSystemSettings::GetSystemFont( wxSYS_DEFAULT_GUI_FONT ) ;
+    int size = font.GetPointSize() ;
+    switch ( variant )
+    {
+        case wxWINDOW_VARIANT_NORMAL :
+            break ;
+        case wxWINDOW_VARIANT_SMALL :
+            font.SetPointSize( size * 3 / 4 ) ;
+            break ;
+        case wxWINDOW_VARIANT_MINI :
+            font.SetPointSize( size * 2 / 3 ) ;
+            break ;
+        case wxWINDOW_VARIANT_LARGE :
+            font.SetPointSize( size * 5 / 4 ) ;
+            break ;
+        case wxWINDOW_VARIANT_DEFAULT :
+            break ;
+        default:
+            wxFAIL_MSG(_T("unexpected window variant"));
+            break ;
+    }
+    SetFont( font ) ;  
 }
 
 void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
