@@ -40,6 +40,7 @@ OBJECTS = \
 	dcmemory.obj,\
 	dcscreen.obj,\
         dnd.obj,\
+        evtloop.obj,\
 	font.obj,\
 	gdiobj.obj,\
         glcanvas.obj,\
@@ -114,6 +115,7 @@ SOURCES =\
 	dcscreen.cpp,\
 	dialog.cpp,\
         dnd.cpp,\
+        evtloop.cpp,\
 	font.cpp,\
 	fontdlg.cpp,\
 	frame.cpp,\
@@ -187,6 +189,7 @@ dcmemory.obj : dcmemory.cpp
 dcscreen.obj : dcscreen.cpp
 dialog.obj : dialog.cpp
 dnd.obj : dnd.cpp
+evtloop.obj : evtloop.cpp
 font.obj : font.cpp
 fontdlg.obj : fontdlg.cpp
 frame.obj : frame.cpp
