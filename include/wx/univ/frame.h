@@ -20,20 +20,31 @@
 // wxFrame
 // ----------------------------------------------------------------------------
 
-class wxFrame : public wxFrameNative
+class wxFrame : public wxFrameBase
 {
 public:
-    wxFrame();
+    wxFrame() {}
     wxFrame(wxWindow *parent,
             wxWindowID id,
             const wxString& title,
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE,
-            const wxString& name = wxFrameNameStr);
+            const wxString& name = wxFrameNameStr)
+    {
+        Create(parent, id, title, pos, size, style, name);
+    }
+            
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& title,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxDEFAULT_FRAME_STYLE,
+                const wxString& name = wxFrameNameStr);
 
     virtual wxPoint GetClientAreaOrigin() const;
-    virtual bool Enable( bool enable = TRUE );
+    virtual bool Enable(bool enable = TRUE);
 
 protected:
     void OnSize(wxSizeEvent& event);
