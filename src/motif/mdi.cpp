@@ -109,12 +109,6 @@ wxMDIParentFrame::~wxMDIParentFrame()
     m_clientWindow = NULL;
 }
 
-// Get size *available for subwindows* i.e. excluding menu bar.
-void wxMDIParentFrame::GetClientSize(int *x, int *y) const
-{
-    wxFrame::GetClientSize(x, y);
-}
-
 void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
 {
     m_frameMenuBar = menu_bar;
@@ -438,7 +432,7 @@ void wxMDIChildFrame::OnLower()
 // to wxWindows)
 void wxMDIChildFrame::SetClientSize(int width, int height)
 {
-    wxWindow::SetClientSize(width, height);
+    wxWindow::DoSetClientSize(width, height);
 }
 
 void wxMDIChildFrame::GetClientSize(int* width, int* height) const
@@ -446,9 +440,9 @@ void wxMDIChildFrame::GetClientSize(int* width, int* height) const
     wxWindow::GetSize(width, height);
 }
 
-void wxMDIChildFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxMDIChildFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxWindow::SetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 void wxMDIChildFrame::GetSize(int* width, int* height) const
@@ -590,14 +584,14 @@ bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
         return FALSE;
 }
 
-void wxMDIClientWindow::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxMDIClientWindow::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxWindow::SetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
 }
 
-void wxMDIClientWindow::SetClientSize(int width, int height)
+void wxMDIClientWindow::DoSetClientSize(int width, int height)
 {
-    wxWindow::SetClientSize(width, height);
+    wxWindow::DoSetClientSize(width, height);
 }
 
 void wxMDIClientWindow::GetClientSize(int *width, int *height) const

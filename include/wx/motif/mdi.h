@@ -117,91 +117,83 @@ DECLARE_EVENT_TABLE()
 class WXDLLEXPORT wxMDIChildFrame: public wxFrame
 {
 DECLARE_DYNAMIC_CLASS(wxMDIChildFrame)
+
 public:
+    wxMDIChildFrame();
+    wxMDIChildFrame(wxMDIParentFrame *parent,
+            wxWindowID id,
+            const wxString& title,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE,
+            const wxString& name = wxFrameNameStr)
+    {
+        Create(parent, id, title, pos, size, style, name);
+    }
 
-  wxMDIChildFrame();
-  inline wxMDIChildFrame(wxMDIParentFrame *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE,
-           const wxString& name = wxFrameNameStr)
-  {
-      Create(parent, id, title, pos, size, style, name);
-  }
+    ~wxMDIChildFrame();
 
-  ~wxMDIChildFrame();
+    bool Create(wxMDIParentFrame *parent,
+            wxWindowID id,
+            const wxString& title,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxDEFAULT_FRAME_STYLE,
+            const wxString& name = wxFrameNameStr);
 
-  bool Create(wxMDIParentFrame *parent,
-           wxWindowID id,
-           const wxString& title,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxDEFAULT_FRAME_STYLE,
-           const wxString& name = wxFrameNameStr);
+    // Set menu bar
+    void SetMenuBar(wxMenuBar *menu_bar);
+    void SetTitle(const wxString& title);
 
-  // Set menu bar
-  void SetMenuBar(wxMenuBar *menu_bar);
-  void SetTitle(const wxString& title);
+    void SetClientSize(int width, int height);
+    void GetClientSize(int *width, int *height);
+    void GetSize(int *width, int *height) const;
+    void GetPosition(int *x, int *y) const ;
 
-  void SetClientSize(int width, int height);
-  void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }
+    // Set icon
+    virtual void SetIcon(const wxIcon& icon);
 
-  void GetClientSize(int *width, int *height) const;
-  wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
+    // Override wxFrame operations
+    void CaptureMouse();
+    void ReleaseMouse();
+    void Raise();
+    void Lower(void);
+    void SetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    // MDI operations
+    virtual void Maximize();
+    virtual void Maximize(bool WXUNUSED(maximize)) { };
+    inline void Minimize() { Iconize(TRUE); };
+    virtual void Iconize(bool iconize);
+    virtual void Restore();
+    virtual void Activate();
+    virtual bool IsIconized() const ;
 
-  void GetSize(int *width, int *height) const;
-  wxSize GetSize() const { return wxWindow::GetSize(); }
+    // Is the frame maximized? Returns TRUE for
+    // wxMDIChildFrame due to the tabbed implementation.
+    virtual bool IsMaximized(void) const ;
 
-  void GetPosition(int *x, int *y) const ;
-  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+    bool Show(bool show);
 
-  // Set icon
-  virtual void SetIcon(const wxIcon& icon);
+    WXWidget GetMainWidget() const { return m_mainWidget; };
+    WXWidget GetTopWidget() const { return m_mainWidget; };
+    WXWidget GetClientWidget() const { return m_mainWidget; };
 
-  // Override wxFrame operations
-  void CaptureMouse();
-  void ReleaseMouse();
-  void Raise();
-  void Lower(void);
-  void SetSizeHints(int minW = -1, int minH = -1, int maxW = -1, int maxH = -1, int incW = -1, int incH = -1);
+    /*
+       virtual void OnRaise();
+       virtual void OnLower();
+     */
 
-  // MDI operations
-  virtual void Maximize();
-  virtual void Maximize(bool WXUNUSED(maximize)) { };
-  inline void Minimize() { Iconize(TRUE); };
-  virtual void Iconize(bool iconize);
-  virtual void Restore();
-  virtual void Activate();
-  virtual bool IsIconized() const ;
-
-  // Is the frame maximized? Returns TRUE for
-  // wxMDIChildFrame due to the tabbed implementation.
-  virtual bool IsMaximized(void) const ;
-
-  bool Show(bool show);
-
-  inline WXWidget GetMainWidget() const { return m_mainWidget; };
-  inline WXWidget GetTopWidget() const { return m_mainWidget; };
-  inline WXWidget GetClientWidget() const { return m_mainWidget; };
-
-/*
-  virtual void OnRaise();
-  virtual void OnLower();
-*/
-
-  inline void SetMDIParentFrame(wxMDIParentFrame* parentFrame) { m_mdiParentFrame = parentFrame; }
-  inline wxMDIParentFrame* GetMDIParentFrame() const { return m_mdiParentFrame; }
+    void SetMDIParentFrame(wxMDIParentFrame* parentFrame) { m_mdiParentFrame = parentFrame; }
+    wxMDIParentFrame* GetMDIParentFrame() const { return m_mdiParentFrame; }
 
 protected:
-  wxMDIParentFrame* m_mdiParentFrame;
+    wxMDIParentFrame* m_mdiParentFrame;
+
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetClientSize(int width, int height);
 };
 
 /* The client window is a child of the parent MDI frame, and itself
@@ -213,47 +205,38 @@ protected:
 
 class WXDLLEXPORT wxMDIClientWindow: public wxNotebook
 {
-  DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
- public:
+DECLARE_DYNAMIC_CLASS(wxMDIClientWindow)
 
-  wxMDIClientWindow() ;
-  inline wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
-  {
-      CreateClient(parent, style);
-  }
+public:
+    wxMDIClientWindow() ;
+    wxMDIClientWindow(wxMDIParentFrame *parent, long style = 0)
+    {
+        CreateClient(parent, style);
+    }
 
-  ~wxMDIClientWindow();
+    ~wxMDIClientWindow();
 
-   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-   void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-   void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    void GetClientSize(int *width, int *height) const;
+    void GetSize(int *width, int *height) const ;
+    void GetPosition(int *x, int *y) const ;
 
-   void SetClientSize(int width, int height);
-   void SetClientSize(const wxSize& size) { wxWindow::SetClientSize(size); }
+    // Note: this is virtual, to allow overridden behaviour.
+    virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
 
-   void GetClientSize(int *width, int *height) const;
-   wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
+    // Explicitly call default scroll behaviour
+    void OnScroll(wxScrollEvent& event);
 
-   void GetSize(int *width, int *height) const ;
-   wxSize GetSize() const { return wxWindow::GetSize(); }
-
-   void GetPosition(int *x, int *y) const ;
-   wxPoint GetPosition() const { return wxWindow::GetPosition(); }
-
-  // Note: this is virtual, to allow overridden behaviour.
-  virtual bool CreateClient(wxMDIParentFrame *parent, long style = wxVSCROLL | wxHSCROLL);
-
-  // Explicitly call default scroll behaviour
-  void OnScroll(wxScrollEvent& event);
-
-  // Implementation
-  void OnPageChanged(wxNotebookEvent& event);
+    // Implementation
+    void OnPageChanged(wxNotebookEvent& event);
 
 protected:
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetClientSize(int width, int height);
 
-DECLARE_EVENT_TABLE()
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif

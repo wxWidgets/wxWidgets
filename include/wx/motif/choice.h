@@ -23,70 +23,68 @@ WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 // Choice item
 class WXDLLEXPORT wxChoice: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxChoice)
+    DECLARE_DYNAMIC_CLASS(wxChoice)
 
- public:
-  wxChoice();
-  ~wxChoice();
+public:
+    wxChoice();
+    ~wxChoice();
 
-  inline wxChoice(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxChoiceNameStr)
-  {
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-  }
+    wxChoice(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr)
+    {
+        Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxChoiceNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr);
 
-  virtual void Append(const wxString& item);
-  virtual void Delete(int n);
-  virtual void Clear();
-  virtual int GetSelection() const ;
-  virtual void SetSelection(int n);
-  virtual int FindString(const wxString& s) const;
-  virtual wxString GetString(int n) const ;
+    virtual void Append(const wxString& item);
+    virtual void Delete(int n);
+    virtual void Clear();
+    virtual int GetSelection() const ;
+    virtual void SetSelection(int n);
+    virtual int FindString(const wxString& s) const;
+    virtual wxString GetString(int n) const ;
 
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    virtual wxString GetStringSelection() const ;
+    virtual bool SetStringSelection(const wxString& sel);
 
-  virtual wxString GetStringSelection() const ;
-  virtual bool SetStringSelection(const wxString& sel);
+    virtual int Number() const { return m_noStrings; }
+    virtual void Command(wxCommandEvent& event);
 
-  virtual inline int Number() const { return m_noStrings; }
-  virtual void Command(wxCommandEvent& event);
+    virtual void SetColumns(int n = 1 );
+    virtual int GetColumns() const ;
 
-  virtual void SetColumns(int n = 1 );
-  virtual int GetColumns() const ;
+    void SetFocus();
 
-  void SetFocus();
-
-// Implementation
-  virtual void ChangeFont(bool keepOriginalSize = TRUE);
-  virtual void ChangeBackgroundColour();
-  virtual void ChangeForegroundColour();
-  WXWidget GetTopWidget() const { return m_formWidget; }
-  WXWidget GetMainWidget() const { return m_buttonWidget; }
+    // Implementation
+    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeBackgroundColour();
+    virtual void ChangeForegroundColour();
+    WXWidget GetTopWidget() const { return m_formWidget; }
+    WXWidget GetMainWidget() const { return m_buttonWidget; }
 
 protected:
-  int           m_noStrings;
-  WXWidget      m_menuWidget;
-  WXWidget      m_buttonWidget;
-  WXWidget*     m_widgetList ;
-  WXWidget      m_formWidget;
-  wxStringList  m_stringList;
+    int           m_noStrings;
+    WXWidget      m_menuWidget;
+    WXWidget      m_buttonWidget;
+    WXWidget*     m_widgetList ;
+    WXWidget      m_formWidget;
+    wxStringList  m_stringList;
+
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

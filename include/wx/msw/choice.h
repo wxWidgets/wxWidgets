@@ -23,60 +23,59 @@ WXDLLEXPORT_DATA(extern const char*) wxChoiceNameStr;
 // Choice item
 class WXDLLEXPORT wxChoice: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxChoice)
+    DECLARE_DYNAMIC_CLASS(wxChoice)
 
- public:
-  inline wxChoice(void) { m_noStrings = 0; }
+public:
+    wxChoice() { m_noStrings = 0; }
 
-  inline wxChoice(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxChoiceNameStr)
-  {
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-  }
+    wxChoice(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr)
+    {
+        Create(parent, id, pos, size, n, choices, style, validator, name);
+    }
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxChoiceNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxChoiceNameStr);
 
-  virtual void Append(const wxString& item);
-  virtual void Delete(int n);
-  virtual void Clear(void);
-  virtual int GetSelection(void) const ;
-  virtual void SetSelection(int n);
-  virtual int FindString(const wxString& s) const;
-  virtual wxString GetString(int n) const ;
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual wxString GetStringSelection(void) const ;
-  virtual bool SetStringSelection(const wxString& sel);
+    virtual void Append(const wxString& item);
+    virtual void Delete(int n);
+    virtual void Clear();
+    virtual int GetSelection() const ;
+    virtual void SetSelection(int n);
+    virtual int FindString(const wxString& s) const;
+    virtual wxString GetString(int n) const ;
+    virtual wxString GetStringSelection() const ;
+    virtual bool SetStringSelection(const wxString& sel);
 
-  virtual inline int Number(void) const { return m_noStrings; }
-  virtual void Command(wxCommandEvent& event);
+    virtual int Number() const { return m_noStrings; }
+    virtual void Command(wxCommandEvent& event);
 
-  virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
 
-  virtual inline void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ } ;
-  virtual inline int GetColumns(void) const { return 1 ; };
+    virtual void SetColumns(int WXUNUSED(n) = 1 ) { /* No effect */ }
+    virtual int GetColumns() const { return 1 ; }
 
-  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
-  long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    long MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
-  int       m_noStrings;
+    int     m_noStrings;
 
+    virtual void DoSetSize(int x, int y,
+            int width, int height,
+            int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

@@ -37,30 +37,30 @@ public:
     ~wxTabControl(void);
 
     virtual void OnDraw(wxDC& dc, bool lastInRow);
-    inline void SetLabel(const wxString& str) { m_controlLabel = str; }
-    inline wxString GetLabel(void) const { return m_controlLabel; }
+    void SetLabel(const wxString& str) { m_controlLabel = str; }
+    wxString GetLabel(void) const { return m_controlLabel; }
 
-    inline void SetFont(const wxFont& f) { m_labelFont = f; }
-    inline wxFont *GetFont(void) const { return (wxFont*) & m_labelFont; }
+    void SetFont(const wxFont& f) { m_labelFont = f; }
+    wxFont *GetFont(void) const { return (wxFont*) & m_labelFont; }
 
-    inline void SetSelected(bool sel) { m_isSelected = sel; }
-    inline bool IsSelected(void) const { return m_isSelected; }
+    void SetSelected(bool sel) { m_isSelected = sel; }
+    bool IsSelected(void) const { return m_isSelected; }
 
-    inline void SetPosition(int x, int y) { m_offsetX = x; m_offsetY = y; }
-    inline void SetSize(int x, int y) { m_width = x; m_height = y; }
+    void SetPosition(int x, int y) { m_offsetX = x; m_offsetY = y; }
+    void SetSize(int x, int y) { m_width = x; m_height = y; }
 
-    inline void SetRowPosition(int r) { m_rowPosition = r; }
-    inline int GetRowPosition() const { return m_rowPosition; }
-    inline void SetColPosition(int c) { m_colPosition = c; }
-    inline int GetColPosition() const { return m_colPosition; }
+    void SetRowPosition(int r) { m_rowPosition = r; }
+    int GetRowPosition() const { return m_rowPosition; }
+    void SetColPosition(int c) { m_colPosition = c; }
+    int GetColPosition() const { return m_colPosition; }
 
-    inline int GetX(void) const { return m_offsetX; }
-    inline int GetY(void) const { return m_offsetY; }
-    inline int GetWidth(void) const { return m_width; }
-    inline int GetHeight(void) const { return m_height; }
+    int GetX(void) const { return m_offsetX; }
+    int GetY(void) const { return m_offsetY; }
+    int GetWidth(void) const { return m_width; }
+    int GetHeight(void) const { return m_height; }
 
-    inline int GetId(void) const { return m_id; }
-    inline void SetId(int i) { m_id = i; }
+    int GetId(void) const { return m_id; }
+    void SetId(int i) { m_id = i; }
 
     virtual bool HitTest(int x, int y) const ;
 

@@ -21,92 +21,88 @@
 WXDLLEXPORT_DATA(extern const char*) wxSliderNameStr;
 
 // Slider
-class WXDLLEXPORT wxSlider95: public wxControl
+class WXDLLEXPORT wxSlider95 : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxSlider95)
+    DECLARE_DYNAMIC_CLASS(wxSlider95)
 
 public:
-  wxSlider95(void);
+    wxSlider95();
 
-  inline wxSlider95(wxWindow *parent, wxWindowID id,
-           int value, int minValue, int maxValue,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxSL_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxSliderNameStr)
-  {
-      Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
-  }
+    wxSlider95(wxWindow *parent, wxWindowID id,
+            int value, int minValue, int maxValue,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxSL_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxSliderNameStr)
+    {
+        Create(parent, id, value, minValue, maxValue, pos, size, style, validator, name);
+    }
 
-  ~wxSlider95(void);
+    ~wxSlider95();
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           int value, int minValue, int maxValue,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxSL_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxSliderNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
+            int value, int minValue, int maxValue,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxSL_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxSliderNameStr);
 
-  virtual int GetValue(void) const ;
-  virtual void SetValue(int);
+    virtual int GetValue() const ;
+    virtual void SetValue(int);
 
-  void GetSize(int *x, int *y) const ;
-  wxSize GetSize() const { return wxWindow::GetSize(); }
+    void GetSize(int *x, int *y) const ;
+    void GetPosition(int *x, int *y) const ;
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+    bool Show(bool show);
 
-  void GetPosition(int *x, int *y) const ;
-  wxPoint GetPosition() const { return wxWindow::GetPosition(); }
+    void SetRange(int minValue, int maxValue);
 
-  bool Show(bool show);
+    int GetMin() const { return m_rangeMin; }
+    int GetMax() const { return m_rangeMax; }
 
-  void SetRange(int minValue, int maxValue);
+    // For trackbars only
+    void SetTickFreq(int n, int pos);
+    int GetTickFreq() const { return m_tickFreq; }
+    void SetPageSize(int pageSize);
+    int GetPageSize() const ;
+    void ClearSel() ;
+    void ClearTicks() ;
+    void SetLineSize(int lineSize);
+    int GetLineSize() const ;
+    int GetSelEnd() const ;
+    int GetSelStart() const ;
+    void SetSelection(int minPos, int maxPos);
+    void SetThumbLength(int len) ;
+    int GetThumbLength() const ;
+    void SetTick(int tickPos) ;
 
-  inline int GetMin(void) const { return m_rangeMin; }
-  inline int GetMax(void) const { return m_rangeMax; }
+    // IMPLEMENTATION
+    WXHWND GetStaticMin() const { return m_staticMin; }
+    WXHWND GetStaticMax() const { return m_staticMax; }
+    WXHWND GetEditValue() const { return m_staticValue; }
+    virtual bool ContainsHWND(WXHWND hWnd) const;
 
-  // For trackbars only
-  void SetTickFreq(int n, int pos);
-  inline int GetTickFreq(void) const { return m_tickFreq; }
-  void SetPageSize(int pageSize);
-  int GetPageSize(void) const ;
-  void ClearSel(void) ;
-  void ClearTicks(void) ;
-  void SetLineSize(int lineSize);
-  int GetLineSize(void) const ;
-  int GetSelEnd(void) const ;
-  int GetSelStart(void) const ;
-  void SetSelection(int minPos, int maxPos);
-  void SetThumbLength(int len) ;
-  int GetThumbLength(void) const ;
-  void SetTick(int tickPos) ;
+    void Command(wxCommandEvent& event);
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
+    void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
 
-  // IMPLEMENTATION
-  inline WXHWND GetStaticMin() const { return m_staticMin; }
-  inline WXHWND GetStaticMax() const { return m_staticMax; }
-  inline WXHWND GetEditValue() const { return m_staticValue; }
-  virtual bool ContainsHWND(WXHWND hWnd) const;
+protected:
+    WXHWND        m_staticMin;
+    WXHWND        m_staticMax;
+    WXHWND        m_staticValue;
+    int           m_rangeMin;
+    int           m_rangeMax;
+    int           m_pageSize;
+    int           m_lineSize;
+    int           m_tickFreq;
 
-  void Command(wxCommandEvent& event);
-  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-  void MSWOnVScroll(WXWORD wParam, WXWORD pos, WXHWND control);
-  void MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control);
-
- protected:
-  WXHWND        m_staticMin;
-  WXHWND        m_staticMax;
-  WXHWND        m_staticValue;
-  int           m_rangeMin;
-  int           m_rangeMax;
-  int           m_pageSize;
-  int           m_lineSize;
-  int           m_tickFreq;
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

@@ -68,7 +68,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
     bool wxFrame::m_useNativeStatusBar = FALSE;
 #endif
 
-wxFrame::wxFrame(void)
+wxFrame::wxFrame()
 {
   m_frameToolBar = NULL ;
   m_frameMenuBar = NULL;
@@ -126,7 +126,7 @@ bool wxFrame::Create(wxWindow *parent,
   return TRUE;
 }
 
-wxFrame::~wxFrame(void)
+wxFrame::~wxFrame()
 {
   m_isBeingDeleted = TRUE;
   wxTopLevelWindows.DeleteObject(this);
@@ -158,7 +158,7 @@ wxFrame::~wxFrame(void)
     ::BringWindowToTop((HWND) GetParent()->GetHWND());
 }
 
-WXHMENU wxFrame::GetWinMenu(void) const
+WXHMENU wxFrame::GetWinMenu() const
 {
   return m_hMenu;
 }
@@ -186,7 +186,7 @@ void wxFrame::GetClientSize(int *x, int *y) const
 
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
-void wxFrame::SetClientSize(int width, int height)
+void wxFrame::DoSetClientSize(int width, int height)
 {
   HWND hWnd = (HWND) GetHWND();
 
@@ -244,7 +244,7 @@ void wxFrame::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
-void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   int x1 = x;
@@ -329,14 +329,14 @@ void wxFrame::Maximize(bool maximize)
   m_iconized = FALSE;
 }
 
-bool wxFrame::IsIconized(void) const
+bool wxFrame::IsIconized() const
 {
   ((wxFrame *)this)->m_iconized = (::IsIconic((HWND) GetHWND()) != 0);
   return m_iconized;
 }
 
 // Is it maximized?
-bool wxFrame::IsMaximized(void) const
+bool wxFrame::IsMaximized() const
 {
     return (::IsZoomed((HWND) GetHWND()) != 0) ;
 }
@@ -346,7 +346,7 @@ void wxFrame::SetTitle(const wxString& title)
   SetWindowText((HWND) GetHWND(), (const char *)title);
 }
 
-wxString wxFrame::GetTitle(void) const
+wxString wxFrame::GetTitle() const
 {
   GetWindowText((HWND) GetHWND(), wxBuffer, 1000);
   return wxString(wxBuffer);
@@ -427,7 +427,7 @@ void wxFrame::SetStatusWidths(int n, const int widths_field[])
   PositionStatusBar();
 }
 
-void wxFrame::PositionStatusBar(void)
+void wxFrame::PositionStatusBar()
 {
   // native status bar positions itself
   if (m_frameStatusBar
@@ -515,7 +515,7 @@ bool wxFrame::LoadAccelerators(const wxString& table)
 }
 #endif
 
-void wxFrame::Fit(void)
+void wxFrame::Fit()
 {
   // Work out max. size
   wxNode *node = GetChildren().First();
@@ -633,7 +633,7 @@ void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *
     ::PostMessage((HWND) GetHWND(), WM_SIZE, SIZE_RESTORED, MAKELPARAM(width, height));
 }
 
-bool wxFrame::MSWOnPaint(void)
+bool wxFrame::MSWOnPaint()
 {
   RECT rect;
   if (GetUpdateRect((HWND) GetHWND(), &rect, FALSE))
@@ -679,7 +679,7 @@ bool wxFrame::MSWOnPaint(void)
   return 1;
 }
 
-WXHICON wxFrame::MSWOnQueryDragIcon(void)
+WXHICON wxFrame::MSWOnQueryDragIcon()
 {
   if (m_icon.Ok() && (m_icon.GetHICON() != 0))
     return m_icon.GetHICON();
@@ -738,7 +738,7 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
  }
 }
 
-bool wxFrame::MSWOnClose(void)
+bool wxFrame::MSWOnClose()
 {
     return Close();
 }
@@ -866,7 +866,7 @@ void wxFrame::OnCloseWindow(wxCloseEvent& event)
 }
 
 // Destroy the window (delayed, if a managed window)
-bool wxFrame::Destroy(void)
+bool wxFrame::Destroy()
 {
   if (!wxPendingDelete.Member(this))
     wxPendingDelete.Append(this);
@@ -898,7 +898,7 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
   }
 }
 
-wxMenuBar *wxFrame::GetMenuBar(void) const
+wxMenuBar *wxFrame::GetMenuBar() const
 {
   return m_frameMenuBar;
 }
@@ -1011,7 +1011,7 @@ wxToolBar* wxFrame::OnCreateToolBar(long style, wxWindowID id, const wxString& n
     return new wxToolBar(this, id, wxDefaultPosition, wxDefaultSize, style, name);
 }
 
-void wxFrame::PositionToolBar(void)
+void wxFrame::PositionToolBar()
 {
     RECT rect;
     ::GetClientRect((HWND) GetHWND(), &rect);

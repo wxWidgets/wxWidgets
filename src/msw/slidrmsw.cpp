@@ -34,7 +34,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSliderMSW, wxControl)
 #endif
 
 // Slider
-wxSliderMSW::wxSliderMSW(void)
+wxSliderMSW::wxSliderMSW()
 {
   m_staticValue = 0;
   m_staticMin = 0;
@@ -235,7 +235,7 @@ void wxSliderMSW::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 	MSWOnVScroll(wParam, pos, control);
 }
 
-wxSliderMSW::~wxSliderMSW(void)
+wxSliderMSW::~wxSliderMSW()
 {
     if (m_staticMin)
       DestroyWindow((HWND) m_staticMin);
@@ -245,7 +245,7 @@ wxSliderMSW::~wxSliderMSW(void)
       DestroyWindow((HWND) m_staticValue);
 }
 
-int wxSliderMSW::GetValue(void) const
+int wxSliderMSW::GetValue() const
 {
   return ::GetScrollPos((HWND) GetHWND(), SB_CTL);
 }
@@ -314,7 +314,7 @@ void wxSliderMSW::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
-void wxSliderMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxSliderMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int x1 = x;
   int y1 = y;
@@ -501,16 +501,16 @@ void wxSliderMSW::SetPageSize(int pageSize)
   m_pageSize = pageSize;
 }
 
-int wxSliderMSW::GetPageSize(void) const
+int wxSliderMSW::GetPageSize() const
 {
   return m_pageSize;
 }
 
-void wxSliderMSW::ClearSel(void)
+void wxSliderMSW::ClearSel()
 {
 }
 
-void wxSliderMSW::ClearTicks(void)
+void wxSliderMSW::ClearTicks()
 {
 }
 
@@ -519,17 +519,17 @@ void wxSliderMSW::SetLineSize(int lineSize)
   m_lineSize = lineSize;
 }
 
-int wxSliderMSW::GetLineSize(void) const
+int wxSliderMSW::GetLineSize() const
 {
   return m_lineSize;
 }
 
-int wxSliderMSW::GetSelEnd(void) const
+int wxSliderMSW::GetSelEnd() const
 {
   return 0;
 }
 
-int wxSliderMSW::GetSelStart(void) const
+int wxSliderMSW::GetSelStart() const
 {
   return 0;
 }
@@ -542,7 +542,7 @@ void wxSliderMSW::SetThumbLength(int len)
 {
 }
 
-int wxSliderMSW::GetThumbLength(void) const
+int wxSliderMSW::GetThumbLength() const
 {
   return 0;
 }

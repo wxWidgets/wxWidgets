@@ -102,7 +102,7 @@ void wxStaticBox::SetLabel(const wxString& label)
   SetWindowText((HWND)m_hWnd, (const char *)label);
 }
 
-void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

@@ -20,54 +20,48 @@
 
 WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
 
-class WXDLLEXPORT wxStaticBitmap: public wxControl
+class WXDLLEXPORT wxStaticBitmap : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
- public:
-  inline wxStaticBitmap() { }
-  ~wxStaticBitmap();
+DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 
-  inline wxStaticBitmap(wxWindow *parent, wxWindowID id,
-           const wxBitmap& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = 0,
-           const wxString& name = wxStaticBitmapNameStr)
-  {
-    Create(parent, id, label, pos, size, style, name);
-  }
+public:
+    wxStaticBitmap() { }
+    ~wxStaticBitmap();
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxBitmap& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = 0,
-           const wxString& name = wxStaticBitmapNameStr);
+    wxStaticBitmap(wxWindow *parent, wxWindowID id,
+            const wxBitmap& label,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = 0,
+            const wxString& name = wxStaticBitmapNameStr)
+    {
+        Create(parent, id, label, pos, size, style, name);
+    }
 
-  virtual void SetBitmap(const wxBitmap& bitmap);
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxBitmap& label,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = 0,
+            const wxString& name = wxStaticBitmapNameStr);
 
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
-  virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
+    virtual void SetBitmap(const wxBitmap& bitmap);
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) {};
+    virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) {};
 
-  inline wxBitmap& GetBitmap() const { return (wxBitmap&) m_messageBitmap; }
+    wxBitmap& GetBitmap() const { return (wxBitmap&) m_messageBitmap; }
 
-  // overriden base class virtuals
-  virtual bool AcceptsFocus() const { return FALSE; }
+    // overriden base class virtuals
+    virtual bool AcceptsFocus() const { return FALSE; }
 
-// Implementation
-  virtual void ChangeFont(bool keepOriginalSize = TRUE);
-  virtual void ChangeBackgroundColour();
-  virtual void ChangeForegroundColour();
+    // Implementation
+    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeBackgroundColour();
+    virtual void ChangeForegroundColour();
 
- protected:
-  wxBitmap m_messageBitmap;
-
+protected:
+    wxBitmap m_messageBitmap;
 };
 
 #endif

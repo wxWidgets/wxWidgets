@@ -290,7 +290,7 @@ void wxDialog::OnSize( wxSizeEvent &WXUNUSED(event) )
     }
 }
 
-void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
+void wxDialog::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid dialog" );
     wxASSERT_MSG( (m_wxwindow != NULL), "invalid dialog" );
@@ -348,11 +348,6 @@ void wxDialog::SetSize( int x, int y, int width, int height, int sizeFlags )
     }
 
     m_resizing = FALSE;
-}
-
-void wxDialog::SetSize( int width, int height )
-{
-    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
 }
 
 void wxDialog::GtkOnSize( int WXUNUSED(x), int WXUNUSED(y), int width, int height )

@@ -131,7 +131,7 @@ void wxSlider::GetSize(int *width, int *height) const
     wxControl::GetSize(width, height);
 }
 
-void wxSlider::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxSlider::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     Widget widget = (Widget) m_mainWidget;
     

@@ -82,11 +82,6 @@ wxStaticBitmap::~wxStaticBitmap()
     SetBitmap(wxNullBitmap);
 }
 
-void wxStaticBitmap::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::SetSize(x, y, width, height, sizeFlags);
-}
-
 void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
 {
     m_messageBitmap = bitmap;

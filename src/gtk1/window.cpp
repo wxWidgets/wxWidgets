@@ -9,7 +9,7 @@
 
 
 #ifdef __GNUG__
-#pragma implementation "window.h"
+    #pragma implementation "window.h"
 #endif
 
 #include "wx/defs.h"
@@ -21,12 +21,15 @@
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/msgdlg.h"
+
 #if wxUSE_DRAG_AND_DROP
-#include "wx/dnd.h"
+    #include "wx/dnd.h"
 #endif
+
 #if wxUSE_TOOLTIPS
-#include "wx/tooltip.h"
+    #include "wx/tooltip.h"
 #endif
+
 #include "wx/menu.h"
 #include "wx/statusbr.h"
 #include "wx/intl.h"
@@ -1798,7 +1801,7 @@ void wxWindow::AdjustForParentClientOrigin( int& x, int& y, int sizeFlags )
     }
 }
 
-void wxWindow::SetSize( int x, int y, int width, int height, int sizeFlags )
+void wxWindow::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid window" );
     wxASSERT_MSG( (m_parent != NULL), "wxWindow::SetSize requires parent.\n" );
@@ -1883,16 +1886,6 @@ void wxWindow::OnInternalIdle()
     UpdateWindowUI();
 }
 
-void wxWindow::SetSize( int width, int height )
-{
-    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
-}
-
-void wxWindow::Move( int x, int y )
-{
-    SetSize( x, y, -1, -1, wxSIZE_USE_EXISTING );
-}
-
 void wxWindow::GetSize( int *width, int *height ) const
 {
     wxCHECK_RET( (m_widget != NULL), "invalid window" );
@@ -1901,7 +1894,7 @@ void wxWindow::GetSize( int *width, int *height ) const
     if (height) (*height) = m_height;
 }
 
-void wxWindow::SetClientSize( int width, int height )
+void wxWindow::DoSetClientSize( int width, int height )
 {
     wxCHECK_RET( (m_widget != NULL), "invalid window" );
 

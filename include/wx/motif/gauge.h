@@ -21,57 +21,52 @@
 WXDLLEXPORT_DATA(extern const char*) wxGaugeNameStr;
 
 // Group box
-class WXDLLEXPORT wxGauge: public wxControl
+class WXDLLEXPORT wxGauge : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxGauge)
- public:
-  inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; }
+    DECLARE_DYNAMIC_CLASS(wxGauge)
 
-  inline wxGauge(wxWindow *parent, wxWindowID id,
-           int range,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxGA_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxGaugeNameStr)
-  {
-    Create(parent, id, range, pos, size, style, validator, name);
-  }
+public:
+    inline wxGauge() { m_rangeMax = 0; m_gaugePos = 0; }
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           int range,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           long style = wxGA_HORIZONTAL,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxGaugeNameStr);
+    inline wxGauge(wxWindow *parent, wxWindowID id,
+            int range,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxGA_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxGaugeNameStr)
+    {
+        Create(parent, id, range, pos, size, style, validator, name);
+    }
 
-  void SetShadowWidth(int w);
-  void SetBezelFace(int w);
-  void SetRange(int r);
-  void SetValue(int pos);
+    bool Create(wxWindow *parent, wxWindowID id,
+            int range,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            long style = wxGA_HORIZONTAL,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxGaugeNameStr);
 
-  int GetShadowWidth() const ;
-  int GetBezelFace() const ;
-  int GetRange() const ;
-  int GetValue() const ;
+    void SetShadowWidth(int w);
+    void SetBezelFace(int w);
+    void SetRange(int r);
+    void SetValue(int pos);
 
-  void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    int GetShadowWidth() const ;
+    int GetBezelFace() const ;
+    int GetRange() const ;
+    int GetValue() const ;
 
-  virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
+    virtual void Command(wxCommandEvent& WXUNUSED(event)) {} ;
 
-// Implementation
-  virtual void ChangeFont(bool keepOriginalSize = TRUE);
-  virtual void ChangeBackgroundColour();
-  virtual void ChangeForegroundColour();
+    // Implementation
+    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeBackgroundColour();
+    virtual void ChangeForegroundColour();
 
- protected:
-   int      m_rangeMax;
-   int      m_gaugePos;
+protected:
+    int      m_rangeMax;
+    int      m_gaugePos;
 };
 
 #endif

@@ -40,7 +40,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSlider95, wxControl)
 #endif
 
 // Slider
-wxSlider95::wxSlider95(void)
+wxSlider95::wxSlider95()
 {
   m_staticValue = 0;
   m_staticMin = 0;
@@ -264,7 +264,7 @@ void wxSlider95::MSWOnHScroll(WXWORD wParam, WXWORD pos, WXHWND control)
 	MSWOnVScroll(wParam, pos, control);
 }
 
-wxSlider95::~wxSlider95(void)
+wxSlider95::~wxSlider95()
 {
     if (m_staticMin)
       DestroyWindow((HWND) m_staticMin);
@@ -274,7 +274,7 @@ wxSlider95::~wxSlider95(void)
       DestroyWindow((HWND) m_staticValue);
 }
 
-int wxSlider95::GetValue(void) const
+int wxSlider95::GetValue() const
 {
   return ::SendMessage((HWND) GetHWND(), TBM_GETPOS, 0, 0);
 }
@@ -343,7 +343,7 @@ void wxSlider95::GetPosition(int *x, int *y) const
   *y = point.y;
 }
 
-void wxSlider95::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxSlider95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int x1 = x;
   int y1 = y;
@@ -553,17 +553,17 @@ void wxSlider95::SetPageSize(int pageSize)
   m_pageSize = pageSize;
 }
 
-int wxSlider95::GetPageSize(void) const
+int wxSlider95::GetPageSize() const
 {
   return m_pageSize;
 }
 
-void wxSlider95::ClearSel(void)
+void wxSlider95::ClearSel()
 {
   ::SendMessage( (HWND) GetHWND(), TBM_CLEARSEL, (WPARAM) TRUE, (LPARAM) 0 );
 }
 
-void wxSlider95::ClearTicks(void)
+void wxSlider95::ClearTicks()
 {
   ::SendMessage( (HWND) GetHWND(), TBM_CLEARTICS, (WPARAM) TRUE, (LPARAM) 0 );
 }
@@ -574,17 +574,17 @@ void wxSlider95::SetLineSize(int lineSize)
   ::SendMessage( (HWND) GetHWND(), TBM_SETLINESIZE, (WPARAM) 0, (LPARAM) lineSize );
 }
 
-int wxSlider95::GetLineSize(void) const
+int wxSlider95::GetLineSize() const
 {
   return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETLINESIZE, (WPARAM) 0, (LPARAM) 0 );
 }
 
-int wxSlider95::GetSelEnd(void) const
+int wxSlider95::GetSelEnd() const
 {
   return (int) ::SendMessage( (HWND) GetHWND(), TBM_SETSELEND, (WPARAM) 0, (LPARAM) 0 );
 }
 
-int wxSlider95::GetSelStart(void) const
+int wxSlider95::GetSelStart() const
 {
   return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETSELSTART, (WPARAM) 0, (LPARAM) 0 );
 }
@@ -599,7 +599,7 @@ void wxSlider95::SetThumbLength(int len)
   ::SendMessage( (HWND) GetHWND(), TBM_SETTHUMBLENGTH, (WPARAM) len, (LPARAM) 0 );
 }
 
-int wxSlider95::GetThumbLength(void) const
+int wxSlider95::GetThumbLength() const
 {
   return (int) ::SendMessage( (HWND) GetHWND(), TBM_GETTHUMBLENGTH, (WPARAM) 0, (LPARAM) 0 );
 }

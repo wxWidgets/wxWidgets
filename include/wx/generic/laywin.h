@@ -67,22 +67,24 @@ public:
         m_alignment = wxLAYOUT_TOP;
         m_orientation = wxLAYOUT_HORIZONTAL;
     }
-// Read by the app
-    inline void SetRequestedLength(int length) { m_requestedLength = length; }
-    inline int GetRequestedLength() const { return m_requestedLength; }
 
-    inline void SetFlags(int flags) { m_flags = flags; }
-    inline int GetFlags() const { return m_flags; }
+    // Read by the app
+    void SetRequestedLength(int length) { m_requestedLength = length; }
+    int GetRequestedLength() const { return m_requestedLength; }
 
-// Set by the app
-    inline void SetSize(const wxSize& size) { m_size = size; }
-    inline wxSize GetSize() const { return m_size; }
+    void SetFlags(int flags) { m_flags = flags; }
+    int GetFlags() const { return m_flags; }
 
-    inline void SetOrientation(wxLayoutOrientation orient) { m_orientation = orient; }
-    inline wxLayoutOrientation GetOrientation() const { return m_orientation; }
+    // Set by the app
+    void SetSize(const wxSize& size) { m_size = size; }
+    wxSize GetSize() const { return m_size; }
 
-    inline void SetAlignment(wxLayoutAlignment align) { m_alignment = align; }
-    inline wxLayoutAlignment GetAlignment() const { return m_alignment; }
+    void SetOrientation(wxLayoutOrientation orient) { m_orientation = orient; }
+    wxLayoutOrientation GetOrientation() const { return m_orientation; }
+
+    void SetAlignment(wxLayoutAlignment align) { m_alignment = align; }
+    wxLayoutAlignment GetAlignment() const { return m_alignment; }
+
 protected:
     int                     m_flags;
     int                     m_requestedLength;

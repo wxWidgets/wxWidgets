@@ -349,7 +349,7 @@ void wxChoice::SetFocus()
     XmProcessTraversal(XtParent((Widget)m_mainWidget), XmTRAVERSE_CURRENT);
 }
 
-void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_ANY, NULL);
     bool managed = XtIsManaged((Widget) m_formWidget);
@@ -380,7 +380,7 @@ void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
         XtManageChild ((Widget) m_formWidget);
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
     
-    wxControl::SetSize (x, y, width, height, sizeFlags);
+    wxControl::DoSetSize (x, y, width, height, sizeFlags);
 }
 
 wxString wxChoice::GetStringSelection () const

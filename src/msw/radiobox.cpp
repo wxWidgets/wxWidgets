@@ -569,7 +569,7 @@ void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
 #endif
 
 // Restored old code.
-void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

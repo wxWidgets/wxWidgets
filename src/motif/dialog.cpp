@@ -335,18 +335,12 @@ XtVaGetValues((Widget) m_mainWidget, XmNiconic, &iconic, NULL);
     return FALSE;
 }
 
-void wxDialog::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxDialog::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     XtVaSetValues((Widget) m_mainWidget, XmNresizePolicy, XmRESIZE_ANY, NULL);
-    wxWindow::SetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
     XtVaSetValues((Widget) m_mainWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 }
-
-void wxDialog::SetClientSize(int width, int height)
-{
-    SetSize(-1, -1, width, height);
-}
-
 
 void wxDialog::SetTitle(const wxString& title)
 {

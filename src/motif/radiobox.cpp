@@ -297,7 +297,7 @@ wxString wxRadioBox::GetString(int n) const
     return m_radioButtonLabels[n];
 }
 
-void wxRadioBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxRadioBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     bool managed = XtIsManaged((Widget) m_formWidget);
 

@@ -22,7 +22,7 @@ WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
 
 class WXDLLEXPORT wxStaticBitmap : public wxControl
 {
-DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
+    DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
 
 public:
     wxStaticBitmap() { }
@@ -49,12 +49,6 @@ public:
     virtual void Command(wxCommandEvent& WXUNUSED(event)) { }
     virtual void ProcessCommand(wxCommandEvent& WXUNUSED(event)) { }
     
-    void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-    void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-        { wxWindow::SetSize(rect, sizeFlags); }
-    void SetSize(const wxSize& size)
-        { wxWindow::SetSize(size); }
-    
     wxBitmap& GetBitmap(void) const { return (wxBitmap&) m_messageBitmap; }
     
     // overriden base class virtuals
@@ -67,6 +61,9 @@ public:
 protected:
     wxBitmap m_messageBitmap;
     
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

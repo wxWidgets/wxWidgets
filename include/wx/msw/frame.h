@@ -56,23 +56,9 @@ public:
 
     virtual bool Destroy();
 
-    void SetClientSize(int width, int height);
-    void SetClientSize(const wxSize& sz) { wxWindow::SetClientSize(sz); }
-
     void GetClientSize(int *width, int *height) const;
-    wxSize GetClientSize() const { return wxWindow::GetClientSize(); }
-
     void GetSize(int *width, int *height) const ;
-    wxSize GetSize() const { return wxWindow::GetSize(); }
-
     void GetPosition(int *x, int *y) const ;
-    wxPoint GetPosition() const { return wxWindow::GetPosition(); }
-
-    virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-    virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-    virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-    virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
 
     virtual void ClientToScreen(int *x, int *y) const;
 
@@ -207,6 +193,11 @@ protected:
 #if wxUSE_TOOLTIPS
     WXHWND                m_hwndToolTip;
 #endif // tooltips
+
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
+    virtual void DoSetClientSize(int width, int height);
 
 private:
     DECLARE_EVENT_TABLE()

@@ -320,7 +320,7 @@ void wxObject::LoadObject( wxObjectInputStream& stream )
   m_serialObj->LoadObject(stream);
 }
 
-#endif
+#endif // wxUSE_SERIAL
 
 /*
  * wxObject: cloning of objects

@@ -123,7 +123,7 @@ void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
     // TODO
 }
 
-void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxBitmapCheckBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     // TODO
 }

@@ -134,11 +134,6 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     return TRUE;
 }
 
-void wxGauge::SetSize(int x, int y, int width, int height, int sizeFlags)
-{
-    wxControl::SetSize(x, y, width, height, sizeFlags);
-}
-
 void wxGauge::SetShadowWidth(int w)
 {
     if (w == 0)

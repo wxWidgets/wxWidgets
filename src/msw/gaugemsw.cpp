@@ -142,7 +142,7 @@ bool wxGaugeMSW::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxGaugeMSW::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxGaugeMSW::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

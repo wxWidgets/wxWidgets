@@ -94,7 +94,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxStaticText::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxStaticText::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

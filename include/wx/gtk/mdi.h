@@ -131,8 +131,11 @@ class wxMDIChildFrame: public wxFrame
   virtual void SetStatusWidths( int WXUNUSED(n), int *WXUNUSED(width) ) {}
 
     // no size hints
-  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH), int WXUNUSED(maxW), 
-    int WXUNUSED(maxH), int WXUNUSED(incW) ) {}
+  virtual void SetSizeHints( int WXUNUSED(minW), int WXUNUSED(minH),
+                             int WXUNUSED(maxW), int WXUNUSED(maxH),
+                             int WXUNUSED(incW) )
+  {
+  }
   
     // no toolbar bars
   virtual wxToolBar* CreateToolBar( long WXUNUSED(style), wxWindowID WXUNUSED(id), 

@@ -28,86 +28,84 @@ WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 // List box item
 class WXDLLEXPORT wxListBox: public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxListBox)
- public:
+DECLARE_DYNAMIC_CLASS(wxListBox)
 
-  wxListBox();
-  inline wxListBox(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr):
-              m_clientDataList(wxKEY_INTEGER)
-  {
-    Create(parent, id, pos, size, n, choices, style, validator, name);
-  }
+public:
+    wxListBox();
+    wxListBox(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxListBoxNameStr):
+        m_clientDataList(wxKEY_INTEGER)
+        {
+            Create(parent, id, pos, size, n, choices, style, validator, name);
+        }
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize,
-           int n = 0, const wxString choices[] = NULL,
-           long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxListBoxNameStr);
+    bool Create(wxWindow *parent, wxWindowID id,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize,
+            int n = 0, const wxString choices[] = NULL,
+            long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxListBoxNameStr);
 
-  ~wxListBox();
+    ~wxListBox();
 
-  virtual void Append(const wxString& item);
-  virtual void Append(const wxString& item, char *clientData);
-  virtual void Set(int n, const wxString* choices, char **clientData = NULL);
-  virtual int FindString(const wxString& s) const ;
-  virtual void Clear();
-  virtual void SetSelection(int n, bool select = TRUE);
+    virtual void Append(const wxString& item);
+    virtual void Append(const wxString& item, char *clientData);
+    virtual void Set(int n, const wxString* choices, char **clientData = NULL);
+    virtual int FindString(const wxString& s) const ;
+    virtual void Clear();
+    virtual void SetSelection(int n, bool select = TRUE);
 
-  virtual void Deselect(int n);
+    virtual void Deselect(int n);
 
-  // For single choice list item only
-  virtual int GetSelection() const ;
-  virtual void Delete(int n);
-  virtual char *GetClientData(int n) const ;
-  virtual void *GetClientData() { return wxWindow::GetClientData(); }
-  virtual void SetClientData(int n, char *clientData);
-  virtual void SetClientData( void *data ) { wxWindow::SetClientData(data); }
-  virtual void SetString(int n, const wxString& s);
+    // For single choice list item only
+    virtual int GetSelection() const ;
+    virtual void Delete(int n);
+    virtual char *GetClientData(int n) const ;
+    virtual void *GetClientData() { return wxWindow::GetClientData(); }
+    virtual void SetClientData(int n, char *clientData);
+    virtual void SetClientData( void *data ) { wxWindow::SetClientData(data); }
+    virtual void SetString(int n, const wxString& s);
 
-  // For single or multiple choice list item
-  virtual int GetSelections(wxArrayInt& aSelections) const;
-  virtual bool Selected(int n) const ;
-  virtual wxString GetString(int n) const ;
+    // For single or multiple choice list item
+    virtual int GetSelections(wxArrayInt& aSelections) const;
+    virtual bool Selected(int n) const ;
+    virtual wxString GetString(int n) const ;
 
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  virtual void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  virtual void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
-  virtual void SetSize(int width, int height) { SetSize(-1, -1, width, height, wxSIZE_USE_EXISTING); }
+    // Set the specified item at the first visible item
+    // or scroll to max range.
+    virtual void SetFirstItem(int n) ;
+    virtual void SetFirstItem(const wxString& s) ;
 
-  // Set the specified item at the first visible item
-  // or scroll to max range.
-  virtual void SetFirstItem(int n) ;
-  virtual void SetFirstItem(const wxString& s) ;
+    virtual void InsertItems(int nItems, const wxString items[], int pos);
 
-  virtual void InsertItems(int nItems, const wxString items[], int pos);
+    virtual wxString GetStringSelection() const ;
+    virtual bool SetStringSelection(const wxString& s, bool flag = TRUE);
+    virtual int Number() const ;
 
-  virtual wxString GetStringSelection() const ;
-  virtual bool SetStringSelection(const wxString& s, bool flag = TRUE);
-  virtual int Number() const ;
+    void Command(wxCommandEvent& event);
 
-  void Command(wxCommandEvent& event);
-
-// Implementation
-  virtual void ChangeFont(bool keepOriginalSize = TRUE);
-  virtual void ChangeBackgroundColour();
-  virtual void ChangeForegroundColour();
-  WXWidget GetTopWidget() const;
+    // Implementation
+    virtual void ChangeFont(bool keepOriginalSize = TRUE);
+    virtual void ChangeBackgroundColour();
+    virtual void ChangeForegroundColour();
+    WXWidget GetTopWidget() const;
 
 protected:
-  int       m_noItems;
-  int       m_selected;
+    int       m_noItems;
+    int       m_selected;
 
-  // List mapping positions->client data
-  wxList    m_clientDataList;
+    // List mapping positions->client data
+    wxList    m_clientDataList;
+
+    virtual void DoSetSize(int x, int y,
+            int width, int height,
+            int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

@@ -140,7 +140,7 @@ bool wxListBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 }
 
 // Listbox item
-wxListBox::wxListBox(void)
+wxListBox::wxListBox()
 {
   m_noItems = 0;
   m_selected = 0;
@@ -258,7 +258,7 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-wxListBox::~wxListBox(void)
+wxListBox::~wxListBox()
 {
 #if wxUSE_OWNER_DRAWN
     size_t uiCount = m_aItems.Count();
@@ -268,7 +268,7 @@ wxListBox::~wxListBox(void)
 #endif
 }
 
-void wxListBox::SetupColours(void)
+void wxListBox::SetupColours()
 {
   SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOW));
   SetForegroundColour(GetParent()->GetForegroundColour());
@@ -377,7 +377,7 @@ int wxListBox::FindString(const wxString& s) const
    return pos;
 }
 
-void wxListBox::Clear(void)
+void wxListBox::Clear()
 {
   ListBox_ResetContent(hwnd);
 
@@ -474,7 +474,7 @@ wxString wxListBox::GetString(int N) const
   return wxString(wxBuffer);
 }
 
-void wxListBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxListBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -640,13 +640,13 @@ void wxListBox::SetString(int N, const wxString& s)
 #endif  //USE_OWNER_DRAWN
 }
 
-int wxListBox::Number (void) const
+int wxListBox::Number () const
 {
   return m_noItems;
 }
 
 // For single selection items only
-wxString wxListBox::GetStringSelection (void) const
+wxString wxListBox::GetStringSelection () const
 {
   int sel = GetSelection ();
   if (sel > -1)

@@ -94,7 +94,7 @@ bool wxGauge95::Create(wxWindow *parent, wxWindowID id,
   return TRUE;
 }
 
-void wxGauge95::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxGauge95::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

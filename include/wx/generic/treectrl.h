@@ -207,7 +207,7 @@ public:
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
                long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-	       const wxValidator &validator = wxDefaultValidator,
+               const wxValidator &validator = wxDefaultValidator,
                const wxString& name = wxTreeCtrlNameStr)
     {
         Create(parent, id, pos, size, style, validator, name);
@@ -219,7 +219,7 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = wxTR_HAS_BUTTONS | wxTR_LINES_AT_ROOT,
-	        const wxValidator &validator = wxDefaultValidator,
+                const wxValidator &validator = wxDefaultValidator,
                 const wxString& name = wxTreeCtrlNameStr);
 
     // accessors
@@ -409,7 +409,7 @@ public:
     wxTreeItemId HitTest(const wxPoint& point)
         { int dummy; return HitTest(point, dummy); }
     wxTreeItemId HitTest(const wxPoint& point, int& flags);
-    
+
         // start editing the item label: this (temporarily) replaces the item
         // with a one line edit control. The item will be selected if it hadn't
         // been before. textCtrlClass parameter allows you to create an edit

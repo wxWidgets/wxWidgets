@@ -24,6 +24,7 @@
 #include "wx/utils.h"
 #include "wx/intl.h"
 #include "wx/wx.h"
+#include "wx/dynarray.h"
 #endif
 
 #ifndef __WIN16__

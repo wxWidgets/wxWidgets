@@ -96,7 +96,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
   return TRUE;
 }
 
-void wxButton::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxButton::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

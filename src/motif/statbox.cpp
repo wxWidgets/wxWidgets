@@ -182,9 +182,9 @@ wxString wxStaticBox::GetLabel() const
     }
 }
 
-void wxStaticBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxStaticBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxControl::SetSize (x, y, width, height, sizeFlags);
+    wxControl::DoSetSize (x, y, width, height, sizeFlags);
 
     if (m_labelWidget)
     {

@@ -412,7 +412,7 @@ void wxFrame::GetClientSize(int *x, int *y) const
 
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
-void wxFrame::SetClientSize(int width, int height)
+void wxFrame::DoSetClientSize(int width, int height)
 {
     // Calculate how large the new main window should be
     // by finding the difference between the client area and the
@@ -480,7 +480,7 @@ void wxFrame::GetPosition(int *x, int *y) const
     if (y) *y = yy;
 }
 
-void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     if (x > -1)
         XtVaSetValues((Widget) m_frameShell, XmNx, x, NULL);

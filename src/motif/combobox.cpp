@@ -102,10 +102,10 @@ wxComboBox::~wxComboBox()
     m_mainWidget = (WXWidget) 0;
 }
 
-void wxComboBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxComboBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
     // Necessary so it doesn't call wxChoice::SetSize
-    wxWindow::SetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
 }
 
 wxString wxComboBox::GetValue() const

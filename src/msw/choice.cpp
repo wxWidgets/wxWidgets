@@ -180,7 +180,7 @@ wxString wxChoice::GetString(int n) const
   return wxString(wxBuffer);
 }
 
-void wxChoice::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxChoice::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

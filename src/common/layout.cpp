@@ -1273,7 +1273,7 @@ void wxSizer::RemoveSizerChild(wxWindow *child)
   GetChildren().DeleteObject(child);
 }
 
-void wxSizer::SetSize(int x, int y, int w, int h, int WXUNUSED(flags))
+void wxSizer::DoSetSize(int x, int y, int w, int h, int WXUNUSED(flags))
 {
   wxLayoutConstraints *constr = GetConstraints();
   if (x != -1)
@@ -1498,11 +1498,6 @@ bool wxRowColSizer::Create(wxWindow *parent, bool rc, int n, wxSizerBehaviour be
 
 wxRowColSizer::~wxRowColSizer()
 {
-}
-
-void wxRowColSizer::SetSize(int x, int y, int w, int h, int flags)
-{
-  wxSizer::SetSize(x, y, w, h, flags);
 }
 
 bool wxRowColSizer::LayoutPhase1(int *noChanges)

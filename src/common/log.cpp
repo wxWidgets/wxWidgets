@@ -994,10 +994,10 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
   // make life easier for people using VC++ IDE: clicking on the message will
   // take us immediately to the place of the failed assert
 #ifdef __VISUALC__
-  sprintf(szBuf, _("%s(%d): assert failed"), szFile, nLine);
+  sprintf(szBuf, "%s(%d): assert failed", szFile, nLine);
 #else  // !VC++
   // make the error message more clear for all the others
-  sprintf(szBuf, _("Assert failed in file %s at line %d"), szFile, nLine);
+  sprintf(szBuf, "Assert failed in file %s at line %d", szFile, nLine);
 #endif // VC/!VC
 
   if ( szMsg != NULL ) {
@@ -1015,9 +1015,9 @@ void wxOnAssert(const char *szFile, int nLine, const char *szMsg)
     #if wxUSE_NOGUI
       Trap();
     #else
-      strcat(szBuf, _("\nDo you want to stop the program?"
-                      "\nYou can also choose [Cancel] to suppress "
-                      "further warnings."));
+      strcat(szBuf, "\nDo you want to stop the program?"
+                    "\nYou can also choose [Cancel] to suppress "
+                    "further warnings.");
 
       switch ( wxMessageBox(szBuf, _("Debug"),
                             wxYES_NO | wxCANCEL | wxICON_STOP ) ) {

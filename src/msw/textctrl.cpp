@@ -311,7 +311,7 @@ void wxTextCtrl::SetValue(const wxString& value)
     SetWindowText((HWND) GetHWND(), (const char *)value);
 }
 
-void wxTextCtrl::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxTextCtrl::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);

@@ -118,7 +118,7 @@ void wxCheckBox::SetLabel(const wxString& label)
   SetWindowText((HWND)GetHWND(), label);
 }
 
-void wxCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxCheckBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -174,7 +174,7 @@ void wxCheckBox::SetValue(bool val)
 #define BST_CHECKED 0x0001
 #endif
 
-bool wxCheckBox::GetValue(void) const
+bool wxCheckBox::GetValue() const
 {
 #ifdef __WIN32__
   return (SendMessage((HWND) GetHWND(), BM_GETCHECK, 0, 0) == BST_CHECKED);
@@ -275,7 +275,7 @@ void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
 {
 }
 
-void wxBitmapCheckBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxBitmapCheckBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
   int currentX, currentY;
   GetPosition(&currentX, &currentY);
@@ -307,7 +307,7 @@ void wxBitmapCheckBox::SetValue(bool val)
   SendMessage((HWND) GetHWND(), BM_SETCHECK, val, 0);
 }
 
-bool wxBitmapCheckBox::GetValue(void) const
+bool wxBitmapCheckBox::GetValue() const
 {
   return ((0x003 & SendMessage((HWND) GetHWND(), BM_GETCHECK, 0, 0)) == 0x003);
 }

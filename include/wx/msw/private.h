@@ -84,8 +84,8 @@ typedef signed short int SHORT ;
 #endif
 
 #if wxUSE_PENWIN
-WXDLLEXPORT void wxRegisterPenWin(void);
-WXDLLEXPORT void wxCleanUpPenWin(void);
+WXDLLEXPORT void wxRegisterPenWin();
+WXDLLEXPORT void wxCleanUpPenWin();
 WXDLLEXPORT void wxEnablePenAppHooks (bool hook);
 #endif
 
@@ -106,7 +106,7 @@ VOID    WINAPI ibAdjustWindowRect( HWND hWnd, LPRECT lprc ) ;
  * - NULL any extra child window pointers not created for this item
  *   (e.g. label control that wasn't needed)
  * - delete any extra child windows in the destructor (e.g. label control)
- * - implement GetSize and SetSize
+ * - implement DoSetSize
  * - to find panel position if coordinates are (-1, -1), use GetPosition
  * - call AdvanceCursor after creation, for panel layout mechanism.
  *

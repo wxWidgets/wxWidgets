@@ -22,38 +22,39 @@
 WXDLLEXPORT_DATA(extern const char*) wxButtonNameStr;
 
 // Pushbutton
-class WXDLLEXPORT wxButton: public wxControl
+class WXDLLEXPORT wxButton : public wxControl
 {
-  DECLARE_DYNAMIC_CLASS(wxButton)
- public:
-  inline wxButton(void) {}
-  inline wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-  {
-      Create(parent, id, label, pos, size, style, validator, name);
-  }
+DECLARE_DYNAMIC_CLASS(wxButton)
 
-  bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr);
+public:
+    wxButton() { }
+    wxButton(wxWindow *parent, wxWindowID id, const wxString& label,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxButtonNameStr)
+    {
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
 
-  virtual void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
-  void SetSize(const wxRect& rect, int sizeFlags = wxSIZE_AUTO)
-    { wxWindow::SetSize(rect, sizeFlags); }
-  void SetSize(const wxSize& size) { wxWindow::SetSize(size); }
+    bool Create(wxWindow *parent, wxWindowID id, const wxString& label,
+            const wxPoint& pos = wxDefaultPosition,
+            const wxSize& size = wxDefaultSize, long style = 0,
+            const wxValidator& validator = wxDefaultValidator,
+            const wxString& name = wxButtonNameStr);
 
-  virtual void SetDefault(void);
-  virtual void SetLabel(const wxString& label);
-  virtual wxString GetLabel(void) const ;
-  virtual void Command(wxCommandEvent& event);
-  virtual bool MSWCommand(WXUINT param, WXWORD id);
-  virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-			WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual void SetDefault();
+    virtual void SetLabel(const wxString& label);
+    virtual wxString GetLabel() const ;
+    virtual void Command(wxCommandEvent& event);
+    virtual bool MSWCommand(WXUINT param, WXWORD id);
+    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
+            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+
+protected:
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 };
 
 #endif

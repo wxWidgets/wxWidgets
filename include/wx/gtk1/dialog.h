@@ -37,70 +37,72 @@ extern const char *wxDialogNameStr;
 
 class wxDialog: public wxPanel
 {
-  DECLARE_DYNAMIC_CLASS(wxDialog)
+    DECLARE_DYNAMIC_CLASS(wxDialog)
 
 public:
-  wxDialog();
-  wxDialog( wxWindow *parent, wxWindowID id,
+    wxDialog();
+    wxDialog( wxWindow *parent, wxWindowID id,
             const wxString &title,
             const wxPoint &pos = wxDefaultPosition,
             const wxSize &size = wxDefaultSize,
             long style = wxDEFAULT_DIALOG_STYLE,
             const wxString &name = wxDialogNameStr );
-  bool Create( wxWindow *parent, wxWindowID id,
-               const wxString &title,
-               const wxPoint &pos = wxDefaultPosition,
-               const wxSize &size = wxDefaultSize,
-               long style = wxDEFAULT_DIALOG_STYLE,
-               const wxString &name = wxDialogNameStr );
-  ~wxDialog();
+    bool Create( wxWindow *parent, wxWindowID id,
+            const wxString &title,
+            const wxPoint &pos = wxDefaultPosition,
+            const wxSize &size = wxDefaultSize,
+            long style = wxDEFAULT_DIALOG_STYLE,
+            const wxString &name = wxDialogNameStr );
+    ~wxDialog();
 
-  void SetTitle(const wxString& title);
-  wxString GetTitle() const;
+    void SetTitle(const wxString& title);
+    wxString GetTitle() const;
 
-  void OnApply( wxCommandEvent &event );
-  void OnCancel( wxCommandEvent &event );
-  void OnOK( wxCommandEvent &event );
-  void OnPaint( wxPaintEvent& event );
-  void OnSize( wxSizeEvent &event );
-  void OnCloseWindow( wxCloseEvent& event );
-/*
-  void OnCharHook( wxKeyEvent& event );
-*/
+    void OnApply( wxCommandEvent &event );
+    void OnCancel( wxCommandEvent &event );
+    void OnOK( wxCommandEvent &event );
+    void OnPaint( wxPaintEvent& event );
+    void OnSize( wxSizeEvent &event );
+    void OnCloseWindow( wxCloseEvent& event );
+    /*
+       void OnCharHook( wxKeyEvent& event );
+     */
 
-  bool Destroy();
+    bool Destroy();
 
-  virtual void SetSize( int x, int y, int width, int height,
-      int sizeFlags = wxSIZE_AUTO );
-  virtual void SetSize( int width, int height );
+    virtual bool Show( bool show );
+    virtual int ShowModal();
+    virtual void EndModal( int retCode );
+    virtual bool IsModal() const;
+    void SetModal( bool modal );
 
-  virtual bool Show( bool show );
-  virtual int ShowModal();
-  virtual void EndModal( int retCode );
-  virtual bool IsModal() const;
-  void SetModal( bool modal );
+    virtual void InitDialog(void);
 
-  virtual void InitDialog(void);
+    virtual void Centre( int direction = wxHORIZONTAL );
 
-  virtual void Centre( int direction = wxHORIZONTAL );
+    virtual void SetIcon( const wxIcon &icon );
+    virtual void Iconize( bool WXUNUSED(iconize)) { }
+    virtual bool IsIconized() const { return FALSE; }
+    bool Iconized() const { return IsIconized(); }
+    virtual void Maximize() { }
+    virtual void Restore() { }
 
-  virtual void SetIcon( const wxIcon &icon );
-  virtual void Iconize( bool WXUNUSED(iconize)) { }
-  virtual bool IsIconized() const { return FALSE; }
-  bool Iconized() const { return IsIconized(); }
-  virtual void Maximize() { }
-  virtual void Restore() { }
+    // implementation
 
-// implementation
+    virtual void GtkOnSize( int x, int y, int width, int height );
+    virtual void OnInternalIdle();
 
-  virtual void GtkOnSize( int x, int y, int width, int height );
-  virtual void OnInternalIdle();
+    bool       m_modalShowing;
+    wxString   m_title;
+    wxIcon     m_icon;
 
-  bool       m_modalShowing;
-  wxString   m_title;
-  wxIcon     m_icon;
+protected:
+    virtual void DoSetSize(int x, int y,
+                           int width, int height,
+                           int sizeFlags = wxSIZE_AUTO);
 
-  DECLARE_EVENT_TABLE()
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 #endif // __GTKDIALOGH__

@@ -512,9 +512,9 @@ wxString wxListBox::GetString(int N) const
         return wxEmptyString;
 }
 
-void wxListBox::SetSize(int x, int y, int width, int height, int sizeFlags)
+void wxListBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 {
-    wxWindow::SetSize(x, y, width, height, sizeFlags);
+    wxWindow::DoSetSize(x, y, width, height, sizeFlags);
     
     // Check resulting size is correct
     int tempW, tempH;

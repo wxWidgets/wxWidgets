@@ -249,7 +249,7 @@ wxPoint wxFrame::GetClientAreaOrigin() const
     return pt;
 }
 
-void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
+void wxFrame::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
 
@@ -312,11 +312,6 @@ void wxFrame::SetSize( int x, int y, int width, int height, int sizeFlags )
     m_resizing = FALSE;
 }
 
-void wxFrame::SetSize( int width, int height )
-{
-    SetSize( -1, -1, width, height, wxSIZE_USE_EXISTING );
-}
-
 void wxFrame::Centre( int direction )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
@@ -353,7 +348,7 @@ void wxFrame::GetClientSize( int *width, int *height ) const
     }
 }
 
-void wxFrame::SetClientSize( int width, int height )
+void wxFrame::DoSetClientSize( int width, int height )
 {
     wxASSERT_MSG( (m_widget != NULL), "invalid frame" );
 
