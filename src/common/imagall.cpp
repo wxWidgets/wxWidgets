@@ -38,6 +38,9 @@ void wxInitAllImageHandlers()
 #if wxUSE_LIBJPEG
   wxImage::AddHandler( new wxJPEGHandler );
 #endif
+#if wxUSE_LIBTIFF
+  wxImage::AddHandler( new wxTIFFHandler );
+#endif
 #if wxUSE_GIF
   wxImage::AddHandler( new wxGIFHandler );
 #endif
