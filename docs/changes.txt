@@ -89,6 +89,7 @@ wxMSW:
 - wxWindow::Freeze()/Thaw() can now be nested
 - Added wxSP_NO_XP_THEME style to wxSplitterWindow to switch off
   XP theming (some applications look bad without 3D borders)
+- wxMenuBar::GetLabelTop() doesn't include '&'s in the label any more
 
 
 2.5.1
