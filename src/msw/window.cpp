@@ -1533,11 +1533,13 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
     // will not be correct as the difference between the total and client size
     // changes - so we keep changing it until we get it right
     //
-    // normally this loop shouldn't take more than 2 iterations (usually 1 but
-    // if scrollbars [dis]appear as the result of the first call, then 2) but
-    // just to be on the safe side we check for it instead of making it an
+    // normally this loop shouldn't take more than 3 iterations (usually 1 but
+    // if scrollbars [dis]appear as the result of the first call, then 2 and it
+    // may become 3 if the window had 0 size originally and so we didn't
+    // calculate the scrollbar correction correctly during the first iteration)
+    // but just to be on the safe side we check for it instead of making it an
     // "infinite" loop (i.e. leaving break inside as the only way to get out)
-    for ( int i = 0; i < 3; i++ )
+    for ( int i = 0; i < 4; i++ )
     {
         RECT rectClient;
         ::GetClientRect(GetHwnd(), &rectClient);
@@ -1548,7 +1550,7 @@ void wxWindowMSW::DoSetClientSize(int width, int height)
             break;
         }
 
-        if ( i == 2 )
+        if ( i == 3 )
         {
             // how did it happen? maybe OnSize() handler does something really
             // strange in this class?
