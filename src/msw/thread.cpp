@@ -26,7 +26,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+#    include "wx/wx.h"
 #endif
 
 #if wxUSE_THREADS
@@ -36,12 +36,18 @@
 #include "wx/module.h"
 #include "wx/thread.h"
 
+#ifdef Yield
+#    undef Yield
+#endif
+
 // must have this symbol defined to get _beginthread/_endthread declarations
 #ifndef _MT
     #define _MT
 #endif
 
-#if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
+#if defined(__VISUALC__) || \
+    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
+    (defined(__GNUG__) && defined(__MSVCRT__))
 
 #if defined(__BORLANDC__) && !defined(__MT__)
 // I can't set -tWM in the IDE (anyone?) so have to do this
@@ -52,7 +58,6 @@
 // Needed to know about _beginthreadex etc..
 #define __MFC_COMPAT__
 #endif
-
 
     #include <process.h>
 #endif
@@ -926,7 +931,9 @@ void wxThread::Exit(ExitCode status)
         delete this;
     }
 
-#if defined(__VISUALC__) || (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500))
+#if defined(__VISUALC__) || \
+    (defined(__BORLANDC__) && (__BORLANDC__ >= 0x500)) || \
+    (defined(__GNUG__) && defined(__MSVCRT__))
     _endthreadex((unsigned)status);
 #else // !VC++
     ::ExitThread((DWORD)status);
