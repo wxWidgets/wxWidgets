@@ -104,7 +104,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 // have two versions of this in wxWindowDC tp avoid function hiding
 // since there are two of these in wxDCBase, and in turn in wxDC.
 // VA cannot resolve this so:
-    dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL, FALSE);
+    dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
 #else
     dc.GetTextExtent(message, &widthText, (long*)NULL);
 #endif

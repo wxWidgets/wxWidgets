@@ -31,7 +31,7 @@ public:
     virtual void Notify() = 0;                 // Override this member
 
     // Returns the current interval time (0 if stop)
-    int Interval() const { return m_milli; }; 
+    int Interval() const { return m_milli; };
     bool OneShot() const { return m_oneShot; }
 
 protected:
@@ -51,8 +51,6 @@ private:
 
 // Timer functions (milliseconds)
 void WXDLLEXPORT wxStartTimer();
-// Gets time since last wxStartTimer or wxGetElapsedTime
-long WXDLLEXPORT wxGetElapsedTime(bool resetTimer = TRUE);
 
 // EXPERIMENTAL: comment this out if it doesn't compile.
 bool WXDLLEXPORT wxGetLocalTime(long *timeZone, int *dstObserved);
