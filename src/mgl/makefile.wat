@@ -102,6 +102,7 @@ COMMONOBJS = &
 	cshelp.obj &
 	ctrlcmn.obj &
 	ctrlsub.obj &
+	datacmn.obj &
 	datetime.obj &
 	datstrm.obj &
 	db.obj &
@@ -577,6 +578,9 @@ ctrlcmn.obj:     $(COMMDIR)\ctrlcmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 ctrlsub.obj:     $(COMMDIR)\ctrlsub.cpp
+  *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
+
+datacmn.obj:     $(COMMDIR)\datacmn.cpp
   *$(CCC) $(CPPFLAGS) $(IFLAGS) $<
 
 datetime.obj:     $(COMMDIR)\datetime.cpp

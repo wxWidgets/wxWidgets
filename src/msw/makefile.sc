@@ -70,6 +70,7 @@ COMMONOBJS = \
 		$(COMMDIR)\cshelp.obj \
 		$(COMMDIR)\ctrlcmn.obj \
 		$(COMMDIR)\ctrlsub.obj \
+		$(COMMDIR)\datacmn.obj \
 		$(COMMDIR)\datetime.obj \
 		$(COMMDIR)\datstrm.obj \
 		$(COMMDIR)\db.obj \

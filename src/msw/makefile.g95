@@ -110,6 +110,7 @@ COMMONOBJS_BASE  = \
 		$(COMMDIR)/clntdata.$(OBJSUFF) \
 		$(COMMDIR)/cmdline.$(OBJSUFF) \
 		$(COMMDIR)/config.$(OBJSUFF) \
+		$(COMMDIR)/datacmn.$(OBJSUFF) \
 		$(COMMDIR)/datetime.$(OBJSUFF) \
 		$(COMMDIR)/datstrm.$(OBJSUFF) \
 		$(COMMDIR)/db.$(OBJSUFF) \

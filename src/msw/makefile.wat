@@ -77,6 +77,7 @@ NONESSENTIALOBJS= $(OUTPUTDIR)\accel.obj &
 	$(OUTPUTDIR)\timer.obj
 
 COMMONOBJS = &
+	$(OUTPUTDIR)\y_tab.obj &
 	$(OUTPUTDIR)\accesscmn.obj &
 	$(OUTPUTDIR)\appcmn.obj &
 	$(OUTPUTDIR)\artprov.obj &
@@ -92,6 +93,7 @@ COMMONOBJS = &
 	$(OUTPUTDIR)\cshelp.obj &
 	$(OUTPUTDIR)\ctrlcmn.obj &
 	$(OUTPUTDIR)\ctrlsub.obj &
+	$(OUTPUTDIR)\datacmn.obj &
 	$(OUTPUTDIR)\datetime.obj &
 	$(OUTPUTDIR)\datstrm.obj &
 	$(OUTPUTDIR)\db.obj &
@@ -755,6 +757,9 @@ $(OUTPUTDIR)\ctrlcmn.obj:     $(COMMDIR)\ctrlcmn.cpp
 $(OUTPUTDIR)\ctrlsub.obj:     $(COMMDIR)\ctrlsub.cpp
   *$(CXX) $(CXXFLAGS) $<
 
+$(OUTPUTDIR)\datacmn.obj:     $(COMMDIR)\datacmn.cpp
+  *$(CXX) $(CXXFLAGS) $<
+
 $(OUTPUTDIR)\datetime.obj:     $(COMMDIR)\datetime.cpp
   *$(CXX) $(CXXFLAGS) $<
 
@@ -1104,6 +1109,15 @@ $(OUTPUTDIR)\zstream.obj:     $(COMMDIR)\zstream.cpp
   *$(CXX) $(CXXFLAGS) $<
 
 
+
+$(OUTPUTDIR)\y_tab.obj:     $(COMMDIR)\y_tab.c $(COMMDIR)\lex_yy.c
+  *$(CC) $(CFLAGS) -DUSE_DEFINE $(COMMDIR)\y_tab.c
+
+$(COMMDIR)\y_tab.c:     $(COMMDIR)\dosyacc.c
+        copy $(COMMDIR)\dosyacc.c $(COMMDIR)\y_tab.c
+
+$(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
+    copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 ########################################################
 # Generic objects (not always compiled, depending on

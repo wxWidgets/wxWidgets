@@ -390,6 +390,7 @@ COMMONOBJS = \
 		$(MSWDIR)\cshelp.obj \
 		$(MSWDIR)\ctrlcmn.obj \
 		$(MSWDIR)\ctrlsub.obj \
+		$(MSWDIR)\datacmn.obj \
 		$(MSWDIR)\datetime.obj \
 		$(MSWDIR)\datstrm.obj \
 		$(MSWDIR)\db.obj \
@@ -1041,6 +1042,8 @@ $(MSWDIR)\cshelp.obj: $(COMMDIR)\cshelp.$(SRCSUFF)
 $(MSWDIR)\ctrlcmn.obj: $(COMMDIR)\ctrlcmn.$(SRCSUFF)
 
 $(MSWDIR)\ctrlsub.obj: $(COMMDIR)\ctrlsub.$(SRCSUFF)
+
+$(MSWDIR)\datacmn.obj: $(COMMDIR)\datacmn.$(SRCSUFF)
 
 $(MSWDIR)\datetime.obj: $(COMMDIR)\datetime.$(SRCSUFF)
 

@@ -148,6 +148,7 @@ COMMONOBJS = \
 		$(COMMDIR)\$D\cshelp.obj \
 		$(COMMDIR)\$D\ctrlcmn.obj \
 		$(COMMDIR)\$D\ctrlsub.obj \
+		$(COMMDIR)\$D\datacmn.obj \
 		$(COMMDIR)\$D\datetime.obj \
 		$(COMMDIR)\$D\datstrm.obj \
 		$(COMMDIR)\$D\db.obj \

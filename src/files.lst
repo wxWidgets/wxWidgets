@@ -6,6 +6,7 @@ ALL_SOURCES = \
 		common/clntdata.cpp \
 		common/cmdline.cpp \
 		common/config.cpp \
+		common/datacmn.cpp \
 		common/datetime.cpp \
 		common/datstrm.cpp \
 		common/db.cpp \
@@ -195,6 +196,7 @@ BASE_OBJS = \
 		clntdata.o \
 		cmdline.o \
 		config.o \
+		datacmn.o \
 		datetime.o \
 		datstrm.o \
 		db.o \

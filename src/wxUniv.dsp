@@ -149,6 +149,10 @@ SOURCE=.\common\ctrlsub.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\datacmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\datetime.cpp
 # End Source File
 # Begin Source File

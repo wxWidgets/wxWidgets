@@ -306,6 +306,9 @@ void wxApp::ExitMainLoop()
 // Is a message/event pending?
 bool wxApp::Pending()
 {
+<<<<<<< app.cpp
+    return XtAppPending( (XtAppContext) GetAppContext() ) != 0;
+=======
     return m_eventLoop->Pending();
 #if 0
     XFlush(XtDisplay( (Widget) wxTheApp->GetTopLevelWidget() ));
@@ -314,6 +317,7 @@ bool wxApp::Pending()
     // is found.
     return ((XtAppPending( (XtAppContext) GetAppContext() ) & XtIMXEvent) != 0) ;
 #endif
+>>>>>>> 1.57
 }
 
 // Dispatch a message.
