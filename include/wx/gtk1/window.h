@@ -107,6 +107,8 @@ public:
     // implementation
     // --------------
 
+    virtual WXWidget GetHandle() const { return m_widget; }
+
     // wxWindows callbacks
     void OnKeyDown( wxKeyEvent &event );
 
@@ -192,27 +194,23 @@ public:
     bool                 m_isFrame:1;       /* faster than IS_KIND_OF */
     bool                 m_acceptsFocus:1;  /* ! wxStaticBox etc.  */
     
-    // these are true if the style were set before the
-    // widget was realized (typcally in the constructor)
-    // but the actual GTK style must not be set before
-    // the widget has been "realized"
+    // these are true if the style were set before the widget was realized
+    // (typcally in the constructor) but the actual GTK style must not be set
+    // before the widget has been "realized"
     bool                 m_delayedFont:1;
     bool                 m_delayedForegroundColour:1;
     bool                 m_delayedBackgroundColour:1;
     bool                 m_delayedCursor:1;
 
-    // contains GTK's widgets internal information
-    // about non-default widget font and colours.
-    // we create one for each widget that gets any
-    // non-default attribute set via SetFont() or
-    // SetForegroundColour() / SetBackgroundColour().
+    // contains GTK's widgets internal information about non-default widget
+    // font and colours. we create one for each widget that gets any
+    // non-default attribute set via SetFont() or SetForegroundColour() /
+    // SetBackgroundColour().
     GtkStyle            *m_widgetStyle;
 
-    // C++ has no virtual methods in the constrcutor
-    // of any class but we need different methods
-    // of inserting a child window into a wxFrame,
-    // wxMDIFrame, wxNotebook etc. this is the
-    // callback that will get used.
+    // C++ has no virtual methods in the constrcutor of any class but we need
+    // different methods of inserting a child window into a wxFrame,
+    // wxMDIFrame, wxNotebook etc. this is the callback that will get used.
     wxInsertChildFunction  m_insertCallback;
 
     // implement the base class pure virtuals

@@ -595,27 +595,14 @@ public:
     void OnSysColourChanged( wxSysColourChangedEvent& event );
     void OnInitDialog( wxInitDialogEvent &event );
 
-/*
-    // What is this doing in the platform independent part?
-    // No doc specifies this. Of what use would that be?
-
-    // the window handle (for the underlying windowing system)
-    union
-    {
-        // we have 2 common names for this member, one for MSW and the other
-        // for the rest of the world
-        WXWidget m_widget;
-        WXWidget m_hWnd;
-    };
-    
-    // accessor
-    WXWidget GetHandle() const { return m_widget; }
-    
-*/
+        // get the haqndle of the window for the underlying window system: this
+        // is only used for wxWin itself or for user code which wants to call
+        // platform-specific APIs
+    virtual WXWidget GetHandle() const = 0;
 
 protected:
     // the window id - a number which uniquely identifies a window among 
-    // its siblings  unless it is -1
+    // its siblings unless it is -1
     wxWindowID           m_windowId;
 
     // the parent window of this window (or NULL) and the list of the children

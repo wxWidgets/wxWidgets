@@ -165,8 +165,9 @@ public:
     // simple accessors
     // ----------------
 
-    WXHWND GetHWND() const { return GetHandle(); }
-    void SetHWND(WXHWND hWnd) { m_widget = hWnd; }
+    WXHWND GetHWND() const { return m_hWnd; }
+    void SetHWND(WXHWND hWnd) { m_hWnd = hWnd; }
+    virtual WXWidget GetHandle() const { return GetHWND(); }
 
     bool GetUseCtl3D() const { return m_useCtl3D; }
     bool GetTransparentBackground() const { return m_backgroundTransparent; }
@@ -340,6 +341,9 @@ public:
     }
 
 protected:
+    // the window handle
+    WXHWND                m_hWnd;
+
     // the old window proc (we subclass all windows)
     WXFARPROC             m_oldWndProc;
 
