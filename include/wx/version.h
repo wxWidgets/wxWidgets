@@ -19,9 +19,10 @@
 
 /*  NB: this file is parsed by Perl code in tmake templates in distrib/msw/tmake */
 /*      so don't change its format too much or they could break */
-#define wxMAJOR_VERSION    2
-#define wxMINOR_VERSION    5
-#define wxRELEASE_NUMBER   2
+#define wxMAJOR_VERSION      2
+#define wxMINOR_VERSION      5
+#define wxRELEASE_NUMBER     2
+#define wxSUBRELEASE_NUMBER  1
 #define wxVERSION_STRING   _T("wxWidgets 2.5.2")
 
 /*  nothing to update below this line when updating the version */
@@ -47,6 +48,14 @@
     (wxMAJOR_VERSION > (major) || \
     (wxMAJOR_VERSION == (major) && wxMINOR_VERSION > (minor)) || \
     (wxMAJOR_VERSION == (major) && wxMINOR_VERSION == (minor) && wxRELEASE_NUMBER >= (release)))
+
+/* the same but check the subrelease also */
+#define wxCHECK_VERSION_FULL(major,minor,release,subrel) \
+    wxCHECK_VERSION(major, minor, release) && \
+        ((major) != wxMAJOR_VERSION || \
+            (minor) != wxMINOR_VERSION || \
+                (release) != wxRELEASE_NUMBER || \
+                    (subrel) >= wxSUBRELEASE_NUMBER)
 
 #endif /*  _WX_VERSION_H_ */
 

@@ -38,6 +38,7 @@ the corresponding topic.
 \helpref{wxCHECK\_MSG}{wxcheckmsg}\\
 \helpref{wxCHECK\_RET}{wxcheckret}\\
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
+\helpref{wxCHECK\_VERSION\_FULL}{wxcheckversionfull}\\
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}\\
 \helpref{wxClientDisplayRect}{wxclientdisplayrect}\\
 \helpref{wxClipboardOpen}{functionwxclipboardopen}\\
@@ -253,6 +254,8 @@ The following constants are defined in wxWidgets:
 \item {\tt wxMAJOR\_VERSION} is the major version of wxWidgets
 \item {\tt wxMINOR\_VERSION} is the minor version of wxWidgets
 \item {\tt wxRELEASE\_NUMBER} is the release number
+\item {\tt wxSUBRELEASE\_NUMBER} is the subrelease number which is $0$ for all
+official releases
 \end{itemize}
 
 For example, the values or these constants for wxWidgets 2.1.15 are 2, 1 and
@@ -263,9 +266,21 @@ the full wxWidgets version and {\tt wxVERSION\_NUMBER} is a combination of the
 three version numbers above: for 2.1.15, it is 2115 and it is 2200 for
 wxWidgets 2.2.
 
+The subrelease number is only used for the sources in between official releases
+and so normally is not useful.
+
 \wxheading{Include files}
 
 <wx/version.h> or <wx/defs.h>
+
+
+\membersection{wxCHECK\_GCC\_VERSION}\label{wxcheckgccversion}
+
+\func{bool}{wxCHECK\_GCC\_VERSION}{\param{}{major, minor, release}}
+
+Returns $1$ if the compiler being used to compile the code is GNU C++
+compiler (g++) version major.minor.release or greater. Otherwise, and also if
+the compiler is not GNU C++ at all, returns $0$.
 
 
 \membersection{wxCHECK\_VERSION}\label{wxcheckversion}
@@ -291,13 +306,12 @@ the following can be done:
 \end{verbatim}
 
 
-\membersection{wxCHECK\_GCC\_VERSION}\label{wxcheckgccversion}
+\membersection{wxCHECK\_VERSION\_FULL}\label{wxcheckversionfull}
 
-\func{bool}{wxCHECK\_GCC\_VERSION}{\param{}{major, minor, release}}
+\func{bool}{wxCHECK\_VERSION\_FULL}{\param{}{major, minor, release, subrel}}
 
-Returns $1$ if the compiler being used to compile the code is GNU C++
-compiler (g++) version major.minor.release or greater. Otherwise, and also if
-the compiler is not GNU C++ at all, returns $0$.
+Same as \helpref{wxCHECK\_VERSION}{wxcheckversion} but also checks that 
+\texttt{wxSUBRELEASE\_NUMBER} is at least \arg{subrel}.
 
 
 \membersection{wxCHECK\_W32API\_VERSION}\label{wxcheckw32apiversion}
