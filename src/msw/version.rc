@@ -27,6 +27,12 @@
     #define DLL_SUFFIX ""
 #endif
 
+#ifdef _UNICODE
+    #define LANG "04090000"
+#else
+    #define LANG "040904b0"
+#endif
+
 1 VERSIONINFO
  FILEVERSION wxMAJOR_VERSION,wxMINOR_VERSION,wxRELEASE_NUMBER,wxBETA_NUMBER
  PRODUCTVERSION wxMAJOR_VERSION,wxMINOR_VERSION,wxRELEASE_NUMBER,wxBETA_NUMBER
@@ -39,23 +45,7 @@ BEGIN
     BLOCK "StringFileInfo"
     BEGIN
         // US English Ascii; see http://msdn.microsoft.com/library/psdk/winui/rc_3rxn.htm for codes
-        BLOCK "04090000" 
-        BEGIN
-            VALUE "Comments", "wxWindows cross-platform GUI framework\0"
-            VALUE "CompanyName", "wxWindows development team\0"
-            VALUE "FileDescription", "wxWindows for MSW\0"
-            VALUE "FileVersion", "wxWindows Library " wxVERSION_NUM_DOT_STRING "\0"
-            VALUE "InternalName", "wxMSW\0"
-            VALUE "LegalCopyright", "Copyright © 1993-2004 wxWindows development team\0"
-            VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "wxmsw" wxVERSION_NUM_STRING DLL_SUFFIX ".dll\0"
-            VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "wxWindows\0"
-            VALUE "ProductVersion", wxVERSION_NUM_DOT_STRING "\0"
-            VALUE "SpecialBuild", "\0"
-        END
-        //US English Unicode; see http://msdn.microsoft.com/library/psdk/winui/rc_3rxn.htm for codes
-        BLOCK "040904b0"
+        BLOCK LANG
         BEGIN
             VALUE "Comments", "wxWindows cross-platform GUI framework\0"
             VALUE "CompanyName", "wxWindows development team\0"
