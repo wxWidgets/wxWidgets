@@ -196,6 +196,7 @@ public :
     virtual void ShowPosition( long WXUNUSED(pos) ) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
+    virtual bool SetupCursor( const wxPoint& pt ) { return false ; }
 
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
@@ -327,6 +328,8 @@ public :
     virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) ;
     virtual void            MacControlUserPaneBackgroundProc(void* info) ;
 
+    virtual bool            SetupCursor( const wxPoint& WXUNUSED(pt) ) { MacControlUserPaneIdleProc() ; return true ;}
+
     virtual void            SetRect( Rect *r ) ;
 
 protected :
@@ -442,6 +445,8 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     {
         SetEditable( false ) ;
     }
+    
+    SetCursor( wxCursor( wxCURSOR_IBEAM ) ) ;
 
     return true;
 }
@@ -1010,7 +1015,10 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 
 bool wxTextCtrl::MacSetupCursor( const wxPoint& pt )
 {
-    return true ;
+    if ( !GetPeer()->SetupCursor(pt) )
+        return wxWindow::MacSetupCursor( pt ) ;
+    else
+        return true ;
 }
 #if !TARGET_API_MAC_OSX
 
