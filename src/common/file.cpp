@@ -136,7 +136,7 @@ bool wxFile::Exists(const wxChar *name)
 #if wxUSE_UNICODE && wxMBFILES
     wxCharBuffer fname = wxConvFile.cWC2MB(name);
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
   return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
 #else
     return !wxAccess(fname, 0) &&
@@ -144,7 +144,7 @@ bool wxFile::Exists(const wxChar *name)
            (st.st_mode & S_IFREG);
 #endif
 #else
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
   return !access(wxUnix2MacFilename( name ) , 0) && !stat(wxUnix2MacFilename( name ), &st) && (st.st_mode & S_IFREG);
 #else
     return !wxAccess(name, 0) &&
@@ -192,7 +192,7 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 {
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
   // Dominic Mazzoni [dmazzoni+@cs.cmu.edu] reports that open is still broken on the mac, so we replace
   // int fd = open(wxUnix2MacFilename( szFileName ), O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
   int fd = creat(wxUnix2MacFilename( szFileName ), accessMode);
@@ -240,7 +240,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             break;
     }
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
     int fd = open(wxUnix2MacFilename( szFileName ), flags, access);
 #else
     int fd = wxOpen(wxFNCONV(szFileName), flags ACCESS(accessMode));
@@ -555,7 +555,7 @@ bool wxTempFile::Commit()
 {
     m_file.Close();
 
-#ifndef __WXMAC__
+#if !defined(__WXMAC__) || defined(__UNIX__)
     if ( wxFile::Exists(m_strName) && wxRemove(m_strName) != 0 ) {
         wxLogSysError(_("can't remove file '%s'"), m_strName.c_str());
         return FALSE;
@@ -583,7 +583,7 @@ bool wxTempFile::Commit()
 void wxTempFile::Discard()
 {
     m_file.Close();
-#ifndef __WXMAC__
+#if !defined(__WXMAC__) || defined(__UNIX__)
     if ( wxRemove(m_strTemp) != 0 )
         wxLogSysError(_("can't remove temporary file '%s'"), m_strTemp.c_str());
 #else

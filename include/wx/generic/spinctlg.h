@@ -77,6 +77,9 @@ protected:
 
     int   m_min;
     int   m_max;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxSpinCtrl)
 };
 
 #endif // _WX_GENERIC_SPINCTRL_H_

@@ -21,7 +21,7 @@
 #include "wx/cmndata.h"
 
 #if defined(__UNIX__)
-  #include <NavigationServices/Navigation.h>
+  #include <Carbon/Carbon.h>
 #else
   #include <Navigation.h>
 #endif
@@ -182,7 +182,7 @@ static Boolean SameFSSpec(FSSpecPtr spec1, FSSpecPtr spec2)
 // flashing of the button when the key is hit
 
 static pascal Boolean SFGetFolderModalDialogFilter(DialogPtr theDlgPtr, EventRecord *eventRec,
-											short *item, Ptr dataPtr)
+											short *item, void *dataPtr)
 {
 #pragma unused (dataPtr)
 
@@ -210,7 +210,7 @@ static pascal Boolean SFGetFolderModalDialogFilter(DialogPtr theDlgPtr, EventRec
 // MyDlgHook is a hook routine that maps the select button to Open
 // and sets the Select button name
 
-static pascal short SFGetFolderDialogHook(short item, DialogPtr theDlgPtr, Ptr dataPtr)
+static pascal short SFGetFolderDialogHook(short item, DialogPtr theDlgPtr, void *dataPtr)
 {
 	UserDataRecPtr	theUserDataRecPtr;
 	long			desktopDirID;
@@ -422,7 +422,7 @@ void StandardGetFolder( ConstStr255Param message , ConstStr255Param path , FileF
 	}
 }
 
-static pascal Boolean OnlyVisibleFoldersCustomFileFilter(CInfoPBPtr myCInfoPBPtr, Ptr dataPtr)
+static pascal Boolean OnlyVisibleFoldersCustomFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {
 #pragma unused (dataPtr)
 

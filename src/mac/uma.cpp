@@ -1,9 +1,10 @@
 #include "wx/defs.h"
+#include "wx/dc.h"
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
 
 #ifdef __UNIX__
-  #include <NavigationServices/Navigation.h>
+  #include <Carbon/Carbon.h>
 #else
   #include <Navigation.h>
 #endif

@@ -16,6 +16,7 @@
 #include "wx/control.h"
 #include "wx/panel.h"
 #include "wx/app.h"
+#include "wx/dc.h"
 #include "wx/notebook.h"
 #include "wx/tabctrl.h"
 #include "wx/radiobox.h"

@@ -53,7 +53,7 @@
 
 #if wxUSE_SOCKETS
     #ifdef __APPLE__
-        #include <OT/OpenTransport.h>
+        #include <CoreServices/CoreServices.h>
     #else
         #include <OpenTransport.h>
         #include <OpenTptInternet.h>
@@ -95,25 +95,25 @@ bool wxApp::s_macSupportPCMenuShortcuts = true ;
 long wxApp::s_macAboutMenuItemId = wxID_ABOUT ;
 wxString wxApp::s_macHelpMenuTitleName = "&Help" ;
 
-pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+pascal OSErr AEHandleODoc( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEODoc( (AppleEvent*) event , reply) ;
 }
 
-pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+pascal OSErr AEHandleOApp( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEOApp( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+pascal OSErr AEHandlePDoc( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEPDoc( (AppleEvent*) event , reply ) ;
 }
 
-pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , unsigned long refcon )
+pascal OSErr AEHandleQuit( const AppleEvent *event , AppleEvent *reply , long refcon )
 {
 	wxApp* app = (wxApp*) refcon ;
 	return wxTheApp->MacHandleAEQuit( (AppleEvent*) event , reply) ;
@@ -1469,7 +1469,11 @@ void wxApp::MacHandleOSEvent( EventRecord *ev )
 		case suspendResumeMessage :
 			{
 				bool isResuming = ev->message & resumeFlag ;
+#if !TARGET_CARBON
 				bool convertClipboard = ev->message & convertClipboardFlag ;
+#else
+				bool convertClipboard = false;
+#endif
 				bool doesActivate = UMAGetProcessModeDoesActivateOnFGSwitch() ;
 				if ( isResuming )
 				{

@@ -35,10 +35,6 @@
 #include "wx/setup.h"
 
 #ifdef macintosh
-	#ifdef __std
-		#undef __std
-		#define __std()
-	#endif
 	#include <stat.h>
 	#include <unix.h>
 	#include <unistd.h>

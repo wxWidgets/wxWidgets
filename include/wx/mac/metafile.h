@@ -20,7 +20,7 @@
 #include "wx/gdiobj.h"
 
 #if wxUSE_DRAG_AND_DROP
-#include "wx/dataobj.h" wx/defs.h
+#include "wx/dataobj.h"
 #endif
 
 /*

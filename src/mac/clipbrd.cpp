@@ -20,6 +20,7 @@
 #include "wx/utils.h"
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
+#include "wx/intl.h"
 
 #define wxUSE_DATAOBJ 1
 

@@ -31,7 +31,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
 
  public:
   wxChoice() {}
-  ~wxChoice() ;
+  virtual ~wxChoice() ;
 
   wxChoice(wxWindow *parent, wxWindowID id,
            const wxPoint& pos = wxDefaultPosition,
@@ -52,12 +52,15 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxChoiceNameStr);
 
-    virtual int DoAppend(const wxString& item);
+  // implement base class pure virtuals
+  virtual int DoAppend(const wxString& item);
   virtual void Delete(int n);
   virtual void Clear();
+
   virtual int GetCount() const ;
   virtual int GetSelection() const ;
   virtual void SetSelection(int n);
+
   virtual int FindString(const wxString& s) const;
   virtual wxString GetString(int n) const ;
   virtual void SetString( int , const wxString& s ) ;
@@ -73,9 +76,9 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
   virtual wxString GetStringSelection() const ;
   virtual bool SetStringSelection(const wxString& sel);
 
-  virtual inline int Number() const { return m_strings.GetCount(); }
-  virtual inline int GetCount() const { return m_strings.GetCount(); }
+  // Mac specific
   virtual void Command(wxCommandEvent& event);
+  void		MacHandleControlClick( ControlHandle control , SInt16 controlpart ) ;
 
   virtual inline int GetColumns() const { return 1 ; };
 */

@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/defs.h"
+#include "wx/app.h"
 #include "wx/utils.h"
 #include "wx/dialog.h"
 #include "wx/filedlg.h"
@@ -30,7 +31,7 @@ IMPLEMENT_CLASS(wxFileDialog, wxDialog)
 // begin wxmac
 
 #if defined(__UNIX__)
-  #include <NavigationServices/Navigation.h>
+  #include <Carbon/Carbon.h>
 #else
   #include <Navigation.h>
 #endif
@@ -73,6 +74,7 @@ NavEventProc(
 		#endif
 		*/
 		
+         wxTheApp->MacHandleOneEvent(ioParams->eventData.eventDataParms.event);
 	}
 }
 
@@ -210,7 +212,7 @@ static Boolean SameFSSpec(FSSpecPtr spec1, FSSpecPtr spec2)
 // flashing of the button when the key is hit
 
 static pascal Boolean SFGetFolderModalDialogFilter(DialogPtr theDlgPtr, EventRecord *eventRec,
-											short *item, Ptr dataPtr)
+											short *item, void *dataPtr)
 {
 #pragma unused (dataPtr)
 
@@ -371,7 +373,7 @@ void ExtendedOpenFile( ConstStr255Param message , ConstStr255Param path , const 
 	}
 }
 
-static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, Ptr dataPtr)
+static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
 {	
 	Str255 			filename ;
 	OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;

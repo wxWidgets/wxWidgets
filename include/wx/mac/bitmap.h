@@ -61,6 +61,7 @@ public:
   bool Create(const wxBitmap& bitmap);
 
   // Implementation
+  bool PointMasked(int x, int y);
   inline WXHBITMAP GetMaskBitmap() const { return m_maskBitmap; }
   inline void SetMaskBitmap(WXHBITMAP bmp) { m_maskBitmap = bmp; }
 protected:
@@ -153,28 +154,33 @@ public:
   wxBitmap(int width, int height, int depth = -1);
   ~wxBitmap();
 
+  // get the given part of bitmap
+  wxBitmap GetSubBitmap( const wxRect& rect ) const;
+
   virtual bool Create(int width, int height, int depth = -1);
   virtual bool Create(void *data, long type, int width, int height, int depth = 1);
   virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_BMP_RESOURCE);
   virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 
-  inline bool Ok() const { return (M_BITMAPDATA && M_BITMAPDATA->m_ok); }
-  inline int GetWidth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_width : 0); }
-  inline int GetHeight() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_height : 0); }
-  inline int GetDepth() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_depth : 0); }
-  inline int GetQuality() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_quality : 0); }
+  bool Ok() const;
+  int GetWidth() const;
+  int GetHeight() const;
+  int GetDepth() const;
+  int GetQuality() const;
   void SetWidth(int w);
   void SetHeight(int h);
   void SetDepth(int d);
   void SetQuality(int q);
   void SetOk(bool isOk);
 
-  inline wxPalette* GetPalette() const { return (M_BITMAPDATA ? (& M_BITMAPDATA->m_bitmapPalette) : (wxPalette*) NULL); }
+  wxPalette* GetPalette() const;
   void SetPalette(const wxPalette& palette);
 
-  inline wxMask *GetMask() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_bitmapMask : (wxMask*) NULL); }
+  wxMask *GetMask() const;
   void SetMask(wxMask *mask) ;
 
+  int GetBitmapType() const;
+  
   inline wxBitmap& operator = (const wxBitmap& bitmap) { if (*this == bitmap) return (*this); Ref(bitmap); return *this; }
   inline bool operator == (const wxBitmap& bitmap) { return m_refData == bitmap.m_refData; }
   inline bool operator != (const wxBitmap& bitmap) { return m_refData != bitmap.m_refData; }
@@ -196,8 +202,10 @@ protected:
   // TODO: Implementation
 public:
   void SetHBITMAP(WXHBITMAP bmp);
-  inline WXHBITMAP GetHBITMAP() const { return (M_BITMAPDATA ? M_BITMAPDATA->m_hBitmap : 0); }
+  WXHBITMAP GetHBITMAP() const;
   
+  PicHandle GetPict() const;
+
   bool FreeResource(bool force = FALSE);
 };
 #endif

@@ -15,6 +15,7 @@
 
 #include "wx/setup.h"
 #include "wx/menu.h"
+#include "wx/window.h"
 #include "wx/dc.h"
 #include "wx/dcclient.h"
 #include "wx/utils.h" 
@@ -33,9 +34,6 @@
 #include "wx/tabctrl.h"
 #include "wx/tooltip.h"
 #include "wx/statusbr.h"
-// TODO remove the line below, just for lookup-up convenience CS
-#include "wx/window.h"
-
 #include "wx/menuitem.h"
 #include "wx/log.h"
 
@@ -763,6 +761,11 @@ void wxWindow::MacSuperShown( bool show )
 
 bool wxWindow::MacIsReallyShown() const 
 {
+	if ( m_isShown && (m_parent != NULL) ) {
+		return m_parent->MacIsReallyShown();
+	}
+	return m_isShown;
+/*	
 	bool status = m_isShown ;
 	wxWindow * win = this ;
 	while ( status && win->m_parent != NULL )
@@ -771,6 +774,7 @@ bool wxWindow::MacIsReallyShown() const
 		status = win->m_isShown ;
 	}
 	return status ;
+*/
 }
 
 int wxWindow::GetCharHeight() const
@@ -794,7 +798,7 @@ void wxWindow::GetTextExtent(const wxString& string, int *x, int *y,
         
     wxClientDC dc( (wxWindow*) this ) ;
     long lx,ly,ld,le ;
-    dc.GetTextExtent( string , &lx , &ly , &ld, &le, fontToUse ) ;
+    dc.GetTextExtent( string , &lx , &ly , &ld, &le, (wxFont *)fontToUse ) ;
     if ( externalLeading )
     	*externalLeading = le ;
     if ( descent )
@@ -2306,7 +2310,37 @@ long wxWindow::MacRemoveBordersFromStyle( long style )
 {
 	return style & ~( wxDOUBLE_BORDER | wxSUNKEN_BORDER | wxRAISED_BORDER | wxBORDER | wxSTATIC_BORDER ) ;
 }
-
+/*
+wxMacFocusHelper::wxMacFocusHelper( wxWindow * theWindow ) 
+{
+	m_ok = false ;
+	Point localOrigin ;
+	Rect clipRect ;
+	WindowRef window ;
+	wxWindow *rootwin ;
+	m_currentPort = NULL ;
+	GetPort( &m_formerPort ) ;
+	if ( theWindow )
+	{
+	
+		theWindow->MacGetPortParams( &localOrigin , &clipRect , &window , &rootwin) ;
+		m_currentPort = UMAGetWindowPort( window ) ;
+		theWindow->MacSetPortFocusParams( localOrigin, clipRect, window , rootwin ) ; 
+		m_ok = true ;
+	}
+}
+	
+wxMacFocusHelper::~wxMacFocusHelper() 
+{
+	if ( m_ok )
+	{
+		SetPort( m_currentPort ) ;
+		SetOrigin( 0 , 0 ) ;
+	}
+	if ( m_formerPort != m_currentPort )
+		SetPort( m_formerPort ) ;
+}
+*/
 
 wxMacDrawingHelper::wxMacDrawingHelper( wxWindow * theWindow ) 
 {

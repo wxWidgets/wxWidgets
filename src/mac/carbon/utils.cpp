@@ -260,6 +260,7 @@ bool wxIsBusy()
   return (wxBusyCursorCount > 0);
 }    
 
+#ifndef __UNIX__
 wxString wxMacFindFolder( short 					vol,
 								 OSType 				folderType,
 								 Boolean 				createFolder)
@@ -278,6 +279,7 @@ wxString wxMacFindFolder( short 					vol,
 	}
 	return strDir ;
 }
+#endif
 
 #ifndef __UNIX__
 char *wxGetUserHome (const wxString& user)
@@ -341,6 +343,11 @@ void wxDisplaySize(int *width, int *height)
 #else
      *height -= LMGetMBarHeight() ;
 #endif
+}
+
+void wxDisplaySizeMM(int *width, int *height)
+{
+   wxDisplaySize(width, height);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

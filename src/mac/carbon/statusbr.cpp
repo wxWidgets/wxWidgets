@@ -17,12 +17,13 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/mac/statusbr.h"
+#include "wx/defs.h"
+#include "wx/statusbr.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBarXX, wxStatusBar);
+IMPLEMENT_DYNAMIC_CLASS(wxStatusBarMac, wxStatusBar);
 
-BEGIN_EVENT_TABLE(wxStatusBarXX, wxStatusBar)
-    EVT_SIZE(wxStatusBarXX::OnSize)
+BEGIN_EVENT_TABLE(wxStatusBarMac, wxStatusBar)
+    EVT_SIZE(wxStatusBarMac::OnSize)
 END_EVENT_TABLE()
 
 
@@ -31,20 +32,15 @@ END_EVENT_TABLE()
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxStatusBarXX class
+// wxStatusBarMac class
 // ----------------------------------------------------------------------------
 
-wxStatusBarXX::wxStatusBarXX()
+wxStatusBarMac::wxStatusBarMac()
 {
     SetParent(NULL);
 }
 
-wxStatusBarXX::wxStatusBarXX(wxWindow *parent, wxWindowID id, long style)
-{
-    Create(parent, id, style);
-}
-
-bool wxStatusBarXX::Create(wxWindow *parent, wxWindowID id, long style)
+bool wxStatusBarMac::Create(wxWindow *parent, wxWindowID id, long style, const wxString& name = wxPanelNameStr)
 {
     SetParent(parent);
 
@@ -57,7 +53,7 @@ bool wxStatusBarXX::Create(wxWindow *parent, wxWindowID id, long style)
     return FALSE;
 }
 
-void wxStatusBarXX::SetFieldsCount(int nFields, const int widths[])
+void wxStatusBarMac::SetFieldsCount(int nFields, const int widths[])
 {
   wxASSERT( (nFields > 0) && (nFields < 255) );
 
@@ -67,7 +63,7 @@ void wxStatusBarXX::SetFieldsCount(int nFields, const int widths[])
   SetFieldsWidth();
 }
 
-void wxStatusBarXX::SetStatusWidths(int n, const int widths[])
+void wxStatusBarMac::SetStatusWidths(int n, const int widths[])
 {
   wxASSERT( n == m_nFields );
 
@@ -75,7 +71,7 @@ void wxStatusBarXX::SetStatusWidths(int n, const int widths[])
   SetFieldsWidth();
 }
 
-void wxStatusBarXX::CopyFieldsWidth(const int widths[])
+void wxStatusBarMac::CopyFieldsWidth(const int widths[])
 {
   if (widths && !m_statusWidths)
     m_statusWidths = new int[m_nFields];
@@ -90,7 +86,7 @@ void wxStatusBarXX::CopyFieldsWidth(const int widths[])
   }
 }
 
-void wxStatusBarXX::SetFieldsWidth()
+void wxStatusBarMac::SetFieldsWidth()
 {
   int *pWidths = new int[m_nFields];
 
@@ -140,12 +136,12 @@ void wxStatusBarXX::SetFieldsWidth()
   delete [] pWidths;
 }
 
-void wxStatusBarXX::SetStatusText(const wxString& strText, int nField)
+void wxStatusBarMac::SetStatusText(const wxString& strText, int nField)
 {
     // TODO
 }
 
-wxString wxStatusBarXX::GetStatusText(int nField) const
+wxString wxStatusBarMac::GetStatusText(int nField) const
 {
     wxASSERT( (nField > -1) && (nField < m_nFields) );
 
@@ -153,7 +149,7 @@ wxString wxStatusBarXX::GetStatusText(int nField) const
     return wxString("");
 }
 
-void wxStatusBarXX::OnSize(wxSizeEvent& event)
+void wxStatusBarMac::OnSize(wxSizeEvent& event)
 {
     // adjust fields widths to the new size
     SetFieldsWidth();

@@ -358,7 +358,7 @@ local uLong unzlocal_SearchCentralDir(fin)
 	return uPosFound;
 }
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
 void wxUnix2MacFilename (char *s) ;
 void
 wxUnix2MacFilename (char *s)
@@ -430,10 +430,10 @@ extern unzFile ZEXPORT unzOpen (path)
     if (unz_copyright[0]!=' ')
         return NULL;
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
 	strcpy( wxBuffer , path ) ;
 	wxUnix2MacFilename( wxBuffer ) ;
-  fin=fopen(wxBuffer,"rb");
+	fin=fopen(wxBuffer,"rb");
 #else
     fin=fopen(path,"rb");
 #endif

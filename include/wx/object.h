@@ -115,6 +115,7 @@ WXDLLEXPORT wxObject* wxCreateStoredObject( wxInputStream& stream );
 
 // Single inheritance with one base class
 #define IMPLEMENT_DYNAMIC_CLASS(name, basename) \
+wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void); \
 wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
    { return new name; }\
  wxClassInfo name::sm_class##name((wxChar *) wxT(#name), (wxChar *) wxT(#basename), (wxChar *) NULL, (int) sizeof(name), (wxObjectConstructorFn) wxConstructorFor##name);

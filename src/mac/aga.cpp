@@ -1,3 +1,4 @@
+#include "wx/dc.h"
 #include "wx/mac/uma.h"
 #include "wx/mac/aga.h"
 

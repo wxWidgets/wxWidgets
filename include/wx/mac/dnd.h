@@ -156,7 +156,7 @@ class WXDLLEXPORT wxDropTarget: public wxObject
     
     virtual void OnEnter() { }
     virtual void OnLeave() { }
-    virtual bool OnDrop( long x, long y, const void *pData ) = 0;
+    virtual bool OnDrop( wxCoord x, wxCoord y, const void *pData ) = 0;
 
 //  protected:
       
@@ -178,8 +178,8 @@ class WXDLLEXPORT wxTextDropTarget: public wxDropTarget
   public:
 
     wxTextDropTarget() {};
-    virtual bool OnDrop( long x, long y, const void *pData );
-    virtual bool OnDropText( long x, long y, const char *psz );
+    virtual bool OnDrop( wxCoord x, wxCoord y, const void *pData );
+    virtual bool OnDropText( wxCoord x, wxCoord y, const char *psz );
     
   protected:
   
@@ -197,8 +197,8 @@ class WXDLLEXPORT wxFileDropTarget: public wxDropTarget
     
     wxFileDropTarget() {};
     
-    virtual bool OnDrop(long x, long y, const void *pData);
-    virtual bool OnDropFiles( long x, long y, 
+    virtual bool OnDrop(wxCoord x, wxCoord y, const void *pData);
+    virtual bool OnDropFiles( wxCoord x, wxCoord y, 
                               size_t nFiles, const char * const aszFiles[]);
 
   protected:

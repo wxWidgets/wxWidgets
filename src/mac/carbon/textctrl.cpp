@@ -22,6 +22,7 @@
 #include <fstream.h>
 
 #include "wx/app.h"
+#include "wx/dc.h"
 #include "wx/button.h"
 #include "wx/panel.h"
 #include "wx/textctrl.h"

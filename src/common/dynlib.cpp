@@ -247,7 +247,7 @@ wxDllLoader::LoadLibrary(const wxString & libname, bool *success)
     char zError[256] = "";
     wxDllOpen(zError, libname, handle);
 #else // !Mac
-    handle = wxDllOpen(libname);
+    handle = wxDllOpen((char *)libname);
 #endif // OS
 
     if ( !handle )
@@ -321,7 +321,7 @@ wxDllLoader::GetSymbol(wxDllType dllHandle, const wxString &name)
     wxDllGetSymbol(dllHandle, symbol);
 #else
     // mb_str() is necessary in Unicode build
-    symbol = wxDllGetSymbol(dllHandle, name.mb_str());
+    symbol = wxDllGetSymbol(dllHandle, (char *)name.mb_str());
 #endif
 
     if ( !symbol )

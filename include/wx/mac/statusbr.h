@@ -17,8 +17,6 @@
 #pragma interface "statbar.h"
 #endif
 
-#include "wx/generic/statusbr.h"
-
 class WXDLLEXPORT wxStatusBarMac : public wxStatusBarGeneric
 {
   DECLARE_DYNAMIC_CLASS(wxStatusBarMac);

@@ -1402,16 +1402,10 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #ifdef __WXMAC__
 
 #ifdef __UNIX__
-  #include <QD/PictUtils.h>
+  #include <ApplicationServices/ApplicationServices.h>
 #else
   #include <PictUtils.h>
 #endif
-
-extern CTabHandle wxMacCreateColorTable( int numColors ) ;
-extern void wxMacDestroyColorTable( CTabHandle colors ) ;
-extern void wxMacSetColorTableEntry( CTabHandle newColors , int index , int red , int green ,  int blue ) ;
-extern GWorldPtr wxMacCreateGWorld( int width , int height , int depth ) ;
-extern void wxMacDestroyGWorld( GWorldPtr gw ) ;
 
 wxBitmap wxImage::ConvertToBitmap() const
 {
@@ -1421,35 +1415,27 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     // Create picture
 
-    wxBitmap bitmap( width , height , wxDisplayDepth() ) ;
+    wxBitmap bitmap;
 
-    // Create mask
-
-    if (HasMask())
-    {
-            /*
-        unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-
-        mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
-
-        wxMask *mask = new wxMask();
-        mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
-
-        bitmap.SetMask( mask );
-       */
-    }
-
-    // Render
-
-    int r_mask = GetMaskRed();
-    int g_mask = GetMaskGreen();
-    int b_mask = GetMaskBlue();
-
+    wxCHECK_MSG( Ok(), bitmap, wxT("invalid image") );
+    
+    bitmap.Create( width , height , wxDisplayDepth() ) ;
+    wxBitmap maskBitmap( width, height, 1);
+    
     CGrafPtr origPort ;
     GDHandle origDevice ;
 
+    LockPixels( GetGWorldPixMap(bitmap.GetHBITMAP()) );
+    LockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
+
     GetGWorld( &origPort , &origDevice ) ;
     SetGWorld( bitmap.GetHBITMAP() , NULL ) ;
+    
+    // Render image
+    wxColour rgb, maskcolor(GetMaskRed(), GetMaskGreen(), GetMaskBlue());
+    RGBColor color;
+    RGBColor white = { 0xffff, 0xffff, 0xffff };
+    RGBColor black = { 0     , 0     , 0      };
 
     register unsigned char* data = GetData();
 
@@ -1458,158 +1444,96 @@ wxBitmap wxImage::ConvertToBitmap() const
     {
         for (int x = 0; x < width; x++)
         {
-            unsigned char r = data[index++];
-            unsigned char g = data[index++];
-            unsigned char b = data[index++];
-            RGBColor color ;
-            color.red = ( r  << 8 ) + r ;
-            color.green = ( g << 8 ) + g ;
-            color.blue = ( b << 8 ) + b ;
+            rgb.Set(data[index++], data[index++], data[index++]);
+            color = rgb.GetPixel();
             SetCPixel( x , y , &color ) ;
+            if (HasMask())
+            {
+                SetGWorld(maskBitmap.GetHBITMAP(), NULL);
+                if (rgb == maskcolor) {
+                    SetCPixel(x,y, &white);
+                }
+                else {
+                    SetCPixel(x,y, &black);
+                }
+                SetGWorld(bitmap.GetHBITMAP(), NULL);
+            }
         }
     }  // for height
 
-           SetGWorld( origPort , origDevice ) ;
-
-    if ( HasMask() )
-    {
-        wxColour colour( GetMaskRed(), GetMaskGreen(), GetMaskBlue());
-        wxMask *mask = new wxMask( bitmap, colour );
-        bitmap.SetMask( mask );
+    // Create mask
+    if ( HasMask() ) {
+        wxMask *mask = new wxMask( maskBitmap );
     }
-    return bitmap;
+    
+    UnlockPixels( GetGWorldPixMap(bitmap.GetHBITMAP()) );
+    UnlockPixels( GetGWorldPixMap(maskBitmap.GetHBITMAP()) );
+    SetGWorld( origPort, origDevice );
 
+    return bitmap;
 }
 
 wxImage::wxImage( const wxBitmap &bitmap )
 {
     // check the bitmap
-    if( !bitmap.Ok() )
-    {
-        wxFAIL_MSG( "invalid bitmap" );
-        return;
-    }
+    wxCHECK_RET( bitmap.Ok(), wxT("Invalid bitmap") );
 
     // create an wxImage object
     int width = bitmap.GetWidth();
     int height = bitmap.GetHeight();
     Create( width, height );
-    /*
+
     unsigned char *data = GetData();
-    if( !data )
-    {
-        wxFAIL_MSG( "could not allocate data for image" );
-        return;
-    }
 
-    // calc the number of bytes per scanline and padding in the DIB
-    int bytePerLine = width*3;
-    int sizeDWORD = sizeof( DWORD );
-    div_t lineBoundary = div( bytePerLine, sizeDWORD );
-    int padding = 0;
-    if( lineBoundary.rem > 0 )
-    {
-        padding = sizeDWORD - lineBoundary.rem;
-        bytePerLine += padding;
-    }
+    wxCHECK_RET( data, wxT("Could not allocate data for image") );
 
-    // create a DIB header
-    int headersize = sizeof(BITMAPINFOHEADER);
-    LPBITMAPINFO lpDIBh = (BITMAPINFO *) malloc( headersize );
-    if( !lpDIBh )
-    {
-        wxFAIL_MSG( "could not allocate data for DIB header" );
-        free( data );
-        return;
-    }
-    // Fill in the DIB header
-    lpDIBh->bmiHeader.biSize = headersize;
-    lpDIBh->bmiHeader.biWidth = width;
-    lpDIBh->bmiHeader.biHeight = -height;
-    lpDIBh->bmiHeader.biSizeImage = bytePerLine * height;
-    lpDIBh->bmiHeader.biPlanes = 1;
-    lpDIBh->bmiHeader.biBitCount = 24;
-    lpDIBh->bmiHeader.biCompression = BI_RGB;
-    lpDIBh->bmiHeader.biClrUsed = 0;
-    // These seem not really needed for our purpose here.
-    lpDIBh->bmiHeader.biClrImportant = 0;
-    lpDIBh->bmiHeader.biXPelsPerMeter = 0;
-    lpDIBh->bmiHeader.biYPelsPerMeter = 0;
-    // memory for DIB data
-    unsigned char *lpBits;
-    lpBits = (unsigned char *) malloc( lpDIBh->bmiHeader.biSizeImage );
-    if( !lpBits )
-    {
-        wxFAIL_MSG( "could not allocate data for DIB" );
-        free( data );
-        free( lpDIBh );
-        return;
-    }
+    WXHBITMAP origPort;
+    GDHandle  origDevice;
+    int      index;
+    RGBColor color;
+    // background color set to RGB(16,16,16) in consistent with wxGTK
+    unsigned char mask_r=16, mask_g=16, mask_b=16;
+    SInt16   r,g,b;
+    wxMask  *mask = bitmap.GetMask();
 
-    // copy data from the device-dependent bitmap to the DIB
-    HDC hdc = ::GetDC(NULL);
-    HBITMAP hbitmap;
-    hbitmap = (HBITMAP) bitmap.GetHBITMAP();
-    ::GetDIBits( hdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
+    GetGWorld( &origPort, &origDevice );
+    LockPixels(GetGWorldPixMap(bitmap.GetHBITMAP()));
+    SetGWorld( bitmap.GetHBITMAP(), NULL);
 
-    // copy DIB data into the wxImage object
-    int i, j;
-    unsigned char *ptdata = data;
-    unsigned char *ptbits = lpBits;
-    for( i=0; i<height; i++ )
+    // Copy data into image
+    index = 0;
+    for (int yy = 0; yy < height; yy++)
     {
-        for( j=0; j<width; j++ )
+        for (int xx = 0; xx < width; xx++)
         {
-            *(ptdata++) = *(ptbits+2);
-            *(ptdata++) = *(ptbits+1);
-            *(ptdata++) = *(ptbits  );
-            ptbits += 3;
-        }
-        ptbits += padding;
-    }
-
-    // similarly, set data according to the possible mask bitmap
-    if( bitmap.GetMask() && bitmap.GetMask()->GetMaskBitmap() )
-    {
-        hbitmap = (HBITMAP) bitmap.GetMask()->GetMaskBitmap();
-        // memory DC created, color set, data copied, and memory DC deleted
-        HDC memdc = ::CreateCompatibleDC( hdc );
-        ::SetTextColor( memdc, RGB( 0, 0, 0 ) );
-        ::SetBkColor( memdc, RGB( 255, 255, 255 ) );
-        ::GetDIBits( memdc, hbitmap, 0, height, lpBits, lpDIBh, DIB_RGB_COLORS );
-        ::DeleteDC( memdc );
-        // background color set to RGB(16,16,16) in consistent with wxGTK
-        unsigned char r=16, g=16, b=16;
-        ptdata = data;
-        ptbits = lpBits;
-        for( i=0; i<height; i++ )
-        {
-            for( j=0; j<width; j++ )
+            GetCPixel(xx,yy, &color);
+            r = ((color.red ) >> 8);
+            g = ((color.green ) >> 8);
+            b = ((color.blue ) >> 8);
+            data[index    ] = r;
+            data[index + 1] = g;
+            data[index + 2] = b;
+            if (mask)
             {
-                if( *ptbits != 0 )
-                    ptdata += 3;
-                else
+                if (mask->PointMasked(xx,yy))
                 {
-                    *(ptdata++)  = r;
-                    *(ptdata++)  = g;
-                    *(ptdata++)  = b;
+                    data[index    ] = mask_r;
+                    data[index + 1] = mask_g;
+                    data[index + 2] = mask_b;
                 }
-                ptbits += 3;
             }
-            ptbits += padding;
+            index += 3;
         }
-        SetMaskColour( r, g, b );
-        SetMask( TRUE );
     }
-    else
+    if (mask)
     {
-        SetMask( FALSE );
+        SetMaskColour( mask_r, mask_g, mask_b );
+        SetMask( true );
     }
-    // free allocated resources
-    ::ReleaseDC(NULL, hdc);
-    free(lpDIBh);
-    free(lpBits);
-    */
+
+    // Free resources
+    UnlockPixels(GetGWorldPixMap(bitmap.GetHBITMAP()));
+    SetGWorld(origPort, origDevice);
 }
 
 #endif

@@ -44,6 +44,7 @@ See mod_*.cpp and htmlwin.cpp for example :-)
 
 // This must be part of the module you want to force:
 #define FORCE_LINK_ME(module_name)                                    \
+                int _link_dummy_func_##module_name ();                \
                 int _link_dummy_func_##module_name ()                 \
                 {                                                     \
                     return 1;                                         \

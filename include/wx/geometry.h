@@ -32,7 +32,7 @@
     #define wxMulDivInt32( a , b , c ) ::MulDiv( a , b , c )
 #elif defined( __WXMAC__ )
     #ifdef __WXMAC_X__
-    #include <CarbonCore/Math64.h>
+    #include <CoreServices/CoreServices.h>
     #else
     #include "Math64.h"
     #endif

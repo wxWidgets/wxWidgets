@@ -39,20 +39,22 @@ wxDropTarget::~wxDropTarget()
 // ----------------------------------------------------------------------------
 // wxTextDropTarget
 // ----------------------------------------------------------------------------
-
-bool wxTextDropTarget::OnDrop( long x, long y, const void *pData )
+#ifndef __WXMAC_X__
+bool wxTextDropTarget::OnDrop( wxCoord x, wxCoord y, const void *pData )
 {
   OnDropText( x, y, (const char*)pData );
   return TRUE;
 };
+#endif
 
-bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
+bool wxTextDropTarget::OnDropText( wxCoord x, wxCoord y, const wxString &psz )
 {
-  printf( "Got dropped text: %s.\n", psz );
+  printf( "Got dropped text: %s.\n", (char *)psz );
   printf( "At x: %d, y: %d.\n", (int)x, (int)y );
   return TRUE;
 };
 
+#ifndef __WXMAC_X__
 size_t wxTextDropTarget::GetFormatCount() const
 {
   return 1;
@@ -62,25 +64,27 @@ wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
 {
   return wxDF_TEXT;
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxFileDropTarget
 // ----------------------------------------------------------------------------
 
-bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const WXUNUSED(aszFiles)[] )
+#ifndef __WXMAC_X__
+bool wxFileDropTarget::OnDropFiles( wxCoord x, wxCoord y, size_t nFiles, const char * const WXUNUSED(aszFiles)[] )
 {
   printf( "Got %d dropped files.\n", (int)nFiles );
   printf( "At x: %d, y: %d.\n", (int)x, (int)y );
   return TRUE;
 }
+#endif
 
-bool wxFileDropTarget::OnDrop(long x, long y, const void *WXUNUSED(pData) )
+bool wxFileDropTarget::OnDrop(wxCoord x, wxCoord y, const wxArrayString& filenames)
 {
-  char *str = "/this/is/a/path.txt";
-
-  return OnDropFiles(x, y, 1, &str ); 
+  return OnDropFiles(x, y, 1, &filenames); 
 }
 
+#ifndef __WXMAC_X__
 size_t wxFileDropTarget::GetFormatCount() const
 {
   return 1;
@@ -90,6 +94,7 @@ wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
 {
   return wxDF_FILENAME;
 }
+#endif
 
 //-------------------------------------------------------------------------
 // wxDropSource

@@ -19,11 +19,8 @@
 
 #if wxUSE_SOCKETS || defined(__GSOCKET_STANDALONE__)
 
-#define OTUNIXERRORS 1
 #ifdef __UNIX__
-  #include <CarbonCore/CarbonCore.h>
-  #include <OT/OpenTransport.h>
-  #include <OT/OpenTransportProviders.h>
+  #include <CoreServices/CoreServices.h>
 
   #ifndef FALSE
     #define FALSE 0
@@ -32,6 +29,7 @@
     #define TRUE 1
   #endif
 #else
+  #define OTUNIXERRORS 1
   #include <OpenTransport.h>
   #include <OpenTransportProviders.h>
   #include <OpenTptInternet.h>
@@ -123,7 +121,11 @@ OSStatus DoNegotiateIPReuseAddrOption(EndpointRef ep, Boolean enableReuseIPMode)
 	ret.opt.maxlen = kOTFourByteOptionSize;
 
 	opt->level	= INET_IP;					// dealing with an IP Level function
+#ifdef __UNIX__
+	opt->name	= kIP_REUSEADDR;
+#else
 	opt->name	= IP_REUSEADDR;
+#endif
 	opt->len	= kOTFourByteOptionSize;
 	opt->status = 0;
 	*(UInt32*)opt->value = enableReuseIPMode;		// set the desired option level, true or false
@@ -1043,8 +1045,8 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 {
 	OTFlags flags ;
 	OTResult res ;
+	OTByteCount sz = 0 ;
 
-	size_t sz = 0 ;
   	OTCountDataBytes( socket->m_endpoint , &sz ) ;
 	res = OTRcv( socket->m_endpoint , buffer , size , &flags ) ;
 	if ( res < 0 )
@@ -1055,7 +1057,7 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
 	// we simulate another read event if there are still bytes
 	if ( socket->m_takesEvents )
 	{
-  		size_t sz = 0 ;
+  		OTByteCount sz = 0 ;
   		OTCountDataBytes( socket->m_endpoint , &sz ) ;
   		if ( sz > 0 )
   		{
@@ -1365,7 +1367,7 @@ GSocketError GAddress_INET_GetHostName(GAddress *address, char *hostname, size_t
   assert(address != NULL); 
   CHECK_ADDRESS(address, INET, GSOCK_INVADDR);
 
-  OTInetAddressToName( gInetSvcRef , address->m_host , &name ) ;
+  OTInetAddressToName( gInetSvcRef , address->m_host , name ) ;
   strncpy( hostname , name , sbuf ) ;
   return GSOCK_NOERROR;
 }
@@ -1397,7 +1399,7 @@ void _GSocket_Enable_Events(GSocket *socket)
 	  state = OTGetEndpointState(socket->m_endpoint);
 	  
 	  {
-	  	size_t sz = 0 ;
+	  	OTByteCount sz = 0 ;
 	  	OTCountDataBytes( socket->m_endpoint , &sz ) ;
 	  	if ( state == T_INCON || sz > 0 )
 	  	{
@@ -1437,7 +1439,7 @@ GSocketError _GSocket_Input_Timeout(GSocket *socket)
     while( (now.hi * 4294967296.0 + now.lo) - (start.hi * 4294967296.0 + start.lo) < socket->m_timeout * 1000.0 )
     {
     	OTResult state ;
-   		size_t sz = 0 ;
+   		OTByteCount sz = 0 ;
  		state = OTGetEndpointState(socket->m_endpoint);
   
   		OTCountDataBytes( socket->m_endpoint , &sz ) ;

@@ -227,7 +227,7 @@ bool wxResourceTable::ParseResourceFile(const wxString& filename)
 {
     wxExprDatabase db;
     
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
     FILE *fd = fopen(wxUnix2MacFilename(filename.fn_str()), "r");
 #else	
     FILE *fd = wxFopen(filename, _T("r"));

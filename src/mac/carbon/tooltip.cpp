@@ -16,6 +16,7 @@
 #if wxUSE_TOOLTIPS
 
 #include "wx/app.h"
+#include "wx/dc.h"
 #include "wx/window.h"
 #include "wx/tooltip.h"
 #include "wx/timer.h"

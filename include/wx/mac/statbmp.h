@@ -63,7 +63,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
     // for compatibility with wxMSW
     void  SetIcon(const wxIcon& icon)
     {
-        SetBitmap( icon );
+        SetBitmap( (const wxBitmap&) icon );
     }
 
   // overriden base class virtuals

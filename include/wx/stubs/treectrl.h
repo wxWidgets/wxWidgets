@@ -256,6 +256,7 @@ protected:
  wxEVT_COMMAND_TREE_KEY_DOWN
 */
 
+#ifndef __WXMAC_X__
 class WXDLLEXPORT wxTreeEvent: public wxCommandEvent
 {
   DECLARE_DYNAMIC_CLASS(wxTreeEvent)
@@ -275,6 +276,7 @@ class WXDLLEXPORT wxTreeEvent: public wxCommandEvent
 };
 
 typedef void (wxEvtHandler::*wxTreeEventFunction)(wxTreeEvent&);
+#endif
 
 #endif
     // _WX_TREECTRL_H_

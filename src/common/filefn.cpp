@@ -1058,7 +1058,7 @@ wxCopyFile (const wxString& file1, const wxString& file2)
             return FALSE;
     }
 
-#if !defined(__VISAGECPP__) && !defined(__WXMAC__)
+#if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
 // no chmod in VA.  SHould be some permission API for HPFS386 partitions however
     if ( chmod(OS_FILENAME(file2), fbuf.st_mode) != 0 )
     {
@@ -1099,7 +1099,7 @@ bool wxRemoveFile(const wxString& file)
 
 bool wxMkdir(const wxString& dir, int perm)
 {
-#if defined( __WXMAC__ )
+#if defined(__WXMAC__) && !defined(__UNIX__)
   return (mkdir(wxUnix2MacFilename( dir ) , 0 ) == 0);
 #else // !Mac
     const wxChar *dirname = dir.c_str();
@@ -1664,7 +1664,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
   char *cbuf = new char[sz+1];
 #ifdef _MSC_VER
   if (_getcwd(cbuf, sz) == NULL) {
-#elif defined( __WXMAC__)
+#elif defined(__WXMAC__) && !defined(__UNIX__)
     enum
     {
         SFSaveDisk = 0x214, CurDirStore = 0x398
@@ -1682,7 +1682,7 @@ wxChar *wxGetWorkingDirectory(wxChar *buf, int sz)
 #else // wxUnicode
 #ifdef _MSC_VER
   if (_getcwd(buf, sz) == NULL) {
-#elif defined( __WXMAC__)
+#elif defined(__WXMAC__) && !defined(__UNIX__)
 	FSSpec cwdSpec ;
 	FCBPBRec pb;
 	OSErr error;

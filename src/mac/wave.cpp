@@ -126,14 +126,18 @@ bool wxWave::Play(bool async, bool looped) const
 	
 	if (m_isResource) 
 	{
-		strcpy(lpSnd, m_sndname); 
-		c2pstr((char *) lpSnd);
-		SndListHandle hSnd;
-		
-		hSnd = (SndListHandle) GetNamedResource('snd ',(const unsigned char *) lpSnd);
+#if TARGET_CARBON
+	  c2pstrcpy((unsigned char *)lpSnd, m_sndname);
+#else
+	  strcpy(lpSnd, m_sndname);
+	  c2pstr((char *) lpSnd);
+#endif
+	  SndListHandle hSnd;
+	  
+	  hSnd = (SndListHandle) GetNamedResource('snd ',(const unsigned char *) lpSnd);
 
-		if ((hSnd != NULL) && (SndPlay(m_sndChan, hSnd, async) == noErr))
-			ret = true;
+	  if ((hSnd != NULL) && (SndPlay(m_sndChan, hSnd, async) == noErr))
+	    ret = true;
 	} 
 	
 	return ret;

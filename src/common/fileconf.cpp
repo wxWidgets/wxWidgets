@@ -797,7 +797,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
 
   bool ret = file.Commit();
 
-#ifdef __WXMAC__
+#if defined(__WXMAC__) && !defined(__UNIX__)
   if ( ret )
   {
   	FSSpec spec ;
@@ -811,7 +811,7 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   		FSpSetFInfo( &spec , &finfo ) ;
   	}
   }
-#endif // __WXMAC__
+#endif // __WXMAC__ && !__UNIX__
 
 #ifdef __UNIX__
   // restore the old umask if we changed it

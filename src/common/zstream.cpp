@@ -34,7 +34,7 @@
 #if defined(__WXMSW__) && !defined(__WX_SETUP_H__) && !defined(wxUSE_ZLIB_H_IN_PATH)
    #include "../zlib/zlib.h"
 #elif defined(__WXMAC__) && defined(__UNIX__)
-   #include <Zip/zlib.h>
+   #include <Kernel/net/zlib.h>
 #else
    #include <zlib.h>
 #endif
