@@ -43,6 +43,10 @@ static pascal void MacTimerProc( TMTask * t )
     wxMacAddEvent( tm->m_table , wxProcessTimer, 0 , (void*) tm->m_timer , TRUE ) ;
 }
 
+// we need this array to track timers that are being deleted within the Notify procedure
+// adding the timer before the Notify call and checking after whether it still is in there 
+// as the destructor would have removed it from the array
+
 wxArrayPtrVoid gTimersInProcess ;
 
 static void wxProcessTimer( unsigned long event , void *data )
@@ -86,7 +90,9 @@ void wxTimer::Init()
 
 bool wxTimer::IsRunning() const 
 {
-    return ( m_info->m_task.qType & kTMTaskActive ) ;
+    // as the qType may already indicate it is elapsed, but it
+    // was not handled internally yet
+    return ( m_info->m_task.tmAddr != NULL ) ;
 }
 
 wxTimer::~wxTimer()
@@ -105,7 +111,7 @@ bool wxTimer::Start(int milliseconds,bool mode)
 {
     (void)wxTimerBase::Start(milliseconds, mode);
 
-    wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeour") );
+    wxCHECK_MSG( m_milli > 0, FALSE, wxT("invalid value for timer timeout") );
     wxCHECK_MSG( m_info->m_task.tmAddr == NULL , FALSE, wxT("attempting to restart a timer") );
 
 #if defined(UNIVERSAL_INTERFACES_VERSION) && (UNIVERSAL_INTERFACES_VERSION >= 0x0340)
