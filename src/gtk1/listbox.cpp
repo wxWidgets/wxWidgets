@@ -756,19 +756,10 @@ bool wxListBox::IsSelected( int n ) const
     wxCHECK_MSG( m_list != NULL, FALSE, wxT("invalid listbox") );
 
     GList *target = g_list_nth( m_list->children, n );
-    if (target)
-    {
-        GList *child = m_list->selection;
-        while (child)
-        {
-            if (child->data == target->data) return TRUE;
-            child = child->next;
-        }
-    }
-
-    wxFAIL_MSG(wxT("wrong listbox index"));
-
-    return FALSE;
+    
+    wxCHECK_MSG( target, FALSE, wxT("invalid listbox index") );
+    
+    return (GTK_WIDGET(target->data)->state == GTK_STATE_SELECTED) ;
 }
 
 void wxListBox::SetSelection( int n, bool select )
