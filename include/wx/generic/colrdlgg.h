@@ -116,6 +116,8 @@ class WXDLLEXPORT wxGenericColourDialog: public wxDialog
 DECLARE_EVENT_TABLE()
 };
 
+#ifdef __GTK__
 typedef wxGenericColourDialog wxColourDialog;
+#endif
 
 #endif

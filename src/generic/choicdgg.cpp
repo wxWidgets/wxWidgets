@@ -225,6 +225,7 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 
 	wxListBox *listBox = new wxListBox(this, wxID_LISTBOX, wxPoint(-1, -1), wxSize(240, 160),
 		n, choices);
+    listBox->SetSelection(m_selection);
 	if ( clientData )
 	{
 		int i;
@@ -285,6 +286,17 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
   wxEndBusyCursor();
 
   return TRUE;
+}
+
+// Set the selection
+void wxSingleChoiceDialog::SetSelection(int sel)
+{
+	wxListBox *listBox = (wxListBox *)FindWindow(wxID_LISTBOX);
+    if (listBox)
+    {
+        listBox->SetSelection(sel);
+    }
+    m_selection = sel;
 }
 
 void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))

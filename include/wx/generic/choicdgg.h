@@ -39,6 +39,7 @@ public:
     bool Create(wxWindow *parent, const wxString& message, const wxString& caption,
         const wxStringList& choices, char **clientData = NULL, long style = wxOK|wxCANCEL|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
 
+    void SetSelection(int sel) ;
     inline int GetSelection(void) const { return m_selection; }
     inline wxString GetStringSelection(void) const { return m_stringSelection; }
     inline char *GetSelectionClientData(void) const { return m_clientData; }

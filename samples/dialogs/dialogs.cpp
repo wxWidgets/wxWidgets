@@ -207,17 +207,19 @@ void MyFrame::TextEntry(wxCommandEvent& event)
 
 void MyFrame::SingleChoice(wxCommandEvent& event)
 {
-	const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
-	int n = 5;
+    const wxString choices[] = { "One", "Two", "Three", "Four", "Five" } ;
+    int n = 5;
 
-  wxSingleChoiceDialog dialog(this, "This is a small sample\nA single-choice convenience dialog",
-  	"Please select a value", n, (const wxString *)choices);
+    wxSingleChoiceDialog dialog(this, "This is a small sample\nA single-choice convenience dialog",
+        "Please select a value", n, (const wxString *)choices);
 
-  if (dialog.ShowModal() == wxID_OK)
-  {
-	wxMessageDialog dialog2(this, dialog.GetStringSelection(), "Got string");
-	dialog2.ShowModal();
-  }
+    dialog.SetSelection(2);
+
+    if (dialog.ShowModal() == wxID_OK)
+    {
+        wxMessageDialog dialog2(this, dialog.GetStringSelection(), "Got string");
+        dialog2.ShowModal();
+    }
 }
 
 void MyFrame::FileOpen(wxCommandEvent& event)
