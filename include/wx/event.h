@@ -128,6 +128,7 @@ enum
     wxEVT_SCROLL_PAGEUP =                     wxEVT_FIRST + 304,
     wxEVT_SCROLL_PAGEDOWN =                   wxEVT_FIRST + 305,
     wxEVT_SCROLL_THUMBTRACK =                 wxEVT_FIRST + 306,
+    wxEVT_SCROLL_THUMBRELEASE =               wxEVT_FIRST + 307,
 
     /*
      * Scroll events from wxWindow
@@ -139,7 +140,7 @@ enum
     wxEVT_SCROLLWIN_PAGEUP =                  wxEVT_FIRST + 324,
     wxEVT_SCROLLWIN_PAGEDOWN =                wxEVT_FIRST + 325,
     wxEVT_SCROLLWIN_THUMBTRACK =              wxEVT_FIRST + 326,
-    wxEVT_SCROLL_THUMBRELEASE =               wxEVT_FIRST + 327,
+    wxEVT_SCROLLWIN_THUMBRELEASE =            wxEVT_FIRST + 327,
 
     /*
      * System events
