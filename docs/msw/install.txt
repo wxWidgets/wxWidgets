@@ -228,7 +228,7 @@ Compiling using the makefiles (updated 24 Sept 02):
 
 1. Change directory to build\msw. Type 'make -f makefile.bcc' to
    make the wxWindows core library. Ignore the compiler warnings.
-   This produces a couple of librarie in the lib\bcc_mswdll directory.
+   This produces a couple of libraries in the lib\bcc_mswdll directory.
 
 2. Change directory to a sample or demo such as samples\minimal, and type
   'make -f makefile.bcc'. This produces a windows exe file - by default 
@@ -248,35 +248,12 @@ recompile wxWindows. The same applies if compiling using the IDE.
 Note (3): If you wish debug messages to be sent to the console in
 debug mode, edit makefile.bcc and change /aa to /Tpe in link commands.
 
-Compiling using the IDE files: [Borland C++ 5.0, not Cbuilder]
+Compiling using the IDE files for Borland C++ 5.0: not supported - please
+use version 2.4.1 (using the make utility in commandline mode works fine_
 
-1. Load src\bc32.ide from the file bc32.zip at 
-   http://biolpc22.york.ac.uk/pub/ports/bcc32/wxwin21/ and select Release settings
-2. Go to Options|Project... and specify the correct BC++ include and lib path for
-   your file structure.
-3. Press F9 to compile the wxWindows library.
-4. Load samples\bc32.ide.
-5. Go to Options|Project... and specify the correct BC++ include and lib path for
-   your file structure.
-6. Press F9 to compile the samples (build each node separately if
-   you prefer, by right clicking and choose Build Node).
-7. Run each sample: you may need to run from each sample's directory
-   since some (notably the wxHTML samples) look for files
-   relative to the working directory.
+Compiling using CBuilder (v1-v6): not supported - please
+use version 2.4.1 (using the make utility in commandline mode works fine_
 
-Note (1): the samples project file contains a selection of
-samples, and not all samples. The remaining samples can be made
-with the makefiles. See also the demos hierarchy which doesn't
-have any BC++ project files yet.
-
-Note (2): to make the png, zlib, jpeg and tiff libraries (needed for
-some samples) you need to compile them with bc32.ide.
-
-Note (3): the debug version of the wxWindows library is about 40 MB, and the
-release version is around 5 MB.
-
-See also the file docs/tech/tn0007.txt for further instructions and details
-of how to create your own project files.
 
 ** REMEMBER **
 
@@ -290,21 +267,6 @@ the following preprocessor directive:
 (check the samples -- e.g., \wx2\samples\minimal\minimal.cpp -- for
 more details)
 
-
-Borland C++Builder IDE compilation
-----------------------------------
-
-1. Build the wxWindows libraries using the Borland make utility as
-   specified in the section called "Borland C++ 5.0 compilation"
-   above. (C++ Builder includes a stand-alone C++ compiler.  For example,
-   C++ Builder 4.0 comes with C++ 5.4.)
-
-2. You can use the process_sample_bcb.bat command which is in
-   wxwindows\distrib\msw to generate a .mak or .bpr file for most of the
-   samples [mak for Cbuilder 1-6; v4 and after will convert this to bpr]. 
-   Execute this in the sampledirectory, passing the name of the cpp files 
-   on the command line. For more details, see the instructions in 
-   docs/tech/tn0004.htm or http://biolpc22.york.ac.uk/wx/bc/ide.html.
 
 Borland 16 Bit compilation for Windows 3.1
 ------------------------------------------
