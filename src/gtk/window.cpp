@@ -1197,7 +1197,7 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   
     m_eventHandler = this;
   
-    m_windowId = id;
+    m_windowId = id == -1 ? wxNewId() : id;
   
     m_sizeSet = FALSE;
   
