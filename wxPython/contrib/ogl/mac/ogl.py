@@ -8,6 +8,47 @@ of 2D objects.  (This version is deprecated, please use wx.lib.ogl instead.)
 
 import _ogl
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _windows
 import _core
 wx = _core 
@@ -19,6 +60,7 @@ warnings.warn("This module is deprecated.  Please use the wx.lib.ogl package ins
 #---------------------------------------------------------------------------
 
 class ShapeRegion(_core.Object):
+    """Proxy of C++ ShapeRegion class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxShapeRegion instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -148,6 +190,7 @@ class ShapeRegionPtr(ShapeRegion):
 _ogl.ShapeRegion_swigregister(ShapeRegionPtr)
 
 class AttachmentPoint(_core.Object):
+    """Proxy of C++ AttachmentPoint class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxAttachmentPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -168,6 +211,7 @@ class AttachmentPointPtr(AttachmentPoint):
 _ogl.AttachmentPoint_swigregister(AttachmentPointPtr)
 
 class PyShapeEvtHandler(_core.Object):
+    """Proxy of C++ PyShapeEvtHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShapeEvtHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -350,6 +394,7 @@ class PyShapeEvtHandlerPtr(PyShapeEvtHandler):
 _ogl.PyShapeEvtHandler_swigregister(PyShapeEvtHandlerPtr)
 
 class PyShape(PyShapeEvtHandler):
+    """Proxy of C++ PyShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1076,6 +1121,7 @@ _ogl.PyShape_swigregister(PyShapePtr)
 oglMETAFLAGS_OUTLINE = _ogl.oglMETAFLAGS_OUTLINE
 oglMETAFLAGS_ATTACHMENTS = _ogl.oglMETAFLAGS_ATTACHMENTS
 class PseudoMetaFile(_core.Object):
+    """Proxy of C++ PseudoMetaFile class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPseudoMetaFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1203,15 +1249,15 @@ class PseudoMetaFile(_core.Object):
         return _ogl.PseudoMetaFile_DrawText(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, int points, Point points_array)"""
+        """DrawLines(self, int points)"""
         return _ogl.PseudoMetaFile_DrawLines(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
-        """DrawPolygon(self, int points, Point points_array, int flags=0)"""
+        """DrawPolygon(self, int points, int flags=0)"""
         return _ogl.PseudoMetaFile_DrawPolygon(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
-        """DrawSpline(self, int points, Point points_array)"""
+        """DrawSpline(self, int points)"""
         return _ogl.PseudoMetaFile_DrawSpline(*args, **kwargs)
 
     def SetClippingRect(*args, **kwargs):
@@ -1255,6 +1301,7 @@ class PseudoMetaFilePtr(PseudoMetaFile):
 _ogl.PseudoMetaFile_swigregister(PseudoMetaFilePtr)
 
 class PyRectangleShape(PyShape):
+    """Proxy of C++ PyRectangleShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyRectangleShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1417,6 +1464,7 @@ class PyRectangleShapePtr(PyRectangleShape):
 _ogl.PyRectangleShape_swigregister(PyRectangleShapePtr)
 
 class PyControlPoint(PyRectangleShape):
+    """Proxy of C++ PyControlPoint class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyControlPoint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1579,6 +1627,7 @@ class PyControlPointPtr(PyControlPoint):
 _ogl.PyControlPoint_swigregister(PyControlPointPtr)
 
 class PyBitmapShape(PyRectangleShape):
+    """Proxy of C++ PyBitmapShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyBitmapShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1749,6 +1798,7 @@ class PyBitmapShapePtr(PyBitmapShape):
 _ogl.PyBitmapShape_swigregister(PyBitmapShapePtr)
 
 class PyDrawnShape(PyRectangleShape):
+    """Proxy of C++ PyDrawnShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDrawnShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1788,7 +1838,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_DrawLine(*args, **kwargs)
 
     def DrawLines(*args, **kwargs):
-        """DrawLines(self, int points, Point points_array)"""
+        """DrawLines(self, int points)"""
         return _ogl.PyDrawnShape_DrawLines(*args, **kwargs)
 
     def DrawPoint(*args, **kwargs):
@@ -1796,7 +1846,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_DrawPoint(*args, **kwargs)
 
     def DrawPolygon(*args, **kwargs):
-        """DrawPolygon(self, int points, Point points_array, int flags=0)"""
+        """DrawPolygon(self, int points, int flags=0)"""
         return _ogl.PyDrawnShape_DrawPolygon(*args, **kwargs)
 
     def DrawRectangle(*args, **kwargs):
@@ -1808,7 +1858,7 @@ class PyDrawnShape(PyRectangleShape):
         return _ogl.PyDrawnShape_DrawRoundedRectangle(*args, **kwargs)
 
     def DrawSpline(*args, **kwargs):
-        """DrawSpline(self, int points, Point points_array)"""
+        """DrawSpline(self, int points)"""
         return _ogl.PyDrawnShape_DrawSpline(*args, **kwargs)
 
     def DrawText(*args, **kwargs):
@@ -2015,6 +2065,7 @@ class PyDrawnShapePtr(PyDrawnShape):
 _ogl.PyDrawnShape_swigregister(PyDrawnShapePtr)
 
 class OGLConstraint(_core.Object):
+    """Proxy of C++ OGLConstraint class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxOGLConstraint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2044,6 +2095,7 @@ class OGLConstraintPtr(OGLConstraint):
 _ogl.OGLConstraint_swigregister(OGLConstraintPtr)
 
 class PyCompositeShape(PyRectangleShape):
+    """Proxy of C++ PyCompositeShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyCompositeShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2254,6 +2306,7 @@ class PyCompositeShapePtr(PyCompositeShape):
 _ogl.PyCompositeShape_swigregister(PyCompositeShapePtr)
 
 class PyDividedShape(PyRectangleShape):
+    """Proxy of C++ PyDividedShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDividedShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2416,6 +2469,7 @@ class PyDividedShapePtr(PyDividedShape):
 _ogl.PyDividedShape_swigregister(PyDividedShapePtr)
 
 class PyDivisionShape(PyCompositeShape):
+    """Proxy of C++ PyDivisionShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDivisionShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2670,6 +2724,7 @@ class PyDivisionShapePtr(PyDivisionShape):
 _ogl.PyDivisionShape_swigregister(PyDivisionShapePtr)
 
 class PyEllipseShape(PyShape):
+    """Proxy of C++ PyEllipseShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyEllipseShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2820,6 +2875,7 @@ class PyEllipseShapePtr(PyEllipseShape):
 _ogl.PyEllipseShape_swigregister(PyEllipseShapePtr)
 
 class PyCircleShape(PyEllipseShape):
+    """Proxy of C++ PyCircleShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyCircleShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2970,6 +3026,7 @@ class PyCircleShapePtr(PyCircleShape):
 _ogl.PyCircleShape_swigregister(PyCircleShapePtr)
 
 class ArrowHead(_core.Object):
+    """Proxy of C++ ArrowHead class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxArrowHead instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3061,6 +3118,7 @@ class ArrowHeadPtr(ArrowHead):
 _ogl.ArrowHead_swigregister(ArrowHeadPtr)
 
 class PyLineShape(PyShape):
+    """Proxy of C++ PyLineShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyLineShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3403,6 +3461,7 @@ class PyLineShapePtr(PyLineShape):
 _ogl.PyLineShape_swigregister(PyLineShapePtr)
 
 class PyPolygonShape(PyShape):
+    """Proxy of C++ PyPolygonShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyPolygonShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3597,6 +3656,7 @@ class PyPolygonShapePtr(PyPolygonShape):
 _ogl.PyPolygonShape_swigregister(PyPolygonShapePtr)
 
 class PyTextShape(PyRectangleShape):
+    """Proxy of C++ PyTextShape class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyTextShape instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3751,6 +3811,7 @@ class PyTextShapePtr(PyTextShape):
 _ogl.PyTextShape_swigregister(PyTextShapePtr)
 
 class Diagram(_core.Object):
+    """Proxy of C++ Diagram class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDiagram instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3864,6 +3925,7 @@ class DiagramPtr(Diagram):
 _ogl.Diagram_swigregister(DiagramPtr)
 
 class PyShapeCanvas(_windows.ScrolledWindow):
+    """Proxy of C++ PyShapeCanvas class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyShapeCanvas instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

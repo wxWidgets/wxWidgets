@@ -8,6 +8,47 @@ or pages.
 
 import _wizard
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 import _windows
 import _core
 wx = _core 
@@ -25,6 +66,7 @@ EVT_WIZARD_HELP          = wx.PyEventBinder( wxEVT_WIZARD_HELP, 1)
 EVT_WIZARD_FINISHED      = wx.PyEventBinder( wxEVT_WIZARD_FINISHED, 1)
 
 class WizardEvent(_core.NotifyEvent):
+    """Proxy of C++ WizardEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -53,6 +95,7 @@ class WizardEventPtr(WizardEvent):
 _wizard.WizardEvent_swigregister(WizardEventPtr)
 
 class WizardPage(_windows.Panel):
+    """Proxy of C++ WizardPage class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -81,6 +124,7 @@ class WizardPagePtr(WizardPage):
 _wizard.WizardPage_swigregister(WizardPagePtr)
 
 class PyWizardPage(WizardPage):
+    """Proxy of C++ PyWizardPage class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyWizardPage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -186,6 +230,7 @@ def PrePyWizardPage(*args, **kwargs):
     return val
 
 class WizardPageSimple(WizardPage):
+    """Proxy of C++ WizardPageSimple class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizardPageSimple instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -238,6 +283,7 @@ def WizardPageSimple_Chain(*args, **kwargs):
     return _wizard.WizardPageSimple_Chain(*args, **kwargs)
 
 class Wizard(_windows.Dialog):
+    """Proxy of C++ Wizard class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWizard instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):

@@ -3,6 +3,47 @@
 
 import _core_
 
+def _swig_setattr_nondynamic(self,class_type,name,value,static=1):
+    if (name == "this"):
+        if isinstance(value, class_type):
+            self.__dict__[name] = value.this
+            if hasattr(value,"thisown"): self.__dict__["thisown"] = value.thisown
+            del value.thisown
+            return
+    method = class_type.__swig_setmethods__.get(name,None)
+    if method: return method(self,value)
+    if (not static) or hasattr(self,name) or (name == "thisown"):
+        self.__dict__[name] = value
+    else:
+        raise AttributeError("You cannot add attributes to %s" % self)
+
+def _swig_setattr(self,class_type,name,value):
+    return _swig_setattr_nondynamic(self,class_type,name,value,0)
+
+def _swig_getattr(self,class_type,name):
+    method = class_type.__swig_getmethods__.get(name,None)
+    if method: return method(self)
+    raise AttributeError,name
+
+import types
+try:
+    _object = types.ObjectType
+    _newclass = 1
+except AttributeError:
+    class _object : pass
+    _newclass = 0
+del types
+
+
+def _swig_setattr_nondynamic_method(set):
+    def set_attr(self,name,value):
+        if hasattr(self,name) or (name in ("this", "thisown")):
+            set(self,name,value)
+        else:
+            raise AttributeError("You cannot add attributes to %s" % self)
+    return set_attr
+
+
 #// Give a reference to the dictionary of this module to the C++ extension
 #// code.
 _core_._wxPySetDictionary(vars())
@@ -671,9 +712,9 @@ CURSOR_MAX = _core_.CURSOR_MAX
 class Size(object):
     """
     wx.Size is a useful data structure used to represent the size of
-    something.  It simply contians integer width and height proprtites.
-    In most places in wxPython where a wx.Size is expected a
-    (width,height) tuple can be used instead.
+    something.  It simply contians integer width and height
+    proprtites.  In most places in wxPython where a wx.Size is
+    expected a (width, height) tuple can be used instead.
     """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSize instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1520,6 +1561,7 @@ FromStart = _core_.FromStart
 FromCurrent = _core_.FromCurrent
 FromEnd = _core_.FromEnd
 class InputStream(object):
+    """Proxy of C++ InputStream class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyInputStream instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1609,6 +1651,7 @@ DefaultPosition = cvar.DefaultPosition
 DefaultSize = cvar.DefaultSize
 
 class OutputStream(object):
+    """Proxy of C++ OutputStream class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxOutputStream instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1627,6 +1670,7 @@ _core_.OutputStream_swigregister(OutputStreamPtr)
 #---------------------------------------------------------------------------
 
 class FSFile(Object):
+    """Proxy of C++ FSFile class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFSFile instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1675,6 +1719,7 @@ class FSFilePtr(FSFile):
 _core_.FSFile_swigregister(FSFilePtr)
 
 class CPPFileSystemHandler(object):
+    """Proxy of C++ CPPFileSystemHandler class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileSystemHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -1687,6 +1732,7 @@ class CPPFileSystemHandlerPtr(CPPFileSystemHandler):
 _core_.CPPFileSystemHandler_swigregister(CPPFileSystemHandlerPtr)
 
 class FileSystemHandler(CPPFileSystemHandler):
+    """Proxy of C++ FileSystemHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyFileSystemHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1746,6 +1792,7 @@ class FileSystemHandlerPtr(FileSystemHandler):
 _core_.FileSystemHandler_swigregister(FileSystemHandlerPtr)
 
 class FileSystem(Object):
+    """Proxy of C++ FileSystem class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFileSystem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1825,6 +1872,7 @@ def FileSystem_URLToFileName(*args, **kwargs):
     return _core_.FileSystem_URLToFileName(*args, **kwargs)
 
 class InternetFSHandler(CPPFileSystemHandler):
+    """Proxy of C++ InternetFSHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxInternetFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1850,6 +1898,7 @@ class InternetFSHandlerPtr(InternetFSHandler):
 _core_.InternetFSHandler_swigregister(InternetFSHandlerPtr)
 
 class ZipFSHandler(CPPFileSystemHandler):
+    """Proxy of C++ ZipFSHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxZipFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1912,6 +1961,7 @@ def MemoryFSHandler_AddFile(filename, dataItem, imgType=-1):
         raise TypeError, 'wx.Image, wx.Bitmap or string expected'
 
 class MemoryFSHandler(CPPFileSystemHandler):
+    """Proxy of C++ MemoryFSHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMemoryFSHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -1957,6 +2007,7 @@ def MemoryFSHandler_RemoveFile(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ImageHandler(Object):
+    """Proxy of C++ ImageHandler class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -2005,6 +2056,7 @@ class ImageHandlerPtr(ImageHandler):
 _core_.ImageHandler_swigregister(ImageHandlerPtr)
 
 class ImageHistogram(object):
+    """Proxy of C++ ImageHistogram class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImageHistogram instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2049,6 +2101,7 @@ def ImageHistogram_MakeKey(*args, **kwargs):
     return _core_.ImageHistogram_MakeKey(*args, **kwargs)
 
 class Image(Object):
+    """Proxy of C++ Image class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxImage instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2460,6 +2513,7 @@ BMP_4BPP = _core_.BMP_4BPP
 BMP_1BPP = _core_.BMP_1BPP
 BMP_1BPP_BW = _core_.BMP_1BPP_BW
 class BMPHandler(ImageHandler):
+    """Proxy of C++ BMPHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxBMPHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2483,6 +2537,7 @@ IMAGE_OPTION_RESOLUTION = cvar.IMAGE_OPTION_RESOLUTION
 IMAGE_OPTION_RESOLUTIONUNIT = cvar.IMAGE_OPTION_RESOLUTIONUNIT
 
 class ICOHandler(BMPHandler):
+    """Proxy of C++ ICOHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxICOHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2500,6 +2555,7 @@ class ICOHandlerPtr(ICOHandler):
 _core_.ICOHandler_swigregister(ICOHandlerPtr)
 
 class CURHandler(ICOHandler):
+    """Proxy of C++ CURHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCURHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2517,6 +2573,7 @@ class CURHandlerPtr(CURHandler):
 _core_.CURHandler_swigregister(CURHandlerPtr)
 
 class ANIHandler(CURHandler):
+    """Proxy of C++ ANIHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxANIHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2534,6 +2591,7 @@ class ANIHandlerPtr(ANIHandler):
 _core_.ANIHandler_swigregister(ANIHandlerPtr)
 
 class PNGHandler(ImageHandler):
+    """Proxy of C++ PNGHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPNGHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2551,6 +2609,7 @@ class PNGHandlerPtr(PNGHandler):
 _core_.PNGHandler_swigregister(PNGHandlerPtr)
 
 class GIFHandler(ImageHandler):
+    """Proxy of C++ GIFHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxGIFHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2568,6 +2627,7 @@ class GIFHandlerPtr(GIFHandler):
 _core_.GIFHandler_swigregister(GIFHandlerPtr)
 
 class PCXHandler(ImageHandler):
+    """Proxy of C++ PCXHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPCXHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2585,6 +2645,7 @@ class PCXHandlerPtr(PCXHandler):
 _core_.PCXHandler_swigregister(PCXHandlerPtr)
 
 class JPEGHandler(ImageHandler):
+    """Proxy of C++ JPEGHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxJPEGHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2602,6 +2663,7 @@ class JPEGHandlerPtr(JPEGHandler):
 _core_.JPEGHandler_swigregister(JPEGHandlerPtr)
 
 class PNMHandler(ImageHandler):
+    """Proxy of C++ PNMHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPNMHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2619,6 +2681,7 @@ class PNMHandlerPtr(PNMHandler):
 _core_.PNMHandler_swigregister(PNMHandlerPtr)
 
 class XPMHandler(ImageHandler):
+    """Proxy of C++ XPMHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxXPMHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2636,6 +2699,7 @@ class XPMHandlerPtr(XPMHandler):
 _core_.XPMHandler_swigregister(XPMHandlerPtr)
 
 class TIFFHandler(ImageHandler):
+    """Proxy of C++ TIFFHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxTIFFHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2691,6 +2755,7 @@ def Quantize_Quantize(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class EvtHandler(Object):
+    """Proxy of C++ EvtHandler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEvtHandler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -2744,7 +2809,7 @@ class EvtHandler(Object):
         return _core_.EvtHandler_Disconnect(*args, **kwargs)
 
     def _setOORInfo(*args, **kwargs):
-        """_setOORInfo(self, PyObject _self)"""
+        """_setOORInfo(self, PyObject _self, bool incref=True)"""
         return _core_.EvtHandler__setOORInfo(*args, **kwargs)
 
     def Bind(self, event, handler, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
@@ -3162,6 +3227,7 @@ EVT_CONTEXT_MENU = wx.PyEventBinder( wxEVT_CONTEXT_MENU )
 #---------------------------------------------------------------------------
 
 class Event(Object):
+    """Proxy of C++ Event class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -3242,6 +3308,7 @@ _core_.Event_swigregister(EventPtr)
 #---------------------------------------------------------------------------
 
 class PropagationDisabler(object):
+    """Proxy of C++ PropagationDisabler class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPropagationDisabler instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3265,6 +3332,7 @@ class PropagationDisablerPtr(PropagationDisabler):
 _core_.PropagationDisabler_swigregister(PropagationDisablerPtr)
 
 class PropagateOnce(object):
+    """Proxy of C++ PropagateOnce class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPropagateOnce instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3290,6 +3358,7 @@ _core_.PropagateOnce_swigregister(PropagateOncePtr)
 #---------------------------------------------------------------------------
 
 class CommandEvent(Event):
+    """Proxy of C++ CommandEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCommandEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3350,6 +3419,7 @@ _core_.CommandEvent_swigregister(CommandEventPtr)
 #---------------------------------------------------------------------------
 
 class NotifyEvent(CommandEvent):
+    """Proxy of C++ NotifyEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNotifyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3381,6 +3451,7 @@ _core_.NotifyEvent_swigregister(NotifyEventPtr)
 #---------------------------------------------------------------------------
 
 class ScrollEvent(CommandEvent):
+    """Proxy of C++ ScrollEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrollEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3419,6 +3490,7 @@ _core_.ScrollEvent_swigregister(ScrollEventPtr)
 #---------------------------------------------------------------------------
 
 class ScrollWinEvent(Event):
+    """Proxy of C++ ScrollWinEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxScrollWinEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3459,6 +3531,7 @@ MOUSE_BTN_LEFT = _core_.MOUSE_BTN_LEFT
 MOUSE_BTN_MIDDLE = _core_.MOUSE_BTN_MIDDLE
 MOUSE_BTN_RIGHT = _core_.MOUSE_BTN_RIGHT
 class MouseEvent(Event):
+    """Proxy of C++ MouseEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMouseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3658,6 +3731,7 @@ _core_.MouseEvent_swigregister(MouseEventPtr)
 #---------------------------------------------------------------------------
 
 class SetCursorEvent(Event):
+    """Proxy of C++ SetCursorEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSetCursorEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3697,6 +3771,7 @@ _core_.SetCursorEvent_swigregister(SetCursorEventPtr)
 #---------------------------------------------------------------------------
 
 class KeyEvent(Event):
+    """Proxy of C++ KeyEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxKeyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3802,6 +3877,7 @@ _core_.KeyEvent_swigregister(KeyEventPtr)
 #---------------------------------------------------------------------------
 
 class SizeEvent(Event):
+    """Proxy of C++ SizeEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3839,6 +3915,7 @@ _core_.SizeEvent_swigregister(SizeEventPtr)
 #---------------------------------------------------------------------------
 
 class MoveEvent(Event):
+    """Proxy of C++ MoveEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMoveEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3876,6 +3953,7 @@ _core_.MoveEvent_swigregister(MoveEventPtr)
 #---------------------------------------------------------------------------
 
 class PaintEvent(Event):
+    """Proxy of C++ PaintEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaintEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3893,6 +3971,7 @@ class PaintEventPtr(PaintEvent):
 _core_.PaintEvent_swigregister(PaintEventPtr)
 
 class NcPaintEvent(Event):
+    """Proxy of C++ NcPaintEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNcPaintEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3912,6 +3991,7 @@ _core_.NcPaintEvent_swigregister(NcPaintEventPtr)
 #---------------------------------------------------------------------------
 
 class EraseEvent(Event):
+    """Proxy of C++ EraseEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEraseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3935,6 +4015,7 @@ _core_.EraseEvent_swigregister(EraseEventPtr)
 #---------------------------------------------------------------------------
 
 class FocusEvent(Event):
+    """Proxy of C++ FocusEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFocusEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3962,6 +4043,7 @@ _core_.FocusEvent_swigregister(FocusEventPtr)
 #---------------------------------------------------------------------------
 
 class ChildFocusEvent(CommandEvent):
+    """Proxy of C++ ChildFocusEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxChildFocusEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -3985,6 +4067,7 @@ _core_.ChildFocusEvent_swigregister(ChildFocusEventPtr)
 #---------------------------------------------------------------------------
 
 class ActivateEvent(Event):
+    """Proxy of C++ ActivateEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxActivateEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4008,6 +4091,7 @@ _core_.ActivateEvent_swigregister(ActivateEventPtr)
 #---------------------------------------------------------------------------
 
 class InitDialogEvent(Event):
+    """Proxy of C++ InitDialogEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxInitDialogEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4027,6 +4111,7 @@ _core_.InitDialogEvent_swigregister(InitDialogEventPtr)
 #---------------------------------------------------------------------------
 
 class MenuEvent(Event):
+    """Proxy of C++ MenuEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenuEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4058,6 +4143,7 @@ _core_.MenuEvent_swigregister(MenuEventPtr)
 #---------------------------------------------------------------------------
 
 class CloseEvent(Event):
+    """Proxy of C++ CloseEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCloseEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4101,6 +4187,7 @@ _core_.CloseEvent_swigregister(CloseEventPtr)
 #---------------------------------------------------------------------------
 
 class ShowEvent(Event):
+    """Proxy of C++ ShowEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxShowEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4128,6 +4215,7 @@ _core_.ShowEvent_swigregister(ShowEventPtr)
 #---------------------------------------------------------------------------
 
 class IconizeEvent(Event):
+    """Proxy of C++ IconizeEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIconizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4151,6 +4239,7 @@ _core_.IconizeEvent_swigregister(IconizeEventPtr)
 #---------------------------------------------------------------------------
 
 class MaximizeEvent(Event):
+    """Proxy of C++ MaximizeEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMaximizeEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4170,6 +4259,7 @@ _core_.MaximizeEvent_swigregister(MaximizeEventPtr)
 #---------------------------------------------------------------------------
 
 class DropFilesEvent(Event):
+    """Proxy of C++ DropFilesEvent class"""
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDropFilesEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -4198,6 +4288,7 @@ _core_.DropFilesEvent_swigregister(DropFilesEventPtr)
 UPDATE_UI_PROCESS_ALL = _core_.UPDATE_UI_PROCESS_ALL
 UPDATE_UI_PROCESS_SPECIFIED = _core_.UPDATE_UI_PROCESS_SPECIFIED
 class UpdateUIEvent(CommandEvent):
+    """Proxy of C++ UpdateUIEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxUpdateUIEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4307,6 +4398,7 @@ def UpdateUIEvent_GetMode(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class SysColourChangedEvent(Event):
+    """Proxy of C++ SysColourChangedEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxSysColourChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4326,6 +4418,7 @@ _core_.SysColourChangedEvent_swigregister(SysColourChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class MouseCaptureChangedEvent(Event):
+    """Proxy of C++ MouseCaptureChangedEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMouseCaptureChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4349,6 +4442,7 @@ _core_.MouseCaptureChangedEvent_swigregister(MouseCaptureChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class DisplayChangedEvent(Event):
+    """Proxy of C++ DisplayChangedEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDisplayChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4368,6 +4462,7 @@ _core_.DisplayChangedEvent_swigregister(DisplayChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class PaletteChangedEvent(Event):
+    """Proxy of C++ PaletteChangedEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPaletteChangedEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4395,6 +4490,7 @@ _core_.PaletteChangedEvent_swigregister(PaletteChangedEventPtr)
 #---------------------------------------------------------------------------
 
 class QueryNewPaletteEvent(Event):
+    """Proxy of C++ QueryNewPaletteEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxQueryNewPaletteEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4422,6 +4518,7 @@ _core_.QueryNewPaletteEvent_swigregister(QueryNewPaletteEventPtr)
 #---------------------------------------------------------------------------
 
 class NavigationKeyEvent(Event):
+    """Proxy of C++ NavigationKeyEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxNavigationKeyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4472,6 +4569,7 @@ _core_.NavigationKeyEvent_swigregister(NavigationKeyEventPtr)
 #---------------------------------------------------------------------------
 
 class WindowCreateEvent(CommandEvent):
+    """Proxy of C++ WindowCreateEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowCreateEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4493,6 +4591,7 @@ class WindowCreateEventPtr(WindowCreateEvent):
 _core_.WindowCreateEvent_swigregister(WindowCreateEventPtr)
 
 class WindowDestroyEvent(CommandEvent):
+    """Proxy of C++ WindowDestroyEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindowDestroyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4516,6 +4615,7 @@ _core_.WindowDestroyEvent_swigregister(WindowDestroyEventPtr)
 #---------------------------------------------------------------------------
 
 class ContextMenuEvent(CommandEvent):
+    """Proxy of C++ ContextMenuEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxContextMenuEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4545,6 +4645,7 @@ _core_.ContextMenuEvent_swigregister(ContextMenuEventPtr)
 IDLE_PROCESS_ALL = _core_.IDLE_PROCESS_ALL
 IDLE_PROCESS_SPECIFIED = _core_.IDLE_PROCESS_SPECIFIED
 class IdleEvent(Event):
+    """Proxy of C++ IdleEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIdleEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4599,6 +4700,7 @@ def IdleEvent_CanSend(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class PyEvent(Event):
+    """Proxy of C++ PyEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -4632,6 +4734,7 @@ class PyEventPtr(PyEvent):
 _core_.PyEvent_swigregister(PyEventPtr)
 
 class PyCommandEvent(CommandEvent):
+    """Proxy of C++ PyCommandEvent class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyCommandEvent instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -5496,6 +5599,7 @@ _sys.__wxPythonCleanup = __wxPyCleanup()
 #---------------------------------------------------------------------------
 
 class EventLoop(object):
+    """Proxy of C++ EventLoop class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxEventLoop instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7924,6 +8028,7 @@ def Window_FromHWND(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Validator(EvtHandler):
+    """Proxy of C++ Validator class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxValidator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -7985,6 +8090,7 @@ def Validator_SetBellOnError(*args, **kwargs):
     return _core_.Validator_SetBellOnError(*args, **kwargs)
 
 class PyValidator(Validator):
+    """Proxy of C++ PyValidator class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyValidator instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -8012,6 +8118,7 @@ _core_.PyValidator_swigregister(PyValidatorPtr)
 #---------------------------------------------------------------------------
 
 class Menu(EvtHandler):
+    """Proxy of C++ Menu class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenu instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -8261,6 +8368,7 @@ DefaultValidator = cvar.DefaultValidator
 #---------------------------------------------------------------------------
 
 class MenuBar(Window):
+    """Proxy of C++ MenuBar class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenuBar instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -8382,6 +8490,7 @@ _core_.MenuBar_swigregister(MenuBarPtr)
 #---------------------------------------------------------------------------
 
 class MenuItem(Object):
+    """Proxy of C++ MenuItem class"""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxMenuItem instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
