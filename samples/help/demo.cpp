@@ -236,10 +236,10 @@ void MyFrame::OnHelp(wxCommandEvent& event)
       m_help.DisplaySection(1);
       break;
    case HelpDemo_Help_Functions:
-      m_help.DisplaySection(4);
+      m_help.DisplaySection(2);
       break;
    case HelpDemo_Help_Help:
-      m_help.DisplaySection(5);
+      m_help.DisplaySection(3);
       break;
 
    // These three calls are only used by wxExtHelpController
