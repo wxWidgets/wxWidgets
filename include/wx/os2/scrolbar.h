@@ -27,9 +27,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSB_HORIZONTAL,
-#if wxUSE_VALIDATORS
            const wxValidator& validator = wxDefaultValidator,
-#endif
            const wxString& name = wxScrollBarNameStr)
   {
       Create(parent, id, pos, size, style, validator, name);
@@ -38,9 +36,7 @@ public:
            const wxPoint& pos = wxDefaultPosition,
            const wxSize& size = wxDefaultSize,
            long style = wxSB_HORIZONTAL,
-#if wxUSE_VALIDATORS
            const wxValidator& validator = wxDefaultValidator,
-#endif
            const wxString& name = wxScrollBarNameStr);
 
   int GetThumbPosition() const ;

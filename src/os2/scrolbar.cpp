@@ -33,9 +33,7 @@ END_EVENT_TABLE()
 bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos,
            const wxSize& size, long style,
-#if wxUSE_VALIDATORS
            const wxValidator& validator,
-#endif
            const wxString& name)
 {
     if (!parent)

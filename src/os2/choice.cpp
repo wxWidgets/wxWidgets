@@ -31,9 +31,7 @@ bool wxChoice::Create(
 , int                               n
 , const wxString                    asChoices[]
 , long                              lStyle
-#if wxUSE_VALIDATORS
 , const wxValidator&                rValidator
-#endif
 , const wxString&                   rsName
 )
 {
@@ -44,9 +42,7 @@ bool wxChoice::Create(
                        ,rPos
                        ,rSize
                        ,lStyle
-#if wxUSE_VALIDATORS
                        ,rValidator
-#endif
                        ,rsName
                       ))
         return FALSE;
