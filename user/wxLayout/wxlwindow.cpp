@@ -141,6 +141,8 @@ wxLayoutWindow::UpdateScrollbars(void)
 void
 wxLayoutWindow::Print(void)
 {
+   VAR(wxThePrintSetupData);
+
    wxPostScriptDC   dc("layout.ps",true,this);
    if (dc.Ok() && dc.StartDoc((char *)_("Printing message...")))
    {

@@ -25,6 +25,10 @@
 #include   "wxllist.h"
 #include   "iostream"
 
+#include   <wx/dc.h>
+#include   <wx/postscrp.h>
+#include   <wx/print.h>
+
 #define   BASELINESTRETCH   12
 
 #define   VAR(x)   cerr << #x"=" << x << endl;
@@ -33,7 +37,7 @@
 
 #ifdef WXLAYOUT_DEBUG
 static const char *_t[] = { "invalid", "text", "cmd", "icon",
-                             "linebreak"};
+                            "linebreak"};
 
 void
 wxLayoutObjectBase::Debug(void)
@@ -63,7 +67,7 @@ wxLayoutObjectText::GetSize(CoordType *baseLine) const
 
 void
 wxLayoutObjectText::Draw(wxDC &dc, wxPoint position, CoordType baseLine,
-                    bool draw)
+                         bool draw)
 {
    long descent = 0l;
    dc.GetTextExtent(Str(m_Text),&m_Width, &m_Height, &descent);
@@ -97,7 +101,7 @@ wxLayoutObjectIcon::wxLayoutObjectIcon(wxIcon *icon)
 
 void
 wxLayoutObjectIcon::Draw(wxDC &dc, wxPoint position, CoordType baseLine,
-                    bool draw)
+                         bool draw)
 {
    position.y += baseLine - m_Icon->GetHeight();
    if(draw)
@@ -116,8 +120,8 @@ wxLayoutObjectIcon::GetSize(CoordType *baseLine) const
 
 
 wxLayoutObjectCmd::wxLayoutObjectCmd(int size, int family, int style, int
-                           weight, bool underline,
-                           wxColour const *fg, wxColour const *bg)
+                                     weight, bool underline,
+                                     wxColour const *fg, wxColour const *bg)
    
 {
    m_font = new wxFont(size,family,style,weight,underline);
@@ -154,7 +158,7 @@ wxLayoutObjectCmd::GetStyle(void) const
 
 void
 wxLayoutObjectCmd::Draw(wxDC &dc, wxPoint position, CoordType lineHeight,
-                   bool draw)
+                        bool draw)
 {
    wxASSERT(m_font);
    // this get called even when draw==false, so that recalculation
@@ -204,7 +208,7 @@ wxLayoutList::SetFont(int family, int size, int style, int weight,
    
    Insert(
       new wxLayoutObjectCmd(m_FontPtSize,m_FontFamily,m_FontStyle,m_FontWeight,m_FontUnderline,
-                       m_ColourFG, m_ColourBG));
+                            m_ColourFG, m_ColourBG));
 }
 
 void
@@ -271,6 +275,40 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
 
    // used temporarily
    wxLayoutObjectText *tobj = NULL;
+
+
+   // this is needed for printing to a printer:
+   // only interesting for printer/PS output
+   int pageWidth, pageHeight;   //GetSize() still needs int at the moment
+   struct
+   {
+      int top, bottom, left, right;
+   } margins;
+
+   if(
+#ifdef __WXMSW__
+      dc.IsKindOf(CLASSINFO(wxPrinterDC)) ||
+#endif
+      dc.IsKindOf(CLASSINFO(wxPostScriptDC)))
+   {
+      VAR(wxThePrintSetupData);
+      
+      dc.GetSize(&pageWidth, &pageHeight);
+      dc.StartDoc(_("Printing..."));
+      dc.StartPage();
+      margins.top = (1*pageHeight)/10;    // 10%
+      margins.bottom = (9*pageHeight)/10; // 90%
+      margins.left = (1*pageWidth)/10;
+      margins.right = (9*pageWidth)/10;
+   }
+   else
+   {
+      margins.top = 0; margins.left = 0;
+      margins.right = -1;
+      margins.bottom = -1;
+   }
+   position.y = margins.right;
+   position.x = margins.left;
    
    VAR(findObject); VAR(findCoords.x); VAR(findCoords.y);
    // if the cursorobject is a cmd, we need to find the first
@@ -337,7 +375,7 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
          else
          {
             if(type == WXLO_TYPE_LINEBREAK)
-                dc.DrawLine(0, position.y+baseLineSkip, 0, position.y+2*baseLineSkip);
+               dc.DrawLine(0, position.y+baseLineSkip, 0, position.y+2*baseLineSkip);
             else
             {
                if(size.x == 0)
@@ -379,7 +417,16 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
          }
 
          if(! draw) // finished calculating sizes
-         {  // do this line again, this time drawing it
+         {
+            // if the this line needs to go onto a new page, we need
+            // to change pages before drawing it:
+            if(margins.bottom != -1 && position.y > margins.bottom)
+            {
+               dc.EndPage();
+               position_HeadOfLine.y = margins.top;
+               dc.StartPage();
+            }
+            // do this line again, this time drawing it
             position = position_HeadOfLine;
             draw = true;
             i = headOfLine;
@@ -394,7 +441,7 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       // is it a linebreak?
       if(type == WXLO_TYPE_LINEBREAK || i == tail())
       {
-         position.x = 0;
+         position.x = margins.left;
          position.y += baseLineSkip;
          baseLine = m_FontPtSize;
          objBaseLine = baseLine; // not all objects set it
@@ -405,6 +452,7 @@ wxLayoutList::Draw(wxDC &dc, bool findObject, wxPoint const &findCoords)
       }
       i++;
    }
+   dc.EndDoc();
    m_MaxY = position.y;
    return foundObject;
 }
