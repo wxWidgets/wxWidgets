@@ -781,6 +781,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_ACCEL=no
   DEFAULT_wxUSE_BUTTON=no
   DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CALCTRL=no
   DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLST=no
@@ -920,6 +921,7 @@ else
   DEFAULT_wxUSE_ACCEL=yes
   DEFAULT_wxUSE_BUTTON=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CALCTRL=yes
   DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLST=yes
@@ -1150,6 +1152,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_CARET=yes
   DEFAULT_wxUSE_COMBOBOX=yes
   DEFAULT_wxUSE_BMPBUTTON=yes
+  DEFAULT_wxUSE_CALCTRL=yes
   DEFAULT_wxUSE_CHECKBOX=yes
   DEFAULT_wxUSE_CHECKLISTBOX=yes
   DEFAULT_wxUSE_CHOICE=yes
@@ -1184,6 +1187,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_CARET=no
   DEFAULT_wxUSE_COMBOBOX=no
   DEFAULT_wxUSE_BMPBUTTON=no
+  DEFAULT_wxUSE_CALCTRL=no
   DEFAULT_wxUSE_CHECKBOX=no
   DEFAULT_wxUSE_CHECKLISTBOX=no
   DEFAULT_wxUSE_CHOICE=no
@@ -1217,6 +1221,7 @@ fi
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
 WX_ARG_ENABLE(button,      [  --enable-button         use wxButton class], wxUSE_BUTTON)
 WX_ARG_ENABLE(bmpbutton,   [  --enable-bmpbutton      use wxBitmapButton class], wxUSE_BMPBUTTON)
+WX_ARG_ENABLE(calendar,    [  --enable-calendar       use wxCalendarCtrl class], wxUSE_CALCTRL)
 WX_ARG_ENABLE(caret,       [  --enable-caret          use wxCaret class], wxUSE_CARET)
 WX_ARG_ENABLE(checkbox,    [  --enable-checkbox       use wxCheckBox class], wxUSE_CHECKBOX)
 WX_ARG_ENABLE(checklst,    [  --enable-checklst       use wxCheckListBox (listbox with checkboxes) class], wxUSE_CHECKLST)
@@ -3585,6 +3590,12 @@ fi
 if test "$wxUSE_BMPBUTTON" = "yes"; then
   AC_DEFINE(wxUSE_BMPBUTTON)
   USES_CONTROLS=1
+fi
+
+if test "$wxUSE_CALCTRL" = "yes"; then
+  AC_DEFINE(wxUSE_CALENDAR)
+  USES_CONTROLS=1
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS calendar"
 fi
 
 if test "$wxUSE_CARET" = "yes"; then

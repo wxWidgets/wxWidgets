@@ -16,8 +16,12 @@
    2. background bitmap for the calendar?
  */
 
-#ifndef _WX_CALCTRL_H
-#define _WX_CALCTRL_H
+#ifndef _WX_CALCTRL_H_
+#define _WX_CALCTRL_H_
+
+#include "wx/defs.h"
+
+#if wxUSE_CALENDARCTRL
 
 #include "wx/datetime.h"
 
@@ -163,4 +167,7 @@ typedef void (wxEvtHandler::*wxCalendarEventFunction)(wxCalendarEvent&);
 #define EVT_CALENDAR_YEAR(id, fn) { wxEVT_CALENDAR_YEAR_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL },
 #define EVT_CALENDAR_WEEKDAY_CLICKED(id, fn) { wxEVT_CALENDAR_WEEKDAY_CLICKED, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction) (wxCalendarEventFunction) & fn, (wxObject *) NULL },
 
-#endif // _WX_CALCTRL_H
+#endif // wxUSE_CALENDARCTRL
+
+#endif // _WX_CALCTRL_H_
+
