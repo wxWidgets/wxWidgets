@@ -285,8 +285,11 @@ wxGenericTreeItem *wxGenericTreeItem::HitTest( const wxPoint& point,
       onButton = TRUE;
       return this;
     }
+    
+    int w = m_width;
+    if (m_image != -1) w += 20;
 
-    if ((point.x > m_x) && (point.x < m_x+m_width))
+    if ((point.x > m_x) && (point.x < m_x+w))
     {
       onButton = FALSE;
       return this;
@@ -883,6 +886,10 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
     int start_y = 0;
     ViewStart( &start_x, &start_y );
     start_y *= 10;
+    
+    int client_h = 0;
+    int client_w = 0;
+    GetClientSize( &client_w, &client_h );
 
     if (item_y < start_y+3)
     {
@@ -891,22 +898,18 @@ void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
         m_anchor->GetSize( x, y );
         y += 2*m_lineHeight;
         int x_pos = GetScrollPos( wxHORIZONTAL );
-	SetScrollbars( 10, 10, x/10, y/10, x_pos, item_y/10 );
+	SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
         return;
     }
 
-    int w = 0;
-    int h = 0;
-    GetClientSize( &w, &h );
-
-    if (item_y > start_y+h-26)
+    if (item_y > start_y+client_h-16)
     {
        int x = 0;
        int y = 0;
        m_anchor->GetSize( x, y );
        y += 2*m_lineHeight;
        int x_pos = GetScrollPos( wxHORIZONTAL );
-       SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-h+30)/10 );
+       SetScrollbars( 10, 10, x/10, y/10, x_pos, (item_y-client_h/2)/10 );
        return;
     }
 }
@@ -1255,8 +1258,38 @@ void wxTreeCtrl::OnChar( wxKeyEvent &event )
       }
       break;
 
-    case WXK_LEFT:
     case WXK_UP:
+      {
+        wxTreeItemId prev = GetPrevSibling( m_current );
+	if (!prev)
+	{
+	   prev = GetParent( m_current );
+	   long cockie = 0;
+	   wxTreeItemId current = m_current;
+	   if (current == GetFirstChild( prev, cockie ))
+	   {
+	      // otherwise we return to where we came from
+              SelectItem( prev );
+              EnsureVisible( prev );
+	      break;
+	   }
+	}
+	if (prev)
+	{
+	  while (IsExpanded(prev))
+	  {
+	    int c = (int)GetChildrenCount( prev, FALSE );
+	    long cockie = 0;
+	    prev = GetFirstChild( prev, cockie );
+	    for (int i = 0; i < c-1; i++)
+	      prev = GetNextSibling( prev );
+	  }
+          SelectItem( prev );
+          EnsureVisible( prev );
+	}
+      }
+      break;
+    case WXK_LEFT:
       {
         wxTreeItemId prev = GetPrevSibling( m_current );
         if (prev != 0)

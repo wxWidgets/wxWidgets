@@ -27,55 +27,55 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap 
       const wxPoint &pos, const wxSize &size, 
       long style, const wxString &name )
 {
-  Create( parent, id, bitmap, pos, size, style, name );
+    Create( parent, id, bitmap, pos, size, style, name );
 }
 
 bool wxStaticBitmap::Create( wxWindow *parent, wxWindowID id, const wxBitmap &bitmap, 
       const wxPoint &pos, const wxSize &size, 
       long style, const wxString &name )
 {
-  m_needParent = TRUE;
+    m_needParent = TRUE;
   
-  wxSize newSize = size;
+    wxSize newSize = size;
   
-  PreCreation( parent, id, pos, size, style, name );
+    PreCreation( parent, id, pos, size, style, name );
 
-  m_bitmap = bitmap;
+    m_bitmap = bitmap;
     
-  if (m_bitmap.Ok())
-  {
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
-    m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
+    if (m_bitmap.Ok())
+    {
+        GdkBitmap *mask = (GdkBitmap *) NULL;
+        if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
+        m_widget = gtk_pixmap_new( m_bitmap.GetPixmap(), mask );
     
-    if (newSize.x == -1) newSize.x = m_bitmap.GetWidth();
-    if (newSize.y == -1) newSize.y = m_bitmap.GetHeight();
-    SetSize( newSize.x, newSize.y );
-  }
-  else
-  {
-    m_widget = gtk_label_new( "Bitmap" );
-  }
+        if (newSize.x == -1) newSize.x = m_bitmap.GetWidth();
+        if (newSize.y == -1) newSize.y = m_bitmap.GetHeight();
+        SetSize( newSize.x, newSize.y );
+    }
+    else
+    {
+        m_widget = gtk_label_new( "Bitmap" );
+    }
   
-  m_parent->AddChild( this );
+    m_parent->AddChild( this );
 
-  (m_parent->m_insertCallback)( m_parent, this );
+    (m_parent->m_insertCallback)( m_parent, this );
   
-  PostCreation();
+    PostCreation();
   
-  Show( TRUE );
+    Show( TRUE );
     
-  return TRUE;
+    return TRUE;
 }
 
 void wxStaticBitmap::SetBitmap( const wxBitmap &bitmap ) 
 {
-  m_bitmap = bitmap;
+    m_bitmap = bitmap;
   
-  if (m_bitmap.Ok())
-  {
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
-    gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
-  }
+    if (m_bitmap.Ok())
+    {
+        GdkBitmap *mask = (GdkBitmap *) NULL;
+        if (m_bitmap.GetMask()) mask = m_bitmap.GetMask()->GetBitmap();
+        gtk_pixmap_set( GTK_PIXMAP(m_widget), m_bitmap.GetPixmap(), mask );
+    }
 }

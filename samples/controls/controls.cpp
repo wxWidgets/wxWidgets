@@ -400,7 +400,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h ) :
     "\n"
     "This is also supposed to demonstrate how\n"
     "to use static controls.\n",
-    wxPoint(208,25), wxSize(200, 100) );
+    wxPoint(208,25)
+#ifdef __WXMSW__ 
+    ,wxSize(210, 110)
+#endif
+    );
   m_spintext = new wxTextCtrl( panel, -1, "0", wxPoint(20,160), wxSize(80,-1) );
   m_spintext->SetBackgroundColour("wheat");
   m_spinbutton = new wxSpinButton( panel, ID_SPIN, wxPoint(103,159), wxSize(-1,-1) );
