@@ -28,8 +28,13 @@ class WXDLLEXPORT wxListBox;
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
 
+#ifdef __WXWINCE__
+#define wxCHOICEDLG_STYLE \
+    (wxDEFAULT_DIALOG_STYLE | wxOK | wxCANCEL | wxCENTRE)
+#else
 #define wxCHOICEDLG_STYLE \
     (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxOK | wxCANCEL | wxCENTRE)
+#endif
 
 // ----------------------------------------------------------------------------
 // wxAnyChoiceDialog: a base class for dialogs containing a listbox

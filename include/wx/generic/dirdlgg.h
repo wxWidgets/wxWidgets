@@ -27,8 +27,14 @@ class WXDLLEXPORT wxTreeEvent;
 extern WXDLLEXPORT_DATA(const wxChar*) wxDirDialogNameStr;
 extern WXDLLEXPORT_DATA(const wxChar*) wxDirSelectorPromptStr;
 #ifndef wxDD_DEFAULT_STYLE
+
+#ifdef __WXWINCE__
+    #define wxDD_DEFAULT_STYLE \
+        (wxDEFAULT_DIALOG_STYLE | wxDD_NEW_DIR_BUTTON)
+#else
     #define wxDD_DEFAULT_STYLE \
         (wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER | wxDD_NEW_DIR_BUTTON)
+#endif
 #endif
 
 #include "wx/dialog.h"
