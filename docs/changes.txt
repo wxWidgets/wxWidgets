@@ -10,17 +10,17 @@ wxBase:
   under 64 bit architectures, please replace it with RemoveAt() in your
   code.
 
+- wxArray<T> macros have been changed to fix runtime problems under 64 bit
+  architectures and as a side effect of this WX_DEFINE_ARRAY() can only be
+  used now for the pointer types, WX_DEFINE_ARRAY_INT should be used for the
+  arrays containing non-pointers.
+
 - wxObject::CopyObject() and Clone() methods were removed because they
   simply don't make sense for all objects
 
 - wxEvent now has a pure virtual Clone() method which must be implemented
   by all derived classes, if you have user-defined event classes please
   add "wxEvent *Clone() const { return new MyEvent(*this); }" line to them
-
-- wxArray<T> macros have been changed to fix runtime problems under 64 bit
-  architectures. The base class is now implemented once for each needed
-  primitive type in order to avoid invalid reference casts. Macros are
-  provided to implement new arrays using these primitive base arrays.
 
 All (GUI):
 
