@@ -200,6 +200,8 @@ protected:
          m_selFrom,
          m_selTo;
 
+    wxString m_range10_20;
+
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
@@ -632,7 +634,12 @@ void TextWidgetsPage::OnIdle(wxIdleEvent& WXUNUSED(event))
 
     if ( m_textRange )
     {
-        m_textRange->SetValue(m_text->GetRange(10, 20));
+        wxString range = m_text->GetRange(10, 20);
+        if ( range != m_range10_20 )
+        {
+            m_range10_20 = range;
+            m_textRange->SetValue(range);
+        }
     }
 }
 
