@@ -43,12 +43,6 @@
 #include "wx/generic/prntdlgg.h"
 #include "wx/generic/printps.h"
 
-/*
-#ifdef __WXMSW__
-#include "wx/mdi.h"
-#endif
-*/
-
 #include <stdio.h>
 #include <string.h>
 
@@ -1331,9 +1325,9 @@ BEGIN_EVENT_TABLE(wxDocChildFrame, wxFrame)
     EVT_ACTIVATE(wxDocChildFrame::OnActivate)
 END_EVENT_TABLE()
 
-wxDocChildFrame::wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, const wxString& title,
+wxDocChildFrame::wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, wxWindowID id, const wxString& title,
   const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-    wxFrame(frame, -1, title, pos, size, style, name)
+    wxFrame(frame, id, title, pos, size, style, name)
 {
   m_childDocument = doc;
   m_childView = view;
@@ -1400,9 +1394,9 @@ BEGIN_EVENT_TABLE(wxDocParentFrame, wxFrame)
     EVT_MENU_RANGE(wxID_FILE1, wxID_FILE2, wxDocParentFrame::OnMRUFile)
 END_EVENT_TABLE()
 
-wxDocParentFrame::wxDocParentFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
+wxDocParentFrame::wxDocParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
   const wxPoint& pos, const wxSize& size, long style, const wxString& name):
-  wxFrame(frame, -1, title, pos, size, style, name)
+  wxFrame(frame, id, title, pos, size, style, name)
 {
   m_docManager = manager;
 }

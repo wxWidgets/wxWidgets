@@ -73,6 +73,7 @@ COMMONOBJS = \
   $(MSWDIR)\config.obj \
   $(MSWDIR)\cmndata.obj \
   $(MSWDIR)\docview.obj \
+  $(MSWDIR)\docmdi.obj \
   $(MSWDIR)\dynarray.obj \
   $(MSWDIR)\event.obj \
   $(MSWDIR)\file.obj \
@@ -407,6 +408,8 @@ $(MSWDIR)\config.obj:     $(COMMDIR)\config.$(SRCSUFF)
 $(MSWDIR)\cmndata.obj:     $(COMMDIR)\cmndata.$(SRCSUFF)
 
 $(MSWDIR)\docview.obj:     $(COMMDIR)\docview.$(SRCSUFF)
+
+$(MSWDIR)\docmdi.obj:     $(COMMDIR)\docmdi.$(SRCSUFF)
 
 $(MSWDIR)\dynarray.obj:     $(COMMDIR)\dynarray.$(SRCSUFF)
 

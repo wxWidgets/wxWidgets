@@ -16,7 +16,7 @@
 #ifndef __DOCVIEWSAMPLEH__
 #define __DOCVIEWSAMPLEH__
 
-#include "wx/docview.h"
+#include "wx/docmdi.h"
 
 class wxDocManager;
 
@@ -38,16 +38,13 @@ DECLARE_APP(MyApp)
 
 // Define a new frame
 class MyCanvas;
-class MyFrame: public wxDocParentFrame
+class MyFrame: public wxDocMDIParentFrame
 {
   DECLARE_CLASS(MyFrame)
  public:
   wxMenu *editMenu;
   
-  // This pointer only needed if in single window mode
-  MyCanvas *canvas;
-  
-  MyFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size,
+  MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title, const wxPoint& pos, const wxSize& size,
     const long type);
 
   void OnAbout(wxCommandEvent& event);

@@ -355,7 +355,7 @@ class WXDLLEXPORT wxDocChildFrame: public wxFrame
   DECLARE_CLASS(wxDocChildFrame)
 
  public:
-  wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, const wxString& title,
+  wxDocChildFrame(wxDocument *doc, wxView *view, wxFrame *frame, wxWindowID id, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long type = wxDEFAULT_FRAME_STYLE, const wxString& name = "frame");
   ~wxDocChildFrame(void);
@@ -387,7 +387,7 @@ class WXDLLEXPORT wxDocParentFrame: public wxFrame
 {
   DECLARE_CLASS(wxDocParentFrame)
  public:
-  wxDocParentFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
+  wxDocParentFrame(wxDocManager *manager, wxFrame *frame, wxWindowID id, const wxString& title,
     const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize,
     long type = wxDEFAULT_FRAME, const wxString& name = "frame");
 

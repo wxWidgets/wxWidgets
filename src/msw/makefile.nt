@@ -77,6 +77,7 @@ COMMONOBJS = \
   $(COMMDIR)\db.obj \
   $(COMMDIR)\dbtable.obj \
   $(COMMDIR)\docview.obj \
+  $(COMMDIR)\docmdi.obj \
   $(COMMDIR)\dynarray.obj \
   $(COMMDIR)\event.obj \
   $(COMMDIR)\file.obj \
@@ -737,6 +738,11 @@ $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(COMMDIR)/docview.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
+<<
+
+$(COMMDIR)/docmdi.obj:     $*.$(SRCSUFF)
         cl @<<
 $(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<

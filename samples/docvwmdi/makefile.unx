@@ -1,0 +1,64 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for docview example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/make.env
+
+OBJECTS = $(OBJDIR)/docview.$(OBJSUFF) $(OBJDIR)/view.$(OBJSUFF) $(OBJDIR)/doc.$(OBJSUFF)
+
+.SUFFIXES:
+
+all:    $(OBJDIR) wx$(GUISUFFIX) docview$(GUISUFFIX)
+
+wx_motif:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx motif
+
+wx_ol:
+	cd $(WXDIR)/src/x; $(MAKE) -f makefile.unx xview
+motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif GUI=-Dwx_motif GUISUFFIX=_motif OPT='$(OPT)' LDLIBS='$(MOTIFLDLIBS)' OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)' XVIEW_LINK=
+
+xview:
+	$(MAKE) -f makefile.unx GUI=-Dwx_xview GUISUFFIX=_ol CC=$(CC) OPTIONS='$(OPTIONS)' DEBUG='$(DEBUG)' WARN='$(WARN)' XLIB='$(XLIB)' XINCLUDE='$(XINCLUDE)'
+
+hp:
+	$(MAKE) -f makefile,unx GUI=-Dwx_motif GUISUFFIX=_hp CC=CC DEBUG='$(DEBUG)' WARN='-w' \
+         XINCLUDE='$(HPXINCLUDE)' XLIB='$(HPXLIB)' XVIEW_LINK='' LDLIBS='$(HPLDLIBS)'
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+docview$(GUISUFFIX): $(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o docview$(GUISUFFIX) $(OBJECTS) $(XVIEW_LINK) $(LDLIBS)
+
+$(OBJDIR)/docview.$(OBJSUFF):        docview.$(SRCSUFF) docview.h doc.h view.h
+	$(CC) -c $(CPPFLAGS) -o $@ docview.$(SRCSUFF)
+
+$(OBJDIR)/doc.$(OBJSUFF):        doc.$(SRCSUFF) doc.h
+	$(CC) -c $(CPPFLAGS) -o $@ doc.$(SRCSUFF)
+
+$(OBJDIR)/view.$(OBJSUFF):        view.$(SRCSUFF) view.h
+	$(CC) -c $(CPPFLAGS) -o $@ view.$(SRCSUFF)
+
+clean_motif:
+	$(MAKE) -f makefile.unx GUISUFFIX=_motif cleanany
+
+clean_ol:
+	$(MAKE) -f makefile.unx GUISUFFIX=_ol cleanany
+
+clean_hp:
+	$(MAKE) -f makefile.unx GUISUFFIX=_hp cleanany
+
+cleanany:
+	rm -f $(OBJECTS) docview$(GUISUFFIX) core

@@ -79,6 +79,7 @@ COMMONOBJS = \
   $(COMMDIR)/config.$(OBJSUFF) \
   $(COMMDIR)/cmndata.$(OBJSUFF) \
   $(COMMDIR)/docview.$(OBJSUFF) \
+  $(COMMDIR)/docmdi.$(OBJSUFF) \
   $(COMMDIR)/dynarray.$(OBJSUFF) \
   $(COMMDIR)/event.$(OBJSUFF) \
   $(COMMDIR)/file.$(OBJSUFF) \
