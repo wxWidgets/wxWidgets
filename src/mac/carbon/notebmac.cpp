@@ -163,34 +163,6 @@ wxSize wxNotebook::CalcSizeFromPage(const wxSize& sizePage) const
     return DoGetSizeFromClientSize( sizePage ) ;
 }
 
-wxSize wxNotebook::DoGetBestSize() const
-{
-    // calculate the max page size
-    wxSize size(0, 0);
-
-    size_t count = GetPageCount();
-    if ( count )
-    {
-        for ( size_t n = 0; n < count; n++ )
-        {
-            wxSize sizePage = m_pages[n]->GetSize();
-
-            if ( size.x < sizePage.x )
-                size.x = sizePage.x;
-            if ( size.y < sizePage.y )
-                size.y = sizePage.y;
-        }
-    }
-    else // no pages
-    {
-        // use some arbitrary default size
-        size.x =
-        size.y = 100;
-    }
-
-    return CalcSizeFromPage(size);
-}
-
 int wxNotebook::SetSelection(size_t nPage)
 {
     wxCHECK_MSG( IS_VALID_PAGE(nPage), -1, wxT("notebook page out of range") );

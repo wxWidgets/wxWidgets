@@ -133,7 +133,6 @@ public:
   // -------------------
   virtual void Command(wxCommandEvent& event);
 protected:
-  virtual wxSize DoGetBestSize() const ;
   virtual wxNotebookPage *DoRemovePage(size_t page) ;
   virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
   // common part of all ctors
