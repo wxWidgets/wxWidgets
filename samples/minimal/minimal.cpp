@@ -145,17 +145,17 @@ MyFrame::MyFrame(const wxString& title)
 
 #if wxUSE_MENUS
     // create a menu bar
-    wxMenu *menuFile = new wxMenu;
+    wxMenu *fileMenu = new wxMenu;
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
 
-    menuFile->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
+    fileMenu->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
     wxMenuBar *menuBar = new wxMenuBar();
-    menuBar->Append(menuFile, _T("&File"));
+    menuBar->Append(fileMenu, _T("&File"));
     menuBar->Append(helpMenu, _T("&Help"));
 
     // ... and attach this menu bar to the frame
