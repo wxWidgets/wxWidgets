@@ -17,6 +17,7 @@
 #include "wx/dcmemory.h"
 #include "wx/region.h"
 #include "wx/window.h"
+#include "wx/toplevel.h"
 #include <math.h>
 
 //-----------------------------------------------------------------------------
