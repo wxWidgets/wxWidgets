@@ -77,10 +77,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxFrame, wxWindow)
 
 void wxFrame::Init()
 {
-    m_iconized = FALSE;
+    m_bIconized = FALSE;
 
 #if wxUSE_TOOLTIPS
-    m_hwndToolTip = 0;
+    m_hHwndToolTip = 0;
 #endif
     // Data to save/restore when calling ShowFullScreen
     m_lFsStyle           = 0L;
@@ -106,7 +106,6 @@ bool wxFrame::Create(
     int                             nY      = rPos.y;
     int                             nWidth  = rSize.x;
     int                             nHeight = rSize.y;
-    SWP                             vSwp;
 
     SetName(rsName);
     m_windowStyle    = lStyle;
@@ -121,14 +120,14 @@ bool wxFrame::Create(
     else
         m_windowId = (int)NewControlId();
 
-    if (pParent) 
+    if (pParent)
         pParent->AddChild(this);
 
     m_bIconized = FALSE;
 
     //
     // We pass NULL as parent to MSWCreate because frames with parents behave
-    // very strangely under Win95 shell. 
+    // very strangely under Win95 shell.
     // Alteration by JACS: keep normal Windows behaviour (float on top of parent)
     // with this style.
     //
@@ -167,7 +166,7 @@ wxFrame::~wxFrame()
 
         if (wxTheApp->GetExitOnFrameDelete())
         {
-            ::WinPostMsg(m_hwnd, WM_QUIT, 0, 0);
+            ::WinPostMsg(GetHwnd(), WM_QUIT, 0, 0);
         }
     }
     wxModelessWindows.DeleteObject(this);
@@ -184,16 +183,13 @@ wxFrame::~wxFrame()
     {
         if (GetParent() && GetParent()->GetHWND())
         {
-            ::WinQueryWindowPos( (HWND) GetParent()->GetHWND()
-                                ,&vSwp
-                               );
             ::WinSetWindowPos( (HWND) GetParent()->GetHWND()
                               ,HWND_TOP
-                              ,vSwp.x
-                              ,vSwp.y
-                              ,vSwp.cx
-                              ,vSwp,cy
-                              ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
+                              ,0
+                              ,0
+                              ,0
+                              ,0
+                              ,SWP_ZORDER
                              );
         }
     }
@@ -202,180 +198,245 @@ wxFrame::~wxFrame()
 //
 // Get size *available for subwindows* i.e. excluding menu bar, toolbar etc.
 //
-void wxFrame::DoGetClientSize(int *x, int *y) const
+void wxFrame::DoGetClientSize(
+  int*                              pX
+, int*                              pY
+) const
 {
-// TODO:
-/*
-  RECT rect;
-  ::GetClientRect(GetHwnd(), &rect);
+    //
+    // OS/2 PM's coordinates go from bottom-left not 
+    // top-left thus the += instead of the -=
+    //
+    RECTL                           vRect;
+    HWND                            hWndClient;
+
+    //
+    // PM has no GetClientRect that inherantly knows about the client window
+    // We have to explicitly go fetch it!
+    //
+    hWndClient = ::WinWindowFromId(GetHwnd(), FID_CLIENT);
+    ::WinQueryWindowRect(hWndClient, &vRect);
 
 #if wxUSE_STATUSBAR
-  if ( GetStatusBar() )
-  {
-    int statusX, statusY;
-    GetStatusBar()->GetClientSize(&statusX, &statusY);
-    rect.bottom -= statusY;
-  }
+    if ( GetStatusBar() )
+    {
+        int                         nStatusX
+        int                         nStatusY;
+
+        GetStatusBar()->GetClientSize( &nStatusX
+                                      ,&nStatusY
+                                     );
+        vRect.yBottom += nStatusY;
+    }
 #endif // wxUSE_STATUSBAR
 
-  wxPoint pt(GetClientAreaOrigin());
-  rect.bottom -= pt.y;
-  rect.right -= pt.x;
+    wxPoint                         vPoint(GetClientAreaOrigin());
+  
+    vRect.bottom += pt.y;
+    vRect.right -= pt.x;
 
-  if ( x )
-    *x = rect.right;
-  if ( y )
-    *y = rect.bottom;
-*/
-}
+    if (pX)
+        *pX = vRect.xRight;
+    if (pY)
+        *pY = vRect.yBottom;
+} // end of wxFrame::DoGetClientSize
 
+//    
 // Set the client size (i.e. leave the calculation of borders etc.
 // to wxWindows)
-void wxFrame::DoSetClientSize(int width, int height)
+//
+void wxFrame::DoSetClientSize(
+  int                               nWidth
+, int                               nHeight
+)
 {
-  HWND hWnd = GetHwnd();
+    HWND                            hWnd = GetHwnd();
+    HWND                            hWndClient;
+    RECTL                           vRect;
+    RECT                            vRect2;
 
-// TODO:
-/*
-  RECT rect;
-  ::GetClientRect(hWnd, &rect);
+    hWndClient = ::WinWindowFromId(GetHwnd(), FID_CLIENT);
+    ::WinQueryWindowRect(hWndClient, &vRect);
 
-  RECT rect2;
-  GetWindowRect(hWnd, &rect2);
+    ::WinQueryWindowRect(hWnd, &vRect2);
 
-  // Find the difference between the entire window (title bar and all)
-  // and the client area; add this to the new client size to move the
-  // window
-  int actual_width = rect2.right - rect2.left - rect.right + width;
-  int actual_height = rect2.bottom - rect2.top - rect.bottom + height;
+    //
+    // Find the difference between the entire window (title bar and all)
+    // and the client area; add this to the new client size to move the
+    // window.  Remember OS/2's backwards y coord system!
+    //
+    int                             nActualWidth = vRect2.xRight - vRect2.xLeft - vRect.xRight + nWidth;
+    int                             nActualHeight = vRect2.yTop + vRect2.yTop - vRect.yTop + nHeight;
 
 #if wxUSE_STATUSBAR
-  if ( GetStatusBar() )
-  {
-    int statusX, statusY;
-    GetStatusBar()->GetClientSize(&statusX, &statusY);
-    actual_height += statusY;
-  }
+    if ( GetStatusBar() )
+    {
+        int                         nStatusX;
+        int                         nStatusY;
+
+        GetStatusBar()->GetClientSize( &nStatusX
+                                      ,&nStatusY
+                                     );
+        nActualHeight += nStatusY;
+    }
 #endif // wxUSE_STATUSBAR
 
-  wxPoint pt(GetClientAreaOrigin());
-  actual_width += pt.y;
-  actual_height += pt.x;
+    wxPoint                         vPoint(GetClientAreaOrigin());
+    nActualWidth  += vPoint.y;
+    nActualHeight += vPoint.x;
 
-  POINT point;
-  point.x = rect2.left;
-  point.y = rect2.top;
+    POINTL                          vPointl;
 
-  MoveWindow(hWnd, point.x, point.y, actual_width, actual_height, (BOOL)TRUE);
+    vPointl.x = vRect2.xLeft;
+    vPoint.y  = vRect2.yTop;
 
-  wxSizeEvent event(wxSize(width, height), m_windowId);
-  event.SetEventObject( this );
-  GetEventHandler()->ProcessEvent(event);
-*/
-}
+    ::WinSetWindowPos( hWnd
+                      ,HWND_TOP
+                      ,vPointl.x
+                      ,vPointl.y
+                      ,nActualWidth
+                      ,nActualHeight
+                      ,SWP_MOVE | SWP_SIZE | SWP_SHOW
+                     );
 
-void wxFrame::DoGetSize(int *width, int *height) const
+    wxSizeEvent                     vEvent( wxSize( nWidth
+                                                   ,nHeight
+                                                  )
+                                           ,m_windowId
+                                          );
+    vEvent.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxFrame::DoSetClientSize
+
+void wxFrame::DoGetSize(
+  int*                              pWidth
+, int*                              pHeight
+) const
 {
-// TODO:
-/*
-  RECT rect;
-  GetWindowRect(GetHwnd(), &rect);
-  *width = rect.right - rect.left;
-  *height = rect.bottom - rect.top;
-*/
-}
+    RECTL                           vRect;
 
-void wxFrame::DoGetPosition(int *x, int *y) const
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    *pWidth = vRect.xRight - vRect.xLeft;
+    *pHeight = vRect.yTop - vRect.yBottom;
+} // end of wxFrame::DoGetSize
+
+void wxFrame::DoGetPosition(
+  int*                              pX
+, int*                              pY
+) const
 {
-// TODO:
-/*
-  RECT rect;
-  GetWindowRect(GetHwnd(), &rect);
-  POINT point;
-  point.x = rect.left;
-  point.y = rect.top;
+    RECTL                           vRect;
+    POINT                           vPoint;
 
-  *x = point.x;
-  *y = point.y;
-*/
-}
+    ::WinQueryWindowRect(GetHwnd(), &vRect);
+    vPoint.x = vRect.xLeft;
+
+    //
+    // OS/2 is backwards [WIN32 it is vRect.yTop]
+    //
+    vPoint.y = vRect.yBottom;
+
+    *pX = vPoint.x;
+    *pY = vPoint.y;
+} // end of wxFrame::DoGetPosition
 
 // ----------------------------------------------------------------------------
 // variations around ::ShowWindow()
 // ----------------------------------------------------------------------------
 
-void wxFrame::DoShowWindow(int nShowCmd)
+void wxFrame::DoShowWindow(
+  int                               nShowCmd
+)
 {
-// TODO:
-/*
-    ::ShowWindow(GetHwnd(), nShowCmd);
+    ::WinShowWindow(GetHwnd(), nShowCmd);
+    m_bIconized = nShowCmd == SWP_MINIMIZE;
+} // end of wxFrame::DoShowWindow
 
-    m_iconized = nShowCmd == SW_MINIMIZE;
-*/
-}
-
-bool wxFrame::Show(bool show)
+bool wxFrame::Show(
+  bool                              bShow
+)
 {
-// TODO:
-/*
-    DoShowWindow(show ? SW_SHOW : SW_HIDE);
+    DoShowWindow(show ? SWP_SHOW : SW_HIDE);
 
-    if ( show )
+    if (bShow)
     {
-        ::BringWindowToTop(GetHwnd());
+        wxActivateEvent             vEvent(wxEVT_ACTIVATE, TRUE, m_windowId);
 
-        wxActivateEvent event(wxEVT_ACTIVATE, TRUE, m_windowId);
-        event.SetEventObject( this );
-        GetEventHandler()->ProcessEvent(event);
+        ::WinSetWindowPos( (HWND) GetHWND()
+                          ,HWND_TOP
+                          ,0
+                          ,0
+                          ,0
+                          ,0
+                          ,SWP_ZORDER
+                         );
+        vEvent.SetEventObject(this);
+        GetEventHandler()->ProcessEvent(vEvent);
     }
     else
     {
+        //
         // Try to highlight the correct window (the parent)
-        if ( GetParent() )
+        //
+        if (GetParent())
         {
-            HWND hWndParent = GetHwndOf(GetParent());
+            HWND                    hWndParent = GetHwndOf(GetParent());
+
             if (hWndParent)
-                ::BringWindowToTop(hWndParent);
+                ::WinSetWindowPos( hWndParent
+                                  ,HWND_TOP
+                                  ,0
+                                  ,0
+                                  ,0
+                                  ,0
+                                  ,SWP_ZORDER
+                                 );
         }
     }
-*/
     return TRUE;
-}
+} // end of wxFrame::Show
 
-void wxFrame::Iconize(bool iconize)
+void wxFrame::Iconize(
+  bool                              bIconize
+)
 {
-//    DoShowWindow(iconize ? SW_MINIMIZE : SW_RESTORE);
-}
+    DoShowWindow(bIconize ? SWP_MINIMIZE : SWP_RESTORE);
+} // end of wxFrame::Iconize
 
-void wxFrame::Maximize(bool maximize)
+void wxFrame::Maximize(
+  bool                              bMaximize)
 {
-//    DoShowWindow(maximize ? SW_MAXIMIZE : SW_RESTORE);
-}
+    DoShowWindow(bMaximize ? SWP_MAXIMIZE : SWP_RESTORE);
+} // end of wxFrame::Maximize
 
 void wxFrame::Restore()
 {
-//    DoShowWindow(SW_RESTORE);
-}
+    DoShowWindow(SWP_RESTORE);
+} // end of wxFrame::Restore
 
 bool wxFrame::IsIconized() const
 {
-// TODO:
-/*
-  ((wxFrame *)this)->m_iconized = (::IsIconic(GetHwnd()) != 0);
-  return m_iconized;
-*/
-    return FALSE;
-}
+    SWP                             vSwp;
+    bool                            bIconic;
+
+    ::WinQueryWindowPos(GetHwnd(), &vSwp)
+    
+    if (vSwp.fl & SWP_MINIMIZE)
+        ((wxFrame*)this)->m_bIconized = TRUE;
+    else
+        ((wxFrame*)this)->m_bIconized = FALSE;
+    return m_bIconized;
+} // end of wxFrame::IsIconized
 
 // Is it maximized?
 bool wxFrame::IsMaximized() const
 {
-// TODO:
-/*
-    return (::IsZoomed(GetHwnd()) != 0);
-*/
-    return FALSE;
-}
+    SWP                             vSwp;
+    bool                            bIconic;
+
+    ::WinQueryWindowPos(GetHwnd(), &vSwp)
+    return (vSwp.fl & SWP_MAXIMIZE);
+} // end of wxFrame::IsMaximized
 
 void wxFrame::SetIcon(const wxIcon& icon)
 {
@@ -497,7 +558,7 @@ bool wxFrame::OS2Create(int id, wxWindow *parent, const wxChar *wclass, wxWindow
                    int x, int y, int width, int height, long style)
 
 {
-  m_defaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
+  m_hDefaultIcon = (WXHICON) (wxSTD_FRAME_ICON ? wxSTD_FRAME_ICON : wxDEFAULT_FRAME_ICON);
 
   // If child windows aren't properly drawn initially, WS_CLIPCHILDREN
   // could be the culprit. But without it, you can get a lot of flicker.

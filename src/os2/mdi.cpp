@@ -127,7 +127,7 @@ bool wxMDIParentFrame::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-  m_defaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON : wxDEFAULT_MDIPARENTFRAME_ICON);
+  m_hDefaultIcon = (WXHICON) (wxSTD_MDIPARENTFRAME_ICON ? wxSTD_MDIPARENTFRAME_ICON : wxDEFAULT_MDIPARENTFRAME_ICON);
 
   m_clientWindow = NULL;
   m_currentChild = NULL;
@@ -375,7 +375,7 @@ MRESULT wxMDIParentFrame::OS2WindowProc(HWND     hwnd,
     }
 */
     if ( !processed )
-        rc = wxFrame::OS2WindowProc(hwnd, message, wParam, lParam);
+        rc = wxFrame::OS2WindowProc(message, wParam, lParam);
 
     return rc;
 }
@@ -559,8 +559,8 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                              long style,
                              const wxString& name)
 {
-  m_defaultIcon = (WXHICON)(wxSTD_MDICHILDFRAME_ICON ? wxSTD_MDICHILDFRAME_ICON
-                                                     : wxDEFAULT_MDICHILDFRAME_ICON);
+  m_hDefaultIcon = (WXHICON)(wxSTD_MDICHILDFRAME_ICON ? wxSTD_MDICHILDFRAME_ICON
+                                                      : wxDEFAULT_MDICHILDFRAME_ICON);
 
   SetName(name);
 
@@ -836,7 +836,7 @@ MRESULT wxMDIChildFrame::OS2WindowProc(HWND hwnd,
     }
 */
     if ( !processed )
-        rc = wxFrame::OS2WindowProc(hwnd, message, wParam, lParam);
+        rc = wxFrame::OS2WindowProc(message, wParam, lParam);
 
     return rc;
 }

@@ -53,7 +53,7 @@ public:
     virtual bool ShowFullScreen( bool bShow
                                 ,long lStyle = wxFULLSCREEN_ALL
                                );
-    virtual bool IsFullScreen(void) const { return m_fsIsShowing; };
+    virtual bool IsFullScreen(void) const { return m_bFfsIsShowing; };
 
 
     // implementation only from now on
@@ -91,9 +91,9 @@ public:
 
     // TODO: should this go into a wxFrameworkSettings class perhaps?
     static void UseNativeStatusBar(bool bUseNative)
-        { m_useNativeStatusBar = useNative; };
+        { m_bUseNativeStatusBar = bUseNative; };
     static bool UsesNativeStatusBar()
-        { return m_useNativeStatusBar; };
+        { return m_bUseNativeStatusBar; };
 #endif // wxUSE_STATUSBAR
 
     WXHMENU GetWinMenu() const { return m_hMenu; }
@@ -131,8 +131,8 @@ public:
 
     // tooltip management
 #if wxUSE_TOOLTIPS
-    WXHWND GetToolTipCtrl(void) const { return m_hwndToolTip; }
-    void   SetToolTipCtrl(WXHWND hHwndTT) { m_hwndToolTip = hwndTT; }
+    WXHWND GetToolTipCtrl(void) const { return m_hHwndToolTip; }
+    void   SetToolTipCtrl(WXHWND hHwndTT) { m_hHwndToolTip = hHwndTT; }
 #endif // tooltips
 
 protected:
@@ -194,7 +194,7 @@ protected:
 
 private:
 #if wxUSE_TOOLTIPS
-    WXHWND                          m_hHwndToolTip;
+    WXHWND                          m_hWndToolTip;
 #endif // tooltips
 
     DECLARE_EVENT_TABLE()
