@@ -191,26 +191,36 @@ gtk_frame_realized_callback( GtkWidget *widget, wxFrame *win )
 
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
-    long decor = (long) GDK_DECOR_ALL;
-    long func = (long) GDK_FUNC_ALL;
+    long decor = (long) 0;
+    long func = (long) GDK_FUNC_MOVE|GDK_FUNC_CLOSE;
     
-    if ((win->m_windowStyle & wxCAPTION) == 0)
+    if ((win->m_windowStyle & wxCAPTION) != 0)
 	decor |= GDK_DECOR_TITLE;
-    if ((win->m_windowStyle & wxSYSTEM_MENU) == 0)
-	decor |= GDK_DECOR_MENU;
-    if ((win->m_windowStyle & wxMINIMIZE_BOX) == 0)
+    if ((win->m_windowStyle & wxSYSTEM_MENU) != 0)
+    {
+       decor |= GDK_DECOR_MENU;
+       func |= GDK_FUNC_CLOSE;
+    }
+    if ((win->m_windowStyle & wxMINIMIZE_BOX) != 0)
     {
 	func |= GDK_FUNC_MINIMIZE;
 	decor |= GDK_DECOR_MINIMIZE;
+        decor |= GDK_DECOR_BORDER;
     }
-    if ((win->m_windowStyle & wxMAXIMIZE_BOX) == 0)
+    if ((win->m_windowStyle & wxMAXIMIZE_BOX) != 0)
     {
 	func |= GDK_FUNC_MAXIMIZE;
 	decor |= GDK_DECOR_MAXIMIZE;
+        decor |= GDK_DECOR_BORDER;
     }
-    if ((win->m_windowStyle & wxRESIZE_BORDER) == 0)
-	func |= GDK_FUNC_RESIZE;
-	
+    if ((win->m_windowStyle & wxRESIZE_BORDER) != 0)
+    {
+       func |= GDK_FUNC_RESIZE;
+       decor |= GDK_DECOR_RESIZEH;
+       decor |= GDK_DECOR_BORDER;
+    }
+
+    
     gdk_window_set_decorations( win->m_widget->window, (GdkWMDecoration)decor);
     gdk_window_set_functions( win->m_widget->window, (GdkWMFunction)func);
       

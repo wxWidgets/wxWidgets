@@ -87,7 +87,7 @@ IMPLEMENT_CLASS(wxGenericMessageDialog, wxDialog)
 
 wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent, const wxString& message, 
    const wxString& caption, long style, const wxPoint& pos) :
-  wxDialog( parent, -1, caption, pos, wxDefaultSize )
+  wxDialog( parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
 {
     m_dialogStyle = style;
 

@@ -388,7 +388,7 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 #define wxMINIMIZE              wxICONIZE
 #define wxMAXIMIZE              0x2000
 #define wxTHICK_FRAME           0x1000
-#define wxSYSTEM_MENU           0x0800
+#define wxSYSTEM_MENU           0x0800 
 #define wxMINIMIZE_BOX          0x0400
 #define wxMAXIMIZE_BOX          0x0200
 #define wxTINY_CAPTION_HORIZ    0x0100
@@ -400,13 +400,21 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /* Add for normal Windows frame behaviour */
 #define wxFRAME_FLOAT_ON_PARENT 0x0020
 
-#define wxDEFAULT_FRAME_STYLE    (wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 
 #if WXWIN_COMPATIBILITY
 #define wxDEFAULT_FRAME wxDEFAULT_FRAME_STYLE
 #endif
 
-#define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
+#define wxDEFAULT_FRAME_STYLE    (wxSYSTEM_MENU|wxRESIZE_BORDER | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxTHICK_FRAME | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
+
+#ifdef __WXMSW__
+#   define wxDEFAULT_DIALOG_STYLE  (wxSYSTEM_MENU|wxCAPTION|wxTHICK_FRAME)
+#else
+// Under Unix, the dialogs don't have a system menu. Specifying
+// wxSYSTEM_MENU here, will make a close button appear.
+#   define wxDEFAULT_DIALOG_STYLE  (wxCAPTION) 
+#endif
+
 
 /*
  * Subwindow style flags
