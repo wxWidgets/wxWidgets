@@ -1249,8 +1249,8 @@ class wxApp(wxPyApp):
 #----------------------------------------------------------------------------
 #
 # $Log$
-# Revision 1.8  1999/03/01 23:21:39  RD
-# Changes for allowing wxRA_SPECIFY_ROWS and wxRA_SPECIFY_COLS.
+# Revision 1.8.2.1  1999/03/16 06:27:37  RD
+# wxPython 2.0b7
 #
 # Revision 1.11  1999/02/20 09:02:55  RD
 # Added wxWindow_FromHWND(hWnd) for wxMSW to construct a wxWindow from a

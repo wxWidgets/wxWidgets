@@ -2953,7 +2953,12 @@ static PyObject *_wrap_wxDC_DrawLines(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg1 = PyList_Size(_obj2);
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
 }
     wxDC_DrawLines(_arg0,_arg1,_arg2,_arg3,_arg4);
     Py_INCREF(Py_None);
@@ -2993,7 +2998,12 @@ static PyObject *_wrap_wxDC_DrawPolygon(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg1 = PyList_Size(_obj2);
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
 }
     wxDC_DrawPolygon(_arg0,_arg1,_arg2,_arg3,_arg4,_arg5);
     Py_INCREF(Py_None);
@@ -3104,7 +3114,12 @@ static PyObject *_wrap_wxDC_DrawSpline(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg1 = PyList_Size(_obj2);
+    if (_obj2) {
+        _arg1 = PyList_Size(_obj2);
+    }
+    else {
+        _arg1 = 0;
+    }
 }
     wxDC_DrawSpline(_arg0,_arg1,_arg2);
     Py_INCREF(Py_None);
@@ -4747,7 +4762,12 @@ static PyObject *_wrap_new_wxPalette(PyObject *self, PyObject *args) {
     }
 }
 {
-    _arg0 = PyList_Size(_obj1);
+    if (_obj1) {
+        _arg0 = PyList_Size(_obj1);
+    }
+    else {
+        _arg0 = 0;
+    }
 }
     _result = (wxPalette *)new_wxPalette(_arg0,_arg1,_arg2,_arg3);
     SWIG_MakePtr(_ptemp, (char *) _result,"_wxPalette_p");

@@ -357,10 +357,15 @@ public:
 
 class wxMenuItem {
 public:
+#ifndef __WXGTK__
     wxMenuItem(wxMenu* parentMenu=NULL, int id=ID_SEPARATOR,
                const wxString& text = wxPyEmptyStr,
                const wxString& helpString = wxPyEmptyStr,
                bool checkable = FALSE, wxMenu* subMenu = NULL);
+#else
+    wxMenuItem();
+#endif
+
     bool IsSeparator();
     bool IsEnabled();
     bool IsChecked();
@@ -393,7 +398,11 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.14.4.2  1999/03/16 06:26:29  RD
+// wxPython 2.0b7
+//
 // Revision 1.14.4.1  1999/03/16 06:04:04  RD
+//
 // wxPython 2.0b7
 //
 // Revision 1.14  1999/02/23 23:48:33  RD

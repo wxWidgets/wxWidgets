@@ -4121,6 +4121,21 @@ static PyObject *_wrap_wxMenuBar_GetMenu(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define new_wxMenuItem() (new wxMenuItem())
+static PyObject *_wrap_new_wxMenuItem(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxMenuItem * _result;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,":new_wxMenuItem")) 
+        return NULL;
+    _result = (wxMenuItem *)new_wxMenuItem();
+    SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenuItem_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxMenuItem_IsSeparator(_swigobj)  (_swigobj->IsSeparator())
 static PyObject *_wrap_wxMenuItem_IsSeparator(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -4299,10 +4314,12 @@ static PyObject *_wrap_wxMenuItem_GetName(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    const wxString & _result_ref = wxMenuItem_GetName(_arg0);
-    _result = (wxString *) &_result_ref;
+    _result = new wxString (wxMenuItem_GetName(_arg0));
 {
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
 }
     return _resultobj;
 }
@@ -4323,10 +4340,12 @@ static PyObject *_wrap_wxMenuItem_GetHelp(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
-    const wxString & _result_ref = wxMenuItem_GetHelp(_arg0);
-    _result = (wxString *) &_result_ref;
+    _result = new wxString (wxMenuItem_GetHelp(_arg0));
 {
-    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    delete _result;
 }
     return _resultobj;
 }
@@ -4426,6 +4445,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuItem_IsChecked", _wrap_wxMenuItem_IsChecked, 1 },
 	 { "wxMenuItem_IsEnabled", _wrap_wxMenuItem_IsEnabled, 1 },
 	 { "wxMenuItem_IsSeparator", _wrap_wxMenuItem_IsSeparator, 1 },
+	 { "new_wxMenuItem", _wrap_new_wxMenuItem, 1 },
 	 { "wxMenuBar_GetMenu", _wrap_wxMenuBar_GetMenu, 1 },
 	 { "wxMenuBar_GetMenuCount", _wrap_wxMenuBar_GetMenuCount, 1 },
 	 { "wxMenuBar_FindItemForId", _wrap_wxMenuBar_FindItemForId, 1 },
@@ -4482,6 +4502,8 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_SetToolTipString", _wrap_wxWindow_SetToolTipString, 1 },
 	 { "wxWindow_ConvertPixelSizeToDialog", _wrap_wxWindow_ConvertPixelSizeToDialog, 1 },
 	 { "wxWindow_ConvertPixelPointToDialog", _wrap_wxWindow_ConvertPixelPointToDialog, 1 },
+	 { "wxWindow_DLG_SZE", _wrap_wxWindow_ConvertDialogSizeToPixels, 1 },
+	 { "wxWindow_DLG_PNT", _wrap_wxWindow_ConvertDialogPointToPixels, 1 },
 	 { "wxWindow_ConvertDialogSizeToPixels", _wrap_wxWindow_ConvertDialogSizeToPixels, 1 },
 	 { "wxWindow_ConvertDialogPointToPixels", _wrap_wxWindow_ConvertDialogPointToPixels, 1 },
 	 { "wxWindow_WarpPointer", _wrap_wxWindow_WarpPointer, 1 },
