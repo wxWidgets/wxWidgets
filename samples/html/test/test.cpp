@@ -114,7 +114,7 @@
      #if wxUSE_LIBJPEG
      wxImage::AddHandler(new wxJPEGHandler);
      #endif
-     #if wxUSE_LIBGIF
+     #if wxUSE_GIF
      wxImage::AddHandler(new wxGIFHandler);
      #endif
     // Create the main application window
