@@ -74,7 +74,6 @@ Source: "%(SYSDIR)s\MSVCP60.dll";           DestDir: "{sys}"; CopyMode: alwayssk
 Source: "%(WXDIR)s\lib\%(WXDLL)s";          DestDir: "{app}\wxPython"; Components: core
 %(MSLU)s
 Source: "wxPython\wxc.pyd";                 DestDir: "{app}\wxPython"; Components: core
-Source: "wxPython\wxc.pyd.manifest";        DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\gridc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\helpc.pyd";               DestDir: "{app}\wxPython"; Components: core
 Source: "wxPython\htmlc.pyd";               DestDir: "{app}\wxPython"; Components: core
@@ -142,9 +141,7 @@ Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\wxPython\docs"; Comp
 Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\wxPython\docs"; Components: docs
 
 Source: "wxPython\tools\*.py";              DestDir: "{app}\wxPython\tools"; Components: tools
-Source: "wxPython\tools\XRCed\CHANGES";     DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "wxPython\tools\XRCed\TODO";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "wxPython\tools\XRCed\README";      DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\*.txt";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\sawfishrc";   DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\*.py";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
 Source: "wxPython\tools\XRCed\*.xrc";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
@@ -185,6 +182,10 @@ Source: "samples\embedded\*.vc";           DestDir: "{app}\wxPython\samples\embe
 Source: "samples\embedded\*.unx";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
 Source: "samples\embedded\*.ico";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
 Source: "samples\embedded\*.xpm";          DestDir: "{app}\wxPython\samples\embedded"; Components: samples
+
+Source: "src\winxp.manifest";              DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest"; Components: core
+Source: "src\winxp.manifest";              DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest"; Components: core
+
 
 ;;------------------------------------------------------------
 

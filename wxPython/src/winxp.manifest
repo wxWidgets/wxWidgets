@@ -6,7 +6,7 @@
     name="Controls"
     type="win32"
 />
-<description>wxPython: GUI library for Python</description>
+<description>Python Interpreter</description>
 <dependency>
     <dependentAssembly>
         <assemblyIdentity
