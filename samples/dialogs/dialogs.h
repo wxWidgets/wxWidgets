@@ -35,6 +35,7 @@ public:
     void MessageBox(wxCommandEvent& event);
     void SingleChoice(wxCommandEvent& event);
     void TextEntry(wxCommandEvent& event);
+    void PasswordEntry(wxCommandEvent& event);
     void NumericEntry(wxCommandEvent& event);
     void FileOpen(wxCommandEvent& event);
     void FilesOpen(wxCommandEvent& event);
@@ -64,20 +65,24 @@ public:
 
 
 // Menu IDs
-#define DIALOGS_CHOOSE_COLOUR               1
-#define DIALOGS_CHOOSE_COLOUR_GENERIC       2
-#define DIALOGS_CHOOSE_FONT                 3
-#define DIALOGS_CHOOSE_FONT_GENERIC         4
-#define DIALOGS_MESSAGE_BOX                 5
-#define DIALOGS_SINGLE_CHOICE               6
-#define DIALOGS_TEXT_ENTRY                  7
-#define DIALOGS_FILE_OPEN                   8
-#define DIALOGS_FILES_OPEN                  9
-#define DIALOGS_FILE_SAVE                   10
-#define DIALOGS_DIR_CHOOSE                  11
-#define DIALOGS_TIP                         12
-#define DIALOGS_NUM_ENTRY                   13
-#define DIALOGS_LOG_DIALOG                  14
+enum
+{
+    DIALOGS_CHOOSE_COLOUR = 1,
+    DIALOGS_CHOOSE_COLOUR_GENERIC,
+    DIALOGS_CHOOSE_FONT,
+    DIALOGS_CHOOSE_FONT_GENERIC,
+    DIALOGS_MESSAGE_BOX,
+    DIALOGS_SINGLE_CHOICE,
+    DIALOGS_TEXT_ENTRY,
+    DIALOGS_PASSWORD_ENTRY,
+    DIALOGS_FILE_OPEN,
+    DIALOGS_FILES_OPEN,
+    DIALOGS_FILE_SAVE,
+    DIALOGS_DIR_CHOOSE,
+    DIALOGS_TIP,
+    DIALOGS_NUM_ENTRY,
+    DIALOGS_LOG_DIALOG
+};
 
 #endif
 

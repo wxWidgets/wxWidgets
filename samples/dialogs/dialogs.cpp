@@ -78,13 +78,14 @@ bool MyApp::OnInit(void)
   file_menu->Append(DIALOGS_LOG_DIALOG, "&Log dialog\tCtrl-L");
   file_menu->Append(DIALOGS_MESSAGE_BOX, "&Message box\tCtrl-M");
   file_menu->Append(DIALOGS_TEXT_ENTRY,  "Text &entry\tCtrl-E");
+  file_menu->Append(DIALOGS_PASSWORD_ENTRY,  "&Password entry\tCtrl-P");
   file_menu->Append(DIALOGS_NUM_ENTRY, "&Numeric entry\tCtrl-N");
   file_menu->Append(DIALOGS_SINGLE_CHOICE,  "&Single choice\tCtrl-S");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_TIP,  "&Tip of the day\tCtrl-T");
   file_menu->AppendSeparator();
   file_menu->Append(DIALOGS_FILE_OPEN,  "&Open file\tCtrl-O");
-  file_menu->Append(DIALOGS_FILES_OPEN,  "&Open files\tCtrl-Q");
+  file_menu->Append(DIALOGS_FILES_OPEN,  "Open &files\tCtrl-Q");
   file_menu->Append(DIALOGS_FILE_SAVE,  "Sa&ve file");
   file_menu->Append(DIALOGS_DIR_CHOOSE,  "&Choose a directory\tCtrl-D");
   file_menu->AppendSeparator();
@@ -233,10 +234,27 @@ void MyFrame::NumericEntry(wxCommandEvent& WXUNUSED(event) )
     wxMessageBox(msg, "Numeric test result", wxOK | icon, this);
 }
 
-void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event) )
+void MyFrame::PasswordEntry(wxCommandEvent& WXUNUSED(event))
 {
-  wxTextEntryDialog dialog(this, "This is a small sample\nA long, long string to test out the text entrybox",
-      "Please enter a string", "Default value", wxOK|wxCANCEL);
+    wxString pwd = wxGetPasswordFromUser("Enter password:",
+                                         "Passowrd entry dialog",
+                                         "",
+                                         this);
+    if ( !!pwd )
+    {
+        wxMessageBox(wxString::Format("Your password is '%s'", pwd.c_str()),
+                     "Got password", wxOK | wxICON_INFORMATION, this);
+    }
+}
+
+void MyFrame::TextEntry(wxCommandEvent& WXUNUSED(event))
+{
+  wxTextEntryDialog dialog(this,
+                           "This is a small sample\n"
+                           "A long, long string to test out the text entrybox",
+                           "Please enter a string",
+                           "Default value",
+                           wxOK | wxCANCEL);
 
   if (dialog.ShowModal() == wxID_OK)
   {
@@ -386,22 +404,23 @@ BEGIN_EVENT_TABLE(MyCanvas, wxScrolledWindow)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(DIALOGS_CHOOSE_COLOUR,                MyFrame::ChooseColour)
-    EVT_MENU(DIALOGS_CHOOSE_FONT,                MyFrame::ChooseFont)
-    EVT_MENU(DIALOGS_LOG_DIALOG,                MyFrame::LogDialog)
-    EVT_MENU(DIALOGS_MESSAGE_BOX,                MyFrame::MessageBox)
-    EVT_MENU(DIALOGS_TEXT_ENTRY,                MyFrame::TextEntry)
-    EVT_MENU(DIALOGS_NUM_ENTRY,                MyFrame::NumericEntry)
-    EVT_MENU(DIALOGS_SINGLE_CHOICE,                MyFrame::SingleChoice)
-    EVT_MENU(DIALOGS_FILE_OPEN,                    MyFrame::FileOpen)
-    EVT_MENU(DIALOGS_FILES_OPEN,                   MyFrame::FilesOpen)
-    EVT_MENU(DIALOGS_FILE_SAVE,                    MyFrame::FileSave)
-    EVT_MENU(DIALOGS_DIR_CHOOSE,                MyFrame::DirChoose)
-    EVT_MENU(DIALOGS_TIP,                        MyFrame::ShowTip)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR,                 MyFrame::ChooseColour)
+    EVT_MENU(DIALOGS_CHOOSE_FONT,                   MyFrame::ChooseFont)
+    EVT_MENU(DIALOGS_LOG_DIALOG,                    MyFrame::LogDialog)
+    EVT_MENU(DIALOGS_MESSAGE_BOX,                   MyFrame::MessageBox)
+    EVT_MENU(DIALOGS_TEXT_ENTRY,                    MyFrame::TextEntry)
+    EVT_MENU(DIALOGS_PASSWORD_ENTRY,                MyFrame::PasswordEntry)
+    EVT_MENU(DIALOGS_NUM_ENTRY,                     MyFrame::NumericEntry)
+    EVT_MENU(DIALOGS_SINGLE_CHOICE,                 MyFrame::SingleChoice)
+    EVT_MENU(DIALOGS_FILE_OPEN,                     MyFrame::FileOpen)
+    EVT_MENU(DIALOGS_FILES_OPEN,                    MyFrame::FilesOpen)
+    EVT_MENU(DIALOGS_FILE_SAVE,                     MyFrame::FileSave)
+    EVT_MENU(DIALOGS_DIR_CHOOSE,                    MyFrame::DirChoose)
+    EVT_MENU(DIALOGS_TIP,                           MyFrame::ShowTip)
 #if defined(__WXMSW__) && wxTEST_GENERIC_DIALOGS_IN_MSW
-    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,        MyFrame::ChooseColourGeneric)
-    EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,        MyFrame::ChooseFontGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_COLOUR_GENERIC,         MyFrame::ChooseColourGeneric)
+    EVT_MENU(DIALOGS_CHOOSE_FONT_GENERIC,           MyFrame::ChooseFontGeneric)
 #endif
-    EVT_MENU(wxID_EXIT,                            MyFrame::OnExit)
+    EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
 END_EVENT_TABLE()
 

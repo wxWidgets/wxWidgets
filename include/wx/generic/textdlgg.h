@@ -22,20 +22,23 @@
 
 class WXDLLEXPORT wxTextCtrl;
 
-// Handy dialog functions (will be converted into classes at some point)
 WXDLLEXPORT_DATA(extern const wxChar*) wxGetTextFromUserPromptStr;
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
 
+#define wxTextEntryDialogStyle (wxOK | wxCANCEL | wxCENTRE)
+
+// ----------------------------------------------------------------------------
+// wxTextEntryDialog: a dialog with text control, [ok] and [cancel] buttons
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxTextEntryDialog : public wxDialog
 {
-    DECLARE_DYNAMIC_CLASS(wxTextEntryDialog)
-
 public:
     wxTextEntryDialog(wxWindow *parent,
                       const wxString& message,
                       const wxString& caption = wxGetTextFromUserPromptStr,
                       const wxString& value = wxEmptyString,
-                      long style = wxOK | wxCANCEL | wxCENTRE,
+                      long style = wxTextEntryDialogStyle,
                       const wxPoint& pos = wxDefaultPosition);
 
     void SetValue(const wxString& val) { m_value = val; }
@@ -51,6 +54,7 @@ protected:
 
 private:
     DECLARE_EVENT_TABLE()
+    DECLARE_DYNAMIC_CLASS(wxTextEntryDialog)
 };
 
 // ----------------------------------------------------------------------------
@@ -65,6 +69,12 @@ wxGetTextFromUser(const wxString& message,
                   int x = -1,
                   int y = -1,
                   bool centre = TRUE);
+
+wxString WXDLLEXPORT
+wxGetPasswordFromUser(const wxString& message,
+                      const wxString& caption = wxGetTextFromUserPromptStr,
+                      const wxString& default_value = wxEmptyString,
+                      wxWindow *parent = (wxWindow *) NULL);
 
 #endif
     // __TEXTDLGH_G__

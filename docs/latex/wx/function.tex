@@ -609,6 +609,19 @@ Dialog is centered on its {\it parent} unless an explicit position is given in
 
 <wx/textdlg.h>
 
+\membersection{::wxGetPasswordFromUser}\label{wxgetpasswordfromuser}
+
+\func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
+ \param{const wxString\& }{default\_value = ``"}, \param{wxWindow *}{parent = NULL}}
+
+Similar to \helpref{wxGetTextFromUser}{wxgettextfromuser} but the text entered
+in the dialog is not shown on screen but replaced with stars. This is intended
+to be used for entering passwords as the function name implies.
+
+\wxheading{Include files}
+
+<wx/textdlg.h>
+
 \membersection{::wxGetTextFromUser}\label{wxgettextfromuser}
 
 \func{wxString}{wxGetTextFromUser}{\param{const wxString\& }{message}, \param{const wxString\& }{caption = ``Input text"},\\
