@@ -33,12 +33,13 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
-    #include "wx/textctrl.h"
-    #include "wx/imaglist.h"
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/settings.h"
 #endif
+
+#include "wx/textctrl.h"
+#include "wx/imaglist.h"
 
 #include "wx/listctrl.h"
 

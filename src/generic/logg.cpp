@@ -59,6 +59,7 @@
 #if wxUSE_LOG_DIALOG
     #include "wx/datetime.h"
     #include "wx/listctrl.h"
+    #include "wx/imaglist.h"
     #include "wx/image.h"
 #else // !wxUSE_TEXTFILE
     #include "wx/msgdlg.h"
