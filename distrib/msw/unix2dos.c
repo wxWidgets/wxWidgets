@@ -37,7 +37,7 @@ main(int argc, char *argv[])
     unix2Dos = 1;
     
     i = 1;
-    if (i > argc)
+    if (argc > 1)
     {
         if (strcmp(argv[1], "--help") == 0)
         {
@@ -70,23 +70,25 @@ main(int argc, char *argv[])
             sprintf(tmpFile, "%s.tmp", argv[i]);
             
             fp = fopen(argv[i], "r");
+            if (!fp)
+            {
+                fprintf(stderr, "Cannot open %s.\n", argv[i]);
+                i ++;
+                continue;
+            }
             outFile = fopen(tmpFile, "w");
             if (!outFile)
             {
                 fprintf(stderr, "Cannot open %s.\n", tmpFile);
                 exit(1);
             }
-            if (!fp)
-            {
-                fprintf(stderr, "Cannot open %s.\n", argv[i]);
-                exit(1);
-            }
             translate(fp, outFile, unix2Dos);
             
             if (warning) /* unix2dos acting on a possible DOS file */
             {
-                fprintf(stderr,"%s: %s may have already been in DOS format.\n",
-                    prog, argv[i]);
+                fprintf(stderr,"%s: %s may have already been in DOS format. Not converted.\n",
+                        prog, argv[i]);
+                warning = 0;
             }
             fclose(fp);
             fclose(outFile);
@@ -128,7 +130,7 @@ void translate(FILE *ifp, FILE *ofp, int unix2Dos)
             while ((c = getc(ifp)) != EOF){
                 if (c == CR)
                     warning = 1;   /* set warning flag: input file may be a DOS file */
-                if (c == LF) 
+                if (c == LF && (warning == 0))
                     putc(CR, ofp); /* add CR before each LF */
                 putc(c, ofp);
             }
