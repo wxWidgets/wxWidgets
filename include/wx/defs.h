@@ -201,6 +201,7 @@ typedef int wxWindowID;
 
 #ifdef __WXMSW__
 
+/*
 #ifdef __BORLANDC__
 
 #  ifdef WXMAKINGDLL
@@ -218,14 +219,18 @@ typedef int wxWindowID;
 #  endif
 
 #else
+*/
+
+// _declspec works in BC++ 5 and later, as well as VC++
+#if defined(__VISUALC__) || defined(__BORLANDC__)
 
 #  ifdef WXMAKINGDLL
-#    define WXDLLEXPORT __declspec( dllexport )
-#    define WXDLLEXPORT_DATA(type) __declspec( dllexport ) type
-#    define WXDLLEXPORT_CTORFN // __declspec( dllexport )
+#    define WXDLLEXPORT _declspec( dllexport )
+#    define WXDLLEXPORT_DATA(type) _declspec( dllexport ) type
+#    define WXDLLEXPORT_CTORFN
 #  elif defined(WXUSINGDLL)
-#    define WXDLLEXPORT __declspec( dllimport )
-#    define WXDLLEXPORT_DATA(type) __declspec( dllimport ) type
+#    define WXDLLEXPORT _declspec( dllimport )
+#    define WXDLLEXPORT_DATA(type) _declspec( dllimport ) type
 #    define WXDLLEXPORT_CTORFN
 #  else
 #    define WXDLLEXPORT
@@ -233,6 +238,10 @@ typedef int wxWindowID;
 #    define WXDLLEXPORT_CTORFN
 #  endif
 
+#else
+#  define WXDLLEXPORT
+#  define WXDLLEXPORT_DATA(type) type
+#  define WXDLLEXPORT_CTORFN
 #endif
 
 #else

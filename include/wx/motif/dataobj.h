@@ -11,7 +11,7 @@
 #define _WX_DATAOBJ_H_
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "dataobj.h"
 #endif
 
 #include "wx/defs.h"

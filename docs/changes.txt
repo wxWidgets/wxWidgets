@@ -1,8 +1,25 @@
 wxWindows 2 Change Log
 ----------------------
 
-Beta 4, February 1999
+Beta 5, February ??  1999
 -------------------------
+
+wxGTK:
+
+
+wxMSW:
+
+- Fixed wxWindow::IsShown (::IsWindowVisible doesn't behave as
+  expected).
+
+wxMotif:
+
+
+General:
+
+
+Beta 4, February 12th 1999
+--------------------------
 
 wxGTK:
 

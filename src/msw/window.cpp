@@ -770,13 +770,14 @@ void wxWindow::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags)
 
 bool wxWindow::Show(bool show)
 {
+    m_isShown = show;
     HWND hWnd = (HWND) GetHWND();
     int cshow;
     if (show)
         cshow = SW_SHOW;
     else
         cshow = SW_HIDE;
-    ShowWindow(hWnd, (BOOL)cshow);
+    ShowWindow(hWnd, cshow);
     if (show)
     {
         BringWindowToTop(hWnd);
@@ -788,7 +789,11 @@ bool wxWindow::Show(bool show)
 
 bool wxWindow::IsShown(void) const
 {
-    return (::IsWindowVisible((HWND) GetHWND()) != 0);
+    // Can't rely on IsWindowVisible, since it will return FALSE
+    // if the parent is not visible.
+    return m_isShown;
+//    int ret = ::IsWindowVisible((HWND) GetHWND()) ;
+//    return (ret != 0);
 }
 
 int wxWindow::GetCharHeight(void) const

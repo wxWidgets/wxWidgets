@@ -14,6 +14,7 @@
 \wxheading{Remark}
 
 You can create a similar stream by this way:
+
 \begin{verbatim}
   wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read);
   wxInputStream *input = new wxInputStream(sb);
@@ -52,10 +53,10 @@ Destructor.
 
 \helpref{wxStreamBuffer}{wxstreamBuffer}
 
-
 \wxheading{Remark}
 
 You can create a similar stream by this way:
+
 \begin{verbatim}
   wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::write);
   wxOutputStream *input = new wxOutputStream(sb);
@@ -67,6 +68,7 @@ You can create a similar stream by this way:
 \end{verbatim}
 
 This way is also useful to create read/write memory stream:
+
 \begin{verbatim}
   wxStreamBuffer *sb = new wxStreamBuffer(wxStreamBuffer::read\_write);
   wxOutputStream *output = new wxOutputStream(sb);
@@ -100,3 +102,4 @@ stream.
 \func{}{\destruct{wxMemoryOutputStream}}{\void}
 
 Destructor.
+

@@ -222,7 +222,7 @@ bool wxGenericGrid::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, 
   m_hScrollBar = new wxScrollBar(this, wxGRID_HSCROLL, wxPoint(0, 0), wxSize(20, 100), wxHORIZONTAL);
   m_vScrollBar = new wxScrollBar(this, wxGRID_VSCROLL, wxPoint(0, 0), wxSize(100, 20), wxVERTICAL);
 
-  SetSize(-1, -1, size.x, size.y);
+//  SetSize(pos.x, pos.y, size.x, size.y);
 
   return TRUE;
 }

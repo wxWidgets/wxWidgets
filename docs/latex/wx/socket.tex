@@ -481,7 +481,7 @@ Sets an event handler to be called when a socket event occured.
 
 Constructs a new wxSocketClient.
 
-{\bf Warning !} The created socket client needs to be registered to a socket handler (See \helpref{wxSocketHandler}{wxsockethandler}).
+{\bf Warning !} The new socket client needs to be registered to a socket handler (See \helpref{wxSocketHandler}{wxsockethandler}).
 
 \wxheading{Parameters}
 
@@ -494,7 +494,7 @@ Constructs a new wxSocketClient.
 
 \func{}{\destruct{wxSocketClient}}{\void}
 
-Destructs a wxSocketClient object.
+Destroys a wxSocketClient object.
 
 %
 % Connect
@@ -609,7 +609,7 @@ many sockets.
 
 \func{}{\destruct{wxSocketHandler}}{\void}
 
-Destructs a wxSocketHandler object.
+Destroys a wxSocketHandler object.
 
 %
 % Register
@@ -763,7 +763,7 @@ Constructs a new wxSocketServer.
 
 \func{}{\destruct{wxSocketServer}}{\void}
 
-Destructs a wxSocketServer object (it doesn't close the accepted connection).
+Destroys a wxSocketServer object (it doesn't close the accepted connection).
 
 %
 % Accept
@@ -799,5 +799,4 @@ This is useful when someone wants to inherit wxSocketBase.
 \wxheading{Return value}
 
 Returns TRUE if no error occurs, else FALSE.
-
 

@@ -536,8 +536,8 @@ bool WriteHPJ(char *filename)
   if (!helpTitle)
     helpTitle = "Untitled";
     
-  char *thePath = wxPathOnly(InputFile);
-  if (!thePath)
+  wxString thePath = wxPathOnly(InputFile);
+  if (thePath.IsEmpty())
     thePath = ".";
   fprintf(fd, "[OPTIONS]\n");
   fprintf(fd, "BMROOT=%s ; Assume that bitmaps are where the source is\n", thePath);

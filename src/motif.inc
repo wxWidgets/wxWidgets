@@ -83,6 +83,7 @@ LIB_CPP_SRC=\
  motif/combobox.cpp \
  motif/cursor.cpp \
  motif/data.cpp \
+ motif/dataobj.cpp \
  motif/dc.cpp \
  motif/dcclient.cpp \
  motif/dcmemory.cpp \

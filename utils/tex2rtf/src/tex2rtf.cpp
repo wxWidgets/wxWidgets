@@ -647,7 +647,7 @@ void ChooseOutputFile(bool force)
   char extensionBuf[10];
   char wildBuf[10];
   strcpy(wildBuf, "*.");
-  char *path = NULL;
+  wxString path;
   if (OutputFile)
     path = wxPathOnly(OutputFile);
   else if (InputFile)

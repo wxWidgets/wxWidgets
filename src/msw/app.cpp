@@ -319,8 +319,6 @@ bool wxApp::RegisterWindowClasses()
 // Register the panel window class.
   WNDCLASS wndclass2;   // Structure used to register Windows class.
   memset(&wndclass2, 0, sizeof(WNDCLASS));   // start with NULL defaults
-  // Use CS_OWNDC to avoid messing about restoring the context
-  // for every graphic operation.
   wndclass2.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS ;
   wndclass2.lpfnWndProc   = (WNDPROC)wxWndProc;
   wndclass2.cbClsExtra    = 0;

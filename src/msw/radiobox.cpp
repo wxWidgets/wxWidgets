@@ -792,6 +792,7 @@ void wxRadioBox::SetFocus(void)
 
 bool wxRadioBox::Show(bool show)
 {
+    m_isShown = show;
     int cshow;
     if (show)
         cshow = SW_SHOW;
