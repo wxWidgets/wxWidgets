@@ -17,14 +17,13 @@
  *
  * Name,
  * Description,
- * Width, Height,
- * Data,                        ('*' = alive, '.' = dead)
- * Field width, Field height,   (optional, defaults to 20 x 20)
- * Wraparound                   (optional, defaults to TRUE)
+ * Width,
+ * Height,
+ * Data ('*' = alive, '.' = dead)
  * 
  */
 
-LifeShape g_shapes[] =
+const LifeShape g_shapes[] =
 {
     LifeShape( _("Glider"),
                _("The glider is the first of a series of life forms, known "
@@ -111,8 +110,7 @@ LifeShape g_shapes[] =
                3, 3,
                ".**"
                "**."
-               ".*.",
-               80, 80, FALSE ),
+               ".*." ),
     LifeShape( _("Thunderbird"),
                _("The thunderbird is another popular methuselah, which "
                  "doesn't stabilize until the 243th generation. Note that "
@@ -124,17 +122,14 @@ LifeShape g_shapes[] =
                "..."
                ".*."
                ".*."
-               ".*.",
-               60, 60, FALSE ),
+               ".*." ),
     LifeShape( _("Accorn"),
                _("Probably the most popular methuselah, the accorn lives "
-                 "for 5206 (!) generations. To see it in action, a very "
-                 "large game field is needed."),
+                 "for 5206 (!) generations."),
                7, 3,
                ".*....."
                "...*..."
-               "**..***",
-               150, 150, FALSE ),
+               "**..***" ),
     LifeShape( _("Galaxy"),
                _("One from my personal collection. It is really beautiful "
                  "to see this configuration expand and shrink periodically "
@@ -152,6 +147,110 @@ LifeShape g_shapes[] =
                "*.....*......"
                "......*......"
                "......*......"
-               ".......***...",
-               80, 80, FALSE )
+               ".......***..." ),
+    LifeShape( _("Glider gun"),
+               _("A gun is a stationary pattern that emits spaceships "
+                 "forever. The glider gun shown here was the first known "
+                 "gun, and indeed the first known finite pattern with "
+                 "unbounded growth. It was found by Bill Gosper in "
+                 "November 1970. Many new guns have since been found."),
+               36, 9,
+               ".........................*.........."
+               "......................****....*....."
+               ".............*.......****.....*....."
+               "............*.*......*..*.........**"
+               "...........*...**....****.........**"
+               "**.........*...**.....****.........."
+               "**.........*...**........*.........."
+               "............*.*....................."
+               ".............*......................" ),
+    LifeShape( _("Puffer train"),
+               _("A puffer is an object that moves like a spaceship, except "
+                 "that it leaves a trail of debris behind. The puffer train "
+                 "is one of the best-known puffers. Originally found by "
+                 "Bill Gosper, this is a very dirty puffer; the tail does "
+                 "not stabilize until generation 5533. It consists of a "
+                 "B-heptomino (the middle pattern) escorted by two light "
+                 "weight space ships."),
+               5, 18,
+               "...*."
+               "....*"
+               "*...*"
+               ".****"
+               "....."
+               "....."
+               "....."
+               "*...."
+               ".**.."
+               "..*.."
+               "..*.."
+               ".*..."
+               "....."
+               "....."
+               "...*."
+               "....*"
+               "*...*"
+               ".****" ),
+    LifeShape( _("Max"),
+               _("Max is the fastest-growing known pattern in Conway's Game "
+                 "of Life (possibly the fastest possible). It fills space to "
+                 "a density of 1/2, conjectured to be the maximum density, "
+                 "and does it at a speed of c/2 in each of the 4 directions, "
+                 "which has been proven to be the maximum possible speed.\n"
+                 "\n"
+                 "Population growth is:\n"
+                 "[(t+19)^2+463]/4 for t divisible by 4;\n"
+                 "[(t+19)^2+487]/4 for t even, not div. by 4;\n"
+                 "[(t+18)^2+639]/4 for t odd.\n"
+                 "\n"
+                 "Original construction, top/bottom stretchers by Hartmut "
+                 "Holzwart; Size optimization, left/right stretchers by David "
+                 "Bell; Original idea, middle part, left/right stretcher "
+                 "connection by Al Hensel.\n"
+                 "\n"
+                 "This spacefiller by David Bell, September 1993."),
+               29, 43,
+               ".....*.*....................."
+               "....*..*....................."
+               "...**........................"
+               "..*.........................."
+               ".****........................"
+               "*....*......................."
+               "*..*........................."
+               "*..*........................."
+               ".*.........***...***........."
+               "..****.*..*..*...*..*........"
+               "...*...*.....*...*..........."
+               "....*........*...*..........."
+               "....*.*......*...*..........."
+               "............................."
+               "...***.....***...***........."
+               "...**.......*.....*.........."
+               "...***......*******.........."
+               "...........*.......*........."
+               "....*.*...***********........"
+               "...*..*..*............**....."
+               "...*.....************...*...."
+               "...*...*.............*...*..."
+               "....*...************.....*..."
+               ".....**............*..*..*..."
+               "........***********...*.*...."
+               ".........*.......*..........."
+               "..........*******......***..."
+               "..........*.....*.......**..."
+               ".........***...***.....***..."
+               "............................."
+               "...........*...*......*.*...."
+               "...........*...*........*...."
+               "...........*...*.....*...*..."
+               "........*..*...*..*..*.****.."
+               ".........***...***.........*."
+               ".........................*..*"
+               ".........................*..*"
+               ".......................*....*"
+               "........................****."
+               "..........................*.."
+               "........................**..."
+               ".....................*..*...."
+               ".....................*.*....." )
 };

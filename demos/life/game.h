@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        game.h
-// Purpose:     Life! game logic
+// Purpose:     Life! game logic, version 2
 // Author:      Guillermo Rodriguez Garcia, <guille@iies.es>
 // Modified by:
 // Created:     Jan/2000
@@ -29,41 +29,37 @@
 #endif
 
 // --------------------------------------------------------------------------
-// constants
+// Cell
 // --------------------------------------------------------------------------
 
-// minimum and maximum table size, in each dimension
-#define LIFE_MIN 20
-#define LIFE_MAX 200
-
-// --------------------------------------------------------------------------
-// Cell and CellArray;
-// --------------------------------------------------------------------------
-
-typedef long        Cell;
-typedef wxArrayLong CellArray;
+// A Cell is just a struct which contains a pair of (i, j) coords.
+// These structs are not used internally anywhere; they are just
+// used to pass cell coordinates around.
+struct Cell
+{
+    wxInt32 i;
+    wxInt32 j;
+};       
 
 // --------------------------------------------------------------------------
 // LifeShape
 // --------------------------------------------------------------------------
 
+// A class which holds a pattern
 class LifeShape
 {
 public:
     LifeShape::LifeShape(wxString name,
                          wxString desc,
-                         int width, int height, char *data,
-                         int fieldWidth = 20, int fieldHeight = 20,
-                         bool wrap = TRUE)
+                         int width,
+                         int height,
+                         char *data)
     {
-        m_name        = name;
-        m_desc        = desc;
-        m_width       = width;
-        m_height      = height;
-        m_data        = data;
-        m_fieldWidth  = fieldWidth;
-        m_fieldHeight = fieldHeight;
-        m_wrap        = wrap;
+        m_name   = name;
+        m_desc   = desc;
+        m_width  = width;
+        m_height = height;
+        m_data   = data;
     }
 
     wxString  m_name;
@@ -71,59 +67,77 @@ public:
     int       m_width;
     int       m_height;
     char     *m_data;
-    int       m_fieldWidth;
-    int       m_fieldHeight;
-    bool      m_wrap;
 };
+
 
 // --------------------------------------------------------------------------
 // Life
 // --------------------------------------------------------------------------
 
+class CellBox;
+
 class Life
 {
 public:
     // ctor and dtor
-    Life(int width, int height);
+    Life();
     ~Life();
-    void Create(int width, int height);
-    void Destroy();
 
-    // game field
-    inline int       GetWidth() const        { return m_width; };
-    inline int       GetHeight() const       { return m_height; };
-    inline void      SetBorderWrap(bool on)  { m_wrap = on; };
+    // accessors
+    inline wxUint32 GetNumCells() const { return m_numcells; };
+    bool IsAlive (wxInt32 x, wxInt32 y);
+    void SetCell (wxInt32 x, wxInt32 y, bool alive = TRUE);
+    void SetShape(const LifeShape &shape);
 
-    // cells
-    bool             IsAlive(int i, int j) const;
-    bool             IsAlive(Cell c) const;
-    int              GetX(Cell c) const;
-    int              GetY(Cell c) const;
-    const CellArray* GetCells() const        { return &m_cells; };
-    const CellArray* GetChangedCells() const { return &m_changed; };
-
-    // game logic
+    // game control
     void Clear();
-    Cell SetCell(int i, int j, bool alive = TRUE);
-    void SetShape(LifeShape &shape);
     bool NextTic();
 
+    // The following functions find cells within a given viewport; either
+    // all alive cells, or only those cells which have changed since last
+    // generation. You first call BeginFind() to specify the viewport,
+    // then keep calling FindMore() until it returns TRUE.
+    //
+    // BeginFind:
+    //  Specify the viewport and whether to look for alive cells or for
+    //  cells which have changed since the last generation and thus need
+    //  to be repainted. In this latter case, there is no distinction
+    //  between newborn or just-dead cells.
+    //
+    // FindMore:
+    //  Fills an array with cells that match the specification given with
+    //  BeginFind(). The array itself belongs to the Life object and must
+    //  not be modified or freed by the caller. If this function returns
+    //  FALSE, then the operation is not complete: just process all cells
+    //  and call FillMore() again.
+    //
+    void BeginFind(wxInt32 i0, wxInt32 j0,
+                   wxInt32 i1, wxInt32 j1,
+                   bool changed);
+    bool FindMore(Cell *cells[], size_t *ncells);
+
 private:
-    int         GetNeighbors(int i, int j) const;
-    inline Cell MakeCell(int i, int j, bool alive) const;
+    // cellbox-related
+    CellBox *CreateBox(wxInt32 x, wxInt32 y, wxUint32 hv);
+    CellBox *LinkBox(wxInt32 x, wxInt32 y, bool create = TRUE);
+    void KillBox(CellBox *c);
 
-    enum CellFlags
-    {
-        CELL_DEAD    = 0x0000,  // is dead
-        CELL_ALIVE   = 0x0001,  // is alive
-        CELL_MARK    = 0x0002,  // will change / has changed
-    };
+    // helpers for FindMore & co.
+    void DoLine(wxInt32 i, wxInt32 j, wxUint32 alive, wxUint32 old);
+    void DoLine(wxInt32 i, wxInt32 j, wxUint32 alive);
 
-    int       m_width;
-    int       m_height;
-    CellArray m_cells;
-    CellArray m_changed;
-    bool      m_wrap;
+
+    CellBox  *m_head;           // list of alive boxes
+    CellBox  *m_available;      // list of reusable dead boxes
+    CellBox **m_boxes;          // hash table of alive boxes
+    wxUint32  m_numcells;       // population (number of alive cells)
+    Cell     *m_cells;          // cell array for FindMore()
+    size_t    m_ncells;         // number of valid cells in cell array
+    wxInt32   m_i, m_j,         // state vars for FindMore()
+              m_i0, m_j0,
+              m_i1, m_j1;
+    bool      m_changed;
+    bool      m_findmore;
 };
 
 #endif  // _LIFE_GAME_H_

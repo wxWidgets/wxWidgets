@@ -34,30 +34,46 @@
 // LifeCanvas
 // --------------------------------------------------------------------------
 
-class LifeCanvas : public wxScrolledWindow
+/* Note that in LifeCanvas, all cell coordinates are
+ * named i, j, while screen coordinates are named x, y.
+ */
+class LifeCanvas : public wxWindow
 {
 public:
     // ctor and dtor
     LifeCanvas(wxWindow* parent, Life* life, bool interactive = TRUE);
     ~LifeCanvas();
 
-    // member functions
-    void Reset();
-    void DrawEverything(bool force = FALSE);
-    void DrawCell(Cell c);
-    void DrawCell(Cell c, wxDC &dc);
-    inline int CellToCoord(int i) const { return (i * m_cellsize); };
-    inline int CoordToCell(int x) const { return ((x >= 0)? (x / m_cellsize) : -1); };
+    // view management
+    int  GetCellSize() const { return m_cellsize; };
+    void SetCellSize(int cellsize);
+    void Recenter(wxInt32 i, wxInt32 j);
 
-    // event handlers
-    void OnPaint(wxPaintEvent& event);
-    void OnMouse(wxMouseEvent& event);
-    void OnSize(wxSizeEvent& event);
+    // drawing
+    void DrawChanged();
+    void DrawCell(wxInt32 i, wxInt32 j, bool alive);
 
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 
+    // draw a cell (parametrized by DC)
+    void DrawCell(wxInt32 i, wxInt32 j, wxDC &dc);
+
+    // event handlers
+    void OnPaint(wxPaintEvent& event);
+    void OnMouse(wxMouseEvent& event);
+    void OnSize(wxSizeEvent& event);
+    void OnScroll(wxScrollWinEvent& event);
+    void OnEraseBackground(wxEraseEvent& event);
+
+    // conversion between cell and screen coordinates
+    inline wxInt32 XToCell(wxCoord x) const { return (x / m_cellsize) + m_viewportX; };
+    inline wxInt32 YToCell(wxCoord y) const { return (y / m_cellsize) + m_viewportY; };
+    inline wxCoord CellToX(wxInt32 i) const { return (i - m_viewportX) * m_cellsize; };
+    inline wxCoord CellToY(wxInt32 j) const { return (j - m_viewportY) * m_cellsize; };
+
+    // what is the user doing?
     enum MouseStatus
     {
         MOUSE_NOACTION,
@@ -65,15 +81,16 @@ private:
         MOUSE_ERASING
     };
 
-    Life        *m_life;
-    wxBitmap    *m_bmp;
-    int          m_height;
-    int          m_width;
-    int          m_cellsize;
-    wxCoord      m_xoffset;
-    wxCoord      m_yoffset;
-    MouseStatus  m_status;
-    bool         m_interactive;
+    Life        *m_life;            // Life object
+    int          m_cellsize;        // current cell size, in pixels
+    bool         m_interactive;     // is this canvas interactive?
+    MouseStatus  m_status;          // what is the user doing?
+    wxInt32      m_viewportX;       // first visible cell (x coord)
+    wxInt32      m_viewportY;       // first visible cell (y coord)
+    wxInt32      m_viewportW;       // number of visible cells (w)
+    wxInt32      m_viewportH;       // number of visible cells (h)
+    int          m_thumbX;          // horiz. scrollbar thumb position 
+    int          m_thumbY;          // vert. scrollbar thumb position 
 };
 
 // --------------------------------------------------------------------------
@@ -100,25 +117,27 @@ public:
 
     // member functions
     void UpdateInfoText();
-
-    // event handlers
-    void OnMenu(wxCommandEvent& event);
-    void OnNewGame(wxCommandEvent& event);
-    void OnSamples(wxCommandEvent& event);
-    void OnStart();
-    void OnStop();
+    void UpdateUI();
     void OnTimer();
-    void OnSlider(wxScrollEvent& event);
 
 private:
     // any class wishing to process wxWindows events must use this macro
     DECLARE_EVENT_TABLE()
 
-    Life         *m_life;
-    LifeTimer    *m_timer;
+    // event handlers
+    void OnMenu(wxCommandEvent& event);
+    void OnSamples(wxCommandEvent& event);
+    void OnSlider(wxScrollEvent& event);
+    void OnClose(wxCloseEvent& event);
+    void OnStart();
+    void OnStop();
+
+    Life         *m_life;  
+    LifeTimer    *m_timer; 
     LifeCanvas   *m_canvas;
     wxStaticText *m_text;
     bool          m_running;
+    bool          m_topspeed;
     long          m_interval;
     long          m_tics;
 };
