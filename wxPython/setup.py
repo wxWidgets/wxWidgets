@@ -13,7 +13,7 @@ from my_distutils import run_swig, contrib_copy_tree
 # flags and values that affect this script
 #----------------------------------------------------------------------
 
-VERSION          = "2.4.0p1"
+VERSION          = "2.4.0"
 DESCRIPTION      = "Cross platform GUI toolkit for Python"
 AUTHOR           = "Robin Dunn"
 AUTHOR_EMAIL     = "Robin Dunn <robin@alldunn.com>"
@@ -71,13 +71,21 @@ UNDEF_NDEBUG = 1   # Python 2.2 on Unix/Linux by default defines NDEBUG,
 
 NO_SCRIPTS = 0     # Don't install the tool scripts
 
+WX_CONFIG = None   # Usually you shouldn't need to touch this, but you can set
+                   # it to pass an alternate version of wx-config or alternate
+                   # flags, eg. as required by the .deb in-tree build.  By
+                   # default a wx-config command will be assembled based on
+                   # version, port, etc. and it will be looked for on the
+                   # default $PATH.
 
-WX_CONFIG = "wx-config"    # Usually you shouldn't need to touch this,
-                           # but you can set it to pass an alternate
-                           # version of wx-config or alternate flags,
-                           # eg. as required by the .deb in-tree build.
+WXPORT = 'gtk'     # On Linux/Unix there are several ports of wxWindows available.
+                   # Setting this value lets you select which will be used for
+                   # the wxPython build.  Possibilites are 'gtk', 'gtk2' and
+                   # 'x11'.  Curently only gtk and gtk2 works.
 
-BUILD_BASE = "build"
+BUILD_BASE = "build"       # Directory to use for temporary build files.
+
+
 
 # Some MSW build settings
 
@@ -139,6 +147,15 @@ if bcpp_compiling:
     WXDLLVER="" # no dll ver path avaible
 
 
+# change the PORT default for wxMac
+if sys.platform[:6] == "darwin":
+    WXPORT = 'mac'
+
+# and do the same for wxMSW, just for consistency
+if os.name == 'nt':
+    WXPORT = 'msw'
+
+
 #----------------------------------------------------------------------
 # Check for build flags on the command line
 #----------------------------------------------------------------------
@@ -157,7 +174,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
                 sys.argv[x] = ''
 
 # String options
-for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE']:
+for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE', 'WXPORT']:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], option) == 0:
             pos = string.find(sys.argv[x], '=') + 1
@@ -168,6 +185,34 @@ for option in ['WX_CONFIG', 'WXDLLVER', 'BUILD_BASE']:
 sys.argv = filter(None, sys.argv)
 
 
+#----------------------------------------------------------------------
+
+def Verify_WX_CONFIG():
+    """ Called below for the builds that need wx-config,
+        assumes POSIX $PATH in environment.
+    """
+    # if WX_CONFIG hasn't been set to an explicit value then construct one.
+    global WX_CONFIG
+    if WX_CONFIG is None:
+        if debug:             # TODO: Fix this.  wxPython's --debug shouldn't be tied to wxWindows...
+            df = 'd'
+        else:
+            df = ''
+        if UNICODE:
+            uf = 'u'
+        else:
+            uf = ''
+        ver2 = VERSION[:3]
+        WX_CONFIG = 'wx%s%s%s-%s-config' % (WXPORT, uf, df, ver2)
+
+    searchpath = os.environ["PATH"]
+    for p in string.split(searchpath, ':'):
+        fp = os.path.join(p, WX_CONFIG)
+        if os.path.exists(fp) and os.access(fp, os.X_OK):
+            # success
+            print "Found wx-config: " + fp
+            return fp
+    raise SystemExit, "%s not found on $PATH" % WX_CONFIG
 
 #----------------------------------------------------------------------
 # sanity checks
@@ -188,11 +233,8 @@ if debug:
 if FINAL:
     HYBRID = 0
 
-
-if UNICODE and os.name != 'nt':
-    print "UNICODE is currently only supported on Win32"
-    sys.exit()
-
+if UNICODE and WXPORT not in ['msw', 'gtk2']:
+    raise SystemExit, "UNICODE mode not surrently supported on this WXPORT."
 
 if UNICODE:
     BUILD_BASE = BUILD_BASE + '.unicode'
@@ -296,10 +338,9 @@ if os.name == 'nt':
 
 
 
-
+#----------------------------------------------------------------------
 elif os.name == 'posix' and sys.platform[:6] == "darwin":
     # Flags and such for a Darwin (Max OS X) build of Python
-
     WXDIR = '..'              # assumes IN_CVS_TREE
     WXPLAT = '__WXMAC__'
     GENDIR = 'mac'
@@ -311,6 +352,8 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
                ]
     libdirs = []
     libs = ['stdc++']
+
+    Verify_WX_CONFIG()
 
     cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1]
     cflags = string.split(cflags)
@@ -327,12 +370,24 @@ elif os.name == 'posix' and sys.platform[:6] == "darwin":
     BUILD_DLLWIDGET = 0
 
 
+#----------------------------------------------------------------------
 elif os.name == 'posix':
     # Set flags for other Unix type platforms
-
     WXDIR = '..'              # assumes IN_CVS_TREE
-    WXPLAT = '__WXGTK__'      # and assumes GTK...
-    GENDIR = 'gtk'            # Need to allow for X11 and/or Motif eventually too
+    GENDIR = WXPORT
+
+    if WXPORT == 'gtk':
+        WXPLAT = '__WXGTK__'
+        portcfg = os.popen('gtk-config --cflags', 'r').read()[:-1]
+    elif WXPORT == 'gtk2':
+        WXPLAT = '__WXGTK__'
+        GENDIR = 'gtk' # no code differences so use the same generated sources
+        portcfg = os.popen('pkg-config gtk+-2.0 --cflags', 'r').read()[:-1]
+    elif WXPORT == 'x11':
+        WXPLAT = '__WXX11__'
+        portcfg = ''
+    else:
+        raise SystemExit, "Unknown WXPORT value: " + WXPORT
 
     includes = ['src']
     defines = [('SWIG_GLOBAL', None),
@@ -342,8 +397,10 @@ elif os.name == 'posix':
     libdirs = []
     libs = []
 
-    cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + \
-             os.popen('gtk-config --cflags', 'r').read()[:-1]
+    Verify_WX_CONFIG()
+
+    cflags = os.popen(WX_CONFIG + ' --cxxflags', 'r').read()[:-1] + ' ' + portcfg
+
     cflags = string.split(cflags)
     if UNDEF_NDEBUG:
         cflags.append('-UNDEBUG')
@@ -361,6 +418,7 @@ elif os.name == 'posix':
     libdirs.append("/usr/X11R6/lib")
 
 
+#----------------------------------------------------------------------
 else:
     raise 'Sorry Charlie...'
 
