@@ -2,7 +2,7 @@
 /** @file Document.h
  ** Text document that handles notifications, DBCS, styling, words and end of line.
  **/
-// Copyright 1998-2002 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 #ifndef DOCUMENT_H
@@ -26,10 +26,10 @@ public:
 	Position start;
 	Position end;
 
-	Range(Position pos=0) : 
+	Range(Position pos=0) :
 		start(pos), end(pos) {
 	};
-	Range(Position start_, Position end_) : 
+	Range(Position start_, Position end_) :
 		start(start_), end(end_) {
 	};
 
@@ -60,7 +60,7 @@ public:
 	}
 
 	bool Overlaps(Range other) const {
-		return 
+		return
 		Contains(other.start) ||
 		Contains(other.end) ||
 		other.Contains(start) ||
@@ -88,7 +88,7 @@ public:
 		}
 	};
 
-private:	
+private:
 	int refCount;
 	CellBuffer cb;
 	enum charClassification { ccSpace, ccNewLine, ccWord, ccPunctuation };
@@ -191,7 +191,7 @@ public:
 	int ExtendWordSelect(int pos, int delta, bool onlyWordCharacters=false);
 	int NextWordStart(int pos, int delta);
 	int Length() { return cb.Length(); }
-	long FindText(int minPos, int maxPos, const char *s, 
+	long FindText(int minPos, int maxPos, const char *s,
 		bool caseSensitive, bool word, bool wordStart, bool regExp, int *length);
 	long FindText(int iMessage, unsigned long wParam, long lParam);
 	const char *SubstituteByPosition(const char *text, int *length);
@@ -222,7 +222,6 @@ public:
 	int WordPartRight(int pos);
 
 private:
-	bool IsDBCS(int pos);
 	charClassification WordCharClass(unsigned char ch);
 	bool IsWordStartAt(int pos);
 	bool IsWordEndAt(int pos);
@@ -252,7 +251,7 @@ public:
 	int foldLevelNow;
 	int foldLevelPrev;
 
-	DocModification(int modificationType_, int position_=0, int length_=0, 
+	DocModification(int modificationType_, int position_=0, int length_=0,
 		int linesAdded_=0, const char *text_=0) :
 		modificationType(modificationType_),
 		position(position_),
