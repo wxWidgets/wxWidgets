@@ -166,7 +166,7 @@ wxSize wxRadioBox::LayoutItems()
     if ( m_majorDim == 0 )
     {
         // avoid dividing by 0 below
-        wxFAIL_MSG( "dimension of radiobox should not be 0!" );
+        wxFAIL_MSG( _T("dimension of radiobox should not be 0!") );
 
         m_majorDim = 1;
     }

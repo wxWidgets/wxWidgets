@@ -37,7 +37,7 @@ wxStaticBitmap::wxStaticBitmap( wxWindow *parent, wxWindowID id, const wxBitmap 
 
 void wxStaticBitmap::CreatePixmapWidget()
 {
-    wxCHECK_RET( m_bitmap.Ok(), "should only be called if we have a bitmap" );
+    wxCHECK_RET( m_bitmap.Ok(), _T("should only be called if we have a bitmap") );
 
     GdkBitmap *mask = (GdkBitmap *) NULL;
     if ( m_bitmap.GetMask() )
