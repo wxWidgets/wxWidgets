@@ -1515,17 +1515,18 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                                 }
                                 else {
                                     // no, it's a simple flag
-                                    // TODO support the flags:
-                                    //  1. create an xterm for 'needsterminal'
-                                    //  2. append "| $PAGER" for 'copiousoutput'
                                     if ( curField == wxT("needsterminal") )
                                         needsterminal = TRUE;
-                                    else if ( curField == wxT("copiousoutput") )
+                                    else if ( curField == wxT("copiousoutput")) {
+                                        // copiousoutput impies that the
+                                        // viewer is a console program
+                                        needsterminal =
                                         copiousoutput = TRUE;
-                                    else if ( curField == wxT("textualnewlines") )
-                                        ;   // ignore
-                                    else
+                                    }
+                                    else {
+                                        // unknown flag
                                         ok = FALSE;
+                                    }
                                 }
 
                                 if ( !ok )
@@ -1575,6 +1576,19 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
                          strFileName.c_str(), nLine + 1);
         }
         else {
+            // support for flags:
+            //  1. create an xterm for 'needsterminal'
+            //  2. append "| $PAGER" for 'copiousoutput'
+            if ( copiousoutput ) {
+                const wxChar *p = wxGetenv(_T("PAGER"));
+                strOpenCmd << _T(" | ") << (p ? p : _T("more"));
+            }
+
+            if ( needsterminal ) {
+                strOpenCmd.Printf(_T("xterm -e sh -c '%s'"),
+                                  strOpenCmd.c_str());
+            }
+
             MailCapEntry *entry = new MailCapEntry(strOpenCmd,
                                                    strPrintCmd,
                                                    strTest);
