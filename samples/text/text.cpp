@@ -585,11 +585,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_tab = new MyTextCtrl( this, 100, "Multiline, allow <TAB> processing.",
       wxPoint(180,90), wxSize(240,70), wxTE_MULTILINE |  wxTE_PROCESS_TAB );
-    m_tab->SetClientData(_T("tab"));
+    m_tab->SetClientData((void *)_T("tab"));
 
     m_enter = new MyTextCtrl( this, 100, "Multiline, allow <ENTER> processing.",
       wxPoint(180,170), wxSize(240,70), wxTE_MULTILINE);
-    m_enter->SetClientData(_T("enter"));
+    m_enter->SetClientData((void *)_T("enter"));
 
     m_textrich = new MyTextCtrl(this, -1, "Allows more than 30Kb of text\n"
                                 "(even under broken Win9x)",
