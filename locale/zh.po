@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.2\n"
-"POT-Creation-Date: 2001-01-27 13:50-0800\n"
+"POT-Creation-Date: 2001-10-20 14:30-0700\n"
 "PO-Revision-Date: 2000-11-09 16:09中国标准时间\n"
 "Last-Translator: mrfx <mrfx@fm365.com>\n"
 "Language-Team: wxWindows tranlators <wx-translators@wxwindows.org>\n"
@@ -9,7 +9,7 @@ msgstr ""
 "Content-Type: text/plain; charset=zh_CN.GB2312\n"
 "Content-Transfer-Encoding: 8-bit\n"
 
-#: ../src/generic/dirdlgg.cpp:550
+#: ../src/generic/dirdlgg.cpp:551
 msgid ""
 "\n"
 "(Do you have the required permissions?)"
@@ -17,7 +17,7 @@ msgstr ""
 "\n"
 "(您是否有所需的权限?)"
 
-#: ../src/generic/dirdlgg.cpp:537
+#: ../src/generic/dirdlgg.cpp:538
 msgid ""
 "\n"
 "does not exist\n"
@@ -27,7 +27,7 @@ msgstr ""
 "不存在\n"
 "现在创建?"
 
-#: ../src/common/log.cpp:238
+#: ../src/common/log.cpp:242
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (错误 %ld: %s)"
@@ -36,7 +36,7 @@ msgstr " (错误 %ld: %s)"
 msgid " - "
 msgstr " - "
 
-#: ../src/html/htmprint.cpp:490
+#: ../src/html/htmprint.cpp:494
 msgid " Preview"
 msgstr "预览"
 
@@ -114,6 +114,14 @@ msgstr "%s 不是图标资源."
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: 不良资源文件语法."
 
+#: ../src/msw/mdi.cpp:187
+msgid "&Arrange Icons"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:183
+msgid "&Cascade"
+msgstr ""
+
 #: ../src/generic/logg.cpp:477 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
 msgstr "关闭[&C]"
@@ -129,6 +137,11 @@ msgstr "完成[&F]"
 #: ../src/generic/logg.cpp:478
 msgid "&Log"
 msgstr "日志[&L]"
+
+#: ../src/msw/mdi.cpp:188
+#, fuzzy
+msgid "&Next"
+msgstr "下一个[&N] >"
 
 #: ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
 msgid "&Next >"
@@ -162,11 +175,11 @@ msgstr "恢复[&U]"
 msgid "&Undo "
 msgstr "恢复[&U]"
 
-#: ../src/msw/mdi.cpp:1284 ../src/msw/mdi.cpp:1291 ../src/msw/window.cpp:2276
+#: ../src/msw/mdi.cpp:1287 ../src/msw/mdi.cpp:1294 ../src/msw/window.cpp:2307
 msgid "&Window"
 msgstr "窗口[&W]"
 
-#: ../src/common/config.cpp:396
+#: ../src/common/config.cpp:396 ../src/msw/regconf.cpp:264
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' 有额外的 '..', 忽略之."
@@ -238,11 +251,6 @@ msgstr "."
 msgid ".."
 msgstr ".."
 
-#: ../src/msw/dirdlg.cpp:156
-#, fuzzy
-msgid "..."
-msgstr ".."
-
 #: ../src/common/paper.cpp:120
 msgid "10 x 14 in"
 msgstr "10 x 14 英寸"
@@ -259,11 +267,11 @@ msgstr "6 3/4 信封, 3 5/8 x 6 1/2 英寸"
 msgid ": file does not exist!"
 msgstr ": 文件不存在!"
 
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:507
 msgid ": unknown charset"
 msgstr ": 未知字符集"
 
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:712
 msgid ": unknown encoding"
 msgstr ": 未知编码"
 
@@ -295,11 +303,11 @@ msgid ""
 "+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
 "+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
 "+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
-"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
-"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
-"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
-"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
-"+4</font></tt></body></html>"
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
 msgstr ""
 "<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
 "<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
@@ -307,17 +315,17 @@ msgstr ""
 "+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
 "+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
 "+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
-"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
-"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
-"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
-"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
-"+4</font></tt></body></html>"
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
 
 #: ../src/common/paper.cpp:113
 msgid "A3 sheet, 297 x 420 mm"
 msgstr "A3 纸张, 297 x 420 毫米"
 
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2531
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "A4 纸张, 210 x 297 毫米"
 
@@ -350,8 +358,13 @@ msgstr "正在添加卷 %s"
 msgid "All"
 msgstr "所有"
 
-#: ../src/generic/filedlgg.cpp:825
+#: ../include/wx/defs.h:1689 ../src/generic/filedlgg.cpp:825
 msgid "All files (*)|*"
+msgstr "所有文件 (*)|*"
+
+#: ../include/wx/defs.h:1686
+#, fuzzy
+msgid "All files (*.*)|*.*"
 msgstr "所有文件 (*)|*"
 
 #: ../src/unix/dialup.cpp:359
@@ -363,7 +376,7 @@ msgstr "已经拨接ISP."
 msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "把日志添加到文件 '%s' (选择 [否] 将覆写该文件)?"
 
-#: ../src/common/fontmap.cpp:102
+#: ../src/common/fontmap.cpp:105
 msgid "Arabic (ISO-8859-6)"
 msgstr "阿拉伯语 (ISO-8859-6)"
 
@@ -435,11 +448,11 @@ msgstr "返回"
 msgid "Backward"
 msgstr "向后"
 
-#: ../src/common/fontmap.cpp:109
+#: ../src/common/fontmap.cpp:112
 msgid "Baltic (ISO-8859-13)"
 msgstr "波罗的海语 (ISO-8859-13)"
 
-#: ../src/common/fontmap.cpp:100
+#: ../src/common/fontmap.cpp:103
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "波罗的海语 (旧的) (ISO-8859-4)"
 
@@ -497,7 +510,7 @@ msgstr "不能创建互斥对象"
 msgid "Can not create mutex."
 msgstr "不能创建互斥对象"
 
-#: ../src/common/filefn.cpp:1287 ../src/msw/dir.cpp:294
+#: ../src/common/filefn.cpp:1294 ../src/msw/dir.cpp:294
 #: ../src/unix/dir.cpp:214
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
@@ -530,12 +543,12 @@ msgstr "不能恢复[&U]"
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr "不能检查文件格式 '%s': 文件不存在."
 
-#: ../src/msw/registry.cpp:409
+#: ../src/msw/registry.cpp:418
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "不能关闭注册键 '%s'"
 
-#: ../src/msw/registry.cpp:485
+#: ../src/msw/registry.cpp:490
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "不能拷贝不支持的类型 %d 的值."
@@ -544,16 +557,16 @@ msgstr "不能拷贝不支持的类型 %d 的值."
 msgid "Can't create list control window, check that comctl32.dll is installed."
 msgstr "不能创建列表控件窗口, 检查comctl32.dll是否已安装."
 
-#: ../src/msw/registry.cpp:392
+#: ../src/msw/registry.cpp:399
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "不能创建注册键 '%s'"
 
-#: ../src/msw/utilsexc.cpp:418
+#: ../src/msw/utilsexc.cpp:482
 msgid "Can't create the inter-process read pipe"
 msgstr "不能创建内部进程读管道"
 
-#: ../src/msw/utilsexc.cpp:430
+#: ../src/msw/utilsexc.cpp:494
 msgid "Can't create the inter-process write pipe"
 msgstr "不能创建内部进程写管道"
 
@@ -561,7 +574,7 @@ msgstr "不能创建内部进程写管道"
 msgid "Can't create thread"
 msgstr "不能创建进程"
 
-#: ../src/msw/window.cpp:2402
+#: ../src/msw/window.cpp:2433
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -570,7 +583,7 @@ msgstr ""
 "不能创建类 %s窗口!\n"
 "也许是 Windows 3.x 兼容问题m?"
 
-#: ../src/msw/registry.cpp:653
+#: ../src/msw/registry.cpp:658
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "不能删除键 '%s'"
@@ -580,22 +593,22 @@ msgstr "不能删除键 '%s'"
 msgid "Can't delete the INI file '%s'"
 msgstr "不能删除 INI 文件 '%s'"
 
-#: ../src/msw/registry.cpp:678
+#: ../src/msw/registry.cpp:683
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "不能删除键值 '%s'/ '%s'"
 
-#: ../src/msw/registry.cpp:689
+#: ../src/msw/registry.cpp:694
 #, c-format
 msgid "Can't delete value of key '%s'"
 msgstr "不能删除键 '%s'的值"
 
-#: ../src/msw/registry.cpp:1015
+#: ../src/msw/registry.cpp:1020
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "不能枚举键 '%s'的子键"
 
-#: ../src/msw/registry.cpp:970
+#: ../src/msw/registry.cpp:975
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "不能枚举键 '%s'的值"
@@ -605,7 +618,7 @@ msgstr "不能枚举键 '%s'的值"
 msgid "Can't find current position in file '%s'"
 msgstr "不能在文件'%s'中找到当前位置"
 
-#: ../src/msw/window.cpp:2352
+#: ../src/msw/window.cpp:2383
 #, fuzzy
 msgid ""
 "Can't find dummy dialog template!\n"
@@ -619,7 +632,7 @@ msgstr ""
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "找不到序列化对象 '%s'，它用于对象 '%s'."
 
-#: ../src/msw/registry.cpp:341
+#: ../src/msw/registry.cpp:348
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "不能获得注册键 '%s'的信息"
@@ -638,17 +651,17 @@ msgstr "不能装载 wxSerial 动态库."
 msgid "Can't open file '%s'"
 msgstr "不能打开文件'%s'"
 
-#: ../src/msw/registry.cpp:367
+#: ../src/msw/registry.cpp:374
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "不能打开注册键 '%s'"
 
-#: ../src/msw/registry.cpp:894
+#: ../src/msw/registry.cpp:899
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "不能读 '%s'的值"
 
-#: ../src/msw/registry.cpp:769 ../src/msw/registry.cpp:808
+#: ../src/msw/registry.cpp:774 ../src/msw/registry.cpp:813
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "不能读键 '%s'的值"
@@ -661,13 +674,13 @@ msgstr "不能把日志内容保存到文件."
 msgid "Can't set thread priority"
 msgstr "不能设置线程优先级"
 
-#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:918
+#: ../src/msw/registry.cpp:799 ../src/msw/registry.cpp:923
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "不能设置 '%s'的值"
 
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2255 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirdlgg.cpp:425
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -751,13 +764,14 @@ msgstr "不能启动线程: 写TLS错误"
 msgid "Case sensitive"
 msgstr "大小写敏感"
 
-#: ../src/common/fontmap.cpp:110
+#: ../src/common/fontmap.cpp:113
 #, fuzzy
 msgid "Celtic (ISO-8859-14)"
 msgstr "波罗的海语 (ISO-8859-13)"
 
-#: ../src/common/fontmap.cpp:98
-msgid "Central European (ISO-8859-2/Latin 2)"
+#: ../src/common/fontmap.cpp:101
+#, fuzzy
+msgid "Central European (ISO-8859-2)"
 msgstr "中欧语系 (ISO-8859-2/Latin 2)"
 
 #: ../src/msw/dialup.cpp:767
@@ -781,7 +795,7 @@ msgstr "关闭"
 msgid "Close this window"
 msgstr "关闭窗口"
 
-#: ../src/common/fileconf.cpp:757
+#: ../src/common/fileconf.cpp:759
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "配置条目名不能以 '%c'开头."
@@ -790,7 +804,7 @@ msgstr "配置条目名不能以 '%c'开头."
 msgid "Confirm"
 msgstr "确认"
 
-#: ../src/html/htmlwin.cpp:166
+#: ../src/html/htmlwin.cpp:165
 msgid "Connecting..."
 msgstr "连接..."
 
@@ -849,7 +863,7 @@ msgstr "不能启动文档预览."
 msgid "Could not start printing."
 msgstr "不能启动打印."
 
-#: ../src/common/wincmn.cpp:782
+#: ../src/common/wincmn.cpp:784
 msgid "Could not transfer data to window"
 msgstr "不能把数据转到窗口"
 
@@ -881,7 +895,7 @@ msgstr "在动态连接库中找不到符号'%s'"
 msgid "Couldn't get the current thread pointer"
 msgstr "不能获得当前线程指针"
 
-#: ../src/msw/utilsexc.cpp:625
+#: ../src/msw/utilsexc.cpp:712
 #, c-format
 msgid "Couldn't launch DDE server '%s'."
 msgstr "不能启动DDE服务器 '%s'."
@@ -899,7 +913,7 @@ msgstr "不能注册剪贴板格式 '%s'."
 msgid "Couldn't release a mutex"
 msgstr "不能释放互斥体"
 
-#: ../src/msw/listctrl.cpp:615
+#: ../src/msw/listctrl.cpp:616
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "不能获得列表控件的项 %d信息."
@@ -908,7 +922,7 @@ msgstr "不能获得列表控件的项 %d信息."
 msgid "Couldn't terminate thread"
 msgstr "不能终止线程"
 
-#: ../src/generic/dirdlgg.cpp:571
+#: ../src/generic/dirdlgg.cpp:572
 msgid "Create directory"
 msgstr "创建目录"
 
@@ -920,15 +934,16 @@ msgstr "创建新目录"
 msgid "Current directory:"
 msgstr "当前目录:"
 
-#: ../src/common/fontmap.cpp:101
-msgid "Cyrillic (Latin 5)"
-msgstr "斯拉夫语 (Latin 5)"
+#: ../src/common/fontmap.cpp:104
+#, fuzzy
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "波罗的海语 (ISO-8859-13)"
 
 #: ../src/common/paper.cpp:106
 msgid "D sheet, 22 x 34 in"
 msgstr "D 纸张, 22 x 34 英寸"
 
-#: ../src/msw/dde.cpp:586
+#: ../src/msw/dde.cpp:597
 msgid "DDE poke request failed"
 msgstr "DDE poke 请求失败"
 
@@ -954,12 +969,12 @@ msgstr "由于远程访问服务（RAS）没有安装在本机,拨号功能不能使用. 请安装它."
 msgid "Did you know..."
 msgstr "你知道..."
 
-#: ../src/common/filefn.cpp:1086
+#: ../src/common/filefn.cpp:1085
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "目录'%s'不能被创建"
 
-#: ../src/generic/dirdlgg.cpp:538
+#: ../src/generic/dirdlgg.cpp:539
 msgid "Directory does not exist"
 msgstr "目录不存在"
 
@@ -978,7 +993,7 @@ msgstr "显示选项对话框"
 msgid "Do you want to save changes to document %s?"
 msgstr "你想保存对文档%s的修改?"
 
-#: ../src/html/htmlwin.cpp:216
+#: ../src/html/htmlwin.cpp:215
 msgid "Done"
 msgstr "完成"
 
@@ -1005,7 +1020,7 @@ msgid ""
 msgstr "环境变量扩展失败:  '%c' 没有出现在位置 %d / '%s'."
 
 #: ../src/generic/dirdlgg.cpp:268 ../src/generic/dirdlgg.cpp:286
-#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:605
 #: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:717
 #: ../src/generic/filedlgg.cpp:731 ../src/generic/filedlgg.cpp:744
 #: ../src/generic/filedlgg.cpp:1043 ../src/generic/filedlgg.cpp:1092
@@ -1018,15 +1033,15 @@ msgstr "错误"
 msgid "Error "
 msgstr "错误"
 
-#: ../src/generic/dirdlgg.cpp:551
+#: ../src/generic/dirdlgg.cpp:552
 msgid "Error creating directory"
 msgstr "创建目录错误"
 
-#: ../src/common/log.cpp:354
+#: ../src/common/log.cpp:362
 msgid "Error: "
 msgstr "错误："
 
-#: ../src/common/fontmap.cpp:99
+#: ../src/common/fontmap.cpp:102
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Esperanto (ISO-8859-3)"
 
@@ -1038,7 +1053,7 @@ msgstr "预期时间："
 msgid "Etcetera"
 msgstr "其它"
 
-#: ../src/msw/utilsexc.cpp:521
+#: ../src/msw/utilsexc.cpp:585
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "命令 '%s'执行失败"
@@ -1082,21 +1097,21 @@ msgstr "连接失败: 缺少用户名/口令."
 msgid "Failed to connect: no ISP to dial."
 msgstr "连接失败: 没有要拨号的ISP."
 
-#: ../src/msw/registry.cpp:589
+#: ../src/msw/registry.cpp:594
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "拷贝注册键值失败 '%s'"
 
-#: ../src/msw/registry.cpp:598
+#: ../src/msw/registry.cpp:603
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "把注册键内容从 '%s' 拷贝到 '%s'失败."
 
-#: ../src/msw/dde.cpp:923
+#: ../src/msw/dde.cpp:934
 msgid "Failed to create DDE string"
 msgstr "创建 DDE 字符串失败"
 
-#: ../src/msw/mdi.cpp:425
+#: ../src/msw/mdi.cpp:428
 msgid "Failed to create MDI parent frame."
 msgstr "创建 MDI 父框架失败."
 
@@ -1109,17 +1124,17 @@ msgstr "创建状态条失败。"
 msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr "创建到服务器 '%s'的关于主题'%s'的连接失败"
 
-#: ../src/msw/dialog.cpp:176
+#: ../src/msw/dialog.cpp:174
 msgid ""
 "Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your "
 "resources."
 msgstr "创建对话框失败. 也许你没有把wx/msw/wx.rc包括进资源中."
 
-#: ../src/generic/dirdlgg.cpp:549
+#: ../src/generic/dirdlgg.cpp:550
 msgid "Failed to create directory "
 msgstr "创建目录失败"
 
-#: ../src/html/winpars.cpp:364
+#: ../src/html/winpars.cpp:374
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "按编码 %s 显示HTML文档失败"
@@ -1128,7 +1143,7 @@ msgstr "按编码 %s 显示HTML文档失败"
 msgid "Failed to empty the clipboard."
 msgstr "清空剪贴板失败"
 
-#: ../src/msw/dde.cpp:605
+#: ../src/msw/dde.cpp:616
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "在DDE服务器建立advise循环失败"
 
@@ -1214,17 +1229,17 @@ msgstr "重定向子过程输入/输出失败"
 msgid "Failed to register DDE server '%s'"
 msgstr "注册DDE服务器 '%s'失败"
 
-#: ../src/common/fontmap.cpp:520
+#: ../src/common/fontmap.cpp:552
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "回忆字符集 '%s'编码失败."
 
-#: ../src/msw/registry.cpp:435
+#: ../src/msw/registry.cpp:440
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "将注册值 '%s'改名到'%s'失败."
 
-#: ../src/msw/registry.cpp:535
+#: ../src/msw/registry.cpp:540
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "将注册值 '%s'改名到'%s'失败."
@@ -1241,7 +1256,7 @@ msgstr "检取RAS错误消息正文失败"
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "检取支持的剪贴板格式失败"
 
-#: ../src/msw/dde.cpp:650
+#: ../src/msw/dde.cpp:661
 msgid "Failed to send DDE advise notification"
 msgstr "发送DDE advise 通知失败"
 
@@ -1263,7 +1278,7 @@ msgstr "将图像'%s'存到内存VFS失败!"
 msgid "Failed to terminate a thread."
 msgstr "终止线程失败"
 
-#: ../src/msw/dde.cpp:624
+#: ../src/msw/dde.cpp:635
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "终止与DDE服务器的advise循环失败"
 
@@ -1281,11 +1296,11 @@ msgstr "撤消DDE服务器 '%s'注册失败"
 msgid "Fatal error"
 msgstr "致命错误"
 
-#: ../src/common/log.cpp:347
+#: ../src/common/log.cpp:355
 msgid "Fatal error: "
 msgstr "致命错误："
 
-#: ../src/msw/app.cpp:1257
+#: ../src/msw/app.cpp:1274
 msgid "Fatal error: exiting"
 msgstr "致命错误：已存在"
 
@@ -1399,31 +1414,27 @@ msgstr "进入home目录"
 msgid "Go to parent directory"
 msgstr "进入父目录"
 
-#: ../src/common/fontmap.cpp:103
+#: ../src/common/fontmap.cpp:106
 msgid "Greek (ISO-8859-7)"
 msgstr "Greek (ISO-8859-7)"
 
-#: ../src/html/htmlwin.cpp:251
+#: ../src/html/htmlwin.cpp:250
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML 锚 %s 不存在."
 
 #: ../src/html/helpfrm.cpp:1188
 msgid ""
-"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books "
-"(*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All "
-"files (*.*)|*"
-msgstr ""
-"HTML 文件 (*.htm)|*.htm|HTML 文件 (*.html)|*.html|帮助书 "
-"(*.htb)|*.htb|帮助书 (*.zip)|*.zip|HTML 帮助项目 (*.hhp)|*.hhp|所有文件 "
-"(*.*)|*"
+"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|"
+"Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
+msgstr "HTML 文件 (*.htm)|*.htm|HTML 文件 (*.html)|*.html|帮助书 (*.htb)|*.htb|帮助书 (*.zip)|*.zip|HTML 帮助项目 (*.hhp)|*.hhp|所有文件 (*.*)|*"
 
-#: ../src/common/fontmap.cpp:104
+#: ../src/common/fontmap.cpp:107
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebrew (ISO-8859-8)"
 
 #: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
-#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1280
+#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1283
 msgid "Help"
 msgstr "帮助"
 
@@ -1480,7 +1491,7 @@ msgstr "HTML帮助版本不正确"
 msgid "Index"
 msgstr "索引"
 
-#: ../src/common/fontmap.cpp:108
+#: ../src/common/fontmap.cpp:111
 #, fuzzy
 msgid "Indian (ISO-8859-12)"
 msgstr "Nordic (ISO-8859-10)"
@@ -1505,11 +1516,11 @@ msgstr "JPEG: 不能装入 - 文件也许已被破坏."
 msgid "JPEG: Couldn't save image."
 msgstr "JPEG: 不能保存图像."
 
-#: ../src/common/fontmap.cpp:112
+#: ../src/common/fontmap.cpp:115
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
-#: ../src/generic/dcpsg.cpp:2246 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "横向"
@@ -1544,7 +1555,7 @@ msgstr "轻"
 msgid "Load %s file"
 msgstr "装入文件 %s "
 
-#: ../src/html/htmlwin.cpp:187
+#: ../src/html/htmlwin.cpp:186
 msgid "Loading : "
 msgstr "装载:"
 
@@ -1565,7 +1576,7 @@ msgstr "日志保存到文件 '%s'."
 msgid "MDI child"
 msgstr "MDI子窗口"
 
-#: ../src/unix/mimetype.cpp:1574
+#: ../src/unix/mimetype.cpp:1597
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Mailcap 文件 %s, 行 %d: 不完整条目被忽略."
@@ -1608,7 +1619,7 @@ msgstr "我的家"
 msgid "Name"
 msgstr "名称"
 
-#: ../src/generic/dirdlgg.cpp:426
+#: ../src/generic/dirdlgg.cpp:427
 msgid "New..."
 msgstr "创建..."
 
@@ -1642,6 +1653,17 @@ msgstr "没有可用的XPM图标设备!"
 msgid "No entries found."
 msgstr "没找到条目"
 
+#: ../src/common/fontmap.cpp:716
+#, fuzzy, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+"编码'%s'未知.\n"
+"选择用于改编码的字体\n"
+"(否则该编码的文本将不能正确显示)?"
+
 #: ../src/common/image.cpp:758
 msgid "No handler found for image type."
 msgstr "没有找到图像类型处理器."
@@ -1660,7 +1682,7 @@ msgstr "没有类型 %s的图像处理器."
 msgid "No matching page found yet"
 msgstr "No matching page found yet"
 
-#: ../src/common/fontmap.cpp:106
+#: ../src/common/fontmap.cpp:109
 msgid "Nordic (ISO-8859-10)"
 msgstr "Nordic (ISO-8859-10)"
 
@@ -1676,8 +1698,8 @@ msgstr "Normal font:"
 msgid "Note, 8 1/2 x 11 in"
 msgstr "笔记簿, 8 1/2 x 11 英寸"
 
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2254
-#: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2270
+#: ../src/generic/dirdlgg.cpp:423 ../src/generic/filedlgg.cpp:907
 #: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:733
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 #: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
@@ -1689,7 +1711,7 @@ msgstr "确认"
 msgid "Open HTML document"
 msgstr "打开HTML文档"
 
-#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:605
 #: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:744
 msgid "Operation not permitted."
 msgstr "不允许的操作."
@@ -1805,7 +1827,7 @@ msgstr "请选择你想连接的ISP"
 msgid "Please wait..."
 msgstr "请等待..."
 
-#: ../src/generic/dcpsg.cpp:2245 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "纵向"
@@ -1818,11 +1840,11 @@ msgstr "PostScript"
 msgid "PostScript file"
 msgstr "PostScript文件"
 
-#: ../src/generic/dcpsg.cpp:2287
+#: ../src/generic/dcpsg.cpp:2303
 msgid "PostScript:"
 msgstr "PostScript:"
 
-#: ../src/generic/dcpsg.cpp:2250
+#: ../src/generic/dcpsg.cpp:2266
 msgid "Preview Only"
 msgstr "仅预览"
 
@@ -1866,7 +1888,7 @@ msgstr "打印假脱机"
 msgid "Print this page"
 msgstr "打印本页"
 
-#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "打印到文件"
 
@@ -1874,11 +1896,11 @@ msgstr "打印到文件"
 msgid "Print..."
 msgstr "打印..."
 
-#: ../src/generic/dcpsg.cpp:2260
+#: ../src/generic/dcpsg.cpp:2276
 msgid "Printer Command: "
 msgstr "打印机命令: "
 
-#: ../src/generic/dcpsg.cpp:2265
+#: ../src/generic/dcpsg.cpp:2281
 msgid "Printer Options: "
 msgstr "打印机选项:"
 
@@ -1919,7 +1941,7 @@ msgstr "正在打印页 %d..."
 msgid "Printing..."
 msgstr "打印..."
 
-#: ../src/common/log.cpp:348
+#: ../src/common/log.cpp:356
 msgid "Program aborted."
 msgstr "程序终止."
 
@@ -1936,17 +1958,17 @@ msgstr "问题"
 msgid "Read error on file '%s'"
 msgstr "读文件 '%s'出错"
 
-#: ../src/msw/registry.cpp:527
+#: ../src/msw/registry.cpp:532
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "注册键 '%s' 已存在."
 
-#: ../src/msw/registry.cpp:496
+#: ../src/msw/registry.cpp:501
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "注册键 '%s' 不存在, 不能改名."
 
-#: ../src/msw/registry.cpp:623
+#: ../src/msw/registry.cpp:628
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
@@ -1957,7 +1979,7 @@ msgstr ""
 "删除它将使系统进入不可用状态:\n"
 "操作终止."
 
-#: ../src/msw/registry.cpp:427
+#: ../src/msw/registry.cpp:432
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "注册值 '%s' 已存在."
@@ -2045,7 +2067,7 @@ msgstr "选择文档视图"
 msgid "Select a file"
 msgstr "选择文件"
 
-#: ../src/generic/dcpsg.cpp:2248
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Send to Printer"
 msgstr "发到打印机"
 
@@ -2156,7 +2178,7 @@ msgstr "模板"
 msgid "Temporary"
 msgstr "临时的"
 
-#: ../src/common/fontmap.cpp:107
+#: ../src/common/fontmap.cpp:110
 msgid "Thai (ISO-8859-11)"
 msgstr "泰语 (ISO-8859-11)"
 
@@ -2164,7 +2186,7 @@ msgstr "泰语 (ISO-8859-11)"
 msgid "The Computer"
 msgstr "计算机"
 
-#: ../src/common/fontmap.cpp:479
+#: ../src/common/fontmap.cpp:511
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2180,20 +2202,9 @@ msgstr ""
 msgid "The clipboard format '%d' doesn't exist."
 msgstr "剪贴板格式 '%d' 不存在."
 
-#: ../src/generic/dirdlgg.cpp:535
+#: ../src/generic/dirdlgg.cpp:536
 msgid "The directory "
 msgstr "目录"
-
-#: ../src/common/fontmap.cpp:672
-#, c-format
-msgid ""
-"The encoding '%s' is unknown.\n"
-"Would you like to select a font to be used for this encoding\n"
-"(otherwise the text in this encoding will not be shown correctly)?"
-msgstr ""
-"编码'%s'未知.\n"
-"选择用于改编码的字体\n"
-"(否则该编码的文本将不能正确显示)?"
 
 #: ../src/common/docview.cpp:1676
 #, c-format
@@ -2245,6 +2256,14 @@ msgstr "线程模块初始化失败: 不能在线程本地存储区中分配索引"
 msgid "Thread priority setting is ignored."
 msgstr "线程优先级设置被忽略."
 
+#: ../src/msw/mdi.cpp:184
+msgid "Tile &Horizontally"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:185
+msgid "Tile &Vertically"
+msgstr ""
+
 #: ../src/generic/filedlgg.cpp:536
 msgid "Time"
 msgstr "时间"
@@ -2274,7 +2293,7 @@ msgstr "试图从内存VFS中移去文件'%s', 但它并没有被装入内存!"
 msgid "Trying to solve a NULL hostname: giving up"
 msgstr "试图解决 NULL 主机名: 放弃"
 
-#: ../src/common/fontmap.cpp:105
+#: ../src/common/fontmap.cpp:108
 msgid "Turkish (ISO-8859-9)"
 msgstr "土耳其语 (ISO-8859-9)"
 
@@ -2282,7 +2301,7 @@ msgstr "土耳其语 (ISO-8859-9)"
 msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "US 标准复写簿, 14 7/8 x 11 英寸"
 
-#: ../src/html/htmlwin.cpp:175
+#: ../src/html/htmlwin.cpp:174
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "不能打开HTML文档: %s"
@@ -2309,12 +2328,12 @@ msgstr "在解析资源时意外到达文件结尾."
 msgid "Unexpected parameter '%s'"
 msgstr "意外参数 '%s'"
 
-#: ../src/msw/dde.cpp:1019
+#: ../src/msw/dde.cpp:1030
 #, c-format
 msgid "Unknown DDE error %08x"
 msgstr "未知 DDE 错误 %08x"
 
-#: ../src/common/fontmap.cpp:329
+#: ../src/common/fontmap.cpp:332
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "位置编码 (%d)"
@@ -2394,7 +2413,7 @@ msgstr "等待子过程终止失败"
 msgid "Warning"
 msgstr "警告"
 
-#: ../src/common/log.cpp:358
+#: ../src/common/log.cpp:366
 msgid "Warning: "
 msgstr "警告:"
 
@@ -2402,72 +2421,72 @@ msgstr "警告:"
 msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr "警告: 视图从空栈中移去HTML标签处理器."
 
-#: ../src/common/fontmap.cpp:97
+#: ../src/common/fontmap.cpp:100
 #, fuzzy
-msgid "Western European (ISO-8859-1/Latin 1)"
+msgid "Western European (ISO-8859-1)"
 msgstr "West European (ISO-8859-1/Latin 1)"
 
-#: ../src/common/fontmap.cpp:111
+#: ../src/common/fontmap.cpp:114
 #, fuzzy
-msgid "Western European with Euro (ISO-8859-15/Latin 0)"
+msgid "Western European with Euro (ISO-8859-15)"
 msgstr "West European new (ISO-8859-15/Latin 0)"
 
 #: ../src/html/helpfrm.cpp:406
 msgid "Whole words only"
 msgstr "仅为整字"
 
-#: ../src/msw/utils.cpp:545
+#: ../src/msw/utils.cpp:547
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s on Windows 3.1"
 
-#: ../src/msw/mdi.cpp:1315
+#: ../src/msw/mdi.cpp:1318
 msgid "Window"
 msgstr "窗口"
 
-#: ../src/msw/utils.cpp:577
+#: ../src/msw/utils.cpp:585
 msgid "Windows 3.1"
 msgstr "Windows 3.1"
 
-#: ../src/msw/utils.cpp:549
+#: ../src/msw/utils.cpp:551
 #, c-format
 msgid "Windows 9%c"
 msgstr "Windows 9%c"
 
-#: ../src/common/fontmap.cpp:119
+#: ../src/common/fontmap.cpp:122
 msgid "Windows Arabic (CP 1256)"
 msgstr "Windows Arabic (CP 1256)"
 
-#: ../src/common/fontmap.cpp:120
+#: ../src/common/fontmap.cpp:123
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Baltic (CP 1257)"
 
-#: ../src/common/fontmap.cpp:113
+#: ../src/common/fontmap.cpp:116
 #, fuzzy
 msgid "Windows Central European (CP 1250)"
 msgstr "Windows 希伯来 (CP 1255)"
 
-#: ../src/common/fontmap.cpp:114
+#: ../src/common/fontmap.cpp:117
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Cyrillic (CP 1251)"
 
-#: ../src/common/fontmap.cpp:116
+#: ../src/common/fontmap.cpp:119
 msgid "Windows Greek (CP 1253)"
 msgstr "Windows Greek (CP 1253)"
 
-#: ../src/common/fontmap.cpp:118
+#: ../src/common/fontmap.cpp:121
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows 希伯来 (CP 1255)"
 
-#: ../src/common/fontmap.cpp:117
+#: ../src/common/fontmap.cpp:120
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows 土耳其语 (CP 1254)"
 
-#: ../src/common/fontmap.cpp:115
+#: ../src/common/fontmap.cpp:118
 #, fuzzy
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Latin 1 (CP 1252)"
 
-#: ../src/common/fontmap.cpp:121
+#: ../src/common/fontmap.cpp:124
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
@@ -2476,19 +2495,19 @@ msgstr "Windows/DOS OEM (CP 437)"
 msgid "Write error on file '%s'"
 msgstr "写文件 '%s'错误"
 
-#: ../src/generic/dcpsg.cpp:2305
+#: ../src/generic/dcpsg.cpp:2321
 msgid "X Scaling"
 msgstr "X缩放"
 
-#: ../src/generic/dcpsg.cpp:2314
+#: ../src/generic/dcpsg.cpp:2330
 msgid "X Translation"
 msgstr "X平移"
 
-#: ../src/generic/dcpsg.cpp:2309
+#: ../src/generic/dcpsg.cpp:2325
 msgid "Y Scaling"
 msgstr "Y缩放"
 
-#: ../src/generic/dcpsg.cpp:2318
+#: ../src/generic/dcpsg.cpp:2334
 msgid "Y Translation"
 msgstr "Y平移"
 
@@ -2497,7 +2516,7 @@ msgstr "Y平移"
 msgid "Yes"
 msgstr "是"
 
-#: ../src/generic/dirdlgg.cpp:570
+#: ../src/generic/dirdlgg.cpp:571
 msgid "You cannot add a new directory to this section."
 msgstr "你不能向该项中加入新的目录."
 
@@ -2505,11 +2524,11 @@ msgstr "你不能向该项中加入新的目录."
 msgid "[EMPTY]"
 msgstr "[空]"
 
-#: ../src/msw/dde.cpp:986
+#: ../src/msw/dde.cpp:997
 msgid "a DDEML application has created a prolonged race condition."
 msgstr "DDEML应用程序已创建延时race条件."
 
-#: ../src/msw/dde.cpp:974
+#: ../src/msw/dde.cpp:985
 msgid ""
 "a DDEML function was called without first calling the DdeInitialize "
 "function,\n"
@@ -2520,39 +2539,39 @@ msgstr ""
 "或传给DDEML函数的是\n"
 "无效的实例标识."
 
-#: ../src/msw/dde.cpp:992
+#: ../src/msw/dde.cpp:1003
 msgid "a client's attempt to establish a conversation has failed."
 msgstr "客户试图建立的会话已失败."
 
-#: ../src/msw/dde.cpp:989
+#: ../src/msw/dde.cpp:1000
 msgid "a memory allocation failed."
 msgstr "内存分配失败."
 
-#: ../src/msw/dde.cpp:983
+#: ../src/msw/dde.cpp:994
 msgid "a parameter failed to be validated by the DDEML."
 msgstr "DDEML参数验证失败."
 
-#: ../src/msw/dde.cpp:965
+#: ../src/msw/dde.cpp:976
 msgid "a request for a synchronous advise transaction has timed out."
 msgstr "同步advise事务请求已超时."
 
-#: ../src/msw/dde.cpp:971
+#: ../src/msw/dde.cpp:982
 msgid "a request for a synchronous data transaction has timed out."
 msgstr "同步data事务请求已超时."
 
-#: ../src/msw/dde.cpp:980
+#: ../src/msw/dde.cpp:991
 msgid "a request for a synchronous execute transaction has timed out."
 msgstr "同步execute事务请求已超时."
 
-#: ../src/msw/dde.cpp:998
+#: ../src/msw/dde.cpp:1009
 msgid "a request for a synchronous poke transaction has timed out."
 msgstr "同步poke事务请求已超时."
 
-#: ../src/msw/dde.cpp:1013
+#: ../src/msw/dde.cpp:1024
 msgid "a request to end an advise transaction has timed out."
 msgstr "终止建议事务的请求已超时."
 
-#: ../src/msw/dde.cpp:1007
+#: ../src/msw/dde.cpp:1018
 msgid ""
 "a server-side transaction was attempted on a conversation\n"
 "that was terminated by the client, or the server\n"
@@ -2562,7 +2581,7 @@ msgstr ""
 "已被客户端终止的会话, 或服务器\n"
 "在完成事务前终止."
 
-#: ../src/msw/dde.cpp:995
+#: ../src/msw/dde.cpp:1006
 msgid "a transaction failed."
 msgstr "事务失败."
 
@@ -2570,7 +2589,7 @@ msgstr "事务失败."
 msgid "alt"
 msgstr "alt"
 
-#: ../src/msw/dde.cpp:977
+#: ../src/msw/dde.cpp:988
 msgid ""
 "an application initialized as APPCLASS_MONITOR has\n"
 "attempted to perform a DDE transaction,\n"
@@ -2582,15 +2601,15 @@ msgstr ""
 "或初始化为APPCMD_CLIENTONLY的应用程序\n"
 "视图执行服务器事务."
 
-#: ../src/msw/dde.cpp:1001
+#: ../src/msw/dde.cpp:1012
 msgid "an internal call to the PostMessage function has failed. "
 msgstr "内部调用PostMessage失败. "
 
-#: ../src/msw/dde.cpp:1010
+#: ../src/msw/dde.cpp:1021
 msgid "an internal error has occurred in the DDEML."
 msgstr "在DDEML中发生内部错误."
 
-#: ../src/msw/dde.cpp:1016
+#: ../src/msw/dde.cpp:1027
 msgid ""
 "an invalid transaction identifier was passed to a DDEML function.\n"
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
@@ -2600,7 +2619,7 @@ msgstr ""
 "一旦应用程序从XTYP_XACT_COMPLETE回调函数返回,\n"
 "回调函数事务标识符就不再有效."
 
-#: ../src/common/fileconf.cpp:1447
+#: ../src/common/fileconf.cpp:1449
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "忽略对只读键 '%s'的修改."
@@ -2615,7 +2634,7 @@ msgstr "不能关闭文件 '%s'"
 msgid "can't close file descriptor %d"
 msgstr "不能关闭文件描述子 %d"
 
-#: ../src/common/file.cpp:555 ../src/common/file.cpp:565
+#: ../src/common/file.cpp:557 ../src/common/file.cpp:567
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "不能把修改提交给文件 '%s'"
@@ -2625,36 +2644,36 @@ msgstr "不能把修改提交给文件 '%s'"
 msgid "can't create file '%s'"
 msgstr "不能创建文件 '%s'"
 
-#: ../src/common/fileconf.cpp:917
+#: ../src/common/fileconf.cpp:919
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "不能删除用户配置文件 '%s'"
 
-#: ../src/common/file.cpp:436
+#: ../src/common/file.cpp:438
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "不能确定是否已达文件 %d 的尾部"
 
-#: ../src/common/file.cpp:402
+#: ../src/common/file.cpp:404
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "不能获得文件描述子 %d的文件的长度"
 
-#: ../src/msw/utils.cpp:376
+#: ../src/msw/utils.cpp:378
 msgid "can't find user's HOME, using current directory."
 msgstr "找不到用户目录HOME, 使用当前目录."
 
-#: ../src/common/file.cpp:316
+#: ../src/common/file.cpp:319
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "不能刷新文件描述子 %d"
 
-#: ../src/common/file.cpp:370
+#: ../src/common/file.cpp:373
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "不能获得文件描述子 %d的指针位置"
 
-#: ../src/common/fontmap.cpp:614
+#: ../src/common/fontmap.cpp:646
 msgid "can't load any font, aborting"
 msgstr "不能装载任何字体, 正在中止"
 
@@ -2663,51 +2682,51 @@ msgstr "不能装载任何字体, 正在中止"
 msgid "can't open file '%s'"
 msgstr "不能打开文件 '%s'"
 
-#: ../src/common/fileconf.cpp:316
+#: ../src/common/fileconf.cpp:318
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "不能打开全局配置文件 '%s'."
 
-#: ../src/common/fileconf.cpp:328
+#: ../src/common/fileconf.cpp:330
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "不能打开用户配置文件 '%s'."
 
-#: ../src/common/fileconf.cpp:797
+#: ../src/common/fileconf.cpp:799
 msgid "can't open user configuration file."
 msgstr "不能打开用户配置文件."
 
-#: ../src/common/file.cpp:283
+#: ../src/common/file.cpp:285
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "不能从文件描述子 %d中读"
 
-#: ../src/common/file.cpp:550 ../src/common/file.cpp:560
+#: ../src/common/file.cpp:552 ../src/common/file.cpp:562
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "不能删除文件 '%s'"
 
-#: ../src/common/file.cpp:578 ../src/common/file.cpp:581
+#: ../src/common/file.cpp:580 ../src/common/file.cpp:583
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "不能删除临时文件 '%s'"
 
-#: ../src/common/file.cpp:356
+#: ../src/common/file.cpp:359
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "不能定位文件描述子 %d"
 
-#: ../src/common/textfile.cpp:357
+#: ../src/common/textfile.cpp:359
 #, c-format
 msgid "can't write file '%s' to disk."
 msgstr "不能把文件 '%s'写到磁盘."
 
-#: ../src/common/file.cpp:301
+#: ../src/common/file.cpp:304
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "不能写到文件描述子 %d"
 
-#: ../src/common/fileconf.cpp:804
+#: ../src/common/fileconf.cpp:806
 msgid "can't write user configuration file."
 msgstr "不能写用户配置文件."
 
@@ -2724,19 +2743,19 @@ msgstr "ctrl"
 msgid "date"
 msgstr "日期"
 
-#: ../src/common/datetime.cpp:3182
+#: ../src/common/datetime.cpp:3172
 msgid "eighteenth"
 msgstr "第十八"
 
-#: ../src/common/datetime.cpp:3172
+#: ../src/common/datetime.cpp:3162
 msgid "eighth"
 msgstr "第八"
 
-#: ../src/common/datetime.cpp:3175
+#: ../src/common/datetime.cpp:3165
 msgid "eleventh"
 msgstr "第十一"
 
-#: ../src/common/fileconf.cpp:1434
+#: ../src/common/fileconf.cpp:1436
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "条目 '%s' 在组 '%s'中已出现一次以上"
@@ -2750,48 +2769,48 @@ msgstr "建立"
 msgid "failed to flush the file '%s'"
 msgstr "刷新文件 '%s'失败"
 
-#: ../src/common/datetime.cpp:3179
+#: ../src/common/datetime.cpp:3169
 msgid "fifteenth"
 msgstr "第十五"
 
-#: ../src/common/datetime.cpp:3169
+#: ../src/common/datetime.cpp:3159
 msgid "fifth"
 msgstr "第五"
 
-#: ../src/common/fileconf.cpp:478
+#: ../src/common/fileconf.cpp:480
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "文件 '%s', 行 %d: '%s' 组头后备忽略."
 
-#: ../src/common/fileconf.cpp:507
+#: ../src/common/fileconf.cpp:509
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "文件 '%s', 行 %d: 期望 '='."
 
-#: ../src/common/fileconf.cpp:533
+#: ../src/common/fileconf.cpp:535
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "文件 '%s', 行 %d: 键 '%s' 第一次出现在行 %d."
 
-#: ../src/common/fileconf.cpp:523
+#: ../src/common/fileconf.cpp:525
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "文件 '%s', 行 %d: 忽略不能修改键 '%s'的值."
 
-#: ../src/common/fileconf.cpp:446
+#: ../src/common/fileconf.cpp:448
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "文件 '%s': 非预期的字符 %c 存在于行 %d.中"
 
-#: ../src/common/datetime.cpp:3165
+#: ../src/common/datetime.cpp:3155
 msgid "first"
 msgstr "第一"
 
-#: ../src/common/datetime.cpp:3178
+#: ../src/common/datetime.cpp:3168
 msgid "fourteenth"
 msgstr "第十四"
 
-#: ../src/common/datetime.cpp:3168
+#: ../src/common/datetime.cpp:3158
 msgid "fourth"
 msgstr "第四"
 
@@ -2803,7 +2822,7 @@ msgstr "gmtime() 失败"
 msgid "initiate"
 msgstr "初始化"
 
-#: ../src/common/file.cpp:440
+#: ../src/common/file.cpp:442
 msgid "invalid eof() return value."
 msgstr "无效的eof()返回值."
 
@@ -2815,7 +2834,7 @@ msgstr "消息框返回无效的值"
 msgid "large"
 msgstr "大"
 
-#: ../src/common/intl.cpp:569
+#: ../src/common/intl.cpp:575
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "不能设置现场locale '%s'."
@@ -2829,7 +2848,7 @@ msgstr "查找目录 '%s' 在路径 '%s'下."
 msgid "medium"
 msgstr "中"
 
-#: ../src/common/datetime.cpp:3329
+#: ../src/common/datetime.cpp:3319
 msgid "midnight"
 msgstr "午夜"
 
@@ -2837,15 +2856,15 @@ msgstr "午夜"
 msgid "mktime() failed"
 msgstr "mktime()失败"
 
-#: ../src/common/datetime.cpp:3183
+#: ../src/common/datetime.cpp:3173
 msgid "nineteenth"
 msgstr "第十九"
 
-#: ../src/common/datetime.cpp:3173
+#: ../src/common/datetime.cpp:3163
 msgid "ninth"
 msgstr "第九"
 
-#: ../src/msw/dde.cpp:961
+#: ../src/msw/dde.cpp:972
 msgid "no DDE error."
 msgstr "没有DDE错误"
 
@@ -2853,7 +2872,7 @@ msgstr "没有DDE错误"
 msgid "noname"
 msgstr "未名"
 
-#: ../src/common/datetime.cpp:3328
+#: ../src/common/datetime.cpp:3318
 msgid "noon"
 msgstr "中午"
 
@@ -2861,19 +2880,19 @@ msgstr "中午"
 msgid "num"
 msgstr "num"
 
-#: ../src/msw/dde.cpp:1004
+#: ../src/msw/dde.cpp:1015
 msgid "reentrancy problem."
 msgstr "重入问题"
 
-#: ../src/common/datetime.cpp:3166
+#: ../src/common/datetime.cpp:3156
 msgid "second"
 msgstr "第二"
 
-#: ../src/common/datetime.cpp:3181
+#: ../src/common/datetime.cpp:3171
 msgid "seventeenth"
 msgstr "第十七"
 
-#: ../src/common/datetime.cpp:3171
+#: ../src/common/datetime.cpp:3161
 msgid "seventh"
 msgstr "第七"
 
@@ -2881,11 +2900,11 @@ msgstr "第七"
 msgid "shift"
 msgstr "shift"
 
-#: ../src/common/datetime.cpp:3180
+#: ../src/common/datetime.cpp:3170
 msgid "sixteenth"
 msgstr "第十六"
 
-#: ../src/common/datetime.cpp:3170
+#: ../src/common/datetime.cpp:3160
 msgid "sixth"
 msgstr "第六"
 
@@ -2897,39 +2916,39 @@ msgstr "小"
 msgid "str"
 msgstr "str"
 
-#: ../src/common/datetime.cpp:3174
+#: ../src/common/datetime.cpp:3164
 msgid "tenth"
 msgstr "第十"
 
-#: ../src/msw/dde.cpp:968
+#: ../src/msw/dde.cpp:979
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr "对事件的响应导致DDE_FBUSY位被设置."
 
-#: ../src/common/datetime.cpp:3167
+#: ../src/common/datetime.cpp:3157
 msgid "third"
 msgstr "第三"
 
-#: ../src/common/datetime.cpp:3177
+#: ../src/common/datetime.cpp:3167
 msgid "thirteenth"
 msgstr "第十三"
 
-#: ../src/common/datetime.cpp:3022
+#: ../src/common/datetime.cpp:3012
 msgid "today"
 msgstr "今天"
 
-#: ../src/common/datetime.cpp:3024
+#: ../src/common/datetime.cpp:3014
 msgid "tomorrow"
 msgstr "明天"
 
-#: ../src/common/datetime.cpp:3176
+#: ../src/common/datetime.cpp:3166
 msgid "twelfth"
 msgstr "第十二"
 
-#: ../src/common/datetime.cpp:3184
+#: ../src/common/datetime.cpp:3174
 msgid "twentieth"
 msgstr "第二十"
 
-#: ../src/common/fileconf.cpp:1554
+#: ../src/common/fileconf.cpp:1556
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "例外的 \" 在位置 %d in '%s'."
@@ -2943,11 +2962,16 @@ msgstr "未知"
 msgid "unknown error (error code %08x)."
 msgstr "未知错误(错误号 %08x)."
 
-#: ../src/common/file.cpp:339
+#: ../src/common/textfile.cpp:237
+#, fuzzy
+msgid "unknown line terminator"
+msgstr "未知搜索原点"
+
+#: ../src/common/file.cpp:342
 msgid "unknown seek origin"
 msgstr "未知搜索原点"
 
-#: ../src/common/fontmap.cpp:351
+#: ../src/common/fontmap.cpp:354
 #, c-format
 msgid "unknown-%d"
 msgstr "未知-%d"
@@ -2978,11 +3002,11 @@ msgstr "非常小"
 msgid "wxGetTimeOfDay failed."
 msgstr "wxGetTimeOfDay 失败."
 
-#: ../src/common/socket.cpp:329 ../src/common/socket.cpp:383
+#: ../src/common/socket.cpp:347 ../src/common/socket.cpp:401
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: ReadMsg中无效的签名."
 
-#: ../src/common/socket.cpp:903
+#: ../src/common/socket.cpp:921
 msgid "wxSocket: unknown event!."
 msgstr "wxSocket: 未知事件!."
 
@@ -2991,13 +3015,20 @@ msgstr "wxSocket: 未知事件!."
 msgid "wxWindows could not open display for '%s': exiting."
 msgstr "wxWindows 不能为 '%s' 打开显示设备: 已经存在."
 
-#: ../src/common/filefn.cpp:1230
+#: ../src/common/filefn.cpp:1237
 msgid "wxWindows: error finding temporary file name.\n"
 msgstr "wxWindows: 查询临时文件名时出错.\n"
 
-#: ../src/common/datetime.cpp:3023
+#: ../src/common/datetime.cpp:3013
 msgid "yesterday"
 msgstr "昨天"
+
+#, fuzzy
+#~ msgid "..."
+#~ msgstr ".."
+
+#~ msgid "Cyrillic (Latin 5)"
+#~ msgstr "斯拉夫语 (Latin 5)"
 
 #, fuzzy
 #~ msgid "Computer"

@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: wxWindows-2.2.1\n"
-"POT-Creation-Date: 2001-01-27 13:50-0800\n"
+"POT-Creation-Date: 2001-10-20 14:30-0700\n"
 "PO-Revision-Date: 2000-08-10 16:09+0200\n"
 "Last-Translator: Roman Rolinsky <rolinsky@mema.ucl.ac.be>, Vadim Zeitlin "
 "<vadimwxwindows.org>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 
 # ../src/generic/dirdlgg.cpp:550
-#: ../src/generic/dirdlgg.cpp:550
+#: ../src/generic/dirdlgg.cpp:551
 msgid ""
 "\n"
 "(Do you have the required permissions?)"
@@ -20,7 +20,7 @@ msgstr ""
 "(У вас есть необходимые разрешения?)"
 
 # ../src/generic/dirdlgg.cpp:537
-#: ../src/generic/dirdlgg.cpp:537
+#: ../src/generic/dirdlgg.cpp:538
 msgid ""
 "\n"
 "does not exist\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Создать его сейчас?"
 
 # ../src/common/log.cpp:238
-#: ../src/common/log.cpp:238
+#: ../src/common/log.cpp:242
 #, c-format
 msgid " (error %ld: %s)"
 msgstr " (ошибка %ld: %s)"
@@ -42,7 +42,7 @@ msgid " - "
 msgstr " - "
 
 # ../src/html/htmprint.cpp:491
-#: ../src/html/htmprint.cpp:490
+#: ../src/html/htmprint.cpp:494
 msgid " Preview"
 msgstr "Пред-осмотр печати"
 
@@ -140,6 +140,14 @@ msgstr "%s не соответствует спецификации иконки."
 msgid "%s: ill-formed resource file syntax."
 msgstr "%s: ошибочный синтаксис файла ресурсов."
 
+#: ../src/msw/mdi.cpp:187
+msgid "&Arrange Icons"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:183
+msgid "&Cascade"
+msgstr ""
+
 # ../src/generic/logg.cpp:473 ../src/generic/tipdlg.cpp:170
 #: ../src/generic/logg.cpp:477 ../src/generic/tipdlg.cpp:170
 msgid "&Close"
@@ -159,6 +167,12 @@ msgstr "&Завершить"
 #: ../src/generic/logg.cpp:478
 msgid "&Log"
 msgstr "&Журнал"
+
+# ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
+#: ../src/msw/mdi.cpp:188
+#, fuzzy
+msgid "&Next"
+msgstr "&Следующий >"
 
 # ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
 #: ../src/generic/wizard.cpp:189 ../src/generic/wizard.cpp:286
@@ -201,12 +215,12 @@ msgid "&Undo "
 msgstr "О&тменить "
 
 # ../src/common/docview.cpp:1906
-#: ../src/msw/mdi.cpp:1284 ../src/msw/mdi.cpp:1291 ../src/msw/window.cpp:2276
+#: ../src/msw/mdi.cpp:1287 ../src/msw/mdi.cpp:1294 ../src/msw/window.cpp:2307
 msgid "&Window"
 msgstr "&Окно"
 
 # ../src/common/config.cpp:396
-#: ../src/common/config.cpp:396
+#: ../src/common/config.cpp:396 ../src/msw/regconf.cpp:264
 #, c-format
 msgid "'%s' has extra '..', ignored."
 msgstr "'%s' содержит лишние '..', проигнорировано."
@@ -294,12 +308,6 @@ msgstr "."
 msgid ".."
 msgstr ".."
 
-# ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
-#: ../src/msw/dirdlg.cpp:156
-#, fuzzy
-msgid "..."
-msgstr ".."
-
 # ../src/common/paper.cpp:120
 #: ../src/common/paper.cpp:120
 msgid "10 x 14 in"
@@ -321,12 +329,12 @@ msgid ": file does not exist!"
 msgstr ": файл не существует!"
 
 # ../src/common/fontmap.cpp:462
-#: ../src/common/fontmap.cpp:475
+#: ../src/common/fontmap.cpp:507
 msgid ": unknown charset"
 msgstr ": неизвестный набор символов"
 
 # ../src/common/fontmap.cpp:651
-#: ../src/common/fontmap.cpp:668
+#: ../src/common/fontmap.cpp:712
 msgid ": unknown encoding"
 msgstr ": неизвестная кодировка"
 
@@ -364,11 +372,11 @@ msgid ""
 "+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
 "+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
 "+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
-"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
-"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
-"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
-"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
-"+4</font></tt></body></html>"
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
 msgstr ""
 "<html><body>Normal face<br>(and <u>underlined</u>. <i>Italic face.</i> "
 "<b>Bold face.</b> <b><i>Bold italic face.</i></b><br><font size=-2>font size "
@@ -376,11 +384,11 @@ msgstr ""
 "+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
 "+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
 "+4</font><br><p><tt>Fixed size face.<br> <b>bold</b> <i>italic</i> "
-"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size "
-"-2</font><br><font size=-1>font size -1</font><br><font size=+0>font size "
-"+0</font><br><font size=+1>font size +1</font><br><font size=+2>font size "
-"+2</font><br><font size=+3>font size +3</font><br><font size=+4>font size "
-"+4</font></tt></body></html>"
+"<b><i>bold italic <u>underlined</u></i></b><br><font size=-2>font size -2</"
+"font><br><font size=-1>font size -1</font><br><font size=+0>font size +0</"
+"font><br><font size=+1>font size +1</font><br><font size=+2>font size +2</"
+"font><br><font size=+3>font size +3</font><br><font size=+4>font size +4</"
+"font></tt></body></html>"
 
 # ../src/common/paper.cpp:113
 #: ../src/common/paper.cpp:113
@@ -388,7 +396,7 @@ msgid "A3 sheet, 297 x 420 mm"
 msgstr "Лист A3 297 x 420 мм"
 
 # ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2516
-#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2531
+#: ../src/common/paper.cpp:104 ../src/generic/dcpsg.cpp:2547
 msgid "A4 sheet, 210 x 297 mm"
 msgstr "Лист A4, 210 x 297 мм"
 
@@ -429,8 +437,14 @@ msgid "All"
 msgstr "Все"
 
 # ../src/generic/filedlgg.cpp:825
-#: ../src/generic/filedlgg.cpp:825
+#: ../include/wx/defs.h:1689 ../src/generic/filedlgg.cpp:825
 msgid "All files (*)|*"
+msgstr "Все файлы (*)|*"
+
+# ../src/generic/filedlgg.cpp:825
+#: ../include/wx/defs.h:1686
+#, fuzzy
+msgid "All files (*.*)|*.*"
 msgstr "Все файлы (*)|*"
 
 # ../src/unix/dialup.cpp:359
@@ -445,7 +459,7 @@ msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
 msgstr "Добавить в файл журнала '%s' (выбор [Нет] перепишет его)?"
 
 # ../src/common/fontmap.cpp:102
-#: ../src/common/fontmap.cpp:102
+#: ../src/common/fontmap.cpp:105
 msgid "Arabic (ISO-8859-6)"
 msgstr "Arabic (ISO-8859-6)"
 
@@ -535,12 +549,12 @@ msgid "Backward"
 msgstr "Назад"
 
 # ../src/common/fontmap.cpp:109
-#: ../src/common/fontmap.cpp:109
+#: ../src/common/fontmap.cpp:112
 msgid "Baltic (ISO-8859-13)"
 msgstr "Baltic (ISO-8859-13)"
 
 # ../src/common/fontmap.cpp:100
-#: ../src/common/fontmap.cpp:100
+#: ../src/common/fontmap.cpp:103
 msgid "Baltic (old) (ISO-8859-4)"
 msgstr "Baltic (old) (ISO-8859-4)"
 
@@ -609,7 +623,7 @@ msgid "Can not create mutex."
 msgstr "Невозможно создать семафор"
 
 # ../src/common/filefn.cpp:1272 ../src/unix/dir.cpp:214
-#: ../src/common/filefn.cpp:1287 ../src/msw/dir.cpp:294
+#: ../src/common/filefn.cpp:1294 ../src/msw/dir.cpp:294
 #: ../src/unix/dir.cpp:214
 #, c-format
 msgid "Can not enumerate files in directory '%s'"
@@ -644,12 +658,12 @@ msgstr "Не могу О&тменить "
 msgid "Can't check image format of file '%s': file does not exist."
 msgstr "Не могу проверить формат изображения файла '%s': файл не существует."
 
-#: ../src/msw/registry.cpp:409
+#: ../src/msw/registry.cpp:418
 #, c-format
 msgid "Can't close registry key '%s'"
 msgstr "Невозможно закрыть ключ registry '%s'"
 
-#: ../src/msw/registry.cpp:485
+#: ../src/msw/registry.cpp:490
 #, c-format
 msgid "Can't copy values of unsupported type %d."
 msgstr "Невозможно скопировать значение неподдерживаемого типа %d."
@@ -658,16 +672,16 @@ msgstr "Невозможно скопировать значение неподдерживаемого типа %d."
 msgid "Can't create list control window, check that comctl32.dll is installed."
 msgstr "Невозможно создать listview control, проверьте установку comctl32.dll."
 
-#: ../src/msw/registry.cpp:392
+#: ../src/msw/registry.cpp:399
 #, c-format
 msgid "Can't create registry key '%s'"
 msgstr "Невозможно создать ключ registry '%s'"
 
-#: ../src/msw/utilsexc.cpp:418
+#: ../src/msw/utilsexc.cpp:482
 msgid "Can't create the inter-process read pipe"
 msgstr "Невозможно создать коммуникационный канал для чтения"
 
-#: ../src/msw/utilsexc.cpp:430
+#: ../src/msw/utilsexc.cpp:494
 msgid "Can't create the inter-process write pipe"
 msgstr "Невозможно создать коммуникационный канал для записи"
 
@@ -675,7 +689,7 @@ msgstr "Невозможно создать коммуникационный канал для записи"
 msgid "Can't create thread"
 msgstr "Невозможно создать нить"
 
-#: ../src/msw/window.cpp:2402
+#: ../src/msw/window.cpp:2433
 #, c-format
 msgid ""
 "Can't create window of class %s!\n"
@@ -684,7 +698,7 @@ msgstr ""
 "Невозможно создать окно класса %s!\n"
 "Возможны проблемы совместимости Windows 3.x?"
 
-#: ../src/msw/registry.cpp:653
+#: ../src/msw/registry.cpp:658
 #, c-format
 msgid "Can't delete key '%s'"
 msgstr "Невозможно удалить ключ '%s'"
@@ -694,22 +708,22 @@ msgstr "Невозможно удалить ключ '%s'"
 msgid "Can't delete the INI file '%s'"
 msgstr "Невозможно удалить INI-файл '%s'"
 
-#: ../src/msw/registry.cpp:678
+#: ../src/msw/registry.cpp:683
 #, c-format
 msgid "Can't delete value '%s' from key '%s'"
 msgstr "Невозможно удалить значение '%s' ключа '%s'"
 
-#: ../src/msw/registry.cpp:689
+#: ../src/msw/registry.cpp:694
 #, c-format
 msgid "Can't delete value of key '%s'"
 msgstr "Невозможно удалить значение ключа '%s'"
 
-#: ../src/msw/registry.cpp:1015
+#: ../src/msw/registry.cpp:1020
 #, c-format
 msgid "Can't enumerate subkeys of key '%s'"
 msgstr "Невозможно подсчитать подключи ключа '%s'"
 
-#: ../src/msw/registry.cpp:970
+#: ../src/msw/registry.cpp:975
 #, c-format
 msgid "Can't enumerate values of key '%s'"
 msgstr "Невозможно подсчитать значения ключа '%s'"
@@ -720,7 +734,7 @@ msgstr "Невозможно подсчитать значения ключа '%s'"
 msgid "Can't find current position in file '%s'"
 msgstr "Не могу найти текущую позицию в файле '%s'"
 
-#: ../src/msw/window.cpp:2352
+#: ../src/msw/window.cpp:2383
 msgid ""
 "Can't find dummy dialog template!\n"
 "Check resource include path for finding wx.rc."
@@ -734,7 +748,7 @@ msgstr ""
 msgid "Can't find the serialization object '%s' for the object '%s'."
 msgstr "Не могу найти объект сериализации '%s' для объекта '%s'."
 
-#: ../src/msw/registry.cpp:341
+#: ../src/msw/registry.cpp:348
 #, c-format
 msgid "Can't get info about registry key '%s'"
 msgstr "Невозможно получить информацию о ключе registry '%s'"
@@ -756,17 +770,17 @@ msgstr "Не могу загрузить динамическую библиотеку wxSerial."
 msgid "Can't open file '%s'"
 msgstr "Невозможно открыть файл '%s'"
 
-#: ../src/msw/registry.cpp:367
+#: ../src/msw/registry.cpp:374
 #, c-format
 msgid "Can't open registry key '%s'"
 msgstr "Невозможно открыть ключ registry '%s'"
 
-#: ../src/msw/registry.cpp:894
+#: ../src/msw/registry.cpp:899
 #, c-format
 msgid "Can't read value of '%s'"
 msgstr "Невозможно прочитать значение '%s'"
 
-#: ../src/msw/registry.cpp:769 ../src/msw/registry.cpp:808
+#: ../src/msw/registry.cpp:774 ../src/msw/registry.cpp:813
 #, c-format
 msgid "Can't read value of key '%s'"
 msgstr "Невозможно прочитать значение ключа '%s'"
@@ -780,7 +794,7 @@ msgstr "Не могу сохранить содержание журнала в файл."
 msgid "Can't set thread priority"
 msgstr "Невозможно установить приоритет нити"
 
-#: ../src/msw/registry.cpp:794 ../src/msw/registry.cpp:918
+#: ../src/msw/registry.cpp:799 ../src/msw/registry.cpp:923
 #, c-format
 msgid "Can't set value of '%s'"
 msgstr "Невозможно установить значение '%s'"
@@ -793,7 +807,7 @@ msgstr "Невозможно установить значение '%s'"
 # ../src/gtk/filedlg.cpp:164 ../src/gtk/fontdlg.cpp:178
 # ../src/html/helpfrm.cpp:910
 #: ../src/common/dlgcmn.cpp:148 ../src/common/prntbase.cpp:109
-#: ../src/generic/dcpsg.cpp:2255 ../src/generic/dirdlgg.cpp:424
+#: ../src/generic/dcpsg.cpp:2271 ../src/generic/dirdlgg.cpp:425
 #: ../src/generic/filedlgg.cpp:916 ../src/generic/fontdlgg.cpp:257
 #: ../src/generic/prntdlgg.cpp:468 ../src/generic/progdlgg.cpp:179
 #: ../src/generic/proplist.cpp:523 ../src/generic/wizard.cpp:192
@@ -891,14 +905,15 @@ msgid "Case sensitive"
 msgstr "Учет регистра"
 
 # ../src/common/fontmap.cpp:109
-#: ../src/common/fontmap.cpp:110
+#: ../src/common/fontmap.cpp:113
 #, fuzzy
 msgid "Celtic (ISO-8859-14)"
 msgstr "Baltic (ISO-8859-13)"
 
 # ../src/common/fontmap.cpp:98
-#: ../src/common/fontmap.cpp:98
-msgid "Central European (ISO-8859-2/Latin 2)"
+#: ../src/common/fontmap.cpp:101
+#, fuzzy
+msgid "Central European (ISO-8859-2)"
 msgstr "Central European (ISO-8859-2/Latin 2)"
 
 #: ../src/msw/dialup.cpp:767
@@ -928,7 +943,7 @@ msgid "Close this window"
 msgstr "Закрыть это окно"
 
 # ../src/common/fileconf.cpp:750
-#: ../src/common/fileconf.cpp:757
+#: ../src/common/fileconf.cpp:759
 #, c-format
 msgid "Config entry name cannot start with '%c'."
 msgstr "Имя поля в файле конфигурации не может начинаться с '%c'."
@@ -939,7 +954,7 @@ msgid "Confirm"
 msgstr "Подтвердить"
 
 # ../src/html/htmlwin.cpp:166
-#: ../src/html/htmlwin.cpp:166
+#: ../src/html/htmlwin.cpp:165
 msgid "Connecting..."
 msgstr "Соединение..."
 
@@ -1011,7 +1026,7 @@ msgid "Could not start printing."
 msgstr "невозможно начать печать."
 
 # ../src/common/wincmn.cpp:782
-#: ../src/common/wincmn.cpp:782
+#: ../src/common/wincmn.cpp:784
 msgid "Could not transfer data to window"
 msgstr "невозможно передать данные в окно"
 
@@ -1043,7 +1058,7 @@ msgstr "Невозможно найти символ '%s' в динамической библиотеке"
 msgid "Couldn't get the current thread pointer"
 msgstr "Невозможно получить указатель на текущую нить"
 
-#: ../src/msw/utilsexc.cpp:625
+#: ../src/msw/utilsexc.cpp:712
 #, c-format
 msgid "Couldn't launch DDE server '%s'."
 msgstr "Невозможно запустить сервер DDE '%s."
@@ -1064,7 +1079,7 @@ msgstr "Невозможно зарегестрировать формат '%s;"
 msgid "Couldn't release a mutex"
 msgstr "Невозможно освободить mutex"
 
-#: ../src/msw/listctrl.cpp:615
+#: ../src/msw/listctrl.cpp:616
 #, c-format
 msgid "Couldn't retrieve information about list control item %d."
 msgstr "Невозможно извлечь информацию об элементе списка %d."
@@ -1075,7 +1090,7 @@ msgid "Couldn't terminate thread"
 msgstr "Не удалось завершить нить"
 
 # ../src/generic/dirdlgg.cpp:571
-#: ../src/generic/dirdlgg.cpp:571
+#: ../src/generic/dirdlgg.cpp:572
 msgid "Create directory"
 msgstr "Создать директорий"
 
@@ -1089,10 +1104,11 @@ msgstr "Создать новый директорий"
 msgid "Current directory:"
 msgstr "Текущий директорий:"
 
-# ../src/common/fontmap.cpp:101
-#: ../src/common/fontmap.cpp:101
-msgid "Cyrillic (Latin 5)"
-msgstr "Cyrillic (Latin 5)"
+# ../src/common/fontmap.cpp:109
+#: ../src/common/fontmap.cpp:104
+#, fuzzy
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "Baltic (ISO-8859-13)"
 
 # ../src/common/paper.cpp:106
 #: ../src/common/paper.cpp:106
@@ -1100,7 +1116,7 @@ msgid "D sheet, 22 x 34 in"
 msgstr "Лист D, 22 x 34 дюйм"
 
 # ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
-#: ../src/msw/dde.cpp:586
+#: ../src/msw/dde.cpp:597
 msgid "DDE poke request failed"
 msgstr "Ошибка записи DDE"
 
@@ -1124,8 +1140,8 @@ msgid ""
 "Dial up functions are unavailable because the remote access service (RAS) is "
 "not installed on this machine. Please install it."
 msgstr ""
-"Сервис удаленного подсоединения (RAS) не установлен на этой "
-"машине.Пожалуйста установите его."
+"Сервис удаленного подсоединения (RAS) не установлен на этой машине."
+"Пожалуйста установите его."
 
 # ../src/generic/tipdlg.cpp:177
 #: ../src/generic/tipdlg.cpp:177
@@ -1133,13 +1149,13 @@ msgid "Did you know..."
 msgstr "А вы знали что..."
 
 # ../src/common/filefn.cpp:1086
-#: ../src/common/filefn.cpp:1086
+#: ../src/common/filefn.cpp:1085
 #, c-format
 msgid "Directory '%s' couldn't be created"
 msgstr "Директорий '%s' не может быть создан"
 
 # ../src/generic/dirdlgg.cpp:538
-#: ../src/generic/dirdlgg.cpp:538
+#: ../src/generic/dirdlgg.cpp:539
 msgid "Directory does not exist"
 msgstr "Каталог не существует"
 
@@ -1164,7 +1180,7 @@ msgid "Do you want to save changes to document %s?"
 msgstr "Вы хотите сохранить изменения в документе %s?"
 
 # ../src/html/htmlwin.cpp:216
-#: ../src/html/htmlwin.cpp:216
+#: ../src/html/htmlwin.cpp:215
 msgid "Done"
 msgstr "Сделано"
 
@@ -1204,7 +1220,7 @@ msgstr ""
 # ../src/generic/helpxlp.cpp:241 ../src/gtk/filedlg.cpp:83
 # ../src/gtk/fontdlg.cpp:72
 #: ../src/generic/dirdlgg.cpp:268 ../src/generic/dirdlgg.cpp:286
-#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:605
 #: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:717
 #: ../src/generic/filedlgg.cpp:731 ../src/generic/filedlgg.cpp:744
 #: ../src/generic/filedlgg.cpp:1043 ../src/generic/filedlgg.cpp:1092
@@ -1219,17 +1235,17 @@ msgid "Error "
 msgstr "Ошибка "
 
 # ../src/generic/dirdlgg.cpp:551
-#: ../src/generic/dirdlgg.cpp:551
+#: ../src/generic/dirdlgg.cpp:552
 msgid "Error creating directory"
 msgstr "Ошибка создания каталога"
 
 # ../src/common/log.cpp:354
-#: ../src/common/log.cpp:354
+#: ../src/common/log.cpp:362
 msgid "Error: "
 msgstr "Ошибка: "
 
 # ../src/common/fontmap.cpp:99
-#: ../src/common/fontmap.cpp:99
+#: ../src/common/fontmap.cpp:102
 msgid "Esperanto (ISO-8859-3)"
 msgstr "Esperanto (ISO-8859-3)"
 
@@ -1243,7 +1259,7 @@ msgstr "Оценка времени : "
 msgid "Etcetera"
 msgstr "И т.д."
 
-#: ../src/msw/utilsexc.cpp:521
+#: ../src/msw/utilsexc.cpp:585
 #, c-format
 msgid "Execution of command '%s' failed"
 msgstr "Ошибка выполнения команды '%s'"
@@ -1297,21 +1313,21 @@ msgstr "Невозможно подключиться: нет имени/пароля."
 msgid "Failed to connect: no ISP to dial."
 msgstr "Невозможно дозвониться: нету ISP."
 
-#: ../src/msw/registry.cpp:589
+#: ../src/msw/registry.cpp:594
 #, c-format
 msgid "Failed to copy registry value '%s'"
 msgstr "Невозможно скопировать значение registry '%s'"
 
-#: ../src/msw/registry.cpp:598
+#: ../src/msw/registry.cpp:603
 #, c-format
 msgid "Failed to copy the contents of registry key '%s' to '%s'."
 msgstr "Невозможно скопировать ключ registry '%s'"
 
-#: ../src/msw/dde.cpp:923
+#: ../src/msw/dde.cpp:934
 msgid "Failed to create DDE string"
 msgstr "Ошибка создания строки DDE"
 
-#: ../src/msw/mdi.cpp:425
+#: ../src/msw/mdi.cpp:428
 msgid "Failed to create MDI parent frame."
 msgstr "Ошибка создания родительского фрейма MDI."
 
@@ -1324,7 +1340,7 @@ msgstr "Ошибка создания статусной строки."
 msgid "Failed to create connection to server '%s' on topic '%s'"
 msgstr "Невозможно подключиться к серверу '%s' по теме '%s'"
 
-#: ../src/msw/dialog.cpp:176
+#: ../src/msw/dialog.cpp:174
 msgid ""
 "Failed to create dialog. You probably forgot to include wx/msw/wx.rc in your "
 "resources."
@@ -1332,12 +1348,12 @@ msgstr ""
 "Невозможно создать диалог. Не забыли ли Вы включить wx/msw/wx.rc в ресурсы?"
 
 # ../src/generic/dirdlgg.cpp:549
-#: ../src/generic/dirdlgg.cpp:549
+#: ../src/generic/dirdlgg.cpp:550
 msgid "Failed to create directory "
 msgstr "Не удалось создать каталог "
 
 # ../src/html/winpars.cpp:364
-#: ../src/html/winpars.cpp:364
+#: ../src/html/winpars.cpp:374
 #, c-format
 msgid "Failed to display HTML document in %s encoding"
 msgstr "Не удалось вывести документ HTML в кодировке %s"
@@ -1346,7 +1362,7 @@ msgstr "Не удалось вывести документ HTML в кодировке %s"
 msgid "Failed to empty the clipboard."
 msgstr "Не удалось очистить clipboard."
 
-#: ../src/msw/dde.cpp:605
+#: ../src/msw/dde.cpp:616
 msgid "Failed to establish an advise loop with DDE server"
 msgstr "Невозможно установить 'advise loop' с DDE сервером"
 
@@ -1447,17 +1463,17 @@ msgid "Failed to register DDE server '%s'"
 msgstr "Не удалось зарегестрировать сервер DDE '%s'"
 
 # ../src/common/fontmap.cpp:507
-#: ../src/common/fontmap.cpp:520
+#: ../src/common/fontmap.cpp:552
 #, c-format
 msgid "Failed to remember the encoding for the charset '%s'."
 msgstr "Не удалось запомнить кодировку для набора символов '%s'."
 
-#: ../src/msw/registry.cpp:435
+#: ../src/msw/registry.cpp:440
 #, c-format
 msgid "Failed to rename registry value '%s' to '%s'."
 msgstr "Невозможно переименовать значение registry из '%s' в '%s."
 
-#: ../src/msw/registry.cpp:535
+#: ../src/msw/registry.cpp:540
 #, c-format
 msgid "Failed to rename the registry key '%s' to '%s'."
 msgstr "Невозможно переименовать ключ registry из '%s' в '%s."
@@ -1474,7 +1490,7 @@ msgstr "Не удалось получить сообщение об ошибке RAS"
 msgid "Failed to retrieve the supported clipboard formats"
 msgstr "Не удалось найти форматы поддерживаемые clipboard"
 
-#: ../src/msw/dde.cpp:650
+#: ../src/msw/dde.cpp:661
 msgid "Failed to send DDE advise notification"
 msgstr "Невозможно послать нотификацию DDE"
 
@@ -1500,7 +1516,7 @@ msgid "Failed to terminate a thread."
 msgstr "Не удалось завершить нить."
 
 # ../src/unix/threadpsx.cpp:1251
-#: ../src/msw/dde.cpp:624
+#: ../src/msw/dde.cpp:635
 msgid "Failed to terminate the advise loop with DDE server"
 msgstr "Не удалось завершить 'advise loop' с DDE сервером."
 
@@ -1522,11 +1538,11 @@ msgid "Fatal error"
 msgstr "Критическая ошибка"
 
 # ../src/common/log.cpp:347
-#: ../src/common/log.cpp:347
+#: ../src/common/log.cpp:355
 msgid "Fatal error: "
 msgstr "Критическая ошибка: "
 
-#: ../src/msw/app.cpp:1257
+#: ../src/msw/app.cpp:1274
 msgid "Fatal error: exiting"
 msgstr "Фатальная ошибка: выходим"
 
@@ -1668,12 +1684,12 @@ msgid "Go to parent directory"
 msgstr "В родительский директорий"
 
 # ../src/common/fontmap.cpp:103
-#: ../src/common/fontmap.cpp:103
+#: ../src/common/fontmap.cpp:106
 msgid "Greek (ISO-8859-7)"
 msgstr "Greek (ISO-8859-7)"
 
 # ../src/html/htmlwin.cpp:251
-#: ../src/html/htmlwin.cpp:251
+#: ../src/html/htmlwin.cpp:250
 #, c-format
 msgid "HTML anchor %s does not exist."
 msgstr "HTML-якорь %s не существует."
@@ -1681,23 +1697,22 @@ msgstr "HTML-якорь %s не существует."
 # ../src/html/helpfrm.cpp:1188
 #: ../src/html/helpfrm.cpp:1188
 msgid ""
-"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books "
-"(*.htb)|*.htb|Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All "
-"files (*.*)|*"
+"HTML files (*.htm)|*.htm|HTML files (*.html)|*.html|Help books (*.htb)|*.htb|"
+"Help books (*.zip)|*.zip|HTML Help Project (*.hhp)|*.hhp|All files (*.*)|*"
 msgstr ""
-"Файлы HTML (*.htm)|*.htm|Файлы HTML (*.html)|*.html|Книги помощи "
-"(*.htb)|*.htb|Книги помощи (*.zip)|*.zip|Проект помощи HTML "
-"(*.hhp)|*.hhp|Все файлы (*.*)|*"
+"Файлы HTML (*.htm)|*.htm|Файлы HTML (*.html)|*.html|Книги помощи (*.htb)|*."
+"htb|Книги помощи (*.zip)|*.zip|Проект помощи HTML (*.hhp)|*.hhp|Все файлы (*."
+"*)|*"
 
 # ../src/common/fontmap.cpp:104
-#: ../src/common/fontmap.cpp:104
+#: ../src/common/fontmap.cpp:107
 msgid "Hebrew (ISO-8859-8)"
 msgstr "Hebrew (ISO-8859-8)"
 
 # ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
 # ../src/html/helpfrm.cpp:208
 #: ../src/common/dlgcmn.cpp:144 ../src/generic/proplist.cpp:528
-#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1280
+#: ../src/html/helpfrm.cpp:208 ../src/msw/mdi.cpp:1283
 msgid "Help"
 msgstr "Помощь"
 
@@ -1767,7 +1782,7 @@ msgid "Index"
 msgstr "Индекс"
 
 # ../src/common/fontmap.cpp:106
-#: ../src/common/fontmap.cpp:108
+#: ../src/common/fontmap.cpp:111
 #, fuzzy
 msgid "Indian (ISO-8859-12)"
 msgstr "Nordic (ISO-8859-10)"
@@ -1798,13 +1813,13 @@ msgid "JPEG: Couldn't save image."
 msgstr "JPEG: Невозможно сохранить изображение."
 
 # ../src/common/fontmap.cpp:112
-#: ../src/common/fontmap.cpp:112
+#: ../src/common/fontmap.cpp:115
 msgid "KOI8-R"
 msgstr "KOI8-R"
 
 # ../src/generic/dcpsg.cpp:2232 ../src/generic/prntdlgg.cpp:441
 # ../src/generic/prntdlgg.cpp:637
-#: ../src/generic/dcpsg.cpp:2246 ../src/generic/prntdlgg.cpp:441
+#: ../src/generic/dcpsg.cpp:2262 ../src/generic/prntdlgg.cpp:441
 #: ../src/generic/prntdlgg.cpp:637
 msgid "Landscape"
 msgstr "Пейзаж"
@@ -1847,7 +1862,7 @@ msgid "Load %s file"
 msgstr "Загрузить файл %s"
 
 # ../src/html/htmlwin.cpp:187
-#: ../src/html/htmlwin.cpp:187
+#: ../src/html/htmlwin.cpp:186
 msgid "Loading : "
 msgstr "Загрузка : "
 
@@ -1873,7 +1888,7 @@ msgid "MDI child"
 msgstr "Потомок MDI"
 
 # ../src/unix/mimetype.cpp:1570
-#: ../src/unix/mimetype.cpp:1574
+#: ../src/unix/mimetype.cpp:1597
 #, c-format
 msgid "Mailcap file %s, line %d: incomplete entry ignored."
 msgstr "Файл mailcap %s, строка %d: неполная запись проигнорирована."
@@ -1926,7 +1941,7 @@ msgid "Name"
 msgstr "Имя"
 
 # ../src/generic/dirdlgg.cpp:426
-#: ../src/generic/dirdlgg.cpp:426
+#: ../src/generic/dirdlgg.cpp:427
 msgid "New..."
 msgstr "Новый..."
 
@@ -1968,6 +1983,17 @@ msgstr "Средства XBM icon отсутствуют!"
 msgid "No entries found."
 msgstr "Запись не найдена."
 
+# ../src/common/fontmap.cpp:655
+#: ../src/common/fontmap.cpp:716
+#, fuzzy, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+"Кодировка '%s' неизвестна. Хотите выбрать шрифт для использования с этой\n"
+"кодировкой (иначе текст в этой кодировке не будет показан правильно)?"
+
 # ../src/common/image.cpp:731
 #: ../src/common/image.cpp:758
 msgid "No handler found for image type."
@@ -1991,7 +2017,7 @@ msgid "No matching page found yet"
 msgstr "Ни одна соответствующая страница пока не найдена"
 
 # ../src/common/fontmap.cpp:106
-#: ../src/common/fontmap.cpp:106
+#: ../src/common/fontmap.cpp:109
 msgid "Nordic (ISO-8859-10)"
 msgstr "Nordic (ISO-8859-10)"
 
@@ -2016,8 +2042,8 @@ msgstr "Note, 8 1/2 x 11 дюйм"
 # ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 # ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
 # ../src/html/helpfrm.cpp:909
-#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2254
-#: ../src/generic/dirdlgg.cpp:422 ../src/generic/filedlgg.cpp:907
+#: ../src/common/dlgcmn.cpp:127 ../src/generic/dcpsg.cpp:2270
+#: ../src/generic/dirdlgg.cpp:423 ../src/generic/filedlgg.cpp:907
 #: ../src/generic/fontdlgg.cpp:256 ../src/generic/logg.cpp:733
 #: ../src/generic/prntdlgg.cpp:467 ../src/generic/proplist.cpp:511
 #: ../src/gtk/filedlg.cpp:158 ../src/gtk/fontdlg.cpp:172
@@ -2032,7 +2058,7 @@ msgstr "Открыть документ HTML"
 
 # ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
 # ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:744
-#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:604
+#: ../src/generic/dirdlgg.cpp:297 ../src/generic/dirdlgg.cpp:605
 #: ../src/generic/filedlgg.cpp:625 ../src/generic/filedlgg.cpp:744
 msgid "Operation not permitted."
 msgstr "Операция не разрешена."
@@ -2177,7 +2203,7 @@ msgstr "Подождите, пожалуйста..."
 
 # ../src/generic/dcpsg.cpp:2231 ../src/generic/prntdlgg.cpp:440
 # ../src/generic/prntdlgg.cpp:636
-#: ../src/generic/dcpsg.cpp:2245 ../src/generic/prntdlgg.cpp:440
+#: ../src/generic/dcpsg.cpp:2261 ../src/generic/prntdlgg.cpp:440
 #: ../src/generic/prntdlgg.cpp:636
 msgid "Portrait"
 msgstr "Портрет"
@@ -2193,12 +2219,12 @@ msgid "PostScript file"
 msgstr "Файл PostScript"
 
 # ../src/generic/dcpsg.cpp:2273
-#: ../src/generic/dcpsg.cpp:2287
+#: ../src/generic/dcpsg.cpp:2303
 msgid "PostScript:"
 msgstr "PostScript:"
 
 # ../src/generic/dcpsg.cpp:2236
-#: ../src/generic/dcpsg.cpp:2250
+#: ../src/generic/dcpsg.cpp:2266
 msgid "Preview Only"
 msgstr "Только пред-осмотр"
 
@@ -2253,7 +2279,7 @@ msgid "Print this page"
 msgstr "Напечатать эту страницу"
 
 # ../src/generic/dcpsg.cpp:2235 ../src/generic/prntdlgg.cpp:150
-#: ../src/generic/dcpsg.cpp:2249 ../src/generic/prntdlgg.cpp:150
+#: ../src/generic/dcpsg.cpp:2265 ../src/generic/prntdlgg.cpp:150
 msgid "Print to File"
 msgstr "Печать в файл"
 
@@ -2263,12 +2289,12 @@ msgid "Print..."
 msgstr "Печать..."
 
 # ../src/generic/dcpsg.cpp:2246
-#: ../src/generic/dcpsg.cpp:2260
+#: ../src/generic/dcpsg.cpp:2276
 msgid "Printer Command: "
 msgstr "Команда принтера: "
 
 # ../src/generic/dcpsg.cpp:2251
-#: ../src/generic/dcpsg.cpp:2265
+#: ../src/generic/dcpsg.cpp:2281
 msgid "Printer Options: "
 msgstr "Опции принтера: "
 
@@ -2319,7 +2345,7 @@ msgid "Printing..."
 msgstr "Печать..."
 
 # ../src/common/log.cpp:348
-#: ../src/common/log.cpp:348
+#: ../src/common/log.cpp:356
 msgid "Program aborted."
 msgstr "Программа остановлена."
 
@@ -2339,17 +2365,17 @@ msgstr "Вопрос"
 msgid "Read error on file '%s'"
 msgstr "Ошибка чтения файла '%s'"
 
-#: ../src/msw/registry.cpp:527
+#: ../src/msw/registry.cpp:532
 #, c-format
 msgid "Registry key '%s' already exists."
 msgstr "Ключ registry '%s' уже существует."
 
-#: ../src/msw/registry.cpp:496
+#: ../src/msw/registry.cpp:501
 #, c-format
 msgid "Registry key '%s' does not exist, cannot rename it."
 msgstr "Ключ registry '%s' не существует, невозможно его переименовать."
 
-#: ../src/msw/registry.cpp:623
+#: ../src/msw/registry.cpp:628
 #, c-format
 msgid ""
 "Registry key '%s' is needed for normal system operation,\n"
@@ -2360,7 +2386,7 @@ msgstr ""
 "его удаление приведет вашу систему в нерабочее состояние:\n"
 "операция отменена."
 
-#: ../src/msw/registry.cpp:427
+#: ../src/msw/registry.cpp:432
 #, c-format
 msgid "Registry value '%s' already exists."
 msgstr "Значение registry '%s' уже существует."
@@ -2471,7 +2497,7 @@ msgid "Select a file"
 msgstr "Выберите файл"
 
 # ../src/generic/dcpsg.cpp:2234
-#: ../src/generic/dcpsg.cpp:2248
+#: ../src/generic/dcpsg.cpp:2264
 msgid "Send to Printer"
 msgstr "Отправить на печать"
 
@@ -2609,7 +2635,7 @@ msgid "Temporary"
 msgstr "Временный"
 
 # ../src/common/fontmap.cpp:107
-#: ../src/common/fontmap.cpp:107
+#: ../src/common/fontmap.cpp:110
 msgid "Thai (ISO-8859-11)"
 msgstr "Thai (ISO-8859-11)"
 
@@ -2619,7 +2645,7 @@ msgid "The Computer"
 msgstr "Компьютер"
 
 # ../src/common/fontmap.cpp:466
-#: ../src/common/fontmap.cpp:479
+#: ../src/common/fontmap.cpp:511
 #, c-format
 msgid ""
 "The charset '%s' is unknown. You may select\n"
@@ -2637,20 +2663,9 @@ msgid "The clipboard format '%d' doesn't exist."
 msgstr "Формат clipboard '%d' не существует."
 
 # ../src/generic/dirdlgg.cpp:535
-#: ../src/generic/dirdlgg.cpp:535
+#: ../src/generic/dirdlgg.cpp:536
 msgid "The directory "
 msgstr "Директория "
-
-# ../src/common/fontmap.cpp:655
-#: ../src/common/fontmap.cpp:672
-#, c-format
-msgid ""
-"The encoding '%s' is unknown.\n"
-"Would you like to select a font to be used for this encoding\n"
-"(otherwise the text in this encoding will not be shown correctly)?"
-msgstr ""
-"Кодировка '%s' неизвестна. Хотите выбрать шрифт для использования с этой\n"
-"кодировкой (иначе текст в этой кодировке не будет показан правильно)?"
 
 # ../src/common/docview.cpp:1631
 #: ../src/common/docview.cpp:1676
@@ -2714,6 +2729,14 @@ msgstr ""
 msgid "Thread priority setting is ignored."
 msgstr "Приоритет нити проигнорирован."
 
+#: ../src/msw/mdi.cpp:184
+msgid "Tile &Horizontally"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:185
+msgid "Tile &Vertically"
+msgstr ""
+
 # ../src/generic/filedlgg.cpp:536
 #: ../src/generic/filedlgg.cpp:536
 msgid "Time"
@@ -2751,7 +2774,7 @@ msgid "Trying to solve a NULL hostname: giving up"
 msgstr "Попытка определить имя хоста NULL: отменена"
 
 # ../src/common/fontmap.cpp:105
-#: ../src/common/fontmap.cpp:105
+#: ../src/common/fontmap.cpp:108
 msgid "Turkish (ISO-8859-9)"
 msgstr "Turkish (ISO-8859-9)"
 
@@ -2761,7 +2784,7 @@ msgid "US Std Fanfold, 14 7/8 x 11 in"
 msgstr "US Std Fanfold, 14 7/8 x 11 дюйм"
 
 # ../src/html/htmlwin.cpp:175
-#: ../src/html/htmlwin.cpp:175
+#: ../src/html/htmlwin.cpp:174
 #, c-format
 msgid "Unable to open requested HTML document: %s"
 msgstr "Невозможно открыть запрошенный документ HTML: %s"
@@ -2800,13 +2823,13 @@ msgstr "Неожиданный конец файла во время лексического разбора ресурса."
 msgid "Unexpected parameter '%s'"
 msgstr "Неожиданный параметр '%s'"
 
-#: ../src/msw/dde.cpp:1019
+#: ../src/msw/dde.cpp:1030
 #, c-format
 msgid "Unknown DDE error %08x"
 msgstr "Неизвестная ошибка DDE %08x"
 
 # ../src/common/fontmap.cpp:329
-#: ../src/common/fontmap.cpp:329
+#: ../src/common/fontmap.cpp:332
 #, c-format
 msgid "Unknown encoding (%d)"
 msgstr "Неожиданная кодировка (%d)"
@@ -2904,7 +2927,7 @@ msgid "Warning"
 msgstr "Предупреждение"
 
 # ../src/common/log.cpp:358
-#: ../src/common/log.cpp:358
+#: ../src/common/log.cpp:366
 msgid "Warning: "
 msgstr "Предупреждение: "
 
@@ -2914,15 +2937,15 @@ msgid "Warning: attempt to remove HTML tag handler from empty stack."
 msgstr "Предупреждение: попытка удалить обработчик тега HTML из пустого стека."
 
 # ../src/common/fontmap.cpp:97
-#: ../src/common/fontmap.cpp:97
+#: ../src/common/fontmap.cpp:100
 #, fuzzy
-msgid "Western European (ISO-8859-1/Latin 1)"
+msgid "Western European (ISO-8859-1)"
 msgstr "West European (ISO-8859-1/Latin 1)"
 
 # ../src/common/fontmap.cpp:111
-#: ../src/common/fontmap.cpp:111
+#: ../src/common/fontmap.cpp:114
 #, fuzzy
-msgid "Western European with Euro (ISO-8859-15/Latin 0)"
+msgid "Western European with Euro (ISO-8859-15)"
 msgstr "West European новый (ISO-8859-15/Latin 0)"
 
 # ../src/html/helpfrm.cpp:406
@@ -2930,68 +2953,68 @@ msgstr "West European новый (ISO-8859-15/Latin 0)"
 msgid "Whole words only"
 msgstr "Только полные слова"
 
-#: ../src/msw/utils.cpp:545
+#: ../src/msw/utils.cpp:547
 msgid "Win32s on Windows 3.1"
 msgstr "Win32s на Windows 3.1"
 
 # ../src/html/helpfrm.cpp:340
-#: ../src/msw/mdi.cpp:1315
+#: ../src/msw/mdi.cpp:1318
 msgid "Window"
 msgstr "Окно"
 
-#: ../src/msw/utils.cpp:577
+#: ../src/msw/utils.cpp:585
 msgid "Windows 3.1"
 msgstr "Windows 3.1"
 
-#: ../src/msw/utils.cpp:549
+#: ../src/msw/utils.cpp:551
 #, c-format
 msgid "Windows 9%c"
 msgstr "Windows 9%c"
 
 # ../src/common/fontmap.cpp:119
-#: ../src/common/fontmap.cpp:119
+#: ../src/common/fontmap.cpp:122
 msgid "Windows Arabic (CP 1256)"
 msgstr "Windows Arabic (CP 1256)"
 
 # ../src/common/fontmap.cpp:120
-#: ../src/common/fontmap.cpp:120
+#: ../src/common/fontmap.cpp:123
 msgid "Windows Baltic (CP 1257)"
 msgstr "Windows Baltic (CP 1257)"
 
 # ../src/common/fontmap.cpp:118
-#: ../src/common/fontmap.cpp:113
+#: ../src/common/fontmap.cpp:116
 #, fuzzy
 msgid "Windows Central European (CP 1250)"
 msgstr "Windows Hebrew (CP 1255)"
 
 # ../src/common/fontmap.cpp:114
-#: ../src/common/fontmap.cpp:114
+#: ../src/common/fontmap.cpp:117
 msgid "Windows Cyrillic (CP 1251)"
 msgstr "Windows Cyrillic (CP 1251)"
 
 # ../src/common/fontmap.cpp:116
-#: ../src/common/fontmap.cpp:116
+#: ../src/common/fontmap.cpp:119
 msgid "Windows Greek (CP 1253)"
 msgstr "Windows Greek (CP 1253)"
 
 # ../src/common/fontmap.cpp:118
-#: ../src/common/fontmap.cpp:118
+#: ../src/common/fontmap.cpp:121
 msgid "Windows Hebrew (CP 1255)"
 msgstr "Windows Hebrew (CP 1255)"
 
 # ../src/common/fontmap.cpp:117
-#: ../src/common/fontmap.cpp:117
+#: ../src/common/fontmap.cpp:120
 msgid "Windows Turkish (CP 1254)"
 msgstr "Windows Turkish (CP 1254)"
 
 # ../src/common/fontmap.cpp:115
-#: ../src/common/fontmap.cpp:115
+#: ../src/common/fontmap.cpp:118
 #, fuzzy
 msgid "Windows Western European (CP 1252)"
 msgstr "Windows Latin 1 (CP 1252)"
 
 # ../src/common/fontmap.cpp:121
-#: ../src/common/fontmap.cpp:121
+#: ../src/common/fontmap.cpp:124
 msgid "Windows/DOS OEM (CP 437)"
 msgstr "Windows/DOS OEM (CP 437)"
 
@@ -3002,22 +3025,22 @@ msgid "Write error on file '%s'"
 msgstr "Ошибка записи в файл '%s'"
 
 # ../src/generic/dcpsg.cpp:2291
-#: ../src/generic/dcpsg.cpp:2305
+#: ../src/generic/dcpsg.cpp:2321
 msgid "X Scaling"
 msgstr "Масштабирование по X"
 
 # ../src/generic/dcpsg.cpp:2300
-#: ../src/generic/dcpsg.cpp:2314
+#: ../src/generic/dcpsg.cpp:2330
 msgid "X Translation"
 msgstr "Сдвиг вдоль X"
 
 # ../src/generic/dcpsg.cpp:2295
-#: ../src/generic/dcpsg.cpp:2309
+#: ../src/generic/dcpsg.cpp:2325
 msgid "Y Scaling"
 msgstr "Масштабирование по Y"
 
 # ../src/generic/dcpsg.cpp:2304
-#: ../src/generic/dcpsg.cpp:2318
+#: ../src/generic/dcpsg.cpp:2334
 msgid "Y Translation"
 msgstr "Сдвиг вдоль Y"
 
@@ -3028,7 +3051,7 @@ msgid "Yes"
 msgstr "Да"
 
 # ../src/generic/dirdlgg.cpp:570
-#: ../src/generic/dirdlgg.cpp:570
+#: ../src/generic/dirdlgg.cpp:571
 msgid "You cannot add a new directory to this section."
 msgstr "Вы не можете добавить новый каталог в эту секцию."
 
@@ -3037,12 +3060,12 @@ msgstr "Вы не можете добавить новый каталог в эту секцию."
 msgid "[EMPTY]"
 msgstr "[ПУСТО]"
 
-#: ../src/msw/dde.cpp:986
+#: ../src/msw/dde.cpp:997
 msgid "a DDEML application has created a prolonged race condition."
 msgstr ""
 "непереводимо (a DDEML application has created a prolonged race condition)"
 
-#: ../src/msw/dde.cpp:974
+#: ../src/msw/dde.cpp:985
 msgid ""
 "a DDEML function was called without first calling the DdeInitialize "
 "function,\n"
@@ -3055,40 +3078,40 @@ msgstr ""
 "or an invalid instance identifier\n"
 "was passed to a DDEML function)"
 
-#: ../src/msw/dde.cpp:992
+#: ../src/msw/dde.cpp:1003
 msgid "a client's attempt to establish a conversation has failed."
 msgstr "попытка клиента установить связь не удалась."
 
 # ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
-#: ../src/msw/dde.cpp:989
+#: ../src/msw/dde.cpp:1000
 msgid "a memory allocation failed."
 msgstr "ошибка выделения памяти."
 
-#: ../src/msw/dde.cpp:983
+#: ../src/msw/dde.cpp:994
 msgid "a parameter failed to be validated by the DDEML."
 msgstr ""
 
-#: ../src/msw/dde.cpp:965
+#: ../src/msw/dde.cpp:976
 msgid "a request for a synchronous advise transaction has timed out."
 msgstr ""
 
-#: ../src/msw/dde.cpp:971
+#: ../src/msw/dde.cpp:982
 msgid "a request for a synchronous data transaction has timed out."
 msgstr ""
 
-#: ../src/msw/dde.cpp:980
+#: ../src/msw/dde.cpp:991
 msgid "a request for a synchronous execute transaction has timed out."
 msgstr ""
 
-#: ../src/msw/dde.cpp:998
+#: ../src/msw/dde.cpp:1009
 msgid "a request for a synchronous poke transaction has timed out."
 msgstr ""
 
-#: ../src/msw/dde.cpp:1013
+#: ../src/msw/dde.cpp:1024
 msgid "a request to end an advise transaction has timed out."
 msgstr ""
 
-#: ../src/msw/dde.cpp:1007
+#: ../src/msw/dde.cpp:1018
 msgid ""
 "a server-side transaction was attempted on a conversation\n"
 "that was terminated by the client, or the server\n"
@@ -3096,7 +3119,7 @@ msgid ""
 msgstr ""
 
 # ../src/unix/utilsunx.cpp:440 ../src/unix/utilsunx.cpp:468
-#: ../src/msw/dde.cpp:995
+#: ../src/msw/dde.cpp:1006
 msgid "a transaction failed."
 msgstr "транзакция не завершилась"
 
@@ -3105,7 +3128,7 @@ msgstr "транзакция не завершилась"
 msgid "alt"
 msgstr "alt"
 
-#: ../src/msw/dde.cpp:977
+#: ../src/msw/dde.cpp:988
 msgid ""
 "an application initialized as APPCLASS_MONITOR has\n"
 "attempted to perform a DDE transaction,\n"
@@ -3113,15 +3136,15 @@ msgid ""
 "attempted to perform server transactions."
 msgstr ""
 
-#: ../src/msw/dde.cpp:1001
+#: ../src/msw/dde.cpp:1012
 msgid "an internal call to the PostMessage function has failed. "
 msgstr ""
 
-#: ../src/msw/dde.cpp:1010
+#: ../src/msw/dde.cpp:1021
 msgid "an internal error has occurred in the DDEML."
 msgstr ""
 
-#: ../src/msw/dde.cpp:1016
+#: ../src/msw/dde.cpp:1027
 msgid ""
 "an invalid transaction identifier was passed to a DDEML function.\n"
 "Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
@@ -3129,7 +3152,7 @@ msgid ""
 msgstr ""
 
 # ../src/common/fileconf.cpp:1440
-#: ../src/common/fileconf.cpp:1447
+#: ../src/common/fileconf.cpp:1449
 #, c-format
 msgid "attempt to change immutable key '%s' ignored."
 msgstr "попытка изменить неизменную клавишу '%s' проигнорирована."
@@ -3147,7 +3170,7 @@ msgid "can't close file descriptor %d"
 msgstr "невозможно закрыть дескриптор файла %d"
 
 # ../src/common/file.cpp:555 ../src/common/file.cpp:565
-#: ../src/common/file.cpp:555 ../src/common/file.cpp:565
+#: ../src/common/file.cpp:557 ../src/common/file.cpp:567
 #, c-format
 msgid "can't commit changes to file '%s'"
 msgstr "невозможно записать изменения в файл '%s'"
@@ -3159,43 +3182,43 @@ msgid "can't create file '%s'"
 msgstr "невозможно создать файл '%s'"
 
 # ../src/common/fileconf.cpp:910
-#: ../src/common/fileconf.cpp:917
+#: ../src/common/fileconf.cpp:919
 #, c-format
 msgid "can't delete user configuration file '%s'"
 msgstr "невозможно удалить файл конфигурации пользователя '%s'"
 
 # ../src/common/file.cpp:436
-#: ../src/common/file.cpp:436
+#: ../src/common/file.cpp:438
 #, c-format
 msgid "can't determine if the end of file is reached on descriptor %d"
 msgstr "невозможно определить достижение конца файла с дескриптором %d"
 
 # ../src/common/file.cpp:402
-#: ../src/common/file.cpp:402
+#: ../src/common/file.cpp:404
 #, c-format
 msgid "can't find length of file on file descriptor %d"
 msgstr "невозможно определить длину файла с дескриптором %d"
 
-#: ../src/msw/utils.cpp:376
+#: ../src/msw/utils.cpp:378
 msgid "can't find user's HOME, using current directory."
 msgstr ""
 "невозможно определить HOME пользователя, будет использован текущий "
 "директорий."
 
 # ../src/common/file.cpp:316
-#: ../src/common/file.cpp:316
+#: ../src/common/file.cpp:319
 #, c-format
 msgid "can't flush file descriptor %d"
 msgstr "невозможно слить файл с дескриптором %d"
 
 # ../src/common/file.cpp:370
-#: ../src/common/file.cpp:370
+#: ../src/common/file.cpp:373
 #, c-format
 msgid "can't get seek position on file descriptor %d"
 msgstr "невозможно получить текущую позицию файла с дескриптором %d"
 
 # ../src/common/fontmap.cpp:597
-#: ../src/common/fontmap.cpp:614
+#: ../src/common/fontmap.cpp:646
 msgid "can't load any font, aborting"
 msgstr "невозможно загрузить ни один шрифт, останов"
 
@@ -3206,60 +3229,60 @@ msgid "can't open file '%s'"
 msgstr "невозможно открыть файл '%s'"
 
 # ../src/common/fileconf.cpp:316
-#: ../src/common/fileconf.cpp:316
+#: ../src/common/fileconf.cpp:318
 #, c-format
 msgid "can't open global configuration file '%s'."
 msgstr "невозможно открыть глобальный файл конфигурации '%s'."
 
 # ../src/common/fileconf.cpp:328
-#: ../src/common/fileconf.cpp:328
+#: ../src/common/fileconf.cpp:330
 #, c-format
 msgid "can't open user configuration file '%s'."
 msgstr "невозможно открыть пользовательский файл конфигурации '%s'."
 
 # ../src/common/fileconf.cpp:790
-#: ../src/common/fileconf.cpp:797
+#: ../src/common/fileconf.cpp:799
 msgid "can't open user configuration file."
 msgstr "невозможно открыть пользовательский файл конфигурации."
 
 # ../src/common/file.cpp:283
-#: ../src/common/file.cpp:283
+#: ../src/common/file.cpp:285
 #, c-format
 msgid "can't read from file descriptor %d"
 msgstr "ошибка чтения файла с дескриптором %d"
 
 # ../src/common/file.cpp:550 ../src/common/file.cpp:560
-#: ../src/common/file.cpp:550 ../src/common/file.cpp:560
+#: ../src/common/file.cpp:552 ../src/common/file.cpp:562
 #, c-format
 msgid "can't remove file '%s'"
 msgstr "ошибка удаления файла '%s'"
 
 # ../src/common/file.cpp:578 ../src/common/file.cpp:581
-#: ../src/common/file.cpp:578 ../src/common/file.cpp:581
+#: ../src/common/file.cpp:580 ../src/common/file.cpp:583
 #, c-format
 msgid "can't remove temporary file '%s'"
 msgstr "ошибка удаления временного файла '%s'"
 
 # ../src/common/file.cpp:356
-#: ../src/common/file.cpp:356
+#: ../src/common/file.cpp:359
 #, c-format
 msgid "can't seek on file descriptor %d"
 msgstr "невозможно переместиться по файлу с дескриптором %d"
 
 # ../src/common/textfile.cpp:354
-#: ../src/common/textfile.cpp:357
+#: ../src/common/textfile.cpp:359
 #, c-format
 msgid "can't write file '%s' to disk."
 msgstr "ошибка записи файла '%s' на диск."
 
 # ../src/common/file.cpp:301
-#: ../src/common/file.cpp:301
+#: ../src/common/file.cpp:304
 #, c-format
 msgid "can't write to file descriptor %d"
 msgstr "невозможно записать в файл с дескриптором %d"
 
 # ../src/common/fileconf.cpp:797
-#: ../src/common/fileconf.cpp:804
+#: ../src/common/fileconf.cpp:806
 msgid "can't write user configuration file."
 msgstr "невозможно записать пользовательский файл конфигурации."
 
@@ -3280,22 +3303,22 @@ msgid "date"
 msgstr "дата"
 
 # ../src/common/datetime.cpp:3232
-#: ../src/common/datetime.cpp:3182
+#: ../src/common/datetime.cpp:3172
 msgid "eighteenth"
 msgstr "восемнадцатый"
 
 # ../src/common/datetime.cpp:3222
-#: ../src/common/datetime.cpp:3172
+#: ../src/common/datetime.cpp:3162
 msgid "eighth"
 msgstr "восьмой"
 
 # ../src/common/datetime.cpp:3225
-#: ../src/common/datetime.cpp:3175
+#: ../src/common/datetime.cpp:3165
 msgid "eleventh"
 msgstr "одиннадцатый"
 
 # ../src/common/fileconf.cpp:1427
-#: ../src/common/fileconf.cpp:1434
+#: ../src/common/fileconf.cpp:1436
 #, c-format
 msgid "entry '%s' appears more than once in group '%s'"
 msgstr "поле '%s' появляется более одного раза в группе '%s'"
@@ -3311,57 +3334,57 @@ msgid "failed to flush the file '%s'"
 msgstr "ошибка сброса буфера файла '%s'."
 
 # ../src/common/datetime.cpp:3229
-#: ../src/common/datetime.cpp:3179
+#: ../src/common/datetime.cpp:3169
 msgid "fifteenth"
 msgstr "пятнадцатый"
 
 # ../src/common/datetime.cpp:3219
-#: ../src/common/datetime.cpp:3169
+#: ../src/common/datetime.cpp:3159
 msgid "fifth"
 msgstr "пятый"
 
 # ../src/common/fileconf.cpp:471
-#: ../src/common/fileconf.cpp:478
+#: ../src/common/fileconf.cpp:480
 #, c-format
 msgid "file '%s', line %d: '%s' ignored after group header."
 msgstr "файл '%s', строка %d: '%s' проигнорировано после заголовка группы."
 
 # ../src/common/fileconf.cpp:500
-#: ../src/common/fileconf.cpp:507
+#: ../src/common/fileconf.cpp:509
 #, c-format
 msgid "file '%s', line %d: '=' expected."
 msgstr "файл '%s', строка %d: ожидался '='."
 
 # ../src/common/fileconf.cpp:526
-#: ../src/common/fileconf.cpp:533
+#: ../src/common/fileconf.cpp:535
 #, c-format
 msgid "file '%s', line %d: key '%s' was first found at line %d."
 msgstr "файл '%s', строка %d: ключ '%s' был уже замечен на строке %d."
 
 # ../src/common/fileconf.cpp:516
-#: ../src/common/fileconf.cpp:523
+#: ../src/common/fileconf.cpp:525
 #, c-format
 msgid "file '%s', line %d: value for immutable key '%s' ignored."
 msgstr "файл '%s', строка %d: значение неизменного ключа '%s' проигнорировано."
 
 # ../src/common/fileconf.cpp:439
-#: ../src/common/fileconf.cpp:446
+#: ../src/common/fileconf.cpp:448
 #, c-format
 msgid "file '%s': unexpected character %c at line %d."
 msgstr "файл '%s': неожиданный символ %c на строке %d."
 
 # ../src/common/datetime.cpp:3215
-#: ../src/common/datetime.cpp:3165
+#: ../src/common/datetime.cpp:3155
 msgid "first"
 msgstr "первый"
 
 # ../src/common/datetime.cpp:3228
-#: ../src/common/datetime.cpp:3178
+#: ../src/common/datetime.cpp:3168
 msgid "fourteenth"
 msgstr "четырнадцатый"
 
 # ../src/common/datetime.cpp:3218
-#: ../src/common/datetime.cpp:3168
+#: ../src/common/datetime.cpp:3158
 msgid "fourth"
 msgstr "четвертый"
 
@@ -3375,7 +3398,7 @@ msgid "initiate"
 msgstr "начать звонить"
 
 # ../src/common/file.cpp:440
-#: ../src/common/file.cpp:440
+#: ../src/common/file.cpp:442
 msgid "invalid eof() return value."
 msgstr "недопустимое значение возврата из eof()."
 
@@ -3390,7 +3413,7 @@ msgid "large"
 msgstr "большой"
 
 # ../src/common/intl.cpp:549
-#: ../src/common/intl.cpp:569
+#: ../src/common/intl.cpp:575
 #, c-format
 msgid "locale '%s' can not be set."
 msgstr "локейл '%s' не может быть установлен."
@@ -3407,7 +3430,7 @@ msgid "medium"
 msgstr "средний"
 
 # ../src/common/datetime.cpp:3379
-#: ../src/common/datetime.cpp:3329
+#: ../src/common/datetime.cpp:3319
 msgid "midnight"
 msgstr "полночь"
 
@@ -3417,16 +3440,16 @@ msgid "mktime() failed"
 msgstr "ошибка mktime()"
 
 # ../src/common/datetime.cpp:3233
-#: ../src/common/datetime.cpp:3183
+#: ../src/common/datetime.cpp:3173
 msgid "nineteenth"
 msgstr "девятнадцатый"
 
 # ../src/common/datetime.cpp:3223
-#: ../src/common/datetime.cpp:3173
+#: ../src/common/datetime.cpp:3163
 msgid "ninth"
 msgstr "девятый"
 
-#: ../src/msw/dde.cpp:961
+#: ../src/msw/dde.cpp:972
 msgid "no DDE error."
 msgstr "нет ошибки"
 
@@ -3436,7 +3459,7 @@ msgid "noname"
 msgstr "без имени"
 
 # ../src/common/datetime.cpp:3378
-#: ../src/common/datetime.cpp:3328
+#: ../src/common/datetime.cpp:3318
 msgid "noon"
 msgstr "полдень"
 
@@ -3445,22 +3468,22 @@ msgstr "полдень"
 msgid "num"
 msgstr "num"
 
-#: ../src/msw/dde.cpp:1004
+#: ../src/msw/dde.cpp:1015
 msgid "reentrancy problem."
 msgstr ""
 
 # ../src/common/datetime.cpp:3216
-#: ../src/common/datetime.cpp:3166
+#: ../src/common/datetime.cpp:3156
 msgid "second"
 msgstr "второй"
 
 # ../src/common/datetime.cpp:3231
-#: ../src/common/datetime.cpp:3181
+#: ../src/common/datetime.cpp:3171
 msgid "seventeenth"
 msgstr "семнадцатый"
 
 # ../src/common/datetime.cpp:3221
-#: ../src/common/datetime.cpp:3171
+#: ../src/common/datetime.cpp:3161
 msgid "seventh"
 msgstr "седьмой"
 
@@ -3470,12 +3493,12 @@ msgid "shift"
 msgstr "shift"
 
 # ../src/common/datetime.cpp:3230
-#: ../src/common/datetime.cpp:3180
+#: ../src/common/datetime.cpp:3170
 msgid "sixteenth"
 msgstr "шестнадцатый"
 
 # ../src/common/datetime.cpp:3220
-#: ../src/common/datetime.cpp:3170
+#: ../src/common/datetime.cpp:3160
 msgid "sixth"
 msgstr "шестой"
 
@@ -3490,46 +3513,46 @@ msgid "str"
 msgstr "str"
 
 # ../src/common/datetime.cpp:3224
-#: ../src/common/datetime.cpp:3174
+#: ../src/common/datetime.cpp:3164
 msgid "tenth"
 msgstr "десятый"
 
-#: ../src/msw/dde.cpp:968
+#: ../src/msw/dde.cpp:979
 msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
 msgstr ""
 
 # ../src/common/datetime.cpp:3217
-#: ../src/common/datetime.cpp:3167
+#: ../src/common/datetime.cpp:3157
 msgid "third"
 msgstr "третий"
 
 # ../src/common/datetime.cpp:3227
-#: ../src/common/datetime.cpp:3177
+#: ../src/common/datetime.cpp:3167
 msgid "thirteenth"
 msgstr "тринадцатый"
 
 # ../src/common/datetime.cpp:3022
-#: ../src/common/datetime.cpp:3022
+#: ../src/common/datetime.cpp:3012
 msgid "today"
 msgstr "сегодня"
 
 # ../src/common/datetime.cpp:3024
-#: ../src/common/datetime.cpp:3024
+#: ../src/common/datetime.cpp:3014
 msgid "tomorrow"
 msgstr "завтра"
 
 # ../src/common/datetime.cpp:3226
-#: ../src/common/datetime.cpp:3176
+#: ../src/common/datetime.cpp:3166
 msgid "twelfth"
 msgstr "двенадцатый"
 
 # ../src/common/datetime.cpp:3234
-#: ../src/common/datetime.cpp:3184
+#: ../src/common/datetime.cpp:3174
 msgid "twentieth"
 msgstr "двадцатый"
 
 # ../src/common/fileconf.cpp:1547
-#: ../src/common/fileconf.cpp:1554
+#: ../src/common/fileconf.cpp:1556
 #, c-format
 msgid "unexpected \" at position %d in '%s'."
 msgstr "неожиданный \" в позиции %d в '%s'."
@@ -3545,12 +3568,18 @@ msgid "unknown error (error code %08x)."
 msgstr "неизвестная ошибка (код ошибки %08x)"
 
 # ../src/common/file.cpp:339
-#: ../src/common/file.cpp:339
+#: ../src/common/textfile.cpp:237
+#, fuzzy
+msgid "unknown line terminator"
+msgstr "неизвестный отсчет поиска"
+
+# ../src/common/file.cpp:339
+#: ../src/common/file.cpp:342
 msgid "unknown seek origin"
 msgstr "неизвестный отсчет поиска"
 
 # ../src/common/fontmap.cpp:351
-#: ../src/common/fontmap.cpp:351
+#: ../src/common/fontmap.cpp:354
 #, c-format
 msgid "unknown-%d"
 msgstr "неизвестный-%d"
@@ -3588,12 +3617,12 @@ msgid "wxGetTimeOfDay failed."
 msgstr "ошибка wxGetTimeOfDay."
 
 # ../src/common/socket.cpp:329 ../src/common/socket.cpp:383
-#: ../src/common/socket.cpp:329 ../src/common/socket.cpp:383
+#: ../src/common/socket.cpp:347 ../src/common/socket.cpp:401
 msgid "wxSocket: invalid signature in ReadMsg."
 msgstr "wxSocket: недействительная подпись в ReadMsg."
 
 # ../src/common/socket.cpp:903
-#: ../src/common/socket.cpp:903
+#: ../src/common/socket.cpp:921
 msgid "wxSocket: unknown event!."
 msgstr "wxSocket: неизвестное событие!"
 
@@ -3603,14 +3632,23 @@ msgid "wxWindows could not open display for '%s': exiting."
 msgstr "wxWindows не смог открыть дисплей для '%s': выходим."
 
 # ../src/common/filefn.cpp:1215
-#: ../src/common/filefn.cpp:1230
+#: ../src/common/filefn.cpp:1237
 msgid "wxWindows: error finding temporary file name.\n"
 msgstr "wxWindows: ошибка определения имени временного файла.\n"
 
 # ../src/common/datetime.cpp:3023
-#: ../src/common/datetime.cpp:3023
+#: ../src/common/datetime.cpp:3013
 msgid "yesterday"
 msgstr "вчера"
+
+# ../src/generic/dirdlgg.cpp:265 ../src/generic/filedlgg.cpp:714
+#, fuzzy
+#~ msgid "..."
+#~ msgstr ".."
+
+# ../src/common/fontmap.cpp:101
+#~ msgid "Cyrillic (Latin 5)"
+#~ msgstr "Cyrillic (Latin 5)"
 
 # ../src/common/fontmap.cpp:108
 #~ msgid "ISO-8859-12"
@@ -3682,7 +3720,8 @@ msgstr "вчера"
 #~ msgstr "Не удалось создать диалог."
 
 #~ msgid ""
-#~ "Mime.types file %s, line %d: extra characters after the field value ignored."
+#~ "Mime.types file %s, line %d: extra characters after the field value "
+#~ "ignored."
 #~ msgstr ""
 #~ "Файл mime.types %s, строка %d: лишние символы после значения поля "
 #~ "проигнорированы."
@@ -3740,8 +3779,8 @@ msgstr "вчера"
 #~ "wxPrintPreviewBase::SetCanvas чтобы я знал о канве (canvas)!"
 
 #~ msgid ""
-#~ "can't determine if the end of file is reached on                 descriptor "
-#~ "%d"
+#~ "can't determine if the end of file is reached on                 "
+#~ "descriptor %d"
 #~ msgstr "невозможно определить достигнут ли конец файла с дескриптором %d"
 
 #~ msgid "bad index in wxArrayString::Insert"

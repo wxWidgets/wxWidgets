@@ -24,5 +24,24 @@ wxwin-examples		wxWindows and wxPython demos and samples (source)
 wxwin-i18n		message catalogs for native language support
 
 
+	The following three can be built from the source package
+	with the mingw32 cross compiler, but are not currently
+	distributed by Debian.  If you feel that should change,
+	please file a bug against the wxwindows2.2 package, or
+	append your views to a report already there if you're not
+	the first to do so.
+
+	[ you can check the current state of affairs at:
+	  http://bugs.debian.org/cgi-bin/pkgreport.cgi?pkg=wxwindows2.2 ]
+
+	Oh and, please do *not* file bug reports for these three
+	to the Debian bts.  But do feel free to email be personally
+	if you find problems and/or have patches to fix them.
+
+libwxmsw2.2-dev_2.2.8_i386.deb		mingw32-cross wxMSW libs.
+libwxbase-msw2.2-dev_2.2.8_i386.deb	mingw32-cross wxBase libs.
+wxwin2.2-headers-msw_2.2.8_i386.deb	extra headers needed for wxMSW.
+
+
  -- Ron Lee <ron@debian.org>, Sun, 13 Feb 2000 18:40:00 +1030
 
