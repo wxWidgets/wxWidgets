@@ -3220,7 +3220,7 @@ void wxListMainWindow::OnArrowChar(size_t newCurrent, const wxKeyEvent& event)
 
         ChangeCurrent(newCurrent);
 
-        HighlightLine( oldCurrent, FALSE );
+        // refresh the old focus to remove it
         RefreshLine( oldCurrent );
 
         if ( !event.ControlDown() )
