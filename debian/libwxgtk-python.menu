@@ -4,6 +4,4 @@
   title="pyshell" command="/usr/bin/pyshell"
 ?package(libwxgtk2.3-python):needs=X11 section=Apps/Programming\
   title="xrced" command="/usr/bin/xrced"
-?package(libwxgtk2.3-python):needs=X11 section=Apps/Programming\
-  title="helpviewer" command="/usr/bin/helpviewer"
 
