@@ -1695,6 +1695,10 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     wxPaintDC dc( this );
     PrepareDC( dc );
 
+    int dev_x = 0;
+    int dev_y = 0;
+    CalcScrolledPosition( 0, 0, &dev_x, &dev_y );
+
     if (m_dirty) return;
 
     if (m_lines.GetCount() == 0) return;
@@ -1706,9 +1710,6 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (m_mode & wxLC_REPORT)
     {
         wxPen pen(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DLIGHT), 1, wxSOLID);
-        dc.SetPen(pen);
-        dc.SetBrush(* wxTRANSPARENT_BRUSH);
-
         wxSize clientSize = GetClientSize();
 
         int lineSpacing = 0;
@@ -1727,12 +1728,20 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             m_lines[i].Draw( &dc );
             // Draw horizontal rule if required
             if (GetWindowStyle() & wxLC_HRULES)
-                dc.DrawLine(0, i*lineSpacing, clientSize.x, i*lineSpacing);
+            {
+                dc.SetPen(pen);
+                dc.SetBrush(* wxTRANSPARENT_BRUSH);
+                dc.DrawLine(0 - dev_x , i*lineSpacing , clientSize.x - dev_x , i*lineSpacing );
+	    }
         }
 
         // Draw last horizontal rule
         if ((i > (size_t) (y_s / lineSpacing)) && (GetWindowStyle() & wxLC_HRULES))
-            dc.DrawLine(0, i*lineSpacing, clientSize.x, i*lineSpacing);
+        {
+            dc.SetPen(pen);
+            dc.SetBrush(* wxTRANSPARENT_BRUSH);
+            dc.DrawLine(0 - dev_x , i*lineSpacing , clientSize.x - dev_x , i*lineSpacing );
+	}
 
         // Draw vertical rules if required
         if ((GetWindowStyle() & wxLC_VRULES) && (GetItemCount() > 0))
@@ -1743,11 +1752,13 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             GetItemRect(0, firstItemRect);
             GetItemRect(GetItemCount() - 1, lastItemRect);
             int x = firstItemRect.GetX();
+            dc.SetPen(pen);
+            dc.SetBrush(* wxTRANSPARENT_BRUSH);
             for (col = 0; col < GetColumnCount(); col++)
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth ;
-                dc.DrawLine(x, firstItemRect.GetY() - 1, x, lastItemRect.GetBottom() + 1);
+                dc.DrawLine(x - dev_x, firstItemRect.GetY() - 1 - dev_y, x - dev_x, lastItemRect.GetBottom() + 1 - dev_y);
             }
         }
     }

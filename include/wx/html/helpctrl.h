@@ -72,6 +72,8 @@ class WXDLLEXPORT wxHtmlHelpController : public wxHelpControllerBase // wxEvtHan
         virtual bool DisplaySection(int sectionNo);
         virtual bool DisplaySection(const wxString& section) { return Display(section); }
         virtual bool DisplayBlock(long blockNo) { return DisplaySection(blockNo); }
+        virtual bool DisplayTextPopup(const wxString& text, const wxPoint& pos);
+
         virtual void SetFrameParameters(const wxString& title,
                                    const wxSize& size,
                                    const wxPoint& pos = wxDefaultPosition,

@@ -28,6 +28,10 @@
 #include "wx/wx.h"
 #include "wx/busyinfo.h"
 
+#if wxUSE_HELP
+#include "wx/tipwin.h"
+#endif
+
 IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpController, wxHelpControllerBase)
 
 wxHtmlHelpController::wxHtmlHelpController(int style)
@@ -185,6 +189,32 @@ bool wxHtmlHelpController::LoadFile(const wxString& WXUNUSED(file))
 bool wxHtmlHelpController::DisplaySection(int sectionNo)
 {
     return Display(sectionNo);
+}
+
+bool wxHtmlHelpController::DisplayTextPopup(const wxString& text, const wxPoint& WXUNUSED(pos))
+{
+#if wxUSE_HELP
+    static wxTipWindow* s_tipWindow = NULL;
+
+    if (s_tipWindow)
+    {
+        // Prevent s_tipWindow being nulled in OnIdle,
+        // thereby removing the chance for the window to be closed by ShowHelp
+        s_tipWindow->SetTipWindowPtr(NULL);
+        s_tipWindow->Close();
+    }
+    s_tipWindow = NULL;
+
+    if ( !text.empty() )
+    {
+        s_tipWindow = new wxTipWindow(wxTheApp->GetTopWindow(), text, 100, & s_tipWindow);
+
+        return TRUE;
+    }
+
+    return FALSE;
+#endif
+    return FALSE;    
 }
 
 void wxHtmlHelpController::SetFrameParameters(const wxString& title,
