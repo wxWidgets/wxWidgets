@@ -350,6 +350,12 @@ bool wxBitmap::Create(int w, int h, int d)
     return Ok();
 }
 
+// ----------------------------------------------------------------------------
+// wxImage to/from conversions
+// ----------------------------------------------------------------------------
+
+#if wxUSE_IMAGE
+
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
@@ -570,7 +576,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
     // check the wxBitmap object
     GetBitmapData()->SetOk();
 #endif // WXWIN_COMPATIBILITY_2
-      
+
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     return TRUE;
@@ -579,7 +585,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 wxImage wxBitmap::ConvertToImage() const
 {
     wxImage image;
-    
+
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
 
     // create an wxImage object
@@ -704,6 +710,8 @@ wxImage wxBitmap::ConvertToImage() const
     return image;
 }
 
+#endif // wxUSE_IMAGE
+
 bool wxBitmap::LoadFile(const wxString& filename, long type)
 {
     UnRef();
@@ -716,16 +724,20 @@ bool wxBitmap::LoadFile(const wxString& filename, long type)
 
         return handler->LoadFile(this, filename, type, -1, -1);
     }
+#if wxUSE_IMAGE
     else
     {
         wxImage image;
-        if ( !image.LoadFile( filename, type ) || !image.Ok() )
-            return FALSE;
+        if ( image.LoadFile( filename, type ) && image.Ok() )
+        {
+            *this = image.ConvertToBitmap();
 
-        *this = image.ConvertToBitmap();
-
-        return TRUE;
+            return TRUE;
+        }
     }
+#endif // wxUSE_IMAGE
+
+    return FALSE;
 }
 
 bool wxBitmap::Create(void *data, long type, int width, int height, int depth)
@@ -754,15 +766,19 @@ bool wxBitmap::SaveFile(const wxString& filename, int type, const wxPalette *pal
     {
         return handler->SaveFile(this, filename, type, palette);
     }
+#if wxUSE_IMAGE
     else
     {
         // FIXME what about palette? shouldn't we use it?
         wxImage image( *this );
-        if (!image.Ok())
-            return FALSE;
-
-        return image.SaveFile( filename, type );
+        if ( image.Ok() )
+        {
+            return image.SaveFile(filename, type);
+        }
     }
+#endif // wxUSE_IMAGE
+
+    return FALSE;
 }
 
 // ----------------------------------------------------------------------------
