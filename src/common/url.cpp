@@ -20,8 +20,6 @@
 #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS
-
 #include <string.h>
 #include <ctype.h>
 
@@ -37,7 +35,10 @@ IMPLEMENT_CLASS(wxURL, wxObject)
 
 // Protocols list
 wxProtoInfo *wxURL::g_protocols = NULL;
+
+#if wxUSE_SOCKETS
 wxHTTP *wxURL::g_proxy = NULL;
+#endif
 
 // --------------------------------------------------------------
 // wxURL
@@ -52,8 +53,10 @@ wxURL::wxURL(const wxString& url)
   m_protocol = NULL;
   m_error = wxURL_NOERR;
   m_url = url;
+#if wxUSE_SOCKETS
   m_useProxy = (g_proxy != NULL);
   m_proxy = g_proxy;
+#endif
   ParseURL();
 }
 
@@ -96,6 +99,7 @@ bool wxURL::ParseURL()
   }
   // URL parse finished.
 
+#if wxUSE_SOCKETS
   if (m_useProxy) {
     // We destroy the newly created protocol.
     CleanData();
@@ -110,6 +114,7 @@ bool wxURL::ParseURL()
     // We initialize specific variables.
     m_protocol = m_proxy; // FIXME: we should clone the protocol
   }
+#endif
 
   m_error = wxURL_NOERR;
   return TRUE;
@@ -117,15 +122,19 @@ bool wxURL::ParseURL()
 
 void wxURL::CleanData()
 {
+#if wxUSE_SOCKETS
   if (!m_useProxy)
+#endif
     delete m_protocol;
 }
 
 wxURL::~wxURL()
 {
   CleanData();
+#if wxUSE_SOCKETS
   if (m_proxy && m_proxy != g_proxy)
     delete m_proxy;
+#endif
 }
 
 // --------------------------------------------------------------
@@ -233,7 +242,6 @@ bool wxURL::FetchProtocol()
 
 wxInputStream *wxURL::GetInputStream(void)
 {
-  wxIPV4address addr;
   wxInputStream *the_i_stream = NULL;
 
   if (!m_protocol) {
@@ -247,6 +255,7 @@ wxInputStream *wxURL::GetInputStream(void)
     m_protocol->SetPassword(m_password);
   }
 
+#if wxUSE_SOCKETS
   // m_protoinfo is NULL when we use a proxy
   if (!m_useProxy && m_protoinfo->m_needhost) {
     if (!addr.Hostname(m_hostname)) {
@@ -254,6 +263,7 @@ wxInputStream *wxURL::GetInputStream(void)
       return NULL;
     }
 
+    wxIPV4address addr;
     addr.Service(m_servname);
 
     if (!m_protocol->Connect(addr, TRUE)) // Watcom needs the 2nd arg for some reason
@@ -262,6 +272,7 @@ wxInputStream *wxURL::GetInputStream(void)
       return NULL;
     }
   }
+#endif
 
   // When we use a proxy, we have to pass the whole URL to it.
   if (m_useProxy)
@@ -277,6 +288,7 @@ wxInputStream *wxURL::GetInputStream(void)
   return the_i_stream;
 }
 
+#if wxUSE_SOCKETS
 void wxURL::SetDefaultProxy(const wxString& url_proxy)
 {
   if (url_proxy.IsNull()) {
@@ -347,6 +359,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
   m_useProxy = TRUE;
   ParseURL();
 }
+#endif
 
 wxString wxURL::ConvertToValidURI(const wxString& uri)
 {
@@ -371,5 +384,3 @@ wxString wxURL::ConvertToValidURI(const wxString& uri)
   return out_str;
 }
 
-#endif
-  // wxUSE_SOCKETS

@@ -150,6 +150,7 @@ bool wxSpinButton::MSWOnScroll(int orientation, WXWORD wParam,
 
 bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
+#ifndef __GNUWIN32__
     LPNMUPDOWN lpnmud = (LPNMUPDOWN)lParam;
 
     wxSpinEvent event(lpnmud->iDelta > 0 ? wxEVT_SCROLL_LINEUP
@@ -163,6 +164,9 @@ bool wxSpinButton::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     *result = event.IsAllowed() ? 0 : 1;
 
     return processed;
+#else
+    return FALSE;
+#endif
 }
 
 bool wxSpinButton::MSWCommand(WXUINT cmd, WXWORD id)

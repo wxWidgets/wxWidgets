@@ -20,7 +20,10 @@
 
 // wxSocket headers
 #include "wx/protocol/protocol.h"
-#include "wx/protocol/http.h"
+
+#if wxUSE_SOCKETS
+  #include "wx/protocol/http.h"
+#endif
 
 typedef enum {
   wxURL_NOERR = 0,
@@ -36,10 +39,14 @@ class WXDLLEXPORT wxURL : public wxObject {
   DECLARE_DYNAMIC_CLASS(wxURL)
 protected:
   static wxProtoInfo *g_protocols;
+#if wxUSE_SOCKETS
   static wxHTTP *g_proxy;
+#endif
   wxProtoInfo *m_protoinfo;
   wxProtocol *m_protocol;
+#if wxUSE_SOCKETS
   wxHTTP *m_proxy;
+#endif
   wxURLError m_error;
   wxString m_protoname, m_hostname, m_servname, m_path, m_url;
   wxString m_user, m_password;
@@ -69,8 +76,10 @@ public:
 
   wxInputStream *GetInputStream();
 
+#if wxUSE_SOCKETS
   static void SetDefaultProxy(const wxString& url_proxy);
   void SetProxy(const wxString& url_proxy);
+#endif
 
   static wxString ConvertToValidURI(const wxString& uri);
 };

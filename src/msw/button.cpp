@@ -31,6 +31,7 @@
     #include "wx/button.h"
     #include "wx/brush.h"
     #include "wx/panel.h"
+    #include "wx/bmpbuttn.h"
 #endif
 
 #include "wx/msw/private.h"

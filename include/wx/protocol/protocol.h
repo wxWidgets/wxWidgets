@@ -17,12 +17,14 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_SOCKETS
 
 #include "wx/object.h"
 #include "wx/string.h"
 #include "wx/stream.h"
+
+#if wxUSE_SOCKETS
 #include "wx/socket.h"
+#endif
 
 typedef enum {
  wxPROTO_NOERR = 0,
@@ -61,14 +63,21 @@ public:
               wxClassInfo *info);
 };
 
-class WXDLLEXPORT wxProtocol : public wxSocketClient {
+class WXDLLEXPORT wxProtocol
+#if wxUSE_SOCKETS
+ : public wxSocketClient {
+#else
+ : public wxObject {
+#endif
   DECLARE_ABSTRACT_CLASS(wxProtocol)
 public:
   wxProtocol();
 
+#if wxUSE_SOCKETS
   bool Reconnect();
   virtual bool Connect( const wxString& WXUNUSED(host) ) { return FALSE; }
   virtual bool Connect( wxSockAddress& addr, bool WXUNUSED(wait) = TRUE) { return wxSocketClient::Connect(addr); }
+#endif
 
   virtual bool Abort() = 0;
   virtual wxInputStream *GetInputStream(const wxString& path) = 0;
@@ -78,8 +87,8 @@ public:
   virtual void SetPassword(const wxString& WXUNUSED(passwd) ) {}
 };
 
+#if wxUSE_SOCKETS
 wxProtocolError WXDLLEXPORT GetLine(wxSocketBase *sock, wxString& result);
-
-#endif // wxUSE_SOCKETS
+#endif
 
 #endif // _WX_PROTOCOL_PROTOCOL_H

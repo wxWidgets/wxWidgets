@@ -186,7 +186,7 @@ void* wxChoice::DoGetClientData( int n ) const
         wxLogLastError(_T("CB_GETITEMDATA"));
 
         // unfortunately, there is no way to return an error code to the user
-        rc = NULL;
+	rc = (LPARAM) NULL;
     }
 
     return (void *)rc;

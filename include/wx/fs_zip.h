@@ -17,6 +17,9 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_FS_ZIP && wxUSE_STREAMS
+
+
 #ifndef WXPRECOMP
 #include <wx/wx.h>
 #endif
@@ -38,4 +41,6 @@ class wxZipFSHandler : public wxFileSystemHandler
 };
 
 
+#endif
+  // wxUSE_FS_ZIP && wxUSE_STREAMS
 

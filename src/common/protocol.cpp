@@ -20,8 +20,6 @@
   #pragma hdrstop
 #endif
 
-#if wxUSE_SOCKETS
-
 #include "wx/protocol/protocol.h"
 #include "wx/url.h"
 #include "wx/module.h"
@@ -53,13 +51,20 @@ wxProtoInfo::wxProtoInfo(const wxChar *name, const wxChar *serv,
 // wxProtocol ///////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////
 
+#if wxUSE_SOCKETS
 IMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxSocketClient)
+#else
+IMPLEMENT_ABSTRACT_CLASS(wxProtocol, wxObject)
+#endif
 
 wxProtocol::wxProtocol()
+#if wxUSE_SOCKETS
  : wxSocketClient()
+#endif
 {
 }
 
+#if wxUSE_SOCKETS
 bool wxProtocol::Reconnect()
 {
   wxIPV4address addr;
@@ -109,6 +114,7 @@ wxProtocolError GetLine(wxSocketBase *sock, wxString& result) {
   return wxPROTO_NOERR;
 #undef PROTO_BSIZE
 }
+#endif
 
 // ----------------------------------------------------------------------
 // Module
@@ -128,6 +134,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxProtocolModule, wxModule)
 
 bool wxProtocolModule::OnInit()
 {
+#if wxUSE_SOCKETS
   char *env_http_prox;
 
   wxURL::g_proxy = NULL;
@@ -135,16 +142,17 @@ bool wxProtocolModule::OnInit()
   env_http_prox = getenv("HTTP_PROXY");
   if (env_http_prox)
     wxURL::SetDefaultProxy(env_http_prox);
+#endif
   
   return TRUE;
 }
 
 void wxProtocolModule::OnExit()
 {
+#if wxUSE_SOCKETS
   if (wxURL::g_proxy)
     delete wxURL::g_proxy;
   wxURL::g_proxy = NULL;
+#endif
 }
 
-#endif
-  // wxUSE_SOCKETS

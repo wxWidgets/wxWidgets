@@ -17,9 +17,7 @@
 #endif
 
 #if !wxUSE_SOCKETS
-    #undef wxUSE_FS_ZIP
     #undef wxUSE_FS_INET
-    #define wxUSE_FS_ZIP 0
     #define wxUSE_FS_INET 0
 #endif
 
