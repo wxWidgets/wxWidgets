@@ -551,6 +551,9 @@ void wxTextCtrl::SetValue( const wxString &value )
         wxCharBuffer buffer( wxConvUTF8.cWC2MB( wxConvLocal.cWX2WC( value ) ) );
 #endif
         GtkTextBuffer *text_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+        if (gtk_text_buffer_get_char_count(text_buffer) != 0)
+            IgnoreNextTextUpdate();
+
         gtk_text_buffer_set_text( text_buffer, buffer, strlen(buffer) );
 
 #else
