@@ -230,7 +230,7 @@ typedef int wxWindowID;
 // check for explicit keyword support
 #ifndef HAVE_EXPLICIT
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        // VC++ 6.0 and 5.0 have explicit (what about the earlier versions?)
+        // VC++ 6.0 and 5.0 have explicit (what about earlier versions?)
         #define HAVE_EXPLICIT
     #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
           && wxCHECK_GCC_VERSION(2, 95)
@@ -256,7 +256,7 @@ typedef int wxWindowID;
 // check for static/const/reinterpret_cast<>()
 #ifndef HAVE_STATIC_CAST
     #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
-        // VC++ 6.0 and 5.0 have C++ casts (what about the earlier versions?)
+        // VC++ 6.0 and 5.0 have C++ casts (what about earlier versions?)
         #define HAVE_CXX_CASTS
     #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
           && wxCHECK_GCC_VERSION(2, 95)
@@ -270,6 +270,30 @@ typedef int wxWindowID;
         #define HAVE_CONST_CAST
     #endif
 #endif // HAVE_CXX_CASTS
+
+#ifndef HAVE_STD_WSTRING
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
+        // VC++ 6.0 and 5.0 have std::wstring (what about earlier versions?)
+        #define HAVE_STD_WSTRING
+    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
+          && wxCHECK_GCC_VERSION(3, 1)
+        // GCC 3.1 has std::wstring; 3.0 never was in MinGW, 2.95 hasn't it
+        #define HAVE_STD_WSTRING
+    #endif
+#endif
+
+#ifndef HAVE_STD_STRING_COMPARE
+    #if defined(__VISUALC__) && (__VISUALC__ >= 1100)
+        // VC++ 6.0 and 5.0 have std::string::compare
+        // (what about earlier versions?)
+        #define HAVE_STD_STRING_COMPARE
+    #elif ( defined(__MINGW32__) || defined(__CYGWIN32__) ) \
+          && wxCHECK_GCC_VERSION(3, 1)
+        // GCC 3.1 has std::string::compare; 
+        // 3.0 never was in MinGW, 2.95 hasn't it
+        #define HAVE_STD_STRING_COMPARE
+    #endif
+#endif
 
 // ----------------------------------------------------------------------------
 // portable calling conventions macros

@@ -1612,6 +1612,51 @@ WX_CPP_EXPLICIT
 dnl check whether C++ compiler supports C++ casts
 AC_CXX_CONST_CAST
 
+dnl check various STL features
+if test "$wxUSE_STL" = "yes"; then
+    AC_LANG_PUSH(C++)
+
+    dnl check for basic STL functionality
+    AC_MSG_CHECKING([for basic STL functionality])
+    AC_TRY_COMPILE([#include <string>
+                    #include <functional>
+                    #include <algorithm>
+                    #include <vector>
+                    #include <list>],
+                    [std::vector<int> moo;
+                     std::list<int> foo;
+                     std::vector<int>::iterator it = 
+                         std::find_if(moo.begin(), moo.end(),
+                                      std::bind2nd(std::less<int>(), 3));],
+                    [AC_MSG_RESULT([yes])],
+                    [AC_MSG_RESULT([no])
+                     AC_MSG_ERROR([Basic STL functionality missing])])
+
+    dnl check if <string> declares std::wstring
+    AC_MSG_CHECKING([for std::wstring in <string>])
+    AC_TRY_COMPILE([#include <string>],
+                   [std::wstring foo;],
+                   [AC_MSG_RESULT(yes)
+                    AC_DEFINE(HAVE_STD_WSTRING)],
+                   [AC_MSG_RESULT(no)])
+
+    dnl check for compliant std::string::compare
+    AC_MSG_CHECKING([for compliant std::string::compare])
+    AC_TRY_COMPILE([#include <string>],
+                   [std::string foo, bar;
+                    foo.compare(bar);
+                    foo.compare(1, 1, bar);
+                    foo.compare(1, 1, bar, 1, 1);
+                    foo.compare("");
+                    foo.compare(1, 1, "");
+                    foo.compare(1, 1, "", 2);],
+                   [AC_MSG_RESULT(yes)
+                    AC_DEFINE(HAVE_STD_STRING_COMPARE)],
+                   [AC_MSG_RESULT(no)])
+
+    AC_LANG_POP
+fi
+
 dnl ---------------------------------------------------------------------------
 dnl Define search path for includes and libraries: all headers and libs will be
 dnl looked for in all directories of this path

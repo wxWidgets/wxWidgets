@@ -158,6 +158,15 @@
 #undef HAVE_CONST_CAST
 
 /*
+ * Define if your compiler has std::wstring
+ */
+#undef HAVE_STD_WSTRING
+/*
+ * Define if your compiler has compilant std::string::compare
+ */
+#undef HAVE_STD_STRING_COMPARE
+
+/*
  * use STL for containers and wxString
  */
 #define wxUSE_STL 0

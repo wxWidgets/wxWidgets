@@ -96,10 +96,7 @@
     #undef TEST_ALL
     static const bool TEST_ALL = true;
 #else
-    #define TEST_ARRAYS
-    #define TEST_HASH
-    #define TEST_LIST
-    #define TEST_SCOPEGUARD
+    #define TEST_HASHMAP
 
     static const bool TEST_ALL = false;
 #endif
@@ -6071,14 +6068,14 @@ static void TestString()
 
     for (int i = 0; i < 1000000; ++i)
     {
-        a = "Hello";
-        b = " world";
-        c = "! How'ya doin'?";
+        a = _T("Hello");
+        b = _T(" world");
+        c = _T("! How'ya doin'?");
         a += b;
         a += c;
-        c = "Hello world! What's up?";
+        c = _T("Hello world! What's up?");
         if (c != a)
-            c = "Doh!";
+            c = _T("Doh!");
     }
 
     wxPrintf(_T("TestString elapsed time: %ld\n"), sw.Time());
@@ -6109,7 +6106,7 @@ static void TestPChar()
 
 static void TestStringSub()
 {
-    wxString s("Hello, world!");
+    wxString s(_T("Hello, world!"));
 
     wxPuts(_T("*** Testing wxString substring extraction ***"));
 
@@ -6406,6 +6403,180 @@ static void TestStringMatch()
     wxPuts(_T(""));
 }
 
+// Sigh, I want Test::Simple, Test::More and Test::Harness...
+void ok(int line, bool ok, const wxString& msg = wxEmptyString)
+{
+    if( !ok )
+        wxPuts(_T("NOT OK: (") + wxString::Format(_T("%d"), line) +
+               _T(") ") + msg);
+}
+
+void is(int line, const wxString& got, const wxString& expected,
+        const wxString& msg = wxEmptyString)
+{
+    bool isOk = got == expected;
+    ok(line, isOk, msg);
+    if( !isOk )
+    {
+        wxPuts(_T("Got: ") + got);
+        wxPuts(_T("Expected: ") + expected);
+    }
+}
+
+void is(int line, const wxChar& got, const wxChar& expected,
+        const wxString& msg = wxEmptyString)
+{
+    bool isOk = got == expected;
+    ok(line, isOk, msg);
+    if( !isOk )
+    {
+        wxPuts("Got: " + got);
+        wxPuts("Expected: " + expected);
+    }
+}
+
+void TestStdString()
+{
+    wxPuts(_T("*** Testing std::string operations ***\n"));
+
+    // test ctors
+    wxString s1(_T("abcdefgh")),
+             s2(_T("abcdefghijklm"), 8),
+             s3(_T("abcdefghijklm")),
+             s4(8, _T('a'));
+    wxString s5(s1),
+             s6(s3, 0, 8),
+             s7(s3.begin(), s3.begin() + 8);
+    wxString s8(s1, 4, 8), s9, s10, s11;
+
+    is( __LINE__, s1, _T("abcdefgh") );
+    is( __LINE__, s2, s1 );
+    is( __LINE__, s4, _T("aaaaaaaa") );
+    is( __LINE__, s5, _T("abcdefgh") );
+    is( __LINE__, s6, s1 );
+    is( __LINE__, s7, s1 );
+    is( __LINE__, s8, _T("efgh") );
+
+    // test append
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = _T("abc");
+    s1.append(_T("def"));
+    s2.append(_T("defgh"), 3);
+    s3.append(wxString(_T("abcdef")), 3, 6);
+    s4.append(s1);
+    s5.append(3, _T('a'));
+    s6.append(s1.begin() + 3, s1.end());
+
+    is( __LINE__, s1, _T("abcdef") );
+    is( __LINE__, s2, _T("abcdef") );
+    is( __LINE__, s3, _T("abcdef") );
+    is( __LINE__, s4, _T("abcabcdef") );
+    is( __LINE__, s5, _T("abcaaa") );
+    is( __LINE__, s6, _T("abcdef") );
+
+    // test assign
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = _T("abc");
+    s1.assign(_T("def"));
+    s2.assign(_T("defgh"), 3);
+    s3.assign(wxString(_T("abcdef")), 3, 6);
+    s4.assign(s1);
+    s5.assign(3, _T('a'));
+    s6.assign(s1.begin() + 1, s1.end());
+
+    is( __LINE__, s1, _T("def") );
+    is( __LINE__, s2, _T("def") );
+    is( __LINE__, s3, _T("def") );
+    is( __LINE__, s4, _T("def") );
+    is( __LINE__, s5, _T("aaa") );
+    is( __LINE__, s6, _T("ef") );
+
+    // test compare
+    s1 = _T("abcdefgh");
+    s2 = _T("abcdefgh");
+    s3 = _T("abc");
+    s4 = _T("abcdefghi");
+    s5 = _T("aaa");
+    s6 = _T("zzz");
+    s7 = _T("zabcdefg");
+
+    ok( __LINE__, s1.compare(s2) == 0 );
+    ok( __LINE__, s1.compare(s3) > 0 );
+    ok( __LINE__, s1.compare(s4) < 0 );
+    ok( __LINE__, s1.compare(s5) > 0 );
+    ok( __LINE__, s1.compare(s6) < 0 );
+    ok( __LINE__, s1.compare(1, 12, s1) > 0);
+    ok( __LINE__, s1.compare(_T("abcdefgh")) == 0);
+    ok( __LINE__, s1.compare(1, 7, _T("bcdefgh")) == 0);
+    ok( __LINE__, s1.compare(1, 7, _T("bcdefgh"), 7) == 0);
+
+    // test erase
+    s1.erase(1, 1);
+    s2.erase(4, 12);
+    wxString::iterator it = s3.erase(s3.begin() + 1);
+    wxString::iterator it2 = s4.erase(s4.begin() + 4, s4.begin() + 6);
+    wxString::iterator it3 = s7.erase(s7.begin() + 4, s7.begin() + 8);
+
+    is( __LINE__, s1, _T("acdefgh") );
+    is( __LINE__, s2, _T("abcd") );
+    is( __LINE__, s3, _T("ac") );
+    is( __LINE__, s4, _T("abcdghi") );
+    is( __LINE__, s7, _T("zabc") );
+    is( __LINE__, *it, _T('c') );
+    is( __LINE__, *it2, _T('g') );
+    ok( __LINE__, it3 == s7.end() );
+
+    // test insert
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = _T("aaaa");
+    s9 = s10 = _T("cdefg");
+
+    s1.insert(1, _T("cc") );
+    s2.insert(2, _T("cdef"), 3);
+    s3.insert(2, s10);
+    s4.insert(2, s10, 3, 7);
+    s5.insert(1, 2, _T('c'));
+    it = s6.insert(s6.begin() + 3, _T('X'));
+    s7.insert(s7.begin(), s9.begin(), s9.end() - 1);
+    s8.insert(s8.begin(), 2, _T('c'));
+
+    is( __LINE__, s1, _T("accaaa") );
+    is( __LINE__, s2, _T("aacdeaa") );
+    is( __LINE__, s3, _T("aacdefgaa") );
+    is( __LINE__, s4, _T("aafgaa") );
+    is( __LINE__, s5, _T("accaaa") );
+    is( __LINE__, s6, _T("aaaXa") );
+    is( __LINE__, s7, _T("cdefaaaa") );
+    is( __LINE__, s8, _T("ccaaaa") );
+
+    s1 = s2 = s3 = _T("aaaa");
+    s1.insert(0, _T("ccc"), 2);
+    s2.insert(4, _T("ccc"), 2);
+
+    is( __LINE__, s1, _T("ccaaaa") );
+    is( __LINE__, s2, _T("aaaacc") );
+
+    // test replace
+    s1 = s2 = s3 = s4 = s5 = s6 = s7 = s8 = _T("QWERTYUIOP");
+    s9 = s10 = _T("werty");
+
+    s1.replace(3, 4, _T("rtyu"));
+    s1.replace(8, 7, _T("opopop"));
+    s2.replace(10, 12, _T("WWWW"));
+    s3.replace(1, 5, s9);
+    s4.replace(1, 4, s9, 0, 4);
+    s5.replace(1, 2, s9, 1, 12);
+    s6.replace(0, 123, s9, 0, 123);
+    s7.replace(2, 7, s9);
+
+    is( __LINE__, s1, _T("QWErtyuIopopop") );
+    is( __LINE__, s2, _T("QWERTYUIOPWWWW") );
+    is( __LINE__, s3, _T("QwertyUIOP") );
+    is( __LINE__, s4, _T("QwertYUIOP") );
+    is( __LINE__, s5, _T("QertyRTYUIOP") );
+    is( __LINE__, s6, s9);
+    is( __LINE__, s7, _T("QWwertyP") );
+
+    wxPuts(_T("*** Testing std::string operations finished ***\n"));
+}
+
 #endif // TEST_STRINGS
 
 // ----------------------------------------------------------------------------
@@ -6415,16 +6586,6 @@ static void TestStringMatch()
 #ifdef TEST_SNGLINST
     #include "wx/snglinst.h"
 #endif // TEST_SNGLINST
-
-static int MyStringCompare(wxString* s1, wxString* s2)
-{
-    return wxStrcmp(s1->c_str(), s2->c_str());
-}
-
-static int MyStringReverseCompare(wxString* s1, wxString* s2)
-{
-    return -wxStrcmp(s1->c_str(), s2->c_str());
-}
 
 int main(int argc, char **argv)
 {
@@ -6552,6 +6713,8 @@ int main(int argc, char **argv)
     {
         TestStringMatch();
     }
+
+    TestStdString();
 #endif // TEST_STRINGS
 
 #ifdef TEST_ARRAYS
@@ -6597,11 +6760,11 @@ int main(int argc, char **argv)
 #endif
 
         wxPuts(_T("*** After sorting a1"));
-        a1.Sort(&MyStringCompare);
+        a1.Sort(wxStringCompareAscending);
         PrintArray(_T("a1"), a1);
 
         wxPuts(_T("*** After sorting a1 in reverse order"));
-        a1.Sort(&MyStringReverseCompare);
+        a1.Sort(wxStringCompareDescending);
         PrintArray(_T("a1"), a1);
 
 #if !wxUSE_STL
