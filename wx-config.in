@@ -167,6 +167,7 @@ Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--release]
                  [--basename] [--static] [--libs[=LIBS]] [--gl-libs]
                  [--cppflags] [--cflags] [--cxxflags] [--ldflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
+                 [--inplace]
 
 wx-config returns configuration information about the installed
 version of wxWidgets. It may be used to query its version and
@@ -194,6 +195,11 @@ and contrib libraries. Special value "std" stands for all libraries linked
 in by default.
 
 --gl-libs option is deprecated, used --libs=gl instead.
+
+The --inplace flag allows wx-config to be used from the wxWindows
+build directory and output flags to use the uninstalled version of
+the headers and libs in the build directory.  (Currently configure
+must be invoked via a full path name for this to work correctly.)
 
 EOF
 
