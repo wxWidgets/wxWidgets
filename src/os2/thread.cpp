@@ -377,7 +377,7 @@ public:
     TID  GetId() const { return m_hThread; }
 
     // thread function
-    static DWORD OS2ThreadStart(ULONG ulParam);
+    static void OS2ThreadStart(void* pParam);
 
 private:
     // Threads in OS/2 have only an ID, so m_hThread is both it's handle and ID
@@ -388,16 +388,20 @@ private:
     unsigned int                    m_nPriority;  // thread priority in "wx" units
 };
 
-ULONG wxThreadInternal::OS2ThreadStart(
-  ULONG ulParam
+void wxThreadInternal::OS2ThreadStart(
+  void * pParam
 )
 {
     DWORD                           dwRet;
     bool bWasCancelled;
 
-    // first of all, check whether we hadn't been cancelled already and don't
-    // start the user code at all then
-    wxThread *pThread = (wxThread *)ulParam;
+    wxThread *pThread = (wxThread *)pParam;
+
+    // first of all, wait for the thread to be started.
+    pThread->m_critsect.Enter();
+    pThread->m_critsect.Leave();
+    // Now check whether we hadn't been cancelled already and don't
+    // start the user code at all in this case.
     if ( pThread->m_internal->GetState() == STATE_EXITED )
     {
         dwRet = (DWORD)-1;
@@ -425,7 +429,7 @@ ULONG wxThreadInternal::OS2ThreadStart(
         delete pThread;
     }
     //else: the joinable threads handle will be closed when Wait() is done
-    return dwRet;
+    return;
 }
 
 void wxThreadInternal::SetPriority(
@@ -468,20 +472,20 @@ bool wxThreadInternal::Create(
 , unsigned int                      uStackSize
 )
 {
-    APIRET                          ulrc;
-
-    ulrc = ::DosCreateThread( &m_hThread
-                             ,(PFNTHREAD)wxThreadInternal::OS2ThreadStart
-                             ,(ULONG)pThread
-                             ,CREATE_SUSPENDED | STACK_SPARSE
-                             ,(ULONG)uStackSize
-                            );
-    if(ulrc != 0)
+    int                          tid;
+    
+    if (!uStackSize)
+      uStackSize = 131072;
+    pThread->m_critsect.Enter();
+    tid = _beginthread(wxThreadInternal::OS2ThreadStart,
+			     NULL, uStackSize, pThread);
+    if(tid == -1)
     {
         wxLogSysError(_("Can't create thread"));
 
         return FALSE;
     }
+    m_hThread = tid;
     if (m_nPriority != WXTHREAD_DEFAULT_PRIORITY)
     {
         SetPriority(m_nPriority);
@@ -509,7 +513,7 @@ bool wxThreadInternal::Resume()
 
     if (ulrc != 0)
     {
-        wxLogSysError(_("Can not suspend thread %lu"), m_hThread);
+        wxLogSysError(_("Can not resume thread %lu"), m_hThread);
         return FALSE;
     }
 
@@ -526,8 +530,6 @@ bool wxThreadInternal::Resume()
 
 // static functions
 // ----------------
-
-bool WXDLLEXPORT wxGuiOwnedByMainThread();
 
 wxThread *wxThread::This()
 {
@@ -651,6 +653,13 @@ wxThreadError wxThread::Pause()
 
 wxThreadError wxThread::Resume()
 {
+    if (m_internal->GetState() == STATE_NEW)
+    {
+	m_internal->SetState(STATE_RUNNING);
+        m_critsect.Leave();
+	return wxTHREAD_NO_ERROR;
+    }
+
     wxCriticalSectionLocker         lock((wxCriticalSection &)m_critsect);
 
     return m_internal->Resume() ? wxTHREAD_NO_ERROR : wxTHREAD_MISC_ERROR;
@@ -745,25 +754,42 @@ wxThreadError wxThread::Delete(ExitCode *pRc)
                 }
             }
 
-            result = ::DosWaitThread(&hThread, DCWW_WAIT);
+            result = ::DosWaitThread(&hThread, DCWW_NOWAIT);
 	    // FIXME: We ought to have a message processing loop here!!
 
             switch ( result )
 	    {
+  	        case ERROR_INTERRUPT:
 		case ERROR_THREAD_NOT_TERMINATED:
+		    break;
 		case ERROR_INVALID_THREADID:
-                    // error
-                    wxLogSysError(_("Can not wait for thread termination"));
-                    Kill();
-                    return wxTHREAD_KILLED;
-
                 case NO_ERROR:
-                    // thread we're waiting for terminated
-                    break;
-
+                    // thread we're waiting for just terminated
+  		    // or even does not exist any more.
+		    result = NO_ERROR;
+		    break;
                 default:
                     wxFAIL_MSG(wxT("unexpected result of DosWaitThread"));
             }
+	    if ( IsMain() )
+	    {
+		// event processing - needed if we are the main thread
+		// to give other threads a chance to do remaining GUI
+		// processing and terminate cleanly.
+		wxTheApp->HandleSockets();
+		if (wxTheApp->Pending())
+		  if ( !wxTheApp->DoMessage() )
+		  {
+		      // WM_QUIT received: kill the thread
+		      Kill();
+
+		      return wxTHREAD_KILLED;
+		  }
+		  else
+		    wxUsleep(10);
+	    }
+	    else
+	        wxUsleep(10);
         } while ( result != NO_ERROR );
 #else // !wxUSE_GUI
         // simply wait for the thread to terminate
@@ -830,7 +856,7 @@ void wxThread::Exit(
 )
 {
     delete this;
-    ::DosExit(EXIT_THREAD, ULONG(pStatus));
+    _endthread();
     wxFAIL_MSG(wxT("Couldn't return from DosExit()!"));
 }
 

@@ -732,7 +732,7 @@ public:
 
 #if wxUSE_THREADS
 
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXPM__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXPM__) || defined(__EMX__)
     // unlock GUI if there are threads waiting for and lock it back when
     // there are no more of them - should be called periodically by the main
     // thread
