@@ -14,7 +14,7 @@ Have fun with it,
 
 Harm van der Heijden (H.v.d.Heijden@phys.tue.nl)"""
 
-import random,re,string
+import random,re
 from wxPython.wx import *
 
 class WordFetcher:

@@ -56,7 +56,7 @@ Options:
 #
 
 
-import sys, os, glob, getopt, tempfile, string
+import sys, os, glob, getopt, tempfile
 import cPickle, cStringIO, zlib
 import img2img
 from wxPython import wx

@@ -10,7 +10,7 @@
 #----------------------------------------------------------------------
 
 
-import sys, os, glob, getopt, string
+import sys, os, glob, getopt
 from wxPython.wx import *
 
 if wxPlatform == "__WXGTK__":
@@ -20,7 +20,7 @@ if wxPlatform == "__WXGTK__":
 wxInitAllImageHandlers()
 
 def convert(file, maskClr, outputDir, outputName, outType, outExt):
-    if string.lower(os.path.splitext(file)[1]) == ".ico":
+    if os.path.splitext(file)[1].lower() == ".ico":
         icon = wxIcon(file, wxBITMAP_TYPE_ICO)
         img = wxBitmapFromIcon(icon)
     else:

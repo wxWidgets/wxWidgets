@@ -20,7 +20,6 @@ Original comment follows below:
 """
 
 from wxPython import wx
-import string
 
 # Not everybody will have Numeric, so let's be cool about it...
 try:

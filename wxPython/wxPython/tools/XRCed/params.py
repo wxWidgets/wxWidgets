@@ -62,7 +62,7 @@ class ParamBinaryOr(PPanel):
         dlg = wxDialog(self, -1, 'Choices')
         topSizer = wxBoxSizer(wxVERTICAL)
         listBox = wxCheckListBox(dlg, -1, choices=self.values, size=(250,200))
-        value = map(string.strip, string.split(self.text.GetValue(), '|'))
+        value = map(string.strip, self.text.GetValue().split('|'))
         if value == ['']: value = []
         ignored = []
         for i in value:

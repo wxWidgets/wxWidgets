@@ -672,7 +672,7 @@ class Frame(wxFrame):
             except:
                 (etype, value, tb) =sys.exc_info()
                 tblist =traceback.extract_tb(tb)[1:]
-                msg =string.join(traceback.format_exception_only(etype, value)
+                msg =' '.join(traceback.format_exception_only(etype, value)
                         +traceback.format_list(tblist))
                 print msg
 

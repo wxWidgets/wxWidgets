@@ -7,7 +7,7 @@ will be created.
 """
 
 
-import sys, os, string, time
+import sys, os, time
 
 KEEP_TEMPS = 0
 ISCC = r"%s\InnoSetup2Ex\ISCC.exe %s"
@@ -335,7 +335,7 @@ def find_DLLs():
     proc.close()
     for line in lines:
         if line[:6] == "    wx":
-            WXDLL =  string.strip(line)
+            WXDLL = line.strip()
 
         if line[:10] == "    python":
             PYTHONVER = line[10] + '.' + line[11]
@@ -370,7 +370,7 @@ def main():
 
     # Starting with 2.3.3 the hybrid build is the release build too, so
     # no need to label it that way.
-    ##if string.find(WXDLL, "h") != -1:
+    ##if WXDLL.find("h") != -1:
     ##    PYVER = PYVER + "-hybrid"
 
     MSLU=''
