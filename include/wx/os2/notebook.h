@@ -57,7 +57,7 @@ public:
     // ---------
     // Get number of pages in the dialog
     //
-           int      GetPageCount(void) const;
+    size_t GetPageCount(void) const;
 
     //
     // Set the currently selected page, return the index of the previously

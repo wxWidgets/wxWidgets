@@ -186,7 +186,7 @@ WXDWORD wxNotebook::OS2GetStyle (
 // wxNotebook accessors
 // ----------------------------------------------------------------------------
 
-int wxNotebook::GetPageCount() const
+size_t wxNotebook::GetPageCount() const
 {
     int                             nPageInternal = m_pages.Count();
     int                             nPageAPI = (int)::WinSendMsg(GetHWND(), BKM_QUERYPAGECOUNT, (MPARAM)0, (MPARAM)BKA_END);
