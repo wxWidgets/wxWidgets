@@ -198,8 +198,7 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     // calculations, we need to add some extra margin or otherwise static box
     // title is clipped
 #if !wxDIALOG_UNIT_COMPATIBILITY
-    if ( !GetLabel().empty() )
-        *borderTop += GetCharHeight()/3;
+    *borderTop += GetCharHeight()/3;
 #endif // !wxDIALOG_UNIT_COMPATIBILITY
 }
 
