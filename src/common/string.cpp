@@ -153,7 +153,7 @@ wxString::wxString(char ch, size_t nLength)
 
   if ( nLength > 0 ) {
     AllocBuffer(nLength);
-    
+
     wxASSERT( sizeof(char) == 1 );  // can't use memset if not
 
     memset(m_pchData, ch, nLength);
@@ -282,14 +282,14 @@ void wxString::AllocBeforeWrite(size_t nLen)
   wxASSERT( nLen != 0 );  // doesn't make any sense
 
   // must not share string and must have enough space
-  register wxStringData* pData = GetStringData();  
+  register wxStringData* pData = GetStringData();
   if ( pData->IsShared() || (nLen > pData->nAllocLength) ) {
     // can't work with old buffer, get new one
     pData->Unlock();
     AllocBuffer(nLen);
   }
 
-  wxASSERT( !pData->IsShared() );  // we must be the only owner
+  wxASSERT( !GetStringData()->IsShared() );  // we must be the only owner
 }
 
 // get the pointer to writable buffer of (at least) nLen bytes
