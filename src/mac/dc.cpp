@@ -20,11 +20,14 @@
 #include "wx/region.h"
 #include "wx/image.h"
 
-#include "wx/mac/private.h"
 
 #if __MSL__ >= 0x6000
 #include "math.h"
+using namespace std ;
 #endif
+
+#include "wx/mac/private.h"
+
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDC, wxObject)
