@@ -854,6 +854,7 @@ void wxFlexGridSizer::RecalcSizes()
             m_rowHeights[ temp[idx] ] += delta;
     }
 
+    temp.Empty();
     // See above 
     for (idx = 0; idx < m_growableCols.GetCount(); idx++)
         if (m_growableCols[idx] < ncols)
