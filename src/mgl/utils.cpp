@@ -146,13 +146,13 @@ int wxKill(long WXUNUSED(pid), wxSignal WXUNUSED(sig), wxKillError *WXUNUSED(rc)
     return 0;
 }
 
-long wxExecute(const wxString& WXUNUSED(command), bool WXUNUSED(sync), wxProcess *WXUNUSED(process))
+long wxExecute(const wxString& WXUNUSED(command), int WXUNUSED(flags), wxProcess *WXUNUSED(process))
 {
     wxFAIL_MSG( wxT("wxExecute not implemented under MS-DOS!") );
     return 0;
 }
 
-long wxExecute(wxChar **WXUNUSED(argv), bool WXUNUSED(sync), wxProcess *WXUNUSED(process))
+long wxExecute(char **WXUNUSED(argv), int WXUNUSED(flags), wxProcess *WXUNUSED(process))
 {
     wxFAIL_MSG( wxT("wxExecute not implemented under MS-DOS!") );
     return 0;
