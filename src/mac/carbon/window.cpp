@@ -1373,7 +1373,9 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 
 wxSize wxWindowMac::DoGetBestSize() const
 {
-    /*
+    if ( m_macIsUserPane || IsTopLevel() )
+        return wxWindowBase::DoGetBestSize() ;
+        
     Rect    bestsize = { 0 , 0 , 0 , 0 } ;
     short   baselineoffset ;
     int bestWidth, bestHeight ;
@@ -1405,8 +1407,7 @@ wxSize wxWindowMac::DoGetBestSize() const
         bestHeight = 13 ;
         
     return wxSize(bestWidth, bestHeight);
-    */
-    return wxWindowBase::DoGetBestSize() ;
+//    return wxWindowBase::DoGetBestSize() ;
 }
 
 
