@@ -398,8 +398,64 @@ bool wxMenu::DoAppend(
   wxMenuItem*                       pItem
 )
 {
-    return wxMenuBase::DoAppend(pItem) && DoInsertOrAppend(pItem);
-}
+    wxCHECK_MSG( pItem, FALSE, _T("NULL item in wxMenu::DoAppend") );
+
+    bool                            bCheck = FALSE;
+
+    if (pItem->GetKind() == wxITEM_RADIO)
+    {
+        int                         nCount = GetMenuItemCount();
+
+        if (m_lStartRadioGroup == -1)
+        {
+            //
+            // Start a new radio group
+            //
+            m_lStartRadioGroup = lCount;
+
+            //
+            // For now it has just one element
+            //
+            pItem->SetAsRadioGroupStart();
+            pItem->SetRadioGroupEnd(m_startRadioGroup);
+
+            //
+            // Ensure that we have a checked item in the radio group
+            //
+            bCheck = TRUE;
+        }
+        else // extend the current radio group
+        {
+            //
+            // We need to update its end item
+            //
+            pItem->SetRadioGroupStart(m_lStartRadioGroup);
+            wxMenuItemList::Node *node = GetMenuItems().Item(m_startRadioGroup);
+
+            if (node)
+            {
+                node->GetData()->SetRadioGroupEnd(count);
+            }
+            else
+            {
+                wxFAIL_MSG( _T("where is the radio group start item?") );
+            }
+        }
+    }
+    else // not a radio item
+    {
+        EndRadioGroup();
+    }
+    if (!wxMenuBase::DoAppend(pItem) || !DoInsertOrAppend(pItem))
+    {
+        return FALSE;
+    }
+    if (bCheck)
+    {
+        pItem->Check(TRUE);
+    }
+    return TRUE;
+} // end of wxMenu::DoInsert
 
 bool wxMenu::DoInsert(
   size_t                            nPos

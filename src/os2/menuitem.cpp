@@ -122,29 +122,50 @@ wxMenuItem::wxMenuItem(
 {
     wxASSERT_MSG(pParentMenu != NULL, wxT("a menu item should have a parent"));
 
-#if  wxUSE_OWNER_DRAWN
+    Init();
+} // end of wxMenuItem::wxMenuItem
 
-    //
-    // Set default menu colors
-    //
+wxMenuItem::wxMenuItem(
+  wxMenu*                           pParentMenu
+, int                               nId
+, const wxString&                   rText
+, const wxString&                   rStrHelp
+, bool                              bIsCheckable
+, wxMenu*                           pSubMenu
+)
+: wxMenuItemBase(pParentMenu, nId, rText, rStrHelp, bIsCheckable ? kITEM_CHECK : kITEM_NORMAL, pSubMenu)
+#if wxUSE_OWNER_DRAWN
+,  wxOwnerDrawn( TextToLabel(rText)
+                ,bCheckable
+               )
+#endif // owner drawn
+{
+    wxASSERT_MSG(pParentMenu != NULL, wxT("a menu item should have a parent"));
+
+    Init();
+} // end of wxMenuItem::wxMenuItem
+
+void wxMenuItem::Init()
+{
+    m_radioGroup.start = -1;
+    m_isRadioGroupStart = FALSE;
+
+#if  wxUSE_OWNER_DRAWN
+    // set default menu colors
     #define SYS_COLOR(c) (wxSystemSettings::GetColour(wxSYS_COLOUR_##c))
 
     SetTextColour(SYS_COLOR(MENUTEXT));
     SetBackgroundColour(SYS_COLOR(MENU));
 
-    //
-    // We don't want normal items be owner-drawn
-    //
+    #undef  SYS_COLOR
+
+    // we don't want normal items be owner-drawn
     ResetOwnerDrawn();
 
-    #undef  SYS_COLOR
+    // tell the owner drawing code to to show the accel string as well
+    SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
-
-    m_text        = TextToLabel(rText);
-
-    memset(&m_vMenuData, '\0', sizeof(m_vMenuData));
-    m_vMenuData.id= nId;
-} // end of wxMenuItem::wxMenuItem
+}
 
 wxMenuItem::~wxMenuItem()
 {
@@ -195,6 +216,34 @@ wxString wxMenuItemBase::GetLabelFromText(
     return label;
 }
 
+// radio group stuff
+// -----------------
+
+void wxMenuItem::SetAsRadioGroupStart()
+{
+    m_bIsRadioGroupStart = TRUE;
+} // end of wxMenuItem::SetAsRadioGroupStart
+
+void wxMenuItem::SetRadioGroupStart(
+  int                               nStart
+)
+{
+    wxASSERT_MSG( !m_bIsRadioGroupStart,
+                  _T("should only be called for the next radio items") );
+
+    m_vRadioGroup.m_nStart = nStart;
+} // end of wxMenuItem::SetRadioGroupStart
+
+void wxMenuItem::SetRadioGroupEnd(
+  int                               nEnd
+)
+{
+    wxASSERT_MSG( m_bIsRadioGroupStart,
+                  _T("should only be called for the first radio item") );
+
+    m_vRadioGroup.m_nEnd = nEnd;
+} // end of wxMenuItem::SetRadioGroupEnd
+
 // change item state
 // -----------------
 
@@ -234,6 +283,7 @@ void wxMenuItem::Check(
     wxCHECK_RET( IsCheckable(), wxT("only checkable items may be checked") );
     if (m_isChecked == bCheck)
         return;
+
     if (bCheck)
         bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
                                  ,MM_SETITEMATTR

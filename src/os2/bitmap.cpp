@@ -384,7 +384,7 @@ bool wxBitmap::LoadFile(
         if (!vImage.LoadFile(rFilename, lType) || !vImage.Ok() )
             return(FALSE);
 
-        *this = vImage.ConvertToBitmap();
+        *this = wxBitmap(vImage);
 
         return(TRUE);
     }
@@ -444,7 +444,7 @@ bool wxBitmap::SaveFile(
     else
     {
         // FIXME what about palette? shouldn't we use it?
-        wxImage                     vImage(*this);
+        wxImage                     vImage = ConvertToImage();
 
         if (!vImage.Ok())
             return(FALSE);
