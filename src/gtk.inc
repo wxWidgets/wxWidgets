@@ -125,6 +125,8 @@ LIB_CPP_SRC=\
  gtk/utilsres.cpp \
  gtk/window.cpp \
 \
+ unix/utilsunx.cpp \
+\
  generic/choicdgg.cpp \
  generic/dcpsg.cpp \
  generic/colrdlgg.cpp \

@@ -449,14 +449,28 @@ AC_SUBST(GTK_JOYSTICK)
 
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
-dnl check for vsnprintf() which is another GNU extension
-AC_CHECK_FUNCS(vsnprintf)
+
+dnl check for several standard functions we use if they are available
+AC_CHECK_FUNCS(vsnprintf vfork)
 
 dnl check for usleep() and nanosleep() which is better in MT programs
-AC_CHECK_FUNCS(nanosleep,
-        AC_DEFINE(HAVE_NANOSLEEP),
-        [AC_CHECK_LIB(posix4, nanosleep, AC_DEFINE(HAVE_NANOSLEEP))])
-AC_CHECK_FUNCS(usleep)
+dnl AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
+dnl                [
+dnl                 AC_CHECK_LIB(posix4, nanosleep,
+dnl                    AC_DEFINE(HAVE_NANOSLEEP),
+dnl                    AC_CHECK_FUNCS(usleep))
+dnl                ]
+dnl               )
+AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
+[AC_CHECK_LIB(posix4, nanosleep, AC_DEFINE(HAVE_NANOSLEEP),
+ [AC_CHECK_FUNCS(usleep, AC_DEFINE(HAVE_USLEEP),
+                         AC_MSG_WARN(Sleep() function will not work)
+  )]
+ )]
+)
+
+dnl check for uname (POSIX) and gethostname (BSD)
+AC_CHECK_FUNCS(uname gethostname, break)
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
@@ -1383,7 +1397,7 @@ if test "$wxUSE_THREADS" = "1"; then
      dnl For glibc 2 users who have the old libc 5 too
 
      AC_CHECK_LIB(pthread-0.7, pthread_create, [
-       UNIX_THREAD="gtk/threadpsx.cpp"
+       UNIX_THREAD="unix/threadpsx.cpp"
        THREADS_LINK="pthread-0.7"
      ],[
        AC_CHECK_HEADER(sys/prctl.h, [
@@ -1394,7 +1408,7 @@ if test "$wxUSE_THREADS" = "1"; then
      dnl the case for pthread_setcanceltype.
 
      AC_CHECK_LIB(pthread, pthread_setcanceltype, [
-       UNIX_THREAD="gtk/threadpsx.cpp"
+       UNIX_THREAD="unix/threadpsx.cpp"
        THREADS_LINK="pthread"
      ])
     ])
@@ -1403,7 +1417,7 @@ if test "$wxUSE_THREADS" = "1"; then
         dnl thread functions are in libc_r under FreeBSD
         AC_CHECK_LIB(c_r, pthread_create,
                     [
-                        UNIX_THREAD="gtk/threadpsx.cpp"
+                        UNIX_THREAD="unix/threadpsx.cpp"
                         THREADS_LINK="c_r"
                     ])
     fi
@@ -1411,10 +1425,6 @@ if test "$wxUSE_THREADS" = "1"; then
     if test "$THREADS_LINK" != ""; then
       AC_DEFINE(wxUSE_THREADS)
     fi
-fi
-
-if test "$wxUSE_MOTIF" = "1"; then
-  UNIX_THREAD="motif/thread.cpp"
 fi
 
 if test -z "$UNIX_THREAD"; then
@@ -1580,3 +1590,4 @@ AC_CONFIG_HEADER(./include/wx/gtk/setup.h:./setup/setup.hin)
 AC_OUTPUT(./setup/substit ./wx-config:./wx-config.in,./setup/general/createall)
 
 AC_OVERRIDES_DONE
+

@@ -603,6 +603,12 @@ bool wxYield()
 {
     while (wxTheApp && wxTheApp->Pending())
         wxTheApp->Dispatch();
+
+    // VZ: is it the same as this (taken from old wxExecute)?
+#if 0
+    XtAppProcessEvent((XtAppContext) wxTheApp->GetAppContext(), XtIMAll);
+#endif
+
     return TRUE;
 }
 

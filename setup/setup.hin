@@ -380,8 +380,14 @@
 /* Define if you have nanosleep() */
 #undef HAVE_NANOSLEEP
 
-/* Define if you have usleep() */
-#undef HAVE_USLEEP
+/* Define if you have vfork() */
+#undef HAVE_VFORK
+
+/* Define if you have uname() */
+#undef HAVE_UNAME
+
+/* Define if you have gethostname() */
+#undef HAVE_GETHOSTNAME
 
 /* Define if you have sched_yield */
 #undef HAVE_SCHED_YIELD

@@ -801,19 +801,6 @@ int isascii( int c )
 }
 #endif
 
-// Overloaded functions, taking a wxString
-bool wxGetHostName(wxString& name)
-{
-    bool success = wxGetHostName(wxBuffer, 500);
-    if (success)
-    {
-        name = wxBuffer;
-        return TRUE;
-    }
-    else
-        return FALSE;
-}
-
 bool wxGetUserId(wxString& buf)
 {
     bool success = wxGetUserId(wxBuffer, 500);
@@ -836,5 +823,15 @@ bool wxGetUserName(wxString& buf)
     }
     else
         return FALSE;
+}
+
+bool wxGetHostName(wxString& buf)
+{
+    static const size_t hostnameSize = 257;
+    bool ok = wxGetHostName(buf.GetWriteBuf(hostnameSize), hostnameSize);
+
+    buf.UngetWriteBuf();
+
+    return ok;
 }
 
