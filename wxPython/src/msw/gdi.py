@@ -1047,6 +1047,39 @@ class wxMemoryDC(wxMemoryDCPtr):
 
 
 
+class wxBufferedDCPtr(wxMemoryDCPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxBufferedDC instance at %s>" % (self.this,)
+class wxBufferedDC(wxBufferedDCPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxBufferedDC,_args,_kwargs)
+        self.thisown = 1
+
+
+
+def wxBufferedDCInternalBuffer(*_args,**_kwargs):
+    val = wxBufferedDCPtr(apply(gdic.new_wxBufferedDCInternalBuffer,_args,_kwargs))
+    val.thisown = 1
+    return val
+
+
+class wxBufferedPaintDCPtr(wxBufferedDCPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxBufferedPaintDC instance at %s>" % (self.this,)
+class wxBufferedPaintDC(wxBufferedPaintDCPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(gdic.new_wxBufferedPaintDC,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxScreenDCPtr(wxDCPtr):
     def __init__(self,this):
         self.this = this

@@ -116,7 +116,7 @@ public:
         return wxFileSystemHandler::GetRightLocation(location);
     }
 
-    wxString GetMimeTypeFromExt(const wxString& location){
+    wxString GetMimeTypeFromExt(const wxString& location) {
         return wxFileSystemHandler::GetMimeTypeFromExt(location);
     }
 
@@ -141,15 +141,11 @@ void __wxMemoryFSHandler_AddFile_wxBitmap(const wxString& filename,
     wxMemoryFSHandler::AddFile(filename, bitmap, type);
 }
 
-//  void __wxMemoryFSHandler_AddFile_wxString(const wxString& filename,
-//                                            const wxString& textdata) {
-//      wxMemoryFSHandler::AddFile(filename, textdata);
-//  }
-
 void __wxMemoryFSHandler_AddFile_Data(const wxString& filename,
                                       PyObject* data) {
 
     wxMemoryFSHandler::AddFile(filename,
+                               // TODO:  Verify data type
                                (void*)PyString_AsString(data),
                                (size_t)PyString_Size(data));
 }

@@ -1888,7 +1888,6 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         if (spec.GetChar(0) == '#' && spec.Length() == 7) {  // It's  #RRGGBB
             long red, green, blue;
             red = green = blue = 0;
-
             spec.Mid(1,2).ToLong(&red,   16);
             spec.Mid(3,2).ToLong(&green, 16);
             spec.Mid(5,2).ToLong(&blue,  16);

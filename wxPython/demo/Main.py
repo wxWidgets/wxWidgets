@@ -109,6 +109,7 @@ def opj(path):
 #---------------------------------------------------------------------------
 
 class wxPythonDemo(wxFrame):
+    overviewText = "wxPython Overview"
 
     def __init__(self, parent, id, title):
         wxFrame.__init__(self, parent, -1, title, size = (800, 600),
@@ -192,7 +193,7 @@ class wxPythonDemo(wxFrame):
                                wxTR_HAS_VARIABLE_ROW_HEIGHT)
 
         #self.tree.SetBackgroundColour(wxNamedColour("Pink"))
-        root = self.tree.AddRoot("Overview")
+        root = self.tree.AddRoot("wxPython Overview")
         firstChild = None
         for item in _treeList:
             child = self.tree.AppendItem(root, item[0])
@@ -217,12 +218,12 @@ class wxPythonDemo(wxFrame):
         # the notebook...
         if 0:  # the old way
             self.ovr = wxHtmlWindow(self.nb, -1, size=(400, 400))
-            self.nb.AddPage(self.ovr, "Overview")
+            self.nb.AddPage(self.ovr, self.overviewText)
 
         else:  # hopefully I can remove this hacky code soon, see bug #216861
             panel = wxPanel(self.nb, -1, style=wxCLIP_CHILDREN)
             self.ovr = wxHtmlWindow(panel, -1, size=(400, 400))
-            self.nb.AddPage(panel, "Overview")
+            self.nb.AddPage(panel, self.overviewText)
 
             def OnOvrSize(evt, ovr=self.ovr):
                 ovr.SetSize(evt.GetSize())
@@ -231,7 +232,7 @@ class wxPythonDemo(wxFrame):
             EVT_ERASE_BACKGROUND(panel, EmptyHandler)
 
 
-        self.SetOverview("Overview", overview)
+        self.SetOverview(self.overviewText, overview)
 
 
         # Set up a TextCtrl on the Demo Code Notebook page
@@ -327,9 +328,9 @@ class wxPythonDemo(wxFrame):
                 self.nb.SetSelection(0)
             self.nb.DeletePage(2)
 
-        if itemText == 'Overview':
+        if itemText == self.overviewText:
             self.GetDemoFile('Main.py')
-            self.SetOverview('Overview', overview)
+            self.SetOverview(self.overviewText, overview)
             self.nb.Refresh();
             self.window = None
 
@@ -340,7 +341,7 @@ class wxPythonDemo(wxFrame):
                 try:
                     self.GetDemoFile(itemText + '.py')
                     module = __import__(itemText, globals())
-                    self.SetOverview(itemText, module.overview)
+                    self.SetOverview(itemText + " Overview", module.overview)
                 finally:
                     wxEndBusyCursor()
 

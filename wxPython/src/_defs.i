@@ -738,8 +738,9 @@ enum wxBitmapType
 // Standard cursors
 enum wxStockCursor
 {
-    wxCURSOR_NONE,          // should be 0
+    wxCURSOR_NONE,
     wxCURSOR_ARROW,
+    wxCURSOR_RIGHT_ARROW,
     wxCURSOR_BULLSEYE,
     wxCURSOR_CHAR,
     wxCURSOR_CROSS,
@@ -765,12 +766,6 @@ enum wxStockCursor
     wxCURSOR_WATCH,
     wxCURSOR_BLANK,
     wxCURSOR_DEFAULT,
-//      // Not yet implemented for Windows
-//      wxCURSOR_CROSS_REVERSE,
-//      wxCURSOR_DOUBLE_ARROW,
-//      wxCURSOR_BASED_ARROW_UP,
-//      wxCURSOR_BASED_ARROW_DOWN,
-
     wxCURSOR_ARROWWAIT,
     wxCURSOR_MAX
 };
@@ -856,6 +851,16 @@ typedef enum {
 } wxDuplexMode;
 
 
+
+// menu and toolbar item kinds
+enum wxItemKind
+{
+    wxItem_Separator = -1,
+    wxItem_Normal,
+    wxItem_Check,
+    wxItem_Radio,
+    wxItem_Max
+};
 
 enum wxHitTest
 {

@@ -531,8 +531,29 @@ public:
     void GetViewStart(int* OUTPUT, int* OUTPUT);
     %pragma(python) addtoclass = "ViewStart = GetViewStart"
 
-    void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
-    void CalcUnscrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
+    %name(CalcScrolledPosition1)wxPoint CalcScrolledPosition(const wxPoint& pt);
+    %name(CalcScrolledPosition2)void CalcScrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
+
+    %name(CalcUnscrolledPosition1)wxPoint CalcUnscrolledPosition(const wxPoint& pt);
+    %name(CalcUnscrolledPosition2)void CalcUnscrolledPosition( int x, int y, int *OUTPUT, int *OUTPUT);
+
+    %pragma(python) addtoclass = "
+    def CalcScrolledPosition(self, *args):
+        if len(args) == 1:
+            return apply(self.CalcScrolledPosition1, args)
+        elif len(args) == 2:
+            return apply(self.CalcScrolledPosition2, args)
+        else:
+            raise TypeError, 'Invalid parameters: only (x,y) or (point) allowed'
+
+    def CalcUnscrolledPosition(self, *args):
+        if len(args) == 1:
+            return apply(self.CalcUnscrolledPosition1, args)
+        elif len(args) == 2:
+            return apply(self.CalcUnscrolledPosition2, args)
+        else:
+            raise TypeError, 'Invalid parameters: only (x,y) or (point) allowed'
+"
 
     void SetScale(double xs, double ys);
     double GetScaleX();
@@ -554,12 +575,59 @@ public:
 
     void Append(int id, const wxString& item,
                 const wxString& helpString = wxEmptyString,
-                int checkable = FALSE);
+                wxItemKind kind = wxItem_Normal);
     %name(AppendMenu)void Append(int id, const wxString& item, wxMenu *subMenu,
-                const wxString& helpString = wxEmptyString);
+                                 const wxString& helpString = wxEmptyString);
     %name(AppendItem)void Append(const wxMenuItem* item);
-
+    void AppendCheckItem(int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString);
+    void AppendRadioItem(int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString);
     void AppendSeparator();
+
+
+    void Insert(size_t pos,
+                int id,
+                const wxString& text,
+                const wxString& help = wxEmptyString,
+                wxItemKind kind = wxItem_Normal);
+    void InsertSeparator(size_t pos);
+    void InsertCheckItem(size_t pos,
+                         int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString);
+    void InsertRadioItem(size_t pos,
+                         int id,
+                         const wxString& text,
+                         const wxString& help = wxEmptyString);
+    %name(InsertMenu)void Insert(size_t pos,
+                                 int id,
+                                 const wxString& text,
+                                 wxMenu *submenu,
+                                 const wxString& help = wxEmptyString);
+    %name(InsertItem)bool Insert(size_t pos, wxMenuItem *item);
+
+
+    void Prepend(int id,
+                 const wxString& text,
+                 const wxString& help = wxEmptyString,
+                 wxItemKind kind = wxItem_Normal);
+    void PrependSeparator();
+    void PrependCheckItem(int id,
+                          const wxString& text,
+                          const wxString& help = wxEmptyString);
+    void PrependRadioItem(int id,
+                          const wxString& text,
+                          const wxString& help = wxEmptyString);
+    %name(PrependMenu)void Prepend(int id,
+                                   const wxString& text,
+                                   wxMenu *submenu,
+                                   const wxString& help = wxEmptyString);
+    %name(PrependItem)void Prepend(wxMenuItem *item);
+
+
     void Break();
     void Check(int id, bool flag);
     bool IsChecked(int id);
@@ -581,9 +649,11 @@ public:
 
     bool Delete(int id);
     %name(DeleteItem)bool Delete(wxMenuItem *item);
-    bool Insert(size_t pos, wxMenuItem *item);
     wxMenuItem *Remove(int id);
     %name(RemoveItem) wxMenuItem *Remove(wxMenuItem *item);
+
+
+
 
     %addmethods {
         void Destroy() { delete self; }
@@ -656,7 +726,8 @@ public:
     wxMenuItem(wxMenu* parentMenu=NULL, int id=wxID_SEPARATOR,
                const wxString& text = wxEmptyString,
                const wxString& help = wxEmptyString,
-               bool isCheckable = FALSE, wxMenu* subMenu = NULL);
+               wxItemKind kind = wxItem_Normal,
+               wxMenu* subMenu = NULL);
 
 
     wxMenu *GetMenu();
@@ -666,6 +737,7 @@ public:
     void SetText(const wxString& str);
     wxString GetLabel();
     const wxString& GetText();
+    wxItemKind GetKind();
     void SetCheckable(bool checkable);
     bool IsCheckable();
     bool IsSubMenu();
@@ -682,6 +754,7 @@ public:
     void SetAccel(wxAcceleratorEntry *accel);
 
     static wxString GetLabelFromText(const wxString& text);
+//    static wxAcceleratorEntry *GetAccelFromString(const wxString& label);
 
     // wxOwnerDrawn methods
 #ifdef __WXMSW__

@@ -20,6 +20,7 @@
 #include <wx/fontenc.h>
 #include <wx/fontmap.h>
 #include <wx/fontutil.h>
+#include <wx/dcbuffer.h>
 %}
 
 //----------------------------------------------------------------------
@@ -1138,6 +1139,26 @@ public:
     }
 %}
 
+
+//---------------------------------------------------------------------------
+
+class wxBufferedDC : public wxMemoryDC {
+public:
+        // Construct a wxBufferedDC using a user supplied buffer.
+    wxBufferedDC( wxDC *dc, const wxBitmap &buffer );
+
+        // Construct a wxBufferedDC with an internal buffer of 'area'
+        // (where area is usually something like the size of the window
+        // being buffered)
+    %name(wxBufferedDCInternalBuffer)wxBufferedDC( wxDC *dc, const wxSize &area );
+};
+
+
+class wxBufferedPaintDC : public wxBufferedDC
+{
+public:
+    wxBufferedPaintDC( wxWindow *window, const wxBitmap &buffer = wxNullBitmap );
+};
 
 //---------------------------------------------------------------------------
 

@@ -30,6 +30,8 @@ columns are specified and work the same as in wxFlexGridSizer.
 
 Updated XRCed from Roman Rolinsky
 
+Added wxBufferedDC.
+
 UNICODE!
 
 
