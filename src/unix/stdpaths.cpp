@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        unix/stdpaths.cpp
-// Purpose:     wxStandardPaths implementation for Unix systems
+// Purpose:     wxStandardPaths implementation for Unix & OpenVMS systems
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     2004-10-19
@@ -34,7 +34,7 @@
 
 #include "wx/stdpaths.h"
 
-#ifdef __LINUX__
+#if defined( __LINUX__ ) || defined( __VMS )
     #include <unistd.h>
 #endif
 
@@ -76,7 +76,11 @@ wxString wxStandardPaths::GetInstallPrefix() const
         if ( m_prefix.empty() )
 #endif // __LINUX__
         {
-            self->m_prefix = _T("/usr/local");
+#ifdef __VMS
+	   self->m_prefix = _T("/sys$system");
+#else
+	   self->m_prefix = _T("/usr/local");
+#endif
         }
     }
 
@@ -89,7 +93,11 @@ wxString wxStandardPaths::GetInstallPrefix() const
 
 wxString wxStandardPaths::GetConfigDir() const
 {
-    return _T("/etc");
+#ifdef __VMS
+   return _T("/sys$manager");
+#else
+   return _T("/etc");
+#endif
 }
 
 wxString wxStandardPaths::GetUserConfigDir() const
@@ -99,17 +107,29 @@ wxString wxStandardPaths::GetUserConfigDir() const
 
 wxString wxStandardPaths::GetDataDir() const
 {
-    return AppendAppName(GetInstallPrefix() + _T("/share"));
+#ifdef __VMS
+   return AppendAppName(GetInstallPrefix() + _T("/sys$share"));
+#else
+   return AppendAppName(GetInstallPrefix() + _T("/share"));
+#endif
 }
 
 wxString wxStandardPaths::GetLocalDataDir() const
 {
-    return AppendAppName(_T("/etc"));
+#ifdef __VMS
+   return AppendAppName(_T("/sys$manager"));
+#else
+   return AppendAppName(_T("/etc"));
+#endif
 }
 
 wxString wxStandardPaths::GetUserDataDir() const
 {
-    return AppendAppName(wxFileName::GetHomeDir() + _T("/."));
+#ifdef __VMS
+   return wxFileName::GetHomeDir();
+#else
+   return AppendAppName(wxFileName::GetHomeDir() + _T("/."));
+#endif
 }
 
 wxString wxStandardPaths::GetPluginsDir() const

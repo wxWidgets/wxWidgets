@@ -164,6 +164,8 @@
 
 #define wxUSE_DEBUG_CONTEXT 0
 
+#define wxUSE_DEBUGREPORT 0
+
 #define wxUSE_MEMORY_TRACING 0
 
 #define wxUSE_GLOBAL_MEMORY_OPERATORS 0
@@ -213,6 +215,8 @@
 #define wxUSE_FFILE         1
 
 #define wxUSE_FSVOLUME      1
+
+#define wxUSE_STDPATHS      1
 
 #define wxUSE_TEXTBUFFER    1
 
