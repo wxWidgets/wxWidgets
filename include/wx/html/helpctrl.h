@@ -66,14 +66,15 @@ class WXDLLEXPORT wxHtmlHelpController : public wxEvtHandler
         // Ctrl and it's wxHtmlWindow
         virtual void ReadCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
         virtual void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
-        virtual void CreateHelpWindow(bool show_progress = FALSE);
+
+    protected:
+        virtual void CreateHelpWindow();
         virtual void DestroyHelpWindow()
         {
             //if (m_Config) WriteCustomization(m_Config, m_ConfigRoot);
             if (m_helpFrame) m_helpFrame->Destroy();
         }
 
-    protected:
         void OnCloseFrame(wxCloseEvent& evt) { m_helpFrame = NULL; evt.Skip(); }
         wxHtmlHelpData m_helpData;
         wxHtmlHelpFrame* m_helpFrame;

@@ -77,7 +77,7 @@ bool wxHtmlHelpController::AddBook(const wxString& book, bool show_wait_msg)
     return retval;
 }
 
-void wxHtmlHelpController::CreateHelpWindow(bool show_progress)
+void wxHtmlHelpController::CreateHelpWindow()
 {
     if (m_helpFrame) {
         m_helpFrame->Raise();
@@ -98,7 +98,6 @@ void wxHtmlHelpController::CreateHelpWindow(bool show_progress)
         m_helpFrame->UseConfig(m_Config, m_ConfigRoot);
 
     m_helpFrame->Create(NULL, wxID_HTML_HELPFRAME, wxEmptyString, m_FrameStyle);
-    m_helpFrame->RefreshLists(show_progress);
     m_helpFrame->SetTitleFormat(m_titleFormat);
     m_helpFrame->Show(TRUE);
 }

@@ -133,18 +133,6 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         //   (+ : page must contain the word ; - : page can't contain the word)
         // * if there is no + or - before the word, + is default
 
-        void RefreshLists(bool show_progress = FALSE);
-        // Refreshes Contents and Index tabs
-
-        void CreateContents(bool show_progress = FALSE);
-        // Adds items to m_Contents tree control
-
-        void CreateIndex(bool show_progress = FALSE);
-        // Adds items to m_IndexList
-
-        void CreateSearch();
-        // Add books to search choice panel
-
         void UseConfig(wxConfigBase *config, const wxString& rootpath = wxEmptyString)
             {
                 m_Config = config;
@@ -158,6 +146,22 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         // saved values : things set by SetFonts, SetBorders.
         void WriteCustomization(wxConfigBase *cfg, const wxString& path = wxEmptyString);
         // ...
+
+    protected:
+        void Init(wxHtmlHelpData* data = NULL);
+
+        void RefreshLists();
+        // Refreshes Contents and Index tabs
+
+        void CreateContents();
+        // Adds items to m_Contents tree control
+
+        void CreateIndex();
+        // Adds items to m_IndexList
+
+        void CreateSearch();
+        // Add books to search choice panel
+
 
         virtual void OptionsDialog();
         // Displays options dialog (fonts etc.)
@@ -220,12 +224,9 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         int m_FontSize; // 0,1,2 = small,medium,big
         wxString m_NormalFace, m_FixedFace;
 
-    protected:
-        void Init(wxHtmlHelpData* data = NULL);
-
         DECLARE_EVENT_TABLE()
 };
 
-#endif
+#endif // wxUSE_HTML
 
 #endif
