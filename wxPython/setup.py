@@ -5,11 +5,12 @@ import sys, os, string
 from distutils.core import setup, Extension
 from distutils.file_util import copy_file
 from distutils.dir_util import mkpath
+from distutils.dep_util import newer
 
 from my_distutils import run_swig, contrib_copy_tree
 
 #----------------------------------------------------------------------
-# flags that affect this script
+# flags and values that affect this script
 #----------------------------------------------------------------------
 
 VERSION          = "2.2.2"
@@ -31,16 +32,29 @@ BUILD_OGL = 1      # If true, build the contrib/ogl extension module
 BUILD_STC = 1      # If true, build the contrib/stc extension module
 
 
-USE_SWIG = 0       # Should we actually execute SWIG, or just use the
+USE_SWIG = 1       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
 
-IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
+IN_CVS_TREE = 1    # Set to true if building in a full wxWindows CVS
                    # tree, otherwise will assume all needed files are
                    # available in the wxPython source distribution
 
+# Some MSW build settings
+
+FINAL = 0          # Mirrors use of same flag in wx makefiles,
+                   # should probably autodetect...
+
+HYBRID = 1         # If set and not debug or FINAL, then build a
+                   # hybrid extension that can be used by the
+                   # non-debug version of python, but contains
+                   # debugging symbols for wxWindows and wxPython.
+                   # wxWindows must have been built with /MD, not /MDd
+
+WXDLLVER = '22_2'  # Version part of DLL name
+
 
 #----------------------------------------------------------------------
-# Some globals
+# Some other globals
 #----------------------------------------------------------------------
 
 PKGDIR = 'wxPython'
@@ -48,6 +62,24 @@ wxpExtensions = []
 
 force = '--force' in sys.argv or '-f' in sys.argv
 debug = '--debug' in sys.argv or '-g' in sys.argv
+
+
+#----------------------------------------------------------------------
+# Check for build flags on the command line
+#----------------------------------------------------------------------
+
+for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
+             'USE_SWIG', 'IN_CVS_TREE', 'FINAL', 'HYBRID',
+             'WXDLLVER', ]:
+    for x in range(len(sys.argv)):
+        if string.find(sys.argv[x], flag) == 0:
+            pos = string.find(sys.argv[x], '=') + 1
+            if pos > 0:
+                vars()[flag] = eval(sys.argv[x][pos:])
+                sys.argv[x] = ''
+
+sys.argv = filter(None, sys.argv)
+
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
@@ -62,23 +94,9 @@ if os.name == 'nt':
     GENDIR = 'msw'
 
 
-    #------------------------------------------------------------------
-    # Some MSW build settings
-
-    FINAL = 0          # Mirrors use of same flag in wx makefiles,
-                       # should probably autodetect...
-
-    HYBRID = 1         # If set and not debug or FINAL, then build a
-                       # hybrid extension that can be used by the
-                       # non-debug version of python, but contains
-                       # debugging symbols for wxWindows and wxPython.
-                       # wxWindows must hav ebeen built with /MD, not /MDd
-
-    WXDLLVER = '22_1'  # Version part of DLL name
-
 
     if debug:
-        FINAL=0
+        FINAL  = 0
         HYBRID = 0
 
 
@@ -110,6 +128,8 @@ if os.name == 'nt':
 
     if FINAL:
         wxdll = 'wx' + WXDLLVER
+    elif HYBRID:
+        wxdll = 'wx' + WXDLLVER + 'h'
     else:
         wxdll = 'wx' + WXDLLVER + 'd'
     libs = [wxdll, 'kernel32', 'user32', 'gdi32', 'comdlg32',
@@ -122,7 +142,7 @@ if os.name == 'nt':
 
     if not FINAL and HYBRID:
         cflags = ['/Z7', '/Od']
-        lflags = ['/DEBUG']
+        lflags = ['/DEBUG', '/PDB:NONE']
 
 
 elif os.name == 'posix':
@@ -153,6 +173,12 @@ else:
     raise 'Sorry Charlie...'
 
 
+#----------------------------------------------------------------------
+# Check if the version file needs updated
+#----------------------------------------------------------------------
+
+if IN_CVS_TREE and newer('setup.py', 'src/__version__.py'):
+    open('src/__version__.py', 'w').write("ver = '%s'\n" % VERSION)
 
 #----------------------------------------------------------------------
 # Define the CORE extension module
@@ -318,7 +344,7 @@ if BUILD_STC:
                             swig_args + ['-I'+STC_H, '-I'+location],
                             [STC_H+'/stc.h'])
 
-    # copy a projext specific py module to the main package dir
+    # copy a project specific py module to the main package dir
     copy_file(location+'/stc.py', PKGDIR, update=1, verbose=1)
 
     # add some include dirs to the standard set
