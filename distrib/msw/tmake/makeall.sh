@@ -46,6 +46,10 @@ do
 	    echo "Generating $mswdir/makefile.wat for Watcom C++..."
 	    tmake -t wat wxwin.pro -o $mswdir/makefile.wat;;
 
+	base.t)
+	    echo "Generating $topdir/src/files.lst for Configure..."
+	    tmake -t base wxwin.pro -o $topdir/src/files.lst ;;
+
 	gtk.t)
 	    echo "Generating $topdir/src/gtk/files.lst for GTK and Configure..."
 	    tmake -t gtk wxwin.pro -o $topdir/src/gtk/files.lst;;
