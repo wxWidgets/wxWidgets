@@ -98,7 +98,7 @@ int wxRadioBoxBase::GetNextItem(int item, wxDirection dir, long style) const
 
         default:
             wxFAIL_MSG( _T("unexpected wxDirection value") );
-            return -1;
+            return wxNOT_FOUND;
     }
 
     // ensure that the item is in range [0..count)

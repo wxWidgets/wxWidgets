@@ -52,10 +52,10 @@ public:
         {
             SetSelection(sel);
 
-            return TRUE;
+            return true;
         }
 
-        return FALSE;
+        return false;
     }
 
     // string access
@@ -76,8 +76,8 @@ public:
     virtual void SetString(int n, const wxString& label) = 0;
 
     // change the individual radio button state
-    virtual void Enable(int n, bool enable = TRUE) = 0;
-    virtual void Show(int n, bool show = TRUE) = 0;
+    virtual void Enable(int n, bool enable = true) = 0;
+    virtual void Show(int n, bool show = true) = 0;
 
     // layout parameters
     virtual int GetColumnCount() const = 0;

@@ -61,7 +61,7 @@ public:
     wxRegExImpl();
     ~wxRegExImpl();
 
-    // return TRUE if Compile() had been called successfully
+    // return true if Compile() had been called successfully
     bool IsValid() const { return m_isCompiled; }
 
     // RE operations
@@ -79,7 +79,7 @@ private:
     // init the members
     void Init()
     {
-        m_isCompiled = FALSE;
+        m_isCompiled = false;
         m_Matches = NULL;
         m_nMatches = 0;
     }
@@ -110,7 +110,7 @@ private:
     regmatch_t *m_Matches;
     size_t      m_nMatches;
 
-    // TRUE if m_RegEx is valid
+    // true if m_RegEx is valid
     bool        m_isCompiled;
 };
 
@@ -210,7 +210,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
         wxLogError(_("Invalid regular expression '%s': %s"),
                    expr.c_str(), GetErrorMsg(errorcode, !conv).c_str());
 
-        m_isCompiled = FALSE;
+        m_isCompiled = false;
     }
     else // ok
     {
@@ -253,7 +253,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
             }
         }
 
-        m_isCompiled = TRUE;
+        m_isCompiled = true;
     }
 
     return IsValid();
@@ -261,7 +261,7 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
 
 bool wxRegExImpl::Matches(const wxChar *str, int flags) const
 {
-    wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
+    wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
     // translate our flags to regexec() ones
     wxASSERT_MSG( !(flags & ~(wxRE_NOTBOL | wxRE_NOTEOL)),
@@ -293,7 +293,7 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
     {
         case 0:
             // matched successfully
-            return TRUE;
+            return true;
 
         default:
             // an error occured
@@ -303,16 +303,16 @@ bool wxRegExImpl::Matches(const wxChar *str, int flags) const
 
         case REG_NOMATCH:
             // no match
-            return FALSE;
+            return false;
     }
 }
 
 bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
 {
-    wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
-    wxCHECK_MSG( m_nMatches, FALSE, _T("can't use with wxRE_NOSUB") );
-    wxCHECK_MSG( m_Matches, FALSE, _T("must call Matches() first") );
-    wxCHECK_MSG( index < m_nMatches, FALSE, _T("invalid match index") );
+    wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
+    wxCHECK_MSG( m_nMatches, false, _T("can't use with wxRE_NOSUB") );
+    wxCHECK_MSG( m_Matches, false, _T("must call Matches() first") );
+    wxCHECK_MSG( index < m_nMatches, false, _T("invalid match index") );
 
     const regmatch_t& match = m_Matches[index];
 
@@ -321,7 +321,7 @@ bool wxRegExImpl::GetMatch(size_t *start, size_t *len, size_t index) const
     if ( len )
         *len = match.rm_eo - match.rm_so;
 
-    return TRUE;
+    return true;
 }
 
 size_t wxRegExImpl::GetMatchCount() const
@@ -336,8 +336,8 @@ int wxRegExImpl::Replace(wxString *text,
                          const wxString& replacement,
                          size_t maxMatches) const
 {
-    wxCHECK_MSG( text, -1, _T("NULL text in wxRegEx::Replace") );
-    wxCHECK_MSG( IsValid(), -1, _T("must successfully Compile() first") );
+    wxCHECK_MSG( text, wxNOT_FOUND, _T("NULL text in wxRegEx::Replace") );
+    wxCHECK_MSG( IsValid(), wxNOT_FOUND, _T("must successfully Compile() first") );
 
     // the replacement text
     wxString textNew;
@@ -372,7 +372,7 @@ int wxRegExImpl::Replace(wxString *text,
         // the replacement text anew after each match
         if ( mayHaveBackrefs )
         {
-            mayHaveBackrefs = FALSE;
+            mayHaveBackrefs = false;
             textNew.clear();
             textNew.reserve(replacement.length());
 
@@ -413,7 +413,7 @@ int wxRegExImpl::Replace(wxString *text,
                         textNew += wxString(text->c_str() + matchStart + start,
                                             len);
 
-                        mayHaveBackrefs = TRUE;
+                        mayHaveBackrefs = true;
                     }
                 }
                 else // ordinary character
@@ -429,7 +429,7 @@ int wxRegExImpl::Replace(wxString *text,
             // we did have match as Matches() returned true above!
             wxFAIL_MSG( _T("internal logic error in wxRegEx::Replace") );
 
-            return -1;
+            return wxNOT_FOUND;
         }
 
         matchStart += start;
@@ -471,22 +471,22 @@ bool wxRegEx::Compile(const wxString& expr, int flags)
         delete m_impl;
         m_impl = NULL;
 
-        return FALSE;
+        return false;
     }
 
-    return TRUE;
+    return true;
 }
 
 bool wxRegEx::Matches(const wxChar *str, int flags) const
 {
-    wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
+    wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
     return m_impl->Matches(str, flags);
 }
 
 bool wxRegEx::GetMatch(size_t *start, size_t *len, size_t index) const
 {
-    wxCHECK_MSG( IsValid(), FALSE, _T("must successfully Compile() first") );
+    wxCHECK_MSG( IsValid(), false, _T("must successfully Compile() first") );
 
     return m_impl->GetMatch(start, len, index);
 }
@@ -511,7 +511,7 @@ int wxRegEx::Replace(wxString *pattern,
                      const wxString& replacement,
                      size_t maxMatches) const
 {
-    wxCHECK_MSG( IsValid(), -1, _T("must successfully Compile() first") );
+    wxCHECK_MSG( IsValid(), wxNOT_FOUND, _T("must successfully Compile() first") );
 
     return m_impl->Replace(pattern, replacement, maxMatches);
 }

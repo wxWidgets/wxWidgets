@@ -101,7 +101,7 @@ static bool DoRegionUnion(wxRegion& region,
 
     return true;
 }
- 
+
 
 bool wxRegion::Union(const wxBitmap& bmp)
 {

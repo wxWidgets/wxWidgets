@@ -31,7 +31,7 @@ enum
 {
     // use extended regex syntax
     wxRE_EXTENDED = 0,
-    
+
     // use advanced RE syntax (built-in regex only)
 #ifdef wxHAS_REGEX_ADVANCED
     wxRE_ADVANCED = 1,
@@ -87,15 +87,15 @@ public:
         (void)Compile(expr, flags);
     }
 
-    // return TRUE if this is a valid compiled regular expression
+    // return true if this is a valid compiled regular expression
     bool IsValid() const { return m_impl != NULL; }
 
-    // compile the string into regular expression, return TRUE if ok or FALSE
+    // compile the string into regular expression, return true if ok or false
     // if string has a syntax error
     bool Compile(const wxString& pattern, int flags = wxRE_DEFAULT);
 
     // matches the precompiled regular expression against a string, return
-    // TRUE if matches and FALSE otherwise
+    // true if matches and false otherwise
     //
     // flags may be combination of wxRE_NOTBOL and wxRE_NOTEOL
     //
@@ -107,7 +107,7 @@ public:
     //
     // may only be called after successful call to Matches()
     //
-    // return FALSE if no match or on error
+    // return false if no match or on error
     bool GetMatch(size_t *start, size_t *len, size_t index = 0) const;
 
     // return the part of string corresponding to the match, empty string is

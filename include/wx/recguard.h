@@ -29,7 +29,7 @@ class WXDLLIMPEXP_BASE wxRecursionGuard
 public:
     wxRecursionGuard(wxRecursionGuardFlag& flag)
         : m_flag(flag)
-    { 
+    {
         m_isInside = flag++ != 0;
     }
 
