@@ -52,7 +52,7 @@ wxEnumData::wxEnumData( wxEnumMemberData* data )
     {} ;
 }
 
-bool wxEnumData::HasEnumMemberValue(const wxChar *name, int *value)
+bool wxEnumData::HasEnumMemberValue(const wxChar *name, int *value) const
 {
     int i;
     for (i = 0; m_members[i].m_name ; i++ )
@@ -67,7 +67,7 @@ bool wxEnumData::HasEnumMemberValue(const wxChar *name, int *value)
     return false ;
 }
 
-int wxEnumData::GetEnumMemberValue(const wxChar *name)
+int wxEnumData::GetEnumMemberValue(const wxChar *name) const
 {
     int i;
     for (i = 0; m_members[i].m_name ; i++ )
@@ -80,7 +80,7 @@ int wxEnumData::GetEnumMemberValue(const wxChar *name)
     return 0 ;
 }
 
-const wxChar *wxEnumData::GetEnumMemberName(int value)
+const wxChar *wxEnumData::GetEnumMemberName(int value) const
 {
     int i;
     for (i = 0; m_members[i].m_name ; i++)
@@ -90,13 +90,13 @@ const wxChar *wxEnumData::GetEnumMemberName(int value)
     return wxT("") ;
 }
 
-int wxEnumData::GetEnumMemberValueByIndex( int idx )
+int wxEnumData::GetEnumMemberValueByIndex( int idx ) const
 {
     // we should cache the count in order to avoid out-of-bounds errors
     return m_members[idx].m_value ;
 }
 
-const wxChar * wxEnumData::GetEnumMemberNameByIndex( int idx )
+const wxChar * wxEnumData::GetEnumMemberNameByIndex( int idx ) const
 {
     // we should cache the count in order to avoid out-of-bounds errors
     return m_members[idx].m_name ;
@@ -118,7 +118,7 @@ template<> void wxStringReadValue(const wxString &s , bool &data )
 {
     int intdata ;
     wxSscanf(s, _T("%d"), &intdata ) ;
-    data = bool(intdata) ;
+    data = (bool)intdata ;
 }
 
 template<> void wxStringWriteValue(wxString &s , const bool &data )
