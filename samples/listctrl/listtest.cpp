@@ -117,7 +117,9 @@ static const int NUM_ICONS = 9;
 int wxCALLBACK MyCompareFunction(long item1, long item2, long sortData)
 {
     // inverse the order
-    return item1 < item2;
+    if (item1 < item2) return -1;
+    if (item1 > item2) return 1;
+    return 0;
 }
 
 // `Main program' equivalent, creating windows and returning main app frame
