@@ -157,6 +157,10 @@ public:
     // call this function to update it (m_menuBarFrame should be !NULL)
     void Refresh();
 
+    // To avoid compile warning
+    void Refresh( bool eraseBackground = TRUE,
+                          const wxRect *rect = (const wxRect *) NULL ) { wxWindow::Refresh(eraseBackground, rect); }
+
 protected:
     // common part of all ctors
     void Init();
