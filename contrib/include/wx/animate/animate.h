@@ -21,6 +21,7 @@
 #include <wx/gdicmn.h>
 #include <wx/list.h>
 #include <wx/timer.h>
+#include <wx/control.h>
 
 //#define ANIMDLLEXPORT WXDLLEXPORT
 #define ANIMDLLEXPORT
