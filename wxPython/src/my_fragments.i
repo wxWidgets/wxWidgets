@@ -27,7 +27,7 @@
         Py_DECREF(o3);
     }
     return target;
-}
+  }
 %}
 
 
