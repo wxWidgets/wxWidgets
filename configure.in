@@ -3183,7 +3183,7 @@ dnl ---------------------------------------------------------------------------
        if test "$wxUSE_DIRECTSHOW" = "yes"; then
           AC_DEFINE(wxUSE_DIRECTSHOW)
 	    LIBS="$LIBS -lstrmiids"          
-       if
+       fi
     fi
 fi
 
@@ -5838,7 +5838,7 @@ dnl note that we always link with -lm except for Mac OS X
 dnl extended.c uses floor() and is always linked in
 
 if test "$wxUSE_MAC" = 1 ; then
-    if test "$wxUSE_SOUND" = "yes"; -o "$wxUSE_MEDIACTRL" = "yes"; then
+    if test "$wxUSE_SOUND" = "yes" || test "$wxUSE_MEDIACTRL" = "yes"; then
        LDFLAGS="$LDFLAGS -framework QuickTime"
     fi
     if test "$USE_DARWIN" = 1; then
