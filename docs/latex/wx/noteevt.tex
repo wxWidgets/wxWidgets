@@ -16,6 +16,10 @@ before allowing the user to change it, it should process the PAGE\_CHANGING
 event, otherwise PAGE\_CHANGED is probably enough. In any case, it is probably
 unnecessary to process both events at once.
 
+{\bf NB:} under Windows, GetSelection() will return the same value as
+GetOldSelection() when called from PAGE\_CHANGING handler and not the page
+which is going to be selected if the handler doesn't call Veto().
+
 \wxheading{Derived from}
 
 \helpref{wxNotifyEvent}{wxnotifyevent}\\
