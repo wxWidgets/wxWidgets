@@ -44,12 +44,14 @@
 #include "wx/sckaddr.h"
 #include "wx/socket.h"
 
-// GRG: Why is this needed?
 
-#ifdef __WXGTK__
+#if defined(__WXMSW__)
+#define PROCESS_EVENTS() wxYield()
+#elif defined(__WXGTK__)
 #include <gtk/gtk.h>
-#define wxYield() gtk_main_iteration()
+#define PROCESS_EVENTS() gtk_main_iteration()
 #endif  
+
 
 // --------------------------------------------------------------
 // ClassInfos
@@ -188,7 +190,7 @@ wxUint32 wxSocketBase::DeferRead(char *buffer, wxUint32 nbytes)
 
   // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
-    wxYield();
+    PROCESS_EVENTS();
 
   timer.Stop();
 
@@ -442,7 +444,7 @@ wxUint32 wxSocketBase::DeferWrite(const char *buffer, wxUint32 nbytes)
 
   // Wait for buffer completion. 
   while (m_defer_buffer != NULL)
-    wxYield();
+    PROCESS_EVENTS();
 
   timer.Stop();
 
@@ -770,7 +772,7 @@ void wxSocketBase::RestoreState()
 // they poll the socket, using GSocket_Select(), to check for
 // the specified combination of event flags, until an event
 // occurs or until the timeout ellapses. The polling loop
-// calls wxYield(), so this won't block the GUI.
+// calls PROCESS_EVENTS(), so this won't block the GUI.
 
 bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags flags)
 {
@@ -848,7 +850,7 @@ bool wxSocketBase::_Wait(long seconds, long milliseconds, wxSocketEventFlags fla
     }
 
     if (timeout != 0)
-      wxYield();
+      PROCESS_EVENTS();
   }
   while ((state == -1) && timeout);
 
