@@ -32,7 +32,9 @@ class TestPanel(wx.Panel):
 
     def OnButton2(self, evt):
         try:
-            sound = wx.Sound(opj('data/plan.wav'))
+            #sound = wx.Sound(opj('data/plan.wav'))
+            data = open(opj('data/plan.wav'), 'rb').read()
+            sound = wx.SoundFromData(data)            
             self.log.write("before Play...\n")
             sound.Play(wx.SOUND_ASYNC)
             wx.YieldIfNeeded()
