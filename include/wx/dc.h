@@ -1,3 +1,14 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        dc.h
+// Purpose:     wxDC class
+// Author:      Vadim Zeitlin
+// Modified by:
+// Created:     05/25/99
+// RCS-ID:      $Id$
+// Copyright:   (c) wxWindows team
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef _WX_DC_H_BASE_
 #define _WX_DC_H_BASE_
 

@@ -338,3 +338,16 @@ long wxExecute(char **argv, bool sync, wxProcess *handler)
 
     return wxExecute(command, sync, handler);
 }
+
+bool wxGetFullHostName(wxChar *buf, int maxSize)
+{
+    DWORD nSize = maxSize;
+    if ( !::GetComputerName(buf, &nSize) )
+    {
+        wxLogLastError("GetComputerName");
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
