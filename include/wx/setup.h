@@ -73,5 +73,5 @@
 #define wxUSE_COMPATIBLE_COORD_TYPES 1
 #endif /* WXWIN_COMPATIBILITY_2_MAX */
 
-#endif // _WX_SETUP_H_BASE_
+#endif
 	/* _WX_SETUP_H_BASE_ */
