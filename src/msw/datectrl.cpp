@@ -29,6 +29,9 @@
 #if wxUSE_DATEPICKCTRL
 
 #include "wx/datectrl.h"
+#include "wx/app.h"
+#include "wx/intl.h"
+#include "wx/dynlib.h"
 
 #define _WX_DEFINE_DATE_EVENTS_
 #include "wx/dateevt.h"
@@ -82,6 +85,39 @@ wxDatePickerCtrl::Create(wxWindow *parent,
                          const wxValidator& validator,
                          const wxString& name)
 {
+    // although we already call InitCommonControls() in app.cpp which is
+    // supposed to initialize all common controls, in comctl32.dll 4.72 (and
+    // presumably earlier versions 4.70 and 4.71, date time picker not being
+    // supported in < 4.70 anyhow) it does not do it and we have to initialize
+    // it explicitely
+    static bool s_initDone = false; // MT-ok: used from GUI thread only
+    if ( !s_initDone )
+    {
+        if ( wxTheApp->GetComCtl32Version() < 470 )
+        {
+            wxLogError(_("This system doesn't support date picker control, please upgrade your version of comctl32.dll"));
+
+            return false;
+        }
+
+        INITCOMMONCONTROLSEX icex;
+        icex.dwSize = sizeof(icex);
+        icex.dwICC = ICC_DATE_CLASSES;
+
+        wxDynamicLibrary dllComCtl32(_T("comctl32.dll"), wxDL_VERBATIM);
+
+        typedef BOOL (WINAPI *ICCEx_t)(INITCOMMONCONTROLSEX *);
+        wxDYNLIB_FUNCTION( ICCEx_t, InitCommonControlsEx, dllComCtl32 );
+
+        if ( pfnInitCommonControlsEx )
+        {
+            (*pfnInitCommonControlsEx)(&icex);
+        }
+
+        s_initDone = true;
+    }
+
+
     // use wxDP_SPIN if wxDP_DEFAULT (0) was given as style
     if ( !(style & wxDP_DROPDOWN) )
         style |= wxDP_SPIN;
@@ -104,7 +140,9 @@ WXDWORD wxDatePickerCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     WXDWORD styleMSW = wxDatePickerCtrlBase::MSWGetStyle(style, exstyle);
 
-    if ( style & wxDP_SPIN )
+    // although MSDN doesn't mention it, DTS_UPDOWN doesn't work with
+    // comctl32.dll 4.72
+    if ( wxTheApp->GetComCtl32Version() > 472 && (style & wxDP_SPIN) )
         styleMSW |= DTS_UPDOWN;
     //else: drop down by default
 
