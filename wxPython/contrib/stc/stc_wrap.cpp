@@ -242,15 +242,14 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #define  SWIGTYPE_p_wxPoint swig_types[9] 
 #define  SWIGTYPE_p_wxDC swig_types[10] 
 #define  SWIGTYPE_p_char swig_types[11] 
-#define  SWIGTYPE_p_wxDragResult swig_types[12] 
-#define  SWIGTYPE_p_wxEvtHandler swig_types[13] 
-#define  SWIGTYPE_p_wxStyledTextCtrl swig_types[14] 
-#define  SWIGTYPE_p_wxFont swig_types[15] 
-#define  SWIGTYPE_p_wxControl swig_types[16] 
-#define  SWIGTYPE_p_wxEvent swig_types[17] 
-#define  SWIGTYPE_p_int swig_types[18] 
-#define  SWIGTYPE_p_wxMemoryBuffer swig_types[19] 
-static swig_type_info *swig_types[21];
+#define  SWIGTYPE_p_wxEvtHandler swig_types[12] 
+#define  SWIGTYPE_p_wxStyledTextCtrl swig_types[13] 
+#define  SWIGTYPE_p_wxFont swig_types[14] 
+#define  SWIGTYPE_p_wxControl swig_types[15] 
+#define  SWIGTYPE_p_wxEvent swig_types[16] 
+#define  SWIGTYPE_p_int swig_types[17] 
+#define  SWIGTYPE_p_wxMemoryBuffer swig_types[18] 
+static swig_type_info *swig_types[20];
 
 /* -------- TYPES TABLE (END) -------- */
 
@@ -358,7 +357,7 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 #ifdef __cplusplus
 extern "C" {
 #endif
-static int _wrap_STCNameStr_set(PyObject *) {
+static int _wrap_STCNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable STCNameStr is read-only.");
     return 1;
 }
@@ -9903,6 +9902,36 @@ static PyObject *_wrap_StyledTextCtrl_SetHotspotActiveUnderline(PyObject *self, 
 }
 
 
+static PyObject *_wrap_StyledTextCtrl_SetHotspotSingleLine(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    bool arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "singleLine", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetHotspotSingleLine",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetHotspotSingleLine(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_StyledTextCtrl_PositionBefore(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
@@ -10043,6 +10072,212 @@ static PyObject *_wrap_StyledTextCtrl_CopyText(PyObject *self, PyObject *args, P
         if (temp3)
         delete arg3;
     }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "mode", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetSelectionMode",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetSelectionMode(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetSelectionMode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_GetSelectionMode",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetSelectionMode();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_PyObj_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetLineSelStartPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineSelStartPosition",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetLineSelStartPosition(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_PyObj_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_GetLineSelEndPosition(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int arg2 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "line", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_GetLineSelEndPosition",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->GetLineSelEndPosition(arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_PyObj_FromInt((int)result);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SetWhitespaceChars(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    wxString *arg2 = 0 ;
+    bool temp2 = False ;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    char *kwnames[] = {
+        (char *) "self",(char *) "characters", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextCtrl_SetWhitespaceChars",kwnames,&obj0,&obj1)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetWhitespaceChars((wxString const &)*arg2);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return resultobj;
+    fail:
+    {
+        if (temp2)
+        delete arg2;
+    }
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_SetCharsDefault(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_SetCharsDefault",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        (arg1)->SetCharsDefault();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    Py_INCREF(Py_None); resultobj = Py_None;
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap_StyledTextCtrl_AutoCompGetCurrent(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj;
+    wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
+    int result;
+    PyObject * obj0 = 0 ;
+    char *kwnames[] = {
+        (char *) "self", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StyledTextCtrl_AutoCompGetCurrent",kwnames,&obj0)) goto fail;
+    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (int)(arg1)->AutoCompGetCurrent();
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_PyObj_FromInt((int)result);
+    return resultobj;
+    fail:
     return NULL;
 }
 
@@ -10947,9 +11182,8 @@ static PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *self, PyObject *args,
     wxStyledTextCtrl *arg1 = (wxStyledTextCtrl *) 0 ;
     int arg2 ;
     int arg3 ;
-    wxDragResult arg4 ;
-    wxDragResult result;
-    wxDragResult *argp4 ;
+    int arg4 ;
+    int result;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -10968,20 +11202,18 @@ static PyObject *_wrap_StyledTextCtrl_DoDragOver(PyObject *self, PyObject *args,
         arg3 = (int) SWIG_PyObj_AsInt(obj2);  
         if (PyErr_Occurred()) SWIG_fail;
     }
-    if ((SWIG_ConvertPtr(obj3,(void **) &argp4, SWIGTYPE_p_wxDragResult,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg4 = *argp4; 
+    {
+        arg4 = (wxDragResult) SWIG_PyObj_AsInt(obj3);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->DoDragOver(arg2,arg3,arg4);
+        result = (int)(arg1)->DoDragOver(arg2,arg3,(wxDragResult )arg4);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        wxDragResult * resultptr;
-        resultptr = new wxDragResult((wxDragResult &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxDragResult, 1);
-    }
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -11703,8 +11935,7 @@ static PyObject *_wrap_StyledTextEvent_SetDragAllowMove(PyObject *self, PyObject
 static PyObject *_wrap_StyledTextEvent_SetDragResult(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
-    wxDragResult arg2 ;
-    wxDragResult *argp2 ;
+    int arg2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -11713,11 +11944,13 @@ static PyObject *_wrap_StyledTextEvent_SetDragResult(PyObject *self, PyObject *a
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:StyledTextEvent_SetDragResult",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &argp2, SWIGTYPE_p_wxDragResult,SWIG_POINTER_EXCEPTION) == -1)) SWIG_fail;
-    arg2 = *argp2; 
+    {
+        arg2 = (wxDragResult) SWIG_PyObj_AsInt(obj1);  
+        if (PyErr_Occurred()) SWIG_fail;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        (arg1)->SetDragResult(arg2);
+        (arg1)->SetDragResult((wxDragResult )arg2);
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
@@ -12219,7 +12452,7 @@ static PyObject *_wrap_StyledTextEvent_GetDragAllowMove(PyObject *self, PyObject
 static PyObject *_wrap_StyledTextEvent_GetDragResult(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxStyledTextEvent *arg1 = (wxStyledTextEvent *) 0 ;
-    wxDragResult result;
+    int result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -12229,16 +12462,12 @@ static PyObject *_wrap_StyledTextEvent_GetDragResult(PyObject *self, PyObject *a
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxStyledTextEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        result = (arg1)->GetDragResult();
+        result = (int)(arg1)->GetDragResult();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    {
-        wxDragResult * resultptr;
-        resultptr = new wxDragResult((wxDragResult &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxDragResult, 1);
-    }
+    resultobj = SWIG_PyObj_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -12662,10 +12891,18 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"StyledTextCtrl_SetHotspotActiveForeground", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveForeground, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_SetHotspotActiveBackground", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveBackground, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_SetHotspotActiveUnderline", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotActiveUnderline, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_SetHotspotSingleLine", (PyCFunction) _wrap_StyledTextCtrl_SetHotspotSingleLine, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_PositionBefore", (PyCFunction) _wrap_StyledTextCtrl_PositionBefore, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_PositionAfter", (PyCFunction) _wrap_StyledTextCtrl_PositionAfter, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_CopyRange", (PyCFunction) _wrap_StyledTextCtrl_CopyRange, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_CopyText", (PyCFunction) _wrap_StyledTextCtrl_CopyText, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_SetSelectionMode", (PyCFunction) _wrap_StyledTextCtrl_SetSelectionMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_GetSelectionMode", (PyCFunction) _wrap_StyledTextCtrl_GetSelectionMode, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_GetLineSelStartPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineSelStartPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_GetLineSelEndPosition", (PyCFunction) _wrap_StyledTextCtrl_GetLineSelEndPosition, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_SetWhitespaceChars", (PyCFunction) _wrap_StyledTextCtrl_SetWhitespaceChars, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_SetCharsDefault", (PyCFunction) _wrap_StyledTextCtrl_SetCharsDefault, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"StyledTextCtrl_AutoCompGetCurrent", (PyCFunction) _wrap_StyledTextCtrl_AutoCompGetCurrent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_StartRecord", (PyCFunction) _wrap_StyledTextCtrl_StartRecord, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_StopRecord", (PyCFunction) _wrap_StyledTextCtrl_StopRecord, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"StyledTextCtrl_SetLexer", (PyCFunction) _wrap_StyledTextCtrl_SetLexer, METH_VARARGS | METH_KEYWORDS },
@@ -12774,6 +13011,9 @@ static void *_p_wxSizerTo_p_wxObject(void *x) {
 static void *_p_wxGridBagSizerTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxSizer *)(wxGridSizer *)(wxFlexGridSizer *) ((wxGridBagSizer *) x));
 }
+static void *_p_wxFileHistoryTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxFileHistory *) x));
+}
 static void *_p_wxUpdateUIEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxUpdateUIEvent *) x));
 }
@@ -12816,8 +13056,14 @@ static void *_p_wxControlTo_p_wxObject(void *x) {
 static void *_p_wxSetCursorEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxSetCursorEvent *) x));
 }
+static void *_p_wxTimerEventTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvent *) ((wxTimerEvent *) x));
+}
 static void *_p_wxFSFileTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxFSFile *) x));
+}
+static void *_p_wxClipboardTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxClipboard *) x));
 }
 static void *_p_wxPySizerTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxSizer *) ((wxPySizer *) x));
@@ -12833,6 +13079,9 @@ static void *_p_wxNotifyEventTo_p_wxObject(void *x) {
 }
 static void *_p_wxShowEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxShowEvent *) x));
+}
+static void *_p_wxToolTipTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxToolTip *) x));
 }
 static void *_p_wxMenuItemTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxMenuItem *) x));
@@ -12909,6 +13158,12 @@ static void *_p_wxImageTo_p_wxObject(void *x) {
 static void *_p_wxScrollWinEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxScrollWinEvent *) x));
 }
+static void *_p_wxSystemOptionsTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxSystemOptions *) x));
+}
+static void *_p_wxJoystickEventTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvent *) ((wxJoystickEvent *) x));
+}
 static void *_p_wxWindowDestroyEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxWindowDestroyEvent *) x));
 }
@@ -12926,6 +13181,9 @@ static void *_p_wxMenuTo_p_wxObject(void *x) {
 }
 static void *_p_wxMenuBarTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxMenuBar *) x));
+}
+static void *_p_wxPyProcessTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *) ((wxPyProcess *) x));
 }
 static void *_p_wxFileSystemTo_p_wxObject(void *x) {
     return (void *)((wxObject *)  ((wxFileSystem *) x));
@@ -12948,6 +13206,9 @@ static void *_p_wxMouseEventTo_p_wxObject(void *x) {
 static void *_p_wxEraseEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *) ((wxEraseEvent *) x));
 }
+static void *_p_wxBusyInfoTo_p_wxObject(void *x) {
+    return (void *)((wxObject *)  ((wxBusyInfo *) x));
+}
 static void *_p_wxPyCommandEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxPyCommandEvent *) x));
 }
@@ -12963,6 +13224,9 @@ static void *_p_wxFocusEventTo_p_wxObject(void *x) {
 static void *_p_wxChildFocusEventTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvent *)(wxCommandEvent *) ((wxChildFocusEvent *) x));
 }
+static void *_p_wxProcessEventTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvent *) ((wxProcessEvent *) x));
+}
 static void *_p_wxControlWithItemsTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxControl *) ((wxControlWithItems *) x));
 }
@@ -12971,6 +13235,9 @@ static void *_p_wxPyValidatorTo_p_wxObject(void *x) {
 }
 static void *_p_wxValidatorTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *) ((wxValidator *) x));
+}
+static void *_p_wxPyTimerTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *) ((wxPyTimer *) x));
 }
 static void *_p_wxControlTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxControl *) x));
@@ -13023,6 +13290,9 @@ static void *_p_wxControlWithItemsTo_p_wxEvtHandler(void *x) {
 static void *_p_wxPyAppTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *)  ((wxPyApp *) x));
 }
+static void *_p_wxPyTimerTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *)  ((wxPyTimer *) x));
+}
 static void *_p_wxStyledTextCtrlTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxControl *) ((wxStyledTextCtrl *) x));
 }
@@ -13037,6 +13307,9 @@ static void *_p_wxMenuBarTo_p_wxEvtHandler(void *x) {
 }
 static void *_p_wxMenuTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *)  ((wxMenu *) x));
+}
+static void *_p_wxPyProcessTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *)  ((wxPyProcess *) x));
 }
 static void *_p_wxControlWithItemsTo_p_wxControl(void *x) {
     return (void *)((wxControl *)  ((wxControlWithItems *) x));
@@ -13062,6 +13335,9 @@ static void *_p_wxEraseEventTo_p_wxEvent(void *x) {
 static void *_p_wxSetCursorEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxSetCursorEvent *) x));
 }
+static void *_p_wxTimerEventTo_p_wxEvent(void *x) {
+    return (void *)((wxEvent *)  ((wxTimerEvent *) x));
+}
 static void *_p_wxInitDialogEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxInitDialogEvent *) x));
 }
@@ -13073,6 +13349,9 @@ static void *_p_wxPyEventTo_p_wxEvent(void *x) {
 }
 static void *_p_wxNotifyEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *) (wxCommandEvent *) ((wxNotifyEvent *) x));
+}
+static void *_p_wxJoystickEventTo_p_wxEvent(void *x) {
+    return (void *)((wxEvent *)  ((wxJoystickEvent *) x));
 }
 static void *_p_wxIdleEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxIdleEvent *) x));
@@ -13131,6 +13410,9 @@ static void *_p_wxFocusEventTo_p_wxEvent(void *x) {
 static void *_p_wxChildFocusEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *) (wxCommandEvent *) ((wxChildFocusEvent *) x));
 }
+static void *_p_wxProcessEventTo_p_wxEvent(void *x) {
+    return (void *)((wxEvent *)  ((wxProcessEvent *) x));
+}
 static void *_p_wxShowEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxShowEvent *) x));
 }
@@ -13154,7 +13436,7 @@ static void *_p_wxScrollWinEventTo_p_wxEvent(void *x) {
 }
 static swig_type_info _swigt__p_wxRect[] = {{"_p_wxRect", 0, "wxRect *", 0},{"_p_wxRect"},{0}};
 static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0},{"_p_wxColour"},{0}};
-static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{0}};
+static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxFileHistory", _p_wxFileHistoryTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxClipboard", _p_wxClipboardTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxToolTip", _p_wxToolTipTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxSystemOptions", _p_wxSystemOptionsTo_p_wxObject},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxBusyInfo", _p_wxBusyInfoTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxObject},{0}};
 static swig_type_info _swigt__p_wxScrollBar[] = {{"_p_wxScrollBar", 0, "wxScrollBar *", 0},{"_p_wxScrollBar"},{0}};
 static swig_type_info _swigt__p_wxStyledTextEvent[] = {{"_p_wxStyledTextEvent", 0, "wxStyledTextEvent *", 0},{"_p_wxStyledTextEvent"},{0}};
 static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{0}};
@@ -13164,12 +13446,11 @@ static swig_type_info _swigt__p_void[] = {{"_p_void", 0, "void *", 0},{"_p_void"
 static swig_type_info _swigt__p_wxPoint[] = {{"_p_wxPoint", 0, "wxPoint *", 0},{"_p_wxPoint"},{0}};
 static swig_type_info _swigt__p_wxDC[] = {{"_p_wxDC", 0, "wxDC *", 0},{"_p_wxDC"},{0}};
 static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
-static swig_type_info _swigt__p_wxDragResult[] = {{"_p_wxDragResult", 0, "wxDragResult *", 0},{"_p_wxDragResult"},{0}};
-static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxEvtHandler},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{0}};
+static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxEvtHandler},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxEvtHandler},{0}};
 static swig_type_info _swigt__p_wxStyledTextCtrl[] = {{"_p_wxStyledTextCtrl", 0, "wxStyledTextCtrl *", 0},{"_p_wxStyledTextCtrl"},{0}};
 static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
 static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0},{"_p_wxControl"},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl},{"_p_wxStyledTextCtrl", _p_wxStyledTextCtrlTo_p_wxControl},{0}};
-static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent},{"_p_wxEvent"},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent},{0}};
+static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxEvent},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxEvent},{"_p_wxEvent"},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent},{"_p_wxStyledTextEvent", _p_wxStyledTextEventTo_p_wxEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxEvent},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent},{0}};
 static swig_type_info _swigt__p_int[] = {{"_p_int", 0, "int *", 0},{"_p_int"},{0}};
 static swig_type_info _swigt__p_wxMemoryBuffer[] = {{"_p_wxMemoryBuffer", 0, "wxMemoryBuffer *", 0},{"_p_wxMemoryBuffer"},{0}};
 
@@ -13186,7 +13467,6 @@ _swigt__p_void,
 _swigt__p_wxPoint, 
 _swigt__p_wxDC, 
 _swigt__p_char, 
-_swigt__p_wxDragResult, 
 _swigt__p_wxEvtHandler, 
 _swigt__p_wxStyledTextCtrl, 
 _swigt__p_wxFont, 
@@ -13318,6 +13598,7 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_INDIC_DIAGONAL", SWIG_PyObj_FromInt((int)3));
     PyDict_SetItemString(d,"STC_INDIC_STRIKE", SWIG_PyObj_FromInt((int)4));
     PyDict_SetItemString(d,"STC_INDIC_HIDDEN", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_INDIC_BOX", SWIG_PyObj_FromInt((int)6));
     PyDict_SetItemString(d,"STC_INDIC0_MASK", SWIG_PyObj_FromInt((int)0x20));
     PyDict_SetItemString(d,"STC_INDIC1_MASK", SWIG_PyObj_FromInt((int)0x40));
     PyDict_SetItemString(d,"STC_INDIC2_MASK", SWIG_PyObj_FromInt((int)0x80));
@@ -13364,6 +13645,9 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_CARET_STRICT", SWIG_PyObj_FromInt((int)0x04));
     PyDict_SetItemString(d,"STC_CARET_JUMPS", SWIG_PyObj_FromInt((int)0x10));
     PyDict_SetItemString(d,"STC_CARET_EVEN", SWIG_PyObj_FromInt((int)0x08));
+    PyDict_SetItemString(d,"STC_SEL_STREAM", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_SEL_RECTANGLE", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_SEL_LINES", SWIG_PyObj_FromInt((int)2));
     PyDict_SetItemString(d,"STC_KEYWORDSET_MAX", SWIG_PyObj_FromInt((int)8));
     PyDict_SetItemString(d,"STC_MOD_INSERTTEXT", SWIG_PyObj_FromInt((int)0x1));
     PyDict_SetItemString(d,"STC_MOD_DELETETEXT", SWIG_PyObj_FromInt((int)0x2));
@@ -13442,6 +13726,16 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_LEX_PS", SWIG_PyObj_FromInt((int)42));
     PyDict_SetItemString(d,"STC_LEX_NSIS", SWIG_PyObj_FromInt((int)43));
     PyDict_SetItemString(d,"STC_LEX_MMIXAL", SWIG_PyObj_FromInt((int)44));
+    PyDict_SetItemString(d,"STC_LEX_CLW", SWIG_PyObj_FromInt((int)45));
+    PyDict_SetItemString(d,"STC_LEX_CLWNOCASE", SWIG_PyObj_FromInt((int)46));
+    PyDict_SetItemString(d,"STC_LEX_LOT", SWIG_PyObj_FromInt((int)47));
+    PyDict_SetItemString(d,"STC_LEX_YAML", SWIG_PyObj_FromInt((int)48));
+    PyDict_SetItemString(d,"STC_LEX_TEX", SWIG_PyObj_FromInt((int)49));
+    PyDict_SetItemString(d,"STC_LEX_METAPOST", SWIG_PyObj_FromInt((int)50));
+    PyDict_SetItemString(d,"STC_LEX_POWERBASIC", SWIG_PyObj_FromInt((int)51));
+    PyDict_SetItemString(d,"STC_LEX_FORTH", SWIG_PyObj_FromInt((int)52));
+    PyDict_SetItemString(d,"STC_LEX_ERLANG", SWIG_PyObj_FromInt((int)53));
+    PyDict_SetItemString(d,"STC_LEX_OCTAVE", SWIG_PyObj_FromInt((int)54));
     PyDict_SetItemString(d,"STC_LEX_AUTOMATIC", SWIG_PyObj_FromInt((int)1000));
     PyDict_SetItemString(d,"STC_P_DEFAULT", SWIG_PyObj_FromInt((int)0));
     PyDict_SetItemString(d,"STC_P_COMMENTLINE", SWIG_PyObj_FromInt((int)1));
@@ -13626,6 +13920,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_B_OPERATOR", SWIG_PyObj_FromInt((int)6));
     PyDict_SetItemString(d,"STC_B_IDENTIFIER", SWIG_PyObj_FromInt((int)7));
     PyDict_SetItemString(d,"STC_B_DATE", SWIG_PyObj_FromInt((int)8));
+    PyDict_SetItemString(d,"STC_B_STRINGEOL", SWIG_PyObj_FromInt((int)9));
+    PyDict_SetItemString(d,"STC_B_KEYWORD2", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_B_KEYWORD3", SWIG_PyObj_FromInt((int)11));
+    PyDict_SetItemString(d,"STC_B_KEYWORD4", SWIG_PyObj_FromInt((int)12));
     PyDict_SetItemString(d,"STC_PROPS_DEFAULT", SWIG_PyObj_FromInt((int)0));
     PyDict_SetItemString(d,"STC_PROPS_COMMENT", SWIG_PyObj_FromInt((int)1));
     PyDict_SetItemString(d,"STC_PROPS_SECTION", SWIG_PyObj_FromInt((int)2));
@@ -13673,6 +13971,8 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_ERR_PHP", SWIG_PyObj_FromInt((int)14));
     PyDict_SetItemString(d,"STC_ERR_ELF", SWIG_PyObj_FromInt((int)15));
     PyDict_SetItemString(d,"STC_ERR_IFC", SWIG_PyObj_FromInt((int)16));
+    PyDict_SetItemString(d,"STC_ERR_IFORT", SWIG_PyObj_FromInt((int)17));
+    PyDict_SetItemString(d,"STC_ERR_ABSF", SWIG_PyObj_FromInt((int)18));
     PyDict_SetItemString(d,"STC_BAT_DEFAULT", SWIG_PyObj_FromInt((int)0));
     PyDict_SetItemString(d,"STC_BAT_COMMENT", SWIG_PyObj_FromInt((int)1));
     PyDict_SetItemString(d,"STC_BAT_WORD", SWIG_PyObj_FromInt((int)2));
@@ -13771,6 +14071,18 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_NNCRONTAB_STRING", SWIG_PyObj_FromInt((int)8));
     PyDict_SetItemString(d,"STC_NNCRONTAB_ENVIRONMENT", SWIG_PyObj_FromInt((int)9));
     PyDict_SetItemString(d,"STC_NNCRONTAB_IDENTIFIER", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_FORTH_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_FORTH_COMMENT", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_FORTH_COMMENT_ML", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_FORTH_IDENTIFIER", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_FORTH_CONTROL", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_FORTH_KEYWORD", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_FORTH_DEFWORD", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_FORTH_PREWORD1", SWIG_PyObj_FromInt((int)7));
+    PyDict_SetItemString(d,"STC_FORTH_PREWORD2", SWIG_PyObj_FromInt((int)8));
+    PyDict_SetItemString(d,"STC_FORTH_NUMBER", SWIG_PyObj_FromInt((int)9));
+    PyDict_SetItemString(d,"STC_FORTH_STRING", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_FORTH_LOCALE", SWIG_PyObj_FromInt((int)11));
     PyDict_SetItemString(d,"STC_MATLAB_DEFAULT", SWIG_PyObj_FromInt((int)0));
     PyDict_SetItemString(d,"STC_MATLAB_COMMENT", SWIG_PyObj_FromInt((int)1));
     PyDict_SetItemString(d,"STC_MATLAB_COMMAND", SWIG_PyObj_FromInt((int)2));
@@ -13779,26 +14091,23 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_MATLAB_STRING", SWIG_PyObj_FromInt((int)5));
     PyDict_SetItemString(d,"STC_MATLAB_OPERATOR", SWIG_PyObj_FromInt((int)6));
     PyDict_SetItemString(d,"STC_MATLAB_IDENTIFIER", SWIG_PyObj_FromInt((int)7));
+    PyDict_SetItemString(d,"STC_MATLAB_DOUBLEQUOTESTRING", SWIG_PyObj_FromInt((int)8));
     PyDict_SetItemString(d,"STC_SCRIPTOL_DEFAULT", SWIG_PyObj_FromInt((int)0));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENT", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_WHITE", SWIG_PyObj_FromInt((int)1));
     PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTLINE", SWIG_PyObj_FromInt((int)2));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTDOC", SWIG_PyObj_FromInt((int)3));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_NUMBER", SWIG_PyObj_FromInt((int)4));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_WORD", SWIG_PyObj_FromInt((int)5));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_STRING", SWIG_PyObj_FromInt((int)6));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_CHARACTER", SWIG_PyObj_FromInt((int)7));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_UUID", SWIG_PyObj_FromInt((int)8));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_PREPROCESSOR", SWIG_PyObj_FromInt((int)9));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_OPERATOR", SWIG_PyObj_FromInt((int)10));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_IDENTIFIER", SWIG_PyObj_FromInt((int)11));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_STRINGEOL", SWIG_PyObj_FromInt((int)12));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_VERBATIM", SWIG_PyObj_FromInt((int)13));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_REGEX", SWIG_PyObj_FromInt((int)14));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTLINEDOC", SWIG_PyObj_FromInt((int)15));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_WORD2", SWIG_PyObj_FromInt((int)16));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTDOCKEYWORD", SWIG_PyObj_FromInt((int)17));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTDOCKEYWORDERROR", SWIG_PyObj_FromInt((int)18));
-    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTBASIC", SWIG_PyObj_FromInt((int)19));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_PERSISTENT", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_CSTYLE", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_COMMENTBLOCK", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_NUMBER", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_STRING", SWIG_PyObj_FromInt((int)7));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_CHARACTER", SWIG_PyObj_FromInt((int)8));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_STRINGEOL", SWIG_PyObj_FromInt((int)9));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_KEYWORD", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_OPERATOR", SWIG_PyObj_FromInt((int)11));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_IDENTIFIER", SWIG_PyObj_FromInt((int)12));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_TRIPLE", SWIG_PyObj_FromInt((int)13));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_CLASSNAME", SWIG_PyObj_FromInt((int)14));
+    PyDict_SetItemString(d,"STC_SCRIPTOL_PREPROCESSOR", SWIG_PyObj_FromInt((int)15));
     PyDict_SetItemString(d,"STC_ASM_DEFAULT", SWIG_PyObj_FromInt((int)0));
     PyDict_SetItemString(d,"STC_ASM_COMMENT", SWIG_PyObj_FromInt((int)1));
     PyDict_SetItemString(d,"STC_ASM_NUMBER", SWIG_PyObj_FromInt((int)2));
@@ -13810,6 +14119,10 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_ASM_REGISTER", SWIG_PyObj_FromInt((int)8));
     PyDict_SetItemString(d,"STC_ASM_DIRECTIVE", SWIG_PyObj_FromInt((int)9));
     PyDict_SetItemString(d,"STC_ASM_DIRECTIVEOPERAND", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_ASM_COMMENTBLOCK", SWIG_PyObj_FromInt((int)11));
+    PyDict_SetItemString(d,"STC_ASM_CHARACTER", SWIG_PyObj_FromInt((int)12));
+    PyDict_SetItemString(d,"STC_ASM_STRINGEOL", SWIG_PyObj_FromInt((int)13));
+    PyDict_SetItemString(d,"STC_ASM_EXTINSTRUCTION", SWIG_PyObj_FromInt((int)14));
     PyDict_SetItemString(d,"STC_F_DEFAULT", SWIG_PyObj_FromInt((int)0));
     PyDict_SetItemString(d,"STC_F_COMMENT", SWIG_PyObj_FromInt((int)1));
     PyDict_SetItemString(d,"STC_F_NUMBER", SWIG_PyObj_FromInt((int)2));
@@ -13928,6 +14241,65 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_MMIXAL_OPERATOR", SWIG_PyObj_FromInt((int)15));
     PyDict_SetItemString(d,"STC_MMIXAL_SYMBOL", SWIG_PyObj_FromInt((int)16));
     PyDict_SetItemString(d,"STC_MMIXAL_INCLUDE", SWIG_PyObj_FromInt((int)17));
+    PyDict_SetItemString(d,"STC_CLW_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_CLW_LABEL", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_CLW_COMMENT", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_CLW_STRING", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_CLW_USER_IDENTIFIER", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_CLW_INTEGER_CONSTANT", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_CLW_REAL_CONSTANT", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_CLW_PICTURE_STRING", SWIG_PyObj_FromInt((int)7));
+    PyDict_SetItemString(d,"STC_CLW_KEYWORD", SWIG_PyObj_FromInt((int)8));
+    PyDict_SetItemString(d,"STC_CLW_COMPILER_DIRECTIVE", SWIG_PyObj_FromInt((int)9));
+    PyDict_SetItemString(d,"STC_CLW_BUILTIN_PROCEDURES_FUNCTION", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_CLW_STRUCTURE_DATA_TYPE", SWIG_PyObj_FromInt((int)11));
+    PyDict_SetItemString(d,"STC_CLW_ATTRIBUTE", SWIG_PyObj_FromInt((int)12));
+    PyDict_SetItemString(d,"STC_CLW_STANDARD_EQUATE", SWIG_PyObj_FromInt((int)13));
+    PyDict_SetItemString(d,"STC_CLW_ERROR", SWIG_PyObj_FromInt((int)14));
+    PyDict_SetItemString(d,"STC_LOT_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_LOT_HEADER", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_LOT_BREAK", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_LOT_SET", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_LOT_PASS", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_LOT_FAIL", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_LOT_ABORT", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_YAML_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_YAML_COMMENT", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_YAML_IDENTIFIER", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_YAML_KEYWORD", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_YAML_NUMBER", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_YAML_REFERENCE", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_YAML_DOCUMENT", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_YAML_TEXT", SWIG_PyObj_FromInt((int)7));
+    PyDict_SetItemString(d,"STC_YAML_ERROR", SWIG_PyObj_FromInt((int)8));
+    PyDict_SetItemString(d,"STC_TEX_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_TEX_SPECIAL", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_TEX_GROUP", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_TEX_SYMBOL", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_TEX_COMMAND", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_TEX_TEXT", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_METAPOST_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_METAPOST_SPECIAL", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_METAPOST_GROUP", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_METAPOST_SYMBOL", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_METAPOST_COMMAND", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_METAPOST_TEXT", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_METAPOST_EXTRA", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_ERLANG_DEFAULT", SWIG_PyObj_FromInt((int)0));
+    PyDict_SetItemString(d,"STC_ERLANG_COMMENT", SWIG_PyObj_FromInt((int)1));
+    PyDict_SetItemString(d,"STC_ERLANG_VARIABLE", SWIG_PyObj_FromInt((int)2));
+    PyDict_SetItemString(d,"STC_ERLANG_NUMBER", SWIG_PyObj_FromInt((int)3));
+    PyDict_SetItemString(d,"STC_ERLANG_KEYWORD", SWIG_PyObj_FromInt((int)4));
+    PyDict_SetItemString(d,"STC_ERLANG_STRING", SWIG_PyObj_FromInt((int)5));
+    PyDict_SetItemString(d,"STC_ERLANG_OPERATOR", SWIG_PyObj_FromInt((int)6));
+    PyDict_SetItemString(d,"STC_ERLANG_ATOM", SWIG_PyObj_FromInt((int)7));
+    PyDict_SetItemString(d,"STC_ERLANG_FUNCTION_NAME", SWIG_PyObj_FromInt((int)8));
+    PyDict_SetItemString(d,"STC_ERLANG_CHARACTER", SWIG_PyObj_FromInt((int)9));
+    PyDict_SetItemString(d,"STC_ERLANG_MACRO", SWIG_PyObj_FromInt((int)10));
+    PyDict_SetItemString(d,"STC_ERLANG_RECORD", SWIG_PyObj_FromInt((int)11));
+    PyDict_SetItemString(d,"STC_ERLANG_SEPARATOR", SWIG_PyObj_FromInt((int)12));
+    PyDict_SetItemString(d,"STC_ERLANG_NODE_NAME", SWIG_PyObj_FromInt((int)13));
+    PyDict_SetItemString(d,"STC_ERLANG_UNKNOWN", SWIG_PyObj_FromInt((int)31));
     PyDict_SetItemString(d,"STC_CMD_REDO", SWIG_PyObj_FromInt((int)2011));
     PyDict_SetItemString(d,"STC_CMD_SELECTALL", SWIG_PyObj_FromInt((int)2013));
     PyDict_SetItemString(d,"STC_CMD_UNDO", SWIG_PyObj_FromInt((int)2176));
@@ -14001,6 +14373,23 @@ SWIGEXPORT(void) SWIG_init(void) {
     PyDict_SetItemString(d,"STC_CMD_PARADOWNEXTEND", SWIG_PyObj_FromInt((int)2414));
     PyDict_SetItemString(d,"STC_CMD_PARAUP", SWIG_PyObj_FromInt((int)2415));
     PyDict_SetItemString(d,"STC_CMD_PARAUPEXTEND", SWIG_PyObj_FromInt((int)2416));
+    PyDict_SetItemString(d,"STC_CMD_LINEDOWNRECTEXTEND", SWIG_PyObj_FromInt((int)2426));
+    PyDict_SetItemString(d,"STC_CMD_LINEUPRECTEXTEND", SWIG_PyObj_FromInt((int)2427));
+    PyDict_SetItemString(d,"STC_CMD_CHARLEFTRECTEXTEND", SWIG_PyObj_FromInt((int)2428));
+    PyDict_SetItemString(d,"STC_CMD_CHARRIGHTRECTEXTEND", SWIG_PyObj_FromInt((int)2429));
+    PyDict_SetItemString(d,"STC_CMD_HOMERECTEXTEND", SWIG_PyObj_FromInt((int)2430));
+    PyDict_SetItemString(d,"STC_CMD_VCHOMERECTEXTEND", SWIG_PyObj_FromInt((int)2431));
+    PyDict_SetItemString(d,"STC_CMD_LINEENDRECTEXTEND", SWIG_PyObj_FromInt((int)2432));
+    PyDict_SetItemString(d,"STC_CMD_PAGEUPRECTEXTEND", SWIG_PyObj_FromInt((int)2433));
+    PyDict_SetItemString(d,"STC_CMD_PAGEDOWNRECTEXTEND", SWIG_PyObj_FromInt((int)2434));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEUP", SWIG_PyObj_FromInt((int)2435));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEUPEXTEND", SWIG_PyObj_FromInt((int)2436));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEDOWN", SWIG_PyObj_FromInt((int)2437));
+    PyDict_SetItemString(d,"STC_CMD_STUTTEREDPAGEDOWNEXTEND", SWIG_PyObj_FromInt((int)2438));
+    PyDict_SetItemString(d,"STC_CMD_WORDLEFTEND", SWIG_PyObj_FromInt((int)2439));
+    PyDict_SetItemString(d,"STC_CMD_WORDLEFTENDEXTEND", SWIG_PyObj_FromInt((int)2440));
+    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTEND", SWIG_PyObj_FromInt((int)2441));
+    PyDict_SetItemString(d,"STC_CMD_WORDRIGHTENDEXTEND", SWIG_PyObj_FromInt((int)2442));
     PyDict_SetItemString(d,"wxEVT_STC_CHANGE", SWIG_PyObj_FromInt((int)wxEVT_STC_CHANGE));
     PyDict_SetItemString(d,"wxEVT_STC_STYLENEEDED", SWIG_PyObj_FromInt((int)wxEVT_STC_STYLENEEDED));
     PyDict_SetItemString(d,"wxEVT_STC_CHARADDED", SWIG_PyObj_FromInt((int)wxEVT_STC_CHARADDED));

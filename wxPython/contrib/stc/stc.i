@@ -23,6 +23,7 @@
 //---------------------------------------------------------------------------
 
 %import core.i
+%import misc.i  // for DnD
 %pythoncode { wx = core }
 
 MAKE_CONST_WXSTRING(STCNameStr);
