@@ -59,6 +59,7 @@
     <subproject id="opengl" template="sub"/>
     <subproject id="ownerdrw" template="sub"/>
     <subproject id="png" template="sub"/>
+    <subproject id="popup" template="sub"/>
     <subproject id="printing" template="sub"/>
     <subproject id="propsize" template="sub"/>
     <subproject id="regtest" template="sub"/>
