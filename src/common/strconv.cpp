@@ -776,7 +776,8 @@ void wxCSConv::LoadNow()
                 SetName(name);
         }
 
-        m_cset = wxGetCharacterSet(m_name);
+        // wxGetCharacterSet() complains about NULL name
+        m_cset = m_name ? wxGetCharacterSet(m_name) : NULL;
         m_deferred = FALSE;
     }
 }
