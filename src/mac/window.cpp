@@ -804,16 +804,31 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
 void wxWindowMac::Refresh(bool eraseBack, const wxRect *rect)
 {
     if ( MacGetTopLevelWindow() == NULL )
-      return ;
+        return ;
       
-    wxPoint client ;
-    client = GetClientAreaOrigin( ) ;
-    Rect clientrect = { -client.y , -client.x , m_height - client.y , m_width - client.x} ;
+    wxPoint client = GetClientAreaOrigin();
+    int x1 = -client.x;
+    int y1 = -client.y;
+    int x2 = m_width - client.x;
+    int y2 = m_height - client.y;
+
+    if (IsKindOf( CLASSINFO(wxButton)))
+    {
+        // buttons have an "aura"
+        y1 -= 5;
+        x1 -= 5;
+        y2 += 5;
+        x2 += 5;
+    }
+
+    Rect clientrect = { y1, x1, y2, x2 };
+    
     if ( rect )
     {
         Rect r = { rect->y , rect->x , rect->y + rect->height , rect->x + rect->width } ;
         SectRect( &clientrect , &r , &clientrect ) ;        
     }
+    
     if ( !EmptyRect( &clientrect ) )
     {
       int top = 0 , left = 0 ;
