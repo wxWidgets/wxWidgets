@@ -35,7 +35,7 @@ For example:
 
 \small{%
 \begin{verbatim}
-  void MyWindow::OnPaint(wxPaintEvent\& event)
+  void MyWindow::OnPaint(wxPaintEvent& event)
   {
       wxPaintDC dc(this);
 
@@ -55,7 +55,7 @@ Here is an example of using the \helpref{wxRegionIterator}{wxregioniterator} cla
 {\small%
 \begin{verbatim}
 // Called when window needs to be repainted.
-void MyWindow::OnPaint(wxPaintEvent\& event)
+void MyWindow::OnPaint(wxPaintEvent& event)
 {
   wxPaintDC dc(this);
 
