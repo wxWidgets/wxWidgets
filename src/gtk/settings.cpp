@@ -91,7 +91,8 @@ static bool GetColourFromGTKWidget(int& red, int& green, int& blue,
 
         case wxGTK_LIST:
             widget = gtk_list_new();
-	
+            break;
+
         case wxGTK_MENUITEM:
             widget = gtk_menu_item_new();
     }
@@ -307,9 +308,9 @@ wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
         case wxSYS_COLOUR_MAX:
         default:
             wxFAIL_MSG( _T("unknown system colour index") );
-  }
+    }
 
-  return *wxWHITE;
+    return *wxWHITE;
 }
 
 wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
