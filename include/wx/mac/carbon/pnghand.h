@@ -26,9 +26,9 @@ class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 public:
   inline wxPNGFileHandler(void)
   {
-    m_name = wxT("PNG bitmap file");
-    m_extension = wxT("bmp");
-    m_type = wxBITMAP_TYPE_PNG;
+    SetName(wxT("PNG bitmap file"));
+    SetExtension(wxT("bmp"));
+    SetType(wxBITMAP_TYPE_PNG);
   };
 
   virtual bool LoadFile(wxBitmap *bitmap, const wxString& name, long flags,
