@@ -178,16 +178,16 @@ static struct cvec *getcvec(struct vars *, int, int, int);
 static void freecvec(struct cvec *);
 
 /* === regc_locale.c === */
-static int	wx_isdigit(wx_wchar c);
-static int	wx_isalpha(wx_wchar c);
-static int	wx_isalnum(wx_wchar c);
-static int	wx_isupper(wx_wchar c);
-static int	wx_islower(wx_wchar c);
-static int	wx_isgraph(wx_wchar c);
-static int	wx_ispunct(wx_wchar c);
-static int	wx_isspace(wx_wchar c);
-static wx_wchar wx_toupper(wx_wchar c);
-static wx_wchar wx_tolower(wx_wchar c);
+extern int	wx_isdigit(wx_wchar c);
+extern int	wx_isalpha(wx_wchar c);
+extern int	wx_isalnum(wx_wchar c);
+extern int	wx_isupper(wx_wchar c);
+extern int	wx_islower(wx_wchar c);
+extern int	wx_isgraph(wx_wchar c);
+extern int	wx_ispunct(wx_wchar c);
+extern int	wx_isspace(wx_wchar c);
+extern wx_wchar wx_toupper(wx_wchar c);
+extern wx_wchar wx_tolower(wx_wchar c);
 static int	nmcces(struct vars *);
 static int	nleaders(struct vars *);
 static struct cvec *allmcces(struct vars *, struct cvec *);
