@@ -17,8 +17,6 @@
 #endif
 
 #include "wx/object.h"
-#include <windows.h>
-
 
 class WXDLLEXPORT wxTimer : public wxObject
 {
@@ -45,8 +43,6 @@ public:
 
 private:
     DECLARE_ABSTRACT_CLASS(wxTimer)
-
-	friend UINT WINAPI wxTimerProc(HWND WXUNUSED(hwnd), WORD, int idTimer, DWORD);
 };
 
 // Timer functions (milliseconds)
