@@ -278,7 +278,7 @@ void wxBaseArray::Remove(long lItem)
   wxCHECK_RET( iIndex != wxNOT_FOUND,
                wxT("removing inexistent item in wxArray::Remove") );
 
-  Remove((size_t)iIndex);
+  RemoveAt((size_t)iIndex);
 }
 
 // sort array elements using passed comparaison function

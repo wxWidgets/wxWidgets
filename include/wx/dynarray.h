@@ -204,7 +204,7 @@ public:                                                             \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
          _WX_ERROR_REMOVE);                                         \
-      wxBaseArray::Remove((size_t)iIndex); }                        \
+      wxBaseArray::RemoveAt((size_t)iIndex); }                      \
                                                                     \
   void Sort(CMPFUNC##T fCmp) { wxBaseArray::Sort((CMPFUNC)fCmp); }  \
 }
@@ -267,7 +267,7 @@ public:                                                             \
     { int iIndex = Index(Item);                                     \
       wxCHECK2_MSG( iIndex != wxNOT_FOUND, return,                  \
         _WX_ERROR_REMOVE );                                         \
-      wxBaseArray::Remove((size_t)iIndex); }                        \
+      wxBaseArray::RemoveAt((size_t)iIndex); }                      \
                                                                     \
 private:                                                            \
   SCMPFUNC##T m_fnCompare;                                          \
