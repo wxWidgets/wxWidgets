@@ -197,6 +197,10 @@ bool wxHtmlWindow::SetPage(const wxString& source)
     return TRUE;
 }
 
+bool wxHtmlWindow::AppendToPage(const wxString& source)
+{
+    return SetPage(*(GetParser()->GetSource()) + source);
+}
 
 bool wxHtmlWindow::LoadPage(const wxString& location)
 {

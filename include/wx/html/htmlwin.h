@@ -49,12 +49,12 @@ class WXDLLEXPORT wxHtmlWindow : public wxScrolledWindow
     friend class wxHtmlWinModule;
 
 public:
-    wxHtmlWindow() : wxScrolledWindow() {};
+    wxHtmlWindow() : wxScrolledWindow() {}
     wxHtmlWindow(wxWindow *parent, wxWindowID id = -1,
                  const wxPoint& pos = wxDefaultPosition,
                  const wxSize& size = wxDefaultSize,
                  long style = wxHW_SCROLLBAR_AUTO,
-                 const wxString& name = "htmlWindow");
+                 const wxString& name = wxT("htmlWindow"));
     ~wxHtmlWindow();
 
     // Set HTML page and display it. !! source is HTML document itself,
@@ -62,6 +62,9 @@ public:
     // specify document location, use LoadPage() istead
     // Return value : FALSE if an error occured, TRUE otherwise
     bool SetPage(const wxString& source);
+    
+    // Append to current page
+    bool AppendToPage(const wxString& source);
 
     // Load HTML page from given location. Location can be either
     // a) /usr/wxGTK2/docs/html/wx.htm

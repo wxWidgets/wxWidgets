@@ -53,6 +53,20 @@ filters. These filters are present by default:
 \item Plain Text filter (this filter is used if no other filter matches)
 \end{itemize}
 
+\membersection{wxHtmlWindow::AppendToPage}\label{wxhtmlwindowappendtopage}
+
+\func{bool}{AppendToPage}{\param{const wxString\& }{source}}
+
+Appends HTML fragment to currently displayed text and refreshes the window. 
+
+\wxheading{Parameters}
+
+\docparam{source}{HTML code fragment}
+
+\wxheading{Return value}
+
+FALSE if an error occurred, TRUE otherwise.
+
 \membersection{wxHtmlWindow::GetInternalRepresentation}\label{wxhtmlwindowgetinternalrepresentation}
 
 \constfunc{wxHtmlContainerCell*}{GetInternalRepresentation}{\void}
