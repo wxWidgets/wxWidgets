@@ -168,8 +168,18 @@ wxRegion::wxRegion( size_t n, const wxPoint *points, int fillStyle )
 
 wxRegion::~wxRegion()
 {
+    // m_refData unrefed in ~wxObject
 }
 
+wxObjectRefData *wxRegion::CreateRefData() const
+{
+    return new wxRegionRefData;
+}
+
+wxObjectRefData *wxRegion::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxRegionRefData(*(wxRegionRefData *)data);
+}
 // ----------------------------------------------------------------------------
 // wxRegion comparison
 // ----------------------------------------------------------------------------
@@ -202,6 +212,7 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     rect.y = y;
     rect.width = width;
     rect.height = height;
+    
     if (!m_refData)
     {
         m_refData = new wxRegionRefData();
@@ -277,6 +288,7 @@ bool wxRegion::Intersect( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
 bool wxRegion::Intersect( const wxRect& rect )
 {
     wxRegion reg( rect );
+    
     return Intersect( reg );
 }
 

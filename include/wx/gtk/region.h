@@ -115,6 +115,10 @@ public:
     GdkRegion *GetRegion() const;
 
 protected:
+    // ref counting code
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
+    
     // common part of ctors for a rectangle region
     void InitRect(wxCoord x, wxCoord y, wxCoord w, wxCoord h);
 
