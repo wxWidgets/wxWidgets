@@ -16,4 +16,6 @@ AC_OUTPUT([
             hhp2cached/Makefile
             dialoged/Makefile
             dialoged/src/Makefile
+            emulator/Makefile
+            emulator/src/Makefile
          ])
