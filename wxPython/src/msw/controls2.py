@@ -1232,7 +1232,6 @@ class wxGenericDirCtrlPtr(wxControlPtr):
         return val
     def GetTreeCtrl(self, *_args, **_kwargs):
         val = apply(controls2c.wxGenericDirCtrl_GetTreeCtrl,(self,) + _args, _kwargs)
-        if val: val = wxTreeCtrlPtr(val) 
         return val
     def GetFilterListCtrl(self, *_args, **_kwargs):
         val = apply(controls2c.wxGenericDirCtrl_GetFilterListCtrl,(self,) + _args, _kwargs)

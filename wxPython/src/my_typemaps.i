@@ -396,6 +396,7 @@ $function
 %typemap(python, out) wxTextCtrl*               { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxToolBar*                { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxToolBarBase*            { $target = wxPyMake_wxObject($source); }
+%typemap(python, out) wxTreeCtrl*               { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxWindow*                 { $target = wxPyMake_wxObject($source); }
 %typemap(python, out) wxHtmlWindow*             { $target = wxPyMake_wxObject($source); }
 
