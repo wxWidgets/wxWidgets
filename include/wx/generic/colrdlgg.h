@@ -22,11 +22,17 @@
 #include "wx/cmndata.h"
 
 #define wxID_ADD_CUSTOM     3000
-#define wxID_RED_SLIDER     3001
-#define wxID_GREEN_SLIDER   3002
-#define wxID_BLUE_SLIDER    3003
 
-class WXDLLEXPORT wxSlider;
+#if wxUSE_SLIDER
+
+    #define wxID_RED_SLIDER     3001
+    #define wxID_GREEN_SLIDER   3002
+    #define wxID_BLUE_SLIDER    3003
+
+    class WXDLLEXPORT wxSlider;
+
+#endif // wxUSE_SLIDER
+
 class WXDLLEXPORT wxGenericColourDialog : public wxDialog
 {
 public:
@@ -59,9 +65,11 @@ public:
 
     void OnAddCustom(wxCommandEvent& event);
 
+#if wxUSE_SLIDER
     void OnRedSlider(wxCommandEvent& event);
     void OnGreenSlider(wxCommandEvent& event);
     void OnBlueSlider(wxCommandEvent& event);
+#endif // wxUSE_SLIDER
 
     void OnCloseWindow(wxCloseEvent& event);
 
@@ -96,9 +104,11 @@ protected:
     int colourSelection;
     int whichKind; // 1 for standard colours, 2 for custom colours,
 
+#if wxUSE_SLIDER
     wxSlider *redSlider;
     wxSlider *greenSlider;
     wxSlider *blueSlider;
+#endif // wxUSE_SLIDER
 
     int buttonY;
 

@@ -125,7 +125,9 @@ public:
     wxRadioBox    *m_radio;
     wxGauge       *m_gauge,
                   *m_gaugeVert;
+#if wxUSE_SLIDER
     wxSlider      *m_slider;
+#endif // wxUSE_SLIDER
     wxButton      *m_fontButton;
     wxButton      *m_lbSelectNum;
     wxButton      *m_lbSelectThis;
@@ -398,7 +400,9 @@ const int  ID_RADIOBUTTON_2     = 167;
 const int  ID_SET_FONT          = 170;
 
 const int  ID_GAUGE             = 180;
+#if wxUSE_SLIDER
 const int  ID_SLIDER            = 181;
+#endif // wxUSE_SLIDER
 
 const int  ID_SPIN              = 182;
 const int  ID_BTNPROGRESS       = 183;
@@ -461,7 +465,9 @@ EVT_CHECKBOX  (ID_RADIOBOX_ENABLE,      MyPanel::OnRadioButtons)
 EVT_RADIOBUTTON(ID_RADIOBUTTON_1,       MyPanel::OnRadioButton1)
 EVT_RADIOBUTTON(ID_RADIOBUTTON_2,       MyPanel::OnRadioButton2)
 EVT_BUTTON    (ID_SET_FONT,             MyPanel::OnSetFont)
+#if wxUSE_SLIDER
 EVT_SLIDER    (ID_SLIDER,               MyPanel::OnSliderUpdate)
+#endif // wxUSE_SLIDER
 #if wxUSE_SPINBTN
 EVT_SPIN      (ID_SPIN,                 MyPanel::OnSpinUpdate)
 EVT_SPIN_UP   (ID_SPIN,                 MyPanel::OnSpinUp)
@@ -523,12 +529,14 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #if wxUSE_CHOICE
     m_choice = NULL;
     m_choiceSorted = NULL;
-#endif
+#endif // wxUSE_CHOICE
     m_combo = NULL;
     m_radio = NULL;
     m_gauge = NULL;
     m_gaugeVert = NULL;
+#if wxUSE_SLIDER
     m_slider = NULL;
+#endif // wxUSE_SLIDER
     m_fontButton = NULL;
     m_lbSelectNum = NULL;
     m_lbSelectThis = NULL;
@@ -728,6 +736,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxRadioButton( panel, ID_RADIOBUTTON_2, _T("&Radiobutton2"), wxPoint(340,170), wxDefaultSize );
     m_book->AddPage(panel, _T("wxRadioBox"), false, Image_Radio);
 
+#if wxUSE_SLIDER && wxUSE_GAUGE
     panel = new wxPanel(m_book);
     (void)new wxStaticBox( panel, wxID_ANY, _T("&wxGauge and wxSlider"), wxPoint(10,10), wxSize(222,130) );
     m_gauge = new wxGauge( panel, wxID_ANY, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
@@ -786,6 +795,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 #endif // wxUSE_SPINCTRL
 
     m_book->AddPage(panel, _T("wxGauge"), false, Image_Gauge);
+#endif // wxUSE_SLIDER && wxUSE_GAUGE
 
     panel = new wxPanel(m_book);
 
@@ -1312,11 +1322,15 @@ void MyPanel::OnUpdateLabel( wxCommandEvent &event )
                                      : _T("Shorter text."));
 }
 
+#if wxUSE_SLIDER
+
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 {
     m_gauge->SetValue( m_slider->GetValue() );
     m_gaugeVert->SetValue( m_slider->GetValue() / 2 );
 }
+
+#endif // wxUSE_SLIDER
 
 #if wxUSE_SPINCTRL
 

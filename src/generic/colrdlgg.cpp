@@ -31,12 +31,15 @@
     #include "wx/stattext.h"
     #include "wx/layout.h"
     #include "wx/dcclient.h"
-    #include "wx/slider.h"
     #include "wx/sizer.h"
 #endif
 
 #if wxUSE_STATLINE
     #include "wx/statline.h"
+#endif
+
+#if wxUSE_SLIDER
+    #include "wx/slider.h"
 #endif
 
 #include "wx/generic/colrdlgg.h"
@@ -45,9 +48,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericColourDialog, wxDialog)
 
 BEGIN_EVENT_TABLE(wxGenericColourDialog, wxDialog)
     EVT_BUTTON(wxID_ADD_CUSTOM, wxGenericColourDialog::OnAddCustom)
+#if wxUSE_SLIDER
     EVT_SLIDER(wxID_RED_SLIDER, wxGenericColourDialog::OnRedSlider)
     EVT_SLIDER(wxID_GREEN_SLIDER, wxGenericColourDialog::OnGreenSlider)
     EVT_SLIDER(wxID_BLUE_SLIDER, wxGenericColourDialog::OnBlueSlider)
+#endif
     EVT_PAINT(wxGenericColourDialog::OnPaint)
     EVT_MOUSE_EVENTS(wxGenericColourDialog::OnMouseEvent)
     EVT_CLOSE(wxGenericColourDialog::OnCloseWindow)
@@ -255,8 +260,12 @@ void wxGenericColourDialog::CreateWidgets()
 {
     wxBeginBusyCursor();
 
-    const int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
+    wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
+
     const int sliderHeight = 160;
+
+#if wxUSE_SLIDER
+    const int sliderX = singleCustomColourRect.x + singleCustomColourRect.width + sectionSpacing;
 
     redSlider = new wxSlider(this, wxID_RED_SLIDER, colourData.m_dataColour.Red(), 0, 255,
         wxDefaultPosition, wxSize(wxDefaultCoord, sliderHeight), wxVERTICAL|wxSL_LABELS);
@@ -273,9 +282,10 @@ void wxGenericColourDialog::CreateWidgets()
     sliderSizer->Add( greenSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
     sliderSizer->Add( blueSlider, 0, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxALL, 10 );
 
-    wxBoxSizer *topSizer = new wxBoxSizer( wxVERTICAL );
-
     topSizer->Add( sliderSizer, 0, wxCENTRE | wxALL, 10 );
+#else
+    topSizer->Add( 1, sliderHeight, 0, wxCENTRE | wxALL, 15 );
+#endif // wxUSE_SLIDER
 
 #if wxUSE_STATLINE
     // 2) static line
@@ -484,9 +494,11 @@ void wxGenericColourDialog::OnBasicColourClick(int which)
     whichKind = 1;
     colourSelection = which;
     
+#if wxUSE_SLIDER
     redSlider->SetValue( standardColours[colourSelection].Red() );
     greenSlider->SetValue( standardColours[colourSelection].Green() );
     blueSlider->SetValue( standardColours[colourSelection].Blue() );
+#endif // wxUSE_SLIDER
     
     colourData.m_dataColour.Set(standardColours[colourSelection].Red(), 
                                 standardColours[colourSelection].Green(), 
@@ -503,9 +515,11 @@ void wxGenericColourDialog::OnCustomColourClick(int which)
     whichKind = 2;
     colourSelection = which;
     
+#if wxUSE_SLIDER
     redSlider->SetValue( customColours[colourSelection].Red() );
     greenSlider->SetValue( customColours[colourSelection].Green() );
     blueSlider->SetValue( customColours[colourSelection].Blue() );
+#endif // wxUSE_SLIDER
     
     colourData.m_dataColour.Set(customColours[colourSelection].Red(), 
                                 customColours[colourSelection].Green(), 
@@ -548,6 +562,8 @@ void wxGenericColourDialog::OnAddCustom(wxCommandEvent& WXUNUSED(event))
   PaintCustomColours(dc);
 }
 
+#if wxUSE_SLIDER
+
 void wxGenericColourDialog::OnRedSlider(wxCommandEvent& WXUNUSED(event))
 {
   if (!redSlider)
@@ -577,6 +593,8 @@ void wxGenericColourDialog::OnBlueSlider(wxCommandEvent& WXUNUSED(event))
   colourData.m_dataColour.Set(colourData.m_dataColour.Red(), colourData.m_dataColour.Green(), (unsigned char)blueSlider->GetValue());
   PaintCustomColour(dc);
 }
+
+#endif // wxUSE_SLIDER
 
 #endif // wxUSE_COLOURDLG && !defined(__WXGTK20__)
 
