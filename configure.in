@@ -996,11 +996,7 @@ if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   DEFAULT_wxUSE_FONTDLG=no
   DEFAULT_wxUSE_GRID=no
   DEFAULT_wxUSE_PROGRESSDLG=no
-  DEFAULT_wxUSE_SASH=no
-  DEFAULT_wxUSE_SPLITTER=no
   DEFAULT_wxUSE_WIZARDDLG=no
-  DEFAULT_wxUSE_SPLITTER=no
-  DEFAULT_wxUSE_STARTUP_TIPS=no
 fi
 
 WX_ARG_ENABLE(accel,       [  --enable-accel          use accelerators], wxUSE_ACCEL)
