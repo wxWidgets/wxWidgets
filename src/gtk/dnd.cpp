@@ -69,7 +69,7 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 	break;
       case wxDF_FILENAME:
 	if (i > 0) formats += ";";
-        formats += "url:any";
+        formats += "file:ALL";
 	valid++;
 	break;
       default:
@@ -282,7 +282,7 @@ void wxDropSource::RegisterWindow(void)
         formats += "text/plain";
 	break;
       case wxDF_FILENAME:
-        formats += "url:any";
+        formats += "file:ALL";
 	break;
       default:
         break;
