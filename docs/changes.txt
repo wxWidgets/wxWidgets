@@ -25,6 +25,7 @@ INCOMPATIBLE CHANGES SINCE 2.4.x
 - wxTheApp can't be assigned to any longer, use wxApp::SetInstance() instead
 - wxFileType::GetIcon() returns wxIconLocation, not wxIcon
 - wxWindow::Clear() is now called ClearBackground()
+- pointer returned by wxFont::GetNativeFontInfo() must not be deleted now
 
 
 DEPRECATED METHODS SINCE 2.4.x
