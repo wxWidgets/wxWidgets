@@ -981,7 +981,7 @@ void wxApp::MacDoOneEvent()
 		wxTheApp->ProcessIdle() ;
 	}
 	if ( event.what != kHighLevelEvent )
-		SetRectRgn( s_macCursorRgn , event.where.h - 1 , event.where.v - 1,  event.where.h + 1 , event.where.v + 1 ) ;
+		SetRectRgn( s_macCursorRgn , event.where.h , event.where.v ,  event.where.h + 1 , event.where.v + 1 ) ;
 
 	// repeaters
 
