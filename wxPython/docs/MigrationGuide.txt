@@ -27,9 +27,9 @@ now be the GUI thread instead of the one that imports wxPython.  Some
 potential problems are that the C++ side of the "stock-objects"
 (wx.BLUE_PEN, wx.TheColourDatabase, etc.) are not initialized until
 the wx.App object is created, so you should not use them until after
-you have created your wx.App object.  (In fact, until I find a better
-solution trying to use one of the stock objects before the app is
-created will probably result in a crash.)
+you have created your wx.App object.  If you do then an exception will
+be raised telling you that the C++ object has not bene initialized
+yet.
 
 Also, you will probably not be able to do any kind of GUI or bitmap
 operation unless you first have created an app object, (even on
