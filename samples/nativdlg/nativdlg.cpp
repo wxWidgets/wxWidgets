@@ -32,9 +32,6 @@
 #include "nativdlg.h"
 #include "resource.h"
 
-// Declare two frames
-MyFrame   *frame = NULL;
-
 IMPLEMENT_APP(MyApp)
 
 // Testing of ressources
@@ -45,7 +42,7 @@ MyApp::MyApp()
 bool MyApp::OnInit(void)
 {
   // Create the main frame window
-  frame = new MyFrame(NULL, -1, _T("wxWindows Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
+  MyFrame   *frame = new MyFrame(NULL, wxID_ANY, _T("wxWindows Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
 
   // Give it a status line
   frame->CreateStatusBar(2);
@@ -64,13 +61,13 @@ bool MyApp::OnInit(void)
   frame->SetMenuBar(menu_bar);
 
   // Make a panel
-  frame->panel = new wxWindow(frame, -1, wxPoint(0, 0), wxSize(400, 400), 0, _T("MyMainFrame"));
-  frame->Show(TRUE);
+  frame->panel = new wxWindow(frame, wxID_ANY, wxPoint(0, 0), wxSize(400, 400), 0, _T("MyMainFrame"));
+  frame->Show(true);
 
   // Return the main frame window
   SetTopWindow(frame);
 
-  return TRUE;
+  return true;
 }
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -85,20 +82,24 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
   panel = NULL;
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
-    Close(TRUE);
+  Close(true);
 }
 
-void MyFrame::OnTest1(wxCommandEvent& event)
+void MyFrame::OnTest1(wxCommandEvent& WXUNUSED(event))
 {
+#if ( defined(__WXOS2__) || defined(__WXMSW__) ) && !defined(__WXUNIVERSAL__)
       MyDialog *dialog = new MyDialog;
       if (dialog->LoadNativeDialog(this, _T("dialog1")))
       {
-        dialog->SetModal(TRUE);
+    dialog->SetModal(true);
         dialog->ShowModal();
       }
-      dialog->Close(TRUE);
+  dialog->Close(true);
+#else
+  wxMessageBox(_T("No native dialog support"),_T("Platform limitation"));
+#endif
 }
 
 BEGIN_EVENT_TABLE(MyDialog, wxDialog)
@@ -107,12 +108,12 @@ BEGIN_EVENT_TABLE(MyDialog, wxDialog)
 END_EVENT_TABLE()
 
 
-void MyDialog::OnOk(wxCommandEvent& event)
+void MyDialog::OnOk(wxCommandEvent& WXUNUSED(event))
 {
   EndModal(wxID_OK);
 }
 
-void MyDialog::OnCancel(wxCommandEvent& event)
+void MyDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
 {
   EndModal(wxID_CANCEL);
 }
