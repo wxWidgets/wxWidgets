@@ -16,7 +16,7 @@
 
 #include "wx/mdi.h"
 
-#if wxUSE_MDI_ARCHITECTURE
+#if wxUSE_MDI
 
 #include "wx/dialog.h"
 #include "wx/menu.h"

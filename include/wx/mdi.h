@@ -3,7 +3,7 @@
 
 #include "wx/setup.h"
 
-#if wxUSE_MDI_ARCHITECTURE
+#if wxUSE_MDI
 
 #if defined(__WXUNIVERSAL__)
     #include "wx/generic/mdig.h"
@@ -21,7 +21,7 @@
     #include "wx/generic/mdig.h"
 #endif
 
-#endif // wxUSE_MDI_ARCHITECTURE
+#endif // wxUSE_MDI
 
 #endif
     // _WX_MDI_H_BASE_

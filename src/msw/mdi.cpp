@@ -28,7 +28,7 @@
     #pragma hdrstop
 #endif
 
-#if wxUSE_MDI_ARCHITECTURE && !defined(__WXUNIVERSAL__)
+#if wxUSE_MDI && !defined(__WXUNIVERSAL__)
 
 #ifndef WX_PRECOMP
     #include "wx/setup.h"
@@ -1394,6 +1394,5 @@ static void UnpackMDIActivate(WXWPARAM wParam, WXLPARAM lParam,
     *hwndDeact = (WXHWND)wParam;
 }
 
-#endif
-// wxUSE_MDI_ARCHITECTURE && !defined(__WXUNIVERSAL__)
+#endif // wxUSE_MDI && !defined(__WXUNIVERSAL__)
 

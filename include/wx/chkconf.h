@@ -496,6 +496,14 @@
 #   endif
 #endif /* !defined(wxUSE_LOG_DIALOG) */
 
+#ifndef wxUSE_MDI
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_MDI must be defined."
+#   else
+#       define wxUSE_MDI 0
+#   endif
+#endif /* !defined(wxUSE_MDI) */
+
 #ifndef wxUSE_MDI_ARCHITECTURE
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_MDI_ARCHITECTURE must be defined."
@@ -1340,6 +1348,15 @@
 #endif /* wxUSE_PRINTING_ARCHITECTURE */
 
 #if wxUSE_MDI_ARCHITECTURE
+#   if !wxUSE_MDI
+#        ifdef wxABORT_ON_CONFIG_ERROR
+#            error "MDI requires wxUSE_MDI"
+#        else
+#            undef wxUSE_MDI
+#            define wxUSE_MDI 1
+#        endif
+#   endif
+
 #   if !wxUSE_DOC_VIEW_ARCHITECTURE
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "MDI requires wxUSE_DOC_VIEW_ARCHITECTURE"
