@@ -1082,18 +1082,18 @@ class LineShape(Shape):
             control = LineControlPoint(self._canvas, self, CONTROL_POINT_SIZE, first[0], first[1], CONTROL_POINT_ENDPOINT_FROM)
             control._point = first
             self._canvas.AddShape(control)
-            self._controlPoints.Append(control)
+            self._controlPoints.append(control)
 
             for point in self._lineControlPoints[1:-1]:
                 control = LineControlPoint(self._canvas, self, CONTROL_POINT_SIZE, point[0], point[1], CONTROL_POINT_LINE)
                 control._point = point
                 self._canvas.AddShape(control)
-                self._controlPoints.Append(control)
+                self._controlPoints.append(control)
 
             control = LineControlPoint(self._canvas, self, CONTROL_POINT_SIZE, last[0], last[1], CONTROL_POINT_ENDPOINT_TO)
             control._point = last
             self._canvas.AddShape(control)
-            self._controlPoints.Append(control)
+            self._controlPoints.append(control)
 
     def ResetControlPoints(self):
         if self._canvas and self._lineControlPoints:
