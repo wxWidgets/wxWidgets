@@ -39,6 +39,7 @@
 
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
+#include "wx/mac/printdlg.h"
 
 #include <stdlib.h>
 

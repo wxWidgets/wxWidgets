@@ -77,7 +77,10 @@ public:
                                                   wxPrintDialogData *data = NULL );
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data );
-                                                  
+
+    virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
+                                                          wxPageSetupDialogData * data = NULL );
+          
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );
     virtual bool HasOwnPrintToFile();
@@ -97,7 +100,7 @@ class wxGnomePrintDialog: public wxPrintDialogBase
 {
 public:
     wxGnomePrintDialog( wxWindow *parent,
-                         wxPrintDialogData* data = (wxPrintDialogData*)NULL );
+                         wxPrintDialogData* data = NULL );
     wxGnomePrintDialog( wxWindow *parent, wxPrintData* data);
     ~wxGnomePrintDialog();
 
@@ -128,6 +131,40 @@ private:
     
 private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintDialog)
+};
+
+//----------------------------------------------------------------------------
+// wxGnomePageSetupDialog
+//----------------------------------------------------------------------------
+
+class wxGnomePageSetupDialog: public wxPageSetupDialogBase
+{
+public:
+    wxGnomePageSetupDialog( wxWindow *parent,
+                            wxPageSetupDialogData* data = NULL );
+    ~wxGnomePageSetupDialog();
+
+    virtual wxPageSetupDialogData& GetPageSetupDialogData();
+
+    virtual int ShowModal();
+
+    virtual bool Validate();
+    virtual bool TransferDataToWindow();
+    virtual bool TransferDataFromWindow();
+
+private:    
+    // Implement some base class methods to do nothing to avoid asserts and
+    // GTK warnings, since this is not a real wxDialog.
+    virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
+                           int WXUNUSED(width), int WXUNUSED(height),
+                           int WXUNUSED(sizeFlags) = wxSIZE_AUTO) {}
+    virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
+                              int WXUNUSED(width), int WXUNUSED(height)) {}
+                              
+    wxPageSetupDialogData   m_pageDialogData;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxGnomePageSetupDialog)
 };
 
 //----------------------------------------------------------------------------

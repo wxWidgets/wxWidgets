@@ -45,6 +45,7 @@
 
 #include "wx/dcprint.h"
 #include "wx/printdlg.h"
+#include "wx/msw/printdlg.h"
 #include "math.h"
 
 #if wxUSE_COMMON_DIALOGS

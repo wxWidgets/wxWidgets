@@ -27,11 +27,13 @@
 #include "wx/fontutil.h"
 #include "wx/printdlg.h"
 #include "wx/gtk/private.h"
+#include "wx/module.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
 #include <libgnomeprintui/gnome-print-dialog.h>
 #include <libgnomeprintui/gnome-print-job-preview.h>
+#include <libgnomeprintui/gnome-print-paper-selector.h>
 
 //----------------------------------------------------------------------------
 // wxGnomePrintNativeData
@@ -96,6 +98,12 @@ wxPrintDialogBase *wxGnomePrintFactory::CreatePrintDialog( wxWindow *parent,
                                                   wxPrintData *data )
 {
     return new wxGnomePrintDialog( parent, data );
+}
+                                                  
+wxPageSetupDialogBase *wxGnomePrintFactory::CreatePageSetupDialog( wxWindow *parent,
+                                                          wxPageSetupDialogData * data )
+{  
+    return new wxGnomePageSetupDialog( parent, data );
 }
                                                   
 bool wxGnomePrintFactory::HasPrintSetupDialog()
@@ -266,6 +274,90 @@ bool wxGnomePrintDialog::TransferDataToWindow()
 }
 
 bool wxGnomePrintDialog::TransferDataFromWindow()
+{
+    return true;
+}
+
+//----------------------------------------------------------------------------
+// wxGnomePageSetupDialog
+//----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxGnomePageSetupDialog, wxPageSetupDialogBase)
+
+wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
+                            wxPageSetupDialogData* data )
+{
+    if (data)
+        m_pageDialogData = *data;
+        
+    wxGnomePrintNativeData *native =
+      (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
+        
+    m_widget = gtk_dialog_new();
+    
+    gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( _("Page setup") ) );
+    
+    GtkWidget *main = gnome_paper_selector_new_with_flags( native->GetPrintConfig(), 
+        GNOME_PAPER_SELECTOR_MARGINS|GNOME_PAPER_SELECTOR_FEED_ORIENTATION );
+    gtk_container_set_border_width (GTK_CONTAINER (main), 8);
+    gtk_widget_show (main);
+    
+    gtk_container_add( GTK_CONTAINER (GTK_DIALOG (m_widget)->vbox), main );
+    
+	gtk_dialog_set_has_separator (GTK_DIALOG (m_widget), TRUE);
+
+	gtk_dialog_add_buttons (GTK_DIALOG (m_widget),
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_OK, GTK_RESPONSE_OK,
+				NULL);
+
+	gtk_dialog_set_default_response (GTK_DIALOG (m_widget),
+					 GTK_RESPONSE_OK);
+}
+
+wxGnomePageSetupDialog::~wxGnomePageSetupDialog()
+{
+}
+
+wxPageSetupDialogData& wxGnomePageSetupDialog::GetPageSetupDialogData()
+{
+    return m_pageDialogData;
+}
+
+int wxGnomePageSetupDialog::ShowModal()
+{
+    // Transfer data from m_pageDialogData to native dialog
+
+    int ret = gtk_dialog_run( GTK_DIALOG(m_widget) );
+
+    if (ret == GTK_RESPONSE_OK)
+    {
+        // Transfer data back to m_pageDialogData
+        
+        ret = wxID_OK;
+    }
+    else
+    {
+        ret = wxID_CANCEL;
+    }
+    
+    gtk_widget_destroy( m_widget );
+    m_widget = NULL;
+
+    return ret;
+}
+
+bool wxGnomePageSetupDialog::Validate()
+{
+    return true;
+}
+
+bool wxGnomePageSetupDialog::TransferDataToWindow()
+{
+    return true;
+}
+
+bool wxGnomePageSetupDialog::TransferDataFromWindow()
 {
     return true;
 }

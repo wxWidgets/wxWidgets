@@ -16,7 +16,7 @@
 
 
 // ---------------------------------------------------------------------------
-// wxPrintDialogBase: interface for the common dialog for printing.
+// wxPrintDialogBase: interface for the dialog for printing
 // ---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPrintDialogBase : public wxDialog
@@ -30,8 +30,6 @@ public:
                       const wxSize &size = wxDefaultSize,
                       long style = wxDEFAULT_DIALOG_STYLE);
             
-    virtual int ShowModal() = 0;
-
     virtual wxPrintDialogData& GetPrintDialogData() = 0;
     virtual wxPrintData& GetPrintData() = 0;
     virtual wxDC *GetPrintDC() = 0;
@@ -42,7 +40,7 @@ private:
 };
 
 // ---------------------------------------------------------------------------
-// wxPrintDialog: the common dialog for printing.
+// wxPrintDialog: the dialog for printing.
 // ---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPrintDialog : public wxObject
@@ -66,31 +64,51 @@ private:
     DECLARE_NO_COPY_CLASS(wxPrintDialog)
 };
 
-#endif
+// ---------------------------------------------------------------------------
+// wxPageSetupDialogBase: interface for the page setup dialog
+// ---------------------------------------------------------------------------
 
-#if defined(__WXUNIVERSAL__) && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
-#include "wx/generic/prntdlgg.h"
-#elif defined(__PALMOS__)
-#include "wx/palmos/printdlg.h"
-#elif defined(__WXMSW__)
-#include "wx/msw/printdlg.h"
-#elif defined(__WXMOTIF__)
-#include "wx/generic/prntdlgg.h"
-#elif defined(__WXGTK__)
-#include "wx/generic/prntdlgg.h"
-#elif defined(__WXX11__)
-#include "wx/generic/prntdlgg.h"
-#elif defined(__WXMGL__)
-#include "wx/generic/prntdlgg.h"
-#elif defined(__WXMAC__)
-#include "wx/mac/printdlg.h"
-#elif defined(__WXPM__)
-#include "wx/generic/prntdlgg.h"
-#endif
+class WXDLLEXPORT wxPageSetupDialogBase: public wxDialog
+{
+public:
+    wxPageSetupDialogBase() { }
+    wxPageSetupDialogBase(wxWindow *parent,
+                      wxWindowID id = wxID_ANY,
+                      const wxString &title = wxEmptyString,
+                      const wxPoint &pos = wxDefaultPosition,
+                      const wxSize &size = wxDefaultSize,
+                      long style = wxDEFAULT_DIALOG_STYLE);
 
-#if (defined(__WXUNIVERSAL__) && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW) ) || (!defined(__WXMSW__) && !defined(__WXMAC__))
-#define wxPrintSetupDialog wxGenericPrintSetupDialog
-#define wxPageSetupDialog wxGenericPageSetupDialog
+    virtual wxPageSetupDialogData& GetPageSetupDialogData() = 0;
+
+private:
+    DECLARE_ABSTRACT_CLASS(wxPageSetupDialogBase)
+    DECLARE_NO_COPY_CLASS(wxPageSetupDialogBase)
+};
+
+// ---------------------------------------------------------------------------
+// wxPageSetupDialog: the page setup dialog
+// ---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxPageSetupDialog: public wxObject
+{
+public:
+    wxPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    ~wxPageSetupDialog();
+
+    int ShowModal();
+    wxPageSetupDialogData& GetPageSetupDialogData();
+    // old name
+    wxPageSetupDialogData& GetPageSetupData();
+
+private:
+    wxPageSetupDialogBase  *m_pimpl;
+    
+private:
+    DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
+    DECLARE_NO_COPY_CLASS(wxPageSetupDialog)
+};
+
 #endif
 
 #endif

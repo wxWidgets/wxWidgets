@@ -40,8 +40,8 @@ public:
 };
     
 /*
- * wxPrinterDialog
- * The common dialog for printing.
+ * wxMacPrintDialog
+ * The Mac dialog for printing
  */
 
 class WXDLLEXPORT wxDC;
@@ -70,22 +70,28 @@ private:
     DECLARE_DYNAMIC_CLASS(wxPrintDialog)
 };
 
-class WXDLLEXPORT wxPageSetupDialog: public wxDialog
+/*
+ * wxMacPageSetupDialog
+ * The Mac page setup dialog
+ */
+
+class WXDLLEXPORT wxMacPageSetupDialog: public wxPageSetupDialogBase
 {
-  DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
+public:
+    wxMacPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    ~wxMacPageSetupDialog();
 
- public:
-  wxPageSetupDialog();
-  wxPageSetupDialog(wxWindow *parent, wxPageSetupData *data = NULL);
-  ~wxPageSetupDialog();
-
-  bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
-  virtual int ShowModal();
-
-  inline wxPageSetupData& GetPageSetupData() { return m_pageSetupData; }
- private:
-  wxPageSetupData   m_pageSetupData;
-  wxWindow*         m_dialogParent;
+    virtual wxPageSetupData& GetPageSetupDialogData();
+    
+    bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    virtual int ShowModal();
+  
+private:
+    wxPageSetupDialogData   m_pageSetupData;
+    wxWindow*               m_dialogParent;
+  
+private:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacPageSetupDialog)
 };
 
 #endif

@@ -32,8 +32,10 @@ class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxChoice;
 class WXDLLEXPORT wxPrintout;
 class WXDLLEXPORT wxPrinterBase;
-class WXDLLEXPORT wxPrintDialog;
 class WXDLLEXPORT wxPrintDialogBase;
+class WXDLLEXPORT wxPrintDialog;
+class WXDLLEXPORT wxPageSetupDialogBase;
+class WXDLLEXPORT wxPageSetupDialog;
 class WXDLLEXPORT wxPrintPreviewBase;
 class WXDLLEXPORT wxPreviewCanvas;
 class WXDLLEXPORT wxPreviewControlBar;
@@ -76,6 +78,9 @@ public:
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data ) = 0;
                                                   
+    virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
+                                                          wxPageSetupDialogData * data = NULL ) = 0;
+                                                  
     // What to do and what to show in the wxPrintDialog
     // a) Use the generic print setup dialog or a native one?
     virtual bool HasPrintSetupDialog() = 0;
@@ -113,6 +118,9 @@ public:
                                                   wxPrintDialogData *data = NULL );
     virtual wxPrintDialogBase *CreatePrintDialog( wxWindow *parent, 
                                                   wxPrintData *data );
+                                                  
+    virtual wxPageSetupDialogBase *CreatePageSetupDialog( wxWindow *parent,
+                                                          wxPageSetupDialogData * data = NULL );
                                                   
     virtual bool HasPrintSetupDialog();
     virtual wxDialog *CreatePrintSetupDialog( wxWindow *parent, wxPrintData *data );

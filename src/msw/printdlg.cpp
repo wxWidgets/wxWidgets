@@ -38,6 +38,7 @@
 
 #include "wx/cmndata.h"
 #include "wx/printdlg.h"
+#include "wx/msw/printdlg.h"
 #include "wx/dcprint.h"
 #include "wx/paper.h"
 
@@ -756,23 +757,23 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 }
 
 // ---------------------------------------------------------------------------
-// wxPageSetupDialog
+// wxWidnowsPageSetupDialog
 // ---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
+IMPLEMENT_CLASS(wxWindowsPageSetupDialog, wxPageSetupDialogBase)
 
-wxPageSetupDialog::wxPageSetupDialog()
+wxWindowsPageSetupDialog::wxWindowsPageSetupDialog()
 {
     m_dialogParent = NULL;
     m_pageDlg = NULL;
 }
 
-wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupDialogData *data)
+wxWindowsPageSetupDialog::wxWindowsPageSetupDialog(wxWindow *p, wxPageSetupDialogData *data)
 {
     Create(p, data);
 }
 
-bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupDialogData *data)
+bool wxWindowsPageSetupDialog::Create(wxWindow *p, wxPageSetupDialogData *data)
 {
     m_dialogParent = p;
     m_pageDlg = NULL;
@@ -783,7 +784,7 @@ bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupDialogData *data)
     return true;
 }
 
-wxPageSetupDialog::~wxPageSetupDialog()
+wxWindowsPageSetupDialog::~wxWindowsPageSetupDialog()
 {
     PAGESETUPDLG *pd = (PAGESETUPDLG *)m_pageDlg;
     if ( pd && pd->hDevMode )
@@ -794,7 +795,7 @@ wxPageSetupDialog::~wxPageSetupDialog()
         delete pd;
 }
 
-int wxPageSetupDialog::ShowModal()
+int wxWindowsPageSetupDialog::ShowModal()
 {
     ConvertToNative( m_pageSetupData );
     
@@ -816,7 +817,7 @@ int wxPageSetupDialog::ShowModal()
         return wxID_CANCEL;
 }
 
-bool wxPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
+bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
 {
     wxWindowsPrintNativeData *native_data =
         (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
@@ -920,7 +921,7 @@ bool wxPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     return true;
 }
 
-bool wxPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
+bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
 {
     PAGESETUPDLG *pd = (PAGESETUPDLG *) m_pageDlg;
     if ( !pd )

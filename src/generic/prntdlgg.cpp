@@ -810,49 +810,15 @@ wxComboBox *wxGenericPrintSetupDialog::CreatePaperTypeChoice()
 // Generic page setup dialog
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxDialog)
+IMPLEMENT_CLASS(wxGenericPageSetupDialog, wxPageSetupDialogBase)
 
-BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxDialog)
+BEGIN_EVENT_TABLE(wxGenericPageSetupDialog, wxPageSetupDialogBase)
     EVT_BUTTON(wxPRINTID_SETUP, wxGenericPageSetupDialog::OnPrinter)
 END_EVENT_TABLE()
 
-void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
-{
-    // We no longer query GetPrintMode, so we can eliminate the need
-    // to call SetPrintMode.
-    // This has the limitation that we can't explicitly call the PostScript
-    // print setup dialog from the generic Page Setup dialog under Windows,
-    // but since this choice would only happen when trying to do PostScript
-    // printing under Windows (and only in 16-bit Windows which
-    // doesn't have a Windows-specific page setup dialog) it's worth it.
-
-    // First save the current settings, so the wxPrintData object is up to date.
-    TransferDataFromWindow();
-
-    // Transfer the current print settings from this dialog to the page setup dialog.
-    
-#if 0
-    // Use print factory later    
-    
-    wxPrintDialogData data;
-    data = GetPageSetupData().GetPrintData();
-    data.SetSetupDialog(true);
-    wxPrintDialog printDialog(this, & data);
-    printDialog.ShowModal();
-
-    // Transfer the page setup print settings from the page dialog to this dialog again, in case
-    // the page setup dialog changed something.
-    GetPageSetupData().GetPrintData() = printDialog.GetPrintDialogData().GetPrintData();
-    GetPageSetupData().CalculatePaperSizeFromId(); // Make sure page size reflects the id in wxPrintData
-
-    // Now update the dialog in case the page setup dialog changed some of our settings.
-    TransferDataToWindow();
-#endif
-}
-
 wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
-                                                    wxPageSetupData* data)
-    : wxDialog( parent,
+                                                    wxPageSetupDialogData* data)
+    : wxPageSetupDialogBase( parent,
                 wxID_ANY,
                 _("Page Setup"),
                 wxPoint(0, 0),
@@ -939,10 +905,19 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
     // 6) buttons
 
     wxSizer* buttonsizer = CreateButtonSizer( wxOK|wxCANCEL);
-    m_printerButton = new wxButton(this, wxPRINTID_SETUP, _("Printer...") );
-    buttonsizer->Add( m_printerButton, 0, wxLEFT|wxRIGHT, 10 );
-    if ( !m_pageData.GetEnablePrinter() )
-        m_printerButton->Enable(false);
+    
+    if (wxPrintFactory::GetFactory()->HasPrintSetupDialog())
+    {
+        m_printerButton = new wxButton(this, wxPRINTID_SETUP, _("Printer...") );
+        buttonsizer->Add( m_printerButton, 0, wxLEFT|wxRIGHT, 10 );
+        if ( !m_pageData.GetEnablePrinter() )
+            m_printerButton->Enable(false);
+    }
+    else
+    {
+        m_printerButton = NULL;
+    }
+        
     //  if (m_printData.GetEnableHelp())
     //  wxButton *helpButton = new wxButton(this, (wxFunction)wxGenericPageSetupHelpProc, _("Help"), wxDefaultCoord, wxDefaultCoord, buttonWidth, buttonHeight);
     mainsizer->Add( buttonsizer, 0, wxCENTER|wxALL, 10 );
@@ -962,6 +937,11 @@ wxGenericPageSetupDialog::wxGenericPageSetupDialog( wxWindow *parent,
 
 wxGenericPageSetupDialog::~wxGenericPageSetupDialog()
 {
+}
+
+wxPageSetupDialogData& wxGenericPageSetupDialog::GetPageSetupDialogData()
+{ 
+    return m_pageData;
 }
 
 bool wxGenericPageSetupDialog::TransferDataToWindow()
@@ -1078,6 +1058,40 @@ wxComboBox *wxGenericPageSetupDialog::CreatePaperTypeChoice(int *x, int *y)
 
 //    choice->SetSelection(sel);
     return choice;
+}
+
+void wxGenericPageSetupDialog::OnPrinter(wxCommandEvent& WXUNUSED(event))
+{
+    // We no longer query GetPrintMode, so we can eliminate the need
+    // to call SetPrintMode.
+    // This has the limitation that we can't explicitly call the PostScript
+    // print setup dialog from the generic Page Setup dialog under Windows,
+    // but since this choice would only happen when trying to do PostScript
+    // printing under Windows (and only in 16-bit Windows which
+    // doesn't have a Windows-specific page setup dialog) it's worth it.
+
+    // First save the current settings, so the wxPrintData object is up to date.
+    TransferDataFromWindow();
+
+    // Transfer the current print settings from this dialog to the page setup dialog.
+    
+#if 0
+    // Use print factory later    
+    
+    wxPrintDialogData data;
+    data = GetPageSetupData().GetPrintData();
+    data.SetSetupDialog(true);
+    wxPrintDialog printDialog(this, & data);
+    printDialog.ShowModal();
+
+    // Transfer the page setup print settings from the page dialog to this dialog again, in case
+    // the page setup dialog changed something.
+    GetPageSetupData().GetPrintData() = printDialog.GetPrintDialogData().GetPrintData();
+    GetPageSetupData().CalculatePaperSizeFromId(); // Make sure page size reflects the id in wxPrintData
+
+    // Now update the dialog in case the page setup dialog changed some of our settings.
+    TransferDataToWindow();
+#endif
 }
 
 #endif

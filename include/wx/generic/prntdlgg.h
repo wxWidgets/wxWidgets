@@ -221,20 +221,20 @@ private:
 #endif
     // wxUSE_POSTSCRIPT
 
-class WXDLLEXPORT wxGenericPageSetupDialog : public wxDialog
+class WXDLLEXPORT wxGenericPageSetupDialog : public wxPageSetupDialogBase
 {
 public:
     wxGenericPageSetupDialog(wxWindow *parent = NULL,
-                             wxPageSetupData* data = NULL);
+                             wxPageSetupDialogData* data = NULL);
     virtual ~wxGenericPageSetupDialog();
 
     virtual bool TransferDataFromWindow();
     virtual bool TransferDataToWindow();
 
-    void OnPrinter(wxCommandEvent& event);
+    virtual wxPageSetupDialogData& GetPageSetupDialogData();
 
+    void OnPrinter(wxCommandEvent& event);
     wxComboBox *CreatePaperTypeChoice(int* x, int* y);
-    wxPageSetupData& GetPageSetupData() { return m_pageData; }
 
 public:
     wxButton*       m_printerButton;
@@ -245,7 +245,7 @@ public:
     wxTextCtrl*     m_marginBottomText;
     wxComboBox*       m_paperTypeChoice;
 
-    wxPageSetupData m_pageData;
+    wxPageSetupDialogData m_pageData;
 
 private:
     DECLARE_EVENT_TABLE()

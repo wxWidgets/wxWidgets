@@ -15,6 +15,7 @@
 
 #include "wx/object.h"
 #include "wx/printdlg.h"
+#include "wx/mac/printdlg.h"
 #include "wx/dcprint.h"
 #include "wx/msgdlg.h"
 #include "wx/mac/private/print.h"
@@ -22,7 +23,6 @@
 // Use generic page setup dialog: use your own native one if one exists.
 
 IMPLEMENT_DYNAMIC_CLASS(wxMacPrintDialog, wxPrintDialogBase)
-IMPLEMENT_CLASS(wxPageSetupDialog, wxDialog)
 
 wxMacPrintDialog::wxMacPrintDialog()
 {
@@ -81,22 +81,18 @@ wxDC *wxMacPrintDialog::GetPrintDC()
 }
 
 /*
-* wxPageSetupDialog
+* wxMacPageSetupDialog
 */
 
-wxPageSetupDialog::wxPageSetupDialog():
-wxDialog()
-{
-    m_dialogParent = NULL;
-}
+IMPLEMENT_CLASS(wxMacPageSetupDialog, wxPageSetupDialogBase)
 
-wxPageSetupDialog::wxPageSetupDialog(wxWindow *p, wxPageSetupData *data):
-wxDialog()
+wxMacPageSetupDialog::wxMacPageSetupDialog(wxWindow *p, wxPageSetupDialogData *data) :
+wxPageSetupDialogBase()
 {
     Create(p, data);
 }
 
-bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupData *data)
+bool wxMacPageSetupDialog::Create(wxWindow *p, wxPageSetupDialogData *data)
 {
     m_dialogParent = p;
     
@@ -106,17 +102,24 @@ bool wxPageSetupDialog::Create(wxWindow *p, wxPageSetupData *data)
     return TRUE;
 }
 
-wxPageSetupDialog::~wxPageSetupDialog()
+wxMacPageSetupDialog::~wxMacPageSetupDialog()
 {
 }
 
-int wxPageSetupDialog::ShowModal()
+wxPageSetupData& wxMacPageSetupDialog::GetPageSetupDialogData()
+{ 
+    return m_pageSetupData;
+}
+
+int wxMacPageSetupDialog::ShowModal()
 {
-    m_pageSetupData.ConvertToNative() ;
-    int result = m_pageSetupData.GetPrintData().m_nativePrintData->ShowPageSetupDialog() ;
+    m_pageSetupData.ConvertToNative();
+    
+    int result = m_pageSetupData.GetPrintData().m_nativePrintData->ShowPageSetupDialog();
+    
     if (result == wxID_OK )
-        m_pageSetupData.ConvertFromNative() ;
+        m_pageSetupData.ConvertFromNative();
         
-    return result ;
+    return result;
 }
 

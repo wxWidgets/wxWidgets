@@ -54,7 +54,7 @@ private:
 };
     
 // ---------------------------------------------------------------------------
-// wxPrinterDialog: the common dialog for printing.
+// wxWindowsPrintDialog: the MSW dialog for printing
 // ---------------------------------------------------------------------------
 
 class WXDLLEXPORT wxWindowsPrintDialog : public wxPrintDialogBase
@@ -89,28 +89,33 @@ private:
     DECLARE_CLASS(wxWindowsPrintDialog)
 };
 
-class WXDLLEXPORT wxPageSetupDialog: public wxDialog
+// ---------------------------------------------------------------------------
+// wxWindowsPageSetupDialog: the MSW page setup dialog 
+// ---------------------------------------------------------------------------
+
+class WXDLLEXPORT wxWindowsPageSetupDialog: public wxPageSetupDialogBase
 {
-    DECLARE_DYNAMIC_CLASS(wxPageSetupDialog)
-
 public:
-    wxPageSetupDialog();
-    wxPageSetupDialog(wxWindow *parent, wxPageSetupData *data = NULL);
-    virtual ~wxPageSetupDialog();
+    wxWindowsPageSetupDialog();
+    wxWindowsPageSetupDialog(wxWindow *parent, wxPageSetupDialogData *data = NULL);
+    virtual ~wxWindowsPageSetupDialog();
 
-    bool Create(wxWindow *parent, wxPageSetupData *data = NULL);
+    bool Create(wxWindow *parent, wxPageSetupDialogData *data = NULL);
     virtual int ShowModal();
     bool ConvertToNative( wxPageSetupDialogData &data );
     bool ConvertFromNative( wxPageSetupDialogData &data );
 
-    wxPageSetupData& GetPageSetupData() { return m_pageSetupData; }
+    virtual wxPageSetupData& GetPageSetupDialogData() { return m_pageSetupData; }
 
 private:
-    wxPageSetupData   m_pageSetupData;
-    wxWindow*         m_dialogParent;
-    void*             m_pageDlg;
+    wxPageSetupDialogData   m_pageSetupData;
+    wxWindow*               m_dialogParent;
+    
+    // holds MSW handle
+    void*                   m_pageDlg;
 
-    DECLARE_NO_COPY_CLASS(wxPageSetupDialog)
+private:
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxWindowsPageSetupDialog)
 };
 
 #endif // wxUSE_PRINTING_ARCHITECTURE
