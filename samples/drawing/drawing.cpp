@@ -150,7 +150,7 @@ public:
     void OnPaint(wxPaintEvent &event);
     void OnMouseMove(wxMouseEvent &event);
 
-    void Show(ScreenToShow show) { m_show = show; Refresh(); }
+    void ToShow(ScreenToShow show) { m_show = show; Refresh(); }
 
     // set or remove the clipping region
     void Clip(bool clip) { m_clip = clip; Refresh(); }
@@ -1141,7 +1141,7 @@ void MyFrame::OnClip(wxCommandEvent& event)
 
 void MyFrame::OnShow(wxCommandEvent& event)
 {
-    m_canvas->Show((ScreenToShow)(event.GetId() - MenuShow_First));
+    m_canvas->ToShow((ScreenToShow)(event.GetId() - MenuShow_First));
 }
 
 void MyFrame::OnOption(wxCommandEvent& event)

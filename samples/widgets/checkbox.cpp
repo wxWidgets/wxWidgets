@@ -148,8 +148,8 @@ void CheckBoxWidgetsPage::OnCheckBox(wxCommandEvent& event)
     };
     wxCheckBoxState state = (wxCheckBoxState) event.GetInt();
 
-    wxCHECK_RET( (state >= 0) && (state < WXSIZEOF(stateNames)),
-        "event.GetInt() returned an invalid wxCheckBoxState" );
+    wxCHECK_RET( (state >= (wxCheckBoxState)0) && (state < (wxCheckBoxState)WXSIZEOF(stateNames)),
+        _T("event.GetInt() returned an invalid wxCheckBoxState") );
 
     wxLogMessage(wxT("Checkbox now set to state: %s"),
         stateNames[state].c_str());

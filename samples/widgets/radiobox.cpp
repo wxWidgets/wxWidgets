@@ -384,10 +384,12 @@ void RadioWidgetsPage::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))
 void RadioWidgetsPage::OnRadioBox(wxCommandEvent& event)
 {
     int sel = m_radio->GetSelection();
+    int event_sel = event.GetSelection();
+    wxUnusedVar(event_sel);
 
     wxLogMessage(_T("Radiobox selection changed, now %d"), sel);
 
-    wxASSERT_MSG( sel == event.GetSelection(),
+    wxASSERT_MSG( sel == event_sel,
                   _T("selection should be the same in event and radiobox") );
 
     m_textCurSel->SetValue(wxString::Format(_T("%d"), sel));

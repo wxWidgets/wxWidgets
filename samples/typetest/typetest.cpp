@@ -728,7 +728,6 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( _T("\nTesting Ungetch():\n\n") );
 
     char ch = 0;
-    size_t pos = 0;
     wxString str;
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to wxFileOutputStream...\n\n") );
@@ -744,7 +743,7 @@ void MyApp::DoStreamDemo6(wxCommandEvent& WXUNUSED(event))
     wxFileInputStream file_input( wxString(_T("test_wx.dat")) );
 
     ch = file_input.GetC();
-    pos = file_input.TellI();
+    size_t pos = file_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
@@ -808,7 +807,6 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( _T("\nTesting Ungetch() in buffered input stream:\n\n") );
 
     char ch = 0;
-    size_t pos = 0;
     wxString str;
 
     textCtrl.WriteText( _T("Writing number 0 to 9 to wxFileOutputStream...\n\n") );
@@ -825,7 +823,7 @@ void MyApp::DoStreamDemo7(wxCommandEvent& WXUNUSED(event))
     wxBufferedInputStream buf_input( file_input );
 
     ch = buf_input.GetC();
-    pos = buf_input.TellI();
+    size_t pos = buf_input.TellI();
     str.Printf( wxT("Read char: %d. Now at position %d\n\n"), (int) ch, (int) pos );
     textCtrl.WriteText( str );
 
@@ -977,10 +975,11 @@ void MyApp::DoByteOrderDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.Clear();
     textCtrl << _T("\nTest byte order macros:\n\n");
 
-    if (wxBYTE_ORDER == wxLITTLE_ENDIAN)
+    #if wxBYTE_ORDER == wxLITTLE_ENDIAN
         textCtrl << _T("This is a little endian system.\n\n");
-    else
+    #else
         textCtrl << _T("This is a big endian system.\n\n");
+    #endif
 
     wxString text;
 

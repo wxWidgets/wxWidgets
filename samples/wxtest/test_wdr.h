@@ -24,7 +24,6 @@
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
 #include <wx/notebook.h>
-#include <wx/grid.h>
 
 // Declare window functions
 

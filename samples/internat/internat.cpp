@@ -337,8 +337,7 @@ void MyFrame::OnTest2(wxCommandEvent& WXUNUSED(event))
 {
     const wxChar* title = _("Testing _N() (ngettext)");
     wxTextEntryDialog d(this,
-	    _("Please enter range for plural forms of \"n files deleted\""
-		"phrase"),
+	    _("Please enter range for plural forms of \"n files deleted\" phrase"),
 	    title, _T("0-10"));
     if (d.ShowModal() == wxID_OK)
     {

@@ -152,19 +152,19 @@ void MyFrame::CreateMyMenuBar()
     SetMenuBar( menu_bar );
 }
 
-void MyFrame::OnCopy( wxCommandEvent &event )
+void MyFrame::OnCopy( wxCommandEvent& WXUNUSED(event) )
 {
 }
 
-void MyFrame::OnCut( wxCommandEvent &event )
+void MyFrame::OnCut( wxCommandEvent& WXUNUSED(event) )
 {
 }
 
-void MyFrame::OnPaste( wxCommandEvent &event )
+void MyFrame::OnPaste( wxCommandEvent& WXUNUSED(event) )
 {
 }
 
-void MyFrame::OnDelete( wxCommandEvent &event )
+void MyFrame::OnDelete( wxCommandEvent& WXUNUSED(event) )
 {
 }
 
@@ -177,17 +177,27 @@ void MyFrame::OnLastFiles( wxCommandEvent &event )
         
     size_t index = event.GetId() - ID_LAST_1;
     
-    wxASSERT( index < m_history.GetCount() );
-    
+    if( index < m_history.GetCount() )
+    {
     m_filename = m_history[index];
     
     m_text->Clear();
     m_text->LoadFile( m_filename );
     
     SetStatusText( m_filename );
+    }
+    else
+    {
+        wxMessageBox(
+            _T("This entry is empty. It should be filled once you will start opening."),
+            _T("Empty entry"),
+            wxOK | wxICON_INFORMATION,
+            this
+        );
+    }
 }
 
-void MyFrame::OnNew( wxCommandEvent &event )
+void MyFrame::OnNew( wxCommandEvent& WXUNUSED(event) )
 {
     if (!Discard()) return;
 
@@ -201,7 +211,7 @@ void MyFrame::OnNew( wxCommandEvent &event )
     SetStatusText( _T("") );
 }
 
-void MyFrame::OnOpen( wxCommandEvent &event )
+void MyFrame::OnOpen( wxCommandEvent& WXUNUSED(event) )
 {
     if (!Discard()) return;
 
@@ -246,12 +256,12 @@ void MyFrame::OnOpen( wxCommandEvent &event )
     }
 }
 
-void MyFrame::OnSave( wxCommandEvent &event )
+void MyFrame::OnSave( wxCommandEvent& WXUNUSED(event) )
 {
     Save();
 }
 
-void MyFrame::OnSaveAs( wxCommandEvent &event )
+void MyFrame::OnSaveAs( wxCommandEvent& WXUNUSED(event) )
 {
     wxFileDialog dialog( this, _T("Open text"), _T(""), _T(""),
         _T("Text file (*.txt)|*.txt|Any file (*)|*"),
@@ -265,14 +275,14 @@ void MyFrame::OnSaveAs( wxCommandEvent &event )
     }
 }
 
-void MyFrame::OnAbout( wxCommandEvent &event )
+void MyFrame::OnAbout( wxCommandEvent& WXUNUSED(event) )
 {
     wxMessageDialog dialog( this, _T("Welcome to wxEdit\n(C)opyright Robert Roebling"),
         _T("About wxEdit"), wxOK|wxICON_INFORMATION );
     dialog.ShowModal();
 }
 
-void MyFrame::OnQuit( wxCommandEvent &event )
+void MyFrame::OnQuit( wxCommandEvent& WXUNUSED(event) )
 {
      Close( TRUE );
 }
@@ -340,7 +350,7 @@ void MyFrame::OnUpdateUI( wxUpdateUIEvent &event )
     }
 }
 
-void MyFrame::OnCloseWindow( wxCloseEvent &event )
+void MyFrame::OnCloseWindow( wxCloseEvent& WXUNUSED(event) )
 {
     // Save changes?
     if (!Discard()) return;    

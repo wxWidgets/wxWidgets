@@ -161,11 +161,9 @@ wxPanel *MyNotebook::CreateInsertPage()
 
 void MyNotebook::CreateInitialPages()
 {
-    wxPanel *panel = (wxPanel *) NULL;
-
     // Create and add some panels to the notebook
 
-    panel = CreateRadioButtonsPage();
+    wxPanel *panel = CreateRadioButtonsPage();
     AddPage( panel, RADIOBUTTONS_PAGE_NAME, FALSE, GetIconIndex() );
 
     panel = CreateVetoPage();

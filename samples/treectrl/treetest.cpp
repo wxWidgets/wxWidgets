@@ -46,7 +46,10 @@
 #include "icon3.xpm"
 #include "icon4.xpm"
 #include "icon5.xpm"
+
+#if defined(__WXGTK__) || defined(__WXX11__) || defined(__WXMOTIF__) || defined(__WXMAC__) || defined(__WXMGL__)
 #include "mondrian.xpm"
+#endif
 
 
 // verify that the item is ok and insult the user if it is not

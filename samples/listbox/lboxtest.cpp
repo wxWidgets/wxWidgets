@@ -38,6 +38,7 @@
 
 // for all others, include the necessary headers
 #ifndef WX_PRECOMP
+    #include "wx/wx.h"
     #include "wx/app.h"
     #include "wx/frame.h"
     #include "wx/dcclient.h"
@@ -256,11 +257,6 @@ private:
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_APP(LboxTestApp)
-
-#ifdef __WXUNIVERSAL__
-    WX_USE_THEME(win32);
-    WX_USE_THEME(gtk);
-#endif // __WXUNIVERSAL__
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -670,14 +666,15 @@ void LboxTestFrame::OnUpdateUIAddSeveral(wxUpdateUIEvent& event)
 void LboxTestFrame::OnListbox(wxCommandEvent& event)
 {
     int sel = event.GetInt();
-    m_textDelete->SetValue(wxString::Format(_T("%ld"), sel));
+    m_textDelete->SetValue(wxString::Format(_T("%d"), sel));
 
     wxLogMessage(_T("Listbox item %d selected"), sel);
 }
 
 void LboxTestFrame::OnListboxDClick(wxCommandEvent& event)
 {
-    wxLogMessage(_T("Listbox item %d double clicked"), event.GetInt());
+    int sel = event.GetInt();
+    wxLogMessage(_T("Listbox item %d double clicked"), sel);
 }
 
 void LboxTestFrame::OnCheckOrRadioBox(wxCommandEvent& WXUNUSED(event))

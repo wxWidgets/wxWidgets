@@ -352,7 +352,7 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 void TextWindow::LogEvent(const wxChar *name, wxKeyEvent& event)
 {
     wxString key;
-    long keycode = event.KeyCode();
+    long keycode = event.GetKeyCode();
     switch ( keycode )
     {
         case WXK_BACK: key = _T("BACK"); break;
