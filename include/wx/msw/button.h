@@ -73,8 +73,8 @@ protected:
     void SetTmpDefault();
     void UnsetTmpDefault();
 
-    static void UpdateDefaultStyle(wxWindow *winDefault,
-                                   wxWindow *winOldDefault);
+    // set or unset BS_DEFPUSHBUTTON style
+    static void SetDefaultStyle(wxButton *btn, bool on);
 
     // usually overridden base class virtuals
     virtual wxSize DoGetBestSize() const;

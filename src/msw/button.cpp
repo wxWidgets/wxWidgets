@@ -201,7 +201,9 @@ wxSize wxButtonBase::GetDefaultSize()
    handled by ::DefWindowProc() (or maybe ::DefDialogProc()) using DM_SETDEFID
    Another aspect of "defaultness" is that the default button has different
    appearance: this is due to BS_DEFPUSHBUTTON style which is completely
-   separate from DM_SETDEFID stuff (!).
+   separate from DM_SETDEFID stuff (!). Also note that BS_DEFPUSHBUTTON should
+   be unset if our parent window is not active so it should be unset whenever
+   we lose activation and set back when we regain it.
 
    Final complication is that when a button is active, it should be the default
    one, i.e. pressing Enter on a button always activates it and not another
@@ -215,9 +217,13 @@ wxSize wxButtonBase::GetDefaultSize()
    the default item will be the permanent default -- that is the default button
    if any had been set or none otherwise, which is just what we want.
 
-   Remark that we probably don't need to send DM_SETDEFID as we don't use
-   ::IsDialogMessage() (which relies on it) any longer but OTOH it probably
-   doesn't hurt neither.
+   NB: all this is quite complicated by now and the worst is that normally
+       it shouldn't be necessary at all as for the normal Windows programs
+       DefWindowProc() and IsDialogMessage() take care of all this
+       automatically -- however in wxWindows programs this doesn't work for
+       nested hierarchies (i.e. a notebook inside a notebook) for unknown
+       reason and so we have to reproduce all this code ourselves. It would be
+       very nice if we could avoid doing it.
  */
 
 // set this button as the (permanently) default one in its panel
@@ -227,13 +233,15 @@ void wxButton::SetDefault()
 
     wxCHECK_RET( parent, _T("button without parent?") );
 
-    // set this one as the default button both for wxWindows and Windows
+    // set this one as the default button both for wxWindows ...
     wxWindow *winOldDefault = parent->SetDefaultItem(this);
-    ::SendMessage(GetWinHwnd(parent), DM_SETDEFID, m_windowId, 0L);
 
-    UpdateDefaultStyle(this, winOldDefault);
+    // ... and Windows
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), FALSE);
+    SetDefaultStyle(this, TRUE);
 }
 
+// set this button as being currently default
 void wxButton::SetTmpDefault()
 {
     wxWindow *parent = GetParent();
@@ -242,13 +250,12 @@ void wxButton::SetTmpDefault()
 
     wxWindow *winOldDefault = parent->GetDefaultItem();
     parent->SetTmpDefaultItem(this);
-    if ( winOldDefault != this )
-    {
-        UpdateDefaultStyle(this, winOldDefault);
-    }
-    //else: no styles to update
+
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), FALSE);
+    SetDefaultStyle(this, TRUE);
 }
 
+// unset this button as currently default, it may still stay permanent default
 void wxButton::UnsetTmpDefault()
 {
     wxWindow *parent = GetParent();
@@ -258,54 +265,64 @@ void wxButton::UnsetTmpDefault()
     parent->SetTmpDefaultItem(NULL);
 
     wxWindow *winOldDefault = parent->GetDefaultItem();
-    if ( winOldDefault != this )
-    {
-        UpdateDefaultStyle(winOldDefault, this);
-    }
-    //else: we had been default before anyhow
+
+    SetDefaultStyle(this, FALSE);
+    SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), TRUE);
 }
 
 /* static */
 void
-wxButton::UpdateDefaultStyle(wxWindow *winDefault, wxWindow *winOldDefault)
+wxButton::SetDefaultStyle(wxButton *btn, bool on)
 {
-    // clear the BS_DEFPUSHBUTTON for the old default button
-    wxButton *btnOldDefault = wxDynamicCast(winOldDefault, wxButton);
-    if ( btnOldDefault && btnOldDefault != winDefault )
-    {
-        // remove the BS_DEFPUSHBUTTON style from the other button
-        long style = ::GetWindowLong(GetHwndOf(btnOldDefault), GWL_STYLE);
+    // we may be called with NULL pointer -- simpler to do the check here than
+    // in the caller which does wxDynamicCast()
+    if ( !btn )
+        return;
 
-        // don't do it with the owner drawn buttons because it will reset
-        // BS_OWNERDRAW style bit too (BS_OWNERDRAW & BS_DEFPUSHBUTTON != 0)!
-        if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
+    // first, let DefDlgProc() know about the new default button
+    if ( on )
+    {
+        // we shouldn't set BS_DEFPUSHBUTTON for any button if we don't have
+        // focus at all any more
+        if ( !wxTheApp->IsActive() )
+            return;
+
+        // look for a panel-like window
+        wxWindow *win = btn->GetParent();
+        while ( win && !win->HasFlag(wxTAB_TRAVERSAL) )
+            win = win->GetParent();
+
+        if ( win )
         {
-            style &= ~BS_DEFPUSHBUTTON;
-            ::SendMessage(GetHwndOf(btnOldDefault), BM_SETSTYLE, style, 1L);
-        }
-        else
-        {
-            // redraw the button - it will notice itself that it's not the
-            // default one any longer
-            btnOldDefault->Refresh();
+            ::SendMessage(GetHwndOf(win), DM_SETDEFID, btn->GetId(), 0L);
+
+            // sending DM_SETDEFID also changes the button style to
+            // BS_DEFPUSHBUTTON so there is nothing more to do
         }
     }
 
-    // and set BS_DEFPUSHBUTTON for this button
-    wxButton *btnDefault = wxDynamicCast(winDefault, wxButton);
-    if ( btnDefault )
+    // then also change the style as needed
+    long style = ::GetWindowLong(GetHwndOf(btn), GWL_STYLE);
+    if ( !(style & BS_DEFPUSHBUTTON) == on )
     {
-        long style = ::GetWindowLong(GetHwndOf(btnDefault), GWL_STYLE);
+        // don't do it with the owner drawn buttons because it will
+        // reset BS_OWNERDRAW style bit too (as BS_OWNERDRAW &
+        // BS_DEFPUSHBUTTON != 0)!
         if ( (style & BS_OWNERDRAW) != BS_OWNERDRAW )
         {
-            style |= BS_DEFPUSHBUTTON;
-            ::SendMessage(GetHwndOf(btnDefault), BM_SETSTYLE, style, 1L);
+            ::SendMessage(GetHwndOf(btn), BM_SETSTYLE,
+                          on ? style | BS_DEFPUSHBUTTON
+                             : style & ~BS_DEFPUSHBUTTON,
+                          1L /* redraw */);
         }
-        else
+        else // owner drawn
         {
-            btnDefault->Refresh();
+            // redraw the button - it will notice itself that it's
+            // [not] the default one [any longer]
+            btn->Refresh();
         }
     }
+    //else: already has correct style
 }
 
 // ----------------------------------------------------------------------------
