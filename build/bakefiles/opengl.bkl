@@ -19,6 +19,7 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_GL</define>
         <sources>$(OPENGL_SRC)</sources>
+        <msvc-headers>$(OPENGL_HDR)</msvc-headers>
 
         <!-- link against base and core libs in multilib build: --> 
         <sys-lib>$(WXLIBGLDEP_CORE)</sys-lib>
@@ -41,6 +42,7 @@
     <lib id="gllib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and USE_OPENGL=='1'">
         <sources>$(OPENGL_SRC)</sources>
+        <msvc-headers>$(OPENGL_HDR)</msvc-headers>
     </lib>
 
 </makefile>

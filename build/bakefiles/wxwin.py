@@ -106,3 +106,20 @@ def getVersionMinor():
     return getVersion()[1]
 def getVersionRelease():
     return getVersion()[2]
+
+
+def headersOnly(files):
+    """Filters 'files' so that only headers are left. Used with
+       <msvc-project-files> to add headers to VC++ projects but not files such
+       as arrimpl.cpp."""
+    
+    def callback(cond, sources):
+        prf = suf = ''
+        if sources[0].isspace(): prefix=' '
+        if sources[-1].isspace(): suffix=' '
+        retval = []
+        for s in sources.split():
+            if s.endswith('.h'):
+                retval.append(s)
+        return '%s%s%s' % (prf, ' '.join(retval), suf)
+    return utils.substitute2(files, callback)

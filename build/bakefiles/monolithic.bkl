@@ -14,6 +14,7 @@
         <define>wxUSE_BASE=1</define> 
         <define>WXMAKINGDLL</define>
         <sources>$(MONOLIB_SRC)</sources>
+        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
         <ldlibs>$(EXTRALIBS_XML)</ldlibs>
     </dll>
     
@@ -21,6 +22,7 @@
          cond="SHARED=='0' and MONOLITHIC=='1'">
         <define>wxUSE_BASE=1</define> 
         <sources>$(MONOLIB_SRC)</sources>
+        <msvc-headers>$(ALL_HEADERS)</msvc-headers>
     </lib>
 
 </makefile>

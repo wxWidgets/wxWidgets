@@ -146,10 +146,10 @@
         <set var="BUILDDIR">$(OBJS)</set>
     </if>
     
-    <set var="LIBDIRNAME">
+    <set var="LIBDIRNAME" make_var="1">
         <if cond="FORMAT=='autoconf'">$(top_builddir)lib</if>
         <if cond="FORMAT!='autoconf'">
-            $(TOP_SRCDIR)lib$(DIRSEP)$(COMPILER)_$(CFG_NAME_PART)
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)_$(CFG_NAME_PART)
         </if>
     </set>
 
@@ -269,6 +269,14 @@
         </if>        
     </template>
 
+    <define-tag name="msvc-headers" rules="dll,lib">
+        <if cond="FORMAT=='msvc6prj'">
+            <msvc-project-files>
+                $(addPrefixToList('include\', wxwin.headersOnly(value)))
+            </msvc-project-files>
+        </if>
+    </define-tag>
+
     <!-- for GUI libs/samples: -->
     <template id="wx_append_nomono" template="wx_append_base_nomono">
         <ldlibs>$(EXTRALIBS_GUI)</ldlibs>
@@ -326,6 +334,7 @@
     </template>
     <template id="wx_base_dll" template="wx_dll_b"
                                template_append="wx_append_base_nomono">
+        <depends>wxexpat</depends>
         <depends>wxzlib</depends>
         <depends>wxregex</depends>
     </template>
