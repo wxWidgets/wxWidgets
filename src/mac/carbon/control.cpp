@@ -647,7 +647,6 @@ void wxControl::MacRedrawControl()
             {
                 wxMacDrawingHelper help( win ) ;
                 // the mac control manager always assumes to have the origin at 0,0
-                SetOrigin( 0 , 0 ) ;
                 wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
                 UMADrawControl( m_macControl ) ;
             }
@@ -667,7 +666,6 @@ void wxControl::OnPaint(wxPaintEvent& event)
             {
                 wxMacDrawingHelper help( win ) ;
                 // the mac control manager always assumes to have the origin at 0,0
-                SetOrigin( 0 , 0 ) ;
                 wxDC::MacSetupBackgroundForCurrentPort( MacGetBackgroundBrush() ) ;
                 UMADrawControl( m_macControl ) ;
             }

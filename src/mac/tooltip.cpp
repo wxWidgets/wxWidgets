@@ -226,7 +226,6 @@ void wxMacToolTip::Draw()
   		#endif
   		m_shown = true ;
 
-  		SetOrigin( 0 , 0 ) ;
   		TextFont( kFontIDGeneva ) ;
   		TextSize( 10 ) ;
   		TextFace( 0 ) ;
@@ -333,7 +332,6 @@ void wxMacToolTip::Clear()
 		#endif
 		m_shown = false ;
 
-		SetOrigin( 0 , 0 ) ;
 		BackColor( whiteColor ) ;
 		ForeColor(blackColor ) ;
 		DrawPicture(m_backpict, &m_rect);

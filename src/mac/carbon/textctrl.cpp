@@ -187,7 +187,6 @@ void wxTextCtrl::SetValue(const wxString& st)
         {
             wxMacDrawingHelper help( win ) ;
             // the mac control manager always assumes to have the origin at 0,0
-            SetOrigin( 0 , 0 ) ;
             
             bool            hasTabBehind = false ;
             wxWindow* parent = GetParent() ;
@@ -263,7 +262,6 @@ void wxTextCtrl::Paste()
             {
                 wxMacDrawingHelper help( win ) ;
                 // the mac control manager always assumes to have the origin at 0,0
-                SetOrigin( 0 , 0 ) ;
                 
                 bool            hasTabBehind = false ;
                 wxWindow* parent = GetParent() ;
@@ -1895,7 +1893,6 @@ void wxTextCtrl::SetValue(const wxString& st)
         {
             wxMacDrawingHelper help( win ) ;
             // the mac control manager always assumes to have the origin at 0,0
-            SetOrigin( 0 , 0 ) ;
             
             bool            hasTabBehind = false ;
             wxWindow* parent = GetParent() ;
@@ -1986,9 +1983,7 @@ void wxTextCtrl::Paste()
   			if ( win )
   			{
   				wxMacDrawingHelper help( win ) ;
-  				// the mac control manager always assumes to have the origin at 0,0
-  				SetOrigin( 0 , 0 ) ;
-  				
+  				// the mac control manager always assumes to have the origin at 0,0  				
   				bool			hasTabBehind = false ;
   				wxWindow* parent = GetParent() ;
   				while ( parent )

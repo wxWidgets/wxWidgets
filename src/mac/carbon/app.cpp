@@ -1161,7 +1161,6 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
                     #else
                     SetPort( (window) ) ;
                     #endif
-                    SetOrigin( 0 , 0 ) ;
                     LocalToGlobal( &pt ) ;
                     SetPort( port ) ;
                         win->SetSize( pt.h , pt.v , -1 ,
@@ -1232,7 +1231,6 @@ void wxApp::MacHandleMouseDownEvent( EventRecord *ev )
                     #else
                     SetPort( (window) ) ;
                     #endif
-                    SetOrigin( 0 , 0 ) ;
                     SetPort( port ) ;
                 }
                 if ( window != frontWindow && wxTheApp->s_captureWindow == NULL )

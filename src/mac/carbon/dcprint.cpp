@@ -237,7 +237,6 @@ void wxPrinterDC::StartPage(void)
   	m_macLocalOrigin.h =  (**m_printData.m_macPrintInfo).rPaper.left ;
   	m_macLocalOrigin.v =  (**m_printData.m_macPrintInfo).rPaper.top ;
   	
-	SetOrigin(  - m_macLocalOrigin.h , - m_macLocalOrigin.v  ) ;
 	Rect clip = { -32000 , -32000 , 32000 , 32000 } ;
 	::ClipRect( &clip ) ;
 	err = PrError() ;

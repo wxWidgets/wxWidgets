@@ -279,18 +279,6 @@ void  wxTopLevelWindowMac::MacCreateRealWindow( const wxString& title,
     m_macFocus = NULL ;
 }
 
-void wxTopLevelWindowMac::MacDoGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) 
-{
-    localOrigin->h = 0;
-    localOrigin->v = 0;
-    clipRect->left = 0;
-    clipRect->top = 0;
-    clipRect->right = m_width ;//width;
-    clipRect->bottom = m_height ;// height;
-    *window = m_macWindow ;
-    *rootwin = this ;
-}
-
 void wxTopLevelWindowMac::MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef *window  , wxWindowMac** rootwin) 
 {
     localOrigin->h = 0;
@@ -305,13 +293,7 @@ void wxTopLevelWindowMac::MacGetPortParams(Point* localOrigin, Rect* clipRect, W
 
 void wxTopLevelWindowMac::Clear()
 {
-    wxMacDrawingClientHelper helper ( this ) ;
-    int w ,h ;
-    wxPoint origin = GetClientAreaOrigin() ;
-    GetClientSize( &w , &h ) ;
-    ::SetThemeWindowBackground( m_macWindow , m_macWindowBackgroundTheme , false ) ;
-    Rect r = { origin.y , origin.x, origin.y+h , origin.x+w } ;
-    EraseRect( &r ) ;
+  wxWindow::Clear() ;
 }
 
 ControlHandle wxTopLevelWindowMac::MacGetContainerForEmbedding() 
@@ -327,7 +309,6 @@ void wxTopLevelWindowMac::MacUpdate( long timestamp)
     #else
     AGAPortHelper help( (m_macWindow) ) ;
     #endif
-    SetOrigin( 0 , 0 ) ;
     BeginUpdate( m_macWindow ) ;
 
     RgnHandle       updateRgn = NewRgn();    

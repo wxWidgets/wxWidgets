@@ -588,8 +588,6 @@ void wxToolBar::OnPaint(wxPaintEvent& event)
 	{
 		wxMacDrawingHelper help( win ) ;
 		// the mac control manager always assumes to have the origin at 0,0
-		SetOrigin( 0 , 0 ) ;
-		
 		bool			hasTabBehind = false ;
 		wxWindow* parent = GetParent() ;
 		while ( parent )

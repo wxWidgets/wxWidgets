@@ -366,7 +366,7 @@ void wxWindowMac::DoClientToScreen(int *x, int *y) const
     GrafPtr     port ;  
     ::GetPort( &port ) ;
     ::SetPort( UMAGetWindowPort( window ) ) ;
-    ::SetOrigin( 0 , 0 ) ;
+
     ::LocalToGlobal( &localwhere ) ;
     ::SetPort( port ) ;
     if(x)   *x = localwhere.h ;
@@ -560,6 +560,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
         if ( focus.Ok() )
         {
             Rect clientrect = { 0 , 0 , m_height , m_width } ;
+            focus.LocalToWindow( &clientrect ) ;
             // ClipRect( &clientrect ) ;
             InvalWindowRect( MacGetRootWindow() , &clientrect ) ;
         }
@@ -575,6 +576,7 @@ void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
             if ( focus.Ok() )
             {
                 Rect clientrect = { 0 , 0 , m_height , m_width } ;
+                focus.LocalToWindow( &clientrect ) ;
                 // ClipRect( &clientrect ) ;
                 InvalWindowRect( MacGetRootWindow() , &clientrect ) ;
             }
@@ -909,7 +911,17 @@ const wxBrush& wxWindowMac::MacGetBackgroundBrush()
                     // if we have the normal colours in the hierarchy but another control etc. -> use it's background
                     if ( parent->IsKindOf( CLASSINFO( wxNotebook ) ) || parent->IsKindOf( CLASSINFO( wxTabCtrl ) ))
                     {
-                        m_macBackgroundBrush.SetMacThemeBackground( kThemeBackgroundTabPane ) ; // todo eventually change for inactive
+                        Rect extent = { 0 , 0 , 0 , 0 } ;
+                        int x , y ;
+                        x = y = 0 ;
+                        wxSize size = GetSize() ;
+                        parent->MacClientToRootWindow( &x , &y ) ;
+                        extent.left = x ;
+                        extent.top = y ;
+                        extent.top-- ;
+                        extent.right = x + size.x ;
+                        extent.bottom = y + size.y ;
+                        m_macBackgroundBrush.SetMacThemeBackground( kThemeBackgroundTabPane , extent ) ; // todo eventually change for inactive
                         break ;
                     }
                 }
@@ -939,7 +951,7 @@ void wxWindowMac::OnNcPaint( wxNcPaintEvent& event )
     wxMacDrawingHelper focus( this ) ;
     if ( focus.Ok() )
     {
-      MacPaintBorders() ;
+      MacPaintBorders( focus.GetOrigin().h , focus.GetOrigin().v) ;
     }
 }
 
@@ -1004,7 +1016,7 @@ void wxWindowMac::SetScrollPos(int orient, int pos, bool refresh)
     }
 }
 
-void wxWindowMac::MacPaintBorders( ) 
+void wxWindowMac::MacPaintBorders( int left , int top ) 
 {
     if( IsTopLevel() )
         return ;
@@ -1018,7 +1030,7 @@ void wxWindowMac::MacPaintBorders( )
     if (HasFlag(wxRAISED_BORDER) || HasFlag( wxSUNKEN_BORDER) || HasFlag(wxDOUBLE_BORDER) )
     {
 #if wxMAC_USE_THEME_BORDER
-		  Rect rect = { 0 , 0 , m_height , m_width } ;
+		  Rect rect = { top , left , m_height + top , m_width + left } ;
 		  SInt32 border = 0 ;
 		  /*
 		  GetThemeMetric( kThemeMetricListBoxFrameOutset , &border ) ;
@@ -1030,38 +1042,38 @@ void wxWindowMac::MacPaintBorders( )
 #else
     	bool sunken = HasFlag( wxSUNKEN_BORDER ) ;
         RGBForeColor( &face );
-        MoveTo( 0 , m_height - 2 );
-        LineTo( 0 , 0 );
-        LineTo( m_width - 2 , 0 );
+        MoveTo( left + 0 , top + m_height - 2 );
+        LineTo( left + 0 , top + 0 );
+        LineTo( left + m_width - 2 , top + 0 );
 
-        MoveTo( 2 , m_height - 3 );
-        LineTo( m_width - 3 , m_height - 3 );
-        LineTo( m_width - 3 , 2 );
+        MoveTo( left + 2 , top + m_height - 3 );
+        LineTo( left + m_width - 3 , top + m_height - 3 );
+        LineTo( left + m_width - 3 , top + 2 );
 
         RGBForeColor( sunken ? &face : &black );
-        MoveTo( 0 , m_height - 1 );
-        LineTo( m_width - 1 , m_height - 1 );
-        LineTo( m_width - 1 , 0 );
+        MoveTo( left + 0 , top + m_height - 1 );
+        LineTo( left + m_width - 1 , top + m_height - 1 );
+        LineTo( left + m_width - 1 , top + 0 );
 
         RGBForeColor( sunken ? &shadow : &white );
-        MoveTo( 1 , m_height - 3 );
-        LineTo( 1, 1 );
-        LineTo( m_width - 3 , 1 );
+        MoveTo( left + 1 , top + m_height - 3 );
+        LineTo( left + 1, top + 1 );
+        LineTo( left + m_width - 3 , top + 1 );
 
         RGBForeColor( sunken ? &white : &shadow );
-        MoveTo( 1 , m_height - 2 );
-        LineTo( m_width - 2 , m_height - 2 );
-        LineTo( m_width - 2 , 1 );
+        MoveTo( left + 1 , top + m_height - 2 );
+        LineTo( left + m_width - 2 , top + m_height - 2 );
+        LineTo( left + m_width - 2 , top + 1 );
 
         RGBForeColor( sunken ? &black : &face );
-        MoveTo( 2 , m_height - 4 );
-        LineTo( 2 , 2 );
-        LineTo( m_width - 4 , 2 );
+        MoveTo( left + 2 , top + m_height - 4 );
+        LineTo( left + 2 , top + 2 );
+        LineTo( left + m_width - 4 , top + 2 );
 #endif
     }
     else if (HasFlag(wxSIMPLE_BORDER))
     {
-        Rect rect = { 0 , 0 , m_height , m_width } ;
+		    Rect rect = { top , left , m_height + top , m_width + left } ;
         RGBForeColor( &black ) ;
         FrameRect( &rect ) ;
     }
@@ -1111,19 +1123,20 @@ void wxWindowMac::SetScrollbar(int orient, int pos, int thumbVisible,
 // Does a physical scroll
 void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 {
-    wxMacDrawingClientHelper focus( this ) ;
+    wxMacDrawingHelper focus( this , true ) ;
     if ( focus.Ok() )
     {
         int width , height ;
         GetClientSize( &width , &height ) ;
 
         Rect scrollrect = { 0 , 0 , height , width } ;
-    
+        focus.LocalToWindow( &scrollrect ) ;
         RgnHandle updateRgn = NewRgn() ;
         ClipRect( &scrollrect ) ;
         if ( rect )
         {
             Rect r = { rect->y , rect->x , rect->y + rect->height , rect->x + rect->width } ;
+            focus.LocalToWindow( &r ) ;
             SectRect( &scrollrect , &r , &scrollrect ) ;        
         }
         ScrollRect( &scrollrect , dx , dy , updateRgn ) ;
@@ -1714,24 +1727,6 @@ void wxWindowMac::MacTopLevelWindowChangedPosition()
     }
 }
 
-bool wxWindowMac::MacSetPortFocusParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* win ) 
-{
-    if ( window == NULL )
-        return false ;
-        
-    GrafPtr currPort;
-    GrafPtr port ;
-
-    ::GetPort(&currPort);
-    port = UMAGetWindowPort( window) ;
-    if (currPort != port )
-            ::SetPort(port);
-                
-//  wxASSERT( port->portRect.left == 0 && port->portRect.top == 0 ) ; 
-    ::SetOrigin(-localOrigin.h, -localOrigin.v);
-    return true;            
-}
-
 bool wxWindowMac::MacSetPortDrawingParams( const Point & localOrigin, const Rect & clipRect, WindowRef window , wxWindowMac* win ) 
 {
     if ( window == NULL )
@@ -1743,9 +1738,9 @@ bool wxWindowMac::MacSetPortDrawingParams( const Point & localOrigin, const Rect
     port = UMAGetWindowPort( window) ;
     if (currPort != port )
             ::SetPort(port);
-//  wxASSERT( port->portRect.left == 0 && port->portRect.top == 0 ) ; 
-    ::SetOrigin(-localOrigin.h, -localOrigin.v);
-    ::ClipRect(&clipRect);
+    Rect cr = clipRect ;
+    OffsetRect( &cr , localOrigin.h , localOrigin.v ) ;
+    ::ClipRect(&cr);
 
     ::PenNormal() ;
     ::RGBBackColor(& win->GetBackgroundColour().GetPixel() ) ;
@@ -1773,27 +1768,9 @@ void wxWindowMac::MacGetPortParams(Point* localOrigin, Rect* clipRect, WindowRef
     SectRect(clipRect, &myClip, clipRect);
 }
 
-void wxWindowMac::MacDoGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) 
-{
-    wxASSERT( GetParent() != NULL ) ;
-
-    GetParent()->MacDoGetPortClientParams( localOrigin , clipRect , window, rootwin) ;
-
-    localOrigin->h += m_x;
-    localOrigin->v += m_y;
-    OffsetRect(clipRect, -m_x, -m_y);
-
-    Rect myClip;
-    myClip.left = 0;
-    myClip.top = 0;
-    myClip.right = m_width ;//width;
-    myClip.bottom = m_height ;// height;
-    SectRect(clipRect, &myClip, clipRect);
-}
-
 void wxWindowMac::MacGetPortClientParams(Point* localOrigin, Rect* clipRect, WindowRef *window , wxWindowMac** rootwin ) 
 {
-    MacDoGetPortClientParams( localOrigin , clipRect , window , rootwin ) ;
+    MacGetPortParams( localOrigin , clipRect, window , rootwin ) ;
 
     int width , height ;
     GetClientSize( &width , &height ) ;
@@ -1804,11 +1781,7 @@ void wxWindowMac::MacGetPortClientParams(Point* localOrigin, Rect* clipRect, Win
     localOrigin->v += client.y;
     OffsetRect(clipRect, -client.x, -client.y);
 
-    Rect myClip;
-    myClip.left = 0;
-    myClip.top = 0;
-    myClip.right = width;
-    myClip.bottom = height;
+    Rect myClip = { 0 , 0 , height , width } ;
     SectRect(clipRect, &myClip, clipRect);
 }
 
@@ -1868,10 +1841,9 @@ long wxWindowMac::MacRemoveBordersFromStyle( long style )
 }
 
 
-wxMacDrawingHelper::wxMacDrawingHelper( wxWindowMac * theWindow ) 
+wxMacDrawingHelper::wxMacDrawingHelper( wxWindowMac * theWindow , bool clientArea ) 
 {
     m_ok = false ;
-    Point localOrigin ;
     Rect clipRect ;
     WindowRef window ;
     wxWindowMac *rootwin ;
@@ -1880,12 +1852,15 @@ wxMacDrawingHelper::wxMacDrawingHelper( wxWindowMac * theWindow )
     GetPort( &m_formerPort ) ;
     if ( theWindow )
     {
-        theWindow->MacGetPortParams( &localOrigin , &clipRect , &window , &rootwin) ;
+        if ( clientArea )
+          theWindow->MacGetPortClientParams( &m_origin , &clipRect , &window , &rootwin) ;        
+        else
+          theWindow->MacGetPortParams( &m_origin , &clipRect , &window , &rootwin) ;
         m_currentPort = UMAGetWindowPort( window ) ;
         if ( m_formerPort != m_currentPort )
             SetPort( m_currentPort ) ;
         GetPenState( &m_savedPenState ) ;
-        theWindow->MacSetPortDrawingParams( localOrigin, clipRect, window , rootwin ) ; 
+        theWindow->MacSetPortDrawingParams( m_origin, clipRect, window , rootwin ) ; 
         m_ok = true ;
     }
 }
@@ -1896,46 +1871,6 @@ wxMacDrawingHelper::~wxMacDrawingHelper()
     {
         SetPort( m_currentPort ) ;
         SetPenState( &m_savedPenState ) ;
-        SetOrigin( 0 , 0 ) ;
-        Rect portRect ;
-        GetPortBounds( m_currentPort , &portRect ) ;
-        ClipRect( &portRect ) ;
-    }
-        
-    if ( m_formerPort != m_currentPort )
-        SetPort( m_formerPort ) ;
-}
-
-wxMacDrawingClientHelper::wxMacDrawingClientHelper( wxWindowMac * theWindow ) 
-{
-    m_ok = false ;
-    Point localOrigin ;
-    Rect clipRect ;
-    WindowRef window ;
-    wxWindowMac *rootwin ;
-    m_currentPort = NULL ;
-    
-    GetPort( &m_formerPort ) ;
-
-    if ( theWindow )
-    {
-        theWindow->MacGetPortClientParams( &localOrigin , &clipRect , &window , &rootwin) ;
-        m_currentPort = UMAGetWindowPort( window ) ;
-        if ( m_formerPort != m_currentPort )
-            SetPort( m_currentPort ) ;
-        GetPenState( &m_savedPenState ) ;
-        theWindow->MacSetPortDrawingParams( localOrigin, clipRect, window , rootwin ) ; 
-        m_ok = true ;
-    }
-}
-    
-wxMacDrawingClientHelper::~wxMacDrawingClientHelper() 
-{
-    if ( m_ok )
-    {
-        SetPort( m_currentPort ) ;
-        SetPenState( &m_savedPenState ) ;
-        SetOrigin( 0 , 0 ) ;
         Rect portRect ;
         GetPortBounds( m_currentPort , &portRect ) ;
         ClipRect( &portRect ) ;

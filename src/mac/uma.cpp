@@ -497,7 +497,6 @@ OSErr UMASetKeyboardFocus				(WindowPtr 				inWindow,
 
 	SetPortWindowPort( inWindow ) ;
 
-	SetOrigin( 0 , 0 ) ;
   err = SetKeyboardFocus( inWindow , inControl , inPart ) ;
 	SetPort( port ) ;
 	return err ;
@@ -549,7 +548,6 @@ void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate )
 		GrafPtr port ;
 		GetPort( &port ) ;
 		SetPortWindowPort( inWindowRef ) ;
-		SetOrigin( 0 , 0 ) ;
 		HiliteWindow( inWindowRef , inActivate ) ;
 		ControlHandle control = NULL ;
 		::GetRootControl( inWindowRef , & control ) ;

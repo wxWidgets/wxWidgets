@@ -119,8 +119,6 @@ wxDC::~wxDC(void)
 }
 void wxDC::MacSetupPort(AGAPortHelper* help) const
 {
-//	help->Setup( m_macPort ) ;
-	::SetOrigin(-m_macLocalOrigin.h, -m_macLocalOrigin.v);
 	SetClip( m_macCurrentClipRgn);
 
 	m_macFontInstalled = false ;
@@ -136,8 +134,8 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
  
      wxMacPortSetter helper(this) ;
  
-     wxCoord xx = XLOG2DEV(x);
-     wxCoord yy = YLOG2DEV(y);
+     wxCoord xx = XLOG2DEVMAC(x);
+     wxCoord yy = YLOG2DEVMAC(y);
      wxCoord w = bmp.GetWidth();
      wxCoord h = bmp.GetHeight();
      wxCoord ww = XLOG2DEVREL(w);
@@ -238,8 +236,8 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoord hei
     wxCHECK_RET(Ok(), wxT("wxDC::DoSetClippingRegion  Invalid DC"));
     wxCoord xx, yy, ww, hh;
 
-    xx = XLOG2DEV(x);
-    yy = YLOG2DEV(y);
+    xx = XLOG2DEVMAC(x);
+    yy = YLOG2DEVMAC(y);
     ww = XLOG2DEVREL(width);
     hh = YLOG2DEVREL(height);
 
@@ -278,8 +276,8 @@ void wxDC::DoSetClippingRegionAsRegion( const wxRegion &region  )
     region.GetBox( x, y, w, h );
     wxCoord xx, yy, ww, hh;
 
-    xx = XLOG2DEV(x);
-    yy = YLOG2DEV(y);
+    xx = XLOG2DEVMAC(x);
+    yy = YLOG2DEVMAC(y);
     ww = XLOG2DEVREL(w);
     hh = YLOG2DEVREL(h);
 
@@ -531,7 +529,7 @@ bool  wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
 
     RGBColor colour;
 
-    GetCPixel( XLOG2DEV(x), YLOG2DEV(y), &colour );
+    GetCPixel( XLOG2DEVMAC(x), YLOG2DEVMAC(y), &colour );
 
     // Convert from Mac colour to wx
     col->Set( colour.red   >> 8,
@@ -553,10 +551,10 @@ void  wxDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 		wxCoord offset = ( (m_pen.GetWidth() == 0 ? 1 :
                             m_pen.GetWidth() ) * (wxCoord)m_scaleX - 1) / 2;
 
-        wxCoord xx1 = XLOG2DEV(x1) - offset;
-        wxCoord yy1 = YLOG2DEV(y1) - offset;
-        wxCoord xx2 = XLOG2DEV(x2) - offset;
-        wxCoord yy2 = YLOG2DEV(y2) - offset;
+        wxCoord xx1 = XLOG2DEVMAC(x1) - offset;
+        wxCoord yy1 = YLOG2DEVMAC(y1) - offset;
+        wxCoord xx2 = XLOG2DEVMAC(x2) - offset;
+        wxCoord yy2 = YLOG2DEVMAC(y2) - offset;
 
         if ((m_pen.GetCap() == wxCAP_ROUND) &&
             (m_pen.GetWidth() <= 1))
@@ -593,14 +591,14 @@ void  wxDC::DoCrossHair( wxCoord x, wxCoord y )
         int w = 0;
         int h = 0;
         GetSize( &w, &h );
-        wxCoord xx = XLOG2DEV(x);
-        wxCoord yy = YLOG2DEV(y);
+        wxCoord xx = XLOG2DEVMAC(x);
+        wxCoord yy = YLOG2DEVMAC(y);
 
         MacInstallPen();
-        ::MoveTo( 0, yy );
-        ::LineTo( XLOG2DEVREL(w), yy );
-        ::MoveTo( xx, 0 );
-        ::LineTo( xx, YLOG2DEVREL(h) );
+        ::MoveTo( XLOG2DEVMAC(0), yy );
+        ::LineTo( XLOG2DEVMAC(w), yy );
+        ::MoveTo( xx, YLOG2DEVMAC(0) );
+        ::LineTo( xx, YLOG2DEVMAC(h) );
     }
 }
 
@@ -645,12 +643,12 @@ void  wxDC::DoDrawArc( wxCoord x1, wxCoord y1,
 {
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawArc  Invalid DC"));
 
-    wxCoord xx1 = XLOG2DEV(x1);
-    wxCoord yy1 = YLOG2DEV(y1);
-    wxCoord xx2 = XLOG2DEV(x2);
-    wxCoord yy2 = YLOG2DEV(y2);
-    wxCoord xxc = XLOG2DEV(xc);
-    wxCoord yyc = YLOG2DEV(yc);
+    wxCoord xx1 = XLOG2DEVMAC(x1);
+    wxCoord yy1 = YLOG2DEVMAC(y1);
+    wxCoord xx2 = XLOG2DEVMAC(x2);
+    wxCoord yy2 = YLOG2DEVMAC(y2);
+    wxCoord xxc = XLOG2DEVMAC(xc);
+    wxCoord yyc = YLOG2DEVMAC(yc);
     double dx = xx1 - xxc;
     double dy = yy1 - yyc;
     double radius = sqrt((double)(dx*dx+dy*dy));
@@ -701,8 +699,8 @@ void  wxDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
     Rect r;
     double angle = sa - ea;  // Order important Mac in opposite direction to wx
  
-    wxCoord xx = XLOG2DEV(x);
-    wxCoord yy = YLOG2DEV(y);
+    wxCoord xx = XLOG2DEVMAC(x);
+    wxCoord yy = YLOG2DEVMAC(y);
     wxCoord ww = m_signX * XLOG2DEVREL(w);
     wxCoord hh = m_signY * YLOG2DEVREL(h);
 
@@ -736,8 +734,8 @@ void  wxDC::DoDrawPoint( wxCoord x, wxCoord y )
   if (m_pen.GetStyle() != wxTRANSPARENT) 
   {
 		MacInstallPen() ;
-        wxCoord xx1 = XLOG2DEV(x); 
-        wxCoord yy1 = YLOG2DEV(y);
+        wxCoord xx1 = XLOG2DEVMAC(x); 
+        wxCoord yy1 = YLOG2DEVMAC(y);
 	
 		::MoveTo(xx1,yy1);
 		::LineTo(xx1+1, yy1+1);
@@ -759,14 +757,14 @@ void  wxDC::DoDrawLines(int n, wxPoint points[],
                       m_pen.GetWidth() ) * (wxCoord)m_scaleX - 1) / 2 ;
 
   wxCoord x1, x2 , y1 , y2 ;
-  x1 = XLOG2DEV(points[0].x + xoffset);
-  y1 = YLOG2DEV(points[0].y + yoffset);   
+  x1 = XLOG2DEVMAC(points[0].x + xoffset);
+  y1 = YLOG2DEVMAC(points[0].y + yoffset);   
   ::MoveTo(x1 - offset, y1 - offset );
   
   for (int i = 0; i < n-1; i++)
   {
-    x2 = XLOG2DEV(points[i+1].x + xoffset);
-    y2 = YLOG2DEV(points[i+1].y + yoffset);
+    x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
+    y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
     ::LineTo( x2 - offset, y2 - offset );
   }
 }
@@ -784,14 +782,14 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
   	{
   		PolyHandle polygon = OpenPoly();
   		
-  		x1 = XLOG2DEV(points[0].x + xoffset);
-  		y1 = YLOG2DEV(points[0].y + yoffset);   
+  		x1 = XLOG2DEVMAC(points[0].x + xoffset);
+  		y1 = YLOG2DEVMAC(points[0].y + yoffset);   
   		::MoveTo(x1,y1);
   
   		for (int i = 0; i < n-1; i++)
   		{
-    		x2 = XLOG2DEV(points[i+1].x + xoffset);
-    		y2 = YLOG2DEV(points[i+1].y + yoffset);
+    		x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
+    		y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
     		::LineTo(x2, y2);
   		}
 
@@ -807,14 +805,14 @@ void  wxDC::DoDrawPolygon(int n, wxPoint points[],
 	{
   		PolyHandle polygon = OpenPoly();
   		
-  		x1 = XLOG2DEV(points[0].x + xoffset);
-  		y1 = YLOG2DEV(points[0].y + yoffset);   
+  		x1 = XLOG2DEVMAC(points[0].x + xoffset);
+  		y1 = YLOG2DEVMAC(points[0].y + yoffset);   
   		::MoveTo(x1,y1);
   
   		for (int i = 0; i < n-1; i++)
   		{
-    		x2 = XLOG2DEV(points[i+1].x + xoffset);
-    		y2 = YLOG2DEV(points[i+1].y + yoffset);
+    		x2 = XLOG2DEVMAC(points[i+1].x + xoffset);
+    		y2 = YLOG2DEVMAC(points[i+1].y + yoffset);
     		::LineTo(x2, y2);
   		}
   		
@@ -835,8 +833,8 @@ void wxDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
     wxMacPortSetter helper(this) ;
 
-	wxCoord xx = XLOG2DEV(x);
-	wxCoord yy = YLOG2DEV(y);
+	wxCoord xx = XLOG2DEVMAC(x);
+	wxCoord yy = YLOG2DEVMAC(y);
 	wxCoord ww = m_signX * XLOG2DEVREL(width);
 	wxCoord hh = m_signY * YLOG2DEVREL(height);
 	
@@ -882,8 +880,8 @@ void  wxDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     if (radius < 0.0) 
   	    radius = - radius * ((width < height) ? width : height);
 	
-	wxCoord xx = XLOG2DEV(x);
-	wxCoord yy = YLOG2DEV(y);
+	wxCoord xx = XLOG2DEVMAC(x);
+	wxCoord yy = YLOG2DEVMAC(y);
 	wxCoord ww = m_signX * XLOG2DEVREL(width);
 	wxCoord hh = m_signY * YLOG2DEVREL(height);
 	
@@ -924,8 +922,8 @@ void  wxDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
     wxCHECK_RET(Ok(), wxT("Invalid DC"));
     wxMacPortSetter helper(this) ;
 
-	wxCoord xx = XLOG2DEV(x);
-	wxCoord yy = YLOG2DEV(y);
+	wxCoord xx = XLOG2DEVMAC(x);
+	wxCoord yy = YLOG2DEVMAC(y);
 	wxCoord ww = m_signX * XLOG2DEVREL(width);
 	wxCoord hh = m_signY * YLOG2DEVREL(height);
 
@@ -995,14 +993,14 @@ bool  wxDC::DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
 	if ( LockPixels(bmappixels) )
 	{
 		Rect srcrect , dstrect ;
-		srcrect.top = source->YLOG2DEV(ysrc) + source->m_macLocalOrigin.v ;
-		srcrect.left = source->XLOG2DEV(xsrc) + source->m_macLocalOrigin.h ;
-		srcrect.right = source->XLOG2DEV(xsrc + width ) + source->m_macLocalOrigin.v;
-		srcrect.bottom = source->YLOG2DEV(ysrc + height) + source->m_macLocalOrigin.h;
-		dstrect.top = YLOG2DEV(ydest) ;
-		dstrect.left = XLOG2DEV(xdest) ;
-		dstrect.bottom = YLOG2DEV(ydest + height )  ;
-		dstrect.right = XLOG2DEV(xdest + width ) ;
+		srcrect.top = source->YLOG2DEVMAC(ysrc) ;
+		srcrect.left = source->XLOG2DEVMAC(xsrc)  ;
+		srcrect.right = source->XLOG2DEVMAC(xsrc + width ) ;
+		srcrect.bottom = source->YLOG2DEVMAC(ysrc + height) ;
+		dstrect.top = YLOG2DEVMAC(ydest) ;
+		dstrect.left = XLOG2DEVMAC(xdest) ;
+		dstrect.bottom = YLOG2DEVMAC(ydest + height )  ;
+		dstrect.right = XLOG2DEVMAC(xdest + width ) ;
 
     	short  mode = (logical_func == wxCOPY ? srcCopy :
  //   	logical_func == wxCLEAR ? WHITENESS :
@@ -1140,7 +1138,7 @@ void  wxDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
             textPixel = data[(srcY*w + srcX)*3] == 0;
             if ( textPixel || (m_backgroundMode == wxSOLID) )
             {
-                SetCPixel(XLOG2DEV(x + dstX), YLOG2DEV(y + dstY),
+                SetCPixel(XLOG2DEVMAC(x + dstX), YLOG2DEVMAC(y + dstY),
                           textPixel ? &colText : &colBack);
             }
         }
@@ -1151,8 +1149,8 @@ void  wxDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y,
 #if 0
     if ( m_font.GetUnderlined() )
     {
-        ::MoveTo(XLOG2DEV(x + x4), YLOG2DEV(y + y4 + font->descent));
-        ::LineTo(XLOG2DEV(x + x3), YLOG2DEV(y + y3 + font->descent));
+        ::MoveTo(XLOG2DEVMAC(x + x4), YLOG2DEVMAC(y + y4 + font->descent));
+        ::LineTo(XLOG2DEVMAC(x + x3), YLOG2DEVMAC(y + y3 + font->descent));
     }
 #endif // 0
 
@@ -1165,8 +1163,8 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
     wxCHECK_RET(Ok(), wxT("wxDC::DoDrawText  Invalid DC"));
     wxMacPortSetter helper(this) ;
 
-	long xx = XLOG2DEV(x);
-	long yy = YLOG2DEV(y);
+	long xx = XLOG2DEVMAC(x);
+	long yy = YLOG2DEVMAC(y);
   
 //	if (m_pen.GetStyle() != wxTRANSPARENT)
 	{
@@ -1561,37 +1559,42 @@ void wxDC::MacInstallPen() const
 	m_macFontInstalled = false ;
 }
 
-int wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background ) 
+void wxDC::MacSetupBackgroundForCurrentPort(const wxBrush& background ) 
 {
     Pattern whiteColor ;
-	if ( background.IsMacTheme() )
-	{
-	    SetThemeBackground( background.GetMacTheme() , wxDisplayDepth() , true ) ;
-	}
-	else if ( background.IsMacThemeBackground() )
-	{
-	    Rect originBox = { 0,0,1,1 } ;
-	    ::ApplyThemeBackground( background.GetMacThemeBackground() , &originBox ,kThemeStateActive , 
-	        wxDisplayDepth() , true ) ;
-	}
-	else
-	{
-    	::RGBBackColor( &background.GetColour().GetPixel() );
-    	int brushStyle = background.GetStyle();
-    	if (brushStyle == wxSOLID)
-    		::BackPat(GetQDGlobalsWhite(&whiteColor));
-    	else if (IS_HATCH(brushStyle))
-    	{
-    		Pattern pat ;
-    		wxMacGetHatchPattern(brushStyle, &pat);
-    		::BackPat(&pat);
-    	}
-    	else
-    	{
-    		::BackPat(GetQDGlobalsWhite(&whiteColor));
-    	}
-	}
-	return 0 ;
+    switch( background.MacGetBrushKind() )
+    {
+      case kwxMacBrushTheme :
+        {
+	        ::SetThemeBackground( background.GetMacTheme() , wxDisplayDepth() , true ) ;
+          break ;
+        }
+      case kwxMacBrushThemeBackground :
+        {
+	        Rect extent ;
+	        ThemeBackgroundKind bg = background.GetMacThemeBackground( &extent ) ;
+	        ::ApplyThemeBackground( bg , &extent ,kThemeStateActive , wxDisplayDepth() , true ) ;
+          break ;
+        }
+      case kwxMacBrushColour :
+        {
+       	  ::RGBBackColor( &background.GetColour().GetPixel() );
+        	int brushStyle = background.GetStyle();
+        	if (brushStyle == wxSOLID)
+        		::BackPat(GetQDGlobalsWhite(&whiteColor));
+        	else if (IS_HATCH(brushStyle))
+        	{
+        		Pattern pat ;
+        		wxMacGetHatchPattern(brushStyle, &pat);
+        		::BackPat(&pat);
+        	}
+        	else
+        	{
+        		::BackPat(GetQDGlobalsWhite(&whiteColor));
+        	}
+          break ;
+        }
+    }
 }
 
 void wxDC::MacInstallBrush() const
