@@ -2179,6 +2179,7 @@ void wxDbTable::ClearMemberVar(UWORD colNo, bool setToNull)
         case SQL_C_USHORT:
             *((UWORD*) colDefs[colNo].PtrDataObj)           = 0;
             break;
+        case SQL_C_LONG:
         case SQL_C_SLONG:
             *((SDWORD *) colDefs[colNo].PtrDataObj)         = 0;
             break;
