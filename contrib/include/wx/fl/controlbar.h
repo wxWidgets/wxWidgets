@@ -1052,6 +1052,8 @@ public:
 	cbUpdatesManagerBase( wxFrameLayout* pPanel )
 		: mpLayout( pPanel ) {}
 
+	virtual ~cbUpdatesManagerBase() {}
+	
 	void SetLayout( wxFrameLayout* pLayout ) { mpLayout = pLayout; }
 
 	// notificiactions received from frame-layout (in the order, in which
