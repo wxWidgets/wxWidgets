@@ -209,6 +209,17 @@ wxComboBox::~wxComboBox()
     m_clientDataList.Clear();
 }
 
+void wxComboBox::SetFocus()
+{
+    if ( m_hasFocus )
+    {
+        // don't do anything if we already have focus
+        return;
+    }
+
+    gtk_widget_grab_focus( m_focusWidget );
+}
+
 void wxComboBox::AppendCommon( const wxString &item )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid combobox") );

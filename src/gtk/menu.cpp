@@ -1313,7 +1313,7 @@ static wxString GetHotKey( const wxMenuItem& item )
             default:
                 if ( code < 127 )
                 {
-                    gchar *name = gdk_keyval_name((guint)code);
+                    wxString name = wxGTK_CONV_BACK( gdk_keyval_name((guint)code) );
                     if ( name )
                     {
                         hotkey << name;

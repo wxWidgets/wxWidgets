@@ -207,8 +207,10 @@ int wxDialog::ShowModal()
     }
 
     wxBusyCursorSuspender cs; // temporarily suppress the busy cursor
-
+    
     Show( TRUE );
+
+    SetFocus();
 
     m_modalShowing = TRUE;
 
