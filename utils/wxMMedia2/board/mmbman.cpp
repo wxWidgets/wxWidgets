@@ -76,6 +76,7 @@ public:
   MMBoardTime GetLength();
 
   bool IsStopped();
+  bool IsPaused();
 
   wxString GetStringType();
   wxString GetStringInformation();
@@ -155,6 +156,11 @@ MMBoardTime MMBoardSoundFile::GetLength()
 bool MMBoardSoundFile::IsStopped()
 {
   return m_file_stream->IsStopped();
+}
+
+bool MMBoardSoundFile::IsPaused()
+{
+  return m_file_stream->IsPaused();
 }
 
 MMBoardTime MMBoardSoundFile::GetPosition()

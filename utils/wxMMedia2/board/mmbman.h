@@ -56,6 +56,7 @@ class MMBoardFile {
   virtual MMBoardTime GetLength() = 0;
 
   virtual bool IsStopped() = 0;
+  virtual bool IsPaused() = 0;
 
   virtual wxString GetStringType() = 0;
   virtual wxString GetStringInformation() = 0;

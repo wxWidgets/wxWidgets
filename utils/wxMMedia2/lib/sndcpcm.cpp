@@ -121,7 +121,7 @@ wxSoundStream& wxSoundStreamPcm::Write(const void *buffer, wxUint32 len)
   len2 = (m_16_to_8) ? len / 2 : len;
 
   tmp_buf = new char[len2];
-  m_function_out((const char *)buffer, tmp_buf, len);
+  m_function_out((const char *)buffer, tmp_buf, len2);
   m_sndio->Write(tmp_buf, len);
   delete[] tmp_buf;
 

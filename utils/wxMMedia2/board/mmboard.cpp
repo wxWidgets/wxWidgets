@@ -439,6 +439,15 @@ void MMBoardFrame::OnRefreshInfo(wxEvent& WXUNUSED(event))
 
 void MMBoardFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 {
+  m_stopButton->Enable(TRUE);
+  m_pauseButton->Enable(TRUE);
+  m_playButton->Enable(FALSE);
+
+  if (m_opened_file->IsPaused()) {
+    m_opened_file->Resume();
+    return;
+  }
+
   m_refreshTimer->Start(1000, FALSE);
 
   m_opened_file->Play();

@@ -63,6 +63,7 @@ class wxSoundFileStream: public wxSoundStream {
   bool Resume();
 
   bool IsStopped() const { return m_state == wxSOUND_FILE_STOPPED; }
+  bool IsPaused() const { return m_state == wxSOUND_FILE_PAUSED; }
 
   bool StartProduction(int evt);
   bool StopProduction();
