@@ -223,14 +223,24 @@ void wxPyOORClientData_dtor(wxPyOORClientData* self);
 
 class wxPyCallbackHelper;
 
+
+// Make SunCC happy and make typedef's for these that are extern "C"
+typedef void        (*p_SWIG_MakePtr_t)(char*, void*, char*);
+typedef char*       (*p_SWIG_GetPtr_t)(char*, void**, char*);
+typedef char*       (*p_SWIG_GetPtrObj_t)(PyObject*, void**, char*);
+typedef void        (*p_SWIG_RegisterMapping_t)(char*, char*, void *(*cast)(void *));
+typedef void        (*p_SWIG_addvarlink_t)(PyObject*, char*, PyObject *(*get_attr)(void), int (*set_attr)(PyObject *p));
+typedef PyObject*   (*p_SWIG_newvarlink_t)(void);
+
+
 struct wxPyCoreAPI {
 
-    void        (*p_SWIG_MakePtr)(char*, void*, char*);
-    char*       (*p_SWIG_GetPtr)(char*, void**, char*);
-    char*       (*p_SWIG_GetPtrObj)(PyObject*, void**, char*);
-    void        (*p_SWIG_RegisterMapping)(char*, char*, void *(*cast)(void *));
-    void        (*p_SWIG_addvarlink)(PyObject*, char*, PyObject *(*get_attr)(void), int (*set_attr)(PyObject *p));
-    PyObject*   (*p_SWIG_newvarlink)(void);
+    p_SWIG_MakePtr_t           p_SWIG_MakePtr;
+    p_SWIG_GetPtr_t            p_SWIG_GetPtr;
+    p_SWIG_GetPtrObj_t         p_SWIG_GetPtrObj;
+    p_SWIG_RegisterMapping_t   p_SWIG_RegisterMapping;
+    p_SWIG_addvarlink_t        p_SWIG_addvarlink;
+    p_SWIG_newvarlink_t        p_SWIG_newvarlink;
 
     PyThreadState* (*p_wxPyBeginAllowThreads)();
     void           (*p_wxPyEndAllowThreads)(PyThreadState* state);

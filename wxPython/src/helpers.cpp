@@ -94,11 +94,10 @@ BOOL WINAPI DllMain(
 
 
 wxPyApp::wxPyApp() {
-//    printf("**** ctor\n");
+    SetUseBestVisual(TRUE);
 }
 
 wxPyApp::~wxPyApp() {
-//    printf("**** dtor\n");
 }
 
 

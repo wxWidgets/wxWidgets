@@ -158,12 +158,12 @@ extern "C" SWIGEXPORT(void) initfontsc();
 // the wxc module and will then have safe access to these functions, even if
 // in another shared library.
 static wxPyCoreAPI API = {
-    SWIG_MakePtr,
-    SWIG_GetPtr,
-    SWIG_GetPtrObj,
-    SWIG_RegisterMapping,
-    SWIG_addvarlink,
-    SWIG_newvarlink,
+    (p_SWIG_MakePtr_t)SWIG_MakePtr,
+    (p_SWIG_GetPtr_t)SWIG_GetPtr,
+    (p_SWIG_GetPtrObj_t)SWIG_GetPtrObj,
+    (p_SWIG_RegisterMapping_t)SWIG_RegisterMapping,
+    (p_SWIG_addvarlink_t)SWIG_addvarlink,
+    (p_SWIG_newvarlink_t)SWIG_newvarlink,
 
     wxPyBeginAllowThreads,
     wxPyEndAllowThreads,
