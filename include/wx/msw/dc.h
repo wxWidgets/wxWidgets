@@ -125,7 +125,6 @@ public:
     // --------------------------
 
     virtual void SetRop(WXHDC cdc);
-    virtual void DoClipping(WXHDC cdc);
     virtual void SelectOldObjects(WXHDC dc);
 
     wxWindow *GetWindow() const { return m_canvas; }

@@ -175,43 +175,39 @@ void wxDC::SelectOldObjects(WXHDC dc)
 // clipping
 // ---------------------------------------------------------------------------
 
+#define DO_SET_CLIPPING_BOX()                   \
+{                                               \
+    RECT rect;                                  \
+                                                \
+    GetClipBox(GetHdc(), &rect);                \
+                                                \
+    m_clipX1 = (wxCoord) XDEV2LOG(rect.left);   \
+    m_clipY1 = (wxCoord) YDEV2LOG(rect.top);    \
+    m_clipX2 = (wxCoord) XDEV2LOG(rect.right);  \
+    m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom); \
+}
+
 void wxDC::DoSetClippingRegion(wxCoord cx, wxCoord cy, wxCoord cw, wxCoord ch)
 {
     m_clipping = TRUE;
-    m_clipX1 = (int)cx;
-    m_clipY1 = (int)cy;
-    m_clipX2 = (int)(cx + cw);
-    m_clipY2 = (int)(cy + ch);
-
-    DoClipping((WXHDC) m_hDC);
+    IntersectClipRect(GetHdc(), XLOG2DEV(cx), YLOG2DEV(cy),
+                                XLOG2DEV(cx + cw), YLOG2DEV(cy + ch));
+    DO_SET_CLIPPING_BOX()
 }
 
 void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
     wxCHECK_RET( region.GetHRGN(), wxT("invalid clipping region") );
 
-    wxRect box = region.GetBox();
-
     m_clipping = TRUE;
-    m_clipX1 = box.x;
-    m_clipY1 = box.y;
-    m_clipX2 = box.x + box.width;
-    m_clipY2 = box.y + box.height;
 
 #ifdef __WIN16__
     SelectClipRgn(GetHdc(), (HRGN) region.GetHRGN());
 #else
     ExtSelectClipRgn(GetHdc(), (HRGN) region.GetHRGN(), RGN_AND);
 #endif
-}
 
-void wxDC::DoClipping(WXHDC dc)
-{
-    if (m_clipping && dc)
-    {
-        IntersectClipRect((HDC) dc, XLOG2DEV(m_clipX1), YLOG2DEV(m_clipY1),
-                                    XLOG2DEV(m_clipX2), YLOG2DEV(m_clipY2));
-    }
+    DO_SET_CLIPPING_BOX()
 }
 
 void wxDC::DestroyClippingRegion()
