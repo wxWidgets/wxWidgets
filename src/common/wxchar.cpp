@@ -198,10 +198,12 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                 }
 
 #define APPEND_CH(ch) \
-                if ( lenCur == lenMax ) \
-                    return -1; \
-                \
-                buf[lenCur++] = ch
+                { \
+                    if ( lenCur == lenMax ) \
+                        return -1; \
+                    \
+                    buf[lenCur++] = ch; \
+                }
 
 #define APPEND_STR(s) \
                 { \
@@ -419,46 +421,71 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 
                     case wxT('c'):
                         {
-                            wxChar val = va_arg(argptr, int);
-                            // we don't need to honor padding here, do we?
+                            int val = va_arg(argptr, int);
+#if wxUSE_UNICODE
+                            if (ilen == -1)
+                            {
+                                const char buf[2] = { val, 0 };
+                                val = wxString(buf, wxConvLibc)[0u];
+                            }
+#elif wxUSE_WCHAR_T
+                            if (ilen == 1)
+                            {
+                                const wchar_t buf[2] = { val, 0 };
+                                val = wxString(buf, wxConvLibc)[0u];
+                            }
+#endif
+                            size_t i;
+
+                            if (!adj_left)
+                                for (i = 1; i < min_width; i++)
+                                    APPEND_CH(_T(' '));
+
                             APPEND_CH(val);
+
+                            if (adj_left)
+                                for (i = 1; i < min_width; i++)
+                                    APPEND_CH(_T(' '));
 
                             done = TRUE;
                         }
                         break;
 
                     case wxT('s'):
-                        if (ilen == -1)
                         {
-                            // wx extension: we'll let %hs mean non-Unicode
-                            // strings
-                            char *val = va_arg(argptr, char *);
+                            const wxChar *val = NULL;
 #if wxUSE_UNICODE
-                            // ASCII->Unicode constructor handles max_width
-                            // right
-                            wxString s(val, wxConvLibc, max_width);
-#else
-                            size_t len = wxSTRING_MAXLEN;
-                            if (val)
+                            wxString s;
+
+                            if (ilen == -1)
                             {
-                                for ( len = 0;
-                                      val[len] && (len < max_width);
-                                      len++ )
-                                    ;
+                                // wx extension: we'll let %hs mean non-Unicode
+                                // strings
+                                char *v = va_arg(argptr, char *);
+
+                                if (v)
+                                    val = s = wxString(v, wxConvLibc);
                             }
                             else
-                                val = wxT("(null)");
-                            wxString s(val, len);
+#elif wxUSE_WCHAR_T
+                            wxString s;
+
+                            if (ilen == 1)
+                            {
+                                // %ls means Unicode strings
+                                wchar_t *v = va_arg(argptr, wchar_t *);
+
+                                if (v)
+                                    val = s = wxString(v, wxConvLibc);
+                            }
+                            else
 #endif
-                            if (s.Len() < min_width)
-                                s.Pad(min_width - s.Len(), wxT(' '), adj_left);
+                            {
+                                val = va_arg(argptr, wxChar *);
+                            }
 
-                            APPEND_STR(s);
-                        }
-                        else
-                        {
-                            wxChar *val = va_arg(argptr, wxChar *);
-                            size_t len = wxSTRING_MAXLEN;
+                            size_t len = 0;
+
                             if (val)
                             {
                                 for ( len = 0;
@@ -466,16 +493,32 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
                                       len++ )
                                     ;
                             }
-                            else
+                            else if (max_width >= 6)
+                            {
                                 val = wxT("(null)");
+                                len = 6;
+                            }
+                            else
+                            {
+                                val = wxT("");
+                                len = 0;
+                            }
 
-                            wxString s(val, len);
-                            if (s.Len() < min_width)
-                                s.Pad(min_width - s.Len(), wxT(' '), adj_left);
+                            size_t i;
 
-                            APPEND_STR(s);
+                            if (!adj_left)
+                                for (i = len; i < min_width; i++)
+                                    APPEND_CH(_T(' '));
+
+                            for (i = 0; i < len; i++)
+                                APPEND_CH(val[i]);
+
+                            if (adj_left)
+                                for (i = len; i < min_width; i++)
+                                    APPEND_CH(_T(' '));
+
+                            done = TRUE;
                         }
-                        done = TRUE;
                         break;
 
                     case wxT('n'):
