@@ -37,6 +37,7 @@
 #include <sys/time.h>
 #include <unistd.h>
 
+#if wxUSE_SOCKETS
 // ----------------------------------------------------------------------------
 // wxSocketTable
 // ----------------------------------------------------------------------------
@@ -246,6 +247,7 @@ extern "C" void wxUnregisterSocketCallback(int fd, wxSocketTableType socketType)
         wxTheSocketTable->UnregisterCallback(fd, socketType);
     }
 }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxEventLoopImpl
@@ -469,8 +471,10 @@ bool wxEventLoop::Dispatch()
         
         FD_SET(fd, &readset);
 
+#if wxUSE_SOCKETS
         if (wxTheSocketTable)
             wxTheSocketTable->FillSets(& readset, & writeset, & highest);
+#endif
         
         if (select(highest+1, &readset, &writeset, NULL, & tv) == 0)
         {
@@ -483,10 +487,12 @@ bool wxEventLoop::Dispatch()
             if (FD_ISSET(fd, & readset))
                 XNextEvent((Display*) wxGetDisplay(), & event);
 
+#if wxUSE_SOCKETS
             // Check if any socket events were pending,
             // and if so, call their callbacks
             if (wxTheSocketTable)
                 wxTheSocketTable->ProcessEvents(& readset, & writeset);
+#endif
         }
 #endif
     } else

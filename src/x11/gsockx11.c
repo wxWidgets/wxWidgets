@@ -14,7 +14,7 @@
 #include "wx/unix/gsockunx.h"
 
 /*
- * TODO: have these in a common header instead of being repeated
+ * FIXME: have these in a common header instead of being repeated
  * in evtloop.cpp and gsockx11.c
  */
 
