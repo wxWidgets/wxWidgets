@@ -83,7 +83,7 @@ bool MakeGenApp::GenerateMakefile(const wxString& filename)
 
     wxString fileOutName;
     fileOutName << m_outdir << _T('/') << filename;
-    wxFFile fileOut(fileOutName, "w");
+    wxFFile fileOut(fileOutName, _T("w"));
     if ( !fileOut.IsOpened() )
     {
         wxLogError(_T("Makefile '%s' couldn't be generated."), filename.c_str());
