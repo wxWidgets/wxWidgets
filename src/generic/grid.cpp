@@ -3835,6 +3835,8 @@ void wxGrid::Init()
 
     // init attr cache
     m_attrCache.row = -1;
+    m_attrCache.col = -1;
+    m_attrCache.attr = NULL;
 
     // TODO: something better than this ?
     //
@@ -8638,13 +8640,16 @@ void wxGrid::ClearAttrCache()
 
 void wxGrid::CacheAttr(int row, int col, wxGridCellAttr *attr) const
 {
-    wxGrid *self = (wxGrid *)this;  // const_cast
+    if ( attr != NULL )
+    {
+        wxGrid *self = (wxGrid *)this;  // const_cast
 
-    self->ClearAttrCache();
-    self->m_attrCache.row = row;
-    self->m_attrCache.col = col;
-    self->m_attrCache.attr = attr;
-    wxSafeIncRef(attr);
+        self->ClearAttrCache();
+        self->m_attrCache.row = row;
+        self->m_attrCache.col = col;
+        self->m_attrCache.attr = attr;
+        wxSafeIncRef(attr);
+    }
 }
 
 bool wxGrid::LookupAttr(int row, int col, wxGridCellAttr **attr) const
