@@ -71,16 +71,6 @@ bool EqualCaseInsensitive(const char *a, const char *b) {
 	return 0 == CompareCaseInsensitive(a, b);
 }
 
-inline unsigned int HashString(const char *s, size_t len) {
-	unsigned int ret = 0;
-	while (len--) {
-		ret <<= 4;
-		ret ^= *s;
-		s++;
-	}
-	return ret;
-}
-
 PropSet::PropSet() {
 	superPS = 0;
 	for (int root = 0; root < hashRoots; root++)
@@ -160,7 +150,7 @@ SString PropSet::Get(const char *key) {
 	}
 }
 
-static bool IncludesVar(const char *value, const char *key) {
+bool PropSet::IncludesVar(const char *value, const char *key) {
 	const char *var = strstr(value, "$(");
 	while (var) {
 		if (isprefix(var + 2, key) && (var[2 + strlen(key)] == ')')) {

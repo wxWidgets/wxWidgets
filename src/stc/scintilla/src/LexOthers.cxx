@@ -268,6 +268,59 @@ static void ColourisePropsDoc(unsigned int startPos, int length, int, WordList *
 	}
 }
 
+// adaption by ksc, using the "} else {" trick of 1.53
+// 030721
+static void FoldPropsDoc(unsigned int startPos, int length, int, WordList *[], Accessor &styler) {
+	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
+
+	unsigned int endPos = startPos + length;
+	int visibleChars = 0;
+	int lineCurrent = styler.GetLine(startPos);
+
+	char chNext = styler[startPos];
+	int styleNext = styler.StyleAt(startPos);
+	bool headerPoint = false;
+
+	for (unsigned int i = startPos; i < endPos; i++) {
+		char ch = chNext;
+		chNext = styler[i+1];
+
+		int style = styleNext;
+		styleNext = styler.StyleAt(i + 1);
+		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
+
+		if (style==2) {
+			headerPoint = true;
+		}
+
+		if (atEOL) {
+			int lev = SC_FOLDLEVELBASE+1;
+			if (headerPoint)
+				lev = SC_FOLDLEVELBASE;
+
+			if (visibleChars == 0 && foldCompact)
+				lev |= SC_FOLDLEVELWHITEFLAG;
+
+			if (headerPoint)
+				lev |= SC_FOLDLEVELHEADERFLAG;
+
+			if (lev != styler.LevelAt(lineCurrent)) {
+				styler.SetLevel(lineCurrent, lev);
+			}
+
+			lineCurrent++;
+			visibleChars = 0;
+			headerPoint=false;
+		}
+		if (!isspacechar(ch))
+			visibleChars++;
+	}
+
+	int lev = headerPoint ? SC_FOLDLEVELBASE : SC_FOLDLEVELBASE+1;
+	int flagsNext = styler.LevelAt(lineCurrent) & ~SC_FOLDLEVELNUMBERMASK;
+	styler.SetLevel(lineCurrent, lev | flagsNext);
+}
+
 static void ColouriseMakeLine(
     char *lineBuffer,
     unsigned int lengthLine,
@@ -638,7 +691,7 @@ static void ColouriseNullDoc(unsigned int startPos, int length, int, WordList *[
 
 LexerModule lmBatch(SCLEX_BATCH, ColouriseBatchDoc, "batch", 0, batchWordListDesc);
 LexerModule lmDiff(SCLEX_DIFF, ColouriseDiffDoc, "diff", 0, emptyWordListDesc);
-LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc, "props", 0, emptyWordListDesc);
+LexerModule lmProps(SCLEX_PROPERTIES, ColourisePropsDoc, "props", FoldPropsDoc, emptyWordListDesc);
 LexerModule lmMake(SCLEX_MAKEFILE, ColouriseMakeDoc, "makefile", 0, emptyWordListDesc);
 LexerModule lmErrorList(SCLEX_ERRORLIST, ColouriseErrorListDoc, "errorlist", 0, emptyWordListDesc);
 LexerModule lmLatex(SCLEX_LATEX, ColouriseLatexDoc, "latex", 0, emptyWordListDesc);

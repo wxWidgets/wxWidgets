@@ -560,7 +560,15 @@ SOURCE=../../src/stc\scintilla\src\LexLua.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=../../src/stc\scintilla\src\LexMMIXAL.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=../../src/stc\scintilla\src\LexMatlab.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/stc\scintilla\src\LexNsis.cxx
 # End Source File
 # Begin Source File
 
@@ -569,6 +577,10 @@ SOURCE=../../src/stc\scintilla\src\LexOthers.cxx
 # Begin Source File
 
 SOURCE=../../src/stc\scintilla\src\LexPOV.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/stc\scintilla\src\LexPS.cxx
 # End Source File
 # Begin Source File
 
@@ -589,6 +601,10 @@ SOURCE=../../src/stc\scintilla\src\LexRuby.cxx
 # Begin Source File
 
 SOURCE=../../src/stc\scintilla\src\LexSQL.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=../../src/stc\scintilla\src\LexScriptol.cxx
 # End Source File
 # Begin Source File
 

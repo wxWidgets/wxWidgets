@@ -39,14 +39,18 @@
         scintilla/src/LexLisp.cxx
         scintilla/src/LexLout.cxx
         scintilla/src/LexLua.cxx
+        scintilla/src/LexMMIXAL.cxx
         scintilla/src/LexMatlab.cxx
+        scintilla/src/LexNsis.cxx
         scintilla/src/LexOthers.cxx
         scintilla/src/LexPOV.cxx
+        scintilla/src/LexPS.cxx
         scintilla/src/LexPascal.cxx
         scintilla/src/LexPerl.cxx
         scintilla/src/LexPython.cxx
         scintilla/src/LexRuby.cxx
         scintilla/src/LexSQL.cxx
+        scintilla/src/LexScriptol.cxx
         scintilla/src/LexVB.cxx
         scintilla/src/LineMarker.cxx
         scintilla/src/PropSet.cxx

@@ -195,7 +195,7 @@ static void FoldESCRIPTDoc(unsigned int startPos, int length, int initStyle, Wor
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
 
-
+            
 		if (foldComment && IsStreamCommentStyle(style)) {
 			if (!IsStreamCommentStyle(stylePrev)) {
 				levelCurrent++;

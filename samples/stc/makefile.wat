@@ -169,7 +169,9 @@ STCTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -i=.\..\..\include $(CXXFLAGS)
 STCTEST_OBJECTS =  &
-	$(OBJS)\stctest_stctest.obj
+	$(OBJS)\stctest_stctest.obj &
+	$(OBJS)\stctest_edit.obj &
+	$(OBJS)\stctest_prefs.obj
 
 
 all : $(OBJS)
@@ -178,7 +180,13 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\stctest.exe data
+all : .SYMBOLIC $(OBJS)\stctest.exe
+
+$(OBJS)\stctest_edit.obj :  .AUTODEPEND .\edit.cpp
+	$(CXX) -zq -fo=$^@ $(STCTEST_CXXFLAGS) $<
+
+$(OBJS)\stctest_prefs.obj :  .AUTODEPEND .\prefs.cpp
+	$(CXX) -zq -fo=$^@ $(STCTEST_CXXFLAGS) $<
 
 $(OBJS)\stctest_sample.res :  .AUTODEPEND .\..\..\..\samples\sample.rc
 	wrc -q -ad -bt=nt -r -fo=$^@  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\..\include -i=$(SETUPHDIR) -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples $<
@@ -192,10 +200,6 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\stctest.exe del $(OBJS)\stctest.exe
-
-data : .SYMBOLIC 
-	if not exist $(OBJS) mkdir $(OBJS)
-	for %f in (stctest.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\stctest.exe :  $(STCTEST_OBJECTS) $(OBJS)\stctest_sample.res
 	@%create $(OBJS)\stctest.lbc

@@ -394,7 +394,7 @@ bool Document::InsertStyledString(int position, char *s, int insertLength) {
 			    DocModification(
 			        SC_MOD_BEFOREINSERT | SC_PERFORMED_USER,
 			        position / 2, insertLength / 2,
-			        0, 0));
+			        0, s));
 			int prevLinesTotal = LinesTotal();
 			bool startSavePoint = cb.IsSavePoint();
 			const char *text = cb.InsertString(position, s, insertLength);
@@ -926,7 +926,7 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 				if (line == lineRangeStart) {
 					if ((startPos != endOfLine) && (searchEnd == '$'))
 						continue;	// Can't match end of line if start position before end of line
-					endOfLine = startPos;
+					endOfLine = startPos+1;
 				}
 			}
 
@@ -938,10 +938,10 @@ long Document::FindText(int minPos, int maxPos, const char *s,
 				if (increment == -1) {
 					// Check for the last match on this line.
 					int repetitions = 1000;	// Break out of infinite loop
-					while (success && (pre->eopat[0] < endOfLine) && (repetitions--)) {
-						success = pre->Execute(di, pre->eopat[0], endOfLine);
+					while (success && (pre->eopat[0] <= (endOfLine+1)) && (repetitions--)) {
+						success = pre->Execute(di, pos+1, endOfLine+1);
 						if (success) {
-							if (pre->eopat[0] <= minPos) {
+							if (pre->eopat[0] <= (minPos+1)) {
 								pos = pre->bopat[0];
 								lenRet = pre->eopat[0] - pre->bopat[0];
 							} else {

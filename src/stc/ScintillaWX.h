@@ -139,7 +139,7 @@ public:
     void DoMiddleButtonUp(Point pt);
     void DoMouseWheel(int rotation, int delta, int linesPerAction, int ctrlDown, bool isPageScroll);
     void DoAddChar(int key);
-    int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed);
+    int  DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool meta, bool* consumed);
     void DoTick() { Tick(); }
 
 #if wxUSE_DRAG_AND_DROP

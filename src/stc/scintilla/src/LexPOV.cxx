@@ -1,9 +1,18 @@
 // Scintilla source code edit control
 /** @file LexPOV.cxx
- ** Lexer for POV-Ray, based on lexer for C++.
+ ** Lexer for POV-Ray SDL (Persistance of Vision Raytracer, Scene Description Language).
+ ** Written by Philippe Lhoste but this is mostly a derivative of LexCPP...
  **/
-// Copyright 2003 by Steven te Brinke <steven.t.b@zonnet.nl>
+// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
+
+// Some points that distinguish from a simple C lexer:
+// Identifiers start only by a character.
+// No line continuation character.
+// Strings are limited to 256 characters.
+// Directives are similar to preprocessor commands,
+// but we match directive keywords and colorize incorrect ones.
+// Block comments can be nested (code stolen from my code in LexLua).
 
 #include <stdlib.h>
 #include <string.h>
@@ -20,90 +29,119 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-#define KEYWORD_BOXHEADER 1
-#define KEYWORD_FOLDCONTRACTED 2
-
 static inline bool IsAWordChar(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '.' || ch == '_');
+	return ch < 0x80 && (isalnum(ch) || ch == '_');
 }
 
-static inline bool IsAWordStart(const int ch) {
-	return (ch < 0x80) && (isalnum(ch) || ch == '_');
+inline bool IsAWordStart(const int ch) {
+	return ch < 0x80 && isalpha(ch);
 }
 
-static inline bool IsStateComment(const int state) {
-	return ((state == SCE_POV_COMMENT) ||
-	        (state == SCE_POV_COMMENTLINE) ||
-	        (state == SCE_POV_COMMENTDOC));
-}
+static void ColourisePovDoc(
+	unsigned int startPos,
+	int length,
+	int initStyle,
+	WordList *keywordlists[],
+    Accessor &styler) {
 
-static inline bool IsStateString(const int state) {
-	return ((state == SCE_POV_STRING));
-}
-
-static void ColourisePOVDoc(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
-                            Accessor &styler) {
-
-	WordList &keywords = *keywordlists[0];
+	WordList &keywords1 = *keywordlists[0];
 	WordList &keywords2 = *keywordlists[1];
+	WordList &keywords3 = *keywordlists[2];
+	WordList &keywords4 = *keywordlists[3];
+	WordList &keywords5 = *keywordlists[4];
+	WordList &keywords6 = *keywordlists[5];
+	WordList &keywords7 = *keywordlists[6];
+	WordList &keywords8 = *keywordlists[7];
+
+	int currentLine = styler.GetLine(startPos);
+	// Initialize the block comment /* */ nesting level, if we are inside such a comment.
+	int blockCommentLevel = 0;
+	if (initStyle == SCE_POV_COMMENT) {
+		blockCommentLevel = styler.GetLineState(currentLine - 1);
+	}
 
 	// Do not leak onto next line
-	/*if (initStyle == SCE_POV_STRINGEOL)
-		initStyle = SCE_POV_DEFAULT;*/
+	if (initStyle == SCE_POV_STRINGEOL) {
+		initStyle = SCE_POV_DEFAULT;
+	}
 
 	StyleContext sc(startPos, length, initStyle, styler);
-
-	bool caseSensitive = styler.GetPropertyInt("pov.case.sensitive", 1) != 0;
+	short stringLen = 0;
 
 	for (; sc.More(); sc.Forward()) {
-
-		/*if (sc.atLineStart && (sc.state == SCE_POV_STRING)) {
-			// Prevent SCE_POV_STRINGEOL from leaking back to previous line
-			sc.SetState(SCE_POV_STRING);
-		}*/
-
-		// Handle line continuation generically.
-		if (sc.ch == '\\') {
-			if (sc.chNext == '\n' || sc.chNext == '\r') {
-				sc.Forward();
-				if (sc.ch == '\r' && sc.chNext == '\n') {
-					sc.Forward();
-				}
-				continue;
+		if (sc.atLineEnd) {
+			// Update the line state, so it can be seen by next line
+			currentLine = styler.GetLine(sc.currentPos);
+			if (sc.state == SCE_POV_COMMENT) {
+				// Inside a block comment, we set the line state
+				styler.SetLineState(currentLine, blockCommentLevel);
+			} else {
+				// Reset the line state
+				styler.SetLineState(currentLine, 0);
 			}
 		}
 
+		if (sc.atLineStart && (sc.state == SCE_POV_STRING)) {
+			// Prevent SCE_POV_STRINGEOL from leaking back to previous line
+			sc.SetState(SCE_POV_STRING);
+		}
+
 		// Determine if the current state should terminate.
-		if (sc.state == SCE_POV_OPERATOR || sc.state == SCE_POV_BRACE) {
+		if (sc.state == SCE_POV_OPERATOR) {
 			sc.SetState(SCE_POV_DEFAULT);
 		} else if (sc.state == SCE_POV_NUMBER) {
-			if (!IsADigit(sc.ch) || sc.ch != '.') {
-				sc.SetState(SCE_POV_DEFAULT);
+			// We stop the number definition on non-numerical non-dot non-eE non-sign char
+			if (!(isdigit(sc.ch) || sc.ch == '.' ||
+				  toupper(sc.ch) == 'E' || sc.ch == '-' || sc.ch == '+')) {
+					// Not exactly following number definition (several dots are seen as OK, etc.)
+					// but probably enough in most cases.
+					sc.SetState(SCE_POV_DEFAULT);
 			}
 		} else if (sc.state == SCE_POV_IDENTIFIER) {
-			if (!IsAWordChar(sc.ch) || (sc.ch == '.')) {
+			if (!IsAWordChar(sc.ch)) {
 				char s[100];
-				if (caseSensitive) {
-					sc.GetCurrent(s, sizeof(s));
-				} else {
-					sc.GetCurrentLowered(s, sizeof(s));
-				}
-				if (keywords.InList(s)) {
-					sc.ChangeState(SCE_POV_WORD);
-				} else if (keywords2.InList(s)) {
+				sc.GetCurrent(s, sizeof(s));
+				if (keywords2.InList(s)) {
 					sc.ChangeState(SCE_POV_WORD2);
+				} else if (keywords3.InList(s)) {
+					sc.ChangeState(SCE_POV_WORD3);
+				} else if (keywords4.InList(s)) {
+					sc.ChangeState(SCE_POV_WORD4);
+				} else if (keywords5.InList(s)) {
+					sc.ChangeState(SCE_POV_WORD5);
+				} else if (keywords6.InList(s)) {
+					sc.ChangeState(SCE_POV_WORD6);
+				} else if (keywords7.InList(s)) {
+					sc.ChangeState(SCE_POV_WORD7);
+				} else if (keywords8.InList(s)) {
+					sc.ChangeState(SCE_POV_WORD8);
+				}
+				sc.SetState(SCE_POV_DEFAULT);
+			}
+		} else if (sc.state == SCE_POV_DIRECTIVE) {
+			if (!IsAWordChar(sc.ch)) {
+				char s[100], *p;
+				sc.GetCurrent(s, sizeof(s));
+				p = s;
+				// Skip # and whitespace between # and directive word
+				do {
+					p++;
+				} while ((*p == ' ' || *p == '\t') && *p != '\0');
+				if (!keywords1.InList(p)) {
+					sc.ChangeState(SCE_POV_BADDIRECTIVE);
 				}
 				sc.SetState(SCE_POV_DEFAULT);
 			}
 		} else if (sc.state == SCE_POV_COMMENT) {
-			if (sc.Match('*', '/')) {
+			if (sc.Match('/', '*')) {
+				blockCommentLevel++;
 				sc.Forward();
-				sc.ForwardSetState(SCE_POV_DEFAULT);
-			}
-		} else if (sc.state == SCE_POV_COMMENTDOC) {
-			if (sc.Match('*', '/')) {
+			} else if (sc.Match('*', '/') && blockCommentLevel > 0) {
+				blockCommentLevel--;
 				sc.Forward();
-				sc.ForwardSetState(SCE_POV_DEFAULT);
+				if (blockCommentLevel == 0) {
+					sc.ForwardSetState(SCE_POV_DEFAULT);
+				}
 			}
 		} else if (sc.state == SCE_POV_COMMENTLINE) {
 			if (sc.atLineEnd) {
@@ -111,10 +149,32 @@ static void ColourisePOVDoc(unsigned int startPos, int length, int initStyle, Wo
 			}
 		} else if (sc.state == SCE_POV_STRING) {
 			if (sc.ch == '\\') {
+				stringLen++;
+				if (strchr("abfnrtuv0'\"", sc.chNext)) {
+					// Compound characters are counted as one.
+					// Note: for Unicode chars \u, we shouldn't count the next 4 digits...
+					sc.Forward();
+				}
+			} else if (sc.ch == '\"') {
+				sc.ForwardSetState(SCE_POV_DEFAULT);
+			} else if (sc.atLineEnd) {
+				sc.ChangeState(SCE_POV_STRINGEOL);
+				sc.ForwardSetState(SCE_POV_DEFAULT);
+			} else {
+				stringLen++;
+			}
+			if (stringLen > 256) {
+				// Strings are limited to 256 chars
+				sc.SetState(SCE_POV_STRINGEOL);
+			}
+		} else if (sc.state == SCE_POV_STRINGEOL) {
+			if (sc.ch == '\\') {
 				if (sc.chNext == '\"' || sc.chNext == '\\') {
 					sc.Forward();
 				}
 			} else if (sc.ch == '\"') {
+				sc.ForwardSetState(SCE_C_DEFAULT);
+			} else if (sc.atLineEnd) {
 				sc.ForwardSetState(SCE_POV_DEFAULT);
 			}
 		}
@@ -123,35 +183,43 @@ static void ColourisePOVDoc(unsigned int startPos, int length, int initStyle, Wo
 		if (sc.state == SCE_POV_DEFAULT) {
 			if (IsADigit(sc.ch) || (sc.ch == '.' && IsADigit(sc.chNext))) {
 				sc.SetState(SCE_POV_NUMBER);
-			} else if (IsAWordStart(sc.ch) || (sc.ch == '#')) {
+			} else if (IsAWordStart(sc.ch)) {
 				sc.SetState(SCE_POV_IDENTIFIER);
 			} else if (sc.Match('/', '*')) {
+				blockCommentLevel = 1;
 				sc.SetState(SCE_POV_COMMENT);
 				sc.Forward();	// Eat the * so it isn't used for the end of the comment
 			} else if (sc.Match('/', '/')) {
 				sc.SetState(SCE_POV_COMMENTLINE);
 			} else if (sc.ch == '\"') {
 				sc.SetState(SCE_POV_STRING);
-				//} else if (isoperator(static_cast<char>(sc.ch))) {
-			} else if (sc.ch == '+' || sc.ch == '-' || sc.ch == '*' || sc.ch == '/' || sc.ch == '=' || sc.ch == '<' || sc.ch == '>' || sc.ch == '&' || sc.ch == '|' || sc.ch == '!' || sc.ch == '?' || sc.ch == ':') {
+				stringLen = 0;
+			} else if (sc.ch == '#') {
+				sc.SetState(SCE_POV_DIRECTIVE);
+				// Skip whitespace between # and directive word
+				do {
+					sc.Forward();
+				} while ((sc.ch == ' ' || sc.ch == '\t') && sc.More());
+				if (sc.atLineEnd) {
+					sc.SetState(SCE_POV_DEFAULT);
+				}
+			} else if (isoperator(static_cast<char>(sc.ch))) {
 				sc.SetState(SCE_POV_OPERATOR);
-			} else if (sc.ch == '{' || sc.ch == '}') {
-				sc.SetState(SCE_POV_BRACE);
 			}
 		}
-
 	}
 	sc.Complete();
 }
 
-static bool IsStreamCommentStyle(int style) {
-	return style == SCE_POV_COMMENT ||
-	       style == SCE_POV_COMMENTDOC;
-}
+static void FoldPovDoc(
+	unsigned int startPos,
+	int length,
+	int initStyle,
+	WordList *[],
+	Accessor &styler) {
 
-static void FoldNoBoxPOVDoc(unsigned int startPos, int length, int initStyle,
-                            Accessor &styler) {
-	bool foldComment = styler.GetPropertyInt("fold.comment", 1) != 0;
+	bool foldComment = styler.GetPropertyInt("fold.comment") != 0;
+	bool foldDirective = styler.GetPropertyInt("fold.directive") != 0;
 	bool foldCompact = styler.GetPropertyInt("fold.compact", 1) != 0;
 	unsigned int endPos = startPos + length;
 	int visibleChars = 0;
@@ -168,15 +236,33 @@ static void FoldNoBoxPOVDoc(unsigned int startPos, int length, int initStyle,
 		style = styleNext;
 		styleNext = styler.StyleAt(i + 1);
 		bool atEOL = (ch == '\r' && chNext != '\n') || (ch == '\n');
-		if (foldComment && IsStreamCommentStyle(style)) {
-			if (!IsStreamCommentStyle(stylePrev)) {
+		if (foldComment && (style == SCE_POV_COMMENT)) {
+			if (stylePrev != SCE_POV_COMMENT) {
 				levelCurrent++;
-			} else if (!IsStreamCommentStyle(styleNext) && !atEOL) {
+			} else if ((styleNext != SCE_POV_COMMENT) && !atEOL) {
 				// Comments don't end at end of line and the next character may be unstyled.
 				levelCurrent--;
 			}
 		}
-		if (style == SCE_POV_BRACE) {
+		if (foldComment && (style == SCE_POV_COMMENTLINE)) {
+			if ((ch == '/') && (chNext == '/')) {
+				char chNext2 = styler.SafeGetCharAt(i + 2);
+				if (chNext2 == '{') {
+					levelCurrent++;
+				} else if (chNext2 == '}') {
+					levelCurrent--;
+				}
+			}
+		}
+		if (foldDirective && (style == SCE_POV_DIRECTIVE)) {
+			if (ch == '#') {
+				unsigned int j=i+1;
+				while ((j<endPos) && IsASpaceOrTab(styler.SafeGetCharAt(j))) {
+					j++;
+				}
+			}
+		}
+		if (style == SCE_POV_OPERATOR) {
 			if (ch == '{') {
 				levelCurrent++;
 			} else if (ch == '}') {
@@ -204,19 +290,16 @@ static void FoldNoBoxPOVDoc(unsigned int startPos, int length, int initStyle,
 	styler.SetLevel(lineCurrent, levelPrev | flagsNext);
 }
 
-static void FoldPOVDoc(unsigned int startPos, int length, int initStyle, WordList *[], Accessor &styler) {
-	FoldNoBoxPOVDoc(startPos, length, initStyle, styler);
-}
+static const char * const povWordLists[] = {
+	"Language directives",
+	"Objects & CSG & Appearance",
+	"Types & Modifiers & Items",
+	"Predefined Identifiers",
+	"Predefined Functions",
+	"User defined 1",
+	"User defined 2",
+	"User defined 3",
+	0,
+};
 
-static const char * const POVWordLists[] = {
-            "Primary keywords and identifiers",
-            "Secondary keywords and identifiers",
-            0,
-        };
-
-static void ColourisePOVDocSensitive(unsigned int startPos, int length, int initStyle, WordList *keywordlists[],
-                                     Accessor &styler) {
-	ColourisePOVDoc(startPos, length, initStyle, keywordlists, styler);
-}
-
-LexerModule lmPOV(SCLEX_POV, ColourisePOVDocSensitive, "pov", FoldPOVDoc, POVWordLists);
+LexerModule lmPOV(SCLEX_POV, ColourisePovDoc, "pov", FoldPovDoc, povWordLists);

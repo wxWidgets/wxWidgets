@@ -288,7 +288,7 @@ void SurfaceImpl::Init(SurfaceID hdc_, WindowID) {
     hdc = (wxDC*)hdc_;
 }
 
-void SurfaceImpl::InitPixMap(int width, int height, Surface *surface_, WindowID) {
+void SurfaceImpl::InitPixMap(int width, int height, Surface *WXUNUSED(surface_), WindowID) {
     Release();
     hdc = new wxMemoryDC();
     hdcOwned = true;
@@ -542,7 +542,7 @@ int SurfaceImpl::Descent(Font &font) {
     return d;
 }
 
-int SurfaceImpl::InternalLeading(Font &font) {
+int SurfaceImpl::InternalLeading(Font &WXUNUSED(font)) {
     return 0;
 }
 
@@ -563,7 +563,7 @@ int SurfaceImpl::AverageCharWidth(Font &font) {
     return hdc->GetCharWidth();
 }
 
-int SurfaceImpl::SetPalette(Palette *pal, bool inBackGround) {
+int SurfaceImpl::SetPalette(Palette *WXUNUSED(pal), bool WXUNUSED(inBackGround)) {
     return 0;
 }
 
@@ -578,7 +578,7 @@ void SurfaceImpl::SetUnicodeMode(bool unicodeMode_) {
     unicodeMode=unicodeMode_;
 }
 
-void SurfaceImpl::SetDBCSMode(int codePage) {
+void SurfaceImpl::SetDBCSMode(int WXUNUSED(codePage)) {
     // dbcsMode = codePage == SC_CP_DBCS;
 }
 
@@ -969,7 +969,7 @@ int ListBoxImpl::GetSelection() {
 }
 
 
-int ListBoxImpl::Find(const char *prefix) {
+int ListBoxImpl::Find(const char *WXUNUSED(prefix)) {
     // No longer used
     return -1;
 }
@@ -1063,7 +1063,7 @@ void Menu::Show(Point pt, Window &w) {
 
 //----------------------------------------------------------------------
 
-DynamicLibrary *DynamicLibrary::Load(const char *modulePath) {
+DynamicLibrary *DynamicLibrary::Load(const char *WXUNUSED(modulePath)) {
     wxFAIL_MSG(wxT("Dynamic lexer loading not implemented yet"));
     return NULL;
 }
@@ -1103,7 +1103,7 @@ void Platform::DebugDisplay(const char *s) {
     wxLogDebug(stc2wx(s));
 }
 
-bool Platform::IsKeyDown(int key) {
+bool Platform::IsKeyDown(int WXUNUSED(key)) {
     return false;  // I don't think we'll need this.
 }
 
@@ -1196,11 +1196,11 @@ int Platform::Clamp(int val, int minVal, int maxVal) {
 }
 
 
-bool Platform::IsDBCSLeadByte(int codePage, char ch) {
+bool Platform::IsDBCSLeadByte(int WXUNUSED(codePage), char WXUNUSED(ch)) {
     return false;
 }
 
-int Platform::DBCSCharLength(int codePage, const char *s) {
+int Platform::DBCSCharLength(int WXUNUSED(codePage), const char *WXUNUSED(s)) {
     return 1;
 }
 

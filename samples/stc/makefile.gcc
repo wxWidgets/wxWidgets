@@ -22,7 +22,9 @@ STCTEST_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -I.\..\..\include $(CXXFLAGS)
 STCTEST_OBJECTS =  \
 	$(OBJS)\stctest_sample_rc.o \
-	$(OBJS)\stctest_stctest.o
+	$(OBJS)\stctest_stctest.o \
+	$(OBJS)\stctest_edit.o \
+	$(OBJS)\stctest_prefs.o
 
 ### Conditionally set variables: ###
 
@@ -145,7 +147,13 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\stctest.exe data
+all: $(OBJS)\stctest.exe
+
+$(OBJS)\stctest_edit.o: ./edit.cpp
+	$(CXX) -c -o $@ $(STCTEST_CXXFLAGS) $<
+
+$(OBJS)\stctest_prefs.o: ./prefs.cpp
+	$(CXX) -c -o $@ $(STCTEST_CXXFLAGS) $<
 
 $(OBJS)\stctest_sample_rc.o: ./../../../samples/sample.rc
 	windres --use-temp-file -i$< -o$@  --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples
@@ -157,11 +165,7 @@ clean:
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\stctest.exe del $(OBJS)\stctest.exe
 
-data: 
-	if not exist $(OBJS) mkdir $(OBJS)
-	for %%f in (stctest.cpp) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
-
 $(OBJS)\stctest.exe: $(STCTEST_OBJECTS) $(OBJS)\stctest_sample_rc.o
 	$(CXX) -o $@ $(STCTEST_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_stc  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
-.PHONY: all clean data
+.PHONY: all clean

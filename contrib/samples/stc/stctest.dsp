@@ -468,6 +468,14 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\edit.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\prefs.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\..\..\..\samples\sample.rc
 # End Source File
 # Begin Source File

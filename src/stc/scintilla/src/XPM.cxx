@@ -49,7 +49,7 @@ void XPM::FillRun(Surface *surface, int code, int startX, int y, int x) {
 	}
 }
 
-XPM::XPM(const char *textForm) :
+XPM::XPM(const char *textForm) : 
 	data(0),	codes(0), colours(0), lines(0) {
 	Init(textForm);
 }
@@ -102,7 +102,7 @@ void XPM::Init(const char * const *linesForm) {
 
 	int strings = 1+height+nColours;
 	lines = new char *[strings];
-	int allocation = 0;
+	size_t allocation = 0;
 	for (int i=0; i<strings; i++) {
 		allocation += MeasureLength(linesForm[i]) + 1;
 	}

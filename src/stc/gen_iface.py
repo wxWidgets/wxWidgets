@@ -547,9 +547,12 @@ methodOverrideMap = {
 
 
     'GrabFocus' : (None, 0, 0, 0),
+
+    # Rename some that woudl otherwise hid the wxWindow methods
     'SetFocus'  : ('SetSTCFocus', 0, 0, 0),
     'GetFocus'  : ('GetSTCFocus', 0, 0, 0),
-
+    'SetCursor' : ('SetSTCCursor', 0, 0, 0),
+    'GetCursor' : ('GetSTCCursor', 0, 0, 0),
 
     'LoadLexerLibrary' : (None, 0,0,0),
 

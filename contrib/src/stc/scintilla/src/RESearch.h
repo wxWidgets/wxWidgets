@@ -18,7 +18,7 @@
 #define BITBLK	MAXCHR/CHRBIT
 
 class CharacterIndexer {
-public:
+public: 
 	virtual char CharAt(int index)=0;
 };
 

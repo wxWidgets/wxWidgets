@@ -43,7 +43,7 @@ protected:
 	int lexLanguage;
 	const LexerModule *lexCurrent;
 	PropSet props;
-	enum {numWordLists=9};
+	enum {numWordLists=KEYWORDSET_MAX+1};
 	WordList *keyWordLists[numWordLists+1];
 	void SetLexer(uptr_t wParam);
 	void SetLexerLanguage(const char *languageName);

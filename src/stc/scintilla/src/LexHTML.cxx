@@ -127,7 +127,7 @@ static int stateForPrintState(int StateToPrint) {
 }
 
 static inline bool IsNumber(unsigned int start, Accessor &styler) {
-	return isdigit(styler[start]) || (styler[start] == '.') ||
+	return IsADigit(styler[start]) || (styler[start] == '.') ||
 	       (styler[start] == '-') || (styler[start] == '#');
 }
 
@@ -246,7 +246,7 @@ static int classifyTagHTML(unsigned int start, unsigned int end,
 static void classifyWordHTJS(unsigned int start, unsigned int end,
                              WordList &keywords, Accessor &styler, script_mode inScriptType) {
 	char chAttr = SCE_HJ_WORD;
-	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
+	bool wordIsNumber = IsADigit(styler[start]) || (styler[start] == '.');
 	if (wordIsNumber)
 		chAttr = SCE_HJ_NUMBER;
 	else {
@@ -264,7 +264,7 @@ static void classifyWordHTJS(unsigned int start, unsigned int end,
 
 static int classifyWordHTVB(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, script_mode inScriptType) {
 	char chAttr = SCE_HB_IDENTIFIER;
-	bool wordIsNumber = isdigit(styler[start]) || (styler[start] == '.');
+	bool wordIsNumber = IsADigit(styler[start]) || (styler[start] == '.');
 	if (wordIsNumber)
 		chAttr = SCE_HB_NUMBER;
 	else {
@@ -288,7 +288,7 @@ static int classifyWordHTVB(unsigned int start, unsigned int end, WordList &keyw
 }
 
 static void classifyWordHTPy(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler, char *prevWord, script_mode inScriptType) {
-	bool wordIsNumber = isdigit(styler[start]) != 0;
+	bool wordIsNumber = IsADigit(styler[start]);
 	char s[30 + 1];
 	unsigned int i = 0;
 	for (; i < end - start + 1 && i < 30; i++) {
@@ -312,7 +312,7 @@ static void classifyWordHTPy(unsigned int start, unsigned int end, WordList &key
 // Called when in a PHP word
 static void classifyWordHTPHP(unsigned int start, unsigned int end, WordList &keywords, Accessor &styler) {
 	char chAttr = SCE_HPHP_DEFAULT;
-	bool wordIsNumber = isdigit(styler[start]) != 0;
+	bool wordIsNumber = IsADigit(styler[start]);
 	if (wordIsNumber)
 		chAttr = SCE_HPHP_NUMBER;
 	else {
@@ -375,19 +375,21 @@ static int StateForScript(script_type scriptLanguage) {
 }
 
 static inline bool ishtmlwordchar(char ch) {
-	return isalnum(ch) || ch == '.' || ch == '-' || ch == '_' || ch == ':' || ch == '!' || ch == '#';
+	return !isascii(ch) ||
+		(isalnum(ch) || ch == '.' || ch == '-' || ch == '_' || ch == ':' || ch == '!' || ch == '#');
 }
 
 static inline bool issgmlwordchar(char ch) {
-	return isalnum(ch) || ch == '.' || ch == '_' || ch == ':' || ch == '!' || ch == '#' || ch == '[';
+	return !isascii(ch) ||
+		(isalnum(ch) || ch == '.' || ch == '_' || ch == ':' || ch == '!' || ch == '#' || ch == '[');
 }
 
 static inline bool IsPhpWordStart(const unsigned char ch) {
-	return isalpha(ch) || (ch == '_') || (ch >= 0x7f);
+	return (isascii(ch) && (isalpha(ch) || (ch == '_'))) || (ch >= 0x7f);
 }
 
 static inline bool IsPhpWordChar(char ch) {
-	return isdigit(ch) || IsPhpWordStart(ch);
+	return IsADigit(ch) || IsPhpWordStart(ch);
 }
 
 static bool InTagState(int state) {
@@ -787,7 +789,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			} else if ((ch == '-') && (chPrev == '-')) {
 				styler.ColourTo(i - 2, StateToPrint);
 				state = SCE_H_SGML_COMMENT;
-			} else if (isalpha(ch) && (chPrev == '%')) {
+			} else if (isascii(ch) && isalpha(ch) && (chPrev == '%')) {
 				styler.ColourTo(i - 2, StateToPrint);
 				state = SCE_H_SGML_ENTITY;
 			} else if (ch == '#') {
@@ -905,7 +907,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			}
 			break;
 		case SCE_H_SGML_SPECIAL:
-			if (!isupper(ch)) {
+			if (!(isascii(ch) && isupper(ch))) {
 				styler.ColourTo(i - 1, StateToPrint);
 				if (isalnum(ch)) {
 					state = SCE_H_SGML_ERROR;
@@ -918,7 +920,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			if (ch == ';') {
 				styler.ColourTo(i, StateToPrint);
 				state = SCE_H_SGML_DEFAULT;
-			} else if (!isalnum(ch) && ch != '-' && ch != '.') {
+			} else if (!(isascii(ch) && isalnum(ch)) && ch != '-' && ch != '.') {
 				styler.ColourTo(i, SCE_H_SGML_ERROR);
 				state = SCE_H_SGML_DEFAULT;
 			}
@@ -928,7 +930,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 				styler.ColourTo(i, StateToPrint);
 				state = SCE_H_DEFAULT;
 			}
-			if (ch != '#' && !isalnum(ch)) {	// Should check that '#' follows '&', but it is unlikely anyway...
+			if (ch != '#' && !(isascii(ch) && isalnum(ch))) {	// Should check that '#' follows '&', but it is unlikely anyway...
 				styler.ColourTo(i, SCE_H_TAGUNKNOWN);
 				state = SCE_H_DEFAULT;
 			}
@@ -1464,7 +1466,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 			}
 			break;
 		case SCE_HPHP_NUMBER:
-			if (!isdigit(ch)) {
+			if (!IsADigit(ch)) {
 				styler.ColourTo(i - 1, SCE_HPHP_NUMBER);
 				if (isoperator(ch))
 					state = SCE_HPHP_OPERATOR;
@@ -1524,7 +1526,7 @@ static void ColouriseHyperTextDoc(unsigned int startPos, int length, int initSty
 		case SCE_HPHP_OPERATOR:
 		case SCE_HPHP_DEFAULT:
 			styler.ColourTo(i - 1, StateToPrint);
-			if (isdigit(ch)) {
+			if (IsADigit(ch)) {
 				state = SCE_HPHP_NUMBER;
 			} else if (iswordstart(ch)) {
 				state = SCE_HPHP_WORD;

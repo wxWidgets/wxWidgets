@@ -10,16 +10,8 @@
 
 #if PLAT_WIN
 #define EXT_LEXER_DECL __stdcall
-#elif PLAT_GTK
-#define EXT_LEXER_DECL
-#endif
-
-#if PLAT_WX
-#ifdef __WXMSW__
-#define EXT_LEXER_DECL __stdcall
 #else
-#define EXT_LEXER_DECL
-#endif
+#define EXT_LEXER_DECL 
 #endif
 
 // External Lexer function definitions...
@@ -41,7 +33,7 @@ protected:
 	int externalLanguage;
 	char name[100];
 public:
-	ExternalLexerModule(int language_, LexerFunction fnLexer_,
+	ExternalLexerModule(int language_, LexerFunction fnLexer_, 
 		const char *languageName_=0, LexerFunction fnFolder_=0) : LexerModule(language_, fnLexer_, 0, fnFolder_){
 		strncpy(name, languageName_, sizeof(name));
 		languageName = name;
@@ -70,7 +62,7 @@ public:
 	LexerLibrary(const char* ModuleName);
 	~LexerLibrary();
 	void Release();
-
+	
 	LexerLibrary	*next;
 	SString			m_sModuleName;
 };
@@ -79,10 +71,10 @@ public:
 class LexerManager {
 public:
 	~LexerManager();
-
+	
 	static LexerManager *GetInstance();
 	static void DeleteInstance();
-
+	
 	void Load(const char* path);
 	void Clear();
 

@@ -153,6 +153,8 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmLout);
 	LINK_LEXER(lmLua);
 	LINK_LEXER(lmMatlab);
+	LINK_LEXER(lmMMIXAL);
+	LINK_LEXER(lmNsis);
 	LINK_LEXER(lmBatch);
 	LINK_LEXER(lmDiff);
 	LINK_LEXER(lmProps);
@@ -163,8 +165,10 @@ int Scintilla_LinkLexers() {
 	LINK_LEXER(lmPascal);
 	LINK_LEXER(lmPerl);
 	LINK_LEXER(lmPOV);
+	LINK_LEXER(lmPS);
 	LINK_LEXER(lmPython);
 	LINK_LEXER(lmRuby);
+	LINK_LEXER(lmScriptol);
 	LINK_LEXER(lmSQL);
 	LINK_LEXER(lmVB);
 	LINK_LEXER(lmVBScript);

@@ -203,11 +203,11 @@ void ScintillaBase::AutoCompleteStart(int lenEntered, const char *list) {
 				pdoc->DeleteChars(currentPos, lenEntered);
 				SetEmptySelection(currentPos);
 				pdoc->InsertString(currentPos, list);
-				SetEmptySelection(currentPos + strlen(list));
+				SetEmptySelection(currentPos + static_cast<int>(strlen(list)));
 			} else {
 				SetEmptySelection(currentPos);
 				pdoc->InsertString(currentPos, list + lenEntered);
-				SetEmptySelection(currentPos + strlen(list + lenEntered));
+				SetEmptySelection(currentPos + static_cast<int>(strlen(list + lenEntered)));
 			}
 			return;
 		}
@@ -340,7 +340,7 @@ void ScintillaBase::AutoCompleteCompleted() {
 	if (item != -1) {
 		SString piece = selected;
 		pdoc->InsertString(firstPos, piece.c_str());
-		SetEmptySelection(firstPos + piece.length());
+		SetEmptySelection(firstPos + static_cast<int>(piece.length()));
 	}
 	pdoc->EndUndoAction();
 }
@@ -557,7 +557,7 @@ sptr_t ScintillaBase::WndProc(unsigned int iMessage, uptr_t wParam, sptr_t lPara
 		return ac.GetTypesep();
 
 	case SCI_CALLTIPSHOW:
-		CallTipShow(LocationFromPosition(wParam),
+		CallTipShow(LocationFromPosition(wParam), 
 			reinterpret_cast<const char *>(lParam));
 		break;
 

@@ -40,7 +40,9 @@ STCTEST_CXXFLAGS = $(CPPFLAGS) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-I$(srcdir)/../../../samples -I$(srcdir)/../../include $(CXXFLAGS)
 STCTEST_OBJECTS =  \
 	$(__stctest___win32rc) \
-	stctest_stctest.o
+	stctest_stctest.o \
+	stctest_edit.o \
+	stctest_prefs.o
 WX_VERSION = 2.5.1
 
 ### Conditionally set variables: ###
@@ -102,21 +104,13 @@ COND_PLATFORM_OS2_1___stctest___os2_emxbindcmd = $(NM) stctest$(EXEEXT) | if \
 
 ### Targets: ###
 
-all: stctest$(EXEEXT) $(__stctest_bundle___depname) data
+all: stctest$(EXEEXT) $(__stctest_bundle___depname)
 
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
 	rm -f stctest$(EXEEXT)
 	rm -rf stctest.app
-
-data: 
-	@mkdir -p .
-	@for f in stctest.cpp; do \
-	if test \( ! -s ./$$f \) -o \( $(srcdir)/$$f -nt ./$$f  \) ; then \
-	cp -pRf $(srcdir)/$$f . ; \
-	fi; \
-	done
 
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
@@ -155,6 +149,12 @@ stctest.app/Contents/PkgInfo: stctest$(EXEEXT) $(top_srcdir)/src/mac/Info.plist.
 
 @COND_PLATFORM_MACOSX_1@stctest_bundle: stctest.app/Contents/PkgInfo
 
+stctest_edit.o: $(srcdir)/edit.cpp
+	$(CXXC) -c -o $@ $(STCTEST_CXXFLAGS) $<
+
+stctest_prefs.o: $(srcdir)/prefs.cpp
+	$(CXXC) -c -o $@ $(STCTEST_CXXFLAGS) $<
+
 stctest_sample_rc.o: $(srcdir)/../../../samples/sample.rc
 	$(RESCOMP) -i$< -o$@  --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_2)   --include-dir $(top_srcdir)/include --include-dir $(srcdir) $(__DLLFLAG_p_2) --include-dir $(srcdir)/../../../samples
 
@@ -167,4 +167,4 @@ uninstall:
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all clean data distclean install stctest_bundle uninstall
+.PHONY: all clean distclean install stctest_bundle uninstall

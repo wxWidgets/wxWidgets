@@ -383,7 +383,8 @@ bool ScintillaWX::CanPaste() {
     bool didOpen;
 
     if (Editor::CanPaste()) {
-        if ( (didOpen = !wxTheClipboard->IsOpened()) )
+        didOpen = !wxTheClipboard->IsOpened();
+        if ( didOpen )
             wxTheClipboard->Open();
 
         if (wxTheClipboard->IsOpened()) {
@@ -597,7 +598,7 @@ void ScintillaWX::DoMouseWheel(int rotation, int delta,
 }
 
 
-void ScintillaWX::DoSize(int width, int height) {
+void ScintillaWX::DoSize(int WXUNUSED(width), int WXUNUSED(height)) {
 //      PRectangle rcClient(0,0,width,height);
 //      SetScrollBarsTo(rcClient);
 //      DropGraphics();
@@ -628,8 +629,8 @@ void ScintillaWX::DoLeftButtonMove(Point pt) {
     ButtonMove(pt);
 }
 
-void ScintillaWX::DoMiddleButtonUp(Point pt) {
 #ifdef __WXGTK__
+void ScintillaWX::DoMiddleButtonUp(Point pt) {
     // Set the current position to the mouse click point and
     // then paste in the PRIMARY selection, if any.  wxGTK only.
     int newPos = PositionFromLocation(pt);
@@ -656,8 +657,11 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
 
     ShowCaretAtCurrentPosition();
     EnsureCaretVisible();
-#endif
 }
+#else
+void ScintillaWX::DoMiddleButtonUp(Point WXUNUSED(pt)) {
+}
+#endif
 
 
 void ScintillaWX::DoAddChar(int key) {
@@ -673,9 +677,10 @@ void ScintillaWX::DoAddChar(int key) {
 }
 
 
-int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* consumed) {
+int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool meta, bool* consumed) {
 #if defined(__WXGTK__) || defined(__WXMAC__)
-    // Ctrl chars (A-Z) end up with the wrong keycode on wxGTK...
+    // Ctrl chars (A-Z) end up with the wrong keycode on wxGTK
+    // TODO:  Check this, it shouldn't be true any longer.
     if (ctrl && key >= 1 && key <= 26)
         key += 'A' - 1;
 #endif
@@ -709,6 +714,21 @@ int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt, bool* cons
     case WXK_MENU:              key = 0; break;
     }
 
+#ifdef __WXMAC__
+    if ( meta ) {
+        // check for a few common Mac Meta-key combos and remap them to Ctrl
+        // for Scintilla
+        switch ( key ) {
+        case 'Z':       // Undo
+        case 'X':       // Cut
+        case 'C':       // Copy
+        case 'V':       // Paste
+        case 'A':       // Select All
+            ctrl = true;
+            break;
+        }                
+#endif
+    
     int rv = KeyDown(key, shift, ctrl, alt, consumed);
 
     if (key)
@@ -760,7 +780,7 @@ bool ScintillaWX::DoDropText(long x, long y, const wxString& data) {
 }
 
 
-wxDragResult ScintillaWX::DoDragEnter(wxCoord x, wxCoord y, wxDragResult def) {
+wxDragResult ScintillaWX::DoDragEnter(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), wxDragResult def) {
     dragResult = def;
     return dragResult;
 }
@@ -817,8 +837,8 @@ void ScintillaWX::DoScrollToColumn(int column) {
     HorizontalScrollTo(column * vs.spaceWidth);
 }
 
-void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
 #ifdef __WXGTK__
+void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
     wxRegion rgn(wxRectFromPRectangle(rect));
     if (ac.Active()) {
         wxRect childRect = ((wxWindow*)ac.lb->GetID())->GetRect();
@@ -830,9 +850,11 @@ void ScintillaWX::ClipChildren(wxDC& dc, PRectangle rect) {
     }
 
     dc.SetClippingRegion(rgn);
-#endif
 }
-
+#else
+void ScintillaWX::ClipChildren(wxDC& WXUNUSED(dc), PRectangle WXUNUSED(rect)) {
+}
+#endif
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

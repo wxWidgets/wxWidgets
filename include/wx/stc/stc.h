@@ -153,6 +153,7 @@
 #define wxSTC_INDIC_TT 2
 #define wxSTC_INDIC_DIAGONAL 3
 #define wxSTC_INDIC_STRIKE 4
+#define wxSTC_INDIC_HIDDEN 5
 #define wxSTC_INDIC0_MASK 0x20
 #define wxSTC_INDIC1_MASK 0x40
 #define wxSTC_INDIC2_MASK 0x80
@@ -233,6 +234,9 @@
 // This way, we favour the displaying of useful information: the begining of lines,
 // where most code reside, and the lines after the caret, eg. the body of a function.
 #define wxSTC_CARET_EVEN 0x08
+
+// Maximum value of keywordSet parameter of SetKeyWords.
+#define wxSTC_KEYWORDSET_MAX 8
 
 // Notifications
 // Type of modification and the action which caused the modification.
@@ -318,6 +322,9 @@
 #define wxSTC_LEX_POV 39
 #define wxSTC_LEX_LOUT 40
 #define wxSTC_LEX_ESCRIPT 41
+#define wxSTC_LEX_PS 42
+#define wxSTC_LEX_NSIS 43
+#define wxSTC_LEX_MMIXAL 44
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -571,6 +578,8 @@
 #define wxSTC_LUA_WORD4 15
 #define wxSTC_LUA_WORD5 16
 #define wxSTC_LUA_WORD6 17
+#define wxSTC_LUA_WORD7 18
+#define wxSTC_LUA_WORD8 19
 
 // Lexical states for SCLEX_ERRORLIST
 #define wxSTC_ERR_DEFAULT 0
@@ -792,14 +801,20 @@
 #define wxSTC_POV_DEFAULT 0
 #define wxSTC_POV_COMMENT 1
 #define wxSTC_POV_COMMENTLINE 2
-#define wxSTC_POV_COMMENTDOC 3
-#define wxSTC_POV_NUMBER 4
-#define wxSTC_POV_WORD 5
+#define wxSTC_POV_NUMBER 3
+#define wxSTC_POV_OPERATOR 4
+#define wxSTC_POV_IDENTIFIER 5
 #define wxSTC_POV_STRING 6
-#define wxSTC_POV_OPERATOR 7
-#define wxSTC_POV_IDENTIFIER 8
-#define wxSTC_POV_BRACE 9
+#define wxSTC_POV_STRINGEOL 7
+#define wxSTC_POV_DIRECTIVE 8
+#define wxSTC_POV_BADDIRECTIVE 9
 #define wxSTC_POV_WORD2 10
+#define wxSTC_POV_WORD3 11
+#define wxSTC_POV_WORD4 12
+#define wxSTC_POV_WORD5 13
+#define wxSTC_POV_WORD6 14
+#define wxSTC_POV_WORD7 15
+#define wxSTC_POV_WORD8 16
 
 // Lexical states for SCLEX_LOUT
 #define wxSTC_LOUT_DEFAULT 0
@@ -828,9 +843,64 @@
 #define wxSTC_ESCRIPT_WORD2 10
 #define wxSTC_ESCRIPT_WORD3 11
 
+// Lexical states for SCLEX_PS
+#define wxSTC_PS_DEFAULT 0
+#define wxSTC_PS_COMMENT 1
+#define wxSTC_PS_DSC_COMMENT 2
+#define wxSTC_PS_DSC_VALUE 3
+#define wxSTC_PS_NUMBER 4
+#define wxSTC_PS_NAME 5
+#define wxSTC_PS_KEYWORD 6
+#define wxSTC_PS_LITERAL 7
+#define wxSTC_PS_IMMEVAL 8
+#define wxSTC_PS_PAREN_ARRAY 9
+#define wxSTC_PS_PAREN_DICT 10
+#define wxSTC_PS_PAREN_PROC 11
+#define wxSTC_PS_TEXT 12
+#define wxSTC_PS_HEXSTRING 13
+#define wxSTC_PS_BASE85STRING 14
+#define wxSTC_PS_BADSTRINGCHAR 15
+
+// Lexical states for SCLEX_NSIS
+#define wxSTC_NSIS_DEFAULT 0
+#define wxSTC_NSIS_COMMENT 1
+#define wxSTC_NSIS_STRINGDQ 2
+#define wxSTC_NSIS_STRINGLQ 3
+#define wxSTC_NSIS_STRINGRQ 4
+#define wxSTC_NSIS_FUNCTION 5
+#define wxSTC_NSIS_VARIABLE 6
+#define wxSTC_NSIS_LABEL 7
+#define wxSTC_NSIS_USERDEFINED 8
+#define wxSTC_NSIS_SECTIONDEF 9
+#define wxSTC_NSIS_SUBSECTIONDEF 10
+#define wxSTC_NSIS_IFDEFINEDEF 11
+#define wxSTC_NSIS_MACRODEF 12
+#define wxSTC_NSIS_STRINGVAR 13
+
+// Lexical states for SCLEX_MMIXAL
+#define wxSTC_MMIXAL_LEADWS 0
+#define wxSTC_MMIXAL_COMMENT 1
+#define wxSTC_MMIXAL_LABEL 2
+#define wxSTC_MMIXAL_OPCODE 3
+#define wxSTC_MMIXAL_OPCODE_PRE 4
+#define wxSTC_MMIXAL_OPCODE_VALID 5
+#define wxSTC_MMIXAL_OPCODE_UNKNOWN 6
+#define wxSTC_MMIXAL_OPCODE_POST 7
+#define wxSTC_MMIXAL_OPERANDS 8
+#define wxSTC_MMIXAL_NUMBER 9
+#define wxSTC_MMIXAL_REF 10
+#define wxSTC_MMIXAL_CHAR 11
+#define wxSTC_MMIXAL_STRING 12
+#define wxSTC_MMIXAL_REGISTER 13
+#define wxSTC_MMIXAL_HEX 14
+#define wxSTC_MMIXAL_OPERATOR 15
+#define wxSTC_MMIXAL_SYMBOL 16
+#define wxSTC_MMIXAL_INCLUDE 17
+
 
 //-----------------------------------------
 // Commands that can be bound to keystrokes
+
 
 // Redoes the next action on the undo history.
 #define wxSTC_CMD_REDO 2011
@@ -2014,10 +2084,10 @@ public:
     bool GetMouseDownCaptures();
 
     // Sets the cursor to one of the SC_CURSOR* values.
-    void SetCursor(int cursorType);
+    void SetSTCCursor(int cursorType);
 
     // Get cursor type.
-    int GetCursor();
+    int GetSTCCursor();
 
     // Change the way control characters are displayed:
     // If symbol is < 32, keep the drawn way, else, use the given character.

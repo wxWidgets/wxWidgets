@@ -53,14 +53,18 @@ STCDLL_OBJECTS =  \
 	$(OBJS)\stcdll_LexLisp.o \
 	$(OBJS)\stcdll_LexLout.o \
 	$(OBJS)\stcdll_LexLua.o \
+	$(OBJS)\stcdll_LexMMIXAL.o \
 	$(OBJS)\stcdll_LexMatlab.o \
+	$(OBJS)\stcdll_LexNsis.o \
 	$(OBJS)\stcdll_LexOthers.o \
 	$(OBJS)\stcdll_LexPOV.o \
+	$(OBJS)\stcdll_LexPS.o \
 	$(OBJS)\stcdll_LexPascal.o \
 	$(OBJS)\stcdll_LexPerl.o \
 	$(OBJS)\stcdll_LexPython.o \
 	$(OBJS)\stcdll_LexRuby.o \
 	$(OBJS)\stcdll_LexSQL.o \
+	$(OBJS)\stcdll_LexScriptol.o \
 	$(OBJS)\stcdll_LexVB.o \
 	$(OBJS)\stcdll_LineMarker.o \
 	$(OBJS)\stcdll_PropSet.o \
@@ -108,14 +112,18 @@ STCLIB_OBJECTS =  \
 	$(OBJS)\stclib_LexLisp.o \
 	$(OBJS)\stclib_LexLout.o \
 	$(OBJS)\stclib_LexLua.o \
+	$(OBJS)\stclib_LexMMIXAL.o \
 	$(OBJS)\stclib_LexMatlab.o \
+	$(OBJS)\stclib_LexNsis.o \
 	$(OBJS)\stclib_LexOthers.o \
 	$(OBJS)\stclib_LexPOV.o \
+	$(OBJS)\stclib_LexPS.o \
 	$(OBJS)\stclib_LexPascal.o \
 	$(OBJS)\stclib_LexPerl.o \
 	$(OBJS)\stclib_LexPython.o \
 	$(OBJS)\stclib_LexRuby.o \
 	$(OBJS)\stclib_LexSQL.o \
+	$(OBJS)\stclib_LexScriptol.o \
 	$(OBJS)\stclib_LexVB.o \
 	$(OBJS)\stclib_LineMarker.o \
 	$(OBJS)\stclib_PropSet.o \
@@ -326,13 +334,22 @@ $(OBJS)\stcdll_LexLout.o: ../../src/stc/scintilla/src/LexLout.cxx
 $(OBJS)\stcdll_LexLua.o: ../../src/stc/scintilla/src/LexLua.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
+$(OBJS)\stcdll_LexMMIXAL.o: ../../src/stc/scintilla/src/LexMMIXAL.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
 $(OBJS)\stcdll_LexMatlab.o: ../../src/stc/scintilla/src/LexMatlab.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexNsis.o: ../../src/stc/scintilla/src/LexNsis.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPOV.o: ../../src/stc/scintilla/src/LexPOV.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexPS.o: ../../src/stc/scintilla/src/LexPS.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexPascal.o: ../../src/stc/scintilla/src/LexPascal.cxx
@@ -348,6 +365,9 @@ $(OBJS)\stcdll_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
+	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
+
+$(OBJS)\stcdll_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
 	$(CXX) -c -o $@ $(STCDLL_CXXFLAGS) $<
 
 $(OBJS)\stcdll_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx
@@ -473,13 +493,22 @@ $(OBJS)\stclib_LexLout.o: ../../src/stc/scintilla/src/LexLout.cxx
 $(OBJS)\stclib_LexLua.o: ../../src/stc/scintilla/src/LexLua.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
+$(OBJS)\stclib_LexMMIXAL.o: ../../src/stc/scintilla/src/LexMMIXAL.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
 $(OBJS)\stclib_LexMatlab.o: ../../src/stc/scintilla/src/LexMatlab.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexNsis.o: ../../src/stc/scintilla/src/LexNsis.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexOthers.o: ../../src/stc/scintilla/src/LexOthers.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPOV.o: ../../src/stc/scintilla/src/LexPOV.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexPS.o: ../../src/stc/scintilla/src/LexPS.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexPascal.o: ../../src/stc/scintilla/src/LexPascal.cxx
@@ -495,6 +524,9 @@ $(OBJS)\stclib_LexRuby.o: ../../src/stc/scintilla/src/LexRuby.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexSQL.o: ../../src/stc/scintilla/src/LexSQL.cxx
+	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
+
+$(OBJS)\stclib_LexScriptol.o: ../../src/stc/scintilla/src/LexScriptol.cxx
 	$(CXX) -c -o $@ $(STCLIB_CXXFLAGS) $<
 
 $(OBJS)\stclib_LexVB.o: ../../src/stc/scintilla/src/LexVB.cxx

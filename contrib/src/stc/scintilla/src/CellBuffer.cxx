@@ -103,9 +103,9 @@ void MarkerHandleSet::RemoveNumber(int markerNum) {
 		if (mhn->number == markerNum) {
 			*pmhn = mhn->next;
 			delete mhn;
-			return ;
+		} else {
+			pmhn = &((*pmhn)->next);
 		}
-		pmhn = &((*pmhn)->next);
 	}
 }
 
