@@ -306,7 +306,8 @@ wxHtmlImageCell::wxHtmlImageCell(wxFSFile *input, int w, int h, int align, wxStr
 void wxHtmlImageCell::Draw(wxDC& dc, int x, int y, int view_y1, int view_y2)
 {
     if (m_Image)
-        dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, (m_Image->GetMask() != (wxMask*) 0));
+//        dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, (m_Image->GetMask() != (wxMask*) 0));
+        dc.DrawBitmap(*m_Image, x + m_PosX, y + m_PosY, TRUE);
     wxHtmlCell::Draw(dc, x, y, view_y1, view_y2);
 }
 
