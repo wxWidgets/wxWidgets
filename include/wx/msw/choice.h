@@ -50,7 +50,7 @@ public:
                 const wxString& name = wxChoiceNameStr);
 
     // implement base class pure virtuals
-    virtual void DoAppend(const wxString& item);
+    virtual int DoAppend(const wxString& item);
     virtual void Delete(int n);
     virtual void Clear();
 

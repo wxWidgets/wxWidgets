@@ -43,10 +43,10 @@ public:
     void Append(const wxString& item) { DoAppend(item); }
         // with client data which belongs to the caller
     void Append(const wxString &item, void* clientData)
-        { DoAppend(item); SetClientData(GetCount() - 1, clientData); }
+        { int n = DoAppend(item); SetClientData(n, clientData); }
         // with client data which will be deleted by the control
     void Append(const wxString &item, wxClientData* clientData)
-        { DoAppend(item); SetClientObject(GetCount() - 1, clientData); }
+        { int n = DoAppend(item); SetClientObject(n, clientData); }
 
     // delete items from the list
         // one item
@@ -95,7 +95,7 @@ public:
 
 private:
     // pure virtuals to implement in the derived classes
-    virtual void DoAppend(const wxString& item) = 0;
+    virtual int DoAppend(const wxString& item) = 0;
 
     virtual void DoSetClientData( int n, void* clientData ) = 0;
     virtual void* DoGetClientData( int n ) const = 0;
