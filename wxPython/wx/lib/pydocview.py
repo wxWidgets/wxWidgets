@@ -558,6 +558,7 @@ class DocApp(wx.PySimpleApp):
             service.OnExit()
         config = wx.ConfigBase_Get()
         self._docManager.FileHistorySave(config)
+        del self._singleInstanceChecker
 
     
     def GetDefaultDocManagerFlags(self):
