@@ -18,7 +18,7 @@
 #include <sys/types.h>
 
 #if !defined(__cplusplus)
-typedef int bool;
+typedef unsigned int bool;
 #endif
 
 #ifndef TRUE
