@@ -508,6 +508,10 @@ public:
     void RefreshAll();
     void SetItemCount(size_t count);
 
+    // retrieve the file system used by the wxHtmlWinParser: if you use
+    // relative paths in your HTML, you should use its ChangePathTo() method
+    wxFileSystem& GetFileSystem();
+    const wxFileSystem& GetFileSystem();
 };
 
 
