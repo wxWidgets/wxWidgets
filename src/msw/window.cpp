@@ -765,14 +765,15 @@ inline int GetScrollPosition(HWND hWnd, int wOrient)
 #ifdef __WXMICROWIN__
     return ::GetScrollPosWX(hWnd, wOrient);
 #else
-    SCROLLINFO scrollInfo;
+    WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.cbSize = sizeof(SCROLLINFO);
     scrollInfo.fMask = SIF_POS;
     if ( !::GetScrollInfo(hWnd,
-                                  wOrient,
-                                  &scrollInfo) )
+                          wOrient,
+                          &scrollInfo) )
     {
-        wxLogLastError(_T("GetScrollInfo"));
+        // Not neccessarily an error, if there are no scrollbars yet.
+        // wxLogLastError(_T("GetScrollInfo"));
     }
     return scrollInfo.nPos;
 //    return ::GetScrollPos(hWnd, wOrient);
@@ -799,13 +800,15 @@ int wxWindowMSW::GetScrollRange(int orient) const
     ::GetScrollRange(hWnd, orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
                      &minPos, &maxPos);
 #endif
-    SCROLLINFO scrollInfo;
+    WinStruct<SCROLLINFO> scrollInfo;
     scrollInfo.fMask = SIF_RANGE;
     if ( !::GetScrollInfo(hWnd,
-                                  orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
-                                  &scrollInfo) )
+                          orient == wxHORIZONTAL ? SB_HORZ : SB_VERT,
+                          &scrollInfo) )
     {
-        wxLogLastError(_T("GetScrollInfo"));
+        // Most of the time this is not really an error, since the return
+        // value can also be zero when there is no scrollbar yet.
+        // wxLogLastError(_T("GetScrollInfo"));
     }
     maxPos = scrollInfo.nMax;
 
@@ -1008,10 +1011,10 @@ bool wxCheckWindowWndProc(WXHWND hWnd, WXFARPROC wndProc)
 	wxString str(wxGetWindowClass(hWnd));
 	if (str == wxCanvasClassName ||
 		str == wxCanvasClassNameNR ||
-		str == wxMDIFrameClassName || 
-		str == wxMDIFrameClassNameNoRedraw || 
-		str == wxMDIChildFrameClassName || 
-		str == wxMDIChildFrameClassNameNoRedraw || 
+		str == wxMDIFrameClassName ||
+		str == wxMDIFrameClassNameNoRedraw ||
+		str == wxMDIChildFrameClassName ||
+		str == wxMDIChildFrameClassNameNoRedraw ||
 		str == _T("wxTLWHiddenParent"))
 		return TRUE; // Effectively means don't subclass
 	else
@@ -4715,7 +4718,8 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
                                                               : SB_VERT,
                                   &scrollInfo) )
             {
-                wxLogLastError(_T("GetScrollInfo"));
+                // Not neccessarily an error, if there are no scrollbars yet.
+                // wxLogLastError(_T("GetScrollInfo"));
             }
 
             event.SetPosition(scrollInfo.nTrackPos);
