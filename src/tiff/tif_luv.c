@@ -2,23 +2,23 @@
  * Copyright (c) 1997 Greg Ward Larson
  * Copyright (c) 1997 Silicon Graphics, Inc.
  *
- * Permission to use, copy, modify, distribute, and sell this software and 
+ * Permission to use, copy, modify, distribute, and sell this software and
  * its documentation for any purpose is hereby granted without fee, provided
  * that (i) the above copyright notices and this permission notice appear in
  * all copies of the software and related documentation, and (ii) the names of
  * Sam Leffler, Greg Larson and Silicon Graphics may not be used in any
  * advertising or publicity relating to the software without the specific,
  * prior written permission of Sam Leffler, Greg Larson and Silicon Graphics.
- * 
- * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
- * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
- * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
- * 
+ *
+ * THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND,
+ * EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY
+ * WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
+ *
  * IN NO EVENT SHALL SAM LEFFLER, GREG LARSON OR SILICON GRAPHICS BE LIABLE
  * FOR ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
  * OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
- * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+ * WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF
+ * LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE
  * OF THIS SOFTWARE.
  */
 
@@ -34,7 +34,7 @@
  * LogLuv image support uses the TIFF library to store 16 or 10-bit
  * log luminance values with 8 bits each of u and v or a 14-bit index.
  *
- * The codec can take as input and produce as output 32-bit IEEE float values 
+ * The codec can take as input and produce as output 32-bit IEEE float values
  * as well as 16-bit integer values.  A 16-bit luminance is interpreted
  * as a sign bit followed by a 15-bit integer that is converted
  * to and from a linear magnitude using the transformation:
@@ -156,7 +156,7 @@ struct logLuvState {
 /*
  * Decode a string of 16-bit gray pixels.
  */
-static int
+static int LINKAGEMODE
 LogL16Decode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 {
 	LogLuvState* sp = DecoderState(tif);
@@ -213,7 +213,7 @@ LogL16Decode(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 /*
  * Decode a string of 24-bit pixels.
  */
-static int
+static int LINKAGEMODE
 LogLuvDecode24(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 {
 	LogLuvState* sp = DecoderState(tif);
@@ -256,7 +256,7 @@ LogLuvDecode24(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 /*
  * Decode a string of 32-bit pixels.
  */
-static int
+static int LINKAGEMODE
 LogLuvDecode32(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
 {
 	LogLuvState* sp;
@@ -316,7 +316,7 @@ LogLuvDecode32(TIFF* tif, tidata_t op, tsize_t occ, tsample_t s)
  * maintain synchrony with the encode algorithm, which
  * is row by row.
  */
-static int
+static int LINKAGEMODE
 LogLuvDecodeStrip(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	tsize_t rowlen = TIFFScanlineSize(tif);
@@ -332,7 +332,7 @@ LogLuvDecodeStrip(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
  * maintain synchrony with the encode algorithm, which
  * is row by row.
  */
-static int
+static int LINKAGEMODE
 LogLuvDecodeTile(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	tsize_t rowlen = TIFFTileRowSize(tif);
@@ -346,7 +346,7 @@ LogLuvDecodeTile(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 /*
  * Encode a row of 16-bit pixels.
  */
-static int
+static int LINKAGEMODE
 LogL16Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	LogLuvState* sp = EncoderState(tif);
@@ -434,7 +434,7 @@ LogL16Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 /*
  * Encode a row of 24-bit pixels.
  */
-static int
+static int LINKAGEMODE
 LogLuvEncode24(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	LogLuvState* sp = EncoderState(tif);
@@ -479,7 +479,7 @@ LogLuvEncode24(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 /*
  * Encode a row of 32-bit pixels.
  */
-static int
+static int LINKAGEMODE
 LogLuvEncode32(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	LogLuvState* sp = EncoderState(tif);
@@ -569,7 +569,7 @@ LogLuvEncode32(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
  * Encode a strip of pixels.  We break it into rows to
  * avoid encoding runs across row boundaries.
  */
-static int
+static int LINKAGEMODE
 LogLuvEncodeStrip(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	tsize_t rowlen = TIFFScanlineSize(tif);
@@ -584,7 +584,7 @@ LogLuvEncodeStrip(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
  * Encode a tile of pixels.  We break it into rows to
  * avoid encoding runs across row boundaries.
  */
-static int
+static int LINKAGEMODE
 LogLuvEncodeTile(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 {
 	tsize_t rowlen = TIFFTileRowSize(tif);

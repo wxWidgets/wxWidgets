@@ -85,13 +85,13 @@ typedef struct {
 #define	DecoderState(tif)	((Fax3DecodeState*) Fax3State(tif))
 
 typedef struct {
-	Fax3BaseState b;
-	int	data;			/* current i/o byte */
-	int	bit;			/* current i/o bit in byte */
-	enum { G3_1D, G3_2D } tag;	/* encoding state */
-	u_char*	refline;		/* reference line for 2d decoding */
-	int	k;			/* #rows left that can be 2d encoded */
-	int	maxk;			/* max #rows that can be 2d encoded */
+    Fax3BaseState b;
+    int    data;                /* current i/o byte */
+    int    bit;                 /* current i/o bit in byte */
+    enum { G3_1D, G3_2D } tag;  /* encoding state */
+    u_char*    refline;         /* reference line for 2d decoding */
+    int    k;                   /* #rows left that can be 2d encoded */
+    int    maxk;                /* max #rows that can be 2d encoded */
 } Fax3EncodeState;
 #define	EncoderState(tif)	((Fax3EncodeState*) Fax3State(tif))
 
@@ -678,7 +678,12 @@ Fax3PutEOL(TIFF* tif)
 	}
 	code = EOL, length = 12;
 	if (is2DEncoding(sp))
+#if defined(__VISAGECPP30__)
+/* VA 3.0 is just plain wierd. */
+		code = (code<<1) | (sp->tag == Fax3EncodeState::G3_1D), length++;
+#else
 		code = (code<<1) | (sp->tag == G3_1D), length++;
+#endif
 	_PutBits(tif, code, length);
 
 	sp->data = data;
@@ -697,7 +702,12 @@ Fax3PreEncode(TIFF* tif, tsample_t s)
 	assert(sp != NULL);
 	sp->bit = 8;
 	sp->data = 0;
+#if defined(__VISAGECPP30__)
+/* VA 3.0 is just plain wierd. */
+	sp->tag = Fax3EncodeState::G3_1D;
+#else
 	sp->tag = G3_1D;
+#endif
 	/*
 	 * This is necessary for Group 4; otherwise it isn't
 	 * needed because the first scanline of each strip ends
@@ -1017,17 +1027,32 @@ Fax3Encode(TIFF* tif, tidata_t bp, tsize_t cc, tsample_t s)
 		if ((sp->b.mode & FAXMODE_NOEOL) == 0)
 			Fax3PutEOL(tif);
 		if (is2DEncoding(sp)) {
+#if defined(__VISAGECPP30__)
+/* VA 3.0 is just plain wierd. */
+			if (sp->tag == Fax3EncodeState::G3_1D) {
+#else
 			if (sp->tag == G3_1D) {
+#endif
 				if (!Fax3Encode1DRow(tif, bp, sp->b.rowpixels))
 					return (0);
+#if defined(__VISAGECPP30__)
+/* VA 3.0 is just plain wierd. */
+				sp->tag = Fax3EncodeState::G3_2D;
+#else
 				sp->tag = G3_2D;
+#endif
 			} else {
 				if (!Fax3Encode2DRow(tif, bp, sp->refline, sp->b.rowpixels))
 					return (0);
 				sp->k--;
 			}
 			if (sp->k == 0) {
+#if defined(__VISAGECPP30__)
+/* VA 3.0 is just plain wierd. */
+				sp->tag = Fax3EncodeState::G3_1D;
+#else
 				sp->tag = G3_1D;
+#endif
 				sp->k = sp->maxk-1;
 			} else
 				_TIFFmemcpy(sp->refline, bp, sp->b.rowbytes);
@@ -1063,7 +1088,12 @@ Fax3Close(TIFF* tif)
 		int i;
 
 		if (is2DEncoding(sp))
+#if defined(__VISAGECPP30__)
+/* VA 3.0 is just plain wierd. */
+			code = (code<<1) | (sp->tag == Fax3EncodeState::G3_1D), length++;
+#else
 			code = (code<<1) | (sp->tag == G3_1D), length++;
+#endif
 		for (i = 0; i < 6; i++)
 			Fax3PutBits(tif, code, length);
 		Fax3FlushBits(tif, sp);
@@ -1280,9 +1310,15 @@ InitCCITTFax3(TIFF* tif)
 	 * Allocate state block so tag methods have storage to record values.
 	 */
 	if (tif->tif_mode == O_RDONLY)
+#if defined(__VISAGECPP__)
+		tif->tif_data = (tidata_t)_TIFFmalloc(sizeof (Fax3DecodeState));
+	else
+		tif->tif_data = (tidata_t)_TIFFmalloc(sizeof (Fax3EncodeState));
+#else
 		tif->tif_data = _TIFFmalloc(sizeof (Fax3DecodeState));
 	else
 		tif->tif_data = _TIFFmalloc(sizeof (Fax3EncodeState));
+#endif
 	if (tif->tif_data == NULL) {
 		TIFFError("TIFFInitCCITTFax3",
 		    "%s: No space for state block", tif->tif_name);

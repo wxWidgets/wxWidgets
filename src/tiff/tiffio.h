@@ -88,7 +88,7 @@ typedef	HFILE thandle_t;	/* client data handle */
 typedef	void* thandle_t;	/* client data handle */
 #endif
 
-#if defined(OS2_32)
+#if defined(__VISAGECPP__)
 #define LINKAGEMODE _Optlink
 #else
 #define LINKAGEMODE
