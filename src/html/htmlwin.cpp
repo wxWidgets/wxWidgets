@@ -170,8 +170,9 @@ bool wxHtmlWindow::LoadPage(const wxString& location)
             wxString err;
 
             err.Printf(_("The browser is unable to open requested location :\n\n%s"), WXSTRINGCAST location);
-            wxMessageBox(err, "Error");
             m_tmpCanDraw = TRUE;
+            Refresh();
+            wxMessageBox(err, "Error");
             return FALSE;
         }
 
