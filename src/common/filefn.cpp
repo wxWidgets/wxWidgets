@@ -1435,7 +1435,13 @@ char *wxGetWorkingDirectory(char *buf, int sz)
 
 wxString wxGetCwd()
 {
-    return wxString(wxGetWorkingDirectory());
+    static const size_t maxPathLen = 1024;
+
+    wxString str;
+    wxGetWorkingDirectory(str.GetWriteBuf(maxPathLen), maxPathLen);
+    str.UngetWriteBuf();
+
+    return str;
 }
 
 bool wxSetWorkingDirectory(const wxString& d)
