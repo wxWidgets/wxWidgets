@@ -447,7 +447,7 @@ AC_SUBST(GTK_JOYSTICK)
 dnl check for vprintf/vsprintf() which are GNU extensions
 AC_FUNC_VPRINTF
 dnl check for vsnprintf() which is another GNU extension
-AC_CHECK_FUNC(vsnprintf)
+AC_CHECK_FUNC(vsnprintf, AC_DEFINE(HAVE_VSNPRINTF))
 
 AC_LANG_SAVE
 AC_LANG_CPLUSPLUS
