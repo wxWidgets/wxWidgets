@@ -137,26 +137,23 @@ public:
     void*           m_macList ;
     wxArrayString   m_stringArray ;
     wxListDataArray m_dataArray ;
-    wxArrayInt      m_selectionPreImage ;
     
-    void            MacSetRedraw( bool doDraw ) ;
+    // as we are getting the same events for human and API selection we have to suppress
+    // events in the latter case
+    bool			MacIsSelectionSuppressed() const { return m_suppressSelection ; } 
 protected:
     void            MacDelete( int n ) ;
     void            MacInsert( int n , const wxString& item) ;
     void            MacAppend( const wxString& item) ;
     void            MacSet( int n , const wxString& item ) ;
     void            MacClear() ;
+    void            MacDeselectAll() ;
     void            MacSetSelection( int n , bool select ) ;
     int             MacGetSelection() const ;
     int             MacGetSelections(wxArrayInt& aSelections) const ;
     bool            MacIsSelected( int n ) const ;
     void            MacScrollTo( int n ) ;
-#ifndef __WXMAC_OSX__
-    void            OnSize( wxSizeEvent &size ) ;
-#endif
-    void            MacDoClick() ;
-    void            MacDoDoubleClick() ;
-
+    bool			MacSuppressSelection( bool suppress ) ;
 
     // free memory (common part of Clear() and dtor)
     // prevent collision with some BSD definitions of macro Free()   
@@ -164,6 +161,7 @@ protected:
 
     int m_noItems;
     int m_selected;
+    bool m_suppressSelection ;
     wxString  m_typeIn ;
     long      m_lastTypeIn ;
 

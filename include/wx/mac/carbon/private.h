@@ -457,6 +457,7 @@ public :
     virtual OSStatus RevealItem( DataBrowserItemID item,
             DataBrowserPropertyID propertyID,
             DataBrowserRevealOptions options ) ;
+    virtual OSStatus GetSelectionAnchor( DataBrowserItemID * first, DataBrowserItemID * last ) ;
     virtual bool IsItemSelected( DataBrowserItemID item ) ;
     virtual OSStatus SetSelectedItems(UInt32 numItems,
             const DataBrowserItemID * items,
