@@ -1,21 +1,29 @@
 wxWindows 2 Change Log
 ----------------------
 
-2.0.2, March ?? 1999
----------------------
+2.1.0, b4, May 9th 1999
+-----------------------
 
 wxGTK:
 
+- JPEG support added.
+- Many fixes and changes not thought worth mentioning in this file :-)
 
 wxMSW:
 
 - wxNotebook changes: can add image only; wxNB_FIXEDWIDTH added;
   SetTabSize added.
+- JPEG support added.
+- Fixes for Cygwin compilation.
+- Added wxGA_SMOOTH and wxFRAME_FLOAT_ON_PARENT styles.
+- Many fixes people didn't tell this file about.
 
 wxMotif:
 
 
 General:
+
+- Some changes for Unicode support, including wxchar.h/cpp.
 
 
 2.0.1 (release), March 1st 1999

@@ -274,6 +274,7 @@ wxString::wxString(const char *psz, wxMBConv& conv, size_t nLength)
 
 #else
 
+#if wxUSE_WCHAR_T
 // from wide string
 wxString::wxString(const wchar_t *pwz)
 {
@@ -289,6 +290,7 @@ wxString::wxString(const wchar_t *pwz)
     Init();
   }
 }
+#endif
 
 #endif
 
@@ -495,12 +497,14 @@ wxString& wxString::operator=(const unsigned char* psz)
   return *this;
 }
 
+#if wxUSE_WCHAR_T
 wxString& wxString::operator=(const wchar_t *pwz)
 {
   wxString str(pwz);
   *this = str;
   return *this;
 }
+#endif
 
 #endif
 
@@ -2190,3 +2194,27 @@ size_t wxCSConv::WC2MB(char *buf, const wchar_t *psz, size_t n) const
 }
 
 #endif//wxUSE_WCHAR_T
+
+#if wxUSE_WCHAR_T
+const wxWCharBuffer wxMBConv::cMB2WC(const char *psz) const
+    {
+      if (psz) {
+        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
+        wxWCharBuffer buf(nLen);
+        MB2WC(WCSTRINGCAST buf, psz, nLen);
+        return buf;
+      } else return wxWCharBuffer((wchar_t *) NULL);
+    }
+
+const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *psz) const
+    {
+      if (psz) {
+        size_t nLen = WC2MB((char *) NULL, psz, 0);
+        wxCharBuffer buf(nLen);
+        WC2MB(MBSTRINGCAST buf, psz, nLen);
+        return buf;
+      } else return wxCharBuffer((char *) NULL);
+    }
+
+#endif//wxUSE_WCHAR_T
+

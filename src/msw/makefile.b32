@@ -50,9 +50,9 @@ PERIPH_TARGET=xpm $(PERIPH_TARGET)
 PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
-PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(PERIPH_LIBS)
-PERIPH_TARGET=zlib png $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_zlib clean_png $(PERIPH_CLEAN_TARGET)
+PERIPH_LIBS=$(WXDIR)\lib\zlib.lib $(WXDIR)\lib\winpng.lib $(WXDIR)\lib\jpeg.lib $(PERIPH_LIBS)
+PERIPH_TARGET=zlib png jpeg $(PERIPH_TARGET)
+PERIPH_CLEAN_TARGET=clean_zlib clean_png clean_jpeg $(PERIPH_CLEAN_TARGET)
 
 !if "$(DLL)" == "0"
 DUMMY=dummy
@@ -112,6 +112,7 @@ COMMONOBJS = \
   $(MSWDIR)\image.obj \
   $(MSWDIR)\imagpng.obj \
   $(MSWDIR)\imagjpeg.obj \
+  $(MSWDIR)\imaggif.obj \
   $(MSWDIR)\intl.obj \
   $(MSWDIR)\ipcbase.obj \
   $(MSWDIR)\log.obj \
@@ -512,6 +513,8 @@ $(MSWDIR)\imagpng.obj:     $(COMMDIR)\imagpng.$(SRCSUFF)
 
 $(MSWDIR)\imagjpeg.obj:     $(COMMDIR)\imagjpeg.$(SRCSUFF)
 
+$(MSWDIR)\imaggif.obj:     $(COMMDIR)\imaggif.$(SRCSUFF)
+
 $(MSWDIR)\image.obj:     $(COMMDIR)\image.$(SRCSUFF)
 
 $(MSWDIR)\intl.obj:     $(COMMDIR)\intl.$(SRCSUFF)
@@ -696,6 +699,16 @@ zlib:   $(CFG)
 
 clean_zlib:
         cd $(WXDIR)\src\zlib
+        make -f makefile.b32 clean
+        cd $(WXDIR)\src\msw
+
+jpeg:    $(CFG)
+        cd $(WXDIR)\src\jpeg
+        make -f makefile.b32 
+        cd $(WXDIR)\src\msw
+
+clean_jpeg:
+        cd $(WXDIR)\src\jpeg
         make -f makefile.b32 clean
         cd $(WXDIR)\src\msw
 

@@ -449,7 +449,16 @@ size_t WXDLLEXPORT wxWC2MB(char *buf, const wchar_t *psz, size_t n);
 #define wxWC2WX wxWC2MB
 #define wxWX2WC wxMB2WC
 #endif
+#else
+// No wxUSE_WCHAR_T: we have to do something (JACS)
+#define wxMB2WC wxStrncpy
+#define wxWC2MB wxStrncpy
+#define wxMB2WX wxStrncpy
+#define wxWX2MB wxStrncpy
+#define wxWC2WX wxWC2MB
+#define wxWX2WC wxMB2WC
 #endif
+
 bool WXDLLEXPORT wxOKlibc(); // for internal use
 
 // if libc versions are not available, use replacements defined in wxchar.cpp

@@ -74,6 +74,8 @@ samples/wxpoem/Makefile.in
 samples/wxpoem/Makefile
 samples/wxsocket/Makefile.in
 samples/wxsocket/Makefile
+samples/scroll/Makefile.in
+samples/scroll/Makefile
 src/Makefile.in
 src/Makefile
 utils/ogl/samples/ogledit/Makefile.in

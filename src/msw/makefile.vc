@@ -263,7 +263,7 @@ MSWOBJS = \
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 # Normal, static library
-all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm $(LIBTARGET)
+all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm jpeg $(LIBTARGET)
 
 dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D
 
@@ -412,6 +412,16 @@ clean_zlib:
     nmake -f makefile.vc clean
     cd $(WXDIR)\src\msw
 
+jpeg:
+    cd $(WXDIR)\src\jpeg
+    nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL) all
+    cd $(WXDIR)\src\msw
+
+clean_jpeg:
+    cd $(WXDIR)\src\jpeg
+    nmake -f makefile.vc clean
+    cd $(WXDIR)\src\msw
+
 xpm:
     cd $(WXDIR)\src\xpm
     nmake -f makefile.vc FINAL=$(FINAL) DLL=$(DLL) WXMAKINGDLL=$(WXMAKINGDLL)
@@ -427,7 +437,7 @@ rcparser:
     nmake -f makefile.vc FINAL=$(FINAL)
     cd $(WXDIR)\src\msw
 
-clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_xpm
+clean: $(PERIPH_CLEAN_TARGET) clean_png clean_zlib clean_jpeg clean_xpm
         -erase $(LIBTARGET)
         -erase $(WXDIR)\lib\$(WXLIBNAME).pdb
         -erase ..\..\lib\wx200.dll

@@ -689,3 +689,15 @@ samples/dde/*.png
 samples/dde/*.ico
 samples/dde/*.txt
 
+samples/scroll/*.cpp
+samples/scroll/*.h
+samples/scroll/makefile*
+samples/scroll/*.rc
+samples/scroll/*.def
+samples/scroll/*.bmp
+samples/scroll/*.xpm
+samples/scroll/*.xbm
+samples/scroll/*.png
+samples/scroll/*.ico
+samples/scroll/*.txt
+

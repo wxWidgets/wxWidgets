@@ -176,24 +176,9 @@ class WXDLLEXPORT wxMBConv
  public:
   virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
-  const wxWCharBuffer cMB2WC(const char *psz) const
-    {
-      if (psz) {
-        size_t nLen = MB2WC((wchar_t *) NULL, psz, 0);
-        wxWCharBuffer buf(nLen);
-        MB2WC(WCSTRINGCAST buf, psz, nLen);
-        return buf;
-      } else return wxWCharBuffer((wchar_t *) NULL);
-    }
-  const wxCharBuffer cWC2MB(const wchar_t *psz) const
-    {
-      if (psz) {
-        size_t nLen = WC2MB((char *) NULL, psz, 0);
-        wxCharBuffer buf(nLen);
-        WC2MB(MBSTRINGCAST buf, psz, nLen);
-        return buf;
-      } else return wxCharBuffer((char *) NULL);
-    }
+  // No longer inline since BC++ complains.
+  const wxWCharBuffer cMB2WC(const char *psz) const;
+  const wxCharBuffer cWC2MB(const wchar_t *psz) const;
 #if wxUSE_UNICODE
   const wxWCharBuffer cMB2WX(const char *psz) const { return cMB2WC(psz); }
   const wxCharBuffer cWX2MB(const wchar_t *psz) const { return cWC2MB(psz); }
@@ -264,6 +249,7 @@ WXDLLEXPORT_DATA(extern wxMBConv *) wxConvCurrent;
 #endif
 #else//!wxUSE_WCHAR_T
 class WXDLLEXPORT wxMBConv {
+public:
   const char* cMB2WX(const char *psz) const { return psz; }
   const char* cWX2MB(const char *psz) const { return psz; }
 };
