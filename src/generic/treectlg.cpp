@@ -1315,7 +1315,7 @@ wxTreeItemId wxGenericTreeCtrl::FindItem(const wxTreeItemId& idParent,
         }
 
         // and try all the items (stop when we get to the one we started from)
-        while ( id != idParent && !GetItemText(id).Lower().StartsWith(prefix) )
+        while ( id.IsOk() && (id != idParent) && !GetItemText(id).Lower().StartsWith(prefix) )
         {
             id = GetNext(id);
         }
