@@ -96,7 +96,11 @@
         <define>__WX$(TOOLKIT)__</define>
         <include>$(SRCDIR)$(WXTOPDIR)/include</include>
         <lib-path>$(LIBDIRNAME)</lib-path>
-        <ldflags-end>$(EXTRALIBS)</ldflags-end>
+    </template>
+
+    <template id="wx_append">
+        <define>BOOBOBO</define>
+        <ldflags>$(EXTRALIBS)</ldflags>
         <!-- link against builtin 3rd party libs, if needed: -->
         <sys-lib>$(LIB_JPEG)</sys-lib>
         <sys-lib>$(LIB_PNG)</sys-lib>
@@ -106,7 +110,7 @@
         <sys-lib>$(LIB_REGEX)</sys-lib>
     </template>
 
-    <template id="wx_lib" template="wx">
+    <template id="wx_lib" template="wx" template_append="wx_append">
         <set var="WXLIBNAME">$(wxwin.mkLibName(wxid))</set>
         <dirname>$(LIBDIRNAME)</dirname>
         <libname>$(WXLIBNAME)</libname>
