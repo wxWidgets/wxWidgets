@@ -3773,6 +3773,41 @@ int wxListMainWindow::GetSelectedItemCount() const
 // item position/size
 // ----------------------------------------------------------------------------
 
+wxRect wxListMainWindow::GetViewRect() const
+{
+    wxASSERT_MSG( !HasFlag(wxLC_REPORT | wxLC_LIST),
+                    _T("wxListCtrl::GetViewRect() only works in icon mode") );
+
+    // we need to find the longest/tallest label
+    wxCoord xMax = 0,
+            yMax = 0;
+    const int count = GetItemCount();
+    if ( count )
+    {
+        for ( int i = 0; i < count; i++ )
+        {
+            wxRect r;
+            GetItemRect(i, r);
+
+            wxCoord x = r.GetRight(),
+                    y = r.GetBottom();
+
+            if ( x > xMax )
+                xMax = x;
+            if ( y > yMax )
+                yMax = y;
+        }
+    }
+
+#if 0
+    // account for the scrollbar
+    yMax += wxSystemSettings::GetMetric(wxSYS_HSCROLL_Y);
+    xMax += wxSystemSettings::GetMetric(wxSYS_VSCROLL_X);
+#endif
+
+    return wxRect(0, 0, xMax, yMax);
+}
+
 void wxListMainWindow::GetItemRect( long index, wxRect &rect ) const
 {
     wxCHECK_RET( index >= 0 && (size_t)index < GetItemCount(),
@@ -4681,6 +4716,11 @@ bool wxGenericListCtrl::SetItemData( long item, long data )
     info.m_data = data;
     m_mainWin->SetItem( info );
     return TRUE;
+}
+
+wxRect wxGenericListCtrl::GetViewRect() const
+{
+    return m_mainWin->GetViewRect();
 }
 
 bool wxGenericListCtrl::GetItemRect( long item, wxRect &rect,  int WXUNUSED(code) ) const

@@ -1032,6 +1032,32 @@ bool wxListCtrl::SetItemData(long item, long data)
     return SetItem(info);
 }
 
+wxRect wxListCtrl::GetViewRect() const
+{
+    wxASSERT_MSG( !HasFlag(wxLC_REPORT | wxLC_LIST),
+                    _T("wxListCtrl::GetViewRect() only works in icon mode") );
+
+    RECT rc;
+    if ( !ListView_GetViewRect(GetHwnd(), &rc) )
+    {
+        wxLogDebug(_T("ListView_GetViewRect() failed."));
+
+        wxZeroMemory(rc);
+    }
+    else
+    {
+        // VZ: I have no idea why is this needed but without it the listbook
+        //     control shows a tiny vertical scrollbar, make sure that it works
+        //     correctly if you decide to change this
+        rc.bottom += 5;
+    }
+
+    wxRect rect;
+    wxCopyRECTToRect(rc, rect);
+
+    return rect;
+}
+
 // Gets the item rectangle
 bool wxListCtrl::GetItemRect(long item, wxRect& rect, int code) const
 {

@@ -138,6 +138,9 @@ public:
     // or small icon view)
     int GetCountPerPage() const;
 
+    // return the total area occupied by all the items (icon/small icon only)
+    wxRect GetViewRect() const;
+
     // Gets the edit control for editing labels.
     wxTextCtrl* GetEditControl() const;
 

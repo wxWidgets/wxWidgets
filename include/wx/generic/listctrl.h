@@ -91,6 +91,7 @@ public:
     int GetColumnWidth( int col ) const;
     bool SetColumnWidth( int col, int width);
     int GetCountPerPage() const; // not the same in wxGLC as in Windows, I think
+    wxRect GetViewRect() const;
 
     bool GetItem( wxListItem& info ) const;
     bool SetItem( wxListItem& info ) ;

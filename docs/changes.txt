@@ -40,6 +40,18 @@ versions, please update your code to not use them.
 OTHER CHANGES
 =============
 
+2.5.1
+-----
+
+wxMSW:
+
+- fixed wxTE_*WRAP styles handling
+
+All (GUI):
+
+- added wxListCtrl::GetViewRect()
+
+
 2.5.0
 -----
 

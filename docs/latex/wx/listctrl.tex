@@ -463,6 +463,19 @@ Gets the text colour of the list control.
 Gets the index of the topmost visible item when in
 list or report view.
 
+
+\membersection{wxRect}{wxListCtrl::GetViewRect}\label{wxlistctrlgetviewrect}
+
+\constfunc{wxRect}{GetViewRect}{\void}
+
+Returns the rectangle taken by all items in the control. In other words, if the
+controls client size were equal to the size of this rectangle, no scrollbars
+would be needed and no free space would be left.
+
+Note that this function only works in the icon and small icon views, not in
+list or report views (this is a limitation of the native Win32 control).
+
+
 \membersection{wxListCtrl::HitTest}\label{wxlistctrlhittest}
 
 \func{long}{HitTest}{\param{const wxPoint\& }{point}, \param{int\& }{flags}}
