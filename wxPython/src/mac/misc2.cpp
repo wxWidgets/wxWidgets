@@ -8068,19 +8068,43 @@ static PyObject *_wrap_wxWave_Play(PyObject *self, PyObject *args, PyObject *kwa
 static PyObject *_wrap_new_wxFileTypeInfo(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxFileTypeInfo * _result;
-    char * _arg0;
-    char * _arg1;
-    char * _arg2;
-    char * _arg3;
+    wxString * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    wxString * _arg3;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    PyObject * _obj3 = 0;
     char *_kwnames[] = { "mimeType","openCmd","printCmd","desc", NULL };
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"ssss:new_wxFileTypeInfo",_kwnames,&_arg0,&_arg1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:new_wxFileTypeInfo",_kwnames,&_obj0,&_obj1,&_obj2,&_obj3)) 
         return NULL;
 {
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
+        return NULL;
+}
+{
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
+        return NULL;
+}
+{
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
+        return NULL;
+}
+{
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
+        return NULL;
+}
+{
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxFileTypeInfo *)new_wxFileTypeInfo(_arg0,_arg1,_arg2,_arg3);
+    _result = (wxFileTypeInfo *)new_wxFileTypeInfo(*_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -8091,6 +8115,22 @@ static PyObject *_wrap_new_wxFileTypeInfo(PyObject *self, PyObject *args, PyObje
         Py_INCREF(Py_None);
         _resultobj = Py_None;
     }
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
+}
+{
+    if (_obj3)
+        delete _arg3;
+}
     return _resultobj;
 }
 
