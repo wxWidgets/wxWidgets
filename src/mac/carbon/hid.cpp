@@ -103,7 +103,7 @@ bool wxHIDDevice::Create (const int& nClass, const int& nType)
 											kCFAllocatorDefault, kNilOptions) == KERN_SUCCESS);
 
 		//Just for sanity :)
-		wxVERIFY(CFGetTypeID(CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey))) == CFStringGetTypeID());
+		wxASSERT(CFGetTypeID(CFDictionaryGetValue(pDictionary, CFSTR(kIOHIDProductKey))) == CFStringGetTypeID());
 			
 		//Get [product] name
 		m_szName = CFStringGetCStringPtr	(
@@ -214,22 +214,22 @@ enum
 	kHIDUsage_KeyboardEqualSign	= 0x2E,	
 	kHIDUsage_KeyboardOpenBracket	= 0x2F,	
 	kHIDUsage_KeyboardCloseBracket	= 0x30,
-	kHIDUsage_KeyboardBackslash	= 0x31,	//* \ or | *
-	kHIDUsage_KeyboardNonUSPound	= 0x32,	/* Non-US # or _ *
-	kHIDUsage_KeyboardSemicolon	= 0x33,	/* ; or : *
-	kHIDUsage_KeyboardQuote	= 0x34,	/* ' or " *
-	kHIDUsage_KeyboardGraveAccentAndTilde	= 0x35,	/* Grave Accent and Tilde *
-	kHIDUsage_KeyboardComma	= 0x36,	/* , or < *
-	kHIDUsage_KeyboardPeriod	= 0x37,	/* . or > *
-	kHIDUsage_KeyboardSlash	= 0x38,	/* / or ? *
-	kHIDUsage_KeyboardCapsLock	= 0x39,	/* Caps Lock *
+	kHIDUsage_KeyboardBackslash	= 0x31,	// \ or | *
+	kHIDUsage_KeyboardNonUSPound	= 0x32,	/ Non-US # or _ *
+	kHIDUsage_KeyboardSemicolon	= 0x33,	/ ; or : *
+	kHIDUsage_KeyboardQuote	= 0x34,	/ ' or " *
+	kHIDUsage_KeyboardGraveAccentAndTilde	= 0x35,	/ Grave Accent and Tilde *
+	kHIDUsage_KeyboardComma	= 0x36,	/ , or < *
+	kHIDUsage_KeyboardPeriod	= 0x37,	/ . or > *
+	kHIDUsage_KeyboardSlash	= 0x38,	/ / or ? *
+	kHIDUsage_KeyboardCapsLock	= 0x39,	/ Caps Lock *
 
-	kHIDUsage_KeyboardPrintScreen	= 0x46,	/* Print Screen *
-	kHIDUsage_KeyboardScrollLock	= 0x47,	/* Scroll Lock *
-	kHIDUsage_KeyboardPause	= 0x48,	/* Pause *
-	kHIDUsage_KeyboardInsert	= 0x49,	/* Insert *
-	kHIDUsage_KeyboardHome	= 0x4A,	/* Home *
-	kHIDUsage_KeyboardDeleteForward	= 0x4C,	/* Delete Forward *
+	kHIDUsage_KeyboardPrintScreen	= 0x46,	/ Print Screen *
+	kHIDUsage_KeyboardScrollLock	= 0x47,	/ Scroll Lock *
+	kHIDUsage_KeyboardPause	= 0x48,	/ Pause *
+	kHIDUsage_KeyboardInsert	= 0x49,	/ Insert *
+	kHIDUsage_KeyboardHome	= 0x4A,	/ Home *
+	kHIDUsage_KeyboardDeleteForward	= 0x4C,	/ Delete Forward *
 
 	kHIDUsage_KeyboardUpArrow
 	kHIDUsage_KeypadNumLock
@@ -244,7 +244,6 @@ enum
 	kHIDUsage_KeyboardPower
 	kHIDUsage_KeypadEqualSign
 };
-/*
 	enum wxKeyCode
 	{
 
