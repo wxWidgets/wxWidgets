@@ -535,13 +535,16 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                 (FindControlUnderMouse(windowMouseLocation , window , &dummyPart) != 
                 wxMacFindControlUnderMouse( windowMouseLocation , window , &dummyPart ) ) )
             {
-                EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
-                Point clickLocation = windowMouseLocation ;
-#if TARGET_API_MAC_OSX
-                currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
-#endif
-                HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
-                    modifiers , (ControlActionUPP ) -1 ) ;
+                if ( currentMouseWindow->MacIsReallyEnabled() ) 
+                {
+                    EventModifiers modifiers = cEvent.GetParameter<EventModifiers>(kEventParamKeyModifiers, typeUInt32) ;
+                    Point clickLocation = windowMouseLocation ;
+    #if TARGET_API_MAC_OSX
+                    currentMouseWindow->MacRootWindowToWindow( &clickLocation.h , &clickLocation.v ) ;
+    #endif
+                    HandleControlClick( (ControlRef) currentMouseWindow->GetHandle() , clickLocation ,
+                        modifiers , (ControlActionUPP ) -1 ) ;
+                }
                 result = noErr ;
             }
         }
