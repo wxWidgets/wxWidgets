@@ -48,56 +48,39 @@ typedef char tchar;
 #include "TextCommon.h"
 #include "TextEncodingConverter.h"
 
-#include  "wx/mac/private.h"  // includes mac headers
+#include "wx/fontutil.h"
+#include "wx/mac/private.h"  // includes mac headers
 
-typedef struct {
-    wxFontEncoding enc ;
-    TextEncodingBase mac ;
-} MacCP ;
-
-MacCP gMacCodePages[] =
-{
-    wxFONTENCODING_MACROMAN, kTextEncodingMacRoman,
-    wxFONTENCODING_MACCENTRALEUR, kTextEncodingMacCentralEurRoman,
-    wxFONTENCODING_MACHEBREW, kTextEncodingMacHebrew,
-    wxFONTENCODING_MACGREEK, kTextEncodingMacGreek,
-    wxFONTENCODING_MACARABIC, kTextEncodingMacArabic,
-    wxFONTENCODING_MACTURKISH, kTextEncodingMacTurkish,
-    wxFONTENCODING_MACCYRILLIC, kTextEncodingMacCyrillic,
-} ;
-
-wxUint16 gMacEncodings[WXSIZEOF(gMacCodePages)][128] ;
-bool gMacEncodingsInited[WXSIZEOF(gMacCodePages)] ;
+wxUint16 gMacEncodings[wxFONTENCODING_MACMAX-wxFONTENCODING_MACMIN+1][128] ;
+bool gMacEncodingsInited[wxFONTENCODING_MACMAX-wxFONTENCODING_MACMIN+1] ;
 
 #endif
 
 static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
 {
 #ifdef __WXMAC__
-    for (int i = 0 ; i < WXSIZEOF(gMacCodePages) ; ++i )
+    if( enc >= wxFONTENCODING_MACMIN && enc <= wxFONTENCODING_MACMAX )
     {
-        if ( gMacCodePages[i].enc == enc )
+        int i = enc-wxFONTENCODING_MACMIN ;
+        if ( gMacEncodingsInited[i] == false )
         {
-            if ( gMacEncodingsInited[i] == false )
-            {
-                TECObjectRef converter ;
-                TextEncodingBase code = gMacCodePages[i].mac ;
-		        TextEncodingBase unicode = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
-        	    OSStatus status = TECCreateConverter(&converter,code,unicode);
-        	    char s[2] ;
-        	    s[1] = 0 ;
-        	    ByteCount byteInLen, byteOutLen ;
-        	    for( char c = 255 ; c >= 128 ; --c )
-        	    {
-        	        s[0] = c ;
-	                status = TECConvertText(converter, (ConstTextPtr) &s , 1, &byteInLen,
-	                (TextPtr) &gMacEncodings[i][c-128] , 2, &byteOutLen);
-        	    }
-	            status = TECDisposeConverter(converter);
-	            gMacEncodingsInited[i]=true;	
-            }
-            return gMacEncodings[i] ;
+            TECObjectRef converter ;
+            TextEncodingBase code = wxMacGetSystemEncFromFontEnc( enc ) ;
+	        TextEncodingBase unicode = CreateTextEncoding(kTextEncodingUnicodeDefault,0,kUnicode16BitFormat) ;
+    	    OSStatus status = TECCreateConverter(&converter,code,unicode);
+    	    char s[2] ;
+    	    s[1] = 0 ;
+    	    ByteCount byteInLen, byteOutLen ;
+    	    for( char c = 255 ; c >= 128 ; --c )
+    	    {
+    	        s[0] = c ;
+                status = TECConvertText(converter, (ConstTextPtr) &s , 1, &byteInLen,
+                (TextPtr) &gMacEncodings[i][c-128] , 2, &byteOutLen);
+    	    }
+            status = TECDisposeConverter(converter);
+            gMacEncodingsInited[i]=true;	
         }
+        return gMacEncodings[i] ;
     }
 #endif
 
