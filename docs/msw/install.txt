@@ -489,7 +489,7 @@ provide Unix-like tools that you'll need to build wxWindows.
 The solution prior to MSYS was to download extra utilities from
 ports/mingw32 on the wxWindows ftp site or CD-ROM:
 
-  ftp://biolp22.york.ac.uk/pub/ports/mingw32/extra.zip
+  ftp://biolpc22.york.ac.uk/pub/ports/mingw32/extra.zip
   
 These should be extracted to a directory in your path. If you have 
 already downloaded rm, cp, mv from elsewhere, or are using
