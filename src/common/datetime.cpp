@@ -1822,8 +1822,9 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
 {
     wxDATETIME_CHECK( weekday != Inv_WeekDay, _T("invalid weekday") );
 
-    int wdayThis = GetWeekDay();
-    if ( weekday == wdayThis )
+    int wdayDst = weekday,
+        wdayThis = GetWeekDay();
+    if ( wdayDst == wdayThis )
     {
         // nothing to do
         return *this;
@@ -1837,21 +1838,23 @@ wxDateTime& wxDateTime::SetToWeekDayInSameWeek(WeekDay weekday, WeekFlags flags)
     // the logic below based on comparing weekday and wdayThis works if Sun (0)
     // is the first day in the week, but breaks down for Monday_First case so
     // we adjust the week days in this case
-    if( flags == Monday_First )
+    if ( flags == Monday_First )
     {
         if ( wdayThis == Sun )
             wdayThis += 7;
+        if ( wdayDst == Sun )
+            wdayDst += 7;
     }
     //else: Sunday_First, nothing to do
 
     // go forward or back in time to the day we want
-    if ( weekday < wdayThis )
+    if ( wdayDst < wdayThis )
     {
-        return Subtract(wxDateSpan::Days(wdayThis - weekday));
+        return Subtract(wxDateSpan::Days(wdayThis - wdayDst));
     }
     else // weekday > wdayThis
     {
-        return Add(wxDateSpan::Days(weekday - wdayThis));
+        return Add(wxDateSpan::Days(wdayDst - wdayThis));
     }
 }
 

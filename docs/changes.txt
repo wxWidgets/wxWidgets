@@ -9,8 +9,9 @@ All:
 
 - wxURI::GetUser() only returns the user name now, use GetUserInfo() to get
   user and password as in 2.5.4; wxURI::GetPassword() added.
-- Added wxDebugReport class.
+- added wxDebugReport class.
 - added wxTempFileOutputStream by Stas Sergeev
+- fixed wxDateTime::SetToWeekDayInSameWeek(Sun, Monday_First)
 
 All (GUI):
 
