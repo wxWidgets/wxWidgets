@@ -919,6 +919,8 @@ if __name__ == "__main__":
                          'scripts/img2xpm',
                          'scripts/img2py',
                          'scripts/xrced',
+                         'scripts/pyshell',
+                         'scripts/pycrust',
                          ],
               )
 

@@ -151,6 +151,8 @@ Source: "scripts\img2png";                  DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\img2py";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\img2xpm";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\pyshell";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
+Source: "scripts\pycrust";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: tools
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples
@@ -194,14 +196,15 @@ Filename: "{code:GetPythonDir}\python.exe";  Parameters: "CreateBatchFiles.py"; 
 
 [Icons]
 Name: "{group}\Run the DEMO";          Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "{app}\wxPython\demo";   Parameters: "demo.py"; IconFilename: "{app}\wxPython\demo\wxpdemo.ico"; Components: core
-Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{app}\wxPython\lib\PyCrust\PyCrustApp.py";  IconFilename: "{app}\wxPython\lib\PyCrust\PyCrust.ico"; Components: core
+Name: "{group}\PyCrust";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{code:GetPythonDir}\Scripts\pycrust";  IconFilename: "{app}\wxPython\lib\PyCrust\PyCrust.ico"; Components: core
+Name: "{group}\PyShell";               Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";                   Parameters: "{code:GetPythonDir}\Scripts\pyshell";  IconFilename: "{app}\wxPython\lib\PyCrust\PyCrust.ico"; Components: core
 Name: "{group}\wxWindows Reference";   Filename: "{app}\wxPython\docs\wx.chm";                Components: docs
 Name: "{group}\wxOGL Reference";       Filename: "{app}\wxPython\docs\ogl.chm";               Components: docs
 Name: "{group}\licence.txt";           Filename: "{app}\wxPython\docs\licence\licence.txt";   Components: core
 Name: "{group}\README.txt";            Filename: "{app}\wxPython\docs\README.txt";            Components: core
 Name: "{group}\CHANGES.txt";           Filename: "{app}\wxPython\docs\CHANGES.txt";           Components: core
 Name: "{group}\Sample Apps";           Filename: "{app}\wxPython\samples"; Components: samples
-Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";   Parameters: "{app}\wxPython\Tools\XRCed\xrced.py"; IconFilename: "{app}\wxPython\Tools\XRCed\xrced.ico"; Components: tools
+Name: "{group}\Resource Editor";       Filename: "{code:GetPythonDir}\pythonw.exe";   WorkingDir: "c:\";   Parameters: "{code:GetPythonDir}\Scripts\xrced"; IconFilename: "{app}\wxPython\Tools\XRCed\xrced.ico"; Components: tools
 
 
 ;;------------------------------------------------------------

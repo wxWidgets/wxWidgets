@@ -13,7 +13,7 @@
 import sys, os
 
 python = sys.executable
-pythonw = ow.path.join(os.path.split(python)[0], 'pythonw.exe')
+pythonw = 'start ' + os.path.join(os.path.split(python)[0], 'pythonw.exe')
 scriptdir = os.getcwd()
 
 scripts = [ ("img2png", 0),
