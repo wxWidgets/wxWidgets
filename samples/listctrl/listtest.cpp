@@ -491,6 +491,8 @@ void MyFrame::OnVirtualView(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::InitWithVirtualItems()
 {
+    m_listCtrl->SetImageList(m_imageListSmall, wxIMAGE_LIST_SMALL);
+
     m_listCtrl->InsertColumn(0, _T("First Column"));
     m_listCtrl->InsertColumn(1, _T("Second Column"));
     m_listCtrl->SetColumnWidth(0, 150);
@@ -774,6 +776,8 @@ void MyListCtrl::OnActivated(wxListEvent& event)
 void MyListCtrl::OnFocused(wxListEvent& event)
 {
     LogEvent(event, _T("OnFocused"));
+
+    event.Skip();
 }
 
 void MyListCtrl::OnListKeyDown(wxListEvent& event)
