@@ -216,16 +216,21 @@ WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_UTF8)) wxConv_UTF8;
 WXDLLEXPORT_DATA(extern wxANOTHER_MBCONV(wxMBConv_gdk)) wxConv_gdk;
 #endif
 
+class wxCharacterSet;
 class WXDLLEXPORT wxCSConv : public wxMBConv
 {
  private:
-  wxChar *data;
+  wxCharacterSet *cset;
  public:
   wxCSConv(const wxChar *charset);
   virtual ~wxCSConv(void);
   virtual size_t MB2WC(wchar_t *buf, const char *psz, size_t n) const;
   virtual size_t WC2MB(char *buf, const wchar_t *psz, size_t n) const;
 };
+
+WXDLLEXPORT_DATA(extern wxCSConv) wxConv_local;
+
+WXDLLEXPORT_DATA(extern wxMBConv *) wxConv_current;
 
 // filenames are multibyte on Unix and probably widechar on Windows?
 #ifdef __UNIX__
@@ -450,6 +455,8 @@ public:
     const wxWCharBuffer wc_str(wxMBConv& conv) const { return conv.cMB2WC(m_pchData); }
     const wxChar* fn_str() const { return m_pchData; }
 #endif
+    // for convenience
+    const wxWX2MBbuf mbc_str() const { return mb_str(*wxConv_current); }
 
   // overloaded assignment
     // from another wxString

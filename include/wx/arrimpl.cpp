@@ -58,7 +58,7 @@ void name::Empty()                                                            \
                                                                               \
 void name::Remove(size_t uiIndex)                                             \
 {                                                                             \
-  wxCHECK_RET( uiIndex < Count(), "bad index in " #name "::Remove()" );       \
+  wxCHECK_RET( uiIndex < Count(), _T("bad index in " #name "::Remove()") );   \
                                                                               \
   delete (T*)wxBaseArray::Item(uiIndex);                                      \
                                                                               \
