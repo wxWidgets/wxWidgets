@@ -14,6 +14,23 @@
 
 #if wxUSE_BUTTON
 
+// ----------------------------------------------------------------------------
+// wxButton flags
+// ----------------------------------------------------------------------------
+
+// all these flags are obsolete
+#define wxBU_NOAUTODRAW      0x0000
+#define wxBU_AUTODRAW        0x0004
+#define wxBU_LEFT            0x0040
+#define wxBU_TOP             0x0080
+#define wxBU_RIGHT           0x0100
+#define wxBU_BOTTOM          0x0200
+
+// by default, the buttons will be created with some (system dependent)
+// minimal size to make them look nicer, giving this style will make them as
+// small as possible
+#define wxBU_EXACTFIT        0x0001
+
 #include "wx/control.h"
 
 class WXDLLEXPORT wxBitmap;

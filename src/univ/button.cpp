@@ -136,9 +136,12 @@ wxSize wxButton::DoGetBestClientSize() const
 
     // for compatibility with other ports, the buttons default size is never
     // less than the standard one
-    wxSize szDef = GetDefaultSize();
-    if ( width < szDef.x )
-        width = szDef.x;
+    if ( !(GetWindowStyle() & wxBU_EXACTFIT) )
+    {
+        wxSize szDef = GetDefaultSize();
+        if ( width < szDef.x )
+            width = szDef.x;
+    }
 
     return wxSize(width, height);
 }

@@ -1196,16 +1196,6 @@ enum wxBorder
 #define wxSB_VERTICAL        wxVERTICAL
 
 /*
- * wxButton flags (Win32 only)
- */
-#define wxBU_AUTODRAW        0x0004
-#define wxBU_NOAUTODRAW      0x0000
-#define wxBU_LEFT            0x0040
-#define wxBU_TOP             0x0080
-#define wxBU_RIGHT           0x0100
-#define wxBU_BOTTOM          0x0200
-
-/*
  * wxTreeCtrl flags
  */
 #define wxTR_HAS_BUTTONS     0x0004
