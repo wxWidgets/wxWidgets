@@ -27,7 +27,7 @@
 
 // the focus rect around a text may have 4 pixels in each direction
 // we handle these problems right now in an extended vis region of a window
-static const wxCoord TEXTBORDER = 0 ;
+static const wxCoord TEXTBORDER = 4 ;
 // the margin between the text control and the spin
 static const wxCoord MARGIN = 8 - TEXTBORDER;
 
