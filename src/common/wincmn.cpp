@@ -121,9 +121,9 @@ wxWindowBase::wxWindowBase()
 
     // no constraints on the minimal window size
     m_minWidth =
+    m_maxWidth = wxDefaultSize.x;
     m_minHeight =
-    m_maxWidth =
-    m_maxHeight = -1;
+    m_maxHeight = wxDefaultSize.y;
 
     // window are created enabled and visible by default
     m_isShown =
@@ -180,9 +180,9 @@ wxWindowBase::wxWindowBase()
     m_virtualSize = wxDefaultSize;
 
     m_minVirtualWidth =
+    m_maxVirtualWidth = wxDefaultSize.x;
     m_minVirtualHeight =
-    m_maxVirtualWidth =
-    m_maxVirtualHeight = -1;
+    m_maxVirtualHeight = wxDefaultSize.y;
 
     m_windowVariant = wxWINDOW_VARIANT_NORMAL;
 
@@ -432,8 +432,8 @@ void wxWindowBase::Centre(int direction)
     int width, height;
     GetSize(&width, &height);
 
-    int xNew = -1,
-        yNew = -1;
+    int xNew = wxDefaultPosition.x,
+        yNew = wxDefaultPosition.y;
 
     if ( direction & wxHORIZONTAL )
         xNew = (widthParent - width)/2;
@@ -590,9 +590,9 @@ wxSize wxWindowBase::DoGetBestSize() const
 
             // if the window hadn't been positioned yet, assume that it is in
             // the origin
-            if ( wx == -1 )
+            if ( wx == wxDefaultPosition.x )
                 wx = 0;
-            if ( wy == -1 )
+            if ( wy == wxDefaultPosition.y )
                 wy = 0;
 
             win->GetSize(&ww, &wh);
@@ -624,12 +624,12 @@ void wxWindowBase::SetBestSize(const wxSize& size)
 {
     // If the given size is incomplete then merge with the best size.
     wxSize sizeBest;
-    if ( size.x == -1 || size.y == -1 )
+    if ( size.x == wxDefaultSize.x || size.y == wxDefaultSize.y )
     {
         sizeBest = DoGetBestSize();
-        if ( size.x != -1 )
+        if ( size.x != wxDefaultSize.x )
             sizeBest.x = size.x;
-        if ( size.y != -1 )
+        if ( size.y != wxDefaultSize.y )
             sizeBest.y = size.y;
     }
     else // have complete explicit size
@@ -659,8 +659,8 @@ void wxWindowBase::SetSizeHints(int minW, int minH,
 {
     // setting min width greater than max width leads to infinite loops under
     // X11 and generally doesn't make any sense, so don't allow it
-    wxCHECK_RET( (minW == -1 || maxW == -1 || minW <= maxW) &&
-                    (minH == -1 || maxH == -1 || minH <= maxH),
+    wxCHECK_RET( (minW == wxDefaultSize.x || maxW == wxDefaultSize.x || minW <= maxW) &&
+                    (minH == wxDefaultSize.y || maxH == wxDefaultSize.y || minH <= maxH),
                  _T("min width/height must be less than max width/height!") );
 
     m_minWidth = minW;
@@ -725,13 +725,13 @@ void wxWindowBase::SetVirtualSizeHints( int minW, int minH,
 
 void wxWindowBase::DoSetVirtualSize( int x, int y )
 {
-    if ( m_minVirtualWidth != -1 && m_minVirtualWidth > x )
+    if ( m_minVirtualWidth != wxDefaultSize.x && m_minVirtualWidth > x )
         x = m_minVirtualWidth;
-    if ( m_maxVirtualWidth != -1 && m_maxVirtualWidth < x )
+    if ( m_maxVirtualWidth != wxDefaultSize.x && m_maxVirtualWidth < x )
         x = m_maxVirtualWidth;
-    if ( m_minVirtualHeight != -1 && m_minVirtualHeight > y )
+    if ( m_minVirtualHeight != wxDefaultSize.y && m_minVirtualHeight > y )
         y = m_minVirtualHeight;
-    if ( m_maxVirtualHeight != -1 && m_maxVirtualHeight < y )
+    if ( m_maxVirtualHeight != wxDefaultSize.y && m_maxVirtualHeight < y )
         y = m_maxVirtualHeight;
 
     m_virtualSize = wxSize(x, y);
@@ -1886,22 +1886,22 @@ void wxWindowBase::SetSizeConstraint(int x, int y, int w, int h)
     wxLayoutConstraints *constr = GetConstraints();
     if ( constr )
     {
-        if ( x != -1 )
+        if ( x != wxDefaultPosition.x )
         {
             constr->left.SetValue(x);
             constr->left.SetDone(true);
         }
-        if ( y != -1 )
+        if ( y != wxDefaultPosition.y )
         {
             constr->top.SetValue(y);
             constr->top.SetDone(true);
         }
-        if ( w != -1 )
+        if ( w != wxDefaultSize.x )
         {
             constr->width.SetValue(w);
             constr->width.SetDone(true);
         }
-        if ( h != -1 )
+        if ( h != wxDefaultSize.y )
         {
             constr->height.SetValue(h);
             constr->height.SetDone(true);
@@ -1914,12 +1914,12 @@ void wxWindowBase::MoveConstraint(int x, int y)
     wxLayoutConstraints *constr = GetConstraints();
     if ( constr )
     {
-        if ( x != -1 )
+        if ( x != wxDefaultPosition.x )
         {
             constr->left.SetValue(x);
             constr->left.SetDone(true);
         }
-        if ( y != -1 )
+        if ( y != wxDefaultPosition.y )
         {
             constr->top.SetValue(y);
             constr->top.SetDone(true);
