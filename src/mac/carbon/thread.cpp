@@ -1197,7 +1197,7 @@ wxThread *wxThread::This()
 
 bool wxThread::IsMain()
 {
-	return GetCurrentId() == gs_idMainThread;
+	return GetCurrentId() == gs_idMainThread || gs_idMainThread == kNoThreadID;
 }
 
 #ifdef Yield

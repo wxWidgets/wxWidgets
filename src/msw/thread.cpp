@@ -863,7 +863,7 @@ wxThread *wxThread::This()
 
 bool wxThread::IsMain()
 {
-    return ::GetCurrentThreadId() == gs_idMainThread;
+    return ::GetCurrentThreadId() == gs_idMainThread || gs_idMainThread == 0;
 }
 
 void wxThread::Yield()

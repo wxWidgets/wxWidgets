@@ -113,7 +113,7 @@ WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
 static wxArrayThread gs_allThreads;
 
 // the id of the main thread
-static pthread_t gs_tidMain;
+static pthread_t gs_tidMain = (pthread_t)-1;
 
 // the key for the pointer to the associated wxThread object
 static pthread_key_t gs_keySelf;
@@ -957,7 +957,7 @@ wxThread *wxThread::This()
 
 bool wxThread::IsMain()
 {
-    return (bool)pthread_equal(pthread_self(), gs_tidMain);
+    return (bool)pthread_equal(pthread_self(), gs_tidMain) || gs_tidMain == (pthread_t)-1;
 }
 
 void wxThread::Yield()
