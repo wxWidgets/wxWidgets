@@ -1079,7 +1079,11 @@
 // So if you're using WinCE .NET, and wxUSE_POCKETPC_UI is 0,
 // you will be able to create separate toolbars and menubars,
 // but _not_ the combined toolbar/menubar.
-#define wxUSE_POCKETPC_UI       1
+
+// NOW OBSOLETE: we test WIN32_PLATFORM_PSPC and WIN32_PLATFORM_WFSP
+// instead
+
+// #define wxUSE_POCKETPC_UI       1
 
 // ----------------------------------------------------------------------------
 // obsolete settings

@@ -414,7 +414,13 @@ bool wxTopLevelWindowMSW::CreateFrame(const wxString& title,
     WXDWORD exflags;
     WXDWORD flags = MSWGetCreateWindowFlags(&exflags);
 
-    return MSWCreate(wxCanvasClassName, title, pos, size, flags, exflags);
+	wxSize sz(size);
+#if _WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)
+	// Always expand to fit the screen in PocketPC or SmartPhone
+	sz = wxDefaultSize;
+#endif
+
+    return MSWCreate(wxCanvasClassName, title, pos, sz, flags, exflags);
 }
 
 bool wxTopLevelWindowMSW::Create(wxWindow *parent,
@@ -807,12 +813,13 @@ bool wxTopLevelWindowMSW::EnableCloseButton(bool enable)
 
         return FALSE;
     }
-
+#ifndef __WXWINCE__
     // update appearance immediately
     if ( !::DrawMenuBar(GetHwnd()) )
     {
         wxLogLastError(_T("DrawMenuBar"));
     }
+#endif
 #endif // !__WXMICROWIN__
 
     return TRUE;

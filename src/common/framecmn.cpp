@@ -156,7 +156,7 @@ wxPoint wxFrameBase::GetClientAreaOrigin() const
     wxPoint pt = wxTopLevelWindow::GetClientAreaOrigin();
 
 #if wxUSE_TOOLBAR && !defined(__WXUNIVERSAL__) && \
-  (!defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI))
+  (!defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP)))
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {

@@ -3059,12 +3059,26 @@ bool wxWindowMSW::MSWGetCreateWindowCoords(const wxPoint& pos,
     //     level window in some smart way which we can't do, but we can
     //     guess a reasonably good size for a new window just as well
     //     ourselves
+
+	// However, on PocketPC devices, we must use the default
+	// size if possible.
+#ifdef _WIN32_WCE
+	if (size.x == -1)
+		w = CW_USEDEFAULT;
+	else
+		w = size.x;
+	if (size.y == -1)
+		h = CW_USEDEFAULT;
+	else
+		h = size.y;
+#else
     if ( size.x == -1 || size.y == -1)
     {
         nonDefault = true;
     }
     w = WidthDefault(size.x);
     h = HeightDefault(size.y);
+#endif
 
     AdjustForParentClientOrigin(x, y);
 

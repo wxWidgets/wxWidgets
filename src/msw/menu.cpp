@@ -676,13 +676,13 @@ void wxMenuBar::Init()
 {
     m_eventHandler = this;
     m_hMenu = 0;
-#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if wxUSE_TOOLBAR && defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
     m_toolBar = NULL;
 #endif
     // Not using a combined wxToolBar/wxMenuBar? then use
     // a commandbar in WinCE .NET just to implement the
     // menubar.
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
     m_commandBar = NULL;
 #endif
 }
@@ -716,7 +716,7 @@ wxMenuBar::~wxMenuBar()
 {
     // In Windows CE (not .NET), the menubar is always associated
     // with a toolbar, which destroys the menu implicitly.
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
     if (GetToolBar())
         GetToolBar()->SetMenuBar(NULL);
 #else
@@ -724,7 +724,7 @@ wxMenuBar::~wxMenuBar()
     // which happens if we're attached to a frame
     if (m_hMenu && !IsAttached())
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
         ::DestroyWindow((HWND) m_commandBar);
         m_commandBar = (WXHWND) NULL;
 #else
@@ -743,12 +743,12 @@ void wxMenuBar::Refresh()
 {
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
     if (GetToolBar())
     {
         CommandBar_DrawMenuBar((HWND) GetToolBar()->GetHWND(), 0);
     }
-#elif defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+#elif defined(__WXWINCE__) && (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
     if (m_commandBar)
         DrawMenuBar((HWND) m_commandBar);
 #else
@@ -762,7 +762,7 @@ WXHMENU wxMenuBar::Create()
     // since you have to use resources.
     // We'll have to find another way to add a menu
     // by changing/adding menu items to an existing menu.
-#if defined(__WXWINCE__) && _WIN32_WCE < 400
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
     if ( m_hMenu != 0 )
         return m_hMenu;
 
@@ -998,7 +998,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
         if (!GetToolBar())
             return FALSE;
         TBBUTTON tbButton; 
@@ -1052,7 +1052,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     if ( IsAttached() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
         if (!GetToolBar())
             return FALSE;
         TBBUTTON tbButton; 
@@ -1103,7 +1103,7 @@ wxMenu *wxMenuBar::Remove(size_t pos)
 
     if ( IsAttached() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
         if (GetToolBar())
         {
             if (!::SendMessage((HWND) GetToolBar()->GetHWND(), TB_DELETEBUTTON, (UINT) pos, (LPARAM) 0))
@@ -1170,10 +1170,14 @@ void wxMenuBar::Attach(wxFrame *frame)
 {
     wxMenuBarBase::Attach(frame);
 
-#if defined(__WXWINCE__) && _WIN32_WCE >= 400
+#if defined(__WXWINCE__)
     if (!m_hMenu)
         this->Create();
-#if wxUSE_POCKETPC_UI
+#if _WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP)
+
+    // No idea why this was here, but it seems to be obsolete.
+	// Remove after testing with other WinCE combinations - April 2004
+#if 0
     if (GetToolBar())
     {
         HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
@@ -1182,6 +1186,7 @@ void wxMenuBar::Attach(wxFrame *frame)
             wxLogLastError(wxT("CommandBar_InsertMenubarEx"));
         }
     }
+#endif
 #else
     if (!m_commandBar)
         m_commandBar = (WXHWND) CommandBar_Create(wxGetInstance(), (HWND) frame->GetHWND(), NewControlId());
@@ -1196,7 +1201,7 @@ void wxMenuBar::Attach(wxFrame *frame)
         }
     }
 #endif
-    // wxUSE_POCKETPC_UI
+    // PSPC/WFSP
 #endif
     // __WXWINCE__ && _WIN32_WCE >= 400
 

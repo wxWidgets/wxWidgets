@@ -320,7 +320,7 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::AttachMenuBar(wxMenuBar *menubar)
 {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
     if (!GetToolBar())
     {
         wxToolBar* toolBar = new wxToolBar(this, -1,
@@ -330,6 +330,20 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
         SetToolBar(toolBar);
         menubar->SetToolBar(toolBar);
     }
+	// Now adjust size for menu bar
+	int menuHeight = 26;
+	
+	//When the main window is created using CW_USEDEFAULT the height of the
+	// is created is not taken into account). So we resize the window after
+	// if a menubar is present
+	{
+		RECT rc;
+		::GetWindowRect((HWND) GetHWND(), &rc);
+		// adjust for menu / titlebar height
+		rc.bottom -= (2*menuHeight-1);
+		
+		MoveWindow((HWND) GetHWND(), rc.left, rc.top, rc.right, rc.bottom, FALSE);
+	}
 #endif
 
     wxFrameBase::AttachMenuBar(menubar);
@@ -342,7 +356,7 @@ void wxFrame::AttachMenuBar(wxMenuBar *menubar)
     }
     else // set new non NULL menu bar
     {
-#if !defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !wxUSE_POCKETPC_UI)
+#if !defined(__WXWINCE__) || (_WIN32_WCE >= 400 && !defined(WIN32_PLATFORM_PSPC) && !defined(WIN32_PLATFORM_WFSP))
         // Can set a menubar several times.
         if ( menubar->GetHMenu() )
         {
@@ -405,7 +419,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     if (show)
     {
 #if wxUSE_TOOLBAR
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
         // TODO: hide commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -450,7 +464,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
     else
     {
 #if wxUSE_TOOLBAR
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
         // TODO: show commandbar
 #else
         wxToolBar *theToolBar = GetToolBar();
@@ -496,7 +510,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
 
 wxToolBar* wxFrame::CreateToolBar(long style, wxWindowID id, const wxString& name)
 {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
     // We may already have a toolbar from calling SetMenuBar.
     if (GetToolBar())
         return GetToolBar();
@@ -514,7 +528,7 @@ void wxFrame::PositionToolBar()
     wxToolBar *toolbar = GetToolBar();
     if ( toolbar && toolbar->IsShown() )
     {
-#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || wxUSE_POCKETPC_UI)
+#if defined(__WXWINCE__) && (_WIN32_WCE < 400 || defined(WIN32_PLATFORM_PSPC) || defined(WIN32_PLATFORM_WFSP))
         // We want to do something different in WinCE, because
         // the toolbar should be associated with the commandbar,
         // and not an independent window.
