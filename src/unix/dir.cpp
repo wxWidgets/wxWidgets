@@ -115,7 +115,7 @@ wxDirData::~wxDirData()
 
 bool wxDirData::Read(wxString *filename)
 {
-    dirent *de;
+    dirent *de = (dirent *)NULL;    // just to silent compiler warnings
     bool matches = FALSE;
 
     while ( !matches )

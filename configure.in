@@ -3054,6 +3054,8 @@ dnl ---------------------------------------------------------------------------
 dnl Joystick support
 dnl ---------------------------------------------------------------------------
 
+if test "$wxUSE_GUI" = "yes"; then
+
 dnl under MSW we always have joystick support
 if test "$TOOLKIT" != "MSW"; then
 
@@ -3062,7 +3064,7 @@ if test "$wxUSE_JOYSTICK" = "yes"; then
   AC_CHECK_HEADERS(linux/joystick.h)
   if test "$ac_cv_header_linux_joystick_h" != "yes"; then
     wxUSE_JOYSTICK=no
-    AC_MSG_WARN(Joystick not supported yb this system, disabled)
+    AC_MSG_WARN(Joystick not supported by this system, disabled)
   fi
 fi
 
@@ -3073,6 +3075,9 @@ if test "$wxUSE_JOYSTICK" = "yes"; then
     AC_DEFINE(wxUSE_JOYSTICK)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS joytest"
 fi
+
+fi
+dnl if wxUSE_GUI
 
 dnl ------------------------------------------------------------------------
 dnl DLL support

@@ -494,6 +494,12 @@ ALL_DIST: distclean
 	mkdir $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms.opt $(DISTDIR)/lib
 	cp $(WXDIR)/lib/vms_gtk.opt $(DISTDIR)/lib
+	mkdir $(DISTDIR)/src
+	mkdir $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
+	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 
 # this target is the common part of distribution script for all GUI toolkits,
 # but is not used when building wxBase distribution
@@ -518,7 +524,6 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(INCDIR)/wx/html/*.h $(DISTDIR)/include/wx/html
 	cp $(INCDIR)/wx/unix/*.h $(DISTDIR)/include/wx/unix
 	cp $(INCDIR)/wx/protocol/*.h $(DISTDIR)/include/wx/protocol
-	mkdir $(DISTDIR)/src
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/generic
 	mkdir $(DISTDIR)/src/html
@@ -527,7 +532,6 @@ ALL_GUI_DIST: ALL_DIST
 	mkdir $(DISTDIR)/src/png
 	mkdir $(DISTDIR)/src/jpeg
 	mkdir $(DISTDIR)/src/tiff
-	mkdir $(DISTDIR)/src/zlib
 	mkdir $(DISTDIR)/src/iodbc
 	mkdir $(DISTDIR)/src/unix
 	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
@@ -549,10 +553,6 @@ ALL_GUI_DIST: ALL_DIST
 	cp $(PNGDIR)/*.h $(DISTDIR)/src/png
 	cp $(PNGDIR)/*.c $(DISTDIR)/src/png
 	cp $(PNGDIR)/README $(DISTDIR)/src/png
-	cp $(ZLIBDIR)/*.h $(DISTDIR)/src/zlib
-	cp $(ZLIBDIR)/*.c $(DISTDIR)/src/zlib
-	cp $(ZLIBDIR)/README $(DISTDIR)/src/zlib
-	cp $(ZLIBDIR)/*.mms $(DISTDIR)/src/zlib
 	cp $(JPEGDIR)/*.h $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/*.c $(DISTDIR)/src/jpeg
 	cp $(JPEGDIR)/README $(DISTDIR)/src/jpeg
@@ -572,7 +572,6 @@ BASE_DIST: ALL_DIST
 	mkdir $(DISTDIR)/include/wx
 	mkdir $(DISTDIR)/include/wx/protocol
 	mkdir $(DISTDIR)/include/wx/unix
-	mkdir $(DISTDIR)/src
 	mkdir $(DISTDIR)/src/common
 	mkdir $(DISTDIR)/src/unix
 	cp $(WXDIR)/@PORT_FILES@ $(DISTDIR)/@PORT_FILES@
@@ -584,6 +583,7 @@ BASE_DIST: ALL_DIST
 	cp $(DOCDIR)/readme.txt $(DISTDIR)/README.txt
 	cp $(DOCDIR)/todo.txt $(DISTDIR)/TODO.txt
 	cp $(SRCDIR)/*.in $(DISTDIR)/src
+	cp $(WXDIR)/src/common/unzip.h $(DISTDIR)/src/common/unzip.h
 	list='$(HEADERS)'; for p in $$list; do \
 	  cp $(WXDIR)/include/wx/$$p $(DISTDIR)/include/wx/$$p; \
 	done

@@ -52,7 +52,7 @@
     }
 
     foreach $file (sort keys %wxUNIXINCLUDE) {
-        next unless $wxWXINCLUDE{$file} =~ /\bB\b/;
+        next unless $wxUNIXINCLUDE{$file} =~ /\bB\b/;
 
         $project{"BASE_HEADERS"} .= "unix/" . $file . " "
     }
