@@ -3371,6 +3371,62 @@ static PyObject *_wrap_wxKeyEvent_HasModifiers(PyObject *self, PyObject *args, P
     return _resultobj;
 }
 
+#define wxKeyEvent_GetRawKeyCode(_swigobj)  (_swigobj->GetRawKeyCode())
+static PyObject *_wrap_wxKeyEvent_GetRawKeyCode(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_GetRawKeyCode",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_GetRawKeyCode. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxKeyEvent_GetRawKeyCode(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxKeyEvent_GetRawKeyFlags(_swigobj)  (_swigobj->GetRawKeyFlags())
+static PyObject *_wrap_wxKeyEvent_GetRawKeyFlags(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_GetRawKeyFlags",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_GetRawKeyFlags. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxKeyEvent_GetRawKeyFlags(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
 #define wxKeyEvent_GetX(_swigobj)  (_swigobj->GetX())
 static PyObject *_wrap_wxKeyEvent_GetX(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -3968,6 +4024,120 @@ static PyObject *_wrap_wxKeyEvent_m_scanCode_get(PyObject *self, PyObject *args,
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxKeyEvent_m_rawCode_set(_swigobj,_swigval) (_swigobj->m_rawCode = _swigval,_swigval)
+static PyObject *_wrap_wxKeyEvent_m_rawCode_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_rawCode", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxKeyEvent_m_rawCode_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_m_rawCode_set. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxKeyEvent_m_rawCode_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxKeyEvent_m_rawCode_get(_swigobj) ((long ) _swigobj->m_rawCode)
+static PyObject *_wrap_wxKeyEvent_m_rawCode_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_m_rawCode_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_m_rawCode_get. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxKeyEvent_m_rawCode_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxKeyEvent_m_rawFlags_set(_swigobj,_swigval) (_swigobj->m_rawFlags = _swigval,_swigval)
+static PyObject *_wrap_wxKeyEvent_m_rawFlags_set(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    long  _arg1;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","m_rawFlags", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Ol:wxKeyEvent_m_rawFlags_set",_kwnames,&_argo0,&_arg1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_m_rawFlags_set. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxKeyEvent_m_rawFlags_set(_arg0,_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
+    return _resultobj;
+}
+
+#define wxKeyEvent_m_rawFlags_get(_swigobj) ((long ) _swigobj->m_rawFlags)
+static PyObject *_wrap_wxKeyEvent_m_rawFlags_get(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    long  _result;
+    wxKeyEvent * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxKeyEvent_m_rawFlags_get",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxKeyEvent_m_rawFlags_get. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (long )wxKeyEvent_m_rawFlags_get(_arg0);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("l",_result);
     return _resultobj;
 }
 
@@ -7213,6 +7383,10 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxNavigationKeyEvent_SetDirection", (PyCFunction) _wrap_wxNavigationKeyEvent_SetDirection, METH_VARARGS | METH_KEYWORDS },
 	 { "wxNavigationKeyEvent_GetDirection", (PyCFunction) _wrap_wxNavigationKeyEvent_GetDirection, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxNavigationKeyEvent", (PyCFunction) _wrap_new_wxNavigationKeyEvent, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_m_rawFlags_get", (PyCFunction) _wrap_wxKeyEvent_m_rawFlags_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_m_rawFlags_set", (PyCFunction) _wrap_wxKeyEvent_m_rawFlags_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_m_rawCode_get", (PyCFunction) _wrap_wxKeyEvent_m_rawCode_get, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_m_rawCode_set", (PyCFunction) _wrap_wxKeyEvent_m_rawCode_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_m_scanCode_get", (PyCFunction) _wrap_wxKeyEvent_m_scanCode_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_m_scanCode_set", (PyCFunction) _wrap_wxKeyEvent_m_scanCode_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_m_metaDown_get", (PyCFunction) _wrap_wxKeyEvent_m_metaDown_get, METH_VARARGS | METH_KEYWORDS },
@@ -7233,6 +7407,8 @@ static PyMethodDef eventscMethods[] = {
 	 { "wxKeyEvent_GetPosition", (PyCFunction) _wrap_wxKeyEvent_GetPosition, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_GetY", (PyCFunction) _wrap_wxKeyEvent_GetY, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_GetX", (PyCFunction) _wrap_wxKeyEvent_GetX, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_GetRawKeyFlags", (PyCFunction) _wrap_wxKeyEvent_GetRawKeyFlags, METH_VARARGS | METH_KEYWORDS },
+	 { "wxKeyEvent_GetRawKeyCode", (PyCFunction) _wrap_wxKeyEvent_GetRawKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_HasModifiers", (PyCFunction) _wrap_wxKeyEvent_HasModifiers, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_GetKeyCode", (PyCFunction) _wrap_wxKeyEvent_GetKeyCode, METH_VARARGS | METH_KEYWORDS },
 	 { "wxKeyEvent_KeyCode", (PyCFunction) _wrap_wxKeyEvent_KeyCode, METH_VARARGS | METH_KEYWORDS },

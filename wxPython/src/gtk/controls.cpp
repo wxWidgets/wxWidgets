@@ -7286,6 +7286,43 @@ static PyObject *_wrap_wxTextCtrl_AppendText(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
+#define wxTextCtrl_EmulateKeyPress(_swigobj,_swigarg0)  (_swigobj->EmulateKeyPress(_swigarg0))
+static PyObject *_wrap_wxTextCtrl_EmulateKeyPress(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxTextCtrl * _arg0;
+    wxKeyEvent * _arg1;
+    PyObject * _argo0 = 0;
+    PyObject * _argo1 = 0;
+    char *_kwnames[] = { "self","event", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxTextCtrl_EmulateKeyPress",_kwnames,&_argo0,&_argo1)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxTextCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTextCtrl_EmulateKeyPress. Expected _wxTextCtrl_p.");
+        return NULL;
+        }
+    }
+    if (_argo1) {
+        if (_argo1 == Py_None) { _arg1 = NULL; }
+        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxKeyEvent_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTextCtrl_EmulateKeyPress. Expected _wxKeyEvent_p.");
+        return NULL;
+        }
+    }
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    _result = (bool )wxTextCtrl_EmulateKeyPress(_arg0,*_arg1);
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxTextCtrl_SetStyle(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->SetStyle(_swigarg0,_swigarg1,_swigarg2))
 static PyObject *_wrap_wxTextCtrl_SetStyle(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -11728,6 +11765,7 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxTextCtrl_GetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_GetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetDefaultStyle", (PyCFunction) _wrap_wxTextCtrl_SetDefaultStyle, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetStyle", (PyCFunction) _wrap_wxTextCtrl_SetStyle, METH_VARARGS | METH_KEYWORDS },
+	 { "wxTextCtrl_EmulateKeyPress", (PyCFunction) _wrap_wxTextCtrl_EmulateKeyPress, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_AppendText", (PyCFunction) _wrap_wxTextCtrl_AppendText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_WriteText", (PyCFunction) _wrap_wxTextCtrl_WriteText, METH_VARARGS | METH_KEYWORDS },
 	 { "wxTextCtrl_SetMaxLength", (PyCFunction) _wrap_wxTextCtrl_SetMaxLength, METH_VARARGS | METH_KEYWORDS },

@@ -351,6 +351,16 @@ def wxGetLocale(*_args, **_kwargs):
 
 wxGetTranslation = fontsc.wxGetTranslation
 
+def wxFontMapper_Get(*_args, **_kwargs):
+    val = apply(fontsc.wxFontMapper_Get,_args,_kwargs)
+    if val: val = wxFontMapperPtr(val)
+    return val
+
+def wxFontMapper_Set(*_args, **_kwargs):
+    val = apply(fontsc.wxFontMapper_Set,_args,_kwargs)
+    if val: val = wxFontMapperPtr(val)
+    return val
+
 wxFontMapper_GetEncodingName = fontsc.wxFontMapper_GetEncodingName
 
 wxFontMapper_GetEncodingDescription = fontsc.wxFontMapper_GetEncodingDescription

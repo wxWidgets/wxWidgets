@@ -519,8 +519,23 @@ public:
                               wxPyConstructObject((void*)&dc,   "wxDC", 0),
                               row, col));
             if (ro) {
-                if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxSize_p"))
+                const char* errmsg = "GetBestSize should return a 2-tuple of integers or a wxSize object.";
+                if (!SWIG_GetPtrObj(ro, (void **)&ptr, "_wxSize_p")) {
                     rval = *ptr;
+                }
+                else if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
+                    PyObject* o1 = PySequence_GetItem(ro, 0);
+                    PyObject* o2 = PySequence_GetItem(ro, 1);
+                    if (PyNumber_Check(o1) && PyNumber_Check(o2))
+                        rval = wxSize(PyInt_AsLong(o1), PyInt_AsLong(o2));
+                    else
+                        PyErr_SetString(PyExc_TypeError, errmsg);
+                    Py_DECREF(o1);
+                    Py_DECREF(o2);
+                }
+                else {
+                    PyErr_SetString(PyExc_TypeError, errmsg);
+                }
                 Py_DECREF(ro);
             }
         }

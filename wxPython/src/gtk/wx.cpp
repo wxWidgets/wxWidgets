@@ -1870,6 +1870,8 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxTB_DOCKABLE", PyInt_FromLong((long) wxTB_DOCKABLE));
 	 PyDict_SetItemString(d,"wxTB_NOICONS", PyInt_FromLong((long) wxTB_NOICONS));
 	 PyDict_SetItemString(d,"wxTB_TEXT", PyInt_FromLong((long) wxTB_TEXT));
+	 PyDict_SetItemString(d,"wxTB_NODIVIDER", PyInt_FromLong((long) wxTB_NODIVIDER));
+	 PyDict_SetItemString(d,"wxTB_NOALIGN", PyInt_FromLong((long) wxTB_NOALIGN));
 	 PyDict_SetItemString(d,"wxCOLOURED", PyInt_FromLong((long) wxCOLOURED));
 	 PyDict_SetItemString(d,"wxFIXED_LENGTH", PyInt_FromLong((long) wxFIXED_LENGTH));
 	 PyDict_SetItemString(d,"wxALIGN_LEFT", PyInt_FromLong((long) wxALIGN_LEFT));
