@@ -530,6 +530,10 @@ public:
     unsigned int GetSpacing() const;
     void SetSpacing(unsigned int spacing);
 
+    // line spacing is the space above and below the text on each line
+    unsigned int GetLineSpacing() const;
+    void SetLineSpacing(unsigned int spacing);
+
     // image list: these functions allow to associate an image list with
     // the control and retrieve it. Note that when assigned with
     // SetImageList, the control does _not_ delete
@@ -583,6 +587,12 @@ public:
     void SetColumn(size_t column, const wxTreeListColumnInfo& info);
     wxTreeListColumnInfo& GetColumn(size_t column);
 
+    // other column-related methods
+    void SetColumnAlignment(size_t column, wxTreeListColumnAlign align);
+    wxTreeListColumnAlign GetColumnAlignment(size_t column) const;
+
+    void SetColumnImage(size_t column, int image);
+    int GetColumnImage(size_t column) const;
 
 
     %addmethods {
@@ -675,8 +685,10 @@ public:
     void SetItemFont(const wxTreeItemId& item, const wxFont& font);
 
 
-    // TODO:  Where are the Getters for item colour, font, etc?
-
+    bool GetItemBold(const wxTreeItemId& item) const;
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+    wxFont GetItemFont(const wxTreeItemId& item) const;
 
     // is the item visible (it might be outside the view or not expanded)?
     bool IsVisible(const wxTreeItemId& item) const;

@@ -76,6 +76,9 @@ static const int NO_IMAGE = -1;
 
 const wxChar* wxTreeListCtrlNameStr = wxT("treelistctrl");
 
+static wxTreeListColumnInfo wxInvalidTreeListColumnInfo;
+
+
 // ---------------------------------------------------------------------------
 // private classes
 // ---------------------------------------------------------------------------
@@ -140,14 +143,14 @@ public:
     void RemoveColumn(size_t column);
 
     void SetColumn(size_t column, const wxTreeListColumnInfo& info);
-    const wxTreeListColumnInfo GetColumn(size_t column) const
+    const wxTreeListColumnInfo& GetColumn(size_t column) const
     {
-        wxCHECK_MSG(column < GetColumnCount(), wxTreeListColumnInfo(), wxT("Invalid column"));
+        wxCHECK_MSG(column < GetColumnCount(), wxInvalidTreeListColumnInfo, wxT("Invalid column"));
         return m_columns[column];
     }
-    wxTreeListColumnInfo GetColumn(size_t column)
+    wxTreeListColumnInfo& GetColumn(size_t column)
     {
-        wxCHECK_MSG(column < GetColumnCount(), wxTreeListColumnInfo(), wxT("Invalid column"));
+        wxCHECK_MSG(column < GetColumnCount(), wxInvalidTreeListColumnInfo, wxT("Invalid column"));
         return m_columns[column];
     }
 
@@ -231,6 +234,10 @@ public:
     unsigned int GetSpacing() const { return m_spacing; }
     void SetSpacing(unsigned int spacing);
 
+    // see wxTreeListCtrl for the meaning
+    unsigned int GetLineSpacing() const { return m_linespacing; }
+    void SetLineSpacing(unsigned int spacing);
+
         // image list: these functions allow to associate an image list with
         // the control and retrieve it. Note that when assigned with
         // SetImageList, the control does _not_ delete
@@ -269,6 +276,11 @@ public:
 
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
+
+    bool GetItemBold(const wxTreeItemId& item) const;
+    wxColour GetItemTextColour(const wxTreeItemId& item) const;
+    wxColour GetItemBackgroundColour(const wxTreeItemId& item) const;
+    wxFont GetItemFont(const wxTreeItemId& item) const;
 
     // modifiers
     // ---------
@@ -547,6 +559,7 @@ protected:
     unsigned short       m_indent;
     unsigned short       m_spacing;
     int                  m_lineHeight;
+    unsigned short       m_linespacing;
     wxPen                m_dottedPen;
     wxBrush             *m_hilightBrush,
                         *m_hilightUnfocusedBrush;
@@ -1151,7 +1164,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int numColumns = GetColumnCount();
     for ( int i = 0; i < numColumns && x < w; i++ )
     {
-        wxTreeListColumnInfo column = GetColumn(i);
+        wxTreeListColumnInfo& column = GetColumn(i);
         int wCol = column.GetWidth();
 
         // the width of the rect to draw: make it smaller to fit entirely
@@ -1732,6 +1745,7 @@ void wxTreeListMainWindow::Init()
     m_lineHeight = 10;
     m_indent = 9;
     m_spacing = 9;
+    m_linespacing = 4;
 
     m_hilightBrush = new wxBrush
                          (
@@ -1865,6 +1879,14 @@ void wxTreeListMainWindow::SetSpacing(unsigned int spacing)
 }
 
 inline
+void wxTreeListMainWindow::SetLineSpacing(unsigned int spacing)
+{
+    m_linespacing = spacing;
+    m_dirty = TRUE;
+    CalculateLineHeight();
+}
+
+inline
 size_t wxTreeListMainWindow::GetChildrenCount(const wxTreeItemId& item,
                                               bool recursively)
 {
@@ -1903,6 +1925,44 @@ wxTreeItemData *wxTreeListMainWindow::GetItemData(const wxTreeItemId& item)
 
     return ((wxTreeListItem*) item.m_pItem)->GetData();
 }
+
+inline
+bool wxTreeListMainWindow::GetItemBold(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG(item.IsOk(), FALSE, wxT("invalid tree item"));
+    return ((wxTreeListItem *)item.m_pItem)->IsBold();
+}
+
+inline
+wxColour wxTreeListMainWindow::GetItemTextColour(const wxTreeItemId& item)
+    const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
+
+    wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
+    return pItem->Attr().GetTextColour();
+}
+
+inline
+wxColour wxTreeListMainWindow::GetItemBackgroundColour(
+    const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullColour, wxT("invalid tree item") );
+
+    wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
+    return pItem->Attr().GetBackgroundColour();
+}
+
+inline
+wxFont wxTreeListMainWindow::GetItemFont(const wxTreeItemId& item) const
+{
+    wxCHECK_MSG( item.IsOk(), wxNullFont, wxT("invalid tree item") );
+
+    wxTreeListItem *pItem = (wxTreeListItem*) item.m_pItem;
+    return pItem->Attr().GetFont();
+}
+
+
 
 inline
 void wxTreeListMainWindow::SetItemImage(const wxTreeItemId& item,
@@ -2854,7 +2914,9 @@ static int LINKAGEMODE tree_ctrl_compare_func(wxTreeListItem **item1,
 int wxTreeListMainWindow::OnCompareItems(const wxTreeItemId& item1,
                                const wxTreeItemId& item2)
 {
-    return wxStrcmp(GetItemText(item1), GetItemText(item2));
+    // ALB: delegate to m_owner, to let the user overrride the comparison
+    //return wxStrcmp(GetItemText(item1), GetItemText(item2));
+    return m_owner->OnCompareItems(item1, item2);
 }
 
 void wxTreeListMainWindow::SortChildren(const wxTreeItemId& itemId)
@@ -2899,7 +2961,7 @@ wxImageList *wxTreeListMainWindow::GetStateImageList() const
 void wxTreeListMainWindow::CalculateLineHeight()
 {
     wxClientDC dc(this);
-    m_lineHeight = (int)(dc.GetCharHeight() + 4);
+    m_lineHeight = (int)(dc.GetCharHeight() + m_linespacing*2);
 
     if ( m_imageListNormal )
     {
@@ -4329,6 +4391,12 @@ unsigned int wxTreeListCtrl::GetSpacing() const
 void wxTreeListCtrl::SetSpacing(unsigned int spacing)
 { m_main_win->SetSpacing(spacing); }
 
+unsigned int wxTreeListCtrl::GetLineSpacing() const
+{ return m_main_win->GetLineSpacing(); }
+
+void wxTreeListCtrl::SetLineSpacing(unsigned int spacing)
+{ m_main_win->SetLineSpacing(spacing); }
+
 wxImageList* wxTreeListCtrl::GetImageList() const
 { return m_main_win->GetImageList(); }
 
@@ -4366,6 +4434,20 @@ int wxTreeListCtrl::GetItemImage(const wxTreeItemId& item, size_t column,
 
 wxTreeItemData* wxTreeListCtrl::GetItemData(const wxTreeItemId& item) const
 { return m_main_win->GetItemData(item); }
+
+bool wxTreeListCtrl::GetItemBold(const wxTreeItemId& item) const
+{ return m_main_win->GetItemBold(item); }
+
+wxColour wxTreeListCtrl::GetItemTextColour(const wxTreeItemId& item) const
+{ return m_main_win->GetItemTextColour(item); }
+
+wxColour wxTreeListCtrl::GetItemBackgroundColour(const wxTreeItemId& item)
+    const
+{ return m_main_win->GetItemBackgroundColour(item); }
+
+wxFont wxTreeListCtrl::GetItemFont(const wxTreeItemId& item) const
+{ return m_main_win->GetItemFont(item); }
+
 
 void wxTreeListCtrl::SetItemText(const wxTreeItemId& item, size_t column,
                                  const wxString& text)
@@ -4573,7 +4655,12 @@ void wxTreeListCtrl::Edit(const wxTreeItemId& item)
 
 int wxTreeListCtrl::OnCompareItems(const wxTreeItemId& item1,
                                    const wxTreeItemId& item2)
-{ return m_main_win->OnCompareItems(item1, item2); }
+{
+    // ALB: do the comparison here, and not delegate to m_main_win, in order
+    // to let the user override it
+    //return m_main_win->OnCompareItems(item1, item2);
+    return wxStrcmp(GetItemText(item1), GetItemText(item2));
+}
 
 void wxTreeListCtrl::SortChildren(const wxTreeItemId& item)
 { m_main_win->SortChildren(item); }
@@ -4621,11 +4708,32 @@ void wxTreeListCtrl::RemoveColumn(size_t column)
 void wxTreeListCtrl::SetColumn(size_t column, const wxTreeListColumnInfo& col)
 { m_header_win->SetColumn(column, col); }
 
-const wxTreeListColumnInfo wxTreeListCtrl::GetColumn(size_t column) const
+const wxTreeListColumnInfo& wxTreeListCtrl::GetColumn(size_t column) const
 { return m_header_win->GetColumn(column); }
 
-wxTreeListColumnInfo wxTreeListCtrl::GetColumn(size_t column)
+wxTreeListColumnInfo& wxTreeListCtrl::GetColumn(size_t column)
 { return m_header_win->GetColumn(column); }
+
+void wxTreeListCtrl::SetColumnImage(size_t column, int image)
+{
+    m_header_win->SetColumn(column, GetColumn(column).SetImage(image));
+}
+
+int wxTreeListCtrl::GetColumnImage(size_t column) const
+{
+    return m_header_win->GetColumn(column).GetImage();
+}
+
+void wxTreeListCtrl::SetColumnAlignment(size_t column,
+                                        wxTreeListColumnAlign align)
+{
+    m_header_win->SetColumn(column, GetColumn(column).SetAlignment(align));
+}
+
+wxTreeListColumnAlign wxTreeListCtrl::GetColumnAlignment(size_t column) const
+{
+    return m_header_win->GetColumn(column).GetAlignment();
+}
 
 void wxTreeListCtrl::Refresh(bool erase, const wxRect* rect)
 {
