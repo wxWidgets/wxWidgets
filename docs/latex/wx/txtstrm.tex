@@ -15,6 +15,12 @@ and on a typical 32-bit computer, none of these match to the "long" type (wxInt3
 is defined as int on 32-bit architectures) so that you cannot use long. To avoid
 problems (here and elsewhere), make use of wxInt32, wxUint32 and similar types.
 
+If you're scanning through a file using wxTextInputStream, you should check for EOF {\bf before}
+reading the next item (word / number), because otherwise the last item may get lost. 
+You should however be prepared to receive an empty item (empty string / zero number) at the
+end of file, especially on Windows systems. This is unavoidable because most (but not all) files end
+with whitespace (i.e. usually a newline).
+
 For example:
 
 \begin{verbatim}
@@ -37,14 +43,20 @@ For example:
 
 \membersection{wxTextInputStream::wxTextInputStream}\label{wxtextinputstreamconstr}
 
-\func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}}
+\func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ sep=wxT(" \t")}, 
+  \param{wxMBConv\&}{ conv = wxConvUTF8} }
 
 Constructs a text stream object from an input stream. Only read methods will
 be available.
 
 \wxheading{Parameters}
 
-\docparam{stream}{The input stream.}
+\docparam{stream}{The underlying input stream.}
+
+\docparam{sep}{The initial string separator characters.}
+
+\docparam{conv}{{\it In Unicode build only:} The encoding converter used to convert the bytes in the
+  underlying input stream to characters.}
 
 \membersection{wxTextInputStream::\destruct{wxTextInputStream}}
 
@@ -52,23 +64,64 @@ be available.
 
 Destroys the wxTextInputStream object.
 
-\membersection{wxTextInputStream::Read8}
+\membersection{wxTextInputStream::Read8}\label{wxtextinputstreamread8}
 
-\func{wxUint8}{Read8}{\void}
+\func{wxUint8}{Read8}{\param{int}{ base = 10}}
 
-Reads a single byte from the stream.
+Reads a single unsigned byte from the stream, given in base {\it base}.
+
+The value of {\it base} must be comprised between $2$ and $36$, inclusive, or
+be a special value $0$ which means that the usual rules of {\tt C} numbers are
+applied: if the number starts with {\tt 0x} it is considered to be in base
+$16$, if it starts with {\tt 0} - in base $8$ and in base $10$ otherwise. Note
+that you may not want to specify the base $0$ if you are parsing the numbers
+which may have leading zeroes as they can yield unexpected (to the user not
+familiar with C) results.
+
+\membersection{wxTextInputStream::Read8S}
+
+\func{wxInt8}{Read8S}{\param{int}{ base = 10}}
+
+Reads a single signed byte from the stream.
+
+See \helpref{wxTextInputStream::Read8}{wxtextinputstreamread8} for the
+description of the {\it base} parameter.
 
 \membersection{wxTextInputStream::Read16}
 
-\func{wxUint16}{Read16}{\void}
+\func{wxUint16}{Read16}{\param{int}{ base = 10}}
 
-Reads a 16 bit integer from the stream.
+Reads a unsigned 16 bit integer from the stream.
+
+See \helpref{wxTextInputStream::Read8}{wxtextinputstreamread8} for the
+description of the {\it base} parameter.
+
+\membersection{wxTextInputStream::Read16S}
+
+\func{wxInt16}{Read16S}{\param{int}{ base = 10}}
+
+Reads a signed 16 bit integer from the stream.
+
+See \helpref{wxTextInputStream::Read8}{wxtextinputstreamread8} for the
+description of the {\it base} parameter.
 
 \membersection{wxTextInputStream::Read32}
 
-\func{wxUint32}{Read32}{\void}
+\func{wxUint32}{Read32}{\param{int}{ base = 10}}
 
-Reads a 32 bit integer from the stream.
+Reads a 32 bit unsigned integer from the stream.
+
+See \helpref{wxTextInputStream::Read8}{wxtextinputstreamread8} for the
+description of the {\it base} parameter.
+
+\membersection{wxTextInputStream::Read32S}
+
+\func{wxInt32}{Read32S}{\param{int}{ base = 10}}
+
+Reads a 32 bit signed integer from the stream.
+
+See \helpref{wxTextInputStream::Read8}{wxtextinputstreamread8} for the
+description of the {\it base} parameter.
 
 \membersection{wxTextInputStream::ReadDouble}
 

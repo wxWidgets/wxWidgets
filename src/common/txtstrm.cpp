@@ -42,11 +42,13 @@
 wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep, wxMBConv& conv)
   : m_input(s), m_separators(sep), m_conv(conv)
 {
+    memset((void*)m_lastBytes, 0, 10);
 }
 #else
 wxTextInputStream::wxTextInputStream(wxInputStream &s, const wxString &sep)
   : m_input(s), m_separators(sep)
 {
+    memset((void*)m_lastBytes, 0, 10);
 }
 #endif
 
@@ -54,13 +56,52 @@ wxTextInputStream::~wxTextInputStream()
 {
 }
 
+void wxTextInputStream::UngetLast()
+{
+    size_t byteCount = 0;
+    while(m_lastBytes[byteCount]) // pseudo ANSI strlen (even for Unicode!)
+        byteCount++;
+    m_input.Ungetch(m_lastBytes, byteCount);
+    memset((void*)m_lastBytes, 0, 10);
+}
+
+wxChar wxTextInputStream::NextChar()
+{
+#if wxUSE_UNICODE
+    wxChar wbuf[2];
+    memset((void*)m_lastBytes, 0, 10);
+    for(size_t inlen = 0; inlen < 9; inlen++) 
+    {
+        // actually read the next character
+        m_lastBytes[inlen] = m_input.GetC();
+
+        if(m_input.LastRead() <= 0) 
+            return wxEOT;
+        
+        int retlen = (int) m_conv.MB2WC(wbuf, m_lastBytes, 2); // returns -1 for failure
+        if(retlen >= 0) // res == 0 could happen for '\0' char
+            return wbuf[0];
+    }
+    // there should be no encoding which requires more than nine bytes for one character...
+    return wxEOT;
+#else
+    m_lastBytes[0] = m_input.GetC();
+    
+    if(m_input.LastRead() <= 0) 
+        return wxEOT;
+    
+    return m_lastBytes[0];
+#endif
+    
+}
+
 wxChar wxTextInputStream::NextNonSeparators()
 {
     wxChar c = (wxChar) 0;
     for (;;)
     {
-        if (!m_input) return (wxChar) 0;
-        c = m_input.GetC();
+        c = NextChar();
+        if (c == wxEOT) return (wxChar) 0;
 
         if (c != wxT('\n') &&
             c != wxT('\r') &&
@@ -76,162 +117,65 @@ bool wxTextInputStream::EatEOL(const wxChar &c)
 
     if (c == wxT('\r')) // eat on both Mac and DOS
     {
-        if (!m_input) return TRUE;
-        wxChar c2 = m_input.GetC();
+        wxChar c2 = NextChar();
+        if(c2 == wxEOT) return TRUE; // end of stream reached, had enough :-)
 
-        if (c2 != wxT('\n'))  m_input.Ungetch( c2 ); // Don't eat on Mac
+        if (c2 != wxT('\n')) UngetLast(); // Don't eat on Mac
         return TRUE;
     }
 
     return FALSE;
 }
 
-void wxTextInputStream::SkipIfEndOfLine( wxChar c )
+wxUint32 wxTextInputStream::Read32(int base)
 {
-    if (EatEOL(c)) return;
-    else m_input.Ungetch( c );  // no line terminator
-}
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+    if(!m_input) return 0;
 
-wxUint32 wxTextInputStream::Read32()
-{
-    /* I only implemented a simple integer parser */
-    // VZ: what about using strtol()?? (TODO)
-
-    int sign;
-    wxInt32 i;
-
-    if (!m_input) return 0;
-    int c = NextNonSeparators();
-    if (c==(wxChar)0) return 0;
-
-    i = 0;
-    if (! (c == wxT('-') || c == wxT('+') || isdigit(c)) )
-    {
-        m_input.Ungetch(c);
+    wxString word = ReadWord();
+    if(word.IsEmpty())
         return 0;
-    }
-
-    if (c == wxT('-'))
-    {
-        sign = -1;
-        c = m_input.GetC();
-    } else
-    if (c == wxT('+'))
-    {
-        sign = 1;
-        c = m_input.GetC();
-    } else
-    {
-        sign = 1;
-    }
-
-    while (isdigit(c))
-    {
-        i = i*10 + (c - (int)wxT('0'));
-        c = m_input.GetC();
-    }
-
-    SkipIfEndOfLine( c );
-
-    i *= sign;
-
-    return (wxUint32)i;
+    return wxStrtoul(word.c_str(), 0, base);
 }
 
-wxUint16 wxTextInputStream::Read16()
+wxUint16 wxTextInputStream::Read16(int base)
 {
-    return (wxUint16)Read32();
+    return (wxUint16)Read32(base);
 }
 
-wxUint8 wxTextInputStream::Read8()
+wxUint8 wxTextInputStream::Read8(int base)
 {
-    return (wxUint8)Read32();
+    return (wxUint8)Read32(base);
+}
+
+wxInt32 wxTextInputStream::Read32S(int base)
+{
+    wxASSERT_MSG( !base || (base > 1 && base <= 36), _T("invalid base") );
+    if(!m_input) return 0;
+
+    wxString word = ReadWord();
+    if(word.IsEmpty())
+        return 0;
+    return wxStrtol(word.c_str(), 0, base);
+}
+
+wxInt16 wxTextInputStream::Read16S(int base)
+{
+    return (wxInt16)Read32S(base);
+}
+
+wxInt8 wxTextInputStream::Read8S(int base)
+{
+    return (wxInt8)Read32S(base);
 }
 
 double wxTextInputStream::ReadDouble()
 {
-    /* I only implemented a simple float parser
-     * VZ: what about using strtod()?? (TODO)
-     */
-
-    double f;
-    int theSign;
-
-    if (!m_input)
+    if(!m_input) return 0;
+    wxString word = ReadWord();
+    if(word.IsEmpty())
         return 0;
-
-    int c = NextNonSeparators();
-    if (c==(wxChar)0) return 0;
-
-    f = 0.0;
-    if (! (c == wxT('.') || c == wxT(',') || c == wxT('-') || c == wxT('+') || isdigit(c)) )
-    {
-        m_input.Ungetch(c);
-        return 0;
-    }
-
-    if (c == wxT('-'))
-    {
-        theSign = -1;
-        c = m_input.GetC();
-    } else
-    if (c == wxT('+'))
-    {
-        theSign = 1;
-        c = m_input.GetC();
-    }
-    else
-    {
-        theSign = 1;
-    }
-
-    while (isdigit(c))
-    {
-        f = f*10 + (c - wxT('0'));
-        c = m_input.GetC();
-    }
-
-    if (c == wxT('.') || c == wxT(','))
-    {
-        double f_multiplicator = (double) 0.1;
-
-        c = m_input.GetC();
-
-        while (isdigit(c))
-        {
-            f += (c-wxT('0'))*f_multiplicator;
-            f_multiplicator /= 10;
-            c = m_input.GetC();
-        }
-
-        if (c == wxT('e'))
-        {
-            double f_multiplicator = 0.0;
-            int i, e;
-
-            c = m_input.GetC();
-
-            switch (c)
-            {
-                case wxT('-'): f_multiplicator = 0.1;  break;
-                case wxT('+'): f_multiplicator = 10.0; break;
-            }
-
-            e = Read8();  // why only max 256 ?
-
-            for (i=0;i<e;i++)
-                f *= f_multiplicator;
-        }
-        else
-            SkipIfEndOfLine( c );
-    }
-    else
-    {
-        m_input.Ungetch(c);
-    }
-
-    f *= theSign;
-    return f;
+    return wxStrtod(word.c_str(), 0);
 }
 
 wxString wxTextInputStream::ReadString()
@@ -245,19 +189,9 @@ wxString wxTextInputStream::ReadLine()
 
     while ( !m_input.Eof() )
     {
-#if wxUSE_UNICODE
-        // FIXME: this is only works for single byte encodings
-        // How-to read a single char in an unkown encoding???
-        char buf[10];
-        buf[0] = m_input.GetC();
-        buf[1] = 0;
-        
-        wxChar wbuf[2];
-        m_conv.MB2WC( wbuf, buf, 2 );
-        wxChar c = wbuf[0];
-#else
-        char c = m_input.GetC();
-#endif
+        wxChar c = NextChar();
+        if(c == wxEOT)
+            break;
         
         if ( !m_input )
             break;
@@ -286,9 +220,8 @@ wxString wxTextInputStream::ReadWord()
     
     while ( !m_input.Eof() )
     {
-        c = m_input.GetC();
-        
-        if (!m_input)
+        c = NextChar();
+        if(c == wxEOT)
             break;
             
         if (m_separators.Contains(c))
@@ -311,13 +244,8 @@ wxTextInputStream& wxTextInputStream::operator>>(wxString& word)
 
 wxTextInputStream& wxTextInputStream::operator>>(char& c)
 {
-    if (!m_input)
-    {
-        c = 0;
-        return *this;
-    }
-
     c = m_input.GetC();
+    if(m_input.LastRead() <= 0) c = 0;
 
     if (EatEOL(c))
         c = '\n';
