@@ -53,9 +53,6 @@ In other words, by default, the dialog {\it is not destroyed} (it might have bee
 on the stack, so the assumption of dynamic creation cannot be made).
 
 The default close event handler for wxFrame destroys the frame using Destroy().
-%
-%Under Windows, wxDialog defines a handler for \helpref{wxWindow::OnCharHook}{wxwindowoncharhook} that
-%generates a Cancel event if the Escape key has been pressed.
 
 \wxheading{What should I do when the user calls up Exit from a menu?}
 
