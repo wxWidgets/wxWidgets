@@ -46,6 +46,7 @@
 // Set Unicode format for a common control
 inline void wxSetCCUnicodeFormat(HWND hwnd)
 {
+#ifndef __WXWINCE__
     SendMessage(hwnd, CCM_SETUNICODEFORMAT,
 #if wxUSE_UNICODE
                 TRUE
@@ -53,6 +54,8 @@ inline void wxSetCCUnicodeFormat(HWND hwnd)
                 FALSE
 #endif
                 , 0);
+#endif
+  // __WXWINCE__
 }
 
 #endif // _WX_MSW_WRAPCCTL_H_
