@@ -117,7 +117,6 @@ bool wxCreateMGL_WM()
     
 #if wxUSE_SYSTEM_OPTIONS
     // FIXME_MGL -- so what is The Proper Way?
-    width=800, height=600;
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-width") )
         width = wxSystemOptions::GetOptionInt(wxT("mgl.screen-width"));
     if ( wxSystemOptions::HasOption(wxT("mgl.screen-height") )
@@ -199,7 +198,13 @@ static ibool wxWindowMouseHandler(window_t *wnd, event_t *e)
     MGL_wmCoordGlobalToLocal(win->GetHandle(), 
                              e->where_x, e->where_y, &where.x, &where.y);
 
-    if ( !win->IsEnabled() ) return FALSE;
+    for (wxWindowMGL *w = win; w; w = w->GetParent())
+    {
+        if ( !w->IsEnabled() ) 
+            return FALSE;
+        if ( w->IsTopLevel() )
+            break;
+    }
     
     wxEventType type = wxEVT_NULL;
     wxMouseEvent event;
