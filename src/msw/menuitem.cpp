@@ -141,7 +141,8 @@ bool wxMenuItem::IsChecked() const
     return (flag & MF_CHECKED) != 0;
 }
 
-wxString wxMenuItem::GetLabel() const
+/* static */
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
     return wxStripMenuCodes(m_text);
 }

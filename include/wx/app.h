@@ -369,11 +369,7 @@ public:
 #elif defined(__WXMSW__) && defined(WXUSINGDLL)
     // NT defines APIENTRY, 3.x not
     #if !defined(WXAPIENTRY)
-        #ifdef __WATCOMC__
-            #define WXAPIENTRY PASCAL
-        #else
-            #define WXAPIENTRY FAR PASCAL
-        #endif
+        #define WXAPIENTRY FAR wxSTDCALL
     #endif
 
     #define IMPLEMENT_WXWIN_MAIN \

@@ -34,7 +34,6 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxMenuItemBase : public wxObject
 {
 public:
-
     // creation
     static wxMenuItem *New(wxMenu *parentMenu = (wxMenu *)NULL,
                            int id = wxID_SEPARATOR,
@@ -61,8 +60,11 @@ public:
     //     different from the item's label which only contains the text shown
     //     in the menu
     virtual void SetText(const wxString& str) { m_text = str; }
-    virtual wxString GetLabel() const { return m_text; }
+    wxString GetLabel() const { return GetLabelFromText(m_text); }
     const wxString& GetText() const { return m_text; }
+
+    // get the label from text (implemented in platform-specific code)
+    static wxString GetLabelFromText(const wxString& text);
 
     // what kind of menu item we are
     virtual void SetCheckable(bool checkable) { m_isCheckable = checkable; }
@@ -107,9 +109,8 @@ protected:
     bool          m_isChecked;      // is checked?
     bool          m_isEnabled;      // is enabled?
 
-    // some compilers need a default constructor here, do not use
-    wxMenuItemBase() 
-        { }
+    // some compilers need a default constructor here, do not remove
+    wxMenuItemBase() { }
 };
 
 // ----------------------------------------------------------------------------

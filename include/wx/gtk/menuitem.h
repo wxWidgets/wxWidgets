@@ -31,7 +31,6 @@ public:
 
     // implement base class virtuals
     virtual void SetText( const wxString& str );
-    virtual wxString GetLabel() const;
     virtual void Enable( bool enable = TRUE );
     virtual void Check( bool check = TRUE );
     virtual bool IsChecked() const;

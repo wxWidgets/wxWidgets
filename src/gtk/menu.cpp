@@ -625,11 +625,12 @@ wxMenuItem::~wxMenuItem()
 }
 
 // return the menu item text without any menu accels
-wxString wxMenuItem::GetLabel() const
+/* static */
+wxString wxMenuItemBase::GetLabelFromText(const wxString& text)
 {
     wxString label;
 #if (GTK_MINOR_VERSION > 0)
-    for ( const wxChar *pc = m_text.c_str(); *pc; pc++ )
+    for ( const wxChar *pc = text.c_str(); *pc; pc++ )
     {
         if ( *pc == wxT('_') )
         {
@@ -640,7 +641,7 @@ wxString wxMenuItem::GetLabel() const
         label += *pc;
     }
 #else // GTK+ 1.0
-    label = m_text;
+    label = text;
 #endif // GTK+ 1.2/1.0
 
     return label;

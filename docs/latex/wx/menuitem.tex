@@ -104,7 +104,26 @@ characaters it might contain.
 
 \wxheading{See also}
 
-\helpref{GetText}{wxmenuitemgettext}
+\helpref{GetText}{wxmenuitemgettext},
+\helpref{GetLabelFromText}{wxmenuitemgetlabelfromtext}
+
+\membersection{wxMenuItem::GetLabelFromText}\label{wxmenuitemgetlabelfromtext}
+
+\func{static wxString}{GetLabelFromText}{\param{const wxString\& }{text}}
+
+Strips all accelerator characeters and mnemonics from the given {\it text}.
+For example,
+
+\begin{verbatim}
+wxMenuItem::GetLabelFromText("&Hello\tCtrl-H");
+\end{verbatim}
+
+will return just {\tt "Hello"}.
+
+\wxheading{See also}
+
+\helpref{GetText}{wxmenuitemgettext},
+\helpref{GetLabel}{wxmenuitemgetlabel}
 
 \membersection{wxMenuItem::GetMarginWidth}\label{wxmenuitemgetmarginwidth}
 
@@ -131,7 +150,8 @@ wxMenuItem constructor, i.e. with any accelerator characters it may contain.
 
 \wxheading{See also}
 
-\helpref{GetLabel}{wxmenuitemgetlabel}
+\helpref{GetLabel}{wxmenuitemgetlabel},
+\helpref{GetLabelFromText}{wxmenuitemgetlabelfromtext}
 
 \membersection{wxMenuItem::GetSubMenu}\label{wxmenuitemgetsubmenu}
 

@@ -252,7 +252,7 @@ bool wxMenuBase::DoDestroy(wxMenuItem *item)
 // Finds the item id matching the given string, -1 if not found.
 int wxMenuBase::FindItem(const wxString& text) const
 {
-    wxString label = wxMenuItem(NULL, wxID_SEPARATOR, text).GetLabel();
+    wxString label = wxMenuItem::GetLabelFromText(text);
     for ( wxMenuItemList::Node *node = m_items.GetFirst();
           node;
           node = node->GetNext() )

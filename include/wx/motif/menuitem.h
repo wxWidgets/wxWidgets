@@ -2,7 +2,7 @@
 // Name:        menuitem.h
 // Purpose:     wxMenuItem class
 // Author:      Vadim Zeitlin
-// Modified by: 
+// Modified by:
 // Created:     11.11.97
 // RCS-ID:      $Id$
 // Copyright:   (c) 1998 Vadim Zeitlin <zeitlin@dptmaths.ens-cachan.fr>
@@ -36,7 +36,6 @@ public:
 
     // accessors (some more are inherited from wxOwnerDrawn or are below)
     virtual void SetText(const wxString& label);
-    virtual wxString GetLabel() const;
     virtual void Enable(bool enable = TRUE);
     virtual void Check(bool check = TRUE);
 
