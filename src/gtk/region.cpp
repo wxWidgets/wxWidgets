@@ -64,8 +64,13 @@ wxRegion::wxRegion( wxCoord x, wxCoord y, wxCoord w, wxCoord h )
     rect.y = y;
     rect.width = w;
     rect.height = h;
+#ifdef __WXGTK20__
+    gdk_region_union_with_rect( reg, &rect );
+    M_REGIONDATA->m_region = reg;
+#else
     M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
     gdk_region_destroy( reg );
+#endif
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,w,h) );
 }
 
@@ -78,8 +83,13 @@ wxRegion::wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
     rect.y = topLeft.y;
     rect.width = bottomRight.x - rect.x;
     rect.height = bottomRight.y - rect.y;
+#ifdef __WXGTK20__
+    gdk_region_union_with_rect( reg, &rect );
+    M_REGIONDATA->m_region = reg;
+#else
     M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
     gdk_region_destroy( reg );
+#endif
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(topLeft,bottomRight) );
 }
 
@@ -92,8 +102,13 @@ wxRegion::wxRegion( const wxRect& rect )
     g_rect.y = rect.y;
     g_rect.width = rect.width;
     g_rect.height = rect.height;
+#ifdef __WXGTK20__
+    gdk_region_union_with_rect( reg, &g_rect );
+    M_REGIONDATA->m_region = reg;
+#else
     M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &g_rect );
     gdk_region_destroy( reg );
+#endif
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(rect.x,rect.y,rect.width,rect.height) );
 }
 
@@ -131,14 +146,23 @@ bool wxRegion::Union( wxCoord x, wxCoord y, wxCoord width, wxCoord height )
     {
         m_refData = new wxRegionRefData();
         GdkRegion *reg = gdk_region_new();
+#ifdef __WXGTK20__
+        gdk_region_union_with_rect( reg, &rect );
+        M_REGIONDATA->m_region = reg;
+#else
         M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
         gdk_region_destroy( reg );
+#endif
     }
     else
     {
+#ifdef __WXGTK20__
+        gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
+#else
         GdkRegion *reg = gdk_region_union_with_rect( M_REGIONDATA->m_region, &rect );
         gdk_region_destroy( M_REGIONDATA->m_region );
         M_REGIONDATA->m_region = reg;
+#endif
     }
     
     M_REGIONDATA->m_rects.Append( (wxObject*) new wxRect(x,y,width,height) );
@@ -162,9 +186,13 @@ bool wxRegion::Union( const wxRegion& region )
         M_REGIONDATA->m_region = gdk_region_new();
     }
 
+#ifdef __WXGTK20__
+    gdk_region_union( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     GdkRegion *reg = gdk_regions_union( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
+#endif
 
     wxNode *node = region.GetRectList()->First();
     while (node)
@@ -215,9 +243,13 @@ bool wxRegion::Intersect( const wxRegion& region )
         return TRUE;
     }
     
+#ifdef __WXGTK20__
+    gdk_region_intersect( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     GdkRegion *reg = gdk_regions_intersect( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
+#endif
     return TRUE;
 }
 
@@ -258,9 +290,13 @@ bool wxRegion::Subtract( const wxRegion& region )
         M_REGIONDATA->m_region = gdk_region_new();
     }
 
+#ifdef __WXGTK20__
+    gdk_region_subtract( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     GdkRegion *reg = gdk_regions_subtract( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
+#endif
     return TRUE;
 }
 
@@ -301,9 +337,13 @@ bool wxRegion::Xor( const wxRegion& region )
         M_REGIONDATA->m_region = gdk_region_new();
     }
 
+#ifdef __WXGTK20__
+    gdk_region_xor( M_REGIONDATA->m_region, region.GetRegion() );
+#else
     GdkRegion *reg = gdk_regions_xor( M_REGIONDATA->m_region, region.GetRegion() );
     gdk_region_destroy( M_REGIONDATA->m_region );
     M_REGIONDATA->m_region = reg;
+#endif
 
     wxNode *node = region.GetRectList()->First();
     while (node)
