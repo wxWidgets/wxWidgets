@@ -204,7 +204,7 @@ int wxEntryStart( int& argc, char *argv[] )
     // We can't use wxCmdLineParser or OnInitCmdLine and friends because
     // we have to create the Display earlier. If we can find a way to
     // use the wxAppBase API then I'll be quite happy to change it.
-    g_newArgv = new wxChar*[argc];
+    g_newArgv = new wxChar*[argc + 1];
     g_newArgc = 0;
     int i;
     for (i = 0; i < argc; i++)
@@ -253,7 +253,8 @@ int wxEntryStart( int& argc, char *argv[] )
         g_newArgv[g_newArgc] = argv[i];
         g_newArgc ++;
     }
-
+    g_newArgv[g_newArgc] = NULL;
+    
     Display* xdisplay = NULL;
     if (displayName.IsEmpty())
         xdisplay = XOpenDisplay(NULL);

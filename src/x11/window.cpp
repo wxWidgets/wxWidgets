@@ -1480,7 +1480,7 @@ bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Window WXUNUSED(win
             wxevent.m_altDown = XKeyEventAltIsDown(xevent);
             wxevent.m_metaDown = XKeyEventMetaIsDown(xevent);
             wxevent.SetEventObject(win);
-            wxevent.m_keyCode = id;
+            wxevent.m_keyCode = toupper(id);
             wxevent.SetTimestamp(XKeyEventGetTime(xevent));
 
             wxevent.m_x = XKeyEventGetX(xevent);
