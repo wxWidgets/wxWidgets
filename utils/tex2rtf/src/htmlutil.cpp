@@ -585,13 +585,16 @@ char *ParseColourString(char *bkStr, bool *isPicture)
 
 void OutputFont(void)
 {
-  // Output <FONT FACE=...>
-  TexOutput("<FONT FACE=\"");
+  // Only output <font face> if explicitly requested by htmlFaceName= directive in
+  // tex2rtf.ini. Otherwise do NOT set the font because we want to use browser's
+  // default font:
   if (htmlFaceName)
-	TexOutput(htmlFaceName);
-  else
-	TexOutput("Times New Roman");
-  TexOutput("\">\n");
+  {
+    // Output <FONT FACE=...>
+    TexOutput("<FONT FACE=\"");
+    TexOutput(htmlFaceName);
+    TexOutput("\">\n");
+  }
 }
 
 // Output start of <BODY> block
