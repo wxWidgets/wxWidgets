@@ -339,7 +339,7 @@ bool wxFileType::SetDefaultIcon(const wxString& cmd, int index)
     if ( sTmp.empty() )
         GetOpenCommand(&sTmp, wxFileType::MessageParameters("", ""));
 
-    wxCHECK_MSG( !sTmp.empty(), false, _T("need the icon file") );
+    wxCHECK_MSG( !sTmp.empty(), FALSE, _T("need the icon file") );
 
 
 #ifdef __WXMSW__
