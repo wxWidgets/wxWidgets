@@ -1125,8 +1125,12 @@ void wxHtmlHelpFrame::OnActivate(wxActivateEvent& event)
 {
     // This saves one mouse click when using the
     // wxHTML for context sensitive help systems
+#ifndef __WXGTK__
+    // NB: wxActivateEvent is a bit broken in wxGTK
+    //     and is sometimes sent when it should not be
     if (event.GetActive() && m_HtmlWin)
         m_HtmlWin->SetFocus();
+#endif
 
     event.Skip();
 }
