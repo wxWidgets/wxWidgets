@@ -1,0 +1,25 @@
+
+BUGS
+=====================================================================
+
+- Delete():
+  1 - occasionally delete deletes too much, maybe when at begin of
+      line?
+  2 - when in an empty line, Delete() doesn't always merge lines
+  3 - line numbers aren't updated properly, may be related to 2.
+  4 - deleting lines leaves later parts of the list unaffected
+       --> just redrawing at least the next two lines doesn't seem
+           enough, strange, don't positions change?
+- dmalloc shows duplicate deletion after merging two lines and
+  deleting the second half
+
+TODO
+=====================================================================
+
+- Add word wrap to wxlwindow/wxllist.
+- Cursor to mouseclick
+- Focus feedback for cursor
+- Selections
+
+- More optimisations
+

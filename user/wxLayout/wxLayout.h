@@ -31,8 +31,7 @@ class MyFrame: public wxFrame
   public:
   
    MyFrame(void);
-   void Edit(void);
-   void AddSampleText(wxLayoutList &llist);
+   void AddSampleText(wxLayoutList *llist);
    void Clear(void);
    void OnCommand( wxCommandEvent &event );
 

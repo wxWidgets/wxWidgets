@@ -41,8 +41,8 @@ struct wxLayoutExportObject
    wxLayoutExportType type;
    union
    {
-      String           *text;
-      wxLayoutObjectBase *object;
+      wxString           *text;
+      wxLayoutObject *object;
    }content;
    ~wxLayoutExportObject()
       {
@@ -51,22 +51,37 @@ struct wxLayoutExportObject
       }
 };
 
+struct wxLayoutExportStatus
+{
+   wxLayoutExportStatus(wxLayoutList *list)
+      {
+         list->GetDefaults()->GetStyle(&m_si);
+         m_line = list->GetFirstLine();
+         m_iterator = m_line->GetFirstObject();
+      }
+   
+   wxLayoutLine      * m_line;
+   wxLOiterator        m_iterator;
+   wxLayoutStyleInfo   m_si;
+};
+
+
 #ifdef OS_WIN
 /// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList &list, String const &str,
+void wxLayoutImportText(wxLayoutList &list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_CRLF);
 
 wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,
-                               wxLayoutList::iterator &from,
                                int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_CRLF); 
 #else
 /// import text into a wxLayoutList (including linefeeds):
-void wxLayoutImportText(wxLayoutList &list, String const &str,
+void wxLayoutImportText(wxLayoutList &list, wxString const &str,
                         int withflag = WXLO_EXPORT_WITH_LF_ONLY);
 
-wxLayoutExportObject *wxLayoutExport(wxLayoutList &list,
-                               wxLayoutList::iterator &from,
-                               int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_LF_ONLY); 
+/// export text in a given format FIXME-MT: not thread safe, uses static variable
+wxLayoutExportObject *wxLayoutExport(wxLayoutExportStatus *status,
+                                     int mode = WXLO_EXPORT_AS_TEXT|WXLO_EXPORT_WITH_LF_ONLY
+                                     );
 #endif
 
 #endif //WXLPARSER_H
