@@ -563,6 +563,9 @@ makesetup()
     cp $APPDIR/docs/motif/install.txt $DESTDIR/install-motif-$VERSION.txt
     cp $APPDIR/docs/gtk/install.txt $DESTDIR/install-gtk-$VERSION.txt
     cp $APPDIR/docs/x11/install.txt $DESTDIR/install-x11-$VERSION.txt
+    cp $APPDIR/docs/mgl/readme.txt $DESTDIR/readme-mgl-$VERSION.txt
+    cp $APPDIR/docs/mgl/install.txt $DESTDIR/install-mgl-$VERSION.txt
+
     cp $APPDIR/docs/readme.txt $DESTDIR/readme-$VERSION.txt
     cp $APPDIR/docs/motif/readme.txt $DESTDIR/readme-motif-$VERSION.txt
     cp $APPDIR/docs/gtk/readme.txt $DESTDIR/readme-gtk-$VERSION.txt

@@ -254,21 +254,6 @@ $TAR xf ../wxAll-${WXVER}.tar
 # Translate all .dsp and .dsw files to DOS format
 unix2dos --unix2dos `cat $WXSRC/distrib/msw/vc.rsp`
 
-# Copy OS/2 specific configure files
-# (no longer)
-# cp $WXSRC/distrib/os2/os2-specific.zip docs/os2
-
-# Copy the OS/2 files which probably haven't been copied yet
-mkdir include/wx/os2
-mkdir src/os2
-cp $WXSRC/include/wx/os2/*.H include/wx/os2
-cp $WXSRC/src/os2/*.CPP $WXSRC/src/os2/*.I src/os2
-
-# Make all OS/2 files lower case
-# No longer necessary.
-# $WXSRC/distrib/msw/namedown include/wx/os2/*.H
-# $WXSRC/distrib/msw/namedown src/os2/*.CPP src/os2/*.I
-
 echo Copying readme files...
 cp $WXSRC/docs/readme.txt README.txt
 cp $WXSRC/docs/changes.txt CHANGES.txt

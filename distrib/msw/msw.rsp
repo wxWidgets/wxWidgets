@@ -107,6 +107,7 @@ samples/ownerdrw/*.bmp
 samples/ownerdrw/*.png
 samples/ownerdrw/*.ico
 samples/ownerdrw/*.txt
+samples/ownerdrw/*.bkl
 
 samples/taskbar/*.cpp
 samples/taskbar/*.h
@@ -125,6 +126,7 @@ samples/regtest/*.def
 samples/regtest/*.bmp
 samples/regtest/*.ico
 samples/regtest/*.txt
+samples/regtest/*.bkl
 
 samples/nativdlg/*.cpp
 samples/nativdlg/*.h
@@ -135,6 +137,7 @@ samples/nativdlg/makefile.*
 samples/nativdlg/*.xbm
 samples/nativdlg/*.ico
 samples/nativdlg/*.bmp
+samples/nativdlg/*.bkl
 
 samples/mfc/*.h
 samples/mfc/*.cpp
@@ -144,16 +147,7 @@ samples/mfc/makefile.*
 samples/mfc/*.txt
 samples/mfc/*.bmp
 samples/mfc/*.ico
-
-samples/joytest/*.h
-samples/joytest/*.cpp
-samples/joytest/*.def
-samples/joytest/*.rc
-samples/joytest/makefile.*
-samples/joytest/*.txt
-samples/joytest/*.bmp
-samples/joytest/*.wav
-samples/joytest/*.ico
+samples/mfc/*.bkl
 
 samples/oleauto/*.h
 samples/oleauto/*.cpp
@@ -163,6 +157,7 @@ samples/oleauto/makefile.*
 samples/oleauto/*.txt
 samples/oleauto/*.bmp
 samples/oleauto/*.ico
+samples/oleauto/*.bkl
 
 src/wxWindows.dsp
 src/wxWindows.dsw

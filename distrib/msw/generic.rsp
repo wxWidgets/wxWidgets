@@ -449,6 +449,12 @@ samples/event/*.bmp
 samples/event/*.pro
 samples/event/*.bkl
 
+samples/except/*.cpp
+samples/except/*.rc
+samples/except/makefile*
+samples/except/*.xpm
+samples/except/*.bkl
+
 samples/exec/*.cpp
 samples/exec/*.h
 samples/exec/makefile*
@@ -728,6 +734,17 @@ samples/ipc/*.txt
 samples/ipc/*.pro
 samples/ipc/*.bkl
 
+samples/joytest/*.h
+samples/joytest/*.cpp
+samples/joytest/*.def
+samples/joytest/*.rc
+samples/joytest/makefile.*
+samples/joytest/*.txt
+samples/joytest/*.bmp
+samples/joytest/*.wav
+samples/joytest/*.ico
+samples/joytest/*.bkl
+
 samples/keyboard/*.cpp
 samples/keyboard/*.h
 samples/keyboard/*.def
@@ -856,6 +873,8 @@ samples/mobile/wxedit/*.h
 samples/mobile/wxedit/*.xpm
 samples/mobile/styles/*.bkl
 samples/mobile/wxedit/*.bkl
+samples/mobile/make*
+samples/mobile/*.bkl
 
 samples/multimon/*.h
 samples/multimon/*.cpp
@@ -898,6 +917,8 @@ samples/odbc/*.cdx
 samples/odbc/*.pro
 samples/odbc/*.bkl
 
+samples/opengl/*.bkl
+samples/opengl/make*
 samples/opengl/cube/*.cpp
 samples/opengl/cube/*.h
 samples/opengl/cube/*.rc
@@ -1193,6 +1214,12 @@ samples/validate/*.ico
 samples/validate/*.bmp
 samples/validate/*.pro
 samples/validate/*.bkl
+
+samples/vscroll/*.cpp
+samples/vscroll/*.rc
+samples/vscroll/makefile*
+samples/vscroll/*.xpm
+samples/vscroll/*.bkl
 
 samples/widgets/*.cpp
 samples/widgets/*.h

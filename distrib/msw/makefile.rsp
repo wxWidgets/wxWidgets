@@ -19,6 +19,7 @@ samples/dragimag/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
 samples/erase/Makefile.in
+samples/except/Makefile.in
 samples/exec/Makefile.in
 samples/event/Makefile.in
 samples/grid/Makefile.in
@@ -67,8 +68,6 @@ samples/thread/Makefile.in
 samples/toolbar/Makefile.in
 samples/treectrl/Makefile.in
 samples/typetest/Makefile.in
-samples/validate/Makefile.in
-samples/wizard/Makefile.in
 samples/dialup/Makefile.in
 samples/display/Makefile.in
 samples/font/Makefile.in
@@ -78,7 +77,10 @@ samples/opengl/Makefile.in
 samples/opengl/cube/Makefile.in
 samples/opengl/penguin/Makefile.in
 samples/opengl/isosurf/Makefile.in
+samples/validate/Makefile.in
+samples/vscroll/Makefile.in
 samples/widgets/Makefile.in
+samples/wizard/Makefile.in
 demos/Makefile.in
 demos/bombs/Makefile.in
 demos/forty/Makefile.in

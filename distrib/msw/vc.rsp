@@ -99,6 +99,9 @@ samples/event/event.dsw
 samples/exec/exec.dsp
 samples/exec/exec.dsw
 
+samples/except/except.dsp
+samples/except/except.dsw
+
 samples/font/font.dsp
 samples/font/font.dsw
 
