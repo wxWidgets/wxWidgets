@@ -95,7 +95,7 @@ BEGIN_EVENT_TABLE(wxWindowBase, wxEvtHandler)
     EVT_MIDDLE_DOWN(wxWindowBase::OnMiddleClick)
 
 #if wxUSE_HELP
-    EVT_HELP(-1, wxWindowBase::OnHelp)
+    EVT_HELP(wxID_ANY, wxWindowBase::OnHelp)
 #endif // wxUSE_HELP
 
 END_EVENT_TABLE()
@@ -113,7 +113,7 @@ wxWindowBase::wxWindowBase()
 {
     // no window yet, no parent nor children
     m_parent = (wxWindow *)NULL;
-    m_windowId = -1;
+    m_windowId = wxID_ANY;
 
     // no constraints on the minimal window size
     m_minWidth =
@@ -122,8 +122,8 @@ wxWindowBase::wxWindowBase()
     m_maxHeight = -1;
 
     // window is created enabled but it's not visible yet
-    m_isShown = FALSE;
-    m_isEnabled = TRUE;
+    m_isShown = false;
+    m_isEnabled = true;
 
     // the default event handler is just this window
     m_eventHandler = this;
@@ -147,9 +147,9 @@ wxWindowBase::wxWindowBase()
     // the colours/fonts are default for now
     m_hasBgCol =
     m_hasFgCol =
-    m_hasFont = FALSE;
-    
-    m_isBeingDeleted = FALSE;
+    m_hasFont = false;
+
+    m_isBeingDeleted = false;
 
     // no style bits
     m_exStyle =
@@ -163,7 +163,7 @@ wxWindowBase::wxWindowBase()
 
     m_windowSizer = (wxSizer *) NULL;
     m_containingSizer = (wxSizer *) NULL;
-    m_autoLayout = FALSE;
+    m_autoLayout = false;
 
 #if wxUSE_DRAG_AND_DROP
     m_dropTarget = (wxDropTarget *)NULL;
@@ -178,7 +178,7 @@ wxWindowBase::wxWindowBase()
 #endif // wxUSE_CARET
 
 #if wxUSE_PALETTE
-    m_hasCustomPalette = FALSE;
+    m_hasCustomPalette = false;
 #endif // wxUSE_PALETTE
 
 #if wxUSE_ACCESSIBILITY
@@ -193,7 +193,7 @@ wxWindowBase::wxWindowBase()
     m_maxVirtualHeight = -1;
 
     // Whether we're using the current theme for this window (wxGTK only for now)
-    m_themeEnabled = FALSE;
+    m_themeEnabled = false;
 }
 
 // common part of window creation process
@@ -241,7 +241,7 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
         SetExtraStyle(GetExtraStyle() | wxWS_EX_VALIDATE_RECURSIVELY);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -322,7 +322,7 @@ bool wxWindowBase::Destroy()
 {
     delete this;
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowBase::Close(bool force)
@@ -331,7 +331,7 @@ bool wxWindowBase::Close(bool force)
     event.SetEventObject(this);
     event.SetCanVeto(!force);
 
-    // return FALSE if window wasn't closed because the application vetoed the
+    // return false if window wasn't closed because the application vetoed the
     // close event
     return GetEventHandler()->ProcessEvent(event) && !event.GetVeto();
 }
@@ -358,7 +358,7 @@ bool wxWindowBase::DestroyChildren()
                       wxT("child didn't remove itself using RemoveChild()") );
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -662,11 +662,11 @@ bool wxWindowBase::Show(bool show)
     {
         m_isShown = show;
 
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 
@@ -676,11 +676,11 @@ bool wxWindowBase::Enable(bool enable)
     {
         m_isEnabled = enable;
 
-        return TRUE;
+        return true;
     }
     else
     {
-        return FALSE;
+        return false;
     }
 }
 // ----------------------------------------------------------------------------
@@ -689,7 +689,7 @@ bool wxWindowBase::Enable(bool enable)
 
 bool wxWindowBase::IsTopLevel() const
 {
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -723,7 +723,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     if ( newParent == oldParent )
     {
         // nothing done
-        return FALSE;
+        return false;
     }
 
     // unlink this window from the existing parent.
@@ -746,7 +746,7 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
         wxTopLevelWindows.Append((wxWindow *)this);
     }
 
-    return TRUE;
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -789,7 +789,7 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
 
 bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 {
-    wxCHECK_MSG( handler, FALSE, _T("RemoveEventHandler(NULL) called") );
+    wxCHECK_MSG( handler, false, _T("RemoveEventHandler(NULL) called") );
 
     wxEvtHandler *handlerPrev = NULL,
                  *handlerCur = GetEventHandler();
@@ -816,7 +816,7 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
             handler->SetNextHandler(NULL);
             handler->SetPreviousHandler(NULL);
 
-            return TRUE;
+            return true;
         }
 
         handlerPrev = handlerCur;
@@ -825,7 +825,7 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 
     wxFAIL_MSG( _T("where has the event handler gone?") );
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -835,25 +835,25 @@ bool wxWindowBase::RemoveEventHandler(wxEvtHandler *handler)
 bool wxWindowBase::SetBackgroundColour( const wxColour &colour )
 {
     if ( !colour.Ok() || (colour == m_backgroundColour) )
-        return FALSE;
+        return false;
 
     m_backgroundColour = colour;
 
-    m_hasBgCol = TRUE;
+    m_hasBgCol = true;
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowBase::SetForegroundColour( const wxColour &colour )
 {
     if ( !colour.Ok() || (colour == m_foregroundColour) )
-        return FALSE;
+        return false;
 
     m_foregroundColour = colour;
 
-    m_hasFgCol = TRUE;
+    m_hasFgCol = true;
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowBase::SetCursor(const wxCursor& cursor)
@@ -863,12 +863,12 @@ bool wxWindowBase::SetCursor(const wxCursor& cursor)
     if ( m_cursor == cursor )
     {
         // no change
-        return FALSE;
+        return false;
     }
 
     m_cursor = cursor;
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowBase::SetFont(const wxFont& font)
@@ -879,21 +879,21 @@ bool wxWindowBase::SetFont(const wxFont& font)
     if ( fontOk == m_font )
     {
         // no change
-        return FALSE;
+        return false;
     }
 
     m_font = fontOk;
 
-    m_hasFont = TRUE;
+    m_hasFont = true;
 
-    return TRUE;
+    return true;
 }
 
 #if wxUSE_PALETTE
 
 void wxWindowBase::SetPalette(const wxPalette& pal)
 {
-    m_hasCustomPalette = TRUE;
+    m_hasCustomPalette = true;
     m_palette = pal;
 
     // VZ: can anyone explain me what do we do here?
@@ -1174,17 +1174,17 @@ bool wxWindowBase::Validate()
         wxValidator *validator = child->GetValidator();
         if ( validator && !validator->Validate((wxWindow *)this) )
         {
-            return FALSE;
+            return false;
         }
 
         if ( recurse && !child->Validate() )
         {
-            return FALSE;
+            return false;
         }
     }
 #endif // wxUSE_VALIDATORS
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowBase::TransferDataToWindow()
@@ -1204,7 +1204,7 @@ bool wxWindowBase::TransferDataToWindow()
             wxLog::FlushActive();
 #endif // wxUSE_LOG
 
-            return FALSE;
+            return false;
         }
 
         if ( recurse )
@@ -1212,13 +1212,13 @@ bool wxWindowBase::TransferDataToWindow()
             if ( !child->TransferDataToWindow() )
             {
                 // warning already given
-                return FALSE;
+                return false;
             }
         }
     }
 #endif // wxUSE_VALIDATORS
 
-    return TRUE;
+    return true;
 }
 
 bool wxWindowBase::TransferDataFromWindow()
@@ -1236,7 +1236,7 @@ bool wxWindowBase::TransferDataFromWindow()
             // nop warning here because the application is supposed to give
             // one itself - we don't know here what might have gone wrongly
 
-            return FALSE;
+            return false;
         }
 
         if ( recurse )
@@ -1244,13 +1244,13 @@ bool wxWindowBase::TransferDataFromWindow()
             if ( !child->TransferDataFromWindow() )
             {
                 // warning already given
-                return FALSE;
+                return false;
             }
         }
     }
 #endif // wxUSE_VALIDATORS
 
-    return TRUE;
+    return true;
 }
 
 void wxWindowBase::InitDialog()
@@ -1524,7 +1524,7 @@ bool wxWindowBase::Layout()
     }
 #endif
 
-    return TRUE;
+    return true;
 }
 
 #if wxUSE_CONSTRAINTS
@@ -1548,7 +1548,7 @@ bool wxWindowBase::LayoutPhase2(int *noChanges)
     // Layout grand children
     DoPhase(2);
 
-    return TRUE;
+    return true;
 }
 
 // Do a phase of evaluating child constraints
@@ -1602,7 +1602,7 @@ bool wxWindowBase::DoPhase(int phase)
         }
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxWindowBase::ResetConstraints()
@@ -1610,14 +1610,14 @@ void wxWindowBase::ResetConstraints()
     wxLayoutConstraints *constr = GetConstraints();
     if ( constr )
     {
-        constr->left.SetDone(FALSE);
-        constr->top.SetDone(FALSE);
-        constr->right.SetDone(FALSE);
-        constr->bottom.SetDone(FALSE);
-        constr->width.SetDone(FALSE);
-        constr->height.SetDone(FALSE);
-        constr->centreX.SetDone(FALSE);
-        constr->centreY.SetDone(FALSE);
+        constr->left.SetDone(false);
+        constr->top.SetDone(false);
+        constr->right.SetDone(false);
+        constr->bottom.SetDone(false);
+        constr->width.SetDone(false);
+        constr->height.SetDone(false);
+        constr->centreX.SetDone(false);
+        constr->centreY.SetDone(false);
     }
 
     wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
@@ -1682,22 +1682,22 @@ void wxWindowBase::SetSizeConstraint(int x, int y, int w, int h)
         if ( x != -1 )
         {
             constr->left.SetValue(x);
-            constr->left.SetDone(TRUE);
+            constr->left.SetDone(true);
         }
         if ( y != -1 )
         {
             constr->top.SetValue(y);
-            constr->top.SetDone(TRUE);
+            constr->top.SetDone(true);
         }
         if ( w != -1 )
         {
             constr->width.SetValue(w);
-            constr->width.SetDone(TRUE);
+            constr->width.SetDone(true);
         }
         if ( h != -1 )
         {
             constr->height.SetValue(h);
-            constr->height.SetDone(TRUE);
+            constr->height.SetDone(true);
         }
     }
 }
@@ -1710,12 +1710,12 @@ void wxWindowBase::MoveConstraint(int x, int y)
         if ( x != -1 )
         {
             constr->left.SetValue(x);
-            constr->left.SetDone(TRUE);
+            constr->left.SetDone(true);
         }
         if ( y != -1 )
         {
             constr->top.SetValue(y);
-            constr->top.SetDone(TRUE);
+            constr->top.SetDone(true);
         }
     }
 }
@@ -1808,7 +1808,7 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {
     if ( event.GetSetEnabled() )
         Enable(event.GetEnabled());
-    
+
 #if wxUSE_CONTROLS
     if ( event.GetSetText() )
     {
@@ -1835,7 +1835,7 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
                 radiobtn->SetValue(event.GetChecked());
         }
 #endif // wxUSE_RADIOBTN
-    }    
+    }
 #endif
 }
 
@@ -1915,7 +1915,7 @@ void wxWindowBase::OnSysColourChanged(wxSysColourChangedEvent& event)
 void wxWindowBase::OnInitDialog( wxInitDialogEvent &WXUNUSED(event) )
 {
     TransferDataToWindow();
-    
+
     // Update the UI at this point
     UpdateWindowUI(wxUPDATE_UI_RECURSE);
 }
@@ -2115,8 +2115,8 @@ void wxWindowBase::ReleaseMouse()
     //else: stack is empty, no previous capture
 
     wxLogTrace(_T("mousecapture"),
-               _T("After ReleaseMouse() mouse is captured by %p"),
-               GetCapture());
+        (const wxChar *) _T("After ReleaseMouse() mouse is captured by %p"),
+        GetCapture());
 }
 
 #if wxUSE_HOTKEY
@@ -2367,7 +2367,7 @@ wxAccStatus wxWindowAccessible::GetName(int childId, wxString* name)
         title = ((wxButton*) GetWindow())->GetLabel();
     else
         title = GetWindow()->GetName();
-    
+
     if (!title.IsEmpty())
     {
         *name = title;
