@@ -732,7 +732,10 @@ const wxChar *wxSysErrorMsg(unsigned long nErrCode)
             0, NULL);
 
     // copy it to our buffer and free memory
-    wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
+    if( lpMsgBuf != 0 )
+        wxStrncpy(s_szBuf, (const wxChar *)lpMsgBuf, WXSIZEOF(s_szBuf) - 1);
+    else
+        s_szBuf[0] = wxT('\0');
     s_szBuf[WXSIZEOF(s_szBuf) - 1] = wxT('\0');
     LocalFree(lpMsgBuf);
 
