@@ -375,6 +375,7 @@ public:
   void SendSelChanging(const wxTreeItemId& item);
   void SendSelChanged(const wxTreeItemId& item);
 protected:
+  wxTreeItemId m_editItem;
   GtkTree *m_tree;
   GtkTreeItem *m_anchor;
   wxTextCtrl*  m_textCtrl;

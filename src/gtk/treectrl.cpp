@@ -32,8 +32,11 @@
 
 //static void wxConvertToGtkTreeItem(wxTreeCtrl *owner, wxTreeItem& info, GtkTreeItem **gtkItem);
 //static void wxConvertFromGtkTreeItem(wxTreeItem& info, GtkTreeItem *gtkItem);
+
 static void gtk_treectrl_count_callback (GtkWidget *widget, gpointer data);
 static void gtk_treectrl_first_selected_callback(GtkWidget *widget, gpointer data);
+static void gtk_treectrl_first_visible_callback(GtkWidget *widget, gpointer data);
+
 // static void gtk_treectrl_next_callback (GtkWidget *widget, gpointer data);
 // static void gtk_treectrl_next_visible_callback (GtkWidget *widget, gpointer data);
 // static void gtk_treectrl_next_selected_callback (GtkWidget *widget, gpointer data);
@@ -124,8 +127,6 @@ printf("3\n");
 printf("4\n");
   gtk_container_add(GTK_CONTAINER(m_widget), GTK_WIDGET(m_tree));
 printf("5\n");
-//  gtk_widget_set_parent(GTK_WIDGET(m_tree), m_widget);
-printf("6\n");
   gtk_widget_show(GTK_WIDGET(m_tree));
 
   SetName(name);
@@ -590,8 +591,28 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item) {
     gtk_tree_item_expand(GTK_TREE_ITEM((GtkTreeItem *)item));
 }
 
+static void gtk_treectrl_unselect_callback(GtkWidget *widget, gpointer data) {
+  GtkTreeItem *p;
+
+  GtkTree *tree = GTK_TREE(GTK_TREE_ITEM(widget)->subtree);
+
+  if (tree->selection != NULL) {
+    guint len = g_list_length(tree->selection);
+    for (guint i=0; i<len; i++) {
+      p = GTK_TREE_ITEM((GtkTreeItem *)g_list_nth(tree->selection, i)->data);
+      gtk_tree_unselect_child(tree, GTK_WIDGET(p));
+    }
+  }
+
+  if (GTK_IS_CONTAINER(widget))
+    gtk_container_foreach(GTK_CONTAINER(widget), gtk_treectrl_unselect_callback, data);
+}
+
 void wxTreeCtrl::Unselect() {
-#warning "Need to implement Unselect"
+  if (m_anchor == NULL)
+    return;
+
+  gtk_treectrl_unselect_callback(GTK_WIDGET(m_anchor), NULL);
 }
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item) {
@@ -613,7 +634,23 @@ wxTextCtrl* wxTreeCtrl::EditLabel(const wxTreeItemId& item,
                           wxClassInfo* textControlClass) {
     wxASSERT( textControlClass->IsKindOf(CLASSINFO(wxTextCtrl)) );
 #warning "Need to implement EditLabel"
-    return m_textCtrl;
+/*
+  char *s;
+  m_editItem = item;
+
+  GtkLabel *m_label = (GtkLabel *)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)item), "w_label");
+  gtk_label_get(m_label, &s);
+
+  m_textCtrl = new wxTextCtrl(this, -1, s);
+//  m_textCtrl->SetValue(s);
+
+  gtk_object_set_data(GTK_OBJECT((GtkTreeItem *)item), "w_edit", m_textCtrl->m_widget);
+
+  gtk_container_remove(GTK_CONTAINER((GtkTreeItem *)item), GTK_WIDGET(m_label));
+  gtk_container_add(GTK_CONTAINER((GtkTreeItem *)item), m_textCtrl->m_widget);
+
+*/
+  return m_textCtrl;
 }
 
 wxTextCtrl* wxTreeCtrl::GetEditControl() const {
@@ -622,6 +659,18 @@ wxTextCtrl* wxTreeCtrl::GetEditControl() const {
 
 void wxTreeCtrl::EndEditLabel(const wxTreeItemId& item, bool discardChanges) {
 #warning "Need to implement EndEditLabel"
+/*
+  GtkLabel *m_label = (GtkLabel *)gtk_object_get_data(GTK_OBJECT((GtkTreeItem *)m_editItem), "w_label");
+  gtk_label_set(m_label, m_textCtrl->GetValue());
+
+  gtk_object_remove_data(GTK_OBJECT((GtkTreeItem *)m_editItem), "w_edit");
+
+  gtk_container_remove(GTK_CONTAINER((GtkTreeItem *)m_editItem), m_textCtrl->m_widget);
+  gtk_container_add(GTK_CONTAINER((GtkTreeItem *)m_editItem), GTK_WIDGET(m_label));
+
+  delete m_textCtrl;
+  m_textCtrl = NULL;
+*/
 }
 
 void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action) {
