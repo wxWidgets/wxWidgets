@@ -1,0 +1,43 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for scroll example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/scroll.$(OBJSUFF) $(OBJDIR)/scroll_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) scroll$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+scroll$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o scroll$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/scroll.$(OBJSUFF):	scroll.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ scroll.$(SRCSUFF)
+
+scroll_resources.c:  scroll.rc
+	$(RESCOMP) $(RCINPUTSWITCH) scroll.rc $(RCOUTPUTSWITCH) scroll_resources.c $(RESFLAGS)
+
+$(OBJDIR)/scroll_resources.$(OBJSUFF):	scroll_resources.c
+	$(CC) -c $(CPPFLAGS) -o $@ scroll_resources.c
+
+#$(OBJDIR)/scroll_resources.o:  scroll.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) scroll.rc $(RCOUTPUTSWITCH) $(OBJDIR)/scroll_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) scroll$(GUISUFFIX).exe core *.rsc *.res

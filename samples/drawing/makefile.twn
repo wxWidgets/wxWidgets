@@ -1,0 +1,43 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for drawing example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/drawing.$(OBJSUFF) $(OBJDIR)/drawing_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) drawing$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+drawing$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o drawing$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/drawing.$(OBJSUFF):	drawing.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ drawing.$(SRCSUFF)
+
+drawing_resources.c:  drawing.rc
+	$(RESCOMP) $(RCINPUTSWITCH) drawing.rc $(RCOUTPUTSWITCH) drawing_resources.c $(RESFLAGS)
+
+$(OBJDIR)/drawing_resources.$(OBJSUFF):	drawing_resources.c
+	$(CC) -c $(CPPFLAGS) -o $@ drawing_resources.c
+
+#$(OBJDIR)/drawing_resources.o:  drawing.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) drawing.rc $(RCOUTPUTSWITCH) $(OBJDIR)/drawing_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) drawing$(GUISUFFIX).exe core *.rsc *.res

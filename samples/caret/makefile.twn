@@ -1,0 +1,43 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for caret example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/caret.$(OBJSUFF) $(OBJDIR)/caret_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) caret$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+caret$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o caret$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/caret.$(OBJSUFF):	caret.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ caret.$(SRCSUFF)
+
+caret_resources.c:  caret.rc
+	$(RESCOMP) $(RCINPUTSWITCH) caret.rc $(RCOUTPUTSWITCH) caret_resources.c $(RESFLAGS)
+
+$(OBJDIR)/caret_resources.$(OBJSUFF):	caret_resources.c
+	$(CC) -c $(CPPFLAGS) -o $@ caret_resources.c
+
+#$(OBJDIR)/caret_resources.o:  caret.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) caret.rc $(RCOUTPUTSWITCH) $(OBJDIR)/caret_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) caret$(GUISUFFIX).exe core *.rsc *.res
