@@ -1,6 +1,8 @@
 #ifndef _WX_MDI_H_BASE_
 #define _WX_MDI_H_BASE_
 
+#include "wx/setup.h"
+
 #if wxUSE_MDI_ARCHITECTURE
 
 #if defined(__WXUNIVERSAL__)
