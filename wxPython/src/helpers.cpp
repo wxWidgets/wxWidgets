@@ -386,10 +386,6 @@ void __wxPreStart(PyObject* moduleDict)
     wxPyTMutex = new wxMutex;
 #endif
 
-     // Restore default signal handlers, (prevents crash upon Ctrl-C in the
-     // console that launched a wxPython app...)
-    PyOS_FiniInterrupts();
-
     wxApp::CheckBuildOptions(wxBuildOptions());
 
     wxPyAssertionError = PyErr_NewException("wxPython.wxc.wxPyAssertionError",
