@@ -213,7 +213,6 @@ configure-gtk-shared-stamp:
 				--cache-file=$(config_cache)		\
 				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
 				--with-gtk				\
-				--enable-gtk2				\
 				--enable-unicode			\
 				--with-opengl				\
 				--with-zlib=sys				\
@@ -237,7 +236,6 @@ configure-gtk-static-stamp:
 				--cache-file=$(config_cache)		\
 				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
 				--with-gtk				\
-				--enable-gtk2				\
 				--enable-unicode			\
 				--with-opengl				\
 				--disable-shared			\
@@ -262,7 +260,6 @@ configure-gtk-debug-stamp:
 				--cache-file=$(config_cache)		\
 				--with-flavour=$(DEBIAN_WXFLAVOUR)	\
 				--with-gtk				\
-				--enable-gtk2				\
 				--enable-unicode			\
 				--with-opengl				\
 				--enable-debug				\
