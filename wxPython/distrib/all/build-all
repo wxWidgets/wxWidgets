@@ -57,7 +57,7 @@ function usage {
     echo ""
     echo "   skipsource   Don't build the source archives, use the ones"
     echo "                already in the staging dir."
-    echo "   onlysource   Exit after building the source archives"
+    echo "   onlysource   Exit after building the source and docs archives"
     echo "   skipdocs     Don't rebuild the docs"
     echo "   skipwin      Don't do the remote Windows build"
     echo "   skiposx      Don't do the remote OSX build"
@@ -135,6 +135,7 @@ VERSION=`python -c "import setup;print setup.VERSION"`
 
 #echo VERSION=$VERSION
 #exit 0
+
 
 echo "Getting started at " `date`
 
@@ -255,8 +256,8 @@ function DoOSXBuild {
 
 if [ $skiposx != yes ]; then
 
-    DoOSXBuild $OSX_HOST_panther panther
     DoOSXBuild $OSX_HOST_jaguar jaguar
+    DoOSXBuild $OSX_HOST_panther panther
 
 fi
 
@@ -330,7 +331,7 @@ if [ $KIND = daily ]; then
     mkdir -p $destdir
     cp $STAGING_DIR/* $destdir
 
-    if [ skipupload != yes ]; then 
+    if [ $skipupload != yes ]; then 
 	destdir=$UPLOAD_DAILY_ROOT/$DAILY
 	echo "Copying to the starship at $destdir..."
 	ssh $UPLOAD_HOST "mkdir -p $destdir"
@@ -381,7 +382,7 @@ if [ $KIND = release ]; then
     mkdir -p $destdir
     cp $STAGING_DIR/* $destdir
 
-    if [ skipupload != yes ]; then 
+    if [ $skipupload != yes ]; then 
 	echo "Copying to the starship..."
 	destdir=$UPLOAD_PREVIEW_ROOT/$VERSION
 	ssh $UPLOAD_HOST "mkdir -p $destdir"
