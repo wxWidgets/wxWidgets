@@ -127,9 +127,6 @@ def ColourRGB(*args, **kwargs):
     val.thisown = 1
     return val
 
-Color = Colour
-NamedColor = NamedColour    
-
 class Palette(GDIObject):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPalette instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)

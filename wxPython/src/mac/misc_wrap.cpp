@@ -15566,6 +15566,8 @@ static PyObject *_wrap_DateTime_GetAmPmStrings(PyObject *self, PyObject *args, P
     PyObject *resultobj;
     wxString *arg1 = (wxString *) 0 ;
     wxString *arg2 = (wxString *) 0 ;
+    bool temp1 = False ;
+    bool temp2 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -15573,8 +15575,16 @@ static PyObject *_wrap_DateTime_GetAmPmStrings(PyObject *self, PyObject *args, P
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DateTime_GetAmPmStrings",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg1 = wxString_in_helper(obj0);
+        if (arg1 == NULL) SWIG_fail;
+        temp1 = True;
+    }
+    {
+        arg2 = wxString_in_helper(obj1);
+        if (arg2 == NULL) SWIG_fail;
+        temp2 = True;
+    }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         wxDateTime::GetAmPmStrings(arg1,arg2);
@@ -15583,8 +15593,24 @@ static PyObject *_wrap_DateTime_GetAmPmStrings(PyObject *self, PyObject *args, P
         if (PyErr_Occurred()) SWIG_fail;
     }
     Py_INCREF(Py_None); resultobj = Py_None;
+    {
+        if (temp1)
+        delete arg1;
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
     return resultobj;
     fail:
+    {
+        if (temp1)
+        delete arg1;
+    }
+    {
+        if (temp2)
+        delete arg2;
+    }
     return NULL;
 }
 

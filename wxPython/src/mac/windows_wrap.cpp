@@ -10676,6 +10676,7 @@ static PyObject *_wrap_new_MultiChoiceDialog(PyObject *self, PyObject *args, PyO
     wxMultiChoiceDialog *result;
     bool temp2 = False ;
     bool temp3 = False ;
+    bool temp5 = False ;
     wxPoint temp7 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
@@ -10698,7 +10699,11 @@ static PyObject *_wrap_new_MultiChoiceDialog(PyObject *self, PyObject *args, PyO
         if (arg3 == NULL) SWIG_fail;
         temp3 = True;
     }
-    if ((SWIG_ConvertPtr(obj4,(void **) &arg5, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    {
+        arg5 = wxString_in_helper(obj4);
+        if (arg5 == NULL) SWIG_fail;
+        temp5 = True;
+    }
     if (obj6) {
         {
             arg7 = &temp7;
@@ -10721,6 +10726,10 @@ static PyObject *_wrap_new_MultiChoiceDialog(PyObject *self, PyObject *args, PyO
         if (temp3)
         delete arg3;
     }
+    {
+        if (temp5)
+        delete arg5;
+    }
     return resultobj;
     fail:
     {
@@ -10730,6 +10739,10 @@ static PyObject *_wrap_new_MultiChoiceDialog(PyObject *self, PyObject *args, PyO
     {
         if (temp3)
         delete arg3;
+    }
+    {
+        if (temp5)
+        delete arg5;
     }
     return NULL;
 }

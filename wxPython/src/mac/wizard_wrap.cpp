@@ -615,6 +615,7 @@ static PyObject *_wrap_new_PyWizardPage(PyObject *self, PyObject *args, PyObject
     wxBitmap *arg2 = (wxBitmap *) &wxNullBitmap ;
     wxString *arg3 = (wxString *) &wxPyEmptyString ;
     wxPyWizardPage *result;
+    bool temp3 = False ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -628,7 +629,11 @@ static PyObject *_wrap_new_PyWizardPage(PyObject *self, PyObject *args, PyObject
         if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxBitmap,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     }
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxString,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        {
+            arg3 = wxString_in_helper(obj2);
+            if (arg3 == NULL) SWIG_fail;
+            temp3 = True;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -638,8 +643,16 @@ static PyObject *_wrap_new_PyWizardPage(PyObject *self, PyObject *args, PyObject
         if (PyErr_Occurred()) SWIG_fail;
     }
     resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxPyWizardPage, 1);
+    {
+        if (temp3)
+        delete arg3;
+    }
     return resultobj;
     fail:
+    {
+        if (temp3)
+        delete arg3;
+    }
     return NULL;
 }
 
