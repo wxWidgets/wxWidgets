@@ -5,7 +5,7 @@ set dest=%src\deliver
 set wise=0
 
 Rem Set this to the required version
-set version=2_1_15
+set version=2_1_16
 
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
@@ -53,6 +53,7 @@ zip32 -@ %dest\wx%version%_htm.zip < %src\distrib\msw\wx_html.rsp
 zip32 -@ %dest\wx%version%_pdf.zip < %src\distrib\msw\wx_pdf.rsp
 zip32 -@ %dest\wx%version%_wrd.zip < %src\distrib\msw\wx_word.rsp
 zip32 -@ %dest\wx%version%_htb.zip < %src\distrib\msw\wx_htb.rsp
+zip32 -@ %dest\wx%version%_chm.zip < %src\distrib\msw\wx_chm.rsp
 
 Rem PDF/HTML docs that should go into the Windows setup because
 Rem there are no WinHelp equivalents

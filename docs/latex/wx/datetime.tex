@@ -291,7 +291,7 @@ objects. As explained in the overview, either wxTimeSpan or wxDateSpan may be
 added to wxDateTime, hence all functions are overloaded to accept both
 arguments.
 
-Also, both {\tt Add()} and {\tt Substract()} have both const and non-const
+Also, both {\tt Add()} and {\tt Subtract()} have both const and non-const
 version. The first one returns a new obejct which represents the
 sum/difference of the original one with the argument while the second form
 modifies the object to which it is applied. The operators $-=$ and $+=$ are
@@ -299,13 +299,13 @@ defined to be equivalent to the second forms of these functions.
 
 \helpref{Add(wxTimeSpan)}{wxdatetimeaddts}\\
 \helpref{Add(wxDateSpan)}{wxdatetimeaddds}\\
-\helpref{Substract(wxTimeSpan)}{wxdatetimesubstractts}\\
-\helpref{Substract(wxDateSpan)}{wxdatetimesubstractds}\\
-\helpref{Substract(wxDateTime)}{wxdatetimesubstractdt}\\
+\helpref{Subtract(wxTimeSpan)}{wxdatetimesubtractts}\\
+\helpref{Subtract(wxDateSpan)}{wxdatetimesubtractds}\\
+\helpref{Subtract(wxDateTime)}{wxdatetimesubtractdt}\\
 \helpref{oparator$+=$(wxTimeSpan)}{wxdatetimeaddts}\\
 \helpref{oparator$+=$(wxDateSpan)}{wxdatetimeaddds}\\
-\helpref{oparator$-=$(wxTimeSpan)}{wxdatetimesubstractts}\\
-\helpref{oparator$-=$(wxDateSpan)}{wxdatetimesubstractds}
+\helpref{oparator$-=$(wxTimeSpan)}{wxdatetimesubtractts}\\
+\helpref{oparator$-=$(wxDateSpan)}{wxdatetimesubtractds}
 
 \membersection{Parsing and formatting dates}
 
@@ -916,15 +916,15 @@ this interval.
 
 Adds the given time span to this object.
 
-\membersection{wxDateTime::Substract}\label{wxdatetimesubstract}
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtract}
 
-\constfunc{wxDateTime}{Substract}{\param{const wxTimeSpan\& }{diff}}
+\constfunc{wxDateTime}{Subtract}{\param{const wxTimeSpan\& }{diff}}
 
-\func{wxDateTime\&}{Substract}{\param{const wxTimeSpan\& }{diff}}
+\func{wxDateTime\&}{Subtract}{\param{const wxTimeSpan\& }{diff}}
 
 \func{wxDateTime\&}{operator$-=$}{\param{const wxTimeSpan\& }{diff}}
 
-Substracts the given time span from this object.
+Subtracts the given time span from this object.
 
 \membersection{wxDateTime::Add}\label{wxdatetimeadd}
 
@@ -936,21 +936,21 @@ Substracts the given time span from this object.
 
 Adds the given date span to this object.
 
-\membersection{wxDateTime::Substract}\label{wxdatetimesubstract}
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtract}
 
-\constfunc{wxDateTime}{Substract}{\param{const wxDateSpan\& }{diff}}
+\constfunc{wxDateTime}{Subtract}{\param{const wxDateSpan\& }{diff}}
 
-\func{wxDateTime\&}{Substract}{\param{const wxDateSpan\& }{diff}}
+\func{wxDateTime\&}{Subtract}{\param{const wxDateSpan\& }{diff}}
 
 \func{wxDateTime\&}{operator$-=$}{\param{const wxDateSpan\& }{diff}}
 
-Substracts the given date span from this object.
+Subtracts the given date span from this object.
 
-\membersection{wxDateTime::Substract}\label{wxdatetimesubstract}
+\membersection{wxDateTime::Subtract}\label{wxdatetimesubtract}
 
-\constfunc{wxTimeSpan}{Substract}{\param{const wxDateTime\& }{dt}}
+\constfunc{wxTimeSpan}{Subtract}{\param{const wxDateTime\& }{dt}}
 
-Substracts another date from this one and returns the difference between them
+Subtracts another date from this one and returns the difference between them
 as wxTimeSpan.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%% parsing/formatting %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
