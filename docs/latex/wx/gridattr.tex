@@ -3,15 +3,11 @@
 % grid.h at 11/May/00 18:30:19
 %
 
-
 \section{\class{wxGridCellAttr}}\label{wxgridcellattr}
 
-
-
-wxGridCellAttr: this class can be used to alter the cells appearance in
+This class can be used to alter the cells' appearance in
 the grid by changing their colour/font/... from default. An object of this
 class may be returned by wxGridTable::GetAttr().
-
 
 \wxheading{Derived from}
 
@@ -21,64 +17,58 @@ No base class
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-
 \membersection{wxGridCellAttr::wxGridCellAttr}\label{wxgridcellattrwxgridcellattr}
 
 \func{}{wxGridCellAttr}{\void}
 
-ctors
-
-
-\membersection{wxGridCellAttr::wxGridCellAttr}\label{wxgridcellattrwxgridcellattr}
-
+Default constructor.
+            
 \func{}{wxGridCellAttr}{\param{const wxColour\& }{colText}, \param{const wxColour\& }{colBack}, \param{const wxFont\& }{font}, \param{int }{hAlign}, \param{int }{vAlign}}
 
 VZ: considering the number of members wxGridCellAttr has now, this ctor
 seems to be pretty useless... may be we should just remove it?
 
-
 \membersection{wxGridCellAttr::Clone}\label{wxgridcellattrclone}
 
 \constfunc{wxGridCellAttr*}{Clone}{\void}
 
-creates a new copy of this object
-
+Creates a new copy of this object.
 
 \membersection{wxGridCellAttr::IncRef}\label{wxgridcellattrincref}
 
 \func{void}{IncRef}{\void}
 
-this class is ref counted: it is created with ref count of 1, so
+This class is ref counted: it is created with ref count of 1, so
 calling DecRef() once will delete it. Calling IncRef() allows to lock
 it until the matching DecRef() is called
-
 
 \membersection{wxGridCellAttr::DecRef}\label{wxgridcellattrdecref}
 
 \func{void}{DecRef}{\void}
 
-
 \membersection{wxGridCellAttr::SetTextColour}\label{wxgridcellattrsettextcolour}
 
 \func{void}{SetTextColour}{\param{const wxColour\& }{colText}}
 
-setters
-
+Sets the text colour.
 
 \membersection{wxGridCellAttr::SetBackgroundColour}\label{wxgridcellattrsetbackgroundcolour}
 
 \func{void}{SetBackgroundColour}{\param{const wxColour\& }{colBack}}
 
+Sets the background colour.
 
 \membersection{wxGridCellAttr::SetFont}\label{wxgridcellattrsetfont}
 
 \func{void}{SetFont}{\param{const wxFont\& }{font}}
 
+Sets the font.
 
 \membersection{wxGridCellAttr::SetAlignment}\label{wxgridcellattrsetalignment}
 
 \func{void}{SetAlignment}{\param{int }{hAlign}, \param{int }{vAlign}}
 
+Sets the alignment.
 
 \membersection{wxGridCellAttr::SetReadOnly}\label{wxgridcellattrsetreadonly}
 

@@ -1,35 +1,30 @@
 \section{\class{wxGrid}}\label{wxgrid}
 
 wxGrid and its related classes are used for displaying and editing tabular
-data.  They provide a rich set of features for display, editing, and
+data. They provide a rich set of features for display, editing, and
 interacting with a variety of data sources. For simple applications, and to
 help you get started, wxGrid is the only class you need to refer to
-directly.  It will set up default instances of the other classes and manage
-them for you.  For more complex applications you can derive your own
+directly. It will set up default instances of the other classes and manage
+them for you. For more complex applications you can derive your own
 classes for custom grid views, grid data tables, cell editors and
-renderers.  The \helpref{wxGrid classes overview}{gridoverview} has
+renderers. The \helpref{wxGrid classes overview}{gridoverview} has
 examples of simple and more complex applications, explains the
 relationship between the various grid classes and has a summary of the
 keyboard shortcuts and mouse functions provided by wxGrid.
 
 wxGrid has been greatly expanded and redesigned for wxWindows 2.2
 onwards. If you have been using the old wxGrid class you will probably
-want to have a look at the \helpref{wxGrid classes
-overview}{gridoverview} to see how things have changed. The new grid
-classes are reasonably backward-compatible but there are some
-exceptions.  There are also easier ways of doing many things compared to
+want to have a look at the \helpref{wxGrid classes overview}{gridoverview} to see
+how things have changed. The new grid classes are reasonably backward-compatible
+but there are some exceptions. There are also easier ways of doing many things compared to
 the previous implementation. 
-
 
 \wxheading{Derived from}
 
-% UNCOMMENT THIS BEFORE COMMITTING TO CVS
-\begin{comment}
 \helpref{wxScrolledWindow}{wxscrolledwindow}\\
 \helpref{wxWindow}{wxwindow}\\
 \helpref{wxEvtHandler}{wxevthandler}\\
 \helpref{wxObject}{wxobject}
-\end{comment}
 
 \wxheading{Include files}
 
@@ -50,20 +45,20 @@ There are presently no specific window styles for wxGrid.
 
 \membersection{Constructors and initialization}
 
-\helpref{wxGrid}{wxgridctor} \\
-\helpref{\destruct{wxGrid}}{wxgriddtor} \\
-\helpref{CreateGrid}{wxgridcreategrid} \\
+\helpref{wxGrid}{wxgridctor}\\
+\helpref{\destruct{wxGrid}}{wxgriddtor}\\
+\helpref{CreateGrid}{wxgridcreategrid}\\
 \helpref{SetTable}{wxgridsettable}
 
 \membersection{Display format}
 
 \membersection{Selection functions}
 
-\helpref{wxGrid::ClearSelection}{wxgridclearselection} \\
-\helpref{wxGrid::IsSelection}{wxgridisselection} \\
-\helpref{wxGrid::SelectAll}{wxgridselectall} \\
-\helpref{wxGrid::SelectBlock}{wxgridselectblock} \\
-\helpref{wxGrid::SelectCol}{wxgridselectcol} \\
+\helpref{wxGrid::ClearSelection}{wxgridclearselection}\\
+\helpref{wxGrid::IsSelection}{wxgridisselection}\\
+\helpref{wxGrid::SelectAll}{wxgridselectall}\\
+\helpref{wxGrid::SelectBlock}{wxgridselectblock}\\
+\helpref{wxGrid::SelectCol}{wxgridselectcol}\\
 \helpref{wxGrid::SelectRow}{wxgridselectrow}
 
 %%%%%%%%% MEMBER FUNCTIONS %%%%%%%%%%
@@ -121,7 +116,7 @@ If you are using a derived grid table class you will need to override
 
 Automatically sets the height and width of all rows and columns to fit their contents.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -129,10 +124,10 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \func{void}{AutoSizeColumn}{\param{int }{col}, \param{bool }{setAsMin = TRUE}}
 
-Automatically sizes the column to fit its contents.  If setAsMin is TRUE the calculated width will
+Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
 also be set as the minimal width for the column.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -140,10 +135,10 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \func{void}{AutoSizeColumns}{\param{bool }{setAsMin = TRUE}}
 
-Automatically sizes all columns to fit their contents.  If setAsMin is TRUE the calculated widths will
+Automatically sizes all columns to fit their contents. If setAsMin is TRUE the calculated widths will
 also be set as the minimal widths for the columns.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -151,10 +146,10 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \func{void}{AutoSizeRow}{\param{int }{row}, \param{bool }{setAsMin = TRUE}}
 
-Automatically sizes the row to fit its contents.  If setAsMin is TRUE the calculated height will
+Automatically sizes the row to fit its contents. If setAsMin is TRUE the calculated height will
 also be set as the minimal height for the row.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -162,10 +157,10 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 \func{void}{AutoSizeRows}{\param{bool }{setAsMin = TRUE}}
 
-Automatically sizes all rows to fit their contents.  If setAsMin is TRUE the calculated heights will
+Automatically sizes all rows to fit their contents. If setAsMin is TRUE the calculated heights will
 also be set as the minimal heights for the rows.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -183,7 +178,7 @@ screen flicker. The final EndBatch will cause the grid to be repainted.
 
 \func{bool}{CanDragColSize}{\void}
 
-Returns TRUE if columns can be resized by dragging with the mouse.  Columns can be resized
+Returns TRUE if columns can be resized by dragging with the mouse. Columns can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
 resized by dragging the right edge of the column in the grid cell area 
 (see \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}).
@@ -192,7 +187,7 @@ resized by dragging the right edge of the column in the grid cell area
 
 \func{bool}{CanDragRowSize}{\void}
 
-Returns TRUE if rows can be resized by dragging with the mouse.  Rows can be resized
+Returns TRUE if rows can be resized by dragging with the mouse. Rows can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
 resized by dragging the lower edge of the row in the grid cell area 
 (see \helpref{wxGrid::EnableDragGridSize}{wxgridenabledraggridsize}).
@@ -451,7 +446,7 @@ Returns the current height of the column labels.
 \func{wxString}{GetColLabelValue}{\param{int }{col}}
 
 Returns the specifed column label. The default grid table class provides column labels of
-the form A,B...Z,AA,AB...ZZ,AAA...  If you are using a custom grid table you can override 
+the form A,B...Z,AA,AB...ZZ,AAA... If you are using a custom grid table you can override 
 \helpref{wxGridTableBase::GetColLabelValue}{wxgridtablebasegetcollabelvalue} to provide
 your own labels. 
 
@@ -468,8 +463,8 @@ Returns the width of the specified column.
 Sets the arguments to the current default horizontal and vertical text alignment
 values.
 
-Horizontal alignment will be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
-Vertical alignment will be one of wxALIGN_TOP, wxALIGN_CENTRE or wxALIGN_BOTTOM.
+Horizontal alignment will be one of wxALIGN\_LEFT, wxALIGN\_CENTRE or wxALIGN\_RIGHT. \\
+Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTTOM.
 
 \membersection{wxGrid::GetDefaultCellBackgroundColour}\label{wxgridgetdefaultcellbackgroundcolour}
 
@@ -698,11 +693,9 @@ Returns TRUE if there are currently rows, columns or blocks of cells selected.
 
 \membersection{wxGrid::IsVisible}\label{wxgridisvisible}
 
-\func{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, 
-\param{bool }{wholeCellVisible = TRUE}
+\func{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, \param{bool }{wholeCellVisible = TRUE}}
 
-\func{bool}{IsVisible}{\param{const wxGridCellCoords\& }{coords}, 
-\param{bool }{wholeCellVisible = TRUE}}
+\func{bool}{IsVisible}{\param{const wxGridCellCoords\& }{coords}, \param{bool }{wholeCellVisible = TRUE}}
 
 Returns TRUE if a cell is either wholly visible (the default) or at least partially
 visible in the grid window.
@@ -720,7 +713,7 @@ nothing if the cell is already visible.
 
 \func{bool}{MoveCursorDown}{\param{bool }{expandSelection}}
 
-Moves the grid cursor down by one row.  If a block of cells was previously selected it
+Moves the grid cursor down by one row. If a block of cells was previously selected it
 will expand if the argument is TRUE or be cleared if the argument is FALSE.
 
 \wxheading{Keyboard}\\
@@ -864,6 +857,10 @@ deselected; if TRUE the row will be added to the existing selection.
 
 \func{void}{SetCellAlignment}{\param{int }{row}, \param{int }{col}, \param{int }{horiz}, \param{int }{vert}}
 
+\func{void}{SetCellAlignment}{\param{int }{align}, \param{int }{row}, \param{int }{col}}
+
+\func{void}{SetCellAlignment}{\param{int }{align}}
+
 Sets the horizontal and vertial alignment for grid cell text at the specified location.
 
 Horizontal alignment should be one of wxALIGN_LEFT, wxALIGN_CENTRE or wxALIGN_RIGHT. \\
@@ -899,6 +896,10 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \func{void}{SetCellTextColour}{\param{int }{row}, \param{int }{col}, \param{const }{wxColour\&}}
 
+\func{void}{SetCellTextColour}{\param{const wxColour\& }{val}, \param{int }{row}, \param{int }{col}}
+
+\func{void}{SetCellTextColour}{\param{const wxColour\& }{col}}
+
 Sets the text colour for the grid cell at the specified location.
 
 \membersection{wxGrid::SetCellValue}\label{wxgridsetcellvalue}
@@ -907,13 +908,17 @@ Sets the text colour for the grid cell at the specified location.
 
 \func{void}{SetCellValue}{\param{const wxGridCellCoords\& }{coords}, \param{const wxString\& }{s}}
 
+\func{void}{SetCellValue}{\param{const wxString\& }{val}, \param{int }{row}, \param{int }{col}}
+
 Sets the string value for the cell at the specified location. For simple applications where a
 grid object automatically uses a default grid table of string values you use this function together
 with \helpref{wxGrid::GetCellValue}{wxgridgetcellvalue} to access cell values. 
 
 For more complex applications where you have derived your own grid table class that contains
 various data types (e.g. numeric, boolean or user-defined custom types) then you only use this
-function for those cells that contain string values. 
+function for those cells that contain string values.
+
+The last form is for backward compatibility only.
 
 See \helpref{wxGridTableBase::CanSetValueAs}{wxgridtablebasecangetvalueas}
 and the \helpref{wxGrid overview}{gridoverview} for more information.
@@ -993,10 +998,10 @@ Sets the width of the specified column.
 This function does not refresh the grid. If you are calling it outside of a BeginBatch / EndBatch
 block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes. 
 
-Automatically sizes the column to fit its contents.  If setAsMin is TRUE the calculated width will
+Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
 also be set as the minimal width for the column.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -1138,10 +1143,10 @@ Sets the height of the specified row.
 This function does not refresh the grid. If you are calling it outside of a BeginBatch / EndBatch
 block you can use \helpref{wxGrid::ForceRefresh}{wxgridforcerefresh} to see the changes. 
 
-Automatically sizes the column to fit its contents.  If setAsMin is TRUE the calculated width will
+Automatically sizes the column to fit its contents. If setAsMin is TRUE the calculated width will
 also be set as the minimal width for the column.
 
-\wxheading{Note} \\
+\wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large. 
 
@@ -1163,7 +1168,7 @@ Set the selection behaviour of the grid.
 
 \func{bool}{SetTable}{\param{wxGridTableBase* }{table}, \param{bool }{takeOwnership = FALSE}, \param{wxGrid::wxGridSelectionModes }{selmode = wxGrid::wxGridSelectCells}}
 
-Passes a pointer to a custom grid table to be used by the grid.  This should be called
+Passes a pointer to a custom grid table to be used by the grid. This should be called
 after the grid constructor and before using the grid object. If takeOwnership is set to
 TRUE then the table will be deleted by the wxGrid destructor. 
 
@@ -1289,98 +1294,98 @@ Methods for a registry for mapping data types to Renderers/Editors
 grid may occupy more space than needed for its rows/columns, this
 function allows to set how big this extra space is
 
-
 \membersection{wxGrid::wxGrid}\label{wxgridwxgrid}
 
 \func{}{wxGrid}{\param{wxWindow* }{parent}, \param{int }{x}, \param{int }{y}, \param{int }{w = -1}, \param{int }{h = -1}, \param{long }{style = wxWANTS\_CHARS}, \param{const wxString\& }{name = wxPanelNameStr}}
 
------- For compatibility with previous wxGrid only...
-
-**  Don't use these in new code because they  **
-**  are liable to disappear in a future       **
-**  revision                                  **
-
-
-
-\membersection{wxGrid::SetCellValue}\label{wxgridsetcellvalue}
-
-\func{void}{SetCellValue}{\param{const wxString\& }{val}, \param{int }{row}, \param{int }{col}}
-
+Backward compatibility.
 
 \membersection{wxGrid::UpdateDimensions}\label{wxgridupdatedimensions}
 
 \func{void}{UpdateDimensions}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetRows}\label{wxgridgetrows}
 
 \func{int}{GetRows}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetCols}\label{wxgridgetcols}
 
 \func{int}{GetCols}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetCursorRow}\label{wxgridgetcursorrow}
 
 \func{int}{GetCursorRow}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetCursorColumn}\label{wxgridgetcursorcolumn}
 
 \func{int}{GetCursorColumn}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetScrollPosX}\label{wxgridgetscrollposx}
 
 \func{int}{GetScrollPosX}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetScrollPosY}\label{wxgridgetscrollposy}
 
 \func{int}{GetScrollPosY}{\void}
 
+Backward compatibility.
 
 \membersection{wxGrid::SetScrollX}\label{wxgridsetscrollx}
 
-\func{void}{SetScrollX}{\param{int }{WXUNUSED(x)}}
+\func{void}{SetScrollX}{\param{int }{x}}
 
+Backward compatibility.
 
 \membersection{wxGrid::SetScrollY}\label{wxgridsetscrolly}
 
-\func{void}{SetScrollY}{\param{int }{WXUNUSED(y)}}
+\func{void}{SetScrollY}{\param{int }{y}}
 
+Backward compatibility.
 
 \membersection{wxGrid::SetColumnWidth}\label{wxgridsetcolumnwidth}
 
 \func{void}{SetColumnWidth}{\param{int }{col}, \param{int }{width}}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetColumnWidth}\label{wxgridgetcolumnwidth}
 
 \func{int}{GetColumnWidth}{\param{int }{col}}
 
+Backward compatibility.
 
 \membersection{wxGrid::SetRowHeight}\label{wxgridsetrowheight}
 
 \func{void}{SetRowHeight}{\param{int }{row}, \param{int }{height}}
 
+Backward compatibility.
 
 \membersection{wxGrid::GetViewHeight}\label{wxgridgetviewheight}
 
 \func{int}{GetViewHeight}{\void}
 
-GetRowHeight() is below
-returned num whole rows visible
+Backward compatibility.
 
+GetRowHeight() is below
+returned num whole rows visible.
 
 \membersection{wxGrid::GetViewWidth}\label{wxgridgetviewwidth}
 
 \func{int}{GetViewWidth}{\void}
 
-returned num whole cols visible
-
+Returned number of whole cols visible.
 
 \membersection{wxGrid::SetLabelSize}\label{wxgridsetlabelsize}
 
@@ -1399,7 +1404,7 @@ returned num whole cols visible
 
 \membersection{wxGrid::GetLabelAlignment}\label{wxgridgetlabelalignment}
 
-\func{int}{GetLabelAlignment}{\param{int }{orientation}, \param{int }{WXUNUSED(align)}}
+\func{int}{GetLabelAlignment}{\param{int }{orientation}, \param{int }{align}}
 
 
 \membersection{wxGrid::SetLabelValue}\label{wxgridsetlabelvalue}
@@ -1416,30 +1421,14 @@ returned num whole cols visible
 
 \constfunc{wxFont}{GetCellTextFont}{\void}
 
-
-\membersection{wxGrid::GetCellTextFont}\label{wxgridgetcelltextfont}
-
-\constfunc{wxFont}{GetCellTextFont}{\param{int }{WXUNUSED(row)}, \param{int }{WXUNUSED(col)}}
+\constfunc{wxFont}{GetCellTextFont}{\param{int }{row}, \param{int }{col}}
 
 
 \membersection{wxGrid::SetCellTextFont}\label{wxgridsetcelltextfont}
 
 \func{void}{SetCellTextFont}{\param{const wxFont\& }{fnt}}
 
-
-\membersection{wxGrid::SetCellTextFont}\label{wxgridsetcelltextfont}
-
 \func{void}{SetCellTextFont}{\param{const wxFont\& }{fnt}, \param{int }{row}, \param{int }{col}}
-
-
-\membersection{wxGrid::SetCellTextColour}\label{wxgridsetcelltextcolour}
-
-\func{void}{SetCellTextColour}{\param{const wxColour\& }{val}, \param{int }{row}, \param{int }{col}}
-
-
-\membersection{wxGrid::SetCellTextColour}\label{wxgridsetcelltextcolour}
-
-\func{void}{SetCellTextColour}{\param{const wxColour\& }{col}}
 
 
 \membersection{wxGrid::SetCellBackgroundColour}\label{wxgridsetcellbackgroundcolour}
@@ -1468,27 +1457,17 @@ returned num whole cols visible
 
 \membersection{wxGrid::SetEditInPlace}\label{wxgridseteditinplace}
 
-\func{void}{SetEditInPlace}{\param{bool }{WXUNUSED(edit) = TRUE}}
-
-
-\membersection{wxGrid::SetCellAlignment}\label{wxgridsetcellalignment}
-
-\func{void}{SetCellAlignment}{\param{int }{align}, \param{int }{row}, \param{int }{col}}
-
-
-\membersection{wxGrid::SetCellAlignment}\label{wxgridsetcellalignment}
-
-\func{void}{SetCellAlignment}{\param{int }{WXUNUSED(align)}}
+\func{void}{SetEditInPlace}{\param{bool }{edit = TRUE}}
 
 
 \membersection{wxGrid::SetCellBitmap}\label{wxgridsetcellbitmap}
 
-\func{void}{SetCellBitmap}{\param{wxBitmap* }{WXUNUSED(bitmap)}, \param{int }{WXUNUSED(row)}, \param{int }{WXUNUSED(col)}}
+\func{void}{SetCellBitmap}{\param{wxBitmap* }{bitmap}, \param{int }{row}, \param{int }{col}}
 
 
 \membersection{wxGrid::SetDividerPen}\label{wxgridsetdividerpen}
 
-\func{void}{SetDividerPen}{\param{const wxPen\& }{WXUNUSED(pen)}}
+\func{void}{SetDividerPen}{\param{const wxPen\& }{pen}}
 
 
 \membersection{wxGrid::GetDividerPen}\label{wxgridgetdividerpen}
@@ -1498,42 +1477,39 @@ returned num whole cols visible
 
 \membersection{wxGrid::OnActivate}\label{wxgridonactivate}
 
-\func{void}{OnActivate}{\param{bool }{WXUNUSED(active)}}
-
+\func{void}{OnActivate}{\param{bool }{active}}
 
 \membersection{wxGrid::Fit}\label{wxgridfit}
 
 \func{void}{Fit}{\void}
 
-overridden wxWindow methods
-
+Overridden wxWindow methods
 
 \membersection{wxGrid::DoGetBestSize}\label{wxgriddogetbestsize}
 
 \constfunc{wxSize}{DoGetBestSize}{\void}
 
-
 \membersection{wxGrid::InitRowHeights}\label{wxgridinitrowheights}
 
 \func{void}{InitRowHeights}{\void}
 
-NB: *never* access m\_row/col arrays directly because they are created
-on demand, *always* use accessor functions instead!
-init the m\_rowHeights/Bottoms arrays with default values
+NB: {\it never} access m\_row/col arrays directly because they are created
+on demand, {\it always} use accessor functions instead!
 
+Init the m\_rowHeights/Bottoms arrays with default values.
 
 \membersection{wxGrid::InitColWidths}\label{wxgridinitcolwidths}
 
 \func{void}{InitColWidths}{\void}
 
-init the m\_colWidths/Rights arrays
+Init the m\_colWidths/Rights arrays
 
 
 \membersection{wxGrid::GetColWidth}\label{wxgridgetcolwidth}
 
 \constfunc{int}{GetColWidth}{\param{int }{col}}
 
-get the col/row coords
+Get the col/row coords
 
 
 \membersection{wxGrid::GetColLeft}\label{wxgridgetcolleft}
@@ -1550,8 +1526,7 @@ get the col/row coords
 
 \constfunc{int}{GetRowHeight}{\param{int }{row}}
 
-this function must be public for compatibility...
-
+This function must be public for compatibility.
 
 \membersection{wxGrid::GetRowTop}\label{wxgridgetrowtop}
 
@@ -1567,20 +1542,17 @@ this function must be public for compatibility...
 
 \func{int}{SetOrCalcColumnSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = TRUE}}
 
-common part of AutoSizeColumn/Row() and GetBestSize()
-
+Common part of AutoSizeColumn/Row() and GetBestSize()
 
 \membersection{wxGrid::SetOrCalcRowSizes}\label{wxgridsetorcalcrowsizes}
 
 \func{int}{SetOrCalcRowSizes}{\param{bool }{calcOnly}, \param{bool }{setAsMin = TRUE}}
 
-
 \membersection{wxGrid::AutoSizeColOrRow}\label{wxgridautosizecolorrow}
 
 \func{void}{AutoSizeColOrRow}{\param{int }{n}, \param{bool }{setAsMin}, \param{bool }{column}}
 
-common part of AutoSizeColumn/Row()
-or row? 
+Common part of AutoSizeColumn/Row() or row? 
 
 \membersection{wxGrid::GetColMinimalWidth}\label{wxgridgetcolminimalwidth}
 
@@ -1588,19 +1560,16 @@ or row?
 
 get the minimal width of the given column/row
 
-
 \membersection{wxGrid::GetRowMinimalHeight}\label{wxgridgetrowminimalheight}
 
 \constfunc{int}{GetRowMinimalHeight}{\param{int }{col}}
-
 
 \membersection{wxGrid::CanHaveAttributes}\label{wxgridcanhaveattributes}
 
 \func{bool}{CanHaveAttributes}{\void}
 
-do we have some place to store attributes in?
-
+Do we have some place to store attributes in?
 
 \membersection{wxGrid::GetOrCreateCellAttr}\label{wxgridgetorcreatecellattr}
 
-\constfunc{wxGridCellAttr*}{GetOrCreateCellAttr}{\param{int }{row}, \param{int }{col}
+\constfunc{wxGridCellAttr*}{GetOrCreateCellAttr}{\param{int }{row}, \param{int }{col}}
