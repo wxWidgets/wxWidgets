@@ -326,6 +326,26 @@ int wxFileDialog::ShowModal()
     bool success = (m_dialogStyle & wxSAVE) ? (GetSaveFileName(&of) != 0)
                                             : (GetOpenFileName(&of) != 0);
 
+    DWORD errCode = CommDlgExtendedError();
+
+    if (!success && (errCode == CDERR_STRUCTSIZE))
+    {
+        // The struct size has changed so try a smaller or bigger size
+
+        int oldStructSize = of.lStructSize;
+        of.lStructSize       = oldStructSize - (sizeof(void *) + 2*sizeof(DWORD));
+        success = (m_dialogStyle & wxSAVE) ? (GetSaveFileName(&of) != 0)
+                                            : (GetOpenFileName(&of) != 0);
+        errCode = CommDlgExtendedError();
+
+        if (!success && (errCode == CDERR_STRUCTSIZE))
+        {
+            of.lStructSize       = oldStructSize + (sizeof(void *) + 2*sizeof(DWORD));
+            success = (m_dialogStyle & wxSAVE) ? (GetSaveFileName(&of) != 0)
+                                            : (GetOpenFileName(&of) != 0);
+        }
+    }
+
     if ( success )
     {
         m_fileNames.Empty();
