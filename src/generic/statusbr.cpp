@@ -98,32 +98,31 @@ bool wxStatusBarGeneric::Create(wxWindow *parent,
 
 void wxStatusBarGeneric::SetFieldsCount(int number, const int *widths)
 {
-  m_nFields = number;
+    if ( number != m_nFields )
+    {
+        m_nFields = number;
 
-  if ( m_statusWidths )
-    delete[] m_statusWidths;
-
-  if ( m_statusStrings )
         delete[] m_statusStrings;
+        m_statusStrings = new wxString[number];
 
-  m_statusStrings = new wxString[number];
+#if 0 // VZ: what is this for?
+        int i;
+        for (i = 0; i < number; i++)
+            m_statusStrings[i] = "";
+#endif
+    }
 
-  int i;
-  for (i = 0; i < number; i++)
-    m_statusStrings[i] = "";
-
-  if ( widths )
-      SetStatusWidths(number, widths);
+    SetStatusWidths(number, widths);
 }
 
 void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
 {
-  if ((number < 0) || (number >= m_nFields))
-    return;
+    wxCHECK_RET( (number >= 0) && (number < m_nFields),
+                 _T("invalid status bar field index") );
 
-  m_statusStrings[number] = text;
+    m_statusStrings[number] = text;
 
-  Refresh();
+    Refresh();
 }
 
 wxString wxStatusBarGeneric::GetStatusText(int n) const
@@ -136,29 +135,40 @@ wxString wxStatusBarGeneric::GetStatusText(int n) const
 
 void wxStatusBarGeneric::SetStatusWidths(int n, const int widths_field[])
 {
-  // only set status widths, when n == number of statuswindows
-  if (n == m_nFields)
-  {
-    // only set status widths,
-    // when one window (minimum) is variable (width <= 0)
-    bool is_variable = FALSE;
-    int i;
-    for (i = 0; i < m_nFields; i++)
+    // only set status widths, when n == number of statuswindows
+    wxCHECK_RET( n == m_nFields, _T("status bar field count mismatch") );
+
+    // delete the old widths in any case - this function may be used to reset
+    // the widths to the default (all equal)
+    delete [] m_statusWidths;
+
+    if ( !widths_field )
     {
-      if (widths_field[i] <= 0) is_variable = TRUE;
+        // not an error, see the comment above
+        m_statusWidths = (int *)NULL;
+
+        return;
     }
 
-    // if there are old widths, delete them
-    if (m_statusWidths)
-      delete [] m_statusWidths;
+    int i;
+
+    // VZ: this doesn't do anything as is_variable is unused later
+#if 0
+    // when one window (minimum) is variable (width <= 0)
+    bool is_variable = FALSE;
+    for (i = 0; i < m_nFields; i++)
+    {
+        if (widths_field[i] <= 0)
+            is_variable = TRUE;
+    }
+#endif // 0
 
     // set widths
     m_statusWidths = new int[n];
     for (i = 0; i < m_nFields; i++)
     {
-      m_statusWidths[i] = widths_field[i];
+        m_statusWidths[i] = widths_field[i];
     }
-  }
 }
 
 void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )

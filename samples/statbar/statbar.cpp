@@ -44,6 +44,7 @@
     #include "wx/statbmp.h"
     #include "wx/menu.h"
     #include "wx/msgdlg.h"
+    #include "wx/textdlg.h"
 #endif
 
 #include "wx/datetime.h"
@@ -82,6 +83,7 @@ public:
     void UpdateClock();
 
     // event handlers
+    void OnTimer(wxTimerEvent& event) { UpdateClock(); }
     void OnSize(wxSizeEvent& event);
     void OnToggleClock(wxCommandEvent& event);
 
@@ -95,16 +97,7 @@ private:
         Field_Max
     };
 
-    class MyTimer : public wxTimer
-    {
-    public:
-        MyTimer(MyStatusBar *statbar) {m_statbar = statbar; }
-
-        virtual void Notify() { m_statbar->UpdateClock(); }
-
-    private:
-        MyStatusBar *m_statbar;
-    } m_timer;
+    wxTimer m_timer;
 
     wxCheckBox *m_checkbox;
     wxStaticBitmap *m_statbmp;
@@ -123,6 +116,8 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+
+    void OnSetStatusFields(wxCommandEvent& event);
     void OnRecreateStatusBar(wxCommandEvent& event);
 
 private:
@@ -151,6 +146,7 @@ enum
 {
     // menu items
     StatusBar_Quit = 1,
+    StatusBar_SetFields,
     StatusBar_Recreate,
     StatusBar_About,
     StatusBar_Checkbox = 1000
@@ -168,6 +164,7 @@ static const int BITMAP_SIZE_Y = 15;
 // simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(StatusBar_Quit,  MyFrame::OnQuit)
+    EVT_MENU(StatusBar_SetFields, MyFrame::OnSetStatusFields)
     EVT_MENU(StatusBar_Recreate, MyFrame::OnRecreateStatusBar)
     EVT_MENU(StatusBar_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
@@ -175,6 +172,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(MyStatusBar, wxStatusBar)
     EVT_SIZE(MyStatusBar::OnSize)
     EVT_CHECKBOX(StatusBar_Checkbox, MyStatusBar::OnToggleClock)
+    EVT_TIMER(-1, MyStatusBar::OnTimer)
 END_EVENT_TABLE()
 
 // Create a new application object: this macro will allow wxWindows to create
@@ -231,6 +229,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFile->Append(StatusBar_Quit, "E&xit\tAlt-X", "Quit this program");
 
     wxMenu *statbarMenu = new wxMenu;
+    statbarMenu->Append(StatusBar_SetFields, "&Set field count\tCtrl-C",
+                        "Set the number of status bar fields");
     statbarMenu->Append(StatusBar_Recreate, "&Recreate\tCtrl-R",
                         "Toggle status bar format");
 
@@ -294,6 +294,44 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
 }
 
 // event handlers
+void MyFrame::OnSetStatusFields(wxCommandEvent& WXUNUSED(event))
+{
+    wxStatusBar *sb = GetStatusBar();
+
+    long nFields = wxGetNumberFromUser
+                   (
+                    "Select the number of fields in the status bar",
+                    "Fields:",
+                    "wxWindows statusbar sample",
+                    sb->GetFieldsCount(),
+                    1, 5,
+                    this
+                   );
+
+    // we don't check if the number changed at all on purpose: calling
+    // SetFieldsCount() with the same number of fields should be ok
+    if ( nFields != -1 )
+    {
+        // we set the widths only for 2 of them, otherwise let all the fields
+        // have equal width (the default behaviour)
+        const int *widths = NULL;
+        if ( nFields == 2 )
+        {
+            static const int widthsFor2Fields[2] = { 200, -1 };
+            widths = widthsFor2Fields;
+        }
+
+        sb->SetFieldsCount(nFields, widths);
+
+        wxLogStatus(this,
+                    wxString::Format("Status bar now has %ld fields", nFields));
+    }
+    else
+    {
+        wxLogStatus(this, "Cancelled");
+    }
+}
+
 void MyFrame::OnRecreateStatusBar(wxCommandEvent& WXUNUSED(event))
 {
     DoCreateStatusBar(m_statbarKind == StatBar_Custom ? StatBar_Default
