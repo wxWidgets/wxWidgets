@@ -24,7 +24,7 @@ public:
     static wxColour    GetSystemColour(int index);
     static wxFont      GetSystemFont(int index);
     static int         GetSystemMetric(int index);
-    static bool        HasFrameDecorations() { return TRUE; }
+    static bool        GetCapability(int index);
 }; // end of CLASS wxSystemSettings
 
 #endif

@@ -55,6 +55,7 @@ WX_FORWARD_TO_INPUT_CONSUMER(wxTopLevelWindow)
 // ============================================================================
 
 int wxTopLevelWindow::ms_drawDecorations = -1;
+int wxTopLevelWindow::ms_canIconize = -1;
 
 void wxTopLevelWindow::Init()
 {
@@ -76,10 +77,18 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
          exstyleOrig = 0;
 
     if ( ms_drawDecorations == -1 )
-        ms_drawDecorations = !wxSystemSettings::HasFrameDecorations() ||
-                             wxGetEnv(wxT("WXDECOR"), NULL);
+    {
+        ms_drawDecorations = 
+            !wxSystemSettings::GetCapability(wxSYS_CAN_DRAW_FRAME_DECORATIONS) 
+            || wxGetEnv(wxT("WXDECOR"), NULL);
         // FIXME -- wxUniv should provide a way to force non-native decorations!
         //          $WXDECOR is just a hack in absence of better wxUniv solution
+    }
+
+    if ( ms_canIconize == -1 )
+    {
+        ms_canIconize = wxSystemSettings::GetCapability(wxSYS_CAN_ICONIZE_FRAME);
+    }
 
     if ( ms_drawDecorations )
     {
@@ -138,7 +147,7 @@ long wxTopLevelWindow::GetDecorationsStyle() const
     if ( m_windowStyle & wxCAPTION )
     {
         style |= wxTOPLEVEL_TITLEBAR | wxTOPLEVEL_BUTTON_CLOSE;
-        if ( m_windowStyle & wxMINIMIZE_BOX )
+        if ( (m_windowStyle & wxMINIMIZE_BOX) && ms_canIconize )
             style |= wxTOPLEVEL_BUTTON_ICONIZE;
         if ( m_windowStyle & wxMAXIMIZE_BOX )
         {

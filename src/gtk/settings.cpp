@@ -369,3 +369,16 @@ int wxSystemSettings::GetSystemMetric( int index )
 
     return 0;
 }
+
+bool wxSystemSettings::GetCapability(int index)
+{
+    switch (index)
+    {
+        case wxSYS_CAN_ICONIZE_FRAME: 
+            return FALSE; break;
+        case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
+            return TRUE; break;
+        default:
+            return FALSE;
+    }
+}

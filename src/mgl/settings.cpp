@@ -32,3 +32,16 @@ int wxSystemSettings::GetSystemMetric(int WXUNUSED(index))
     // FIXME_MGL
     return 1;
 }
+
+bool wxSystemSettings::GetCapability(int index)
+{
+    switch (index)
+    {
+        case wxSYS_CAN_ICONIZE_FRAME: 
+            return FALSE; break;
+        case wxSYS_CAN_DRAW_FRAME_DECORATIONS:
+            return FALSE; break;
+        default:
+            return FALSE;
+    }
+}

@@ -106,6 +106,10 @@
 #define wxSYS_SHOW_SOUNDS             36
 #define wxSYS_SWAP_BUTTONS            37
 
+// Platform capabilities
+#define wxSYS_CAN_DRAW_FRAME_DECORATIONS  1
+#define wxSYS_CAN_ICONIZE_FRAME           2
+
 #if defined(__WXMSW__)
 #include "wx/msw/settings.h"
 #elif defined(__WXMOTIF__)

@@ -37,8 +37,9 @@ public:
     // Get a system metric, e.g. scrollbar size
     static int         GetSystemMetric(int index);
 
-    // Return true if the port can draw frame titlebar (i.e. doesn't need wxUniv for it)
-    static bool        HasFrameDecorations() { return TRUE; }
+    // Return true if the port has certain feature
+    static bool        GetCapability(int index);
+
 };
 
 #endif
