@@ -7142,8 +7142,12 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
     // now also compare with the column label extent
     wxCoord w, h;
     dc.SetFont( GetLabelFont() );
-    dc.GetTextExtent( column ? GetColLabelValue(col)
-                             : GetRowLabelValue(row), &w, &h );
+
+    if ( column )
+        dc.GetTextExtent( GetColLabelValue(col), &w, &h );
+    else
+        dc.GetTextExtent( GetRowLabelValue(col), &w, &h );
+
     extent = column ? w : h;
     if ( extent > extentMax )
     {
