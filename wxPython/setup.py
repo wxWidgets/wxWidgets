@@ -932,7 +932,7 @@ if BUILD_OGL:
     msg('Preparing OGL...')
     location = 'contrib/ogl'
 
-    swig_sources = run_swig(['ogl.i'], location, '', PKGDIR,
+    swig_sources = run_swig(['ogl.i'], location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps +
                             [ '%s/_oglbasic.i' % location,
                               '%s/_oglshapes.i' % location,
@@ -944,7 +944,7 @@ if BUILD_OGL:
     ext = Extension('_ogl',
                     swig_sources,
 
-                    include_dirs =  includes,
+                    include_dirs =  includes + [ location ],
                     define_macros = defines + [('wxUSE_DEPRECATED', '0')],
 
                     library_dirs = libdirs,
@@ -1082,13 +1082,13 @@ if BUILD_GIZMOS:
     msg('Preparing GIZMOS...')
     location = 'contrib/gizmos'
 
-    swig_sources = run_swig(['gizmos.i'], location, '', PKGDIR,
+    swig_sources = run_swig(['gizmos.i'], location, GENDIR, PKGDIR,
                             USE_SWIG, swig_force, swig_args, swig_deps)
 
     ext = Extension('_gizmos',
                     [ '%s/treelistctrl.cpp' % location ] + swig_sources,
 
-                    include_dirs =  includes,
+                    include_dirs =  includes + [ location ],
                     define_macros = defines,
 
                     library_dirs = libdirs,
