@@ -419,6 +419,8 @@ void wxScrollHelper::AdjustScrollbars()
         // current client window
         int noPagePositions = (int) ( (w/(double)m_xScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
+        if ( noPagePositions > m_xScrollLines )
+            noPagePositions = m_xScrollLines;
 
         // Correct position if greater than extent of canvas minus
         // the visible portion of it or if below zero
@@ -441,6 +443,8 @@ void wxScrollHelper::AdjustScrollbars()
         // current client window
         int noPagePositions = (int) ( (h/(double)m_yScrollPixelsPerLine) + 0.5 );
         if (noPagePositions < 1) noPagePositions = 1;
+        if ( noPagePositions > m_yScrollLines )
+            noPagePositions = m_yScrollLines;
 
         // Correct position if greater than extent of canvas minus
         // the visible portion of it or if below zero

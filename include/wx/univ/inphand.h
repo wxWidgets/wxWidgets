@@ -223,6 +223,7 @@ protected:
     wxRenderer *m_renderer;
 
     wxWindow *m_winCapture;
+    int m_btnCapture;
 };
 
 #endif // _WX_UNIV_INPHAND_H_

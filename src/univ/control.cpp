@@ -77,7 +77,6 @@ bool wxControl::Create(wxWindow *parent,
     if ( !wxControlBase::Create(parent, id, pos, size, style, validator, name) )
         return FALSE;
 
-    m_renderer = wxTheme::Get()->GetRenderer();
     m_handler = CreateInputHandler();
 
     SetBackgroundColour(parent->GetBackgroundColour());
@@ -191,15 +190,6 @@ bool wxControl::PerformAction(const wxControlAction& action,
                               const wxString& strArg)
 {
     return FALSE;
-}
-
-// ----------------------------------------------------------------------------
-// border
-// ----------------------------------------------------------------------------
-
-wxBorder wxControl::GetDefaultBorder() const
-{
-    return AcceptsFocus() ? wxBORDER_SUNKEN : wxBORDER_NONE;
 }
 
 #endif // wxUSE_CONTROLS

@@ -90,10 +90,6 @@ public:
                                const wxString& strArg = wxEmptyString);
 
 protected:
-    // by default static controls don't have the border and all the others do
-    // have it
-    virtual wxBorder GetDefaultBorder() const;
-
     // create the event translator object for this control: the base class
     // action creates the default one which doesn't do anything
     virtual wxInputHandler *CreateInputHandler() const;

@@ -113,23 +113,27 @@ public:
                                     wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
+    virtual void DrawScrollCorner(wxDC& dc,
+                                  const wxRect& rect);
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
+    virtual wxRect GetBorderDimensions(wxBorder border) const;
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const;
+    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar);
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const;
     virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
                                      int thumbPos = -1);
     virtual int PixelToScrollbar(const wxScrollBar *scrollbar, wxCoord coord);
     virtual wxCoord GetListboxItemHeight(wxCoord fontHeight)
-        { return fontHeight + 2; }
+        { return fontHeight; }
 
 protected:
     // common part of DrawLabel() and DrawItem()
@@ -709,7 +713,7 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknwon border type"));
+            wxFAIL_MSG(_T("unknown border type"));
             // fall through
 
         case wxBORDER_DEFAULT:
@@ -719,6 +723,44 @@ void wxWin32Renderer::DrawBorder(wxDC& dc,
 
     if ( rectIn )
         *rectIn = rect;
+}
+
+wxRect wxWin32Renderer::GetBorderDimensions(wxBorder border) const
+{
+    wxCoord width;
+    switch ( border )
+    {
+        case wxBORDER_RAISED:
+        case wxBORDER_SUNKEN:
+            width = 2;
+            break;
+
+        case wxBORDER_SIMPLE:
+        case wxBORDER_STATIC:
+            width = 1;
+            break;
+
+        case wxBORDER_DOUBLE:
+            width = 3;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown border type"));
+            // fall through
+
+        case wxBORDER_DEFAULT:
+        case wxBORDER_NONE:
+            width = 0;
+            break;
+    }
+
+    wxRect rect;
+    rect.x =
+    rect.y =
+    rect.width =
+    rect.height = width;
+
+    return rect;
 }
 
 // ----------------------------------------------------------------------------
@@ -847,29 +889,34 @@ void wxWin32Renderer::DrawFocusRect(wxDC& dc, const wxRect& rect)
 #if 0
     DrawRect(dc, &rect, wxPen(*wxBLACK, 0, wxDOT));
 #else
-    // draw the pixels manually
+    // draw the pixels manually: note that to behave in the same manner as
+    // DrawRect(), we must exclude the bottom and right borders from the
+    // rectangle
+    wxCoord x1 = rect.GetLeft(),
+            y1 = rect.GetTop(),
+            x2 = rect.GetRight(),
+            y2 = rect.GetBottom();
+
     dc.SetPen(wxPen(*wxBLACK, 0, wxSOLID));
-    //dc.SetLogicalFunction(wxXOR);
+    dc.SetLogicalFunction(wxINVERT);
 
-    // Windows quirk: appears to draw them like this, from right to left
-    // (and I don't have Hebrew windows to see what happens there :-)
-    for ( wxCoord x = rect.GetRight(); x >= rect.GetLeft(); x -= 2 )
-    {
-        dc.DrawPoint(x, rect.GetTop());
-        dc.DrawPoint(x, rect.GetBottom());
-    }
+    wxCoord z;
+    for ( z = x1 + 1; z < x2; z += 2 )
+        dc.DrawPoint(z, rect.GetTop());
 
-    wxCoord shift = rect.width % 2 ? 0 : 1;
-    for ( wxCoord y = rect.GetTop() + 2; y <= rect.GetBottom(); y+= 2 )
-    {
-        dc.DrawPoint(rect.GetLeft(), y - shift);
-        dc.DrawPoint(rect.GetRight(), y);
-    }
+    wxCoord shift = z == x2 ? 0 : 1;
+    for ( z = y1 + shift; z < y2; z += 2 )
+        dc.DrawPoint(x2, z);
 
-    if ( shift )
-    {
-        dc.DrawPoint(rect.GetLeft(), rect.GetBottom() - 1);
-    }
+    shift = z == y2 ? 0 : 1;
+    for ( z = x2 - shift; z > x1; z -= 2 )
+        dc.DrawPoint(z, y2);
+
+    shift = z == x1 ? 0 : 1;
+    for ( z = y2 - shift; z > y1; z -= 2 )
+        dc.DrawPoint(x1, z);
+
+    dc.SetLogicalFunction(wxCOPY);
 #endif // 0/1
 }
 
@@ -912,6 +959,16 @@ void wxWin32Renderer::DrawLabel(wxDC& dc,
 
     if ( flags & wxCONTROL_FOCUSED )
     {
+        if ( flags & wxCONTROL_PRESSED )
+        {
+            // the focus rectangle is never pressed, so undo the shift done
+            // above
+            rectText.x--;
+            rectText.y--;
+            rectText.width--;
+            rectText.height--;
+        }
+
         DrawFocusRect(dc, rectText);
     }
 }
@@ -924,20 +981,21 @@ void wxWin32Renderer::DrawItem(wxDC& dc,
     wxColour colFg;
     if ( flags & wxCONTROL_SELECTED )
     {
-        dc.SetBrush(wxBrush(m_scheme->Get(wxColourScheme::HIGHLIGHT), wxSOLID));
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.DrawRectangle(rect);
+        wxColour colBg = m_scheme->Get(wxColourScheme::HIGHLIGHT);
         colFg = dc.GetTextForeground();
         dc.SetTextForeground(m_scheme->Get(wxColourScheme::HIGHLIGHT_TEXT));
+        dc.SetBrush(wxBrush(colBg, wxSOLID));
+        dc.SetPen(wxPen(colBg, 0, wxSOLID));
+        dc.DrawRectangle(rect);
     }
 
     wxRect rectText = rect;
     rectText.x += 2;
+    rectText.width -= 2;
     dc.DrawLabel(label, wxNullBitmap, rectText);
 
     if ( flags & wxCONTROL_FOCUSED )
     {
-        dc.SetBrush(*wxTRANSPARENT_BRUSH);
         DrawFocusRect(dc, rect);
     }
 
@@ -1037,6 +1095,7 @@ void wxWin32Renderer::DrawArrowButton(wxDC& dc,
                                       wxArrowStyle arrowStyle)
 {
     wxRect rect = rectAll;
+    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL), rect);
     DrawArrowBorder(dc, &rect, arrowStyle == Arrow_Pressed);
     DrawArrow(dc, rect, arrowDir, arrowStyle);
 }
@@ -1061,12 +1120,22 @@ void wxWin32Renderer::DrawScrollbarShaft(wxDC& dc,
                      rectBar);
 }
 
+void wxWin32Renderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
+{
+    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL), rect);
+}
+
 wxRect wxWin32Renderer::GetScrollbarRect(const wxScrollBar *scrollbar,
                                          wxScrollBar::Element elem,
                                          int thumbPos) const
 {
     return StandardGetScrollbarRect(scrollbar, elem,
                                     thumbPos, m_sizeScrollbarArrow);
+}
+
+wxCoord wxWin32Renderer::GetScrollbarSize(const wxScrollBar *scrollbar)
+{
+    return StandardScrollBarSize(scrollbar, m_sizeScrollbarArrow);
 }
 
 wxHitTest wxWin32Renderer::HitTestScrollbar(const wxScrollBar *scrollbar,
@@ -1115,34 +1184,9 @@ void wxWin32Renderer::AdjustSize(wxSize *size, const wxWindow *window)
     else
     {
         // take into account the border width
-        wxBorder border = (wxBorder)(window->GetWindowStyle() & wxBORDER_MASK);
-        switch ( border )
-        {
-            case wxBORDER_SUNKEN:
-            case wxBORDER_RAISED:
-                size->x += 4;
-                size->y += 4;
-                break;
-
-            case wxBORDER_SIMPLE:
-            case wxBORDER_STATIC:
-                size->x += 2;
-                size->y += 2;
-                break;
-
-            case wxBORDER_DOUBLE:
-                size->x += 6;
-                size->y += 6;
-                break;
-
-            default:
-                wxFAIL_MSG(_T("unknwon border type"));
-                // fall through
-
-            case wxBORDER_DEFAULT:
-            case wxBORDER_NONE:
-                break;
-        }
+        wxRect rectBorder = GetBorderDimensions(window->GetBorder());
+        size->x += rectBorder.x + rectBorder.width;
+        size->y += rectBorder.y + rectBorder.height;
     }
 }
 

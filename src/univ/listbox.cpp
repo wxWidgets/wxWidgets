@@ -62,6 +62,7 @@ void wxListBox::Init()
     // will be calculated later when needed
     m_lineHeight = 0;
     m_itemsPerPage = 0;
+    m_maxWidth = 0;
 
     // no items hence no current item
     m_current = -1;
@@ -69,8 +70,12 @@ void wxListBox::Init()
 
     // no need to update anything initially
     m_updateCount = 0;
-    m_updateScrollbar =
-    m_showScrollbar = FALSE;
+
+    // no scrollbars to show nor update
+    m_updateScrollbarX =
+    m_showScrollbarX =
+    m_updateScrollbarY =
+    m_showScrollbarY = FALSE;
 }
 
 bool wxListBox::Create(wxWindow *parent,
@@ -83,6 +88,11 @@ bool wxListBox::Create(wxWindow *parent,
                        const wxValidator& validator,
                        const wxString &name)
 {
+    // for compatibility accept both the new and old styles - they mean the
+    // same thing for us
+    if ( style & wxLB_ALWAYS_SB )
+        style |= wxALWAYS_SHOW_SB;
+
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
 
@@ -113,7 +123,20 @@ int wxListBox::DoAppend(const wxString& item)
     size_t index = m_strings.Add(item);
     m_clientData.Insert(NULL, index);
 
-    m_updateScrollbar = TRUE;
+    m_updateScrollbarY = TRUE;
+
+    if ( HasHorzScrollbar() )
+    {
+        // has the max width increased?
+        wxClientDC dc(this);
+        wxCoord width;
+        dc.GetTextExtent(item, &width, NULL);
+        if ( width > m_maxWidth )
+        {
+            m_maxWidth = width;
+            m_updateScrollbarX = TRUE;
+        }
+    }
 
     RefreshItem(m_strings.GetCount() - 1);
 
@@ -133,7 +156,14 @@ void wxListBox::DoInsertItems(const wxArrayString& items, int pos)
         m_clientData.Insert(NULL, pos + n);
     }
 
-    m_updateScrollbar = TRUE;
+    // the number of items has changed
+    m_updateScrollbarY = TRUE;
+
+    // the max width also might have changed - just recalculate it instead of
+    // keeping track of it here, this is probably more efficient for a typical
+    // use pattern
+    m_maxWidth = 0;
+    m_updateScrollbarX = TRUE;
 
     RefreshItems(pos, count);
 }
@@ -143,6 +173,9 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
     DoClear();
 
     size_t count = items.GetCount();
+    if ( !count )
+        return;
+
     m_strings.Alloc(count);
     m_clientData.Alloc(count);
     for ( size_t n = 0; n < count; n++ )
@@ -151,9 +184,44 @@ void wxListBox::DoSetItems(const wxArrayString& items, void **clientData)
         m_clientData.Insert(clientData ? clientData[n] : NULL, index);
     }
 
-    m_updateScrollbar = TRUE;
+    m_updateScrollbarY = TRUE;
 
     RefreshAll();
+}
+
+void wxListBox::SetString(int n, const wxString& s)
+{
+    if ( HasHorzScrollbar() )
+    {
+        // we need to update m_maxWidth as changing the string may cause the
+        // horz scrollbar [dis]appear
+        wxCoord widthOld;
+        GetTextExtent(m_strings[n], &widthOld, NULL);
+        m_strings[n] = s;
+
+        // has the max length changed?
+        wxCoord width;
+        GetTextExtent(s, &width, NULL);
+
+        // it might have increased if the new string is long
+        if ( width > m_maxWidth )
+        {
+            m_maxWidth = width;
+            m_updateScrollbarX = TRUE;
+        }
+        // or also decreased if the old string was the longest one
+        else if ( (width < m_maxWidth) && (widthOld == m_maxWidth) )
+        {
+            m_maxWidth = 0;
+            m_updateScrollbarX = TRUE;
+        }
+    }
+    else // no horz scrollbar
+    {
+        m_strings[n] = s;
+    }
+
+    RefreshItem(n);
 }
 
 // ----------------------------------------------------------------------------
@@ -180,7 +248,7 @@ void wxListBox::Clear()
 {
     DoClear();
 
-    m_updateScrollbar = TRUE;
+    m_updateScrollbarY = TRUE;
 
     RefreshAll();
 }
@@ -198,7 +266,7 @@ void wxListBox::Delete(int n)
 
     m_clientData.RemoveAt(n);
 
-    m_updateScrollbar = TRUE;
+    m_updateScrollbarY = TRUE;
 
     RefreshItems(n, GetCount() - n);
 }
@@ -337,8 +405,8 @@ void wxListBox::RefreshItem(int n)
             // add this item to the others which we have to refresh
             if ( m_updateFrom < n )
             {
-                if ( m_updateCount < n - m_updateFrom )
-                    m_updateFrom = n - m_updateFrom;
+                if ( m_updateCount < n - m_updateFrom + 1 )
+                    m_updateCount = n - m_updateFrom + 1;
             }
             else // n <= m_updateFrom
             {
@@ -355,20 +423,51 @@ void wxListBox::RefreshAll()
 
 void wxListBox::OnIdle(wxIdleEvent& event)
 {
-    if ( m_updateScrollbar )
+    if ( m_updateScrollbarY || m_updateScrollbarX )
     {
-        // is our height enough to show all items?
-        wxCoord lineHeight = GetLineHeight();
-        bool showScrollbar = GetCount()*lineHeight > GetClientSize().y;
-        if ( showScrollbar != m_showScrollbar )
-        {
-            // TODO: support for horz scrollbar
-            SetScrollbars(0, lineHeight, 0, GetCount());
+        wxSize size = GetClientSize();
 
-            m_showScrollbar = showScrollbar;
+        // is our height enough to show all items?
+        int nLines = GetCount();
+        wxCoord lineHeight = GetLineHeight();
+        bool showScrollbarY = nLines*lineHeight > size.y;
+
+        // check the width too if required
+        wxCoord charWidth, maxWidth;
+        bool showScrollbarX;
+        if ( HasHorzScrollbar() )
+        {
+            charWidth = GetCharWidth();
+            maxWidth = GetMaxWidth();
+            showScrollbarX = maxWidth > size.x;
+        }
+        else // never show it
+        {
+            charWidth = maxWidth = 0;
+            showScrollbarX = FALSE;
         }
 
-        m_updateScrollbar = FALSE;
+        // reset scrollbars if something changed
+        if ( (showScrollbarY != m_showScrollbarY) ||
+             (showScrollbarX != m_showScrollbarX) )
+        {
+            int x, y;
+            GetViewStart(&x, &y);
+            SetScrollbars(charWidth, lineHeight,
+                          showScrollbarX
+                            ? (maxWidth + 2*charWidth - 1) / charWidth
+                            : 0,
+                          showScrollbarY
+                            ? nLines
+                            : 0,
+                          x, y);
+
+            m_showScrollbarX = showScrollbarX;
+            m_showScrollbarY = showScrollbarY;
+        }
+
+        m_updateScrollbarX = FALSE;
+        m_updateScrollbarY = FALSE;
     }
 
     if ( m_currentChanged )
@@ -390,14 +489,13 @@ void wxListBox::OnIdle(wxIdleEvent& event)
         }
         else
         {
-            wxRect rect;
-            rect.x = 0;
-            rect.y = m_updateFrom*GetLineHeight();
-            rect.width = 32767; // larger than our size
+            wxRect rect = GetClientRect();
+            rect.y += m_updateFrom*GetLineHeight();
             rect.height = m_updateCount*GetLineHeight();
+            CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
 
             wxLogTrace(_T("listbox"), _T("Refreshing items %d..%d (%d-%d)"),
-                       m_updateFrom, m_updateFrom + m_updateCount,
+                       m_updateFrom, m_updateFrom + m_updateCount - 1,
                        rect.GetTop(), rect.GetBottom());
 
             Refresh(TRUE, &rect);
@@ -411,10 +509,16 @@ void wxListBox::OnIdle(wxIdleEvent& event)
 // drawing
 // ----------------------------------------------------------------------------
 
+wxBorder wxListBox::GetDefaultBorder() const
+{
+    return wxBORDER_SUNKEN;
+}
+
 void wxListBox::DoDraw(wxControlRenderer *renderer)
 {
+#if 0
     // draw the border first
-    if ( m_showScrollbar )
+    if ( m_showScrollbarY )
     {
         // we need to draw a border around the client area
         renderer->GetRect().width -= GetScrollbar(wxVERTICAL)->GetSize().x;
@@ -422,21 +526,25 @@ void wxListBox::DoDraw(wxControlRenderer *renderer)
 
     // the base class version does it for us
     wxControl::DoDraw(renderer);
+#endif
 
     // adjust the DC to account for scrolling
     wxDC& dc = renderer->GetDC();
     PrepareDC(dc);
 
     // get the items which must be redrawn
-#if 0
-    int y;
-    GetViewStart(NULL, &y);
+#if 1
     wxCoord lineHeight = GetLineHeight();
     wxRegion rgnUpdate = GetUpdateRegion();
+    rgnUpdate.Intersect(GetClientRect());
     //dc.SetClippingRegion(rgnUpdate);
     wxRect rectUpdate = rgnUpdate.GetBox();
-    size_t itemFirst = rectUpdate.GetTop() / lineHeight,
-           itemLast = (rectUpdate.GetBottom() + lineHeight - 1) / lineHeight,
+
+    int yTop, yBottom;
+    CalcUnscrolledPosition(0, rectUpdate.GetTop(), NULL, &yTop);
+    CalcUnscrolledPosition(0, rectUpdate.GetBottom(), NULL, &yBottom);
+    size_t itemFirst = yTop / lineHeight,
+           itemLast = (yBottom + lineHeight - 1) / lineHeight,
            itemMax = m_strings.GetCount();
 
     if ( itemFirst >= itemMax )
@@ -499,6 +607,25 @@ wxCoord wxListBox::GetLineHeight() const
     return m_lineHeight;
 }
 
+wxCoord wxListBox::GetMaxWidth() const
+{
+    if ( m_maxWidth == -1 )
+    {
+        wxCoord width;
+        size_t count = m_strings.GetCount();
+        for ( size_t n =0; n < count; n++ )
+        {
+            GetTextExtent(m_strings[n], &width, NULL);
+            if ( width > m_maxWidth )
+            {
+                wxConstCast(this, wxListBox)->m_maxWidth = width;
+            }
+        }
+    }
+
+    return m_maxWidth;
+}
+
 void wxListBox::OnSize(wxSizeEvent& event)
 {
     // recalculate the number of items per page
@@ -509,7 +636,7 @@ void wxListBox::OnSize(wxSizeEvent& event)
 
 void wxListBox::DoSetFirstItem(int n)
 {
-    wxFAIL_MSG( _T("TODO") );
+    SetCurrentItem(n);
 }
 
 wxSize wxListBox::DoGetBestClientSize() const
@@ -582,7 +709,7 @@ void wxListBox::SetCurrentItem(int n)
     if ( n != m_current )
     {
         if ( m_current != -1 )
-            RefreshItem(n);
+            RefreshItem(m_current);
 
         m_current = n;
 
@@ -605,7 +732,7 @@ void wxListBox::SetCurrentItem(int n)
 
 void wxListBox::EnsureVisible()
 {
-    if ( !m_showScrollbar )
+    if ( !m_showScrollbarY )
     {
         // nothing to do - everything is shown anyhow
         return;
@@ -720,6 +847,7 @@ wxStdListboxInputHandler::wxStdListboxInputHandler(wxInputHandler *handler)
                         : wxStdInputHandler(handler)
 {
     m_winCapture = NULL;
+    m_btnCapture = 0;
 }
 
 int wxStdListboxInputHandler::HitTest(const wxListBox *lbox,
@@ -736,8 +864,8 @@ bool wxStdListboxInputHandler::HandleKey(wxControl *control,
                                          const wxKeyEvent& event,
                                          bool pressed)
 {
-    // we're only interested in the key presses
-    if ( pressed )
+    // we're only interested in the (normal) key presses
+    if ( pressed && !event.AltDown() )
     {
         wxControlAction action;
         switch ( event.GetKeyCode() )
@@ -773,18 +901,32 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
     // mouse events: for both of them clicking the item selects or toggles it,
     // but multiple selection listboxes are different: the item is focused
     // when clicked and only toggled when the button is released
-    if ( ((control->GetWindowStyle() & wxLB_MULTIPLE) && event.ButtonUp())
-            || event.ButtonDown() || event.LeftDClick() )
+    if ( (m_btnCapture &&
+          (control->GetWindowStyle() & wxLB_MULTIPLE) &&
+          event.ButtonUp(m_btnCapture))
+            || event.ButtonDown()
+            || event.LeftDClick() )
     {
         wxListBox *lbox = wxStaticCast(control, wxListBox);
         int item = HitTest(lbox, event);
         if ( item != -1 )
         {
             wxControlAction action;
-            if ( event.ButtonUp() )
+            if ( m_btnCapture && event.ButtonUp(m_btnCapture) )
             {
-                m_winCapture->ReleaseMouse();
-                m_winCapture = NULL;
+                if ( m_winCapture )
+                {
+                    m_winCapture->ReleaseMouse();
+                    m_winCapture = NULL;
+                    m_btnCapture = 0;
+                }
+                else
+                {
+                    // this is not supposed to happen - if we get here, the
+                    // even is from the mouse button which had been pressed
+                    // before and we must have captured the mouse back then
+                    wxFAIL_MSG(_T("logic error in listbox mosue handling"));
+                }
 
                 action = wxACTION_LISTBOX_TOGGLE;
             }
@@ -797,8 +939,11 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                         // capture the mouse to track the selected item
                         m_winCapture = lbox;
                         m_winCapture->CaptureMouse();
-
-                        action = wxACTION_LISTBOX_SETFOCUS;
+                        m_btnCapture = event.LeftDown()
+                                        ? 1
+                                        : event.RightDown()
+                                            ? 3
+                                            : 2;
                     }
                     else
                     {
@@ -809,13 +954,19 @@ bool wxStdListboxInputHandler::HandleMouse(wxControl *control,
                 {
                     action = wxACTION_LISTBOX_SELECT;
                 }
+
+                // in any case, clicking an item makes it the current one
+                lbox->PerformAction(wxACTION_LISTBOX_SETFOCUS, item);
             }
             else // event.LeftDClick()
             {
                 action = wxACTION_LISTBOX_ACTIVATE;
             }
 
-            lbox->PerformAction(action, item);
+            if ( !!action )
+            {
+                lbox->PerformAction(action, item);
+            }
 
             return TRUE;
         }

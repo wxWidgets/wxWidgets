@@ -64,8 +64,15 @@ public:
              const wxSize& size = wxDefaultSize,
              long style = 0,
              const wxString& name = wxPanelNameStr)
-        : wxWindowNative(parent, id, pos, size, style, name)
+        : wxWindowNative(parent, id, pos, size, style | wxCLIP_CHILDREN, name)
         { Init(); }
+
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPanelNameStr);
 
     // background pixmap support
     // -------------------------
@@ -92,6 +99,9 @@ public:
     virtual int GetScrollRange(int orient) const;
     virtual void ScrollWindow(int dx, int dy,
                                const wxRect* rect = (wxRect *) NULL);
+
+    // take into account the borders here
+    virtual wxPoint GetClientAreaOrigin() const;
 
     // miscellaneous other methods
     // ---------------------------
@@ -129,6 +139,9 @@ protected:
 
     // draw the control background, return TRUE if done
     virtual bool DoDrawBackground(wxControlRenderer *renderer);
+
+    // draw the controls border
+    virtual void DoDrawBorder(wxControlRenderer *renderer);
 
     // draw the controls contents
     virtual void DoDraw(wxControlRenderer *renderer);

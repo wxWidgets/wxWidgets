@@ -880,6 +880,13 @@ enum wxBorder
 // Override CTL3D or native 3D styles for children
 #define wxNO_3D                 0x00800000
 
+// wxALWAYS_SHOW_SB: instead of hiding the scrollbar when it is not needed,
+// disable it - but still show (see also wxLB_ALWAYS_SB style)
+//
+// NB: as this style is only supported by wxUniversal so far as it doesn't use
+//     wxUSER_COLOURS/wxNO_3D, we reuse the same style value
+#define wxALWAYS_SHOW_SB        0x00800000
+
 // Clip children when painting, which reduces flicker in e.g. frames and
 // splitter windows, but can't be used in a panel where a static box must be
 // 'transparent' (panel paints the background for it)

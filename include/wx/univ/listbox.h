@@ -75,12 +75,9 @@ public:
     virtual void Clear();
     virtual void Delete(int n);
 
-    virtual int GetCount() const
-        { return (int)m_strings.GetCount(); }
-    virtual wxString GetString(int n) const
-        { return m_strings[n]; }
-    virtual void SetString(int n, const wxString& s)
-        { m_strings[n] = s; RefreshItem(n); }
+    virtual int GetCount() const { return (int)m_strings.GetCount(); }
+    virtual wxString GetString(int n) const { return m_strings[n]; }
+    virtual void SetString(int n, const wxString& s);
     virtual int FindString(const wxString& s) const
         { return m_strings.Index(s); }
 
@@ -125,10 +122,11 @@ public:
     void Select(bool sel = TRUE);
     void EnsureVisible();
 
-    // get, calculating it if necessary, the number of items per page and the
-    // height of each line
+    // get, calculating it if necessary, the number of items per page, the
+    // height of each line and the max width of an item
     int GetItemsPerPage() const;
     wxCoord GetLineHeight() const;
+    wxCoord GetMaxWidth() const;
 
     // override the wxControl virtual methods
     virtual bool PerformAction(const wxControlAction& action,
@@ -138,6 +136,7 @@ public:
 protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
+    virtual wxBorder GetDefaultBorder() const;
 
     // common part of all ctors
     void Init();
@@ -159,6 +158,10 @@ protected:
 
     // calculate the number of items per page using our current size
     void CalcItemsPerPage();
+
+    // can/should we have a horz scrollbar?
+    bool HasHorzScrollbar() const
+        { return (m_windowStyle & wxLB_HSCROLL) != 0; }
 
     // the array containing all items (it is sorted if the listbox has
     // wxLB_SORT style)
@@ -185,13 +188,16 @@ private:
     // the height of one line in the listbox (all lines have the same height)
     wxCoord m_lineHeight;
 
+    // the maximal width of a listbox item
+    wxCoord m_maxWidth;
+
     // the number of items per page
     size_t m_itemsPerPage;
 
     // if the number of items has changed we may need to show/hide the
     // scrollbar
-    bool m_updateScrollbar,
-         m_showScrollbar;
+    bool m_updateScrollbarX, m_updateScrollbarY,
+         m_showScrollbarX, m_showScrollbarY;
 
     // if the current item has changed, we might need to scroll if it went out
     // of the window

@@ -103,11 +103,12 @@ public:
 
     // wxScrollBar sub elements state (combination of wxCONTROL_XXX)
     void SetState(Element which, int flags);
-    int GetState(Element which) const { return m_elementsState[which]; }
+    int GetState(Element which) const;
 
 protected:
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoDraw(wxControlRenderer *renderer);
+    virtual wxBorder GetDefaultBorder() const { return wxBORDER_NONE; }
 
     // event handler
     void OnIdle(wxIdleEvent& event);

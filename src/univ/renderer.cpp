@@ -325,14 +325,6 @@ void wxControlRenderer::DrawBorder()
     // draw outline
     m_renderer->DrawBorder(m_dc, m_window->GetBorder(),
                            m_rect, flags, &m_rect);
-
-    // fill the inside unless we have the background bitmap as we don't want to
-    // overwrite it
-    if ( !m_window->GetBackgroundBitmap().Ok() )
-    {
-        m_renderer->DrawBackground(m_dc, m_window->GetBackgroundColour(),
-                                   m_rect, flags);
-    }
 }
 
 void wxControlRenderer::DrawLabel(const wxBitmap& bitmap,
@@ -398,12 +390,19 @@ void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap)
 
 void wxControlRenderer::DrawBackgroundBitmap()
 {
-    // get the bitmap and the flags
-    int alignment;
-    wxStretch stretch;
-    wxBitmap bmp = m_window->GetBackgroundBitmap(&alignment, &stretch);
-
-    DrawBitmap(bmp, m_rect, alignment, stretch);
+    if ( m_window->GetBackgroundBitmap().Ok() )
+    {
+        // get the bitmap and the flags
+        int alignment;
+        wxStretch stretch;
+        wxBitmap bmp = m_window->GetBackgroundBitmap(&alignment, &stretch);
+        DrawBitmap(bmp, m_rect, alignment, stretch);
+    }
+    else // just fill it with bg colour if no bitmap
+    {
+        m_renderer->DrawBackground(m_dc, m_window->GetBackgroundColour(),
+                                   m_rect, m_window->GetStateFlags());
+    }
 }
 
 void wxControlRenderer::DrawBitmap(const wxBitmap& bitmap,
@@ -549,7 +548,7 @@ void wxControlRenderer::DrawScrollbar(const wxScrollBar *scrollbar,
     // and the thumb
     wxScrollBar::Element elem = wxScrollBar::Element_Thumb;
     wxRect rectThumb = m_renderer->GetScrollbarRect(scrollbar, elem);
-    if ( rgnUpdate.Contains(rectThumb) )
+    if ( rectThumb.width && rectThumb.height && rgnUpdate.Contains(rectThumb) )
     {
         wxLogTrace(_T("scroll"), _T("drawing thumb at (%d, %d)-(%d, %d)"),
                    rectThumb.GetLeft(),
@@ -580,12 +579,30 @@ void wxControlRenderer::DrawItems(const wxListBox *lbox,
 {
     // prepare for the drawing: calc the initial position
     wxCoord lineHeight = lbox->GetLineHeight();
-    int lines, pixelsPerLine;
-    lbox->GetViewStart(NULL, &lines);
-    lbox->GetScrollPixelsPerUnit(NULL, &pixelsPerLine);
-    wxRect rect = m_rect;
-    rect.y += itemFirst*lineHeight - lines*pixelsPerLine;
+
+    // note that SetClippingRegion() needs the physical (unscrolled)
+    // coordinates while we use the logical (scrolled) ones for the drawing
+    // itself
+    wxRect rect = lbox->GetClientRect();
+
+    // keep the text inside the client rect or we will overwrite the vertical
+    // scrollbar for the long strings
+    m_dc.SetClippingRegion(rect.x, rect.y, rect.width + 1, rect.height + 1);
+
+    // the rect should go to the right visible border
+    int widthTotal;
+    lbox->GetVirtualSize(&widthTotal, NULL);
+    if ( widthTotal )
+        rect.width = widthTotal;
+    //else: no horz scrolling at all
+
+    // adjust the rect position now
+    lbox->CalcScrolledPosition(rect.x, rect.y, &rect.x, &rect.y);
+    rect.y += itemFirst*lineHeight;
     rect.height = lineHeight;
+
+    // we'll keep the text colour unchanged
+    m_dc.SetTextForeground(lbox->GetForegroundColour());
 
     // an item should have the focused rect only when the app has focus, so
     // make sure that we never set wxCONTROL_FOCUSED flag if it doesn't

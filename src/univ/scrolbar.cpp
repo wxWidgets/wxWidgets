@@ -54,12 +54,19 @@ public:
                      const wxControlAction& action,
                      wxScrollBar *control);
 
+    void StartAutoScroll();
+
     virtual void Notify();
+
+protected:
+    void DoNotify();
 
 private:
     wxStdScrollBarInputHandler *m_handler;
     wxControlAction m_action;
     wxScrollBar    *m_control;
+
+    bool m_skipNext;
 };
 
 // ============================================================================
@@ -101,9 +108,8 @@ bool wxScrollBar::Create(wxWindow *parent,
                          const wxValidator& validator,
                          const wxString &name)
 {
-    // the scrollbars always have the standard border so far
+    // the scrollbars never have the border
     style &= ~wxBORDER_MASK;
-    style |= wxBORDER_SUNKEN;
 
     if ( !wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name) )
         return FALSE;
@@ -221,27 +227,38 @@ void wxScrollBar::OnIdle(wxIdleEvent& event)
                 {
                     // we try to avoid redrawing the entire shaft (which might
                     // be quite long) if possible by only redrawing the area
-                    // between the old and current positions of the thumb
-                    if ( m_thumbPosOld != -1 )
+                    // wich really changed
+                    if ( (n == Element_Bar_1 || n == Element_Bar_2) &&
+                            (m_thumbPosOld != -1) )
                     {
+                        // the less efficient but more reliable (i.e. this will
+                        // probably work everywhere) version: refresh the
+                        // distance covered by thumb since the last update
+#if 0
                         wxRect rectOld =
                             GetRenderer()->GetScrollbarRect(this,
-                                                         (Element)n,
-                                                         m_thumbPosOld);
+                                                            (Element)n,
+                                                            m_thumbPosOld);
                         if ( IsVertical() )
                         {
                             if ( n == Element_Bar_1 )
                                 rect.SetTop(rectOld.GetBottom());
                             else
-                                rect.SetBottom(rect.GetTop());
+                                rect.SetBottom(rectOld.GetBottom());
                         }
                         else // horizontal
                         {
                             if ( n == Element_Bar_1 )
                                 rect.SetLeft(rectOld.GetRight());
                             else
-                                rect.SetRight(rect.GetLeft());
+                                rect.SetRight(rectOld.GetRight());
                         }
+#else                   // efficient version: only repaint the area occupied by
+                        // the thumb previously - we can't do better than this
+                        rect = GetRenderer()->GetScrollbarRect(this,
+                                                               Element_Thumb,
+                                                               m_thumbPosOld);
+#endif // 0/1
                     }
 
                     Refresh(TRUE, &rect);
@@ -265,18 +282,32 @@ void wxScrollBar::DoDraw(wxControlRenderer *renderer)
 }
 
 // ----------------------------------------------------------------------------
-// input processing
+// state flags
 // ----------------------------------------------------------------------------
+
+int wxScrollBar::GetState(Element which) const
+{
+    // if the entire scrollbar is disabled, all of its elements are too
+    int flags = m_elementsState[which];
+    if ( !IsEnabled() )
+        flags |= wxCONTROL_DISABLED;
+
+    return flags;
+}
 
 void wxScrollBar::SetState(Element which, int flags)
 {
-    if ( (m_elementsState[which] & ~wxCONTROL_DIRTY) != (unsigned)flags )
+    if ( (int)(m_elementsState[which] & ~wxCONTROL_DIRTY) != flags )
     {
         m_elementsState[which] = flags | wxCONTROL_DIRTY;
 
         m_dirty = TRUE;
     }
 }
+
+// ----------------------------------------------------------------------------
+// input processing
+// ----------------------------------------------------------------------------
 
 bool wxScrollBar::PerformAction(const wxControlAction& action,
                                 long numArg,
@@ -389,11 +420,40 @@ wxScrollBarTimer::wxScrollBarTimer(wxStdScrollBarInputHandler *handler,
     m_handler = handler;
     m_action = action;
     m_control = control;
+
+    m_skipNext = FALSE;
+}
+
+void wxScrollBarTimer::StartAutoScroll()
+{
+    // start scrolling immediately
+    DoNotify();
+
+    // there is an initial delay before the scrollbar starts scrolling -
+    // implement it by ignoring the first timer expiration and only start
+    // scrolling from the second one
+    m_skipNext = TRUE;
+    Start(200); // FIXME: hardcoded delay
+}
+
+void wxScrollBarTimer::DoNotify()
+{
+    m_handler->OnScrollTimer(m_control, m_action);
 }
 
 void wxScrollBarTimer::Notify()
 {
-    m_handler->OnScrollTimer(m_control, m_action);
+    if ( m_skipNext )
+    {
+        // scroll normally now - reduce the delay
+        Start(50); // FIXME: hardcoded delay
+
+        m_skipNext = FALSE;
+    }
+    else
+    {
+        DoNotify();
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -603,14 +663,12 @@ bool wxStdScrollBarInputHandler::HandleMouse(wxControl *control,
                 // start dragging
                 if ( hasAction )
                 {
-                    m_timerScroll = new wxScrollBarTimer(this,
-                                                         action,
-                                                         scrollbar);
-                    // start scrolling immediately
-                    m_timerScroll->Notify();
-
-                    // and continue it later
-                    m_timerScroll->Start(50); // FIXME hardcoded delay
+                    // this slightly unreadable code is necessary because
+                    // m_timerScroll is of class wxTimer, not wxScrollBarTimer
+                    wxScrollBarTimer *timerScroll =
+                        new wxScrollBarTimer(this, action, scrollbar);
+                    m_timerScroll = timerScroll;
+                    timerScroll->StartAutoScroll();
                 }
                 //else: no (immediate) action
 

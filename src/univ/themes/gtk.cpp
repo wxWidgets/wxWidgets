@@ -95,17 +95,21 @@ public:
                                     wxOrientation orient,
                                     const wxRect& rect,
                                     int flags = 0);
+    virtual void DrawScrollCorner(wxDC& dc,
+                                  const wxRect& rect);
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0);
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window);
+    virtual wxRect GetBorderDimensions(wxBorder border) const;
 
     // hit testing for the input handlers
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const;
+    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar);
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const;
     virtual wxCoord ScrollbarToPixel(const wxScrollBar *scrollbar,
@@ -547,7 +551,7 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
             break;
 
         default:
-            wxFAIL_MSG(_T("unknwon border type"));
+            wxFAIL_MSG(_T("unknown border type"));
             // fall through
 
         case wxBORDER_DEFAULT:
@@ -557,6 +561,44 @@ void wxGTKRenderer::DrawBorder(wxDC& dc,
 
     if ( rectIn )
         *rectIn = rect;
+}
+
+wxRect wxGTKRenderer::GetBorderDimensions(wxBorder border) const
+{
+    wxCoord width;
+    switch ( border )
+    {
+        case wxBORDER_RAISED:
+        case wxBORDER_SUNKEN:
+            width = 2;
+            break;
+
+        case wxBORDER_SIMPLE:
+        case wxBORDER_STATIC:
+            width = 1;
+            break;
+
+        case wxBORDER_DOUBLE:
+            width = 3;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unknown border type"));
+            // fall through
+
+        case wxBORDER_DEFAULT:
+        case wxBORDER_NONE:
+            width = 0;
+            break;
+    }
+
+    wxRect rect;
+    rect.x =
+    rect.y =
+    rect.width =
+    rect.height = width;
+
+    return rect;
 }
 
 // ----------------------------------------------------------------------------
@@ -1091,12 +1133,22 @@ void wxGTKRenderer::DrawScrollbarShaft(wxDC& dc,
     DoDrawBackground(dc, m_scheme->Get(wxColourScheme::SCROLLBAR), rectBar);
 }
 
+void wxGTKRenderer::DrawScrollCorner(wxDC& dc, const wxRect& rect)
+{
+    DoDrawBackground(dc, m_scheme->Get(wxColourScheme::CONTROL), rect);
+}
+
 wxRect wxGTKRenderer::GetScrollbarRect(const wxScrollBar *scrollbar,
                                        wxScrollBar::Element elem,
                                        int thumbPos) const
 {
     return StandardGetScrollbarRect(scrollbar, elem,
                                     thumbPos, GetScrollbarArrowSize(scrollbar));
+}
+
+wxCoord wxGTKRenderer::GetScrollbarSize(const wxScrollBar *scrollbar)
+{
+    return StandardScrollBarSize(scrollbar, GetScrollbarArrowSize(scrollbar));
 }
 
 wxHitTest wxGTKRenderer::HitTestScrollbar(const wxScrollBar *scrollbar,
@@ -1149,34 +1201,9 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
     else
     {
         // take into account the border width
-        wxBorder border = (wxBorder)(window->GetWindowStyle() & wxBORDER_MASK);
-        switch ( border )
-        {
-            case wxBORDER_SUNKEN:
-            case wxBORDER_RAISED:
-                size->x += 4;
-                size->y += 4;
-                break;
-
-            case wxBORDER_SIMPLE:
-            case wxBORDER_STATIC:
-                size->x += 2;
-                size->y += 2;
-                break;
-
-            case wxBORDER_DOUBLE:
-                size->x += 6;
-                size->y += 6;
-                break;
-
-            default:
-                wxFAIL_MSG(_T("unknwon border type"));
-                // fall through
-
-            case wxBORDER_DEFAULT:
-            case wxBORDER_NONE:
-                break;
-        }
+        wxRect rectBorder = GetBorderDimensions(window->GetBorder());
+        size->x += rectBorder.x + rectBorder.width;
+        size->y += rectBorder.y + rectBorder.height;
     }
 }
 

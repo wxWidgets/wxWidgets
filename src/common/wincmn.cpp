@@ -391,7 +391,11 @@ void wxWindowBase::Fit()
 {
     if ( GetChildren().GetCount() > 0 )
     {
-        SetClientSize(DoGetBestSize());
+        // leave a margin for compatibility with old version
+        wxSize size = DoGetBestSize();
+        size.x += 7;
+        size.y += 14;
+        SetClientSize(size);
     }
     //else: do nothing if we have no children
 }
@@ -439,8 +443,7 @@ wxSize wxWindowBase::DoGetBestSize() const
                 maxY = wy + wh;
         }
 
-        // leave a margin
-        return wxSize(maxX + 7, maxY + 14);
+        return wxSize(maxX, maxY);
     }
     else
     {
@@ -448,6 +451,12 @@ wxSize wxWindowBase::DoGetBestSize() const
         // current one
         return GetSize();
     }
+}
+
+// by default the origin is not shifted
+wxPoint wxWindowBase::GetClientAreaOrigin() const
+{
+    return wxPoint(0, 0);
 }
 
 // set the min/max size of the window

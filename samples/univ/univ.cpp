@@ -317,10 +317,13 @@ MyUnivFrame::MyUnivFrame(const wxString& title)
     };
     wxListBox *lbox = new wxListBox(this, -1, wxPoint(550, 10), wxDefaultSize,
                                     WXSIZEOF(choices), choices,
-                                    wxLB_MULTIPLE);
-    for ( int i = 0; i < 20; i++ )
+                                    wxLB_MULTIPLE | wxLB_ALWAYS_SB);
+    lbox = new wxListBox(this, -1, wxPoint(550, 300), wxDefaultSize,
+                         0, NULL, wxLB_HSCROLL);
+    for ( int i = 1; i <= 20; i++ )
     {
-        lbox->Append(wxString::Format(_T("entry %d"), i));
+        lbox->Append(wxString::Format(_T("%sentry %d"),
+                     i % 10 ? _T("") : _T("very very long "), i));
     }
 }
 

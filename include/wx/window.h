@@ -259,6 +259,17 @@ public:
         return wxSize(w, h);
     }
 
+        // get the origin of the client area of the window relative to the
+        // window top left corner (the client area may be shifted because of
+        // the borders, scrollbars, other decorations...)
+    virtual wxPoint GetClientAreaOrigin() const;
+
+        // get the client rectangle in window (i.e. client) coordinates
+    wxRect GetClientRect() const
+    {
+        return wxRect(GetClientAreaOrigin(), GetClientSize());
+    }
+
         // get the size best suited for the window (in fact, minimal
         // acceptable size using which it will still look "nice")
     wxSize GetBestSize() const { return DoGetBestSize(); }

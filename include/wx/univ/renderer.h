@@ -135,6 +135,10 @@ public:
                                     const wxRect& rect,
                                     int flags = 0) = 0;
 
+    // draw the rectangle in the corner between two scrollbars
+    virtual void DrawScrollCorner(wxDC& dc,
+                                  const wxRect& rect) = 0;
+
     // draw an item of a wxControlWithItems
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
@@ -143,6 +147,10 @@ public:
 
     // geometry functions
     // ------------------
+
+    // get the dimensions of the border: rect.x/y contain the width/height of
+    // the left/top side, width/heigh - of the right/bottom one
+    virtual wxRect GetBorderDimensions(wxBorder border) const = 0;
 
     // adjust the size of the control of the given class: for most controls,
     // this just takes into account the border, but for some (buttons, for
@@ -155,6 +163,9 @@ public:
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const = 0;
+
+    // returns the size of the scrollbar shaft excluding the arrows
+    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar) = 0;
 
     // returns one of wxHT_SCROLLBAR_XXX constants
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
@@ -266,6 +277,9 @@ public:
                                     const wxRect& rect,
                                     int flags = 0)
         { m_renderer->DrawScrollbarShaft(dc, orient, rect, flags); }
+    virtual void DrawScrollCorner(wxDC& dc,
+                                  const wxRect& rect)
+        { m_renderer->DrawScrollCorner(dc, rect); }
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
                           const wxRect& rect,
@@ -274,11 +288,15 @@ public:
 
     virtual void AdjustSize(wxSize *size, const wxWindow *window)
         { m_renderer->AdjustSize(size, window); }
+    virtual wxRect GetBorderDimensions(wxBorder border) const
+        { m_renderer->GetBorderDimensions(border); }
 
     virtual wxRect GetScrollbarRect(const wxScrollBar *scrollbar,
                                     wxScrollBar::Element elem,
                                     int thumbPos = -1) const
         { return m_renderer->GetScrollbarRect(scrollbar, elem, thumbPos); }
+    virtual wxCoord GetScrollbarSize(const wxScrollBar *scrollbar)
+        { return m_renderer->GetScrollbarSize(scrollbar); }
     virtual wxHitTest HitTestScrollbar(const wxScrollBar *scrollbar,
                                        const wxPoint& pt) const
         { return m_renderer->HitTestScrollbar(scrollbar, pt); }

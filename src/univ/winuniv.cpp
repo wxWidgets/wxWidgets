@@ -73,7 +73,31 @@ void wxWindow::Init()
 
     m_isCurrent = FALSE;
 
-    m_renderer = (wxRenderer *)NULL;
+    m_renderer = wxTheme::Get()->GetRenderer();
+}
+
+bool wxWindow::Create(wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint& pos,
+                      const wxSize& size,
+                      long style,
+                      const wxString& name)
+{
+    if ( !wxWindowNative::Create(parent, id, pos, size,
+                                 style | wxCLIP_CHILDREN, name) )
+    {
+        return FALSE;
+    }
+
+    // if we should always have the scrollbar, do show it
+    if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
+    {
+        m_scrollbarVert = new wxScrollBar(this, -1,
+                                          wxDefaultPosition, wxDefaultSize,
+                                          wxSB_VERTICAL);
+    }
+
+    return TRUE;
 }
 
 // ----------------------------------------------------------------------------
@@ -110,13 +134,22 @@ const wxBitmap& wxWindow::GetBackgroundBitmap(int *alignment,
 // the event handler executed when the window background must be painted
 void wxWindow::OnErase(wxEraseEvent& event)
 {
-    wxControlRenderer renderer(this, *event.GetDC(),
-                               wxTheme::Get()->GetRenderer());
+    wxControlRenderer renderer(this, *event.GetDC(), m_renderer);
 
-    if ( !DoDrawBackground(&renderer) )
+    DoDrawBackground(&renderer);
+
+    // if we have both scrollbars, we also have a square in the corner between
+    // them which we must paint
+    if ( m_scrollbarVert && m_scrollbarHorz )
     {
-        // not processed
-        event.Skip();
+        wxRect rectCorner;
+        wxPoint ptOrigin = GetClientAreaOrigin();
+        wxSize sizeClient = GetClientSize();
+        rectCorner.x = ptOrigin.x + m_scrollbarHorz->GetSize().x;
+        rectCorner.y = ptOrigin.y + m_scrollbarVert->GetSize().y;
+        rectCorner.width = m_scrollbarVert->GetSize().x;
+        rectCorner.height = m_scrollbarHorz->GetSize().y;
+        m_renderer->DrawScrollCorner(*event.GetDC(), rectCorner);
     }
 }
 
@@ -134,24 +167,28 @@ void wxWindow::OnPaint(wxPaintEvent& event)
         wxPaintDC dc(this);
         wxControlRenderer renderer(this, dc, m_renderer);
 
-        // do draw the control!
+        // first, draw the border
+        DoDrawBorder(&renderer);
+
+        // and then draw the control
         DoDraw(&renderer);
     }
 }
 
 bool wxWindow::DoDrawBackground(wxControlRenderer *renderer)
 {
-    if ( !m_bitmapBg.Ok() )
-        return FALSE;
-
     renderer->DrawBackgroundBitmap();
 
     return TRUE;
 }
 
-void wxWindow::DoDraw(wxControlRenderer *renderer)
+void wxWindow::DoDrawBorder(wxControlRenderer *renderer)
 {
     renderer->DrawBorder();
+}
+
+void wxWindow::DoDraw(wxControlRenderer *renderer)
+{
 }
 
 // ----------------------------------------------------------------------------
@@ -251,15 +288,39 @@ void wxWindow::DoSetClientSize(int width, int height)
     wxWindowNative::DoSetClientSize(width, height);
 }
 
+wxPoint wxWindow::GetClientAreaOrigin() const
+{
+    wxPoint pt = wxWindowBase::GetClientAreaOrigin();
+
+    if ( m_renderer )
+        pt += m_renderer->GetBorderDimensions(GetBorder()).GetPosition();
+
+    return pt;
+}
+
 void wxWindow::DoGetClientSize(int *width, int *height) const
 {
     wxWindowNative::DoGetClientSize(width, height);
 
-    if ( width && m_scrollbarVert )
-        *width -= m_scrollbarVert->GetSize().x;
+    wxRect rectBorder;
+    if ( m_renderer )
+        rectBorder = m_renderer->GetBorderDimensions(GetBorder());
 
-    if ( height && m_scrollbarHorz )
-        *height -= m_scrollbarHorz->GetSize().y;
+    if ( width )
+    {
+        if ( m_scrollbarVert )
+            *width -= m_scrollbarVert->GetSize().x;
+
+        *width -= rectBorder.x + rectBorder.width;
+    }
+
+    if ( height )
+    {
+        if ( m_scrollbarHorz )
+            *height -= m_scrollbarHorz->GetSize().y;
+
+        *height -= rectBorder.y + rectBorder.height;
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -270,21 +331,31 @@ void wxWindow::DoGetClientSize(int *width, int *height) const
 
 void wxWindow::PositionScrollbars()
 {
-    wxCoord x, y;
-    DoGetSize(&x, &y);
+    wxRect rectClient = GetClientRect();
 
     int width = m_scrollbarVert ? m_scrollbarVert->GetSize().x : 0;
     int height = m_scrollbarHorz ? m_scrollbarHorz->GetSize().y : 0;
 
     if ( m_scrollbarVert )
-        m_scrollbarVert->SetSize(x - width, 0, width, y - height);
+    {
+        m_scrollbarVert->SetSize(rectClient.GetRight() - 1,
+                                 rectClient.GetTop() - 2,
+                                 width,
+                                 rectClient.GetHeight());
+    }
+
     if ( m_scrollbarHorz )
-        m_scrollbarHorz->SetSize(0, y - height, x - width, height);
+    {
+        m_scrollbarHorz->SetSize(rectClient.GetLeft() - 2,
+                                 rectClient.GetBottom() - 1,
+                                 rectClient.GetWidth(),
+                                 height);
+    }
 }
 
 void wxWindow::SetScrollbar(int orient,
                             int pos,
-                            int thumb,
+                            int pageSize,
                             int range,
                             bool refresh)
 {
@@ -305,19 +376,31 @@ void wxWindow::SetScrollbar(int orient,
 
             PositionScrollbars();
         }
+        else if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
+        {
+            // we might have disabled it before
+            scrollbar->Enable();
+        }
 
-        scrollbar->SetScrollbar(pos, thumb, range, thumb, refresh);
+        scrollbar->SetScrollbar(pos, pageSize, range, pageSize, refresh);
     }
     else // no range means no scrollbar
     {
         if ( scrollbar )
         {
-            delete scrollbar;
-
-            if ( orient & wxVERTICAL )
-                m_scrollbarVert = NULL;
+            if ( GetWindowStyle() & wxALWAYS_SHOW_SB )
+            {
+                scrollbar->Disable();
+            }
             else
-                m_scrollbarHorz = NULL;
+            {
+                delete scrollbar;
+
+                if ( orient & wxVERTICAL )
+                    m_scrollbarVert = NULL;
+                else
+                    m_scrollbarHorz = NULL;
+            }
         }
     }
 }
@@ -367,7 +450,10 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
     wxLogTrace(_T("scroll"), _T("window is %dx%d, scroll by %d, %d"),
                sizeTotal.x, sizeTotal.y, dx, dy);
 
-    wxPoint ptSource, ptDest;
+    wxPoint ptSource, ptDest, ptOrigin;
+    ptSource =
+    ptDest =
+    ptOrigin = GetClientAreaOrigin();
     wxSize size;
     size.x = sizeTotal.x - abs(dx);
     size.y = sizeTotal.y - abs(dy);
@@ -386,27 +472,23 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         if ( dx < 0 )
         {
             // scroll to the right, move to the left
-            ptSource.x = -dx;
-            ptDest.x = 0;
+            ptSource.x -= dx;
         }
         else
         {
             // scroll to the left, move to the right
-            ptSource.x = 0;
-            ptDest.x = dx;
+            ptDest.x += dx;
         }
 
         if ( dy < 0 )
         {
             // scroll down, move up
-            ptSource.y = -dy;
-            ptDest.y = 0;
+            ptSource.y -= dy;
         }
         else
         {
             // scroll up, move down
-            ptSource.y = 0;
-            ptDest.y = dy;
+            ptDest.y += dy;
         }
 
         // do move
@@ -429,23 +511,23 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         //        it bad?
 
         wxRect rect;
+        rect.x = ptOrigin.x;
+        rect.y = ptOrigin.y;
 
         if ( dx )
         {
             if ( dx < 0 )
             {
                 // refresh the area along the right border
-                rect.x = size.x;
+                rect.x += size.x;
                 rect.width = -dx;
             }
             else
             {
                 // refresh the area along the left border
-                rect.x = 0;
                 rect.width = dx;
             }
 
-            rect.y = 0;
             rect.height = sizeTotal.y;
 
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
@@ -459,17 +541,15 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
             if ( dy < 0 )
             {
                 // refresh the area along the bottom border
-                rect.y = size.y;
+                rect.y += size.y;
                 rect.height = -dy;
             }
             else
             {
                 // refresh the area along the top border
-                rect.y = 0;
                 rect.height = dy;
             }
 
-            rect.x = 0;
             rect.width = sizeTotal.x;
 
             wxLogTrace(_T("scroll"), _T("refreshing (%d, %d)-(%d, %d)"),
