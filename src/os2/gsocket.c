@@ -1491,7 +1491,7 @@ GSocketError GAddress_INET_SetHostName(GAddress *address, const char *hostname)
   {
 #elif defined(HAVE_INET_ADDR)
   addr->s_addr = inet_addr(hostname);
-  if ( (addr->s_addr == -1 )
+  if ( addr->s_addr == -1 )
   {
 #else
   /* Use gethostbyname by default */
