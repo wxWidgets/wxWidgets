@@ -290,7 +290,8 @@ void wxAssociateControlWithMacControl(ControlHandle inControl, wxControl *contro
 
 void wxRemoveMacControlAssociation(wxControl *control)
 {
-    wxWinMacControlList->DeleteObject(control);
+    if ( wxWinMacControlList )
+        wxWinMacControlList->DeleteObject(control);
 }
 
 void wxControl::MacPreControlCreate( wxWindow *parent, wxWindowID id, wxString label , 
@@ -346,7 +347,7 @@ void wxControl::MacPostControlCreate()
     ControlHandle container = (ControlHandle) GetParent()->MacGetContainerForEmbedding() ;
     wxASSERT_MSG( container != NULL , wxT("No valid mac container control") ) ;
     ::EmbedControl( (ControlHandle) m_macControl , container ) ;
-    m_macControlIsShown  = true ;
+    m_macControlIsShown  = MacIsReallyShown() ;
 
     wxAssociateControlWithMacControl( (ControlHandle) m_macControl , this ) ;
     if ( wxMacSetupControlBackgroundUPP == NULL )
@@ -402,7 +403,8 @@ void wxControl::MacPostControlCreate()
     UMASetControlTitle( (ControlHandle) m_macControl , wxStripMenuCodes(m_label) ) ;
 #endif
 
-    UMAShowControl( (ControlHandle) m_macControl ) ;
+    if ( m_macControlIsShown )
+        UMAShowControl( (ControlHandle) m_macControl ) ;
     
     SetCursor( *wxSTANDARD_CURSOR ) ;
     
