@@ -66,7 +66,7 @@ const unsigned int wxSTRING_MAXLEN = UINT_MAX - 100;
 #define   WXSTRINGCAST (char *)(const char *)
 
 // implementation only
-#define   ASSERT_VALID_INDEX(i) wxASSERT( (unsigned)(i) < Len() )
+#define   ASSERT_VALID_INDEX(i) wxASSERT( (unsigned)(i) <= Len() )
 
 // ---------------------------------------------------------------------------
 // Global functions complementing standard C string library replacements for
