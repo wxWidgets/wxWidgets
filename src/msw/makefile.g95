@@ -122,6 +122,7 @@ COMMONOBJS = \
   $(COMMDIR)/wincmn.$(OBJSUFF)
 
 MSWOBJS = \
+  accel.$(OBJSUFF) \
   app.$(OBJSUFF) \
   bitmap.$(OBJSUFF) \
   bmpbuttn.$(OBJSUFF) \

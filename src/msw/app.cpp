@@ -757,7 +757,19 @@ bool wxApp::ProcessMessage(WXMSG *Msg)
 
   HWND hWnd;
 
-  // Anyone for a message? Try youngest descendants first.
+  // Try translations first; find the youngest window with
+  // a translation table.
+  for (hWnd = msg->hwnd; hWnd != NULL; hWnd = ::GetParent(hWnd))
+  {
+    wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
+    if (wnd)
+    {
+       if (wnd->MSWTranslateMessage(Msg))
+         return TRUE;
+    }
+  }
+
+  // Anyone for a non-translation message? Try youngest descendants first.
   for (hWnd = msg->hwnd; hWnd != NULL; hWnd = ::GetParent(hWnd))
   {
     wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
@@ -765,18 +777,9 @@ bool wxApp::ProcessMessage(WXMSG *Msg)
     {
        if (wnd->MSWProcessMessage(Msg))
          return TRUE;
-
-       // STOP if we've reached the top of the hierarchy!
-//       if (m_topWindow && (wnd == m_topWindow))
-//          return FALSE;
     }
   }
-
-  // TODO: Is this now obsolete, given that m_topWindow may not be defined?
-  // Does it do anything useful anyway?
-//  if (m_topWindow && m_topWindow->MSWProcessMessage(Msg))
-//     return TRUE;
-    return FALSE;
+  return FALSE;
 }
 
 void wxApp::OnIdle(wxIdleEvent& event)

@@ -348,6 +348,11 @@ void wxFrame::SetIcon(const wxIcon& icon)
 #endif
 }
 
+void wxFrame::SetAcceleratorTable(const wxAcceleratorTable& accel)
+{
+    m_acceleratorTable = accel;
+}
+
 wxStatusBar *wxFrame::OnCreateStatusBar(int number, long style, wxWindowID id,
     const wxString& name)
 {
@@ -479,6 +484,7 @@ void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
   menu_bar->m_menuBarFrame = this;
 }
 
+#if 0
 bool wxFrame::LoadAccelerators(const wxString& table)
 {
   m_acceleratorTable = (WXHANDLE)
@@ -498,6 +504,7 @@ bool wxFrame::LoadAccelerators(const wxString& table)
 
   return (m_acceleratorTable != (WXHANDLE) NULL);
 }
+#endif
 
 void wxFrame::Fit(void)
 {
@@ -758,8 +765,13 @@ void wxFrame::MSWOnMenuHighlight(WXWORD nItem, WXWORD nFlags, WXHMENU hSysMenu)
 
 bool wxFrame::MSWProcessMessage(WXMSG* pMsg)
 {
-  if (m_acceleratorTable != 0 &&
-          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable, (MSG *)pMsg))
+  return FALSE;
+}
+
+bool wxFrame::MSWTranslateMessage(WXMSG* pMsg)
+{
+  if (m_acceleratorTable.Ok() &&
+          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), (MSG *)pMsg))
     return TRUE;
   
   return FALSE;

@@ -18,6 +18,7 @@
 
 #include "wx/window.h"
 #include "wx/toolbar.h"
+#include "wx/msw/accel.h"
 
 WXDLLEXPORT_DATA(extern const char*) wxFrameNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxToolBarNameStr;
@@ -126,7 +127,9 @@ public:
   inline bool Iconized(void) const { return IsIconized(); }
 
   virtual void Maximize(bool maximize);
-  virtual bool LoadAccelerators(const wxString& table);
+//  virtual bool LoadAccelerators(const wxString& table);
+
+  virtual void SetAcceleratorTable(const wxAcceleratorTable& accel);
 
   // Responds to colour changes
   void OnSysColourChanged(wxSysColourChangedEvent& event);
@@ -148,6 +151,7 @@ public:
   bool MSWOnClose(void);
   void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
   bool MSWProcessMessage(WXMSG *msg);
+  bool MSWTranslateMessage(WXMSG *msg);
   void MSWCreate(int id, wxWindow *parent, const char *WXUNUSED(wclass), wxWindow *wx_win, const char *title,
                    int x, int y, int width, int height, long style);
 
@@ -159,6 +163,7 @@ protected:
   WXHICON               m_defaultIcon;
   static bool           m_useNativeStatusBar;
   wxToolBar *           m_frameToolBar ;
+  wxAcceleratorTable    m_acceleratorTable;
 
   DECLARE_EVENT_TABLE()
 };

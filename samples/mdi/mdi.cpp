@@ -100,6 +100,16 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
 
     CreateToolBar(wxNO_BORDER|wxTB_FLAT|wxTB_HORIZONTAL);
     InitToolBar(GetToolBar());
+
+#ifdef __WXMSW__
+    // Accelerators
+    wxAcceleratorEntry entries[3];
+    entries[0].Set(wxACCEL_CTRL, (int) 'N', MDI_NEW_WINDOW);
+    entries[1].Set(wxACCEL_CTRL, (int) 'X', MDI_QUIT);
+    entries[2].Set(wxACCEL_CTRL, (int) 'A', MDI_ABOUT);
+    wxAcceleratorTable accel(3, entries);
+    SetAcceleratorTable(accel);
+#endif
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )

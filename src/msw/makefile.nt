@@ -122,6 +122,7 @@ COMMONOBJS = \
 
 
 MSWOBJS = \
+  $(MSWDIR)\accel.obj \
   $(MSWDIR)\app.obj \
   $(MSWDIR)\bitmap.obj \
   $(MSWDIR)\bmpbuttn.obj \
@@ -276,6 +277,11 @@ dummy.obj: dummy.$(SRCSUFF) $(WXDIR)\include\wx\wx.h
 dummydll.obj: dummydll.$(SRCSUFF) $(WXDIR)\include\wx\wx.h
         cl @<<
 $(CPPFLAGS) $(MAKEPRECOMP) /c /Tp $*.$(SRCSUFF)
+<<
+
+$(MSWDIR)/accel.obj:     $*.$(SRCSUFF)
+        cl @<<
+$(CPPFLAGS) /c /Tp $*.$(SRCSUFF) /Fo$@
 <<
 
 $(MSWDIR)/app.obj:     $*.$(SRCSUFF)

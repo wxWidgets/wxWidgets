@@ -94,6 +94,7 @@ class WXDLLEXPORT wxMDIParentFrame: public wxFrame
   bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
   void MSWOnMenuHighlight(WXWORD item, WXWORD flags, WXHMENU sysmenu);
   bool MSWProcessMessage(WXMSG *msg);
+  bool MSWTranslateMessage(WXMSG *msg);
   void MSWOnCreate(WXLPCREATESTRUCT cs);
   long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
   bool MSWOnEraseBkgnd(WXHDC pDC);
@@ -161,6 +162,7 @@ class WXDLLEXPORT wxMDIChildFrame: public wxFrame
     bool MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control);
     long MSWDefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     bool MSWProcessMessage(WXMSG *msg);
+    bool MSWTranslateMessage(WXMSG *msg);
     void MSWDestroyWindow(void);
 
     // Implementation

@@ -99,6 +99,7 @@ wxCursor *wxHOURGLASS_CURSOR = NULL;
 wxCursor *wxCROSS_CURSOR = NULL;
 
 // 'Null' objects
+wxAcceleratorTable wxNullAcceleratorTable;
 wxBitmap wxNullBitmap;
 wxIcon   wxNullIcon;
 wxCursor wxNullCursor;

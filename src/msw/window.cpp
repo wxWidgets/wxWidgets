@@ -252,7 +252,7 @@ wxWindow::wxWindow(void)
   m_lastMsg = 0;
   m_lastWParam = 0;
   m_lastLParam = 0;
-  m_acceleratorTable = 0;
+//  m_acceleratorTable = 0;
   m_hMenu = 0;
 
   m_xThumbSize = 0;
@@ -434,7 +434,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
   m_lastMsg = 0;
   m_lastWParam = 0;
   m_lastLParam = 0;
-  m_acceleratorTable = 0;
+//  m_acceleratorTable = 0;
   m_hMenu = 0;
 
   m_xThumbSize = 0;
@@ -2010,6 +2010,11 @@ bool wxWindow::MSWProcessMessage(WXMSG* pMsg)
   }
 
   return FALSE;
+}
+
+bool wxWindow::MSWTranslateMessage(WXMSG* WXUNUSED(pMsg))
+{
+    return FALSE;
 }
 
 long wxWindow::MSWOnMDIActivate(long WXUNUSED(flag), WXHWND WXUNUSED(activate), WXHWND WXUNUSED(deactivate))

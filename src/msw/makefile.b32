@@ -118,6 +118,7 @@ COMMONOBJS = \
 #  $(MSWDIR)\matrix.obj \
 
 MSWOBJS = \
+  $(MSWDIR)\accel.obj \
   $(MSWDIR)\app.obj \
   $(MSWDIR)\bitmap.obj \
   $(MSWDIR)\bmpbuttn.obj \
@@ -233,6 +234,8 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     copy $(COMMDIR)\doslex.c $(COMMDIR)\lex_yy.c
 
 #$(OBJECTS):	$(WXDIR)\include\wx\setup.h
+
+$(MSWDIR)\accel.obj:     $(MSWDIR)\accel.$(SRCSUFF)
 
 $(MSWDIR)\app.obj:     $(MSWDIR)\app.$(SRCSUFF)
 

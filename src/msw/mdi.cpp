@@ -479,7 +479,7 @@ bool wxMDIParentFrame::MSWOnActivate(int state, bool minimized, WXHWND activate)
 
 bool wxMDIParentFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
-  if (cmd == 0)
+//  if (cmd == 0) // Why did I do this test?
   {
     // In case it's e.g. a toolbar.
     wxWindow *win = wxFindWinFromHandle(control);
@@ -599,8 +599,18 @@ bool wxMDIParentFrame::MSWProcessMessage(WXMSG* msg)
   if ((m_currentChild != (wxWindow *)NULL) && (m_currentChild->GetHWND() != (WXHWND) NULL) && m_currentChild->MSWProcessMessage(msg))
      return TRUE;
 	
-  if (m_acceleratorTable != (WXHANDLE) NULL &&
-          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable, pMsg))
+  return FALSE;
+}
+
+bool wxMDIParentFrame::MSWTranslateMessage(WXMSG* msg)
+{
+  MSG *pMsg = (MSG *)msg;
+
+  if ((m_currentChild != (wxWindow *)NULL) && (m_currentChild->GetHWND() != (WXHWND) NULL) && m_currentChild->MSWTranslateMessage(msg))
+     return TRUE;
+	
+  if (m_acceleratorTable.Ok() &&
+          ::TranslateAccelerator((HWND) GetHWND(), (HACCEL) m_acceleratorTable.GetHACCEL(), pMsg))
     return TRUE;
 
   if (pMsg->message == WM_KEYDOWN || pMsg->message == WM_SYSKEYDOWN)
@@ -611,6 +621,7 @@ bool wxMDIParentFrame::MSWProcessMessage(WXMSG* msg)
 
   return FALSE;
 }
+
 
 bool wxMDIParentFrame::MSWOnEraseBkgnd(WXHDC WXUNUSED(pDC))
 {
@@ -918,7 +929,8 @@ bool wxMDIChildFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 #if WXDEBUG > 1
   wxDebugMsg("wxMDIChildFrame::MSWOnCommand %d\n", GetHWND());
 #endif
-  if ((cmd == 0) && GetHWND())
+//  if ((cmd == 0) && GetHWND())
+  if (GetHWND())
   {
     // In case it's e.g. a toolbar.
     wxWindow *win = wxFindWinFromHandle(control);
@@ -947,13 +959,19 @@ long wxMDIChildFrame::MSWDefWindowProc(WXUINT message, WXUINT wParam, WXLPARAM l
 
 bool wxMDIChildFrame::MSWProcessMessage(WXMSG *msg)
 {
+  return FALSE;
+}
+
+bool wxMDIChildFrame::MSWTranslateMessage(WXMSG* msg)
+{
   MSG *pMsg = (MSG *)msg;
-  if (m_acceleratorTable && GetHWND())
+  if (m_acceleratorTable.Ok())
   {
     wxFrame *parent = (wxFrame *)GetParent();
     HWND parent_hwnd = (HWND) parent->GetHWND();
-    return (::TranslateAccelerator(parent_hwnd, (HACCEL) m_acceleratorTable, pMsg) != 0);
+    return (::TranslateAccelerator(parent_hwnd, (HACCEL) m_acceleratorTable.GetHACCEL(), pMsg) != 0);
   }
+
   return FALSE;
 }
 

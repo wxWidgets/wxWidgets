@@ -555,6 +555,7 @@ public:
   // Calls an appropriate default window procedure
   virtual long MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
   virtual bool MSWProcessMessage(WXMSG* pMsg);
+  virtual bool MSWTranslateMessage(WXMSG* pMsg);
   virtual void MSWDestroyWindow(void);
 
   // Detach "Window" menu from menu bar so it doesn't get deleted
@@ -665,7 +666,7 @@ public:
 #endif
 */
 
-  WXHANDLE              m_acceleratorTable;
+//  WXHANDLE              m_acceleratorTable;
   WXHMENU               m_hMenu; // Menu, if any
   wxList *              m_children;                           // Window's children
   int                   m_returnCode;

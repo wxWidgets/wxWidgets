@@ -858,6 +858,7 @@ typedef unsigned long   WXHBRUSH;
 typedef unsigned long   WXHPALETTE;
 typedef unsigned long   WXHCURSOR;
 typedef unsigned long   WXHRGN;
+typedef unsigned long   WXHACCEL;
 typedef unsigned long   WXHINSTANCE;
 typedef unsigned long   WXHBITMAP;
 typedef unsigned long   WXHIMAGELIST;
