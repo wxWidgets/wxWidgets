@@ -1,13 +1,15 @@
-/////////////////////////////////////////////////////////////////////////////
-// Name:        math.h
-// Purpose:     Declarations/definitions of common math functions
-// Author:      John Labenski and others
-// Modified by:
-// Created:     02/02/03
-// RCS-ID:
-// Copyright:   (c)
-// Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+/**
+* Name:        math.h
+* Purpose:     Declarations/definitions of common math functions
+* Author:      John Labenski and others
+* Modified by:
+* Created:     02/02/03
+* RCS-ID:
+* Copyright:   (c)
+* Licence:     wxWindows licence
+*/
+
+/* THIS IS A C FILE, DON'T USE C++ FEATURES (IN PARTICULAR COMMENTS) IN IT */
 
 #ifndef _WX_MATH_H_
 #define _WX_MATH_H_
@@ -24,7 +26,7 @@
     #define M_PI 3.1415926535897932384626433832795
 #endif
 
-// unknown __VISAGECC__, __SYMANTECCC__
+/* unknown __VISAGECC__, __SYMANTECCC__ */
 
 #if defined(__VISUALC__) || defined(__BORLANDC__) || defined(__WATCOMC__)
     #include <float.h>
@@ -49,4 +51,5 @@
 #endif
 
 
-#endif // _WX_MATH_H_
+#endif
+       /* _WX_MATH_H_ */
