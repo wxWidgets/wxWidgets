@@ -111,7 +111,6 @@ bool WXDLLEXPORT wxInitialize()
         return FALSE;
     }
 
-    wxTheApp->CreateMessageOutput();
     gs_nInitCount++;
 
     return TRUE;
