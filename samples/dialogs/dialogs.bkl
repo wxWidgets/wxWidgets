@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <makefile>
 
-    <include file="../../build/bakefiles/common.bkl"/>
+    <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="dialogs" template="wx_sample">
         <sources>dialogs.cpp</sources>
