@@ -575,7 +575,7 @@ void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
-    (void)wxMessageBox(_T("wxWidgets menu sample\n© 1999-2001 Vadim Zeitlin"),
+    (void)wxMessageBox(_T("wxWidgets menu sample\n(c) 1999-2001 Vadim Zeitlin"),
                        _T("About wxWidgets menu sample"),
                        wxICON_INFORMATION);
 }
