@@ -69,6 +69,7 @@ wxToolBar::wxToolBar():
 bool wxToolBar::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
             long style, const wxString& name)
 {
+    m_windowId = id;
     m_maxWidth = -1;
     m_maxHeight = -1;
 
@@ -409,7 +410,7 @@ void wxToolBar::DestroyPixmaps()
 // created and used as the pushed/toggled image.
 // If toggle is TRUE, the button toggles between the two states.
 
-wxToolBarTool *wxToolBar::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& pushedBitmap,
+wxToolBarTool *wxToolBar::AddTool(int index, const wxBitmap& bitmap, const wxBitmap& WXUNUSED(pushedBitmap),
              bool toggle, long xPos, long yPos, wxObject *clientData, const wxString& helpString1, const wxString& helpString2)
 {
   wxToolBarTool *tool = new wxToolBarTool(index, bitmap, wxNullBitmap, toggle, xPos, yPos, helpString1, helpString2);
@@ -471,7 +472,7 @@ WXWidget wxToolBar::GetMainWidget() const
 
 
 void wxToolButtonCallback (Widget w, XtPointer clientData,
-                    XtPointer ptr)
+                    XtPointer WXUNUSED(ptr))
 {
     wxToolBar *toolBar = (wxToolBar *) clientData;
     int index = toolBar->FindIndexForWidget((WXWidget) w);
@@ -492,7 +493,7 @@ void wxToolButtonCallback (Widget w, XtPointer clientData,
 
 
 static void wxToolButtonPopupCallback (Widget w, XtPointer client_data,
-                     XEvent *event, Boolean *continue_to_dispatch)
+                     XEvent *event, Boolean *WXUNUSED(continue_to_dispatch))
 {
     // TODO: retrieve delay before popping up tooltip from wxSystemSettings.
     int delayMilli = 800;

@@ -141,7 +141,7 @@ void wxGauge::SetShadowWidth(int w)
     XtVaSetValues((Widget) m_mainWidget, XmNshadowThickness, w, NULL);
 }
 
-void wxGauge::SetBezelFace(int w)
+void wxGauge::SetBezelFace(int WXUNUSED(w))
 {
 }
 
@@ -436,7 +436,7 @@ DrawSlider(XmGaugeWidget gw, Boolean clear)
 #endif
 
 static void
-Initialize(Widget req, Widget new_w, ArgList args, Cardinal *num_args )
+Initialize(Widget WXUNUSED(req), Widget new_w, ArgList WXUNUSED(args), Cardinal *WXUNUSED(num_args ))
 {
     XmGaugeWidget gw = (XmGaugeWidget)new_w;
 #define THIS gw->gauge
@@ -466,10 +466,10 @@ Destroy(Widget w)
 static Boolean
 SetValues(
           Widget cw,
-          Widget rw,
+          Widget WXUNUSED(rw),
           Widget nw,
-          ArgList args,
-          Cardinal *num_args )
+          ArgList WXUNUSED(args),
+          Cardinal *WXUNUSED(num_args) )
 {
     XmGaugeWidget cgw = (XmGaugeWidget)cw;
     XmGaugeWidget ngw = (XmGaugeWidget)nw;
@@ -493,7 +493,7 @@ SetValues(
 
 
 static void
-ExposeProc(Widget w, XEvent *event, Region r)
+ExposeProc(Widget w, XEvent *WXUNUSED(event), Region WXUNUSED(r))
 {
     XmGaugeWidget gw = (XmGaugeWidget)w;
 #define THIS gw->gauge
@@ -599,7 +599,7 @@ WidgetClass xmGaugeWidgetClass = (WidgetClass)&xmGaugeClassRec;
 
 
 void
-GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args)
+GaugePick(Widget WXUNUSED(w), XEvent *WXUNUSED(e), String *WXUNUSED(args), Cardinal  *WXUNUSED(num_args))
 {
     /* Commented out for a read-only gauge in wxWindows */
 #if 0
@@ -665,7 +665,7 @@ GaugePick(Widget w, XEvent *e, String *args, Cardinal  *num_args)
 #define round(x) ( (x) > 0 ? ((x) + 0.5) : -(-(x) + 0.5) )
 
 void
-GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args)
+GaugeDrag(Widget WXUNUSED(w), XEvent *WXUNUSED(e), String *WXUNUSED(args), Cardinal  *WXUNUSED(num_args))
 {
     /* Commented out for a read-only gauge in wxWindows */
 #if 0
@@ -734,7 +734,7 @@ GaugeDrag(Widget w, XEvent *e, String *args, Cardinal  *num_args)
 
 
 void
-GaugeDrop(Widget w, XEvent *e, String *args, Cardinal  *num_args)
+GaugeDrop(Widget WXUNUSED(w), XEvent *WXUNUSED(e), String *WXUNUSED(args), Cardinal  *WXUNUSED(num_args))
 {
     /* Commented out for a read-only gauge in wxWindows */
 #if 0

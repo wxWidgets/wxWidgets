@@ -20,7 +20,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinButton, wxControl)
 IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxScrollEvent);
 #endif
 
-bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
+bool wxSpinButton::Create(wxWindow *parent, wxWindowID id, const wxPoint& WXUNUSED(pos), const wxSize& WXUNUSED(size),
             long style, const wxString& name)
 {
     SetName(name);
@@ -50,7 +50,7 @@ int wxSpinButton::GetValue() const
     return 0;
 }
 
-void wxSpinButton::SetValue(int val)
+void wxSpinButton::SetValue(int WXUNUSED(val))
 {
     // TODO
 }
@@ -61,7 +61,7 @@ void wxSpinButton::SetRange(int minVal, int maxVal)
     wxSpinButtonBase::SetRange(minVal, maxVal);
 }
 
-void wxSpinButton::ChangeFont(bool keepOriginalSize)
+void wxSpinButton::ChangeFont(bool WXUNUSED(keepOriginalSize))
 {
     // TODO
 }

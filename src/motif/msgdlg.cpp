@@ -59,28 +59,28 @@ static void msgboxCallBack(Widget w, int client_data, int id)
 
 static void msgboxCallBackOk(Widget w,
                              int client_data,
-                             XmAnyCallbackStruct *call_data)
+                             XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_OK);
 }
 
 static void msgboxCallBackCancel(Widget w,
                                  int client_data,
-                                 XmAnyCallbackStruct *call_data)
+                                 XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_CANCEL);
 }
 
 static void msgboxCallBackHelp(Widget w,
                                int client_data,
-                               XmAnyCallbackStruct *call_data)
+                               XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_HELP);
 }
 
 static void msgboxCallBackClose(Widget w,
                                 int client_data,
-                                XmAnyCallbackStruct *call_data)
+                                XmAnyCallbackStruct *WXUNUSED(call_data))
 {
     msgboxCallBack(w, client_data, wxID_CANCEL);
 }
@@ -93,7 +93,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& message,
                                  const wxString& caption,
                                  long style,
-                                 const wxPoint& pos)
+                                 const wxPoint& WXUNUSED(pos))
 {
     m_caption = caption;
     m_message = message;
@@ -135,7 +135,7 @@ int wxMessageDialog::ShowModal()
     XtSetArg(args[ac], XmNdialogTitle, title()); ac++;
 
     // do create message box
-    Widget wParent = m_parent ? GetWidget(m_parent) : NULL;
+    Widget wParent = m_parent ? GetWidget(m_parent) : (Widget) 0;
     if ( !wParent )
     {
         wxWindow *window = wxTheApp->GetTopWindow();

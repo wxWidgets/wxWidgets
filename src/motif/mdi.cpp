@@ -116,7 +116,7 @@ void wxMDIParentFrame::SetMenuBar(wxMenuBar *menu_bar)
     SetChildMenuBar((wxMDIChildFrame*) NULL);
 }
 
-void wxMDIParentFrame::OnSize(wxSizeEvent& event)
+void wxMDIParentFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
 #if wxUSE_CONSTRAINTS
     if (GetAutoLayout())
@@ -136,7 +136,7 @@ void wxMDIParentFrame::GetClientSize(int *width, int *height) const
     wxFrame::GetClientSize(width, height);
 }
 
-void wxMDIParentFrame::OnActivate(wxActivateEvent& event)
+void wxMDIParentFrame::OnActivate(wxActivateEvent& WXUNUSED(event))
 {
     // Do nothing
 }
@@ -299,6 +299,7 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
                              const wxString& name)
 {
     SetName(name);
+    SetWindowStyleFlag(style);
 
     m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
     m_foregroundColour = *wxBLACK;
@@ -515,7 +516,7 @@ void wxMDIChildFrame::Maximize()
     // TODO
 }
 
-void wxMDIChildFrame::Iconize(bool iconize)
+void wxMDIChildFrame::Iconize(bool WXUNUSED(iconize))
 {
     // TODO
 }
@@ -583,6 +584,8 @@ wxMDIClientWindow::~wxMDIClientWindow()
 
 bool wxMDIClientWindow::CreateClient(wxMDIParentFrame *parent, long style)
 {
+    SetWindowStyleFlag(style);
+
     //    m_windowParent = parent;
     //    m_backgroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_APPWORKSPACE);
 
@@ -627,7 +630,7 @@ void wxMDIClientWindow::GetPosition(int *x, int *y) const
 }
 
 // Explicitly call default scroll behaviour
-void wxMDIClientWindow::OnScroll(wxScrollEvent& event)
+void wxMDIClientWindow::OnScroll(wxScrollEvent& WXUNUSED(event))
 {
     Default(); // Default processing
 }

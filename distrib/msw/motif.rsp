@@ -1,20 +1,3 @@
-install-sh
-Makefile
-template.mak
-configure
-configure.in
-config.guess
-config.sub
-wx-config.in
-mkinstalldirs
-wxinstall
-
-src/makeenvs/*.env
-src/make.env
-src/makeprog.env
-src/makelib.env
-
-src/Makefile
 src/motif.inc
 
 src/motif/*.cpp

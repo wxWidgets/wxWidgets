@@ -164,7 +164,7 @@ int wxGenericFontDialog::ShowModal(void)
 }
 
 
-void wxGenericFontDialog::OnPaint(wxPaintEvent& event)
+void wxGenericFontDialog::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
   PaintFontBackground(dc);

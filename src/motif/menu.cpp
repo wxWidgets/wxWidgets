@@ -498,7 +498,7 @@ void wxMenuBar::Enable(int id, bool flag)
     item->Enable(flag);
 }
 
-void wxMenuBar::EnableTop(int pos, bool flag)
+void wxMenuBar::EnableTop(int WXUNUSED(pos), bool WXUNUSED(flag))
 {
     // TODO
 }
@@ -604,7 +604,7 @@ wxString wxMenuBar::GetLabelTop(int pos) const
 
 }
 
-bool wxMenuBar::OnDelete(wxMenu *menu, int pos)
+bool wxMenuBar::OnDelete(wxMenu *menu, int WXUNUSED(pos))
 {
     // Only applies to dynamic deletion (when set in frame)
     if (!m_menuBarFrame)
@@ -860,8 +860,8 @@ int PostDeletionOfMenu( XtPointer* clientData )
 }
 
 void
-wxMenuPopdownCallback(Widget w, XtPointer clientData,
-                      XtPointer ptr)
+wxMenuPopdownCallback(Widget WXUNUSED(w), XtPointer clientData,
+                      XtPointer WXUNUSED(ptr))
 {
     wxMenu *menu = (wxMenu *)clientData;
 
@@ -1114,7 +1114,7 @@ void wxMenuBar::SetForegroundColour(const wxColour& col)
         m_menus[i]->SetForegroundColour((wxColour&) col);
 }
 
-void wxMenuBar::ChangeFont(bool keepOriginalSize)
+void wxMenuBar::ChangeFont(bool WXUNUSED(keepOriginalSize))
 {
     // Nothing to do for menubar, fonts are kept in wxMenus
 }

@@ -93,8 +93,8 @@ class wxGridTableBase : public wxObject
 
     virtual wxString GetRowLabelValue( int row );
     virtual wxString GetColLabelValue( int col );
-    virtual void SetRowLabelValue( int row, const wxString& ) {}
-    virtual void SetColLabelValue( int col, const wxString& ) {}
+    virtual void SetRowLabelValue( int WXUNUSED(row), const wxString& ) {}
+    virtual void SetColLabelValue( int WXUNUSED(col), const wxString& ) {}
     
     DECLARE_ABSTRACT_CLASS( wxGridTableBase );
 };
@@ -796,7 +796,7 @@ class wxGrid : public wxPanel
                 SetRowLabelAlignment( align, -1 );
         }
 
-    int GetLabelAlignment( int orientation, int align )
+    int GetLabelAlignment( int orientation, int WXUNUSED(align) )
         {
             int h, v;
             if ( orientation == wxHORIZONTAL )
@@ -830,7 +830,7 @@ class wxGrid : public wxPanel
     wxFont GetCellTextFont() const 
         { return m_defaultCellFont; }
         
-    wxFont GetCellTextFont(int row, int col) const
+    wxFont GetCellTextFont(int WXUNUSED(row), int WXUNUSED(col)) const
         { return m_defaultCellFont; }
         
     void SetCellTextFont(const wxFont& fnt)

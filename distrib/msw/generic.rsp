@@ -3,6 +3,7 @@ BuildCVS.txt
 acconfig.h
 *.m4
 autogen.sh
+configure
 config.guess
 config.sub
 configure.in
@@ -16,6 +17,8 @@ modules
 template.mak
 wx-config.in
 makefile.unx.in
+wxinstall
+Makefile
 
 distrib/msw/*.rsp
 distrib/msw/*.bat
@@ -48,6 +51,12 @@ docs/html/*.htm
 docs/html/*.gif
 docs/html/*.png
 
+src/makeenvs/*.env
+src/make.env
+src/makeprog.env
+src/makelib.env
+
+src/Makefile
 src/*.inc
 src/mkdir
 src/Makefile
@@ -249,6 +258,18 @@ samples/config/*.ico
 samples/config/*.bmp
 samples/config/*.rc
 samples/config/*.wav
+
+samples/db/*.cpp
+samples/db/*.h
+samples/db/*.def
+samples/db/makefile*
+samples/db/*.xbm
+samples/db/*.xpm
+samples/db/*.txt
+samples/db/*.ico
+samples/db/*.bmp
+samples/db/*.rc
+samples/db/*.wav
 
 samples/dynamic/*.cpp
 samples/dynamic/*.h
@@ -941,4 +962,40 @@ samples/console/*.xbm
 samples/console/*.png
 samples/console/*.ico
 samples/console/*.txt
+
+samples/font/*.cpp
+samples/font/*.h
+samples/font/makefile*
+samples/font/*.rc
+samples/font/*.def
+samples/font/*.bmp
+samples/font/*.xpm
+samples/font/*.xbm
+samples/font/*.png
+samples/font/*.ico
+samples/font/*.txt
+
+samples/nettest/*.cpp
+samples/nettest/*.h
+samples/nettest/makefile*
+samples/nettest/*.rc
+samples/nettest/*.def
+samples/nettest/*.bmp
+samples/nettest/*.xpm
+samples/nettest/*.xbm
+samples/nettest/*.png
+samples/nettest/*.ico
+samples/nettest/*.txt
+
+samples/scrollsub/*.cpp
+samples/scrollsub/*.h
+samples/scrollsub/makefile*
+samples/scrollsub/*.rc
+samples/scrollsub/*.def
+samples/scrollsub/*.bmp
+samples/scrollsub/*.xpm
+samples/scrollsub/*.xbm
+samples/scrollsub/*.png
+samples/scrollsub/*.ico
+samples/scrollsub/*.txt
 

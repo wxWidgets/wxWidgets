@@ -171,7 +171,7 @@ int wxPalette::GetPixel(const unsigned char red, const unsigned char green, cons
     return FALSE;
 }
 
-bool wxPalette::GetRGB(int index, unsigned char *red, unsigned char *green, unsigned char *blue) const
+bool wxPalette::GetRGB(int index, unsigned char *WXUNUSED(red), unsigned char *WXUNUSED(green), unsigned char *WXUNUSED(blue)) const
 {
     if ( !m_refData )
         return FALSE;

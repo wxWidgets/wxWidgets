@@ -34,7 +34,7 @@
 // ----------------------------------------------------------------------------
 
 // id for a separator line in the menu (invalid for normal item)
-#define   ID_SEPARATOR    (-1)
+// #define   ID_SEPARATOR    (-1)
 
 // ----------------------------------------------------------------------------
 // wxMenuItem: an item in the menu, optionally implements owner-drawn behaviour

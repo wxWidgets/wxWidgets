@@ -1212,7 +1212,7 @@ bool wxGrid::SendEvent( const wxEventType type,
 }
 
 
-void wxGrid::OnPaint( wxPaintEvent& ev )
+void wxGrid::OnPaint( wxPaintEvent& WXUNUSED(ev) )
 {
     wxPaintDC dc( this );
 
@@ -1260,7 +1260,7 @@ void wxGrid::OnPaint( wxPaintEvent& ev )
 }
 
 
-void wxGrid::OnSize( wxSizeEvent& ev )
+void wxGrid::OnSize( wxSizeEvent& WXUNUSED(ev) )
 {
     if ( m_created ) CalcDimensions();
 }
@@ -3788,7 +3788,7 @@ wxColour wxGrid::GetDefaultCellBackgroundColour()
     return wxColour( 255, 255, 255 );
 }
 
-wxColour wxGrid::GetCellBackgroundColour( int row, int col )
+wxColour wxGrid::GetCellBackgroundColour( int WXUNUSED(row), int WXUNUSED(col) )
 {
     // TODO: replace this temp test code
     //
@@ -3802,7 +3802,7 @@ wxColour wxGrid::GetDefaultCellTextColour()
     return wxColour( 0, 0, 0 );    
 }
 
-wxColour wxGrid::GetCellTextColour( int row, int col )
+wxColour wxGrid::GetCellTextColour( int WXUNUSED(row), int WXUNUSED(col) )
 {
     // TODO: replace this temp test code
     //
@@ -3823,7 +3823,7 @@ wxFont wxGrid::GetDefaultCellFont()
     return m_defaultCellFont;
 }
 
-wxFont wxGrid::GetCellFont( int row, int col )
+wxFont wxGrid::GetCellFont( int WXUNUSED(row), int WXUNUSED(col) )
 {
     // TODO: replace this temp test code
     //
@@ -3838,7 +3838,7 @@ void wxGrid::GetDefaultCellAlignment( int *horiz, int *vert )
     *vert  = wxTOP;
 }
 
-void wxGrid::GetCellAlignment( int row, int col, int *horiz, int *vert )
+void wxGrid::GetCellAlignment( int WXUNUSED(row), int WXUNUSED(col), int *horiz, int *vert )
 {
     // TODO: replace this temp test code
     //
@@ -3930,7 +3930,7 @@ void wxGrid::SetDefaultCellBackgroundColour( const wxColour& )
     //
 }
 
-void wxGrid::SetCellBackgroundColour( int row, int col, const wxColour& )
+void wxGrid::SetCellBackgroundColour( int WXUNUSED(row), int WXUNUSED(col), const wxColour& )
 {
     // TODO: everything !!!
     //
@@ -3942,7 +3942,7 @@ void wxGrid::SetDefaultCellTextColour( const wxColour& )
     //
 }
 
-void wxGrid::SetCellTextColour( int row, int col, const wxColour& )
+void wxGrid::SetCellTextColour( int WXUNUSED(row), int WXUNUSED(col), const wxColour& )
 {
     // TODO: everything !!!
     //
@@ -3960,19 +3960,19 @@ void wxGrid::SetDefaultCellFont( const wxFont& )
     //
 }
 
-void wxGrid::SetCellFont( int row, int col, const wxFont& )
+void wxGrid::SetCellFont( int WXUNUSED(row), int WXUNUSED(col), const wxFont& )
 {
     // TODO: everything !!!
     //
 }
 
-void wxGrid::SetDefaultCellAlignment( int horiz, int vert )
+void wxGrid::SetDefaultCellAlignment( int WXUNUSED(horiz), int WXUNUSED(vert) )
 {
     // TODO: everything !!!
     //
 }
 
-void wxGrid::SetCellAlignment( int row, int col, int horiz, int vert )
+void wxGrid::SetCellAlignment( int WXUNUSED(row), int WXUNUSED(col), int WXUNUSED(horiz), int WXUNUSED(vert) )
 {
     // TODO: everything !!!
     //

@@ -1,5 +1,5 @@
-wxWindows 2.0.1
----------------
+wxWindows 2.1
+-------------
 
 Welcome to wxWindows 2, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using (where
@@ -12,7 +12,7 @@ and facilities for writing TCP/IP applications, thread handling, and more.
 Where certain features are not available on a platform, such as MDI and
 tree controls on Unix, they are emulated.
 
-A detailed 700-page reference manual is supplied in HTML, PDF and
+A detailed 1100-page reference manual is supplied in HTML, PDF and
 Windows Help form: see the docs hierarchy.
 
 For a quick start, point your Web browser at docs/html/index.htm for a list of
@@ -33,6 +33,15 @@ Most popular C++ compilers are supported; see the release notes
 Files
 -----
 
+The distribution is available in a number of formats.
+The most convenient is the platform-specific distribution,
+but the zip set forms a more complete distribution, for example if
+you wish to take part in wxWindows development. Also, add-ons
+such as OGL may only be available in zip form.
+
+Zip set
+-------
+
 Depending on what you downloaded, you may have one or more of
 these ports. You may unarchive any or all of the ports into
 the same directory hierarchy. The zip archive set comprises the
@@ -51,19 +60,26 @@ wx200htm.zip            HTML documentation
 wx200vc.zip             MS VC++ 5/6 project files
 wx200bc.zip             Borland C++ 5 project files
 wx200cw.zip             Metrowerks CodeWarrior 4.1 project files
+jpeg.zip                Optional JPEG library
+ogl3.zip                Optional Object Graphics Library
+glcanvas.zip            Optional wxGLCanvas class (Motif, GTK, MSW)
+tex2rtf2.zip            Tex2RTF documentation tool
 
-The tarred, gzip archive comprises the following (or similar
-names). Not all of these files are available in all distributions, due
-to space restrictions.
+wxWindows for GTK distribution
+------------------------------
 
-wx200gtk.tgz            All wxGTK source and samples
-wx200mot.tgz            All wxMotif source and samples
-wx200stubs.tgz          Stubs ('empty port') source. Needs
-                        wx200gen.zip/tgz.
-wx200gen.tgz            Generic code and samples (common to all ports)
-wx200pdf.tgz            Acrobat PDF documentation
-wx200htm.tgz            HTML documentation
-wx200src.tgz            Documentation source
+TODO
+
+wxWindows for Motif distribution
+--------------------------------
+
+TODO
+
+wxWindows for Windows distribution
+----------------------------------
+
+setup.exe               Setup file (Windows 95/98, NT)
+setup.*                 Other setup files
 
 Installation
 ------------
@@ -123,13 +139,10 @@ The main wxWindows ftp site is at:
 
 A wxWindows CD-ROM with the latest distribution plus an HTML
 front-end and hundreds of MB of compilers, utilities and other
-material may be ordered from the CD-ROM page:
-
-  http://www.wxwindows.org/cdrom.htm
-
-or contact Julian Smart <julian.smart@ukonline.co.uk>.
+material may be ordered from the CD-ROM page (see the wxWindows
+web site) or contact Julian Smart <julian.smart@ukonline.co.uk>.
 
 Good luck!
 
-The wxWindows Team, March 1st, 1999
+The wxWindows Team, November 1999
 

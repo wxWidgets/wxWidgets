@@ -143,7 +143,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     m_pos = pos;
 }
 
-static void wxChangeListBoxColours(wxWindow* win, Widget widget)
+static void wxChangeListBoxColours(wxWindow* WXUNUSED(win), Widget widget)
 {
     wxWindow::DoChangeBackgroundColour((WXWidget) widget, *wxWHITE);
 

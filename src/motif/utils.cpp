@@ -123,7 +123,7 @@ bool wxCheckForInterrupt(wxWindow *wnd)
 // wxExecute stuff
 // ----------------------------------------------------------------------------
 
-static void xt_notify_end_process(XtPointer data, int *fid,
+static void xt_notify_end_process(XtPointer data, int *WXUNUSED(fid),
                                   XtInputId *id)
 {
     wxEndProcessData *proc_data = (wxEndProcessData *)data;
@@ -1048,7 +1048,7 @@ void wxHSVToXColor(wxHSV *hsv,XColor *rgb)
     int h = hsv->h;
     int s = hsv->s;
     int v = hsv->v;
-    int r, g, b;
+    int r = 0, g = 0, b = 0;
     int i, f;
     int p, q, t;
     s = (s * wxMAX_RGB) / wxMAX_SV;
@@ -1081,14 +1081,14 @@ void wxXColorToHSV(wxHSV *hsv,XColor *rgb)
     int b = rgb->blue >> 8;
     int maxv = wxMax3(r, g, b);
     int minv = wxMin3(r, g, b);
-    int h, s, v;
+    int h = 0, s, v;
     v = maxv;
     if (maxv) s = (maxv - minv) * wxMAX_RGB / maxv;
     else s = 0;
     if (s == 0) h = 0;
     else
     {
-        int rc, gc, bc, hex;
+        int rc, gc, bc, hex = 0;
         rc = (maxv - r) * wxMAX_RGB / (maxv - minv);
         gc = (maxv - g) * wxMAX_RGB / (maxv - minv);
         bc = (maxv - b) * wxMAX_RGB / (maxv - minv);
@@ -1117,7 +1117,7 @@ void wxAllocNearestColor(Display *d,Colormap cmp,XColor *xc)
     wxHSV hsv_defs, hsv;
     wxXColorToHSV(&hsv,xc);
 
-    int diff, min_diff, pixel = 0;
+    int diff, min_diff = 0, pixel = 0;
 
     for(llp = 0;llp < num_colors;llp++)
     {

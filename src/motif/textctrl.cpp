@@ -399,7 +399,7 @@ bool wxTextCtrl::LoadFile(const wxString& file)
     Clear();
 
     Widget textWidget = (Widget) m_mainWidget;
-    FILE *fp;
+    FILE *fp = 0;
 
     struct stat statb;
     if ((stat ((char*) (const char*) file, &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
@@ -781,7 +781,7 @@ static void MergeChangesIntoString(wxString& value,
 }
 
 static void
-wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
+wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer WXUNUSED(ptr))
 {
     if (!wxGetWindowFromTable(w))
         // Widget has been deleted!
@@ -792,7 +792,7 @@ wxTextWindowChangedProc (Widget w, XtPointer clientData, XtPointer ptr)
 }
 
 static void
-wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStruct *cbs)
+wxTextWindowModifyProc (Widget WXUNUSED(w), XtPointer clientData, XmTextVerifyCallbackStruct *cbs)
 {
     wxTextCtrl *tw = (wxTextCtrl *) clientData;
     tw->m_processedDefault = FALSE;
@@ -842,7 +842,7 @@ wxTextWindowModifyProc (Widget w, XtPointer clientData, XmTextVerifyCallbackStru
 }
 
 static void
-wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs)
+wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *WXUNUSED(cbs))
 {
     if (!wxGetWindowFromTable(w))
         return;
@@ -854,7 +854,7 @@ wxTextWindowGainFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *
 }
 
 static void
-wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *cbs)
+wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *WXUNUSED(cbs))
 {
     if (!wxGetWindowFromTable(w))
         return;
@@ -866,7 +866,7 @@ wxTextWindowLoseFocusProc (Widget w, XtPointer clientData, XmAnyCallbackStruct *
 }
 
 static void wxTextWindowActivateProc(Widget w, XtPointer clientData,
-                                     XmAnyCallbackStruct *ptr)
+                                     XmAnyCallbackStruct *WXUNUSED(ptr))
 {
     if (!wxGetWindowFromTable(w))
         return;

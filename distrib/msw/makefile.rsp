@@ -7,6 +7,7 @@ samples/caret/Makefile.in
 samples/checklst/Makefile.in
 samples/config/Makefile.in
 samples/controls/Makefile.in
+samples/db/Makefile.in
 samples/dialogs/Makefile.in
 samples/dnd/Makefile.in
 samples/docview/Makefile.in
@@ -43,6 +44,9 @@ samples/validate/Makefile.in
 samples/wizard/Makefile.in
 samples/wxpoem/Makefile.in
 samples/wxsocket/Makefile.in
+samples/nettest/Makefile.in
+samples/scrollsub/Makefile.in
+utils/glcanvas/motif/Makefile.in
 utils/Makefile.in
 utils/wxMMedia2/Makefile.in
 utils/wxMMedia2/lib/Makefile.in

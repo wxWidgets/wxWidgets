@@ -569,7 +569,7 @@ bool wxNotebook::DoPhase(int /* nPhase */)
     return TRUE;
 }
 
-void wxNotebook::Command(wxCommandEvent& event)
+void wxNotebook::Command(wxCommandEvent& WXUNUSED(event))
 {
     wxFAIL_MSG("wxNotebook::Command not implemented");
 }

@@ -329,7 +329,7 @@ void wxDialog::Iconize(bool WXUNUSED(iconize))
 
 // Default resizing behaviour - if only ONE subwindow,
 // resize to client rectangle size
-void wxDialog::OnSize(wxSizeEvent& event)
+void wxDialog::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     // if we're using constraints - do use them
 #if wxUSE_CONSTRAINTS
@@ -569,7 +569,7 @@ void wxDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
     }
 }
 
-void wxDialog::OnCloseWindow(wxCloseEvent& event)
+void wxDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     // We'll send a Cancel message by default,
     // which may close the dialog.

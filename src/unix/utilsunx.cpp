@@ -442,7 +442,7 @@ char *wxGetUserHome( const wxString &user )
       who = getpwnam (user.mb_str());
     }
 
-    return wxConvertMB2WX(who ? who->pw_dir : NULL);
+    return wxConvertMB2WX(who ? who->pw_dir : 0);
 }
 
 // ----------------------------------------------------------------------------

@@ -95,7 +95,7 @@ bool wxIsClipboardFormatAvailable(wxDataFormat dataFormat)
         return TRUE;
 }
 
-bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int width, int height)
+bool wxSetClipboardData(wxDataFormat dataFormat, wxObject *obj, int WXUNUSED(width), int WXUNUSED(height))
 {
     if (dataFormat != wxDF_TEXT)
         return FALSE;
@@ -213,13 +213,13 @@ wxDataFormat  wxEnumClipboardFormats(wxDataFormat dataFormat)
        return wxDF_INVALID;
 }
 
-wxDataFormat  wxRegisterClipboardFormat(char *formatName)
+wxDataFormat  wxRegisterClipboardFormat(char *WXUNUSED(formatName))
 {
     // Not supported
     return (wxDataFormat) wxDF_INVALID;
 }
 
-bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int maxCount)
+bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int WXUNUSED(maxCount))
 {
     // Only wxDF_TEXT supported
     if (dataFormat == wxDF_TEXT)
@@ -236,8 +236,6 @@ bool wxGetClipboardFormatName(wxDataFormat dataFormat, char *formatName, int max
 //-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxClipboard,wxObject)
-
-wxClipboard* wxTheClipboard = (wxClipboard*) NULL;
 
 wxClipboard::wxClipboard()
 {

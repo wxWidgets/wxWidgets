@@ -1591,7 +1591,7 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
     }
 }
 
-void wxWindow::OnIdle(wxIdleEvent& event)
+void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event))
 {
     // This calls the UI-update mechanism (querying windows for
     // menu/toolbar/control state information)
@@ -1711,7 +1711,7 @@ void wxDeleteWindowFromTable(Widget w)
 // ----------------------------------------------------------------------------
 
 // Add to hash table, add event handler
-bool wxWindow::AttachWidget (wxWindow* parent, WXWidget mainWidget,
+bool wxWindow::AttachWidget (wxWindow* WXUNUSED(parent), WXWidget mainWidget,
                              WXWidget formWidget, int x, int y, int width, int height)
 {
     wxAddWindowToTable((Widget) mainWidget, this);
@@ -1825,7 +1825,7 @@ WXWidget wxWindow::GetLabelWidget() const
 
 // All widgets should have this as their resize proc.
 // OnSize sent to wxWindow via client data.
-void wxWidgetResizeProc(Widget w, XConfigureEvent *event, String args[], int *num_args)
+void wxWidgetResizeProc(Widget w, XConfigureEvent *WXUNUSED(event), String WXUNUSED(args)[], int *WXUNUSED(num_args))
 {
     wxWindow *win = wxGetWindowFromTable(w);
     if (!win)
@@ -1870,7 +1870,7 @@ static void wxCanvasRepaintProc(Widget drawingArea,
 
 // Unable to deal with Enter/Leave without a separate EventHandler (Motif 1.1.4)
 static void wxCanvasEnterLeave(Widget drawingArea,
-                               XtPointer clientData,
+                               XtPointer WXUNUSED(clientData),
                                XCrossingEvent * event)
 {
     XmDrawingAreaCallbackStruct cbs;
@@ -1885,7 +1885,7 @@ static void wxCanvasEnterLeave(Widget drawingArea,
 }
 
 // Fix to make it work under Motif 1.0 (!)
-static void wxCanvasMotionEvent (Widget drawingArea, XButtonEvent * event)
+static void wxCanvasMotionEvent (Widget WXUNUSED(drawingArea), XButtonEvent * WXUNUSED(event))
 {
 #if XmVersion <= 1000
     XmDrawingAreaCallbackStruct cbs;
@@ -1900,7 +1900,7 @@ static void wxCanvasMotionEvent (Widget drawingArea, XButtonEvent * event)
 }
 
 static void wxCanvasInputEvent(Widget drawingArea,
-                               XtPointer data,
+                               XtPointer WXUNUSED(data),
                                XmDrawingAreaCallbackStruct * cbs)
 {
     wxWindow *canvas = wxGetWindowFromTable(drawingArea);
@@ -2186,7 +2186,7 @@ static void wxCanvasInputEvent(Widget drawingArea,
 }
 
 static void wxPanelItemEventHandler(Widget    wid,
-                                    XtPointer client_data,
+                                    XtPointer WXUNUSED(client_data),
                                     XEvent*   event,
                                     Boolean  *continueToDispatch)
 {
@@ -2693,7 +2693,7 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Widget widget, 
     return FALSE;
 }
 
-bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget widget, XEvent *xevent)
+bool wxTranslateKeyEvent(wxKeyEvent& wxevent, wxWindow *win, Widget WXUNUSED(widget), XEvent *xevent)
 {
     switch (xevent->xany.type)
     {

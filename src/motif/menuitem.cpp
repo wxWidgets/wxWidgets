@@ -291,8 +291,8 @@ void wxMenuItem::SetLabel(const wxString& label)
     }
 }
 
-void wxMenuItemCallback (Widget w, XtPointer clientData,
-                         XtPointer ptr)
+void wxMenuItemCallback (Widget WXUNUSED(w), XtPointer clientData,
+                         XtPointer WXUNUSED(ptr))
 {
     wxMenuItem *item = (wxMenuItem *) clientData;
     if (item)
@@ -322,8 +322,8 @@ void wxMenuItemCallback (Widget w, XtPointer clientData,
     }
 }
 
-void wxMenuItemArmCallback (Widget w, XtPointer clientData,
-                       XtPointer ptr)
+void wxMenuItemArmCallback (Widget WXUNUSED(w), XtPointer clientData,
+                       XtPointer WXUNUSED(ptr))
 {
     wxMenuItem *item = (wxMenuItem *) clientData;
     if (item)
@@ -339,8 +339,8 @@ void wxMenuItemArmCallback (Widget w, XtPointer clientData,
 }
 
 void
-wxMenuItemDisarmCallback (Widget w, XtPointer clientData,
-                          XtPointer ptr)
+wxMenuItemDisarmCallback (Widget WXUNUSED(w), XtPointer clientData,
+                          XtPointer WXUNUSED(ptr))
 {
     wxMenuItem *item = (wxMenuItem *) clientData;
     if (item)

@@ -2,11 +2,17 @@
 rem Zip up an external, generic + Windows distribution of wxWindows 2.0
 set src=%wxwin
 set dest=%src\deliver
+set wise=0
 if "%src" == "" goto usage
 if "%dest" == "" goto usage
+if "%1" == "-help" goto usage
+if "%1" == "--help" goto usage
+if "%1" == "/?" goto usage
+if "%1" == "wise" set wise=1
 echo About to archive an external wxWindows distribution:
 echo   From   %src
 echo   To     %dest
+if "%wise" == "1" echo with WISE setup creation.
 echo CTRL-C if this is not correct.
 pause
 
@@ -76,6 +82,9 @@ copy %src\docs\gtk\makewxgtk %dest
 
 cd %dest
 
+Rem Skip WISE setup if wise is 0.
+if "%wise" == "0" goto end
+
 rem Unzip the Windows files into 'wx'
 mkdir %dest\wx
 
@@ -125,8 +134,10 @@ echo wxWindows archived.
 goto end
 
 :usage
-echo DOS wxWindows distribution.
-echo Usage: zipdist source destination
-echo e.g. zipdist d:\wx2\wxWindows d:\wx2\wxWindows\deliver
+echo DOS wxWindows distribution. Zips up all GTK/Motif/MSW/doc files,
+echo and optionally makes a deliver\wx directory and a setup.exe
+echo if you specify 'wise'.
+echo.
+echo Usage: zipdist [wise]
 
 :end

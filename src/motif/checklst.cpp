@@ -60,13 +60,13 @@ wxCheckListBox::wxCheckListBox(wxWindow *parent, wxWindowID id,
 // check items
 // -----------
 
-bool wxCheckListBox::IsChecked(size_t uiIndex) const
+bool wxCheckListBox::IsChecked(size_t WXUNUSED(uiIndex)) const
 {
     // TODO
     return FALSE;
 }
 
-void wxCheckListBox::Check(size_t uiIndex, bool bCheck)
+void wxCheckListBox::Check(size_t WXUNUSED(uiIndex), bool WXUNUSED(bCheck))
 {
     // TODO
 }

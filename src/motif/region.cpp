@@ -249,7 +249,7 @@ bool wxRegion::Empty() const
 //-----------------------------------------------------------------------------
 
 // Does the region contain the point (x,y)?
-wxRegionContain wxRegion::Contains(long x, long y) const
+wxRegionContain wxRegion::Contains(long WXUNUSED(x), long WXUNUSED(y)) const
 {
     if (!m_refData)
         return wxOutRegion;

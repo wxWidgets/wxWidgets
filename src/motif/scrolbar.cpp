@@ -126,7 +126,7 @@ int wxScrollBar::GetThumbPosition() const
 }
 
 void wxScrollBar::SetScrollbar(int position, int thumbSize, int range, int pageSize,
-    bool refresh)
+    bool WXUNUSED(refresh))
 {
     m_viewSize = pageSize;
     m_pageSize = thumbSize;
@@ -152,7 +152,7 @@ void wxScrollBar::Command(wxCommandEvent& event)
     ProcessCommand(event);
 }
 
-void wxScrollBar::ChangeFont(bool keepOriginalSize)
+void wxScrollBar::ChangeFont(bool WXUNUSED(keepOriginalSize))
 {
     // TODO
     // Do anything for a scrollbar? A font will never be seen.
@@ -172,7 +172,7 @@ void wxScrollBar::ChangeForegroundColour()
     wxWindow::ChangeForegroundColour();
 }
 
-static void wxScrollBarCallback(Widget widget, XtPointer clientData,
+static void wxScrollBarCallback(Widget WXUNUSED(widget), XtPointer clientData,
                         XmScaleCallbackStruct *cbs)
 {
     wxScrollBar *scrollBar = (wxScrollBar *)clientData;

@@ -61,7 +61,7 @@ wxAcceleratorTable::~wxAcceleratorTable()
 }
 
 // Load from .rc resource
-wxAcceleratorTable::wxAcceleratorTable(const wxString& resource)
+wxAcceleratorTable::wxAcceleratorTable(const wxString& WXUNUSED(resource))
 {
     m_refData = new wxAcceleratorRefData;
 }

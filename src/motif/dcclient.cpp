@@ -1381,10 +1381,10 @@ void wxWindowDC::SetPen( const wxPen &pen )
         int style;
         int join;
         int cap;
-        const static char dotted[] = {2, 5};
-        const static char short_dashed[] = {4, 4};
-        const static char long_dashed[] = {4, 8};
-        const static char dotted_dashed[] = {6, 6, 2, 6};
+        static const char dotted[] = {2, 5};
+        static const char short_dashed[] = {4, 4};
+        static const char long_dashed[] = {4, 8};
+        static const char dotted_dashed[] = {6, 6, 2, 6};
 
         // We express dash pattern in pen width unit, so we are
         // independent of zoom factor and so on...

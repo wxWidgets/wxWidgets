@@ -653,7 +653,7 @@ void wxListBox::Command (wxCommandEvent & event)
     ProcessCommand (event);
 }
 
-void wxListBoxCallback (Widget w, XtPointer clientData,
+void wxListBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
                         XmListCallbackStruct * cbs)
 {
     /*
@@ -717,7 +717,7 @@ void wxListBoxCallback (Widget w, XtPointer clientData,
 * designated "default button" in the action area and activate it
 * as if the user had selected it.
 */
-void wxListBoxDefaultActionProc (Widget list_w, XtPointer client_data, XmListCallbackStruct * cbs)
+void wxListBoxDefaultActionProc (Widget WXUNUSED(list_w), XtPointer client_data, XmListCallbackStruct * WXUNUSED(cbs))
 {
     wxListBox *lbox = (wxListBox *) client_data;
 

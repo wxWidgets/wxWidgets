@@ -174,7 +174,7 @@ void wxSlider::SetRange(int minValue, int maxValue)
 }
 
 // For trackbars only
-void wxSlider::SetTickFreq(int n, int pos)
+void wxSlider::SetTickFreq(int n, int WXUNUSED(pos))
 {
     // Not implemented in Motif
     m_tickFreq = n;

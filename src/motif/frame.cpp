@@ -517,7 +517,7 @@ void wxFrame::GetPosition(int *x, int *y) const
     if (y) *y = yy;
 }
 
-void wxFrame::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+void wxFrame::DoSetSize(int x, int y, int width, int height, int WXUNUSED(sizeFlags))
 {
     if (x > -1)
         XtVaSetValues((Widget) m_frameShell, XmNx, x, NULL);
@@ -767,7 +767,7 @@ void wxFrame::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 // Default resizing behaviour - if only ONE subwindow,
 // resize to client rectangle size
-void wxFrame::OnSize(wxSizeEvent& event)
+void wxFrame::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     // if we're using constraints - do use them
 #if wxUSE_CONSTRAINTS
@@ -812,6 +812,9 @@ void wxFrame::OnSize(wxSizeEvent& event)
 // subwindow found.
 void wxFrame::OnActivate(wxActivateEvent& event)
 {
+    if (!event.GetActive())
+        return;
+
     for(wxNode *node = GetChildren().First(); node; node = node->Next())
     {
         // Find a child that's a subwindow, but not a dialog box.
@@ -828,7 +831,7 @@ void wxFrame::OnActivate(wxActivateEvent& event)
 // The default implementation for the close window event.
 // OnClose for backward compatibility.
 
-void wxFrame::OnCloseWindow(wxCloseEvent& event)
+void wxFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     this->Destroy();
 }
@@ -1074,8 +1077,8 @@ void wxFrame::Lower(void)
     XLowerWindow(XtDisplay((Widget) m_frameShell), parent_window);
 }
 
-void wxFrameFocusProc(Widget workArea, XtPointer clientData,
-                      XmAnyCallbackStruct *cbs)
+void wxFrameFocusProc(Widget WXUNUSED(workArea), XtPointer WXUNUSED(clientData),
+                      XmAnyCallbackStruct *WXUNUSED(cbs))
 {
     // wxDebugMsg("focus proc from frame %ld\n",(long)frame);
     // TODO
@@ -1123,7 +1126,7 @@ WXWidget wxFrame::GetClientWidget() const
     return m_clientArea;
 }
 
-void wxFrame::ChangeFont(bool keepOriginalSize)
+void wxFrame::ChangeFont(bool WXUNUSED(keepOriginalSize))
 {
     // TODO
 }
@@ -1140,7 +1143,7 @@ void wxFrame::ChangeForegroundColour()
         DoChangeForegroundColour(GetClientWidget(), m_foregroundColour);
 }
 
-void wxCloseFrameCallback(Widget widget, XtPointer client_data, XmAnyCallbackStruct *cbs)
+void wxCloseFrameCallback(Widget WXUNUSED(widget), XtPointer client_data, XmAnyCallbackStruct *WXUNUSED(cbs))
 {
     wxFrame *frame = (wxFrame *)client_data;
 

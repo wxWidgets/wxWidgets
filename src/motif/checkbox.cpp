@@ -102,9 +102,9 @@ void wxCheckBox::Command (wxCommandEvent & event)
 }
 
 // Bitmap checkbox
-bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *label,
-                              const wxPoint& pos,
-                              const wxSize& size, long style,
+bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *WXUNUSED(label),
+                              const wxPoint& WXUNUSED(pos),
+                              const wxSize& WXUNUSED(size), long style,
                               const wxValidator& validator,
                               const wxString& name)
 {
@@ -124,17 +124,17 @@ bool wxBitmapCheckBox::Create(wxWindow *parent, wxWindowID id, const wxBitmap *l
     return FALSE;
 }
 
-void wxBitmapCheckBox::SetLabel(const wxBitmap& bitmap)
+void wxBitmapCheckBox::SetLabel(const wxBitmap& WXUNUSED(bitmap))
 {
     // TODO
 }
 
-void wxBitmapCheckBox::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+void wxBitmapCheckBox::DoSetSize(int WXUNUSED(x), int WXUNUSED(y), int WXUNUSED(width), int WXUNUSED(height), int WXUNUSED(sizeFlags))
 {
     // TODO
 }
 
-void wxBitmapCheckBox::SetValue(bool val)
+void wxBitmapCheckBox::SetValue(bool WXUNUSED(val))
 {
     // TODO
 }
@@ -145,8 +145,8 @@ bool wxBitmapCheckBox::GetValue() const
     return FALSE;
 }
 
-void wxCheckBoxCallback (Widget w, XtPointer clientData,
-                         XtPointer ptr)
+void wxCheckBoxCallback (Widget WXUNUSED(w), XtPointer clientData,
+                         XtPointer WXUNUSED(ptr))
 {
     wxCheckBox *item = (wxCheckBox *) clientData;
 
