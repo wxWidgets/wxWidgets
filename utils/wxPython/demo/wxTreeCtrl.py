@@ -15,14 +15,15 @@ class TestTreeCtrlPanel(wxPanel):
         self.tree = wxTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
                                wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)# | wxTR_MULTIPLE)
 
-        self.il = wxImageList(16, 16)
-        idx1 = self.il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
-        idx2 = self.il.Add(wxBitmap('bitmaps/open.bmp', wxBITMAP_TYPE_BMP))
-        idx3 = self.il.Add(wxBitmap('bitmaps/new.bmp', wxBITMAP_TYPE_BMP))
-        idx4 = self.il.Add(wxBitmap('bitmaps/copy.bmp', wxBITMAP_TYPE_BMP))
-        idx5 = self.il.Add(wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP))
+        il = wxImageList(16, 16)
+        idx1 = il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
+        idx2 = il.Add(wxBitmap('bitmaps/open.bmp', wxBITMAP_TYPE_BMP))
+        idx3 = il.Add(wxBitmap('bitmaps/new.bmp', wxBITMAP_TYPE_BMP))
+        idx4 = il.Add(wxBitmap('bitmaps/copy.bmp', wxBITMAP_TYPE_BMP))
+        idx5 = il.Add(wxBitmap('bitmaps/paste.bmp', wxBITMAP_TYPE_BMP))
 
-        self.tree.SetImageList(self.il)
+        self.tree.SetImageList(il)
+        self.il = il
 
         self.root = self.tree.AddRoot("The Root Item")
         self.tree.SetItemImage(self.root, idx1)
