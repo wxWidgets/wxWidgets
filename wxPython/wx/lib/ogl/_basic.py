@@ -2227,7 +2227,7 @@ class Shape(ShapeEvtHandler):
             elif pt._type == CONTROL_POINT_VERTICAL:
                 newX1 = pt._controlPointDragStartX
                 newX2 = newX1 + pt._controlPointDragStartWidth
-            elif pt._type == CONTROL_POINT_DIAGONAL and (keys & KEYS or self.GetMaintainAspectRatio()):
+            elif pt._type == CONTROL_POINT_DIAGONAL and (keys & KEY_SHIFT or self.GetMaintainAspectRatio()):
                 newH = (newX2 - newX1) * (float(pt._controlPointDragStartHeight) / pt._controlPointDragStartWidth)
                 if pt.GetY() > pt._controlPointDragStartY:
                     newY2 = newY1 + newH
