@@ -977,7 +977,7 @@ wxString wxMacFSSpec2MacFilename( const FSSpec *spec )
     }
 
     // create path string for return value
-    wxString result( thePath ) ;
+    wxString result( thePath , wxConvLocal) ;
 #else
     Handle    myPath ;
     short     length ;

@@ -44,12 +44,12 @@ long wxExecute(const wxString& command, int flags, wxProcess *handler)
 void wxMAC_MachPortEndProcessDetect(CFMachPortRef port, void *data)
 {
 	wxEndProcessData *proc_data = (wxEndProcessData*)data;
-	wxLogDebug("Wow.. this actually worked!");
+	wxLogDebug(wxT("Wow.. this actually worked!"));
 	int status = 0;
 	int rc = waitpid(abs(proc_data->pid), &status, WNOHANG);
 	if(!rc)
 	{
-		wxLogDebug("Mach port was invalidated, but process hasn't terminated!");
+		wxLogDebug(wxT("Mach port was invalidated, but process hasn't terminated!"));
 		return;
 	}
 	if((rc != -1) && WIFEXITED(status))
@@ -69,10 +69,10 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     taskOfOurProcess = mach_task_self();
     if(taskOfOurProcess == MACH_PORT_NULL)
     {
-        wxLogDebug("No mach_task_self()");
+        wxLogDebug(wxT("No mach_task_self()"));
         return -1;
     }
-    wxLogDebug("pid=%d",pid);
+    wxLogDebug(wxT("pid=%d"),pid);
     kernResult = task_for_pid(taskOfOurProcess,pid, &machPortForProcess);
     if(kernResult != KERN_SUCCESS)
     {
@@ -97,7 +97,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     CFMachPortForProcess = CFMachPortCreateWithPort(NULL, machPortForProcess, NULL, &termcb_contextinfo, &ShouldFreePort);
     if(!CFMachPortForProcess)
     {
-        wxLogDebug("No CFMachPortForProcess");
+        wxLogDebug(wxT("No CFMachPortForProcess"));
         mach_port_deallocate(taskOfOurProcess, machPortForProcess);
         return -1;
     }
@@ -106,7 +106,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
         kernResult = mach_port_deallocate(taskOfOurProcess, machPortForProcess);
         if(kernResult!=KERN_SUCCESS)
         {
-            wxLogDebug("Couldn't deallocate mach port");
+            wxLogDebug(wxT("Couldn't deallocate mach port"));
             return -1;
         }
     }
@@ -115,7 +115,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     runloopsource = CFMachPortCreateRunLoopSource(NULL,CFMachPortForProcess, (CFIndex)0);
     if(!runloopsource)
     {
-        wxLogDebug("Couldn't create runloopsource");
+        wxLogDebug(wxT("Couldn't create runloopsource"));
         return -1;
     }
     
@@ -123,7 +123,7 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
 
     CFRunLoopAddSource(CFRunLoopGetCurrent(),runloopsource,kCFRunLoopDefaultMode);
     CFRelease(runloopsource);
-    wxLogDebug("Successfully added notification to the runloop");
+    wxLogDebug(wxT("Successfully added notification to the runloop"));
     return 0;
 }
 #endif

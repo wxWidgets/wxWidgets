@@ -222,7 +222,7 @@ bool wxDynamicLibrary::Load(wxString libname, int flags)
 #elif defined(HAVE_DLOPEN) || defined(__DARWIN__)
 
 #if defined(__VMS) || defined(__DARWIN__)
-    m_handle = dlopen(libname.c_str(), 0);  // The second parameter is ignored
+    m_handle = dlopen(libname.fn_str(), 0);  // The second parameter is ignored
 #else // !__VMS  && !__DARWIN__
     int rtldFlags = 0;
 

@@ -486,7 +486,7 @@ wxString wxGetOsDescription()
 {
 #ifdef WXWIN_OS_DESCRIPTION
     // use configure generated description if available
-    return wxString("MacOS (") + WXWIN_OS_DESCRIPTION + wxString(")");
+    return wxString(wxT("MacOS (")) + wxT(WXWIN_OS_DESCRIPTION) + wxString(wxT(")"));
 #else
     return wxT("MacOS") ; //TODO:define further
 #endif
