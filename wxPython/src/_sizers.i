@@ -100,9 +100,6 @@ public:
         void _setOORInfo(PyObject* _self) {
             self->SetClientObject(new wxPyOORClientData(_self));
         }
-    }
-
-    %extend {
 
         void _Add(PyObject* item, int proportion=0, int flag=0, int border=0,
                   PyObject* userData=NULL, int option=-1) {
@@ -111,28 +108,45 @@ public:
             // instead.  This can be removed eventually.
             if (option != -1) proportion = option;
 
-            wxWindow* window;
-            wxSizer*  sizer;
+            wxWindow* window = NULL;
+            wxSizer*  sizer = NULL;
+            bool      gotSize = false;
             wxSize    size;
             wxSize*   sizePtr = &size;
             wxPyUserData* data = NULL;
-            if (userData) data = new wxPyUserData(userData);
 
-            // Find out what type the item is and call the real Add method
-            if ( wxPyConvertSwigPtr(item, (void**)&window, wxT("wxWindow")) )
+            wxPyBeginBlockThreads();
+
+            // Find out what the type of the item is
+            // try wxWindow
+            if ( ! wxPyConvertSwigPtr(item, (void**)&window, wxT("wxWindow")) ) {
+                PyErr_Clear();
+                // try wxSizer
+                if ( ! wxPyConvertSwigPtr(item, (void**)&sizer, wxT("wxSizer")) ) {
+                    PyErr_Clear();
+
+                    // try wxSize or (w,h)
+                    if ( ! wxSize_helper(item, &sizePtr))
+                        PyErr_SetString(PyExc_TypeError,
+                                        "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
+                    else
+                        gotSize = true;
+                }
+            }
+
+            if ( userData && (window || sizer || gotSize) )
+                data = new wxPyUserData(userData);
+
+            wxPyEndBlockThreads();
+            
+            // Now call the real Add method if a valid item type was found
+            if ( window )
                 self->Add(window, proportion, flag, border, data);
-
-            else if ( wxPyConvertSwigPtr(item, (void**)&sizer, wxT("wxSizer")) )
+            else if ( sizer )
                 self->Add(sizer, proportion, flag, border, data);
-
-            else if (wxSize_helper(item, &sizePtr))
+            else if (gotSize)
                 self->Add(sizePtr->GetWidth(), sizePtr->GetHeight(),
                           proportion, flag, border, data);
-            else {
-                if (data) delete data;
-                PyErr_SetString(PyExc_TypeError,
-                                "wxWindow, wxSizer, wxSize, or (w,h) expected for item");
-            }
         }
 
 
