@@ -233,7 +233,7 @@ void MyApp::DoStreamDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl.WriteText( tmp );
     
     ui32 = data_input.Read32();
-    tmp.Printf( "Unsigned int32: %d\n", ui32 );
+    tmp.Printf( "Unsigned int32: %u\n", ui32 );
     textCtrl.WriteText( tmp );
 
     d = data_input.ReadDouble();
