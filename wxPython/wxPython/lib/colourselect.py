@@ -26,18 +26,12 @@ class ColourSelect(wxButton):
         EVT_BUTTON(self, ID, self.OnClick)
         self.SetColourValue(bcolour)
 
-    def __del__(self):
-        if hasattr(self, "set_colour_val"):
-            del self.set_colour_val
-
     def SetColour(self, bcolour):
         self.SetBackgroundColour(bcolour)
 
     def SetColourValue(self, bcolour):
-        self.set_colour_val = wxColour(bcolour[0], bcolour[1], bcolour[2])
         self.set_colour = bcolour
-
-        self.SetBackgroundColour(self.set_colour_val)
+        self.SetBackgroundColour(self.Get_wxColour())
         self.SetForegroundColour(wxWHITE)
 
     def SetValue(self, bcolour):
@@ -46,6 +40,9 @@ class ColourSelect(wxButton):
     def GetColour(self):
         return self.set_colour
 
+    def Get_wxColour(self):
+        return wxColour(self.set_colour[0], self.set_colour[1], self.set_colour[2])
+
     def OnChange(self):
         if self.callback != None:
             self.callback()
@@ -53,13 +50,12 @@ class ColourSelect(wxButton):
     def OnClick(self, event):
         data = wxColourData()
         data.SetChooseFull(true)
-        data.SetColour(self.set_colour_val)
+        data.SetColour(self.Get_wxColour())
         dlg = wxColourDialog(self.win, data)
         if dlg.ShowModal() == wxID_OK:
             data = dlg.GetColourData()
             self.set_colour = set = data.GetColour().Get()
-            self.set_colour_val = bcolour = wxColour(set[0],set[1],set[2])
-            self.SetBackgroundColour(bcolour)
+            self.SetBackgroundColour(self.Get_wxColour())
             self.OnChange()
         dlg.Destroy()
 
