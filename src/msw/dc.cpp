@@ -960,6 +960,10 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         {
             s_triedToLoad = TRUE;
 
+            // don't give errors about the DLL being unavailable, we're
+            // prepared to handle this
+            wxLogNull nolog;
+
             wxDynamicLibrary dll(_T("msimg32.dll"));
             if ( dll.IsLoaded() )
             {
@@ -967,7 +971,8 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
                 if ( pfnAlphaBlend )
                 {
                     // we must keep the DLL loaded if we want to be able to
-                    // call AlphaBlend() so just never unload it at all
+                    // call AlphaBlend() so just never unload it at all, not a
+                    // big deal
                     dll.Detach();
                 }
             }
