@@ -369,10 +369,10 @@ void wxEntryCleanup()
 // wxEntry
 // ----------------------------------------------------------------------------
 
-// for MSW with wxUSE_ON_FATAL_EXCEPTION on, wxEntry is defined in msw/main.cpp
-#if !defined(__WXMSW__) || !wxUSE_ON_FATAL_EXCEPTION
+// for MSW the real wxEntry is defined in msw/main.cpp
+#ifndef __WXMSW__
     #define wxEntryReal wxEntry
-#endif // !(__WXMSW__ && wxUSE_ON_FATAL_EXCEPTION)
+#endif // !__WXMSW__
 
 int wxEntryReal(int& argc, wxChar **argv)
 {

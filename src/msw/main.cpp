@@ -46,16 +46,16 @@
 #ifdef __WXWINCE__
     // there is no ExitProcess() under CE but exiting the main thread has the
     // same effect
-#ifndef ExitProcess
-    #define ExitProcess ExitThread
-#endif
-#endif
+    #ifndef ExitProcess
+        #define ExitProcess ExitThread
+    #endif
+#endif // __WXWINCE__
 
 #ifdef __BORLANDC__
     // BC++ has to be special: its run-time expects the DLL entry point to be
     // named DllEntryPoint instead of the (more) standard DllMain
     #define DllMain DllEntryPoint
-#endif
+#endif // __BORLANDC__
 
 #if defined(__WXMICROWIN__)
     #define HINSTANCE HANDLE
@@ -65,13 +65,40 @@
 // implementation: various entry points
 // ============================================================================
 
+#if wxUSE_BASE
+
+#ifdef __VISUALC__
+    // VC++ (at least from 4.0 up to version 7.1) is incredibly broken in that
+    // a "catch ( ... )" will *always* catch SEH exceptions in it even though
+    // it should have never been the case... to prevent such catches from
+    // stealing the exceptions from our wxGlobalSEHandler which is only called
+    // if the exception is not handled elsewhere, we have to also call it from
+    // a special SEH translator function which is called by VC CRT when a Win32
+    // exception occurs
+
+    // this warns that /EHa (async exceptions) should be used when using
+    // _set_se_translator but, in fact, this doesn't seem to change anything
+    // with VC++ up to 7.1 -- to be confirmed with VC++ 8
+    #if _MSC_VER <= 1310
+        #pragma warning(disable:4535)
+    #endif
+
+    // note that the SE translator must be called wxSETranslator!
+    #define DisableAutomaticSETranslator() _set_se_translator(wxSETranslator)
+#else // !__VISUALC__
+    #define DisableAutomaticSETranslator()
+#endif // __VISUALC__/!__VISUALC__
+
 // ----------------------------------------------------------------------------
 // wrapper wxEntry catching all Win32 exceptions occuring in a wx program
 // ----------------------------------------------------------------------------
 
 // wrap real wxEntry in a try-except block to be able to call
 // OnFatalException() if necessary
-#if wxUSE_ON_FATAL_EXCEPTION && wxUSE_BASE
+#if wxUSE_ON_FATAL_EXCEPTION
+
+// defined in common/init.cpp
+extern int wxEntryReal(int& argc, wxChar **argv);
 
 // global pointer to exception information, only valid inside OnFatalException,
 // used by wxStackWalker and wxCrashReport
@@ -79,6 +106,12 @@ extern EXCEPTION_POINTERS *wxGlobalSEInformation = NULL;
 
 // flag telling us whether the application wants to handle exceptions at all
 static bool gs_handleExceptions = false;
+
+static void wxFatalExit()
+{
+    // use the same exit code as abort()
+    ::ExitProcess(3);
+}
 
 unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 {
@@ -112,7 +145,27 @@ unsigned long wxGlobalSEHandler(EXCEPTION_POINTERS *pExcPtrs)
 
 static void wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS *ep)
 {
-    wxGlobalSEHandler(ep);
+    switch ( wxGlobalSEHandler(ep) )
+    {
+        default:
+            wxFAIL_MSG( _T("unexpected wxGlobalSEHandler() return value") );
+            // fall through
+
+        case EXCEPTION_EXECUTE_HANDLER:
+            // if wxApp::OnFatalException() had been called we should exit the
+            // application -- but we shouldn't kill our host when we're a DLL
+#ifndef WXMAKINGDLL
+            wxFatalExit();
+#endif // not a DLL
+            break;
+
+        case EXCEPTION_CONTINUE_SEARCH:
+            // we're called for each "catch ( ... )" and if we (re)throw from
+            // here, the catch handler body is not executed, so the effect is
+            // as if had inhibited translation of SE to C++ ones because the
+            // handler will never see any structured exceptions
+            throw;
+    }
 }
 
 #endif // __VISUALC__
@@ -121,25 +174,6 @@ bool wxHandleFatalExceptions(bool doit)
 {
     // assume this can only be called from the main thread
     gs_handleExceptions = doit;
-
-#ifdef __VISUALC__
-    // VC++ (at least from 4.0 up to version 7.1) is incredibly broken in that
-    // a "catch ( ... )" will *always* catch SEH exceptions in it even though
-    // it should have never been the case... to prevent such catches from
-    // stealing the exceptions from our wxGlobalSEHandler which is only called
-    // if the exception is not handled elsewhere, we have to also call it from
-    // a special SEH translator function which is called by VC CRT when a Win32
-    // exception occurs
-
-    // this warns that /EHa (async exceptions) should be used when using
-    // _set_se_translator but, in fact, this doesn't seem to change anything
-    // with VC++ up to 7.1 -- to be confirmed with VC++ 8
-    #if _MSC_VER <= 1310
-        #pragma warning(disable:4535)
-    #endif
-
-    _set_se_translator(doit ? wxSETranslator : NULL);
-#endif
 
 #if wxUSE_CRASHREPORT
     if ( doit )
@@ -175,25 +209,40 @@ bool wxHandleFatalExceptions(bool doit)
 
 int wxEntry(int& argc, wxChar **argv)
 {
+    DisableAutomaticSETranslator();
+
     __try
     {
-        extern int wxEntryReal(int& argc, wxChar **argv);
-
         return wxEntryReal(argc, argv);
     }
     __except ( wxGlobalSEHandler(GetExceptionInformation()) )
     {
-        ::ExitProcess(3); // the same exit code as abort()
+        wxFatalExit();
 
-#if !defined(_MSC_VER) || _MSC_VER < 1300
         // this code is unreachable but put it here to suppress warnings
-        // from some compilers
         return -1;
-#endif
     }
 }
 
-#endif // wxUSE_ON_FATAL_EXCEPTION && wxUSE_BASE
+#else // !wxUSE_ON_FATAL_EXCEPTION
+
+static void
+wxSETranslator(unsigned int WXUNUSED(code), EXCEPTION_POINTERS * WXUNUSED(ep))
+{
+    // see wxSETranslator() version for wxUSE_ON_FATAL_EXCEPTION above
+    throw;
+}
+
+int wxEntry(int& argc, wxChar **argv)
+{
+    DisableAutomaticSETranslator();
+
+    return wxEntryReal(argc, argv);
+}
+
+#endif // wxUSE_ON_FATAL_EXCEPTION/!wxUSE_ON_FATAL_EXCEPTION
+
+#endif // wxUSE_BASE
 
 #if wxUSE_GUI
 
