@@ -53,7 +53,7 @@ public:
     virtual bool ShowFullScreen( bool bShow
                                 ,long lStyle = wxFULLSCREEN_ALL
                                );
-    virtual bool IsFullScreen(void) const { return m_bFfsIsShowing; };
+    virtual bool IsFullScreen(void) const { return m_bFsIsShowing; };
 
 
     // implementation only from now on
@@ -131,8 +131,8 @@ public:
 
     // tooltip management
 #if wxUSE_TOOLTIPS
-    WXHWND GetToolTipCtrl(void) const { return m_hHwndToolTip; }
-    void   SetToolTipCtrl(WXHWND hHwndTT) { m_hHwndToolTip = hHwndTT; }
+    WXHWND GetToolTipCtrl(void) const { return m_hWndToolTip; }
+    void   SetToolTipCtrl(WXHWND hHwndTT) { m_hWndToolTip = hHwndTT; }
 #endif // tooltips
 
 protected:

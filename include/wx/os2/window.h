@@ -46,8 +46,6 @@ enum
 
 class WXDLLEXPORT wxWindow : public wxWindowBase
 {
-    DECLARE_DYNAMIC_CLASS(wxWindow);
-
 public:
     wxWindow() { Init(); }
 
@@ -205,6 +203,7 @@ public:
 
     // event handlers
     // --------------
+    void OnSetFocus(wxFocusEvent& rEvent);
     void OnEraseBackground(wxEraseEvent& rEvent);
     void OnIdle(wxIdleEvent& rEvent);
 
@@ -424,15 +423,13 @@ public:
                         );
 
     // Window procedure
-    virtual MRESULT OS2WindowProc( HWND     hwnd
-                                  ,WXUINT   uMsg
+    virtual MRESULT OS2WindowProc( WXUINT   uMsg
                                   ,WXWPARAM wParam
                                   ,WXLPARAM lParam
                                  );
 
     // Calls an appropriate default window procedure
-    virtual MRESULT OS2DefWindowProc( HWND     hwnd
-                                     ,WXUINT   uMsg
+    virtual MRESULT OS2DefWindowProc( WXUINT   uMsg
                                      ,WXWPARAM wParam
                                      ,WXLPARAM lParam
                                     );
@@ -469,6 +466,17 @@ public:
                        );
 
 protected:
+    // PM can't create some MSW styles natively but can perform these after
+    // creation by sending messages
+    typedef enum extra_flags { kFrameToolWindow = 0x0001
+                              ,kVertCaption     = 0x0002
+                              ,kHorzCaption     = 0x0004
+                             } EExtraFlags;
+    // Some internal sizeing id's to make it easy for event handlers
+    typedef enum size_types { kSizeNormal
+                             ,kSizeMax
+                             ,kSizeMin
+                            } ESizeTypes;
     // the window handle
     WXHWND                          m_hWnd;
 
@@ -557,13 +565,17 @@ private:
                       ,WXLPARAM  lParam
                       ,WXLPARAM* pResult
                      );
+    // the helper functions used by HandleChar/KeyXXX methods
+    wxKeyEvent CreateKeyEvent(wxEventType evType, int id, WXLPARAM lp) const;
+
+    DECLARE_DYNAMIC_CLASS(wxWindow);
     DECLARE_NO_COPY_CLASS(wxWindow);
     DECLARE_EVENT_TABLE()
 private:
     // Virtual function hiding supression
     inline virtual bool Reparent(wxWindowBase* pNewParent)
     { return(wxWindowBase::Reparent(pNewParent));};
-};
+}; // end of wxWindow
 
 // ---------------------------------------------------------------------------
 // global functions

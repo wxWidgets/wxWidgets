@@ -49,7 +49,7 @@ class WXDLLEXPORT wxStaticBox: public wxControl
 
     void OnEraseBackground(wxEraseEvent& event);
 
-    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);

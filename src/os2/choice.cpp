@@ -246,7 +246,7 @@ wxSize wxChoice::DoGetBestSize() const
     return wxSize(wChoice, hChoice);
 }
 
-MRESULT wxChoice::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+MRESULT wxChoice::OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
    // TODO:
    /*
@@ -264,7 +264,7 @@ MRESULT wxChoice::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARA
             return 0;
     }
     */
-    return wxWindow::OS2WindowProc(hwnd, nMsg, wParam, lParam);
+    return wxWindow::OS2WindowProc(nMsg, wParam, lParam);
 }
 
 bool wxChoice::OS2Command(WXUINT param, WXWORD WXUNUSED(id))

@@ -174,7 +174,7 @@ void wxStaticBox::OnEraseBackground(wxEraseEvent& event)
 */
 }
 
-MRESULT wxStaticBox::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+MRESULT wxStaticBox::OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
     // TODO:
 /*
@@ -192,7 +192,7 @@ MRESULT wxStaticBox::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLP
     }
 */
 
-    return wxControl::OS2WindowProc(hwnd, nMsg, wParam, lParam);
+    return wxControl::OS2WindowProc(nMsg, wParam, lParam);
 }
 
 

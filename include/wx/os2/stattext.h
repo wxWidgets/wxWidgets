@@ -53,7 +53,7 @@ class WXDLLEXPORT wxStaticText: public wxControl
     // callbacks
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
     virtual wxSize DoGetBestSize() const;

@@ -100,8 +100,7 @@ protected:
     void UpdateSize(void);
 
     // override WndProc to process WM_SIZE
-    virtual MRESULT OS2WindowProc( HWND     hWnd
-                                  ,WXUINT   ulMsg
+    virtual MRESULT OS2WindowProc( WXUINT   ulMsg
                                   ,WXWPARAM wParam
                                   ,WXLPARAM lParam
                                  );

@@ -61,7 +61,7 @@ public:
 
     // OS2 only
     virtual bool OS2Command(WXUINT param, WXWORD id);
-    MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
 protected:
     virtual void DoSetItemClientData( int n, void* clientData );

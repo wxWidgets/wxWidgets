@@ -138,7 +138,7 @@ WXHBRUSH wxStaticText::OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
     return (WXHBRUSH)0;
 }
 
-MRESULT wxStaticText::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+MRESULT wxStaticText::OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 {
   // Ensure that static items get messages. Some controls don't like this
   // message to be intercepted (e.g. RichEdit), hence the tests.
@@ -147,6 +147,6 @@ MRESULT wxStaticText::OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXL
   if (nMsg == WM_NCHITTEST)
     return (long)HTCLIENT;
 */
-  return wxWindow::OS2WindowProc(hwnd, nMsg, wParam, lParam);
+  return wxWindow::OS2WindowProc(nMsg, wParam, lParam);
 }
 

@@ -919,8 +919,7 @@ void wxToolBar::OnMouseEvent(
 }
 
 MRESULT wxToolBar::OS2WindowProc(
-  HWND                              hWnd
-, WXUINT                            ulMsg
+  WXUINT                            ulMsg
 , MPARAM                            wParam
 , MPARAM                            lParam
 )

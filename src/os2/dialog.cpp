@@ -423,7 +423,7 @@ void wxDialog::OnSysColourChanged(wxSysColourChangedEvent& event)
   Refresh();
 }
 
-MRESULT wxDialog::OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+MRESULT wxDialog::OS2WindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     MRESULT rc = 0;
     bool    processed = FALSE;
@@ -438,7 +438,7 @@ MRESULT wxDialog::OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLP
     }
 
     if ( !processed )
-        rc = wxWindow::OS2WindowProc(hwnd, message, wParam, lParam);
+        rc = wxWindow::OS2WindowProc(message, wParam, lParam);
 
     return rc;
 }

@@ -288,8 +288,7 @@ void wxMDIParentFrame::ActivatePrevious()
 // the MDI parent frame window proc
 // ---------------------------------------------------------------------------
 
-MRESULT wxMDIParentFrame::OS2WindowProc(HWND     hwnd,
-                                        WXUINT message,
+MRESULT wxMDIParentFrame::OS2WindowProc(WXUINT message,
                                         WXWPARAM wParam,
                                         WXLPARAM lParam)
 {
@@ -504,8 +503,7 @@ bool wxMDIParentFrame::HandleCommand(WXWORD id, WXWORD cmd, WXHWND hwnd)
     return FALSE;
 }
 
-MRESULT wxMDIParentFrame::OS2DefWindowProc(HWND hwnd,
-                                           WXUINT message,
+MRESULT wxMDIParentFrame::OS2DefWindowProc(WXUINT message,
                                            WXWPARAM wParam,
                                            WXLPARAM lParam)
 {
@@ -774,8 +772,7 @@ void wxMDIChildFrame::Activate()
 // MDI window proc and message handlers
 // ---------------------------------------------------------------------------
 
-MRESULT wxMDIChildFrame::OS2WindowProc(HWND hwnd,
-                                       WXUINT message,
+MRESULT wxMDIChildFrame::OS2WindowProc(WXUINT message,
                                        WXWPARAM wParam,
                                        WXLPARAM lParam)
 {
@@ -987,7 +984,7 @@ bool wxMDIChildFrame::HandleWindowPosChanging(void *pos)
 // MDI specific message translation/preprocessing
 // ---------------------------------------------------------------------------
 
-MRESULT wxMDIChildFrame::OS2DefWindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+MRESULT wxMDIChildFrame::OS2DefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
 {
     // TODO
 /*

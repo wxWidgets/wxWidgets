@@ -110,7 +110,7 @@ public:
 
     // implementation
     // --------------
-    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2WindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
 
     virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
                                 WXUINT message, WXWPARAM wParam, WXLPARAM lParam);

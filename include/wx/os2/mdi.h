@@ -86,9 +86,9 @@ public:
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
     // override window proc for MDI-specific message processing
-    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2WindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
 
-    virtual MRESULT OS2DefWindowProc(HWND hwnd, WXUINT, WXWPARAM, WXLPARAM);
+    virtual MRESULT OS2DefWindowProc(WXUINT, WXWPARAM, WXLPARAM);
     virtual bool OS2TranslateMessage(WXMSG* msg);
 
 protected:
@@ -144,8 +144,8 @@ public:
     bool HandleWindowPosChanging(void *lpPos);
     bool HandleCommand(WXWORD id, WXWORD cmd, WXHWND control);
 
-    virtual MRESULT OS2WindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
-    virtual MRESULT OS2DefWindowProc(HWND hwnd, WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2WindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual MRESULT OS2DefWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
     virtual bool OS2TranslateMessage(WXMSG *msg);
 
     virtual void OS2DestroyWindow();
