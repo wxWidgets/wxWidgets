@@ -1072,7 +1072,7 @@ void OutputDebugStringW95(const char* lpOutputString, ...)
 #endif
 
 
-#ifdef 0
+#if 0
 
 // maximum mumber of lines the output console should have
 static const WORD MAX_CONSOLE_LINES = 500;
