@@ -111,26 +111,19 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
                           const wxString& name)
    : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name), m_edittingNew(FALSE)
 {
+<<<<<<< editlbox.cpp
     m_style = style;
+    m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;    
+
+=======
+    m_style = style;
+>>>>>>> 1.10
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 
     wxPanel *subp = new wxPanel(this, -1, wxDefaultPosition, wxDefaultSize,
                                 wxSUNKEN_BORDER | wxTAB_TRAVERSAL);
     wxSizer *subsizer = new wxBoxSizer(wxHORIZONTAL);
     subsizer->Add(new wxStaticText(subp, -1, label), 1, wxALIGN_CENTRE_VERTICAL | wxLEFT, 4);
-    m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT, wxBitmap(eledit_xpm));
-    m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW, wxBitmap(elnew_xpm));
-    m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE, wxBitmap(eldel_xpm));
-    m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
-    m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
-
-#if wxUSE_TOOLTIPS
-    m_bEdit->SetToolTip(wxT("Edit item"));
-    m_bNew->SetToolTip(wxT("New item"));
-    m_bDel->SetToolTip(wxT("Delete item"));
-    m_bUp->SetToolTip(wxT("Move up"));
-    m_bDown->SetToolTip(wxT("Move down"));
-#endif
 
 #ifdef __WXMSW__
     #define BTN_BORDER 4
@@ -141,19 +134,37 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     #define BTN_BORDER 0
 #endif
 
-    subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
-    subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
-    subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    if ( m_style & wxEL_ALLOW_EDIT )
+    {
+        m_bEdit = new wxBitmapButton(subp, wxID_ELB_EDIT, wxBitmap(eledit_xpm));
+        subsizer->Add(m_bEdit, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    }
 
-    if (!(m_style & wxEL_ALLOW_EDIT))
-        m_bEdit->Show(FALSE);
-    if (!(m_style & wxEL_ALLOW_NEW))
-        m_bNew->Show(FALSE);
-    if (!(m_style & wxEL_ALLOW_DELETE))
-        m_bDel->Show(FALSE);
+    if ( m_style & wxEL_ALLOW_NEW )
+    {
+        m_bNew = new wxBitmapButton(subp, wxID_ELB_NEW, wxBitmap(elnew_xpm));
+        subsizer->Add(m_bNew, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    }
 
+    if ( m_style & wxEL_ALLOW_DELETE )
+    {
+        m_bDel = new wxBitmapButton(subp, wxID_ELB_DELETE, wxBitmap(eldel_xpm));
+        subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    }
+
+    m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
     subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+
+    m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
     subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+
+#if wxUSE_TOOLTIPS
+    if ( m_bEdit ) m_bEdit->SetToolTip(wxT("Edit item"));
+    if ( m_bNew ) m_bNew->SetToolTip(wxT("New item"));
+    if ( m_bDel ) m_bDel->SetToolTip(wxT("Delete item"));
+    m_bUp->SetToolTip(wxT("Move up"));
+    m_bDown->SetToolTip(wxT("Move down"));
+#endif
 
     subp->SetAutoLayout(TRUE);
     subp->SetSizer(subsizer);
@@ -162,8 +173,8 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
     sizer->Add(subp, 0, wxEXPAND);
 
     long st = wxLC_REPORT | wxLC_NO_HEADER | wxLC_SINGLE_SEL | wxSUNKEN_BORDER;
-    if (style & wxEL_ALLOW_EDIT)
-        st |= wxLC_EDIT_LABELS;
+    if ( style & wxEL_ALLOW_EDIT )
+         st |= wxLC_EDIT_LABELS;
     m_listCtrl = new CleverListCtrl(this, wxID_ELD_LISTCTRL,
                                     wxDefaultPosition, wxDefaultSize, st);
     wxArrayString empty_ar;
