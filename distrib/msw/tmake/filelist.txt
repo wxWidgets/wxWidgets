@@ -315,14 +315,14 @@ printdlg.cpp	MSW
 printwin.cpp	MSW
 radiobox.cpp	MSW
 radiobut.cpp	MSW
-regconf.cpp	MSW	Win32Only,Base
+regconf.cpp	MSW	Win32Only,Base,LowLevel
 region.cpp	MSW	LowLevel
-registry.cpp	MSW	Win32Only,Base
+registry.cpp	MSW	Win32Only,Base,LowLevel
 scrolbar.cpp	MSW
 settings.cpp	MSW	LowLevel
 slider95.cpp	MSW	Win32Only
 slidrmsw.cpp	MSW	NotWin32
-snglinst.cpp	MSW	Base
+snglinst.cpp	MSW	Base,LowLevel
 spinbutt.cpp	MSW
 spinctrl.cpp	MSW
 statbmp.cpp	MSW
@@ -336,13 +336,13 @@ tbar95.cpp	MSW	Win32Only
 tbarmsw.cpp	MSW	NotWin32
 textctrl.cpp	MSW
 tglbtn.cpp	MSW
-thread.cpp	MSW	Win32Only,Base
+thread.cpp	MSW	Win32Only,Base,LowLevel
 timer.cpp	MSW	LowLevel
 tooltip.cpp	MSW	Win32Only
 toplevel.cpp	MSW	LowLevel
 treectrl.cpp	MSW	Win32Only
-utils.cpp	MSW	Base
-utilsexc.cpp	MSW	Base
+utils.cpp	MSW	Base,LowLevel
+utilsexc.cpp	MSW	Base,LowLevel
 uuid.cpp	MSW	OLE
 wave.cpp	MSW
 window.cpp	MSW	LowLevel
