@@ -708,14 +708,15 @@ public:
     inline wxDateTime& operator-=(const wxDateSpan& diff);
 
 
+//     inline bool operator<(const wxDateTime& dt) const;
+//     inline bool operator<=(const wxDateTime& dt) const;
+//     inline bool operator>(const wxDateTime& dt) const;
+//     inline bool operator>=(const wxDateTime& dt) const;
+//     inline bool operator==(const wxDateTime& dt) const;
+//     inline bool operator!=(const wxDateTime& dt) const;
+
     %nokwargs __add__;
     %nokwargs __sub__;
-    %nokwargs __lt__;
-    %nokwargs __le__;
-    %nokwargs __gt__;
-    %nokwargs __ge__;
-    %nokwargs __eq__;
-    %nokwargs __ne__;
     %extend {
         wxDateTime __add__(const wxTimeSpan& other) { return *self + other; }
         wxDateTime __add__(const wxDateSpan& other) { return *self + other; }
@@ -724,14 +725,9 @@ public:
         wxDateTime __sub__(const wxTimeSpan& other) { return *self - other; }
         wxDateTime __sub__(const wxDateSpan& other) { return *self - other; }
 
-//         bool __lt__(const wxDateTime* other) { return other ? (*self <  *other) : false; }
-//         bool __le__(const wxDateTime* other) { return other ? (*self <= *other) : false; }
-//         bool __gt__(const wxDateTime* other) { return other ? (*self >  *other) : true;  }
-//         bool __ge__(const wxDateTime* other) { return other ? (*self >= *other) : true;  }
-
-
         // These fall back to just comparing pointers if other is NULL, or if
-        // either operand is invalid.
+        // either operand is invalid.  This allows Python comparrisons to None
+        // to not assert and to return a sane value for the compare.
         bool __lt__(const wxDateTime* other) { 
             if (!other || !self->IsValid() || !other->IsValid()) return self <  other; 
             return (*self <  *other);
@@ -759,6 +755,9 @@ public:
         }            
     }
 
+
+
+   
         
     // ------------------------------------------------------------------------
     // conversion from text: all conversions from text return -1 on failure,

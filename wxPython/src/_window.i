@@ -1215,7 +1215,7 @@ to the window.", "");
     
 
     DocDeclStr(
-        void , RefreshRect(const wxRect& rect),
+        void , RefreshRect(const wxRect& rect, bool eraseBackground = true),
         "Redraws the contents of the given rectangle: the area inside it will
 be repainted.  This is the same as Refresh but has a nicer syntax.", "");
     

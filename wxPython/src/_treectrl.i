@@ -458,10 +458,8 @@ public:
     // the item will be shown in bold
     void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
-#ifdef __WXMSW__
     // the item will be shown with a drop highlight
     void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = true);
-#endif
     
     // set the items text colour
     void SetItemTextColour(const wxTreeItemId& item, const wxColour& col);

@@ -51,10 +51,12 @@
 %rename(RA_VERTICAL)                        wxRA_VERTICAL;
 %rename(RA_SPECIFY_ROWS)                    wxRA_SPECIFY_ROWS;
 %rename(RA_SPECIFY_COLS)                    wxRA_SPECIFY_COLS;
+%rename(RA_USE_CHECKBOX)                    wxRA_USE_CHECKBOX;
 %rename(RB_GROUP)                           wxRB_GROUP;
 %rename(RB_SINGLE)                          wxRB_SINGLE;
 %rename(SB_HORIZONTAL)                      wxSB_HORIZONTAL;
 %rename(SB_VERTICAL)                        wxSB_VERTICAL;
+%rename(RB_USE_CHECKBOX)                    wxRB_USE_CHECKBOX;
 %rename(ST_SIZEGRIP)                        wxST_SIZEGRIP;
 %rename(ST_NO_AUTORESIZE)                   wxST_NO_AUTORESIZE;
 %rename(FLOOD_SURFACE)                      wxFLOOD_SURFACE;

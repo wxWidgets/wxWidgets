@@ -40,7 +40,9 @@ bool wxIsStockLabel(wxWindowID id, const wxString& label);
 
 // Returns label that should be used for given stock UI element (e.g. "&OK"
 // for wxID_OK):
-wxString wxGetStockLabel(wxWindowID id);
+wxString wxGetStockLabel(wxWindowID id,
+                         bool withCodes = true,
+                         wxString accelerator = wxPyEmptyString);
  
 
 MustHaveApp(wxBell);

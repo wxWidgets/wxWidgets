@@ -442,10 +442,12 @@ enum {
     wxRA_VERTICAL,
     wxRA_SPECIFY_ROWS,
     wxRA_SPECIFY_COLS,
+    wxRA_USE_CHECKBOX,
     wxRB_GROUP,
     wxRB_SINGLE,
     wxSB_HORIZONTAL,
     wxSB_VERTICAL,
+    wxRB_USE_CHECKBOX,
     wxST_SIZEGRIP,
     wxST_NO_AUTORESIZE,
 
