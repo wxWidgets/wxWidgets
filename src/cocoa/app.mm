@@ -81,7 +81,11 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     if(event)
         return event;
     // No events, try doing some idle stuff
-    if(sg_needIdle && !wxTheApp->IsInAssert() && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
+    if(sg_needIdle
+#ifdef __WXDEBUG__
+        && !wxTheApp->IsInAssert()
+#endif
+        && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
     {
         sg_needIdle = false;
         wxLogDebug("Processing idle events");
