@@ -54,6 +54,12 @@ class wxRightTextCtrl(wxTextCtrl):
         y = (dcheight - textheight) / 2
         x = dcwidth - textwidth - 2
 
+        if self.IsEnabled():
+            fclr = self.GetForegroundColour()
+        else:
+            fclr = wxSystemSettings_GetColour(wxSYS_COLOUR_GRAYTEXT)
+        dc.SetTextForeground(fclr)
+
         dc.SetClippingRegion(0, 0, dcwidth, dcheight)
         dc.DrawText(text, x, y)
 
