@@ -16,16 +16,18 @@
 
 class WXDLLEXPORT wxMemoryDC: public wxDC
 {
-  DECLARE_DYNAMIC_CLASS(wxMemoryDC)
+    DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 
-  public:
+public:
     wxMemoryDC(void);
-    wxMemoryDC( wxDC *dc ); // Create compatible DC
+    wxMemoryDC(wxDC* pDC); // Create compatible DC
 
     ~wxMemoryDC(void);
-    virtual void SelectObject( const wxBitmap& bitmap );
-    virtual void DoGetSize( int *width, int *height ) const;
-};
+    virtual void SelectObject(const wxBitmap& rBitmap);
+    virtual void DoGetSize( int* pWidth
+                           ,int* pHeight
+                          ) const;
+}; // end of CLASS wxMemoryDC
 
 #endif
     // _WX_DCMEMORY_H_

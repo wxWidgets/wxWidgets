@@ -28,6 +28,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxMemoryDC, wxDC)
 
 wxMemoryDC::wxMemoryDC(void)
 {
+    ERRORID                         vError;
+    wxString                        sError;
     HDC                             hDC;
     HPS                             hPS;
     DEVOPENSTRUC                    vDOP = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
@@ -48,6 +50,33 @@ wxMemoryDC::wxMemoryDC(void)
             m_bOwnsDC = TRUE;
             SetBrush(*wxWHITE_BRUSH);
             SetPen(*wxBLACK_PEN);
+            if (!::GpiCreateLogColorTable( m_hPS
+                                          ,0L
+                                          ,LCOLF_CONSECRGB
+                                          ,0L
+                                          ,(LONG)wxTheColourDatabase->m_nSize
+                                          ,(PLONG)wxTheColourDatabase->m_palTable
+                                         ))
+            {
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+                wxLogError("Unable to set current color table. Error: %s\n", sError);
+            }
+            //
+            // Set the color table to RGB mode
+            //
+            if (!::GpiCreateLogColorTable( m_hPS
+                                          ,0L
+                                          ,LCOLF_RGB
+                                          ,0L
+                                          ,0L
+                                          ,NULL
+                                         ))
+            {
+                vError = ::WinGetLastError(vHabmain);
+                sError = wxPMErrorToStr(vError);
+                wxLogError("Unable to set current color table. Error: %s\n", sError);
+            }
         }
         else
         {
@@ -155,7 +184,7 @@ void wxMemoryDC::SelectObject(
     m_vSelectedBitmap.SetSelectedInto(this);
     hBmp = (WXHBITMAP)::GpiSetBitmap(m_hPS, (HBITMAP)hBmp);
 
-    if (hBmp != HBM_ERROR)
+    if (hBmp == HBM_ERROR)
     {
         wxLogLastError(wxT("SelectObject(memDC, bitmap)"));
         wxFAIL_MSG(wxT("Couldn't select a bitmap into wxMemoryDC"));

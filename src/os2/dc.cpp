@@ -1326,19 +1326,178 @@ wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 // bit blit
 // ---------------------------------------------------------------------------
 
-bool wxDC::DoBlit( wxCoord xdest
-                  ,wxCoord ydest
-                  ,wxCoord width
-                  ,wxCoord height
-                  ,wxDC *source
-                  ,wxCoord xsrc
-                  ,wxCoord ysrc
-                  ,int  rop
-                  ,bool useMask
-                 )
+bool wxDC::DoBlit(
+  wxCoord                           vXdest
+, wxCoord                           vYdest
+, wxCoord                           vWidth
+, wxCoord                           vHeight
+, wxDC*                             pSource
+, wxCoord                           vXsrc
+, wxCoord                           vYsrc
+, int                               nRop
+, bool                              bUseMask
+)
 {
-   // TODO
-   return(TRUE);
+    wxMask*                         pMask = NULL;
+    CHARBUNDLE                      vCbnd;
+    COLORREF                        vOldTextColor;
+    COLORREF                        vOldBackground = ::GpiQueryBackColor(m_hPS);
+    POINTL                          aPoint[4] = { vXdest, vYdest
+                                                 ,vXdest + vWidth, vYdest + vHeight
+                                                 ,vXsrc, vYsrc
+                                                 ,vXsrc + vWidth, vYsrc + vHeight
+                                                };
+
+    if (bUseMask)
+    {
+        const wxBitmap&             rBmp = pSource->m_vSelectedBitmap;
+
+        pMask = rBmp.GetMask();
+        if (!(rBmp.Ok() && pMask && pMask->GetMaskBitmap()))
+        {
+            bUseMask = FALSE;
+        }
+    }
+
+    ::GpiQueryAttrs( m_hPS
+                    ,PRIM_CHAR
+                    ,CBB_COLOR
+                    ,&vCbnd
+                   );
+    vOldTextColor = (COLORREF)vCbnd.lColor;
+
+    if (m_textForegroundColour.Ok())
+    {
+        vCbnd.lColor = (LONG)m_textForegroundColour.GetPixel();
+        ::GpiSetAttrs( m_hPS           // presentation-space handle
+                      ,PRIM_CHAR       // Char primitive.
+                      ,CBB_COLOR       // sets color.
+                      ,0
+                      ,&vCbnd          // buffer for attributes.
+                     );
+    }
+    if (m_textBackgroundColour.Ok())
+    {
+        ::GpiSetBackColor(m_hPS, (LONG)m_textBackgroundColour.GetPixel());
+    }
+
+    LONG                            lRop = ROP_SRCCOPY;
+
+    switch (nRop)
+    {
+        case wxXOR:          lRop = ROP_SRCINVERT;        break;
+        case wxINVERT:       lRop = ROP_DSTINVERT;        break;
+        case wxOR_REVERSE:   lRop = 0x00DD0228;           break;
+        case wxAND_REVERSE:  lRop = ROP_SRCERASE;         break;
+        case wxCLEAR:        lRop = ROP_ZERO;             break;
+        case wxSET:          lRop = ROP_ONE;              break;
+        case wxOR_INVERT:    lRop = ROP_MERGEPAINT;       break;
+        case wxAND:          lRop = ROP_SRCAND;           break;
+        case wxOR:           lRop = ROP_SRCPAINT;         break;
+        case wxEQUIV:        lRop = 0x00990066;           break;
+        case wxNAND:         lRop = 0x007700E6;           break;
+        case wxAND_INVERT:   lRop = 0x00220326;           break;
+        case wxCOPY:         lRop = ROP_SRCCOPY;          break;
+        case wxNO_OP:        lRop = ROP_NOTSRCERASE;      break;
+        case wxSRC_INVERT:   lRop = ROP_SRCINVERT;        break;
+        case wxNOR:          lRop = ROP_NOTSRCCOPY;       break;
+        default:
+           wxFAIL_MSG( wxT("unsupported logical function") );
+           return FALSE;
+    }
+
+    bool                            bSuccess;
+#if 0
+    if (bUseMask)
+    {
+        //
+        // Blit bitmap with mask
+        //
+
+        //
+        // Create a temp buffer bitmap and DCs to access it and the mask
+        //
+            HDC dc_mask = ::CreateCompatibleDC(GetHdcOf(*source));
+            HDC dc_buffer = ::CreateCompatibleDC(GetHdc());
+            HBITMAP buffer_bmap = ::CreateCompatibleBitmap(GetHdc(), width, height);
+            ::SelectObject(dc_mask, (HBITMAP) mask->GetMaskBitmap());
+            ::SelectObject(dc_buffer, buffer_bmap);
+
+            // copy dest to buffer
+            if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+                           GetHdc(), xdest, ydest, SRCCOPY) )
+            {
+                wxLogLastError(wxT("BitBlt"));
+            }
+
+            // copy src to buffer using selected raster op
+            if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+                           GetHdcOf(*source), xsrc, ysrc, dwRop) )
+            {
+                wxLogLastError(wxT("BitBlt"));
+            }
+
+            // set masked area in buffer to BLACK (pixel value 0)
+            COLORREF prevBkCol = ::SetBkColor(GetHdc(), RGB(255, 255, 255));
+            COLORREF prevCol = ::SetTextColor(GetHdc(), RGB(0, 0, 0));
+            if ( !::BitBlt(dc_buffer, 0, 0, (int)width, (int)height,
+                           dc_mask, xsrc, ysrc, SRCAND) )
+            {
+                wxLogLastError(wxT("BitBlt"));
+            }
+
+            // set unmasked area in dest to BLACK
+            ::SetBkColor(GetHdc(), RGB(0, 0, 0));
+            ::SetTextColor(GetHdc(), RGB(255, 255, 255));
+            if ( !::BitBlt(GetHdc(), xdest, ydest, (int)width, (int)height,
+                           dc_mask, xsrc, ysrc, SRCAND) )
+            {
+                wxLogLastError(wxT("BitBlt"));
+            }
+            ::SetBkColor(GetHdc(), prevBkCol);   // restore colours to original values
+            ::SetTextColor(GetHdc(), prevCol);
+
+            // OR buffer to dest
+            success = ::BitBlt(GetHdc(), xdest, ydest,
+                               (int)width, (int)height,
+                               dc_buffer, 0, 0, SRCPAINT) != 0;
+            if ( !success )
+            {
+                wxLogLastError(wxT("BitBlt"));
+            }
+
+            // tidy up temporary DCs and bitmap
+            ::SelectObject(dc_mask, 0);
+            ::DeleteDC(dc_mask);
+            ::SelectObject(dc_buffer, 0);
+            ::DeleteDC(dc_buffer);
+            ::DeleteObject(buffer_bmap);
+        }
+    }
+#endif
+//    else // no mask, just BitBlt() it
+//    {
+        bSuccess = (::GpiBitBlt( m_hPS
+                                ,pSource->GetHPS()
+                                ,4L
+                                ,aPoint
+                                ,lRop
+                                ,BBO_IGNORE
+                               ) != GPI_ERROR);
+        if (!bSuccess )
+        {
+            wxLogLastError(wxT("BitBlt"));
+        }
+//    }
+    vCbnd.lColor = (LONG)vOldTextColor;
+    ::GpiSetAttrs( m_hPS           // presentation-space handle
+                  ,PRIM_CHAR       // Char primitive.
+                  ,CBB_COLOR       // sets color.
+                  ,0
+                  ,&vCbnd          // buffer for attributes.
+                 );
+    ::GpiSetBackColor(m_hPS, (LONG)vOldBackground);
+    return bSuccess;
 }
 
 void wxDC::DoGetSize( int* width, int* height ) const

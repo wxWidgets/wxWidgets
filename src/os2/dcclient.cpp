@@ -123,7 +123,17 @@ wxWindowDC::wxWindowDC(
         sError = wxPMErrorToStr(vError);
         wxLogError("Unable to set current color table. Error: %s\n", sError);
     }
+    ::GpiCreateLogColorTable( m_hPS
+                             ,0L
+                             ,LCOLF_RGB
+                             ,0L
+                             ,0L
+                             ,NULL
+                            );
     SetBackground(wxBrush(m_pCanvas->GetBackgroundColour(), wxSOLID));
+    ::WinQueryWindowRect( GetWinHwnd(m_pCanvas)
+                         ,&m_vRclPaint
+                        );
 }
 
 wxWindowDC::~wxWindowDC()
@@ -190,6 +200,13 @@ wxClientDC::wxClientDC(
         sError = wxPMErrorToStr(vError);
         wxLogError("Unable to set current color table. Error: %s\n", sError);
     }
+    ::GpiCreateLogColorTable( m_hPS
+                             ,0L
+                             ,LCOLF_RGB
+                             ,0L
+                             ,0L
+                             ,NULL
+                            );
     //
     // Default mode is BM_LEAVEALONE so we make no call Set the mix
     //
@@ -197,6 +214,12 @@ wxClientDC::wxClientDC(
                           ,wxSOLID
                          )
                  );
+    //
+    // Set the DC/PS rectangle
+    //
+    ::WinQueryWindowRect( GetWinHwnd(m_pCanvas)
+                         ,&m_vRclPaint
+                        );
 } // end of wxClientDC::wxClientDC
 
 wxClientDC::~wxClientDC()

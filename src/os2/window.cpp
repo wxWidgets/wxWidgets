@@ -2663,6 +2663,8 @@ bool wxWindow::OS2OnDrawItem(
     //
     if (vId == 0)
     {
+        ERRORID                     vError;
+        wxString                    sError;
         POWNERITEM                  pMeasureStruct = (POWNERITEM)pItemStruct;
         wxFrame*                    pFrame = (wxFrame*)this;
         wxMenuItem*                 pMenuItem = pFrame->GetMenuBar()->FindItem(pMeasureStruct->idItem, pMeasureStruct->hItem);
@@ -2676,6 +2678,36 @@ bool wxWindow::OS2OnDrawItem(
                    ,FALSE
                   );
         vDc.SetHPS(pMeasureStruct->hps);
+        //
+        // Load the wxWindows Pallete and set to RGB mode
+        //
+        if (!::GpiCreateLogColorTable( pMeasureStruct->hps
+                                      ,0L
+                                      ,LCOLF_CONSECRGB
+                                      ,0L
+                                      ,(LONG)wxTheColourDatabase->m_nSize
+                                      ,(PLONG)wxTheColourDatabase->m_palTable
+                                     ))
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError);
+        }
+        //
+        // Set the color table to RGB mode
+        //
+        if (!::GpiCreateLogColorTable( pMeasureStruct->hps
+                                      ,0L
+                                      ,LCOLF_RGB
+                                      ,0L
+                                      ,0L
+                                      ,NULL
+                                     ))
+        {
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+            wxLogError("Unable to set current color table. Error: %s\n", sError);
+        }
 
         wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
 
@@ -2719,11 +2751,32 @@ bool wxWindow::OS2OnDrawItem(
         }
         else
         {
-            //
-            // For now we don't care about doing our own highlighting so we'll
-            // just ignore the entie message!
-            //
-            return TRUE;
+            if (pMeasureStruct->fsAttribute & MIA_HILITED)
+            {
+                eAction = wxOwnerDrawn::wxODDrawAll;
+                eStatus |= wxOwnerDrawn::wxODSelected;
+                //
+                // Keep the system from trying to highlight with its bogus colors
+                //
+                pMeasureStruct->fsAttributeOld = pMeasureStruct->fsAttribute &= ~MIA_HILITED;
+            }
+            else if (!(pMeasureStruct->fsAttribute & MIA_HILITED))
+            {
+                eAction = wxOwnerDrawn::wxODDrawAll;
+                eStatus = 0;
+                //
+                // Keep the system from trying to highlight with its bogus colors
+                //
+                pMeasureStruct->fsAttribute = pMeasureStruct->fsAttributeOld &= ~MIA_HILITED;
+            }
+            else
+            {
+                //
+                // For now we don't care about anything else
+                // just ignore the entire message!
+                //
+                return TRUE;
+            }
         }
         //
         // Now redraw the item
