@@ -43,14 +43,14 @@ bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED
 // wxDialog
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxDialog,wxWindow)
+BEGIN_EVENT_TABLE(wxDialog,wxPanel)
   EVT_BUTTON  (wxID_OK,       wxDialog::OnOK)
   EVT_BUTTON  (wxID_CANCEL,   wxDialog::OnCancel)
   EVT_BUTTON  (wxID_APPLY,    wxDialog::OnApply)
   EVT_CLOSE   (wxDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
-IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxWindow)
+IMPLEMENT_DYNAMIC_CLASS(wxDialog,wxPanel)
 
 wxDialog::wxDialog(void)
 {

@@ -17,10 +17,7 @@
 #endif
 
 #include "wx/defs.h"
-#include "wx/object.h"
-#include "wx/string.h"
-#include "wx/event.h"
-#include "wx/window.h"
+#include "wx/panel.h"
 #include "wx/icon.h"
 
 //-----------------------------------------------------------------------------
@@ -45,7 +42,7 @@ extern const char *wxDialogNameStr;
 // wxDialog
 //-----------------------------------------------------------------------------
 
-class wxDialog: public wxWindow
+class wxDialog: public wxPanel
 {
   DECLARE_DYNAMIC_CLASS(wxDialog)
 

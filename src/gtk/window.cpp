@@ -1885,27 +1885,37 @@ void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {
   GtkWidget *dnd_widget = GetConnectWidget();
   
-  if (m_pDropTarget)
-  {
-    gtk_signal_disconnect_by_func( GTK_OBJECT(dnd_widget),
-      GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
+  DisconnectDnDWidget( dnd_widget );
   
-    m_pDropTarget->UnregisterWidget( dnd_widget );
-    delete m_pDropTarget;
-  }
+  if (m_pDropTarget) delete m_pDropTarget;
   m_pDropTarget = dropTarget;
-  if (m_pDropTarget)
-  {
-    m_pDropTarget->RegisterWidget( dnd_widget );
-    
-    gtk_signal_connect( GTK_OBJECT(dnd_widget), "drop_data_available_event",
-      GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
-  }
+  
+  ConnectDnDWidget( dnd_widget );
 }
 
 wxDropTarget *wxWindow::GetDropTarget() const
 {
   return m_pDropTarget;
+}
+
+void wxWindow::ConnectDnDWidget( GtkWidget *widget )
+{
+  if (!m_pDropTarget) return;
+  
+  m_pDropTarget->RegisterWidget( widget );
+    
+  gtk_signal_connect( GTK_OBJECT(widget), "drop_data_available_event",
+    GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
+}
+
+void wxWindow::DisconnectDnDWidget( GtkWidget *widget )
+{
+  if (!m_pDropTarget) return;
+  
+  gtk_signal_disconnect_by_func( GTK_OBJECT(widget),
+    GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
+  
+  m_pDropTarget->UnregisterWidget( widget );
 }
 
 GtkWidget* wxWindow::GetConnectWidget(void)

@@ -25,7 +25,7 @@
 extern bool   g_blockEventsOnDrag;
 
 //-----------------------------------------------------------------------------
-// wxListBox
+// "select" and "deselect"
 //-----------------------------------------------------------------------------
 
 static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox *listbox )
@@ -58,6 +58,8 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
 }
 
 //-----------------------------------------------------------------------------
+// wxListBox
+//-----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxListBox,wxControl)
 
@@ -83,11 +85,10 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
   
   m_list = GTK_LIST( gtk_list_new() );
   
-  // @@ what's the difference between BROWSE and SINGLE?
-  GtkSelectionMode mode = GTK_SELECTION_BROWSE;
-  if ( style & wxLB_MULTIPLE )
+  GtkSelectionMode mode = GTK_SELECTION_SINGLE;
+  if (style & wxLB_MULTIPLE)
     mode = GTK_SELECTION_MULTIPLE;
-  else if ( style & wxLB_EXTENDED )
+  else if (style & wxLB_EXTENDED)
     mode = GTK_SELECTION_EXTENDED;
 
   gtk_list_set_selection_mode( GTK_LIST(m_list), mode );
@@ -105,7 +106,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     gtk_signal_connect( GTK_OBJECT(list_item), "select", 
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
-    if ( style & wxLB_MULTIPLE )
+    if (style & wxLB_MULTIPLE)
       gtk_signal_connect( GTK_OBJECT(list_item), "deselect", 
         GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
@@ -143,7 +144,7 @@ void wxListBox::Append( const wxString &item, char *clientData )
   gtk_signal_connect( GTK_OBJECT(list_item), "select", 
     GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
-  if ( GetWindowStyleFlag() & wxLB_MULTIPLE )
+  if (GetWindowStyleFlag() & wxLB_MULTIPLE)
     gtk_signal_connect( GTK_OBJECT(list_item), "deselect", 
       GTK_SIGNAL_FUNC(gtk_listitem_select_callback), (gpointer)this );
   
@@ -152,6 +153,11 @@ void wxListBox::Append( const wxString &item, char *clientData )
   gtk_container_add( GTK_CONTAINER(m_list), list_item );
   
   gtk_widget_show( list_item );
+  
+  ConnectWidget( list_item );
+  
+  ConnectDnDWidget( list_item );
+  
 }
 
 void wxListBox::Clear(void)
@@ -381,6 +387,25 @@ int wxListBox::GetIndex( GtkWidget *item ) const
   return -1;
 }
 
+void wxListBox::SetDropTarget( wxDropTarget *dropTarget )
+{
+  GList *child = m_list->children;
+  while (child)
+  {
+    DisconnectDnDWidget( GTK_WIDGET( child->data ) );
+    child = child->next;
+  }
+  
+  wxWindow::SetDropTarget( dropTarget  );
+  
+  child = m_list->children;
+  while (child)
+  {
+    ConnectDnDWidget( GTK_WIDGET( child->data ) );
+    child = child->next;
+  }
+}
+
 GtkWidget *wxListBox::GetConnectWidget(void)
 {
   return GTK_WIDGET(m_list);
@@ -389,7 +414,7 @@ GtkWidget *wxListBox::GetConnectWidget(void)
 void wxListBox::SetFont( const wxFont &font )
 {
   wxWindow::SetFont( font );
-   
+
   GList *child = m_list->children;
   while (child)
   {

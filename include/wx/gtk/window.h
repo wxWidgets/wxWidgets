@@ -61,6 +61,8 @@ extern const wxPoint wxDefaultPosition;
 
 class wxWindow: public wxEvtHandler
 {
+  DECLARE_DYNAMIC_CLASS(wxWindow)
+  
 public:
   wxWindow();
   inline wxWindow(wxWindow *parent, wxWindowID id,
@@ -228,15 +230,17 @@ public:
   virtual bool AcceptsFocus() const;
   void UpdateWindowUI();
 
-public:         // cannot get private going yet
-
+  // implementation
+  
   virtual GtkWidget* GetConnectWidget(void);
   virtual bool IsOwnGtkWindow( GdkWindow *window );
+  void ConnectWidget( GtkWidget *widget );
+  void ConnectDnDWidget( GtkWidget *widget );
+  void DisconnectDnDWidget( GtkWidget *widget );
 
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,
     const wxSize &size, long style, const wxString &name );
   void PostCreation();
-  void ConnectWidget( GtkWidget *widget );
   bool HasVMT();
   virtual void ImplementSetSize();
   virtual void ImplementSetPosition();
@@ -313,7 +317,6 @@ public:
   virtual void GetClientSizeConstraint(int *w, int *h) const ;
   virtual void GetPositionConstraint(int *x, int *y) const ;
 
-  DECLARE_DYNAMIC_CLASS(wxWindow)
   DECLARE_EVENT_TABLE()
 };
 

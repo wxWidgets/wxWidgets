@@ -661,6 +661,7 @@ DEFAULT_USE_GDK_IMLIB=1
 DEFAULT_USE_LIBPNG=1
 DEFAULT_USE_ODBC=1
 
+DEFAULT_USE_COMBOBOX=1
 DEFAULT_USE_GAUGE=1
 DEFAULT_USE_SCROLLBAR=1
 DEFAULT_USE_LISTCTRL=1
@@ -786,6 +787,10 @@ dnl ----------------------------------------------------------------
 AC_OVERRIDES(gauge,gauge,
 **--with-gauge            use wxGauge class,
 USE_GAUGE)
+
+AC_OVERRIDES(combobox,combobox,
+**--with-combobox         use wxComboBox class,
+USE_COMBOBOX)
 
 AC_OVERRIDES(scrollbar,scrollbar,
 **--with-scrollbar        use wxScrollbar class,
@@ -1128,6 +1133,10 @@ dnl ----------------------------------------------------------------
 
 if test "$USE_GAUGE" = 1 ; then
   AC_DEFINE_UNQUOTED(USE_GAUGE,$USE_GAUGE)
+fi
+
+if test "$USE_COMBOBOX" = 1 ; then
+  AC_DEFINE_UNQUOTED(USE_COMBOBOX,$USE_COMBOBOX)
 fi
 
 if test "$USE_SCROLLBAR" = 1 ; then

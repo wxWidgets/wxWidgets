@@ -72,6 +72,10 @@
  */
 #undef USE_GAUGE
 /*
+ * Use combobox item
+ */
+#undef USE_COMBOBOX
+/*
  * Use scrollbar item
  */
 #undef USE_SCROLLBAR
