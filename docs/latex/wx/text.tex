@@ -132,6 +132,14 @@ Return the text font specified by this attribute.
 Returns the left indent in tenths of a millimetre.
 
 
+\membersection{wxTextAttr::GetLeftSubIndent}\label{wxtextattrgetleftsubindent}
+
+\constfunc{int}{GetLeftSubIndent}{\void}
+
+Returns the left sub indent for all lines but the first line in a paragraph in
+tenths of a millimetre.
+
+
 \membersection{wxTextAttr::GetRightIndent}\label{wxtextattrgetrightindent}
 
 \constfunc{int}{GetRightIndent}{\void}
@@ -219,9 +227,11 @@ Sets the text font.
 
 \membersection{wxTextAttr::SetLeftIndent}\label{wxtextattrsetleftindent}
 
-\func{void}{SetLeftIndent}{\param{int }{indent}}
+\func{void}{SetLeftIndent}{\param{int }{indent}, \param{int }{subIndent = 0}}
 
 Sets the left indent in tenths of a millimetre.
+subIndent sets the indent for all lines but the first line in a paragraph 
+relative to the first line.
 
 
 \membersection{wxTextAttr::SetRightIndent}\label{wxtextattrsetrightindent}

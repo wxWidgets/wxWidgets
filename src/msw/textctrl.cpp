@@ -2364,12 +2364,11 @@ bool wxTextCtrl::SetStyle(long start, long end, const wxTextAttr& style)
 
     if (style.HasLeftIndent())
     {
-        pf.dwMask |= PFM_STARTINDENT;
+        pf.dwMask |= PFM_STARTINDENT | PFM_OFFSET;
 
         // Convert from 1/10 mm to TWIPS
         pf.dxStartIndent = (int) (((double) style.GetLeftIndent()) * mm2twips / 10.0) ;
-
-        // TODO: do we need to specify dxOffset?
+        pf.dxOffset = (int) (((double) style.GetLeftSubIndent()) * mm2twips / 10.0) ;
     }
 
     if (style.HasRightIndent())
@@ -2531,7 +2530,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     // do format the selection
     (void) ::SendMessage(GetHwnd(), EM_GETPARAFORMAT, 0, (LPARAM) &pf) ;
 
-    style.SetLeftIndent( (int) ((double) pf.dxStartIndent * twips2mm * 10.0) );
+    style.SetLeftIndent( (int) ((double) pf.dxStartIndent * twips2mm * 10.0), (int) ((double) pf.dxOffset * twips2mm * 10.0) );
     style.SetRightIndent( (int) ((double) pf.dxRightIndent * twips2mm * 10.0) );
 
     if (pf.wAlignment == PFA_CENTER)
@@ -2547,7 +2546,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
     size_t i;
     for (i = 0; i < (size_t) pf.cTabCount; i++)
     {
-        tabStops[i] = (int) ((double) (pf.rgxTabs[i] & 0xFFFF) * twips2mm * 10.0) ;
+        tabStops.Add( (int) ((double) (pf.rgxTabs[i] & 0xFFFF) * twips2mm * 10.0) );
     }
 
     if ( changeSel )

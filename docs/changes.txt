@@ -139,6 +139,7 @@ wxMSW:
 - wxFileName::GetModificationTime() works with opened files too now
 - wxDC::GetClippingBox() now works even for clipping regions created by Windows
 - fixed wxFileDataObject in Unicode build (Alex D)
+- subdindented paragraphs support (Tim Kosse)
 
 wxMotif:
 
