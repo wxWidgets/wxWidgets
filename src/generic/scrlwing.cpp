@@ -652,7 +652,8 @@ void wxScrollHelper::AdjustScrollbars()
         }
         else
         {
-            m_xScrollLines = m_targetWindow->GetVirtualSize().GetWidth() / m_xScrollPixelsPerLine;
+            int vVirt = m_targetWindow->GetVirtualSize().GetWidth();
+            m_xScrollLines = (vVirt+m_xScrollPixelsPerLine-1) / m_xScrollPixelsPerLine;
 
             // Calculate page size i.e. number of scroll units you get on the
             // current client window
@@ -686,7 +687,7 @@ void wxScrollHelper::AdjustScrollbars()
         else // might need scrolling
         {
             int hVirt = m_targetWindow->GetVirtualSize().GetHeight();
-            m_yScrollLines = hVirt / m_yScrollPixelsPerLine;
+            m_yScrollLines = (hVirt+m_yScrollPixelsPerLine-1) / m_yScrollPixelsPerLine;
 
             // Calculate page size i.e. number of scroll units you get on the
             // current client window
