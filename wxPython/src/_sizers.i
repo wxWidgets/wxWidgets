@@ -836,6 +836,8 @@ subsizer.  Returns True if the item was found.", "");
                 return self->Show(info.sizer, show, recursive);
             else if ( info.gotPos )
                 return self->Show(info.pos, show);
+            else
+                return false;
         }
        
         DocAStr(IsShown,
