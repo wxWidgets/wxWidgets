@@ -137,7 +137,6 @@ $(OBJS)\dialogs_dialogs_rc.o: .\dialogs.rc
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\dialogs.exe del $(OBJS)\dialogs.exe
-	-if exist $(OBJS)\tips.txt del $(OBJS)\tips.txt
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)

@@ -134,7 +134,7 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 ### Variables: ###
 
 OBJS = wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-DIALOGS_CXXFLAGS = $(CPPFLAGS)  $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm -br  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\include -i=.\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\src\tiff -i=.\src\jpeg -i=.\src\png -i=.\src\zlib  -i=.\src\regex -i=. $(__DLLFLAG_p) $(CXXFLAGS)
+DIALOGS_CXXFLAGS = $(CPPFLAGS)  $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm -br  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=. $(__DLLFLAG_p) $(CXXFLAGS)
 
 
 
@@ -150,7 +150,7 @@ $(OBJS)\dialogs_dialogs.obj :  .AUTODEPEND .\dialogs.cpp
 	$(CXX) -zq -fo=$^@ $(DIALOGS_CXXFLAGS) $<
 
 $(OBJS)\dialogs_dialogs.res :  .AUTODEPEND .\dialogs.rc
-	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\include -i=.\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\src\tiff -i=.\src\jpeg -i=.\src\png -i=.\src\zlib  -i=.\src\regex -i=. $(__DLLFLAG_p) $<
+	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=. $(__DLLFLAG_p) $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -158,7 +158,6 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\dialogs.exe del $(OBJS)\dialogs.exe
-	-if exist $(OBJS)\tips.txt del $(OBJS)\tips.txt
 
 data :  
 	if not exist $(OBJS) mkdir $(OBJS)
@@ -169,9 +168,9 @@ $(OBJS)\dialogs.exe :  $(OBJS)\dialogs_dialogs.obj $(OBJS)\dialogs_dialogs.res
 	@%append $(OBJS)\dialogs.lbc option quiet
 	@%append $(OBJS)\dialogs.lbc name $^@
 	@%append $(OBJS)\dialogs.lbc option incremental
-	@%append $(OBJS)\dialogs.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath .\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  system nt_win ref '_WinMain@16'
+	@%append $(OBJS)\dialogs.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath .\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  system nt_win ref '_WinMain@16'
 	@for %i in ( $(OBJS)\dialogs_dialogs.obj) do @%append $(OBJS)\dialogs.lbc file %i
-	@for %i in ( $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\dialogs.lbc library %i
+	@for %i in ( $(__WXLIB_MONO_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\dialogs.lbc library %i
 	@%append $(OBJS)\dialogs.lbc option resource=$(OBJS)\dialogs_dialogs.res
 	wlink @$(OBJS)\dialogs.lbc
 

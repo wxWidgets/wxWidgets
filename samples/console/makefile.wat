@@ -134,7 +134,7 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 ### Variables: ###
 
 OBJS = wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-CONSOLE_CXXFLAGS = $(CPPFLAGS)  $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm -br  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\include -i=.\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\src\tiff -i=.\src\jpeg -i=.\src\png -i=.\src\zlib  -i=.\src\regex -i=. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
+CONSOLE_CXXFLAGS = $(CPPFLAGS)  $(__DEBUGFLAG_0) $(__OPTIMIZEFLAG_2) -bm -br  -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
 
 
 
@@ -155,14 +155,13 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\console.exe del $(OBJS)\console.exe
-	-if exist $(OBJS)\testdata.fc del $(OBJS)\testdata.fc
 
 $(OBJS)\console.exe :  $(OBJS)\console_console.obj
 	@%create $(OBJS)\console.lbc
 	@%append $(OBJS)\console.lbc option quiet
 	@%append $(OBJS)\console.lbc name $^@
 	@%append $(OBJS)\console.lbc option incremental
-	@%append $(OBJS)\console.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath .\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  system nt ref 'main_'
+	@%append $(OBJS)\console.lbc $(LDFLAGS) $(__DEBUGFLAG_1)  libpath .\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  system nt ref 'main_'
 	@for %i in ( $(OBJS)\console_console.obj) do @%append $(OBJS)\console.lbc file %i
 	@for %i in ( $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib) do @%append $(OBJS)\console.lbc library %i
 	@%append $(OBJS)\console.lbc

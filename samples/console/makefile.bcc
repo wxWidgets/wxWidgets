@@ -74,7 +74,7 @@ WXUNIV = 0
 ### Variables: ###
 
 OBJS = bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-CONSOLE_CXXFLAGS = $(CPPFLAGS)  -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I./../../include -I./../../lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I./../../src/tiff -I./../../src/jpeg -I./../../src/png -I./../../src/zlib  -I./../../src/regex -I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
+CONSOLE_CXXFLAGS = $(CPPFLAGS)  $(__DEBUGFLAG) $(__OPTIMIZEFLAG_2)  -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -I.\..\..\include -I.\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) -I.\..\..\src\tiff -I.\..\..\src\jpeg -I.\..\..\src\png -I.\..\..\src\zlib  -I.\..\..\src\regex -I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -97,6 +97,12 @@ WXUNICODEFLAG = u
 WXUNIVNAME = univ
 !endif
 !if "$(BUILD)" == "debug"
+__DEBUGFLAG = -v
+!endif
+!if "$(BUILD)" == "release"
+__DEBUGFLAG = -v-
+!endif
+!if "$(BUILD)" == "debug"
 __DEBUG_DEFINE_p = -D__WXDEBUG__
 !endif
 !if "$(SHARED)" == "1"
@@ -104,6 +110,12 @@ __DLLFLAG_p = -DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
 __MULTILIB_FLAG_p = -DwxUSE_GUI=0
+!endif
+!if "$(BUILD)" == "debug"
+__OPTIMIZEFLAG_2 = -Od
+!endif
+!if "$(BUILD)" == "release"
+__OPTIMIZEFLAG_2 = -O2
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
@@ -134,11 +146,10 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\console.exe del $(OBJS)\console.exe
-	-if exist $(OBJS)\testdata.fc del $(OBJS)\testdata.fc
 
 $(OBJS)\console.exe: $(OBJS)\console_console.obj
-	ilink32 -Tpe $(LDFLAGS) -L.\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  -ap -ap @&&|
-	c0x32.obj  $(OBJS)\console_console.obj,$@,, $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib cw32.lib,,
+	ilink32 -Tpe $(LDFLAGS) $(__DEBUGFLAG) -tWM -L.\..\..\lib\bcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  -ap @&&|
+	c0x32.obj  $(OBJS)\console_console.obj,$@,, $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  import32.lib ole2w32.lib cw32mti.lib,,
 |
 
 data: 

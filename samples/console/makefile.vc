@@ -43,7 +43,7 @@ WXUNIV = 0
 ### Variables: ###
 
 OBJS = vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-CONSOLE_CXXFLAGS = $(CPPFLAGS) /MD /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I./../../include /I./../../lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I./../../src/tiff /I./../../src/jpeg /I./../../src/png /I./../../src/zlib  /I./../../src/regex /I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
+CONSOLE_CXXFLAGS = $(CPPFLAGS) /MD$(__DEBUGFLAG_2) $(__DEBUGFLAG_0) /Fd$(OBJS)\console.pdb $(__OPTIMIZEFLAG_3)  /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) /I.\..\..\include /I.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG) /I.\..\..\src\tiff /I.\..\..\src\jpeg /I.\..\..\src\png /I.\..\..\src\zlib  /I.\..\..\src\regex /I. $(__DLLFLAG_p) $(__MULTILIB_FLAG_p) $(CXXFLAGS)
 
 ### Conditionally set variables: ###
 
@@ -66,6 +66,24 @@ WXUNICODEFLAG = u
 WXUNIVNAME = univ
 !endif
 !if "$(BUILD)" == "debug"
+__DEBUGFLAG_0 = /Zi
+!endif
+!if "$(BUILD)" == "release"
+__DEBUGFLAG_0 = 
+!endif
+!if "$(BUILD)" == "debug"
+__DEBUGFLAG_1 = /DEBUG
+!endif
+!if "$(BUILD)" == "release"
+__DEBUGFLAG_1 = 
+!endif
+!if "$(BUILD)" == "debug"
+__DEBUGFLAG_2 = d
+!endif
+!if "$(BUILD)" == "release"
+__DEBUGFLAG_2 = 
+!endif
+!if "$(BUILD)" == "debug"
 __DEBUG_DEFINE_p = /D__WXDEBUG__
 !endif
 !if "$(SHARED)" == "1"
@@ -73,6 +91,12 @@ __DLLFLAG_p = /DWXUSINGDLL
 !endif
 !if "$(MONOLITHIC)" == "0"
 __MULTILIB_FLAG_p = /DwxUSE_GUI=0
+!endif
+!if "$(BUILD)" == "debug"
+__OPTIMIZEFLAG_3 = /Od
+!endif
+!if "$(BUILD)" == "release"
+__OPTIMIZEFLAG_3 = /O2
 !endif
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
@@ -103,10 +127,9 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\console.exe del $(OBJS)\console.exe
-	-if exist $(OBJS)\testdata.fc del $(OBJS)\testdata.fc
 
 $(OBJS)\console.exe: $(OBJS)\console_console.obj
-	link /NOLOGO /OUT:$@ $(LDFLAGS) /LIBPATH:.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  /SUBSYSTEM:CONSOLE /SUBSYSTEM:CONSOLE @<<
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGFLAG_1)  /LIBPATH:.\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)  /SUBSYSTEM:CONSOLE @<<
 	$(OBJS)\console_console.obj  $(__WXLIB_MONO_p) $(__WXLIB_BASE_p) wxtiff$(WXDEBUGFLAG).lib wxjpeg$(WXDEBUGFLAG).lib wxpng$(WXDEBUGFLAG).lib wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
 
