@@ -498,6 +498,9 @@ Here are the steps required using the provided makefiles:
   *** IMPORTANT: For Cygwin/Mingw32, use forward slashes in the path, not
   backslashes.
 
+- Check src/makeg95.env to see that MINGW32VERSION is set to correctly
+  reflect the version of gcc that you have. Edit it as needed.
+  
 - Use the makefile.g95 files for compiling wxWindows and samples,
   e.g. to compile a debugging version of wxWindows:
   > cd c:\wx\src\msw
