@@ -109,7 +109,8 @@ public:
                 wxMenu *submenu,
                 const wxString& help = wxEmptyString)
     {
-        DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help, FALSE, submenu));
+        DoAppend(wxMenuItem::New((wxMenu *)this, id, text, help,
+                                 wxItem_Normal, submenu));
     }
 
     // the most generic form of Append() - append anything
@@ -163,7 +164,8 @@ public:
                 wxMenu *submenu,
                 const wxString& help = wxEmptyString)
     {
-        Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help, FALSE, submenu));
+        Insert(pos, wxMenuItem::New((wxMenu *)this, id, text, help,
+                                    wxItem_Normal, submenu));
     }
 
     // prepend an item to the menu
