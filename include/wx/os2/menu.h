@@ -28,82 +28,139 @@ class WXDLLEXPORT wxFrame;
 class WXDLLEXPORT wxMenu : public wxMenuBase
 {
 public:
-    // ctors & dtor
-    wxMenu(const wxString& title, long style = 0)
-        : wxMenuBase(title, style) { Init(); }
+    //
+    // Ctors & dtor
+    //
+    wxMenu( const wxString& rTitle
+           ,long            lStyle = 0
+          )
+          : wxMenuBase( rTitle
+                       ,lStyle
+                      )
+    {
+        Init();
+    }
 
-    wxMenu(long style = 0) : wxMenuBase(style) { Init(); }
+    wxMenu(long lStyle = 0)
+          : wxMenuBase(lStyle)
+    {
+        Init();
+    }
 
     virtual ~wxMenu();
 
-    // implement base class virtuals
-    virtual bool DoAppend(wxMenuItem *item);
-    virtual bool DoInsert(size_t pos, wxMenuItem *item);
-    virtual wxMenuItem *DoRemove(wxMenuItem *item);
+    //
+    // Implement base class virtuals
+    //
+    virtual bool        DoAppend(wxMenuItem* pItem);
+    virtual bool        DoInsert( size_t      nPos
+                                 ,wxMenuItem* pItem
+                                );
+    virtual wxMenuItem* DoRemove(wxMenuItem* pItem);
+    virtual void        Break(void);
+    virtual void        SetTitle(const wxString& rTitle);
 
-    virtual void Break();
-
-    virtual void SetTitle(const wxString& title);
-
-    // OS2-specific
-    bool ProcessCommand(wxCommandEvent& event);
-
-#if WXWIN_COMPATIBILITY
-    wxMenu(const wxString& title, const wxFunction func)
-        : wxMenuBase(title)
+#if wxUSE_MENU_CALLBACK
+    wxMenu( const wxString&  rTitle
+           ,const wxFunction fnFunc
+          )
+          : wxMenuBase(rTitle)
     {
-        Callback(func);
+        Init();
+        Callback(fnFunc);
     }
-#endif // WXWIN_COMPATIBILITY
+#endif // wxUSE_MENU_CALLBACK
 
-    // implementation only from now on
+    //
+    // OS2-specific
+    //
+    bool ProcessCommand(wxCommandEvent& rEvent);
+
+
+    //
+    // Implementation only from now on
     // -------------------------------
+    //
+    bool OS2Command( WXUINT uParam
+                    ,WXWORD wId
+                   );
 
-    bool OS2Command(WXUINT param, WXWORD id);
+    //
+    // Semi-private accessors
+    //
 
-    // semi-private accessors
-        // get the window which contains this menu
-    wxWindow *GetWindow() const;
-        // get the menu handle
+    //
+    // Get the window which contains this menu
+    //
+    wxWindow* GetWindow(void) const;
+
+    //
+    // Get the menu handle
+    //
     WXHMENU GetHMenu() const { return m_hMenu; }
 
-    // attach/detach menu to/from wxMenuBar
-    void Attach(wxMenuBar *menubar);
-    void Detach();
+    //
+    // Attach/detach menu to/from wxMenuBar
+    //
+    void Attach(wxMenuBar* pMenubar);
+    void Detach(void);
 
 #if wxUSE_ACCEL
-    // called by wxMenuBar to build its accel table from the accels of all menus
-    bool HasAccels() const { return !m_accels.IsEmpty(); }
-    size_t GetAccelCount() const { return m_accels.GetCount(); }
-    size_t CopyAccels(wxAcceleratorEntry *accels) const;
+    //
+    // Called by wxMenuBar to build its accel table from the accels of all menus
+    //
+    bool   HasAccels(void) const { return !m_vAccels.IsEmpty(); }
+    size_t GetAccelCount(void) const { return m_vAccels.GetCount(); }
+    size_t CopyAccels(wxAcceleratorEntry* pAccels) const;
 
-    // called by wxMenuItem when its accels changes
-    void UpdateAccel(wxMenuItem *item);
+    //
+    // Called by wxMenuItem when its accels changes
+    //
+    void UpdateAccel(wxMenuItem* pItem);
 
-    // helper used by wxMenu itself (returns the index in m_accels)
-    int FindAccel(int id) const;
+    //
+    // Helper used by wxMenu itself (returns the index in m_accels)
+    //
+    int FindAccel(int nId) const;
 #endif // wxUSE_ACCEL
 
+    //
+    // All OS/2PM Menu's have one of these
+    //
+    MENUITEM                        m_vMenuData;
+
 private:
-    // common part of all ctors
+    //
+    // Common part of all ctors
+    //
     void Init();
 
-    // common part of Append/Insert (behaves as Append is pos == (size_t)-1)
-    bool DoInsertOrAppend(wxMenuItem *item, size_t pos = (size_t)-1);
+    //
+    // Common part of Append/Insert (behaves as Append is pos == (size_t)-1)
+    //
+    bool DoInsertOrAppend( wxMenuItem* pItem
+                          ,size_t      nPos = (size_t)-1
+                         );
 
-    // if TRUE, insert a breal before appending the next item
-    bool m_doBreak;
+    //
+    // If TRUE, insert a breal before appending the next item
+    //
+    bool                            m_bDoBreak;
 
-    // the menu handle of this menu
-    WXHMENU m_hMenu;
+    //
+    // The menu handle of this menu
+    //
+    WXHMENU                         m_hMenu;
 
 #if wxUSE_ACCEL
-    // the accelerators for our menu items
-    wxAcceleratorArray m_accels;
+    //
+    // The accelerators for our menu items
+    //
+    wxAcceleratorArray              m_vAccels;
 #endif // wxUSE_ACCEL
 
     DECLARE_DYNAMIC_CLASS(wxMenu)
-};
+}; // end of wxMenu
 
 // ----------------------------------------------------------------------------
 // Menu Bar (a la Windows)
@@ -112,88 +169,142 @@ private:
 class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
 {
 public:
-    // ctors & dtor
-        // default constructor
+    //
+    // Ctors & dtor
+    //
+
+    //
+    // Default constructor
+    //
     wxMenuBar();
-        // unused under OS2
-    wxMenuBar(long style);
-        // menubar takes ownership of the menus arrays but copies the titles
-    wxMenuBar(int n, wxMenu *menus[], const wxString titles[]);
+
+    //
+    // Unused under OS2
+    wxMenuBar(long lStyle);
+
+    //
+    // Menubar takes ownership of the menus arrays but copies the titles
+    //
+    wxMenuBar( int            n
+              ,wxMenu*        vMenus[]
+              ,const wxString sTitles[]
+             );
     virtual ~wxMenuBar();
 
-    // menubar construction
-    virtual bool Append( wxMenu *menu, const wxString &title );
-    virtual bool Insert(size_t pos, wxMenu *menu, const wxString& title);
-    virtual wxMenu *Replace(size_t pos, wxMenu *menu, const wxString& title);
-    virtual wxMenu *Remove(size_t pos);
+    //
+    // Menubar construction
+    //
+    virtual bool        Append( wxMenu*         pMenu
+                               ,const wxString& rTitle
+                              );
+    virtual bool        Insert( size_t          nPos
+                               ,wxMenu*         pMenu
+                               ,const wxString& rTitle
+                              );
+    virtual wxMenu*     Replace( size_t          nPos
+                                ,wxMenu*         pMenu
+                                ,const wxString& rTitle
+                               );
+    virtual wxMenu*     Remove(size_t nPos);
+    virtual int         FindMenuItem( const wxString& rMenuString
+                                     ,const wxString& rItemString
+                                    ) const;
+    virtual wxMenuItem* FindItem( int      nId
+                                 ,wxMenu** ppMenu = NULL
+                                ) const;
 
-    virtual int FindMenuItem(const wxString& menuString,
-                             const wxString& itemString) const;
-    virtual wxMenuItem* FindItem( int id, wxMenu **menu = NULL ) const;
+    virtual void        EnableTop( size_t nPos
+                                  ,bool   bFlag
+                                 );
+    virtual void        SetLabelTop( size_t          nPos
+                                    ,const wxString& rLabel
+                                   );
+    virtual wxString    GetLabelTop(size_t nPos) const;
 
-    virtual void EnableTop( size_t pos, bool flag );
-    virtual void SetLabelTop( size_t pos, const wxString& label );
-    virtual wxString GetLabelTop( size_t pos ) const;
-
-    // compatibility: these functions are deprecated
+    //
+    // Compatibility: these functions are deprecated
+    //
 #if WXWIN_COMPATIBILITY
-    void SetEventHandler(wxEvtHandler *handler) { m_eventHandler = handler; }
-    wxEvtHandler *GetEventHandler() { return m_eventHandler; }
-
-    bool Enabled(int id) const { return IsEnabled(id); }
-    bool Checked(int id) const { return IsChecked(id); }
+    void          SetEventHandler(wxEvtHandler* pHandler) { m_pEventHandler = pHandler; }
+    wxEvtHandler* GetEventHandler(void) { return m_pEventHandler; }
+    bool          Enabled(int nId) const { return IsEnabled(nId); }
+    bool          Checked(int nId) const { return IsChecked(nId); }
 #endif // WXWIN_COMPATIBILITY
 
-    // implementation from now on
-    WXHMENU Create();
-    int  FindMenu(const wxString& title);
-    void Detach();
+    //
+    // Implementation from now on
+    //
+    WXHMENU                   Create(void);
+    void                      Detach(void);
 
-        // returns TRUE if we're attached to a frame
-    bool IsAttached() const { return m_menuBarFrame != NULL; }
-        // get the frame we live in
-    wxFrame *GetFrame() const { return m_menuBarFrame; }
-        // attach to a frame
-    void Attach(wxFrame *frame);
+    //
+    // Returns TRUE if we're attached to a frame
+    //
+    bool                      IsAttached(void) const { return m_pMenuBarFrame != NULL; }
+
+    //
+    // Get the frame we live in
+    //
+    wxFrame *                 GetFrame(void) const { return m_pMenuBarFrame; }
+
+    //
+    // Attach to a frame
+    //
+    void                      Attach(wxFrame* pFrame);
 
 #if wxUSE_ACCEL
-    // get the accel table for all the menus
-    const wxAcceleratorTable& GetAccelTable() const { return m_accelTable; }
+    //
+    // Get the accel table for all the menus
+    //
+    const wxAcceleratorTable& GetAccelTable(void) const { return m_vAccelTable; }
 
-    // update the accel table (must be called after adding/deletign a menu)
-    void RebuildAccelTable();
+    //
+    // Update the accel table (must be called after adding/deletign a menu)
+    //
+    void                      RebuildAccelTable(void);
 #endif // wxUSE_ACCEL
 
-        // get the menu handle
-    WXHMENU       GetHMenu() const { return m_hMenu; }
-    unsigned long GetMenubarId() const { return m_ulMenubarId; }
+    //
+    // Get the menu handle
+    WXHMENU                   GetHMenu(void) const { return m_hMenu; }
 
-    // if the menubar is modified, the display is not updated automatically,
+    //
+    // If the menubar is modified, the display is not updated automatically,
     // call this function to update it (m_menuBarFrame should be !NULL)
-    void Refresh( bool eraseBackground = TRUE
-                 ,const wxRect *rect = (const wxRect *) NULL
-                );
+    //
+    void                      Refresh(void);
 
 protected:
-    // common part of all ctors
-    void Init();
+    //
+    // Common part of all ctors
+    //
+    void                      Init(void);
 
 #if WXWIN_COMPATIBILITY
-    wxEvtHandler *m_eventHandler;
+    wxEvtHandler*                   m_pEventHandler;
 #endif // WXWIN_COMPATIBILITY
 
     wxArrayString m_titles;
 
-    wxFrame*                        m_menuBarFrame;
+    wxFrame*                        m_pMenuBarFrame;
     WXHMENU                         m_hMenu;
-    unsigned long                   m_ulMenubarId;
 
 #if wxUSE_ACCEL
-    // the accelerator table for all accelerators in all our menus
-    wxAcceleratorTable m_accelTable;
+    //
+    // The accelerator table for all accelerators in all our menus
+    //
+    wxAcceleratorTable              m_vAccelTable;
 #endif // wxUSE_ACCEL
 
 private:
+    //
+    // Virtual function hiding suppression
+    //
+    void                      Refresh( bool          bErase
+                                      ,const wxRect* pRect
+                                     )
+    { wxWindow::Refresh(bErase, pRect); }
+
     DECLARE_DYNAMIC_CLASS(wxMenuBar)
 };
 

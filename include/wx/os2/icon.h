@@ -38,12 +38,10 @@ class WXDLLEXPORT wxIconRefData: public wxIconRefDataBase
 {
 public:
     wxIconRefData() { };
-    virtual ~wxIconRefData() { Free(); m_hIcon = NULL; }
+    virtual ~wxIconRefData() { Free(); }
 
     virtual void Free();
-public:
-    WXHICON m_hIcon;
-};
+}; // end of
 
 // ---------------------------------------------------------------------------
 // Icon

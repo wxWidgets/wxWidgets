@@ -91,11 +91,13 @@
 //
 // The last Windows message we got (MT-UNSAFE)
 //
-extern WXMSGID            s_currentMsg;
+QMSG                      s_currentMsg;
 
 wxMenu*                   wxCurrentPopupMenu = NULL;
 extern wxList WXDLLEXPORT wxPendingDelete;
+#if defined(__VISAGECPP__) && (__IBMCPP__ < 400)
 extern wxChar*            wxCanvasClassName;
+#endif
 wxList*                   wxWinHandleList = NULL;
 
 // ---------------------------------------------------------------------------
@@ -706,12 +708,11 @@ void wxWindow::SubclassWin(
   WXHWND                            hWnd
 )
 {
-    HAB                             hab;
     HWND                            hwnd = (HWND)hWnd;
 
     wxASSERT_MSG( !m_fnOldWndProc, wxT("subclassing window twice?") );
 
-    wxCHECK_RET(::WinIsWindow(hab, hwnd), wxT("invalid HWND in SubclassWin") );
+    wxCHECK_RET(::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in SubclassWin") );
 
     wxAssociateWinWithHandle(hwnd, this);
 
@@ -721,8 +722,6 @@ void wxWindow::SubclassWin(
 
 void wxWindow::UnsubclassWin()
 {
-    HAB                             hab;
-
     wxRemoveHandleAssociation(this);
 
     //
@@ -734,7 +733,7 @@ void wxWindow::UnsubclassWin()
     {
         m_hWnd = 0;
 
-        wxCHECK_RET( ::WinIsWindow(hab, hwnd), wxT("invalid HWND in UnsubclassWin") );
+        wxCHECK_RET( ::WinIsWindow(vHabmain, hwnd), wxT("invalid HWND in UnsubclassWin") );
 
         PFNWP                       fnProc = (PFNWP)::WinQueryWindowULong(hwnd, QWS_USER);
         if ( (m_fnOldWndProc != 0) && (fnProc != (PFNWP) m_fnOldWndProc))
@@ -1459,246 +1458,505 @@ void wxWindow::GetCaretPos(
 // popup menu
 // ---------------------------------------------------------------------------
 
-bool wxWindow::DoPopupMenu( wxMenu *menu, int x, int y )
+bool wxWindow::DoPopupMenu(
+  wxMenu*                           pMenu
+, int                               nX
+, int                               nY
+)
 {
-    // TODO:
-    return(TRUE);
-}
+    HWND                            hWnd = GetHwnd();
+    HWND                            hWndParent = GetParent() ? GetWinHwnd(GetParent()) : (HWND)0;
+    HWND                            hMenu = GetHmenuOf(pMenu);
+
+    pMenu->SetInvokingWindow(this);
+    pMenu->UpdateUI();
+
+    DoClientToScreen( &nX
+                     ,&nY
+                    );
+    wxCurrentPopupMenu = pMenu;
+
+    ::WinPopupMenu( hWndParent
+                   ,hWnd
+                   ,hMenu
+                   ,nX
+                   ,nY
+                   ,0L
+                   ,PU_MOUSEBUTTON2DOWN | PU_MOUSEBUTTON2 | PU_KEYBOARD
+                  );
+    wxYield();
+    wxCurrentPopupMenu = NULL;
+
+    pMenu->SetInvokingWindow(NULL);
+    return TRUE;
+} // end of wxWindow::DoPopupMenu
 
 // ===========================================================================
 // pre/post message processing
 // ===========================================================================
 
-MRESULT wxWindow::OS2DefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
+MRESULT wxWindow::OS2DefWindowProc(
+  WXUINT                            uMsg
+, WXWPARAM                          wParam
+, WXLPARAM                          lParam
+)
 {
-   // TODO:
-   return (MRESULT)0;
-}
+    if (m_fnOldWndProc)
+        return ((MRESULT)m_fnOldWndProc());
+    else
+        return (::WinDefWindowProc(GetHwnd(), (ULONG)uMsg, (MPARAM)wParam, (MPARAM)lParam));
+} // end of wxWindow::OS2DefWindowProc
 
-bool wxWindow::OS2ProcessMessage(WXMSG* pMsg)
+bool wxWindow::OS2ProcessMessage(
+  WXMSG*                            pMsg
+)
 {
-   // TODO:
+    QMSG*                           pQMsg = (QMSG*)pMsg;
+
+    if (m_hWnd != 0 && (GetWindowStyleFlag() & wxTAB_TRAVERSAL))
+    {
+        //
+        // Intercept dialog navigation keys
+        //
+        bool                        bProcess = TRUE;
+        USHORT                      uKeyFlags = SHORT1FROMMP(pQMsg->mp1);
+
+        if (uKeyFlags & KC_KEYUP)
+            bProcess = FALSE;
+
+        if (uKeyFlags & KC_ALT)
+            bProcess = FALSE;
+
+        if (!(uKeyFlags & KC_VIRTUALKEY))
+            bProcess = FALSE;
+
+        if (bProcess)
+        {
+            bool                    bCtrlDown = IsCtrlDown();
+            bool                    bShiftDown = IsShiftDown();
+
+            //
+            // WM_QUERYDLGCODE: ask the control if it wants the key for itself,
+            // don't process it if it's the case (except for Ctrl-Tab/Enter
+            // combinations which are always processed)
+            //
+            ULONG                   ulDlgCode = 0;
+
+            if (!bCtrlDown)
+            {
+                ulDlgCode = (ULONG)::WinSendMsg(pQMsg->hwnd, WM_QUERYDLGCODE, pQMsg, 0);
+            }
+
+            bool                    bForward = TRUE;
+            bool                    bWindowChange = FALSE;
+
+            switch (SHORT2FROMMP(pQMsg->mp2))
+            {
+                //
+                // Going to make certain assumptions about specific types of controls
+                // here, so we may have to alter some things later if they prove invalid
+                //
+                case VK_TAB:
+                    //
+                    // Shift tabl will always be a nav-key but tabs may be wanted
+                    //
+                    if (!bShiftDown)
+                    {
+                        bProcess = FALSE;
+                    }
+                    else
+                    {
+                        //
+                        // Entry Fields want tabs for themselve usually
+                        //
+                        switch (ulDlgCode)
+                        {
+                            case DLGC_ENTRYFIELD:
+                            case DLGC_MLE:
+                                bProcess = TRUE;
+                                break;
+
+                            default:
+                                bProcess = FALSE;
+                        }
+
+                        //
+                        // Ctrl-Tab cycles thru notebook pages
+                        //
+                        bWindowChange = bCtrlDown;
+                        bForward = !bShiftDown;
+                    }
+                    break;
+
+                case VK_UP:
+                case VK_LEFT:
+                    if (bCtrlDown)
+                        bProcess = FALSE;
+                    else
+                        bForward = FALSE;
+                    break;
+
+                case VK_DOWN:
+                case VK_RIGHT:
+                    if (bCtrlDown)
+                        bProcess = FALSE;
+                    break;
+
+                case VK_ENTER:
+                    {
+                        if (bCtrlDown)
+                        {
+                            //
+                            // ctrl-enter is not processed
+                            //
+                            return FALSE;
+                        }
+                        else if (ulDlgCode & DLGC_BUTTON)
+                        {
+                            //
+                            // buttons want process Enter themselevs
+                            //
+                            bProcess = FALSE;
+                        }
+                        else
+                        {
+                            wxPanel*    pPanel = wxDynamicCast(this, wxPanel);
+                            wxButton*   pBtn = NULL;
+
+                            if (pPanel)
+                            {
+                                //
+                                // Panel may have a default button which should
+                                // be activated by Enter
+                                //
+                                pBtn = pPanel->GetDefaultItem();
+                            }
+
+                            if (pBtn && pBtn->IsEnabled())
+                            {
+                                //
+                                // If we do have a default button, do press it
+                                //
+                                pBtn->OS2Command(BN_CLICKED, 0 /* unused */);
+                                return TRUE;
+                            }
+                            // else: but if it does not it makes sense to make
+                            //       it work like a TAB - and that's what we do.
+                            //       Note that Ctrl-Enter always works this way.
+                        }
+                    }
+                    break;
+
+                default:
+                    bProcess = FALSE;
+            }
+
+            if (bProcess)
+            {
+                wxNavigationKeyEvent    vEvent;
+
+                vEvent.SetDirection(bForward);
+                vEvent.SetWindowChange(bWindowChange);
+                vEvent.SetEventObject(this);
+
+                if (GetEventHandler()->ProcessEvent(vEvent))
+                {
+                    wxButton*       pBtn = wxDynamicCast(FindFocus(), wxButton);
+
+                    if (pBtn)
+                    {
+                        //
+                        // The button which has focus should be default
+                        //
+                        pBtn->SetDefault();
+                    }
+                    return TRUE;
+                }
+            }
+        }
+    }
+    //
+    // Let Dialogs process
+    //
+    if (::WinSendMsg(pQMsg->hwnd, WM_QUERYDLGCODE, pQMsg, 0));
+        return TRUE;
+
+#if wxUSE_TOOLTIPS
+    if ( m_tooltip )
+    {
+        // relay mouse move events to the tooltip control
+        QMSG*                       pQMsg = (QMSG*)pMsg;
+
+        if (pQMsg->msg == WM_MOUSEMOVE )
+            m_tooltip->RelayEvent(pMsg);
+    }
+#endif // wxUSE_TOOLTIPS
+
     return FALSE;
-}
+} // end of wxWindow::OS2ProcessMessage
 
-bool wxWindow::OS2TranslateMessage(WXMSG* pMsg)
+bool wxWindow::OS2TranslateMessage(
+  WXMSG*                            pMsg
+)
 {
     return m_acceleratorTable.Translate(this, pMsg);
-}
+} // end of wxWindow::OS2TranslateMessage
 
 // ---------------------------------------------------------------------------
-// message params unpackers (different for Win16 and Win32)
+// message params unpackers
 // ---------------------------------------------------------------------------
 
-void wxWindow::UnpackCommand(WXWPARAM wParam, WXLPARAM lParam,
-                             WORD *id, WXHWND *hwnd, WORD *cmd)
+void wxWindow::UnpackCommand(
+  WXWPARAM                          wParam
+, WXLPARAM                          lParam
+, WORD*                             pId
+, WXHWND*                           phWnd
+, WORD*                             pCmd
+)
 {
-    *id = LOWORD(wParam);
-    *hwnd = (WXHWND)lParam;
-    *cmd = HIWORD(wParam);
-}
+    *pId = LOWORD(wParam);
+    *phWnd = (WXHWND)lParam;
+    *pCmd = HIWORD(wParam);
+} // end of wxWindow::UnpackCommand
 
-void wxWindow::UnpackActivate(WXWPARAM wParam, WXLPARAM lParam,
-                              WXWORD *state, WXWORD *minimized, WXHWND *hwnd)
+void wxWindow::UnpackActivate(
+  WXWPARAM                          wParam
+, WXLPARAM                          lParam
+, WXWORD*                           pState
+, WXHWND*                           phWnd
+)
 {
-    *state = LOWORD(wParam);
-    *minimized = HIWORD(wParam);
-    *hwnd = (WXHWND)lParam;
-}
+    *pState     = LOWORD(wParam);
+    *phWnd      = (WXHWND)lParam;
+} // end of wxWindow::UnpackActivate
 
-void wxWindow::UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
-                            WXWORD *code, WXWORD *pos, WXHWND *hwnd)
+void wxWindow::UnpackScroll(
+  WXWPARAM                          wParam
+, WXLPARAM                          lParam
+, WXWORD*                           pCode
+, WXWORD*                           pPos
+, WXHWND*                           phWnd
+)
 {
-    *code = LOWORD(wParam);
-    *pos = HIWORD(wParam);
-    *hwnd = (WXHWND)lParam;
-}
+    *pCode = LOWORD(wParam);
+    *pPos  = HIWORD(wParam);
+    *phWnd = (WXHWND)lParam;
+} // end of wxWindow::UnpackScroll
 
-void wxWindow::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
-                              WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd)
+void wxWindow::UnpackMenuSelect(
+  WXWPARAM                          wParam
+, WXLPARAM                          lParam
+, WXWORD*                           pItem
+, WXWORD*                           pFlags
+, WXHMENU*                          phMenu
+)
 {
-    *nCtlColor = 0; // TODO: CTLCOLOR_BTN;
-    *hwnd = (WXHWND)lParam;
-    *hdc = (WXHDC)wParam;
-}
-
-void wxWindow::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
-                                WXWORD *item, WXWORD *flags, WXHMENU *hmenu)
-{
-    *item = (WXWORD)LOWORD(wParam);
-    *flags = HIWORD(wParam);
-    *hmenu = (WXHMENU)lParam;
-}
+    *pItem = (WXWORD)LOWORD(wParam);
+    *pFlags = HIWORD(wParam);
+    *phMenu = (WXHMENU)lParam;
+} // end of wxWindow::UnpackMenuSelect
 
 // ---------------------------------------------------------------------------
 // Main wxWindows window proc and the window proc for wxWindow
 // ---------------------------------------------------------------------------
 
+//
 // Hook for new window just as it's being created, when the window isn't yet
 // associated with the handle
-wxWindow *wxWndHook = NULL;
+//
+wxWindow*                           wxWndHook = NULL;
 
+//
 // Main window proc
-MRESULT wxWndProc(HWND hWnd, ULONG message, MPARAM wParam, MPARAM lParam)
+//
+MRESULT wxWndProc(
+  HWND                              hWnd
+, ULONG                             ulMsg
+, MPARAM                            wParam
+, MPARAM                            lParam
+)
 {
-    // trace all messages - useful for the debugging
+    //
+    // Trace all ulMsgs - useful for the debugging
+    //
 #ifdef __WXDEBUG__
     wxLogTrace(wxTraceMessages, wxT("Processing %s(wParam=%8lx, lParam=%8lx)"),
-               wxGetMessageName(message), wParam, lParam);
+               wxGetMessageName(ulMsg), wParam, lParam);
 #endif // __WXDEBUG__
 
-    wxWindow *wnd = wxFindWinFromHandle((WXHWND) hWnd);
+    wxWindow*                       pWnd = wxFindWinFromHandle((WXHWND)hWnd);
 
-    // when we get the first message for the HWND we just created, we associate
+    //
+    // When we get the first message for the HWND we just created, we associate
     // it with wxWindow stored in wxWndHook
-    if ( !wnd && wxWndHook )
+    //
+    if (!pWnd && wxWndHook)
     {
-#if 0 // def __WXDEBUG__
-        char buf[512];
-        ::GetClassNameA((HWND) hWnd, buf, 512);
-        wxString className(buf);
-#endif
-
         wxAssociateWinWithHandle(hWnd, wxWndHook);
-        wnd = wxWndHook;
+        pWnd = wxWndHook;
         wxWndHook = NULL;
-        wnd->SetHWND((WXHWND)hWnd);
+        pWnd->SetHWND((WXHWND)hWnd);
     }
 
-    MRESULT rc;
+    MRESULT                         rc;
 
+    //
     // Stop right here if we don't have a valid handle in our wxWindow object.
-    if ( wnd && !wnd->GetHWND() )
+    //
+    if (pWnd && !pWnd->GetHWND())
     {
-        // FIXME: why do we do this?
-        wnd->SetHWND((WXHWND) hWnd);
-        rc = wnd->OS2DefWindowProc(message, wParam, lParam );
-        wnd->SetHWND(0);
+        pWnd->SetHWND((WXHWND) hWnd);
+        rc = pWnd->OS2DefWindowProc(ulMsg, wParam, lParam );
+        pWnd->SetHWND(0);
     }
     else
     {
-        if ( wnd )
-            rc = wnd->OS2WindowProc(message, wParam, lParam);
+        if (pWnd)
+            rc = pWnd->OS2WindowProc(ulMsg, wParam, lParam);
         else
-            rc = 0; //TODO: DefWindowProc( hWnd, message, wParam, lParam );
+            rc = ::WinDefWindowProc(hWnd, ulMsg, wParam, lParam);
     }
-
     return rc;
-}
+} // end of wxWndProc
 
-MRESULT wxWindow::OS2WindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam)
+//
+// We will add (or delete) messages we need to handle at this default
+// level as we go
+//
+MRESULT wxWindow::OS2WindowProc(
+  WXUINT                            uMsg
+, WXWPARAM                          wParam
+, WXLPARAM                          lParam
+)
 {
-    // did we process the message?
-    bool processed = FALSE;
+    //
+    // Did we process the uMsg?
+    //
+    bool                            bProcessed = FALSE;
 
-    // the return value
+    //
+    // The return value
+    //
     union
     {
-        bool        allow;
-        long        result;
-        WXHICON     hIcon;
-        WXHBRUSH    hBrush;
-    } rc;
+        bool                        bAllow;
+        MRESULT                     mResult;
+        WXHICON                     hIcon;
+        WXHBRUSH                    hBrush;
+    } vRc;
 
-    // for most messages we should return 0 when we do process the message
-    rc.result = 0;
-    // TODO:
-/*
-    switch ( message )
+    //
+    // For most messages we should return 0 when we do process the message
+    //
+    vRc.mResult = (MRESULT)0;
+
+    switch (uMsg)
     {
         case WM_CREATE:
             {
-                bool mayCreate;
-                processed = HandleCreate((WXLPCREATESTRUCT)lParam, &mayCreate);
-                if ( processed )
+                bool                bMayCreate;
+
+                bProcessed = HandleCreate( (WXLPCREATESTRUCT)lParam
+                                          ,&bMayCreate
+                                         );
+                if (bProcessed)
                 {
-                    // return 0 to allow window creation
-                    rc.result = mayCreate ? 0 : -1;
+                    //
+                    // Return 0 to bAllow window creation
+                    //
+                    vRc.mResult = (MRESULT)(bMayCreate ? 0 : -1);
                 }
             }
             break;
 
         case WM_DESTROY:
-            processed = HandleDestroy();
+            bProcessed = HandleDestroy();
             break;
 
         case WM_MOVE:
-            processed = HandleMove(LOWORD(lParam), HIWORD(lParam));
+            bProcessed = HandleMove( LOWORD(lParam)
+                                    ,HIWORD(lParam)
+                                   );
             break;
 
         case WM_SIZE:
-            processed = HandleSize(LOWORD(lParam), HIWORD(lParam), wParam);
+            bProcessed = HandleSize( LOWORD(lParam)
+                                    ,HIWORD(lParam)
+                                    ,(WXUINT)wParam
+                                   );
             break;
 
         case WM_ACTIVATE:
             {
-                WXWORD state, minimized;
-                WXHWND hwnd;
-                UnpackActivate(wParam, lParam, &state, &minimized, &hwnd);
+                WXWORD              wState;
+                WXHWND              hWnd;
 
-                processed = HandleActivate(state, minimized != 0, (WXHWND)hwnd);
+                UnpackActivate( wParam
+                               ,lParam
+                               ,&wState
+                               ,&hWnd
+                              );
+
+                bProcessed = HandleActivate( wState
+                                            ,(WXHWND)hWnd
+                                           );
             }
             break;
 
         case WM_SETFOCUS:
-            processed = HandleSetFocus((WXHWND)(HWND)wParam);
-            break;
-
-        case WM_KILLFOCUS:
-            processed = HandleKillFocus((WXHWND)(HWND)wParam);
+            if (SHORT1FROMMP((MPARAM)lParam) == TRUE)
+                bProcessed = HandleSetFocus((WXHWND)(HWND)wParam);
+            else
+                bProcessed = HandleKillFocus((WXHWND)(HWND)wParam);
             break;
 
         case WM_PAINT:
-            processed = HandlePaint();
+            bProcessed = HandlePaint();
             break;
 
         case WM_CLOSE:
-            // don't let the DefWindowProc() destroy our window - we'll do it
+            //
+            // Don't let the DefWindowProc() destroy our window - we'll do it
             // ourselves in ~wxWindow
-            processed = TRUE;
-            rc.result = TRUE;
+            //
+            bProcessed = TRUE;
+            vRc.mResult = (MRESULT)TRUE;
             break;
 
-        case WM_SHOWWINDOW:
-            processed = HandleShow(wParam != 0, (int)lParam);
+        case WM_SHOW:
+            bProcessed = HandleShow(wParam != 0, (int)lParam);
             break;
 
+        //
+        // Under OS2 PM Joysticks are treated just like mouse events
+        // The "Motion" events will be prevelent in joysticks
+        //
         case WM_MOUSEMOVE:
-        case WM_LBUTTONDOWN:
-        case WM_LBUTTONUP:
-        case WM_LBUTTONDBLCLK:
-        case WM_RBUTTONDOWN:
-        case WM_RBUTTONUP:
-        case WM_RBUTTONDBLCLK:
-        case WM_MBUTTONDOWN:
-        case WM_MBUTTONUP:
-        case WM_MBUTTONDBLCLK:
+        case WM_BUTTON1DOWN:
+        case WM_BUTTON1UP:
+        case WM_BUTTON1DBLCLK:
+        case WM_BUTTON1MOTIONEND:
+        case WM_BUTTON1MOTIONSTART:
+        case WM_BUTTON2DOWN:
+        case WM_BUTTON2UP:
+        case WM_BUTTON2DBLCLK:
+        case WM_BUTTON2MOTIONEND:
+        case WM_BUTTON2MOTIONSTART:
+        case WM_BUTTON3DOWN:
+        case WM_BUTTON3UP:
+        case WM_BUTTON3DBLCLK:
+        case WM_BUTTON3MOTIONEND:
+        case WM_BUTTON3MOTIONSTART:
             {
                 short x = LOWORD(lParam);
                 short y = HIWORD(lParam);
 
-                processed = HandleMouseEvent(message, x, y, wParam);
-            }
-            break;
-
-        case MM_JOY1MOVE:
-        case MM_JOY2MOVE:
-        case MM_JOY1ZMOVE:
-        case MM_JOY2ZMOVE:
-        case MM_JOY1BUTTONDOWN:
-        case MM_JOY2BUTTONDOWN:
-        case MM_JOY1BUTTONUP:
-        case MM_JOY2BUTTONUP:
-            {
-                int x = LOWORD(lParam);
-                int y = HIWORD(lParam);
-
-                processed = HandleJoystickEvent(message, x, y, wParam);
+                bProcessed = HandleMouseEvent(uMsg, x, y, (WXUINT)wParam);
             }
             break;
 
         case WM_SYSCOMMAND:
-            processed = HandleSysCommand(wParam, lParam);
+            bProcessed = HandleSysCommand(wParam, lParam);
             break;
 
         case WM_COMMAND:
@@ -1707,707 +1965,738 @@ MRESULT wxWindow::OS2WindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 WXHWND hwnd;
                 UnpackCommand(wParam, lParam, &id, &hwnd, &cmd);
 
-                processed = HandleCommand(id, cmd, hwnd);
+                bProcessed = HandleCommand(id, cmd, hwnd);
             }
             break;
 
-#ifdef __WIN95__
-        case WM_NOTIFY:
-            processed = HandleNotify((int)wParam, lParam, &rc.result);
-            break;
-#endif  // Win95
-
-            // for these messages we must return TRUE if process the message
+            //
+            // For these messages we must return TRUE if process the message
+            //
         case WM_DRAWITEM:
         case WM_MEASUREITEM:
             {
                 int idCtrl = (UINT)wParam;
-                if ( message == WM_DRAWITEM )
+                if ( uMsg == WM_DRAWITEM )
                 {
-                    processed = MSWOnDrawItem(idCtrl,
+                    bProcessed = OS2OnDrawItem(idCtrl,
                                               (WXDRAWITEMSTRUCT *)lParam);
                 }
                 else
                 {
-                    processed = MSWOnMeasureItem(idCtrl,
+                    bProcessed = OS2OnMeasureItem(idCtrl,
                                                  (WXMEASUREITEMSTRUCT *)lParam);
                 }
 
-                if ( processed )
-                    rc.result = TRUE;
+                if ( bProcessed )
+                    vRc.mResult = (MRESULT)TRUE;
             }
             break;
 
-        case WM_GETDLGCODE:
+        case WM_QUERYDLGCODE:
             if ( m_lDlgCode )
             {
-                rc.result = m_lDlgCode;
-                processed = TRUE;
+                vRc.mResult = (MRESULT)m_lDlgCode;
+                bProcessed = TRUE;
             }
+            //
             //else: get the dlg code from the DefWindowProc()
+            //
             break;
 
-        case WM_KEYDOWN:
-            // If this has been processed by an event handler,
-            // return 0 now (we've handled it).
-            if ( HandleKeyDown((WORD) wParam, lParam) )
+        //
+        // In OS/2 PM all keyboard events are of the WM_CHAR type.  Virtual key and key-up
+        // and key-down events are obtained from the WM_CHAR params.
+        //
+        case WM_CHAR:
             {
-                processed = TRUE;
+                USHORT                  uKeyFlags = SHORT1FROMMP((MPARAM)wParam);
 
-                break;
-            }
-
-            // we consider these message "not interesting" to OnChar
-            if ( wParam == VK_SHIFT || wParam == VK_CONTROL )
-            {
-                processed = TRUE;
-
-                break;
-            }
-
-            switch ( wParam )
-            {
-                // avoid duplicate messages to OnChar for these ASCII keys: they
-                // will be translated by TranslateMessage() and received in WM_CHAR
-                case VK_ESCAPE:
-                case VK_SPACE:
-                case VK_RETURN:
-                case VK_BACK:
-                case VK_TAB:
-                    // but set processed to FALSE, not TRUE to still pass them to
-                    // the control's default window proc - otherwise built-in
-                    // keyboard handling won't work
-                    processed = FALSE;
-
+                if (uKeyFlags & KC_KEYUP)
+                {
+                    bProcessed = HandleKeyUp((WXDWORD)wParam, lParam);
                     break;
-
-#ifdef VK_APPS
-                // special case of VK_APPS: treat it the same as right mouse
-                // click because both usually pop up a context menu
-                case VK_APPS:
+                }
+                else // keydown event
+                {
+                    //
+                    // If this has been processed by an event handler,
+                    // return 0 now (we've handled it). DON't RETURN
+                    // we still need to process further
+                    //
+                    HandleKeyDown((WXDWORD)wParam, lParam);
+                    if (uKeyFlags & KC_VIRTUALKEY)
                     {
-                        // construct the key mask
-                        WPARAM fwKeys = MK_RBUTTON;
-                        if ( (::GetKeyState(VK_CONTROL) & 0x100) != 0 )
-                            fwKeys |= MK_CONTROL;
-                        if ( (::GetKeyState(VK_SHIFT) & 0x100) != 0 )
-                            fwKeys |= MK_SHIFT;
+                        USHORT          uVk = SHORT2FROMMP((MPARAM)lParam);
 
-                        // simulate right mouse button click
-                        DWORD dwPos = ::GetMessagePos();
-                        int x = GET_X_LPARAM(dwPos),
-                            y = GET_Y_LPARAM(dwPos);
+                        //
+                        // We consider these message "not interesting" to OnChar
+                        //
+                        if (uVk == VK_SHIFT || uVk == VK_CTRL )
+                        {
+                            bProcessed = TRUE;
+                            break;
+                        }
+                        switch(uVk)
+                        {
+                            //
+                            // Avoid duplicate messages to OnChar for these ASCII keys: they
+                            // will be translated by TranslateMessage() and received in WM_CHAR
+                            case VK_ESC:
+                            case VK_SPACE:
+                            case VK_ENTER:
+                            case VK_BACKSPACE:
+                            case VK_TAB:
+                                // But set processed to FALSE, not TRUE to still pass them to
+                                // the control's default window proc - otherwise built-in
+                                // keyboard handling won't work
+                                bProcessed = FALSE;
+                                break;
 
-                        ScreenToClient(&x, &y);
-                        processed = HandleMouseEvent(WM_RBUTTONDOWN, x, y, fwKeys);
+                            case VK_LEFT:
+                            case VK_RIGHT:
+                            case VK_DOWN:
+                            case VK_UP:
+                            default:
+                                bProcessed = HandleChar((WXDWORD)wParam, lParam);
+                         }
+                         break;
                     }
-                    break;
-#endif // VK_APPS
-
-                case VK_LEFT:
-                case VK_RIGHT:
-                case VK_DOWN:
-                case VK_UP:
-                default:
-                    processed = HandleChar((WORD)wParam, lParam);
+                    else // WM_CHAR -- Always an ASCII character
+                    {
+                        bProcessed = HandleChar((WXDWORD)wParam, lParam, TRUE);
+                        break;
+                    }
+                }
             }
-            break;
-
-        case WM_KEYUP:
-            processed = HandleKeyUp((WORD) wParam, lParam);
-            break;
-
-        case WM_CHAR: // Always an ASCII character
-            processed = HandleChar((WORD)wParam, lParam, TRUE);
-            break;
 
         case WM_HSCROLL:
         case WM_VSCROLL:
             {
-                WXWORD code, pos;
-                WXHWND hwnd;
-                UnpackScroll(wParam, lParam, &code, &pos, &hwnd);
+                WXWORD              wCode;
+                WXWORD              wPos;
+                WXHWND              hWnd;
+                UnpackScroll( wParam
+                             ,lParam
+                             ,&wCode
+                             ,&wPos
+                             ,&hWnd
+                            );
 
-                processed = MSWOnScroll(message == WM_HSCROLL ? wxHORIZONTAL
-                                                              : wxVERTICAL,
-                                        code, pos, hwnd);
+                bProcessed = OS2OnScroll( uMsg == WM_HSCROLL ? wxHORIZONTAL
+                                                             : wxVERTICAL
+                                         ,wCode
+                                         ,wPos
+                                         ,hWnd
+                                        );
             }
             break;
 
-        // CTLCOLOR messages are sent by children to query the parent for their
-        // colors
-#ifdef __WIN32__
-        case WM_CTLCOLORMSGBOX:
-        case WM_CTLCOLOREDIT:
-        case WM_CTLCOLORLISTBOX:
-        case WM_CTLCOLORBTN:
-        case WM_CTLCOLORDLG:
-        case WM_CTLCOLORSCROLLBAR:
-        case WM_CTLCOLORSTATIC:
-#else // Win16
-        case WM_CTLCOLOR:
-#endif // Win32/16
+#if defined(__VISAGECPP__) && (__IBMCPP__ >= 400)
+        case WM_CTLCOLORCHANGE:
             {
-                WXWORD nCtlColor;
-                WXHDC hdc;
-                WXHWND hwnd;
-                UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
+                bProcessed = HandleCtlColor(&vRc.hBrush);
+            }
+            break;
+#endif
+        //
+        // Instead of CTLCOLOR messages PM sends QUERYWINDOWPARAMS to
+        // things such as colors and fonts and such
+        //
+        case WM_QUERYWINDOWPARAMS:
+            {
+                PWNDPARAMS          pWndParams = (PWNDPARAMS)wParam;
 
-                processed = HandleCtlColor(&rc.hBrush,
-                                           (WXHDC)hdc,
-                                           (WXHWND)hwnd,
-                                           nCtlColor,
-                                           message,
-                                           wParam,
-                                           lParam);
+                bProcessed = HandleWindowParams( pWndParams
+                                                ,lParam
+                                               );
             }
             break;
 
             // the return value for this message is ignored
         case WM_SYSCOLORCHANGE:
-            processed = HandleSysColorChange();
+            bProcessed = HandleSysColorChange();
             break;
 
-        case WM_PALETTECHANGED:
-            processed = HandlePaletteChanged((WXHWND) (HWND) wParam);
+        case WM_REALIZEPALETTE:
+            bProcessed = HandlePaletteChanged();
             break;
 
-        case WM_QUERYNEWPALETTE:
-            processed = HandleQueryNewPalette();
+        case WM_PRESPARAMCHANGED:
+            bProcessed = HandlePresParamChanged(wParam);
             break;
 
-        case WM_ERASEBKGND:
-            processed = HandleEraseBkgnd((WXHDC)(HDC)wParam);
-            if ( processed )
+        // move this to wxFrame
+        case WM_ERASEBACKGROUND:
+            bProcessed = HandleEraseBkgnd((WXHDC)(HDC)wParam);
+            if (bProcessed)
             {
-                // we processed the message, i.e. erased the background
-                rc.result = TRUE;
+                //
+                // We processed the message, i.e. erased the background
+                //
+                vRc.mResult = (MRESULT)TRUE;
             }
             break;
 
-        case WM_DROPFILES:
-            processed = HandleDropFiles(wParam);
+        // move all drag and drops to wxDrg
+        case WM_ENDDRAG:
+            bProcessed = HandleEndDrag(wParam);
             break;
 
-        case WM_INITDIALOG:
-            processed = HandleInitDialog((WXHWND)(HWND)wParam);
+        case WM_INITDLG:
+            bProcessed = HandleInitDialog((WXHWND)(HWND)wParam);
 
-            if ( processed )
+            if ( bProcessed )
             {
                 // we never set focus from here
-                rc.result = FALSE;
+                vRc.mResult = FALSE;
             }
             break;
 
-        case WM_QUERYENDSESSION:
-            processed = HandleQueryEndSession(lParam, &rc.allow);
+        // wxFrame specific message
+        case WM_MINMAXFRAME:
+            bProcessed = HandleGetMinMaxInfo((PSWP)lParam);
             break;
 
-        case WM_ENDSESSION:
-            processed = HandleEndSession(wParam != 0, lParam);
+        case WM_SYSVALUECHANGED:
+            // TODO: do something
+            vRc.mResult = (MRESULT)TRUE;
             break;
 
-        case WM_GETMINMAXINFO:
-            processed = HandleGetMinMaxInfo((MINMAXINFO*)lParam);
-            break;
-
-        case WM_SETCURSOR:
-            processed = HandleSetCursor((WXHWND)(HWND)wParam,
-                                        LOWORD(lParam),     // hit test
-                                        HIWORD(lParam));    // mouse msg
-
-            if ( processed )
+        //
+        // Comparable to WM_SETPOINTER for windows, only for just controls
+        //
+        case WM_CONTROLPOINTER:
+            bProcessed = HandleSetCursor( SHORT1FROMMP(wParam) // Control ID
+                                         ,(HWND)lParam         // Cursor Handle
+                                        );
+            if (bProcessed )
             {
-                // returning TRUE stops the DefWindowProc() from further
+                //
+                // Returning TRUE stops the DefWindowProc() from further
                 // processing this message - exactly what we need because we've
                 // just set the cursor.
-                rc.result = TRUE;
+                //
+                vRc.mResult = (MRESULT)TRUE;
             }
             break;
     }
 
-    if ( !processed )
+    if (!bProcessed)
     {
 #ifdef __WXDEBUG__
         wxLogTrace(wxTraceMessages, wxT("Forwarding %s to DefWindowProc."),
-                   wxGetMessageName(message));
+                   wxGetMessageName(uMsg));
 #endif // __WXDEBUG__
-        rc.result = MSWDefWindowProc(message, wParam, lParam);
+        vRc.mResult = OS2DefWindowProc(uMsg, wParam, lParam);
     }
-*/
-    return (MRESULT)0;
-}
+    return vRc.mResult;
+} // end of wxWindow::OS2WindowProc
 
+//
 // Dialog window proc
-MRESULT wxDlgProc(HWND hWnd, UINT message, MPARAM wParam, MPARAM lParam)
+//
+MRESULT wxDlgProc(
+  HWND                              hWnd
+, UINT                              uMsg
+, MPARAM                            wParam
+, MPARAM                            lParam)
 {
-   // TODO:
-/*
-    if ( message == WM_INITDIALOG )
+    if (uMsg == WM_INITDLG)
     {
-        // for this message, returning TRUE tells system to set focus to the
+        //
+        // For this message, returning TRUE tells system to set focus to the
         // first control in the dialog box
-        return TRUE;
+        //
+        return (MRESULT)TRUE;
     }
     else
     {
-        // for all the other ones, FALSE means that we didn't process the
+        //
+        // For all the other ones, FALSE means that we didn't process the
         // message
-        return 0;
+        //
+        return (MRESULT)0;
     }
-*/
-    return (MRESULT)0;
-}
+} // end of wxDlgProc
 
-wxWindow *wxFindWinFromHandle(WXHWND hWnd)
+wxWindow* wxFindWinFromHandle(
+  WXHWND                            hWnd
+)
 {
-    wxNode *node = wxWinHandleList->Find((long)hWnd);
-    if ( !node )
+    wxNode*                         pNode = wxWinHandleList->Find((long)hWnd);
+
+    if (!pNode)
         return NULL;
-    return (wxWindow *)node->Data();
-}
+    return (wxWindow *)pNode->Data();
+} // end of wxFindWinFromHandle
 
-void wxAssociateWinWithHandle(HWND hWnd, wxWindow *win)
+void wxAssociateWinWithHandle(
+  HWND                              hWnd
+, wxWindow*                         pWin
+)
 {
-    // adding NULL hWnd is (first) surely a result of an error and
+    //
+    // Adding NULL hWnd is (first) surely a result of an error and
     // (secondly) breaks menu command processing
+    //
     wxCHECK_RET( hWnd != (HWND)NULL,
                  wxT("attempt to add a NULL hWnd to window list ignored") );
 
 
-    wxWindow *oldWin = wxFindWinFromHandle((WXHWND) hWnd);
-    if ( oldWin && (oldWin != win) )
-    {
-        wxString str(win->GetClassInfo()->GetClassName());
-        wxLogError("Bug! Found existing HWND %X for new window of class %s", (int) hWnd, (const char*) str);
-    }
-    else if (!oldWin)
-    {
-        wxWinHandleList->Append((long)hWnd, win);
-    }
-}
+    wxWindow*                       pOldWin = wxFindWinFromHandle((WXHWND) hWnd);
 
-void wxRemoveHandleAssociation(wxWindow *win)
+    if (pOldWin && (pOldWin != pWin))
+    {
+        wxString                    str(pWin->GetClassInfo()->GetClassName());
+        wxLogError( "Bug! Found existing HWND %X for new window of class %s"
+                   ,(int)hWnd
+                   ,(const char*)str
+                  );
+    }
+    else if (!pOldWin)
+    {
+        wxWinHandleList->Append( (long)hWnd
+                                ,pWin
+                               );
+    }
+} // end of wxAssociateWinWithHandle
+
+void wxRemoveHandleAssociation(
+  wxWindow*                         pWin
+)
 {
-    wxWinHandleList->DeleteObject(win);
-}
+    wxWinHandleList->DeleteObject(pWin);
+} // end of wxRemoveHandleAssociation
 
+//
 // Default destroyer - override if you destroy it in some other way
 // (e.g. with MDI child windows)
+//
 void wxWindow::OS2DestroyWindow()
 {
 }
 
 void wxWindow::OS2DetachWindowMenu()
 {
-    if ( m_hMenu )
+    if (m_hMenu)
     {
-        HMENU hMenu = (HMENU)m_hMenu;
+        HMENU                       hMenu = (HMENU)m_hMenu;
 
-        int N = (int)WinSendMsg(hMenu, MM_QUERYITEMCOUNT, 0, 0);
-        int i;
-        for (i = 0; i < N; i++)
+        int                         nN = (int)::WinSendMsg(hMenu, MM_QUERYITEMCOUNT, 0, 0);
+        int                         i;
+
+        for (i = 0; i < nN; i++)
         {
-            wxChar buf[100];
-            int chars = (int)WinSendMsg(hMenu, MM_QUERYITEMTEXT, MPFROM2SHORT(i, N), buf);
-            if ( !chars )
+            wxChar                   zBuf[100];
+            int                      nChars = (int)::WinSendMsg( hMenu
+                                                                ,MM_QUERYITEMTEXT
+                                                                ,MPFROM2SHORT(i, nN)
+                                                                ,zBuf
+                                                               );
+            if (!nChars)
             {
                 wxLogLastError(wxT("GetMenuString"));
-
                 continue;
             }
 
-            if ( wxStrcmp(buf, wxT("&Window")) == 0 )
+            if (wxStrcmp(zBuf, wxT("&Window")) == 0)
             {
-                WinSendMsg(hMenu, MM_DELETEITEM, MPFROM2SHORT(i, TRUE), 0);
+                ::WinSendMsg(hMenu, MM_DELETEITEM, MPFROM2SHORT(i, TRUE), 0);
                 break;
             }
         }
     }
-}
+} // end of wxWindow::OS2DetachWindowMenu
 
-bool wxWindow::OS2Create(int id,
-                         wxWindow *parent,
-                         const wxChar *wclass,
-                         wxWindow *wx_win,
-                         const wxChar *title,
-                         int x,
-                         int y,
-                         int width,
-                         int height,
-                         WXDWORD style,
-                         const wxChar *dialog_template,
-                         WXDWORD extendedStyle)
+bool wxWindow::OS2Create(
+  int                               vId
+, wxWindow*                         pParent
+, const wxChar*                     zWclass
+, wxWindow*                         pWxWin
+, const wxChar*                     zTitle
+, int                               nX
+, int                               nY
+, int                               nWidth
+, int                               nHeight
+, WXDWORD                           dwStyle
+, const wxChar*                     zDialogTemplate
+, WXDWORD                           dwExtendedStyle // Port compatability only
+)
 {
-   // TODO:
-/*
-    int x1 = CW_USEDEFAULT;
-    int y1 = 0;
-    int width1 = CW_USEDEFAULT;
-    int height1 = 100;
+    int                             nX1      = CW_USEDEFAULT;
+    int                             nY1      = 0;
+    int                             nWidth1  = CW_USEDEFAULT;
+    int                             nHeight1 = 100;
 
+    //
     // Find parent's size, if it exists, to set up a possible default
     // panel size the size of the parent window
-    RECT parent_rect;
-    if ( parent )
-    {
-        ::GetClientRect((HWND) parent->GetHWND(), &parent_rect);
+    //
+    RECTL                           vParentRect;
+    HWND                            hWndClient;
 
-        width1 = parent_rect.right - parent_rect.left;
-        height1 = parent_rect.bottom - parent_rect.top;
+    HWND                            hParent = (HWND)NULL;
+
+    if (pParent)
+    {
+        hParent = (HWND)pParent->GetHWND();
+        hWndClient = ::WinWindowFromID(hParent, FID_CLIENT);
+        ::WinQueryWindowRect(hWndClient, &vParentRect);
+
+        nWidth1  = vParentRect.xRight - vParentRect.xLeft;
+        nHeight1 = vParentRect.yTop - vParentRect.yBottom;
     }
 
-    if ( x > -1 ) x1 = x;
-    if ( y > -1 ) y1 = y;
-    if ( width > -1 ) width1 = width;
-    if ( height > -1 ) height1 = height;
-
-    HWND hParent = (HWND)NULL;
-    if ( parent )
-        hParent = (HWND) parent->GetHWND();
+    if (nX > -1)
+        nX1 = nX;
+    if (nY > -1)
+        nY1 = nY;
+    if (nWidth > -1)
+        nWidth1   = nWidth;
+    if (nHeight > -1)
+        nHeight1 = nHeight;
 
     wxWndHook = this;
 
-    if ( dialog_template )
+    if (zDialogTemplate)
     {
-        m_hWnd = (WXHWND)::CreateDialog(wxGetInstance(),
-                                        dialog_template,
-                                        hParent,
-                                        (DLGPROC)wxDlgProc);
+        //
+        // We can use extended styles for custom default user config params
+        // These can be processed in the dialog proc's WM_INITDLG
+        // Dialog template is defined by vId and should be loaded from the
+        // resource file in the current .exe
+        //
+        PDLGTEMPLATE                 pDlgt;
 
-        if ( m_hWnd == 0 )
+        ::DosGetResource(0L, RT_DIALOG, vId, (PPVOID)&pDlgt);
+        m_hWnd = (WXHWND)::WinCreateDlg( pParent->GetHWND()
+                                        ,NULLHANDLE
+                                        ,(PFNWP)wxDlgProc
+                                        ,pDlgt
+                                        ,(PVOID)&dwExtendedStyle
+                                       );
+        if (m_hWnd == 0)
         {
             wxLogError(_("Can't find dummy dialog template!\n"
                          "Check resource include path for finding wx.rc."));
-
             return FALSE;
         }
 
-        // ::SetWindowLong(GWL_EXSTYLE) doesn't work for the dialogs, so try
-        // to take care of (at least some) extended style flags ourselves
-        if ( extendedStyle & WS_EX_TOPMOST )
-        {
-            if ( !::SetWindowPos(GetHwnd(), HWND_TOPMOST, 0, 0, 0, 0,
-                                 SWP_NOSIZE | SWP_NOMOVE) )
-            {
-                wxLogLastError(wxT("SetWindowPos"));
-            }
-        }
-
-        // move the dialog to its initial position without forcing repainting
-        if ( !::MoveWindow(GetHwnd(), x1, y1, width1, height1, FALSE) )
+        //
+        // Move the dialog to its initial position without forcing repainting
+        //
+        if (!::WinSetWindowPos( m_hWnd
+                               ,HWND_TOP
+                               ,nX1
+                               ,nY1
+                               ,nWidth1
+                               ,nHeight1
+                               ,SWP_MOVE | SWP_SIZE | SWP_NOREDRAW
+                              ));
         {
             wxLogLastError(wxT("MoveWindow"));
         }
     }
     else
     {
-        int controlId = 0;
-        if ( style & WS_CHILD )
-            controlId = id;
+        int                         nControlId = 0;
+        WXDWORD                     dwClass = dwStyle | 0xffff0000;
 
-        wxString className(wclass);
-        if ( GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
+        //
+        // check to see if the new window is a standard control
+        //
+        if (dwClass & (ULONG)WC_BUTTON ||
+            dwClass & (ULONG)WC_COMBOBOX ||
+            dwClass & (ULONG)WC_CONTAINER ||
+            dwClass & (ULONG)WC_ENTRYFIELD ||
+            dwClass & (ULONG)WC_LISTBOX ||
+            dwClass & (ULONG)WC_MENU ||
+            dwClass & (ULONG)WC_NOTEBOOK ||
+            dwClass & (ULONG)WC_SCROLLBAR ||
+            dwClass & (ULONG)WC_SPINBUTTON ||
+            dwClass & (ULONG)WC_STATIC ||
+            dwClass & (ULONG)WC_TITLEBAR ||
+            dwClass & (ULONG)WC_VALUESET
+           )
+            nControlId = vId;
+
+        wxString                    sClassName(zWclass);
+
+        if (GetWindowStyleFlag() & wxNO_FULL_REPAINT_ON_RESIZE )
         {
-            className += wxT("NR");
+            sClassName += wxT("NR");
         }
 
-        m_hWnd = (WXHWND)CreateWindowEx(extendedStyle,
-                                        className,
-                                        title ? title : wxT(""),
-                                        style,
-                                        x1, y1,
-                                        width1, height1,
-                                        hParent, (HMENU)controlId,
-                                        wxGetInstance(),
-                                        NULL);
-
-        if ( !m_hWnd )
+        m_hWnd = (WXHWND)::WinCreateWindow( hParent
+                                           ,(PSZ)sClassName.c_str()
+                                           ,zTitle ? zTitle : wxT("")
+                                           ,dwStyle
+                                           ,nX1
+                                           ,nY1
+                                           ,nWidth
+                                           ,nHeight
+                                           ,NULLHANDLE
+                                           ,HWND_TOP
+                                           ,vId
+                                           ,NULL
+                                           ,NULL
+                                          );
+        if (!m_hWnd)
         {
-            wxLogError(_("Can't create window of class %s!\n"
-                         "Possible Windows 3.x compatibility problem?"),
-                       wclass);
-
+            wxLogError("Can't create window of class %s!\n", zWclass);
             return FALSE;
         }
     }
-
     wxWndHook = NULL;
+
 #ifdef __WXDEBUG__
-    wxNode* node = wxWinHandleList->Member(this);
-    if (node)
+    wxNode*                         pNode = wxWinHandleList->Member(this);
+
+    if (pNode)
     {
-        HWND hWnd = (HWND) node->GetKeyInteger();
-        if (hWnd != (HWND) m_hWnd)
+        HWND                        hWnd = (HWND)pNode->GetKeyInteger();
+
+        if (hWnd != (HWND)m_hWnd)
+
         {
             wxLogError("A second HWND association is being added for the same window!");
         }
     }
 #endif
-*/
-    wxAssociateWinWithHandle((HWND) m_hWnd, this);
-
+    wxAssociateWinWithHandle((HWND)m_hWnd
+                             ,this
+                            );
     return TRUE;
-}
+} // end of wxWindow::OS2Create
 
 // ===========================================================================
 // OS2 PM message handlers
 // ===========================================================================
 
 // ---------------------------------------------------------------------------
-// WM_NOTIFY
-// ---------------------------------------------------------------------------
-
-bool wxWindow::HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
-{
-   // TODO:
-   return FALSE;
-}
-
-bool wxWindow::OS2OnNotify(int WXUNUSED(idCtrl),
-                           WXLPARAM lParam,
-                           WXLPARAM* WXUNUSED(result))
-{
-    // TODO:
-    return FALSE;
-}
-
-// ---------------------------------------------------------------------------
-// end session messages
-// ---------------------------------------------------------------------------
-
-bool wxWindow::HandleQueryEndSession(long logOff, bool *mayEnd)
-{
-    wxCloseEvent event(wxEVT_QUERY_END_SESSION, -1);
-    event.SetEventObject(wxTheApp);
-    event.SetCanVeto(TRUE);
-    event.SetLoggingOff(logOff == ENDSESSION_LOGOFF);
-
-    bool rc = wxTheApp->ProcessEvent(event);
-
-    if ( rc )
-    {
-        // we may end only if the app didn't veto session closing (double
-        // negation...)
-        *mayEnd = !event.GetVeto();
-    }
-
-    return rc;
-}
-
-bool wxWindow::HandleEndSession(bool endSession, long logOff)
-{
-    // do nothing if the session isn't ending
-    if ( !endSession )
-        return FALSE;
-
-    wxCloseEvent event(wxEVT_END_SESSION, -1);
-    event.SetEventObject(wxTheApp);
-    event.SetCanVeto(FALSE);
-    event.SetLoggingOff( (logOff == ENDSESSION_LOGOFF) );
-    if ( (this == wxTheApp->GetTopWindow()) && // Only send once
-        wxTheApp->ProcessEvent(event))
-    {
-    }
-    return TRUE;
-}
-
-// ---------------------------------------------------------------------------
 // window creation/destruction
 // ---------------------------------------------------------------------------
 
-bool wxWindow::HandleCreate(WXLPCREATESTRUCT cs, bool *mayCreate)
+bool wxWindow::HandleCreate(
+  WXLPCREATESTRUCT                  vCs
+, bool*                             pbMayCreate
+)
 {
-    // TODO: should generate this event from WM_NCCREATE
-    wxWindowCreateEvent event(this);
-    (void)GetEventHandler()->ProcessEvent(event);
+    wxWindowCreateEvent             vEvent(this);
 
-    *mayCreate = TRUE;
-
+    (void)GetEventHandler()->ProcessEvent(vEvent);
+    *pbMayCreate = TRUE;
     return TRUE;
-}
+} // end of wxWindow::HandleCreate
 
 bool wxWindow::HandleDestroy()
 {
-    wxWindowDestroyEvent event(this);
-    (void)GetEventHandler()->ProcessEvent(event);
+    wxWindowDestroyEvent            vEvent(this);
 
-    // delete our drop target if we've got one
+    (void)GetEventHandler()->ProcessEvent(vEvent);
+
+    //
+    // Delete our drop target if we've got one
+    //
 #if wxUSE_DRAG_AND_DROP
-    if ( m_dropTarget != NULL )
+    if (m_dropTarget != NULL)
     {
-//        m_dropTarget->Revoke(m_hWnd);
-
+        m_dropTarget->Revoke(m_hWnd);
         delete m_dropTarget;
         m_dropTarget = NULL;
     }
 #endif // wxUSE_DRAG_AND_DROP
 
+    //
     // WM_DESTROY handled
+    //
     return TRUE;
-}
+} // end of wxWindow::HandleDestroy
 
 // ---------------------------------------------------------------------------
 // activation/focus
 // ---------------------------------------------------------------------------
-
-bool wxWindow::HandleActivate(int state,
-                              bool WXUNUSED(minimized),
-                              WXHWND WXUNUSED(activate))
+void wxWindow::OnSetFocus(
+  wxFocusEvent&                     rEvent
+)
 {
-    // TODO:
-    /*
-    wxActivateEvent event(wxEVT_ACTIVATE,
-                          (state == WA_ACTIVE) || (state == WA_CLICKACTIVE),
-                          m_windowId);
-    event.SetEventObject(this);
+    //
+    // Panel wants to track the window which was the last to have focus in it,
+    // so we want to set ourselves as the window which last had focus
+    //
+    // Notice that it's also important to do it upwards the tree becaus
+    // otherwise when the top level panel gets focus, it won't set it back to
+    // us, but to some other sibling
+    //
+    wxWindow*                       pWin = this;
 
-    return GetEventHandler()->ProcessEvent(event);
-    */
-    return FALSE;
-}
+    while (pWin)
+    {
+        wxWindow*                   pParent = pWin->GetParent();
+        wxPanel*                    pPanel = wxDynamicCast( pParent
+                                                           ,wxPanel
+                                                          );
+        if (pPanel)
+        {
+            pPanel->SetLastFocus(pWin);
+        }
+        pWin = pParent;
+    }
 
-bool wxWindow::HandleSetFocus(WXHWND WXUNUSED(hwnd))
+    wxLogTrace(_T("focus"), _T("%s (0x%08x) gets focus"),
+               GetClassInfo()->GetClassName(), GetHandle());
+
+    rEvent.Skip();
+} // end of wxWindow::OnSetFocus
+
+bool wxWindow::HandleActivate(
+  int                               nState
+, WXHWND                            WXUNUSED(hActivate)
+)
+{
+    wxActivateEvent                 vEvent( wxEVT_ACTIVATE
+                                           ,(bool)nState
+                                           ,m_windowId
+                                          );
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleActivate
+
+bool wxWindow::HandleSetFocus(
+  WXHWND                            WXUNUSED(hWnd)
+)
 {
 #if wxUSE_CARET
+    //
     // Deal with caret
-    if ( m_caret )
+    //
+    if (m_caret)
     {
         m_caret->OnSetFocus();
     }
 #endif // wxUSE_CARET
 
-    // panel wants to track the window which was the last to have focus in it
-    wxPanel *panel = wxDynamicCast(GetParent(), wxPanel);
-    if ( panel )
+    //
+    // Panel wants to track the window which was the last to have focus in it
+    //
+    wxPanel*                        pPanel = wxDynamicCast( GetParent()
+                                                           ,wxPanel
+                                                          );
+    if (pPanel)
     {
-        panel->SetLastFocus(this);
+        pPanel->SetLastFocus(this);
     }
 
-    wxFocusEvent event(wxEVT_SET_FOCUS, m_windowId);
-    event.SetEventObject(this);
+    wxFocusEvent                    vEvent(wxEVT_SET_FOCUS, m_windowId);
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleSetFocus
 
-bool wxWindow::HandleKillFocus(WXHWND WXUNUSED(hwnd))
+bool wxWindow::HandleKillFocus(
+  WXHWND                            WXUNUSED(hWnd)
+)
 {
 #if wxUSE_CARET
+    //
     // Deal with caret
-    if ( m_caret )
+    //
+    if (m_caret)
     {
         m_caret->OnKillFocus();
     }
 #endif // wxUSE_CARET
 
-    wxFocusEvent event(wxEVT_KILL_FOCUS, m_windowId);
-    event.SetEventObject(this);
+    wxFocusEvent                    vEvent( wxEVT_KILL_FOCUS
+                                           ,m_windowId
+                                          );
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleKillFocus
 
 // ---------------------------------------------------------------------------
 // miscellaneous
 // ---------------------------------------------------------------------------
 
-bool wxWindow::HandleShow(bool show, int status)
+bool wxWindow::HandleShow(
+  bool                              bShow
+, int                               nStatus
+)
 {
-    wxShowEvent event(GetId(), show);
-    event.m_eventObject = this;
+    wxShowEvent                     vEvent( GetId()
+                                           ,bShow
+                                          );
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.m_eventObject = this;
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleShow
 
-bool wxWindow::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
+bool wxWindow::HandleInitDialog(
+  WXHWND                            WXUNUSED(hWndFocus)
+)
 {
-    wxInitDialogEvent event(GetId());
-    event.m_eventObject = this;
+    wxInitDialogEvent               vEvent(GetId());
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.m_eventObject = this;
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleInitDialog
 
-bool wxWindow::HandleDropFiles(WXWPARAM wParam)
+bool wxWindow::HandleEndDrag(WXWPARAM wParam)
 {
-   // TODO:
+   // TODO: We'll handle drag and drop later
     return FALSE;
 }
 
-bool wxWindow::HandleSetCursor(WXHWND hWnd,
-                               short nHitTest,
-                               int WXUNUSED(mouseMsg))
+bool wxWindow::HandleSetCursor(
+  USHORT                            vId
+, WXHWND                            hPointer
+)
 {
-    // don't set cursor for other windows, only for this one: this prevents
-    // children of this window from getting the same cursor as the parent has
-    // (don't forget that this message is propagated by default up the window
-    // parent-child hierarchy)
-    if ( GetHWND() == hWnd )
-    {
-        // don't set cursor when the mouse is not in the client part
-// TODO
-/*
-        if ( nHitTest == HTCLIENT || nHitTest == HTERROR )
-        {
-            HCURSOR hcursor = 0;
-            if ( wxIsBusy() )
-            {
-                // from msw\utils.cpp
-                extern HCURSOR gs_wxBusyCursor;
-
-                hcursor = gs_wxBusyCursor;
-            }
-            else
-            {
-                wxCursor *cursor = NULL;
-
-                if ( m_cursor.Ok() )
-                {
-                    cursor = &m_cursor;
-                }
-                else
-                {
-                    // from msw\data.cpp
-                    extern wxCursor *g_globalCursor;
-
-                    if ( g_globalCursor && g_globalCursor->Ok() )
-                        cursor = g_globalCursor;
-                }
-
-                if ( cursor )
-                    hcursor = (HCURSOR)cursor->GetHCURSOR();
-            }
-
-            if ( hcursor )
-            {
-//                ::SetCursor(hcursor);
-
-                return TRUE;
-            }
-        }
-*/
-    }
-
-    return FALSE;
-}
+    //
+    // Under OS/2 PM this allows the pointer to be changed
+    // as it passes over a control
+    //
+    ::WinSetPointer(HWND_DESKTOP, (HPOINTER)hPointer);
+    return TRUE;
+} // end of wxWindow::HandleSetCursor
 
 // ---------------------------------------------------------------------------
 // owner drawn stuff
 // ---------------------------------------------------------------------------
-
-bool wxWindow::OS2OnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
+bool wxWindow::OS2OnDrawItem(
+  int                               vId
+, WXDRAWITEMSTRUCT*                 pItemStruct
+)
 {
-   // TODO:
-/*
+    //
+    // I'll get to owner drawn stuff later
+    //
+
+    //
+    // is it a menu item or control?
+    //
+    wxWindow*                       pItem = FindItem(vId);
+
 #if wxUSE_OWNER_DRAWN
-    // is it a menu item?
-    if ( id == 0 )
+    if (pItem && pItem->IsKindOf(CLASSINFO(wxControl)))
     {
-        DRAWITEMSTRUCT *pDrawStruct = (DRAWITEMSTRUCT *)itemStruct;
-        wxMenuItem *pMenuItem = (wxMenuItem *)(pDrawStruct->itemData);
+        return ((wxControl *)pItem)->OS2OnDraw(pItemStruct);
+    }
+    else if (pItem && pItem->IsKindOf(CLASSINFO(wxMenu)))
+    {
+        /*
+        // TODO: draw a menu item
+        //
+        POWNERITEM                  pDrawStruct = (OWNERITEM *)pItemStruct;
+        wxMenuItem*                 pMenuItem = (wxMenuItem *)(pDrawStruct->pItemData);
 
-        wxCHECK( pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE );
+        wxCHECK(pMenuItem->IsKindOf(CLASSINFO(wxMenuItem)), FALSE);
 
-        // prepare to call OnDrawItem()
-        wxDC dc;
+        //
+        // Prepare to call OnDrawItem()
+        //
+        HPSdc;
         dc.SetHDC((WXHDC)pDrawStruct->hDC, FALSE);
         wxRect rect(pDrawStruct->rcItem.left, pDrawStruct->rcItem.top,
                     pDrawStruct->rcItem.right - pDrawStruct->rcItem.left,
@@ -2419,23 +2708,18 @@ bool wxWindow::OS2OnDrawItem(int id, WXDRAWITEMSTRUCT *itemStruct)
                             (wxOwnerDrawn::wxODAction)pDrawStruct->itemAction,
                             (wxOwnerDrawn::wxODStatus)pDrawStruct->itemState
                           );
+        */
     }
 
-    wxWindow *item = FindItem(id);
-    if ( item && item->IsKindOf(CLASSINFO(wxControl)) )
-    {
-        return ((wxControl *)item)->MSWOnDraw(itemStruct);
-    }
     else
-#endif
         return FALSE;
-*/
-    return FALSE;
-}
+#endif
+    return TRUE;
+} // end of wxWindow::OS2OnDrawItem
 
 bool wxWindow::OS2OnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 {
-   // TODO:
+   // TODO: more owner drawn menu related stuff, get to it later
 /*
 #if wxUSE_OWNER_DRAWN
     // is it a menu item?
@@ -2466,40 +2750,29 @@ bool wxWindow::OS2OnMeasureItem(int id, WXMEASUREITEMSTRUCT *itemStruct)
 
 bool wxWindow::HandleSysColorChange()
 {
-    wxSysColourChangedEvent event;
-    event.SetEventObject(this);
+    wxSysColourChangedEvent         vEvent;
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleSysColorChange
 
-bool wxWindow::HandleCtlColor(WXHBRUSH *brush,
-                              WXHDC pDC,
-                              WXHWND pWnd,
-                              WXUINT nCtlColor,
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam)
+bool wxWindow::HandleCtlColor(
+  WXHBRUSH*                         phBrush
+)
 {
-    WXHBRUSH hBrush = 0;
-// TODO:
-/*
-    if ( nCtlColor == CTLCOLOR_DLG )
-    {
-        hBrush = OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
-    }
-    else
-    {
-        wxControl *item = (wxControl *)FindItemByHWND(pWnd, TRUE);
-        if ( item )
-            hBrush = item->OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
-    }
+    //
+    // Not much provided with message. So not sure I can do anything with it
+    //
+    return TRUE;
+} // end of wxWindow::HandleCtlColor
 
-    if ( hBrush )
-        *brush = hBrush;
-
-    return hBrush != 0;
-*/
-    return FALSE;
+bool wxWindow::HandleWindowParams(
+  PWNDPARAMS                        pWndParams
+, WXLPARAM                          lParam
+)
+{
+// TODO: I'll do something here, just not sure what yet
+    return TRUE;
 }
 
 // Define for each class of dialog and control
@@ -2513,41 +2786,60 @@ WXHBRUSH wxWindow::OnCtlColor(WXHDC hDC,
     return (WXHBRUSH)0;
 }
 
-bool wxWindow::HandlePaletteChanged(WXHWND hWndPalChange)
+bool wxWindow::HandlePaletteChanged()
 {
-    wxPaletteChangedEvent event(GetId());
-    event.SetEventObject(this);
-    event.SetChangedWindow(wxFindWinFromHandle(hWndPalChange));
+    // need to set this to something first
+    WXHWND                          hWndPalChange = NULLHANDLE;
 
-    return GetEventHandler()->ProcessEvent(event);
+    wxPaletteChangedEvent           vEvent(GetId());
+
+    vEvent.SetEventObject(this);
+    vEvent.SetChangedWindow(wxFindWinFromHandle(hWndPalChange));
+
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandlePaletteChanged
+
+bool wxWindow::HandlePresParamChanged(
+  WXWPARAM                          wParam
+)
+{
+    //
+    // TODO:  Once again I'll do something here when I need it
+    //
+    //wxQueryNewPaletteEvent event(GetId());
+    //event.SetEventObject(this);
+    // if the background is erased
+//            bProcessed = HandleEraseBkgnd((WXHDC)(HDC)wParam);
+
+    return FALSE; //GetEventHandler()->ProcessEvent(event) && event.GetPaletteRealized();
 }
 
-bool wxWindow::HandleQueryNewPalette()
-{
-    wxQueryNewPaletteEvent event(GetId());
-    event.SetEventObject(this);
-
-    return GetEventHandler()->ProcessEvent(event) && event.GetPaletteRealized();
-}
-
+//
 // Responds to colour changes: passes event on to children.
-void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
+//
+void wxWindow::OnSysColourChanged(
+  wxSysColourChangedEvent&          rEvent
+)
 {
-    wxNode *node = GetChildren().First();
-    while ( node )
-    {
-        // Only propagate to non-top-level windows
-        wxWindow *win = (wxWindow *)node->Data();
-        if ( win->GetParent() )
-        {
-            wxSysColourChangedEvent event2;
-            event.m_eventObject = win;
-            win->GetEventHandler()->ProcessEvent(event2);
-        }
+    wxNode*                         pNode = GetChildren().First();
 
-        node = node->Next();
+    while (pNode)
+    {
+        //
+        // Only propagate to non-top-level windows
+        //
+        wxWindow*                   pWin = (wxWindow *)pNode->Data();
+
+        if (pWin->GetParent())
+        {
+            wxSysColourChangedEvent vEvent;
+
+            rEvent.m_eventObject = pWin;
+            pWin->GetEventHandler()->ProcessEvent(vEvent);
+        }
+        pNode = pNode->Next();
     }
-}
+} // end of wxWindow::OnSysColourChanged
 
 // ---------------------------------------------------------------------------
 // painting
@@ -2555,15 +2847,28 @@ void wxWindow::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 bool wxWindow::HandlePaint()
 {
-   // TODO:
-   return FALSE;
-}
+    HRGN                            hRgn = NULLHANDLE;
+
+    if (::WinQueryUpdateRegion(GetHwnd(), hRgn) == RGN_NULL)
+    {
+         wxLogLastError("CreateRectRgn");
+         return FALSE;
+    }
+    m_updateRegion = wxRegion(hRgn);
+
+    wxPaintEvent                    vEvent;
+
+    vEvent.SetEventObject(this);
+    return (GetEventHandler()->ProcessEvent(vEvent));
+} // end of wxWindow::HandlePaint
 
 bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
 {
-    // Prevents flicker when dragging
-//  if ( ::IsIconic(GetHwnd()) )
-//      return TRUE;
+    // TODO:  will have to worry about this later as part of
+    //        the handling of changed presentation parameters
+    /*
+    if ( ::IsIconic(GetHwnd()) )
+        return TRUE;
 
     wxDC dc;
 
@@ -2578,14 +2883,16 @@ bool wxWindow::HandleEraseBkgnd(WXHDC hdc)
     dc.EndDrawing();
     dc.SelectOldObjects(hdc);
     dc.SetHDC((WXHDC) NULL);
+    */
+    return TRUE;
+} // end of wxWindow::HandleEraseBkgnd
 
-    return rc;
-}
-
-void wxWindow::OnEraseBackground(wxEraseEvent& event)
+void wxWindow::OnEraseBackground(
+  wxEraseEvent&                     rEvent
+)
 {
     // TODO:
-}
+}  // end of wxWindow::OnEraseBackground
 
 // ---------------------------------------------------------------------------
 // moving and resizing
@@ -2593,137 +2900,169 @@ void wxWindow::OnEraseBackground(wxEraseEvent& event)
 
 bool wxWindow::HandleMinimize()
 {
-    wxIconizeEvent event(m_windowId);
-    event.SetEventObject(this);
+    wxIconizeEvent                  vEvent(m_windowId);
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleMinimize
 
 bool wxWindow::HandleMaximize()
 {
-    wxMaximizeEvent event(m_windowId);
-    event.SetEventObject(this);
+    wxMaximizeEvent                 vEvent(m_windowId);
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleMaximize
 
-bool wxWindow::HandleMove(int x, int y)
+bool wxWindow::HandleMove(
+  int                               nX
+, int                               nY
+)
 {
-    wxMoveEvent event(wxPoint(x, y), m_windowId);
-    event.SetEventObject(this);
+    wxMoveEvent                     vEvent( wxPoint( nX
+                                                    ,nY
+                                                   )
+                                           ,m_windowId
+                                          );
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+}  // end of wxWindow::HandleMove
 
-bool wxWindow::HandleSize(int w, int h, WXUINT WXUNUSED(flag))
+bool wxWindow::HandleSize(
+  int                               nWidth
+, int                               nHeight
+, WXUINT                            WXUNUSED(nFlag)
+)
 {
-    wxSizeEvent event(wxSize(w, h), m_windowId);
-    event.SetEventObject(this);
+    wxSizeEvent                     vEvent( wxSize( nWidth
+                                                   ,nHeight
+                                                  )
+                                           ,m_windowId
+                                          );
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    vEvent.SetEventObject(this);
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleSize
 
-bool wxWindow::HandleGetMinMaxInfo(void *mmInfo)
+bool wxWindow::HandleGetMinMaxInfo(
+  PSWP                              pSwp
+)
 {
-// TODO:
-/*
-    MINMAXINFO *info = (MINMAXINFO *)mmInfo;
+    bool                            bRc = FALSE;
+    POINTL                          vPoint;
 
-    bool rc = FALSE;
-
-    if ( m_minWidth != -1 )
+    switch(pSwp->fl)
     {
-        info->ptMinTrackSize.x = m_minWidth;
-        rc = TRUE;
-    }
+        case SWP_MAXIMIZE:
+            ::WinGetMaxPosition(GetHwnd(), pSwp);
+            m_maxWidth = pSwp->cx;
+            m_maxHeight = pSwp->cy;
+            break;
 
-    if ( m_minHeight != -1 )
-    {
-        info->ptMinTrackSize.y = m_minHeight;
-        rc = TRUE;
-    }
+        case SWP_MINIMIZE:
+            ::WinGetMinPosition(GetHwnd(), pSwp, &vPoint);
+            m_minWidth = pSwp->cx;
+            m_minHeight = pSwp->cy;
+            break;
 
-    if ( m_maxWidth != -1 )
-    {
-        info->ptMaxTrackSize.x = m_maxWidth;
-        rc = TRUE;
+        default:
+            return FALSE;
     }
-
-    if ( m_maxHeight != -1 )
-    {
-        info->ptMaxTrackSize.y = m_maxHeight;
-        rc = TRUE;
-    }
-
-    return rc;
-*/
-    return FALSE;
-}
+    return TRUE;
+} // end of wxWindow::HandleGetMinMaxInfo
 
 // ---------------------------------------------------------------------------
 // command messages
 // ---------------------------------------------------------------------------
-
-bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
+bool wxWindow::HandleCommand(
+  WXWORD                            wId
+, WXWORD                            wCmd
+, WXHWND                            hControl
+)
 {
-    if ( wxCurrentPopupMenu )
+    if (wxCurrentPopupMenu)
     {
-        wxMenu *popupMenu = wxCurrentPopupMenu;
+        wxMenu*                     pPopupMenu = wxCurrentPopupMenu;
+
         wxCurrentPopupMenu = NULL;
-
-        return popupMenu->OS2Command(cmd, id);
+        return pPopupMenu->OS2Command(wCmd, wId);
     }
 
-    wxWindow *win = FindItem(id);
-    if ( !win )
+    wxWindow*                       pWin = FindItem(wId);
+
+    if (!pWin)
     {
-        win = wxFindWinFromHandle(control);
+        pWin = wxFindWinFromHandle(hControl);
     }
 
-    if ( win )
-        return win->OS2Command(cmd, id);
-
+    if (pWin)
+        return pWin->OS2Command( wCmd
+                                ,wId
+                               );
     return FALSE;
-}
+} // end of wxWindow::HandleCommand
 
-bool wxWindow::HandleSysCommand(WXWPARAM wParam, WXLPARAM lParam)
+bool wxWindow::HandleSysCommand(
+  WXWPARAM                          wParam
+, WXLPARAM                          lParam
+)
 {
-   // TODO:
+    //
+    // 4 bits are reserved
+    //
+    switch (SHORT1FROMMP(wParam))
+    {
+        case SC_MAXIMIZE:
+            return HandleMaximize();
+
+        case SC_MINIMIZE:
+            return HandleMinimize();
+    }
     return FALSE;
-}
+} // end of wxWindow::HandleSysCommand
 
 // ---------------------------------------------------------------------------
 // mouse events
 // ---------------------------------------------------------------------------
 
-void wxWindow::InitMouseEvent(wxMouseEvent& event, int x, int y, WXUINT flags)
+void wxWindow::InitMouseEvent(
+  wxMouseEvent&                     rEvent
+, int                               nX
+, int                               nY
+, WXUINT                            uFlags
+)
 {
-// TODO:
-/*
-    event.m_x = x;
-    event.m_y = y;
-    event.m_shiftDown = ((flags & MK_SHIFT) != 0);
-    event.m_controlDown = ((flags & MK_CONTROL) != 0);
-    event.m_leftDown = ((flags & MK_LBUTTON) != 0);
-    event.m_middleDown = ((flags & MK_MBUTTON) != 0);
-    event.m_rightDown = ((flags & MK_RBUTTON) != 0);
-    event.SetTimestamp(s_currentMsg.time);
-    event.m_eventObject = this;
+    rEvent.m_x           = nX;
+    rEvent.m_y           = nY;
+    rEvent.m_shiftDown   = ((uFlags & VK_SHIFT) != 0);
+    rEvent.m_controlDown = ((uFlags & VK_CTRL) != 0);
+    rEvent.m_leftDown    = ((uFlags & VK_BUTTON1) != 0);
+    rEvent.m_middleDown  = ((uFlags & VK_BUTTON3) != 0);
+    rEvent.m_rightDown   = ((uFlags & VK_BUTTON2) != 0);
+    rEvent.SetTimestamp(s_currentMsg.time);
+    rEvent.m_eventObject = this;
 
 #if wxUSE_MOUSEEVENT_HACK
-    m_lastMouseX = x;
-    m_lastMouseY = y;
-    m_lastMouseEvent = event.GetEventType();
+    m_lastMouseX = nX;
+    m_lastMouseY = nY;
+    m_lastMouseEvent = rEvent.GetEventType();
 #endif // wxUSE_MOUSEEVENT_HACK
-*/
-}
+} // end of wxWindow::InitMouseEvent
 
-bool wxWindow::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
+bool wxWindow::HandleMouseEvent(
+  WXUINT                            uMsg
+, int                               nX
+, int                               nY
+, WXUINT                            uFlags
+)
 {
-    // the mouse events take consecutive IDs from WM_MOUSEFIRST to
+    //
+    // The mouse events take consecutive IDs from WM_MOUSEFIRST to
     // WM_MOUSELAST, so it's enough to substract WM_MOUSEMOVE == WM_MOUSEFIRST
     // from the message id and take the value in the table to get wxWin event
     // id
+    //
     static const wxEventType eventsMouse[] =
     {
         wxEVT_MOTION,
@@ -2738,491 +3077,671 @@ bool wxWindow::HandleMouseEvent(WXUINT msg, int x, int y, WXUINT flags)
         wxEVT_MIDDLE_DCLICK
     };
 
-    wxMouseEvent event(eventsMouse[msg - WM_MOUSEMOVE]);
-    InitMouseEvent(event, x, y, flags);
+    wxMouseEvent                    vEvent(eventsMouse[uMsg - WM_MOUSEMOVE]);
 
-    return GetEventHandler()->ProcessEvent(event);
-}
+    InitMouseEvent( vEvent
+                   ,nX
+                   ,nY
+                   ,uFlags
+                  );
 
-bool wxWindow::HandleMouseMove(int x, int y, WXUINT flags)
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::HandleMouseEvent
+
+bool wxWindow::HandleMouseMove(
+  int                               nX
+, int                               nY
+, WXUINT                            uFlags
+)
 {
-    if ( !m_bMouseInWindow )
+    if (!m_bMouseInWindow)
     {
+        //
         // Generate an ENTER event
+        //
         m_bMouseInWindow = TRUE;
 
-        wxMouseEvent event(wxEVT_ENTER_WINDOW);
-        InitMouseEvent(event, x, y, flags);
+        wxMouseEvent                vEvent(wxEVT_ENTER_WINDOW);
 
-        (void)GetEventHandler()->ProcessEvent(event);
+        InitMouseEvent( vEvent
+                       ,nX
+                       ,nY
+                       ,uFlags
+                      );
+
+        (void)GetEventHandler()->ProcessEvent(vEvent);
     }
-
-#if wxUSE_MOUSEEVENT_HACK
-    // Window gets a click down message followed by a mouse move message even
-    // if position isn't changed!  We want to discard the trailing move event
-    // if x and y are the same.
-    if ( (m_lastMouseEvent == wxEVT_RIGHT_DOWN ||
-          m_lastMouseEvent == wxEVT_LEFT_DOWN ||
-          m_lastMouseEvent == wxEVT_MIDDLE_DOWN) &&
-         (m_lastMouseX == event.m_x && m_lastMouseY == event.m_y) )
-    {
-        m_lastMouseEvent = wxEVT_MOTION;
-
-        return FALSE;
-    }
-#endif // wxUSE_MOUSEEVENT_HACK
-
-    return HandleMouseEvent(WM_MOUSEMOVE, x, y, flags);
-}
+    return HandleMouseEvent( WM_MOUSEMOVE
+                            ,nX
+                            ,nY
+                            ,uFlags
+                           );
+} // end of wxWindow::HandleMouseMove
 
 // ---------------------------------------------------------------------------
 // keyboard handling
 // ---------------------------------------------------------------------------
 
+//
+// Create the key event of the given type for the given key - used by
+// HandleChar and HandleKeyDown/Up
+//
+wxKeyEvent wxWindow::CreateKeyEvent(
+  wxEventType                       eType
+, int                               nId
+, WXLPARAM                          lParam
+) const
+{
+    wxKeyEvent                      vEvent(eType);
+
+    vEvent.SetId(GetId());
+    vEvent.m_shiftDown   = IsShiftDown();
+    vEvent.m_controlDown = IsCtrlDown();
+    vEvent.m_altDown     = (HIWORD(lParam) & KC_ALT) == KC_ALT;
+
+    vEvent.m_eventObject = (wxWindow *)this; // const_cast
+    vEvent.m_keyCode     = nId;
+    vEvent.SetTimestamp(s_currentMsg.time);
+
+    //
+    // Translate the position to client coords
+    //
+    POINTL                          vPoint;
+    RECTL                           vRect;
+
+    ::WinQueryPointerPos(HWND_DESKTOP, &vPoint);
+    ::WinQueryWindowRect( GetHwnd()
+                         ,&vRect
+                        );
+
+    vPoint.x -= vRect.xLeft;
+    vPoint.y -= vRect.yBottom;
+
+    vEvent.m_x = vPoint.x;
+    vEvent.m_y = vPoint.y;
+
+    return vEvent;
+} // end of wxWindow::CreateKeyEvent
+
+//
 // isASCII is TRUE only when we're called from WM_CHAR handler and not from
 // WM_KEYDOWN one
-bool wxWindow::HandleChar(WXWORD wParam, WXLPARAM lParam, bool isASCII)
+//
+bool wxWindow::HandleChar(
+  WXWORD                            wParam
+, WXLPARAM                          lParam
+, bool                              isASCII
+)
 {
-   // TODO:
-   return FALSE;
+    bool                            bCtrlDown = FALSE;
+    int                             vId;
+
+    if (isASCII)
+    {
+        //
+        // If 1 -> 26, translate to CTRL plus a letter.
+        //
+        vId = wParam;
+        if ((vId > 0) && (vId < 27))
+        {
+            switch (vId)
+            {
+                case 13:
+                    vId = WXK_RETURN;
+                    break;
+
+                case 8:
+                    vId = WXK_BACK;
+                    break;
+
+                case 9:
+                    vId = WXK_TAB;
+                    break;
+
+                default:
+                    bCtrlDown = TRUE;
+                    vId = vId + 96;
+            }
+        }
+    }
+    else if ( (vId = wxCharCodeOS2ToWX(wParam)) == 0)
+    {
+        //
+        // It's ASCII and will be processed here only when called from
+        // WM_CHAR (i.e. when isASCII = TRUE), don't process it now
+        //
+        vId = -1;
+    }
+
+    if (vId != -1)
+    {
+        wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_CHAR
+                                                          ,vId
+                                                          ,lParam
+                                                         ));
+
+        if (bCtrlDown)
+        {
+            vEvent.m_controlDown = TRUE;
+        }
+
+        if (GetEventHandler()->ProcessEvent(vEvent))
+            return TRUE;
+    }
+    return FALSE;
 }
 
-bool wxWindow::HandleKeyDown(WXWORD wParam, WXLPARAM lParam)
+bool wxWindow::HandleKeyDown(
+  WXWORD                            wParam
+, WXLPARAM                          lParam
+)
 {
-   // TODO:
-   return FALSE;
-}
+    int                             nId = wxCharCodeOS2ToWX(wParam);
 
-bool wxWindow::HandleKeyUp(WXWORD wParam, WXLPARAM lParam)
+    if (!nId)
+    {
+        //
+        // Normal ASCII char
+        //
+        nId = wParam;
+    }
+
+    if (nId != -1)
+    {
+        wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_KEY_DOWN
+                                                          ,nId
+                                                          ,lParam
+                                                         ));
+
+        if (GetEventHandler()->ProcessEvent(vEvent))
+        {
+            return TRUE;
+        }
+    }
+    return FALSE;
+} // end of wxWindow::HandleKeyDown
+
+bool wxWindow::HandleKeyUp(
+  WXWORD                            wParam
+, WXLPARAM                          lParam
+)
 {
-   // TODO:
-   return FALSE;
-}
+    int                             nId = wxCharCodeOS2ToWX(wParam);
+
+    if (!nId)
+    {
+        //
+        // Normal ASCII char
+        //
+        nId = wParam;
+    }
+
+    if (nId != -1)
+    {
+        wxKeyEvent                  vEvent(CreateKeyEvent( wxEVT_KEY_UP
+                                                          ,nId
+                                                          ,lParam
+                                                         ));
+
+        if (GetEventHandler()->ProcessEvent(vEvent))
+            return TRUE;
+    }
+    return FALSE;
+} // end of wxWindow::HandleKeyUp
 
 // ---------------------------------------------------------------------------
 // joystick
 // ---------------------------------------------------------------------------
 
-bool wxWindow::HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags)
-{
-   // TODO:
-   return FALSE;
-}
-
 // ---------------------------------------------------------------------------
 // scrolling
 // ---------------------------------------------------------------------------
 
-bool wxWindow::OS2OnScroll(int orientation, WXWORD wParam,
-                           WXWORD pos, WXHWND control)
+bool wxWindow::OS2OnScroll(
+  int                               nOrientation
+, WXWORD                            wParam
+, WXWORD                            wPos
+, WXHWND                            hControl
+)
 {
-    if ( control )
+    if (hControl)
     {
-        wxWindow *child = wxFindWinFromHandle(control);
-        if ( child )
-            return child->OS2OnScroll(orientation, wParam, pos, control);
+        wxWindow*                   pChild = wxFindWinFromHandle(hControl);
+
+        if (pChild )
+            return pChild->OS2OnScroll( nOrientation
+                                       ,wParam
+                                       ,wPos
+                                       ,hControl
+                                      );
     }
 
-    wxScrollWinEvent event;
-    event.SetPosition(pos);
-    event.SetOrientation(orientation);
-    event.m_eventObject = this;
-   // TODO:
-   return FALSE;
-}
+    wxScrollWinEvent                vEvent;
+
+    vEvent.SetPosition(wPos);
+    vEvent.SetOrientation(nOrientation);
+    vEvent.m_eventObject = this;
+
+    switch (wParam)
+    {
+        case SB_LINEUP:
+            vEvent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+            break;
+
+        case SB_LINEDOWN:
+            vEvent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
+            break;
+
+        case SB_PAGEUP:
+            vEvent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
+            break;
+
+        case SB_PAGEDOWN:
+            vEvent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+            break;
+
+        case SB_SLIDERPOSITION:
+            vEvent.m_eventType = wxEVT_SCROLLWIN_THUMBRELEASE;
+            break;
+
+        case SB_SLIDERTRACK:
+            vEvent.m_eventType = wxEVT_SCROLLWIN_THUMBTRACK;
+            break;
+
+        default:
+            return FALSE;
+    }
+    return GetEventHandler()->ProcessEvent(vEvent);
+} // end of wxWindow::OS2OnScroll
 
 // ===========================================================================
 // global functions
 // ===========================================================================
 
-void wxGetCharSize(WXHWND wnd, int *x, int *y,wxFont *the_font)
+void wxGetCharSize(
+  WXHWND                            hWnd
+, int*                              pX
+, int*                              pY
+,wxFont*                            pTheFont
+)
 {
-   // TODO:
-}
+  // TODO: we'll do this later
+} // end of wxGetCharSize
 
+//
 // Returns 0 if was a normal ASCII value, not a special key. This indicates that
 // the key should be ignored by WM_KEYDOWN and processed by WM_CHAR instead.
-int wxCharCodeOS2ToWX(int keySym)
+//
+int wxCharCodeOS2ToWX(
+  int                               nKeySym
+)
 {
-    int id = 0;
-   // TODO:
-/*
-    switch (keySym)
+    int                             nId = 0;
+
+    switch (nKeySym)
     {
-    case VK_CANCEL:     id = WXK_CANCEL; break;
-    case VK_BACK:       id = WXK_BACK; break;
-    case VK_TAB:        id = WXK_TAB; break;
-    case VK_CLEAR:      id = WXK_CLEAR; break;
-    case VK_RETURN:     id = WXK_RETURN; break;
-    case VK_SHIFT:      id = WXK_SHIFT; break;
-    case VK_CONTROL:    id = WXK_CONTROL; break;
-    case VK_MENU :      id = WXK_MENU; break;
-    case VK_PAUSE:      id = WXK_PAUSE; break;
-    case VK_SPACE:      id = WXK_SPACE; break;
-    case VK_ESCAPE:     id = WXK_ESCAPE; break;
-    case VK_PRIOR:      id = WXK_PRIOR; break;
-    case VK_NEXT :      id = WXK_NEXT; break;
-    case VK_END:        id = WXK_END; break;
-    case VK_HOME :      id = WXK_HOME; break;
-    case VK_LEFT :      id = WXK_LEFT; break;
-    case VK_UP:         id = WXK_UP; break;
-    case VK_RIGHT:      id = WXK_RIGHT; break;
-    case VK_DOWN :      id = WXK_DOWN; break;
-    case VK_SELECT:     id = WXK_SELECT; break;
-    case VK_PRINT:      id = WXK_PRINT; break;
-    case VK_EXECUTE:    id = WXK_EXECUTE; break;
-    case VK_INSERT:     id = WXK_INSERT; break;
-    case VK_DELETE:     id = WXK_DELETE; break;
-    case VK_HELP :      id = WXK_HELP; break;
-    case VK_NUMPAD0:    id = WXK_NUMPAD0; break;
-    case VK_NUMPAD1:    id = WXK_NUMPAD1; break;
-    case VK_NUMPAD2:    id = WXK_NUMPAD2; break;
-    case VK_NUMPAD3:    id = WXK_NUMPAD3; break;
-    case VK_NUMPAD4:    id = WXK_NUMPAD4; break;
-    case VK_NUMPAD5:    id = WXK_NUMPAD5; break;
-    case VK_NUMPAD6:    id = WXK_NUMPAD6; break;
-    case VK_NUMPAD7:    id = WXK_NUMPAD7; break;
-    case VK_NUMPAD8:    id = WXK_NUMPAD8; break;
-    case VK_NUMPAD9:    id = WXK_NUMPAD9; break;
-    case VK_MULTIPLY:   id = WXK_MULTIPLY; break;
-    case VK_ADD:        id = WXK_ADD; break;
-    case VK_SUBTRACT:   id = WXK_SUBTRACT; break;
-    case VK_DECIMAL:    id = WXK_DECIMAL; break;
-    case VK_DIVIDE:     id = WXK_DIVIDE; break;
-    case VK_F1:         id = WXK_F1; break;
-    case VK_F2:         id = WXK_F2; break;
-    case VK_F3:         id = WXK_F3; break;
-    case VK_F4:         id = WXK_F4; break;
-    case VK_F5:         id = WXK_F5; break;
-    case VK_F6:         id = WXK_F6; break;
-    case VK_F7:         id = WXK_F7; break;
-    case VK_F8:         id = WXK_F8; break;
-    case VK_F9:         id = WXK_F9; break;
-    case VK_F10:        id = WXK_F10; break;
-    case VK_F11:        id = WXK_F11; break;
-    case VK_F12:        id = WXK_F12; break;
-    case VK_F13:        id = WXK_F13; break;
-    case VK_F14:        id = WXK_F14; break;
-    case VK_F15:        id = WXK_F15; break;
-    case VK_F16:        id = WXK_F16; break;
-    case VK_F17:        id = WXK_F17; break;
-    case VK_F18:        id = WXK_F18; break;
-    case VK_F19:        id = WXK_F19; break;
-    case VK_F20:        id = WXK_F20; break;
-    case VK_F21:        id = WXK_F21; break;
-    case VK_F22:        id = WXK_F22; break;
-    case VK_F23:        id = WXK_F23; break;
-    case VK_F24:        id = WXK_F24; break;
-    case VK_NUMLOCK:    id = WXK_NUMLOCK; break;
-    case VK_SCROLL:     id = WXK_SCROLL; break;
-    default:
+        case VK_BACKTAB:    nId = WXK_BACK; break;
+        case VK_TAB:        nId = WXK_TAB; break;
+        case VK_CLEAR:      nId = WXK_CLEAR; break;
+        case VK_ENTER:      nId = WXK_RETURN; break;
+        case VK_SHIFT:      nId = WXK_SHIFT; break;
+        case VK_CTRL:       nId = WXK_CONTROL; break;
+        case VK_PAUSE:      nId = WXK_PAUSE; break;
+        case VK_SPACE:      nId = WXK_SPACE; break;
+        case VK_ESC:        nId = WXK_ESCAPE; break;
+        case VK_END:        nId = WXK_END; break;
+        case VK_HOME :      nId = WXK_HOME; break;
+        case VK_LEFT :      nId = WXK_LEFT; break;
+        case VK_UP:         nId = WXK_UP; break;
+        case VK_RIGHT:      nId = WXK_RIGHT; break;
+        case VK_DOWN :      nId = WXK_DOWN; break;
+        case VK_PRINTSCRN:  nId = WXK_PRINT; break;
+        case VK_INSERT:     nId = WXK_INSERT; break;
+        case VK_DELETE:     nId = WXK_DELETE; break;
+        case VK_F1:         nId = WXK_F1; break;
+        case VK_F2:         nId = WXK_F2; break;
+        case VK_F3:         nId = WXK_F3; break;
+        case VK_F4:         nId = WXK_F4; break;
+        case VK_F5:         nId = WXK_F5; break;
+        case VK_F6:         nId = WXK_F6; break;
+        case VK_F7:         nId = WXK_F7; break;
+        case VK_F8:         nId = WXK_F8; break;
+        case VK_F9:         nId = WXK_F9; break;
+        case VK_F10:        nId = WXK_F10; break;
+        case VK_F11:        nId = WXK_F11; break;
+        case VK_F12:        nId = WXK_F12; break;
+        case VK_F13:        nId = WXK_F13; break;
+        case VK_F14:        nId = WXK_F14; break;
+        case VK_F15:        nId = WXK_F15; break;
+        case VK_F16:        nId = WXK_F16; break;
+        case VK_F17:        nId = WXK_F17; break;
+        case VK_F18:        nId = WXK_F18; break;
+        case VK_F19:        nId = WXK_F19; break;
+        case VK_F20:        nId = WXK_F20; break;
+        case VK_F21:        nId = WXK_F21; break;
+        case VK_F22:        nId = WXK_F22; break;
+        case VK_F23:        nId = WXK_F23; break;
+        case VK_F24:        nId = WXK_F24; break;
+        case VK_NUMLOCK:    nId = WXK_NUMLOCK; break;
+        case VK_SCRLLOCK:   nId = WXK_SCROLL; break;
+        default:
         {
             return 0;
         }
     }
-*/
-    return id;
-}
+    return nId;
+} // end of wxCharCodeOS2ToWX
 
-int wxCharCodeWXToOS2(int id, bool *isVirtual)
+int wxCharCodeWXToOS2(
+  int                               nId
+, bool*                             bIsVirtual
+)
 {
-    *isVirtual = TRUE;
-    int keySym = 0;
-    // TODO
-/*
-    switch (id)
+    int                             nKeySym = 0;
+
+    *bIsVirtual = TRUE;
+    switch (nId)
     {
-    case WXK_CANCEL:    keySym = VK_CANCEL; break;
-    case WXK_CLEAR:     keySym = VK_CLEAR; break;
-    case WXK_SHIFT:     keySym = VK_SHIFT; break;
-    case WXK_CONTROL:   keySym = VK_CONTROL; break;
-    case WXK_MENU :     keySym = VK_MENU; break;
-    case WXK_PAUSE:     keySym = VK_PAUSE; break;
-    case WXK_PRIOR:     keySym = VK_PRIOR; break;
-    case WXK_NEXT :     keySym = VK_NEXT; break;
-    case WXK_END:       keySym = VK_END; break;
-    case WXK_HOME :     keySym = VK_HOME; break;
-    case WXK_LEFT :     keySym = VK_LEFT; break;
-    case WXK_UP:        keySym = VK_UP; break;
-    case WXK_RIGHT:     keySym = VK_RIGHT; break;
-    case WXK_DOWN :     keySym = VK_DOWN; break;
-    case WXK_SELECT:    keySym = VK_SELECT; break;
-    case WXK_PRINT:     keySym = VK_PRINT; break;
-    case WXK_EXECUTE:   keySym = VK_EXECUTE; break;
-    case WXK_INSERT:    keySym = VK_INSERT; break;
-    case WXK_DELETE:    keySym = VK_DELETE; break;
-    case WXK_HELP :     keySym = VK_HELP; break;
-    case WXK_NUMPAD0:   keySym = VK_NUMPAD0; break;
-    case WXK_NUMPAD1:   keySym = VK_NUMPAD1; break;
-    case WXK_NUMPAD2:   keySym = VK_NUMPAD2; break;
-    case WXK_NUMPAD3:   keySym = VK_NUMPAD3; break;
-    case WXK_NUMPAD4:   keySym = VK_NUMPAD4; break;
-    case WXK_NUMPAD5:   keySym = VK_NUMPAD5; break;
-    case WXK_NUMPAD6:   keySym = VK_NUMPAD6; break;
-    case WXK_NUMPAD7:   keySym = VK_NUMPAD7; break;
-    case WXK_NUMPAD8:   keySym = VK_NUMPAD8; break;
-    case WXK_NUMPAD9:   keySym = VK_NUMPAD9; break;
-    case WXK_MULTIPLY:  keySym = VK_MULTIPLY; break;
-    case WXK_ADD:       keySym = VK_ADD; break;
-    case WXK_SUBTRACT:  keySym = VK_SUBTRACT; break;
-    case WXK_DECIMAL:   keySym = VK_DECIMAL; break;
-    case WXK_DIVIDE:    keySym = VK_DIVIDE; break;
-    case WXK_F1:        keySym = VK_F1; break;
-    case WXK_F2:        keySym = VK_F2; break;
-    case WXK_F3:        keySym = VK_F3; break;
-    case WXK_F4:        keySym = VK_F4; break;
-    case WXK_F5:        keySym = VK_F5; break;
-    case WXK_F6:        keySym = VK_F6; break;
-    case WXK_F7:        keySym = VK_F7; break;
-    case WXK_F8:        keySym = VK_F8; break;
-    case WXK_F9:        keySym = VK_F9; break;
-    case WXK_F10:       keySym = VK_F10; break;
-    case WXK_F11:       keySym = VK_F11; break;
-    case WXK_F12:       keySym = VK_F12; break;
-    case WXK_F13:       keySym = VK_F13; break;
-    case WXK_F14:       keySym = VK_F14; break;
-    case WXK_F15:       keySym = VK_F15; break;
-    case WXK_F16:       keySym = VK_F16; break;
-    case WXK_F17:       keySym = VK_F17; break;
-    case WXK_F18:       keySym = VK_F18; break;
-    case WXK_F19:       keySym = VK_F19; break;
-    case WXK_F20:       keySym = VK_F20; break;
-    case WXK_F21:       keySym = VK_F21; break;
-    case WXK_F22:       keySym = VK_F22; break;
-    case WXK_F23:       keySym = VK_F23; break;
-    case WXK_F24:       keySym = VK_F24; break;
-    case WXK_NUMLOCK:   keySym = VK_NUMLOCK; break;
-    case WXK_SCROLL:    keySym = VK_SCROLL; break;
-    default:
+        case WXK_CLEAR:     nKeySym = VK_CLEAR; break;
+        case WXK_SHIFT:     nKeySym = VK_SHIFT; break;
+        case WXK_CONTROL:   nKeySym = VK_CTRL; break;
+        case WXK_PAUSE:     nKeySym = VK_PAUSE; break;
+        case WXK_END:       nKeySym = VK_END; break;
+        case WXK_HOME :     nKeySym = VK_HOME; break;
+        case WXK_LEFT :     nKeySym = VK_LEFT; break;
+        case WXK_UP:        nKeySym = VK_UP; break;
+        case WXK_RIGHT:     nKeySym = VK_RIGHT; break;
+        case WXK_DOWN :     nKeySym = VK_DOWN; break;
+        case WXK_PRINT:     nKeySym = VK_PRINTSCRN; break;
+        case WXK_INSERT:    nKeySym = VK_INSERT; break;
+        case WXK_DELETE:    nKeySym = VK_DELETE; break;
+        case WXK_F1:        nKeySym = VK_F1; break;
+        case WXK_F2:        nKeySym = VK_F2; break;
+        case WXK_F3:        nKeySym = VK_F3; break;
+        case WXK_F4:        nKeySym = VK_F4; break;
+        case WXK_F5:        nKeySym = VK_F5; break;
+        case WXK_F6:        nKeySym = VK_F6; break;
+        case WXK_F7:        nKeySym = VK_F7; break;
+        case WXK_F8:        nKeySym = VK_F8; break;
+        case WXK_F9:        nKeySym = VK_F9; break;
+        case WXK_F10:       nKeySym = VK_F10; break;
+        case WXK_F11:       nKeySym = VK_F11; break;
+        case WXK_F12:       nKeySym = VK_F12; break;
+        case WXK_F13:       nKeySym = VK_F13; break;
+        case WXK_F14:       nKeySym = VK_F14; break;
+        case WXK_F15:       nKeySym = VK_F15; break;
+        case WXK_F16:       nKeySym = VK_F16; break;
+        case WXK_F17:       nKeySym = VK_F17; break;
+        case WXK_F18:       nKeySym = VK_F18; break;
+        case WXK_F19:       nKeySym = VK_F19; break;
+        case WXK_F20:       nKeySym = VK_F20; break;
+        case WXK_F21:       nKeySym = VK_F21; break;
+        case WXK_F22:       nKeySym = VK_F22; break;
+        case WXK_F23:       nKeySym = VK_F23; break;
+        case WXK_F24:       nKeySym = VK_F24; break;
+        case WXK_NUMLOCK:   nKeySym = VK_NUMLOCK; break;
+        case WXK_SCROLL:    nKeySym = VK_SCRLLOCK; break;
+        default:
         {
-            *isVirtual = FALSE;
-            keySym = id;
+            *bIsVirtual = FALSE;
+            nKeySym = nId;
             break;
         }
     }
-*/
-    return keySym;
-}
+    return nKeySym;
+} // end of wxCharCodeWXToOS2
 
-wxWindow *wxGetActiveWindow()
+wxWindow* wxGetActiveWindow()
 {
-   // TODO
+    HWND                            hWnd = ::WinQueryActiveWindow(HWND_DESKTOP);
+
+    if (hWnd != 0)
+    {
+        return wxFindWinFromHandle((WXHWND)hWnd);
+    }
     return NULL;
-}
-
-// Windows keyboard hook. Allows interception of e.g. F1, ESCAPE
-// in active frames and dialogs, regardless of where the focus is.
-//static HHOOK wxTheKeyboardHook = 0;
-//static FARPROC wxTheKeyboardHookProc = 0;
-int wxKeyboardHook(int nCode, WORD wParam, DWORD lParam);
-
-void wxSetKeyboardHook(bool doIt)
-{
-   // TODO:
-}
-
-int wxKeyboardHook(int nCode, WORD wParam, DWORD lParam)
-{
-   // TODO:
-
-    return 0;
-}
+} // end of wxGetActiveWindow
 
 #ifdef __WXDEBUG__
-const char *wxGetMessageName(int message)
+const char* wxGetMessageName(
+  int                               nMessage)
 {
-   // TODO
-/*
-    switch ( message )
+    switch (nMessage)
     {
         case 0x0000: return "WM_NULL";
         case 0x0001: return "WM_CREATE";
         case 0x0002: return "WM_DESTROY";
-        case 0x0003: return "WM_MOVE";
-        case 0x0005: return "WM_SIZE";
-        case 0x0006: return "WM_ACTIVATE";
-        case 0x0007: return "WM_SETFOCUS";
-        case 0x0008: return "WM_KILLFOCUS";
-        case 0x000A: return "WM_ENABLE";
-        case 0x000B: return "WM_SETREDRAW";
-        case 0x000C: return "WM_SETTEXT";
-        case 0x000D: return "WM_GETTEXT";
-        case 0x000E: return "WM_GETTEXTLENGTH";
-        case 0x000F: return "WM_PAINT";
-        case 0x0010: return "WM_CLOSE";
-        case 0x0011: return "WM_QUERYENDSESSION";
-        case 0x0012: return "WM_QUIT";
-        case 0x0013: return "WM_QUERYOPEN";
-        case 0x0014: return "WM_ERASEBKGND";
-        case 0x0015: return "WM_SYSCOLORCHANGE";
-        case 0x0016: return "WM_ENDSESSION";
-        case 0x0017: return "WM_SYSTEMERROR";
-        case 0x0018: return "WM_SHOWWINDOW";
-        case 0x0019: return "WM_CTLCOLOR";
-        case 0x001A: return "WM_WININICHANGE";
-        case 0x001B: return "WM_DEVMODECHANGE";
-        case 0x001C: return "WM_ACTIVATEAPP";
-        case 0x001D: return "WM_FONTCHANGE";
-        case 0x001E: return "WM_TIMECHANGE";
-        case 0x001F: return "WM_CANCELMODE";
-        case 0x0020: return "WM_SETCURSOR";
-        case 0x0021: return "WM_MOUSEACTIVATE";
-        case 0x0022: return "WM_CHILDACTIVATE";
-        case 0x0023: return "WM_QUEUESYNC";
-        case 0x0024: return "WM_GETMINMAXINFO";
-        case 0x0026: return "WM_PAINTICON";
-        case 0x0027: return "WM_ICONERASEBKGND";
-        case 0x0028: return "WM_NEXTDLGCTL";
-        case 0x002A: return "WM_SPOOLERSTATUS";
-        case 0x002B: return "WM_DRAWITEM";
-        case 0x002C: return "WM_MEASUREITEM";
-        case 0x002D: return "WM_DELETEITEM";
-        case 0x002E: return "WM_VKEYTOITEM";
-        case 0x002F: return "WM_CHARTOITEM";
-        case 0x0030: return "WM_SETFONT";
-        case 0x0031: return "WM_GETFONT";
-        case 0x0037: return "WM_QUERYDRAGICON";
-        case 0x0039: return "WM_COMPAREITEM";
-        case 0x0041: return "WM_COMPACTING";
-        case 0x0044: return "WM_COMMNOTIFY";
-        case 0x0046: return "WM_WINDOWPOSCHANGING";
-        case 0x0047: return "WM_WINDOWPOSCHANGED";
-        case 0x0048: return "WM_POWER";
+        case 0x0004: return "WM_ENABLE";
+        case 0x0005: return "WM_SHOW";
+        case 0x0006: return "WM_MOVE";
+        case 0x0007: return "WM_SIZE";
+        case 0x0008: return "WM_ADJUSTWINDOWPOS";
+        case 0x0009: return "WM_CALCVALIDRECTS";
+        case 0x000A: return "WM_SETWINDOWPARAMS";
+        case 0x000B: return "WM_QUERYWINDOWPARAMS";
+        case 0x000C: return "WM_HITTEST";
+        case 0x000D: return "WM_ACTIVATE";
+        case 0x000F: return "WM_SETFOCUS";
+        case 0x0010: return "WM_SETSELECTION";
+        case 0x0011: return "WM_PPAINT";
+        case 0x0012: return "WM_PSETFOCUS";
+        case 0x0013: return "WM_PSYSCOLORCHANGE";
+        case 0x0014: return "WM_PSIZE";
+        case 0x0015: return "WM_PACTIVATE";
+        case 0x0016: return "WM_PCONTROL";
+        case 0x0020: return "WM_COMMAND";
+        case 0x0021: return "WM_SYSCOMMAND";
+        case 0x0022: return "WM_HELP";
+        case 0x0023: return "WM_PAINT";
+        case 0x0024: return "WM_TIMER";
+        case 0x0025: return "WM_SEM1";
+        case 0x0026: return "WM_SEM2";
+        case 0x0027: return "WM_SEM3";
+        case 0x0028: return "WM_SEM4";
+        case 0x0029: return "WM_CLOSE";
+        case 0x002A: return "WM_QUIT";
+        case 0x002B: return "WM_SYSCOLORCHANGE";
+        case 0x002D: return "WM_SYSVALUECHANGE";
+        case 0x002E: return "WM_APPTERMINATENOTIFY";
+        case 0x002F: return "WM_PRESPARAMCHANGED";
+        // Control notification messages
+        case 0x0030: return "WM_CONTROL";
+        case 0x0031: return "WM_VSCROLL";
+        case 0x0032: return "WM_HSCROLL";
+        case 0x0033: return "WM_INITMENU";
+        case 0x0034: return "WM_MENUSELECT";
+        case 0x0035: return "WM_MENUSEND";
+        case 0x0036: return "WM_DRAWITEM";
+        case 0x0037: return "WM_MEASUREITEM";
+        case 0x0038: return "WM_CONTROLPOINTER";
+        case 0x003A: return "WM_QUERYDLGCODE";
+        case 0x003B: return "WM_INITDLG";
+        case 0x003C: return "WM_SUBSTITUTESTRING";
+        case 0x003D: return "WM_MATCHMNEMONIC";
+        case 0x003E: return "WM_SAVEAPPLICATION";
+        case 0x0129: return "WM_CTLCOLORCHANGE";
+        case 0x0130: return "WM_QUERYCTLTYPE";
+        // Frame messages
+        case 0x0040: return "WM_FLASHWINDOW";
+        case 0x0041: return "WM_FORMATFRAME";
+        case 0x0042: return "WM_UPDATEFRAME";
+        case 0x0043: return "WM_FOCUSCHANGE";
+        case 0x0044: return "WM_SETBORDERSIZE";
+        case 0x0045: return "WM_TRACKFRAME";
+        case 0x0046: return "WM_MINMAXFRAME";
+        case 0x0047: return "WM_SETICON";
+        case 0x0048: return "WM_QUERYICON";
+        case 0x0049: return "WM_SETACCELTABLE";
+        case 0x004A: return "WM_QUERYACCELTABLE";
+        case 0x004B: return "WM_TRANSLATEACCEL";
+        case 0x004C: return "WM_QUERYTRACKINFO";
+        case 0x004D: return "WM_QUERYBORDERSIZE";
+        case 0x004E: return "WM_NEXTMENU";
+        case 0x004F: return "WM_ERASEBACKGROUND";
+        case 0x0050: return "WM_QUERYFRAMEINFO";
+        case 0x0051: return "WM_QUERYFOCUSCHAIN";
+        case 0x0052: return "WM_OWNERPOSCHANGE";
+        case 0x0053: return "WM_CACLFRAMERECT";
+        case 0x0055: return "WM_WINDOWPOSCHANGED";
+        case 0x0056: return "WM_ADJUSTFRAMEPOS";
+        case 0x0059: return "WM_QUERYFRAMECTLCOUNT";
+        case 0x005B: return "WM_QUERYHELPINFO";
+        case 0x005C: return "WM_SETHELPINFO";
+        case 0x005D: return "WM_ERROR";
+        case 0x005E: return "WM_REALIZEPALETTE";
+        // Clipboard messages
+        case 0x0060: return "WM_RENDERFMT";
+        case 0x0061: return "WM_RENDERALLFMTS";
+        case 0x0062: return "WM_DESTROYCLIPBOARD";
+        case 0x0063: return "WM_PAINTCLIPBOARD";
+        case 0x0064: return "WM_SIZECLIPBOARD";
+        case 0x0065: return "WM_HSCROLLCLIPBOARD";
+        case 0x0066: return "WM_VSCROLLCLIPBOARD";
+        case 0x0067: return "WM_DRAWCLIPBOARD";
+        // mouse messages
+        case 0x0070: return "WM_MOUSEMOVE";
+        case 0x0071: return "WM_BUTTON1DOWN";
+        case 0x0072: return "WM_BUTTON1UP";
+        case 0x0073: return "WM_BUTTON1DBLCLK";
+        case 0x0074: return "WM_BUTTON2DOWN";
+        case 0x0075: return "WM_BUTTON2UP";
+        case 0x0076: return "WM_BUTTON2DBLCLK";
+        case 0x0077: return "WM_BUTTON3DOWN";
+        case 0x0078: return "WM_BUTTON3UP";
+        case 0x0079: return "WM_BUTTON3DBLCLK";
+        case 0x007D: return "WM_MOUSEMAP";
+        case 0x007E: return "WM_VRNDISABLED";
+        case 0x007F: return "WM_VRNENABLED";
+        case 0x0410: return "WM_CHORD";
+        case 0x0411: return "WM_BUTTON1MOTIONSTART";
+        case 0x0412: return "WM_BUTTON1MOTIONEND";
+        case 0x0413: return "WM_BUTTON1CLICK";
+        case 0x0414: return "WM_BUTTON2MOTIONSTART";
+        case 0x0415: return "WM_BUTTON2MOTIONEND";
+        case 0x0416: return "WM_BUTTON2CLICK";
+        case 0x0417: return "WM_BUTTON3MOTIONSTART";
+        case 0x0418: return "WM_BUTTON3MOTIONEND";
+        case 0x0419: return "WM_BUTTON3CLICK";
+        case 0x0420: return "WM_BEGINDRAG";
+        case 0x0421: return "WM_ENDDRAG";
+        case 0x0422: return "WM_SINGLESELECT";
+        case 0x0423: return "WM_OPEN";
+        case 0x0424: return "WM_CONTEXTMENU";
+        case 0x0425: return "WM_CONTEXTHELP";
+        case 0x0426: return "WM_TEXTEDIT";
+        case 0x0427: return "WM_BEGINSELECT";
+        case 0x0228: return "WM_ENDSELECT";
+        case 0x0429: return "WM_PICKUP";
+        case 0x04C0: return "WM_PENFIRST";
+        case 0x04FF: return "WM_PENLAST";
+        case 0x0500: return "WM_MMPMFIRST";
+        case 0x05FF: return "WM_MMPMLAST";
+        case 0x0600: return "WM_STDDLGFIRST";
+        case 0x06FF: return "WM_STDDLGLAST";
+        case 0x0BD0: return "WM_BIDI_FIRST";
+        case 0x0BFF: return "WM_BIDI_LAST";
+        // keyboard input
+        case 0x007A: return "WM_CHAR";
+        case 0x007B: return "WM_VIOCHAR";
+        // DDE messages
+        case 0x00A0: return "WM_DDE_INITIATE";
+        case 0x00A1: return "WM_DDE_REQUEST";
+        case 0x00A2: return "WM_DDE_ACK";
+        case 0x00A3: return "WM_DDE_DATA";
+        case 0x00A4: return "WM_DDE_ADVISE";
+        case 0x00A5: return "WM_DDE_UNADVISE";
+        case 0x00A6: return "WM_DDE_POKE";
+        case 0x00A7: return "WM_DDE_EXECUTE";
+        case 0x00A8: return "WM_DDE_TERMINATE";
+        case 0x00A9: return "WM_DDE_INITIATEACK";
+        case 0x00AF: return "WM_DDE_LAST";
+        // Buttons
+        case 0x0120: return "BM_CLICK";
+        case 0x0121: return "BM_QUERYCHECKINDEX";
+        case 0x0122: return "BM_QUERYHILITE";
+        case 0x0123: return "BM_SETHILITE";
+        case 0x0124: return "BM_QUERYCHECK";
+        case 0x0125: return "BM_SETCHECK";
+        case 0x0126: return "BM_SETDEFAULT";
+        case 0x0128: return "BM_AUTOSIZE";
+        // Combo boxes
+        case 0x029A: return "CBID_LIST";
+        case 0x029B: return "CBID_EDIT";
+        case 0x0170: return "CBM_SHOWLIST";
+        case 0x0171: return "CBM_HILITE";
+        case 0x0172: return "CBM_ISLISTSHOWING";
+        // Edit fields
+        case 0x0140: return "EM_QUERYCHANGED";
+        case 0x0141: return "EM_QUERYSEL";
+        case 0x0142: return "EM_SETSEL";
+        case 0x0143: return "EM_SETTEXTLIMIT";
+        case 0x0144: return "EM_CUT";
+        case 0x0145: return "EM_COPY";
+        case 0x0146: return "EM_CLEAR";
+        case 0x0147: return "EM_PASTE";
+        case 0x0148: return "EM_QUERYFIRSTCHAR";
+        case 0x0149: return "EM_SETFIRSTCHAR";
+        case 0x014A: return "EM_QUERYREADONLY";
+        case 0x014B: return "EM_SETREADONLY";
+        case 0x014C: return "EM_SETINSERTMODE";
+        // Listboxes
+        case 0x0160: return "LM_QUERYITEMCOUNT";
+        case 0x0161: return "LM_INSERTITEM";
+        case 0x0162: return "LM_SETOPENINDEX";
+        case 0x0163: return "LM_DELETEITEM";
+        case 0x0164: return "LM_SELECTITEM";
+        case 0x0165: return "LM_QUERYSELECTION";
+        case 0x0166: return "LM_SETITEMTEXT";
+        case 0x0167: return "LM_QUERYITEMTEXTLENGTH";
+        case 0x0168: return "LM_QUERYITEMTEXT";
+        case 0x0169: return "LM_SETITEMHANDLE";
+        case 0x016A: return "LM_QUERYITEMHANDLE";
+        case 0x016B: return "LM_SEARCHSTRING";
+        case 0x016C: return "LM_SETITEMHEIGHT";
+        case 0x016D: return "LM_QUERYTOPINDEX";
+        case 0x016E: return "LM_DELETEALL";
+        case 0x016F: return "LM_INSERTMULITEMS";
+        case 0x0660: return "LM_SETITEMWIDTH";
+        // Menus
+        case 0x0180: return "MM_INSERTITEM";
+        case 0x0181: return "MM_DELETEITEM";
+        case 0x0182: return "MM_QUERYITEM";
+        case 0x0183: return "MM_SETITEM";
+        case 0x0184: return "MM_QUERYITEMCOUNT";
+        case 0x0185: return "MM_STARTMENUMODE";
+        case 0x0186: return "MM_ENDMENUMODE";
+        case 0x0188: return "MM_REMOVEITEM";
+        case 0x0189: return "MM_SELECTITEM";
+        case 0x018A: return "MM_QUERYSELITEMID";
+        case 0x018B: return "MM_QUERYITEMTEXT";
+        case 0x018C: return "MM_QUERYITEMTEXTLENGTH";
+        case 0x018D: return "MM_SETITEMHANDLE";
+        case 0x018E: return "MM_SETITEMTEXT";
+        case 0x018F: return "MM_ITEMPOSITIONFROMID";
+        case 0x0190: return "MM_ITEMIDFROMPOSITION";
+        case 0x0191: return "MM_QUERYITEMATTR";
+        case 0x0192: return "MM_SETITEMATTR";
+        case 0x0193: return "MM_ISITEMVALID";
+        case 0x0194: return "MM_QUERYITEMRECT";
+        case 0x0431: return "MM_QUERYDEFAULTITEMID";
+        case 0x0432: return "MM_SETDEFAULTITEMID";
+        // Scrollbars
+        case 0x01A0: return "SBM_SETSCROLLBAR";
+        case 0x01A1: return "SBM_SETPOS";
+        case 0x01A2: return "SBM_QUERYPOS";
+        case 0x01A3: return "SBM_QUERYRANGE";
+        case 0x01A6: return "SBM_SETTHUMBSIZE";
 
-#ifdef  __WIN32__
-        case 0x004A: return "WM_COPYDATA";
-        case 0x004B: return "WM_CANCELJOURNAL";
-        case 0x004E: return "WM_NOTIFY";
-        case 0x0050: return "WM_INPUTLANGCHANGEREQUEST";
-        case 0x0051: return "WM_INPUTLANGCHANGE";
-        case 0x0052: return "WM_TCARD";
-        case 0x0053: return "WM_HELP";
-        case 0x0054: return "WM_USERCHANGED";
-        case 0x0055: return "WM_NOTIFYFORMAT";
-        case 0x007B: return "WM_CONTEXTMENU";
-        case 0x007C: return "WM_STYLECHANGING";
-        case 0x007D: return "WM_STYLECHANGED";
-        case 0x007E: return "WM_DISPLAYCHANGE";
-        case 0x007F: return "WM_GETICON";
-        case 0x0080: return "WM_SETICON";
-#endif  //WIN32
+        // Help messages
+        case 0x0F00: return "WM_HELPBASE";
+        case 0x0FFF: return "WM_HELPTOP";
+        // Beginning of user defined messages
+        case 0x1000: return "WM_USER";
 
-        case 0x0081: return "WM_NCCREATE";
-        case 0x0082: return "WM_NCDESTROY";
-        case 0x0083: return "WM_NCCALCSIZE";
-        case 0x0084: return "WM_NCHITTEST";
-        case 0x0085: return "WM_NCPAINT";
-        case 0x0086: return "WM_NCACTIVATE";
-        case 0x0087: return "WM_GETDLGCODE";
-        case 0x00A0: return "WM_NCMOUSEMOVE";
-        case 0x00A1: return "WM_NCLBUTTONDOWN";
-        case 0x00A2: return "WM_NCLBUTTONUP";
-        case 0x00A3: return "WM_NCLBUTTONDBLCLK";
-        case 0x00A4: return "WM_NCRBUTTONDOWN";
-        case 0x00A5: return "WM_NCRBUTTONUP";
-        case 0x00A6: return "WM_NCRBUTTONDBLCLK";
-        case 0x00A7: return "WM_NCMBUTTONDOWN";
-        case 0x00A8: return "WM_NCMBUTTONUP";
-        case 0x00A9: return "WM_NCMBUTTONDBLCLK";
-        case 0x0100: return "WM_KEYDOWN";
-        case 0x0101: return "WM_KEYUP";
-        case 0x0102: return "WM_CHAR";
-        case 0x0103: return "WM_DEADCHAR";
-        case 0x0104: return "WM_SYSKEYDOWN";
-        case 0x0105: return "WM_SYSKEYUP";
-        case 0x0106: return "WM_SYSCHAR";
-        case 0x0107: return "WM_SYSDEADCHAR";
-        case 0x0108: return "WM_KEYLAST";
-
-#ifdef  __WIN32__
-        case 0x010D: return "WM_IME_STARTCOMPOSITION";
-        case 0x010E: return "WM_IME_ENDCOMPOSITION";
-        case 0x010F: return "WM_IME_COMPOSITION";
-#endif  //WIN32
-
-        case 0x0110: return "WM_INITDIALOG";
-        case 0x0111: return "WM_COMMAND";
-        case 0x0112: return "WM_SYSCOMMAND";
-        case 0x0113: return "WM_TIMER";
-        case 0x0114: return "WM_HSCROLL";
-        case 0x0115: return "WM_VSCROLL";
-        case 0x0116: return "WM_INITMENU";
-        case 0x0117: return "WM_INITMENUPOPUP";
-        case 0x011F: return "WM_MENUSELECT";
-        case 0x0120: return "WM_MENUCHAR";
-        case 0x0121: return "WM_ENTERIDLE";
-        case 0x0200: return "WM_MOUSEMOVE";
-        case 0x0201: return "WM_LBUTTONDOWN";
-        case 0x0202: return "WM_LBUTTONUP";
-        case 0x0203: return "WM_LBUTTONDBLCLK";
-        case 0x0204: return "WM_RBUTTONDOWN";
-        case 0x0205: return "WM_RBUTTONUP";
-        case 0x0206: return "WM_RBUTTONDBLCLK";
-        case 0x0207: return "WM_MBUTTONDOWN";
-        case 0x0208: return "WM_MBUTTONUP";
-        case 0x0209: return "WM_MBUTTONDBLCLK";
-        case 0x0210: return "WM_PARENTNOTIFY";
-        case 0x0211: return "WM_ENTERMENULOOP";
-        case 0x0212: return "WM_EXITMENULOOP";
-
-#ifdef  __WIN32__
-        case 0x0213: return "WM_NEXTMENU";
-        case 0x0214: return "WM_SIZING";
-        case 0x0215: return "WM_CAPTURECHANGED";
-        case 0x0216: return "WM_MOVING";
-        case 0x0218: return "WM_POWERBROADCAST";
-        case 0x0219: return "WM_DEVICECHANGE";
-#endif  //WIN32
-
-        case 0x0220: return "WM_MDICREATE";
-        case 0x0221: return "WM_MDIDESTROY";
-        case 0x0222: return "WM_MDIACTIVATE";
-        case 0x0223: return "WM_MDIRESTORE";
-        case 0x0224: return "WM_MDINEXT";
-        case 0x0225: return "WM_MDIMAXIMIZE";
-        case 0x0226: return "WM_MDITILE";
-        case 0x0227: return "WM_MDICASCADE";
-        case 0x0228: return "WM_MDIICONARRANGE";
-        case 0x0229: return "WM_MDIGETACTIVE";
-        case 0x0230: return "WM_MDISETMENU";
-        case 0x0233: return "WM_DROPFILES";
-
-#ifdef  __WIN32__
-        case 0x0281: return "WM_IME_SETCONTEXT";
-        case 0x0282: return "WM_IME_NOTIFY";
-        case 0x0283: return "WM_IME_CONTROL";
-        case 0x0284: return "WM_IME_COMPOSITIONFULL";
-        case 0x0285: return "WM_IME_SELECT";
-        case 0x0286: return "WM_IME_CHAR";
-        case 0x0290: return "WM_IME_KEYDOWN";
-        case 0x0291: return "WM_IME_KEYUP";
-#endif  //WIN32
-
-        case 0x0300: return "WM_CUT";
-        case 0x0301: return "WM_COPY";
-        case 0x0302: return "WM_PASTE";
-        case 0x0303: return "WM_CLEAR";
-        case 0x0304: return "WM_UNDO";
-        case 0x0305: return "WM_RENDERFORMAT";
-        case 0x0306: return "WM_RENDERALLFORMATS";
-        case 0x0307: return "WM_DESTROYCLIPBOARD";
-        case 0x0308: return "WM_DRAWCLIPBOARD";
-        case 0x0309: return "WM_PAINTCLIPBOARD";
-        case 0x030A: return "WM_VSCROLLCLIPBOARD";
-        case 0x030B: return "WM_SIZECLIPBOARD";
-        case 0x030C: return "WM_ASKCBFORMATNAME";
-        case 0x030D: return "WM_CHANGECBCHAIN";
-        case 0x030E: return "WM_HSCROLLCLIPBOARD";
-        case 0x030F: return "WM_QUERYNEWPALETTE";
-        case 0x0310: return "WM_PALETTEISCHANGING";
-        case 0x0311: return "WM_PALETTECHANGED";
-
-#ifdef __WIN32__
-        // common controls messages - although they're not strictly speaking
-        // standard, it's nice to decode them nevertheless
+        // wxWindows user defined types
 
         // listview
-        case 0x1000 + 0: return "LVM_GETBKCOLOR";
+        // case 0x1000 + 0: return "LVM_GETBKCOLOR";
         case 0x1000 + 1: return "LVM_SETBKCOLOR";
         case 0x1000 + 2: return "LVM_GETIMAGELIST";
         case 0x1000 + 3: return "LVM_SETIMAGELIST";
@@ -3382,73 +3901,99 @@ const char *wxGetMessageName(int message)
         case 0x1300 + 50: return "TCM_DESELECTALL";
 
         // toolbar
-        case WM_USER+1: return "TB_ENABLEBUTTON";
-        case WM_USER+2: return "TB_CHECKBUTTON";
-        case WM_USER+3: return "TB_PRESSBUTTON";
-        case WM_USER+4: return "TB_HIDEBUTTON";
-        case WM_USER+5: return "TB_INDETERMINATE";
-        case WM_USER+9: return "TB_ISBUTTONENABLED";
-        case WM_USER+10: return "TB_ISBUTTONCHECKED";
-        case WM_USER+11: return "TB_ISBUTTONPRESSED";
-        case WM_USER+12: return "TB_ISBUTTONHIDDEN";
-        case WM_USER+13: return "TB_ISBUTTONINDETERMINATE";
-        case WM_USER+17: return "TB_SETSTATE";
-        case WM_USER+18: return "TB_GETSTATE";
-        case WM_USER+19: return "TB_ADDBITMAP";
-        case WM_USER+20: return "TB_ADDBUTTONS";
-        case WM_USER+21: return "TB_INSERTBUTTON";
-        case WM_USER+22: return "TB_DELETEBUTTON";
-        case WM_USER+23: return "TB_GETBUTTON";
-        case WM_USER+24: return "TB_BUTTONCOUNT";
-        case WM_USER+25: return "TB_COMMANDTOINDEX";
-        case WM_USER+26: return "TB_SAVERESTOREA";
-        case WM_USER+76: return "TB_SAVERESTOREW";
-        case WM_USER+27: return "TB_CUSTOMIZE";
-        case WM_USER+28: return "TB_ADDSTRINGA";
-        case WM_USER+77: return "TB_ADDSTRINGW";
-        case WM_USER+29: return "TB_GETITEMRECT";
-        case WM_USER+30: return "TB_BUTTONSTRUCTSIZE";
-        case WM_USER+31: return "TB_SETBUTTONSIZE";
-        case WM_USER+32: return "TB_SETBITMAPSIZE";
-        case WM_USER+33: return "TB_AUTOSIZE";
-        case WM_USER+35: return "TB_GETTOOLTIPS";
-        case WM_USER+36: return "TB_SETTOOLTIPS";
-        case WM_USER+37: return "TB_SETPARENT";
-        case WM_USER+39: return "TB_SETROWS";
-        case WM_USER+40: return "TB_GETROWS";
-        case WM_USER+42: return "TB_SETCMDID";
-        case WM_USER+43: return "TB_CHANGEBITMAP";
-        case WM_USER+44: return "TB_GETBITMAP";
-        case WM_USER+45: return "TB_GETBUTTONTEXTA";
-        case WM_USER+75: return "TB_GETBUTTONTEXTW";
-        case WM_USER+46: return "TB_REPLACEBITMAP";
-        case WM_USER+47: return "TB_SETINDENT";
-        case WM_USER+48: return "TB_SETIMAGELIST";
-        case WM_USER+49: return "TB_GETIMAGELIST";
-        case WM_USER+50: return "TB_LOADIMAGES";
-        case WM_USER+51: return "TB_GETRECT";
-        case WM_USER+52: return "TB_SETHOTIMAGELIST";
-        case WM_USER+53: return "TB_GETHOTIMAGELIST";
-        case WM_USER+54: return "TB_SETDISABLEDIMAGELIST";
-        case WM_USER+55: return "TB_GETDISABLEDIMAGELIST";
-        case WM_USER+56: return "TB_SETSTYLE";
-        case WM_USER+57: return "TB_GETSTYLE";
-        case WM_USER+58: return "TB_GETBUTTONSIZE";
-        case WM_USER+59: return "TB_SETBUTTONWIDTH";
-        case WM_USER+60: return "TB_SETMAXTEXTROWS";
-        case WM_USER+61: return "TB_GETTEXTROWS";
-        case WM_USER+41: return "TB_GETBITMAPFLAGS";
-
-#endif //WIN32
+        case WM_USER+1000+1: return "TB_ENABLEBUTTON";
+        case WM_USER+1000+2: return "TB_CHECKBUTTON";
+        case WM_USER+1000+3: return "TB_PRESSBUTTON";
+        case WM_USER+1000+4: return "TB_HIDEBUTTON";
+        case WM_USER+1000+5: return "TB_INDETERMINATE";
+        case WM_USER+1000+9: return "TB_ISBUTTONENABLED";
+        case WM_USER+1000+10: return "TB_ISBUTTONCHECKED";
+        case WM_USER+1000+11: return "TB_ISBUTTONPRESSED";
+        case WM_USER+1000+12: return "TB_ISBUTTONHIDDEN";
+        case WM_USER+1000+13: return "TB_ISBUTTONINDETERMINATE";
+        case WM_USER+1000+17: return "TB_SETSTATE";
+        case WM_USER+1000+18: return "TB_GETSTATE";
+        case WM_USER+1000+19: return "TB_ADDBITMAP";
+        case WM_USER+1000+20: return "TB_ADDBUTTONS";
+        case WM_USER+1000+21: return "TB_INSERTBUTTON";
+        case WM_USER+1000+22: return "TB_DELETEBUTTON";
+        case WM_USER+1000+23: return "TB_GETBUTTON";
+        case WM_USER+1000+24: return "TB_BUTTONCOUNT";
+        case WM_USER+1000+25: return "TB_COMMANDTOINDEX";
+        case WM_USER+1000+26: return "TB_SAVERESTOREA";
+        case WM_USER+1000+76: return "TB_SAVERESTOREW";
+        case WM_USER+1000+27: return "TB_CUSTOMIZE";
+        case WM_USER+1000+28: return "TB_ADDSTRINGA";
+        case WM_USER+1000+77: return "TB_ADDSTRINGW";
+        case WM_USER+1000+29: return "TB_GETITEMRECT";
+        case WM_USER+1000+30: return "TB_BUTTONSTRUCTSIZE";
+        case WM_USER+1000+31: return "TB_SETBUTTONSIZE";
+        case WM_USER+1000+32: return "TB_SETBITMAPSIZE";
+        case WM_USER+1000+33: return "TB_AUTOSIZE";
+        case WM_USER+1000+35: return "TB_GETTOOLTIPS";
+        case WM_USER+1000+36: return "TB_SETTOOLTIPS";
+        case WM_USER+1000+37: return "TB_SETPARENT";
+        case WM_USER+1000+39: return "TB_SETROWS";
+        case WM_USER+1000+40: return "TB_GETROWS";
+        case WM_USER+1000+42: return "TB_SETCMDID";
+        case WM_USER+1000+43: return "TB_CHANGEBITMAP";
+        case WM_USER+1000+44: return "TB_GETBITMAP";
+        case WM_USER+1000+45: return "TB_GETBUTTONTEXTA";
+        case WM_USER+1000+75: return "TB_GETBUTTONTEXTW";
+        case WM_USER+1000+46: return "TB_REPLACEBITMAP";
+        case WM_USER+1000+47: return "TB_SETINDENT";
+        case WM_USER+1000+48: return "TB_SETIMAGELIST";
+        case WM_USER+1000+49: return "TB_GETIMAGELIST";
+        case WM_USER+1000+50: return "TB_LOADIMAGES";
+        case WM_USER+1000+51: return "TB_GETRECT";
+        case WM_USER+1000+52: return "TB_SETHOTIMAGELIST";
+        case WM_USER+1000+53: return "TB_GETHOTIMAGELIST";
+        case WM_USER+1000+54: return "TB_SETDISABLEDIMAGELIST";
+        case WM_USER+1000+55: return "TB_GETDISABLEDIMAGELIST";
+        case WM_USER+1000+56: return "TB_SETSTYLE";
+        case WM_USER+1000+57: return "TB_GETSTYLE";
+        case WM_USER+1000+58: return "TB_GETBUTTONSIZE";
+        case WM_USER+1000+59: return "TB_SETBUTTONWIDTH";
+        case WM_USER+1000+60: return "TB_SETMAXTEXTROWS";
+        case WM_USER+1000+61: return "TB_GETTEXTROWS";
+        case WM_USER+1000+41: return "TB_GETBITMAPFLAGS";
 
         default:
             static char s_szBuf[128];
-            sprintf(s_szBuf, "<unknown message = %d>", message);
+            sprintf(s_szBuf, "<unknown message = %d>", nMessage);
             return s_szBuf;
     }
-*/
    return NULL;
-}
+} // end of wxGetMessageName
 
 #endif // __WXDEBUG__
+
+static void TranslateKbdEventToMouse(
+  wxWindow*                         pWin
+, int*                              pX
+, int*                              pY
+, ULONG*                            pFlags
+)
+{
+    //
+    // Construct the key mask
+    ULONG&                          fwKeys = *pFlags;
+
+    fwKeys = VK_BUTTON2;
+    if ((::WinGetKeyState(HWND_DESKTOP, VK_CTRL) & 0x100) != 0)
+        fwKeys |= VK_CTRL;
+    if ((::WinGetKeyState(HWND_DESKTOP, VK_SHIFT) & 0x100) != 0)
+        fwKeys |= VK_SHIFT;
+
+    //
+    // Simulate right mouse button click
+    //
+    POINTL                          vPoint;
+
+    ::WinQueryMsgPos(vHabmain, &vPoint);
+    *pX = vPoint.x;
+    *pY = vPoint.y;
+
+    pWin->ScreenToClient(pX, pY);
+} // end of TranslateKbdEventToMouse
 

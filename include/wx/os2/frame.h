@@ -12,6 +12,11 @@
 #ifndef _WX_FRAME_H_
 #define _WX_FRAME_H_
 
+//
+// Get the default resource ID's for frames
+//
+#include "wx/os2/wxOs2.h"
+
 class WXDLLEXPORT wxFrame : public wxFrameBase
 {
 public:

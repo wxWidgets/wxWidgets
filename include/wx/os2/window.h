@@ -294,7 +294,6 @@ public:
     void UnpackActivate( WXWPARAM wParam
                         ,WXLPARAM lParam
                         ,WXWORD*  pState
-                        ,WXWORD*  pMinimized
                         ,WXHWND*  pHwnd
                        );
     void UnpackScroll( WXWPARAM wParam
@@ -303,12 +302,6 @@ public:
                       ,WXWORD*  pPos
                       ,WXHWND*  pHwnd
                      );
-    void UnpackCtlColor( WXWPARAM wParam
-                        ,WXLPARAM lParam
-                        ,WXWORD*  pCtlColor
-                        ,WXHDC*   pHdc
-                        ,WXHWND*  pHwnd
-                       );
     void UnpackMenuSelect( WXWPARAM wParam
                           ,WXLPARAM lParam
                           ,WXWORD*  pTtem
@@ -335,11 +328,6 @@ public:
                              ,WXHWND control
                             );
 
-    virtual bool OS2OnNotify( int       nIdCtrl
-                             ,WXLPARAM  lParam
-                             ,WXLPARAM* pResult
-                            );
-
     // owner-drawn controls need to process these messages
     virtual bool OS2OnDrawItem( int               nId
                                ,WXDRAWITEMSTRUCT* pItem
@@ -362,12 +350,11 @@ public:
                     ,int    nY
                     ,WXUINT uFlag
                    );
-    bool HandleGetMinMaxInfo(void* pMmInfo);
+    bool HandleGetMinMaxInfo(PSWP pMmInfo);
     bool HandleShow( bool bShow
                     ,int  nStatus
                    );
     bool HandleActivate( int    nFlag
-                        ,bool   bMinimized
                         ,WXHWND hActivate
                        );
     bool HandleCommand( WXWORD nId
@@ -377,26 +364,16 @@ public:
     bool HandleSysCommand( WXWPARAM wParam
                           ,WXLPARAM lParam
                          );
-    bool HandleCtlColor( WXHBRUSH* phBrush
-                        ,WXHDC     hDc
-                        ,WXHWND    hWnd
-                        ,WXUINT    uCtlColor
-                        ,WXUINT    uMessage
-                        ,WXWPARAM  wParam
-                        ,WXLPARAM  lParam
-                       );
-    bool HandlePaletteChanged(WXHWND hWndPalChange);
-    bool HandleQueryNewPalette(void);
+    bool HandleWindowParams( PWNDPARAMS pParams
+                            ,WXLPARAM   lParam
+                           );
+    bool HandlePaletteChanged();
+    bool HandlePresParamChanged(WXWPARAM wParam);
     bool HandleSysColorChange(void);
-    bool HandleQueryEndSession( long  lLogOff
-                               ,bool* pbMayEnd
-                              );
-    bool HandleEndSession( bool bEndSession
-                          ,long lLogOff
-                         );
+    bool HandleCtlColor(WXHBRUSH* hBrush);
     bool HandleSetFocus(WXHWND hWnd);
     bool HandleKillFocus(WXHWND hWnd);
-    bool HandleDropFiles(WXWPARAM wParam);
+    bool HandleEndDrag(WXWPARAM wParam);
     bool HandleMouseEvent( WXUINT uMsg
                           ,int    nX
                           ,int    nY
@@ -417,9 +394,8 @@ public:
                      ,WXLPARAM lParam
                     );
     bool HandleQueryDragIcon(WXHICON* phIcon);
-    bool HandleSetCursor( WXHWND hWnd
-                         ,short  nHitTest
-                         ,int    nMouseMsg
+    bool HandleSetCursor( USHORT vId
+                         ,WXHWND hWnd
                         );
 
     // Window procedure

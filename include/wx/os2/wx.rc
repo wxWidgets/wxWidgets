@@ -99,3 +99,69 @@ BITMAP     wxDISABLE_BUTTON_BITMAP   LOADONCALL  "wx/os2/disable.bmp"
 BITMAP     tick_bmp                  LOADONCALL  "wx/os2/tick.bmp"
 BITMAP     cross_bmp                 LOADONCALL  "wx/os2/cross.bmp"
 
+//////////////////////////////////////////////////////////////////////////////
+//
+// Main Frame Window menu for wxWindows OS/2
+//
+//  OS/2 menues must be created from a resource file or binary menu template
+//  loaded from a resource file via a DosGetResource call.  To keep interface
+//  compatability with other ports the default wxMenu constructor loads the
+//  below menu.  Users can them add or delete menu items as they see fit in
+//  their own wxMenu derived classes or add them dynamically.
+//
+
+MENU IDR_MAIN
+{
+    SUBMENU     "~File", IDM_FILE, MIS_TEXT
+    {
+        MENUITEM    "~New",             IDM_FILENEW,        MIS_TEXT
+        MENUITEM    "~Open...\tCtrl+O", IDM_FILEOPEN,       MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM    "~Save...\tCtrl+O", IDM_FILESAVE,       MIS_TEXT
+        MENUITEM    "Save ~as...",      IDM_FILESAVEAS,     MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM    "E~xit...",         ID_CANCEL,          MIS_TEXT
+    }
+
+    SUBMENU     "~Edit", IDM_EDIT, MIS_TEXT
+    {
+        MENUITEM    "~Undo\tAlt+Backspace",    IDM_EDITUNDO,   MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM    "Cu~t\tShift+Delete",      IDM_EDITCUT,    MIS_TEXT
+        MENUITEM    "~Copy\tCtrl+Insert",      IDM_EDITCOPY,   MIS_TEXT
+        MENUITEM    "~Paste\tShift+Insert",    IDM_EDITPASTE,  MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM    "Cl~ear\tDelete",          IDM_EDITCLEAR,  MIS_TEXT
+    }
+
+/*
+ * Application specific menus go here.
+ */
+
+    SUBMENU     "~Help",    IDM_HELP,   MIS_TEXT
+    {
+        MENUITEM    "Help ~index",       IDM_HELPINDEX,      MIS_TEXT
+        MENUITEM    "~General help",     IDM_HELPGENERAL,    MIS_TEXT
+        MENUITEM    "~Using help",       IDM_HELPUSINGHELP,  MIS_TEXT
+        MENUITEM SEPARATOR
+        MENUITEM    "~About",            IDM_HELPABOUT,      MIS_TEXT
+    }
+
+}
+
+ACCELTABLE IDR_MAIN
+{
+    VK_BACKSPACE,   IDM_EDITUNDO,       VIRTUALKEY,    ALT
+    VK_DELETE,      IDM_EDITCUT,        VIRTUALKEY,    SHIFT
+    VK_INSERT,      IDM_EDITCOPY,       VIRTUALKEY,    CONTROL
+    VK_INSERT,      IDM_EDITPASTE,      VIRTUALKEY,    SHIFT
+    VK_DELETE,      IDM_EDITCLEAR,      VIRTUALKEY
+}
+
+STRINGTABLE
+{
+    IDS_OPEN                    "Open"
+    IDS_SAVE                    "Save"
+}
+
+

@@ -62,7 +62,6 @@ extern wxChar*                      wxBuffer;
 extern wxChar*                      wxOsVersion;
 extern wxList*                      wxWinHandleList;
 extern wxList WXDLLEXPORT           wxPendingDelete;
-extern void wxSetKeyboardHook(bool doIt);
 extern wxCursor*                    g_globalCursor;
 
 HINSTANCE                           wxhInstance = 0;
@@ -169,7 +168,7 @@ bool wxApp::Initialize(
     if (wxDummyChar) wxDummyChar++;
 #endif
 
-    wxSetKeyboardHook(TRUE);
+    // wxSetKeyboardHook(TRUE);
 
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules())
@@ -338,7 +337,7 @@ void wxApp::CleanUp()
 
     //// WINDOWS-SPECIFIC CLEANUP
 
-    wxSetKeyboardHook(FALSE);
+    // wxSetKeyboardHook(FALSE);
 
     if (wxSTD_FRAME_ICON)
         ::WinFreeFileIcon(wxSTD_FRAME_ICON);
