@@ -477,18 +477,6 @@ wxUint32 wxSocketBase::_Write(const void *buffer, wxUint32 nbytes)
         buffer  = (const char *)buffer + ret;
       }
 
-      // Yes, this can happen even when the socket selects as writable!
-      // (probably due to a buggy kernel; Linux 2.0.36 seems to do this).
-      // Fake it so that we stay in the loop, but do it only for ret < 0,
-      // as ret == 0 means that the socket is closed. I'm not applying
-      // this hack for read calls as it seems unnecessary there.
-      //
-      if ((ret < 0) && (GSocket_GetError(m_socket) == GSOCK_WOULDBLOCK))
-      {
-        wxLogDebug(_("wxSocket: working around select() bug in Write."));
-        continue;
-      }
-
       // If we got here and wxSOCKET_WAITALL is not set, we can leave
       // now. Otherwise, wait until we send all the data or until there
       // is an error.
