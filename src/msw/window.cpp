@@ -3607,7 +3607,7 @@ bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
     if ( hWndPalChange != GetHWND() )
     {
         // check to see if we our our parents have a custom palette
-        wxWindow *win = this;
+        wxWindowMSW *win = this;
         while ( win && !win->HasCustomPalette() )
         {
             win = win->GetParent();
@@ -3656,7 +3656,7 @@ bool wxWindowMSW::HandleQueryNewPalette()
 
 #if wxUSE_PALETTE
     // check to see if we our our parents have a custom palette
-    wxWindow *win = this;
+    wxWindowMSW *win = this;
     while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
     if (win->HasCustomPalette()) {
         /* realize the palette to see whether redrawing is needed */
