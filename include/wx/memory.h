@@ -233,8 +233,8 @@ protected:
     static int debugLevel;
     static bool debugOn;
 
-	static int m_balign;			// byte alignment
-	static int m_balignmask;		// mask for performing byte alignment
+    static int m_balign;            // byte alignment
+    static int m_balignmask;        // mask for performing byte alignment
 public:
     // Set a checkpoint to dump only the memory from
     // a given point
@@ -246,7 +246,7 @@ public:
     static bool HasStream(void) { return (m_debugStream != NULL); };
     static wxSTD ostream& GetStream(void) { return *m_debugStream; }
     static wxSTD streambuf *GetStreamBuf(void) { return m_streamBuf; }
-    static void SetStream(wxSTD ostream *stream, streambuf *buf = NULL);
+    static void SetStream(wxSTD ostream *stream, wxSTD streambuf *buf = NULL);
     static bool SetFile(const wxString& file);
     static bool SetStandardError(void);
 

@@ -494,7 +494,7 @@ wxDebugContext::~wxDebugContext(void)
  * between SetFile and SetStream.
  */
 
-void wxDebugContext::SetStream(wxSTD ostream *str, streambuf *buf)
+void wxDebugContext::SetStream(wxSTD ostream *str, wxSTD streambuf *buf)
 {
   if (m_debugStream)
   {
@@ -508,7 +508,7 @@ void wxDebugContext::SetStream(wxSTD ostream *str, streambuf *buf)
 #ifndef __WATCOMC__
   if (m_streamBuf)
   {
-    streambuf* oldBuf = m_streamBuf;
+    wxSTD streambuf* oldBuf = m_streamBuf;
     m_streamBuf = NULL;
     delete oldBuf;
   }
@@ -615,13 +615,13 @@ size_t wxDebugContext::PaddedSize (const size_t size)
 {
     // Added by Terry Farnham <TJRT@pacbell.net> to replace
     // slow GetPadding call.
-	int padb;
+    int padb;
 
-	padb = size & m_balignmask;
-	if(padb)
-		return(size + m_balign - padb);
-	else
-		return(size);
+    padb = size & m_balignmask;
+    if(padb)
+        return(size + m_balign - padb);
+    else
+        return(size);
 
 // Old (slow) code
 #if 0
