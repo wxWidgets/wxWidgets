@@ -23,12 +23,12 @@
 #include <stdio.h>
 
 #if !USE_SHARED_LIBRARY
-IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxStaticText, wxStaticTextBase)
 #endif
 
 #include <wx/mac/uma.h>
 
-BEGIN_EVENT_TABLE(wxStaticText, wxControl)
+BEGIN_EVENT_TABLE(wxStaticText, wxStaticTextBase)
     EVT_PAINT(wxStaticText::OnPaint)
 END_EVENT_TABLE()
 
@@ -52,7 +52,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     m_label = label ;
 
 	bool ret = wxControl::Create( parent, id, pos, size, style , wxDefaultValidator , name );
-	SetSizeOrDefault( size ) ;
+	SetBestSize( size ) ;
     
     return ret;
 }
@@ -235,7 +235,7 @@ void wxStaticText::SetLabel(const wxString& st )
 	SetTitle( st ) ;
 	m_label = st ;
 	if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
-		SetSizeOrDefault() ;
+		SetSize( GetBestSize() ) ;
 
 	Refresh() ;	
 	MacUpdateImmediately() ;

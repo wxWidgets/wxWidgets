@@ -16,16 +16,12 @@
 #pragma interface "radiobox.h"
 #endif
 
-#include "wx/control.h"
-
-WXDLLEXPORT_DATA(extern const char*) wxRadioBoxNameStr;
-
 // List box item
-class  wxBitmap ;
+class WXDLLEXPORT wxBitmap ;
 
-class  wxRadioButton ;
+class WXDLLEXPORT wxRadioButton ;
 
-class  wxRadioBox: public wxControl
+class WXDLLEXPORT wxRadioBox: public wxControl, public wxRadioBoxBase
 {
 	DECLARE_DYNAMIC_CLASS(wxRadioBox)
 public:
@@ -55,7 +51,7 @@ public:
 	int GetSelection() const;
 	wxString GetString(int item) const;
 	virtual wxString GetStringSelection() const;
-	inline virtual int Number() const { return m_noItems; } ;
+	inline virtual int GetCount() const { return m_noItems; } ;
 	void SetLabel(const wxString& label) ;
 	void SetLabel(int item, const wxString& label) ;
 	void SetSelection(int item);

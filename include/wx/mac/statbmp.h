@@ -16,11 +16,9 @@
 #pragma interface "statbmp.h"
 #endif
 
-#include "wx/control.h"
+#include "wx/icon.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxStaticBitmapNameStr;
-
-class WXDLLEXPORT wxStaticBitmap: public wxControl
+class WXDLLEXPORT wxStaticBitmap: public wxStaticBitmapBase
 {
   DECLARE_DYNAMIC_CLASS(wxStaticBitmap)
  public:
@@ -50,8 +48,12 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
   virtual void OnPaint( wxPaintEvent &event ) ;
   void SetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
 
-  inline const wxBitmap& GetBitmap() const { return m_messageBitmap; }
-  const wxIcon& GetIcon() const { return (const wxIcon&) GetBitmap() ; }
+  wxBitmap GetBitmap() const { return m_bitmap; }
+  wxIcon GetIcon() const
+      {
+	  // icons and bitmaps are really the same thing in wxMac
+	  return (const wxIcon &)m_bitmap;
+      }
   void  SetIcon(const wxIcon& icon) { SetBitmap( (const wxBitmap &)icon ) ; }
 
   // overriden base class virtuals
@@ -59,7 +61,7 @@ class WXDLLEXPORT wxStaticBitmap: public wxControl
   wxSize DoGetBestSize() const ;
 
  protected:
-  wxBitmap m_messageBitmap;
+  wxBitmap m_bitmap;
 	DECLARE_EVENT_TABLE() 
 };
 

@@ -77,7 +77,7 @@ int wxChoice::DoAppend(const wxString& item)
 	m_datas.Add( NULL ) ;
 	int index = m_strings.GetCount()  - 1  ;
 	DoSetItemClientData( index , NULL ) ;
-	SetControlMaximum( m_macControl , Number()) ;
+	SetControlMaximum( m_macControl , GetCount()) ;
 	return index ;
 }
 
@@ -93,7 +93,7 @@ void wxChoice::Delete(int n)
     ::DeleteMenuItem( m_macPopUpMenuHandle , n + 1) ;
     m_strings.Remove( n ) ;
     m_datas.Remove( n ) ;
-	SetControlMaximum( m_macControl , Number()) ;
+	SetControlMaximum( m_macControl , GetCount()) ;
 }
 
 void wxChoice::Clear()
