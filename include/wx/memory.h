@@ -42,9 +42,7 @@ WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = false);
 
 // We'll only do malloc and free for the moment: leave the interesting
 // stuff for the wxObject versions.
-// devik 2000-8-29: All new/delete ops are now inline because they can't
-// be marked as dllexport/dllimport. It then leads to weird bugs when
-// used on MSW as DLL
+
 
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 
@@ -70,6 +68,44 @@ WXDLLIMPEXP_BASE void wxDebugFree(void * buf, bool isVect = false);
     #define wxUSE_ARRAY_MEMORY_OPERATORS 0
 #endif
 
+// devik 2000-8-29: All new/delete ops are now inline because they can't
+// be marked as dllexport/dllimport. It then leads to weird bugs when
+// used on MSW as DLL
+#if defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE))
+inline void * operator new (size_t size, wxChar * fileName, int lineNum)
+{
+  return wxDebugAlloc(size, fileName, lineNum, FALSE, FALSE);
+}
+
+inline void * operator new (size_t size)
+{
+  return wxDebugAlloc(size, NULL, 0, FALSE);
+}
+
+inline void operator delete (void * buf)
+{
+  wxDebugFree(buf, FALSE);
+}
+
+#if wxUSE_ARRAY_MEMORY_OPERATORS
+inline void * operator new[] (size_t size)
+{
+  return wxDebugAlloc(size, NULL, 0, FALSE, TRUE);
+}
+
+inline void * operator new[] (size_t size, wxChar * fileName, int lineNum)
+{
+  return wxDebugAlloc(size, fileName, lineNum, FALSE, TRUE);
+}
+
+inline void operator delete[] (void * buf)
+{
+  wxDebugFree(buf, TRUE);
+}
+#endif // wxUSE_ARRAY_MEMORY_OPERATORS
+
+#else
+
 void * operator new (size_t size, wxChar * fileName, int lineNum);
 
 void * operator new (size_t size);
@@ -82,7 +118,8 @@ void * operator new[] (size_t size);
 void * operator new[] (size_t size, wxChar * fileName, int lineNum);
 
 void operator delete[] (void * buf);
-#endif
+#endif // wxUSE_ARRAY_MEMORY_OPERATORS
+#endif // defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE))
 
 // VC++ 6.0 and MWERKS
 #if ( defined(__VISUALC__) && (__VISUALC__ >= 1200) ) || defined(__MWERKS__)

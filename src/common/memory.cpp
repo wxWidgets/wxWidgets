@@ -917,6 +917,7 @@ static MemoryCriticalSection memLocker;
 
 #endif
 
+#if !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 #ifdef __WXDEBUG__
 #if wxUSE_GLOBAL_MEMORY_OPERATORS
 void * operator new (size_t size, wxChar * fileName, int lineNum)
@@ -949,7 +950,8 @@ void operator delete[] (void * buf)
 {
   wxDebugFree(buf, true);
 }
-#endif
+#endif // wxUSE_ARRAY_MEMORY_OPERATORS
+#endif // !(defined(__WXMSW__) && (defined(WXUSINGDLL) || defined(WXMAKINGDLL_BASE)))
 #endif // wxUSE_GLOBAL_MEMORY_OPERATORS
 
 // TODO: store whether this is a vector or not.
