@@ -49,15 +49,17 @@ wxHtmlCell::~wxHtmlCell()
 }
 
 
-void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y,
-                              bool WXUNUSED(left),
-                              bool WXUNUSED(middle),
-                              bool WXUNUSED(right))
+void wxHtmlCell::OnMouseClick(wxWindow *parent, int x, int y, 
+                              const wxMouseEvent& event)
 {
     wxHtmlLinkInfo *lnk = GetLink(x, y);
     if (lnk != NULL)
-        ((wxHtmlWindow*)parent) -> OnLinkClicked(lnk);
+    {
+        wxHtmlLinkInfo lnk2(*lnk);
+        lnk2.SetEvent(&event);
+        ((wxHtmlWindow*)parent) -> OnLinkClicked(lnk2);
         // note : this overcasting is legal because parent is *always* wxHtmlWindow
+    }
 }
 
 
@@ -444,7 +446,7 @@ const wxHtmlCell* wxHtmlContainerCell::Find(int condition, const void* param) co
 
 
 
-void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, bool left, bool middle, bool right)
+void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, const wxMouseEvent& event)
 {
     if (m_Cells) {
         wxHtmlCell *c = m_Cells;
@@ -453,7 +455,7 @@ void wxHtmlContainerCell::OnMouseClick(wxWindow *parent, int x, int y, bool left
                     (c -> GetPosY() <= y) &&
                     (c -> GetPosX() + c -> GetWidth() > x) &&
                     (c -> GetPosY() + c -> GetHeight() > y)) {
-                c -> OnMouseClick(parent, x - c -> GetPosX(), y - c -> GetPosY(), left, middle, right);
+                c -> OnMouseClick(parent, x - c -> GetPosX(), y - c -> GetPosY(), event);
                 break;
             }
             c = c -> GetNext();

@@ -418,9 +418,9 @@ void wxHtmlWindow::AddFilter(wxHtmlFilter *filter)
 
 
 
-void wxHtmlWindow::OnLinkClicked(wxHtmlLinkInfo *link)
+void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
 {
-    LoadPage(link -> GetHref());
+    LoadPage(link.GetHref());
 }
 
 
@@ -506,7 +506,7 @@ void wxHtmlWindow::OnMouseEvent(wxMouseEvent& event)
         pos = event.GetPosition();
 
         if (m_Cell)
-            m_Cell -> OnMouseClick(this, sx + pos.x, sy + pos.y, event.ButtonDown(1), event.ButtonDown(2), event.ButtonDown(3));
+            m_Cell -> OnMouseClick(this, sx + pos.x, sy + pos.y, event);
     }
 }
 

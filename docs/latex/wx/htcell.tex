@@ -197,7 +197,7 @@ before calling Layout.
 
 \membersection{wxHtmlCell::OnMouseClick}\label{wxhtmlcellonmouseclick}
 
-\func{virtual void}{OnMouseClick}{\param{wxWindow* }{parent}, \param{int }{x}, \param{int }{y}, \param{bool }{left}, \param{bool }{middle}, \param{bool }{right}}
+\func{virtual void}{OnMouseClick}{\param{wxWindow* }{parent}, \param{int }{x}, \param{int }{y}, \param{const wxMouseEvent& }{event}}
 
 This function is simple event handler. Each time user clicks mouse button over a cell
 within \helpref{wxHtmlWindow}{wxhtmlwindow} this method of that cell is called. Default behavior is
@@ -205,8 +205,8 @@ that it calls \helpref{wxHtmlWindow::LoadPage}{wxhtmlwindowloadpage}.
 
 \wxheading{Note}
 
-If you need more "advanced" behaviour (for example you'd like to catch mouse movement events or
-key events or whatsoever) you should use wxHtmlBinderCell instead.
+If you need more "advanced" event handling
+you should use wxHtmlBinderCell instead.
 
 \wxheading{Parameters}
 
