@@ -139,9 +139,14 @@ int wxFileDialog::ShowModal()
     *fileNameBuffer = wxT('\0');
     *titleBuffer    = wxT('\0');
 
+#if WXWIN_COMPATIBILITY_2_4
     long msw_flags = 0;
     if ( (m_dialogStyle & wxHIDE_READONLY) || (m_dialogStyle & wxSAVE) )
         msw_flags |= OFN_HIDEREADONLY;
+#else
+    long msw_flags = OFN_HIDEREADONLY;
+#endif
+
     if ( m_dialogStyle & wxFILE_MUST_EXIST )
         msw_flags |= OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 

@@ -30,7 +30,9 @@ enum
     wxOPEN              = 0x0001,
     wxSAVE              = 0x0002,
     wxOVERWRITE_PROMPT  = 0x0004,
+#if WXWIN_COMPATIBILITY_2_4
     wxHIDE_READONLY     = 0x0008,
+#endif
     wxFILE_MUST_EXIST   = 0x0010,
     wxMULTIPLE          = 0x0020,
     wxCHANGE_DIR        = 0x0040
