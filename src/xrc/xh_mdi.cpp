@@ -62,13 +62,13 @@ wxMdiXmlHandler::wxMdiXmlHandler() : wxXmlResourceHandler()
     AddWindowStyles();
 }
 
-wxFrame *wxMdiXmlHandler::CreateFrame()
+wxWindow *wxMdiXmlHandler::CreateFrame()
 {
     if (m_class == wxT("wxMDIParentFrame"))
     {
         XRC_MAKE_INSTANCE(frame, wxMDIParentFrame);
 
-        frame->Create(m_parentAsWindow,
+        ((wxMDIParentFrame*)frame)->Create(m_parentAsWindow,
                       GetID(),
                       GetText(wxT("title")),
                       wxDefaultPosition, wxDefaultSize,
@@ -86,7 +86,7 @@ wxFrame *wxMdiXmlHandler::CreateFrame()
 
         XRC_MAKE_INSTANCE(frame, wxMDIChildFrame);
 
-        frame->Create(mdiParent,
+        ((wxMDIChildFrame*) frame)->Create(mdiParent,
                       GetID(),
                       GetText(wxT("title")),
                       wxDefaultPosition, wxDefaultSize,
@@ -99,14 +99,17 @@ wxFrame *wxMdiXmlHandler::CreateFrame()
 
 wxObject *wxMdiXmlHandler::DoCreateResource()
 {
-    wxFrame *frame = CreateFrame();
+    wxWindow *frame = CreateFrame();
 
     if (HasParam(wxT("size")))
         frame->SetClientSize(GetSize());
     if (HasParam(wxT("pos")))
         frame->Move(GetPosition());
-    if (HasParam(wxT("icon")))
-        frame->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
+    if (HasParam(wxT("icon")) && frame->IsKindOf(CLASSINFO(wxFrame)))
+    {
+        wxFrame* f = wxDynamicCast(f, wxFrame);
+        f->SetIcon(GetIcon(wxT("icon"), wxART_FRAME_ICON));
+    }
 
     SetupWindow(frame);
 

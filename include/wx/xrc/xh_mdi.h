@@ -19,7 +19,7 @@
 
 #if wxUSE_MDI
 
-class WXDLLIMPEXP_CORE wxFrame;
+class WXDLLIMPEXP_CORE wxWindow;
 
 class WXDLLIMPEXP_XRC wxMdiXmlHandler : public wxXmlResourceHandler
 {
@@ -29,7 +29,7 @@ public:
     virtual bool CanHandle(wxXmlNode *node);
 
 private:
-    wxFrame *CreateFrame();
+    wxWindow *CreateFrame();
 
     DECLARE_DYNAMIC_CLASS(wxMdiXmlHandler)
 };
