@@ -52,7 +52,7 @@ enum wxURIFlags
 // Originally based off of RFC 2396 - then
 // extended to meet the newer RFC 2396.bis
 // specifications.
-class wxURI : public wxObject
+class WXDLLIMPEXP_BASE wxURI : public wxObject
 {
 public:
     wxURI();
