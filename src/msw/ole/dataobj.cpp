@@ -973,12 +973,6 @@ bool wxBitmapDataObject::SetData(const wxDataFormat& format,
 
 bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *pData)
 {
-//FIX ME  __DIGITALMARS__   
-#if defined (__DIGITALMARS__)
-    //DragQueryFile not in any library
-    wxLogDebug(wxT("In wxFileDataObject::SetData code not executed - no Digital Mars library "));
-    return FALSE;
-#endif
     m_filenames.Empty();
 
     // the documentation states that the first member of DROPFILES structure is

@@ -322,7 +322,7 @@ MSWOBJS = $(MSWDIR)\accel.obj \
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
 OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) $(HTMLOBJS) 
 
-all: MAKEARCHDIR MAKEWINSOCKLIB $(LIBTARGET) zlib png jpeg tiff regex
+all: MAKEARCHDIR MAKELIBS $(LIBTARGET) zlib png jpeg tiff regex
 
 MAKEARCHDIR:
     @if not exist $(MSWINCDIR)\setup.h copy $(MSWINCDIR)\setup0.h $(MSWINCDIR)\setup.h
@@ -330,14 +330,10 @@ MAKEARCHDIR:
     @if not exist $(ARCHINCDIR)\wx\setup.h mkdir $(ARCHINCDIR)\wx
     @if not exist $(ARCHINCDIR)\wx\setup.h copy $(MSWINCDIR)\setup.h $(ARCHINCDIR)\wx\setup.h
 
-MAKEWINSOCKLIB:
-      implib  /s $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
-##      implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
-##    implib /system /v /suffix /Ic:\wx\dm\include\win32 $(WINSOCKLIB) $(WINDIR)\system32\wsock32.dll
-##  bug here on win98 no system32 ??
-##  implib doesn't work anyway
-##    implib  /s $(WINSOCKLIB) $(WINDIR)\system32\winsock.dll
-##@if not exist $(WINSOCKLIB)  
+#build our own copies of missing libraries
+MAKELIBS:
+      implib  /s $(LIBDIR)\$(SHELLLIB) $(LIBDIR)\$(SC_SUFFIX)\$(SHELLLIB).def
+      implib  /s $(LIBDIR)\$(WINSOCKLIB) $(LIBDIR)\$(SC_SUFFIX)\$(WINSOCKLIB).def
 
 $(LIBTARGET): $(OBJECTS)
 	-del $(LIBTARGET)

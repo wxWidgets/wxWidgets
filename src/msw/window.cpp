@@ -1415,12 +1415,10 @@ void wxWindowMSW::Update()
 // drag and drop
 // ---------------------------------------------------------------------------
 
-//FIXME __DIGITALMARS__ does not honor drag drop in setup.h
 
 #if wxUSE_DRAG_AND_DROP
 void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 {
-#ifndef __DIGITALMARS__
     if ( m_dropTarget != 0 ) {
         m_dropTarget->Revoke(m_hWnd);
         delete m_dropTarget;
@@ -1429,7 +1427,6 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
     m_dropTarget = pDropTarget;
     if ( m_dropTarget != 0 )
         m_dropTarget->Register(m_hWnd);
-#endif //  __DIGITALMARS__
 }
 #endif // wxUSE_DRAG_AND_DROP
 
@@ -1437,11 +1434,9 @@ void wxWindowMSW::SetDropTarget(wxDropTarget *pDropTarget)
 // DragAcceptFiles in parallel with SetDropTarget.
 void wxWindowMSW::DragAcceptFiles(bool accept)
 {
-#ifndef __DIGITALMARS__
     HWND hWnd = GetHwnd();
     if ( hWnd )
         ::DragAcceptFiles(hWnd, (BOOL)accept);
-#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -3246,7 +3241,6 @@ bool wxWindowMSW::HandleDestroy()
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
-#ifndef __DIGITALMARS__    
     if ( m_dropTarget != NULL )
     {
         m_dropTarget->Revoke(m_hWnd);
@@ -3254,7 +3248,6 @@ bool wxWindowMSW::HandleDestroy()
         delete m_dropTarget;
         m_dropTarget = NULL;
     }
-#endif  //#ifndef __DIGITALMARS__
 #endif // wxUSE_DRAG_AND_DROP
 
     // WM_DESTROY handled
@@ -3368,8 +3361,7 @@ bool wxWindowMSW::HandleInitDialog(WXHWND WXUNUSED(hWndFocus))
 
 bool wxWindowMSW::HandleDropFiles(WXWPARAM wParam)
 {
-//FIX ME  __DIGITALMARS__   
-#if defined (__WXMICROWIN__) || defined (__DIGITALMARS__)
+#if defined (__WXMICROWIN__) 
     return FALSE;
 #else // __WXMICROWIN__
     HDROP hFilesInfo = (HDROP) wParam;

@@ -366,16 +366,9 @@ bool wxFileTypeImpl::GetIcon(wxIcon *icon,
             wxString strExpPath = wxExpandEnvVars(strFullPath);
             // here we need C based counting!
             int nIndex = wxAtoi(strIndex);
-#ifdef __DIGITALMARS__
-//FIXME __DIGITALMARS__ April 2003 CE
-    // why no ExtractIcon in library
-            wxLogTrace(_T("wxFileTypeImpl::GetIcon"),
-                   _T("Returning false from wxFileTypeImpl::GetIcon because of DigitalMars compiler bug"));
-            HICON hIcon = 0 ;
-#else
 
             HICON hIcon = ExtractIcon(GetModuleHandle(NULL), strExpPath, nIndex);
-#endif
+
             switch ( (int)hIcon ) {
                 case 0: // means no icons were found
                 case 1: // means no such file or it wasn't a DLL/EXE/OCX/ICO/...
