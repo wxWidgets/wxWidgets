@@ -25,13 +25,7 @@
 #endif
 
 #include "wx/datstrm.h"
-
-/*
-#if !USE_SHARED_LIBRARY
-IMPLEMENT_CLASS(wxDataInputStream, wxFilterInputStream)
-IMPLEMENT_CLASS(wxDataOutputStream, wxFilterOutputStream)
-#endif
-*/
+#include "wx/bufstrm.h"
 
 wxDataInputStream::wxDataInputStream(wxInputStream& s)
   : wxFilterInputStream(s)
@@ -89,10 +83,30 @@ double wxDataInputStream::ReadDouble()
 
 wxString wxDataInputStream::ReadLine()
 {
-  char i_strg[255];
+  char c, last_endl = 0;
+  bool end_line = FALSE;
+  wxString line;
 
-  // TODO: Implement ReadLine
-  return i_strg;
+  while (!end_line) {
+    c = GetC();
+    switch (c) {
+    case '\n':
+      end_line = TRUE;
+      break;
+    case '\r':
+      last_endl = '\r';
+      break;
+    default:
+      if (last_endl == '\r') {
+        end_line = TRUE;
+        InputStreamBuffer()->WriteBack(c);
+        break;
+      }
+      line += c;
+      break;
+    } 
+  }
+  return line;
 }
 
 wxString wxDataInputStream::ReadString()

@@ -32,25 +32,29 @@
 wxFileInputStream::wxFileInputStream(const wxString& fileName)
   : wxFile(fileName, read)
 {
-  m_lastread = 0;
+  m_i_streambuf->SetBufferIO(1024);
 }
 
 wxFileInputStream::~wxFileInputStream()
 {
 }
 
-wxInputStream& wxFileInputStream::Read(void *buffer, size_t size)
+char wxFileInputStream::Peek()
 {
-  m_lastread = wxFile::Read(buffer, size);
-  return *this;
+  return 0;
 }
 
-off_t wxFileInputStream::SeekI(off_t pos, wxSeekMode mode)
+size_t wxFileInputStream::DoRead(void *buffer, size_t size)
+{
+  return wxFile::Read(buffer, size);
+}
+
+off_t wxFileInputStream::DoSeekInput(off_t pos, wxSeekMode mode)
 {
   return wxFile::Seek(pos, mode);
 }
 
-off_t wxFileInputStream::TellI() const
+off_t wxFileInputStream::DoTellInput() const
 {
   return wxFile::Tell();
 }
@@ -62,32 +66,34 @@ off_t wxFileInputStream::TellI() const
 wxFileOutputStream::wxFileOutputStream(const wxString& fileName)
  : wxFile(fileName, write)
 {
-  m_lastwrite = 0;
+  m_o_streambuf->SetBufferIO(1024);
 }
 
 wxFileOutputStream::~wxFileOutputStream()
 {
+  Sync();
 }
 
-wxOutputStream& wxFileOutputStream::Write(const void *buffer, size_t size)
+size_t wxFileOutputStream::DoWrite(const void *buffer, size_t size)
 {
-  m_lastwrite = wxFile::Write(buffer, size);
+  size_t ret = wxFile::Write(buffer, size);
   m_bad = wxFile::Error();
-  return *this;
+  return ret;
 }
 
-off_t wxFileOutputStream::TellO() const
+off_t wxFileOutputStream::DoTellOutput() const
 {
   return wxFile::Tell();
 }
 
-off_t wxFileOutputStream::SeekO(off_t pos, wxSeekMode mode)
+off_t wxFileOutputStream::DoSeekOutput(off_t pos, wxSeekMode mode)
 {
   return wxFile::Seek(pos, mode);
 }
 
 void wxFileOutputStream::Sync()
 {
+  wxOutputStream::Sync();
   wxFile::Flush();
 }
 

@@ -67,29 +67,30 @@ wxMemoryInputStream::wxMemoryInputStream(const char *data, size_t len)
   m_lastread = 0;
   m_eof = FALSE;
   m_iolimit = 1;
+
+  m_i_streambuf->SetBufferIO(0);
 }
 
 wxMemoryInputStream::~wxMemoryInputStream()
 {
 }
 
-wxInputStream& wxMemoryInputStream::Read(void *buffer, size_t size)
+size_t wxMemoryInputStream::DoRead(void *buffer, size_t size)
 {
   if (m_iolimit == 2) {
     m_eof = TRUE;
-    return *this;
+    return 0; 
   }
   if (m_position_i+size > m_length)
     size = m_length-m_position_i;
 
   memcpy((void *)((unsigned long)buffer+m_position_i), m_buffer, size);
   m_position_i += size;
-  m_lastread = size;
 
-  return *this;
+  return size;
 }
 
-off_t wxMemoryInputStream::SeekI(off_t pos, wxSeekMode mode)
+off_t wxMemoryInputStream::DoSeekInput(off_t pos, wxSeekMode mode)
 {
   if (m_iolimit == 2)
     return 0;
@@ -129,33 +130,35 @@ wxMemoryOutputStream::wxMemoryOutputStream(char *data, size_t len)
   m_lastwrite = 0;
   m_bad = FALSE;
   m_iolimit = 2;
+
+  m_o_streambuf->SetBufferIO(0);
 }
 
 wxMemoryOutputStream::~wxMemoryOutputStream()
 {
+  Sync();
 }
 
-wxOutputStream& wxMemoryOutputStream::Write(const void *buffer, size_t size)
+size_t wxMemoryOutputStream::DoWrite(const void *buffer, size_t size)
 {
   if (m_iolimit == 1) {
     m_bad = TRUE;
-    return *this;
+    return 0;
   }
   
   if (m_position_o+size > m_length)
     if (!ChangeBufferSize(m_position_o+size)) {
       m_bad = TRUE;
-      return *this;
+      return 0;
     }
 
   memcpy(m_buffer+m_position_o, buffer, size);
   m_position_o += size;
-  m_lastwrite = size;
 
-  return *this;
+  return size;
 }
 
-off_t wxMemoryOutputStream::SeekO(off_t pos, wxSeekMode mode)
+off_t wxMemoryOutputStream::DoSeekOutput(off_t pos, wxSeekMode mode)
 {
   if (m_iolimit == 1)
     return 0;
