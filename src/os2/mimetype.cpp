@@ -318,7 +318,7 @@ wxMimeTypesManagerImpl::GetFileTypeFromExtension(const wxString& ext)
 {
     // add the leading point if necessary
     wxString str;
-    if ( ext[0u] != wxT('.') ) {
+    if ( ext[(size_t) 0] != wxT('.') ) {
         str = wxT('.');
     }
     str << ext;

@@ -63,7 +63,7 @@ wxIniConfig::wxIniConfig(const wxString& strAppName,
 
     // append the extension if none given and it's not an absolute file name
     // (otherwise we assume that they know what they're doing)
-    if ( !wxIsPathSeparator(m_strLocalFilename[0u]) &&
+    if ( !wxIsPathSeparator(m_strLocalFilename[(size_t) 0]) &&
         m_strLocalFilename.Find('.') == wxNOT_FOUND )
     {
         m_strLocalFilename << ".ini";
@@ -88,7 +88,7 @@ void wxIniConfig::SetPath(const wxString& strPath)
   if ( strPath.IsEmpty() ) {
     // nothing
   }
-  else if ( strPath[0u] == wxCONFIG_PATH_SEPARATOR ) {
+  else if ( strPath[(size_t) 0] == wxCONFIG_PATH_SEPARATOR ) {
     // absolute path
     wxSplitPath(aParts, strPath);
   }
@@ -107,7 +107,7 @@ void wxIniConfig::SetPath(const wxString& strPath)
   }
   else {
     // translate
-    m_strGroup = aParts[0u];
+    m_strGroup = aParts[(size_t) 0];
     for ( size_t nPart = 1; nPart < nPartsCount; nPart++ ) {
       if ( nPart > 1 )
         m_strPath << PATH_SEP_REPLACE;
