@@ -101,8 +101,10 @@ class Tools(wxPanel):
         EVT_KEY_UP(self, self.OnKeyUp)
 
     def AddButton(self, id, image, text):
-        button = wxBitmapButton(self, id, image, size=self.TOOL_SIZE,
-                                style=wxBU_AUTODRAW|wxNO_BORDER|wxWANTS_CHARS)
+        from wxPython.lib import buttons
+        button = buttons.wxGenBitmapButton(self, id, image, size=self.TOOL_SIZE,
+                                           style=wxNO_BORDER|wxWANTS_CHARS)
+        button.SetBezelWidth(0)
         EVT_KEY_DOWN(button, self.OnKeyDown)
         EVT_KEY_UP(button, self.OnKeyUp)
         button.SetToolTipString(text)
