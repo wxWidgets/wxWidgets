@@ -436,7 +436,7 @@ int wxFileDialog::ShowModal()
         ::AECountItems(&navReply.selection , &count);
         for (long i = 1; i <= count; ++i)
         {
-            err = ::AEGetNthPtr(&(navReply.selection), 1, typeFSRef, &theKeyword, &actualType,
+            err = ::AEGetNthPtr(&(navReply.selection), i, typeFSRef, &theKeyword, &actualType,
                                 &theFSRef, sizeof(theFSRef), &actualSize);
             if (err != noErr)
                 break;
