@@ -124,7 +124,7 @@ def onSubmakefile(type, dirname, names):
         cfgbase = '../../../build/config.'
 
     args = {
-        'not_autoconf':dirflags,
+        'all':dirflags,
         'autoconf':'-DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4',
         'msvc':'-DOPTIONS_FILE='+cfgbase+'vc -DWRITE_OPTIONS_FILE=0',
         'mingw':'-DOPTIONS_FILE='+cfgbase+'gcc -DWRITE_OPTIONS_FILE=0',

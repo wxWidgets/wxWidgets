@@ -13,7 +13,7 @@
     <if cond="FORMAT=='autoconf'">
         <set var="MACOSX_RESOURCES">
             <if cond="TOOLKIT=='MAC'">
-                Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r
+                Carbon.r $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).$(WXSOVERSION[0]).r $(WXTOPDIR)samples/sample.r
             </if>
         </set>
     </if>
@@ -30,6 +30,7 @@
     <template id="wx_util" template="wx_util_b">
         <app-type>gui</app-type>
         <mac-res cond="FORMAT=='autoconf'">$(MACOSX_RESOURCES)</mac-res>
+        <win32-res>$(WXTOPDIR)samples/sample.rc</win32-res>
     </template>
     
     <template id="wx_util_console" template="wx_util_b">

@@ -160,6 +160,7 @@ compiled .lib files and setup.h under the lib/ toplevel directory.
         
         <set var="TOP_SRCDIR">$(top_srcdir)/</set>
         <set var="RUNTIME_LIBS">dynamic</set>
+        <set var="WXTOPDIR"/> <!-- to be overriden on bakefile cmd line -->
     </if>
 
     
