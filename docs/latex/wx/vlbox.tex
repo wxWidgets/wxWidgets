@@ -173,6 +173,19 @@ may only return $0$ or $1$ however.
 Get the currently selected item or $-1$ if there is no selection.
 
 
+\membersection{wxVListBox::GetSelectionBackground}\label{wxvlistboxgetselectionbackground}
+
+\constfunc{const wxColour\&}{GetSelectionBackground}{\void}
+
+Returns the background colour used for the selected cells. By default the
+standard system colour is used.
+
+\wxheading{See also}
+
+\helpref{wxSystemSettings::GetColour}{wxsystemsettingsgetcolour},\\
+\helpref{SetSelectionBackground}{wxvlistboxsetselectionbackground}
+
+
 \membersection{wxVListBox::HasMultipleSelection}\label{wxvlistboxishasmultipleselection}
 
 \constfunc{bool}{HasMultipleSelection}{\void}
@@ -320,6 +333,21 @@ By default both margins are $0$.
 Set the selection to the specified item, if it is $-1$ the selection is
 unset. The selected item will be automatically scrolled into view if it isn't
 currently visible.
+
+This method may be used both with single and multiple selection listboxes.
+
+
+\membersection{wxVListBox::SetSelectionBackground}\label{wxvlistboxsetselectionbackground}
+
+\func{void}{SetSelectionBackground}{\param{const wxColour\& }{col}}
+
+Sets the colour to be used for the selected cells background. The background of
+the standard cells may be changed by simply calling 
+\helpref{SetBackgroundColour}{wxwindowsetbackgroundcolour}.
+
+\wxheading{See also}
+
+\helpref{GetSelectionBackground}{wxvlistboxgetselectionbackground}
 
 
 \membersection{wxVListBox::Toggle}\label{wxvlistboxtoggle}

@@ -249,8 +249,11 @@ void wxVListBox::SetSelection(int selection)
                   (selection >= 0 && (size_t)selection < GetItemCount()),
                   _T("wxVListBox::SetSelection(): invalid item index") );
 
-    wxASSERT_MSG( !HasMultipleSelection(),
-                  _T("SetSelection() is invalid with multiselection listbox") );
+    if ( HasMultipleSelection() )
+    {
+        Select(selection);
+        m_anchor = selection;
+    }
 
     DoSetCurrent(selection);
 }
