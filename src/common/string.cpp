@@ -497,18 +497,21 @@ void wxString::Shrink()
 {
   wxStringData *pData = GetStringData();
 
-  // this variable is unused in release build, so avoid the compiler warning
-  // by just not declaring it
-#ifdef __WXDEBUG__
-  void *p =
-#endif
-  realloc(pData, sizeof(wxStringData) + (pData->nDataLength + 1)*sizeof(wxChar));
+  size_t nLen = pData->nDataLength;
+  void *p = realloc(pData, sizeof(wxStringData) + (nLen + 1)*sizeof(wxChar));
 
-  // we rely on a reasonable realloc() implementation here - so far I haven't
-  // seen any which wouldn't behave like this
+  wxASSERT_MSG( p != NULL, _T("can't free memory?") );
 
-  wxASSERT( p != NULL );  // can't free memory?
-  wxASSERT( p == pData ); // we're decrementing the size - block shouldn't move!
+  if ( p != pData )
+  {
+      // contrary to what one might believe, some realloc() implementation do
+      // move the memory block even when its size is reduced
+      pData = (wxStringData *)p;
+
+      m_pchData = pData->data();
+  }
+
+  pData->nAllocLength = nLen;
 }
 
 // get the pointer to writable buffer of (at least) nLen bytes
