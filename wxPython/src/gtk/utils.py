@@ -10,7 +10,7 @@ class wxConfigBasePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=utilsc.delete_wxConfigBase):
+    def __del__(self, delfunc=utilsc.delete_wxConfigBase):
         if self.thisown == 1:
             delfunc(self)
     def DeleteAll(self, *_args, **_kwargs):
@@ -137,7 +137,7 @@ class wxConfigPtr(wxConfigBasePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=utilsc.delete_wxConfig):
+    def __del__(self, delfunc=utilsc.delete_wxConfig):
         if self.thisown == 1:
             delfunc(self)
     def __repr__(self):
@@ -154,7 +154,7 @@ class wxFileConfigPtr(wxConfigBasePtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=utilsc.delete_wxFileConfig):
+    def __del__(self, delfunc=utilsc.delete_wxFileConfig):
         if self.thisown == 1:
             delfunc(self)
     def __repr__(self):
@@ -262,7 +262,7 @@ class wxDateTimePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=utilsc.delete_wxDateTime):
+    def __del__(self, delfunc=utilsc.delete_wxDateTime):
         if self.thisown == 1:
             delfunc(self)
     def SetToCurrent(self, *_args, **_kwargs):
@@ -603,7 +603,7 @@ class wxTimeSpanPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=utilsc.delete_wxTimeSpan):
+    def __del__(self, delfunc=utilsc.delete_wxTimeSpan):
         if self.thisown == 1:
             delfunc(self)
     def Add(self, *_args, **_kwargs):
@@ -702,7 +702,7 @@ class wxDateSpanPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=utilsc.delete_wxDateSpan):
+    def __del__(self, delfunc=utilsc.delete_wxDateSpan):
         if self.thisown == 1:
             delfunc(self)
     def SetYears(self, *_args, **_kwargs):

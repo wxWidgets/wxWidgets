@@ -41,7 +41,7 @@ class wxColourDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=cmndlgsc.delete_wxColourData):
+    def __del__(self, delfunc=cmndlgsc.delete_wxColourData):
         if self.thisown == 1:
             delfunc(self)
     def GetChooseFull(self, *_args, **_kwargs):
@@ -271,7 +271,7 @@ class wxFontDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=cmndlgsc.delete_wxFontData):
+    def __del__(self, delfunc=cmndlgsc.delete_wxFontData):
         if self.thisown == 1:
             delfunc(self)
     def EnableEffects(self, *_args, **_kwargs):
@@ -427,7 +427,7 @@ class wxFindReplaceDataPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=cmndlgsc.delete_wxFindReplaceData):
+    def __del__(self, delfunc=cmndlgsc.delete_wxFindReplaceData):
         if self.thisown == 1:
             delfunc(self)
     def GetFindString(self, *_args, **_kwargs):

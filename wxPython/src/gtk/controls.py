@@ -598,7 +598,7 @@ class wxTextAttrPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=controlsc.delete_wxTextAttr):
+    def __del__(self, delfunc=controlsc.delete_wxTextAttr):
         if self.thisown == 1:
             delfunc(self)
     def SetTextColour(self, *_args, **_kwargs):

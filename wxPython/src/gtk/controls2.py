@@ -186,7 +186,7 @@ class wxListItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=controls2c.delete_wxListItem):
+    def __del__(self, delfunc=controls2c.delete_wxListItem):
         if self.thisown == 1:
             delfunc(self)
     def Clear(self, *_args, **_kwargs):
@@ -811,7 +811,7 @@ class wxTreeItemIdPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,delfunc=controls2c.delete_wxTreeItemId):
+    def __del__(self, delfunc=controls2c.delete_wxTreeItemId):
         if self.thisown == 1:
             delfunc(self)
     def IsOk(self, *_args, **_kwargs):
