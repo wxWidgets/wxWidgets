@@ -1701,13 +1701,18 @@ if test "$wxUSE_WINE" = 1; then
     GUIDIST=MSW_DIST
 fi
 
-if test "$wxUSE_MOTIF" = 1; then
-    dnl use standard macros to check for X headers/libs, this brings support
-    dnl for the standard configure options --x-includes and --x-libraries
-    AC_PATH_XTRA
+dnl use standard macros to check for X headers/libs, this brings support
+dnl for the standard configure options --x-includes and --x-libraries;
+dnl the path to the X headers/libs is not only needed for motif, but also
+dnl by the OpenGL and XKBlib.h checks further down
 
+AC_PATH_XTRA
+CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+LDFLAGS="$LDFLAGS $X_LIBS"
+
+if test "$wxUSE_MOTIF" = 1; then
     if test "$no_x" = "yes"; then
-        AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
+      AC_MSG_ERROR(X11 not found, please use --x-includes and/or --x-libraries options)
     fi
 
     GUI_TK_LIBRARY="$X_LIBS"
@@ -2098,8 +2103,13 @@ if test "$wxUSE_SHARED" = "yes"; then
       *-*-freebsd* | *-*-netbsd*)
         SHARED_LD="${CC} -shared -o"
         PIC_FLAG="-fPIC"
-        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
-        WX_ALL="CREATE_LINKS"
+        if test "$wxUSE_OPENGL" = "yes"; then
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS CREATE_INSTALLED_LINKS_GL"
+            WX_ALL="CREATE_LINKS CREATE_LINKS_GL"
+        else
+            WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+            WX_ALL="CREATE_LINKS"
+        fi
       ;;
       *-*-osf* )
         SHARED_LD="${CXX} -shared -o"
