@@ -11,9 +11,10 @@ by category (and sorted by alphabetical order inside each category).
 \twocolitem{\_\_WIN32\_\_}{Win32 API}
 \twocolitem{\_\_WIN95\_\_}{Windows 95 or NT 4.0 and above system (not NT 3.5x)}
 \twocolitem{\_\_WXBASE\_\_}{Only wxBase, no GUI features}
-\twocolitem{\_\_WXGTK\_\_}{GTK}
-\twocolitem{\_\_WXGTK12\_\_}{GTK 1.2 or higher}
-\twocolitem{\_\_WXGTK20\_\_}{GTK 2.0 or higher}
+\twocolitem{\_\_WXWINCE\_\_}{Windows CE}
+\twocolitem{\_\_WXGTK\_\_}{GTK+}
+\twocolitem{\_\_WXGTK12\_\_}{GTK+ 1.2 or higher}
+\twocolitem{\_\_WXGTK20\_\_}{GTK+ 2.0 or higher}
 \twocolitem{\_\_WXMOTIF\_\_}{Motif}
 \twocolitem{\_\_WXMOTIF20\_\_}{Motif 2.0 or higher}
 \twocolitem{\_\_WXMAC\_\_}{Mac OS whether Classic (Mac OS 8/9 TARGET\_CARBON
@@ -27,7 +28,7 @@ defined)}
 \twocolitem{\_\_WXXT\_\_}{Xt; mutually exclusive with WX\_MOTIF, not
 implemented in wxWindows 2.x}
 \twocolitem{\_\_WXX11\_\_}{wxX11 (\_\_WXUNIVERSAL\_\_ will be also defined)}
-\twocolitem{\_\_WXWINE\_\_}{WINE (i.e. Win32 on Unix)}
+\twocolitem{\_\_WXWINE\_\_}{WINE (i.e. WIN32 on Unix)}
 \twocolitem{\_\_WXUNIVERSAL\_\_}{wxUniversal port, always defined in addition
 to one of the symbols above so this should be tested first.}
 \twocolitem{\_\_X\_\_}{any X11-based GUI toolkit except GTK+}
@@ -82,10 +83,12 @@ compiler used.
 \twocolitem{\_\_BORLANDC\_\_}{Borland C++. The value of the macro corresponds
 to the compiler version: $500$ is $5.0$.}
 \twocolitem{\_\_DJGPP\_\_}{DJGPP}
+\twocolitem{\_\_DIGITALMARS\_\_}{Digital Mars}
 \twocolitem{\_\_GNUG\_\_}{Gnu C++ on any platform, see also 
 \helpref{wxCHECK\_GCC\_VERSION}{wxcheckgccversion}}
 \twocolitem{\_\_GNUWIN32\_\_}{Gnu-Win32 compiler, see also 
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}}
+\twocolitem{\_\_MINGW32\_\_}{MinGW}
 \twocolitem{\_\_MWERKS\_\_}{CodeWarrior MetroWerks compiler}
 \twocolitem{\_\_SUNCC\_\_}{Sun CC}
 \twocolitem{\_\_SYMANTECC\_\_}{Symantec C++}
@@ -96,6 +99,7 @@ version), $1100$ for $5.0$, $1200$ for $6.0$ and so on}
 \twocolitem{\_\_XLC\_\_}{AIX compiler}
 \twocolitem{\_\_WATCOMC\_\_}{Watcom C++. The value of this macro corresponds to
 the compiler version, $1100$ is $11.0$ and $1200$ is OpenWatcom.}
+\twocolitem{\_WIN32\_WCE}{Windows CE version}
 \end{twocollist}
 
 \subsection{Miscellaneous}
