@@ -172,6 +172,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
 // wxWakeUpIdle
 //-----------------------------------------------------------------------------
 
+static bool gs_WakeUpIdle = false;
+
 void wxWakeUpIdle()
 {
 #if wxUSE_THREADS
@@ -179,8 +181,11 @@ void wxWakeUpIdle()
         wxMutexGuiEnter();
 #endif
 
-    if (g_isIdle)
+    if (g_isIdle) {
+        gs_WakeUpIdle = true;
         wxapp_install_idle_handler();
+        gs_WakeUpIdle = false;
+    }
 
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
@@ -361,6 +366,8 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 
 void wxapp_install_idle_handler()
 {
+    wxASSERT_MSG( wxThread::IsMain() || gs_WakeUpIdle, wxT("attempt to install idle handler from widget callback in child thread (should be exclusively from wxWakeUpIdle)") );
+
     wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
 
     g_isIdle = FALSE;
