@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.h
+// Name:        tab.h
 // Purpose:     Tab demo
 // Author:      Julian Smart
 // Modified by:

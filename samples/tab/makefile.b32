@@ -1,15 +1,9 @@
-#
-# File:		makefile.b32
-# Author:	Julian Smart
-# Created:	1999
-# Updated:	
-# Copyright:
-#
-# Makefile : Builds sample for 32-bit BC++
+# Purpose: makefile for tab example (BC++ 32bit)
+# Created: 2000-03-15
 
 WXDIR = $(WXWIN)
 
-TARGET=test
+TARGET=tab
 OBJECTS = $(TARGET).obj
 
 !include $(WXDIR)\src\makeprog.b32

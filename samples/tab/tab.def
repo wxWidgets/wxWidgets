@@ -1,4 +1,4 @@
-NAME         Test
+NAME         Tab
 DESCRIPTION  'Tab test'
 EXETYPE      WINDOWS
 STUB         'WINSTUB.EXE'

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        test.cpp
+// Name:        tab.cpp
 // Purpose:     Tab demo
 // Author:      Julian Smart
 // Modified by:
@@ -21,7 +21,7 @@
 #endif
 
 #include "wx/tab.h"
-#include "test.h"
+#include "tab.h"
 
 // If 1, use a dialog. Otherwise use a frame.
 #define USE_TABBED_DIALOG 1
