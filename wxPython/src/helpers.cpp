@@ -544,8 +544,10 @@ void __wxPyPreStart(PyObject* moduleDict)
 #endif
 
 #ifdef WXP_WITH_THREAD
+#if wxPyUSE_GIL_STATE
     PyEval_InitThreads();
-#if !wxPyUSE_GIL_STATE
+#else
+    PyEval_InitThreads();
     wxPyTStates = new wxPyThreadStateArray;
     wxPyTMutex = new wxMutex;
 

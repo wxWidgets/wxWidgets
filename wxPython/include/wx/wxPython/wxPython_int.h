@@ -141,8 +141,15 @@ bool wxPySwigInstance_Check(PyObject* obj);
 // blocking threads when calling back into Python. Using them instead of my
 // home-grown hacks greatly simplifies wxPyBeginBlockThreads and
 // wxPyEndBlockThreads.
+//
+// Unfortunatly there is a bug somewhere when using these new APIs on Python
+// 2.3.  It manifests in Boa Constructor's debugger where it is unable to stop
+// at breakpoints located in event handlers.  I think that the cause may be
+// something like the original PyThreadState for the main thread is not being
+// restored for the callbacks, but I can't see where that could be
+// happening...  So we'll only activate this new change for Python 2.4+  :-(
 
-#if PY_VERSION_HEX < 0x02030000
+#if PY_VERSION_HEX < 0x02040000
 #define wxPyUSE_GIL_STATE 0
 typedef bool wxPyBlock_t;
 #else
