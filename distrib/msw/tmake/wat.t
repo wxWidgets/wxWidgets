@@ -82,11 +82,10 @@ LIBTARGET   = $(WXLIB)\wx.lib
 DUMMY=dummydll
 # ODBCLIB     = ..\..\contrib\odbc\odbc32.lib
 
-EXTRATARGETS = xpm png zlib jpeg tiff
-EXTRATARGETSCLEAN = clean_xpm clean_png clean_zlib clean_jpeg clean_tiff
+EXTRATARGETS = png zlib jpeg tiff
+EXTRATARGETSCLEAN = clean_png clean_zlib clean_jpeg clean_tiff
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
-XPMDIR=$(WXDIR)\src\xpm
 JPEGDIR=$(WXDIR)\src\jpeg
 TIFFDIR=$(WXDIR)\src\tiff
 MSWDIR=$(WXDIR)\src\msw
@@ -207,73 +206,6 @@ $(COMMDIR)\lex_yy.c:    $(COMMDIR)\doslex.c
     }
 #$}
 
-crbuffri.obj: $(XPMDIR)\crbuffri.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crbuffrp.obj: $(XPMDIR)\crbuffrp.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crdatfri.obj: $(XPMDIR)\crdatfri.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crdatfrp.obj: $(XPMDIR)\crdatfrp.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-create.obj: $(XPMDIR)\create.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crifrbuf.obj: $(XPMDIR)\crifrbuf.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crifrdat.obj: $(XPMDIR)\crifrdat.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crpfrbuf.obj: $(XPMDIR)\crpfrbuf.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-crpfrdat.obj: $(XPMDIR)\crpfrdat.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-# TODO: what to do about this clash of filename????
-#data.obj: $(XPMDIR)\data.c
-#  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-hashtab.obj: $(XPMDIR)\hashtab.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-misc.obj: $(XPMDIR)\misc.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-parse.obj: $(XPMDIR)\parse.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-rdftodat.obj: $(XPMDIR)\rdftodat.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-rdftoi.obj: $(XPMDIR)\rdftoi.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-rdftop.obj: $(XPMDIR)\rdftop.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-rgb.obj: $(XPMDIR)\rgb.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-scan.obj: $(XPMDIR)\scan.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-simx.obj: $(XPMDIR)\simx.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-wrffrdat.obj: $(XPMDIR)\wrffrdat.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-wrffri.obj: $(XPMDIR)\wrffri.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
-wrffrp.obj: $(XPMDIR)\wrffrp.c
-  *$(CC) $(CPPFLAGS) $(IFLAGS) $<
-
 OBJ1 = adler32$(O) compress$(O) crc32$(O) gzio$(O) uncompr$(O) deflate$(O) \
   trees$(O)
 OBJ2 = zutil$(O) inflate$(O) infblock$(O) inftrees$(O) infcodes$(O) \
@@ -322,16 +254,6 @@ uncompr.obj: uncompr.c zlib.h zconf.h
 
 zutil.obj: zutil.c zutil.h zlib.h zconf.h
 	$(CC) -c $(CFLAGS) $*.c
-
-xpm:   .SYMBOLIC
-    cd $(WXDIR)\src\xpm
-    wmake -f makefile.wat all
-    cd $(WXDIR)\src\msw
-
-clean_xpm:   .SYMBOLIC
-    cd $(WXDIR)\src\xpm
-    wmake -f makefile.wat clean
-    cd $(WXDIR)\src\msw
 
 png:   .SYMBOLIC
     cd $(WXDIR)\src\png

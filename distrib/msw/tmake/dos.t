@@ -78,7 +78,6 @@ DUMMYOBJ=dummy.obj
 # This one overrides the others, to be consistent with the settings in wx_setup.h
 MINIMAL_WXWINDOWS_SETUP=0
 
-USE_XPM_IN_MSW=1
 USE_CTL3D=1
 
 !if "$(MINIMAL_WXWINDOWS_SETUP)" == "1"
@@ -93,12 +92,6 @@ PERIPH_CLEAN_TARGET=
 # !if "$(USE_CTL3D)" == "1"
 # PERIPH_LIBS=d:\msdev\lib\ctl3d32.lib $(PERIPH_LIBS)
 # !endif
-
-!if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXDIR)\lib\xpm.lib $(PERIPH_LIBS)
-PERIPH_TARGET=xpm $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
-!endif
 
 # PNG and Zlib
 PERIPH_TARGET=png zlib $(PERIPH_TARGET)
@@ -125,7 +118,6 @@ MSWOBJS1 = #$ ExpandList("WXMSWOBJS1");
 MSWOBJS2 = #$ ExpandList("WXMSWOBJS2");
 
 # TODO: Implement XPM and PNG targets in this makefile!
-#  $(OLEDIR)\xpmhand \
 #  $(OLEDIR)\pnghand \
 
 OBJECTS = $(COMMONOBJS1) $(COMMONOBJS2) $(GENERICOBJS) $(MSWOBJS1) $(MSWOBJS2)
@@ -234,18 +226,6 @@ $(COMMDIR)/lex_yy.c:    $(COMMDIR)/doslex.c
 $(OBJECTS):	$(WXDIR)/include/wx/setup.h
 
 # Peripheral components
-
-$(WXDIR)\lib\xpm.lib: xpm
-
-xpm:
-    cd $(WXDIR)\src\xpm
-    nmake -f makefile.dos FINAL=$(FINAL)
-    cd $(WXDIR)\src\msw
-
-clean_xpm:
-    cd $(WXDIR)\src\xpm
-    nmake -f makefile.dos clean
-    cd $(WXDIR)\src\msw
 
 zlib:
     cd $(WXDIR)\src\zlib

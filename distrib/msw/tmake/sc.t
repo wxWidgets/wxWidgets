@@ -67,7 +67,6 @@ OPTIONS=
 
 GENDIR=$(WXDIR)\src\generic
 COMMDIR=$(WXDIR)\src\common
-XPMDIR=$(WXDIR)\src\xpm
 OLEDIR=ole
 MSWDIR=$(WXDIR)\src\msw
 
@@ -79,20 +78,8 @@ COMMONOBJS = \
 
 MSWOBJS = #$ ExpandList("WXMSWOBJS");
 
-XPMOBJECTS = 	$(XPMDIR)\crbuffri.obj\
-		$(XPMDIR)\crdatfri.obj\
-		$(XPMDIR)\create.obj $(XPMDIR)\crifrbuf.obj\
-		$(XPMDIR)\crifrdat.obj\
-		$(XPMDIR)\data.obj\
-		$(XPMDIR)\hashtab.obj $(XPMDIR)\misc.obj\
-		$(XPMDIR)\parse.obj $(XPMDIR)\rdftodat.obj\
-		$(XPMDIR)\rdftoi.obj\
-		$(XPMDIR)\rgb.obj $(XPMDIR)\scan.obj\
-		$(XPMDIR)\simx.obj $(XPMDIR)\wrffrdat.obj\
-		$(XPMDIR)\wrffrp.obj $(XPMDIR)\wrffri.obj
-
 # Add $(NONESSENTIALOBJS) if wanting generic dialogs, PostScript etc.
-OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS) # $(XPMOBJECTS)
+OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 
 all: $(LIBTARGET)
 

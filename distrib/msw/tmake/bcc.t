@@ -98,7 +98,6 @@ THISDIR = $(WXDIR)\src\msw
 # Please set these according to the settings in wx_setup.h, so we can include
 # the appropriate libraries in wx.lib
 USE_CTL3D=1
-USE_XPM_IN_MSW=1
 
 PERIPH_LIBS=
 PERIPH_TARGET=
@@ -106,12 +105,6 @@ PERIPH_CLEAN_TARGET=
 
 !if "$(USE_CTL3D)" == "1"
 PERIPH_LIBS=$(WXDIR)\lib\bcc16\ctl3dv2.lib $(PERIPH_LIBS)
-!endif
-
-!if "$(USE_XPM_IN_MSW)" == "1"
-PERIPH_LIBS=$(WXDIR)\lib\xpm.lib $(PERIPH_LIBS)
-PERIPH_TARGET=xpm $(PERIPH_TARGET)
-PERIPH_CLEAN_TARGET=clean_xpm $(PERIPH_CLEAN_TARGET)
 !endif
 
 # TODO: add these libraries
@@ -228,16 +221,6 @@ all_execs:
     cd $(WXDIR)\src\msw
 
 # CONTRIB
-xpm:	$(CFG)
-	cd $(WXDIR)\src\xpm
-	make -f makefile.bcc -DCFG=$(CFG) -DFINAL=$(FINAL) -DWXWIN=$(WXDIR) -DDEBUG=$(DEBUG)
-	cd $(WXDIR)\src\msw
-
-clean_xpm:	$(CFG)
-	cd $(WXDIR)\src\xpm
-	make -f makefile.bcc clean
-	cd $(WXDIR)\src\msw
-
 png:    $(CFG)
         cd $(WXDIR)\src\png
         make -f makefile.bcc
@@ -275,7 +258,7 @@ $(CFG): makefile.bcc
 -Fs-
 -Vf
 -Ff=4
--I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/zlib;$(WXDIR)/src/xpm
+-I$(WXINC);$(BCCDIR)\include;$(WXDIR)/src/generic;$(WXDIR)/src/png;$(WXDIR)/src/zlib
 -I$(WXDIR)\include\wx\msw\gnuwin32
 -L$(BCCDIR)\lib
 -D__WXWIN__
