@@ -1050,7 +1050,6 @@ radiobut.h	MacH
 region.h	MacH
 scrolbar.h	MacH
 settings.h	MacH
-setup.h	MacH
 slider.h	MacH
 spinbutt.h	MacH
 statbmp.h	MacH
