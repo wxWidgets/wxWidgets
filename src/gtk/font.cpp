@@ -31,6 +31,7 @@
 #include <strings.h>
 
 #include <gdk/gdk.h>
+#include <gdk/gdkprivate.h>
 #include <gtk/gtk.h>
 
 // ----------------------------------------------------------------------------
@@ -190,8 +191,11 @@ wxFont::wxFont( const wxString& fontname, const wxFontData& fontdata )
     tn.GetNextToken();                           // pixel size
 
     tmp = tn.GetNextToken();                     // pointsize
-    long num = wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
-    M_FONTDATA->m_pointSize = (int)(num / 10);
+    if (tmp != wxT("*"))
+    {
+        long num = wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
+        M_FONTDATA->m_pointSize = (int)(num / 10);
+    }
 
     tn.GetNextToken();                           // x-res
     tn.GetNextToken();                           // y-res
