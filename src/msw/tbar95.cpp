@@ -368,6 +368,9 @@ WXDWORD wxToolBar::MSWGetStyle(long style, WXDWORD *exstyle) const
     if ( style & wxTB_NOALIGN )
         msStyle |= CCS_NOPARENTALIGN;
 
+    if ( style & wxTB_VERTICAL )
+        msStyle |= CCS_VERT;
+
     return msStyle;
 }
 
@@ -659,8 +662,8 @@ bool wxToolBar::Realize()
         wxToolBarToolBase *tool = node->GetData();
 
         // don't add separators to the vertical toolbar - looks ugly
-        if ( isVertical && tool->IsSeparator() )
-            continue;
+        //if ( isVertical && tool->IsSeparator() )
+        //    continue;
 
         TBBUTTON& button = buttons[i];
 
