@@ -74,7 +74,7 @@ and then call \verb$wxXmlResource::Get()->Load("myfile.xrc")$ to load the resour
 \item to create a dialog from a resource, create it using the default constructor, and then
 load using for example \verb$wxXmlResource::Get()->LoadDialog(&dlg, this, "dlg1")$;
 \item set up event tables as usual but use the \verb$XRCID(str)$ macro to translate from XRC string names
-to a suitable integer identifier, for example \verb$EVT_MENU(XRCID("quit"), MyFrame::OnQuit)$.
+to a suitable integer identifier, for example \verb$EVT\_MENU(XRCID("quit"), MyFrame::OnQuit)$.
 \end{itemize}
 
 To create an XRC file, use one of the following methods.
