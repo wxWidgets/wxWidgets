@@ -71,6 +71,8 @@ BEGIN_EVENT_TABLE(wxNumberEntryDialog, wxDialog)
     EVT_BUTTON(wxID_CANCEL, wxNumberEntryDialog::OnCancel)
 END_EVENT_TABLE()
 
+IMPLEMENT_CLASS(wxNumberEntryDialog, wxDialog)
+
 wxNumberEntryDialog::wxNumberEntryDialog(wxWindow *parent,
                                          const wxString& message,
                                          const wxString& prompt,
