@@ -4,28 +4,28 @@ setlocal
 
 iff "%1" == "both" then
 	shift
-	call .make debug %$      & if %? != 0 quit $?
-	call .make hybrid %$     & if %? != 0 quit $?
+	call .make debug %$      & if %? != 0 quit %?
+	call .make hybrid %$     & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "both-uni" then
 	shift
-	call .make debug-uni %$  & if %? != 0 quit $?
-	call .make hybrid-uni %$ & if %? != 0 quit $?
+	call .make debug-uni %$  & if %? != 0 quit %?
+	call .make hybrid-uni %$ & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "both-hybrid" then
 	shift
-	call .make hybrid %$     & if %? != 0 quit $?
-	call .make hybrid-uni %$ & if %? != 0 quit $?
+	call .make hybrid %$     & if %? != 0 quit %?
+	call .make hybrid-uni %$ & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "all" then
 	shift
-	call .make debug %$      & if %? != 0 quit $?
-	call .make hybrid %$     & if %? != 0 quit $?
-	call .make debug-uni %$  & if %? != 0 quit $?
-	call .make hybrid-uni %$ & if %? != 0 quit $?
+	call .make debug %$      & if %? != 0 quit %?
+	call .make hybrid %$     & if %? != 0 quit %?
+	call .make debug-uni %$  & if %? != 0 quit %?
+	call .make hybrid-uni %$ & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "debug" then
@@ -113,8 +113,8 @@ cd -
 @echo --   SUCCESS!  --
 @echo -----------------
 REM copy DLLs to a dir on the PATH
-copy /U %WXWIN%\lib\vc_dll\*.dll %WXWIN%\BIN
-copy /U %WXWIN%\lib\vc_dll\*.pdb %WXWIN%\BIN
+REM copy /U %WXWIN%\lib\vc_dll\*.dll %WXWIN%\BIN
+REM copy /U %WXWIN%\lib\vc_dll\*.pdb %WXWIN%\BIN
 quit 0
 
 

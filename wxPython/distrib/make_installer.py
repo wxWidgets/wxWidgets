@@ -65,11 +65,11 @@ CodeFile = %(IFSFILE)s
 ;;------------------------------------------------------------
 
 [Components]
-Name: core;    Description: "wxPython modules and library";  Types: full compact custom;  Flags: fixed
-Name: docs;    Description: "Documentation";                 Types: full
-Name: demo;    Description: "Demo application";              Types: full
-Name: samples; Description: "Sample applications";           Types: full
-
+Name: core;     Description: "wxPython modules and library";  Types: full compact custom;  Flags: fixed
+Name: docs;     Description: "Documentation";                 Types: full
+Name: demo;     Description: "Demo application";              Types: full
+Name: samples;  Description: "Sample applications";           Types: full
+Name: ; Description: "Manifest files for XP LnF";     Types: full
 
 ;;------------------------------------------------------------
 
@@ -78,7 +78,7 @@ Source: "%(SYSDIR)s\MSVCRT.dll";        DestDir: "{code:GetPythonDir}"; CopyMode
 Source: "%(SYSDIR)s\MSVCIRT.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
 Source: "%(SYSDIR)s\MSVCP60.dll";       DestDir: "{code:GetPythonDir}"; CopyMode: alwaysskipifsameorolder; Flags: uninsneveruninstall; Components: core
 
-Source: "%(WXDIR)s\BIN\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\wx"; Components: core
+Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\wx"; Components: core
 %(MSLU)s
 Source: "wx\_core.pyd";                        DestDir: "{app}\wx"; Components: core
 Source: "wx\_gdi.pyd";                         DestDir: "{app}\wx"; Components: core
@@ -191,7 +191,7 @@ Source: "scripts\pyshell";                  DestDir: "{code:GetPythonDir}\Script
 Source: "scripts\pycrust";                  DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 Source: "scripts\pywrap";                   DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 Source: "scripts\xrced";                    DestDir: "{code:GetPythonDir}\Scripts"; Components: core
-Source: "%(WXDIR)s\BIN\wxrc.exe";           DestDir: "{code:GetPythonDir}\Scripts"; Components: core
+Source: "%(WXDIR)s\lib\vc_dll\wxrc.exe";           DestDir: "{code:GetPythonDir}\Scripts"; Components: core
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wx\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wx\samples\doodle"; Components: samples
@@ -228,8 +228,8 @@ Source: "samples\wxProject\*.txt";          DestDir: "{app}\wx\samples\wxProject
 Source: "samples\wxProject\*.py";           DestDir: "{app}\wx\samples\wxProject"; Components: samples
 
 
-Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest"; Components: core
-Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest"; Components: core
+Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "python.exe.manifest"; Components:  manifest
+Source: "src\winxp.manifest";               DestDir: "{code:GetPythonDir}"; DestName: "pythonw.exe.manifest"; Components: manifest
 
 
 ;;------------------------------------------------------------
@@ -511,7 +511,7 @@ def main():
 
     MSLU=''
     if len(sys.argv) > 1 and sys.argv[1] == "UNICODE=1":
-        MSLU=r'Source: "%(WXDIR)s\BIN\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
+        MSLU=r'Source: "%(WXDIR)s\lib\vc_dll\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
 
     f = open(ISSFILE, "w")
     f.write(ISS_Template % vars())

@@ -1,5 +1,5 @@
 
-SRC=..\..\include\wx\msw\setup.h
+SRC=$(WXWIN)\include\wx\msw\setup.h
 DIR=$(WXWIN)\lib
 FILES=	$(DIR)\vc_dll\mswd\wx\setup.h \
         $(DIR)\vc_dll\mswh\wx\setup.h \
@@ -26,6 +26,11 @@ $(DIR)\vc_dll\mswh\wx\setup.h : $(SRC) .makesetup.mk
 	-if not exist  $(DIR)\vc_dll\mswh\wx mkdir /s $(DIR)\vc_dll\mswh\wx
 	cat $(SRC) | $(HYB_SEDCMD) > $@
 
+# release
+$(DIR)\vc_dll\msw\wx\setup.h : $(SRC) .makesetup.mk
+	-if not exist  $(DIR)\vc_dll\msw\wx mkdir /s $(DIR)\vc_dll\msw\wx
+	cat $(SRC) > $@
+
 # debug-uni
 $(DIR)\vc_dll\mswud\wx\setup.h : $(SRC) .makesetup.mk
 	-if not exist  $(DIR)\vc_dll\mswud\wx mkdir /s $(DIR)\vc_dll\mswud\wx
@@ -35,11 +40,6 @@ $(DIR)\vc_dll\mswud\wx\setup.h : $(SRC) .makesetup.mk
 $(DIR)\vc_dll\mswuh\wx\setup.h : $(SRC) .makesetup.mk
 	-if not exist  $(DIR)\vc_dll\mswuh\wx mkdir /s $(DIR)\vc_dll\mswuh\wx
 	cat $(SRC) | $(UNI_SEDCMD) | $(HYB_SEDCMD) > $@
-
-# release
-$(DIR)\vc_dll\msw\wx\setup.h : $(SRC) .makesetup.mk
-	-if not exist  $(DIR)\vc_dll\msw\wx mkdir /s $(DIR)\vc_dll\msw\wx
-	cat $(SRC) > $@
 
 # release-uni
 $(DIR)\vc_dll\mswu\wx\setup.h : $(SRC) .makesetup.mk

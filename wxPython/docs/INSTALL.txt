@@ -134,6 +134,6 @@ Installing on Windows
    found at runtime by the extension modules without requiring that
    they be installed on the PATH::
 
-	copy %WXWIN%\BIN\wx*h_*.dll c:\Python23\Lib\site-pacakges\wx
+	copy %WXWIN%\lib\vc_dll\wx*h_*.dll c:\Python23\Lib\site-pacakges\wx
 
 

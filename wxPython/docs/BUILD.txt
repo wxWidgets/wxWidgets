@@ -256,8 +256,9 @@ here.  There is a copy of my build scripts in wxWidgets\wxPython\distrib\msw
          wxUSE_DISPLAY                  1
          
 
-4. Make a %WXWIN%\BIN directory and add it to the PATH.  My build
-   scripts will copy the wxWidgets DLLs there.
+4. Make sure that %WXWIN%\lib\vc_dll directory is on the PATH.  The
+   wxWidgets DLLs will end up there as part of the build and so you'll
+   need it on the PATH for them to be found at runtime.
 
 
 5. Change to the %WXWIN%\build\msw directory and copy my build scripts

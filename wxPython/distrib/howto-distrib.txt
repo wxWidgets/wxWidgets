@@ -45,18 +45,6 @@ Preflight Checklist
 Windows  (build env is on Cyclops)
 ----------------------------------
 
-* Clean out unneded files from wx/BIN
-
-	*.pdb	    # debugger data
-	wx*d_*.dll  # debug version of the DLLs
-		    # also old versions
-		    # etc.
-
-* Clean out the same files in wx/lib/vc_dll.  (NOTE to self: There is
-  probably no reason any more to move stuff to the BIN dir.  Update
-  the build and packager scripts and the PATHs and then get rid of
-  it.)
-
 * Do a clean build of the ansi and unicode hybrid versions of
   wxWidgets:
 
@@ -71,7 +59,8 @@ Windows  (build env is on Cyclops)
 
 * Build the tools. This btm script makes a static release version of
   wxWidgets, and then builds copies of wxrc.exe and tex2rtf.exe
-  linking with that lib, placing them in wx/BIN.
+  linking with that lib, placing them in wx/lib/vc_dll, (which you
+  should have on the PATH.)
 
        .make_tools.btm
 
