@@ -1723,17 +1723,83 @@ public:
 %{
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
+#include <wx/dynload.h>
 #endif
 %}
 
+
 %inline %{
 
-void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc)
+void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
 {
 #ifdef __WXMSW__
-    ::SendMessage(GetHwndOf(window), WM_PAINT, (long)GetHdcOf(dc), 0);
-//     ::SendMessage(GetHwndOf(window), WM_PRINTCLIENT, (long)GetHdcOf(dc),
-//                   PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN );
+
+    switch (method)
+    {
+        case 1:
+            // This one only partially works.  Appears to be an undocumented
+            // "standard" convention that not all widgets adhear to.  For
+            // example, for some widgets backgrounds or non-client areas may
+            // not be painted.
+            ::SendMessage(GetHwndOf(window), WM_PAINT, (long)GetHdcOf(dc), 0);
+            break;
+
+        case 2:
+            // This one works much better, except for on XP.  On Win2k nearly
+            // all widgets and their children are captured correctly[**].  On
+            // XP with Themes activated most native widgets draw only
+            // partially, if at all.  Without themes it works just like on
+            // Win2k.
+            //
+            // ** For example the radio buttons in a wxRadioBox are not its
+            // children by default, but you can capture it via the panel
+            // instead, or change RADIOBTN_PARENT_IS_RADIOBOX in radiobox.cpp.
+            ::SendMessage(GetHwndOf(window), WM_PRINT, (long)GetHdcOf(dc),
+                          PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN |
+                          PRF_ERASEBKGND | PRF_OWNED );
+            break;
+
+        case 3:
+            // This one is only defined in the latest SDK and is only
+            // available on XP.  MSDN says it is similar to sending WM_PRINT
+            // so I expect that it will work similar to the above.  Since it
+            // is avaialble only on XP, it can't be compiled like this and
+            // will have to be loaded dynamically.
+            // //::PrintWindow(GetHwndOf(window), GetHdcOf(dc), 0); //break;
+
+            // fall through
+
+        case 4:
+            // Use PrintWindow if available, or fallback to WM_PRINT
+            // otherwise.  Unfortunately using PrintWindow is even worse than
+            // WM_PRINT.  For most native widgets nothing is drawn to the dc
+            // at all, with or without Themes.
+            typedef BOOL (WINAPI *PrintWindow_t)(HWND, HDC, UINT);
+            static bool s_triedToLoad = false;
+            static PrintWindow_t pfnPrintWindow = NULL;
+            if ( !s_triedToLoad )
+            {
+
+                s_triedToLoad = true;
+                wxDynamicLibrary dllUser32(_T("user32.dll"));
+                if ( dllUser32.IsLoaded() )
+                {
+                    wxLogNull nolog;  // Don't report errors here
+                    pfnPrintWindow = (PrintWindow_t)dllUser32.GetSymbol(_T("PrintWindow"));
+                }
+            }
+            if (pfnPrintWindow)
+            {
+                printf("Using PrintWindow\n");
+                pfnPrintWindow(GetHwndOf(window), GetHdcOf(dc), 0);
+            }
+            else
+            {
+                printf("Using WM_PRINT\n");
+                ::SendMessage(GetHwndOf(window), WM_PRINT, (long)GetHdcOf(dc),
+                              PRF_CLIENT | PRF_NONCLIENT | PRF_CHILDREN | PRF_ERASEBKGND | PRF_OWNED );
+            }
+    }
 #endif
 }
 
