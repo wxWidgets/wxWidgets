@@ -50,7 +50,7 @@ protected:
 
 	wxString mLabelText;
 	wxString mImageFileName;
-	int      mImageFileType;
+	wxBitmapType mImageFileType;
 
 	wxBitmap mDepressedBmp; // source image for rendering
 	                        // labels for particular state
@@ -114,17 +114,17 @@ public:
 	// use this constructor if buttons have to be persistant 
 	 
 	wxNewBitmapButton( const wxString& bitmapFileName,
-		               const int       bitmapFileType = wxBITMAP_TYPE_BMP,
-					   const wxString& labelText      = "",
-		               int alignText                  = NB_ALIGN_TEXT_BOTTOM,
-					   bool  isFlat                   = TRUE,
-					   // this is the default type of fired events
-					   int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
-					   int marginX        = 2,
-	                   int marginY        = 2,
-					   int textToLabelGap = 2,
-					   bool isSticky      = FALSE
-		             );
+                           const wxBitmapType     bitmapFileType = wxBITMAP_TYPE_BMP,
+                           const wxString& labelText      = "",
+                           int alignText                  = NB_ALIGN_TEXT_BOTTOM,
+                           bool  isFlat                   = TRUE,
+                           // this is the default type of fired events
+                           int firedEventType = wxEVT_COMMAND_MENU_SELECTED,
+                           int marginX        = 2,
+                           int marginY        = 2,
+                           int textToLabelGap = 2,
+                           bool isSticky      = FALSE
+                             );
 
 	~wxNewBitmapButton();
 

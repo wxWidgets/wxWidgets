@@ -228,7 +228,7 @@ wxNewBitmapButton::wxNewBitmapButton( const wxBitmap& labelBitmap,
 		mIsSticky( isSticky ),
 		mIsFlat( isFlat ),
 		mLabelText( labelText ),
-		mImageFileType( -1 ),
+		mImageFileType( wxBITMAP_TYPE_INVALID ),
 		mDepressedBmp( labelBitmap ),
 
 	 	mpDepressedImg( NULL ),
@@ -257,15 +257,15 @@ wxNewBitmapButton::wxNewBitmapButton( const wxBitmap& labelBitmap,
 }
 
 wxNewBitmapButton::wxNewBitmapButton( const wxString& bitmapFileName,
-									  const int       bitmapFileType,
-									  const wxString& labelText,
-									  int  alignText,
-									  bool isFlat,
-									  int  firedEventType, 
-									  int  marginX,
-									  int  marginY,
-									  int  textToLabelGap,
-									  bool isSticky)
+                                      const wxBitmapType  bitmapFileType,
+                                      const wxString& labelText,
+                                      int  alignText,
+                                      bool isFlat,
+                                      int  firedEventType, 
+                                      int  marginX,
+                                      int  marginY,
+                                      int  textToLabelGap,
+                                      bool isSticky)
 
 	:	mTextToLabelGap  ( 2 ),
 		mMarginX( 2 ),
