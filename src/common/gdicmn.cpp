@@ -466,7 +466,7 @@ void wxInitializeStockObjects ()
     p2cstrcpy( (char*) fontName , fontName ) ;
     wxSWISS_FONT = new wxFont (fontSize, wxSWISS, wxNORMAL, wxNORMAL , false , fontName );
 #elif defined(__WXPM__)
-  static const int sizeFont = 10;
+  static const int sizeFont = 12;
 #else
   wxNORMAL_FONT = new wxFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
   static const int sizeFont = wxNORMAL_FONT->GetPointSize();
@@ -478,7 +478,7 @@ void wxInitializeStockObjects ()
   // as I can do to get something that looks halfway "wx" normal
   */
   wxNORMAL_FONT = new wxFont (sizeFont, wxMODERN, wxNORMAL, wxBOLD);
-  wxSMALL_FONT = new wxFont (sizeFont - 2, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
+  wxSMALL_FONT = new wxFont (sizeFont - 4, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
   wxITALIC_FONT = new wxFont (sizeFont, wxROMAN, wxITALIC, wxNORMAL);
   wxSWISS_FONT = new wxFont (sizeFont, wxSWISS, wxNORMAL, wxNORMAL); /* Helv */
 #elif defined(__WXMAC__)

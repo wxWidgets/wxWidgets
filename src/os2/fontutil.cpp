@@ -487,7 +487,7 @@ void wxOS2SelectMatchingFontByName(
     switch (pFont->GetFamily())
     {
         case wxSCRIPT:
-            sFaceName = wxT("Script");
+            sFaceName = wxT("Tms Rmn");
             break;
 
         case wxDECORATIVE:
@@ -495,15 +495,15 @@ void wxOS2SelectMatchingFontByName(
             break;
 
         case wxROMAN:
-            sFaceName = wxT("Times New Roman");
+            sFaceName = wxT("Tms Rmn");
             break;
 
         case wxTELETYPE:
-            sFaceName = wxT("Courier New") ;
+            sFaceName = wxT("Courier") ;
             break;
 
         case wxMODERN:
-            sFaceName = wxT("Courier New") ;
+            sFaceName = wxT("System VIO") ;
             break;
 
         case wxSWISS:

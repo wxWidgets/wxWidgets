@@ -454,10 +454,12 @@ bool wxFontRefData::Alloc(
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System Monospaced") == 0)
         m_nFamily = wxTELETYPE;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System VIO") == 0)
-        m_nFamily = wxDEFAULT;
+        m_nFamily = wxMODERN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "System Proportional") == 0)
         m_nFamily = wxMODERN;
     else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Arial") == 0)
+        m_nFamily = wxSWISS;
+    else if (strcmp(m_vNativeFontInfo.fm.szFamilyname, "Swiss") == 0)
         m_nFamily = wxSWISS;
     else
         m_nFamily = wxSWISS;
@@ -613,10 +615,12 @@ wxFontFamily wxNativeFontInfo::GetFamily() const
     else if (strcmp(fm.szFamilyname, "System Monospaced") == 0)
         nFamily = wxTELETYPE;
     else if (strcmp(fm.szFamilyname, "System VIO") == 0)
-        nFamily = wxDEFAULT;
+        nFamily = wxMODERN;
     else if (strcmp(fm.szFamilyname, "System Proportional") == 0)
         nFamily = wxMODERN;
     else if (strcmp(fm.szFamilyname, "Arial") == 0)
+        nFamily = wxSWISS;
+    else if (strcmp(fm.szFamilyname, "Swiss") == 0)
         nFamily = wxSWISS;
     else
         nFamily = wxSWISS;
@@ -703,7 +707,7 @@ void wxNativeFontInfo::SetFamily(
     switch (eFamily)
     {
         case wxSCRIPT:
-            sFacename = wxT("Script");
+            sFacename = wxT("Tms Rmn");
             break;
 
         case wxDECORATIVE:
@@ -711,15 +715,15 @@ void wxNativeFontInfo::SetFamily(
             break;
 
         case wxROMAN:
-            sFacename = wxT("Times New Roman");
+            sFacename = wxT("Tms Rmn");
             break;
 
         case wxTELETYPE:
-            sFacename = wxT("Courier New") ;
+            sFacename = wxT("Courier") ;
             break;
 
         case wxMODERN:
-            sFacename = wxT("Courier New") ;
+            sFacename = wxT("System VIO") ;
             break;
 
         case wxSWISS:
