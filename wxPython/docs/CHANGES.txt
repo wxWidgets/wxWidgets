@@ -49,6 +49,11 @@ incorrect builds on some systems where the system installed distutils
 has been patched to behave slightly differently, for example SuSE on
 x86_64 or Chandler's build.
 
+Updated to SWIG 1.3.22 (plus my patch.)  See wxPython/SWIG/README.txt
+in the source tree if you need to use SWIG when building your own copy
+of wxPython, or other extension modules that need to integrate with
+the wxPython modules.
+
 
 
 
