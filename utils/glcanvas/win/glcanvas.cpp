@@ -23,7 +23,14 @@
 #include <wx/frame.h>
 #endif
 
+#include <wx/msw/private.h>
+
 #include "glcanvas.h"
+
+wxChar wxGLCanvasClassName[]        = wxT("wxGLCanvasClass");
+
+LRESULT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message,
+                                   WPARAM wParam, LPARAM lParam);
 
 /*
  * GLContext implementation
@@ -131,18 +138,28 @@ wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
 
   m_glContext = new wxGLContext(TRUE, this, palette);
 }
+
 wxGLCanvas::wxGLCanvas( wxWindow *parent, 
               const wxGLContext *shared, wxWindowID id,
               const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-              int *attribList, const wxPalette& palette ) :
-  wxScrolledWindow(parent, id, pos, size, style, name)
+              int *attribList, const wxPalette& palette )
+  : wxScrolledWindow()
+//  : wxScrolledWindow(parent, id, pos, size, style, name)
 {			
-  m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+    bool ret = Create(parent, id, pos, size, style, name);
 
-  SetupPixelFormat();
-  SetupPalette(palette);
+    if ( ret )
+    {
+        SetBackgroundColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE));
+        SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+    }
 
-  m_glContext = new wxGLContext(TRUE, this, palette, shared );
+    m_hDC = (WXHDC) ::GetDC((HWND) GetHWND());
+
+    SetupPixelFormat();
+    SetupPalette(palette);
+
+    m_glContext = new wxGLContext(TRUE, this, palette, shared );
 }
 
 wxGLCanvas::~wxGLCanvas()
@@ -151,6 +168,103 @@ wxGLCanvas::~wxGLCanvas()
     delete m_glContext;
 
   ::ReleaseDC((HWND) GetHWND(), (HDC) m_hDC);
+}
+
+// Replaces wxWindow::Create functionality, since we need to use a different window class
+bool wxGLCanvas::Create(wxWindow *parent, wxWindowID id,
+              const wxPoint& pos, const wxSize& size, long style, const wxString& name)
+{
+    static bool registeredGLCanvasClass = FALSE;
+
+    // We have to register a special window class because we need
+    // the CS_OWNDC style for GLCanvas.
+
+/*
+    Here are two snips from a dicussion in the OpenGL Gamedev list that explains
+    how this problem can be fixed:
+
+    "There are 5 common DCs available in Win95. These are aquired when you call
+    GetDC or GetDCEx from a window that does _not_ have the OWNDC flag.
+    OWNDC flagged windows do not get their DC from the common DC pool, the issue
+    is they require 800 bytes each from the limited 64Kb local heap for GDI."
+
+    "The deal is, if you hold onto one of the 5 shared DC's too long (as GL apps
+    do), Win95 will actually "steal" it from you.  MakeCurrent fails,
+    apparently, because Windows re-assigns the HDC to a different window.  The
+    only way to prevent this, the only reliable means, is to set CS_OWNDC."
+*/
+
+    if (!registeredGLCanvasClass)
+    {
+        WNDCLASS wndclass;
+
+        static const long styleNormal = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS | CS_OWNDC;
+
+        // the fields which are common to all classes
+        wndclass.lpfnWndProc   = (WNDPROC)wxWndProc;
+        wndclass.cbClsExtra    = 0;
+        wndclass.cbWndExtra    = sizeof( DWORD ); // VZ: what is this DWORD used for?
+        wndclass.hInstance     = wxhInstance;
+        wndclass.hIcon         = (HICON) NULL;
+        wndclass.hCursor       = ::LoadCursor((HINSTANCE)NULL, IDC_ARROW);
+        wndclass.lpszMenuName  = NULL;
+
+        // Register the GLCanvas class name
+        wndclass.hbrBackground = (HBRUSH)NULL;
+        wndclass.lpszClassName = wxGLCanvasClassName;
+        wndclass.style         = styleNormal;
+
+        if ( !RegisterClass(&wndclass) )
+        {
+            wxLogLastError("RegisterClass(wxGLCanvasClass)");
+
+            return FALSE;
+        }
+    }
+
+    wxCHECK_MSG( parent, FALSE, wxT("can't create wxWindow without parent") );
+
+    if ( !CreateBase(parent, id, pos, size, style, wxDefaultValidator, name) )
+        return FALSE;
+
+    parent->AddChild(this);
+
+    DWORD msflags = 0;
+    if ( style & wxBORDER )
+        msflags |= WS_BORDER;
+    if ( style & wxTHICK_FRAME )
+        msflags |= WS_THICKFRAME;
+
+    msflags |= WS_CHILD | WS_VISIBLE;
+    if ( style & wxCLIP_CHILDREN )
+        msflags |= WS_CLIPCHILDREN;
+
+    bool want3D;
+    WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
+
+    // Even with extended styles, need to combine with WS_BORDER
+    // for them to look right.
+    if ( want3D || (m_windowStyle & wxSIMPLE_BORDER) || (m_windowStyle & wxRAISED_BORDER ) ||
+        (m_windowStyle & wxSUNKEN_BORDER) || (m_windowStyle & wxDOUBLE_BORDER))
+    {
+        msflags |= WS_BORDER;
+    }
+
+    // calculate the value to return from WM_GETDLGCODE handler
+    if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+    {
+        // want everything: i.e. all keys and WM_CHAR message
+        m_lDlgCode = DLGC_WANTARROWS | DLGC_WANTCHARS |
+                     DLGC_WANTTAB | DLGC_WANTMESSAGE;
+    }
+
+    MSWCreate(m_windowId, parent, wxGLCanvasClassName, this, NULL,
+              pos.x, pos.y,
+              WidthDefault(size.x), HeightDefault(size.y),
+              msflags, NULL, exStyle);
+
+    return TRUE;
+
 }
 
 void wxGLCanvas::SetupPixelFormat() // (HDC hDC)

@@ -79,6 +79,10 @@ class wxGLCanvas: public wxScrolledWindow
 
    ~wxGLCanvas();
 
+   // Replaces wxWindow::Create functionality, since we need to use a different window class
+   bool Create(wxWindow *parent, wxWindowID id,
+              const wxPoint& pos, const wxSize& size, long style, const wxString& name);
+
    void SetCurrent();
    void SetColour(const char *colour);
    void SwapBuffers();

@@ -78,7 +78,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
   M_CURSORDATA->m_destroyCursor = FALSE;
   M_CURSORDATA->m_hCursor = 0;
   M_CURSORDATA->m_ok = FALSE;
-  if (flags & wxBITMAP_TYPE_CUR_RESOURCE)
+  if (flags == wxBITMAP_TYPE_CUR_RESOURCE)
   {
 #ifdef __WIN95__
     M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadImage(wxGetInstance(), cursor_file, IMAGE_CURSOR, 0, 0, 0);
@@ -90,7 +90,7 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
     else
       M_CURSORDATA->m_ok = FALSE;
   }
-  else if (flags & wxBITMAP_TYPE_CUR)
+  else if (flags == wxBITMAP_TYPE_CUR)
   {
 #ifdef __WIN95__
     M_CURSORDATA->m_hCursor = (WXHCURSOR) LoadImage(wxGetInstance(), cursor_file, IMAGE_CURSOR, 0, 0, LR_LOADFROMFILE);
@@ -101,14 +101,14 @@ wxCursor::wxCursor(const wxString& cursor_file, long flags, int hotSpotX, int ho
 #endif
 #endif
   }
-  else if (flags & wxBITMAP_TYPE_ICO)
+  else if (flags == wxBITMAP_TYPE_ICO)
   {
 #if wxUSE_RESOURCE_LOADING_IN_MSW
     M_CURSORDATA->m_hCursor = (WXHCURSOR) IconToCursor(WXSTRINGCAST cursor_file, wxGetInstance(), hotSpotX, hotSpotY, &M_CURSORDATA->m_width, &M_CURSORDATA->m_height);
     M_CURSORDATA->m_destroyCursor = TRUE;
 #endif
   }
-  else if (flags & wxBITMAP_TYPE_BMP)
+  else if (flags == wxBITMAP_TYPE_BMP)
   {
 #if wxUSE_RESOURCE_LOADING_IN_MSW
     HBITMAP hBitmap = 0;

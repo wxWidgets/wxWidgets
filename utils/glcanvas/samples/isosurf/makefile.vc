@@ -11,10 +11,15 @@
 # Set WXDIR for your system
 WXDIR = $(WXWIN)
 
+!if "$(FINAL)" == "1"
+!else
+LIBEXT=_d
+!endif
+
 PROGRAM=isosurf
 OBJECTS = $(PROGRAM).obj
 EXTRAINC=-I..\..\win
-EXTRALIBS=$(WXDIR)\lib\glcanvas.lib glu32.lib opengl32.lib
+EXTRALIBS=$(WXDIR)\lib\glcanvas$(LIBEXT).lib glu32.lib opengl32.lib
 EXTRATARGETS=isosurf.dat
 
 !include $(WXDIR)\src\makeprog.vc

@@ -15,7 +15,7 @@
 WXDIR = $(WXWIN)
 GLDIR = $(WXDIR)\utils\glcanvas
 THISDIR = $(GLDIR)\win
-EXTRALIBS=$(WXDIR)\lib\glcanvas.lib
+EXTRALIBS=$(WXDIR)\lib\glcanvas$(LIBEXT).lib
 DOCDIR=$(WXDIR)\docs
 LOCALDOCDIR=$(WXDIR)\utils\glcanvas\docs
 
