@@ -242,7 +242,7 @@ void wxMacReleaseBitmapButton( ControlButtonContentInfo*info )
     {
         ReleaseIconRef(info->u.iconRef) ;
     }
-#if wxMAC_USE_CORE_GRAPHICS
+#if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED > MAC_OS_X_VERSION_10_2
     else if ( info->contentType == kControlContentCGImageRef )
     {
         CGImageRelease( info->u.imageRef ) ;
