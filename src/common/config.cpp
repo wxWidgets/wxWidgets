@@ -23,7 +23,7 @@
   #pragma hdrstop
 #endif  //__BORLANDC__
 
-#if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || defined(wxCONFIG_WIN32_NATIVE))
+#if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE))
 
 #include "wx/app.h"
 #include "wx/file.h"
@@ -75,7 +75,7 @@ wxConfigBase *wxConfigBase::Create()
 {
   if ( ms_bAutoCreate && ms_pConfig == NULL ) {
     ms_pConfig =
-    #if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
+    #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
       #ifdef __WIN32__
         new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
       #else  //WIN16

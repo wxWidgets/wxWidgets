@@ -3,7 +3,7 @@
 
 #include "wx/confbase.h"
 
-#if defined(__WXMSW__) && defined(wxCONFIG_WIN32_NATIVE)
+#if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
 #  ifdef __WIN32__
 #    include "wx/msw/regconf.h"
 #else

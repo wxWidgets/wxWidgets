@@ -44,12 +44,12 @@
   #define   wxCONFIG_IMMUTABLE_PREFIX   '!'
 #endif
 
-/// should we use registry instead of configuration files under Win32?
+/// should we use registry instead of configuration files under Windows?
 // (i.e. whether wxConfigBase::Create() will create a wxFileConfig (if it's
 //  FALSE) or wxRegConfig (if it's true and we're under Win32) or wxIniConfig
 //  (under Win16))
-#ifndef   wxCONFIG_WIN32_NATIVE
-  #define wxCONFIG_WIN32_NATIVE          TRUE
+#ifndef   wxUSE_CONFIG_NATIVE
+  #define wxUSE_CONFIG_NATIVE 1
 #endif
 
 // Style flags for constructor style parameter
@@ -93,7 +93,7 @@ public:
   static wxConfigBase *Get() { if ( !ms_pConfig ) Create(); return ms_pConfig; }
     // create a new config object: this function will create the "best"
     // implementation of wxConfig available for the current platform, see
-    // comments near definition wxCONFIG_WIN32_NATIVE for details. It returns
+    // comments near definition wxUSE_CONFIG_NATIVE for details. It returns
     // the created object and also sets it as ms_pConfig.
   static wxConfigBase *Create();
     // should Get() try to create a new log object if the current one is NULL?
@@ -279,7 +279,7 @@ private:
 // ----------------------------------------------------------------------------
 
 // under Windows we prefer to use the native implementation
-#if defined(__WXMSW__) && wxCONFIG_WIN32_NATIVE
+#if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
   #ifdef __WIN32__
     #define wxConfig  wxRegConfig
     #define sm_classwxConfig sm_classwxRegConfig

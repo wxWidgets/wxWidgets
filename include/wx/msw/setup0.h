@@ -47,8 +47,29 @@
 // General features
 // ----------------------------------------------------------------------------
 
+// Setting wxUSE_CONFIG to 1 enables the use of wxConfig and related classes
+// which allow the application to store its settings in the persistent
+// storage. Setting this to 1 will also enable on-demand creation of the
+// global config object in wxApp.
+//
+// See also wxUSE_CONFIG_NATIVE below.
+//
+// Recommended setting: 1
 #define wxUSE_CONFIG           1
-                                // Use wxConfig, with CreateConfig in wxApp
+
+// If wxUSE_CONFIG is 1, you may choose to use either the native config
+// classes under Windows (using .INI files under Win16 and the registry under
+// Win32) or the portable text file format used by the config classes under
+// Unix.
+//
+// Default is 1 to use native classes. Note that you may still use
+// wxFileConfig even if you set this to 1 - just the config object created by
+// default for the applications needs will be a wxRegConfig or wxIniConfig and
+// not wxFileConfig.
+//
+// Recommended setting: 1
+#define wxUSE_CONFIG_NATIVE   1
+
 #define wxUSE_DIALUP_MANAGER   1
                                 // Use wxDialUpManager class
 #define wxUSE_POSTSCRIPT  0
