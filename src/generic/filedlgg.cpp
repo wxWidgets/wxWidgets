@@ -1098,7 +1098,7 @@ void wxFileDialog::HandleAction( const wxString &fn )
     SetPath( filename );
 
     // change to the directory where the user went if asked
-    if ( style & wxCHANGE_DIR )
+    if ( GetWindowStyle() & wxCHANGE_DIR )
     {
         wxString cwd;
         wxSplitPath(filename, &cwd, NULL, NULL);
