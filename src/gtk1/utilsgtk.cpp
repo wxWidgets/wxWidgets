@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        utils.cpp
+// Name:        src/gtk/utilsgtk.cpp
 // Purpose:
 // Author:      Robert Roebling
 // Id:          $Id$
@@ -21,6 +21,7 @@
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <sys/wait.h>   // for WNOHANG
 #include <unistd.h>
 
 #include "glib.h"
@@ -142,12 +143,23 @@ static void GTK_EndProcessDetector(gpointer data, gint source,
                                    GdkInputCondition WXUNUSED(condition) )
 {
    wxEndProcessData *proc_data = (wxEndProcessData *)data;
+
+   // has the process really terminated? unfortunately GDK (or GLib) seem to
+   // generate G_IO_HUP notification even when it simply tries to read from a
+   // closed fd and hasn't terminated at all
+   int pid = (proc_data->pid > 0) ? proc_data->pid : -(proc_data->pid);
+   if ( waitpid(pid, NULL, WNOHANG) == 0 )
+   {
+       // no, it didn't exit yet, continue waiting
+       return;
+   }
+
+   // child exited, end waiting
    close(source);
+
+   // don't call us again!
    gdk_input_remove(proc_data->tag);
 
-   // This has to come after gdk_input_remove() or we will
-   // occasionally receive multiple callbacks with corrupt data
-   // pointers. (KB)
    wxHandleProcessTermination(proc_data);
 }
 
