@@ -1456,15 +1456,15 @@ struct WXDLLEXPORT wxEventTableEntry
 {
     wxEventTableEntry( const int &eventType,
                        int id,
-                       int m_lastId,
+                       int lastId,
                        wxObjectEventFunction fn,
                        wxObject *data ) :
-        m_eventType(eventType), 
-        m_id(id),
-        m_lastId(id),
-        m_fn(fn),
-        m_callbackUserData(data)
+        m_eventType(eventType)
     {
+        m_id = id;
+        m_lastId = lastId;
+        m_fn = fn;
+        m_callbackUserData = data;
     }
 
     // For some reason, this can't be wxEventType, or VC++ complains.
