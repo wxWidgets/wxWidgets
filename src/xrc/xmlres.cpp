@@ -1226,7 +1226,10 @@ static void CleanXRCID_Record(XRCID_record *rec)
 static void CleanXRCID_Records()
 {
     for (int i = 0; i < XRCID_TABLE_SIZE; i++)
+    {
         CleanXRCID_Record(XRCID_Records[i]);
+        XRCID_Records[i] = NULL;
+    }
 }
 
 static void AddStdXRCID_Records()
@@ -1286,5 +1289,3 @@ void wxXmlInitResourceModule()
     module->Init();
     wxModule::RegisterModule(module);
 }
-
-
