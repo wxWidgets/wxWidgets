@@ -56,8 +56,6 @@
 
 static wxChar   *poem_buffer;          // Storage for each poem
 static wxChar   line[150];                      // Storage for a line
-static wxChar   title[150];                     // Remember the title
-static wxChar   *search_string = NULL;          // The search string
 static int      pages[30];                      // For multipage poems -
                                                 // store the start of each page
 static long     last_poem_start = 0;            // Start of last found poem
@@ -89,11 +87,6 @@ wxIcon          *Corner2 = NULL;
 wxIcon          *Corner3 = NULL;
 wxIcon          *Corner4 = NULL;
 
-// Fonts
-wxFont          *NormalFont = NULL;
-wxFont          *BoldFont = NULL;
-wxFont          *ItalicFont = NULL;
-
 // Pens
 wxPen           *GreyPen = NULL;
 wxPen           *DarkGreyPen = NULL;
@@ -109,10 +102,7 @@ bool            LoadPoem(wxChar *, long);
 int             GetIndex();
 int             LoadIndex(wxChar *);
 bool            Compile(void);
-void            WritePreferences();
-void            ReadPreferences();
 void            FindMax(int *max_thing, int thing);
-void            CreateFonts();
 
 #if wxUSE_CLIPBOARD
     #include "wx/dataobj.h"
@@ -128,11 +118,11 @@ IMPLEMENT_APP(MyApp)
 MainWindow *TheMainWindow = NULL;
 
 // Create the fonts
-void CreateFonts()
+void MainWindow::CreateFonts()
 {
-  NormalFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL);
-  BoldFont =   wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxBOLD);
-  ItalicFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxITALIC, wxNORMAL);
+    m_normalFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxNORMAL);
+    m_boldFont =   wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxNORMAL, wxBOLD);
+    m_italicFont = wxTheFontList->FindOrCreateFont(pointSize, wxSWISS, wxITALIC, wxNORMAL);
 }
 
 BEGIN_EVENT_TABLE(MainWindow, wxFrame)
@@ -142,9 +132,11 @@ BEGIN_EVENT_TABLE(MainWindow, wxFrame)
 END_EVENT_TABLE()
 
 MainWindow::MainWindow(wxFrame *frame, wxWindowID id, const wxString& title,
-   const wxPoint& pos, const wxSize& size, long style):
-  wxFrame(frame, id, title, pos, size, style)
+     const wxPoint& pos, const wxSize& size, long style):
+     wxFrame(frame, id, title, pos, size, style)
 {
+    ReadPreferences();
+    CreateFonts();
 }
 
 // Read the poetry buffer, either for finding the size
@@ -167,48 +159,51 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 
     if (DrawIt)
     {
-      y = (*max_y - poem_height)/2;
-      width = *max_x;
-      height = *max_y;
+        y = (*max_y - poem_height)/2;
+        width = *max_x;
+        height = *max_y;
     }
 
     if (DrawIt && wxColourDisplay())
     {
-      dc->SetBrush(*wxLIGHT_GREY_BRUSH);
-      dc->SetPen(*GreyPen);
-      dc->DrawRectangle(0, 0, width, height);
-      dc->SetBackgroundMode(wxTRANSPARENT);
+        dc->SetBrush(*wxLIGHT_GREY_BRUSH);
+        dc->SetPen(*GreyPen);
+        dc->DrawRectangle(0, 0, width, height);
+        dc->SetBackgroundMode(wxTRANSPARENT);
     }
 
     // See what ACTUAL char height is
-    dc->SetFont(* NormalFont);
+    if(m_normalFont)
+        dc->SetFont(*m_normalFont);
     long xx;
     long yy;
     dc->GetTextExtent(_T("X"), &xx, &yy);
     char_height = (int)yy;
 
     if (current_page == 0)
-      title[0] = 0;
-    else if (title[0] != 0)
     {
-       dc->SetFont(* BoldFont);
-       dc->GetTextExtent(title, &xx, &yy);
-       FindMax(&curr_width, (int)xx);
+        m_title = wxEmptyString;
+    }
+    else if (!m_title.empty())
+    {
+        dc->SetFont(* m_boldFont);
+        dc->GetTextExtent(m_title, &xx, &yy);
+        FindMax(&curr_width, (int)xx);
 
-       if (DrawIt)
-       {
-         int x = (width - xx)/2;
-         dc->SetFont(* BoldFont);
+        if (DrawIt)
+        {
+            int x = (width - xx)/2;
+            dc->SetFont(* m_boldFont);
 
-         // Change text to BLACK!
-         dc->SetTextForeground(* wxBLACK);
-         dc->DrawText(title, x, y);
-         // Change text to WHITE!
-         dc->SetTextForeground(* wxWHITE);
-         dc->DrawText(title, x-SHADOW_OFFSET, y-SHADOW_OFFSET);
-       }
-       y += char_height;
-       y += char_height;
+            // Change text to BLACK!
+            dc->SetTextForeground(* wxBLACK);
+            dc->DrawText(m_title, x, y);
+            // Change text to WHITE!
+            dc->SetTextForeground(* wxWHITE);
+            dc->DrawText(m_title, x-SHADOW_OFFSET, y-SHADOW_OFFSET);
+        }
+        y += char_height;
+        y += char_height;
     }
 
     while (ch != 0 && !page_break)
@@ -240,85 +235,85 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
             // If a single newline on its own, put a space in
             if (j == 0)
             {
-              line[j] = ' ';
-              j ++;
-              line[j] = 0;
+                line[j] = ' ';
+                j ++;
+                line[j] = 0;
             }
         }
 
         if (j > 0)
         {
-          line[j] = 0;
-          if (line[0] == '@')
-          {
-            switch (line[1])
+            line[j] = 0;
+            if (line[0] == '@')
             {
-              case 'P':
-                paging = true;
-                page_break = true;
-                break;
-
-              case 'T':
-                dc->SetFont(* BoldFont);
-                line_ptr = line+3;
-
-                wxStrcpy(title, line_ptr);
-                wxStrcat(title, _T(" (cont'd)"));
-
-                dc->GetTextExtent(line_ptr, &xx, &yy);
-                FindMax(&curr_width, (int)xx);
-
-                if (DrawIt)
+                switch (line[1])
                 {
-                  int x = (width - xx)/2;
-                  dc->SetFont(* BoldFont);
+                    case 'P':
+                        paging = true;
+                        page_break = true;
+                        break;
 
-                  // Change text to BLACK!
-                  dc->SetTextForeground(* wxBLACK);
-                  dc->DrawText(line_ptr, x, y);
+                    case 'T':
+                        dc->SetFont(* m_boldFont);
+                        line_ptr = line+3;
 
-                  // Change text to WHITE!
-                  dc->SetTextForeground(* wxWHITE);
-                  dc->DrawText(line_ptr, x-SHADOW_OFFSET, y-SHADOW_OFFSET);
-                  dc->SetTextForeground(* wxWHITE);
+                        m_title = line_ptr;
+                        m_title << _T(" (cont'd)");
+
+                        dc->GetTextExtent(line_ptr, &xx, &yy);
+                        FindMax(&curr_width, (int)xx);
+
+                        if (DrawIt)
+                        {
+                            int x = (width - xx)/2;
+                            dc->SetFont(* m_boldFont);
+
+                            // Change text to BLACK!
+                            dc->SetTextForeground(* wxBLACK);
+                            dc->DrawText(line_ptr, x, y);
+
+                            // Change text to WHITE!
+                            dc->SetTextForeground(* wxWHITE);
+                            dc->DrawText(line_ptr, x-SHADOW_OFFSET, y-SHADOW_OFFSET);
+                            dc->SetTextForeground(* wxWHITE);
+                        }
+                        break;
+
+                    case 'A':
+                        line_ptr = line+3;
+                        dc->SetFont(* m_italicFont);
+
+                        dc->GetTextExtent(line_ptr, &xx, &yy);
+                        FindMax(&curr_width, (int)xx);
+
+                        if (DrawIt)
+                        {
+                            int x = (width - xx)/2;
+                            dc->SetTextForeground(* wxBLACK);
+                            dc->DrawText(line_ptr, x, y);
+                        }
+                        break;
+
+                    // Default: just ignore this line
+                    default:
+                    y -= char_height;
                 }
-                break;
-
-              case 'A':
-                line_ptr = line+3;
-                dc->SetFont(* ItalicFont);
-
-                dc->GetTextExtent(line_ptr, &xx, &yy);
-                FindMax(&curr_width, (int)xx);
-
-                if (DrawIt)
-                {
-                  int x = (width - xx)/2;
-                  dc->SetTextForeground(* wxBLACK);
-                  dc->DrawText(line_ptr, x, y);
-                }
-                break;
-
-              // Default: just ignore this line
-              default:
-                y -= char_height;
             }
-           }
-           else
-           {
-              dc->SetFont(* NormalFont);
+            else
+            {
+                dc->SetFont(* m_normalFont);
 
-              dc->GetTextExtent(line, &xx, &yy);
-              FindMax(&curr_width, (int)xx);
+                dc->GetTextExtent(line, &xx, &yy);
+                FindMax(&curr_width, (int)xx);
 
-              if (DrawIt)
-              {
-                int x = (int)((width - xx)/2.0);
-                dc->SetFont(* NormalFont);
-                dc->SetTextForeground(* wxBLACK);
-                dc->DrawText(line, x, y);
-              }
-           }
+                if (DrawIt)
+                {
+                    int x = (int)((width - xx)/2.0);
+                    dc->SetFont(* m_normalFont);
+                    dc->SetTextForeground(* wxBLACK);
+                    dc->DrawText(line, x, y);
+                }
+            }
         }
         y += char_height;
     }
@@ -326,89 +321,87 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     // Write (cont'd)
     if (page_break)
     {
-       wxChar *cont = _T("(cont'd)");
+        wxChar *cont = _T("(cont'd)");
 
-       dc->SetFont(* NormalFont);
+        dc->SetFont(* m_normalFont);
 
-       dc->GetTextExtent(cont, &xx, &yy);
-       FindMax(&curr_width, (int)xx);
-       if (DrawIt)
-       {
-         int x = (int)((width - xx)/2.0);
-         dc->SetFont(* NormalFont);
-         dc->SetTextForeground(* wxBLACK);
-         dc->DrawText(cont, x, y);
-       }
-       y += 2*char_height;
+        dc->GetTextExtent(cont, &xx, &yy);
+        FindMax(&curr_width, (int)xx);
+        if (DrawIt)
+        {
+            int x = (int)((width - xx)/2.0);
+            dc->SetFont(* m_normalFont);
+            dc->SetTextForeground(* wxBLACK);
+            dc->DrawText(cont, x, y);
+        }
+        y += 2*char_height;
     }
 
     *max_x = (int)curr_width;
     *max_y = (int)(y-char_height);
 
     if (page_break)
-      pages[current_page+1] = i;
+        pages[current_page+1] = i;
     else
-      paging = false;
+        paging = false;
 
     if (DrawIt)
     {
-      // Draw dark grey thick border
-      if (wxColourDisplay())
-      {
-        dc->SetBrush(*wxGREY_BRUSH);
-        dc->SetPen(*wxGREY_PEN);
+        // Draw dark grey thick border
+        if (wxColourDisplay())
+        {
+            dc->SetBrush(*wxGREY_BRUSH);
+            dc->SetPen(*wxGREY_PEN);
 
-        // Left side
-        dc->DrawRectangle(0, 0, THIN_LINE_BORDER, height);
-        // Top side
-        dc->DrawRectangle(THIN_LINE_BORDER, 0, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
-        // Right side
-        dc->DrawRectangle(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width, height-THIN_LINE_BORDER);
-        // Bottom side
-        dc->DrawRectangle(THIN_LINE_BORDER, height-THIN_LINE_BORDER, width-THIN_LINE_BORDER, height);
-      }
-      // Draw border
-      // Have grey background, plus 3-d border -
-      // One black rectangle.
-      // Inside this, left and top sides - dark grey. Bottom and right -
-      // white.
+            // Left side
+            dc->DrawRectangle(0, 0, THIN_LINE_BORDER, height);
+            // Top side
+            dc->DrawRectangle(THIN_LINE_BORDER, 0, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
+            // Right side
+            dc->DrawRectangle(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width, height-THIN_LINE_BORDER);
+            // Bottom side
+            dc->DrawRectangle(THIN_LINE_BORDER, height-THIN_LINE_BORDER, width-THIN_LINE_BORDER, height);
+        }
+        // Draw border
+        // Have grey background, plus 3-d border -
+        // One black rectangle.
+        // Inside this, left and top sides - dark grey. Bottom and right -
+        // white.
 
-      // Change pen to black
-      dc->SetPen(*wxBLACK_PEN);
-      dc->DrawLine(THIN_LINE_BORDER, THIN_LINE_BORDER, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
-      dc->DrawLine(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width-THIN_LINE_BORDER, height-THIN_LINE_BORDER);
-      dc->DrawLine(width-THIN_LINE_BORDER, height-THIN_LINE_BORDER, THIN_LINE_BORDER, height-THIN_LINE_BORDER);
-      dc->DrawLine(THIN_LINE_BORDER, height-THIN_LINE_BORDER, THIN_LINE_BORDER, THIN_LINE_BORDER);
+        // Change pen to black
+        dc->SetPen(*wxBLACK_PEN);
+        dc->DrawLine(THIN_LINE_BORDER, THIN_LINE_BORDER, width-THIN_LINE_BORDER, THIN_LINE_BORDER);
+        dc->DrawLine(width-THIN_LINE_BORDER, THIN_LINE_BORDER, width-THIN_LINE_BORDER, height-THIN_LINE_BORDER);
+        dc->DrawLine(width-THIN_LINE_BORDER, height-THIN_LINE_BORDER, THIN_LINE_BORDER, height-THIN_LINE_BORDER);
+        dc->DrawLine(THIN_LINE_BORDER, height-THIN_LINE_BORDER, THIN_LINE_BORDER, THIN_LINE_BORDER);
 
-      // Right and bottom white lines - 'grey' (black!) if
-      // we're running on a mono display.
-      if (wxColourDisplay())
-        dc->SetPen(*WhitePen);
-      else
+        // Right and bottom white lines - 'grey' (black!) if
+        // we're running on a mono display.
+        if (wxColourDisplay())
+            dc->SetPen(*WhitePen);
+        else
+            dc->SetPen(*DarkGreyPen);
+
+        dc->DrawLine(width-THICK_LINE_BORDER, THICK_LINE_BORDER,
+                     width-THICK_LINE_BORDER, height-THICK_LINE_BORDER);
+        dc->DrawLine(width-THICK_LINE_BORDER, height-THICK_LINE_BORDER,
+                     THICK_LINE_BORDER, height-THICK_LINE_BORDER);
+
+        // Left and top grey lines
         dc->SetPen(*DarkGreyPen);
+        dc->DrawLine(THICK_LINE_BORDER, height-THICK_LINE_BORDER,
+                     THICK_LINE_BORDER, THICK_LINE_BORDER);
+        dc->DrawLine(THICK_LINE_BORDER, THICK_LINE_BORDER,
+                     width-THICK_LINE_BORDER, THICK_LINE_BORDER);
 
-      dc->DrawLine(width-THICK_LINE_BORDER, THICK_LINE_BORDER,
-                   width-THICK_LINE_BORDER, height-THICK_LINE_BORDER);
-      dc->DrawLine(width-THICK_LINE_BORDER, height-THICK_LINE_BORDER,
-                   THICK_LINE_BORDER, height-THICK_LINE_BORDER);
+        // Draw icons
+        dc->DrawIcon(* Corner1, 0, 0);
+        dc->DrawIcon(* Corner2, int(width-32), 0);
 
-      // Left and top grey lines
-      dc->SetPen(*DarkGreyPen);
-      dc->DrawLine(THICK_LINE_BORDER, height-THICK_LINE_BORDER,
-                   THICK_LINE_BORDER, THICK_LINE_BORDER);
-      dc->DrawLine(THICK_LINE_BORDER, THICK_LINE_BORDER,
-                   width-THICK_LINE_BORDER, THICK_LINE_BORDER);
-
-//#ifdef __WXMSW__
-      // Draw icons
-      dc->DrawIcon(* Corner1, 0, 0);
-      dc->DrawIcon(* Corner2, int(width-32), 0);
-
-      int y2 = height - 32;
-      int x2 = (width-32);
-      dc->DrawIcon(* Corner3, 0, y2);
-      dc->DrawIcon(* Corner4, x2, y2);
-//#endif
+        int y2 = height - 32;
+        int x2 = (width-32);
+        dc->DrawIcon(* Corner3, 0, y2);
+        dc->DrawIcon(* Corner4, x2, y2);
     }
 }
 
@@ -416,10 +409,10 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
 void MainWindow::GetIndexLoadPoem(void)
 {
     if (index_ok)
-      index_ptr = GetIndex();
+        index_ptr = GetIndex();
 
     if (index_ptr > -1)
-      loaded_ok = LoadPoem(data_filename, -1);
+        loaded_ok = LoadPoem(data_filename, -1);
 }
 
 // Find the size of the poem and resize the window accordingly
@@ -444,75 +437,78 @@ void MainWindow::Resize(void)
     memDC.SelectObject(* backingBitmap);
 
     memDC.Clear();
-    TheMainWindow->ScanBuffer(&memDC, true, &xx, &yy);
+    ScanBuffer(&memDC, true, &xx, &yy);
 }
 
 // Which is more?
 void FindMax(int *max_thing, int thing)
 {
-  if (thing > *max_thing)
-    *max_thing = thing;
+    if (thing > *max_thing)
+        *max_thing = thing;
 }
 
 // Next page/poem
 void MainWindow::NextPage(void)
 {
-  if (paging)
-    current_page ++;
-  else
-  {
-    current_page = 0;
-    GetIndexLoadPoem();
-  }
-  Resize();
+    if (paging)
+        current_page ++;
+    else
+    {
+        current_page = 0;
+        GetIndexLoadPoem();
+    }
+    Resize();
 }
 
 // Previous page
 void MainWindow::PreviousPage(void)
 {
-  if (current_page > 0)
-  {
-    current_page --;
-    Resize();
-  }
+    if (current_page > 0)
+    {
+        current_page --;
+        Resize();
+    }
 }
 
 // Search for a string
 void MainWindow::Search(bool ask)
 {
-  long position;
+    long position;
 
-  if (ask || !search_string)
-  {
-    wxString s = wxGetTextFromUser( _T("Enter search string"), _T("Search"), (const wxChar*) search_string);
-    if (s != wxEmptyString)
+    if (ask || m_searchString.empty())
     {
-      s.MakeLower();
-      if (search_string) delete[] search_string;
-      search_string = wxStrcpy(new wxChar[wxStrlen(s.c_str()) + 1], s.c_str());
-      search_ok = true;
-    } else search_ok = false;
-  }
-  else
-  {
-    same_search = true;
-    search_ok = true;
-  }
-
-  if (search_string && search_ok)
-  {
-    position = DoSearch();
-    if (position > -1)
-    {
-       loaded_ok = LoadPoem(data_filename, position);
-       Resize();
+        wxString s = wxGetTextFromUser( _T("Enter search string"), _T("Search"), m_searchString);
+        if (s != wxEmptyString)
+        {
+            s.MakeLower();
+            m_searchString = s;
+            search_ok = true;
+        }
+        else
+        {
+            search_ok = false;
+        }
     }
     else
     {
-      last_poem_start = 0;
-      PoetryNotify(_T("Search string not found."));
+        same_search = true;
+        search_ok = true;
     }
-  }
+
+    if (!m_searchString.empty() && search_ok)
+    {
+        position = DoSearch();
+        if (position > -1)
+        {
+            loaded_ok = LoadPoem(data_filename, position);
+            Resize();
+        }
+        else
+        {
+            last_poem_start = 0;
+            PoetryNotify(_T("Search string not found."));
+        }
+    }
 }
 
 bool MyApp::OnInit()
@@ -522,10 +518,6 @@ bool MyApp::OnInit()
   GreyPen = new wxPen(_T("LIGHT GREY"), THICK_LINE_WIDTH, wxSOLID);
   DarkGreyPen = new wxPen(_T("GREY"), THICK_LINE_WIDTH, wxSOLID);
   WhitePen = new wxPen(_T("WHITE"), THICK_LINE_WIDTH, wxSOLID);
-
-  CreateFonts();
-
-  ReadPreferences();
 
   // Seed the random number generator
 #ifdef __WXWINCE__
@@ -550,7 +542,7 @@ bool MyApp::OnInit()
 
   TheMainWindow->SetIcon(wxICON(wxpoem));
 
-  TheMainWindow->canvas = new MyCanvas(TheMainWindow, 501, wxDefaultPosition, wxDefaultSize);
+  TheMainWindow->canvas = new MyCanvas(TheMainWindow);
 
   if (argc > 1)
   {
@@ -598,8 +590,6 @@ int MyApp::OnExit()
   delete Corner4;
 
   delete[] poem_buffer;
-  if (search_string)
-    delete[] search_string;
 
   return 0;
 }
@@ -622,32 +612,32 @@ BEGIN_EVENT_TABLE(MyCanvas, wxWindow)
 END_EVENT_TABLE()
 
 // Define a constructor for my canvas
-MyCanvas::MyCanvas(wxFrame *frame, wxWindowID id, const wxPoint& pos, const wxSize& size):
- wxWindow(frame, id, pos, size)
+MyCanvas::MyCanvas(wxFrame *frame):
+          wxWindow(frame, wxID_ANY)
 {
-  popupMenu = new wxMenu;
-  popupMenu->Append(POEM_NEXT, _T("Next poem/page"));
-  popupMenu->Append(POEM_PREVIOUS, _T("Previous page"));
-  popupMenu->AppendSeparator();
-  popupMenu->Append(POEM_SEARCH, _T("Search"));
-  popupMenu->Append(POEM_NEXT_MATCH, _T("Next match"));
-  popupMenu->Append(POEM_COPY, _T("Copy to clipboard"));
-  popupMenu->Append(POEM_MINIMIZE, _T("Minimize"));
-  popupMenu->AppendSeparator();
-  popupMenu->Append(POEM_BIGGER_TEXT, _T("Bigger text"));
-  popupMenu->Append(POEM_SMALLER_TEXT, _T("Smaller text"));
-  popupMenu->AppendSeparator();
-  popupMenu->Append(POEM_ABOUT, _T("About wxPoem"));
-  popupMenu->AppendSeparator();
-  popupMenu->Append(POEM_EXIT, _T("Exit"));
+    m_popupMenu = new wxMenu;
+    m_popupMenu->Append(POEM_NEXT, _T("Next poem/page"));
+    m_popupMenu->Append(POEM_PREVIOUS, _T("Previous page"));
+    m_popupMenu->AppendSeparator();
+    m_popupMenu->Append(POEM_SEARCH, _T("Search"));
+    m_popupMenu->Append(POEM_NEXT_MATCH, _T("Next match"));
+    m_popupMenu->Append(POEM_COPY, _T("Copy to clipboard"));
+    m_popupMenu->Append(POEM_MINIMIZE, _T("Minimize"));
+    m_popupMenu->AppendSeparator();
+    m_popupMenu->Append(POEM_BIGGER_TEXT, _T("Bigger text"));
+    m_popupMenu->Append(POEM_SMALLER_TEXT, _T("Smaller text"));
+    m_popupMenu->AppendSeparator();
+    m_popupMenu->Append(POEM_ABOUT, _T("About wxPoem"));
+    m_popupMenu->AppendSeparator();
+    m_popupMenu->Append(POEM_EXIT, _T("Exit"));
 }
 
 MyCanvas::~MyCanvas()
 {
-  // Note: this must be done before the main window/canvas are destroyed
-  // or we get an error (no parent window for menu item button)
-  delete popupMenu;
-  popupMenu = NULL;
+    // Note: this must be done before the main window/canvas are destroyed
+    // or we get an error (no parent window for menu item button)
+    delete m_popupMenu;
+    m_popupMenu = NULL;
 }
 
 // Define the repainting behaviour
@@ -671,69 +661,72 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 
 void MyCanvas::OnMouseEvent(wxMouseEvent& event)
 {
-  static int startPosX, startPosY, startFrameX, startFrameY;
+    static int startPosX, startPosY, startFrameX, startFrameY;
 
-  long x, y;
-  event.GetPosition(&x, &y);
+    long x, y;
+    event.GetPosition(&x, &y);
 
-  if (event.RightDown())
-  {
-    // Versions from wxWin 1.67 are probably OK
-    PopupMenu(popupMenu, (int)x, (int)y );
-  }
-  else if (event.LeftDown())
-  {
-    this->CaptureMouse();
-    int x1 = (int)x;
-    int y1 = (int)y;
-    ClientToScreen(&x1, &y1);
-    startPosX = x1;
-    startPosY = y1;
-    GetParent()->GetPosition(&startFrameX, &startFrameY);
-  }
-  else if (event.LeftUp())
-  {
-    if (GetCapture() == this) this->ReleaseMouse();
-  }
-  else if (event.Dragging() && event.LeftIsDown())
-  {
-    int x1 = (int)x;
-    int y1 = (int)y;
-    ClientToScreen(&x1, &y1);
+    if (event.RightDown())
+    {
+        // Versions from wxWin 1.67 are probably OK
+        PopupMenu(m_popupMenu, (int)x, (int)y );
+    }
+    else if (event.LeftDown())
+    {
+        this->CaptureMouse();
+        int x1 = (int)x;
+        int y1 = (int)y;
+        ClientToScreen(&x1, &y1);
+        startPosX = x1;
+        startPosY = y1;
+        GetParent()->GetPosition(&startFrameX, &startFrameY);
+    }
+    else if (event.LeftUp())
+    {
+        if (GetCapture() == this) this->ReleaseMouse();
+    }
+    else if (event.Dragging() && event.LeftIsDown())
+    {
+        int x1 = (int)x;
+        int y1 = (int)y;
+        ClientToScreen(&x1, &y1);
 
-    int dX = x1 - startPosX;
-    int dY = y1 - startPosY;
-    GetParent()->Move(startFrameX + dX, startFrameY + dY);
-  }
+        int dX = x1 - startPosX;
+        int dY = y1 - startPosY;
+        GetParent()->Move(startFrameX + dX, startFrameY + dY);
+    }
 }
 
 // Process characters
 void MyCanvas::OnChar(wxKeyEvent& event)
 {
-  switch (event.GetKeyCode())
-  {
-    case 'n':
-    case 'N':
-      // Next match
-      TheMainWindow->Search(false);
-      break;
-    case 's':
-    case 'S':
-      // New search
-      TheMainWindow->Search(true);
-      break;
-    case WXK_SPACE:
-    case WXK_RIGHT:
-    case WXK_DOWN:
-      // Another poem
-      TheMainWindow->NextPage();
-      break;
-    case WXK_ESCAPE:
-      TheMainWindow->Close(true);
-    default:
-       break;
-   }
- }
+    switch (event.GetKeyCode())
+    {
+        case 'n':
+        case 'N':
+            // Next match
+            TheMainWindow->Search(false);
+            break;
+
+        case 's':
+        case 'S':
+            // New search
+            TheMainWindow->Search(true);
+            break;
+
+        case WXK_SPACE:
+        case WXK_RIGHT:
+        case WXK_DOWN:
+            // Another poem
+            TheMainWindow->NextPage();
+            break;
+
+        case WXK_ESCAPE:
+            TheMainWindow->Close(true);
+        default:
+            break;
+    }
+}
 
 // Load index file
 int LoadIndex(wxChar *file_name)
@@ -744,25 +737,25 @@ int LoadIndex(wxChar *file_name)
     wxChar buf[100];
 
     if (file_name == NULL)
-      return 0;
+        return 0;
 
     wxSprintf(buf, _T("%s.idx"), file_name);
 
     index_file = wxFopen(buf, _T("r"));
     if (index_file == NULL)
-      return 0;
+        return 0;
 
     wxFscanf(index_file, _T("%ld"), &nitems);
 
-      for (int i = 0; i < nitems; i++)
-      {
-      wxFscanf(index_file, _T("%ld"), &data);
+    for (int i = 0; i < nitems; i++)
+    {
+        wxFscanf(index_file, _T("%ld"), &data);
         poem_index[i] = data;
-      }
+    }
 
-      fclose(index_file);
+    fclose(index_file);
 
-      return 1;
+    return 1;
 }
 
 // Get index
@@ -779,24 +772,24 @@ int GetIndex()
 }
 
 // Read preferences
-void ReadPreferences()
+void MainWindow::ReadPreferences()
 {
 #if wxUSE_RESOURCES
-  wxGetResource(_T("wxPoem"), _T("FontSize"), &pointSize);
-  wxGetResource(_T("wxPoem"), _T("X"), &XPos);
-  wxGetResource(_T("wxPoem"), _T("Y"), &YPos);
+    wxGetResource(_T("wxPoem"), _T("FontSize"), &pointSize);
+    wxGetResource(_T("wxPoem"), _T("X"), &XPos);
+    wxGetResource(_T("wxPoem"), _T("Y"), &YPos);
 #endif
 }
 
 // Write preferences to disk
-void WritePreferences()
+void MainWindow::WritePreferences()
 {
 #ifdef __WXMSW__
-  TheMainWindow->GetPosition(&XPos, &YPos);
+    TheMainWindow->GetPosition(&XPos, &YPos);
 #if wxUSE_RESOURCES
-  wxWriteResource(_T("wxPoem"), _T("FontSize"), pointSize);
-  wxWriteResource(_T("wxPoem"), _T("X"), XPos);
-  wxWriteResource(_T("wxPoem"), _T("Y"), YPos);
+    wxWriteResource(_T("wxPoem"), _T("FontSize"), pointSize);
+    wxWriteResource(_T("wxPoem"), _T("X"), XPos);
+    wxWriteResource(_T("wxPoem"), _T("Y"), YPos);
 #endif
 #endif
 }
@@ -832,23 +825,23 @@ bool LoadPoem(wxChar *file_name, long position)
       return false;
     }
 
-      if (position > -1)
+    if (position > -1)
         data = position;
-      else
+    else
         data = poem_index[index_ptr];
 
-      fseek(data_file, data, SEEK_SET);
+    fseek(data_file, data, SEEK_SET);
 
-      int ch = 0;
-      int i = 0;
-      while ((ch != EOF) && (ch != '#'))
-      {
+    int ch = 0;
+    int i = 0;
+    while ((ch != EOF) && (ch != '#'))
+    {
         ch = getc(data_file);
         // Add a linefeed so it will copy to the clipboard ok
         if (ch == 10)
         {
-          poem_buffer[i] = 13;
-          i++;
+            poem_buffer[i] = 13;
+            i++;
         }
 
         poem_buffer[i] = (wxChar)ch;
@@ -856,21 +849,21 @@ bool LoadPoem(wxChar *file_name, long position)
 
         if (i == buf_size)
         {
-        wxSprintf(error_buf, _T("%s"), _T("Poetry buffer exceeded."));
-           PoetryError(error_buf);
-           return false;
+            wxSprintf(error_buf, _T("%s"), _T("Poetry buffer exceeded."));
+            PoetryError(error_buf);
+            return false;
         }
-      }
-      fclose(data_file);
-      poem_buffer[i-1] = 0;
-      return true;
+    }
+    fclose(data_file);
+    poem_buffer[i-1] = 0;
+    return true;
 }
 
 // Do the search
 long MainWindow::DoSearch(void)
 {
-    if (!search_string)
-      return false;
+    if (m_searchString.empty())
+        return false;
 
     FILE *file;
     long i = 0;
@@ -880,29 +873,29 @@ long MainWindow::DoSearch(void)
     long previous_poem_start;
 
     bool found = false;
-    int search_length = wxStrlen(search_string);
+    int search_length = m_searchString.length();
 
     if (same_search)
     {
-      find_start = last_find + 1;
-      previous_poem_start = last_poem_start;
+        find_start = last_find + 1;
+        previous_poem_start = last_poem_start;
     }
     else
     {
-      find_start = 0;
-      last_poem_start = 0;
-      previous_poem_start = -1;
+        find_start = 0;
+        last_poem_start = 0;
+        previous_poem_start = -1;
     }
 
     if (data_filename)
-      wxSprintf(buf, _T("%s.dat"), data_filename);
+        wxSprintf(buf, _T("%s.dat"), data_filename);
 
     file = wxFopen(buf, _T("r"));
     if (! (data_filename && file))
     {
-      wxSprintf(error_buf, _T("Poetry data file %s not found\n"), buf);
-      PoetryError(error_buf);
-      return false;
+        wxSprintf(error_buf, _T("Poetry data file %s not found\n"), buf);
+        PoetryError(error_buf);
+        return false;
     }
 
     fseek(file, find_start, SEEK_SET);
@@ -914,57 +907,61 @@ long MainWindow::DoSearch(void)
 
         // Only match if we're looking at a different poem
         // (no point in displaying the same poem again)
-        if ((ch == search_string[i]) && (last_poem_start != previous_poem_start))
+        if ((ch == m_searchString[i]) && (last_poem_start != previous_poem_start))
         {
-          if (i == 0)
-            last_find = ftell(file);
-          if (i == search_length-1)
-            found = true;
-          i ++;
+            if (i == 0)
+                last_find = ftell(file);
+            if (i == search_length-1)
+                found = true;
+            i ++;
         }
         else
-          i = 0;
+        {
+            i = 0;
+        }
 
         if (ch == '#')
         {
             ch = getc(file);
-              last_poem_start = ftell(file);
+            last_poem_start = ftell(file);
         }
     }
     fclose(file);
     if (ch == EOF)
-      last_find = -1;
+    {
+        last_find = -1;
+    }
 
     if (found)
     {
-      return last_poem_start;
+        return last_poem_start;
     }
-    else
-      return -1;
+
+    return -1;
 }
 
 // Set up poetry filenames, preferences, load the index
 // Load index (or compile it if none found)
 void TryLoadIndex()
 {
-  index_ok = (LoadIndex(index_filename) != 0);
-  if (!index_ok || (nitems == 0))
-  {
-      PoetryError(_T("Index file not found; will compile new one"), _T("wxPoem"));
-      index_ok = Compile();
-  }
+    index_ok = (LoadIndex(index_filename) != 0);
+    if (!index_ok || (nitems == 0))
+    {
+        PoetryError(_T("Index file not found; will compile new one"), _T("wxPoem"));
+        index_ok = Compile();
+    }
 }
 
 // Error message
 void PoetryError(wxChar *msg, wxChar *caption)
 {
-  wxMessageBox(msg, caption, wxOK|wxICON_EXCLAMATION);
+    wxMessageBox(msg, caption, wxOK|wxICON_EXCLAMATION);
 }
 
 // Notification (change icon to something appropriate!)
 void PoetryNotify(wxChar *Msg, wxChar *caption)
 {
-  wxMessageBox(Msg, caption, wxOK | wxICON_INFORMATION);
+    wxMessageBox(Msg, caption, wxOK | wxICON_INFORMATION);
 }
 
 // Build up and save an index into the poetry data file, for
@@ -977,14 +974,14 @@ bool Compile(void)
     wxChar buf[100];
 
     if (data_filename)
-      wxSprintf(buf, _T("%s.dat"), data_filename);
+        wxSprintf(buf, _T("%s.dat"), data_filename);
 
     file = wxFopen(buf, _T("r"));
     if (! (data_filename && file))
     {
-      wxSprintf(error_buf, _T("Poetry data file %s not found\n"), buf);
-      PoetryError(error_buf);
-      return false;
+        wxSprintf(error_buf, _T("Poetry data file %s not found\n"), buf);
+        PoetryError(error_buf);
+        return false;
     }
 
     nitems = 0;
@@ -1014,14 +1011,14 @@ bool Compile(void)
     file = wxFopen(buf, _T("w"));
     if (! (data_filename && file))
     {
-      wxSprintf(error_buf, _T("Poetry index file %s cannot be created\n"), buf);
-      PoetryError(error_buf);
-      return false;
+        wxSprintf(error_buf, _T("Poetry index file %s cannot be created\n"), buf);
+        PoetryError(error_buf);
+        return false;
     }
 
     wxFprintf(file, _T("%ld\n\n"), nitems);
     for (j = 0; j < nitems; j++)
-      wxFprintf(file, _T("%ld\n"), poem_index[j]);
+        wxFprintf(file, _T("%ld\n"), poem_index[j]);
 
     fclose(file);
     PoetryNotify(_T("Poetry index compiled."));
@@ -1030,82 +1027,72 @@ bool Compile(void)
 
 void MainWindow::OnPopup(wxCommandEvent& event)
 {
-  switch (event.GetId())
-  {
-     case POEM_NEXT:
-       // Another poem/page
-       TheMainWindow->NextPage();
-       break;
-     case POEM_PREVIOUS:
-       // Previous page
-       TheMainWindow->PreviousPage();
-       break;
-     case POEM_SEARCH:
-       // Search - with dialog
-       TheMainWindow->Search(true);
-       break;
-     case POEM_NEXT_MATCH:
-       // Search - without dialog (next match)
-       TheMainWindow->Search(false);
-       break;
-     case POEM_MINIMIZE:
-       TheMainWindow->Iconize(true);
-       break;
+    switch (event.GetId())
+    {
+        case POEM_NEXT:
+            // Another poem/page
+            TheMainWindow->NextPage();
+            break;
+        case POEM_PREVIOUS:
+            // Previous page
+            TheMainWindow->PreviousPage();
+            break;
+        case POEM_SEARCH:
+            // Search - with dialog
+            TheMainWindow->Search(true);
+            break;
+        case POEM_NEXT_MATCH:
+            // Search - without dialog (next match)
+            TheMainWindow->Search(false);
+            break;
+        case POEM_MINIMIZE:
+            TheMainWindow->Iconize(true);
+            break;
 #if wxUSE_CLIPBOARD
-     case POEM_COPY:
-       wxTheClipboard->UsePrimarySelection();
-       if (wxTheClipboard->Open())
-       {
-         static wxString s;
-         s = poem_buffer;
-         s.Replace( _T("@P"),_T(""));
-         s.Replace( _T("@A "),_T(""));
-         s.Replace( _T("@A"),_T(""));
-         s.Replace( _T("@T "),_T(""));
-         s.Replace( _T("@T"),_T(""));
-         wxTextDataObject *data = new wxTextDataObject( s.c_str() );
-         if (!wxTheClipboard->SetData( data ))
-           wxMessageBox(_T("Error while copying to the clipboard."));
-       }
-       else
-       {
-         wxMessageBox(_T("Error opening the clipboard."));
-       }
-       wxTheClipboard->Close();
-       break;
+        case POEM_COPY:
+            wxTheClipboard->UsePrimarySelection();
+            if (wxTheClipboard->Open())
+            {
+                static wxString s;
+                s = poem_buffer;
+                s.Replace( _T("@P"),wxEmptyString);
+                s.Replace( _T("@A "),wxEmptyString);
+                s.Replace( _T("@A"),wxEmptyString);
+                s.Replace( _T("@T "),wxEmptyString);
+                s.Replace( _T("@T"),wxEmptyString);
+                wxTextDataObject *data = new wxTextDataObject( s.c_str() );
+                if (!wxTheClipboard->SetData( data ))
+                    wxMessageBox(_T("Error while copying to the clipboard."));
+            }
+            else
+            {
+                wxMessageBox(_T("Error opening the clipboard."));
+            }
+            wxTheClipboard->Close();
+            break;
 #endif
-     case POEM_COMPILE:
-       // Compile index
-       Compile();
-       break;
-     case POEM_BIGGER_TEXT:
-     {
-       pointSize ++;
-       CreateFonts();
-       TheMainWindow->Resize();
-       break;
-     }
-     case POEM_SMALLER_TEXT:
-     {
-       if (pointSize > 2)
-       {
-         pointSize --;
-         CreateFonts();
-         TheMainWindow->Resize();
-       }
-       break;
-     }
-     case POEM_ABOUT:
-     {
-       (void)wxMessageBox(_T("wxPoem Version 1.1\nJulian Smart (c) 1995"),
-                          _T("About wxPoem"), wxOK, TheMainWindow);
-       break;
-     }
-     case POEM_EXIT:
-       // Exit
-       TheMainWindow->Close(true);
-       break;
-     default:
-       break;
-  }
+        case POEM_BIGGER_TEXT:
+            pointSize ++;
+            CreateFonts();
+            TheMainWindow->Resize();
+            break;
+        case POEM_SMALLER_TEXT:
+            if (pointSize > 2)
+            {
+                pointSize --;
+                CreateFonts();
+                TheMainWindow->Resize();
+            }
+            break;
+        case POEM_ABOUT:
+            (void)wxMessageBox(_T("wxPoem Version 1.1\nJulian Smart (c) 1995"),
+                               _T("About wxPoem"), wxOK, TheMainWindow);
+            break;
+        case POEM_EXIT:
+            // Exit
+            TheMainWindow->Close(true);
+            break;
+        default:
+            break;
+    }
 }

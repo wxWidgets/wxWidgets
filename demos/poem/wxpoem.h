@@ -21,7 +21,7 @@
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
+public:
     bool OnInit();
     int OnExit();
 };
@@ -31,23 +31,24 @@ DECLARE_APP(MyApp)
 // Define a new canvas which can receive some events
 class MyCanvas: public wxWindow
 {
-  public:
-    MyCanvas(wxFrame *frame, wxWindowID id, const wxPoint& pos, const wxSize& size);
+public:
+    MyCanvas(wxFrame *frame);
     ~MyCanvas();
 
     void OnPaint(wxPaintEvent& event);
     void OnMouseEvent(wxMouseEvent& event);
     void OnChar(wxKeyEvent& event);
 
+private:
+    wxMenu *m_popupMenu;
+
     DECLARE_EVENT_TABLE()
-  private:
-    wxMenu *popupMenu;
 };
 
 // Define a new frame
 class MainWindow: public wxFrame
 {
-  public:
+public:
     MyCanvas *canvas;
     MainWindow(wxFrame *frame, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
 
@@ -74,21 +75,35 @@ class MainWindow: public wxFrame
     void GetIndexLoadPoem(void);
     void Resize(void);
 
+private:
+
+    wxString m_searchString;
+    wxString m_title;
+
+    // Preferences
+    void WritePreferences();
+    void ReadPreferences();
+
+    // Fonts
+    void CreateFonts();
+    wxFont *m_normalFont;
+    wxFont *m_boldFont;
+    wxFont *m_italicFont;
+
     DECLARE_EVENT_TABLE()
 };
 
 // Menu items
 enum
 {
-    POEM_NEXT = wxID_HIGHEST,
-    POEM_PREVIOUS,
-    POEM_COPY,
-    POEM_SEARCH,
-    POEM_NEXT_MATCH,
-    POEM_ABOUT,
-    POEM_EXIT,
-    POEM_COMPILE,
-    POEM_BIGGER_TEXT,
-    POEM_SMALLER_TEXT,
-    POEM_MINIMIZE
+    POEM_ABOUT         = wxID_ABOUT,
+    POEM_EXIT          = wxID_EXIT,
+    POEM_PREVIOUS      = wxID_BACKWARD,
+    POEM_COPY          = wxID_COPY,
+    POEM_NEXT          = wxID_FORWARD,
+    POEM_NEXT_MATCH    = wxID_MORE,
+    POEM_BIGGER_TEXT   = wxID_ZOOM_IN,
+    POEM_SMALLER_TEXT  = wxID_ZOOM_OUT,
+    POEM_SEARCH        = wxID_FIND,
+    POEM_MINIMIZE      = wxID_ICONIZE_FRAME
 };
