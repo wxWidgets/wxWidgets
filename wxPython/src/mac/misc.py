@@ -4217,10 +4217,27 @@ DF_PRIVATE = _misc.DF_PRIVATE
 DF_HTML = _misc.DF_HTML
 DF_MAX = _misc.DF_MAX
 class DataFormat(object):
+    """
+    A wx.DataFormat is an encapsulation of a platform-specific format
+    handle which is used by the system for the clipboard and drag and
+    drop operations. The applications are usually only interested in,
+    for example, pasting data from the clipboard only if the data is
+    in a format the program understands.  A data format is is used to
+    uniquely identify this format.
+
+    On the system level, a data format is usually just a number
+    (CLIPFORMAT under Windows or Atom under X11, for example).
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxDataFormat instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(int type) -> DataFormat"""
+        """
+        __init__(int type) -> DataFormat
+
+        Constructs a data format object for one of the standard data
+        formats or an empty data object (use SetType or SetId later in
+        this case)
+        """
         newobj = _misc.new_DataFormat(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -4246,19 +4263,35 @@ class DataFormat(object):
         return _misc.DataFormat___ne__(*args)
 
     def SetType(*args, **kwargs):
-        """SetType(int format)"""
+        """
+        SetType(int format)
+
+        Sets the format to the given value, which should be one of wx.DF_XXX constants.
+        """
         return _misc.DataFormat_SetType(*args, **kwargs)
 
     def GetType(*args, **kwargs):
-        """GetType() -> int"""
+        """
+        GetType() -> int
+
+        Returns the platform-specific number identifying the format.
+        """
         return _misc.DataFormat_GetType(*args, **kwargs)
 
     def GetId(*args, **kwargs):
-        """GetId() -> String"""
+        """
+        GetId() -> String
+
+        Returns the name of a custom format (this function will fail for a standard format).
+        """
         return _misc.DataFormat_GetId(*args, **kwargs)
 
     def SetId(*args, **kwargs):
-        """SetId(String format)"""
+        """
+        SetId(String format)
+
+        Sets the format to be the custom format identified by the given name.
+        """
         return _misc.DataFormat_SetId(*args, **kwargs)
 
 
@@ -4271,7 +4304,11 @@ _misc.DataFormat_swigregister(DataFormatPtr)
 DefaultDateTime = cvar.DefaultDateTime
 
 def CustomDataFormat(*args, **kwargs):
-    """CustomDataFormat(String format) -> DataFormat"""
+    """
+    CustomDataFormat(String format) -> DataFormat
+
+    Constructs a data format object for a custom format identified by its name.
+    """
     val = _misc.new_CustomDataFormat(*args, **kwargs)
     val.thisown = 1
     return val
@@ -4508,6 +4545,10 @@ class FileDataObject(DataObjectSimple):
         """GetFilenames() -> wxArrayString"""
         return _misc.FileDataObject_GetFilenames(*args, **kwargs)
 
+    def AddFile(*args, **kwargs):
+        """AddFile(String filename)"""
+        return _misc.FileDataObject_AddFile(*args, **kwargs)
+
 
 class FileDataObjectPtr(FileDataObject):
     def __init__(self, this):
@@ -4668,8 +4709,8 @@ class DropTarget(object):
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxPyDropTarget instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """PyDropTarget(DataObject dataObject=None) -> DropTarget"""
-        newobj = _misc.new_PyDropTarget(*args, **kwargs)
+        """__init__(DataObject dataObject=None) -> DropTarget"""
+        newobj = _misc.new_DropTarget(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

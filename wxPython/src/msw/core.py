@@ -5230,12 +5230,21 @@ def GetAccelFromString(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Window(EvtHandler):
+    """
+    wx.Window is the base class for all windows and represents any visible
+    object on the screen. All controls, top level windows and so on are
+    wx.Windows. Sizers and device contexts are not however, as they don't
+    appear on screen themselves.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxWindow instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
         """
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, String name=PanelNameStr) -> Window
+
+        Construct and show a generic Window.
         """
         newobj = _core.new_Window(*args, **kwargs)
         self.this = newobj.this
@@ -5247,119 +5256,286 @@ class Window(EvtHandler):
         """
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, String name=PanelNameStr) -> bool
+
+        Create the GUI part of the Window for 2-phase creation mode.
         """
         return _core.Window_Create(*args, **kwargs)
 
     def Close(*args, **kwargs):
-        """Close(bool force=False) -> bool"""
+        """
+        Close(bool force=False) -> bool
+
+        This function simply generates a EVT_CLOSE event whose handler usually
+        tries to close the window. It doesn't close the window itself,
+        however.  If force is False (the default) then the window's close
+        handler will be allowed to veto the destruction of the window.
+
+        Usually Close is only used with the top level windows (wx.Frame and
+        wx.Dialog classes) as the others are not supposed to have any special
+        EVT_CLOSE logic.
+
+        The close handler should check whether the window is being deleted
+        forcibly, using wx.CloseEvent.GetForce, in which case it should
+        destroy the window using wx.Window.Destroy.
+
+        Note that calling Close does not guarantee that the window will be
+        destroyed; but it provides a way to simulate a manual close of a
+        window, which may or may not be implemented by destroying the
+        window. The default EVT_CLOSE handler for wx.Dialog does not
+        necessarily delete the dialog, since it will simply simulate an
+        wxID_CANCEL event which is handled by the appropriate button event
+        handler and may do anything at all.
+
+        To guarantee that the window will be destroyed, call wx.Window.Destroy
+        instead.
+        """
         return _core.Window_Close(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
         """
         Destroy() -> bool
 
-        Deletes the C++ object this Python object is a proxy for.
+        Destroys the window safely.  Frames and dialogs are not destroyed
+        immediately when this function is called -- they are added to a list
+        of windows to be deleted on idle time, when all the window's events
+        have been processed. This prevents problems with events being sent to
+        non-existent windows.
+
+        Returns True if the window has either been successfully deleted, or it
+        has been added to the list of windows pending real deletion.
         """
         return _core.Window_Destroy(*args, **kwargs)
 
     def DestroyChildren(*args, **kwargs):
-        """DestroyChildren() -> bool"""
+        """
+        DestroyChildren() -> bool
+
+        Destroys all children of a window. Called automatically by the destructor.
+        """
         return _core.Window_DestroyChildren(*args, **kwargs)
 
     def IsBeingDeleted(*args, **kwargs):
-        """IsBeingDeleted() -> bool"""
+        """
+        IsBeingDeleted() -> bool
+
+        Is the window in the process of being deleted?
+        """
         return _core.Window_IsBeingDeleted(*args, **kwargs)
 
     def SetTitle(*args, **kwargs):
-        """SetTitle(String title)"""
+        """
+        SetTitle(String title)
+
+        Sets the window's title. Applicable only to frames and dialogs.
+        """
         return _core.Window_SetTitle(*args, **kwargs)
 
     def GetTitle(*args, **kwargs):
-        """GetTitle() -> String"""
+        """
+        GetTitle() -> String
+
+        Gets the window's title. Applicable only to frames and dialogs.
+        """
         return _core.Window_GetTitle(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(String label)"""
+        """
+        SetLabel(String label)
+
+        Set the text which the window shows in its label if applicable.
+        """
         return _core.Window_SetLabel(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> String"""
+        """
+        GetLabel() -> String
+
+        Generic way of getting a label from any window, for identification
+        purposes.  The interpretation of this function differs from class to
+        class. For frames and dialogs, the value returned is the title. For
+        buttons or static text controls, it is the button text. This function
+        can be useful for meta-programs (such as testing tools or
+        special-needs access programs) which need to identify windows by name.
+        """
         return _core.Window_GetLabel(*args, **kwargs)
 
     def SetName(*args, **kwargs):
-        """SetName(String name)"""
+        """
+        SetName(String name)
+
+        Sets the window's name.  The window name is used for ressource setting
+        in X, it is not the same as the window title/label
+        """
         return _core.Window_SetName(*args, **kwargs)
 
     def GetName(*args, **kwargs):
-        """GetName() -> String"""
+        """
+        GetName() -> String
+
+        Returns the window's name.  This name is not guaranteed to be unique;
+        it is up to the programmer to supply an appropriate name in the window
+        constructor or via wx.Window.SetName.
+        """
         return _core.Window_GetName(*args, **kwargs)
 
     def SetId(*args, **kwargs):
-        """SetId(int winid)"""
+        """
+        SetId(int winid)
+
+        Sets the identifier of the window.  Each window has an integer
+        identifier. If the application has not provided one, an identifier
+        will be generated. Normally, the identifier should be provided on
+        creation and should not be modified subsequently.
+        """
         return _core.Window_SetId(*args, **kwargs)
 
     def GetId(*args, **kwargs):
-        """GetId() -> int"""
+        """
+        GetId() -> int
+
+        Returns the identifier of the window.  Each window has an integer
+        identifier. If the application has not provided one (or the default Id
+        -1 is used) then an unique identifier with a negative value will be
+        generated.
+        """
         return _core.Window_GetId(*args, **kwargs)
 
     def NewControlId(*args, **kwargs):
-        """NewControlId() -> int"""
+        """
+        NewControlId() -> int
+
+        Generate a control id for the controls which were not given one.
+        """
         return _core.Window_NewControlId(*args, **kwargs)
 
     NewControlId = staticmethod(NewControlId)
     def NextControlId(*args, **kwargs):
-        """NextControlId(int winid) -> int"""
+        """
+        NextControlId(int winid) -> int
+
+        Get the id of the control following the one with the given
+        (autogenerated) id
+        """
         return _core.Window_NextControlId(*args, **kwargs)
 
     NextControlId = staticmethod(NextControlId)
     def PrevControlId(*args, **kwargs):
-        """PrevControlId(int winid) -> int"""
+        """
+        PrevControlId(int winid) -> int
+
+        Get the id of the control preceding the one with the given
+        (autogenerated) id
+        """
         return _core.Window_PrevControlId(*args, **kwargs)
 
     PrevControlId = staticmethod(PrevControlId)
     def SetSize(*args, **kwargs):
-        """SetSize(Size size)"""
+        """
+        SetSize(Size size)
+
+        Sets the size of the window in pixels.
+        """
         return _core.Window_SetSize(*args, **kwargs)
 
     def SetDimensions(*args, **kwargs):
-        """SetDimensions(int x, int y, int width, int height, int sizeFlags=SIZE_AUTO)"""
+        """
+        SetDimensions(int x, int y, int width, int height, int sizeFlags=SIZE_AUTO)
+
+        Sets the position and size of the window in pixels.  The sizeFlags
+        parameter indicates the interpretation of the other params if they are
+        -1.  wx.SIZE_AUTO*: a -1 indicates that a class-specific default
+        shoudl be used.  wx.SIZE_USE_EXISTING: existing dimensions should be
+        used if -1 values are supplied.  wxSIZE_ALLOW_MINUS_ONE: allow
+        dimensions of -1 and less to be interpreted as real dimensions, not
+        default values.
+        """
         return _core.Window_SetDimensions(*args, **kwargs)
 
     def SetRect(*args, **kwargs):
-        """SetRect(Rect rect, int sizeFlags=SIZE_AUTO)"""
+        """
+        SetRect(Rect rect, int sizeFlags=SIZE_AUTO)
+
+        Sets the position and size of the window in pixels using a wx.Rect.
+        """
         return _core.Window_SetRect(*args, **kwargs)
 
     def SetSizeWH(*args, **kwargs):
-        """SetSizeWH(int width, int height)"""
+        """
+        SetSizeWH(int width, int height)
+
+        Sets the size of the window in pixels.
+        """
         return _core.Window_SetSizeWH(*args, **kwargs)
 
     def Move(*args, **kwargs):
-        """Move(Point pt, int flags=SIZE_USE_EXISTING)"""
+        """
+        Move(Point pt, int flags=SIZE_USE_EXISTING)
+
+        Moves the window to the given position.
+        """
         return _core.Window_Move(*args, **kwargs)
 
     SetPosition = Move 
     def MoveXY(*args, **kwargs):
-        """MoveXY(int x, int y, int flags=SIZE_USE_EXISTING)"""
+        """
+        MoveXY(int x, int y, int flags=SIZE_USE_EXISTING)
+
+        Moves the window to the given position.
+        """
         return _core.Window_MoveXY(*args, **kwargs)
 
     def Raise(*args, **kwargs):
-        """Raise()"""
+        """
+        Raise()
+
+        Raises the window to the top of the window hierarchy if it is a
+        managed window (dialog or frame).
+        """
         return _core.Window_Raise(*args, **kwargs)
 
     def Lower(*args, **kwargs):
-        """Lower()"""
+        """
+        Lower()
+
+        Lowers the window to the bottom of the window hierarchy if it is a
+        managed window (dialog or frame).
+        """
         return _core.Window_Lower(*args, **kwargs)
 
     def SetClientSize(*args, **kwargs):
-        """SetClientSize(Size size)"""
+        """
+        SetClientSize(Size size)
+
+        This sets the size of the window client area in pixels. Using this
+        function to size a window tends to be more device-independent than
+        wx.Window.SetSize, since the application need not worry about what
+        dimensions the border or title bar have when trying to fit the window
+        around panel items, for example.
+        """
         return _core.Window_SetClientSize(*args, **kwargs)
 
     def SetClientSizeWH(*args, **kwargs):
-        """SetClientSizeWH(int width, int height)"""
+        """
+        SetClientSizeWH(int width, int height)
+
+        This sets the size of the window client area in pixels. Using this
+        function to size a window tends to be more device-independent than
+        wx.Window.SetSize, since the application need not worry about what
+        dimensions the border or title bar have when trying to fit the window
+        around panel items, for example.
+        """
         return _core.Window_SetClientSizeWH(*args, **kwargs)
 
     def SetClientRect(*args, **kwargs):
-        """SetClientRect(Rect rect)"""
+        """
+        SetClientRect(Rect rect)
+
+        This sets the size of the window client area in pixels. Using this
+        function to size a window tends to be more device-independent than
+        wx.Window.SetSize, since the application need not worry about what
+        dimensions the border or title bar have when trying to fit the window
+        around panel items, for example.
+        """
         return _core.Window_SetClientRect(*args, **kwargs)
 
     def GetPosition(*args, **kwargs):
@@ -5395,14 +5571,20 @@ class Window(EvtHandler):
         return _core.Window_GetSizeTuple(*args, **kwargs)
 
     def GetRect(*args, **kwargs):
-        """GetRect() -> Rect"""
+        """
+        GetRect() -> Rect
+
+        Returns the size and position of the window as a wx.Rect object.
+        """
         return _core.Window_GetRect(*args, **kwargs)
 
     def GetClientSize(*args, **kwargs):
         """
         GetClientSize() -> Size
 
-        Get the window's client size.
+        This gets the size of the window's 'client area' in pixels. The client
+        area is the area which may be drawn on by the programmer, excluding
+        title bar, border, scrollbars, etc.
         """
         return _core.Window_GetClientSize(*args, **kwargs)
 
@@ -5410,24 +5592,40 @@ class Window(EvtHandler):
         """
         GetClientSizeTuple() -> (width, height)
 
-        Get the window's client size.
+        This gets the size of the window's 'client area' in pixels. The client
+        area is the area which may be drawn on by the programmer, excluding
+        title bar, border, scrollbars, etc.
         """
         return _core.Window_GetClientSizeTuple(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
-        """GetClientAreaOrigin() -> Point"""
+        """
+        GetClientAreaOrigin() -> Point
+
+        Get the origin of the client area of the window relative to the
+        window's top left corner (the client area may be shifted because of
+        the borders, scrollbars, other decorations...)
+        """
         return _core.Window_GetClientAreaOrigin(*args, **kwargs)
 
     def GetClientRect(*args, **kwargs):
-        """GetClientRect() -> Rect"""
+        """
+        GetClientRect() -> Rect
+
+        Get the client area position and size as a wx.Rect object.
+        """
         return _core.Window_GetClientRect(*args, **kwargs)
 
     def GetBestSize(*args, **kwargs):
         """
         GetBestSize() -> Size
 
-        Get the size best suited for the window (in fact, minimal acceptable size
-        using which it will still look "nice")
+        This functions returns the best acceptable minimal size for the
+        window, if applicable. For example, for a static text control, it will be
+        the minimal size such that the control label is not truncated. For
+        windows containing subwindows (suzh aswx.Panel), the size returned
+        by this function will be the same as the size the window would have
+        had after calling Fit.
         """
         return _core.Window_GetBestSize(*args, **kwargs)
 
@@ -5435,47 +5633,108 @@ class Window(EvtHandler):
         """
         GetBestSizeTuple() -> (width, height)
 
-        Get the size best suited for the window (in fact, minimal acceptable size
-        using which it will still look "nice")
+        This functions returns the best acceptable minimal size for the
+        window, if applicable. For example, for a static text control, it will be
+        the minimal size such that the control label is not truncated. For
+        windows containing subwindows (suzh aswx.Panel), the size returned
+        by this function will be the same as the size the window would have
+        had after calling Fit.
         """
         return _core.Window_GetBestSizeTuple(*args, **kwargs)
 
     def GetAdjustedBestSize(*args, **kwargs):
-        """GetAdjustedBestSize() -> Size"""
+        """
+        GetAdjustedBestSize() -> Size
+
+        This method is similar to GetBestSize, except in one
+        thing. GetBestSize should return the minimum untruncated size of the
+        window, while this method will return the largest of BestSize and any
+        user specified minimum size. ie. it is the minimum size the window
+        should currently be drawn at, not the minimal size it can possibly
+        tolerate.
+        """
         return _core.Window_GetAdjustedBestSize(*args, **kwargs)
 
     def Center(*args, **kwargs):
-        """Center(int direction=BOTH)"""
+        """
+        Center(int direction=BOTH)
+
+        Centers the window.  The parameter specifies the direction for
+        cetering, and may be wx.HORIZONTAL, wx.VERTICAL or wx.BOTH. It may
+        also include wx.CENTER_ON_SCREEN flag if you want to center the window
+        on the entire screen and not on its parent window.  If it is a
+        top-level window and has no parent then it will always be centered
+        relative to the screen.
+        """
         return _core.Window_Center(*args, **kwargs)
 
     Centre = Center 
     def CenterOnScreen(*args, **kwargs):
-        """CenterOnScreen(int dir=BOTH)"""
+        """
+        CenterOnScreen(int dir=BOTH)
+
+        Center on screen (only works for top level windows)
+        """
         return _core.Window_CenterOnScreen(*args, **kwargs)
 
     CentreOnScreen = CenterOnScreen 
     def CenterOnParent(*args, **kwargs):
-        """CenterOnParent(int dir=BOTH)"""
+        """
+        CenterOnParent(int dir=BOTH)
+
+        Center with respect to the the parent window
+        """
         return _core.Window_CenterOnParent(*args, **kwargs)
 
     CentreOnParent = CenterOnParent 
     def Fit(*args, **kwargs):
-        """Fit()"""
+        """
+        Fit()
+
+        Sizes the window so that it fits around its subwindows. This function
+        won't do anything if there are no subwindows and will only really work
+        correctly if sizers are used for the subwindows layout. Also, if the
+        window has exactly one subwindow it is better (faster and the result
+        is more precise as Fit adds some margin to account for fuzziness of
+        its calculations) to call window.SetClientSize(child.GetSize())
+        instead of calling Fit.
+        """
         return _core.Window_Fit(*args, **kwargs)
 
     def FitInside(*args, **kwargs):
-        """FitInside()"""
+        """
+        FitInside()
+
+        Similar to Fit, but sizes the interior (virtual) size of a
+        window. Mainly useful with scrolled windows to reset scrollbars after
+        sizing changes that do not trigger a size event, and/or scrolled
+        windows without an interior sizer. This function similarly won't do
+        anything if there are no subwindows.
+        """
         return _core.Window_FitInside(*args, **kwargs)
 
     def SetSizeHints(*args, **kwargs):
         """
         SetSizeHints(int minW, int minH, int maxW=-1, int maxH=-1, int incW=-1, 
             int incH=-1)
+
+        Allows specification of minimum and maximum window sizes, and window
+        size increments. If a pair of values is not set (or set to -1), the
+        default values will be used.  If this function is called, the user
+        will not be able to size the window outside the given bounds. The
+        resizing increments are only significant under Motif or Xt.
         """
         return _core.Window_SetSizeHints(*args, **kwargs)
 
     def SetVirtualSizeHints(*args, **kwargs):
-        """SetVirtualSizeHints(int minW, int minH, int maxW=-1, int maxH=-1)"""
+        """
+        SetVirtualSizeHints(int minW, int minH, int maxW=-1, int maxH=-1)
+
+        Allows specification of minimum and maximum virtual window sizes. If a
+        pair of values is not set (or set to -1), the default values will be
+        used.  If this function is called, the user will not be able to size
+        the virtual area of the window outside the given bounds.
+        """
         return _core.Window_SetVirtualSizeHints(*args, **kwargs)
 
     def GetMinWidth(*args, **kwargs):
@@ -5502,9 +5761,9 @@ class Window(EvtHandler):
         """
         SetVirtualSize(Size size)
 
-        Set the the virtual size of a window.  For most windows this is just the
-        client area of the window, but for some like scrolled windows it is more or
-        less independent of the screen window size.
+        Set the the virtual size of a window in pixels.  For most windows this
+        is just the client area of the window, but for some like scrolled
+        windows it is more or less independent of the screen window size.
         """
         return _core.Window_SetVirtualSize(*args, **kwargs)
 
@@ -5512,9 +5771,9 @@ class Window(EvtHandler):
         """
         SetVirtualSizeWH(int w, int h)
 
-        Set the the virtual size of a window.  For most windows this is just the
-        client area of the window, but for some like scrolled windows it is more or
-        less independent of the screen window size.
+        Set the the virtual size of a window in pixels.  For most windows this
+        is just the client area of the window, but for some like scrolled
+        windows it is more or less independent of the screen window size.
         """
         return _core.Window_SetVirtualSizeWH(*args, **kwargs)
 
@@ -5522,9 +5781,9 @@ class Window(EvtHandler):
         """
         GetVirtualSize() -> Size
 
-        Get the the virtual size of the window.  For most windows this is just
-        the client area of the window, but for some like scrolled windows it is
-        more or less independent of the screen window size.
+        Get the the virtual size of the window in pixels.  For most windows
+        this is just the client area of the window, but for some like scrolled
+        windows it is more or less independent of the screen window size.
         """
         return _core.Window_GetVirtualSize(*args, **kwargs)
 
@@ -5532,215 +5791,492 @@ class Window(EvtHandler):
         """
         GetVirtualSizeTuple() -> (width, height)
 
-        Get the the virtual size of the window.  For most windows this is just
-        the client area of the window, but for some like scrolled windows it is
-        more or less independent of the screen window size.
+        Get the the virtual size of the window in pixels.  For most windows
+        this is just the client area of the window, but for some like scrolled
+        windows it is more or less independent of the screen window size.
         """
         return _core.Window_GetVirtualSizeTuple(*args, **kwargs)
 
     def GetBestVirtualSize(*args, **kwargs):
-        """GetBestVirtualSize() -> Size"""
+        """
+        GetBestVirtualSize() -> Size
+
+        Return the largest of ClientSize and BestSize (as determined by a
+        sizer, interior children, or other means)
+        """
         return _core.Window_GetBestVirtualSize(*args, **kwargs)
 
     def Show(*args, **kwargs):
-        """Show(bool show=True) -> bool"""
+        """
+        Show(bool show=True) -> bool
+
+        Shows or hides the window. You may need to call Raise for a top level
+        window if you want to bring it to top, although this is not needed if
+        Show is called immediately after the frame creation.  Returns True if
+        the window has been shown or hidden or False if nothing was done
+        because it already was in the requested state.
+        """
         return _core.Window_Show(*args, **kwargs)
 
     def Hide(*args, **kwargs):
-        """Hide() -> bool"""
+        """
+        Hide() -> bool
+
+        Equivalent to calling Show(False).
+        """
         return _core.Window_Hide(*args, **kwargs)
 
     def Enable(*args, **kwargs):
-        """Enable(bool enable=True) -> bool"""
+        """
+        Enable(bool enable=True) -> bool
+
+        Enable or disable the window for user input. Note that when a parent
+        window is disabled, all of its children are disabled as well and they
+        are reenabled again when the parent is.  Returns true if the window
+        has been enabled or disabled, false if nothing was done, i.e. if the
+        window had already been in the specified state.
+        """
         return _core.Window_Enable(*args, **kwargs)
 
     def Disable(*args, **kwargs):
-        """Disable() -> bool"""
+        """
+        Disable() -> bool
+
+        Disables the window, same as Enable(false).
+        """
         return _core.Window_Disable(*args, **kwargs)
 
     def IsShown(*args, **kwargs):
-        """IsShown() -> bool"""
+        """
+        IsShown() -> bool
+
+        Returns true if the window is shown, false if it has been hidden.
+        """
         return _core.Window_IsShown(*args, **kwargs)
 
     def IsEnabled(*args, **kwargs):
-        """IsEnabled() -> bool"""
+        """
+        IsEnabled() -> bool
+
+        Returns true if the window is enabled for input, false otherwise.
+        """
         return _core.Window_IsEnabled(*args, **kwargs)
 
     def SetWindowStyleFlag(*args, **kwargs):
-        """SetWindowStyleFlag(long style)"""
+        """
+        SetWindowStyleFlag(long style)
+
+        Sets the style of the window. Please note that some styles cannot be
+        changed after the window creation and that Refresh() might be called
+        after changing the others for the change to take place immediately.
+        """
         return _core.Window_SetWindowStyleFlag(*args, **kwargs)
 
     def GetWindowStyleFlag(*args, **kwargs):
-        """GetWindowStyleFlag() -> long"""
+        """
+        GetWindowStyleFlag() -> long
+
+        Gets the window style that was passed to the constructor or Create
+        method.
+        """
         return _core.Window_GetWindowStyleFlag(*args, **kwargs)
 
-    def SetWindowStyle(*args, **kwargs):
-        """SetWindowStyle(long style)"""
-        return _core.Window_SetWindowStyle(*args, **kwargs)
-
-    def GetWindowStyle(*args, **kwargs):
-        """GetWindowStyle() -> long"""
-        return _core.Window_GetWindowStyle(*args, **kwargs)
-
+    SetWindowStyle = SetWindowStyleFlag; GetWindowStyle = GetWindowStyleFlag 
     def HasFlag(*args, **kwargs):
-        """HasFlag(int flag) -> bool"""
+        """
+        HasFlag(int flag) -> bool
+
+        Test if the given style is set for this window.
+        """
         return _core.Window_HasFlag(*args, **kwargs)
 
     def IsRetained(*args, **kwargs):
-        """IsRetained() -> bool"""
+        """
+        IsRetained() -> bool
+
+        Returns true if the window is retained, false otherwise.  Retained
+        windows are only available on X platforms.
+        """
         return _core.Window_IsRetained(*args, **kwargs)
 
     def SetExtraStyle(*args, **kwargs):
-        """SetExtraStyle(long exStyle)"""
+        """
+        SetExtraStyle(long exStyle)
+
+        Sets the extra style bits for the window.  Extra styles are the less
+        often used style bits which can't be set with the constructor or with
+        SetWindowStyleFlag()
+        """
         return _core.Window_SetExtraStyle(*args, **kwargs)
 
     def GetExtraStyle(*args, **kwargs):
-        """GetExtraStyle() -> long"""
+        """
+        GetExtraStyle() -> long
+
+        Returns the extra style bits for the window.
+        """
         return _core.Window_GetExtraStyle(*args, **kwargs)
 
     def MakeModal(*args, **kwargs):
-        """MakeModal(bool modal=True)"""
+        """
+        MakeModal(bool modal=True)
+
+        Disables all other windows in the application so that the user can
+        only interact with this window.  Passing False will reverse this
+        effect.
+        """
         return _core.Window_MakeModal(*args, **kwargs)
 
     def SetThemeEnabled(*args, **kwargs):
-        """SetThemeEnabled(bool enableTheme)"""
+        """
+        SetThemeEnabled(bool enableTheme)
+
+        This function tells a window if it should use the system's "theme"
+         code to draw the windows' background instead if its own background
+         drawing code. This will only have an effect on platforms that support
+         the notion of themes in user defined windows. One such platform is
+         GTK+ where windows can have (very colourful) backgrounds defined by a
+         user's selected theme.
+
+        Dialogs, notebook pages and the status bar have this flag set to true
+        by default so that the default look and feel is simulated best.
+        """
         return _core.Window_SetThemeEnabled(*args, **kwargs)
 
     def GetThemeEnabled(*args, **kwargs):
-        """GetThemeEnabled() -> bool"""
+        """
+        GetThemeEnabled() -> bool
+
+        Return the themeEnabled flag.
+        """
         return _core.Window_GetThemeEnabled(*args, **kwargs)
 
-    def ShouldInheritColours(*args, **kwargs):
-        """ShouldInheritColours() -> bool"""
-        return _core.Window_ShouldInheritColours(*args, **kwargs)
-
     def SetFocus(*args, **kwargs):
-        """SetFocus()"""
+        """
+        SetFocus()
+
+        Set's the focus to this window, allowing it to receive keyboard input.
+        """
         return _core.Window_SetFocus(*args, **kwargs)
 
     def SetFocusFromKbd(*args, **kwargs):
-        """SetFocusFromKbd()"""
+        """
+        SetFocusFromKbd()
+
+        Set focus to this window as the result of a keyboard action.  Normally
+        only called internally.
+        """
         return _core.Window_SetFocusFromKbd(*args, **kwargs)
 
     def FindFocus(*args, **kwargs):
-        """FindFocus() -> Window"""
+        """
+        FindFocus() -> Window
+
+        Returns the window or control that currently has the keyboard focus,
+        or None.
+        """
         return _core.Window_FindFocus(*args, **kwargs)
 
     FindFocus = staticmethod(FindFocus)
     def AcceptsFocus(*args, **kwargs):
-        """AcceptsFocus() -> bool"""
+        """
+        AcceptsFocus() -> bool
+
+        Can this window have focus?
+        """
         return _core.Window_AcceptsFocus(*args, **kwargs)
 
     def AcceptsFocusFromKeyboard(*args, **kwargs):
-        """AcceptsFocusFromKeyboard() -> bool"""
+        """
+        AcceptsFocusFromKeyboard() -> bool
+
+        Can this window be given focus by keyboard navigation? if not, the
+        only way to give it focus (provided it accepts it at all) is to click
+        it.
+        """
         return _core.Window_AcceptsFocusFromKeyboard(*args, **kwargs)
 
     def GetDefaultItem(*args, **kwargs):
-        """GetDefaultItem() -> Window"""
+        """
+        GetDefaultItem() -> Window
+
+        Get the default child of this parent, i.e. the one which is activated
+        by pressing <Enter> such as the OK button on a wx.Dialog.
+        """
         return _core.Window_GetDefaultItem(*args, **kwargs)
 
     def SetDefaultItem(*args, **kwargs):
-        """SetDefaultItem(Window child) -> Window"""
+        """
+        SetDefaultItem(Window child) -> Window
+
+        Set this child as default, return the old default.
+        """
         return _core.Window_SetDefaultItem(*args, **kwargs)
 
     def SetTmpDefaultItem(*args, **kwargs):
-        """SetTmpDefaultItem(Window win)"""
+        """
+        SetTmpDefaultItem(Window win)
+
+        Set this child as temporary default
+        """
         return _core.Window_SetTmpDefaultItem(*args, **kwargs)
 
     def GetChildren(*args, **kwargs):
-        """GetChildren() -> PyObject"""
+        """
+        GetChildren() -> PyObject
+
+        Returns a list of the window's children.  NOTE: Currently this is a
+        copy of the child window list maintained by the window, so the return
+        value of this function is only valid as long as the window's children
+        do not change.
+        """
         return _core.Window_GetChildren(*args, **kwargs)
 
     def GetParent(*args, **kwargs):
-        """GetParent() -> Window"""
+        """
+        GetParent() -> Window
+
+        Returns the parent window of this window, or None if there isn't one.
+        """
         return _core.Window_GetParent(*args, **kwargs)
 
     def GetGrandParent(*args, **kwargs):
-        """GetGrandParent() -> Window"""
+        """
+        GetGrandParent() -> Window
+
+        Returns the parent of the parent of this window, or None if there isn't one.
+        """
         return _core.Window_GetGrandParent(*args, **kwargs)
 
     def IsTopLevel(*args, **kwargs):
-        """IsTopLevel() -> bool"""
+        """
+        IsTopLevel() -> bool
+
+        Returns true if the given window is a top-level one. Currently all
+        frames and dialogs are always considered to be top-level windows (even
+        if they have a parent window).
+        """
         return _core.Window_IsTopLevel(*args, **kwargs)
 
     def Reparent(*args, **kwargs):
-        """Reparent(Window newParent) -> bool"""
+        """
+        Reparent(Window newParent) -> bool
+
+        Reparents the window, i.e the window will be removed from its current
+        parent window (e.g. a non-standard toolbar in a wxFrame) and then
+        re-inserted into another. Available on Windows and GTK.  Returns True
+        if the parent was changed, False otherwise (error or newParent ==
+        oldParent)
+        """
         return _core.Window_Reparent(*args, **kwargs)
 
     def AddChild(*args, **kwargs):
-        """AddChild(Window child)"""
+        """
+        AddChild(Window child)
+
+        Adds a child window. This is called automatically by window creation
+        functions so should not be required by the application programmer.
+        """
         return _core.Window_AddChild(*args, **kwargs)
 
     def RemoveChild(*args, **kwargs):
-        """RemoveChild(Window child)"""
+        """
+        RemoveChild(Window child)
+
+        Removes a child window. This is called automatically by window
+        deletion functions so should not be required by the application
+        programmer.
+        """
         return _core.Window_RemoveChild(*args, **kwargs)
 
     def FindWindowById(*args, **kwargs):
-        """FindWindowById(long winid) -> Window"""
+        """
+        FindWindowById(long winid) -> Window
+
+        Find a chld of this window by window ID
+        """
         return _core.Window_FindWindowById(*args, **kwargs)
 
     def FindWindowByName(*args, **kwargs):
-        """FindWindowByName(String name) -> Window"""
+        """
+        FindWindowByName(String name) -> Window
+
+        Find a child of this window by name
+        """
         return _core.Window_FindWindowByName(*args, **kwargs)
 
     def GetEventHandler(*args, **kwargs):
-        """GetEventHandler() -> EvtHandler"""
+        """
+        GetEventHandler() -> EvtHandler
+
+        Returns the event handler for this window. By default, the window is
+        its own event handler.
+        """
         return _core.Window_GetEventHandler(*args, **kwargs)
 
     def SetEventHandler(*args, **kwargs):
-        """SetEventHandler(EvtHandler handler)"""
+        """
+        SetEventHandler(EvtHandler handler)
+
+        Sets the event handler for this window.  An event handler is an object
+        that is capable of processing the events sent to a window. By default,
+        the window is its own event handler, but an application may wish to
+        substitute another, for example to allow central implementation of
+        event-handling for a variety of different window classes.
+
+        It is usually better to use wx.Window.PushEventHandler since this sets
+        up a chain of event handlers, where an event not handled by one event
+        handler is handed to the next one in the chain.
+        """
         return _core.Window_SetEventHandler(*args, **kwargs)
 
     def PushEventHandler(*args, **kwargs):
-        """PushEventHandler(EvtHandler handler)"""
+        """
+        PushEventHandler(EvtHandler handler)
+
+        Pushes this event handler onto the event handler stack for the window.
+        An event handler is an object that is capable of processing the events
+        sent to a window. By default, the window is its own event handler, but
+        an application may wish to substitute another, for example to allow
+        central implementation of event-handling for a variety of different
+        window classes.
+
+        wx.Window.PushEventHandler allows an application to set up a chain of
+        event handlers, where an event not handled by one event handler is
+        handed to the next one in the chain. Use wx.Window.PopEventHandler to
+        remove the event handler.
+        """
         return _core.Window_PushEventHandler(*args, **kwargs)
 
     def PopEventHandler(*args, **kwargs):
-        """PopEventHandler(bool deleteHandler=False) -> EvtHandler"""
+        """
+        PopEventHandler(bool deleteHandler=False) -> EvtHandler
+
+        Removes and returns the top-most event handler on the event handler
+        stack.  If deleteHandler is True then the wx.EvtHandler object will be
+        destroyed after it is popped.
+        """
         return _core.Window_PopEventHandler(*args, **kwargs)
 
     def RemoveEventHandler(*args, **kwargs):
-        """RemoveEventHandler(EvtHandler handler) -> bool"""
+        """
+        RemoveEventHandler(EvtHandler handler) -> bool
+
+        Find the given handler in the event handler chain and remove (but
+        not delete) it from the event handler chain, return True if it was
+        found and False otherwise (this also results in an assert failure so
+        this function should only be called when the handler is supposed to
+        be there.)
+        """
         return _core.Window_RemoveEventHandler(*args, **kwargs)
 
     def SetValidator(*args, **kwargs):
-        """SetValidator(Validator validator)"""
+        """
+        SetValidator(Validator validator)
+
+        Deletes the current validator (if any) and sets the window validator,
+        having called wx.Validator.Clone to create a new validator of this
+        type.
+        """
         return _core.Window_SetValidator(*args, **kwargs)
 
     def GetValidator(*args, **kwargs):
-        """GetValidator() -> Validator"""
+        """
+        GetValidator() -> Validator
+
+        Returns a pointer to the current validator for the window, or None if
+        there is none.
+        """
         return _core.Window_GetValidator(*args, **kwargs)
 
     def SetAcceleratorTable(*args, **kwargs):
-        """SetAcceleratorTable(AcceleratorTable accel)"""
+        """
+        SetAcceleratorTable(AcceleratorTable accel)
+
+        Sets the accelerator table for this window.
+        """
         return _core.Window_SetAcceleratorTable(*args, **kwargs)
 
     def GetAcceleratorTable(*args, **kwargs):
-        """GetAcceleratorTable() -> AcceleratorTable"""
+        """
+        GetAcceleratorTable() -> AcceleratorTable
+
+        Gets the accelerator table for this window.
+        """
         return _core.Window_GetAcceleratorTable(*args, **kwargs)
 
     def RegisterHotKey(*args, **kwargs):
-        """RegisterHotKey(int hotkeyId, int modifiers, int keycode) -> bool"""
+        """
+        RegisterHotKey(int hotkeyId, int modifiers, int keycode) -> bool
+
+        Registers a system wide hotkey. Every time the user presses the hotkey
+        registered here, this window will receive a hotkey event. It will
+        receive the event even if the application is in the background and
+        does not have the input focus because the user is working with some
+        other application.  To bind an event handler function to this hotkey
+        use EVT_HOTKEY with an id equal to hotkeyId.  Returns True if the
+        hotkey was registered successfully.
+        """
         return _core.Window_RegisterHotKey(*args, **kwargs)
 
     def UnregisterHotKey(*args, **kwargs):
-        """UnregisterHotKey(int hotkeyId) -> bool"""
+        """
+        UnregisterHotKey(int hotkeyId) -> bool
+
+        Unregisters a system wide hotkey.
+        """
         return _core.Window_UnregisterHotKey(*args, **kwargs)
 
     def ConvertDialogPointToPixels(*args, **kwargs):
-        """ConvertDialogPointToPixels(Point pt) -> Point"""
+        """
+        ConvertDialogPointToPixels(Point pt) -> Point
+
+        Converts a point or size from dialog units to pixels.  Dialog units
+        are used for maintaining a dialog's proportions even if the font
+        changes. For the x dimension, the dialog units are multiplied by the
+        average character width and then divided by 4. For the y dimension,
+        the dialog units are multiplied by the average character height and
+        then divided by 8.
+        """
         return _core.Window_ConvertDialogPointToPixels(*args, **kwargs)
 
     def ConvertDialogSizeToPixels(*args, **kwargs):
-        """ConvertDialogSizeToPixels(Size sz) -> Size"""
+        """
+        ConvertDialogSizeToPixels(Size sz) -> Size
+
+        Converts a point or size from dialog units to pixels.  Dialog units
+        are used for maintaining a dialog's proportions even if the font
+        changes. For the x dimension, the dialog units are multiplied by the
+        average character width and then divided by 4. For the y dimension,
+        the dialog units are multiplied by the average character height and
+        then divided by 8.
+        """
         return _core.Window_ConvertDialogSizeToPixels(*args, **kwargs)
 
     def DLG_PNT(*args, **kwargs):
-        """DLG_PNT(Point pt) -> Point"""
+        """
+        DLG_PNT(Point pt) -> Point
+
+        Converts a point or size from dialog units to pixels.  Dialog units
+        are used for maintaining a dialog's proportions even if the font
+        changes. For the x dimension, the dialog units are multiplied by the
+        average character width and then divided by 4. For the y dimension,
+        the dialog units are multiplied by the average character height and
+        then divided by 8.
+        """
         return _core.Window_DLG_PNT(*args, **kwargs)
 
     def DLG_SZE(*args, **kwargs):
-        """DLG_SZE(Size sz) -> Size"""
+        """
+        DLG_SZE(Size sz) -> Size
+
+        Converts a point or size from dialog units to pixels.  Dialog units
+        are used for maintaining a dialog's proportions even if the font
+        changes. For the x dimension, the dialog units are multiplied by the
+        average character width and then divided by 4. For the y dimension,
+        the dialog units are multiplied by the average character height and
+        then divided by 8.
+        """
         return _core.Window_DLG_SZE(*args, **kwargs)
 
     def ConvertPixelPointToDialog(*args, **kwargs):
@@ -5752,120 +6288,297 @@ class Window(EvtHandler):
         return _core.Window_ConvertPixelSizeToDialog(*args, **kwargs)
 
     def WarpPointer(*args, **kwargs):
-        """WarpPointer(int x, int y)"""
+        """
+        WarpPointer(int x, int y)
+
+        Moves the pointer to the given position on the window.
+
+        NOTE: This function is not supported under Mac because Apple Human
+        Interface Guidelines forbid moving the mouse cursor programmatically.
+        """
         return _core.Window_WarpPointer(*args, **kwargs)
 
     def CaptureMouse(*args, **kwargs):
-        """CaptureMouse()"""
+        """
+        CaptureMouse()
+
+        Directs all mouse input to this window. Call wx.Window.ReleaseMouse to
+        release the capture.
+
+        Note that wxWindows maintains the stack of windows having captured the
+        mouse and when the mouse is released the capture returns to the window
+        which had had captured it previously and it is only really released if
+        there were no previous window. In particular, this means that you must
+        release the mouse as many times as you capture it.
+        """
         return _core.Window_CaptureMouse(*args, **kwargs)
 
     def ReleaseMouse(*args, **kwargs):
-        """ReleaseMouse()"""
+        """
+        ReleaseMouse()
+
+        Releases mouse input captured with wx.Window.CaptureMouse.
+        """
         return _core.Window_ReleaseMouse(*args, **kwargs)
 
     def GetCapture(*args, **kwargs):
-        """GetCapture() -> Window"""
+        """
+        GetCapture() -> Window
+
+        Returns the window which currently captures the mouse or None
+        """
         return _core.Window_GetCapture(*args, **kwargs)
 
     GetCapture = staticmethod(GetCapture)
     def HasCapture(*args, **kwargs):
-        """HasCapture() -> bool"""
+        """
+        HasCapture() -> bool
+
+        Returns true if this window has the current mouse capture.
+        """
         return _core.Window_HasCapture(*args, **kwargs)
 
     def Refresh(*args, **kwargs):
-        """Refresh(bool eraseBackground=True, Rect rect=None)"""
+        """
+        Refresh(bool eraseBackground=True, Rect rect=None)
+
+        Mark the specified rectangle (or the whole window) as "dirty" so it
+        will be repainted.  Causes an EVT_PAINT event to be generated and sent
+        to the window.
+        """
         return _core.Window_Refresh(*args, **kwargs)
 
     def RefreshRect(*args, **kwargs):
-        """RefreshRect(Rect rect)"""
+        """
+        RefreshRect(Rect rect)
+
+        Redraws the contents of the given rectangle: the area inside it will
+        be repainted.  This is the same as Refresh but has a nicer syntax.
+        """
         return _core.Window_RefreshRect(*args, **kwargs)
 
     def Update(*args, **kwargs):
-        """Update()"""
+        """
+        Update()
+
+        Calling this method immediately repaints the invalidated area of the
+        window instead of waiting for the EVT_PAINT event to happen, (normally
+        this would usually only happen when the flow of control returns to the
+        event loop.)  Notice that this function doesn't refresh the window and
+        does nothing if the window has been already repainted.  Use Refresh
+        first if you want to immediately redraw the window (or some portion of
+        it) unconditionally.
+        """
         return _core.Window_Update(*args, **kwargs)
 
     def ClearBackground(*args, **kwargs):
-        """ClearBackground()"""
+        """
+        ClearBackground()
+
+        Clears the window by filling it with the current background
+        colour. Does not cause an erase background event to be generated.
+        """
         return _core.Window_ClearBackground(*args, **kwargs)
 
     def Freeze(*args, **kwargs):
-        """Freeze()"""
+        """
+        Freeze()
+
+        Freezes the window or, in other words, prevents any updates from
+        taking place on screen, the window is not redrawn at all. Thaw must be
+        called to reenable window redrawing.
+
+        This method is useful for visual appearance optimization (for example,
+        it is a good idea to use it before inserting large amount of text into
+        a wxTextCtrl under wxGTK) but is not implemented on all platforms nor
+        for all controls so it is mostly just a hint to wxWindows and not a
+        mandatory directive.
+        """
         return _core.Window_Freeze(*args, **kwargs)
 
     def Thaw(*args, **kwargs):
-        """Thaw()"""
+        """
+        Thaw()
+
+        Reenables window updating after a previous call to Freeze.
+        """
         return _core.Window_Thaw(*args, **kwargs)
 
     def PrepareDC(*args, **kwargs):
-        """PrepareDC(DC dc)"""
+        """
+        PrepareDC(DC dc)
+
+        Call this function to prepare the device context for drawing a
+        scrolled image. It sets the device origin according to the current
+        scroll position.
+        """
         return _core.Window_PrepareDC(*args, **kwargs)
 
     def GetUpdateRegion(*args, **kwargs):
-        """GetUpdateRegion() -> Region"""
+        """
+        GetUpdateRegion() -> Region
+
+        Returns the region specifying which parts of the window have been
+        damaged. Should only be called within an EVT_PAINT handler.
+        """
         return _core.Window_GetUpdateRegion(*args, **kwargs)
 
     def GetUpdateClientRect(*args, **kwargs):
-        """GetUpdateClientRect() -> Rect"""
+        """
+        GetUpdateClientRect() -> Rect
+
+        Get the update rectangle region bounding box in client coords.
+        """
         return _core.Window_GetUpdateClientRect(*args, **kwargs)
 
     def IsExposed(*args, **kwargs):
-        """IsExposed(int x, int y, int w=1, int h=1) -> bool"""
+        """
+        IsExposed(int x, int y, int w=1, int h=1) -> bool
+
+        Returns true if the given point or rectangle area has been exposed
+        since the last repaint. Call this in an paint event handler to
+        optimize redrawing by only redrawing those areas, which have been
+        exposed.
+        """
         return _core.Window_IsExposed(*args, **kwargs)
 
     def IsExposedPoint(*args, **kwargs):
-        """IsExposedPoint(Point pt) -> bool"""
+        """
+        IsExposedPoint(Point pt) -> bool
+
+        Returns true if the given point or rectangle area has been exposed
+        since the last repaint. Call this in an paint event handler to
+        optimize redrawing by only redrawing those areas, which have been
+        exposed.
+        """
         return _core.Window_IsExposedPoint(*args, **kwargs)
 
     def isExposedRect(*args, **kwargs):
-        """isExposedRect(Rect rect) -> bool"""
+        """
+        isExposedRect(Rect rect) -> bool
+
+        Returns true if the given point or rectangle area has been exposed
+        since the last repaint. Call this in an paint event handler to
+        optimize redrawing by only redrawing those areas, which have been
+        exposed.
+        """
         return _core.Window_isExposedRect(*args, **kwargs)
 
     def SetBackgroundColour(*args, **kwargs):
-        """SetBackgroundColour(Colour colour) -> bool"""
+        """
+        SetBackgroundColour(Colour colour) -> bool
+
+        Sets the background colour of the window.  Returns True if the colour
+        was changed.  The background colour is usually painted by the default
+        EVT_ERASE_BACKGROUND event handler function under Windows and
+        automatically under GTK.
+
+        Note that setting the background colour does not cause an immediate
+        refresh, so you may wish to call ClearBackground or Refresh after
+        calling this function.
+
+        Use this function with care under GTK+ as the new appearance of the
+        window might not look equally well when used with themes, i.e GTK+'s
+        ability to change its look as the user wishes with run-time loadable
+        modules.
+        """
         return _core.Window_SetBackgroundColour(*args, **kwargs)
 
     def SetForegroundColour(*args, **kwargs):
-        """SetForegroundColour(Colour colour) -> bool"""
+        """
+        SetForegroundColour(Colour colour) -> bool
+
+        Sets the foreground colour of the window.  Returns True is the colour
+        was changed.  The interpretation of foreground colour is dependent on
+        the window class; it may be the text colour or other colour, or it may
+        not be used at all.
+        """
         return _core.Window_SetForegroundColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
-        """GetBackgroundColour() -> Colour"""
+        """
+        GetBackgroundColour() -> Colour
+
+        Returns the background colour of the window.
+        """
         return _core.Window_GetBackgroundColour(*args, **kwargs)
 
     def GetForegroundColour(*args, **kwargs):
-        """GetForegroundColour() -> Colour"""
+        """
+        GetForegroundColour() -> Colour
+
+        Returns the foreground colour of the window.  The interpretation of
+        foreground colour is dependent on the window class; it may be the text
+        colour or other colour, or it may not be used at all.
+        """
         return _core.Window_GetForegroundColour(*args, **kwargs)
 
     def SetCursor(*args, **kwargs):
-        """SetCursor(Cursor cursor) -> bool"""
+        """
+        SetCursor(Cursor cursor) -> bool
+
+        Sets the window's cursor. Notice that the window cursor also sets it
+        for the children of the window implicitly.
+
+        The cursor may be wx.NullCursor in which case the window cursor will
+        be reset back to default.
+        """
         return _core.Window_SetCursor(*args, **kwargs)
 
     def GetCursor(*args, **kwargs):
-        """GetCursor() -> Cursor"""
+        """
+        GetCursor() -> Cursor
+
+        Return the cursor associated with this window.
+        """
         return _core.Window_GetCursor(*args, **kwargs)
 
     def SetFont(*args, **kwargs):
-        """SetFont(Font font) -> bool"""
+        """
+        SetFont(Font font) -> bool
+
+        Sets the font for this window.
+        """
         return _core.Window_SetFont(*args, **kwargs)
 
     def GetFont(*args, **kwargs):
-        """GetFont() -> Font"""
+        """
+        GetFont() -> Font
+
+        Returns a reference to the font for this window.
+        """
         return _core.Window_GetFont(*args, **kwargs)
 
     def SetCaret(*args, **kwargs):
-        """SetCaret(Caret caret)"""
+        """
+        SetCaret(Caret caret)
+
+        Sets the caret associated with the window.
+        """
         return _core.Window_SetCaret(*args, **kwargs)
 
     def GetCaret(*args, **kwargs):
-        """GetCaret() -> Caret"""
+        """
+        GetCaret() -> Caret
+
+        Returns the caret associated with the window.
+        """
         return _core.Window_GetCaret(*args, **kwargs)
 
     def GetCharHeight(*args, **kwargs):
-        """GetCharHeight() -> int"""
+        """
+        GetCharHeight() -> int
+
+        Get the (average) character size for the current font.
+        """
         return _core.Window_GetCharHeight(*args, **kwargs)
 
     def GetCharWidth(*args, **kwargs):
-        """GetCharWidth() -> int"""
+        """
+        GetCharWidth() -> int
+
+        Get the (average) character size for the current font.
+        """
         return _core.Window_GetCharWidth(*args, **kwargs)
 
     def GetTextExtent(*args, **kwargs):
@@ -5881,56 +6594,133 @@ class Window(EvtHandler):
         GetFullTextExtent(String string, Font font=None) ->
            (width, height, descent, externalLeading)
 
-        Get the width, height, decent and leading of the text using the current or specified font.
+        Get the width, height, decent and leading of the text using the
+        current or specified font.
         """
         return _core.Window_GetFullTextExtent(*args, **kwargs)
 
     def ClientToScreenXY(*args, **kwargs):
-        """ClientToScreenXY(int x, int y)"""
+        """
+        ClientToScreenXY(int x, int y) -> (x,y)
+
+        Converts to screen coordinates from coordinates relative to this window.
+        """
         return _core.Window_ClientToScreenXY(*args, **kwargs)
 
     def ScreenToClientXY(*args, **kwargs):
-        """ScreenToClientXY(int x, int y)"""
+        """
+        ScreenToClientXY(int x, int y) -> (x,y)
+
+        Converts from screen to client window coordinates.
+        """
         return _core.Window_ScreenToClientXY(*args, **kwargs)
 
     def ClientToScreen(*args, **kwargs):
-        """ClientToScreen(Point pt) -> Point"""
+        """
+        ClientToScreen(Point pt) -> Point
+
+        Converts to screen coordinates from coordinates relative to this window.
+        """
         return _core.Window_ClientToScreen(*args, **kwargs)
 
     def ScreenToClient(*args, **kwargs):
-        """ScreenToClient(Point pt) -> Point"""
+        """
+        ScreenToClient(Point pt) -> Point
+
+        Converts from screen to client window coordinates.
+        """
         return _core.Window_ScreenToClient(*args, **kwargs)
 
     def HitTestXY(*args, **kwargs):
-        """HitTestXY(int x, int y) -> int"""
+        """
+        HitTestXY(int x, int y) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _core.Window_HitTestXY(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
-        """HitTest(Point pt) -> int"""
+        """
+        HitTest(Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
         return _core.Window_HitTest(*args, **kwargs)
 
-    def GetBorderFlags(*args, **kwargs):
-        """GetBorderFlags(long flags) -> int"""
-        return _core.Window_GetBorderFlags(*args, **kwargs)
+    def GetBorder(*args):
+        """
+        GetBorder(long flags) -> int
+        GetBorder() -> int
 
-    def GetBorder(*args, **kwargs):
-        """GetBorder() -> int"""
-        return _core.Window_GetBorder(*args, **kwargs)
+        Get border for the flags of this window
+        """
+        return _core.Window_GetBorder(*args)
 
     def UpdateWindowUI(*args, **kwargs):
-        """UpdateWindowUI(long flags=UPDATE_UI_NONE)"""
+        """
+        UpdateWindowUI(long flags=UPDATE_UI_NONE)
+
+        This function sends EVT_UPDATE_UI events to the window. The particular
+        implementation depends on the window; for example a wx.ToolBar will
+        send an update UI event for each toolbar button, and a wx.Frame will
+        send an update UI event for each menubar menu item. You can call this
+        function from your application to ensure that your UI is up-to-date at
+        a particular point in time (as far as your EVT_UPDATE_UI handlers are
+        concerned). This may be necessary if you have called
+        wx.UpdateUIEvent.SetMode or wx.UpdateUIEvent.SetUpdateInterval to
+        limit the overhead that wxWindows incurs by sending update UI events
+        in idle time.
+
+        The flags should be a bitlist of one or more of the following values:
+
+            wx.UPDATE_UI_NONE          No particular value
+            wx.UPDATE_UI_RECURSE       Call the function for descendants
+            wx.UPDATE_UI_FROMIDLE      Invoked from OnIdle
+
+        If you are calling this function from an OnIdle function, make sure
+        you pass the wx.UPDATE_UI_FROMIDLE flag, since this tells the window to
+        only update the UI elements that need to be updated in idle time. Some
+        windows update their elements only when necessary, for example when a
+        menu is about to be shown. The following is an example of how to call
+        UpdateWindowUI from an idle function.
+
+            def OnIdle(self, evt):
+                if wx.UpdateUIEvent.CanUpdate(self):
+                    self.UpdateWindowUI(wx.UPDATE_UI_FROMIDLE);
+
+        """
         return _core.Window_UpdateWindowUI(*args, **kwargs)
 
     def PopupMenuXY(*args, **kwargs):
-        """PopupMenuXY(Menu menu, int x, int y) -> bool"""
+        """
+        PopupMenuXY(Menu menu, int x, int y) -> bool
+
+        Pops up the given menu at the specified coordinates, relative to this
+        window, and returns control when the user has dismissed the menu. If a
+        menu item is selected, the corresponding menu event is generated and
+        will be processed as usual.
+        """
         return _core.Window_PopupMenuXY(*args, **kwargs)
 
     def PopupMenu(*args, **kwargs):
-        """PopupMenu(Menu menu, Point pos) -> bool"""
+        """
+        PopupMenu(Menu menu, Point pos) -> bool
+
+        Pops up the given menu at the specified coordinates, relative to this
+        window, and returns control when the user has dismissed the menu. If a
+        menu item is selected, the corresponding menu event is generated and
+        will be processed as usual.
+        """
         return _core.Window_PopupMenu(*args, **kwargs)
 
     def GetHandle(*args, **kwargs):
-        """GetHandle() -> long"""
+        """
+        GetHandle() -> long
+
+        Returns the platform-specific handle (as a long integer) of the
+        physical window.  Currently on wxMac it returns the handle of the
+        toplevel parent of the window.
+        """
         return _core.Window_GetHandle(*args, **kwargs)
 
     def OnPaint(*args, **kwargs):
@@ -5938,136 +6728,330 @@ class Window(EvtHandler):
         return _core.Window_OnPaint(*args, **kwargs)
 
     def HasScrollbar(*args, **kwargs):
-        """HasScrollbar(int orient) -> bool"""
+        """
+        HasScrollbar(int orient) -> bool
+
+        Does the window have the scrollbar for this orientation?
+        """
         return _core.Window_HasScrollbar(*args, **kwargs)
 
     def SetScrollbar(*args, **kwargs):
-        """SetScrollbar(int orient, int pos, int thumbvisible, int range, bool refresh=True)"""
+        """
+        SetScrollbar(int orientation, int pos, int thumbvisible, int range, 
+            bool refresh=True)
+
+        Sets the scrollbar properties of a built-in scrollbar.
+
+            orientation: Determines the scrollbar whose page size is to be
+                         set. May be wx.HORIZONTAL or wx.VERTICAL.
+
+            position:    The position of the scrollbar in scroll units.
+
+            thumbSize:   The size of the thumb, or visible portion of the
+                         scrollbar, in scroll units.
+
+            range:       The maximum position of the scrollbar.
+
+            refresh:     True to redraw the scrollbar, false otherwise.
+        """
         return _core.Window_SetScrollbar(*args, **kwargs)
 
     def SetScrollPos(*args, **kwargs):
-        """SetScrollPos(int orient, int pos, bool refresh=True)"""
+        """
+        SetScrollPos(int orientation, int pos, bool refresh=True)
+
+        Sets the position of one of the built-in scrollbars.
+        """
         return _core.Window_SetScrollPos(*args, **kwargs)
 
     def GetScrollPos(*args, **kwargs):
-        """GetScrollPos(int orient) -> int"""
+        """
+        GetScrollPos(int orientation) -> int
+
+        Returns the built-in scrollbar position.
+        """
         return _core.Window_GetScrollPos(*args, **kwargs)
 
     def GetScrollThumb(*args, **kwargs):
-        """GetScrollThumb(int orient) -> int"""
+        """
+        GetScrollThumb(int orientation) -> int
+
+        Returns the built-in scrollbar thumb size.
+        """
         return _core.Window_GetScrollThumb(*args, **kwargs)
 
     def GetScrollRange(*args, **kwargs):
-        """GetScrollRange(int orient) -> int"""
+        """
+        GetScrollRange(int orientation) -> int
+
+        Returns the built-in scrollbar range.
+        """
         return _core.Window_GetScrollRange(*args, **kwargs)
 
     def ScrollWindow(*args, **kwargs):
-        """ScrollWindow(int dx, int dy, Rect rect=None)"""
+        """
+        ScrollWindow(int dx, int dy, Rect rect=None)
+
+        Physically scrolls the pixels in the window and move child windows
+        accordingly.  Use this function to optimise your scrolling
+        implementations, to minimise the area that must be redrawn. Note that
+        it is rarely required to call this function from a user program.
+
+            dx:   Amount to scroll horizontally.
+
+            dy:   Amount to scroll vertically.
+
+            rect: Rectangle to invalidate. If this is None, the whole window
+                  is invalidated. If you pass a rectangle corresponding to the
+                  area of the window exposed by the scroll, your painting
+                  handler can optimize painting by checking for the
+                  invalidated region.
+        """
         return _core.Window_ScrollWindow(*args, **kwargs)
 
     def ScrollLines(*args, **kwargs):
-        """ScrollLines(int lines) -> bool"""
+        """
+        ScrollLines(int lines) -> bool
+
+        If the platform and window class supports it, scrolls the window by
+        the given number of lines down, if lines is positive, or up if lines
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _core.Window_ScrollLines(*args, **kwargs)
 
     def ScrollPages(*args, **kwargs):
-        """ScrollPages(int pages) -> bool"""
+        """
+        ScrollPages(int pages) -> bool
+
+        If the platform and window class supports it,  scrolls the window by
+        the given number of pages down, if pages is positive, or up if pages
+        is negative.  Returns True if the window was scrolled, False if it was
+        already on top/bottom and nothing was done.
+        """
         return _core.Window_ScrollPages(*args, **kwargs)
 
     def LineUp(*args, **kwargs):
-        """LineUp() -> bool"""
+        """
+        LineUp() -> bool
+
+        This is just a wrapper for ScrollLines(-1).
+        """
         return _core.Window_LineUp(*args, **kwargs)
 
     def LineDown(*args, **kwargs):
-        """LineDown() -> bool"""
+        """
+        LineDown() -> bool
+
+        This is just a wrapper for ScrollLines(1).
+        """
         return _core.Window_LineDown(*args, **kwargs)
 
     def PageUp(*args, **kwargs):
-        """PageUp() -> bool"""
+        """
+        PageUp() -> bool
+
+        This is just a wrapper for ScrollPages(-1).
+        """
         return _core.Window_PageUp(*args, **kwargs)
 
     def PageDown(*args, **kwargs):
-        """PageDown() -> bool"""
+        """
+        PageDown() -> bool
+
+        This is just a wrapper for ScrollPages(1).
+        """
         return _core.Window_PageDown(*args, **kwargs)
 
     def SetHelpText(*args, **kwargs):
-        """SetHelpText(String text)"""
+        """
+        SetHelpText(String text)
+
+        Sets the help text to be used as context-sensitive help for this
+        window.  Note that the text is actually stored by the current
+        wxHelpProvider implementation, and not in the window object itself.
+        """
         return _core.Window_SetHelpText(*args, **kwargs)
 
     def SetHelpTextForId(*args, **kwargs):
-        """SetHelpTextForId(String text)"""
+        """
+        SetHelpTextForId(String text)
+
+        Associate this help text with all windows with the same id as this
+        one.
+        """
         return _core.Window_SetHelpTextForId(*args, **kwargs)
 
     def GetHelpText(*args, **kwargs):
-        """GetHelpText() -> String"""
+        """
+        GetHelpText() -> String
+
+        Gets the help text to be used as context-sensitive help for this
+        window.  Note that the text is actually stored by the current
+        wxHelpProvider implementation, and not in the window object itself.
+        """
         return _core.Window_GetHelpText(*args, **kwargs)
 
     def SetToolTipString(*args, **kwargs):
-        """SetToolTipString(String tip)"""
+        """
+        SetToolTipString(String tip)
+
+        Attach a tooltip to the window.
+        """
         return _core.Window_SetToolTipString(*args, **kwargs)
 
     def SetToolTip(*args, **kwargs):
-        """SetToolTip(ToolTip tip)"""
+        """
+        SetToolTip(ToolTip tip)
+
+        Attach a tooltip to the window.
+        """
         return _core.Window_SetToolTip(*args, **kwargs)
 
     def GetToolTip(*args, **kwargs):
-        """GetToolTip() -> ToolTip"""
+        """
+        GetToolTip() -> ToolTip
+
+        get the associated tooltip or None if none
+        """
         return _core.Window_GetToolTip(*args, **kwargs)
 
     def SetDropTarget(*args, **kwargs):
-        """SetDropTarget(PyDropTarget dropTarget)"""
+        """
+        SetDropTarget(DropTarget dropTarget)
+
+        Associates a drop target with this window.  If the window already has
+        a drop target, it is deleted.
+        """
         return _core.Window_SetDropTarget(*args, **kwargs)
 
     def GetDropTarget(*args, **kwargs):
-        """GetDropTarget() -> PyDropTarget"""
+        """
+        GetDropTarget() -> DropTarget
+
+        Returns the associated drop target, which may be None.
+        """
         return _core.Window_GetDropTarget(*args, **kwargs)
 
     def DragAcceptFiles(*args, **kwargs):
-        """DragAcceptFiles(bool accept)"""
+        """
+        DragAcceptFiles(bool accept)
+
+        Enables or disables eligibility for drop file events, EVT_DROP_FILES.
+        Only available on Windows.
+        """
         return _core.Window_DragAcceptFiles(*args, **kwargs)
 
     def SetConstraints(*args, **kwargs):
-        """SetConstraints(LayoutConstraints constraints)"""
+        """
+        SetConstraints(LayoutConstraints constraints)
+
+        Sets the window to have the given layout constraints. If an existing
+        layout constraints object is already owned by the window, it will be
+        deleted.  Pass None to disassociate and delete the window's current
+        constraints.
+
+        You must call SetAutoLayout to tell a window to use the constraints
+        automatically in its default EVT_SIZE handler; otherwise, you must
+        handle EVT_SIZE yourself and call Layout() explicitly. When setting
+        both a wx.LayoutConstraints and a wx.Sizer, only the sizer will have
+        effect.
+        """
         return _core.Window_SetConstraints(*args, **kwargs)
 
     def GetConstraints(*args, **kwargs):
-        """GetConstraints() -> LayoutConstraints"""
+        """
+        GetConstraints() -> LayoutConstraints
+
+        Returns a pointer to the window's layout constraints, or None if there
+        are none.
+        """
         return _core.Window_GetConstraints(*args, **kwargs)
 
     def SetAutoLayout(*args, **kwargs):
-        """SetAutoLayout(bool autoLayout)"""
+        """
+        SetAutoLayout(bool autoLayout)
+
+        Determines whether the Layout function will be called automatically
+        when the window is resized.  It is called implicitly by SetSizer but
+        if you use SetConstraints you should call it manually or otherwise the
+        window layout won't be correctly updated when its size changes.
+        """
         return _core.Window_SetAutoLayout(*args, **kwargs)
 
     def GetAutoLayout(*args, **kwargs):
-        """GetAutoLayout() -> bool"""
+        """
+        GetAutoLayout() -> bool
+
+        Returns the current autoLayout setting
+        """
         return _core.Window_GetAutoLayout(*args, **kwargs)
 
     def Layout(*args, **kwargs):
-        """Layout() -> bool"""
+        """
+        Layout() -> bool
+
+        Invokes the constraint-based layout algorithm or the sizer-based
+        algorithm for this window.  See SetAutoLayout: when auto layout is on,
+        this function gets called automatically by the default EVT_SIZE
+        handler when the window is resized.
+        """
         return _core.Window_Layout(*args, **kwargs)
 
     def SetSizer(*args, **kwargs):
-        """SetSizer(Sizer sizer, bool deleteOld=True)"""
+        """
+        SetSizer(Sizer sizer, bool deleteOld=True)
+
+        Sets the window to have the given layout sizer. The window will then
+        own the object, and will take care of its deletion. If an existing
+        layout sizer object is already owned by the window, it will be deleted
+        if the deleteOld parameter is true. Note that this function will also
+        call SetAutoLayout implicitly with a True parameter if the sizer is
+        non-NoneL and False otherwise.
+        """
         return _core.Window_SetSizer(*args, **kwargs)
 
     def SetSizerAndFit(*args, **kwargs):
-        """SetSizerAndFit(Sizer sizer, bool deleteOld=True)"""
+        """
+        SetSizerAndFit(Sizer sizer, bool deleteOld=True)
+
+        The same as SetSizer, except it also sets the size hints for the
+        window based on the sizer's minimum size.
+        """
         return _core.Window_SetSizerAndFit(*args, **kwargs)
 
     def GetSizer(*args, **kwargs):
-        """GetSizer() -> Sizer"""
+        """
+        GetSizer() -> Sizer
+
+        Return the sizer associated with the window by a previous call to
+        SetSizer or None if there isn't one.
+        """
         return _core.Window_GetSizer(*args, **kwargs)
 
     def SetContainingSizer(*args, **kwargs):
-        """SetContainingSizer(Sizer sizer)"""
+        """
+        SetContainingSizer(Sizer sizer)
+
+        This normally does not need to be called by application code. It is
+        called internally when a window is added to a sizer, and is used so
+        the window can remove itself from the sizer when it is destroyed.
+        """
         return _core.Window_SetContainingSizer(*args, **kwargs)
 
     def GetContainingSizer(*args, **kwargs):
-        """GetContainingSizer() -> Sizer"""
+        """
+        GetContainingSizer() -> Sizer
+
+        Return the sizer that this window is a member of, if any, otherwise None.
+        """
         return _core.Window_GetContainingSizer(*args, **kwargs)
 
     def PostCreate(self, pre):
-        """Phase 3 of the 2-phase create <wink!>
-           Call this method after precreating the window with the 2-phase create method."""
+        """
+        Phase 3 of the 2-phase create <wink!>
+        Call this method after precreating the window with the 2-phase create method.
+        """
         self.this = pre.this
         self.thisown = pre.thisown
         pre.thisown = 0
@@ -6087,38 +7071,73 @@ NullAcceleratorTable = cvar.NullAcceleratorTable
 PanelNameStr = cvar.PanelNameStr
 
 def PreWindow(*args, **kwargs):
-    """PreWindow() -> Window"""
+    """
+    PreWindow() -> Window
+
+    Precreate a Window for 2-phase creation.
+    """
     val = _core.new_PreWindow(*args, **kwargs)
     val.thisown = 1
     return val
 
 def Window_NewControlId(*args, **kwargs):
-    """Window_NewControlId() -> int"""
+    """
+    Window_NewControlId() -> int
+
+    Generate a control id for the controls which were not given one.
+    """
     return _core.Window_NewControlId(*args, **kwargs)
 
 def Window_NextControlId(*args, **kwargs):
-    """Window_NextControlId(int winid) -> int"""
+    """
+    Window_NextControlId(int winid) -> int
+
+    Get the id of the control following the one with the given
+    (autogenerated) id
+    """
     return _core.Window_NextControlId(*args, **kwargs)
 
 def Window_PrevControlId(*args, **kwargs):
-    """Window_PrevControlId(int winid) -> int"""
+    """
+    Window_PrevControlId(int winid) -> int
+
+    Get the id of the control preceding the one with the given
+    (autogenerated) id
+    """
     return _core.Window_PrevControlId(*args, **kwargs)
 
 def Window_FindFocus(*args, **kwargs):
-    """Window_FindFocus() -> Window"""
+    """
+    Window_FindFocus() -> Window
+
+    Returns the window or control that currently has the keyboard focus,
+    or None.
+    """
     return _core.Window_FindFocus(*args, **kwargs)
 
 def Window_GetCapture(*args, **kwargs):
-    """Window_GetCapture() -> Window"""
+    """
+    Window_GetCapture() -> Window
+
+    Returns the window which currently captures the mouse or None
+    """
     return _core.Window_GetCapture(*args, **kwargs)
 
 def DLG_PNT(win, point_or_x, y=None):
+    """
+    Convenience function for converting a Point or (x,y) in
+    dialog units to pixel units.
+    """
     if y is None:
         return win.ConvertDialogPointToPixels(point_or_x)
     else:
         return win.ConvertDialogPointToPixels(wx.Point(point_or_x, y))
 
 def DLG_SZE(win, size_width, height=None):
+    """
+    Convenience function for converting a Size or (w,h) in
+    dialog units to pixel units.
+    """
     if height is None:
         return win.ConvertDialogSizeToPixels(size_width)
     else:
@@ -6126,15 +7145,40 @@ def DLG_SZE(win, size_width, height=None):
 
 
 def FindWindowById(*args, **kwargs):
-    """FindWindowById(long id, Window parent=None) -> Window"""
+    """
+    FindWindowById(long id, Window parent=None) -> Window
+
+    Find the first window in the application with the given id. If parent
+    is None, the search will start from all top-level frames and dialog
+    boxes; if non-None, the search will be limited to the given window
+    hierarchy. The search is recursive in both cases.
+    """
     return _core.FindWindowById(*args, **kwargs)
 
 def FindWindowByName(*args, **kwargs):
-    """FindWindowByName(String name, Window parent=None) -> Window"""
+    """
+    FindWindowByName(String name, Window parent=None) -> Window
+
+    Find a window by its name (as given in a window constructor or Create
+    function call). If parent is None, the search will start from all
+    top-level frames and dialog boxes; if non-None, the search will be
+    limited to the given window hierarchy. The search is recursive in both
+    cases.
+
+    If no window with such name is found, wx.FindWindowByLabel is called.
+    """
     return _core.FindWindowByName(*args, **kwargs)
 
 def FindWindowByLabel(*args, **kwargs):
-    """FindWindowByLabel(String label, Window parent=None) -> Window"""
+    """
+    FindWindowByLabel(String label, Window parent=None) -> Window
+
+    Find a window by its label. Depending on the type of window, the label
+    may be a window title or panel item label. If parent is None, the
+    search will start from all top-level frames and dialog boxes; if
+    non-None, the search will be limited to the given window
+    hierarchy. The search is recursive in both cases.
+    """
     return _core.FindWindowByLabel(*args, **kwargs)
 
 def Window_FromHWND(*args, **kwargs):
@@ -6798,6 +7842,12 @@ def MenuItem_GetDefaultMarginWidth(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class Control(Window):
+    """
+    This is the base class for a control or 'widget'.
+
+    A control is generally a small window which processes user input and/or
+    displays one or more item of data.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxControl instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
@@ -6805,6 +7855,9 @@ class Control(Window):
         __init__(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ControlNameStr) -> Control
+
+        Create a Control.  Normally you should only call this from a
+        subclass' __init__ as a plain old wx.Control is not very useful.
         """
         newobj = _core.new_Control(*args, **kwargs)
         self.this = newobj.this
@@ -6817,19 +7870,34 @@ class Control(Window):
         Create(Window parent, int id, Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
             String name=ControlNameStr) -> bool
+
+        Do the 2nd phase and create the GUI control.
         """
         return _core.Control_Create(*args, **kwargs)
 
     def Command(*args, **kwargs):
-        """Command(CommandEvent event)"""
+        """
+        Command(CommandEvent event)
+
+        Simulates the effect of the user issuing a command to the
+        item. See wxCommandEvent.
+        """
         return _core.Control_Command(*args, **kwargs)
 
     def GetLabel(*args, **kwargs):
-        """GetLabel() -> String"""
+        """
+        GetLabel() -> String
+
+        Return a control's text.
+        """
         return _core.Control_GetLabel(*args, **kwargs)
 
     def SetLabel(*args, **kwargs):
-        """SetLabel(String label)"""
+        """
+        SetLabel(String label)
+
+        Sets the item's text.
+        """
         return _core.Control_SetLabel(*args, **kwargs)
 
 
@@ -6842,7 +7910,11 @@ _core.Control_swigregister(ControlPtr)
 ControlNameStr = cvar.ControlNameStr
 
 def PreControl(*args, **kwargs):
-    """PreControl() -> Control"""
+    """
+    PreControl() -> Control
+
+    Precreate a Control control for 2-phase creation
+    """
     val = _core.new_PreControl(*args, **kwargs)
     val.thisown = 1
     return val
@@ -6850,39 +7922,95 @@ def PreControl(*args, **kwargs):
 #---------------------------------------------------------------------------
 
 class ItemContainer(object):
+    """
+    wx.ItemContainer defines an interface which is implemented by all
+    controls which have string subitems, each of which may be
+    selected, such as wx.ListBox, wx.CheckListBox, wx.Choice and
+    wx.ComboBox (which implements an extended interface deriving from
+    this one)
+
+    It defines the methods for accessing the control's items and
+    although each of the derived classes implements them differently,
+    they still all conform to the same interface.
+
+    The items in a wx.ItemContainer have (non empty) string labels
+    and, optionally, client data associated with them.
+
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxItemContainer instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def Append(*args, **kwargs):
-        """Append(String item, PyObject clientData=None) -> int"""
+        """
+        Append(String item, PyObject clientData=None) -> int
+
+        Adds the item to the control, associating the given data with the
+        item if not None.  The return value is the index of the newly
+        added item which may be different from the last one if the
+        control is sorted (e.g. has wx.LB_SORT or wx.CB_SORT style).
+        """
         return _core.ItemContainer_Append(*args, **kwargs)
 
     def AppendItems(*args, **kwargs):
-        """AppendItems(wxArrayString strings)"""
+        """
+        AppendItems(wxArrayString strings)
+
+        Apend several items at once to the control.  Notice that calling
+        this method may be much faster than appending the items one by
+        one if you need to add a lot of items.
+        """
         return _core.ItemContainer_AppendItems(*args, **kwargs)
 
     def Insert(*args, **kwargs):
-        """Insert(String item, int pos, PyObject clientData=None) -> int"""
+        """
+        Insert(String item, int pos, PyObject clientData=None) -> int
+
+        Insert an item into the control before the item at the pos index,
+        optionally associating some data object with the item.
+        """
         return _core.ItemContainer_Insert(*args, **kwargs)
 
     def Clear(*args, **kwargs):
-        """Clear()"""
+        """
+        Clear()
+
+        Removes all items from the control.
+        """
         return _core.ItemContainer_Clear(*args, **kwargs)
 
     def Delete(*args, **kwargs):
-        """Delete(int n)"""
+        """
+        Delete(int n)
+
+        Deletes the item at the zero-based index 'n' from the control.
+        Note that it is an error (signalled by a PyAssertionError
+        exception if enabled) to remove an item with the index negative
+        or greater or equal than the number of items in the control.
+        """
         return _core.ItemContainer_Delete(*args, **kwargs)
 
     def GetCount(*args, **kwargs):
-        """GetCount() -> int"""
+        """
+        GetCount() -> int
+
+        Returns the number of items in the control.
+        """
         return _core.ItemContainer_GetCount(*args, **kwargs)
 
     def IsEmpty(*args, **kwargs):
-        """IsEmpty() -> bool"""
+        """
+        IsEmpty() -> bool
+
+        Returns True if the control is empty or False if it has some items.
+        """
         return _core.ItemContainer_IsEmpty(*args, **kwargs)
 
     def GetString(*args, **kwargs):
-        """GetString(int n) -> String"""
+        """
+        GetString(int n) -> String
+
+        Returns the label of the item with the given index.
+        """
         return _core.ItemContainer_GetString(*args, **kwargs)
 
     def GetStrings(*args, **kwargs):
@@ -6890,31 +8018,62 @@ class ItemContainer(object):
         return _core.ItemContainer_GetStrings(*args, **kwargs)
 
     def SetString(*args, **kwargs):
-        """SetString(int n, String s)"""
+        """
+        SetString(int n, String s)
+
+        Sets the label for the given item.
+        """
         return _core.ItemContainer_SetString(*args, **kwargs)
 
     def FindString(*args, **kwargs):
-        """FindString(String s) -> int"""
+        """
+        FindString(String s) -> int
+
+        Finds an item whose label matches the given string.  Returns the
+        zero-based position of the item, or wx.NOT_FOUND if the string
+        was not found.
+        """
         return _core.ItemContainer_FindString(*args, **kwargs)
 
     def Select(*args, **kwargs):
-        """Select(int n)"""
+        """
+        Select(int n)
+
+        Sets the item at index 'n' to be the selected item.
+        """
         return _core.ItemContainer_Select(*args, **kwargs)
 
+    SetSelection = Select 
     def GetSelection(*args, **kwargs):
-        """GetSelection() -> int"""
+        """
+        GetSelection() -> int
+
+        Returns the index of the selected item or wx.NOT_FOUND if no item is selected.
+        """
         return _core.ItemContainer_GetSelection(*args, **kwargs)
 
     def GetStringSelection(*args, **kwargs):
-        """GetStringSelection() -> String"""
+        """
+        GetStringSelection() -> String
+
+        Returns the label of the selected item or an empty string if no item is selected.
+        """
         return _core.ItemContainer_GetStringSelection(*args, **kwargs)
 
     def GetClientData(*args, **kwargs):
-        """GetClientData(int n) -> PyObject"""
+        """
+        GetClientData(int n) -> PyObject
+
+        Returns the client data associated with the given item, (if any.)
+        """
         return _core.ItemContainer_GetClientData(*args, **kwargs)
 
     def SetClientData(*args, **kwargs):
-        """SetClientData(int n, PyObject clientData)"""
+        """
+        SetClientData(int n, PyObject clientData)
+
+        Associate the given client data with the item at position n.
+        """
         return _core.ItemContainer_SetClientData(*args, **kwargs)
 
 
@@ -6928,6 +8087,11 @@ _core.ItemContainer_swigregister(ItemContainerPtr)
 #---------------------------------------------------------------------------
 
 class ControlWithItems(Control,ItemContainer):
+    """
+    wx.ControlWithItems combines the wx.ItemContainer class with the
+    wx.Control class, and is used for the base class of various
+    controls that have items.
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxControlWithItems instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -7828,6 +8992,51 @@ RightOf = _core.RightOf
 SameAs = _core.SameAs
 Absolute = _core.Absolute
 class IndividualLayoutConstraint(Object):
+    """
+    Objects of this class are stored in the wx.LayoutConstraint class as one of
+    eight possible constraints that a window can be involved in.  You will never
+    need to create an instance of wx.IndividualLayoutConstraint, rather you should
+    use create a wx.LayoutContstraints instance and use the individual contstraints
+    that it contains.
+
+    Constraints are initially set to have the relationship wx.Unconstrained, which
+    means that their values should be calculated by looking at known constraints.
+
+    The Edge specifies the type of edge or dimension of a window.
+
+     Edges
+
+        wx.Left 	The left edge.
+        wx.Top 	The top edge.
+        wx.Right 	The right edge.
+        wx.Bottom 	The bottom edge.
+        wx.CentreX 	The x-coordinate of the centre of the window.
+        wx.CentreY 	The y-coordinate of the centre of the window. 
+
+
+    The Relationship specifies the relationship that this edge or dimension has
+    with another specified edge or dimension. Normally, the user doesn't use these
+    directly because functions such as Below and RightOf are a convenience for
+    using the more general Set function.
+
+     Relationships
+
+        wx.Unconstrained 	The edge or dimension is unconstrained
+                            (the default for edges.)
+        wx.AsIs 	        The edge or dimension is to be taken from the current
+                            window position or size (the default for dimensions.)
+        wx.Above 	        The edge should be above another edge.
+        wx.Below 	        The edge should be below another edge.
+        wx.LeftOf 	        The edge should be to the left of another edge.
+        wx.RightOf 	        The edge should be to the right of another edge.
+        wx.SameAs 	        The edge or dimension should be the same as another edge
+                            or dimension.
+        wx.PercentOf 	The edge or dimension should be a percentage of another
+                            edge or dimension.
+        wx.Absolute 	The edge or dimension should be a given absolute value.
+
+
+    """
     def __init__(self): raise RuntimeError, "No constructor defined"
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxIndividualLayoutConstraint instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
@@ -7836,39 +9045,75 @@ class IndividualLayoutConstraint(Object):
         return _core.IndividualLayoutConstraint_Set(*args, **kwargs)
 
     def LeftOf(*args, **kwargs):
-        """LeftOf(Window sibling, int marg=0)"""
+        """
+        LeftOf(Window sibling, int marg=0)
+
+        Sibling relationship
+        """
         return _core.IndividualLayoutConstraint_LeftOf(*args, **kwargs)
 
     def RightOf(*args, **kwargs):
-        """RightOf(Window sibling, int marg=0)"""
+        """
+        RightOf(Window sibling, int marg=0)
+
+        Sibling relationship
+        """
         return _core.IndividualLayoutConstraint_RightOf(*args, **kwargs)
 
     def Above(*args, **kwargs):
-        """Above(Window sibling, int marg=0)"""
+        """
+        Above(Window sibling, int marg=0)
+
+        Sibling relationship
+        """
         return _core.IndividualLayoutConstraint_Above(*args, **kwargs)
 
     def Below(*args, **kwargs):
-        """Below(Window sibling, int marg=0)"""
+        """
+        Below(Window sibling, int marg=0)
+
+        Sibling relationship
+        """
         return _core.IndividualLayoutConstraint_Below(*args, **kwargs)
 
     def SameAs(*args, **kwargs):
-        """SameAs(Window otherW, int edge, int marg=0)"""
+        """
+        SameAs(Window otherW, int edge, int marg=0)
+
+        'Same edge' alignment
+        """
         return _core.IndividualLayoutConstraint_SameAs(*args, **kwargs)
 
     def PercentOf(*args, **kwargs):
-        """PercentOf(Window otherW, int wh, int per)"""
+        """
+        PercentOf(Window otherW, int wh, int per)
+
+        The edge is a percentage of the other window's edge
+        """
         return _core.IndividualLayoutConstraint_PercentOf(*args, **kwargs)
 
     def Absolute(*args, **kwargs):
-        """Absolute(int val)"""
+        """
+        Absolute(int val)
+
+        Edge has absolute value
+        """
         return _core.IndividualLayoutConstraint_Absolute(*args, **kwargs)
 
     def Unconstrained(*args, **kwargs):
-        """Unconstrained()"""
+        """
+        Unconstrained()
+
+        Dimension is unconstrained
+        """
         return _core.IndividualLayoutConstraint_Unconstrained(*args, **kwargs)
 
     def AsIs(*args, **kwargs):
-        """AsIs()"""
+        """
+        AsIs()
+
+        Dimension is 'as is' (use current size settings)
+        """
         return _core.IndividualLayoutConstraint_AsIs(*args, **kwargs)
 
     def GetOtherWindow(*args, **kwargs):
@@ -7924,15 +9169,28 @@ class IndividualLayoutConstraint(Object):
         return _core.IndividualLayoutConstraint_SetRelationship(*args, **kwargs)
 
     def ResetIfWin(*args, **kwargs):
-        """ResetIfWin(Window otherW) -> bool"""
+        """
+        ResetIfWin(Window otherW) -> bool
+
+        Reset constraint if it mentions otherWin
+        """
         return _core.IndividualLayoutConstraint_ResetIfWin(*args, **kwargs)
 
     def SatisfyConstraint(*args, **kwargs):
-        """SatisfyConstraint(LayoutConstraints constraints, Window win) -> bool"""
+        """
+        SatisfyConstraint(LayoutConstraints constraints, Window win) -> bool
+
+        Try to satisfy constraint
+        """
         return _core.IndividualLayoutConstraint_SatisfyConstraint(*args, **kwargs)
 
     def GetEdge(*args, **kwargs):
-        """GetEdge(int which, Window thisWin, Window other) -> int"""
+        """
+        GetEdge(int which, Window thisWin, Window other) -> int
+
+        Get the value of this edge or dimension, or if this
+        is not determinable, -1.
+        """
         return _core.IndividualLayoutConstraint_GetEdge(*args, **kwargs)
 
 
@@ -7944,6 +9202,33 @@ class IndividualLayoutConstraintPtr(IndividualLayoutConstraint):
 _core.IndividualLayoutConstraint_swigregister(IndividualLayoutConstraintPtr)
 
 class LayoutConstraints(Object):
+    """
+    Note: constraints are now deprecated and you should use sizers instead.
+
+    Objects of this class can be associated with a window to define its layout
+    constraints, with respect to siblings or its parent.
+
+    The class consists of the following eight constraints of class
+    wx.IndividualLayoutConstraint, some or all of which should be accessed
+    directly to set the appropriate constraints.
+
+        * left: represents the left hand edge of the window
+        * right: represents the right hand edge of the window
+        * top: represents the top edge of the window
+        * bottom: represents the bottom edge of the window
+        * width: represents the width of the window
+        * height: represents the height of the window
+        * centreX: represents the horizontal centre point of the window
+        * centreY: represents the vertical centre point of the window 
+
+    Most constraints are initially set to have the relationship wxUnconstrained,
+    which means that their values should be calculated by looking at known
+    constraints. The exceptions are width and height, which are set to wxAsIs to
+    ensure that if the user does not specify a constraint, the existing width and
+    height will be used, to be compatible with panel items which often have take a
+    default size. If the constraint is wxAsIs, the dimension will not be changed.
+
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxLayoutConstraints instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     left = property(_core.LayoutConstraints_left_get)

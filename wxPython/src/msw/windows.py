@@ -2280,15 +2280,14 @@ class FontDialog(Dialog):
     """This class represents the font chooser dialog."""
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxFontDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
-    def __init__(self, *args):
+    def __init__(self, *args, **kwargs):
         """
-        __init__(Window parent) -> FontDialog
         __init__(Window parent, FontData data) -> FontDialog
 
-        Constructor. Pass a parent window, and optionally the font data object to be
+        Constructor. Pass a parent window and the FontData object to be
         used to initialize the dialog controls.
         """
-        newobj = _windows.new_FontDialog(*args)
+        newobj = _windows.new_FontDialog(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown

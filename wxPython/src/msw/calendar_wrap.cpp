@@ -123,7 +123,6 @@ SWIGIMPORT(char *)           SWIG_UnpackData(char *, void *, int);
 }
 #endif
 
-
 /***********************************************************************
  * pyrun.swg for wxPython
  *
@@ -195,28 +194,6 @@ SWIGIMPORT(int)               SWIG_Python_ConvertPacked(PyObject *, void *, int 
 SWIGIMPORT(PyObject *)        SWIG_Python_NewPackedObj(void *, int sz, swig_type_info *);
 SWIGIMPORT(void)              SWIG_Python_InstallConstants(PyObject *d, swig_const_info constants[]);
 
-/* -----------------------------------------------------------------------------
- *  the needed conversions between C++ and python
- * ----------------------------------------------------------------------------- */
-/* basic types */
-/*
-  utilities
-*/
-SWIGIMPORT(char* )         SWIG_PyObj_AsCharPtr(PyObject *obj, swig_type_info* pchar_info);
-SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharPtr(const char* cptr);
-SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLong(PyObject * obj);
-SWIGIMPORT(long)           SWIG_PyObj_AsLongInRange(PyObject * obj, const char* type,
-						    long min_value, long max_value);
-SWIGIMPORT(unsigned long)  SWIG_PyObj_AsUnsignedLongInRange(PyObject *obj, const char* type,
-							    unsigned long max_value);
-SWIGIMPORT(char *)         SWIG_PyObj_AsNewCharPtr(PyObject *obj, swig_type_info* pchar_info);
-SWIGIMPORT(void)           SWIG_PyObj_AsCharPtrAndSize(PyObject *obj, swig_type_info* pchar_info,
-						       char** cptr, size_t* size);
-SWIGIMPORT(void)           SWIG_PyObj_AsCharArray(PyObject *obj, swig_type_info* pchar_info,
-						  char* carray, size_t size);
-SWIGIMPORT(PyObject *)     SWIG_PyObj_FromCharArray(const char* carray, size_t size);
-SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_conv pyconv);
-
 
 /* Contract support */
 
@@ -225,7 +202,6 @@ SWIGIMPORT(float)          SWIG_PyObj_AsFloatConv(PyObject *obj,  py_objasdbl_co
 #ifdef __cplusplus
 }
 #endif
-
 
 
 /* -------- TYPES TABLE (BEGIN) -------- */
@@ -255,42 +231,47 @@ static swig_type_info *swig_types[14];
 
 #define SWIG_name    "_calendar"
 
-#include <limits.h>
-#include <float.h>
-#include <string.h>
+/* Auxiliar swig  macros */
 
-#ifndef SWIGSTATIC
 #ifdef __cplusplus
-#define SWIGSTATIC(a) static inline a
-#else
+#define SWIGSTATICINLINE(a) static inline a
 #define SWIGSTATIC(a) static a
-#endif
-#endif
+#define swig_new_array(type, size) (new type[(size)])
+#define swig_delete_array(cptr) delete[] cptr
+#define swig_const_cast(type,a) const_cast<type>(a)
+#define swig_static_cast(type,a) static_cast<type>(a)
+#define swig_reinterpret_cast(type,a) reinterpret_cast<type>(a)
 
-#ifndef numeric_cast
-#ifdef __cplusplus
 #ifdef HAVE_NUMERIC_CAST
-#define numeric_cast(type,a) numeric_cast<type>(a)
+#define swig_numeric_cast(type,a) numeric_cast<type>(a)
 #else
-#define numeric_cast(type,a) static_cast<type>(a)
-#endif
-#else
-#define numeric_cast(type,a) (type)(a)
-#endif
+#define swig_numeric_cast(type,a) static_cast<type>(a)
 #endif
 
+#else /* C case */
+
+#define SWIGSTATICINLINE(a) static a
+#define SWIGSTATIC(a) static a
+#define swig_new_array(type, size) ((type*) malloc((size)*sizeof(type)))
+#define swig_delete_array(cptr) free((char*)cptr)
+#define swig_const_cast(type,a) (type)(a)
+#define swig_static_cast(type,a) (type)(a)
+#define swig_reinterpret_cast(type,a) (type)(a)
+#define swig_numeric_cast(type,a) (type)(a)
+
+#endif /* __cplusplus */
 
 
-#define SWIG_PyObj_FromSignedChar     PyInt_FromLong
-#define SWIG_PyObj_FromUnsignedChar   PyInt_FromLong
-#define SWIG_PyObj_FromShort         PyInt_FromLong
-#define SWIG_PyObj_FromUnsignedShort  PyInt_FromLong
-#define SWIG_PyObj_FromInt           PyInt_FromLong
-#define SWIG_PyObj_FromLong          PyInt_FromLong
-#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
-#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
-#define SWIG_PyObj_FromFloat         PyFloat_FromDouble
-#define SWIG_PyObj_FromDouble        PyFloat_FromDouble
+#define SWIG_FromSignedChar     PyInt_FromLong
+#define SWIG_FromUnsignedChar   PyInt_FromLong
+#define SWIG_FromShort         PyInt_FromLong
+#define SWIG_FromUnsignedShort  PyInt_FromLong
+#define SWIG_FromInt           PyInt_FromLong
+#define SWIG_FromLong          PyInt_FromLong
+#define SWIG_FromFloat         PyFloat_FromDouble
+#define SWIG_FromDouble        PyFloat_FromDouble
+#define SWIG_FromFloat         PyFloat_FromDouble
+#define SWIG_FromDouble        PyFloat_FromDouble
 
 
 #include "wx/wxPython/wxPython.h"
@@ -299,26 +280,125 @@ static swig_type_info *swig_types[14];
 #include <wx/calctrl.h>
 
 
-SWIGSTATIC(int)
-SWIG_PyObj_AsInt(PyObject *obj)
-{ 
-  return numeric_cast(int,
-    SWIG_PyObj_AsLongInRange(obj, "int", INT_MIN, INT_MAX));
+#include <limits.h>
+
+
+SWIGSTATICINLINE(long)
+SWIG_CheckLongInRange(long value, const char* type,
+		      long min_value, long max_value)
+{
+  if (!PyErr_Occurred()) {
+    if (value < min_value) {
+      PyObject *err = 
+	PyString_FromFormat("value %ld is less than '%s' minimum %ld", 
+			    value, type, min_value);
+      
+      PyErr_SetObject(PyExc_OverflowError, err);
+      Py_DECREF(err);
+    } else if (value > max_value) {
+      PyObject *err = 
+	PyString_FromFormat("value %ld is greater than '%s' maximum %ld", 
+			    value, type, max_value);
+      PyErr_SetObject(PyExc_OverflowError, err);
+      Py_DECREF(err);
+    }
+  }
+  return value;
 }
 
 
-SWIGSTATIC(bool)
-SWIG_PyObj_AsBool(PyObject *obj)
+SWIGSTATICINLINE(long)
+SWIG_AsLong(PyObject * obj)
+{
+  return PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLong(obj);
+}
+
+
+#if INT_MAX != LONG_MAX
+SWIGSTATICINLINE(int)
+SWIG_AsInt(PyObject *obj)
+{ 
+  return swig_numeric_cast(int,
+    SWIG_CheckLongInRange(SWIG_AsLong(obj),
+			  "int", INT_MIN, INT_MAX));
+}
+#else
+#define SWIG_AsInt SWIG_AsLong
+#endif
+
+
+SWIGSTATICINLINE(int)
+SWIG_CheckInt(PyObject* obj)
+{
+  SWIG_AsInt(obj);
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+SWIGSTATICINLINE(bool)
+SWIG_AsBool(PyObject *obj)
 {
   return PyObject_IsTrue(obj) ? true : false;
 }
 
+
+SWIGSTATICINLINE(int)
+SWIG_CheckBool(PyObject* obj)
+{
+  SWIG_AsBool(obj);
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
  static const wxString wxPyCalendarNameStr(wxCalendarNameStr); 
 
-SWIGSTATIC(long)
-SWIG_PyObj_AsLong(PyObject * obj)
+SWIGSTATICINLINE(int)
+SWIG_CheckLong(PyObject* obj)
 {
-  return PyInt_Check(obj) ? PyInt_AsLong(obj) : PyLong_AsLong(obj);
+  SWIG_AsLong(obj);
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    return 0;
+  } else {
+    return 1;
+  }
+}
+
+
+SWIGSTATICINLINE(unsigned long)
+SWIG_AsUnsignedLong(PyObject * obj) 
+{
+  if (PyLong_Check(obj)) {
+    return PyLong_AsUnsignedLong(obj);
+  } else {
+    long i = PyInt_AsLong(obj);
+    if ( !PyErr_Occurred() && (i < 0)) {
+      PyErr_SetString(PyExc_TypeError, "negative value for unsigned type");
+    }
+    return i;
+  }
+}
+
+
+SWIGSTATICINLINE(int)
+SWIG_CheckUnsignedLong(PyObject* obj)
+{
+  SWIG_AsUnsignedLong(obj);
+  if (PyErr_Occurred()) {
+    PyErr_Clear();
+    return 0;
+  } else {
+    return 1;
+  }
 }
 
 PyObject *wxCalendarCtrl_HitTest(wxCalendarCtrl *self,wxPoint const &pos){
@@ -380,16 +460,17 @@ static PyObject *_wrap_new_CalendarDateAttr(PyObject *self, PyObject *args, PyOb
         }
     }
     if (obj3) {
-        if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_wxFont,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg4 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     if (obj4) {
-        {
-            arg5 = (wxCalendarDateBorder) SWIG_PyObj_AsInt(obj4);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
+        arg5 = (wxCalendarDateBorder) SWIG_AsInt(obj4); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -398,7 +479,7 @@ static PyObject *_wrap_new_CalendarDateAttr(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCalendarDateAttr, 1);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarDateAttr, 1);
     return resultobj;
     fail:
     return NULL;
@@ -417,7 +498,8 @@ static PyObject *_wrap_CalendarDateAttr_SetTextColour(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarDateAttr_SetTextColour",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
@@ -448,7 +530,8 @@ static PyObject *_wrap_CalendarDateAttr_SetBackgroundColour(PyObject *self, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarDateAttr_SetBackgroundColour",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
@@ -479,7 +562,8 @@ static PyObject *_wrap_CalendarDateAttr_SetBorderColour(PyObject *self, PyObject
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarDateAttr_SetBorderColour",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
@@ -509,10 +593,14 @@ static PyObject *_wrap_CalendarDateAttr_SetFont(PyObject *self, PyObject *args, 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarDateAttr_SetFont",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxFont,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxFont,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
     if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -539,11 +627,10 @@ static PyObject *_wrap_CalendarDateAttr_SetBorder(PyObject *self, PyObject *args
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarDateAttr_SetBorder",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (wxCalendarDateBorder) SWIG_PyObj_AsInt(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxCalendarDateBorder) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetBorder((wxCalendarDateBorder )arg2);
@@ -569,11 +656,10 @@ static PyObject *_wrap_CalendarDateAttr_SetHoliday(PyObject *self, PyObject *arg
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarDateAttr_SetHoliday",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (bool) SWIG_AsBool(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetHoliday(arg2);
@@ -598,7 +684,8 @@ static PyObject *_wrap_CalendarDateAttr_HasTextColour(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_HasTextColour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCalendarDateAttr const *)arg1)->HasTextColour();
@@ -623,7 +710,8 @@ static PyObject *_wrap_CalendarDateAttr_HasBackgroundColour(PyObject *self, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_HasBackgroundColour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCalendarDateAttr const *)arg1)->HasBackgroundColour();
@@ -648,7 +736,8 @@ static PyObject *_wrap_CalendarDateAttr_HasBorderColour(PyObject *self, PyObject
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_HasBorderColour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCalendarDateAttr const *)arg1)->HasBorderColour();
@@ -673,7 +762,8 @@ static PyObject *_wrap_CalendarDateAttr_HasFont(PyObject *self, PyObject *args, 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_HasFont",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCalendarDateAttr const *)arg1)->HasFont();
@@ -698,7 +788,8 @@ static PyObject *_wrap_CalendarDateAttr_HasBorder(PyObject *self, PyObject *args
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_HasBorder",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCalendarDateAttr const *)arg1)->HasBorder();
@@ -723,7 +814,8 @@ static PyObject *_wrap_CalendarDateAttr_IsHoliday(PyObject *self, PyObject *args
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_IsHoliday",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)((wxCalendarDateAttr const *)arg1)->IsHoliday();
@@ -748,7 +840,8 @@ static PyObject *_wrap_CalendarDateAttr_GetTextColour(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_GetTextColour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarDateAttr const *)arg1)->GetTextColour();
@@ -759,7 +852,7 @@ static PyObject *_wrap_CalendarDateAttr_GetTextColour(PyObject *self, PyObject *
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -777,7 +870,8 @@ static PyObject *_wrap_CalendarDateAttr_GetBackgroundColour(PyObject *self, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_GetBackgroundColour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarDateAttr const *)arg1)->GetBackgroundColour();
@@ -788,7 +882,7 @@ static PyObject *_wrap_CalendarDateAttr_GetBackgroundColour(PyObject *self, PyOb
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -806,7 +900,8 @@ static PyObject *_wrap_CalendarDateAttr_GetBorderColour(PyObject *self, PyObject
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_GetBorderColour",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarDateAttr const *)arg1)->GetBorderColour();
@@ -817,7 +912,7 @@ static PyObject *_wrap_CalendarDateAttr_GetBorderColour(PyObject *self, PyObject
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -835,7 +930,8 @@ static PyObject *_wrap_CalendarDateAttr_GetFont(PyObject *self, PyObject *args, 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_GetFont",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarDateAttr const *)arg1)->GetFont();
@@ -846,7 +942,7 @@ static PyObject *_wrap_CalendarDateAttr_GetFont(PyObject *self, PyObject *args, 
     {
         wxFont * resultptr;
         resultptr = new wxFont((wxFont &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxFont, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxFont, 1);
     }
     return resultobj;
     fail:
@@ -864,7 +960,8 @@ static PyObject *_wrap_CalendarDateAttr_GetBorder(PyObject *self, PyObject *args
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarDateAttr_GetBorder",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)((wxCalendarDateAttr const *)arg1)->GetBorder();
@@ -872,7 +969,7 @@ static PyObject *_wrap_CalendarDateAttr_GetBorder(PyObject *self, PyObject *args
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromInt((int)result);
+    resultobj = SWIG_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -898,11 +995,10 @@ static PyObject *_wrap_new_CalendarEvent(PyObject *self, PyObject *args, PyObjec
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:new_CalendarEvent",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (wxEventType) SWIG_PyObj_AsInt(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxEventType) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxCalendarEvent *)new wxCalendarEvent(arg1,arg2);
@@ -910,7 +1006,7 @@ static PyObject *_wrap_new_CalendarEvent(PyObject *self, PyObject *args, PyObjec
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCalendarEvent, 1);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarEvent, 1);
     return resultobj;
     fail:
     return NULL;
@@ -927,7 +1023,8 @@ static PyObject *_wrap_CalendarEvent_GetDate(PyObject *self, PyObject *args, PyO
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarEvent_GetDate",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarEvent,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarEvent const *)arg1)->GetDate();
@@ -938,7 +1035,7 @@ static PyObject *_wrap_CalendarEvent_GetDate(PyObject *self, PyObject *args, PyO
     {
         wxDateTime * resultptr;
         resultptr = new wxDateTime((wxDateTime &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxDateTime, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxDateTime, 1);
     }
     return resultobj;
     fail:
@@ -957,10 +1054,14 @@ static PyObject *_wrap_CalendarEvent_SetDate(PyObject *self, PyObject *args, PyO
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarEvent_SetDate",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarEvent,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDateTime,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
     if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -987,11 +1088,10 @@ static PyObject *_wrap_CalendarEvent_SetWeekDay(PyObject *self, PyObject *args, 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarEvent_SetWeekDay",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (wxDateTime::WeekDay const) SWIG_PyObj_AsInt(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarEvent,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (wxDateTime::WeekDay const) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetWeekDay((wxDateTime::WeekDay )arg2);
@@ -1016,7 +1116,8 @@ static PyObject *_wrap_CalendarEvent_GetWeekDay(PyObject *self, PyObject *args, 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarEvent_GetWeekDay",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarEvent,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (int)((wxCalendarEvent const *)arg1)->GetWeekDay();
@@ -1024,7 +1125,7 @@ static PyObject *_wrap_CalendarEvent_GetWeekDay(PyObject *self, PyObject *args, 
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_PyObj_FromInt((int)result);
+    resultobj = SWIG_FromInt((int)result);
     return resultobj;
     fail:
     return NULL;
@@ -1038,7 +1139,7 @@ static PyObject * CalendarEvent_swigregister(PyObject *self, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
-static int _wrap_CalendarNameStr_set(PyObject *) {
+static int _wrap_CalendarNameStr_set(PyObject *_val) {
     PyErr_SetString(PyExc_TypeError,"Variable CalendarNameStr is read-only.");
     return 1;
 }
@@ -1087,15 +1188,17 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:new_CalendarCtrl",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (int) SWIG_PyObj_AsInt(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (int) SWIG_AsInt(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxDateTime,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg3 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     if (obj3) {
@@ -1111,10 +1214,8 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
         }
     }
     if (obj5) {
-        {
-            arg6 = (long) SWIG_PyObj_AsLong(obj5);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
+        arg6 = (long) SWIG_AsLong(obj5); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj6) {
         {
@@ -1130,7 +1231,7 @@ static PyObject *_wrap_new_CalendarCtrl(PyObject *self, PyObject *args, PyObject
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCalendarCtrl, 1);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarCtrl, 1);
     {
         if (temp7)
         delete arg7;
@@ -1160,7 +1261,7 @@ static PyObject *_wrap_new_PreCalendarCtrl(PyObject *self, PyObject *args, PyObj
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCalendarCtrl, 1);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarCtrl, 1);
     return resultobj;
     fail:
     return NULL;
@@ -1198,16 +1299,19 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObj
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|OOOOO:CalendarCtrl_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg3 = (int) SWIG_PyObj_AsInt(obj2);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxWindow,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg3 = (int) SWIG_AsInt(obj2); 
+    if (PyErr_Occurred()) SWIG_fail;
     if (obj3) {
-        if ((SWIG_ConvertPtr(obj3,(void **) &arg4, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj3,(void **)(&arg4),SWIGTYPE_p_wxDateTime,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg4 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     if (obj4) {
@@ -1223,10 +1327,8 @@ static PyObject *_wrap_CalendarCtrl_Create(PyObject *self, PyObject *args, PyObj
         }
     }
     if (obj6) {
-        {
-            arg7 = (long) SWIG_PyObj_AsLong(obj6);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
+        arg7 = (long) SWIG_AsLong(obj6); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     if (obj7) {
         {
@@ -1268,10 +1370,14 @@ static PyObject *_wrap_CalendarCtrl_SetDate(PyObject *self, PyObject *args, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarCtrl_SetDate",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDateTime,
+    SWIG_POINTER_EXCEPTION | 0)) == -1)
+    SWIG_fail;
     if (arg2 == NULL) {
-        PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+        PyErr_SetString(PyExc_TypeError,"null reference");
+        SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1297,7 +1403,8 @@ static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *self, PyObject *args, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetDate",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -1308,7 +1415,7 @@ static PyObject *_wrap_CalendarCtrl_GetDate(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDateTime, 0);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
     return resultobj;
     fail:
     return NULL;
@@ -1328,11 +1435,15 @@ static PyObject *_wrap_CalendarCtrl_SetLowerDateLimit(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:CalendarCtrl_SetLowerDateLimit",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDateTime,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg2 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     {
@@ -1362,11 +1473,15 @@ static PyObject *_wrap_CalendarCtrl_SetUpperDateLimit(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:CalendarCtrl_SetUpperDateLimit",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDateTime,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg2 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     {
@@ -1393,7 +1508,8 @@ static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetLowerDateLimit",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -1404,7 +1520,7 @@ static PyObject *_wrap_CalendarCtrl_GetLowerDateLimit(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDateTime, 0);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
     return resultobj;
     fail:
     return NULL;
@@ -1421,7 +1537,8 @@ static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetUpperDateLimit",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         {
@@ -1432,7 +1549,7 @@ static PyObject *_wrap_CalendarCtrl_GetUpperDateLimit(PyObject *self, PyObject *
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDateTime, 0);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxDateTime, 0);
     return resultobj;
     fail:
     return NULL;
@@ -1455,17 +1572,24 @@ static PyObject *_wrap_CalendarCtrl_SetDateRange(PyObject *self, PyObject *args,
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:CalendarCtrl_SetDateRange",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj1,(void **)(&arg2),SWIGTYPE_p_wxDateTime,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg2 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     if (obj2) {
-        if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxDateTime,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxDateTime,
+        SWIG_POINTER_EXCEPTION | 0)) == -1)
+        SWIG_fail;
         if (arg3 == NULL) {
-            PyErr_SetString(PyExc_TypeError,"null reference"); SWIG_fail; 
+            PyErr_SetString(PyExc_TypeError,"null reference");
+            SWIG_fail;
         }
     }
     {
@@ -1493,12 +1617,11 @@ static PyObject *_wrap_CalendarCtrl_EnableYearChange(PyObject *self, PyObject *a
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:CalendarCtrl_EnableYearChange",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        {
-            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
+        arg2 = (bool) SWIG_AsBool(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1525,12 +1648,11 @@ static PyObject *_wrap_CalendarCtrl_EnableMonthChange(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:CalendarCtrl_EnableMonthChange",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        {
-            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
+        arg2 = (bool) SWIG_AsBool(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1557,12 +1679,11 @@ static PyObject *_wrap_CalendarCtrl_EnableHolidayDisplay(PyObject *self, PyObjec
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:CalendarCtrl_EnableHolidayDisplay",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     if (obj1) {
-        {
-            arg2 = (bool) SWIG_PyObj_AsBool(obj1);  
-            if (PyErr_Occurred()) SWIG_fail;
-        }
+        arg2 = (bool) SWIG_AsBool(obj1); 
+        if (PyErr_Occurred()) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -1593,7 +1714,8 @@ static PyObject *_wrap_CalendarCtrl_SetHeaderColours(PyObject *self, PyObject *a
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:CalendarCtrl_SetHeaderColours",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
@@ -1626,7 +1748,8 @@ static PyObject *_wrap_CalendarCtrl_GetHeaderColourFg(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetHeaderColourFg",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarCtrl const *)arg1)->GetHeaderColourFg();
@@ -1637,7 +1760,7 @@ static PyObject *_wrap_CalendarCtrl_GetHeaderColourFg(PyObject *self, PyObject *
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -1655,7 +1778,8 @@ static PyObject *_wrap_CalendarCtrl_GetHeaderColourBg(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetHeaderColourBg",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarCtrl const *)arg1)->GetHeaderColourBg();
@@ -1666,7 +1790,7 @@ static PyObject *_wrap_CalendarCtrl_GetHeaderColourBg(PyObject *self, PyObject *
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -1689,7 +1813,8 @@ static PyObject *_wrap_CalendarCtrl_SetHighlightColours(PyObject *self, PyObject
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:CalendarCtrl_SetHighlightColours",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
@@ -1722,7 +1847,8 @@ static PyObject *_wrap_CalendarCtrl_GetHighlightColourFg(PyObject *self, PyObjec
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetHighlightColourFg",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarCtrl const *)arg1)->GetHighlightColourFg();
@@ -1733,7 +1859,7 @@ static PyObject *_wrap_CalendarCtrl_GetHighlightColourFg(PyObject *self, PyObjec
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -1751,7 +1877,8 @@ static PyObject *_wrap_CalendarCtrl_GetHighlightColourBg(PyObject *self, PyObjec
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetHighlightColourBg",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarCtrl const *)arg1)->GetHighlightColourBg();
@@ -1762,7 +1889,7 @@ static PyObject *_wrap_CalendarCtrl_GetHighlightColourBg(PyObject *self, PyObjec
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -1785,7 +1912,8 @@ static PyObject *_wrap_CalendarCtrl_SetHolidayColours(PyObject *self, PyObject *
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:CalendarCtrl_SetHolidayColours",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxColour_helper(obj1, &arg2)) SWIG_fail;
@@ -1818,7 +1946,8 @@ static PyObject *_wrap_CalendarCtrl_GetHolidayColourFg(PyObject *self, PyObject 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetHolidayColourFg",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarCtrl const *)arg1)->GetHolidayColourFg();
@@ -1829,7 +1958,7 @@ static PyObject *_wrap_CalendarCtrl_GetHolidayColourFg(PyObject *self, PyObject 
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -1847,7 +1976,8 @@ static PyObject *_wrap_CalendarCtrl_GetHolidayColourBg(PyObject *self, PyObject 
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetHolidayColourBg",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = ((wxCalendarCtrl const *)arg1)->GetHolidayColourBg();
@@ -1858,7 +1988,7 @@ static PyObject *_wrap_CalendarCtrl_GetHolidayColourBg(PyObject *self, PyObject 
     {
         wxColour * resultptr;
         resultptr = new wxColour((wxColour &) result);
-        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxColour, 1);
+        resultobj = SWIG_NewPointerObj((void *)(resultptr), SWIGTYPE_p_wxColour, 1);
     }
     return resultobj;
     fail:
@@ -1878,11 +2008,10 @@ static PyObject *_wrap_CalendarCtrl_GetAttr(PyObject *self, PyObject *args, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarCtrl_GetAttr",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (size_t) SWIG_PyObj_AsUnsignedLong(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (size_t) SWIG_AsUnsignedLong(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxCalendarDateAttr *)((wxCalendarCtrl const *)arg1)->GetAttr(arg2);
@@ -1890,7 +2019,7 @@ static PyObject *_wrap_CalendarCtrl_GetAttr(PyObject *self, PyObject *args, PyOb
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxCalendarDateAttr, 0);
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxCalendarDateAttr, 0);
     return resultobj;
     fail:
     return NULL;
@@ -1910,12 +2039,12 @@ static PyObject *_wrap_CalendarCtrl_SetAttr(PyObject *self, PyObject *args, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:CalendarCtrl_SetAttr",kwnames,&obj0,&obj1,&obj2)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (size_t) SWIG_PyObj_AsUnsignedLong(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
-    if ((SWIG_ConvertPtr(obj2,(void **) &arg3, SWIGTYPE_p_wxCalendarDateAttr,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (size_t) SWIG_AsUnsignedLong(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj2,(void **)(&arg3),SWIGTYPE_p_wxCalendarDateAttr,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetAttr(arg2,arg3);
@@ -1941,11 +2070,10 @@ static PyObject *_wrap_CalendarCtrl_SetHoliday(PyObject *self, PyObject *args, P
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarCtrl_SetHoliday",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (size_t) SWIG_PyObj_AsUnsignedLong(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (size_t) SWIG_AsUnsignedLong(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetHoliday(arg2);
@@ -1971,11 +2099,10 @@ static PyObject *_wrap_CalendarCtrl_ResetAttr(PyObject *self, PyObject *args, Py
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarCtrl_ResetAttr",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    {
-        arg2 = (size_t) SWIG_PyObj_AsUnsignedLong(obj1);  
-        if (PyErr_Occurred()) SWIG_fail;
-    }
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
+    arg2 = (size_t) SWIG_AsUnsignedLong(obj1); 
+    if (PyErr_Occurred()) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->ResetAttr(arg2);
@@ -2003,7 +2130,8 @@ static PyObject *_wrap_CalendarCtrl_HitTest(PyObject *self, PyObject *args, PyOb
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:CalendarCtrl_HitTest",kwnames,&obj0,&obj1)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         arg2 = &temp2;
         if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
@@ -2032,7 +2160,8 @@ static PyObject *_wrap_CalendarCtrl_GetMonthControl(PyObject *self, PyObject *ar
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetMonthControl",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxControl *)((wxCalendarCtrl const *)arg1)->GetMonthControl();
@@ -2059,7 +2188,8 @@ static PyObject *_wrap_CalendarCtrl_GetYearControl(PyObject *self, PyObject *arg
     };
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:CalendarCtrl_GetYearControl",kwnames,&obj0)) goto fail;
-    if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj0,(void **)(&arg1),SWIGTYPE_p_wxCalendarCtrl,
+    SWIG_POINTER_EXCEPTION | 0)) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (wxControl *)((wxCalendarCtrl const *)arg1)->GetYearControl();
@@ -2595,19 +2725,19 @@ static void *_p_wxKeyEventTo_p_wxEvent(void *x) {
 static void *_p_wxScrollWinEventTo_p_wxEvent(void *x) {
     return (void *)((wxEvent *)  ((wxScrollWinEvent *) x));
 }
-static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0},{"_p_wxControl"},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxControl},{0}};
-static swig_type_info _swigt__p_wxDateTime[] = {{"_p_wxDateTime", 0, "wxDateTime *", 0},{"_p_wxDateTime"},{0}};
-static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow},{"_p_wxWindow"},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxWindow},{0}};
-static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0},{"_p_wxFont"},{0}};
-static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxEvent},{"_p_wxCalendarEvent", _p_wxCalendarEventTo_p_wxEvent},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxEvent},{"_p_wxEvent"},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxEvent},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent},{0}};
-static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxObject},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject},{"_p_wxSizer", _p_wxSizerTo_p_wxObject},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject},{"_p_wxFileHistory", _p_wxFileHistoryTo_p_wxObject},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject},{"_p_wxMenu", _p_wxMenuTo_p_wxObject},{"_p_wxEvent", _p_wxEventTo_p_wxObject},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject},{"_p_wxControl", _p_wxControlTo_p_wxObject},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxObject},{"_p_wxCalendarEvent", _p_wxCalendarEventTo_p_wxObject},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject},{"_p_wxClipboard", _p_wxClipboardTo_p_wxObject},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject},{"_p_wxToolTip", _p_wxToolTipTo_p_wxObject},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject},{"_p_wxImage", _p_wxImageTo_p_wxObject},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject},{"_p_wxSystemOptions", _p_wxSystemOptionsTo_p_wxObject},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxObject},{"_p_wxObject"},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject},{"_p_wxWindow", _p_wxWindowTo_p_wxObject},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxObject},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject},{"_p_wxBusyInfo", _p_wxBusyInfoTo_p_wxObject},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxObject},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxObject},{0}};
-static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler},{"_p_wxEvtHandler"},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxEvtHandler},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxEvtHandler},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxEvtHandler},{0}};
-static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0},{"_p_char"},{0}};
-static swig_type_info _swigt__p_wxCalendarDateAttr[] = {{"_p_wxCalendarDateAttr", 0, "wxCalendarDateAttr *", 0},{"_p_wxCalendarDateAttr"},{0}};
-static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0},{"_p_wxColour"},{0}};
-static swig_type_info _swigt__p_wxCalendarEvent[] = {{"_p_wxCalendarEvent", 0, "wxCalendarEvent *", 0},{"_p_wxCalendarEvent"},{0}};
-static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent},{"_p_wxCalendarEvent", _p_wxCalendarEventTo_p_wxCommandEvent},{"_p_wxCommandEvent"},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent},{0}};
-static swig_type_info _swigt__p_wxCalendarCtrl[] = {{"_p_wxCalendarCtrl", 0, "wxCalendarCtrl *", 0},{"_p_wxCalendarCtrl"},{0}};
+static swig_type_info _swigt__p_wxControl[] = {{"_p_wxControl", 0, "wxControl *", 0, 0, 0, 0},{"_p_wxControl", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxControl, 0, 0, 0, 0, 0},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxControl, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxDateTime[] = {{"_p_wxDateTime", 0, "wxDateTime *", 0, 0, 0, 0},{"_p_wxDateTime", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxWindow[] = {{"_p_wxWindow", 0, "wxWindow *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxWindow", 0, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxWindow, 0, 0, 0, 0, 0},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxWindow, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxFont[] = {{"_p_wxFont", 0, "wxFont *", 0, 0, 0, 0},{"_p_wxFont", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxEvent[] = {{"_p_wxEvent", 0, "wxEvent *", 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCalendarEvent", _p_wxCalendarEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxEvent", 0, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxEvent, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxObject[] = {{"_p_wxObject", 0, "wxObject *", 0, 0, 0, 0},{"_p_wxLayoutConstraints", _p_wxLayoutConstraintsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGBSizerItem", _p_wxGBSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizerItem", _p_wxSizerItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIndividualLayoutConstraint", _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxStaticBoxSizer", _p_wxStaticBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBoxSizer", _p_wxBoxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizer", _p_wxSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridBagSizer", _p_wxGridBagSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileHistory", _p_wxFileHistoryTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvent", _p_wxEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGridSizer", _p_wxGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFlexGridSizer", _p_wxFlexGridSizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxInitDialogEvent", _p_wxInitDialogEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaintEvent", _p_wxPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNcPaintEvent", _p_wxNcPaintEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPaletteChangedEvent", _p_wxPaletteChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDisplayChangedEvent", _p_wxDisplayChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseCaptureChangedEvent", _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSysColourChangedEvent", _p_wxSysColourChangedEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSetCursorEvent", _p_wxSetCursorEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTimerEvent", _p_wxTimerEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCalendarEvent", _p_wxCalendarEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFSFile", _p_wxFSFileTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxClipboard", _p_wxClipboardTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPySizer", _p_wxPySizerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyEvent", _p_wxPyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxShowEvent", _p_wxShowEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxToolTip", _p_wxToolTipTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuItem", _p_wxMenuItemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIdleEvent", _p_wxIdleEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMoveEvent", _p_wxMoveEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSizeEvent", _p_wxSizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxActivateEvent", _p_wxActivateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxIconizeEvent", _p_wxIconizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMaximizeEvent", _p_wxMaximizeEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxQueryNewPaletteEvent", _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCURHandler", _p_wxCURHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxICOHandler", _p_wxICOHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBMPHandler", _p_wxBMPHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImageHandler", _p_wxImageHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxTIFFHandler", _p_wxTIFFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", _p_wxEvtHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxANIHandler", _p_wxANIHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNGHandler", _p_wxPNGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxGIFHandler", _p_wxGIFHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPCXHandler", _p_wxPCXHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJPEGHandler", _p_wxJPEGHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPNMHandler", _p_wxPNMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxXPMHandler", _p_wxXPMHandlerTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxAcceleratorTable", _p_wxAcceleratorTableTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxImage", _p_wxImageTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxScrollWinEvent", _p_wxScrollWinEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxSystemOptions", _p_wxSystemOptionsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxJoystickEvent", _p_wxJoystickEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxObject", 0, 0, 0, 0, 0, 0},{"_p_wxKeyEvent", _p_wxKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxNavigationKeyEvent", _p_wxNavigationKeyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFileSystem", _p_wxFileSystemTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMenuEvent", _p_wxMenuEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCloseEvent", _p_wxCloseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxMouseEvent", _p_wxMouseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxEraseEvent", _p_wxEraseEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxBusyInfo", _p_wxBusyInfoTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", _p_wxCommandEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxDropFilesEvent", _p_wxDropFilesEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxFocusEvent", _p_wxFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxProcessEvent", _p_wxProcessEventTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxObject, 0, 0, 0, 0, 0},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxObject, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxEvtHandler[] = {{"_p_wxEvtHandler", 0, "wxEvtHandler *", 0, 0, 0, 0},{"_p_wxControl", _p_wxControlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxControlWithItems", _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxWindow", _p_wxWindowTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxEvtHandler", 0, 0, 0, 0, 0, 0},{"_p_wxPyApp", _p_wxPyAppTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyTimer", _p_wxPyTimerTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenuBar", _p_wxMenuBarTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxValidator", _p_wxValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyValidator", _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxMenu", _p_wxMenuTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxCalendarCtrl", _p_wxCalendarCtrlTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{"_p_wxPyProcess", _p_wxPyProcessTo_p_wxEvtHandler, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_char[] = {{"_p_char", 0, "char *", 0, 0, 0, 0},{"_p_char", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxCalendarDateAttr[] = {{"_p_wxCalendarDateAttr", 0, "wxCalendarDateAttr *", 0, 0, 0, 0},{"_p_wxCalendarDateAttr", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxColour[] = {{"_p_wxColour", 0, "wxColour *", 0, 0, 0, 0},{"_p_wxColour", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxCalendarEvent[] = {{"_p_wxCalendarEvent", 0, "wxCalendarEvent *", 0, 0, 0, 0},{"_p_wxCalendarEvent", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxCommandEvent[] = {{"_p_wxCommandEvent", 0, "wxCommandEvent *", 0, 0, 0, 0},{"_p_wxChildFocusEvent", _p_wxChildFocusEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxScrollEvent", _p_wxScrollEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowCreateEvent", _p_wxWindowCreateEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxUpdateUIEvent", _p_wxUpdateUIEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxWindowDestroyEvent", _p_wxWindowDestroyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxContextMenuEvent", _p_wxContextMenuEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCalendarEvent", _p_wxCalendarEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxCommandEvent", 0, 0, 0, 0, 0, 0},{"_p_wxNotifyEvent", _p_wxNotifyEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{"_p_wxPyCommandEvent", _p_wxPyCommandEventTo_p_wxCommandEvent, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
+static swig_type_info _swigt__p_wxCalendarCtrl[] = {{"_p_wxCalendarCtrl", 0, "wxCalendarCtrl *", 0, 0, 0, 0},{"_p_wxCalendarCtrl", 0, 0, 0, 0, 0, 0},{0, 0, 0, 0, 0, 0, 0}};
 
 static swig_type_info *swig_types_initial[] = {
 _swigt__p_wxControl, 
@@ -2656,22 +2786,22 @@ SWIGEXPORT(void) SWIG_init(void) {
     }
     SWIG_InstallConstants(d,swig_const_table);
     
-    PyDict_SetItemString(d,"CAL_SUNDAY_FIRST", SWIG_PyObj_FromInt((int)wxCAL_SUNDAY_FIRST));
-    PyDict_SetItemString(d,"CAL_MONDAY_FIRST", SWIG_PyObj_FromInt((int)wxCAL_MONDAY_FIRST));
-    PyDict_SetItemString(d,"CAL_SHOW_HOLIDAYS", SWIG_PyObj_FromInt((int)wxCAL_SHOW_HOLIDAYS));
-    PyDict_SetItemString(d,"CAL_NO_YEAR_CHANGE", SWIG_PyObj_FromInt((int)wxCAL_NO_YEAR_CHANGE));
-    PyDict_SetItemString(d,"CAL_NO_MONTH_CHANGE", SWIG_PyObj_FromInt((int)wxCAL_NO_MONTH_CHANGE));
-    PyDict_SetItemString(d,"CAL_SEQUENTIAL_MONTH_SELECTION", SWIG_PyObj_FromInt((int)wxCAL_SEQUENTIAL_MONTH_SELECTION));
-    PyDict_SetItemString(d,"CAL_SHOW_SURROUNDING_WEEKS", SWIG_PyObj_FromInt((int)wxCAL_SHOW_SURROUNDING_WEEKS));
-    PyDict_SetItemString(d,"CAL_HITTEST_NOWHERE", SWIG_PyObj_FromInt((int)wxCAL_HITTEST_NOWHERE));
-    PyDict_SetItemString(d,"CAL_HITTEST_HEADER", SWIG_PyObj_FromInt((int)wxCAL_HITTEST_HEADER));
-    PyDict_SetItemString(d,"CAL_HITTEST_DAY", SWIG_PyObj_FromInt((int)wxCAL_HITTEST_DAY));
-    PyDict_SetItemString(d,"CAL_HITTEST_INCMONTH", SWIG_PyObj_FromInt((int)wxCAL_HITTEST_INCMONTH));
-    PyDict_SetItemString(d,"CAL_HITTEST_DECMONTH", SWIG_PyObj_FromInt((int)wxCAL_HITTEST_DECMONTH));
-    PyDict_SetItemString(d,"CAL_HITTEST_SURROUNDING_WEEK", SWIG_PyObj_FromInt((int)wxCAL_HITTEST_SURROUNDING_WEEK));
-    PyDict_SetItemString(d,"CAL_BORDER_NONE", SWIG_PyObj_FromInt((int)wxCAL_BORDER_NONE));
-    PyDict_SetItemString(d,"CAL_BORDER_SQUARE", SWIG_PyObj_FromInt((int)wxCAL_BORDER_SQUARE));
-    PyDict_SetItemString(d,"CAL_BORDER_ROUND", SWIG_PyObj_FromInt((int)wxCAL_BORDER_ROUND));
+    PyDict_SetItemString(d,"CAL_SUNDAY_FIRST", SWIG_FromInt((int)wxCAL_SUNDAY_FIRST));
+    PyDict_SetItemString(d,"CAL_MONDAY_FIRST", SWIG_FromInt((int)wxCAL_MONDAY_FIRST));
+    PyDict_SetItemString(d,"CAL_SHOW_HOLIDAYS", SWIG_FromInt((int)wxCAL_SHOW_HOLIDAYS));
+    PyDict_SetItemString(d,"CAL_NO_YEAR_CHANGE", SWIG_FromInt((int)wxCAL_NO_YEAR_CHANGE));
+    PyDict_SetItemString(d,"CAL_NO_MONTH_CHANGE", SWIG_FromInt((int)wxCAL_NO_MONTH_CHANGE));
+    PyDict_SetItemString(d,"CAL_SEQUENTIAL_MONTH_SELECTION", SWIG_FromInt((int)wxCAL_SEQUENTIAL_MONTH_SELECTION));
+    PyDict_SetItemString(d,"CAL_SHOW_SURROUNDING_WEEKS", SWIG_FromInt((int)wxCAL_SHOW_SURROUNDING_WEEKS));
+    PyDict_SetItemString(d,"CAL_HITTEST_NOWHERE", SWIG_FromInt((int)wxCAL_HITTEST_NOWHERE));
+    PyDict_SetItemString(d,"CAL_HITTEST_HEADER", SWIG_FromInt((int)wxCAL_HITTEST_HEADER));
+    PyDict_SetItemString(d,"CAL_HITTEST_DAY", SWIG_FromInt((int)wxCAL_HITTEST_DAY));
+    PyDict_SetItemString(d,"CAL_HITTEST_INCMONTH", SWIG_FromInt((int)wxCAL_HITTEST_INCMONTH));
+    PyDict_SetItemString(d,"CAL_HITTEST_DECMONTH", SWIG_FromInt((int)wxCAL_HITTEST_DECMONTH));
+    PyDict_SetItemString(d,"CAL_HITTEST_SURROUNDING_WEEK", SWIG_FromInt((int)wxCAL_HITTEST_SURROUNDING_WEEK));
+    PyDict_SetItemString(d,"CAL_BORDER_NONE", SWIG_FromInt((int)wxCAL_BORDER_NONE));
+    PyDict_SetItemString(d,"CAL_BORDER_SQUARE", SWIG_FromInt((int)wxCAL_BORDER_SQUARE));
+    PyDict_SetItemString(d,"CAL_BORDER_ROUND", SWIG_FromInt((int)wxCAL_BORDER_ROUND));
     PyDict_SetItemString(d, "wxEVT_CALENDAR_DOUBLECLICKED", PyInt_FromLong(wxEVT_CALENDAR_DOUBLECLICKED));
     PyDict_SetItemString(d, "wxEVT_CALENDAR_SEL_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_SEL_CHANGED));
     PyDict_SetItemString(d, "wxEVT_CALENDAR_DAY_CHANGED", PyInt_FromLong(wxEVT_CALENDAR_DAY_CHANGED));

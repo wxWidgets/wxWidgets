@@ -886,10 +886,30 @@ def IconBundleFromIcon(*args, **kwargs):
     return val
 
 class Cursor(GDIObject):
+    """
+    A cursor is a small bitmap usually used for denoting where the
+    mouse pointer is, with a picture that might indicate the
+    interpretation of a mouse click.
+
+    A single cursor object may be used in many windows (any subwindow
+    type). The wxWindows convention is to set the cursor for a
+    window, as in X, rather than to set it globally as in MS Windows,
+    although a global wx.SetCursor function is also available for use
+    on MS Windows.
+    """
     def __repr__(self):
         return "<%s.%s; proxy of C++ wxCursor instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
     def __init__(self, *args, **kwargs):
-        """__init__(String cursorName, long flags, int hotSpotX=0, int hotSpotY=0) -> Cursor"""
+        """
+        __init__(String cursorName, long type, int hotSpotX=0, int hotSpotY=0) -> Cursor
+
+        Construct a Cursor from a file.  Specify the type of file using
+        wx.BITAMP_TYPE* constants, and specify the hotspot if not using a
+        .cur file.
+
+        This cursor is not available on wxGTK, use wx.StockCursor,
+        wx.CursorFromImage, or wx.CursorFromBits instead.
+        """
         newobj = _gdi.new_Cursor(*args, **kwargs)
         self.this = newobj.this
         self.thisown = 1
@@ -901,17 +921,26 @@ class Cursor(GDIObject):
         except: pass
 
     def GetHandle(*args, **kwargs):
-        """GetHandle() -> long"""
+        """
+        GetHandle() -> long
+
+        Get the MS Windows handle for the cursor
+        """
         return _gdi.Cursor_GetHandle(*args, **kwargs)
 
     def SetHandle(*args, **kwargs):
-        """SetHandle(long handle)"""
+        """
+        SetHandle(long handle)
+
+        Set the MS Windows handle to use for the cursor
+        """
         return _gdi.Cursor_SetHandle(*args, **kwargs)
 
     def Ok(*args, **kwargs):
         """Ok() -> bool"""
         return _gdi.Cursor_Ok(*args, **kwargs)
 
+    def __nonzero__(self): return self.Ok() 
     def GetWidth(*args, **kwargs):
         """GetWidth() -> int"""
         return _gdi.Cursor_GetWidth(*args, **kwargs)
@@ -940,7 +969,6 @@ class Cursor(GDIObject):
         """SetSize(Size size)"""
         return _gdi.Cursor_SetSize(*args, **kwargs)
 
-    def __nonzero__(self): return self.Ok() 
 
 class CursorPtr(Cursor):
     def __init__(self, this):
@@ -950,23 +978,33 @@ class CursorPtr(Cursor):
 _gdi.Cursor_swigregister(CursorPtr)
 
 def StockCursor(*args, **kwargs):
-    """StockCursor(int id) -> Cursor"""
+    """
+    StockCursor(int id) -> Cursor
+
+    Create a cursor using one of the stock cursors.  Note that not
+    all cursors are available on all platforms.
+    """
     val = _gdi.new_StockCursor(*args, **kwargs)
     val.thisown = 1
     return val
 
 def CursorFromImage(*args, **kwargs):
-    """CursorFromImage(Image image) -> Cursor"""
-    val = _gdi.new_CursorFromImage(*args, **kwargs)
-    val.thisown = 1
-    return val
+    """
+    CursorFromImage(Image image) -> Cursor
 
-def CursorFromBits(*args, **kwargs):
+    Constructs a cursor from a wxImage. The cursor is monochrome,
+    colors with the RGB elements all greater than 127 will be
+    foreground, colors less than this background. The mask (if any)
+    will be used as transparent.
+
+    In MSW the foreground will be white and the background black. The
+    cursor is resized to 32x32 In GTK, the two most frequent colors
+    will be used for foreground and background. The cursor will be
+    displayed at the size of the image. On MacOS the cursor is
+    resized to 16x16 and currently only shown as black/white (mask
+    respected).
     """
-    CursorFromBits(PyObject bits, int width, int height, int hotSpotX=-1, 
-        int hotSpotY=-1, PyObject maskBits=0) -> Cursor
-    """
-    val = _gdi.new_CursorFromBits(*args, **kwargs)
+    val = _gdi.new_CursorFromImage(*args, **kwargs)
     val.thisown = 1
     return val
 
