@@ -132,7 +132,7 @@ bool BrowserDB::OnStartDB(int Quiet)
     p_Dlg->s_Password = Password;
     p_Dlg->OnInit();
     p_Dlg->Fit();
-    
+
     bool OK = false;
     if (p_Dlg->ShowModal() == wxID_OK)
     {
@@ -252,7 +252,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
             {
             case DB_DATA_TYPE_VARCHAR:
                 wxStrcpy(s_temp,_T(""));
-                if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_dbDataType,&s_temp,sizeof(s_temp), &cb))
+                if (!db_BrowserDB->GetData((UWORD)(i+1),(SWORD)((cl_BrowserDB+i)->pColFor->i_dbDataType),&s_temp[0],sizeof(s_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetNext - ODBC-Error with GetNext of >%s<.\n-E-> "),(cl_BrowserDB+i)->tableName);
                     Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
@@ -263,7 +263,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                 break;
             case DB_DATA_TYPE_INTEGER:
                 l_temp = 0;
-                if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_sqlDataType,&l_temp,sizeof(l_temp), &cb))
+                if (!db_BrowserDB->GetData((UWORD)(i+1),(SWORD)((cl_BrowserDB+i)->pColFor->i_sqlDataType),&l_temp,sizeof(l_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n-E-> "));
                     Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
@@ -276,7 +276,7 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                 break;
             case DB_DATA_TYPE_FLOAT:
                 f_temp = 0;
-                if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_sqlDataType,&f_temp,sizeof(f_temp), &cb))
+                if (!db_BrowserDB->GetData((UWORD)(i+1),(SWORD)((cl_BrowserDB+i)->pColFor->i_sqlDataType),&f_temp,sizeof(f_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n-E-> "));
                     Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
@@ -289,8 +289,14 @@ bool BrowserDB::OnGetNext(int Cols,int WXUNUSED(Quiet))
                 }
                 break;
             case DB_DATA_TYPE_DATE:
-                t_temp.day = t_temp.month = t_temp.year = t_temp.hour = t_temp.minute = t_temp.second = t_temp.fraction = 0;
-                if (!db_BrowserDB->GetData(i+1,(cl_BrowserDB+i)->pColFor->i_sqlDataType,&t_temp,sizeof(t_temp), &cb))
+                t_temp.day = 0;
+                t_temp.month = 0;
+                t_temp.year = 0;
+                t_temp.hour = 0;
+                t_temp.minute = 0;
+                t_temp.second = 0;
+                t_temp.fraction = 0;
+                if (!db_BrowserDB->GetData((UWORD)(i+1),(SWORD)((cl_BrowserDB+i)->pColFor->i_sqlDataType),&t_temp,sizeof(t_temp), &cb))
                 {
                     Temp0.Printf(_("\n-E-> BrowserDB::OnGetData - ODBC-Error with GetNext \n-E-> "));
                     Temp0 += GetExtendedDBErrorMsg(__TFILE__,__LINE__);
@@ -425,7 +431,7 @@ wxDbColInf* BrowserDB::OnGetColumns(wxChar *tableName, UWORD numCols, int WXUNUS
         (cl_BrowserDB+i)->pColFor->Format(1,
                                         (cl_BrowserDB+i)->dbDataType,
                                         (cl_BrowserDB+i)->sqlDataType,
-                                        (cl_BrowserDB+i)->columnSize, 
+                                        (cl_BrowserDB+i)->columnSize,
                                         (cl_BrowserDB+i)->decimalDigits);
     }
     return cl_BrowserDB;

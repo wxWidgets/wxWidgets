@@ -557,9 +557,9 @@ wxString wxColourToHexString(const wxColour& col)
 // Convert 6-digit hex string to a colour
 wxColour wxHexStringToColour(const wxString& hex)
 {
-    unsigned int r = wxHexToDec(hex.Mid(0, 2));
-    unsigned int g = wxHexToDec(hex.Mid(2, 2));
-    unsigned int b = wxHexToDec(hex.Mid(4, 2));
+    unsigned char r = (unsigned char)wxHexToDec(hex.Mid(0, 2));
+    unsigned char g = (unsigned char)wxHexToDec(hex.Mid(2, 2));
+    unsigned char b = (unsigned char)wxHexToDec(hex.Mid(4, 2));
 
     return wxColour(r, g, b);
 }

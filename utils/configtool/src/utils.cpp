@@ -82,9 +82,9 @@ wxString apColourToHexString(const wxColour& col)
 // Convert 6-digit hex string to a colour
 wxColour apHexStringToColour(const wxString& hex)
 {
-    unsigned int r = wxHexToDec(hex.Mid(0, 2));
-    unsigned int g = wxHexToDec(hex.Mid(2, 2));
-    unsigned int b = wxHexToDec(hex.Mid(4, 2));
+    unsigned char r = (unsigned char)wxHexToDec(hex.Mid(0, 2));
+    unsigned char g = (unsigned char)wxHexToDec(hex.Mid(2, 2));
+    unsigned char b = (unsigned char)wxHexToDec(hex.Mid(4, 2));
 
     return wxColour(r, g, b);
 }
@@ -132,7 +132,7 @@ wxFont apStringToFont(const wxString& str)
                 pointSize = 8;
             if (pointSize == 9)
                 pointSize = 10;
-#endif            
+#endif
         }
         else if (i == 1)
             family = StringToInt(token);
@@ -230,7 +230,7 @@ wxString wxGetTempDir()
         wxString envVar(wxGetenv(_T("TEMP")));
         dir = envVar;
     }
-    
+
     if ( dir.empty() )
     {
         // default
@@ -312,25 +312,25 @@ wxString apFindAppPath(const wxString& argv0, const wxString& cwd, const wxStrin
 }
 
 // Adds a context-sensitive help button, for non-Windows platforms
-void apAddContextHelpButton(wxWindow* 
+void apAddContextHelpButton(wxWindow*
                                       #if defined(__WXGTK__) || defined(__WXMAC__)
                                       parent
                                       #else
                                       WXUNUSED(parent)
                                       #endif
-                                      , wxSizer* 
+                                      , wxSizer*
                                                  #if defined(__WXGTK__) || defined(__WXMAC__)
                                                  sizer
                                                  #else
                                                  WXUNUSED(sizer)
                                                  #endif
-                                                 , int 
+                                                 , int
                                                        #if defined(__WXGTK__) || defined(__WXMAC__)
                                                        sizerFlags
                                                        #else
                                                        WXUNUSED(sizerFlags)
                                                        #endif
-                                                       , int 
+                                                       , int
                                                              #if defined(__WXGTK__) || defined(__WXMAC__)
                                                              sizerBorder
                                                              #else
@@ -392,7 +392,7 @@ int wxIconInfo::GetIconId(int state, bool enabled) const
 {
     wxASSERT ( state < (wxMAX_ICON_STATES * 2) );
     wxASSERT ( state < m_maxStates );
-    
+
     return m_states[state * 2 + (enabled ? 0 : 1)];
 }
 
@@ -401,7 +401,7 @@ void wxIconInfo::SetIconId(int state, bool enabled, int iconId)
     wxASSERT ( state < (wxMAX_ICON_STATES * 2) );
     if (state+1 > m_maxStates)
         m_maxStates = state+1;
-    
+
     m_states[state * 2 + (enabled ? 0 : 1)] = iconId;
 }
 
@@ -426,7 +426,7 @@ void wxIconTable::AppendInfo(wxIconInfo* info)
 bool wxIconTable::AddInfo(const wxString& name, const wxIcon& icon, int state, bool enabled)
 {
     wxASSERT (m_imageList != NULL);
-    
+
     wxIconInfo* info = FindInfo(name);
     if (!info)
     {

@@ -58,10 +58,6 @@ wxColour* FortyApp::m_backgroundColour = 0;
 wxColour* FortyApp::m_textColour = 0;
 wxBrush*  FortyApp::m_backgroundBrush = 0;
 
-FortyApp::FortyApp()
-{
-}
-
 FortyApp::~FortyApp()
 {
     delete m_backgroundColour;
@@ -210,10 +206,6 @@ FortyFrame::FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos
 #endif // wxUSE_STATUSBAR
 }
 
-FortyFrame::~FortyFrame()
-{
-}
-
 void FortyFrame::OnCloseWindow(wxCloseEvent& event)
 {
     if (m_canvas->OnCloseCanvas() )
@@ -338,8 +330,8 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
         if (file.Exists())
         {
             file.Open();
-            for ( htmlText = file.GetFirstLine(); 
-                  !file.Eof(); 
+            for ( htmlText = file.GetFirstLine();
+                  !file.Eof();
                   htmlText << file.GetNextLine() << _T("\n") ) ;
         }
     }
@@ -365,7 +357,7 @@ bool FortyAboutDialog::AddControls(wxWindow* parent)
     wxHtmlWindow* html = new wxHtmlWindow(this, ID_ABOUT_HTML_WINDOW, wxDefaultPosition, htmlSize, borderStyle);
     html -> SetBorders(10);
     html -> SetPage(htmlText);
-        
+
     //// Start of sizer-based control creation
 
     wxSizer *item0 = new wxBoxSizer( wxVERTICAL );

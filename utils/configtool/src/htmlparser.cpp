@@ -119,7 +119,7 @@ bool wxSimpleHtmlParser::ParseString(const wxString& str)
 
     bool bResult = ParseHtml(m_topLevel);
 
-    wxASSERT(bResult); // Failed to parse the TAGs. 
+    wxASSERT(bResult); // Failed to parse the TAGs.
                        // Hint: Check if every open tag has a close tag!
 
     return bResult;
@@ -164,7 +164,7 @@ bool wxSimpleHtmlParser::ParseHtml(wxSimpleHtmlTag* parent)
                 }
                 else
                     parent->AppendTag(tag);
-            }               
+            }
         }
         else if (IsTagStartBracket(GetChar(m_pos)))
         {
@@ -189,7 +189,7 @@ bool wxSimpleHtmlParser::ParseHtml(wxSimpleHtmlTag* parent)
             if(parent->GetParent())
                 parent->GetParent()->AppendTag(tag);
             else
-                parent->AppendTag(tag); // When this occurs it is probably the 
+                parent->AppendTag(tag); // When this occurs it is probably the
                                         // empty lines at the end of the file...
         }
     }
@@ -201,7 +201,7 @@ bool wxSimpleHtmlParser::ParseText(wxString& text)
 {
     while (!Eof() && GetChar(m_pos) != wxT('<'))
     {
-        text += GetChar(m_pos);
+        text += (wxChar)GetChar(m_pos);
         m_pos ++;
     }
     DecodeSpecialChars(text);
@@ -441,7 +441,7 @@ bool wxSimpleHtmlParser::ReadLiteral(wxString& str, bool eatIt)
 
     while (!Eof(pos) && !IsWhitespace(GetChar(pos)) && !IsTagEndBracket(GetChar(pos)) && GetChar(pos) != wxT('='))
     {
-        str += GetChar(pos);
+        str += (wxChar)GetChar(pos);
         pos ++;
     }
     if (eatIt)
@@ -524,7 +524,7 @@ bool wxSimpleHtmlParser::IsCloseTagNeeded(const wxString &name)
 // See here for the used table: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/xmlsql/ac_xml1_1nqk.asp
 /* static */ void wxSimpleHtmlParser::DecodeSpecialChars(wxString &value)
 {
-    // XML translation      
+    // XML translation
     value.Replace(wxT("&gt;"),   wxT(">"),  true);
     value.Replace(wxT("&lt;"),   wxT("<"),  true);
     value.Replace(wxT("&quot;"), wxT("\""), true);
@@ -536,13 +536,13 @@ bool wxSimpleHtmlParser::IsCloseTagNeeded(const wxString &name)
 {
     wxString newvalue = value;
 
-    // XML translation      
+    // XML translation
     newvalue.Replace(wxT("&"), wxT("&amp;"),  true);    // Note: do this as first to prevent replace problems.
     newvalue.Replace(wxT(">"), wxT("&gt;"),   true);
     newvalue.Replace(wxT("<"), wxT("&lt;"),   true);
     newvalue.Replace(wxT("\""),wxT("&quot;"), true);
     newvalue.Replace(wxT("'"), wxT("&apos;"), true);
-    
+
     return newvalue;
 }
 
@@ -695,7 +695,7 @@ void wxSimpleHtmlTag::RemoveChild(wxSimpleHtmlTag *remove)
             {
                 child->m_next = NULL;
                 delete child;
-                
+
                 if (prev != NULL)
                     prev->m_next = next;
                 else
@@ -721,7 +721,7 @@ void wxSimpleHtmlTag::AppendTag(wxSimpleHtmlTag* tag)
         while (last->m_next)
             last = last->m_next;
 
-        last->m_next = tag;        
+        last->m_next = tag;
     }
     else
     {
@@ -823,7 +823,7 @@ bool wxSimpleHtmlTag::GetAttributeValue(wxString& value, const wxString& attrNam
         return false;
 }
 
-// Search forward from this tag until we find a tag with this name & attribute 
+// Search forward from this tag until we find a tag with this name & attribute
 wxSimpleHtmlTag* wxSimpleHtmlTag::FindTag(const wxString& tagName, const wxString& attrName)
 {
     wxSimpleHtmlTag* tag = m_next;
@@ -902,10 +902,10 @@ void wxSimpleHtmlTag::Write(wxOutputStream& stream)
                 attr->Write(stream);
                 if (i < GetAttributeCount() - 1)
                     stream << wxT(" ");
-            }            
+            }
             if(!m_children)
             {
-                sbUseTab = false;   // We're putting the open a close tag on the same line, 
+                sbUseTab = false;   // We're putting the open a close tag on the same line,
                                     // so we don't wan't any tabs
                 stream << wxT(">");
             }

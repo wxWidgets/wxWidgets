@@ -16,7 +16,7 @@
 class FortyApp: public wxApp
 {
 public:
-    FortyApp();
+    FortyApp(){};
     ~FortyApp();
     bool OnInit();
 
@@ -38,8 +38,8 @@ class FortyCanvas;
 class FortyFrame: public wxFrame
 {
 public:
-  FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards);
-    virtual ~FortyFrame();
+    FortyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, const wxSize& size, bool largecards);
+    virtual ~FortyFrame(){};
 
     void OnCloseWindow(wxCloseEvent& event);
 
@@ -60,13 +60,13 @@ public:
     DECLARE_EVENT_TABLE()
 
 private:
-    enum MenuCommands { 
-        NEW_GAME = 10, 
+    enum MenuCommands {
+        NEW_GAME = 10,
         SCORES,
-        UNDO, 
+        UNDO,
         REDO,
-        RIGHT_BUTTON_UNDO, 
-        HELPING_HAND, 
+        RIGHT_BUTTON_UNDO,
+        HELPING_HAND,
         LARGE_CARDS
     };
 
@@ -86,7 +86,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE );
-    
+
     bool AddControls(wxWindow* parent);
 
 private:

@@ -88,20 +88,20 @@ void OutputChunkToString(TexChunk *chunk, wxChar *buf)
   FILE *tempfd = wxFopen(_T("tmp.tmp"), _T("w"));
   if (!tempfd)
     return;
-    
+
   FILE *old1 = CurrentOutput1;
   FILE *old2 = CurrentOutput2;
-  
+
   CurrentOutput1 = tempfd;
   CurrentOutput2 = NULL;
-  
+
   TraverseChildrenFromChunk(chunk);
-    
+
   CurrentOutput1 = old1;
   CurrentOutput2 = old2;
-  
+
   fclose(tempfd);
-  
+
   // Read from file into string
   tempfd = wxFopen(_T("tmp.tmp"), _T("r"));
   if (!tempfd)
@@ -177,7 +177,7 @@ wxChar *FindTopicName(TexChunk *chunk)
 {
   if (forceTopicName)
     return forceTopicName;
-    
+
   wxChar *topicName = NULL;
   static wxChar topicBuf[100];
 
@@ -216,7 +216,7 @@ wxChar *FindTopicName(TexChunk *chunk)
  * Snag is that some save a TexChunk, so don't use yet...
  *
  */
- 
+
 void StartSimulateArgument(wxChar *data)
 {
   wxStrcpy(currentArgData, data);
@@ -243,13 +243,13 @@ int ParseUnitArgument(wxChar *unitArg)
     if (unitArg[i] == '\\')
       unitArg[i] = 0;
   len = wxStrlen(unitArg);
-      
+
   if (unitArg && (len > 0) && (isdigit(unitArg[0]) || unitArg[0] == '-'))
   {
     wxSscanf(unitArg, _T("%f"), &unitValue);
     if (len > 1)
     {
-      wxChar units[3]; 
+      wxChar units[3];
       units[0] = unitArg[len-2];
       units[1] = unitArg[len-1];
       units[2] = 0;
@@ -272,7 +272,7 @@ int ParseUnitArgument(wxChar *unitArg)
  * IF one exists. Inserts zero into buffer.
  *
  */
- 
+
 void StripExtension(wxChar *buffer)
 {
   int len = wxStrlen(buffer);
@@ -339,18 +339,18 @@ void SetFontSizes(int pointSize)
   }
 }
 
- 
+
 /*
  * Latex references
  *
  */
- 
+
 void AddTexRef(wxChar *name, wxChar *file, wxChar *sectionName,
                int chapter, int section, int subsection, int subsubsection)
 {
   TexRef *texRef = (TexRef *)TexReferences.Get(name);
   if (texRef) TexReferences.Delete(name);
-  
+
   wxChar buf[100];
   buf[0] = 0;
 /*
@@ -399,7 +399,7 @@ void WriteTexReferences(wxChar *filename)
   wxString name = filename;
   wxSTD ofstream ostr((char const *)name.fn_str());
   if (ostr.bad()) return;
-  
+
   TexReferences.BeginFind();
   wxHashTable::Node *node = TexReferences.Next();
   while (node)
@@ -467,17 +467,17 @@ void ReadTexReferences(wxChar *filename)
       wxString sectionName_string = wxString::FromAscii(sectionName);
       wxString section_string     = wxString::FromAscii(section);
 
-      // gt - needed to trick the hash table "TexReferences" into deleting the key 
+      // gt - needed to trick the hash table "TexReferences" into deleting the key
       // strings it creates in the Put() function, but not the item that is
       // created here, as that is destroyed elsewhere.  Without doing this, there
       // were massive memory leaks
       TexReferences.DeleteContents(true);
       TexReferences.Put(
-        label_string.c_str(), 
+        label_string.c_str(),
         new TexRef(
-              label_string.c_str(), 
-              file_string.c_str(), 
-              section_string.c_str(), 
+              label_string.c_str(),
+              file_string.c_str(),
+              section_string.c_str(),
               sectionName_string.c_str()
         )
       );
@@ -495,13 +495,13 @@ void ReadTexReferences(wxChar *filename)
 void BibEatWhiteSpace(wxSTD istream& str)
 {
   char ch = (char)str.peek();
-  
-  while (!str.eof() && (ch == ' ' || ch == '\t' || ch == 13 || ch == 10 || ch == EOF))
+
+  while (!str.eof() && (ch == ' ' || ch == '\t' || ch == 13 || ch == 10 || ch == (char)EOF))
   {
     if (ch == 10)
       BibLine ++;
     str.get(ch);
-    if ((ch == EOF) || str.eof()) return;
+    if ((ch == (char)EOF) || str.eof()) return;
     ch = (char)str.peek();
   }
 
@@ -585,7 +585,7 @@ void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = true,
       return;
     }
     istr.get(ch);
-    
+
     if (ch == '{')
       braceCount ++;
 
@@ -617,7 +617,7 @@ void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = true,
   buffer[i] = 0;
   wxUnusedVar(stopping);
 }
- 
+
 bool ReadBib(wxChar *filename)
 {
   if (!wxFileExists(filename))
@@ -1377,7 +1377,7 @@ bool ReadCustomMacros(wxChar *filename)
     istr.get(ch);
     if (istr.eof())
       break;
-      
+
     if (ch != '\\') // Not a macro definition, so must be NAME=VALUE
     {
       wxChar settingName[100];
@@ -1426,7 +1426,7 @@ bool ReadCustomMacros(wxChar *filename)
       BibReadValue(istr, macroBody, false, false); // Don't ignore extra braces
       if (wxStrlen(macroBody) > 0)
         macro->macroBody = copystring(macroBody);
-    
+
       BibEatWhiteSpace(istr);
       CustomMacroList.Append(macroName, macro);
       AddMacroDef(ltCUSTOM_MACRO, macroName, noArgs);
@@ -1437,7 +1437,7 @@ bool ReadCustomMacros(wxChar *filename)
   OnInform(mbuf);
   return true;
 }
- 
+
 CustomMacro *FindCustomMacro(wxChar *name)
 {
   wxNode *node = CustomMacroList.Find(name);
@@ -1458,7 +1458,7 @@ void ShowCustomMacros(void)
     OnInform(_T("No custom macros loaded.\n"));
     return;
   }
-  
+
   wxChar buf[400];
   while (node)
   {
@@ -1506,7 +1506,7 @@ wxChar *ParseMultifieldString(wxChar *allFields, int *pos)
   buffer[i] = 0;
   if (oldPos == (*pos))
     *pos = len + 1;
-    
+
   if (i == 0)
     return NULL;
   else
@@ -1517,7 +1517,7 @@ wxChar *ParseMultifieldString(wxChar *allFields, int *pos)
  * Colour tables
  *
  */
- 
+
 ColourTableEntry::ColourTableEntry(const wxChar *theName, unsigned int r,  unsigned int g,  unsigned int b)
 {
   name = copystring(theName);
@@ -1575,7 +1575,7 @@ bool FindColourHTMLString(wxChar *theName, wxChar *buf)
     if (wxStrcmp(theName, entry->name) == 0)
     {
         wxStrcpy(buf, _T("#"));
-        
+
         wxChar buf2[3];
         DecToHex(entry->red, buf2);
         wxStrcat(buf, buf2);
@@ -1591,7 +1591,7 @@ bool FindColourHTMLString(wxChar *theName, wxChar *buf)
   return false;
 }
 
-  
+
 void InitialiseColourTable(void)
 {
   // \\red0\\green0\\blue0;
@@ -1602,16 +1602,16 @@ void InitialiseColourTable(void)
 
   // \\red0\\green255\\blue0;
   AddColour(_T("green"), 0,255,0);
-  
+
   // \\red255\\green0\\blue255;
   AddColour(_T("magenta"), 255,0,255);
 
   // \\red255\\green0\\blue0;
   AddColour(_T("red"), 255,0,0);
-  
+
   // \\red255\\green255\\blue0;
   AddColour(_T("yellow"), 255,255,0);
-  
+
   // \\red255\\green255\\blue255;}");
   AddColour(_T("white"), 255,255,255);
 }
@@ -1625,10 +1625,10 @@ void Tex2RTFYield(bool force)
 {
 #ifdef __WXMSW__
     static int yieldCount = 0;
-    
+
     if (isSync)
         return;
-    
+
     if (force)
     yieldCount = 0;
     if (yieldCount == 0)
@@ -1655,7 +1655,7 @@ void AddKeyWordForTopic(wxChar *topic, wxChar *entry, wxChar *filename)
     texTopic->keywords = new wxStringList;
     TopicTable.Put(topic, texTopic);
   }
-  
+
   if (!texTopic->keywords->Member(entry))
     texTopic->keywords->Add(entry);
 }
@@ -1677,7 +1677,7 @@ void ClearKeyWordTable(void)
 /*
  * TexTopic structure
  */
- 
+
 TexTopic::TexTopic(wxChar *f)
 {
   if (f)
@@ -1704,17 +1704,17 @@ wxChar *ConvertCase(wxChar *s)
   int i;
   if (upperCaseNames)
     for (i = 0; i < len; i ++)
-      buf[i] = wxToupper(s[i]);
+      buf[i] = (wxChar)wxToupper(s[i]);
   else
     for (i = 0; i < len; i ++)
-      buf[i] = wxTolower(s[i]);
+      buf[i] = (wxChar)wxTolower(s[i]);
   buf[i] = 0;
-  return buf;  
+  return buf;
 }
 
 #if !WXWIN_COMPATIBILITY_2
 // if substring is true, search for str1 in str2
-bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString, 
+bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString,
                  bool exact)
 {
    if (subString)
@@ -1729,7 +1729,7 @@ bool StringMatch(const wxChar *str1, const wxChar *str2, bool subString,
       return Sstr2.Index(Sstr1) != (size_t)wxNOT_FOUND;
    }
    else
-      return exact ? wxString(str2).Cmp(str1) == 0 : 
+      return exact ? wxString(str2).Cmp(str1) == 0 :
                      wxString(str2).CmpNoCase(str1) == 0;
 }
 #endif

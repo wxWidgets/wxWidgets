@@ -911,7 +911,7 @@ wxDos2UnixFilename (wxChar *s)
           *s = _T('/');
 #ifdef __WXMSW__
         else
-          *s = wxTolower (*s);        // Case INDEPENDENT
+          *s = (wxChar)wxTolower (*s);        // Case INDEPENDENT
 #endif
         s++;
       }

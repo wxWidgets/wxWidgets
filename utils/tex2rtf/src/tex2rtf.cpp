@@ -430,7 +430,7 @@ bool MyApp::OnInit()
       ReadCustomMacros((wxChar*)path.c_str());
 
     Go();
-    if (runTwice) 
+    if (runTwice)
     {
         Go();
     }
@@ -1118,7 +1118,7 @@ void OnInform(const wxChar *msg)
 /* This whole block of code is just wrong I think.  It would behave
    completely wrong under anything other than MSW due to the ELSE
    with no statement, and the cout calls would fail under MSW, as
-   the code in this block is compiled if !NO_GUI This code has been 
+   the code in this block is compiled if !NO_GUI This code has been
    here since v1.1 of this file too. - gt
   else
 #ifdef __WXMSW__
@@ -1210,10 +1210,6 @@ wxConnectionBase *Tex2RTFServer::OnAcceptConnection(const wxString& topic)
   */
 
 Tex2RTFConnection::Tex2RTFConnection(wxChar *buf, int size):wxDDEConnection(buf, size)
-{
-}
-
-Tex2RTFConnection::~Tex2RTFConnection(void)
 {
 }
 

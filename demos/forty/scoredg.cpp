@@ -203,10 +203,6 @@ ScoreDialog::ScoreDialog(wxWindow* parent, ScoreFile* file) :
     CentreOnParent();
 }
 
-ScoreDialog::~ScoreDialog()
-{
-}
-
 void ScoreDialog::Display()
 {
     ShowModal();

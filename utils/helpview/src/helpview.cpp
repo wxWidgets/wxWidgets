@@ -68,7 +68,8 @@ bool hvApp::OnInit()
 
     int istyle = wxHF_DEFAULT_STYLE;
 
-    wxString service, windowName, book[10], titleFormat, argStr;
+    wxString service, windowName, titleFormat, argStr;
+    wxString book[10];
     int bookCount = 0;
     int i;
     bool hasService = false;

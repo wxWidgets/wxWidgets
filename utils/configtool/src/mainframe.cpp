@@ -192,11 +192,11 @@ void ctMainFrame::OnCloseWindow(wxCloseEvent& event)
         wxGetApp().GetSettings().m_frameStatus = ctSHOW_STATUS_MINIMIZED ;
     else
         wxGetApp().GetSettings().m_frameStatus = ctSHOW_STATUS_NORMAL ;
-    
+
     // Must delete this now since the DLL loading library will be
     // uninitialised by the time the app object is deleted
     wxGetApp().ClearHelpControllers();
-    
+
     if (!IsMaximized() && !IsIconized())
     {
         wxGetApp().GetSettings().m_frameSize = GetRect();
@@ -279,9 +279,9 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
 {
     // Make a menubar
     wxMenu *fileMenu = new wxMenu;
-    
+
     wxGetApp().GetFileHistory().UseMenu(fileMenu);
-    
+
     fileMenu->Append(wxID_NEW, wxT("&New...\tCtrl+N"), wxT("Create a new settings document"));
     fileMenu->Append(wxID_OPEN, wxT("&Open...\tCtrl+O"), wxT("Open a settings document"));
     fileMenu->Append(wxID_CLOSE, wxT("&Close\tCtrl+W"), wxT("Close the current settings document"));
@@ -297,7 +297,7 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
     fileMenu->Append(wxID_EXIT, wxT("E&xit\tAlt+F4"), wxT("Exit the application"));
 
     wxGetApp().GetDocManager()->FileHistoryUseMenu(fileMenu);
-    
+
     wxMenu *editMenu = new wxMenu;
 
     editMenu->Append(wxID_UNDO, _("&Undo\tCtrl+Z"));
@@ -349,9 +349,9 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
     helpMenu->Append(wxID_HELP_CONTEXT, wxT("&What's this?"), wxT("Show help on the clicked item"));
     helpMenu->AppendSeparator();
     helpMenu->Append(wxID_ABOUT, wxT("&About..."), wxT("Show details about this application"));
-    
+
     wxMenuBar *menuBar = new wxMenuBar;
-    
+
     menuBar->Append(fileMenu, wxT("&File"));
     menuBar->Append(editMenu, wxT("&Edit"));
     menuBar->Append(viewMenu, wxT("&View"));
@@ -361,7 +361,7 @@ wxMenuBar* ctMainFrame::CreateMenuBar()
         wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("wxWidgets"));
         config.SetPath(wxT("FileHistory/"));
         wxGetApp().GetDocManager()->FileHistoryLoad(config);
-    }    
+    }
 
     return menuBar;
 }
@@ -438,10 +438,6 @@ ctOutputWindow::ctOutputWindow(wxWindow* parent, wxWindowID id,
     CreateWindows();
 }
 
-ctOutputWindow::~ctOutputWindow()
-{
-}
-
 /// Initialise the windows.
 void ctOutputWindow::CreateWindows()
 {
@@ -492,13 +488,13 @@ void ctOutputWindow::OnCopyToClipboard(wxCommandEvent& WXUNUSED(event))
         wxMessageBox(_("Sorry, could not open the clipboard."), _("Clipboard problem"), wxICON_EXCLAMATION|wxOK);
         return;
     }
-    
+
     wxString value(m_codeCtrl->GetValue());
 #ifdef __WXMSW__
     value.Replace(_T("\n"), _T("\r\n"));
 #endif
     wxTextDataObject *data = new wxTextDataObject( value );
-    
+
     if (!wxTheClipboard->SetData( data ))
     {
         wxTheClipboard->Close();

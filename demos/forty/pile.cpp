@@ -298,9 +298,3 @@ bool Pile::Overlap(int x, int y)
     }
     return false;
 }
-
-
-Pile::~Pile()
-{
-// nothing special at the moment
-}

@@ -33,9 +33,9 @@ class ctConfigToolView: public wxView
 {
     DECLARE_DYNAMIC_CLASS(ctConfigToolView)
 public:
-    ctConfigToolView();
-    ~ctConfigToolView() {};
-    
+    ctConfigToolView(){};
+    ~ctConfigToolView(){};
+
 //// Overrides
 
     bool OnCreate(wxDocument *doc, long flags);
@@ -248,7 +248,7 @@ public:
     // constructors and destructors
     ctFindReplaceDialog( wxWindow* parent, const wxString& title,
         long style = 0 );
-    
+
     void OnFind(wxFindDialogEvent& event);
     void OnClose(wxFindDialogEvent& event);
 

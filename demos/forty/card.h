@@ -44,7 +44,7 @@ class Card {
 
 public:
     Card(int value, WayUp way_up = facedown);
-    virtual ~Card();
+    virtual ~Card(){};
 
     void Draw(wxDC& pDC, int x, int y);
     static void DrawNullCard(wxDC& pDC, int x, int y); // Draw card place-holder

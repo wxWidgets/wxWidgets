@@ -184,10 +184,13 @@ public:
               const wxString &qryTblName=wxEmptyString, bool qryOnly = !wxDB_QUERY_ONLY,
               const wxString &tblPath=wxEmptyString);
 
-    // DEPRECATED
-    wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
-              const wxChar *qryTblName=wxEmptyString, bool qryOnly = !wxDB_QUERY_ONLY,
-              const wxString &tblPath=wxEmptyString);
+#if WXWIN_COMPATIBILITY_2_4
+    wxDEPRECATED(
+        wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
+                  const wxChar *qryTblName=wxEmptyString, bool qryOnly = !wxDB_QUERY_ONLY,
+                  const wxString &tblPath=wxEmptyString)
+    );
+#endif // WXWIN_COMPATIBILITY_2_4
 
     virtual ~wxDbTable();
 

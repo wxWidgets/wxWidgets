@@ -17,7 +17,7 @@ class ScoreDialog : public wxDialog
 {
 public:
     ScoreDialog(wxWindow* parent, ScoreFile* file);
-    virtual ~ScoreDialog();
+    virtual ~ScoreDialog(){};
 
     void Display();
 

@@ -220,7 +220,7 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
         while (((ch = poem_buffer[i]) != 10) && (ch != 0))
 #endif
         {
-            line[j] = ch;
+            line[j] = (wxChar)ch;
             j ++;
             i ++;
         }
@@ -661,7 +661,7 @@ void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
         TheMainWindow->GetClientSize(&xx, &yy);
 
         dc.DrawBitmap(* backingBitmap, 0, 0);
-#if 0        
+#if 0
         wxMemoryDC memDC;
         memDC.SelectObject(* backingBitmap);
         dc.Blit(0, 0, backingBitmap->GetWidth(), backingBitmap->GetHeight(), &memDC, 0, 0);
@@ -851,7 +851,7 @@ bool LoadPoem(wxChar *file_name, long position)
           i++;
         }
 
-        poem_buffer[i] = ch;
+        poem_buffer[i] = (wxChar)ch;
         i ++;
 
         if (i == buf_size)
@@ -994,7 +994,7 @@ bool Compile(void)
     nitems ++;
 
     // Do rest
-    
+
     do {
         ch = getc(file);
         if (ch == '#')

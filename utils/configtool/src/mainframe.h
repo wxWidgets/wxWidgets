@@ -41,7 +41,7 @@ class ctConfigurationBrowserWindow;
 class ctMainFrame: public wxDocParentFrame
 {
     DECLARE_CLASS(ctMainFrame)
-  public:
+public:
     /// Constructor.
     ctMainFrame(wxDocManager *manager, wxFrame *parent, wxWindowID id, const wxString& title, const wxPoint& pos, const wxSize& size, long style);
 
@@ -124,7 +124,7 @@ class ctMainFrame: public wxDocParentFrame
     /// Returns the configure page window
     ctOutputWindow* GetConfigurePage() const { return m_configurePage; }
 
-    /// Returns the main notebook containing editor and text tabs 
+    /// Returns the main notebook containing editor and text tabs
     wxNotebook* GetMainNotebook() const { return m_mainNotebook; }
 
     /// Sets the find dialog for future closing
@@ -178,7 +178,7 @@ DECLARE_CLASS(ctOutputWindow)
 public:
     ctOutputWindow(wxWindow* parent, wxWindowID id,
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = 0);
-    ~ctOutputWindow();
+    ~ctOutputWindow(){};
 
     /// Initialise the windows.
     void CreateWindows();

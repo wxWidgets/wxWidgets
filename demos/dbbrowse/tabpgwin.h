@@ -112,7 +112,7 @@ public:
 
  virtual void AddTab( wxWindow* pContent,
                       wxString  tabText,
-                      wxBitmap* pImage = NULL );
+                      wxBitmap* pImage );
 
  virtual void RemoveTab( int tabNo );
 
@@ -200,7 +200,7 @@ public:
 
 public:
  wxPagedWindow();
- ~wxPagedWindow();
+ ~wxPagedWindow(){};
 
  // NOTE:: use public methods of the base class
  //        to add "pages" to this window
@@ -243,7 +243,7 @@ class twTabInfo : public wxObject
  DECLARE_DYNAMIC_CLASS( twTabInfo )
 public:
  twTabInfo();
- ~twTabInfo();
+ ~twTabInfo(){};
 
  int ImgWidth();
  int ImgHeight();

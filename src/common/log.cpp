@@ -558,7 +558,8 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
         if ( traits && !traits->HasStderr() )
         {
-            wxMessageOutputDebug().Printf(_T("%s"), str.c_str());
+            wxMessageOutputDebug dbgout;
+            dbgout.Printf(_T("%s"), str.c_str());
         }
     }
 }

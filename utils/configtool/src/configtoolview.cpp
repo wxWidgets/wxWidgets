@@ -95,10 +95,6 @@ BEGIN_EVENT_TABLE(ctConfigToolView, wxView)
 
 END_EVENT_TABLE()
 
-ctConfigToolView::ctConfigToolView()
-{
-}
-
 // What to do when a view is created. Creates actual
 // windows for displaying the view.
 bool ctConfigToolView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
@@ -121,11 +117,11 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
     ctConfigTreeCtrl* treeCtrl = wxGetApp().GetMainFrame()->GetConfigTreeCtrl();
     if (!treeCtrl)
         return;
-    
+
     wxASSERT (doc != NULL);
-    
+
     ctConfigItem* selItem = NULL;
-    
+
     wxTreeItemId sel = treeCtrl->GetSelection();
     if (sel.IsOk())
     {
@@ -133,12 +129,12 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
         if (data)
             selItem = data->GetConfigItem() ;
     }
-    
+
     ctConfigToolHint* hint = (ctConfigToolHint*) hintObj;
     int hintOp = ctNoHint;
     if (hint)
         hintOp = hint->m_op;
-    
+
     switch (hintOp)
     {
     case ctInitialUpdate:
@@ -151,12 +147,12 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
             }
         }
         break;
-    case ctSelChanged:        
+    case ctSelChanged:
         {
             if (selItem)
             {
                 wxGetApp().GetMainFrame()->GetPropertyEditor()->ShowItem(selItem);
-            }            
+            }
         }
         break;
     case ctAllSaved:
@@ -175,14 +171,14 @@ void ctConfigToolView::OnUpdate(wxView *WXUNUSED(sender), wxObject *hintObj)
             treeCtrl->DeleteAllItems();
             wxGetApp().GetMainFrame()->GetPropertyEditor()->ShowItem(NULL);
             break;
-        }        
+        }
     case ctValueChanged:
         {
             // ctConfigItem& ti = *(ctConfigItem *)hint->m_item;
             wxGetApp().GetMainFrame()->GetPropertyEditor()->ShowItem(selItem);
-        }        
+        }
         break;
-        
+
     default:
         break;
     }
@@ -200,7 +196,7 @@ bool ctConfigToolView::OnClose(bool WXUNUSED(deleteWindow))
     wxGetApp().GetDocManager()->ActivateView(this, false);
 
     Activate(false);
-    
+
     wxGetApp().GetMainFrame()->SetDocument(NULL);
     wxGetApp().GetMainFrame()->GetSetupPage()->SetDocument(NULL) ;
     wxGetApp().GetMainFrame()->GetConfigurePage()->SetDocument(NULL) ;
@@ -443,7 +439,7 @@ void ctConfigToolView::AddItem(ctConfigType type, const wxString& msg)
                 parent = sel->GetParent();
                 insertBefore = sel->FindNextSibling();
             }
-            
+
             ctConfigItem* newItem = new ctConfigItem(NULL, type, name);
             newItem->InitProperties();
 
@@ -634,7 +630,7 @@ void ctConfigToolView::OnContextPasteAsChild(wxCommandEvent& WXUNUSED(event))
         {
             ctConfigItem* parent = sel;
             ctConfigItem* insertBefore = NULL;
-            
+
             ctConfigItem* newItem = doc->GetClipboardItem()->DeepClone();
             ctConfigCommand* cmd = new ctConfigCommand(wxT("Paste Config Item"), ctCMD_PASTE,
                 NULL, newItem, parent, insertBefore);
@@ -766,7 +762,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
             wxString oldType = property->GetVariant().GetType();
             wxString oldEditorType = property->GetEditorType();
             wxArrayString oldChoices = property->GetChoices();
-            
+
             ctCustomPropertyDialog dialog(wxGetApp().GetMainFrame(),
                 wxID_ANY, _("Edit custom property"));
             dialog.SetPropertyName(oldName);
@@ -779,7 +775,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
                 wxString editorType = dialog.GetEditorType();
                 wxArrayString choices = dialog.GetChoices();
                 wxString descr = dialog.GetPropertyDescription();
-                
+
                 if (name != oldName && sel->GetProperties().FindProperty(name))
                 {
                     wxMessageBox(_("Sorry, this name already exists."), _T("Add custom property"),
@@ -813,7 +809,7 @@ void ctConfigToolView::OnEditCustomProperty(wxCommandEvent& WXUNUSED(event))
 
                 if (descr != oldDescription)
                     property->SetDescription(descr);
-                
+
                 editor->ShowItem(sel);
                 OnChangeFilename();
             }
@@ -917,12 +913,12 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
     if (path.IsEmpty())
         path = doc->GetFrameworkDir(false);
     wxString wildcard = _T("Header files (*.h)|*.h|All files (*.*)|*.*");
-    
+
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
         _("Save Setup File As"),
         path, filename ,
         wildcard, wxSAVE|wxOVERWRITE_PROMPT);
-    
+
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString fullPath = dialog.GetPath();
@@ -936,7 +932,7 @@ void ctConfigToolView::OnSaveSetupFile(wxCommandEvent& WXUNUSED(event))
         }
 
         stream << setupStr;
-    }    
+    }
 }
 
 void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
@@ -949,12 +945,12 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
     if (path.IsEmpty())
         path = doc->GetFrameworkDir(false);
     wxString wildcard = _T("Shell script files (*.sh)|*.sh|All files (*.*)|*.*");
-    
+
     wxFileDialog dialog(wxTheApp->GetTopWindow(),
         _("Save Configure Command File As"),
         path, filename ,
         wildcard, wxSAVE|wxOVERWRITE_PROMPT);
-    
+
     if (dialog.ShowModal() == wxID_OK)
     {
         wxString fullPath = dialog.GetPath();
@@ -968,7 +964,7 @@ void ctConfigToolView::OnSaveConfigureCommand(wxCommandEvent& WXUNUSED(event))
         }
 
         stream << configureStr;
-    }    
+    }
 }
 
 void ctConfigToolView::OnUpdateSaveSetupFile(wxUpdateUIEvent& event)

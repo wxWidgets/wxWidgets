@@ -1025,7 +1025,7 @@ void LifeCanvas::OnSize(wxSizeEvent& event)
 
 void LifeCanvas::OnScroll(wxScrollWinEvent& event)
 {
-    WXTYPE type = event.GetEventType();
+    WXTYPE type = (WXTYPE)event.GetEventType();
     int pos     = event.GetPosition();
     int orient  = event.GetOrientation();
 

@@ -861,11 +861,6 @@ bool Base::AcceptCard(Card* card)
     return retval;
 }
 
-Base::~Base()
-{
-// nothing special at the moment
-};
-
 
 //----------------------------------------------------------------//
 // The Foundation class: holds the cards built up from the ace... //
@@ -894,11 +889,6 @@ bool Foundation::AcceptCard(Card* card)
     }
     return retval;
 }
-
-Foundation::~Foundation()
-{
-// nothing special at the moment
-};
 
 
 //----------------------------------------------------//
@@ -981,7 +971,7 @@ Card* Discard::RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset)
 
         for (int i = m_topCard - 31; i <= m_topCard - 31 + CardWidth / m_dx; i++)
         {
-            m_cards[i]->Draw(dc, m_x - m_xOffset + i * m_dx, m_y - m_yOffset); 
+            m_cards[i]->Draw(dc, m_x - m_xOffset + i * m_dx, m_y - m_yOffset);
         }
         if (m_topCard > 31)
         {
@@ -992,9 +982,3 @@ Card* Discard::RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset)
 
     return card;
 }
-
-
-Discard::~Discard()
-{
-// nothing special at the moment
-};

@@ -42,7 +42,7 @@ const int NumCards = 2 * PackSize;
 class Pile {
 public:
     Pile(int x, int y, int dx = 0, int dy = 0);
-    virtual ~Pile();
+    virtual ~Pile(){};
 
     // General functions
     virtual void ResetPile() { m_topCard = -1; }

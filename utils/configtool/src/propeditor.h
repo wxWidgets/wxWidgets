@@ -35,7 +35,7 @@ class ctPropertyEditor: public wxPanel
     DECLARE_CLASS(ctPropertyEditor)
   public:
     ctPropertyEditor(wxWindow *parent, wxWindowID id, const wxPoint& pos, const wxSize& size, long style);
-    ~ctPropertyEditor();
+    ~ctPropertyEditor(){};
 
 // Event handlers
 
@@ -216,7 +216,7 @@ public:
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER );
-    
+
     bool AddControls(wxWindow* parent, const wxString& msg);
 
     wxString GetText() const { return m_text; }
@@ -231,7 +231,7 @@ private:
  * Special-purpose splitter window for changing sash look and
  * also saving sash width
  */
- 
+
 class ctSplitterWindow: public wxSplitterWindow
 {
 public:

@@ -728,7 +728,7 @@ wxSocketBase *wxFTP::GetPassivePort()
                         (wxUint16)a[3] << 16 |
                         (wxUint16)a[4] << 8 |
                         a[5];
-    wxUint16 port = (wxUint16)a[0] << 8 | a[1];
+    wxUint16 port = (wxUint16)(a[0] << 8 | a[1]);
 
     wxIPV4address addr;
     addr.Hostname(hostaddr);

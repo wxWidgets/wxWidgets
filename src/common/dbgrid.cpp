@@ -320,7 +320,7 @@ bool wxDbGridTableBase::CanGetValueAs(int row, int col, const wxString& typeName
         return true;
     }
 
-    if (m_data->IsColNull(m_ColInfo[col].DbCol))
+    if (m_data->IsColNull((UWORD)m_ColInfo[col].DbCol))
     {
         return false;
     }
@@ -508,7 +508,7 @@ void* wxDbGridTableBase::GetValueAsCustom(int row, int col, const wxString& type
         wxFAIL_MSG (_T("You can not use GetValueAsCustom for virtual columns"));
         return NULL;
     }
-    if (m_data->IsColNull(m_ColInfo[col].DbCol))
+    if (m_data->IsColNull((UWORD)m_ColInfo[col].DbCol))
         return NULL;
 
     if (typeName == wxGRID_VALUE_DATETIME)
@@ -580,7 +580,7 @@ bool wxDbGridTableBase::IsEmptyCell(int row, int col)
     wxLogDebug(wxT("IsEmtpyCell on %i,%i"),row,col);
 
     ValidateRow(row);
-    return m_data->IsColNull(m_ColInfo[col].DbCol);
+    return m_data->IsColNull((UWORD)m_ColInfo[col].DbCol);
 }
 
 

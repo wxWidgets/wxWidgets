@@ -669,7 +669,7 @@ int main(int argc, char **argv)
                         }
 
                         directoryOut = argv[current];
-                        if ( !!directoryOut ) {
+                        if ( !directoryOut.IsEmpty() ) {
                             // terminate with a '/' if it doesn't have it
                             switch ( directoryOut.Last() ) {
                                 case '/':
@@ -729,7 +729,7 @@ int main(int argc, char **argv)
     // create a parser object and a visitor derivation
     CJSourceParser parser;
     HelpGenVisitor visitor(directoryOut, overwrite);
-    if ( !!ignoreFile && mode == Mode_Dump )
+    if ( !ignoreFile.IsEmpty() && mode == Mode_Dump )
         visitor.GetIgnoreHandler().AddNamesFromFile(ignoreFile);
 
     spContext *ctxTop = NULL;
@@ -775,7 +775,7 @@ int main(int argc, char **argv)
             }
         }
 
-        if ( !!ignoreFile )
+        if ( !ignoreFile.IsEmpty() )
             docman.GetIgnoreHandler().AddNamesFromFile(ignoreFile);
 
         docman.DumpDifferences(ctxTop);
@@ -877,10 +877,10 @@ void HelpGenVisitor::CloseClass()
 {
     CloseFunction();
 
-    if ( m_inClass ) 
+    if ( m_inClass )
     {
         size_t count = m_arrayFuncDocs.GetCount();
-        if ( count ) 
+        if ( count )
         {
             size_t n;
             FunctionDocEntry::classname = m_classname;
@@ -1417,7 +1417,7 @@ bool DocManager::ParseTeXFile(const wxString& filename)
     char *buf = new char[len + 1];
     buf[len] = '\0';
 
-    if ( file.Read(buf, len) == wxInvalidOffset ) {
+    if ( (wxFileOffset)file.Read(buf, len) == wxInvalidOffset ) {
         delete [] buf;
 
         return false;
@@ -1988,7 +1988,7 @@ bool IgnoreNamesHandler::AddNamesFromFile(const wxString& filename)
     char *buf = new char[len + 1];
     buf[len] = '\0';
 
-    if ( file.Read(buf, len) == wxInvalidOffset ) {
+    if ( (wxFileOffset)file.Read(buf, len) == wxInvalidOffset ) {
         delete [] buf;
 
         return false;
@@ -2186,6 +2186,9 @@ static const wxString GetVersionString()
 
 /*
    $Log$
+   Revision 1.31  2004/10/05 15:38:29  ABX
+   Warning fixes found under hardest mode of OpenWatcom. Seems clean in Borland, MinGW and DMC.
+
    Revision 1.30  2004/06/18 19:25:50  ABX
    Small step in making HelpGen up to date unicode application.
 

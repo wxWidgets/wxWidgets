@@ -208,7 +208,7 @@ void ResetContentsLevels(int l)
   int i;
   for (i = l; i < 5; i++)
     ContentsLevels[i] = false;
-    
+
   // There are always books on the top level
   ContentsLevels[0] = true;
 }
@@ -218,7 +218,7 @@ void ResetContentsLevels(int l)
 void OutputSectionKeyword(FILE *fd)
 {
   OutputCurrentSectionToString(wxTex2RTFBuffer);
-  
+
   unsigned int i;
   for (i = 0; i < wxStrlen(wxTex2RTFBuffer); i++)
     if (wxTex2RTFBuffer[i] == ':')
@@ -229,7 +229,7 @@ void OutputSectionKeyword(FILE *fd)
 
   wxFprintf(fd, _T("K{\\footnote {K} "));
   wxFprintf(fd, _T("%s"), wxTex2RTFBuffer);
-  
+
   wxFprintf(fd, _T("}\n"));
 }
 
@@ -242,12 +242,12 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
   int d=0;
   while ( (xitle[s]!=0)&&(d<255) )
   {
-    wxChar ch=xitle[s]&0xff;
+    wxChar ch=wxChar(xitle[s]&0xff);
     if (ch==0x5c) {
-      wxChar ch1=xitle[s+1]&0xff;
-      wxChar ch2=xitle[s+2]&0xff;
-      wxChar ch3=xitle[s+3]&0xff;
-      s+=4; // next character  
+      wxChar ch1=wxChar(xitle[s+1]&0xff);
+      wxChar ch2=wxChar(xitle[s+2]&0xff);
+      wxChar ch3=wxChar(xitle[s+3]&0xff);
+      s+=4; // next character
       if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x36)) { title[d++]=_T('ö');  }
       if ((ch1==0x27)&&(ch2==0x65)&&(ch3==0x34)) { title[d++]=_T('ä');  }
       if ((ch1==0x27)&&(ch2==0x66)&&(ch3==0x63)) { title[d++]=_T('ü');  }
@@ -257,7 +257,7 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
     } else {
       title[d++]=ch;
       s++;
-    }  
+    }
   }
   title[d]=0;
 
@@ -267,12 +267,9 @@ void WriteWinHelpContentsFileLine(wxChar *topicName, wxChar *xitle, int level)
 
   if (level == 0) // Means we had a Chapter in an article, oops.
     return;
-    
+
   ResetContentsLevels(level);
-  
-  if (!title)
-    return;
-    
+
   if (winHelp && winHelpContents && WinHelpContentsFile)
   {
     TexTopic *texTopic = (TexTopic *)TopicTable.Get(topicName);
@@ -352,7 +349,7 @@ void GenerateKeywordsForTopic(wxChar *topic)
       // Must separate out main entry form subentry (only 1 subentry allowed)
       wxChar buf1[100]; wxChar buf2[100];
       SplitIndexEntry(s, buf1, buf2);
-      
+
       // Check for ':' which messes up index
       unsigned int i;
       for (i = 0; i < wxStrlen(buf1) ; i++)
@@ -382,7 +379,7 @@ void GenerateKeywordsForTopic(wxChar *topic)
  * Output index entry in linear RTF
  *
  */
- 
+
 void GenerateIndexEntry(wxChar *entry)
 {
   if (useWord)
@@ -405,7 +402,7 @@ void GenerateIndexEntry(wxChar *entry)
   * Write a suitable RTF header.
   *
   */
-  
+
 void WriteColourTable(FILE *fd)
 {
   wxFprintf(fd, _T("{\\colortbl"));
@@ -474,7 +471,7 @@ void WriteRTFHeader(FILE *fd)
 
   // Table of contents styles
   wxFprintf(fd, _T("{\\s20\\sb300\\tqr\\tldot\\tx8640 \\b\\f2 \\sbasedon0\\snext0 toc 1;}\n"));
-  
+
   wxFprintf(fd, _T("{\\s21\\sb90\\tqr\\tldot\\li400\\tqr\\tx8640 \\f2\\fs20\\sbasedon0\\snext0 toc 2;}\n"));
   wxFprintf(fd, _T("{\\s22\\sb90\\tqr\\tldot\\li800\\tx8640 \\f2\\fs20 \\sbasedon0\\snext0 toc 3;}\n"));
   wxFprintf(fd, _T("{\\s23\\sb90\\tqr\\tldot\\li1200\\tx8640 \\f2\\fs20 \\sbasedon0\\snext0 toc 4;}\n"));
@@ -522,7 +519,7 @@ void OutputNumberStyle(wxChar *numberStyle)
 /*
  * Write a Windows help project file
  */
- 
+
 bool WriteHPJ(wxChar *filename)
 {
   wxChar hpjFilename[256];
@@ -537,7 +534,7 @@ bool WriteHPJ(wxChar *filename)
   wxStrcpy(rtfFile, helpFile);
   wxStrcat(helpFile, _T(".hlp"));
   wxStrcat(rtfFile, _T(".rtf"));
-  
+
   FILE *fd = wxFopen(hpjFilename, _T("w"));
   if (!fd)
     return false;
@@ -545,7 +542,7 @@ bool WriteHPJ(wxChar *filename)
   wxChar *helpTitle = winHelpTitle;
   if (!helpTitle)
     helpTitle = _T("Untitled");
-    
+
   wxString thePath = wxPathOnly(InputFile);
   if (thePath.IsEmpty())
     thePath = _T(".");
@@ -703,7 +700,7 @@ void ProcessText2RTF(TexChunk *chunk)
  * and before TraverseDocument is called.
  *
  */
- 
+
 void Text2RTF(TexChunk *chunk)
 {
   Tex2RTFYield();
@@ -758,7 +755,7 @@ void Text2RTF(TexChunk *chunk)
  * Not used yet
  *
  */
- 
+
 wxChar browseBuf[10];
 static long browseId = 0;
 wxChar *GetBrowseString(void)
@@ -879,7 +876,7 @@ void OutputRTFHeaderCommands(void)
   {
     int oldForbidResetPar = forbidResetPar;
     forbidResetPar = 0;
-    
+
     if (LeftHeaderEven || CentreHeaderEven || RightHeaderEven)
     {
       TexOutput(_T("{\\headerl\\fi0 "));
@@ -1147,7 +1144,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           OutputRTFHeaderCommands();
           OutputRTFFooterCommands();
         }
-        
+
         // Need to reset the current numbering style, or RTF forgets it.
         SetCurrentOutput(Chapters);
         OutputNumberStyle(currentNumberStyle);
@@ -1168,14 +1165,14 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           else SetCurrentOutput(NULL); // No entry in table of contents
         }
       }
-  
+
       startedSections = true;
 
       // Output heading to contents page
       if (!InPopups())
       {
         OutputCurrentSection();
-      
+
         if (winHelp)
         {
           wxFprintf(Contents, _T("}{\\v %s}\\pard\\par\n"), topicName);
@@ -1187,12 +1184,12 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         // From here, just output to chapter
         SetCurrentOutput(Chapters);
       }
-     
+
       if (winHelp)
       {
         wxFprintf(Chapters, _T("}\n#{\\footnote %s}\n"), topicName);
         wxFprintf(Chapters, _T("+{\\footnote %s}\n"), GetBrowseString());
-        
+
         OutputSectionKeyword(Chapters);
 
         GenerateKeywordsForTopic(topicName);
@@ -1318,7 +1315,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
           }
         }
         else SetCurrentOutput(NULL);
-      } 
+      }
 
       if (startedSections)
       {
@@ -1349,7 +1346,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         else
           wxFprintf(Contents, _T("}\\par\\par\\pard\n"));
       }
-        
+
       SetCurrentOutput(winHelp ? Sections : Chapters);
 
       if (winHelp)
@@ -1386,7 +1383,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       wxChar *keep = _T("");
       if (winHelp && (macroId != ltGLOSS) && !InPopups())
         keep = _T("\\keepn\\sa140\\sb140");
-        
+
       wxFprintf(winHelp ? Sections : Chapters, _T("\\pard{%s%s"),
          keep, styleCommand);
 
@@ -1490,7 +1487,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 #if 0
         else
           wxFprintf(Chapters, _T("\\par\n"));
-#endif        
+#endif
       }
       startedSections = true;
 
@@ -1585,7 +1582,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         }
       }
       OutputCurrentSection(); // Repeat section header
-      
+
       // Experimental JACS
       TexOutput(_T("\\par\\pard}\n"));
       // TexOutput(_T("\\par\\pard}\\par\n"));
@@ -1641,7 +1638,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         else
           SetCurrentOutput(NULL); // Don't write it into the contents, or anywhere else
       }
-      
+
       if (startedSections)
       {
         if (winHelp)
@@ -1650,7 +1647,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 #if 0
         else
           wxFprintf(Chapters, _T("\\par\n"));
-#endif        
+#endif
       }
 
       startedSections = true;
@@ -1668,7 +1665,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       }
       else if ((DocumentStyle == LATEX_ARTICLE) && (macroId != ltSUBSUBSECTIONSTAR))
         wxFprintf(Contents, _T("\\par\\pard\n"));
-        
+
       SetCurrentOutput(winHelp ? Subsubsections : Chapters);
       if (winHelp)
       {
@@ -1708,7 +1705,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       WriteHeadingStyle((winHelp ? Subsubsections : Chapters),
                         (DocumentStyle == LATEX_ARTICLE ? 3 : 4));
       wxFprintf(winHelp ? Subsubsections : Chapters, _T(" "));
-         
+
       if (!winHelp)
       {
         if ((macroId != ltSUBSUBSECTIONSTAR))
@@ -2003,7 +2000,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 
           if (TableData[i].leftBorder)
             TexOutput(_T("\\clbrdrl\\brdrs\\brdrw15"));
-          
+
           wxSnprintf(buf, sizeof(buf), _T("\\cellx%d"), currentWidth);
           TexOutput(buf);
         }
@@ -2072,7 +2069,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 
       ItemizeStruc *struc = new ItemizeStruc(listType, indentSize2, indentSize1);
       itemizeStack.Insert(struc);
-      
+
       wxSnprintf(buf, sizeof(buf), _T("\\tx%d\\tx%d\\li%d\\sa200"), indentSize1, indentSize2, indentSize2);
       PushEnvironmentStyle(buf);
     }
@@ -2113,7 +2110,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 
       ItemizeStruc *struc = new ItemizeStruc(LATEX_TWOCOL, indentSize);
       itemizeStack.Insert(struc);
-      
+
 //      wxSnprintf(buf, sizeof(buf), _T("\\tx%d\\li%d\\ri%d"), indentSize, indentSize, TwoColWidthA+TwoColWidthB+oldIndent);
       wxSnprintf(buf, sizeof(buf), _T("\\tx%d\\li%d\\sa200"), indentSize, indentSize);
       PushEnvironmentStyle(buf);
@@ -2143,7 +2140,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         OnMacro(ltPAR, 0, true);
         OnMacro(ltPAR, 0, false);
       }
-#endif      
+#endif
     }
     break;
   }
@@ -2266,7 +2263,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 
 //          WriteEnvironmentStyles();
         }
-#endif        
+#endif
 
 //        wxSnprintf(buf, sizeof(buf), _T("\\tx%d\\li%d\\fi-%d\\ri%d\n"), TwoColWidthA,
 //             TwoColWidthA, TwoColWidthA, TwoColWidthA+TwoColWidthB+oldIndent);
@@ -2299,7 +2296,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
         else issuedNewParagraph = 0;
       }
 #endif
-      
+
       if (macroId == ltVERBATIM)
         wxSnprintf(buf, sizeof(buf), _T("{\\f3\\s10\\fs20\\li720\\sa0 "));
       else
@@ -2317,7 +2314,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
 #if 0
         TexOutput(_T("\\par\n"));
         issuedNewParagraph = 1;
-#endif        
+#endif
       }
     }
     break;
@@ -2508,7 +2505,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
   case ltRMFAMILY:
   case ltRM:
   {
-/*    
+/*
     if (start)
     {
       TexOutput(_T("{\\plain "));
@@ -2585,7 +2582,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
       {
           TexOutput(_T("\\par\\pard"));
           issuedNewParagraph ++;
-          
+
           // Extra par if parskip is more than zero (usually looks best.)
           // N.B. JACS 2004-02-21: shouldn't need this for linear RTF if
           // we have a suitable set of styles.
@@ -2595,7 +2592,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
           }
-#endif          
+#endif
           WriteEnvironmentStyles();
       }
       // 1 is a whole paragraph if ParSkip == 0,
@@ -2611,7 +2608,7 @@ void RTFOnMacro(int macroId, int no_args, bool start)
             TexOutput(_T("\\par"));
             issuedNewParagraph ++;
           }
-#endif          
+#endif
           WriteEnvironmentStyles();
       }
 /*
@@ -3231,7 +3228,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     {
       if (!suppressNameDecoration) TexOutput(_T("}"));
     }
-    
+
     if (start && (arg_no == 3))
       TexOutput(_T("("));
     if (!start && (arg_no == 3))
@@ -3339,7 +3336,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
     if (start)
     {
       wxChar *sec = NULL;
-      
+
       wxChar *refName = GetArgData();
       if (winHelp || !useWord)
       {
@@ -3547,10 +3544,10 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
   {
     if (arg_no == 3)
       return false;
-      
+
     static int imageWidth = 0;
     static int imageHeight = 0;
-    
+
     if (start && (arg_no == 1))
     {
       wxChar *imageDimensions = copystring(GetArgData());
@@ -3581,7 +3578,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       if (imageDimensions)  // glt
           delete [] imageDimensions;
       return false;
-    }  
+    }
     else if (start && (arg_no == 2 ))
     {
       wxChar *filename = copystring(GetArgData());
@@ -3702,7 +3699,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
             }
             else
             {
-#endif            
+#endif
               TexOutput(_T("[No BMP or WMF for image file "));
               TexOutput(filename);
               TexOutput(_T("]"));
@@ -4476,7 +4473,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       if (currentNumberStyle) delete[] currentNumberStyle;
       currentNumberStyle = copystring(data);
       OutputNumberStyle(currentNumberStyle);
-      
+
       TexOutput(_T("\n"));
     }
     return false;
@@ -4687,7 +4684,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
 
         if (TableData[i].leftBorder)
           TexOutput(_T("\\clbrdrl\\brdrs\\brdrw15"));
-          
+
         wxSnprintf(buf, sizeof(buf), _T("\\cellx%d"), currentWidth);
         TexOutput(buf);
       }
@@ -4753,7 +4750,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
 
       ItemizeStruc *struc = new ItemizeStruc(LATEX_INDENT, indentSize);
       itemizeStack.Insert(struc);
-      
+
       wxSnprintf(buf, sizeof(buf), _T("\\tx%d\\li%d\\sa200 "), indentSize, indentSize);
       PushEnvironmentStyle(buf);
       TexOutput(buf);
@@ -4796,7 +4793,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
 
       ItemizeStruc *struc = new ItemizeStruc(LATEX_INDENT, indentSize);
       itemizeStack.Insert(struc);
-      
+
       wxSnprintf(buf, sizeof(buf), _T("\\tx%d\\li%d\\lr%d\\sa200\\box%s "), indentSize, indentSize, indentSizeRight,
         ((macroId == ltCENTEREDBOX) ? _T("\\brdrs") : _T("\\brdrdb")));
       PushEnvironmentStyle(buf);
@@ -4920,7 +4917,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
           OutputRTFHeaderCommands();
           OutputRTFFooterCommands();
         }
-        
+
         // Need to reset the current numbering style, or RTF forgets it.
         OutputNumberStyle(currentNumberStyle);
         SetCurrentOutput(Contents);
@@ -4960,7 +4957,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
                wxFileNameFromPath(FileRoot), "Contents");
         }
       }
-      
+
       SetCurrentOutput(Chapters);
       wxChar *styleCommand = _T("");
       if (!winHelp && useHeadingStyles)
@@ -5171,7 +5168,7 @@ bool RTFGo(void)
   startedSections = false;
   inVerbatim = false;
   browseId = 0;
-  
+
   if (InputFile && OutputFile)
   {
     // Do some RTF-specific transformations on all the strings,
@@ -5218,7 +5215,7 @@ bool RTFGo(void)
       wxFprintf(Chapters, _T("\\titlepg\n"));
       wxFprintf(Contents, _T("\\par\\pard\\pgnrestart\\sect\\titlepg"));
     }
-    
+
     // In WinHelp, Contents title takes font of title.
     // In linear RTF, same as chapter headings.
     wxFprintf(Contents, _T("{\\b\\fs%d %s}\\par\\par\\pard\n\n"),
@@ -5226,7 +5223,7 @@ bool RTFGo(void)
 
     // By default, Swiss, 11 point.
     wxFprintf(Chapters, _T("\\f2\\fs22\n"));
-    
+
     PushEnvironmentStyle(_T("\\f2\\fs22\\sa200"));
 
     SetCurrentOutput(Chapters);
@@ -5248,7 +5245,7 @@ bool RTFGo(void)
     fclose(Header);
 
     PopEnvironmentStyle();
-    
+
     Tex2RTFYield(true);
     if (winHelp)
     {
@@ -5324,7 +5321,7 @@ bool RTFGo(void)
       Tex2RTFYield(true);
       wxRemoveFile(_T("tmp1.rtf"));
     }
-    
+
     if (wxFileExists(ContentsName)) wxRemoveFile(ContentsName);
 
     if (!wxRenameFile(TmpContentsName, ContentsName))
@@ -5335,7 +5332,7 @@ bool RTFGo(void)
 
     wxRemoveFile(_T("chapters.rtf"));
     wxRemoveFile(_T("header.rtf"));
-      
+
     if (winHelp)
     {
       wxRemoveFile(_T("sections.rtf"));

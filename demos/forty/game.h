@@ -39,7 +39,7 @@ public:
 class Base : public Pile {
 public:
     Base(int x, int y);
-    ~Base();
+    ~Base(){};
     bool AcceptCard(Card* card);
 };
 
@@ -50,7 +50,7 @@ public:
 class Foundation : public Pile {
 public:
     Foundation(int x, int y);
-    ~Foundation();
+    ~Foundation(){};
     bool AcceptCard(Card* card);
 };
 
@@ -61,7 +61,7 @@ public:
 class Discard : public Pile {
 public:
     Discard(int x, int y);
-    ~Discard();
+    ~Discard(){};
     void Redraw(wxDC& dc);
     void GetTopCardPos(int& x, int& y);
     Card* RemoveTopCard(wxDC& dc, int m_xOffset, int m_yOffset);

@@ -545,7 +545,7 @@ void wxGenericColourDialog::OnRedSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  singleCustomColour.Set(redSlider->GetValue(), singleCustomColour.Green(), singleCustomColour.Blue());
+  singleCustomColour.Set((unsigned char)redSlider->GetValue(), singleCustomColour.Green(), singleCustomColour.Blue());
   PaintCustomColour(dc);
 }
 
@@ -555,7 +555,7 @@ void wxGenericColourDialog::OnGreenSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  singleCustomColour.Set(singleCustomColour.Red(), greenSlider->GetValue(), singleCustomColour.Blue());
+  singleCustomColour.Set(singleCustomColour.Red(), (unsigned char)greenSlider->GetValue(), singleCustomColour.Blue());
   PaintCustomColour(dc);
 }
 
@@ -565,7 +565,7 @@ void wxGenericColourDialog::OnBlueSlider(wxCommandEvent& WXUNUSED(event))
     return;
 
   wxClientDC dc(this);
-  singleCustomColour.Set(singleCustomColour.Red(), singleCustomColour.Green(), blueSlider->GetValue());
+  singleCustomColour.Set(singleCustomColour.Red(), singleCustomColour.Green(), (unsigned char)blueSlider->GetValue());
   PaintCustomColour(dc);
 }
 

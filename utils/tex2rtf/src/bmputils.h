@@ -22,7 +22,7 @@ void DecToHex(int dec, wxChar *buf)
   buf[1] = hexArray[secondDigit];
   buf[2] = 0;
 }
- 
+
 static unsigned int getshort(FILE *fp)
 {
   int c, c1;
@@ -35,7 +35,7 @@ static unsigned long getint(FILE *fp)
   int c, c1, c2, c3;
   c = getc(fp);  c1 = getc(fp);  c2 = getc(fp);  c3 = getc(fp);
   return (long)((long) c) +
-         (((long) c1) << 8) + 
+         (((long) c1) << 8) +
          (((long) c2) << 16) +
          (((long) c3) << 24);
 }
@@ -44,20 +44,20 @@ bool GetBMPHeader(FILE *fp, int *Width, int *Height, int *Planes, int *BitsPerPi
 {
   // Remember about all fields but store only important ones
   unsigned long /*
-                bfSize, 
-                bfOffBits, 
-                biSize, 
-                */ 
-                biWidth, 
-                biHeight, 
+                bfSize,
+                bfOffBits,
+                biSize,
+                */
+                biWidth,
+                biHeight,
                 biPlanes,
                 biBitCount
                 /*        ,
                 biCompression,
-                biSizeImage, 
-                biXPelsPerMeter, 
-                biYPelsPerMeter, 
-                biClrUsed, 
+                biSizeImage,
+                biXPelsPerMeter,
+                biYPelsPerMeter,
+                biClrUsed,
                 biClrImportant
                 */
                 ;
@@ -161,7 +161,7 @@ struct mfPLACEABLEHEADER {
 bool GetMetafileHeader(FILE *handle, int *width, int *height)
 {
   char buffer[40];
-  mfPLACEABLEHEADER *theHeader = (mfPLACEABLEHEADER *)&buffer;
+  mfPLACEABLEHEADER *theHeader = (mfPLACEABLEHEADER *)&buffer[0];
   fread((void *)theHeader, sizeof(char), sizeof(mfPLACEABLEHEADER), handle);
   if (theHeader->key != 0x9AC6CDD7)
   {
@@ -223,7 +223,7 @@ bool OutputMetafileData(FILE *handle)
   int ch;
   do
   {
-    ch = getc(handle);  
+    ch = getc(handle);
     if (bytesSoFar == scanLineWidth)
     {
       bytesSoFar = 0;

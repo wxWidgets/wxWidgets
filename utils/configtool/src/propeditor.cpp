@@ -65,10 +65,6 @@ ctPropertyEditor::ctPropertyEditor(wxWindow *parent, wxWindowID id, const wxPoin
     CreateControls(this);
 }
 
-ctPropertyEditor::~ctPropertyEditor()
-{
-}
-
 void ctPropertyEditor::CreateControls(wxWindow* parent)
 {
     m_elementTitleTextCtrl = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_READONLY);

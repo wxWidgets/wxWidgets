@@ -218,7 +218,7 @@ void wxFileData::ReadData()
         }
     }
 
-    m_size = buff.st_size;
+    m_size = (long)buff.st_size;
 
     m_dateTime = buff.st_mtime;
 

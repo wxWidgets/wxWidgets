@@ -83,10 +83,6 @@ PlayerSelectionDialog::PlayerSelectionDialog(
     CentreOnParent();
 }
 
-PlayerSelectionDialog::~PlayerSelectionDialog()
-{
-}
-
 void PlayerSelectionDialog::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     Layout();

@@ -1017,7 +1017,7 @@ public:
         { m_value = wxDateTime(valptr->day, (wxDateTime::Month) (valptr->month - 1),valptr->year); }
     wxVariantDataDateTime(const TIMESTAMP_STRUCT* valptr)
         { m_value = wxDateTime(valptr->day, (wxDateTime::Month) (valptr->month - 1), valptr->year,
-                        valptr->hour, valptr->minute, valptr->second, valptr->fraction ); }
+                        valptr->hour, valptr->minute, valptr->second, (wxDateTime::wxDateTime_t)valptr->fraction ); }
 #endif //ODBC
 
     inline wxDateTime GetValue() const { return m_value; }
@@ -1722,7 +1722,8 @@ wxVariant wxVariant::operator[] (size_t idx) const
         wxVariantDataStringList* data = (wxVariantDataStringList*) m_data;
         wxASSERT_MSG( (idx < (size_t) data->GetValue().GetCount()), wxT("Invalid index for array") );
 
-        wxVariant variant( wxString( (const wxChar*) (data->GetValue().Item(idx)->GetData()) ));
+        wxString str( (const wxChar*) (data->GetValue().Item(idx)->GetData()) );
+        wxVariant variant( str );
         return variant;
     }
     return wxNullVariant;

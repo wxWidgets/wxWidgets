@@ -22,7 +22,7 @@
 #endif
 
 // Define a new application type
-class MyApp: public 
+class MyApp: public
                     #ifndef NO_GUI
                         wxApp
                     #else
@@ -74,7 +74,7 @@ class Tex2RTFConnection: public wxDDEConnection
 {
  public:
   Tex2RTFConnection(wxChar *buf, int size);
-  ~Tex2RTFConnection(void);
+  ~Tex2RTFConnection(void){};
   bool OnExecute(const wxString& topic, wxChar *data, int size, wxIPCFormat format);
   wxChar *OnRequest(const wxString& topic, const wxString& item, int *size, wxIPCFormat format);
 };

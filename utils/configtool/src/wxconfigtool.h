@@ -43,7 +43,7 @@ public:
     ctApp();
 
     /// Destructor.
-    ~ctApp();
+    ~ctApp(){};
 
 // Accessors
 

@@ -86,10 +86,6 @@ ctSettings::ctSettings(const ctSettings& settings)
 }
 
 
-ctSettings::~ctSettings()
-{
-}
-
 void ctSettings::operator = (const ctSettings& settings)
 {
     Copy(settings);
@@ -265,7 +261,7 @@ bool ctSettings::SaveConfig()
     // Indicate that we're no longer running, so we know if the program
     // crashed last time around.
     config.Write(wxT("Misc/RunningProgram"), (long) 0);
-   
+
     {
         config.SetPath(wxT("FileHistory/"));
         wxGetApp().GetDocManager()->FileHistorySave(config);

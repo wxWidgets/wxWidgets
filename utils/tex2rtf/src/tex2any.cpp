@@ -38,7 +38,7 @@ static inline wxChar* copystring(const wxChar* s)
  * Variables accessible from clients
  *
  */
- 
+
 TexChunk *      DocumentTitle = NULL;
 TexChunk *      DocumentAuthor = NULL;
 TexChunk *      DocumentDate = NULL;
@@ -181,7 +181,7 @@ wxChar *UpNameString = copystring(_T("Up"));
  * Section numbering
  *
  */
- 
+
 int             chapterNo = 0;
 int             sectionNo = 0;
 int             subsectionNo = 0;
@@ -193,7 +193,7 @@ int             tableNo = 0;
  * Other variables
  *
  */
- 
+
 FILE *CurrentOutput1 = NULL;
 FILE *CurrentOutput2 = NULL;
 FILE *Inputs[15];
@@ -302,7 +302,7 @@ void ForbidWarning(TexMacroDef *def)
       break;
   }
 }
- 
+
 TexMacroDef *MatchMacro(wxChar *buffer, int *pos, wxChar **env, bool *parseToBrace)
 {
   *parseToBrace = true;
@@ -359,11 +359,11 @@ TexMacroDef *MatchMacro(wxChar *buffer, int *pos, wxChar **env, bool *parseToBra
     macroBuf[j-i] = 0;
     def = (TexMacroDef *)MacroDefs.Get(macroBuf);
   }
-    
+
   if (def)
   {
     i = j;
-    
+
     // We want to check whether this is a space-consuming macro
     // (e.g. {\bf word})
     // No brace, e.g. \input thing.tex instead of \input{thing};
@@ -492,7 +492,7 @@ bool read_a_line(wxChar *buf)
         if ((ch1 == 10) || (ch1 == 13))
         {
           // Eliminate newline (10) following DOS linefeed
-          if (ch1 == 13) 
+          if (ch1 == 13)
             getc(Inputs[CurrentInputIndex]);
           buf[bufIndex] = 0;
           IncrementLineNumber();
@@ -522,7 +522,7 @@ bool read_a_line(wxChar *buf)
              return false;
           }
 
-          buf[bufIndex] = ch;
+          buf[bufIndex] = (wxChar)ch;
           bufIndex ++;
         }
       }
@@ -537,7 +537,7 @@ bool read_a_line(wxChar *buf)
         case 0xfc: // ü
         case 0xd6: // Ö
         case 0xc4: // Ä
-        case 0xdc: // Ü     
+        case 0xdc: // Ü
                 if (bufIndex+5 >= MAX_LINE_BUFFER_SIZE)
                 {
                    wxString errBuf;
@@ -556,11 +556,11 @@ bool read_a_line(wxChar *buf)
                     case 0xfc:buf[bufIndex++]='u';break; // ü
                     case 0xd6:buf[bufIndex++]='O';break; // Ö
                     case 0xc4:buf[bufIndex++]='A';break; // Ä
-                    case 0xdc:buf[bufIndex++]='U';break; // Ü                   
-                }               
+                    case 0xdc:buf[bufIndex++]='U';break; // Ü
+                }
                 buf[bufIndex++]='}';
                 break;
-        case 0xdf: // ß 
+        case 0xdf: // ß
             if (bufIndex+5 >= MAX_LINE_BUFFER_SIZE)
             {
               wxString errBuf;
@@ -574,7 +574,7 @@ bool read_a_line(wxChar *buf)
             buf[bufIndex++]='s';
             buf[bufIndex++]='\\';
             buf[bufIndex++]='/';
-            break;  
+            break;
         default:
             if (bufIndex >= MAX_LINE_BUFFER_SIZE)
             {
@@ -584,11 +584,11 @@ bool read_a_line(wxChar *buf)
               OnError((wxChar *)errBuf.c_str());
               return false;
             }
-            // If the current character read in is a '_', we need to check 
+            // If the current character read in is a '_', we need to check
             // whether there should be a '\' before it or not
             if (ch != '_')
             {
-                buf[bufIndex++] = ch;
+                buf[bufIndex++] = (wxChar)ch;
                 break;
             }
 
@@ -625,7 +625,7 @@ bool read_a_line(wxChar *buf)
                     }
                 }
             }
-            buf[bufIndex++] = ch;
+            buf[bufIndex++] = (wxChar)ch;
             break;
         }  // switch
       }  // else
@@ -635,7 +635,7 @@ bool read_a_line(wxChar *buf)
       buf[bufIndex] = 0;
       fclose(Inputs[CurrentInputIndex]);
       Inputs[CurrentInputIndex] = NULL;
-      if (CurrentInputIndex > 0) 
+      if (CurrentInputIndex > 0)
          ch = ' '; // No real end of file
       CurrentInputIndex --;
 
@@ -687,7 +687,7 @@ bool read_a_line(wxChar *buf)
       j -= 5;
       buf[j] = 0;
     }
-    
+
     if (buf[j-1] == '}')
         buf[j-1] = 0; // Ignore final brace
 
@@ -753,7 +753,7 @@ bool read_a_line(wxChar *buf)
       buf[j] = 0;
     }
 
-    if (buf[j-1] == _T('}')) 
+    if (buf[j-1] == _T('}'))
         buf[j-1] = 0; // Ignore final brace
 
     // Remove backslashes from name
@@ -975,7 +975,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
 {
   Tex2RTFYield();
   if (stopRunning) return pos;
-  
+
   bool eof = false;
   BigBuffer[0] = 0;
   int buf_ptr = 0;
@@ -1005,7 +1005,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
     }
   }
 */
-    
+
   // If not parsing to brace, just read the next word
   // (e.g. \vskip 20pt)
   if (!parseToBrace)
@@ -1014,7 +1014,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
     while (!eof && ch != 13 && ch != 32 && ch != 10 &&
            ch != 0 && ch != '{')
     {
-      BigBuffer[buf_ptr] = ch;
+      BigBuffer[buf_ptr] = (wxChar)ch;
       buf_ptr ++;
       pos ++;
       ch = buffer[pos];
@@ -1124,7 +1124,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           children.Append((wxObject *)chunk);
         }
         pos ++;
-        
+
         // Try matching \end{environment}
         if (environment && FindEndEnvironment(buffer, &pos, environment))
         {
@@ -1190,7 +1190,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
             }
             else
             {
-              wxTex2RTFBuffer[i] = ch;
+              wxTex2RTFBuffer[i] = (wxChar)ch;
               pos ++;
               i ++;
               if (ch == 0)
@@ -1221,7 +1221,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
           if (buffer[pos] == '*')
             pos ++;
 
-          // Find the delimiter character         
+          // Find the delimiter character
           int ch = buffer[pos];
           pos ++;
           // Now at start of verbatim text
@@ -1297,7 +1297,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
               wxStrcat(macroBuf, _T("}"));
               ParseArg(thisArg, children, macroBuf, 0, NULL, true, chunk);
             }
-            
+
 //            delete chunk; // Might delete children
           }
         }
@@ -1353,7 +1353,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
                 wxStrcat(macroBuf, _T("}"));
                 ParseArg(thisArg, children, macroBuf, 0, NULL, true, chunk);
               }
-            
+
 //            delete chunk; // Might delete children
         }
           }
@@ -1557,7 +1557,7 @@ int ParseArg(TexChunk *thisArg, wxList& children, wxChar *buffer, int pos, wxCha
  * Consume as many arguments as the macro definition specifies
  *
  */
- 
+
 int ParseMacroBody(const wxChar *WXUNUSED(macro_name), TexChunk *parent,
                    int no_args, wxChar *buffer, int pos,
                    wxChar *environment, bool parseToBrace,
@@ -1674,11 +1674,11 @@ bool TexLoadFile(wxChar *filename)
 
   TexPathList.EnsureFileAccessible(filename);
 
-  if (line_buffer) 
+  if (line_buffer)
       delete line_buffer;
 
   line_buffer = new wxChar[MAX_LINE_BUFFER_SIZE];
-  
+
   Inputs[0] = wxFopen(filename, _T("r"));
   LineNumbers[0] = 1;
   FileNames[0] = copystring(filename);
@@ -1725,7 +1725,7 @@ TexChunk::TexChunk(TexChunk& toCopy)
   no_args = toCopy.no_args;
   argn = toCopy.argn;
   macroId = toCopy.macroId;
-  
+
 //  if (toCopy.name)
 //    name = copystring(toCopy.name);
 //  else
@@ -1736,7 +1736,7 @@ TexChunk::TexChunk(TexChunk& toCopy)
     value = copystring(toCopy.value);
   else
     value = NULL;
-  
+
   optional = toCopy.optional;
   wxNode *node = toCopy.children.GetFirst();
   while (node)
@@ -1776,7 +1776,7 @@ int GetNoArgs(void) // Number of args for this macro
  * only!)
  *
  */
- 
+
 void GetArgData1(TexChunk *chunk)
 {
   switch (chunk->type)
@@ -2066,7 +2066,7 @@ void TexCleanUp(void)
     refNode = TexReferences.Next();
   }
   TexReferences.Clear();
-  
+
   wxNode* bibNode = BibList.GetFirst();
   while (bibNode)
   {
@@ -2506,7 +2506,7 @@ void DefineDefaultMacros(void)
   AddMacroDef(ltUPSHAPE,             _T("upshape"), 1);
   AddMacroDef(ltURLREF,              _T("urlref"), 2);
   AddMacroDef(ltUSEPACKAGE,          _T("usepackage"), 1);
-  
+
   AddMacroDef(ltVAREPSILON,          _T("varepsilon"), 0);
   AddMacroDef(ltVARPHI,              _T("varphi"), 0);
   AddMacroDef(ltVARPI,               _T("varpi"), 0);
@@ -2570,7 +2570,7 @@ void DefineDefaultMacros(void)
  * Default behaviour, should be called by client if can't match locally.
  *
  */
- 
+
 // Called on start/end of macro examination
 void DefaultOnMacro(int macroId, int no_args, bool start)
 {
@@ -2691,7 +2691,7 @@ void DefaultOnMacro(int macroId, int no_args, bool start)
         TexOutput(_T("(r)"), true);
       break;
     case ltBACKSLASH:
-      if (start)    
+      if (start)
         TexOutput(_T("\\"), true);
       break;
     case ltLDOTS:
@@ -3174,7 +3174,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         else
         {
            wxString informBuf;
-           informBuf.Printf(_T("Warning: unresolved reference '%s'"), refName); 
+           informBuf.Printf(_T("Warning: unresolved reference '%s'"), refName);
            OnInform((wxChar *)informBuf.c_str());
         }
       }
@@ -3222,7 +3222,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         DocumentStyle = LATEX_LETTER;
       else if (wxStrncmp(DocumentStyleString, _T("slides"), 6) == 0)
         DocumentStyle = LATEX_SLIDES;
-        
+
       if (StringMatch(_T("10"), DocumentStyleString))
         SetFontSizes(10);
       else if (StringMatch(_T("11"), DocumentStyleString))
@@ -3436,12 +3436,12 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
       if (fd)
       {
         ch = getc(fd);
-        smallBuf[0] = ch;
+        smallBuf[0] = (wxChar)ch;
         while (ch != EOF)
         {
           TexOutput(smallBuf);
           ch = getc(fd);
-          smallBuf[0] = ch;
+          smallBuf[0] = (wxChar)ch;
         }
         fclose(fd);
       }
@@ -3515,7 +3515,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         wxChar *s1 = copystring(s);
         int i;
         for (i = 0; i < (int)wxStrlen(s); i++)
-          s1[i] = wxToupper(s[i]);
+          s1[i] = (wxChar)wxToupper(s[i]);
         TexOutput(s1);
         delete[] s1;
         return false;
@@ -3535,7 +3535,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         wxChar *s1 = copystring(s);
         int i;
         for (i = 0; i < (int)wxStrlen(s); i++)
-          s1[i] = wxTolower(s[i]);
+          s1[i] = (wxChar)wxTolower(s[i]);
         TexOutput(s1);
         delete[] s1;
         return false;
@@ -3555,7 +3555,7 @@ bool DefaultOnArgument(int macroId, int arg_no, bool start)
         wxChar *s1 = copystring(s);
         int i;
         for (i = 0; i < (int)wxStrlen(s); i++)
-          s1[i] = wxToupper(s[i]);
+          s1[i] = (wxChar)wxToupper(s[i]);
         TexOutput(s1);
         delete[] s1;
         return false;

@@ -57,27 +57,23 @@ ctApp::ctApp()
     m_docManager = NULL;
 }
 
-ctApp::~ctApp()
-{
-}
-
 bool ctApp::OnInit(void)
 {
 
 #if wxUSE_LOG
     wxLog::SetTimestamp(NULL);
 #endif // wxUSE_LOG
-    
+
     wxHelpProvider::Set(new wxSimpleHelpProvider);
 
 #if wxUSE_LIBPNG
     wxImage::AddHandler( new wxPNGHandler );
 #endif
-    
+
 #if wxUSE_LIBJPEG
     wxImage::AddHandler( new wxJPEGHandler );
 #endif
-    
+
 #if wxUSE_GIF
     wxImage::AddHandler( new wxGIFHandler );
 #endif
@@ -124,13 +120,13 @@ bool ctApp::OnInit(void)
     m_settings.Init();
 
     LoadConfig();
- 
+
     wxString helpFilePathReference(GetFullAppPath(_("wx")));
     m_helpControllerReference->Initialize(helpFilePathReference);
-    
+
     wxString helpFilePath(GetFullAppPath(_("configtool")));
     m_helpController->Initialize(helpFilePath);
-    
+
     ctMainFrame* frame = new ctMainFrame(m_docManager, NULL, wxID_ANY, wxGetApp().GetSettings().GetAppName(),
         GetSettings().m_frameSize.GetPosition(), GetSettings().m_frameSize.GetSize(),
         wxDEFAULT_FRAME_STYLE|wxNO_FULL_REPAINT_ON_RESIZE|wxCLIP_CHILDREN);
@@ -194,16 +190,16 @@ bool ctApp::OnInit(void)
                 doc->SetDocumentSaved(true);
         }
     }
-    
+
     GetTopWindow()->Show(true);
-    
+
     return true;
 }
 
 int ctApp::OnExit(void)
 {
     SaveConfig();
-    
+
     // Save the file history
     {
         wxConfig config(wxGetApp().GetSettings().GetAppName(), wxT("Generic Organisation"));
@@ -212,7 +208,7 @@ int ctApp::OnExit(void)
 
     delete m_docManager;
     m_docManager = NULL;
-    
+
     return 0;
 }
 
@@ -220,7 +216,7 @@ void ctApp::ClearHelpControllers()
 {
     delete m_helpController;
     m_helpController = NULL;
-        
+
     delete m_helpControllerReference;
     m_helpControllerReference = NULL;
 }
@@ -233,7 +229,7 @@ wxString ctApp::GetFullAppPath(const wxString& filename) const
     if (path.Last() != wxFILE_SEP_PATH && filename[0] != wxFILE_SEP_PATH)
         path += wxFILE_SEP_PATH;
     path += filename;
-    
+
     return path;
 }
 
