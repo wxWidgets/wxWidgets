@@ -419,6 +419,17 @@ Returns \helpref{wxLanguage}{wxlanguage} constant of current language.
 Note that you can call this function only if you used the form of
 \helpref{Init}{wxlocaleinit} that takes wxLanguage argument.
 
+\membersection{wxLocale::GetLanguageInfo}\label{wxlocalegetlanguageinfo}
+
+\constfunc{static wxLanguageInfo *}{GetLanguageInfo}{\param{int }{lang}}
+
+Returns a pointer to wxLanguageInfo structure containing information about the
+given language or {\tt NULL} if this language is unknown. Note that even if the
+returned pointer is valid, the caller should {\it not} delete it.
+
+See \helpref{AddLanguage}{wxlocaleaddlanguage} for the wxLanguageInfo
+description.
+
 
 \membersection{wxLocale::GetLocale}\label{wxlocalegetlocale}
 

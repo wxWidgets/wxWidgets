@@ -641,11 +641,7 @@ bool wxLocale::Init(const wxChar *szName,
 
 bool wxLocale::Init(int language, int flags)
 {
-    wxLanguageInfo *info = NULL;
     int lang = language;
-
-    CreateLanguagesDB();
-
     if (lang == wxLANGUAGE_DEFAULT)
     {
         // auto detect the language
@@ -658,17 +654,7 @@ bool wxLocale::Init(int language, int flags)
        return FALSE;
     }
 
-    if (lang != wxLANGUAGE_DEFAULT)
-    {
-        for (size_t i = 0; i < ms_languagesDB->GetCount(); i++)
-        {
-            if (ms_languagesDB->Item(i).Language == lang)
-            {
-                info = &ms_languagesDB->Item(i);
-                break;
-            }
-        }
-    }
+    const wxLanguageInfo *info = GetLanguageInfo(lang);
 
     // Unknown language:
     if (info == NULL)
@@ -1365,10 +1351,28 @@ wxFontEncoding wxLocale::GetSystemEncoding()
     return wxFONTENCODING_SYSTEM;
 }
 
-/*static*/ void wxLocale::AddLanguage(const wxLanguageInfo& info)
+/* static */
+void wxLocale::AddLanguage(const wxLanguageInfo& info)
 {
     CreateLanguagesDB();
     ms_languagesDB->Add(info);
+}
+
+/* static */
+const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
+{
+    CreateLanguagesDB();
+
+    size_t count = ms_languagesDB->GetCount();
+    for ( size_t i = 0; i < count; i++ )
+    {
+        if ( ms_languagesDB->Item(i).Language == lang )
+        {
+            return &ms_languagesDB->Item(i);
+        }
+    }
+
+    return NULL;
 }
 
 wxString wxLocale::GetSysName() const
@@ -2100,7 +2104,7 @@ void wxLocale::InitLanguagesDB()
    wxLanguageInfo info;
    wxStringTokenizer tkn;
 
-      LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , "Abkhazian")
+   LNG(wxLANGUAGE_ABKHAZIAN,                  "ab"   , 0              , 0                                 , "Abkhazian")
    LNG(wxLANGUAGE_AFAR,                       "aa"   , 0              , 0                                 , "Afar")
    LNG(wxLANGUAGE_AFRIKAANS,                  "af_ZA", LANG_AFRIKAANS , SUBLANG_DEFAULT                   , "Afrikaans")
    LNG(wxLANGUAGE_ALBANIAN,                   "sq_AL", LANG_ALBANIAN  , SUBLANG_DEFAULT                   , "Albanian")
