@@ -92,6 +92,7 @@ const bool False = false;
 void      __wxPyPreStart(PyObject*);
 void      __wxPyCleanup();
 PyObject* __wxPySetDictionary(PyObject*, PyObject* args);
+PyObject* __wxPyFixStockObjects(PyObject*, PyObject* args);
 
 
 void wxPyEventThunker(wxObject*, wxEvent& event);
@@ -116,7 +117,7 @@ void      wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName);
 PyObject* wxPy_ConvertList(wxListBase* list);
 long      wxPyGetWinHandle(wxWindow* win);
 
-void wxPy_ReinitStockObjects(bool init);
+void wxPy_ReinitStockObjects(int pass);
 
 bool wxPyInstance_Check(PyObject* obj);
 bool wxPySwigInstance_Check(PyObject* obj);

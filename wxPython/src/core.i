@@ -28,9 +28,8 @@
 %include _core_api.i
 %include _core_rename.i
 
-
-
 %native(_wxPySetDictionary)   __wxPySetDictionary;
+%native(_wxPyFixStockObjects) __wxPyFixStockObjects;
 
 %pythoncode {
 %#// Give a reference to the dictionary of this module to the C++ extension

@@ -80,6 +80,11 @@ public:
 %newgroup
 
 
+// %typemap(varout) wxFont* {
+//     // my typemap
+//     $result = SWIG_NewPointerObj((void *) $1, $1_descriptor, 0);
+// }
+
 
 // See also wxPy_ReinitStockObjects in helpers.cpp
 %immutable;

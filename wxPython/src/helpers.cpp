@@ -359,7 +359,7 @@ void wxPyApp::_BootstrapApp()
 
     // The stock objects were all NULL when they were loaded into
     // SWIG generated proxies, so re-init those now...
-    wxPy_ReinitStockObjects(False);
+    wxPy_ReinitStockObjects(3);
 
     // It's now ok to generate exceptions for assertion errors.
     wxPythonApp->SetStartupComplete(True);
@@ -472,7 +472,7 @@ void __wxPyPreStart(PyObject* moduleDict)
     wxApp::CheckBuildOptions(WX_BUILD_OPTIONS_SIGNATURE, "wxPython");
 
     // Init the stock objects to a non-NULL value so SWIG doesn't create them as None
-    wxPy_ReinitStockObjects(True);
+    wxPy_ReinitStockObjects(1);
 }
 
 
@@ -564,33 +564,88 @@ bool wxPySwigInstance_Check(PyObject* obj) {
 
 //---------------------------------------------------------------------------
 
-// The stock objects are no longer created when the wxc module is imported, but
-// only after the app object has been created.  This function will be called before
-// OnInit is called so we can hack the new pointer values into the obj.this attributes.
+// The stock objects are no longer created when the wxc module is imported,
+// but only after the app object has been created.  The
+// wxPy_ReinitStockObjects function will be called 3 times to pass the stock
+// objects though various stages of evolution:
+//
+//   pass 1: Set all the pointers to a non-NULL value so the Python proxy
+//           object will be created (otherwise it will just use None.)
+//
+//   pass 2: After the module has been imported and the python proxys have
+//           been created, then set the __class__ to be _wxPyUnbornObject so
+//           it will catch any access to the object and will raise an exception.
+//
+//   pass 3: Finally, from OnInit patch things up so the stock objects can
+//           be used.
 
-void wxPy_ReinitStockObjects(bool init)
+
+PyObject* __wxPyFixStockObjects(PyObject* /* self */, PyObject* args)
+{
+    wxPy_ReinitStockObjects(2);    
+    RETURN_NONE();
+}
+
+
+static void rsoPass2(const char* name)
+{
+    static PyObject* unbornObjectClass = NULL;
+    PyObject* obj;
+    
+    if (unbornObjectClass == NULL) {
+        unbornObjectClass = PyDict_GetItemString(wxPython_dict, "_wxPyUnbornObject");
+        Py_INCREF(unbornObjectClass);
+    }
+
+    // Find the object instance
+    obj = PyDict_GetItemString(wxPython_dict, dropwx(name));
+    wxCHECK_RET(obj != NULL, wxT("Unable to find stock object"));
+    wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance"));
+
+    // Change its class
+    PyObject_SetAttrString(obj, "__class__",  unbornObjectClass);
+   
+}
+
+static void rsoPass3(const char* name, const char* classname, void* ptr)
+{
+    PyObject* obj;
+    PyObject* classobj;
+    PyObject* ptrobj;
+
+    // Find the object instance
+    obj = PyDict_GetItemString(wxPython_dict, dropwx(name));
+    wxCHECK_RET(obj != NULL, wxT("Unable to find stock object")); 
+    wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance"));
+
+    // Find the class object and put it back in the instance
+    classobj = PyDict_GetItemString(wxPython_dict, dropwx(classname));
+    wxCHECK_RET(classobj != NULL, wxT("Unable to find stock class object")); 
+    PyObject_SetAttrString(obj, "__class__",  classobj);
+
+    // Rebuild the .this swigified pointer with the new value of the C++ pointer
+    ptrobj = wxPyMakeSwigPtr(ptr, wxString(classname, *wxConvCurrent));
+    PyObject_SetAttrString(obj, "this", ptrobj); 
+    Py_DECREF(ptrobj);
+}
+
+
+
+void wxPy_ReinitStockObjects(int pass)
 {
     PyObject* obj;
     PyObject* ptrobj;
 
-
 #define REINITOBJ(name, classname) \
-    if ( init ) { name = (classname*)0xC0C0C0C0; } else { \
-    obj = PyDict_GetItemString(wxPython_dict, dropwx(#name)); \
-    wxCHECK_RET(obj != NULL, wxT("Unable to find stock object for " #name)) \
-    wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance: " #name)); \
-    ptrobj = wxPyMakeSwigPtr((void*)name, wxT(#classname)); \
-    PyObject_SetAttrString(obj, "this", ptrobj); \
-    Py_DECREF(ptrobj); }
+    if (pass == 1) { name = (classname*)0xC0C0C0C0; } \
+    else if (pass == 2) { rsoPass2(#name); } \
+    else if (pass == 3) { rsoPass3(#name, #classname, (void*)name); }
+
 
 #define REINITOBJ2(name, classname) \
-    if ( init ) { } else { \
-    obj = PyDict_GetItemString(wxPython_dict, dropwx(#name)); \
-    wxCHECK_RET(obj != NULL, wxT("Unable to find stock object for " #name)) \
-    wxCHECK_RET(wxPySwigInstance_Check(obj), wxT("Not a swig instance: " #name)); \
-    ptrobj = wxPyMakeSwigPtr((void*)&name, wxT(#classname)); \
-    PyObject_SetAttrString(obj, "this", ptrobj); \
-    Py_DECREF(ptrobj); }
+    if (pass == 1) { } \
+    else if (pass == 2) { rsoPass2(#name); } \
+    else if (pass == 3) { rsoPass3(#name, #classname, (void*)&name); }
 
 
     REINITOBJ(wxNORMAL_FONT, wxFont);
