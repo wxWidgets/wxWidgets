@@ -1,0 +1,6 @@
+ ../configure --with-gtk --with-opengl --enable-permissive
+
+--enable-debug=yes --enable-mem_tracing=yes
+
+
+LDSHARED...

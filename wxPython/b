@@ -1,0 +1,3 @@
+#!/bin/sh
+python -u setup.py USE_SWIG=1 IN_CVS_TREE=1 build_ext --inplace $*
+
