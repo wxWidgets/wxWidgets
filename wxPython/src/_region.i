@@ -44,13 +44,22 @@ enum wxRegionContain
 class wxRegion : public wxGDIObject {
 public:
     wxRegion(wxCoord x=0, wxCoord y=0, wxCoord width=0, wxCoord height=0);
-#ifndef __WXMAC__
-    %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
-                                      int fillStyle = wxWINDING_RULE);
-#endif
     %name(RegionFromBitmap)wxRegion(const wxBitmap& bmp,
                                       const wxColour& transColour = wxNullColour,
                                       int   tolerance = 0);
+#ifndef __WXMAC__
+    %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
+                                      int fillStyle = wxWINDING_RULE);
+#else
+    %extend {
+        %name(RegionFromPoints)wxRegion(int points, wxPoint* points_array,
+                                        int fillStyle = wxWINDING_RULE) {
+            PyErr_SetNone(PyExc_NotImplementedError);
+            return NULL;
+        }
+    }
+#endif
+
     ~wxRegion();
 
 

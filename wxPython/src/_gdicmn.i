@@ -85,22 +85,26 @@ enum wxStockCursor
     wxCURSOR_WATCH,
     wxCURSOR_BLANK,
     wxCURSOR_DEFAULT, // standard X11 cursor
-#ifdef __WXMAC__
-	wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
-#endif
-#ifdef __X__
-    // Not yet implemented for Windows
-    wxCURSOR_CROSS_REVERSE,
-    wxCURSOR_DOUBLE_ARROW,
-    wxCURSOR_BASED_ARROW_UP,
-    wxCURSOR_BASED_ARROW_DOWN,
-#endif // X11
+    wxCURSOR_COPY_ARROW , // MacOS Theme Plus arrow
+    
+// #ifdef __X__
+//     // Not yet implemented for Windows
+//     wxCURSOR_CROSS_REVERSE,
+//     wxCURSOR_DOUBLE_ARROW,
+//     wxCURSOR_BASED_ARROW_UP,
+//     wxCURSOR_BASED_ARROW_DOWN,
+// #endif // X11
 
     wxCURSOR_ARROWWAIT,
 
     wxCURSOR_MAX
 };
 
+%{
+#ifndef __WXMAC__
+#define wxCURSOR_COPY_ARROW wxCURSOR_ARROW
+#endif
+%}
 
 //---------------------------------------------------------------------------
 %newgroup

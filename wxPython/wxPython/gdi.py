@@ -52,6 +52,7 @@ wxOutRegion = wx.gdi.OutRegion
 wxPartRegion = wx.gdi.PartRegion
 wxInRegion = wx.gdi.InRegion
 wxRegionFromBitmap = wx.gdi.RegionFromBitmap
+wxRegionFromPoints = wx.gdi.RegionFromPoints
 wxRegion = wx.gdi.Region
 wxRegionIterator = wx.gdi.RegionIterator
 wxFONTFAMILY_DEFAULT = wx.gdi.FONTFAMILY_DEFAULT

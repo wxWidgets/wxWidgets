@@ -24,8 +24,29 @@
 %}
 
 //---------------------------------------------------------------------------
-#ifndef __WXMAC__
 %newgroup
+
+
+%{
+#ifdef __WXMAC__
+// implement dummy classes and such for wxMac
+
+#define wxEVT_COMMAND_TOGGLEBUTTON_CLICKED 0
+class wxToggleButton : public wxControl
+{
+public:
+    wxToggleButton(wxWindow *, wxWindowID, const wxString&,
+                   const wxPoint&, const wxSize&, long,
+                   const wxValidator&, const wxString&)
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+    
+    wxToggleButton()
+        { PyErr_SetNone(PyExc_NotImplementedError); }
+};
+#endif
+%}
+
+
 
 enum { wxEVT_COMMAND_TOGGLEBUTTON_CLICKED, };
 
@@ -59,10 +80,11 @@ public:
                    const wxValidator& validator = wxDefaultValidator,
                    const wxString& name = wxPyToggleButtonNameStr);
 
+#ifndef __WXMAC__
     void SetValue(bool value);
     bool GetValue() const ;
     void SetLabel(const wxString& label);
+#endif
 };
 
-#endif
 //---------------------------------------------------------------------------
