@@ -14,11 +14,17 @@ class MyHtmlWindow(wxHtmlWindow):
         wxHtmlWindow.__init__(self, parent, id)
         self.log = log
 
-    def OnLinkClicked(self, link):
-        self.log.WriteText('OnLinkClicked: %s\n' % link)
+
+    def OnLinkClicked(self, linkinfo):
+        self.log.WriteText('OnLinkClicked: %s\n' % linkinfo.GetHref())
 
         # Virtuals in the base class have been renamed with base_ on the font.
-        self.base_OnLinkClicked(link)
+        self.base_OnLinkClicked(linkinfo)
+
+
+    def OnSetTitle(self, title):
+        self.log.WriteText('OnSetTitle: %s\n' % title)
+        self.base_OnSetTitle(title)
 
 
 

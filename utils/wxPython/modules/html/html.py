@@ -35,6 +35,26 @@ from printfw import *
 
 from sizers import *
 import wx
+class wxHtmlLinkInfoPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def GetHref(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlLinkInfo_GetHref,(self,) + _args, _kwargs)
+        return val
+    def GetTarget(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlLinkInfo_GetTarget,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxHtmlLinkInfo instance at %s>" % (self.this,)
+class wxHtmlLinkInfo(wxHtmlLinkInfoPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlLinkInfo,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
 class wxHtmlTagPtr :
     def __init__(self,this):
         self.this = this
@@ -208,15 +228,16 @@ class wxHtmlWinParserPtr(wxHtmlParserPtr):
     def SetActualColor(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_SetActualColor,(self,) + _args, _kwargs)
         return val
-    def GetLink(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlWinParser_GetLink,(self,) + _args, _kwargs)
-        return val
     def SetLink(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_SetLink,(self,) + _args, _kwargs)
         return val
     def CreateCurrentFont(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlWinParser_CreateCurrentFont,(self,) + _args, _kwargs)
         if val: val = wxFontPtr(val) 
+        return val
+    def GetLink(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWinParser_GetLink,(self,) + _args, _kwargs)
+        if val: val = wxHtmlLinkInfoPtr(val) ; val.thisown = 1
         return val
     def __repr__(self):
         return "<C wxHtmlWinParser instance at %s>" % (self.this,)
@@ -288,13 +309,6 @@ class wxHtmlCellPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def SetParent(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlCell_SetParent,(self,) + _args, _kwargs)
-        return val
-    def GetParent(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlCell_GetParent,(self,) + _args, _kwargs)
-        if val: val = wxHtmlContainerCellPtr(val) 
-        return val
     def GetPosX(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_GetPosX,(self,) + _args, _kwargs)
         return val
@@ -312,19 +326,27 @@ class wxHtmlCellPtr :
         return val
     def GetLink(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_GetLink,(self,) + _args, _kwargs)
+        if val: val = wxHtmlLinkInfoPtr(val) 
         return val
     def GetNext(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_GetNext,(self,) + _args, _kwargs)
         if val: val = wxHtmlCellPtr(val) 
         return val
-    def SetPos(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlCell_SetPos,(self,) + _args, _kwargs)
+    def GetParent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_GetParent,(self,) + _args, _kwargs)
+        if val: val = wxHtmlContainerCellPtr(val) 
         return val
     def SetLink(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_SetLink,(self,) + _args, _kwargs)
         return val
     def SetNext(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_SetNext,(self,) + _args, _kwargs)
+        return val
+    def SetParent(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetParent,(self,) + _args, _kwargs)
+        return val
+    def SetPos(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlCell_SetPos,(self,) + _args, _kwargs)
         return val
     def Layout(self, *_args, **_kwargs):
         val = apply(htmlc.wxHtmlCell_Layout,(self,) + _args, _kwargs)
@@ -413,6 +435,20 @@ class wxHtmlContainerCellPtr(wxHtmlCellPtr):
 class wxHtmlContainerCell(wxHtmlContainerCellPtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(htmlc.new_wxHtmlContainerCell,_args,_kwargs)
+        self.thisown = 1
+
+
+
+
+class wxHtmlColourCellPtr(wxHtmlCellPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxHtmlColourCell instance at %s>" % (self.this,)
+class wxHtmlColourCell(wxHtmlColourCellPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(htmlc.new_wxHtmlColourCell,_args,_kwargs)
         self.thisown = 1
 
 
@@ -516,8 +552,8 @@ class wxHtmlWindowPtr(wxScrolledWindowPtr):
         val = apply(htmlc.wxHtmlWindow_GetParser,(self,) + _args, _kwargs)
         if val: val = wxHtmlWinParserPtr(val) 
         return val
-    def base_OnLinkClicked(self, *_args, **_kwargs):
-        val = apply(htmlc.wxHtmlWindow_base_OnLinkClicked,(self,) + _args, _kwargs)
+    def base_OnSetTitle(self, *_args, **_kwargs):
+        val = apply(htmlc.wxHtmlWindow_base_OnSetTitle,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxHtmlWindow instance at %s>" % (self.this,)
@@ -696,3 +732,4 @@ wx.wxHtmlContainerCellPtr   = wxHtmlContainerCellPtr
 wx.wxHtmlWidgetCellPtr      = wxHtmlWidgetCellPtr
 wx.HtmlHistoryItemPtr       = HtmlHistoryItemPtr
 wx.wxHtmlWindowPtr          = wxHtmlWindowPtr
+wx.wxHtmlLinkInfoPtr        = wxHtmlLinkInfo

@@ -85,6 +85,15 @@ enum {
 
 //---------------------------------------------------------------------------
 
+class wxHtmlLinkInfo {
+public:
+    wxHtmlLinkInfo(const wxString& href, const wxString& target = wxEmptyString);
+    wxString GetHref();
+    wxString GetTarget();
+};
+
+//---------------------------------------------------------------------------
+
 class wxHtmlTag {
 public:
     // Never need to create a new tag from Python...
@@ -141,8 +150,7 @@ public:
     int GetCharHeight();
     int GetCharWidth();
     wxWindow* GetWindow();
-    void SetFonts(wxString normal_face, int normal_italic_mode,
-                  wxString fixed_face, int fixed_italic_mode, int *LIST);
+    void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
 
     wxHtmlContainerCell* GetContainer();
     wxHtmlContainerCell* OpenContainer();
@@ -165,9 +173,10 @@ public:
     void SetLinkColor(const wxColour& clr);
     const wxColour& GetActualColor();
     void SetActualColor(const wxColour& clr);
-    const wxString& GetLink();
     void SetLink(const wxString& link);
     wxFont* CreateCurrentFont();
+    wxHtmlLinkInfo GetLink();
+
 };
 
 
@@ -310,18 +319,18 @@ class wxHtmlCell {
 public:
     wxHtmlCell();
 
-    void SetParent(wxHtmlContainerCell *p);
-    wxHtmlContainerCell* GetParent();
     int GetPosX();
     int GetPosY();
     int GetWidth();
     int GetHeight();
     int GetDescent();
-    wxString GetLink(int x = 0, int y = 0);
+    wxHtmlLinkInfo* GetLink(int x = 0, int y = 0);
     wxHtmlCell* GetNext();
-    void SetPos(int x, int y);
-    void SetLink(const wxString& link);
+    wxHtmlContainerCell* GetParent();
+    void SetLink(const wxHtmlLinkInfo& link);
     void SetNext(wxHtmlCell *cell);
+    void SetParent(wxHtmlContainerCell *p);
+    void SetPos(int x, int y);
     void Layout(int w);
     void Draw(wxDC& dc, int x, int y, int view_y1, int view_y2);
     void DrawInvisible(wxDC& dc, int x, int y);
@@ -329,6 +338,7 @@ public:
 
     bool AdjustPagebreak(int * pagebreak);
     void SetCanLiveOnPagebreak(bool can);
+
 };
 
 
@@ -354,6 +364,13 @@ public:
     wxHtmlCell* GetFirstCell();
 };
 
+
+
+class wxHtmlColourCell : public wxHtmlCell {
+public:
+    wxHtmlColourCell(wxColour clr, int flags = wxHTML_CLR_FOREGROUND);
+
+};
 
 
 
@@ -392,13 +409,29 @@ public:
                    const wxString& name = "htmlWindow")
         : wxHtmlWindow(parent, id, pos, size, style, name)  {};
 
-    DEC_PYCALLBACK__STRING(OnLinkClicked);
 
+    void OnLinkClicked(wxHtmlLinkInfo* link);
+    void base_OnLinkClicked(wxHtmlLinkInfo* link);
+
+    DEC_PYCALLBACK__STRING(OnSetTitle);
     PYPRIVATE;
 };
 
-IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnLinkClicked);
+IMP_PYCALLBACK__STRING(wxPyHtmlWindow, wxHtmlWindow, OnSetTitle);
 
+void wxPyHtmlWindow::OnLinkClicked(wxHtmlLinkInfo* link) {
+    bool doSave = wxPyRestoreThread();
+    if (m_myInst.findCallback("OnLinkClicked")) {
+        PyObject* obj = wxPyConstructObject(link, "wxHtmlLinkInfo");
+        m_myInst.callCallback(Py_BuildValue("(O)", obj));
+    }
+    else
+        wxHtmlWindow::OnLinkClicked(link);
+    wxPySaveThread(doSave);
+}
+void wxPyHtmlWindow::base_OnLinkClicked(wxHtmlLinkInfo* link) {
+    wxHtmlWindow::OnLinkClicked(link);
+}
 %}
 
 
@@ -422,8 +455,7 @@ public:
     void SetRelatedFrame(wxFrame* frame, const char* format);
     wxFrame* GetRelatedFrame();
     void SetRelatedStatusBar(int bar);
-    void SetFonts(wxString normal_face, int normal_italic_mode,
-                  wxString fixed_face, int fixed_italic_mode, int *LIST);
+    void SetFonts(wxString normal_face, wxString fixed_face, int *LIST);
     void SetTitle(const char* title);
     void SetBorders(int b);
     void ReadCustomization(wxConfigBase *cfg, char* path = "");
@@ -435,7 +467,7 @@ public:
     wxHtmlWinParser* GetParser();
 
 
-    void base_OnLinkClicked(const char* link);
+    void base_OnSetTitle(const char* title);
 };
 
 // Static methods are mapped to stand-alone functions
