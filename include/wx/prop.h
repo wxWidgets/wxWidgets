@@ -26,6 +26,7 @@
 #include "wx/textctrl.h"
 #include "wx/gdicmn.h"
 #include "wx/layout.h"
+#include "wx/sizer.h"
 
 class wxWindow;
 class wxProperty;

@@ -92,6 +92,14 @@ public:
    virtual void Add( wxSizer *sizer, int option = 0, int flag = 0, int border = 0 );
    virtual void Add( int width, int height, int option = 0, int flag = 0, int border = 0  );
   
+   virtual void Prepend( wxWindow *window, int option = 0, int flag = 0, int border = 0 );
+   virtual void Prepend( wxSizer *sizer, int option = 0, int flag = 0, int border = 0 );
+   virtual void Prepend( int width, int height, int option = 0, int flag = 0, int border = 0  );
+   
+   virtual bool Remove( wxWindow *window );
+   virtual bool Remove( wxSizer *sizer );
+   virtual bool Remove( int pos );
+  
    void SetDimension( int x, int y, int width, int height );
   
    wxSize GetSize()

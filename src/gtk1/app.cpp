@@ -587,8 +587,6 @@ bool wxApp::Initialize()
     wxInitializeResourceSystem();
 #endif
 
-    wxImage::InitStandardHandlers();
-
     wxModule::RegisterModules();
     if (!wxModule::InitializeModules()) return FALSE;
 
@@ -621,8 +619,6 @@ void wxApp::CleanUp()
     wxDeleteStockObjects();
 
     wxDeleteStockLists();
-
-    wxImage::CleanUpHandlers();
 
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;

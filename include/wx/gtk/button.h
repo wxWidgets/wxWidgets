@@ -57,7 +57,7 @@ class wxButton: public wxControl
            const wxSize& size = wxDefaultSize, long style = 0,
            const wxValidator& validator = wxDefaultValidator,
            const wxString& name = wxButtonNameStr);
-    void SetDefault();
+    virtual void SetDefault();
     void SetLabel( const wxString &label );
     bool Enable( bool enable );
 

@@ -23,6 +23,7 @@
 #include "wx/list.h"
 #include "wx/control.h"
 #include "wx/bitmap.h"
+#include "wx/button.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -40,7 +41,7 @@ extern const wxChar *wxButtonNameStr;
 // wxBitmapButton
 //-----------------------------------------------------------------------------
 
-class wxBitmapButton: public wxControl
+class wxBitmapButton: public wxButton
 {
   DECLARE_DYNAMIC_CLASS(wxBitmapButton)
 
@@ -59,7 +60,7 @@ public:
                const wxSize& size = wxDefaultSize, long style = wxBU_AUTODRAW,
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxButtonNameStr);
-  void SetDefault();
+  virtual void SetDefault();
     
   void SetLabel( const wxString &label );
   wxString GetLabel() const;

@@ -105,7 +105,7 @@ static void gtk_bmpbutton_release_callback( GtkWidget *WXUNUSED(widget), wxBitma
 // wxBitmapButton
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxBitmapButton,wxButton)
 
 wxBitmapButton::wxBitmapButton()
 {

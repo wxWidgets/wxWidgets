@@ -172,11 +172,9 @@ public:
   wxButton*         m_confirmButton;  // A tick, as in VB
   wxButton*         m_cancelButton;   // A cross, as in VB
   wxButton*         m_editButton;     // Invokes the custom validator, if any
+  wxSizer*          m_middleSizer;
 
   bool              m_detailedEditing;     // E.g. using listbox for choices
-
-  static wxBitmap*  sm_tickBitmap;
-  static wxBitmap*  sm_crossBitmap;
 
   wxPanel*          m_propertyWindow; // Panel that the controls will appear on
   wxWindow*         m_managedWindow; // Frame or dialog

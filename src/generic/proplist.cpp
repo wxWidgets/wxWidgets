@@ -21,8 +21,20 @@
 #endif
 
 #ifndef WX_PRECOMP
-#include "wx/wx.h"
+#include "wx/window.h"
+#include "wx/font.h"
+#include "wx/button.h"
+#include "wx/bmpbuttn.h"
+#include "wx/textctrl.h"
+#include "wx/listbox.h"
+#include "wx/settings.h"
+#include "wx/msgdlg.h"
+#include "wx/filedlg.h"
 #endif
+
+#include "wx/sizer.h"
+#include "wx/module.h"
+#include "wx/intl.h"
 
 #include "wx/colordlg.h"
 #include "wx/proplist.h"
@@ -31,6 +43,19 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+
+#ifndef __WXMSW__
+#include "wx/generic/cross.xpm"
+#include "wx/generic/tick.xpm"
+#endif
+
+
+/*
+ * global data, urgh.
+ */
+
+static wxBitmap* gs_tickBitmap = (wxBitmap*) NULL;
+static wxBitmap* gs_crossBitmap = (wxBitmap*) NULL;
 
 
 /*
@@ -60,6 +85,8 @@ void wxPropertyTextEdit::OnKillFocus(void)
  * Property list view
  */
 
+bool wxPropertyListView::sm_dialogCancelled = FALSE;
+
 IMPLEMENT_DYNAMIC_CLASS(wxPropertyListView, wxPropertyView)
 
 BEGIN_EVENT_TABLE(wxPropertyListView, wxPropertyView)
@@ -75,10 +102,6 @@ BEGIN_EVENT_TABLE(wxPropertyListView, wxPropertyView)
                                         wxPropertyListView::OnPropertyDoubleClick)
     EVT_LISTBOX(wxID_PROP_VALUE_SELECT, wxPropertyListView::OnValueListSelect)
 END_EVENT_TABLE()
-
-bool wxPropertyListView::sm_dialogCancelled = FALSE;
-wxBitmap *wxPropertyListView::sm_tickBitmap = NULL;
-wxBitmap *wxPropertyListView::sm_crossBitmap = NULL;
 
 wxPropertyListView::wxPropertyListView(wxPanel *propPanel, long flags):wxPropertyView(flags)
 {
@@ -100,12 +123,6 @@ wxPropertyListView::wxPropertyListView(wxPanel *propPanel, long flags):wxPropert
 
 wxPropertyListView::~wxPropertyListView(void)
 {
-/*
-  if (m_tickBitmap)
-    delete m_tickBitmap;
-  if (m_crossBitmap)
-    delete m_crossBitmap;
-*/
 }
 
 void wxPropertyListView::ShowView(wxPropertySheet *ps, wxPanel *panel)
@@ -389,258 +406,122 @@ void wxPropertyListView::OnPropertySelect(wxCommandEvent& WXUNUSED(event))
   }
 }
 
-bool wxPropertyListView::CreateControls(void)
+bool wxPropertyListView::CreateControls()
 {
-  wxPanel *panel = (wxPanel *)m_propertyWindow;
+    wxPanel *panel = (wxPanel *)m_propertyWindow;
 
-  int largeButtonWidth = 60;
-  int largeButtonHeight = 25;
+    wxSize largeButtonSize( 60, 25 );
+    wxSize smallButtonSize( 23, 23 );
 
-  int smallButtonWidth = 25;
-  int smallButtonHeight = 20;
+    if (m_valueText)
+        return TRUE;
 
-  // XView must be allowed to choose its own sized buttons
-#ifdef __XVIEW__
-  largeButtonWidth = -1;
-  largeButtonHeight = -1;
+    if (!panel)
+        return FALSE;
 
-  smallButtonWidth = -1;
-  smallButtonHeight = -1;
-#endif
-
-  if (m_valueText)
-    return TRUE;
-
-  if (!panel)
-    return FALSE;
-
-  wxWindow *leftMostWindow = panel;
-/*
-  wxWindow *topMostWindow = panel;
-  wxWindow *rightMostWindow = panel;
-*/
-
-  wxSystemSettings settings;
-  wxFont guiFont = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
+    wxSystemSettings settings;
+    wxFont guiFont = settings.GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
 #ifdef __WXMSW__
-  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL, FALSE, "Courier New");
+    wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxMODERN, wxNORMAL, wxNORMAL, FALSE, "Courier New");
 #else
-  wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxTELETYPE, wxNORMAL, wxNORMAL);
+    wxFont *boringFont = wxTheFontList->FindOrCreateFont(guiFont.GetPointSize(), wxTELETYPE, wxNORMAL, wxNORMAL);
 #endif
 
-  // May need to be changed in future to eliminate clashes with app.
-  // WHAT WAS THIS FOR?
+    // May need to be changed in future to eliminate clashes with app.
+    // WHAT WAS THIS FOR?
 //  panel->SetClientData((char *)this);
 
-  // These buttons are at the bottom of the window, but create them now
-  // so the constraints are evaluated in the correct order
-  if (m_buttonFlags & wxPROP_BUTTON_OK)
-  {
-    m_windowCloseButton = new wxButton(panel, wxID_OK, "OK",
-     wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-    m_windowCloseButton->SetDefault();
-    m_windowCloseButton->SetFocus();
-  }
-  else if (m_buttonFlags & wxPROP_BUTTON_CLOSE)
-  {
-    m_windowCloseButton = new wxButton(panel, wxID_OK, "Close",
-     wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-  }
-  if (m_buttonFlags & wxPROP_BUTTON_CANCEL)
-  {
-    m_windowCancelButton = new wxButton(panel, wxID_CANCEL, "Cancel",
-     wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-  }
-  if (m_buttonFlags & wxPROP_BUTTON_HELP)
-  {
-    m_windowHelpButton = new wxButton(panel, wxID_HELP, "Help",
-     wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
-  }
+    wxBoxSizer *mainsizer = new wxBoxSizer( wxVERTICAL );
+    
+    // top row with optional buttons and input line
 
-  if (m_windowCloseButton)
-  {
-    wxLayoutConstraints *c1 = new wxLayoutConstraints;
+    wxBoxSizer *topsizer = new wxBoxSizer( wxHORIZONTAL );
+    int buttonborder = 3;
 
-    c1->left.SameAs       (panel, wxLeft, 2);
-    c1->bottom.SameAs        (panel, wxBottom, 2);
-    c1->width.AsIs();
-    c1->height.AsIs();
-    m_windowCloseButton->SetConstraints(c1);
-    leftMostWindow = m_windowCloseButton;
-  }
-  if (m_windowCancelButton)
-  {
-    wxLayoutConstraints *c2 = new wxLayoutConstraints;
-
-    c2->right.SameAs       (panel, wxRight, 2);
-    c2->bottom.SameAs          (panel, wxBottom, 2);
-    c2->width.AsIs();
-    c2->height.AsIs();
-    m_windowCancelButton->SetConstraints(c2);
-    leftMostWindow = m_windowCancelButton;
-  }
-  if (m_windowHelpButton)
-  {
-    wxLayoutConstraints *c2 = new wxLayoutConstraints;
-    if (leftMostWindow == panel)
-      c2->left.SameAs       (panel, wxLeft, 2);
-    else
-      c2->left.RightOf      (leftMostWindow, 2);
-
-    c2->bottom.SameAs          (panel, wxBottom, 2);
-    c2->width.AsIs();
-    c2->height.AsIs();
-    m_windowHelpButton->SetConstraints(c2);
-    leftMostWindow = m_windowHelpButton;
-  }
-
-  if (m_buttonFlags & wxPROP_BUTTON_CHECK_CROSS)
-  {
-/*
-    if (!tickBitmap)
+    if (m_buttonFlags & wxPROP_BUTTON_CHECK_CROSS)
     {
-#ifdef __WXMSW__
-      tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
-      crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
-      if (!tickBitmap || !crossBitmap || !tickBitmap->Ok() || !crossBitmap->Ok())
-      {
-        if (tickBitmap)
-          delete tickBitmap;
-        if (crossBitmap)
-          delete crossBitmap;
-        tickBitmap = NULL;
-        crossBitmap = NULL;
-      }
-#endif
-    }
-*/
-/*
-    if (tickBitmap && crossBitmap)
-    {
-      m_confirmButton = new wxBitmapButton(panel, wxID_PROP_CHECK, tickBitmap,
-       wxPoint(-1, -1), wxSize(smallButtonWidth-5, smallButtonHeight-5));
-      m_cancelButton = new wxBitmapButton(panel, wxID_PROP_CROSS, crossBitmap,
-       wxPoint(-1, -1), wxSize(smallButtonWidth-5, smallButtonHeight-5));
-    }
-    else
-*/
-    {
-      m_confirmButton = new wxButton(panel, wxID_PROP_CHECK, ":-)",
-       wxPoint(-1, -1), wxSize(smallButtonWidth, smallButtonHeight));
-      m_cancelButton = new wxButton(panel, wxID_PROP_CROSS, "X",
-       wxPoint(-1, -1), wxSize(smallButtonWidth, smallButtonHeight));
+        if (gs_tickBitmap && gs_crossBitmap)
+        {
+            m_confirmButton = new wxBitmapButton(panel, wxID_PROP_CHECK, *gs_tickBitmap, wxPoint(-1, -1), smallButtonSize );
+            m_cancelButton = new wxBitmapButton(panel, wxID_PROP_CROSS, *gs_crossBitmap, wxPoint(-1, -1), smallButtonSize );
+        }
+        else
+        {
+            m_confirmButton = new wxButton(panel, wxID_PROP_CHECK, ":-)", wxPoint(-1, -1), smallButtonSize );
+	    m_cancelButton = new wxButton(panel, wxID_PROP_CROSS, "X", wxPoint(-1, -1), smallButtonSize );
+        }
+	
+	topsizer->Add( m_confirmButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
+	topsizer->Add( m_cancelButton, 0, wxLEFT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
     }
 
-    wxLayoutConstraints *c = new wxLayoutConstraints;
-    c->left.SameAs         (panel, wxLeft, 2);
-/*
-    if (windowCloseButton)
-      c->top.Below         (m_windowCloseButton, 2);
-    else
-*/
-      c->top.SameAs        (panel, wxTop, 2);
+    m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "", 
+       wxPoint(-1, -1), wxSize(-1, smallButtonSize.y), wxPROCESS_ENTER);
+    m_valueText->Enable(FALSE);
+    topsizer->Add( m_valueText, 1, wxALL | wxEXPAND, buttonborder );
+    
+    if (m_buttonFlags & wxPROP_PULLDOWN)
+    {
+        m_editButton = new wxButton(panel, wxID_PROP_EDIT, "...",  wxPoint(-1, -1), smallButtonSize);
+        m_editButton->Enable(FALSE);
+	topsizer->Add( m_editButton, 0, wxRIGHT|wxTOP|wxBOTTOM | wxEXPAND, buttonborder );
+    }
 
-    c->width.AsIs();
-    c->height.AsIs();
+    mainsizer->Add( topsizer, 0, wxEXPAND );
 
-    m_cancelButton->SetConstraints(c);
+    // middle section with two list boxes
 
-    c = new wxLayoutConstraints;
-    c->left.RightOf        (m_cancelButton, 2);
-    c->top.SameAs          (m_cancelButton, wxTop, 0);
-    c->width.AsIs();
-    c->height.AsIs();
+    m_middleSizer = new wxBoxSizer( wxVERTICAL );
 
-    m_confirmButton->SetConstraints(c);
+    m_valueList = new wxListBox(panel, wxID_PROP_VALUE_SELECT, wxPoint(-1, -1), wxSize(-1, 60));
+    m_valueList->Show(FALSE);
 
-    m_cancelButton->Enable(FALSE);
-    m_confirmButton->Enable(FALSE);
-  }
+    m_propertyScrollingList = new wxListBox(panel, wxID_PROP_SELECT, wxPoint(-1, -1), wxSize(100, 100));
+    m_propertyScrollingList->SetFont(* boringFont);
+    m_middleSizer->Add( m_propertyScrollingList, 1, wxALL|wxEXPAND, buttonborder );
 
-  if (m_buttonFlags & wxPROP_PULLDOWN)
-  {
-    m_editButton = new wxButton(panel, wxID_PROP_EDIT, "...",
-     wxPoint(-1, -1), wxSize(smallButtonWidth, smallButtonHeight));
-    m_editButton->Enable(FALSE);
-    wxLayoutConstraints *c = new wxLayoutConstraints;
+    mainsizer->Add( m_middleSizer, 1, wxEXPAND );    
 
-/*
-    if (m_windowCloseButton)
-      c->top.Below           (m_windowCloseButton, 2);
-    else
-*/
-      c->top.SameAs          (panel, wxTop, 2);
+    // bottom row with buttons
 
-    c->right.SameAs          (panel, wxRight, 2);
-    c->width.AsIs();
-    c->height.AsIs();
-    m_editButton->SetConstraints(c);
-  }
+    if ((m_buttonFlags & wxPROP_BUTTON_OK) ||
+        (m_buttonFlags & wxPROP_BUTTON_CLOSE) ||
+	(m_buttonFlags & wxPROP_BUTTON_CANCEL) ||
+	(m_buttonFlags & wxPROP_BUTTON_HELP))
+    {
+        wxBoxSizer *bottomsizer = new wxBoxSizer( wxHORIZONTAL );
+        buttonborder = 5;
+    
+        if (m_buttonFlags & wxPROP_BUTTON_OK)
+        {
+            m_windowCloseButton = new wxButton(panel, wxID_OK, _("OK"), wxPoint(-1, -1), largeButtonSize );
+            m_windowCloseButton->SetDefault();
+            m_windowCloseButton->SetFocus();
+            bottomsizer->Add( m_windowCloseButton, 0, wxLEFT|wxTOP|wxBOTTOM, buttonborder );
+        }
+        else if (m_buttonFlags & wxPROP_BUTTON_CLOSE)
+        {
+            m_windowCloseButton = new wxButton(panel, wxID_OK, _("Close"), wxPoint(-1, -1), largeButtonSize );
+            bottomsizer->Add( m_windowCloseButton, 0, wxALL, buttonborder );
+        }
+        if (m_buttonFlags & wxPROP_BUTTON_CANCEL)
+        {
+            m_windowCancelButton = new wxButton(panel, wxID_CANCEL, _("Cancel"), wxPoint(-1, -1), largeButtonSize );
+            bottomsizer->Add( m_windowCancelButton, 0, wxALL, buttonborder );
+        }
+        if (m_buttonFlags & wxPROP_BUTTON_HELP)
+        {
+            m_windowHelpButton = new wxButton(panel, wxID_HELP, _("Help"), wxPoint(-1, -1), largeButtonSize );
+            bottomsizer->Add( m_windowHelpButton, 0, wxALL, buttonborder );
+        }
+	
+        mainsizer->Add( bottomsizer, 1, wxALIGN_RIGHT | wxEXPAND );
+    }
 
-  m_valueText = new wxPropertyTextEdit(this, panel, wxID_PROP_TEXT, "", wxPoint(-1, -1), wxSize(-1, -1), wxPROCESS_ENTER);
-  m_valueText->Enable(FALSE);
+    panel->SetSizer( mainsizer );
 
-  wxLayoutConstraints *c = new wxLayoutConstraints;
-
-  if (m_cancelButton)
-    c->left.RightOf        (m_confirmButton, 2);
-  else
-    c->left.SameAs         (panel, wxLeft, 2);
-/*
-  if (m_windowCloseButton)
-    c->top.Below           (m_windowCloseButton, 2);
-  else
-*/
-    c->top.SameAs          (panel, wxTop, 2);
-
-  if (m_editButton)
-    c->right.LeftOf        (m_editButton, 2);
-  else
-    c->right.SameAs        (panel, wxRight, 2);
-  c->height.AsIs();
-
-  m_valueText->SetConstraints(c);
-
-  m_valueList = new wxListBox(panel, wxID_PROP_VALUE_SELECT, wxPoint(-1, -1), wxSize(-1, 60));
-  m_valueList->Show(FALSE);
-
-  c = new wxLayoutConstraints;
-
-  c->left.SameAs         (panel, wxLeft, 2);
-  c->top.Below           (m_valueText, 2);
-  c->right.SameAs        (panel, wxRight, 2);
-  c->height.Absolute(60);
-
-  m_valueList->SetConstraints(c);
-
-  m_propertyScrollingList = new wxListBox(panel, wxID_PROP_SELECT,
-    wxPoint(-1, -1), wxSize(300, 300));
-  m_propertyScrollingList->SetFont(* boringFont);
-
-  c = new wxLayoutConstraints;
-
-  c->left.SameAs         (panel, wxLeft, 2);
-
-  if (m_buttonFlags & wxPROP_DYNAMIC_VALUE_FIELD)
-    c->top.Below         (m_valueText, 2);
-  else
-    c->top.Below         (m_valueList, 2);
-
-  c->right.SameAs        (panel, wxRight, 2);
-
-  if (m_windowCloseButton)
-    c->bottom.Above       (m_windowCloseButton, -2);
-  else
-    c->bottom.SameAs       (panel, wxBottom, 2);
-
-  m_propertyScrollingList->SetConstraints(c);
-
-  // Note: if this is called now, it causes a GPF.
-  // Why?
-//  panel->Layout();
-
-  return TRUE;
+    return TRUE;
 }
 
 void wxPropertyListView::ShowTextControl(bool show)
@@ -651,30 +532,19 @@ void wxPropertyListView::ShowTextControl(bool show)
 
 void wxPropertyListView::ShowListBoxControl(bool show)
 {
-  if (m_valueList)
-  {
+    if (!m_valueList) return;
+    
     m_valueList->Show(show);
+    
     if (m_buttonFlags & wxPROP_DYNAMIC_VALUE_FIELD)
     {
-      wxLayoutConstraints *constraints = m_propertyScrollingList->GetConstraints();
-      if (constraints)
-      {
         if (show)
-        {
-          constraints->top.Below(m_valueList, 2);
-          // Maintain back-pointer so when valueList is deleted,
-          // any reference to it from this window is removed.
-          m_valueList->AddConstraintReference(m_propertyScrollingList);
-        }
-        else
-        {
-          constraints->top.Below(m_valueText, 2);
-          m_valueText->AddConstraintReference(m_propertyScrollingList);
-        }
+	    m_middleSizer->Prepend( m_valueList, 0, wxTOP|wxLEFT|wxRIGHT | wxEXPAND, 3 );
+	else
+	    m_middleSizer->Remove( 0 );
+      
         m_propertyWindow->Layout();
-      }
     }
-  }
 }
 
 void wxPropertyListView::EnableCheck(bool show)
@@ -1779,7 +1649,9 @@ bool wxListOfStringsListValidator::EditStringList(wxWindow *parent, wxStringList
   wxButton *cancelButton = new wxButton(dialog, wxID_CANCEL, "Cancel", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
   wxButton *okButton = new wxButton(dialog, wxID_OK, "OK", wxPoint(-1, -1), wxSize(largeButtonWidth, largeButtonHeight));
 
+#ifndef __WXGTK__
   okButton->SetDefault();
+#endif
 
   wxLayoutConstraints *c = new wxLayoutConstraints;
 
@@ -1948,5 +1820,49 @@ void wxPropertyStringListEditorDialog::ShowCurrentSelection(void)
   char *txt = (char *)node->Data();
   m_stringText->SetValue(txt);
   m_stringText->Enable(TRUE);
+}
+
+//-----------------------------------------------------------------------------
+// wxPropertyModule
+//-----------------------------------------------------------------------------
+
+class wxPropertyModule: public wxModule
+{
+  DECLARE_DYNAMIC_CLASS(wxPropertyModule)
+
+public:
+    wxPropertyModule() {}
+    bool OnInit();
+    void OnExit();
+};
+
+IMPLEMENT_DYNAMIC_CLASS(wxPropertyModule,wxModule)
+
+bool wxPropertyModule::OnInit()
+{
+#ifdef __WXMSW__
+    gs_tickBitmap = new wxBitmap("tick_bmp", wxBITMAP_TYPE_RESOURCE);
+    gs_crossBitmap =  new wxBitmap("cross_bmp", wxBITMAP_TYPE_RESOURCE);
+#else
+    gs_tickBitmap = new wxBitmap( tick_xpm );
+    gs_crossBitmap =  new wxBitmap( cross_xpm );
+#endif
+    if (!gs_tickBitmap || !gs_crossBitmap || !gs_tickBitmap->Ok() || !gs_crossBitmap->Ok())
+    {
+        if (gs_tickBitmap) delete gs_tickBitmap;
+	if (gs_crossBitmap) delete gs_crossBitmap;
+	gs_tickBitmap = (wxBitmap*) NULL;
+	gs_crossBitmap = (wxBitmap*) NULL;
+    }
+
+    return TRUE;
+}
+
+void wxPropertyModule::OnExit()
+{
+    if (gs_tickBitmap)
+        delete gs_tickBitmap;
+    if (gs_crossBitmap)
+        delete gs_crossBitmap;
 }
 

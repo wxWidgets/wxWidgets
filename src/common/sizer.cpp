@@ -197,6 +197,69 @@ void wxSizer::Add( int width, int height, int option, int flag, int border )
     m_children.Append( new wxSizerItem( width, height, option, flag, border ) );
 }
 
+void wxSizer::Prepend( wxWindow *window, int option, int flag, int border )
+{
+    m_children.Insert( new wxSizerItem( window, option, flag, border ) );
+}
+
+void wxSizer::Prepend( wxSizer *sizer, int option, int flag, int border )
+{
+    m_children.Insert( new wxSizerItem( sizer, option, flag, border ) );
+}
+
+void wxSizer::Prepend( int width, int height, int option, int flag, int border )
+{
+    m_children.Insert( new wxSizerItem( width, height, option, flag, border ) );
+}
+
+bool wxSizer::Remove( wxWindow *window )
+{
+    wxASSERT( window );
+    
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+	if (item->GetWindow() == window)
+	{
+            m_children.DeleteNode( node );
+	    return TRUE;
+	}
+        node = node->Next();
+    }
+    
+    return FALSE;
+}
+
+bool wxSizer::Remove( wxSizer *sizer )
+{
+    wxASSERT( sizer );
+    
+    wxNode *node = m_children.First();
+    while (node)
+    {
+        wxSizerItem *item = (wxSizerItem*)node->Data();
+	if (item->GetSizer() == sizer)
+	{
+            m_children.DeleteNode( node );
+	    return TRUE;
+	}
+        node = node->Next();
+    }
+    
+    return FALSE;
+}
+
+bool wxSizer::Remove( int pos )
+{
+    wxNode *node = m_children.Nth( pos );
+    if (!node) return FALSE;
+    
+    m_children.DeleteNode( node );
+    
+    return TRUE;
+}
+  
 void wxSizer::Fit( wxWindow *window )
 {
     window->SetSize( GetMinWindowSize( window ) );
@@ -204,7 +267,7 @@ void wxSizer::Fit( wxWindow *window )
 
 void wxSizer::Layout()
 {
-    m_size = CalcMin();
+    CalcMin();
     RecalcSizes();
 }
 
@@ -229,6 +292,7 @@ void wxSizer::SetDimension( int x, int y, int width, int height )
     m_position.y = y;
     m_size.x = width;
     m_size.y = height;
+    CalcMin();
     RecalcSizes();
 }
 
@@ -244,10 +308,7 @@ wxBoxSizer::wxBoxSizer( int orient )
 void wxBoxSizer::RecalcSizes()
 {
     if (m_children.GetCount() == 0)
-    {
-        SetDimension( m_position.x, m_position.y, 2, 2 );
         return;
-    }
     
     int delta = 0;
     int extra = 0;
