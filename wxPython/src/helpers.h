@@ -98,8 +98,8 @@ bool wxPoint2DDouble_helper(PyObject* source, wxPoint2DDouble** obj);
      (PyList_Check(o) ? PyList_GET_ITEM(o, i) : PyTuple_GET_ITEM(o, i))
 #endif
 
-bool _2int_seq_helper(PyObject* source, int* i1, int* i2);
-bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
+bool wxPy2int_seq_helper(PyObject* source, int* i1, int* i2);
+bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4);
 
 
 PyObject* wxArrayString2PyList_helper(const wxArrayString& arr);

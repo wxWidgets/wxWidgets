@@ -1882,7 +1882,7 @@ wxPen** wxPen_LIST_helper(PyObject* source) {
 }
 
 
-bool _2int_seq_helper(PyObject* source, int* i1, int* i2) {
+bool wxPy2int_seq_helper(PyObject* source, int* i1, int* i2) {
     bool isFast = PyList_Check(source) || PyTuple_Check(source);
     PyObject *o1, *o2;
 
@@ -1909,7 +1909,7 @@ bool _2int_seq_helper(PyObject* source, int* i1, int* i2) {
 }
 
 
-bool _4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
+bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
     bool isFast = PyList_Check(source) || PyTuple_Check(source);
     PyObject *o1, *o2, *o3, *o4;
 

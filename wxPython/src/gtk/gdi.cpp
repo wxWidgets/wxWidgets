@@ -7731,7 +7731,7 @@ static PyObject * wxDC__DrawPointList(wxDC *self,PyObject * pyPoints,PyObject * 
                 else {
                     obj = PySequence_GetItem(pyPoints, i);
                 }
-                if (! _2int_seq_helper(obj, &x1, &y1)) {
+                if (! wxPy2int_seq_helper(obj, &x1, &y1)) {
                     if (!isFastPens)
                         Py_DECREF(obj);
                     goto err0;
@@ -7856,7 +7856,7 @@ static PyObject * wxDC__DrawLineList(wxDC *self,PyObject * pyLines,PyObject * py
                 else {
                     obj = PySequence_GetItem(pyLines, i);
                 }
-                if (! _4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
+                if (! wxPy4int_seq_helper(obj, &x1, &y1, &x2, &y2)) {
                     if (!isFastPens)
                         Py_DECREF(obj);
                     goto err0;
