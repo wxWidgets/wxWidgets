@@ -996,7 +996,22 @@ lib_flags_for()
         if is_static; then
             _wxlibs="$_wxlibs ${libdir}/lib${_libname}.a"
             for f in $(eval echo \"\$ldlibs_$lib\"); do
-                _all_libs="$(remove_field $f $_all_libs) $f"
+
+                # Only propagate duplicate -libraries to their latest
+                # possible position.  Do not eliminate any other
+                # duplicates that might occur.  They should be fixed
+                # in configure long before they get here.
+                # This started as a workaround for Mac -framework,
+                # but it seems like a better policy in general, which
+                # will let the more heinous bugs in configure shake out.
+                # We should maybe filter *.a here too, but not unless
+                # we have to.
+                if echo "$f" | grep ^-l > /dev/null 2>&1 ; then
+                    _all_libs="$(remove_field $f $_all_libs) $f"
+                else
+                    _all_libs="$_all_libs $f"
+                fi
+
             done
         else
             _wxlibs="$_wxlibs -l${_libname}"
@@ -1018,7 +1033,11 @@ lib_flags_for()
 # output the list of libraries the main program should depend on
 #
 # of course, this duplication is bad but I'll leave to somebody else the care
-# of refactoring this as I don't see any way to do it
+# of refactoring this as I don't see any way to do it - VZ.
+
+# This (and the other cruft to support it) should be removed with
+# reference to the FIXME above when configure stops piping us a slurry
+# of options that need to be decomposed again for most practical uses - RL.
 link_deps_for()
 {
     _wxlibs=''
