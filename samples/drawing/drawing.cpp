@@ -377,6 +377,7 @@ MyCanvas::MyCanvas(MyFrame *parent)
     m_show = Show_Default;
     m_smile_bmp = wxBitmap(smile_xpm);
     m_std_icon = wxArtProvider::GetIcon(wxART_INFORMATION);
+    m_clip = FALSE;
 }
 
 void MyCanvas::DrawTestBrushes(wxDC& dc)
