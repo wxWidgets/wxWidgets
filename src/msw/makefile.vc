@@ -263,7 +263,7 @@ OBJECTS = $(COMMONOBJS) $(GENERICOBJS) $(MSWOBJS)
 # Normal, static library
 all:    dirs $(DUMMYOBJ) $(OBJECTS) $(PERIPH_TARGET) png zlib xpm $(LIBTARGET)
 
-dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D 
+dirs: $(MSWDIR)\$D $(COMMDIR)\$D $(GENDIR)\$D $(OLEDIR)\$D
 
 test:   $(MSWDIR)\$D\wave.obj
 test2:  ..\common\Debug\config.obj
@@ -308,7 +308,7 @@ dllnp:
 # In fact headers are compiled differently depending on whether a DLL is being made
 # or an app is calling the DLL exported functionality (WXDLLEXPORT is different
 # in each case) so you couldn't use the same PCH.
-pch:    
+pch:
         nmake -f makefile.vc pch1 WXUSINGDLL=1 FINAL=$(FINAL)
 
 pch1:   dirs $(DUMMYOBJ)
@@ -580,52 +580,52 @@ $(DOCDIR)/winhelp/techref.hlp:         $(DOCDIR)/latex/techref/techref.rtf $(DOC
 
 $(DOCDIR)/latex/wx/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
         cd $(DOCDIR)\latex\wx
-        -start /w tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/latex/wx/wx.rtf -twice -winhelp
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/latex/wx/wx.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)/latex/porting/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         cd $(DOCDIR)\latex\porting
-        -start /w tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/latex/porting/porting.rtf -twice -winhelp
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/latex/porting/porting.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)/latex/proplist/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
         cd $(DOCDIR)\latex\proplist
-        -start /w tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/prop.rtf -twice -winhelp
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/prop.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)/latex/techref/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
         cd $(DOCDIR)\latex\techref
-        -start /w tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/latex/techref/techref.rtf -twice -winhelp
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/latex/techref/techref.rtf -twice -winhelp
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/wx.rtf:         $(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/manual.tex
         cd $(DOCDIR)\latex\wx
         -copy *.bmp *.wmf $(DOCDIR)\pdf
-        -start /w tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/wx/manual.tex $(DOCDIR)/pdf/wx.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/porting.rtf:         $(DOCDIR)/latex/porting/porting.tex
         cd $(DOCDIR)\latex\porting
         -copy *.bmp *.wmf $(DOCDIR)\pdf
-        -start /w tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/pdf/porting.rtf -twice -rtf
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/porting/porting.tex $(DOCDIR)/pdf/porting.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/prop.rtf:         $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/latex/proplist/body.tex $(DOCDIR)/latex/proplist/classes.tex $(DOCDIR)/latex/proplist/changes.tex
         cd $(DOCDIR)\latex\proplist
         -copy *.bmp *.wmf $(DOCDIR)\pdf
-        -start /w tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/pdf/prop.rtf -twice -rtf
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/proplist/prop.tex $(DOCDIR)/pdf/prop.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)/pdf/techref.rtf:         $(DOCDIR)/latex/techref/techref.tex
         cd $(DOCDIR)\latex\techref
         -copy *.bmp *.wmf $(DOCDIR)\pdf
-        -start /w tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/pdf/techref.rtf -twice -rtf
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)/latex/techref/techref.tex $(DOCDIR)/pdf/techref.rtf -twice -rtf
         cd $(THISDIR)
 
 $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex\wx\body.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)\latex\wx\manual.tex
         cd $(DOCDIR)\latex\wx
         -mkdir $(DOCDIR)\html\wx
-        -start /w tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\wx\manual.tex $(DOCDIR)\html\wx\wx.htm -twice -html
         -erase $(DOCDIR)\html\wx\*.con
         -erase $(DOCDIR)\html\wx\*.ref
         -erase $(DOCDIR)\latex\wx\*.con
@@ -635,7 +635,7 @@ $(DOCDIR)\html\wx\wx.htm:         $(DOCDIR)\latex\wx\classes.tex $(DOCDIR)\latex
 $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
         cd $(DOCDIR)\latex\porting
         -mkdir $(DOCDIR)\html\porting
-        -start /w tex2rtf $(DOCDIR)\latex\porting\porting.tex $(DOCDIR)\html\porting\port.htm -twice -html
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\porting\porting.tex $(DOCDIR)\html\porting\port.htm -twice -html
         -erase $(DOCDIR)\html\porting\*.con
         -erase $(DOCDIR)\html\porting\*.ref
         -erase $(DOCDIR)\latex\porting\*.con
@@ -645,7 +645,7 @@ $(DOCDIR)\html\porting\port.htm:         $(DOCDIR)\latex\porting\porting.tex
 $(DOCDIR)\html\proplist\prop.htm:         $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\latex\proplist\body.tex $(DOCDIR)\latex\proplist\classes.tex $(DOCDIR)\latex\proplist\changes.tex
         cd $(DOCDIR)\latex\proplist
         -mkdir $(DOCDIR)\html\proplist
-        -start /w tex2rtf $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\html\proplist\prop.htm -twice -html
+        -start $(WAITFLAG) tex2rtf $(DOCDIR)\latex\proplist\prop.tex $(DOCDIR)\html\proplist\prop.htm -twice -html
         -erase $(DOCDIR)\html\proplist\*.con
         -erase $(DOCDIR)\html\proplist\*.ref
         -erase $(DOCDIR)\latex\proplist\*.con
@@ -709,5 +709,5 @@ updatedocs: touchmanual alldocs
 # Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
 # Office StartUp folder, and PDFMaker should be installed.
 updatepdf:  # touchmanual pdfrtf
-    start /w "winword d:\wx2\wxWindows\docs\latex\pdf\wx.rtf /mGeneratePDF"
+    start $(WAITFLAG) "winword d:\wx2\wxWindows\docs\latex\pdf\wx.rtf /mGeneratePDF"
 
