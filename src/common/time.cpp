@@ -36,11 +36,15 @@ seconds since January 1, 1901, GMT.
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
+#include <iomanip.h>
 #else
 #include <iostream>
+#include <iomanip>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
 #endif
 
-#include <iomanip.h>
 #include <string.h>
 
 #if !USE_SHARED_LIBRARY

@@ -25,6 +25,9 @@
 #include <iostream.h>
 #else
 #include <iostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
 #endif
 
 /*

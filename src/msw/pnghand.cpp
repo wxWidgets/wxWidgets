@@ -24,7 +24,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#if wxUSE_IOSTREAMH
 #include <fstream.h>
+#else
+#include <fstream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
+
 #include <windows.h>
 #include <wx/msw/pngread.h>
 #include <wx/msw/dibutils.h>

@@ -34,7 +34,15 @@
 
 #include <windows.h>
 #include <stdlib.h>
-#include "fstream.h"
+
+#if wxUSE_IOSTREAMH
+#include <fstream.h>
+#else
+#include <fstream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -508,7 +516,8 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 
   Clear();
 
-  ifstream input(WXSTRINGCAST file, ios::nocreate | ios::in);
+//  ifstream input(WXSTRINGCAST file, ios::nocreate | ios::in);
+  ifstream input(WXSTRINGCAST file, ios::in);
 
   if (!input.bad())
   {

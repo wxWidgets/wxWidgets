@@ -53,11 +53,14 @@
 
 #if wxUSE_IOSTREAMH
 #include <iostream.h>
+#include <fstream.h>
 #else
 #include <iostream>
+#include <fstream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
 #endif
-
-#include "fstream.h"
 
 #if !USE_SHARED_LIBRARY
 IMPLEMENT_ABSTRACT_CLASS(wxDocument, wxEvtHandler)

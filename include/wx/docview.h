@@ -36,8 +36,16 @@ class WXDLLEXPORT wxCommandProcessor;
 class WXDLLEXPORT wxFileHistory;
 class WXDLLEXPORT wxConfigBase;
 
-class WXDLLIMPORT ostream;
-class WXDLLIMPORT istream;
+#if wxUSE_IOSTREAMH
+#  include <istream.h>
+#  include <ostream.h>
+#else
+#  include <istream>
+#  include <ostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 
 // Document manager flags
 #define wxDOC_SDI       1

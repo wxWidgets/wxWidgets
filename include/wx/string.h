@@ -919,7 +919,17 @@ inline bool operator>=(const char  * s1, const wxString& s2) { return s2.Cmp(s1)
 #ifdef  STD_STRING_COMPATIBILITY
 
 // fwd decl
-class WXDLLEXPORT istream;
+// Known not to work with wxUSE_IOSTREAMH set to 0, so
+// replacing with includes (on advice of ungod@pasdex.com.au)
+// class WXDLLEXPORT istream;
+#if wxUSE_IOSTREAMH
+#include <istream.h>
+#else
+#include <istream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 
 istream& WXDLLEXPORT operator>>(istream& is, wxString& str);
 

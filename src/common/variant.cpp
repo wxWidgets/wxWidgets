@@ -20,7 +20,14 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_IOSTREAMH
 #include <fstream.h>
+#else
+#include <fstream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 
 #include "wx/string.h"
 #include "wx/variant.h"

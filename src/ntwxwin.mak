@@ -29,7 +29,7 @@ CPU=i386
 OBJSUFF=obj
 SRCSUFF=cpp
 
-WINFLAGS=-c -W3 -Dtry=__try -Dexcept=__except -Dleave=__leave -Dfinally=__finally -DCRTAPI1=_cdecl -DCRTAPI2=_cdecl -nologo -D_X86_=1 -DWIN32 -D__WIN32__ $(WINVERSION)
+WINFLAGS=-c -W3 -DCRTAPI1=_cdecl -DCRTAPI2=_cdecl -nologo -D_X86_=1 -DWIN32 -D__WIN32__ $(WINVERSION)
 #WINLINKFLAGS=/NODEFAULTLIB /INCREMENTAL:NO /NOLOGO -align:0x1000 -machine:$(CPU) -subsystem:windows,$(APPVER)
 WINLINKFLAGS=/INCREMENTAL:NO /NOLOGO -align:0x1000 -machine:$(CPU) -subsystem:windows,$(APPVER)
 #WINLIBS=kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib libc.lib oldnames.lib\
@@ -168,8 +168,4 @@ LINKFLAGS=$(LINK_DEBUG_FLAGS) -machine:i386 -subsystem:windows,$(APPVER) -dll # 
 !endif
 
 DUMMYOBJ=$(WXDIR)\src\msw\$(DUMMY).obj
-
-
-
-
 

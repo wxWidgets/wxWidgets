@@ -96,6 +96,18 @@ extern const char *g_szNul = &g_strEmpty.dummy;
   #define   NAMESPACE
 #endif  //Visual C++
 
+#if wxUSE_IOSTREAMH
+#include <iostream.h>
+#define   NAMESPACE
+#else
+#include <iostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#define   NAMESPACE   std::
+#endif
+
+
 NAMESPACE istream& operator>>(NAMESPACE istream& is, wxString& WXUNUSED(str))
 {
 #if 0

@@ -52,10 +52,18 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
-class wxTextCtrl;
-class wxLogFrame;
-class wxFrame;
-class ostream;
+class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxLogFrame;
+class WXDLLEXPORT wxFrame;
+
+#if wxUSE_IOSTREAMH
+#  include <ostream.h>
+#else
+#  include <ostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 
 // ----------------------------------------------------------------------------
 // derive from this class to redirect (or suppress, or ...) log messages
@@ -166,7 +174,6 @@ private:
 };
 
 // log everything to an "ostream", cerr by default
-class ostream;
 class WXDLLEXPORT wxLogStream : public wxLog
 {
 public:
@@ -356,9 +363,6 @@ DECLARE_LOG_FUNCTION2(SysError, long lErrCode);
 //  debugger, thus enabling/disabling verbose reporting for some
 //  parts of the program only)
 WXDLLEXPORT_DATA(extern bool) g_bVerbose;
-
-// fwd decl to avoid including iostream.h here
-class ostream;
 
 // ----------------------------------------------------------------------------
 // get error code/error message from system in a portable way

@@ -30,12 +30,20 @@ class WXDLLEXPORT wxObject;
 #endif
 
 class WXDLLEXPORT wxClassInfo;
-class WXDLLIMPORT ostream;
 class WXDLLEXPORT wxInputStream;
 class WXDLLEXPORT wxObjectInputStream;
 class WXDLLEXPORT wxObjectOutputStream;
 class WXDLLEXPORT wxHashTable;
 class WXDLLEXPORT wxObject_Serialize;
+
+#if wxUSE_IOSTREAMH
+#  include <ostream.h>
+#else
+#  include <ostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 
 /*
  * Dynamic object system declarations

@@ -28,9 +28,12 @@
 #include <stddef.h>
 
 #if wxUSE_IOSTREAMH
-#include <iostream.h>
+#  include <ostream.h>
 #else
-#include <iostream>
+#  include <ostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
 #endif
 
 #include "wx/string.h"

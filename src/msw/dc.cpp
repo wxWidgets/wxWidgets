@@ -33,7 +33,6 @@
 
 #include <string.h>
 #include <math.h>
-#include <fstream.h>
 
 #if wxUSE_COMMON_DIALOGS
 #include <commdlg.h>

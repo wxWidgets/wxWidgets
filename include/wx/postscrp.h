@@ -34,7 +34,15 @@ public:
     void OnExit();
 };
 
-class WXDLLIMPORT ofstream;
+#if wxUSE_IOSTREAMH
+#  include <fstream.h>
+#else
+#  include <fstream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
+
 class WXDLLEXPORT wxPostScriptDC: public wxDC
 {
   DECLARE_DYNAMIC_CLASS(wxPostScriptDC)

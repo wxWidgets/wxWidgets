@@ -186,6 +186,8 @@ const wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING =          wxEVT_FIRST + 801;
 const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED =     wxEVT_FIRST + 802;
 const wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING =    wxEVT_FIRST + 803;
 
+const wxEventType wxEVT_USER_FIRST =                        wxEVT_FIRST + 2000;
+
 // Compatibility
 
 #if WXWIN_COMPATIBILITY

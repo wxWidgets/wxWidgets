@@ -37,7 +37,14 @@
 
 #if WXDEBUG || wxUSE_DEBUG_CONTEXT
   // for wxObject::Dump
-  #include <iostream.h>
+#if wxUSE_IOSTREAMH
+#  include <iostream.h>
+#else
+#  include <iostream>
+#  ifdef _MSC_VER
+      using namespace std;
+#  endif
+#endif
 #endif
 
 #if !USE_SHARED_LIBRARY

@@ -10,7 +10,7 @@
 # See zconf.h for details about the memory requirements.
 
 # ------------- Turbo C++, Borland C++ -------------
-CFLAGS=-O2 /MDd /GX
+CFLAGS=-O2 /MD /GX
 CC=cl
 LD=cl
 LIB=tlib
@@ -82,7 +82,7 @@ $(LIBOBJECTS)
 <<
 
 clean:
-	-erase *.obj
-	-erase *.exe
-        -erase *.sbr
-        -erase $(LIBTARGET)
+    -erase *.obj
+    -erase *.exe
+    -erase *.sbr
+    -erase $(LIBTARGET)

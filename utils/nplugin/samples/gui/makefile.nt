@@ -43,7 +43,7 @@ $(PROGRAM).dll: $(DUMMYOBJ) $(OBJECTS) $(WXDIR)\lib\wx.lib $(PLUGINLIB) $(PROGRA
     -out:$(PROGRAM).dll   \
     -def:$(PROGRAM).def \
     $(DUMMYOBJ) $(OBJECTS) $(PROGRAM).res $(WXDIR)\lib\wx.lib $(PLUGINLIB) \
-    $(guilibsdll) msvcrt.lib shell32.lib comctl32.lib ctl3d32.lib
+    $(guilibsdll) shell32.lib comctl32.lib ctl3d32.lib
 
 gui.obj:      gui.$(SRCSUFF) gui.h $(DUMMYOBJ)
         $(cc) @<<

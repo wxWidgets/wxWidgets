@@ -26,7 +26,6 @@
 
 #include "wx/dcprint.h"
 #include "math.h"
-#include "fstream.h"
 
 #include <windows.h>
 
