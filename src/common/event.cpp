@@ -47,15 +47,6 @@
 #endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
-// event constants
-// ----------------------------------------------------------------------------
-
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxEventType wxEVT_NULL = 0;
-    wxEventType wxEVT_FIRST = 10000;
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
-
-// ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
 
@@ -117,212 +108,218 @@ wxList *wxPendingEvents = (wxList *)NULL;
 
 #if !WXWIN_COMPATIBILITY_EVENT_TYPES
 
-wxEventType wxEVT_COMMAND_BUTTON_CLICKED;
-wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED;
-wxEventType wxEVT_COMMAND_CHOICE_SELECTED;
-wxEventType wxEVT_COMMAND_LISTBOX_SELECTED;
-wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
-wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED;
-wxEventType wxEVT_COMMAND_TEXT_UPDATED;
-wxEventType wxEVT_COMMAND_TEXT_ENTER;
-wxEventType wxEVT_COMMAND_MENU_SELECTED;
-wxEventType wxEVT_COMMAND_SLIDER_UPDATED;
-wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED;
-wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED;
-wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED;
-wxEventType wxEVT_COMMAND_VLBOX_SELECTED;
-wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED;
-wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
-wxEventType wxEVT_COMMAND_TOOL_ENTER;
-wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED;
+wxEventType wxEVT_COMMAND_BUTTON_CLICKED = wxNewEventType();
+wxEventType wxEVT_COMMAND_CHECKBOX_CLICKED = wxNewEventType();
+wxEventType wxEVT_COMMAND_CHOICE_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_LISTBOX_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_LISTBOX_DOUBLECLICKED = wxNewEventType();
+wxEventType wxEVT_COMMAND_CHECKLISTBOX_TOGGLED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TEXT_UPDATED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TEXT_ENTER = wxNewEventType();
+wxEventType wxEVT_COMMAND_MENU_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_SLIDER_UPDATED = wxNewEventType();
+wxEventType wxEVT_COMMAND_RADIOBOX_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_RADIOBUTTON_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_SCROLLBAR_UPDATED = wxNewEventType();
+wxEventType wxEVT_COMMAND_VLBOX_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TOOL_RCLICKED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TOOL_ENTER = wxNewEventType();
+wxEventType wxEVT_COMMAND_SPINCTRL_UPDATED = wxNewEventType();
 
 // Sockets and timers send events, too
-wxEventType wxEVT_SOCKET;
-wxEventType wxEVT_TIMER;
+wxEventType wxEVT_SOCKET = wxNewEventType();
+wxEventType wxEVT_TIMER = wxNewEventType();
 
 // Mouse event types
-wxEventType wxEVT_LEFT_DOWN;
-wxEventType wxEVT_LEFT_UP;
-wxEventType wxEVT_MIDDLE_DOWN;
-wxEventType wxEVT_MIDDLE_UP;
-wxEventType wxEVT_RIGHT_DOWN;
-wxEventType wxEVT_RIGHT_UP;
-wxEventType wxEVT_MOTION;
-wxEventType wxEVT_ENTER_WINDOW;
-wxEventType wxEVT_LEAVE_WINDOW;
-wxEventType wxEVT_LEFT_DCLICK;
-wxEventType wxEVT_MIDDLE_DCLICK;
-wxEventType wxEVT_RIGHT_DCLICK;
-wxEventType wxEVT_SET_FOCUS;
-wxEventType wxEVT_KILL_FOCUS;
+wxEventType wxEVT_LEFT_DOWN = wxNewEventType();
+wxEventType wxEVT_LEFT_UP = wxNewEventType();
+wxEventType wxEVT_MIDDLE_DOWN = wxNewEventType();
+wxEventType wxEVT_MIDDLE_UP = wxNewEventType();
+wxEventType wxEVT_RIGHT_DOWN = wxNewEventType();
+wxEventType wxEVT_RIGHT_UP = wxNewEventType();
+wxEventType wxEVT_MOTION = wxNewEventType();
+wxEventType wxEVT_ENTER_WINDOW = wxNewEventType();
+wxEventType wxEVT_LEAVE_WINDOW = wxNewEventType();
+wxEventType wxEVT_LEFT_DCLICK = wxNewEventType();
+wxEventType wxEVT_MIDDLE_DCLICK = wxNewEventType();
+wxEventType wxEVT_RIGHT_DCLICK = wxNewEventType();
+wxEventType wxEVT_SET_FOCUS = wxNewEventType();
+wxEventType wxEVT_KILL_FOCUS = wxNewEventType();
 
 // Non-client mouse events
-wxEventType wxEVT_NC_LEFT_DOWN;
-wxEventType wxEVT_NC_LEFT_UP;
-wxEventType wxEVT_NC_MIDDLE_DOWN;
-wxEventType wxEVT_NC_MIDDLE_UP;
-wxEventType wxEVT_NC_RIGHT_DOWN;
-wxEventType wxEVT_NC_RIGHT_UP;
-wxEventType wxEVT_NC_MOTION;
-wxEventType wxEVT_NC_ENTER_WINDOW;
-wxEventType wxEVT_NC_LEAVE_WINDOW;
-wxEventType wxEVT_NC_LEFT_DCLICK;
-wxEventType wxEVT_NC_MIDDLE_DCLICK;
-wxEventType wxEVT_NC_RIGHT_DCLICK;
+wxEventType wxEVT_NC_LEFT_DOWN = wxNewEventType();
+wxEventType wxEVT_NC_LEFT_UP = wxNewEventType();
+wxEventType wxEVT_NC_MIDDLE_DOWN = wxNewEventType();
+wxEventType wxEVT_NC_MIDDLE_UP = wxNewEventType();
+wxEventType wxEVT_NC_RIGHT_DOWN = wxNewEventType();
+wxEventType wxEVT_NC_RIGHT_UP = wxNewEventType();
+wxEventType wxEVT_NC_MOTION = wxNewEventType();
+wxEventType wxEVT_NC_ENTER_WINDOW = wxNewEventType();
+wxEventType wxEVT_NC_LEAVE_WINDOW = wxNewEventType();
+wxEventType wxEVT_NC_LEFT_DCLICK = wxNewEventType();
+wxEventType wxEVT_NC_MIDDLE_DCLICK = wxNewEventType();
+wxEventType wxEVT_NC_RIGHT_DCLICK = wxNewEventType();
 
 // Character input event type
-wxEventType wxEVT_CHAR;
-wxEventType wxEVT_CHAR_HOOK;
-wxEventType wxEVT_NAVIGATION_KEY;
-wxEventType wxEVT_KEY_DOWN;
-wxEventType wxEVT_KEY_UP;
+wxEventType wxEVT_CHAR = wxNewEventType();
+wxEventType wxEVT_CHAR_HOOK = wxNewEventType();
+wxEventType wxEVT_NAVIGATION_KEY = wxNewEventType();
+wxEventType wxEVT_KEY_DOWN = wxNewEventType();
+wxEventType wxEVT_KEY_UP = wxNewEventType();
 
 // Set cursor event
-wxEventType wxEVT_SET_CURSOR;
+wxEventType wxEVT_SET_CURSOR = wxNewEventType();
 
 // wxScrollbar and wxSlider event identifiers
-wxEventType wxEVT_SCROLL_TOP;
-wxEventType wxEVT_SCROLL_BOTTOM;
-wxEventType wxEVT_SCROLL_LINEUP;
-wxEventType wxEVT_SCROLL_LINEDOWN;
-wxEventType wxEVT_SCROLL_PAGEUP;
-wxEventType wxEVT_SCROLL_PAGEDOWN;
-wxEventType wxEVT_SCROLL_THUMBTRACK;
-wxEventType wxEVT_SCROLL_THUMBRELEASE;
+wxEventType wxEVT_SCROLL_TOP = wxNewEventType();
+wxEventType wxEVT_SCROLL_BOTTOM = wxNewEventType();
+wxEventType wxEVT_SCROLL_LINEUP = wxNewEventType();
+wxEventType wxEVT_SCROLL_LINEDOWN = wxNewEventType();
+wxEventType wxEVT_SCROLL_PAGEUP = wxNewEventType();
+wxEventType wxEVT_SCROLL_PAGEDOWN = wxNewEventType();
+wxEventType wxEVT_SCROLL_THUMBTRACK = wxNewEventType();
+wxEventType wxEVT_SCROLL_THUMBRELEASE = wxNewEventType();
 
 // Scroll events from wxWindow
-wxEventType wxEVT_SCROLLWIN_TOP;
-wxEventType wxEVT_SCROLLWIN_BOTTOM;
-wxEventType wxEVT_SCROLLWIN_LINEUP;
-wxEventType wxEVT_SCROLLWIN_LINEDOWN;
-wxEventType wxEVT_SCROLLWIN_PAGEUP;
-wxEventType wxEVT_SCROLLWIN_PAGEDOWN;
-wxEventType wxEVT_SCROLLWIN_THUMBTRACK;
-wxEventType wxEVT_SCROLLWIN_THUMBRELEASE;
+wxEventType wxEVT_SCROLLWIN_TOP = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_BOTTOM = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_LINEUP = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_LINEDOWN = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_PAGEUP = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_PAGEDOWN = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_THUMBTRACK = wxNewEventType();
+wxEventType wxEVT_SCROLLWIN_THUMBRELEASE = wxNewEventType();
 
 // System events
-wxEventType wxEVT_SIZE;
-wxEventType wxEVT_MOVE;
-wxEventType wxEVT_CLOSE_WINDOW;
-wxEventType wxEVT_END_SESSION;
-wxEventType wxEVT_QUERY_END_SESSION;
-wxEventType wxEVT_ACTIVATE_APP;
-wxEventType wxEVT_POWER;
-wxEventType wxEVT_ACTIVATE;
-wxEventType wxEVT_CREATE;
-wxEventType wxEVT_DESTROY;
-wxEventType wxEVT_SHOW;
-wxEventType wxEVT_ICONIZE;
-wxEventType wxEVT_MAXIMIZE;
-wxEventType wxEVT_MOUSE_CAPTURE_CHANGED;
-wxEventType wxEVT_PAINT;
-wxEventType wxEVT_ERASE_BACKGROUND;
-wxEventType wxEVT_NC_PAINT;
-wxEventType wxEVT_PAINT_ICON;
-wxEventType wxEVT_MENU_CHAR;
-wxEventType wxEVT_MENU_INIT;
-wxEventType wxEVT_MENU_HIGHLIGHT;
-wxEventType wxEVT_POPUP_MENU_INIT;
-wxEventType wxEVT_CONTEXT_MENU;
-wxEventType wxEVT_SYS_COLOUR_CHANGED;
-wxEventType wxEVT_SETTING_CHANGED;
-wxEventType wxEVT_QUERY_NEW_PALETTE;
-wxEventType wxEVT_PALETTE_CHANGED;
-wxEventType wxEVT_JOY_BUTTON_DOWN;
-wxEventType wxEVT_JOY_BUTTON_UP;
-wxEventType wxEVT_JOY_MOVE;
-wxEventType wxEVT_JOY_ZMOVE;
-wxEventType wxEVT_DROP_FILES;
-wxEventType wxEVT_DRAW_ITEM;
-wxEventType wxEVT_MEASURE_ITEM;
-wxEventType wxEVT_COMPARE_ITEM;
-wxEventType wxEVT_INIT_DIALOG;
-wxEventType wxEVT_IDLE;
-wxEventType wxEVT_UPDATE_UI;
+wxEventType wxEVT_SIZE = wxNewEventType();
+wxEventType wxEVT_MOVE = wxNewEventType();
+wxEventType wxEVT_CLOSE_WINDOW = wxNewEventType();
+wxEventType wxEVT_END_SESSION = wxNewEventType();
+wxEventType wxEVT_QUERY_END_SESSION = wxNewEventType();
+wxEventType wxEVT_ACTIVATE_APP = wxNewEventType();
+wxEventType wxEVT_POWER = wxNewEventType();
+wxEventType wxEVT_ACTIVATE = wxNewEventType();
+wxEventType wxEVT_CREATE = wxNewEventType();
+wxEventType wxEVT_DESTROY = wxNewEventType();
+wxEventType wxEVT_SHOW = wxNewEventType();
+wxEventType wxEVT_ICONIZE = wxNewEventType();
+wxEventType wxEVT_MAXIMIZE = wxNewEventType();
+wxEventType wxEVT_MOUSE_CAPTURE_CHANGED = wxNewEventType();
+wxEventType wxEVT_PAINT = wxNewEventType();
+wxEventType wxEVT_ERASE_BACKGROUND = wxNewEventType();
+wxEventType wxEVT_NC_PAINT = wxNewEventType();
+wxEventType wxEVT_PAINT_ICON = wxNewEventType();
+wxEventType wxEVT_MENU_CHAR = wxNewEventType();
+wxEventType wxEVT_MENU_INIT = wxNewEventType();
+wxEventType wxEVT_MENU_HIGHLIGHT = wxNewEventType();
+wxEventType wxEVT_POPUP_MENU_INIT = wxNewEventType();
+wxEventType wxEVT_CONTEXT_MENU = wxNewEventType();
+wxEventType wxEVT_SYS_COLOUR_CHANGED = wxNewEventType();
+wxEventType wxEVT_SETTING_CHANGED = wxNewEventType();
+wxEventType wxEVT_QUERY_NEW_PALETTE = wxNewEventType();
+wxEventType wxEVT_PALETTE_CHANGED = wxNewEventType();
+wxEventType wxEVT_JOY_BUTTON_DOWN = wxNewEventType();
+wxEventType wxEVT_JOY_BUTTON_UP = wxNewEventType();
+wxEventType wxEVT_JOY_MOVE = wxNewEventType();
+wxEventType wxEVT_JOY_ZMOVE = wxNewEventType();
+wxEventType wxEVT_DROP_FILES = wxNewEventType();
+wxEventType wxEVT_DRAW_ITEM = wxNewEventType();
+wxEventType wxEVT_MEASURE_ITEM = wxNewEventType();
+wxEventType wxEVT_COMPARE_ITEM = wxNewEventType();
+wxEventType wxEVT_INIT_DIALOG = wxNewEventType();
+wxEventType wxEVT_IDLE = wxNewEventType();
+wxEventType wxEVT_UPDATE_UI = wxNewEventType();
 
 // System misc.
-wxEventType wxEVT_END_PROCESS;
+wxEventType wxEVT_END_PROCESS = wxNewEventType();
 
 // Dial up events
-wxEventType wxEVT_DIALUP_CONNECTED;
-wxEventType wxEVT_DIALUP_DISCONNECTED;
+wxEventType wxEVT_DIALUP_CONNECTED = wxNewEventType();
+wxEventType wxEVT_DIALUP_DISCONNECTED = wxNewEventType();
 
 // Generic command events
 // Note: a click is a higher-level event than button down/up
-wxEventType wxEVT_COMMAND_LEFT_CLICK;
-wxEventType wxEVT_COMMAND_LEFT_DCLICK;
-wxEventType wxEVT_COMMAND_RIGHT_CLICK;
-wxEventType wxEVT_COMMAND_RIGHT_DCLICK;
-wxEventType wxEVT_COMMAND_SET_FOCUS;
-wxEventType wxEVT_COMMAND_KILL_FOCUS;
-wxEventType wxEVT_COMMAND_ENTER;
+wxEventType wxEVT_COMMAND_LEFT_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_LEFT_DCLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_RIGHT_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_RIGHT_DCLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_SET_FOCUS = wxNewEventType();
+wxEventType wxEVT_COMMAND_KILL_FOCUS = wxNewEventType();
+wxEventType wxEVT_COMMAND_ENTER = wxNewEventType();
 
 // Tree control event types
-wxEventType wxEVT_COMMAND_TREE_BEGIN_DRAG;
-wxEventType wxEVT_COMMAND_TREE_BEGIN_RDRAG;
-wxEventType wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT;
-wxEventType wxEVT_COMMAND_TREE_END_LABEL_EDIT;
-wxEventType wxEVT_COMMAND_TREE_DELETE_ITEM;
-wxEventType wxEVT_COMMAND_TREE_GET_INFO;
-wxEventType wxEVT_COMMAND_TREE_SET_INFO;
-wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDED;
-wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDING;
-wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
-wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
-wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED;
-wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING;
-wxEventType wxEVT_COMMAND_TREE_KEY_DOWN;
-wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED;
-wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK;
-wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK;
-wxEventType wxEVT_COMMAND_TREE_END_DRAG;
+wxEventType wxEVT_COMMAND_TREE_BEGIN_DRAG = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_BEGIN_RDRAG = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_END_LABEL_EDIT = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_DELETE_ITEM = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_GET_INFO = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_SET_INFO = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_EXPANDING = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_COLLAPSING = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_SEL_CHANGED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_SEL_CHANGING = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_KEY_DOWN = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_ACTIVATED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_TREE_END_DRAG = wxNewEventType();
 
 // List control event types
-wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG;
-wxEventType wxEVT_COMMAND_LIST_BEGIN_RDRAG;
-wxEventType wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT;
-wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT;
-wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM;
-wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS;
-wxEventType wxEVT_COMMAND_LIST_GET_INFO;
-wxEventType wxEVT_COMMAND_LIST_SET_INFO;
-wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED;
-wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED;
-wxEventType wxEVT_COMMAND_LIST_KEY_DOWN;
-wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM;
-wxEventType wxEVT_COMMAND_LIST_COL_CLICK;
-wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
-wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK;
-wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED;
+wxEventType wxEVT_COMMAND_LIST_BEGIN_DRAG = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_BEGIN_RDRAG = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_END_LABEL_EDIT = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_DELETE_ITEM = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_GET_INFO = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_SET_INFO = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_ITEM_SELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_ITEM_DESELECTED = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_KEY_DOWN = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_INSERT_ITEM = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_COL_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = wxNewEventType();
+wxEventType wxEVT_COMMAND_LIST_ITEM_ACTIVATED = wxNewEventType();
 
 // Tab and notebook control event types
-wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED;
-wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING;
-wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED;
-wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING;
+wxEventType wxEVT_COMMAND_TAB_SEL_CHANGED = wxNewEventType();
+wxEventType wxEVT_COMMAND_TAB_SEL_CHANGING = wxNewEventType();
+wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = wxNewEventType();
+wxEventType wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = wxNewEventType();
 
 // Splitter events
-wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED;
-wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING;
-wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED;
-wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT;
+wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxNewEventType();
+wxEventType wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxNewEventType();
+wxEventType wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxNewEventType();
+wxEventType wxEVT_COMMAND_SPLITTER_UNSPLIT = wxNewEventType();
 
 // Wizard events
-wxEventType wxEVT_WIZARD_PAGE_CHANGED;
-wxEventType wxEVT_WIZARD_PAGE_CHANGING;
-wxEventType wxEVT_WIZARD_CANCEL;
+wxEventType wxEVT_WIZARD_PAGE_CHANGED = wxNewEventType();
+wxEventType wxEVT_WIZARD_PAGE_CHANGING = wxNewEventType();
+wxEventType wxEVT_WIZARD_CANCEL = wxNewEventType();
 
 // Calendar events
-wxEventType wxEVT_CALENDAR_SEL_CHANGED;
-wxEventType wxEVT_CALENDAR_DAY_CHANGED;
-wxEventType wxEVT_CALENDAR_MONTH_CHANGED;
-wxEventType wxEVT_CALENDAR_YEAR_CHANGED;
-wxEventType wxEVT_CALENDAR_DOUBLECLICKED;
-wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED;
+wxEventType wxEVT_CALENDAR_SEL_CHANGED = wxNewEventType();
+wxEventType wxEVT_CALENDAR_DAY_CHANGED = wxNewEventType();
+wxEventType wxEVT_CALENDAR_MONTH_CHANGED = wxNewEventType();
+wxEventType wxEVT_CALENDAR_YEAR_CHANGED = wxNewEventType();
+wxEventType wxEVT_CALENDAR_DOUBLECLICKED = wxNewEventType();
+wxEventType wxEVT_CALENDAR_WEEKDAY_CLICKED = wxNewEventType();
 
 // Help events
-wxEventType wxEVT_HELP;
-wxEventType wxEVT_DETAILED_HELP;
+wxEventType wxEVT_HELP = wxNewEventType();
+wxEventType wxEVT_DETAILED_HELP = wxNewEventType();
+
+#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
+
+// ============================================================================
+// implementation
+// ============================================================================
 
 // ----------------------------------------------------------------------------
 // event initialization
@@ -337,258 +334,14 @@ int wxNewEventType()
     // check that we don't overlap with the user-defined types: if it does
     // happen, the best solution is probably to update the existing code to
     // use wxNewEventType() instead of wxEVT_USER_FIRST
+    //
+    // due to the uncertainty
     wxASSERT_MSG( s_lastUsedEventType < wxEVT_USER_FIRST - 1,
                   _T("possible event type conflict") );
 #endif // WXWIN_COMPATIBILITY_2
 
     return s_lastUsedEventType++;
 }
-
-static void InitEvents()
-{
-#ifdef __WXDEBUG__
-    // this function is supposed to be called only once, as normally this
-    // should be always true we only do this check in debug mode
-    static bool s_inInitEvents = FALSE;
-    wxCHECK_RET( !s_inInitEvents, _T("InitEvents() reentrancy!") );
-
-    // note that we don't reset it to FALSE any more as we shouldn't be called
-    // again
-    s_inInitEvents = TRUE;
-#endif // __WXDEBUG__
-
-    wxEVT_COMMAND_BUTTON_CLICKED = wxNewEventType();
-    wxEVT_COMMAND_CHECKBOX_CLICKED = wxNewEventType();
-    wxEVT_COMMAND_CHOICE_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_LISTBOX_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_LISTBOX_DOUBLECLICKED = wxNewEventType();
-    wxEVT_COMMAND_CHECKLISTBOX_TOGGLED = wxNewEventType();
-    wxEVT_COMMAND_TEXT_UPDATED = wxNewEventType();
-    wxEVT_COMMAND_TEXT_ENTER = wxNewEventType();
-    wxEVT_COMMAND_MENU_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_TOOL_CLICKED = wxNewEventType();
-    wxEVT_COMMAND_SLIDER_UPDATED = wxNewEventType();
-    wxEVT_COMMAND_RADIOBOX_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_RADIOBUTTON_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_SCROLLBAR_UPDATED = wxNewEventType();
-    wxEVT_COMMAND_VLBOX_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_COMBOBOX_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_TOOL_RCLICKED = wxNewEventType();
-    wxEVT_COMMAND_TOOL_ENTER = wxNewEventType();
-    wxEVT_COMMAND_SPINCTRL_UPDATED = wxNewEventType();
-
-    // Sockets and timers send events, too
-    wxEVT_SOCKET = wxNewEventType();
-    wxEVT_TIMER = wxNewEventType();
-
-    // Mouse event types
-    wxEVT_LEFT_DOWN = wxNewEventType();
-    wxEVT_LEFT_UP = wxNewEventType();
-    wxEVT_MIDDLE_DOWN = wxNewEventType();
-    wxEVT_MIDDLE_UP = wxNewEventType();
-    wxEVT_RIGHT_DOWN = wxNewEventType();
-    wxEVT_RIGHT_UP = wxNewEventType();
-    wxEVT_MOTION = wxNewEventType();
-    wxEVT_ENTER_WINDOW = wxNewEventType();
-    wxEVT_LEAVE_WINDOW = wxNewEventType();
-    wxEVT_LEFT_DCLICK = wxNewEventType();
-    wxEVT_MIDDLE_DCLICK = wxNewEventType();
-    wxEVT_RIGHT_DCLICK = wxNewEventType();
-    wxEVT_SET_FOCUS = wxNewEventType();
-    wxEVT_KILL_FOCUS = wxNewEventType();
-
-    // Non-client mouse events
-    wxEVT_NC_LEFT_DOWN = wxNewEventType();
-    wxEVT_NC_LEFT_UP = wxNewEventType();
-    wxEVT_NC_MIDDLE_DOWN = wxNewEventType();
-    wxEVT_NC_MIDDLE_UP = wxNewEventType();
-    wxEVT_NC_RIGHT_DOWN = wxNewEventType();
-    wxEVT_NC_RIGHT_UP = wxNewEventType();
-    wxEVT_NC_MOTION = wxNewEventType();
-    wxEVT_NC_ENTER_WINDOW = wxNewEventType();
-    wxEVT_NC_LEAVE_WINDOW = wxNewEventType();
-    wxEVT_NC_LEFT_DCLICK = wxNewEventType();
-    wxEVT_NC_MIDDLE_DCLICK = wxNewEventType();
-    wxEVT_NC_RIGHT_DCLICK = wxNewEventType();
-
-    // Character input event type
-    wxEVT_CHAR = wxNewEventType();
-    wxEVT_CHAR_HOOK = wxNewEventType();
-    wxEVT_NAVIGATION_KEY = wxNewEventType();
-    wxEVT_KEY_DOWN = wxNewEventType();
-    wxEVT_KEY_UP = wxNewEventType();
-
-    // Set cursor event
-    wxEVT_SET_CURSOR = wxNewEventType();
-
-    // wxScrollbar and wxSlider event identifiers
-    wxEVT_SCROLL_TOP = wxNewEventType();
-    wxEVT_SCROLL_BOTTOM = wxNewEventType();
-    wxEVT_SCROLL_LINEUP = wxNewEventType();
-    wxEVT_SCROLL_LINEDOWN = wxNewEventType();
-    wxEVT_SCROLL_PAGEUP = wxNewEventType();
-    wxEVT_SCROLL_PAGEDOWN = wxNewEventType();
-    wxEVT_SCROLL_THUMBTRACK = wxNewEventType();
-    wxEVT_SCROLL_THUMBRELEASE = wxNewEventType();
-
-    // Scroll events from wxWindow
-    wxEVT_SCROLLWIN_TOP = wxNewEventType();
-    wxEVT_SCROLLWIN_BOTTOM = wxNewEventType();
-    wxEVT_SCROLLWIN_LINEUP = wxNewEventType();
-    wxEVT_SCROLLWIN_LINEDOWN = wxNewEventType();
-    wxEVT_SCROLLWIN_PAGEUP = wxNewEventType();
-    wxEVT_SCROLLWIN_PAGEDOWN = wxNewEventType();
-    wxEVT_SCROLLWIN_THUMBTRACK = wxNewEventType();
-    wxEVT_SCROLLWIN_THUMBRELEASE = wxNewEventType();
-
-    // System events
-    wxEVT_SIZE = wxNewEventType();
-    wxEVT_MOVE = wxNewEventType();
-    wxEVT_CLOSE_WINDOW = wxNewEventType();
-    wxEVT_END_SESSION = wxNewEventType();
-    wxEVT_QUERY_END_SESSION = wxNewEventType();
-    wxEVT_ACTIVATE_APP = wxNewEventType();
-    wxEVT_POWER = wxNewEventType();
-    wxEVT_ACTIVATE = wxNewEventType();
-    wxEVT_CREATE = wxNewEventType();
-    wxEVT_DESTROY = wxNewEventType();
-    wxEVT_SHOW = wxNewEventType();
-    wxEVT_ICONIZE = wxNewEventType();
-    wxEVT_MAXIMIZE = wxNewEventType();
-    wxEVT_MOUSE_CAPTURE_CHANGED = wxNewEventType();
-    wxEVT_PAINT = wxNewEventType();
-    wxEVT_ERASE_BACKGROUND = wxNewEventType();
-    wxEVT_NC_PAINT = wxNewEventType();
-    wxEVT_PAINT_ICON = wxNewEventType();
-    wxEVT_MENU_CHAR = wxNewEventType();
-    wxEVT_MENU_INIT = wxNewEventType();
-    wxEVT_MENU_HIGHLIGHT = wxNewEventType();
-    wxEVT_POPUP_MENU_INIT = wxNewEventType();
-    wxEVT_CONTEXT_MENU = wxNewEventType();
-    wxEVT_SYS_COLOUR_CHANGED = wxNewEventType();
-    wxEVT_SETTING_CHANGED = wxNewEventType();
-    wxEVT_QUERY_NEW_PALETTE = wxNewEventType();
-    wxEVT_PALETTE_CHANGED = wxNewEventType();
-    wxEVT_JOY_BUTTON_DOWN = wxNewEventType();
-    wxEVT_JOY_BUTTON_UP = wxNewEventType();
-    wxEVT_JOY_MOVE = wxNewEventType();
-    wxEVT_JOY_ZMOVE = wxNewEventType();
-    wxEVT_DROP_FILES = wxNewEventType();
-    wxEVT_DRAW_ITEM = wxNewEventType();
-    wxEVT_MEASURE_ITEM = wxNewEventType();
-    wxEVT_COMPARE_ITEM = wxNewEventType();
-    wxEVT_INIT_DIALOG = wxNewEventType();
-    wxEVT_IDLE = wxNewEventType();
-    wxEVT_UPDATE_UI = wxNewEventType();
-
-    // System misc.
-    wxEVT_END_PROCESS = wxNewEventType();
-
-    // Dial up events
-    wxEVT_DIALUP_CONNECTED = wxNewEventType();
-    wxEVT_DIALUP_DISCONNECTED = wxNewEventType();
-
-    // Generic command events
-    // Note: a click is a higher-level event than button down/up
-    wxEVT_COMMAND_LEFT_CLICK = wxNewEventType();
-    wxEVT_COMMAND_LEFT_DCLICK = wxNewEventType();
-    wxEVT_COMMAND_RIGHT_CLICK = wxNewEventType();
-    wxEVT_COMMAND_RIGHT_DCLICK = wxNewEventType();
-    wxEVT_COMMAND_SET_FOCUS = wxNewEventType();
-    wxEVT_COMMAND_KILL_FOCUS = wxNewEventType();
-    wxEVT_COMMAND_ENTER = wxNewEventType();
-
-    // Tree control event types
-    wxEVT_COMMAND_TREE_BEGIN_DRAG = wxNewEventType();
-    wxEVT_COMMAND_TREE_BEGIN_RDRAG = wxNewEventType();
-    wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT = wxNewEventType();
-    wxEVT_COMMAND_TREE_END_LABEL_EDIT = wxNewEventType();
-    wxEVT_COMMAND_TREE_DELETE_ITEM = wxNewEventType();
-    wxEVT_COMMAND_TREE_GET_INFO = wxNewEventType();
-    wxEVT_COMMAND_TREE_SET_INFO = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_EXPANDED = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_EXPANDING = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_COLLAPSED = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_COLLAPSING = wxNewEventType();
-    wxEVT_COMMAND_TREE_SEL_CHANGED = wxNewEventType();
-    wxEVT_COMMAND_TREE_SEL_CHANGING = wxNewEventType();
-    wxEVT_COMMAND_TREE_KEY_DOWN = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_ACTIVATED = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK = wxNewEventType();
-    wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK = wxNewEventType();
-    wxEVT_COMMAND_TREE_END_DRAG = wxNewEventType();
-
-    // List control event types
-    wxEVT_COMMAND_LIST_BEGIN_DRAG = wxNewEventType();
-    wxEVT_COMMAND_LIST_BEGIN_RDRAG = wxNewEventType();
-    wxEVT_COMMAND_LIST_BEGIN_LABEL_EDIT = wxNewEventType();
-    wxEVT_COMMAND_LIST_END_LABEL_EDIT = wxNewEventType();
-    wxEVT_COMMAND_LIST_DELETE_ITEM = wxNewEventType();
-    wxEVT_COMMAND_LIST_DELETE_ALL_ITEMS = wxNewEventType();
-    wxEVT_COMMAND_LIST_GET_INFO = wxNewEventType();
-    wxEVT_COMMAND_LIST_SET_INFO = wxNewEventType();
-    wxEVT_COMMAND_LIST_ITEM_SELECTED = wxNewEventType();
-    wxEVT_COMMAND_LIST_ITEM_DESELECTED = wxNewEventType();
-    wxEVT_COMMAND_LIST_KEY_DOWN = wxNewEventType();
-    wxEVT_COMMAND_LIST_INSERT_ITEM = wxNewEventType();
-    wxEVT_COMMAND_LIST_COL_CLICK = wxNewEventType();
-    wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK = wxNewEventType();
-    wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK = wxNewEventType();
-    wxEVT_COMMAND_LIST_ITEM_ACTIVATED = wxNewEventType();
-
-    // Tab and notebook control event types
-    wxEVT_COMMAND_TAB_SEL_CHANGED = wxNewEventType();
-    wxEVT_COMMAND_TAB_SEL_CHANGING = wxNewEventType();
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED = wxNewEventType();
-    wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING = wxNewEventType();
-
-    // Splitter events
-    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED = wxNewEventType();
-    wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGING = wxNewEventType();
-    wxEVT_COMMAND_SPLITTER_DOUBLECLICKED = wxNewEventType();
-    wxEVT_COMMAND_SPLITTER_UNSPLIT = wxNewEventType();
-
-    // Wizard events
-    wxEVT_WIZARD_PAGE_CHANGED = wxNewEventType();
-    wxEVT_WIZARD_PAGE_CHANGING = wxNewEventType();
-    wxEVT_WIZARD_CANCEL = wxNewEventType();
-
-    // Calendar events
-    wxEVT_CALENDAR_SEL_CHANGED = wxNewEventType();
-    wxEVT_CALENDAR_DAY_CHANGED = wxNewEventType();
-    wxEVT_CALENDAR_MONTH_CHANGED = wxNewEventType();
-    wxEVT_CALENDAR_YEAR_CHANGED = wxNewEventType();
-    wxEVT_CALENDAR_DOUBLECLICKED = wxNewEventType();
-    wxEVT_CALENDAR_WEEKDAY_CLICKED = wxNewEventType();
-
-    // Help events
-    wxEVT_HELP = wxNewEventType();
-    wxEVT_DETAILED_HELP = wxNewEventType();
-}
-
-// ----------------------------------------------------------------------------
-// wxEventTableEntry
-// ----------------------------------------------------------------------------
-
-wxEventTableEntry::wxEventTableEntry(int evType, int id, int idLast,
-                                     wxObjectEventFunction fn, wxObject *data)
-{
-    static bool s_initEventsDone = FALSE;
-    if ( !s_initEventsDone )
-    {
-        InitEvents();
-
-        s_initEventsDone = TRUE;
-    }
-
-    m_eventType = evType;
-    m_id = id;
-    m_lastId = idLast;
-    m_fn = fn;
-    m_callbackUserData = data;
-}
-
-#endif // WXWIN_COMPATIBILITY_EVENT_TYPES
 
 // ----------------------------------------------------------------------------
 // wxEvent
@@ -877,7 +630,7 @@ void wxKeyEvent::CopyObject(wxObject& obj_d) const
     obj->m_x = m_x;
     obj->m_y = m_y;
     obj->m_keyCode = m_keyCode;
-    
+
     obj->m_shiftDown   = m_shiftDown;
     obj->m_controlDown = m_controlDown;
     obj->m_metaDown    = m_metaDown;
@@ -1123,7 +876,7 @@ void wxEvtHandler::AddPendingEvent(wxEvent& event)
     wxPendingEvents->Append(this);
 
     wxLEAVE_CRIT_SECT(*wxPendingEventsLocker);
-    
+
     // 3) Inform the system that new pending events are somwehere,
     //    and that these should be processed in idle time.
     wxWakeUpIdle();
@@ -1144,7 +897,7 @@ void wxEvtHandler::ProcessPendingEvents()
         delete node;
 
         // In ProcessEvent, new events might get added and
-	    // we can safely leave the crtical section here.
+        // we can safely leave the crtical section here.
 #if defined(__VISAGECPP__)
         wxLEAVE_CRIT_SECT( m_eventsLocker);
 #else
@@ -1182,7 +935,7 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     // An event handler can be enabled or disabled
     if ( GetEvtHandlerEnabled() )
     {
-    
+
 #if 0
 /*
         What is this? When using GUI threads, a non main

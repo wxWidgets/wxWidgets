@@ -1,0 +1,13 @@
+# Purpose: makefile for event example (UNIX).
+# Created: 2001-01-31
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../..
+program_dir = samples/event
+
+PROGRAM=event
+
+OBJECTS=$(PROGRAM).o
+
+include ../../src/makeprog.env
+

@@ -31,6 +31,7 @@ AC_OUTPUT([
             dragimag/Makefile
             drawing/Makefile
             dynamic/Makefile
+            event/Makefile
             exec/Makefile
             font/Makefile
             grid/Makefile

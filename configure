@@ -15012,8 +15012,9 @@ LDFLAGS="$LDFLAGS $PROFILE"
 
 if test "$wxUSE_GUI" = "yes"; then
         
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag drawing dynamic \
-                     font fractal image menu minimal richedit"
+            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag \
+                     drawing dynamic event font fractal image menu \
+                     minimal richedit"
 
         CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
 else
@@ -15117,7 +15118,7 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:15121: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:15122: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6

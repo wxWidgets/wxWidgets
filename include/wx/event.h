@@ -91,8 +91,11 @@ enum
     wxEVT_NULL = 0,
     wxEVT_FIRST = 10000,
 #else // !WXWIN_COMPATIBILITY_EVENT_TYPES
-    extern wxEventType wxEVT_NULL;
-    extern wxEventType wxEVT_FIRST;
+    // it is important to still have these as constants to avoid
+    // initialization order related problems
+    const wxEventType wxEVT_NULL = 0;
+    const wxEventType wxEVT_FIRST = 10000;
+    const wxEventType wxEVT_USER_FIRST = wxEVT_FIRST + 2000;
 #endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
 DECLARE_EVENT_TYPE(wxEVT_COMMAND_BUTTON_CLICKED, 1)
@@ -311,8 +314,6 @@ DECLARE_EVENT_TYPE(wxEVT_CALENDAR_WEEKDAY_CLICKED, 955)
     // Help events
 DECLARE_EVENT_TYPE(wxEVT_HELP, 1050)
 DECLARE_EVENT_TYPE(wxEVT_DETAILED_HELP, 1051)
-
-DECLARE_EVENT_TYPE(wxEVT_USER_FIRST, 2000)
 
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
 };
@@ -1507,31 +1508,76 @@ protected:
 
 typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 
-struct WXDLLEXPORT wxEventTableEntry
+// struct containing the members common to static and dynamic event tables
+// entries
+struct WXDLLEXPORT wxEventTableEntryBase
 {
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxEventTableEntry(int evType, int id, int idLast,
-                      wxObjectEventFunction fn, wxObject *data);
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
+    // provide default ctors for everything in backwards compatibility mode
+#if WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxEventTableEntryBase() { }
+#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxEventTableEntryBase(int id, int idLast,
+                          wxObjectEventFunction fn, wxObject *data)
+    {
+        m_id = id;
+        m_lastId = idLast;
+        m_fn = fn;
+        m_callbackUserData = data;
+    }
+#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
 
-    int m_eventType;            // the event type
-    int m_id;                   // control/menu/toolbar id
-    int m_lastId;               // used for ranges of ids
-    wxObjectEventFunction m_fn; // function to call: not wxEventFunction,
-                                // because of dependency problems
+    // the range of ids for this entry: if m_lastId == -1, the range consists
+    // only of m_id, otherwise it is m_id..m_lastId inclusive
+    int m_id, m_lastId;
 
+    // function to call: not wxEventFunction, because of dependency problems
+    wxObjectEventFunction m_fn;
+
+    // arbitrary user data asosciated with the callback
     wxObject* m_callbackUserData;
 };
 
-struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntry
+// an entry from a static event table
+struct WXDLLEXPORT wxEventTableEntry : public wxEventTableEntryBase
 {
-#if !WXWIN_COMPATIBILITY_EVENT_TYPES
-    wxDynamicEventTableEntry(int evType, int id, int idLast,
-                             wxObjectEventFunction fn, wxObject *data)
-        : wxEventTableEntry(evType, id, idLast, fn, data)
+#if WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxEventTableEntry() { }
+#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxEventTableEntry(const int& evType, int id, int idLast,
+                      wxObjectEventFunction fn, wxObject *data)
+                 : wxEventTableEntryBase(id, idLast, fn, data),
+                   m_eventType(evType)
     {
     }
-#endif // !WXWIN_COMPATIBILITY_EVENT_TYPES
+#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
+
+    // the reference to event type: this allows us to not care about the
+    // (undefined) order in which the event table entries and the event types
+    // are initialized: initially the value of this reference might be
+    // invalid, but by the time it is used for the first time, all global
+    // objects will have been initialized (including the event type constants)
+    // and so it will have the correct value when it is needed
+    const int& m_eventType;
+};
+
+// an entry used in dynamic event table managed by wxEvtHandler::Connect()
+struct WXDLLEXPORT wxDynamicEventTableEntry : public wxEventTableEntryBase
+{
+#if WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxDynamicEventTableEntry() { }
+#else // !WXWIN_COMPATIBILITY_EVENT_TYPES
+    wxDynamicEventTableEntry(int evType, int id, int idLast,
+                             wxObjectEventFunction fn, wxObject *data)
+        : wxEventTableEntryBase(id, idLast, fn, data)
+    {
+        m_eventType = evType;
+    }
+#endif // WXWIN_COMPATIBILITY_EVENT_TYPES/!WXWIN_COMPATIBILITY_EVENT_TYPES
+
+    // not a reference here as we can't keep a reference to a temporary int
+    // created to wrap the constant value typically passed to Connect() - nor
+    // do we need it
+    int m_eventType;
 };
 
 struct WXDLLEXPORT wxEventTable
@@ -1540,13 +1586,15 @@ struct WXDLLEXPORT wxEventTable
     const wxEventTableEntry *entries; // bottom of entry array
 };
 
+// ----------------------------------------------------------------------------
+// wxEvtHandler: the base class for all objects handling wxWindows events
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxEvtHandler : public wxObject
 {
-    DECLARE_DYNAMIC_CLASS(wxEvtHandler)
-
 public:
     wxEvtHandler();
-    ~wxEvtHandler();
+    virtual ~wxEvtHandler();
 
     wxEvtHandler *GetNextHandler() const { return m_nextHandler; }
     wxEvtHandler *GetPreviousHandler() const { return m_previousHandler; }
@@ -1632,11 +1680,11 @@ protected:
 
     virtual const wxEventTable *GetEventTable() const;
 
-protected:
     wxEvtHandler*       m_nextHandler;
     wxEvtHandler*       m_previousHandler;
     wxList*             m_dynamicEvents;
     wxList*             m_pendingEvents;
+
 #if wxUSE_THREADS
 #if defined (__VISAGECPP__)
     wxCriticalSection   m_eventsLocker;
@@ -1651,6 +1699,9 @@ protected:
 
     // Is event handler enabled?
     bool                m_enabled;
+
+private:
+    DECLARE_DYNAMIC_CLASS(wxEvtHandler)
 };
 
 typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);

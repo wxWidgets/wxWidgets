@@ -1,0 +1,10 @@
+# Purpose: makefile for event example (VC++ 1.5x)
+# Created: 2001-01-31
+
+WXDIR = $(WXWIN)
+
+TARGET=event
+OBJECTS=$(TARGET).obj
+
+!include $(WXDIR)\src\makeprog.msc
+

@@ -3797,8 +3797,9 @@ if test "$wxUSE_GUI" = "yes"; then
 
     dnl TODO some samples are never built so far:
     dnl      ipc, mfc, nativdlg, oleauto, ownerdrw, proplist
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag drawing dynamic \
-                     font fractal image menu minimal richedit"
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs dragimag \
+                     drawing dynamic event font fractal image menu \
+                     minimal richedit"
 
     dnl this is needed to be able to find AFM files
     CPPFLAGS="$CPPFLAGS \$(EXTRADEFS) \$(APPEXTRADEFS)"
