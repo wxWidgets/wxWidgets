@@ -48,6 +48,12 @@ class wxStatusBarPtr(wxWindowPtr):
     def SetStatusWidths(self, *_args, **_kwargs):
         val = apply(stattoolc.wxStatusBar_SetStatusWidths,(self,) + _args, _kwargs)
         return val
+    def PushStatusText(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxStatusBar_PushStatusText,(self,) + _args, _kwargs)
+        return val
+    def PopStatusText(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxStatusBar_PopStatusText,(self,) + _args, _kwargs)
+        return val
     def SetMinHeight(self, *_args, **_kwargs):
         val = apply(stattoolc.wxStatusBar_SetMinHeight,(self,) + _args, _kwargs)
         return val

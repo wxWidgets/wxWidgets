@@ -11032,6 +11032,7 @@ SWIGEXPORT(void) initstc_c() {
 	 SWIG_globals = SWIG_newvarlink();
 	 m = Py_InitModule("stc_c", stc_cMethods);
 	 d = PyModule_GetDict(m);
+	 PyDict_SetItemString(d,"wxSTC_USE_POPUP", PyInt_FromLong((long) 1));
 	 PyDict_SetItemString(d,"wxSTC_INVALID_POSITION", PyInt_FromLong((long) -1));
 	 PyDict_SetItemString(d,"wxSTC_START", PyInt_FromLong((long) 2000));
 	 PyDict_SetItemString(d,"wxSTC_OPTIONAL_START", PyInt_FromLong((long) 3000));

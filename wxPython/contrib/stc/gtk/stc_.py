@@ -1158,6 +1158,7 @@ class wxStyledTextEvent(wxStyledTextEventPtr):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxSTC_USE_POPUP = stc_c.wxSTC_USE_POPUP
 wxSTC_INVALID_POSITION = stc_c.wxSTC_INVALID_POSITION
 wxSTC_START = stc_c.wxSTC_START
 wxSTC_OPTIONAL_START = stc_c.wxSTC_OPTIONAL_START
