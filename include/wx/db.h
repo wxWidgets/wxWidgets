@@ -53,7 +53,7 @@
 
 #if wxMAJOR_VERSION == 2
     #ifdef __GNUG__
-    #pragma interface "db.h"
+        #pragma interface "db.h"
     #endif
 #endif
 
@@ -305,6 +305,7 @@ public:
     int          FkCol;       // Foreign key column       0=No; 1= First Key, 2 = Second Key etc.
     char         FkTableName[DB_MAX_TABLE_NAME_LEN+1]; // Foreign key table name
     wxDbColFor  *pColFor;                              // How should this columns be formatted
+
     wxDbColInf();
     ~wxDbColInf();
 };
@@ -332,6 +333,7 @@ public:
     char          schema[128+1];
     int           numTables;           // How many tables does this database have
     wxDbTableInf *pTableInf;           // pTableInf = new wxDbTableInf[numTables];
+
     wxDbInf();
     ~wxDbInf();
 };
@@ -401,7 +403,7 @@ private:
     unsigned int nTables;
 
     // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
-	 //
+     //
     // This information is obtained from the ODBC driver by use of the
     // SQLGetTypeInfo() function.  The key piece of information is the
     // type name the data source uses for each logical data type.
@@ -475,7 +477,7 @@ public:
 
 #if wxODBC_BACKWARD_COMPATABILITY
     // Information about logical data types VARCHAR, INTEGER, FLOAT and DATE.
-	 //
+     //
     // This information is obtained from the ODBC driver by use of the
     // SQLGetTypeInfo() function.  The key piece of information is the
     // type name the data source uses for each logical data type.
