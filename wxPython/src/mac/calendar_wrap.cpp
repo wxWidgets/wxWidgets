@@ -1013,7 +1013,7 @@ static PyObject *_wrap_new_CalendarEvent(PyObject *self, PyObject *args, PyObjec
 static PyObject *_wrap_CalendarEvent_GetDate(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxCalendarEvent *arg1 = (wxCalendarEvent *) 0 ;
-    wxDateTime *result;
+    wxDateTime result;
     PyObject * obj0 = 0 ;
     char *kwnames[] = {
         (char *) "self", NULL 
@@ -1023,15 +1023,16 @@ static PyObject *_wrap_CalendarEvent_GetDate(PyObject *self, PyObject *args, PyO
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxCalendarEvent,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
-        {
-            wxDateTime const &_result_ref = ((wxCalendarEvent const *)arg1)->GetDate();
-            result = (wxDateTime *) &_result_ref;
-        }
+        result = ((wxCalendarEvent const *)arg1)->GetDate();
         
         wxPyEndAllowThreads(__tstate);
         if (PyErr_Occurred()) SWIG_fail;
     }
-    resultobj = SWIG_NewPointerObj((void *) result, SWIGTYPE_p_wxDateTime, 0);
+    {
+        wxDateTime * resultptr;
+        resultptr = new wxDateTime((wxDateTime &) result);
+        resultobj = SWIG_NewPointerObj((void *) resultptr, SWIGTYPE_p_wxDateTime, 1);
+    }
     return resultobj;
     fail:
     return NULL;

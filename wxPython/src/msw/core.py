@@ -6011,9 +6011,7 @@ class Window(EvtHandler):
 
     def SetDropTarget(*args, **kwargs):
         """SetDropTarget(PyDropTarget dropTarget)"""
-        val = _core.Window_SetDropTarget(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _core.Window_SetDropTarget(*args, **kwargs)
 
     def GetDropTarget(*args, **kwargs):
         """GetDropTarget() -> PyDropTarget"""

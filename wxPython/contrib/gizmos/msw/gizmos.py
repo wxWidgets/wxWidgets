@@ -490,21 +490,15 @@ class TreeListCtrl(core.Control):
 
     def AssignImageList(*args, **kwargs):
         """AssignImageList(ImageList imageList)"""
-        val = _gizmos.TreeListCtrl_AssignImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _gizmos.TreeListCtrl_AssignImageList(*args, **kwargs)
 
     def AssignStateImageList(*args, **kwargs):
         """AssignStateImageList(ImageList imageList)"""
-        val = _gizmos.TreeListCtrl_AssignStateImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _gizmos.TreeListCtrl_AssignStateImageList(*args, **kwargs)
 
     def AssignButtonsImageList(*args, **kwargs):
         """AssignButtonsImageList(ImageList imageList)"""
-        val = _gizmos.TreeListCtrl_AssignButtonsImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _gizmos.TreeListCtrl_AssignButtonsImageList(*args, **kwargs)
 
     def AddColumn(*args, **kwargs):
         """AddColumn(String text)"""

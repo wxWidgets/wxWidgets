@@ -829,7 +829,7 @@ static PyObject *_wrap_new_GLCanvas(PyObject *self, PyObject *args, PyObject *kw
 }
 
 
-static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_new_GLCanvasWithContext(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj;
     wxWindow *arg1 = (wxWindow *) 0 ;
     wxGLContext *arg2 = (wxGLContext *) NULL ;
@@ -860,7 +860,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
         (char *) "parent",(char *) "shared",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name",(char *) "attribList",(char *) "palette", NULL 
     };
     
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OiOOlOOO:new_wxGLCanvasWithContext",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&arg6,&obj6,&obj7,&obj8)) goto fail;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OiOOlOOO:new_GLCanvasWithContext",kwnames,&obj0,&obj1,&arg3,&obj3,&obj4,&arg6,&obj6,&obj7,&obj8)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
     if (obj1) {
         if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxGLContext,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
@@ -1065,7 +1065,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GLContext_GetWindow", (PyCFunction) _wrap_GLContext_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS },
 	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS },
-	 { (char *)"new_wxGLCanvasWithContext", (PyCFunction) _wrap_new_wxGLCanvasWithContext, METH_VARARGS | METH_KEYWORDS },
+	 { (char *)"new_GLCanvasWithContext", (PyCFunction) _wrap_new_GLCanvasWithContext, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GLCanvas_SetCurrent", (PyCFunction) _wrap_GLCanvas_SetCurrent, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GLCanvas_SetColour", (PyCFunction) _wrap_GLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS },
 	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction) _wrap_GLCanvas_SwapBuffers, METH_VARARGS | METH_KEYWORDS },

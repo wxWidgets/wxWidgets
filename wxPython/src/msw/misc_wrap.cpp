@@ -22769,7 +22769,7 @@ static PyObject *_wrap_DataObjectComposite_Add(PyObject *self, PyObject *args, P
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|i:DataObjectComposite_Add",kwnames,&obj0,&obj1,&arg3)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObjectComposite,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObjectSimple,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObjectSimple,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->Add(arg2,arg3);
@@ -23894,7 +23894,7 @@ static PyObject *_wrap_new_PyDropTarget(PyObject *self, PyObject *args, PyObject
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:new_PyDropTarget",kwnames,&obj0)) goto fail;
     if (obj0) {
-        if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+        if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -24001,7 +24001,7 @@ static PyObject *_wrap_DropTarget_SetDataObject(PyObject *self, PyObject *args, 
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:DropTarget_SetDataObject",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetDataObject(arg2);
@@ -24676,7 +24676,7 @@ static PyObject *_wrap_Clipboard_AddData(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Clipboard_AddData",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxClipboard,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->AddData(arg2);
@@ -24704,7 +24704,7 @@ static PyObject *_wrap_Clipboard_SetData(PyObject *self, PyObject *args, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Clipboard_SetData",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxClipboard,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxDataObject,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         result = (bool)(arg1)->SetData(arg2);

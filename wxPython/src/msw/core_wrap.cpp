@@ -24526,7 +24526,7 @@ static PyObject *_wrap_Window_SetDropTarget(PyObject *self, PyObject *args, PyOb
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetDropTarget",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxWindow,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxPyDropTarget,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->SetDropTarget(arg2);

@@ -120,14 +120,14 @@ class GLCanvasPtr(GLCanvas):
         self.__class__ = GLCanvas
 _glcanvas.GLCanvas_swigregister(GLCanvasPtr)
 
-def wxGLCanvasWithContext(*args, **kwargs):
+def GLCanvasWithContext(*args, **kwargs):
     """
-    wxGLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
+    GLCanvasWithContext(Window parent, GLContext shared=None, int id=-1, Point pos=DefaultPosition, 
         Size size=DefaultSize, 
         long style=0, String name=GLCanvasNameStr, 
         int attribList=None, wxPalette palette=wxNullPalette) -> GLCanvas
     """
-    val = _glcanvas.new_wxGLCanvasWithContext(*args, **kwargs)
+    val = _glcanvas.new_GLCanvasWithContext(*args, **kwargs)
     val.thisown = 1
     val._setOORInfo(val)
     return val

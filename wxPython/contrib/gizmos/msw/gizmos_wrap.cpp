@@ -2996,7 +2996,7 @@ static PyObject *_wrap_TreeListCtrl_AssignImageList(PyObject *self, PyObject *ar
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_AssignImageList",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeListCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxImageList,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxImageList,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->AssignImageList(arg2);
@@ -3023,7 +3023,7 @@ static PyObject *_wrap_TreeListCtrl_AssignStateImageList(PyObject *self, PyObjec
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_AssignStateImageList",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeListCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxImageList,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxImageList,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->AssignStateImageList(arg2);
@@ -3050,7 +3050,7 @@ static PyObject *_wrap_TreeListCtrl_AssignButtonsImageList(PyObject *self, PyObj
     
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeListCtrl_AssignButtonsImageList",kwnames,&obj0,&obj1)) goto fail;
     if ((SWIG_ConvertPtr(obj0,(void **) &arg1, SWIGTYPE_p_wxPyTreeListCtrl,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
-    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxImageList,SWIG_POINTER_EXCEPTION | 0 )) == -1) SWIG_fail;
+    if ((SWIG_ConvertPtr(obj1,(void **) &arg2, SWIGTYPE_p_wxImageList,SWIG_POINTER_EXCEPTION | SWIG_POINTER_DISOWN )) == -1) SWIG_fail;
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
         (arg1)->AssignButtonsImageList(arg2);

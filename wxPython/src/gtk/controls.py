@@ -1926,9 +1926,7 @@ class BookCtrl(core.Control):
 
     def AssignImageList(*args, **kwargs):
         """AssignImageList(ImageList imageList)"""
-        val = _controls.BookCtrl_AssignImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _controls.BookCtrl_AssignImageList(*args, **kwargs)
 
     def GetImageList(*args, **kwargs):
         """GetImageList() -> ImageList"""
@@ -3383,9 +3381,7 @@ class ListCtrl(core.Control):
 
     def AssignImageList(*args, **kwargs):
         """AssignImageList(ImageList imageList, int which)"""
-        val = _controls.ListCtrl_AssignImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _controls.ListCtrl_AssignImageList(*args, **kwargs)
 
     def IsVirtual(*args, **kwargs):
         """IsVirtual() -> bool"""
@@ -3955,15 +3951,11 @@ class TreeCtrl(core.Control):
 
     def AssignImageList(*args, **kwargs):
         """AssignImageList(ImageList imageList)"""
-        val = _controls.TreeCtrl_AssignImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _controls.TreeCtrl_AssignImageList(*args, **kwargs)
 
     def AssignStateImageList(*args, **kwargs):
         """AssignStateImageList(ImageList imageList)"""
-        val = _controls.TreeCtrl_AssignStateImageList(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _controls.TreeCtrl_AssignStateImageList(*args, **kwargs)
 
     def GetItemText(*args, **kwargs):
         """GetItemText(TreeItemId item) -> String"""
@@ -4076,7 +4068,7 @@ class TreeCtrl(core.Control):
         return _controls.TreeCtrl_GetFirstChild(*args, **kwargs)
 
     def GetNextChild(*args, **kwargs):
-        """GetNextChild(TreeItemId item, wxTreeItemIdValue cookie) -> PyObject"""
+        """GetNextChild(TreeItemId item, void cookie) -> PyObject"""
         return _controls.TreeCtrl_GetNextChild(*args, **kwargs)
 
     def GetLastChild(*args, **kwargs):

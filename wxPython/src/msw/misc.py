@@ -4131,9 +4131,7 @@ class DataObjectComposite(DataObject):
         del newobj.thisown
     def Add(*args, **kwargs):
         """Add(DataObjectSimple dataObject, int preferred=False)"""
-        val = _misc.DataObjectComposite_Add(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _misc.DataObjectComposite_Add(*args, **kwargs)
 
 
 class DataObjectCompositePtr(DataObjectComposite):
@@ -4425,7 +4423,6 @@ class DropTarget(object):
         self.this = newobj.this
         self.thisown = 1
         del newobj.thisown
-        if args: args[0].thisown = 0;
         self._setCallbackInfo(self, DropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -4444,9 +4441,7 @@ class DropTarget(object):
 
     def SetDataObject(*args, **kwargs):
         """SetDataObject(DataObject dataObject)"""
-        val = _misc.DropTarget_SetDataObject(*args, **kwargs)
-        args[1].thisown = 0
-        return val
+        return _misc.DropTarget_SetDataObject(*args, **kwargs)
 
     def base_OnEnter(*args, **kwargs):
         """base_OnEnter(int x, int y, int def) -> int"""
