@@ -41,6 +41,10 @@
 #include "wx/univ/renderer.h"
 #include "wx/univ/theme.h"
 
+#if wxUSE_CARET
+    #include "wx/caret.h"
+#endif // wxUSE_CARET
+
 // turn Refresh() debugging on/off
 #define WXDEBUG_REFRESH
 
@@ -756,6 +760,14 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
             ptDest.y += dy;
         }
 
+#if wxUSE_CARET
+        // we need to hide the caret before moving or it will erase itself at
+        // the wrong (old) location
+        wxCaret *caret = GetCaret();
+        if ( caret )
+            caret->Hide();
+#endif // wxUSE_CARET
+
         // do move
         wxClientDC dc(this);
         wxBitmap bmp(size.x, size.y);
@@ -826,6 +838,11 @@ wxRect wxWindow::ScrollNoRefresh(int dx, int dy, const wxRect *rectTotal)
                        rect.x, rect.y,
                        rect.GetRight() + 1, rect.GetBottom() + 1);
         }
+
+#if wxUSE_CARET
+        if ( caret )
+            caret->Show();
+#endif // wxUSE_CARET
     }
 
     return rect;
