@@ -496,23 +496,34 @@ void wxPreviewControlBar::CreateButtons()
 
 void wxPreviewControlBar::SetZoomControl(int zoom)
 {
-    wxChar buf[20];
-    wxSprintf( buf, wxT("%d%%"), zoom );
-
     if (m_zoomControl)
-        m_zoomControl->SetStringSelection(buf);
+    {
+        int n, count = m_zoomControl->GetCount();
+        long val;
+        for (n=0; n<count; n++)
+        {
+            if (m_zoomControl->GetString(n).BeforeFirst(wxT('%')).ToLong(&val) &&
+                (val >= long(zoom)))
+            {
+                m_zoomControl->SetSelection(n);
+                return;
+            }
+        }
+        
+        m_zoomControl->SetSelection(count-1);
+    }
 }
 
 int wxPreviewControlBar::GetZoomControl()
 {
-    wxChar buf[20];
-    if (m_zoomControl && (m_zoomControl->GetStringSelection() != wxT("")))
+    if (m_zoomControl && (m_zoomControl->GetStringSelection() != wxEmptyString))
     {
-        wxStrcpy(buf, m_zoomControl->GetStringSelection());
-        buf[wxStrlen(buf) - 1] = 0;
-        return (int)wxAtoi(buf);
+        long val;
+        if (m_zoomControl->GetStringSelection().BeforeFirst(wxT('%')).ToLong(&val))
+            return int(val);
     }
-    else return 0;
+    
+    return 0;
 }
 
 
