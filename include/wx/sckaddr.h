@@ -73,6 +73,8 @@ public:
 
   virtual int Type() { return wxSockAddress::IPV4; }
   virtual wxSockAddress *Clone() const;
+  
+  bool operator==(wxIPV4address& addr);
 
 private:
   wxString m_origHostname;

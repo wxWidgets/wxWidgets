@@ -193,6 +193,12 @@ wxString wxIPV4address::IPAddress() const
 		);
 }
 
+bool wxIPV4address::operator==(wxIPV4address& addr)
+{
+	if(Hostname().Cmp(addr.Hostname().c_str()) == 0 && Service() == addr.Service()) return true;
+	return false;
+}
+
 #if 0
 // ---------------------------------------------------------------------------
 // wxIPV6address
