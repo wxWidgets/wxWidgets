@@ -138,7 +138,20 @@ bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUS
 
 bool wxPNMHandler::CanRead( wxInputStream& stream )
 {
-    return FALSE; // VS - temporary - FIXME
+    off_t pos=stream.TellI();
+
+    Skip_Comment(stream);
+
+    if (stream.GetC()==_T('P'))
+      switch (stream.GetC())
+	{
+	case _T('3'): case _T('6'):
+	  stream.SeekI(pos);
+	  return TRUE;
+	}
+
+    stream.SeekI(pos);
+    return FALSE;
 }
 
 
