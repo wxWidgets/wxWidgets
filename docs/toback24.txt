@@ -261,6 +261,17 @@ Checking in xpmdecod.cpp;
 new revision: 1.32; previous revision: 1.31
 done
 
+36. [ 892580, 892582 ] Fix of variable declaration in wxApp::Yield().
+
+Checking in src/motif/app.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/motif/app.cpp,v  <--  app.cpp
+new revision: 1.82; previous revision: 1.81
+done
+Checking in src/x11/app.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/x11/app.cpp,v  <--  app.cpp
+new revision: 1.94; previous revision: 1.93
+done
+
 =======
 
 
