@@ -2108,12 +2108,12 @@ void wxDC::AddToDCCache(wxDCCacheEntry* entry)
 
 void wxDC::ClearCache()
 {
-    sm_bitmapCache.DeleteContents(TRUE);
-    sm_bitmapCache.Clear();
-    sm_bitmapCache.DeleteContents(FALSE);
     sm_dcCache.DeleteContents(TRUE);
     sm_dcCache.Clear();
     sm_dcCache.DeleteContents(FALSE);
+    sm_bitmapCache.DeleteContents(TRUE);
+    sm_bitmapCache.Clear();
+    sm_bitmapCache.DeleteContents(FALSE);
 }
 
 // Clean up cache at app exit
