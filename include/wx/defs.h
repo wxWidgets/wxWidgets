@@ -174,12 +174,23 @@
     typedef unsigned int bool;
 #endif // bool
 
-// define boolean constants: don't use true/false here as not all compilers
-// support them
-#undef TRUE
-#undef FALSE
-#define TRUE  ((bool)1)
-#define FALSE ((bool)0)
+#ifdef __cplusplus
+    // define boolean constants: don't use true/false here as not all compilers
+    // support them
+    #undef TRUE
+    #undef FALSE
+    #define TRUE  ((bool)1)
+    #define FALSE ((bool)0)
+#else // !__cplusplus
+    // the definitions above don't work for C sources
+    #ifndef TRUE
+        #define TRUE 1
+    #endif
+
+    #ifndef FALSE
+        #define FALSE 0
+    #endif
+#endif // C++/!C++
 
 typedef short int WXTYPE;
 

@@ -60,12 +60,6 @@
 
 #include <winsock.h>
 
-/* don't use C++ TRUE/FALSE definition which we get from wx/defs.h */
-#undef TRUE
-#undef FALSE
-#define TRUE 1
-#define FALSE 0
-
 /* if we use configure for MSW SOCKLEN_T will be already defined */
 #ifndef SOCKLEN_T
 #  define SOCKLEN_T int
