@@ -904,14 +904,22 @@ if __name__ == "__main__":
                           PKGDIR+'.lib.editor',
                           PKGDIR+'.lib.mixins',
                           PKGDIR+'.lib.PyCrust',
+                          PKGDIR+'.tools',
+                          PKGDIR+'.tools.XRCed',
                           ],
 
               ext_package = PKGDIR,
               ext_modules = wxpExtensions,
 
-              options = { 'build' : { 'build_base' : BUILD_BASE }}
+              options = { 'build' : { 'build_base' : BUILD_BASE }},
 
               ##data_files = TOOLS,
+
+              scripts = ['scripts/img2png',
+                         'scripts/img2xpm',
+                         'scripts/img2py',
+                         'scripts/xrced',
+                         ],
               )
 
     else:

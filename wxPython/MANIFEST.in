@@ -100,14 +100,16 @@ include src/mac/*.cpp
 include src/mac/*.h
 include src/mac/*.py
 
-include tools/*.py
-include tools/XRCed/CHANGES
-include tools/XRCed/TODO
-include tools/XRCed/README
-include tools/XRCed/*.py
-include tools/XRCed/*.xrc
-include tools/XRCed/*.ico
-include tools/XRCed/*.sh
+include wxPython/tools/*.py
+include wxPython/tools/XRCed/CHANGES
+include wxPython/tools/XRCed/TODO
+include wxPython/tools/XRCed/README
+include wxPython/tools/XRCed/*.py
+include wxPython/tools/XRCed/*.xrc
+include wxPython/tools/XRCed/*.ico
+include wxPython/tools/XRCed/*.sh
+
+include scripts/*
 
 include contrib/glcanvas/*.i
 include contrib/glcanvas/*.py

@@ -136,14 +136,16 @@ Source: "licence\*.txt";                    DestDir: "{app}\wxPython\docs\licenc
 Source: "%(WXDIR)s\docs\htmlhelp\wx.chm";   DestDir: "{app}\wxPython\docs"; Components: docs
 Source: "%(WXDIR)s\docs\htmlhelp\ogl.chm";  DestDir: "{app}\wxPython\docs"; Components: docs
 
-Source: "tools\*.py";                       DestDir: "{app}\wxPython\tools"; Components: tools
-Source: "tools\XRCed\CHANGES";              DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "tools\XRCed\TODO";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "tools\XRCed\README";               DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "tools\XRCed\*.py";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "tools\XRCed\*.xrc";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "tools\XRCed\*.ico";                DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
-Source: "tools\XRCed\*.sh";                 DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\*.py";              DestDir: "{app}\wxPython\tools"; Components: tools
+Source: "wxPython\tools\XRCed\CHANGES";     DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\TODO";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\README";      DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\*.py";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\*.xrc";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\*.ico";       DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+Source: "wxPython\tools\XRCed\*.sh";        DestDir: "{app}\wxPython\tools\XRCed"; Components: tools
+
+;; Where to put the scripts on Win32???
 
 Source: "samples\doodle\*.py";              DestDir: "{app}\wxPython\samples\doodle"; Components: samples
 Source: "samples\doodle\*.txt";             DestDir: "{app}\wxPython\samples\doodle"; Components: samples

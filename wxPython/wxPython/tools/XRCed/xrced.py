@@ -72,7 +72,10 @@ def SetMenu(m, list):
 class Panel(wxNotebook):
     def __init__(self, parent, id = -1):
         wxNotebook.__init__(self, parent, id, style=wxNB_BOTTOM)
-        sys.modules['params'].panel = self
+        ##sys.modules['params'].panel = self
+        import params
+        params.panel = self
+
         # List of child windows
         self.pages = []
         # Create scrolled windows for pages
@@ -997,7 +1000,8 @@ class Frame(wxFrame):
         frame = self
         wxFrame.__init__(self, None, -1, '', pos, size)
         self.CreateStatusBar()
-        icon = wxIcon(os.path.join(sys.path[0], 'xrced.ico'), wxBITMAP_TYPE_ICO)
+        progpath = os.path.split(__file__)[0]
+        icon = wxIcon(os.path.join(progpath, 'xrced.ico'), wxBITMAP_TYPE_ICO)
         self.SetIcon(icon)
 
         # Idle flag
@@ -1114,10 +1118,14 @@ class Frame(wxFrame):
         splitter = wxSplitterWindow(self, -1, style=wxSP_3DSASH)
         self.splitter = splitter
         splitter.SetMinimumPaneSize(100)
+
         # Create tree
         global tree
         tree = XML_Tree(splitter, -1)
-        sys.modules['xxx'].tree = tree
+        ##sys.modules['xxx'].tree = tree
+        import xxx
+        xxx.tree = tree
+
         # !!! frame styles are broken
         # Miniframe for not embedded mode
         miniFrame = wxFrame(self, -1, 'Properties Panel',
@@ -1880,7 +1888,9 @@ class App(wxApp):
         frame = Frame(pos, size)
         frame.Show(true)
         # Load resources from XRC file (!!! should be transformed to .py later?)
-        sys.modules['params'].frame = frame
+        ##sys.modules['params'].frame = frame
+        import params
+        params.frame = frame
         frame.res = wxXmlResource('')
         frame.res.Load(os.path.join(sys.path[0], 'xrced.xrc'))
 
@@ -1893,6 +1903,7 @@ class App(wxApp):
 
     def OnExit(self):
         # Write config
+        global conf
         wc = wxConfigBase_Get()
         wc.WriteInt('autorefresh', conf.autoRefresh)
         wc.WriteInt('x', conf.x)
@@ -1908,6 +1919,7 @@ class App(wxApp):
         wc.WriteInt('panelHeight', conf.panelHeight)
         wc.WriteInt('nopanic', 1)
         wc.Flush()
+        del conf
 
 def main():
     app = App()
