@@ -2305,16 +2305,19 @@ void wxTreeCtrl::OnMouse( wxMouseEvent &event )
             nevent.SetEventObject(this);
             GetEventHandler()->ProcessEvent(nevent);
         }
-        else if ( event.LeftUp() && m_lastOnSame )
+        else if ( event.LeftUp() )
         {
-            if ( (item == m_current) &&
-                 (flags & wxTREE_HITTEST_ONITEMLABEL) &&
-                 HasFlag(wxTR_EDIT_LABELS) )
+            if ( m_lastOnSame )
             {
-                m_renameTimer->Start( 100, TRUE );
-            }
+                if ( (item == m_current) &&
+                     (flags & wxTREE_HITTEST_ONITEMLABEL) &&
+                     HasFlag(wxTR_EDIT_LABELS) )
+                {
+                    m_renameTimer->Start( 100, TRUE );
+                }
 
-            m_lastOnSame = FALSE;
+                m_lastOnSame = FALSE;
+            }
         }
         else
         {
