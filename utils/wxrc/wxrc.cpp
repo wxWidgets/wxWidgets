@@ -485,8 +485,8 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
     wxString cwd = wxGetCwd();
     wxSetWorkingDirectory(parOutputPath);
     int execres = wxExecute(_T("zip -9 -j ") +
-                            wxString(flagVerbose ? _T("") : _T("-q ")) +
-                            parOutput + _T(" ") + files, true);
+                            wxString(flagVerbose ? _T("\"") : _T("-q \"")) +
+                            parOutput + _T("\" ") + files, true);
     wxSetWorkingDirectory(cwd);
     if (execres == -1)
     {
