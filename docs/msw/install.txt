@@ -250,7 +250,7 @@ C++Builder compilation is the same as for Borland C++ above.
 Tested with C++Builder 1.0 and 3.0. Only makefiles are currently
 supplied.
 
-Watcom C++ 10.6 compilation
+Watcom C++ 10.6/11 compilation
 ---------------------------
 
 1. Make sure your WXWIN variable is set, and uses the DOS short
@@ -258,7 +258,12 @@ Watcom C++ 10.6 compilation
 2. Change directory to wx\src\msw. Type 'wmake -f makefile.wat' to
    make the wxWindows core library.
 3. Change directory to wx\samples\minimal and type 'wmake -f makefile.wat'
-   to make this sample.
+   to make this sample. Repeat for other samples of interest.
+
+Note (1): setup.h overrides wxUSE_LIBJPEG and sets it to 0, since
+imagjpeg.cpp doesn't compile.
+Note (2): makewat.env uses the odbc32.lib supplied in wxWindows' lib\watcom
+directory. See the notes in that directory.
 
 Metrowerks CodeWarrior compilation
 ----------------------------------

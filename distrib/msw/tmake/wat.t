@@ -61,6 +61,15 @@
 # Created:  1998
 #
 # Makefile : Builds wxWindows library for Watcom C++, WIN32
+#
+# NOTE: This file is generated from wat.t by tmake, but not all bugs have
+# been removed from this process. If wxWindows doesn't compile,
+# check the following and edit this makefile accordingly:
+#
+# - OLE-related files such as oleutils.cpp should have 'ole\' prepended
+#   to the path.
+# - extended.c, gsocket.c, unzip.c must be compiled using $(CC), not $(CCC).
+#   They may also be wrongly specified as extended.cpp, etc.
 
 WXDIR = ..\..
 

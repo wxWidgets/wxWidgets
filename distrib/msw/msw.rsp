@@ -1,5 +1,10 @@
 Mingw32-gcc295.patches
 
+lib/watcom/*.txt
+lib/watcom/*.lib
+lib/watcom/*.bat
+lib/bcc16/*.lib
+
 docs/licence.txt
 docs/msw/*.txt
 docs/wine/*.txt
@@ -55,11 +60,6 @@ src/msw/*.inc
 src/msw/winestub.c
 src/msw/gsocket.c
 
-src/msw/ctl3d/*.*
-src/msw/ctl3d/msvc/*.*
-src/msw/ctl3d/wat32/*.*
-src/msw/ctl3d/wat386/*.*
-src/msw/ctl3d/borland/*.*
 src/msw/ole/*.cpp
 src/msw/*.prj
 
