@@ -661,12 +661,20 @@ bool wxBitmap::CreateFromImage (
         // Have to do something similar to WIN32's StretchDIBits, use GpiBitBlt
         // in combination with setting the bits into the selected bitmap
         //
-        lScans = ::GpiSetBitmapBits( hPS
-                                    ,0             // Start at the bottom
-                                    ,(LONG)nHeight // One line per scan
-                                    ,(PBYTE)pucBits
-                                    ,&vInfo
-                                   );
+        if ((lScans = ::GpiSetBitmapBits( hPS
+                                         ,0             // Start at the bottom
+                                         ,(LONG)nHeight // One line per scan
+                                         ,(PBYTE)pucBits
+                                         ,&vInfo
+                                       )) == GPI_ALTERROR)
+        {
+            ERRORID                 vError;
+            wxString                sError;
+
+            vError = ::WinGetLastError(vHabmain);
+            sError = wxPMErrorToStr(vError);
+        }
+
         hPSScreen = ::GpiCreatePS( vHabmain
                                   ,hDCScreen
                                   ,&vSize

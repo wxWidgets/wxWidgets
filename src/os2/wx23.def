@@ -4,7 +4,7 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  H:\DEV\WX2\WXWINDOWS\lib\wx.lib
+;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
@@ -1925,7 +1925,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -5003,6 +5003,8 @@ EXPORTS
       Fit__7wxSizerFP8wxWindow
       ;wxSizer::GetMinWindowSize(wxWindow*)
       GetMinWindowSize__7wxSizerFP8wxWindow
+      ;wxSizer::FitInside(wxWindow*)
+      FitInside__7wxSizerFP8wxWindow
       ;wxSizer::Prepend(wxWindow*,int,int,int,wxObject*)
       Prepend__7wxSizerFP8wxWindowiN22P8wxObject
       __vft15wxFlexGridSizer8wxObject
@@ -5089,6 +5091,10 @@ EXPORTS
       DoSetItemMinSize__7wxSizerFP7wxSizeriT2
       ;wxSizerItem::DeleteWindows()
       DeleteWindows__11wxSizerItemFv
+      ;wxSizer::GetMinClientSize(wxWindow*)
+      GetMinClientSize__7wxSizerFP8wxWindow
+      ;wxSizer::GetMaxClientSize(wxWindow*)
+      GetMaxClientSize__7wxSizerFP8wxWindow
       ;wxSizerItem::wxSizerItem(wxWindow*,int,int,int,wxObject*)
       __ct__11wxSizerItemFP8wxWindowiN22P8wxObject
       __vft16wxStaticBoxSizer8wxObject
@@ -5113,8 +5119,12 @@ EXPORTS
       SetItemBounds__11wxGridSizerFP11wxSizerItemiN32
       ;wxGridSizer::CalcMin()
       CalcMin__11wxGridSizerFv
+      ;wxSizer::VirtualFitSize(wxWindow*)
+      VirtualFitSize__7wxSizerFP8wxWindow
       ;wxNotebookSizer::wxNotebookSizer(wxNotebook*)
       __ct__15wxNotebookSizerFP10wxNotebook
+      ;wxSizer::SetVirtualSizeHints(wxWindow*)
+      SetVirtualSizeHints__7wxSizerFP8wxWindow
   ;From object file:  ..\common\socket.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxSocketBase::SetTimeout(long)
@@ -6027,7 +6037,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -6876,6 +6886,8 @@ EXPORTS
       ConvertPixelsToDialog__12wxWindowBaseFRC7wxPoint
       ;wxWindowBase::SetSizer(wxSizer*,unsigned long)
       SetSizer__12wxWindowBaseFP7wxSizerUl
+      ;wxWindowBase::SetSizerAndFit(wxSizer*,unsigned long)
+      SetSizerAndFit__12wxWindowBaseFP7wxSizerUl
       ;wxWindowBase::FindWindow(long)
       FindWindow__12wxWindowBaseFl
       ;wxWindowBase::IsExposed(int,int) const
@@ -6885,6 +6897,8 @@ EXPORTS
       ;wxWindowBase::sm_classwxWindowBase
       sm_classwxWindowBase__12wxWindowBase
       __vft16wxWindowListNode10wxNodeBase
+      ;wxWindowBase::SetVirtualSizeHints(int,int,int,int)
+      SetVirtualSizeHints__12wxWindowBaseFiN31
       ;wxWindowBase::SetSizeHints(int,int,int,int,int,int)
       SetSizeHints__12wxWindowBaseFiN51
       ;wxWindowBase::MoveConstraint(int,int)
@@ -6921,6 +6935,8 @@ EXPORTS
       SetSizeConstraint__12wxWindowBaseFiN31
       ;wxWindowBase::GetClientSizeConstraint(int*,int*) const
       GetClientSizeConstraint__12wxWindowBaseCFPiT1
+      ;wxWindowBase::DoSetVirtualSize(int,int)
+      DoSetVirtualSize__12wxWindowBaseFiT1
       ;wxWindowBase::DoHitTest(int,int) const
       DoHitTest__12wxWindowBaseCFiT1
       ;wxWindowBase::DoGetBestSize() const
@@ -6961,6 +6977,8 @@ EXPORTS
       GetBorder__12wxWindowBaseCFv
       ;wxWindowBase::Fit()
       Fit__12wxWindowBaseFv
+      ;wxWindowBase::DoGetVirtualSize() const
+      DoGetVirtualSize__12wxWindowBaseCFv
       ;wxWindowBase::DeleteRelatedConstraints()
       DeleteRelatedConstraints__12wxWindowBaseFv
       ;wxWindowBase::SetHelpText(const wxString&)
@@ -9858,6 +9876,8 @@ EXPORTS
       GetScrollPixelsPerUnit__14wxScrollHelperCFPiT1
       ;wxScrollHelper::Scroll(int,int)
       Scroll__14wxScrollHelperFiT1
+      ;wxGenericScrolledWindow::DoSetVirtualSize(int,int)
+      DoSetVirtualSize__23wxGenericScrolledWindowFiT1
       ;wxScrollHelper::~wxScrollHelper()
       __dt__14wxScrollHelperFv
       ;wxConstructorForwxGenericScrolledWindow()
@@ -9873,8 +9893,8 @@ EXPORTS
       HandleOnSize__14wxScrollHelperFR11wxSizeEvent
       ;wxScrollHelper::HandleOnPaint(wxPaintEvent&)
       HandleOnPaint__14wxScrollHelperFR12wxPaintEvent
-      ;wxScrollHelper::GetVirtualSize(int*,int*) const
-      GetVirtualSize__14wxScrollHelperCFPiT1
+      ;wxScrollHelper::SetScrollRate(int,int)
+      SetScrollRate__14wxScrollHelperFiT1
       ;wxScrollHelper::GetTargetWindow() const
       GetTargetWindow__14wxScrollHelperCFv
       __vft14wxScrollHelper
