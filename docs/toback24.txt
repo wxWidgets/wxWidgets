@@ -5,7 +5,6 @@ http://sf.net/tracker/index.php?func=detail&aid=651314&group_id=9863&atid=109863
 Checking in defs.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/defs.h,v  <--  defs.h
 new revision: 1.324; previous revision: 1.323
-done
 
 
 
@@ -16,16 +15,13 @@ http://sf.net/tracker/index.php?func=detail&aid=651140&group_id=9863&atid=109863
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.221; previous revision: 1.220
-done
 cvs diff: [23:41:08] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs
 Checking in docs/latex/wx/checklst.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/checklst.tex,v  <--  checklst.tex
 new revision: 1.8; previous revision: 1.7
-done
 Checking in src/msw/checklst.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/checklst.cpp,v  <--  checklst.cpp
 new revision: 1.35; previous revision: 1.34
-done
 
 
 
@@ -36,7 +32,6 @@ http://sf.net/tracker/index.php?func=detail&aid=651492&group_id=9863&atid=109863
 Checking in src/common/imagpng.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/imagpng.cpp,v  <--  imagpng.cpp
 new revision: 1.29; previous revision: 1.28
-done
 
 
 
@@ -47,12 +42,10 @@ http://sf.net/tracker/index.php?func=detail&aid=659209&group_id=9863&atid=109863
 Checking in src/msw/caret.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/caret.cpp,v  <--  caret.cpp
 new revision: 1.15; previous revision: 1.14
-done
 cvs diff: [01:41:47] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/src/msw
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.223; previous revision: 1.222
-done
 
 
 
@@ -63,12 +56,10 @@ http://sf.net/tracker/index.php?func=detail&aid=622089&group_id=9863&atid=109863
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.224; previous revision: 1.223
-done
 cvs diff: [21:21:39] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/docs
 Checking in src/msw/treectrl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/treectrl.cpp,v  <--  treectrl.cpp
 new revision: 1.136; previous revision: 1.135
-done
 
 
 
@@ -86,11 +77,9 @@ retrieving revision 1.2
 Checking in gtk/toplevel.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/gtk/toplevel.cpp,v  <--  toplevel.cpp
 new revision: 1.37; previous revision: 1.36
-done
 Checking in unix/utilsx11.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/unix/utilsx11.cpp,v  <--  utilsx11.cpp
 new revision: 1.9; previous revision: 1.8
-done
 
 
 
@@ -113,7 +102,6 @@ http://sourceforge.net/tracker/index.php?func=detail&aid=648659&group_id=9863&at
 Checking in src/msw/textctrl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/textctrl.cpp,v  <--  textctrl.cpp
 new revision: 1.157; previous revision: 1.156
-done
 
 10. Fixes for compilation with OpenWatcom
 
@@ -122,30 +110,24 @@ http://sf.net/tracker/index.php?func=detail&aid=665959&group_id=9863&atid=309863
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.230; previous revision: 1.229
-done
 Checking in src/common/imagjpeg.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/imagjpeg.cpp,v  <--  imagjpeg.cpp
 new revision: 1.31; previous revision: 1.30
-done
 Checking in include/wx/msw/missing.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/msw/missing.h,v  <--  missing.h
 new revision: 1.8; previous revision: 1.7
-done
 Checking in include/wx/msw/setup0.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/msw/setup0.h,v  <--  setup0.h
 new revision: 1.128; previous revision: 1.127
-done
 
 12. wxStopWatch::Start() didn't resume it contrary to the docs
 
 Checking in src/common/timercmn.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/timercmn.cpp,v  <--  timercmn.cpp
 new revision: 1.64; previous revision: 1.63
-done
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.234; previous revision: 1.233
-done
 
 13. wxMSW::wxStaticText::GetBestSize() was wrong by '&' width
 
@@ -154,7 +136,6 @@ http://sf.net/tracker/index.php?func=detail&aid=667324&group_id=9863&atid=109863
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.235; previous revision: 1.234
-done
 
 src/msw/stattext.cpp: 1.33 -> 1.35
 
@@ -166,18 +147,15 @@ http://sf.net/tracker/index.php?func=detail&aid=667665&group_id=9863&atid=109863
 Checking in src/msw/toplevel.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/toplevel.cpp,v  <--  toplevel.cpp
 new revision: 1.44; previous revision: 1.43
-done
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.236; previous revision: 1.235
-done
 
 15. wxCondition docs updates (just change true/false back to TRUE/FALSE)
 
 Checking in docs/latex/wx/conditn.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/conditn.tex,v  <--  conditn.tex
 new revision: 1.11; previous revision: 1.10
-done
 
 
 15. XRC fixes for <object_ref> and relative file names
@@ -187,11 +165,9 @@ Must be modified to be binary compatible before backporting!
 Checking in xmlres.cpp;
 /pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xmlres.cpp,v  <--  xmlres.cpp
 new revision: 1.27; previous revision: 1.26
-done
 Checking in xmlres.h;
 /pack/cvsroots/wxwindows/wxWindows/contrib/include/wx/xrc/xmlres.h,v  <--  xmlres.h
 new revision: 1.22; previous revision: 1.21
-done
 
 
 16. Fixes for wxLocale::Init and Borland C++
@@ -201,7 +177,6 @@ done
 Checking in intl.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/intl.cpp,v  <--  intl.cpp
 new revision: 1.87; previous revision: 1.86
-done
 
 
 17. XRC: better wxToolBar handler
@@ -213,7 +188,6 @@ patch (including new features not present in 2.4.0's handler).
 Checking in xh_toolb.cpp;
 /pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xh_toolb.cpp,v  <--  xh_toolb.cpp
 new revision: 1.7; previous revision: 1.6
-done
 
 
 20. Fix for wxProgressDialog::Update() signature:
@@ -221,7 +195,6 @@ done
 Checking in docs/latex/wx/progdlg.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/progdlg.tex,v  <--  progdlg.tex
 new revision: 1.10; previous revision: 1.9
-done
 
 21. [ 668155 ] Refresh problem when msgbox is shown (wxUniversal)
 
@@ -270,7 +243,6 @@ compatibility!
 Checking in mimetype.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
 new revision: 1.29; previous revision: 1.28
-done
 
 
 24.  Fix SetScrollbars bug.  You know the one :-)
@@ -278,15 +250,12 @@ done
 Checking in src/common/wincmn.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/wincmn.cpp,v  <--  wincmn.cpp
 new revision: 1.129; previous revision: 1.128
-done
 Checking in src/generic/scrlwing.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/generic/scrlwing.cpp,v  <--  scrlwing.cpp
 new revision: 1.35; previous revision: 1.34
-done
 Checking in src/gtk/scrolwin.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/gtk/scrolwin.cpp,v  <--  scrolwin.cpp
 new revision: 1.27; previous revision: 1.26
-done
 
 
 26.  Fix Unicode + .wxr
@@ -297,25 +266,20 @@ binary compatibility.
 Checking in include/wx/resource.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/resource.h,v  <--  resource.h
 new revision: 1.18; previous revision: 1.17
-done
 Checking in include/wx/wxexpr.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/wxexpr.h,v  <--  wxexpr.h
 new revision: 1.19; previous revision: 1.18
-done
 cvs diff: [23:38:56] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/include/wx
 Checking in samples/resource/resource.cpp;
 /pack/cvsroots/wxwindows/wxWindows/samples/resource/resource.cpp,v  <--  resource.cpp
 new revision: 1.14; previous revision: 1.13
-done
 cvs diff: [23:39:00] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/samples/resource
 Checking in src/common/resource.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/resource.cpp,v  <--  resource.cpp
 new revision: 1.85; previous revision: 1.84
-done
 Checking in src/common/wxexpr.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/wxexpr.cpp,v  <--  wxexpr.cpp
 new revision: 1.27; previous revision: 1.26
-done
 
 
 27. Fix assert (and crash in debug) in wxFileConfigGroup::DeleteSubgroupByName
@@ -323,14 +287,12 @@ done
 Checking in src/common/fileconf.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/common/fileconf.cpp,v  <--  fileconf.cpp
 new revision: 1.93; previous revision: 1.92
-done
 
 28. Set orientation for scrolbar events
 
 Checking in src/msw/scrolbar.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/scrolbar.cpp,v  <--  scrolbar.cpp
 new revision: 1.24; previous revision: 1.23
-done
 
 29. Patch 664399: wxButton default size should not be adjusted
     (wxUniv), cures overlapping buttons on e.g. wxWizard sample.
@@ -387,7 +349,6 @@ diff -r1.55 win32.cpp
 Checking in src/motif/dcclient.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/motif/dcclient.cpp,v  <--  dcclient.cpp
 new revision: 1.47; previous revision: 1.46
-done
 
 
 31. [wxHTML] Fix parsing of CDATA tags and ignore <script>
@@ -412,7 +373,6 @@ http://sf.net/tracker/index.php?func=detail&aid=685580&group_id=9863&atid=309863
 Checking in src/unix/mimetype.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/unix/mimetype.cpp,v  <--  mimetype.cpp
 new revision: 1.32; previous revision: 1.31
-done
 
 34. Fix memory leak in generic wxFileDialog
 
@@ -421,7 +381,6 @@ http://sf.net/tracker/index.php?func=detail&aid=696164&group_id=9863&atid=309863
 Checking in src/generic/filedlgg.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/generic/filedlgg.cpp,v  <--  filedlgg.cpp
 new revision: 1.84; previous revision: 1.83
-done
 
 33. Add support for GTK2 label mnemonics (patch #689573)
 
@@ -448,54 +407,50 @@ to set default sizes now.
 Checking in src/html/winpars.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/html/winpars.cpp,v  <--  winpars.cpp
 new revision: 1.38; previous revision: 1.37
-done
 Checking in src/html/htmprint.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/html/htmprint.cpp,v  <--  htmprint.cpp
 new revision: 1.29; previous revision: 1.28
-done
 cvs diff: [21:30:15] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/src/html
 Checking in samples/html/printing/printing.cpp;
 /pack/cvsroots/wxwindows/wxWindows/samples/html/printing/printing.cpp,v  <--  printing.cpp
 new revision: 1.9; previous revision: 1.8
-done
 cvs diff: [21:30:19] waiting for cvs's lock in /pack/cvsroots/wxwindows/wxWindows/samples/html/printing
 Checking in include/wx/html/htmldefs.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/html/htmldefs.h,v  <--  htmldefs.h
 new revision: 1.8; previous revision: 1.7
-done
 Checking in include/wx/html/htmlwin.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/html/htmlwin.h,v  <--  htmlwin.h
 new revision: 1.35; previous revision: 1.34
-done
 Checking in include/wx/html/htmprint.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/html/htmprint.h,v  <--  htmprint.h
 new revision: 1.13; previous revision: 1.12
-done
 Checking in include/wx/html/winpars.h;
 /pack/cvsroots/wxwindows/wxWindows/include/wx/html/winpars.h,v  <--  winpars.h
 new revision: 1.18; previous revision: 1.17
-done
 Checking in docs/changes.txt;
 /pack/cvsroots/wxwindows/wxWindows/docs/changes.txt,v  <--  changes.txt
 new revision: 1.258; previous revision: 1.257
-done
 Checking in docs/latex/wx/htwindow.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htwindow.tex,v  <--  htwindow.tex
 new revision: 1.27; previous revision: 1.26
-done
 Checking in docs/latex/wx/htwinprs.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htwinprs.tex,v  <--  htwinprs.tex
 new revision: 1.19; previous revision: 1.18
-done
 Checking in docs/latex/wx/htprint.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htprint.tex,v  <--  htprint.tex
 new revision: 1.7; previous revision: 1.6
-done
 Checking in docs/latex/wx/htdcrend.tex;
 /pack/cvsroots/wxwindows/wxWindows/docs/latex/wx/htdcrend.tex,v  <--  htdcrend.tex
 new revision: 1.8; previous revision: 1.7
-done
 
 37. Backport wxLANGUAGE_CHINESE_TRADITIONAL fix in src/common/intl.cpp
     (replace zh_CN with zh_TW)
+
+38. Owner-drawn (coloures) buttons don't draw multiline labels correctly
+
+http://sf.net/tracker/index.php?func=detail&aid=672894&group_id=9863&atid=109863
+
+Checking in src/msw/button.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/button.cpp,v  <--  button.cpp
+new revision: 1.59; previous revision: 1.58
 
