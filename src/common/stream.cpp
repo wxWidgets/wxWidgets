@@ -39,6 +39,7 @@
 #include "wx/stream.h"
 #include "wx/datstrm.h"
 #include "wx/textfile.h"
+#include "wx/log.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -702,14 +703,14 @@ char *wxInputStream::AllocSpaceWBack(size_t needed_size)
     if (!temp_b)
         return NULL;
 
-    /* copy previous data (and free old buffer) if needed */
+    // copy previous data (and free old buffer) if needed
     if (m_wback)
     {
         memmove(temp_b + needed_size, m_wback + m_wbackcur, toget);
         free(m_wback);
     }
 
-    /* done */
+    // done
     m_wback = temp_b;
     m_wbackcur = 0;
     m_wbacksize = needed_size + toget;
@@ -819,23 +820,29 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 
 off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
-    /* Should be check and improve, just to remove a slight bug !
-       I don't know whether it should be put as well in wxFileInputStream::OnSysSeek ? */
+    // RR: This code is duplicated in wxBufferedInputStream. This is
+    // not really a good design, but buffered stream are different
+    // from all other in that they handle two stream-related objects,
+    // the stream buffer and parent stream.
+
+    // I don't know whether it should be put as well in wxFileInputStream::OnSysSeek
     if (m_lasterror==wxSTREAM_EOF)
         m_lasterror=wxSTREAM_NOERROR;
 
-    /* A call to SeekI() will automatically invalidate any previous call
-       to Ungetch(), otherwise it would be possible to SeekI() to one
+    /* RR: A call to SeekI() will automatically invalidate any previous
+       call to Ungetch(), otherwise it would be possible to SeekI() to
        one position, unread some bytes there, SeekI() to another position
        and the data would be corrupted.
 
        GRG: Could add code here to try to navigate within the wback
        buffer if possible, but is it really needed? It would only work
        when seeking in wxFromCurrent mode, else it would invalidate
-       anyway...
-     */
+       anyway... */
+       
     if (m_wback)
     {
+        wxLogDebug( wxT("Seeking in stream which has data written back to it.") );
+        
         free(m_wback);
         m_wback = NULL;
         m_wbacksize = 0;
@@ -847,7 +854,6 @@ off_t wxInputStream::SeekI(off_t pos, wxSeekMode mode)
 
 off_t wxInputStream::TellI() const
 {
-    /* GRG: Changed to make it compatible with the wback buffer */
     off_t pos = OnSysTell();
 
     if (pos != wxInvalidOffset)
@@ -1061,12 +1067,32 @@ wxInputStream& wxBufferedInputStream::Read(void *buf, size_t size)
 
 off_t wxBufferedInputStream::SeekI(off_t pos, wxSeekMode mode)
 {
+    // RR: Look at wxInputStream for comments.
+
+    if (m_lasterror==wxSTREAM_EOF)
+        m_lasterror=wxSTREAM_NOERROR;
+
+    if (m_wback)
+    {
+        wxLogDebug( wxT("Seeking in stream which has data written back to it.") );
+        
+        free(m_wback);
+        m_wback = NULL;
+        m_wbacksize = 0;
+        m_wbackcur = 0;
+    }
+    
     return m_i_streambuf->Seek(pos, mode);
 }
 
 off_t wxBufferedInputStream::TellI() const
 {
-    return m_i_streambuf->Tell();
+    off_t pos = m_i_streambuf->Tell();
+
+    if (pos != wxInvalidOffset)
+        pos -= (m_wbacksize - m_wbackcur);
+        
+    return pos;
 }
 
 size_t wxBufferedInputStream::OnSysRead(void *buffer, size_t bufsize)
