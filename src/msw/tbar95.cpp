@@ -580,7 +580,7 @@ bool wxToolBar::Realize()
                 TBBUTTON tbb;
                 wxZeroMemory(tbb);
                 tbb.idCommand = 0;
-                tbb.fsState = TBSTATE_ENABLED | TBSTATE_HIDDEN;
+                tbb.fsState = TBSTATE_ENABLED;
                 tbb.fsStyle = TBSTYLE_SEP;
 
                 size_t nSeparators = size.x / widthSep;

@@ -76,9 +76,12 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
     if ( message == WM_CHAR )
     {
         HWND hwndCombo = ::GetParent(hWnd);
-        wxCHECK_MSG( hwndCombo, 0, _T("should have combo as parent") );
+        wxWindow *win = wxFindWinFromHandle((WXHWND)hwndCombo);
+        wxComboBox *combo = wxDynamicCast(win, wxComboBox);
+        wxCHECK_MSG( combo, 0, _T("should have combo as parent") );
 
-        ::SendMessage(hwndCombo, message, wParam, lParam);
+        if ( combo->MSWProcessEditMsg(message, wParam, lParam) )
+            return 0;
     }
 
     return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
@@ -87,6 +90,16 @@ LRESULT APIENTRY _EXPORT wxComboEditWndProc(HWND hWnd,
 // ----------------------------------------------------------------------------
 // wxComboBox
 // ----------------------------------------------------------------------------
+
+bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
+{
+    if ( msg == WM_CHAR )
+    {
+        return HandleChar(wParam, lParam, TRUE /* isASCII */);
+    }
+
+    return FALSE;
+}
 
 bool wxComboBox::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
