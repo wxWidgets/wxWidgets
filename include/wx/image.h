@@ -211,6 +211,18 @@ public:
     // otherwise:
     bool ConvertAlphaToMask(unsigned char threshold = 128);
 
+    // This method converts an image where the original alpha
+    // information is only available as a shades of a colour
+    // (actually shades of grey) typically when you draw anti-
+    // aliased text into a bitmap. The DC drawinf routines
+    // draw grey values on the black background although they
+    // actually mean to draw white with differnt alpha values.
+    // This method reverses it, assuming a black (!) background
+    // and white text (actually only the red channel is read). 
+    // The method will then fill up the whole image with the
+    // colour given.
+    bool ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b ); 
+
     static bool CanRead( const wxString& name );
     static int GetImageCount( const wxString& name, long type = wxBITMAP_TYPE_ANY );
     virtual bool LoadFile( const wxString& name, long type = wxBITMAP_TYPE_ANY, int index = -1 );

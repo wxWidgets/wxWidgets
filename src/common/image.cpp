@@ -804,6 +804,33 @@ unsigned char wxImage::GetAlpha(int x, int y) const
     return M_IMGDATA->m_alpha[y*w + x];
 }
 
+bool wxImage::ConvertColourToAlpha( unsigned char r, unsigned char g, unsigned char b )
+{
+    SetAlpha( NULL );
+    
+    int w = M_IMGDATA->m_width,
+        h = M_IMGDATA->m_height;
+    
+    unsigned char *alpha = GetAlpha();
+    unsigned char *data = GetData();
+    
+    int x,y;
+    for (y = 0; y < h; y++)
+        for (x = 0; x < w; x++)
+            {
+                *alpha = *data;
+                alpha++;
+                *data = r;
+                data++;
+                *data = g;
+                data++;
+                *data = b;
+                data++;
+            }
+
+    return true;
+}
+
 void wxImage::SetAlpha( unsigned char *alpha )
 {
     wxCHECK_RET( Ok(), wxT("invalid image") );
@@ -1668,14 +1695,24 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
 {
     int i;
     angle = -angle;     // screen coordinates are a mirror image of "real" coordinates
+    
+    bool has_alpha = HasAlpha();
 
     // Create pointer-based array to accelerate access to wxImage's data
     unsigned char ** data = new unsigned char * [GetHeight()];
-
     data[0] = GetData();
-
     for (i = 1; i < GetHeight(); i++)
         data[i] = data[i - 1] + (3 * GetWidth());
+
+    // Same for alpha channel    
+    unsigned char ** alpha = NULL;
+    if (has_alpha)
+    {
+        alpha = new unsigned char * [GetHeight()];
+        alpha[0] = GetAlpha();
+        for (i = 1; i < GetHeight(); i++)
+            alpha[i] = alpha[i - 1] + GetWidth();
+    }
 
     // precompute coefficients for rotation formula
     // (sine and cosine of the angle)
@@ -1698,7 +1735,11 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     int x2 = (int) ceil (wxMax (wxMax(p1.x, p2.x), wxMax(p3.x, p4.x)));
     int y2 = (int) ceil (wxMax (wxMax(p1.y, p2.y), wxMax(p3.y, p4.y)));
 
+    // Create rotated image
     wxImage rotated (x2 - x1 + 1, y2 - y1 + 1, false);
+    // With alpha channel
+    if (has_alpha)
+        rotated.SetAlpha();
 
     if (offset_after_rotation != NULL)
     {
@@ -1710,6 +1751,10 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     //      array here (and in fact it would be slower).
     //
     unsigned char * dst = rotated.GetData();
+    
+    unsigned char * alpha_dst = NULL;
+    if (has_alpha)
+        alpha_dst = rotated.GetAlpha();
 
     // GRG: if the original image has a mask, use its RGB values
     //      as the blank pixel, else, fall back to default (black).
@@ -1796,28 +1841,52 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         unsigned char *p = data[y1] + (3 * x1);
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
-                        *(dst++) = *(p++);
+                        *(dst++) = *p;
+                        
+                        if (has_alpha)
+                        {
+                            unsigned char *p = alpha[y1] + x1;
+                            *(alpha_dst++) = *p;
+                        }
                     }
                     else if (d2 < gs_Epsilon)
                     {
                         unsigned char *p = data[y1] + (3 * x2);
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
-                        *(dst++) = *(p++);
+                        *(dst++) = *p;
+                        
+                        if (has_alpha)
+                        {
+                            unsigned char *p = alpha[y1] + x2;
+                            *(alpha_dst++) = *p;
+                        }
                     }
                     else if (d3 < gs_Epsilon)
                     {
                         unsigned char *p = data[y2] + (3 * x2);
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
-                        *(dst++) = *(p++);
+                        *(dst++) = *p;
+                        
+                        if (has_alpha)
+                        {
+                            unsigned char *p = alpha[y2] + x2;
+                            *(alpha_dst++) = *p;
+                        }
                     }
                     else if (d4 < gs_Epsilon)
                     {
                         unsigned char *p = data[y2] + (3 * x1);
                         *(dst++) = *(p++);
                         *(dst++) = *(p++);
-                        *(dst++) = *(p++);
+                        *(dst++) = *p;
+                        
+                        if (has_alpha)
+                        {
+                            unsigned char *p = alpha[y2] + x1;
+                            *(alpha_dst++) = *p;
+                        }
                     }
                     else
                     {
@@ -1843,6 +1912,19 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                             ( (w1 * *v1 + w2 * *v2 +
                                w3 * *v3 + w4 * *v4) /
                               (w1 + w2 + w3 + w4) );
+                              
+                        if (has_alpha)
+                        {
+                            unsigned char *v1 = alpha[y1] + (x1);
+                            unsigned char *v2 = alpha[y1] + (x2);
+                            unsigned char *v3 = alpha[y2] + (x2);
+                            unsigned char *v4 = alpha[y2] + (x1);
+
+                            *(alpha_dst++) = (unsigned char)
+                                ( (w1 * *v1 + w2 * *v2 +
+                                   w3 * *v3 + w4 * *v4) /
+                                  (w1 + w2 + w3 + w4) );
+                        }
                     }
                 }
                 else
@@ -1850,6 +1932,9 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     *(dst++) = blank_r;
                     *(dst++) = blank_g;
                     *(dst++) = blank_b;
+                   
+                    if (has_alpha)
+                        *(alpha_dst++) = 0;
                 }
             }
         }
@@ -1872,18 +1957,30 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                     *(dst++) = *(p++);
                     *(dst++) = *(p++);
                     *(dst++) = *p;
+                    
+                    if (has_alpha)
+                    {
+                        unsigned char *p = alpha[ys] + (xs);
+                        *(alpha_dst++) = *p;
+                    }
                 }
                 else
                 {
                     *(dst++) = blank_r;
                     *(dst++) = blank_g;
                     *(dst++) = blank_b;
+                    
+                    if (has_alpha)
+                        *(alpha_dst++) = 255;
                 }
             }
         }
     }
 
     delete [] data;
+    
+    if (has_alpha)
+        delete [] alpha;
 
     return rotated;
 }
