@@ -213,11 +213,13 @@ public:
         int rval = 0;
         bool found;
         wxPyBeginBlockThreads();
-        if ((found = m_myInst.findCallback("OnCompareItems")))
-            rval = m_myInst.callCallback(Py_BuildValue(
-                "(OO)",
-                wxPyConstructObject((void*)&item1, "wxTreeItemId"),
-                wxPyConstructObject((void*)&item2, "wxTreeItemId")));
+        if ((found = m_myInst.findCallback("OnCompareItems"))) {
+            PyObject *o1 = wxPyConstructObject((void*)&item1, "wxTreeItemId");
+            PyObject *o2 = wxPyConstructObject((void*)&item2, "wxTreeItemId");
+            rval = m_myInst.callCallback(Py_BuildValue("(OO)",o1,o2));
+            Py_DECREF(o1);
+            Py_DECREF(o2);
+        }
         wxPyEndBlockThreads();
         if (! found)
             rval = wxTreeCtrl::OnCompareItems(item1, item2);

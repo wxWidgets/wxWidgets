@@ -288,8 +288,9 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() {
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPyBeginBlockThreads();
     if (m_myInst.findCallback("SetBitmap")) {
-        m_myInst.callCallback(Py_BuildValue("(O)",
-                              wxPyConstructObject((void*)&bitmap, "wxBitmap")));
+        PyObject* bo = wxPyConstructObject((void*)&bitmap, "wxBitmap");
+        m_myInst.callCallback(Py_BuildValue("(O)", bo));
+        Py_DECREF(bo);
     }
     wxPyEndBlockThreads();
 }
@@ -625,10 +626,11 @@ bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
     bool rval = FALSE;
     wxPyBeginBlockThreads();
-    PyObject* list = wxArrayString2PyList_helper(filenames);
-    if (m_myInst.findCallback("OnDropFiles"))
+    if (m_myInst.findCallback("OnDropFiles")) {
+        PyObject* list = wxArrayString2PyList_helper(filenames);
         rval = m_myInst.callCallback(Py_BuildValue("(iiO)",x,y,list));
-    Py_DECREF(list);
+        Py_DECREF(list);
+    }
     wxPyEndBlockThreads();
     return rval;
 }

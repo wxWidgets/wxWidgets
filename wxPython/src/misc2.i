@@ -696,9 +696,11 @@ public:
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t) {
         bool found;
         wxPyBeginBlockThreads();
-        if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level,
-                                                         wx2PyString(szString), t));
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLog"))) {
+            PyObject* s = wx2PyString(szString);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iOi)", level, s, t));
+            Py_DECREF(s);
+        }
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLog(level, szString, t);
@@ -707,9 +709,11 @@ public:
     virtual void DoLogString(const wxChar *szString, time_t t) {
         bool found;
         wxPyBeginBlockThreads();
-        if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)",
-                                                         wx2PyString(szString), t));
+        if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString"))) {
+            PyObject* s = wx2PyString(szString);
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(Oi)", s, t));
+            Py_DECREF(s);
+        }
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLogString(szString, t);
@@ -1412,20 +1416,13 @@ public:
             PyObject* so = wxPyConstructObject((void*)&size, "wxSize", 0);
             PyObject* ro;
             wxBitmap* ptr;
-#if 0
-            ro = wxPyCBH_callCallbackObj(
-                m_myInst, Py_BuildValue("(OOO)",
-                                        wx2PyString(id),
-                                        wx2PyString(client),
-                                        so));
-#else  // testing...
-            PyObject *args, *s1, *s2;
+            PyObject* s1, *s2;
             s1 = wx2PyString(id);
             s2 = wx2PyString(client);
-            args = Py_BuildValue("(OOO)", s1, s2, so);
-            ro = wxPyCBH_callCallbackObj(m_myInst, args);
-#endif
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OOO)", s1, s2, so));
             Py_DECREF(so);
+            Py_DECREF(s1);
+            Py_DECREF(s2);
             if (ro) {
                 if (!SWIG_GetPtrObj(ro, (void**)&ptr, "_wxBitmap_p"))
                     rval = *ptr;
