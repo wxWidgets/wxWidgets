@@ -4,10 +4,53 @@ DATA MULTIPLE NONSHARED READWRITE LOADONCALL
 CODE LOADONCALL
 
 EXPORTS
-;From library:  F:\DEV\WX2\WXWINDOWS\LIB\wx.lib
+;From library:  H:\DEV\WX2\WXWINDOWS\LIB\wx.lib
   ;From object file:  dummy.cpp
     ;PUBDEFs (Symbols available from object file):
       wxDummyChar
+  ;From object file:  ..\common\artprov.cpp
+    ;PUBDEFs (Symbols available from object file):
+      ;wxArtProviderCache::GetBitmap(const wxString&,wxBitmap*)
+      GetBitmap__18wxArtProviderCacheFRC8wxStringP8wxBitmap
+      ;wxArtProviderCache::Clear()
+      Clear__18wxArtProviderCacheFv
+      ;wxConstructorForwxArtProviderModule()
+      wxConstructorForwxArtProviderModule__Fv
+      ;wxArtProvider::PopProvider()
+      PopProvider__13wxArtProviderFv
+      ;wxArtProvider::CleanUpProviders()
+      CleanUpProviders__13wxArtProviderFv
+      ;wxArtProviderCache::ConstructHashID(const wxString&,const wxString&,const wxSize&)
+      ConstructHashID__18wxArtProviderCacheFRC8wxStringT1RC6wxSize
+      __vft24wxwxArtProvidersListNode10wxNodeBase
+      ;wxArtProvider::GetBitmap(const wxString&,const wxString&,const wxSize&)
+      GetBitmap__13wxArtProviderFRC8wxStringT1RC6wxSize
+      ;wxArtProvider::RemoveProvider(wxArtProvider*)
+      RemoveProvider__13wxArtProviderFP13wxArtProvider
+      ;wxArtProvider::GetIcon(const wxString&,const wxString&,const wxSize&)
+      GetIcon__13wxArtProviderFRC8wxStringT1RC6wxSize
+      ;wxArtProviderModule::sm_classwxArtProviderModule
+      sm_classwxArtProviderModule__19wxArtProviderModule
+      ;wxArtProvider::PushProvider(wxArtProvider*)
+      PushProvider__13wxArtProviderFP13wxArtProvider
+      ;wxArtProvider::sm_providers
+      sm_providers__13wxArtProvider
+      ;wxArtProvider::sm_classwxArtProvider
+      sm_classwxArtProvider__13wxArtProvider
+      ;wxwxArtProvidersListNode::DeleteData()
+      DeleteData__24wxwxArtProvidersListNodeFv
+      ;wxArtProvider::sm_cache
+      sm_cache__13wxArtProvider
+  ;From object file:  ..\common\artstd.cpp
+    ;PUBDEFs (Symbols available from object file):
+      g_ArtProviderModule
+      ;wxDefaultArtProviderModule::sm_classwxDefaultArtProviderModule
+      sm_classwxDefaultArtProviderModule__26wxDefaultArtProviderModule
+      __vft20wxDefaultArtProvider8wxObject
+      ;wxDefaultArtProvider::CreateBitmap(const wxString&,const wxString&,const wxSize&)
+      CreateBitmap__20wxDefaultArtProviderFRC8wxStringT1RC6wxSize
+      ;wxConstructorForwxDefaultArtProviderModule()
+      wxConstructorForwxDefaultArtProviderModule__Fv
   ;From object file:  ..\common\appcmn.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxOnAssert(const char*,int,const char*)
@@ -1878,7 +1921,7 @@ EXPORTS
       wxEVT_NC_LEFT_DCLICK
       wxEVT_INIT_DIALOG
       wxEVT_COMMAND_SET_FOCUS
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\extended.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\extended.c
     ;PUBDEFs (Symbols available from object file):
       ConvertToIeeeExtended
       ConvertFromIeeeExtended
@@ -3029,6 +3072,8 @@ EXPORTS
       Copy__7wxImageCFv
       ;wxImage::GetOptionInt(const wxString&) const
       GetOptionInt__7wxImageCFRC8wxString
+      ;wxImage::SaveFile(const wxString&) const
+      SaveFile__7wxImageCFRC8wxString
       ;wxImage::SaveFile(wxOutputStream&,const wxString&) const
       SaveFile__7wxImageCFR14wxOutputStreamRC8wxString
       ;wxImage::FindHandlerMime(const wxString&)
@@ -4000,6 +4045,8 @@ EXPORTS
       SetHelpString__13wxMenuBarBaseFiRC8wxString
       ;wxMenuBase::Insert(unsigned int,wxMenuItem*)
       Insert__10wxMenuBaseFUiP10wxMenuItem
+      ;wxMenuItemBase::wxMenuItemBase(wxMenu*,int,const wxString&,const wxString&,wxItemKind,wxMenu*)
+      __ct__14wxMenuItemBaseFP6wxMenuiRC8wxStringT310wxItemKindT1
       ;wxMenuBase::Remove(wxMenuItem*)
       Remove__10wxMenuBaseFP10wxMenuItem
       ;wxMenuBase::IsChecked(int) const
@@ -5931,7 +5978,7 @@ EXPORTS
       Read32__17wxTextInputStreamFv
       ;wxTextInputStream::SkipIfEndOfLine(char)
       SkipIfEndOfLine__17wxTextInputStreamFc
-  ;From object file:  F:\DEV\WX2\WXWINDOWS\src\common\unzip.c
+  ;From object file:  H:\DEV\WX2\WXWINDOWS\src\common\unzip.c
     ;PUBDEFs (Symbols available from object file):
       unzReadCurrentFile
       unzGetCurrentFileInfo
@@ -7356,6 +7403,26 @@ EXPORTS
       CalculateMeasurements__21wxGenericColourDialogFv
       ;wxGenericColourDialog::sm_classwxGenericColourDialog
       sm_classwxGenericColourDialog__21wxGenericColourDialog
+  ;From object file:  ..\generic\dcbuffer.cpp
+    ;PUBDEFs (Symbols available from object file):
+      __vft17wxBufferedPaintDC8wxObject
+      ;wxBufferedDC::wxBufferedDC(wxDC*,const wxBitmap&)
+      __ct__12wxBufferedDCFP4wxDCRC8wxBitmap
+      ;wxBufferedPaintDC::wxBufferedPaintDC(wxWindow*,const wxBitmap&)
+      __ct__17wxBufferedPaintDCFP8wxWindowRC8wxBitmap
+      ;wxBufferedDC::~wxBufferedDC()
+      __dt__12wxBufferedDCFv
+      __vft12wxBufferedDC8wxObject
+      ;wxBufferedDC::wxBufferedDC(wxDC*,const wxSize&)
+      __ct__12wxBufferedDCFP4wxDCRC6wxSize
+      ;wxBufferedDC::UnMask()
+      UnMask__12wxBufferedDCFv
+      ;wxBufferedDC::Init(wxDC*,const wxBitmap&)
+      Init__12wxBufferedDCFP4wxDCRC8wxBitmap
+      ;wxBufferedDC::Init(wxDC*,const wxSize&)
+      Init__12wxBufferedDCFP4wxDCRC6wxSize
+      ;wxBufferedPaintDC::~wxBufferedPaintDC()
+      __dt__17wxBufferedPaintDCFv
   ;From object file:  ..\generic\dcpsg.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft23wxPostScriptPrintDialog8wxObject
@@ -8780,36 +8847,6 @@ EXPORTS
       LoadFile__24wxHTMLHelpControllerBaseFRC8wxString
       ;wxHTMLHelpControllerBase::KeywordSearch(const wxString&)
       KeywordSearch__24wxHTMLHelpControllerBaseFRC8wxString
-  ;From object file:  ..\generic\helpwxht.cpp
-    ;PUBDEFs (Symbols available from object file):
-      ;wxHelpControllerHtml::GetFrameParameters(wxSize*,wxPoint*,unsigned long*)
-      GetFrameParameters__20wxHelpControllerHtmlFP6wxSizeP7wxPointPUl
-      __vft20wxHelpControllerHtml8wxObject
-      ;wxHelpFrame::sm_eventTable
-      sm_eventTable__11wxHelpFrame
-      ;wxHelpFrame::OnButton(wxCommandEvent&)
-      OnButton__11wxHelpFrameFR14wxCommandEvent
-      ;wxHelpControllerHtml::sm_classwxHelpControllerHtml
-      sm_classwxHelpControllerHtml__20wxHelpControllerHtml
-      __vft11wxHelpFrame8wxObject
-      ;wxHelpFrame::OnClose(wxCloseEvent&)
-      OnClose__11wxHelpFrameFR12wxCloseEvent
-      ;wxHelpControllerHtml::wxHelpControllerHtml()
-      __ct__20wxHelpControllerHtmlFv
-      ;wxHelpControllerHtml::~wxHelpControllerHtml()
-      __dt__20wxHelpControllerHtmlFv
-      ;wxHelpControllerHtml::DisplayHelp(const wxString&)
-      DisplayHelp__20wxHelpControllerHtmlFRC8wxString
-      ;wxHelpFrame::wxHelpFrame(wxWindow*,int,const wxString&,const wxPoint&,const wxSize&,wxHelpControllerHtml*)
-      __ct__11wxHelpFrameFP8wxWindowiRC8wxStringRC7wxPointRC6wxSizeP20wxHelpControllerHtml
-      ;wxHelpFrame::GetEventTable() const
-      GetEventTable__11wxHelpFrameCFv
-      ;wxHelpControllerHtml::SetFrameParameters(const wxString&,const wxSize&,const wxPoint&,unsigned long)
-      SetFrameParameters__20wxHelpControllerHtmlFRC8wxStringRC6wxSizeRC7wxPointUl
-      ;wxHelpFrame::sm_eventTableEntries
-      sm_eventTableEntries__11wxHelpFrame
-      ;wxHelpFrame::~wxHelpFrame()
-      __dt__11wxHelpFrameFv
   ;From object file:  ..\generic\imaglist.cpp
     ;PUBDEFs (Symbols available from object file):
       __vft11wxImageList8wxObject
@@ -9765,6 +9802,8 @@ EXPORTS
       sm_eventTable__23wxGenericScrolledWindow
       ;wxAutoScrollTimer::wxAutoScrollTimer(wxWindow*,wxScrollHelper*,int,int,int)
       __ct__17wxAutoScrollTimerFP8wxWindowP14wxScrollHelperiN23
+      ;wxScrollHelper::DoCalcUnscrolledPosition(int,int,int*,int*) const
+      DoCalcUnscrolledPosition__14wxScrollHelperCFiT1PiT3
       ;wxScrollHelper::HandleOnScroll(wxScrollWinEvent&)
       HandleOnScroll__14wxScrollHelperFR16wxScrollWinEvent
       __vft17wxAutoScrollTimer8wxObject
@@ -9800,10 +9839,8 @@ EXPORTS
       GetEventTable__23wxGenericScrolledWindowCFv
       ;wxGenericScrolledWindow::Create(wxWindow*,int,const wxPoint&,const wxSize&,long,const wxString&)
       Create__23wxGenericScrolledWindowFP8wxWindowiRC7wxPointRC6wxSizelRC8wxString
-      ;wxScrollHelper::CalcUnscrolledPosition(int,int,int*,int*) const
-      CalcUnscrolledPosition__14wxScrollHelperCFiT1PiT3
-      ;wxScrollHelper::CalcScrolledPosition(int,int,int*,int*) const
-      CalcScrolledPosition__14wxScrollHelperCFiT1PiT3
+      ;wxScrollHelper::DoCalcScrolledPosition(int,int,int*,int*) const
+      DoCalcScrolledPosition__14wxScrollHelperCFiT1PiT3
       ;wxScrollHelper::HandleOnMouseEnter(wxMouseEvent&)
       HandleOnMouseEnter__14wxScrollHelperFR12wxMouseEvent
       ;wxScrollHelper::HandleOnMouseLeave(wxMouseEvent&)
@@ -10381,7 +10418,6 @@ EXPORTS
       ;wxGenericTreeCtrl::FillArray(wxGenericTreeItem*,wxArrayTreeItemIds&) const
       FillArray__17wxGenericTreeCtrlCFP17wxGenericTreeItemR18wxArrayTreeItemIds
   ;From object file:  ..\generic\treelay.cpp
-  ;From object file:  ..\generic\wizard.cpp
   ;From object file:  ..\html\helpctrl.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxHtmlHelpController::DisplayTextPopup(const wxString&,const wxPoint&)
@@ -11310,8 +11346,6 @@ EXPORTS
       ;wxMsgArray::RemoveAt(unsigned int)
       RemoveAt__10wxMsgArrayFUi
       wxGetInstance
-      ;wxApp::GetStdIcon(int) const
-      GetStdIcon__5wxAppCFi
       ;wxMsgArray::~wxMsgArray()
       __dt__10wxMsgArrayFv
       wxSTD_MDIPARENTFRAME_ICON
@@ -13208,25 +13242,35 @@ EXPORTS
       GetRealId__10wxMenuItemCFv
       ;wxMenuItem::SetCheckable(unsigned long)
       SetCheckable__10wxMenuItemFUl
-      ;wxMenuItemBase::New(wxMenu*,int,const wxString&,const wxString&,unsigned long,wxMenu*)
-      New__14wxMenuItemBaseFP6wxMenuiRC8wxStringT3UlT1
+      ;wxMenuItem::SetRadioGroupEnd(int)
+      SetRadioGroupEnd__10wxMenuItemFi
       ;wxMenuItem::IsChecked() const
       IsChecked__10wxMenuItemCFv
+      ;wxMenuItem::SetAsRadioGroupStart()
+      SetAsRadioGroupStart__10wxMenuItemFv
       ;wxMenuItemBase::GetLabelFromText(const wxString&)
       GetLabelFromText__14wxMenuItemBaseFRC8wxString
       ;wxMenuItem::SetText(const wxString&)
       SetText__10wxMenuItemFRC8wxString
+      ;wxMenuItemBase::New(wxMenu*,int,const wxString&,const wxString&,wxItemKind,wxMenu*)
+      New__14wxMenuItemBaseFP6wxMenuiRC8wxStringT310wxItemKindT1
+      ;wxMenuItem::wxMenuItem(wxMenu*,int,const wxString&,const wxString&,wxItemKind,wxMenu*)
+      __ct__10wxMenuItemFP6wxMenuiRC8wxStringT310wxItemKindT1
       ;wxMenuItem::Check(unsigned long)
       Check__10wxMenuItemFUl
       __vft10wxMenuItem8wxObject
       ;wxMenuItem::wxMenuItem(wxMenu*,int,const wxString&,const wxString&,unsigned long,wxMenu*)
       __ct__10wxMenuItemFP6wxMenuiRC8wxStringT3UlT1
+      ;wxMenuItem::SetRadioGroupStart(int)
+      SetRadioGroupStart__10wxMenuItemFi
       ;wxConstructorForwxMenuItem()
       wxConstructorForwxMenuItem__Fv
       ;wxMenuItem::~wxMenuItem()
       __dt__10wxMenuItemFv
       ;wxMenuItem::Enable(unsigned long)
       Enable__10wxMenuItemFUl
+      ;wxMenuItem::Init()
+      Init__10wxMenuItemFv
       __vft10wxMenuItem12wxOwnerDrawn
   ;From object file:  ..\os2\metafile.cpp
     ;PUBDEFs (Symbols available from object file):
@@ -14623,13 +14667,13 @@ EXPORTS
       wxGetEnv__FRC8wxStringP8wxString
   ;From object file:  ..\os2\utilsexc.cpp
     ;PUBDEFs (Symbols available from object file):
-      ;wxExecute(char**,unsigned long,wxProcess*)
-      wxExecute__FPPcUlP9wxProcess
-      ;wxExecute(const wxString&,unsigned long,wxProcess*)
-      wxExecute__FRC8wxStringUlP9wxProcess
+      ;wxExecute(char**,int,wxProcess*)
+      wxExecute__FPPciP9wxProcess
       ;wxGetFullHostName(char*,int)
       wxGetFullHostName__FPci
       wxExecuteWindowCbk
+      ;wxExecute(const wxString&,int,wxProcess*)
+      wxExecute__FRC8wxStringiP9wxProcess
   ;From object file:  ..\os2\wave.cpp
     ;PUBDEFs (Symbols available from object file):
       ;wxWave::Create(const wxString&,unsigned long)

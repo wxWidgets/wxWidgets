@@ -188,6 +188,14 @@ void wxMenu::Break()
 
 #if wxUSE_ACCEL
 
+void wxMenu::EndRadioGroup()
+{
+    //
+    // We're not inside a radio group any longer
+    //
+    m_nStartRadioGroup = -1;
+} // end of wxMenu::EndRadioGroup
+
 int wxMenu::FindAccel(
   int                               nId
 ) const
@@ -406,18 +414,18 @@ bool wxMenu::DoAppend(
     {
         int                         nCount = GetMenuItemCount();
 
-        if (m_lStartRadioGroup == -1)
+        if (m_nStartRadioGroup == -1)
         {
             //
             // Start a new radio group
             //
-            m_lStartRadioGroup = lCount;
+            m_nStartRadioGroup = nCount;
 
             //
             // For now it has just one element
             //
             pItem->SetAsRadioGroupStart();
-            pItem->SetRadioGroupEnd(m_startRadioGroup);
+            pItem->SetRadioGroupEnd(m_nStartRadioGroup);
 
             //
             // Ensure that we have a checked item in the radio group
@@ -429,12 +437,12 @@ bool wxMenu::DoAppend(
             //
             // We need to update its end item
             //
-            pItem->SetRadioGroupStart(m_lStartRadioGroup);
-            wxMenuItemList::Node *node = GetMenuItems().Item(m_startRadioGroup);
+            pItem->SetRadioGroupStart(m_nStartRadioGroup);
+            wxMenuItemList::Node*   pNode = GetMenuItems().Item(m_nStartRadioGroup);
 
-            if (node)
+            if (pNode)
             {
-                node->GetData()->SetRadioGroupEnd(count);
+                pNode->GetData()->SetRadioGroupEnd(nCount);
             }
             else
             {

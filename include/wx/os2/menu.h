@@ -142,6 +142,11 @@ private:
                          );
 
     //
+    // Terminate the current radio group, if any
+    //
+    void EndRadioGroup(void);
+
+    //
     // If TRUE, insert a breal before appending the next item
     //
     bool                            m_bDoBreak;
@@ -155,6 +160,11 @@ private:
     // The helper variable for creating unique IDs.
     //
     static USHORT		            m_nextMenuId;
+
+    //
+    // The position of the first item in the current radio group or -1
+    //
+    int                             m_nStartRadioGroup;
 
 #if wxUSE_ACCEL
     //

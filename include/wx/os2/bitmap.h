@@ -183,10 +183,10 @@ public:
 
     void SetMask(wxMask* pMask) ;
 
-    inline bool operator==(const wxBitmap& rBitmap)
+    inline bool operator==(const wxBitmap& rBitmap) const
       { return m_refData == rBitmap.m_refData; }
 
-    inline bool operator!=(const wxBitmap& rBitmap)
+    inline bool operator!=(const wxBitmap& rBitmap) const
       { return m_refData != rBitmap.m_refData; }
 
 #if WXWIN_COMPATIBILITY_2

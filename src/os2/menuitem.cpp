@@ -108,15 +108,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuItem, wxObject)
 wxMenuItem::wxMenuItem(
   wxMenu*                           pParentMenu
 , int                               nId
-, const wxString&                   rText
-, const wxString&                   rStrHelp
-, wxItemKind                        kind
+, const wxString&                   rsText
+, const wxString&                   rsHelp
+, wxItemKind                        eKind
 , wxMenu*                           pSubMenu
 )
-: wxMenuItemBase(pParentMenu, nId, rText, rStrHelp, kind, pSubMenu)
+: wxMenuItemBase( pParentMenu
+                 ,nId
+                 ,rsText
+                 ,rsHelp
+                 ,eKind
+                 ,pSubMenu
+                )
 #if wxUSE_OWNER_DRAWN
-,  wxOwnerDrawn( TextToLabel(rText)
-                ,bCheckable
+,  wxOwnerDrawn( TextToLabel(rsText)
+                ,eKind == wxITEM_CHECK
                )
 #endif // owner drawn
 {
@@ -128,15 +134,21 @@ wxMenuItem::wxMenuItem(
 wxMenuItem::wxMenuItem(
   wxMenu*                           pParentMenu
 , int                               nId
-, const wxString&                   rText
-, const wxString&                   rStrHelp
+, const wxString&                   rsText
+, const wxString&                   rsHelp
 , bool                              bIsCheckable
 , wxMenu*                           pSubMenu
 )
-: wxMenuItemBase(pParentMenu, nId, rText, rStrHelp, bIsCheckable ? kITEM_CHECK : kITEM_NORMAL, pSubMenu)
+: wxMenuItemBase( pParentMenu
+                 ,nId
+                 ,rsText
+                 ,rsHelp
+                 ,bIsCheckable ? wxITEM_CHECK : wxITEM_NORMAL
+                 ,pSubMenu
+                )
 #if wxUSE_OWNER_DRAWN
-,  wxOwnerDrawn( TextToLabel(rText)
-                ,bCheckable
+,  wxOwnerDrawn( TextToLabel(rsText)
+                ,bIsCheckable
                )
 #endif // owner drawn
 {
@@ -147,11 +159,13 @@ wxMenuItem::wxMenuItem(
 
 void wxMenuItem::Init()
 {
-    m_radioGroup.start = -1;
-    m_isRadioGroupStart = FALSE;
+    m_vRadioGroup.m_nStart = -1;
+    m_bIsRadioGroupStart = FALSE;
 
 #if  wxUSE_OWNER_DRAWN
-    // set default menu colors
+    //
+    // Set default menu colors
+    //
     #define SYS_COLOR(c) (wxSystemSettings::GetColour(wxSYS_COLOUR_##c))
 
     SetTextColour(SYS_COLOR(MENUTEXT));
@@ -159,13 +173,17 @@ void wxMenuItem::Init()
 
     #undef  SYS_COLOR
 
-    // we don't want normal items be owner-drawn
+    //
+    // We don't want normal items be owner-drawn
+    //
     ResetOwnerDrawn();
 
-    // tell the owner drawing code to to show the accel string as well
+    //
+    // Tell the owner drawing code to to show the accel string as well
+    //
     SetAccelString(m_text.AfterFirst(_T('\t')));
 #endif // wxUSE_OWNER_DRAWN
-}
+} // end of wxMenuItem::Init
 
 wxMenuItem::~wxMenuItem()
 {
@@ -284,18 +302,92 @@ void wxMenuItem::Check(
     if (m_isChecked == bCheck)
         return;
 
-    if (bCheck)
-        bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
-                                 ,MM_SETITEMATTR
-                                 ,MPFROM2SHORT(GetRealId(), TRUE)
-                                 ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
-                                );
-    else
-        bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
-                                 ,MM_SETITEMATTR
-                                 ,MPFROM2SHORT(GetRealId(), TRUE)
-                                 ,MPFROM2SHORT(MIA_CHECKED, FALSE)
-                                );
+    HMENU                           hMenu = GetHMenuOf(m_parentMenu);
+
+    if ( GetKind() == wxITEM_RADIO )
+    {
+        //
+        // It doesn't make sense to uncheck a radio item - what would this do?
+        //
+        if (!bCheck)
+            return;
+
+        //
+        // Get the index of this item in the menu
+        //
+        const wxMenuItemList&       rItems = m_parentMenu->GetMenuItems();
+        int                         nPos = rItems.IndexOf(this);
+        int                         nStart;
+        int                         nEnd;
+
+        wxCHECK_RET( nPos != wxNOT_FOUND,
+                     _T("menuitem not found in the menu items list?") );
+
+        //
+        // Get the radio group range
+        //
+
+        if (m_bIsRadioGroupStart)
+        {
+            // we already have all information we need
+            nStart = nPos;
+            nEnd = m_vRadioGroup.m_nEnd;
+        }
+        else // Next radio group item
+        {
+            //
+            // Get the radio group end from the start item
+            //
+            nStart = m_vRadioGroup.m_nStart;
+            nEnd = rItems.Item(nStart)->GetData()->m_vRadioGroup.m_nEnd;
+        }
+
+        //
+        // Also uncheck all the other items in this radio group
+        //
+        wxMenuItemList::Node*       pNode = rItems.Item(nStart);
+
+        for (int n = nStart; n <= nEnd && pNode; n++)
+        {
+            if (n != nPos)
+            {
+                pNode->GetData()->m_isChecked = FALSE;
+            }
+
+            if (n == nPos)
+            {
+                bOk = (bool)::WinSendMsg( hMenu
+                                         ,MM_SETITEMATTR
+                                         ,MPFROM2SHORT(n, TRUE)
+                                         ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
+                                        );
+            }
+            else
+            {
+                bOk = (bool)::WinSendMsg( hMenu
+                                         ,MM_SETITEMATTR
+                                         ,MPFROM2SHORT(n, TRUE)
+                                         ,MPFROM2SHORT(MIA_CHECKED, FALSE)
+                                        );
+            }
+            pNode = pNode->GetNext();
+        }
+    }
+    else // check item
+    {
+        if (bCheck)
+            bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                     ,MM_SETITEMATTR
+                                     ,MPFROM2SHORT(GetRealId(), TRUE)
+                                     ,MPFROM2SHORT(MIA_CHECKED, MIA_CHECKED)
+                                    );
+        else
+            bOk = (bool)::WinSendMsg( GetHMenuOf(m_parentMenu)
+                                     ,MM_SETITEMATTR
+                                     ,MPFROM2SHORT(GetRealId(), TRUE)
+                                     ,MPFROM2SHORT(MIA_CHECKED, FALSE)
+                                    );
+    }
     if (!bOk)
     {
         wxLogLastError("CheckMenuItem");

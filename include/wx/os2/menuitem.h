@@ -42,17 +42,32 @@ class WXDLLEXPORT wxMenuItem: public wxMenuItemBase
 #endif
 {
 public:
+    //
     // ctor & dtor
+    //
     wxMenuItem( wxMenu*         pParentMenu = NULL
                ,int             nId = wxID_SEPARATOR
                ,const wxString& rStrName = ""
                ,const wxString& rWxHelp = ""
-               ,wxItemKind      kind = wxItem_Normal
+               ,wxItemKind      kind = wxITEM_NORMAL
                ,wxMenu*         pSubMenu = NULL
+              );
+
+    //
+    // Depricated, do not use in new code
+    //
+    wxMenuItem( wxMenu*         pParentMenu
+               ,int             vId
+               ,const wxString& rsText
+               ,const wxString& rsHelp
+               ,bool            bIsCheckable
+               ,wxMenu*         pSubMenu = (wxMenu *)NULL
               );
     virtual ~wxMenuItem();
 
-    // override base class virtuals
+    //
+    // Override base class virtuals
+    //
     virtual void SetText(const wxString& rStrName);
     virtual void SetCheckable(bool bCheckable);
 
@@ -60,14 +75,23 @@ public:
     virtual void Check(bool bDoCheck = TRUE);
     virtual bool IsChecked(void) const;
 
-    // unfortunately needed to resolve ambiguity between
+    //
+    // Unfortunately needed to resolve ambiguity between
     // wxMenuItemBase::IsCheckable() and wxOwnerDrawn::IsCheckable()
+    //
     bool IsCheckable(void) const { return wxMenuItemBase::IsCheckable(); }
 
-    // the id for a popup menu is really its menu handle (as required by
+    //
+    // The id for a popup menu is really its menu handle (as required by
     // ::AppendMenu() API), so this function will return either the id or the
     // menu handle depending on what we're
+    //
     int GetRealId(void) const;
+
+    void SetAsRadioGroupStart(void);
+    void SetRadioGroupStart(int nStart);
+    void SetRadioGroupEnd(int nEnd);
+
 
     //
     // All OS/2PM Submenus and menus have one of these
@@ -75,6 +99,20 @@ public:
     MENUITEM                        m_vMenuData;
 
 private:
+    void Init();
+
+    //
+    // The positions of the first and last items of the radio group this item
+    // belongs to or -1: start is the radio group start and is valid for all
+    // but first radio group items (m_isRadioGroupStart == FALSE), end is valid
+    // only for the first one
+    //
+    union
+    {
+        int m_nStart;
+        int m_nEnd;
+    }                               m_vRadioGroup;
+    bool                            m_bIsRadioGroupStart;
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 }; // end of CLASS wxMenuItem
 
