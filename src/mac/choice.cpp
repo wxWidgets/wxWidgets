@@ -90,7 +90,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 // ----------------------------------------------------------------------------
 int wxChoice::DoAppend(const wxString& item)
 {
-    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item);
+    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() );
     m_strings.Add( item ) ;
     m_datas.Add( NULL ) ;
     int index = m_strings.GetCount()  - 1  ;
@@ -107,7 +107,7 @@ int wxChoice::DoInsert(const wxString& item, int pos)
     if (pos == GetCount())
         return DoAppend(item);
 
-    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item);
+    UMAAppendMenuItem(MAC_WXHMENU( m_macPopUpMenuHandle ) , item, m_font.GetEncoding() );
     m_strings.Insert( item, pos ) ;
     m_datas.Insert( NULL, pos ) ;
     DoSetItemClientData( pos , NULL ) ;
@@ -277,7 +277,7 @@ wxSize wxChoice::DoGetBestSize() const
         #if wxUSE_UNICODE
             Point bounds={0,0} ;
             SInt16 baseline ;
-            ::GetThemeTextDimensions( wxMacCFStringHolder( str ) ,
+            ::GetThemeTextDimensions( wxMacCFStringHolder( str , m_font.GetEncoding() ) ,
                 kThemeCurrentPortFont,
                 kThemeStateActive,
                 false,

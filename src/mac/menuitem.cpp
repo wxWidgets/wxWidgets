@@ -130,7 +130,7 @@ void wxMenuItem::UpdateItemStatus()
         else
             ::SetItemMark( mhandle , index , 0 ) ; // no mark
 
-           UMASetMenuItemText( mhandle , index , m_text ) ; 
+           UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ; 
            wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
         UMASetMenuItemShortcut( mhandle , index , entry ) ;
         delete entry ;
@@ -147,7 +147,7 @@ void wxMenuItem::UpdateItemText()
     if( mhandle == NULL || index == 0)
         return ;
 
-       UMASetMenuItemText( mhandle , index , m_text ) ; 
+       UMASetMenuItemText( mhandle , index , m_text , wxFont::GetDefaultEncoding() ) ; 
        wxAcceleratorEntry *entry = wxGetAccelFromString( m_text ) ;
     UMASetMenuItemShortcut( mhandle , index , entry ) ;
     delete entry ;

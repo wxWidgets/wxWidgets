@@ -123,7 +123,7 @@ static pascal void wxMacListDefinition( short message, Boolean isSelected, Rect 
 			{
 				Rect frame = { drawRect->top, drawRect->left + 4,
 				    drawRect->top + kwxMacListItemHeight, drawRect->right + 10000 } ;
-				CFMutableStringRef mString = CFStringCreateMutableCopy( NULL , 0 , wxMacCFStringHolder(linetext) ) ;
+				CFMutableStringRef mString = CFStringCreateMutableCopy( NULL , 0 , wxMacCFStringHolder(linetext , list->GetFont().GetEncoding()) ) ;
 				::TruncateThemeText( mString , kThemeCurrentPortFont, kThemeStateActive, drawRect->right - drawRect->left , truncEnd , NULL ) ;
 				::DrawThemeTextBox( mString,
 				    kThemeCurrentPortFont,
@@ -636,7 +636,7 @@ wxSize wxListBox::DoGetBestSize() const
         #if wxUSE_UNICODE
             Point bounds={0,0} ;
             SInt16 baseline ;
-            ::GetThemeTextDimensions( wxMacCFStringHolder( str ) ,
+            ::GetThemeTextDimensions( wxMacCFStringHolder( str , m_font.GetEncoding() ) ,
                 kThemeCurrentPortFont,
                 kThemeStateActive,
                 false,

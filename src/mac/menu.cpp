@@ -70,7 +70,7 @@ void wxMenu::Init()
 
     // create the menu
     m_macMenuId = s_macNextMenuId++;
-    m_hMenu = UMANewMenu(m_macMenuId, m_title);
+    m_hMenu = UMANewMenu(m_macMenuId, m_title, wxFont::GetDefaultEncoding() );
 
     if ( !m_hMenu )
     {
@@ -130,9 +130,9 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
              }
 
             if ( pos == (size_t)-1 )
-                UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), pItem->GetText(), pSubMenu->m_macMenuId);
+                UMAAppendSubMenuItem(MAC_WXHMENU(m_hMenu), pItem->GetText(), wxFont::GetDefaultEncoding() , pSubMenu->m_macMenuId);
             else
-                UMAInsertSubMenuItem(MAC_WXHMENU(m_hMenu), pItem->GetText() , pos, pSubMenu->m_macMenuId);
+                UMAInsertSubMenuItem(MAC_WXHMENU(m_hMenu), pItem->GetText(), wxFont::GetDefaultEncoding()  , pos, pSubMenu->m_macMenuId);
             pItem->UpdateItemBitmap() ;
             pItem->UpdateItemStatus() ;
         }
@@ -140,7 +140,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         {
             if ( pos == (size_t)-1 )
             {
-                UMAAppendMenuItem(MAC_WXHMENU(m_hMenu), wxT("a") );
+                UMAAppendMenuItem(MAC_WXHMENU(m_hMenu), wxT("a") , wxFont::GetDefaultEncoding() );
                 pos = CountMenuItems(MAC_WXHMENU(m_hMenu)) ;
             }
             else
@@ -148,7 +148,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 // MacOS counts menu items from 1 and inserts after, therefore having the
                 // same effect as wx 0 based and inserting before, we must correct pos
                 // after however for updates to be correct
-                UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), wxT("a") , pos);
+                UMAInsertMenuItem(MAC_WXHMENU(m_hMenu), wxT("a"), wxFont::GetDefaultEncoding(), pos);
                 pos += 1 ;
             }
 
@@ -273,7 +273,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 void wxMenu::SetTitle(const wxString& label)
 {
        m_title = label ;
-    UMASetMenuTitle(MAC_WXHMENU(m_hMenu) , label ) ;
+    UMASetMenuTitle(MAC_WXHMENU(m_hMenu) , label , wxFont::GetDefaultEncoding() ) ;
 }
 bool wxMenu::ProcessCommand(wxCommandEvent & event)
 {
@@ -580,7 +580,7 @@ void wxMenuBar::MacInstallMenuBar()
 
                         if ( item->GetId() == wxApp::s_macAboutMenuItemId )
                         {
-                                UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , item->GetText()  );
+                                UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , item->GetText() , wxFont::GetDefaultEncoding() );
                                 UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 , true );
                                 SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , item->GetId() ) ;
                                 UMASetMenuItemShortcut( GetMenuHandle( kwxMacAppleMenuId ) , 1 , entry ) ;
@@ -589,7 +589,7 @@ void wxMenuBar::MacInstallMenuBar()
                         {
                             if ( mh )
                             {
-                                UMAAppendMenuItem(mh, item->GetText()  , entry );
+                                UMAAppendMenuItem(mh, item->GetText()  , wxFont::GetDefaultEncoding(), entry);
                                 SetMenuItemCommandID( mh , CountMenuItems(mh) , item->GetId() ) ;
                             }
                         }
@@ -601,7 +601,7 @@ void wxMenuBar::MacInstallMenuBar()
         }
         else
         {
-            UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , m_titles[i] ) ;
+            UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , m_titles[i], m_font.GetEncoding()  ) ;
             m_menus[i]->MacBeforeDisplay(false) ;
             ::InsertMenu(MAC_WXHMENU(m_menus[i]->GetHMenu()), 0);
         }
@@ -684,7 +684,7 @@ wxMenu *wxMenuBar::Replace(size_t pos, wxMenu *menu, const wxString& title)
             ::DeleteMenu( menuOld->MacGetMenuId() /* m_menus[pos]->MacGetMenuId() */ ) ;
             {
                 menu->MacBeforeDisplay( false ) ;
-                UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , title ) ;
+                UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , title , m_font.GetEncoding() ) ;
                 if ( pos == m_menus.GetCount() - 1)
                 {
                     ::InsertMenu( MAC_WXHMENU(menu->GetHMenu()) , 0 ) ;
@@ -709,7 +709,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 
     m_titles.Insert(title, pos);
 
-    UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , title ) ;
+    UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , title , m_font.GetEncoding() ) ;
 
     if ( IsAttached() && s_macInstalledMenuBar == this )
     {
@@ -762,7 +762,7 @@ bool wxMenuBar::Append(wxMenu *menu, const wxString& title)
 
     m_titles.Add(title);
 
-    UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , title ) ;
+    UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , title , m_font.GetEncoding() ) ;
 
     if ( IsAttached() )
     {

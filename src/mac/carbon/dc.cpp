@@ -1485,7 +1485,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
                 if ( useDrawThemeText )
                 {
                     Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
-                    wxMacCFStringHolder mString( linetext ) ;
+                    wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
                     if ( m_backgroundMode != wxTRANSPARENT )
                     {
                         Point bounds={0,0} ;
@@ -1527,7 +1527,7 @@ void  wxDC::DoDrawText(const wxString& strtext, wxCoord x, wxCoord y)
         if ( useDrawThemeText )
         {
             Rect frame = { yy + line*(fi.descent + fi.ascent + fi.leading)  ,xx , yy + (line+1)*(fi.descent + fi.ascent + fi.leading) , xx + 10000 } ;
-            wxMacCFStringHolder mString( linetext ) ;
+            wxMacCFStringHolder mString( linetext , m_font.GetEncoding()) ;
 
             if ( m_backgroundMode != wxTRANSPARENT )
             {
@@ -1614,7 +1614,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
                 {
                     Point bounds={0,0} ;
                     SInt16 baseline ;
-                    wxMacCFStringHolder mString( linetext ) ;
+                    wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
                     ::GetThemeTextDimensions( mString,
                         kThemeCurrentPortFont,
                         kThemeStateActive,
@@ -1642,7 +1642,7 @@ void  wxDC::DoGetTextExtent( const wxString &strtext, wxCoord *width, wxCoord *h
         {
             Point bounds={0,0} ;
             SInt16 baseline ;
-            wxMacCFStringHolder mString( linetext ) ;
+            wxMacCFStringHolder mString( linetext , m_font.GetEncoding() ) ;
             ::GetThemeTextDimensions( mString,
                 kThemeCurrentPortFont,
                 kThemeStateActive,

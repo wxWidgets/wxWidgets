@@ -53,11 +53,11 @@ int wxMessageDialog::ShowModal()
     if ( UMAGetSystemVersion() >= 0x1000 )
     {
         AlertStdCFStringAlertParamRec param ;
-        wxMacCFStringHolder cfNoString(_("No")) ;
-        wxMacCFStringHolder cfYesString( _("Yes")) ;
+        wxMacCFStringHolder cfNoString(_("No") , m_font.GetEncoding()) ;
+        wxMacCFStringHolder cfYesString( _("Yes") , m_font.GetEncoding()) ;
         
-        wxMacCFStringHolder cfTitle(m_caption);
-        wxMacCFStringHolder cfText(m_message);
+        wxMacCFStringHolder cfTitle(m_caption , m_font.GetEncoding());
+        wxMacCFStringHolder cfText(m_message , m_font.GetEncoding());
                 
         param.movable = true;
         param.flags = 0 ;

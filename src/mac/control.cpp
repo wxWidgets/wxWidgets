@@ -207,7 +207,7 @@ void wxControl::SetLabel(const wxString& title)
 
     if ( m_macControl )
     {
-		UMASetControlTitle( (ControlHandle) m_macControl , m_label ) ;
+		UMASetControlTitle( (ControlHandle) m_macControl , m_label , m_font.GetEncoding() ) ;
     }
     Refresh() ;
 }
@@ -338,7 +338,7 @@ void wxControl::MacPostControlCreate()
         controlstyle.flags = kControlUseFontMask ;
         
         if (IsKindOf( CLASSINFO( wxButton ) ) )
-            controlstyle.font = kControlFontSmallSystemFont ; // eventually kControlFontBigSystemFont ;
+            controlstyle.font = kControlFontBigSystemFont ; // eventually kControlFontBigSystemFont ;
         else
             controlstyle.font = kControlFontSmallSystemFont ;
         
@@ -400,7 +400,7 @@ void wxControl::MacPostControlCreate()
     SetSize(pos.x, pos.y, new_size.x, new_size.y);
     
 #if wxUSE_UNICODE
-    UMASetControlTitle( (ControlHandle) m_macControl , wxStripMenuCodes(m_label) ) ;
+    UMASetControlTitle( (ControlHandle) m_macControl , wxStripMenuCodes(m_label) , m_font.GetEncoding() ) ;
 #endif
 
     if ( m_macControlIsShown )

@@ -144,7 +144,7 @@ void wxMacCarbonPrintData::TransferFrom( wxPrintData* data )
     // collate cannot be set
 #if 0 // not yet tested
     if ( m_printerName.Length() > 0 )
-        PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxMacCFStringHolder( m_printerName ) ) ;
+        PMSessionSetCurrentPrinter( (PMPrintSession) m_macPrintSession , wxMacCFStringHolder( m_printerName , wxFont::GetDefaultEncoding() ) ) ;
 #endif
     PMColorMode color ;
     PMGetColorMode(  (PMPrintSettings) m_macPrintSettings, &color ) ;

@@ -233,7 +233,7 @@ void wxMacToolTip::Draw()
         LocalToGlobal( (Point *) &tag.absHotRect.top );
         LocalToGlobal( (Point *) &tag.absHotRect.bottom );
         SetPort( port );
-        m_helpTextRef = m_label ;
+        m_helpTextRef.Assign( m_label  , wxFONTENCODING_DEFAULT ) ;
         tag.content[kHMMinimumContentIndex].contentType = kHMCFStringContent ;
         tag.content[kHMMinimumContentIndex].u.tagCFString = m_helpTextRef ;
         tag.content[kHMMaximumContentIndex].contentType = kHMCFStringContent ;

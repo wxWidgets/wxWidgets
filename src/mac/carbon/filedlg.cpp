@@ -141,7 +141,7 @@ NavEventProc(
                 {
                     sfilename = sfilename.Left(pos+1)+extension ;
 #if TARGET_CARBON
-                    cfString = sfilename ;
+                    cfString.Assign( sfilename , wxFONTENCODING_DEFAULT ) ;
                     NavDialogSetSaveFileName( ioParams->context , cfString ) ;
 #else
                     wxMacStringToPascal( sfilename , filename ) ;
@@ -356,7 +356,7 @@ int wxFileDialog::ShowModal()
 #else
     CFStringRef titleRef = ::CFStringCreateWithCString(NULL,
                                                        m_message.c_str(),
-                                                       CFStringGetSystemEncoding());
+                                                       m_font.GetEncoding() );
 #endif
     dialogCreateOptions.windowTitle = titleRef;
 #if wxUSE_UNICODE
@@ -366,7 +366,7 @@ int wxFileDialog::ShowModal()
 #else
     CFStringRef defaultFileNameRef = ::CFStringCreateWithCString(NULL,
                                                                  m_fileName.c_str(),
-                                                                 CFStringGetSystemEncoding());
+                                                                 m_font.GetEncoding());
 #endif
     dialogCreateOptions.saveFileName = defaultFileNameRef;
     NavDialogRef dialog;
@@ -403,7 +403,7 @@ int wxFileDialog::ShowModal()
             myData.menuitems = dialogCreateOptions.popupExtension ;
             for ( size_t i = 0 ; i < numfilters ; ++i )
             {
-                CFArrayAppendValue( popup , (CFStringRef) wxMacCFStringHolder( myData.name[i] ) ) ;
+                CFArrayAppendValue( popup , (CFStringRef) wxMacCFStringHolder( myData.name[i] , m_font.GetEncoding() ) ) ;
             }
         }
 
@@ -484,7 +484,7 @@ int wxFileDialog::ShowModal()
             CFURLPathStyle pathstyle = kCFURLHFSPathStyle;
 #endif
             CFStringRef cfString = CFURLCopyFileSystemPath(fullURLRef, pathstyle);
-            thePath = wxMacCFStringHolder(cfString).AsString();
+            thePath = wxMacCFStringHolder(cfString).AsString(m_font.GetEncoding());
             if (!thePath)
             {
                 ::NavDisposeReply(&navReply);
