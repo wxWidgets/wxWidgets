@@ -35,6 +35,11 @@ void wxColour::Init()
     m_isInit = false;
 }
 
+wxColour::wxColour()
+{
+    Init();
+}
+
 wxColour::wxColour(const wxColour& col)
 {
     *this = col;

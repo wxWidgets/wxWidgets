@@ -240,7 +240,7 @@ bool wxAppBase::OnCmdLineParsed(wxCmdLineParser& parser)
             return FALSE;
         }
 
-        if ( !SetDisplayMode(wxDisplayModeInfo(w, h, bpp)) )
+        if ( !SetDisplayMode(wxVideoMode(w, h, bpp)) )
             return FALSE;
     }
 #endif // __WXMGL__

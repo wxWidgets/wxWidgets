@@ -534,7 +534,7 @@ END_EVENT_TABLE()
 // constructors and such
 // ----------------------------------------------------------------------------
 
-extern wxDisplayModeInfo wxGetDefaultDisplayMode();
+extern wxVideoMode wxGetDefaultDisplayMode();
 
 void wxWindowMGL::Init()
 {

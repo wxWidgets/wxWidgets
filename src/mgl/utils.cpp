@@ -208,6 +208,8 @@ int wxDisplayDepth()
     return g_displayDC->getBitsPerPixel();
 }
 
+#if wxUSE_GUI
+
 wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo info;
@@ -230,6 +232,29 @@ wxToolkitInfo& wxGUIAppTraits::GetToolkitInfo()
     return info;
 }
 
+#endif
+
+wxToolkitInfo& wxConsoleAppTraits::GetToolkitInfo()
+{
+    static wxToolkitInfo info;
+    info.shortName = _T("mglbase");
+    info.versionMajor = MGL_RELEASE_MAJOR;
+    info.versionMinor = MGL_RELEASE_MINOR;
+    info.name = _T("wxBase");
+    info.os = wxGTK;
+#if defined(__UNIX__)
+    info.os = wxMGL_UNIX;
+#elif defined(__OS2__)
+    info.os = wxMGL_OS2;
+#elif defined(__WIN32__)
+    info.os = wxMGL_WIN32;
+#elif defined(__DOS__)
+    info.os = wxMGL_DOS;
+#else
+    #error Platform not supported by wxMGL!
+#endif
+    return info;
+}
 
 void wxGetMousePosition(int* x, int* y)
 {

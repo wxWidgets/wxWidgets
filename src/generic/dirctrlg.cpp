@@ -73,16 +73,17 @@
 
 #endif
 
-#ifdef __OS2__
-
-#define INCL_BASE
-#include <os2.h>
-#ifndef __EMX__
-#include <direct.h>
-#endif
-#include <stdlib.h>
-#include <ctype.h>
-extern bool wxIsDriveAvailable(const wxString& dirName);
+#if defined(__OS2__) || defined(__DOS__)
+  #ifdef __OS2__
+    #define INCL_BASE
+    #include <os2.h>
+    #ifndef __EMX__
+      #include <direct.h>
+    #endif
+    #include <stdlib.h>
+    #include <ctype.h>
+  #endif
+  extern bool wxIsDriveAvailable(const wxString& dirName);
 #endif // __OS2__
 
 #if defined(__WXMAC__)

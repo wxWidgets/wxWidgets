@@ -730,7 +730,7 @@ typedef wxUint32 wxDword;
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
     #define wxLongLongFmtSpec _T("Ld")
-#elif (defined(__WATCOMC__) && defined(__WIN32__))
+#elif (defined(__WATCOMC__) && (defined(__WIN32__) || defined(__DOS__)))
       #define wxLongLong_t __int64
       #define wxLongLongSuffix i64
       #define wxLongLongFmtSpec _T("Ld")
