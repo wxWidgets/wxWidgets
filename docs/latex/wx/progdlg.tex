@@ -89,9 +89,9 @@ dialog may be resumed with \helpref{Resume}{wxprogressdialogresume} function.
 
 \wxheading{Parameters}
 
-\docparam{value}{The new value of the progress meter. It must be strictly less
-than the maximum value given to the constructor (i.e., as usual in C, the
-index runs from $0$ to $maximum-1$).}
+\docparam{value}{The new value of the progress meter. It should be less than or
+equal to the maximum value given to the constructor and the dialog is closed if
+it is equal to the maximum.}
 \docparam{newmsg}{The new messages for the progress dialog text, if it is
 empty (which is the default) the message is not changed.}
 
