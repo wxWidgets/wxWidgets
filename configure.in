@@ -1138,10 +1138,10 @@ case "${host}" in
       LIBS="$LIBS -lstdcpp"
       if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_GTK" = 1 -o "$wxUSE_X11" = 1; then
           dnl More complete Unix emulation for unix-like ports
-	  dnl by linking in POSIX/2's cExt (if available).
+          dnl by linking in POSIX/2's cExt (if available).
           AC_CHECK_LIB(cExt, drand48, LIBS="$LIBS -lcExt")
       else
-	  dnl Include resources for the "native" port (wxPM).
+          dnl Include resources for the "native" port (wxPM).
           RESPROGRAMOBJ="\${top_srcdir}/include/wx/os2/wx.res"
       fi
   ;;
@@ -3358,7 +3358,8 @@ if test "$TOOLKIT" != "MSW"; then
       else
           dnl yes, these special compiler flags should be used with the
           dnl linker as well
-          LIBS="$THREADS_LINK $THREADS_CFLAGS $LIBS"
+          LDFLAGS="$THREADS_CFLAGS $LDFLAGS"
+          LIBS="$THREADS_LINK $LIBS"
 
           AC_MSG_CHECKING([if more special flags are required for pthreads])
           flag=no
