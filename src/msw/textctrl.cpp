@@ -177,7 +177,9 @@ void wxTextCtrl::Init()
 {
 #if wxUSE_RICHEDIT
     m_verRichEdit = 0;
-#endif
+
+    m_suppressNextUpdate = FALSE;
+#endif // wxUSE_RICHEDIT
 }
 
 bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -300,9 +302,9 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 #if wxUSE_RICHEDIT
     if ( IsRich() )
     {
-        // enable the events we're interested in: we want to get EN_CHANGE and
-        // EN_UPDATE as for the normal controls
-        LPARAM mask = ENM_CHANGE | ENM_UPDATE;
+        // enable the events we're interested in: we want to get EN_CHANGE as
+        // for the normal controls
+        LPARAM mask = ENM_CHANGE;
 
         if ( GetRichVersion() == 1 )
         {
@@ -676,15 +678,18 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
     if ( !done )
 #endif // wxUSE_RICHEDIT
     {
-        if ( !selectionOnly )
+#if wxUSE_RICHEDIT
+        // rich edit text control sends us 2 EN_CHANGE events when we send
+        // WM_SETTEXT to it, we have to suppress one of them to make wxTextCtrl
+        // behaviour consistent
+        if ( IsRich() )
         {
-            //SetSelection(-1, -1);
-            // This eliminates an annoying flashing effect
-            // when replacing all text.
-            Clear();
+            m_suppressNextUpdate = TRUE;
         }
+#endif // wxUSE_RICHEDIT
 
-        ::SendMessage(GetHwnd(), EM_REPLACESEL, 0, (LPARAM)valueDos.c_str());
+        ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
+                      0, (LPARAM)valueDos.c_str());
     }
 
     AdjustSpaceLimit();
@@ -700,6 +705,16 @@ void wxTextCtrl::AppendText(const wxString& text)
 void wxTextCtrl::Clear()
 {
     ::SetWindowText(GetHwnd(), wxT(""));
+
+#if wxUSE_RICHEDIT
+    if ( !IsRich() )
+#endif // wxUSE_RICHEDIT
+    {
+        // rich edit controls send EN_UPDATE from WM_SETTEXT handler themselves
+        // but the normal ones don't -- make Clear() behaviour consistent by
+        // always sending this event
+        SendUpdateEvent();
+    }
 }
 
 #ifdef __WIN32__
@@ -1260,9 +1275,27 @@ long wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
 // text control event processing
 // ----------------------------------------------------------------------------
 
+bool wxTextCtrl::SendUpdateEvent()
+{
+    // is event reporting suspended?
+    if ( m_suppressNextUpdate )
+    {
+        // do process the next one
+        m_suppressNextUpdate = FALSE;
+
+        return FALSE;
+    }
+
+    wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
+    InitCommandEvent(event);
+    event.SetString(GetValue());
+
+    return ProcessCommand(event);
+}
+
 bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
 {
-    switch (param)
+    switch ( param )
     {
         case EN_SETFOCUS:
         case EN_KILLFOCUS:
@@ -1270,22 +1303,17 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
                 wxFocusEvent event(param == EN_KILLFOCUS ? wxEVT_KILL_FOCUS
                                                          : wxEVT_SET_FOCUS,
                                    m_windowId);
-                event.SetEventObject( this );
+                event.SetEventObject(this);
                 GetEventHandler()->ProcessEvent(event);
             }
             break;
 
         case EN_CHANGE:
-            {
-                wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, m_windowId);
-                InitCommandEvent(event);
-                event.SetString(GetValue());
-                ProcessCommand(event);
-            }
+            SendUpdateEvent();
             break;
 
         case EN_MAXTEXT:
-            // the text size limit has been hit - increase it
+            // the text size limit has been hit -- try to increase it
             if ( !AdjustSpaceLimit() )
             {
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_MAXLEN, m_windowId);
@@ -1295,13 +1323,7 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             }
             break;
 
-            // the other notification messages are not processed
-        case EN_UPDATE:
-        case EN_ERRSPACE:
-        case EN_HSCROLL:
-        case EN_VSCROLL:
-            return FALSE;
-
+            // the other edit notification messages are not processed
         default:
             return FALSE;
     }

@@ -207,6 +207,9 @@ protected:
     // position
     long GetLengthOfLineContainingPos(long pos) const;
 
+    // send TEXT_UPDATED event, return TRUE if it was handled, FALSE otherwise
+    bool SendUpdateEvent();
+
     // override some base class virtuals
     virtual bool MSWShouldPreProcessMessage(WXMSG* pMsg);
     virtual wxSize DoGetBestSize() const;
@@ -218,6 +221,10 @@ protected:
     // 0, it also gives the version of the RICHEDIT control being used (1, 2 or
     // 3 so far)
     int m_verRichEdit;
+
+    // if TRUE, SendUpdateEvent() will eat the next event (see comments in the
+    // code as to why this is needed)
+    bool m_suppressNextUpdate;
 #endif // wxUSE_RICHEDIT
 
 private:
