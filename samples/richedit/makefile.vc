@@ -143,10 +143,10 @@ __RUNTIME_LIBS_7 = D
 __RUNTIME_LIBS_7 = T
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = /D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = /d _UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -218,7 +218,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\richedit.exe
+all: $(OBJS)\richedit.exe data
 
 $(OBJS)\richedit_kbList.obj: .\kbList.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(RICHEDIT_CXXFLAGS) $**
@@ -242,6 +242,12 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\richedit.exe del $(OBJS)\richedit.exe
+	-if exist $(OBJS)\richedit.ilk del $(OBJS)\richedit.ilk
+	-if exist $(OBJS)\richedit.pdb del $(OBJS)\richedit.pdb
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (wxLayout.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\richedit.exe: $(RICHEDIT_OBJECTS) $(OBJS)\richedit_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<

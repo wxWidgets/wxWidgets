@@ -122,10 +122,10 @@ __RUNTIME_LIBS_7 = i
 __RUNTIME_LIBS_7 = 
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p = -DwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -D_UNICODE
 !endif
 !if "$(UNICODE)" == "1"
-__UNICODE_DEFINE_p_1 = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p_1 = -d_UNICODE
 !endif
 !if "$(MSLU)" == "1"
 __UNICOWS_LIB_p = unicows.lib
@@ -155,7 +155,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\richedit.exe
+all: $(OBJS)\richedit.exe data
 
 $(OBJS)\richedit_kbList.obj: .\kbList.cpp
 	$(CXX) -q -c -P -o$@ $(RICHEDIT_CXXFLAGS) $**
@@ -179,6 +179,15 @@ clean:
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\richedit.exe del $(OBJS)\richedit.exe
+	-if exist $(OBJS)\richedit.tds del $(OBJS)\richedit.tds
+	-if exist $(OBJS)\richedit.ilc del $(OBJS)\richedit.ilc
+	-if exist $(OBJS)\richedit.ild del $(OBJS)\richedit.ild
+	-if exist $(OBJS)\richedit.ilf del $(OBJS)\richedit.ilf
+	-if exist $(OBJS)\richedit.ils del $(OBJS)\richedit.ils
+
+data: 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (wxLayout.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\richedit.exe: $(RICHEDIT_OBJECTS)  $(OBJS)\richedit_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|

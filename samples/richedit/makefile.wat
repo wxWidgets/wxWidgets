@@ -137,7 +137,7 @@ __RUNTIME_LIBS_5 =
 !endif
 __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
-__UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
+__UNICODE_DEFINE_p = -d_UNICODE
 !endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
@@ -182,7 +182,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\richedit.exe
+all : .SYMBOLIC $(OBJS)\richedit.exe data
 
 $(OBJS)\richedit_kbList.obj :  .AUTODEPEND .\kbList.cpp
 	$(CXX) -zq -fo=$^@ $(RICHEDIT_CXXFLAGS) $<
@@ -208,6 +208,10 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\richedit.exe del $(OBJS)\richedit.exe
+
+data : .SYMBOLIC 
+	if not exist $(OBJS) mkdir $(OBJS)
+	for %f in (wxLayout.cpp) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
 $(OBJS)\richedit.exe :  $(RICHEDIT_OBJECTS) $(OBJS)\richedit_sample.res
 	@%create $(OBJS)\richedit.lbc
