@@ -79,13 +79,15 @@ private:
 class wxAutoScrollTimer : public wxTimer
 {
 public:
-    wxAutoScrollTimer(wxWindow *winToScroll, wxEventType eventTypeToSend,
+    wxAutoScrollTimer(wxWindow *winToScroll, wxScrollHelper *scroll,
+                      wxEventType eventTypeToSend,
                       int pos, int orient);
 
     virtual void Notify();
 
 private:
     wxWindow *m_win;
+    wxScrollHelper *m_scrollHelper;
     wxEventType m_eventType;
     int m_pos,
         m_orient;
@@ -100,10 +102,12 @@ private:
 // ----------------------------------------------------------------------------
 
 wxAutoScrollTimer::wxAutoScrollTimer(wxWindow *winToScroll,
+                                     wxScrollHelper *scroll,
                                      wxEventType eventTypeToSend,
                                      int pos, int orient)
 {
     m_win = winToScroll;
+    m_scrollHelper = scroll;
     m_eventType = eventTypeToSend;
     m_pos = pos;
     m_orient = orient;
@@ -111,17 +115,43 @@ wxAutoScrollTimer::wxAutoScrollTimer(wxWindow *winToScroll,
 
 void wxAutoScrollTimer::Notify()
 {
-    // first scroll the window
-    wxScrollWinEvent event1(m_eventType, m_pos, m_orient);
-    m_win->GetEventHandler()->ProcessEvent(event1);
+    // only do all this as long as the window is capturing the mouse
+    if ( wxWindow::GetCapture() != m_win )
+    {
+        Stop();
+    }
+    else // we still capture the mouse, continue generating events
+    {
+        // first scroll the window if we are allowed to do it
+        wxScrollWinEvent event1(m_eventType, m_pos, m_orient);
+        event1.SetEventObject(m_win);
+        if ( m_scrollHelper->SendAutoScrollEvents(event1) &&
+                m_win->GetEventHandler()->ProcessEvent(event1) )
+        {
+            // and then send a pseudo mouse-move event to refresh the selection
+            wxMouseEvent event2(wxEVT_MOTION);
+            wxGetMousePosition(&event2.m_x, &event2.m_y);
 
-    // and then send a pseudo mouse-move event to refresh the selection
-    wxMouseEvent event2(wxEVT_MOTION);
-    wxGetMousePosition(&event2.m_x, &event2.m_y);
+            // the mouse event coordinates should be client, not screen as
+            // returned by wxGetMousePosition
+            wxWindow *parentTop = m_win;
+            while ( parentTop->GetParent() )
+                parentTop = parentTop->GetParent();
+            wxPoint ptOrig = parentTop->GetPosition();
+            event2.m_x -= ptOrig.x;
+            event2.m_y -= ptOrig.y;
 
-    // FIXME: we don't fill in the other members - ok?
+            event2.SetEventObject(m_win);
 
-    m_win->GetEventHandler()->ProcessEvent(event2);
+            // FIXME: we don't fill in the other members - ok?
+
+            m_win->GetEventHandler()->ProcessEvent(event2);
+        }
+        else // can't scroll further, stop
+        {
+            Stop();
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -144,7 +174,7 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         case wxEVT_SCROLLWIN_THUMBTRACK:
         case wxEVT_SCROLLWIN_THUMBRELEASE:
             m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
-            return TRUE;
+            return !event.GetSkipped();
 
         case wxEVT_PAINT:
             m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
@@ -213,7 +243,7 @@ void wxScrollHelper::SetWindow(wxWindow *win)
 
 wxScrollHelper::~wxScrollHelper()
 {
-    delete m_timerAutoScroll;
+    StopAutoScrolling();
 
     if ( m_targetWindow )
         m_targetWindow->PopEventHandler(TRUE /* do delete it */);
@@ -316,29 +346,23 @@ wxWindow *wxScrollHelper::GetTargetWindow() const
 
 void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
 {
-    int orient = event.GetOrientation();
-
     int nScrollInc = CalcScrollInc(event);
-    if (nScrollInc == 0) return;
-
-    if (orient == wxHORIZONTAL)
+    if ( nScrollInc == 0 )
     {
-        int newPos = m_xScrollPosition + nScrollInc;
-        m_win->SetScrollPos(wxHORIZONTAL, newPos, FALSE );
-    }
-    else
-    {
-        int newPos = m_yScrollPosition + nScrollInc;
-        m_win->SetScrollPos(wxVERTICAL, newPos, FALSE );
+        // can't scroll further
+        event.Skip();
     }
 
+    int orient = event.GetOrientation();
     if (orient == wxHORIZONTAL)
     {
         m_xScrollPosition += nScrollInc;
+        m_win->SetScrollPos(wxHORIZONTAL, m_xScrollPosition, FALSE);
     }
     else
     {
         m_yScrollPosition += nScrollInc;
+        m_win->SetScrollPos(wxVERTICAL, m_yScrollPosition, FALSE);
     }
 
     bool needsRefresh = FALSE;
@@ -348,7 +372,7 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     {
        if ( m_xScrollingEnabled )
        {
-            dx = -m_xScrollPixelsPerLine * nScrollInc;
+           dx = -m_xScrollPixelsPerLine * nScrollInc;
        }
        else
        {
@@ -803,13 +827,28 @@ void wxScrollHelper::HandleOnChar(wxKeyEvent& event)
     }
 }
 
-void wxScrollHelper::HandleOnMouseEnter(wxMouseEvent& event)
+// ----------------------------------------------------------------------------
+// autoscroll stuff: these functions deal with sending fake scroll events when
+// a captured mouse is being held outside the window
+// ----------------------------------------------------------------------------
+
+bool wxScrollHelper::SendAutoScrollEvents(wxScrollWinEvent& event) const
+{
+    return TRUE;
+}
+
+void wxScrollHelper::StopAutoScrolling()
 {
     if ( m_timerAutoScroll )
     {
         delete m_timerAutoScroll;
         m_timerAutoScroll = (wxTimer *)NULL;
     }
+}
+
+void wxScrollHelper::HandleOnMouseEnter(wxMouseEvent& event)
+{
+    StopAutoScrolling();
 
     event.Skip();
 }
@@ -855,15 +894,16 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
             }
         }
 
+        delete m_timerAutoScroll;
         m_timerAutoScroll = new wxAutoScrollTimer
                                 (
-                                    m_targetWindow,
+                                    m_targetWindow, this,
                                     pos == 0 ? wxEVT_SCROLLWIN_LINEUP
                                              : wxEVT_SCROLLWIN_LINEDOWN,
                                     pos,
                                     orient
                                 );
-        m_timerAutoScroll->Start(50); // FIXME: make configurable
+        m_timerAutoScroll->Start(500); // FIXME: make configurable
     }
 
     // don't prevent the usual processing of the event from taking place

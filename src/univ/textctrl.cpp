@@ -598,6 +598,9 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxControl)
     EVT_SIZE(OnSize)
 
     EVT_IDLE(OnIdle)
+
+    EVT_SCROLLWIN_LINEUP(OnScroll)
+    EVT_SCROLLWIN_LINEDOWN(OnScroll)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxTextCtrl, wxControl)
@@ -1379,12 +1382,7 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
     }
     else // valid sel range
     {
-        if ( from >= to )
-        {
-            wxTextPos tmp = from;
-            from = to;
-            to = tmp;
-        }
+        OrderPositions(from, to);
 
         wxCHECK_RET( to <= GetLastPosition(),
                      _T("invalid range in wxTextCtrl::SetSelection") );
@@ -1423,6 +1421,9 @@ void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
             }
         }
         //else: nothing to do
+
+        // the cursor should always be at the end of the selection
+        DoSetInsertionPoint(m_selEnd);
     }
 }
 
@@ -1879,6 +1880,13 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
         }
 
         // scroll the position horizontally into view
+        //
+        // we follow what I believe to be Windows behaviour here, that is if
+        // the position is already entirely in the view we do nothing, but if
+        // we do have to scroll the window to bring it into view, we scroll it
+        // not just enough to show the position but slightly more so that this
+        // position is at 1/3 of the window width from the closest border to it
+        // (I'm not sure that Windows does exactly this but it looks like this)
         if ( MData().m_scrollRangeX )
         {
             // unlike for the rows, xStart doesn't correspond to the starting
@@ -1894,6 +1902,11 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
 
             if ( x < xStart )
             {
+                // we want the position of this column be 1/3 to the right of
+                // the left edge
+                x -= rectText.width / 3;
+                if ( x < 0 )
+                    x = 0;
                 Scroll(x / wChar, y);
             }
             else // maybe we're beyond the right border of the view?
@@ -1905,7 +1918,13 @@ void wxTextCtrl::ShowPosition(wxTextPos pos)
                     wxCoord x2 = x + GetTextWidth(lineText[(size_t)col]);
                     if ( x2 > xStart + rectText.width )
                     {
-                        Scroll((x2 - 1)/ wChar, row);
+                        // we want the position of this column be 1/3 to the
+                        // left of the right edge, i.e. 2/3 right of the left
+                        // one
+                        x2 -= (2*rectText.width)/3;
+                        if ( x2 < 0 )
+                            x2 = 0;
+                        Scroll(x2 / wChar, row);
                     }
                 }
             }
@@ -2272,6 +2291,12 @@ void wxTextCtrl::UpdateTextRect()
     wxRect rectTotal(wxPoint(0, 0), GetClientSize());
     wxCoord *extraSpace = WrapLines() ? &WData().m_widthMark : NULL;
     m_rectText = GetRenderer()->GetTextClientArea(this, rectTotal, extraSpace);
+
+    // code elsewhere is confused by negative rect size
+    if ( m_rectText.width <= 0 )
+        m_rectText.width = 1;
+    if ( m_rectText.height <= 0 )
+        m_rectText.height = 1;
 
     if ( !IsSingleLine() )
     {
@@ -3496,6 +3521,30 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
     event.Skip();
 }
 
+bool wxTextCtrl::SendAutoScrollEvents(wxScrollWinEvent& event) const
+{
+    return event.GetEventType() == wxEVT_SCROLLWIN_LINEDOWN
+            ? m_curCol < GetLineLength(m_curRow)
+            : m_curCol > 0;
+}
+
+void wxTextCtrl::OnScroll(wxScrollWinEvent& event)
+{
+#if 0
+    if ( IsAutoScrolling() )
+    {
+        wxControlAction action;
+        action << wxACTION_TEXT_PREFIX_SEL
+               << (forward ? wxACTION_TEXT_RIGHT : wxACTION_TEXT_LEFT);
+        PerformAction(action);
+    }
+    else
+#endif
+    {
+        event.Skip();
+    }
+}
+
 // ----------------------------------------------------------------------------
 // refresh
 // ----------------------------------------------------------------------------
@@ -3699,19 +3748,40 @@ void wxTextCtrl::RefreshTextRect(const wxRect& rectClient, bool textOnly)
     // account for the text area offset
     rect.Offset(m_rectText.GetPosition());
 
-    // don't refresh outside the text area
+    // don't refresh beyond the text area unless we're refreshing the line wrap
+    // marks in which case textOnly is FALSE
     if ( textOnly )
     {
         if ( rect.GetRight() > m_rectText.GetRight() )
+        {
             rect.SetRight(m_rectText.GetRight());
+
+            if ( rect.width <= 0 )
+            {
+                // nothing to refresh
+                return;
+            }
+        }
     }
 
-    // never refresh beyond the visible rect
+    // check the bottom boundary always, even for the line wrap marks
+    if ( rect.GetBottom() > m_rectText.GetBottom() )
+    {
+        rect.SetBottom(m_rectText.GetBottom());
+
+        if ( rect.height <= 0 )
+        {
+            // nothing to refresh
+            return;
+        }
+    }
+
+    // never refresh before the visible rect
+    if ( rect.x < m_rectText.x )
+        rect.x = m_rectText.x;
+
     if ( rect.y < m_rectText.y )
         rect.y = m_rectText.y;
-
-    if ( rect.GetBottom() > m_rectText.GetBottom() )
-        rect.SetBottom(m_rectText.GetBottom());
 
     wxLogTrace(_T("text"), _T("Refreshing (%d, %d)-(%d, %d)"),
                rect.x, rect.y, rect.x + rect.width, rect.y + rect.height);

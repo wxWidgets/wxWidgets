@@ -293,8 +293,16 @@ protected:
 
     wxRenderer *m_renderer;
 
+    // the listbox which has currently the mouse captured or NULL
     wxWindow *m_winCapture;
+
+    // the button which initiated the mouse capture (currently 0 or 1)
     int m_btnCapture;
+
+    // the action to perform when the mouse moves while we capture it
+    wxControlAction m_actionMouse;
+
+    // see ctor comment
     bool m_toggleOnPressAlways;
 };
 

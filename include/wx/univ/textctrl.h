@@ -425,9 +425,14 @@ protected:
     void RecalcFontMetrics();
 
     // event handlers
+    void OnScroll(wxScrollWinEvent& event);
     void OnIdle(wxIdleEvent& event);
     void OnChar(wxKeyEvent& event);
     void OnSize(wxSizeEvent& event);
+
+    // overrdie wxScrollHelper method to prevent (auto)scrolling beyond the end
+    // of line
+    virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;
 
     // return the struct containing control-type dependent data
     struct wxTextSingleLineData& SData() { return *m_data.sdata; }

@@ -89,6 +89,20 @@ public:
     // change the DC origin according to the scroll position.
     virtual void DoPrepareDC(wxDC& dc);
 
+    // are we generating the autoscroll events?
+    bool IsAutoScrolling() const { return m_timerAutoScroll != NULL; }
+
+    // stop generating the scroll events when mouse is held outside the window
+    void StopAutoScrolling();
+
+    // this method can be overridden in a derived class to forbid sending the
+    // auto scroll events - note that unlike StopAutoScrolling() it doesn't
+    // stop the timer, so it will be called repeatedly and will typically
+    // return different values depending on the current mouse position
+    //
+    // the base class version just returns TRUE
+    virtual bool SendAutoScrollEvents(wxScrollWinEvent& event) const;
+
     // the methods to be called from the window event handlers
     void HandleOnScroll(wxScrollWinEvent& event);
     void HandleOnSize(wxSizeEvent& event);
