@@ -553,7 +553,7 @@ wxLayoutLine::FindText(const wxString &needle, CoordType xpos = 0) const
             relpos = text->Find(needle);
             if(relpos >= cpos-xpos) // -1 if not found
             {
-               return xpos+relpos;
+               return cpos+relpos;
             }
          }
          cpos += (**i).GetLength();
