@@ -435,6 +435,10 @@ LINK32=link.exe
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\arrays\arrays.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\filesys\filesys.cpp
 # End Source File
 # Begin Source File

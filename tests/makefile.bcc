@@ -34,7 +34,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_main.obj \
 	$(OBJS)\test_formatconverter.obj \
 	$(OBJS)\test_regex.obj \
-	$(OBJS)\test_filesys.obj
+	$(OBJS)\test_filesys.obj \
+	$(OBJS)\test_arrays.obj
 
 ### Conditionally set variables: ###
 
@@ -167,4 +168,7 @@ $(OBJS)\test_regex.obj: .\regex\regex.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_filesys.obj: .\filesys\filesys.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_arrays.obj: .\arrays\arrays.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**

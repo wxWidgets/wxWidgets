@@ -175,7 +175,8 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_main.obj &
 	$(OBJS)\test_formatconverter.obj &
 	$(OBJS)\test_regex.obj &
-	$(OBJS)\test_filesys.obj
+	$(OBJS)\test_filesys.obj &
+	$(OBJS)\test_arrays.obj
 
 
 all : $(OBJS)
@@ -217,4 +218,7 @@ $(OBJS)\test_regex.obj :  .AUTODEPEND .\regex\regex.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesys.obj :  .AUTODEPEND .\filesys\filesys.cpp
+	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_arrays.obj :  .AUTODEPEND .\arrays\arrays.cpp
 	$(CXX) -zq -fo=$^@ $(TEST_CXXFLAGS) $<

@@ -25,7 +25,8 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_main.o \
 	$(OBJS)\test_formatconverter.o \
 	$(OBJS)\test_regex.o \
-	$(OBJS)\test_filesys.o
+	$(OBJS)\test_filesys.o \
+	$(OBJS)\test_arrays.o
 
 ### Conditionally set variables: ###
 
@@ -161,6 +162,9 @@ $(OBJS)\test_regex.o: ./regex/regex.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_filesys.o: ./filesys/filesys.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_arrays.o: ./arrays/arrays.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $<
 
 .PHONY: all clean

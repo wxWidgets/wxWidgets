@@ -51,7 +51,6 @@
 
 #if TEST_ALL
 
-    #define TEST_ARRAYS
     #define TEST_CHARSET
     #define TEST_CMDLINE
     #define TEST_DATETIME
@@ -114,7 +113,7 @@
 // test class for container objects
 // ----------------------------------------------------------------------------
 
-#if defined(TEST_ARRAYS) || defined(TEST_LIST)
+#if defined(TEST_LIST)
 
 class Bar // Foo is already taken in the hash test
 {
@@ -135,7 +134,7 @@ private:
 
 size_t Bar::ms_bars = 0;
 
-#endif // defined(TEST_ARRAYS) || defined(TEST_LIST)
+#endif // defined(TEST_LIST)
 
 // ============================================================================
 // implementation
@@ -6222,214 +6221,6 @@ static void TestSemaphore()
 #endif // TEST_THREADS
 
 // ----------------------------------------------------------------------------
-// arrays
-// ----------------------------------------------------------------------------
-
-#ifdef TEST_ARRAYS
-
-#include "wx/dynarray.h"
-
-typedef unsigned short ushort;
-
-#define DefineCompare(name, T)                                                \
-                                                                              \
-int wxCMPFUNC_CONV name ## CompareValues(T first, T second)                   \
-{                                                                             \
-    return first - second;                                                    \
-}                                                                             \
-                                                                              \
-int wxCMPFUNC_CONV name ## Compare(T* first, T* second)                       \
-{                                                                             \
-    return *first - *second;                                                  \
-}                                                                             \
-                                                                              \
-int wxCMPFUNC_CONV name ## RevCompare(T* first, T* second)                    \
-{                                                                             \
-    return *second - *first;                                                  \
-}                                                                             \
-
-DefineCompare(UShort, ushort);
-DefineCompare(Int, int);
-
-// test compilation of all macros
-WX_DEFINE_ARRAY_SHORT(ushort, wxArrayUShort);
-WX_DEFINE_SORTED_ARRAY_SHORT(ushort, wxSortedArrayUShortNoCmp);
-WX_DEFINE_SORTED_ARRAY_CMP_SHORT(ushort, UShortCompareValues, wxSortedArrayUShort);
-WX_DEFINE_SORTED_ARRAY_CMP_INT(int, IntCompareValues, wxSortedArrayInt);
-
-WX_DECLARE_OBJARRAY(Bar, ArrayBars);
-#include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(ArrayBars);
-
-static void PrintArray(const wxChar* name, const wxArrayString& array)
-{
-    wxPrintf(_T("Dump of the array '%s'\n"), name);
-
-    size_t nCount = array.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
-    {
-        wxPrintf(_T("\t%s[%u] = '%s'\n"), name, n, array[n].c_str());
-    }
-}
-
-static void PrintArray(const wxChar* name, const wxSortedArrayString& array)
-{
-    wxPrintf(_T("Dump of the array '%s'\n"), name);
-
-    size_t nCount = array.GetCount();
-    for ( size_t n = 0; n < nCount; n++ )
-    {
-        wxPrintf(_T("\t%s[%u] = '%s'\n"), name, n, array[n].c_str());
-    }
-}
-
-int wxCMPFUNC_CONV StringLenCompare(const wxString& first,
-                                    const wxString& second)
-{
-    return first.length() - second.length();
-}
-
-#define TestArrayOf(name)                                                     \
-                                                                              \
-static void PrintArray(const wxChar* name, const wxSortedArray##name & array) \
-{                                                                             \
-    wxPrintf(_T("Dump of the array '%s'\n"), name);                           \
-                                                                              \
-    size_t nCount = array.GetCount();                                         \
-    for ( size_t n = 0; n < nCount; n++ )                                     \
-    {                                                                         \
-        wxPrintf(_T("\t%s[%u] = %d\n"), name, n, array[n]);                   \
-    }                                                                         \
-}                                                                             \
-                                                                              \
-static void PrintArray(const wxChar* name, const wxArray##name & array)       \
-{                                                                             \
-    wxPrintf(_T("Dump of the array '%s'\n"), name);                           \
-                                                                              \
-    size_t nCount = array.GetCount();                                         \
-    for ( size_t n = 0; n < nCount; n++ )                                     \
-    {                                                                         \
-        wxPrintf(_T("\t%s[%u] = %d\n"), name, n, array[n]);                   \
-    }                                                                         \
-}                                                                             \
-                                                                              \
-static void TestArrayOf ## name ## s()                                        \
-{                                                                             \
-    wxPrintf(_T("*** Testing wxArray%s ***\n"), #name);                       \
-                                                                              \
-    wxArray##name a;                                                          \
-    a.Add(1);                                                                 \
-    a.Add(17,2);                                                              \
-    a.Add(5,3);                                                               \
-    a.Add(3,4);                                                               \
-                                                                              \
-    wxPuts(_T("Initially:"));                                                 \
-    PrintArray(_T("a"), a);                                                   \
-                                                                              \
-    wxPuts(_T("After sort:"));                                                \
-    a.Sort(name ## Compare);                                                  \
-    PrintArray(_T("a"), a);                                                   \
-                                                                              \
-    wxPuts(_T("After reverse sort:"));                                        \
-    a.Sort(name ## RevCompare);                                               \
-    PrintArray(_T("a"), a);                                                   \
-                                                                              \
-    wxSortedArray##name b;                                                    \
-    b.Add(1);                                                                 \
-    b.Add(17);                                                                \
-    b.Add(5);                                                                 \
-    b.Add(3);                                                                 \
-                                                                              \
-    wxPuts(_T("Sorted array initially:"));                                    \
-    PrintArray(_T("b"), b);                                                       \
-}
-
-TestArrayOf(UShort);
-TestArrayOf(Int);
-
-static void TestStlArray()
-{
-    wxPuts(_T("*** Testing std::vector operations ***\n"));
-
-    {
-        wxArrayInt list1;
-        wxArrayInt::iterator it, en;
-        wxArrayInt::reverse_iterator rit, ren;
-        int i;
-        for ( i = 0; i < 5; ++i )
-            list1.push_back(i);
-
-        for ( it = list1.begin(), en = list1.end(), i = 0;
-              it != en; ++it, ++i )
-            if ( *it != i )
-                wxPuts(_T("Error in iterator\n"));
-
-        for ( rit = list1.rbegin(), ren = list1.rend(), i = 4;
-              rit != ren; ++rit, --i )
-            if ( *rit != i )
-                wxPuts(_T("Error in reverse_iterator\n"));
-
-        if ( *list1.rbegin() != *(list1.end()-1) ||
-             *list1.begin() != *(list1.rend()-1) )
-            wxPuts(_T("Error in iterator/reverse_iterator\n"));
-
-        it = list1.begin()+1;
-        rit = list1.rbegin()+1;
-        if ( *list1.begin() != *(it-1) ||
-             *list1.rbegin() != *(rit-1) )
-            wxPuts(_T("Error in iterator/reverse_iterator\n"));
-
-        if ( list1.front() != 0 || list1.back() != 4 )
-            wxPuts(_T("Error in front()/back()\n"));
-
-        list1.erase(list1.begin());
-        list1.erase(list1.end()-1);
-
-        for ( it = list1.begin(), en = list1.end(), i = 1;
-              it != en; ++it, ++i )
-            if ( *it != i )
-                wxPuts(_T("Error in erase()\n"));
-    }
-
-    wxPuts(_T("*** Testing std::vector operations finished ***\n"));
-}
-
-static void TestArrayOfObjects()
-{
-    wxPuts(_T("*** Testing wxObjArray ***\n"));
-
-    {
-        ArrayBars bars;
-        Bar bar(_T("second bar (two copies!)"));
-
-        wxPrintf(_T("Initially: %u objects in the array, %u objects total.\n"),
-               bars.GetCount(), Bar::GetNumber());
-
-        bars.Add(new Bar(_T("first bar")));
-        bars.Add(bar,2);
-
-        wxPrintf(_T("Now: %u objects in the array, %u objects total.\n"),
-               bars.GetCount(), Bar::GetNumber());
-
-        bars.RemoveAt(1, bars.GetCount() - 1);
-
-        wxPrintf(_T("After removing all but first element: %u objects in the ")
-                 _T("array, %u objects total.\n"),
-               bars.GetCount(), Bar::GetNumber());
-
-        bars.Empty();
-
-        wxPrintf(_T("After Empty(): %u objects in the array, %u objects total.\n"),
-               bars.GetCount(), Bar::GetNumber());
-    }
-
-    wxPrintf(_T("Finally: no more objects in the array, %u objects total.\n"),
-           Bar::GetNumber());
-}
-
-#endif // TEST_ARRAYS
-
-// ----------------------------------------------------------------------------
 // strings
 // ----------------------------------------------------------------------------
 
@@ -7275,69 +7066,6 @@ int main(int argc, char **argv)
 
     TestStdString();
 #endif // TEST_STRINGS
-
-#ifdef TEST_ARRAYS
-    #if TEST_ALL
-        wxArrayString a1;
-        a1.Add(_T("tiger"));
-        a1.Add(_T("cat"));
-        a1.Add(_T("lion"), 3);
-        a1.Add(_T("dog"));
-        a1.Add(_T("human"));
-        a1.Add(_T("ape"));
-
-        wxPuts(_T("*** Initially:"));
-
-        PrintArray(_T("a1"), a1);
-
-        wxArrayString a2(a1);
-        PrintArray(_T("a2"), a2);
-
-        #if !wxUSE_STL
-        wxSortedArrayString a3(a1);
-        #else
-        wxSortedArrayString a3;
-        for (wxArrayString::iterator it = a1.begin(), en = a1.end();
-             it != en; ++it)
-            a3.Add(*it);
-        #endif
-        PrintArray(_T("a3"), a3);
-
-        wxPuts(_T("*** After deleting three strings from a1"));
-        a1.RemoveAt(2,3);
-
-        PrintArray(_T("a1"), a1);
-        PrintArray(_T("a2"), a2);
-        PrintArray(_T("a3"), a3);
-
-        #if !wxUSE_STL
-        wxPuts(_T("*** After reassigning a1 to a2 and a3"));
-        a3 = a2 = a1;
-        PrintArray(_T("a2"), a2);
-        PrintArray(_T("a3"), a3);
-        #endif
-
-        wxPuts(_T("*** After sorting a1"));
-        a1.Sort(false);
-        PrintArray(_T("a1"), a1);
-
-        wxPuts(_T("*** After sorting a1 in reverse order"));
-        a1.Sort(true);
-        PrintArray(_T("a1"), a1);
-
-        #if !wxUSE_STL
-        wxPuts(_T("*** After sorting a1 by the string length"));
-        a1.Sort(&StringLenCompare);
-        PrintArray(_T("a1"), a1);
-        #endif
-
-        TestArrayOfObjects();
-        TestArrayOfUShorts();
-    #endif
-
-    TestArrayOfInts();
-    TestStlArray();
-#endif // TEST_ARRAYS
 
 #ifdef TEST_DIR
     #if TEST_ALL

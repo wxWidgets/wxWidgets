@@ -13,6 +13,7 @@
             formatconverter/formatconverter.cpp
             regex/regex.cpp
             filesys/filesys.cpp
+            arrays/arrays.cpp
         </sources>
         <wx-lib>base</wx-lib>
     </exe>
