@@ -194,7 +194,7 @@ wxFont::wxFont(const wxNativeFontInfo& info)
 {
     Init();
 
-    (void)Create(info.xFontName);
+    (void)Create(info.GetXFontName());
 }
 
 void wxFont::Init()
@@ -228,7 +228,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
 
     m_refData = new wxFontRefData();
 
-    M_FONTDATA->m_nativeFontInfo.xFontName = fontname;  // X font name
+    M_FONTDATA->m_nativeFontInfo.SetXFontName(fontname);  // X font name
 
     wxString tmp;
 
@@ -349,7 +349,7 @@ void wxFont::SetPointSize(int pointSize)
     Unshare();
 
     M_FONTDATA->m_pointSize = pointSize;
-    M_FONTDATA->m_nativeFontInfo.xFontName.Clear();            // invalid now
+    M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
     
     RealizeResource();
 }
@@ -359,7 +359,7 @@ void wxFont::SetFamily(int family)
     Unshare();
 
     M_FONTDATA->m_family = family;
-    M_FONTDATA->m_nativeFontInfo.xFontName.Clear();            // invalid now
+    M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
     
     RealizeResource();
 }
@@ -369,7 +369,7 @@ void wxFont::SetStyle(int style)
     Unshare();
 
     M_FONTDATA->m_style = style;
-    M_FONTDATA->m_nativeFontInfo.xFontName.Clear();            // invalid now
+    M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
     
     RealizeResource();
 }
@@ -379,7 +379,7 @@ void wxFont::SetWeight(int weight)
     Unshare();
 
     M_FONTDATA->m_weight = weight;
-    M_FONTDATA->m_nativeFontInfo.xFontName.Clear();            // invalid now
+    M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
     
     RealizeResource();
 }
@@ -389,7 +389,7 @@ void wxFont::SetFaceName(const wxString& faceName)
     Unshare();
 
     M_FONTDATA->m_faceName = faceName;
-    M_FONTDATA->m_nativeFontInfo.xFontName.Clear();            // invalid now
+    M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
     
     RealizeResource();
 }
@@ -408,7 +408,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
     Unshare();
 
     M_FONTDATA->m_encoding = encoding;
-    M_FONTDATA->m_nativeFontInfo.xFontName.Clear();            // invalid now
+    M_FONTDATA->m_nativeFontInfo.GetXFontName().Clear(); // invalid now
     
     RealizeResource();
 }
@@ -477,7 +477,7 @@ wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), (wxNativeFontInfo *)NULL, wxT("invalid font") );
 
-    if(M_FONTDATA->m_nativeFontInfo.xFontName.IsEmpty())
+    if(M_FONTDATA->m_nativeFontInfo.GetXFontName().IsEmpty())
         GetInternalFont();
 
     return new wxNativeFontInfo(M_FONTDATA->m_nativeFontInfo);
