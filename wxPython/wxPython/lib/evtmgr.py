@@ -8,7 +8,7 @@
 #
 # Created:     12-December-2002
 # RCS-ID:      $Id$
-# Copyright:   (c) 2002 by Robb Shecter <robb@acm.org>
+# Copyright:   (c) 2003 by db-X Corporation
 # Licence:     wxWindows license
 #---------------------------------------------------------------------------
 
@@ -32,7 +32,6 @@ programmer to declare or track control ids or parent containers:
 
 This module is Python 2.1+ compatible.
 
-Author: Robb Shecter
 """
 from wxPython import wx
 import pubsub
@@ -176,7 +175,7 @@ class EventManager:
         Return a dictionary with data about my state.
         """
         stats = {}
-        stats['Adapters: Message'] = reduce(lambda x,y: x+y, map(len, self.messageAdapterDict.values()))
+        stats['Adapters: Message'] = reduce(lambda x,y: x+y, [0] + map(len, self.messageAdapterDict.values()))
         stats['Adapters: Event']   = len(self.eventAdapterDict)
         stats['Topics: Total']     = len(self.__getTopics())
         stats['Topics: Dead']      = len(self.GetDeadTopics())
@@ -193,7 +192,7 @@ class EventManager:
         is a problem.
         """
         for topic in self.GetDeadTopics():
-            self.DeregisterTopic(topic)
+            self.__deregisterTopic(topic)
 
 
     def GetDeadTopics(self):
