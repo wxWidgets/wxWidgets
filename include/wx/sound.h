@@ -16,6 +16,10 @@
 #pragma interface "soundbase.h"
 #endif
 
+#include "wx/defs.h"
+
+#if wxUSE_SOUND
+
 #include "wx/object.h"
 
 // ----------------------------------------------------------------------------
@@ -23,31 +27,70 @@
 // ----------------------------------------------------------------------------
 
 // Flags for wxSound::Play
-enum wxSoundFlags
-{
-    wxSOUND_SYNC   = 0,
-    wxSOUND_ASYNC  = 1,
-    wxSOUND_LOOP   = 2
-};
+#if WXWIN_COMPATIBILITY_2_4
+    // NB: we can't use enum because there would be ambiguity between the
+    //     two Play() prototypes when called without explicit parameters
+    #define wxSOUND_SYNC  ((unsigned)0)
+    #define wxSOUND_ASYNC ((unsigned)1)
+    #define wxSOUND_LOOP  ((unsigned)2)
+#else
+    enum wxSoundFlags
+    {
+        wxSOUND_SYNC   = 0,
+        wxSOUND_ASYNC  = 1,
+        wxSOUND_LOOP   = 2
+    };
+#endif
 
+// Base class for wxSound implementations
 class wxSoundBase : public wxObject
 {
 public:
     // Play the sound:
-    bool Play(unsigned flags = wxSOUND_ASYNC)
+    bool Play(unsigned flags = wxSOUND_ASYNC) const
     {
+        wxASSERT_MSG( (flags & wxSOUND_LOOP) == 0 ||
+                      (flags & wxSOUND_ASYNC) != 0,
+                     _T("sound can only be looped asynchronously") );
         return DoPlay(flags);
     }
 #if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( bool Play(bool async = true, bool looped = false) );
+    wxDEPRECATED( bool Play(bool async, bool looped = false) const );
 #endif
 
-protected:
-    virtual bool DoPlay(unsigned flags) = 0;
-};
+    // Plays sound from filename:
+    static bool Play(const wxString& filename, unsigned flags = wxSOUND_ASYNC);
     
+protected:
+    virtual bool DoPlay(unsigned flags) const = 0;
+};
+
+// ----------------------------------------------------------------------------
+// wxSound class implementation
+// ----------------------------------------------------------------------------
+
+#if defined(__WXMSW__)
+    #include "wx/msw/sound.h"
+#elif defined(__UNIX__)
+    #include "wx/unix/sound.h"
+#elif defined(__WXMAC__)
+    #include "wx/mac/sound.h"
+#elif defined(__WXPM__)
+    #include "wx/os2/sound.h"
+#endif
+
+// ----------------------------------------------------------------------------
+// wxSoundBase methods
+// ----------------------------------------------------------------------------
+
+inline bool wxSoundBase::Play(const wxString& filename, unsigned flags)
+{
+    wxSound snd(filename);
+    return snd.IsOk() ? snd.Play(flags) : false;
+}
+
 #if WXWIN_COMPATIBILITY_2_4
-inline bool wxSoundBase::Play(bool async, bool looped)
+inline bool wxSoundBase::Play(bool async, bool looped) const
 {
     unsigned flags = 0;
     if (async) flags |= wxSOUND_ASYNC;
@@ -56,27 +99,6 @@ inline bool wxSoundBase::Play(bool async, bool looped)
 }
 #endif
 
-// ----------------------------------------------------------------------------
-// wxSound class implementation
-// ----------------------------------------------------------------------------
-
-#if defined(__WXMSW__)
-#include "wx/msw/wave.h"
-#elif defined(__UNIX__)
-#include "wx/unix/sound.h"
-#elif defined(__WXMAC__)
-#include "wx/mac/wave.h"
-#elif defined(__WXPM__)
-#include "wx/os2/wave.h"
-#endif
-
-// wxSound used to be called wxWave before wxWindows 2.5.1:
-#ifdef __UNIX__ // FIXME: on all platforms when everything is renamed
-    #if WXWIN_COMPATIBILITY_2_4
-        typedef wxSound wxWave;
-    #endif
-#else
-    typedef wxWave wxSound;
-#endif
+#endif // wxUSE_SOUND
 
 #endif // _WX_SOUND_H_BASE_

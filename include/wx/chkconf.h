@@ -592,6 +592,14 @@
 #   endif
 #endif /* !defined(wxUSE_SLIDER) */
 
+#ifndef wxUSE_SOUND
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_SOUND must be defined."
+#   else
+#       define wxUSE_SOUND 0
+#   endif
+#endif /* !defined(wxUSE_SOUND) */
+
 #ifndef wxUSE_SPINBTN
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_SPINBTN must be defined."

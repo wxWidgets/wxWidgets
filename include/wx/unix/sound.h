@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wave.h
+// Name:        sound.h
 // Purpose:     wxSound class
 // Author:      Julian Smart, Vaclav Slavik
 // Modified by:
@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_WAVE
+#if wxUSE_SOUND
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "sound.h"
@@ -84,7 +84,7 @@ public:
     static void UnloadBackend();
     
 protected:
-    bool DoPlay(unsigned flags);
+    bool DoPlay(unsigned flags) const;
 
     static void EnsureBackend();
     void Free();
@@ -159,6 +159,6 @@ public:
 };
 
 
-#endif // wxUSE_WAVE
+#endif // wxUSE_SOUND
 
 #endif

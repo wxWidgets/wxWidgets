@@ -14,11 +14,17 @@
 
 #include "wx/setup.h"
 
+#if wxUSE_SOUND
+
 #if WXWIN_COMPATIBILITY_2_4
     #warning "wx/wave.h header is deprecated, use wx/sound.h and wxSound"
     #include "wx/sound.h"
+    // wxSound used to be called wxWave before wxWindows 2.5.1:
+    typedef wxSound wxWave;
 #else
     #error "wx/wave.h is only available in compatibility mode"
+#endif
+
 #endif
 
 #endif
