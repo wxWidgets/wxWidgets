@@ -551,73 +551,16 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
 
 void wxWindowMac::DoMoveWindow(int x, int y, int width, int height)
 {
-	DoSetSize( x,y, width, height ) ;
-}
-
-// set the size of the window: if the dimensions are positive, just use them,
-// but if any of them is equal to -1, it means that we must find the value for
-// it ourselves (unless sizeFlags contains wxSIZE_ALLOW_MINUS_ONE flag, in
-// which case -1 is a valid value for x and y)
-//
-// If sizeFlags contains wxSIZE_AUTO_WIDTH/HEIGHT flags (default), we calculate
-// the width/height to best suit our contents, otherwise we reuse the current
-// width/height
-void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
-{
-
 	int former_x = m_x ;
 	int former_y = m_y ;
 	int former_w = m_width ;
 	int former_h = m_height ;
 	
-  int currentX, currentY;
-  GetPosition(&currentX, &currentY);
-  int currentW,currentH;
-  GetSize(&currentW, &currentH);
-
   int actualWidth = width;
   int actualHeight = height;
   int actualX = x;
   int actualY = y;
-  if (x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-      actualX = currentX;
-  if (y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE))
-      actualY = currentY;
   
-  wxSize size( -1 , -1 ) ;
-  
-  if (width == -1 || height == -1 )
-  {
-  	size = DoGetBestSize() ;
-  }
-  
-  if ( width == -1 )
-  {
-  	if ( sizeFlags & wxSIZE_AUTO_WIDTH )
-    {
-      actualWidth = size.x ;	
-      if ( actualWidth == -1 )
-      	actualWidth = 80 ;
-    }
-    else
-    {
-      actualWidth = currentW ;
-    }
-  }
-  if (height == -1)
-  {
-  	if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
-  	{
-  		actualHeight = size.y ;
-  		if ( actualHeight == -1 )
-  			actualHeight = 26 ;
-  	}
-  	else 
-  	{
-      actualHeight = currentH ;
-    }
-  }
-
     if ((m_minWidth != -1) && (actualWidth < m_minWidth)) 
     	actualWidth = m_minWidth;
     if ((m_minHeight != -1) && (actualHeight < m_minHeight)) 
@@ -626,15 +569,7 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
     	actualWidth = m_maxWidth;
     if ((m_maxHeight != -1) && (actualHeight > m_maxHeight)) 
     	actualHeight = m_maxHeight;
-	if ( actualX == currentX && actualY == currentY && actualWidth == currentW && actualHeight == currentH)
-	{
-		MacRepositionScrollBars() ; // we might have a real position shift
-		return ;
-	}
 
-	AdjustForParentClientOrigin(actualX, actualY, sizeFlags);
-	
-	
 	bool doMove = false ;
 	bool doResize = false ;
 	
@@ -719,6 +654,76 @@ void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
 	         GetEventHandler()->ProcessEvent(event);
     	}
 	}
+	
+}
+
+// set the size of the window: if the dimensions are positive, just use them,
+// but if any of them is equal to -1, it means that we must find the value for
+// it ourselves (unless sizeFlags contains wxSIZE_ALLOW_MINUS_ONE flag, in
+// which case -1 is a valid value for x and y)
+//
+// If sizeFlags contains wxSIZE_AUTO_WIDTH/HEIGHT flags (default), we calculate
+// the width/height to best suit our contents, otherwise we reuse the current
+// width/height
+void wxWindowMac::DoSetSize(int x, int y, int width, int height, int sizeFlags)
+{
+    // get the current size and position...
+    int currentX, currentY;
+    GetPosition(&currentX, &currentY);
+    int currentW,currentH;
+    GetSize(&currentW, &currentH);
+
+    // ... and don't do anything (avoiding flicker) if it's already ok
+    if ( x == currentX && y == currentY &&
+         width == currentW && height == currentH )
+    {
+		MacRepositionScrollBars() ; // we might have a real position shift
+        return;
+    }
+
+    if ( x == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        x = currentX;
+    if ( y == -1 && !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+        y = currentY;
+
+    AdjustForParentClientOrigin(x, y, sizeFlags);
+
+    wxSize size(-1, -1);
+    if ( width == -1 )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_WIDTH )
+        {
+            size = DoGetBestSize();
+            width = size.x;
+        }
+        else
+        {
+            // just take the current one
+            width = currentW;
+        }
+    }
+
+    if ( height == -1 )
+    {
+        if ( sizeFlags & wxSIZE_AUTO_HEIGHT )
+        {
+            if ( size.x == -1 )
+            {
+                size = DoGetBestSize();
+            }
+            //else: already called DoGetBestSize() above
+
+            height = size.y;
+        }
+        else
+        {
+            // just take the current one
+            height = currentH;
+        }
+    }
+
+    DoMoveWindow(x, y, width, height);
+
 }
 // For implementation purposes - sometimes decorations make the client area
 // smaller

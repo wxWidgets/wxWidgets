@@ -152,10 +152,14 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     m_btn->SetRange(min, max);
     m_btn->SetValue(initial);
-
-    DoSetSize(pos.x, pos.y, size.x, size.y);
 #ifdef __WXMAC__
-    DoMoveWindow( pos.x, pos.y, size.x, size.y ) ;
+    wxSize csize = size ;
+    if ( size.y == -1 ) {
+      csize.y = m_text->GetSize().y ;
+    }
+    DoSetSize(pos.x, pos.y, csize.x, csize.y);
+#else
+    DoSetSize(pos.x, pos.y, size.x, size.y);
 #endif
     // have to disable this window to avoid interfering it with message
     // processing to the text and the button... but pretend it is enabled to
@@ -166,8 +170,9 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // we don't even need to show this window itself - and not doing it avoids
     // that it overwrites the text control
     wxControl::Show(FALSE);
+#ifndef __WXMAC__
     m_isShown = TRUE;
-
+#endif
     return TRUE;
 }
 

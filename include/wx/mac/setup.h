@@ -368,6 +368,16 @@
 // wxSystemOptions class
 #define wxUSE_SYSTEM_OPTIONS 1
 
+// Support for regular expression matching via wxRegEx class: enable this to
+// use POSIX regular expressions in your code. You need to compile regex
+// library from src/regex to use it under Windows.
+//
+// Default is 0
+//
+// Recommended setting: 1 if your compiler supports it, if it doesn't please
+// contribute us a makefile for src/regex for it
+#define wxUSE_REGEX       0
+
 // ----------------------------------------------------------------------------
 // Individual GUI controls
 // ----------------------------------------------------------------------------
