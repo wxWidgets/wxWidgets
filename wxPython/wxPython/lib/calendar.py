@@ -5,8 +5,8 @@
 # Author:       Lorne White (email: lorne.white@telusplanet.net)
 #
 # Created:
-# Version       0.8 
-# Date:         Feb 27, 2001
+# Version       0.85
+# Date:         June 20, 2001
 # Licence:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -31,7 +31,7 @@ def GetMonthList():
         if name != None:
             monthlist.append(name)
     return monthlist
-    
+
 class CalDraw:
     def __init__(self, parent):
         self.pwidth = 1
@@ -635,7 +635,7 @@ class wxCalendar(wxWindow):
 
     def ClearDsp(self):
         self.Clear()
-        
+
 class CalenDlg(wxDialog):
     def __init__(self, parent, month=None, day = None, year=None):
         wxDialog.__init__(self, parent, -1, "Event Calendar", wxPyDefaultPosition, wxSize(280, 360))
@@ -647,8 +647,8 @@ class CalenDlg(wxDialog):
             start_month = self.calend.GetMonth()
             start_year = self.calend.GetYear()
         else:
-            start_month = month
-            start_year = year
+            self.calend.month = start_month = month
+            self.calend.year = start_year = year
             self.calend.SetDayValue(day)
 
         self.calend.HideTitle()
@@ -691,7 +691,7 @@ class CalenDlg(wxDialog):
         mID = NewId()
         wxButton(self, mID, ' Ok ', wxPoint(x_pos, y_pos), but_size)
         EVT_BUTTON(self, mID, self.OnOk)
-        
+
         mID = NewId()
         wxButton(self, mID, ' Close ', wxPoint(x_pos + 120, y_pos), but_size)
         EVT_BUTTON(self, mID, self.OnCancel)
@@ -704,6 +704,7 @@ class CalenDlg(wxDialog):
 
 # log the mouse clicks
     def MouseClick(self, evt):
+        self.month = evt.month
         self.result = [evt.click, str(evt.day), Month[evt.month], str(evt.year)]  # result click type and date
 
         if evt.click == 'DLEFT':
@@ -735,5 +736,6 @@ class CalenDlg(wxDialog):
     def ResetDisplay(self):
         month = self.calend.GetMonth()
         self.calend.Refresh()
+
 
 
