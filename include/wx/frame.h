@@ -81,11 +81,6 @@ public:
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
 #endif // wxUSE_MENUS
 
-#ifdef WXWIN_COMPATIBILITY_2_2
-    // call this to simulate a menu command
-    bool Command(int winid) { return ProcessCommand(winid); }
-#endif // WXWIN_COMPATIBILITY_2_2
-
     // process menu command: returns TRUE if processed
     bool ProcessCommand(int winid);
 
@@ -142,10 +137,13 @@ public:
     // -------------------------------
 
     // event handlers
-    void OnMenuOpen(wxMenuEvent& event);
-    void OnMenuHighlight(wxMenuEvent& event);
-
 #if wxUSE_MENUS
+#if wxUSE_STATUSBAR
+    void OnMenuOpen(wxMenuEvent& event);
+    void OnMenuClose(wxMenuEvent& event);
+    void OnMenuHighlight(wxMenuEvent& event);
+#endif // wxUSE_STATUSBAR
+
     // send wxUpdateUIEvents for all menu items in the menubar,
     // or just for menu if non-NULL
     void DoMenuUpdates(wxMenu* menu = NULL);
@@ -172,6 +170,11 @@ public:
     // if you are hiding the help, TRUE otherwise
     virtual void DoGiveHelp(const wxString& text, bool show);
 
+#ifdef WXWIN_COMPATIBILITY_2_2
+    // call this to simulate a menu command
+    bool Command(int winid) { return ProcessCommand(winid); }
+#endif // WXWIN_COMPATIBILITY_2_2
+
 protected:
     // the frame main menu/status/tool bars
     // ------------------------------------
@@ -196,6 +199,11 @@ protected:
     virtual void AttachMenuBar(wxMenuBar *menubar);
 
     wxMenuBar *m_frameMenuBar;
+
+#if wxUSE_STATUSBAR
+    // the saved status bar text overwritten by DoGiveHelp()
+    wxString m_oldStatusText;
+#endif // wxUSE_STATUSBAR
 #endif // wxUSE_MENUS
 
 #if wxUSE_STATUSBAR
@@ -221,7 +229,10 @@ protected:
     wxToolBar *m_frameToolBar;
 #endif // wxUSE_TOOLBAR
 
+#if wxUSE_MENUS && wxUSE_STATUSBAR
     DECLARE_EVENT_TABLE()
+#endif // wxUSE_MENUS && wxUSE_STATUSBAR
+
     DECLARE_NO_COPY_CLASS(wxFrameBase)
 };
 
