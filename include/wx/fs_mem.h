@@ -90,7 +90,9 @@ public:
     }
 
 #if wxUSE_IMAGE
-    static void AddFile(const wxString& filename, wxImage& image, long type);
+    static void AddFile(const wxString& filename,
+                        const wxImage& image,
+                        long type);
 
     static void AddFile(const wxString& filename,
                         const wxBitmap& bitmap,

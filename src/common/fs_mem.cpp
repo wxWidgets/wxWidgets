@@ -216,7 +216,9 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 
 #if wxUSE_IMAGE
 /*static*/ void
-wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
+wxMemoryFSHandler::AddFile(const wxString& filename,
+                           const wxImage& image,
+                           long type)
 {
     if (!CheckHash(filename)) return;
 
@@ -232,7 +234,10 @@ wxMemoryFSHandler::AddFile(const wxString& filename, wxImage& image, long type)
     }
 }
 
-/*static*/ void wxMemoryFSHandler::AddFile(const wxString& filename, const wxBitmap& bitmap, long type)
+/*static*/ void
+wxMemoryFSHandler::AddFile(const wxString& filename,
+                           const wxBitmap& bitmap,
+                           long type)
 {
     wxImage img = bitmap.ConvertToImage();
     AddFile(filename, img, type);
