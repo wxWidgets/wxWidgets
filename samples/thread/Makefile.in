@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for controls example (UNIX).
+# Makefile for thread example (UNIX).
 
-PROGRAM=controls
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=test
 
 OBJECTS=$(PROGRAM).o
 

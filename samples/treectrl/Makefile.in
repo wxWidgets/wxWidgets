@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for scroll example (UNIX).
+# Makefile for treectrl example (UNIX).
 
-PROGRAM=scroll
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=treetest
 
 OBJECTS=$(PROGRAM).o
 

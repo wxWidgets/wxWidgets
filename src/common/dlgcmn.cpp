@@ -47,6 +47,12 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
 {
     wxBoxSizer *box = new wxBoxSizer( wxVERTICAL );
     
+    // get line height for empty lines
+    int y = 0;
+    wxFont new_font( GetFont() );
+    if (!new_font.Ok()) new_font = *wxSWISS_FONT;
+    GetTextExtent( "H", (int*)NULL, &y, (int*)NULL, (int*)NULL, &new_font );
+    
     wxString line;
     for (size_t pos = 0; pos < message.Len(); pos++)
     {
@@ -58,6 +64,10 @@ wxSizer *wxDialogBase::CreateTextSizer( const wxString &message )
 		box->Add( s1 );
                 line = _T("");
             }
+	    else
+	    {
+	        box->Add( 5, y );
+	    }
         }
         else
         {

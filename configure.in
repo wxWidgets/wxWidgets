@@ -2717,6 +2717,14 @@ AC_OUTPUT([
 	    samples/minimal/Makefile
 	    samples/notebook/Makefile
             samples/printing/Makefile
+	    samples/sashtest/Makefile
+	    samples/scroll/Makefile
+	    samples/splitter/Makefile
+	    samples/text/Makefile
+	    samples/thread/Makefile
+	    samples/toolbar/Makefile
+	    samples/treectrl/Makefile
+	    samples/typetest/Makefile
           ],
           [
             chmod +x wx-config

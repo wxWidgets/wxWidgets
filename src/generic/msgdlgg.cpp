@@ -90,7 +90,7 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 #endif
 
     // 4) buttons
-    topsizer->Add( CreateButtonSizer( wxOK|wxCANCEL ), 0, wxCENTRE | wxALL, 10 );
+    topsizer->Add( CreateButtonSizer( style ), 0, wxCENTRE | wxALL, 10 );
 
     topsizer->SetSizeHints( this );
     topsizer->Fit( this );

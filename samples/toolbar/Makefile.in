@@ -9,6 +9,9 @@
 #
 # Makefile for toolbar example (UNIX).
 
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
 PROGRAM=test
 
 OBJECTS=$(PROGRAM).o

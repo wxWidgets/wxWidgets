@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for thread example (UNIX).
+# Makefile for typetest example (UNIX).
 
-PROGRAM=test
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=typetest
 
 OBJECTS=$(PROGRAM).o
 

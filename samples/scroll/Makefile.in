@@ -7,9 +7,12 @@
 #
 # "%W% %G%"
 #
-# Makefile for typetest example (UNIX).
+# Makefile for scroll example (UNIX).
 
-PROGRAM=typetest
+top_srcdir = @top_srcdir@
+top_builddir = ../..
+
+PROGRAM=scroll
 
 OBJECTS=$(PROGRAM).o
 

@@ -107,9 +107,6 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
   dc.DrawRectangle( 0, 0, 100, 100 );
   dc.SelectObject( wxNullBitmap );
 
-  dc.DrawText( "Loaded image", 30, 10 );
-  if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
-  
   // try to find the directory with our images
   wxString dir;
   if ( wxFile::Exists("./horse.png") )
@@ -278,6 +275,7 @@ void MyFrame::OnQuit( wxCommandEvent &WXUNUSED(event) )
 void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 {
   (void)wxMessageBox( "wxImage demo\n"
+                      "\n"
                       "Robert Roebling (c) 1998",
                       "About wxImage Demo", wxICON_INFORMATION | wxOK );
 }
