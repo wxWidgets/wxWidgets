@@ -1662,6 +1662,13 @@ int wxFileIconsTable::GetIconID(const wxString& extension, const wxString& mime)
     wxBitmap bmp;
     bmp.CopyFromIcon(ic);
 
+    if ( !bmp.Ok() )
+    {
+        int newid = file;
+        m_HashTable->Put(extension, new wxFileIconEntry(newid));
+        return newid;
+    }
+
     int id = m_smallImageList->GetImageCount();
     if ((bmp.GetWidth() == 16) && (bmp.GetHeight() == 16))
         m_smallImageList->Add(bmp);
