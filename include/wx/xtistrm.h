@@ -57,11 +57,11 @@ public :
 
     // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( -1 , -1 ) or veto
     // writing that property at all by returning false
-    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; } 
+    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object), const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariant &WXUNUSED(value) )  { return true ; } 
 
     // will be called before a property gets written, may change the value , eg replace a concrete wxSize by wxSize( -1 , -1 ) or veto
     // writing that property at all by returning false
-    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariantArray &WXUNUSED(value) )  { return true ; } 
+    virtual bool BeforeWriteProperty( wxWriter *WXUNUSED(writer)  , const wxObject *WXUNUSED(object), const wxPropertyInfo *WXUNUSED(propInfo) , wxxVariantArray &WXUNUSED(value) )  { return true ; } 
 
     // will be called after a property has been written out, may be needed for adjusting stacks
     virtual void AfterWriteProperty( wxWriter *WXUNUSED(writer)  , const wxPropertyInfo *WXUNUSED(propInfo) ) {}
@@ -248,7 +248,7 @@ public :
     // sets the corresponding event handler
     virtual void SetConnect(int EventSourceObjectID,
         const wxClassInfo *EventSourceClassInfo,
-        const wxDelegateTypeInfo *delegateInfo ,
+        const wxPropertyInfo *delegateInfo ,
         const wxClassInfo *EventSinkClassInfo ,
         const wxHandlerInfo* handlerInfo ,
         int EventSinkObjectID ) = 0;
@@ -333,7 +333,7 @@ public :
     // sets the corresponding event handler
     virtual void SetConnect(int eventSourceObjectID,
         const wxClassInfo *eventSourceClassInfo,
-        const wxDelegateTypeInfo *delegateInfo ,
+        const wxPropertyInfo *delegateInfo ,
         const wxClassInfo *eventSinkClassInfo ,
         const wxHandlerInfo* handlerInfo ,
         int eventSinkObjectID ) ;
@@ -420,7 +420,7 @@ public:
     // sets the corresponding event handler
     virtual void SetConnect(int eventSourceObjectID,
         const wxClassInfo *eventSourceClassInfo,
-        const wxDelegateTypeInfo *delegateInfo ,
+        const wxPropertyInfo *delegateInfo ,
         const wxClassInfo *eventSinkClassInfo ,
         const wxHandlerInfo* handlerInfo ,
         int eventSinkObjectID ) ;

@@ -62,11 +62,11 @@
 #endif
 
 #if wxUSE_MEMBER_TEMPLATES
-#define WX_TEMPLATED_MEMBER_CALL( method , type ) method<type>()
-#define WX_TEMPLATED_MEMBER_FIX( type )
+#define wxTEMPLATED_MEMBER_CALL( method , type ) method<type>()
+#define wxTEMPLATED_MEMBER_FIX( type )
 #else
-#define WX_TEMPLATED_MEMBER_CALL( method , type ) method((type*)NULL)
-#define WX_TEMPLATED_MEMBER_FIX( type ) type* =NULL
+#define wxTEMPLATED_MEMBER_CALL( method , type ) method((type*)NULL)
+#define wxTEMPLATED_MEMBER_FIX( type ) type* =NULL
 #endif
 
 class WXDLLIMPEXP_BASE wxObject;
@@ -85,11 +85,11 @@ typedef void (wxObject::*wxObjectEventFunction)(wxEvent&);
 // implementation, an enum would have
 // to be enumerated eg :
 //
-// WX_BEGIN_ENUM( wxFlavor )
-//   WX_ENUM_MEMBER( Vanilla )
-//   WX_ENUM_MEMBER( Chocolate )
-//   WX_ENUM_MEMBER( Strawberry )
-// WX_END_ENUM( wxFlavor )
+// wxBEGIN_ENUM( wxFlavor )
+//   wxENUM_MEMBER( Vanilla )
+//   wxENUM_MEMBER( Chocolate )
+//   wxENUM_MEMBER( Strawberry )
+// wxEND_ENUM( wxFlavor )
 // ----------------------------------------------------------------------------
 
 struct WXDLLIMPEXP_BASE wxEnumMemberData
@@ -129,12 +129,12 @@ private :
     int m_count ;
 };
 
-#define WX_BEGIN_ENUM( e ) \
+#define wxBEGIN_ENUM( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define WX_ENUM_MEMBER( v ) { wxT(#v), v } ,
+#define wxENUM_MEMBER( v ) { wxT(#v), v } ,
 
-#define WX_END_ENUM( e ) { NULL , 0 } } ; \
+#define wxEND_ENUM( e ) { NULL , 0 } } ; \
     wxEnumData s_enumData##e( s_enumDataMembers##e ) ; \
     wxEnumData *wxGetEnumData(e) { return &s_enumData##e ; } \
     template<>  void wxStringReadValue(const wxString& s , e &data ) \
@@ -165,13 +165,13 @@ private :
 //
 // in the implementation file :
 //
-// WX_BEGIN_ENUM( wxFlavor )
-//  WX_ENUM_MEMBER( Vanilla )
-//  WX_ENUM_MEMBER( Chocolate )
-//  WX_ENUM_MEMBER( Strawberry )
-// WX_END_ENUM( wxFlavor )
+// wxBEGIN_ENUM( wxFlavor )
+//  wxENUM_MEMBER( Vanilla )
+//  wxENUM_MEMBER( Chocolate )
+//  wxENUM_MEMBER( Strawberry )
+// wxEND_ENUM( wxFlavor )
 //
-// WX_IMPLEMENT_SET_STREAMING( wxCoupe , wxFlavor )
+// wxIMPLEMENT_SET_STREAMING( wxCoupe , wxFlavor )
 //
 // implementation note : no partial specialization for streaming, but a delegation to a
 // different class
@@ -221,7 +221,7 @@ void wxSetToString( wxString &s , const wxBitset<e> &data )
     }
 }
 
-#define WX_IMPLEMENT_SET_STREAMING(SetName,e) \
+#define wxIMPLEMENT_SET_STREAMING(SetName,e) \
     template<>  void wxStringReadValue(const wxString &s , wxBitset<e> &data ) \
 { \
     wxSetFromString( s , data ) ; \
@@ -279,12 +279,12 @@ void wxFlagsToString( wxString &s , const e& data )
     }
 }
 
-#define WX_BEGIN_FLAGS( e ) \
+#define wxBEGIN_FLAGS( e ) \
     wxEnumMemberData s_enumDataMembers##e[] = {
 
-#define WX_FLAGS_MEMBER( v ) { wxT(#v), v } ,
+#define wxFLAGS_MEMBER( v ) { wxT(#v), v } ,
 
-#define WX_END_FLAGS( e ) { NULL , 0 } } ; \
+#define wxEND_FLAGS( e ) { NULL , 0 } } ; \
     wxEnumData s_enumData##e( s_enumDataMembers##e ) ; \
     wxEnumData *wxGetEnumData(e*) { return &s_enumData##e ; } \
     template<>  void wxStringReadValue(const wxString &s , e &data ) \
@@ -530,15 +530,15 @@ template<typename T> const wxTypeInfo* wxGetTypeInfo( T * ) { return wxTypeInfo:
 
 // this macro is for usage with custom, non-object derived classes and structs, wxPoint is such a custom type
 
-#define WX_CUSTOM_TYPE_INFO( e , toString , fromString ) \
+#define wxCUSTOM_TYPE_INFO( e , toString , fromString ) \
     wxCustomTypeInfo s_typeInfo##e(typeid(e).name() , &toString , &fromString) ;
 
-#define WX_COLLECTION_TYPE_INFO( element , collection ) \
+#define wxCOLLECTION_TYPE_INFO( element , collection ) \
     wxCollectionTypeInfo s_typeInfo##collection( typeid(element).name() , NULL , NULL , typeid(collection).name() ) ;
 
 // sometimes a compiler invents specializations that are nowhere called, use this macro to satisfy the refs
 
-#define WX_ILLEGAL_TYPE_SPECIALIZATION( a )
+#define wxILLEGAL_TYPE_SPECIALIZATION( a )
 /*
     template<>  const wxTypeInfo* wxGetTypeInfo( a * ) { assert(0) ; \
     static wxBuiltInTypeInfo s_typeInfo( wxT_VOID ) ; return &s_typeInfo ; } \
@@ -600,7 +600,7 @@ public :
     ~wxxVariant() { delete m_data ; }
 
     // get a ref to the stored data
-    template<typename T> T& Get(WX_TEMPLATED_MEMBER_FIX(T))
+    template<typename T> T& Get(wxTEMPLATED_MEMBER_FIX(T))
     {
         wxxVariantDataT<T> *dataptr = dynamic_cast<wxxVariantDataT<T>*> (m_data) ;
         wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
@@ -608,7 +608,7 @@ public :
     }
 
     // get a ref to the stored data
-    template<typename T> const T& Get(WX_TEMPLATED_MEMBER_FIX(T)) const
+    template<typename T> const T& Get(wxTEMPLATED_MEMBER_FIX(T)) const
     {
         const wxxVariantDataT<T> *dataptr = dynamic_cast<const wxxVariantDataT<T>*> (m_data) ;
         wxASSERT_MSG( dataptr , wxT("Cast not possible") ) ;
@@ -669,7 +669,7 @@ template<typename T>
 void wxStringWriteValue( wxString &s , const T &data);
 
 template<typename T>
-void wxToStringConverter( const wxxVariant &v, wxString &s) { wxStringWriteValue( s , v.WX_TEMPLATED_MEMBER_CALL(Get , T) ) ; }
+void wxToStringConverter( const wxxVariant &v, wxString &s) { wxStringWriteValue( s , v.wxTEMPLATED_MEMBER_CALL(Get , T) ) ; }
 
 template<typename T>
 void wxFromStringConverter( const wxString &s, wxxVariant &v) { T d ; wxStringReadValue( s , d ) ; v = wxxVariant(d) ; } \
@@ -730,7 +730,7 @@ private :
 
 
 
-#define WX_SETTER( property, Klass, valueType, setterMethod ) \
+#define wxSETTER( property, Klass, valueType, setterMethod ) \
 class wxSetter##property : public wxSetter \
 { \
 public: \
@@ -746,7 +746,7 @@ public: \
 } \
 } ;
 
-#define WX_GETTER( property, Klass, valueType , gettermethod ) \
+#define wxGETTER( property, Klass, valueType , gettermethod ) \
 class wxGetter##property : public wxGetter \
 { \
 public : \
@@ -759,7 +759,7 @@ public : \
 } \
 } ;
 
-#define WX_ADDER( property, Klass, valueType , addermethod ) \
+#define wxADDER( property, Klass, valueType , addermethod ) \
 class wxAdder##property : public wxAdder \
 { \
 public: \
@@ -775,7 +775,7 @@ public: \
 } \
 } ;
 
-#define WX_COLLECTION_GETTER( property, Klass, valueType , gettermethod ) \
+#define wxCOLLECTION_GETTER( property, Klass, valueType , gettermethod ) \
 class wxCollectionGetter##property : public wxCollectionGetter \
 { \
 public : \
@@ -1077,66 +1077,66 @@ private :
 
 WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , class WXDLLIMPEXP_BASE ) ;
 
-#define WX_BEGIN_PROPERTIES_TABLE(theClass) \
+#define wxBEGIN_PROPERTIES_TABLE(theClass) \
     wxPropertyInfo *theClass::GetPropertiesStatic()  \
 {  \
     typedef theClass class_t; \
     static wxPropertyInfo* first = NULL ;
 
-#define WX_END_PROPERTIES_TABLE() \
+#define wxEND_PROPERTIES_TABLE() \
     return first ; }
 
-#define WX_HIDE_PROPERTY( pname ) \
+#define wxHIDE_PROPERTY( pname ) \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(void).name() ,NULL , wxxVariant() , wxPROP_DONT_STREAM , wxEmptyString , wxEmptyString ) ;
 
-#define WX_PROPERTY( pname , type , setter , getter ,defaultValue , flags , help , group) \
-    WX_SETTER( pname , class_t , type , setter ) \
+#define wxPROPERTY( pname , type , setter , getter ,defaultValue , flags , help , group) \
+    wxSETTER( pname , class_t , type , setter ) \
     static wxSetter##pname _setter##pname ; \
-    WX_GETTER( pname , class_t , type , getter ) \
+    wxGETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( &_setter##pname , &_getter##pname , NULL , NULL ) ; \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(type).name() ,&_accessor##pname , wxxVariant(defaultValue) , flags , group , help ) ;
 
-#define WX_PROPERTY_FLAGS( pname , flags , type , setter , getter ,defaultValue , pflags , help , group) \
-    WX_SETTER( pname , class_t , type , setter ) \
+#define wxPROPERTY_FLAGS( pname , flags , type , setter , getter ,defaultValue , pflags , help , group) \
+    wxSETTER( pname , class_t , type , setter ) \
     static wxSetter##pname _setter##pname ; \
-    WX_GETTER( pname , class_t , type , getter ) \
+    wxGETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( &_setter##pname , &_getter##pname , NULL , NULL ) ; \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(flags).name() ,&_accessor##pname , wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags , help , group ) ;
 
-#define WX_READONLY_PROPERTY( pname , type , getter ,defaultValue , flags , help , group) \
-    WX_GETTER( pname , class_t , type , getter ) \
+#define wxREADONLY_PROPERTY( pname , type , getter ,defaultValue , flags , help , group) \
+    wxGETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , &_getter##pname , NULL , NULL ) ; \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(type).name() ,&_accessor##pname , wxxVariant(defaultValue), flags , help , group ) ;
 
-#define WX_READONLY_PROPERTY_FLAGS( pname , flags , type , getter ,defaultValue , pflags , help , group) \
-    WX_GETTER( pname , class_t , type , getter ) \
+#define wxREADONLY_PROPERTY_FLAGS( pname , flags , type , getter ,defaultValue , pflags , help , group) \
+    wxGETTER( pname , class_t , type , getter ) \
     static wxGetter##pname _getter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , &_getter##pname , NULL , NULL ) ; \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(flags).name() ,&_accessor##pname , wxxVariant(defaultValue), wxPROP_ENUM_STORE_LONG | pflags , help , group ) ;
 
-#define WX_PROPERTY_COLLECTION( pname , colltype , addelemtype , adder , getter , flags , help , group ) \
-    WX_ADDER( pname , class_t , addelemtype , adder ) \
+#define wxPROPERTY_COLLECTION( pname , colltype , addelemtype , adder , getter , flags , help , group ) \
+    wxADDER( pname , class_t , addelemtype , adder ) \
     static wxAdder##pname _adder##pname ; \
-    WX_COLLECTION_GETTER( pname , class_t , colltype , getter ) \
+    wxCOLLECTION_GETTER( pname , class_t , colltype , getter ) \
     static wxCollectionGetter##pname _collectionGetter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , NULL ,&_adder##pname , &_collectionGetter##pname ) ; \
     static wxPropertyInfo _propertyInfo##pname( first , class_t::GetClassInfoStatic() , wxT(#pname) , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group ) ;
 
-#define WX_READONLY_PROPERTY_COLLECTION( pname , colltype , addelemtype , getter , flags , help , group) \
-    WX_COLLECTION_GETTER( pname , class_t , colltype , getter ) \
+#define wxREADONLY_PROPERTY_COLLECTION( pname , colltype , addelemtype , getter , flags , help , group) \
+    wxCOLLECTION_GETTER( pname , class_t , colltype , getter ) \
     static wxCollectionGetter##pname _collectionGetter##pname ; \
     static wxPropertyAccessor _accessor##pname( NULL , NULL , NULL , &_collectionGetter##pname ) ; \
     static wxPropertyInfo _propertyInfo##pname( first ,class_t::GetClassInfoStatic() ,  wxT(#pname) , typeid(colltype).name() ,typeid(addelemtype).name() ,&_accessor##pname , flags , help , group  ) ;
 
 
-#define WX_EVENT_PROPERTY( name , eventType , eventClass ) \
+#define wxEVENT_PROPERTY( name , eventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , CLASSINFO( eventClass ) ) ; \
     static wxPropertyInfo _propertyInfo##name( first ,class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
-#define WX_EVENT_RANGE_PROPERTY( name , eventType , lastEventType , eventClass ) \
+#define wxEVENT_RANGE_PROPERTY( name , eventType , lastEventType , eventClass ) \
     static wxDelegateTypeInfo _typeInfo##name( eventType , lastEventType , CLASSINFO( eventClass ) ) ; \
     static wxPropertyInfo _propertyInfo##name( first , class_t::GetClassInfoStatic() , wxT(#name) , &_typeInfo##name , NULL , wxxVariant() ) ; \
 
@@ -1144,7 +1144,7 @@ WX_DECLARE_STRING_HASH_MAP_WITH_DECL( wxPropertyInfo* , wxPropertyInfoMap , clas
 // Implementation Helper for Simple Properties
 // ----------------------------------------------------------------------------
 
-#define WX_IMPLEMENT_PROPERTY(name, type) \
+#define wxIMPLEMENT_PROPERTY(name, type) \
 private:\
     type m_##name; \
 public: \
@@ -1209,16 +1209,16 @@ private :
     wxClassInfo*        m_itsClass ;
 };
 
-#define WX_HANDLER(name,eventClassType) \
+#define wxHANDLER(name,eventClassType) \
     static wxHandlerInfo _handlerInfo##name( first , class_t::GetClassInfoStatic() , #name , (wxObjectEventFunction) (wxEventFunction) &name , CLASSINFO( eventClassType ) ) ;
 
-#define WX_BEGIN_HANDLERS_TABLE(theClass) \
+#define wxBEGIN_HANDLERS_TABLE(theClass) \
     wxHandlerInfo *theClass::GetHandlersStatic()  \
 {  \
     typedef theClass class_t; \
     static wxHandlerInfo* first = NULL ;
 
-#define WX_END_HANDLERS_TABLE() \
+#define wxEND_HANDLERS_TABLE() \
     return first ; }
 
 // ----------------------------------------------------------------------------
@@ -1263,13 +1263,13 @@ struct wxConstructorBridge_Dummy : public wxConstructorBridge
     }
 } ;
 
-#define WX_CONSTRUCTOR_0(klass) \
+#define wxCONSTRUCTOR_0(klass) \
     wxConstructorBridge_0<klass> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { NULL } ; \
     const int klass::sm_constructorPropertiesCount##klass = 0 ;
 
-#define WX_CONSTRUCTOR_DUMMY(klass) \
+#define wxCONSTRUCTOR_DUMMY(klass) \
     wxConstructorBridge_Dummy constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { NULL } ; \
@@ -1284,12 +1284,12 @@ struct wxConstructorBridge_1 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_1(klass,t0,v0) \
+#define wxCONSTRUCTOR_1(klass,t0,v0) \
     wxConstructorBridge_1<klass,t0> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0) } ; \
@@ -1305,13 +1305,13 @@ struct wxConstructorBridge_2 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
+#define wxCONSTRUCTOR_2(klass,t0,v0,t1,v1) \
     wxConstructorBridge_2<klass,t0,t1> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  } ; \
@@ -1326,13 +1326,13 @@ struct wxDirectConstructorBridge_2 : public wxDirectConstructorBrigde
     void Create(wxObject * &o, wxxVariant *args)
     {
         o = new Class(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1)
             );
     }
 };
 
-#define WX_DIRECT_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
+#define wxDIRECT_CONSTRUCTOR_2(klass,t0,v0,t1,v1) \
     wxDirectConstructorBridge_2<klass,t0,t1> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  } ; \
@@ -1349,14 +1349,14 @@ struct wxConstructorBridge_3 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
+#define wxCONSTRUCTOR_3(klass,t0,v0,t1,v1,t2,v2) \
     wxConstructorBridge_3<klass,t0,t1,t2> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  } ; \
@@ -1372,15 +1372,15 @@ struct wxConstructorBridge_4 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
-            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].wxTEMPLATED_MEMBER_CALL(Get , T3)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
+#define wxCONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
     wxConstructorBridge_4<klass,t0,t1,t2,t3> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  } ; \
@@ -1396,16 +1396,16 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
-            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
-            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].wxTEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].wxTEMPLATED_MEMBER_CALL(Get , T4)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
+#define wxCONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
     wxConstructorBridge_5<klass,t0,t1,t2,t3,t4> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  } ; \
@@ -1421,17 +1421,17 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
-            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
-            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
-            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].wxTEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].wxTEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].wxTEMPLATED_MEMBER_CALL(Get , T5)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
+#define wxCONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  } ; \
@@ -1446,17 +1446,17 @@ struct wxDirectConstructorBridge_6 : public wxDirectConstructorBrigde
     void Create(wxObject * &o, wxxVariant *args)
     {
         o = new Class(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
-            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
-            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
-            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].wxTEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].wxTEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].wxTEMPLATED_MEMBER_CALL(Get , T5)
             );
     }
 };
 
-#define WX_DIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
+#define wxDIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxDirectConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  } ; \
@@ -1472,18 +1472,18 @@ struct wxConstructorBridge_7 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
-            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
-            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
-            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5) ,
-            args[6].WX_TEMPLATED_MEMBER_CALL(Get , T6)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].wxTEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].wxTEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].wxTEMPLATED_MEMBER_CALL(Get , T5) ,
+            args[6].wxTEMPLATED_MEMBER_CALL(Get , T6)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
+#define wxCONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
     wxConstructorBridge_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) } ; \
@@ -1499,19 +1499,19 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
     {
         Class *obj = dynamic_cast<Class*>(o);
         obj->Create(
-            args[0].WX_TEMPLATED_MEMBER_CALL(Get , T0) ,
-            args[1].WX_TEMPLATED_MEMBER_CALL(Get , T1) ,
-            args[2].WX_TEMPLATED_MEMBER_CALL(Get , T2) ,
-            args[3].WX_TEMPLATED_MEMBER_CALL(Get , T3) ,
-            args[4].WX_TEMPLATED_MEMBER_CALL(Get , T4) ,
-            args[5].WX_TEMPLATED_MEMBER_CALL(Get , T5) ,
-            args[6].WX_TEMPLATED_MEMBER_CALL(Get , T6) ,
-            args[7].WX_TEMPLATED_MEMBER_CALL(Get , T7)
+            args[0].wxTEMPLATED_MEMBER_CALL(Get , T0) ,
+            args[1].wxTEMPLATED_MEMBER_CALL(Get , T1) ,
+            args[2].wxTEMPLATED_MEMBER_CALL(Get , T2) ,
+            args[3].wxTEMPLATED_MEMBER_CALL(Get , T3) ,
+            args[4].wxTEMPLATED_MEMBER_CALL(Get , T4) ,
+            args[5].wxTEMPLATED_MEMBER_CALL(Get , T5) ,
+            args[6].wxTEMPLATED_MEMBER_CALL(Get , T6) ,
+            args[7].wxTEMPLATED_MEMBER_CALL(Get , T7)
             );
     }
 };
 
-#define WX_CONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
+#define wxCONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
     wxConstructorBridge_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass ; \
     wxConstructorBridge* klass::sm_constructor##klass = &constructor##klass ; \
     const wxChar *klass::sm_constructorProperties##klass[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) , wxT(#v7) } ; \
@@ -1881,14 +1881,14 @@ public :
     _TYPEINFO_CLASSES(name, NULL , NULL) \
     const wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     const wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
-    WX_CONSTRUCTOR_DUMMY( name )
+    wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS( name , basename ) \
     _IMPLEMENT_DYNAMIC_CLASS( name , basename , "" , NULL ) \
      _TYPEINFO_CLASSES(name, NULL , NULL) \
    wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
-    WX_CONSTRUCTOR_DUMMY( name )
+    wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS_XTI( name , basename , unit ) \
     _IMPLEMENT_DYNAMIC_CLASS( name , basename , unit , NULL ) \
@@ -1948,7 +1948,7 @@ public :
     _TYPEINFO_CLASSES(name, NULL , NULL) \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
-    WX_CONSTRUCTOR_DUMMY( name )
+    wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS2_XTI( name , basename , basename2, unit) \
     _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit) \
@@ -1987,6 +1987,9 @@ public :
 
 #define IMPLEMENT_CLASS IMPLEMENT_ABSTRACT_CLASS
 #define IMPLEMENT_CLASS2 IMPLEMENT_ABSTRACT_CLASS2
+
+#define wxBEGIN_EVENT_TABLE( a , b ) BEGIN_EVENT_TABLE( a , b )
+#define wxEND_EVENT_TABLE() END_EVENT_TABLE()
 
 // --------------------------------------------------------------------------
 // Collection Support
