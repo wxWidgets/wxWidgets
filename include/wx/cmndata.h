@@ -209,6 +209,7 @@ public:
 #elif defined(__WXMAC__)
   void ConvertToNative();
   void ConvertFromNative();
+  void ValidateOrCreateNative() ;
 #endif
 
 public:
