@@ -700,6 +700,7 @@ void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
 
     event.Skip();
 }
+
 // ----------------------------------------------------------------------------
 // wxGridCellFloatEditor
 // ----------------------------------------------------------------------------
@@ -1100,7 +1101,10 @@ wxString wxGridCellNumberRenderer::GetString(wxGrid& grid, int row, int col)
     {
         text.Printf(_T("%ld"), table->GetValueAsLong(row, col));
     }
-    //else: leave the string empty or put 0 into it?
+    else
+    {
+        text = table->GetValue(row, col);
+    }
 
     return text;
 }
@@ -1158,7 +1162,10 @@ wxString wxGridCellFloatRenderer::GetString(wxGrid& grid, int row, int col)
 
         text.Printf(m_format, table->GetValueAsDouble(row, col));
     }
-    //else: leave the string empty or put 0 into it?
+    else
+    {
+        text = table->GetValue(row, col);
+    }
 
     return text;
 }
