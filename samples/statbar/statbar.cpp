@@ -371,6 +371,8 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
                                           "wxStatusBar sample\n"
                                           "(c) 2000 Vadim Zeitlin");
 
+    wxButton *btn = new wxButton(this, wxID_OK, "&Close");
+
     // create the top status bar without the size grip (default style),
     // otherwise it looks weird
     wxStatusBar *statbarTop = new wxStatusBar(this, -1, 0);
@@ -387,7 +389,9 @@ MyAboutDialog::MyAboutDialog(wxWindow *parent)
     wxBoxSizer *sizerTop = new wxBoxSizer(wxVERTICAL);
     sizerTop->Add(statbarTop, 0, wxGROW);
     sizerTop->Add(-1, 10, 1, wxGROW);
-    sizerTop->Add(text, 0, wxCENTRE);
+    sizerTop->Add(text, 0, wxCENTRE | wxRIGHT | wxLEFT, 20);
+    sizerTop->Add(-1, 10, 1, wxGROW);
+    sizerTop->Add(btn, 0, wxCENTRE | wxRIGHT | wxLEFT, 20);
     sizerTop->Add(-1, 10, 1, wxGROW);
     sizerTop->Add(statbarBottom, 0, wxGROW);
 
