@@ -2963,16 +2963,36 @@ const wxChar *wxDateTime::ParseDate(const wxChar *date)
     while ( wxIsspace(*p) )
         p++;
 
-    wxString today = _T("today");
-    size_t len = today.length();
-    if ( wxString(p, len).CmpNoCase(today) == 0 )
+    // some special cases
+    static struct
     {
-        // nothing can follow this, so stop here
-        p += len;
+        const wxChar *str;
+        int dayDiffFromToday;
+    } literalDates[] =
+    {
+        { wxTRANSLATE("today"),             0 },
+        { wxTRANSLATE("yesterday"),        -1 },
+        { wxTRANSLATE("tomorrow"),          1 },
+    };
 
-        *this = Today();
+    for ( size_t n = 0; n < WXSIZEOF(literalDates); n++ )
+    {
+        wxString date = wxGetTranslation(literalDates[n].str);
+        size_t len = date.length();
+        if ( wxString(p, len).CmpNoCase(date) == 0 )
+        {
+            // nothing can follow this, so stop here
+            p += len;
 
-        return p;
+            int dayDiffFromToday = literalDates[n].dayDiffFromToday;
+            *this = Today();
+            if ( dayDiffFromToday )
+            {
+                *this += wxDateSpan::Days(dayDiffFromToday);
+            }
+
+            return p;
+        }
     }
 
     // what do we have?
