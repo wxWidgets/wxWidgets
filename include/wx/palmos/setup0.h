@@ -286,6 +286,14 @@
 // Recommended setting: 1 (but may be safely disabled if you don't use it)
 #define wxUSE_FSVOLUME      1
 
+// Use wxStandardPaths class which allows to retrieve some standard locations
+// in the file system
+//
+// Default is 1
+//
+// Recommended setting: 1 (may be disabled to save space, but not much)
+#define wxUSE_STDPATHS      1
+
 // use wxTextBuffer class: required by wxTextFile
 #define wxUSE_TEXTBUFFER    0
 
