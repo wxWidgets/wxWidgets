@@ -208,6 +208,7 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     wxPySaveThread(doSave);
 }
 
+    // See below in the init function...
     wxClipboard* wxPyTheClipboard;
 
 class wxPyDropSource : public wxDropSource {
@@ -3444,6 +3445,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_class_wxRegion","_wxRegion",0},
     { "_class_wxDataFormat","_wxDataFormat",0},
+    { "_wxGDIImage","_class_wxGDIImage",0},
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_class_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
     { "_class_wxPyDropTarget","_wxPyFileDropTarget",SwigwxPyFileDropTargetTowxPyDropTarget},
@@ -3512,6 +3514,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyDataObjectSimple","_wxPyDataObjectSimple",0},
     { "_class_wxPyDropSource","_wxPyDropSource",0},
     { "_class_wxImageList","_wxImageList",0},
+    { "_class_wxGDIImage","_wxGDIImage",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_size_t",0},

@@ -80,6 +80,10 @@ public:
     int GetSelection();
     wxString GetString();
     bool IsSelection();
+    void SetString(const wxString& s);
+    void SetExtraLong(long extraLong);
+    void SetInt(int i);
+
 };
 
 

@@ -50,6 +50,9 @@ class wxEvtHandlerPtr :
     def Connect(self, *_args, **_kwargs):
         val = apply(windowsc.wxEvtHandler_Connect,(self,) + _args, _kwargs)
         return val
+    def Disconnect(self, *_args, **_kwargs):
+        val = apply(windowsc.wxEvtHandler_Disconnect,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxEvtHandler instance at %s>" % (self.this,)
 class wxEvtHandler(wxEvtHandlerPtr):

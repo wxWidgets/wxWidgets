@@ -4,8 +4,19 @@ from wxPython.wx import *
 
 #---------------------------------------------------------------------------
 
+class MySplitter(wxSplitterWindow):
+    def __init__(self, parent, ID, log):
+        wxSplitterWindow.__init__(self, parent, ID)
+        self.log = log
+        EVT_SPLITTER_SASH_POS_CHANGED(self, self.GetId(), self.OnSashChanged)
+
+    def OnSashChanged(self, evt):
+        self.log.WriteText("sash changed to " + str(evt.GetSashPosition()))
+
+#---------------------------------------------------------------------------
+
 def runTest(frame, nb, log):
-    splitter = wxSplitterWindow(nb, -1)
+    splitter = MySplitter(nb, -1, log)
 
     p1 = wxWindow(splitter, -1)
     p1.SetBackgroundColour(wxRED)

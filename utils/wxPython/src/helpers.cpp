@@ -75,7 +75,7 @@ wxPyApp::~wxPyApp() {
 
 // This one isn't acutally called...  See __wxStart()
 bool wxPyApp::OnInit(void) {
-    return false;
+    return FALSE;
 }
 
 int  wxPyApp::MainLoop(void) {

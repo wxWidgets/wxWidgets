@@ -121,6 +121,15 @@ class wxCommandEventPtr(wxEventPtr):
     def IsSelection(self, *_args, **_kwargs):
         val = apply(eventsc.wxCommandEvent_IsSelection,(self,) + _args, _kwargs)
         return val
+    def SetString(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_SetString,(self,) + _args, _kwargs)
+        return val
+    def SetExtraLong(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_SetExtraLong,(self,) + _args, _kwargs)
+        return val
+    def SetInt(self, *_args, **_kwargs):
+        val = apply(eventsc.wxCommandEvent_SetInt,(self,) + _args, _kwargs)
+        return val
     def __repr__(self):
         return "<C wxCommandEvent instance at %s>" % (self.this,)
 class wxCommandEvent(wxCommandEventPtr):

@@ -376,6 +376,7 @@ public:
 };
 
 %{
+    // See below in the init function...
     wxClipboard* wxPyTheClipboard;
 %}
 %readonly

@@ -18,6 +18,7 @@
 #include <wx/spinbutt.h>
 #include <wx/dynarray.h>
 #include <wx/statline.h>
+//#include <wx/toggbutt.h>
 
 #ifdef __WXMSW__
 #if wxUSE_OWNER_DRAWN
@@ -59,12 +60,43 @@ wxValidator wxDefaultValidator;
 
 class wxControl : public wxWindow {
 public:
+    wxControl();
+
 #ifdef __WXMSW__
     void Command(wxCommandEvent& event);
 #endif
     wxString GetLabel();
     void SetLabel(const wxString& label);
 };
+
+
+//  %{
+//  class wxPyControl : public wxControl {
+//  public:
+//      wxPyControl(wxWindow *parent,
+//                  wxWindowID id,
+//                  const wxPoint& pos,
+//                  const wxSize& size,
+//                  long style,
+//                  const wxValidator& validator,
+//                  const wxString& name)
+//          : wxControl() {
+//          CreateControl(parent, id, pos, size, style, validator, name);
+//      }
+//  };
+//  %}
+
+
+//  class wxPyControl : public wxControl {
+//  public:
+//      wxPyControl(wxWindow* parent, wxWindowID id,
+//                  const wxPoint& pos = wxPyDefaultPosition,
+//                  const wxSize& size = wxPyDefaultSize,
+//                  long style = 0,
+//                  const wxValidator& validator = wxPyDefaultValidator,
+//                  char* name = "control");
+//  };
+
 
 //----------------------------------------------------------------------
 
@@ -81,6 +113,13 @@ public:
 
     void SetDefault();
 };
+
+
+%inline %{
+    wxSize wxButton_GetDefaultSize() {
+        return wxButton::GetDefaultSize();
+    }
+%}
 
 //----------------------------------------------------------------------
 
@@ -105,6 +144,31 @@ public:
     void SetBitmapLabel(const wxBitmap& bitmap);
 
 };
+
+//----------------------------------------------------------------------
+
+//  class wxToggleButton : public wxControl {
+//  public:
+//      wxToggleButton(wxWindow *parent, wxWindowID id, const wxString& label,
+//                     const wxPoint& pos = wxPyDefaultPosition,
+//                     const wxSize& size = wxPyDefaultSize, long style = 0,
+//                     const wxValidator& validator = wxPyDefaultValidator,
+//                     const char* name = "toggle");
+//      void SetValue(bool value);
+//      bool GetValue() const ;
+//      void SetLabel(const wxString& label);
+//  };
+
+//  class wxBitmapToggleButton : public wxToggleButton {
+//  public:
+//      wxBitmapToggleButton(wxWindow *parent, wxWindowID id, const wxBitmap *label,
+//                           const wxPoint& pos = wxPyDefaultPosition,
+//                           const wxSize& size = wxPyDefaultSize, long style = 0,
+//                           const wxValidator& validator = wxPyDefaultValidator,
+//                           const char *name = "toggle");
+//      void SetLabel(const wxBitmap& bitmap);
+//  };
+
 
 //----------------------------------------------------------------------
 

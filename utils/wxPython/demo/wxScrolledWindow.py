@@ -67,6 +67,12 @@ class MyCanvas(wxScrolledWindow):
         dc.SetTextForeground(wxColour(0, 0xFF, 0x80))
         dc.DrawText("a bitmap", 200, 85)
 
+        font = wxFont(20, wxSWISS, wxNORMAL, wxNORMAL)
+        dc.SetFont(font)
+        dc.SetTextForeground(wxBLACK)
+        for a in range(0, 360, 45):
+            dc.DrawRotatedText("Rotated text...", 300, 300, a)
+
         self.DrawSavedLines(dc)
         dc.EndDrawing()
 

@@ -55,6 +55,14 @@ public:
                           new wxPyCallback(func));
             }
         }
+
+        bool Disconnect(int id, int lastId = -1,
+                        wxEventType eventType = wxEVT_NULL) {
+            return self->Disconnect(id, lastId, eventType,
+                                   (wxObjectEventFunction)
+                                    &wxPyCallback::EventThunker);
+        }
+
     }
 };
 

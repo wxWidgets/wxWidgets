@@ -22,7 +22,8 @@ _useNestedSplitter = true
 
 _treeList = [
     ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow',
-                                'FileBrowseButton']),
+                                'FileBrowseButton', #'wxToggleButton',
+                                'GenericButtons']),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
@@ -39,7 +40,8 @@ _treeList = [
     ('Controls', ['wxButton', 'wxCheckBox', 'wxCheckListBox', 'wxChoice',
                   'wxComboBox', 'wxGauge', 'wxListBox', 'wxListCtrl', 'wxTextCtrl',
                   'wxTreeCtrl', 'wxSpinButton', 'wxStaticText', 'wxStaticBitmap',
-                  'wxRadioBox', 'wxSlider']),
+                  'wxRadioBox', 'wxSlider', #'wxToggleButton'
+                  ]),
 
     ('Window Layout', ['wxLayoutConstraints', 'Sizers', 'OldSizers']),
 
@@ -51,7 +53,7 @@ _treeList = [
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
                           'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
-                          'FileBrowseButton',]),
+                          'FileBrowseButton', 'GenericButtons']),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
@@ -136,13 +138,16 @@ class wxPythonDemo(wxFrame):
             self.treeMap = {}
             self.tree = wxTreeCtrl(splitter, tID)
             root = self.tree.AddRoot("Overview")
+            firstChild = None
             for item in _treeList:
                 child = self.tree.AppendItem(root, item[0])
+                if not firstChild: firstChild = child
                 for childItem in item[1]:
                     theDemo = self.tree.AppendItem(child, childItem)
                     self.treeMap[childItem] = theDemo
 
             self.tree.Expand(root)
+            self.tree.Expand(firstChild)
             EVT_TREE_ITEM_EXPANDED   (self.tree, tID, self.OnItemExpanded)
             EVT_TREE_ITEM_COLLAPSED  (self.tree, tID, self.OnItemCollapsed)
             EVT_TREE_SEL_CHANGED     (self.tree, tID, self.OnSelChanged)

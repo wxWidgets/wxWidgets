@@ -30,6 +30,13 @@ rectangle representing the intersection is returned.
 
 Some bug fixes for Clipboard and Drag-n-Drop.
 
+Rotated text!!!  WooHoo!  (See wxDC.DrawRotatedtext())
+
+Added a set of Generic Buttons to the library.  These are simple
+window classes that look and act like native buttons, but you can have
+a bit more control over them.  The bezel width can be set in addition
+to colours, fonts, etc.  There is a ToggleButton as well as Bitmap
+versions too.
 
 
 

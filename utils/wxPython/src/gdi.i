@@ -33,33 +33,43 @@
 
 //---------------------------------------------------------------------------
 
-class wxBitmap {
+class wxGDIImage {
+public:
+    long GetHandle();
+    void SetHandle(long handle);
+
+    bool Ok();
+
+    int GetWidth();
+    int GetHeight();
+    int GetDepth();
+
+    void SetWidth(int w);
+    void SetHeight(int h);
+    void SetDepth(int d);
+
+    void SetSize(const wxSize& size);
+
+};
+
+//---------------------------------------------------------------------------
+
+class wxBitmap : public wxGDIImage {
 public:
     wxBitmap(const wxString& name, long type);
     ~wxBitmap();
 
-#ifdef __WXMSW__
-    void Create(int width, int height, int depth = -1);
-#endif
-    int GetDepth();
-    int GetHeight();
     wxPalette* GetPalette();
     wxMask* GetMask();
-    int GetWidth();
     bool LoadFile(const wxString& name, long flags);
-    bool Ok();
     bool SaveFile(const wxString& name, int type, wxPalette* palette = NULL);
-    void SetDepth(int depth);
-    void SetHeight(int height);
     void SetMask(wxMask* mask);
 #ifdef __WXMSW__
     void SetPalette(wxPalette& palette);
 #endif
-    void SetWidth(int width);
 };
 
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
-wxBitmap* wxNoRefBitmap(char* name, long flags);
 
 #ifdef __WXMSW__
 %new wxBitmap* wxBitmapFromData(char* data, long type,
@@ -69,14 +79,6 @@ wxBitmap* wxNoRefBitmap(char* name, long flags);
 %{                              // Alternate 'constructor'
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
         return new wxBitmap(width, height, depth);
-    }
-
-                                // This one won't own the reference, so Python
-                                // won't call the dtor, this is good for
-                                // toolbars and such where the parent will
-                                // manage the bitmap.
-    wxBitmap* wxNoRefBitmap(char* name, long flags) {
-        return new wxBitmap(name, flags);
     }
 
 #ifdef __WXMSW__
@@ -106,32 +108,24 @@ public:
 //---------------------------------------------------------------------------
 
 
-class wxIcon : public wxBitmap {
+class wxIcon : public wxGDIImage {
 public:
     wxIcon(const wxString& name, long flags,
            int desiredWidth = -1, int desiredHeight = -1);
     ~wxIcon();
 
-    int GetDepth();
-    int GetHeight();
-    int GetWidth();
     bool LoadFile(const wxString& name, long flags);
-    bool Ok();
-    void SetDepth(int depth);
-    void SetHeight(int height);
-    void SetWidth(int width);
 };
 
 
 //---------------------------------------------------------------------------
 
-class wxCursor : public wxBitmap {
+class wxCursor : public wxGDIImage {
 public:
 #ifdef __WXMSW__
     wxCursor(const wxString& cursorName, long flags, int hotSpotX=0, int hotSpotY=0);
 #endif
     ~wxCursor();
-    bool Ok();
 };
 
 %name(wxStockCursor) %new wxCursor* wxPyStockCursor(int id);
@@ -269,7 +263,12 @@ public:
 
 //----------------------------------------------------------------------
 
+#ifdef __WXMSW__
 typedef unsigned long wxDash;
+#else
+typedef byte wxDash;
+#endif
+
 
 class wxPen {
 public:
@@ -295,11 +294,12 @@ public:
     void SetStyle(int style);
     void SetWidth(int width);
 
-#ifdef __WXMSW__
             // **** This one needs to return a list of ints (wxDash)
     int GetDashes(wxDash **dashes);
-    wxBitmap* GetStipple();
     void SetDashes(int LCOUNT, wxDash* LIST);
+
+#ifdef __WXMSW__
+    wxBitmap* GetStipple();
     void SetStipple(wxBitmap& stipple);
 #endif
 };
@@ -363,6 +363,7 @@ public:
                      int fill_style=wxODDEVEN_RULE);
     void DrawPoint(long x, long y);
     void DrawRectangle(long x, long y, long width, long height);
+    void DrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
     void DrawRoundedRectangle(long x, long y, long width, long height, long radius=20);
     void DrawSpline(int LCOUNT, wxPoint* LIST);
     void DrawText(const wxString& text, long x, long y);
@@ -611,7 +612,7 @@ enum {
 
 class wxImageList {
 public:
-    wxImageList(int width, int height, const bool mask=TRUE, int initialCount=1);
+    wxImageList(int width, int height, int mask=TRUE, int initialCount=1);
     ~wxImageList();
 
 #ifdef __WXMSW__

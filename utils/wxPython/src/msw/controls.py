@@ -27,8 +27,9 @@ class wxControlPtr(wxWindowPtr):
     def __repr__(self):
         return "<C wxControl instance at %s>" % (self.this,)
 class wxControl(wxControlPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(controlsc.new_wxControl,_args,_kwargs)
+        self.thisown = 1
 
 
 
@@ -785,6 +786,11 @@ class wxSlider(wxSliderPtr):
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+def wxButton_GetDefaultSize(*_args, **_kwargs):
+    val = apply(controlsc.wxButton_GetDefaultSize,_args,_kwargs)
+    if val: val = wxSizePtr(val); val.thisown = 1
+    return val
 
 
 

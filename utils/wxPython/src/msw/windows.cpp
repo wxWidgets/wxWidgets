@@ -529,6 +529,40 @@ static PyObject *_wrap_wxEvtHandler_Connect(PyObject *self, PyObject *args, PyOb
     return _resultobj;
 }
 
+static bool  wxEvtHandler_Disconnect(wxEvtHandler *self,int  id,int  lastId,wxEventType  eventType) {
+            return self->Disconnect(id, lastId, eventType,
+                                   (wxObjectEventFunction)
+                                    &wxPyCallback::EventThunker);
+        }
+static PyObject *_wrap_wxEvtHandler_Disconnect(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxEvtHandler * _arg0;
+    int  _arg1;
+    int  _arg2 = (int ) -1;
+    wxEventType  _arg3 = (wxEventType ) wxEVT_NULL;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self","id","lastId","eventType", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi|ii:wxEvtHandler_Disconnect",_kwnames,&_argo0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxEvtHandler_Disconnect. Expected _wxEvtHandler_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxEvtHandler_Disconnect(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 static void *SwigwxValidatorTowxEvtHandler(void *ptr) {
     wxValidator *src;
     wxEvtHandler *dest;
@@ -8651,6 +8685,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxValidator_GetWindow", (PyCFunction) _wrap_wxValidator_GetWindow, METH_VARARGS | METH_KEYWORDS },
 	 { "wxValidator_Clone", (PyCFunction) _wrap_wxValidator_Clone, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxValidator", (PyCFunction) _wrap_new_wxValidator, METH_VARARGS | METH_KEYWORDS },
+	 { "wxEvtHandler_Disconnect", (PyCFunction) _wrap_wxEvtHandler_Disconnect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_Connect", (PyCFunction) _wrap_wxEvtHandler_Connect, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_SetPreviousHandler", (PyCFunction) _wrap_wxEvtHandler_SetPreviousHandler, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEvtHandler_SetNextHandler", (PyCFunction) _wrap_wxEvtHandler_SetNextHandler, METH_VARARGS | METH_KEYWORDS },
@@ -8769,6 +8804,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_EBool","_wxWindowID",0},
     { "_class_wxRegion","_wxRegion",0},
     { "_class_wxDataFormat","_wxDataFormat",0},
+    { "_wxGDIImage","_class_wxGDIImage",0},
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
     { "_unsigned_long","_wxDash",0},
@@ -8844,6 +8880,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyDataObjectSimple","_wxPyDataObjectSimple",0},
     { "_class_wxPyDropSource","_wxPyDropSource",0},
     { "_class_wxImageList","_wxImageList",0},
+    { "_class_wxGDIImage","_wxGDIImage",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
     { "_wxWindowID","_size_t",0},

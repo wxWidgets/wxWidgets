@@ -72,6 +72,10 @@ class wxToolBarToolPtr :
     def GetHeight(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBarTool_GetHeight,(self,) + _args, _kwargs)
         return val
+    def GetControl(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBarTool_GetControl,(self,) + _args, _kwargs)
+        if val: val = wxControlPtr(val) 
+        return val
     def __setattr__(self,name,value):
         if name == "m_toolStyle" :
             stattoolc.wxToolBarTool_m_toolStyle_set(self,value)
@@ -170,8 +174,14 @@ class wxToolBarPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def AddControl(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_AddControl,(self,) + _args, _kwargs)
+        return val
     def AddSeparator(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_AddSeparator,(self,) + _args, _kwargs)
+        return val
+    def ClearTools(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_ClearTools,(self,) + _args, _kwargs)
         return val
     def AddTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_AddTool,(self,) + _args, _kwargs)
@@ -198,6 +208,10 @@ class wxToolBarPtr(wxControlPtr):
         return val
     def SetToolBitmapSize(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_SetToolBitmapSize,(self,) + _args, _kwargs)
+        return val
+    def GetToolMargins(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_GetToolMargins,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
         return val
     def GetMaxSize(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_GetMaxSize,(self,) + _args, _kwargs)
@@ -241,6 +255,18 @@ class wxToolBarPtr(wxControlPtr):
         return val
     def ToggleTool(self, *_args, **_kwargs):
         val = apply(stattoolc.wxToolBar_ToggleTool,(self,) + _args, _kwargs)
+        return val
+    def SetToggle(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_SetToggle,(self,) + _args, _kwargs)
+        return val
+    def SetMaxRowsCols(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_SetMaxRowsCols,(self,) + _args, _kwargs)
+        return val
+    def GetMaxRows(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_GetMaxRows,(self,) + _args, _kwargs)
+        return val
+    def GetMaxCols(self, *_args, **_kwargs):
+        val = apply(stattoolc.wxToolBar_GetMaxCols,(self,) + _args, _kwargs)
         return val
     def __repr__(self):
         return "<C wxToolBar instance at %s>" % (self.this,)

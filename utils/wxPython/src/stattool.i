@@ -57,8 +57,6 @@ public:
     void DrawFieldText(wxDC& dc, int i);
     void InitColours(void);
 
-    // OnSysColourChanged(wxSysColourChangedEvent& event);
-
     void SetFieldsCount(int number = 1);
     void SetStatusText(const wxString& text, int i = 0);
     void SetStatusWidths(int LCOUNT, int* LIST);
@@ -71,22 +69,19 @@ class wxToolBarTool {
 public:
     wxToolBarTool();
     ~wxToolBarTool();
-#ifdef __WXMSW__
     void SetSize( long w, long h ) { m_width = w; m_height = h; }
     long GetWidth () const { return m_width; }
     long GetHeight () const { return m_height; }
-#endif
+    wxControl *GetControl();
 
 public:
     int                   m_toolStyle;
     wxObject *            m_clientData;
     int                   m_index;
-#ifdef __WXMSW__
     long                  m_x;
     long                  m_y;
     long                  m_width;
     long                  m_height;
-#endif
     bool                  m_toggleState;
     bool                  m_isToggle;
     bool                  m_deleteSecondBitmap;
@@ -114,7 +109,9 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
 
+    bool AddControl(wxControl * control);
     void AddSeparator();
+    void ClearTools();
 
     // Ignoge the clientData for now...
     %addmethods {
@@ -143,17 +140,14 @@ public:
     }
 
 
-//    void DrawTool(wxMemoryDC& memDC, wxToolBarTool* tool);
-    void EnableTool(int toolIndex, const bool enable);
-#ifdef __WXMSW__
-    wxToolBarTool* FindToolForPosition(const float x, const float y);
+    void EnableTool(int toolIndex, bool enable);
+    wxToolBarTool* FindToolForPosition(long x, long y);
     wxSize GetToolSize();
     wxSize GetToolBitmapSize();
     void SetToolBitmapSize(const wxSize& size);
-//    wxSize GetMargins();
+    wxSize GetToolMargins();
     wxSize GetMaxSize();
 //    wxObject* GetToolClientData(int toolIndex);
-#endif
     bool GetToolEnabled(int toolIndex);
     wxString GetToolLongHelp(int toolIndex);
     int GetToolPacking();
@@ -161,10 +155,6 @@ public:
     wxString GetToolShortHelp(int toolIndex);
     bool GetToolState(int toolIndex);
 
-    // TODO:  figure out how to handle these
-    //bool OnLeftClick(int toolIndex, bool toggleDown);
-    //void OnMouseEnter(int toolIndex);
-    //void OnRightClick(int toolIndex, float x, float y);
 
     bool Realize();
 
@@ -174,6 +164,12 @@ public:
     void SetToolPacking(int packing);
     void SetToolSeparation(int separation);
     void ToggleTool(int toolIndex, const bool toggle);
+    void SetToggle(int toolIndex, bool toggle);
+
+    void SetMaxRowsCols(int rows, int cols);
+    int GetMaxRows();
+    int GetMaxCols();
+
 };
 
 

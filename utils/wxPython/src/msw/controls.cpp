@@ -58,6 +58,7 @@ extern PyObject *SWIG_newvarlink(void);
 #include <wx/spinbutt.h>
 #include <wx/dynarray.h>
 #include <wx/statline.h>
+//#include <wx/toggbutt.h>
 
 #ifdef __WXMSW__
 #if wxUSE_OWNER_DRAWN
@@ -120,6 +121,10 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
 static char* wxStringErrorMsg = "string type is required for parameter";
 
 wxValidator wxPyDefaultValidator;       // Non-const default because of SWIG
+
+    wxSize wxButton_GetDefaultSize() {
+        return wxButton::GetDefaultSize();
+    }
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -138,6 +143,25 @@ static PyObject *_wrap_wxDefaultValidator_get() {
     return pyobj;
 }
 
+static PyObject *_wrap_wxButton_GetDefaultSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxButton_GetDefaultSize",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxButton_GetDefaultSize());
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxControlTowxWindow(void *ptr) {
     wxControl *src;
     wxWindow *dest;
@@ -152,6 +176,31 @@ static void *SwigwxControlTowxEvtHandler(void *ptr) {
     src = (wxControl *) ptr;
     dest = (wxEvtHandler *) src;
     return (void *) dest;
+}
+
+#define new_wxControl() (new wxControl())
+static PyObject *_wrap_new_wxControl(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxControl * _result;
+    char *_kwnames[] = {  NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":new_wxControl",_kwnames)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxControl *)new_wxControl();
+
+    wxPy_END_ALLOW_THREADS;
+}    if (_result) {
+        SWIG_MakePtr(_ptemp, (char *) _result,"_wxControl_p");
+        _resultobj = Py_BuildValue("s",_ptemp);
+    } else {
+        Py_INCREF(Py_None);
+        _resultobj = Py_None;
+    }
+    return _resultobj;
 }
 
 #define wxControl_Command(_swigobj,_swigarg0)  (_swigobj->Command(_swigarg0))
@@ -7175,6 +7224,8 @@ static PyMethodDef controlscMethods[] = {
 	 { "wxControl_SetLabel", (PyCFunction) _wrap_wxControl_SetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxControl_GetLabel", (PyCFunction) _wrap_wxControl_GetLabel, METH_VARARGS | METH_KEYWORDS },
 	 { "wxControl_Command", (PyCFunction) _wrap_wxControl_Command, METH_VARARGS | METH_KEYWORDS },
+	 { "new_wxControl", (PyCFunction) _wrap_new_wxControl, METH_VARARGS | METH_KEYWORDS },
+	 { "wxButton_GetDefaultSize", (PyCFunction) _wrap_wxButton_GetDefaultSize, METH_VARARGS | METH_KEYWORDS },
 	 { NULL, NULL }
 };
 #ifdef __cplusplus
@@ -7344,6 +7395,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxDataFormat","_wxDataFormat",0},
     { "_class_wxDropFilesEvent","_wxDropFilesEvent",0},
     { "_wxWindowDestroyEvent","_class_wxWindowDestroyEvent",0},
+    { "_wxGDIImage","_class_wxGDIImage",0},
     { "_wxStaticText","_class_wxStaticText",0},
     { "_wxFont","_class_wxFont",0},
     { "_class_wxPyDropTarget","_wxPyDropTarget",0},
@@ -7517,6 +7569,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxSlider","_wxSlider",0},
     { "_class_wxImageList","_wxImageList",0},
     { "_class_wxBitmapButton","_wxBitmapButton",0},
+    { "_class_wxGDIImage","_wxGDIImage",0},
     { "_class_wxPaletteChangedEvent","_wxPaletteChangedEvent",0},
     { "_wxWindowID","_wxCoord",0},
     { "_wxWindowID","_wxPrintQuality",0},
