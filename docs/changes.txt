@@ -32,6 +32,7 @@ All:
 - Added wxPrintFactory classes so that it is possible to add a new
   print system backend at run-time. This was required by the new GNOME
   printing stuff in the GTK port.
+- Deprecated print setup dialog.
 - Added support to the wxODBC classes for Firebird 1.5 database
 - The samples\db sample program now includes an optional example of using a BLOB
   datatype (if BLOB support is enabled and supported by the database)
