@@ -1206,6 +1206,9 @@ enum wxBorder
 #define wxFRAME_EX_CONTEXTHELP  0x00000004
 #define wxDIALOG_EX_CONTEXTHELP 0x00000004
 
+/*  Create a window which is attachable to another top level window */
+#define wxFRAME_DRAWER          0x0020  
+
 /*
  * MDI parent frame style flags
  * Can overlap with some of the above.

@@ -2190,11 +2190,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_MAC_SRC" hints="files">
+    src/common/taskbarcmn.cpp
+    src/mac/carbon/drawer.cpp
     src/mac/carbon/joystick.cpp
     src/mac/carbon/sound.cpp
     src/mac/carbon/taskbar.cpp
 </set>
 <set var="ADVANCED_MAC_HDR" hints="files">
+    wx/mac/carbon/drawer.h
     wx/mac/carbon/joystick.h
     wx/mac/carbon/sound.h
     wx/mac/carbon/taskbarosx.h

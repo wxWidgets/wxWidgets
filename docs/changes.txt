@@ -249,6 +249,7 @@ wxMAC:
 
 - Fixed MLTE text control GetLineText and GetLineLength on OSX (RN)
 - Added OSX wxTaskBarIcon implementation for the OSX Dock (RN)
+- Added wxDrawerWindow class for drawer windows for OSX >= 10.2 (RN - from Jason Bagley)
 
 wxGTK:
 
