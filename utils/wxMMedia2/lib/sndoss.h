@@ -35,6 +35,7 @@ class wxSoundStreamOSS : public wxSoundStream {
   bool StopProduction();
 
   void SetDuplexMode(bool duplex) {}
+  bool QueueFilled() const;
 
   // You should not call this.
   void WakeUpEvt(int evt);
@@ -42,7 +43,7 @@ class wxSoundStreamOSS : public wxSoundStream {
   int m_fd;
   wxUint32 m_bufsize;
   int m_tag;
-  bool m_oss_stop;
+  bool m_oss_stop, m_q_filled;
   wxString m_devname;
 
  private:

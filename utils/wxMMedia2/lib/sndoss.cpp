@@ -46,6 +46,7 @@ wxSoundStreamOSS::wxSoundStreamOSS(const wxString& dev_name)
   close(m_fd);
 
   m_oss_stop = TRUE;
+  m_q_filled = TRUE;
 }
 
 wxSoundStreamOSS::~wxSoundStreamOSS()
@@ -64,6 +65,7 @@ wxSoundStream& wxSoundStreamOSS::Read(void *buffer, size_t len)
   int ret;
 
   m_lastcount = (size_t)ret = read(m_fd, buffer, len);
+  m_q_filled  = TRUE;
 
   if (ret < 0)
     m_snderror = wxSOUND_IOERR;
@@ -78,6 +80,7 @@ wxSoundStream& wxSoundStreamOSS::Write(const void *buffer, size_t len)
   int ret;
 
   m_lastcount = (size_t)ret = write(m_fd, buffer, len);
+  m_q_filled  = TRUE;
 
   if (ret < 0)
     m_snderror = wxSOUND_IOERR;
@@ -220,6 +223,7 @@ static void _wxSound_OSS_CBack(gpointer data, int source,
 
 void wxSoundStreamOSS::WakeUpEvt(int evt)
 {
+  m_q_filled = FALSE;
   OnSoundEvent(evt);
 }
 
@@ -263,6 +267,7 @@ bool wxSoundStreamOSS::StartProduction(int evt)
   ioctl(m_fd, SNDCTL_DSP_SETTRIGGER, &trig);
 
   m_oss_stop = FALSE;
+  m_q_filled = FALSE;
 
   return TRUE;
 }
@@ -278,7 +283,13 @@ bool wxSoundStreamOSS::StopProduction()
 
   close(m_fd);
   m_oss_stop = TRUE;
+  m_q_filled = TRUE;
   return TRUE;
+}
+
+bool wxSoundStreamOSS::QueueFilled() const
+{
+  return m_q_filled;
 }
 
 //

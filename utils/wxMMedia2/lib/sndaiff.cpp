@@ -116,11 +116,13 @@ bool wxSoundAiff::PrepareToPlay()
 
 bool wxSoundAiff::PrepareToRecord(unsigned long time)
 {
+  // TODO
   return FALSE;
 }
 
 bool wxSoundAiff::FinishRecording()
 {
+  // TODO
   return FALSE;
 }
 

@@ -158,10 +158,11 @@ bool wxSoundFileStream::Play()
   if (!PrepareToPlay())
     return FALSE;
 
+  m_state = wxSOUND_FILE_PLAYING;
+
   if (!StartProduction(wxSOUND_OUTPUT))
     return FALSE;
 
-  m_state = wxSOUND_FILE_PLAYING;
   return TRUE;
 }
 
@@ -175,10 +176,10 @@ bool wxSoundFileStream::Record(unsigned long time)
 
   m_len = m_sndformat->GetBytesFromTime(time);
 
+  m_state = wxSOUND_FILE_RECORDING;
   if (!StartProduction(wxSOUND_INPUT))
     return FALSE;
 
-  m_state = wxSOUND_FILE_RECORDING;
   return TRUE;
 }
 
@@ -265,30 +266,32 @@ void wxSoundFileStream::OnSoundEvent(int evt)
   size_t len = m_sndio->GetBestSize();
   char *buffer;
 
-  buffer = new char[m_sndio->GetBestSize()];
+  buffer = new char[len];
   wxSoundStream::OnSoundEvent(evt);
 
-  switch(evt) {
-  case wxSOUND_INPUT:
-    if (len > m_len)
-      len = m_len;
+  while (!m_sndio->QueueFilled()) {
+    switch(evt) {
+    case wxSOUND_INPUT:
+      if (len > m_len)
+        len = m_len;
 
-    len = m_codec.Read(buffer, len).GetLastAccess();
-    PutData(buffer, len);
-    m_len -= len;
-    if (m_len == 0) {
-      Stop();
-      return;
+      len = m_codec.Read(buffer, len).GetLastAccess();
+      PutData(buffer, len);
+      m_len -= len;
+      if (m_len == 0) {
+        Stop();
+        return;
+      }
+      break;
+    case wxSOUND_OUTPUT:
+      len = GetData(buffer, len);
+      if (len == 0) {
+        Stop();
+        return;
+      }
+      m_codec.Write(buffer, len);
+      break;
     }
-    break;
-  case wxSOUND_OUTPUT:
-    len = GetData(buffer, len);
-    if (len == 0) {
-      Stop();
-      return;
-    }
-    m_codec.Write(buffer, len);
-    break;
   }
   delete[] buffer;
 }

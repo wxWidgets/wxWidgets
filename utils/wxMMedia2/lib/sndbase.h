@@ -98,6 +98,9 @@ class wxSoundStream {
   wxSoundError GetError() const { return m_snderror; }
   size_t GetLastAccess() const { return m_lastcount; }
 
+  // This is only useful for device (I think).
+  virtual bool QueueFilled() const { return TRUE; }
+
  protected:
   // Current sound format
   wxSoundFormatBase *m_sndformat;

@@ -64,10 +64,11 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
      * Read the PNM header
      */
 
-    wxTextInputStream text_stream(stream);
+    wxBufferedInputStream buf_stream(stream);
+    wxTextInputStream text_stream(buf_stream);
 
-    Skip_Comment(stream);
-    if (stream.GetC()==_T('P')) c=stream.GetC();
+    Skip_Comment(buf_stream);
+    if (buf_stream.GetC()==_T('P')) c=buf_stream.GetC();
 
     switch (c)
       {
@@ -84,9 +85,9 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
       }
 
     text_stream >> line; // for the \n
-    Skip_Comment(stream);
+    Skip_Comment(buf_stream);
     text_stream >> width >> height ;
-    Skip_Comment(stream); 
+    Skip_Comment(buf_stream); 
     text_stream >> maxval;
 
     //cout << width << " " << height << " " << maxval << endl;
@@ -108,7 +109,7 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 	    value=text_stream.Read32();
 	    *ptr++=(unsigned char)value;
 
-	    if (stream.LastError()!=wxSTREAM_NOERROR)
+	    if (buf_stream.LastError()!=wxSTREAM_NOERROR)
 	      {
 		wxLogError(_T("Loading PNM image : file seems truncated."));
 		return FALSE;
@@ -116,11 +117,11 @@ bool wxPNMHandler::LoadFile( wxImage *image, wxInputStream& stream, bool WXUNUSE
 	  }
       }
     if (c=='6') // Raw RGB
-      stream.Read( ptr, 3*width*height );
+      buf_stream.Read( ptr, 3*width*height );
 
     image->SetMask( FALSE );
 
-    return (stream.LastError()==wxStream_NOERROR || stream.LastError()==wxStream_EOF);
+    return (buf_stream.LastError()==wxStream_NOERROR || buf_stream.LastError()==wxStream_EOF);
 }
 
 bool wxPNMHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool WXUNUSED(verbose) )
