@@ -108,6 +108,8 @@ wxBitmapRefData::~wxBitmapRefData()
 
 wxList wxBitmap::sm_handlers;
 
+#define M_BMPDATA ((wxBitmapRefData *)m_refData)
+
 wxBitmap::wxBitmap()
 {
     m_refData = NULL;
@@ -306,6 +308,20 @@ void wxBitmap::SetMask(wxMask *mask)
         m_refData = new wxBitmapRefData;
 
     M_BITMAPDATA->m_bitmapMask = mask ;
+}
+
+wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
+{
+    wxCHECK_MSG( Ok() &&
+                 (rect.x >= 0) && (rect.y >= 0) &&
+                 (rect.x+rect.width <= M_BMPDATA->m_width) && (rect.y+rect.height <= M_BMPDATA->m_height),
+                 wxNullBitmap, wxT("invalid bitmap or bitmap region") );
+
+    wxBitmap ret( rect.width, rect.height, 0 );
+    wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
+
+   // The remaining still TODO
+   return ret;
 }
 
 void wxBitmap::AddHandler(wxBitmapHandler *handler)

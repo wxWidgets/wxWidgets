@@ -48,6 +48,7 @@ OBJECTS = \
 		docview.obj,\
 		dynarray.obj,\
 		dynlib.obj,\
+		encconv.obj,\
 		event.obj,\
 		extended.obj,\
 		ffile.obj,\
@@ -145,6 +146,7 @@ SOURCES = \
 		docview.cpp,\
 		dynarray.cpp,\
 		dynlib.cpp,\
+		encconv.cpp,\
 		event.cpp,\
 		extended.c,\
 		ffile.cpp,\
@@ -266,6 +268,7 @@ docmdi.obj : docmdi.cpp
 docview.obj : docview.cpp
 dynarray.obj : dynarray.cpp
 dynlib.obj : dynlib.cpp
+encconv.obj : encconv.cpp
 event.obj : event.cpp
 extended.obj : extended.c
 ffile.obj : ffile.cpp

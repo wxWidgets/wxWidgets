@@ -159,6 +159,9 @@ public:
 
   virtual bool Create(int width, int height, int depth = -1);
   virtual bool Create(void *data, long type, int width, int height, int depth = 1);
+   
+   wxBitmap GetSubBitmap( const wxRect& rect ) const;
+   
   virtual bool LoadFile(const wxString& name, long type = wxBITMAP_TYPE_XPM);
   virtual bool SaveFile(const wxString& name, int type, const wxPalette *cmap = NULL);
 

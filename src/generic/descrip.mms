@@ -21,6 +21,7 @@ CXX_DEFINE =
 
 OBJECTS = \
 		busyinfo.obj,\
+		calctrl.obj,\
 		caret.obj,\
 		choicdgg.obj,\
 		colrdlgg.obj,\
@@ -60,6 +61,7 @@ OBJECTS = \
 
 SOURCES = \
 		busyinfo.cpp,\
+		calctrl.cpp,\
 		caret.cpp,\
 		choicdgg.cpp,\
 		colrdlgg.cpp,\
@@ -105,6 +107,7 @@ all : $(SOURCES)
 .endif
 
 busyinfo.obj : busyinfo.cpp
+calctrl.obj : calctrl.cpp
 caret.obj : caret.cpp
 choicdgg.obj : choicdgg.cpp
 colrdlgg.obj : colrdlgg.cpp

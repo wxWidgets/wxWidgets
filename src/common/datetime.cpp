@@ -1637,7 +1637,12 @@ wxDateTime::wxDateTime_t wxDateTime::GetWeekOfMonth(wxDateTime::WeekFlags flags,
     Tm tm = GetTm(tz);
     wxDateTime dtMonthStart = wxDateTime(1, tm.mon, tm.year);
     size_t nWeek = GetWeekOfYear(flags) - dtMonthStart.GetWeekOfYear(flags) + 1;
+#ifdef __VMS__ // nWeek is unsigned so avoid the warning
+   int nweek2 = (int) nWeek;
+   if ( nweek2 < 0 )
+#else
     if ( nWeek < 0 )
+#endif
     {
         // this may happen for January when Jan, 1 is the last week of the
         // previous year
