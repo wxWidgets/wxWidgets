@@ -450,20 +450,20 @@ PyObject* wxPyCallbackHelper::callCallbackObj(PyObject* argTuple) {
 // themselves and some special case handling in wxPyCallback::EventThunker.
 
 
-wxPySelfRef::wxPySelfRef() {
+wxPyEvtSelfRef::wxPyEvtSelfRef() {
     //m_self = Py_None;         // **** We don't do normal ref counting to prevent
     //Py_INCREF(m_self);        //      circular loops...
     m_cloned = false;
 }
 
-wxPySelfRef::~wxPySelfRef() {
+wxPyEvtSelfRef::~wxPyEvtSelfRef() {
     bool doSave = wxPyRestoreThread();
     if (m_cloned)
         Py_DECREF(m_self);
     wxPySaveThread(doSave);
 }
 
-void wxPySelfRef::SetSelf(PyObject* self, bool clone) {
+void wxPyEvtSelfRef::SetSelf(PyObject* self, bool clone) {
     bool doSave = wxPyRestoreThread();
     if (m_cloned)
         Py_DECREF(m_self);
@@ -475,7 +475,7 @@ void wxPySelfRef::SetSelf(PyObject* self, bool clone) {
     wxPySaveThread(doSave);
 }
 
-PyObject* wxPySelfRef::GetSelf() const {
+PyObject* wxPyEvtSelfRef::GetSelf() const {
     Py_INCREF(m_self);
     return m_self;
 }

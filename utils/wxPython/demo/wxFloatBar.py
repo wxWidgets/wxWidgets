@@ -7,7 +7,10 @@ class TestFloatBar(wxFrame):
                          wxPoint(0,0), wxSize(500, 300))
         self.log = log
 
-        wxWindow(self, -1).SetBackgroundColour(wxNamedColour("WHITE"))
+        win = wxWindow(self, -1)
+        win.SetBackgroundColour(wxNamedColour("WHITE"))
+        wxStaticText(win, -1, "Drag the toolbar to float it,\n"
+                     "Toggle the last tool to remove the title.", wxPoint(15,15))
 
         tb = wxFloatBar(self, -1)
         self.SetToolBar(tb)
@@ -37,10 +40,6 @@ class TestFloatBar(wxFrame):
 
         tb.AddSeparator()
 
-        tb.AddTool(50, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
-                        wxNullBitmap, true, -1, -1, "Toggle this")
-        EVT_TOOL(self, 50, self.OnToolClick)
-        EVT_TOOL_RCLICKED(self, 50, self.OnToolRClick)
 
         tb.AddTool(60, wxBitmap('bitmaps/tog1.bmp', wxBITMAP_TYPE_BMP),
                         wxBitmap('bitmaps/tog2.bmp', wxBITMAP_TYPE_BMP),
@@ -48,8 +47,8 @@ class TestFloatBar(wxFrame):
         EVT_TOOL(self, 60, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 60, self.OnToolRClick)
         tb.Realize()
-#        b = wxButton(tb, -1, "HELLO!")
-#        EVT_BUTTON(b, b.GetId(), self.test)
+
+        self.tb = tb
 
 
     def OnCloseWindow(self, event):
@@ -57,6 +56,11 @@ class TestFloatBar(wxFrame):
 
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())
+        if event.GetId() == 60:
+            if event.GetExtraLong():
+                self.tb.SetTitle("")
+            else:
+                self.tb.SetTitle("Floating!")
 
     def OnToolRClick(self, event):
         self.log.WriteText("tool %s right-clicked\n" % event.GetId())
@@ -75,33 +79,8 @@ def runTest(frame, nb, log):
 overview = """\
 wxFloatBar is a subclass of wxToolBar, implemented in Python, which can be detached from its frame.
 
-Drag the toolbar with the mouse to make it float, and drag it back, or close it to make the toolbar
+Drag the toolbar with the mouse to make it float, and drag it back, or close it to make the toolbar return to its original position.
 
-return to its original position.
-
-wxFloatBar()
------------------------
-
-Default constructor.
-
-wxFloatBar(wxWindow* parent, wxWindowID id, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize, long style = wxTB_HORIZONTAL | wxNO_BORDER, const wxString& name = wxPanelNameStr)
-
-Constructs a floatable toolbar.
-
-Parameters
--------------------
-
-parent = Pointer to a parent window.
-
-id = Window identifier. If -1, will automatically create an identifier.
-
-pos = Window position. wxDefaultPosition is (-1, -1) which indicates that wxWindows should generate a default position for the window. If using the wxWindow class directly, supply an actual position.
-
-size = Window size. wxDefaultSize is (-1, -1) which indicates that wxWindows should generate a default size for the window.
-
-style = Window style. Se wxToolBar for details.
-
-name = Window name.
 """
 
 

@@ -8,6 +8,7 @@ Makefile.pre
 Setup
 build.local
 config.c
+glcanvas.h
 glcanvasc.ilk
 glcanvasc.pyd
 sedscript

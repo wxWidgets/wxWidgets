@@ -189,10 +189,10 @@ private:
 // themselves and some special case handling in wxPyCallback::EventThunker.
 
 
-class wxPySelfRef {
+class wxPyEvtSelfRef {
 public:
-    wxPySelfRef();
-    ~wxPySelfRef();
+    wxPyEvtSelfRef();
+    ~wxPyEvtSelfRef();
 
     void SetSelf(PyObject* self, bool clone=FALSE);
     PyObject* GetSelf() const;
@@ -203,7 +203,7 @@ protected:
 };
 
 
-class wxPyEvent : public wxEvent, public wxPySelfRef {
+class wxPyEvent : public wxEvent, public wxPyEvtSelfRef {
     DECLARE_DYNAMIC_CLASS(wxPyEvent)
 public:
     wxPyEvent(int id=0);
@@ -213,7 +213,7 @@ public:
 };
 
 
-class wxPyCommandEvent : public wxCommandEvent, public wxPySelfRef {
+class wxPyCommandEvent : public wxCommandEvent, public wxPyEvtSelfRef {
     DECLARE_DYNAMIC_CLASS(wxPyCommandEvent)
 public:
     wxPyCommandEvent(wxEventType commandType = wxEVT_NULL, int id=0);
