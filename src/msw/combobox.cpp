@@ -270,7 +270,13 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
                 InitCommandEvent(event);
                 event.SetString(GetValue());
                 event.SetInt(GetSelection());
-                ProcessCommand(event);
+                if ( ProcessCommand(event) )
+                {
+                    // don't let the event through to the native control
+                    // because it doesn't need it and may generate an annoying
+                    // beep if it gets it
+                    return true;
+                }
             }
 
             return HandleChar(wParam, lParam, true /* isASCII */);
