@@ -1145,7 +1145,9 @@ Gets operating system version information.
 
 \begin{twocollist}\itemsep=0pt
 \twocolitemruled{Platform}{Return types}
-\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC\_DARWIN when compiled with the Apple Developer Tools under Mac OS X.}
+\twocolitem{Mac OS}{Return value is wxMAC when compiled with CodeWarrior under Mac OS 8.x/9.x and Mac OS X, wxMAC\_DARWIN when compiled with the Apple Developer Tools under Mac OS X. 
+
+Both {\it major} and {\it minor} have to be looked at as hexadecimal numbers. So System 10.2.4 returns 0x10, resp 16 for {\it major} and 0x24, resp 36 for {\it minor}. }
 \twocolitem{GTK}{Return value is wxGTK, For GTK 1.0, {\it major} is 1, {\it minor} is 0. }
 \twocolitem{Motif}{Return value is wxMOTIF\_X, {\it major} is X version, {\it minor} is X revision.}
 \twocolitem{OS/2}{Return value is wxOS2\_PM.}
