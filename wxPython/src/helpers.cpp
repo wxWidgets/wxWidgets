@@ -54,8 +54,8 @@
 //----------------------------------------------------------------------
 
 wxPyApp* wxPythonApp = NULL;  // Global instance of application object
-bool wxPyDoCleanup = False;
-bool wxPyDoingCleanup = False;
+bool wxPyDoCleanup = false;
+bool wxPyDoingCleanup = false;
 
 
 #ifdef WXP_WITH_THREAD
@@ -99,7 +99,7 @@ BOOL WINAPI DllMain(
     // the inatance has already been set.
     if (! wxGetInstance())
         wxSetInstance(hinstDLL);
-    return True;
+    return true;
 }
 #endif
 
@@ -112,7 +112,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyApp, wxApp);
 
 wxPyApp::wxPyApp() {
     m_assertMode = wxPYAPP_ASSERT_EXCEPTION;
-    m_startupComplete = False;
+    m_startupComplete = false;
 }
 
 
@@ -122,7 +122,7 @@ wxPyApp::~wxPyApp() {
 
 // This one isn't acutally called...  We fake it with _BootstrapApp
 bool wxPyApp::OnInit() {
-    return False;
+    return false;
 }
 
 
@@ -144,7 +144,7 @@ int  wxPyApp::MainLoop() {
 
 
 bool wxPyApp::OnInitGui() {
-    bool rval=True;
+    bool rval=true;
     wxApp::OnInitGui();  // in this case always call the base class version
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnInitGui"))
@@ -435,7 +435,7 @@ void wxPyApp::_BootstrapApp()
     }
     
     // It's now ok to generate exceptions for assertion errors.
-    wxPythonApp->SetStartupComplete(True);
+    wxPythonApp->SetStartupComplete(true);
 
     // Call the Python wxApp's OnInit function
     blocked = wxPyBeginBlockThreads();
@@ -458,11 +458,11 @@ void wxPyApp::_BootstrapApp()
     }
     else {
         // Is it okay if there is no OnInit?  Probably so...
-        result = True;
+        result = true;
     }
 
     if (! result) {
-        PyErr_SetString(PyExc_SystemExit, "OnInit returned False, exiting...");
+        PyErr_SetString(PyExc_SystemExit, "OnInit returned false, exiting...");
     }
 
  error:
@@ -556,9 +556,9 @@ void __wxPyPreStart(PyObject* moduleDict)
 
 
 void __wxPyCleanup() {
-    wxPyDoingCleanup = True;
+    wxPyDoingCleanup = true;
     if (wxPyDoCleanup) {
-        wxPyDoCleanup = False;
+        wxPyDoCleanup = false;
         wxEntryCleanup();
     }
 #ifdef WXP_WITH_THREAD
@@ -967,14 +967,14 @@ void wxPyPtrTypeMap_Add(const char* commonName, const char* ptrName) {
 
 PyObject*  wxPyMake_wxObject(wxObject* source, bool setThisOwn, bool checkEvtHandler) {
     PyObject* target = NULL;
-    bool      isEvtHandler = False;
+    bool      isEvtHandler = false;
 
     if (source) {
         // If it's derived from wxEvtHandler then there may
         // already be a pointer to a Python object that we can use
         // in the OOR data.
         if (checkEvtHandler && wxIsKindOf(source, wxEvtHandler)) {
-            isEvtHandler = True;
+            isEvtHandler = true;
             wxEvtHandler* eh = (wxEvtHandler*)source;
             wxPyOORClientData* data = (wxPyOORClientData*)eh->GetClientObject();
             if (data) {
@@ -1030,7 +1030,7 @@ PyObject*  wxPyMake_wxSizer(wxSizer* source, bool setThisOwn) {
         }
     }
     if (! target) {
-        target = wxPyMake_wxObject(source, setThisOwn, False);
+        target = wxPyMake_wxObject(source, setThisOwn, false);
         if (target != Py_None)
             ((wxSizer*)source)->SetClientObject(new wxPyOORClientData(target));
     }
@@ -1177,7 +1177,7 @@ bool wxPyInputStream::eof() {
     if (m_wxis)
         return m_wxis->Eof();
     else
-        return True;
+        return true;
 }
 
 wxPyInputStream::~wxPyInputStream() {
@@ -1492,7 +1492,7 @@ void wxPyCallback::EventThunker(wxEvent& event) {
     PyObject*       result;
     PyObject*       arg;
     PyObject*       tuple;
-    bool            checkSkip = False;
+    bool            checkSkip = false;
 
     bool blocked = wxPyBeginBlockThreads();
     wxString className = event.GetClassInfo()->GetClassName();
@@ -1704,7 +1704,7 @@ bool wxPyCallbackHelper::findCallback(const char* name) const {
 
 int wxPyCallbackHelper::callCallback(PyObject* argTuple) const {
     PyObject*   result;
-    int         retval = False;
+    int         retval = false;
 
     result = callCallbackObj(argTuple);
     if (result) {                       // Assumes an integer return type...
@@ -1771,7 +1771,7 @@ void wxPyCBH_delete(wxPyCallbackHelper* cbh) {
 wxPyEvtSelfRef::wxPyEvtSelfRef() {
     //m_self = Py_None;         // **** We don't do normal ref counting to prevent
     //Py_INCREF(m_self);        //      circular loops...
-    m_cloned = False;
+    m_cloned = false;
 }
 
 wxPyEvtSelfRef::~wxPyEvtSelfRef() {
@@ -1788,7 +1788,7 @@ void wxPyEvtSelfRef::SetSelf(PyObject* self, bool clone) {
     m_self = self;
     if (clone) {
         Py_INCREF(m_self);
-        m_cloned = True;
+        m_cloned = true;
     }
     wxPyEndBlockThreads(blocked);
 }
@@ -1811,7 +1811,7 @@ wxPyEvent::wxPyEvent(int winid, wxEventType commandType)
 wxPyEvent::wxPyEvent(const wxPyEvent& evt)
     : wxEvent(evt)
 {
-    SetSelf(evt.m_self, True);
+    SetSelf(evt.m_self, true);
 }
 
 
@@ -1827,7 +1827,7 @@ wxPyCommandEvent::wxPyCommandEvent(wxEventType commandType, int id)
 wxPyCommandEvent::wxPyCommandEvent(const wxPyCommandEvent& evt)
     : wxCommandEvent(evt)
 {
-    SetSelf(evt.m_self, True);
+    SetSelf(evt.m_self, true);
 }
 
 
@@ -2072,24 +2072,24 @@ static inline bool wxPointFromObjects(PyObject* o1, PyObject* o2, wxPoint* point
     if (PyInt_Check(o1) && PyInt_Check(o2)) {
         point->x = PyInt_AS_LONG(o1);
         point->y = PyInt_AS_LONG(o2);
-        return True;
+        return true;
     }
     if (PyFloat_Check(o1) && PyFloat_Check(o2)) {
         point->x = (int)PyFloat_AS_DOUBLE(o1);
         point->y = (int)PyFloat_AS_DOUBLE(o2);
-        return True;
+        return true;
     }
     if (wxPySwigInstance_Check(o1) || wxPySwigInstance_Check(o2)) {  // TODO: Why???
         // Disallow instances because they can cause havok
-        return False;
+        return false;
     }
     if (PyNumber_Check(o1) && PyNumber_Check(o2)) {
         // I believe this excludes instances, so this should be safe without INCREFFing o1 and o2
         point->x = PyInt_AsLong(o1);
         point->y = PyInt_AsLong(o2);
-        return True;
+        return true;
     }
-    return False;
+    return false;
 }
 
 
@@ -2315,7 +2315,7 @@ bool wxPy2int_seq_helper(PyObject* source, int* i1, int* i2) {
     PyObject *o1, *o2;
 
     if (!PySequence_Check(source) || PySequence_Length(source) != 2)
-        return False;
+        return false;
 
     if (isFast) {
         o1 = PySequence_Fast_GET_ITEM(source, 0);
@@ -2333,7 +2333,7 @@ bool wxPy2int_seq_helper(PyObject* source, int* i1, int* i2) {
         Py_DECREF(o1);
         Py_DECREF(o2);
     }
-    return True;
+    return true;
 }
 
 
@@ -2342,7 +2342,7 @@ bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
     PyObject *o1, *o2, *o3, *o4;
 
     if (!PySequence_Check(source) || PySequence_Length(source) != 4)
-        return False;
+        return false;
 
     if (isFast) {
         o1 = PySequence_Fast_GET_ITEM(source, 0);
@@ -2368,7 +2368,7 @@ bool wxPy4int_seq_helper(PyObject* source, int* i1, int* i2, int* i3, int* i4) {
         Py_DECREF(o3);
         Py_DECREF(o4);
     }
-    return True;
+    return true;
 }
 
 
@@ -2380,20 +2380,20 @@ bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen)
 
     if (wxPySwigInstance_Check(source) &&
         wxPyConvertSwigPtr(source, (void **)&ptr, classname))
-        return True;
+        return true;
 
     PyErr_Clear();
     if (PySequence_Check(source) && PySequence_Length(source) == seqLen)
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 bool wxSize_helper(PyObject* source, wxSize** obj)
 {
     if (source == Py_None) {
         **obj = wxSize(-1,-1);
-        return True;
+        return true;
     }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxSize"));
 }
@@ -2403,7 +2403,7 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj)
 {
     if (source == Py_None) {
         **obj = wxPoint(-1,-1);
-        return True;
+        return true;
     }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxPoint"));
 }
@@ -2414,7 +2414,7 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
 
     if (source == Py_None) {
         **obj = wxRealPoint(-1,-1);
-        return True;
+        return true;
     }
 
     // If source is an object instance then it may already be the right type
@@ -2423,7 +2423,7 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
         if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxRealPoint")))
             goto error;
         *obj = ptr;
-        return True;
+        return true;
     }
     // otherwise a 2-tuple of floats is expected
     else if (PySequence_Check(source) && PyObject_Length(source) == 2) {
@@ -2437,12 +2437,12 @@ bool wxRealPoint_helper(PyObject* source, wxRealPoint** obj) {
         **obj = wxRealPoint(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2));
         Py_DECREF(o1);
         Py_DECREF(o2);
-        return True;
+        return true;
     }
 
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wxRealPoint object.");
-    return False;
+    return false;
 }
 
 
@@ -2451,7 +2451,7 @@ bool wxRect_helper(PyObject* source, wxRect** obj) {
 
     if (source == Py_None) {
         **obj = wxRect(-1,-1,-1,-1);
-        return True;
+        return true;
     }
 
     // If source is an object instance then it may already be the right type
@@ -2460,7 +2460,7 @@ bool wxRect_helper(PyObject* source, wxRect** obj) {
         if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxRect")))
             goto error;
         *obj = ptr;
-        return True;
+        return true;
     }
     // otherwise a 4-tuple of integers is expected
     else if (PySequence_Check(source) && PyObject_Length(source) == 4) {
@@ -2482,12 +2482,12 @@ bool wxRect_helper(PyObject* source, wxRect** obj) {
         Py_DECREF(o2);
         Py_DECREF(o3);
         Py_DECREF(o4);
-        return True;
+        return true;
     }
 
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 4-tuple of integers or a wxRect object.");
-    return False;
+    return false;
 }
 
 
@@ -2496,7 +2496,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
 
     if (source == Py_None) {
         **obj = wxNullColour;
-        return True;
+        return true;
     }
 
     // If source is an object instance then it may already be the right type
@@ -2505,7 +2505,7 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxColour")))
             goto error;
         *obj = ptr;
-        return True;
+        return true;
     }
     // otherwise check for a string
     else if (PyString_Check(source) || PyUnicode_Check(source)) {
@@ -2518,11 +2518,11 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
             spec.Mid(5,2).ToLong(&blue,  16);
 
             **obj = wxColour(red, green, blue);
-            return True;
+            return true;
         }
         else {                                       // it's a colour name
             **obj = wxColour(spec);
-            return True;
+            return true;
         }
     }
     // last chance: 3-tuple of integers is expected
@@ -2540,25 +2540,25 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         Py_DECREF(o1);
         Py_DECREF(o2);
         Py_DECREF(o3);
-        return True;
+        return true;
     }
 
  error:
     PyErr_SetString(PyExc_TypeError,
                     "Expected a wxColour object or a string containing a colour name or '#RRGGBB'.");
-    return False;
+    return false;
 }
 
 
 bool wxColour_typecheck(PyObject* source) {
 
     if (wxPySimple_typecheck(source, wxT("wxColour"), 3))
-        return True;
+        return true;
 
     if (PyString_Check(source) || PyUnicode_Check(source))
-        return True;
+        return true;
 
-    return False;
+    return false;
 }
 
 
@@ -2567,7 +2567,7 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
 
     if (source == Py_None) {
         **obj = wxPoint2D(-1,-1);
-        return True;
+        return true;
     }
 
     // If source is an object instance then it may already be the right type
@@ -2576,7 +2576,7 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
         if (! wxPyConvertSwigPtr(source, (void **)&ptr, wxT("wxPoint2D")))
             goto error;
         *obj = ptr;
-        return True;
+        return true;
     }
     // otherwise a length-2 sequence of floats is expected
     if (PySequence_Check(source) && PySequence_Length(source) == 2) {
@@ -2591,11 +2591,11 @@ bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj) {
         **obj = wxPoint2D(PyFloat_AsDouble(o1), PyFloat_AsDouble(o2));
         Py_DECREF(o1);
         Py_DECREF(o2);
-        return True;
+        return true;
     }
  error:
     PyErr_SetString(PyExc_TypeError, "Expected a 2-tuple of floats or a wxPoint2D object.");
-    return False;
+    return false;
 }
 
 
