@@ -54,6 +54,9 @@ enum
     wxID_HTML_TREECTRL,
     wxID_HTML_INDEXPAGE,
     wxID_HTML_INDEXLIST,
+    wxID_HTML_INDEXTEXT,
+    wxID_HTML_INDEXBUTTON,
+    wxID_HTML_INDEXBUTTONALL,
     wxID_HTML_NOTEBOOK,
     wxID_HTML_SEARCHPAGE,
     wxID_HTML_SEARCHTEXT,
@@ -159,6 +162,8 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         void OnToolbar(wxCommandEvent& event);
         void OnContentsSel(wxTreeEvent& event);
         void OnIndexSel(wxCommandEvent& event);
+        void OnIndexFind(wxCommandEvent& event);
+        void OnIndexAll(wxCommandEvent& event);
         void OnSearchSel(wxCommandEvent& event);
         void OnSearch(wxCommandEvent& event);
         void OnBookmarksSel(wxCommandEvent& event);
@@ -182,7 +187,10 @@ class WXDLLEXPORT wxHtmlHelpFrame : public wxFrame
         wxNotebook *m_NavigPan;
         wxTreeCtrl *m_ContentsBox;
         wxImageList *m_ContentsImageList;
-        wxListBox *m_IndexBox;
+        wxTextCtrl *m_IndexText;
+        wxButton *m_IndexButton;
+        wxButton *m_IndexButtonAll;
+        wxListBox *m_IndexList;
         wxTextCtrl *m_SearchText;
         wxButton *m_SearchButton;
         wxListBox *m_SearchList;

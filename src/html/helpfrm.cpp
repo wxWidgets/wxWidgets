@@ -62,6 +62,10 @@
 // is updated.
 #define PROGRESS_STEP 40
 
+// what is considered "small index"?
+#define INDEX_IS_SMALL 100
+
+
 //--------------------------------------------------------------------------
 // wxHtmlHelpTreeItemData (private)
 //--------------------------------------------------------------------------
@@ -112,7 +116,10 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
     m_ContentsImageList -> Add(wxICON(whlproot));
 
     m_ContentsBox = NULL;
-    m_IndexBox = NULL;
+    m_IndexList = NULL;
+    m_IndexButton = NULL;
+    m_IndexButtonAll = NULL;
+    m_IndexText = NULL;
     m_SearchList = NULL;
     m_SearchButton = NULL;
     m_SearchText = NULL;
@@ -140,7 +147,7 @@ void wxHtmlHelpFrame::Init(wxHtmlHelpData* data)
 // with the style flag it's possible to toggle the toolbar, contents, index and search
 // controls.
 // m_HtmlWin will *always* be created, but it's important to realize that
-// m_ContentsBox, m_IndexBox, m_SearchList, m_SearchButton, m_SearchText and
+// m_ContentsBox, m_IndexList, m_SearchList, m_SearchButton, m_SearchText and
 // m_SearchButton may be NULL.
 // moreover, if no contents, index or searchpage is needed, m_Splitter and
 // m_NavigPan will be NULL too (with m_HtmlWin directly connected to the frame)
@@ -237,15 +244,44 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
     // index listbox panel?
     if (style & wxHF_INDEX) {
         wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_INDEXPAGE);
+
         wxLayoutConstraints *b1 = new wxLayoutConstraints;
-        b1 -> top.SameAs (dummy, wxTop, 0);
-        b1 -> left.SameAs (dummy, wxLeft, 0);
-        b1 -> width.PercentOf (dummy, wxWidth, 100);
-        b1 -> bottom.SameAs (dummy, wxBottom, 0);
-        m_IndexBox = new wxListBox(dummy, wxID_HTML_INDEXLIST, wxDefaultPosition,
-                                   wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
-        m_IndexBox -> SetConstraints(b1);
+        m_IndexText = new wxTextCtrl(dummy, wxID_HTML_INDEXTEXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
+        b1 -> top.SameAs (dummy, wxTop, 10);
+        b1 -> left.SameAs (dummy, wxLeft, 10);
+        b1 -> right.SameAs (dummy, wxRight, 10);
+        b1 -> height.AsIs();
+        m_IndexText -> SetConstraints(b1);
+
+        wxLayoutConstraints *b4 = new wxLayoutConstraints;
+        m_IndexButtonAll = new wxButton(dummy, wxID_HTML_INDEXBUTTONALL, _("Show all"));
+        m_IndexButtonAll -> SetToolTip(_("Show all items in index"));
+        b4 -> top.Below (m_IndexText, 10);
+        b4 -> right.SameAs (dummy, wxRight, 10);
+        b4 -> width.AsIs();
+        b4 -> height.AsIs();
+        m_IndexButtonAll -> SetConstraints(b4);
+
+        wxLayoutConstraints *b2 = new wxLayoutConstraints;
+        m_IndexButton = new wxButton(dummy, wxID_HTML_INDEXBUTTON, _("Find"));
+        m_IndexButton -> SetToolTip(_("Display all index items that contain given substring. Note that this is case sensitive, so 'window' and 'Window' is something else!"));
+        b2 -> top.Below (m_IndexText, 10);
+        b2 -> right.LeftOf (m_IndexButtonAll, 10);
+        b2 -> width.AsIs();
+        b2 -> height.AsIs();
+        m_IndexButton -> SetConstraints(b2);
+
+        wxLayoutConstraints *b3 = new wxLayoutConstraints;
+        m_IndexList = new wxListBox(dummy, wxID_HTML_INDEXLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
+        b3 -> top.Below (m_IndexButton, 10);
+        b3 -> left.SameAs (dummy, wxLeft, 0);
+        b3 -> right.SameAs (dummy, wxRight, 0);
+        b3 -> bottom.SameAs (dummy, wxBottom, 0);
+        m_IndexList -> SetConstraints(b3);
+
         dummy -> SetAutoLayout(TRUE);
+        dummy -> Layout();
+
         m_NavigPan -> AddPage(dummy, _("Index"));
         m_IndexPage = notebook_page++;
     }
@@ -255,7 +291,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         wxWindow *dummy = new wxPanel(m_NavigPan, wxID_HTML_SEARCHPAGE);
 
         wxLayoutConstraints *b1 = new wxLayoutConstraints;
-        m_SearchText = new wxTextCtrl(dummy, wxID_HTML_SEARCHTEXT);
+        m_SearchText = new wxTextCtrl(dummy, wxID_HTML_SEARCHTEXT, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_PROCESS_ENTER);
         b1 -> top.SameAs (dummy, wxTop, 10);
         b1 -> left.SameAs (dummy, wxLeft, 10);
         b1 -> right.SameAs (dummy, wxRight, 10);
@@ -264,6 +300,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
         wxLayoutConstraints *b2 = new wxLayoutConstraints;
         m_SearchButton = new wxButton(dummy, wxID_HTML_SEARCHBUTTON, _("Search"));
+        m_SearchButton -> SetToolTip(_("Search contents of help book(s) for all occurences of the text you typed above"));
         b2 -> top.Below (m_SearchText, 10);
         b2 -> left.SameAs (dummy, wxLeft, 10);
         b2 -> width.AsIs();
@@ -280,7 +317,7 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
         m_SearchChoice -> SetConstraints(b4);
 
         wxLayoutConstraints *b3 = new wxLayoutConstraints;
-        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0);
+        m_SearchList = new wxListBox(dummy, wxID_HTML_SEARCHLIST, wxDefaultPosition, wxDefaultSize, 0, NULL, wxLB_SINGLE | wxLB_ALWAYS_SB);
         b3 -> top.Below (m_SearchButton, 10);
         b3 -> left.SameAs (dummy, wxLeft, 0);
         b3 -> right.SameAs (dummy, wxRight, 0);
@@ -366,7 +403,7 @@ bool wxHtmlHelpFrame::DisplayContents()
 
 bool wxHtmlHelpFrame::DisplayIndex()
 {
-    if (! m_IndexBox)
+    if (! m_IndexList)
         return FALSE;
     if (!m_Splitter -> IsSplit()) {
         m_NavigPan -> Show(TRUE);
@@ -490,15 +527,18 @@ void wxHtmlHelpFrame::CreateContents(bool show_progress)
 
 void wxHtmlHelpFrame::CreateIndex(bool show_progress)
 {
-    if (! m_IndexBox)
+    if (! m_IndexList)
         return ;
 
     wxProgressDialog *progress = NULL;
     wxString proginfo;
 
-    m_IndexBox->Clear();
+    m_IndexList->Clear();
 
     int cnt = m_Data->GetIndexCnt();
+    
+    if (cnt > INDEX_IS_SMALL) return;
+    
     int div = (cnt / PROGRESS_STEP) + 1;
 
     wxHtmlContentsItem* index = m_Data->GetIndex();
@@ -514,7 +554,7 @@ void wxHtmlHelpFrame::CreateIndex(bool show_progress)
                 break;
             wxYield();
         }
-        m_IndexBox -> Append(index[i].m_Name, (char*)(index + i));
+        m_IndexList -> Append(index[i].m_Name, (char*)(index + i));
     }
 
     if (show_progress)
@@ -911,10 +951,57 @@ void wxHtmlHelpFrame::OnContentsSel(wxTreeEvent& event)
 
 void wxHtmlHelpFrame::OnIndexSel(wxCommandEvent& WXUNUSED(event))
 {
-    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexBox -> GetClientData(m_IndexBox -> GetSelection());
+    wxHtmlContentsItem *it = (wxHtmlContentsItem*) m_IndexList -> GetClientData(m_IndexList -> GetSelection());
     m_HtmlWin -> LoadPage(it -> m_Book -> GetBasePath() + it -> m_Page);
 }
 
+
+void wxHtmlHelpFrame::OnIndexFind(wxCommandEvent& event)
+{
+    wxString sr = m_IndexText -> GetLineText(0);
+    if (sr == wxEmptyString) 
+        OnIndexAll(event);
+
+    else {
+        wxBusyCursor bcur;
+        const wxChar *cstr = sr.c_str();
+        bool first = TRUE;
+    
+        m_IndexList->Clear();
+        int cnt = m_Data->GetIndexCnt();
+        wxHtmlContentsItem* index = m_Data->GetIndex();
+
+        for (int i = 0; i < cnt; i++)
+            if (wxStrstr(index[i].m_Name, cstr) != NULL) {
+                m_IndexList -> Append(index[i].m_Name, (char*)(index + i));
+                if (first) {
+                    m_HtmlWin -> LoadPage(index[i].m_Book -> GetBasePath() + index[i].m_Page);
+                    first = FALSE;
+                }
+            }
+
+        m_IndexText -> SetSelection(0, sr.Length());
+        m_IndexText -> SetFocus();
+    }
+}
+
+void wxHtmlHelpFrame::OnIndexAll(wxCommandEvent& WXUNUSED(event))
+{
+    wxBusyCursor bcur;
+    
+    m_IndexList->Clear();
+    int cnt = m_Data->GetIndexCnt();
+    bool first = TRUE;
+    wxHtmlContentsItem* index = m_Data->GetIndex();
+
+    for (int i = 0; i < cnt; i++) {
+        m_IndexList -> Append(index[i].m_Name, (char*)(index + i));
+        if (first) {
+            m_HtmlWin -> LoadPage(index[i].m_Book -> GetBasePath() + index[i].m_Page);
+            first = FALSE;
+        }
+    }
+}
 
 
 void wxHtmlHelpFrame::OnSearchSel(wxCommandEvent& WXUNUSED(event))
@@ -958,6 +1045,9 @@ BEGIN_EVENT_TABLE(wxHtmlHelpFrame, wxFrame)
     EVT_LISTBOX(wxID_HTML_SEARCHLIST, wxHtmlHelpFrame::OnSearchSel)
     EVT_BUTTON(wxID_HTML_SEARCHBUTTON, wxHtmlHelpFrame::OnSearch)
     EVT_TEXT_ENTER(wxID_HTML_SEARCHTEXT, wxHtmlHelpFrame::OnSearch)
+    EVT_BUTTON(wxID_HTML_INDEXBUTTON, wxHtmlHelpFrame::OnIndexFind)
+    EVT_TEXT_ENTER(wxID_HTML_INDEXTEXT, wxHtmlHelpFrame::OnIndexFind)
+    EVT_BUTTON(wxID_HTML_INDEXBUTTONALL, wxHtmlHelpFrame::OnIndexAll)
     EVT_COMBOBOX(wxID_HTML_BOOKMARKSLIST, wxHtmlHelpFrame::OnBookmarksSel)
     EVT_CLOSE(wxHtmlHelpFrame::OnCloseWindow)    
 END_EVENT_TABLE()
