@@ -259,8 +259,8 @@ gint gtk_window_key_press_callback( GtkWidget *WXUNUSED(widget), GdkEventKey *gd
 
 gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxWindow *win )
 { 
-  if (widget->window != gdk_event->window) return FALSE;
-  if (g_blockEventsOnDrag) return FALSE;
+  if (widget->window != gdk_event->window) return TRUE;
+  if (g_blockEventsOnDrag) return TRUE;
 
   if (win->m_wxwindow)
   {
@@ -278,7 +278,7 @@ gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_ev
     };
   };
     
-  if (!win->HasVMT()) return FALSE;
+  if (!win->HasVMT()) return TRUE;
     
 /*
   printf( "OnButtonPress from " );
@@ -342,9 +342,9 @@ gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_
 { 
   if (widget->window != gdk_event->window) return TRUE;
 
-  if (g_blockEventsOnDrag) return FALSE;
+  if (g_blockEventsOnDrag) return TRUE;
 
-  if (!win->HasVMT()) return FALSE;
+  if (!win->HasVMT()) return TRUE;
  
 /*
   printf( "OnButtonRelease from " );
@@ -374,7 +374,9 @@ gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_
   event.m_y = (long)gdk_event->y;
   event.SetEventObject( win );
   
-  return win->ProcessEvent( event );
+  win->ProcessEvent( event );
+  
+  return TRUE;
 };
 
 //-----------------------------------------------------------------------------
@@ -384,9 +386,9 @@ gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_e
 { 
   if (widget->window != gdk_event->window) return TRUE;
 
-  if (g_blockEventsOnDrag) return FALSE;
+  if (g_blockEventsOnDrag) return TRUE;
 
-  if (!win->HasVMT()) return FALSE;
+  if (!win->HasVMT()) return TRUE;
   
 /*
   printf( "OnMotion from " );
@@ -410,7 +412,7 @@ gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_e
   
   win->ProcessEvent( event );
   
-  return FALSE;
+  return TRUE;
 };
 
 //-----------------------------------------------------------------------------
@@ -418,7 +420,7 @@ gint gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_e
 
 gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxWindow *win )
 {
-  if (g_blockEventsOnDrag) return FALSE;
+  if (g_blockEventsOnDrag) return TRUE;
   if (win->m_wxwindow)
   {
     if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
@@ -433,7 +435,7 @@ gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
     };
   };
   
-  if (!win->HasVMT()) return FALSE;
+  if (!win->HasVMT()) return TRUE;
   
 /*
   printf( "OnSetFocus from " );
@@ -446,7 +448,9 @@ gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
   
   wxFocusEvent event( wxEVT_SET_FOCUS, win->GetId() );
   event.SetEventObject( win );
-  return win->ProcessEvent( event );
+  win->ProcessEvent( event );
+  
+  return TRUE;
 };
 
 //-----------------------------------------------------------------------------
@@ -454,14 +458,14 @@ gint gtk_window_focus_in_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUS
 
 gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxWindow *win )
 {
-  if (g_blockEventsOnDrag) return FALSE;
+  if (g_blockEventsOnDrag) return TRUE;
   if (win->m_wxwindow)
   {
     if (GTK_WIDGET_CAN_FOCUS(win->m_wxwindow))
       GTK_WIDGET_UNSET_FLAGS (win->m_wxwindow, GTK_HAS_FOCUS);
   };
   
-  if (!win->HasVMT()) return FALSE;
+  if (!win->HasVMT()) return TRUE;
   
 /*
   printf( "OnKillFocus from " );
@@ -472,7 +476,9 @@ gint gtk_window_focus_out_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNU
   
   wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
   event.SetEventObject( win );
-  return win->ProcessEvent( event );
+  win->ProcessEvent( event );
+  
+  return TRUE;
 };
 
 //-----------------------------------------------------------------------------
@@ -616,8 +622,6 @@ void gtk_window_hscroll_change_callback( GtkWidget *WXUNUSED(widget), wxWindow *
 
 void gtk_window_drop_callback( GtkWidget *widget, GdkEvent *event, wxWindow *win )
 {
-  printf( "OnDrop.\n" );
-
   if (win->GetDropTarget())
   {
     int x = 0;
@@ -961,9 +965,6 @@ void wxWindow::PostCreation(void)
   gtk_signal_connect( GTK_OBJECT(connect_widget), "focus_out_event", 
     GTK_SIGNAL_FUNC(gtk_window_focus_out_callback), (gpointer)this );
 
-  gtk_signal_connect( GTK_OBJECT(connect_widget), "drop_data_available_event",
-    GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
-      
   // Only for cursor handling
     
   gtk_signal_connect( GTK_OBJECT(m_widget), "enter_notify_event", 
@@ -1480,6 +1481,7 @@ void wxWindow::AddChild( wxWindow *child )
   
   m_children.Append( child );
   if (m_wxwindow) gtk_myfixed_put( GTK_MYFIXED(m_wxwindow), child->m_widget, child->m_x, child->m_y );
+  
   gtk_widget_set_usize( child->m_widget, child->m_width, child->m_height );
 };
 
@@ -1693,17 +1695,23 @@ void wxWindow::InitDialog(void)
 
 void wxWindow::SetDropTarget( wxDropTarget *dropTarget )
 {
-  GtkWidget *connect_widget = m_widget;
-  if (m_wxwindow) connect_widget = m_wxwindow;
+  GtkWidget *dnd_widget = GetDropTargetWidget();
+  
   if (m_pDropTarget)
   {
-    m_pDropTarget->UnregisterWidget( connect_widget );
+    gtk_signal_disconnect_by_func( GTK_OBJECT(dnd_widget),
+      GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
+  
+    m_pDropTarget->UnregisterWidget( dnd_widget );
     delete m_pDropTarget;
   };
   m_pDropTarget = dropTarget;
   if (m_pDropTarget)
   {
-    m_pDropTarget->RegisterWidget( connect_widget );
+    m_pDropTarget->RegisterWidget( dnd_widget );
+    
+    gtk_signal_connect( GTK_OBJECT(dnd_widget), "drop_data_available_event",
+      GTK_SIGNAL_FUNC(gtk_window_drop_callback), (gpointer)this );
   };
 };
 
@@ -1712,6 +1720,14 @@ wxDropTarget *wxWindow::GetDropTarget() const
   return m_pDropTarget;
 };
 
+GtkWidget* wxWindow::GetDropTargetWidget(void)
+{
+  GtkWidget *connect_widget = m_widget;
+  if (m_wxwindow) connect_widget = m_wxwindow;
+  
+  return connect_widget;
+}
+  
 void wxWindow::SetFont( const wxFont &font )
 {
   m_font = font;
@@ -2445,7 +2461,7 @@ bool wxWindow::AcceptsFocus() const
   return IsEnabled() && IsShown();
 }
 
-void wxWindow::OnIdle(wxIdleEvent& event)
+void wxWindow::OnIdle(wxIdleEvent& WXUNUSED(event) )
 {
   UpdateWindowUI();
 }

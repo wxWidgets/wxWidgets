@@ -41,6 +41,7 @@
 #include "card.h"
 #include "pile.h"
 
+#include "wx/app.h"
 
 //+-------------------------------------------------------------+
 //| Pile::Pile()												|
@@ -72,13 +73,22 @@ Pile::Pile(int x, int y, int dx, int dy)
 //|	at the origin of the pile, shifting each subsequent			|
 //|	card by the pile's x and y offsets.							|
 //+-------------------------------------------------------------+
-void Pile::Redraw(wxDC& dc)
+void Pile::Redraw(wxDC& dc )
 {
+   wxWindow *frame = wxTheApp->GetTopWindow();
+   wxWindow *canvas = NULL;
+   if (frame)
+   {
+     wxNode *node = frame->GetChildren()->First();
+     if (node) canvas = (wxWindow*)node->Data();
+   }
+
 	if (m_topCard >= 0)
 	{
 		if (m_dx == 0 && m_dy == 0)
 		{
-			m_cards[m_topCard]->Draw(dc, m_x, m_y);
+  			if ((canvas) && (canvas->IsExposed(m_x,m_y,60,200))) 
+			  m_cards[m_topCard]->Draw(dc, m_x, m_y);
 		}
 		else
 		{
@@ -86,14 +96,16 @@ void Pile::Redraw(wxDC& dc)
 			int y = m_y;
 			for (int i = 0; i <= m_topCard; i++)
 			{
-				m_cards[i]->Draw(dc, x, y);
-				x += m_dx;
-				y += m_dy;
+  			      if ((canvas) && (canvas->IsExposed(x,y,60,200))) 
+			        m_cards[i]->Draw(dc, x, y);
+			      x += m_dx;
+			      y += m_dy;
 			}
 		}
 	}
 	else
 	{
+            if ((canvas) && (canvas->IsExposed(m_x,m_y,60,200))) 
 		Card::DrawNullCard(dc, m_x, m_y);
 	}
 }

@@ -206,7 +206,7 @@ void wxFileData::MakeItem( wxListItem &item )
 IMPLEMENT_DYNAMIC_CLASS(wxFileCtrl,wxListCtrl);
 
 BEGIN_EVENT_TABLE(wxFileCtrl,wxListCtrl)
-  EVT_SET_FOCUS   (wxFileCtrl::OnSetFocus)
+  EVT_SET_FOCUS     (wxFileCtrl::OnSetFocus)
 END_EVENT_TABLE()
 
 wxFileCtrl *wxFileCtrl::m_lastFocus = NULL;
@@ -222,8 +222,8 @@ wxFileCtrl::wxFileCtrl( wxWindow *win, const wxWindowID id, const wxString &dirN
       const long style, const wxString &name ) :
   wxListCtrl( win, id, pos, size, style, name )
 {
-  SetItemSpacing( 20 );
-  wxImageList *imageList = new wxImageList( 18, 18 );
+  SetItemSpacing( 40 );
+  wxImageList *imageList = new wxImageList( 30, 30 );
   imageList->Add( wxBitmap( folder_xpm ) );
   imageList->Add( wxBitmap( txt_xpm ) );
   imageList->Add( wxBitmap( list_xpm ) );
@@ -236,8 +236,12 @@ wxFileCtrl::wxFileCtrl( wxWindow *win, const wxWindowID id, const wxString &dirN
   Update();
   
   m_lastFocus = this;
-  
-  SetDropTarget( new wxTextDropTarget() );
+
+  m_dragStartX = 0;
+  m_dragStartY = 0;
+  m_dragCount = 0;
+    
+  SetDropTarget( new wxFileDropTarget() );
 };
 
 void wxFileCtrl::ChangeToListMode()
@@ -537,5 +541,4 @@ void wxFileCtrl::OnSetFocus( wxFocusEvent &event )
   m_lastFocus = this;
   event.Skip();
 };
-
 

@@ -138,8 +138,12 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
           m_strText("wxWindows drag & drop works :-)")
 
 {
+
+#ifdef __WXMSW__
   // frame icon and status bar
   SetIcon(wxIcon("mondrian"));
+#endif  
+  
   const int widths[] = { -1 };
   CreateStatusBar();
 
@@ -172,6 +176,7 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
 
   m_ctrlFile  = new wxListBox(this, -1, pos, size, 1, &strFile, wxLB_HSCROLL);
   m_ctrlText  = new wxListBox(this, -1, pos, size, 1, &strText, wxLB_HSCROLL);
+
   m_ctrlLog   = new wxTextCtrl(this, -1, "", pos, size, 
                                wxTE_MULTILINE | wxTE_READONLY | 
                                wxSUNKEN_BORDER| wxHSCROLL);
@@ -181,10 +186,10 @@ DnDFrame::DnDFrame(wxFrame *frame, char *title, int x, int y, int w, int h)
   m_pLogPrev = wxLog::SetActiveTarget(m_pLog);
 
   // associate drop targets with 2 text controls
-  m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
-  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));
+//  m_ctrlFile->SetDropTarget(new DnDFile(m_ctrlFile));
+  m_ctrlText->SetDropTarget(new DnDText(m_ctrlText));  
 
-  wxLayoutConstraints *c;
+ wxLayoutConstraints *c;
 
   // Top-left listbox
   c = new wxLayoutConstraints;
@@ -274,7 +279,7 @@ void DnDFrame::OnHelp(wxCommandEvent& /* event */)
   dialog.ShowModal();
 }
 
-void DnDFrame::OnLogClear(wxCommandEvent& event)
+void DnDFrame::OnLogClear(wxCommandEvent& /* event */ )
 {
   m_ctrlLog->Clear();
 }
@@ -284,12 +289,12 @@ bool DnDFrame::OnClose()
   return TRUE; 
 }
 
-void DnDFrame::OnMouseBtnDown(wxMouseEvent& event)
+void DnDFrame::OnMouseBtnDown(wxMouseEvent& /* event */ )
 {
   if ( !m_strText.IsEmpty() ) {
     // start drag operation
     wxTextDataObject data(m_strText);
-    wxDropSource dragSource(data);
+    wxDropSource dragSource(data, this);
     const char *pc;
 
     switch ( dragSource.DoDragDrop(TRUE) ) {

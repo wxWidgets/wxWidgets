@@ -31,15 +31,15 @@ class WXDLLEXPORT wxConnectionBase: public wxObject
   inline ~wxConnectionBase(void) {}
 
   // Calls that CLIENT can make
-  virtual bool Execute(char *data, int size = -1, int format = wxCF_TEXT) = 0;
-  virtual bool Execute(const wxString& str) { return Execute((char *)(const char *)str, -1, wxCF_TEXT); }
-  virtual char *Request(const wxString& item, int *size = NULL, int format = wxCF_TEXT) = 0;
-  virtual bool Poke(const wxString& item, char *data, int size = -1, int format = wxCF_TEXT) = 0;
+  virtual bool Execute(char *data, int size = -1, wxDataFormat format = wxDF_TEXT ) = 0;
+  virtual bool Execute(const wxString& str) { return Execute((char *)(const char *)str, -1, wxDF_TEXT); }
+  virtual char *Request(const wxString& item, int *size = NULL, wxDataFormat format = wxDF_TEXT) = 0;
+  virtual bool Poke(const wxString& item, char *data, int size = -1, wxDataFormat format = wxDF_TEXT) = 0;
   virtual bool StartAdvise(const wxString& item) = 0;
   virtual bool StopAdvise(const wxString& item) = 0;
 
   // Calls that SERVER can make
-  virtual bool Advise(const wxString& item, char *data, int size = -1, int format = wxCF_TEXT) = 0;
+  virtual bool Advise(const wxString& item, char *data, int size = -1, wxDataFormat format = wxDF_TEXT) = 0;
 
   // Calls that both can make
   virtual bool Disconnect(void) = 0;

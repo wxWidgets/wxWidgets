@@ -475,7 +475,7 @@ class wxListMainWindow: public wxScrolledWindow
     bool                 m_renameAccept;
     wxString             m_renameRes;
     bool                 m_isCreated;
-    bool                 m_isDragging;
+    int                  m_dragCount;
 
   public:
     wxListMainWindow(void); 
@@ -524,6 +524,7 @@ class wxListMainWindow: public wxScrolledWindow
     int GetItemState( long item, long stateMask );
     int GetItemCount( void );
     void GetItemRect( long index, wxRectangle &rect );
+    bool GetItemPosition(long item, wxPoint& pos);
     int GetSelectedItemCount( void );
     void SetMode( long mode );
     long GetMode( void ) const;
@@ -582,8 +583,8 @@ class wxListCtrl: public wxControl
     void SetItemText( long item, const wxString& str );
     long GetItemData( long item );
     bool SetItemData( long item, long data );
-    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS ); // not supported in wxGLC
-    bool GetItemPosition( long item, wxPoint& pos ) const; // not supported in wxGLC
+    bool GetItemRect( long item, wxRectangle& rect, int code = wxLIST_RECT_BOUNDS ); 
+    bool GetItemPosition( long item, wxPoint& pos );
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
     int GetItemCount(void);
     void SetItemSpacing( int spacing, bool isSmall = FALSE );

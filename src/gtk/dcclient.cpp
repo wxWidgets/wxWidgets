@@ -87,10 +87,21 @@ IMPLEMENT_DYNAMIC_CLASS(wxPaintDC,wxDC)
 
 wxPaintDC::wxPaintDC(void)
 {
+  m_penGC = NULL;
+  m_brushGC = NULL;
+  m_textGC = NULL;
+  m_bgGC = NULL;
+  m_cmap = NULL;
 };
 
 wxPaintDC::wxPaintDC( wxWindow *window )
 {
+  m_penGC = NULL;
+  m_brushGC = NULL;
+  m_textGC = NULL;
+  m_bgGC = NULL;
+  m_cmap = NULL;
+  
   if (!window) return;
   GtkWidget *widget = window->m_wxwindow;
   if (!widget) return;
@@ -777,9 +788,13 @@ void wxPaintDC::SetUpDC(void)
 {
   m_ok = TRUE;
   m_logicalFunction = wxCOPY;
+  if (m_penGC) gdk_gc_unref( m_penGC );
   m_penGC = gdk_gc_new( m_window );
+  if (m_brushGC) gdk_gc_unref( m_brushGC );
   m_brushGC = gdk_gc_new( m_window );
+  if (m_textGC) gdk_gc_unref( m_textGC );
   m_textGC = gdk_gc_new( m_window );
+  if (m_bgGC) gdk_gc_unref( m_bgGC );
   m_bgGC = gdk_gc_new( m_window );
   SetTextForeground( m_textForegroundColour );
   SetTextBackground( m_textBackgroundColour );

@@ -349,7 +349,7 @@ typedef struct {
 } wxEndProcessData;
 
 static void GTK_EndProcessDetector(gpointer data, gint source,
-                                   GdkInputCondition condition)
+                                   GdkInputCondition WXUNUSED(condition) )
 {
   wxEndProcessData *proc_data = (wxEndProcessData *)data;
   int pid;

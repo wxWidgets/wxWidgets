@@ -129,6 +129,7 @@ class wxMDIChildFrame: public wxPanel
     
     bool Destroy(void);
     void OnCloseWindow( wxCloseEvent& event );
+    void OnSize( wxSizeEvent &event );
     
   public:
   

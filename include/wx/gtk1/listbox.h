@@ -73,6 +73,8 @@ class wxListBox: public wxControl
     void SetString( int n, const wxString &string );
     void SetStringSelection( const wxString &string, bool select = TRUE );
 
+    virtual GtkWidget *GetDropTargetWidget(void);
+  
   private:
   
     GtkList   *m_list;

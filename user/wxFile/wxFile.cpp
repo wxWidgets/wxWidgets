@@ -312,8 +312,11 @@ void MyFrame::OnListEndLabelEdit( wxListEvent &event )
 
 void MyFrame::OnListDrag( wxListEvent &event )
 {
-  printf( "OnDrag.\n" );
-  return;
+      wxFileDataObject data;
+      data.AddFile( "/home/karl/test.txt" );
+    
+      wxDropSource drag( data, m_leftFile->m_lastFocus );
+      drag.DoDragDrop();
 };
     
 void MyFrame::OnTreeSelected( wxTreeEvent &event )

@@ -109,10 +109,6 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 // wxNotebook
 //-----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxNotebook, wxControl)
-  EVT_SIZE(wxNotebook::OnSize)
-END_EVENT_TABLE()
-
 IMPLEMENT_DYNAMIC_CLASS(wxNotebook,wxControl)
 
 void wxNotebook::Init()
@@ -400,11 +396,6 @@ wxWindow *wxNotebook::GetPage( int page ) const
 
 void wxNotebook::AddChild( wxWindow *win )
 {
-  // @@@ normally done in wxWindow::AddChild but for some reason wxNotebook
-  // case is special there (Robert?)
-  // Robert: Don't you think the code below looks different from the one
-  // in wxWindow::AddChild :-)
-
   m_children.Append(win);
 
   wxNotebookPage *page = new wxNotebookPage();
@@ -434,13 +425,13 @@ void wxNotebook::AddChild( wxWindow *win )
 };
 
 // override these 2 functions to do nothing: everything is done in OnSize
-void wxNotebook::SetConstraintSizes(bool /* recurse */)
+void wxNotebook::SetConstraintSizes( bool WXUNUSED(recurse) )
 {
   // don't set the sizes of the pages - their correct size is not yet known
   wxControl::SetConstraintSizes(FALSE);
 }
 
-bool wxNotebook::DoPhase(int /* nPhase */)
+bool wxNotebook::DoPhase( int WXUNUSED(nPhase) )
 {
   return TRUE;
 }

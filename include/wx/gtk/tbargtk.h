@@ -113,7 +113,7 @@ class wxToolBar: public wxControl
     virtual void AddSeparator(void);
     virtual void ClearTools(void);
     
-    virtual void Layout(void);
+    virtual void Realize(void);
 
     virtual void EnableTool(int toolIndex, bool enable);
     virtual void ToggleTool(int toolIndex, bool toggle); // toggle is TRUE if toggled on

@@ -135,7 +135,7 @@ wxObject* WXDLLEXPORT_CTORFN wxConstructorFor##name(void) \
 
 #endif
 
-#define IS_KIND_OF(obj, className) obj->IsKindOf(&className::class##name)
+#define IS_KIND_OF(obj, className) obj->IsKindOf(&className::class##className)
 
 // Unfortunately Borland seems to need this include.
 #ifdef __BORLANDC__

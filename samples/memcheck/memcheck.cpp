@@ -28,7 +28,7 @@
 #include "wx/date.h"
 
 #if !WXDEBUG
-#error You must set WXDEBUG to 1 on the 'make' command line or make.env.
+#error You must set WXDEBUG to 1 on the 'make' command line (MSW) or with configure (GTK)
 #endif
 
 // #define new WXDEBUG_NEW

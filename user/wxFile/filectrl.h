@@ -79,6 +79,9 @@ class wxFileCtrl : public wxListCtrl
   private:
     wxString      m_dirName;
     bool          m_showHidden;
+    int           m_dragStartX;
+    int           m_dragStartY;
+    int           m_dragCount;
 
   public:
     wxFileCtrl( void );

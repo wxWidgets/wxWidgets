@@ -109,6 +109,7 @@ void FortyCanvas::OnDraw(wxDC& dc)
 			m_game->DisplayScore(dc);
 			delete m_playerDialog;
 			m_playerDialog = 0;
+			Refresh();
 		}
 		else
 		{

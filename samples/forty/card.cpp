@@ -11,12 +11,12 @@
 // Last modified: 22nd July 1998 - ported to wxWindows 2.0
 /////////////////////////////////////////////////////////////////////////////
 //+-------------------------------------------------------------+
-//| Description:												|
-//|	A class for drawing playing cards.							|
-//|	Currently assumes that the card symbols have been			|
-//|	loaded into hbmap_symbols and the pictures for the			|
-//|	Jack, Queen and King have been loaded into					|
-//|	hbmap_pictures.												|
+//| Description
+//|	A class for drawing playing cards.
+//|	Currently assumes that the card symbols have been
+//|	loaded into hbmap_symbols and the pictures for the
+//|	Jack, Queen and King have been loaded into
+//|	hbmap_pictures.
 //+-------------------------------------------------------------+
 
 #ifdef __GNUG__

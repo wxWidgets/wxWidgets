@@ -439,7 +439,7 @@ long wxListLineData::IsHit( int x, int y )
     wxListItemData *item = (wxListItemData*)node->Data();
     if (item->HasImage() && IsInRect( x, y, m_bound_icon )) return wxLIST_HITTEST_ONITEMICON;
     if (item->HasText() && IsInRect( x, y, m_bound_label )) return wxLIST_HITTEST_ONITEMLABEL;
-    if (!(item->HasImage() || item->HasText())) return 0;
+//    if (!(item->HasImage() || item->HasText())) return 0;
   };
   // if there is no icon or text = empty
   if (IsInRect( x, y, m_bound_all )) return wxLIST_HITTEST_ONITEMICON;
@@ -806,7 +806,7 @@ wxListMainWindow::wxListMainWindow( void )
   m_lastOnSame = FALSE;
 //  m_renameTimer = new wxRenameTimer( this );
   m_isCreated = FALSE;
-  m_isDragging = FALSE;
+  m_dragCount = 0;
 };
 
 wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id, 
@@ -828,7 +828,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent, wxWindowID id,
 //  AllowDoubleClick( TRUE );
   m_myFont = wxNORMAL_FONT;
   m_hasFocus = FALSE;
-  m_isDragging = FALSE;
+  m_dragCount = 0;
   m_isCreated = FALSE;
   wxSize sz = size;
   sz.y = 25;
@@ -1032,9 +1032,10 @@ void wxListMainWindow::OnRenameAccept()
 
 void wxListMainWindow::OnMouse( wxMouseEvent &event )
 {
+  if (m_parent->ProcessEvent( event)) return;
+
   if (!m_current) return;
   if (m_dirty) return;
-//  wxDragCanvas::OnEvent( event );
 
   wxClientDC dc(this);
   PrepareDC(dc);
@@ -1053,11 +1054,14 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     node = node->Next();
   };
   
-  if (!event.Dragging()) m_isDragging = FALSE;
+  if (!event.Dragging())
+    m_dragCount = 0;
+  else
+    m_dragCount++;
   
-  if (event.Dragging() && (!m_isDragging))
+  if (event.Dragging() && (m_dragCount > 3))
   {
-    m_isDragging = TRUE;
+    m_dragCount = 0;
     wxListEvent le( wxEVT_COMMAND_LIST_BEGIN_DRAG, m_parent->GetId() );
     le.SetEventObject( this );
     le.m_code = 0;
@@ -1553,6 +1557,25 @@ void wxListMainWindow::GetItemRect( long index, wxRectangle &rect )
     rect.width = 0;
     rect.height = 0;
   };
+};
+
+bool wxListMainWindow::GetItemPosition(long item, wxPoint& pos)
+{
+  wxNode *node = m_lines.Nth( item );
+  if (node) 
+  {
+    wxRectangle rect;
+    wxListLineData *line = (wxListLineData*)node->Data();
+    line->GetRect( rect );
+    pos.x = rect.x;
+    pos.y = rect.y;
+  }
+  else
+  {
+    pos.x = 0;
+    pos.y = 0;
+  };
+  return TRUE;
 };
 
 int wxListMainWindow::GetSelectedItemCount( void )
@@ -2197,9 +2220,10 @@ bool wxListCtrl::GetItemRect( long item, wxRectangle &rect,  int WXUNUSED(code) 
   return TRUE;
 };
 
-bool wxListCtrl::GetItemPosition( long WXUNUSED(item), wxPoint& WXUNUSED(pos) ) const
+bool wxListCtrl::GetItemPosition( long item, wxPoint& pos )
 {
-  return 0;
+  m_mainWin->GetItemPosition( item, pos );
+  return TRUE;
 };
 
 bool wxListCtrl::SetItemPosition( long WXUNUSED(item), const wxPoint& WXUNUSED(pos) )
@@ -2403,7 +2427,7 @@ bool wxListCtrl::SortItems( wxListCtrlCompare fn, long data )
   return TRUE;
 };
 
-void wxListCtrl::OnIdle( wxIdleEvent &event )
+void wxListCtrl::OnIdle( wxIdleEvent &WXUNUSED(event) )
 {
   if (!m_mainWin->m_dirty) return;
 

@@ -7,14 +7,14 @@ OS=@OS@
 RULE=bin
 
 # define library name
-BIN_TARGET=wxFile
+BIN_TARGET=dnd
 # define library sources
 BIN_SRC=\
-wxFile.cpp filectrl.cpp dirctrl.cpp FMJobs.cpp
+dnd.cpp
 
 #define library objects
 BIN_OBJ=\
-wxFile.o filectrl.o dirctrl.o FMJobs.o
+dnd.o
 
 # additional things needed to link
 BIN_LINK=

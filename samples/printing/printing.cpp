@@ -159,12 +159,12 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
   canvas = NULL;
 }
 
-void MyFrame::OnExit(wxCommandEvent& event)
+void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event))
 {
       Close(TRUE);
 }
 
-void MyFrame::OnPrint(wxCommandEvent& event)
+void MyFrame::OnPrint(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
@@ -177,7 +177,7 @@ void MyFrame::OnPrint(wxCommandEvent& event)
         wxMessageBox("There was a problem printing.\nPerhaps your current printer is not set correctly?", "Printing", wxOK);
 }
 
-void MyFrame::OnPrintPS(wxCommandEvent& event)
+void MyFrame::OnPrintPS(wxCommandEvent& WXUNUSED(event))
 {
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
@@ -186,7 +186,7 @@ void MyFrame::OnPrintPS(wxCommandEvent& event)
       printer.Print(this, &printout, TRUE);
 }
 
-void MyFrame::OnPrintPreview(wxCommandEvent& event)
+void MyFrame::OnPrintPreview(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
@@ -211,7 +211,7 @@ void MyFrame::OnPrintPreview(wxCommandEvent& event)
       frame->Show(TRUE);
 }
 
-void MyFrame::OnPrintPreviewPS(wxCommandEvent& event)
+void MyFrame::OnPrintPreviewPS(wxCommandEvent& WXUNUSED(event))
 {
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
@@ -226,7 +226,7 @@ void MyFrame::OnPrintPreviewPS(wxCommandEvent& event)
       frame->Show(TRUE);
 }
 
-void MyFrame::OnPrintSetup(wxCommandEvent& event)
+void MyFrame::OnPrintSetup(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
@@ -247,7 +247,7 @@ void MyFrame::OnPrintSetup(wxCommandEvent& event)
       orientation = printerDialog.GetPrintData().GetOrientation();
 }
 
-void MyFrame::OnPageSetup(wxCommandEvent& event)
+void MyFrame::OnPageSetup(wxCommandEvent& WXUNUSED(event))
 {
 #ifdef __WXMSW__
       wxGetApp().SetPrintMode(wxPRINT_WINDOWS);
@@ -268,7 +268,7 @@ void MyFrame::OnPageSetup(wxCommandEvent& event)
       orientation = data.GetOrientation();
 }
 
-void MyFrame::OnPrintSetupPS(wxCommandEvent& event)
+void MyFrame::OnPrintSetupPS(wxCommandEvent& WXUNUSED(event))
 {
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
@@ -282,7 +282,7 @@ void MyFrame::OnPrintSetupPS(wxCommandEvent& event)
       orientation = printerDialog.GetPrintData().GetOrientation();
 }
 
-void MyFrame::OnPageSetupPS(wxCommandEvent& event)
+void MyFrame::OnPageSetupPS(wxCommandEvent& WXUNUSED(event))
 {
       wxGetApp().SetPrintMode(wxPRINT_POSTSCRIPT);
 
@@ -295,7 +295,7 @@ void MyFrame::OnPageSetupPS(wxCommandEvent& event)
       orientation = pageSetupDialog.GetPageSetupData().GetOrientation();
 }
 
-void MyFrame::OnPrintAbout(wxCommandEvent& event)
+void MyFrame::OnPrintAbout(wxCommandEvent& WXUNUSED(event))
 {
       (void)wxMessageBox("wxWindows printing demo\nAuthor: Julian Smart julian.smart@ukonline.co.uk",
             "About wxWindows printing demo", wxOK|wxCENTRE);
@@ -309,19 +309,19 @@ void MyFrame::Draw(wxDC& dc)
   dc.SetBrush(wxCYAN_BRUSH);
   dc.SetPen(wxRED_PEN);
 
-  dc.DrawRectangle(0.0, 30.0, 200.0, 100.0);
-  dc.DrawText("Rectangle 200 by 100", 40.0, 40.0);
+  dc.DrawRectangle(0, 30, 200, 100);
+  dc.DrawText("Rectangle 200 by 100", 40, 40);
 
-  dc.DrawEllipse(50.0, 140.0, 100.0, 50.0);
+  dc.DrawEllipse(50, 140, 100, 50);
 
-  dc.DrawText("Test message: this is in 11 point text", 10.0, 180.0);
+  dc.DrawText("Test message: this is in 11 point text", 10, 180);
 
   dc.SetPen(wxBLACK_PEN);
-  dc.DrawLine(0.0, 0.0, 200.0, 200.0);
-  dc.DrawLine(200.0, 0.0, 0.0, 200.0);
+  dc.DrawLine(0, 0, 200, 200);
+  dc.DrawLine(200, 0, 0, 200);
 }
 
-void MyFrame::OnSize(wxSizeEvent& event)
+void MyFrame::OnSize(wxSizeEvent& event )
 {
     wxFrame::OnSize(event);
 }
@@ -346,7 +346,7 @@ void MyCanvas::OnDraw(wxDC& dc)
   frame->Draw(dc);
 }
 
-void MyCanvas::OnEvent(wxMouseEvent& event)
+void MyCanvas::OnEvent(wxMouseEvent& WXUNUSED(event))
 {
 }
 
@@ -373,7 +373,7 @@ bool MyPrintout::OnPrintPage(int page)
 
     char buf[200];
     sprintf(buf, "PAGE %d", page);
-    dc->DrawText(buf, 10.0, 10.0);
+    dc->DrawText(buf, 10, 10);
     
     return TRUE;
   }
@@ -438,7 +438,7 @@ void MyPrintout::DrawPageOne(wxDC *dc)
 
   // Set the scale and origin
   dc->SetUserScale(actualScale, actualScale);
-  dc->SetDeviceOrigin(posX, posY);
+  dc->SetDeviceOrigin( (long)posX, (long)posY );
 
   frame->Draw(*dc);
 }
@@ -486,13 +486,13 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
   float logUnitsFactor = (float)(ppiPrinterX/(scale*25.1));
   float logUnits = (float)(50*logUnitsFactor);
   dc->SetPen(wxBLACK_PEN);
-  dc->DrawLine(50.0, 50.0, (float)(50.0 + logUnits), 50.0);
-  dc->DrawLine(50.0, 50.0, 50.0, (float)(50.0 + logUnits));
+  dc->DrawLine(50, 50, (long)(50.0 + logUnits), 50);
+  dc->DrawLine(50, 50, 50, (long)(50.0 + logUnits));
 
   dc->SetFont(itemFont);
   dc->SetBackgroundMode(wxTRANSPARENT);
 
-  dc->DrawText("Some test text", 200.0, 200.0);
+  dc->DrawText("Some test text", 200, 200 );
 
   // TESTING
   
@@ -510,8 +510,10 @@ void MyPrintout::DrawPageTwo(wxDC *dc)
   float rightMarginLogical = (float)(logUnitsFactor*(pageWidthMM - rightMargin));
 
   dc->SetPen(wxBLACK_PEN);
-  dc->DrawLine(leftMarginLogical, topMarginLogical, rightMarginLogical, topMarginLogical);
-  dc->DrawLine(leftMarginLogical, bottomMarginLogical, rightMarginLogical, bottomMarginLogical);
+  dc->DrawLine( (long)leftMarginLogical, (long)topMarginLogical, 
+                (long)rightMarginLogical, (long)topMarginLogical);
+  dc->DrawLine( (long)leftMarginLogical, (long)bottomMarginLogical, 
+                 (long)rightMarginLogical,  (long)bottomMarginLogical);
 
   WritePageHeader(this, dc, "A header", logUnitsFactor);
 }
@@ -541,10 +543,11 @@ bool WritePageHeader(wxPrintout *printout, wxDC *dc, char *text, float mmToLogic
   long xExtent, yExtent;
   dc->GetTextExtent(text, &xExtent, &yExtent);
   float xPos = (float)(((((pageWidthMM - leftMargin - rightMargin)/2.0)+leftMargin)*mmToLogical) - (xExtent/2.0));
-  dc->DrawText(text, (long)xPos, topMarginLogical);
+  dc->DrawText(text, (long)xPos, (long)topMarginLogical);
 
   dc->SetPen(wxBLACK_PEN);
-  dc->DrawLine(leftMarginLogical, topMarginLogical+yExtent, rightMarginLogical, topMarginLogical+yExtent);
+  dc->DrawLine( (long)leftMarginLogical, (long)(topMarginLogical+yExtent), 
+                (long)rightMarginLogical, (long)topMarginLogical+yExtent );
 
   return TRUE;
 }

@@ -156,7 +156,6 @@ private:
   uint            m_idHandler; // the change page handler id
 
   DECLARE_DYNAMIC_CLASS(wxNotebook)
-  DECLARE_EVENT_TABLE()
 };
 
 // ----------------------------------------------------------------------------

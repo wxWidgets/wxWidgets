@@ -680,15 +680,22 @@ typedef enum {
 // Don't do parent client adjustments (for implementation only)
 #define wxSIZE_NO_ADJUSTMENTS   0x0008
 
-// Clipboard formats
-// Numbers as per winuser.h
-# define wxCF_TEXT               1 /* CF_TEXT */
-# define wxCF_BITMAP             2 /* CF_BITMAP */
-# define wxCF_METAFILE           3 /* CF_METAFILEPICT */
-# define wxCF_DIB                8 /* CF_DIB */
-# define wxCF_OEMTEXT            7 /* CF_OEMTEXT */
+
+// Data format for drag & drop and clipboard operations
+// numbers as per winuser.h
+
+enum wxDataFormat
+{
+  wxDF_TEXT =             1,  /* CF_TEXT */
+  wxDF_BITMAP =           2,  /* CF_BITMAP */
+  wxDF_METAFILE =         3,  /* CF_METAFILEPICT */
+  wxDF_DIB =              8,  /* CF_DIB */
+  wxDF_OEMTEXT =          7,  /* CF_OEMTEXT */
+  wxDF_FILENAME =         15  /* CF_HDROP */
+};
 
 // Virtual keycodes
+
 enum _Virtual_keycodes {
  WXK_BACK    =   8,
  WXK_TAB     =   9,
@@ -871,9 +878,6 @@ typedef void *          WXLPCREATESTRUCT;
 typedef int (*WXFARPROC)();
 
 #endif
-
-// for drag & drop and clipboard operations
-typedef unsigned short wxDataFormat;
 
 #endif
     // __WXDEFSH__

@@ -99,6 +99,8 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
  
   PostCreation();
   
+  gtk_widget_realize( GTK_WIDGET(m_list) );
+  
   Show( TRUE );
   
   return TRUE;
@@ -320,5 +322,11 @@ int wxListBox::GetIndex( GtkWidget *item ) const
   };
   return -1;
 };
+
+GtkWidget *wxListBox::GetDropTargetWidget(void)
+{
+  return GTK_WIDGET(m_list);
+};
+
 
 

@@ -385,3 +385,11 @@ wxTextCtrl& wxTextCtrl::operator<<(const char c)
   return *this;
 }
 
+GtkWidget* wxTextCtrl::GetDropTargetWidget(void)
+{
+  return GTK_WIDGET(m_text);
+};
+
+
+
+  

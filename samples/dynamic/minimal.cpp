@@ -79,8 +79,7 @@ bool MyApp::OnInit(void)
   // Make a panel with a message
   wxPanel *panel = new wxPanel(frame, -1, wxPoint(0, 0), wxSize(400, 200), wxTAB_TRAVERSAL);
 
-  wxStaticText *msg = new wxStaticText(panel, 311, "Hello!", wxPoint(10, 10), wxSize(-1, -1),
-    0);
+  (void)new wxStaticText(panel, 311, "Hello!", wxPoint(10, 10), wxSize(-1, -1), 0);
 
   // Show the frame
   frame->Show(TRUE);

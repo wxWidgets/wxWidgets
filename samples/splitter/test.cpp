@@ -163,12 +163,12 @@ bool MyFrame::OnClose()
 	return TRUE;
 }
 
-void MyFrame::Quit(wxCommandEvent& event)
+void MyFrame::Quit(wxCommandEvent& WXUNUSED(event) )
 {
 	Close(TRUE);
 }
 
-void MyFrame::SplitHorizontal(wxCommandEvent& event)
+void MyFrame::SplitHorizontal(wxCommandEvent& WXUNUSED(event) )
 {
     if ( splitter->IsSplit() )
         splitter->Unsplit();
@@ -177,7 +177,7 @@ void MyFrame::SplitHorizontal(wxCommandEvent& event)
     splitter->SplitHorizontally( leftCanvas, rightCanvas );
 }
 
-void MyFrame::SplitVertical(wxCommandEvent& event)
+void MyFrame::SplitVertical(wxCommandEvent& WXUNUSED(event) )
 {
     if ( splitter->IsSplit() )
         splitter->Unsplit();
@@ -186,7 +186,7 @@ void MyFrame::SplitVertical(wxCommandEvent& event)
     splitter->SplitVertically( leftCanvas, rightCanvas );
 }
 
-void MyFrame::Unsplit(wxCommandEvent& event)
+void MyFrame::Unsplit(wxCommandEvent& WXUNUSED(event) )
 {
     if ( splitter->IsSplit() )
         splitter->Unsplit();

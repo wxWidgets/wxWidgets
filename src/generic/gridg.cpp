@@ -485,7 +485,7 @@ void wxGenericGrid::PaintGrid(wxDC& dc)
 
 // Erase (some of) the background.
 // Currently, a Windows-only optimisation.
-void wxGenericGrid::OnEraseBackground(wxEraseEvent& event)
+void wxGenericGrid::OnEraseBackground(wxEraseEvent& WXUNUSED(event) )
 {
     wxClientDC dc(this);
     dc.BeginDrawing();

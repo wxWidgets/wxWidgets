@@ -28,6 +28,8 @@
 #include	<../iodbc/itrace.h>
 #include	<stdio.h>
 
+extern	RETCODE	_iodbcdm_driverunload();
+
 RETCODE SQL_API	SQLAllocConnect( 
 			HENV 		henv,
 			HDBC FAR*	phdbc )
@@ -156,7 +158,7 @@ RETCODE SQL_API	SQLSetConnectOption(
 			UWORD	fOption,
 			UDWORD	vParam )
 {
-	GENV_t FAR*	genv;
+/*	GENV_t FAR*	genv;  */
 	DBC_t  FAR*	pdbc 	= (DBC_t FAR*)hdbc;
 	STMT_t FAR*	pstmt;
 	HPROC		hproc	= SQL_NULL_HPROC;
@@ -496,7 +498,7 @@ RETCODE SQL_API	SQLGetConnectOption(
 			UWORD	fOption,
 			PTR	pvParam )
 {
-	GENV_t FAR*	genv;
+/*	GENV_t FAR*	genv; */
 	DBC_t  FAR*	pdbc = (DBC_t FAR*)hdbc;
 	int		sqlstat = en_00000;
 	HPROC		hproc 	= SQL_NULL_HPROC;
@@ -755,7 +757,7 @@ RETCODE	SQL_API	SQLTransact(
 	GENV_t FAR*	genv	= (GENV_t FAR*)henv;
 	DBC_t  FAR*	pdbc	= (DBC_t FAR*)hdbc;
 	HERR		herr;
-	RETCODE		retcode;
+	RETCODE		retcode = 0;
 
 	if( hdbc != SQL_NULL_HDBC )
 	{

@@ -5,7 +5,7 @@
 # The file that contains palette entries for a global palette for all Imlib
 # based programs.
 # options: full path to palette file
-PaletteFile                       /etc/im_palette.pal
+PaletteFile                       ~/im_palette.pal
 # This defines if when the display is greater than 8 bit, that it still remaps
 # the images to the palette defined, rather than using "perfect" rendering
 # options: yes/no

@@ -52,12 +52,12 @@ MyDialog::MyDialog(wxWindow* parent, const wxWindowID id, const wxString& title,
     Init();
 }
 
-void MyDialog::OnOK(wxCommandEvent& event)
+void MyDialog::OnOK(wxCommandEvent& WXUNUSED(event) )
 {
     EndModal(wxID_OK);
 }
 
-void MyDialog::OnCloseWindow(wxCloseEvent& event)
+void MyDialog::OnCloseWindow(wxCloseEvent& WXUNUSED(event) )
 {
     EndModal(wxID_CANCEL);
 }
@@ -68,8 +68,8 @@ void MyDialog::Init(void)
   int dialogHeight = 390;
   
   wxButton *okButton = new wxButton(this, wxID_OK, "Close", wxPoint(100, 330), wxSize(80, 25));
-  wxButton *cancelButton = new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(185, 330), wxSize(80, 25));
-  wxButton *HelpButton = new wxButton(this, wxID_HELP, "Help", wxPoint(270, 330), wxSize(80, 25));
+  (void)new wxButton(this, wxID_CANCEL, "Cancel", wxPoint(185, 330), wxSize(80, 25));
+  (void)new wxButton(this, wxID_HELP, "Help", wxPoint(270, 330), wxSize(80, 25));
   okButton->SetDefault();
 
   // Note, omit the wxTAB_STYLE_COLOUR_INTERIOR, so we will guarantee a match
@@ -136,7 +136,7 @@ void MyDialog::Init(void)
   view->AddTabWindow(TEST_TAB_DOG, panel2);
   
   // Don't know why this is necessary under Motif...
-#ifdef wx_motif
+#ifndef __WXMSW__
   this->SetSize(dialogWidth, dialogHeight-20);
 #endif
 

@@ -293,8 +293,7 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
     for(wxNode *node = GetChildren()->First(); node; node = node->Next())
     {
       wxWindow *win = (wxWindow *)node->Data();
-      if (!win->IsKindOf(CLASSINFO(wxFrame)) &&
-          !win->IsKindOf(CLASSINFO(wxDialog))
+      if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog)
 #if 0  // not in m_children anyway
           && (win != m_frameMenuBar) &&
              (win != m_frameToolBar) &&
@@ -318,6 +317,18 @@ void wxFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
 
 void wxFrame::AddChild( wxWindow *child )
 {
+  // wxFrame and wxDialog as children aren't placed into the parents
+  
+  if (child->IsKindOf(CLASSINFO(wxFrame)) || child->IsKindOf(CLASSINFO(wxDialog)))
+  {
+    m_children.Append( child );
+    
+    if ((child->m_x != -1) && (child->m_y != -1))
+      gtk_widget_set_uposition( child->m_widget, child->m_x, child->m_y );
+      
+    return;
+  }
+  
   if (m_addPrivateChild)
   {
     gtk_myfixed_put( GTK_MYFIXED(m_mainWindow), child->m_widget, child->m_x, child->m_y );
@@ -376,11 +387,11 @@ wxMenuBar *wxFrame::GetMenuBar(void)
   return m_frameMenuBar;
 };
 
-wxToolBar *wxFrame::CreateToolBar( int style, int WXUNUSED(orientation), int WXUNUSED(rowsOrColumns) )
+wxToolBar *wxFrame::CreateToolBar( long style , wxWindowID id, const wxString& name )
 {
   m_addPrivateChild = TRUE;
   
-  m_frameToolBar = new wxToolBar( this, -1, wxDefaultPosition, wxDefaultSize, style );
+  m_frameToolBar = new wxToolBar( this, id, wxDefaultPosition, wxDefaultSize, style, name );
   
   m_addPrivateChild = FALSE;
   
@@ -392,15 +403,16 @@ wxToolBar *wxFrame::GetToolBar(void)
   return m_frameToolBar;
 };
 
-bool wxFrame::CreateStatusBar( int number )
+wxStatusBar* wxFrame::CreateStatusBar( int number, long style, wxWindowID id, const wxString& name )
 {
   if (m_frameStatusBar)
   delete m_frameStatusBar;
 
-  m_frameStatusBar = new wxStatusBar( this, -1, wxPoint(0,0), wxSize(100,20) );
+  m_frameStatusBar = new wxStatusBar( this, id, wxPoint(0,0), wxSize(100,20), style, name );
 
   m_frameStatusBar->SetFieldsCount( number );
-  return TRUE;
+  
+  return m_frameStatusBar;
 };
 
 void wxFrame::SetStatusText( const wxString &text, int number )

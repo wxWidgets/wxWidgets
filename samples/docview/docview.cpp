@@ -244,7 +244,7 @@ MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
   editMenu = NULL;
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
     (void)wxMessageBox("DocView Demo\nAuthor: Julian Smart julian.smart@ukonline.co.uk\nUsage: docview.exe [-single]", "About DocView");
 }

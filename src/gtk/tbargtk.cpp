@@ -179,7 +179,7 @@ void wxToolBar::ClearTools(void)
 {
 };
 
-void wxToolBar::Layout(void)
+void wxToolBar::Realize(void)
 {
   m_x = 0;
   m_y = 0;

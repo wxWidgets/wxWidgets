@@ -89,18 +89,18 @@ MyFrame::MyFrame(wxFrame *frame, const wxString& title, const wxPoint& pos, cons
   canvas = NULL;
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
     Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     (void)wxMessageBox("PNG demo\nJulian Smart (c) 1998",
             "About PNG Demo", wxOK);
 }
 
-void MyFrame::OnLoadFile(wxCommandEvent& event)
+void MyFrame::OnLoadFile(wxCommandEvent& WXUNUSED(event))
 {
 	// Show file selector.
 	char *f = wxFileSelector("Open Image", NULL, NULL,"png",
@@ -136,7 +136,7 @@ MyCanvas::~MyCanvas(void)
 }
 
 // Define the repainting behaviour
-void MyCanvas::OnPaint(wxPaintEvent& event)
+void MyCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
   wxPaintDC dc(this);
   dc.SetPen(wxRED_PEN);

@@ -67,7 +67,6 @@ class wxDirCtrl: public wxTreeCtrl
     void OnExpandItem( const wxTreeEvent &event );
     void OnCollapseItem( const wxTreeEvent &event );
     void OnDeleteItem( const wxTreeEvent &event );
-    void OnMouse( wxMouseEvent &event );
 
   DECLARE_EVENT_TABLE()
 };

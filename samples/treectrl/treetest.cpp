@@ -163,12 +163,12 @@ MyFrame::~MyFrame(void)
 	delete wxGetApp().m_imageListNormal;
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
   Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "Tree test sample\nJulian Smart (c) 1997",
   	"About tree test", wxOK|wxCANCEL);
@@ -178,7 +178,7 @@ void MyFrame::OnAbout(wxCommandEvent& event)
 
 // MyTreeCtrl
 
-void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
+void MyTreeCtrl::OnBeginDrag(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -195,7 +195,7 @@ void MyTreeCtrl::OnBeginDrag(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnBeginRDrag(wxTreeEvent& event)
+void MyTreeCtrl::OnBeginRDrag(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -212,7 +212,7 @@ void MyTreeCtrl::OnBeginRDrag(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
+void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -229,7 +229,7 @@ void MyTreeCtrl::OnBeginLabelEdit(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
+void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -246,7 +246,7 @@ void MyTreeCtrl::OnEndLabelEdit(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnDeleteItem(wxTreeEvent& event)
+void MyTreeCtrl::OnDeleteItem(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -263,7 +263,7 @@ void MyTreeCtrl::OnDeleteItem(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnGetInfo(wxTreeEvent& event)
+void MyTreeCtrl::OnGetInfo(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -280,7 +280,7 @@ void MyTreeCtrl::OnGetInfo(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnSetInfo(wxTreeEvent& event)
+void MyTreeCtrl::OnSetInfo(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -297,7 +297,7 @@ void MyTreeCtrl::OnSetInfo(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnItemExpanded(wxTreeEvent& event)
+void MyTreeCtrl::OnItemExpanded(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -314,7 +314,7 @@ void MyTreeCtrl::OnItemExpanded(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnItemExpanding(wxTreeEvent& event)
+void MyTreeCtrl::OnItemExpanding(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -331,7 +331,7 @@ void MyTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnSelChanged(wxTreeEvent& event)
+void MyTreeCtrl::OnSelChanged(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -348,7 +348,7 @@ void MyTreeCtrl::OnSelChanged(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnSelChanging(wxTreeEvent& event)
+void MyTreeCtrl::OnSelChanging(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;
@@ -365,7 +365,7 @@ void MyTreeCtrl::OnSelChanging(wxTreeEvent& event)
 #endif
 }
 
-void MyTreeCtrl::OnKeyDown(wxTreeEvent& event)
+void MyTreeCtrl::OnKeyDown(wxTreeEvent& WXUNUSED(event) )
 {
 	if ( !wxGetApp().GetTopWindow() )
 		return;

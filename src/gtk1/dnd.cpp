@@ -46,7 +46,39 @@ void wxDropTarget::Drop( GdkEvent *event, int x, int y )
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 {
+  if (!widget) return;
+  
   gtk_widget_dnd_drop_set( widget, FALSE, NULL, 0, FALSE );
+};
+
+void wxDropTarget::RegisterWidget( GtkWidget *widget )
+{
+  wxString formats;
+  int valid = 0;
+  
+  for ( uint i = 0; i < GetFormatCount(); i++ )
+  {
+    wxDataFormat df = GetFormat( i );
+    switch (df) 
+    {
+      case wxDF_TEXT:
+	if (i > 0) formats += ";";
+        formats += "text/plain";
+	valid++;
+	break;
+      case wxDF_FILENAME:
+	if (i > 0) formats += ";";
+        formats += "url:any";
+	valid++;
+	break;
+      default:
+        break;
+    };
+  }
+  
+  char *str = WXSTRINGCAST formats;
+  
+  gtk_widget_dnd_drop_set( widget, TRUE, &str, valid, FALSE );
 };
 
 // ----------------------------------------------------------------------------
@@ -66,63 +98,115 @@ bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
   return TRUE;
 };
 
-void wxTextDropTarget::RegisterWidget( GtkWidget *widget )
+size_t wxTextDropTarget::GetFormatCount() const
 {
-  char *accepted_drop_types[] = { "text/plain" };
-  gtk_widget_dnd_drop_set( widget, TRUE, accepted_drop_types, 1, FALSE );
-};
+  return 1;
+}
+
+wxDataFormat wxTextDropTarget::GetFormat(size_t WXUNUSED(n)) const
+{
+  return wxDF_TEXT;
+}
+
+// ----------------------------------------------------------------------------
+// wxFileDropTarget
+// ----------------------------------------------------------------------------
+
+bool wxFileDropTarget::OnDropFiles( long x, long y, size_t nFiles, const char * const WXUNUSED(aszFiles)[] )
+{
+  printf( "Got %d dropped files.\n", (int)nFiles );
+  printf( "At x: %d, y: %d.\n", (int)x, (int)y );
+  return TRUE;
+}
+
+bool wxFileDropTarget::OnDrop(long x, long y, const void *WXUNUSED(pData) )
+{
+  char *str = "/this/is/a/path.txt";
+
+  return OnDropFiles(x, y, 1, &str ); 
+}
+
+size_t wxFileDropTarget::GetFormatCount() const
+{
+  return 1;
+}
+
+wxDataFormat wxFileDropTarget::GetFormat(size_t WXUNUSED(n)) const
+{
+  return wxDF_FILENAME;
+}
 
 //-------------------------------------------------------------------------
-// wxDragSource
+// wxDropSource
 //-------------------------------------------------------------------------
 
 //-----------------------------------------------------------------------------
 // drag request
 
-void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDragSource *drag )
+void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDataObject *data )
 {
-  printf( "OnDragRequest.\n" );
+  printf( "Data requested for dropping.\n" );
   
-  gtk_widget_dnd_data_set( widget, event, drag->m_data, drag->m_size );
+  uint size = data->GetDataSize();
+  char *ptr = new char[size];
+  data->GetDataHere( ptr );
+  
+  gtk_widget_dnd_data_set( widget, event, ptr, size );
+  
+  delete ptr;
 };
 
-wxDragSource::wxDragSource( wxWindow *win )
+wxDropSource::wxDropSource( wxWindow *win )
 {
   g_blockEventsOnDrag = TRUE;
-
+  
   m_window = win;
   m_widget = win->m_widget;
   if (win->m_wxwindow) m_widget = win->m_wxwindow;
- 
-  m_data = NULL;
-  m_size = 0;
   
+  m_data = NULL;  
+
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
   m_goaheadCursor = wxCursor( wxCURSOR_HAND );
 };
 
-wxDragSource::~wxDragSource(void)
+wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 {
+  g_blockEventsOnDrag = TRUE;
+  
+  m_window = win;
+  m_widget = win->m_widget;
+  if (win->m_wxwindow) m_widget = win->m_wxwindow;
+  
+  m_data = &data;
+
+  m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
+  m_goaheadCursor = wxCursor( wxCURSOR_HAND );
+};
+
+void wxDropSource::SetData( wxDataObject &data )
+{
+  m_data = &data;  
+};
+
+wxDropSource::~wxDropSource(void)
+{
+//  if (m_data) delete m_data;
+
   g_blockEventsOnDrag = FALSE;
 };
    
-void wxDragSource::SetData( char *data, long size )
+wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
-  m_size = size;
-  m_data = data;
-};
-
-void wxDragSource::Start( int x, int y )
-{
-  if (gdk_dnd.dnd_grabbed) return;
-  if (gdk_dnd.drag_really) return;
-  if (m_size == 0) return;
-  if (!m_data) return;
+  if (gdk_dnd.dnd_grabbed) return None;
+  if (gdk_dnd.drag_really) return None;
+  
+  if (!m_data) return None;
+  if (m_data->GetDataSize() == 0) return None;
   
   GdkWindowPrivate *wp = (GdkWindowPrivate*) m_widget->window;
   
   RegisterWindow();
-  ConnectWindow();
   
   gdk_dnd.drag_perhaps = TRUE;
 
@@ -159,49 +243,53 @@ void wxDragSource::Start( int x, int y )
   
   gdk_dnd.dnd_grabbed = TRUE;
   gdk_dnd.drag_really = 1;
+  
+  int x = 0;
+  int y = 0;
+  gdk_window_get_pointer( m_widget->window, &x, &y, NULL );
+  
   gdk_dnd_display_drag_cursor( x, y, FALSE, TRUE );
   
   while (gdk_dnd.drag_really || gdk_dnd.drag_perhaps) wxYield();
   
-  UnconnectWindow();
   UnregisterWindow();
-};
-
-void wxDragSource::ConnectWindow(void)
-{
-  gtk_signal_connect( GTK_OBJECT(m_widget), "drag_request_event",
-    GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)this );
-};
-
-void wxDragSource::UnconnectWindow(void)
-{
-  if (!m_widget) return;
   
-  gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
+  return Copy;
 };
 
-void wxDragSource::UnregisterWindow(void)
+void wxDropSource::RegisterWindow(void)
+{
+  if (!m_data) return;
+
+  wxString formats;
+    
+  wxDataFormat df = m_data->GetPreferredFormat();
+  
+    switch (df) 
+    {
+      case wxDF_TEXT: 
+        formats += "text/plain";
+	break;
+      case wxDF_FILENAME:
+        formats += "url:any";
+	break;
+      default:
+        break;
+    }
+  
+  char *str = WXSTRINGCAST formats;
+  
+  gtk_widget_dnd_drag_set( m_widget, TRUE, &str, 1 );
+
+  gtk_signal_connect( GTK_OBJECT(m_widget), "drag_request_event",
+    GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)m_data );
+};
+
+void wxDropSource::UnregisterWindow(void)
 {
   if (!m_widget) return;
   
   gtk_widget_dnd_drag_set( m_widget, FALSE, NULL, 0 );
-};
   
-//-------------------------------------------------------------------------
-// wxTextDragSource
-//-------------------------------------------------------------------------
-
-void wxTextDragSource::SetTextData( const wxString &text )
-{
-  m_tmp = text;
-  SetData( WXSTRINGCAST(m_tmp), m_tmp.Length()+1 );
+  gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)m_data );
 };
-
-void wxTextDragSource::RegisterWindow(void)
-{
-  if (!m_widget) return;
-  
-  char *accepted_drop_types[] = { "text/plain" };
-  gtk_widget_dnd_drag_set( m_widget, TRUE, accepted_drop_types, 1 );
-};
-

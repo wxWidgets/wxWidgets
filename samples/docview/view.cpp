@@ -44,7 +44,7 @@ END_EVENT_TABLE()
 
 // What to do when a view is created. Creates actual
 // windows for displaying the view.
-bool DrawingView::OnCreate(wxDocument *doc, long flags)
+bool DrawingView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
   if (!singleWindowMode)
   {
@@ -99,7 +99,7 @@ void DrawingView::OnDraw(wxDC *dc)
   }
 }
 
-void DrawingView::OnUpdate(wxView *sender, wxObject *hint)
+void DrawingView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint))
 {
   if (canvas)
     canvas->Refresh();
@@ -147,7 +147,7 @@ bool DrawingView::OnClose(bool deleteWindow)
   return TRUE;
 }
 
-void DrawingView::OnCut(wxCommandEvent& event)
+void DrawingView::OnCut(wxCommandEvent& WXUNUSED(event) )
 {
     DrawingDocument *doc = (DrawingDocument *)GetDocument();
     doc->GetCommandProcessor()->Submit(new DrawingCommand("Cut Last Segment", DOODLE_CUT, doc, NULL));
@@ -155,7 +155,7 @@ void DrawingView::OnCut(wxCommandEvent& event)
 
 IMPLEMENT_DYNAMIC_CLASS(TextEditView, wxView)
 
-bool TextEditView::OnCreate(wxDocument *doc, long flags)
+bool TextEditView::OnCreate(wxDocument *doc, long WXUNUSED(flags) )
 {
   frame = wxGetApp().CreateChildFrame(doc, this, FALSE);
 
@@ -178,11 +178,11 @@ bool TextEditView::OnCreate(wxDocument *doc, long flags)
 }
 
 // Handled by wxTextWindow
-void TextEditView::OnDraw(wxDC *dc)
+void TextEditView::OnDraw(wxDC *WXUNUSED(dc) )
 {
 }
 
-void TextEditView::OnUpdate(wxView *sender, wxObject *hint)
+void TextEditView::OnUpdate(wxView *WXUNUSED(sender), wxObject *WXUNUSED(hint) )
 {
 }
 
@@ -264,11 +264,13 @@ void MyCanvas::OnMouseEvent(wxMouseEvent& event)
       currentSegment = new DoodleSegment;
 
     DoodleLine *newLine = new DoodleLine;
-    newLine->x1 = xpos; newLine->y1 = ypos;
-    newLine->x2 = pt.x; newLine->y2 = pt.y;
+    newLine->x1 = (long)xpos; 
+    newLine->y1 = (long)ypos;
+    newLine->x2 = pt.x; 
+    newLine->y2 = pt.y;
     currentSegment->lines.Append(newLine);
     
-    dc.DrawLine(xpos, ypos, pt.x, pt.y);
+    dc.DrawLine( (long)xpos, (long)ypos, pt.x, pt.y);
   }
   xpos = pt.x;
   ypos = pt.y;

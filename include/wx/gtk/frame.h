@@ -64,13 +64,14 @@ public:
     // set minimal/maxmimal size for the frame
   virtual void SetSizeHints( int minW, int minH, int maxW, int maxH, int incW = -1 );
 
-  virtual bool CreateStatusBar( int number = 1 );
+  virtual wxStatusBar* CreateStatusBar(int number=1, long style = wxST_SIZEGRIP, wxWindowID id = 0,
+    const wxString& name = "statusBar");
   virtual wxStatusBar *GetStatusBar();
   virtual void SetStatusText( const wxString &text, int number = 0 );
   virtual void SetStatusWidths( int n, int *width );
 
-  virtual wxToolBar *CreateToolBar( int style = 0, 
-                                    int orientation = wxHORIZONTAL, int rowsOrColumns = 1 );
+  virtual wxToolBar* CreateToolBar( long style = wxNO_BORDER|wxTB_HORIZONTAL, wxWindowID id = -1, 
+                                    const wxString& name = wxToolBarNameStr);
   virtual wxToolBar *GetToolBar();
   
   virtual void SetMenuBar( wxMenuBar *menuBar );

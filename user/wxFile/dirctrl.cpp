@@ -16,6 +16,7 @@
 #include "dirctrl.h"
 #include "wx/gdicmn.h"
 #include "wx/utils.h"
+#include "wx/dnd.h"
 
 //-----------------------------------------------------------------------------
 // wxDirInfo
@@ -75,7 +76,6 @@ BEGIN_EVENT_TABLE(wxDirCtrl,wxTreeCtrl)
   EVT_TREE_ITEM_EXPANDED      (-1, wxDirCtrl::OnExpandItem)
   EVT_TREE_ITEM_COLLAPSED     (-1, wxDirCtrl::OnCollapseItem)
   EVT_TREE_DELETE_ITEM        (-1, wxDirCtrl::OnDeleteItem)
-  EVT_MOUSE_EVENTS            (wxDirCtrl::OnMouse)
 END_EVENT_TABLE()
 
 wxDirCtrl::wxDirCtrl(void)
@@ -95,11 +95,9 @@ wxDirCtrl::wxDirCtrl(wxWindow *parent, const wxWindowID id, const wxString &WXUN
   item.m_mask = wxTREE_MASK_TEXT | wxTREE_MASK_CHILDREN | wxTREE_MASK_DATA;
   item.m_text = "Sections";
   item.m_children = 1;
-/*
-  wxDirInfo *info = new wxDirInfo( dir );
-  item.m_data = (long)info;
-*/  
   m_rootId = InsertItem( 0, item );
+  
+  SetDropTarget( new wxFileDropTarget() );
 };
 
 void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
@@ -180,7 +178,8 @@ void wxDirCtrl::OnExpandItem( const wxTreeEvent &event )
 	  (path != "/proc") &&
 	  (path != "/mnt")
 	 )
-        slist.Add( path );  // ref counting in action !
+
+	slist.Add( path );  // ref counting in action !
     };
     path = wxFindNextFile();
   };
@@ -212,26 +211,3 @@ void wxDirCtrl::OnDeleteItem( const wxTreeEvent &event )
   wxDirInfo *info = (wxDirInfo *)event.m_item.m_data;
   if (info) delete info;
 };
-
-void wxDirCtrl::OnMouse( wxMouseEvent &event )
-{
-  event.Skip(TRUE);
-  
-  if (event.LeftDown())
-  {
-    m_dragX = event.GetX();
-    m_dragY = event.GetY();
-    return;
-  };
-  
-  if (event.Dragging())
-  {
-    if ((abs(m_dragX-event.GetX()) < 2) &&
-        (abs(m_dragY-event.GetY()) < 2)) return;
-	
-    wxTextDragSource drag( this );
-    drag.SetTextData( "Oh, what a drag." );
-    drag.Start( event.GetX(), event.GetY() );
-  };
-};
-

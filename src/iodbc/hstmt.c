@@ -189,7 +189,7 @@ RETCODE SQL_API	SQLFreeStmt (
 			UWORD	fOption )
 {
 	STMT_t FAR*	pstmt = (STMT_t FAR*)hstmt;
-	STMT_t FAR*	tpstmt;
+/*	STMT_t FAR*	tpstmt; */
 	DBC_t  FAR*	pdbc;
 
 	HPROC		hproc = SQL_NULL_HPROC;

@@ -17,7 +17,7 @@
 #include <wx/stream.h>
 #include <wx/zstream.h>
 #include <wx/utils.h>
-#include "zlib.h"
+#include "../zlib/zlib.h"   // don't change this, Robert
 
 #ifdef __BORLANDC__
 #pragma hdrstop

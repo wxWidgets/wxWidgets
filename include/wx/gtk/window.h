@@ -167,7 +167,10 @@ public:
 
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget *GetDropTarget() const;
-
+private:
+  virtual GtkWidget* GetDropTargetWidget(void);
+  
+public:
   virtual void SetScrollbar( int orient, int pos, int thumbVisible,
     int range, bool refresh = TRUE );
   virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
@@ -182,6 +185,7 @@ public:
   // update the UI state (called from OnIdle)
   void UpdateWindowUI();
 
+  
 public:         // cannot get private going yet
 
   void PreCreation( wxWindow *parent, wxWindowID id, const wxPoint &pos,

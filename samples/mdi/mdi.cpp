@@ -102,20 +102,20 @@ MyFrame::MyFrame(wxWindow *parent, const wxWindowID id, const wxString& title, c
     InitToolBar(GetToolBar());
 }
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
       Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
       (void)wxMessageBox("wxWindows 2.0 MDI Demo\nAuthor: Julian Smart (c) 1997\nUsage: mdi.exe", "About MDI Demo");
 }
 
-void MyFrame::OnNewWindow(wxCommandEvent& event)
+void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
 {
       // Make another frame, containing a canvas
-      MyChild *subframe = new MyChild(frame, "Canvas Frame", wxPoint(10, 10), wxSize(300, 300),
+      MyChild *subframe = new MyChild(frame, "Canvas Frame", wxPoint(4, 4), wxSize(100, 100),
                              wxDEFAULT_FRAME);
 
       char titleBuf[100];
@@ -241,12 +241,10 @@ bool MyFrame::OnClose(void)
   return TRUE;
 }
 
-void MyFrame::OnSize(wxSizeEvent& event)
+void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event) )
 {
     int w, h;
     GetClientSize(&w, &h);
-    int tw = 0;
-    int th = 0;
     
     textWindow->SetSize(0, 0, 200, h);
     GetClientWindow()->SetSize(200, 0, w - 200, h);
@@ -318,7 +316,6 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 #else
   int width = 16;
 #endif
-  int offX = 5;
   int currentX = 5;
 
   toolBar->AddTool(0, *bitmaps[0], wxNullBitmap, FALSE, currentX, -1, NULL, "New file");

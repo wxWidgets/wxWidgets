@@ -26,8 +26,6 @@ bool wxGauge::Create( wxWindow *parent, wxWindowID id,  int range,
 {
   m_needParent = TRUE;
   
-  wxSize newSize = size;
-  
   PreCreation( parent, id, pos, size, style, name );
   
   m_rangeMax = range;

@@ -13,6 +13,7 @@
 #endif
 
 #include "wx/mdi.h"
+#include "wx/dialog.h"
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
@@ -174,6 +175,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIChildFrame,wxPanel)
   
 BEGIN_EVENT_TABLE(wxMDIChildFrame, wxPanel)
   EVT_CLOSE(wxMDIChildFrame::OnCloseWindow)
+  EVT_SIZE(wxMDIChildFrame::OnSize)
 END_EVENT_TABLE()
 
 wxMDIChildFrame::wxMDIChildFrame(void)
@@ -223,6 +225,35 @@ void wxMDIChildFrame::OnCloseWindow( wxCloseEvent &event )
     }
 };
 
+void wxMDIChildFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
+{
+  if ( GetAutoLayout() )
+    Layout();
+  else {
+    // no child: go out !
+    if (!GetChildren()->First())
+      return;
+      
+    // do we have exactly one child?
+    wxWindow *child = NULL;
+    for(wxNode *node = GetChildren()->First(); node; node = node->Next())
+    {
+      wxWindow *win = (wxWindow *)node->Data();
+      if (!IS_KIND_OF(win,wxFrame) && !IS_KIND_OF(win,wxDialog))
+      {
+        if ( child )  // it's the second one: do nothing
+          return;
+
+        child = win;
+      };
+    };
+
+    // yes: set it's size to fill all the frame
+    int client_x, client_y;
+    GetClientSize(&client_x, &client_y);
+    child->SetSize( 1, 1, client_x-2, client_y);
+  }
+};
 bool wxMDIChildFrame::Destroy(void)
 {
   if (!wxPendingDelete.Member(this))

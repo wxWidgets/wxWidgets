@@ -157,7 +157,7 @@ MyFrame::MyFrame(wxFrame *frame, char *title, int x, int y, int w, int h):
   wxFrame(frame, -1, title, wxPoint(x, y), wxSize(w, h))
 {}
 
-void MyFrame::OnStartThread(wxCommandEvent& event)
+void MyFrame::OnStartThread(wxCommandEvent& WXUNUSED(event) )
 {
   MyThread *thread = new MyThread(this);
 
@@ -166,9 +166,9 @@ void MyFrame::OnStartThread(wxCommandEvent& event)
   m_threads.Add(thread);
 }
 
-void MyFrame::OnStopThread(wxCommandEvent& event)
+void MyFrame::OnStopThread(wxCommandEvent& WXUNUSED(event) )
 {
-  uint no_thrd = m_threads.Count()-1;
+  int no_thrd = m_threads.Count()-1;
 
   if (no_thrd < 0)
     return;
@@ -177,10 +177,10 @@ void MyFrame::OnStopThread(wxCommandEvent& event)
   m_threads.Remove(no_thrd);
 }
 
-void MyFrame::OnPauseThread(wxCommandEvent& event)
+void MyFrame::OnPauseThread(wxCommandEvent& WXUNUSED(event) )
 {}
 
-void MyFrame::OnQuit(wxCommandEvent& event)
+void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 {
   uint i;
   for (i=0;i<m_threads.Count();i++)
@@ -188,7 +188,7 @@ void MyFrame::OnQuit(wxCommandEvent& event)
   Close(TRUE);
 }
 
-void MyFrame::OnAbout(wxCommandEvent& event)
+void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
   wxMessageDialog dialog(this, "wxThread sample (based on minimal)\nJulian Smart and Guilhem Lavaux",
   	"About wxThread sample", wxYES_NO|wxCANCEL);
