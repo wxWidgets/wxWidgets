@@ -77,6 +77,10 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     m_mainWidget = (WXWindow) xwindow;
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
+    // Set background to None which will prevent X11 from clearing the
+    // background comletely.
+    XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
+
     XSetTransientForHint( xdisplay, xwindow, xparent );
 
     XWMHints wm_hints;

@@ -144,7 +144,7 @@ void wxApp::CleanUp()
     // wxDebugContext, too.
     if (wxDebugContext::CountObjectsLeft(TRUE) > 0)
     {
-        wxLogDebug("There were memory leaks.\n");
+        wxLogDebug("There were memory leaks.");
         wxDebugContext::Dump();
         wxDebugContext::PrintStatistics();
     }
@@ -368,6 +368,8 @@ void wxApp::ProcessXEvent(WXEvent* _event)
                 {
                     wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
                     wxTranslateKeyEvent(keyEvent, win, window, event);
+                    
+                    wxLogDebug( "OnKey from %s", win->GetName().c_str() );
         
                     // We didn't process wxEVT_KEY_DOWN, so send
                     // wxEVT_CHAR
@@ -464,9 +466,14 @@ void wxApp::ProcessXEvent(WXEvent* _event)
         {
             if (win)
             {
-                // Schedule update for later
                 win->GetUpdateRegion().Union( event->xexpose.x, event->xexpose.y,
                                               event->xexpose.width, event->xexpose.height);
+                                              
+                win->GetClearRegion().Union( event->xexpose.x, event->xexpose.y,
+                                             event->xexpose.width, event->xexpose.height);
+                                              
+                // if (event->xexpose.count == 0)
+                //    win->Update();
             }
 
             return;
@@ -492,6 +499,8 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             {
                 if (win && event->xfocus.detail != NotifyPointer)
                 {
+                    wxLogDebug( "FocusIn from %s", win->GetName().c_str() );
+                    
                     wxFocusEvent focusEvent(wxEVT_SET_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
                     win->GetEventHandler()->ProcessEvent(focusEvent);
@@ -502,6 +511,8 @@ void wxApp::ProcessXEvent(WXEvent* _event)
             {
                 if (win && event->xfocus.detail != NotifyPointer)
                 {
+                    wxLogDebug( "FocusOut from %s\n", win->GetName().c_str() );
+                    
                     wxFocusEvent focusEvent(wxEVT_KILL_FOCUS, win->GetId());
                     focusEvent.SetEventObject(win);
                     win->GetEventHandler()->ProcessEvent(focusEvent);

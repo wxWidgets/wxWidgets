@@ -111,7 +111,7 @@ public:
     WXDisplay *GetXDisplay() const;
     
     void SetLastClick(int button, long timestamp)
-    { m_lastButton = button; m_lastTS = timestamp; }
+        { m_lastButton = button; m_lastTS = timestamp; }
     
     int GetLastClickedButton() const { return m_lastButton; }
     long GetLastClickTime() const { return m_lastTS; }
@@ -125,6 +125,9 @@ public:
     
     // Clip to paint region?
     bool GetClipPaintRegion() { return m_clipPaintRegion; }
+    
+    // Return clear region
+    wxRegion &GetClearRegion() { return m_clearRegion; }
     
     // sets the fore/background colour for the given widget
     static void DoChangeForegroundColour(WXWindow widget, wxColour& foregroundColour);

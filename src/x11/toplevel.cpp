@@ -135,6 +135,10 @@ bool wxTopLevelWindowX11::Create(wxWindow *parent,
 
     wxAddWindowToTable( xwindow, (wxWindow*) this );
 
+    // Set background to None which will prevent X11 from clearing the
+    // background completely.
+    XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
+
     // Messes up window management
     //    XSetTransientForHint( xdisplay, xwindow, xparent );
 

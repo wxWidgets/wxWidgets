@@ -129,11 +129,9 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
 
     m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
     m_backgroundColour.CalcPixel( (WXColormap) cm ); 
-    m_hasBgCol = TRUE;
     
     m_foregroundColour = *wxBLACK;
     m_foregroundColour.CalcPixel( (WXColormap) cm ); 
-    
 
     Window parentWindow = (Window) parent->GetMainWindow();
 
@@ -149,31 +147,35 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (pos2.y == -1)
 	pos2.y = 100;
     
-    Window window = XCreateSimpleWindow( 
+    Window xwindow = XCreateSimpleWindow( 
         xdisplay, parentWindow,
         pos2.x, pos2.y, size2.x, size2.y, 0, 
         m_backgroundColour.GetPixel(),
         m_backgroundColour.GetPixel() );
         
-    m_mainWidget = (WXWindow) window;
+    m_mainWidget = (WXWindow) xwindow;
 
     // Select event types wanted
-    XSelectInput( wxGlobalDisplay(), window,
+    XSelectInput( xdisplay, xwindow,
         ExposureMask | KeyPressMask | KeyReleaseMask | ButtonPressMask | ButtonReleaseMask |
         ButtonMotionMask | EnterWindowMask | LeaveWindowMask | PointerMotionMask |
         KeymapStateMask | FocusChangeMask | ColormapChangeMask | StructureNotifyMask |
         PropertyChangeMask);
 
-    wxAddWindowToTable(window, (wxWindow*) this);
+    wxAddWindowToTable( xwindow, (wxWindow*) this );
 
     // Is a subwindow, so map immediately
     m_isShown = TRUE;
-    XMapWindow(wxGlobalDisplay(), window);
+    XMapWindow( xdisplay, xwindow );
 
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
     SetCursor(*wxSTANDARD_CURSOR);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+    
+    // Set background to None which will prevent X11 from clearing the
+    // background comletely.
+    XSetWindowBackgroundPixmap( xdisplay, xwindow, None );
 
     // Don't call this, it can have nasty repercussions for composite controls,
     // for example
@@ -226,11 +228,11 @@ void wxWindowX11::SetFocus()
     if (wxWindowIsVisible(xwindow))
     {
         XSetInputFocus( wxGlobalDisplay(), xwindow, RevertToParent, CurrentTime );
-	m_needsInputFocus = FALSE;
+        m_needsInputFocus = FALSE;
     }
     else
     {
-	m_needsInputFocus = TRUE;
+        m_needsInputFocus = TRUE;
     }
 }
 
@@ -994,6 +996,7 @@ void wxWindowX11::Update()
 {
     if (!m_updateRegion.IsEmpty())
     {
+        // Actually send erase and paint events.
         X11SendPaintEvents();
     }
 }
@@ -1010,7 +1013,7 @@ void wxWindowX11::X11SendPaintEvents()
 {
     m_clipPaintRegion = TRUE;
 
-    //    if (!m_clearRegion.IsEmpty())
+    if (!m_clearRegion.IsEmpty())
     {
         wxWindowDC dc( (wxWindow*)this );
         dc.SetClippingRegion( m_clearRegion );
@@ -1020,11 +1023,17 @@ void wxWindowX11::X11SendPaintEvents()
     
         if (!GetEventHandler()->ProcessEvent(erase_event))
         {
+            printf( "Hallo!\n" );
+            Window xwindow = (Window) GetMainWindow();
+            Display *xdisplay = wxGlobalDisplay();
+            GC xgc = XCreateGC( xdisplay, xwindow, 0, NULL );
+            XSetFillStyle( xdisplay, xgc, FillSolid );
+            XSetForeground( xdisplay, xgc, m_backgroundColour.GetPixel() );
             wxRegionIterator upd( m_clearRegion );
             while (upd)
             {
-                XClearArea( wxGlobalDisplay(), (Window) m_mainWidget, 
-                            upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight(), False );
+                XFillRectangle( xdisplay, xwindow, xgc,
+                                upd.GetX(), upd.GetY(), upd.GetWidth(), upd.GetHeight() );
                 upd ++;
             }
         }
@@ -1315,16 +1324,16 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
 {
     wxWindowBase::SetBackgroundColour(col);
 
-    if (!GetMainWindow())
-        return FALSE;
-
     Display *xdisplay = (Display*) wxGlobalDisplay();
     int xscreen = DefaultScreen( xdisplay );
     Colormap cm = DefaultColormap( xdisplay, xscreen );
 
-    wxColour colour( col );
-    colour.CalcPixel( (WXColormap) cm );
+    m_backgroundColour.CalcPixel( (WXColormap) cm );
     
+    if (!GetMainWindow())
+        return FALSE;
+
+/*
     XSetWindowAttributes attrib;
     attrib.background_pixel = colour.GetPixel();
 
@@ -1332,6 +1341,7 @@ bool wxWindowX11::SetBackgroundColour(const wxColour& col)
         (Window) GetMainWindow(),
         CWBackPixel,
         & attrib);
+*/
 
     return TRUE;
 }
