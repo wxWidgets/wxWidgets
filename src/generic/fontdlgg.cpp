@@ -356,7 +356,7 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
   m_previewer->Refresh();
 }
 
-wxChar *wxFontWeightIntToString(int weight)
+const wxChar *wxFontWeightIntToString(int weight)
 {
   switch (weight)
   {
@@ -370,7 +370,7 @@ wxChar *wxFontWeightIntToString(int weight)
   }
 }
 
-wxChar *wxFontStyleIntToString(int style)
+const wxChar *wxFontStyleIntToString(int style)
 {
   switch (style)
   {
@@ -384,7 +384,7 @@ wxChar *wxFontStyleIntToString(int style)
   }
 }
 
-wxChar *wxFontFamilyIntToString(int family)
+const wxChar *wxFontFamilyIntToString(int family)
 {
   switch (family)
   {
