@@ -47,7 +47,8 @@
 
 // allocating extra space for each string consumes more memory but speeds up
 // the concatenation operations (nLen is the current string's length)
-#define EXTRA_ALLOC       16
+// NB: EXTRA_ALLOC must be >= 0!
+#define EXTRA_ALLOC       (19 - nLen % 16)
 
 // ---------------------------------------------------------------------------
 // static class variables definition
