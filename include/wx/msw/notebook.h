@@ -49,9 +49,7 @@ private :
 } ;
 
 
-WX_DECLARE_LIST(wxNotebookPageInfo, wxNotebookPageInfoList);
-// WX_DECLARE_EXPORTED_LIST(wxNotebookPageInfo, wxNotebookPageInfoList );
-// WX_DECLARE_LIST_3(wxNotebookPageInfo, wxNotebookPageInfo, wxNotebookPageInfoList, wxNotebookPageInfoListNode, class WXDLLEXPORT);
+WX_DECLARE_EXPORTED_LIST(wxNotebookPageInfo, wxNotebookPageInfoList );
 
 class WXDLLEXPORT wxNotebook : public wxNotebookBase
 {
