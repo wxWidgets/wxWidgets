@@ -37,34 +37,34 @@ wxDataInputStream::~wxDataInputStream()
 {
 }
 
-unsigned long wxDataInputStream::Read32()
+wxUint32 wxDataInputStream::Read32()
 {
   char buf[4];
 
   Read(buf, 4);
 
-  return (unsigned long)buf[0] |
-         ((unsigned long)buf[1] << 8) |
-         ((unsigned long)buf[2] << 16) |
-         ((unsigned long)buf[3] << 24);
+  return (wxUint32)buf[0] |
+         ((wxUint32)buf[1] << 8) |
+         ((wxUint32)buf[2] << 16) |
+         ((wxUint32)buf[3] << 24);
 }
 
-unsigned short wxDataInputStream::Read16()
+wxUint16 wxDataInputStream::Read16()
 {
   char buf[2];
 
   Read(buf, 2);
 
-  return (unsigned short)buf[0] |
-         ((unsigned short)buf[1] << 8);
+  return (wxUint16)buf[0] |
+         ((wxUint16)buf[1] << 8);
 }
 
-unsigned char wxDataInputStream::Read8()
+wxUint8 wxDataInputStream::Read8()
 {
-  char buf;
+  wxUint8 buf;
 
-  Read(&buf, 1);
-  return (unsigned char)buf;
+  Read((char *)&buf, 1);
+  return (wxUint8)buf;
 }
 
 // Must be at global scope for VC++ 5
@@ -144,7 +144,7 @@ wxDataOutputStream::~wxDataOutputStream()
 {
 }
 
-void wxDataOutputStream::Write32(unsigned long i)
+void wxDataOutputStream::Write32(wxUint32 i)
 {
   char buf[4];
 
@@ -155,7 +155,7 @@ void wxDataOutputStream::Write32(unsigned long i)
   Write(buf, 4);
 }
 
-void wxDataOutputStream::Write16(unsigned short i)
+void wxDataOutputStream::Write16(wxUint16 i)
 {
   char buf[2];
 
@@ -164,7 +164,7 @@ void wxDataOutputStream::Write16(unsigned short i)
   Write(buf, 2);
 }
 
-void wxDataOutputStream::Write8(unsigned char i)
+void wxDataOutputStream::Write8(wxUint8 i)
 {
   Write(&i, 1);
 }
