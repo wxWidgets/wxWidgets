@@ -1140,6 +1140,16 @@ protected:
     // at all.
     void SetBestSize(const wxSize& size);
 
+    // set the initial window size if none is given (i.e. at least one of the
+    // components of the size passed to ctor/Create() is -1)
+    //
+    // normally just calls SetBestSize() for controls, but can be overridden
+    // not to do it for the controls which have to do some additional
+    // initialization (e.g. add strings to list box) before their best size
+    // can be accurately calculated
+    virtual void SetInitialBestSize(const wxSize& WXUNUSED(size)) {}
+
+
     // more pure virtual functions
     // ---------------------------
 

@@ -683,16 +683,8 @@ void wxWindowMac::MacPostControlCreate(const wxPoint& pos, const wxSize& size)
 
     wxSize new_size = size ;
     if (!m_macIsUserPane)
-    {    
-        wxSize best_size( DoGetBestSize() );
-        
-        if (size.x == -1) {
-            new_size.x = best_size.x;
-        }
-        if (size.y == -1) {
-            new_size.y = best_size.y;
-        }
-        SetSize( pos.x, pos.y , new_size.x, new_size.y,wxSIZE_USE_EXISTING );
+    {
+        SetInitialBestSize(size);
     }
 
     SetCursor( *wxSTANDARD_CURSOR ) ;

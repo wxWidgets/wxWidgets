@@ -311,6 +311,8 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
         m_choice->DoAppend( choices[ i ] );
     }
 
+    SetBestSize(csize);   // Needed because it is a wxControlWithItems
+
     return TRUE;
 }
 

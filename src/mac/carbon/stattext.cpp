@@ -92,7 +92,10 @@ void wxStaticText::SetLabel(const wxString& st )
 		&ref );
 
     if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+    {
         SetSize( GetBestSize() ) ;
+        SetSizeHints(GetSize());
+    }
 
     Update() ;
 }
@@ -104,7 +107,10 @@ bool wxStaticText::SetFont(const wxFont& font)
 	if ( ret )
 	{
 	    if ( !(GetWindowStyle() & wxST_NO_AUTORESIZE) )
+            {
 	        SetSize( GetBestSize() );
+                SetSizeHints(GetSize());
+            }
 	}
 
     return ret;

@@ -246,6 +246,8 @@ bool wxListBox::Create(wxWindow *parent, wxWindowID id,
         Append( choices[i] ) ;
     }
 
+    SetBestSize(size);   // Needed because it is a wxControlWithItems
+    
     return TRUE;
 }
 
