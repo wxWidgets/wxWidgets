@@ -37,8 +37,11 @@
 
         next if $wxGeneric{$file} =~ /\b16\b/;
 
+        my $isOleObj = $wxMSW{$file} =~ /\bO\b/;
         $file =~ s/cp?p?$/obj/;
-        $project{"WXMSWOBJS"} .= '$(MSWDIR)\\' . $file . " "
+        $project{"WXMSWOBJS"} .= '$(MSWDIR)\\';
+        $project{"WXMSWOBJS"} .= 'ole\\' if $isOleObj;
+        $project{"WXMSWOBJS"} .= $file . " "
     }
 #$}
 
