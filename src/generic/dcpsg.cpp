@@ -1297,9 +1297,9 @@ static void InitializePangoContext(PangoContext *context)
 #else
     // FIXME: assuming LTR is incorrect!
     pango_context_set_base_dir(context, PANGO_DIRECTION_LTR);
-    wxString lang = wxLocale::GetCanonicalName();
+    wxString lang = wxGetLocale()->GetCanonicalName();
     pango_context_set_language(context,
-                               pango_language_from_string(lang::ToAscii()));
+                               pango_language_from_string(lang.ToAscii()));
 #endif
 }
 #endif
