@@ -46,9 +46,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,wxc=wxc):
-        if self.thisown == 1 :
-            wxc.delete_wxPyApp(self)
+    def __del__(self, delfunc=wxc.delete_wxPyApp):
+        if self.thisown == 1:
+            delfunc(self)
     def _setCallbackInfo(self, *_args, **_kwargs):
         val = apply(wxc.wxPyApp__setCallbackInfo,(self,) + _args, _kwargs)
         return val
@@ -163,7 +163,6 @@ _wxSetDictionary = wxc._wxSetDictionary
 
 def wxGetApp(*_args, **_kwargs):
     val = apply(wxc.wxGetApp,_args,_kwargs)
-    if val: val = wxPyAppPtr(val)
     return val
 
 wxApp_CleanUp = wxc.wxApp_CleanUp
@@ -1077,6 +1076,12 @@ def EVT_WINDOW_CREATE(win, func):
 
 def EVT_WINDOW_DESTROY(win, func):
     win.Connect(-1, -1, wxEVT_DESTROY, func)
+
+def EVT_WINDOW_CREATE_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_CREATE, func)
+
+def EVT_WINDOW_DESTROY_ID(win, id, func):
+    win.Connect(id, -1, wxEVT_DESTROY, func)
 
 def EVT_SET_CURSOR(win, func):
     win.Connect(-1, -1, wxEVT_SET_CURSOR, func)

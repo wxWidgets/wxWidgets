@@ -186,9 +186,9 @@ class wxListItemPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,controls2c=controls2c):
-        if self.thisown == 1 :
-            controls2c.delete_wxListItem(self)
+    def __del__(self, delfunc=controls2c.delete_wxListItem):
+        if self.thisown == 1:
+            delfunc(self)
     def Clear(self, *_args, **_kwargs):
         val = apply(controls2c.wxListItem_Clear,(self,) + _args, _kwargs)
         return val
@@ -670,7 +670,7 @@ class wxListCtrlPtr(wxControlPtr):
         '''get the currently focused item or -1 if none'''
         return self.GetNextItem(-1, wxLIST_NEXT_ALL, wxLIST_STATE_FOCUSED)
 
-    def GetFirstSelected(self, item):
+    def GetFirstSelected(self, *args):
         '''return first selected item, or -1 when none'''
         return self.GetNextSelected(-1)
 
@@ -817,9 +817,9 @@ class wxTreeItemIdPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,controls2c=controls2c):
-        if self.thisown == 1 :
-            controls2c.delete_wxTreeItemId(self)
+    def __del__(self, delfunc=controls2c.delete_wxTreeItemId):
+        if self.thisown == 1:
+            delfunc(self)
     def IsOk(self, *_args, **_kwargs):
         val = apply(controls2c.wxTreeItemId_IsOk,(self,) + _args, _kwargs)
         return val

@@ -98,9 +98,9 @@ class wxCaretPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxCaret(self)
+    def __del__(self, delfunc=misc2c.delete_wxCaret):
+        if self.thisown == 1:
+            delfunc(self)
     def IsOk(self, *_args, **_kwargs):
         val = apply(misc2c.wxCaret_IsOk,(self,) + _args, _kwargs)
         return val
@@ -156,9 +156,9 @@ class wxBusyCursorPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxBusyCursor(self)
+    def __del__(self, delfunc=misc2c.delete_wxBusyCursor):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxBusyCursor instance at %s>" % (self.this,)
 class wxBusyCursor(wxBusyCursorPtr):
@@ -173,9 +173,9 @@ class wxWindowDisablerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxWindowDisabler(self)
+    def __del__(self, delfunc=misc2c.delete_wxWindowDisabler):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxWindowDisabler instance at %s>" % (self.this,)
 class wxWindowDisabler(wxWindowDisablerPtr):
@@ -190,9 +190,9 @@ class wxMutexGuiLockerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxMutexGuiLocker(self)
+    def __del__(self, delfunc=misc2c.delete_wxMutexGuiLocker):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxMutexGuiLocker instance at %s>" % (self.this,)
 class wxMutexGuiLocker(wxMutexGuiLockerPtr):
@@ -207,9 +207,9 @@ class wxTipProviderPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxTipProvider(self)
+    def __del__(self, delfunc=misc2c.delete_wxTipProvider):
+        if self.thisown == 1:
+            delfunc(self)
     def GetTip(self, *_args, **_kwargs):
         val = apply(misc2c.wxTipProvider_GetTip,(self,) + _args, _kwargs)
         return val
@@ -250,17 +250,17 @@ class wxDragImagePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxDragImage(self)
+    def __del__(self, delfunc=misc2c.delete_wxDragImage):
+        if self.thisown == 1:
+            delfunc(self)
     def SetBackingBitmap(self, *_args, **_kwargs):
         val = apply(misc2c.wxDragImage_SetBackingBitmap,(self,) + _args, _kwargs)
         return val
     def BeginDrag(self, *_args, **_kwargs):
         val = apply(misc2c.wxDragImage_BeginDrag,(self,) + _args, _kwargs)
         return val
-    def BeginDrag2(self, *_args, **_kwargs):
-        val = apply(misc2c.wxDragImage_BeginDrag2,(self,) + _args, _kwargs)
+    def BeginDragBounded(self, *_args, **_kwargs):
+        val = apply(misc2c.wxDragImage_BeginDragBounded,(self,) + _args, _kwargs)
         return val
     def EndDrag(self, *_args, **_kwargs):
         val = apply(misc2c.wxDragImage_EndDrag,(self,) + _args, _kwargs)
@@ -283,6 +283,7 @@ class wxDragImagePtr(wxObjectPtr):
         return val
     def __repr__(self):
         return "<C wxDragImage instance at %s>" % (self.this,)
+    BeginDrag2 = BeginDragBounded
 class wxDragImage(wxDragImagePtr):
     def __init__(self,*_args,**_kwargs):
         self.this = apply(misc2c.new_wxDragImage,_args,_kwargs)
@@ -315,9 +316,9 @@ class wxPyTimerPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxPyTimer(self)
+    def __del__(self, delfunc=misc2c.delete_wxPyTimer):
+        if self.thisown == 1:
+            delfunc(self)
     def GetInterval(self, *_args, **_kwargs):
         val = apply(misc2c.wxPyTimer_GetInterval,(self,) + _args, _kwargs)
         return val
@@ -350,9 +351,9 @@ class wxStopWatchPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxStopWatch(self)
+    def __del__(self, delfunc=misc2c.delete_wxStopWatch):
+        if self.thisown == 1:
+            delfunc(self)
     def Start(self, *_args, **_kwargs):
         val = apply(misc2c.wxStopWatch_Start,(self,) + _args, _kwargs)
         return val
@@ -504,9 +505,9 @@ class wxLogNullPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxLogNull(self)
+    def __del__(self, delfunc=misc2c.delete_wxLogNull):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxLogNull instance at %s>" % (self.this,)
 class wxLogNull(wxLogNullPtr):
@@ -631,9 +632,9 @@ class wxJoystickPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxJoystick(self)
+    def __del__(self, delfunc=misc2c.delete_wxJoystick):
+        if self.thisown == 1:
+            delfunc(self)
     def GetPosition(self, *_args, **_kwargs):
         val = apply(misc2c.wxJoystick_GetPosition,(self,) + _args, _kwargs)
         if val: val = wxPointPtr(val) ; val.thisown = 1
@@ -775,9 +776,9 @@ class wxWavePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxWave(self)
+    def __del__(self, delfunc=misc2c.delete_wxWave):
+        if self.thisown == 1:
+            delfunc(self)
     def IsOk(self, *_args, **_kwargs):
         val = apply(misc2c.wxWave_IsOk,(self,) + _args, _kwargs)
         return val
@@ -895,9 +896,9 @@ class wxFileTypePtr :
     def Unassociate(self, *_args, **_kwargs):
         val = apply(misc2c.wxFileType_Unassociate,(self,) + _args, _kwargs)
         return val
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxFileType(self)
+    def __del__(self, delfunc=misc2c.delete_wxFileType):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxFileType instance at %s>" % (self.this,)
 class wxFileType(wxFileTypePtr):
@@ -945,9 +946,9 @@ class wxMimeTypesManagerPtr :
     def Unassociate(self, *_args, **_kwargs):
         val = apply(misc2c.wxMimeTypesManager_Unassociate,(self,) + _args, _kwargs)
         return val
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxMimeTypesManager(self)
+    def __del__(self, delfunc=misc2c.delete_wxMimeTypesManager):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxMimeTypesManager instance at %s>" % (self.this,)
 class wxMimeTypesManager(wxMimeTypesManagerPtr):
@@ -980,9 +981,9 @@ class wxFileHistoryPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxFileHistory(self)
+    def __del__(self, delfunc=misc2c.delete_wxFileHistory):
+        if self.thisown == 1:
+            delfunc(self)
     def AddFileToHistory(self, *_args, **_kwargs):
         val = apply(misc2c.wxFileHistory_AddFileToHistory,(self,) + _args, _kwargs)
         return val
@@ -1091,9 +1092,9 @@ class wxSingleInstanceCheckerPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,misc2c=misc2c):
-        if self.thisown == 1 :
-            misc2c.delete_wxSingleInstanceChecker(self)
+    def __del__(self, delfunc=misc2c.delete_wxSingleInstanceChecker):
+        if self.thisown == 1:
+            delfunc(self)
     def Create(self, *_args, **_kwargs):
         val = apply(misc2c.wxSingleInstanceChecker_Create,(self,) + _args, _kwargs)
         return val

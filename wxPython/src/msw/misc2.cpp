@@ -3884,8 +3884,8 @@ static PyObject *_wrap_wxDragImage_BeginDrag(PyObject *self, PyObject *args, PyO
     return _resultobj;
 }
 
-#define wxDragImage_BeginDrag2(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->BeginDrag(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxDragImage_BeginDrag2(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxDragImage_BeginDragBounded(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->BeginDrag(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxDragImage_BeginDragBounded(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     bool  _result;
     wxGenericDragImage * _arg0;
@@ -3897,15 +3897,15 @@ static PyObject *_wrap_wxDragImage_BeginDrag2(PyObject *self, PyObject *args, Py
     PyObject * _obj1 = 0;
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
-    char *_kwnames[] = { "self","hotspot","window","fullScreenRect", NULL };
+    char *_kwnames[] = { "self","hotspot","window","boundingWindow", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxDragImage_BeginDrag2",_kwnames,&_argo0,&_obj1,&_argo2,&_argo3)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:wxDragImage_BeginDragBounded",_kwnames,&_argo0,&_obj1,&_argo2,&_argo3)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxGenericDragImage_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDragImage_BeginDrag2. Expected _wxGenericDragImage_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxDragImage_BeginDragBounded. Expected _wxGenericDragImage_p.");
         return NULL;
         }
     }
@@ -3917,20 +3917,20 @@ static PyObject *_wrap_wxDragImage_BeginDrag2(PyObject *self, PyObject *args, Py
     if (_argo2) {
         if (_argo2 == Py_None) { _arg2 = NULL; }
         else if (SWIG_GetPtrObj(_argo2,(void **) &_arg2,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDragImage_BeginDrag2. Expected _wxWindow_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxDragImage_BeginDragBounded. Expected _wxWindow_p.");
         return NULL;
         }
     }
     if (_argo3) {
         if (_argo3 == Py_None) { _arg3 = NULL; }
         else if (SWIG_GetPtrObj(_argo3,(void **) &_arg3,"_wxWindow_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxDragImage_BeginDrag2. Expected _wxWindow_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 4 of wxDragImage_BeginDragBounded. Expected _wxWindow_p.");
         return NULL;
         }
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (bool )wxDragImage_BeginDrag2(_arg0,*_arg1,_arg2,_arg3);
+    _result = (bool )wxDragImage_BeginDragBounded(_arg0,*_arg1,_arg2,_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -11333,7 +11333,7 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxDragImage_Show", (PyCFunction) _wrap_wxDragImage_Show, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_Move", (PyCFunction) _wrap_wxDragImage_Move, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_EndDrag", (PyCFunction) _wrap_wxDragImage_EndDrag, METH_VARARGS | METH_KEYWORDS },
-	 { "wxDragImage_BeginDrag2", (PyCFunction) _wrap_wxDragImage_BeginDrag2, METH_VARARGS | METH_KEYWORDS },
+	 { "wxDragImage_BeginDragBounded", (PyCFunction) _wrap_wxDragImage_BeginDragBounded, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_BeginDrag", (PyCFunction) _wrap_wxDragImage_BeginDrag, METH_VARARGS | METH_KEYWORDS },
 	 { "wxDragImage_SetBackingBitmap", (PyCFunction) _wrap_wxDragImage_SetBackingBitmap, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxDragImage", (PyCFunction) _wrap_delete_wxDragImage, METH_VARARGS | METH_KEYWORDS },

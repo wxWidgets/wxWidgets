@@ -23,9 +23,9 @@ class wxSizePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxSize(self)
+    def __del__(self, delfunc=miscc.delete_wxSize):
+        if self.thisown == 1:
+            delfunc(self)
     def Set(self, *_args, **_kwargs):
         val = apply(miscc.wxSize_Set,(self,) + _args, _kwargs)
         return val
@@ -108,9 +108,9 @@ class wxRealPointPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxRealPoint(self)
+    def __del__(self, delfunc=miscc.delete_wxRealPoint):
+        if self.thisown == 1:
+            delfunc(self)
     def Set(self, *_args, **_kwargs):
         val = apply(miscc.wxRealPoint_Set,(self,) + _args, _kwargs)
         return val
@@ -173,9 +173,9 @@ class wxPointPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxPoint(self)
+    def __del__(self, delfunc=miscc.delete_wxPoint):
+        if self.thisown == 1:
+            delfunc(self)
     def Set(self, *_args, **_kwargs):
         val = apply(miscc.wxPoint_Set,(self,) + _args, _kwargs)
         return val
@@ -238,9 +238,9 @@ class wxRectPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxRect(self)
+    def __del__(self, delfunc=miscc.delete_wxRect):
+        if self.thisown == 1:
+            delfunc(self)
     def GetX(self, *_args, **_kwargs):
         val = apply(miscc.wxRect_GetX,(self,) + _args, _kwargs)
         return val
@@ -663,9 +663,9 @@ class wxAcceleratorEntryPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxAcceleratorEntry(self)
+    def __del__(self, delfunc=miscc.delete_wxAcceleratorEntry):
+        if self.thisown == 1:
+            delfunc(self)
     def Set(self, *_args, **_kwargs):
         val = apply(miscc.wxAcceleratorEntry_Set,(self,) + _args, _kwargs)
         return val
@@ -692,9 +692,9 @@ class wxAcceleratorTablePtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxAcceleratorTable(self)
+    def __del__(self, delfunc=miscc.delete_wxAcceleratorTable):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxAcceleratorTable instance at %s>" % (self.this,)
 class wxAcceleratorTable(wxAcceleratorTablePtr):
@@ -709,9 +709,9 @@ class wxBusyInfoPtr(wxObjectPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,miscc=miscc):
-        if self.thisown == 1 :
-            miscc.delete_wxBusyInfo(self)
+    def __del__(self, delfunc=miscc.delete_wxBusyInfo):
+        if self.thisown == 1:
+            delfunc(self)
     def __repr__(self):
         return "<C wxBusyInfo instance at %s>" % (self.this,)
 class wxBusyInfo(wxBusyInfoPtr):

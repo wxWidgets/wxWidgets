@@ -205,15 +205,17 @@ void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
 class wxPyDropSource : public wxDropSource {
 public:
 #ifdef __WXMSW__
-    wxPyDropSource(wxWindow *win = NULL,
-                   const wxCursor &cursorCopy = wxNullCursor,
-                   const wxCursor &cursorMove = wxNullCursor,
-                   const wxCursor &cursorStop = wxNullCursor)
-        : wxDropSource(win, cursorCopy, cursorMove, cursorStop) {}
+     wxPyDropSource(wxWindow *win = NULL,
+                    const wxCursor &copy = wxNullCursor,
+                    const wxCursor &move = wxNullCursor,
+                    const wxCursor &none = wxNullCursor)
+         : wxDropSource(win, copy, move, none) {}
 #else
     wxPyDropSource(wxWindow *win = NULL,
-                   const wxIcon &go = wxNullIcon)
-        : wxDropSource(win, go) {}
+                   const wxIcon& copy = wxNullIcon,
+                   const wxIcon& move = wxNullIcon,
+                   const wxIcon& none = wxNullIcon)
+        : wxDropSource(win, copy, move, none) {}
 #endif
     ~wxPyDropSource() { }
 
@@ -2505,7 +2507,7 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
     PyObject * _argo1 = 0;
     PyObject * _argo2 = 0;
     PyObject * _argo3 = 0;
-    char *_kwnames[] = { "win","cursorCopy","cursorMove","cursorStop", NULL };
+    char *_kwnames[] = { "win","copy","move","none", NULL };
     char _ptemp[128];
 
     self = self;

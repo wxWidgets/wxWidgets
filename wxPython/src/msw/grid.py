@@ -871,9 +871,9 @@ class wxGridTableMessagePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gridc=gridc):
-        if self.thisown == 1 :
-            gridc.delete_wxGridTableMessage(self)
+    def __del__(self, delfunc=gridc.delete_wxGridTableMessage):
+        if self.thisown == 1:
+            delfunc(self)
     def SetTableObject(self, *_args, **_kwargs):
         val = apply(gridc.wxGridTableMessage_SetTableObject,(self,) + _args, _kwargs)
         return val
@@ -912,9 +912,9 @@ class wxGridCellCoordsPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self,gridc=gridc):
-        if self.thisown == 1 :
-            gridc.delete_wxGridCellCoords(self)
+    def __del__(self, delfunc=gridc.delete_wxGridCellCoords):
+        if self.thisown == 1:
+            delfunc(self)
     def GetRow(self, *_args, **_kwargs):
         val = apply(gridc.wxGridCellCoords_GetRow,(self,) + _args, _kwargs)
         return val
