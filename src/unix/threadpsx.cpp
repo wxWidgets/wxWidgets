@@ -508,12 +508,14 @@ void wxThread::Sleep(unsigned long milliseconds)
 // creating thread
 // -----------------------------------------------------------------------------
 
-wxThread::wxThread()
+wxThread::wxThread(wxThreadKind kind)
 {
     // add this thread to the global list of all threads
     gs_allThreads.Add(this);
 
     p_internal = new wxThreadInternal();
+
+    m_isDetached = kind == wxTHREAD_DETACHED;
 }
 
 wxThreadError wxThread::Create()
@@ -636,7 +638,7 @@ unsigned int wxThread::GetPriority() const
     return p_internal->GetPriority();
 }
 
-unsigned long wxThread::GetID() const
+unsigned long wxThread::GetId() const
 {
     return (unsigned long)p_internal->GetId();
 }
@@ -722,10 +724,8 @@ wxThreadError wxThread::Delete(ExitCode *rc)
             // wait until the thread stops
             p_internal->Wait();
     }
-    //GL: As we must auto-destroy, the destruction must happen here.
-    delete this;
 
-    return NULL;
+    return wxTHREAD_NO_ERROR;
 }
 
 wxThreadError wxThread::Kill()
