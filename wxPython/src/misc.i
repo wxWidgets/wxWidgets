@@ -141,6 +141,8 @@ public:
     void SetTop(int top);
     void SetBottom(int bottom);
 
+    void Inflate(int dx, int dy);
+    bool Inside(int cx, int cy);
 
     int x, y, width, height;
 
@@ -153,7 +155,18 @@ public:
             PyTuple_SET_ITEM(tup, 3, PyInt_FromLong(self->height));
             return tup;
         }
+
+        wxRect* __add__(const wxRect* rect) {
+            if (! rect) return self;
+            return &(*self + *rect);
+        }
+
+        int __cmp__(const wxRect* rect) {
+            if (! rect) return 0;
+            return *self == *rect;
+        }
     }
+
     %pragma(python) addtoclass = "def __str__(self): return str(self.asTuple())"
     %pragma(python) addtoclass = "def __repr__(self): return str(self.asTuple())"
     %pragma(python) addtoclass = "

@@ -401,5 +401,78 @@ bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup 
 
 
 //----------------------------------------------------------------------
+
+%{
+#include <wx/generic/dragimgg.h>
+static wxPoint wxPyNullPoint;
+%}
+
+%name (wxDragImage) class wxGenericDragImage
+{
+public:
+
+    wxGenericDragImage(const wxBitmap& image,
+                       const wxCursor& cursor = wxNullCursor,
+                       const wxPoint& hotspot = wxPyNullPoint);
+    ~wxGenericDragImage();
+
+    bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
+                   bool fullScreen = FALSE, wxRect* rect = NULL);
+
+    %name(BeginDrag2) bool BeginDrag(const wxPoint& hotspot, wxWindow* window,
+                                     wxWindow* fullScreenRect);
+
+    bool EndDrag();
+    bool Move(const wxPoint& pt);
+    bool Show();
+    bool Hide();
+
+    wxRect GetImageRect(const wxPoint& pos) const;
+    bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos,
+                     bool eraseOld, bool drawNew);
+};
+
+
+// Alternate Constructors
+%new wxGenericDragImage* wxDragIcon(const wxIcon& image,
+                                   const wxCursor& cursor = wxNullCursor,
+                                   const wxPoint& hotspot = wxPyNullPoint);
+
+%new wxGenericDragImage* wxDragString(const wxString& str,
+                                      const wxCursor& cursor = wxNullCursor,
+                                      const wxPoint& hotspot = wxPyNullPoint);
+
+%new wxGenericDragImage* wxDragTreeItem(const wxTreeCtrl& treeCtrl, wxTreeItemId& id);
+
+%new wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id);
+
+
+%{
+
+wxGenericDragImage* wxDragIcon(const wxIcon& image,
+                               const wxCursor& cursor,
+                               const wxPoint& hotspot) {
+    return new wxGenericDragImage(image, cursor, hotspot);
+}
+
+wxGenericDragImage* wxDragString(const wxString& str,
+                                 const wxCursor& cursor,
+                                 const wxPoint& hotspot) {
+    return new wxGenericDragImage(str, cursor, hotspot);
+}
+
+wxGenericDragImage* wxDragTreeItem(const wxTreeCtrl& treeCtrl, wxTreeItemId& id) {
+    return new wxGenericDragImage(treeCtrl, id);
+}
+
+wxGenericDragImage* wxDragListItem(const wxListCtrl& listCtrl, long id) {
+    return new wxGenericDragImage(listCtrl, id);
+}
+
+%}
+
+
+
+//----------------------------------------------------------------------
 //----------------------------------------------------------------------
 

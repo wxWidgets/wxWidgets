@@ -98,6 +98,8 @@ class DoodlePad(wxWindow):
         result = dropSource.DoDragDrop()
         self.log.WriteText("DragDrop completed: %d\n" % result)
 
+
+
 #----------------------------------------------------------------------
 
 
@@ -106,31 +108,39 @@ class DoodleDropTarget(wxPyDropTarget):
         wxPyDropTarget.__init__(self)
         self.log = log
         self.dv = window
+
+        # specify the type of data we will accept
         self.data = wxCustomDataObject(wxCustomDataFormat("DoodleLines"))
         self.SetDataObject(self.data)
 
+
+    # some virtual methods that track the progress of the drag
     def OnEnter(self, x, y, d):
         self.log.WriteText("OnEnter: %d, %d, %d\n" % (x, y, d))
         return wxDragCopy
-
     def OnLeave(self):
         self.log.WriteText("OnLeave\n")
-
     def OnDrop(self, x, y):
         self.log.WriteText("OnDrop: %d %d\n" % (x, y))
         return true
+    #def OnDragOver(self, x, y, d):
+    #    self.log.WriteText("OnDragOver: %d, %d, %d\n" % (x, y, d))
+    #    return wxDragCopy
 
+
+    # Called when OnDrop returns true.  We need to get the data and
+    # do something with it.
     def OnData(self, x, y, d):
         self.log.WriteText("OnData: %d, %d, %d\n" % (x, y, d))
+
+        # copy the data from the drag source to out data object
         if self.GetData():
+            # convert it back to a list of lines and give it to the viewer
             linesdata = self.data.GetData()
             lines = cPickle.loads(linesdata)
             self.dv.SetLines(lines)
         return d
 
-    #def OnDragOver(self, x, y, d):
-    #    self.log.WriteText("OnDragOver: %d, %d, %d\n" % (x, y, d))
-    #    return wxDragCopy
 
 
 

@@ -1338,7 +1338,7 @@ public:
 
     void GetTextBoxSize( wxDC& dc,
                          wxArrayString& lines,
-                         long *width, long *height );
+                         long *OUTPUT, long *OUTPUT );
 
 
     // ------

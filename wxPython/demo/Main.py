@@ -22,17 +22,16 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxGrid',
-                                'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',
-                                'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
-                                'FileBrowseButton', 'wxCalendar']),
+    ('New since last release', ['wxDragImage',
+                                ]),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
     ('Non-Managed Windows', ['wxGrid', 'wxSashWindow',
-                               'wxScrolledWindow', 'wxSplitterWindow',
-                               'wxStatusBar', 'wxNotebook',
-                               'wxHtmlWindow']),
+                             'wxScrolledWindow', 'wxSplitterWindow',
+                             'wxStatusBar', 'wxNotebook',
+                             'wxHtmlWindow',
+                             'wxStyledTextCtrl_1', 'wxStyledTextCtrl_2',]),
 
     ('Common Dialogs', ['wxColourDialog', 'wxDirDialog', 'wxFileDialog',
                         'wxSingleChoiceDialog', 'wxTextEntryDialog',
@@ -50,7 +49,9 @@ _treeList = [
     ('Miscellaneous', [ 'DragAndDrop', 'CustomDragAndDrop', 'FontEnumerator',
                         'wxTimer', 'wxValidator', 'wxGLCanvas', 'DialogUnits',
                         'wxImage', 'wxMask', 'PrintFramework', 'wxOGL',
-                        'PythonEvents', 'Threads']),
+                        'PythonEvents', 'Threads',
+                        'ActiveXWrapper_Acrobat', 'ActiveXWrapper_IE',
+                        ]),
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',

@@ -1895,6 +1895,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxRect","_wxRect",0},
     { "_class_wxDC","_wxDC",0},
     { "_wxScrollWinEvent","_class_wxScrollWinEvent",0},
+    { "_wxGenericDragImage","_class_wxGenericDragImage",0},
     { "_class_wxProgressDialog","_wxProgressDialog",0},
     { "_wxQueryNewPaletteEvent","_class_wxQueryNewPaletteEvent",0},
     { "_wxPyApp","_class_wxPyApp",0},
@@ -1954,6 +1955,7 @@ static struct { char *n1; char *n2; void *(*pcnv)(void *); } _swig_mapping[] = {
     { "_class_wxPyBitmapDataObject","_wxPyBitmapDataObject",0},
     { "_wxClientDC","_class_wxClientDC",0},
     { "_wxMouseEvent","_class_wxMouseEvent",0},
+    { "_class_wxGenericDragImage","_wxGenericDragImage",0},
     { "_wxListCtrl","_class_wxListCtrl",0},
     { "_wxSingleChoiceDialog","_class_wxSingleChoiceDialog",0},
     { "_class_wxPoint","_wxPoint",0},
@@ -2846,6 +2848,7 @@ SWIGEXPORT(void) initwxc() {
     initprintfwc();
     initsizersc();
     initclip_dndc();
+
     initgridc();
     initutilsc();
     inithtmlc();

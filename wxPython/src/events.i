@@ -26,6 +26,7 @@
 // Import some definitions of other classes, etc.
 %import _defs.i
 %import misc.i
+%import gdi.i
 
 //---------------------------------------------------------------------------
 
