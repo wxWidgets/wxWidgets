@@ -5543,11 +5543,17 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
 
         if ( XToEdgeOfCol(x) < 0  &&  YToEdgeOfRow(y) < 0 )
         {
-            SendEvent( wxEVT_GRID_CELL_LEFT_DCLICK,
-                       coords.GetRow(),
-                       coords.GetCol(),
-                       event );
+            if ( !SendEvent( wxEVT_GRID_CELL_LEFT_DCLICK,
+                             coords.GetRow(),
+                             coords.GetCol(),
+                             event ) )
+            {
+                // we want double click to select a cell and start editing
+                // (i.e. to behave in same way as sequence of two slow clicks):
+                m_waitForSlowClick = true;
+            }
         }
+
     }
 
 
