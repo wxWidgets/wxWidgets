@@ -41,12 +41,6 @@
 #endif
 
 // ----------------------------------------------------------------------------
-// wxWindows macros
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_DYNAMIC_CLASS(wxStatusBar95, wxWindow);
-
-// ----------------------------------------------------------------------------
 // macros
 // ----------------------------------------------------------------------------
 
@@ -128,39 +122,18 @@ wxStatusBar95::~wxStatusBar95()
 {
 }
 
-void wxStatusBar95::CopyFieldsWidth(const int widths[])
-{
-    if (widths && !m_statusWidths)
-        m_statusWidths = new int[m_nFields];
-
-    if ( widths != NULL )
-    {
-        for ( int i = 0; i < m_nFields; i++ )
-            m_statusWidths[i] = widths[i];
-    }
-    else // no widths
-    {
-        delete [] m_statusWidths;
-        m_statusWidths = NULL;
-    }
-}
-
 void wxStatusBar95::SetFieldsCount(int nFields, const int *widths)
 {
     // this is a Windows limitation
     wxASSERT_MSG( (nFields > 0) && (nFields < 255), _T("too many fields") );
 
-    m_nFields = nFields;
-
-    CopyFieldsWidth(widths);
-    SetFieldsWidth();
+    wxStatusBarBase::SetFieldsCount(nFields, widths);
 }
 
-void wxStatusBar95::SetStatusWidths(int WXUNUSED_UNLESS_DEBUG(n), const int widths[])
+void wxStatusBar95::SetStatusWidths(int n, const int widths[])
 {
-    wxASSERT_MSG( n == m_nFields, _T("field number mismatch") );
+    wxStatusBarBase::SetStatusWidths(n, widths);
 
-    CopyFieldsWidth(widths);
     SetFieldsWidth();
 }
 
@@ -174,46 +147,15 @@ void wxStatusBar95::SetFieldsWidth()
 
     int extraWidth = aBorders[2]; // space between fields
 
+    wxArrayInt widthsAbs =
+        CalculateAbsWidths(GetClientSize().x - extraWidth*(m_nFields - 1));
+
     int *pWidths = new int[m_nFields];
 
-    int nWindowWidth, y;
-    GetClientSize(&nWindowWidth, &y);
-
-    if ( m_statusWidths == NULL ) {
-        // default: all fields have the same width
-        int nWidth = nWindowWidth / m_nFields;
-        for ( int i = 0; i < m_nFields; i++ )
-            pWidths[i] = (i + 1) * nWidth;
-    }
-    else {
-        // -1 doesn't mean the same thing for wxWindows and Win32, recalc
-        int nTotalWidth = 0,
-        nVarCount = 0,
-        i;
-        for ( i = 0; i < m_nFields; i++ ) {
-            if ( m_statusWidths[i] == -1 )
-                nVarCount++;
-            else
-                nTotalWidth += m_statusWidths[i] + extraWidth;
-        }
-
-        if ( nVarCount == 0 ) {
-            wxFAIL_MSG( _T("at least one field must be of variable width") );
-
-            nVarCount++;
-        }
-
-        int nVarWidth = (nWindowWidth - nTotalWidth) / nVarCount;
-
-        // do fill the array
-        int nCurPos = 0;
-        for ( i = 0; i < m_nFields; i++ ) {
-            if ( m_statusWidths[i] == -1 )
-                nCurPos += nVarWidth;
-            else
-                nCurPos += m_statusWidths[i] + extraWidth;
-            pWidths[i] = nCurPos;
-        }
+    int nCurPos = 0;
+    for ( int i = 0; i < m_nFields; i++ ) {
+        nCurPos += widthsAbs[i] + extraWidth;
+        pWidths[i] = nCurPos;
     }
 
     if ( !StatusBar_SetParts(GetHwnd(), m_nFields, pWidths) ) {
