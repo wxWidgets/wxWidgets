@@ -110,20 +110,6 @@
 /*  compiler defects workarounds */
 /*  ---------------------------------------------------------------------------- */
 
-#if defined(__VISUALC__) && !defined(WIN32) && !defined(__WXWINCE__)
-    /*  VC1.5 does not have LPTSTR type */
-#define LPTSTR  LPSTR
-#define LPCTSTR LPCSTR
-#elif defined(__BORLANDC__) && !defined(__WIN32__)
-#ifndef LPTSTR
-#define LPTSTR  LPSTR
-#endif
-#ifndef LPCTSTR
-#define LPCTSTR LPSTR
-#endif
-#endif
-
-
 /*
    Digital Unix C++ compiler only defines this symbol for .cxx and .hxx files,
    so define it ourselves (newer versions do it for all files, though, and
