@@ -43,7 +43,7 @@ _treeList = [
     ('wxPython Library', ['Sizers', 'Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas']),
 
-    ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot']),
+    ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
     ]
 
@@ -153,7 +153,8 @@ class wxPythonDemo(wxFrame):
         w, h = self.log.GetClientSizeTuple()
         numLines = h/self.charHeight
         x, y = self.log.PositionToXY(self.log.GetLastPosition())
-        self.log.ShowPosition(self.log.XYToPosition(x, y-numLines+1))
+        self.log.ShowPosition(self.log.XYToPosition(x, y-numLines))
+##          self.log.ShowPosition(self.log.GetLastPosition())
         self.log.SetInsertionPointEnd()
 
     def write(self, txt):
@@ -218,7 +219,7 @@ class wxPythonDemo(wxFrame):
         #    self.txt.WriteText("Cannot open %s file." % filename)
         try:
             self.txt.SetValue(open(filename).read())
-        except IOException:
+        except IOError:
             self.txt.WriteText("Cannot open %s file." % filename)
 
 

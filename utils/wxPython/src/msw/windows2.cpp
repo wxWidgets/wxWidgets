@@ -1082,6 +1082,58 @@ static PyObject *_wrap_wxGrid_GetDefCellBackgroundColour(PyObject *self, PyObjec
     return _resultobj;
 }
 
+static PyObject * wxGrid_GetCells(wxGrid *self) {
+            int row, col;
+            PyObject* rows = PyList_New(0);
+            for (row=0; row < self->GetRows(); row++) {
+                PyObject* rowList = PyList_New(0);
+                for (col=0; col < self->GetCols(); col++) {
+                    wxGridCell* cell = self->GetCell(row, col);
+
+#ifdef WXP_WITH_THREAD
+                    PyEval_RestoreThread(wxPyEventThreadState);
+                    wxPyInEvent = true;
+#endif
+                    PyObject* pyCell = wxPyConstructObject(cell, "wxGridCell");
+#ifdef WXP_WITH_THREAD
+                    PyEval_SaveThread();
+                    wxPyInEvent = false;
+#endif
+
+                    if (PyList_Append(rowList, pyCell) == -1)
+                        return NULL;
+                }
+                if (PyList_Append(rows, rowList) == -1)
+                    return NULL;
+            }
+            return rows;
+        }
+static PyObject *_wrap_wxGrid_GetCells(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    wxGrid * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGrid_GetCells",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetCells. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)wxGrid_GetCells(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
 #define wxGrid_GetCellTextColour(_swigobj,_swigarg0,_swigarg1)  (_swigobj->GetCellTextColour(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxGrid_GetCellTextColour(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2468,6 +2520,57 @@ static PyObject *_wrap_wxGrid_UpdateDimensions(PyObject *self, PyObject *args) {
 {
     wxPy_BEGIN_ALLOW_THREADS;
         wxGrid_UpdateDimensions(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
+#define wxGrid_GetEditInPlace(_swigobj)  (_swigobj->GetEditInPlace())
+static PyObject *_wrap_wxGrid_GetEditInPlace(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxGrid * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxGrid_GetEditInPlace",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_GetEditInPlace. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxGrid_GetEditInPlace(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxGrid_SetEditInPlace(_swigobj,_swigarg0)  (_swigobj->SetEditInPlace(_swigarg0))
+static PyObject *_wrap_wxGrid_SetEditInPlace(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxGrid * _arg0;
+    int  _arg1 = (1);
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s|i:wxGrid_SetEditInPlace",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxGrid_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxGrid_SetEditInPlace. Expected _wxGrid_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxGrid_SetEditInPlace(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4496,6 +4599,8 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxGridEvent_m_col_set", _wrap_wxGridEvent_m_col_set, 1 },
 	 { "wxGridEvent_m_row_get", _wrap_wxGridEvent_m_row_get, 1 },
 	 { "wxGridEvent_m_row_set", _wrap_wxGridEvent_m_row_set, 1 },
+	 { "wxGrid_SetEditInPlace", _wrap_wxGrid_SetEditInPlace, 1 },
+	 { "wxGrid_GetEditInPlace", _wrap_wxGrid_GetEditInPlace, 1 },
 	 { "wxGrid_UpdateDimensions", _wrap_wxGrid_UpdateDimensions, 1 },
 	 { "wxGrid_SetRowHeight", _wrap_wxGrid_SetRowHeight, 1 },
 	 { "wxGrid_SetLabelValue", _wrap_wxGrid_SetLabelValue, 1 },
@@ -4544,6 +4649,7 @@ static PyMethodDef windows2cMethods[] = {
 	 { "wxGrid_GetCellTextFont", _wrap_wxGrid_GetCellTextFont, 1 },
 	 { "wxGrid_GetDefCellTextColour", _wrap_wxGrid_GetDefCellTextColour, 1 },
 	 { "wxGrid_GetCellTextColour", _wrap_wxGrid_GetCellTextColour, 1 },
+	 { "wxGrid_GetCells", _wrap_wxGrid_GetCells, 1 },
 	 { "wxGrid_GetDefCellBackgroundColour", _wrap_wxGrid_GetDefCellBackgroundColour, 1 },
 	 { "wxGrid_GetCellBackgroundColour", _wrap_wxGrid_GetCellBackgroundColour, 1 },
 	 { "wxGrid_GetDefCellAlignment", _wrap_wxGrid_GetDefCellAlignment, 1 },
@@ -4647,7 +4753,6 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
@@ -4689,6 +4794,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxDialog","_wxDialog",0);
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_class_wxNotebookEvent","_wxNotebookEvent",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
@@ -4730,6 +4836,7 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
@@ -4817,7 +4924,6 @@ SWIGEXPORT(void,initwindows2c)() {
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);

@@ -132,6 +132,13 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         return new wxBitmap(name, flags);
     }
 
+#ifdef __WXMSW__
+    wxBitmap* wxBitmapFromData(char* data, long type,
+                               int width, int height, int depth = 1) {
+        return new wxBitmap((void*)data, type, width, height, depth);
+    }
+#endif
+
     wxMask* wxMaskColour(const wxBitmap& bitmap, const wxColour& colour) {
         return new wxMask(bitmap, colour);
     }
@@ -1441,6 +1448,41 @@ static void *SwigwxIconTowxBitmap(void *ptr) {
     src = (wxIcon *) ptr;
     dest = (wxBitmap *) src;
     return (void *) dest;
+}
+
+#define new_wxIcon(_swigarg0,_swigarg1,_swigarg2,_swigarg3) (new wxIcon(_swigarg0,_swigarg1,_swigarg2,_swigarg3))
+static PyObject *_wrap_new_wxIcon(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxIcon * _result;
+    wxString * _arg0;
+    long  _arg1;
+    int  _arg2 = -1;
+    int  _arg3 = -1;
+    PyObject * _obj0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"Ol|ii:new_wxIcon",&_obj0,&_arg1,&_arg2,&_arg3)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxIcon *)new_wxIcon(*_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxIcon_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+{
+    if (_obj0)
+        delete _arg0;
+}
+    return _resultobj;
 }
 
 #define delete_wxIcon(_swigobj) (delete _swigobj)
@@ -5012,8 +5054,10 @@ static PyObject *_wrap_wxDC_StartPage(PyObject *self, PyObject *args) {
 static void  wxDC_DrawBitmap(wxDC *self,wxBitmap & bitmap,long  x,long  y,bool  swapPalette) {
             wxMemoryDC* memDC = new wxMemoryDC;
             memDC->SelectObject(bitmap);
+#ifdef __WXMSW__
             if (swapPalette)
                 self->SetPalette(*bitmap.GetPalette());
+#endif
             self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
                     0, 0, self->GetLogicalFunction());
             memDC->SelectObject(wxNullBitmap);
@@ -5959,6 +6003,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxIcon_GetHeight", _wrap_wxIcon_GetHeight, 1 },
 	 { "wxIcon_GetDepth", _wrap_wxIcon_GetDepth, 1 },
 	 { "delete_wxIcon", _wrap_delete_wxIcon, 1 },
+	 { "new_wxIcon", _wrap_new_wxIcon, 1 },
 	 { "delete_wxMask", _wrap_delete_wxMask, 1 },
 	 { "new_wxMask", _wrap_new_wxMask, 1 },
 	 { "wxBitmap_SetWidth", _wrap_wxBitmap_SetWidth, 1 },

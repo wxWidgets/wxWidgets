@@ -185,6 +185,11 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def GetTitle(self):
         val = windowsc.wxWindow_GetTitle(self.this)
         return val
+    def GetUpdateRegion(self):
+        val = windowsc.wxWindow_GetUpdateRegion(self.this)
+        val = wxRegionPtr(val)
+        val.thisown = 1
+        return val
     def GetWindowStyleFlag(self):
         val = windowsc.wxWindow_GetWindowStyleFlag(self.this)
         return val
@@ -224,8 +229,11 @@ class wxWindowPtr(wxEvtHandlerPtr):
     def Move(self,arg0):
         val = windowsc.wxWindow_Move(self.this,arg0.this)
         return val
-    def PopupMenu(self,arg0,arg1,arg2):
-        val = windowsc.wxWindow_PopupMenu(self.this,arg0.this,arg1,arg2)
+    def PopupMenuXY(self,arg0,arg1,arg2):
+        val = windowsc.wxWindow_PopupMenuXY(self.this,arg0.this,arg1,arg2)
+        return val
+    def PopupMenu(self,arg0,arg1):
+        val = windowsc.wxWindow_PopupMenu(self.this,arg0.this,arg1.this)
         return val
     def Raise(self):
         val = windowsc.wxWindow_Raise(self.this)
@@ -584,28 +592,18 @@ class wxMenuPtr(wxEvtHandlerPtr):
     def SetLabel(self,arg0,arg1):
         val = windowsc.wxMenu_SetLabel(self.this,arg0,arg1)
         return val
+    def UpdateUI(self,*args):
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        args = tuple(argl)
+        val = apply(windowsc.wxMenu_UpdateUI,(self.this,)+args)
+        return val
     def __repr__(self):
         return "<C wxMenu instance>"
 class wxMenu(wxMenuPtr):
     def __init__(self,*args) :
         self.this = apply(windowsc.new_wxMenu,()+args)
-        self.thisown = 1
-
-
-
-
-class wxPyMenuPtr(wxMenuPtr):
-    def __init__(self,this):
-        self.this = this
-        self.thisown = 0
-    def __del__(self):
-        if self.thisown == 1 :
-            windowsc.delete_wxPyMenu(self.this)
-    def __repr__(self):
-        return "<C wxPyMenu instance>"
-class wxPyMenu(wxPyMenuPtr):
-    def __init__(self,*args) :
-        self.this = apply(windowsc.new_wxPyMenu,()+args)
         self.thisown = 1
 
 

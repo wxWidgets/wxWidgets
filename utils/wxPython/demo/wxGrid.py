@@ -25,6 +25,8 @@ class TestGrid(wxGrid):
         EVT_GRID_CELL_LCLICK(self, self.OnCellClick)
         EVT_GRID_LABEL_LCLICK(self, self.OnLabelClick)
 
+        self.SetEditInPlace(true)
+        #print self.GetCells()
 
 
     def OnSelectCell(self, event):

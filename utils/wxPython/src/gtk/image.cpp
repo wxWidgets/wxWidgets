@@ -815,6 +815,33 @@ static PyObject *_wrap_wxImage_Scale(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxImage_Rescale(_swigobj,_swigarg0,_swigarg1)  (_swigobj->Rescale(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxImage_Rescale(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxImage * _arg0;
+    int  _arg1;
+    int  _arg2;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sii:wxImage_Rescale",&_argc0,&_arg1,&_arg2)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxImage_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxImage_Rescale. Expected _wxImage_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxImage_Rescale(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxImage_SetRGB(_swigobj,_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4)  (_swigobj->SetRGB(_swigarg0,_swigarg1,_swigarg2,_swigarg3,_swigarg4))
 static PyObject *_wrap_wxImage_SetRGB(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1417,6 +1444,7 @@ static PyMethodDef imagecMethods[] = {
 	 { "wxImage_GetGreen", _wrap_wxImage_GetGreen, 1 },
 	 { "wxImage_GetRed", _wrap_wxImage_GetRed, 1 },
 	 { "wxImage_SetRGB", _wrap_wxImage_SetRGB, 1 },
+	 { "wxImage_Rescale", _wrap_wxImage_Rescale, 1 },
 	 { "wxImage_Scale", _wrap_wxImage_Scale, 1 },
 	 { "wxImage_Destroy", _wrap_wxImage_Destroy, 1 },
 	 { "wxImage_Create", _wrap_wxImage_Create, 1 },

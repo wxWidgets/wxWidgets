@@ -48,6 +48,7 @@ class TestListCtrlPanel(wxPanel):
 
         self.currentItem = 0
         EVT_LIST_ITEM_SELECTED(self, tID, self.OnItemSelected)
+        EVT_LIST_DELETE_ITEM(self, tID, self.OnItemDelete)
         EVT_LEFT_DCLICK(self.list, self.OnDoubleClick)
         EVT_RIGHT_DOWN(self.list, self.OnRightDown)
 
@@ -68,6 +69,10 @@ class TestListCtrlPanel(wxPanel):
         self.currentItem = event.m_itemIndex
         self.log.WriteText("OnItemSelected: %s\n" % self.list.GetItemText(self.currentItem))
 
+    def OnItemDelete(self, event):
+        self.log.WriteText("OnItemDelete\n")
+
+
     def OnDoubleClick(self, event):
         self.log.WriteText("OnDoubleClick item %s\n" % self.list.GetItemText(self.currentItem))
 
@@ -78,13 +83,16 @@ class TestListCtrlPanel(wxPanel):
         tPopupID1 = 0
         tPopupID2 = 1
         tPopupID3 = 2
+        tPopupID4 = 3
         self.menu.Append(tPopupID1, "One")
         self.menu.Append(tPopupID2, "Two")
         self.menu.Append(tPopupID3, "Three")
+        self.menu.Append(tPopupID4, "DeleteAllItems")
         EVT_MENU(self, tPopupID1, self.OnPopupOne)
         EVT_MENU(self, tPopupID2, self.OnPopupTwo)
         EVT_MENU(self, tPopupID3, self.OnPopupThree)
-        self.PopupMenu(self.menu, self.x, self.y)
+        EVT_MENU(self, tPopupID4, self.OnPopupFour)
+        self.PopupMenu(self.menu, wxPoint(self.x, self.y))
 
     def OnPopupOne(self, event):
         self.log.WriteText("Popup one\n")
@@ -94,6 +102,9 @@ class TestListCtrlPanel(wxPanel):
 
     def OnPopupThree(self, event):
         self.log.WriteText("Popup three\n")
+
+    def OnPopupFour(self, event):
+        self.list.DeleteAllItems()
 
     def OnSize(self, event):
         w,h = self.GetClientSizeTuple()

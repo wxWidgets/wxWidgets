@@ -15,7 +15,7 @@ class wxGridCellPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, windows2c=windows2c):
         if self.thisown == 1 :
             windows2c.delete_wxGridCell(self.this)
     def GetTextValue(self):
@@ -126,6 +126,9 @@ class wxGridPtr(wxPanelPtr):
     def GetDefCellBackgroundColour(self):
         val = windows2c.wxGrid_GetDefCellBackgroundColour(self.this)
         val = wxColourPtr(val)
+        return val
+    def GetCells(self):
+        val = windows2c.wxGrid_GetCells(self.this)
         return val
     def GetCellTextColour(self,arg0,arg1):
         val = windows2c.wxGrid_GetCellTextColour(self.this,arg0,arg1)
@@ -282,6 +285,12 @@ class wxGridPtr(wxPanelPtr):
         return val
     def UpdateDimensions(self):
         val = windows2c.wxGrid_UpdateDimensions(self.this)
+        return val
+    def GetEditInPlace(self):
+        val = windows2c.wxGrid_GetEditInPlace(self.this)
+        return val
+    def SetEditInPlace(self,*args):
+        val = apply(windows2c.wxGrid_SetEditInPlace,(self.this,)+args)
         return val
     def __repr__(self):
         return "<C wxGrid instance>"
@@ -574,7 +583,7 @@ class wxTaskBarIconPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, windows2c=windows2c):
         if self.thisown == 1 :
             windows2c.delete_wxTaskBarIcon(self.this)
     def SetIcon(self,arg0,*args):

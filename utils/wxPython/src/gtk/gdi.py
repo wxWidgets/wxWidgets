@@ -6,7 +6,7 @@ class wxBitmapPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxBitmap(self.this)
     def GetDepth(self):
@@ -65,7 +65,7 @@ class wxMaskPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxMask(self.this)
     def __repr__(self):
@@ -82,7 +82,7 @@ class wxIconPtr(wxBitmapPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxIcon(self.this)
     def GetDepth(self):
@@ -112,8 +112,9 @@ class wxIconPtr(wxBitmapPtr):
     def __repr__(self):
         return "<C wxIcon instance>"
 class wxIcon(wxIconPtr):
-    def __init__(self,this):
-        self.this = this
+    def __init__(self,arg0,arg1,*args) :
+        self.this = apply(gdic.new_wxIcon,(arg0,arg1,)+args)
+        self.thisown = 1
 
 
 
@@ -122,7 +123,7 @@ class wxCursorPtr(wxBitmapPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxCursor(self.this)
     def Ok(self):
@@ -191,7 +192,7 @@ class wxColourPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxColour(self.this)
     def Red(self):
@@ -311,7 +312,7 @@ class wxDCPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxDC(self.this)
     def BeginDrawing(self):
@@ -664,7 +665,7 @@ class wxPalettePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxPalette(self.this)
     def GetPixel(self,arg0,arg1,arg2):
@@ -690,7 +691,7 @@ class wxImageListPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, gdic=gdic):
         if self.thisown == 1 :
             gdic.delete_wxImageList(self.this)
     def Add(self,arg0):

@@ -238,7 +238,7 @@ class wxLayoutAlgorithmPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, windows3c=windows3c):
         if self.thisown == 1 :
             windows3c.delete_wxLayoutAlgorithm(self.this)
     def LayoutMDIFrame(self,arg0,*args):

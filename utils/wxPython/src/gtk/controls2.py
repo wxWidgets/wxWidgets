@@ -15,7 +15,7 @@ class wxListItemPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, controls2c=controls2c):
         if self.thisown == 1 :
             controls2c.delete_wxListItem(self.this)
     def __setattr__(self,name,value):
@@ -155,6 +155,9 @@ class wxListCtrlPtr(wxControlPtr):
         return val
     def ClearAll(self):
         val = controls2c.wxListCtrl_ClearAll(self.this)
+        return val
+    def EditLabel(self,arg0):
+        val = controls2c.wxListCtrl_EditLabel(self.this,arg0)
         return val
     def EnsureVisible(self,arg0):
         val = controls2c.wxListCtrl_EnsureVisible(self.this,arg0)
@@ -304,7 +307,7 @@ class wxTreeItemIdPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, controls2c=controls2c):
         if self.thisown == 1 :
             controls2c.delete_wxTreeItemId(self.this)
     def IsOk(self):
@@ -347,7 +350,7 @@ class wxTreeItemData(wxTreeItemDataPtr):
 
 
 
-class wxTreeEventPtr(wxCommandEventPtr):
+class wxTreeEventPtr(wxNotifyEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
@@ -369,8 +372,8 @@ class wxTreeEventPtr(wxCommandEventPtr):
     def GetCode(self):
         val = controls2c.wxTreeEvent_GetCode(self.this)
         return val
-    def Veto(self):
-        val = controls2c.wxTreeEvent_Veto(self.this)
+    def GetLabel(self):
+        val = controls2c.wxTreeEvent_GetLabel(self.this)
         return val
     def __repr__(self):
         return "<C wxTreeEvent instance>"
@@ -563,6 +566,9 @@ class wxTreeCtrlPtr(wxControlPtr):
     def Unselect(self):
         val = controls2c.wxTreeCtrl_Unselect(self.this)
         return val
+    def UnselectAll(self):
+        val = controls2c.wxTreeCtrl_UnselectAll(self.this)
+        return val
     def SelectItem(self,arg0):
         val = controls2c.wxTreeCtrl_SelectItem(self.this,arg0.this)
         return val
@@ -574,14 +580,6 @@ class wxTreeCtrlPtr(wxControlPtr):
         return val
     def EditLabel(self,arg0):
         val = controls2c.wxTreeCtrl_EditLabel(self.this,arg0.this)
-        val = wxTextCtrlPtr(val)
-        return val
-    def GetEditControl(self):
-        val = controls2c.wxTreeCtrl_GetEditControl(self.this)
-        val = wxTextCtrlPtr(val)
-        return val
-    def EndEditLabel(self,arg0,*args):
-        val = apply(controls2c.wxTreeCtrl_EndEditLabel,(self.this,arg0.this,)+args)
         return val
     def SetItemBold(self,arg0,*args):
         val = apply(controls2c.wxTreeCtrl_SetItemBold,(self.this,arg0.this,)+args)

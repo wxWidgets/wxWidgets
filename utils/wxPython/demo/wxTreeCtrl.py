@@ -1,6 +1,8 @@
 
 from wxPython.wx import *
 
+import string
+
 #---------------------------------------------------------------------------
 
 class TestTreeCtrlPanel(wxPanel):
@@ -10,19 +12,23 @@ class TestTreeCtrlPanel(wxPanel):
         self.log = log
         tID = NewId()
 
-        self.tree = wxTreeCtrl(self, tID)
-        root = self.tree.AddRoot("The Root Item")
+        self.tree = wxTreeCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
+                               wxTR_HAS_BUTTONS | wxTR_EDIT_LABELS)
+
+        self.root = self.tree.AddRoot("The Root Item")
         for x in range(15):
-            child = self.tree.AppendItem(root, "Item %d" % x)
+            child = self.tree.AppendItem(self.root, "Item %d" % x)
             for y in range(5):
                 last = self.tree.AppendItem(child, "item %d-%s" % (x, chr(ord("a")+y)))
                 for z in range(5):
                     self.tree.AppendItem(last,  "item %d-%s-%d" % (x, chr(ord("a")+y), z))
 
-        self.tree.Expand(root)
+        self.tree.Expand(self.root)
         EVT_TREE_ITEM_EXPANDED  (self, tID, self.OnItemExpanded)
         EVT_TREE_ITEM_COLLAPSED (self, tID, self.OnItemCollapsed)
         EVT_TREE_SEL_CHANGED    (self, tID, self.OnSelChanged)
+        EVT_TREE_BEGIN_LABEL_EDIT(self, tID, self.OnBeginEdit)
+        EVT_TREE_END_LABEL_EDIT (self, tID, self.OnEndEdit)
 
         EVT_LEFT_DCLICK(self.tree, self.OnLeftDClick)
         EVT_RIGHT_DOWN(self.tree, self.OnRightClick)
@@ -37,7 +43,30 @@ class TestTreeCtrlPanel(wxPanel):
     def OnRightUp(self, event):
         (x,y) = event.Position();
         item = self.tree.HitTest(wxPoint(x,y))
-        self.log.WriteText("OnRightUp: %s\n" % self.tree.GetItemText(item))
+        self.log.WriteText("OnRightUp: %s (manually starting label edit)\n"
+                           % self.tree.GetItemText(item))
+        self.tree.EditLabel(item)
+
+
+
+    def OnBeginEdit(self, event):
+        self.log.WriteText("OnBeginEdit\n")
+        # show how to prevent edit...
+        if self.tree.GetItemText(event.GetItem()) == "The Root Item":
+            wxBell()
+            self.log.WriteText("You can't edit this one...\n")
+            event.Veto()
+
+    def OnEndEdit(self, event):
+        self.log.WriteText("OnEndEdit\n")
+        # show how to reject edit, we'll not allow any digits
+        for x in event.GetLabel():
+            if x in string.digits:
+                self.log.WriteText("You can't enter digits...\n")
+                event.Veto()
+                return
+
+
 
     def OnLeftDClick(self, event):
         (x,y) = event.Position();
@@ -59,8 +88,8 @@ class TestTreeCtrlPanel(wxPanel):
         self.log.WriteText("OnItemCollapsed: %s\n" % self.tree.GetItemText(item))
 
     def OnSelChanged(self, event):
-        item = event.GetItem()
-        self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(item))
+        self.item = event.GetItem()
+        self.log.WriteText("OnSelChanged: %s\n" % self.tree.GetItemText(self.item))
 
 #---------------------------------------------------------------------------
 

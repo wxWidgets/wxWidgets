@@ -7,6 +7,7 @@ wxPython/demo/bitmaps/*.gif
 wxPython/demo/bitmaps/*.png
 wxPython/demo/bitmaps/*.jpg
 wxPython/demo/README.txt
+wxPython/demo/*.xml
 
 wxPython/lib/*.py
 wxPython/lib/*.txt

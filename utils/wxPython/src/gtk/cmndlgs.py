@@ -19,7 +19,7 @@ class wxColourDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, cmndlgsc=cmndlgsc):
         if self.thisown == 1 :
             cmndlgsc.delete_wxColourData(self.this)
     def GetChooseFull(self):
@@ -243,7 +243,7 @@ class wxFontDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, cmndlgsc=cmndlgsc):
         if self.thisown == 1 :
             cmndlgsc.delete_wxFontData(self.this)
     def EnableEffects(self,arg0):

@@ -120,7 +120,36 @@ public:
     %name(GetDefCellAlignment)int GetCellAlignment();
     wxColour& GetCellBackgroundColour(int row, int col);
     %name(GetDefCellBackgroundColour) wxColour& GetCellBackgroundColour();
+
     //wxGridCell *** GetCells();
+    %addmethods {
+        PyObject* GetCells() {
+            int row, col;
+            PyObject* rows = PyList_New(0);
+            for (row=0; row < self->GetRows(); row++) {
+                PyObject* rowList = PyList_New(0);
+                for (col=0; col < self->GetCols(); col++) {
+                    wxGridCell* cell = self->GetCell(row, col);
+
+#ifdef WXP_WITH_THREAD
+                    PyEval_RestoreThread(wxPyEventThreadState);
+                    wxPyInEvent = true;
+#endif
+                    PyObject* pyCell = wxPyConstructObject(cell, "wxGridCell");
+#ifdef WXP_WITH_THREAD
+                    PyEval_SaveThread();
+                    wxPyInEvent = false;
+#endif
+
+                    if (PyList_Append(rowList, pyCell) == -1)
+                        return NULL;
+                }
+                if (PyList_Append(rows, rowList) == -1)
+                    return NULL;
+            }
+            return rows;
+        }
+    }
     wxColour& GetCellTextColour(int row, int col);
     %name(GetDefCellTextColour)wxColour& GetCellTextColour();
     wxFont& GetCellTextFont(int row, int col);
@@ -174,6 +203,10 @@ public:
     void SetRowHeight(int row, int height);
 
     void UpdateDimensions();
+
+    bool GetEditInPlace();
+    void SetEditInPlace(int edit = TRUE);
+
 };
 
 

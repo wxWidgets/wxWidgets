@@ -102,7 +102,7 @@ class wxImagePtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, imagec=imagec):
         if self.thisown == 1 :
             imagec.delete_wxImage(self.this)
     def ConvertToBitmap(self):
@@ -120,6 +120,9 @@ class wxImagePtr :
         val = imagec.wxImage_Scale(self.this,arg0,arg1)
         val = wxImagePtr(val)
         val.thisown = 1
+        return val
+    def Rescale(self,arg0,arg1):
+        val = imagec.wxImage_Rescale(self.this,arg0,arg1)
         return val
     def SetRGB(self,arg0,arg1,arg2,arg3,arg4):
         val = imagec.wxImage_SetRGB(self.this,arg0,arg1,arg2,arg3,arg4)

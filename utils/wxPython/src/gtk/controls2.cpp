@@ -1349,6 +1349,32 @@ static PyObject *_wrap_wxListCtrl_ClearAll(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxListCtrl_EditLabel(_swigobj,_swigarg0)  (_swigobj->EditLabel(_swigarg0))
+static PyObject *_wrap_wxListCtrl_EditLabel(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxListCtrl * _arg0;
+    long  _arg1;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sl:wxListCtrl_EditLabel",&_argc0,&_arg1)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxListCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxListCtrl_EditLabel. Expected _wxListCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxListCtrl_EditLabel(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxListCtrl_EnsureVisible(_swigobj,_swigarg0)  (_swigobj->EnsureVisible(_swigarg0))
 static PyObject *_wrap_wxListCtrl_EnsureVisible(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -2814,6 +2840,14 @@ static PyObject *_wrap_wxTreeItemData_SetId(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+static void *SwigwxTreeEventTowxNotifyEvent(void *ptr) {
+    wxTreeEvent *src;
+    wxNotifyEvent *dest;
+    src = (wxTreeEvent *) ptr;
+    dest = (wxNotifyEvent *) src;
+    return (void *) dest;
+}
+
 static void *SwigwxTreeEventTowxCommandEvent(void *ptr) {
     wxTreeEvent *src;
     wxCommandEvent *dest;
@@ -2936,28 +2970,31 @@ static PyObject *_wrap_wxTreeEvent_GetCode(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxTreeEvent_Veto(_swigobj)  (_swigobj->Veto())
-static PyObject *_wrap_wxTreeEvent_Veto(PyObject *self, PyObject *args) {
+#define wxTreeEvent_GetLabel(_swigobj)  (_swigobj->GetLabel())
+static PyObject *_wrap_wxTreeEvent_GetLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
+    wxString * _result;
     wxTreeEvent * _arg0;
     char * _argc0 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxTreeEvent_Veto",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s:wxTreeEvent_GetLabel",&_argc0)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTreeEvent_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_Veto. Expected _wxTreeEvent_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeEvent_GetLabel. Expected _wxTreeEvent_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxTreeEvent_Veto(_arg0);
+        const wxString & _result_ref = wxTreeEvent_GetLabel(_arg0);
+    _result = (wxString *) &_result_ref;
 
     wxPy_END_ALLOW_THREADS;
-}    Py_INCREF(Py_None);
-    _resultobj = Py_None;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST (*_result));
+}
     return _resultobj;
 }
 
@@ -4659,6 +4696,31 @@ static PyObject *_wrap_wxTreeCtrl_Unselect(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxTreeCtrl_UnselectAll(_swigobj)  (_swigobj->UnselectAll())
+static PyObject *_wrap_wxTreeCtrl_UnselectAll(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxTreeCtrl * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxTreeCtrl_UnselectAll",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTreeCtrl_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_UnselectAll. Expected _wxTreeCtrl_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        wxTreeCtrl_UnselectAll(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 #define wxTreeCtrl_SelectItem(_swigobj,_swigarg0)  (_swigobj->SelectItem(_swigarg0))
 static PyObject *_wrap_wxTreeCtrl_SelectItem(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -4761,12 +4823,10 @@ static PyObject *_wrap_wxTreeCtrl_ScrollTo(PyObject *self, PyObject *args) {
 #define wxTreeCtrl_EditLabel(_swigobj,_swigarg0)  (_swigobj->EditLabel(_swigarg0))
 static PyObject *_wrap_wxTreeCtrl_EditLabel(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    wxTextCtrl * _result;
     wxTreeCtrl * _arg0;
     wxTreeItemId * _arg1;
     char * _argc0 = 0;
     char * _argc1 = 0;
-    char _ptemp[128];
 
     self = self;
     if(!PyArg_ParseTuple(args,"ss:wxTreeCtrl_EditLabel",&_argc0,&_argc1)) 
@@ -4785,70 +4845,7 @@ static PyObject *_wrap_wxTreeCtrl_EditLabel(PyObject *self, PyObject *args) {
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxTextCtrl *)wxTreeCtrl_EditLabel(_arg0,*_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxTreeCtrl_GetEditControl(_swigobj)  (_swigobj->GetEditControl())
-static PyObject *_wrap_wxTreeCtrl_GetEditControl(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxTextCtrl * _result;
-    wxTreeCtrl * _arg0;
-    char * _argc0 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"s:wxTreeCtrl_GetEditControl",&_argc0)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_GetEditControl. Expected _wxTreeCtrl_p.");
-        return NULL;
-        }
-    }
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxTextCtrl *)wxTreeCtrl_GetEditControl(_arg0);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxTextCtrl_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-    return _resultobj;
-}
-
-#define wxTreeCtrl_EndEditLabel(_swigobj,_swigarg0,_swigarg1)  (_swigobj->EndEditLabel(_swigarg0,_swigarg1))
-static PyObject *_wrap_wxTreeCtrl_EndEditLabel(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxTreeCtrl * _arg0;
-    wxTreeItemId * _arg1;
-    bool  _arg2 = (0);
-    char * _argc0 = 0;
-    char * _argc1 = 0;
-    int tempbool2;
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"ss|i:wxTreeCtrl_EndEditLabel",&_argc0,&_argc1,&tempbool2)) 
-        return NULL;
-    if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxTreeCtrl_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxTreeCtrl_EndEditLabel. Expected _wxTreeCtrl_p.");
-        return NULL;
-        }
-    }
-    if (_argc1) {
-        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxTreeItemId_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxTreeCtrl_EndEditLabel. Expected _wxTreeItemId_p.");
-        return NULL;
-        }
-    }
-    _arg2 = (bool ) tempbool2;
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        wxTreeCtrl_EndEditLabel(_arg0,*_arg1,_arg2);
+        wxTreeCtrl_EditLabel(_arg0,*_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -4964,12 +4961,11 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_HitTest", _wrap_wxTreeCtrl_HitTest, 1 },
 	 { "wxTreeCtrl_IsBold", _wrap_wxTreeCtrl_IsBold, 1 },
 	 { "wxTreeCtrl_SetItemBold", _wrap_wxTreeCtrl_SetItemBold, 1 },
-	 { "wxTreeCtrl_EndEditLabel", _wrap_wxTreeCtrl_EndEditLabel, 1 },
-	 { "wxTreeCtrl_GetEditControl", _wrap_wxTreeCtrl_GetEditControl, 1 },
 	 { "wxTreeCtrl_EditLabel", _wrap_wxTreeCtrl_EditLabel, 1 },
 	 { "wxTreeCtrl_ScrollTo", _wrap_wxTreeCtrl_ScrollTo, 1 },
 	 { "wxTreeCtrl_EnsureVisible", _wrap_wxTreeCtrl_EnsureVisible, 1 },
 	 { "wxTreeCtrl_SelectItem", _wrap_wxTreeCtrl_SelectItem, 1 },
+	 { "wxTreeCtrl_UnselectAll", _wrap_wxTreeCtrl_UnselectAll, 1 },
 	 { "wxTreeCtrl_Unselect", _wrap_wxTreeCtrl_Unselect, 1 },
 	 { "wxTreeCtrl_Toggle", _wrap_wxTreeCtrl_Toggle, 1 },
 	 { "wxTreeCtrl_CollapseAndReset", _wrap_wxTreeCtrl_CollapseAndReset, 1 },
@@ -5016,7 +5012,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxTreeCtrl_GetIndent", _wrap_wxTreeCtrl_GetIndent, 1 },
 	 { "wxTreeCtrl_GetCount", _wrap_wxTreeCtrl_GetCount, 1 },
 	 { "new_wxTreeCtrl", _wrap_new_wxTreeCtrl, 1 },
-	 { "wxTreeEvent_Veto", _wrap_wxTreeEvent_Veto, 1 },
+	 { "wxTreeEvent_GetLabel", _wrap_wxTreeEvent_GetLabel, 1 },
 	 { "wxTreeEvent_GetCode", _wrap_wxTreeEvent_GetCode, 1 },
 	 { "wxTreeEvent_GetPoint", _wrap_wxTreeEvent_GetPoint, 1 },
 	 { "wxTreeEvent_GetOldItem", _wrap_wxTreeEvent_GetOldItem, 1 },
@@ -5069,6 +5065,7 @@ static PyMethodDef controls2cMethods[] = {
 	 { "wxListCtrl_FindItemData", _wrap_wxListCtrl_FindItemData, 1 },
 	 { "wxListCtrl_FindItem", _wrap_wxListCtrl_FindItem, 1 },
 	 { "wxListCtrl_EnsureVisible", _wrap_wxListCtrl_EnsureVisible, 1 },
+	 { "wxListCtrl_EditLabel", _wrap_wxListCtrl_EditLabel, 1 },
 	 { "wxListCtrl_ClearAll", _wrap_wxListCtrl_ClearAll, 1 },
 	 { "wxListCtrl_DeleteAllColumns", _wrap_wxListCtrl_DeleteAllColumns, 1 },
 	 { "wxListCtrl_DeleteColumn", _wrap_wxListCtrl_DeleteColumn, 1 },
@@ -5197,10 +5194,11 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxPaintEvent","_class_wxPaintEvent",0);
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent);
+	 SWIG_RegisterMapping("_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent);
 	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_class_wxTreeCtrl","_wxTreeCtrl",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
@@ -5269,6 +5267,8 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_wxScrollBar","_class_wxScrollBar",0);
 	 SWIG_RegisterMapping("_wxSpinButton","_class_wxSpinButton",0);
 	 SWIG_RegisterMapping("_class_wxIndividualLayoutConstraint","_wxIndividualLayoutConstraint",0);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_class_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent);
+	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxTreeEvent",SwigwxTreeEventTowxNotifyEvent);
 	 SWIG_RegisterMapping("_class_wxNotifyEvent","_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_class_wxPyEvent","_wxPyEvent",0);
 	 SWIG_RegisterMapping("_class_wxIconizeEvent","_wxIconizeEvent",0);
@@ -5357,7 +5357,6 @@ SWIGEXPORT(void,initcontrols2c)() {
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxListItem","_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);

@@ -12,6 +12,11 @@ class TestRadioButtons(wxPanel):
                       'six', 'seven', 'eight']
 
         rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(35, 30), wxDefaultSize,
+                        sampleList, 3, wxRA_SPECIFY_COLS)
+        EVT_RADIOBOX(self, 30, self.EvtRadioBox)
+
+
+        rb = wxRadioBox(self, 30, "wxRadioBox", wxPoint(35, 120), wxDefaultSize,
                         sampleList, 3, wxRA_SPECIFY_COLS | wxNO_BORDER)
         EVT_RADIOBOX(self, 30, self.EvtRadioBox)
 

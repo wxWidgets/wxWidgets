@@ -33,8 +33,50 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.12  1999/06/28 03:10:35  RD
- * Final tweaks for 2.1b1
+ * Revision 1.13  1999/07/31 07:56:03  RD
+ * wxPython 2.1b1:
+ *
+ * 	Added the missing wxWindow.GetUpdateRegion() method.
+ *
+ * 	Made a new change in SWIG (update your patches everybody) that
+ * 	provides a fix for global shadow objects that get an exception in
+ * 	their __del__ when their extension module has already been deleted.
+ * 	It was only a 1 line change in .../SWIG/Modules/pycpp.cxx at about
+ * 	line 496 if you want to do it by hand.
+ *
+ * 	It is now possible to run through MainLoop more than once in any one
+ * 	process.  The cleanup that used to happen as MainLoop completed (and
+ * 	prevented it from running again) has been delayed until the wxc module
+ * 	is being unloaded by Python.
+ *
+ * 	wxWindow.PopupMenu() now takes a wxPoint instead of  x,y.  Added
+ * 	wxWindow.PopupMenuXY to be consistent with some other methods.
+ *
+ * 	Added wxGrid.SetEditInPlace and wxGrid.GetEditInPlace.
+ *
+ * 	You can now provide your own app.MainLoop method.  See
+ * 	wxPython/demo/demoMainLoop.py for an example and some explaination.
+ *
+ * 	Got the in-place-edit for the wxTreeCtrl fixed and added some demo
+ * 	code to show how to use it.
+ *
+ * 	Put the wxIcon constructor back in for GTK as it now has one that
+ * 	matches MSW's.
+ *
+ * 	Added wxGrid.GetCells
+ *
+ * 	Added wxSystemSettings static methods as functions with names like
+ * 	wxSystemSettings_GetSystemColour.
+ *
+ * 	Removed wxPyMenu since using menu callbacks have been depreciated in
+ * 	wxWindows.  Use wxMenu and events instead.
+ *
+ * 	Added alternate wxBitmap constructor (for MSW only) as
+ * 	      wxBitmapFromData(data, type, width, height, depth = 1)
+ *
+ * 	Added a helper function named wxPyTypeCast that can convert shadow
+ * 	objects of one type into shadow objects of another type.  (Like doing
+ * 	a down-cast.)  See the implementation in wx.py for some docs.
  *
  ************************************************************************/
 
@@ -617,6 +659,522 @@ extern wxAcceleratorEntry* wxAcceleratorEntry_LIST_helper(PyObject* source);
 
 static char* wxStringErrorMsg = "string type is required for parameter";
 
+
+#include <ctype.h>
+
+/*------------------------------------------------------------------
+  ptrcast(value,type)
+
+  Constructs a new pointer value.   Value may either be a string
+  or an integer. Type is a string corresponding to either the
+  C datatype or mangled datatype.
+
+  ptrcast(0,"Vector *")
+               or
+  ptrcast(0,"Vector_p")   
+  ------------------------------------------------------------------ */
+
+static PyObject *ptrcast(PyObject *_PTRVALUE, char *type) {
+
+  char *r,*s;
+  void *ptr;
+  PyObject *obj;
+  char *typestr,*c;
+
+  /* Produce a "mangled" version of the type string.  */
+
+  typestr = (char *) malloc(strlen(type)+2);
+  
+  /* Go through and munge the typestring */
+  
+  r = typestr;
+  *(r++) = '_';
+  c = type;
+  while (*c) {
+    if (!isspace(*c)) {
+      if ((*c == '*') || (*c == '&')) {
+	*(r++) = 'p';
+      }
+      else *(r++) = *c;
+    } else {
+        *(r++) = '_';
+    }
+    c++;
+  }
+  *(r++) = 0;
+
+  /* Check to see what kind of object _PTRVALUE is */
+  
+  if (PyInt_Check(_PTRVALUE)) {
+    ptr = (void *) PyInt_AsLong(_PTRVALUE);
+    /* Received a numerical value. Make a pointer out of it */
+    r = (char *) malloc(strlen(typestr)+22);
+    if (ptr) {
+      SWIG_MakePtr(r, ptr, typestr);
+    } else {
+      sprintf(r,"_0%s",typestr);
+    }
+    obj = PyString_FromString(r);
+    free(r);
+  } else if (PyString_Check(_PTRVALUE)) {
+    /* Have a real pointer value now.  Try to strip out the pointer
+       value */
+    s = PyString_AsString(_PTRVALUE);
+    r = (char *) malloc(strlen(type)+22);
+    
+    /* Now extract the pointer value */
+    if (!SWIG_GetPtr(s,&ptr,0)) {
+      if (ptr) {
+	SWIG_MakePtr(r,ptr,typestr);
+      } else {
+	sprintf(r,"_0%s",typestr);
+      }
+      obj = PyString_FromString(r);
+    } else {
+      obj = NULL;
+    }
+    free(r);
+  } else {
+    obj = NULL;
+  }
+  free(typestr);
+  if (!obj) 
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrcast. Argument is not a valid pointer value.");
+  return obj;
+}
+
+/*------------------------------------------------------------------
+  ptrvalue(ptr,type = 0)
+
+  Attempts to dereference a pointer value.  If type is given, it 
+  will try to use that type.  Otherwise, this function will attempt
+  to "guess" the proper datatype by checking against all of the 
+  builtin C datatypes. 
+  ------------------------------------------------------------------ */
+
+static PyObject *ptrvalue(PyObject *_PTRVALUE, int index, char *type) {
+  void     *ptr;
+  char     *s;
+  PyObject *obj;
+
+  if (!PyString_Check(_PTRVALUE)) {
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrvalue. Argument is not a valid pointer value.");
+    return NULL;
+  }
+  s = PyString_AsString(_PTRVALUE);
+  if (SWIG_GetPtr(s,&ptr,0)) {
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrvalue. Argument is not a valid pointer value.");
+    return NULL;
+  }
+
+  /* If no datatype was passed, try a few common datatypes first */
+
+  if (!type) {
+
+    /* No datatype was passed.   Type to figure out if it's a common one */
+
+    if (!SWIG_GetPtr(s,&ptr,"_int_p")) {
+      type = "int";
+    } else if (!SWIG_GetPtr(s,&ptr,"_double_p")) {
+      type = "double";
+    } else if (!SWIG_GetPtr(s,&ptr,"_short_p")) {
+      type = "short";
+    } else if (!SWIG_GetPtr(s,&ptr,"_long_p")) {
+      type = "long";
+    } else if (!SWIG_GetPtr(s,&ptr,"_float_p")) {
+      type = "float";
+    } else if (!SWIG_GetPtr(s,&ptr,"_char_p")) {
+      type = "char";
+    } else if (!SWIG_GetPtr(s,&ptr,"_char_pp")) {
+      type = "char *";
+    } else {
+      type = "unknown";
+    }
+  }
+
+  if (!ptr) {
+    PyErr_SetString(PyExc_TypeError,"Unable to dereference NULL pointer.");
+    return NULL;
+  }
+
+  /* Now we have a datatype.  Try to figure out what to do about it */
+  if (strcmp(type,"int") == 0) {
+    obj = PyInt_FromLong((long) *(((int *) ptr) + index));
+  } else if (strcmp(type,"double") == 0) {
+    obj = PyFloat_FromDouble((double) *(((double *) ptr)+index));
+  } else if (strcmp(type,"short") == 0) {
+    obj = PyInt_FromLong((long) *(((short *) ptr)+index));
+  } else if (strcmp(type,"long") == 0) {
+    obj = PyInt_FromLong((long) *(((long *) ptr)+index));
+  } else if (strcmp(type,"float") == 0) {
+    obj = PyFloat_FromDouble((double) *(((float *) ptr)+index));
+  } else if (strcmp(type,"char") == 0) {
+    obj = PyString_FromString(((char *) ptr)+index);
+  } else if (strcmp(type,"char *") == 0) {
+    char *c = *(((char **) ptr)+index);
+    if (c) obj = PyString_FromString(c);
+    else obj = PyString_FromString("NULL");
+  } else {
+    PyErr_SetString(PyExc_TypeError,"Unable to dereference unsupported datatype.");
+    return NULL;
+  }
+  return obj;
+}
+
+/*------------------------------------------------------------------
+  ptrcreate(type,value = 0,numelements = 1)
+
+  Attempts to create a new object of given type.  Type must be
+  a basic C datatype.  Will not create complex objects.
+  ------------------------------------------------------------------ */
+
+static PyObject *ptrcreate(char *type, PyObject *_PYVALUE, int numelements) {
+  void     *ptr;
+  PyObject *obj;
+  int       sz;
+  char     *cast;
+  char      temp[40];
+
+  /* Check the type string against a variety of possibilities */
+
+  if (strcmp(type,"int") == 0) {
+    sz = sizeof(int)*numelements;
+    cast = "_int_p";
+  } else if (strcmp(type,"short") == 0) {
+    sz = sizeof(short)*numelements;
+    cast = "_short_p";
+  } else if (strcmp(type,"long") == 0) {
+    sz = sizeof(long)*numelements;
+    cast = "_long_p";
+  } else if (strcmp(type,"double") == 0) {
+    sz = sizeof(double)*numelements;
+    cast = "_double_p";
+  } else if (strcmp(type,"float") == 0) {
+    sz = sizeof(float)*numelements;
+    cast = "_float_p";
+  } else if (strcmp(type,"char") == 0) {
+    sz = sizeof(char)*numelements;
+    cast = "_char_p";
+  } else if (strcmp(type,"char *") == 0) {
+    sz = sizeof(char *)*(numelements+1);
+    cast = "_char_pp";
+  } else {
+    PyErr_SetString(PyExc_TypeError,"Unable to create unknown datatype."); 
+    return NULL;
+  }
+   
+  /* Create the new object */
+  
+  ptr = (void *) malloc(sz);
+  if (!ptr) {
+    PyErr_SetString(PyExc_MemoryError,"Out of memory in swig_create."); 
+    return NULL;
+  }
+
+  /* Now try to set its default value */
+
+  if (_PYVALUE) {
+    if (strcmp(type,"int") == 0) {
+      int *ip,i,ivalue;
+      ivalue = (int) PyInt_AsLong(_PYVALUE);
+      ip = (int *) ptr;
+      for (i = 0; i < numelements; i++)
+	ip[i] = ivalue;
+    } else if (strcmp(type,"short") == 0) {
+      short *ip,ivalue;
+      int i;
+      ivalue = (short) PyInt_AsLong(_PYVALUE);
+      ip = (short *) ptr;
+      for (i = 0; i < numelements; i++)
+	ip[i] = ivalue;
+    } else if (strcmp(type,"long") == 0) {
+      long *ip,ivalue;
+      int i;
+      ivalue = (long) PyInt_AsLong(_PYVALUE);
+      ip = (long *) ptr;
+      for (i = 0; i < numelements; i++)
+	ip[i] = ivalue;
+    } else if (strcmp(type,"double") == 0) {
+      double *ip,ivalue;
+      int i;
+      ivalue = (double) PyFloat_AsDouble(_PYVALUE);
+      ip = (double *) ptr;
+      for (i = 0; i < numelements; i++)
+	ip[i] = ivalue;
+    } else if (strcmp(type,"float") == 0) {
+      float *ip,ivalue;
+      int i;
+      ivalue = (float) PyFloat_AsDouble(_PYVALUE);
+      ip = (float *) ptr;
+      for (i = 0; i < numelements; i++)
+	ip[i] = ivalue;
+    } else if (strcmp(type,"char") == 0) {
+      char *ip,*ivalue;
+      ivalue = (char *) PyString_AsString(_PYVALUE);
+      ip = (char *) ptr;
+      strncpy(ip,ivalue,numelements-1);
+    } else if (strcmp(type,"char *") == 0) {
+      char **ip, *ivalue;
+      int  i;
+      ivalue = (char *) PyString_AsString(_PYVALUE);
+      ip = (char **) ptr;
+      for (i = 0; i < numelements; i++) {
+	if (ivalue) {
+	  ip[i] = (char *) malloc(strlen(ivalue)+1);
+	  strcpy(ip[i],ivalue);
+	} else {
+	  ip[i] = 0;
+	}
+      }
+      ip[numelements] = 0;
+    }
+  } 
+  /* Create the pointer value */
+  
+  SWIG_MakePtr(temp,ptr,cast);
+  obj = PyString_FromString(temp);
+  return obj;
+}
+
+
+/*------------------------------------------------------------------
+  ptrset(ptr,value,index = 0,type = 0)
+
+  Attempts to set the value of a pointer variable.  If type is
+  given, we will use that type.  Otherwise, we'll guess the datatype.
+  ------------------------------------------------------------------ */
+
+static PyObject *ptrset(PyObject *_PTRVALUE, PyObject *_PYVALUE, int index, char *type) {
+  void     *ptr;
+  char     *s;
+  PyObject *obj;
+
+  if (!PyString_Check(_PTRVALUE)) {
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrset. Argument is not a valid pointer value.");
+    return NULL;
+  }
+  s = PyString_AsString(_PTRVALUE);
+  if (SWIG_GetPtr(s,&ptr,0)) {
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrset. Argument is not a valid pointer value.");
+    return NULL;
+  }
+
+  /* If no datatype was passed, try a few common datatypes first */
+
+  if (!type) {
+
+    /* No datatype was passed.   Type to figure out if it's a common one */
+
+    if (!SWIG_GetPtr(s,&ptr,"_int_p")) {
+      type = "int";
+    } else if (!SWIG_GetPtr(s,&ptr,"_double_p")) {
+      type = "double";
+    } else if (!SWIG_GetPtr(s,&ptr,"_short_p")) {
+      type = "short";
+    } else if (!SWIG_GetPtr(s,&ptr,"_long_p")) {
+      type = "long";
+    } else if (!SWIG_GetPtr(s,&ptr,"_float_p")) {
+      type = "float";
+    } else if (!SWIG_GetPtr(s,&ptr,"_char_p")) {
+      type = "char";
+    } else if (!SWIG_GetPtr(s,&ptr,"_char_pp")) {
+      type = "char *";
+    } else {
+      type = "unknown";
+    }
+  }
+
+  if (!ptr) {
+    PyErr_SetString(PyExc_TypeError,"Unable to set NULL pointer.");
+    return NULL;
+  }
+  
+  /* Now we have a datatype.  Try to figure out what to do about it */
+  if (strcmp(type,"int") == 0) {
+    *(((int *) ptr)+index) = (int) PyInt_AsLong(_PYVALUE);
+  } else if (strcmp(type,"double") == 0) {
+    *(((double *) ptr)+index) = (double) PyFloat_AsDouble(_PYVALUE);
+  } else if (strcmp(type,"short") == 0) {
+    *(((short *) ptr)+index) = (short) PyInt_AsLong(_PYVALUE);
+  } else if (strcmp(type,"long") == 0) {
+    *(((long *) ptr)+index) = (long) PyInt_AsLong(_PYVALUE);
+  } else if (strcmp(type,"float") == 0) {
+    *(((float *) ptr)+index) = (float) PyFloat_AsDouble(_PYVALUE);
+  } else if (strcmp(type,"char") == 0) {
+    char *c = PyString_AsString(_PYVALUE);
+    strcpy(((char *) ptr)+index, c);
+  } else if (strcmp(type,"char *") == 0) {
+    char *c = PyString_AsString(_PYVALUE);
+    char **ca = (char **) ptr;
+    if (ca[index]) free(ca[index]);
+    if (strcmp(c,"NULL") == 0) {
+      ca[index] = 0;
+    } else {
+      ca[index] = (char *) malloc(strlen(c)+1);
+      strcpy(ca[index],c);
+    }
+  } else {
+    PyErr_SetString(PyExc_TypeError,"Unable to set unsupported datatype.");
+    return NULL;
+  }
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+
+/*------------------------------------------------------------------
+  ptradd(ptr,offset)
+
+  Adds a value to an existing pointer value.  Will do a type-dependent
+  add for basic datatypes.  For other datatypes, will do a byte-add.
+  ------------------------------------------------------------------ */
+
+static PyObject *ptradd(PyObject *_PTRVALUE, int offset) {
+
+  char *r,*s;
+  void *ptr,*junk;
+  PyObject *obj;
+  char *type;
+
+  /* Check to see what kind of object _PTRVALUE is */
+  
+  if (PyString_Check(_PTRVALUE)) {
+    /* Have a potential pointer value now.  Try to strip out the value */
+    s = PyString_AsString(_PTRVALUE);
+
+    /* Try to handle a few common datatypes first */
+
+    if (!SWIG_GetPtr(s,&ptr,"_int_p")) {
+      ptr = (void *) (((int *) ptr) + offset);
+    } else if (!SWIG_GetPtr(s,&ptr,"_double_p")) {
+      ptr = (void *) (((double *) ptr) + offset);
+    } else if (!SWIG_GetPtr(s,&ptr,"_short_p")) {
+      ptr = (void *) (((short *) ptr) + offset);
+    } else if (!SWIG_GetPtr(s,&ptr,"_long_p")) {
+      ptr = (void *) (((long *) ptr) + offset);
+    } else if (!SWIG_GetPtr(s,&ptr,"_float_p")) {
+      ptr = (void *) (((float *) ptr) + offset);
+    } else if (!SWIG_GetPtr(s,&ptr,"_char_p")) {
+      ptr = (void *) (((char *) ptr) + offset);
+    } else if (!SWIG_GetPtr(s,&ptr,0)) {
+      ptr = (void *) (((char *) ptr) + offset);
+    } else {
+      PyErr_SetString(PyExc_TypeError,"Type error in ptradd. Argument is not a valid pointer value.");
+      return NULL;
+    }
+    type = SWIG_GetPtr(s,&junk,"INVALID POINTER");
+    r = (char *) malloc(strlen(type)+20);
+    if (ptr) {
+      SWIG_MakePtr(r,ptr,type);
+    } else {
+      sprintf(r,"_0%s",type);
+    }
+    obj = PyString_FromString(r);
+    free(r);
+  }
+  return obj;
+}
+
+/*------------------------------------------------------------------
+  ptrmap(type1,type2)
+
+  Allows a mapping between type1 and type2. (Like a typedef)
+  ------------------------------------------------------------------ */
+
+static void ptrmap(char *type1, char *type2) {
+
+  char *typestr1,*typestr2,*c,*r;
+
+  /* Produce a "mangled" version of the type string.  */
+
+  typestr1 = (char *) malloc(strlen(type1)+2);
+  
+  /* Go through and munge the typestring */
+  
+  r = typestr1;
+  *(r++) = '_';
+  c = type1;
+  while (*c) {
+    if (!isspace(*c)) {
+      if ((*c == '*') || (*c == '&')) {
+	*(r++) = 'p';
+      }
+      else *(r++) = *c;
+    } else {
+      *(r++) = '_';
+    }
+    c++;
+  }
+  *(r++) = 0;
+  
+  typestr2 = (char *) malloc(strlen(type2)+2);
+
+  /* Go through and munge the typestring */
+  
+  r = typestr2;
+  *(r++) = '_';
+  c = type2;
+  while (*c) {
+    if (!isspace(*c)) {
+      if ((*c == '*') || (*c == '&')) {
+	*(r++) = 'p';
+      }
+      else *(r++) = *c;
+    } else {
+      *(r++) = '_';
+    }
+    c++;
+  }
+  *(r++) = 0;
+  SWIG_RegisterMapping(typestr1,typestr2,0);
+  SWIG_RegisterMapping(typestr2,typestr1,0);
+}
+
+/*------------------------------------------------------------------
+  ptrfree(ptr)
+
+  Destroys a pointer value
+  ------------------------------------------------------------------ */
+
+PyObject *ptrfree(PyObject *_PTRVALUE) {
+  void *ptr, *junk;
+  char *s;
+
+  if (!PyString_Check(_PTRVALUE)) {
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrfree. Argument is not a valid pointer value.");
+    return NULL;
+  }
+  s = PyString_AsString(_PTRVALUE);
+  if (SWIG_GetPtr(s,&ptr,0)) {
+    PyErr_SetString(PyExc_TypeError,"Type error in ptrfree. Argument is not a valid pointer value.");
+    return NULL;
+  }
+
+  /* Check to see if this pointer is a char ** */
+  if (!SWIG_GetPtr(s,&junk,"_char_pp")) {
+    char **c = (char **) ptr;
+    if (c) {
+      int i = 0;
+      while (c[i]) {
+	free(c[i]);
+	i++;
+      }
+    }
+  } 
+  if (ptr)
+    free((char *) ptr);
+
+  Py_INCREF(Py_None);
+  return Py_None;
+}
+
+
+class __wxPyCleanup {
+public:
+    __wxPyCleanup()  { }
+    ~__wxPyCleanup() { wxApp::CleanUp(); }
+};
+
 extern "C" SWIGEXPORT(void,initwindowsc)();
 extern "C" SWIGEXPORT(void,initwindows2c)();
 extern "C" SWIGEXPORT(void,initeventsc)();
@@ -634,8 +1192,179 @@ extern "C" SWIGEXPORT(void,initimagec)();
 extern "C" SWIGEXPORT(void,initprintfwc)();
 #ifndef SEPARATE
 extern "C" SWIGEXPORT(void,initutilsc)();
+//extern "C" SWIGEXPORT(void,initoglc)();
 extern "C" SWIGEXPORT(void,initglcanvasc)();
 #endif
+static PyObject *_wrap_ptrcast(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    PyObject * _arg0;
+    char * _arg1;
+    PyObject * _obj0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"Os:ptrcast",&_obj0,&_arg1)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)ptrcast(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_ptrvalue(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    PyObject * _arg0;
+    int  _arg1 = 0;
+    char * _arg2 = 0;
+    PyObject * _obj0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"O|is:ptrvalue",&_obj0,&_arg1,&_arg2)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)ptrvalue(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_ptrset(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    PyObject * _arg0;
+    PyObject * _arg1;
+    int  _arg2 = 0;
+    char * _arg3 = 0;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"OO|is:ptrset",&_obj0,&_obj1,&_arg2,&_arg3)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)ptrset(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_ptrcreate(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    char * _arg0;
+    PyObject * _arg1 = 0;
+    int  _arg2 = 1;
+    PyObject * _obj1 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s|Oi:ptrcreate",&_arg0,&_obj1,&_arg2)) 
+        return NULL;
+    if (_obj1)
+{
+  _arg1 = _obj1;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)ptrcreate(_arg0,_arg1,_arg2);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_ptrfree(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    PyObject * _arg0;
+    PyObject * _obj0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"O:ptrfree",&_obj0)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)ptrfree(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_ptradd(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    PyObject * _result;
+    PyObject * _arg0;
+    int  _arg1;
+    PyObject * _obj0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"Oi:ptradd",&_obj0,&_arg1)) 
+        return NULL;
+{
+  _arg0 = _obj0;
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (PyObject *)ptradd(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}{
+  _resultobj = _result;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_ptrmap(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    char * _arg0;
+    char * _arg1;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"ss:ptrmap",&_arg0,&_arg1)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        ptrmap(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
+    return _resultobj;
+}
+
 static int _wrap_wxPyDefaultPosition_set(PyObject *val) {
     char * tval;
     wxPoint * temp;
@@ -720,6 +1449,31 @@ static PyObject *_wrap_new_wxPyApp(PyObject *self, PyObject *args) {
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyApp_p");
     _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define delete_wxPyApp(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete_wxPyApp(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxPyApp * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete_wxPyApp",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyApp. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete_wxPyApp(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    Py_INCREF(Py_None);
+    _resultobj = Py_None;
     return _resultobj;
 }
 
@@ -1040,6 +1794,31 @@ static PyObject *_wrap_wxPyApp_Pending(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxPyApp_ProcessIdle(_swigobj)  (_swigobj->ProcessIdle())
+static PyObject *_wrap_wxPyApp_ProcessIdle(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyApp * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxPyApp_ProcessIdle",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPyApp_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_ProcessIdle. Expected _wxPyApp_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxPyApp_ProcessIdle(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
 #define wxPyApp_SetAppName(_swigobj,_swigarg0)  (_swigobj->SetAppName(_swigarg0))
 static PyObject *_wrap_wxPyApp_SetAppName(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1269,24 +2048,71 @@ static PyObject *_wrap_wxPyApp_SetVendorName(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxPyApp_AfterMainLoop(_swigobj)  (_swigobj->AfterMainLoop())
-static PyObject *_wrap_wxPyApp_AfterMainLoop(PyObject *self, PyObject *args) {
+#define wxPyApp_GetStdIcon(_swigobj,_swigarg0)  (_swigobj->GetStdIcon(_swigarg0))
+static PyObject *_wrap_wxPyApp_GetStdIcon(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
+    wxIcon * _result;
     wxPyApp * _arg0;
+    int  _arg1;
     char * _argc0 = 0;
+    char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxPyApp_AfterMainLoop",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"si:wxPyApp_GetStdIcon",&_argc0,&_arg1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPyApp_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_AfterMainLoop. Expected _wxPyApp_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyApp_GetStdIcon. Expected _wxPyApp_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxPyApp_AfterMainLoop(_arg0);
+        _result = new wxIcon (wxPyApp_GetStdIcon(_arg0,_arg1));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxIcon_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define new___wxPyCleanup() (new __wxPyCleanup())
+static PyObject *_wrap_new___wxPyCleanup(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    __wxPyCleanup * _result;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,":new___wxPyCleanup")) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (__wxPyCleanup *)new___wxPyCleanup();
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"___wxPyCleanup_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+#define delete___wxPyCleanup(_swigobj) (delete _swigobj)
+static PyObject *_wrap_delete___wxPyCleanup(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    __wxPyCleanup * _arg0;
+    char * _argc0 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:delete___wxPyCleanup",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"___wxPyCleanup_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete___wxPyCleanup. Expected ___wxPyCleanup_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        delete___wxPyCleanup(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -1295,7 +2121,9 @@ static PyObject *_wrap_wxPyApp_AfterMainLoop(PyObject *self, PyObject *args) {
 }
 
 static PyMethodDef wxcMethods[] = {
-	 { "wxPyApp_AfterMainLoop", _wrap_wxPyApp_AfterMainLoop, 1 },
+	 { "delete___wxPyCleanup", _wrap_delete___wxPyCleanup, 1 },
+	 { "new___wxPyCleanup", _wrap_new___wxPyCleanup, 1 },
+	 { "wxPyApp_GetStdIcon", _wrap_wxPyApp_GetStdIcon, 1 },
 	 { "wxPyApp_SetVendorName", _wrap_wxPyApp_SetVendorName, 1 },
 	 { "wxPyApp_SetTopWindow", _wrap_wxPyApp_SetTopWindow, 1 },
 	 { "wxPyApp_SetPrintMode", _wrap_wxPyApp_SetPrintMode, 1 },
@@ -1303,6 +2131,7 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_SetClassName", _wrap_wxPyApp_SetClassName, 1 },
 	 { "wxPyApp_SetAuto3D", _wrap_wxPyApp_SetAuto3D, 1 },
 	 { "wxPyApp_SetAppName", _wrap_wxPyApp_SetAppName, 1 },
+	 { "wxPyApp_ProcessIdle", _wrap_wxPyApp_ProcessIdle, 1 },
 	 { "wxPyApp_Pending", _wrap_wxPyApp_Pending, 1 },
 	 { "wxPyApp_MainLoop", _wrap_wxPyApp_MainLoop, 1 },
 	 { "wxPyApp_Initialized", _wrap_wxPyApp_Initialized, 1 },
@@ -1315,9 +2144,17 @@ static PyMethodDef wxcMethods[] = {
 	 { "wxPyApp_GetClassName", _wrap_wxPyApp_GetClassName, 1 },
 	 { "wxPyApp_GetAuto3D", _wrap_wxPyApp_GetAuto3D, 1 },
 	 { "wxPyApp_GetAppName", _wrap_wxPyApp_GetAppName, 1 },
+	 { "delete_wxPyApp", _wrap_delete_wxPyApp, 1 },
 	 { "new_wxPyApp", _wrap_new_wxPyApp, 1 },
 	 { "_wxSetDictionary", __wxSetDictionary, 1 },
 	 { "_wxStart", __wxStart, 1 },
+	 { "ptrmap", _wrap_ptrmap, 1 },
+	 { "ptradd", _wrap_ptradd, 1 },
+	 { "ptrfree", _wrap_ptrfree, 1 },
+	 { "ptrcreate", _wrap_ptrcreate, 1 },
+	 { "ptrset", _wrap_ptrset, 1 },
+	 { "ptrvalue", _wrap_ptrvalue, 1 },
+	 { "ptrcast", _wrap_ptrcast, 1 },
 	 { NULL, NULL }
 };
 static PyObject *SWIG_globals;
@@ -1395,6 +2232,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxTE_PROCESS_ENTER", PyInt_FromLong((long) wxTE_PROCESS_ENTER));
 	 PyDict_SetItemString(d,"wxTE_PASSWORD", PyInt_FromLong((long) wxTE_PASSWORD));
 	 PyDict_SetItemString(d,"wxTE_READONLY", PyInt_FromLong((long) wxTE_READONLY));
+	 PyDict_SetItemString(d,"wxTE_RICH", PyInt_FromLong((long) wxTE_RICH));
 	 PyDict_SetItemString(d,"wxTE_MULTILINE", PyInt_FromLong((long) wxTE_MULTILINE));
 	 PyDict_SetItemString(d,"wxCB_SIMPLE", PyInt_FromLong((long) wxCB_SIMPLE));
 	 PyDict_SetItemString(d,"wxCB_DROPDOWN", PyInt_FromLong((long) wxCB_DROPDOWN));
@@ -1427,6 +2265,8 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxTR_HAS_BUTTONS", PyInt_FromLong((long) wxTR_HAS_BUTTONS));
 	 PyDict_SetItemString(d,"wxTR_EDIT_LABELS", PyInt_FromLong((long) wxTR_EDIT_LABELS));
 	 PyDict_SetItemString(d,"wxTR_LINES_AT_ROOT", PyInt_FromLong((long) wxTR_LINES_AT_ROOT));
+	 PyDict_SetItemString(d,"wxTR_MULTIPLE", PyInt_FromLong((long) wxTR_MULTIPLE));
+	 PyDict_SetItemString(d,"wxTR_HAS_VARIABLE_ROW_HEIGHT", PyInt_FromLong((long) wxTR_HAS_VARIABLE_ROW_HEIGHT));
 	 PyDict_SetItemString(d,"wxLC_ICON", PyInt_FromLong((long) wxLC_ICON));
 	 PyDict_SetItemString(d,"wxLC_SMALL_ICON", PyInt_FromLong((long) wxLC_SMALL_ICON));
 	 PyDict_SetItemString(d,"wxLC_LIST", PyInt_FromLong((long) wxLC_LIST));
@@ -1561,6 +2401,8 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxPD_ESTIMATED_TIME", PyInt_FromLong((long) wxPD_ESTIMATED_TIME));
 	 PyDict_SetItemString(d,"wxPD_REMAINING_TIME", PyInt_FromLong((long) wxPD_REMAINING_TIME));
 	 PyDict_SetItemString(d,"wxNO_DEFAULT", PyInt_FromLong((long) wxNO_DEFAULT));
+	 PyDict_SetItemString(d,"wxMENU_TEAROFF", PyInt_FromLong((long) wxMENU_TEAROFF));
+	 PyDict_SetItemString(d,"wxNO_FULL_REPAINT_ON_RESIZE", PyInt_FromLong((long) wxNO_FULL_REPAINT_ON_RESIZE));
 	 PyDict_SetItemString(d,"wxDEFAULT", PyInt_FromLong((long) wxDEFAULT));
 	 PyDict_SetItemString(d,"wxDECORATIVE", PyInt_FromLong((long) wxDECORATIVE));
 	 PyDict_SetItemString(d,"wxROMAN", PyInt_FromLong((long) wxROMAN));
@@ -1836,6 +2678,9 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_NC_MIDDLE_DCLICK", PyInt_FromLong((long) wxEVT_NC_MIDDLE_DCLICK));
 	 PyDict_SetItemString(d,"wxEVT_NC_RIGHT_DCLICK", PyInt_FromLong((long) wxEVT_NC_RIGHT_DCLICK));
 	 PyDict_SetItemString(d,"wxEVT_CHAR", PyInt_FromLong((long) wxEVT_CHAR));
+	 PyDict_SetItemString(d,"wxEVT_KEY_DOWN", PyInt_FromLong((long) wxEVT_KEY_DOWN));
+	 PyDict_SetItemString(d,"wxEVT_KEY_UP", PyInt_FromLong((long) wxEVT_KEY_UP));
+	 PyDict_SetItemString(d,"wxEVT_CHAR_HOOK", PyInt_FromLong((long) wxEVT_CHAR_HOOK));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_TOP", PyInt_FromLong((long) wxEVT_SCROLL_TOP));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_BOTTOM", PyInt_FromLong((long) wxEVT_SCROLL_BOTTOM));
 	 PyDict_SetItemString(d,"wxEVT_SCROLL_LINEUP", PyInt_FromLong((long) wxEVT_SCROLL_LINEUP));
@@ -1857,8 +2702,6 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_QUERY_END_SESSION", PyInt_FromLong((long) wxEVT_QUERY_END_SESSION));
 	 PyDict_SetItemString(d,"wxEVT_ACTIVATE_APP", PyInt_FromLong((long) wxEVT_ACTIVATE_APP));
 	 PyDict_SetItemString(d,"wxEVT_POWER", PyInt_FromLong((long) wxEVT_POWER));
-	 PyDict_SetItemString(d,"wxEVT_CHAR_HOOK", PyInt_FromLong((long) wxEVT_CHAR_HOOK));
-	 PyDict_SetItemString(d,"wxEVT_KEY_UP", PyInt_FromLong((long) wxEVT_KEY_UP));
 	 PyDict_SetItemString(d,"wxEVT_ACTIVATE", PyInt_FromLong((long) wxEVT_ACTIVATE));
 	 PyDict_SetItemString(d,"wxEVT_CREATE", PyInt_FromLong((long) wxEVT_CREATE));
 	 PyDict_SetItemString(d,"wxEVT_DESTROY", PyInt_FromLong((long) wxEVT_DESTROY));
@@ -1933,7 +2776,7 @@ SWIGEXPORT(void,initwxc)() {
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_SASH_POS_CHANGED));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_UNSPLIT", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_UNSPLIT));
 	 PyDict_SetItemString(d,"wxEVT_COMMAND_SPLITTER_DOUBLECLICKED", PyInt_FromLong((long) wxEVT_COMMAND_SPLITTER_DOUBLECLICKED));
-	 PyDict_SetItemString(d,"__version__", PyString_FromString("2.1b1"));
+	 PyDict_SetItemString(d,"__version__", PyString_FromString("2.1b2"));
 	 PyDict_SetItemString(d,"cvar", SWIG_globals);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultPosition",_wrap_wxPyDefaultPosition_get, _wrap_wxPyDefaultPosition_set);
 	 SWIG_addvarlink(SWIG_globals,"wxPyDefaultSize",_wrap_wxPyDefaultSize_get, _wrap_wxPyDefaultSize_set);
@@ -1941,7 +2784,6 @@ SWIGEXPORT(void,initwxc)() {
 
     __wxPreStart();     // initialize the GUI toolkit, if needed.
 
-//    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);
 
         // Since these modules are all linked together, initialize them now
         // because python won't be able to find their shared library files,
@@ -1963,6 +2805,7 @@ SWIGEXPORT(void,initwxc)() {
     initprintfwc();
 #ifndef SEPARATE
     initutilsc();
+//    initoglc();
 #ifdef WITH_GLCANVAS
     initglcanvasc();
 #endif
@@ -1987,6 +2830,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
 	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_wxFontData","_class_wxFontData",0);
+	 SWIG_RegisterMapping("___wxPyCleanup","_class___wxPyCleanup",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxPyTreeItemData","_wxPyTreeItemData",0);
@@ -2004,7 +2848,6 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPNGHandler","_class_wxPNGHandler",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxColourData","_wxColourData",0);
 	 SWIG_RegisterMapping("_class_wxPageSetupDialogData","_wxPageSetupDialogData",0);
 	 SWIG_RegisterMapping("_wxPrinter","_class_wxPrinter",0);
@@ -2064,6 +2907,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
@@ -2089,6 +2933,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_class_wxButton","_wxButton",0);
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_class_wxFontData","_wxFontData",0);
+	 SWIG_RegisterMapping("_class___wxPyCleanup","___wxPyCleanup",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
 	 SWIG_RegisterMapping("_wxTaskBarIcon","_class_wxTaskBarIcon",0);
 	 SWIG_RegisterMapping("_wxPrintDialog","_class_wxPrintDialog",0);
@@ -2109,6 +2954,7 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_wxMDIChildFrame","_class_wxMDIChildFrame",0);
 	 SWIG_RegisterMapping("_wxListItem","_class_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxCalculateLayoutEvent","_class_wxCalculateLayoutEvent",0);
 	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
@@ -2206,7 +3052,6 @@ SWIGEXPORT(void,initwxc)() {
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxListItem","_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_class_wxFileDialog","_wxFileDialog",0);

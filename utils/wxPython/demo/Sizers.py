@@ -111,21 +111,17 @@ def makeSimpleBorder3(win):
 def makeBoxInBox(win):
     box = wxBoxSizer(wxVERTICAL)
 
-    btn = wxButton(win, 1010, "one")
-    box.Add(btn)
+    box.Add(wxButton(win, 1010, "one"))
 
     box2 = wxBoxSizer(wxHORIZONTAL)
-    btn = wxButton(win, 1010, "two")
-    box2.Add(btn)
-    btn = wxButton(win, 1010, "three")
-    box2.Add(btn)
-    btn = wxButton(win, 1010, "four")
-    box2.Add(btn)
-    btn = wxButton(win, 1010, "five")
-    box2.Add(btn)
+    box2.AddMany([ wxButton(win, 1010, "two"),
+                   wxButton(win, 1010, "three"),
+                   wxButton(win, 1010, "four"),
+                   wxButton(win, 1010, "five"),
+                   ])
 
     box3 = wxBoxSizer(wxVERTICAL)
-    box3.AddMany([ (wxButton(win, 1010, "six"),   1),
+    box3.AddMany([ (wxButton(win, 1010, "six"),   0),
                    (wxButton(win, 1010, "seven"), 2),
                    (wxButton(win, 1010, "eight"), 1),
                    (wxButton(win, 1010, "nine"),  1),
@@ -134,8 +130,7 @@ def makeBoxInBox(win):
     box2.Add(box3, 1)
     box.Add(box2, 1)
 
-    btn = wxButton(win, 1010, "ten")
-    box.Add(btn)
+    box.Add(wxButton(win, 1010, "ten"))
 
     return box
 
@@ -154,11 +149,11 @@ def makeBorderInBox(win):
     insideBox = wxBoxSizer(wxHORIZONTAL)
 
     box2 = wxBoxSizer(wxHORIZONTAL)
-    box2.AddMany([ (wxButton(win, 1010, "one"), 0),
-                   (wxButton(win, 1010, "two"), 0),
-                   (wxButton(win, 1010, "three"), 0),
-                   (wxButton(win, 1010, "four"), 0),
-                   (wxButton(win, 1010, "five"), 0),
+    box2.AddMany([ wxButton(win, 1010, "one"),
+                   wxButton(win, 1010, "two"),
+                   wxButton(win, 1010, "three"),
+                   wxButton(win, 1010, "four"),
+                   wxButton(win, 1010, "five"),
                  ])
 
     insideBox.Add(box2, 0)
@@ -168,7 +163,7 @@ def makeBorderInBox(win):
     insideBox.Add(bdr, 1)
 
     box3 = wxBoxSizer(wxVERTICAL)
-    box3.AddMany([ (wxButton(win, 1010, "six"),   1),
+    box3.AddMany([ (wxButton(win, 1010, "six"),   0),
                    (wxButton(win, 1010, "seven"), 2),
                    (wxButton(win, 1010, "eight"), 1),
                    (wxButton(win, 1010, "nine"),  1),

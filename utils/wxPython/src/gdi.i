@@ -61,6 +61,11 @@ public:
 %new wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1);
 wxBitmap* wxNoRefBitmap(char* name, long flags);
 
+#ifdef __WXMSW__
+%new wxBitmap* wxBitmapFromData(char* data, long type,
+                                int width, int height, int depth = 1);
+#endif
+
 %{                              // Alternate 'constructor'
     wxBitmap* wxEmptyBitmap(int width, int height, int depth=-1) {
         return new wxBitmap(width, height, depth);
@@ -73,6 +78,13 @@ wxBitmap* wxNoRefBitmap(char* name, long flags);
     wxBitmap* wxNoRefBitmap(char* name, long flags) {
         return new wxBitmap(name, flags);
     }
+
+#ifdef __WXMSW__
+    wxBitmap* wxBitmapFromData(char* data, long type,
+                               int width, int height, int depth = 1) {
+        return new wxBitmap((void*)data, type, width, height, depth);
+    }
+#endif
 %}
 
 //---------------------------------------------------------------------------
@@ -96,10 +108,8 @@ public:
 
 class wxIcon : public wxBitmap {
 public:
-#ifdef __WXMSW__
     wxIcon(const wxString& name, long flags,
            int desiredWidth = -1, int desiredHeight = -1);
-#endif
     ~wxIcon();
 
     int GetDepth();
@@ -111,6 +121,7 @@ public:
     void SetHeight(int height);
     void SetWidth(int width);
 };
+
 
 //---------------------------------------------------------------------------
 
@@ -348,8 +359,10 @@ public:
         void DrawBitmap(wxBitmap& bitmap, long x, long y, bool swapPalette=TRUE) {
             wxMemoryDC* memDC = new wxMemoryDC;
             memDC->SelectObject(bitmap);
+#ifdef __WXMSW__
             if (swapPalette)
                 self->SetPalette(*bitmap.GetPalette());
+#endif
             self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
                     0, 0, self->GetLogicalFunction());
             memDC->SelectObject(wxNullBitmap);

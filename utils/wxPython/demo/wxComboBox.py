@@ -15,9 +15,9 @@ class TestComboBox(wxPanel):
                                wxPoint(8, 10))
 
         wxStaticText(self, -1, "Select one:", wxPoint(15, 50), wxSize(75, 18))
-        wxComboBox(self, 50, "default value", wxPoint(80, 50), wxSize(95, 20),
+        wxComboBox(self, 500, "default value", wxPoint(80, 50), wxSize(95, 20),
                    sampleList, wxCB_DROPDOWN)
-        EVT_COMBOBOX(self, 50, self.EvtComboBox)
+        EVT_COMBOBOX(self, 500, self.EvtComboBox)
 
 
     def EvtComboBox(self, event):

@@ -1,38 +1,38 @@
-*** swig.h.old	Wed Feb 04 14:59:40 1998
---- swig.h	Fri Aug 28 14:46:32 1998
+*** swig.h.old	Wed Feb 04 15:59:40 1998
+--- swig.h	Fri Aug 28 15:46:32 1998
 ***************
 *** 178,185 ****
 --- 178,211 ----
     char  *firstkey();
     char  *nextkey();
   };
-  
+
 + // -------------------------------------------------------------------
 + // Simple Vector class
 + // User is responsible for deleting contents before deleteing Vector
 + // -------------------------------------------------------------------
-+ 
++
 + class Vector {
 + public:
 +     Vector(size_t allocSize=8);
 +     ~Vector();
-+ 
++
 +     size_t size()                      { return m_size;  }
 +     size_t count()                     { return m_count; }
 +     size_t append(void* object);
 +     size_t extend(size_t newSize);
-+ 
++
 +     void*& operator[] (size_t idx);
-+ 
++
 +     static void*    s_nullPtr;
-+ 
++
 + private:
 +     size_t          m_size;
 +     size_t          m_count;
 +     void**          m_data;
 + };
-+ 
-+ 
++
++
   /************************************************************************
    * class DataType
    *
@@ -44,15 +44,15 @@
   extern char  *name_set(char *vname, int suppress=0);
   extern char  *name_construct(char *classname, int suppress=0);
   extern char  *name_destroy(char *classname, int suppress=0);
-+ 
++
 + // ----------------------------------------------------------------------
 + // class CPP_class
 + //
 + // Class for managing class members (internally)
 + // ----------------------------------------------------------------------
-+ 
++
 + class CPP_member;
-+ 
++
 + class CPP_class {
 + public:
 +   char        *classname;             // Real class name
@@ -74,9 +74,9 @@
 +   CPP_member  *members;               // Linked list of members
 +   CPP_class   *next;                  // Next class
 +   static CPP_class *classlist;        // List of all classes stored
-+ 
++
 +   Vector      addPragmas;
-+ 
++
 +   CPP_class(char *name, char *ctype);
 +   void add_member(CPP_member *m);
 +   CPP_member *search_member(char *name);
@@ -86,12 +86,54 @@
 +   void create_default();
 +   static void create_all();
 + };
-+ 
++
 + extern CPP_class     *current_class;
-  
+
   /***********************************************************************
    * -- Revision History
    * $Log$
-   * Revision 1.1  1998/10/03 05:56:02  RD
-   * *** empty log message ***
+   * Revision 1.2  1999/07/31 07:54:05  RD
+   * wxPython 2.1b1:
+   *
+   * 	Added the missing wxWindow.GetUpdateRegion() method.
+   *
+   * 	Made a new change in SWIG (update your patches everybody) that
+   * 	provides a fix for global shadow objects that get an exception in
+   * 	their __del__ when their extension module has already been deleted.
+   * 	It was only a 1 line change in .../SWIG/Modules/pycpp.cxx at about
+   * 	line 496 if you want to do it by hand.
+   *
+   * 	It is now possible to run through MainLoop more than once in any one
+   * 	process.  The cleanup that used to happen as MainLoop completed (and
+   * 	prevented it from running again) has been delayed until the wxc module
+   * 	is being unloaded by Python.
+   *
+   * 	wxWindow.PopupMenu() now takes a wxPoint instead of  x,y.  Added
+   * 	wxWindow.PopupMenuXY to be consistent with some other methods.
+   *
+   * 	Added wxGrid.SetEditInPlace and wxGrid.GetEditInPlace.
+   *
+   * 	You can now provide your own app.MainLoop method.  See
+   * 	wxPython/demo/demoMainLoop.py for an example and some explaination.
+   *
+   * 	Got the in-place-edit for the wxTreeCtrl fixed and added some demo
+   * 	code to show how to use it.
+   *
+   * 	Put the wxIcon constructor back in for GTK as it now has one that
+   * 	matches MSW's.
+   *
+   * 	Added wxGrid.GetCells
+   *
+   * 	Added wxSystemSettings static methods as functions with names like
+   * 	wxSystemSettings_GetSystemColour.
+   *
+   * 	Removed wxPyMenu since using menu callbacks have been depreciated in
+   * 	wxWindows.  Use wxMenu and events instead.
+   *
+   * 	Added alternate wxBitmap constructor (for MSW only) as
+   * 	      wxBitmapFromData(data, type, width, height, depth = 1)
+   *
+   * 	Added a helper function named wxPyTypeCast that can convert shadow
+   * 	objects of one type into shadow objects of another type.  (Like doing
+   * 	a down-cast.)  See the implementation in wx.py for some docs.
    *

@@ -543,14 +543,16 @@ static PyObject *_wrap_wxMDIChildFrame_Activate(PyObject *self, PyObject *args) 
     return _resultobj;
 }
 
-#define wxMDIChildFrame_Maximize(_swigobj)  (_swigobj->Maximize())
+#define wxMDIChildFrame_Maximize(_swigobj,_swigarg0)  (_swigobj->Maximize(_swigarg0))
 static PyObject *_wrap_wxMDIChildFrame_Maximize(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxMDIChildFrame * _arg0;
+    bool  _arg1;
     char * _argc0 = 0;
+    int tempbool1;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:wxMDIChildFrame_Maximize",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"si:wxMDIChildFrame_Maximize",&_argc0,&tempbool1)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMDIChildFrame_p")) {
@@ -558,9 +560,10 @@ static PyObject *_wrap_wxMDIChildFrame_Maximize(PyObject *self, PyObject *args) 
         return NULL;
         }
     }
+    _arg1 = (bool ) tempbool1;
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxMDIChildFrame_Maximize(_arg0);
+        wxMDIChildFrame_Maximize(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -694,7 +697,6 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
 	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_wxUpdateUIEvent","_class_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
@@ -734,6 +736,7 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
 	 SWIG_RegisterMapping("_wxShowEvent","_class_wxShowEvent",0);
@@ -763,6 +766,7 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_class_wxStaticBitmap","_wxStaticBitmap",0);
 	 SWIG_RegisterMapping("_wxMDIChildFrame","_class_wxMDIChildFrame",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_EBool","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_EBool","_signed_int",0);
@@ -846,7 +850,6 @@ SWIGEXPORT(void,initmdic)() {
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);

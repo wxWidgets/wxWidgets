@@ -4007,7 +4007,6 @@ SWIGEXPORT(void,initprintfwc)() {
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
 	 SWIG_RegisterMapping("_wxNotifyEvent","_class_wxNotifyEvent",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxColourData","_wxColourData",0);
 	 SWIG_RegisterMapping("_class_wxPageSetupDialogData","_wxPageSetupDialogData",0);
 	 SWIG_RegisterMapping("_wxPrinter","_class_wxPrinter",0);
@@ -4197,7 +4196,6 @@ SWIGEXPORT(void,initprintfwc)() {
 	 SWIG_RegisterMapping("_wxDialog","_class_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_wxPageSetupDialog",SwigwxPageSetupDialogTowxDialog);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_class_wxFileDialog","_wxFileDialog",0);
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);

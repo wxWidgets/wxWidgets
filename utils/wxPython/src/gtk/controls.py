@@ -13,9 +13,6 @@ class wxControlPtr(wxWindowPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def Command(self,arg0):
-        val = controlsc.wxControl_Command(self.this,arg0.this)
-        return val
     def GetLabel(self):
         val = controlsc.wxControl_GetLabel(self.this)
         return val
@@ -684,6 +681,9 @@ class wxStaticBitmapPtr(wxControlPtr):
         return val
     def SetBitmap(self,arg0):
         val = controlsc.wxStaticBitmap_SetBitmap(self.this,arg0.this)
+        return val
+    def SetIcon(self,arg0):
+        val = controlsc.wxStaticBitmap_SetIcon(self.this,arg0.this)
         return val
     def __repr__(self):
         return "<C wxStaticBitmap instance>"

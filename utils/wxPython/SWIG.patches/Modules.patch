@@ -1,8 +1,9 @@
-*** python.cxx.old	Fri Jan 02 22:17:40 1998
---- python.cxx	Fri Aug 28 14:49:18 1998
+*** python.cxx.old	Fri Jan 02 23:17:40 1998
+--- python.cxx	Fri Aug 28 15:49:18 1998
 ***************
-*** 1679,1684 ****
---- 1679,1701 ----
+*** 1678,1685 ****
+--- 1678,1702 ----
+  		fprintf(stderr,"%s : Line %d. Unable to locate file %s\n", input_file, line_number, value);
   	      }
   	    }
   	  }
@@ -15,7 +16,7 @@
 +                 txtptr++;
 +                 AddPragmaData* apData = new AddPragmaData(value, txtptr);
 +                 current_class->addPragmas.append(apData);
-+ 
++
 +             } else {
 +                 fprintf(stderr,"%s : Line %d. Malformed addtomethod pragma.  Should be \"methodName:text\"\n",
 +                         input_file, line_number);
@@ -26,65 +27,80 @@
   	} else {
   	  fprintf(stderr,"%s : Line %d. Unrecognized pragma.\n", input_file, line_number);
   	}
-*** python.h.old	Thu Jul 24 22:18:50 1997
---- python.h	Fri Aug 28 14:46:08 1998
+      }
+*** python.h.old	Thu Jul 24 23:18:50 1997
+--- python.h	Fri Aug 28 15:46:08 1998
 ***************
-*** 185,191 ****
---- 185,203 ----
+*** 184,191 ****
+--- 184,203 ----
+    void cpp_declare_const(char *name, char *iname, DataType *type, char *value);
     void cpp_class_decl(char *, char *,char *);
     void pragma(char *, char *, char *);
     void add_typedef(DataType *t, char *name);
-+ 
++
 +   void emitAddPragmas(String& output, char* name, char* spacing);
   };
-  
+
   #define PYSHADOW_MEMBER  0x2
-+ 
++
 + struct AddPragmaData {
 +     String      m_method;
 +     String      m_text;
-+ 
++
 +     AddPragmaData(char* method, char* text)
 +         : m_method(method),
 +           m_text(text)
 +         {}
 + };
-  
-*** pycpp.cxx.old	Fri Jan 02 20:23:22 1998
---- pycpp.cxx	Fri Aug 28 16:01:46 1998
+
+*** pycpp.cxx.old	Fri Jan 02 21:23:22 1998
+--- pycpp.cxx	Tue Jul 20 14:34:36 1999
 ***************
-*** 276,281 ****
---- 276,282 ----
+*** 275,282 ****
+--- 275,283 ----
+  #endif
         }
       }
       //    if ((t->type != T_VOID) || (t->is_pointer))
 +     emitAddPragmas(*pyclass, realname, tab8);
       *pyclass << tab8 << "return val\n";
-  
+
       // Change the usage string to reflect our shadow class
+
 ***************
-*** 394,399 ****
---- 395,401 ----
+*** 393,400 ****
+--- 394,402 ----
+  	}
         }
         *construct << ")\n";
         *construct << tab8 << "self.thisown = 1\n";
 +       emitAddPragmas(*construct, "__init__", tab8);
         have_constructor = 1;
       } else {
-  
+
+        // Hmmm. We seem to be creating a different constructor.  We're just going to create a
 ***************
-*** 494,502 ****
-      *pyclass << tab4 << "def __del__(self):\n"
+*** 490,503 ****
+        if (class_renamed) realname = class_name;
+        else realname = name;
+      }
+
+!     *pyclass << tab4 << "def __del__(self):\n"
   	     << tab8 << "if self.thisown == 1 :\n"
   	     << tab8 << tab4 << module << "." << name_destroy(realname) << "(self.this)\n";
-!     
+!
       have_destructor = 1;
-- 
+-
       if (doc_entry) {
         doc_entry->usage = "";
         doc_entry->usage << "del this";
---- 496,503 ----
-      *pyclass << tab4 << "def __del__(self):\n"
+      }
+--- 492,504 ----
+        if (class_renamed) realname = class_name;
+        else realname = name;
+      }
+
+!     *pyclass << tab4 << "def __del__(self, " << module << "=" << module << "):\n"
   	     << tab8 << "if self.thisown == 1 :\n"
   	     << tab8 << tab4 << module << "." << name_destroy(realname) << "(self.this)\n";
 !     emitAddPragmas(*pyclass, "__del__", tab8);
@@ -92,23 +108,27 @@
       if (doc_entry) {
         doc_entry->usage = "";
         doc_entry->usage << "del this";
+      }
 ***************
-*** 552,557 ****
---- 553,560 ----
+*** 551,558 ****
+--- 552,561 ----
+        repr << tab4 << "def __repr__(self):\n"
   	   << tab8 << "return \"<C " << class_name <<" instance>\"\n";
-  
+
         classes << repr;
 +       emitAddPragmas(classes, "__class__", tab4);
-+ 
++
       }
-  
+
       // Now build the real class with a normal constructor
+
 ***************
-*** 747,752 ****
---- 750,777 ----
+*** 746,753 ****
+--- 749,778 ----
+      hash.add(name,copy_string((char *) hash.lookup(t->name)));
     }
   }
-  
+
 + // --------------------------------------------------------------------------------
 + // PYTHON::emitAddPragmas(String& output, char* name, char* spacing);
 + //
@@ -116,13 +136,13 @@
 + // Append the text properly spcaed to the output string.
 + //
 + // --------------------------------------------------------------------------------
-+ 
++
 + void PYTHON::emitAddPragmas(String& output, char* name, char* spacing)
 + {
 +     AddPragmaData*      apData;
 +     size_t              count;
 +     int                 i;
-+ 
++
 +     count = current_class->addPragmas.count();
 +     for (i=0; i<count; i++) {
 +         apData = (AddPragmaData*)current_class->addPragmas[i];
@@ -131,6 +151,52 @@
 +         }
 +     }
 + }
-  
+
   /*********************************************************************************
+   *
+   * $Log$
+   * Revision 1.2  1999/07/31 07:54:05  RD
+   * wxPython 2.1b1:
+   *
+   * 	Added the missing wxWindow.GetUpdateRegion() method.
+   *
+   * 	Made a new change in SWIG (update your patches everybody) that
+   * 	provides a fix for global shadow objects that get an exception in
+   * 	their __del__ when their extension module has already been deleted.
+   * 	It was only a 1 line change in .../SWIG/Modules/pycpp.cxx at about
+   * 	line 496 if you want to do it by hand.
+   *
+   * 	It is now possible to run through MainLoop more than once in any one
+   * 	process.  The cleanup that used to happen as MainLoop completed (and
+   * 	prevented it from running again) has been delayed until the wxc module
+   * 	is being unloaded by Python.
+   *
+   * 	wxWindow.PopupMenu() now takes a wxPoint instead of  x,y.  Added
+   * 	wxWindow.PopupMenuXY to be consistent with some other methods.
+   *
+   * 	Added wxGrid.SetEditInPlace and wxGrid.GetEditInPlace.
+   *
+   * 	You can now provide your own app.MainLoop method.  See
+   * 	wxPython/demo/demoMainLoop.py for an example and some explaination.
+   *
+   * 	Got the in-place-edit for the wxTreeCtrl fixed and added some demo
+   * 	code to show how to use it.
+   *
+   * 	Put the wxIcon constructor back in for GTK as it now has one that
+   * 	matches MSW's.
+   *
+   * 	Added wxGrid.GetCells
+   *
+   * 	Added wxSystemSettings static methods as functions with names like
+   * 	wxSystemSettings_GetSystemColour.
+   *
+   * 	Removed wxPyMenu since using menu callbacks have been depreciated in
+   * 	wxWindows.  Use wxMenu and events instead.
+   *
+   * 	Added alternate wxBitmap constructor (for MSW only) as
+   * 	      wxBitmapFromData(data, type, width, height, depth = 1)
+   *
+   * 	Added a helper function named wxPyTypeCast that can convert shadow
+   * 	objects of one type into shadow objects of another type.  (Like doing
+   * 	a down-cast.)  See the implementation in wx.py for some docs.
    *

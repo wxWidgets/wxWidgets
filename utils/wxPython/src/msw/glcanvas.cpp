@@ -9270,6 +9270,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_wxPrintQuality","_EBool",0);
 	 SWIG_RegisterMapping("_wxPrintQuality","_size_t",0);
 	 SWIG_RegisterMapping("_wxFontData","_class_wxFontData",0);
+	 SWIG_RegisterMapping("___wxPyCleanup","_class___wxPyCleanup",0);
 	 SWIG_RegisterMapping("_class_wxRegionIterator","_wxRegionIterator",0);
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxPyTreeItemData","_wxPyTreeItemData",0);
@@ -9299,7 +9300,6 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxGrid","_class_wxGrid",0);
 	 SWIG_RegisterMapping("_wxPNGHandler","_class_wxPNGHandler",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxColourData","_wxColourData",0);
 	 SWIG_RegisterMapping("_class_wxPageSetupDialogData","_wxPageSetupDialogData",0);
 	 SWIG_RegisterMapping("_wxPrinter","_class_wxPrinter",0);
@@ -9383,6 +9383,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_wxIdleEvent","_class_wxIdleEvent",0);
 	 SWIG_RegisterMapping("_class_wxUpdateUIEvent","_wxUpdateUIEvent",0);
 	 SWIG_RegisterMapping("_wxToolBar","_class_wxToolBar",0);
+	 SWIG_RegisterMapping("_wxStaticLine","_class_wxStaticLine",0);
 	 SWIG_RegisterMapping("_class_wxLayoutAlgorithm","_wxLayoutAlgorithm",0);
 	 SWIG_RegisterMapping("_wxBrush","_class_wxBrush",0);
 	 SWIG_RegisterMapping("_wxMiniFrame","_class_wxMiniFrame",0);
@@ -9425,6 +9426,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_class_wxButton","_wxButton",0);
 	 SWIG_RegisterMapping("_wxRadioBox","_class_wxRadioBox",0);
 	 SWIG_RegisterMapping("_class_wxFontData","_wxFontData",0);
+	 SWIG_RegisterMapping("_class___wxPyCleanup","___wxPyCleanup",0);
 	 SWIG_RegisterMapping("_GLclampf","_float",0);
 	 SWIG_RegisterMapping("_GLclampf","_GLfloat",0);
 	 SWIG_RegisterMapping("_wxBitmap","_class_wxBitmap",0);
@@ -9457,6 +9459,7 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_wxMDIChildFrame","_class_wxMDIChildFrame",0);
 	 SWIG_RegisterMapping("_wxListItem","_class_wxListItem",0);
 	 SWIG_RegisterMapping("_class_wxToolBar","_wxToolBar",0);
+	 SWIG_RegisterMapping("_class_wxStaticLine","_wxStaticLine",0);
 	 SWIG_RegisterMapping("_wxScrollEvent","_class_wxScrollEvent",0);
 	 SWIG_RegisterMapping("_wxCalculateLayoutEvent","_class_wxCalculateLayoutEvent",0);
 	 SWIG_RegisterMapping("_EBool","_GLsizei",0);
@@ -9589,7 +9592,6 @@ SWIGEXPORT(void,initglcanvasc)() {
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxListItem","_wxListItem",0);
 	 SWIG_RegisterMapping("_GLdouble","_GLclampd",0);
 	 SWIG_RegisterMapping("_GLdouble","_double",0);

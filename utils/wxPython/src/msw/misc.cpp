@@ -121,6 +121,19 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         wxGetResource(section, entry, &retval, file);
         return retval;
     }
+
+
+    wxColour wxSystemSettings_GetSystemColour(int index) {
+        return wxSystemSettings::GetSystemColour(index);
+    }
+
+    wxFont wxSystemSettings_GetSystemFont(int index) {
+        return wxSystemSettings::GetSystemFont(index);
+    }
+
+    int wxSystemSettings_GetSystemMetric(int index) {
+        return wxSystemSettings::GetSystemMetric(index);
+    }
 static PyObject *_wrap_wxFileSelector(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxString * _result;
@@ -444,6 +457,80 @@ static PyObject *_wrap_wxMessageBox(PyObject *self, PyObject *args) {
 {
     if (_obj1)
         delete _arg1;
+}
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxGetNumberFromUser(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    long  _result;
+    wxString * _arg0;
+    wxString * _arg1;
+    wxString * _arg2;
+    long  _arg3;
+    long  _arg4 = 0;
+    long  _arg5 = 100;
+    wxWindow * _arg6 = NULL;
+    wxPoint * _arg7 = &wxPyDefaultPosition;
+    PyObject * _obj0 = 0;
+    PyObject * _obj1 = 0;
+    PyObject * _obj2 = 0;
+    char * _argc6 = 0;
+    char * _argc7 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"OOOl|llss:wxGetNumberFromUser",&_obj0,&_obj1,&_obj2,&_arg3,&_arg4,&_arg5,&_argc6,&_argc7)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    if (!PyString_Check(_obj1)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg1 = new wxString(PyString_AsString(_obj1), PyString_Size(_obj1));
+}
+{
+    if (!PyString_Check(_obj2)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg2 = new wxString(PyString_AsString(_obj2), PyString_Size(_obj2));
+}
+    if (_argc6) {
+        if (SWIG_GetPtr(_argc6,(void **) &_arg6,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 7 of wxGetNumberFromUser. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc7) {
+        if (SWIG_GetPtr(_argc7,(void **) &_arg7,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 8 of wxGetNumberFromUser. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (long )wxGetNumberFromUser(*_arg0,*_arg1,*_arg2,_arg3,_arg4,_arg5,_arg6,*_arg7);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("l",_result);
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    if (_obj1)
+        delete _arg1;
+}
+{
+    if (_obj2)
+        delete _arg2;
 }
     return _resultobj;
 }
@@ -1166,6 +1253,61 @@ static PyObject *_wrap_wxResourceParseString(PyObject *self, PyObject *args) {
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (bool )wxResourceParseString(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemColour(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxColour * _result;
+    int  _arg0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"i:wxSystemSettings_GetSystemColour",&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxColour (wxSystemSettings_GetSystemColour(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxColour_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemFont(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxFont * _result;
+    int  _arg0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"i:wxSystemSettings_GetSystemFont",&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxFont (wxSystemSettings_GetSystemFont(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxFont_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxSystemSettings_GetSystemMetric(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    int  _result;
+    int  _arg0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"i:wxSystemSettings_GetSystemMetric",&_arg0)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (int )wxSystemSettings_GetSystemMetric(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -4142,6 +4284,9 @@ static PyMethodDef misccMethods[] = {
 	 { "wxSize_y_set", _wrap_wxSize_y_set, 1 },
 	 { "wxSize_x_get", _wrap_wxSize_x_get, 1 },
 	 { "wxSize_x_set", _wrap_wxSize_x_set, 1 },
+	 { "wxSystemSettings_GetSystemMetric", _wrap_wxSystemSettings_GetSystemMetric, 1 },
+	 { "wxSystemSettings_GetSystemFont", _wrap_wxSystemSettings_GetSystemFont, 1 },
+	 { "wxSystemSettings_GetSystemColour", _wrap_wxSystemSettings_GetSystemColour, 1 },
 	 { "wxResourceParseString", _wrap_wxResourceParseString, 1 },
 	 { "wxResourceParseFile", _wrap_wxResourceParseFile, 1 },
 	 { "wxResourceParseData", _wrap_wxResourceParseData, 1 },
@@ -4177,6 +4322,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxSetCursor", _wrap_wxSetCursor, 1 },
 	 { "wxDisplayDepth", _wrap_wxDisplayDepth, 1 },
 	 { "wxColourDisplay", _wrap_wxColourDisplay, 1 },
+	 { "wxGetNumberFromUser", _wrap_wxGetNumberFromUser, 1 },
 	 { "wxMessageBox", _wrap_wxMessageBox, 1 },
 	 { "wxGetSingleChoiceIndex", _wrap_wxGetSingleChoiceIndex, 1 },
 	 { "wxGetSingleChoice", _wrap_wxGetSingleChoice, 1 },
@@ -4215,6 +4361,92 @@ SWIGEXPORT(void,initmiscc)() {
 	 PyDict_SetItemString(d,"wxOutRegion", PyInt_FromLong((long) wxOutRegion));
 	 PyDict_SetItemString(d,"wxPartRegion", PyInt_FromLong((long) wxPartRegion));
 	 PyDict_SetItemString(d,"wxInRegion", PyInt_FromLong((long) wxInRegion));
+	 PyDict_SetItemString(d,"wxSYS_WHITE_BRUSH", PyInt_FromLong((long) wxSYS_WHITE_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_LTGRAY_BRUSH", PyInt_FromLong((long) wxSYS_LTGRAY_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_GRAY_BRUSH", PyInt_FromLong((long) wxSYS_GRAY_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_DKGRAY_BRUSH", PyInt_FromLong((long) wxSYS_DKGRAY_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_BLACK_BRUSH", PyInt_FromLong((long) wxSYS_BLACK_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_NULL_BRUSH", PyInt_FromLong((long) wxSYS_NULL_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_HOLLOW_BRUSH", PyInt_FromLong((long) wxSYS_HOLLOW_BRUSH));
+	 PyDict_SetItemString(d,"wxSYS_WHITE_PEN", PyInt_FromLong((long) wxSYS_WHITE_PEN));
+	 PyDict_SetItemString(d,"wxSYS_BLACK_PEN", PyInt_FromLong((long) wxSYS_BLACK_PEN));
+	 PyDict_SetItemString(d,"wxSYS_NULL_PEN", PyInt_FromLong((long) wxSYS_NULL_PEN));
+	 PyDict_SetItemString(d,"wxSYS_OEM_FIXED_FONT", PyInt_FromLong((long) wxSYS_OEM_FIXED_FONT));
+	 PyDict_SetItemString(d,"wxSYS_ANSI_FIXED_FONT", PyInt_FromLong((long) wxSYS_ANSI_FIXED_FONT));
+	 PyDict_SetItemString(d,"wxSYS_ANSI_VAR_FONT", PyInt_FromLong((long) wxSYS_ANSI_VAR_FONT));
+	 PyDict_SetItemString(d,"wxSYS_SYSTEM_FONT", PyInt_FromLong((long) wxSYS_SYSTEM_FONT));
+	 PyDict_SetItemString(d,"wxSYS_DEVICE_DEFAULT_FONT", PyInt_FromLong((long) wxSYS_DEVICE_DEFAULT_FONT));
+	 PyDict_SetItemString(d,"wxSYS_DEFAULT_PALETTE", PyInt_FromLong((long) wxSYS_DEFAULT_PALETTE));
+	 PyDict_SetItemString(d,"wxSYS_SYSTEM_FIXED_FONT", PyInt_FromLong((long) wxSYS_SYSTEM_FIXED_FONT));
+	 PyDict_SetItemString(d,"wxSYS_DEFAULT_GUI_FONT", PyInt_FromLong((long) wxSYS_DEFAULT_GUI_FONT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_SCROLLBAR", PyInt_FromLong((long) wxSYS_COLOUR_SCROLLBAR));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BACKGROUND", PyInt_FromLong((long) wxSYS_COLOUR_BACKGROUND));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_ACTIVECAPTION", PyInt_FromLong((long) wxSYS_COLOUR_ACTIVECAPTION));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INACTIVECAPTION", PyInt_FromLong((long) wxSYS_COLOUR_INACTIVECAPTION));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_MENU", PyInt_FromLong((long) wxSYS_COLOUR_MENU));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_WINDOW", PyInt_FromLong((long) wxSYS_COLOUR_WINDOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_WINDOWFRAME", PyInt_FromLong((long) wxSYS_COLOUR_WINDOWFRAME));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_MENUTEXT", PyInt_FromLong((long) wxSYS_COLOUR_MENUTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_WINDOWTEXT", PyInt_FromLong((long) wxSYS_COLOUR_WINDOWTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_CAPTIONTEXT", PyInt_FromLong((long) wxSYS_COLOUR_CAPTIONTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_ACTIVEBORDER", PyInt_FromLong((long) wxSYS_COLOUR_ACTIVEBORDER));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INACTIVEBORDER", PyInt_FromLong((long) wxSYS_COLOUR_INACTIVEBORDER));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_APPWORKSPACE", PyInt_FromLong((long) wxSYS_COLOUR_APPWORKSPACE));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_HIGHLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_HIGHLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_HIGHLIGHTTEXT", PyInt_FromLong((long) wxSYS_COLOUR_HIGHLIGHTTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNFACE", PyInt_FromLong((long) wxSYS_COLOUR_BTNFACE));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_BTNSHADOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_GRAYTEXT", PyInt_FromLong((long) wxSYS_COLOUR_GRAYTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNTEXT", PyInt_FromLong((long) wxSYS_COLOUR_BTNTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INACTIVECAPTIONTEXT", PyInt_FromLong((long) wxSYS_COLOUR_INACTIVECAPTIONTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNHIGHLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_BTNHIGHLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DDKSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_3DDKSHADOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INFOTEXT", PyInt_FromLong((long) wxSYS_COLOUR_INFOTEXT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_INFOBK", PyInt_FromLong((long) wxSYS_COLOUR_INFOBK));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_DESKTOP", PyInt_FromLong((long) wxSYS_COLOUR_DESKTOP));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DFACE", PyInt_FromLong((long) wxSYS_COLOUR_3DFACE));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DSHADOW", PyInt_FromLong((long) wxSYS_COLOUR_3DSHADOW));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DHIGHLIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DHIGHLIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_3DHILIGHT", PyInt_FromLong((long) wxSYS_COLOUR_3DHILIGHT));
+	 PyDict_SetItemString(d,"wxSYS_COLOUR_BTNHILIGHT", PyInt_FromLong((long) wxSYS_COLOUR_BTNHILIGHT));
+	 PyDict_SetItemString(d,"wxSYS_MOUSE_BUTTONS", PyInt_FromLong((long) wxSYS_MOUSE_BUTTONS));
+	 PyDict_SetItemString(d,"wxSYS_BORDER_X", PyInt_FromLong((long) wxSYS_BORDER_X));
+	 PyDict_SetItemString(d,"wxSYS_BORDER_Y", PyInt_FromLong((long) wxSYS_BORDER_Y));
+	 PyDict_SetItemString(d,"wxSYS_CURSOR_X", PyInt_FromLong((long) wxSYS_CURSOR_X));
+	 PyDict_SetItemString(d,"wxSYS_CURSOR_Y", PyInt_FromLong((long) wxSYS_CURSOR_Y));
+	 PyDict_SetItemString(d,"wxSYS_DCLICK_X", PyInt_FromLong((long) wxSYS_DCLICK_X));
+	 PyDict_SetItemString(d,"wxSYS_DCLICK_Y", PyInt_FromLong((long) wxSYS_DCLICK_Y));
+	 PyDict_SetItemString(d,"wxSYS_DRAG_X", PyInt_FromLong((long) wxSYS_DRAG_X));
+	 PyDict_SetItemString(d,"wxSYS_DRAG_Y", PyInt_FromLong((long) wxSYS_DRAG_Y));
+	 PyDict_SetItemString(d,"wxSYS_EDGE_X", PyInt_FromLong((long) wxSYS_EDGE_X));
+	 PyDict_SetItemString(d,"wxSYS_EDGE_Y", PyInt_FromLong((long) wxSYS_EDGE_Y));
+	 PyDict_SetItemString(d,"wxSYS_HSCROLL_ARROW_X", PyInt_FromLong((long) wxSYS_HSCROLL_ARROW_X));
+	 PyDict_SetItemString(d,"wxSYS_HSCROLL_ARROW_Y", PyInt_FromLong((long) wxSYS_HSCROLL_ARROW_Y));
+	 PyDict_SetItemString(d,"wxSYS_HTHUMB_X", PyInt_FromLong((long) wxSYS_HTHUMB_X));
+	 PyDict_SetItemString(d,"wxSYS_ICON_X", PyInt_FromLong((long) wxSYS_ICON_X));
+	 PyDict_SetItemString(d,"wxSYS_ICON_Y", PyInt_FromLong((long) wxSYS_ICON_Y));
+	 PyDict_SetItemString(d,"wxSYS_ICONSPACING_X", PyInt_FromLong((long) wxSYS_ICONSPACING_X));
+	 PyDict_SetItemString(d,"wxSYS_ICONSPACING_Y", PyInt_FromLong((long) wxSYS_ICONSPACING_Y));
+	 PyDict_SetItemString(d,"wxSYS_WINDOWMIN_X", PyInt_FromLong((long) wxSYS_WINDOWMIN_X));
+	 PyDict_SetItemString(d,"wxSYS_WINDOWMIN_Y", PyInt_FromLong((long) wxSYS_WINDOWMIN_Y));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_X", PyInt_FromLong((long) wxSYS_SCREEN_X));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_Y", PyInt_FromLong((long) wxSYS_SCREEN_Y));
+	 PyDict_SetItemString(d,"wxSYS_FRAMESIZE_X", PyInt_FromLong((long) wxSYS_FRAMESIZE_X));
+	 PyDict_SetItemString(d,"wxSYS_FRAMESIZE_Y", PyInt_FromLong((long) wxSYS_FRAMESIZE_Y));
+	 PyDict_SetItemString(d,"wxSYS_SMALLICON_X", PyInt_FromLong((long) wxSYS_SMALLICON_X));
+	 PyDict_SetItemString(d,"wxSYS_SMALLICON_Y", PyInt_FromLong((long) wxSYS_SMALLICON_Y));
+	 PyDict_SetItemString(d,"wxSYS_HSCROLL_Y", PyInt_FromLong((long) wxSYS_HSCROLL_Y));
+	 PyDict_SetItemString(d,"wxSYS_VSCROLL_X", PyInt_FromLong((long) wxSYS_VSCROLL_X));
+	 PyDict_SetItemString(d,"wxSYS_VSCROLL_ARROW_X", PyInt_FromLong((long) wxSYS_VSCROLL_ARROW_X));
+	 PyDict_SetItemString(d,"wxSYS_VSCROLL_ARROW_Y", PyInt_FromLong((long) wxSYS_VSCROLL_ARROW_Y));
+	 PyDict_SetItemString(d,"wxSYS_VTHUMB_Y", PyInt_FromLong((long) wxSYS_VTHUMB_Y));
+	 PyDict_SetItemString(d,"wxSYS_CAPTION_Y", PyInt_FromLong((long) wxSYS_CAPTION_Y));
+	 PyDict_SetItemString(d,"wxSYS_MENU_Y", PyInt_FromLong((long) wxSYS_MENU_Y));
+	 PyDict_SetItemString(d,"wxSYS_NETWORK_PRESENT", PyInt_FromLong((long) wxSYS_NETWORK_PRESENT));
+	 PyDict_SetItemString(d,"wxSYS_PENWINDOWS_PRESENT", PyInt_FromLong((long) wxSYS_PENWINDOWS_PRESENT));
+	 PyDict_SetItemString(d,"wxSYS_SHOW_SOUNDS", PyInt_FromLong((long) wxSYS_SHOW_SOUNDS));
+	 PyDict_SetItemString(d,"wxSYS_SWAP_BUTTONS", PyInt_FromLong((long) wxSYS_SWAP_BUTTONS));
 /*
  * These are the pointer type-equivalency mappings. 
  * (Used by the SWIG pointer type-checker).

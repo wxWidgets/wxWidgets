@@ -45,7 +45,7 @@ public:
     ~wxPyApp();
     int  MainLoop(void);
     bool OnInit(void);
-    void AfterMainLoop(void);
+//#    void AfterMainLoop(void);
 };
 
 extern wxPyApp *wxPythonApp;
@@ -58,10 +58,8 @@ PyObject* __wxStart(PyObject*, PyObject* args);
 extern PyObject* wxPython_dict;
 PyObject* __wxSetDictionary(PyObject*, PyObject* args);
 
-extern wxHashTable*  wxPyWindows;  // keep track of all windows so we
-                                   // don't accidentally delete them twice.
-
 void wxPyEventThunker(wxObject*, wxEvent& event);
+PyObject* wxPyConstructObject(void* ptr, char* className);
 
 //----------------------------------------------------------------------
 
@@ -98,15 +96,15 @@ public:
 
 //---------------------------------------------------------------------------
 
-class wxPyMenu : public wxMenu {
-public:
-    wxPyMenu(const wxString& title = "", PyObject* func=NULL);
-    ~wxPyMenu();
+//  class wxPyMenu : public wxMenu {
+//  public:
+//      wxPyMenu(const wxString& title = "", PyObject* func=NULL);
+//      ~wxPyMenu();
 
-private:
-    static void MenuCallback(wxMenu& menu, wxCommandEvent& evt);
-    PyObject*   func;
-};
+//  private:
+//      static void MenuCallback(wxMenu& menu, wxCommandEvent& evt);
+//      PyObject*   func;
+//  };
 
 
 //---------------------------------------------------------------------------

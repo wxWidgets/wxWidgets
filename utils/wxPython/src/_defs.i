@@ -232,6 +232,7 @@ enum {
     wxTE_PROCESS_ENTER,
     wxTE_PASSWORD,
     wxTE_READONLY,
+    wxTE_RICH,
     wxTE_MULTILINE,
     wxCB_SIMPLE,
     wxCB_DROPDOWN,
@@ -264,6 +265,8 @@ enum {
     wxTR_HAS_BUTTONS,
     wxTR_EDIT_LABELS,
     wxTR_LINES_AT_ROOT,
+    wxTR_MULTIPLE,
+    wxTR_HAS_VARIABLE_ROW_HEIGHT,
     wxLC_ICON,
     wxLC_SMALL_ICON,
     wxLC_LIST,
@@ -404,6 +407,9 @@ enum {
     wxPD_REMAINING_TIME,
 
     wxNO_DEFAULT,
+    wxMENU_TEAROFF,
+    wxNO_FULL_REPAINT_ON_RESIZE,
+
 };
 
 
@@ -743,6 +749,9 @@ enum wxEventType {
 
 /* Character input event type  */
  wxEVT_CHAR,
+ wxEVT_KEY_DOWN,
+ wxEVT_KEY_UP,
+ wxEVT_CHAR_HOOK,
 
  /*
   * Scrollbar event identifiers
@@ -773,8 +782,6 @@ enum wxEventType {
  wxEVT_QUERY_END_SESSION,
  wxEVT_ACTIVATE_APP,
  wxEVT_POWER,
- wxEVT_CHAR_HOOK,
- wxEVT_KEY_UP,
  wxEVT_ACTIVATE,
  wxEVT_CREATE,
  wxEVT_DESTROY,

@@ -609,7 +609,7 @@ class wxPyEventPtr(wxCommandEventPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, eventsc=eventsc):
         if self.thisown == 1 :
             eventsc.delete_wxPyEvent(self.this)
     def SetUserData(self,arg0):

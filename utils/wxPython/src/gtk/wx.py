@@ -34,6 +34,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def __del__(self, wxc=wxc):
+        if self.thisown == 1 :
+            wxc.delete_wxPyApp(self.this)
     def GetAppName(self):
         val = wxc.wxPyApp_GetAppName(self.this)
         return val
@@ -68,6 +71,9 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def Pending(self):
         val = wxc.wxPyApp_Pending(self.this)
         return val
+    def ProcessIdle(self):
+        val = wxc.wxPyApp_ProcessIdle(self.this)
+        return val
     def SetAppName(self,arg0):
         val = wxc.wxPyApp_SetAppName(self.this,arg0)
         return val
@@ -86,9 +92,6 @@ class wxPyAppPtr(wxEvtHandlerPtr):
     def SetVendorName(self,arg0):
         val = wxc.wxPyApp_SetVendorName(self.this,arg0)
         return val
-    def AfterMainLoop(self):
-        val = wxc.wxPyApp_AfterMainLoop(self.this)
-        return val
     def __repr__(self):
         return "<C wxPyApp instance>"
 class wxPyApp(wxPyAppPtr):
@@ -99,9 +102,40 @@ class wxPyApp(wxPyAppPtr):
 
 
 
+class __wxPyCleanupPtr :
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __del__(self, wxc=wxc):
+        if self.thisown == 1 :
+            wxc.delete___wxPyCleanup(self.this)
+    def __repr__(self):
+        return "<C __wxPyCleanup instance>"
+class __wxPyCleanup(__wxPyCleanupPtr):
+    def __init__(self) :
+        self.this = wxc.new___wxPyCleanup()
+        self.thisown = 1
+
+
+
+
 
 
 #-------------- FUNCTION WRAPPERS ------------------
+
+ptrcast = wxc.ptrcast
+
+ptrvalue = wxc.ptrvalue
+
+ptrset = wxc.ptrset
+
+ptrcreate = wxc.ptrcreate
+
+ptrfree = wxc.ptrfree
+
+ptradd = wxc.ptradd
+
+ptrmap = wxc.ptrmap
 
 _wxStart = wxc._wxStart
 
@@ -177,6 +211,7 @@ wxPASSWORD = wxc.wxPASSWORD
 wxTE_PROCESS_ENTER = wxc.wxTE_PROCESS_ENTER
 wxTE_PASSWORD = wxc.wxTE_PASSWORD
 wxTE_READONLY = wxc.wxTE_READONLY
+wxTE_RICH = wxc.wxTE_RICH
 wxTE_MULTILINE = wxc.wxTE_MULTILINE
 wxCB_SIMPLE = wxc.wxCB_SIMPLE
 wxCB_DROPDOWN = wxc.wxCB_DROPDOWN
@@ -209,6 +244,8 @@ wxBU_NOAUTODRAW = wxc.wxBU_NOAUTODRAW
 wxTR_HAS_BUTTONS = wxc.wxTR_HAS_BUTTONS
 wxTR_EDIT_LABELS = wxc.wxTR_EDIT_LABELS
 wxTR_LINES_AT_ROOT = wxc.wxTR_LINES_AT_ROOT
+wxTR_MULTIPLE = wxc.wxTR_MULTIPLE
+wxTR_HAS_VARIABLE_ROW_HEIGHT = wxc.wxTR_HAS_VARIABLE_ROW_HEIGHT
 wxLC_ICON = wxc.wxLC_ICON
 wxLC_SMALL_ICON = wxc.wxLC_SMALL_ICON
 wxLC_LIST = wxc.wxLC_LIST
@@ -337,6 +374,8 @@ wxPD_ELAPSED_TIME = wxc.wxPD_ELAPSED_TIME
 wxPD_ESTIMATED_TIME = wxc.wxPD_ESTIMATED_TIME
 wxPD_REMAINING_TIME = wxc.wxPD_REMAINING_TIME
 wxNO_DEFAULT = wxc.wxNO_DEFAULT
+wxMENU_TEAROFF = wxc.wxMENU_TEAROFF
+wxNO_FULL_REPAINT_ON_RESIZE = wxc.wxNO_FULL_REPAINT_ON_RESIZE
 wxDEFAULT = wxc.wxDEFAULT
 wxDECORATIVE = wxc.wxDECORATIVE
 wxROMAN = wxc.wxROMAN
@@ -612,6 +651,9 @@ wxEVT_NC_LEFT_DCLICK = wxc.wxEVT_NC_LEFT_DCLICK
 wxEVT_NC_MIDDLE_DCLICK = wxc.wxEVT_NC_MIDDLE_DCLICK
 wxEVT_NC_RIGHT_DCLICK = wxc.wxEVT_NC_RIGHT_DCLICK
 wxEVT_CHAR = wxc.wxEVT_CHAR
+wxEVT_KEY_DOWN = wxc.wxEVT_KEY_DOWN
+wxEVT_KEY_UP = wxc.wxEVT_KEY_UP
+wxEVT_CHAR_HOOK = wxc.wxEVT_CHAR_HOOK
 wxEVT_SCROLL_TOP = wxc.wxEVT_SCROLL_TOP
 wxEVT_SCROLL_BOTTOM = wxc.wxEVT_SCROLL_BOTTOM
 wxEVT_SCROLL_LINEUP = wxc.wxEVT_SCROLL_LINEUP
@@ -633,8 +675,6 @@ wxEVT_END_SESSION = wxc.wxEVT_END_SESSION
 wxEVT_QUERY_END_SESSION = wxc.wxEVT_QUERY_END_SESSION
 wxEVT_ACTIVATE_APP = wxc.wxEVT_ACTIVATE_APP
 wxEVT_POWER = wxc.wxEVT_POWER
-wxEVT_CHAR_HOOK = wxc.wxEVT_CHAR_HOOK
-wxEVT_KEY_UP = wxc.wxEVT_KEY_UP
 wxEVT_ACTIVATE = wxc.wxEVT_ACTIVATE
 wxEVT_CREATE = wxc.wxEVT_CREATE
 wxEVT_DESTROY = wxc.wxEVT_DESTROY
@@ -813,6 +853,12 @@ def EVT_CHAR(win, func):
 
 def EVT_CHAR_HOOK(win, func):
     win.Connect(-1, -1, wxEVT_CHAR_HOOK, func)
+
+def EVT_KEY_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_KEY_DOWN, func)
+
+def EVT_KEY_UP(win, func):
+    win.Connect(-1, -1, wxEVT_KEY_UP, func)
 
 def EVT_MENU_HIGHLIGHT(win, id, func):
     win.Connect(id, -1, wxEVT_MENU_HIGHLIGHT, func)
@@ -1306,6 +1352,38 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
         self.thisown = 1
 
 #----------------------------------------------------------------------
+# This helper function will take a wxPython object and convert it to
+# another wxPython object type.  This will not be able to create objects
+# user that are derived from wxPython classes, only those that are
+# actually part of wxPython and directly corespond to C++ objects.
+#
+# This is useful in situations where some method returns a generic
+# type such as wxWindow, but you know that it is actually some
+# derived type such as a wxTextCtrl.  You can't call wxTextCtrl specific
+# methods on a wxWindow object, but you can use this function to
+# create a wxTextCtrl object that will pass the same pointer to
+# the C++ code.  You use it like this:
+#
+#    textCtrl = wxPyTypeCast(window, "wxTextCtrl")
+#
+#
+# WARNING:  Using this function to type cast objects into types that
+#           they are not is not recommended and is likely to cause your
+#           program to crash...  Hard.
+#
+
+def wxPyTypeCast(obj, typeStr):
+    if hasattr(obj, "this"):
+        newPtr = ptrcast(obj.this, typeStr+"_p")
+    else:
+        newPtr = ptrcast(obj, typeStr+"_p")
+    theClass = globals()[typeStr+"Ptr"]
+    theObj = theClass(newPtr)
+    theObj.thisown = obj.thisown
+    return theObj
+
+
+#----------------------------------------------------------------------
 
 ##  class wxPyStdOutWindow:
 ##       def __init__(self, title = "wxPython: stdout/stderr"):
@@ -1373,3 +1451,10 @@ class wxApp(wxPyApp):
 
 
 #----------------------------------------------------------------------------
+# DO NOT hold any other references to this object.  This is how we know when
+# to cleanup system resources that wxWin is holding...
+__cleanMeUp = __wxPyCleanup()
+#----------------------------------------------------------------------------
+
+
+

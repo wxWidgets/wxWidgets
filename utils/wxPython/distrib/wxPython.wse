@@ -863,6 +863,18 @@ item: Install File
   Flags=0000000010000010
 end
 item: Install File
+  Source=E:\Projects\wx\utils\wxPython\demo\README.txt
+  Destination=%MAINDIR%\wxPython\demo
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
+  Source=e:\Projects\wx\utils\wxPython\demo\*.xml
+  Destination=%MAINDIR%\wxPython\demo
+  Description=Demos
+  Flags=0000000010000010
+end
+item: Install File
   Source=e:\Projects\wx\utils\wxPython\demo\bitmaps\*.bmp
   Destination=%MAINDIR%\wxPython\demo\bitmaps
   Description=Demos

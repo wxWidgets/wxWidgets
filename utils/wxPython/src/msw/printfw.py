@@ -21,7 +21,7 @@ class wxPrintDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, printfwc=printfwc):
         if self.thisown == 1 :
             printfwc.delete_wxPrintData(self.this)
     def GetNoCopies(self):
@@ -93,7 +93,7 @@ class wxPageSetupDialogDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, printfwc=printfwc):
         if self.thisown == 1 :
             printfwc.delete_wxPageSetupDialogData(self.this)
     def EnableHelp(self,arg0):
@@ -232,7 +232,7 @@ class wxPrintDialogDataPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, printfwc=printfwc):
         if self.thisown == 1 :
             printfwc.delete_wxPrintDialogData(self.this)
     def EnableHelp(self,arg0):
@@ -409,7 +409,7 @@ class wxPrinterPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, printfwc=printfwc):
         if self.thisown == 1 :
             printfwc.delete_wxPrinter(self.this)
     def CreateAbortWindow(self,arg0,arg1):

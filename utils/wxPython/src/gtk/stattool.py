@@ -65,7 +65,7 @@ class wxToolBarToolPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, stattoolc=stattoolc):
         if self.thisown == 1 :
             stattoolc.delete_wxToolBarTool(self.this)
     def __setattr__(self,name,value):

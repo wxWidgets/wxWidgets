@@ -79,35 +79,36 @@ bool wxPyApp::OnInit(void) {
 
 int  wxPyApp::MainLoop(void) {
     int retval = wxApp::MainLoop();
-    AfterMainLoop();
+//#    AfterMainLoop();
+    wxPythonApp->OnExit();  //#
     return retval;
 }
 
 
-void wxPyApp::AfterMainLoop(void) {
-    // more stuff from wxEntry...
+//#  void wxPyApp::AfterMainLoop(void) {
+//      // more stuff from wxEntry...
 
-    if (wxPythonApp->GetTopWindow()) {
-        // Forcibly delete the window.
-        if (wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)) ||
-            wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxDialog))) {
+//      if (wxPythonApp->GetTopWindow()) {
+//          // Forcibly delete the window.
+//          if (wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxFrame)) ||
+//              wxPythonApp->GetTopWindow()->IsKindOf(CLASSINFO(wxDialog))) {
 
-            wxPythonApp->GetTopWindow()->Close(TRUE);
-            wxPythonApp->DeletePendingObjects();
-        }
-        else {
-            delete wxPythonApp->GetTopWindow();
-            wxPythonApp->SetTopWindow(NULL);
-        }
-    }
-#ifdef __WXGTK__
-      wxPythonApp->DeletePendingObjects();
-#endif
+//              wxPythonApp->GetTopWindow()->Close(TRUE);
+//              wxPythonApp->DeletePendingObjects();
+//          }
+//          else {
+//              delete wxPythonApp->GetTopWindow();
+//              wxPythonApp->SetTopWindow(NULL);
+//          }
+//      }
+//  #ifdef __WXGTK__
+//        wxPythonApp->DeletePendingObjects();
+//  #endif
 
-    wxPythonApp->OnExit();
-    wxApp::CleanUp();
-//    delete wxPythonApp;
-}
+//      wxPythonApp->OnExit();
+//      wxApp::CleanUp();
+//  //    delete wxPythonApp;
+//  }
 
 
 //---------------------------------------------------------------------
@@ -117,7 +118,7 @@ void wxPyApp::AfterMainLoop(void) {
 
 // This is where we pick up the first part of the wxEntry functionality...
 // The rest is in __wxStart and  AfterMainLoop.  This function is called when
-// wxpc is imported.  (Before there is a wxApp object.)
+// wxcmodule is imported.  (Before there is a wxApp object.)
 void __wxPreStart()
 {
     // Bail out if there is already windows created.  This means that the
@@ -140,7 +141,9 @@ void __wxPreStart()
     argv[argc] = NULL;
 
     gtk_set_locale();
+    if (!wxOKlibc()) wxConvCurrent = &wxConvLocal;
     gtk_init( &argc, &argv );
+    wxSetDetectableAutoRepeat( TRUE );
     delete [] argv;
 
     wxApp::Initialize();     // may return FALSE. Should we check?
@@ -154,6 +157,8 @@ PyThreadState*  wxPyEventThreadState = NULL;
 bool            wxPyInEvent = false;
 #endif
 static char* __nullArgv[1] = { 0 };
+
+
 
 // Start the user application, user App's OnInit method is a parameter here
 PyObject* __wxStart(PyObject* /* self */, PyObject* args)
@@ -184,15 +189,9 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
     // Call the Python App's OnInit function
     arglist = PyTuple_New(0);
-
-    // Py_END_ALLOW_THREADS;  ****  __wxStart was called from Python,
-    //                              should already have the lock
     result = PyEval_CallObject(onInitFunc, arglist);
-    // Py_BEGIN_ALLOW_THREADS;
-
-    if (!result) {
-        PyErr_Print();
-        exit(1);
+    if (!result) {      // an exception was raised.
+        return NULL;
     }
 
     if (! PyInt_Check(result)) {
@@ -201,9 +200,6 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
     }
     bResult = PyInt_AS_LONG(result);
     if (! bResult) {
-        wxPythonApp->DeletePendingObjects();
-        wxPythonApp->OnExit();
-        wxApp::CleanUp();
         PyErr_SetString(PyExc_SystemExit, "OnInit returned false, exiting...");
         return NULL;
     }
@@ -256,8 +252,6 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 
 //---------------------------------------------------------------------------
 
-
-static
 PyObject* wxPyConstructObject(void* ptr, char* className)
 {
     char    buff[64];               // should always be big enough...
@@ -338,64 +332,64 @@ void wxPyCallback::EventThunker(wxEvent& event) {
 
 //---------------------------------------------------------------------------
 
-wxPyMenu::wxPyMenu(const wxString& title, PyObject* _func)
-    : wxMenu(title, (wxFunction)(func ? MenuCallback : NULL)), func(0) {
+//  wxPyMenu::wxPyMenu(const wxString& title, PyObject* _func)
+//      : wxMenu(title, (wxFunction)(func ? MenuCallback : NULL)), func(0) {
 
-    if (_func) {
-        func = _func;
-        Py_INCREF(func);
-    }
-}
+//      if (_func) {
+//          func = _func;
+//          Py_INCREF(func);
+//      }
+//  }
 
-wxPyMenu::~wxPyMenu() {
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_RestoreThread(wxPyEventThreadState);
-#endif
+//  wxPyMenu::~wxPyMenu() {
+//  #ifdef WXP_WITH_THREAD
+//      //if (! wxPyInEvent)
+//          PyEval_RestoreThread(wxPyEventThreadState);
+//  #endif
 
-    if (func)
-        Py_DECREF(func);
+//      if (func)
+//          Py_DECREF(func);
 
-#ifdef WXP_WITH_THREAD
-    //if (! wxPyInEvent)
-        PyEval_SaveThread();
-#endif
-}
+//  #ifdef WXP_WITH_THREAD
+//      //if (! wxPyInEvent)
+//          PyEval_SaveThread();
+//  #endif
+//  }
 
 
-void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
-    PyObject* evtobj;
-    PyObject* menuobj;
-    PyObject* func;
-    PyObject* args;
-    PyObject* res;
+//  void wxPyMenu::MenuCallback(wxMenu& menu, wxCommandEvent& evt) {
+//      PyObject* evtobj;
+//      PyObject* menuobj;
+//      PyObject* func;
+//      PyObject* args;
+//      PyObject* res;
 
-#ifdef WXP_WITH_THREAD
-    PyEval_RestoreThread(wxPyEventThreadState);
-    wxPyInEvent = true;
-#endif
-    evtobj  = wxPyConstructObject((void*)&evt, "wxCommandEvent");
-    menuobj = wxPyConstructObject((void*)&menu, "wxMenu");
-    if (PyErr_Occurred()) {
-        // bail out if a problem
-        PyErr_Print();
-        goto done;
-    }
-    // Now call the callback...
-    func = ((wxPyMenu*)&menu)->func;
-    args = PyTuple_New(2);
-    PyTuple_SET_ITEM(args, 0, menuobj);
-    PyTuple_SET_ITEM(args, 1, evtobj);
-    res  = PyEval_CallObject(func, args);
-    Py_DECREF(args);
-    Py_XDECREF(res); /* In case res is a NULL pointer */
- done:
-#ifdef WXP_WITH_THREAD
-    PyEval_SaveThread();
-    wxPyInEvent = false;
-#endif
-    return;
-}
+//  #ifdef WXP_WITH_THREAD
+//      PyEval_RestoreThread(wxPyEventThreadState);
+//      wxPyInEvent = true;
+//  #endif
+//      evtobj  = wxPyConstructObject((void*)&evt, "wxCommandEvent");
+//      menuobj = wxPyConstructObject((void*)&menu, "wxMenu");
+//      if (PyErr_Occurred()) {
+//          // bail out if a problem
+//          PyErr_Print();
+//          goto done;
+//      }
+//      // Now call the callback...
+//      func = ((wxPyMenu*)&menu)->func;
+//      args = PyTuple_New(2);
+//      PyTuple_SET_ITEM(args, 0, menuobj);
+//      PyTuple_SET_ITEM(args, 1, evtobj);
+//      res  = PyEval_CallObject(func, args);
+//      Py_DECREF(args);
+//      Py_XDECREF(res); /* In case res is a NULL pointer */
+//   done:
+//  #ifdef WXP_WITH_THREAD
+//      PyEval_SaveThread();
+//      wxPyInEvent = false;
+//  #endif
+//      return;
+//  }
 
 
 //---------------------------------------------------------------------------

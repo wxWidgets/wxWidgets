@@ -95,6 +95,12 @@ def EVT_CHAR(win, func):
 def EVT_CHAR_HOOK(win, func):
     win.Connect(-1, -1, wxEVT_CHAR_HOOK, func)
 
+def EVT_KEY_DOWN(win, func):
+    win.Connect(-1, -1, wxEVT_KEY_DOWN, func)
+
+def EVT_KEY_UP(win, func):
+    win.Connect(-1, -1, wxEVT_KEY_UP, func)
+
 def EVT_MENU_HIGHLIGHT(win, id, func):
     win.Connect(id, -1, wxEVT_MENU_HIGHLIGHT, func)
 
@@ -587,6 +593,38 @@ class wxAcceleratorTable(wxAcceleratorTablePtr):
         self.thisown = 1
 
 #----------------------------------------------------------------------
+# This helper function will take a wxPython object and convert it to
+# another wxPython object type.  This will not be able to create objects
+# user that are derived from wxPython classes, only those that are
+# actually part of wxPython and directly corespond to C++ objects.
+#
+# This is useful in situations where some method returns a generic
+# type such as wxWindow, but you know that it is actually some
+# derived type such as a wxTextCtrl.  You can't call wxTextCtrl specific
+# methods on a wxWindow object, but you can use this function to
+# create a wxTextCtrl object that will pass the same pointer to
+# the C++ code.  You use it like this:
+#
+#    textCtrl = wxPyTypeCast(window, "wxTextCtrl")
+#
+#
+# WARNING:  Using this function to type cast objects into types that
+#           they are not is not recommended and is likely to cause your
+#           program to crash...  Hard.
+#
+
+def wxPyTypeCast(obj, typeStr):
+    if hasattr(obj, "this"):
+        newPtr = ptrcast(obj.this, typeStr+"_p")
+    else:
+        newPtr = ptrcast(obj, typeStr+"_p")
+    theClass = globals()[typeStr+"Ptr"]
+    theObj = theClass(newPtr)
+    theObj.thisown = obj.thisown
+    return theObj
+
+
+#----------------------------------------------------------------------
 
 ##  class wxPyStdOutWindow:
 ##       def __init__(self, title = "wxPython: stdout/stderr"):
@@ -654,3 +692,10 @@ class wxApp(wxPyApp):
 
 
 #----------------------------------------------------------------------------
+# DO NOT hold any other references to this object.  This is how we know when
+# to cleanup system resources that wxWin is holding...
+__cleanMeUp = __wxPyCleanup()
+#----------------------------------------------------------------------------
+
+
+

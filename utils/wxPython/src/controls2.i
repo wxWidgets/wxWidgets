@@ -143,6 +143,8 @@ public:
     wxTextCtrl* EditLabel(long item);
     bool EndEditLabel(bool cancel);
     wxTextCtrl* GetEditControl();
+#else
+    void EditLabel(long item);
 #endif
     bool EnsureVisible(long item);
     long FindItem(long start, const wxString& str, bool partial = FALSE);
@@ -284,13 +286,13 @@ public:
 
 
 
-class wxTreeEvent : public wxCommandEvent {
+class wxTreeEvent : public wxNotifyEvent {
 public:
     wxTreeItemId GetItem();
     wxTreeItemId GetOldItem();
     wxPoint GetPoint();
     int GetCode();
-    void Veto();
+    const wxString& GetLabel();
 };
 
 
@@ -412,15 +414,17 @@ public:
     void Toggle(const wxTreeItemId& item);
 
     void Unselect();
+    void UnselectAll();
     void SelectItem(const wxTreeItemId& item);
     void EnsureVisible(const wxTreeItemId& item);
     void ScrollTo(const wxTreeItemId& item);
-
+#ifdef __WXMSW__
     wxTextCtrl* EditLabel(const wxTreeItemId& item);
-                          // **** figure out how to do this
-                          // wxClassInfo* textCtrlClass = CLASSINFO(wxTextCtrl));
     wxTextCtrl* GetEditControl();
     void EndEditLabel(const wxTreeItemId& item, bool discardChanges = FALSE);
+#else
+    void EditLabel(const wxTreeItemId& item);
+#endif
 
 //    void SortChildren(const wxTreeItemId& item);
                       // **** And this too

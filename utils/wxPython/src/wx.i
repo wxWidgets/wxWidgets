@@ -25,6 +25,8 @@
 %include my_typemaps.i
 %include _defs.i
 
+%include pointer.i
+
 %import misc.i
 %import misc2.i
 %import windows.i
@@ -47,7 +49,7 @@
 
 //---------------------------------------------------------------------------
 
-#define __version__ "2.1b1"
+#define __version__ "2.1b2"
 
 wxPoint     wxPyDefaultPosition;
 wxSize      wxPyDefaultSize;
@@ -64,6 +66,7 @@ public:
         }
     }
 
+    ~wxPyApp();
 
     wxString GetAppName();
 #ifdef __WXMSW__
@@ -80,6 +83,7 @@ public:
     bool Initialized();
     int  MainLoop();
     bool Pending();
+    bool ProcessIdle();
 
     void SetAppName(const wxString& name);
 #ifdef __WXMSW__
@@ -91,9 +95,31 @@ public:
     void SetTopWindow(wxWindow* window);
     void SetVendorName(const wxString& name);
 
-    // This one is wxPython specific.  If you override MainLoop,
-    // call this when done.
-    void AfterMainLoop();
+    wxIcon GetStdIcon(int which);
+
+
+};
+
+
+//----------------------------------------------------------------------
+// An instance of this object is created in the main wx module.  As long
+// as there are no extra references to it then when the wx module is being
+// unloaded from memory then this object's destructor will be called. When
+// it is then we'll use that as a signal to clean up wxWindows
+
+%{
+class __wxPyCleanup {
+public:
+    __wxPyCleanup()  { }
+    ~__wxPyCleanup() { wxApp::CleanUp(); }
+};
+%}
+
+// now to swigify it...
+class __wxPyCleanup {
+public:
+    __wxPyCleanup();
+    ~__wxPyCleanup();
 };
 
 
@@ -120,6 +146,7 @@ extern "C" SWIGEXPORT(void,initimagec)();
 extern "C" SWIGEXPORT(void,initprintfwc)();
 #ifndef SEPARATE
 extern "C" SWIGEXPORT(void,initutilsc)();
+//extern "C" SWIGEXPORT(void,initoglc)();
 extern "C" SWIGEXPORT(void,initglcanvasc)();
 #endif
 %}
@@ -130,7 +157,6 @@ extern "C" SWIGEXPORT(void,initglcanvasc)();
 
     __wxPreStart();     // initialize the GUI toolkit, if needed.
 
-//    wxPyWindows = new wxHashTable(wxKEY_INTEGER, 100);
 
         // Since these modules are all linked together, initialize them now
         // because python won't be able to find their shared library files,
@@ -152,6 +178,7 @@ extern "C" SWIGEXPORT(void,initglcanvasc)();
     initprintfwc();
 #ifndef SEPARATE
     initutilsc();
+//    initoglc();
 #ifdef WITH_GLCANVAS
     initglcanvasc();
 #endif

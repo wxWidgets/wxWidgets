@@ -35,7 +35,7 @@ class wxGLContextPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, glcanvasc=glcanvasc):
         if self.thisown == 1 :
             glcanvasc.delete_wxGLContext(self.this)
     def SetCurrent(self):

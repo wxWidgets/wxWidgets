@@ -331,6 +331,26 @@ class wxStaticBox(wxStaticBoxPtr):
 
 
 
+class wxStaticLinePtr(wxControlPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def __repr__(self):
+        return "<C wxStaticLine instance>"
+class wxStaticLine(wxStaticLinePtr):
+    def __init__(self,arg0,arg1,*args) :
+        argl = map(None,args)
+        try: argl[0] = argl[0].this
+        except: pass
+        try: argl[1] = argl[1].this
+        except: pass
+        args = tuple(argl)
+        self.this = apply(controlsc.new_wxStaticLine,(arg0.this,arg1,)+args)
+        self.thisown = 1
+
+
+
+
 class wxStaticTextPtr(wxControlPtr):
     def __init__(self,this):
         self.this = this
@@ -664,6 +684,9 @@ class wxStaticBitmapPtr(wxControlPtr):
         return val
     def SetBitmap(self,arg0):
         val = controlsc.wxStaticBitmap_SetBitmap(self.this,arg0.this)
+        return val
+    def SetIcon(self,arg0):
+        val = controlsc.wxStaticBitmap_SetIcon(self.this,arg0.this)
         return val
     def __repr__(self):
         return "<C wxStaticBitmap instance>"

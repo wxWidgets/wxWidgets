@@ -131,6 +131,13 @@ static char* wxStringErrorMsg = "string type is required for parameter";
         return new wxBitmap(name, flags);
     }
 
+#ifdef __WXMSW__
+    wxBitmap* wxBitmapFromData(char* data, long type,
+                               int width, int height, int depth = 1) {
+        return new wxBitmap((void*)data, type, width, height, depth);
+    }
+#endif
+
     wxMask* wxMaskColour(const wxBitmap& bitmap, const wxColour& colour) {
         return new wxMask(bitmap, colour);
     }
@@ -226,6 +233,29 @@ static PyObject *_wrap_wxNoRefBitmap(PyObject *self, PyObject *args) {
 {
     wxPy_BEGIN_ALLOW_THREADS;
         _result = (wxBitmap *)wxNoRefBitmap(_arg0,_arg1);
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
+static PyObject *_wrap_wxBitmapFromData(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxBitmap * _result;
+    char * _arg0;
+    long  _arg1;
+    int  _arg2;
+    int  _arg3;
+    int  _arg4 = 1;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"slii|i:wxBitmapFromData",&_arg0,&_arg1,&_arg2,&_arg3,&_arg4)) 
+        return NULL;
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (wxBitmap *)wxBitmapFromData(_arg0,_arg1,_arg2,_arg3,_arg4);
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (char *) _result,"_wxBitmap_p");
@@ -5306,8 +5336,10 @@ static PyObject *_wrap_wxDC_StartPage(PyObject *self, PyObject *args) {
 static void  wxDC_DrawBitmap(wxDC *self,wxBitmap & bitmap,long  x,long  y,bool  swapPalette) {
             wxMemoryDC* memDC = new wxMemoryDC;
             memDC->SelectObject(bitmap);
+#ifdef __WXMSW__
             if (swapPalette)
                 self->SetPalette(*bitmap.GetPalette());
+#endif
             self->Blit(x, y, bitmap.GetWidth(), bitmap.GetHeight(), memDC,
                     0, 0, self->GetLogicalFunction());
             memDC->SelectObject(wxNullBitmap);
@@ -6498,6 +6530,7 @@ static PyMethodDef gdicMethods[] = {
 	 { "wxNamedColour", _wrap_wxNamedColour, 1 },
 	 { "wxStockCursor", _wrap_wxStockCursor, 1 },
 	 { "wxMaskColour", _wrap_wxMaskColour, 1 },
+	 { "wxBitmapFromData", _wrap_wxBitmapFromData, 1 },
 	 { "wxNoRefBitmap", _wrap_wxNoRefBitmap, 1 },
 	 { "wxEmptyBitmap", _wrap_wxEmptyBitmap, 1 },
 	 { NULL, NULL }

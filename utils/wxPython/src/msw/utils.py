@@ -4,7 +4,7 @@ class wxConfigPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
-    def __del__(self):
+    def __del__(self, utilsc=utilsc):
         if self.thisown == 1 :
             utilsc.delete_wxConfig(self.this)
     def DontCreateOnDemand(self):

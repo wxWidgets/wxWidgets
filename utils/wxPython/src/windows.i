@@ -64,10 +64,10 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     void CaptureMouse();
-    void Center(int direction = wxHORIZONTAL);
-    void Centre(int direction = wxHORIZONTAL);
-    void CentreOnParent(int direction = wxHORIZONTAL );
-    void CenterOnParent(int direction = wxHORIZONTAL );
+    void Center(int direction = wxBOTH);
+    void Centre(int direction = wxBOTH);
+    void CentreOnParent(int direction = wxBOTH );
+    void CenterOnParent(int direction = wxBOTH );
     %name(ClientToScreenXY)void ClientToScreen(int *BOTH, int *BOTH);
     wxPoint ClientToScreen(const wxPoint& pt);
     bool Close(int force = FALSE);
@@ -110,6 +110,7 @@ public:
                        int *OUTPUT, int *OUTPUT, int *OUTPUT, int* OUTPUT,
                        const wxFont* font = NULL); //, bool use16 = FALSE)
     wxString GetTitle();
+    wxRegion GetUpdateRegion();
     long GetWindowStyleFlag();
     bool Hide();
     void InitDialog();
@@ -125,8 +126,10 @@ public:
     void Move(const wxPoint& point);
 
     //wxEvtHandler* PopEventHandler(bool deleteHandler = FALSE);
-    bool PopupMenu(wxMenu *menu, int x, int y);
     //void PushEventHandler(wxEvtHandler* handler);
+
+    %name(PopupMenuXY)bool PopupMenu(wxMenu *menu, int x, int y);
+    bool PopupMenu(wxMenu *menu, const wxPoint& pos);
 
     void Raise();
     void Refresh(bool eraseBackground = TRUE, const wxRect* rect = NULL);
@@ -141,7 +144,6 @@ public:
     void SetAutoLayout(bool autoLayout);
     void SetBackgroundColour(const wxColour& colour);
     void SetConstraints(wxLayoutConstraints *constraints);
-//    void SetDoubleClick(bool allowDoubleClick);
     void SetFocus();
     void SetFont(const wxFont& font);
     void SetForegroundColour(const wxColour& colour);
@@ -308,7 +310,7 @@ public:
 
 class wxMenu : public wxEvtHandler {
 public:
-    wxMenu(const wxString& title = wxPyEmptyStr);
+    wxMenu(const wxString& title = wxPyEmptyStr, long style = 0);
 
     void Append(int id, const wxString& item,
                 const wxString& helpString = wxPyEmptyStr,
@@ -333,6 +335,7 @@ public:
     bool IsChecked(int id);
     bool IsEnabled(int id);
     void SetLabel(int id, const wxString& label);
+    void UpdateUI(wxEvtHandler* source = NULL);
 };
 
 
@@ -341,11 +344,11 @@ public:
 // be used for PopupMenus, but you must retain a referece to it while using
 // it.
 //
-class wxPyMenu : public wxMenu {
-public:
-    wxPyMenu(const wxString& title = wxPyEmptyStr, PyObject* func = NULL);
-    ~wxPyMenu();
-};
+//  class wxPyMenu : public wxMenu {
+//  public:
+//      wxPyMenu(const wxString& title = wxPyEmptyStr, PyObject* func = NULL);
+//      ~wxPyMenu();
+//  };
 
 //----------------------------------------------------------------------
 
@@ -419,7 +422,53 @@ public:
 /////////////////////////////////////////////////////////////////////////////
 //
 // $Log$
+// Revision 1.18  1999/07/31 07:54:35  RD
+// wxPython 2.1b1:
+//
+// 	Added the missing wxWindow.GetUpdateRegion() method.
+//
+// 	Made a new change in SWIG (update your patches everybody) that
+// 	provides a fix for global shadow objects that get an exception in
+// 	their __del__ when their extension module has already been deleted.
+// 	It was only a 1 line change in .../SWIG/Modules/pycpp.cxx at about
+// 	line 496 if you want to do it by hand.
+//
+// 	It is now possible to run through MainLoop more than once in any one
+// 	process.  The cleanup that used to happen as MainLoop completed (and
+// 	prevented it from running again) has been delayed until the wxc module
+// 	is being unloaded by Python.
+//
+// 	wxWindow.PopupMenu() now takes a wxPoint instead of  x,y.  Added
+// 	wxWindow.PopupMenuXY to be consistent with some other methods.
+//
+// 	Added wxGrid.SetEditInPlace and wxGrid.GetEditInPlace.
+//
+// 	You can now provide your own app.MainLoop method.  See
+// 	wxPython/demo/demoMainLoop.py for an example and some explaination.
+//
+// 	Got the in-place-edit for the wxTreeCtrl fixed and added some demo
+// 	code to show how to use it.
+//
+// 	Put the wxIcon constructor back in for GTK as it now has one that
+// 	matches MSW's.
+//
+// 	Added wxGrid.GetCells
+//
+// 	Added wxSystemSettings static methods as functions with names like
+// 	wxSystemSettings_GetSystemColour.
+//
+// 	Removed wxPyMenu since using menu callbacks have been depreciated in
+// 	wxWindows.  Use wxMenu and events instead.
+//
+// 	Added alternate wxBitmap constructor (for MSW only) as
+// 	      wxBitmapFromData(data, type, width, height, depth = 1)
+//
+// 	Added a helper function named wxPyTypeCast that can convert shadow
+// 	objects of one type into shadow objects of another type.  (Like doing
+// 	a down-cast.)  See the implementation in wx.py for some docs.
+//
 // Revision 1.17  1999/06/22 07:03:03  RD
+//
 // wxPython 2.1b1 for wxMSW  (wxGTK coming soon)
 // Lots of changes, see the README.txt for details...
 //

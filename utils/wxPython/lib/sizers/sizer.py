@@ -55,6 +55,8 @@ class wxSizer:
         the Add method.
         """
         for childinfo in widgets:
+            if type(childinfo) != type(()):
+                childinfo = (childinfo, )
             apply(self.Add, childinfo)
 
 

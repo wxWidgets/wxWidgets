@@ -85,6 +85,7 @@ public:
     void Create( int width, int height );
     void Destroy();
     wxImage Scale( int width, int height );
+    void Rescale(int width, int height);
 
     void SetRGB( int x, int y, unsigned char r, unsigned char g, unsigned char b );
     unsigned char GetRed( int x, int y );

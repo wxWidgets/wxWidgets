@@ -76,11 +76,7 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdFrameCallbacks(self)"
 
     void Activate();
-#ifdef __WXMSW__
-    void Maximize();
-#else
     void Maximize(bool maximize);
-#endif
     void Restore();
 
 };

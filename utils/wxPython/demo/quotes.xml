@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE quotations [
+  <!ELEMENT collection (quotation)*>
+
+  <!ELEMENT em (#PCDATA) >
+  <!ELEMENT foreign (#PCDATA) >
+  <!ELEMENT cite (#PCDATA) >
+  <!ELEMENT author (#PCDATA)>
+  <!ELEMENT source (#PCDATA|cite)*>
+ 
+  <!ELEMENT quotation (#PCDATA|author|source)* >
+]>
+<collection><quotation>We will perhaps eventually be writing only small modules which are identified by name as they are used to build larger ones, so that devices like indentation, rather than delimiters, might become feasible for expressing local structure in the source language.  <source>Donald E. Knuth, "Structured Programming with goto Statements", Computing Surveys, Vol 6 No 4, Dec. 1974</source> </quotation>  <quotation> The infinities aren't contagious except in that they often appear that way due to to their large size. <source>Tim Peters on the IEEE 754 floating point standard, 27 Apr 1998</source> </quotation>  </collection>

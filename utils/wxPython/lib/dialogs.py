@@ -19,7 +19,7 @@ class wxScrolledMessageDialog(wxDialog):
         text.SetConstraints(Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)))
         ok.SetConstraints(Layoutf('b=b5#1;x%w50#1;w!80;h!25', (self,)))
         self.SetAutoLayout(TRUE)
-
+        self.Layout()
 
 
 class wxMultipleChoiceDialog(wxDialog):
@@ -47,6 +47,7 @@ class wxMultipleChoiceDialog(wxDialog):
         cancel.SetConstraints(Layoutf('b=b5#1;x%w75#1;w!80;h!25', (self,)))
         self.SetAutoLayout(TRUE)
         self.lst = lst
+        self.Layout()
 
     def OnSize(self, event):
         self.Layout()

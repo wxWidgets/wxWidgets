@@ -270,7 +270,7 @@ static PyObject *_wrap_wxWindow_CaptureMouse(PyObject *self, PyObject *args) {
 static PyObject *_wrap_wxWindow_Center(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxWindow * _arg0;
-    int  _arg1 = (wxHORIZONTAL);
+    int  _arg1 = (wxBOTH);
     char * _argc0 = 0;
 
     self = self;
@@ -296,7 +296,7 @@ static PyObject *_wrap_wxWindow_Center(PyObject *self, PyObject *args) {
 static PyObject *_wrap_wxWindow_Centre(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxWindow * _arg0;
-    int  _arg1 = (wxHORIZONTAL);
+    int  _arg1 = (wxBOTH);
     char * _argc0 = 0;
 
     self = self;
@@ -322,7 +322,7 @@ static PyObject *_wrap_wxWindow_Centre(PyObject *self, PyObject *args) {
 static PyObject *_wrap_wxWindow_CentreOnParent(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxWindow * _arg0;
-    int  _arg1 = (wxHORIZONTAL);
+    int  _arg1 = (wxBOTH);
     char * _argc0 = 0;
 
     self = self;
@@ -348,7 +348,7 @@ static PyObject *_wrap_wxWindow_CentreOnParent(PyObject *self, PyObject *args) {
 static PyObject *_wrap_wxWindow_CenterOnParent(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxWindow * _arg0;
-    int  _arg1 = (wxHORIZONTAL);
+    int  _arg1 = (wxBOTH);
     char * _argc0 = 0;
 
     self = self;
@@ -1482,6 +1482,33 @@ static PyObject *_wrap_wxWindow_GetTitle(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
+#define wxWindow_GetUpdateRegion(_swigobj)  (_swigobj->GetUpdateRegion())
+static PyObject *_wrap_wxWindow_GetUpdateRegion(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    wxRegion * _result;
+    wxWindow * _arg0;
+    char * _argc0 = 0;
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"s:wxWindow_GetUpdateRegion",&_argc0)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetUpdateRegion. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxRegion (wxWindow_GetUpdateRegion(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxRegion_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 #define wxWindow_GetWindowStyleFlag(_swigobj)  (_swigobj->GetWindowStyleFlag())
 static PyObject *_wrap_wxWindow_GetWindowStyleFlag(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
@@ -1849,8 +1876,8 @@ static PyObject *_wrap_wxWindow_Move(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-#define wxWindow_PopupMenu(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PopupMenu(_swigarg0,_swigarg1,_swigarg2))
-static PyObject *_wrap_wxWindow_PopupMenu(PyObject *self, PyObject *args) {
+#define wxWindow_PopupMenuXY(_swigobj,_swigarg0,_swigarg1,_swigarg2)  (_swigobj->PopupMenu(_swigarg0,_swigarg1,_swigarg2))
+static PyObject *_wrap_wxWindow_PopupMenuXY(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     bool  _result;
     wxWindow * _arg0;
@@ -1861,7 +1888,42 @@ static PyObject *_wrap_wxWindow_PopupMenu(PyObject *self, PyObject *args) {
     char * _argc1 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"ssii:wxWindow_PopupMenu",&_argc0,&_argc1,&_arg2,&_arg3)) 
+    if(!PyArg_ParseTuple(args,"ssii:wxWindow_PopupMenuXY",&_argc0,&_argc1,&_arg2,&_arg3)) 
+        return NULL;
+    if (_argc0) {
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_PopupMenuXY. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxWindow_PopupMenuXY. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxWindow_PopupMenuXY(_arg0,_arg1,_arg2,_arg3);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxWindow_PopupMenu(_swigobj,_swigarg0,_swigarg1)  (_swigobj->PopupMenu(_swigarg0,_swigarg1))
+static PyObject *_wrap_wxWindow_PopupMenu(PyObject *self, PyObject *args) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxWindow * _arg0;
+    wxMenu * _arg1;
+    wxPoint * _arg2;
+    char * _argc0 = 0;
+    char * _argc1 = 0;
+    char * _argc2 = 0;
+
+    self = self;
+    if(!PyArg_ParseTuple(args,"sss:wxWindow_PopupMenu",&_argc0,&_argc1,&_argc2)) 
         return NULL;
     if (_argc0) {
         if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxWindow_p")) {
@@ -1875,9 +1937,15 @@ static PyObject *_wrap_wxWindow_PopupMenu(PyObject *self, PyObject *args) {
         return NULL;
         }
     }
+    if (_argc2) {
+        if (SWIG_GetPtr(_argc2,(void **) &_arg2,"_wxPoint_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 3 of wxWindow_PopupMenu. Expected _wxPoint_p.");
+        return NULL;
+        }
+    }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (bool )wxWindow_PopupMenu(_arg0,_arg1,_arg2,_arg3);
+        _result = (bool )wxWindow_PopupMenu(_arg0,_arg1,*_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -4016,16 +4084,17 @@ static void *SwigwxMenuTowxEvtHandler(void *ptr) {
     return (void *) dest;
 }
 
-#define new_wxMenu(_swigarg0) (new wxMenu(_swigarg0))
+#define new_wxMenu(_swigarg0,_swigarg1) (new wxMenu(_swigarg0,_swigarg1))
 static PyObject *_wrap_new_wxMenu(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
     wxMenu * _result;
     wxString * _arg0 = &wxPyEmptyStr;
+    long  _arg1 = 0;
     PyObject * _obj0 = 0;
     char _ptemp[128];
 
     self = self;
-    if(!PyArg_ParseTuple(args,"|O:new_wxMenu",&_obj0)) 
+    if(!PyArg_ParseTuple(args,"|Ol:new_wxMenu",&_obj0,&_arg1)) 
         return NULL;
     if (_obj0)
 {
@@ -4037,7 +4106,7 @@ static PyObject *_wrap_new_wxMenu(PyObject *self, PyObject *args) {
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxMenu *)new_wxMenu(*_arg0);
+        _result = (wxMenu *)new_wxMenu(*_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    SWIG_MakePtr(_ptemp, (char *) _result,"_wxMenu_p");
@@ -4598,79 +4667,32 @@ static PyObject *_wrap_wxMenu_SetLabel(PyObject *self, PyObject *args) {
     return _resultobj;
 }
 
-static void *SwigwxPyMenuTowxMenu(void *ptr) {
-    wxPyMenu *src;
-    wxMenu *dest;
-    src = (wxPyMenu *) ptr;
-    dest = (wxMenu *) src;
-    return (void *) dest;
-}
-
-static void *SwigwxPyMenuTowxEvtHandler(void *ptr) {
-    wxPyMenu *src;
-    wxEvtHandler *dest;
-    src = (wxPyMenu *) ptr;
-    dest = (wxEvtHandler *) src;
-    return (void *) dest;
-}
-
-#define new_wxPyMenu(_swigarg0,_swigarg1) (new wxPyMenu(_swigarg0,_swigarg1))
-static PyObject *_wrap_new_wxPyMenu(PyObject *self, PyObject *args) {
+#define wxMenu_UpdateUI(_swigobj,_swigarg0)  (_swigobj->UpdateUI(_swigarg0))
+static PyObject *_wrap_wxMenu_UpdateUI(PyObject *self, PyObject *args) {
     PyObject * _resultobj;
-    wxPyMenu * _result;
-    wxString * _arg0 = &wxPyEmptyStr;
-    PyObject * _arg1 = NULL;
-    PyObject * _obj0 = 0;
-    PyObject * _obj1 = 0;
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTuple(args,"|OO:new_wxPyMenu",&_obj0,&_obj1)) 
-        return NULL;
-    if (_obj0)
-{
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
-}
-    if (_obj1)
-{
-  _arg1 = _obj1;
-}
-{
-    wxPy_BEGIN_ALLOW_THREADS;
-        _result = (wxPyMenu *)new_wxPyMenu(*_arg0,_arg1);
-
-    wxPy_END_ALLOW_THREADS;
-}    SWIG_MakePtr(_ptemp, (char *) _result,"_wxPyMenu_p");
-    _resultobj = Py_BuildValue("s",_ptemp);
-{
-    if (_obj0)
-        delete _arg0;
-}
-    return _resultobj;
-}
-
-#define delete_wxPyMenu(_swigobj) (delete _swigobj)
-static PyObject *_wrap_delete_wxPyMenu(PyObject *self, PyObject *args) {
-    PyObject * _resultobj;
-    wxPyMenu * _arg0;
+    wxMenu * _arg0;
+    wxEvtHandler * _arg1 = NULL;
     char * _argc0 = 0;
+    char * _argc1 = 0;
 
     self = self;
-    if(!PyArg_ParseTuple(args,"s:delete_wxPyMenu",&_argc0)) 
+    if(!PyArg_ParseTuple(args,"s|s:wxMenu_UpdateUI",&_argc0,&_argc1)) 
         return NULL;
     if (_argc0) {
-        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxPyMenu_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of delete_wxPyMenu. Expected _wxPyMenu_p.");
+        if (SWIG_GetPtr(_argc0,(void **) &_arg0,"_wxMenu_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxMenu_UpdateUI. Expected _wxMenu_p.");
+        return NULL;
+        }
+    }
+    if (_argc1) {
+        if (SWIG_GetPtr(_argc1,(void **) &_arg1,"_wxEvtHandler_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxMenu_UpdateUI. Expected _wxEvtHandler_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        delete_wxPyMenu(_arg0);
+        wxMenu_UpdateUI(_arg0,_arg1);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);
@@ -5380,8 +5402,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxMenuBar_Check", _wrap_wxMenuBar_Check, 1 },
 	 { "wxMenuBar_Append", _wrap_wxMenuBar_Append, 1 },
 	 { "new_wxMenuBar", _wrap_new_wxMenuBar, 1 },
-	 { "delete_wxPyMenu", _wrap_delete_wxPyMenu, 1 },
-	 { "new_wxPyMenu", _wrap_new_wxPyMenu, 1 },
+	 { "wxMenu_UpdateUI", _wrap_wxMenu_UpdateUI, 1 },
 	 { "wxMenu_SetLabel", _wrap_wxMenu_SetLabel, 1 },
 	 { "wxMenu_IsEnabled", _wrap_wxMenu_IsEnabled, 1 },
 	 { "wxMenu_IsChecked", _wrap_wxMenu_IsChecked, 1 },
@@ -5466,6 +5487,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_Refresh", _wrap_wxWindow_Refresh, 1 },
 	 { "wxWindow_Raise", _wrap_wxWindow_Raise, 1 },
 	 { "wxWindow_PopupMenu", _wrap_wxWindow_PopupMenu, 1 },
+	 { "wxWindow_PopupMenuXY", _wrap_wxWindow_PopupMenuXY, 1 },
 	 { "wxWindow_Move", _wrap_wxWindow_Move, 1 },
 	 { "wxWindow_MoveXY", _wrap_wxWindow_MoveXY, 1 },
 	 { "wxWindow_MakeModal", _wrap_wxWindow_MakeModal, 1 },
@@ -5479,6 +5501,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxWindow_InitDialog", _wrap_wxWindow_InitDialog, 1 },
 	 { "wxWindow_Hide", _wrap_wxWindow_Hide, 1 },
 	 { "wxWindow_GetWindowStyleFlag", _wrap_wxWindow_GetWindowStyleFlag, 1 },
+	 { "wxWindow_GetUpdateRegion", _wrap_wxWindow_GetUpdateRegion, 1 },
 	 { "wxWindow_GetTitle", _wrap_wxWindow_GetTitle, 1 },
 	 { "wxWindow_GetFullTextExtent", _wrap_wxWindow_GetFullTextExtent, 1 },
 	 { "wxWindow_GetTextExtent", _wrap_wxWindow_GetTextExtent, 1 },
@@ -5549,8 +5572,6 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_class_wxMenuBar","_wxMenuBar",0);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxMenuBar",SwigwxMenuBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxMenuBar",SwigwxMenuBarTowxEvtHandler);
-	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxPyMenu",SwigwxPyMenuTowxEvtHandler);
-	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxPyMenu",SwigwxPyMenuTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxMenu",SwigwxMenuTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_wxMenu",SwigwxMenuTowxEvtHandler);
 	 SWIG_RegisterMapping("_class_wxEvtHandler","_class_wxScrolledWindow",SwigwxScrolledWindowTowxEvtHandler);
@@ -5565,7 +5586,6 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_wxIndividualLayoutConstraint","_class_wxIndividualLayoutConstraint",0);
 	 SWIG_RegisterMapping("_wxCursor","_class_wxCursor",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
-	 SWIG_RegisterMapping("_wxPyMenu","_class_wxPyMenu",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
 	 SWIG_RegisterMapping("_byte","_unsigned_char",0);
 	 SWIG_RegisterMapping("_long","_wxDash",0);
@@ -5624,8 +5644,6 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_signed_int","_wxWindowID",0);
 	 SWIG_RegisterMapping("_signed_int","_int",0);
 	 SWIG_RegisterMapping("_wxLayoutConstraints","_class_wxLayoutConstraints",0);
-	 SWIG_RegisterMapping("_wxMenu","_class_wxPyMenu",SwigwxPyMenuTowxMenu);
-	 SWIG_RegisterMapping("_wxMenu","_wxPyMenu",SwigwxPyMenuTowxMenu);
 	 SWIG_RegisterMapping("_wxMenu","_class_wxMenu",0);
 	 SWIG_RegisterMapping("_wxScreenDC","_class_wxScreenDC",0);
 	 SWIG_RegisterMapping("_WXTYPE","_short",0);
@@ -5655,8 +5673,6 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_wxPostScriptDC","_class_wxPostScriptDC",0);
 	 SWIG_RegisterMapping("_wxScrolledWindow","_class_wxScrolledWindow",0);
 	 SWIG_RegisterMapping("_unsigned_char","_byte",0);
-	 SWIG_RegisterMapping("_class_wxMenu","_class_wxPyMenu",SwigwxPyMenuTowxMenu);
-	 SWIG_RegisterMapping("_class_wxMenu","_wxPyMenu",SwigwxPyMenuTowxMenu);
 	 SWIG_RegisterMapping("_class_wxMenu","_wxMenu",0);
 	 SWIG_RegisterMapping("_unsigned_int","_wxPrintQuality",0);
 	 SWIG_RegisterMapping("_unsigned_int","_size_t",0);
@@ -5665,7 +5681,6 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_unsigned_int","_int",0);
 	 SWIG_RegisterMapping("_wxIcon","_class_wxIcon",0);
 	 SWIG_RegisterMapping("_wxDialog","_class_wxDialog",0);
-	 SWIG_RegisterMapping("_class_wxPyMenu","_wxPyMenu",0);
 	 SWIG_RegisterMapping("_class_wxPen","_wxPen",0);
 	 SWIG_RegisterMapping("_short","_WXTYPE",0);
 	 SWIG_RegisterMapping("_short","_unsigned_short",0);
@@ -5701,8 +5716,6 @@ SWIGEXPORT(void,initwindowsc)() {
 	 SWIG_RegisterMapping("_wxMenuBar","_class_wxMenuBar",0);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxMenuBar",SwigwxMenuBarTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxMenuBar",SwigwxMenuBarTowxEvtHandler);
-	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxPyMenu",SwigwxPyMenuTowxEvtHandler);
-	 SWIG_RegisterMapping("_wxEvtHandler","_wxPyMenu",SwigwxPyMenuTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxMenu",SwigwxMenuTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_wxMenu",SwigwxMenuTowxEvtHandler);
 	 SWIG_RegisterMapping("_wxEvtHandler","_class_wxScrolledWindow",SwigwxScrolledWindowTowxEvtHandler);
