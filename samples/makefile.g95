@@ -16,79 +16,64 @@ WXDIR = ..
 
 THISDIR=$(WXDIR)/samples
 
-all:
-	        cd $(WXDIR)/samples/bombs; make -f makefile.g95
-	        cd $(WXDIR)/samples/fractal; make -f makefile.g95
-	        cd $(WXDIR)/samples/splitter; make -f makefile.g95
-	        cd  $(WXDIR)/samples/resource; make -f makefile.g95
-	        cd  $(WXDIR)/samples/controls; make -f makefile.g95
-	        cd  $(WXDIR)/samples/listctrl; make -f makefile.g95
-	        cd  $(WXDIR)/samples/treectrl; make -f makefile.g95
-	        cd  $(WXDIR)/samples/validate; make -f makefile.g95
-	        cd  $(WXDIR)/samples/mdi; make -f makefile.g95
-	        cd  $(WXDIR)/samples/minimal; make -f makefile.g95
-	        cd  $(WXDIR)/samples/layout; make -f makefile.g95
-	        cd  $(WXDIR)/samples/printing; make -f makefile.g95
-	        cd  $(WXDIR)/samples/proplist; make -f makefile.g95
-	        cd  $(WXDIR)/samples/toolbar; make -f makefile.g95
-	        cd  $(WXDIR)/samples/dialogs; make -f makefile.g95
-	        cd  $(WXDIR)/samples/docview; make -f makefile.g95
-	        cd  $(WXDIR)/samples/docvwmdi; make -f makefile.g95
-	        cd  $(WXDIR)/samples/sashtest; make -f makefile.g95
-	        cd  $(WXDIR)/samples/controls; make -f makefile.g95
-	        cd  $(WXDIR)/samples/nativdlg; make -f makefile.g95
-	        cd  $(WXDIR)/samples/grid; make -f makefile.g95
-	        cd  $(WXDIR)/samples/internat; make -f makefile.g95
-	        cd  $(WXDIR)/samples/checklst; make -f makefile.g95
-	        cd  $(WXDIR)/samples/ownerdrw; make -f makefile.g95
-	        cd  $(WXDIR)/samples/joytest; make -f makefile.g95
-	        cd  $(WXDIR)/samples/memcheck; make -f makefile.g95
-	        cd  $(WXDIR)/samples/image; make -f makefile.g95
-	        cd  $(WXDIR)/samples/wxpoem; make -f makefile.g95
-	        cd  $(WXDIR)/samples/notebook; make -f makefile.g95
-	        cd  $(WXDIR)/samples/thread; make -f makefile.g95
-	        cd  $(WXDIR)/samples/minifram; make -f makefile.g95
-	        cd  $(WXDIR)/samples/forty; make -f makefile.g95
-	        cd  $(WXDIR)/samples/dde; make -f client.g95
-	        cd  $(WXDIR)/samples/dde; make -f server.g95
-#	        cd  $(WXDIR)/samples/dnd; make -f makefile.g95
-#	        cd  $(WXDIR)/samples/regtest; make -f makefile.g95
-
-clean:
-	        cd  $(WXDIR)/samples/bombs; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/fractal; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/splitter; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/mdi; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/minimal; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/layout; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/printing; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/proplist; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/toolbar; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/dialogs; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/resource; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/listctrl; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/treectrl; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/validate; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/docview; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/docvwmdi; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/sashtest; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/controls; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/nativdlg; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/grid; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/internat; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/checklst; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/ownerdrw; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/regtest; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/joytest; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/memcheck; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/image; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/wxpoem; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/notebook; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/thread; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/minifram; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/forty; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/dnd; make -f makefile.g95 clean
-	        cd  $(WXDIR)/samples/dde; make -f client.g95 clean
-	        cd  $(WXDIR)/samples/dde; make -f server.g95 clean
-
+# Mingw make may not have a shell to use, so can't use a loop here. Sigh.
+# Please add new sample directories alphabetically to make it easier to
+# keep track.
+all clean:
+	-$(MAKE) -C calendar -f $(MAKEFILE) $@
+	-$(MAKE) -C caret -f $(MAKEFILE) $@
+	-$(MAKE) -C checklst -f $(MAKEFILE) $@
+	-$(MAKE) -C config -f $(MAKEFILE) $@
+	-$(MAKE) -C console -f $(MAKEFILE) $@
+	-$(MAKE) -C controls -f $(MAKEFILE) $@
+	-$(MAKE) -C db -f $(MAKEFILE) $@
+	-$(MAKE) -C ipc -f $(MAKEFILE) $@
+	-$(MAKE) -C dialogs -f $(MAKEFILE) $@
+	-$(MAKE) -C dnd -f $(MAKEFILE) $@
+	-$(MAKE) -C docview -f $(MAKEFILE) $@
+	-$(MAKE) -C docvwmdi -f $(MAKEFILE) $@
+	-$(MAKE) -C drawing -f $(MAKEFILE) $@
+	-$(MAKE) -C dynamic -f $(MAKEFILE) $@
+	-$(MAKE) -C font -f $(MAKEFILE) $@
+	-$(MAKE) -C grid -f $(MAKEFILE) $@
+	-$(MAKE) -C help -f $(MAKEFILE) $@
+	-$(MAKE) -C html -f $(MAKEFILE) $@
+	-$(MAKE) -C image -f $(MAKEFILE) $@
+	-$(MAKE) -C internat -f $(MAKEFILE) $@
+	-$(MAKE) -C joytest -f $(MAKEFILE) $@
+	-$(MAKE) -C layout -f $(MAKEFILE) $@
+	-$(MAKE) -C listctrl -f $(MAKEFILE) $@
+	-$(MAKE) -C mdi -f $(MAKEFILE) $@
+	-$(MAKE) -C memcheck -f $(MAKEFILE) $@
+	-$(MAKE) -C menu -f $(MAKEFILE) $@
+	-$(MAKE) -C mfc -f $(MAKEFILE) $@
+	-$(MAKE) -C minifram -f $(MAKEFILE) $@
+	-$(MAKE) -C minimal -f $(MAKEFILE) $@
+	-$(MAKE) -C nativdlg -f $(MAKEFILE) $@
+	-$(MAKE) -C dialup -f $(MAKEFILE) $@
+	-$(MAKE) -C newgrid -f $(MAKEFILE) $@
+	-$(MAKE) -C notebook -f $(MAKEFILE) $@
+	-$(MAKE) -C oleauto -f $(MAKEFILE) $@
+	-$(MAKE) -C ownerdrw -f $(MAKEFILE) $@
+	-$(MAKE) -C png -f $(MAKEFILE) $@
+	-$(MAKE) -C printing -f $(MAKEFILE) $@
+	-$(MAKE) -C proplist -f $(MAKEFILE) $@
+	-$(MAKE) -C propsize -f $(MAKEFILE) $@
+	-$(MAKE) -C regtest -f $(MAKEFILE) $@
+	-$(MAKE) -C resource -f $(MAKEFILE) $@
+	-$(MAKE) -C richedit -f $(MAKEFILE) $@
+	-$(MAKE) -C sashtest -f $(MAKEFILE) $@
+	-$(MAKE) -C scroll -f $(MAKEFILE) $@
+	-$(MAKE) -C scrollsub -f $(MAKEFILE) $@
+	-$(MAKE) -C splitter -f $(MAKEFILE) $@
+	-$(MAKE) -C tab -f $(MAKEFILE) $@
+	-$(MAKE) -C taskbar -f $(MAKEFILE) $@
+	-$(MAKE) -C text -f $(MAKEFILE) $@
+	-$(MAKE) -C thread -f $(MAKEFILE) $@
+	-$(MAKE) -C toolbar -f $(MAKEFILE) $@
+	-$(MAKE) -C treectrl -f $(MAKEFILE) $@
+	-$(MAKE) -C typetest -f $(MAKEFILE) $@
+	-$(MAKE) -C validate -f $(MAKEFILE) $@
+	-$(MAKE) -C wizard -f $(MAKEFILE) $@
+	-$(MAKE) -C sockets -f $(MAKEFILE) $@
 
