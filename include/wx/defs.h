@@ -60,6 +60,8 @@
 #   pragma warning(disable:4244)    // conversion from double to float
 #   pragma warning(disable:4710)    // function not inlined
 #   pragma warning(disable:4097)    // typedef used as class
+#   pragma warning(disable:4511)    // copy ctor couldn't be generated
+#   pragma warning(disable:4512)    // operator=() couldn't be generated
 #ifndef WIN32
 #   pragma warning(disable:4135)    // conversion between different integral types
 #   pragma warning(disable:4769)    // assignment of near pointer to long integer
