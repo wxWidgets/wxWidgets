@@ -1721,7 +1721,7 @@ typedef unsigned long   WXHPALETTE;
 typedef unsigned long   WXHCURSOR;
 typedef unsigned long   WXHRGN;
 typedef unsigned long   WXHACCEL;
-typedef void WXFAR *    WXHINSTANCE;
+typedef void WXFAR  *   WXHINSTANCE;
 typedef unsigned long   WXHBITMAP;
 typedef unsigned long   WXHIMAGELIST;
 typedef unsigned long   WXHGLOBAL;
