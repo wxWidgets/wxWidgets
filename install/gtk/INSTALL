@@ -83,7 +83,7 @@ to check that out automatically.
 
 Thread support:
 
-  Requires pthreads under Linux without glibc.
+  Requires pthreads under Linux without glibc or glibc 2.
   
 OpenGl:
 

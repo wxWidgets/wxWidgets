@@ -56,8 +56,6 @@
  * Use Threads
  */
 #undef USE_THREADS
-#undef USE_THREADS_POSIX
-#undef USE_THREADS_SGI
 /*
  * Use storable classes
  */

@@ -18,6 +18,9 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <sys/prctl.h>
+#include "wx/thread.h"
+#include "wx/module.h"
+#include "wx/utils.h"
 
 enum thread_state {
   STATE_IDLE = 0,
@@ -29,8 +32,6 @@ enum thread_state {
 /////////////////////////////////////////////////////////////////////////////
 // Static variables
 /////////////////////////////////////////////////////////////////////////////
-
-#include "wx/thread.h"
 
 static int p_mainid;
 wxMutex wxMainMutex;

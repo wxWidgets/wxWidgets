@@ -16,6 +16,9 @@
 #include <unistd.h>
 #include <sched.h>
 #include <pthread.h>
+#include "wx/thread.h"
+#include "wx/module.h"
+#include "wx/utils.h"
 
 enum thread_state {
   STATE_IDLE = 0,
@@ -27,8 +30,6 @@ enum thread_state {
 /////////////////////////////////////////////////////////////////////////////
 // Static variables
 /////////////////////////////////////////////////////////////////////////////
-
-#include "wx/thread.h"
 
 static pthread_t p_mainid;
 wxMutex wxMainMutex; // controls access to all GUI functions

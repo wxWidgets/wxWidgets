@@ -26,6 +26,7 @@
 #include <pwd.h>
 #include <errno.h>
 #include <netdb.h>
+#include <signal.h>
 
 #ifdef __SVR4__
 #include <sys/systeminfo.h>
@@ -38,6 +39,16 @@
 void wxBell(void)
 {
   gdk_beep();
+};
+
+void wxSleep(int nSecs)
+{
+  sleep(nSecs);
+};
+
+int wxKill(long pid, int sig)
+{
+  return kill(pid, sig);
 };
 
 //------------------------------------------------------------------------

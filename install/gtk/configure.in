@@ -494,9 +494,6 @@ dnl ############################
 dnl # checks library functions #
 dnl ############################
 
-UNIX_THREAD=gtk/threadno.cpp
-AC_CHECK_LIB(pthread, pthread_create, [UNIX_THREAD=gtk/threadpsx.cpp])
-
 dnl ##########################
 dnl # checks system services #
 dnl ##########################
@@ -504,11 +501,25 @@ dnl ##########################
 
 dnl ##### Threads #####
 UNIX_THREAD="gtk/threadno.cpp"
-AC_CHECK_LIB(pthread, pthread_create, [UNIX_THREAD="gtk/threadpsx.cpp"])
-AC_CHECK_LIB(pthreads, pthread_create, [UNIX_THREAD="gtk/threadpsx.cpp"])
-AC_CHECK_HEADER(sys/prctl.h, [UNIX_THREAD="gtk/threadsgi.cpp"])
+AC_CHECK_LIB(pthread, pthread_create, [
+   UNIX_THREAD="gtk/threadpsx.cpp"
+   THREADS_LINK="-lpthread"
+   AC_DEFINE(USE_THREADS)
+])
+AC_CHECK_LIB(pthreads, pthread_create, [
+   UNIX_THREAD="gtk/threadpsx.cpp"
+   THREADS_LINK="-lpthreads"
+   AC_DEFINE(USE_THREADS)
+])
+AC_CHECK_HEADER(sys/prctl.h, [
+   UNIX_THREAD="gtk/threadsgi.cpp"
+   AC_DEFINE(USE_THREADS)
+])
 AC_SUBST(UNIX_THREAD)
+AC_SUBST(THREADS_LINK)
 dnl   defines UNIX_THREAD it contains the source file to use for threads. (GL)
+dnl   defines THREADS_LINK it contains the thread library to link with. (GL)
+dnl   defines USE_THREADS if thread support is activated. (GL)
 
 AC_SYS_LONG_FILE_NAMES
 dnl   defines HAVE_LONG_FILENAMES if filenames longer then
@@ -672,9 +683,6 @@ DEFAULT_WX_NORMALIZED_PS_FONTS=1
 
 DEFAULT_USE_IOSTREAMH=1
 
-DEFAULT_USE_THREADS=0
-DEFAULT_USE_THREADS_SGI=0
-DEFAULT_USE_THREADS_POSIX=0
 DEFAULT_USE_OPENGL=0
 
 DEFAULT_USE_WXCONFIG=1
@@ -746,10 +754,6 @@ USE_GDK_IMLIB)
 AC_OVERRIDES(libpng,libpng,
 **--with-libpng        use libpng (PNG image format),
 USE_LIBPNG)
-
-AC_OVERRIDES(threads,threads,
-**--with-threads       use threads,
-USE_THREADS)
 
 AC_OVERRIDES(opengl,opengl,
 **--with-opengl        use opengl (OpenGL or Mesa),
@@ -892,26 +896,6 @@ if test "$USE_LIBPNG" = 1 ; then
   LIBPNG="LIBPNG"
 fi
 
-THREADS=NONE
-THREADS_LINK=
-if test "$USE_THREADS" = 1 ; then
-  case "$OS" in iris | IRIX | Irix5 | Irix6)
-    USE_THREADS_POSIX=0
-    USE_THREADS_SGI=1
-  ;;
-  *)
-    USE_THREADS_POSIX=1
-    USE_THREADS_SGI=0
-    THREADS_LINK=-lpthread
-  ;;
-  esac
-  THREADS="THREADS"
-  AC_DEFINE_UNQUOTED(USE_THREADS,$USE_THREADS)
-  AC_DEFINE_UNQUOTED(USE_THREADS_SGI,$USE_THREADS_SGI)
-  AC_DEFINE_UNQUOTED(USE_THREADS_POSIX,$USE_THREADS_POSIX)
-fi
-AC_SUBST(THREADS)
-AC_SUBST(THREADS_LINK)
 
 STORABLE=NONE
 if test "$USE_STORABLE_CLASSES" = 1 ; then
