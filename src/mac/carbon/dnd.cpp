@@ -194,8 +194,12 @@ bool wxDropTarget::GetData()
                   Size dataSize ;
                   Ptr theData ;
                   GetFlavorDataSize((DragReference)m_currentDrag, theItem, theType, &dataSize);
-          			  if ( theType == 'TEXT' )
-          			    dataSize++ ;
+      			  if ( theType == 'TEXT' )
+      			  {
+      			  	// this increment is only valid for allocating, on the next GetFlavorData
+      			  	// call it is reset again to the original value
+      			    dataSize++ ;
+      			  }
                   theData = new char[dataSize];
                   GetFlavorData((DragReference)m_currentDrag, theItem, theType, (void*) theData, &dataSize, 0L); 
                   if( theType == 'TEXT' )
@@ -203,7 +207,7 @@ bool wxDropTarget::GetData()
                     theData[dataSize]=0 ;       
                     if ( wxApp::s_macDefaultEncodingIsPC )
                     {
-                      wxMacConvertToPC((char*)theData) ;
+                      wxMacConvertToPC((char*)theData,(char*)theData,dataSize) ;
                     }
                     m_dataObject->SetData( format, dataSize, theData );
                   }
@@ -292,7 +296,7 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
           dataSize-- ;
           if ( wxApp::s_macDefaultEncodingIsPC )
           {
-            wxMacConvertFromPC((char*)dataPtr) ;
+            wxMacConvertFromPC((char*)dataPtr,(char*)dataPtr,dataSize) ;
           }
           AddDragItemFlavor(theDrag, theItem, type , dataPtr, dataSize, 0);
         }
@@ -336,7 +340,14 @@ wxDragResult wxDropSource::DoDragDrop(int WXUNUSED(flags))
     dragRegion = NewRgn();
     RgnHandle tempRgn = NewRgn() ;
     
-    EventRecord* ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
+    EventRecord* ev = NULL ;
+#if !TARGET_CARBON // TODO
+	ev = (EventRecord*) wxTheApp->MacGetCurrentEvent() ;
+#else
+	EventRecord rec ;
+	ev = &rec ;
+	wxMacConvertEventToRecord( (EventRef) wxTheApp->MacGetCurrentEvent() , &rec ) ;
+#endif
     const short dragRegionOuterBoundary = 10 ;
     const short dragRegionInnerBoundary = 9 ;
     
