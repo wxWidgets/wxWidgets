@@ -12,6 +12,14 @@
 
 ### Variables: ###
 
+MAKEARGS = CPPFLAGS="$(CPPFLAGS)" DEBUG_FLAG="$(DEBUG_FLAG)" \
+	LDFLAGS="$(LDFLAGS)" DEBUG_RUNTIME_LIBS="$(DEBUG_RUNTIME_LIBS)" CC="$(CC)" \
+	USE_GUI="$(USE_GUI)" MONOLITHIC="$(MONOLITHIC)" CXXFLAGS="$(CXXFLAGS)" \
+	USE_HTML="$(USE_HTML)" BUILD="$(BUILD)" DEBUG_INFO="$(DEBUG_INFO)" \
+	VENDOR="$(VENDOR)" UNICODE="$(UNICODE)" OFFICIAL_BUILD="$(OFFICIAL_BUILD)" \
+	MSLU="$(MSLU)" WXUNIV="$(WXUNIV)" RUNTIME_LIBS="$(RUNTIME_LIBS)" \
+	CXX="$(CXX)" CFG="$(CFG)" CFLAGS="$(CFLAGS)" SHARED="$(SHARED)" \
+	USE_ODBC="$(USE_ODBC)" USE_OPENGL="$(USE_OPENGL)"
 
 ### Conditionally set variables: ###
 
@@ -27,10 +35,10 @@ clean:
 
 sub_helpgen: 
 	cd HelpGen
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd $(MAKEDIR)
 
 sub_tex2rtf: 
 	cd tex2rtf\src
-	$(MAKE) /$(MAKEFLAGS) -f makefile.vc all
+	$(MAKE) -f makefile.vc $(MAKEARGS) all
 	cd $(MAKEDIR)

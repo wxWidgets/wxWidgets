@@ -74,6 +74,7 @@ Support files are:
   common_samples.bkl
   common_contrib.bkl      - shared definitions and templates
   config.bkl              - user-configurable build options
+  make_dist.mk            - implementation of "make dist" on Unix
 
 Files used to build the library are:
   wx.bkl                  - main file
@@ -173,8 +174,9 @@ a) Add files to files.bkl:
      Finally, define FOO_SRC and FOO_HDR to contain both
      FOO_PLATFORM_{SRC,HDR} and FOO_{SRC,HDR} (see NET_SRC definition for an
      example).
-   * Add FOO_HDR to ALL_HEADERS (or ALL_BASE_HEADERS if wxFoo is not GUI
-     component). 
+   * Add FOO_HDR to ALL_GUI_HEADERS or ALL_BASE_HEADERS. 
+   * If wxFoo is wxBase library (doesn't use GUI), add FOO_SRC to
+     ALL_BASE_SOURCES.
 
    (You can apply different approaches to HDR and SRC variables, if e.g.
    headers are all common but sources are not.)
@@ -183,8 +185,9 @@ a) Add files to files.bkl:
    native make tools.
 
 b) Modify bakefile system in build/bakefiles/ to recognize wxFoo:
-   * Add 'foo'to MAIN_LIBS and LIBS_NOGUI or LIBS_GUI (depending on whether
+   * Add 'foo' to MAIN_LIBS and LIBS_NOGUI or LIBS_GUI (depending on whether
      the library depends on wxCore or not) to wxwin.py file.
+   * Add the library to DEPS_TABLE in wxwin.py
    * Add WXLIB_FOO definition to common.bkl (into the "Names of component
      libraries" section). It looks like this:
        <set var="WXLIB_FOO">

@@ -12,17 +12,12 @@ include ../../../../build/msw/config.gcc
 
 ### Variables: ###
 
-LIBDIRNAME = \
-	.\..\..\..\..\lib\gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OGLEDIT_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) -I.\..\..\..\..\include -I$(LIBDIRNAME) \
-	-I.\..\..\..\..\src\tiff -I.\..\..\..\..\src\jpeg -I.\..\..\..\..\src\png \
-	-I.\..\..\..\..\src\zlib -I.\..\..\..\..\src\regex \
-	-I.\..\..\..\..\src\expat\lib -I. $(__DLLFLAG_p) -I.\..\..\..\include \
-	$(CXXFLAGS)
+	$(__UNICODE_DEFINE_p) -I.\..\..\..\..\include -I$(SETUPHDIR) -I. \
+	$(__DLLFLAG_p) -I.\..\..\..\..\samples -I.\..\..\..\include $(CXXFLAGS)
 OGLEDIT_OBJECTS =  \
 	$(OBJS)\ogledit_studio.o \
 	$(OBJS)\ogledit_doc.o \
@@ -35,11 +30,19 @@ OGLEDIT_OBJECTS =  \
 	$(OBJS)\ogledit_dialogs.o \
 	$(OBJS)\ogledit_csprint.o \
 	$(OBJS)\ogledit_studio_rc.o
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
 ifeq ($(GCC_VERSION),2.95)
 GCCFLAGS = -fvtable-thunks
+endif
+ifeq ($(SHARED),0)
+LIBDIRNAME = .\..\..\..\..\lib\gcc_lib$(CFG)
+endif
+ifeq ($(SHARED),1)
+LIBDIRNAME = .\..\..\..\..\lib\gcc_dll$(CFG)
 endif
 ifeq ($(USE_GUI),0)
 PORTNAME = base
@@ -123,6 +126,9 @@ endif
 ifeq ($(UNICODE),1)
 __UNICODE_DEFINE_p_1 = --define wxUSE_UNICODE=1
 endif
+ifeq ($(MSLU),1)
+__UNICOWS_LIB_p = -lunicows
+endif
 ifeq ($(MONOLITHIC),0)
 __WXLIB_BASE_p = -lwxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 endif
@@ -140,8 +146,6 @@ endif
 ifeq ($(WXUNIV),1)
 __WXUNIV_DEFINE_p_1 = --define __WXUNIVERSAL__
 endif
-
-MAKEARGS = BUILD=$(BUILD) CFG=$(CFG) CPPFLAGS=$(CPPFLAGS) CXX=$(CXX) CXXFLAGS=$(CXXFLAGS) DEBUG_FLAG=$(DEBUG_FLAG) DEBUG_INFO=$(DEBUG_INFO) GCC_VERSION=$(GCC_VERSION) LDFLAGS=$(LDFLAGS) MONOLITHIC=$(MONOLITHIC) OFFICIAL_BUILD=$(OFFICIAL_BUILD) SHARED=$(SHARED) UNICODE=$(UNICODE) USE_GUI=$(USE_GUI) WXUNIV=$(WXUNIV)
 
 
 all: $(OBJS)
@@ -177,7 +181,7 @@ $(OBJS)\ogledit_studio.o: .\studio.cpp
 	$(CXX) -c -o $@ $(OGLEDIT_CXXFLAGS) $<
 
 $(OBJS)\ogledit_studio_rc.o: .\studio.rc
-	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../../include --include-dir $(LIBDIRNAME) --include-dir ./../../../../src/tiff --include-dir ./../../../../src/jpeg --include-dir ./../../../../src/png --include-dir ./../../../../src/zlib  --include-dir ./../../../../src/regex --include-dir ./../../../../src/expat/lib --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../include
+	windres --use-temp-file -i$< -o$@ --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) --include-dir ./../../../../include --include-dir $(SETUPHDIR) --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../../samples --include-dir ./../../../include
 
 $(OBJS)\ogledit_symbols.o: .\symbols.cpp
 	$(CXX) -c -o $@ $(OGLEDIT_CXXFLAGS) $<
@@ -194,6 +198,6 @@ data:
 	for %%f in (studio_resources.wxr) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
 $(OBJS)\ogledit.exe: $(OGLEDIT_OBJECTS) $(OBJS)\ogledit_studio_rc.o
-	$(CXX) -o $@ $(OGLEDIT_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows   -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
+	$(CXX) -o $@ $(OGLEDIT_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) -mthreads -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  -lwx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_ogl $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG)  $(__UNICOWS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lodbc32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32
 
 .PHONY: all clean data

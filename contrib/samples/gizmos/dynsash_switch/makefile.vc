@@ -16,20 +16,24 @@ DYNSASH_SWITCH_CXXFLAGS = $(CPPFLAGS) \
 	/M$(__RUNTIME_LIBS_7)$(__DEBUGRUNTIME_3) /DWIN32 $(__DEBUGINFO_0) \
 	/Fd$(OBJS)\dynsash_switch.pdb $(____DEBUGRUNTIME_2_p) $(__OPTIMIZEFLAG_4) \
 	/D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) \
-	/I.\..\..\..\..\include /I$(LIBDIRNAME) /I.\..\..\..\..\src\tiff \
-	/I.\..\..\..\..\src\jpeg /I.\..\..\..\..\src\png /I.\..\..\..\..\src\zlib \
-	/I.\..\..\..\..\src\regex /I.\..\..\..\..\src\expat\lib /I. $(__DLLFLAG_p) \
-	/D_WINDOWS /I.\..\..\..\include $(CXXFLAGS)
+	/I.\..\..\..\..\include /I$(SETUPHDIR) /I. $(__DLLFLAG_p) /D_WINDOWS \
+	/I.\..\..\..\..\samples /I.\..\..\..\include $(CXXFLAGS)
 DYNSASH_SWITCH_OBJECTS =  \
 	$(OBJS)\dynsash_switch_sample.res \
 	$(OBJS)\dynsash_switch_dynsash_switch.obj
-LIBDIRNAME = \
-	.\..\..\..\..\lib\vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = \
 	vc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+SETUPHDIR = \
+	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 
 ### Conditionally set variables: ###
 
+!if "$(SHARED)" == "0"
+LIBDIRNAME = .\..\..\..\..\lib\vc_lib$(CFG)
+!endif
+!if "$(SHARED)" == "1"
+LIBDIRNAME = .\..\..\..\..\lib\vc_dll$(CFG)
+!endif
 !if "$(USE_GUI)" == "0"
 PORTNAME = base
 !endif
@@ -141,6 +145,9 @@ __UNICODE_DEFINE_p = /DwxUSE_UNICODE=1
 !if "$(UNICODE)" == "1"
 __UNICODE_DEFINE_p_1 = /d wxUSE_UNICODE=1
 !endif
+!if "$(MSLU)" == "1"
+__UNICOWS_LIB_p = unicows.lib
+!endif
 !if "$(MONOLITHIC)" == "0"
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
 !endif
@@ -214,7 +221,7 @@ $(OBJS)\dynsash_switch_dynsash_switch.obj: .\dynsash_switch.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(DYNSASH_SWITCH_CXXFLAGS) $**
 
 $(OBJS)\dynsash_switch_sample.res: .\..\..\..\..\samples\sample.rc
-	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\..\..\include /i $(LIBDIRNAME) /i .\..\..\..\..\src\tiff /i .\..\..\..\..\src\jpeg /i .\..\..\..\..\src\png /i .\..\..\..\..\src\zlib  /i .\..\..\..\..\src\regex /i .\..\..\..\..\src\expat\lib /i . $(__DLLFLAG_p_1) /d _WINDOWS $**
+	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_2_p_1) /d __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) /i .\..\..\..\..\include /i $(SETUPHDIR) /i . $(__DLLFLAG_p_1) /d _WINDOWS /i .\..\..\..\..\samples $**
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -222,6 +229,6 @@ clean:
 	-if exist $(OBJS)\dynsash_switch.exe del $(OBJS)\dynsash_switch.exe
 
 $(OBJS)\dynsash_switch.exe: $(DYNSASH_SWITCH_OBJECTS) $(OBJS)\dynsash_switch_sample.res
-	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS  @<<
-	$(DYNSASH_SWITCH_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
+	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
+	$(DYNSASH_SWITCH_OBJECTS)  wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_gizmos.lib $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  $(__UNICOWS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib
 <<
