@@ -61,6 +61,12 @@ bool wxControlContainer::AcceptsFocus() const
         if ( !node )
             return TRUE;
 
+#ifdef __WXMAC__
+        // wxMac has eventually the two scrollbars as children, they don't count
+        // as real children in the algorithm mentioned above
+        bool hasRealChildren = false ;
+#endif
+        
         while ( node )
         {
             wxWindow *child = node->GetData();
@@ -70,8 +76,18 @@ bool wxControlContainer::AcceptsFocus() const
                 return TRUE;
             }
 
+#ifdef __WXMAC__
+            wxScrollBar *sb = wxDynamicCast( child , wxScrollBar ) ;
+            if ( sb == NULL || !m_winParent->MacIsWindowScrollbar( sb ) )
+                hasRealChildren = true ;
+#endif
             node = node->GetNext();
         }
+        
+#ifdef __WXMAC__
+        if ( !hasRealChildren )
+            return TRUE ;
+#endif
     }
 
     return FALSE;
