@@ -145,15 +145,15 @@ bool wxFontEnumeratorHelper::OnFont(const LPLOGFONT lf,
         }
     }
 
-    return m_fontEnum->OnFontFamily(lf->lfFaceName);
+    return m_fontEnum->OnFacename(lf->lfFaceName);
 }
 
 // ----------------------------------------------------------------------------
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
 
-bool wxFontEnumerator::EnumerateFamilies(wxFontEncoding encoding,
-                                         bool fixedWidthOnly)
+bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
+                                          bool fixedWidthOnly)
 {
     wxFontEnumeratorHelper fe(this);
     if ( fe.SetEncoding(encoding) )

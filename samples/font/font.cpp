@@ -27,6 +27,8 @@
 #include <wx/choicdlg.h>
 #include <wx/fontdlg.h>
 #include <wx/fontenum.h>
+#include <wx/fontmap.h>
+#include <wx/textfile.h>
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -81,6 +83,7 @@ public:
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnViewMsg(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
     void OnEnumerateFamiliesForEncoding(wxCommandEvent& event);
     void OnEnumerateFamilies(wxCommandEvent& WXUNUSED(event))
@@ -117,6 +120,7 @@ enum
     // menu items
     Font_Quit = 1,
     Font_About,
+    Font_ViewMsg,
     Font_Choose = 100,
     Font_EnumFamiliesForEncoding,
     Font_EnumFamilies,
@@ -135,6 +139,7 @@ enum
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Quit,  MyFrame::OnQuit)
     EVT_MENU(Font_About, MyFrame::OnAbout)
+    EVT_MENU(Font_ViewMsg, MyFrame::OnViewMsg)
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
     EVT_MENU(Font_EnumFamiliesForEncoding, MyFrame::OnEnumerateFamiliesForEncoding)
     EVT_MENU(Font_EnumFamilies, MyFrame::OnEnumerateFamilies)
@@ -187,6 +192,9 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     // create a menu bar
     wxMenu *menuFile = new wxMenu;
 
+    menuFile->Append(Font_ViewMsg, "&View...\tCtrl-V",
+                     "View an email message file");
+    menuFile->AppendSeparator();
     menuFile->Append(Font_About, "&About...\tCtrl-A", "Show about dialog");
     menuFile->AppendSeparator();
     menuFile->Append(Font_Quit, "E&xit\tAlt-X", "Quit this program");
@@ -237,12 +245,12 @@ void MyFrame::OnEnumerateEncodings(wxCommandEvent& WXUNUSED(event))
         const wxString& GetText() const { return m_text; }
 
     protected:
-        virtual bool OnFontEncoding(const wxString& family,
+        virtual bool OnFontEncoding(const wxString& facename,
                                     const wxString& encoding)
         {
             wxString text;
-            text.Printf("Encoding %d: %s (available in family '%s')\n",
-                         ++m_n, encoding.c_str(), family.c_str());
+            text.Printf("Encoding %d: %s (available in facename '%s')\n",
+                         ++m_n, encoding.c_str(), facename.c_str());
             m_text += text;
 
             return TRUE;
@@ -270,9 +278,9 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
         const wxArrayString& GetFacenames() const { return m_facenames; }
 
     protected:
-        virtual bool OnFontFamily(const wxString& family)
+        virtual bool OnFacename(const wxString& facename)
         {
-            m_facenames.Add(family);
+            m_facenames.Add(facename);
 
             return TRUE;
         }
@@ -281,7 +289,7 @@ void MyFrame::DoEnumerateFamilies(bool fixedWidthOnly, wxFontEncoding encoding)
         wxArrayString m_facenames;
     } fontEnumerator;
 
-    fontEnumerator.EnumerateFamilies(encoding, fixedWidthOnly);
+    fontEnumerator.EnumerateFacenames(encoding, fixedWidthOnly);
 
     if ( fontEnumerator.GotAny() )
     {
@@ -387,6 +395,82 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
     Close(TRUE);
 }
 
+void MyFrame::OnViewMsg(wxCommandEvent& WXUNUSED(event))
+{
+    // first, choose the file
+    static wxString s_dir, s_file;
+    wxFileDialog dialog(this, "Open an email message file",
+                        s_dir, s_file);
+    if ( dialog.ShowModal() != wxID_OK )
+        return;
+
+    // save for the next time
+    s_dir = dialog.GetDirectory();
+    s_file = dialog.GetFilename();
+
+    wxString filename = dialog.GetPath();
+
+    // load it and search for Content-Type header
+    wxTextFile file(filename);
+    if ( !file.Open() )
+        return;
+
+    wxString charset;
+
+    static const char *prefix = "Content-Type: text/plain; charset=";
+    const size_t len = strlen(prefix);
+
+    size_t n, count = file.GetLineCount();
+    for ( n = 0; n < count; n++ )
+    {
+        wxString line = file[n];
+
+        if ( !line )
+        {
+            // if it is an email message, headers are over, no need to parse
+            // all the file
+            break;
+        }
+
+        if ( line.Left(len) == prefix )
+        {
+            // found!
+            const char *pc = line.c_str() + len;
+            if ( *pc == '"' )
+                pc++;
+
+            while ( *pc && *pc != '"' )
+            {
+                charset += *pc++;
+            }
+
+            break;
+        }
+    }
+
+    if ( !charset )
+    {
+        wxLogError("The file '%s' doesn't contain charset information.",
+                   filename.c_str());
+
+        return;
+    }
+
+    // ok, now get the corresponding encoding
+    wxFontMapper fontMapper;
+    wxFontEncoding fontenc = fontMapper.CharsetToEncoding(charset);
+    if ( fontenc == wxFONTENCODING_SYSTEM )
+    {
+        wxLogError("Charset '%s' is unsupported.", charset.c_str());
+        return;
+    }
+
+    // and now create the correct font
+    m_textctrl->LoadFile(filename);
+
+    DoEnumerateFamilies(FALSE, fontenc);
+}
+
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
     wxMessageBox("wxWindows font demo\n"
@@ -415,7 +499,7 @@ void MyFrame::Resize(const wxSize& size, const wxFont& font)
         wxClientDC dc(this);
         dc.SetFont(font);
 
-        h = 4*dc.GetCharHeight() + 4;
+        h = 10*(dc.GetCharHeight() + 1);
     }
     else
     {

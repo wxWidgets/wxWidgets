@@ -35,6 +35,10 @@
     #define   _(str)  wxGetTranslation(wxT(str))
 #endif
 
+// another one which just marks the strings for extraction, but doesn't
+// perform the translation (use -kwxTRANSLATE with xgettext!)
+#define wxTRANSLATE(str) (str)
+
 // ----------------------------------------------------------------------------
 // forward decls
 // ----------------------------------------------------------------------------

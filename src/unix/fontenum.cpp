@@ -39,7 +39,7 @@ static char **CreateFontList(wxChar spacing, wxFontEncoding encoding,
                              int *nFonts);
 
 // extract all font families from the given font list and call our
-// OnFontFamily() for each of them
+// OnFacename() for each of them
 static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
                                         char **fonts,
                                         int nFonts);
@@ -86,7 +86,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
             // it's not a full font name (probably an alias)
             continue;
         }
-        
+
         char *dash = strchr(font + 1, '-');
         char *family = dash + 1;
         dash = strchr(family, '-');
@@ -95,7 +95,7 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 
         if ( families.Index(fam) == wxNOT_FOUND )
         {
-            if ( !This->OnFontFamily(fam) )
+            if ( !This->OnFacename(fam) )
             {
                 // stop enumerating
                 return FALSE;
@@ -113,8 +113,8 @@ static bool ProcessFamiliesFromFontList(wxFontEnumerator *This,
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
 
-bool wxFontEnumerator::EnumerateFamilies(wxFontEncoding encoding,
-                                         bool fixedWidthOnly)
+bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
+                                          bool fixedWidthOnly)
 {
     int nFonts;
     char **fonts;

@@ -89,6 +89,7 @@ enum wxFontEncoding
     wxFONTENCODING_ISO8859_13,      // Latin7
     wxFONTENCODING_ISO8859_14,      // Latin8
     wxFONTENCODING_ISO8859_15,      // Latin9 (a.k.a. Latin0, includes euro)
+    wxFONTENCODING_ISO8859_MAX,
 
     // Cyrillic charset soup (see http://czyborra.com/charsets/cyrillic.html)
     wxFONTENCODING_KOI8,            // we don't support any of KOI8 variants
@@ -106,6 +107,12 @@ enum wxFontEncoding
     wxFONTENCODING_CP1250,          // WinLatin2
     wxFONTENCODING_CP1251,          // WinCyrillic
     wxFONTENCODING_CP1252,          // WinLatin1
+    wxFONTENCODING_CP1253,          // WinGreek (8859-7)
+    wxFONTENCODING_CP1254,          // WinTurkish
+    wxFONTENCODING_CP1255,          // WinHebrew
+    wxFONTENCODING_CP1256,          // WinArabic
+    wxFONTENCODING_CP1257,          // WinBaltic (same as Latin 7)
+    wxFONTENCODING_CP12_MAX,
 
     wxFONTENCODING_MAX
 };

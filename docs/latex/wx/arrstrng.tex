@@ -92,9 +92,10 @@ This is the operator version of \helpref{Item}{wxarraystringitem} method.
 
 \membersection{wxArrayString::Add}\label{wxarraystringadd}
 
-\func{void}{Add}{\param{const wxString\& }{str}}
+\func{size\_t}{Add}{\param{const wxString\& }{str}}
 
-Appends a new item to the array.
+Appends a new item to the array and return the index of th new item in the
+array.
 
 {\bf Warning:} For sorted arrays, the index of the inserted item will not be,
 in general, equal to \helpref{GetCount()}{wxarraystringgetcount} - 1 because

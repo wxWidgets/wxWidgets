@@ -17,20 +17,20 @@ programs such as terminal emulators and the like) or the fonts available in
 the given \helpref{encoding}{wxfontencodingoverview}.
 
 To do this, you just have to call one of EnumerateXXX() functions - either 
-\helpref{EnumerateFamilies}{wxfontenumeratorenumeratefamilies} or 
+\helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames} or 
 \helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings} and the
 corresponding callback ( 
-\helpref{OnFontFamily}{wxFontEnumeratoronfontfamily} or
+\helpref{OnFacename}{wxFontEnumeratoronfacename} or
 \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding}) will be called
 repeatedly until either all fonts (satisfying the specified criteria) are
 exhausted or the callback returns FALSE.
 
 \wxheading{Virtual functions to override}
 
-Either \helpref{OnFontFamily}{wxfontenumeratoronfontfamily} or 
+Either \helpref{OnFacename}{wxfontenumeratoronfacename} or 
 \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} should be overridden
 depending on whether you plan to call 
-\helpref{EnumerateFamilies}{wxfontenumeratorenumeratefamilies} or 
+\helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames} or 
 \helpref{EnumerateEncodings}{wxfontenumeratorenumerateencodings}. Of course,
 if you call both of them, you should override both functions.
 
@@ -51,13 +51,13 @@ None
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxFontEnumerator::EnumerateFamilies}\label{wxfontenumeratorenumeratefamilies}
+\membersection{wxFontEnumerator::EnumerateFacenames}\label{wxfontenumeratorenumeratefacenames}
 
-\func{virtual bool}{EnumerateFamilies}{
+\func{virtual bool}{EnumerateFacenames}{
     \param{wxFontEncoding }{encoding = wxFONTENCODING\_SYSTEM},
     \param{bool }{fixedWidthOnly = FALSE}}
 
-Call \helpref{OnFontFamily}{wxfontenumeratoronfontfamily} for each font which
+Call \helpref{OnFacename}{wxfontenumeratoronfacename} for each font which
 supports given encoding (only if it is not wxFONTENCODING\_SYSTEM) and is of
 fixed width (if {\it fixedWidthOnly} is TRUE).
 
@@ -72,11 +72,11 @@ Call \helpref{OnFontEncoding}{wxfontenumeratoronfontencoding} for each
 encoding supported by the given font - or for each encoding supported by at
 least some font if {\it font} is not specified.
 
-\membersection{wxFontEnumerator::OnFontFamily}\label{wxfontenumeratoronfontfamily}
+\membersection{wxFontEnumerator::OnFacename}\label{wxfontenumeratoronfacename}
 
-\func{virtual bool}{OnFontFamily}{\param{const wxString\& }{font}}
+\func{virtual bool}{OnFacename}{\param{const wxString\& }{font}}
 
-Called by \helpref{EnumerateFamilies}{wxfontenumeratorenumeratefamilies} for
+Called by \helpref{EnumerateFacenames}{wxfontenumeratorenumeratefacenames} for
 each match. Return TRUE to continue enumeration or FALSE to stop it.
 
 \membersection{wxFontEnumerator::OnFontEncoding}\label{wxfontenumeratoronfontencoding}
