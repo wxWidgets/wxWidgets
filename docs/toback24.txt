@@ -207,3 +207,15 @@ Checking in intl.cpp;
 new revision: 1.87; previous revision: 1.86
 done
 
+
+17. XRC: better wxToolBar handler
+
+Note: This depends on our agreement on what should be backported. Either
+only XRC_ADD_STYLE(...) lines will go into 2.4 or everything in this
+patch (including new features not present in 2.4.0's handler).
+
+Checking in xh_toolb.cpp;
+/pack/cvsroots/wxwindows/wxWindows/contrib/src/xrc/xh_toolb.cpp,v  <--  xh_toolb.cpp
+new revision: 1.7; previous revision: 1.6
+done
+
