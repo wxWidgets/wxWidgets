@@ -10,5 +10,8 @@ makeprog.env
 makelib.env
 wxwindowsM*Data
 wxwindowsM5.mcp
+*.ncb
+*.opt
+*.plg
 build
 .DS_Store
