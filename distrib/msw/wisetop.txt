@@ -17,7 +17,7 @@ item: Global
   Patch Flags=0000000000000001
   Patch Threshold=85
   Patch Memory=4000
-  EXE Filename=D:\wx2\wxWindows\deliver\setup.exe
+  EXE Filename=D:\wx2stable\wxWindows\deliver\setup.exe
   FTP Cluster Size=20
   Variable Name1=_SYS_
   Variable Default1=C:\WINDOWS\SYSTEM
@@ -62,7 +62,7 @@ item: Set Variable
   Value=wx2
 end
 item: Display Graphic
-  Pathname=D:\wx2\wxWindows\distrib\msw\wxwin01.bmp
+  Pathname=D:\wx2stable\wxWindows\distrib\msw\wxwin01.bmp
   X Position=16
   Y Position=16
 end

@@ -12,8 +12,12 @@ Rem TODO: check differing setup.h options, again by programmatic modification
 set WXDIR=%WXWIN%
 set FATWXWIN=%WXDIR%
 set FULLWXWIN=%WXDIR%
-if not %@INDEX["%WXDIR%","wxWindows"] == "-1" set FATWXWIN=%@PATH[%WXDIR%]wxwind~
+if not %@INDEX["%WXDIR%","wxWindows"] == "-1" set FATWXWIN=%@PATH[%WXDIR%]wxwind~1
 if not %@INDEX["%WXDIR%","wxWindows"] == "-1" set FULLWXWIN=%@PATH[%WXDIR%]wxWindows
+
+Rem The following line is for a specific environment -- edit, or comment out
+if not %@INDEX["%WXDIR%","wx2stable"] == "-1" set FATWXWIN=d:\wx2sta~1\wxwind~1
+
 echo Full wxWindows path is %FULLWXWIN%, FAT path is %FATWXWIN%
 set BUILDDEST=o:\wxWinBuild
 Rem Only carry on if we haven't specified a single target
@@ -577,40 +581,40 @@ call borland
 echo *** 16-bit BC++ Debug ***
 Rem 16-bit BC++ Debug
 cd %WXDIR%\src\msw
-nmake -f makefile.bcc cleanall
-nmake -f makefile.bcc
+make -f makefile.bcc cleanall
+make -f makefile.bcc
 if not direxist %BUILDDEST%\BC16Debug mkdir /S %BUILDDEST%\BC16Debug
 erase /F /Y %BUILDDEST%\BC16Debug
 
 Rem Make one sample, just to make sure Debug mode is OK
 cd %WXDIR%\samples\minimal
-nmake -f makefile.bcc clean
-nmake -f makefile.bcc
+make -f makefile.bcc clean
+make -f makefile.bcc
 copy minimal.exe /S %BUILDDEST%\BC16Debug
-nmake -f makefile.bcc clean
+make -f makefile.bcc clean
 
 cd %WXDIR%\src\msw
-nmake -f makefile.bcc cleanall
+make -f makefile.bcc cleanall
 
 echo *** 16-bit BC++ Release ***
 
-nmake -f makefile.bcc cleanall FINAL=1
-nmake -f makefile.bcc FINAL=1
+make -f makefile.bcc cleanall FINAL=1
+make -f makefile.bcc FINAL=1
 
 if not direxist %BUILDDEST%\BC16Release mkdir /S %BUILDDEST%\BC16Release
 erase /F /Y %BUILDDEST%\BC16Release
 
 Rem Make one sample, just to make sure Release mode is OK
 cd %WXDIR%\samples\minimal
-nmake -f makefile.bcc clean
-nmake -f makefile.bcc FINAL=1
+make -f makefile.bcc clean
+make -f makefile.bcc FINAL=1
 copy minimal.exe /S %BUILDDEST%\BC16Release
-nmake -f makefile.bcc clean
+make -f makefile.bcc clean
 
 Rem Clean up
 
 cd %WXDIR%\src\msw
-nmake -f makefile.bcc cleanall FINAL=1
+make -f makefile.bcc cleanall FINAL=1
 
 :end
 
