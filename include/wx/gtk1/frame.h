@@ -96,8 +96,14 @@ protected:
     virtual void DoGetClientSize( int *width, int *height ) const;
 
 #if wxUSE_MENUS_NATIVE
+
     virtual void DetachMenuBar();
     virtual void AttachMenuBar(wxMenuBar *menubar);
+
+public:
+    // Menu size is dynamic now, call this whenever it might change.
+    void UpdateMenuBarSize();
+
 #endif // wxUSE_MENUS_NATIVE
 
     DECLARE_DYNAMIC_CLASS(wxFrame)

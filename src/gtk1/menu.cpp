@@ -387,7 +387,20 @@ bool wxMenuBar::GtkAppend(wxMenu *menu, const wxString& title)
     // m_invokingWindow is set after wxFrame::SetMenuBar(). This call enables
     // adding menu later on.
     if (m_invokingWindow)
+    {
         wxMenubarSetInvokingWindow( menu, m_invokingWindow );
+
+            // OPTIMISE ME:  we should probably cache this, or pass it
+            //               directly, but for now this is a minimal
+            //               change to validate the new dynamic sizing.
+            //               see (and refactor :) similar code in Remove
+            //               below.
+
+	wxFrame	*frame = wxDynamicCast( m_invokingWindow, wxFrame );
+
+	if( frame )
+            frame->UpdateMenuBarSize();
+    }
 
     return TRUE;
 }
@@ -451,6 +464,16 @@ wxMenu *wxMenuBar::Remove(size_t pos)
     printf( "factory entries after %d\n", (int)g_slist_length(m_factory->items) );
     printf( "menu shell entries after %d\n", (int)g_list_length( menu_shell->children ) );
 */
+
+    if (m_invokingWindow)
+    {
+            // OPTIMISE ME:  see comment in GtkAppend
+
+	wxFrame	*frame = wxDynamicCast( m_invokingWindow, wxFrame );
+
+	if( frame )
+            frame->UpdateMenuBarSize();
+    }
 
     return menu;
 }
