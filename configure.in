@@ -2264,9 +2264,6 @@ equivalent variable and GTK+ is version 1.2.3 or above.
         ALL_OBJECTS="${ALL_OBJECTS} \$(FREETYPEOBJS)"
     fi
 
-    RPM_FILES="src/\$(TOOLKITDIR)/rpmfiles.lst"
-    RPM_SPEC="wx\$(TOOLKIT).spec"
-
     dnl distribute samples/demos/utils with GUI versions
     GUIDIST="${GUIDIST} SAMPLES_DIST DEMOS_DIST UTILS_DIST MISC_DIST"
     DISTDIR="wx\$(TOOLKIT)"
@@ -2291,8 +2288,6 @@ else
     fi
 
     PORT_FILES="\${top_srcdir}/src/files.lst"
-    RPM_FILES="src/rpmfiles.lst"
-    RPM_SPEC="wxBase.spec"
 
     dnl distribute only wxBase sources/headers
     GUIDIST="BASE_DIST"
@@ -4773,8 +4768,6 @@ dnl distribution vars
 AC_SUBST(GUIDIST)
 AC_SUBST(PORT_FILES)
 AC_SUBST(DISTDIR)
-AC_SUBST(RPM_SPEC)
-AC_SUBST(RPM_FILES)
 
 dnl additional subdirectories where we will build
 AC_SUBST(SAMPLES_SUBDIRS)
