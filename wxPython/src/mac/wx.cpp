@@ -676,7 +676,8 @@ static wxPyCoreAPI API = {
     wxPyMake_wxObject,
     wxPyMake_wxSizer,
     wxPyPtrTypeMap_Add,
-    wxArrayString2PyList_helper
+    wxArrayString2PyList_helper,
+    wxArrayInt2PyList_helper
 };
 
 
@@ -2136,8 +2137,6 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxNB_MULTILINE", PyInt_FromLong((long) wxNB_MULTILINE));
 	 PyDict_SetItemString(d,"wxLI_HORIZONTAL", PyInt_FromLong((long) wxLI_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxLI_VERTICAL", PyInt_FromLong((long) wxLI_VERTICAL));
-	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_NEVER", PyInt_FromLong((long) wxHW_SCROLLBAR_NEVER));
-	 PyDict_SetItemString(d,"wxHW_SCROLLBAR_AUTO", PyInt_FromLong((long) wxHW_SCROLLBAR_AUTO));
 	 PyDict_SetItemString(d,"wxJOYSTICK1", PyInt_FromLong((long) wxJOYSTICK1));
 	 PyDict_SetItemString(d,"wxJOYSTICK2", PyInt_FromLong((long) wxJOYSTICK2));
 	 PyDict_SetItemString(d,"wxJOY_BUTTON1", PyInt_FromLong((long) wxJOY_BUTTON1));
@@ -2348,6 +2347,7 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICON", PyInt_FromLong((long) wxBITMAP_TYPE_ICON));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ICON_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_ICON_RESOURCE));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ANI", PyInt_FromLong((long) wxBITMAP_TYPE_ANI));
+	 PyDict_SetItemString(d,"wxBITMAP_TYPE_IFF", PyInt_FromLong((long) wxBITMAP_TYPE_IFF));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_MACCURSOR", PyInt_FromLong((long) wxBITMAP_TYPE_MACCURSOR));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_MACCURSOR_RESOURCE", PyInt_FromLong((long) wxBITMAP_TYPE_MACCURSOR_RESOURCE));
 	 PyDict_SetItemString(d,"wxBITMAP_TYPE_ANY", PyInt_FromLong((long) wxBITMAP_TYPE_ANY));

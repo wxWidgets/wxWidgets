@@ -819,6 +819,30 @@ static PyObject *_wrap_wxGetHomeDir(PyObject *self, PyObject *args, PyObject *kw
     return _resultobj;
 }
 
+static PyObject *_wrap_wxGetUserHome(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    char * _arg0 = (char *) "";
+    char *_kwnames[] = { "user", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"|s:wxGetUserHome",_kwnames,&_arg0)) 
+        return NULL;
+{
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+        _result = new wxString (wxGetUserHome(_arg0));
+
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) return NULL;
+}{
+    _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 static PyObject *_wrap_wxGetAccelFromString(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxAcceleratorEntry * _result;
@@ -4148,6 +4172,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxObject_Destroy", (PyCFunction) _wrap_wxObject_Destroy, METH_VARARGS | METH_KEYWORDS },
 	 { "wxObject_GetClassName", (PyCFunction) _wrap_wxObject_GetClassName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetAccelFromString", (PyCFunction) _wrap_wxGetAccelFromString, METH_VARARGS | METH_KEYWORDS },
+	 { "wxGetUserHome", (PyCFunction) _wrap_wxGetUserHome, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetHomeDir", (PyCFunction) _wrap_wxGetHomeDir, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetUserName", (PyCFunction) _wrap_wxGetUserName, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetUserId", (PyCFunction) _wrap_wxGetUserId, METH_VARARGS | METH_KEYWORDS },

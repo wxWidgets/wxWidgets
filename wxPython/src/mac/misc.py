@@ -601,6 +601,8 @@ wxGetUserName = miscc.wxGetUserName
 
 wxGetHomeDir = miscc.wxGetHomeDir
 
+wxGetUserHome = miscc.wxGetUserHome
+
 def wxGetAccelFromString(*_args, **_kwargs):
     val = apply(miscc.wxGetAccelFromString,_args,_kwargs)
     if val: val = wxAcceleratorEntryPtr(val)

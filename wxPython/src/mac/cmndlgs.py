@@ -193,6 +193,27 @@ class wxFileDialog(wxFileDialogPtr):
 
 
 
+class wxMultiChoiceDialogPtr(wxDialogPtr):
+    def __init__(self,this):
+        self.this = this
+        self.thisown = 0
+    def SetSelections(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxMultiChoiceDialog_SetSelections,(self,) + _args, _kwargs)
+        return val
+    def GetSelections(self, *_args, **_kwargs):
+        val = apply(cmndlgsc.wxMultiChoiceDialog_GetSelections,(self,) + _args, _kwargs)
+        return val
+    def __repr__(self):
+        return "<C wxMultiChoiceDialog instance at %s>" % (self.this,)
+class wxMultiChoiceDialog(wxMultiChoiceDialogPtr):
+    def __init__(self,*_args,**_kwargs):
+        self.this = apply(cmndlgsc.new_wxMultiChoiceDialog,_args,_kwargs)
+        self.thisown = 1
+        self._setOORInfo(self)
+
+
+
+
 class wxSingleChoiceDialogPtr(wxDialogPtr):
     def __init__(self,this):
         self.this = this
@@ -474,6 +495,7 @@ def wxPreFindReplaceDialog(*_args,**_kwargs):
 
 #-------------- VARIABLE WRAPPERS ------------------
 
+wxCHOICEDLG_STYLE = cmndlgsc.wxCHOICEDLG_STYLE
 wxFR_DOWN = cmndlgsc.wxFR_DOWN
 wxFR_WHOLEWORD = cmndlgsc.wxFR_WHOLEWORD
 wxFR_MATCHCASE = cmndlgsc.wxFR_MATCHCASE
