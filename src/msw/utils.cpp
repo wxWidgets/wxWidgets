@@ -178,6 +178,11 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 {
 #if defined(__WIN32__) && !defined(__TWIN32__) && !defined(__WXMICROWIN__) && ! (defined(__GNUWIN32__) && !defined(__MINGW32__))
     // TODO should use GetComputerNameEx() when available
+
+    // the idea is that if someone had set wxUSE_SOCKETS to 0 the code
+    // shouldn't use winsock.dll (a.k.a. ws2_32.dll) at all so only use this
+    // code if we link with it anyhow
+#if wxUSE_SOCKETS
     WSADATA wsa;
     if ( WSAStartup(MAKEWORD(1, 1), &wsa) == 0 )
     {
@@ -206,13 +211,15 @@ bool wxGetFullHostName(wxChar *buf, int maxSize)
 
         WSACleanup();
 
-        if ( !!host )
+        if ( !host.empty() )
         {
             wxStrncpy(buf, host, maxSize);
 
             return TRUE;
         }
     }
+#endif // wxUSE_SOCKETS
+
 #endif // Win32
 
     return wxGetHostName(buf, maxSize);
