@@ -121,7 +121,8 @@ public:
                   *m_choiceSorted;
     wxComboBox    *m_combo;
     wxRadioBox    *m_radio;
-    wxGauge       *m_gauge;
+    wxGauge       *m_gauge,
+                  *m_gaugeVert;
     wxSlider      *m_slider;
     wxButton      *m_fontButton;
     wxButton      *m_lbSelectNum;
@@ -694,13 +695,16 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
     m_gauge->SetBackgroundColour(*wxGREEN);
     m_gauge->SetForegroundColour(*wxRED);
+    m_gaugeVert = new wxGauge( panel, -1, 100,
+                               wxPoint(180,50), wxSize(-1, 70),
+                               wxGA_VERTICAL | wxNO_BORDER );
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1), wxSL_LABELS );
     (void)new wxStaticBox( panel, -1, "&Explanation", wxPoint(220,10), wxSize(270,130) );
 #ifdef __WXMOTIF__
     // No wrapping text in wxStaticText yet :-(
     (void)new wxStaticText( panel, -1,
                             "Drag the slider!",
-                            wxPoint(228,30),
+                            wxPoint(250,30),
                             wxSize(240, -1)
                           );
 #else
@@ -711,7 +715,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
                             "\n"
                             "This is also supposed to demonstrate how\n"
                             "to use static controls.\n",
-                            wxPoint(228,25),
+                            wxPoint(250,25),
                             wxSize(240, 110)
                           );
 #endif
@@ -1214,6 +1218,7 @@ void MyPanel::OnUpdateLabel( wxCommandEvent &WXUNUSED(event) )
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
 {
     m_gauge->SetValue( m_slider->GetValue() );
+    m_gaugeVert->SetValue( m_slider->GetValue() / 2 );
 }
 
 #if wxUSE_SPINCTRL
