@@ -551,7 +551,9 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
    wxBitmapRefData *ref = (wxBitmapRefData *)ret.GetRefData();
 
    ref->m_numColors     = M_BITMAPDATA->m_numColors;
-   ref->m_bitmapPalette = M_BITMAPDATA->m_bitmapPalette;
+#if wxUSE_PALETTE
+    ref->m_bitmapPalette = M_BITMAPDATA->m_bitmapPalette;
+#endif // wxUSE_PALETTE
    ref->m_bitmapType    = M_BITMAPDATA->m_bitmapType;
 
    // Copy sub region of this bitmap
@@ -1031,6 +1033,7 @@ void wxBitmap::SetOk(bool isOk)
     M_BITMAPDATA->m_ok = isOk;
 }
 
+#if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
    wxCHECK_MSG( Ok(), NULL, wxT("Invalid bitmap  GetPalette()") );
@@ -1045,6 +1048,7 @@ void wxBitmap::SetPalette(const wxPalette& palette)
 
     M_BITMAPDATA->m_bitmapPalette = palette ;
 }
+#endif // wxUSE_PALETTE
 
 void wxBitmap::SetMask(wxMask *mask)
 {

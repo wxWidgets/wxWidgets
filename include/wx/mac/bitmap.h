@@ -86,7 +86,9 @@ public:
   int           m_depth;
   bool          m_ok;
   int           m_numColors;
+#if wxUSE_PALETTE
   wxPalette     m_bitmapPalette;
+#endif // wxUSE_PALETTE
   int           m_quality;
 
   int            m_bitmapType ;
@@ -186,8 +188,10 @@ public:
   void SetQuality(int q);
   void SetOk(bool isOk);
 
-  wxPalette* GetPalette() const;
-  void SetPalette(const wxPalette& palette);
+#if wxUSE_PALETTE
+   wxPalette* GetPalette() const;
+   void SetPalette(const wxPalette& palette);
+#endif // wxUSE_PALETTE
 
   wxMask *GetMask() const;
   void SetMask(wxMask *mask) ;
