@@ -17,6 +17,7 @@
 #include "wx/setup.h"
 #include "wx/utils.h"
 #include "wx/app.h"
+#include "wx/apptrait.h"
 #include "wx/mac/uma.h"
 
 #include <ctype.h>
@@ -192,7 +193,7 @@ void wxBell()
     SysBeep(30);
 }
 
-int wxGetOsVersion(int *majorVsn, int *minorVsn)
+int wxGUIAppTraits::GetOSVersion(int *majorVsn, int *minorVsn)
 {
     long theSystem ;
 
