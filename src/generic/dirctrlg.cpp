@@ -312,9 +312,6 @@ static const char * icon8_xpm[] = {
 "                "};
 
 
-#define wxID_TREECTRL          7000
-#define wxID_FILTERLISTCTRL    7001
-
 #if defined(__DOS__)
 
 bool wxIsDriveAvailable(const wxString& dirName)

@@ -54,6 +54,7 @@ enum wxDRAG_MODE
 // alteration of a  wxCanvasObject functionality
 class wxCanvasObject: public wxEvtHandler
 {
+    DECLARE_CLASS(wxCanvasObject)
 public:
 
     wxCanvasObject();
@@ -214,6 +215,7 @@ protected:
 // The group has a matrix to position/rotate/scale the group.
 class wxCanvasObjectGroup: public wxCanvasObject
 {
+    DECLARE_CLASS(wxCanvasObjectGroup)
 public:
     wxCanvasObjectGroup(double x, double y);
     virtual ~wxCanvasObjectGroup();
@@ -282,6 +284,7 @@ protected:
 // The position/matrix of the referenced Object is accumulated with the one here.
 class wxCanvasObjectRef: public wxCanvasObject
 {
+    DECLARE_CLASS(wxCanvasObjectRef)
 public:
     wxCanvasObjectRef(double x, double y,wxCanvasObject* obj);
 
@@ -332,6 +335,7 @@ protected:
 // wxCanvasRect
 class wxCanvasRect: public wxCanvasObject
 {
+    DECLARE_CLASS(wxCanvasRect)
 public:
     wxCanvasRect( double x, double y, double w, double h , double radius=0 );
     void SetBrush( const wxBrush& brush)  { m_brush = brush; };

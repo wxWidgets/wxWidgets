@@ -514,9 +514,11 @@ void wxToolBarSimple::DrawTool(wxDC& dc, wxToolBarToolBase *toolBase)
     wxPen white_pen(wxT("WHITE"), 1, wxSOLID);
     wxPen black_pen(wxT("BLACK"), 1, wxSOLID);
 
-    wxBitmap bitmap = tool->GetBitmap();
+    wxBitmap bitmap = tool->GetNormalBitmap();
+    if (!bitmap.Ok())
+        return;
 
-    if ( bitmap.Ok() )
+    if ( !tool->IsToggled() )
     {
 #if wxUSE_PALETTE
 #ifndef __WXGTK__

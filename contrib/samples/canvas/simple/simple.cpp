@@ -71,7 +71,7 @@ MyFrame::MyFrame( wxWindow *parent, wxWindowID id, const wxString &title,
 
     // Bunch of rects and images.
     wxBitmap bitmap( smile_xpm );
-    wxImage image( bitmap );
+    wxImage image( bitmap.ConvertToImage() );
 
     m_smile1 = new wxCanvasImage( image, 0,70,32,32 );
     root->Append( m_smile1 );

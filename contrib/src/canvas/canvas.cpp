@@ -51,6 +51,8 @@ FT_Library g_freetypeLibrary;
 // wxCanvasObject
 //----------------------------------------------------------------------------
 
+IMPLEMENT_CLASS(wxCanvasObject, wxEvtHandler)
+
 wxCanvasObject::wxCanvasObject()
 {
     // the default event handler is just this object
@@ -407,6 +409,8 @@ void wxCanvasObject::WriteSVG( wxTextOutputStream &stream )
 // wxCanvasObjectGroup
 //----------------------------------------------------------------------------
 
+IMPLEMENT_CLASS(wxCanvasObjectGroup, wxCanvasObject)
+
 wxCanvasObjectGroup::wxCanvasObjectGroup(double x, double y)
 {
     lworld.Translate(x,y);
@@ -716,6 +720,8 @@ int wxCanvasObjectGroup::IndexOf( wxCanvasObject* obj )
 // wxCanvasObjectRef
 //----------------------------------------------------------------------------
 
+IMPLEMENT_CLASS(wxCanvasObjectRef, wxCanvasObject)
+
 wxCanvasObjectRef::wxCanvasObjectRef(double x, double y, wxCanvasObject* obj)
    : wxCanvasObject()
 {
@@ -879,6 +885,8 @@ wxCanvasObject* wxCanvasObjectRef::IsHitWorld( double x, double y, double margin
 //----------------------------------------------------------------------------
 // wxCanvasRect
 //----------------------------------------------------------------------------
+
+IMPLEMENT_CLASS(wxCanvasRect, wxCanvasObject)
 
 wxCanvasRect::wxCanvasRect( double x, double y, double w, double h , double radius )
    : wxCanvasObject()

@@ -223,6 +223,10 @@ protected:
     #define wxDirCtrl wxGenericDirCtrl
 #endif
 
+// Symbols for accessing individual controls
+#define wxID_TREECTRL          7000
+#define wxID_FILTERLISTCTRL    7001
+
 #endif // wxUSE_DIRDLG
 
 #endif

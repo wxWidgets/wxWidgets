@@ -312,18 +312,18 @@ MMBoardFrame::MMBoardFrame(const wxString& title, const wxPoint& pos, const wxSi
     // Bitmap button panel
     wxBoxSizer *buttonSizer = new wxBoxSizer(wxHORIZONTAL);
     
-    wxBitmap *play_bmp = new wxBitmap(play_back_xpm);
-    wxBitmap *stop_bmp = new wxBitmap(stop_back_xpm);
-    wxBitmap *eject_bmp = new wxBitmap(eject_xpm);
-    wxBitmap *pause_bmp = new wxBitmap(pause_xpm);
+    wxBitmap play_bmp(play_back_xpm);
+    wxBitmap stop_bmp(stop_back_xpm);
+    wxBitmap eject_bmp(eject_xpm);
+    wxBitmap pause_bmp(pause_xpm);
 
-    m_playButton = new wxBitmapButton(m_panel, MMBoard_PlayButton, *play_bmp);
+    m_playButton = new wxBitmapButton(m_panel, MMBoard_PlayButton, play_bmp);
     m_playButton->Enable(FALSE);
-    m_pauseButton = new wxBitmapButton(m_panel, MMBoard_PauseButton, *pause_bmp);
+    m_pauseButton = new wxBitmapButton(m_panel, MMBoard_PauseButton, pause_bmp);
     m_pauseButton->Enable(FALSE);
-    m_stopButton = new wxBitmapButton(m_panel, MMBoard_StopButton, *stop_bmp);
+    m_stopButton = new wxBitmapButton(m_panel, MMBoard_StopButton, stop_bmp);
     m_stopButton->Enable(FALSE);
-    m_ejectButton = new wxBitmapButton(m_panel, MMBoard_EjectButton, *eject_bmp);
+    m_ejectButton = new wxBitmapButton(m_panel, MMBoard_EjectButton, eject_bmp);
     m_ejectButton->Enable(FALSE);
     
     buttonSizer->Add(m_playButton, 0, wxALL, 2);

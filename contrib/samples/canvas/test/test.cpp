@@ -235,7 +235,7 @@ MyFrame::MyFrame(wxFrame* frame, const wxString& title, const wxPoint& pos, cons
     m_datatree->SetAdmin(&m_canvasadmin);
 
     wxBitmap bitmap( smile_xpm );
-    wxImage image( bitmap );
+    wxImage image( bitmap.ConvertToImage() );
 
 //    m_sm1 = new wxCanvasImage( image, 0,70,32,32 );
 //    m_datatree->Append( m_sm1 );
