@@ -17,7 +17,7 @@
 #endif
 
 // for all others, include the necessary headers (this file is usually all you
-// need because it includes almost all <standard< wxWindows headers
+// need because it includes almost all standard wxWindows headers
 #ifndef WX_PRECOMP
     #include "wx/wx.h"
 
@@ -54,7 +54,7 @@ class MyCanvas: public wxWindow
 {
 public:
     MyCanvas( wxWindow *parent );
-    ~MyCanvas();
+    virtual ~MyCanvas();
 
     // accessors for the frame
     const wxFont& GetTextFont() const { return m_font; }
@@ -92,6 +92,8 @@ public:
     void OnBold(wxCommandEvent& event);
     void OnItalic(wxCommandEvent& event);
     void OnUnderline(wxCommandEvent& event);
+
+    void OnwxPointerFont(wxCommandEvent& event);
 
     void OnViewMsg(wxCommandEvent& event);
     void OnSelectFont(wxCommandEvent& event);
@@ -138,6 +140,11 @@ enum
     Font_Bold,
     Font_Italic,
     Font_Underlined,
+    Font_wxNORMAL_FONT,
+    Font_wxSMALL_FONT,
+    Font_wxITALIC_FONT,
+    Font_wxSWISS_FONT,
+
     Font_Choose = 100,
     Font_EnumFamiliesForEncoding,
     Font_EnumFamilies,
@@ -164,6 +171,12 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Font_Bold, MyFrame::OnBold)
     EVT_MENU(Font_Italic, MyFrame::OnItalic)
     EVT_MENU(Font_Underlined, MyFrame::OnUnderline)
+
+    EVT_MENU(Font_wxNORMAL_FONT, MyFrame::OnwxPointerFont)
+    EVT_MENU(Font_wxSMALL_FONT, MyFrame::OnwxPointerFont)
+    EVT_MENU(Font_wxITALIC_FONT, MyFrame::OnwxPointerFont)
+    EVT_MENU(Font_wxSWISS_FONT, MyFrame::OnwxPointerFont)
+
     EVT_MENU(Font_CheckNativeToFromString, MyFrame::OnCheckNativeToFromString)
 
     EVT_MENU(Font_Choose, MyFrame::OnSelectFont)
@@ -233,6 +246,7 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuFont->Append(Font_Italic, "&Oblique\tCtrl-O", "Toggle italic state", TRUE);
     menuFont->Append(Font_Underlined, "&Underlined\tCtrl-U",
                      "Toggle underlined state", TRUE);
+
     menuFont->AppendSeparator();
     menuFont->Append(Font_CheckNativeToFromString,
                      "Check Native Font Info To/From String");
@@ -240,6 +254,14 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     wxMenu *menuSelect = new wxMenu;
     menuSelect->Append(Font_Choose, "&Select font...\tCtrl-S",
                      "Select a standard font");
+
+    wxMenu *menuStdFonts = new wxMenu;
+    menuStdFonts->Append(Font_wxNORMAL_FONT, "wxNORMAL_FONT", "Normal font used by wxWindows");
+    menuStdFonts->Append(Font_wxSMALL_FONT,  "wxSMALL_FONT",  "Small font used by wxWindows");
+    menuStdFonts->Append(Font_wxITALIC_FONT, "wxITALIC_FONT", "Italic font used by wxWindows");
+    menuStdFonts->Append(Font_wxSWISS_FONT,  "wxSWISS_FONT",  "Swiss font used by wxWindows");
+    menuSelect->Append(-2, "Standar&d fonts", menuStdFonts);
+
     menuSelect->AppendSeparator();
     menuSelect->Append(Font_EnumFamilies, "Enumerate font &families\tCtrl-F");
     menuSelect->Append(Font_EnumFixedFamilies,
@@ -481,6 +503,26 @@ void MyFrame::OnUnderline(wxCommandEvent& event)
     wxFont font = m_canvas->GetTextFont();
 
     font.SetUnderlined(event.IsChecked());
+    DoChangeFont(font);
+}
+
+void MyFrame::OnwxPointerFont(wxCommandEvent& event)
+{
+    wxFont font;
+
+    switch (event.GetId())
+    {
+        case Font_wxNORMAL_FONT : font = wxFont(*wxNORMAL_FONT); break;
+        case Font_wxSMALL_FONT  : font = wxFont(*wxSMALL_FONT); break;
+        case Font_wxITALIC_FONT : font = wxFont(*wxITALIC_FONT); break;
+        case Font_wxSWISS_FONT  : font = wxFont(*wxSWISS_FONT); break;
+        default                 : font = wxFont(*wxNORMAL_FONT); break;
+    }
+
+    GetMenuBar()->Check(Font_Bold, FALSE);
+    GetMenuBar()->Check(Font_Italic, FALSE);
+    GetMenuBar()->Check(Font_Underlined, FALSE);
+
     DoChangeFont(font);
 }
 
