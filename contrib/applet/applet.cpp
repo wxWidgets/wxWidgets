@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-*						wxWindows HTML Applet Package
+*                       wxWindows HTML Applet Package
 *
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
@@ -23,8 +23,8 @@
 *  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
 *  ======================================================================
 *
-* Language:		ANSI C++
-* Environment:	Any
+* Language:     ANSI C++
+* Environment:  Any
 *
 * Description:  Main wxApplet class implementation
 *
@@ -53,14 +53,14 @@ REMARKS:
 Psuedo virtual constructor for the wxApplet class.
 ****************************************************************************/
 bool wxApplet::Create(
-	wxHtmlAppletWindow *parent,
-	const wxSize& size,
-	long style)
+    wxHtmlAppletWindow *parent,
+    const wxSize& size,
+    long style)
 {
     bool ret = wxPanel::Create(parent, -1, wxDefaultPosition, size, style);
     if (ret) {
-		m_Parent = parent;
-		}
+        m_Parent = parent;
+        }
     return ret;
 }
 
@@ -70,7 +70,7 @@ Destructor for the wxApplet class.
 ****************************************************************************/
 wxApplet::~wxApplet()
 {
-	m_Parent->RemoveApplet(this);			
+    m_Parent->RemoveApplet(this);           
 }
 
 /****************************************************************************
@@ -78,7 +78,7 @@ REMARKS:
 Special handler for background erase messages. We do nothing in here which
 causes the background to not be erased which is exactly what we want. All
 the wxApplet classes display over an HTML window, so we want the HTML
-background to show through. 			
+background to show through.             
 ****************************************************************************/
 void wxApplet::OnEraseBackground(wxEraseEvent&)
 {

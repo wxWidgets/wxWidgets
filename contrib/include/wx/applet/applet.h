@@ -1,6 +1,6 @@
 /****************************************************************************
 *
-*						wxWindows HTML Applet Package
+*                       wxWindows HTML Applet Package
 *
 *               Copyright (C) 1991-2001 SciTech Software, Inc.
 *                            All rights reserved.
@@ -23,8 +23,8 @@
 *  |REMOVAL OR MODIFICATION OF THIS HEADER IS STRICTLY PROHIBITED BY LAW|
 *  ======================================================================
 *
-* Language:		ANSI C++
-* Environment:	Any
+* Language:     ANSI C++
+* Environment:  Any
 *
 * Description:  Header file for the wxApplet class
 *
@@ -46,38 +46,38 @@ class wxApplet : public wxPanel {
 private:
     DECLARE_ABSTRACT_CLASS(wxApplet);
     DECLARE_EVENT_TABLE();
-	
+    
 protected:
-	wxHtmlAppletWindow	*m_Parent;
+    wxHtmlAppletWindow  *m_Parent;
 
-			// Special handler for background erase messages 			
-			void OnEraseBackground(wxEraseEvent&);
-		
+            // Special handler for background erase messages            
+            void OnEraseBackground(wxEraseEvent&);
+        
 public:
-			// Constructor (called during dynamic creation)
-			wxApplet() { m_Parent = NULL; }
-	
-			// Psuedo virtual constructor
-	virtual bool Create(
-				wxHtmlAppletWindow *parent,
-				const wxSize& size,
-				long style = wxTAB_TRAVERSAL | wxNO_BORDER);
-				
-			// Virtual destructor
-	virtual ~wxApplet();
+            // Constructor (called during dynamic creation)
+            wxApplet() { m_Parent = NULL; }
+    
+            // Psuedo virtual constructor
+    virtual bool Create(
+                wxHtmlAppletWindow *parent,
+                const wxSize& size,
+                long style = wxTAB_TRAVERSAL | wxNO_BORDER);
+                
+            // Virtual destructor
+    virtual ~wxApplet();
 
-			// Handle HTML navigation to a new URL
-	virtual void OnLinkClicked(const wxHtmlLinkInfo& link) = 0;	
-			
-			// Handle HTML navigation forward command in applet
-	virtual void OnHistoryForward() = 0;
-			
-			// Handle HTML navigation back command in applet
-	virtual void OnHistoryBack() = 0;
-			
-			// Handle messages from the wxAppletManager and other applets
-	virtual void OnMessage(wxEvent& msg) = 0;
-	};
-	
+            // Handle HTML navigation to a new URL
+    virtual void OnLinkClicked(const wxHtmlLinkInfo& link) = 0; 
+            
+            // Handle HTML navigation forward command in applet
+    virtual void OnHistoryForward() = 0;
+            
+            // Handle HTML navigation back command in applet
+    virtual void OnHistoryBack() = 0;
+            
+            // Handle messages from the wxAppletManager and other applets
+    virtual void OnMessage(wxEvent& msg) = 0;
+    };
+    
 #endif // __WX_APPLET_H
 
