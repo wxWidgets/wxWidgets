@@ -84,12 +84,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
-
-#if PYTHON_API_VERSION >= 1009
-    static char* wxStringErrorMsg = "String or Unicode type required";
-#else
-    static char* wxStringErrorMsg = "String type required";
-#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -158,41 +152,15 @@ static PyObject *_wrap_new_wxDllWidget(PyObject *self, PyObject *args, PyObject 
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
     if (_obj3)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg3 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
-#endif
 }
     if (_obj4)
 {
@@ -208,7 +176,7 @@ static PyObject *_wrap_new_wxDllWidget(PyObject *self, PyObject *args, PyObject 
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxDllWidget *)new_wxDllWidget(_arg0,_arg1,*_arg2,*_arg3,*_arg4,*_arg5,_arg6);
+    _result = (wxDllWidget *)new_wxDllWidget(_arg0,_arg1,*_arg2,*_arg3,*_arg4,*_arg5,_arg6);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -250,7 +218,7 @@ static PyObject *_wrap_wxDllWidget_Ok(PyObject *self, PyObject *args, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxDllWidget_Ok(_arg0);
+    _result = (bool )wxDllWidget_Ok(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -281,26 +249,13 @@ static PyObject *_wrap_wxDllWidget_SendCommand(PyObject *self, PyObject *args, P
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxDllWidget_SendCommand(_arg0,_arg1,*_arg2);
+    _result = (int )wxDllWidget_SendCommand(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -332,7 +287,7 @@ static PyObject *_wrap_wxDllWidget_GetWidgetWindow(PyObject *self, PyObject *arg
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxWindow *)wxDllWidget_GetWidgetWindow(_arg0);
+    _result = (wxWindow *)wxDllWidget_GetWidgetWindow(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -350,12 +305,16 @@ static PyObject *_wrap_wxDllWidget_GetDllExt(PyObject *self, PyObject *args, PyO
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxDllWidget::GetDllExt());
+    _result = new wxString (wxDllWidget::GetDllExt());
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     delete _result;

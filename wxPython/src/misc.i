@@ -35,7 +35,7 @@ class wxObject {
 public:
 
     %addmethods {
-        const char* GetClassName() {
+        wxString GetClassName() {
             return self->GetClassInfo()->GetClassName();
         }
 
@@ -357,8 +357,9 @@ bool wxYieldIfNeeded();
 void wxEnableTopLevelWindows(bool enable);
 
 %inline %{
-    char* wxGetResource(char *section, char *entry, char *file = NULL) {
-        char * retval;
+    wxString wxGetResource(const wxString& section, const wxString& entry,
+                          const wxString& file = wxEmptyString) {
+        wxChar * retval;
         wxGetResource(section, entry, &retval, file);
         return retval;
     }

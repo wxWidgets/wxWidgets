@@ -85,12 +85,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     return target;
 }
 
-#if PYTHON_API_VERSION >= 1009
-    static char* wxStringErrorMsg = "String or Unicode type required";
-#else
-    static char* wxStringErrorMsg = "String type required";
-#endif
-
 //---------------------------------------------------------------------------
 // This one will work for any class for the VERY generic cases, but beyond that
 // the helper needs to know more about the type.
@@ -230,7 +224,7 @@ static PyObject *_wrap_wxOGLInitialize(PyObject *self, PyObject *args, PyObject 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxOGLInitialize();
+    wxOGLInitialize();
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -248,7 +242,7 @@ static PyObject *_wrap_wxOGLCleanUp(PyObject *self, PyObject *args, PyObject *kw
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxOGLCleanUp();
+    wxOGLCleanUp();
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

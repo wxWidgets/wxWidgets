@@ -47,6 +47,9 @@ GL_ONLY = 0        # Only used when making the -gl RPM.  See the "b" script
 USE_SWIG = 0       # Should we actually execute SWIG, or just use the
                    # files already in the distribution?
 
+USE_UNICODE = 0    # This will pass the 'wxUSE_UNICODE' flag to SWIG.
+                   # At the moment only tested for 'CORE_ONLY = 1'
+
 IN_CVS_TREE = 0    # Set to true if building in a full wxWindows CVS
                    # tree, otherwise will assume all needed files are
                    # available in the wxPython source distribution
@@ -84,11 +87,14 @@ def opj(*args):
 
 def libFlag():
     if FINAL:
-        return ''
+        rv = ''
     elif HYBRID:
-        return 'h'
+        rv = 'h'
     else:
-        return 'd'
+        rv = 'd'
+    if USE_UNICODE:
+        rv = 'u' + rv
+    return rv
 
 
 #----------------------------------------------------------------------
@@ -117,7 +123,7 @@ if bcpp_compiling:
 
 for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC', 'BUILD_XRC',
              'BUILD_GIZMOS', 'BUILD_DLLWIDGET',
-             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE',
+             'CORE_ONLY', 'USE_SWIG', 'IN_CVS_TREE', 'USE_UNICODE',
              'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if string.find(sys.argv[x], flag) == 0:
@@ -137,6 +143,10 @@ for option in ['WX_CONFIG', 'WXDLLVER', ]:
 sys.argv = filter(None, sys.argv)
 
 
+
+#----------------------------------------------------------------------
+# sanity checks
+
 if CORE_ONLY:
     BUILD_GLCANVAS = 0
     BUILD_OGL = 0
@@ -145,6 +155,10 @@ if CORE_ONLY:
     BUILD_GIZMOS = 0
     BUILD_DLLWIDGET = 0
 
+
+if USE_UNICODE and os.name != 'nt':
+    print "UNICODE is currently only supported on Win32"
+    sys.exit()
 
 #----------------------------------------------------------------------
 # Setup some platform specific stuff
@@ -313,6 +327,9 @@ swig_args = ['-c++', '-shadow', '-python', '-keyword',
              #'-docstring', '-Sbefore',
              '-I./src', '-D'+WXPLAT,
              ]
+if USE_UNICODE:
+    swig_args.append('-DwxUSE_UNICODE')
+
 swig_deps = ['src/my_typemaps.i']
 
 

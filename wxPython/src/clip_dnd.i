@@ -72,7 +72,7 @@ public:
     wxDataFormatId GetType() const;
 
     wxString GetId() const;
-    void SetId(const char *format);
+    void SetId(const wxChar *format);
 };
 
 %new wxDataFormat* wxCustomDataFormat(const wxString &id);

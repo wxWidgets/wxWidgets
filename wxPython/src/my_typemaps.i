@@ -16,7 +16,7 @@
 
 %except(python) {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    $function
+$function
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }
@@ -151,61 +151,12 @@
 
 //---------------------------------------------------------------------------
 
-%{
-#if PYTHON_API_VERSION >= 1009
-    static char* wxStringErrorMsg = "String or Unicode type required";
-#else
-    static char* wxStringErrorMsg = "String type required";
-#endif
-%}
 
-// TODO:  Which works best???
-
-// Implementation #1
-//  %typemap(python, in) wxString& (PyObject* temp, int tmpDoDecRef) {
-//      temp = $source;
-//      tmpDoDecRef = 0;
-//  #if PYTHON_API_VERSION >= 1009
-//      if (PyUnicode_Check(temp) {
-//          temp = PyUnicode_AsUTF8String(temp);
-//          if (! temp) {
-//              PyErr_SetString(PyExc_TypeError, "Unicode encoding to UTF8 failed.");
-//              return NULL;
-//          }
-//          tmpDoDecRef = 1;
-//  #endif
-//      if (!PyString_Check(temp)) {
-//          PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-//          return NULL;
-//      }
-//      $target = new wxString(PyString_AsString(temp), PyString_Size(temp));
-//  #if PYTHON_API_VERESION >= 1009
-//      if (tmpDoDecRef) Py_DECREF(temp);
-//  #endif
-//  }
-
-
-// Implementation #2
 %typemap(python, in) wxString& {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check($source) && !PyUnicode_Check($source)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    $target = wxString_in_helper($source);
+    if ($target == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize($source, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    $target = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check($source)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    $target = new wxString(PyString_AS_STRING($source), PyString_GET_SIZE($source));
-#endif
 }
-
-
 
 
 %typemap(python, freearg) wxString& {
@@ -216,7 +167,11 @@
 
 
 %typemap(python, out) wxString {
+#if wxUSE_UNICODE
+    $target = PyUnicode_FromUnicode($source->c_str(), $source->Len());
+#else
     $target = PyString_FromStringAndSize($source->c_str(), $source->Len());
+#endif
 }
 %typemap(python, ret) wxString {
     delete $source;
@@ -224,7 +179,11 @@
 
 
 %typemap(python, out) wxString* {
+#if wxUSE_UNICODE
+    $target = PyUnicode_FromUnicode($source->c_str(), $source->Len());
+#else
     $target = PyString_FromStringAndSize($source->c_str(), $source->Len());
+#endif
 }
 
 
@@ -281,8 +240,13 @@
     int i, len=PySequence_Length($source);
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($source, i);
+#if wxUSE_UNICODE
+        PyObject* str  = PyObject_Unicode(item);
+        $target->Add(PyUnicode_AsUnicode(str));
+#else
         PyObject* str  = PyObject_Str(item);
         $target->Add(PyString_AsString(str));
+#endif
         Py_DECREF(item);
         Py_DECREF(str);
     }

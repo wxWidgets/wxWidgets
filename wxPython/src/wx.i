@@ -175,6 +175,7 @@ static wxPyCoreAPI API = {
     wxPyConstructObject,
     wxPy_ConvertList,
 
+    wxString_in_helper,
     byte_LIST_helper,
     int_LIST_helper,
     long_LIST_helper,
@@ -249,7 +250,12 @@ static wxPyCoreAPI API = {
     PyDict_SetItemString(d,"wxMINOR_VERSION", PyInt_FromLong((long)wxMINOR_VERSION ));
     PyDict_SetItemString(d,"wxRELEASE_NUMBER", PyInt_FromLong((long)wxRELEASE_NUMBER ));
     PyDict_SetItemString(d,"wxVERSION_NUMBER", PyInt_FromLong((long)wxVERSION_NUMBER ));
+#if wxUSE_UNICODE
+    wxString tempStr(wxVERSION_STRING);
+    PyDict_SetItemString(d,"wxVERSION_STRING", PyUnicode_FromUnicode(tempStr.c_str(), tempStr.Len()));
+#else
     PyDict_SetItemString(d,"wxVERSION_STRING", PyString_FromString(wxVERSION_STRING));
+#endif
 
 
 %}

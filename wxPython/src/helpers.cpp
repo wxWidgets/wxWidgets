@@ -32,6 +32,12 @@
 
 //----------------------------------------------------------------------
 
+#if PYTHON_API_VERSION <= 1007 && wxUSE_UNICODE
+#error Python must support Unicode to use wxWindows Unicode
+#endif
+
+//----------------------------------------------------------------------
+
 #ifdef __WXGTK__
 int  WXDLLEXPORT wxEntryStart( int& argc, char** argv );
 #else
@@ -119,6 +125,39 @@ int  wxPyApp::MainLoop() {
 //---------------------------------------------------------------------
 //----------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+// TODO:  Is this really the right way to do these????
+static char* copyUniString(const wxChar *s)
+{
+    if (s == NULL) s = wxT("");
+    wxString tmpStr = wxString(s);
+    char *news = new char[tmpStr.Len()+1];
+    for (unsigned int i=0; i<tmpStr.Len(); i++)
+      news[i] = tmpStr[i];
+    news[i] = '\0';
+    return news;
+}
+
+static char* copyCString(const char *s)
+{
+    if (s == NULL) s = "";
+    int len = strlen(s);
+    char *news = new char[len+1];
+    memcpy(news, s, len+1);
+    return news;
+}
+
+static wxChar* wCharFromCStr(const char *s)
+{
+  if (s == NULL) s = "";
+  size_t len = strlen(s) + 1;
+  wxChar *news = new wxChar[len];
+  for (size_t i=0; i<len; i++) {
+    news[i] = (wxChar)s[i];
+  }
+  return news;
+}
+#endif
 
 // This is where we pick up the first part of the wxEntry functionality...
 // The rest is in __wxStart and  __wxCleanup.  This function is called when
@@ -150,8 +189,17 @@ void __wxPreStart()
         argc = PyList_Size(sysargv);
         argv = new char*[argc+1];
         int x;
-        for(x=0; x<argc; x++)
-            argv[x] = copystring(PyString_AsString(PyList_GetItem(sysargv, x)));
+        for(x=0; x<argc; x++) {
+	    PyObject *item = PyList_GetItem(sysargv, x);
+#if wxUSE_UNICODE
+	    if (PyUnicode_Check(item))
+	        argv[x] = copyUniString(PyUnicode_AS_UNICODE(item));
+	    else
+		argv[x] = copyCString(PyString_AsString(item));
+#else
+	    argv[x] = copystring(PyString_AsString(item));
+#endif
+	}
         argv[argc] = NULL;
     }
 
@@ -181,16 +229,28 @@ PyObject* __wxStart(PyObject* /* self */, PyObject* args)
 
     // This is the next part of the wxEntry functionality...
     int argc = 0;
-    char** argv = NULL;
+    wxChar** argv = NULL;
     PyObject* sysargv = PySys_GetObject("argv");
     if (sysargv != NULL) {
         argc = PyList_Size(sysargv);
-        argv = new char*[argc+1];
+        argv = new wxChar*[argc+1];
         int x;
-        for(x=0; x<argc; x++)
-            argv[x] = copystring(PyString_AsString(PyList_GetItem(sysargv, x)));
+        for(x=0; x<argc; x++) {
+            PyObject *pyArg = PyList_GetItem(sysargv, x);
+#if wxUSE_UNICODE
+            if (PyUnicode_Check(pyArg)) {
+                argv[x] = copystring(PyUnicode_AS_UNICODE(pyArg));
+            } else {
+                assert(PyString_Check(pyArg));
+                argv[x] = wCharFromCStr(PyString_AsString(pyArg));
+            }
+#else
+            argv[x] = copystring(PyString_AsString(pyArg));
+#endif
+        }
         argv[argc] = NULL;
     }
+
     wxPythonApp->argc = argc;
     wxPythonApp->argv = argv;
 
@@ -271,6 +331,8 @@ PyObject* __wxSetDictionary(PyObject* /* self */, PyObject* args)
 #endif
 
     PyDict_SetItemString(wxPython_dict, "wxPlatform", PyString_FromString(wxPlatform));
+    PyDict_SetItemString(wxPython_dict, "wxUSE_UNICODE", PyInt_FromLong(wxUSE_UNICODE));
+
 
     Py_INCREF(Py_None);
     return Py_None;
@@ -310,6 +372,28 @@ PyObject* wxPyClassExists(const char* className) {
 }
 
 
+#if wxUSE_UNICODE
+void unicodeToChar(const wxString *src, char *dest)
+{
+    for (unsigned int i=0; i<src->Len(); i++) {
+      dest[i] = (char)(*src)[i];
+    }
+    dest[i] = '\0';
+}
+PyObject* wxPyClassExistsUnicode(const wxString *className) {
+    if (!className->Len())
+        return NULL;
+    char    buff[64];               // should always be big enough...
+    char *nameBuf = new char[className->Len()+1];
+    unicodeToChar(className, nameBuf);
+    sprintf(buff, "%sPtr", nameBuf);
+    PyObject* classobj = PyDict_GetItemString(wxPython_dict, buff);
+    delete [] nameBuf;
+    return classobj;  // returns NULL if not found
+}
+#endif
+
+
 PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
     PyObject* target = NULL;
     bool      isEvtHandler = FALSE;
@@ -328,6 +412,7 @@ PyObject*  wxPyMake_wxObject(wxObject* source, bool checkEvtHandler) {
             }
         }
 
+        // TODO: unicode fix
         if (! target) {
             // Otherwise make it the old fashioned way by making a
             // new shadow object and putting this pointer in it.
@@ -860,8 +945,18 @@ void wxPyCallback::EventThunker(wxEvent& event) {
         arg = ((wxPyEvent*)&event)->GetSelf();
     else if (className == "wxPyCommandEvent")
         arg = ((wxPyCommandEvent*)&event)->GetSelf();
-    else
-        arg = wxPyConstructObject((void*)&event, className);
+    else {
+
+// TODO:  get rid of this ifdef by changing wxPyConstructObject to take a wxString
+#if wxUSE_UNICODE
+        char *classNameAsChrStr = new char[className.Len()+1];
+	unicodeToChar(&className, classNameAsChrStr);
+	arg = wxPyConstructObject((void*)&event, classNameAsChrStr);
+	delete [] classNameAsChrStr;
+#else
+	arg = wxPyConstructObject((void*)&event, className);
+#endif
+    }
 
     tuple = PyTuple_New(1);
     PyTuple_SET_ITEM(tuple, 0, arg);
@@ -1225,7 +1320,50 @@ long wxPyGetWinHandle(wxWindow* win) {
 
 //----------------------------------------------------------------------
 // Some helper functions for typemaps in my_typemaps.i, so they won't be
-// included in every file...
+// included in every file over and over again...
+
+#if PYTHON_API_VERSION >= 1009
+    static char* wxStringErrorMsg = "String or Unicode type required";
+#else
+    static char* wxStringErrorMsg = "String type required";
+#endif
+
+
+wxString* wxString_in_helper(PyObject* source) {
+    wxString* target;
+#if PYTHON_API_VERSION >= 1009  // Have Python unicode API
+    if (!PyString_Check(source) && !PyUnicode_Check(source)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+#if wxUSE_UNICODE
+    if (PyUnicode_Check(source)) {
+        target = new wxString(PyUnicode_AS_UNICODE(source));
+    } else {
+        // It is a string, transform to unicode
+        PyObject *tempUniStr = PyObject_Unicode(source);
+        target = new wxString(PyUnicode_AS_UNICODE(tempUniStr));
+        Py_DECREF(tempUniStr);
+    }
+#else
+    char* tmpPtr; int tmpSize;
+    if (PyString_AsStringAndSize(source, &tmpPtr, &tmpSize) == -1) {
+        PyErr_SetString(PyExc_TypeError, "Unable to convert string");
+        return NULL;
+    }
+    target = new wxString(tmpPtr, tmpSize);
+#endif // wxUSE_UNICODE
+
+#else  // No Python unicode API (1.5.2)
+    if (!PyString_Check(source)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    target = new wxString(PyString_AS_STRING(source), PyString_GET_SIZE(source));
+#endif
+    return target;
+}
+
 
 
 byte* byte_LIST_helper(PyObject* source) {
@@ -1485,7 +1623,13 @@ wxString* wxString_LIST_helper(PyObject* source) {
         int   length;
         if (PyString_AsStringAndSize(o, &buff, &length) == -1)
             return NULL;
+#if wxUSE_UNICODE  // TODO:  unicode fix.  this is wrong!
+	wxChar *uniBuff = wCharFromCStr(buff);
+        temp[x] = wxString(uniBuff, length);
+	delete [] uniBuff;
+#else
         temp[x] = wxString(buff, length);
+#endif //wxUSE_UNICODE
 #else
         if (! PyString_Check(o)) {
             PyErr_SetString(PyExc_TypeError, "Expected a list of strings.");
@@ -1754,9 +1898,22 @@ bool wxColour_helper(PyObject* source, wxColour** obj) {
         wxString spec = PyString_AS_STRING(source);
         if (spec[0U] == '#' && spec.Length() == 7) {  // It's  #RRGGBB
             char* junk;
+#if wxUSE_UNICODE  // TODO: unicode fix.
+            // This ifdef can be removed by using wxString methods to
+            // convert to long instead of strtol
+	    char *tmpAsChar = new char[spec.Len()+1];
+	    unicodeToChar(&spec.Mid(1,2), tmpAsChar);
+            int red   = strtol(tmpAsChar, &junk, 16);
+	    unicodeToChar(&spec.Mid(3,2), tmpAsChar);
+            int green = strtol(tmpAsChar, &junk, 16);
+	    unicodeToChar(&spec.Mid(5,2), tmpAsChar);
+            int blue  = strtol(tmpAsChar, &junk, 16);
+	    delete [] tmpAsChar;
+#else
             int red   = strtol(spec.Mid(1,2), &junk, 16);
             int green = strtol(spec.Mid(3,2), &junk, 16);
             int blue  = strtol(spec.Mid(5,2), &junk, 16);
+#endif
             **obj = wxColour(red, green, blue);
             return TRUE;
         }
@@ -1778,7 +1935,11 @@ PyObject* wxArrayString2PyList_helper(const wxArrayString& arr) {
 
     PyObject* list = PyList_New(0);
     for (size_t i=0; i < arr.GetCount(); i++) {
-        PyObject* str = PyString_FromString(arr[i].c_str());
+#if wxUSE_UNICODE
+        PyObject* str = PyUnicode_FromUnicode(arr[i].c_str(), arr[i].Len());
+#else
+	PyObject* str = PyString_FromStringAndSize(arr[i].c_str(), arr[i].Len());
+#endif
         PyList_Append(list, str);
         Py_DECREF(str);
     }

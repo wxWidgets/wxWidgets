@@ -39,6 +39,15 @@
 %extern utils.i
 %extern html.i
 
+//  #ifdef wxUSE_UNICODE
+//  %typemap(python, memberin) wxChar* {
+//      if ($target) delete [] $target;
+//      wxString *tempStr = new wxString($source);
+//      $target = new wxChar[tempStr->Len()+1];
+//      memcpy($target, tempStr->c_str(), (sizeof(wxChar)*tempStr->Len())+sizeof(wxChar));
+//      delete tempStr;
+//  }
+//  #endif
 
 //---------------------------------------------------------------------------
 
@@ -67,11 +76,13 @@ public:
 
 struct wxHtmlContentsItem
 {
+%readonly
     short int m_Level;
     int m_ID;
-    char* m_Name;
-    char* m_Page;
+    wxChar* m_Name;
+    wxChar* m_Page;
     wxHtmlBookRecord *m_Book;
+%readwrite
 };
 
 //---------------------------------------------------------------------------

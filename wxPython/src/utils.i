@@ -38,7 +38,11 @@
         PyObject* ret = PyTuple_New(3);
         if (ret) {
             PyTuple_SET_ITEM(ret, 0, PyInt_FromLong(flag));
-            PyTuple_SET_ITEM(ret, 1, PyString_FromString(str));
+#if wxUSE_UNICODE
+	    PyTuple_SET_ITEM(ret, 1, PyUnicode_FromUnicode(str.c_str(), str.Len()));
+#else
+            PyTuple_SET_ITEM(ret, 1, PyString_FromStringAndSize(str.c_str(), str.Len()));
+#endif
             PyTuple_SET_ITEM(ret, 2, PyInt_FromLong(index));
         }
         return ret;
@@ -767,32 +771,32 @@ public:
 
         // parse a string in RFC 822 format (found e.g. in mail headers and
         // having the form "Wed, 10 Feb 1999 19:07:07 +0100")
-    const char *ParseRfc822Date(const char* date);
+    const char *ParseRfc822Date(const wxChar* date);
 
         // parse a date/time in the given format (see strptime(3)), fill in
         // the missing (in the string) fields with the values of dateDef (by
         // default, they will not change if they had valid values or will
         // default to Today() otherwise)
-    const char *ParseFormat(const char *date,
-                              const char *format = "%c",
+    const char *ParseFormat(const wxChar *date,
+                              const wxChar *format = "%c",
                               const wxDateTime& dateDef = wxDefaultDateTime);
 
         // parse a string containing the date/time in "free" format, this
         // function will try to make an educated guess at the string contents
-    const char *ParseDateTime(const char *datetime);
+    const char *ParseDateTime(const wxChar *datetime);
 
         // parse a string containing the date only in "free" format (less
         // flexible than ParseDateTime)
-    const char *ParseDate(const char *date);
+    const char *ParseDate(const wxChar *date);
 
         // parse a string containing the time only in "free" format
-    const char *ParseTime(const char *time);
+    const char *ParseTime(const wxChar *time);
 
         // this function accepts strftime()-like format string (default
         // argument corresponds to the preferred date and time representation
         // for the current locale) and returns the string containing the
         // resulting text representation
-    wxString Format(const char *format = "%c",
+    wxString Format(const wxChar *format = "%c",
                     const wxDateTime::TimeZone& tz = LOCAL) const;
 
         // preferred date representation for the current locale
@@ -942,7 +946,7 @@ public:
         // resulting text representation. Notice that only some of format
         // specifiers valid for wxDateTime are valid for wxTimeSpan: hours,
         // minutes and seconds make sense, but not "PM/AM" string for example.
-    wxString Format(const char *format = "%c") const;
+    wxString Format(const wxChar *format = "%c") const;
 
 //          // preferred date representation for the current locale
 //      wxString FormatDate() const;

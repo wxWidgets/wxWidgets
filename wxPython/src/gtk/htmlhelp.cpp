@@ -89,12 +89,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
-
-#if PYTHON_API_VERSION >= 1009
-    static char* wxStringErrorMsg = "String or Unicode type required";
-#else
-    static char* wxStringErrorMsg = "String type required";
-#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -125,80 +119,28 @@ static PyObject *_wrap_new_wxHtmlBookRecord(PyObject *self, PyObject *args, PyOb
     if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOOO:new_wxHtmlBookRecord",_kwnames,&_obj0,&_obj1,&_obj2,&_obj3)) 
         return NULL;
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj0) && !PyUnicode_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg0 = wxString_in_helper(_obj0);
+    if (_arg0 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj0, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg0 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj0)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg0 = new wxString(PyString_AS_STRING(_obj0), PyString_GET_SIZE(_obj0));
-#endif
 }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj3) && !PyUnicode_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg3 = wxString_in_helper(_obj3);
+    if (_arg3 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj3, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg3 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj3)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg3 = new wxString(PyString_AS_STRING(_obj3), PyString_GET_SIZE(_obj3));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlBookRecord *)new_wxHtmlBookRecord(*_arg0,*_arg1,*_arg2,*_arg3);
+    _result = (wxHtmlBookRecord *)new_wxHtmlBookRecord(*_arg0,*_arg1,*_arg2,*_arg3);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -248,12 +190,16 @@ static PyObject *_wrap_wxHtmlBookRecord_GetBookFile(PyObject *self, PyObject *ar
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlBookRecord_GetBookFile(_arg0));
+    _result = new wxString (wxHtmlBookRecord_GetBookFile(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     delete _result;
@@ -281,12 +227,16 @@ static PyObject *_wrap_wxHtmlBookRecord_GetTitle(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlBookRecord_GetTitle(_arg0));
+    _result = new wxString (wxHtmlBookRecord_GetTitle(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     delete _result;
@@ -314,12 +264,16 @@ static PyObject *_wrap_wxHtmlBookRecord_GetStart(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlBookRecord_GetStart(_arg0));
+    _result = new wxString (wxHtmlBookRecord_GetStart(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     delete _result;
@@ -347,12 +301,16 @@ static PyObject *_wrap_wxHtmlBookRecord_GetBasePath(PyObject *self, PyObject *ar
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlBookRecord_GetBasePath(_arg0));
+    _result = new wxString (wxHtmlBookRecord_GetBasePath(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     delete _result;
@@ -381,7 +339,7 @@ static PyObject *_wrap_wxHtmlBookRecord_SetContentsRange(PyObject *self, PyObjec
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlBookRecord_SetContentsRange(_arg0,_arg1,_arg2);
+    wxHtmlBookRecord_SetContentsRange(_arg0,_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -410,7 +368,7 @@ static PyObject *_wrap_wxHtmlBookRecord_GetContentsStart(PyObject *self, PyObjec
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlBookRecord_GetContentsStart(_arg0);
+    _result = (int )wxHtmlBookRecord_GetContentsStart(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -438,7 +396,7 @@ static PyObject *_wrap_wxHtmlBookRecord_GetContentsEnd(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlBookRecord_GetContentsEnd(_arg0);
+    _result = (int )wxHtmlBookRecord_GetContentsEnd(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -466,26 +424,13 @@ static PyObject *_wrap_wxHtmlBookRecord_SetTitle(PyObject *self, PyObject *args,
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlBookRecord_SetTitle(_arg0,*_arg1);
+    wxHtmlBookRecord_SetTitle(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -518,26 +463,13 @@ static PyObject *_wrap_wxHtmlBookRecord_SetBasePath(PyObject *self, PyObject *ar
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlBookRecord_SetBasePath(_arg0,*_arg1);
+    wxHtmlBookRecord_SetBasePath(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -570,26 +502,13 @@ static PyObject *_wrap_wxHtmlBookRecord_SetStart(PyObject *self, PyObject *args,
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlBookRecord_SetStart(_arg0,*_arg1);
+    wxHtmlBookRecord_SetStart(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -623,31 +542,22 @@ static PyObject *_wrap_wxHtmlBookRecord_GetFullPath(PyObject *self, PyObject *ar
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlBookRecord_GetFullPath(_arg0,*_arg1));
+    _result = new wxString (wxHtmlBookRecord_GetFullPath(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     if (_obj1)
@@ -656,35 +566,6 @@ static PyObject *_wrap_wxHtmlBookRecord_GetFullPath(PyObject *self, PyObject *ar
 {
     delete _result;
 }
-    return _resultobj;
-}
-
-#define wxHtmlContentsItem_m_Level_set(_swigobj,_swigval) (_swigobj->m_Level = _swigval,_swigval)
-static PyObject *_wrap_wxHtmlContentsItem_m_Level_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    short  _result;
-    wxHtmlContentsItem * _arg0;
-    short  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_Level", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oh:wxHtmlContentsItem_m_Level_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Level_set. Expected _wxHtmlContentsItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (short )wxHtmlContentsItem_m_Level_set(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("h",_result);
     return _resultobj;
 }
 
@@ -708,40 +589,11 @@ static PyObject *_wrap_wxHtmlContentsItem_m_Level_get(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (short )wxHtmlContentsItem_m_Level_get(_arg0);
+    _result = (short )wxHtmlContentsItem_m_Level_get(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("h",_result);
-    return _resultobj;
-}
-
-#define wxHtmlContentsItem_m_ID_set(_swigobj,_swigval) (_swigobj->m_ID = _swigval,_swigval)
-static PyObject *_wrap_wxHtmlContentsItem_m_ID_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    int  _result;
-    wxHtmlContentsItem * _arg0;
-    int  _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_ID", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Oi:wxHtmlContentsItem_m_ID_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_ID_set. Expected _wxHtmlContentsItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlContentsItem_m_ID_set(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("i",_result);
     return _resultobj;
 }
 
@@ -765,7 +617,7 @@ static PyObject *_wrap_wxHtmlContentsItem_m_ID_get(PyObject *self, PyObject *arg
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlContentsItem_m_ID_get(_arg0);
+    _result = (int )wxHtmlContentsItem_m_ID_get(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -773,44 +625,10 @@ static PyObject *_wrap_wxHtmlContentsItem_m_ID_get(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-static char * wxHtmlContentsItem_m_Name_set(wxHtmlContentsItem *obj, char *val) {
-    if (obj->m_Name) delete [] obj->m_Name;
-    obj->m_Name = new char[strlen(val)+1];
-    strcpy((char *)obj->m_Name,val);
-    return (char *) val;
-}
-static PyObject *_wrap_wxHtmlContentsItem_m_Name_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char * _result;
-    wxHtmlContentsItem * _arg0;
-    char * _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_Name", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxHtmlContentsItem_m_Name_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Name_set. Expected _wxHtmlContentsItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (char *)wxHtmlContentsItem_m_Name_set(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("s", _result);
-    return _resultobj;
-}
-
-#define wxHtmlContentsItem_m_Name_get(_swigobj) ((char *) _swigobj->m_Name)
+#define wxHtmlContentsItem_m_Name_get(_swigobj) ((wxChar *) _swigobj->m_Name)
 static PyObject *_wrap_wxHtmlContentsItem_m_Name_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    char * _result;
+    wxChar * _result;
     wxHtmlContentsItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -827,7 +645,7 @@ static PyObject *_wrap_wxHtmlContentsItem_m_Name_get(PyObject *self, PyObject *a
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (char *)wxHtmlContentsItem_m_Name_get(_arg0);
+    _result = (wxChar *)wxHtmlContentsItem_m_Name_get(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -835,44 +653,10 @@ static PyObject *_wrap_wxHtmlContentsItem_m_Name_get(PyObject *self, PyObject *a
     return _resultobj;
 }
 
-static char * wxHtmlContentsItem_m_Page_set(wxHtmlContentsItem *obj, char *val) {
-    if (obj->m_Page) delete [] obj->m_Page;
-    obj->m_Page = new char[strlen(val)+1];
-    strcpy((char *)obj->m_Page,val);
-    return (char *) val;
-}
-static PyObject *_wrap_wxHtmlContentsItem_m_Page_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    char * _result;
-    wxHtmlContentsItem * _arg0;
-    char * _arg1;
-    PyObject * _argo0 = 0;
-    char *_kwnames[] = { "self","m_Page", NULL };
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"Os:wxHtmlContentsItem_m_Page_set",_kwnames,&_argo0,&_arg1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Page_set. Expected _wxHtmlContentsItem_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (char *)wxHtmlContentsItem_m_Page_set(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    _resultobj = Py_BuildValue("s", _result);
-    return _resultobj;
-}
-
-#define wxHtmlContentsItem_m_Page_get(_swigobj) ((char *) _swigobj->m_Page)
+#define wxHtmlContentsItem_m_Page_get(_swigobj) ((wxChar *) _swigobj->m_Page)
 static PyObject *_wrap_wxHtmlContentsItem_m_Page_get(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    char * _result;
+    wxChar * _result;
     wxHtmlContentsItem * _arg0;
     PyObject * _argo0 = 0;
     char *_kwnames[] = { "self", NULL };
@@ -889,55 +673,11 @@ static PyObject *_wrap_wxHtmlContentsItem_m_Page_get(PyObject *self, PyObject *a
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (char *)wxHtmlContentsItem_m_Page_get(_arg0);
+    _result = (wxChar *)wxHtmlContentsItem_m_Page_get(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }    _resultobj = Py_BuildValue("s", _result);
-    return _resultobj;
-}
-
-#define wxHtmlContentsItem_m_Book_set(_swigobj,_swigval) (_swigobj->m_Book = _swigval,_swigval)
-static PyObject *_wrap_wxHtmlContentsItem_m_Book_set(PyObject *self, PyObject *args, PyObject *kwargs) {
-    PyObject * _resultobj;
-    wxHtmlBookRecord * _result;
-    wxHtmlContentsItem * _arg0;
-    wxHtmlBookRecord * _arg1;
-    PyObject * _argo0 = 0;
-    PyObject * _argo1 = 0;
-    char *_kwnames[] = { "self","m_Book", NULL };
-    char _ptemp[128];
-
-    self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxHtmlContentsItem_m_Book_set",_kwnames,&_argo0,&_argo1)) 
-        return NULL;
-    if (_argo0) {
-        if (_argo0 == Py_None) { _arg0 = NULL; }
-        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxHtmlContentsItem_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxHtmlContentsItem_m_Book_set. Expected _wxHtmlContentsItem_p.");
-        return NULL;
-        }
-    }
-    if (_argo1) {
-        if (_argo1 == Py_None) { _arg1 = NULL; }
-        else if (SWIG_GetPtrObj(_argo1,(void **) &_arg1,"_wxHtmlBookRecord_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 2 of wxHtmlContentsItem_m_Book_set. Expected _wxHtmlBookRecord_p.");
-        return NULL;
-        }
-    }
-{
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlBookRecord *)wxHtmlContentsItem_m_Book_set(_arg0,_arg1);
-
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) return NULL;
-}    if (_result) {
-        SWIG_MakePtr(_ptemp, (char *) _result,"_wxHtmlBookRecord_p");
-        _resultobj = Py_BuildValue("s",_ptemp);
-    } else {
-        Py_INCREF(Py_None);
-        _resultobj = Py_None;
-    }
     return _resultobj;
 }
 
@@ -962,7 +702,7 @@ static PyObject *_wrap_wxHtmlContentsItem_m_Book_get(PyObject *self, PyObject *a
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlBookRecord *)wxHtmlContentsItem_m_Book_get(_arg0);
+    _result = (wxHtmlBookRecord *)wxHtmlContentsItem_m_Book_get(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -996,7 +736,7 @@ static PyObject *_wrap_wxHtmlSearchStatus_Search(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlSearchStatus_Search(_arg0);
+    _result = (bool )wxHtmlSearchStatus_Search(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1024,7 +764,7 @@ static PyObject *_wrap_wxHtmlSearchStatus_IsActive(PyObject *self, PyObject *arg
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlSearchStatus_IsActive(_arg0);
+    _result = (bool )wxHtmlSearchStatus_IsActive(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1052,7 +792,7 @@ static PyObject *_wrap_wxHtmlSearchStatus_GetCurIndex(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlSearchStatus_GetCurIndex(_arg0);
+    _result = (int )wxHtmlSearchStatus_GetCurIndex(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1080,7 +820,7 @@ static PyObject *_wrap_wxHtmlSearchStatus_GetMaxIndex(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlSearchStatus_GetMaxIndex(_arg0);
+    _result = (int )wxHtmlSearchStatus_GetMaxIndex(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1108,13 +848,17 @@ static PyObject *_wrap_wxHtmlSearchStatus_GetName(PyObject *self, PyObject *args
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        const wxString & _result_ref = wxHtmlSearchStatus_GetName(_arg0);
+    const wxString & _result_ref = wxHtmlSearchStatus_GetName(_arg0);
     _result = (wxString *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
     return _resultobj;
 }
@@ -1140,7 +884,7 @@ static PyObject *_wrap_wxHtmlSearchStatus_GetContentsItem(PyObject *self, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlContentsItem *)wxHtmlSearchStatus_GetContentsItem(_arg0);
+    _result = (wxHtmlContentsItem *)wxHtmlSearchStatus_GetContentsItem(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1166,7 +910,7 @@ static PyObject *_wrap_new_wxHtmlHelpData(PyObject *self, PyObject *args, PyObje
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlHelpData *)new_wxHtmlHelpData();
+    _result = (wxHtmlHelpData *)new_wxHtmlHelpData();
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1199,7 +943,7 @@ static PyObject *_wrap_delete_wxHtmlHelpData(PyObject *self, PyObject *args, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete_wxHtmlHelpData(_arg0);
+    delete_wxHtmlHelpData(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1228,26 +972,13 @@ static PyObject *_wrap_wxHtmlHelpData_SetTempDir(PyObject *self, PyObject *args,
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpData_SetTempDir(_arg0,*_arg1);
+    wxHtmlHelpData_SetTempDir(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1281,26 +1012,13 @@ static PyObject *_wrap_wxHtmlHelpData_AddBook(PyObject *self, PyObject *args, Py
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlHelpData_AddBook(_arg0,*_arg1);
+    _result = (bool )wxHtmlHelpData_AddBook(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1333,31 +1051,22 @@ static PyObject *_wrap_wxHtmlHelpData_FindPageByName(PyObject *self, PyObject *a
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlHelpData_FindPageByName(_arg0,*_arg1));
+    _result = new wxString (wxHtmlHelpData_FindPageByName(_arg0,*_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     if (_obj1)
@@ -1390,12 +1099,16 @@ static PyObject *_wrap_wxHtmlHelpData_FindPageById(PyObject *self, PyObject *arg
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxString (wxHtmlHelpData_FindPageById(_arg0,_arg1));
+    _result = new wxString (wxHtmlHelpData_FindPageById(_arg0,_arg1));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
 }{
+#if wxUSE_UNICODE
+    _resultobj = PyUnicode_FromUnicode(_result->c_str(), _result->Len());
+#else
     _resultobj = PyString_FromStringAndSize(_result->c_str(), _result->Len());
+#endif
 }
 {
     delete _result;
@@ -1424,7 +1137,7 @@ static PyObject *_wrap_wxHtmlHelpData_GetBookRecArray(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        const wxHtmlBookRecArray & _result_ref = wxHtmlHelpData_GetBookRecArray(_arg0);
+    const wxHtmlBookRecArray & _result_ref = wxHtmlHelpData_GetBookRecArray(_arg0);
     _result = (wxHtmlBookRecArray *) &_result_ref;
 
     wxPyEndAllowThreads(__tstate);
@@ -1460,7 +1173,7 @@ static PyObject *_wrap_wxHtmlHelpData_GetContents(PyObject *self, PyObject *args
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlContentsItem *)wxHtmlHelpData_GetContents(_arg0);
+    _result = (wxHtmlContentsItem *)wxHtmlHelpData_GetContents(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1494,7 +1207,7 @@ static PyObject *_wrap_wxHtmlHelpData_GetContentsCnt(PyObject *self, PyObject *a
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlHelpData_GetContentsCnt(_arg0);
+    _result = (int )wxHtmlHelpData_GetContentsCnt(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1523,7 +1236,7 @@ static PyObject *_wrap_wxHtmlHelpData_GetIndex(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlContentsItem *)wxHtmlHelpData_GetIndex(_arg0);
+    _result = (wxHtmlContentsItem *)wxHtmlHelpData_GetIndex(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1557,7 +1270,7 @@ static PyObject *_wrap_wxHtmlHelpData_GetIndexCnt(PyObject *self, PyObject *args
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (int )wxHtmlHelpData_GetIndexCnt(_arg0);
+    _result = (int )wxHtmlHelpData_GetIndexCnt(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1632,22 +1345,9 @@ static PyObject *_wrap_new_wxHtmlHelpFrame(PyObject *self, PyObject *args, PyObj
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
     if (_argo4) {
         if (_argo4 == Py_None) { _arg4 = NULL; }
@@ -1658,7 +1358,7 @@ static PyObject *_wrap_new_wxHtmlHelpFrame(PyObject *self, PyObject *args, PyObj
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlHelpFrame *)new_wxHtmlHelpFrame(_arg0,_arg1,*_arg2,_arg3,_arg4);
+    _result = (wxHtmlHelpFrame *)new_wxHtmlHelpFrame(_arg0,_arg1,*_arg2,_arg3,_arg4);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1697,7 +1397,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_GetData(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlHelpData *)wxHtmlHelpFrame_GetData(_arg0);
+    _result = (wxHtmlHelpData *)wxHtmlHelpFrame_GetData(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1731,26 +1431,13 @@ static PyObject *_wrap_wxHtmlHelpFrame_SetTitleFormat(PyObject *self, PyObject *
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_SetTitleFormat(_arg0,*_arg1);
+    wxHtmlHelpFrame_SetTitleFormat(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1783,26 +1470,13 @@ static PyObject *_wrap_wxHtmlHelpFrame_Display(PyObject *self, PyObject *args, P
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_Display(_arg0,*_arg1);
+    wxHtmlHelpFrame_Display(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1835,7 +1509,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_DisplayID(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_DisplayID(_arg0,_arg1);
+    wxHtmlHelpFrame_DisplayID(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1863,7 +1537,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_DisplayContents(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_DisplayContents(_arg0);
+    wxHtmlHelpFrame_DisplayContents(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1891,7 +1565,7 @@ static PyObject *_wrap_wxHtmlHelpFrame_DisplayIndex(PyObject *self, PyObject *ar
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_DisplayIndex(_arg0);
+    wxHtmlHelpFrame_DisplayIndex(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1921,26 +1595,13 @@ static PyObject *_wrap_wxHtmlHelpFrame_KeywordSearch(PyObject *self, PyObject *a
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlHelpFrame_KeywordSearch(_arg0,*_arg1);
+    _result = (bool )wxHtmlHelpFrame_KeywordSearch(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -1982,26 +1643,13 @@ static PyObject *_wrap_wxHtmlHelpFrame_UseConfig(PyObject *self, PyObject *args,
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_UseConfig(_arg0,_arg1,*_arg2);
+    wxHtmlHelpFrame_UseConfig(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2044,26 +1692,13 @@ static PyObject *_wrap_wxHtmlHelpFrame_ReadCustomization(PyObject *self, PyObjec
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_ReadCustomization(_arg0,_arg1,*_arg2);
+    wxHtmlHelpFrame_ReadCustomization(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2106,26 +1741,13 @@ static PyObject *_wrap_wxHtmlHelpFrame_WriteCustomization(PyObject *self, PyObje
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpFrame_WriteCustomization(_arg0,_arg1,*_arg2);
+    wxHtmlHelpFrame_WriteCustomization(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2167,7 +1789,7 @@ static PyObject *_wrap_new_wxHtmlHelpController(PyObject *self, PyObject *args, 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlHelpController *)new_wxHtmlHelpController(_arg0);
+    _result = (wxHtmlHelpController *)new_wxHtmlHelpController(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2200,7 +1822,7 @@ static PyObject *_wrap_delete_wxHtmlHelpController(PyObject *self, PyObject *arg
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete_wxHtmlHelpController(_arg0);
+    delete_wxHtmlHelpController(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2229,26 +1851,13 @@ static PyObject *_wrap_wxHtmlHelpController_SetTitleFormat(PyObject *self, PyObj
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_SetTitleFormat(_arg0,*_arg1);
+    wxHtmlHelpController_SetTitleFormat(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2281,26 +1890,13 @@ static PyObject *_wrap_wxHtmlHelpController_SetTempDir(PyObject *self, PyObject 
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_SetTempDir(_arg0,*_arg1);
+    wxHtmlHelpController_SetTempDir(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2335,26 +1931,13 @@ static PyObject *_wrap_wxHtmlHelpController_AddBook(PyObject *self, PyObject *ar
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlHelpController_AddBook(_arg0,*_arg1,_arg2);
+    _result = (bool )wxHtmlHelpController_AddBook(_arg0,*_arg1,_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2386,26 +1969,13 @@ static PyObject *_wrap_wxHtmlHelpController_Display(PyObject *self, PyObject *ar
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_Display(_arg0,*_arg1);
+    wxHtmlHelpController_Display(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2438,7 +2008,7 @@ static PyObject *_wrap_wxHtmlHelpController_DisplayID(PyObject *self, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_DisplayID(_arg0,_arg1);
+    wxHtmlHelpController_DisplayID(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2466,7 +2036,7 @@ static PyObject *_wrap_wxHtmlHelpController_DisplayContents(PyObject *self, PyOb
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_DisplayContents(_arg0);
+    wxHtmlHelpController_DisplayContents(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2494,7 +2064,7 @@ static PyObject *_wrap_wxHtmlHelpController_DisplayIndex(PyObject *self, PyObjec
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_DisplayIndex(_arg0);
+    wxHtmlHelpController_DisplayIndex(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2524,26 +2094,13 @@ static PyObject *_wrap_wxHtmlHelpController_KeywordSearch(PyObject *self, PyObje
         }
     }
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj1) && !PyUnicode_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg1 = wxString_in_helper(_obj1);
+    if (_arg1 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj1, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg1 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj1)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg1 = new wxString(PyString_AS_STRING(_obj1), PyString_GET_SIZE(_obj1));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (bool )wxHtmlHelpController_KeywordSearch(_arg0,*_arg1);
+    _result = (bool )wxHtmlHelpController_KeywordSearch(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2585,26 +2142,13 @@ static PyObject *_wrap_wxHtmlHelpController_UseConfig(PyObject *self, PyObject *
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_UseConfig(_arg0,_arg1,*_arg2);
+    wxHtmlHelpController_UseConfig(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2647,26 +2191,13 @@ static PyObject *_wrap_wxHtmlHelpController_ReadCustomization(PyObject *self, Py
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_ReadCustomization(_arg0,_arg1,*_arg2);
+    wxHtmlHelpController_ReadCustomization(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2709,26 +2240,13 @@ static PyObject *_wrap_wxHtmlHelpController_WriteCustomization(PyObject *self, P
     }
     if (_obj2)
 {
-#if PYTHON_API_VERSION >= 1009
-    char* tmpPtr; int tmpSize;
-    if (!PyString_Check(_obj2) && !PyUnicode_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+    _arg2 = wxString_in_helper(_obj2);
+    if (_arg2 == NULL)
         return NULL;
-    }
-    if (PyString_AsStringAndSize(_obj2, &tmpPtr, &tmpSize) == -1)
-        return NULL;
-    _arg2 = new wxString(tmpPtr, tmpSize);
-#else
-    if (!PyString_Check(_obj2)) {
-        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
-        return NULL;
-    }
-    _arg2 = new wxString(PyString_AS_STRING(_obj2), PyString_GET_SIZE(_obj2));
-#endif
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxHtmlHelpController_WriteCustomization(_arg0,_arg1,*_arg2);
+    wxHtmlHelpController_WriteCustomization(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2762,7 +2280,7 @@ static PyObject *_wrap_wxHtmlHelpController_GetFrame(PyObject *self, PyObject *a
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxHtmlHelpFrame *)wxHtmlHelpController_GetFrame(_arg0);
+    _result = (wxHtmlHelpFrame *)wxHtmlHelpController_GetFrame(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2820,15 +2338,10 @@ static PyMethodDef htmlhelpcMethods[] = {
 	 { "wxHtmlSearchStatus_IsActive", (PyCFunction) _wrap_wxHtmlSearchStatus_IsActive, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlSearchStatus_Search", (PyCFunction) _wrap_wxHtmlSearchStatus_Search, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_Book_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Book_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Book_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_Book_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_Page_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Page_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Page_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_Page_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_Name_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Name_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Name_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_Name_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_ID_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_ID_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_ID_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_ID_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlContentsItem_m_Level_get", (PyCFunction) _wrap_wxHtmlContentsItem_m_Level_get, METH_VARARGS | METH_KEYWORDS },
-	 { "wxHtmlContentsItem_m_Level_set", (PyCFunction) _wrap_wxHtmlContentsItem_m_Level_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_GetFullPath", (PyCFunction) _wrap_wxHtmlBookRecord_GetFullPath, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_SetStart", (PyCFunction) _wrap_wxHtmlBookRecord_SetStart, METH_VARARGS | METH_KEYWORDS },
 	 { "wxHtmlBookRecord_SetBasePath", (PyCFunction) _wrap_wxHtmlBookRecord_SetBasePath, METH_VARARGS | METH_KEYWORDS },

@@ -74,7 +74,11 @@
         wxStringPtrList::Node *node = $source->GetFirst();
         for (int i=0; node; i++) {
             wxString *s = node->GetData();
+#if wxUSE_UNICODE
+            PyList_SetItem($target, i, PyUnicode_FromUnicode(s->c_str(), s->Len()));
+#else
             PyList_SetItem($target, i, PyString_FromStringAndSize(s->c_str(), s->Len()));
+#endif
             node = node->GetNext();
             delete s;
         }

@@ -79,6 +79,8 @@ void wxPyEndBlockThreads();
 //----------------------------------------------------------------------
 // These are helpers used by the typemaps
 
+wxString* wxString_in_helper(PyObject* source);
+
 byte* byte_LIST_helper(PyObject* source);
 int* int_LIST_helper(PyObject* source);
 long* long_LIST_helper(PyObject* source);
@@ -217,6 +219,8 @@ struct wxPyCoreAPI {
 
     PyObject*   (*p_wxPyConstructObject)(void *, const char *, int);
     PyObject*   (*p_wxPy_ConvertList)(wxListBase* list, const char* className);
+
+    wxString*   (*p_wxString_in_helper)(PyObject* source);
 
     byte*       (*p_byte_LIST_helper)(PyObject* source);
     int*        (*p_int_LIST_helper)(PyObject* source);
@@ -802,7 +806,7 @@ public:
     void CBNAME(const wxString& a);                     \
     void base_##CBNAME(const wxString& a);
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK__STRING(CLASS, PCLASS, CBNAME)                           \
     void CLASS::CBNAME(const wxString& a)  {                                    \
         bool found;                                                             \
@@ -823,7 +827,7 @@ public:
     bool CBNAME(const wxString& a);                     \
     bool base_##CBNAME(const wxString& a);
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK_BOOL_STRING(CLASS, PCLASS, CBNAME)                       \
     bool CLASS::CBNAME(const wxString& a)  {                                    \
         bool rval=FALSE;                                                        \
@@ -844,7 +848,8 @@ public:
 
 #define DEC_PYCALLBACK_BOOL_STRING_pure(CBNAME)         \
     bool CBNAME(const wxString& a);
-                   \
+
+// TODO: unicode fix
 #define IMP_PYCALLBACK_BOOL_STRING_pure(CLASS, PCLASS, CBNAME)                          \
     bool CLASS::CBNAME(const wxString& a)  {                                            \
         bool rval=FALSE;                                                                \
@@ -860,6 +865,7 @@ public:
 #define DEC_PYCALLBACK_STRING_STRING_pure(CBNAME)                               \
     wxString CBNAME(const wxString& a);                                         \
 
+// TODO: unicode fix
 #define IMP_PYCALLBACK_STRING_STRING_pure(CLASS, PCLASS, CBNAME)                \
     wxString CLASS::CBNAME(const wxString& a)  {                                \
         wxString rval;                                                          \
@@ -882,6 +888,7 @@ public:
 #define DEC_PYCALLBACK_STRING_STRINGINT_pure(CBNAME)                            \
     wxString CBNAME(const wxString& a,int b);                                   \
 
+// TODO: unicode fix
 #define IMP_PYCALLBACK_STRING_STRINGINT_pure(CLASS, PCLASS, CBNAME)             \
     wxString CLASS::CBNAME(const wxString& a,int b)  {                          \
         wxString rval;                                                          \
@@ -905,7 +912,7 @@ public:
     bool CBNAME(const wxString& a, const wxString& b);        \
     bool base_##CBNAME(const wxString& a, const wxString& b);
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK_BOOL_STRINGSTRING(CLASS, PCLASS, CBNAME)                 \
     bool CLASS::CBNAME(const wxString& a, const wxString& b) {                  \
         bool rval=FALSE;                                                        \
@@ -929,7 +936,7 @@ public:
     wxString CBNAME();                                  \
     wxString base_##CBNAME();
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK_STRING_(CLASS, PCLASS, CBNAME)                           \
     wxString CLASS::CBNAME() {                                                  \
         wxString rval;                                                          \
@@ -958,7 +965,7 @@ public:
 #define DEC_PYCALLBACK_STRING__pure(CBNAME)             \
     wxString CBNAME();
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK_STRING__pure(CLASS, PCLASS, CBNAME)                      \
     wxString CLASS::CBNAME() {                                                  \
         wxString rval;                                                          \
@@ -1003,7 +1010,6 @@ public:
 
 #define IMP_PYCALLBACK__CELLINTINT(CLASS, PCLASS, CBNAME)                       \
     void CLASS::CBNAME(wxHtmlCell *cell, wxCoord x, wxCoord y) {                \
-        wxString rval;                                                          \
         bool found;                                                             \
         wxPyBeginBlockThreads();                            \
         if ((found = wxPyCBH_findCallback(m_myInst, #CBNAME))) {                \
@@ -1162,6 +1168,7 @@ public:
 #define DEC_PYCALLBACK_FSF_FSSTRING_pure(CBNAME)                        \
     wxFSFile* CBNAME(wxFileSystem& fs, const wxString& location);       \
 
+// TODO: unicode fix
 #define IMP_PYCALLBACK_FSF_FSSTRING_pure(CLASS, PCLASS, CBNAME)         \
     wxFSFile* CLASS::CBNAME(wxFileSystem& a,const wxString& b) {        \
         wxPyBeginBlockThreads();                    \
@@ -1225,7 +1232,7 @@ public:
 #define DEC_PYCALLBACK_BOOL_INTINTSTR_pure(CBNAME)                      \
     bool CBNAME(int a, int b, const wxString& c);
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK_BOOL_INTINTSTR_pure(CLASS, PCLASS, CBNAME)       \
     bool CLASS::CBNAME(int a, int b, const wxString& c) {               \
         bool rval=FALSE;                                                \
@@ -1371,7 +1378,7 @@ public:
     wxString CBNAME(long a, long b) const;                                      \
     wxString base_##CBNAME(long a, long b)const ;
 
-
+// TODO: unicode fix
 #define IMP_PYCALLBACK_STRING_LONGLONG(CLASS, PCLASS, CBNAME)                   \
     wxString CLASS::CBNAME(long a, long b) const {                              \
         wxString rval;                                                          \

@@ -89,12 +89,6 @@ static PyObject* t_output_helper(PyObject* target, PyObject* o) {
     }
     return target;
 }
-
-#if PYTHON_API_VERSION >= 1009
-    static char* wxStringErrorMsg = "String or Unicode type required";
-#else
-    static char* wxStringErrorMsg = "String type required";
-#endif
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -139,7 +133,7 @@ static PyObject *_wrap_new_wxGLContext(PyObject *self, PyObject *args, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxGLContext *)new_wxGLContext(_arg0,_arg1,*_arg2);
+    _result = (wxGLContext *)new_wxGLContext(_arg0,_arg1,*_arg2);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -172,7 +166,7 @@ static PyObject *_wrap_delete_wxGLContext(PyObject *self, PyObject *args, PyObje
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        delete_wxGLContext(_arg0);
+    delete_wxGLContext(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -200,7 +194,7 @@ static PyObject *_wrap_wxGLContext_SetCurrent(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLContext_SetCurrent(_arg0);
+    wxGLContext_SetCurrent(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -229,7 +223,7 @@ static PyObject *_wrap_wxGLContext_SetColour(PyObject *self, PyObject *args, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLContext_SetColour(_arg0,_arg1);
+    wxGLContext_SetColour(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -257,7 +251,7 @@ static PyObject *_wrap_wxGLContext_SwapBuffers(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLContext_SwapBuffers(_arg0);
+    wxGLContext_SwapBuffers(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -286,7 +280,7 @@ static PyObject *_wrap_wxGLContext_GetWindow(PyObject *self, PyObject *args, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxWindow *)wxGLContext_GetWindow(_arg0);
+    _result = (wxWindow *)wxGLContext_GetWindow(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -385,7 +379,7 @@ static PyObject *_wrap_new_wxGLCanvas(PyObject *self, PyObject *args, PyObject *
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxGLCanvas *)new_wxGLCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7);
+    _result = (wxGLCanvas *)new_wxGLCanvas(_arg0,_arg1,*_arg2,*_arg3,_arg4,_arg5,_arg6,*_arg7);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -478,7 +472,7 @@ static PyObject *_wrap_new_wxGLCanvasWithContext(PyObject *self, PyObject *args,
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxGLCanvas *)new_wxGLCanvasWithContext(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,*_arg8);
+    _result = (wxGLCanvas *)new_wxGLCanvasWithContext(_arg0,_arg1,_arg2,*_arg3,*_arg4,_arg5,_arg6,_arg7,*_arg8);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -514,7 +508,7 @@ static PyObject *_wrap_wxGLCanvas_SetCurrent(PyObject *self, PyObject *args, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLCanvas_SetCurrent(_arg0);
+    wxGLCanvas_SetCurrent(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -543,7 +537,7 @@ static PyObject *_wrap_wxGLCanvas_SetColour(PyObject *self, PyObject *args, PyOb
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLCanvas_SetColour(_arg0,_arg1);
+    wxGLCanvas_SetColour(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -571,7 +565,7 @@ static PyObject *_wrap_wxGLCanvas_SwapBuffers(PyObject *self, PyObject *args, Py
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLCanvas_SwapBuffers(_arg0);
+    wxGLCanvas_SwapBuffers(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -601,7 +595,7 @@ static PyObject *_wrap_wxGLCanvas_GetContext(PyObject *self, PyObject *args, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxGLContext *)wxGLCanvas_GetContext(_arg0);
+    _result = (wxGLContext *)wxGLCanvas_GetContext(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -650,7 +644,7 @@ static PyObject *_wrap_wxGLCanvas_SetupPixelFormat(PyObject *self, PyObject *arg
 }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLCanvas_SetupPixelFormat(_arg0,_arg1);
+    wxGLCanvas_SetupPixelFormat(_arg0,_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -690,7 +684,7 @@ static PyObject *_wrap_wxGLCanvas_SetupPalette(PyObject *self, PyObject *args, P
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        wxGLCanvas_SetupPalette(_arg0,*_arg1);
+    wxGLCanvas_SetupPalette(_arg0,*_arg1);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -720,7 +714,7 @@ static PyObject *_wrap_wxGLCanvas_CreateDefaultPalette(PyObject *self, PyObject 
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = new wxPalette (wxGLCanvas_CreateDefaultPalette(_arg0));
+    _result = new wxPalette (wxGLCanvas_CreateDefaultPalette(_arg0));
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -750,7 +744,7 @@ static PyObject *_wrap_wxGLCanvas_GetPalette(PyObject *self, PyObject *args, PyO
     }
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-        _result = (wxPalette *)wxGLCanvas_GetPalette(_arg0);
+    _result = (wxPalette *)wxGLCanvas_GetPalette(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;

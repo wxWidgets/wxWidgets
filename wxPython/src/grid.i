@@ -131,7 +131,7 @@
     }
 
 
-
+// TODO: unicode fix
 #define PYCALLBACK_STRING_INTINT_pure(CBNAME)                                   \
     wxString CBNAME(int a, int b) {                                             \
         wxPyBeginBlockThreads();                            \
@@ -150,7 +150,7 @@
     }
 
 
-
+// TODO: unicode fix
 #define PYCALLBACK__INTINTSTRING_pure(CBNAME)                                   \
     void CBNAME(int a, int b, const wxString& c) {                              \
         wxPyBeginBlockThreads();                            \
@@ -159,7 +159,7 @@
         wxPyEndBlockThreads();                                             \
     }
 
-
+// TODO: unicode fix
 #define PYCALLBACK_STRING_INTINT(PCLASS, CBNAME)                                \
     wxString CBNAME(int a, int b) {                                             \
         bool found;                                                             \
@@ -184,7 +184,7 @@
     }
 
 
-
+// TODO: unicode fix
 #define PYCALLBACK_BOOL_INTINTSTRING(PCLASS, CBNAME)                            \
     bool CBNAME(int a, int b, const wxString& c)  {                             \
         bool rval = 0;                                                          \
@@ -317,7 +317,7 @@
     }
 
 
-
+// TODO: unicode fix
 #define PYCALLBACK_STRING_INT(PCLASS, CBNAME)                                   \
     wxString CBNAME(int a) {                                                    \
         bool found;                                                             \
@@ -342,7 +342,7 @@
     }
 
 
-
+// TODO: unicode fix
 #define PYCALLBACK__INTSTRING(PCLASS, CBNAME)                                   \
     void CBNAME(int a, const wxString& c)  {                                    \
         bool found;                                                             \
@@ -1070,8 +1070,13 @@ public:
             PyObject* ro;
             ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(ii)",row,col));
             if (ro) {
-                PyObject* str = PyObject_Str(ro);
-                rval = PyString_AsString(str);
+#if wxUSE_UNICODE
+	      PyObject* str = PyObject_Unicode(ro);
+	      rval = PyUnicode_AS_UNICODE(str);
+#else
+	      PyObject* str = PyObject_Str(ro);
+	      rval = PyString_AsString(str);
+#endif
                 Py_DECREF(ro);
                 Py_DECREF(str);
             }
@@ -1082,8 +1087,13 @@ public:
 
     void SetValue(int row, int col, const wxString& val) {
         wxPyBeginBlockThreads();
-        if (wxPyCBH_findCallback(m_myInst, "SetValue"))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",row,col,val.c_str()));
+        if (wxPyCBH_findCallback(m_myInst, "SetValue")) {
+#if wxUSE_UNICODE
+	  wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iiu)",row,col,val.c_str()));
+#else
+	  wxPyCBH_callCallback(m_myInst, Py_BuildValue("(iis)",row,col,val.c_str()));
+#endif
+	}
         wxPyEndBlockThreads();
     }
 

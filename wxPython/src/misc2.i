@@ -53,14 +53,25 @@
 //---------------------------------------------------------------------------
 // Dialog Functions
 
-wxString wxFileSelector(char* message,
-                        char* default_path = NULL,
-                        char* default_filename = NULL,
-                        char* default_extension = NULL,
-                        char* wildcard = "*.*",
+#ifdef wxUSE_UNICODE
+wxString wxFileSelector(const wxChar* message = wxFileSelectorPromptStr,
+                        const wxChar* default_path = NULL,
+                        const wxChar* default_filename = NULL,
+                        const wxChar* default_extension = NULL,
+                        const wxChar* wildcard = wxFileSelectorDefaultWildcardStr,
                         int flags = 0,
                         wxWindow *parent = NULL,
                         int x = -1, int y = -1);
+#else
+wxString wxFileSelector(const char* message = wxFileSelectorPromptStr,
+                        const char* default_path = NULL,
+                        const char* default_filename = NULL,
+                        const char* default_extension = NULL,
+                        const char* wildcard = wxFileSelectorDefaultWildcardStr,
+                        int flags = 0,
+                        wxWindow *parent = NULL,
+                        int x = -1, int y = -1);
+#endif
 
 wxString wxGetTextFromUser(const wxString& message,
                            const wxString& caption = wxEmptyString,
@@ -574,7 +585,7 @@ public:
 
     static bool IsEnabled();
     static bool EnableLogging(bool doIt = TRUE);
-    static void OnLog(wxLogLevel level, const char *szString, int t=0);
+    static void OnLog(wxLogLevel level, const wxString& szString, int t=0);
 
     virtual void Flush();
     bool HasPendingMessages() const;
@@ -600,7 +611,7 @@ public:
     bool GetVerbose() const { return m_bVerbose; }
 
     static wxTraceMask GetTraceMask();
-    static bool IsAllowedTraceMask(const char *mask);
+    static bool IsAllowedTraceMask(const wxString& mask);
 
     // static void TimeStamp(wxString *str);
     %addmethods {
@@ -637,7 +648,7 @@ class wxLogWindow : public wxLog
 {
 public:
     wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
-            const char *szTitle,          // the title of the frame
+            const wxString& szTitle,      // the title of the frame
             bool bShow = TRUE,            // show window immediately?
             bool bPassToOld = TRUE);      // pass log messages to the old target?
 
@@ -645,7 +656,7 @@ public:
     wxFrame *GetFrame() const;
     wxLog *GetOldLog() const;
     bool IsPassingMessages() const;
-    void PassMessages(bool bDoPass) { m_bPassMessages = bDoPass; }
+    void PassMessages(bool bDoPass);
 };
 
 
@@ -669,16 +680,16 @@ public:
 
 
 unsigned long wxSysErrorCode();
-const char* wxSysErrorMsg(unsigned long nErrCode = 0);
-void wxLogFatalError(const char *szFormat);
-void wxLogError(const char *szFormat);
-void wxLogWarning(const char *szFormat);
-void wxLogMessage(const char *szFormat);
-void wxLogInfo(const char *szFormat);
-void wxLogVerbose(const char *szFormat);
-void wxLogStatus(const char *szFormat);
-%name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const char *szFormat);
-void wxLogSysError(const char *szFormat);
+const wxString wxSysErrorMsg(unsigned long nErrCode = 0);
+void wxLogFatalError(const wxString& szFormat);
+void wxLogError(const wxString& szFormat);
+void wxLogWarning(const wxString& szFormat);
+void wxLogMessage(const wxString& szFormat);
+void wxLogInfo(const wxString& szFormat);
+void wxLogVerbose(const wxString& szFormat);
+void wxLogStatus(const wxString& szFormat);
+%name(wxLogStatusFrame)void wxLogStatus(wxFrame *pFrame, const wxString& szFormat);
+void wxLogSysError(const wxString& szFormat);
 
 
 %{
@@ -691,7 +702,7 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLog")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(isi)", level, szString, t));  // TODO: unicode fix
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLog(level, szString, t);
@@ -701,7 +712,7 @@ public:
         bool found;
         wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "DoLogString")))
-            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));
+            wxPyCBH_callCallback(m_myInst, Py_BuildValue("(si)", szString, t));  // TODO: unicode fix
         wxPyEndBlockThreads();
         if (! found)
             wxLog::DoLogString(szString, t);
@@ -1061,8 +1072,13 @@ public:
     %addmethods {
         PyObject* GetMimeType() {
             wxString str;
-            if (self->GetMimeType(&str))
-                return PyString_FromString(str.c_str());
+            if (self->GetMimeType(&str)) {
+#if wxUSE_UNICODE
+	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+#else
+	      return PyString_FromStringAndSize(str.c_str(), str.Len());
+#endif
+	    }
             else
                 RETURN_NONE();
         }
@@ -1109,7 +1125,11 @@ public:
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(icon),
                                                               "wxIcon", TRUE));
-                PyTuple_SetItem(tuple, 1, PyString_FromString(iconFile.c_str()));
+#if wxUSE_UNICODE
+                PyTuple_SetItem(tuple, 1, PyUnicode_FromUnicode(iconFile.c_str(), iconFile.Len()));
+#else
+                PyTuple_SetItem(tuple, 1, PyString_FromStringAndSize(iconFile.c_str(), iconFile.Len()));
+#endif
                 PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
                 wxPyEndBlockThreads();
                 return tuple;
@@ -1123,9 +1143,13 @@ public:
         // get a brief file type description ("*.txt" => "text document")
         PyObject* GetDescription() {
             wxString str;
-            if (self->GetDescription(&str))
-                return PyString_FromString(str.c_str());
-            else
+            if (self->GetDescription(&str)) {
+#if  wxUSE_UNICODE
+	      return PyUnicode_FromUnicode(str.c_str(), str.Len());
+#else
+	      return PyString_FromStringAndSize(str.c_str(), str.Len());
+#endif
+            } else
                 RETURN_NONE();
         }
     }
@@ -1136,9 +1160,13 @@ public:
         PyObject* GetOpenCommand(const wxString& filename,
                                  const wxString& mimetype=wxEmptyString) {
             wxString str;
-            if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype)))
-                return PyString_FromString(str.c_str());
-            else
+            if (self->GetOpenCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
+#if  wxUSE_UNICODE
+                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+#else
+                return PyString_FromStringAndSize(str.c_str(), str.Len());
+#endif
+            } else
                 RETURN_NONE();
         }
     }
@@ -1149,9 +1177,13 @@ public:
         PyObject* GetPrintCommand(const wxString& filename,
                                   const wxString& mimetype=wxEmptyString) {
             wxString str;
-            if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype)))
-                return PyString_FromString(str.c_str());
-            else
+            if (self->GetPrintCommand(&str, wxFileType::MessageParameters(filename, mimetype))) {
+#if wxUSE_UNICODE
+                return PyUnicode_FromUnicode(str.c_str(), str.Len());
+#else
+                return PyString_FromStringAndSize(str.c_str(), str.Len());
+#endif
+            } else
                 RETURN_NONE();
         }
     }

@@ -40,6 +40,8 @@ static void wxPyCoreAPI_IMPORT() {
 
 #define wxPyConstructObject(a,b,c)      (wxPyCoreAPIPtr->p_wxPyConstructObject(a,b,c))
 #define wxPy_ConvertList(a,b)           (wxPyCoreAPIPtr->p_wxPy_ConvertList(a,b))
+
+#define wxString_in_helper(a)           (wxPyCoreAPIPtr->p_wxString_in_helper(a))
 #define byte_LIST_helper(a)             (wxPyCoreAPIPtr->p_byte_LIST_helper(a))
 #define int_LIST_helper(a)              (wxPyCoreAPIPtr->p_int_LIST_helper(a))
 #define long_LIST_helper(a)             (wxPyCoreAPIPtr->p_long_LIST_helper(a))
