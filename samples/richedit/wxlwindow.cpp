@@ -1157,21 +1157,21 @@ void wxLayoutWindow::OnMenu(wxCommandEvent& event)
    switch (event.GetId())
    {
    case WXLOWIN_MENU_LARGER:
-      m_llist->SetFontLarger(); Refresh(FALSE); break;
+      m_llist->SetFontLarger(); DoPaint(); break;
    case WXLOWIN_MENU_SMALLER:
-      m_llist->SetFontSmaller(); Refresh(FALSE); break;
+      m_llist->SetFontSmaller(); DoPaint(); break;
    case WXLOWIN_MENU_UNDERLINE:
-      m_llist->ToggleFontUnderline(); Refresh(FALSE); break;
+      m_llist->ToggleFontUnderline(); DoPaint(); break;
    case WXLOWIN_MENU_BOLD:
-      m_llist->ToggleFontWeight(); Refresh(FALSE); break;
+      m_llist->ToggleFontWeight(); DoPaint(); break;
    case WXLOWIN_MENU_ITALICS:
-      m_llist->ToggleFontItalics(); Refresh(FALSE); break;
+      m_llist->ToggleFontItalics(); DoPaint(); break;
    case WXLOWIN_MENU_ROMAN:
-      m_llist->SetFontFamily(wxROMAN); Refresh(FALSE); break;
+      m_llist->SetFontFamily(wxROMAN); DoPaint(); break;
    case WXLOWIN_MENU_TYPEWRITER:
-      m_llist->SetFontFamily(wxFIXED); Refresh(FALSE); break;
+      m_llist->SetFontFamily(wxFIXED); DoPaint(); break;
    case WXLOWIN_MENU_SANSSERIF:
-      m_llist->SetFontFamily(wxSWISS); Refresh(FALSE); break;
+      m_llist->SetFontFamily(wxSWISS); DoPaint(); break;
    }
 }
 
@@ -1184,7 +1184,7 @@ wxLayoutWindow::OnSetFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = true;
    ev.Skip();
-   Refresh(FALSE); // cursor must change
+   DoPaint(); // cursor must change
 }
 
 void
@@ -1192,7 +1192,7 @@ wxLayoutWindow::OnKillFocus(wxFocusEvent &ev)
 {
    m_HaveFocus = false;
    ev.Skip();
-   Refresh(FALSE);// cursor must change
+   DoPaint();// cursor must change
 }
 
 // ----------------------------------------------------------------------------
