@@ -2,14 +2,15 @@
 """
 
 from wxPython.wx import *
-from wxPython.lib.activexwrapper import MakeActiveXClass
 
-import win32com.client.gencache
+if wxPlatform == '__WXMSW__':
+    from wxPython.lib.activexwrapper import MakeActiveXClass
+    import win32com.client.gencache
 
-try:
-    browserModule = win32com.client.gencache.EnsureModule("{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 0, 1, 1)
-except:
-    raise ImportError("IE4 or greater does not appear to be installed.")
+    try:
+        browserModule = win32com.client.gencache.EnsureModule("{EAB22AC0-30C1-11CF-A7EB-0000C05BAE0B}", 0, 1, 1)
+    except:
+        raise ImportError("IE4 or greater does not appear to be installed.")
 
 
 #----------------------------------------------------------------------
@@ -139,8 +140,14 @@ class TestPanel(wxWindow):
 # for the demo framework...
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log, frame)
-    return win
+    if wxPlatform == '__WXMSW__':
+        win = TestPanel(nb, log, frame)
+        return win
+    else:
+        dlg = wxMessageDialog(frame, 'This demo only works on MSW.',
+                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
 
 
 overview = __doc__

@@ -2,14 +2,16 @@
 """
 
 from wxPython.wx import *
-from wxPython.lib.activexwrapper import MakeActiveXClass
 
-import win32com.client.gencache
+if wxPlatform == '__WXMSW__':
+    from wxPython.lib.activexwrapper import MakeActiveXClass
+    import win32com.client.gencache
 
-try:
-    acrobat = win32com.client.gencache.EnsureModule('{CA8A9783-280D-11CF-A24D-444553540000}', 0x0, 1, 3)
-except:
-    raise ImportError("Can't load PDF.OCX, install Acrobat 4.0")
+    try:
+        acrobat = win32com.client.gencache.EnsureModule('{CA8A9783-280D-11CF-A24D-444553540000}', 0x0, 1, 3)
+    except:
+        raise ImportError("Can't load PDF.OCX, install Acrobat 4.0")
+
 
 
 #----------------------------------------------------------------------
@@ -77,8 +79,14 @@ class TestPanel(wxPanel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    win = TestPanel(nb, log)
-    return win
+    if wxPlatform == '__WXMSW__':
+        win = TestPanel(nb, log)
+        return win
+    else:
+        dlg = wxMessageDialog(frame, 'This demo only works on MSW.',
+                          'Sorry', wxOK | wxICON_INFORMATION)
+        dlg.ShowModal()
+        dlg.Destroy()
 
 
 overview = __doc__

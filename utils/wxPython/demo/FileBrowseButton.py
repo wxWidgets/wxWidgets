@@ -9,12 +9,14 @@ class TestPanel(wxPanel):
     def __init__(self, parent, ID, log):
         wxPanel.__init__(self, parent, ID)
         self.log = log
-        self.fbb = FileBrowseButton(self, -1, wxPoint(20,20), wxSize(350, -1),
+        self.fbb = FileBrowseButton(self, -1, wxPoint(20,20), wxSize(450, -1),
                                     changeCallback = self.fbbCallback)
         self.fbbh = FileBrowseButtonWithHistory(self, -1, wxPoint(20, 50),
-                                                wxSize(350, -1),
-                                                changeCallback = self.fbbhCallback)
-        self.fbbh.SetHistory([])
+                                                wxSize(450, -1),
+                                                #changeCallback = self.fbbhCallback
+                                                )
+
+        self.fbbh.SetHistory(['You', 'can', 'put', 'some', 'file', 'names', 'here'])
 
 
     def fbbCallback(self, evt):
@@ -22,11 +24,12 @@ class TestPanel(wxPanel):
 
 
     def fbbhCallback(self, evt):
-        value = evt.GetString()
-        self.log.write('FileBrowseButtonWithHistory: %s\n' % value)
-        history = self.fbbh.GetHistory()
-        history.append(value)
-        self.fbbh.SetHistory(history)
+        if hasattr(self, 'fbbh'):
+            value = evt.GetString()
+            self.log.write('FileBrowseButtonWithHistory: %s\n' % value)
+            history = self.fbbh.GetHistory()
+            history.append(value)
+            self.fbbh.SetHistory(history)
 
 
 #----------------------------------------------------------------------
