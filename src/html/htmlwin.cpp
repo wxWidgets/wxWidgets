@@ -387,6 +387,11 @@ bool wxHtmlWindow::HistoryBack()
     return TRUE;
 }
 
+bool wxHtmlWindow::HistoryCanBack()
+{
+    if (m_HistoryPos < 1) return FALSE;
+    return TRUE ;
+}
 
 
 bool wxHtmlWindow::HistoryForward()
@@ -413,6 +418,12 @@ bool wxHtmlWindow::HistoryForward()
     return TRUE;
 }
 
+bool wxHtmlWindow::HistoryCanForward()
+{
+    if (m_HistoryPos == -1) return FALSE;
+    if (m_HistoryPos >= (int)m_History.GetCount() - 1)return FALSE;
+    return TRUE ;
+}
 
 
 void wxHtmlWindow::HistoryClear()
