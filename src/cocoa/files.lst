@@ -92,6 +92,7 @@ ALL_SOURCES = \
 		common/filefn.cpp \
 		common/filename.cpp \
 		common/filesys.cpp \
+		common/fldlgcmn.cpp \
 		common/fontcmn.cpp \
 		common/fontmap.cpp \
 		common/framecmn.cpp \
@@ -196,7 +197,7 @@ ALL_SOURCES = \
 		cocoa/checkbox.mm \
 		cocoa/checklst.mm \
 		cocoa/choice.mm \
-		cocoa/colour.cpp \
+		cocoa/colour.mm \
 		cocoa/control.mm \
 		cocoa/cursor.mm \
 		cocoa/data.cpp \
@@ -649,6 +650,7 @@ COMMONOBJS = \
 		filefn.o \
 		filename.o \
 		filesys.o \
+		fldlgcmn.o \
 		fontcmn.o \
 		fontmap.o \
 		framecmn.o \

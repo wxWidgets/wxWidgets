@@ -582,7 +582,7 @@ button.mm	Cocoa
 checkbox.mm	Cocoa
 checklst.mm	Cocoa
 choice.mm	Cocoa
-colour.cpp	Cocoa
+colour.mm	Cocoa
 control.mm	Cocoa
 cursor.mm	Cocoa
 data.cpp	Cocoa
