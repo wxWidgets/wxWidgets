@@ -414,7 +414,7 @@ void wxRegion::GetBox(
                             ,&vRect
                            );
         x       = vRect.xLeft;
-        y       = vRect.yTop;
+        y       = vRect.yBottom;
         vWidth  = vRect.xRight - vRect.xLeft;
         vHeight = vRect.yTop - vRect.yBottom;
     }

@@ -198,8 +198,8 @@ private:
 #if !USE_SHARED_LIBRARIES
     IMPLEMENT_DYNAMIC_CLASS(wxBMPFileHandler, wxBitmapHandler)
     IMPLEMENT_DYNAMIC_CLASS(wxBMPResourceHandler, wxBitmapHandler)
-    IMPLEMENT_DYNAMIC_CLASS(wxICOFileHandler, wxGDIImageHandler)
-    IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxGDIImageHandler)
+    IMPLEMENT_DYNAMIC_CLASS(wxICOFileHandler, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxICOResourceHandler, wxObject)
 #endif
 
 // ----------------------------------------------------------------------------

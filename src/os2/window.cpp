@@ -303,8 +303,11 @@ void wxWindowOS2::Init()
     m_hWndScrollBarHorz = 0L;
     m_hWndScrollBarVert = 0L;
 
+    memset(&m_vWinSwp, '\0', sizeof (SWP));
+
     //
     // Pass WM_GETDLGCODE to DefWindowProc()
+    //
     m_lDlgCode = 0;
 
     m_nXThumbSize = 0;
@@ -902,7 +905,6 @@ void wxWindowOS2::SetScrollbar(
         }
         else
         {
-            ::WinQueryWindowPos(hWnd, &vSwpOwner);
             //
             // The owner (the scrolled window) is a child of the Frame's
             // client window, usually.  The scrollbars are children of the
@@ -975,6 +977,7 @@ void wxWindowOS2::ScrollWindow(
                       ,NULL
                       ,SW_SCROLLCHILDREN | SW_INVALIDATERGN
                      );
+    Refresh();
 } // end of wxWindowOS2::ScrollWindow
 
 // ---------------------------------------------------------------------------
@@ -1598,8 +1601,8 @@ void wxWindowOS2::DoMoveWindow(
         // which will cause the scrollbars to be displayed via the SetScrollbar
         // call in CWindow.
         //
-        if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-             pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
+        if ( IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
+             IsKindOf(CLASSINFO(wxScrolledWindow))
            )
         {
             int                     nAdjustWidth  = 0;
@@ -3045,37 +3048,6 @@ bool wxWindowOS2::OS2Create(
     {
         sClassName += wxT("NR");
     }
-
-    //
-    // If the window being created is a Frame's Statusbar we need to use
-    // the actual Frame's size, not its client
-    //
-    if (pParent)
-    {
-        if ( pParent->IsKindOf(CLASSINFO(wxGenericScrolledWindow)) ||
-             pParent->IsKindOf(CLASSINFO(wxScrolledWindow))
-           )
-        {
-            if (IsKindOf(CLASSINFO(wxStatusBar)) &&
-                pParent->IsKindOf(CLASSINFO(wxFrame)))
-            {
-                RECTL               vRect;
-                wxFrame*            pFrame = wxDynamicCast(pParent, wxFrame);
-
-                ::WinQueryWindowRect((HWND)pFrame->GetFrame(), &vRect);
-                nY = vRect.yTop - (nY + nHeight);
-            }
-            else
-                nY = pParent->GetSize().y - (nY + nHeight);
-        }
-    }
-    else
-    {
-        RECTL                   vRect;
-
-        ::WinQueryWindowRect(HWND_DESKTOP, &vRect);
-        nY = vRect.yTop - (nY + nHeight);
-    }
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)hParent
                                       ,(PSZ)sClassName.c_str()
                                       ,(PSZ)zTitle ? zTitle : ""
@@ -3098,6 +3070,22 @@ bool wxWindowOS2::OS2Create(
     }
     SubclassWin(m_hWnd);
     SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+
+    m_backgroundColour.Set(wxString("GREY"));
+
+    LONG                            lColor = (LONG)m_backgroundColour.GetPixel();
+
+    if (!::WinSetPresParam( m_hWnd
+                           ,PP_BACKGROUNDCOLOR
+                           ,sizeof(LONG)
+                           ,(PVOID)&lColor
+                          ))
+    {
+        vError = ::WinGetLastError(vHabmain);
+        sError = wxPMErrorToStr(vError);
+        wxLogError("Error creating frame. Error: %s\n", sError);
+        return FALSE;
+    }
     SetSize( nX
             ,nY
             ,nWidth
@@ -4112,12 +4100,12 @@ void wxWindowOS2::MoveChildren(
             vSwp.x -= pCtrl->GetXComp();
         }
         ::WinSetWindowPos( GetHwndOf(pWin)
-                          ,HWND_BOTTOM
+                          ,HWND_TOP
                           ,vSwp.x
                           ,vSwp.y - nDiff
                           ,vSwp.cx
                           ,vSwp.cy
-                          ,SWP_MOVE | SWP_ZORDER
+                          ,SWP_MOVE | SWP_SHOW | SWP_ZORDER
                          );
         ::WinQueryWindowPos(GetHwndOf(pWin), pWin->GetSwp());
         if (pWin->IsKindOf(CLASSINFO(wxRadioBox)))
@@ -4145,6 +4133,7 @@ void wxWindowOS2::MoveChildren(
                                       );
         }
     }
+    Refresh();
 } // end of wxWindowOS2::MoveChildren
 
 //
@@ -4207,41 +4196,14 @@ int wxWindowOS2::GetOS2ParentHeight(
             return(pParent->GetClientSize().y);
     }
     //
-    // Case 3a -- One of many Frame children.  Will be positioned normally
-    //
-    else if (pParent->GetChildren().GetCount() > 1)
-        return(pParent->GetClientSize().y);
-    //
-    // Case 3b -- this is for any window that is the sole child of a Frame.
-    //            The grandparent must exist and it must be of type CFrame
-    //            and it's height must be different. Otherwise the standard
-    //            applies.
+    // Case -- this is for any window that is the sole child of a Frame.
+    //         The grandparent must exist and it must be of type CFrame
+    //         and it's height must be different. Otherwise the standard
+    //         applies.
     //
     else
     {
-        pGrandParent = pParent->GetParent();
-        if (pGrandParent &&
-            pGrandParent->IsKindOf(CLASSINFO(wxFrame)) &&
-            pGrandParent->GetClientSize().y != pParent->GetSize().y
-           )
-        {
-            int                     nParentHeight = 0L;
-            int                     nStatusBarHeight = 0L;
-            wxFrame*                pFrame = wxDynamicCast(pGrandParent, wxFrame);
-            wxStatusBar*            pStatbar = pFrame->GetStatusBar();
-
-            nParentHeight = pGrandParent->GetClientSize().y;
-            if (pStatbar)
-                nStatusBarHeight = pStatbar->GetSize().y;
-            nParentHeight -= nStatusBarHeight;
-            return(nParentHeight);
-        }
-        else
-            //
-            // Panel is a child of some other kind of window so we'll
-            // just use it's original size
-            //
-            return(pParent->GetClientSize().y);
+        return(pParent->GetClientSize().y);
     }
     return(0L);
 } // end of wxWindowOS2::GetOS2ParentHeight

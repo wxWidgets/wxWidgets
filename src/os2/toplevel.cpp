@@ -593,35 +593,13 @@ bool wxTopLevelWindowOS2::Show(
         m_bIconized = vSwp.fl & SWP_MINIMIZE;
         ::WinQueryWindowPos(m_hWnd, &m_vSwpClient);
         ::WinSendMsg(m_hFrame, WM_UPDATEFRAME, (MPARAM)~0, 0);
+        ::WinQueryWindowPos(m_hWnd, &vSwp);
         ::WinEnableWindow(m_hFrame, TRUE);
 
         //
         // Deal with children
         //
         MoveChildren(m_vSwpClient.cy - vSwp.cy);
-
-
-        //
-        // Need to handle the case of a single child that not a control
-        // as this is probably a panel with its own children
-        //
-        if (GetChildren().GetCount() > 0)
-        {
-            for (wxWindowList::Node* pNode = GetChildren().GetFirst();
-                 pNode;
-                 pNode = pNode->GetNext())
-            {
-                wxWindow*                   pChild = pNode->GetData();
-
-                if ( GetChildren().GetCount() == 1 &&
-                    !pChild->IsKindOf(CLASSINFO(wxControl))
-                   )
-                    pChild->MoveChildren(m_vSwpClient.cy - vSwp.cy);
-                pChild->Refresh();
-                pChild = NULL;
-            }
-        }
-
         vEvent.SetEventObject(this);
         GetEventHandler()->ProcessEvent(vEvent);
     }
