@@ -12,6 +12,10 @@
 #ifndef   _OWNERDRW_H
 #define   _OWNERDRW_H
 
+#ifdef    __GNUG__
+#pragma interface "ownerdrw.h"
+#endif
+
 typedef   wxColour      wxColor;
 typedef   unsigned int  uint;
 

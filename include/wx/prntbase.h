@@ -13,7 +13,7 @@
 #define __PRNTBASEH__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "prntbase.h"
 #endif
 
 #include "wx/defs.h"

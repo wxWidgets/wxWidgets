@@ -9,6 +9,10 @@
 // Licence:   	wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#ifdef __GNUG__
+#pragma interface "pnghand.h"
+#endif
+
 class WXDLLEXPORT wxPNGFileHandler: public wxBitmapHandler
 {
   DECLARE_DYNAMIC_CLASS(wxPNGFileHandler)

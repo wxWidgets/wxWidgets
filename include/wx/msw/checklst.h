@@ -12,6 +12,10 @@
 #ifndef   __CHECKLST_H__
 #define   __CHECKLST_H__
 
+#ifdef __GNUG__
+#pragma interface "checklst.h"
+#endif
+
 typedef   unsigned int  uint;
 
 #if !USE_OWNER_DRAWN

@@ -13,7 +13,7 @@
 #define __PROCESSH__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "process.h"
 #endif
 
 #include "wx/defs.h"

@@ -13,7 +13,7 @@
 #define __GTKTREECTRLH_G__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "treectrl.h"
 #endif
 
 #include "wx/defs.h"

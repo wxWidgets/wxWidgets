@@ -13,7 +13,7 @@
 #define __WXSTRINGH__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "string.h"
 #endif
 
 /* Dependencies (should be included before this header):

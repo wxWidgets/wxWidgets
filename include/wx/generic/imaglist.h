@@ -12,7 +12,7 @@
 #define __IMAGELISTH_G__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "imaglist.h"
 #endif
 
 #include "wx/defs.h"

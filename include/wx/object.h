@@ -13,7 +13,7 @@
 #define __OBJECTH__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "object.h"
 #endif
 
 #include "wx/defs.h"

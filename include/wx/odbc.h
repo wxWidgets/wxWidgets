@@ -13,6 +13,10 @@
 
 #if USE_ODBC
 
+#ifdef __GNUG__
+#pragma interface "odbc.h"
+#endif
+
 #ifndef __ODBCH__
 #define __ODBCH__
 

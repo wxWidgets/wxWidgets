@@ -12,6 +12,10 @@
 #ifndef __IPCBASEH__
 #define __IPCBASEH__
 
+#ifdef __GNUG__
+#pragma interface "ipcbase.h"
+#endif
+
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/string.h"

@@ -12,7 +12,7 @@
 #define __LISTCTRLH_G__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "listctrl.h"
 #endif
 
 #include "wx/defs.h"

@@ -13,8 +13,8 @@
 #define   __LOGH__
 
 #ifdef    __GNUG__
-  #pragma interface
-#endif  //GNU C++
+#pragma interface "log.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // constants

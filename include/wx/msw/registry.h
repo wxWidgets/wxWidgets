@@ -12,6 +12,10 @@
 #ifndef   _REGISTRY_H
 #define   _REGISTRY_H
 
+#ifdef __GNUG__
+#pragma interface "registry.h"
+#endif
+
 // ----------------------------------------------------------------------------
 // mutable hack (see also registry.cpp)
 // ----------------------------------------------------------------------------

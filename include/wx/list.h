@@ -13,7 +13,7 @@
 #define __LISTH__
 
 #ifdef __GNUG__
-#pragma interface
+#pragma interface "list.h"
 #endif
 
 #include "wx/defs.h"
