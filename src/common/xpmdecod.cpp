@@ -111,6 +111,7 @@ license is as follows:
 #include "wx/image.h"
 #include "wx/utils.h"
 #include "wx/log.h"
+#include "wx/hashmap.h"
 #include "wx/intl.h"
 #include <string.h>
 
@@ -652,11 +653,11 @@ static const char *ParseColor(const char *data)
     return NULL;
 }
 
-class wxXPMColourMapData : public wxObject
+struct wxXPMColourMapData
 {
-    public:
-        unsigned char R,G,B;
+    unsigned char R,G,B;
 };
+WX_DECLARE_STRING_HASH_MAP(wxXPMColourMapData, wxXPMColourMap)
 
 wxImage wxXPMDecoder::ReadData(const char **xpm_data)
 {
@@ -667,8 +668,8 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     wxChar key[64];
     const char *clr_def;
     bool hasMask;
-    wxXPMColourMapData *clr_data;
-    wxHashTable clr_tbl(wxKEY_STRING);
+    wxXPMColourMapData clr_data;
+    wxXPMColourMap clr_tbl;
 
     /*
      *  Read hints and initialize structures:
@@ -693,7 +694,6 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
     img.SetMask(FALSE);
     key[chars_per_pixel] = wxT('\0');
     hasMask = FALSE;
-    clr_tbl.DeleteContents(TRUE);
 
     /*
      *  Create colour map:
@@ -703,21 +703,20 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
         for (i_key = 0; i_key < chars_per_pixel; i_key++)
             key[i_key] = (wxChar)xpm_data[1 + i][i_key];
         clr_def = ParseColor(xpm_data[1 + i] + chars_per_pixel);
-        clr_data = new wxXPMColourMapData;
 
         if ( clr_def == NULL )
         {
             wxLogError(_("XPM: malformed colour definition '%s'!"), xpm_data[1+i]);
-            clr_data->R = 255, clr_data->G = 0, clr_data->B = 255;
+            clr_data.R = 255, clr_data.G = 0, clr_data.B = 255;
         }
         else
         {
             bool isNone;
             if ( !GetRGBFromName(clr_def, &isNone,
-                                 &clr_data->R, &clr_data->G, &clr_data->B) )
+                                 &clr_data.R, &clr_data.G, &clr_data.B) )
             {
                 wxLogError(_("XPM: malformed colour definition '%s'!"), xpm_data[1+i]);
-                clr_data->R = 255, clr_data->G = 0, clr_data->B = 255;
+                clr_data.R = 255, clr_data.G = 0, clr_data.B = 255;
             }
             else
             {
@@ -726,17 +725,17 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
                     img.SetMask(TRUE);
                     img.SetMaskColour(255, 0, 255);
                     hasMask = TRUE;
-                    clr_data->R = 255, clr_data->G = 0, clr_data->B = 255;
+                    clr_data.R = 255, clr_data.G = 0, clr_data.B = 255;
                 }
                 else
                 {
-                    if ( hasMask && clr_data->R == 255 &&
-                                    clr_data->G == 0 && clr_data->B == 255 )
-                        clr_data->B = 254;
+                    if ( hasMask && clr_data.R == 255 &&
+                                    clr_data.G == 0 && clr_data.B == 255 )
+                        clr_data.B = 254;
                 }
             }
         }
-        clr_tbl.Put(key, clr_data);
+        clr_tbl[key] = clr_data;
     }
 
     /*
@@ -744,6 +743,9 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
      */
 
     unsigned char *img_data = img.GetData();
+    wxXPMColourMap::iterator entry;
+    wxXPMColourMap::iterator end = clr_tbl.end();
+    
     for (j = 0; j < height; j++)
     {
         for (i = 0; i < width; i++, img_data += 3)
@@ -751,16 +753,16 @@ wxImage wxXPMDecoder::ReadData(const char **xpm_data)
             for (i_key = 0; i_key < chars_per_pixel; i_key++)
                 key[i_key] = (wxChar)xpm_data[1 + colors_cnt + j]
                                              [chars_per_pixel * i + i_key];
-            clr_data = (wxXPMColourMapData*) clr_tbl.Get(key);
-            if ( clr_data == NULL )
+            entry = clr_tbl.find(key);
+            if ( entry == end )
             {
                 wxLogError(_("XPM: Malformed pixel data!"));
             }
             else
             {
-                img_data[0] = clr_data->R;
-                img_data[1] = clr_data->G;
-                img_data[2] = clr_data->B;
+                img_data[0] = entry->second.R;
+                img_data[1] = entry->second.G;
+                img_data[2] = entry->second.B;
             }
         }
     }
