@@ -40,15 +40,6 @@
 #include "wx/msw/wrapcctl.h"
 #include "wx/msw/private.h"
 
-#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 2, 4 )
-typedef struct tagNMDATETIMECHANGE
-{
-    NMHDR       nmhdr;
-    DWORD       dwFlags;
-    SYSTEMTIME  st;
-} NMDATETIMECHANGE;
-#endif // old gcc headers
-
 // apparently some versions of mingw define these macros erroneously
 #ifndef DateTime_GetSystemtime
     #define DateTime_GetSystemtime DateTime_GetSystemTime

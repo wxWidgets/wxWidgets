@@ -184,6 +184,82 @@ typedef struct {
 #define LVM_SETUNICODEFORMAT 0x2005
 #endif
 
+// ----------------------------------------------------------------------------
+// Common Control missing
+// ----------------------------------------------------------------------------
+// __DMC__ date time control IDs
+
+#ifdef __DMC__
+#define DATETIMEPICK_CLASSW L"SysDateTimePick32"
+#define DATETIMEPICK_CLASSA "SysDateTimePick32"
+
+#define ICC_DATE_CLASSES 256
+
+#if (_WIN32_IE >= 0x0300)
+typedef struct tagINITCOMMONCONTROLSEX {
+	DWORD dwSize;
+	DWORD dwICC;
+} INITCOMMONCONTROLSEX,*LPINITCOMMONCONTROLSEX;
+
+#define GDTR_MIN 1
+#define GDTR_MAX 2
+
+#define GDT_ERROR -1
+#define GDT_VALID 0
+#define GDT_NONE 1
+
+
+#define DTS_UPDOWN 1
+#define DTS_SHOWNONE 2
+#define DTS_SHORTDATEFORMAT 0
+#define DTS_LONGDATEFORMAT 4
+#define DTS_TIMEFORMAT 9
+#define DTS_APPCANPARSE 16
+#define DTS_RIGHTALIGN 32
+#if ( _WIN32_IE >= 0x500 )
+#define DTS_SHORTDATECENTURYFORMAT	0x000C
+#endif /* _WIN32_IE >= 0x500 */
+#endif
+
+
+
+#define DATETIMEPICK_CLASSW L"SysDateTimePick32"
+#define DATETIMEPICK_CLASSA "SysDateTimePick32"
+
+#ifdef UNICODE
+    #define DATETIMEPICK_CLASS DATETIMEPICK_CLASSW
+#else
+    #define DATETIMEPICK_CLASS DATETIMEPICK_CLASSA
+#endif
+
+#define DTM_GETSYSTEMTIME 0x1001
+#define DTM_SETSYSTEMTIME 0x1002
+#define DTM_GETRANGE 0x1003
+#define DTM_SETRANGE 0x1004
+#define DTN_DATETIMECHANGE ((UINT)-759) 
+
+#define DateTime_GetMonthCal(hwnd) SNDMSG(hwnd, DTM_GETMONTHCAL, 0, 0)
+#define DateTime_GetMonthCalColor(hwnd, icolor) SNDMSG(hwnd, DTM_GETMONTHCAL, (WPARAM)icolor,0)
+#define DateTime_GetMonthCalFont(hwnd) SNDMSG(hwnd,DTM_GETMCFONT,0,0)
+#define DateTime_GetRange(hwnd,lpsystimearray) SNDMSG(hwnd,DTM_GETRANGE,0,(LPARAM)lpsystimearray)
+#define DateTime_GetSystemTime(hwnd,lpsystime) SNDMSG(hwnd,DTM_GETSYSTEMTIME,0,(LPARAM)lpsystime)
+#define DateTime_SetFormat(hwnd,lpszformat) SNDMSG(hwnd,DTM_SETFORMAT,0,(LPARAM)lpszformat)
+#define DateTime_SetMonthCalColor(hwnd,icolor,clr) SNDMSG(hwnd,DTM_SETMCCOLOR,(WPARAM)icolor,(LPARAM)clr)
+#define DateTime_SetMonthCalFont(hwnd,hfont,lparam) SNDMSG(hwnd,DTM_SETMCFONT,(WPARAM)hfont,(LPARAM)lparam)
+#define DateTime_SetRange(hwnd,flags,lpsystimearray) SNDMSG(hwnd,DTM_SETRANGE,(WPARAM)flags,(LPARAM)lpsystimearray)
+#define DateTime_SetSystemTime(hwnd,flag,lpsystime) SNDMSG(hwnd,DTM_SETSYSTEMTIME,(WPARAM)flag,(LPARAM)lpsystime)
+
+
+#endif //__DMC__ date time control IDs
+
+#if defined(__GNUWIN32__) && !wxCHECK_W32API_VERSION( 2, 4 ) || defined (__DMC__)
+typedef struct tagNMDATETIMECHANGE
+{
+    NMHDR       nmhdr;
+    DWORD       dwFlags;
+    SYSTEMTIME  st;
+} NMDATETIMECHANGE;
+#endif // old gcc headers
 
 // ----------------------------------------------------------------------------
 // Toolbar define value missing
