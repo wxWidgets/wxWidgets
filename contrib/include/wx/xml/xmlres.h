@@ -216,9 +216,13 @@ extern wxXmlResource *wxTheXmlResource;
 //    wxTheXmlResource->LoadDialog(&dlg, mainFrame, "my_dialog");
 //    XMLCTRL(dlg, "my_textctrl", wxTextCtrl)->SetValue(wxT("default value"));
 
+#ifdef __WXDEBUG__
+#define XMLCTRL(window, id, type) \
+    (wxDynamicCast((window).FindWindow(XMLID(id)), type))
+#else
 #define XMLCTRL(window, id, type) \
     ((type*)((window).FindWindow(XMLID(id))))
-
+#endif
 
 
 class WXDLLEXPORT wxXmlResourceHandler : public wxObject
