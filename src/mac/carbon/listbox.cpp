@@ -714,24 +714,6 @@ void wxListBox::OnSize( wxSizeEvent &event)
 {
 }
 
-void wxListBox::MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool WXUNUSED(mouseStillDown))
-{
-    /*
-    Boolean wasDoubleClick = false ;
-    long    result ;
-    
-    ::GetControlData( (ControlRef) m_macControl , kControlNoPart , kControlListBoxDoubleClickTag , sizeof( wasDoubleClick ) , (char*) &wasDoubleClick  , &result ) ;
-    if ( !wasDoubleClick )
-    {
-        MacDoClick() ;
-    }
-    else
-    {
-        MacDoDoubleClick() ;
-    }
-    */
-}
-
 void wxListBox::MacSetRedraw( bool doDraw )
 {
     // nothing to do in compositing mode
