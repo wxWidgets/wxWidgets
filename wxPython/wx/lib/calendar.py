@@ -292,6 +292,8 @@ class CalDraw:
             self.cal_days.append(str(i))
             i = i + 1
 
+        self.end_pos = dow + dim
+
         return start_pos
 
     def SetWeekEnd(self, font_color=None, backgrd = None):
@@ -539,6 +541,9 @@ class CalDraw:
     def DrawDayText(self, DC, key):
         f = wx.Font(10, self.font, wx.NORMAL, self.bold)      # initial font setting
         self._CalcFontSize(DC, f)
+
+        if key > self.end_pos: 
+            key = self.end_pos
 
         val = self.cal_days[key]
         cnt_x = key % 7
