@@ -43,7 +43,9 @@ bool wxButtonBase::CreateStock(wxWindow *parent,
                                const wxString& name)
 {
     wxString label;
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#if !defined(__WXMAC__) && !defined(__WXCOCOA__)
+    wxUnusedVar(descriptiveLabel);
+#else // defined(__WXMAC__) || defined(__WXCOCOA__)
     if (!descriptiveLabel.empty())
     {
         label = descriptiveLabel;
