@@ -97,7 +97,7 @@ HMODULE wxGetModuleHandle(const char *name, void *addr)
     // GetModuleHandleEx() is only available under XP and later, coincidence?)
 
     // check if we can use GetModuleHandleEx
-    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCTSTR, HMODULE *);
+    typedef BOOL (WINAPI *GetModuleHandleEx_t)(DWORD, LPCSTR, HMODULE *);
 
     static const GetModuleHandleEx_t INVALID_FUNC_PTR = (GetModuleHandleEx_t)-1;
 
@@ -117,7 +117,7 @@ HMODULE wxGetModuleHandle(const char *name, void *addr)
         // flags are GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT |
         //           GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS
         HMODULE hmod;
-        if ( s_pfnGetModuleHandleEx(6, (LPCTSTR)addr, &hmod) && hmod )
+        if ( s_pfnGetModuleHandleEx(6, (char *)addr, &hmod) && hmod )
             return hmod;
     }
 
