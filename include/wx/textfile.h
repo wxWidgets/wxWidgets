@@ -33,9 +33,9 @@ public:
   enum Type
   {
     Type_None,  // incomplete (the last line of the file only)
-    Type_Unix,  // line is terminated with 'CR' = 0xA = 10 = '\n'
-    Type_Dos,   //                         'LF' 'CR'
-    Type_Mac    //                         'LF' = 0xD = 12 = '\r'
+    Type_Unix,  // line is terminated with 'LF' = 0xA = 10 = '\n'
+    Type_Dos,   //                         'CR' 'LF'
+    Type_Mac    //                         'CR' = 0xD = 13 = '\r'
   };
 
   // default type for current platform (determined at compile time)
@@ -61,10 +61,31 @@ public:
 
   // accessors
     // get the number of lines in the file
-  size_t    GetLineCount() const { return m_aLines.Count(); }
+  size_t GetLineCount() const { return m_aLines.Count(); }
     // the returned line may be modified (but don't add CR/LF at the end!)
   wxString& GetLine(size_t n)    const { return m_aLines[n]; }
   wxString& operator[](size_t n) const { return m_aLines[n]; }
+
+    // the current line has meaning only when you're using
+    // GetFirstLine()/GetNextLine() functions, it doesn't get updated when
+    // you're using "direct access" i.e. GetLine()
+  size_t GetCurrentLine() const { return m_nCurLine; }
+  void GoToLine(size_t n) { m_nCurLine = n; }
+  bool Eof() const { return m_nCurLine == m_aLines.Count(); }
+
+    // these methods allow more "iterator-like" traversal of the list of
+    // lines, i.e. you may write something like:
+    //  for ( str = GetFirstLine(); !Eof(); str = GetNextLine() ) { ... }
+
+    // @@@ const is commented out because not all compilers understand
+    //     'mutable' keyword yet (m_nCurLine should be mutable)
+  wxString& GetFirstLine() /* const */ { return m_aLines[m_nCurLine = 0]; }
+  wxString& GetNextLine()  /* const */ { return m_aLines[++m_nCurLine];   }
+  wxString& GetPrevLine()  /* const */
+    { wxASSERT(m_nCurLine > 0); return m_aLines[--m_nCurLine];   }
+  wxString& GetLastLine() /* const */
+    { return m_aLines[m_nCurLine = m_aLines.Count() - 1]; }
+
     // get the type of the line (see also GetEOL)
   Type GetLineType(size_t n) const { return m_aTypes[n]; }
     // guess the type of file (m_file is supposed to be opened)
@@ -115,8 +136,12 @@ private:
   WX_DEFINE_ARRAY(Type, ArrayFileType);
 
   wxFile        m_file;     // current file
+
   ArrayFileType m_aTypes;   // type of each line
   wxArrayString m_aLines;   // lines of file
+
+  size_t        m_nCurLine; // number of current line in the file
+
   wxString      m_strFile;  // name of the file
 };
 
