@@ -1270,11 +1270,6 @@ void wxListBox::DoSetItems(const wxArrayString& choices, void** clientData)
     MacSetRedraw( true ) ;
 }
 
-bool wxListBox::HasMultipleSelection() const
-{
-    return (m_windowStyle & wxLB_MULTIPLE) || (m_windowStyle & wxLB_EXTENDED);
-}
-
 int wxListBox::FindString(const wxString& s) const
 {
     
