@@ -68,6 +68,11 @@ DBBROWSE_OBJECTS =  \
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
+@COND_USE_ODBC_1@__dbbrowse___depname = dbbrowse$(EXEEXT)
 @COND_PLATFORM_MAC_1@__dbbrowse___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C dbbrowse$(EXEEXT)
 @COND_PLATFORM_MAC_1@__dbbrowse___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
@@ -135,7 +140,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_1 = $(RESCOMP) -d __DARWIN__ -t APPL -d \
 
 ### Targets: ###
 
-all: dbbrowse$(EXEEXT) $(__dbbrowse_bundle___depname) data_help_std data_help_png
+all: $(__dbbrowse___depname) $(__dbbrowse_bundle___depname) data_help_std data_help_png
 
 install: all
 
@@ -152,14 +157,14 @@ clean:
 distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-dbbrowse$(EXEEXT): $(DBBROWSE_OBJECTS) $(__dbbrowse___win32rc)
-	$(CXX) -o $@ $(DBBROWSE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_ODBC_p) $(EXTRALIBS_ODBC) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
-	$(__dbbrowse___mac_rezcmd)
-	$(__dbbrowse___mac_setfilecmd)
-	$(__dbbrowse___os2_emxbindcmd)
-	$(SAMPLES_RPATH_POSTLINK)
+@COND_USE_ODBC_1@dbbrowse$(EXEEXT): $(DBBROWSE_OBJECTS) $(__dbbrowse___win32rc)
+@COND_USE_ODBC_1@	$(CXX) -o $@ $(DBBROWSE_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_DBGRID_p)  $(__WXLIB_ADV_p) $(PLUGIN_ADV_EXTRALIBS) $(__WXLIB_ODBC_p) $(EXTRALIBS_ODBC) $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
+@COND_USE_ODBC_1@	$(__dbbrowse___mac_rezcmd)
+@COND_USE_ODBC_1@	$(__dbbrowse___mac_setfilecmd)
+@COND_USE_ODBC_1@	$(__dbbrowse___os2_emxbindcmd)
+@COND_USE_ODBC_1@	$(SAMPLES_RPATH_POSTLINK)
 
-dbbrowse.app/Contents/PkgInfo: dbbrowse$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
+dbbrowse.app/Contents/PkgInfo: $(__dbbrowse___depname) $(top_srcdir)/src/mac/carbon/Info.plist.in $(LIBDIRNAME)/libwx_$(TOOLCHAIN_NAME).3.rsrc $(top_srcdir)/src/mac/carbon/wxmac.icns
 	mkdir -p dbbrowse.app/Contents
 	mkdir -p dbbrowse.app/Contents/MacOS
 	mkdir -p dbbrowse.app/Contents/Resources

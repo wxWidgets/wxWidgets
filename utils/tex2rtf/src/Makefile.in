@@ -77,6 +77,10 @@ TEX2RTF_GUI_OBJECTS =  \
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_MAC_1@__tex2rtf___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -t APPL tex2rtf$(EXEEXT)
 @COND_USE_GUI_1@__tex2rtf_gui___depname = tex2rtf_gui$(EXEEXT)
@@ -155,7 +159,7 @@ distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 tex2rtf$(EXEEXT): $(TEX2RTF_OBJECTS)
-	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS)
+	$(CXX) -o $@ $(TEX2RTF_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)   $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
 	$(__tex2rtf___mac_setfilecmd)
 
@@ -164,7 +168,7 @@ install_tex2rtf:
 	$(INSTALL_PROGRAM) tex2rtf$(EXEEXT) $(DESTDIR)$(bindir)
 
 @COND_USE_GUI_1@tex2rtf_gui$(EXEEXT): $(TEX2RTF_GUI_OBJECTS) $(__tex2rtf_gui___win32rc)
-@COND_USE_GUI_1@	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_USE_GUI_1@	$(CXX) -o $@ $(TEX2RTF_GUI_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI)  $(__WXLIB_HTML_p) $(EXTRALIBS_HTML) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
 @COND_USE_GUI_1@	$(__tex2rtf_gui___mac_rezcmd)
 @COND_USE_GUI_1@	$(__tex2rtf_gui___mac_setfilecmd)
 @COND_USE_GUI_1@	$(__tex2rtf_gui___os2_emxbindcmd)

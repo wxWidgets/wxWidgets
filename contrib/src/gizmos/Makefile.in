@@ -93,6 +93,10 @@ GIZMOSLIB_ODEP =  $(___pch_wxprec_gizmoslib_wx_wxprec_h_gch___depname)
 @COND_PLATFORM_WIN32_1@	wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)
 @COND_PLATFORM_WIN32_0@WXDLLVERSIONTAG = -$(WX_RELEASE)
 @COND_PLATFORM_WIN32_1@WXDLLVERSIONTAG = 
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 COND_SHARED_1___gizmosdll___depname = \
 	$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3)
 @COND_SHARED_1@__gizmosdll___depname = $(COND_SHARED_1___gizmosdll___depname)
@@ -214,7 +218,7 @@ distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 @COND_SHARED_1@$(LIBDIRNAME)/$(DLLPREFIX)$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG)$(__gizmosdll___targetsuf3): $(GIZMOSDLL_OBJECTS)
-@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(GIZMOSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gizmosdll___macinstnamecmd) $(__gizmosdll___importlib) $(__gizmosdll___soname_flags) $(__gizmosdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI) $(__WXLIB_BASE_p)  $(__WXLIB_CORE_p)
+@COND_SHARED_1@	$(SHARED_LD_CXX) $@ $(GIZMOSDLL_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(__gizmosdll___macinstnamecmd) $(__gizmosdll___importlib) $(__gizmosdll___soname_flags) $(__gizmosdll___macver)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI) $(__WXLIB_BASE_p)  $(__WXLIB_CORE_p)
 @COND_SHARED_1@	
 @COND_SHARED_1@	$(__gizmosdll___so_symlinks_cmd)
 

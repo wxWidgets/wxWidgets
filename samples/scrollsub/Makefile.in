@@ -57,6 +57,10 @@ SCROLLSUB_OBJECTS =  \
 @COND_DEBUG_FLAG_1@WXDEBUGFLAG = d
 @COND_UNICODE_1@WXUNICODEFLAG = u
 @COND_WXUNIV_1@WXUNIVNAME = univ
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_BASE = $(EXTRALIBS)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
+@COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
 @COND_PLATFORM_MAC_1@__scrollsub___mac_setfilecmd = \
 @COND_PLATFORM_MAC_1@	$(SETFILE) -a C scrollsub$(EXEEXT)
 @COND_PLATFORM_MAC_1@__scrollsub___mac_rezcmd = $(__MACOSX_RESOURCES_p_1)
@@ -130,7 +134,7 @@ distclean: clean
 	rm -f configure config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 scrollsub$(EXEEXT): $(SCROLLSUB_OBJECTS) $(__scrollsub___win32rc)
-	$(CXX) -o $@ $(SCROLLSUB_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS) $(EXTRALIBS_GUI)
+	$(CXX) -o $@ $(SCROLLSUB_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE) $(EXTRALIBS_FOR_GUI)
 	$(__scrollsub___mac_rezcmd)
 	$(__scrollsub___mac_setfilecmd)
 	$(__scrollsub___os2_emxbindcmd)
