@@ -113,7 +113,6 @@ AC_DEFUN([AM_PATH_WXCONFIG],
 
   if test "$WX_CONFIG_PATH" != "no" ; then
     WX_VERSION=""
-    no_wx=""
 
     min_wx_version=ifelse([$1], ,2.2.1,$1)
     if test -z "$5" ; then
@@ -158,11 +157,20 @@ AC_DEFUN([AM_PATH_WXCONFIG],
       fi
     fi
 
-    if test "x$wx_ver_ok" = x ; then
-      no_wx=yes
-    else
+    if test -n "$wx_ver_ok"; then
+
+      AC_MSG_RESULT(yes (version $WX_VERSION))
       WX_LIBS=`$WX_CONFIG_WITH_ARGS --libs`
+
+      dnl is this even still appropriate?  --static is a real option now
+      dnl and WX_CONFIG_WITH_ARGS is likely to contain it if that is
+      dnl what the user actually wants, making this redundant at best.
+      dnl For now keep it in case anyone actually used it in the past.
+      AC_MSG_CHECKING([for wxWindows static library])
       WX_LIBS_STATIC=`$WX_CONFIG_WITH_ARGS --static --libs`
+      if test -n "$WX_LIBS_STATIC"; then
+        AC_MSG_RESULT(yes)
+      fi
 
       dnl starting with version 2.2.6 wx-config has --cppflags argument
       wx_has_cppflags=""
@@ -199,12 +207,11 @@ AC_DEFUN([AM_PATH_WXCONFIG],
          WX_CFLAGS_ONLY=`echo $WX_CFLAGS | sed "s@^$WX_CPPFLAGS *@@"`
          WX_CXXFLAGS_ONLY=`echo $WX_CXXFLAGS | sed "s@^$WX_CFLAGS *@@"`
       fi
-    fi
 
-    if test "x$no_wx" = x ; then
-       AC_MSG_RESULT(yes (version $WX_VERSION))
-       ifelse([$2], , :, [$2])
+      ifelse([$2], , :, [$2])
+
     else
+
        if test "x$WX_VERSION" = x; then
           dnl no wx-config at all
           AC_MSG_RESULT(no)
@@ -218,6 +225,7 @@ AC_DEFUN([AM_PATH_WXCONFIG],
        WX_LIBS=""
        WX_LIBS_STATIC=""
        ifelse([$3], , :, [$3])
+
     fi
   fi
 
