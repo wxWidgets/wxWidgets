@@ -196,8 +196,15 @@ wxDir::wxDir(const wxString& dirname)
 bool wxDir::Open(const wxString& dirname)
 {
     delete M_DIR;
+    m_data = NULL;
+    
+    if ( !wxDir::Exists(dirname) )
+    {
+        wxLogError(_("Directory '%s' doesn't exist!"), dirname.c_str());
+        return FALSE;
+    }
+    
     m_data = new wxDirData(dirname);
-
     return TRUE;
 }
 
