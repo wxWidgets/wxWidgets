@@ -522,11 +522,16 @@ long wxTextCtrl::XYToPosition(long x, long y) const
     return r+x;
 }
 
-void wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
+bool wxTextCtrl::PositionToXY(long pos, long *x, long *y) const
 {
     Position xx, yy;
     XmTextPosToXY((Widget) m_mainWidget, pos, &xx, &yy);
-    *x = xx; *y = yy;
+    if ( x )
+        *x = xx;
+    if ( y )
+        *y = yy;
+
+    return TRUE;
 }
 
 void wxTextCtrl::ShowPosition(long pos)

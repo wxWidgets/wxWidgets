@@ -20,7 +20,7 @@ WXDLLEXPORT_DATA(extern const char*) wxTextCtrlNameStr;
 WXDLLEXPORT_DATA(extern const char*) wxEmptyString;
 
 // Single-line text item
-class WXDLLEXPORT wxTextCtrl : public wxControl
+class WXDLLEXPORT wxTextCtrl : public wxTextCtrlBase
 {
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 
@@ -95,7 +95,7 @@ public:
     virtual bool IsModified() const;
 
     virtual long XYToPosition(long x, long y) const;
-    virtual void PositionToXY(long pos, long *x, long *y) const;
+    virtual bool PositionToXY(long pos, long *x, long *y) const;
     virtual void ShowPosition(long pos);
     virtual void Clear();
 

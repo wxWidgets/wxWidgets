@@ -217,7 +217,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
 {
     wxCHECK_MSG( parent, FALSE, "can't create wxWindow without parent" );
 
-    CreateBase(parent, id, pos, size, style, name);
+    CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
     parent->AddChild(this);
 

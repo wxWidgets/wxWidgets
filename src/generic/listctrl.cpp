@@ -1146,7 +1146,7 @@ void wxListMainWindow::DeleteLine( wxListLineData *line )
 void wxListMainWindow::EditLabel( long item )
 {
     wxNode *node = m_lines.Nth( item );
-    wxCHECK_MSG( node, (wxTextCtrl *)NULL, _T("wrong index in wxListCtrl::Edit()") );
+    wxCHECK_RET( node, _T("wrong index in wxListCtrl::Edit()") );
     
     m_currentEdit = (wxListLineData*) node->Data();
 

@@ -4,6 +4,11 @@
 // Purpose: GSocket: Motif part
 // CVSID:   $Id$
 // -------------------------------------------------------------------------
+
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS
+
 #include <stdlib.h>
 #include <X11/Intrinsic.h>
 #include <wx/gsocket.h>
@@ -113,3 +118,5 @@ unsigned long GSocket_GetEventID(GSocket *socket)
 void GSocket_DoEvent(unsigned long evt_id)
 {
 }
+
+#endif // wxUSE_SOCKETS

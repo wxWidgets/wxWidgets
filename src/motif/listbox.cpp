@@ -226,7 +226,7 @@ void wxListBox::Append(const wxString& item)
     m_noItems ++;
 }
 
-void wxListBox::Append(const wxString& item, char *clientData)
+void wxListBox::Append(const wxString& item, void *clientData)
 {
     int width1, height1;
     int width2, height2;
@@ -272,7 +272,7 @@ void wxListBox::Append(const wxString& item, char *clientData)
     m_noItems ++;
 }
 
-void wxListBox::Set(int n, const wxString *choices, char** clientData)
+void wxListBox::Set(int n, const wxString *choices, void** clientData)
 {
     m_clientDataList.Clear();
     int width1, height1;
@@ -427,16 +427,16 @@ void wxListBox::Deselect(int N)
     XmListDeselectPos ((Widget) m_mainWidget, N + 1);
 }
 
-char *wxListBox::GetClientData(int N) const
+void *wxListBox::GetClientData(int N) const
 {
     wxNode *node = m_clientDataList.Find ((long) N);
     if (node)
-        return (char *) node->Data ();
+        return (void *) node->Data ();
     else
         return NULL;
 }
 
-void wxListBox::SetClientData(int N, char *Client_data)
+void wxListBox::SetClientData(int N, void *Client_data)
 {
     wxNode *node = m_clientDataList.Find ((long) N);
     if (node)

@@ -6,6 +6,10 @@
  * -------------------------------------------------------------------------
  */
 
+#include "wx/setup.h"
+
+#if wxUSE_SOCKETS
+
 #include <assert.h>
 #include <sys/ioctl.h>
 #include <sys/types.h>
@@ -35,7 +39,6 @@
 
 #include <signal.h>
 
-#include "wx/setup.h"
 #include "wx/gsocket.h"
 #include "gsockunx.h"
 
@@ -968,3 +971,5 @@ GSocketError GAddress_UNIX_GetPath(GAddress *address, char *path, size_t sbuf)
 
   return GSOCK_NOERROR;
 }
+
+#endif // wxUSE_SOCKETS
