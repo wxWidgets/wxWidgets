@@ -244,7 +244,7 @@ const wxCharBuffer wxMBConv::cWC2MB(const wchar_t *pwz) const
     // return value excludes NUL
     size_t nLen = pwz ? WC2MB((char *) NULL, pwz, 0) : (size_t)-1;
     if (nLen == (size_t)-1)
-        return wxCharBuffer(NULL);
+        return wxCharBuffer((const char *)NULL);
 
     wxCharBuffer buf(nLen);                      // this allocates nLen+1
     WC2MB((char *)(const char *) buf, pwz, nLen+1);

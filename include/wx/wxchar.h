@@ -643,17 +643,17 @@ WXDLLEXPORT bool wxOKlibc(); // for internal use
     int wxVfprintf( FILE *stream, const wxChar *format, va_list ap );
     int wxVprintf( const wxChar *format, va_list ap );
     int wxVsprintf( wxChar *str, const wxChar *format, va_list ap );
-
-    // these 2 can be simply mapped to the versions with underscore at the end
-    // if we don't have to do the conversion
-    #ifdef wxNEED_PRINTF_CONVERSION
-        int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_4;
-        int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
-    #else
-        #define wxSnprintf wxSnprintf_
-        #define wxVsnprintf wxVsnprintf_
-    #endif
 #endif // wxNEED_PRINTF_CONVERSION
+
+// these 2 can be simply mapped to the versions with underscore at the end
+// if we don't have to do the conversion
+#ifdef wxNEED_PRINTF_CONVERSION
+    int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_4;
+    int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
+#else
+    #define wxSnprintf wxSnprintf_
+    #define wxVsnprintf wxVsnprintf_
+#endif
 
 // ----------------------------------------------------------------------------
 // various functions which might not be available in libc and for which we
