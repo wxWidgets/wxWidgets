@@ -129,7 +129,8 @@ DECLARE_CLASS(wxExtHelpController)
        @key k string to search for, empty string will list all entries
        @return true on success
    */
-   virtual bool KeywordSearch(const wxString& k);
+   virtual bool KeywordSearch(const wxString& k,
+                              wxHelpSearchMode mode = wxHELP_SEARCH_ALL);
 
    /// does nothing
    virtual bool Quit(void);
