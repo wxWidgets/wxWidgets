@@ -1419,7 +1419,7 @@ void wxHtmlHelpFrame::OnToolbar(wxCommandEvent& event)
                         &m_Data->GetContentsArray()[ind];
                     while (ind >= 0 && it->level != level)
                     {
-                        ind--, it--;
+                        ind--;
                         it = &m_Data->GetContentsArray()[ind];
                     }
                     if (ind >= 0)
