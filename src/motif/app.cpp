@@ -18,19 +18,8 @@
 #define XtDisplay XTDISPLAY
 #endif
 
-#include "wx/frame.h"
 #include "wx/app.h"
 #include "wx/utils.h"
-#include "wx/gdicmn.h"
-#include "wx/pen.h"
-#include "wx/brush.h"
-#include "wx/cursor.h"
-#include "wx/icon.h"
-#include "wx/palette.h"
-#include "wx/dc.h"
-#include "wx/dialog.h"
-#include "wx/msgdlg.h"
-#include "wx/log.h"
 #include "wx/module.h"
 #include "wx/memory.h"
 #include "wx/log.h"
@@ -114,9 +103,6 @@ bool wxApp::Initialize()
 
 void wxApp::CleanUp()
 {
-    delete wxWidgetHashTable;
-    wxWidgetHashTable = NULL;
-
     wxModule::CleanUpModules();
 
     wxDeleteStockObjects() ;
@@ -132,6 +118,9 @@ void wxApp::CleanUp()
 
     delete wxTheApp;
     wxTheApp = NULL;
+
+    delete wxWidgetHashTable;
+    wxWidgetHashTable = NULL;
 
     // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
@@ -159,7 +148,11 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 }
 
-int wxEntry( int argc, char *argv[] )
+// ============================================================================
+// wxEntry*
+// ============================================================================
+
+int wxEntryStart( int argc, char* argv[] )
 {
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
     // This seems to be necessary since there are 'rogue'
@@ -172,7 +165,41 @@ int wxEntry( int argc, char *argv[] )
 #endif
 
     if (!wxApp::Initialize())
-        return FALSE;
+        return -1;
+
+    return 0;
+}
+
+int wxEntryInitGui()
+{
+    int retValue = 0;
+
+    // GUI-specific initialization, such as creating an app context.
+    if (!wxTheApp->OnInitGui())
+        retValue = -1;
+
+    return retValue;
+}
+
+void wxEntryCleanup()
+{
+    // So dialog boxes aren't used for further messages
+    delete wxLog::SetActiveTarget(new wxLogStderr);
+
+    // flush the logged messages if any
+    wxLog *pLog = wxLog::GetActiveTarget();
+    if ( pLog != NULL && pLog->HasPendingMessages() )
+        pLog->Flush();
+
+    wxApp::CleanUp();
+}
+
+int wxEntry( int argc, char *argv[] )
+{
+    int retValue = 0;
+
+    retValue = wxEntryStart( argc, argv );
+    if (retValue) return retValue;
 
     if (!wxTheApp)
     {
@@ -198,24 +225,17 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->argv = argv;
 
     // GUI-specific initialization, such as creating an app context.
-    wxTheApp->OnInitGui();
+    retValue = wxEntryInitGui();
+    if (retValue) return retValue;
 
     // Here frames insert themselves automatically into wxTopLevelWindows by
     // getting created in OnInit().
 
-    int retValue = 0;
     if (wxTheApp->OnInit())
     {
-        if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
+        if (wxTheApp->Initialized())
+            wxTheApp->OnRun();
     }
-
-    // flush the logged messages if any
-    wxLog *pLog = wxLog::GetActiveTarget();
-    if ( pLog != NULL && pLog->HasPendingMessages() )
-        pLog->Flush();
-
-    // So dialog boxes aren't used for further messages
-    delete wxLog::SetActiveTarget(new wxLogStderr);
 
     if (wxTheApp->GetTopWindow())
     {
@@ -225,12 +245,12 @@ int wxEntry( int argc, char *argv[] )
 
     wxTheApp->DeletePendingObjects();
 
-    wxTheApp->OnExit();
+    retValue = wxTheApp->OnExit();
 
-    wxApp::CleanUp();
+    wxEntryCleanup();
 
     return retValue;
-};
+}
 
 // Static member initialization
 wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
@@ -300,7 +320,8 @@ bool wxApp::ProcessIdle()
 
 void wxApp::ExitMainLoop()
 {
-    m_eventLoop->Exit();
+    if( m_eventLoop->IsRunning() )
+        m_eventLoop->Exit();
 }
 
 // Is a message/event pending?

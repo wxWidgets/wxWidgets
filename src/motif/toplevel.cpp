@@ -66,8 +66,6 @@ static void wxTLWEventHandler( Widget wid,
 
 void wxTopLevelWindowMotif::PreDestroy()
 {
-    wxTopLevelWindows.DeleteObject(this);
-
     if ( (GetWindowStyleFlag() & wxDIALOG_MODAL) != wxDIALOG_MODAL )
         wxModelessWindows.DeleteObject(this);
 
@@ -90,17 +88,6 @@ void wxTopLevelWindowMotif::PreDestroy()
 wxTopLevelWindowMotif::~wxTopLevelWindowMotif()
 {
     SetMainWidget( (WXWidget)0 );
-
-    // If this is the last top-level window, exit.
-    if (wxTheApp && (wxTopLevelWindows.GetCount() == 0))
-    {
-        wxTheApp->SetTopWindow(NULL);
-
-        if (wxTheApp->GetExitOnFrameDelete())
-        {
-            wxTheApp->ExitMainLoop();
-        }
-    }
 }
 
 void wxTopLevelWindowMotif::Init()
