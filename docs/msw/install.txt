@@ -396,7 +396,7 @@ Borland C++Builder compilation
 
 2. You can build samples using the makefiles as per the
    instructions for BC++ above, or you can follow the instructions
-   in docs/tech/tn0004.htm or http://biolpc22.york.ac.uk/wx/bc/.
+   in docs/tech/tn0004.htm or http://biolpc22.york.ac.uk/wx/bc/ide.html.
 
 Watcom C++ 10.6/11 compilation
 ---------------------------
@@ -485,13 +485,13 @@ Cygwin b19/b20/Mingw32 compilation
 ----------------------------------
 
 wxWindows 2 supports Cygwin (formerly GnuWin32) b19, b20, Mingw32,
-and Mingw32/EGCS.
+and Mingw32/EGCS. Cygwin 1.1.0 and 1.1.1 are not yet supported.
 
 Thanks are due to Keith Garry Boyce (garp@opustel.com) and Cygnus for making
 it all possible.
 
-From wxWindows 2.0 beta 9, both Cygwin and Mingw32 (the minimal
-distribution of Cygwin) can be used with the same makefiles.
+Both Cygwin and Mingw32 (the minimal distribution of Cygwin) can be used
+with the same makefiles.
 
 Here are the steps required:
 
