@@ -10,7 +10,8 @@
 /////////////////////////////////////////////////////////////////////////////
 
 #ifdef __GNUG__
-#pragma implementation "app.h"
+    #pragma implementation "app.h"
+    #pragma implementation "appbase.h"
 #endif
 
 #include "wx/frame.h"
@@ -77,7 +78,7 @@ bool wxApp::Initialize()
 
     wxClassInfo::InitializeClasses();
 
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to 
+    // GL: I'm annoyed ... I don't know where to put this and I don't want to
     // create a module for that as it's part of the core.
 #if wxUSE_THREADS
     wxPendingEvents = new wxList();
@@ -261,7 +262,7 @@ int wxEntry( int argc, char *argv[] )
 };
 
 // Static member initialization
-wxAppInitializerFunction wxApp::m_appInitFn = (wxAppInitializerFunction) NULL;
+wxAppInitializerFunction wxAppBase::m_appInitFn = (wxAppInitializerFunction) NULL;
 
 wxApp::wxApp()
 {
@@ -272,9 +273,7 @@ wxApp::wxApp()
     m_appName = "";
     argc = 0;
     argv = NULL;
-    m_printMode = wxPRINT_POSTSCRIPT;
     m_exitOnFrameDelete = TRUE;
-    m_auto3D = TRUE;
 
     m_mainColormap = (WXColormap) NULL;
     m_appContext = (WXAppContext) NULL;
@@ -339,10 +338,24 @@ void wxApp::ProcessXEvent(WXEvent* _event)
 {
     XEvent* event = (XEvent*) _event;
 
-    if ((event->type == KeyPress) && CheckForAccelerator(_event))
+    if (event->type == KeyPress)
     {
-        // Do nothing! We intercepted and processed the event as an accelerator.
+      if (CheckForAccelerator(_event))
+      {
+        // Do nothing! We intercepted and processed the event as an
+        // accelerator.
         return;
+      }
+      else if (CheckForKeyDown(_event))
+      {
+        // We intercepted and processed the key down event
+        return;
+      }
+      else
+      {
+        XtDispatchEvent(event);
+        return;
+      }
     }
     else if (event->type == PropertyNotify)
     {
@@ -351,10 +364,10 @@ void wxApp::ProcessXEvent(WXEvent* _event)
     }
     else if (event->type == ResizeRequest)
     {
-    /* Terry Gitnick <terryg@scientech.com> - 1/21/98
-    * If resize event, don't resize until the last resize event for this
-    * window is recieved. Prevents flicker as windows are resized.
-        */
+        /* Terry Gitnick <terryg@scientech.com> - 1/21/98
+         * If resize event, don't resize until the last resize event for this
+         * window is recieved. Prevents flicker as windows are resized.
+         */
 
         Display *disp = XtDisplay((Widget) wxTheApp->GetTopLevelWidget());
         Window win = event->xany.window;
@@ -527,21 +540,6 @@ void wxApp::ProcessPendingEvents()
 }
 #endif // wxUSE_THREADS
 
-wxLog* wxApp::CreateLogTarget()
-{
-    return new wxLogGui;
-}
-
-wxWindow* wxApp::GetTopWindow() const
-{
-    if (m_topWindow)
-        return m_topWindow;
-    else if (wxTopLevelWindows.GetCount() > 0)
-        return wxTopLevelWindows.GetFirst()->GetData();
-    else
-        return NULL;
-}
-
 // Create an application context
 bool wxApp::OnInitGui()
 {
@@ -631,6 +629,37 @@ bool wxApp::CheckForAccelerator(WXEvent* event)
     return FALSE;
 }
 
+bool wxApp::CheckForKeyDown(WXEvent* event)
+{
+    XEvent* xEvent = (XEvent*) event;
+    // VZ: this code doesn't work for me because it never finds the correct
+    //     window. Also, if we go this way, we should generate KEY_UP and
+    //     CHAR events as well, not only KEY_DOWN.
+#if 0
+    if (xEvent->xany.type == KeyPress)
+    {
+      Widget widget = XtWindowToWidget((Display*) wxGetDisplay(),
+                                       xEvent->xany.window);
+      wxWindow* win = NULL;
+
+      // Find the first wxWindow that corresponds to this event window
+      while (widget && !(win = wxGetWindowFromTable(widget)))
+          widget = XtParent(widget);
+
+      if (!widget || !win)
+          return FALSE;
+
+      wxKeyEvent keyEvent(wxEVT_KEY_DOWN);
+      wxTranslateKeyEvent(keyEvent, win, (Widget) 0, xEvent);
+
+      win->ProcessEvent( keyEvent );
+      return (keyEvent.GetSkipped() != TRUE);
+    }
+#endif // 0
+
+    return FALSE;
+}
+
 void wxExit()
 {
     int retValue = 0;
@@ -659,3 +688,32 @@ bool wxYield()
     return TRUE;
 }
 
+// TODO use XmGetPixmap (?) to get the really standard icons!
+
+#include "wx/generic/info.xpm"
+#include "wx/generic/error.xpm"
+#include "wx/generic/question.xpm"
+#include "wx/generic/warning.xpm"
+
+wxIcon
+wxApp::GetStdIcon(int which) const
+{
+    switch(which)
+    {
+        case wxICON_INFORMATION:
+            return wxIcon(info_xpm);
+
+        case wxICON_QUESTION:
+            return wxIcon(question_xpm);
+
+        case wxICON_EXCLAMATION:
+            return wxIcon(warning_xpm);
+
+        default:
+            wxFAIL_MSG("requested non existent standard icon");
+            // still fall through
+
+        case wxICON_HAND:
+            return wxIcon(error_xpm);
+    }
+}

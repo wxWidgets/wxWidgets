@@ -569,8 +569,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(TEXT_TOOLTIPS_ENABLE,    MyFrame::OnToggleTooltips)
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_CLIPBOARD
     EVT_MENU(TEXT_CLIPBOARD_PASTE,    MyFrame::OnPasteFromClipboard)
     EVT_MENU(TEXT_CLIPBOARD_COPY,     MyFrame::OnCopyToClipboard)
+#endif // wxUSE_CLIPBOARD
+
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
     EVT_MENU(TEXT_MOVE_ENDENTRY,      MyFrame::OnMoveToEndOfEntry)
 

@@ -12,7 +12,7 @@ SUFFIXES = .cpp .c
 DEFS = $(TOOLKIT_DEF) $(WXDEBUG_DEFINE)
 LIBS = $(GUILIBS)
 
-VPATH = .:${srcdir}:${srcdir}/xmcombo:${srcdir}/../common:${srcdir}/../generic:${EXTRA_VPATH}
+VPATH = .:${srcdir}:${srcdir}/xmcombo:${srcdir}/../common:${srcdir}/../generic:${srcdir}/../html:${EXTRA_VPATH}
 
 EXTRA_DIST = "${srcdir}/../common ${srcdir}/../generic ${srcdir}"
 

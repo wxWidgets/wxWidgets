@@ -251,6 +251,26 @@ protected:
 #endif
 
 // ----------------------------------------------------------------------------
+// the global data
+// ----------------------------------------------------------------------------
+
+// the one and only application object - use of wxTheApp in application code
+// is discouraged, consider using DECLARE_APP() after which you may call
+// wxGetApp() which will return the object of the correct type (i.e. MyApp and
+// not wxApp)
+WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
+
+// ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+// Force an exit from main loop
+void WXDLLEXPORT wxExit();
+
+// Yield to other apps/messages
+bool WXDLLEXPORT wxYield();
+
+// ----------------------------------------------------------------------------
 // macros for dynamic creation of the application object
 // ----------------------------------------------------------------------------
 

@@ -16,8 +16,6 @@
 #pragma interface "app.h"
 #endif
 
-#include "wx/defs.h"
-#include "wx/object.h"
 #include "wx/event.h"
 #include "wx/icon.h"
 
@@ -26,14 +24,6 @@ class WXDLLEXPORT wxWindow;
 class WXDLLEXPORT wxApp ;
 class WXDLLEXPORT wxKeyEvent;
 class WXDLLEXPORT wxLog;
-
-WXDLLEXPORT_DATA(extern wxApp*) wxTheApp;
-
-// Force an exit from main loop
-void WXDLLEXPORT wxExit();
-
-// Yield to other apps/messages
-bool WXDLLEXPORT wxYield();
 
 // Represents the application. Derive OnInit and declare
 // a new App object to start application

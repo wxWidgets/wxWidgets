@@ -58,7 +58,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar, wxEvtHandler)
 // Menus
 
 // Construct a menu with optional title (then use append)
-wxMenu::wxMenu(const wxString& title, const wxFunction func)
+void wxMenu::Init(const wxString& title,
+                  long style
+#ifdef WXWIN_COMPATIBILITY
+                  , const wxFunction func
+#endif
+                 )
 {
     m_title = title;
     m_parent = (wxEvtHandler*) NULL;
@@ -66,6 +71,7 @@ wxMenu::wxMenu(const wxString& title, const wxFunction func)
     m_noItems = 0;
     m_menuBar = NULL;
     m_pInvokingWindow = NULL;
+    m_style = style;
 
     //// Motif-specific members
     m_numColumns = 1;
@@ -87,7 +93,9 @@ wxMenu::wxMenu(const wxString& title, const wxFunction func)
     m_foregroundColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_MENUTEXT);
     m_font = wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT);
 
+#ifdef WXWIN_COMPATIBILITY
     Callback(func);
+#endif
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
@@ -424,72 +432,6 @@ void wxMenu::UpdateUI(wxEvtHandler* source)
     }
     node = node->Next();
   }
-}
-
-bool wxWindow::PopupMenu(wxMenu *menu, int x, int y)
-{
-    Widget widget = (Widget) GetMainWidget();
-
-    /* The menuId field seems to be usused, so we'll use it to
-    indicate whether a menu is popped up or not:
-    0: Not currently created as a popup
-    -1: Created as a popup, but not active
-    1: Active popup.
-    */
-
-    if (menu->GetParent() && (menu->GetId() != -1))
-        return FALSE;
-
-    if (menu->GetMainWidget()) {
-        menu->DestroyMenu(TRUE);
-    }
-
-    menu->SetId(1); /* Mark as popped-up */
-    menu->CreateMenu(NULL, widget, menu);
-    menu->SetInvokingWindow(this);
-
-    menu->UpdateUI();
-
-    //  menu->SetParent(parent);
-    //  parent->children->Append(menu);  // Store menu for later deletion
-
-    Widget menuWidget = (Widget) menu->GetMainWidget();
-
-    int rootX = 0;
-    int rootY = 0;
-
-    int deviceX = x;
-    int deviceY = y;
-    /*
-    if (this->IsKindOf(CLASSINFO(wxCanvas)))
-    {
-    wxCanvas *canvas = (wxCanvas *) this;
-    deviceX = canvas->GetDC ()->LogicalToDeviceX (x);
-    deviceY = canvas->GetDC ()->LogicalToDeviceY (y);
-    }
-    */
-
-    Display *display = XtDisplay (widget);
-    Window rootWindow = RootWindowOfScreen (XtScreen((Widget)widget));
-    Window thisWindow = XtWindow (widget);
-    Window childWindow;
-    XTranslateCoordinates (display, thisWindow, rootWindow, (int) deviceX, (int) deviceY,
-        &rootX, &rootY, &childWindow);
-
-    XButtonPressedEvent event;
-    event.type = ButtonPress;
-    event.button = 1;
-
-    event.x = deviceX;
-    event.y = deviceY;
-
-    event.x_root = rootX;
-    event.y_root = rootY;
-
-    XmMenuPosition (menuWidget, &event);
-    XtManageChild (menuWidget);
-
-    return TRUE;
 }
 
 // Menu Bar
@@ -836,13 +778,20 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         wxString title(m_titles[i]);
         menu->SetButtonWidget(menu->CreateMenu (this, menuBarW, menu, title, TRUE));
 
-        /*
-        * COMMENT THIS OUT IF YOU DON'T LIKE A RIGHT-JUSTIFIED HELP MENU
-        */
         wxStripMenuCodes ((char*) (const char*) title, wxBuffer);
 
         if (strcmp (wxBuffer, "Help") == 0)
             XtVaSetValues ((Widget) menuBarW, XmNmenuHelpWidget, (Widget) menu->GetButtonWidget(), NULL);
+
+        // tear off menu support
+#if (XmVersion >= 1002)
+        if ( menu->IsTearOff() )
+        {
+            XtVaSetValues(GetWidget(menu),
+                          XmNtearOffModel, XmTEAR_OFF_ENABLED,
+                          NULL);
+#endif
+        }
     }
 
     SetBackgroundColour(m_backgroundColour);

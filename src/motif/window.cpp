@@ -53,6 +53,7 @@
 #include <Xm/ScrollBar.h>
 #include <Xm/Frame.h>
 #include <Xm/Label.h>
+#include <Xm/RowColumn.h>           // for XmMenuPosition
 
 #include "wx/motif/private.h"
 
@@ -368,6 +369,9 @@ wxWindow::~wxWindow()
     }
 
     ClearUpdateRects();
+
+    if ( m_parent )
+        m_parent->RemoveChild( this );
 
     // If m_drawingArea, we're a fully-fledged window with drawing area,
     // scrollbars etc. (what wxCanvas used to be)
@@ -1039,6 +1043,76 @@ void wxWindow::DoSetToolTip(wxToolTip * WXUNUSED(tooltip))
 }
 
 #endif // wxUSE_TOOLTIPS
+
+// ----------------------------------------------------------------------------
+// popup menus
+// ----------------------------------------------------------------------------
+
+bool wxWindow::DoPopupMenu(wxMenu *menu, int x, int y)
+{
+    Widget widget = (Widget) GetMainWidget();
+
+    /* The menuId field seems to be usused, so we'll use it to
+    indicate whether a menu is popped up or not:
+    0: Not currently created as a popup
+    -1: Created as a popup, but not active
+    1: Active popup.
+    */
+
+    if (menu->GetParent() && (menu->GetId() != -1))
+        return FALSE;
+
+    if (menu->GetMainWidget()) {
+        menu->DestroyMenu(TRUE);
+    }
+
+    menu->SetId(1); /* Mark as popped-up */
+    menu->CreateMenu(NULL, widget, menu);
+    menu->SetInvokingWindow(this);
+
+    menu->UpdateUI();
+
+    //  menu->SetParent(parent);
+    //  parent->children->Append(menu);  // Store menu for later deletion
+
+    Widget menuWidget = (Widget) menu->GetMainWidget();
+
+    int rootX = 0;
+    int rootY = 0;
+
+    int deviceX = x;
+    int deviceY = y;
+    /*
+    if (this->IsKindOf(CLASSINFO(wxCanvas)))
+    {
+    wxCanvas *canvas = (wxCanvas *) this;
+    deviceX = canvas->GetDC ()->LogicalToDeviceX (x);
+    deviceY = canvas->GetDC ()->LogicalToDeviceY (y);
+    }
+    */
+
+    Display *display = XtDisplay (widget);
+    Window rootWindow = RootWindowOfScreen (XtScreen((Widget)widget));
+    Window thisWindow = XtWindow (widget);
+    Window childWindow;
+    XTranslateCoordinates (display, thisWindow, rootWindow, (int) deviceX, (int) deviceY,
+        &rootX, &rootY, &childWindow);
+
+    XButtonPressedEvent event;
+    event.type = ButtonPress;
+    event.button = 1;
+
+    event.x = deviceX;
+    event.y = deviceY;
+
+    event.x_root = rootX;
+    event.y_root = rootY;
+
+    XmMenuPosition (menuWidget, &event);
+    XtManageChild (menuWidget);
+
+    return TRUE;
+}
 
 // ---------------------------------------------------------------------------
 // moving and resizing

@@ -72,5 +72,37 @@ extern XColor itemColors[5] ;
 #define wxTOPS_INDEX 3
 #define wxBOTS_INDEX 4
 
+// ----------------------------------------------------------------------------
+// utility classes
+// ----------------------------------------------------------------------------
+
+// XmString made easy to use in wxWindows (and has an added benefit of
+// cleaning up automatically)
+class wxXmString
+{
+public:
+    wxXmString(const wxString& str)
+    {
+        m_string = XmStringCreateLtoR((char *)str.c_str(),
+                                      XmSTRING_DEFAULT_CHARSET);
+    }
+
+    ~wxXmString() { XmStringFree(m_string); }
+
+    // semi-implicit conversion to XmString (shouldn't rely on implicit
+    // conversion because many of Motif functions are macros)
+    XmString operator()() const { return m_string; }
+
+private:
+    XmString m_string;
+};
+
+// ----------------------------------------------------------------------------
+// macros to avoid casting WXFOO to Foo all the time
+// ----------------------------------------------------------------------------
+
+// argument is of type "wxWindow *"
+#define GetWidget(w)    ((Widget)(w)->GetHandle())
+
 #endif
     // _WX_PRIVATE_H_

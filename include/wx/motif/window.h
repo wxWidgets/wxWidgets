@@ -91,8 +91,6 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const;
 
-    virtual bool PopupMenu( wxMenu *menu, int x, int y );
-
     virtual void SetScrollbar( int orient, int pos, int thumbVisible,
                                int range, bool refresh = TRUE );
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
@@ -319,6 +317,7 @@ protected:
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
     virtual void DoSetClientSize(int width, int height);
+    virtual bool DoPopupMenu(wxMenu *menu, int x, int y);
 
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
