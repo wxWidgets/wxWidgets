@@ -81,6 +81,9 @@ Cygwin/Mingw32 to quickly locate the instructions for your compiler.
 Microsoft Visual C++ compilation
 --------------------------------
 
+You may wish to visit http://wiki.wxwindows.org/wiki.pl?MSVC for a more
+informal and more detailed description of the process summarized below.
+
 Please note that the VC++ 6.0 project files will work for VC++ .NET also, but
 you must open the .dsp files and not the .dsw files and in this case you will
 need to manually build the other .dsp on which wxWindows.dsp depends: jpeg,
