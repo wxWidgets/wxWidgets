@@ -2511,6 +2511,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/sound_sdl.cpp
 </set>
 
+<set var="GTK_PRINT_SRC_GNOME" hints="files">
+    src/gtk/gnome/gprint.cpp
+</set>
+
 <!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
@@ -2713,6 +2717,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <set var="PLUGIN_ADV_SRC">
         <if cond="FORMAT=='autoconf' and PLATFORM_UNIX=='1' and USE_PLUGINS=='0'">
             $(UNIX_SOUND_SRC_SDL)
+            $(GTK_PRINT_SRC_GNOME)
         </if>
     </set>
 

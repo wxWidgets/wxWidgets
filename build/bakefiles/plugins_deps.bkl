@@ -10,6 +10,7 @@
     <set var="PLUGIN_ADV_EXTRALIBS">
         <if cond="USE_PLUGINS=='0'">
             $(EXTRALIBS_SDL)
+            $(EXTRALIBS_GNOMEPRINT)
         </if>
     </set>
 

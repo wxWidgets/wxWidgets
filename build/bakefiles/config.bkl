@@ -230,6 +230,7 @@ to run the tests, include CppUnit library here.
         <option name="EXTRALIBS_GUI"/>
         <option name="EXTRALIBS_OPENGL"/>
         <option name="EXTRALIBS_SDL"/>
+        <option name="EXTRALIBS_GNOMEPRINT"/>
         <option name="HOST_SUFFIX"/>
         <option name="SAMPLES_RPATH_FLAG"/>
         <option name="SAMPLES_RPATH_POSTLINK"/>
@@ -280,6 +281,7 @@ it if SHARED=1 unless you know what you are doing.
             <if cond="COMPILER=='gcc'">-lopengl32 -lglu32</if>
         </set>
         <set var="EXTRALIBS_SDL"/>
+        <set var="EXTRALIBS_GNOMEPRINT"/>
 
         <set var="WITH_PLUGIN_SDL">0</set>
 
