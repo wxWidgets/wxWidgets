@@ -21,7 +21,9 @@
 
 #if wxUSE_XRC
 
+#ifndef __WXWINCE__
 #include <locale.h>
+#endif
 
 #include "wx/dialog.h"
 #include "wx/panel.h"
@@ -796,11 +798,11 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
                 case wxT('n'):
                     str2 << wxT('\n');
                     break;
-                    
+
                 case wxT('t'):
                     str2 << wxT('\t');
                     break;
-                    
+
                 case wxT('r'):
                     str2 << wxT('\r');
                     break;
@@ -813,7 +815,7 @@ wxString wxXmlResourceHandler::GetText(const wxString& param, bool translate)
                         break;
                     }
                     // else fall-through to default: branch below
-    
+
                 default:
                     str2 << wxT('\\') << *dt;
                     break;
@@ -860,18 +862,22 @@ long wxXmlResourceHandler::GetLong(const wxString& param, long defaultv)
 
     return value;
 }
-    
+
 float wxXmlResourceHandler::GetFloat(const wxString& param, float defaultv)
 {
     double value;
     wxString str1 = GetParamValue(param);
 
+#ifndef __WXWINCE__
     const char *prevlocale = setlocale(LC_NUMERIC, "C");
-    
+#endif
+
     if (!str1.ToDouble(&value))
         value = defaultv;
 
+#ifndef __WXWINCE__
     setlocale(LC_NUMERIC, prevlocale);
+#endif
 
     return value;
 }
@@ -964,7 +970,7 @@ wxColour wxXmlResourceHandler::GetColour(const wxString& param)
         wxColour clr = GetSystemColour(v);
         if (clr.Ok())
             return clr;
- 
+
         wxLogError(_("XRC resource: Incorrect colour specification '%s' for property '%s'."),
                    v.c_str(), param.c_str());
         return wxNullColour;
@@ -993,7 +999,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
                 scl = defaultArtClient;
             else
                 scl = wxART_MAKE_CLIENT_ID_FROM_STR(scl);
-            
+
             wxBitmap stockArt =
                 wxArtProvider::GetBitmap(wxART_MAKE_ART_ID_FROM_STR(sid),
                                          scl, size);
@@ -1004,7 +1010,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
 
     /* ...or load the bitmap from file: */
     wxString name = GetParamValue(param);
-    if (name.IsEmpty()) return wxNullBitmap;
+    if (name.empty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
     wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
     if (fsfile == NULL)
@@ -1079,7 +1085,7 @@ wxString wxXmlResourceHandler::GetNodeContent(wxXmlNode *node)
 
 wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 {
-    if (param.IsEmpty())
+    if (param.empty())
         return GetNodeContent(m_node);
     else
         return GetNodeContent(GetParamNode(param));
@@ -1090,7 +1096,7 @@ wxString wxXmlResourceHandler::GetParamValue(const wxString& param)
 wxSize wxXmlResourceHandler::GetSize(const wxString& param)
 {
     wxString s = GetParamValue(param);
-    if (s.IsEmpty()) s = wxT("-1,-1");
+    if (s.empty()) s = wxT("-1,-1");
     bool is_dlg;
     long sx, sy = 0;
 
@@ -1130,7 +1136,7 @@ wxPoint wxXmlResourceHandler::GetPosition(const wxString& param)
 wxCoord wxXmlResourceHandler::GetDimension(const wxString& param, wxCoord defaultv)
 {
     wxString s = GetParamValue(param);
-    if (s.IsEmpty()) return defaultv;
+    if (s.empty()) return defaultv;
     bool is_dlg;
     long sx;
 
@@ -1195,7 +1201,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     // size
     int isize = wxDEFAULT;
     bool hasSize = HasParam(wxT("size"));
-    if (hasSize) 
+    if (hasSize)
         isize = GetLong(wxT("size"), wxDEFAULT);
 
     // style
@@ -1204,9 +1210,9 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     if (hasStyle)
     {
         wxString style = GetParamValue(wxT("style"));
-        if (style == wxT("italic")) 
+        if (style == wxT("italic"))
             istyle = wxITALIC;
-        else if (style == wxT("slant")) 
+        else if (style == wxT("slant"))
             istyle = wxSLANT;
     }
 
@@ -1216,12 +1222,12 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     if (hasWeight)
     {
         wxString weight = GetParamValue(wxT("weight"));
-        if (weight == wxT("bold")) 
+        if (weight == wxT("bold"))
             iweight = wxBOLD;
-        else if (weight == wxT("light")) 
+        else if (weight == wxT("light"))
             iweight = wxLIGHT;
     }
-   
+
     // underline
     bool hasUnderlined = HasParam(wxT("underlined"));
     bool underlined = hasUnderlined ? GetBool(wxT("underlined"), false) : false;
@@ -1239,8 +1245,8 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
         else if (family == wxT("modern")) ifamily = wxMODERN;
         else if (family == wxT("teletype")) ifamily = wxTELETYPE;
     }
-    
-    
+
+
     wxString facename;
     bool hasFacename = HasParam(wxT("face"));
     if (hasFacename)
@@ -1267,7 +1273,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
     {
         wxString encoding = GetParamValue(wxT("encoding"));
         wxFontMapper mapper;
-        if (!encoding.IsEmpty())
+        if (!encoding.empty())
             enc = mapper.CharsetToEncoding(encoding);
         if (enc == wxFONTENCODING_SYSTEM)
             enc = wxFONTENCODING_DEFAULT;
@@ -1275,7 +1281,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
 
     // is this font based on a system font?
     wxFont sysfont = GetSystemFont(GetParamValue(wxT("sysfont")));
-    
+
     if (sysfont.Ok())
     {
         if (hasSize)
@@ -1283,7 +1289,7 @@ wxFont wxXmlResourceHandler::GetFont(const wxString& param)
         else if (HasParam(wxT("relativesize")))
             sysfont.SetPointSize(int(sysfont.GetPointSize() *
                                      GetFloat(wxT("relativesize"))));
-        
+
         if (hasStyle)
             sysfont.SetStyle(istyle);
         if (hasWeight)
@@ -1465,7 +1471,7 @@ static void AddStdXRCID_Records()
 
     stdID(wxID_ANY);
     stdID(wxID_SEPARATOR);
-    
+
     stdID(wxID_OPEN);
     stdID(wxID_CLOSE);
     stdID(wxID_NEW);
