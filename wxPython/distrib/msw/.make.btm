@@ -4,28 +4,28 @@ setlocal
 
 iff "%1" == "both" then
 	shift
-	call .make debug %$      & if %? != 0 quit %?
-	call .make hybrid %$     & if %? != 0 quit %?
+	call .make.btm debug %$      & if %? != 0 quit %?
+	call .make.btm hybrid %$     & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "both-uni" then
 	shift
-	call .make debug-uni %$  & if %? != 0 quit %?
-	call .make hybrid-uni %$ & if %? != 0 quit %?
+	call .make.btm debug-uni %$  & if %? != 0 quit %?
+	call .make.btm hybrid-uni %$ & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "both-hybrid" then
 	shift
-	call .make hybrid %$     & if %? != 0 quit %?
-	call .make hybrid-uni %$ & if %? != 0 quit %?
+	call .make.btm hybrid %$     & if %? != 0 quit %?
+	call .make.btm hybrid-uni %$ & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "all" then
 	shift
-	call .make debug %$      & if %? != 0 quit %?
-	call .make hybrid %$     & if %? != 0 quit %?
-	call .make debug-uni %$  & if %? != 0 quit %?
-	call .make hybrid-uni %$ & if %? != 0 quit %?
+	call .make.btm debug %$      & if %? != 0 quit %?
+	call .make.btm hybrid %$     & if %? != 0 quit %?
+	call .make.btm debug-uni %$  & if %? != 0 quit %?
+	call .make.btm hybrid-uni %$ & if %? != 0 quit %?
 	quit
 
 elseiff "%1" == "debug" then
@@ -73,21 +73,21 @@ nmake -f .makesetup.mk %WXWIN%\lib\vc_dll\%WXLIBDIR%\wx\setup.h
 echo ------------------
 echo cd %WXWIN%\build\msw
 cd %WXWIN%\build\msw
-call %WXWIN%\build\msw\.mymake %BUILD_TYPE% %$
+call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
 if %? != 0 goto done
 
 
 echo ------------------
 echo cd ..\..\contrib\build\gizmos
 cd ..\..\contrib\build\gizmos
-call %WXWIN%\build\msw\.mymake %BUILD_TYPE% %$
+call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
 if %? != 0 goto done
 cd -
 
 echo ------------------
 echo cd ..\..\contrib\build\xrc
 cd ..\..\contrib\build\xrc
-call %WXWIN%\build\msw\.mymake %BUILD_TYPE% %$
+call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
 if %? != 0 goto done
 cd -
 
@@ -95,7 +95,7 @@ cd -
 echo ------------------
 echo cd ..\..\contrib\build\stc
 cd ..\..\contrib\build\stc
-call %WXWIN%\build\msw\.mymake %BUILD_TYPE% %$
+call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
 if %? != 0 goto done
 cd -
 
@@ -103,7 +103,7 @@ cd -
 echo ------------------
 echo cd ..\..\contrib\build\ogl
 cd ..\..\contrib\build\ogl
-call %WXWIN%\build\msw\.mymake %BUILD_TYPE% CXX="cl -DwxUSE_DEPRECATED=0" %$
+call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% CXX="cl -DwxUSE_DEPRECATED=0" %$
 if %? != 0 goto done
 cd -
 

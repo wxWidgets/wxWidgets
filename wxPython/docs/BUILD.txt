@@ -246,16 +246,25 @@ version is fine, and you can use the regular python executables with
 it.
 
 Just like the unix versions I also use some scripts to help me build
-wxWidgets, but I use some non-standard stuff to do it.  So if you want
-to use my scripts you'll need to get a copy or 4DOS or 4NT from
-http://www.jpsoft.com/ and also a copy of unix-like cat and sed
-programs.  You can also do by hand what my scripts are doing, but
-there are alot of steps involved and I won't be going into details
-here.  There is a copy of my build scripts in %WXDIR%\\wxPython\\distrib\\msw
-that you can use for reference (if you don't use them directly) for
-adapting these instructions to your specific needs.  The directions
-below assume that you are using my scripts.
+wxWidgets, but I use some non-standard stuff to do it.  So if you have
+bash (cygwin or probably MSYS too) or 4NT plus unix-like cat and sed
+programs then there is a copy of my wxWidgets build scripts in
+%WXDIR%\\wxPython\\distrib\\msw.  Just copy them to
+%WXDIR%\\build\\msw and you can use them to do your build, otherwise
+you can do everything by hand as described below.  But if you do work
+by hand and something doesn't seem to be working correctly please
+refer to the build scripts to see what may need to be done
+differently.
 
+The *.btm files are for 4NT and the others are for bash.  They are:
+
+   .make/.make.btm	  Builds the main lib and the needed contribs
+   .mymake/.mymake.btm	  Builds just one lib, use by .make
+   .makesetup.mk	  A makefile that will copy and edit setup.h
+			  as needed for the different types of builds
+
+Okay.  Here's what you've been waiting for, the instructions!  Adapt
+accordingly if you are using the bash shell.
 
 1. Set an environment variable to the root of the wxWidgets source
    tree.  This is used by the makefiles::
@@ -268,10 +277,7 @@ below assume that you are using my scripts.
          copy setup0.h setup.h
 
 
-3. Edit %WXDIR%\\include\\wx\\msw\\setup.h and change a few settings.
-   Some of them are changed by my build scripts depending on the type
-   of build (debug/hybrid, unicode/ansi). I change a few of the other
-   defaults to have these values::
+3. Edit %WXDIR%\\include\\wx\\msw\\setup.h and change a few settings::
 
          wxDIALOG_UNIT_COMPATIBILITY    0
          wxUSE_DEBUG_CONTEXT            1
@@ -281,21 +287,35 @@ below assume that you are using my scripts.
          wxUSE_POSTSCRIPT               1
          wxUSE_AFM_FOR_POSTSCRIPT       0
          wxUSE_DISPLAY                  1
-         
+
+   If you are using my build scripts then a few more settings will be
+   changed and then a copy of setup.h is placed in a subdir of
+   %WXWIN%\\lib\vc_dll.  If you are doing it by hand and making a
+   UNICODE build, then also change these::
+
+         wxUSE_UNICODE                  1
+	 wxUSE_UNICODE_MSLU             1
+
+   If you are doing a "hybrid" build (which is the same as the
+   binaries that I release) then also change these::
+
+         wxUSE_MEMORY_TRACING           0
+         wxUSE_DEBUG_CONTEXT            0
+
 
 4. Make sure that %WXDIR%\\lib\\vc_dll directory is on the PATH.  The
    wxWidgets DLLs will end up there as part of the build and so you'll
    need it on the PATH for them to be found at runtime.
 
 
-5. Change to the %WXDIR%\\build\\msw directory and copy my build scripts
-   there from their default location in %WXDIR%\\wxPython\\distrib\\msw
-   if they are not present already.
+5. Change to the %WXDIR%\\build\\msw directory 
+
+     	 cd %WXDIR%\\build\\msw
 
 
-6. Use the .make.btm command to build wxWidgets.  It needs one
-   command-line parameter which controls what kind of build(s) to do.
-   Use one of the following::
+6. If using my scripts then use the .make.btm command to build
+   wxWidgets.  It needs one command-line parameter which controls what
+   kind of build(s) to do.  Use one of the following::
 
          debug          Build debug version
          hybrid         Build hybrid version
@@ -308,16 +328,44 @@ below assume that you are using my scripts.
 
          .make hybrid
 
-    You can also pass additional command line parameters as needed and
-    they will all be passed on to the nmake commands, for example to
-    clean up the build::
+   You can also pass additional command line parameters as needed and
+   they will all be passed on to the nmake commands, for example to
+   clean up the build::
 
          .make hybrid clean
 
+   If *not* using my scripts then you can do it by hand by directly
+   executing nmake with a bunch of extra command line parameters.
+   The base set are::
 
-7.  When that is done it will have built the main wxWidgets DLLs and
-    also some of the contribs DLLs.  There should be a ton of DLLs and
-    lots of lib files and other stuff in %WXDIR%\\lib\\vc_dll.
+	-f makefile.vc OFFICIAL_BUILD=1 SHARED=1 MONOLITHIC=0 USE_OPENGL=1
+
+   If doing a debug build then add::
+
+       BUILD=debug 
+
+   otherwise add these::
+
+       DEBUG_FLAG=1 CXXFLAGS=/D__NO_VC_CRTDBG__ WXDEBUGFLAG=h BUILD=release
+
+   If doing a Unicode build then add these flags::
+
+       UNICODE=1 MSLU=1
+
+   Now, from the %WXDIR%\\build\\msw directory run nmake with your
+   selection of command-line flags as described above.  Repeat this
+   same command from the following directories in order to build the
+   contrib libraries::
+
+	%WXDIR%\contrib\build\gizmos
+	%WXDIR%\contrib\build\xrc
+	%WXDIR%\contrib\build\stc
+	%WXDIR%\contrib\build\ogl
+
+
+7.  When that is all done it will have built the main wxWidgets DLLs
+    and also some of the contribs DLLs.  There should be a ton of DLLs
+    and lots of lib files and other stuff in %WXDIR%\\lib\\vc_dll.
 
 
 8. Building wxPython on Windows is very similar to doing it for the
@@ -329,7 +377,7 @@ below assume that you are using my scripts.
    development version please refer to INSTALL.txt.
 
    Change to the %WXDIR%\\wxPython dir and run the this command,
-   makeing sure that you use the version of python that you want to
+   making sure that you use the version of python that you want to
    build for (if you have more than one on your system)::
 
          cd %WXDIR%\wxPython

@@ -7,6 +7,8 @@ FILES=	$(DIR)\vc_dll\mswd\wx\setup.h \
         $(DIR)\vc_dll\mswuh\wx\setup.h \
         $(DIR)\vc_dll\msw\wx\setup.h \
         $(DIR)\vc_dll\mswu\wx\setup.h \
+	\
+        $(DIR)\vc_lib\msw\wx\setup.h \
 
 
 UNI_SEDCMD=sed "s!wxUSE_UNICODE 0!wxUSE_UNICODE 1!g;s!wxUSE_UNICODE_MSLU 0!wxUSE_UNICODE_MSLU 1!g"
@@ -14,7 +16,8 @@ HYB_SEDCMD=sed "s!wxUSE_MEMORY_TRACING 1!wxUSE_MEMORY_TRACING 0!g;s!wxUSE_DEBUG_
 
 all : $(FILES)
 
-
+test :
+	echo $(DIR)\vc_lib\msw\wx\setup.h
 
 # debug
 $(DIR)\vc_dll\mswd\wx\setup.h : $(SRC) .makesetup.mk
@@ -29,6 +32,10 @@ $(DIR)\vc_dll\mswh\wx\setup.h : $(SRC) .makesetup.mk
 # release
 $(DIR)\vc_dll\msw\wx\setup.h : $(SRC) .makesetup.mk
 	-if not exist  $(DIR)\vc_dll\msw\wx mkdir /s $(DIR)\vc_dll\msw\wx
+	cat $(SRC) > $@
+
+$(DIR)\vc_lib\msw\wx\setup.h : $(SRC) .makesetup.mk
+	-if not exist  $(DIR)\vc_lib\msw\wx mkdir /s $(DIR)\vc_lib\msw\wx
 	cat $(SRC) > $@
 
 # debug-uni
