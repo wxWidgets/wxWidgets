@@ -303,7 +303,7 @@ was compiled with to compile extension modules.  It also appears that
 distutils assumes that this compiler can compile C or C++ sources as
 distutils makes no differentiation between the two.  For builds using
 GNU gcc and a few other compilers this is not an issue as they will
-determine the type of souece from the file extension.  For SunCC (and
+determine the type of source from the file extension.  For SunCC (and
 probably other compilers that came from cfront) it won't work as the C
 compiler (cc) is totally separate from the C++ compiler (CC).  This
 causes distutils to attempt to compile the wxPython sources with the C
