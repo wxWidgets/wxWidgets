@@ -1230,8 +1230,6 @@ static XRCID_record *XRCID_Records[XRCID_TABLE_SIZE] = {NULL};
 
 static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
 {
-    static int XRCID_LastID = wxID_HIGHEST;
-
     int index = 0;
 
     for (const wxChar *c = str_id; *c != wxT('\0'); c++) index += (int)*c;
@@ -1266,7 +1264,7 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = -2)
         }
         else
         {
-            (*rec_var)->id = ++XRCID_LastID;
+            (*rec_var)->id = wxNewId();
         }
     }
 
