@@ -1249,7 +1249,12 @@ void wxListHeaderWindow::AdjustDC(wxDC& dc)
 
 void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
+#ifdef __WXGTK__
+    wxClientDC dc( this );
+#else
     wxPaintDC dc( this );
+#endif
+
     PrepareDC( dc );
     AdjustDC( dc );
 
