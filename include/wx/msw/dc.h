@@ -102,13 +102,15 @@ public:
     virtual void SelectOldObjects(WXHDC dc);
 
     wxWindow *GetWindow() const { return m_canvas; }
-    void SetWindow(wxWindow *win) {
+    void SetWindow(wxWindow *win)
+    {
         m_canvas = win;
+
 #if wxUSE_PALETTE
         // if we have palettes use the correct one for this window
         InitializePalette();
-#endif
-        }
+#endif // wxUSE_PALETTE
+    }
 
     WXHDC GetHDC() const { return m_hDC; }
     void SetHDC(WXHDC dc, bool bOwnsDC = FALSE)
@@ -195,10 +197,12 @@ protected:
     // (tell windows to translate pixel from other palettes to our custom one
     // and vice versa)
     // Realize tells it to also reset the system palette to this one.
-    void DoSelectPalette(bool realize = false);
+    void DoSelectPalette(bool realize = FALSE);
+
     // Find out what palette our parent window has, then select it into the dc
     void InitializePalette();
-#endif
+#endif // wxUSE_PALETTE
+
     // common part of DoDrawText() and DoDrawRotatedText()
     void DrawAnyText(const wxString& text, wxCoord x, wxCoord y);
 

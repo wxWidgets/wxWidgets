@@ -168,7 +168,7 @@ void wxWindowBase::InitBase()
 #endif // wxUSE_CARET
 
 #if wxUSE_PALETTE
-    m_custompalette = false;
+    m_hasCustomPalette = FALSE;
 #endif // wxUSE_PALETTE
 
     // Whether we're using the current theme for this window (wxGTK only for now)
@@ -732,6 +732,31 @@ bool wxWindowBase::SetFont(const wxFont& font)
 
     return TRUE;
 }
+
+#if wxUSE_PALETTE
+
+void wxWindowBase::SetPalette(const wxPalette& pal)
+{
+    m_hasCustomPalette = TRUE;
+    m_palette = pal;
+
+    // VZ: can anyone explain me what do we do here?
+    wxWindowDC d((wxWindow *) this);
+    d.SetPalette(pal);
+}
+
+wxWindow *wxWindowBase::GetAncestorWithCustomPalette() const
+{
+    wxWindow *win = (wxWindow *)this;
+    while ( win && !win->HasCustomPalette() )
+    {
+        win = win->GetParent();
+    }
+
+    return win;
+}
+
+#endif // wxUSE_PALETTE
 
 #if wxUSE_CARET
 void wxWindowBase::SetCaret(wxCaret *caret)

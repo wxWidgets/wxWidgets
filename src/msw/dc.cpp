@@ -940,7 +940,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             wxPalette *pal = bmp.GetPalette();
             if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
             {
-                oldPal = ::SelectPalette(hdcMem, GetHpaletteOf(pal), FALSE);
+                oldPal = ::SelectPalette(hdcMem, GetHpaletteOf(*pal), FALSE);
                 ::RealizePalette(hdcMem);
             }
 #endif // wxUSE_PALETTE
@@ -995,7 +995,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
         wxPalette *pal = bmp.GetPalette();
         if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
         {
-            oldPal = ::SelectPalette(memdc, GetHpaletteOf(pal), FALSE);
+            oldPal = ::SelectPalette(memdc, GetHpaletteOf(*pal), FALSE);
             ::RealizePalette(memdc);
         }
 #endif // wxUSE_PALETTE
@@ -1157,44 +1157,47 @@ void wxDC::DoSelectPalette(bool realize)
         m_oldPalette = 0;
     }
 
-    if (m_palette.Ok() && m_palette.GetHPALETTE())
+    if ( m_palette.Ok() )
     {
-        HPALETTE oldPal = ::SelectPalette(GetHdc(), (HPALETTE) m_palette.GetHPALETTE(), FALSE);
+        HPALETTE oldPal = ::SelectPalette(GetHdc(),
+                                          GetHpaletteOf(m_palette),
+                                          FALSE);
         if (!m_oldPalette)
             m_oldPalette = (WXHPALETTE) oldPal;
 
         if (realize)
             ::RealizePalette(GetHdc());
     }
-
-
 }
 
 void wxDC::SetPalette(const wxPalette& palette)
 {
-    if (palette.Ok()) {
+    if ( palette.Ok() )
+    {
         m_palette = palette;
-        DoSelectPalette(true);
-        }
+        DoSelectPalette(TRUE);
+    }
 }
 
 void wxDC::InitializePalette()
 {
-    if (wxDisplayDepth() <= 8) {
+    if ( wxDisplayDepth() <= 8 )
+    {
         // look for any window or parent that has a custom palette. If any has
         // one then we need to use it in drawing operations
-        wxWindow *win = m_canvas;
-        while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
-        if (win->HasCustomPalette()) {
+        wxWindow *win = m_canvas->GetAncestorWithCustomPalette();
+
+        m_hasCustomPalette = win && win->HasCustomPalette();
+        if ( m_hasCustomPalette )
+        {
             m_palette = win->GetPalette();
-            m_custompalette = true;
+
             // turn on MSW translation for this palette
             DoSelectPalette();
-            }
-        else
-            m_custompalette = false;
         }
+    }
 }
+
 #endif // wxUSE_PALETTE
 
 void wxDC::SetFont(const wxFont& the_font)

@@ -396,7 +396,7 @@ private:
 #define GetHfontOf(font)        ((HFONT)(font).GetHFONT())
 
 #define GetHpalette()           ((HPALETTE)GetHPALETTE())
-#define GetHpaletteOf(pal)      ((HPALETTE)(pal)->GetHPALETTE())
+#define GetHpaletteOf(pal)      ((HPALETTE)(pal).GetHPALETTE())
 
 #define GetHrgn()               ((HRGN)GetHRGN())
 #define GetHrgnOf(rgn)          ((HRGN)(rgn).GetHRGN())

@@ -770,15 +770,16 @@ public:
         // Store the palette used by DCs in wxWindow so that the dcs can share
         // a palette. And we can respond to palette messages.
     wxPalette GetPalette() const { return m_palette; }
+
         // When palette is changed tell the DC to set the system palette to the
         // new one.
-    void SetPalette(wxPalette &pal) {
-			m_custompalette=true;
-			m_palette=pal;
-            wxWindowDC d((wxWindow *) this);
-			d.SetPalette(pal);
-			}
-    bool HasCustomPalette() { return m_custompalette; }
+    void SetPalette(const wxPalette& pal);
+
+        // return true if we have a specific palette
+    bool HasCustomPalette() const { return m_hasCustomPalette; }
+
+        // return the first parent window with a custom palette or NULL
+    wxWindow *GetAncestorWithCustomPalette() const;
 #endif // wxUSE_PALETTE
 
 protected:
@@ -866,8 +867,8 @@ protected:
 
 #ifdef wxUSE_PALETTE
     wxPalette            m_palette;
-    bool                 m_custompalette;
-#endif
+    bool                 m_hasCustomPalette;
+#endif // wxUSE_PALETTE
 
 protected:
 

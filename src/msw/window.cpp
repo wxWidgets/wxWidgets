@@ -3349,30 +3349,38 @@ WXHBRUSH wxWindowMSW::OnCtlColor(WXHDC WXUNUSED(hDC),
 bool wxWindowMSW::HandlePaletteChanged(WXHWND hWndPalChange)
 {
 #if wxUSE_PALETTE
-        // same as below except we don't respond to our own messages
-        if (hWndPalChange != GetHWND()) {
+    // same as below except we don't respond to our own messages
+    if ( hWndPalChange != GetHWND() )
+    {
         // check to see if we our our parents have a custom palette
         wxWindow *win = this;
-        while (!win->HasCustomPalette() && win->GetParent()) win = win->GetParent();
-        if (win->HasCustomPalette()) {
-            /* realize the palette to see whether redrawing is needed */
-            HDC hdc = GetDC((HWND) hWndPalChange);
-            win->m_palette.SetHPALETTE( (WXHPALETTE)
-                ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), false) );
+        while ( win && !win->HasCustomPalette() )
+        {
+            win = win->GetParent();
+        }
+
+        if ( win && win->HasCustomPalette() )
+        {
+            // realize the palette to see whether redrawing is needed
+            HDC hdc = ::GetDC((HWND) hWndPalChange);
+            win->m_palette.SetHPALETTE((WXHPALETTE)
+                    ::SelectPalette(hdc, GetHpaletteOf(win->m_palette), FALSE));
 
             int result = ::RealizePalette(hdc);
-            /* restore the palette (before releasing the DC) */
-            win->m_palette.SetHPALETTE( (WXHPALETTE)
-                ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), true) );
-            RealizePalette(hdc);
-            ReleaseDC((HWND) hWndPalChange, hdc);
-            /* now check for the need to redraw */
+
+            // restore the palette (before releasing the DC)
+            win->m_palette.SetHPALETTE((WXHPALETTE)
+                    ::SelectPalette(hdc, GetHpaletteOf(win->m_palette), FALSE));
+            ::RealizePalette(hdc);
+            ::ReleaseDC((HWND) hWndPalChange, hdc);
+
+            // now check for the need to redraw
             if (result > 0)
                 InvalidateRect((HWND) hWndPalChange, NULL, TRUE);
-            }
-
         }
-#endif
+
+    }
+#endif // wxUSE_PALETTE
 
     wxPaletteChangedEvent event(GetId());
     event.SetEventObject(this);
@@ -3392,19 +3400,19 @@ bool wxWindowMSW::HandleQueryNewPalette()
         /* realize the palette to see whether redrawing is needed */
         HDC hdc = GetDC((HWND) GetHWND());
         win->m_palette.SetHPALETTE( (WXHPALETTE)
-             ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), false) );
+             ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), FALSE) );
 
         int result = ::RealizePalette(hdc);
         /* restore the palette (before releasing the DC) */
         win->m_palette.SetHPALETTE( (WXHPALETTE)
-             ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), true) );
+             ::SelectPalette(hdc, (HPALETTE) win->m_palette.GetHPALETTE(), TRUE) );
         ::RealizePalette(hdc);
         ::ReleaseDC((HWND) GetHWND(), hdc);
         /* now check for the need to redraw */
         if (result > 0)
             ::InvalidateRect((HWND) GetHWND(), NULL, TRUE);
         }
-#endif
+#endif // wxUSE_PALETTE
 
     wxQueryNewPaletteEvent event(GetId());
     event.SetEventObject(this);

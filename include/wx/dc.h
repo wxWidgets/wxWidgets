@@ -227,7 +227,7 @@ public:
     void DrawCircle(wxCoord x, wxCoord y, wxCoord radius)
         { DoDrawEllipse(x - radius, y - radius, 2*radius, 2*radius); }
     void DrawCircle(const wxPoint& pt, wxCoord radius)
-        { DoDrawEllipse(pt.x, pt.y, radius); }
+        { DrawCircle(pt.x, pt.y, radius); }
 
     void DrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
         { DoDrawEllipse(x, y, width, height); }
@@ -743,7 +743,7 @@ protected:
 
 #if wxUSE_PALETTE
     wxPalette         m_palette;
-    bool              m_custompalette;
+    bool              m_hasCustomPalette;
 #endif // wxUSE_PALETTE
 
 private:
