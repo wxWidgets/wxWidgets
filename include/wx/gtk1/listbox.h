@@ -68,6 +68,8 @@ public:
     void Append( const wxString &item, void* clientData );
     void Append( const wxString &item, wxClientData* clientData );
 
+    void InsertItems(int nItems, const wxString items[], int pos);
+
     void SetClientData( int n, void* clientData );
     void* GetClientData( int n );
     void SetClientObject( int n, wxClientData* clientData );
