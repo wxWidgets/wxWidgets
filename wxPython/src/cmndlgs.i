@@ -244,7 +244,7 @@ public:
 
 class wxFontDialog : public wxDialog {
 public:
-    wxFontDialog(wxWindow* parent, wxFontData* data);
+    wxFontDialog(wxWindow* parent, const wxFontData& data);
     %pragma(python) addtomethod = "__init__:self._setOORInfo(self)"
 
     wxFontData& GetFontData();

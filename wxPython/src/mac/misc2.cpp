@@ -2471,17 +2471,17 @@ static PyObject *_wrap_wxSystemSettings_HasFeature(PyObject *self, PyObject *arg
     return _resultobj;
 }
 
-static PyObject *_wrap_wxSystemSettings_GetScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxSystemSettings_GetScreenType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxSystemScreen  _result;
+    wxSystemScreenType  _result;
     char *_kwnames[] = {  NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxSystemSettings_GetScreen",_kwnames)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,":wxSystemSettings_GetScreenType",_kwnames)) 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    _result = (wxSystemScreen )wxSystemSettings::GetScreenType();
+    _result = (wxSystemScreenType )wxSystemSettings::GetScreenType();
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -2489,17 +2489,17 @@ static PyObject *_wrap_wxSystemSettings_GetScreen(PyObject *self, PyObject *args
     return _resultobj;
 }
 
-static PyObject *_wrap_wxSystemSettings_SetScreen(PyObject *self, PyObject *args, PyObject *kwargs) {
+static PyObject *_wrap_wxSystemSettings_SetScreenType(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
-    wxSystemScreen  _arg0;
+    wxSystemScreenType  _arg0;
     char *_kwnames[] = { "screen", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_SetScreen",_kwnames,&_arg0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"i:wxSystemSettings_SetScreenType",_kwnames,&_arg0)) 
         return NULL;
 {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxSystemSettings::SetScreen(_arg0);
+    wxSystemSettings::SetScreenType(_arg0);
 
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) return NULL;
@@ -10106,8 +10106,8 @@ static PyMethodDef misc2cMethods[] = {
 	 { "wxToolTip_GetTip", (PyCFunction) _wrap_wxToolTip_GetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "wxToolTip_SetTip", (PyCFunction) _wrap_wxToolTip_SetTip, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxToolTip", (PyCFunction) _wrap_new_wxToolTip, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_SetScreen", (PyCFunction) _wrap_wxSystemSettings_SetScreen, METH_VARARGS | METH_KEYWORDS },
-	 { "wxSystemSettings_GetScreen", (PyCFunction) _wrap_wxSystemSettings_GetScreen, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_SetScreenType", (PyCFunction) _wrap_wxSystemSettings_SetScreenType, METH_VARARGS | METH_KEYWORDS },
+	 { "wxSystemSettings_GetScreenType", (PyCFunction) _wrap_wxSystemSettings_GetScreenType, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_HasFeature", (PyCFunction) _wrap_wxSystemSettings_HasFeature, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetMetric", (PyCFunction) _wrap_wxSystemSettings_GetMetric, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSystemSettings_GetFont", (PyCFunction) _wrap_wxSystemSettings_GetFont, METH_VARARGS | METH_KEYWORDS },
@@ -10395,10 +10395,10 @@ SWIGEXPORT(void) initmisc2c() {
 	 PyDict_SetItemString(d,"wxSYS_CAN_DRAW_FRAME_DECORATIONS", PyInt_FromLong((long) wxSYS_CAN_DRAW_FRAME_DECORATIONS));
 	 PyDict_SetItemString(d,"wxSYS_CAN_ICONIZE_FRAME", PyInt_FromLong((long) wxSYS_CAN_ICONIZE_FRAME));
 	 PyDict_SetItemString(d,"wxSYS_SCREEN_NONE", PyInt_FromLong((long) wxSYS_SCREEN_NONE));
-	 PyDict_SetItemString(d,"wxSYS_SCREEN_DESKTOP", PyInt_FromLong((long) wxSYS_SCREEN_DESKTOP));
-	 PyDict_SetItemString(d,"wxSYS_SCREEN_SMALL", PyInt_FromLong((long) wxSYS_SCREEN_SMALL));
-	 PyDict_SetItemString(d,"wxSYS_SCREEN_PDA", PyInt_FromLong((long) wxSYS_SCREEN_PDA));
 	 PyDict_SetItemString(d,"wxSYS_SCREEN_TINY", PyInt_FromLong((long) wxSYS_SCREEN_TINY));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_PDA", PyInt_FromLong((long) wxSYS_SCREEN_PDA));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_SMALL", PyInt_FromLong((long) wxSYS_SCREEN_SMALL));
+	 PyDict_SetItemString(d,"wxSYS_SCREEN_DESKTOP", PyInt_FromLong((long) wxSYS_SCREEN_DESKTOP));
 	 PyDict_SetItemString(d,"wxLOG_FatalError", PyInt_FromLong((long) wxLOG_FatalError));
 	 PyDict_SetItemString(d,"wxLOG_Error", PyInt_FromLong((long) wxLOG_Error));
 	 PyDict_SetItemString(d,"wxLOG_Warning", PyInt_FromLong((long) wxLOG_Warning));
