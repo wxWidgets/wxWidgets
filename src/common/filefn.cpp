@@ -1397,11 +1397,13 @@ bool wxIsWild( const wxString& pattern )
     return FALSE;
 };
 
-
+bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 #ifdef HAVE_FNMATCH_H
 {
-   // dot_special: what is it supposed to do?
-   return fnmatch(pat.c_str(), text.c_str(), FNM_PERIOD) == 0;
+   if(dot_special)
+      return fnmatch(pat.c_str(), text.c_str(), FNM_PERIOD) == 0;
+   else
+      return fnmatch(pat.c_str(), text.c_str(), 0) == 0;
 }
 #else
 
@@ -1409,7 +1411,6 @@ bool wxIsWild( const wxString& pattern )
    /*
     * WARNING: this code is broken!
     */
-bool wxMatchWild( const wxString& pat, const wxString& text, bool dot_special )
 {
   wxString tmp1 = pat;
   char *pattern = WXSTRINGCAST(tmp1);
