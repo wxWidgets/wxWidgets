@@ -200,7 +200,8 @@ nothing.", "");
             unsigned char* dataPtr;
 
             if (! PyString_Check(data)) {
-                PyErr_SetString(PyExc_TypeError, "Expected string object");
+                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
+                                                  "Expected string object"));
                 return /* NULL */ ;
             }
 
