@@ -47,7 +47,7 @@ bool MyApp::OnInit()
 
   // Problem with generic wxNotebook implementation whereby it doesn't size properly unless
   // you set the size again
-#if defined(__WIN16__)
+#if defined(__WIN16__) || defined(__WXMOTIF__)
   int width, height;
   frame->GetSize(& width, & height);
   frame->SetSize(-1, -1, width, height);

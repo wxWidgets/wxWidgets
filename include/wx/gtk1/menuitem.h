@@ -14,6 +14,8 @@
 #pragma interface
 #endif
 
+#include "wx/bitmap.h"
+
 //-----------------------------------------------------------------------------
 // wxMenuItem
 //-----------------------------------------------------------------------------
@@ -34,6 +36,8 @@ public:
     virtual void Enable( bool enable = TRUE );
     virtual void Check( bool check = TRUE );
     virtual bool IsChecked() const;
+    virtual void SetBitmap(const wxBitmap& bitmap) { m_bitmap = bitmap; }
+    virtual const wxBitmap& GetBitmap() const { return m_bitmap; }
 
 #if wxUSE_ACCEL
     virtual wxAcceleratorEntry *GetAccel() const;
@@ -42,6 +46,8 @@ public:
     // implementation
     void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
     GtkWidget *GetMenuItem() const { return m_menuItem; }
+    GtkWidget *GetLabelWidget() const { return m_labelWidget; }
+    void SetLabelWidget(GtkWidget *labelWidget) { m_labelWidget = labelWidget; }
     wxString GetFactoryPath() const;
 
     wxString GetHotKey() const { return m_hotKey; }
@@ -52,8 +58,10 @@ private:
     void DoSetText(const wxString& text);
 
     wxString  m_hotKey;
+    wxBitmap  m_bitmap; // Bitmap for menuitem, if any
 
     GtkWidget *m_menuItem;  // GtkMenuItem
+    GtkWidget* m_labelWidget; // Label widget
 
     DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };

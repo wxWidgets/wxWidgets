@@ -179,6 +179,7 @@ void wxStatusBarGeneric::OnPaint(wxPaintEvent& WXUNUSED(event) )
   if ( GetFont().Ok() )
     dc.SetFont(GetFont());
   dc.SetBackgroundMode(wxTRANSPARENT);
+  dc.SetTextForeground(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_WINDOWTEXT));
 
   for ( i = 0; i < m_nFields; i ++ )
     DrawField(dc, i);
@@ -320,7 +321,7 @@ bool wxStatusBarGeneric::GetFieldRect(int n, wxRect& rect) const
 void wxStatusBarGeneric::InitColours()
 {
     // Shadow colours
-#if defined(__WIN95__)
+#ifndef __WIN16__
     wxColour mediumShadowColour(wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW));
     m_mediumShadowPen = wxPen(mediumShadowColour, 1, wxSOLID);
 

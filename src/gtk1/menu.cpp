@@ -15,6 +15,7 @@
 #include "wx/log.h"
 #include "wx/intl.h"
 #include "wx/app.h"
+#include "wx/bitmap.h"
 #include "wx/menu.h"
 
 #if wxUSE_ACCEL
@@ -34,6 +35,49 @@ extern bool g_isIdle;
 #if (GTK_MINOR_VERSION > 0) && wxUSE_ACCEL
 static wxString GetHotKey( const wxMenuItem& item );
 #endif
+
+////// BEGIN CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
+
+#define GTK_TYPE_PIXMAP_MENU_ITEM	     (gtk_pixmap_menu_item_get_type ())
+#define GTK_PIXMAP_MENU_ITEM(obj)	     (GTK_CHECK_CAST ((obj), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItem))
+#define GTK_PIXMAP_MENU_ITEM_CLASS(klass)    (GTK_CHECK_CLASS_CAST ((klass), GTK_TYPE_PIXMAP_MENU_ITEM, GtkPixmapMenuItemClass))
+#define GTK_IS_PIXMAP_MENU_ITEM(obj)	     (GTK_CHECK_TYPE ((obj), GTK_TYPE_PIXMAP_MENU_ITEM))
+#define GTK_IS_PIXMAP_MENU_ITEM_CLASS(klass) (GTK_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PIXMAP_MENU_ITEM))
+//#define GTK_PIXMAP_MENU_ITEM_GET_CLASS(obj)  (GTK_CHECK_GET_CLASS ((obj), GTK_TYPE_PIXMAP_MENU_ITEM))
+#define GTK_PIXMAP_MENU_ITEM_GET_CLASS(obj) (GTK_PIXMAP_MENU_ITEM_CLASS( GTK_OBJECT_GET_CLASS(obj)))
+
+#ifndef GTK_MENU_ITEM_GET_CLASS
+#define GTK_MENU_ITEM_GET_CLASS(obj) (GTK_MENU_ITEM_CLASS( GTK_OBJECT_GET_CLASS(obj)))
+#endif
+
+typedef struct _GtkPixmapMenuItem       GtkPixmapMenuItem;
+typedef struct _GtkPixmapMenuItemClass  GtkPixmapMenuItemClass;
+
+struct _GtkPixmapMenuItem
+{
+  GtkMenuItem menu_item;
+
+  GtkWidget *pixmap;
+};
+
+struct _GtkPixmapMenuItemClass
+{
+  GtkMenuItemClass parent_class;
+
+  guint orig_toggle_size;
+  guint have_pixmap_count;
+};
+
+
+GtkType	   gtk_pixmap_menu_item_get_type      (void);
+GtkWidget* gtk_pixmap_menu_item_new	      (void);
+void       gtk_pixmap_menu_item_set_pixmap    (GtkPixmapMenuItem *menu_item,
+					       GtkWidget *pixmap);
+/* Added by JACS */
+
+GtkWidget* gtk_pixmap_menu_item_new_with_label (const gchar *label, GtkWidget** labelWidget);
+
+////// END CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
 
 //-----------------------------------------------------------------------------
 // idle system
@@ -668,6 +712,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
     m_parentMenu = parentMenu;
     m_help = help;
 
+    m_labelWidget = (GtkWidget *) NULL;
     m_menuItem = (GtkWidget *) NULL;
 
     DoSetText(text);
@@ -708,7 +753,11 @@ void wxMenuItem::SetText( const wxString& str )
 
     if (m_menuItem)
     {
-        GtkLabel *label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
+        GtkLabel *label;
+        if (m_labelWidget)
+          label = (GtkLabel*) m_labelWidget;
+        else
+          label = GTK_LABEL( GTK_BIN(m_menuItem)->child );
 
         /* set new text */
         gtk_label_set( label, m_text.mb_str());
@@ -872,6 +921,8 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
 {
     GtkWidget *menuItem;
 
+    bool appended = FALSE;
+
     if ( mitem->IsSeparator() )
     {
 #if (GTK_MINOR_VERSION > 0)
@@ -923,6 +974,32 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
         // submenu
         if ( m_invokingWindow )
             wxMenubarSetInvokingWindow(mitem->GetSubMenu(), m_invokingWindow);
+    }
+    else if (mitem->GetBitmap().Ok()) // An item with bitmap
+    {
+        //// UNFINISHED, because I don't know how to handle hotkeys and
+        //// accelerators :-(
+
+        GtkWidget* labelWidget;
+        menuItem = gtk_pixmap_menu_item_new_with_label(mitem->GetText().mb_str(), &labelWidget);
+        //menuItem = gtk_pixmap_menu_item_new_with_label("", &labelWidget);
+        mitem->SetLabelWidget(labelWidget);
+
+        //// TODO: should we store the widget somewhere to avoid a memory leak?
+        GtkWidget* w = gtk_pixmap_new(mitem->GetBitmap().GetPixmap(), mitem->GetBitmap().GetMask() ? mitem->GetBitmap().GetMask()->GetBitmap() : (GdkBitmap* )NULL);
+        gtk_widget_show(w);
+        gtk_pixmap_menu_item_set_pixmap(GTK_PIXMAP_MENU_ITEM( menuItem ), w);
+
+        gtk_signal_connect( GTK_OBJECT(menuItem), "activate",
+                            GTK_SIGNAL_FUNC(gtk_menu_clicked_callback),
+                            (gpointer)this );
+        gtk_menu_append( GTK_MENU(m_menu), menuItem );
+        gtk_widget_show( menuItem );
+
+        //mitem->SetMenuItem(menuItem);
+        //mitem->SetText(mitem->GetText());
+
+        appended = TRUE; // We've done this, don't do it again
     }
     else // a normal item
     {
@@ -983,8 +1060,11 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem)
     }
 
 #if GTK_MINOR_VERSION == 0
-    gtk_menu_append( GTK_MENU(m_menu), menuItem );
-    gtk_widget_show( menuItem );
+    if (!appended)
+    {
+        gtk_menu_append( GTK_MENU(m_menu), menuItem );
+        gtk_widget_show( menuItem );
+    }
 #endif // GTK+ 1.0
 
     mitem->SetMenuItem(menuItem);
@@ -1127,4 +1207,396 @@ static wxString GetHotKey( const wxMenuItem& item )
     return hotkey;
 }
 #endif // wxUSE_ACCEL
+
+
+////// BEGIN CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
+
+/*
+ * Copyright (C) 1998, 1999, 2000 Free Software Foundation
+ * All rights reserved.
+ *
+ * This file is part of the Gnome Library.
+ *
+ * The Gnome Library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Library General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * The Gnome Library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Library General Public License for more details.
+ *
+ * You should have received a copy of the GNU Library General Public
+ * License along with the Gnome Library; see the file COPYING.LIB.  If not,
+ * write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+/*
+  @NOTATION@
+ */
+
+/* Author: Dietmar Maurer <dm@vlsivie.tuwien.ac.at> */
+
+//#include "gtkpixmapmenuitem.h"
+#include <gtk/gtkaccellabel.h>
+#include <gtk/gtksignal.h>
+#include <gtk/gtkmenuitem.h>
+#include <gtk/gtkmenu.h>
+#include <gtk/gtkcontainer.h>
+
+static void gtk_pixmap_menu_item_class_init    (GtkPixmapMenuItemClass *klass);
+static void gtk_pixmap_menu_item_init          (GtkPixmapMenuItem      *menu_item);
+static void gtk_pixmap_menu_item_draw          (GtkWidget              *widget,
+					        GdkRectangle           *area);
+static gint gtk_pixmap_menu_item_expose        (GtkWidget              *widget,
+					        GdkEventExpose         *event);
+
+/* we must override the following functions */
+
+static void gtk_pixmap_menu_item_map           (GtkWidget        *widget);
+static void gtk_pixmap_menu_item_size_allocate (GtkWidget        *widget,
+						GtkAllocation    *allocation);
+static void gtk_pixmap_menu_item_forall        (GtkContainer    *container,
+						gboolean         include_internals,
+						GtkCallback      callback,
+						gpointer         callback_data);
+static void gtk_pixmap_menu_item_size_request  (GtkWidget        *widget,
+						GtkRequisition   *requisition);
+static void gtk_pixmap_menu_item_remove        (GtkContainer *container,
+						GtkWidget    *child);
+
+static void changed_have_pixmap_status         (GtkPixmapMenuItem *menu_item);
+
+static GtkMenuItemClass *parent_class = NULL;
+
+#define BORDER_SPACING  3
+#define PMAP_WIDTH 20
+
+GtkType
+gtk_pixmap_menu_item_get_type (void)
+{
+  static GtkType pixmap_menu_item_type = 0;
+
+  if (!pixmap_menu_item_type)
+    {
+      GtkTypeInfo pixmap_menu_item_info =
+      {
+        "GtkPixmapMenuItem",
+        sizeof (GtkPixmapMenuItem),
+        sizeof (GtkPixmapMenuItemClass),
+        (GtkClassInitFunc) gtk_pixmap_menu_item_class_init,
+        (GtkObjectInitFunc) gtk_pixmap_menu_item_init,
+        /* reserved_1 */ NULL,
+        /* reserved_2 */ NULL,
+        (GtkClassInitFunc) NULL,
+      };
+
+      pixmap_menu_item_type = gtk_type_unique (gtk_menu_item_get_type (), 
+					       &pixmap_menu_item_info);
+    }
+
+  return pixmap_menu_item_type;
+}
+
+/**
+ * gtk_pixmap_menu_item_new
+ *
+ * Creates a new pixmap menu item. Use gtk_pixmap_menu_item_set_pixmap() 
+ * to set the pixmap wich is displayed at the left side.
+ *
+ * Returns:
+ * &GtkWidget pointer to new menu item
+ **/
+
+GtkWidget*
+gtk_pixmap_menu_item_new (void)
+{
+  return GTK_WIDGET (gtk_type_new (gtk_pixmap_menu_item_get_type ()));
+}
+
+static void
+gtk_pixmap_menu_item_class_init (GtkPixmapMenuItemClass *klass)
+{
+  GtkObjectClass *object_class;
+  GtkWidgetClass *widget_class;
+  GtkMenuItemClass *menu_item_class;
+  GtkContainerClass *container_class;
+
+  object_class = (GtkObjectClass*) klass;
+  widget_class = (GtkWidgetClass*) klass;
+  menu_item_class = (GtkMenuItemClass*) klass;
+  container_class = (GtkContainerClass*) klass;
+
+  parent_class = (GtkMenuItemClass*) gtk_type_class (gtk_menu_item_get_type ());
+
+  widget_class->draw = gtk_pixmap_menu_item_draw;
+  widget_class->expose_event = gtk_pixmap_menu_item_expose;
+  widget_class->map = gtk_pixmap_menu_item_map;
+  widget_class->size_allocate = gtk_pixmap_menu_item_size_allocate;
+  widget_class->size_request = gtk_pixmap_menu_item_size_request;
+
+  container_class->forall = gtk_pixmap_menu_item_forall;
+  container_class->remove = gtk_pixmap_menu_item_remove;
+
+  klass->orig_toggle_size = menu_item_class->toggle_size;
+  klass->have_pixmap_count = 0;
+}
+
+static void
+gtk_pixmap_menu_item_init (GtkPixmapMenuItem *menu_item)
+{
+  GtkMenuItem *mi;
+
+  mi = GTK_MENU_ITEM (menu_item);
+
+  menu_item->pixmap = NULL;
+}
+
+static void
+gtk_pixmap_menu_item_draw (GtkWidget    *widget,
+			   GdkRectangle *area)
+{
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_PIXMAP_MENU_ITEM (widget));
+  g_return_if_fail (area != NULL);
+
+  if (GTK_WIDGET_CLASS (parent_class)->draw)
+    (* GTK_WIDGET_CLASS (parent_class)->draw) (widget, area);
+
+  if (GTK_WIDGET_DRAWABLE (widget) && 
+      GTK_PIXMAP_MENU_ITEM(widget)->pixmap) {
+    gtk_widget_draw(GTK_WIDGET(GTK_PIXMAP_MENU_ITEM(widget)->pixmap),NULL);
+  }
+}
+
+static gint
+gtk_pixmap_menu_item_expose (GtkWidget      *widget,
+			     GdkEventExpose *event)
+{
+  g_return_val_if_fail (widget != NULL, FALSE);
+  g_return_val_if_fail (GTK_IS_PIXMAP_MENU_ITEM (widget), FALSE);
+  g_return_val_if_fail (event != NULL, FALSE);
+
+  if (GTK_WIDGET_CLASS (parent_class)->expose_event)
+    (* GTK_WIDGET_CLASS (parent_class)->expose_event) (widget, event);
+
+  if (GTK_WIDGET_DRAWABLE (widget) && 
+      GTK_PIXMAP_MENU_ITEM(widget)->pixmap) {
+    gtk_widget_draw(GTK_WIDGET(GTK_PIXMAP_MENU_ITEM(widget)->pixmap),NULL);
+  }
+
+  return FALSE;
+}
+
+/**
+ * gtk_pixmap_menu_item_set_pixmap
+ * @menu_item: Pointer to the pixmap menu item
+ * @pixmap: Pointer to a pixmap widget
+ *
+ * Set the pixmap of the menu item.
+ *
+ **/
+
+void
+gtk_pixmap_menu_item_set_pixmap (GtkPixmapMenuItem *menu_item,
+				 GtkWidget         *pixmap)
+{
+  g_return_if_fail (menu_item != NULL);
+  g_return_if_fail (pixmap != NULL);
+  g_return_if_fail (GTK_IS_PIXMAP_MENU_ITEM (menu_item));
+  g_return_if_fail (GTK_IS_WIDGET (pixmap));
+  g_return_if_fail (menu_item->pixmap == NULL);
+
+  gtk_widget_set_parent (pixmap, GTK_WIDGET (menu_item));
+  menu_item->pixmap = pixmap;
+
+  if (GTK_WIDGET_REALIZED (pixmap->parent) &&
+      !GTK_WIDGET_REALIZED (pixmap))
+    gtk_widget_realize (pixmap);
+  
+  if (GTK_WIDGET_VISIBLE (pixmap->parent)) {      
+    if (GTK_WIDGET_MAPPED (pixmap->parent) &&
+	GTK_WIDGET_VISIBLE(pixmap) &&
+        !GTK_WIDGET_MAPPED (pixmap))
+      gtk_widget_map (pixmap);
+  }
+
+  changed_have_pixmap_status(menu_item);
+  
+  if (GTK_WIDGET_VISIBLE (pixmap) && GTK_WIDGET_VISIBLE (menu_item))
+    gtk_widget_queue_resize (pixmap);
+}
+
+static void
+gtk_pixmap_menu_item_map (GtkWidget *widget)
+{
+  GtkPixmapMenuItem *menu_item;
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_PIXMAP_MENU_ITEM (widget));
+
+  menu_item = GTK_PIXMAP_MENU_ITEM(widget);
+
+  GTK_WIDGET_CLASS(parent_class)->map(widget);
+
+  if (menu_item->pixmap &&
+      GTK_WIDGET_VISIBLE (menu_item->pixmap) &&
+      !GTK_WIDGET_MAPPED (menu_item->pixmap))
+    gtk_widget_map (menu_item->pixmap);
+}
+
+static void
+gtk_pixmap_menu_item_size_allocate (GtkWidget        *widget,
+				    GtkAllocation    *allocation)
+{
+  GtkPixmapMenuItem *pmenu_item;
+
+  pmenu_item = GTK_PIXMAP_MENU_ITEM(widget);
+
+  if (pmenu_item->pixmap && GTK_WIDGET_VISIBLE(pmenu_item))
+    {
+      GtkAllocation child_allocation;
+      int border_width;
+
+      border_width = GTK_CONTAINER (widget)->border_width;
+
+      child_allocation.width = pmenu_item->pixmap->requisition.width;
+      child_allocation.height = pmenu_item->pixmap->requisition.height;
+      child_allocation.x = border_width + BORDER_SPACING;
+      child_allocation.y = (border_width + BORDER_SPACING
+			    + (((allocation->height - child_allocation.height) - child_allocation.x)
+			       / 2)); /* center pixmaps vertically */
+      gtk_widget_size_allocate (pmenu_item->pixmap, &child_allocation);
+    }
+
+  if (GTK_WIDGET_CLASS (parent_class)->size_allocate)
+    GTK_WIDGET_CLASS(parent_class)->size_allocate (widget, allocation);
+}
+
+static void
+gtk_pixmap_menu_item_forall (GtkContainer    *container,
+			     gboolean         include_internals,
+			     GtkCallback      callback,
+			     gpointer         callback_data)
+{
+  GtkPixmapMenuItem *menu_item;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_PIXMAP_MENU_ITEM (container));
+  g_return_if_fail (callback != NULL);
+
+  menu_item = GTK_PIXMAP_MENU_ITEM (container);
+
+  if (menu_item->pixmap)
+    (* callback) (menu_item->pixmap, callback_data);
+
+  GTK_CONTAINER_CLASS(parent_class)->forall(container,include_internals,
+					    callback,callback_data);
+}
+
+static void
+gtk_pixmap_menu_item_size_request (GtkWidget      *widget,
+				   GtkRequisition *requisition)
+{
+  GtkPixmapMenuItem *menu_item;
+  GtkRequisition req = {0, 0};
+
+  g_return_if_fail (widget != NULL);
+  g_return_if_fail (GTK_IS_MENU_ITEM (widget));
+  g_return_if_fail (requisition != NULL);
+
+  GTK_WIDGET_CLASS(parent_class)->size_request(widget,requisition);
+
+  menu_item = GTK_PIXMAP_MENU_ITEM (widget);
+  
+  if (menu_item->pixmap)
+    gtk_widget_size_request(menu_item->pixmap, &req);
+
+  requisition->height = MAX(req.height + GTK_CONTAINER(widget)->border_width + BORDER_SPACING, (unsigned int) requisition->height);
+  requisition->width += (req.width + GTK_CONTAINER(widget)->border_width + BORDER_SPACING);
+}
+
+static void
+gtk_pixmap_menu_item_remove (GtkContainer *container,
+			     GtkWidget    *child)
+{
+  GtkBin *bin;
+  gboolean widget_was_visible;
+
+  g_return_if_fail (container != NULL);
+  g_return_if_fail (GTK_IS_PIXMAP_MENU_ITEM (container));
+  g_return_if_fail (child != NULL);
+  g_return_if_fail (GTK_IS_WIDGET (child));
+
+  bin = GTK_BIN (container);
+  g_return_if_fail ((bin->child == child || 
+		     (GTK_PIXMAP_MENU_ITEM(container)->pixmap == child)));
+
+  widget_was_visible = GTK_WIDGET_VISIBLE (child);
+  
+  gtk_widget_unparent (child);
+  if (bin->child == child)
+    bin->child = NULL; 
+  else {
+    GTK_PIXMAP_MENU_ITEM(container)->pixmap = NULL;
+    changed_have_pixmap_status(GTK_PIXMAP_MENU_ITEM(container));
+  }
+    
+  if (widget_was_visible)
+    gtk_widget_queue_resize (GTK_WIDGET (container));
+}
+
+
+/* important to only call this if there was actually a _change_ in pixmap == NULL */
+static void
+changed_have_pixmap_status (GtkPixmapMenuItem *menu_item)
+{
+  if (menu_item->pixmap != NULL) {
+    GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->have_pixmap_count += 1;
+
+    if (GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->have_pixmap_count == 1) {
+      /* Install pixmap toggle size */
+      GTK_MENU_ITEM_GET_CLASS(menu_item)->toggle_size = MAX(GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->orig_toggle_size, PMAP_WIDTH);
+    }
+  } else {
+    GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->have_pixmap_count -= 1;
+
+    if (GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->have_pixmap_count == 0) {
+      /* Install normal toggle size */
+      GTK_MENU_ITEM_GET_CLASS(menu_item)->toggle_size = GTK_PIXMAP_MENU_ITEM_GET_CLASS(menu_item)->orig_toggle_size;    
+    }
+  }
+
+  /* Note that we actually need to do this for _all_ GtkPixmapMenuItem
+     whenever the klass->toggle_size changes; but by doing it anytime
+     this function is called, we get the same effect, just because of
+     how the preferences option to show pixmaps works. Bogus, broken.
+  */
+  if (GTK_WIDGET_VISIBLE(GTK_WIDGET(menu_item))) 
+    gtk_widget_queue_resize(GTK_WIDGET(menu_item));
+}
+
+/* Added by JACS */
+
+GtkWidget*
+gtk_pixmap_menu_item_new_with_label (const gchar *label, GtkWidget** labelWidget)
+{
+  GtkWidget *menu_item;
+  GtkWidget *accel_label;
+
+  menu_item = gtk_pixmap_menu_item_new ();
+  accel_label = gtk_accel_label_new (label);
+  if (labelWidget)
+      *labelWidget = accel_label;
+  gtk_misc_set_alignment (GTK_MISC (accel_label), 0.0, 0.5);
+
+  gtk_container_add (GTK_CONTAINER (menu_item), accel_label);
+  gtk_accel_label_set_accel_widget (GTK_ACCEL_LABEL (accel_label), menu_item);
+  gtk_widget_show (accel_label);
+
+  return menu_item;
+}
+
+////// END CODE ADAPTED FROM GTKPIXMAPMENUITEM.C IN LIBGNOMEUI //////
 

@@ -1818,7 +1818,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             if ( attr && attr->HasTextColour() )
                 colText = attr->GetTextColour();
             else
-                colText = *wxBLACK;
+                colText = wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOWTEXT );
         }
 
         // prepare to draw

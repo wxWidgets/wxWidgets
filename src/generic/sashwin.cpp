@@ -98,7 +98,8 @@ void wxSashWindow::OnMouseEvent(wxMouseEvent& event)
 
     // reset the cursor
 #if defined(__WXMOTIF__) || defined(__WXGTK__)
-    SetCursor(* wxSTANDARD_CURSOR);
+    // Not necessary and in fact inhibits proper cursor setting (JACS 8/2000)
+    //SetCursor(* wxSTANDARD_CURSOR);
 #endif
 #ifdef __WXMSW__
     SetCursor(wxNullCursor);
@@ -655,7 +656,7 @@ void wxSashWindow::SizeWindows()
 void wxSashWindow::InitColours()
 {
     // Shadow colours
-#if defined(__WIN95__)
+#ifndef __WIN16__
     m_faceColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DFACE);
     m_mediumShadowColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DSHADOW);
     m_darkShadowColour = wxSystemSettings::GetSystemColour(wxSYS_COLOUR_3DDKSHADOW);

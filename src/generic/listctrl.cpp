@@ -1231,7 +1231,8 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // do *not* use the listctrl colour for headers - one day we will have a
     // function to set it separately
-    dc.SetTextForeground( *wxBLACK );
+    //dc.SetTextForeground( *wxBLACK );
+    dc.SetTextForeground(wxSystemSettings::GetSystemColour( wxSYS_COLOUR_WINDOWTEXT ));
 
     int x = 1;          // left of the header rect
     const int y = 1;    // top

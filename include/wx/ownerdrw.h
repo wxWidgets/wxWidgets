@@ -63,6 +63,10 @@ public:
         m_bmpUnchecked = bmpUnchecked;
         m_bOwnerDrawn = TRUE; }
 
+  void SetBitmap(const wxBitmap& bmpChecked);
+      { m_bmpChecked = bmpChecked;
+        m_bOwnerDrawn = TRUE; }
+
   const wxBitmap& GetBitmap(bool bChecked = TRUE) const
       { return (bChecked ? m_bmpChecked : m_bmpUnchecked); }
 
