@@ -192,7 +192,7 @@ wxMenuItem::wxMenuItem(wxMenu *pParentMenu, int id,
     m_help        = strHelp;
 
 
-    if ( m_text ==  "E&xit"  ||m_text == "Exit" )
+    if ( m_text ==  "E&xit"  ||m_text == "Exit"  ||m_text.Left(5) == "Exit\t" || m_text.Left(6) == "E&xit\t" )
     {
         m_text = "Quit\tCtrl+Q" ;
     }
