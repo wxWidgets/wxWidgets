@@ -605,13 +605,6 @@ public:
         Merged
     };
 
-    enum wxAttrOverflowMode
-    {
-        Unset = -1,
-        Overflow,
-        SingleCell
-    };
-
     // ctors
     wxGridCellAttr(wxGridCellAttr *attrDefault = NULL)
     {
@@ -675,7 +668,7 @@ public:
     bool HasRenderer() const { return m_renderer != NULL; }
     bool HasEditor() const { return m_editor != NULL; }
     bool HasReadWriteMode() const { return m_isReadOnly != Unset; }
-    bool HasOverflowMode() const { return m_overflow != Unset; }
+    bool HasOverflowMode() const { return m_overflow != UnsetOverflow; }
 
     const wxColour& GetTextColour() const;
     const wxColour& GetBackgroundColour() const;
@@ -683,7 +676,7 @@ public:
     void GetAlignment(int *hAlign, int *vAlign) const;
     void GetSize(int *num_rows, int *num_cols) const;
     bool GetOverflow() const
-        { return m_overflow != wxGridCellAttr::SingleCell; }
+        { return m_overflow != SingleCell; }
     wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
     wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
 
@@ -699,6 +692,13 @@ private:
         Unset = -1,
         ReadWrite,
         ReadOnly
+    };
+
+    enum wxAttrOverflowMode
+    {
+        UnsetOverflow = -1,
+        Overflow,
+        SingleCell
     };
 
     // the common part of all ctors

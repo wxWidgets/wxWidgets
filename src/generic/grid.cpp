@@ -2061,7 +2061,7 @@ void wxGridCellAttr::Init(wxGridCellAttr *attrDefault)
     m_attrkind = wxGridCellAttr::Cell;
 
     m_sizeRows = m_sizeCols = 1;
-    m_overflow = TRUE;
+    m_overflow = UnsetOverflow;
 
     SetDefAttr(attrDefault);
 }
