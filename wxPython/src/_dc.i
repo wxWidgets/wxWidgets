@@ -572,12 +572,14 @@ public:
 
 %{
 //-=-=-=-=-=-=-=-=-=-=-    
-#if 0
+
+#if 1
+// Use the standard wxBufferedDC
 #include <wx/dcbuffer.h>
+
 #else
 
-
-//  Temporarily put a set of classes here similar to the old buffered DC
+//  Or, temporarily put a set of classes here similar to the old buffered DC
 //  classes until the real ones can be fixed to work "correctly" again.
 
 class wxBufferedDC : public wxMemoryDC
