@@ -31,7 +31,8 @@ typedef struct MacTimerInfo
 class WXDLLEXPORT wxTimer: public wxTimerBase
 {
 public:
-    wxTimer();
+	wxTimer() { Init(); }
+	wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id) { Init(); }
     ~wxTimer();
 
     virtual bool Start(int milliseconds = -1,
@@ -41,7 +42,10 @@ public:
     virtual bool IsRunning() const ;
 
     MacTimerInfo m_info;
+protected :
+	void Init();
 private:
+
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 

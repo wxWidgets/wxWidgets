@@ -12,6 +12,10 @@
 #ifndef _WX_CW__
 #define _WX_CW__
 
+#if __MWERKS__ >= 0x2400
+#pragma old_argmatch on
+#endif
+
 #if __option(profile)
 #error "profiling is not supported in debug versions"
 #else

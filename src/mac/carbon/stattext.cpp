@@ -55,6 +55,9 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
 void wxStaticText::OnDraw( wxDC &dc )
 {
+    if (m_width <= 0 || m_height <= 0)
+        return;
+
     PrepareDC(dc);
     dc.Clear() ;
     

@@ -21,13 +21,13 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxObject)
 
 static void wxProcessTimer( unsigned long event , void *data ) ;
 
-pascal void MacTimerProc( TMTask * t )
+static pascal void MacTimerProc( TMTask * t )
 {
 	MacTimerInfo * tm = (MacTimerInfo*)  t ;
 	wxMacAddEvent( tm->m_table , wxProcessTimer, 0 , (void*) tm->m_timer , TRUE ) ;
 }
 
-void wxProcessTimer( unsigned long event , void *data )
+static void wxProcessTimer( unsigned long event , void *data )
 {
 	if ( !data )
 		return ;
@@ -44,7 +44,7 @@ void wxProcessTimer( unsigned long event , void *data )
     }
 }
 
-wxTimer::wxTimer()
+void wxTimer::Init()
 {
 	m_info.m_task.tmAddr = NULL ;
 	m_info.m_task.tmWakeUp = 0 ;
