@@ -166,14 +166,16 @@ int wxRadioBox::GetSelection(void) const
 {
   GSList *item = gtk_radio_button_group( m_radio );
   int count = 0;
+  int found = -1;
   while (item)
   {
     GtkButton *button = GTK_BUTTON( item->data );
-    if (GTK_TOGGLE_BUTTON(button)->active) return count;
+    if (GTK_TOGGLE_BUTTON(button)->active) found = count;
     count++;
     item = item->next;
   }
-  return -1;
+  
+  return found != -1 ? count-found-1 : -1;
 }
 
 wxString wxRadioBox::GetString( int n ) const
