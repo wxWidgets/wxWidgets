@@ -154,7 +154,7 @@ MyFrame::MyFrame(wxDocManager *manager, wxFrame *frame, const wxString& title,
   editMenu = NULL;
 }
 
-void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
+void MyFrame::OnSize(wxSizeEvent& event)
 {
   if (canvas && palette)
   {
@@ -172,6 +172,7 @@ void MyFrame::OnSize(wxSizeEvent& WXUNUSED(event))
     palette->SetSize(paletteX, paletteY, paletteW, paletteH);
     canvas->SetSize(canvasX, canvasY, canvasW, canvasH);
   }
+  event.Skip();
 }
 
 void MyFrame::OnCloseWindow(wxCloseEvent& event)

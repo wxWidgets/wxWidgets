@@ -141,10 +141,11 @@ void csFrame::OnCloseWindow(wxCloseEvent& event)
     wxDocMDIParentFrame::OnCloseWindow(event);
 }
 
-void csFrame::OnSize(wxSizeEvent& WXUNUSED(event))
+void csFrame::OnSize(wxSizeEvent& event)
 {
     wxLayoutAlgorithm layout;
     layout.LayoutMDIFrame(this);
+    event.Skip();
 }
 
 // Make sure the correct toolbars are showing for the active view
