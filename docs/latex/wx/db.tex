@@ -3958,7 +3958,7 @@ see two different ways for adding columns.
 
 \docparam{colNo}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
 \docparam{type}{Column type ,wxString specifying the grid name for the datatype in this column, or
- use wxGRID_VALUE_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
+ use wxGRID\_VALUE\_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
 \docparam{title}{The column label to be used in the grid display}
 \docparam{next}{A pointer to the next wxDbGridColInfo structure if using one-step
 construction, NULL  terminates the list. Use Null also if using two step construction.}
@@ -3987,7 +3987,7 @@ not have any effect.
 \wxheading{Parameters}
 \docparam{colNo}{Column number in the \helpref{wxDbTable}{wxdbtable} instance to be used (first column is 0).}
 \docparam{type}{Column type ,wxString specifying the grid name for the datatype in this column, or
- use wxGRID_VALUE_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
+ use wxGRID\_VALUE\_DBAUTO to determine the type automatically from the \helpref{wxDbColDef}{wxdbcoldef} definition}
 \docparam{title}{The column label to be used in the grid display}
 
 \wxheading{Remarks}
@@ -4077,7 +4077,7 @@ that the client keeps ownership.
 \membersection{wxDbGridTableBase::wxDbGridTableBase}\label{wxdbgridtablebaseconstr}
 
 \func{}{wxDbGridTableBase}{\param{wxDbTable *}{tab}, \param{wxDbGridColInfo *}{ColInfo},
-  \param{int }{count = wxUSE_QUERY}, \param{bool }{takeOwnership = TRUE}}
+  \param{int }{count = wxUSE\_QUERY}, \param{bool }{takeOwnership = TRUE}}
 
 Constructor.
 
@@ -4086,7 +4086,7 @@ Constructor.
 \docparam{tab}{ The database table you want to display. Must be opened and queried before display the grid.
 See the example \helpref{above}{wxdbgridtablebase}.}
 \docparam{ColInfo}{ Columns titles, and other values. See \helpref{wxDbGridColInfo}{wxdbgridcolinfo}.}
-\docparam{count}{You can use a query result set (wxUSE_QUERY, to use wxDbTable::Count(wxDbTable::Count() 
+\docparam{count}{You can use a query result set (wxUSE\_QUERY, to use wxDbTable::Count(wxDbTable::Count() 
  or you can fix the total number of rows (count >= 0) to display, or specify it if you already know the size in avoid calling }
 
 \docparam{takeOwnership}{ If TRUE, this class deletes wxDbTable when it stops
@@ -4118,7 +4118,7 @@ function is currently unsupported.
 
 \membersection{wxDbGridTableBase::AssignDbTable}\label{wxdbgridtablebaseassigndbtable}
 
-\func{bool}{AssignDbTable}{\param{wxDbTable *}{tab},\param{int }{count = wxUSE_QUERY},
+\func{bool}{AssignDbTable}{\param{wxDbTable *}{tab},\param{int }{count = wxUSE\_QUERY},
 \param{bool }{takeOwnership = TRUE}}
 
 Resets the grid for using with a new database table, but using the same columns definition.
@@ -4127,7 +4127,7 @@ This can be useful when re-querying the database and want to see the changes.
 \wxheading{Parameters}
 
 \docparam{tab}{ Database table you want to assign to the grid. }
-\docparam{count}{ Number of rows you want to show or wxUSE_QUERY for using a query. }
+\docparam{count}{ Number of rows you want to show or wxUSE\_QUERY for using a query. }
 \docparam{takeOwnership}{ If FALSE, user must take care of deleting tab after deleting
 the wxDbGridTableBase. If TRUE, deletion is made by destructor class. }
 
