@@ -141,7 +141,7 @@ wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
             }
         }
 
-        if ( current.empty() ) {
+        if ( current.IsEmpty() ) {
             wxLogDebug(wxT("No accel key found, accel string ignored."));
         }
         else {
@@ -262,7 +262,7 @@ void wxMenuItemBase::SetAccel(wxAcceleratorEntry *accel)
             // we should process them here
 
             default:
-                if ( wxIsalnum((wxChar)code) )
+                if ( wxIsalnum(code) )
                 {
                     text << (wxChar)code;
 

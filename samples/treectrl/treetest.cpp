@@ -411,7 +411,7 @@ void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
     static wxString s_text;
     s_text = wxGetTextFromUser(wxT("New name: "), wxT("Tree sample question"),
             s_text, this);
-    if ( !s_text.empty() )
+    if ( !s_text.IsEmpty() )
     {
         m_treeCtrl->SetItemText(item, s_text);
     }
@@ -906,120 +906,121 @@ TREE_EVENT_HANDLER(OnSelChanging)
 void LogKeyEvent(const wxChar *name, const wxKeyEvent& event)
 {
     wxString key;
-    int keycode = event.GetKeyCode();
-
-    switch ( keycode )
+    long keycode = event.GetKeyCode();
     {
-        case WXK_BACK: key = wxT("BACK"); break;
-        case WXK_TAB: key = wxT("TAB"); break;
-        case WXK_RETURN: key = wxT("RETURN"); break;
-        case WXK_ESCAPE: key = wxT("ESCAPE"); break;
-        case WXK_SPACE: key = wxT("SPACE"); break;
-        case WXK_DELETE: key = wxT("DELETE"); break;
-        case WXK_START: key = wxT("START"); break;
-        case WXK_LBUTTON: key = wxT("LBUTTON"); break;
-        case WXK_RBUTTON: key = wxT("RBUTTON"); break;
-        case WXK_CANCEL: key = wxT("CANCEL"); break;
-        case WXK_MBUTTON: key = wxT("MBUTTON"); break;
-        case WXK_CLEAR: key = wxT("CLEAR"); break;
-        case WXK_SHIFT: key = wxT("SHIFT"); break;
-        case WXK_ALT: key = wxT("ALT"); break;
-        case WXK_CONTROL: key = wxT("CONTROL"); break;
-        case WXK_MENU: key = wxT("MENU"); break;
-        case WXK_PAUSE: key = wxT("PAUSE"); break;
-        case WXK_CAPITAL: key = wxT("CAPITAL"); break;
-        case WXK_PRIOR: key = wxT("PRIOR"); break;
-        case WXK_NEXT: key = wxT("NEXT"); break;
-        case WXK_END: key = wxT("END"); break;
-        case WXK_HOME: key = wxT("HOME"); break;
-        case WXK_LEFT: key = wxT("LEFT"); break;
-        case WXK_UP: key = wxT("UP"); break;
-        case WXK_RIGHT: key = wxT("RIGHT"); break;
-        case WXK_DOWN: key = wxT("DOWN"); break;
-        case WXK_SELECT: key = wxT("SELECT"); break;
-        case WXK_PRINT: key = wxT("PRINT"); break;
-        case WXK_EXECUTE: key = wxT("EXECUTE"); break;
-        case WXK_SNAPSHOT: key = wxT("SNAPSHOT"); break;
-        case WXK_INSERT: key = wxT("INSERT"); break;
-        case WXK_HELP: key = wxT("HELP"); break;
-        case WXK_NUMPAD0: key = wxT("NUMPAD0"); break;
-        case WXK_NUMPAD1: key = wxT("NUMPAD1"); break;
-        case WXK_NUMPAD2: key = wxT("NUMPAD2"); break;
-        case WXK_NUMPAD3: key = wxT("NUMPAD3"); break;
-        case WXK_NUMPAD4: key = wxT("NUMPAD4"); break;
-        case WXK_NUMPAD5: key = wxT("NUMPAD5"); break;
-        case WXK_NUMPAD6: key = wxT("NUMPAD6"); break;
-        case WXK_NUMPAD7: key = wxT("NUMPAD7"); break;
-        case WXK_NUMPAD8: key = wxT("NUMPAD8"); break;
-        case WXK_NUMPAD9: key = wxT("NUMPAD9"); break;
-        case WXK_MULTIPLY: key = wxT("MULTIPLY"); break;
-        case WXK_ADD: key = wxT("ADD"); break;
-        case WXK_SEPARATOR: key = wxT("SEPARATOR"); break;
-        case WXK_SUBTRACT: key = wxT("SUBTRACT"); break;
-        case WXK_DECIMAL: key = wxT("DECIMAL"); break;
-        case WXK_DIVIDE: key = wxT("DIVIDE"); break;
-        case WXK_F1: key = wxT("F1"); break;
-        case WXK_F2: key = wxT("F2"); break;
-        case WXK_F3: key = wxT("F3"); break;
-        case WXK_F4: key = wxT("F4"); break;
-        case WXK_F5: key = wxT("F5"); break;
-        case WXK_F6: key = wxT("F6"); break;
-        case WXK_F7: key = wxT("F7"); break;
-        case WXK_F8: key = wxT("F8"); break;
-        case WXK_F9: key = wxT("F9"); break;
-        case WXK_F10: key = wxT("F10"); break;
-        case WXK_F11: key = wxT("F11"); break;
-        case WXK_F12: key = wxT("F12"); break;
-        case WXK_F13: key = wxT("F13"); break;
-        case WXK_F14: key = wxT("F14"); break;
-        case WXK_F15: key = wxT("F15"); break;
-        case WXK_F16: key = wxT("F16"); break;
-        case WXK_F17: key = wxT("F17"); break;
-        case WXK_F18: key = wxT("F18"); break;
-        case WXK_F19: key = wxT("F19"); break;
-        case WXK_F20: key = wxT("F20"); break;
-        case WXK_F21: key = wxT("F21"); break;
-        case WXK_F22: key = wxT("F22"); break;
-        case WXK_F23: key = wxT("F23"); break;
-        case WXK_F24: key = wxT("F24"); break;
-        case WXK_NUMLOCK: key = wxT("NUMLOCK"); break;
-        case WXK_SCROLL: key = wxT("SCROLL"); break;
-        case WXK_PAGEUP: key = wxT("PAGEUP"); break;
-        case WXK_PAGEDOWN: key = wxT("PAGEDOWN"); break;
-        case WXK_NUMPAD_SPACE: key = wxT("NUMPAD_SPACE"); break;
-        case WXK_NUMPAD_TAB: key = wxT("NUMPAD_TAB"); break;
-        case WXK_NUMPAD_ENTER: key = wxT("NUMPAD_ENTER"); break;
-        case WXK_NUMPAD_F1: key = wxT("NUMPAD_F1"); break;
-        case WXK_NUMPAD_F2: key = wxT("NUMPAD_F2"); break;
-        case WXK_NUMPAD_F3: key = wxT("NUMPAD_F3"); break;
-        case WXK_NUMPAD_F4: key = wxT("NUMPAD_F4"); break;
-        case WXK_NUMPAD_HOME: key = wxT("NUMPAD_HOME"); break;
-        case WXK_NUMPAD_LEFT: key = wxT("NUMPAD_LEFT"); break;
-        case WXK_NUMPAD_UP: key = wxT("NUMPAD_UP"); break;
-        case WXK_NUMPAD_RIGHT: key = wxT("NUMPAD_RIGHT"); break;
-        case WXK_NUMPAD_DOWN: key = wxT("NUMPAD_DOWN"); break;
-        case WXK_NUMPAD_PRIOR: key = wxT("NUMPAD_PRIOR"); break;
-        case WXK_NUMPAD_PAGEUP: key = wxT("NUMPAD_PAGEUP"); break;
-        case WXK_NUMPAD_PAGEDOWN: key = wxT("NUMPAD_PAGEDOWN"); break;
-        case WXK_NUMPAD_END: key = wxT("NUMPAD_END"); break;
-        case WXK_NUMPAD_BEGIN: key = wxT("NUMPAD_BEGIN"); break;
-        case WXK_NUMPAD_INSERT: key = wxT("NUMPAD_INSERT"); break;
-        case WXK_NUMPAD_DELETE: key = wxT("NUMPAD_DELETE"); break;
-        case WXK_NUMPAD_EQUAL: key = wxT("NUMPAD_EQUAL"); break;
-        case WXK_NUMPAD_MULTIPLY: key = wxT("NUMPAD_MULTIPLY"); break;
-        case WXK_NUMPAD_ADD: key = wxT("NUMPAD_ADD"); break;
-        case WXK_NUMPAD_SEPARATOR: key = wxT("NUMPAD_SEPARATOR"); break;
-        case WXK_NUMPAD_SUBTRACT: key = wxT("NUMPAD_SUBTRACT"); break;
-        case WXK_NUMPAD_DECIMAL: key = wxT("NUMPAD_DECIMAL"); break;
-
-        default:
+        switch ( keycode )
         {
-           if ( wxIsprint((wxChar)keycode) )
-               key.Printf(wxT("'%c'"), (char)keycode);
-           else if ( keycode > 0 && keycode < 27 )
-               key.Printf(_("Ctrl-%c"), wxT('A') + keycode - 1);
-           else
-               key.Printf(wxT("unknown (%d)"), keycode);
+            case WXK_BACK: key = wxT("BACK"); break;
+            case WXK_TAB: key = wxT("TAB"); break;
+            case WXK_RETURN: key = wxT("RETURN"); break;
+            case WXK_ESCAPE: key = wxT("ESCAPE"); break;
+            case WXK_SPACE: key = wxT("SPACE"); break;
+            case WXK_DELETE: key = wxT("DELETE"); break;
+            case WXK_START: key = wxT("START"); break;
+            case WXK_LBUTTON: key = wxT("LBUTTON"); break;
+            case WXK_RBUTTON: key = wxT("RBUTTON"); break;
+            case WXK_CANCEL: key = wxT("CANCEL"); break;
+            case WXK_MBUTTON: key = wxT("MBUTTON"); break;
+            case WXK_CLEAR: key = wxT("CLEAR"); break;
+            case WXK_SHIFT: key = wxT("SHIFT"); break;
+            case WXK_ALT: key = wxT("ALT"); break;
+            case WXK_CONTROL: key = wxT("CONTROL"); break;
+            case WXK_MENU: key = wxT("MENU"); break;
+            case WXK_PAUSE: key = wxT("PAUSE"); break;
+            case WXK_CAPITAL: key = wxT("CAPITAL"); break;
+            case WXK_PRIOR: key = wxT("PRIOR"); break;
+            case WXK_NEXT: key = wxT("NEXT"); break;
+            case WXK_END: key = wxT("END"); break;
+            case WXK_HOME: key = wxT("HOME"); break;
+            case WXK_LEFT: key = wxT("LEFT"); break;
+            case WXK_UP: key = wxT("UP"); break;
+            case WXK_RIGHT: key = wxT("RIGHT"); break;
+            case WXK_DOWN: key = wxT("DOWN"); break;
+            case WXK_SELECT: key = wxT("SELECT"); break;
+            case WXK_PRINT: key = wxT("PRINT"); break;
+            case WXK_EXECUTE: key = wxT("EXECUTE"); break;
+            case WXK_SNAPSHOT: key = wxT("SNAPSHOT"); break;
+            case WXK_INSERT: key = wxT("INSERT"); break;
+            case WXK_HELP: key = wxT("HELP"); break;
+            case WXK_NUMPAD0: key = wxT("NUMPAD0"); break;
+            case WXK_NUMPAD1: key = wxT("NUMPAD1"); break;
+            case WXK_NUMPAD2: key = wxT("NUMPAD2"); break;
+            case WXK_NUMPAD3: key = wxT("NUMPAD3"); break;
+            case WXK_NUMPAD4: key = wxT("NUMPAD4"); break;
+            case WXK_NUMPAD5: key = wxT("NUMPAD5"); break;
+            case WXK_NUMPAD6: key = wxT("NUMPAD6"); break;
+            case WXK_NUMPAD7: key = wxT("NUMPAD7"); break;
+            case WXK_NUMPAD8: key = wxT("NUMPAD8"); break;
+            case WXK_NUMPAD9: key = wxT("NUMPAD9"); break;
+            case WXK_MULTIPLY: key = wxT("MULTIPLY"); break;
+            case WXK_ADD: key = wxT("ADD"); break;
+            case WXK_SEPARATOR: key = wxT("SEPARATOR"); break;
+            case WXK_SUBTRACT: key = wxT("SUBTRACT"); break;
+            case WXK_DECIMAL: key = wxT("DECIMAL"); break;
+            case WXK_DIVIDE: key = wxT("DIVIDE"); break;
+            case WXK_F1: key = wxT("F1"); break;
+            case WXK_F2: key = wxT("F2"); break;
+            case WXK_F3: key = wxT("F3"); break;
+            case WXK_F4: key = wxT("F4"); break;
+            case WXK_F5: key = wxT("F5"); break;
+            case WXK_F6: key = wxT("F6"); break;
+            case WXK_F7: key = wxT("F7"); break;
+            case WXK_F8: key = wxT("F8"); break;
+            case WXK_F9: key = wxT("F9"); break;
+            case WXK_F10: key = wxT("F10"); break;
+            case WXK_F11: key = wxT("F11"); break;
+            case WXK_F12: key = wxT("F12"); break;
+            case WXK_F13: key = wxT("F13"); break;
+            case WXK_F14: key = wxT("F14"); break;
+            case WXK_F15: key = wxT("F15"); break;
+            case WXK_F16: key = wxT("F16"); break;
+            case WXK_F17: key = wxT("F17"); break;
+            case WXK_F18: key = wxT("F18"); break;
+            case WXK_F19: key = wxT("F19"); break;
+            case WXK_F20: key = wxT("F20"); break;
+            case WXK_F21: key = wxT("F21"); break;
+            case WXK_F22: key = wxT("F22"); break;
+            case WXK_F23: key = wxT("F23"); break;
+            case WXK_F24: key = wxT("F24"); break;
+            case WXK_NUMLOCK: key = wxT("NUMLOCK"); break;
+            case WXK_SCROLL: key = wxT("SCROLL"); break;
+            case WXK_PAGEUP: key = wxT("PAGEUP"); break;
+            case WXK_PAGEDOWN: key = wxT("PAGEDOWN"); break;
+            case WXK_NUMPAD_SPACE: key = wxT("NUMPAD_SPACE"); break;
+            case WXK_NUMPAD_TAB: key = wxT("NUMPAD_TAB"); break;
+            case WXK_NUMPAD_ENTER: key = wxT("NUMPAD_ENTER"); break;
+            case WXK_NUMPAD_F1: key = wxT("NUMPAD_F1"); break;
+            case WXK_NUMPAD_F2: key = wxT("NUMPAD_F2"); break;
+            case WXK_NUMPAD_F3: key = wxT("NUMPAD_F3"); break;
+            case WXK_NUMPAD_F4: key = wxT("NUMPAD_F4"); break;
+            case WXK_NUMPAD_HOME: key = wxT("NUMPAD_HOME"); break;
+            case WXK_NUMPAD_LEFT: key = wxT("NUMPAD_LEFT"); break;
+            case WXK_NUMPAD_UP: key = wxT("NUMPAD_UP"); break;
+            case WXK_NUMPAD_RIGHT: key = wxT("NUMPAD_RIGHT"); break;
+            case WXK_NUMPAD_DOWN: key = wxT("NUMPAD_DOWN"); break;
+            case WXK_NUMPAD_PRIOR: key = wxT("NUMPAD_PRIOR"); break;
+            case WXK_NUMPAD_PAGEUP: key = wxT("NUMPAD_PAGEUP"); break;
+            case WXK_NUMPAD_PAGEDOWN: key = wxT("NUMPAD_PAGEDOWN"); break;
+            case WXK_NUMPAD_END: key = wxT("NUMPAD_END"); break;
+            case WXK_NUMPAD_BEGIN: key = wxT("NUMPAD_BEGIN"); break;
+            case WXK_NUMPAD_INSERT: key = wxT("NUMPAD_INSERT"); break;
+            case WXK_NUMPAD_DELETE: key = wxT("NUMPAD_DELETE"); break;
+            case WXK_NUMPAD_EQUAL: key = wxT("NUMPAD_EQUAL"); break;
+            case WXK_NUMPAD_MULTIPLY: key = wxT("NUMPAD_MULTIPLY"); break;
+            case WXK_NUMPAD_ADD: key = wxT("NUMPAD_ADD"); break;
+            case WXK_NUMPAD_SEPARATOR: key = wxT("NUMPAD_SEPARATOR"); break;
+            case WXK_NUMPAD_SUBTRACT: key = wxT("NUMPAD_SUBTRACT"); break;
+            case WXK_NUMPAD_DECIMAL: key = wxT("NUMPAD_DECIMAL"); break;
+
+            default:
+            {
+               if ( wxIsprint((int)keycode) )
+                   key.Printf(wxT("'%c'"), (char)keycode);
+               else if ( keycode > 0 && keycode < 27 )
+                   key.Printf(_("Ctrl-%c"), wxT('A') + keycode - 1);
+               else
+                   key.Printf(wxT("unknown (%ld)"), keycode);
+            }
         }
     }
 
