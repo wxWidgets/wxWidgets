@@ -888,6 +888,12 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
 /* Make sure ssize_t is defined (a signed type the same size as size_t) */
 /* HAVE_SSIZE_T should be defined for compiliers that already have it */
+#ifdef __MINGW32__
+    #include <sys/types.h>
+    #if defined(_SSIZE_T_) && !defined(HAVE_SSIZE_T)
+        #define HAVE_SSIZE_T
+    #endif
+#endif
 #ifndef HAVE_SSIZE_T
     #if SIZEOF_SIZE_T == 4
         typedef wxInt32 ssize_t;
