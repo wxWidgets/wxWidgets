@@ -3,7 +3,7 @@
 
 """
 The Object Graphics Library provides for simple drawing and manipulation
-of 2D objects.
+of 2D objects.  (This version is deprecated, please use wx.lib.ogl instead.)
 """
 
 import _ogl
@@ -12,6 +12,10 @@ import _windows
 import _core
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
+import warnings
+warnings.warn("This module is deprecated.  Please use the wx.lib.ogl pacakge instead.",    
+              DeprecationWarning, stacklevel=2)
+
 #---------------------------------------------------------------------------
 
 class ShapeRegion(_core.Object):

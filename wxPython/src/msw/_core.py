@@ -5773,7 +5773,7 @@ class Window(EvtHandler):
         """
         GetClientRect(self) -> Rect
 
-        Get the client area position and size as a wx.Rect object.
+        Get the client area position and size as a `wx.Rect` object.
         """
         return _core_.Window_GetClientRect(*args, **kwargs)
 
