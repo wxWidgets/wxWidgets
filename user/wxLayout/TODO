@@ -17,6 +17,8 @@ BUGS
 TODO
 =====================================================================
 
+- Image at end of a message doesn't get considered properly in
+  wxLayoutList::GetSize(), so it cannot be seen
 - searching for text
 - moving cursor in non-edit mode
 - cursor screen positioning ignores font sizes once again :-(
