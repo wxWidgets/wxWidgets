@@ -901,7 +901,11 @@ doesn't change this string.
 
 \constfunc{wxString}{SubString}{\param{size\_t}{ from}, \param{size\_t}{ to}}
 
-Same as \helpref{Mid}{wxstringmid}.
+Deprecated, use \helpref{Mid}{wxstringmid} instead (but note that parameters
+have different meaning).
+
+Returns the part of the string between the indices {\it from} and {\it to}
+inclusive.
 
 \membersection{wxString::ToDouble}\label{wxstringtodouble}
 
