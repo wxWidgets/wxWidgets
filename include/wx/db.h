@@ -51,8 +51,8 @@
 
 #if wxMAJOR_VERSION == 2
 	extern "C" {
-	#include "../../src/iodbc/isql.h"
-	#include "../../src/iodbc/isqlext.h"
+	#include "wx/unix/isql.h"
+	#include "wx/unix/isqlext.h"
 	}
 #else  // version == 1
 	extern "C" {

@@ -1290,6 +1290,8 @@ wxImage::wxImage( const wxBitmap &bitmap )
 #include <gdk/gdkrgb.h>
 #endif
 
+extern GtkWidget *wxRootWindow;
+
 wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, unsigned char blue )
 {
     wxBitmap bitmap;
@@ -1302,7 +1304,7 @@ wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, u
     bitmap.SetHeight( height );
     bitmap.SetWidth( width );
 
-    bitmap.SetBitmap( gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 ) );
+    bitmap.SetBitmap( gdk_pixmap_new( wxRootWindow->window, width, height, 1 ) );
     
     bitmap.SetDepth( 1 );
 
@@ -1324,7 +1326,7 @@ wxBitmap wxImage::ConvertToMonoBitmap( unsigned char red, unsigned char green, u
         mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
 
         wxMask *mask = new wxMask();
-        mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
+        mask->m_bitmap = gdk_pixmap_new( wxRootWindow->window, width, height, 1 );
 
         bitmap.SetMask( mask );
     }
@@ -1400,7 +1402,7 @@ wxBitmap wxImage::ConvertToBitmap() const
     bitmap.SetHeight( height );
     bitmap.SetWidth( width );
 
-    bitmap.SetPixmap( gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, -1 ) );
+    bitmap.SetPixmap( gdk_pixmap_new( wxRootWindow->window, width, height, -1 ) );
 
      // Retrieve depth
 
@@ -1458,7 +1460,7 @@ wxBitmap wxImage::ConvertToBitmap() const
         mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
 
         wxMask *mask = new wxMask();
-        mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
+        mask->m_bitmap = gdk_pixmap_new( wxRootWindow->window, width, height, 1 );
 
         bitmap.SetMask( mask );
     }
@@ -1646,7 +1648,7 @@ wxImage::wxImage( const wxBitmap &bitmap )
     {
         GdkVisual *visual = gdk_window_get_visual( bitmap.GetPixmap() );
 
-        if (visual == NULL) visual = gdk_window_get_visual( (GdkWindow*) &gdk_root_parent );
+        if (visual == NULL) visual = gdk_window_get_visual( wxRootWindow->window );
         bpp = visual->depth;
         if (bpp == 16) bpp = visual->red_prec + visual->green_prec + visual->blue_prec;
         red_shift_right = visual->red_shift;

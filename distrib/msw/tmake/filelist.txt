@@ -1040,6 +1040,8 @@ fontutil.h	S
 execute.h	S
 mimetype.h	S	B
 gsockunx.h	S
+isql.h	S
+isqlext.h	S
 
 file.h	P
 ftp.h	P

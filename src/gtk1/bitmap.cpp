@@ -18,15 +18,13 @@
 #include "wx/dcmemory.h"
 
 #include <gdk/gdk.h>
-#include <gdk/gdkprivate.h>
+#include <gtk/gtk.h>
 
-// in GTK+ 1.3 gdk_root_parent was renamed into gdk_parent_root
-#ifdef __WXGTK13__
-    #define gdk_root_parent gdk_parent_root
-#else // GTK+ <= 1.2
-    // need to get the declaration of gdk_root_parent from private header
-    #include <gdk/gdkx.h>
-#endif // GTK+ 1.3/1.2
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern GtkWidget *wxRootWindow;
 
 //-----------------------------------------------------------------------------
 // wxMask
@@ -75,8 +73,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     wxImage image( bitmap );
     if (!image.Ok()) return FALSE;
 
-    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
-    m_bitmap = gdk_pixmap_new( parent, image.GetWidth(), image.GetHeight(), 1 );
+    m_bitmap = gdk_pixmap_new( wxRootWindow->window, image.GetWidth(), image.GetHeight(), 1 );
     GdkGC *gc = gdk_gc_new( m_bitmap );
 
     GdkColor color;
@@ -175,7 +172,7 @@ bool wxMask::Create( const wxBitmap& bitmap )
 
     wxCHECK_MSG( bitmap.GetBitmap(), FALSE, wxT("Cannot create mask from colour bitmap") );
 
-    m_bitmap = gdk_pixmap_new( (GdkWindow*) &gdk_root_parent, bitmap.GetWidth(), bitmap.GetHeight(), 1 );
+    m_bitmap = gdk_pixmap_new( wxRootWindow->window, bitmap.GetWidth(), bitmap.GetHeight(), 1 );
 
     if (!m_bitmap) return FALSE;
 
@@ -246,10 +243,9 @@ wxBitmap::wxBitmap( int width, int height, int depth )
 {
     wxCHECK_RET( (width > 0) && (height > 0), wxT("invalid bitmap size") )
 
-    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
-    if (depth == -1) depth = gdk_window_get_visual( parent )->depth;
+    if (depth == -1) depth = gdk_window_get_visual( wxRootWindow->window )->depth;
 
-    wxCHECK_RET( (depth ==  gdk_window_get_visual( parent )->depth) ||
+    wxCHECK_RET( (depth ==  gdk_window_get_visual( wxRootWindow->window )->depth) ||
                  (depth == 1), wxT("invalid bitmap depth") )
 
     m_refData = new wxBitmapRefData();
@@ -258,13 +254,13 @@ wxBitmap::wxBitmap( int width, int height, int depth )
     M_BMPDATA->m_height = height;
     if (depth == 1)
     {
-        M_BMPDATA->m_bitmap = gdk_pixmap_new( parent, width, height, 1 );
+        M_BMPDATA->m_bitmap = gdk_pixmap_new( wxRootWindow->window, width, height, 1 );
         M_BMPDATA->m_bpp = 1;
     }
     else
     {
-        M_BMPDATA->m_pixmap = gdk_pixmap_new( parent, width, height, depth );
-        M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;
+        M_BMPDATA->m_pixmap = gdk_pixmap_new( wxRootWindow->window, width, height, depth );
+        M_BMPDATA->m_bpp = gdk_window_get_visual( wxRootWindow->window )->depth;
     }
 
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
@@ -277,9 +273,8 @@ bool wxBitmap::CreateFromXpm( const char **bits )
     m_refData = new wxBitmapRefData();
 
     GdkBitmap *mask = (GdkBitmap*) NULL;
-    GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
 
-    M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( parent, &mask, NULL, (gchar **) bits );
+    M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm_d( wxRootWindow->window, &mask, NULL, (gchar **) bits );
 
     wxCHECK_MSG( M_BMPDATA->m_pixmap, FALSE, wxT("couldn't create pixmap") );
 
@@ -291,7 +286,7 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
     gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
 
-    M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;  // ?
+    M_BMPDATA->m_bpp = gdk_window_get_visual( wxRootWindow->window )->depth;  // ?
     if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
 
     return TRUE;
@@ -317,7 +312,7 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
 
     M_BMPDATA->m_mask = (wxMask *) NULL;
     M_BMPDATA->m_bitmap =
-      gdk_bitmap_create_from_data( (GdkWindow*) &gdk_root_parent, (gchar *) bits, width, height );
+      gdk_bitmap_create_from_data( wxRootWindow->window, (gchar *) bits, width, height );
     M_BMPDATA->m_width = width;
     M_BMPDATA->m_height = height;
     M_BMPDATA->m_bpp = 1;
@@ -417,8 +412,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     if (GetMask())
     {
         wxMask *mask = new wxMask;
-        GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
-        mask->m_bitmap = gdk_pixmap_new( parent, rect.width, rect.height, 1 );
+        mask->m_bitmap = gdk_pixmap_new( wxRootWindow->window, rect.width, rect.height, 1 );
 
         GdkGC *gc = gdk_gc_new( mask->m_bitmap );
         gdk_draw_bitmap( mask->m_bitmap, gc, M_BMPDATA->m_mask->m_bitmap, 0, 0, rect.x, rect.y, rect.width, rect.height );
@@ -454,9 +448,8 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
         m_refData = new wxBitmapRefData();
 
         GdkBitmap *mask = (GdkBitmap*) NULL;
-        GdkWindow *parent = (GdkWindow*) &gdk_root_parent;
 
-        M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm( parent, &mask, NULL, name.fn_str() );
+        M_BMPDATA->m_pixmap = gdk_pixmap_create_from_xpm( wxRootWindow->window, &mask, NULL, name.fn_str() );
 
         if (mask)
         {
@@ -465,7 +458,7 @@ bool wxBitmap::LoadFile( const wxString &name, int type )
         }
 
         gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
-        M_BMPDATA->m_bpp = gdk_window_get_visual( parent )->depth;
+        M_BMPDATA->m_bpp = gdk_window_get_visual( wxRootWindow->window )->depth;
     }
     else // try if wxImage can load it
     {

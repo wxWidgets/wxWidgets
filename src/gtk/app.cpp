@@ -51,6 +51,8 @@ extern bool g_isIdle;
 
 bool g_mainThreadLocked = FALSE;
 
+GtkWidget *wxRootWindow = (GtkWidget*) NULL;
+
 //-----------------------------------------------------------------------------
 // local functions
 //-----------------------------------------------------------------------------
@@ -268,7 +270,7 @@ bool wxApp::OnInitGui()
     /* on some machines, the default visual is just 256 colours, so
        we make sure we get the best. this can sometimes be wasteful,
        of course, but what do these guys pay $30.000 for? */
-/*
+       
     if (gdk_visual_get_best() != gdk_visual_get_system())
     {
         GdkVisual* vis = gdk_visual_get_best();
@@ -279,7 +281,9 @@ bool wxApp::OnInitGui()
 
         visual = vis;
     }
-*/
+
+    wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_widget_realize( wxRootWindow );
 
     /* Nothing to do for 15, 16, 24, 32 bit displays */
     if (visual->depth > 8) return TRUE;

@@ -40,9 +40,15 @@
     #undef explicit
 #endif // HAVE_X11_XKBLIB_H
 
-// ----------------------------------------------------------------------------
+//-----------------------------------------------------------------------------
+// data
+//-----------------------------------------------------------------------------
+
+extern GtkWidget *wxRootWindow;
+
+//----------------------------------------------------------------------------
 // misc.
-// ----------------------------------------------------------------------------
+//----------------------------------------------------------------------------
 
 void wxBell()
 {
@@ -92,7 +98,7 @@ bool wxColourDisplay()
 
 int wxDisplayDepth()
 {
-    return gdk_window_get_visual( (GdkWindow*) &gdk_root_parent )->depth;
+    return gdk_window_get_visual( wxRootWindow->window )->depth;
 }
 
 int wxGetOsVersion(int *majorVsn, int *minorVsn)

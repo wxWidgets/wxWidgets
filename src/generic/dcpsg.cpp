@@ -1901,7 +1901,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                 {
                     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "CourBoO";
                     else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "CourBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "Cour0";
+                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "CourO";
                     else name = "Cour";
                 }
                 break;
@@ -1917,7 +1917,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                 {
                     if ((Style == wxITALIC) && (Weight == wxBOLD)) name = "HelvBoO";
                     else if ((Style != wxITALIC) && (Weight == wxBOLD)) name = "HelvBo";
-                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "Helv0";
+                    else if ((Style == wxITALIC) && (Weight != wxBOLD)) name = "HelvO";
                     else name = "Helv";
                 }
                 break;
