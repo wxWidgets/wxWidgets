@@ -164,11 +164,15 @@ void UMAInitToolbox( UInt16 inMoreMastersCalls, bool isEmbedded )
         { fontId , (fontSize << 16) ,kTXNDefaultFontStyle, kTXNSystemDefaultEncoding }
     } ;
     int noOfFontDescriptions = sizeof( fontDescriptions ) / sizeof(TXNMacOSPreferredFontDescription) ;
-#if 0 // TARGET_CARBON
-    --noOfFontDescriptions ;
-#endif
+
       // kTXNAlwaysUseQuickDrawTextMask might be desirable because of speed increases but it crashes the app under OS X upon key stroke
-      OptionBits options = kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask ;
+#if 0
+    // leads to unexpected content for clients, TODO configurable
+    OptionBits options = kTXNWantMoviesMask | kTXNWantSoundMask | kTXNWantGraphicsMask ;
+#else
+    OptionBits options = 0 ;
+#endif
+
 #if TARGET_CARBON
     if ( !UMAHasAquaLayout() )
 #endif
