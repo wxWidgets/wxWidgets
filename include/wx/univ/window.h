@@ -146,6 +146,10 @@ public:
     bool UseFgCol() const { return m_hasFgCol; }
     bool UseFont() const { return m_hasFont; }
 
+    // returns the (low level) renderer to use for drawing the control by
+    // querying the current theme
+    wxRenderer *GetRenderer() const { return m_renderer; }
+
     // overridden base class methods
     // -----------------------------
 
@@ -168,10 +172,6 @@ protected:
     void OnSize(wxSizeEvent& event);
     void OnPaint(wxPaintEvent& event);
     void OnErase(wxEraseEvent& event);
-
-    // returns the (low level) renderer to use for drawing the control by
-    // querying the current theme
-    wxRenderer *GetRenderer() const { return m_renderer; }
 
     // draw the control background, return TRUE if done
     virtual bool DoDrawBackground(wxControlRenderer *renderer);

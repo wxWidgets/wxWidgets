@@ -70,13 +70,13 @@
 #define wxUSE_BMPBUTTON    1
 #define wxUSE_CARET        0
 #define wxUSE_CHECKBOX     1
-#define wxUSE_CHECKLISTBOX 0
+#define wxUSE_CHECKLISTBOX 1
 #define wxUSE_CHOICE       0
 #define wxUSE_COMBOBOX     0
 #define wxUSE_GAUGE        0
 #define wxUSE_LISTBOX      1
 #define wxUSE_LISTCTRL     0
-#define wxUSE_RADIOBOX     0
+#define wxUSE_RADIOBOX     1
 #define wxUSE_RADIOBTN     1
 #define wxUSE_SASH         0
 #define wxUSE_SCROLLBAR    1

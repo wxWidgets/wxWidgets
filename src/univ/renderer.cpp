@@ -650,10 +650,10 @@ void wxControlRenderer::DoDrawItems(const wxListBox *lbox,
             if ( checklstbox->IsChecked(n) )
                 flags |= wxCONTROL_CHECKED;
 
-            m_renderer->DrawCheckButton(m_dc, lbox->GetString(n),
-                                        wxNullBitmap,
-                                        rect,
-                                        flags);
+            m_renderer->DrawCheckItem(m_dc, lbox->GetString(n),
+                                      wxNullBitmap,
+                                      rect,
+                                      flags);
         }
         else
         {

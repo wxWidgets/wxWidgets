@@ -149,11 +149,18 @@ public:
     virtual void DrawScrollCorner(wxDC& dc,
                                   const wxRect& rect) = 0;
 
-    // draw an item of a wxControlWithItems
+    // draw an item of a wxListBox
     virtual void DrawItem(wxDC& dc,
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0) = 0;
+
+    // draw an item of a wxCheckListBox
+    virtual void DrawCheckItem(wxDC& dc,
+                               const wxString& label,
+                               const wxBitmap& bitmap,
+                               const wxRect& rect,
+                               int flags = 0) = 0;
 
     // draw a checkbutton (bitmap may be invalid to use default one)
     virtual void DrawCheckButton(wxDC& dc,
@@ -330,6 +337,12 @@ public:
                           const wxRect& rect,
                           int flags = 0)
         { m_renderer->DrawItem(dc, label, rect, flags); }
+    virtual void DrawCheckItem(wxDC& dc,
+                               const wxString& label,
+                               const wxBitmap& bitmap,
+                               const wxRect& rect,
+                               int flags = 0)
+        { m_renderer->DrawCheckItem(dc, label, bitmap, rect, flags); }
     virtual void DrawCheckButton(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& bitmap,

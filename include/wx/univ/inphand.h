@@ -21,6 +21,7 @@
 
 #include "wx/univ/renderer.h"   // for wxHitTest
 
+class WXDLLEXPORT wxCheckListBox;
 class WXDLLEXPORT wxListBox;
 class WXDLLEXPORT wxRenderer;
 class WXDLLEXPORT wxScrollBar;
@@ -33,6 +34,7 @@ class WXDLLEXPORT wxScrollBar;
 #define wxINP_HANDLER_DEFAULT           _T("")
 #define wxINP_HANDLER_BUTTON            _T("button")
 #define wxINP_HANDLER_CHECKBOX          _T("checkbox")
+#define wxINP_HANDLER_CHECKLISTBOX      _T("checklistbox")
 #define wxINP_HANDLER_RADIOBTN          _T("radiobtn")
 #define wxINP_HANDLER_SCROLLBAR         _T("scrollbar")
 #define wxINP_HANDLER_LISTBOX           _T("listbox")
@@ -259,6 +261,22 @@ public:
                              const wxMouseEvent& event);
     virtual bool HandleMouseMove(wxControl *control,
                                  const wxMouseEvent& event);
+};
+
+// ----------------------------------------------------------------------------
+// wxStdCheckListBoxHandler
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxStdCheckListboxInputHandler : public wxStdListboxInputHandler
+{
+public:
+    wxStdCheckListboxInputHandler(wxInputHandler *inphand);
+
+    virtual bool HandleKey(wxControl *control,
+                           const wxKeyEvent& event,
+                           bool pressed);
+    virtual bool HandleMouse(wxControl *control,
+                             const wxMouseEvent& event);
 };
 
 #endif // _WX_UNIV_INPHAND_H_

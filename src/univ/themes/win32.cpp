@@ -126,6 +126,11 @@ public:
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0);
+    virtual void DrawCheckItem(wxDC& dc,
+                               const wxString& label,
+                               const wxBitmap& bitmap,
+                               const wxRect& rect,
+                               int flags = 0);
     virtual void DrawCheckButton(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& bitmap,
@@ -345,6 +350,251 @@ private:
     WX_DECLARE_THEME(win32)
 };
 
+// ----------------------------------------------------------------------------
+// standard bitmaps
+// ----------------------------------------------------------------------------
+
+static char *checked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 5 1",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwbwgh",
+"dbwwwwwwbbwgh",
+"dbwbwwwbbbwgh",
+"dbwbbwbbbwwgh",
+"dbwbbbbbwwwgh",
+"dbwwbbbwwwwgh",
+"dbwwwbwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *pressed_checked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 4 1",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbggggggggggh",
+"dbgggggggbggh",
+"dbggggggbbggh",
+"dbgbgggbbbggh",
+"dbgbbgbbbgggh",
+"dbgbbbbbggggh",
+"dbggbbbgggggh",
+"dbgggbggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *checked_item_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 3 1",
+"w c white",
+"b c black",
+"d c #808080",
+/* pixels */
+"wwwwwwwwwwwww",
+"wdddddddddddw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwbwdw",
+"wdwwwwwwbbwdw",
+"wdwbwwwbbbwdw",
+"wdwbbwbbbwwdw",
+"wdwbbbbbwwwdw",
+"wdwwbbbwwwwdw",
+"wdwwwbwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdddddddddddw",
+"wwwwwwwwwwwww"
+};
+
+static char *unchecked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 5 1",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dbwwwwwwwwwgh",
+"dgggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *pressed_unchecked_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 4 1",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"ddddddddddddh",
+"dbbbbbbbbbbgh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"dbggggggggggh",
+"hhhhhhhhhhhhh"
+};
+
+static char *unchecked_item_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 2 1",
+"w c white",
+"d c #808080",
+/* pixels */
+"wwwwwwwwwwwww",
+"wdddddddddddw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdwwwwwwwwwdw",
+"wdddddddddddw",
+"wwwwwwwwwwwww"
+};
+
+static char *checked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbwwwwbbh ",
+"  dbwwwwwwgh ",
+" dbwwwbbwwwgh",
+" dbwwbbbbwwgh",
+" dbwwbbbbwwgh",
+" dbwwwbbwwwgh",
+"  dbwwwwwwgh ",
+"  dggwwwwggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static char *pressed_checked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbggggbbh ",
+"  dbgggggggh ",
+" dbgggbbggggh",
+" dbggbbbbgggh",
+" dbggbbbbgggh",
+" dbgggbbggggh",
+"  dbgggggggh ",
+"  dggggggggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static char *unchecked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbwwwwbbh ",
+"  dbwwwwwwgh ",
+" dbwwwwwwwwgh",
+" dbwwwwwwwwgh",
+" dbwwwwwwwwgh",
+" dbwwwwwwwwgh",
+"  dbwwwwwwgh ",
+"  dggwwwwggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
+static char *pressed_unchecked_radio_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"13 13 6 1",
+"  c None",
+"w c white",
+"b c black",
+"d c #7f7f7f",
+"g c #c0c0c0",
+"h c #e0e0e0",
+/* pixels */
+"     dddd    ",
+"   ddbbbbdd  ",
+"  dbbggggbbh ",
+"  dbgggggggh ",
+" dbgggggggggh",
+" dbgggggggggh",
+" dbgggggggggh",
+" dbgggggggggh",
+"  dbgggggggh ",
+"  dggggggggh ",
+"   hhgggghh  ",
+"     hhhh    ",
+"             "
+};
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -396,6 +646,8 @@ wxInputHandler *wxWin32Theme::GetInputHandler(const wxString& control)
             handler = new wxWin32CheckboxInputHandler(GetDefaultInputHandler());
         else if ( control == wxINP_HANDLER_LISTBOX )
             handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_CHECKLISTBOX )
+            handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -1131,6 +1383,10 @@ void wxWin32Renderer::DrawButtonLabel(wxDC& dc,
     }
 }
 
+// ----------------------------------------------------------------------------
+// (check)listbox items
+// ----------------------------------------------------------------------------
+
 void wxWin32Renderer::DrawItem(wxDC& dc,
                                const wxString& label,
                                const wxRect& rect,
@@ -1164,205 +1420,37 @@ void wxWin32Renderer::DrawItem(wxDC& dc,
     }
 }
 
+void wxWin32Renderer::DrawCheckItem(wxDC& dc,
+                                    const wxString& label,
+                                    const wxBitmap& bitmap,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxBitmap bmp;
+    if ( bitmap.Ok() )
+    {
+        bmp = bitmap;
+    }
+    else // use default bitmap
+    {
+        bmp = wxBitmap(flags & wxCONTROL_CHECKED ? checked_item_xpm
+                                                 : unchecked_item_xpm);
+    }
+
+    dc.DrawBitmap(bmp, rect.x, rect.y + (rect.height - bmp.GetHeight()) / 2,
+                  TRUE /* use mask */);
+
+    wxRect rectLabel = rect;
+    int bmpWidth = bmp.GetWidth();
+    rectLabel.x += bmpWidth;
+    rectLabel.width -= bmpWidth;
+
+    DrawItem(dc, label, rectLabel, flags);
+}
+
 // ----------------------------------------------------------------------------
 // check/radio buttons
 // ----------------------------------------------------------------------------
-
-static char *checked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 5 1",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwbwgh",
-"dbwwwwwwbbwgh",
-"dbwbwwwbbbwgh",
-"dbwbbwbbbwwgh",
-"dbwbbbbbwwwgh",
-"dbwwbbbwwwwgh",
-"dbwwwbwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dgggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *pressed_checked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 4 1",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbggggggggggh",
-"dbgggggggbggh",
-"dbggggggbbggh",
-"dbgbgggbbbggh",
-"dbgbbgbbbgggh",
-"dbgbbbbbggggh",
-"dbggbbbgggggh",
-"dbgggbggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dgggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *unchecked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 5 1",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dbwwwwwwwwwgh",
-"dgggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *pressed_unchecked_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 4 1",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"ddddddddddddh",
-"dbbbbbbbbbbgh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"dbggggggggggh",
-"hhhhhhhhhhhhh"
-};
-
-static char *checked_radio_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 6 1",
-"  c None",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbwwwwbbh ",
-"  dbwwwwwwgh ",
-" dbwwwbbwwwgh",
-" dbwwbbbbwwgh",
-" dbwwbbbbwwgh",
-" dbwwwbbwwwgh",
-"  dbwwwwwwgh ",
-"  dggwwwwggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
-};
-
-static char *pressed_checked_radio_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 6 1",
-"  c None",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbggggbbh ",
-"  dbgggggggh ",
-" dbgggbbggggh",
-" dbggbbbbgggh",
-" dbggbbbbgggh",
-" dbgggbbggggh",
-"  dbgggggggh ",
-"  dggggggggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
-};
-
-static char *unchecked_radio_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 6 1",
-"  c None",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbwwwwbbh ",
-"  dbwwwwwwgh ",
-" dbwwwwwwwwgh",
-" dbwwwwwwwwgh",
-" dbwwwwwwwwgh",
-" dbwwwwwwwwgh",
-"  dbwwwwwwgh ",
-"  dggwwwwggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
-};
-
-static char *pressed_unchecked_radio_xpm[] = {
-/* columns rows colors chars-per-pixel */
-"13 13 6 1",
-"  c None",
-"w c white",
-"b c black",
-"d c #7f7f7f",
-"g c #c0c0c0",
-"h c #e0e0e0",
-/* pixels */
-"     dddd    ",
-"   ddbbbbdd  ",
-"  dbbggggbbh ",
-"  dbgggggggh ",
-" dbgggggggggh",
-" dbgggggggggh",
-" dbgggggggggh",
-" dbgggggggggh",
-"  dbgggggggh ",
-"  dggggggggh ",
-"   hhgggghh  ",
-"     hhhh    ",
-"             "
-};
 
 wxBitmap wxWin32Renderer::GetCheckBitmap(int flags)
 {

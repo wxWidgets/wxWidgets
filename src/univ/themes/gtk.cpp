@@ -109,6 +109,11 @@ public:
                           const wxString& label,
                           const wxRect& rect,
                           int flags = 0);
+    virtual void DrawCheckItem(wxDC& dc,
+                               const wxString& label,
+                               const wxBitmap& bitmap,
+                               const wxRect& rect,
+                               int flags = 0);
     virtual void DrawCheckButton(wxDC& dc,
                                  const wxString& label,
                                  const wxBitmap& bitmap,
@@ -431,6 +436,8 @@ wxInputHandler *wxGTKTheme::GetInputHandler(const wxString& control)
             handler = new wxGTKCheckboxInputHandler(GetDefaultInputHandler());
         else if ( control == wxINP_HANDLER_LISTBOX )
             handler = new wxStdListboxInputHandler(GetDefaultInputHandler());
+        else if ( control == wxINP_HANDLER_CHECKLISTBOX )
+            handler = new wxStdCheckListboxInputHandler(GetDefaultInputHandler());
         else
             handler = GetDefaultInputHandler();
 
@@ -939,6 +946,15 @@ void wxGTKRenderer::DrawItem(wxDC& dc,
     {
         dc.SetTextForeground(colFg);
     }
+}
+
+void wxGTKRenderer::DrawCheckItem(wxDC& dc,
+                                  const wxString& label,
+                                  const wxBitmap& bitmap,
+                                  const wxRect& rect,
+                                  int flags)
+{
+    DrawCheckButton(dc, label, bitmap, rect, flags);
 }
 
 // ----------------------------------------------------------------------------

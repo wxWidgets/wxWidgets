@@ -72,7 +72,9 @@ void wxCheckListBox::Check(size_t item, bool check)
     wxCHECK_RET( item < m_checks.GetCount(),
                  _T("invalid index in wxCheckListBox::Check") );
 
-    if ( check != m_checks[item] )
+    // intermediate var is needed to avoid compiler warning with VC++
+    bool isChecked = m_checks[item] != 0;
+    if ( check != isChecked )
     {
         m_checks[item] = check;
 
@@ -147,6 +149,87 @@ void wxCheckListBox::DoDrawRange(wxControlRenderer *renderer,
                                  int itemFirst, int itemLast)
 {
     renderer->DrawCheckItems(this, itemFirst, itemLast);
+}
+
+// ----------------------------------------------------------------------------
+// actions
+// ----------------------------------------------------------------------------
+
+wxString wxCheckListBox::GetInputHandlerType() const
+{
+    return wxINP_HANDLER_CHECKLISTBOX;
+}
+
+bool wxCheckListBox::PerformAction(const wxControlAction& action,
+                                   long numArg,
+                                   const wxString& strArg)
+{
+    if ( action == wxACTION_CHECKLISTBOX_TOGGLE )
+    {
+        int sel = (int)numArg;
+        if ( sel == -1 )
+        {
+            sel = GetSelection();
+        }
+
+        if ( sel != -1 )
+        {
+            Check(sel, !IsChecked(sel));
+
+            SendEvent(sel, wxEVT_COMMAND_CHECKLISTBOX_TOGGLED);
+        }
+    }
+    else
+    {
+        return wxListBox::PerformAction(action, numArg, strArg);
+    }
+
+    return TRUE;
+}
+
+// ----------------------------------------------------------------------------
+// wxStdCheckListboxInputHandler
+// ----------------------------------------------------------------------------
+
+wxStdCheckListboxInputHandler::
+wxStdCheckListboxInputHandler(wxInputHandler *inphand)
+    : wxStdListboxInputHandler(inphand)
+{
+}
+
+bool wxStdCheckListboxInputHandler::HandleKey(wxControl *control,
+                                              const wxKeyEvent& event,
+                                              bool pressed)
+{
+    if ( pressed && (event.GetKeyCode() == WXK_SPACE) )
+        control->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE);
+
+    return wxStdListboxInputHandler::HandleKey(control, event, pressed);
+}
+
+bool wxStdCheckListboxInputHandler::HandleMouse(wxControl *control,
+                                                const wxMouseEvent& event)
+{
+    if ( event.LeftDown() || event.LeftDClick() )
+    {
+        wxCheckListBox *lbox = wxStaticCast(control, wxCheckListBox);
+        int x, y;
+
+        const wxPoint& pt = event.GetPosition();
+        lbox->CalcUnscrolledPosition(pt.x, pt.y, &x, &y);
+        int item = y / lbox->GetLineHeight();
+        if ( x >= 0 &&
+             x < lbox->GetRenderer()->GetCheckBitmapSize().x &&
+             item >= 0 &&
+             item < lbox->GetCount() )
+        {
+            lbox->PerformAction(wxACTION_CHECKLISTBOX_TOGGLE, item);
+
+            return TRUE;
+        }
+    }
+
+    return wxStdListboxInputHandler::HandleMouse(control, event);
 }
 
 #endif // wxUSE_CHECKLISTBOX

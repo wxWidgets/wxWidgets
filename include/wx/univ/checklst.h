@@ -16,6 +16,16 @@
     #pragma interface "univchecklst.h"
 #endif
 
+// ----------------------------------------------------------------------------
+// actions
+// ----------------------------------------------------------------------------
+
+#define wxACTION_CHECKLISTBOX_TOGGLE _T("toggle")
+
+// ----------------------------------------------------------------------------
+// wxCheckListBox
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
 public:
@@ -43,6 +53,11 @@ public:
     virtual bool IsChecked(size_t item) const;
     virtual void Check(size_t item, bool check = TRUE);
 
+    // and input handling
+    virtual bool PerformAction(const wxControlAction& action,
+                               long numArg = -1l,
+                               const wxString& strArg = wxEmptyString);
+
     // override all methods which add/delete items to update m_checks array as
     // well
     virtual void Delete(int n);
@@ -59,6 +74,9 @@ protected:
 
     // take them also into account for size calculation
     virtual wxSize DoGetBestClientSize() const;
+
+    // our input handler
+    virtual wxString GetInputHandlerType() const;
 
     // common part of all ctors
     void Init();
