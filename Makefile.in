@@ -1088,6 +1088,24 @@ SAMPLES_DIST: ALL_GUI_DIST
 	cp $(SAMPDIR)/wizard/*.xpm $(DISTDIR)/samples/wizard
     
 UTILS_DIST: ALL_GUI_DIST
+	mkdir $(DISTDIR)/utils
+	cp $(UTILSDIR)/Makefile.in $(DISTDIR)/utils
+	cp $(UTILSDIR)/configure $(DISTDIR)/utils
+	cp $(UTILSDIR)/configure.in $(DISTDIR)/utils
+
+	mkdir $(DISTDIR)/utils/tex2rtf
+	mkdir $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/*.in $(DISTDIR)/utils/tex2rtf
+	cp $(UTILSDIR)/tex2rtf/src/*.h $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/src/*.in $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
+	cp $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
+
+	mkdir $(DISTDIR)/utils/makegen
+	mkdir $(DISTDIR)/utils/makegen/templates
+	cp $(UTILSDIR)/makegen/Makefile.in $(DISTDIR)/utils/makegen
+	cp $(UTILSDIR)/makegen/*.cpp $(DISTDIR)/utils/makegen
+	cp $(UTILSDIR)/makegen/templates/*.* $(DISTDIR)/utils/makegen/templates
 
 MISC_DIST: ALL_GUI_DIST
 	mkdir $(DISTDIR)/misc
@@ -1105,15 +1123,6 @@ MANUAL_DIST:
 	cp $(DOCDIR)/latex/wx/*.ini $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.bib $(DISTDIR)/docs/latex/wx
 	cp $(DOCDIR)/latex/wx/*.sty $(DISTDIR)/docs/latex/wx
-
-	-mkdir $(DISTDIR)/utils
-	mkdir $(DISTDIR)/utils/tex2rtf
-	mkdir $(DISTDIR)/utils/tex2rtf/src
-	cp $(UTILSDIR)/tex2rtf/*.in $(DISTDIR)/utils/tex2rtf
-	cp $(UTILSDIR)/tex2rtf/src/*.h $(DISTDIR)/utils/tex2rtf/src
-	cp $(UTILSDIR)/tex2rtf/src/*.in $(DISTDIR)/utils/tex2rtf/src
-	cp $(UTILSDIR)/tex2rtf/src/*.cpp $(DISTDIR)/utils/tex2rtf/src
-	cp $(UTILSDIR)/tex2rtf/src/tex2rtf.* $(DISTDIR)/utils/tex2rtf/src
 
 # this target does not generate a complete wxPython dist, it only includes
 # those files needed for the Debian source package.

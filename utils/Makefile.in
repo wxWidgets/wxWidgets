@@ -2,19 +2,11 @@
 # Makefile : Builds wxWindows utils for Unix.
 #
 
+UTILS_SUBDIRS=tex2rtf hhp2cached makegen HelpGen dialoged
+
 all:
-	cd tex2rtf; make
-	cd hhp2cached; make
-	cd makegen; make
-	cd HelpGen; make
-	cd dialoged; make
-	cd wxMMedia2; make
+	@for d in $(UTILS_SUBDIRS); do (cd $$d && $(MAKE)); done
 
 clean:
-	cd tex2rtf; make clean
-	cd hhp2cached; make clean
-	cd makegen; make clean
-	cd HelpGen; make clean
-	cd dialoged; make clean
-	cd wxMMedia2; make clean
+	@for d in $(UTILS_SUBDIRS); do (cd $$d && $(MAKE) clean); done
 
