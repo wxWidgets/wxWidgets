@@ -110,6 +110,15 @@ private:
 class wxMimeTypesManager
 {
 public:
+    // static helper functions
+    // -----------------------
+
+        // check if the given MIME type is the same as the other one: the second
+        // argument may contain wildcards ('*'), but not the first. If the
+        // types are equal or if the mimeType matches wildcard the function
+        // returns TRUE, otherwise it returns FALSE
+    static bool IsOfType(const wxString& mimeType, const wxString& wildcard);
+
     // ctor
     wxMimeTypesManager();
 
