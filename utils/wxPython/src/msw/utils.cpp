@@ -33,9 +33,8 @@
  * and things like that.
  *
  * $Log$
- * Revision 1.6  1999/06/22 07:03:28  RD
- * wxPython 2.1b1 for wxMSW  (wxGTK coming soon)
- * Lots of changes, see the README.txt for details...
+ * Revision 1.7  1999/06/22 18:01:12  RD
+ * wxPython 2.1b1:  More more set of generated sources...
  *
  ************************************************************************/
 

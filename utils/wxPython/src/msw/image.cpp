@@ -1480,7 +1480,6 @@ SWIGEXPORT(void,initimagec)() {
 	 SWIG_RegisterMapping("_wxImageHandler","_class_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler);
 	 SWIG_RegisterMapping("_wxImageHandler","_wxPNGHandler",SwigwxPNGHandlerTowxImageHandler);
 	 SWIG_RegisterMapping("_wxImageHandler","_class_wxImageHandler",0);
-	 SWIG_RegisterMapping("_wxToolTip","_class_wxToolTip",0);
 	 SWIG_RegisterMapping("_wxMask","_class_wxMask",0);
 	 SWIG_RegisterMapping("_wxPNGHandler","_class_wxPNGHandler",0);
 	 SWIG_RegisterMapping("_wxPen","_class_wxPen",0);
@@ -1500,7 +1499,6 @@ SWIGEXPORT(void,initimagec)() {
 	 SWIG_RegisterMapping("_class_wxRealPoint","_wxRealPoint",0);
 	 SWIG_RegisterMapping("_wxPrinterDC","_class_wxPrinterDC",0);
 	 SWIG_RegisterMapping("_class_wxGIFHandler","_wxGIFHandler",0);
-	 SWIG_RegisterMapping("_class_wxToolTip","_wxToolTip",0);
 	 SWIG_RegisterMapping("_class_wxMask","_wxMask",0);
 	 SWIG_RegisterMapping("_class_wxPNGHandler","_wxPNGHandler",0);
 	 SWIG_RegisterMapping("_wxColour","_class_wxColour",0);

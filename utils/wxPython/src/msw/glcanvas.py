@@ -3,6 +3,8 @@ import glcanvasc
 
 from misc import *
 
+from misc2 import *
+
 from windows import *
 
 from gdi import *
@@ -26,6 +28,8 @@ from cmndlgs import *
 from windows3 import *
 
 from image import *
+
+from printfw import *
 import wx
 class wxGLContextPtr :
     def __init__(self,this):
