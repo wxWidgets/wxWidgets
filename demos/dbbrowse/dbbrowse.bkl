@@ -1,0 +1,25 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <include file="../../build/bakefiles/common_samples.bkl"/>
+
+    <exe id="dbbrowse" template="wx_sample" template_append="wx_append">
+        <sources>
+            dbbrowse.cpp
+            doc.cpp
+            pgmctrl.cpp
+            tabpgwin.cpp
+            browsedb.cpp
+            dbtree.cpp
+            dbgrid.cpp
+            dlguser.cpp
+        </sources>
+        <wx-lib>adv</wx-lib>
+        <wx-lib>odbc</wx-lib>
+        <wx-lib>html</wx-lib>
+        <wx-lib>core</wx-lib>
+        <wx-lib>base</wx-lib>
+        <win32-res>dbbrowse.rc</win32-res>
+    </exe>
+
+</makefile>

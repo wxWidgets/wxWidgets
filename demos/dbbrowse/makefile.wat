@@ -132,6 +132,11 @@ __UNICODE_DEFINE_p =
 !ifeq UNICODE 1
 __UNICODE_DEFINE_p = -dwxUSE_UNICODE=1
 !endif
+__WXLIB_ADV_p =
+!ifeq MONOLITHIC 0
+__WXLIB_ADV_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_adv.lib
+!endif
 __WXLIB_BASE_p =
 !ifeq MONOLITHIC 0
 __WXLIB_BASE_p = wxbase25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
@@ -141,10 +146,20 @@ __WXLIB_CORE_p =
 __WXLIB_CORE_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_core.lib
 !endif
+__WXLIB_HTML_p =
+!ifeq MONOLITHIC 0
+__WXLIB_HTML_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_html.lib
+!endif
 __WXLIB_MONO_p =
 !ifeq MONOLITHIC 1
 __WXLIB_MONO_p = &
 	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib
+!endif
+__WXLIB_ODBC_p =
+!ifeq MONOLITHIC 0
+__WXLIB_ODBC_p = &
+	wx$(PORTNAME)$(WXUNIVNAME)25$(WXUNICODEFLAG)$(WXDEBUGFLAG)_odbc.lib
 !endif
 __WXUNIV_DEFINE_p =
 !ifeq WXUNIV 1
@@ -153,14 +168,21 @@ __WXUNIV_DEFINE_p = -d__WXUNIVERSAL__
 
 ### Variables: ###
 
-FRACTAL_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
+DBBROWSE_CXXFLAGS = $(CPPFLAGS) $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) -bm &
 	$(__RUNTIME_LIBS_5) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) &
 	-i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png &
 	-i=.\..\..\src\zlib -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. &
 	$(__DLLFLAG_p) $(CXXFLAGS)
-FRACTAL_OBJECTS =  &
-	$(OBJS)\fractal_fractal.obj
+DBBROWSE_OBJECTS =  &
+	$(OBJS)\dbbrowse_dbbrowse.obj &
+	$(OBJS)\dbbrowse_doc.obj &
+	$(OBJS)\dbbrowse_pgmctrl.obj &
+	$(OBJS)\dbbrowse_tabpgwin.obj &
+	$(OBJS)\dbbrowse_browsedb.obj &
+	$(OBJS)\dbbrowse_dbtree.obj &
+	$(OBJS)\dbbrowse_dbgrid.obj &
+	$(OBJS)\dbbrowse_dlguser.obj
 LIBDIRNAME = &
 	.\..\..\lib\wat_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 OBJS = &
@@ -174,28 +196,49 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\fractal.exe
+all : .SYMBOLIC $(OBJS)\dbbrowse.exe
 
-$(OBJS)\fractal_fractal.obj :  .AUTODEPEND .\fractal.cpp
-	$(CXX) -zq -fo=$^@ $(FRACTAL_CXXFLAGS) $<
+$(OBJS)\dbbrowse_browsedb.obj :  .AUTODEPEND .\browsedb.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
-$(OBJS)\fractal_fractal.res :  .AUTODEPEND .\fractal.rc
+$(OBJS)\dbbrowse_dbbrowse.obj :  .AUTODEPEND .\dbbrowse.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+
+$(OBJS)\dbbrowse_dbbrowse.res :  .AUTODEPEND .\dbbrowse.rc
 	wrc -q -ad -bt=nt -r -fo=$^@ -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__UNICODE_DEFINE_p) -i=.\..\..\include -i=$(LIBDIRNAME) -i=.\..\..\src\tiff -i=.\..\..\src\jpeg -i=.\..\..\src\png -i=.\..\..\src\zlib  -i=.\..\..\src\regex -i=.\..\..\src\expat\lib -i=. $(__DLLFLAG_p) $<
+
+$(OBJS)\dbbrowse_dbgrid.obj :  .AUTODEPEND .\dbgrid.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+
+$(OBJS)\dbbrowse_dbtree.obj :  .AUTODEPEND .\dbtree.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+
+$(OBJS)\dbbrowse_dlguser.obj :  .AUTODEPEND .\dlguser.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+
+$(OBJS)\dbbrowse_doc.obj :  .AUTODEPEND .\doc.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+
+$(OBJS)\dbbrowse_pgmctrl.obj :  .AUTODEPEND .\pgmctrl.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
+
+$(OBJS)\dbbrowse_tabpgwin.obj :  .AUTODEPEND .\tabpgwin.cpp
+	$(CXX) -zq -fo=$^@ $(DBBROWSE_CXXFLAGS) $<
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
-	-if exist $(OBJS)\fractal.exe del $(OBJS)\fractal.exe
+	-if exist $(OBJS)\dbbrowse.exe del $(OBJS)\dbbrowse.exe
 
-$(OBJS)\fractal.exe :  $(FRACTAL_OBJECTS) $(OBJS)\fractal_fractal.res
-	@%create $(OBJS)\fractal.lbc
-	@%append $(OBJS)\fractal.lbc option quiet
-	@%append $(OBJS)\fractal.lbc name $^@
-	@%append $(OBJS)\fractal.lbc option incremental
-	@%append $(OBJS)\fractal.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(FRACTAL_OBJECTS)) do @%append $(OBJS)\fractal.lbc file %i
-	@for %i in ( $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\fractal.lbc library %i
-	@%append $(OBJS)\fractal.lbc option resource=$(OBJS)\fractal_fractal.res
-	wlink @$(OBJS)\fractal.lbc
+$(OBJS)\dbbrowse.exe :  $(DBBROWSE_OBJECTS) $(OBJS)\dbbrowse_dbbrowse.res
+	@%create $(OBJS)\dbbrowse.lbc
+	@%append $(OBJS)\dbbrowse.lbc option quiet
+	@%append $(OBJS)\dbbrowse.lbc name $^@
+	@%append $(OBJS)\dbbrowse.lbc option incremental
+	@%append $(OBJS)\dbbrowse.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(DBBROWSE_OBJECTS)) do @%append $(OBJS)\dbbrowse.lbc file %i
+	@for %i in ( $(__WXLIB_ADV_p) $(__WXLIB_ODBC_p) $(__WXLIB_HTML_p) $(__WXLIB_CORE_p) $(__WXLIB_BASE_p) $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib  kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib odbc32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib ) do @%append $(OBJS)\dbbrowse.lbc library %i
+	@%append $(OBJS)\dbbrowse.lbc option resource=$(OBJS)\dbbrowse_dbbrowse.res
+	wlink @$(OBJS)\dbbrowse.lbc
