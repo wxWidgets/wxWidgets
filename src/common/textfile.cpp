@@ -46,6 +46,10 @@
 // ----------------------------------------------------------------------------
 
 // default type is the native one
+// the native type under Mac OS X is:
+//   - Unix when compiling with the Apple Developer Tools (__UNIX__)
+//   - Mac when compiling with CodeWarrior (__WXMAC__)
+
 const wxTextFileType wxTextFile::typeDefault =
 #if   defined(__WINDOWS__)
   wxTextFileType_Dos;
