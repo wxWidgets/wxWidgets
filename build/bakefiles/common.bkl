@@ -304,6 +304,9 @@
                 <sys-lib>advapi32</sys-lib>
                 <sys-lib>wsock32</sys-lib>
             </if>
+            <if cond="COMPILER=='vc' or COMPILER=='bcc'">
+                <sys-lib>oleacc</sys-lib>
+            </if>
         </if>        
     </template>
 
