@@ -5,6 +5,27 @@
 
 %rename(Panel)                              wxPanel;
 %rename(ScrolledWindow)                     wxScrolledWindow;
+%rename(STAY_ON_TOP)                        wxSTAY_ON_TOP;
+%rename(ICONIZE)                            wxICONIZE;
+%rename(MINIMIZE)                           wxMINIMIZE;
+%rename(MAXIMIZE)                           wxMAXIMIZE;
+%rename(CLOSE_BOX)                          wxCLOSE_BOX;
+%rename(THICK_FRAME)                        wxTHICK_FRAME;
+%rename(SYSTEM_MENU)                        wxSYSTEM_MENU;
+%rename(MINIMIZE_BOX)                       wxMINIMIZE_BOX;
+%rename(MAXIMIZE_BOX)                       wxMAXIMIZE_BOX;
+%rename(TINY_CAPTION_HORIZ)                 wxTINY_CAPTION_HORIZ;
+%rename(TINY_CAPTION_VERT)                  wxTINY_CAPTION_VERT;
+%rename(RESIZE_BOX)                         wxRESIZE_BOX;
+%rename(RESIZE_BORDER)                      wxRESIZE_BORDER;
+%rename(DIALOG_NO_PARENT)                   wxDIALOG_NO_PARENT;
+%rename(DEFAULT_FRAME_STYLE)                wxDEFAULT_FRAME_STYLE;
+%rename(DEFAULT_DIALOG_STYLE)               wxDEFAULT_DIALOG_STYLE;
+%rename(FRAME_TOOL_WINDOW)                  wxFRAME_TOOL_WINDOW;
+%rename(FRAME_FLOAT_ON_PARENT)              wxFRAME_FLOAT_ON_PARENT;
+%rename(FRAME_NO_WINDOW_MENU)               wxFRAME_NO_WINDOW_MENU;
+%rename(FRAME_NO_TASKBAR)                   wxFRAME_NO_TASKBAR;
+%rename(FRAME_SHAPED)                       wxFRAME_SHAPED;
 %rename(FULLSCREEN_NOMENUBAR)               wxFULLSCREEN_NOMENUBAR;
 %rename(FULLSCREEN_NOTOOLBAR)               wxFULLSCREEN_NOTOOLBAR;
 %rename(FULLSCREEN_NOSTATUSBAR)             wxFULLSCREEN_NOSTATUSBAR;
