@@ -1277,7 +1277,7 @@ void wxWindowBase::SetConstraintSizes(bool recurse)
         while (node)
         {
             wxWindow *win = node->GetData();
-            if ( !win->IsTopLevel() )
+            if ( !win->IsTopLevel() && win->GetConstraints() )
                 win->SetConstraintSizes();
             node = node->GetNext();
         }
