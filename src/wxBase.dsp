@@ -445,6 +445,10 @@ SOURCE=.\common\sysopt.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\textbuf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\textfile.cpp
 # End Source File
 # Begin Source File
@@ -809,6 +813,10 @@ SOURCE=..\include\wx\memory.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\memtext.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\mimetype.h
 # End Source File
 # Begin Source File
@@ -874,6 +882,10 @@ SOURCE=..\include\wx\string.h
 # Begin Source File
 
 SOURCE=..\include\wx\sysopt.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\textbuf.h
 # End Source File
 # Begin Source File
 

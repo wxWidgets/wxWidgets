@@ -45,6 +45,7 @@ wxBase:
 
 - wxRegEx class added
 - wxGetDiskSpace() function added (Jonothan Farr, Markus Fieber)
+- wxTextBuffer and wxTextFile(wxStream) added (Morten Hanssen)
 - more fixes to wxMBConv classes. Conversion to and from wchar_t now works with
   glibc 2.2 as well as with glibc 2.1. Unix version now checks for iconv()'s
   capabilities at runtime instead of in the configure script.

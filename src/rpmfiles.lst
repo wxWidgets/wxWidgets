@@ -41,6 +41,7 @@
 /usr/include/wx/longlong.h
 /usr/include/wx/memconf.h
 /usr/include/wx/memory.h
+/usr/include/wx/memtext.h
 /usr/include/wx/mimetype.h
 /usr/include/wx/module.h
 /usr/include/wx/mstream.h
@@ -59,6 +60,7 @@
 /usr/include/wx/stream.h
 /usr/include/wx/string.h
 /usr/include/wx/sysopt.h
+/usr/include/wx/textbuf.h
 /usr/include/wx/textfile.h
 /usr/include/wx/thread.h
 /usr/include/wx/time.h

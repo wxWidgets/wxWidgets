@@ -121,6 +121,11 @@ public:
                const wxString& globalFilename = wxT(""),
                long style = wxCONFIG_USE_LOCAL_FILE);
 
+#if wxUSE_STREAMS
+    // ctor that takes an input stream.
+  wxFileConfig(wxInputStream &inStream);
+#endif // wxUSE_STREAMS
+
     // dtor will save unsaved data
   virtual ~wxFileConfig();
 
@@ -210,7 +215,7 @@ private:
   void CleanUp();
 
   // parse the whole file
-  void Parse(wxTextFile& file, bool bLocal);
+  void Parse(wxTextBuffer& buffer, bool bLocal);
 
   // the same as SetPath("/")
   void SetRootPath();

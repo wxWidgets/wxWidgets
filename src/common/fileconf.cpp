@@ -36,8 +36,13 @@
 #include  "wx/file.h"
 #include  "wx/log.h"
 #include  "wx/textfile.h"
+#include  "wx/memtext.h"
 #include  "wx/config.h"
 #include  "wx/fileconf.h"
+
+#if wxUSE_STREAMS
+    #include  "wx/stream.h"
+#endif // wxUSE_STREAMS
 
 #include  "wx/utils.h"    // for wxGetHomeDir
 
@@ -523,6 +528,68 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
   Init();
 }
 
+#if wxUSE_STREAMS
+
+wxFileConfig::wxFileConfig(wxInputStream &inStream)
+{
+    // always local_file when this constructor is called (?)
+    SetStyle(GetStyle() | wxCONFIG_USE_LOCAL_FILE);
+
+    m_pCurrentGroup =
+    m_pRootGroup    = new wxFileConfigGroup(NULL, "", this);
+
+    m_linesHead =
+    m_linesTail = NULL;
+
+    // translate everything to the current (platform-dependent) line
+    // termination character
+    wxString strTrans;
+    {
+        wxString strTmp;
+
+        char buf[1024];
+        while ( !inStream.Read(buf, WXSIZEOF(buf)).Eof() )
+            strTmp += wxString(buf, inStream.LastRead());
+
+        strTmp += wxString(buf, inStream.LastRead());
+
+        strTrans = wxTextBuffer::Translate(strTmp);
+    }
+
+    wxMemoryText memText;
+
+    // Now we can add the text to the memory text. To do this we extract line
+    // by line from the translated string, until we've reached the end.
+    //
+    // VZ: all this is horribly inefficient, we should do the translation on
+    //     the fly in one pass saving both memory and time (TODO)
+
+    const wxChar *pEOL = wxTextBuffer::GetEOL(wxTextBuffer::typeDefault);
+    const size_t EOLLen = wxStrlen(pEOL);
+
+    int posLineStart = strTrans.Find(pEOL);
+    while ( posLineStart != -1 )
+    {
+        wxString line(strTrans.Left(posLineStart));
+
+        memText.AddLine(line);
+
+        strTrans = strTrans.Mid(posLineStart + EOLLen);
+
+        posLineStart = strTrans.Find(pEOL);
+    }
+
+    // also add whatever we have left in the translated string.
+    memText.AddLine(strTrans);
+
+    // Finally we can parse it all.
+    Parse(memText, TRUE /* local */);
+
+    SetRootPath();
+}
+
+#endif // wxUSE_STREAMS
+
 void wxFileConfig::CleanUp()
 {
   delete m_pRootGroup;
@@ -546,15 +613,15 @@ wxFileConfig::~wxFileConfig()
 // parse a config file
 // ----------------------------------------------------------------------------
 
-void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
+void wxFileConfig::Parse(wxTextBuffer& buffer, bool bLocal)
 {
   const wxChar *pStart;
   const wxChar *pEnd;
   wxString strLine;
 
-  size_t nLineCount = file.GetLineCount();
+  size_t nLineCount = buffer.GetLineCount();
   for ( size_t n = 0; n < nLineCount; n++ ) {
-    strLine = file[n];
+    strLine = buffer[n];
 
     // add the line to linked list
     if ( bLocal )
@@ -585,7 +652,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 
       if ( *pEnd != wxT(']') ) {
         wxLogError(_("file '%s': unexpected character %c at line %d."),
-                   file.GetName(), *pEnd, n + 1);
+                   buffer.GetName(), *pEnd, n + 1);
         continue; // skip this line
       }
 
@@ -617,7 +684,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 
           default:
             wxLogWarning(_("file '%s', line %d: '%s' ignored after group header."),
-                         file.GetName(), n + 1, pEnd);
+                         buffer.GetName(), n + 1, pEnd);
             bCont = FALSE;
         }
       }
@@ -646,7 +713,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
 
       if ( *pEnd++ != wxT('=') ) {
         wxLogError(_("file '%s', line %d: '=' expected."),
-                   file.GetName(), n + 1);
+                   buffer.GetName(), n + 1);
       }
       else {
         wxFileConfigEntry *pEntry = m_pCurrentGroup->FindEntry(strKey);
@@ -662,7 +729,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           if ( bLocal && pEntry->IsImmutable() ) {
             // immutable keys can't be changed by user
             wxLogWarning(_("file '%s', line %d: value for immutable key '%s' ignored."),
-                         file.GetName(), n + 1, strKey.c_str());
+                         buffer.GetName(), n + 1, strKey.c_str());
             continue;
           }
           // the condition below catches the cases (a) and (b) but not (c):
@@ -672,7 +739,7 @@ void wxFileConfig::Parse(wxTextFile& file, bool bLocal)
           // which is exactly what we want.
           else if ( !bLocal || pEntry->IsLocal() ) {
             wxLogWarning(_("file '%s', line %d: key '%s' was first found at line %d."),
-                         file.GetName(), n + 1, strKey.c_str(), pEntry->Line());
+                         buffer.GetName(), n + 1, strKey.c_str(), pEntry->Line());
 
             if ( bLocal )
               pEntry->SetLine(m_linesTail);

@@ -50,9 +50,9 @@
 //#define TEST_ENVIRON
 //#define TEST_EXECUTE
 //#define TEST_FILE
-//#define TEST_FILECONF
+#define TEST_FILECONF
 //#define TEST_FILENAME
-#define TEST_FILETIME
+//#define TEST_FILETIME
 //#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_INFO_FUNCTIONS

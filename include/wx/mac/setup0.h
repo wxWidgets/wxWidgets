@@ -243,6 +243,9 @@
 #define wxUSE_FILE          1
 #define wxUSE_FFILE         1
 
+// use wxTextBuffer class: required by wxTextFile
+#define wxUSE_TEXTBUFFER    1
+
 // use wxTextFile class: requires wxFile, required by wxFileConfig
 #define wxUSE_TEXTFILE      1
 

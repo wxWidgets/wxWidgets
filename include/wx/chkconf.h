@@ -469,6 +469,14 @@
 #   endif
 #endif /* !defined(wxUSE_TAB_DIALOG) */
 
+#ifndef wxUSE_TEXTBUFFER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTBUFFER must be defined."
+#   else
+#       define wxUSE_TEXTBUFFER 0
+#   endif
+#endif /* !defined(wxUSE_TEXTBUFFER) */
+
 #ifndef wxUSE_TEXTCTRL
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_TEXTCTRL must be defined."
@@ -476,6 +484,14 @@
 #       define wxUSE_TEXTCTRL 0
 #   endif
 #endif /* !defined(wxUSE_TEXTCTRL) */
+
+#ifndef wxUSE_TEXTFILE
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTFILE must be defined."
+#   else
+#       define wxUSE_TEXTFILE 0
+#   endif
+#endif /* !defined(wxUSE_TEXTFILE) */
 
 #ifndef wxUSE_TOOLBAR
 #   ifdef wxABORT_ON_CONFIG_ERROR
@@ -825,6 +841,15 @@
 #       define wxUSE_TEXTFILE 1
 #   endif
 #endif /* wxUSE_MIMETYPE */
+
+#if wxUSE_TEXTFILE && !wxUSE_TEXTBUFFER
+#   ifdef wxABORT_ON_CONFIG_ERROR
+#       error "wxUSE_TEXTFILE requires wxUSE_TEXTBUFFER"
+#   else
+#       undef wxUSE_TEXTBUFFER
+#       define wxUSE_TEXTBUFFER 1
+#   endif
+#endif /* wxUSE_TEXTFILE */
 
 #if wxUSE_TEXTFILE && !wxUSE_FILE
 #   ifdef wxABORT_ON_CONFIG_ERROR

@@ -648,6 +648,10 @@ SOURCE=.\common\tbarbase.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\common\textbuf.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\common\textcmn.cpp
 # End Source File
 # Begin Source File
@@ -759,6 +763,10 @@ SOURCE=.\generic\calctrl.cpp
 # Begin Source File
 
 SOURCE=.\generic\choicdgg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\generic\dcpsg.cpp
 # End Source File
 # Begin Source File
 
@@ -1954,6 +1962,10 @@ SOURCE=..\include\wx\memory.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\include\wx\memtext.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\include\wx\menu.h
 # End Source File
 # Begin Source File
@@ -2203,6 +2215,10 @@ SOURCE=..\include\wx\tbarbase.h
 # Begin Source File
 
 SOURCE=..\include\wx\tbarsmpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\include\wx\textbuf.h
 # End Source File
 # Begin Source File
 

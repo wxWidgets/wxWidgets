@@ -679,6 +679,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_STOPWATCH=no
   DEFAULT_wxUSE_FILE=no
   DEFAULT_wxUSE_FFILE=no
+  DEFAULT_wxUSE_TEXTBUFFER=no
   DEFAULT_wxUSE_TEXTFILE=no
   DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=no
@@ -840,6 +841,7 @@ else
   DEFAULT_wxUSE_STOPWATCH=yes
   DEFAULT_wxUSE_FILE=yes
   DEFAULT_wxUSE_FFILE=yes
+  DEFAULT_wxUSE_TEXTBUFFER=yes
   DEFAULT_wxUSE_TEXTFILE=yes
   DEFAULT_wxUSE_WAVE=no
   DEFAULT_wxUSE_INTL=yes
@@ -1073,7 +1075,8 @@ WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxU
 WX_ARG_ENABLE(streams,       [  --enable-streams        use wxStream etc classes], wxUSE_STREAMS)
 WX_ARG_ENABLE(file,          [  --enable-file           use wxFile classes], wxUSE_FILE)
 WX_ARG_ENABLE(ffile,         [  --enable-ffile          use wxFFile classes], wxUSE_FFILE)
-WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile classes], wxUSE_TEXTFILE)
+WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
+WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(fontmap,       [  --enable-fontmap        use font encodings conversion classes], wxUSE_FONTMAP)
 WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(wxprintfv,     [  --enable-wxprintfv      use wxWindows implementation of vprintf()], wxUSE_EXPERIMENTAL_PRINTF)
@@ -3613,9 +3616,13 @@ if test "$wxUSE_STD_IOSTREAM" = "yes"; then
   AC_DEFINE(wxUSE_STD_IOSTREAM)
 fi
 
+if test "$wxUSE_TEXTBUFFER" = "yes"; then
+    AC_DEFINE(wxUSE_TEXTBUFFER)
+fi
+
 if test "$wxUSE_TEXTFILE" = "yes"; then
-  if test "$wxUSE_FILE" != "yes"; then
-    AC_MSG_WARN(wxTextFile requires wxFile and it won't be compiled without it)
+  if test "$wxUSE_FILE" != "yes" -o "$wxUSE_TEXTBUFFER" != "yes" ; then
+    AC_MSG_WARN(wxTextFile requires wxFile and wxTextBuffer and won't be compiled without them)
   else
     AC_DEFINE(wxUSE_TEXTFILE)
   fi
