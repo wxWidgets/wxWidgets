@@ -342,7 +342,7 @@ public:
 
         dummy* operator->() { return (dummy*)this; }
     };
-    typedef class compatibility_iterator citer;
+    typedef compatibility_iterator citer;
 
     class dummy
     {
