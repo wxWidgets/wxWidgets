@@ -145,6 +145,9 @@ class wxFontPtr :
     def __init__(self,this):
         self.this = this
         self.thisown = 0
+    def Ok(self, *_args, **_kwargs):
+        val = apply(gdic.wxFont_Ok,(self,) + _args, _kwargs)
+        return val
     def GetFaceName(self, *_args, **_kwargs):
         val = apply(gdic.wxFont_GetFaceName,(self,) + _args, _kwargs)
         return val

@@ -23,7 +23,7 @@ class TestListCtrlPanel(wxPanel):
         tID = NewId()
 
         self.il = wxImageList(16, 16)
-        idx1 = self.il.Add(wxNoRefBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
+        idx1 = self.il.Add(wxBitmap('bitmaps/smiles.bmp', wxBITMAP_TYPE_BMP))
 
         self.list = wxListCtrl(self, tID, wxDefaultPosition, wxDefaultSize,
                                wxLC_REPORT|wxSUNKEN_BORDER)

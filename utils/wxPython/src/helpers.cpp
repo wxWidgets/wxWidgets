@@ -10,14 +10,12 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-
-#ifdef __WXGTK__
-#include <gtk/gtk.h>
-#endif
+#include <stdio.h>  // get the correct definition of NULL
 
 #undef DEBUG
 #include <Python.h>
 #include "helpers.h"
+
 #ifdef __WXMSW__
 #include <wx/msw/private.h>
 #undef FindWindow
@@ -26,7 +24,10 @@
 #undef GetClassInfo
 #undef GetClassName
 #endif
-#include <wx/module.h>
+
+#ifdef __WXGTK__
+#include <gtk/gtk.h>
+#endif
 
 
 //---------------------------------------------------------------------------

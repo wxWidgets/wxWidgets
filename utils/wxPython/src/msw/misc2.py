@@ -231,6 +231,8 @@ wxCaret_SetBlinkTime = misc2c.wxCaret_SetBlinkTime
 
 wxPostEvent = misc2c.wxPostEvent
 
+wxWakeUpIdle = misc2c.wxWakeUpIdle
+
 
 
 #-------------- VARIABLE WRAPPERS ------------------

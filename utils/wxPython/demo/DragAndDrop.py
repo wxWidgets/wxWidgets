@@ -8,8 +8,6 @@ class ClipTextPanel(wxPanel):
         wxPanel.__init__(self, parent, -1)
         self.log = log
 
-        self.do = wxTextDataObject()
-
         #self.SetFont(wxFont(10, wxSWISS, wxNORMAL, wxBOLD, false))
 
         sizer = wxBoxSizer(wxVERTICAL)
@@ -35,6 +33,7 @@ class ClipTextPanel(wxPanel):
 
 
     def OnCopy(self, evt):
+        self.do = wxTextDataObject()
         self.do.SetText(self.text.GetValue())
         wxTheClipboard.Open()
         wxTheClipboard.SetData(self.do)
@@ -42,11 +41,12 @@ class ClipTextPanel(wxPanel):
 
 
     def OnPaste(self, evt):
+        do = wxTextDataObject()
         wxTheClipboard.Open()
-        success = wxTheClipboard.GetData(self.do)
+        success = wxTheClipboard.GetData(do)
         wxTheClipboard.Close()
         if success:
-            self.text.SetValue(self.do.GetText())
+            self.text.SetValue(do.GetText())
         else:
             wxMessageBox("There is no data in the clipboard in the required format",
                          "Error")

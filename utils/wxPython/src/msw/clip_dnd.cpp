@@ -223,6 +223,8 @@ public:
                    const wxIcon &go = wxNullIcon)
         : wxDropSource(win, go) {}
 #endif
+    ~wxPyDropSource() { }
+
     DEC_PYCALLBACK_BOOL_DR(GiveFeedback);
     PYPRIVATE;
 };
@@ -2229,17 +2231,18 @@ static PyObject *_wrap_new_wxDropSource(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-#define wxDropSource__setSelf(_swigobj,_swigarg0)  (_swigobj->_setSelf(_swigarg0))
+#define wxDropSource__setSelf(_swigobj,_swigarg0,_swigarg1)  (_swigobj->_setSelf(_swigarg0,_swigarg1))
 static PyObject *_wrap_wxDropSource__setSelf(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     wxPyDropSource * _arg0;
     PyObject * _arg1;
+    int  _arg2;
     PyObject * _argo0 = 0;
     PyObject * _obj1 = 0;
-    char *_kwnames[] = { "self","self", NULL };
+    char *_kwnames[] = { "self","self","incref", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OO:wxDropSource__setSelf",_kwnames,&_argo0,&_obj1)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"OOi:wxDropSource__setSelf",_kwnames,&_argo0,&_obj1,&_arg2)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
@@ -2253,7 +2256,7 @@ static PyObject *_wrap_wxDropSource__setSelf(PyObject *self, PyObject *args, PyO
 }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        wxDropSource__setSelf(_arg0,_arg1);
+        wxDropSource__setSelf(_arg0,_arg1,_arg2);
 
     wxPy_END_ALLOW_THREADS;
 }    Py_INCREF(Py_None);

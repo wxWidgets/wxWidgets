@@ -198,11 +198,12 @@ public:
                 wxFontEncoding encoding=wxFONTENCODING_DEFAULT) {
 
             return wxTheFontList->FindOrCreateFont(pointSize, family, style, weight,
-                                                   underline, faceName);
+                                                   underline, faceName, encoding);
         }
         // NO Destructor.
     }
 
+    bool Ok();
 
     wxString GetFaceName();
     int GetFamily();

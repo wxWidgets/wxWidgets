@@ -471,7 +471,6 @@ enum {
     wxLI_HORIZONTAL,
     wxLI_VERTICAL,
 
-
     wxHW_SCROLLBAR_NEVER,
     wxHW_SCROLLBAR_AUTO,
 

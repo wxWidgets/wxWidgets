@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.lib.GridSizer
+# Name:        wxPython.lib.grids
 # Purpose:     An example sizer derived from the C++ wxPySizer that
 #              sizes items in a fixed or flexible grid.
 #

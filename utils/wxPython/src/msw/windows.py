@@ -466,6 +466,10 @@ class wxWindowPtr(wxEvtHandlerPtr):
         val = apply(windowsc.wxWindow_GetDropTarget,(self,) + _args, _kwargs)
         if val: val = wxDropTargetPtr(val) 
         return val
+    def GetBestSize(self, *_args, **_kwargs):
+        val = apply(windowsc.wxWindow_GetBestSize,(self,) + _args, _kwargs)
+        if val: val = wxSizePtr(val) ; val.thisown = 1
+        return val
     def __repr__(self):
         return "<C wxWindow instance at %s>" % (self.this,)
 class wxWindow(wxWindowPtr):

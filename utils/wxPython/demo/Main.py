@@ -21,7 +21,8 @@ _useSplitter       = true
 _useNestedSplitter = true
 
 _treeList = [
-    ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow']),
+    ('New since last release', ['wxMVCTree', 'wxVTKRenderWindow',
+                                'FileBrowseButton']),
 
     ('Managed Windows', ['wxFrame', 'wxDialog', 'wxMiniFrame']),
 
@@ -49,7 +50,8 @@ _treeList = [
 
     ('wxPython Library', ['Layoutf', 'wxScrolledMessageDialog',
                           'wxMultipleChoiceDialog', 'wxPlotCanvas', 'wxFloatBar',
-                          'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow']),
+                          'PyShell', 'wxCalendar', 'wxMVCTree', 'wxVTKRenderWindow',
+                          'FileBrowseButton',]),
 
     ('Cool Contribs', ['pyTree', 'hangman', 'SlashDot', 'XMLtreeview']),
 
@@ -60,6 +62,8 @@ _treeList = [
 class wxPythonDemo(wxFrame):
     def __init__(self, parent, id, title):
         wxFrame.__init__(self, parent, -1, title, size = (725, 550))
+
+        self.cwd = os.getcwd()
 
         if wxPlatform == '__WXMSW__':
             self.icon = wxIcon('bitmaps/mondrian.ico', wxBITMAP_TYPE_ICO)
@@ -238,6 +242,7 @@ class wxPythonDemo(wxFrame):
 
     #---------------------------------------------
     def RunDemo(self, itemText):
+        os.chdir(self.cwd)
         if self.nb.GetPageCount() == 3:
             if self.nb.GetSelection() == 2:
                 self.nb.SetSelection(0)

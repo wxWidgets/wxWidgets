@@ -191,6 +191,7 @@ void wxEnableTopLevelWindows(bool enable);
     }
 %}
 
+wxString wxStripMenuCodes(const wxString& in);
 
 //----------------------------------------------------------------------
 
@@ -198,7 +199,8 @@ class wxPyTimer {
 public:
     wxPyTimer(PyObject* notify);
     ~wxPyTimer();
-    int Interval();
+    int GetInterval();
+    bool IsOneShot();
     void Start(int milliseconds=-1, int oneShot=FALSE);
     void Stop();
 };

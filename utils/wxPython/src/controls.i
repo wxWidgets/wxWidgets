@@ -323,7 +323,8 @@ public:
     %pragma(python) addtomethod = "__init__:wx._StdWindowCallbacks(self)"
 
     bool  IsChecked(int uiIndex);
-    void  Check(int uiIndex, bool bCheck = TRUE);
+    void  Check(int uiIndex, int bCheck = TRUE);
+    void InsertItems(int LCOUNT, wxString* LIST, int pos);
 
     int GetItemHeight();
 };

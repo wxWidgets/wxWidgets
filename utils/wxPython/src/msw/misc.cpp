@@ -579,6 +579,41 @@ static PyObject *_wrap_wxGetResource(PyObject *self, PyObject *args, PyObject *k
     return _resultobj;
 }
 
+static PyObject *_wrap_wxStripMenuCodes(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxString * _result;
+    wxString * _arg0;
+    PyObject * _obj0 = 0;
+    char *_kwnames[] = { "in", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxStripMenuCodes",_kwnames,&_obj0)) 
+        return NULL;
+{
+    if (!PyString_Check(_obj0)) {
+        PyErr_SetString(PyExc_TypeError, wxStringErrorMsg);
+        return NULL;
+    }
+    _arg0 = new wxString(PyString_AsString(_obj0), PyString_Size(_obj0));
+}
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxString (wxStripMenuCodes(*_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}{
+    _resultobj = PyString_FromString(WXSTRINGCAST *(_result));
+}
+{
+    if (_obj0)
+        delete _arg0;
+}
+{
+    delete _result;
+}
+    return _resultobj;
+}
+
 #define wxSize_x_set(_swigobj,_swigval) (_swigobj->x = _swigval,_swigval)
 static PyObject *_wrap_wxSize_x_set(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
@@ -2134,8 +2169,8 @@ static PyObject *_wrap_delete_wxPyTimer(PyObject *self, PyObject *args, PyObject
     return _resultobj;
 }
 
-#define wxPyTimer_Interval(_swigobj)  (_swigobj->Interval())
-static PyObject *_wrap_wxPyTimer_Interval(PyObject *self, PyObject *args, PyObject *kwargs) {
+#define wxPyTimer_GetInterval(_swigobj)  (_swigobj->GetInterval())
+static PyObject *_wrap_wxPyTimer_GetInterval(PyObject *self, PyObject *args, PyObject *kwargs) {
     PyObject * _resultobj;
     int  _result;
     wxPyTimer * _arg0;
@@ -2143,18 +2178,45 @@ static PyObject *_wrap_wxPyTimer_Interval(PyObject *self, PyObject *args, PyObje
     char *_kwnames[] = { "self", NULL };
 
     self = self;
-    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyTimer_Interval",_kwnames,&_argo0)) 
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyTimer_GetInterval",_kwnames,&_argo0)) 
         return NULL;
     if (_argo0) {
         if (_argo0 == Py_None) { _arg0 = NULL; }
         else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
-            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_Interval. Expected _wxPyTimer_p.");
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_GetInterval. Expected _wxPyTimer_p.");
         return NULL;
         }
     }
 {
     wxPy_BEGIN_ALLOW_THREADS;
-        _result = (int )wxPyTimer_Interval(_arg0);
+        _result = (int )wxPyTimer_GetInterval(_arg0);
+
+    wxPy_END_ALLOW_THREADS;
+}    _resultobj = Py_BuildValue("i",_result);
+    return _resultobj;
+}
+
+#define wxPyTimer_IsOneShot(_swigobj)  (_swigobj->IsOneShot())
+static PyObject *_wrap_wxPyTimer_IsOneShot(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    bool  _result;
+    wxPyTimer * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxPyTimer_IsOneShot",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxPyTimer_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxPyTimer_IsOneShot. Expected _wxPyTimer_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = (bool )wxPyTimer_IsOneShot(_arg0);
 
     wxPy_END_ALLOW_THREADS;
 }    _resultobj = Py_BuildValue("i",_result);
@@ -3929,7 +3991,8 @@ static PyMethodDef misccMethods[] = {
 	 { "wxIndividualLayoutConstraint_Above", (PyCFunction) _wrap_wxIndividualLayoutConstraint_Above, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_Stop", (PyCFunction) _wrap_wxPyTimer_Stop, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPyTimer_Start", (PyCFunction) _wrap_wxPyTimer_Start, METH_VARARGS | METH_KEYWORDS },
-	 { "wxPyTimer_Interval", (PyCFunction) _wrap_wxPyTimer_Interval, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyTimer_IsOneShot", (PyCFunction) _wrap_wxPyTimer_IsOneShot, METH_VARARGS | METH_KEYWORDS },
+	 { "wxPyTimer_GetInterval", (PyCFunction) _wrap_wxPyTimer_GetInterval, METH_VARARGS | METH_KEYWORDS },
 	 { "delete_wxPyTimer", (PyCFunction) _wrap_delete_wxPyTimer, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPyTimer", (PyCFunction) _wrap_new_wxPyTimer, METH_VARARGS | METH_KEYWORDS },
 	 { "wxRect_asTuple", (PyCFunction) _wrap_wxRect_asTuple, METH_VARARGS | METH_KEYWORDS },
@@ -3991,6 +4054,7 @@ static PyMethodDef misccMethods[] = {
 	 { "wxSize_y_set", (PyCFunction) _wrap_wxSize_y_set, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_x_get", (PyCFunction) _wrap_wxSize_x_get, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSize_x_set", (PyCFunction) _wrap_wxSize_x_set, METH_VARARGS | METH_KEYWORDS },
+	 { "wxStripMenuCodes", (PyCFunction) _wrap_wxStripMenuCodes, METH_VARARGS | METH_KEYWORDS },
 	 { "wxGetResource", (PyCFunction) _wrap_wxGetResource, METH_VARARGS | METH_KEYWORDS },
 	 { "wxEnableTopLevelWindows", (PyCFunction) _wrap_wxEnableTopLevelWindows, METH_VARARGS | METH_KEYWORDS },
 	 { "wxSafeYield", (PyCFunction) _wrap_wxSafeYield, METH_VARARGS | METH_KEYWORDS },

@@ -94,25 +94,24 @@ public:
     }
 
     wxObject* wxPyValidator::Clone() const {
-    wxPyValidator* ptr = NULL;
-    wxPyValidator* self = (wxPyValidator*)this;
+        wxPyValidator* ptr = NULL;
+        wxPyValidator* self = (wxPyValidator*)this;
 
-    bool doSave = wxPyRestoreThread();
-    if (self->m_myInst.findCallback("Clone")) {
-        PyObject* ro;
-        ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
-        SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+        bool doSave = wxPyRestoreThread();
+        if (self->m_myInst.findCallback("Clone")) {
+            PyObject* ro;
+            ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
+            SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+        }
+        // This is very dangerous!!! But is the only way I could find
+        // to squash a memory leak.  Currently it is okay, but if the
+        // validator architecture in wxWindows ever changes, problems
+        // could arise.
+        delete self;
+
+        wxPySaveThread(doSave);
+        return ptr;
     }
-    // This is very dangerous!!! But is the only way I could find
-    // to squash a memory leak.  Currently it is okay, but if the
-    // validator architecture in wxWindows ever changes, problems
-    // could arise.
-    delete self;
-
-    wxPySaveThread(doSave);
-    return ptr;
-}
-
 
     DEC_PYCALLBACK_BOOL_WXWIN(Validate);
     DEC_PYCALLBACK_BOOL_(TransferToWindow);
@@ -313,6 +312,8 @@ public:
     void SetDropTarget(wxDropTarget* target);
     wxDropTarget* GetDropTarget();
     %pragma(python) addtomethod = "SetDropTarget:_args[0].thisown = 0"
+
+    wxSize GetBestSize();
 };
 
 //%clear int* x, int* y;
@@ -574,25 +575,9 @@ public:
     wxAcceleratorEntry *GetAccel();
     void SetAccel(wxAcceleratorEntry *accel);
 
-//  #ifdef __WXMSW__
-//      wxColour& GetBackgroundColour();
-//      wxBitmap GetBitmap(bool checked = TRUE);
-//      wxFont& GetFont();
-//      int GetMarginWidth();
-//      wxColour& GetTextColour();
-//      void SetBackgroundColour(const wxColour& colour);
-//      void SetBitmaps(const wxBitmap& checked, const wxBitmap& unchecked = wxNullBitmap);
-//      void SetFont(const wxFont& font);
-//      void SetMarginWidth(int width);
-//      void SetText(const wxString& str);
-//      const wxString& GetText();
-//      void SetTextColour(const wxColour& colour);
-//      void DeleteSubMenu();
-//      void SetCheckable(bool checkable);
-//      void SetSubMenu(wxMenu *menu);
-//  #endif
 };
 
 //---------------------------------------------------------------------------
+
 
 

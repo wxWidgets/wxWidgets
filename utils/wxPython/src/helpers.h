@@ -231,7 +231,7 @@ public:
 //---------------------------------------------------------------------------
 
 #define PYPRIVATE                                       \
-    void _setSelf(PyObject* self, int incref=TRUE) {    \
+    void _setSelf(PyObject* self, int incref=1) {       \
         m_myInst.setSelf(self, incref);                 \
     }                                                   \
     private: wxPyCallbackHelper m_myInst;

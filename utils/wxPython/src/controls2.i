@@ -229,6 +229,15 @@ public:
 
 //----------------------------------------------------------------------
 
+enum wxTreeItemIcon
+{
+    wxTreeItemIcon_Normal,              // not selected, not expanded
+    wxTreeItemIcon_Selected,            //     selected, not expanded
+    wxTreeItemIcon_Expanded,            // not selected,     expanded
+    wxTreeItemIcon_SelectedExpanded,    //     selected,     expanded
+    wxTreeItemIcon_Max
+};
+
 
 class wxTreeItemId {
 public:
@@ -317,18 +326,20 @@ public:
     void SetIndent(unsigned int indent);
     wxImageList *GetImageList();
     wxImageList *GetStateImageList();
-    void SetImageList(wxImageList *imageList);
+    void SetImageList(wxImageList *imageList/*, int which = wxIMAGE_LIST_NORMAL*/);
     void SetStateImageList(wxImageList *imageList);
 
     unsigned int GetSpacing();
     void SetSpacing(unsigned int spacing);
 
     wxString GetItemText(const wxTreeItemId& item);
-    int GetItemImage(const wxTreeItemId& item);
+    int GetItemImage(const wxTreeItemId& item,
+                     wxTreeItemIcon which = wxTreeItemIcon_Normal);
     int GetItemSelectedImage(const wxTreeItemId& item);
 
     void SetItemText(const wxTreeItemId& item, const wxString& text);
-    void SetItemImage(const wxTreeItemId& item, int image);
+    void SetItemImage(const wxTreeItemId& item, int image,
+                      wxTreeItemIcon which = wxTreeItemIcon_Normal);
     void SetItemSelectedImage(const wxTreeItemId& item, int image);
     void SetItemHasChildren(const wxTreeItemId& item, bool hasChildren = TRUE);
 

@@ -2134,11 +2134,16 @@ SWIGEXPORT(void) initwxc() {
 	 PyDict_SetItemString(d,"wxCOLOURED", PyInt_FromLong((long) wxCOLOURED));
 	 PyDict_SetItemString(d,"wxFIXED_LENGTH", PyInt_FromLong((long) wxFIXED_LENGTH));
 	 PyDict_SetItemString(d,"wxALIGN_LEFT", PyInt_FromLong((long) wxALIGN_LEFT));
-	 PyDict_SetItemString(d,"wxALIGN_CENTER", PyInt_FromLong((long) wxALIGN_CENTER));
-	 PyDict_SetItemString(d,"wxALIGN_CENTRE", PyInt_FromLong((long) wxALIGN_CENTRE));
+	 PyDict_SetItemString(d,"wxALIGN_CENTER_HORIZONTAL", PyInt_FromLong((long) wxALIGN_CENTER_HORIZONTAL));
+	 PyDict_SetItemString(d,"wxALIGN_CENTRE_HORIZONTAL", PyInt_FromLong((long) wxALIGN_CENTRE_HORIZONTAL));
 	 PyDict_SetItemString(d,"wxALIGN_RIGHT", PyInt_FromLong((long) wxALIGN_RIGHT));
 	 PyDict_SetItemString(d,"wxALIGN_BOTTOM", PyInt_FromLong((long) wxALIGN_BOTTOM));
+	 PyDict_SetItemString(d,"wxALIGN_CENTER_VERTICAL", PyInt_FromLong((long) wxALIGN_CENTER_VERTICAL));
+	 PyDict_SetItemString(d,"wxALIGN_CENTRE_VERTICAL", PyInt_FromLong((long) wxALIGN_CENTRE_VERTICAL));
 	 PyDict_SetItemString(d,"wxALIGN_TOP", PyInt_FromLong((long) wxALIGN_TOP));
+	 PyDict_SetItemString(d,"wxALIGN_CENTER", PyInt_FromLong((long) wxALIGN_CENTER));
+	 PyDict_SetItemString(d,"wxALIGN_CENTRE", PyInt_FromLong((long) wxALIGN_CENTRE));
+	 PyDict_SetItemString(d,"wxSHAPED", PyInt_FromLong((long) wxSHAPED));
 	 PyDict_SetItemString(d,"wxLB_NEEDED_SB", PyInt_FromLong((long) wxLB_NEEDED_SB));
 	 PyDict_SetItemString(d,"wxLB_ALWAYS_SB", PyInt_FromLong((long) wxLB_ALWAYS_SB));
 	 PyDict_SetItemString(d,"wxLB_SORT", PyInt_FromLong((long) wxLB_SORT));

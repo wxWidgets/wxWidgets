@@ -124,25 +124,24 @@ public:
     }
 
     wxObject* wxPyValidator::Clone() const {
-    wxPyValidator* ptr = NULL;
-    wxPyValidator* self = (wxPyValidator*)this;
+        wxPyValidator* ptr = NULL;
+        wxPyValidator* self = (wxPyValidator*)this;
 
-    bool doSave = wxPyRestoreThread();
-    if (self->m_myInst.findCallback("Clone")) {
-        PyObject* ro;
-        ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
-        SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+        bool doSave = wxPyRestoreThread();
+        if (self->m_myInst.findCallback("Clone")) {
+            PyObject* ro;
+            ro = self->m_myInst.callCallbackObj(Py_BuildValue("()"));
+            SWIG_GetPtrObj(ro, (void **)&ptr, "_wxPyValidator_p");
+        }
+        // This is very dangerous!!! But is the only way I could find
+        // to squash a memory leak.  Currently it is okay, but if the
+        // validator architecture in wxWindows ever changes, problems
+        // could arise.
+        delete self;
+
+        wxPySaveThread(doSave);
+        return ptr;
     }
-    // This is very dangerous!!! But is the only way I could find
-    // to squash a memory leak.  Currently it is okay, but if the
-    // validator architecture in wxWindows ever changes, problems
-    // could arise.
-    delete self;
-
-    wxPySaveThread(doSave);
-    return ptr;
-}
-
 
     DEC_PYCALLBACK_BOOL_WXWIN(Validate);
     DEC_PYCALLBACK_BOOL_(TransferToWindow);
@@ -4490,6 +4489,35 @@ static PyObject *_wrap_wxWindow_GetDropTarget(PyObject *self, PyObject *args, Py
     return _resultobj;
 }
 
+#define wxWindow_GetBestSize(_swigobj)  (_swigobj->GetBestSize())
+static PyObject *_wrap_wxWindow_GetBestSize(PyObject *self, PyObject *args, PyObject *kwargs) {
+    PyObject * _resultobj;
+    wxSize * _result;
+    wxWindow * _arg0;
+    PyObject * _argo0 = 0;
+    char *_kwnames[] = { "self", NULL };
+    char _ptemp[128];
+
+    self = self;
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,"O:wxWindow_GetBestSize",_kwnames,&_argo0)) 
+        return NULL;
+    if (_argo0) {
+        if (_argo0 == Py_None) { _arg0 = NULL; }
+        else if (SWIG_GetPtrObj(_argo0,(void **) &_arg0,"_wxWindow_p")) {
+            PyErr_SetString(PyExc_TypeError,"Type error in argument 1 of wxWindow_GetBestSize. Expected _wxWindow_p.");
+        return NULL;
+        }
+    }
+{
+    wxPy_BEGIN_ALLOW_THREADS;
+        _result = new wxSize (wxWindow_GetBestSize(_arg0));
+
+    wxPy_END_ALLOW_THREADS;
+}    SWIG_MakePtr(_ptemp, (void *) _result,"_wxSize_p");
+    _resultobj = Py_BuildValue("s",_ptemp);
+    return _resultobj;
+}
+
 static void *SwigwxPanelTowxWindow(void *ptr) {
     wxPanel *src;
     wxWindow *dest;
@@ -8471,6 +8499,7 @@ static PyMethodDef windowscMethods[] = {
 	 { "wxPanel_GetDefaultItem", (PyCFunction) _wrap_wxPanel_GetDefaultItem, METH_VARARGS | METH_KEYWORDS },
 	 { "wxPanel_InitDialog", (PyCFunction) _wrap_wxPanel_InitDialog, METH_VARARGS | METH_KEYWORDS },
 	 { "new_wxPanel", (PyCFunction) _wrap_new_wxPanel, METH_VARARGS | METH_KEYWORDS },
+	 { "wxWindow_GetBestSize", (PyCFunction) _wrap_wxWindow_GetBestSize, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_GetDropTarget", (PyCFunction) _wrap_wxWindow_GetDropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetDropTarget", (PyCFunction) _wrap_wxWindow_SetDropTarget, METH_VARARGS | METH_KEYWORDS },
 	 { "wxWindow_SetValidator", (PyCFunction) _wrap_wxWindow_SetValidator, METH_VARARGS | METH_KEYWORDS },
