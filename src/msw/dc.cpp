@@ -572,7 +572,7 @@ bool wxDC::DoFloodFill(wxCoord x, wxCoord y, const wxColour& col, int style)
     }
 
     CalcBoundingBox(x, y);
-    
+
     return success;
 #endif
 }
@@ -2047,8 +2047,12 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
         }
 
         if ( !success && (caps & RC_STRETCHBLT) )
+#endif
+        // __WXWINCE__
         {
+#ifndef __WXWINCE__
             StretchBltModeChanger changeMode(GetHdc(), COLORONCOLOR);
+#endif
 
             if ( !::StretchBlt
                     (
@@ -2086,8 +2090,6 @@ bool wxDC::DoBlit(wxCoord xdest, wxCoord ydest,
                 success = TRUE;
             }
         }
-#endif
-        // __WXWINCE__
     }
 
     ::SetTextColor(GetHdc(), old_textground);

@@ -2360,6 +2360,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 break;
             }
 
+#ifndef __WXWINCE__
         case WM_PRINT:
             {
                 // Don't call the wx handlers in this case
@@ -2373,6 +2374,7 @@ long wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM lParam
                 processed = HandlePaint();
             }
             break;
+#endif
 
         case WM_CLOSE:
 #ifdef __WXUNIVERSAL__

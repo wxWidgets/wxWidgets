@@ -79,7 +79,8 @@ bool wxWinceHelpController::DisplayBlock(long block)
     return TRUE;
 }
 
-bool wxWinceHelpController::KeywordSearch(const wxString& k)
+bool wxWinceHelpController::KeywordSearch(const wxString& k,
+                               wxHelpSearchMode mode)
 {
     return TRUE;
 }
