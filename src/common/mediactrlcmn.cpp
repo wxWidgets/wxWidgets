@@ -70,7 +70,7 @@ DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
 //
 // This searches by searching the global RTTI hashtable, class by class,
 // attempting to call CreateControl on each one found that is a derivative
-// of wxMediaBackend - if it succeededs Create returns true, otherwise
+// of wxMediaBackend - if it succeeded Create returns true, otherwise
 // it keeps iterating through the hashmap.
 //---------------------------------------------------------------------------
 bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
@@ -301,9 +301,9 @@ bool wxMediaCtrl::Load(const wxURI& location)
 // wxMediaCtrl::Stop
 // wxMediaCtrl::GetPlaybackRate
 // wxMediaCtrl::SetPlaybackRate
-// wxMediaCtrl::SetPosition
-// wxMediaCtrl::GetPosition
-// wxMediaCtrl::GetDuration
+// wxMediaCtrl::Seek --> SetPosition
+// wxMediaCtrl::Tell --> GetPosition
+// wxMediaCtrl::Length --> GetDuration
 // wxMediaCtrl::GetState
 // wxMediaCtrl::DoGetBestSize
 //
@@ -346,25 +346,43 @@ bool wxMediaCtrl::SetPlaybackRate(double dRate)
     return false;
 }
 
-bool wxMediaCtrl::SetPosition(wxLongLong where)
+wxFileOffset wxMediaCtrl::Seek(wxFileOffset where, wxSeekMode mode)
 {
-    if(m_imp && m_bLoaded)
-        return m_imp->SetPosition(where);
-    return false;
+    wxFileOffset offset;
+
+    switch (mode)
+    {
+    case wxFromStart:
+        offset = where;
+        break;
+    case wxFromEnd:
+        offset = Length() - where;
+        break;
+//    case wxFromCurrent:
+    default:
+        offset = Tell() + where;
+        break;
+    }
+
+    if(m_imp && m_bLoaded && m_imp->SetPosition(offset))
+        return offset;
+    return wxInvalidOffset;
 }
 
-wxLongLong wxMediaCtrl::GetPosition()
+wxFileOffset wxMediaCtrl::Tell()
 {
+    //FIXME
     if(m_imp && m_bLoaded)
-        return m_imp->GetPosition();
-    return 0;
+        return (wxFileOffset) m_imp->GetPosition().ToLong();
+    return wxInvalidOffset;
 }
 
-wxLongLong wxMediaCtrl::GetDuration()
+wxFileOffset wxMediaCtrl::Length()
 {
+    //FIXME
     if(m_imp && m_bLoaded)
-        return m_imp->GetDuration();
-    return 0;
+        return (wxFileOffset) m_imp->GetDuration().ToLong();
+    return wxInvalidOffset;
 }
 
 wxMediaState wxMediaCtrl::GetState()

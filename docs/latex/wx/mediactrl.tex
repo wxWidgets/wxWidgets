@@ -172,16 +172,16 @@ wxMediaCtrl figure it out.}
 \docparam{name}{Window name.}
 
 
-\membersection{wxMediaCtrl::GetDuration}\label{wxmediactrlgetduration}
+\membersection{wxMediaCtrl::Length}\label{wxmediactrlgetduration}
 
-\func{wxLongLong}{GetDuration}{\void}
+\func{wxFileOffset}{GetDuration}{\void}
 
 Obtains the length - the total amount of time the movie has in milliseconds.
 
 
-\membersection{wxMediaCtrl::GetPosition}\label{wxmediactrlgetposition}
+\membersection{wxMediaCtrl::Tell}\label{wxmediactrlgetposition}
 
-\func{wxLongLong}{GetPosition}{\void}
+\func{wxFileOffset}{GetPosition}{\void}
 
 Obtains the current position in time within the movie in milliseconds.
 
@@ -220,9 +220,9 @@ Pauses playback of the movie.
 Resumes playback of the movie.
 
 
-\membersection{wxMediaCtrl::SetPosition}\label{wxmediactrlsetposition}
+\membersection{wxMediaCtrl::Seek}\label{wxmediactrlsetposition}
 
-\func{bool}{SetPosition}{\param{wxLongLong }{where}}
+\func{wxFileOffset}{SetPosition}{\param{wxFileOffset }{where}, \param{wxSeekMode }{mode}}
 
 Seeks to a position within the movie.
 

@@ -55,11 +55,6 @@ enum wxMediaState
     wxMEDIASTATE_PLAYING
 };
 
-enum wxMediaTimeFormat
-{
-    wxMEDIATIMEFORMAT_TIME
-};
-
 #define wxMEDIABACKEND_DIRECTSHOW   wxT("wxAMMediaBackend")
 #define wxMEDIABACKEND_MCI          wxT("wxMCIMediaBackend")
 #define wxMEDIABACKEND_QUICKTIME    wxT("wxQTMediaBackend")
@@ -159,7 +154,7 @@ public:
                 long style = 0,
                 const wxString& szBackend = wxT(""),
                 const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxT("mediaCtrl"));
+                const wxString& name = wxT("mediaCtrl")); //DirectShow only
 
     bool DoCreate(wxClassInfo* instance,
                 wxWindow* parent, wxWindowID id,
@@ -174,26 +169,19 @@ public:
     bool Stop();
 
     bool Load(const wxString& fileName);
-    bool Load(const wxURI& location);
+    bool Load(const wxURI& location); //DirectShow only
 
     void Loop(bool bLoop = true);
     bool IsLooped();
 
     wxMediaState GetState();
 
-    double GetPlaybackRate();
-    bool SetPlaybackRate(double dRate);
+    double GetPlaybackRate();           //All but MCI
+    bool SetPlaybackRate(double dRate); //All but MCI
 
-    bool SetPosition(wxLongLong where);
-    wxLongLong GetPosition();
-    wxLongLong GetDuration();
-
-    //The following two prevent function hiding
-    void GetPosition(int* x, int* y) const
-    {       wxControl::GetPosition(x, y);           }
-
-    wxPoint GetPosition() const
-    {       return wxControl::GetPosition();        }  
+    wxFileOffset Seek(wxFileOffset where, wxSeekMode mode = wxFromStart);
+    wxFileOffset Tell(); //FIXME: This should be const
+    wxFileOffset Length(); //FIXME: This should be const
 
 protected:
     static wxClassInfo* NextBackend();
@@ -213,7 +201,7 @@ protected:
 //
 // wxMediaBackend
 //
-// Currently an internal class - API stability not gauranteed.
+// Currently an internal class - API stability not guaranteed.
 //
 // ----------------------------------------------------------------------------
 

@@ -244,6 +244,7 @@ bool MyApp::OnInit()
 // 4) Connect our events
 // 5) Start our timer
 // ----------------------------------------------------------------------------
+
 MyFrame::MyFrame(const wxString& title)
        : wxFrame(NULL, wxID_ANY, title)
 {
@@ -482,11 +483,11 @@ void MyFrame::ResetStatus()
                                     _T("Length(Seconds):%u Speed:%1.1fx"),
     m_mediactrl->GetBestSize().x,
     m_mediactrl->GetBestSize().y,
-    (unsigned)((m_mediactrl->GetDuration() / 1000).ToLong()),
+    (unsigned)((m_mediactrl->Length() / 1000)),
     m_mediactrl->GetPlaybackRate()
     );
 
-    m_slider->SetRange(0, (m_mediactrl->GetDuration() / 1000).ToLong());
+    m_slider->SetRange(0, (m_mediactrl->Length() / 1000));
 
     m_nLoops = 0;
 }
@@ -599,7 +600,7 @@ void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyFrame::OnSeek(wxCommandEvent& WXUNUSED(event))
 {
-    if( !m_mediactrl->SetPosition( m_slider->GetValue() * 1000 ) )
+    if( m_mediactrl->Seek( m_slider->GetValue() * 1000 ) == wxInvalidOffset )
         wxMessageBox(wxT("Couldn't seek in movie!"));
 }
 
@@ -630,7 +631,7 @@ void MyFrame::OnMediaStop(wxMediaEvent& WXUNUSED(event))
 // ----------------------------------------------------------------------------
 void MyTimer::Notify()
 {
-    long lPosition = (m_frame->m_mediactrl->GetPosition() / 1000).ToLong();
+    long lPosition = (m_frame->m_mediactrl->Tell() / 1000);
     m_frame->m_slider->SetValue(lPosition);
 
 #if wxUSE_STATUSBAR
