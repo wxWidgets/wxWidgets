@@ -74,7 +74,10 @@
     #include "wx/fdrepdlg.h"
 #endif // wxUSE_FINDREPLDLG
 
+#if wxUSE_SPINCTRL
 #include "wx/spinctrl.h"
+#endif
+
 #include "wx/propdlg.h"
 
 #include "dialogs.h"
@@ -407,10 +410,6 @@ MyFrame::MyFrame(wxWindow *parent,
         );
     }
 #endif // wxUSE_COLOURDLG
-
-#if wxUSE_STATUSBAR
-    CreateStatusBar();
-#endif // wxUSE_STATUSBAR
 }
 
 #if wxUSE_COLOURDLG
@@ -1405,11 +1404,16 @@ wxPanel* SettingsDialog::CreateGeneralSettingsPage(wxWindow* parent)
 
     wxBoxSizer* itemSizer12 = new wxBoxSizer( wxHORIZONTAL );
     wxCheckBox* checkBox12 = new wxCheckBox(panel, ID_AUTO_SAVE, autoSaveLabel, wxDefaultPosition, wxDefaultSize);
+
+#if wxUSE_SPINCTRL
     wxSpinCtrl* spinCtrl12 = new wxSpinCtrl(panel, ID_AUTO_SAVE_MINS, wxEmptyString,
         wxDefaultPosition, wxSize(40, -1), wxSP_ARROW_KEYS, 1, 60, 1);
+#endif
     
     itemSizer12->Add(checkBox12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+#if wxUSE_SPINCTRL
     itemSizer12->Add(spinCtrl12, 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
+#endif
     itemSizer12->Add(new wxStaticText(panel, wxID_STATIC, minsLabel), 0, wxALL|wxALIGN_CENTER_VERTICAL, 5);
     item0->Add(itemSizer12, 0, wxGROW|wxALL, 0);
 
@@ -1465,6 +1469,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
 
     styleSizer->Add(itemSizer2, 0, wxGROW|wxALL, 5);
 
+#if wxUSE_SPINCTRL
     //// FONT SIZE SELECTION
 
     wxStaticBox* staticBox1 = new wxStaticBox(panel, -1, _("Tile font size:"));
@@ -1475,6 +1480,7 @@ wxPanel* SettingsDialog::CreateAestheticSettingsPage(wxWindow* parent)
     itemSizer5->Add(spinCtrl, 0, wxALL|wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL, 5);
 
     item0->Add(itemSizer5, 0, wxGROW|wxLEFT|wxRIGHT, 5);
+#endif
 
     topSizer->Add( item0, 1, wxGROW|wxALIGN_CENTRE|wxALL, 5 );
 
