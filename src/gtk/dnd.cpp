@@ -12,7 +12,9 @@
 #endif
 
 #include "wx/dnd.h"
-
+#include "wx/log.h"
+									       
+									        
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/window.h"

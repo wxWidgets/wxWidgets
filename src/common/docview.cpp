@@ -40,6 +40,7 @@
     #include "wx/list.h"
     #include "wx/filedlg.h"
     #include "wx/intl.h"
+    #include "wx/log.h"
 #endif
 
 

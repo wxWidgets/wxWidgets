@@ -39,6 +39,7 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/progdlg.h"
+    #include "wx/log.h"									  
 #endif
 
 #include "wx/generic/printps.h"
