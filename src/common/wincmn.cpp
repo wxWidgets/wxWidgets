@@ -722,8 +722,13 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
 
 void wxWindowBase::PushEventHandler(wxEvtHandler *handler)
 {
-    handler->SetNextHandler(GetEventHandler());
-    GetEventHandler()->SetPreviousHandler(handler);
+    wxEvtHandler *handlerOld = GetEventHandler();
+
+    handler->SetNextHandler(handlerOld);
+
+    if ( handlerOld )
+        GetEventHandler()->SetPreviousHandler(handler);
+
     SetEventHandler(handler);
 }
 
@@ -734,8 +739,11 @@ wxEvtHandler *wxWindowBase::PopEventHandler(bool deleteHandler)
     {
         wxEvtHandler *handlerB = handlerA->GetNextHandler();
         handlerA->SetNextHandler((wxEvtHandler *)NULL);
-        handlerB->SetPreviousHandler((wxEvtHandler *)NULL);
+
+        if ( handlerB )
+            handlerB->SetPreviousHandler((wxEvtHandler *)NULL);
         SetEventHandler(handlerB);
+
         if ( deleteHandler )
         {
             delete handlerA;
