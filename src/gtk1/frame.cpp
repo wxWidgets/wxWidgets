@@ -940,12 +940,16 @@ void wxFrame::OnMenuHighlight(wxMenuEvent& event)
         wxString helpString;
 
         int menuId = event.GetMenuId();
-        if ( menuId != -1 )
+        if ( menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */ )
         {
             wxMenuBar *menuBar = GetMenuBar();
-            if (menuBar)
+            if ( menuBar )
             {
-                helpString = menuBar->GetHelpString(menuId);
+                // it's ok if we don't find the item because it might belong to
+                // the popup menu
+                wxMenuItem *item = menuBar->FindItem(menuId);
+                if ( item )
+                    helpString = item->GetHelp();
             }
         }
 
