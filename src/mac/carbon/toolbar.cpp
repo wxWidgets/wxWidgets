@@ -195,7 +195,7 @@ bool wxToolBar::Realize()
     controlstyle.flags = kControlUseFontMask ;
     controlstyle.font = kControlFontSmallSystemFont ;
     
-    wxwxToolBarToolsListNode *node = m_tools.GetFirst();
+    wxToolBarToolsList::Node *node = m_tools.GetFirst();
     int noButtons = 0;
     int x = 0 ;
     int y = 0 ;
@@ -385,7 +385,7 @@ void wxToolBar::MacSuperChangedPosition()
     controlstyle.flags = kControlUseFontMask ;
     controlstyle.font = kControlFontSmallSystemFont ;
     
-    wxwxToolBarToolsListNode *node = m_tools.GetFirst();
+    wxToolBarToolsList::Node *node = m_tools.GetFirst();
     int noButtons = 0;
     int x = 0 ;
     wxSize toolSize = GetToolSize() ;

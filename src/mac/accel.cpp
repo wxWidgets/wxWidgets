@@ -88,7 +88,7 @@ int wxAcceleratorTable::GetCommand( wxKeyEvent &event )
 {
     if (!Ok()) return -1;
 
-    wxwxAccelListNode *node = M_ACCELDATA->m_accels.GetFirst();
+    wxAccelList::Node *node = M_ACCELDATA->m_accels.GetFirst();
     while (node)
     {
         wxAcceleratorEntry *entry = (wxAcceleratorEntry*)node->GetData();

@@ -560,7 +560,7 @@ void wxMenuBar::MacInstallMenuBar()
    	for (size_t i = 0; i < m_menus.GetCount(); i++)
   	{
         Str255 	label;
-        wxwxMenuItemListNode *node;
+        wxMenuItemList::Node *node;
         wxMenuItem *item;
         int pos ;
     	wxMenu* menu = m_menus[i] , *subMenu = NULL ;
@@ -642,7 +642,7 @@ void wxMenuBar::MacInstallMenuBar()
 			for ( size_t i = 0 ; i < submenus.GetCount() ; ++i )
 			{
 			    wxMenu* submenu = (wxMenu*) submenus[i] ;
-    	        wxwxMenuItemListNode *subnode;
+    	        wxMenuItemList::Node *subnode;
     	        wxMenuItem *subitem;
     	        int subpos ;
                 for ( subpos = 0 , subnode = submenu->GetMenuItems().GetFirst(); subnode; subnode = subnode->GetNext(), subpos++) 
