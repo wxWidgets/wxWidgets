@@ -22,7 +22,6 @@ copy /s %WXWIN%\include\wx\*                 %BASE%\include\wx
 copy /s %WXWIN%\contrib\include\wx\gizmos    %BASE%\include\wx\gizmos
 copy /s %WXWIN%\contrib\include\wx\ogl       %BASE%\include\wx\ogl
 copy /s %WXWIN%\contrib\include\wx\stc       %BASE%\include\wx\stc
-copy /s %WXWIN%\contrib\include\wx\xrc       %BASE%\include\wx\xrc
 
 copy /s %WXWIN%\wxPython\include\wx\*        %BASE%\include\wx
 mkdir %BASE%\include\wx\wxPython\i_files
@@ -68,8 +67,8 @@ rm del-files
 rm del-dirs
 
 rem *** bundle it all up
-tar cvf ../dist/wxPythonWIN32-devel-%1.tar wxPython-%1
-gzip -9 ../dist/wxPythonWIN32-devel-%1.tar
+tar cvf ../dist/wxPython-win32-devel-%1.tar wxPython-%1
+gzip -9 ../dist/wxPython-win32-devel-%1.tar
 
 rem *** cleanup
 cd ..

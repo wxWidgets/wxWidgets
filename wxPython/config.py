@@ -162,16 +162,22 @@ CONTRIBS_INC = ""  # A dir to add as an -I flag when compiling the contribs
 
 # Some MSW build settings
 
-FINAL = 0          # Mirrors use of same flag in wx makefiles,
-                   # (0 or 1 only) should probably find a way to
-                   # autodetect this...
+MONOLITHIC = 1     # The core wxWidgets lib can be built as either a
+                   # single monolithic DLL or as a collection of DLLs.
+                   # This flag controls which set of libs will be used
+                   # on Windows.  (For other platforms it is automatic
+                   # via using wx-config.)
 
-HYBRID = 1         # If set and not debug or FINAL, then build a
-                   # hybrid extension that can be used by the
-                   # non-debug version of python, but contains
-                   # debugging symbols for wxWidgets and wxPython.
-                   # wxWidgets must have been built with /MD, not /MDd
-                   # (using FINAL=hybrid will do it.)
+FINAL = 0          # Will use the release version of the wxWidgets libs on MSW.
+
+HYBRID = 1         # Will use the "hybrid" version of the wxWidgets
+                   # libs on MSW.  A "hybrid" build is one that is
+                   # basically a release build, but that also defines
+                   # __WXDEBUG__ to activate the runtime checks and
+                   # assertions in the library.  When any of these is
+                   # triggered it is turned into a Python exception so
+                   # this is a very useful feature to have turned on.
+
 
                    # Version part of wxWidgets LIB/DLL names
 WXDLLVER = '%d%d' % (VER_MAJOR, VER_MINOR)
@@ -237,7 +243,7 @@ for flag in ['BUILD_GLCANVAS', 'BUILD_OGL', 'BUILD_STC',
              'CORE_ONLY', 'PREP_ONLY', 'USE_SWIG', 'UNICODE',
              'UNDEF_NDEBUG', 'NO_SCRIPTS', 'NO_HEADERS', 'BUILD_RENAMERS',
              'FULL_DOCS', 'INSTALL_MULTIVERSION', 'EP_ADD_OPTS',
-             'FINAL', 'HYBRID', ]:
+             'MONOLITHIC', 'FINAL', 'HYBRID', ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(flag) == 0:
             pos = sys.argv[x].find('=') + 1
@@ -509,9 +515,10 @@ def find_data_files(srcdir, *wildcards):
 def makeLibName(name):
     if os.name == 'posix':
         libname = '%s_%s-%s' % (WXBASENAME, name, WXRELEASE)
-    else:
+    elif name:
         libname = 'wxmsw%s%s_%s' % (WXDLLVER, libFlag(), name)
-
+    else:
+        libname = 'wxmsw%s%s' % (WXDLLVER, libFlag())
     return [libname]
 
 
@@ -558,14 +565,18 @@ def getExtraPath(shortVer=True, addOpts=False):
     if shortVer:
         # short version, just Major.Minor
         ep = "wx-%d.%d" % (VER_MAJOR, VER_MINOR)
+        
         # plus release if minor is odd
-        if VER_MINOR % 2 == 1:
-            ep += ".%d" % VER_RELEASE
+        #if VER_MINOR % 2 == 1:
+        #    ep += ".%d" % VER_RELEASE
+            
     else:
         # long version, full version 
         ep = "wx-%d.%d.%d.%d" % (VER_MAJOR, VER_MINOR, VER_RELEASE, VER_SUBREL)
 
     if addOpts:
+        port = WXPORT
+        if port == "msw": port = "win32"
         ep += "-%s-%s" % (WXPORT, (UNICODE and 'unicode' or 'ansi'))
         
     if FLAVOUR:
@@ -646,14 +657,17 @@ if os.name == 'nt':
         defines.append( ('__WXDEBUG__', None) )
 
     libdirs = [ opj(WXDIR, 'lib', 'vc_dll') ]
-    libs = [ 'wxbase' + WXDLLVER + libFlag(),  # TODO: trim this down to what is really needed for the core
-             'wxbase' + WXDLLVER + libFlag() + '_net',
-             'wxbase' + WXDLLVER + libFlag() + '_xml',
-             makeLibName('core')[0],
-             makeLibName('adv')[0],
-             makeLibName('html')[0],
-             makeLibName('xrc')[0],
-             ]
+    if MONOLITHIC:
+        libs = makeLibName('')
+    else:
+        libs = [ 'wxbase' + WXDLLVER + libFlag(), 
+                 'wxbase' + WXDLLVER + libFlag() + '_net',
+                 'wxbase' + WXDLLVER + libFlag() + '_xml',
+                 makeLibName('core')[0],
+                 makeLibName('adv')[0],
+                 makeLibName('html')[0],
+                 makeLibName('xrc')[0],
+                 ]
 
     libs = libs + ['kernel32', 'user32', 'gdi32', 'comdlg32',
             'winspool', 'winmm', 'shell32', 'oldnames', 'comctl32',
@@ -771,7 +785,7 @@ else:
 
 if UNICODE:
     BUILD_BASE = BUILD_BASE + '.unicode'
-    VER_FLAGS += 'u'
+    ##VER_FLAGS += 'u'
 
 if os.path.exists('DAILY_BUILD'):
     

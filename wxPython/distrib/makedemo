@@ -28,8 +28,8 @@ rm -f `find  _distrib_tgz/wxPython-$VERSION -name ".#*"`
 
 cd _distrib_tgz
 
-tar cvf ../dist/wxPythonDemo-$VERSION.tar wxPython-$VERSION
-gzip -9 ../dist/wxPythonDemo-$VERSION.tar
+tar cvf ../dist/wxPython-demo-$VERSION.tar wxPython-$VERSION
+gzip -9 ../dist/wxPython-demo-$VERSION.tar
 
 cd ..
 rm -r _distrib_tgz

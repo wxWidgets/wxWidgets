@@ -51,9 +51,9 @@ DEST=wxPython-$VERSION/docs
 mkdir -p _build_docs/$DEST
 cp -R --link docs/api _build_docs/$DEST
 cd _build_docs
-rm -f ../dist/wxPythonNewDocs-$VERSION.tar.gz
-tar cf ../dist/wxPythonNewDocs-$VERSION.tar $DEST
-gzip -9 ../dist/wxPythonNewDocs-$VERSION.tar
+rm -f ../dist/wxPython-newdocs-$VERSION.tar.gz
+tar cf ../dist/wxPython-newdocs-$VERSION.tar $DEST
+gzip -9 ../dist/wxPython-newdocs-$VERSION.tar
 
 # Cleanup
 cd ..

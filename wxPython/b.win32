@@ -91,7 +91,7 @@ elif [ "$1" = "b" ]; then
     $0 $VER   $@
     $0 $VER h $@
 
-# (no command arg) --> normal build for development
+# (no command arg) --> normal debug build for development
 else
     CMD="$SETUP $FLAGS HYBRID=0 build_ext --inplace --debug $@"
 fi
