@@ -322,7 +322,8 @@ extern bool g_isIdle;
 //-----------------------------------------------------------------------------
 
 // returns the child of win which currently has focus or NULL if not found
-static wxWindow *FindFocusedChild(wxWindow *win)
+// Note: can't be static, needed by textctrl.cpp.
+/* static */ wxWindow *FindFocusedChild(wxWindow *win)
 {
     wxWindow *winFocus = wxWindow::FindFocus();
     if ( !winFocus )
