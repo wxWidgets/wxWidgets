@@ -265,14 +265,14 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id,
 
     wxMenu* fileMenu = new wxMenu;
     fileMenu->Append(wxID_HTML_OPENFILE, _("&Open..."));
-    fileMenu->Append(wxID_ABOUT, _("&About..."));
     fileMenu->AppendSeparator();
     fileMenu->Append(wxID_CLOSE, _("&Close"));
 
-//    wxMenu* helpMenu = new wxMenu;
-//    helpMenu->Append(wxID_ABOUT, _("&About..."));
+    wxMenu* helpMenu = new wxMenu;
+    helpMenu->Append(wxID_ABOUT, _("&About..."));
 
     menuBar->Append(fileMenu,_("File"));
+    menuBar->Append(helpMenu,_("Help"));
     SetMenuBar(menuBar);
 #endif
 
