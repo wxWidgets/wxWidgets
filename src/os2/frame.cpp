@@ -695,29 +695,13 @@ bool wxFrame::ShowFullScreen(
 // Checks if there is a toolbar, and returns the first free client position
 wxPoint wxFrame::GetClientAreaOrigin() const
 {
-    wxPoint                         vPoint(0, 0);
+    wxPoint                         vPoint = wxTopLevelWindow::GetClientAreaOrigin();
 
-#if wxUSE_TOOLBAR
-    if (GetToolBar())
-    {
-        int                         nWidth;
-        int                         nHeight;
-
-        GetToolBar()->GetSize( &nWidth
-                              ,&nHeight
-                             );
-
-        if (GetToolBar()->GetWindowStyleFlag() & wxTB_VERTICAL)
-        {
-            vPoint.x += nWidth;
-        }
-        else
-        {
-            // PM is backwards from windows
-            vPoint.y += nHeight;
-        }
-    }
-#endif //wxUSE_TOOLBAR
+    //
+    // In OS/2 the toolbar and statusbar are frame extensions so there is no
+    // adjustment.  The client is supposedly resized for a toolbar in OS/2
+    // as it is for the status bar.
+    //
     return vPoint;
 } // end of wxFrame::GetClientAreaOrigin
 

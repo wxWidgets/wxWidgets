@@ -74,9 +74,11 @@ void wxBitmapRefData::Free()
             wxLogLastError("GpiDeleteBitmap(hbitmap)");
         }
     }
-
-    delete m_pBitmapMask;
-    m_pBitmapMask = NULL;
+    if (m_pBitmapMask)
+    {
+        delete m_pBitmapMask;
+        m_pBitmapMask = NULL;
+    }
 } // end of wxBitmapRefData::Free
 
 // ----------------------------------------------------------------------------

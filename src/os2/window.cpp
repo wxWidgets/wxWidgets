@@ -2592,6 +2592,8 @@ MRESULT wxWindowOS2::OS2WindowProc(
                     {
                         if (pFrame->GetStatusBar())
                             pFrame->PositionStatusBar();
+                        if (pFrame->GetToolBar())
+                            pFrame->PositionToolBar();
                     }
                 }
             }
@@ -4364,7 +4366,19 @@ int wxWindowOS2::GetOS2ParentHeight(
             IsKindOf(CLASSINFO(wxMenuBar))   ||
             IsKindOf(CLASSINFO(wxToolBar))
            )
-            return(pParent->GetSize().y);
+        {
+            if (IsKindOf(CLASSINFO(wxToolBar)))
+            {
+                wxFrame*            pFrame = wxDynamicCast(GetParent(), wxFrame);
+
+                if (pFrame->GetToolBar() == this)
+                    return(pParent->GetSize().y);
+                else
+                    return(pParent->GetClientSize().y);
+            }
+            else
+                return(pParent->GetSize().y);
+        }
         else
             return(pParent->GetClientSize().y);
     }

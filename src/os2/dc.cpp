@@ -1390,7 +1390,7 @@ void wxDC::DoDrawBitmap(
                 //
                 // Need to get a background color for mask blitting
                 //
-                if (IsKindOf(CLASSINFO(wxPaintDC)))
+                if (IsKindOf(CLASSINFO(wxWindowDC)))
                 {
                     wxWindowDC*             pWindowDC = wxDynamicCast(this, wxWindowDC);
 
