@@ -15,6 +15,9 @@ These options are currently recognised by wxWidgets:
 In some circumstances the MaskBlt function can be slower than using the fallback code, especially if using
 DC cacheing. By default, MaskBlt will be used where it is implemented by the operating system and driver.
 }
+\twocolitem{msw.remap}{(wxMSW only) If 1 (the default), wxToolBar bitmap colours will be remapped
+to the current theme's values. Set this to 0 to disable this functionality, for example if you're using
+more than 16 colours in your tool bitmaps.}
 \twocolitem{mgl.aa-threshold}{(wxMGL only) Set this integer option to point
 size below which fonts are not antialiased. Default: 10.
 }
