@@ -260,13 +260,15 @@ long wxTreeCtrl::GetRootItem(void) const
   return (long) ::SendMessage((HWND) GetHWND(), TVM_GETNEXTITEM, TVGN_ROOT, 0);
 }
 
-// TODO: convert mask
 bool wxTreeCtrl::GetItem(wxTreeItem& info) const
 {
   TV_ITEM tvItem;
   tvItem.hItem   = (HTREEITEM)info.m_itemId;
   tvItem.pszText = NULL;
-  tvItem.mask    = 0;
+  tvItem.mask    = 
+  tvItem.stateMask = 0;
+
+  // TODO: convert other bits in the mask
   if ( info.m_mask & wxTREE_MASK_TEXT )
   {
     tvItem.mask |= TVIF_TEXT;
@@ -275,6 +277,10 @@ bool wxTreeCtrl::GetItem(wxTreeItem& info) const
   }
   if ( info.m_mask & wxTREE_MASK_DATA )
     tvItem.mask |= TVIF_PARAM;
+  if ( info.m_stateMask & wxTREE_STATE_EXPANDED ) {
+    tvItem.mask |= TVIF_STATE;
+    tvItem.stateMask |= TVIS_EXPANDED;
+  }
 
   bool success = TreeView_GetItem((HWND)GetHWND(), &tvItem) != 0;
 
@@ -303,7 +309,7 @@ bool wxTreeCtrl::SetItem(wxTreeItem& info)
   return (::SendMessage((HWND) GetHWND(), TVM_SETITEM, 0, (LPARAM)&item) != 0);
 }
 
-int  wxTreeCtrl::GetItemState(long item, long stateMask) const
+int wxTreeCtrl::GetItemState(long item, long stateMask) const
 {
   wxTreeItem info;
 
@@ -427,17 +433,53 @@ bool wxTreeCtrl::ExpandItem(long item, int action)
     case wxTREE_EXPAND_EXPAND:
       mswAction = TVE_EXPAND;
       break;
+
     case wxTREE_EXPAND_COLLAPSE:
       mswAction = TVE_COLLAPSE;
+      break;
+
     case wxTREE_EXPAND_COLLAPSE_RESET:
+      // @@@ it should also delete all the items! currently, if you do use this
+      //     code your program will probaly crash. Feel free to remove this if
+      //     it does work
+      wxFAIL_MSG("wxTREE_EXPAND_COLLAPSE_RESET probably doesn't work.");
       mswAction = TVE_COLLAPSERESET;
+      break;
+
     case wxTREE_EXPAND_TOGGLE:
       mswAction = TVE_TOGGLE;
       break;
-    default :
-      break;
+
+    default:
+      wxFAIL_MSG("unknown action in wxTreeCtrl::ExpandItem");
   }
-  return (TreeView_Expand((HWND) GetHWND(), (HTREEITEM) item, mswAction) != 0);
+
+  bool bOk = TreeView_Expand((HWND)GetHWND(), (HTREEITEM)item, mswAction) != 0;
+
+  // TreeView_Expand doesn't send TVN_EXPAND(ING) messages, so emulate them
+  if ( bOk ) {
+    wxTreeEvent event(wxEVT_NULL, m_windowId);
+    event.m_item.m_itemId  = item;
+    event.m_item.m_mask      =
+    event.m_item.m_stateMask = 0xffff; // get all
+    GetItem(event.m_item);
+
+    bool bIsExpanded = (event.m_item.m_state & wxTREE_STATE_EXPANDED) != 0;
+
+    event.m_code = action;
+    event.SetEventObject(this);
+
+    // @@@ return values of {EXPAND|COLLAPS}ING event handler is discarded
+    event.SetEventType(bIsExpanded ? wxEVT_COMMAND_TREE_ITEM_EXPANDING
+                                   : wxEVT_COMMAND_TREE_ITEM_COLLAPSING);
+    GetEventHandler()->ProcessEvent(event);
+
+    event.SetEventType(bIsExpanded ? wxEVT_COMMAND_TREE_ITEM_EXPANDED
+                                   : wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
+    GetEventHandler()->ProcessEvent(event);
+  }
+
+  return bOk;
 }
 
 long wxTreeCtrl::InsertItem(long parent, wxTreeItem& info, long insertAfter)
@@ -619,45 +661,44 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
     }
     case TVN_ITEMEXPANDING:
     {
-      eventType = wxEVT_COMMAND_TREE_ITEM_EXPANDING;
       NM_TREEVIEW* hdr = (NM_TREEVIEW*)lParam;
       wxConvertFromMSWTreeItem(event.m_item, hdr->itemNew, (HWND) GetHWND());
 
       switch ( hdr->action )
       {
         case TVE_EXPAND:
-          event.m_code = wxTREE_EXPAND_EXPAND;
+          eventType = wxEVT_COMMAND_TREE_ITEM_EXPANDING;
           break;
+
         case TVE_COLLAPSE:
-          event.m_code = wxTREE_EXPAND_COLLAPSE;
-        case TVE_COLLAPSERESET:
-          event.m_code = wxTREE_EXPAND_COLLAPSE_RESET;
-        case TVE_TOGGLE:
-          event.m_code = wxTREE_EXPAND_TOGGLE;
+          eventType = wxEVT_COMMAND_TREE_ITEM_COLLAPSING;
           break;
-        default :
+
+        case TVE_COLLAPSERESET:
+        case TVE_TOGGLE:
+          wxLogDebug("unexpected code in TVN_ITEMEXPANDING message");
           break;
       }
       break;
     }
+
     case TVN_ITEMEXPANDED:
     {
-      eventType = wxEVT_COMMAND_TREE_ITEM_EXPANDED;
       NM_TREEVIEW* hdr = (NM_TREEVIEW*)lParam;
       wxConvertFromMSWTreeItem(event.m_item, hdr->itemNew, (HWND) GetHWND());
       switch ( hdr->action )
       {
         case TVE_EXPAND:
-          event.m_code = wxTREE_EXPAND_EXPAND;
+          eventType = wxEVT_COMMAND_TREE_ITEM_EXPANDED;
           break;
+
         case TVE_COLLAPSE:
-          event.m_code = wxTREE_EXPAND_COLLAPSE;
-        case TVE_COLLAPSERESET:
-          event.m_code = wxTREE_EXPAND_COLLAPSE_RESET;
-        case TVE_TOGGLE:
-          event.m_code = wxTREE_EXPAND_TOGGLE;
+          eventType = wxEVT_COMMAND_TREE_ITEM_COLLAPSED;
           break;
-        default :
+
+        case TVE_COLLAPSERESET:
+        case TVE_TOGGLE:
+          wxLogDebug("unexpected code in TVN_ITEMEXPANDED message");
           break;
       }
       break;
@@ -699,7 +740,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
       break;
   }
 
-  event.SetEventObject( this );
+  event.SetEventObject(this);
   event.SetEventType(eventType);
 
   if ( !GetEventHandler()->ProcessEvent(event) )
@@ -711,7 +752,7 @@ bool wxTreeCtrl::MSWNotify(WXWPARAM wParam, WXLPARAM lParam)
     wxConvertToMSWTreeItem(event.m_item, info->item);
   }
 
-    return TRUE;
+  return TRUE;
 }
 
 // Tree item structure
