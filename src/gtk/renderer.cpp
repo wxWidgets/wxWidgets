@@ -49,10 +49,6 @@
 class WXDLLEXPORT wxRendererGTK : public wxDelegateRendererNative
 {
 public:
-
-    // used by DrawHeaderButton and DrawComboBoxDropButton
-    void PrepareButtonDraw();
-
     // draw the header control button (used by wxListCtrl)
     virtual void DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
@@ -65,7 +61,7 @@ public:
                                     wxDC& dc,
                                     const wxRect& rect,
                                     int flags = 0);
-#endif // GTK 2.0
+#endif // GTK+ 2.0
 
     virtual void DrawSplitterBorder(wxWindow *win,
                                     wxDC& dc,
@@ -84,6 +80,10 @@ public:
                                         int flags = 0);
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
+
+private:
+    // used by DrawHeaderButton and DrawComboBoxDropButton
+    void PrepareButtonDraw();
 };
 
 // ============================================================================
@@ -169,7 +169,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     // This draws the GTK+ 2.2.4 triangle
     x--;
     GdkPoint points[3];
-    
+
     if ( flags & wxCONTROL_EXPANDED )
     {
         points[0].x = x;
@@ -180,7 +180,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
         points[2].y = y + 2 * (PM_SIZE + 2) / 3;
     }
     else
-    {  
+    {
         points[0].x = x + ((PM_SIZE + 2) / 6 + 2);
         points[0].y = y - 1;
         points[1].x = points[0].x;
@@ -197,7 +197,7 @@ wxRendererGTK::DrawTreeItemButton(wxWindow* win,
     gdk_draw_polygon( pizza->bin_window, style->fg_gc[GTK_STATE_NORMAL], FALSE, points, 3 );
 }
 
-#endif // GTK 2.0
+#endif // __WXGTK20__
 
 // ----------------------------------------------------------------------------
 // splitter sash drawing
@@ -265,12 +265,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     if ( isVert )
     {
         int h = win->GetClientSize().GetHeight();
-    
+
         rect.x = position;
         rect.y = 0;
         rect.width = SASH_FULL_SIZE;
         rect.height = h;
-    
+
         erase_rect.x = position;
         erase_rect.y = 0;
         erase_rect.width = SASH_FULL_SIZE;
@@ -279,12 +279,12 @@ wxRendererGTK::DrawSplitterSash(wxWindow *win,
     else // horz
     {
         int w = win->GetClientSize().GetWidth();
-    
+
         rect.x = 0;
         rect.y = position;
         rect.height = SASH_FULL_SIZE;
         rect.width = w;
-    
+
         erase_rect.y = position;
         erase_rect.x = 0;
         erase_rect.height = SASH_FULL_SIZE;
@@ -382,15 +382,14 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
     // only doing debug-time checking here (it should probably be enough)
     wxASSERT ( wdc.IsKindOf(CLASSINFO(wxWindowDC)) );
 
-    GtkStateType state = GTK_STATE_NORMAL;
-    GtkShadowType shadow = GTK_SHADOW_OUT;
+    GtkStateType state;
 
-    if ( flags & wxCONTROL_PRESSED )
-        shadow = GTK_SHADOW_IN;
-    else if ( flags & wxCONTROL_CURRENT )
+    if ( flags & wxCONTROL_CURRENT )
         state = GTK_STATE_PRELIGHT;
     else if ( flags & wxCONTROL_DISABLED )
         state = GTK_STATE_INSENSITIVE;
+    else
+        state = GTK_STATE_NORMAL;
 
     gtk_paint_box
     (
@@ -398,36 +397,27 @@ void wxRendererGTK::DrawComboBoxDropButton(wxWindow *win,
         //GTK_PIZZA(wdc->m_window)->bin_window,
         wdc.m_window,
         state,
-        shadow,
+        GTK_SHADOW_NONE,
         NULL,
         gs_button,
         "button",
-        dc.XLOG2DEV(rect.x), rect.y, rect.width, rect.height
+        rect.x, rect.y, rect.width, rect.height
     );
 
     // draw arrow on button
-
-    int arr_wid = rect.width/2;
-    int arr_hei = rect.height/2;
-    arr_wid += arr_wid & 1;
-    arr_hei += arr_hei & 1;
-
     gtk_paint_arrow
     (
         gs_button->style,
         //GTK_PIZZA(wdc->m_window)->bin_window,
         wdc.m_window,
         state,
-        shadow,
+        flags & wxCONTROL_PRESSED ? GTK_SHADOW_IN : GTK_SHADOW_OUT,
         NULL,
         gs_button,
         "arrow",
         GTK_ARROW_DOWN,
         TRUE,
-        dc.XLOG2DEV(rect.x) + (rect.width/2-arr_wid/2) + 1,
-        rect.y + (rect.height/2-arr_hei/2) + 1,
-        arr_wid,
-        arr_hei
+        rect.x + 1, rect.y + 1, rect.width - 2, rect.height - 2
     );
 
 }
