@@ -36,9 +36,6 @@ struct _GtkMyFixed
   GtkContainer container;
 
   GList *children;
-  
-  gint16  scroll_offset_x;
-  gint16  scroll_offset_y;
 };
 
 struct _GtkMyFixedClass
@@ -55,9 +52,6 @@ struct _GtkMyFixedChild
 
 guint      gtk_myfixed_get_type        (void);
 GtkWidget* gtk_myfixed_new             (void);
-void       gtk_myfixed_set_offset      (GtkMyFixed     *myfixed,
-                                        gint16         x,
-                                        gint16         y);
 void       gtk_myfixed_put             (GtkMyFixed     *myfixed,
                                         GtkWidget      *widget,
                                         gint16         x,

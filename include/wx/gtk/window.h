@@ -235,7 +235,6 @@ public:         // cannot get private going yet
   bool HasVMT();
   virtual void ImplementSetSize();
   virtual void ImplementSetPosition();
-  void GetDrawingOffset( long *x, long *y );
 
   wxWindow       *m_parent;
   wxList          m_children;
@@ -257,7 +256,6 @@ public:         // cannot get private going yet
   bool            m_isShown;
   bool            m_isEnabled;
   wxString        m_windowName;
-  long            m_drawingOffsetX,m_drawingOffsetY;
 
   GtkWidget      *m_widget;
   GtkWidget      *m_wxwindow;

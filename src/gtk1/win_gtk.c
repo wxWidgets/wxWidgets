@@ -107,33 +107,7 @@ gtk_myfixed_new ()
 
   myfixed = gtk_type_new (gtk_myfixed_get_type ());
   
-  myfixed->scroll_offset_x = 0;
-  myfixed->scroll_offset_y = 0;
-  
   return GTK_WIDGET (myfixed);
-}
-
-void       
-gtk_myfixed_set_offset (GtkMyFixed     *myfixed,
-                        gint16         x,
-			gint16         y)
-{
-  GtkWidget *widget;
- 
-  g_return_if_fail (myfixed != NULL);
-  g_return_if_fail (GTK_IS_MYFIXED (myfixed));
-  
-  myfixed->scroll_offset_x = x;
-  myfixed->scroll_offset_y = y;
-  
-  widget = GTK_WIDGET( myfixed );
-  
-  if (GTK_WIDGET_REALIZED( GTK_WIDGET(myfixed) ))
-    gdk_window_move_resize (widget->window,
-			    widget->allocation.x + x, 
-			    widget->allocation.y + y,
-                            32000, 
-			    32000);
 }
 
 void
@@ -150,8 +124,8 @@ gtk_myfixed_put (GtkMyFixed       *myfixed,
 
   child_info = g_new (GtkMyFixedChild, 1);
   child_info->widget = widget;
-  child_info->x = x - myfixed->scroll_offset_x;
-  child_info->y = y - myfixed->scroll_offset_y;
+  child_info->x = x;
+  child_info->y = y;
   
   gtk_widget_set_parent (widget, GTK_WIDGET (myfixed));
 
@@ -188,8 +162,8 @@ gtk_myfixed_move (GtkMyFixed       *myfixed,
 
       if (child->widget == widget)
         {
-          child->x = x - myfixed->scroll_offset_x;
-          child->y = y - myfixed->scroll_offset_y;
+          child->x = x;
+          child->y = y;
 
           if (GTK_WIDGET_VISIBLE (widget) && GTK_WIDGET_VISIBLE (myfixed))
             gtk_widget_queue_resize (GTK_WIDGET (myfixed));
@@ -250,8 +224,8 @@ gtk_myfixed_realize (GtkWidget *widget)
   GTK_WIDGET_SET_FLAGS (widget, GTK_REALIZED);
 
   attributes.window_type = GDK_WINDOW_CHILD;
-  attributes.x = widget->allocation.x + myfixed->scroll_offset_x;
-  attributes.y = widget->allocation.y + myfixed->scroll_offset_x;
+  attributes.x = widget->allocation.x;
+  attributes.y = widget->allocation.y;
   attributes.width = 32000;
   attributes.height = 32000;
   attributes.wclass = GDK_INPUT_OUTPUT;
@@ -331,12 +305,7 @@ gtk_myfixed_size_allocate (GtkWidget     *widget,
 
   widget->allocation = *allocation;
   if (GTK_WIDGET_REALIZED (widget))
-    gdk_window_move_resize (widget->window,
-			    allocation->x + myfixed->scroll_offset_x, 
-			    allocation->y + myfixed->scroll_offset_y,
-			    32000, 
-			    32000
-			    );
+    gdk_window_move_resize (widget->window, allocation->x, allocation->y, 32000, 32000 );
 
   border_width = GTK_CONTAINER (myfixed)->border_width;
   

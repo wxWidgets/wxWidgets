@@ -169,8 +169,6 @@ class wxDC: public wxObject
     virtual void GetLogicalOrigin( long *x, long *y );
     virtual void SetDeviceOrigin( long x, long y );
     virtual void GetDeviceOrigin( long *x, long *y );
-    virtual void SetInternalDeviceOrigin( long x, long y );
-    virtual void GetInternalDeviceOrigin( long *x, long *y );
 
     virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
     
@@ -283,14 +281,6 @@ class wxDC: public wxObject
     // not sure what for, but what is a mm on a screen you don't know the size of?
     double       m_mm_to_pix_x,m_mm_to_pix_y; 
     
-    long         m_internalDeviceOriginX,m_internalDeviceOriginY;   // If un-scrolled is non-zero or
-								    // d.o. changes with scrolling.
-								    // Set using SetInternalDeviceOrigin().
-								    
-    long         m_externalDeviceOriginX,m_externalDeviceOriginY;   // To be set by external classes
-                                                                    // such as wxScrolledWindow
-								    // using SetDeviceOrigin()
-								    
     long         m_deviceOriginX,m_deviceOriginY;                   // Sum of the two above.
     
     long         m_logicalOriginX,m_logicalOriginY;                 // User defined.

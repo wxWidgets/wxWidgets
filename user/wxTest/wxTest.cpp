@@ -434,7 +434,6 @@ const  ID_ABOUT = 109;
 IMPLEMENT_DYNAMIC_CLASS( MyFrame, wxFrame )
 
 BEGIN_EVENT_TABLE(MyFrame,wxFrame)
-  EVT_SIZE    (MyFrame::OnSize)
   EVT_MENU    (ID_OPEN,  MyFrame::OnOpenDialog)
   EVT_MENU    (ID_FONT,  MyFrame::OnFontDialog)
   EVT_MENU    (ID_MSG,   MyFrame::OnMsg)
@@ -474,19 +473,9 @@ MyFrame::MyFrame(void) :
   m_tb->SetMargins( 2, 2 );
   m_tb->AddTool( 0, wxBitmap( list_xpm ), wxNullBitmap, FALSE, -1, -1, NULL, "This is a button" );
   m_tb->AddTool( 0, wxBitmap( folder_xpm ), wxNullBitmap, TRUE, -1, -1, NULL, "This is a toggle" );
-  m_tb->Layout();
+  m_tb->Realize();
   
 //  m_timer.Start( 1000, TRUE );
-};
-
-void MyFrame::OnSize( wxSizeEvent &WXUNUSED(event) )
-{
-  int x = 0;
-  int y = 0;
-  GetClientSize( &x, &y );
-  
-  m_tb->SetSize( 1, 0, x-2, 42 );
-  m_canvas-> SetSize( 0, 42, x, y-42 ); 
 };
 
 void MyFrame::OnDialog( wxCommandEvent &WXUNUSED(event) )

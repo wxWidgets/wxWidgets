@@ -118,8 +118,6 @@ wxPaintDC::wxPaintDC( wxWindow *window )
   
   long x = 0;
   long y = 0;
-  window->GetDrawingOffset( &x, &y );
-  SetInternalDeviceOrigin( -x, -y );
 }
 
 wxPaintDC::~wxPaintDC(void)

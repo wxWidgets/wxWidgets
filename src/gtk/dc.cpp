@@ -47,10 +47,6 @@ wxDC::wxDC(void)
   m_logicalOriginY = 0;
   m_deviceOriginX = 0;
   m_deviceOriginY = 0;
-  m_internalDeviceOriginX = 0;
-  m_internalDeviceOriginY = 0;
-  m_externalDeviceOriginX = 0;
-  m_externalDeviceOriginY = 0;
   
   m_logicalScaleX = 1.0;
   m_logicalScaleY = 1.0;
@@ -286,30 +282,15 @@ void wxDC::GetLogicalOrigin( long *x, long *y )
 
 void wxDC::SetDeviceOrigin( long x, long y )
 {
-  m_externalDeviceOriginX = x;
-  m_externalDeviceOriginY = y;
+  m_deviceOriginX = x;
+  m_deviceOriginY = y;
   ComputeScaleAndOrigin();
 };
 
 void wxDC::GetDeviceOrigin( long *x, long *y )
 {
-//  if (x) *x = m_externalDeviceOriginX;
-//  if (y) *y = m_externalDeviceOriginY;
   if (x) *x = m_deviceOriginX;
   if (y) *y = m_deviceOriginY;
-};
-
-void wxDC::SetInternalDeviceOrigin( long x, long y )
-{
-  m_internalDeviceOriginX = x;
-  m_internalDeviceOriginY = y;
-  ComputeScaleAndOrigin();
-};
-
-void wxDC::GetInternalDeviceOrigin( long *x, long *y )
-{
-  if (x) *x = m_internalDeviceOriginX;
-  if (y) *y = m_internalDeviceOriginY;
 };
 
 void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
@@ -375,9 +356,6 @@ void wxDC::ComputeScaleAndOrigin(void)
 
   m_scaleX = m_logicalScaleX * m_userScaleX;
   m_scaleY = m_logicalScaleY * m_userScaleY;
-
-  m_deviceOriginX = m_internalDeviceOriginX + m_externalDeviceOriginX;
-  m_deviceOriginY = m_internalDeviceOriginY + m_externalDeviceOriginY;
 
   // CMB: if scale has changed call SetPen to recalulate the line width 
   if (m_scaleX != origScaleX || m_scaleY != origScaleY)

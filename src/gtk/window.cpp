@@ -746,8 +746,6 @@ wxWindow::wxWindow()
   m_oldVerticalPos = 0.0;
   m_isShown = FALSE;
   m_isEnabled = TRUE;
-  m_drawingOffsetX = 0;
-  m_drawingOffsetY = 0;
   m_pDropTarget = NULL;
   m_resizing = FALSE;
 }
@@ -927,8 +925,6 @@ void wxWindow::PreCreation( wxWindow *parent, wxWindowID id,
   m_windowSizer = NULL;
   m_sizerParent = NULL;
   m_autoLayout = FALSE;
-  m_drawingOffsetX = 0;
-  m_drawingOffsetY = 0;
   m_pDropTarget = NULL;
   m_resizing = FALSE;
   m_windowValidator = NULL;
@@ -1008,7 +1004,12 @@ void wxWindow::PostCreation(void)
 */
   
   if (m_widget && m_parent) gtk_widget_realize( m_widget );
-  if (m_wxwindow) gtk_widget_realize( m_wxwindow );
+  
+  if (m_wxwindow)
+  {
+    gtk_widget_realize( m_wxwindow );
+    gdk_gc_set_exposures( m_wxwindow->style->fg_gc[0], TRUE );
+  }
   
   SetCursor( wxSTANDARD_CURSOR );
   
@@ -1047,7 +1048,7 @@ bool wxWindow::DestroyChildren(void)
       if ((child = (wxWindow *)node->Data()) != (wxWindow *)NULL) 
       {
         delete child;
-  if (GetChildren()->Member(child)) delete node;
+        if (GetChildren()->Member(child)) delete node;
       }
     }
   }
@@ -1645,19 +1646,13 @@ void wxWindow::Refresh( bool eraseBackground, const wxRect *rect )
   {
     if (m_wxwindow)
     {
-      wxClientDC dc(this);
-      PrepareDC(dc);
-      long x = 0;
-      long y = 0;
-      dc.GetInternalDeviceOrigin( &x, &y );
-      
       int w = 0;
       int h = 0;
       GetClientSize( &w, &h );
       
       GdkRectangle gdk_rect;
-      gdk_rect.x = x;
-      gdk_rect.y = y;
+      gdk_rect.x = 0;
+      gdk_rect.y = 0;
       gdk_rect.width = w;
       gdk_rect.height = h;
       gtk_widget_draw( m_wxwindow, &gdk_rect );
@@ -1993,23 +1988,9 @@ void wxWindow::SetScrollbar( int orient, int pos, int thumbVisible,
   if (m_wxwindow->window)
   {
     if (orient == wxHORIZONTAL)
-    {
-/*
-      m_drawingOffsetX = -16000;
-  
-      gtk_myfixed_set_offset( GTK_MYFIXED(m_wxwindow), m_drawingOffsetX, m_drawingOffsetY );
-*/  
       gtk_signal_emit_by_name( GTK_OBJECT(m_hAdjust), "changed" );
-    }
     else
-    { 
-/*
-      m_drawingOffsetY = -16000;
-  
-      gtk_myfixed_set_offset( GTK_MYFIXED(m_wxwindow), m_drawingOffsetX, m_drawingOffsetY );
-*/      
       gtk_signal_emit_by_name( GTK_OBJECT(m_vAdjust), "changed" );
-    }
       
     gtk_widget_set_usize( m_widget, m_width, m_height );
   }
@@ -2078,6 +2059,7 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 {
   if (!m_wxwindow) return;
   
+/*
   bool refresh = FALSE;
     
   if ((m_drawingOffsetX == 0) && (m_drawingOffsetY == 0))
@@ -2098,9 +2080,9 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
   
   if (refresh) Refresh();
   
-/*
     The code here is very nifty, but it doesn't work with
     overlapping windows...
+*/
 
     int cw = 0;
     int ch = 0;
@@ -2131,13 +2113,6 @@ void wxWindow::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     if (dx != 0) rect.height = ch; else rect.height = abs(dy);
   
     Refresh( TRUE, &rect );
-*/
-}
-
-void wxWindow::GetDrawingOffset( long *x, long *y )
-{
-  if (x) *x = m_drawingOffsetX;
-  if (y) *y = m_drawingOffsetY;
 }
 
 //-------------------------------------------------------------------------------------
