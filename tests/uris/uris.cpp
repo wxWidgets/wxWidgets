@@ -320,8 +320,8 @@ void URITestCase::URLCompat()
 
 void URITestCase::URLProxy()
 {
-    wxURL url("http://www.asite.com/index.html"); 
-    url.SetProxy("pserv:3122"); 
+    wxURL url(wxT("http://www.asite.com/index.html"));
+    url.SetProxy(wxT("pserv:3122"));
 }
 #endif
 
