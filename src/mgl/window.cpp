@@ -648,13 +648,6 @@ void wxWindowMGL::SetFocus()
     
     MGL_wmCaptureEvents(GetHandle(), EVT_KEYEVT, wxMGL_CAPTURE_KEYB);
 
-#if wxUSE_CARET
-    // caret needs to be informed about focus change
-    wxCaret *caret = GetCaret();
-    if ( caret )
-        caret->OnSetFocus();
-#endif // wxUSE_CARET
-
     wxWindowMGL *active = wxGetTopLevelParent(this);
     if ( !(m_windowStyle & wxPOPUP_WINDOW) && active != gs_activeFrame )
     {
@@ -674,6 +667,13 @@ void wxWindowMGL::SetFocus()
     wxFocusEvent event(wxEVT_SET_FOCUS, GetId());
     event.SetEventObject(this);
     GetEventHandler()->ProcessEvent(event);
+
+#if wxUSE_CARET
+    // caret needs to be informed about focus change
+    wxCaret *caret = GetCaret();
+    if ( caret )
+        caret->OnSetFocus();
+#endif // wxUSE_CARET
 }
 
 void wxWindowMGL::KillFocus()
