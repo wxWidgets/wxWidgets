@@ -1073,9 +1073,6 @@
 /* Define if you have the usleep function.  */
 #define HAVE_USLEEP 1
 
-/* Define if you have the vfork function.  */
-#define HAVE_VFORK 1
-
 /* Define if you have the <X11/XKBlib.h> header file.  */
 #undef HAVE_X11_XKBLIB_H
 

@@ -3025,9 +3025,6 @@ if test "$wxUSE_ON_FATAL_EXCEPTION" = "yes" -a "$wxUSE_UNIX" = "yes"; then
     fi
 fi
 
-dnl check for vfork() (even if it's the same as fork() in modern Unices)
-AC_CHECK_FUNCS(vfork)
-
 dnl check for the function for temp files creation
 AC_CHECK_FUNCS(mkstemp mktemp, break)
 

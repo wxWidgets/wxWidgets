@@ -563,12 +563,10 @@ long wxExecute(wxChar **argv,
     }
 
     // fork the process
-#ifdef HAVE_VFORK
-    pid_t pid = vfork();
-#else
+    //
+    // NB: do *not* use vfork() here, it completely breaks this code for some
+    //     reason under Solaris (and maybe others, although not under Linux)
     pid_t pid = fork();
-#endif
-
     if ( pid == -1 )     // error?
     {
         wxLogSysError( _("Fork failed") );
