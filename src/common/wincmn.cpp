@@ -77,6 +77,10 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
+#if wxUSE_DISPLAY
+    #include "wx/display.h"
+#endif
+
 #if wxUSE_SYSTEM_OPTIONS
     #include "wx/sysopt.h"
 #endif
@@ -431,6 +435,20 @@ void wxWindowBase::Centre(int direction)
 
     if ( direction & wxCENTRE_ON_SCREEN )
     {
+        //RN:  If we are using wxDisplay we get
+        //the dimensions of the monitor the window is on,
+        //otherwise we get the dimensions of the primary monitor
+#if wxUSE_DISPLAY
+        int nDisplay = wxDisplay::GetFromWindow((wxWindow*)this);
+        if(nDisplay != wxNOT_FOUND)
+        {
+            wxDisplay windowDisplay(nDisplay);
+            wxRect displayRect = windowDisplay.GetGeometry();
+            widthParent = displayRect.width;
+            heightParent = displayRect.height;
+        }
+        else
+#endif
         // centre with respect to the whole screen
         wxDisplaySize(&widthParent, &heightParent);
     }
@@ -471,6 +489,9 @@ void wxWindowBase::Centre(int direction)
     xNew += posParent.x;
     yNew += posParent.y;
 
+    // FIXME:  This needs to get the client display rect of the display
+    // the window is (via wxDisplay::GetFromWindow). 
+    
     // Base size of the visible dimensions of the display
     // to take into account the taskbar. And the Mac menu bar at top.
     wxRect clientrect = wxGetClientDisplayRect();
