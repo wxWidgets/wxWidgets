@@ -371,6 +371,8 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
 int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
 {
 #ifdef __WXGTK20__
+    bool success = false;
+            
     guchar *data = NULL;
     GdkWindow *window = NULL;
     if(win && GTK_WIDGET_REALIZED(win->GetHandle()))
@@ -419,9 +421,12 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                     Atom type;
                     gint format;
                     gulong nitems;
-                    gulong bytes_after;
-    
-                    if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
+                    
+#if GTK_CHECK_VERSION(2,2,0)
+                    if (!gtk_check_version(2,2,0))
+                    {
+                        gulong bytes_after;
+                        success = (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
                                             GDK_WINDOW_XWINDOW(window),
                                             gdk_x11_get_xatom_by_name_for_display (
                                                     gdk_drawable_get_display(window),
@@ -431,7 +436,10 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                                             false, // do not delete property
                                             XA_CARDINAL, // 32 bit
                                             &type, &format, &nitems, &bytes_after, &data
-                                           ) == Success)
+                                           ) == Success);
+                    }
+#endif
+                    if (success)
                     {
                         int border_return = -1;
 
@@ -573,9 +581,12 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             Atom type;
             gint format;
             gulong nitems;
-            gulong bytes_after;
 
-            if (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
+#if GTK_CHECK_VERSION(2,2,0)
+            if (!gtk_check_version(2,2,0))
+            {
+                gulong bytes_after;
+                success = (XGetWindowProperty (GDK_DISPLAY_XDISPLAY(gdk_drawable_get_display(window)),
                                     GDK_WINDOW_XWINDOW(window),
                                     gdk_x11_get_xatom_by_name_for_display (
                                             gdk_drawable_get_display(window),
@@ -585,7 +596,10 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
                                     false, // do not delete property
                                     XA_CARDINAL, // 32 bit
                                     &type, &format, &nitems, &bytes_after, &data
-                                   ) == Success)
+                                   ) == Success);
+            }
+#endif
+            if (success)
             {
                 int caption_height = -1;
 
