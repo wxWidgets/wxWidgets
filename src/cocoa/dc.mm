@@ -347,8 +347,9 @@ void wxDC::Clear()
 {
 }
 
-void wxDC::SetBackground(const wxBrush&)
+void wxDC::SetBackground(const wxBrush& brush)
 {
+    m_backgroundBrush = brush;
 }
 
 void wxDC::SetPalette(const wxPalette&)
