@@ -1,7 +1,7 @@
 wxMotif TODO
 ------------
 
-Updated: 8/11/98
+Updated: 9/11/98
 
          -------------------------------o-------------------------
 
@@ -16,21 +16,12 @@ High Priority
 - Work out why XFreeFont in font.cpp produces a segv. This is
   currently commented out, which presumably causes a memory leak.
 
-- Also work out why wxWindow::SetFont causes the widget to be shrunk
-  to fit its text, in dialogs. Uncomment the SetFont implementation and pop
-  up a dialog, e.g. an About box. Widgets are arranged
-  incorrectly. Seems to be OK for non-dialog panels, once the
-  size has been restored after the font setting.
-  In fact it seems OK for dialogs now!!! Weird.
+- Colour setting in widgets (almost done). Should scrollbars take
+  on the background colour? Not right for e.g. wxScrolledWindows,
+  so maybe have wxSystemSettings value for scrollbar colour, and/or
+  ability to set scrollbar colour independently.
 
-- ChangeFont should have an extra arg, to allow for not resizing
-  the window back to the original size after setting the font.
-  Also don't call SetFont from constructor, assign the font and
-  call ChangeFont so we can pass FALSE if the size has been passed
-  as the default (which means: wxWin should choose an appropriate
-  size, so Motif should expand/contract the widget as appropriate).
-
-- Colour setting in widgets (almost done).
+- Make wxDialog OnPaint work.
 
 - Implementation of OnEraseBackground. How? Call OnEraseBackground
   just before OnPaint? Will duplicate Xlib's own erase of the background.
@@ -43,10 +34,6 @@ High Priority
 
 - wxSpinButton
 
-- A generic version of wxNotebook that can be used in wxMotif and
-  other toolkits that don't have a native control. Perhaps use wxTab as a
-  starting point.
-
 - Tidy dialogs such as the colour and font selectors.
 
 - Use generic wxTreeCtrl, wxListCtrl: debug and enhance these.
@@ -58,6 +45,8 @@ High Priority
   from a file.
 
 - wxThread (hopefully, similar to wxGTK)
+
+- wxAcceleratorTable.
 
 - Miscellaneous events.
 
@@ -138,9 +127,8 @@ Low Priority
 - Blit scaling
 
 - Could eventually alter the MDI widgets to be more Windows-like
-  -- currently it's half-hearted.
-
-- Accelerators
+  -- currently it's half-hearted (menus are on children, whereas
+  they should replace the main parent frame menu).
 
 - Get ODBC classes and sample working.
 

@@ -53,6 +53,7 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
     m_labelWidget = (WXWidget) 0;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
+    m_windowFont = parent->GetFont();
 
     SetName(name);
 
@@ -78,10 +79,13 @@ bool wxStaticBox::Create(wxWindow *parent, wxWindowID id,
 
     if (hasLabel)
     {
+        XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+
         wxString label1(wxStripMenuCodes(label));
         XmString text = XmStringCreateSimple ((char*) (const char*) label1);
         m_labelWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) label1,
 					     xmLabelWidgetClass, formWidget,
+                                             XmNfontList, fontList,
 					     XmNlabelString, text,
 					     NULL);
         XmStringFree (text);

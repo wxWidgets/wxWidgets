@@ -58,7 +58,7 @@ void wxBitmapShape::OnDraw(wxDC& dc)
   double x, y;
   x = WXROUND(m_xpos - m_bitmap.GetWidth() / 2.0);
   y = WXROUND(m_ypos - m_bitmap.GetHeight() / 2.0);
-  dc.Blit(x, y, m_bitmap.GetWidth(), m_bitmap.GetHeight(), &tempDC, 0, 0);
+  dc.Blit((long) x, (long) y, m_bitmap.GetWidth(), m_bitmap.GetHeight(), &tempDC, 0, 0);
 }
 
 void wxBitmapShape::SetSize(double w, double h, bool recursive)

@@ -170,7 +170,7 @@ bool wxXMetaFile::ReadFile(char *file)
   // Read placeable metafile header, if any
   long key = getint(handle);
     
-  if (key == 0x9AC6CDD7)
+  if (key == (long) 0x9AC6CDD7)
   {
     long hmf = getshort(handle);
     int iLeft, iTop, iRight, iBottom;
@@ -792,7 +792,7 @@ bool wxXMetaFile::Play(wxDC *dc)
       {
         long x1 = rec->param1;
         long y1 = rec->param2;
-        dc->DrawLine(lastX, lastY, (double)x1, (double)y1);
+        dc->DrawLine((long) lastX, (long) lastY, x1, y1);
         break;
       }
       case META_MOVETO:
@@ -818,17 +818,17 @@ bool wxXMetaFile::Play(wxDC *dc)
 //      case META_PIE: // DO!!!
       case META_RECTANGLE:
       {
-        dc->DrawRectangle((double)rec->param1, (double)rec->param2,
-                          (double)rec->param3 - rec->param1,
-                          (double)rec->param4 - rec->param2);
+        dc->DrawRectangle((long)rec->param1, (long)rec->param2,
+                          (long)rec->param3 - rec->param1,
+                          (long)rec->param4 - rec->param2);
         break;
       }
       case META_ROUNDRECT:
       {
-        dc->DrawRoundedRectangle((double)rec->param1, (double)rec->param2,
-                          (double)rec->param3 - rec->param1,
-                          (double)rec->param4 - rec->param2,
-                          (double)rec->param5);
+        dc->DrawRoundedRectangle((long)rec->param1, (long)rec->param2,
+                          (long)rec->param3 - rec->param1,
+                          (long)rec->param4 - rec->param2,
+                          (long)rec->param5);
         break;
       }
 //      case META_PATBLT:

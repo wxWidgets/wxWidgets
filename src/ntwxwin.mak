@@ -122,7 +122,7 @@ OPTIONS=
 !if "$(FINAL)" == "0"
 OPT = /Od /Gy
 # ***N.B.*** to save space/time, comment out /FR to avoid browse info (.sbr files) being generated
-DEBUG_FLAGS= /Zi /D__WXDEBUG__ /DWXDEBUG=1 /DDEBUG=1 # /FR
+DEBUG_FLAGS= /Zi /D__WXDEBUG__ # /DDEBUG=1 # /FR
 LINK_DEBUG_FLAGS=-debug:full -debugtype:cv # /PDB:NONE
 CRTFLAG=/MD
 !else

@@ -358,9 +358,6 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     if (!child->IsKindOf(CLASSINFO(wxFrame)) &&
          !child->IsKindOf(CLASSINFO(wxDialog)))
     {
-#if WXDEBUG > 1
-      wxDebugMsg("wxFrame::OnActivate: about to set the child's focus.\n");
-#endif
       child->SetFocus();
       return;
     }

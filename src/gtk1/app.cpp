@@ -362,7 +362,7 @@ int wxEntry( int argc, char *argv[] )
 
   wxClassInfo::InitializeClasses();
 
-#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
   streambuf* sBuf = new wxDebugStreamBuf;
   ostream* oStr = new ostream(sBuf) ;
@@ -452,7 +452,7 @@ int wxEntry( int argc, char *argv[] )
   
   delete[] wxBuffer;
   
-#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   
   if (wxDebugContext::CountObjectsLeft() > 0)
   {

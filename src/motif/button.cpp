@@ -40,6 +40,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_windowStyle = style;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
+    m_windowFont = parent->GetFont();
 
     parent->AddChild((wxButton *)this);
 
@@ -53,6 +54,8 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     XmString text = XmStringCreateSimple ((char*) (const char*) label1);
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
+    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+
     /*
      * Patch Note (important)
      * There is no major reason to put a defaultButtonThickness here.
@@ -65,6 +68,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ("button",
                                         xmPushButtonWidgetClass,
 						 parentWidget,
+                                                 XmNfontList, fontList,
 						 XmNlabelString, text,
 //                  XmNdefaultButtonShadowThickness, 1, // See comment for wxButton::SetDefault
 						 NULL);
@@ -73,9 +77,6 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& label,
 
     XtAddCallback ((Widget) m_mainWidget, XmNactivateCallback, (XtCallbackProc) wxButtonCallback,
             (XtPointer) this);
-
-    m_windowFont = parent->GetFont();
-    ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);

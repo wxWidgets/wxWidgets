@@ -458,7 +458,7 @@ void MyEvtHandler::OnBeginDragRight(double x, double y, int keys, int attachment
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPosition(attachment, &xp, &yp);
-  dc.DrawLine(xp, yp, x, y);
+  dc.DrawLine((long) xp, (long) yp, (long) x, (long) y);
   GetShape()->GetCanvas()->CaptureMouse();
 }
 
@@ -475,7 +475,7 @@ void MyEvtHandler::OnDragRight(bool draw, double x, double y, int keys, int atta
   dc.SetPen(dottedPen);
   double xp, yp;
   GetShape()->GetAttachmentPosition(attachment, &xp, &yp);
-  dc.DrawLine(xp, yp, x, y);
+  dc.DrawLine((long) xp, (long) yp, (long) x, (long) y);
 }
 
 void MyEvtHandler::OnEndDragRight(double x, double y, int keys, int attachment)

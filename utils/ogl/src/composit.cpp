@@ -1733,8 +1733,8 @@ void wxDivisionShape::PopupMenu(double x, double y)
   wxClientDC dc(GetCanvas());
   GetCanvas()->PrepareDC(dc);
 
-  int mouse_x = (int)(dc.LogicalToDeviceX(x - x1*unit_x));
-  int mouse_y = (int)(dc.LogicalToDeviceY(y - y1*unit_y));
+  int mouse_x = (int)(dc.LogicalToDeviceX((long)(x - x1*unit_x)));
+  int mouse_y = (int)(dc.LogicalToDeviceY((long)(y - y1*unit_y)));
 
   m_canvas->PopupMenu(oglPopupDivisionMenu, mouse_x, mouse_y);
 }

@@ -31,7 +31,7 @@
   <BR>
   <BR>
   Extensive use of these macros is recommended! Remember that ASSERTs are
-  disabled in final (without WXDEBUG defined) build, so they add strictly
+  disabled in final (without __WXDEBUG__ defined) build, so they add strictly
   nothing to your program's code. On the other hand, CHECK macros do stay
   even in release builds, but in general are not much of a burden, while
   a judicious use of them might increase your program's stability.
@@ -62,7 +62,7 @@
   // no more bugs ;-)
   #define   wxASSERT(cond)
   #define   wxASSERT_MSG(x, m)
-#endif  //WXDEBUG
+#endif  //__WXDEBUG__
 
   /// special form of assert: always triggers it (in debug mode)
 #define   wxFAIL                 wxASSERT(wxFalse)

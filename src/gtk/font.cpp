@@ -764,7 +764,7 @@ public:
     inline int   GetFamily(void)                 {return family;}
     inline int   GetId(void)                     {return id;}
     inline bool  IsRoman(void)                   {return isroman;}
-#if WXDEBUG
+#if defined(__WXDEBUG__)
     void Dump(ostream& str);
 #endif
 
@@ -795,7 +795,7 @@ wxFontNameItem::~wxFontNameItem(void)
     name = (char *) NULL;
 }
 
-#if WXDEBUG
+#if defined(__WXDEBUG__)
 void wxFontNameItem::Dump(ostream& str)
 {
     str << "wxFontNameItem(" << name << ")";

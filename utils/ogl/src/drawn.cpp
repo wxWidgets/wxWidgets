@@ -607,7 +607,7 @@ void wxOpSetClipping::Do(wxDC& dc, double xoffset, double yoffset)
   {
     case DRAWOP_SET_CLIPPING_RECT:
     {
-      dc.SetClippingRegion(m_x1 + xoffset, m_y1 + yoffset, m_x2 + xoffset, m_y2 + yoffset);
+      dc.SetClippingRegion((long)(m_x1 + xoffset), (long)(m_y1 + yoffset), (long)(m_x2 + xoffset), (long)(m_y2 + yoffset));
       break;
     }
     case DRAWOP_DESTROY_CLIPPING_RECT:
@@ -1208,7 +1208,7 @@ bool wxOpPolyDraw::OnDrawOutline(wxDC& dc, double x, double y, double w, double 
         intPoints[i].x = WXROUND (x_proportion * m_points[i].x);
         intPoints[i].y = WXROUND (y_proportion * m_points[i].y);
     }
-    dc.DrawPolygon(n, intPoints, x, y);
+    dc.DrawPolygon(n, intPoints, (long) x, (long) y);
     delete[] intPoints;
     return TRUE;
 }

@@ -191,20 +191,20 @@ void wxDiagram::DrawOutline(wxDC& dc, double x1, double y1, double x2, double y2
 
   wxPoint points[5];
 
-  points[0].x = x1;
-  points[0].y = y1;
+  points[0].x = (int) x1;
+  points[0].y = (int) y1;
 
-  points[1].x = x2;
-  points[1].y = y1;
+  points[1].x = (int) x2;
+  points[1].y = (int) y1;
 
-  points[2].x = x2;
-  points[2].y = y2;
+  points[2].x = (int) x2;
+  points[2].y = (int) y2;
 
-  points[3].x = x1;
-  points[3].y = y2;
+  points[3].x = (int) x1;
+  points[3].y = (int) y2;
 
-  points[4].x = x1;
-  points[4].y = y1;
+  points[4].x = (int) x1;
+  points[4].y = (int) y1;
   dc.DrawLines(5, points);
 }
 

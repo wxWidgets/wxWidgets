@@ -1051,9 +1051,9 @@ void wxEllipseShape::OnDraw(wxDC& dc)
       if (m_shadowBrush)
         dc.SetBrush(m_shadowBrush);
       dc.SetPen(g_oglTransparentPen);
-      dc.DrawEllipse((m_xpos - GetWidth()/2) + m_shadowOffsetX,
-                      (m_ypos - GetHeight()/2) + m_shadowOffsetY,
-                      GetWidth(), GetHeight());
+      dc.DrawEllipse((long) ((m_xpos - GetWidth()/2) + m_shadowOffsetX),
+                      (long) ((m_ypos - GetHeight()/2) + m_shadowOffsetY),
+                      (long) GetWidth(), (long) GetHeight());
     }
 
     if (m_pen)
@@ -1065,7 +1065,7 @@ void wxEllipseShape::OnDraw(wxDC& dc)
     }
     if (m_brush)
       dc.SetBrush(m_brush);
-    dc.DrawEllipse((m_xpos - GetWidth()/2), (m_ypos - GetHeight()/2), GetWidth(), GetHeight());
+    dc.DrawEllipse((long) (m_xpos - GetWidth()/2), (long) (m_ypos - GetHeight()/2), (long) GetWidth(), (long) GetHeight());
 }
 
 void wxEllipseShape::SetSize(double x, double y, bool recursive)

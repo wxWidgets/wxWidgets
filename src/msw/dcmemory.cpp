@@ -101,9 +101,6 @@ void wxMemoryDC::SelectObject(const wxBitmap& bitmap)
     return;
 
   m_selectedBitmap.SetSelectedInto(this);
-#if WXDEBUG > 1
-  wxDebugMsg("wxMemoryDC::SelectObject: Selecting HBITMAP %X\n", m_selectedBitmap.GetHBITMAP());
-#endif
   HBITMAP bm = (HBITMAP) ::SelectObject((HDC) m_hDC, (HBITMAP) m_selectedBitmap.GetHBITMAP());
 
   if (bm == ERROR)

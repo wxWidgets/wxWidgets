@@ -2073,9 +2073,7 @@ void wxWidgetResizeProc(Widget w, XConfigureEvent *event, String args[], int *nu
 bool wxAddWindowToTable(Widget w, wxWindow *win)
 {
   wxWindow *oldItem = NULL;
-#if DEBUG
 //  printf("Adding widget %ld, name = %s\n", w, win->GetClassInfo()->GetClassName());
-#endif
   if ((oldItem = (wxWindow *)wxWidgetHashTable->Get ((long) w)))
   {
     char buf[300];

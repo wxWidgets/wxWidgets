@@ -297,11 +297,11 @@ wxShape::wxShape(wxShapeCanvas *can)
   m_parent = NULL;
   m_formatMode = FORMAT_CENTRE_HORIZ | FORMAT_CENTRE_VERT;
   m_shadowMode = SHADOW_NONE;
-  m_shadowOffsetX = 6.0;
-  m_shadowOffsetY = 6.0;
+  m_shadowOffsetX = 6;
+  m_shadowOffsetY = 6;
   m_shadowBrush = wxBLACK_BRUSH;
-  m_textMarginX = 5.0;
-  m_textMarginY = 5.0;
+  m_textMarginX = 5;
+  m_textMarginY = 5;
   m_regionName = "0";
   m_centreResize = TRUE;
   m_maintainAspectRatio = FALSE;
@@ -1907,8 +1907,8 @@ void wxShape::ReadAttributes(wxExpr *clause)
       else if (string_expr->Type() == wxExprList)
       {
         wxExpr *first = string_expr->value.first;
-        wxExpr *second = first ? first->next : NULL;
-        wxExpr *third = second ? second->next : NULL;
+        wxExpr *second = first ? first->next : (wxExpr*) NULL;
+        wxExpr *third = second ? second->next : (wxExpr*) NULL;
 
         if (first && second && third &&
             (first->Type() == wxExprReal || first->Type() == wxExprInteger) &&
@@ -2076,7 +2076,7 @@ void wxShape::ReadRegions(wxExpr *clause)
 
   m_formatted = TRUE;  // Assume text is formatted unless we prove otherwise
 
-  while (regionExpr = clause->AttributeValue(regionNameBuf))
+  while ((regionExpr = clause->AttributeValue(regionNameBuf)))
   {
     /*
      * Get the region information
@@ -2200,8 +2200,8 @@ void wxShape::ReadRegions(wxExpr *clause)
         else if (string_expr->Type() == wxExprList)
         {
           wxExpr *first = string_expr->value.first;
-          wxExpr *second = first ? first->next : NULL;
-          wxExpr *third = second ? second->next : NULL;
+          wxExpr *second = first ? first->next : (wxExpr*) NULL;
+          wxExpr *third = second ? second->next : (wxExpr*) NULL;
 
           if (first && second && third &&
               (first->Type() == wxExprReal || first->Type() == wxExprInteger) &&

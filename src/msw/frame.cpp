@@ -620,9 +620,6 @@ void wxFrame::MSWCreate(int id, wxWindow *parent, const char *wclass, wxWindow *
 
 bool wxFrame::MSWOnPaint(void)
 {
-#if WXDEBUG > 1
-  wxDebugMsg("wxFrameWnd::OnPaint %d\n", handle);
-#endif
   RECT rect;
   if (GetUpdateRect((HWND) GetHWND(), &rect, FALSE))
   {
@@ -677,9 +674,6 @@ WXHICON wxFrame::MSWOnQueryDragIcon(void)
 
 void wxFrame::MSWOnSize(int x, int y, WXUINT id)
 {
-#if WXDEBUG > 1
-  wxDebugMsg("wxFrameWnd::OnSize %d\n", m_hWnd);
-#endif
   switch (id)
   {
     case SIZENORMAL:
@@ -731,17 +725,11 @@ void wxFrame::MSWOnSize(int x, int y, WXUINT id)
 
 bool wxFrame::MSWOnClose(void)
 {
-#if WXDEBUG > 1
-  wxDebugMsg("wxFrameWnd::OnClose %d\n", handle);
-#endif
     return Close();
 }
 
 bool wxFrame::MSWOnCommand(WXWORD id, WXWORD cmd, WXHWND control)
 {
-#if WXDEBUG > 1
-  wxDebugMsg("wxFrameWnd::OnCommand %d\n", handle);
-#endif
   if (cmd == 0 || cmd == 1 ) // Can be either a menu command or an accelerator.
   {
     // In case it's e.g. a toolbar.
@@ -850,9 +838,6 @@ void wxFrame::OnActivate(wxActivateEvent& event)
     if (!child->IsKindOf(CLASSINFO(wxFrame)) &&
          !child->IsKindOf(CLASSINFO(wxDialog)))
     {
-#if WXDEBUG > 1
-      wxDebugMsg("wxFrame::OnActivate: about to set the child's focus.\n");
-#endif
       child->SetFocus();
       return;
     }

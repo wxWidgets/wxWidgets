@@ -187,7 +187,7 @@ class WXDLLEXPORT wxObject
 
   bool IsKindOf(wxClassInfo *info) const;
 
-#if WXDEBUG && wxUSE_MEMORY_TRACING
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
   void * operator new (size_t size, char * fileName = NULL, int lineNum = 0);
   void operator delete (void * buf);
   
@@ -204,7 +204,7 @@ class WXDLLEXPORT wxObject
 
 #endif
 
-#if WXDEBUG || wxUSE_DEBUG_CONTEXT
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
   virtual void Dump(ostream& str);
 #endif
 
@@ -246,7 +246,7 @@ private:
     int m_count;
 };
 
-#if WXDEBUG && wxUSE_GLOBAL_MEMORY_OPERATORS
+#if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS
 //#ifndef WXDEBUG_NEW
 //#define WXDEBUG_NEW new(__FILE__,__LINE__)
 //#endif

@@ -14,7 +14,9 @@ wxWindows 2.0 for Motif installation
   overwritten: they should be identical anyway.
 
 - Edit src/make.env to change options according to your local
-  environment. Later, there will be a better makefile system
+  environment. In particular, change WXDIR to where wxWindows is
+  found on your system.
+  Later, there will be a better makefile system
   and/or alternate make.env files as per wxWindows 1.68.
   Please feel free to contribute settings files for your environment.
 
@@ -41,18 +43,19 @@ Notes:
   we should use something that can be made to work easily
   with applications outside the wxWindows hierarchy.
 
+- Debugging mode is switched on by default. To compile in non-debug
+  mode, remove the -D__WXDEBUG__ switch in make.env.
+
 - Some classes can be switched off in include/wx/motif/setup.h,
   if you are having trouble with a particular file. However,
   I'd prefer you to fix the problem and send the fix to me :-) or at
   least let me know about it.
 
 - Please send bug reports with a description of your environment,
-  compiler and the error message(s) to:
+  compiler and the error message(s) to the wxwin-users mailing list at:
 
-    julian.smart@ukonline.co.uk
+    wxwin-users@wx.dent.med.uni-muenchen.de
 
-  or the wxwin-developers mailing list at:
-
-    wxwin-developers@wx.dent.med.uni-muenchen.de
 
 Julian Smart, November 1998.
+julian.smart@ukonline.co.uk

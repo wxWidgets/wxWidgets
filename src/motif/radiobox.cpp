@@ -59,6 +59,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     m_radioButtonLabels = (wxString*) NULL;
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
+    m_windowFont = parent->GetFont();
 
     SetName(name);
     SetValidator(val);
@@ -93,6 +94,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_formWidget = (WXWidget) formWidget;
 
+    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
     if (label1 != "")
     {
         text = XmStringCreateSimple ((char*) (const char*) label1);
@@ -104,15 +106,9 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 #else
 					     xmLabelWidgetClass, formWidget,
 #endif
+                                             XmNfontList, fontList,
 					     XmNlabelString, text,
 					     NULL);
-
-/* TODO: change label font
-        if (labelFont)
-	        XtVaSetValues (labelWidget,
-		       XmNfontList, labelFont->GetInternalFont (XtDisplay(formWidget)),
-		       NULL);
-*/
 
         XmStringFree (text);
     }
@@ -159,16 +155,11 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 #else
 				    xmToggleButtonWidgetClass, radioBoxWidget,
 #endif
+                                    XmNfontList, fontList,
 						 NULL);
         XtAddCallback ((Widget) m_radioButtons[i], XmNvalueChangedCallback, (XtCallbackProc) wxRadioBoxCallback,
 		     (XtCallbackProc) this);
 
-/* TODO: set font
-        if (buttonFont)
-	        XtVaSetValues ((Widget) m_radioButtons[i],
-		       XmNfontList, buttonFont->GetInternalFont (XtDisplay(formWidget)),
-		       NULL);
-*/
     }
     SetSelection (0);
 

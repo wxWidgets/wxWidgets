@@ -31,11 +31,11 @@
 #include <string.h>
 #include <assert.h>
 
-#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 #include "wx/memory.h"
 #endif
 
-#if WXDEBUG || wxUSE_DEBUG_CONTEXT
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
   // for wxObject::Dump
 #if wxUSE_IOSTREAMH
 #  include <iostream.h>
@@ -90,7 +90,7 @@ bool wxObject::IsKindOf(wxClassInfo *info) const
     return FALSE;
 }
 
-#if WXDEBUG || wxUSE_DEBUG_CONTEXT
+#if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
 void wxObject::Dump(ostream& str)
 {
   if (GetClassInfo() && GetClassInfo()->GetClassName())
@@ -100,7 +100,7 @@ void wxObject::Dump(ostream& str)
 }
 #endif
 
-#if WXDEBUG && wxUSE_MEMORY_TRACING
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING
 
 #ifdef new
 #undef new

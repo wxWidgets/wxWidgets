@@ -50,7 +50,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 {
     SetName(name);
     SetValidator(validator);
-    m_noStrings = n;
+    m_noStrings = 0; // Starts off with none, incremented in Append
     m_windowStyle = style;
     m_buttonWidget = (WXWidget) 0;
     m_menuWidget = (WXWidget) 0;
@@ -66,6 +66,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     m_backgroundColour = parent->GetBackgroundColour();
     m_foregroundColour = parent->GetForegroundColour();
+    m_windowFont = parent->GetFont();
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -125,7 +126,6 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
-    m_windowFont = parent->GetFont();
     ChangeFont(FALSE);
 
     AttachWidget (parent, m_buttonWidget, m_formWidget, pos.x, pos.y, size.x, size.y);

@@ -57,7 +57,7 @@ bool wxApp::Initialize()
   wxBuffer = new char[BUFSIZ + 512];
 #endif
 
-#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
   streambuf* sBuf = new wxDebugStreamBuf;
   ostream* oStr = new ostream(sBuf) ;
@@ -177,7 +177,7 @@ int wxEntry( int argc, char *argv[] )
   delete wxTheApp;
   wxTheApp = NULL;
   
-#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
   // At this point we want to check if there are any memory
   // blocks that aren't part of the wxDebugContext itself,
   // as a special case. Then when dumping we need to ignore

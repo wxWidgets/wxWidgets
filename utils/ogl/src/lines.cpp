@@ -290,7 +290,7 @@ void wxLineShape::DrawRegion(wxDC& dc, wxShapeRegion *region, double x, double y
       // Now draw the text
       if (region->GetFont()) dc.SetFont(region->GetFont());
 
-      dc.DrawRectangle((double)(xp - w/2.0), (double)(yp - h/2.0), (double)w, (double)h);
+      dc.DrawRectangle((long)(xp - w/2.0), (long)(yp - h/2.0), (long)w, (long)h);
 
       if (m_pen) dc.SetPen(m_pen);
       dc.SetTextForeground(* region->GetActualColourObject());
@@ -323,7 +323,7 @@ void wxLineShape::EraseRegion(wxDC& dc, wxShapeRegion *region, double x, double 
       dc.SetPen(g_oglWhiteBackgroundPen);
       dc.SetBrush(g_oglWhiteBackgroundBrush);
 
-      dc.DrawRectangle((double)(xp - w/2.0), (double)(yp - h/2.0), (double)w, (double)h);
+      dc.DrawRectangle((long)(xp - w/2.0), (long)(yp - h/2.0), (long)w, (long)h);
   }
 }
 
@@ -722,10 +722,10 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
                        &side1_x, &side1_y, &side2_x, &side2_y);
 
       wxPoint points[4];
-      points[0].x = tip_x; points[0].y = tip_y;
-      points[1].x = side1_x; points[1].y = side1_y;
-      points[2].x = side2_x; points[2].y = side2_y;
-      points[3].x = tip_x; points[3].y = tip_y;
+      points[0].x = (int) tip_x; points[0].y = (int) tip_y;
+      points[1].x = (int) side1_x; points[1].y = (int) side1_y;
+      points[2].x = (int) side2_x; points[2].y = (int) side2_y;
+      points[3].x = (int) tip_x; points[3].y = (int) tip_y;
 
       dc.SetPen(m_pen);
       dc.SetBrush(m_brush);
@@ -754,7 +754,7 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
       else
         dc.SetBrush(m_brush);
 
-      dc.DrawEllipse(x1, y1, diameter, diameter);
+      dc.DrawEllipse((long) x1, (long) y1, (long) diameter, (long) diameter);
       break;
     }
     case ARROW_SINGLE_OBLIQUE:
@@ -831,8 +831,8 @@ void wxLineShape::DrawArrow(wxDC& dc, wxArrowHead *arrow, double xOffset, bool p
           arrow->GetMetaFile()->GetBounds(&minX, &minY, &maxX, &maxY);
           // Make erasing rectangle slightly bigger or you get droppings.
           int extraPixels = 4;
-          dc.DrawRectangle((double)(deltaX + x + minX - (extraPixels/2.0)), (double)(deltaY + y + minY - (extraPixels/2.0)),
-                           (double)(maxX - minX + extraPixels), (double)(maxY - minY + extraPixels));
+          dc.DrawRectangle((long)(deltaX + x + minX - (extraPixels/2.0)), (long)(deltaY + y + minY - (extraPixels/2.0)),
+                           (long)(maxX - minX + extraPixels), (long)(maxY - minY + extraPixels));
         }
         else
           arrow->GetMetaFile()->Draw(dc, x+deltaX, y+deltaY);
@@ -877,8 +877,8 @@ void wxLineShape::OnErase(wxDC& dc)
     // of 1.
     if (old_pen && (old_pen->GetWidth() > 1))
     {
-      dc.DrawRectangle((double)(m_xpos - (bound_x/2.0) - 2.0), (double)(m_ypos - (bound_y/2.0) - 2.0),
-                        (double)(bound_x+4.0),  (double)(bound_y+4.0));
+      dc.DrawRectangle((long)(m_xpos - (bound_x/2.0) - 2.0), (long)(m_ypos - (bound_y/2.0) - 2.0),
+                        (long)(bound_x+4.0),  (long)(bound_y+4.0));
     }
     else
     {

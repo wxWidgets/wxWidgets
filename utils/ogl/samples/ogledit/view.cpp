@@ -119,7 +119,7 @@ void DiagramView::OnDraw(wxDC *dc)
 
   // Set the scale and origin 
   dc->SetUserScale (actualScale, actualScale); 
-  dc->SetDeviceOrigin (posX, posY); 
+  dc->SetDeviceOrigin ((long) posX, (long) posY); 
 
   // This part was added to preform the print preview and printing functions 
 

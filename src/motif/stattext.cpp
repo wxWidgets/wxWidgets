@@ -45,6 +45,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 	    m_windowId = id;
 
     m_windowStyle = style;
+    m_windowFont = parent->GetFont();
 
     char* label1 = (label.IsNull() ? "" : (char*) (const char*) label);
 
@@ -52,9 +53,12 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     XmString text = XmStringCreateSimple (label1);
 
+    XmFontList fontList = (XmFontList) m_windowFont.GetFontList(1.0, XtDisplay(parentWidget));
+
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget ((char*) (const char*) name,
                                          xmLabelWidgetClass,
                                          parentWidget,
+                                         XmNfontList, fontList,
                                          XmNlabelString, text,
                                          XmNalignment,
                      ((style & wxALIGN_RIGHT) ? XmALIGNMENT_END :
@@ -63,9 +67,6 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
                                          NULL);
 
     XmStringFree (text);
-
-    m_windowFont = parent->GetFont();
-    ChangeFont(FALSE);
 
     SetCanAddEventHandler(TRUE);
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);

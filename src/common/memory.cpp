@@ -24,7 +24,7 @@
 #include "wx/defs.h"
 #endif
 
-#if (WXDEBUG && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
+#if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
 
 #ifdef __GNUG__
 // #pragma implementation
@@ -635,7 +635,7 @@ void wxDebugContext::TraverseList (PmSFV func, wxMemStruct *from)
   */
 bool wxDebugContext::PrintList (void)
 {
-#if WXDEBUG
+#ifdef __WXDEBUG__
   if (!HasStream())
     return FALSE;
 
@@ -649,7 +649,7 @@ bool wxDebugContext::PrintList (void)
 
 bool wxDebugContext::Dump(void)
 {
-#if WXDEBUG
+#ifdef __WXDEBUG__
   if (!HasStream())
     return FALSE;
 
@@ -705,7 +705,7 @@ static wxDebugStatsStruct *InsertStatsStruct(wxDebugStatsStruct *head, wxDebugSt
 
 bool wxDebugContext::PrintStatistics(bool detailed)
 {
-#if WXDEBUG
+#ifdef __WXDEBUG__
   if (!HasStream())
     return FALSE;
 
@@ -900,7 +900,7 @@ int wxDebugContext::CountObjectsLeft(void)
 // We'll only do malloc and free for the moment: leave the interesting
 // stuff for the wxObject versions.
 
-#if WXDEBUG && wxUSE_GLOBAL_MEMORY_OPERATORS
+#if defined(__WXDEBUG__) && wxUSE_GLOBAL_MEMORY_OPERATORS
 
 #ifdef new
 #undef new
@@ -1122,7 +1122,7 @@ void wxTraceLevel(int level, const char *fmt ...)
 #endif
 }
 
-#else // wxUSE_MEMORY_TRACING && WXDEBUG
+#else // wxUSE_MEMORY_TRACING && defined(__WXDEBUG__)
 void wxTrace(const char *WXUNUSED(fmt) ...)
 {
 }
