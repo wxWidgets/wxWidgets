@@ -116,10 +116,6 @@ public:
    */
    void DoPaint(const wxRect *updateRect = NULL);
 
-#ifdef __WXMSW__
-   virtual long MSWGetDlgCode();
-#endif //MSW
-
    /// if exact == false, assume 50% extra size for the future
    void ResizeScrollbars(bool exact = false);  // don't change this to true!
 

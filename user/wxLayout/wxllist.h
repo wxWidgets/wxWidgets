@@ -761,10 +761,15 @@ public:
    */
    bool MoveCursorVertically(int n);
    /** Move cursor left or right.
-       @param n
+       @param n = number of positions to move
        @return bool if it could be moved
    */
    bool MoveCursorHorizontally(int n);
+   /** Move cursor to the left or right counting in words
+       @param n = number of positions in words
+       @return bool if it could be moved
+   */
+   bool MoveCursorWord(int n);
 
    /// Move cursor to end of line.
    void MoveCursorToEndOfLine(void)
@@ -847,7 +852,7 @@ public:
    /** Finds text in this list.
        @param needle the text to find
        @param cpos the position where to start the search
-       @return the cursoor coord where it was found or (-1,-1)
+       @return the cursor coord where it was found or (-1,-1)
    */
    wxPoint FindText(const wxString &needle, const wxPoint &cpos = wxPoint(0,0)) const;
 

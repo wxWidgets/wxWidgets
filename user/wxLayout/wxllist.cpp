@@ -937,7 +937,8 @@ wxLayoutLine::DeleteWord(CoordType xpos)
          return true;
       }
    }
-   wxASSERT(0); // we should never arrive here
+
+   wxFAIL_MSG("unreachable");
 }
 
 wxLayoutLine *
@@ -1669,6 +1670,78 @@ wxLayoutList::MoveCursorHorizontally(int n)
       n -= move;
    }
    return n == 0;
+}
+
+bool
+wxLayoutList::MoveCursorWord(int n)
+{
+   wxCHECK_MSG( m_CursorLine, false, "no current line" );
+   wxCHECK_MSG( n == -1 || n == +1, false, "not implemented yet" );
+
+   CoordType moveDistance = 0;
+   CoordType offset;
+   for ( wxLOiterator i = m_CursorLine->FindObject(m_CursorPos.x, &offset);
+         n != 0;
+         n > 0 ? i++ : i-- )
+   {
+      if ( i == NULLIT )
+         return false;
+
+      wxLayoutObject *obj = *i;
+      if( obj->GetType() != WXLO_TYPE_TEXT )
+      {
+         // any non text objects count as one word
+         n > 0 ? n-- : n++;
+
+         moveDistance += obj->GetLength();
+      }
+      else
+      {
+         // text object
+         wxLayoutObjectText *tobj = (wxLayoutObjectText *)obj;
+
+         if ( offset == tobj->GetLength() )
+         {
+            // at end of object
+            n > 0 ? n-- : n++;
+         }
+         else
+         {
+            const char *start = tobj->GetText().c_str();
+            const char *p = start + offset;
+
+            // to the beginning/end of the next/prev word
+            while ( isspace(*p) )
+            {
+               n > 0 ? p++ : p--;
+            }
+
+            // go to the end/beginning of the word (in a broad sense...)
+            while ( p >= start && !isspace(*p) )
+            {
+               n > 0 ? p++ : p--;
+            }
+
+            if ( n > 0 )
+            {
+               // now advance to the beginning of the next word
+               while ( isspace(*p) )
+                  p++;
+            }
+
+            n > 0 ? n-- : n++;
+
+            moveDistance = p - start - offset;
+         }
+      }
+
+      // except for the first iteration, offset is 0
+      offset = 0;
+   }
+
+   MoveCursorHorizontally(moveDistance);
+
+   return true;
 }
 
 bool

@@ -75,7 +75,9 @@ END_EVENT_TABLE()
 wxLayoutWindow::wxLayoutWindow(wxWindow *parent)
               : wxScrolledWindow(parent, -1,
                                  wxDefaultPosition, wxDefaultSize,
-                                 wxHSCROLL | wxVSCROLL | wxBORDER)
+                                 wxHSCROLL | wxVSCROLL |
+                                 wxBORDER |
+                                 wxWANTS_CHARS)
 
 {
    SetStatusBar(NULL); // don't use statusbar
@@ -137,15 +139,6 @@ wxLayoutWindow::Clear(int family,
 
    DoPaint((wxRect *)NULL);
 }
-
-#ifdef __WXMSW__
-long
-wxLayoutWindow::MSWGetDlgCode()
-{
-   // if we don't return this, we won't get OnChar() events for TABs and ENTER
-   return DLGC_WANTCHARS | DLGC_WANTARROWS | DLGC_WANTMESSAGE;
-}
-#endif //MSW
 
 void
 wxLayoutWindow::OnMouse(int eventId, wxMouseEvent& event)
@@ -308,13 +301,20 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       cursor, etc. It's default will process all keycodes causing
       modifications to the buffer, but only if editing is allowed.
    */
+   bool ctrlDown = event.ControlDown();
    switch(keyCode)
    {
    case WXK_RIGHT:
-      m_llist->MoveCursorHorizontally(1);
+      if ( ctrlDown )
+         m_llist->MoveCursorWord(1);
+      else
+         m_llist->MoveCursorHorizontally(1);
       break;
    case WXK_LEFT:
-      m_llist->MoveCursorHorizontally(-1);
+      if ( ctrlDown )
+         m_llist->MoveCursorWord(-1);
+      else
+         m_llist->MoveCursorHorizontally(-1);
       break;
    case WXK_UP:
       m_llist->MoveCursorVertically(-1);
@@ -329,18 +329,26 @@ wxLayoutWindow::OnChar(wxKeyEvent& event)
       m_llist->MoveCursorVertically(20);
       break;
    case WXK_HOME:
-      m_llist->MoveCursorToBeginOfLine();
+      if ( ctrlDown )
+         m_llist->MoveCursorTo(wxPoint(0, 0));
+      else
+         m_llist->MoveCursorToBeginOfLine();
       break;
    case WXK_END:
+      if ( ctrlDown )
+      {
+         // TODO VZ: how to move the cursor to the last line of the text?
+         m_llist->MoveCursorVertically(1000);
+      }
       m_llist->MoveCursorToEndOfLine();
       break;
    default:
-      if(keyCode == 'c' && event.ControlDown())
+      if(keyCode == 'c' && ctrlDown)
       {
          // this should work even in read-only mode
          Copy();
       }
-      if( IsEditable() )
+      else if( IsEditable() )
       {
          /* First, handle control keys */
          if(event.ControlDown() && ! event.AltDown())
