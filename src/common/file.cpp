@@ -60,7 +60,7 @@
     #include  <unistd.h>
     #include  <sys/stat.h>
     #ifdef __GNUWIN32__
-        #include <windows.h>
+        #include "wx/msw/wrapwin.h"
     #endif
 #elif defined(__DOS__)
     #if defined(__WATCOMC__)

@@ -6494,22 +6494,15 @@ fi
 ## FIXME: This is a blatant hack
 if test "x$wxUSE_COCOA" != "x" -a "$wxUSE_COCOA" != "0" ; then
   wxUSE_PRINTING_ARCHITECTURE=no
-  wxUSE_HELP=no
   wxUSE_CLIPBOARD=no
   wxUSE_DRAG_AND_DROP=no
   wxUSE_DATAOBJ=no
   # Generic notebook requires tab dialog
   DEFAULT_wxUSE_TABDIALOG=yes
   DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_GAUGE=no
   DEFAULT_wxUSE_SCROLLBAR=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_CALCTRL=no
-  DEFAULT_wxUSE_SPINBTN=no
-  DEFAULT_wxUSE_SPINCTRL=no
   DEFAULT_wxUSE_TOOLTIPS=no
   DEFAULT_wxUSE_DRAGIMAGE=no
-  DEFAULT_wxUSE_PROGRESSDLG=no
 fi
 
 
@@ -19299,69 +19292,6 @@ echo "$as_me: error: please set CFLAGS to contain the location of windows.h" >&2
 fi
 
 
-
-        echo "$as_me:$LINENO: checking if w32api has good enough MSIE support" >&5
-echo $ECHO_N "checking if w32api has good enough MSIE support... $ECHO_C" >&6
-if test "${wx_cv_w32api_win32_ie+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-
-      cat >conftest.$ac_ext <<_ACEOF
-#line $LINENO "configure"
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <w32api.h>
-int
-main ()
-{
-
-                       #define wxCHECK_W32API_VERSION( major, minor ) \
-                       ( defined( __W32API_MAJOR_VERSION ) && defined( __W32API_MINOR_VERSION ) \
-                       && ( ( __W32API_MAJOR_VERSION > (major) ) \
-                       || ( __W32API_MAJOR_VERSION == (major) && __W32API_MINOR_VERSION >= (minor))))
-
-                       #if !wxCHECK_W32API_VERSION(1,1)
-                       #error You need w32api 1.1 or newer
-                       #endif
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (eval echo "$as_me:$LINENO: \"$ac_compile\"") >&5
-  (eval $ac_compile) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-         { ac_try='test -s conftest.$ac_objext'
-  { (eval echo "$as_me:$LINENO: \"$ac_try\"") >&5
-  (eval $ac_try) 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-
-                        wx_cv_w32api_win32_ie=yes
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-
-                        wx_cv_w32api_win32_ie=no
-
-fi
-rm -f conftest.$ac_objext conftest.$ac_ext
-
-fi
-echo "$as_me:$LINENO: result: $wx_cv_w32api_win32_ie" >&5
-echo "${ECHO_T}$wx_cv_w32api_win32_ie" >&6
-    if test "$wx_cv_w32api_win32_ie" = "yes" ; then
-        CPPFLAGS="$CPPFLAGS -D_WIN32_IE=0x400"
-    fi
 
             LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"
 

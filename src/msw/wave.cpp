@@ -30,7 +30,6 @@
 #include "wx/msw/wave.h"
 #include "wx/msw/private.h"
 
-#include <windows.h>
 #include <windowsx.h>
 
 #if defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__)

@@ -54,7 +54,7 @@
 #include <string.h>
 
 #ifdef __WXMSW__
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 
 #ifdef GetClassInfo
 #undef GetClassInfo

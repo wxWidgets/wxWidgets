@@ -43,7 +43,7 @@
 #include <string.h>
 
 #ifdef __WXMSW__
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 #endif
 
 #ifdef __WXMOTIF__

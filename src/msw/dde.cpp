@@ -43,7 +43,6 @@
 #include "wx/msw/private.h"
 
 #include <string.h>
-#include <windows.h>
 #include <ddeml.h>
 
 #ifdef __GNUWIN32_OLD__

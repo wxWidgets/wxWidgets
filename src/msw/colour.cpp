@@ -24,7 +24,6 @@
 #include "wx/msw/private.h"
 
 #include <string.h>
-#include <windows.h>
 
 IMPLEMENT_DYNAMIC_CLASS(wxColour, wxObject)
 

@@ -29,8 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include <windows.h>
-    #include "wx/msw/winundef.h"
+    #include "wx/msw/wrapwin.h"
 #endif
 
 #include "wx/msw/wince/time.h"

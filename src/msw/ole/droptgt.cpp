@@ -43,7 +43,7 @@
 #ifdef __WIN32__
     #if !defined(__GNUWIN32__) || wxUSE_NORLANDER_HEADERS
         #if wxCHECK_W32API_VERSION( 1, 0 )
-            #include <windows.h>
+            #include "wx/msw/wrapwin.h"
         #endif
         #include <shlobj.h>            // for DROPFILES structure
     #endif

@@ -35,7 +35,7 @@
 //     defining HAVE_BOOLEAN.
 #if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__DIGITALMARS__) || (defined(__WATCOMC__) && __WATCOMC__ < 1200))
     #define HAVE_BOOLEAN
-    #include <windows.h>
+    #include "wx/msw/wrapwin.h"
 #endif
 
 extern "C"

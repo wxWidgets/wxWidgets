@@ -41,7 +41,7 @@
 // _WINDOWS_ is defined when windows.h is included,
 // __WXMSW__ is defined for MS Windows compilation
 #if       defined(__WXMSW__) && !defined(_WINDOWS_)
-  #include  <windows.h>
+  #include  "wx/msw/wrapwin.h"
 #endif  //windows.h
 
 // ----------------------------------------------------------------------------

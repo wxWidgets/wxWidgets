@@ -28,9 +28,8 @@
 
 #if wxUSE_UXTHEME
 
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 
-#include "wx/msw/winundef.h"
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 #include "wx/app.h"         // for GetComCtl32Version

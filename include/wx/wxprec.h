@@ -38,8 +38,7 @@
         #define STRICT 1
     #endif
 
-    #include <windows.h>
-    #include "wx/msw/winundef.h"
+    #include "wx/msw/wrapwin.h"
 #endif
 
 // include the most common wx headers

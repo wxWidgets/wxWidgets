@@ -49,7 +49,6 @@
 #include "wx/quantize.h"
 
 #ifdef __WXMSW__
-#include <windows.h>
 #include "wx/msw/private.h"
 #endif
 

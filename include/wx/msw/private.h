@@ -14,11 +14,7 @@
 #ifndef _WX_PRIVATE_H_
 #define _WX_PRIVATE_H_
 
-#ifndef STRICT
-    #define STRICT 1
-#endif
-
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 
 
 #if defined (__WXWINCE__)
@@ -31,9 +27,6 @@
     // Extra prototypes and symbols not defined by MicroWindows
     #include "wx/msw/microwin.h"
 #endif
-
-// undefine conflicting symbols which were defined in windows.h
-#include "wx/msw/winundef.h"
 
 // Include fixes for MSLU:
 #include "wx/msw/mslu.h"

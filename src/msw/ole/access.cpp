@@ -38,7 +38,7 @@
 #include "wx/log.h"
 #include "wx/access.h"
 
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 
 // for some compilers, the entire ole2.h must be included, not only oleauto.h
 #if wxUSE_NORLANDER_HEADERS || defined(__WATCOMC__)
@@ -49,7 +49,6 @@
 #include <oleacc.h>
 #include <winable.h>
 
-#include "wx/msw/winundef.h"
 #include "wx/msw/ole/oleutils.h"
 
 #ifndef CHILDID_SELF

@@ -41,7 +41,7 @@
 // ----------------------------------------------------------------------------
 
 #if defined(__WIN32__)
-    #include <windows.h>
+    #include "wx/msw/wrapwin.h"
 #endif
 
 #if defined(__WIN32__) && !defined(HAVE_FTIME) && !defined(__MWERKS__) && !defined(__WXWINCE__)

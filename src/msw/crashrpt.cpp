@@ -40,7 +40,7 @@
 
 #include "wx/msw/crashrpt.h"
 
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 #include <imagehlp.h>
 #include "wx/msw/private.h"
 

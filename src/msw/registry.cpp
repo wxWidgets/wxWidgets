@@ -36,7 +36,7 @@
 #define   WIN32_LEAN_AND_MEAN
 */
 
-#include  <windows.h>
+#include  "wx/msw/wrapwin.h"
 
 #ifdef __WXWINCE__
 #include "wx/msw/private.h"

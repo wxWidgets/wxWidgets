@@ -44,8 +44,6 @@
 
 #if wxUSE_COLOURDLG
 
-#include <windows.h>
-
 #include "wx/msw/private.h"
 #include "wx/colordlg.h"
 #include "wx/cmndata.h"

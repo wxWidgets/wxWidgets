@@ -86,8 +86,7 @@
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
-#include <windows.h>
-#include "wx/msw/winundef.h"
+#include "wx/msw/wrapwin.h"
 #endif
 
 #ifdef __WXWINCE__

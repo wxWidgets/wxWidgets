@@ -47,7 +47,7 @@
 #include "wx/ownerdrw.h"
 #include "wx/checklst.h"
 
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 #include <windowsx.h>
 
 #include "wx/msw/private.h"

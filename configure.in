@@ -2059,29 +2059,6 @@ if test "$USE_WIN32" = 1 ; then
         AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
     ])
 
-    dnl check if can use _WIN32_IE macro
-    AC_CACHE_CHECK([if w32api has good enough MSIE support], wx_cv_w32api_win32_ie,
-    [
-      AC_TRY_COMPILE([#include <w32api.h>],
-                     [
-                       #define wxCHECK_W32API_VERSION( major, minor ) \
-                       ( defined( __W32API_MAJOR_VERSION ) && defined( __W32API_MINOR_VERSION ) \
-                       && ( ( __W32API_MAJOR_VERSION > (major) ) \
-                       || ( __W32API_MAJOR_VERSION == (major) && __W32API_MINOR_VERSION >= (minor))))
-
-                       #if !wxCHECK_W32API_VERSION(1,1)
-                       #error You need w32api 1.1 or newer
-                       #endif
-                     ], [
-                        wx_cv_w32api_win32_ie=yes
-                     ], [
-                        wx_cv_w32api_win32_ie=no
-                     ])
-    ])
-    if test "$wx_cv_w32api_win32_ie" = "yes" ; then
-        CPPFLAGS="$CPPFLAGS -D_WIN32_IE=0x400"
-    fi
-
     dnl --- FIXME: This is still a somewhat random list of libs,
     dnl ---        some of them should probably be included conditionally.
     LIBS="$LIBS -lwinspool -lwinmm -lshell32 -lcomctl32 -lcomdlg32 -lctl3d32 -ladvapi32 -lwsock32 -lgdi32"

@@ -12,7 +12,7 @@
 
 */
 
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 #include <tchar.h>
 #include <winsock.h>
 #include <string.h>

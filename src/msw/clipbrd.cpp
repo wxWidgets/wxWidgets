@@ -52,7 +52,6 @@
 #include "wx/clipbrd.h"
 
 #include <string.h>
-#include <windows.h>
 
 #include "wx/msw/private.h"
 

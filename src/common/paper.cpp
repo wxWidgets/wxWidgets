@@ -39,7 +39,7 @@
 #include <string.h>
 
 #ifdef __WXMSW__
-#include <windows.h>
+#include "wx/msw/wrapwin.h"
 #include <commdlg.h>
 
 #ifndef __WIN32__

@@ -128,7 +128,7 @@
 #endif
 
 #ifdef __WINDOWS__
-    #include <windows.h>
+    #include "wx/msw/wrapwin.h"
     #include "wx/msw/mslu.h"
 
     // for _getcwd
