@@ -51,11 +51,10 @@ UNICODE!
     MSLU, (Microsoft Layer for Unicode).  It simply gets out of the
     way if the app is run on an NT box, or if run on a win9x box it
     loads a special DLL that provides the unicode versions of the
-    windows API.  So far I have not been able to get this to work on
-    win9x with the stock python.exe and pythonw.exe executables.
-    Instead I've had to rebuild the Python loaders linked with this
-    MSLU library from Microsoft.  I'd like to find a way to build
-    wxWindows/wxPython such that this is not needed...
+    windows API.  So far I have not been able to get this to work
+    perfectly on win9x.  Most things work fine but wxTaskBarIcon for
+    example will cause a crash if used with the unicode build on
+    win95.
 
     So how do you use it?  It's very simple.  When unicode is enabled,
     then all functions and methods in wxPython that return a wxString
@@ -68,10 +67,6 @@ UNICODE!
     encoding then you should convert it to unicode using the Python
     codecs first and then pass the unicode string to the wxPython
     method.
-
-
-Bad news: The API for adding tools to toolbars has changed again.
-Good news: Toolbar tools can now have labels!
 
 
 

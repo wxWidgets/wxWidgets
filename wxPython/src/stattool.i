@@ -31,7 +31,7 @@
 %import controls.i
 
 %pragma(python) code = "import wx"
-
+%pragma(python) code = "wxITEM_NORMAL = 0 # predeclare this since wx isn't fully imported yet"
 
 //----------------------------------------------------------------------
 
@@ -169,73 +169,30 @@ public:
 
     %addmethods {
 
-        // the full AddTool() function
+        // The full AddTool() function.  Call it DoAddTool in wxPython and
+        // implement the other Add methods by calling it.
         //
         // If bmpDisabled is wxNullBitmap, a shadowed version of the normal bitmap
         // is created and used as the disabled image.
-        wxToolBarToolBase *AddTool(int id,
-                                   const wxString& label,
-                                   const wxBitmap& bitmap,
-                                   const wxBitmap& bmpDisabled,
-                                   wxItemKind kind = wxITEM_NORMAL,
-                                   const wxString& shortHelp = wxPyEmptyString,
-                                   const wxString& longHelp = wxPyEmptyString,
-                                   PyObject *clientData = NULL)
+        wxToolBarToolBase *DoAddTool(int id,
+                                     const wxString& label,
+                                     const wxBitmap& bitmap,
+                                     const wxBitmap& bmpDisabled = wxNullBitmap,
+                                     wxItemKind kind = wxITEM_NORMAL,
+                                     const wxString& shortHelp = wxPyEmptyString,
+                                     const wxString& longHelp = wxPyEmptyString,
+                                     PyObject *clientData = NULL)
         {
             wxPyUserData* udata = NULL;
-            if (clientData)
+            if (clientData && clientData != Py_None)
                 udata = new wxPyUserData(clientData);
             return self->AddTool(id, label, bitmap, bmpDisabled, kind,
                                  shortHelp, longHelp, udata);
         }
 
-        // The most common version of AddTool
-        wxToolBarToolBase *AddSimpleTool(int id,
-                                         const wxString& label,
-                                         const wxBitmap& bitmap,
-                                         const wxString& shortHelp = wxPyEmptyString,
-                                         const wxString& longHelp = wxPyEmptyString,
-                                         wxItemKind kind = wxITEM_NORMAL)
-        {
-            return self->AddTool(id, label, bitmap, wxNullBitmap, kind,
-                                 shortHelp, longHelp, NULL);
-        }
 
-        // add a check tool, i.e. a tool which can be toggled
-        wxToolBarToolBase *AddCheckTool(int id,
-                                        const wxString& label,
-                                        const wxBitmap& bitmap,
-                                        const wxBitmap& bmpDisabled = wxNullBitmap,
-                                        const wxString& shortHelp = wxPyEmptyString,
-                                        const wxString& longHelp = wxPyEmptyString,
-                                        PyObject *clientData = NULL)
-        {
-            wxPyUserData* udata = NULL;
-            if (clientData)
-                udata = new wxPyUserData(clientData);
-            return self->AddCheckTool(id, label, bitmap, bmpDisabled,
-                                      shortHelp, longHelp, udata);
-        }
-
-        // add a radio tool, i.e. a tool which can be toggled and releases any
-        // other toggled radio tools in the same group when it happens
-        wxToolBarToolBase *AddRadioTool(int id,
-                                    const wxString& label,
-                                    const wxBitmap& bitmap,
-                                    const wxBitmap& bmpDisabled = wxNullBitmap,
-                                    const wxString& shortHelp = wxPyEmptyString,
-                                    const wxString& longHelp = wxPyEmptyString,
-                                    PyObject *clientData = NULL)
-        {
-            wxPyUserData* udata = NULL;
-            if (clientData)
-                udata = new wxPyUserData(clientData);
-            return self->AddRadioTool(id, label, bitmap, bmpDisabled,
-                                      shortHelp, longHelp, udata);
-        }
-
-        // insert the new tool at the given position, if pos == GetToolsCount(), it
-        // is equivalent to AddTool()
+        // Insert the new tool at the given position, if pos == GetToolsCount(), it
+        // is equivalent to DoAddTool()
         wxToolBarToolBase *InsertTool(size_t pos,
                                       int id,
                                       const wxString& label,
@@ -247,25 +204,139 @@ public:
                                       PyObject *clientData = NULL)
         {
             wxPyUserData* udata = NULL;
-            if (clientData)
+            if (clientData && clientData != Py_None)
                 udata = new wxPyUserData(clientData);
             return self->InsertTool(pos, id, label, bitmap, bmpDisabled, kind,
                                     shortHelp, longHelp, udata);
         }
 
-        // A simpler InsertTool
-        wxToolBarToolBase *InsertSimpleTool(size_t pos,
-                                      int id,
-                                      const wxString& label,
-                                      const wxBitmap& bitmap,
-                                      wxItemKind kind = wxITEM_NORMAL,
-                                      const wxString& shortHelp = wxPyEmptyString,
-                                      const wxString& longHelp = wxPyEmptyString)
-        {
-            return self->InsertTool(pos, id, label, bitmap, wxNullBitmap, kind,
-                                    shortHelp, longHelp);
-        }
     }
+
+
+    %pragma(python) addtoclass = "
+    # These match the original Add methods for this class, kept for
+    # backwards compatibility with versions < 2.3.3.
+
+
+    def AddTool(self, id, bitmap,
+                pushedBitmap = wxNullBitmap,
+                isToggle = 0,
+                clientData = None,
+                shortHelpString = '',
+                longHelpString = '') :
+        '''Old style method to add a tool to the toolbar.'''
+        kind = wx.wxITEM_NORMAL
+        if isToggle: kind = wx.wxITEM_CHECK
+        return self.DoAddTool(id, '', bitmap, pushedBitmap, kind,
+                              shortHelpString, longHelpString, clientData)
+
+    def AddSimpleTool(self, id, bitmap,
+                      shortHelpString = '',
+                      longHelpString = '',
+                      isToggle = 0):
+        '''Old style method to add a tool to the toolbar.'''
+        kind = wx.wxITEM_NORMAL
+        if isToggle: kind = wx.wxITEM_CHECK
+        return self.DoAddTool(id, '', bitmap, wxNullBitmap, kind,
+                              shortHelpString, longHelpString, None)
+
+    def InsertTool(self, pos, id, bitmap,
+                   pushedBitmap = wxNullBitmap,
+                   isToggle = 0,
+                   clientData = None,
+                   shortHelpString = '',
+                   longHelpString = ''):
+        '''Old style method to insert a tool in the toolbar.'''
+        kind = wx.wxITEM_NORMAL
+        if isToggle: kind = wx.wxITEM_CHECK
+        return self.DoInsertTool(pos, id, '', bitmap, pushedBitmap, kind,
+                                 shortHelpString, longHelpString, clientData)
+
+    def InsertSimpleTool(self, pos, id, bitmap,
+                         shortHelpString = '',
+                         longHelpString = '',
+                         isToggle = 0):
+        '''Old style method to insert a tool in the toolbar.'''
+        kind = wx.wxITEM_NORMAL
+        if isToggle: kind = wx.wxITEM_CHECK
+        return self.DoInsertTool(pos, id, '', bitmap, wxNullBitmap, kind,
+                                 shortHelpString, longHelpString, None)
+
+
+    # The following are the new toolbar Add methods starting with
+    # 2.3.3.  They are renamed to have 'Label' in the name so as to be
+    # able to keep backwards compatibility with using the above
+    # methods.  Eventually these should migrate to be the methods used
+    # primarily and loose the 'Label' in the name...
+
+    def AddLabelTool(self, id, label, bitmap,
+                     bmpDisabled = wxNullBitmap,
+                     kind = wxITEM_NORMAL,
+                     shortHelp = '', longHelp = '',
+                     clientData = None):
+        '''
+        The full AddTool() function.
+
+        If bmpDisabled is wxNullBitmap, a shadowed version of the normal bitmap
+        is created and used as the disabled image.
+        '''
+        return self.DoAddTool(id, label, bitmap, bmpDisabled, kind,
+                              shortHelp, longHelp, clientData)
+
+
+    def InsertLabelTool(self, pos, id, label, bitmap,
+                        bmpDisabled = wxNullBitmap,
+                        kind = wxITEM_NORMAL,
+                        shortHelp = '', longHelp = '',
+                        clientData = None):
+        '''
+        Insert the new tool at the given position, if pos == GetToolsCount(), it
+        is equivalent to AddTool()
+        '''
+        return self.DoInsertTool(pos, id, label, bitmap, bmpDisabled, kind,
+                                 shortHelp, longHelp, clientData)
+
+    def AddCheckLabelTool(self, id, label, bitmap,
+                        bmpDisabled = wxNullBitmap,
+                        shortHelp = '', longHelp = '',
+                        clientData = None):
+        '''Add a check tool, i.e. a tool which can be toggled'''
+        return self.DoAddTool(id, label, bitmap, bmpDisabled, wx.wxITEM_CHECK,
+                              shortHelp, longHelp, clientData)
+
+    def AddRadioLabelTool(self, id, label, bitmap,
+                          bmpDisabled = wxNullBitmap,
+                          shortHelp = '', longHelp = '',
+                          clientData = None):
+        '''
+        Add a radio tool, i.e. a tool which can be toggled and releases any
+        other toggled radio tools in the same group when it happens
+        '''
+        return self.DoAddTool(id, label, bitmap, bmpDisabled, wx.wxITEM_RADIO,
+                              shortHelp, longHelp, clientData)
+
+
+    # For consistency with the backwards compatible methods above, here are
+    # some non-'Label' versions of the Check and Radio methods
+    def AddCheckTool(self, id, bitmap,
+                     bmpDisabled = wxNullBitmap,
+                     shortHelp = '', longHelp = '',
+                     clientData = None):
+        '''Add a check tool, i.e. a tool which can be toggled'''
+        return self.DoAddTool(id, '', bitmap, bmpDisabled, wx.wxITEM_CHECK,
+                              shortHelp, longHelp, clientData)
+
+    def AddRadioTool(self, id, bitmap,
+                     bmpDisabled = wxNullBitmap,
+                     shortHelp = '', longHelp = '',
+                     clientData = None):
+        '''
+        Add a radio tool, i.e. a tool which can be toggled and releases any
+        other toggled radio tools in the same group when it happens
+        '''
+        return self.DoAddTool(id, '', bitmap, bmpDisabled, wx.wxITEM_RADIO,
+                              shortHelp, longHelp, clientData)
+    "
 
 
     wxToolBarToolBase *AddControl(wxControl *control);

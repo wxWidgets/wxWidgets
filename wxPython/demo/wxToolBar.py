@@ -23,26 +23,26 @@ class TestToolBar(wxFrame):
 
         self.CreateStatusBar()
 
-        tb.AddSimpleTool(10, '', images.getNewBitmap(), "New", "Long help for 'New'")
+        tb.AddSimpleTool(10, images.getNewBitmap(), "New", "Long help for 'New'")
         EVT_TOOL(self, 10, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 10, self.OnToolRClick)
 
-        tb.AddSimpleTool(20, '', images.getOpenBitmap(), "Open", "Long help for 'Open'")
+        tb.AddSimpleTool(20, images.getOpenBitmap(), "Open", "Long help for 'Open'")
         EVT_TOOL(self, 20, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 20, self.OnToolRClick)
 
         tb.AddSeparator()
-        tb.AddSimpleTool(30, '', images.getCopyBitmap(), "Copy", "Long help for 'Copy'")
+        tb.AddSimpleTool(30, images.getCopyBitmap(), "Copy", "Long help for 'Copy'")
         EVT_TOOL(self, 30, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 30, self.OnToolRClick)
 
-        tb.AddSimpleTool(40, '', images.getPasteBitmap(), "Paste", "Long help for 'Paste'")
+        tb.AddSimpleTool(40, images.getPasteBitmap(), "Paste", "Long help for 'Paste'")
         EVT_TOOL(self, 40, self.OnToolClick)
         EVT_TOOL_RCLICKED(self, 40, self.OnToolRClick)
 
         tb.AddSeparator()
 
-        tool = tb.AddCheckTool(50, '', images.getTog1Bitmap(),
+        tool = tb.AddCheckTool(50, images.getTog1Bitmap(),
                                shortHelp="Toggle this")
         EVT_TOOL(self, 50, self.OnToolClick)
 
