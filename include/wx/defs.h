@@ -1658,6 +1658,26 @@ typedef enum {
 
 #ifdef __WXMAC__
 
+typedef unsigned char WXCOLORREF[6];
+typedef void*       WXHBITMAP;
+typedef void*       WXHMETAFILE ;
+typedef void*       WXHICON ;
+typedef void*       WXHCURSOR ;
+typedef void*       WXHRGN ;
+typedef void*       WXRECTPTR ;
+typedef void*       WXPOINTPTR ;
+typedef void*       WXHWND ;
+typedef void*       WXEVENTREF ;
+typedef void*       WXAPPLEEVENTREF ;
+typedef void*       WXHDC ;
+typedef void*       WXHMENU ;
+typedef unsigned int    WXUINT;
+typedef unsigned long   WXDWORD;
+typedef unsigned short  WXWORD;
+
+typedef void*       WXWidget ;
+typedef void*       WXWindow ;
+/*
 typedef WindowPtr       WXHWND;
 typedef Handle          WXHANDLE;
 typedef CIconHandle     WXHICON;
@@ -1670,16 +1690,11 @@ typedef CursHandle      WXHCURSOR;
 typedef RgnHandle       WXHRGN;
 //typedef unsigned long   WXHACCEL;
 //typedef unsigned long   WXHINSTANCE;
-typedef GWorldPtr       WXHBITMAP;
 //typedef unsigned long   WXHIMAGELIST;
 //typedef unsigned long   WXHGLOBAL;
 typedef GrafPtr         WXHDC;
-typedef unsigned int    WXUINT;
-typedef unsigned long   WXDWORD;
-typedef unsigned short  WXWORD;
 //typedef unsigned int    WXWPARAM;
 //typedef long            WXLPARAM;
-typedef RGBColor        WXCOLORREF;
 //typedef void *          WXRGNDATA;
 //typedef void *          WXMSG;
 //typedef unsigned long   WXHCONV;
@@ -1691,7 +1706,7 @@ typedef int (*WXFARPROC)();
 
 typedef WindowPtr       WXWindow;
 typedef ControlHandle   WXWidget;
-
+*/
 #endif
 
 #if defined(__WXMSW__) || defined(__WXPM__)
