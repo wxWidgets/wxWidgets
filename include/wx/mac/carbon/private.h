@@ -333,7 +333,9 @@ public :
     {
         m_controlRef = (ControlRef) control ;
     }
-    
+    virtual ~wxMacControl()
+    {
+    }
     bool Ok() const { return m_controlRef != NULL ; }
     
     void operator= (ControlRef c) { m_controlRef = c ; }
@@ -343,27 +345,27 @@ public :
     // accessing data and values
 
     virtual OSStatus SetData( ControlPartCode inPartCode , ResType inTag , Size inSize , const void * inData ) ;
-    virtual OSStatus GetData( ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) ;
-    virtual OSStatus GetDataSize( ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) ;
+    virtual OSStatus GetData( ControlPartCode inPartCode , ResType inTag , Size inBufferSize , void * inOutBuffer , Size * outActualSize ) const ;
+    virtual OSStatus GetDataSize( ControlPartCode inPartCode , ResType inTag , Size * outActualSize ) const ;
     virtual OSStatus SendEvent(  EventRef ref , OptionBits inOptions = 0 ) ;
     virtual OSStatus SendHICommand( HICommand &command , OptionBits inOptions = 0 ) ;
 
-    OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 ) ;
+    virtual OSStatus SendHICommand( UInt32 commandID , OptionBits inOptions = 0 ) ;
 
-    SInt32 GetValue() const ;
-    SInt32 GetMaximum() const ;
-    SInt32 GetMinimum() const ;
+    virtual SInt32 GetValue() const ;
+    virtual SInt32 GetMaximum() const ;
+    virtual SInt32 GetMinimum() const ;
     
-    void SetValue( SInt32 v ) ;
-    void SetMinimum( SInt32 v ) ;
-    void SetMaximum( SInt32 v ) ;
+    virtual void SetValue( SInt32 v ) ;
+    virtual void SetMinimum( SInt32 v ) ;
+    virtual void SetMaximum( SInt32 v ) ;
 
-    void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum ) ;
-    void SetRange( SInt32 minimum , SInt32 maximum ) ;
+    virtual void SetValueAndRange( SInt32 value , SInt32 minimum , SInt32 maximum ) ;
+    virtual void SetRange( SInt32 minimum , SInt32 maximum ) ;
     
     // templated helpers
 
-    Size GetDataSize( ControlPartCode inPartCode , ResType inTag )
+    Size GetDataSize( ControlPartCode inPartCode , ResType inTag ) const
     {
         Size sz ;
         verify_noerr( GetDataSize( inPartCode , inTag , &sz ) ) ;
@@ -377,12 +379,12 @@ public :
     {
         return SetData( inPartCode , inTag , sizeof( T ) , &data ) ;
     }
-    template <typename T> OSStatus GetData( ControlPartCode inPartCode , ResType inTag , T *data )
+    template <typename T> OSStatus GetData( ControlPartCode inPartCode , ResType inTag , T *data ) const
     {
         Size dummy ;
         return GetData( inPartCode , inTag , sizeof( T ) , data , &dummy ) ;
     }
-    template <typename T> T GetData( ControlPartCode inPartCode , ResType inTag )
+    template <typename T> T GetData( ControlPartCode inPartCode , ResType inTag ) const
     {
         T value ;
         verify_noerr( GetData<T>( inPartCode , inTag , &value ) ) ;
@@ -390,11 +392,14 @@ public :
     }
        
     // Flash the control for the specified amount of time
-    void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
-    
+    virtual void Flash( ControlPartCode part , UInt32 ticks = 8 ) ;
+    virtual void VisibilityChanged( bool shown ) ;
+    virtual void SetFont( const wxFont & font , const wxColour& foreground , long windowStyle ) ;
 
 protected :
-    ControlRef m_controlRef ;
+    ControlRef  m_controlRef ;
+    wxFont      m_font ;
+    long        m_windowStyle ; 
 } ;
 
 #endif // wxUSE_GUI
