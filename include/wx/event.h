@@ -2632,9 +2632,9 @@ typedef void (wxEvtHandler::*wxMouseCaptureChangedEventFunction)(wxMouseCaptureC
     wx__DECLARE_EVT2(event, id1, id2, wxEventHandler(func))
 
 // EVT_COMMAND
-#define EVT_COMMAND(winid, event, fn) \
+#define EVT_COMMAND(winid, event, func) \
     wx__DECLARE_EVT1(event, winid, wxCommandEventHandler(func))
-#define EVT_COMMAND_RANGE(id1, id2, event, fn) \
+#define EVT_COMMAND_RANGE(id1, id2, event, func) \
     wx__DECLARE_EVT2(event, id1, id2, wxCommandEventHandler(func))
 
 #define EVT_NOTIFY(event, winid, func) \
