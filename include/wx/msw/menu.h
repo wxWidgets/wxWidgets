@@ -22,7 +22,7 @@
 #include "wx/string.h"
 
 #if wxUSE_ACCEL
-#include "wx/accel.h"
+    #include "wx/accel.h"
 #endif // wxUSE_ACCEL
 
 class WXDLLEXPORT wxMenuItem;
@@ -31,6 +31,8 @@ class WXDLLEXPORT wxMenu;
 class WXDLLEXPORT wxFrame;
 
 WXDLLEXPORT_DATA(extern const wxChar*) wxEmptyString;
+
+WX_DEFINE_ARRAY(wxAcceleratorEntry *, wxAcceleratorArray);
 
 // ----------------------------------------------------------------------------
 // Menu
@@ -50,7 +52,7 @@ public:
 
     wxMenu( long WXUNUSED(style) )
     {
-	Init( wxEmptyString );
+        Init( wxEmptyString );
     }
 
     wxMenu(const wxString& title = wxEmptyString, long WXUNUSED(style) = 0)
@@ -147,7 +149,7 @@ public:
     void Detach();
 
 #if wxUSE_ACCEL
-    size_t GetAccelCount() const { return m_accelKeyCodes.GetCount(); }
+    size_t GetAccelCount() const { return m_accels.GetCount(); }
     size_t CopyAccels(wxAcceleratorEntry *accels) const;
 #endif // wxUSE_ACCEL
 
@@ -186,8 +188,8 @@ private:
     void*             m_clientData;
 
 #if wxUSE_ACCEL
-    // the accelerators data
-    wxArrayInt        m_accelKeyCodes, m_accelFlags, m_accelIds;
+    // the accelerators for our menu items
+    wxAcceleratorArray m_accels;
 #endif // wxUSE_ACCEL
 };
 

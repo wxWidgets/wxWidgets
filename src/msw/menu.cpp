@@ -141,78 +141,9 @@ void wxMenu::Append(wxMenuItem *pItem)
     wxCHECK_RET( pItem != NULL, wxT("can't append NULL item to the menu") );
 
 #if wxUSE_ACCEL
-    // check for accelerators: they are given after '\t'
-    wxString label = pItem->GetName();
-    int posTab = label.Find(wxT('\t'));
-    if ( posTab != wxNOT_FOUND ) {
-        // parse the accelerator string
-        int keyCode = 0;
-        int accelFlags = wxACCEL_NORMAL;
-        wxString current;
-        for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
-            if ( (label[n] == '+') || (label[n] == '-') ) {
-                if ( current == _("ctrl") )
-                    accelFlags |= wxACCEL_CTRL;
-                else if ( current == _("alt") )
-                    accelFlags |= wxACCEL_ALT;
-                else if ( current == _("shift") )
-                    accelFlags |= wxACCEL_SHIFT;
-                else {
-                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
-                               current.c_str());
-                }
-
-                current.Empty();
-            }
-            else {
-                current += wxTolower(label[n]);
-            }
-        }
-
-        if ( current.IsEmpty() ) {
-            wxLogDebug(wxT("No accel key found, accel string ignored."));
-        }
-        else {
-            if ( current.Len() == 1 ) {
-                // it's a letter
-                keyCode = wxToupper(current[0U]);
-            }
-            else {
-                // is it a function key?
-                if ( current[0U] == 'f' && isdigit(current[1U]) &&
-                     (current.Len() == 2 ||
-                     (current.Len() == 3 && isdigit(current[2U]))) ) {
-                    int n;
-                    wxSscanf(current.c_str() + 1, wxT("%d"), &n);
-
-                    keyCode = VK_F1 + n - 1;
-                }
-                else {
-                    // several special cases
-                    current.MakeUpper();
-                    if ( current == wxT("DEL") ) {
-                        keyCode = VK_DELETE;
-                    }
-                    else if ( current == wxT("PGUP") ) {
-                        keyCode = VK_PRIOR;
-                    }
-                    else if ( current == wxT("PGDN") ) {
-                        keyCode = VK_NEXT;
-                    }
-                    else {
-                        wxLogDebug(wxT("Unrecognized accel key '%s', accel "
-                                       "string ignored."), current.c_str());
-                    }
-                }
-            }
-        }
-
-        if ( keyCode ) {
-            // do add an entry
-            m_accelKeyCodes.Add(keyCode);
-            m_accelFlags.Add(accelFlags);
-            m_accelIds.Add(pItem->GetId());
-        }
+    wxAcceleratorEntry *accel = wxGetAccelFromMenuLabel(pItem->GetText());
+    if ( accel ) {
+        m_accels.Add(accel);
     }
 #endif // wxUSE_ACCEL
 
@@ -262,13 +193,7 @@ void wxMenu::Append(wxMenuItem *pItem)
         // menu is just a normal string (passed in data parameter)
         flags |= MF_STRING;
 
-// Don't know what the correct cast should be, but it doesn't
-// compile in BC++/16-bit without this cast.
-#if !defined(__WIN32__)
-        pData = (char*) (const char*) label;
-#else
-        pData = label;
-#endif
+        pData = (char*)pItem->GetText().c_str();
     }
 
     if ( !::AppendMenu(GetHmenu(), flags, id, pData) )
@@ -373,7 +298,7 @@ size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
     size_t count = GetAccelCount();
     for ( size_t n = 0; n < count; n++ )
     {
-        (*accels++).Set(m_accelFlags[n], m_accelKeyCodes[n], m_accelIds[n]);
+        *accels++ = *m_accels[n];
     }
 
     return count;
@@ -422,7 +347,7 @@ void wxMenu::SetLabel(int id, const wxString& label)
     wxMenuItem *item = FindItemForId(id) ;
     wxCHECK_RET( item, wxT("wxMenu::SetLabel: no such item") );
 
-    item->SetName(label);
+    item->SetText(label);
 }
 
 wxString wxMenu::GetLabel(int id) const
@@ -430,7 +355,7 @@ wxString wxMenu::GetLabel(int id) const
     wxString label;
     wxMenuItem *pItem = FindItemForId(id) ;
     if (pItem)
-        label = pItem->GetName() ;
+        label = pItem->GetText() ;
     else
         wxFAIL_MSG(wxT("wxMenu::GetLabel: item doesn't exist"));
 
@@ -592,7 +517,7 @@ int wxMenu::FindItem (const wxString& itemString) const
         }
         else if ( !item->IsSeparator() )
         {
-            wxString label = wxStripMenuCodes(item->GetName());
+            wxString label = wxStripMenuCodes(item->GetText());
             if ( itemLabel == label )
                 return item->GetId();
         }
@@ -812,7 +737,7 @@ void wxMenuBar::SetLabel(int id, const wxString& label)
 
     wxCHECK_RET( item, wxT("wxMenuBar::SetLabel(): no such item") );
 
-    item->SetName(label);
+    item->SetText(label);
 }
 
 wxString wxMenuBar::GetLabel(int id) const
@@ -820,9 +745,10 @@ wxString wxMenuBar::GetLabel(int id) const
     wxMenu *itemMenu = NULL;
     wxMenuItem *item = FindItemForId(id, &itemMenu) ;
 
-    wxCHECK_MSG( item, wxT(""), wxT("wxMenuBar::GetLabel(): no such item") );
+    wxCHECK_MSG( item, wxEmptyString,
+                 wxT("wxMenuBar::GetLabel(): no such item") );
 
-    return item->GetName();
+    return item->GetText();
 }
 
 void wxMenuBar::SetHelpString (int id, const wxString& helpString)

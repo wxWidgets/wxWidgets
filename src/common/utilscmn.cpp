@@ -32,6 +32,8 @@
     #include "wx/defs.h"
     #include "wx/string.h"
     #include "wx/utils.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
 
     #if wxUSE_GUI
         #include "wx/window.h"
@@ -39,6 +41,10 @@
         #include "wx/frame.h"
         #include "wx/msgdlg.h"
         #include "wx/textdlg.h"
+        #if wxUSE_ACCEL
+            #include "wx/menuitem.h"
+            #include "wx/accel.h"
+        #endif // wxUSE_ACCEL
     #endif // wxUSE_GUI
 #endif // WX_PRECOMP
 
@@ -392,7 +398,7 @@ wxString wxNow()
 #if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
-// Strip out any menu codes
+// Menu accelerators related functions
 // ----------------------------------------------------------------------------
 
 wxChar *wxStripMenuCodes (wxChar *in, wxChar *out)
@@ -438,6 +444,91 @@ wxString wxStripMenuCodes(const wxString& str)
     delete[] buf;
     return str1;
 }
+
+#if wxUSE_ACCEL
+
+// return wxAcceleratorEntry for the given menu string or NULL if none
+// specified
+wxAcceleratorEntry *wxGetAccelFromString(const wxString& label)
+{
+    // check for accelerators: they are given after '\t'
+    int posTab = label.Find(wxT('\t'));
+    if ( posTab != wxNOT_FOUND ) {
+        // parse the accelerator string
+        int keyCode = 0;
+        int accelFlags = wxACCEL_NORMAL;
+        wxString current;
+        for ( size_t n = (size_t)posTab + 1; n < label.Len(); n++ ) {
+            if ( (label[n] == '+') || (label[n] == '-') ) {
+                if ( current == _("ctrl") )
+                    accelFlags |= wxACCEL_CTRL;
+                else if ( current == _("alt") )
+                    accelFlags |= wxACCEL_ALT;
+                else if ( current == _("shift") )
+                    accelFlags |= wxACCEL_SHIFT;
+                else {
+                    wxLogDebug(wxT("Unknown accel modifier: '%s'"),
+                               current.c_str());
+                }
+
+                current.Empty();
+            }
+            else {
+                current += wxTolower(label[n]);
+            }
+        }
+
+        if ( current.IsEmpty() ) {
+            wxLogDebug(wxT("No accel key found, accel string ignored."));
+        }
+        else {
+            if ( current.Len() == 1 ) {
+                // it's a letter
+                keyCode = wxToupper(current[0U]);
+            }
+            else {
+                // is it a function key?
+                if ( current[0U] == 'f' && isdigit(current[1U]) &&
+                     (current.Len() == 2 ||
+                     (current.Len() == 3 && isdigit(current[2U]))) ) {
+                    int n;
+                    wxSscanf(current.c_str() + 1, wxT("%d"), &n);
+
+                    keyCode = WXK_F1 + n - 1;
+                }
+                else {
+#if 0 // this is not supported by GTK+, apparently
+                    // several special cases
+                    current.MakeUpper();
+                    if ( current == wxT("DEL") ) {
+                        keyCode = VK_DELETE;
+                    }
+                    else if ( current == wxT("PGUP") ) {
+                        keyCode = VK_PRIOR;
+                    }
+                    else if ( current == wxT("PGDN") ) {
+                        keyCode = VK_NEXT;
+                    }
+                    else
+#endif // 0
+                    {
+                        wxLogDebug(wxT("Unrecognized accel key '%s', accel "
+                                       "string ignored."), current.c_str());
+                    }
+                }
+            }
+        }
+
+        if ( keyCode ) {
+            // we do have something
+            return new wxAcceleratorEntry(accelFlags, keyCode);
+        }
+    }
+
+    return NULL;
+}
+
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // Window search functions

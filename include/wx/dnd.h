@@ -17,6 +17,7 @@
 #if wxUSE_DRAG_AND_DROP
 
 #include "wx/dataobj.h"
+#include "wx/cursor.h"
 
 // ----------------------------------------------------------------------------
 // constants

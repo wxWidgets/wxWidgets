@@ -14,83 +14,43 @@
 #pragma interface
 #endif
 
-#include "wx/defs.h"
-#include "wx/string.h"
-
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-#define   ID_SEPARATOR    (-1)
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class wxMenuItem;
-class wxMenu;
-
 //-----------------------------------------------------------------------------
 // wxMenuItem
 //-----------------------------------------------------------------------------
 
-class wxMenuItem : public wxObject
+class wxMenuItem : public wxMenuItemBase
 {
-DECLARE_DYNAMIC_CLASS(wxMenuItem)
-
 public:
-    wxMenuItem();
+    wxMenuItem(wxMenu *parentMenu = (wxMenu *)NULL,
+               int id = wxID_SEPARATOR,
+               const wxString& text = wxEmptyString,
+               const wxString& help = wxEmptyString,
+               bool isCheckable = FALSE,
+               wxMenu *subMenu = (wxMenu *)NULL);
     ~wxMenuItem();
 
-    // accessors
-        // id
-    void SetId(int id) { m_id = id; }
-    int  GetId() const { return m_id; }
-    bool IsSeparator() const { return m_id == ID_SEPARATOR; }
-
-        // the item's text = name
-    void SetName(const wxString& str);
-    void SetText(const wxString& str) { SetName(str); } // compatibility
-    const wxString& GetName() const { return m_text; }
-    const wxString& GetText() const { return GetName(); }
-
-        // what kind of menu item we are
-    void SetCheckable(bool checkable) { m_isCheckMenu = checkable; }
-    bool IsCheckable() const { return m_isCheckMenu; }
-    void SetSubMenu(wxMenu *menu) { m_subMenu = menu; }
-    wxMenu *GetSubMenu() const { return m_subMenu; }
-    bool IsSubMenu() const { return m_subMenu != NULL; }
-
-        // state
-    void Enable( bool enable = TRUE );
-    bool IsEnabled() const { return m_isEnabled; }
-    void Check( bool check = TRUE );
-    bool IsChecked() const;
-
-        // help string (displayed in the status bar by default)
-    void SetHelp(const wxString& str) { m_helpStr = str; }
-    const wxString& GetHelp() const { return m_helpStr; }
+    // implement base class virtuals
+    virtual void SetText( const wxString& str ) { DoSetText(str); }
+    virtual void Enable( bool enable = TRUE );
+    virtual void Check( bool check = TRUE );
+    virtual bool IsChecked() const;
 
     // implementation
     void SetMenuItem(GtkWidget *menuItem) { m_menuItem = menuItem; }
     GtkWidget *GetMenuItem() const { return m_menuItem; }
-    
+
     wxString GetHotKey() const { return m_hotKey; }
 
-    void SetCheckedFlag(bool checked) { m_isChecked = checked; }
-    bool GetCheckedFlag() const { return m_isChecked; }
-
 private:
-    int           m_id;
-    wxString      m_text;
-    wxString      m_hotKey;
-    bool          m_isCheckMenu;
-    bool          m_isChecked;
-    bool          m_isEnabled;
-    wxMenu       *m_subMenu;
-    wxString      m_helpStr;
+    // DoSetText() transforms the accel mnemonics in our label from MSW/wxWin
+    // style to GTK+ and is called from ctor and SetText()
+    void DoSetText(const wxString& text);
 
-    GtkWidget    *m_menuItem;  // GtkMenuItem
+    wxString  m_hotKey;
+
+    GtkWidget *m_menuItem;  // GtkMenuItem
+
+    DECLARE_DYNAMIC_CLASS(wxMenuItem)
 };
 
 

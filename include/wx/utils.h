@@ -221,11 +221,16 @@ WXDLLEXPORT wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
 #if wxUSE_GUI // GUI only things from now on
 
 // ----------------------------------------------------------------------------
-// Strip out any menu codes
+// Menu accelerators related things
 // ----------------------------------------------------------------------------
 
 WXDLLEXPORT wxChar* wxStripMenuCodes(wxChar *in, wxChar *out = (wxChar *) NULL);
 WXDLLEXPORT wxString wxStripMenuCodes(const wxString& str);
+
+#if wxUSE_ACCEL
+class WXDLLEXPORT wxAcceleratorEntry;
+WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
+#endif // wxUSE_ACCEL
 
 // ----------------------------------------------------------------------------
 // Window search

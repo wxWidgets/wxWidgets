@@ -628,7 +628,7 @@ gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigur
     if (source->m_dragContext->action == GDK_ACTION_COPY) action = wxDragCopy;
     if (source->m_dragContext->action == GDK_ACTION_MOVE) action = wxDragMove;
 
-    source->GiveFeedback( action, FALSE );
+    source->GiveFeedback( action );
 
     return 0;
 }

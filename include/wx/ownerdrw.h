@@ -12,11 +12,13 @@
 #ifndef   _OWNERDRW_H
 #define   _OWNERDRW_H
 
-#ifdef    __GNUG__
-#pragma interface "ownerdrw.h"
-#endif
+#include "wx/setup.h"
 
-#include <stddef.h>
+#if wxUSE_OWNER_DRAWN
+
+#ifdef    __GNUG__
+    #pragma interface "ownerdrw.h"
+#endif
 
 // ----------------------------------------------------------------------------
 // wxOwnerDrawn - a mix-in base class, derive from it to implement owner-drawn
@@ -26,11 +28,12 @@
 // also supports 3 bitmaps: either a checked/unchecked bitmap for a checkable
 // element or one unchangeable bitmap otherwise.
 // ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxOwnerDrawn
 {
 public:
   // ctor & dtor
-  wxOwnerDrawn(const wxString& str = "",
+  wxOwnerDrawn(const wxString& str = wxEmptyString,
                bool bCheckable = FALSE,
                bool bMenuItem = FALSE); // FIXME kludge for colors
   virtual ~wxOwnerDrawn() { }
@@ -78,17 +81,18 @@ public:
   static int GetDefaultMarginWidth() { return (int) ms_nDefaultMarginWidth; }
 
   // accessors
-  void            SetName(const wxString& strName)  { m_strName = strName; }
-  const wxString& GetName()       const             { return m_strName;    }
-  bool            IsCheckable()   const             { return m_bCheckable; }
+  void SetName(const wxString& strName)  { m_strName = strName; }
+  const wxString& GetName() const { return m_strName;    }
+  void SetCheckable(bool checkable) { m_bCheckable = checkable; }
+  bool IsCheckable() const { return m_bCheckable; }
 
   // this function might seem strange, but if it returns FALSE it means that
   // no non-standard attribute are set, so there is no need for this control
   // to be owner-drawn. Moreover, you can force owner-drawn to FALSE if you
   // want to change, say, the color for the item but only if it is owner-drawn
   // (see wxMenuItem::wxMenuItem for example)
-  bool     IsOwnerDrawn()  const             { return m_bOwnerDrawn;   }
-  void     ResetOwnerDrawn()                 { m_bOwnerDrawn = FALSE;  }
+  bool IsOwnerDrawn() const { return m_bOwnerDrawn;   }
+  void ResetOwnerDrawn() { m_bOwnerDrawn = FALSE;  }
 
 public:
   // constants used in OnDrawItem
@@ -125,14 +129,16 @@ private:
             m_bOwnerDrawn;  // true if something is non standard
 
   wxFont    m_font;         // font to use for drawing
-  wxColour   m_colText,      // color ----"---"---"----
+  wxColour  m_colText,      // color ----"---"---"----
             m_colBack;      // background color
   wxBitmap  m_bmpChecked,   // bitmap to put near the item
             m_bmpUnchecked; // (checked is used also for 'uncheckable' items)
 
-  size_t      m_nHeight,      // font height
+  size_t    m_nHeight,      // font height
             m_nMarginWidth; // space occupied by bitmap to the left of the item
 };
+
+#endif // wxUSE_OWNER_DRAWN
 
 #endif
   // _OWNERDRW_H
