@@ -1084,6 +1084,10 @@ void wxScrollHelper::HandleOnMouseLeave(wxMouseEvent& event)
 
 #if wxUSE_MOUSEWHEEL
 
+#ifndef  WHEEL_PAGESCROLL
+#define WHEEL_PAGESCROLL  (UINT_MAX)   // signifies to scroll a page
+#endif
+
 void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 {
     m_wheelRotation += event.GetWheelRotation();
@@ -1092,26 +1096,34 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
 
     if (lines != 0)
     {
-        lines *= event.GetLinesPerAction();
 
         wxScrollWinEvent newEvent;
 
         newEvent.SetPosition(0);
         newEvent.SetOrientation(wxVERTICAL);
         newEvent.m_eventObject = m_win;
-        if (lines > 0)
-            newEvent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
-        else
-            newEvent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
 
-        int times = abs(lines);
-        for (; times > 0; times --)
+        if (event.GetLinesPerAction() == WHEEL_PAGESCROLL)
+        {
+            if (lines > 0)
+                newEvent.m_eventType = wxEVT_SCROLLWIN_PAGEUP;
+            else
+                newEvent.m_eventType = wxEVT_SCROLLWIN_PAGEDOWN;
+
             m_win->GetEventHandler()->ProcessEvent(newEvent);
+        }
+        else
+        {
+            lines *= event.GetLinesPerAction();
+            if (lines > 0)
+                newEvent.m_eventType = wxEVT_SCROLLWIN_LINEUP;
+            else
+                newEvent.m_eventType = wxEVT_SCROLLWIN_LINEDOWN;
 
-        /* Old Way */
-        // int vsx, vsy;
-        // GetViewStart(&vsx, &vsy);
-        // Scroll(-1, vsy - lines);
+            int times = abs(lines);
+            for (; times > 0; times--)
+                m_win->GetEventHandler()->ProcessEvent(newEvent);
+        }
     }
 }
 
