@@ -1327,6 +1327,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/dcscreen.h \
 	wx/mac/dialog.h \
 	wx/mac/dirdlg.h \
+	wx/mac/display.h \
 	wx/mac/dnd.h \
 	wx/mac/filedlg.h \
 	wx/mac/font.h \
@@ -2473,6 +2474,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_dcscreen.o \
 	monodll_dialog.o \
 	monodll_dirdlg.o \
+	monodll_display.o \
 	monodll_dnd.o \
 	monodll_filedlg.o \
 	monodll_font.o \
@@ -3261,6 +3263,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_dcscreen.o \
 	monolib_dialog.o \
 	monolib_dirdlg.o \
+	monolib_display.o \
 	monolib_dnd.o \
 	monolib_filedlg.o \
 	monolib_font.o \
@@ -4208,6 +4211,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_dcscreen.o \
 	coredll_dialog.o \
 	coredll_dirdlg.o \
+	coredll_display.o \
 	coredll_dnd.o \
 	coredll_filedlg.o \
 	coredll_font.o \
@@ -4871,6 +4875,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_dcscreen.o \
 	corelib_dialog.o \
 	corelib_dirdlg.o \
+	corelib_display.o \
 	corelib_dnd.o \
 	corelib_filedlg.o \
 	corelib_font.o \
@@ -7730,11 +7735,11 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
+@COND_PLATFORM_OS2_1@monodll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONODLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
+
 @COND_PLATFORM_WIN32_1@monodll_gsocket.o: $(srcdir)/src/msw/gsocket.c $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
-
-@COND_PLATFORM_OS2_1@monodll_gsocket.o: $(srcdir)/src/os2/gsocket.c $(MONODLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_caret.o: $(srcdir)/src/generic/caret.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -8458,6 +8463,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_display.o: $(srcdir)/src/msw/display.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_display.o: $(srcdir)/src/mac/display.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $<
@@ -10343,11 +10351,11 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
+@COND_PLATFORM_OS2_1@monolib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(MONOLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
+
 @COND_PLATFORM_WIN32_1@monolib_gsocket.o: $(srcdir)/src/msw/gsocket.c $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
-
-@COND_PLATFORM_OS2_1@monolib_gsocket.o: $(srcdir)/src/os2/gsocket.c $(MONOLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $<
 
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_caret.o: $(srcdir)/src/generic/caret.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -11071,6 +11079,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_display.o: $(srcdir)/src/msw/display.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_display.o: $(srcdir)/src/mac/display.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $<
@@ -12971,11 +12982,11 @@ netdll_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
+@COND_PLATFORM_OS2_1@netdll_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETDLL_ODEP)
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
+
 @COND_PLATFORM_WIN32_1@netdll_gsocket.o: $(srcdir)/src/msw/gsocket.c $(NETDLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
-
-@COND_PLATFORM_OS2_1@netdll_gsocket.o: $(srcdir)/src/os2/gsocket.c $(NETDLL_ODEP)
-@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETDLL_CFLAGS) $<
 
 netlib_fs_inet.o: $(srcdir)/src/common/fs_inet.cpp $(NETLIB_ODEP)
 	$(CXXC) -c -o $@ $(NETLIB_CXXFLAGS) $<
@@ -13016,11 +13027,11 @@ netlib_urlmsw.o: $(srcdir)/src/msw/urlmsw.cpp $(NETLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
 
+@COND_PLATFORM_OS2_1@netlib_gsocket.o: $(srcdir)/src/unix/gsocket.c $(NETLIB_ODEP)
+@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
+
 @COND_PLATFORM_WIN32_1@netlib_gsocket.o: $(srcdir)/src/msw/gsocket.c $(NETLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
-
-@COND_PLATFORM_OS2_1@netlib_gsocket.o: $(srcdir)/src/os2/gsocket.c $(NETLIB_ODEP)
-@COND_PLATFORM_OS2_1@	$(CCC) -c -o $@ $(NETLIB_CFLAGS) $<
 
 coredll_event.o: $(srcdir)/src/common/event.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -13948,6 +13959,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_display.o: $(srcdir)/src/msw/display.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_display.o: $(srcdir)/src/mac/display.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@coredll_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $<
@@ -16066,6 +16080,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_display.o: $(srcdir)/src/msw/display.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_display.o: $(srcdir)/src/mac/display.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<
 
 @COND_TOOLKIT_MSW_USE_GUI_1@corelib_enhmeta.o: $(srcdir)/src/msw/enhmeta.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $<

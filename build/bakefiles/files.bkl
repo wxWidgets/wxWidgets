@@ -1551,6 +1551,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/dcscreen.cpp
     src/mac/dialog.cpp
     src/mac/dirdlg.cpp
+    src/mac/display.cpp
     src/mac/dnd.cpp
     src/mac/filedlg.cpp
     src/mac/font.cpp
@@ -1636,6 +1637,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/dcscreen.h
     wx/mac/dialog.h
     wx/mac/dirdlg.h
+    wx/mac/display.h
     wx/mac/dnd.h
     wx/mac/filedlg.h
     wx/mac/font.h
