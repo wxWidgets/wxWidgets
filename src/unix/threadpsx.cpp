@@ -50,14 +50,18 @@
 // constants
 // ----------------------------------------------------------------------------
 
-enum thread_state
+// the possible states of the thread and transitions from them
+enum wxThreadState
 {
     STATE_NEW,          // didn't start execution yet (=> RUNNING)
-    STATE_RUNNING,
-    STATE_PAUSED,
-    STATE_CANCELED,
-    STATE_EXITED
+    STATE_RUNNING,      // running (=> PAUSED or EXITED)
+    STATE_PAUSED,       // suspended (=> RUNNING or EXITED)
+    STATE_EXITED        // thread doesn't exist any more
 };
+
+// ----------------------------------------------------------------------------
+// types
+// ----------------------------------------------------------------------------
 
 WX_DEFINE_ARRAY(wxThread *, wxArrayThread);
 
@@ -224,7 +228,7 @@ public:
         // start the thread
     wxThreadError Run();
         // ask the thread to terminate
-    void Cancel();
+    void Wait();
         // wake up threads waiting for our termination
     void SignalExit();
         // go to sleep until Resume() is called
@@ -237,19 +241,19 @@ public:
     int GetPriority() const { return m_prio; }
     void SetPriority(int prio) { m_prio = prio; }
         // state
-    thread_state GetState() const { return m_state; }
-    void SetState(thread_state state) { m_state = state; }
+    wxThreadState GetState() const { return m_state; }
+    void SetState(wxThreadState state) { m_state = state; }
         // id
-    pthread_t GetId() const { return thread_id; }
+    pthread_t GetId() const { return m_threadId; }
+    pthread_t *GetIdPtr() { return &m_threadId; }
         // "cancelled" flag
+    void SetCancelFlag() { m_cancelled = TRUE; }
     bool WasCancelled() const { return m_cancelled; }
 
-//private: -- should be!
-    pthread_t thread_id;
-
 private:
-    thread_state m_state;    // see thread_state enum
-    int          m_prio;     // in wxWindows units: from 0 to 100
+    pthread_t     m_threadId;   // id of the thread
+    wxThreadState m_state;      // see wxThreadState enum
+    int           m_prio;       // in wxWindows units: from 0 to 100
 
     // set when the thread should terminate
     bool m_cancelled;
@@ -346,16 +350,14 @@ wxThreadError wxThreadInternal::Run()
     // starts executing and the mutex is still locked
 }
 
-void wxThreadInternal::Cancel()
+void wxThreadInternal::Wait()
 {
+    wxCHECK_RET( WasCancelled(), "thread should have been cancelled first" );
+
     // if the thread we're waiting for is waiting for the GUI mutex, we will
     // deadlock so make sure we release it temporarily
     if ( wxThread::IsMain() )
         wxMutexGuiLeave();
-
-    // nobody ever writes this variable so it's safe to not use any
-    // synchronization here
-    m_cancelled = TRUE;
 
     // entering Wait() releases the mutex thus allowing SignalExit() to acquire
     // it and to signal us its termination
@@ -385,13 +387,15 @@ void wxThreadInternal::SignalExit()
 
 void wxThreadInternal::Pause()
 {
+    // the state is set from the thread which pauses us first, this function
+    // is called later so the state should have been already set
     wxCHECK_RET( m_state == STATE_PAUSED,
                  "thread must first be paused with wxThread::Pause()." );
 
     // don't pause the thread which is being terminated - this would lead to
     // deadlock if the thread is paused after Delete() had called Resume() but
-    // before it had time to call Cancel()
-    if ( m_cancelled )
+    // before it had time to call Wait()
+    if ( WasCancelled() )
         return;
 
     // wait until the condition is signaled from Resume()
@@ -481,7 +485,7 @@ wxThreadError wxThread::Create()
 #endif // HAVE_THREAD_PRIORITY_FUNCTIONS
 
     // create the new OS thread object
-    int rc = pthread_create(&p_internal->thread_id, &attr,
+    int rc = pthread_create(p_internal->GetIdPtr(), &attr,
                             wxThreadInternal::PthreadStart, (void *)this);
     pthread_attr_destroy(&attr);
 
@@ -549,7 +553,7 @@ unsigned int wxThread::GetPriority() const
 
 unsigned long wxThread::GetID() const
 {
-    return (unsigned long)p_internal->thread_id;
+    return (unsigned long)p_internal->GetId();
 }
 
 // -----------------------------------------------------------------------------
@@ -597,8 +601,11 @@ wxThreadError wxThread::Resume()
 wxThread::ExitCode wxThread::Delete()
 {
     m_critsect.Enter();
-    thread_state state = p_internal->GetState();
+    wxThreadState state = p_internal->GetState();
     m_critsect.Leave();
+
+    // ask the thread to stop
+    p_internal->SetCancelFlag();
 
     switch ( state )
     {
@@ -614,8 +621,8 @@ wxThread::ExitCode wxThread::Delete()
             // fall through
 
         default:
-            // set the flag telling to the thread to stop and wait
-            p_internal->Cancel();
+            // wait until the thread stops
+            p_internal->Wait();
     }
 
     return NULL;
@@ -662,7 +669,7 @@ void wxThread::Exit(void *status)
 // also test whether we were paused
 bool wxThread::TestDestroy()
 {
-    wxCriticalSectionLocker lock((wxCriticalSection&)m_critsect);
+    wxCriticalSectionLocker lock(m_critsect);
 
     if ( p_internal->GetState() == STATE_PAUSED )
     {
