@@ -862,6 +862,7 @@ int wxString::PrintfV(const char* pszFormat, va_list argptr)
   return iLen;
 }
 
+#if 0
 int wxString::Scanf(const char *pszFormat, ...) const
 {
   va_list argptr;
@@ -883,6 +884,7 @@ int wxString::ScanfV(const char *pszFormat, va_list argptr) const
   return vsscanf(c_str(), pszFormat, argptr);
 #endif
 }
+#endif
 
 // ---------------------------------------------------------------------------
 // standard C++ library string functions
