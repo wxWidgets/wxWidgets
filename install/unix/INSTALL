@@ -133,14 +133,17 @@ The following options handle the kind of library you want to build.
 
 	--without-optimise	Do not optimise the code.
 
-	--with-profile          Add profiling info to the
-	                        object files. Currently
-				broken.
+	--with-profile          Add profiling info to the object 
+				files. Currently broken, I think.
 				
-	--with-mem_tracing      Add built-in memory tracing.
+	--with-mem_tracing      Add built-in memory tracing. 
+	                        This doesn't work well with gcc.
 				
-	--with-debug_info	Add debug info to object
-	                        files.
+	--with-dmalloc          Use the dmalloc memory debugger.
+	                        Read more at www.letters.com/dmalloc/
+				
+	--with-debug_info	Add debug info to object files and
+	                        executables.
 
 	--with-debug_flag	Define __DEBUG__ and __WXDEBUG__ when
 	                        compiling.

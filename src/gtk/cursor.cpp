@@ -32,12 +32,12 @@ class wxCursorRefData: public wxObjectRefData
 wxCursorRefData::wxCursorRefData(void)
 {
   m_cursor = NULL;
-};
+}
 
 wxCursorRefData::~wxCursorRefData(void)
 {
   if (m_cursor) gdk_cursor_destroy( m_cursor );
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -47,7 +47,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxCursor,wxObject)
 
 wxCursor::wxCursor(void)
 {
-};
+}
 
 wxCursor::wxCursor( int cursorId )
 {
@@ -67,7 +67,7 @@ wxCursor::wxCursor( int cursorId )
     case wxCURSOR_IBEAM:      gdk_cur = GDK_XTERM; break;
     case wxCURSOR_PENCIL:     gdk_cur = GDK_PENCIL; break;
     case wxCURSOR_NO_ENTRY:   gdk_cur = GDK_PIRATE; break;
-  };
+  }
   
   M_CURSORDATA->m_cursor = gdk_cursor_new( gdk_cur );
   
@@ -97,49 +97,49 @@ wxCursor::wxCursor( int cursorId )
   wxCURSOR_BASED_ARROW_DOWN
 */
    
-};
+}
 
 wxCursor::wxCursor( const wxCursor &cursor )
 {
   Ref( cursor );
-};
+}
 
 wxCursor::wxCursor( const wxCursor *cursor )
 {
   UnRef();
   if (cursor) Ref( *cursor );
-};
+}
 
 wxCursor::~wxCursor(void)
 {
-};
+}
 
 wxCursor& wxCursor::operator = ( const wxCursor& cursor )
 {
   if (*this == cursor) return (*this); 
   Ref( cursor ); 
   return *this; 
-};
+}
 
 bool wxCursor::operator == ( const wxCursor& cursor )
 {
   return m_refData == cursor.m_refData; 
-};
+}
 
 bool wxCursor::operator != ( const wxCursor& cursor )
 {
   return m_refData != cursor.m_refData; 
-};
+}
 
 bool wxCursor::Ok(void) const
 {
   return TRUE;
-};
+}
 
 GdkCursor *wxCursor::GetCursor(void) const
 {
   return M_CURSORDATA->m_cursor;
-};
+}
 
 //-----------------------------------------------------------------------------
 // busy cursor routines
@@ -150,24 +150,24 @@ bool g_isBusy = FALSE;
 void wxEndBusyCursor(void)
 {
   g_isBusy = FALSE;
-};
+}
 
 void wxBeginBusyCursor( wxCursor *WXUNUSED(cursor) )
 {
   g_isBusy = TRUE;
-};
+}
 
 bool wxIsBusy(void)
 {
   return g_isBusy;
-};
+}
 
 void wxSetCursor( const wxCursor& cursor )
 {
   extern wxCursor *g_globalCursor;
   if (g_globalCursor) (*g_globalCursor) = cursor;
 
-  if (cursor.Ok()) {};
-};
+  if (cursor.Ok()) {}
+}
 
 

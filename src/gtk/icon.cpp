@@ -23,5 +23,5 @@ IMPLEMENT_DYNAMIC_CLASS(wxIcon,wxBitmap)
 wxIcon::wxIcon( char **bits, int WXUNUSED(width), int WXUNUSED(height) ) :
     wxBitmap( bits ) 
 {
-};
+}
     

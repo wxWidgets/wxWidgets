@@ -52,13 +52,13 @@ extern void wxFlushResources(void);
 void wxExit(void)
 {
   gtk_main_quit();
-};
+}
 
 bool wxYield(void)
 {
   while (gtk_events_pending() > 0) gtk_main_iteration();
   return TRUE;
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -72,38 +72,38 @@ END_EVENT_TABLE()
 
 gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
-  if (wxTheApp) while (wxTheApp->ProcessIdle()) {};
+  if (wxTheApp) while (wxTheApp->ProcessIdle()) {}
   usleep( 10000 );
   return TRUE;
-};
+}
 
 wxApp::wxApp()
 {
   m_idleTag = 0;
   m_topWindow = NULL;
   m_exitOnFrameDelete = TRUE;
-};
+}
 
 wxApp::~wxApp(void)
 {
   gtk_idle_remove( m_idleTag );
-};
+}
 
 bool wxApp::OnInit(void)
 {
   return TRUE;
-};
+}
 
 bool wxApp::OnInitGui(void)
 { 
   m_idleTag = gtk_idle_add( wxapp_idle_callback, NULL );
   return TRUE; 
-};
+}
 
 int wxApp::OnRun(void) 
 { 
   return MainLoop(); 
-};
+}
 
 bool wxApp::ProcessIdle(void)
 {
@@ -112,7 +112,7 @@ bool wxApp::ProcessIdle(void)
   ProcessEvent( event );
   
   return event.MoreRequested();
-};
+}
 
 void wxApp::OnIdle( wxIdleEvent &event )
 {
@@ -139,7 +139,7 @@ void wxApp::OnIdle( wxIdleEvent &event )
     event.RequestMore(TRUE);
 
   inOnIdle = FALSE;
-};
+}
 
 bool wxApp::SendIdleEvents(void)
 {
@@ -154,7 +154,7 @@ bool wxApp::SendIdleEvents(void)
 		node = node->Next();
 	}
     return needMore;
-};
+}
 
 bool wxApp::SendIdleEvents( wxWindow* win )
 {
@@ -177,37 +177,37 @@ bool wxApp::SendIdleEvents( wxWindow* win )
 		node = node->Next();
 	}
     return needMore ;
-};
+}
 
 int wxApp::OnExit(void)
 {
   return 0;
-};
+}
 
 int wxApp::MainLoop(void)
 {
   gtk_main();
   return 0;
-};
+}
 
 void wxApp::ExitMainLoop(void)
 {
   gtk_main_quit();
-};
+}
 
 bool wxApp::Initialized(void)
 {
   return m_initialized;
-};
+}
 
 bool wxApp::Pending(void) 
 {
   return FALSE;
-};
+}
 
 void wxApp::Dispatch(void) 
 {
-};
+}
 
 void wxApp::DeletePendingObjects(void)
 {
@@ -222,8 +222,8 @@ void wxApp::DeletePendingObjects(void)
       delete node;
 
     node = wxPendingDelete.First();
-  };
-};
+  }
+}
 
 wxWindow *wxApp::GetTopWindow(void)
 {
@@ -231,12 +231,12 @@ wxWindow *wxApp::GetTopWindow(void)
   wxNode *node = wxTopLevelWindows.First();
   if (!node) return NULL;
   return (wxWindow*)node->Data();
-};
+}
 
 void wxApp::SetTopWindow( wxWindow *win )
 {
   m_topWindow = win;
-};
+}
 
 void wxApp::CommonInit(void)
 {
@@ -273,7 +273,7 @@ void wxApp::CommonInit(void)
 
   g_globalCursor = new wxCursor;
 */
-};
+}
 
 void wxApp::CommonCleanUp(void)
 {
@@ -292,7 +292,7 @@ void wxApp::CommonCleanUp(void)
   wxCleanUpResourceSystem();
   
   wxSystemSettings::Done();
-};
+}
     
 wxLog *wxApp::CreateLogTarget()
 {
@@ -327,20 +327,20 @@ int wxEntry( int argc, char *argv[] )
     {
       printf( _("wxWindows error: No initializer - use IMPLEMENT_APP macro.\n") );
       return 0;
-    };
+    }
     
     wxAppInitializerFunction app_ini = wxApp::GetInitializerFunction();
     
     wxObject *test_app = app_ini();
     
     wxTheApp = (wxApp*) test_app;
-  };
+  }
   
   if (!wxTheApp) 
   {
     printf( _("wxWindows error: wxTheApp == NULL\n") );
     return 0;
-  };
+  }
 
   wxTheApp->argc = argc;
   wxTheApp->argv = argv;
@@ -396,7 +396,7 @@ int wxEntry( int argc, char *argv[] )
 #endif
   
   return retValue;
-};
+}
 
 //-----------------------------------------------------------------------------
 // main()

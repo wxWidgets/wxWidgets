@@ -36,12 +36,12 @@ wxScreenDC::wxScreenDC(void)
   gdk_gc_set_subwindow( m_brushGC, GDK_INCLUDE_INFERIORS );
   gdk_gc_set_subwindow( m_textGC, GDK_INCLUDE_INFERIORS );
   gdk_gc_set_subwindow( m_bgGC, GDK_INCLUDE_INFERIORS );
-};
+}
 
 wxScreenDC::~wxScreenDC(void)
 {
   EndDrawingOnTop();
-};
+}
 
 bool wxScreenDC::StartDrawingOnTop( wxWindow *WXUNUSED(window) )
 {
@@ -51,7 +51,7 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *WXUNUSED(window) )
   {
     StartDrawingOnTop();
     return;
-  };
+  }
   wxRectangle rect;
   rect.x = 0;
   rect.y = 0;
@@ -63,7 +63,7 @@ bool wxScreenDC::StartDrawingOnTop( wxWindow *WXUNUSED(window) )
   StartDrawingOnTop( &rect );
   return TRUE;
 */
-};
+}
 
 bool wxScreenDC::StartDrawingOnTop( wxRectangle *WXUNUSED(rect) )
 {
@@ -79,7 +79,7 @@ bool wxScreenDC::StartDrawingOnTop( wxRectangle *WXUNUSED(rect) )
     y = rect->y;
     width = rect->width;
     height = rect->height;
-  };
+  }
   
   GTK cannot set transparent backgrounds. :-(
 
@@ -107,7 +107,7 @@ bool wxScreenDC::StartDrawingOnTop( wxRectangle *WXUNUSED(rect) )
 
   return TRUE;
 */
-};
+}
 
 bool wxScreenDC::EndDrawingOnTop(void)
 {
@@ -118,4 +118,5 @@ bool wxScreenDC::EndDrawingOnTop(void)
   m_isOk = FALSE;
   return TRUE;
 */
-};
+}
+

@@ -30,9 +30,8 @@
 #include "bitmaps/save.xpm"
 #include "bitmaps/copy.xpm"
 #include "bitmaps/cut.xpm"
-// #include "bitmaps/paste.xpm"
+#include "bitmaps/paste.xpm"
 #include "bitmaps/print.xpm"
-#include "bitmaps/preview.xpm"
 #include "bitmaps/help.xpm"
 #endif
 
@@ -322,8 +321,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
   bitmaps[2] = new wxBitmap( save_xpm );
   bitmaps[3] = new wxBitmap( copy_xpm );
   bitmaps[4] = new wxBitmap( cut_xpm );
-//  bitmaps[5] = new wxBitmap( paste_xpm );
-  bitmaps[5] = new wxBitmap( preview_xpm );
+  bitmaps[5] = new wxBitmap( paste_xpm );
   bitmaps[6] = new wxBitmap( print_xpm );
   bitmaps[7] = new wxBitmap( help_xpm );
 #endif
@@ -335,7 +333,7 @@ void MyFrame::InitToolBar(wxToolBar* toolBar)
 #endif
   int currentX = 5;
 
-  toolBar->AddTool(0, *bitmaps[0], wxNullBitmap, FALSE, currentX, -1, NULL, "New file");
+  toolBar->AddTool(0, *(bitmaps[0]), wxNullBitmap, FALSE, currentX, -1, NULL, "New file");
   currentX += width + 5;
   toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, FALSE, currentX, -1, NULL, "Open file");
   currentX += width + 5;

@@ -32,25 +32,25 @@ extern bool g_blockEventsOnDrag;
 
 wxDropTarget::wxDropTarget()
 {
-};
+}
 
 wxDropTarget::~wxDropTarget()
 {
-};
+}
 
 void wxDropTarget::Drop( GdkEvent *event, int x, int y )
 {
   printf( "Drop data is of type %s.\n", event->dropdataavailable.data_type );
   
   OnDrop( x, y, (char *)event->dropdataavailable.data);
-};
+}
 
 void wxDropTarget::UnregisterWidget( GtkWidget *widget )
 {
   if (!widget) return;
   
   gtk_widget_dnd_drop_set( widget, FALSE, NULL, 0, FALSE );
-};
+}
 
 void wxDropTarget::RegisterWidget( GtkWidget *widget )
 {
@@ -74,13 +74,13 @@ void wxDropTarget::RegisterWidget( GtkWidget *widget )
 	break;
       default:
         break;
-    };
+    }
   }
   
   char *str = WXSTRINGCAST formats;
   
   gtk_widget_dnd_drop_set( widget, TRUE, &str, valid, FALSE );
-};
+}
 
 // ----------------------------------------------------------------------------
 // wxTextDropTarget
@@ -90,14 +90,14 @@ bool wxTextDropTarget::OnDrop( long x, long y, const void *pData )
 {
   OnDropText( x, y, (const char*)pData );
   return TRUE;
-};
+}
 
 bool wxTextDropTarget::OnDropText( long x, long y, const char *psz )
 {
   printf( "Got dropped text: %s.\n", psz );
   printf( "At x: %d, y: %d.\n", (int)x, (int)y );
   return TRUE;
-};
+}
 
 size_t wxTextDropTarget::GetFormatCount() const
 {
@@ -159,7 +159,7 @@ void gtk_drag_callback( GtkWidget *widget, GdkEvent *event, wxDropSource *source
   delete ptr;
   
   source->m_retValue = wxDropSource::Copy;
-};
+}
 
 wxDropSource::wxDropSource( wxWindow *win )
 {
@@ -174,7 +174,7 @@ wxDropSource::wxDropSource( wxWindow *win )
 
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
   m_goaheadCursor = wxCursor( wxCURSOR_HAND );
-};
+}
 
 wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 {
@@ -189,19 +189,19 @@ wxDropSource::wxDropSource( wxDataObject &data, wxWindow *win )
 
   m_defaultCursor = wxCursor( wxCURSOR_NO_ENTRY );
   m_goaheadCursor = wxCursor( wxCURSOR_HAND );
-};
+}
 
 void wxDropSource::SetData( wxDataObject &data )
 {
   m_data = &data;  
-};
+}
 
 wxDropSource::~wxDropSource(void)
 {
 //  if (m_data) delete m_data;
 
   g_blockEventsOnDrag = FALSE;
-};
+}
    
 wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
 {
@@ -227,7 +227,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   {
     g_free( gdk_dnd.drag_startwindows );
     gdk_dnd.drag_startwindows = NULL;
-  };
+  }
   gdk_dnd.drag_numwindows = gdk_dnd.drag_really = 0;
   
   XWindowAttributes dnd_winattr;
@@ -266,7 +266,7 @@ wxDropSource::DragResult wxDropSource::DoDragDrop( bool WXUNUSED(bAllowMove) )
   g_blockEventsOnDrag = FALSE;
   
   return m_retValue;
-};
+}
 
 void wxDropSource::RegisterWindow(void)
 {
@@ -294,7 +294,7 @@ void wxDropSource::RegisterWindow(void)
 
   gtk_signal_connect( GTK_OBJECT(m_widget), "drag_request_event",
     GTK_SIGNAL_FUNC(gtk_drag_callback), (gpointer)this );
-};
+}
 
 void wxDropSource::UnregisterWindow(void)
 {
@@ -303,4 +303,4 @@ void wxDropSource::UnregisterWindow(void)
   gtk_widget_dnd_drag_set( m_widget, FALSE, NULL, 0 );
   
   gtk_signal_disconnect_by_data( GTK_OBJECT(m_widget), (gpointer)this );
-};
+}

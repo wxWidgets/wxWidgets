@@ -24,9 +24,11 @@ static char *wx_font_family [] = {
     "wxDEFAULT", "wxDECORATIVE", "wxMODERN", "wxROMAN", "wxSCRIPT",
     "wxSWISS", "wxTELETYPE",
 };
+
 static char *wx_font_style [] = {
     "wxDEFAULT", "wxNORMAL", "wxSLANT", "wxITALIC",
 };
+
 static char *wx_font_weight [] = {
     "wxDEFAULT", "wxNORMAL", "wxBOLD", "wxLIGHT",
 };
@@ -68,7 +70,7 @@ wxFontRefData::wxFontRefData(void) : m_scaled_xfonts(wxKEY_INTEGER)
   m_fontId = 0;
   m_faceName = NULL;
   m_font = NULL;
-};
+}
 
 wxFontRefData::~wxFontRefData(void)
 {
@@ -79,14 +81,14 @@ wxFontRefData::~wxFontRefData(void)
     wxNode *next = node->Next();
     gdk_font_unref( font );
     node = next;
-  };
+  }
   if (m_faceName) 
   {
     delete m_faceName;
     m_faceName = NULL;
-  };
+  }
   if (m_font) gdk_font_unref( m_font );
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -97,7 +99,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxFont, wxGDIObject)
 wxFont::wxFont(void)
 {
   if (wxTheFontList) wxTheFontList->Append( this );
-};
+}
 
 wxFont::wxFont( char *xFontName )
 {
@@ -107,7 +109,7 @@ wxFont::wxFont( char *xFontName )
   
   M_FONTDATA->m_byXFontName = TRUE;
   M_FONTDATA->m_font = gdk_font_load( xFontName );
-};
+}
 
 wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
 	       bool Underlined, const char* Face)
@@ -123,14 +125,14 @@ wxFont::wxFont(int PointSize, int FontIdOrFamily, int Style, int Weight,
   {
     M_FONTDATA->m_fontId = FontIdOrFamily;
     M_FONTDATA->m_family  = wxTheFontNameDirectory->GetFamily( FontIdOrFamily );
-  };
+  }
   M_FONTDATA->m_style = Style;
   M_FONTDATA->m_weight = Weight;
   M_FONTDATA->m_pointSize = PointSize;
   M_FONTDATA->m_underlined = Underlined;
 
   if (wxTheFontList) wxTheFontList->Append( this );
-};
+}
 
 wxFont::wxFont(int PointSize, const char *Face, int Family, int Style, 
 	       int Weight, bool Underlined)
@@ -146,105 +148,105 @@ wxFont::wxFont(int PointSize, const char *Face, int Family, int Style,
   M_FONTDATA->m_underlined = Underlined;
 
   if (wxTheFontList) wxTheFontList->Append( this );
-};
+}
 
 wxFont::wxFont( const wxFont& font )
 { 
   Ref( font ); 
-};
+}
 
 wxFont::wxFont( const wxFont* font ) 
 { 
   UnRef(); 
   if (font) Ref( *font ); 
-};
+}
 
 wxFont::~wxFont(void)
 {
   if (wxTheFontList) wxTheFontList->DeleteObject( this );
-};
+}
 
 wxFont& wxFont::operator = ( const wxFont& font ) 
 { 
   if (*this == font) return (*this); 
   Ref( font ); 
   return *this; 
-};
+}
 
 bool wxFont::operator == ( const wxFont& font ) 
 { 
   return m_refData == font.m_refData; 
-};
+}
 
 bool wxFont::operator != ( const wxFont& font ) 
 { 
   return m_refData != font.m_refData; 
-};
+}
 
 bool wxFont::Ok()
 {
   return (m_refData != NULL);
-};
+}
 
 int wxFont::GetPointSize(void) const
 {
   return M_FONTDATA->m_pointSize;
-};
+}
 
 wxString wxFont::GetFaceString(void) const
 {
   wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s;
-};
+}
 
 wxString wxFont::GetFaceName(void) const
 {
   wxString s = wxTheFontNameDirectory->GetFontName( M_FONTDATA->m_fontId );
   return s; 
-};
+}
 
 int wxFont::GetFamily(void) const
 {
   return M_FONTDATA->m_family;
-};
+}
 
 wxString wxFont::GetFamilyString(void) const
 {
   wxString s = wx_font_family[M_FONTDATA->m_family];
   return s;
-};
+}
 
 int wxFont::GetFontId(void) const
 {
   return M_FONTDATA->m_fontId; // stub
-};
+}
 
 int wxFont::GetStyle(void) const
 {
   return M_FONTDATA->m_style;
-};
+}
 
 wxString wxFont::GetStyleString(void) const
 {
   wxString s =  wx_font_style[M_FONTDATA->m_style];
   return s;
-};
+}
 
 int wxFont::GetWeight(void) const
 {
   return M_FONTDATA->m_weight;
-};
+}
 
 wxString wxFont::GetWeightString(void) const
 {
   wxString s = wx_font_weight[M_FONTDATA->m_weight];
   return s;
-};
+}
 
 bool wxFont::GetUnderlined(void) const
 {
   return M_FONTDATA->m_underlined;
-};
+}
 
 //-----------------------------------------------------------------------------
 // get internal representation of font
@@ -273,12 +275,12 @@ GdkFont *wxFont::GetInternalFont(float scale) const
      font = wxLoadQueryNearestFont( point_scale, M_FONTDATA->m_fontId, M_FONTDATA->m_style,
 				    M_FONTDATA->m_weight, M_FONTDATA->m_underlined );
      M_FONTDATA->m_scaled_xfonts.Append( int_scale, (wxObject*)font );
-  };
+  }
   if (!font)
 	printf("could not load any font");
 //	wxError("could not load any font", "wxFont");
   return font;
-};
+}
 
 //-----------------------------------------------------------------------------
 // local utilities to find a X font
@@ -448,7 +450,7 @@ static int WCoordinate(int w)
     case wxNORMAL:
     default:       return wxWEIGHT_NORMAL;
     }
-}
+};
 
 static int SCoordinate(int s)
 {
@@ -458,7 +460,7 @@ static int SCoordinate(int s)
     case wxNORMAL:
     default:       return wxSTYLE_NORMAL;
     }
-}
+};
 
 //-----------------------------------------------------------------------------
 // wxSuffixMap

@@ -34,7 +34,7 @@ public:
     m_page = NULL;
     m_client = NULL;
     m_parent = NULL;
-  };
+  }
 
 //private:
   int                m_id;
@@ -80,7 +80,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
       (win->m_height == alloc->height))
   {
     return;
-  };
+  }
 
 /*
   printf( "OnResize from " );
@@ -104,7 +104,7 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
   printf( "  W: %d  H: %d ", win->m_width, win->m_height );
   printf( " .\n" );
 */
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxNotebook
@@ -122,7 +122,7 @@ void wxNotebook::Init()
 wxNotebook::wxNotebook()
 {
   Init();
-};
+}
 
 wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
       const wxPoint& pos, const wxSize& size,
@@ -130,7 +130,7 @@ wxNotebook::wxNotebook( wxWindow *parent, wxWindowID id,
 {
   Init();
   Create( parent, id, pos, size, style, name );
-};
+}
 
 wxNotebook::~wxNotebook()
 {
@@ -139,7 +139,7 @@ wxNotebook::~wxNotebook()
     gtk_signal_disconnect(GTK_OBJECT(m_widget), m_idHandler);
 
   DeleteAllPages();
-};
+}
 
 bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
       const wxPoint& pos, const wxSize& size,
@@ -165,7 +165,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
   Show( TRUE );
 
   return TRUE;
-};
+}
 
 int wxNotebook::GetSelection() const
 {
@@ -183,22 +183,22 @@ int wxNotebook::GetSelection() const
     if (page->m_page == g_page)
       break;
     node = node->Next();
-  };
+  }
 
   wxCHECK_MSG( node != NULL, -1, "wxNotebook: no selection?" );
 
   return page->m_id;
-};
+}
 
 int wxNotebook::GetPageCount() const
 {
   return m_pages.Number();
-};
+}
 
 int wxNotebook::GetRowCount() const
 {
   return 1;
-};
+}
 
 wxString wxNotebook::GetPageText( int page ) const
 {
@@ -207,7 +207,7 @@ wxString wxNotebook::GetPageText( int page ) const
     return nb_page->m_text;
   else
     return "";
-};
+}
 
 int wxNotebook::GetPageImage( int page ) const
 {
@@ -216,7 +216,7 @@ int wxNotebook::GetPageImage( int page ) const
     return nb_page->m_image;
   else
     return 0;
-};
+}
 
 wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
 {
@@ -229,12 +229,12 @@ wxNotebookPage* wxNotebook::GetNotebookPage(int page) const
     if (nb_page->m_id == page)
       return nb_page;
     node = node->Next();
-  };
+  }
 
   wxLogDebug( "Notebook page %d not found!", page );
 
   return NULL;
-};
+}
 
 int wxNotebook::SetSelection( int page )
 {
@@ -251,14 +251,14 @@ int wxNotebook::SetSelection( int page )
       break;
     page_num++;
     child = child->next;
-  };
+  }
 
   if (!child) return -1;
 
   gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), page_num );
 
   return selOld;
-};
+}
 
 void wxNotebook::AdvanceSelection(bool bForward)
 {
@@ -276,7 +276,7 @@ void wxNotebook::AdvanceSelection(bool bForward)
 void wxNotebook::SetImageList( wxImageList* imageList )
 {
   m_imageList = imageList;
-};
+}
 
 bool wxNotebook::SetPageText( int page, const wxString &text )
 {
@@ -287,7 +287,7 @@ bool wxNotebook::SetPageText( int page, const wxString &text )
   nb_page->m_text = text;
 
   return TRUE;
-};
+}
 
 bool wxNotebook::SetPageImage( int page, int image )
 {
@@ -298,17 +298,17 @@ bool wxNotebook::SetPageImage( int page, int image )
   nb_page->m_image = image;
 
   return TRUE;
-};
+}
 
 void wxNotebook::SetPageSize( const wxSize &WXUNUSED(size) )
 {
   wxFAIL_MSG(_("wxNotebook::SetPageSize not implemented"));
-};
+}
 
 void wxNotebook::SetPadding( const wxSize &WXUNUSED(padding) )
 {
   wxFAIL_MSG(_("wxNotebook::SetPadding not implemented"));
-};
+}
 
 bool wxNotebook::DeleteAllPages()
 {
@@ -320,10 +320,10 @@ bool wxNotebook::DeleteAllPages()
     DeletePage( page->m_id );
 
     page_node = m_pages.First();
-  };
+  }
 
   return TRUE;
-};
+}
 
 bool wxNotebook::DeletePage( int page )
 {
@@ -337,7 +337,7 @@ bool wxNotebook::DeletePage( int page )
     if (nb_page->m_page == (GtkNotebookPage*)child->data) break;
     page_num++;
     child = child->next;
-  };
+  }
 
   wxASSERT( child );
 
@@ -349,7 +349,7 @@ bool wxNotebook::DeletePage( int page )
   m_pages.DeleteObject( nb_page );
 
   return TRUE;
-};
+}
 
 bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
                          bool bSelect, int imageId)
@@ -367,7 +367,7 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
     if ( page->m_client == win )
       break; // found
     node = node->Next();
-  };
+  }
 
   wxCHECK_MSG(page != NULL, FALSE,
               _("Can't add a page whose parent is not the notebook!"));
@@ -384,7 +384,7 @@ bool wxNotebook::AddPage(wxWindow* win, const wxString& text,
   }
 
   return TRUE;
-};
+}
 
 wxWindow *wxNotebook::GetPage( int page ) const
 {
@@ -393,7 +393,7 @@ wxWindow *wxNotebook::GetPage( int page ) const
     return NULL;
   else
     return nb_page->m_client;
-};
+}
 
 void wxNotebook::AddChild( wxWindow *win )
 {
@@ -423,7 +423,7 @@ void wxNotebook::AddChild( wxWindow *win )
   }
 
   m_pages.Append( page );
-};
+}
 
 // override these 2 functions to do nothing: everything is done in OnSize
 void wxNotebook::SetConstraintSizes( bool WXUNUSED(recurse) )

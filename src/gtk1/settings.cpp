@@ -90,9 +90,9 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 	  new wxColour( style->bg[0].red >> SHIFT,
 	                style->bg[0].green >> SHIFT,
 			style->bg[0].blue >> SHIFT );
-      };
+      }
       return *g_systemBtnFaceColour;
-    };
+    }
     case wxSYS_COLOUR_BTNSHADOW:
     {
       GtkStyle *style = gtk_widget_get_default_style();
@@ -102,9 +102,9 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 	  new wxColour( style->dark[0].red >> SHIFT,
 	                style->dark[0].green >> SHIFT,
 			style->dark[0].blue >> SHIFT );
-      };
+      }
       return *g_systemBtnShadowColour;
-    };
+    }
     case wxSYS_COLOUR_GRAYTEXT:
     case wxSYS_COLOUR_BTNHIGHLIGHT:
     {
@@ -115,9 +115,9 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 	  new wxColour( style->light[0].red >> SHIFT,
 	                style->light[0].green >> SHIFT,
 			style->light[0].blue >> SHIFT );
-      };
+      }
       return *g_systemBtnHighlightColour;
-    };
+    }
     case wxSYS_COLOUR_HIGHLIGHT:
     {
       GtkStyle *style = gtk_widget_get_default_style();
@@ -127,9 +127,9 @@ wxColour wxSystemSettings::GetSystemColour( int index )
 	  new wxColour( style->bg[GTK_STATE_SELECTED].red >> SHIFT,
 	                style->bg[GTK_STATE_SELECTED].green >> SHIFT,
 			style->bg[GTK_STATE_SELECTED].blue >> SHIFT );
-      };
+      }
       return *g_systemHighlightColour;
-    };
+    }
     case wxSYS_COLOUR_MENUTEXT:
     case wxSYS_COLOUR_WINDOWTEXT:
     case wxSYS_COLOUR_CAPTIONTEXT:
@@ -137,19 +137,19 @@ wxColour wxSystemSettings::GetSystemColour( int index )
     case wxSYS_COLOUR_INFOTEXT:
     {
       return *wxBLACK;
-    };
+    }
     case wxSYS_COLOUR_HIGHLIGHTTEXT:
     {
       return *wxWHITE;
-    };
+    }
     case wxSYS_COLOUR_INFOBK:
     case wxSYS_COLOUR_APPWORKSPACE:
     {
       return *wxWHITE;    // ?
-    };
-  };
+    }
+  }
   return *wxWHITE;
-};
+}
 
 wxFont wxSystemSettings::GetSystemFont( int index ) 
 {
@@ -160,7 +160,7 @@ wxFont wxSystemSettings::GetSystemFont( int index )
     case wxSYS_SYSTEM_FIXED_FONT:
     {
       return *wxNORMAL_FONT;
-    };
+    }
     case wxSYS_ANSI_VAR_FONT:
     case wxSYS_SYSTEM_FONT:
     case wxSYS_DEVICE_DEFAULT_FONT:
@@ -169,12 +169,11 @@ wxFont wxSystemSettings::GetSystemFont( int index )
       if (!g_systemFont)
         g_systemFont = new wxFont( "-adobe-helvetica-medium-r-normal--*-120-*-*-*-*-*-*" );
       return *g_systemFont;
-    };
-  };
+    }
+  }
 
   return wxNullFont;
 }
-;
 
 int wxSystemSettings::GetSystemMetric( int index )
 {
@@ -184,8 +183,6 @@ int wxSystemSettings::GetSystemMetric( int index )
       return gdk_screen_width();
     case wxSYS_SCREEN_Y:
       return gdk_screen_height();
-  };
+  }
   return 0;
 }
-;
-

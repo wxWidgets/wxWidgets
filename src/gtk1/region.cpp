@@ -34,12 +34,12 @@ class wxRegionRefData: public wxObjectRefData
 wxRegionRefData::wxRegionRefData(void)
 {
   m_region = NULL;
-};
+}
 
 wxRegionRefData::~wxRegionRefData(void)
 {
   if (m_region) gdk_region_destroy( m_region );
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -58,7 +58,7 @@ wxRegion::wxRegion( long x, long y, long w, long h )
   rect.height = h;
   M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
   gdk_region_destroy( reg );
-};
+}
 
 wxRegion::wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
 {
@@ -71,7 +71,7 @@ wxRegion::wxRegion( const wxPoint& topLeft, const wxPoint& bottomRight )
   rect.height = bottomRight.y - rect.y;
   M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &rect );
   gdk_region_destroy( reg );
-};
+}
 
 wxRegion::wxRegion( const wxRect& rect )
 {
@@ -84,24 +84,24 @@ wxRegion::wxRegion( const wxRect& rect )
   g_rect.height = rect.height;
   M_REGIONDATA->m_region = gdk_region_union_with_rect( reg, &g_rect );
   gdk_region_destroy( reg );
-};
+}
 
 wxRegion::wxRegion(void)
 {
   m_refData = new wxRegionRefData();
   M_REGIONDATA->m_region = gdk_region_new();
-};
+}
 
 wxRegion::~wxRegion(void)
 {
-};
+}
 
 void wxRegion::Clear(void)
 {
   UnRef();
   m_refData = new wxRegionRefData();
   M_REGIONDATA->m_region = gdk_region_new();
-};
+}
 
 bool wxRegion::Union( long x, long y, long width, long height )
 {
@@ -114,7 +114,7 @@ bool wxRegion::Union( long x, long y, long width, long height )
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
   return TRUE;
-};
+}
 
 bool wxRegion::Union( const wxRect& rect )
 {
@@ -127,7 +127,7 @@ bool wxRegion::Union( const wxRect& rect )
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
   return TRUE;
-};
+}
 
 bool wxRegion::Union( const wxRegion& region )
 {
@@ -135,21 +135,21 @@ bool wxRegion::Union( const wxRegion& region )
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
   return TRUE;
-};
+}
 
 bool wxRegion::Intersect( long x, long y, long width, long height )
 {
   wxRegion reg( x, y, width, height );
   Intersect( reg );
   return TRUE;
-};
+}
 
 bool wxRegion::Intersect( const wxRect& rect )
 {
   wxRegion reg( rect );
   Intersect( reg );
   return TRUE;
-};
+}
 
 bool wxRegion::Intersect( const wxRegion& region )
 {
@@ -157,21 +157,21 @@ bool wxRegion::Intersect( const wxRegion& region )
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
   return TRUE;
-};
+}
 
 bool wxRegion::Subtract( long x, long y, long width, long height )
 {
   wxRegion reg( x, y, width, height );
   Subtract( reg );
   return TRUE;
-};
+}
 
 bool wxRegion::Subtract( const wxRect& rect )
 {
   wxRegion reg( rect );
   Subtract( reg );
   return TRUE;
-};
+}
 
 bool wxRegion::Subtract( const wxRegion& region )
 {
@@ -179,21 +179,21 @@ bool wxRegion::Subtract( const wxRegion& region )
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
   return TRUE;
-};
+}
 
 bool wxRegion::Xor( long x, long y, long width, long height )
 {
   wxRegion reg( x, y, width, height );
   Xor( reg );
   return TRUE;
-};
+}
 
 bool wxRegion::Xor( const wxRect& rect )
 {
   wxRegion reg( rect );
   Xor( reg );
   return TRUE;
-};
+}
 
 bool wxRegion::Xor( const wxRegion& region )
 {
@@ -201,7 +201,7 @@ bool wxRegion::Xor( const wxRegion& region )
   gdk_region_destroy( M_REGIONDATA->m_region );
   M_REGIONDATA->m_region = reg;
   return TRUE;
-};
+}
 
 void wxRegion::GetBox( long& x, long& y, long&w, long &h ) const
 {
@@ -209,17 +209,17 @@ void wxRegion::GetBox( long& x, long& y, long&w, long &h ) const
   y = 0;
   w = -1;
   h = -1;
-};
+}
 
 wxRect wxRegion::GetBox(void) const
 {
   return wxRect( 0, 0, -1, -1 );
-};
+}
 
 bool wxRegion::Empty(void) const
 {
   return gdk_region_empty( M_REGIONDATA->m_region );
-};
+}
 
 wxRegionContain wxRegion::Contains( long x, long y ) const
 {
@@ -227,7 +227,7 @@ wxRegionContain wxRegion::Contains( long x, long y ) const
     return wxInRegion;
   else
     return wxOutRegion;
-};
+}
 
 wxRegionContain wxRegion::Contains( long x, long y, long w, long h ) const
 {
@@ -242,12 +242,12 @@ wxRegionContain wxRegion::Contains( long x, long y, long w, long h ) const
    case GDK_OVERLAP_RECTANGLE_IN:   return wxInRegion;
    case GDK_OVERLAP_RECTANGLE_OUT:  return wxOutRegion;
    case GDK_OVERLAP_RECTANGLE_PART: return wxPartRegion;
-  };
+  }
   return wxOutRegion;
-};
+}
 
 GdkRegion *wxRegion::GetRegion(void) const
 {
   return M_REGIONDATA->m_region;
-};
+}
 

@@ -34,10 +34,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
       (win->m_height == alloc->height))
   {
     return;
-  };
+  }
 
   win->SetSize( alloc->x, alloc->y, alloc->width, alloc->height );
-};
+}
 
 // page change callback
 static void gtk_page_change_callback( GtkNotebook *WXUNUSED(widget),
@@ -55,7 +55,7 @@ static void gtk_page_change_callback( GtkNotebook *WXUNUSED(widget),
       mdi_frame->m_currentChild = child_frame;
       mdi_frame->SetMDIMenuBar( child_frame->m_menuBar );
       return;
-    };
+    }
     node = node->Next();
   }
 }
@@ -72,7 +72,7 @@ wxMDIParentFrame::wxMDIParentFrame(void)
   m_clientWindow = NULL;
   m_currentChild = NULL;
   m_parentFrameActive = TRUE;
-};
+}
 
 wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
       wxWindowID id, const wxString& title,
@@ -83,11 +83,11 @@ wxMDIParentFrame::wxMDIParentFrame( wxWindow *parent,
   m_currentChild = NULL;
   m_parentFrameActive = TRUE;
   Create( parent, id, title, pos, size, style, name );
-};
+}
 
 wxMDIParentFrame::~wxMDIParentFrame(void)
 {
-};
+}
 
 bool wxMDIParentFrame::Create( wxWindow *parent,
       wxWindowID id, const wxString& title,
@@ -99,7 +99,7 @@ bool wxMDIParentFrame::Create( wxWindow *parent,
   OnCreateClient();
 
   return TRUE;
-};
+}
 
 void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
 {
@@ -112,7 +112,7 @@ void wxMDIParentFrame::GtkOnSize( int x, int y, int width, int height )
     GetClientSize( &x, &y );
     m_mdiMenuBar->SetSize( 1, 1, x-2, 26 );
   }
-};
+}
 
 void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
 {
@@ -126,48 +126,48 @@ void wxMDIParentFrame::SetMDIMenuBar( wxMenuBar *menu_bar )
     m_mdiMenuBar->SetSize( 1, 1, x-2, 26 );
     m_mdiMenuBar->Show( TRUE );
   }
-};
+}
 
 void wxMDIParentFrame::GetClientSize(int *width, int *height ) const
 {
   wxFrame::GetClientSize( width, height );
-};
+}
 
 wxMDIChildFrame *wxMDIParentFrame::GetActiveChild(void) const
 {
   return m_currentChild;
-};
+}
 
 wxMDIClientWindow *wxMDIParentFrame::GetClientWindow(void) const
 {
   return m_clientWindow;
-};
+}
 
 wxMDIClientWindow *wxMDIParentFrame::OnCreateClient(void)
 {
   m_clientWindow = new wxMDIClientWindow( this );
   return m_clientWindow;
-};
+}
 
 void wxMDIParentFrame::ActivateNext(void)
 {
   if (m_clientWindow)
     gtk_notebook_next_page( GTK_NOTEBOOK(m_clientWindow->m_widget) );
-};
+}
 
 void wxMDIParentFrame::ActivatePrevious(void)
 {
   if (m_clientWindow)
     gtk_notebook_prev_page( GTK_NOTEBOOK(m_clientWindow->m_widget) );
-};
+}
 
 void wxMDIParentFrame::OnActivate( wxActivateEvent& WXUNUSED(event) )
 {
-};
+}
 
 void wxMDIParentFrame::OnSysColourChanged( wxSysColourChangedEvent& WXUNUSED(event) )
 {
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxMDIChildFrame
@@ -183,7 +183,7 @@ wxMDIChildFrame::wxMDIChildFrame(void)
 {
   m_menuBar = NULL;
   m_page = NULL;
-};
+}
 
 wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
@@ -193,7 +193,7 @@ wxMDIChildFrame::wxMDIChildFrame( wxMDIParentFrame *parent,
   m_menuBar = NULL;
   m_page = NULL;
   Create( parent, id, title, wxDefaultPosition, size, style, name );
-};
+}
 
 wxMDIChildFrame::~wxMDIChildFrame(void)
 {
@@ -204,10 +204,10 @@ wxMDIChildFrame::~wxMDIChildFrame(void)
     {
       mdi_frame->SetMDIMenuBar( NULL );
       mdi_frame->m_currentChild = NULL;
-    };
+    }
     delete m_menuBar;
   }
-};
+}
 
 bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
       wxWindowID id, const wxString& title,
@@ -216,7 +216,7 @@ bool wxMDIChildFrame::Create( wxMDIParentFrame *parent,
 {
   m_title = title;
   return wxWindow::Create( parent->GetClientWindow(), id, wxDefaultPosition, size, style, name );
-};
+}
 
 void wxMDIChildFrame::GetClientSize( int *width, int *height ) const
 {
@@ -238,8 +238,8 @@ static void SetInvokingWindow( wxMenu *menu, wxWindow *win )
     if (menuitem->IsSubMenu())
       SetInvokingWindow( menuitem->GetSubMenu(), win );
     node = node->Next();
-  };
-};
+  }
+}
 
 void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
 {
@@ -257,7 +257,7 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
         wxMenu *menu = (wxMenu*)node->Data();
         SetInvokingWindow( menu, this );
         node = node->Next();
-      };
+      }
 
       m_menuBar->m_parent = mdi_frame;
     }
@@ -266,20 +266,20 @@ void wxMDIChildFrame::SetMenuBar( wxMenuBar *menu_bar )
     gtk_myfixed_put( GTK_MYFIXED(mdi_frame->m_mainWindow),
       m_menuBar->m_widget, m_menuBar->m_x, m_menuBar->m_y );
   }
-};
+}
 
 wxMenuBar *wxMDIChildFrame::GetMenuBar()
 {
   return m_menuBar;
-};
+}
 
 void wxMDIChildFrame::Activate(void)
 {
-};
+}
 
 void wxMDIChildFrame::OnActivate( wxActivateEvent &WXUNUSED(event) )
 {
-};
+}
 
 //-----------------------------------------------------------------------------
 // wxMDIClientWindow
@@ -289,16 +289,16 @@ IMPLEMENT_DYNAMIC_CLASS(wxMDIClientWindow,wxWindow)
 
 wxMDIClientWindow::wxMDIClientWindow(void)
 {
-};
+}
 
 wxMDIClientWindow::wxMDIClientWindow( wxMDIParentFrame *parent, long style )
 {
   CreateClient( parent, style );
-};
+}
 
 wxMDIClientWindow::~wxMDIClientWindow(void)
 {
-};
+}
 
 bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 {
@@ -318,7 +318,7 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
   Show( TRUE );
 
   return TRUE;
-};
+}
 
 void wxMDIClientWindow::AddChild( wxWindow *child )
 {
@@ -326,7 +326,7 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
   {
      wxFAIL_MSG("wxNotebook::AddChild: Child has to be wxMDIChildFrame");
      return;
-  };
+  }
 
   m_children.Append( child );
 
@@ -349,6 +349,6 @@ void wxMDIClientWindow::AddChild( wxWindow *child )
   gtk_notebook_set_page( GTK_NOTEBOOK(m_widget), m_children.Number()-1 );
   
   gtk_page_change_callback( NULL, mdi_child->m_page, 0, this );
-};
+}
 
 

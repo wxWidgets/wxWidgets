@@ -37,14 +37,14 @@ void gtk_filedialog_ok_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 	}
 
   dialog->OnOK( event );
-};
+}
 
 void gtk_filedialog_cancel_callback( GtkWidget *WXUNUSED(widget), gpointer data )
 {
   wxFileDialog *dialog = (wxFileDialog*)data;
   wxCommandEvent event(wxEVT_NULL);
   dialog->OnCancel( event );
-};
+}
 
 IMPLEMENT_DYNAMIC_CLASS(wxFileDialog,wxDialog)
 
@@ -83,7 +83,7 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
   gtk_signal_connect( GTK_OBJECT(sel->cancel_button), "clicked",
     GTK_SIGNAL_FUNC(gtk_filedialog_cancel_callback), (gpointer*)this );
-};
+}
 
 int wxFileDialog::ShowModal(void)
 {
@@ -93,9 +93,9 @@ int wxFileDialog::ShowModal(void)
   {
     m_fileName = gtk_file_selection_get_filename( GTK_FILE_SELECTION(m_widget) );
     m_path = gtk_file_selection_get_filename( GTK_FILE_SELECTION(m_widget) );
-  };
+  }
   return ret;
-};
+}
 
 
 char *wxFileSelector(const char *title,
@@ -131,7 +131,7 @@ char *wxFileSelector(const char *title,
   }
   else
     return NULL;
-};
+}
 
 char* wxLoadFileSelector(const char *what, const char *extension, const char *default_name,
          wxWindow *parent )
@@ -147,7 +147,7 @@ char* wxLoadFileSelector(const char *what, const char *extension, const char *de
   sprintf(wild, "*.%s", ext);
 
   return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
-};
+}
 
 char* wxSaveFileSelector(const char *what, const char *extension, const char *default_name,
          wxWindow *parent )
@@ -163,5 +163,5 @@ char* wxSaveFileSelector(const char *what, const char *extension, const char *de
   sprintf(wild, "*.%s", ext);
 
   return wxFileSelector (prompt, NULL, default_name, ext, wild, 0, parent);
-};
+}
 

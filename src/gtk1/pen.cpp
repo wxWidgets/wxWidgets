@@ -38,7 +38,7 @@ wxPenRefData::wxPenRefData(void)
   m_style = wxSOLID;
   m_joinStyle = wxJOIN_ROUND;
   m_capStyle = wxCAP_ROUND;
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -49,7 +49,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxPen,wxGDIObject)
 wxPen::wxPen(void)
 {
   if (wxThePenList) wxThePenList->AddPen( this );
-};
+}
 
 wxPen::wxPen( const wxColour &colour, int width, int style )
 {
@@ -58,7 +58,7 @@ wxPen::wxPen( const wxColour &colour, int width, int style )
   M_PENDATA->m_style = style;
   M_PENDATA->m_colour = colour;
   if (wxThePenList) wxThePenList->AddPen( this );
-};
+}
 
 wxPen::wxPen( const wxString &colourName, int width, int style )
 {
@@ -67,42 +67,42 @@ wxPen::wxPen( const wxString &colourName, int width, int style )
   M_PENDATA->m_style = style;
   M_PENDATA->m_colour = colourName;
   if (wxThePenList) wxThePenList->AddPen( this );
-};
+}
 
 wxPen::wxPen( const wxPen& pen )
 {
   Ref( pen );
   if (wxThePenList) wxThePenList->AddPen( this );
-};
+}
 
 wxPen::wxPen( const wxPen* pen )
 {
   UnRef();
   if (pen) Ref( *pen ); 
   if (wxThePenList) wxThePenList->AddPen( this );
-};
+}
 
 wxPen::~wxPen(void)
 {
   if (wxThePenList) wxThePenList->RemovePen( this );
-};
+}
 
 wxPen& wxPen::operator = ( const wxPen& pen )
 {
   if (*this == pen) return (*this); 
   Ref( pen ); 
   return *this; 
-};
+}
 
 bool wxPen::operator == ( const wxPen& pen )
 {
   return m_refData == pen.m_refData; 
-};
+}
 
 bool wxPen::operator != ( const wxPen& pen )
 {
   return m_refData != pen.m_refData; 
-};
+}
 
 void wxPen::SetColour( const wxColour &colour )
 {
@@ -110,7 +110,7 @@ void wxPen::SetColour( const wxColour &colour )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_colour = colour;
-};
+}
 
 void wxPen::SetColour( const wxString &colourName )
 {
@@ -118,7 +118,7 @@ void wxPen::SetColour( const wxString &colourName )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_colour = colourName;
-};
+}
 
 void wxPen::SetColour( int red, int green, int blue )
 {
@@ -126,7 +126,7 @@ void wxPen::SetColour( int red, int green, int blue )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_colour.Set( red, green, blue );
-};
+}
 
 void wxPen::SetCap( int capStyle )
 {
@@ -134,7 +134,7 @@ void wxPen::SetCap( int capStyle )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_capStyle = capStyle;
-};
+}
 
 void wxPen::SetJoin( int joinStyle )
 {
@@ -142,7 +142,7 @@ void wxPen::SetJoin( int joinStyle )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_joinStyle = joinStyle;
-};
+}
 
 void wxPen::SetStyle( int style )
 {
@@ -150,7 +150,7 @@ void wxPen::SetStyle( int style )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_style = style;
-};
+}
 
 void wxPen::SetWidth( int width )
 {
@@ -158,12 +158,12 @@ void wxPen::SetWidth( int width )
     m_refData = new wxPenRefData();
 
   M_PENDATA->m_width = width;
-};
+}
 
 int wxPen::GetCap(void) const
 {
   return M_PENDATA->m_capStyle;
-};
+}
 
 int wxPen::GetJoin(void) const
 {
@@ -171,7 +171,7 @@ int wxPen::GetJoin(void) const
     return 0;
   else
     return M_PENDATA->m_joinStyle;
-};
+}
 
 int wxPen::GetStyle(void) const
 {
@@ -179,7 +179,7 @@ int wxPen::GetStyle(void) const
     return 0;
   else
     return M_PENDATA->m_style;
-};
+}
 
 int wxPen::GetWidth(void) const
 {
@@ -187,7 +187,7 @@ int wxPen::GetWidth(void) const
     return 0;
   else
     return M_PENDATA->m_width;
-};
+}
 
 wxColour &wxPen::GetColour(void) const
 {
@@ -195,10 +195,10 @@ wxColour &wxPen::GetColour(void) const
     return wxNullColour;
   else
     return M_PENDATA->m_colour;
-};
+}
 
 bool wxPen::Ok(void) const
 {
   return (m_refData);
-};
+}
 

@@ -28,19 +28,19 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask,wxObject)
 wxMask::wxMask(void)
 {
   m_bitmap = NULL;
-};
+}
 
 wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap), const wxColour& WXUNUSED(colour) )
 {
-};
+}
 
 wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap), int WXUNUSED(paletteIndex) )
 {
-};
+}
 
 wxMask::wxMask( const wxBitmap& WXUNUSED(bitmap) )
 {
-};
+}
 
 wxMask::~wxMask(void)
 {
@@ -49,12 +49,12 @@ wxMask::~wxMask(void)
 #else
   if (m_bitmap) gdk_bitmap_unref( m_bitmap );
 #endif  
-};
+}
 
 GdkBitmap *wxMask::GetBitmap(void) const
 {
   return m_bitmap;
-};
+}
   
 //-----------------------------------------------------------------------------
 // wxBitmap
@@ -92,7 +92,7 @@ wxBitmapRefData::wxBitmapRefData(void)
 #ifdef USE_GDK_IMLIB
   m_image = NULL;
 #endif
-};
+}
 
 wxBitmapRefData::~wxBitmapRefData(void)
 {
@@ -105,7 +105,7 @@ wxBitmapRefData::~wxBitmapRefData(void)
   if (m_bitmap) gdk_bitmap_unref( m_bitmap );
   if (m_mask) delete m_mask;
   if (m_palette) delete m_palette;
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -116,7 +116,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxBitmap,wxGDIObject)
 wxBitmap::wxBitmap(void)
 {
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-};
+}
   
 wxBitmap::wxBitmap( int width, int height, int depth )
 {
@@ -129,7 +129,7 @@ wxBitmap::wxBitmap( int width, int height, int depth )
   M_BMPDATA->m_bpp = depth;
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-};
+}
 
 wxBitmap::wxBitmap( char **bits )
 {
@@ -146,7 +146,7 @@ wxBitmap::wxBitmap( char **bits )
   {
     M_BMPDATA->m_mask = new wxMask();
     M_BMPDATA->m_mask->m_bitmap = mask;
-  };
+  }
   
   gdk_window_get_size( M_BMPDATA->m_pixmap, &(M_BMPDATA->m_width), &(M_BMPDATA->m_height) );
   
@@ -160,26 +160,28 @@ wxBitmap::wxBitmap( char **bits )
   M_BMPDATA->m_bpp = 24; // ?
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-};
+}
   
 wxBitmap::wxBitmap( const wxBitmap& bmp )
 {
   Ref( bmp );
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-};
+}
   
 wxBitmap::wxBitmap( const wxBitmap* bmp )
 {
   if (bmp) Ref( *bmp );
    
   if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
-};
+}
 
 wxBitmap::wxBitmap( const wxString &filename, int type )
 {
   LoadFile( filename, type );
-};
+  
+  if (wxTheBitmapList) wxTheBitmapList->AddBitmap(this);
+}
 
 // CMB 15/5/98: add constructor for xbm bitmaps
 wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth))
@@ -199,72 +201,72 @@ wxBitmap::wxBitmap( const char bits[], int width, int height, int WXUNUSED(depth
 wxBitmap::~wxBitmap(void)
 {
   if (wxTheBitmapList) wxTheBitmapList->DeleteObject(this);
-};
+}
   
 wxBitmap& wxBitmap::operator = ( const wxBitmap& bmp )
 {
   if (*this == bmp) return (*this); 
   Ref( bmp ); 
   return *this; 
-};
+}
   
 bool wxBitmap::operator == ( const wxBitmap& bmp )
 {
   return m_refData == bmp.m_refData; 
-};
+}
   
 bool wxBitmap::operator != ( const wxBitmap& bmp )
 {
   return m_refData != bmp.m_refData; 
-};
+}
   
 bool wxBitmap::Ok(void) const
 {
   return m_refData != NULL;
-};
+}
   
 int wxBitmap::GetHeight(void) const
 {
   if (!Ok()) return 0;
   return M_BMPDATA->m_height;
-};
+}
 
 int wxBitmap::GetWidth(void) const
 {
   if (!Ok()) return 0;
   return M_BMPDATA->m_width;
-};
+}
 
 int wxBitmap::GetDepth(void) const
 {
   if (!Ok()) return 0;
   return M_BMPDATA->m_bpp;
-};
+}
 
 void wxBitmap::SetHeight( int height )
 {
   if (!Ok()) return;
   M_BMPDATA->m_height = height;
-};
+}
 
 void wxBitmap::SetWidth( int width )
 {
   if (!Ok()) return;
   M_BMPDATA->m_width = width;
-};
+}
 
 void wxBitmap::SetDepth( int depth )
 {
   if (!Ok()) return;
   M_BMPDATA->m_bpp = depth;
-};
+}
 
 wxMask *wxBitmap::GetMask(void) const
 {
   if (!Ok()) return NULL;
   
   return M_BMPDATA->m_mask;
-};
+}
 
 void wxBitmap::SetMask( wxMask *mask )
 {
@@ -272,7 +274,7 @@ void wxBitmap::SetMask( wxMask *mask )
   
   if (M_BMPDATA->m_mask) delete M_BMPDATA->m_mask;
   M_BMPDATA->m_mask = mask;
-};
+}
 
 void wxBitmap::Resize( int height, int width )
 {
@@ -296,7 +298,7 @@ void wxBitmap::Resize( int height, int width )
   Render();
   
 #endif
-};
+}
 
 bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type), 
   wxPalette *WXUNUSED(palette) )
@@ -312,7 +314,7 @@ bool wxBitmap::SaveFile( const wxString &name, int WXUNUSED(type),
 #endif
 
   return FALSE;
-};
+}
 
 bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
 {
@@ -327,7 +329,7 @@ bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
   {
     UnRef();
     return FALSE;
-  };
+  }
 
   Render();
 				  
@@ -338,26 +340,26 @@ bool wxBitmap::LoadFile( const wxString &name, int WXUNUSED(type) )
 #endif
 
   return FALSE;
-};
+}
         
 wxPalette *wxBitmap::GetPalette(void) const
 {
   if (!Ok()) return NULL;
   return M_BMPDATA->m_palette;
-};
+}
 
 GdkPixmap *wxBitmap::GetPixmap(void) const
 {
   if (!Ok()) return NULL;
   return M_BMPDATA->m_pixmap;
-};
+}
   
 GdkBitmap *wxBitmap::GetBitmap(void) const
 {
   if (!Ok()) return NULL;
   
   return M_BMPDATA->m_bitmap;
-};
+}
   
 void wxBitmap::DestroyImage(void)
 {
@@ -367,12 +369,12 @@ void wxBitmap::DestroyImage(void)
   {
     gdk_imlib_destroy_image( M_BMPDATA->m_image );
     M_BMPDATA->m_image = NULL;
-  };
-};
+  }
+}
 
 void wxBitmap::RecreateImage(void)
 {
-};
+}
 
 void wxBitmap::Render(void)
 {
@@ -389,9 +391,9 @@ void wxBitmap::Render(void)
   {
     M_BMPDATA->m_mask = new wxMask();
     M_BMPDATA->m_mask->m_bitmap = mask;
-  };
+  }
   
 #endif
-};
+}
 
 

@@ -46,17 +46,17 @@ wxColourRefData::wxColourRefData(void)
   m_color.pixel = 0;
   m_colormap = NULL;
   m_hasPixel = FALSE;
-};
+}
 
 wxColourRefData::~wxColourRefData(void)
 {
   FreeColour();
-};
+}
 
 void wxColourRefData::FreeColour(void)
 {
 //  if (m_hasPixel) gdk_colors_free( m_colormap, &m_color, 1, 0 );
-};
+}
 
 //-----------------------------------------------------------------------------
 
@@ -68,7 +68,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 
 wxColour::wxColour(void)
 {
-};
+}
 
 wxColour::wxColour( char red, char green, char blue )
 {
@@ -77,7 +77,7 @@ wxColour::wxColour( char red, char green, char blue )
   M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
   M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
   M_COLDATA->m_color.pixel = 0;
-};
+}
   
 wxColour::wxColour( const wxString &colourName )
 {
@@ -96,30 +96,30 @@ wxColour::wxColour( const wxString &colourName )
       wxFAIL_MSG( "wxColour: couldn't find colour" );
       delete m_refData;
       m_refData = NULL;
-    };
-  };
-};
+    }
+  }
+}
 
 wxColour::wxColour( const wxColour& col )
 { 
   Ref( col ); 
-};
+}
 
 wxColour::wxColour( const wxColour* col ) 
 { 
   if (col) Ref( *col ); 
-};
+}
 
 wxColour::~wxColour(void)
 {
-};
+}
 
 wxColour& wxColour::operator = ( const wxColour& col ) 
 { 
   if (*this == col) return (*this); 
   Ref( col ); 
   return *this; 
-};
+}
 
 wxColour& wxColour::operator = ( const wxString& colourName ) 
 { 
@@ -138,20 +138,20 @@ wxColour& wxColour::operator = ( const wxString& colourName )
       wxFAIL_MSG( "wxColour: couldn't find colour" );
       delete m_refData;
       m_refData = NULL;
-    };
-  };
+    }
+  }
   return *this; 
-};
+}
 
 bool wxColour::operator == ( const wxColour& col ) 
 { 
   return m_refData == col.m_refData; 
-};
+}
 
 bool wxColour::operator != ( const wxColour& col) 
 { 
   return m_refData != col.m_refData; 
-};
+}
 
 void wxColour::Set( const unsigned char red, const unsigned char green, const unsigned char blue )
 {
@@ -161,30 +161,30 @@ void wxColour::Set( const unsigned char red, const unsigned char green, const un
   M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
   M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
   M_COLDATA->m_color.pixel = 0;
-};
+}
 
 unsigned char wxColour::Red(void) const
 {
   if (!Ok()) return 0;
   return (unsigned char)(M_COLDATA->m_color.red >> SHIFT);
-};
+}
 
 unsigned char wxColour::Green(void) const
 {
   if (!Ok()) return 0;
   return (unsigned char)(M_COLDATA->m_color.green >> SHIFT);
-};
+}
 
 unsigned char wxColour::Blue(void) const
 {
   if (!Ok()) return 0;
   return (unsigned char)(M_COLDATA->m_color.blue >> SHIFT);
-};
+}
 
 bool wxColour::Ok(void) const
 {
   return (m_refData);
-};
+}
 
 void wxColour::CalcPixel( GdkColormap *cmap )
 {
@@ -208,20 +208,20 @@ void wxColour::CalcPixel( GdkColormap *cmap )
 #endif
   
   M_COLDATA->m_colormap = cmap;
-};
+}
 
 int wxColour::GetPixel(void)
 {
   if (!Ok()) return 0;
   
   return M_COLDATA->m_color.pixel;
-};
+}
 
 GdkColor *wxColour::GetColor(void)
 {
   if (!Ok()) return NULL;
   
   return &M_COLDATA->m_color;
-};
+}
 
 

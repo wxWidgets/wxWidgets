@@ -171,6 +171,7 @@ wxFrame::~wxFrame()
 {
   if (m_frameMenuBar) delete m_frameMenuBar;
   if (m_frameStatusBar) delete m_frameStatusBar;
+  if (m_frameToolBar) delete m_frameToolBar;
 
 //  if (m_mainWindow) gtk_widget_destroy( m_mainWindow );
 

@@ -24,17 +24,17 @@ wxMemoryDC::wxMemoryDC(void)
 {
   m_ok = FALSE;
   m_cmap = gdk_colormap_get_system();
-};
+}
 
 wxMemoryDC::wxMemoryDC( wxDC *WXUNUSED(dc) )
 {
   m_ok = FALSE;
   m_cmap = gdk_colormap_get_system();
-};
+}
 
 wxMemoryDC::~wxMemoryDC(void)
 {
-};
+}
 
 void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
 {
@@ -58,8 +58,8 @@ void wxMemoryDC::SelectObject( const wxBitmap& bitmap )
   {
     m_ok = FALSE;
     m_window = NULL;
-  };
-};
+  }
+}
 
 void wxMemoryDC::GetSize( int *width, int *height ) const
 {
@@ -72,7 +72,7 @@ void wxMemoryDC::GetSize( int *width, int *height ) const
   {
     if (width) (*width) = 0;
     if (height) (*height) = 0;
-  };
-};
+  }
+}
 
 
