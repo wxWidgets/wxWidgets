@@ -530,6 +530,8 @@ WXDLLEXPORT size_t   wxStrxfrm(wxChar *dest, const wxChar *src, size_t n);
 #ifdef wxNEED_WX_STDIO_H
 #include <stdio.h>
 #include <stdarg.h>
+WXDLLEXPORT FILE *   wxFopen(const wxChar *path, const wxChar *mode);
+WXDLLEXPORT FILE *   wxFreopen(const wxChar *path, const wxChar *mode, FILE *stream);
 WXDLLEXPORT int      wxPrintf(const wxChar *fmt, ...);
 WXDLLEXPORT int      wxVprintf(const wxChar *fmt, va_list argptr);
 WXDLLEXPORT int      wxFprintf(FILE *stream, const wxChar *fmt, ...);
@@ -549,6 +551,10 @@ WXDLLEXPORT int      wxAtoi(const wxChar *psz);
 WXDLLEXPORT long     wxAtol(const wxChar *psz);
 WXDLLEXPORT wxChar * wxGetenv(const wxChar *name);
 WXDLLEXPORT int      wxSystem(const wxChar *psz);
+#endif
+
+#ifdef wxNEED_WX_TIME_H
+WXDLLEXPORT size_t   wxStrftime(wxChar *s, size_t max, const wxChar *fmt, const struct tm *tm);
 #endif
 
 #endif
