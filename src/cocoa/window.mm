@@ -27,6 +27,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
 BEGIN_EVENT_TABLE(wxWindowCocoa, wxWindowBase)
 END_EVENT_TABLE()
 
+wxWindow *wxWindowCocoa::sm_capturedWindow = NULL;
+
 // Constructor
 void wxWindowCocoa::Init()
 {
@@ -386,11 +388,13 @@ void wxWindow::SetFocus()
 void wxWindow::DoCaptureMouse()
 {
     // TODO
+    sm_capturedWindow = this;
 }
 
 void wxWindow::DoReleaseMouse()
 {
     // TODO
+    sm_capturedWindow = NULL;
 }
 
 void wxWindow::DoScreenToClient(int *x, int *y) const
@@ -522,7 +526,7 @@ wxWindow *wxWindowBase::FindFocus()
 /* static */ wxWindow *wxWindowBase::GetCapture()
 {
     // TODO
-    return NULL;
+    return wxWindowCocoa::sm_capturedWindow;
 }
 
 wxWindow *wxGetActiveWindow()

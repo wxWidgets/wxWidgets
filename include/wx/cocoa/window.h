@@ -22,6 +22,7 @@ class WXDLLEXPORT wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
     DECLARE_DYNAMIC_CLASS(wxWindowCocoa)
     DECLARE_NO_COPY_CLASS(wxWindowCocoa)
     DECLARE_EVENT_TABLE()
+    friend wxWindow *wxWindowBase::GetCapture();
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -73,6 +74,7 @@ protected:
     WX_NSView m_cocoaNSView;
     WX_NSView m_dummyNSView;
     bool m_isInPaint;
+    static wxWindow *sm_capturedWindow;
 // ------------------------------------------------------------------------
 // Implementation
 // ------------------------------------------------------------------------
