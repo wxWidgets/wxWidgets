@@ -42,8 +42,9 @@
 //#define TEST_DLLLOADER
 //#define TEST_ENVIRON
 //#define TEST_EXECUTE
-#define TEST_FILE
+//#define TEST_FILE
 //#define TEST_FILECONF
+#define TEST_FILENAME
 //#define TEST_FTP
 //#define TEST_HASH
 //#define TEST_LIST
@@ -586,6 +587,61 @@ static void TestFileConfRead()
 }
 
 #endif // TEST_FILECONF
+
+// ----------------------------------------------------------------------------
+// wxFileName
+// ----------------------------------------------------------------------------
+
+#ifdef TEST_FILENAME
+
+#include <wx/filename.h>
+
+static void TestFileNameConstruction()
+{
+    puts("*** testing wxFileName construction ***");
+
+    static const wxChar *filenames[] =
+    {
+        _T("/usr/bin/ls"),
+        _T("/usr/bin/"),
+        _T("~/.zshrc"),
+        _T("../../foo"),
+    };
+
+    for ( size_t n = 0; n < WXSIZEOF(filenames); n++ )
+    {
+        wxFileName fn(filenames[n]);
+
+        printf("Filename: '%s'\t", fn.GetFullPath().c_str());
+        if ( !fn.Normalize() )
+        {
+            puts("ERROR (couldn't be normalized)");
+        }
+        else
+        {
+            printf("normalized: '%s'\n", fn.GetFullPath().c_str());
+        }
+    }
+
+    puts("");
+}
+
+static void TestFileNameComparison()
+{
+    // TODO!
+}
+
+static void TestFileNameOperations()
+{
+    // TODO!
+}
+
+static void TestFileNameCwd()
+{
+    // TODO!
+}
+
+#endif // TEST_FILENAME
 
 // ----------------------------------------------------------------------------
 // wxHashTable
@@ -3905,6 +3961,10 @@ int main(int argc, char **argv)
     }
     TestFileCopy();
 #endif // TEST_FILE
+
+#ifdef TEST_FILENAME
+    TestFileNameConstruction();
+#endif // TEST_FILENAME
 
 #ifdef TEST_THREADS
     int nCPUs = wxThread::GetCPUCount();

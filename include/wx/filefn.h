@@ -252,6 +252,7 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 #define wxFILE_SEP_DSK        wxT(':')
 #define wxFILE_SEP_PATH_DOS   wxT('\\')
 #define wxFILE_SEP_PATH_UNIX  wxT('/')
+#define wxFILE_SEP_PATH_MAC   wxT(':')
 
 // separator in the path list (as in PATH environment variable)
 // NB: these are strings and not characters on purpose!
@@ -262,6 +263,8 @@ WXDLLEXPORT bool wxRmdir(const wxString& dir, int flags = 0);
 #ifdef  __UNIX__
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_UNIX
   #define wxPATH_SEP          wxPATH_SEP_UNIX
+#elif defined(__MAC__)
+  #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_MAC
 #else   // Windows and OS/2
   #define wxFILE_SEP_PATH     wxFILE_SEP_PATH_DOS
   #define wxPATH_SEP          wxPATH_SEP_DOS

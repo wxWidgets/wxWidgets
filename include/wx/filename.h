@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/filename.h
 // Purpose:     wxFileName - encapsulates a file path
-// Author:      Robert Roebling
+// Author:      Robert Roebling, Vadim Zeitlin
 // Modified by:
 // Created:     28.12.00
 // RCS-ID:      $Id$
@@ -32,7 +32,7 @@
 // Windows)
 enum wxPathFormat
 {
-    wxPATH_NATIVE = 0,
+    wxPATH_NATIVE = 0,      // the path format for the current platform
     wxPATH_UNIX,
     wxPATH_MAC,
     wxPATH_DOS,
@@ -47,9 +47,11 @@ enum wxPathFormat
 enum wxPathNormalize
 {
     wxPATH_NORM_ENV_VARS = 0x0001,  // replace env vars with their values
-    wxPATH_NORM_ABSOLUTE = 0x0002,  // squeeze all .. and . and prepend cwd
+    wxPATH_NORM_DOTS     = 0x0002,  // squeeze all .. and . and prepend cwd
     wxPATH_NORM_TILDE    = 0x0004,  // Unix only: replace ~ and ~user
-    wxPATH_NORM_ALL      = 0x0007
+    wxPATH_NORM_CASE     = 0x0008,  // if case insensitive => tolower
+    wxPATH_NORM_ABSOLUTE = 0x0010,  // make the path absolute
+    wxPATH_NORM_ALL      = 0x001f
 };
 
 // ----------------------------------------------------------------------------
@@ -60,48 +62,136 @@ class WXDLLEXPORT wxFileName
 {
 public:
     // constructors and assignment
-    wxFileName()
-        { }
-    wxFileName( const wxFileName &filepath );
-    wxFileName( const wxString &path, bool dir_only = FALSE, wxPathFormat format = wxPATH_NATIVE )
-        { Assign( path, dir_only, format ); }
-    void Assign( const wxString &path, bool dir_only = FALSE, wxPathFormat format = wxPATH_NATIVE );
-    void Assign( const wxFileName &filepath );
 
-    // Only native form
+        // the usual stuff
+    wxFileName() { }
+    wxFileName( const wxFileName &filepath ) { Assign(filepath); }
+
+        // from a full filename: if it terminates with a '/', a directory path
+        // is contructed (the name will be empty), otherwise a file name and
+        // extension are extracted from it
+    wxFileName( const wxString& fullpath, wxPathFormat format = wxPATH_NATIVE )
+        { Assign( fullpath, format ); }
+
+        // from a directory name and a file name
+    wxFileName(const wxString& path,
+               const wxString& name,
+               wxPathFormat format = wxPATH_NATIVE)
+        { Assign(path, name, format); }
+
+        // from a directory name, file base name and extension
+    wxFileName(const wxString& path,
+               const wxString& name,
+               const wxString& ext,
+               wxPathFormat format = wxPATH_NATIVE)
+        { Assign(path, name, ext, format); }
+
+        // assorted assignment operators
+
+    wxFileName& operator=(const wxFileName& filename)
+        { Assign(filename); return *this; }
+
+    wxFileName& operator=(const wxString& filename)
+        { Assign(filename); return *this; }
+
+        // the same for delayed initialization
+
+        // VZ: wouldn't it be better to call this Create() for consistency with
+        //     all GUI classes? Personally, I like Set() more than Assign() too
+
+    void Assign(const wxFileName& filepath);
+    void Assign(const wxString& fullpath,
+                wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& path,
+                const wxString& name,
+                wxPathFormat format = wxPATH_NATIVE);
+    void Assign(const wxString& path,
+                const wxString& name,
+                const wxString& ext,
+                wxPathFormat format = wxPATH_NATIVE);
+    void AssignDir(const wxString& dir, wxPathFormat format = wxPATH_NATIVE)
+        { Assign(dir, _T(""), format); }
+
+        // reset all components to default, uninitialized state
+    void Clear();
+
+        // static pseudo constructors
+    static wxFileName FileName(const wxString& file);
+    static wxFileName DirName(const wxString& dir);
+
+    // test for existence
+
+        // is the filename valid at all?
+    bool IsOk() const { return !m_dirs.IsEmpty() || !m_name.IsEmpty(); }
+
+        // does the file with this name exists?
     bool FileExists();
     static bool FileExists( const wxString &file );
 
+        // does the directory with this name exists?
     bool DirExists();
     static bool DirExists( const wxString &dir );
 
+        // VZ: also need: IsDirWritable(), IsFileExecutable() &c (TODO)
+
+    // various file/dir operations
+
+        // retrieve the value of the current working directory
     void AssignCwd();
     static wxString GetCwd();
 
+        // change the current working directory
     bool SetCwd();
     static bool SetCwd( const wxString &cwd );
 
+        // get the value of user home (Unix only mainly)
     void AssignHomeDir();
     static wxString GetHomeDir();
 
+        // get a temp file name starting with thespecified prefix
     void AssignTempFileName( const wxString &prefix );
 
+    // directory creation and removal
     bool Mkdir( int perm = 0777 );
     static bool Mkdir( const wxString &dir, int perm = 0777 );
 
     bool Rmdir();
     static bool Rmdir( const wxString &dir );
 
-    // Remove . and .. (under Unix ~ as well)
-    bool Normalize( const wxString &cwd = wxEmptyString, const wxString &home = wxEmptyString );
+    // operations on the path
+
+        // normalize the path: with the default flags value, the path will be
+        // made absolute, without any ".." and "." and all environment
+        // variables will be expanded in it
+        //
+        // this may be done using another (than current) value of cwd
+    bool Normalize(wxPathNormalize flags = wxPATH_NORM_ALL,
+                   const wxString& cwd = wxEmptyString,
+                   wxPathFormat format = wxPATH_NATIVE);
 
     // Comparison
-    bool SameAs( const wxFileName &filepath, bool upper_case = TRUE );
+
+        // uses the current platform settings
+    bool operator==(const wxFileName& filename) { return SameAs(filename); }
+    bool operator==(const wxString& filename)
+        { return *this == wxFileName(filename); }
+
+        // compares with the rules of this platform
+    bool SameAs(const wxFileName &filepath,
+                wxPathFormat format = wxPATH_NATIVE);
 
     // Tests
-    bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
+    static bool IsCaseSensitive( wxPathFormat format = wxPATH_NATIVE );
     bool IsRelative( wxPathFormat format = wxPATH_NATIVE );
     bool IsAbsolute( wxPathFormat format = wxPATH_NATIVE );
+
+    // get the string of path separators for this format
+    static wxString GetPathSeparators(wxPathFormat format = wxPATH_NATIVE);
+
+    // is the char a path separator for this format?
+    static bool IsPathSeparator(wxChar ch, wxPathFormat format = wxPATH_NATIVE);
+
+    // FIXME: what exactly does this do?
     bool IsWild( wxPathFormat format = wxPATH_NATIVE );
 
     // Dir accessors
@@ -120,25 +210,29 @@ public:
     wxString GetName() const                    { return m_name; }
     bool HasName() const                        { return !m_name.IsEmpty(); }
 
-    // name and ext
-    void SetFullName( const wxString name, wxPathFormat format = wxPATH_NATIVE );
-    wxString GetFullName();
+    wxString GetFullName() const;
 
     const wxArrayString &GetDirs() const        { return m_dirs; }
 
-    // Construct path only
+    // Construct path only - possibly with the trailing separator
     wxString GetPath( bool add_separator = FALSE, wxPathFormat format = wxPATH_NATIVE ) const;
+
+    // more readable synonym
+    wxString GetPathWithSep(wxPathFormat format = wxPATH_NATIVE ) const
+        { return GetPath(TRUE /* add separator */, format); }
 
     // Construct full path with name and ext
     wxString GetFullPath( wxPathFormat format = wxPATH_NATIVE ) const;
 
-
     static wxPathFormat GetFormat( wxPathFormat format = wxPATH_NATIVE );
 
 private:
+    // the path components of the file
     wxArrayString   m_dirs;
-    wxString        m_name;
-    wxString        m_ext;
+
+    // the file name and extension (empty for directories)
+    wxString        m_name,
+                    m_ext;
 };
 
 #endif // _WX_FILENAME_H_
