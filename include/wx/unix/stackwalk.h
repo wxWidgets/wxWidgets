@@ -55,7 +55,10 @@ public:
     // addr2line, normally we can retrieve it from wxTheApp but if wxTheApp
     // doesn't exist or doesn't have the correct value, the path may be given
     // explicitly
-    wxStackWalker(const char *argv0 = NULL) { ms_exepath = argv0; }
+    wxStackWalker(const char *argv0 = NULL)
+    {
+        ms_exepath = wxString::FromAscii(argv0);
+    }
 
     virtual void Walk(size_t skip = 1);
     virtual void WalkFromException() { Walk(2); }
