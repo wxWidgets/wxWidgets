@@ -21,9 +21,7 @@
 class wxDataObject : public wxDataObjectBase
 {
 public:
-#ifdef __DARWIN__
-    ~wxDataObject() { }
-#endif
+    virtual ~wxDataObject();
 };
 
 #endif //_WX_MOTIF_DATAOBJ_H_
