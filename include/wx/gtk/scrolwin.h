@@ -99,9 +99,6 @@ public:
 
     // Get the view start
     virtual void GetViewStart(int *x, int *y) const;
-    // Compatibility
-    void ViewStart(int *x, int *y) const
-       { GetViewStart( x, y ); }
 
     // translate between scrolled and unscrolled coordinates
     void CalcScrolledPosition(int x, int y, int *xx, int *yy) const
@@ -121,7 +118,7 @@ public:
         DoCalcUnscrolledPosition(pt.x, pt.y, &p2.x, &p2.y);
         return p2;
     }
-    
+
     virtual void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
     virtual void DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
@@ -161,6 +158,11 @@ public:
 
     // Overridden from wxWindows due callback being static
     virtual void SetScrollPos( int orient, int pos, bool refresh = TRUE );
+
+#if WXWIN_COMPATIBILITY_2_2
+    // Compatibility
+    void ViewStart(int *x, int *y) const { GetViewStart( x, y ); }
+#endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
     wxWindow             *m_targetWindow;

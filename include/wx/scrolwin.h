@@ -84,7 +84,7 @@ public:
         DoCalcUnscrolledPosition(pt.x, pt.y, &p2.x, &p2.y);
         return p2;
     }
-    
+
     virtual void DoCalcScrolledPosition(int x, int y, int *xx, int *yy) const;
     virtual void DoCalcUnscrolledPosition(int x, int y, int *xx, int *yy) const;
 
@@ -138,6 +138,11 @@ public:
     // FIXME: this is needed for now for wxPlot compilation, should be removed
     //        once it is fixed!
     void OnScroll(wxScrollWinEvent& event) { HandleOnScroll(event); }
+
+#if WXWIN_COMPATIBILITY_2_2
+    // Compatibility only, don't use
+    void ViewStart(int *x, int *y) const { GetViewStart( x, y ); }
+#endif // WXWIN_COMPATIBILITY_2_2
 
 protected:
     // get pointer to our scroll rect if we use it or NULL
