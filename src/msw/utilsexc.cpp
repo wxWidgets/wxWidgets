@@ -398,6 +398,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
 #if wxUSE_STREAMS
     // the first elements are reading ends, the second are the writing ones
     HANDLE hpipeStdin[2],
+           hpipeStdinWrite = INVALID_HANDLE_VALUE,
            hpipeStdout[2],
            hpipeStderr[2];
 
@@ -454,6 +455,27 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         si.hStdError = hpipeStderr[1];
 
         si.wShowWindow = SW_HIDE;
+
+        // we must duplicate the handle to the write side of stdin pipe to make
+        // it non inheritable: indeed, we must close hpipeStdin[1] before
+        // launching the child process as otherwise this handle will be
+        // inherited by the child which will never close it and so the pipe
+        // will never be closed and the child will be left stuck in ReadFile()
+        if ( !::DuplicateHandle
+                (
+                    GetCurrentProcess(),
+                    hpipeStdin[1],
+                    GetCurrentProcess(),
+                    &hpipeStdinWrite,
+                    0,                      // desired access: unused here
+                    FALSE,                  // not inherited
+                    DUPLICATE_SAME_ACCESS   // same access as for src handle
+                ) )
+        {
+            wxLogLastError(_T("DuplicateHandle"));
+        }
+
+        ::CloseHandle(hpipeStdin[1]);
     }
 #endif // wxUSE_STREAMS
 
@@ -491,7 +513,6 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         // close the other handles too
         if ( redirect )
         {
-            ::CloseHandle(hpipeStdin[1]);
             ::CloseHandle(hpipeStdout[0]);
             ::CloseHandle(hpipeStderr[0]);
         }
@@ -508,7 +529,7 @@ long wxExecute(const wxString& cmd, bool sync, wxProcess *handler)
         // We can now initialize the wxStreams
         wxInputStream *inStream = new wxPipeInputStream(hpipeStdout[0]),
                       *errStream = new wxPipeInputStream(hpipeStderr[0]);
-        wxOutputStream *outStream = new wxPipeOutputStream(hpipeStdin[1]);
+        wxOutputStream *outStream = new wxPipeOutputStream(hpipeStdinWrite);
 
         handler->SetPipeStreams(inStream, outStream, errStream);
     }
