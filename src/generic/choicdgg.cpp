@@ -21,63 +21,27 @@
 #endif
 
 #ifndef WX_PRECOMP
-  #include <stdio.h>
-  #include "wx/utils.h"
-  #include "wx/dialog.h"
-  #include "wx/button.h"
-  #include "wx/listbox.h"
-  #include "wx/stattext.h"
-  #include "wx/intl.h"
+    #include <stdio.h>
+    #include "wx/utils.h"
+    #include "wx/dialog.h"
+    #include "wx/button.h"
+    #include "wx/listbox.h"
+    #include "wx/stattext.h"
+    #include "wx/intl.h"
 #endif
 
 #if wxUSE_STATLINE
-  #include "wx/statline.h" 
+    #include "wx/statline.h" 
 #endif
 
 #include "wx/generic/choicdgg.h"
 
-/* Split message, using constraints to position controls */
-static wxSize wxSplitMessage2( const wxString &message, wxWindow *parent )
-{
-    int y = 10;
-    int w = 50;
-    wxString line( _T("") );
-    for (size_t pos = 0; pos < message.Len(); pos++)
-    {
-        if (message[pos] == _T('\n'))
-        {
-            if (!line.IsEmpty())
-            {
-                wxStaticText *s1 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-                wxSize size1( s1->GetSize() );
-                if (size1.x > w) w = size1.x;
-                line = _T("");
-            }
-            y += 18;
-        }
-        else
-        {
-            line += message[pos];
-        }
-    }
-    
-    if (!line.IsEmpty())
-    {
-        wxStaticText *s2 = new wxStaticText( parent, -1, line, wxPoint(15,y) );
-        wxSize size2( s2->GetSize() );
-        if (size2.x > w) w = size2.x;
-    }
-        
-    y += 18;
-    
-    return wxSize(w+30,y);
-}
-
+#define wxID_LISTBOX 3000
 
 wxString wxGetSingleChoice( const wxString& message, const wxString& caption, int n, 
                             const wxString *choices, wxWindow *parent,
-                int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
-                int WXUNUSED(width), int WXUNUSED(height) )
+                            int WXUNUSED(x), int WXUNUSED(y), bool WXUNUSED(centre), 
+                            int WXUNUSED(width), int WXUNUSED(height) )
 {
     wxSingleChoiceDialog dialog(parent, message, caption, n, choices);
     if ( dialog.ShowModal() == wxID_OK )
@@ -89,8 +53,8 @@ wxString wxGetSingleChoice( const wxString& message, const wxString& caption, in
 // Overloaded for backward compatibility
 wxString wxGetSingleChoice( const wxString& message, const wxString& caption, int n, 
                             char *choices[], wxWindow *parent,
-                int x, int y, bool centre, 
-                int width, int height )
+                            int x, int y, bool centre, 
+                            int width, int height )
 {
     wxString *strings = new wxString[n];
     int i;
@@ -200,22 +164,44 @@ END_EVENT_TABLE()
 IMPLEMENT_CLASS(wxSingleChoiceDialog, wxDialog)
 #endif
 
-wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        int n, const wxString *choices, wxChar **clientData, long style, const wxPoint& pos):
-      wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL|wxTAB_TRAVERSAL)
+#define wxCHOICEDLG_DIALOG_STYLE (wxDEFAULT_DIALOG_STYLE | \
+                                  wxDIALOG_MODAL |         \
+                                  wxTAB_TRAVERSAL)
+
+wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
+                                           const wxString& message,
+                                           const wxString& caption,
+                                           int n, 
+                                           const wxString *choices,
+                                           char **clientData,
+                                           long style,
+                                           const wxPoint& pos)
+                    : wxDialog(parent, -1, caption, pos, wxDefaultSize,
+                               wxCHOICEDLG_DIALOG_STYLE)
 {
-        Create(parent, message, caption, n, choices, clientData, style);
+    Create(parent, message, caption, n, choices, clientData, style);
 }
 
-wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        const wxStringList& choices, wxChar **clientData, long style, const wxPoint& pos):
-      wxDialog(parent, -1, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxDIALOG_MODAL)
+wxSingleChoiceDialog::wxSingleChoiceDialog(wxWindow *parent,
+                                           const wxString& message,
+                                           const wxString& caption,
+                                           const wxStringList& choices, 
+                                           wxChar **clientData, 
+                                           long style, 
+                                           const wxPoint& pos)
+                    : wxDialog(parent, -1, caption, pos, wxDefaultSize,
+                               wxCHOICEDLG_DIALOG_STYLE)
 {
-        Create(parent, message, caption, choices, clientData, style);
+    Create(parent, message, caption, choices, clientData, style);
 }
 
-bool wxSingleChoiceDialog::Create(wxWindow *parent, const wxString& message, const wxString& caption,
-        const wxStringList& choices, wxChar **clientData, long style, const wxPoint& pos)
+bool wxSingleChoiceDialog::Create(wxWindow *parent,
+                                  const wxString& message,
+                                  const wxString& caption,
+                                  const wxStringList& choices,
+                                  char **clientData,
+                                  long style,
+                                  const wxPoint& pos)
 {
     wxString *strings = new wxString[choices.Number()];
     int i;
@@ -228,83 +214,205 @@ bool wxSingleChoiceDialog::Create(wxWindow *parent, const wxString& message, con
     return ans;
 }
 
-bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& message, 
-                                   const wxString& WXUNUSED(caption), int n, 
-                                   const wxString *choices, wxChar **clientData, long style,
+bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent),
+                                   const wxString& message, 
+                                   const wxString& WXUNUSED(caption),
+                                   int n, 
+                                   const wxString *choices,
+                                   char **clientData,
+                                   long style,
                                    const wxPoint& WXUNUSED(pos) )
 {
     m_dialogStyle = style;
     m_selection = 0;
-    m_stringSelection = _T("");
     m_clientData = NULL;
 
-    wxBeginBusyCursor();
+    // dialog layout constants
+    static const int LAYOUT_X_MARGIN = 5;
+    static const int LAYOUT_Y_MARGIN = 5;
+    static const int MARGIN_BETWEEN_BUTTONS = 3*LAYOUT_X_MARGIN;
+
+    // calc the message size
+    // ---------------------
+
+    // TODO this should be factored out to a common function (also used in
+    //      msgdlgg.cpp)
+    wxClientDC dc(this);
+    dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+
+    wxArrayString lines;
+    wxString curLine;
+    long height, width, heightTextMax = 0, widthTextMax = 0;
+    for ( const char *pc = message; ; pc++ ) {
+        if ( *pc == '\n' || *pc == '\0' ) {
+            dc.GetTextExtent(curLine, &width, &height);
+            if ( width > widthTextMax )
+                widthTextMax = width;
+            if ( height > heightTextMax )
+                heightTextMax = height;
+
+            lines.Add(curLine);
+
+            if ( *pc == '\n' ) {
+               curLine.Empty();
+            }
+            else {
+               // the end of string
+               break;
+            }
+        }
+        else {
+            curLine += *pc;
+        }
+    }
+
+    size_t nLineCount = lines.Count();
+    long hTotalMsg = heightTextMax*nLineCount;
+
+    // calc the button size
+    // --------------------
+
+    bool hasCancel = FALSE;
+
+    // always create the OK button - the code below supposes we do have buttons
+    // and besides the user should have some way to close this dialog
+    wxASSERT_MSG( style & wxOK, _T("this dialog should have OK button") );
+
+    wxString labelOk(_("OK"));
+    long wButton = 0;
+    dc.GetTextExtent(labelOk, &width, NULL);
+    if ( width > wButton )
+        wButton = width;
+
+    wxString labelCancel;
+    if ( style & wxCANCEL )
+    {
+        labelCancel = _("Cancel");
+        dc.GetTextExtent(labelCancel, &width, NULL);
+        if ( width > wButton )
+            wButton = width;
+
+        hasCancel = TRUE;
+    }
+
+    if ( wButton < 75 )
+        wButton = 75;
+    else
+        wButton += 10;
+
+    long hButton = wButton*23/75;
+    long wTotalButtons = wButton;
+    if ( hasCancel )
+    {
+        wTotalButtons *= 2;                         // second button
+        wTotalButtons += MARGIN_BETWEEN_BUTTONS;    // margin between the 2
+    }
+
+    // listbox and stat line
+    // ---------------------
+
+    // make the listbox at least as tall as the message - otherwise it looks
+    // ugly (the lower limit of 300 for the width is arbitrary OTOH)
+    //
+    // NB: we write "n + 2" because the horiz. scrollbar also takes some place
+    long hListbox = wxMax((n + 2) * heightTextMax, hTotalMsg),
+         wListbox = wxMax(300, wxMax(wTotalButtons, widthTextMax));
+
+#if wxUSE_STATLINE
+    // arbitrary...
+    long hStatLine = 5;
+#endif
+
+    // now the complete dialog size
+    // ----------------------------
+
+    long hDialog = 2*LAYOUT_Y_MARGIN +  // top margin
+                   hTotalMsg +          // message
+                   2*LAYOUT_Y_MARGIN +  // margin between text and listbox
+                   hListbox +           // listbox
+#if wxUSE_STATLINE
+                   LAYOUT_Y_MARGIN +    // margin
+                   hStatLine +          // separator line
+#endif
+                   2*LAYOUT_Y_MARGIN +  // margin between listbox and buttons
+                   hButton +            // button(s)
+                   LAYOUT_Y_MARGIN;     // bottom margin
+
+    long wDialog = wxMax(wTotalButtons, widthTextMax) +
+                   4*LAYOUT_X_MARGIN;   // 2 from each side
+
+    // create the controls
+    // -------------------
+
+    // message
+    wxStaticText *text;
+    int y = 2*LAYOUT_Y_MARGIN;
+    for ( size_t nLine = 0; nLine < nLineCount; nLine++ )
+    {
+        text = new wxStaticText(this, -1, lines[nLine],
+                                wxPoint(2*LAYOUT_X_MARGIN, y),
+                                wxSize(widthTextMax, heightTextMax));
+        y += heightTextMax;
+    }
+
+    y += 2*LAYOUT_X_MARGIN;
+
+    // listbox
+    m_listbox = new wxListBox( this, wxID_LISTBOX,
+                               wxPoint(2*LAYOUT_X_MARGIN, y),
+                               wxSize(wListbox, hListbox), 
+                               n, choices,
+                               wxLB_HSCROLL);
+    y += hListbox;
+
+    if ( clientData )
+    {
+        for (int i = 0; i < n; i++)
+            m_listbox->SetClientData(i, clientData[i]);
+    }
+
+    // separator line
+#if wxUSE_STATLINE
+    (void) new wxStaticLine( this, -1,
+                             wxPoint(0, y + LAYOUT_Y_MARGIN),
+                             wxSize(wDialog, hStatLine) );
+
+    y += LAYOUT_Y_MARGIN + hStatLine;
+#endif
     
-    wxSize message_size( wxSplitMessage2( message, this ) );
+    // buttons
+
+    y += 2*LAYOUT_X_MARGIN;
+
+    // NB: create [Ok] first to get the right tab order
 
     wxButton *ok = (wxButton *) NULL;
     wxButton *cancel = (wxButton *) NULL;
-    wxList m_buttons;
     
-    int y = message_size.y + 15;
-    
-    int listbox_height = wxMin( 160, n*20 + 40);
-    
-    wxListBox *listBox = new wxListBox( this, wxID_LISTBOX, wxPoint(10, y), wxSize(340, listbox_height), 
-                                        n, choices, wxLB_ALWAYS_SB );
-    listBox->SetSelection( m_selection );
-    if (clientData)
-    {
-        for (int i = 0; i < n; i++)
-            listBox->SetClientData(i, clientData[i]);
-    }
-    
-    y += listbox_height + 35;
+    long x = wDialog / 2;
+    if ( hasCancel )
+        x -= MARGIN_BETWEEN_BUTTONS / 2 + wButton;
+    else
+        x -= wButton / 2;
 
-    if (style & wxOK) 
+    ok = new wxButton( this, wxID_OK, labelOk,
+                       wxPoint(x, y),
+                       wxSize(wButton, hButton) );
+
+    if ( hasCancel )
     {
-        ok = new wxButton( this, wxID_OK, _("OK"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( ok );
+        x += MARGIN_BETWEEN_BUTTONS + wButton;
+        cancel = new wxButton( this, wxID_CANCEL, labelCancel,
+                               wxPoint(x, y),
+                               wxSize(wButton, hButton) );
     }
 
-    if (style & wxCANCEL) 
-    {
-        cancel = new wxButton( this, wxID_CANCEL, _("Cancel"), wxPoint(-1,y), wxSize(80,-1) );
-	m_buttons.Append( cancel );
-    }
+    ok->SetDefault();
+    ok->SetFocus();
 
-    if (ok)
-    {
-        ok->SetDefault();
-        ok->SetFocus();
-    }
-
-    int w = m_buttons.GetCount() * 100;
-    if (message_size.x > w) w = message_size.x;
-    int space = w / (m_buttons.GetCount()*2);
-    
-    listBox->SetSize( 20, -1, w-10, listbox_height );
-    
-    int m = 0;
-    wxNode *node = m_buttons.First();
-    while (node)
-    {
-        wxWindow *win = (wxWindow*)node->Data();
-        int x = (m*2+1)*space - 40 + 15;
-        win->Move( x, -1 );
-        node = node->Next();
-        m++;
-    }
-    
-#if wxUSE_STATLINE
-    (void) new wxStaticLine( this, -1, wxPoint(0,y-20), wxSize(w+30, 5) );
-#endif
-    
-    SetSize( w+30, y+40 );
+    SetClientSize( wDialog, hDialog );
 
     Centre( wxBOTH );
-
-    wxEndBusyCursor();
 
     return TRUE;
 }
@@ -312,36 +420,24 @@ bool wxSingleChoiceDialog::Create( wxWindow *WXUNUSED(parent), const wxString& m
 // Set the selection
 void wxSingleChoiceDialog::SetSelection(int sel)
 {
-    wxListBox *listBox = (wxListBox *)FindWindow(wxID_LISTBOX);
-    if (listBox)
-    {
-        listBox->SetSelection(sel);
-    }
+    m_listbox->SetSelection(sel);
     m_selection = sel;
 }
 
 void wxSingleChoiceDialog::OnOK(wxCommandEvent& WXUNUSED(event))
 {
-    wxListBox *listBox = (wxListBox *)FindWindow(wxID_LISTBOX);
-    if ( listBox )
-    {
-        m_selection = listBox->GetSelection();
-        m_stringSelection = listBox->GetStringSelection();
-        m_clientData = (wxChar*)listBox->GetClientData(m_selection);
-    }
+    m_selection = m_listbox->GetSelection();
+    m_stringSelection = m_listbox->GetStringSelection();
+    m_clientData = m_listbox->GetClientData(m_selection);
 
     EndModal(wxID_OK);
 }
 
 void wxSingleChoiceDialog::OnListBoxDClick(wxCommandEvent& WXUNUSED(event))
 {
-    wxListBox *listBox = (wxListBox *)FindWindow(wxID_LISTBOX);
-    if ( listBox )
-    {
-        m_selection = listBox->GetSelection();
-        m_stringSelection = listBox->GetStringSelection();
-        m_clientData = (wxChar*)listBox->GetClientData(m_selection);
-    }
+    m_selection = m_listbox->GetSelection();
+    m_stringSelection = m_listbox->GetStringSelection();
+    m_clientData = m_listbox->GetClientData(m_selection);
 
     EndModal(wxID_OK);
 }

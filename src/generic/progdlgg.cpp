@@ -68,6 +68,11 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
    wxLayoutConstraints *c;
 
+   wxClientDC dc(this);
+   dc.SetFont(wxSystemSettings::GetSystemFont(wxSYS_DEFAULT_GUI_FONT));
+   long widthText;
+   dc.GetTextExtent(message, &widthText, NULL);
+
    m_msg = new wxStaticText(this, -1, message);
    c = new wxLayoutConstraints;
    c->left.SameAs(this, wxLeft, 10);
@@ -113,9 +118,12 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
    // calc the height of the dialog
    Fit();
-   // and set the width from it
+   // and set the width from it - unfortunately, Fit() makes the dialog way too
+   // wide under Windows, so try to find a reasonable value for the width, not
+   // too big and not too small
    wxSize size = GetClientSize();
-   if(size.x < 2*size.y)
+   size.x = 2*widthText;
+   if ( size.x < 2*size.y )
       SetClientSize(2*size.y, size.y);
 
    Show(TRUE);

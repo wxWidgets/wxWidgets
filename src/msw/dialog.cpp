@@ -123,7 +123,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     // resizeable or not (but a resizeable dialog always has caption -
     // otherwise it would look too strange)
     const wxChar *dlg;
-    if ( style & wxTHICK_FRAME )
+    if ( style & wxRESIZE_BORDER )
         dlg = _T("wxResizeableDialog");
     else if ( style & wxCAPTION )
         dlg = _T("wxCaptionDialog");

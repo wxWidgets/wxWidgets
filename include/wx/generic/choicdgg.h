@@ -13,7 +13,7 @@
 #define __CHOICEDLGH_G__
 
 #ifdef __GNUG__
-#pragma interface "choicdgg.h"
+    #pragma interface "choicdgg.h"
 #endif
 
 #include "wx/setup.h"
@@ -22,38 +22,70 @@
 #define wxCHOICE_HEIGHT 150
 #define wxCHOICE_WIDTH 200
 
-#define wxID_LISTBOX 3000
+#define wxCHOICEDLG_STYLE (wxOK | wxCANCEL | wxCENTRE)
 
 class WXDLLEXPORT wxSingleChoiceDialog: public wxDialog
 {
-DECLARE_DYNAMIC_CLASS(wxSingleChoiceDialog)
+    DECLARE_DYNAMIC_CLASS(wxSingleChoiceDialog)
+
 public:
-    wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        int n, const wxString *choices, wxChar **clientData = (wxChar **) NULL, long style = wxOK|wxCANCEL|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
+    wxSingleChoiceDialog(wxWindow *parent,
+                         const wxString& message,
+                         const wxString& caption,
+                         int n,
+                         const wxString *choices,
+                         char **clientData = (char **)NULL,
+                         long style = wxCHOICEDLG_STYLE,
+                         const wxPoint& pos = wxDefaultPosition);
 
-    wxSingleChoiceDialog(wxWindow *parent, const wxString& message, const wxString& caption,
-        const wxStringList& choices, wxChar **clientData = (wxChar **) NULL, long style = wxOK|wxCANCEL|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
+    wxSingleChoiceDialog(wxWindow *parent,
+                         const wxString& message,
+                         const wxString& caption,
+                         const wxStringList& choices,
+                         char **clientData = (char **)NULL,
+                         long style = wxCHOICEDLG_STYLE,
+                         const wxPoint& pos = wxDefaultPosition);
 
-    bool Create(wxWindow *parent, const wxString& message, const wxString& caption,
-        int n, const wxString *choices, wxChar **clientData = (wxChar **) NULL, long style = wxOK|wxCANCEL|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
-    bool Create(wxWindow *parent, const wxString& message, const wxString& caption,
-        const wxStringList& choices, wxChar **clientData = (wxChar **) NULL, long style = wxOK|wxCANCEL|wxCENTRE, const wxPoint& pos = wxDefaultPosition);
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& caption,
+                int n,
+                const wxString *choices,
+                char **clientData = (char **)NULL,
+                long style = wxCHOICEDLG_STYLE,
+                const wxPoint& pos = wxDefaultPosition);
+
+    bool Create(wxWindow *parent,
+                const wxString& message,
+                const wxString& caption,
+                const wxStringList& choices,
+                char **clientData = (char **)NULL,
+                long style = wxCHOICEDLG_STYLE,
+                const wxPoint& pos = wxDefaultPosition);
 
     void SetSelection(int sel) ;
-    inline int GetSelection(void) const { return m_selection; }
-    inline wxString GetStringSelection(void) const { return m_stringSelection; }
-    inline wxChar *GetSelectionClientData(void) const { return m_clientData; }
+    int GetSelection() const { return m_selection; }
+    wxString GetStringSelection() const { return m_stringSelection; }
 
+    // get client data associated with selection
+    void *GetClientData() const { return m_clientData; }
+
+    // obsolete function (NB: no need to make it return wxChar, it's untyped)
+    char *GetSelectionClientData() const { return (char *)m_clientData; }
+
+    // implementation from now on
     void OnOK(wxCommandEvent& event);
     void OnListBoxDClick(wxCommandEvent& event);
-
-DECLARE_EVENT_TABLE()
 
 protected:
     long        m_dialogStyle;
     int         m_selection;
     wxString    m_stringSelection;
-    wxChar*     m_clientData;
+    void       *m_clientData;
+    wxListBox  *m_listbox;
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 WXDLLEXPORT wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
@@ -79,14 +111,15 @@ WXDLLEXPORT int wxGetSingleChoiceIndex(const wxString& message, const wxString& 
                            int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
 // Return client data instead
+// FIXME: this is horrible, using "char *" instead of "void *" belongs to the 70s!
 WXDLLEXPORT wxChar* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
-                            int n, const wxString *choices, wxChar **client_data,
+                            int n, const wxString *choices, char **client_data,
                             wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1,
                             bool centre = TRUE,
                             int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
 
 WXDLLEXPORT wxChar* wxGetSingleChoiceData(const wxString& message, const wxString& caption,
-                            int n, wxChar *choices[], wxChar **client_data,
+                            int n, wxChar *choices[], char **client_data,
                             wxWindow *parent = (wxWindow *) NULL, int x = -1, int y = -1,
                             bool centre = TRUE,
                             int width = wxCHOICE_WIDTH, int height = wxCHOICE_HEIGHT);
