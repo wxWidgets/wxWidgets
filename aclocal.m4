@@ -1,4 +1,4 @@
-dnl aclocal.m4 generated automatically by aclocal 1.4-p5
+dnl aclocal.m4 generated automatically by aclocal 1.4-p6
 
 dnl Copyright (C) 1994, 1995-8, 1999, 2001 Free Software Foundation, Inc.
 dnl This file is free software; the Free Software Foundation
@@ -409,15 +409,17 @@ AC_DEFUN([WX_VERSIONED_SYMBOLS],
 [
   found_versioning=no
 
-  dnl Check for known non-gcc cases:
-  case "${host}" in
-    *-*-solaris2* )
-      if test "x$GCC" != "xyes" ; then
-          LDFLAGS_VERSIONING="-M $1"
-          found_versioning=yes
-      fi
-    ;;
-  esac
+  dnl FIXME - doesn't work, Solaris linker doesn't accept wildcards
+  dnl         in the script.
+  dnl dnl Check for known non-gcc cases:
+  dnl case "${host}" in
+  dnl   *-*-solaris2* )
+  dnl     if test "x$GCC" != "xyes" ; then
+  dnl         LDFLAGS_VERSIONING="-M $1"
+  dnl         found_versioning=yes
+  dnl     fi
+  dnl   ;;
+  dnl esac
   
   dnl Generic check for GCC or GCC-like behaviour (Intel C++, GCC):
   if test $found_versioning = no ; then
