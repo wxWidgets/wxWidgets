@@ -16,7 +16,7 @@
 # 12/20/2003 - Jeff Grimmett (grimmtooth@softhome.net)
 #
 # o wxMultiSash -> MultiSash
-# o wxMultiSplit -> MultiSplit wxMultiViewLeaf
+# o wxMultiSplit -> MultiSplit 
 # o wxMultiViewLeaf -> MultiViewLeaf
 #
 
