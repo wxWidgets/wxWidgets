@@ -40,8 +40,8 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
     {
         wxCHECK_MSG(m_toolbar, NULL, wxT("Incorrect syntax of XRC resource: tool not within a toolbar!"));
         m_toolbar->AddTool(GetID(),
-                           GetBitmap(wxT("bitmap")),
-                           GetBitmap(wxT("bitmap2")),
+                           GetBitmap(wxT("bitmap"), wxART_TOOLBAR),
+                           GetBitmap(wxT("bitmap2"), wxART_TOOLBAR),
                            GetBool(wxT("toggle")),
                            GetPosition().x,
                            GetPosition().y,

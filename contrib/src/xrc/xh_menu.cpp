@@ -87,7 +87,7 @@ wxObject *wxMenuXmlHandler::DoCreateResource()
                                                
 #if wxCHECK_VERSION(2,3,0) || defined(__WXMSW__)
                 if (HasParam(wxT("bitmap")))
-                    mitem->SetBitmap(GetBitmap(wxT("bitmap")));
+                    mitem->SetBitmap(GetBitmap(wxT("bitmap"), wxART_MENU));
 #endif
             p_menu->Append(mitem);
             mitem->Enable(GetBool(wxT("enabled"), TRUE));
