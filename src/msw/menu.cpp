@@ -697,6 +697,9 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
+    if (m_hMenu != 0 )
+    return m_hMenu;
+
     wxCHECK_MSG( !m_hMenu, TRUE, _T("menubar already created") );
 
     m_hMenu = (WXHMENU)::CreateMenu();
@@ -924,6 +927,75 @@ bool wxMenuBar::OnAppend(wxMenu *a_menu, const wxChar *title)
 // ---------------------------------------------------------------------------
 // wxMenuBar construction
 // ---------------------------------------------------------------------------
+int wxMenuBar::FindMenu(const wxString& title)
+{
+    wxString menuTitle = wxStripMenuCodes(title);
+    for ( int i = 0; i < m_menuCount; i++ )
+    {
+        wxString title = wxStripMenuCodes(m_titles[i]);
+        if ( menuTitle == title )
+            return i; 
+    }
+
+    return wxNOT_FOUND;
+
+}
+
+
+void wxMenuBar::ReplaceMenu(int pos, wxMenu * new_menu, const wxString& title)
+{
+    if (m_menuBarFrame) return;
+
+    if ( pos >= 0 && pos < m_menuCount )
+    {
+       wxMenu *old_menu = m_menus[pos];
+       m_menus[pos] = new_menu; 
+       delete old_menu;
+    }
+
+}
+
+
+void wxMenuBar::Insert(int pos, wxMenu * menu, const wxString& title)
+{
+    if (m_menuBarFrame) return;
+    if ( pos < 0 && pos >= m_menuCount ) return;
+
+    m_menuCount ++;
+    wxMenu **new_menus = new wxMenu *[m_menuCount];
+    wxString *new_titles = new wxString[m_menuCount];
+    int i;
+
+    for (i = 0; i < pos; i++)
+    {
+        new_menus[i] = m_menus[i];
+        m_menus[i] = NULL;
+        new_titles[i] = m_titles[i];
+        m_titles[i] = _T("");
+    }
+
+    new_menus[pos] = (wxMenu *)menu;
+    new_titles[i] = title; 
+
+    for (i = pos+1; i < m_menuCount; i++)
+    {
+        new_menus[i] = m_menus[i-1];
+        m_menus[i-1] = NULL;
+        new_titles[i] = m_titles[i-1];
+        m_titles[i-1] = _T("");
+    }
+    if (m_menus)
+    {
+        delete[]m_menus;
+        delete[]m_titles;
+    }
+    m_menus = new_menus;
+    m_titles = new_titles;
+
+    menu->SetParent(this);
+
+}
+
 
 void wxMenuBar::Append (wxMenu * menu, const wxString& title)
 {
@@ -1018,6 +1090,14 @@ void wxMenuBar::Attach(wxFrame *frame)
     }
 #endif // wxUSE_ACCEL
 }
+
+void wxMenuBar::Detach()
+{
+//    ::DestroyMenu((HMENU)m_hMenu);
+    m_hMenu = NULL;
+    m_menuBarFrame = NULL;
+}
+
 
 // ---------------------------------------------------------------------------
 // wxMenuBar searching for menu items
