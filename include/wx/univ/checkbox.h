@@ -32,6 +32,11 @@
 // wxCheckBox
 // ----------------------------------------------------------------------------
 
+// X11 headers may define this
+#ifdef Status
+#undef Status
+#endif
+
 class WXDLLEXPORT wxCheckBox : public wxCheckBoxBase
 {
 public:

@@ -217,7 +217,7 @@
     #endif /* __WXMOTIF__ */
 #endif
 
-#if defined(__WXMOTIF__)
+#if defined(__WXMOTIF__) || defined(__WXX11__)
     #define __X__
 #endif
 

@@ -41,7 +41,7 @@ public:
         Create(parent, id, pos, size, style, name);
     }
     
-    virtual ~wxWindow();
+    virtual ~wxWindowX11();
     
     bool Create(wxWindow *parent,
         wxWindowID id,
@@ -194,7 +194,7 @@ protected:
     void CanvasSetClientSize(int width, int size);
     void CanvasSetSize(int x, int y, int width, int height, int sizeFlags = wxSIZE_AUTO);
     
-    void SetMainWindow(WXWindow w) { m_mainWindow = w; }
+    void SetMainWindow(WXWindow w) { m_mainWidget = w; }
     
     bool CanAddEventHandler() const { return m_canAddEventHandler; }
     void SetCanAddEventHandler(bool flag) { m_canAddEventHandler = flag; }

@@ -1090,7 +1090,7 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl we suppose that expr is available (maybe there is a better way to do
     dnl this? what about using ALL_TOOLKITS? TODO)
     NUM_TOOLKITS=`expr ${wxUSE_GTK:-0} + ${wxUSE_MOTIF:-0} + ${wxUSE_MAC:-0}  \
-                  + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0}+ ${wxUSE_X11:-0}`
+                  + ${wxUSE_WINE:-0} + ${wxUSE_MSW:-0} + ${wxUSE_MGL:-0} + ${wxUSE_MICROWIN:-0} + ${wxUSE_X11:-0}`
 
     dnl Allow wxUSE_PM only for OS/2 with EMX.
     dnl Path separator; ':' for unix.
