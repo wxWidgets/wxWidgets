@@ -118,6 +118,7 @@ void PropEditCtrlColor::OnDetails()
         clr = wxColour((tmp & 0xFF0000) >> 16, 
                        (tmp & 0x00FF00) >> 8, 
                        (tmp & 0x0000FF));
+
     clr = wxGetColourFromUser(NULL, clr);
     if (clr.Ok())
     {

@@ -23,7 +23,7 @@ DATAFILES = df/break.df df/control.df df/menu_item.df df/notebookpage.df \
             df/wxSlider.df df/wxSpinButton.df df/wxSpinCtrl.df \
             df/wxStaticBitmap.df df/wxStaticBox.df df/wxStaticBoxSizer.df \
             df/wxStaticLine.df df/wxStaticText.df df/wxTextCtrl.df \
-            df/wxToolBar.df df/wxTreeCtrl.df 
+            df/wxToolBar.df df/wxTreeCtrl.df df/wxFrame.df
             
 APPEXTRALIBS=$(top_builddir)/lib/lib@WX_LIBRARY_BASENAME@_xrc-@WX_RELEASE@.@WX_TARGET_LIBRARY_TYPE@
 APPEXTRADEFS=-I$(top_srcdir)/contrib/include

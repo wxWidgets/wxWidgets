@@ -92,7 +92,7 @@ void wxXmlRcEditDocument::Upgrade()
         UpgradeNode(node);
     }
     node->DeleteProperty(wxT("version"));
-    node->AddProperty(wxT("version"), wxT(WX_XMLRES_CURRENT_VERSION_STRING));
+    node->AddProperty(wxT("version"), WX_XMLRES_CURRENT_VERSION_STRING);
 }
 
 
@@ -141,6 +141,7 @@ enum
     ID_COPY,
 
     ID_NEWDIALOG,
+	ID_NEWFRAME,
     ID_NEWPANEL,
     ID_NEWMENU,
     ID_NEWMENUBAR,
@@ -341,7 +342,12 @@ void EditorFrame::NewFile()
     m_FileName = "";
     m_Resource = new wxXmlRcEditDocument;
     m_Resource->SetRoot(new wxXmlNode(wxXML_ELEMENT_NODE, _("resource")));
+	
+	m_Resource->SetFileEncoding("utf-8");
     
+	m_Resource->GetRoot()->AddProperty(_T("version"),
+                                       WX_XMLRES_CURRENT_VERSION_STRING);
+
     m_Modified = FALSE;
     RefreshTree();
     RefreshTitle();
@@ -366,6 +372,7 @@ void EditorFrame::RefreshTree()
     wxXmlNode *sel = m_SelectedNode;
     
     m_TreeCtrl->DeleteAllItems(); 
+
     wxTreeItemId root = m_TreeCtrl->AddRoot("Resource: " + wxFileNameFromPath(m_FileName), 5, 5);
 
     wxXmlNode *n = m_Resource->GetRoot()->GetChildren();  
@@ -613,6 +620,7 @@ void EditorFrame::OnNewNode(wxCommandEvent& event)
         switch (event.GetId())
         {
             case ID_NEWDIALOG : name = _T("wxDialog"); break;
+			case ID_NEWFRAME : name = _T("wxFrame"); break;
             case ID_NEWPANEL : name = _T("wxPanel"); break;
             case ID_NEWMENU : name = _T("wxMenu"); break;
             case ID_NEWMENUBAR : name = _T("wxMenuBar"); break;
@@ -637,6 +645,7 @@ void EditorFrame::OnRightClickTree(wxPoint pos)
     if (m_SelectedNode == NULL || m_SelectedNode == m_Resource->GetRoot())
     {
         popup->Append(ID_NEWDIALOG, _("New wxDialog"));
+		popup->Append(ID_NEWFRAME, _("New wxFrame"));
         popup->Append(ID_NEWPANEL, _("New wxPanel"));
         popup->Append(ID_NEWMENU, _("New wxMenu"));
         popup->Append(ID_NEWMENUBAR, _("New wxMenuBar"));

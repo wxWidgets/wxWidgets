@@ -43,6 +43,7 @@ class PreviewFrame : public wxFrame
         void PreviewMenu();
         void PreviewToolbar();
         void PreviewPanel();
+		void PreviewWXFrame();
     
     private:
         static PreviewFrame *ms_Instance;

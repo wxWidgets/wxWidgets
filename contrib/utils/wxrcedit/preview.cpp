@@ -157,6 +157,9 @@ void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
        if (XmlGetClass(doc.GetRoot()->GetChildren()) == _T("wxDialog")) 
            XmlSetClass(doc.GetRoot()->GetChildren(), _T("wxPanel"));   
 
+       if (XmlGetClass(doc.GetRoot()->GetChildren()) == _T("wxFrame")) 
+           XmlSetClass(doc.GetRoot()->GetChildren(), _T("wxPanel"));  
+
        doc.Save(m_TmpFile);
        // wxXmlResource will detect change automatically
    }
@@ -186,7 +189,9 @@ void PreviewFrame::Preview(wxXmlNode *node, wxXmlDocument *orig_doc)
        PreviewToolbar();
    else if (XmlGetClass(node) == _T("wxPanel") || XmlGetClass(node) == _T("wxDialog"))
        PreviewPanel();
-   
+   else if (XmlGetClass(node) == _T("wxFrame"))
+	   PreviewWXFrame();	
+
    wxSetWorkingDirectory(oldcwd);
    wxLog::SetActiveTarget(oldlog);
    
@@ -223,7 +228,7 @@ void PreviewFrame::PreviewToolbar()
 void PreviewFrame::PreviewPanel()
 {
     wxPanel *panel = m_RC->LoadPanel(m_ScrollWin, m_Node->GetPropVal(_T("name"), _T("-1")));
-    
+
     if (panel == NULL)
         wxLogError(_("Cannot preview the panel -- XML resource corrupted."));
     else
@@ -233,6 +238,37 @@ void PreviewFrame::PreviewPanel()
     }
 }
 
+void PreviewFrame::PreviewWXFrame()
+{
+	//for this to work the frame MUST have a child panel!
+
+	wxXmlNode*	child = m_Node;
+	wxString name;
+
+	while( child != NULL)
+	{
+		name = child->GetPropVal(_T("name"), _T("-1"));
+		
+		if(name != _T("-1"))
+		{
+			wxXmlNode* parent = child->GetParent();
+			if(parent->GetPropVal(_T("class"),_T("-1")) == _T("wxPanel"))
+				break;
+		}
+		child = child->GetNext();
+	}
+
+    wxPanel *panel = m_RC->LoadPanel(m_ScrollWin, name);
+    
+    if (panel == NULL)
+        wxLogError(_("Cannot preview the panel -- XML resource corrupted."));
+    else
+    {
+        m_ScrollWin->SetScrollbars(1, 1, panel->GetSize().x, panel->GetSize().y,
+                                   0, 0, TRUE);
+    }
+
+}
 
 BEGIN_EVENT_TABLE(PreviewFrame, wxFrame)
     EVT_ENTER_WINDOW(PreviewFrame::OnMouseEnter)
