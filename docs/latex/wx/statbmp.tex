@@ -1,6 +1,10 @@
 \section{\class{wxStaticBitmap}}\label{wxstaticbitmap}
 
-A static bitmap control displays a bitmap.
+A static bitmap control displays a bitmap. It is meant for display of the
+small icons in the dialog boxes and is not meant to be a general purpose image
+display control. In particular, under Windows 9x the size of bitmap is limited
+to $64*64$ pixels and thus you should use your own control if you want to
+display larger images portably.
 
 \wxheading{Derived from}
 
@@ -29,6 +33,7 @@ The bitmap to be displayed should have a small number of colours, such as 16, to
 palette problems.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
+
 
 \membersection{wxStaticBitmap::wxStaticBitmap}\label{wxstaticbitmapconstr}
 
@@ -62,6 +67,7 @@ Constructor, creating and showing a text control.
 
 \helpref{wxStaticBitmap::Create}{wxstaticbitmapcreate}
 
+
 \membersection{wxStaticBitmap::Create}\label{wxstaticbitmapcreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id},\rtfsp
@@ -69,6 +75,7 @@ Constructor, creating and showing a text control.
 \param{long}{ style = 0}, \param{const wxString\& }{name = ``staticBitmap"}}
 
 Creation function, for two-step construction. For details see \helpref{wxStaticBitmap::wxStaticBitmap}{wxstaticbitmapconstr}.
+
 
 \membersection{wxStaticBitmap::GetBitmap}\label{wxstaticbitmapgetbitmap}
 
@@ -79,6 +86,7 @@ Returns a reference to the label bitmap.
 \wxheading{See also}
 
 \helpref{wxStaticBitmap::SetBitmap}{wxstaticbitmapsetbitmap}
+
 
 \membersection{wxStaticBitmap::SetBitmap}\label{wxstaticbitmapsetbitmap}
 
