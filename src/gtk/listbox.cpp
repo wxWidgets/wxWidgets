@@ -96,17 +96,16 @@ gtk_listbox_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event,
             event.m_commandInt = aSelections[0] ;
             event.m_clientData = listbox->GetClientData( event.m_commandInt );
             wxString str(listbox->GetString(event.m_commandInt));
-            if (str != "") event.m_commandString = copystring((char *)(const char *)str);
+            if (!str.IsEmpty()) event.m_commandString = str;
         }
         else
         {
             event.m_commandInt = -1 ;
-            event.m_commandString = copystring("") ;
+            event.m_commandString.Empty();
         }
 
         listbox->GetEventHandler()->ProcessEvent( event );
 
-        if (event.m_commandString) delete[] event.m_commandString ;
     }
 
     return FALSE;
@@ -157,18 +156,17 @@ static void gtk_listitem_select_callback( GtkWidget *WXUNUSED(widget), wxListBox
         event.m_commandInt = aSelections[0] ;
         event.m_clientData = listbox->GetClientData( event.m_commandInt );
         wxString str(listbox->GetString(event.m_commandInt));
-        if (str != "") event.m_commandString = copystring((char *)(const char *)str);
+        if (!str.IsEmpty()) event.m_commandString = str;
     }
     else
     {
         event.m_commandInt = -1 ;
-        event.m_commandString = copystring("") ;
+        event.m_commandString.Empty();
     }
 
     event.SetEventObject( listbox );
 
     listbox->GetEventHandler()->ProcessEvent( event );
-    if (event.m_commandString) delete[] event.m_commandString ;
 }
 
 //-----------------------------------------------------------------------------

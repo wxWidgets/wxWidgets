@@ -97,6 +97,7 @@ wxColour wxSystemSettings::GetSystemColour( int index )
       }
       return *g_systemBtnFaceColour;
     }
+    case wxSYS_COLOUR_GRAYTEXT:
     case wxSYS_COLOUR_BTNSHADOW:
     {
       GtkStyle *style = gtk_widget_get_default_style();
@@ -109,7 +110,6 @@ wxColour wxSystemSettings::GetSystemColour( int index )
       }
       return *g_systemBtnShadowColour;
     }
-    case wxSYS_COLOUR_GRAYTEXT:
     case wxSYS_COLOUR_BTNHIGHLIGHT:
     {
       GtkStyle *style = gtk_widget_get_default_style();
