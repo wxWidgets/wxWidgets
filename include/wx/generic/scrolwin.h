@@ -26,7 +26,7 @@
 WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
 // default scrolled window style
-#define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL | wxTAB_TRAVERSAL)
+#define wxScrolledWindowStyle (wxHSCROLL | wxVSCROLL)
 
 // ----------------------------------------------------------------------------
 // wxScrolledWindow
