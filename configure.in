@@ -245,7 +245,8 @@ SEARCH_INCLUDE="\
                               \
     /usr/Motif1.2/include     \
     /usr/dt/include           \
-			      \
+    /usr/include/Xm           \
+			                  \
     /usr/X11R6/include        \
     /usr/X11R5/include        \
     /usr/X11R4/include        \
