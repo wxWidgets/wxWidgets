@@ -1475,6 +1475,7 @@ void wxGrid::ProcessRowLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
+                    dc.SetPen(*wxRED_PEN);  // FIXME should be bg col dependent
                     dc.SetLogicalFunction(wxXOR);
                     if ( m_dragLastPos >= 0 )
                     {
@@ -1656,6 +1657,7 @@ void wxGrid::ProcessColLabelMouseEvent( wxMouseEvent& event )
 
                     wxClientDC dc( m_gridWin );
                     PrepareDC( dc );
+                    dc.SetPen(*wxRED_PEN);  // FIXME should be bg col dependent
                     dc.SetLogicalFunction(wxXOR);
                     if ( m_dragLastPos >= 0 )
                     {
