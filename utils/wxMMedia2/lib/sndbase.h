@@ -14,12 +14,25 @@
 
 #include <wx/defs.h>
 
+// ------------------------------------------------------------------------
+// DEFINITIONS
+
+// ---------------------
+// Sound streaming mode:
+//   - wxSOUND_INPUT: simple recording mode
+//   - wxSOUND_OUTPUT: simple playing mode
+//   - wxSOUND_DUPLEX: full duplex record/play at the same time
+// ---------------------
 enum {
   wxSOUND_INPUT = 1,
   wxSOUND_OUTPUT = 2,
   wxSOUND_DUPLEX = wxSOUND_INPUT | wxSOUND_OUTPUT,
 };
 
+// ---------------------
+// wxSoundFormatType: it specifies the format family of the sound data
+// which will be passed to the stream.
+// ---------------------
 typedef enum {
   wxSOUND_NOFORMAT,
   wxSOUND_PCM,
@@ -27,12 +40,33 @@ typedef enum {
   wxSOUND_G72X
 } wxSoundFormatType;
 
+// ---------------------
+// wxSoundError:
+//   - wxSOUND_NOERR: No error occured
+//   - wxSOUND_IOERR: an input/output error occured, it may concern either
+//                    a driver or a file
+//   - wxSOUND_INVFRMT: the sound format passed to the function is invalid.
+//                      Generally, it means that you passed out of range values
+//                      to the codec stream or you don't pass the right sound
+//                      format object to the right sound codec stream.
+//   - wxSOUND_INVDEV: Invalid device. Generally, it means that the sound stream
+//                     didn't manage to open the device driver due to an invalid//                     parameter or to the fact that sound is not supported on
+//                     this computer.
+//   - wxSOUND_NOEXACT: No exact matching sound codec has been found for
+//                      this sound format. It means that the sound driver didn't
+//                      manage to setup the sound card with the specified
+//                      values.
+//   - wxSOUND_NOCODEC: No matching codec has been found. Generally, it 
+//                      may happen when you call
+//                      wxSoundRouterStream::SetSoundFormat().
+//   - wxSOUND_MEMERR:  Not enough memory.
+// ---------------------
 typedef enum {
   wxSOUND_NOERR,
   wxSOUND_IOERR,
   wxSOUND_INVFRMT,
   wxSOUND_INVDEV,
-  wxSOUND_NOTEXACT,
+  wxSOUND_NOEXACT,
   wxSOUND_INVSTRM,
   wxSOUND_NOCODEC,
   wxSOUND_MEMERR
@@ -40,6 +74,13 @@ typedef enum {
 
 class WXDLLEXPORT wxSoundStream;
 
+// ---------------------
+// wxSoundCallback(stream, evt, cdata): C callback for sound event.
+//    - stream: current wxSoundStream
+//    - evt: the sound event which has occured, it may be wxSOUND_INPUT,
+//            wxSOUND_OUTPUT or wxSOUND_DUPLEX
+//    - cdata: User callback data
+// ---------------------
 typedef void (*wxSoundCallback)(wxSoundStream *stream, int evt,
                                 char *cdata);
 
@@ -52,7 +93,9 @@ class WXDLLEXPORT wxSoundFormatBase {
   wxSoundFormatBase();
   virtual ~wxSoundFormatBase();
 
+  // It returns a "standard" format type.
   virtual wxSoundFormatType GetType() const { return wxSOUND_NOFORMAT; }
+  // It clones the current format.
   virtual wxSoundFormatBase *Clone() const;
 
   virtual wxUint32 GetTimeFromBytes(wxUint32 bytes) const = 0;
@@ -86,7 +129,8 @@ class wxSoundStream {
   // Register a callback for a specified async event.
   void Register(int evt, wxSoundCallback cbk, char *cdata);
 
-  // Starts the async notifier.
+  // Starts the async notifier. After this call, the stream begins either 
+  // recording or playing or the two at the same time.
   virtual bool StartProduction(int evt) = 0;
   // Stops the async notifier.
   virtual bool StopProduction() = 0;

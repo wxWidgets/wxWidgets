@@ -113,7 +113,7 @@ bool wxSoundStreamESD::SetSoundFormat(const wxSoundFormatBase& format)
 
   m_snderror = wxSOUND_NOERR;
   if (*pcm_format != format) {
-    m_snderror = wxSOUND_NOTEXACT;
+    m_snderror = wxSOUND_NOEXACT;
     return FALSE;
   }
   return TRUE;

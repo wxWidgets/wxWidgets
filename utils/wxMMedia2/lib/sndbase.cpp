@@ -43,6 +43,7 @@ wxSoundStream::wxSoundStream()
 {
   int i;
 
+  // Reset all variables to their neutral value.
   m_sndformat = NULL;
   m_handler = NULL;
   m_snderror = wxSOUND_NOERR;
@@ -57,17 +58,33 @@ wxSoundStream::~wxSoundStream()
     delete m_sndformat;
 }
 
-// SetSoundFormat returns TRUE when the format can be handled.
+// --------------------------------------------------------------------------
+// SetSoundFormat(const wxSoundFormatBase& format) is one of the most
+// important function of the wxSoundStream class. It prepares the stream to
+// receive or send the data in a strict format. Normally, the sound stream
+// should be ready to accept any format it is asked to manage but in certain
+// cases, it really cannot: in that case it returns FALSE. To have more
+// details in the functionnalities of SetSoundFormat see
+// wxSoundRouterStream::SetSoundFormat()
+// --------------------------------------------------------------------------
 bool wxSoundStream::SetSoundFormat(const wxSoundFormatBase& format)
 {
+  // delete the previous prepared format
   if (m_sndformat)
     delete m_sndformat;
 
+  // create a new one by cloning the format passed in parameter
   m_sndformat = format.Clone();
   return TRUE;
 }
 
-// Register a callback for a specified async event.
+
+// --------------------------------------------------------------------------
+// Register(int evt, ...) registers the callback for a specified async event.
+// Warning ! Only one callback by event is supported. It means that if you
+// call twice this function the previous registered callback is absolutely
+// ignored.
+// --------------------------------------------------------------------------
 void wxSoundStream::Register(int evt, wxSoundCallback cbk, char *cdata)
 {
   int c;
@@ -86,6 +103,13 @@ void wxSoundStream::Register(int evt, wxSoundCallback cbk, char *cdata)
   m_cdata[c] = cdata;
 }
 
+// --------------------------------------------------------------------------
+// OnSoundEvent(int evt) is called either when the driver is ready to receive
+// a new block to play or when the driver has a new recorded buffer. You
+// must be careful here and try not to spend a lot of time: this is a
+// real-time call. In the case, an "event handler" was specified previously, 
+// it called him before everything.
+// --------------------------------------------------------------------------
 void wxSoundStream::OnSoundEvent(int evt)
 {
   int c;

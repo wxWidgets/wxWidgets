@@ -59,6 +59,11 @@ wxSoundStreamWin::wxSoundStreamWin()
 
   m_production_started = FALSE;
   m_internal = new wxSoundInternal;
+  if (!m_internal) {
+    m_snderror = wxSOUND_MEMERR;
+    m_internal = NULL;
+    return;
+  }
   m_snderror = wxSOUND_NOERR;
 
   // Setup defaults
@@ -78,11 +83,13 @@ wxSoundStreamWin::wxSoundStreamWin()
 
 wxSoundStreamWin::~wxSoundStreamWin()
 {
-  if (m_production_started)
-    StopProduction();
-  DestroySndWindow();
+  if (m_internal) {
+    if (m_production_started)
+      StopProduction();
+    DestroySndWindow();
 
-  delete m_internal;
+    delete m_internal;
+  }
 }
 
 LRESULT APIENTRY _EXPORT _wxSoundHandlerWndProc(HWND hWnd, UINT message,
@@ -651,6 +658,9 @@ bool wxSoundStreamWin::SetSoundFormat(wxSoundFormatBase& base)
 // -------------------------------------------------------------------------
 bool wxSoundStreamWin::StartProduction(int evt)
 {
+  if (!m_internal)
+    return FALSE;
+
   if ((m_internal->m_output_enabled && (evt & wxSOUND_OUTPUT)) ||
       (m_internal->m_input_enabled && (evt & wxSOUND_INPUT)))
     CloseDevice();
@@ -679,6 +689,9 @@ bool wxSoundStreamWin::StartProduction(int evt)
 // -------------------------------------------------------------------------
 bool wxSoundStreamWin::StopProduction()
 {
+  if (!m_production_started)
+    return FALSE;
+
   m_production_started = FALSE;
   CloseDevice();
   return TRUE;

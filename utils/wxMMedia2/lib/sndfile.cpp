@@ -20,8 +20,10 @@
 
 // --------------------------------------------------------------------------
 // Sound codec router
+// A very important class: it ensures that everybody is satisfied.
+// It is supposed to create as many codec as it is necessary to transform
+// a signal in a specific format in an another.
 // --------------------------------------------------------------------------
-
 wxSoundRouterStream::wxSoundRouterStream(wxSoundStream& sndio)
   : wxSoundStreamCodec(sndio)
 {
@@ -34,6 +36,10 @@ wxSoundRouterStream::~wxSoundRouterStream()
     delete m_router;
 }
 
+// --------------------------------------------------------------------------
+// Read(void *buffer, wxUint32 len): It reads data synchronously. See sndbase.h
+// for possible errors and behaviours ...
+// --------------------------------------------------------------------------
 wxSoundStream& wxSoundRouterStream::Read(void *buffer, wxUint32 len)
 {
   if (m_router) {
@@ -48,6 +54,9 @@ wxSoundStream& wxSoundRouterStream::Read(void *buffer, wxUint32 len)
   return *this;
 }
 
+// --------------------------------------------------------------------------
+// Write(const void *buffer, wxUint32 len): It writes data synchronously
+// --------------------------------------------------------------------------
 wxSoundStream& wxSoundRouterStream::Write(const void *buffer, wxUint32 len)
 {
   if (m_router) {
@@ -62,6 +71,13 @@ wxSoundStream& wxSoundRouterStream::Write(const void *buffer, wxUint32 len)
   return *this;
 }
 
+// --------------------------------------------------------------------------
+// SetSoundFormat(const wxSoundFormatBase& format) first tries to setup the
+// sound driver using the specified format. If this fails, it uses personnal
+// codec converters: for the moment there is a PCM converter (PCM to PCM:
+// with optional resampling, ...), an ULAW converter (ULAW to PCM), a G72X
+// converter (G72X to PCM). If nothing works, it returns FALSE.
+// --------------------------------------------------------------------------
 bool wxSoundRouterStream::SetSoundFormat(const wxSoundFormatBase& format)
 {
   if (m_router)
@@ -92,6 +108,11 @@ bool wxSoundRouterStream::SetSoundFormat(const wxSoundFormatBase& format)
   return TRUE;
 }
 
+// --------------------------------------------------------------------------
+// GetBestSize() returns the specific best buffer size a sound driver
+// can manage. It means that it will be easier for it to manage the buffer
+// and so it will be faster and in some case more accurate for real-time event.
+// --------------------------------------------------------------------------
 wxUint32 wxSoundRouterStream::GetBestSize() const
 {
   if (m_router)
@@ -100,6 +121,9 @@ wxUint32 wxSoundRouterStream::GetBestSize() const
     return m_sndio->GetBestSize();
 }
 
+// --------------------------------------------------------------------------
+// StartProduction(int evt). See sndbase.h 
+// --------------------------------------------------------------------------
 bool wxSoundRouterStream::StartProduction(int evt)
 {
   if (!m_router) {
@@ -119,6 +143,9 @@ bool wxSoundRouterStream::StartProduction(int evt)
   return FALSE;
 } 
 
+// --------------------------------------------------------------------------
+// StopProduction(). See sndbase.h
+// --------------------------------------------------------------------------
 bool wxSoundRouterStream::StopProduction()
 {
   if (!m_router) {
@@ -209,8 +236,13 @@ bool wxSoundFileStream::Stop()
       m_state = wxSOUND_FILE_STOPPED;
       return FALSE;
     }
+
+  if (m_input)
+    m_input->SeekI(0, wxFromStart);
+
+  if (m_output)
+    m_output->SeekO(0, wxFromStart);
  
-  // TODO reset counter
   m_state = wxSOUND_FILE_STOPPED;
   return TRUE;
 }

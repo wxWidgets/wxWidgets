@@ -285,7 +285,7 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
     delete frmt;
   }
 
-  data << (fmt_data.GetSize() + 8 + m_sndformat->GetBytesFromTime(time));
+  data << (fmt_data.GetSize() + m_sndformat->GetBytesFromTime(time));
 
   {
     char *out_buf;
@@ -304,6 +304,15 @@ FAIL_WITH(s->Write(&signature, 4).LastWrite() != 4, wxSOUND_INVSTRM);
 
 bool wxSoundWave::FinishRecording()
 {
+  if (m_output->SeekO(0, wxFromStart) == wxInvalidOffset)
+    // We can't but there is no error.
+    return TRUE;
+
+  if (m_len == 0)
+    return TRUE;
+
+  
+
   // TODO: Update headers when we stop before the specified time (if possible)
   return TRUE;
 }

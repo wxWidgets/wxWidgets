@@ -131,7 +131,7 @@ bool wxSoundStreamOSS::SetSoundFormat(const wxSoundFormatBase& format)
 
   m_snderror = wxSOUND_NOERR;
   if (*pcm_format != format) {
-    m_snderror = wxSOUND_NOTEXACT;
+    m_snderror = wxSOUND_NOEXACT;
     return FALSE;
   }
   return TRUE;
@@ -235,6 +235,10 @@ bool wxSoundStreamOSS::StartProduction(int evt)
     StopProduction();
 
   old_frmt = m_sndformat->Clone();
+  if (!old_frmt) {
+    m_snderror = wxSOUND_MEMERR;
+    return FALSE;
+  }
 
   if (evt == wxSOUND_OUTPUT)
     m_fd = open(m_devname.mb_str(), O_WRONLY);
