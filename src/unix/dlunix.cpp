@@ -325,7 +325,7 @@ wxDynamicLibraryDetailsArray wxDynamicLibrary::ListLoaded()
 
 #ifdef __LINUX__
     // examine /proc/self/maps to find out what is loaded in our address space
-    wxFFile file("/proc/self/maps");
+    wxFFile file(_T("/proc/self/maps"));
     if ( file.IsOpened() )
     {
         // details of the module currently being parsed
