@@ -36,7 +36,6 @@
 #include "wx/dcscreen.h"
 #include "wx/button.h"
 #include "wx/menu.h"
-#include "wx/list.h"
 #include "wx/pen.h"
 #include "wx/brush.h"
 #include "wx/palette.h"
