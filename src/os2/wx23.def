@@ -9527,8 +9527,6 @@ EXPORTS
       Initialize__20wxHtmlHelpControllerFRC8wxString
       ;wxHtmlHelpController::SetFrameParameters(const wxString&,const wxSize&,const wxPoint&,unsigned long)
       SetFrameParameters__20wxHtmlHelpControllerFRC8wxStringRC6wxSizeRC7wxPointUl
-      ;wxHtmlHelpController::SetBookBasePath(const wxString&,int)
-      SetBookBasePath__20wxHtmlHelpControllerFRC8wxStringi
       ;wxConstructorForwxHtmlHelpController()
       wxConstructorForwxHtmlHelpController__Fv
       ;wxHtmlHelpController::~wxHtmlHelpController()

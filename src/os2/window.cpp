@@ -273,9 +273,10 @@ void wxWindow::Init()
     //
     // wxWnd
     //
-    m_hMenu         = 0L;
-    m_hWnd          = 0L;
-    m_hWndScrollBar = 0L;
+    m_hMenu             = 0L;
+    m_hWnd              = 0L;
+    m_hWndScrollBarHorz = 0L;
+    m_hWndScrollBarVert = 0L;
 
     //
     // Pass WM_GETDLGCODE to DefWindowProc()
@@ -710,51 +711,99 @@ void wxWindow::SetScrollbar(
     if (nOrient == wxHORIZONTAL )
     {
         ulStyle |= SBS_HORZ;
-        if (m_hWndScrollBar == 0L)
+        if (m_hWndScrollBarHorz == 0L)
         {
-            m_hWndScrollBar = ::WinCreateWindow( hWnd
-                                                ,WC_SCROLLBAR
-                                                ,(PSZ)NULL
-                                                ,ulStyle
-                                                ,vRect.xLeft
-                                                ,vRect.yBottom
-                                                ,vRect.xRight - vRect.xLeft
-                                                ,20
-                                                ,hWnd
-                                                ,HWND_TOP
-                                                ,-1
-                                                ,&vInfo
-                                                ,NULL
-                                               );
+            m_hWndScrollBarHorz = ::WinCreateWindow( hWnd
+                                                    ,WC_SCROLLBAR
+                                                    ,(PSZ)NULL
+                                                    ,ulStyle
+                                                    ,vRect.xLeft
+                                                    ,vRect.yBottom
+                                                    ,vRect.xRight - vRect.xLeft
+                                                    ,20
+                                                    ,hWnd
+                                                    ,HWND_TOP
+                                                    ,-1
+                                                    ,&vInfo
+                                                    ,NULL
+                                                   );
         }
         else
         {
-            ::WinSendMsg(m_hWndScrollBar, SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, (SHORT)nRange1));
+            RECTL                   vRect2;
+
+            //
+            // Only want to resize the scrollbar if it changes, otherwise
+            // we'd probably end up in a recursive loop until we crash the call stack
+            // because this method is called in a ScrolledWindow OnSize event and SWP_MOVE | SWP_SIZE
+            // generates those events.
+            //
+            ::WinQueryWindowRect(m_hWndScrollBarHorz, &vRect2);
+            if (!(vRect2.xLeft == vRect.xLeft     &&
+                  vRect2.xRight == vRect.xRight   &&
+                  vRect2.yBottom == vRect.yBottom &&
+                  vRect2.yTop == vRect.yTop
+                ) )
+            {
+                ::WinSetWindowPos( m_hWndScrollBarHorz
+                                  ,HWND_TOP
+                                  ,vRect.xLeft
+                                  ,vRect.yBottom
+                                  ,vRect.xRight - vRect.xLeft
+                                  ,20
+                                  ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
+                                 );
+            }
+            ::WinSendMsg(m_hWndScrollBarHorz, SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, (SHORT)nRange1));
         }
     }
     else
     {
         ulStyle |= SBS_VERT;
-        if (m_hWndScrollBar == 0L)
+        if (m_hWndScrollBarVert == 0L)
         {
-            m_hWndScrollBar = ::WinCreateWindow( hWnd
-                                                ,WC_SCROLLBAR
-                                                ,(PSZ)NULL
-                                                ,ulStyle
-                                                ,vRect.xRight - 20
-                                                ,vRect.yBottom
-                                                ,20
-                                                ,vRect.yTop - vRect.yBottom
-                                                ,hWnd
-                                                ,HWND_TOP
-                                                ,-1
-                                                ,&vInfo
-                                                ,NULL
-                                               );
+            m_hWndScrollBarVert = ::WinCreateWindow( hWnd
+                                                    ,WC_SCROLLBAR
+                                                    ,(PSZ)NULL
+                                                    ,ulStyle
+                                                    ,vRect.xRight - 20
+                                                    ,vRect.yBottom
+                                                    ,20
+                                                    ,vRect.yTop - vRect.yBottom
+                                                    ,hWnd
+                                                    ,HWND_TOP
+                                                    ,-1
+                                                    ,&vInfo
+                                                    ,NULL
+                                                   );
         }
         else
         {
-            ::WinSendMsg(m_hWndScrollBar, SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, (SHORT)nRange1));
+            RECTL                   vRect2;
+
+            //
+            // Only want to resize the scrollbar if it changes, otherwise
+            // we'd probably end up in a recursive loop until we crash the call stack
+            // because this method is called in a ScrolledWindow OnSize event and SWP_MOVE | SWP_SIZE
+            // generates those events.
+            //
+            ::WinQueryWindowRect(m_hWndScrollBarVert, &vRect2);
+            if (!(vRect2.xLeft == vRect.xLeft     &&
+                  vRect2.xRight == vRect.xRight   &&
+                  vRect2.yBottom == vRect.yBottom &&
+                  vRect2.yTop == vRect.yTop
+                ) )
+            {
+                ::WinSetWindowPos( m_hWndScrollBarVert
+                                  ,HWND_TOP
+                                  ,vRect.xRight - 20
+                                  ,vRect.yBottom
+                                  ,20
+                                  ,vRect.yTop - vRect.yBottom
+                                  ,SWP_ACTIVATE | SWP_MOVE | SWP_SIZE | SWP_SHOW
+                                 );
+            }
+            ::WinSendMsg(m_hWndScrollBarVert, SBM_SETSCROLLBAR, (MPARAM)nPos, MPFROM2SHORT(0, (SHORT)nRange1));
         }
         m_nYThumbSize = nThumbVisible;
     }
