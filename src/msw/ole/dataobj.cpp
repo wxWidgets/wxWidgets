@@ -1037,13 +1037,13 @@ size_t wxFileDataObject::GetDataSize() const
         return 0;
 
     // inital size of DROPFILES struct + null byte
-    size_t sz = sizeof(DROPFILES) + 1;
+    size_t sz = sizeof(DROPFILES) + (1 * sizeof(wxChar));
 
     size_t count = m_filenames.GetCount();
     for ( size_t i = 0; i < count; i++ )
     {
         // add filename length plus null byte
-        sz += m_filenames[i].Len() + 1;
+        sz += (m_filenames[i].Len() + 1) * sizeof(wxChar);
     }
 
     return sz;
