@@ -57,7 +57,7 @@ typedef unsigned short  VARTYPE;
 // Some conversion helpers
 static wxVariant _PyObj2Variant(PyObject* value);
 static bool  _PyObj2Variant(PyObject* value, wxVariant& wv);
-static PyObject* _Variant2PyObj(wxVariant& value, bool useNone=False);
+static PyObject* _Variant2PyObj(wxVariant& value, bool useNone=false);
 static wxString  _VARTYPEname(VARTYPE vt);
 
 // Check if an exception has been raised  (blocking threads)
@@ -460,7 +460,7 @@ public:
             // conversion errors for now
             wxVariant wv;
             MSWVariantToVariant(rv, wv);
-            rval = _Variant2PyObj(wv, True);
+            rval = _Variant2PyObj(wv, true);
             VariantClear(&rv);
 
             if (func.hasOut) {
@@ -477,7 +477,7 @@ public:
                     const wxParamX &px = func.params[i];
                     if (px.IsOut()) {
                         MSWVariantToVariant(va, wv);
-                        PyObject* obj = _Variant2PyObj(wv, True);
+                        PyObject* obj = _Variant2PyObj(wv, true);
                         PyList_Append(lst, obj);
                     }
                 }
@@ -642,7 +642,7 @@ public:
             Py_DECREF(pList);
             for (int i=0; i<self->ParamCount(); i+=1) {
                 PyObject* name = PyString_FromString((char*)(const char*)self->ParamName(i).mb_str());
-                PyObject* val = _Variant2PyObj((*self)[i], True);
+                PyObject* val = _Variant2PyObj((*self)[i], true);
                 PyObject_SetAttr(pyself, name, val);
                 PyList_Append(pList, name);
                 Py_DECREF(val);

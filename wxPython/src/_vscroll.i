@@ -87,7 +87,7 @@ public:
 
     // find the index of the line we need to show at the top of the window such
     // that the last (fully or partially) visible line is the given one
-    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = False)
+    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false)
     { return wxVScrolledWindow::FindFirstFromBottom(lineLast, fullyVisible); }
 
     // get the total height of the lines between lineMin (inclusive) and
@@ -399,7 +399,7 @@ public:
     // otherwise
     //
     // this function is only valid for the multiple selection listboxes
-    bool Select(size_t item, bool select = True);
+    bool Select(size_t item, bool select = true);
 
     // selects the items in the specified range whose end points may be given
     // in any order

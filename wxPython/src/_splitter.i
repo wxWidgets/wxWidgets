@@ -293,7 +293,7 @@ showing the top-level window.", "");
     
 
     DocDeclStr(
-        void , SetSashPosition(int position, bool redraw = True),
+        void , SetSashPosition(int position, bool redraw = true),
         "Sets the sash position, in pixels.  If redraw is Ttrue then the panes
 are resized and the sash and border are redrawn.", "");
     

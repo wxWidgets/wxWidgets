@@ -193,7 +193,7 @@ public:
                 bool blocked = wxPyBeginBlockThreads();
                 PyObject* tuple = PyTuple_New(3);
                 PyTuple_SetItem(tuple, 0, wxPyConstructObject(new wxIcon(loc),
-                                                              wxT("wxIcon"), True));
+                                                              wxT("wxIcon"), true));
                 PyTuple_SetItem(tuple, 1, wx2PyString(iconFile));
                 PyTuple_SetItem(tuple, 2, PyInt_FromLong(iconIndex));
                 wxPyEndBlockThreads(blocked);
@@ -266,7 +266,7 @@ public:
     // set an arbitrary command, ask confirmation if it already exists and
     // overwriteprompt is True
     bool SetCommand(const wxString& cmd, const wxString& verb,
-                    bool overwriteprompt = True);
+                    bool overwriteprompt = true);
 
     bool SetDefaultIcon(const wxString& cmd = wxPyEmptyString, int index = 0);
 
@@ -353,7 +353,7 @@ public:
     // settings from other, previously parsed, files by this one: normally,
     // the files read most recently would override the older files, but with
     // fallback == True this won't happen
-    bool ReadMailcap(const wxString& filename, bool fallback = False);
+    bool ReadMailcap(const wxString& filename, bool fallback = false);
 
     // read in additional file in mime.types format
     bool ReadMimeTypes(const wxString& filename);

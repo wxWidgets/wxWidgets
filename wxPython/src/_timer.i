@@ -80,7 +80,7 @@ public:
     //
     // it is now valid to call Start() multiple times: this just restarts the
     // timer if it is already running
-    virtual bool Start(int milliseconds = -1, bool oneShot = False);
+    virtual bool Start(int milliseconds = -1, bool oneShot = false);
 
     // stop the timer
     virtual void Stop();
@@ -138,10 +138,10 @@ class wxTimerRunner
 public:
     %nokwargs wxTimerRunner;
     wxTimerRunner(wxTimer& timer);
-    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = False);
+    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = false);
     ~wxTimerRunner();
 
-    void Start(int milli, bool oneShot = False);
+    void Start(int milli, bool oneShot = false);
 };
 
 

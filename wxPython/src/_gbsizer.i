@@ -42,7 +42,7 @@ bool wxGBPosition_helper(PyObject* source, wxGBPosition** obj)
 {
     if (source == Py_None) {
         **obj = wxGBPosition(-1,-1);
-        return True;
+        return true;
     }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxGBPosition"));
 }
@@ -51,7 +51,7 @@ bool wxGBSpan_helper(PyObject* source, wxGBSpan** obj)
 {
     if (source == Py_None) {
         **obj = wxGBSpan(-1,-1);
-        return True;
+        return true;
     }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxGBSpan"));
 }
@@ -80,8 +80,8 @@ public:
     void SetCol(int col);
 
 //     %extend {
-//         bool __eq__(const wxGBPosition* other) { return other ? (*self == *other) : False; }
-//         bool __ne__(const wxGBPosition* other) { return other ? (*self != *other) : True;  }
+//         bool __eq__(const wxGBPosition* other) { return other ? (*self == *other) : false; }
+//         bool __ne__(const wxGBPosition* other) { return other ? (*self != *other) : true;  }
 //     }
 
     bool operator==(const wxGBPosition& other);
@@ -113,7 +113,7 @@ public:
         elif index == 1: self.SetCol(val)
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    __safe_for_unpickling__ = True
+    __safe_for_unpickling__ = true
     def __reduce__(self):                return (wx.GBPosition, self.Get())
     }
 
@@ -149,8 +149,8 @@ cell in each direction.", "");
     void SetColspan(int colspan);
     
 //     %extend {
-//         bool __eq__(const wxGBSpan* other) { return other ? (*self == *other) : False; }
-//         bool __ne__(const wxGBSpan* other) { return other ? (*self != *other) : True;  }
+//         bool __eq__(const wxGBSpan* other) { return other ? (*self == *other) : false; }
+//         bool __ne__(const wxGBSpan* other) { return other ? (*self != *other) : true;  }
 //     }
     bool operator==(const wxGBSpan& other);
     bool operator!=(const wxGBSpan& other);
@@ -182,7 +182,7 @@ cell in each direction.", "");
         elif index == 1: self.SetColspan(val)
         else: raise IndexError
     def __nonzero__(self):               return self.Get() != (0,0)
-    __safe_for_unpickling__ = True
+    __safe_for_unpickling__ = true
     def __reduce__(self):                return (wx.GBSpan, self.Get())
     }
 
@@ -386,7 +386,7 @@ position, False if something was already there.
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
@@ -399,7 +399,7 @@ position, False if something was already there.
             else if (info.gotSize)
                 return self->Add(info.size.GetWidth(), info.size.GetHeight(),
                                  pos, span, flag, border, data);
-            return False;
+            return false;
         }
     }
     

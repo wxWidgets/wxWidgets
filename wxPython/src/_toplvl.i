@@ -85,13 +85,13 @@ public:
     // No constructor as it can not be used directly from Python
 
     // maximize = True => maximize, otherwise - restore
-    virtual void Maximize(bool maximize = True);
+    virtual void Maximize(bool maximize = true);
 
     // undo Maximize() or Iconize()
     virtual void Restore();
 
     // iconize = True => iconize, otherwise - restore
-    virtual void Iconize(bool iconize = True);
+    virtual void Iconize(bool iconize = true);
 
     // return True if the frame is maximized
     virtual bool IsMaximized() const;

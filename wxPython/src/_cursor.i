@@ -77,7 +77,7 @@ This constructor is not available on wxGTK, use ``wx.StockCursor``,
 ``wx.CursorFromImage``, or ``wx.CursorFromBits`` instead.", "");
         wxCursor(const wxString* cursorName, long type, int hotSpotX=0, int hotSpotY=0) {
 %#ifdef __WXGTK__
-            wxCHECK_MSG(False, NULL,
+            wxCHECK_MSG(false, NULL,
                         wxT("wx.Cursor constructor not implemented for wxGTK, use wx.StockCursor, wx.CursorFromImage, or wx.CursorFromBits instead."));
 %#else
             return new wxCursor(*cursorName, type, hotSpotX, hotSpotY);

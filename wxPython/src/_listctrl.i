@@ -544,7 +544,7 @@ public:
     wxSize GetItemSpacing() const;
 
 #ifndef __WXMSW__
-    void SetItemSpacing( int spacing, bool isSmall = False );
+    void SetItemSpacing( int spacing, bool isSmall = false );
 #endif
 
     // Gets the number of selected items in the list control
@@ -561,7 +561,7 @@ public:
     long GetTopItem() const ;
 
     // Add or remove a single window style
-    void SetSingleStyle(long style, bool add = True) ;
+    void SetSingleStyle(long style, bool add = true) ;
 
     // Set the whole window style
     void SetWindowStyleFlag(long style) ;
@@ -627,7 +627,7 @@ public:
 
     // Find an item whose label matches this string, starting from the item after 'start'
     // or the beginning if 'start' is -1.
-    long FindItem(long start, const wxString& str, bool partial = False);
+    long FindItem(long start, const wxString& str, bool partial = false);
 
     // Find an item whose data matches this data, starting from the item after 'start'
     // or the beginning if 'start' is -1.
@@ -754,7 +754,7 @@ details in the second return value (see wxLIST_HITTEST_... flags.)", "");
         // or zero if the two items are equivalent.
         bool SortItems(PyObject* func) {
             if (!PyCallable_Check(func))
-                return False;
+                return false;
             return self->SortItems((wxListCtrlCompare)wxPyListCtrl_SortItems, (long)func);
         }
     }
@@ -807,7 +807,7 @@ public:
                 const wxString& name = wxPyListCtrlNameStr);
 
     // [de]select an item
-    void Select(long n, bool on = True);
+    void Select(long n, bool on = true);
 
     // focus and show the given item
     void Focus(long index);

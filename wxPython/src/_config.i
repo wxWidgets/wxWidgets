@@ -92,7 +92,7 @@ reference to the previous global config object.", "");
     
 
     DocDeclStr(
-        static wxConfigBase *, Get(bool createOnDemand = True),
+        static wxConfigBase *, Get(bool createOnDemand = true),
         "Returns the current global config object, creating one if neccessary.", "");
     
 
@@ -192,12 +192,12 @@ GetNextGroup to fetch the next item.", "");
 
 
     DocDeclStr(
-        virtual size_t , GetNumberOfEntries(bool recursive = False) const,
+        virtual size_t , GetNumberOfEntries(bool recursive = false) const,
         "Get the number of entries in the current group, with or without its
 subgroups.", "");
     
     DocDeclStr(
-        virtual size_t , GetNumberOfGroups(bool recursive = False) const,
+        virtual size_t , GetNumberOfGroups(bool recursive = false) const,
         "Get the number of subgroups in the current group, with or without its
 subgroups.", "");
     
@@ -249,7 +249,7 @@ subgroups.", "");
         
         DocStr(ReadBool,
                "Returns the value of key if it exists, defaultVal otherwise.", "");
-        bool ReadBool(const wxString& key, bool defaultVal = False) {
+        bool ReadBool(const wxString& key, bool defaultVal = false) {
             bool rv;
             self->Read(key, &rv, defaultVal);
             return rv;
@@ -279,7 +279,7 @@ subgroups.", "");
 
 
     DocDeclStr(
-        virtual bool , Flush(bool currentOnly = False),
+        virtual bool , Flush(bool currentOnly = false),
         "permanently writes all changes", "");
     
 
@@ -300,7 +300,7 @@ name is already taken by an existing entry)", "");
     // it was the last key in it and the second parameter is True
     DocDeclStr(
         virtual bool , DeleteEntry(const wxString& key,
-                                   bool deleteGroupIfEmpty = True),
+                                   bool deleteGroupIfEmpty = true),
         "Deletes the specified entry and the group it belongs to if it was the
 last key in it and the second parameter is True", "");
     
@@ -318,7 +318,7 @@ primarly intended for use by deinstallation routine.", "");
 
 
     DocDeclStr(
-        void , SetExpandEnvVars(bool doIt = True),
+        void , SetExpandEnvVars(bool doIt = true),
         "We can automatically expand environment variables in the config
 entries this option is on by default, you can turn it on/off at any
 time)", "");
@@ -329,7 +329,7 @@ time)", "");
     
 
     DocDeclStr(
-        void , SetRecordDefaults(bool doIt = True),
+        void , SetRecordDefaults(bool doIt = true),
         "Set whether the config objec should record default values.", "");
     
     DocDeclStr(

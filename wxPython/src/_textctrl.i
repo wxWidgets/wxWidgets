@@ -305,7 +305,7 @@ the client area origin nor scrolling. ", "",
 
 #ifdef __WXMSW__
     // Caret handling (Windows only)
-    bool ShowNativeCaret(bool show = True);
+    bool ShowNativeCaret(bool show = true);
     bool HideNativeCaret();
 #endif
 

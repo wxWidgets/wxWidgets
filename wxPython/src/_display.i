@@ -61,8 +61,8 @@ means unspecified/known", "");
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
     %extend {
-        bool __eq__(const wxVideoMode* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxVideoMode* other) { return other ? (*self != *other) : True;  }
+        bool __eq__(const wxVideoMode* other) { return other ? (*self == *other) : false; }
+        bool __ne__(const wxVideoMode* other) { return other ? (*self != *other) : true;  }
     }
 
     

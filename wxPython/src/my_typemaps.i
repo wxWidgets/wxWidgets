@@ -47,10 +47,10 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 // wxString typemaps
 
 
-%typemap(in) wxString& (bool temp=False) {
+%typemap(in) wxString& (bool temp=false) {
     $1 = wxString_in_helper($input);
     if ($1 == NULL) SWIG_fail;
-    temp = True;
+    temp = true;
 }
 %typemap(freearg) wxString& {
     if (temp$argnum)
@@ -101,7 +101,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 //---------------------------------------------------------------------------
 // wxMemoryBuffer  (needed for wxSTC)
 
-%typemap(in) wxMemoryBuffer& (bool temp=False) {
+%typemap(in) wxMemoryBuffer& (bool temp=false) {
     if (!PyString_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "String buffer expected");
         SWIG_fail;
@@ -109,7 +109,7 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
     char* str = PyString_AS_STRING($input);
     int   len = PyString_GET_SIZE($input);
     $1 = new wxMemoryBuffer(len);
-    temp = True;
+    temp = true;
     memcpy($1->GetData(), str, len);
     $1->SetDataLen(len);
 }
@@ -191,13 +191,13 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 //---------------------------------------------------------------------------
 // Typemap for wxArrayString from Python sequence objects
 
-%typemap(in) wxArrayString& (bool temp=False) {
+%typemap(in) wxArrayString& (bool temp=false) {
     if (! PySequence_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "Sequence of strings expected.");
         SWIG_fail;
     }
     $1 = new wxArrayString;
-    temp = True;
+    temp = true;
     int i, len=PySequence_Length($input);
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($input, i);
@@ -220,13 +220,13 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 //---------------------------------------------------------------------------
 // Typemap for wxArrayInt from Python sequence objects
 
-%typemap(in) wxArrayInt& (bool temp=False) {
+%typemap(in) wxArrayInt& (bool temp=false) {
     if (! PySequence_Check($input)) {
         PyErr_SetString(PyExc_TypeError, "Sequence of integers expected.");
         SWIG_fail;
     }
     $1 = new wxArrayInt;
-    temp = True;
+    temp = true;
     int i, len=PySequence_Length($input);
     for (i=0; i<len; i++) {
         PyObject* item = PySequence_GetItem($input, i);

@@ -95,7 +95,7 @@ public:
     virtual void SetScrollbars(int pixelsPerUnitX, int pixelsPerUnitY,
                                int noUnitsX, int noUnitsY,
                                int xPos = 0, int yPos = 0,
-                               bool noRefresh = False );
+                               bool noRefresh = false );
 
     // scroll to the given (in logical coords) position
     virtual void Scroll(int x, int y);

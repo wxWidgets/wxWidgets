@@ -115,7 +115,7 @@ during each event loop iteration.", "");
 
 
     DocDeclStr(
-        virtual bool, Yield(bool onlyIfNeeded = False),
+        virtual bool, Yield(bool onlyIfNeeded = false),
         "Process all currently pending events right now, instead of waiting
 until return to the event loop.  It is an error to call ``Yield``
 recursively unless the value of ``onlyIfNeeded`` is True.
@@ -307,7 +307,7 @@ DocDeclStr(
 
 
 DocDeclStr(
-    bool, wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=False),
+    bool, wxSafeYield(wxWindow* win=NULL, bool onlyIfNeeded=false),
     "This function is similar to `wx.Yield`, except that it disables the
 user input to all program windows before calling `wx.Yield` and
 re-enables it again afterwards. If ``win`` is not None, this window

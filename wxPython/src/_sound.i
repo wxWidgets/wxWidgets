@@ -110,7 +110,7 @@ public:
         %#ifndef __WXMAC__
             unsigned char* buffer;
             int size;
-            bool rv = False;
+            bool rv = false;
 
             bool blocked = wxPyBeginBlockThreads();
             if (!PyArg_Parse(data, "t#", &buffer, &size))
@@ -124,7 +124,7 @@ public:
                  PyErr_SetString(PyExc_NotImplementedError,
                                  "Create from data is not available on this platform.");
                  wxPyEndBlockThreads(blocked);
-                 return False;
+                 return false;
         %#endif
         }
     }

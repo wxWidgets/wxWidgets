@@ -98,14 +98,14 @@ public:
     // adds a new page to the control
     virtual bool AddPage(wxWindow *page,
                          const wxString& text,
-                         bool select = False,
+                         bool select = false,
                          int imageId = -1);
 
     // the same as AddPage(), but adds the page at the specified position
     virtual bool InsertPage(size_t n,
                             wxWindow *page,
                             const wxString& text,
-                            bool select = False,
+                            bool select = false,
                             int imageId = -1)/* = 0*/;
 
     // set the currently selected page, return the index of the previously
@@ -116,7 +116,7 @@ public:
 
 
     // cycle thru the pages
-    void AdvanceSelection(bool forward = True);
+    void AdvanceSelection(bool forward = true);
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
@@ -345,9 +345,6 @@ public:
 
 //---------------------------------------------------------------------------
 
-%{
-#include <wx/choicebk.h>
-%}
 
 /*
  * wxChoicebook flags

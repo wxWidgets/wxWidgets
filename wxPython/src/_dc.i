@@ -246,8 +246,8 @@ current text background colour to draw the background (all bits set to
 0).
 
 :see: `SetTextForeground`, `SetTextBackground` and `wx.MemoryDC`");
-    void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = False);
-    %name(DrawBitmapPoint) void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = False);
+    void DrawBitmap(const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask = false);
+    %name(DrawBitmapPoint) void DrawBitmap(const wxBitmap &bmp, const wxPoint& pt, bool useMask = false);
 
 
     DocStr(
@@ -285,7 +285,7 @@ font. ``wx.SWISS_FONT`` is an example of a font which is.","
     DocDeclStr(
         bool , Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
                     wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                    int rop = wxCOPY, bool useMask = False,
+                    int rop = wxCOPY, bool useMask = false,
                     wxCoord xsrcMask = -1, wxCoord ysrcMask = -1),
         "Copy from a source DC to this DC.  Parameters specify the destination
 coordinates, size of area to copy, source DC, source coordinates,
@@ -312,7 +312,7 @@ position.", "
     DocDeclStrName(
         bool , Blit(const wxPoint& destPt, const wxSize& sz,
                     wxDC *source, const wxPoint& srcPt,
-                    int rop = wxCOPY, bool useMask = False,
+                    int rop = wxCOPY, bool useMask = false,
                     const wxPoint& srcPtMask = wxDefaultPosition),
         "Copy from a source DC to this DC.  Parameters specify the destination
 coordinates, size of area to copy, source DC, source coordinates,
@@ -1575,7 +1575,7 @@ public:
 //     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
 //                                     const wxString& device,
 //                                     const wxString& output,
-//                                     bool interactive = True,
+//                                     bool interactive = true,
 //                                     int orientation = wxPORTRAIT);
 };
 
@@ -1597,7 +1597,7 @@ public:
 //     %name(PrinterDC2) wxPrinterDC(const wxString& driver,
 //                                     const wxString& device,
 //                                     const wxString& output,
-//                                     bool interactive = True,
+//                                     bool interactive = true,
 //                                     int orientation = wxPORTRAIT);
 };
 #endif

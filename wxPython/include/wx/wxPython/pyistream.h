@@ -53,9 +53,9 @@ public:
     char Peek()           { if (m_wxis) return m_wxis->Peek(); else return -1; }
     char GetC()           { if (m_wxis) return m_wxis->GetC(); else return -1; }
     size_t LastRead()     { if (m_wxis) return m_wxis->LastRead(); else return 0; }
-    bool CanRead()        { if (m_wxis) return m_wxis->CanRead(); else return False; }
-    bool Eof()            { if (m_wxis) return m_wxis->Eof(); else return False; }
-    bool Ungetch(char c)  { if (m_wxis) return m_wxis->Ungetch(c); else return False; }
+    bool CanRead()        { if (m_wxis) return m_wxis->CanRead(); else return false; }
+    bool Eof()            { if (m_wxis) return m_wxis->Eof(); else return false; }
+    bool Ungetch(char c)  { if (m_wxis) return m_wxis->Ungetch(c); else return false; }
 
     unsigned long SeekI(unsigned long pos, wxSeekMode mode)
           { if (m_wxis) return m_wxis->SeekI(pos, mode); else return 0; }
@@ -72,7 +72,7 @@ public:
     virtual size_t GetSize() const;
 
     // factory function
-    static wxPyCBInputStream* create(PyObject *py, bool block=True);
+    static wxPyCBInputStream* create(PyObject *py, bool block=true);
 
 protected:
     // can only be created via the factory

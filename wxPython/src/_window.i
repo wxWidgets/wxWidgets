@@ -232,7 +232,7 @@ public:
 
 
     DocDeclStr(
-        bool , Close( bool force = False ),
+        bool , Close( bool force = false ),
         "This function simply generates a EVT_CLOSE event whose handler usually
 tries to close the window. It doesn't close the window itself,
 however.  If force is False (the default) then the window's close
@@ -696,7 +696,7 @@ sizer, interior children, or other means)", "");
     // ------------
 
     DocDeclStr(
-        virtual bool , Show( bool show = True ),
+        virtual bool , Show( bool show = true ),
         "Shows or hides the window. You may need to call Raise for a top level
 window if you want to bring it to top, although this is not needed if
 Show is called immediately after the frame creation.  Returns True if
@@ -709,7 +709,7 @@ because it already was in the requested state.", "");
     
 
     DocDeclStr(
-        virtual bool , Enable( bool enable = True ),
+        virtual bool , Enable( bool enable = true ),
         "Enable or disable the window for user input. Note that when a parent
 window is disabled, all of its children are disabled as well and they
 are reenabled again when the parent is.  Returns true if the window
@@ -772,7 +772,7 @@ SetWindowStyleFlag()", "");
 
     
     DocDeclStr(
-        virtual void , MakeModal(bool modal = True),
+        virtual void , MakeModal(bool modal = true),
         "Disables all other windows in the application so that the user can
 only interact with this window.  Passing False will reverse this
 effect.", "");
@@ -1015,7 +1015,7 @@ remove the event handler.", "");
 
     
     DocDeclStr(
-        wxEvtHandler *, PopEventHandler( bool deleteHandler = False ),
+        wxEvtHandler *, PopEventHandler( bool deleteHandler = false ),
         "Removes and returns the top-most event handler on the event handler
 stack.  If deleteHandler is True then the wx.EvtHandler object will be
 destroyed after it is popped.", "");
@@ -1110,7 +1110,7 @@ hotkey was registered successfully.", "");
         %#if wxUSE_HOTKEY
             return self->RegisterHotKey(hotkeyId, modifiers, keycode);
         %#else
-            return False;
+            return false;
         %#endif
         }
 
@@ -1121,7 +1121,7 @@ hotkey was registered successfully.", "");
         #if wxUSE_HOTKEY
             return self->UnregisterHotKey(hotkeyId);
         #else
-            return False;
+            return false;
         #endif
         }
     }
@@ -1200,7 +1200,7 @@ release the mouse as many times as you capture it.", "");
     // -------------------
 
     DocDeclStr(
-        virtual void , Refresh( bool eraseBackground = True,
+        virtual void , Refresh( bool eraseBackground = true,
                                 const wxRect *rect = NULL ),
         "Mark the specified rectangle (or the whole window) as \"dirty\" so it
 will be repainted.  Causes an EVT_PAINT event to be generated and sent
@@ -1610,7 +1610,7 @@ toplevel parent of the window.", "");
                                      int position,
                                      int thumbSize,
                                      int range,
-                                     bool refresh = True ),
+                                     bool refresh = true ),
         "Sets the scrollbar properties of a built-in scrollbar.",
         "
     :param orientation: Determines the scrollbar whose page size is to
@@ -1627,7 +1627,7 @@ toplevel parent of the window.", "");
 ");
     
     DocDeclStr(
-        virtual void , SetScrollPos( int orientation, int pos, bool refresh = True ),
+        virtual void , SetScrollPos( int orientation, int pos, bool refresh = true ),
         "Sets the position of one of the built-in scrollbars.", "");
     
     DocDeclStr(
@@ -1814,16 +1814,16 @@ handler when the window is resized.", "");
     
 
     DocDeclStr(
-        void , SetSizer(wxSizer *sizer, bool deleteOld = True ),
+        void , SetSizer(wxSizer *sizer, bool deleteOld = true ),
         "Sets the window to have the given layout sizer. The window will then
 own the object, and will take care of its deletion. If an existing
 layout sizer object is already owned by the window, it will be deleted
 if the deleteOld parameter is true. Note that this function will also
 call SetAutoLayout implicitly with a True parameter if the sizer is
-non-NoneL and False otherwise.", "");
+non-None, and False otherwise.", "");
     
     DocDeclStr(
-        void , SetSizerAndFit( wxSizer *sizer, bool deleteOld = True ),
+        void , SetSizerAndFit( wxSizer *sizer, bool deleteOld = true ),
         "The same as SetSizer, except it also sets the size hints for the
 window based on the sizer's minimum size.", "");
     

@@ -49,7 +49,7 @@ void wxBell();
 MustHaveApp(wxEndBusyCursor);
 void wxEndBusyCursor();
 
-long wxGetElapsedTime(bool resetTimer = True);
+long wxGetElapsedTime(bool resetTimer = true);
 
 MustHaveApp(wxGetMousePosition);
 DocDeclA(
@@ -161,7 +161,7 @@ wxString wxGetTextFromUser(const wxString& message,
                            const wxString& default_value = wxPyEmptyString,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
-                           bool centre = True);
+                           bool centre = true);
 
 MustHaveApp(wxGetPasswordFromUser);
 wxString wxGetPasswordFromUser(const wxString& message,
@@ -175,7 +175,7 @@ wxString wxGetPasswordFromUser(const wxString& message,
 //                         int LCOUNT, char** choices,
 //                         int nsel, int *selection,
 //                         wxWindow *parent = NULL, int x = -1, int y = -1,
-//                         bool centre = True, int width=150, int height=200);
+//                         bool centre = true, int width=150, int height=200);
 
 
 MustHaveApp(wxGetSingleChoice);
@@ -183,7 +183,7 @@ wxString wxGetSingleChoice(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
-                           bool centre = True,
+                           bool centre = true,
                            int width=150, int height=200);
 
 MustHaveApp(wxGetSingleChoiceIndex);
@@ -191,7 +191,7 @@ int wxGetSingleChoiceIndex(const wxString& message, const wxString& caption,
                            int choices, wxString* choices_array,
                            wxWindow *parent = NULL,
                            int x = -1, int y = -1,
-                           bool centre = True,
+                           bool centre = true,
                            int width=150, int height=200);
 
 
@@ -318,7 +318,7 @@ MustHaveApp(wxThread);
 #ifdef WXP_WITH_THREAD
         return wxThread::IsMain();
 #else
-        return True;
+        return true;
 #endif
     }
 %}

@@ -138,7 +138,7 @@ MustHaveApp(wxContextHelp);
 class wxContextHelp : public wxObject {
 public:
     DocCtorStr(
-        wxContextHelp(wxWindow* window = NULL, bool doNow = True),
+        wxContextHelp(wxWindow* window = NULL, bool doNow = true),
         "Constructs a context help object, calling BeginContextHelp if doNow is
 true (the default).
 

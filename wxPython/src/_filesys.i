@@ -127,7 +127,7 @@ public:
     wxFileSystem();
     ~wxFileSystem();
 
-    void ChangePathTo(const wxString& location, bool is_dir = False);
+    void ChangePathTo(const wxString& location, bool is_dir = false);
     wxString GetPath();
 
     %newobject OpenFile;

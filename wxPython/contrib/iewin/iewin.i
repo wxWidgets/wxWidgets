@@ -100,8 +100,8 @@ public:
     void SetCharset(wxString charset);
     void SetEditMode(bool seton);
     bool GetEditMode();
-    wxString GetStringSelection(bool asHTML = False);
-    wxString GetText(bool asHTML = False);
+    wxString GetStringSelection(bool asHTML = false);
+    wxString GetText(bool asHTML = false);
 
     bool GoBack();
     bool GoForward();

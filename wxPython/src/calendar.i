@@ -292,20 +292,20 @@ creation.", "");
     
 
     DocDeclStr(
-        void, EnableYearChange(bool enable = True),
+        void, EnableYearChange(bool enable = true),
         "This function should be used instead of changing CAL_NO_YEAR_CHANGE
 style bit directly. It allows or disallows the user to change the year
 interactively.", "");
     
     DocDeclStr(
-        void, EnableMonthChange(bool enable = True),
+        void, EnableMonthChange(bool enable = true),
         "This function should be used instead of changing CAL_NO_MONTH_CHANGE
 style bit. It allows or disallows the user to change the month
 interactively. Note that if the month can not be changed, the year can
 not be changed either.", "");
 
     DocDeclStr(
-        void, EnableHolidayDisplay(bool display = True),
+        void, EnableHolidayDisplay(bool display = true),
         "This function should be used instead of changing CAL_SHOW_HOLIDAYS
 style bit directly. It enables or disables the special highlighting of
 the holidays.", "");

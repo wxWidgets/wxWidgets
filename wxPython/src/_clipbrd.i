@@ -113,7 +113,7 @@ exit.  Returns False if the operation is unsuccesful for any reason.", "");
     
 
     DocDeclStr(
-        virtual void , UsePrimarySelection( bool primary = True ),
+        virtual void , UsePrimarySelection( bool primary = true ),
         "On platforms supporting it (the X11 based platforms), selects the
 so called PRIMARY SELECTION as the clipboard as opposed to the
 normal clipboard, if primary is True.", "");

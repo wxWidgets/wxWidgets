@@ -84,7 +84,7 @@ public:
     %name(ImageFromStream) wxImage(wxInputStream& stream, long type = wxBITMAP_TYPE_ANY, int index = -1);
     %name(ImageFromStreamMime) wxImage(wxInputStream& stream, const wxString& mimetype, int index = -1 );
     %extend {
-        %name(EmptyImage) wxImage(int width=0, int height=0, bool clear = True) {
+        %name(EmptyImage) wxImage(int width=0, int height=0, bool clear = true) {
             if (width > 0 && height > 0)
                 return new wxImage(width, height, clear);
             else
@@ -104,7 +104,7 @@ public:
                 return NULL;
             }
             memcpy(copy, data, width*height*3);
-            return new wxImage(width, height, copy, False);
+            return new wxImage(width, height, copy, false);
         }
     }
 
@@ -297,13 +297,13 @@ nothing.", "");
     unsigned char GetMaskRed();
     unsigned char GetMaskGreen();
     unsigned char GetMaskBlue();
-    void SetMask( bool mask = True );
+    void SetMask( bool mask = true );
     bool HasMask();
 
     wxImage Rotate(double angle, const wxPoint & centre_of_rotation,
-                   bool interpolating = True, wxPoint * offset_after_rotation = NULL) const ;
-    wxImage Rotate90( bool clockwise = True ) ;
-    wxImage Mirror( bool horizontally = True ) ;
+                   bool interpolating = true, wxPoint * offset_after_rotation = NULL) const ;
+    wxImage Rotate90( bool clockwise = true ) ;
+    wxImage Mirror( bool horizontally = true ) ;
 
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );

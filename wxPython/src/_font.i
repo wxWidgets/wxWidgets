@@ -316,7 +316,7 @@ bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
         { wxPyRaiseNotImplemented(); return NULL; }
     
     bool wxTestFontEncoding(const wxNativeEncodingInfo& info)
-        { wxPyRaiseNotImplemented(); return False; }
+        { wxPyRaiseNotImplemented(); return false; }
 %}
 #endif
 
@@ -356,7 +356,7 @@ public:
     // interactive parameter is ignored in the base class, we behave as if it
     // were always False
     virtual wxFontEncoding CharsetToEncoding(const wxString& charset,
-                                             bool interactive = True);
+                                             bool interactive = true);
 
 
     // get the number of font encodings we know about
@@ -398,7 +398,7 @@ public:
     %extend {
         PyObject* GetAltForEncoding(wxFontEncoding encoding,
                                     const wxString& facename = wxPyEmptyString,
-                                    bool interactive = True) {
+                                    bool interactive = true) {
             wxFontEncoding alt_enc;
             if (self->GetAltForEncoding(encoding, &alt_enc, facename, interactive))
                 return PyInt_FromLong(alt_enc);
@@ -439,7 +439,7 @@ public:
     %pythonPrepend wxFont   "if kwargs.has_key('faceName'): kwargs['face'] = kwargs['faceName'];del kwargs['faceName']"
 
     wxFont( int pointSize, int family, int style, int weight,
-            bool underline=False, const wxString& face = wxPyEmptyString,
+            bool underline=false, const wxString& face = wxPyEmptyString,
             wxFontEncoding encoding=wxFONTENCODING_DEFAULT);
     ~wxFont();
 
@@ -467,8 +467,8 @@ public:
 
     // comparison
     %extend {
-        bool __eq__(const wxFont* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxFont* other) { return other ? (*self != *other) : True;  }
+        bool __eq__(const wxFont* other) { return other ? (*self == *other) : false; }
+        bool __ne__(const wxFont* other) { return other ? (*self != *other) : true;  }
     }
 
     // accessors: get the font characteristics
@@ -505,7 +505,7 @@ public:
     wxString GetWeightString() const;
 
     // Unofficial API, don't use
-    virtual void SetNoAntiAliasing( bool no = True );
+    virtual void SetNoAntiAliasing( bool no = true );
     virtual bool GetNoAntiAliasing() const;
 
     // the default encoding is used for creating all fonts with default
@@ -549,7 +549,7 @@ public:
 
     bool EnumerateFacenames(
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all
-        bool fixedWidthOnly = False);
+        bool fixedWidthOnly = false);
 
     bool EnumerateEncodings(const wxString& facename = wxPyEmptyString);
 

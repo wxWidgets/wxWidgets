@@ -378,7 +378,7 @@ public:
     // (treat as if the event table entry had not been found): this must be done
     // to allow the event processing by the base classes (calling event.Skip()
     // is the analog of calling the base class verstion of a virtual function)
-    void Skip(bool skip = True);
+    void Skip(bool skip = true);
     bool GetSkipped() const;
 
     // Determine if this event should be propagating to the parent window.
@@ -877,7 +877,7 @@ public:
 class wxActivateEvent : public wxEvent
 {
 public:
-    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = True, int Id = 0);
+    wxActivateEvent(wxEventType type = wxEVT_NULL, bool active = true, int Id = 0);
     bool GetActive() const;
 };
 
@@ -922,7 +922,7 @@ public:
     void SetLoggingOff(bool logOff);
     bool GetLoggingOff() const;
 
-    void Veto(bool veto = True);
+    void Veto(bool veto = true);
     void SetCanVeto(bool canVeto);
     
     bool CanVeto() const;
@@ -936,7 +936,7 @@ public:
 class wxShowEvent : public wxEvent
 {
 public:
-    wxShowEvent(int winid = 0, bool show = False);
+    wxShowEvent(int winid = 0, bool show = false);
     
     void SetShow(bool show);
     bool GetShow() const;
@@ -950,7 +950,7 @@ public:
 class wxIconizeEvent: public wxEvent
 {
 public:
-    wxIconizeEvent(int id = 0, bool iconized = True);
+    wxIconizeEvent(int id = 0, bool iconized = true);
     bool Iconized();
 };
 
@@ -1220,7 +1220,7 @@ class wxIdleEvent : public wxEvent
 public:
     wxIdleEvent();
     
-    void RequestMore(bool needMore = True);
+    void RequestMore(bool needMore = true);
     bool MoreRequested() const;
 
     // Specify how wxWindows will send idle events: to

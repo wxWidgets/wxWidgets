@@ -66,7 +66,7 @@ public:
     void Move(const wxPoint& pt);
     %name(SetSizeWH) void SetSize(int width, int height);
     void SetSize(const wxSize& size);
-    void Show(int show = True);
+    void Show(int show = true);
     void Hide();
 
     %pythoncode { def __nonzero__(self): return self.IsOk() }
@@ -264,7 +264,7 @@ void wxDrawWindowOnDC(wxWindow* window, const wxDC& dc, int method)
             // WM_PRINT.  For most native widgets nothing is drawn to the dc
             // at all, with or without Themes.
             typedef BOOL (WINAPI *PrintWindow_t)(HWND, HDC, UINT);
-            static bool s_triedToLoad = False;
+            static bool s_triedToLoad = false;
             static PrintWindow_t pfnPrintWindow = NULL;
             if ( !s_triedToLoad )
             {

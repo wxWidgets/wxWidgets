@@ -94,7 +94,7 @@ bool wxPyConvertSwigPtr(PyObject* obj, void **ptr,
                         const wxChar* className) {
 
     swig_type_info* swigType = wxPyFindSwigType(className);
-    wxCHECK_MSG(swigType != NULL, False, wxT("Unknown type in wxPyConvertSwigPtr"));
+    wxCHECK_MSG(swigType != NULL, false, wxT("Unknown type in wxPyConvertSwigPtr"));
 
     return SWIG_Python_ConvertPtr(obj, ptr, swigType, SWIG_POINTER_EXCEPTION) != -1;
 }

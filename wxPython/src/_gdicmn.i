@@ -132,8 +132,8 @@ public:
 
 // None/NULL is now handled properly by the typemap, so these are not needed.
 //     %extend {
-//         bool __eq__(const wxSize* other) { return other ? (*self == *other) : False; }
-//         bool __ne__(const wxSize* other) { return other ? (*self != *other) : True;  }
+//         bool __eq__(const wxSize* other) { return other ? (*self == *other) : false; }
+//         bool __ne__(const wxSize* other) { return other ? (*self != *other) : true;  }
 //     }
 
     DocDeclStr(
@@ -594,7 +594,7 @@ DocAStr(wxIntersectRect,
         if (dest != wxRect(0,0,0,0)) {
             bool blocked = wxPyBeginBlockThreads();
             wxRect* newRect = new wxRect(dest);
-            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), True);
+            obj = wxPyConstructObject((void*)newRect, wxT("wxRect"), true);
             wxPyEndBlockThreads(blocked);
             return obj;
         }

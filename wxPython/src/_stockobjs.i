@@ -128,7 +128,7 @@ public:
 
     void AddFont(wxFont* font);
     wxFont * FindOrCreateFont(int point_size, int family, int style, int weight,
-                              bool underline = False, const wxString& facename = wxPyEmptyString,
+                              bool underline = false, const wxString& facename = wxPyEmptyString,
                               wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
     void RemoveFont(wxFont *font);
 

@@ -53,7 +53,7 @@ public:
     virtual void SetThumbPosition(int viewStart);
     virtual void SetScrollbar(int position, int thumbSize,
                               int range, int pageSize,
-                              bool refresh = True);
+                              bool refresh = true);
 
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);

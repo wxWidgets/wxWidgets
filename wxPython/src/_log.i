@@ -61,7 +61,7 @@ public:
     static bool IsEnabled();
 
     // change the flag state, return the previous one
-    static bool EnableLogging(bool doIt = True);
+    static bool EnableLogging(bool doIt = true);
 
     // static sink function
     static void OnLog(wxLogLevel level, const wxChar *szString, time_t t);    
@@ -94,7 +94,7 @@ public:
 
     // verbose mode is activated by standard command-line '-verbose'
     // option
-    static void SetVerbose(bool bVerbose = True);
+    static void SetVerbose(bool bVerbose = true);
 
     // Set log level.  Log messages with level > logLevel will not be logged.
     static void SetLogLevel(wxLogLevel logLevel);
@@ -181,10 +181,10 @@ class wxLogWindow : public wxLog
 public:
     wxLogWindow(wxFrame *pParent,         // the parent frame (can be NULL)
             const wxString& szTitle,      // the title of the frame
-            bool bShow = True,            // show window immediately?
-            bool bPassToOld = True);      // pass log messages to the old target?
+            bool bShow = true,            // show window immediately?
+            bool bPassToOld = true);      // pass log messages to the old target?
 
-    void Show(bool bShow = True);
+    void Show(bool bShow = true);
     wxFrame *GetFrame() const;
     wxLog *GetOldLog() const;
     bool IsPassingMessages() const;

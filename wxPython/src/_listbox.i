@@ -70,12 +70,12 @@ public:
 
     // multiple selection logic
     virtual bool IsSelected(int n) const;
-    virtual void SetSelection(int n, bool select = True);
+    virtual void SetSelection(int n, bool select = true);
     virtual void Select(int n);
     void Deselect(int n);
     void DeselectAll(int itemToLeaveSelected = -1);
 
-    virtual bool SetStringSelection(const wxString& s, bool select = True);
+    virtual bool SetStringSelection(const wxString& s, bool select = true);
 
     // works for single as well as multiple selection listboxes (unlike
     // GetSelection which only works for listboxes with single selection)
@@ -168,7 +168,7 @@ public:
                 const wxString& name = wxPyListBoxNameStr);
 
     bool  IsChecked(int index);
-    void  Check(int index, int check = True);
+    void  Check(int index, int check = true);
 
 #if defined(__WXMSW__) || defined(__WXGTK__)
     int GetItemHeight();

@@ -263,8 +263,8 @@ isn't any.", "");
 
 struct wxPySizerItemInfo {
     wxPySizerItemInfo()
-        : window(NULL), sizer(NULL), gotSize(False),
-          size(wxDefaultSize), gotPos(False), pos(-1)
+        : window(NULL), sizer(NULL), gotSize(false),
+          size(wxDefaultSize), gotPos(false), pos(-1)
     {}
     
     wxWindow* window;
@@ -295,13 +295,13 @@ static wxPySizerItemInfo wxPySizerItemTypeHelper(PyObject* item, bool checkSize,
             // try wxSize or (w,h)
             if ( checkSize && wxSize_helper(item, &sizePtr)) {
                 info.size = *sizePtr;
-                info.gotSize = True;
+                info.gotSize = true;
             }
 
             // or a single int
             if (checkIdx && PyInt_Check(item)) {
                 info.pos = PyInt_AsLong(item);
-                info.gotPos = True;
+                info.gotPos = true;
             }
         }
     }
@@ -482,7 +482,7 @@ public:
             
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
@@ -511,7 +511,7 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
@@ -541,7 +541,7 @@ this sizer.  See `Add` for a description of the parameters.", "");
 
             wxPyUserData* data = NULL;
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, True, False);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
             if ( userData && (info.window || info.sizer || info.gotSize) )
                 data = new wxPyUserData(userData);
             wxPyEndBlockThreads(blocked);
@@ -575,7 +575,7 @@ and removed.", "
 ");
         bool Remove(PyObject* item) {
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
                 return self->Remove(info.window);
@@ -584,7 +584,7 @@ and removed.", "
             else if ( info.gotPos )
                 return self->Remove(info.pos);
             else 
-                return False;
+                return false;
         }
 
 
@@ -597,7 +597,7 @@ zero-based index of the item to be detached.  Returns True if the child item
 was found and detached.", "");
         bool Detach(PyObject* item) {
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
                 return self->Detach(info.window);
@@ -606,13 +606,13 @@ was found and detached.", "");
             else if ( info.gotPos )
                 return self->Detach(info.pos);
             else 
-                return False;
+                return false;
         }
 
         
         void _SetItemMinSize(PyObject* item, const wxSize& size) {
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
                 self->SetItemMinSize(info.window, size);
@@ -793,7 +793,7 @@ this will set them appropriately.
     
 
     DocDeclStr(
-        void , Clear( bool deleteWindows=False ),
+        void , Clear( bool deleteWindows=false ),
         "Clear all items from the sizer, optionally destroying the window items
 as well.", "");
     
@@ -820,15 +820,15 @@ as well.", "");
 
     %extend {
         DocAStr(Show,
-                "Show(self, item, bool show=True, bool recursive=False) -> bool",
+                "Show(self, item, bool show=True, bool recursive=false) -> bool",
                 "Shows or hides an item managed by the sizer.  To make a sizer item
 disappear or reappear, use Show followed by `Layout`.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
 the item.  Use the recursive parameter to show or hide an item in a
 subsizer.  Returns True if the item was found.", "");
-        bool Show(PyObject* item, bool show = True, bool recursive=False) {
+        bool Show(PyObject* item, bool show = true, bool recursive=false) {
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, True);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
                 return self->Show(info.window, show, recursive);
@@ -846,7 +846,7 @@ parameter can be either a window, a sizer, or the zero-based index of
 the item.", "");
         bool IsShown(PyObject* item) {
             bool blocked = wxPyBeginBlockThreads();
-            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, False, False);
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, false);
             wxPyEndBlockThreads(blocked);
             if ( info.window ) 
                 return self->IsShown(info.window);
@@ -855,16 +855,16 @@ the item.", "");
             else if ( info.gotPos )
                 return self->IsShown(info.pos);
             else
-                return False;
+                return false;
         }
     }
 
     %pythoncode {
-    def Hide(self, item, recursive=False):
+    def Hide(self, item, recursive=false):
         """
         A convenience method for Show(item, False, recursive).
         """
-        return self.Show(item, False, recursive)
+        return self.Show(item, false, recursive)
     }
 
     

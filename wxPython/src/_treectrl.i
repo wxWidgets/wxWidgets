@@ -96,8 +96,8 @@ public:
     bool IsOk() const;
 
     %extend {
-        bool __eq__(const wxTreeItemId* other) { return other ? (*self == *other) : False; }
-        bool __ne__(const wxTreeItemId* other) { return other ? (*self != *other) : True;  }
+        bool __eq__(const wxTreeItemId* other) { return other ? (*self == *other) : false; }
+        bool __ne__(const wxTreeItemId* other) { return other ? (*self != *other) : true;  }
     }
 
     void*  m_pItem;
@@ -288,8 +288,8 @@ public:
         bool found;
         bool blocked = wxPyBeginBlockThreads();
         if ((found = wxPyCBH_findCallback(m_myInst, "OnCompareItems"))) {
-            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), False);
-            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), False);
+            PyObject *o1 = wxPyConstructObject((void*)&item1, wxT("wxTreeItemId"), false);
+            PyObject *o2 = wxPyConstructObject((void*)&item2, wxT("wxTreeItemId"), false);
             rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(OO)",o1,o2));
             Py_DECREF(o1);
             Py_DECREF(o2);
@@ -450,14 +450,14 @@ public:
     // allow the user to expand the items which don't have any children now
     // - but instead add them only when needed, thus minimizing memory
     // usage and loading time.
-    void SetItemHasChildren(const wxTreeItemId& item, bool has = True);
+    void SetItemHasChildren(const wxTreeItemId& item, bool has = true);
 
     // the item will be shown in bold
-    void SetItemBold(const wxTreeItemId& item, bool bold = True);
+    void SetItemBold(const wxTreeItemId& item, bool bold = true);
 
 #ifdef __WXMSW__
     // the item will be shown with a drop highlight
-    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = True);
+    void SetItemDropHighlight(const wxTreeItemId& item, bool highlight = true);
 #endif
     
     // set the items text colour
@@ -489,7 +489,7 @@ public:
     // if 'recursively' is False, only immediate children count, otherwise
     // the returned number is the number of all items in this branch
     size_t GetChildrenCount(const wxTreeItemId& item,
-                            bool recursively = True) /*const*/;
+                            bool recursively = true) /*const*/;
 
 
 
@@ -514,7 +514,7 @@ public:
             num = self->GetSelections(array);
             for (x=0; x < num; x++) {
                 wxTreeItemId *tii = new wxTreeItemId(array.Item(x));
-                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), True);
+                PyObject* item = wxPyConstructObject((void*)tii, wxT("wxTreeItemId"), true);
                 PyList_Append(rval, item);
                 Py_DECREF(item);
             }
@@ -539,7 +539,7 @@ public:
             wxTreeItemId* ritem = new wxTreeItemId(self->GetFirstChild(item, cookie));
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
             wxPyEndBlockThreads(blocked);
             return tup;
@@ -554,7 +554,7 @@ public:
             wxTreeItemId* ritem = new wxTreeItemId(self->GetNextChild(item, cookie));
             bool blocked = wxPyBeginBlockThreads();
             PyObject* tup = PyTuple_New(2);
-            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), True));
+            PyTuple_SET_ITEM(tup, 0, wxPyConstructObject(ritem, wxT("wxTreeItemId"), true));
             PyTuple_SET_ITEM(tup, 1, wxPyMakeSwigPtr(cookie, wxT("void")));
             wxPyEndBlockThreads(blocked);
             return tup;
@@ -651,7 +651,7 @@ public:
     void UnselectAll();
 
     // select this item
-    void SelectItem(const wxTreeItemId& item, bool select = True);
+    void SelectItem(const wxTreeItemId& item, bool select = true);
 
     // toggle the item selection
     void ToggleItemSelection(const wxTreeItemId& item);
@@ -678,7 +678,7 @@ public:
 
 #ifdef __WXMSW__
     // end editing and accept or discard the changes to item label
-    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = False);
+    void EndEditLabel(const wxTreeItemId& item, bool discardChanges = false);
 #endif
 
 
@@ -702,12 +702,12 @@ value is set to a bitmask of wxTREE_HITTEST_xxx constants.
 
     %extend {
         // get the bounding rectangle of the item (or of its label only)
-        PyObject* GetBoundingRect(const wxTreeItemId& item,  bool textOnly = False) {
+        PyObject* GetBoundingRect(const wxTreeItemId& item,  bool textOnly = false) {
              wxRect rect;
             if (self->GetBoundingRect(item, rect, textOnly)) {
                 bool blocked = wxPyBeginBlockThreads();
                 wxRect* r = new wxRect(rect);
-                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), True);
+                PyObject* val = wxPyConstructObject((void*)r, wxT("wxRect"), true);
                 wxPyEndBlockThreads(blocked);
                 return val;
             }

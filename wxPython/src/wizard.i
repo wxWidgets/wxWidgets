@@ -65,7 +65,7 @@ class wxWizardEvent : public wxNotifyEvent
 public:
     wxWizardEvent(wxEventType type = wxEVT_NULL,
                   int id = -1,
-                  bool direction = True,
+                  bool direction = true,
                   wxWizardPage* page = NULL);
 
     // for EVT_WIZARD_PAGE_CHANGING, return True if we're going forward or
@@ -380,7 +380,7 @@ public:
     // show the prev/next page, but call TransferDataFromWindow on the current
     // page first and return False without changing the page if
     // TransferDataFromWindow() returns False - otherwise, returns True
-    bool ShowPage(wxWizardPage *page, bool goingForward = True);
+    bool ShowPage(wxWizardPage *page, bool goingForward = true);
 
     bool HasNextPage(wxWizardPage* page);
     bool HasPrevPage(wxWizardPage* page);

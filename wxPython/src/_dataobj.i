@@ -247,7 +247,7 @@ in the given direction.", "");
             PyObject* list = PyList_New(count);
             for (size_t i=0; i<count; i++) {
                 wxDataFormat* format = new wxDataFormat(formats[i]);
-                PyObject* obj = wxPyConstructObject((void*)format, wxT("wxDataFormat"), True);
+                PyObject* obj = wxPyConstructObject((void*)format, wxT("wxDataFormat"), true);
                 PyList_Append(list, obj);
                 Py_DECREF(obj);
             }            
@@ -308,7 +308,7 @@ in the given direction.", "");
             else {
                 // raise a TypeError if not a string
                 PyErr_SetString(PyExc_TypeError, "String expected.");
-                rval = False;
+                rval = false;
             }
             wxPyEndBlockThreads(blocked);
             return rval;
@@ -395,7 +395,7 @@ derived class if the object supports setting its data.
             else {
                 // raise a TypeError if not a string
                 PyErr_SetString(PyExc_TypeError, "String expected.");
-                rval = False;
+                rval = false;
             }
             wxPyEndBlockThreads(blocked);
             return rval;
@@ -427,7 +427,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
     // return either a string or None and then act appropriately with the
     // C++ version.
 
-    bool rval = False;
+    bool rval = false;
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "GetDataHere")) {
         PyObject* ro;
@@ -446,7 +446,7 @@ bool wxPyDataObjectSimple::GetDataHere(void *buf) const {
 bool wxPyDataObjectSimple::SetData(size_t len, const void *buf) const{
     // For this one we simply need to make a string from buf and len
     // and send it to the Python method.
-    bool rval = False;
+    bool rval = false;
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetData")) {
         PyObject* data = PyString_FromStringAndSize((char*)buf, len);
@@ -524,7 +524,7 @@ public:
     %apply SWIGTYPE *DISOWN { wxDataObjectSimple *dataObject };
     
     DocDeclStr(
-        void , Add(wxDataObjectSimple *dataObject, bool preferred = False),
+        void , Add(wxDataObjectSimple *dataObject, bool preferred = false),
         "Adds the dataObject to the list of supported objects and it becomes
 the preferred object if preferred is True.", "");
     
@@ -683,7 +683,7 @@ wxBitmap wxPyBitmapDataObject::GetBitmap() const {
 void wxPyBitmapDataObject::SetBitmap(const wxBitmap& bitmap) {
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "SetBitmap")) {
-        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), False);
+        PyObject* bo = wxPyConstructObject((void*)&bitmap, wxT("wxBitmap"), false);
         wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", bo));
         Py_DECREF(bo);
     }
@@ -770,7 +770,7 @@ public:
             else {
                 // raise a TypeError if not a string
                 PyErr_SetString(PyExc_TypeError, "String expected.");
-                rval = False;
+                rval = false;
             }
             wxPyEndBlockThreads(blocked);
             return rval;

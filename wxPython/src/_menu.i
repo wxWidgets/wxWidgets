@@ -249,7 +249,7 @@ public:
     virtual void EnableTop(size_t pos, bool enable);
 
     // is the menu enabled?
-    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return True; }
+    virtual bool IsEnabledTop(size_t WXUNUSED(pos)) const { return true; }
 
     // get or change the label of the menu at given position
     virtual void SetLabelTop(size_t pos, const wxString& label);
@@ -345,10 +345,10 @@ public:
     wxMenu *GetSubMenu() const;
 
     // state
-    virtual void Enable(bool enable = True);
+    virtual void Enable(bool enable = true);
     virtual bool IsEnabled() const;
 
-    virtual void Check(bool check = True);
+    virtual void Check(bool check = true);
     virtual bool IsChecked() const;
     void Toggle();
 
@@ -384,7 +384,7 @@ public:
     bool IsOwnerDrawn();
 
     // switch on/off owner-drawing the item
-    void SetOwnerDrawn(bool ownerDrawn = True);
+    void SetOwnerDrawn(bool ownerDrawn = true);
     void ResetOwnerDrawn();
 #else
     // just to keep the global  renamers in sync

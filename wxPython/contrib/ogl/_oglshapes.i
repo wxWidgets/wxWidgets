@@ -153,8 +153,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -164,7 +164,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -204,8 +204,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -215,7 +215,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -255,8 +255,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -266,7 +266,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -335,8 +335,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -346,7 +346,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -457,8 +457,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -468,7 +468,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -508,8 +508,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -519,7 +519,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
@@ -586,8 +586,8 @@ public:
     void base_OnLeftDoubleClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnRightClick(double x, double y, int keys = 0, int attachment = 0);
     void base_OnSize(double x, double y);
-    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
-    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = True);
+    bool base_OnMovePre(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
+    void base_OnMovePost(wxDC& dc, double x, double y, double old_x, double old_y, bool display = true);
     void base_OnDragLeft(bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnBeginDragLeft(double x, double y, int keys=0, int attachment = 0);
     void base_OnEndDragLeft(double x, double y, int keys=0, int attachment = 0);
@@ -597,7 +597,7 @@ public:
     void base_OnDrawOutline(wxDC& dc, double x, double y, double w, double h);
     void base_OnDrawControlPoints(wxDC& dc);
     void base_OnEraseControlPoints(wxDC& dc);
-    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = True);
+    void base_OnMoveLink(wxDC& dc, bool moveControlPoints = true);
     void base_OnSizingDragLeft(wxPyControlPoint* pt, bool draw, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingBeginDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);
     void base_OnSizingEndDragLeft(wxPyControlPoint* pt, double x, double y, int keys=0, int attachment = 0);

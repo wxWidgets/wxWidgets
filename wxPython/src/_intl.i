@@ -324,8 +324,8 @@ public:
     %name(Init1)bool Init(const wxString& szName,
                           const wxString& szShort = wxPyEmptyString,
                           const wxString& szLocale = wxPyEmptyString,
-                          bool bLoadDefault = True,
-                          bool bConvertEncoding = False);
+                          bool bLoadDefault = true,
+                          bool bConvertEncoding = false);
 
     %name(Init2) bool Init(int language = wxLANGUAGE_DEFAULT,
                            int flags = wxLOCALE_LOAD_DEFAULT | wxLOCALE_CONV_ENCODING);

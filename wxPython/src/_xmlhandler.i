@@ -69,7 +69,7 @@ public:
     int GetStyle(const wxString& param = wxT("style"), int defaults = 0)
         { return wxXmlResourceHandler::GetStyle(param, defaults); }
 
-    wxString GetText(const wxString& param, bool translate = True)
+    wxString GetText(const wxString& param, bool translate = true)
         { return wxXmlResourceHandler::GetText(param, translate); }
 
     int GetID()
@@ -78,7 +78,7 @@ public:
     wxString GetName()
         { return wxXmlResourceHandler::GetName(); }
 
-    bool GetBool(const wxString& param, bool defaultv = False)
+    bool GetBool(const wxString& param, bool defaultv = false)
         { return wxXmlResourceHandler::GetBool(param, defaultv); }
 
     long GetLong( const wxString& param, long defaultv = 0 )
@@ -112,7 +112,7 @@ public:
     void SetupWindow(wxWindow *wnd)
         { wxXmlResourceHandler::SetupWindow(wnd); }
 
-    void CreateChildren(wxObject *parent, bool this_hnd_only = False)
+    void CreateChildren(wxObject *parent, bool this_hnd_only = false)
         { wxXmlResourceHandler::CreateChildren(parent, this_hnd_only); }
 
     void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL)
@@ -204,7 +204,7 @@ public:
     // - replaces \n, \r, \t by respective chars (according to C syntax)
     // - replaces _ by & and __ by _ (needed for _File => &File because of XML)
     // - calls wxGetTranslations (unless disabled in wxXmlResource)
-    wxString GetText(const wxString& param, bool translate = True);
+    wxString GetText(const wxString& param, bool translate = true);
 
     // Returns the XRCID.
     int GetID();
@@ -212,8 +212,8 @@ public:
     // Returns the resource name.
     wxString GetName();
 
-    // Gets a bool flag (1, t, yes, on, true are True, everything else is False).
-    bool GetBool(const wxString& param, bool defaultv = False);
+    // Gets a bool flag (1, t, yes, on, true are True, everything else is false).
+    bool GetBool(const wxString& param, bool defaultv = false);
 
     // Gets the integer value from the parameter.
     long GetLong( const wxString& param, long defaultv = 0 );
@@ -247,7 +247,7 @@ public:
     void SetupWindow(wxWindow *wnd);
 
     // Creates children.
-    void CreateChildren(wxObject *parent, bool this_hnd_only = False);
+    void CreateChildren(wxObject *parent, bool this_hnd_only = false);
 
     // Helper function.
     void CreateChildrenPrivately(wxObject *parent, wxXmlNode *rootnode = NULL);

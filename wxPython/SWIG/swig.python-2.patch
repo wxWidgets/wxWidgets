@@ -4,7 +4,7 @@ RCS file: /cvsroot/swig/SWIG/Doc/Manual/Python.html,v
 retrieving revision 1.18
 diff -u -4 -r1.18 Python.html
 --- Doc/Manual/Python.html	2 Sep 2004 20:27:14 -0000	1.18
-+++ Doc/Manual/Python.html	6 Sep 2004 21:06:11 -0000
++++ Doc/Manual/Python.html	23 Sep 2004 00:31:44 -0000
 @@ -86,8 +86,15 @@
  <li><a href="#Python_nn62">Mapping Python tuples into small arrays</a>
  <li><a href="#Python_nn63">Mapping sequences to C arrays</a>
@@ -282,7 +282,7 @@ RCS file: /cvsroot/swig/SWIG/Source/Modules/python.cxx,v
 retrieving revision 1.50
 diff -u -4 -r1.50 python.cxx
 --- Source/Modules/python.cxx	1 Sep 2004 22:25:56 -0000	1.50
-+++ Source/Modules/python.cxx	6 Sep 2004 21:06:11 -0000
++++ Source/Modules/python.cxx	23 Sep 2004 00:31:44 -0000
 @@ -19,8 +19,9 @@
  
  static  String       *const_code = 0;
@@ -413,7 +413,7 @@ diff -u -4 -r1.50 python.cxx
    }
  
  
-@@ -440,24 +486,303 @@
+@@ -440,24 +486,307 @@
    }
  
  
@@ -662,6 +662,10 @@ diff -u -4 -r1.50 python.cxx
 +      if (value) {
 +        if (Strcmp(value, "NULL") == 0)
 +          value = NewString("None");
++        else if (Strcmp(value, "true") == 0 || Strcmp(value, "TRUE") == 0)
++          value = NewString("True");
++        else if (Strcmp(value, "false") == 0 || Strcmp(value, "FALSE") == 0)
++          value = NewString("False");
 +        else {
 +          lookup = Swig_symbol_clookup(value, 0);
 +          if (lookup)
@@ -725,7 +729,7 @@ diff -u -4 -r1.50 python.cxx
      if (*t == '{') {
        Delitem(str ,0);
        Delitem(str,DOH_END);
-@@ -1686,9 +2011,18 @@
+@@ -1686,9 +2015,18 @@
        mod = Getattr(n,"module");
        if (mod) {
  	String *modname = Getattr(mod,"name");
@@ -745,7 +749,7 @@ diff -u -4 -r1.50 python.cxx
  	  importname = NewString(Getattr(n,"sym:name"));
  	}
  	Setattr(n,"python:proxy",importname);
-@@ -1760,9 +2094,11 @@
+@@ -1760,9 +2098,11 @@
  	  Printf(f_shadow, modern ? "(object)" : "(_object)");
  	}
        }
@@ -758,7 +762,7 @@ diff -u -4 -r1.50 python.cxx
          Printv(f_shadow,tab4,"__swig_setmethods__ = {}\n",NIL);
          if (Len(base_class)) {
            Printf(f_shadow,"%sfor _s in [%s]: __swig_setmethods__.update(_s.__swig_setmethods__)\n",tab4,base_class);
-@@ -1906,16 +2242,24 @@
+@@ -1906,16 +2246,24 @@
  	  Delete(pyaction);
  	  Printv(f_shadow,pycode,"\n",NIL);
  	} else {
@@ -790,7 +794,7 @@ diff -u -4 -r1.50 python.cxx
          }
  
        }
-@@ -1930,14 +2274,22 @@
+@@ -1930,14 +2278,22 @@
    virtual int staticmemberfunctionHandler(Node *n) {
      String *symname = Getattr(n,"sym:name");
      Language::staticmemberfunctionHandler(n);
@@ -817,7 +821,7 @@ diff -u -4 -r1.50 python.cxx
                 " = staticmethod(", symname, ")\n", NIL);
  
          if (!modern) {
-@@ -2022,8 +2374,12 @@
+@@ -2022,8 +2378,12 @@
   	    }
  
              Printv(f_shadow, tab4, "def __init__(self, *args",
@@ -830,7 +834,7 @@ diff -u -4 -r1.50 python.cxx
              if (!modern) {
                Printv(f_shadow, tab8, "_swig_setattr(self, ", rclassname, ", 'this', ", 
                       funcCallHelper(Swig_name_construct(symname), allow_kwargs), ")\n", NIL);
-@@ -2036,10 +2392,10 @@
+@@ -2036,10 +2396,10 @@
                Printv(f_shadow, tab8, "self.this = newobj.this\n", NIL);
                Printv(f_shadow, tab8, "self.thisown = 1\n", NIL);
                Printv(f_shadow, tab8, "del newobj.thisown\n", NIL);
@@ -843,7 +847,7 @@ diff -u -4 -r1.50 python.cxx
    	  }
  	  have_constructor = 1;
  	} else {
-@@ -2055,13 +2411,17 @@
+@@ -2055,13 +2415,17 @@
  	  } else {
  
              Printv(f_shadow_stubs, "\ndef ", symname, "(*args",
@@ -863,7 +867,7 @@ diff -u -4 -r1.50 python.cxx
    	  }
  	}
        }
-@@ -2088,13 +2448,18 @@
+@@ -2088,13 +2452,18 @@
  	Delete(pyaction);
  	Printv(f_shadow,pycode,"\n", NIL);
        } else {

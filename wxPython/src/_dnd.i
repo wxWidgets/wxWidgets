@@ -216,7 +216,7 @@ public:
 
 bool wxPyFileDropTarget::OnDropFiles(wxCoord x, wxCoord y,
                                      const wxArrayString& filenames) {
-    bool rval = False;
+    bool rval = false;
     bool blocked = wxPyBeginBlockThreads();
     if (wxPyCBH_findCallback(m_myInst, "OnDropFiles")) {
         PyObject* list = wxArrayString2PyList_helper(filenames);

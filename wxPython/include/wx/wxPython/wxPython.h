@@ -115,7 +115,7 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 #define wxPyCBH_callCallbackObj(a, b)           (wxPyGetCoreAPIPtr()->p_wxPyCBH_callCallbackObj(a, b))
 #define wxPyCBH_delete(a)                       (wxPyGetCoreAPIPtr()->p_wxPyCBH_delete(a))
 
-#define wxPyMake_wxObject(a,b)                  (wxPyGetCoreAPIPtr()->p_wxPyMake_wxObject(a,b,True))
+#define wxPyMake_wxObject(a,b)                  (wxPyGetCoreAPIPtr()->p_wxPyMake_wxObject(a,b,true))
 #define wxPyMake_wxObject2(a,b,c)               (wxPyGetCoreAPIPtr()->p_wxPyMake_wxObject(a,b,c))
 #define wxPyMake_wxSizer(a,b)                   (wxPyGetCoreAPIPtr()->p_wxPyMake_wxSizer(a,b))
 #define wxPyPtrTypeMap_Add(a, b)                (wxPyGetCoreAPIPtr()->p_wxPyPtrTypeMap_Add(a, b))

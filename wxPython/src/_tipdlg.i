@@ -82,7 +82,7 @@ public:
 //
 // The function returns True if this checkbox is checked, False otherwise.
 MustHaveApp(wxShowTip);
-bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup = True);
+bool wxShowTip(wxWindow *parent, wxTipProvider *tipProvider, bool showAtStartup = true);
 
 // a function which returns an implementation of wxTipProvider using the
 // specified text file as the source of tips (each line is a tip).
