@@ -1387,7 +1387,10 @@ WXDLLEXPORT wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **save_pt
 #if __MSL__ < 0x00008000
 char *strdup(const char *s)
 {
-        return strcpy( (char*) malloc( strlen( s ) + 1 ) , s ) ;
+    char *dest = (char*) malloc( strlen( s ) + 1 ) ;
+    if ( dest )
+        strcpy( dest , s ) ;
+    return dest ;
 }
 #endif
 int isascii( int c )
