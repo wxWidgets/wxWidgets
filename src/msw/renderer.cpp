@@ -35,6 +35,17 @@
 #include "wx/msw/uxtheme.h"
 #include "wx/msw/private.h"
 
+// tmschema.h is in Win32 Platform SDK and might not be available with earlier
+// compilers
+#ifndef CP_DROPDOWNBUTTON
+    #define CP_DROPDOWNBUTTON  1
+
+    #define CBXS_NORMAL        1
+    #define CBXS_HOT           2
+    #define CBXS_PRESSED       3
+    #define CBXS_DISABLED      4
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRendererMSW: wxRendererNative implementation for "old" Win32 systems
 // ----------------------------------------------------------------------------
@@ -59,6 +70,8 @@ private:
 // wxRendererXP: wxRendererNative implementation for Windows XP and later
 // ----------------------------------------------------------------------------
 
+#if wxUSE_UXTHEME
+
 class WXDLLEXPORT wxRendererXP : public wxDelegateRendererNative
 {
 public:
@@ -79,9 +92,15 @@ public:
 
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0);
 private:
     DECLARE_NO_COPY_CLASS(wxRendererXP)
 };
+
+#endif // wxUSE_UXTHEME
 
 // ============================================================================
 // wxRendererNative and wxRendererMSW implementation
@@ -90,9 +109,13 @@ private:
 /* static */
 wxRendererNative& wxRendererNative::GetDefault()
 {
+#if wxUSE_UXTHEME
     wxUxThemeEngine *themeEngine = wxUxThemeEngine::Get();
-    return themeEngine && themeEngine->IsAppThemed() ? wxRendererXP::Get()
-                                                     : wxRendererMSW::Get();
+    if ( themeEngine && themeEngine->IsAppThemed() )
+        return wxRendererXP::Get();
+#endif // wxUSE_UXTHEME
+
+    return wxRendererMSW::Get();
 }
 
 /* static */
@@ -112,14 +135,14 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
     RECT r;
     r.left = rect.GetLeft();
     r.top = rect.GetTop();
-    r.bottom = rect.GetBottom();
-    r.right = rect.GetRight();
+    r.bottom = rect.y + rect.height;
+    r.right = rect.x + rect.width;
 
     int style = DFCS_SCROLLCOMBOBOX;
     if ( flags & wxCONTROL_DISABLED )
         style |= DFCS_INACTIVE;
     if ( flags & wxCONTROL_PRESSED )
-        style |= DFCS_PUSHED;
+        style |= DFCS_PUSHED | DFCS_FLAT;
 
     ::DrawFrameControl(GetHdcOf(dc), &r, DFC_SCROLL, style);
 }
@@ -128,12 +151,55 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
 // wxRendererXP implementation
 // ============================================================================
 
+#if wxUSE_UXTHEME
+
 /* static */
 wxRendererNative& wxRendererXP::Get()
 {
     static wxRendererXP s_rendererXP;
 
     return s_rendererXP;
+}
+
+// NOTE: There is no guarantee that the button drawn fills the entire rect (XP
+// default theme, for example), so the caller should have cleared button's
+// background before this call. This is quite likely a wxMSW-specific thing.
+void
+wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
+                                      wxDC& dc,
+                                      const wxRect& rect,
+                                      int flags)
+{
+    wxUxThemeHandle hTheme(win, L"COMBOBOX");
+    if ( hTheme )
+    {
+        RECT r;
+        r.left = rect.x;
+        r.top = rect.y;
+        r.right = rect.x + rect.width;
+        r.bottom = rect.y + rect.height;
+
+        int state;
+        if ( flags & wxCONTROL_PRESSED )
+            state = CBXS_PRESSED;
+        else if ( flags & wxCONTROL_CURRENT )
+            state = CBXS_HOT;
+        else if ( flags & wxCONTROL_DISABLED )
+            state = CBXS_DISABLED;
+        else
+            state = CBXS_NORMAL;
+
+        wxUxThemeEngine::Get()->DrawThemeBackground
+                                (
+                                    hTheme,
+                                    dc.GetHDC(),
+                                    CP_DROPDOWNBUTTON,
+                                    state,
+                                    &r,
+                                    NULL
+                                );
+
+    }
 }
 
 // ----------------------------------------------------------------------------
@@ -208,4 +274,6 @@ wxRendererXP::DrawSplitterSash(wxWindow *win,
 
     m_rendererNative.DrawSplitterSash(win, dc, size, position, orient, flags);
 }
+
+#endif // wxUSE_UXTHEME
 
