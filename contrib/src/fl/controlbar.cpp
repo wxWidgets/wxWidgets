@@ -1156,6 +1156,9 @@ void wxFrameLayout::PositionPanes()
 
 void wxFrameLayout::OnSize( wxSizeEvent& event )
 {
+    mpFrame->ProcessEvent( event );
+    event.Skip( FALSE ); // stop its progpagation
+
     if ( event.GetEventObject() == (wxObject*) mpFrame )
     {
         GetUpdatesManager().OnStartChanges();
