@@ -3689,7 +3689,6 @@ wxGridWindow::wxGridWindow( wxGrid *parent,
     m_owner = parent;
     m_rowLabelWin = rowLblWin;
     m_colLabelWin = colLblWin;
-    SetBackgroundColour(_T("WHITE"));
 }
 
 
@@ -3903,6 +3902,10 @@ wxGrid::~wxGrid()
 // ----- internal init and update functions
 //
 
+// NOTE: If using the default visual attributes works everywhere then this can
+// be removed as well as the #else cases below.
+#define _USE_VISATTR 0
+
 void wxGrid::Create()
 {
     m_created = FALSE;    // set to TRUE by CreateGrid
@@ -3919,13 +3922,22 @@ void wxGrid::Create()
     m_defaultCellAttr->SetKind(wxGridCellAttr::Default);
     m_defaultCellAttr->SetFont(GetFont());
     m_defaultCellAttr->SetAlignment(wxALIGN_LEFT, wxALIGN_TOP);
+    m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
+    m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
+
+#if _USE_VISATTR
+    wxVisualAttributes gva = wxListBox::GetClassDefaultAttributes();
+    wxVisualAttributes lva = wxPanel::GetClassDefaultAttributes();
+
+    m_defaultCellAttr->SetTextColour(gva.colFg);
+    m_defaultCellAttr->SetBackgroundColour(gva.colBg);
+    
+#else
     m_defaultCellAttr->SetTextColour(
         wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
     m_defaultCellAttr->SetBackgroundColour(
         wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-    m_defaultCellAttr->SetRenderer(new wxGridCellStringRenderer);
-    m_defaultCellAttr->SetEditor(new wxGridCellTextEditor);
-
+#endif
 
     m_numRows = 0;
     m_numCols = 0;
@@ -3963,6 +3975,27 @@ void wxGrid::Create()
 
     SetTargetWindow( m_gridWin );
 
+#if _USE_VISATTR
+    wxColour gfg = gva.colFg;
+    wxColour gbg = gva.colBg;
+    wxColour lfg = lva.colFg;
+    wxColour lbg = lva.colBg;
+#else
+    wxColour gfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    wxColour gbg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOW );
+    wxColour lfg = wxSystemSettings::GetColour( wxSYS_COLOUR_WINDOWTEXT );
+    wxColour lbg = wxSystemSettings::GetColour( wxSYS_COLOUR_BTNFACE );
+#endif
+    m_cornerLabelWin->SetDefaultForegroundColour(lfg);
+    m_cornerLabelWin->SetDefaultBackgroundColour(lbg);
+    m_rowLabelWin->SetDefaultForegroundColour(lfg);
+    m_rowLabelWin->SetDefaultBackgroundColour(lbg);
+    m_colLabelWin->SetDefaultForegroundColour(lfg);
+    m_colLabelWin->SetDefaultBackgroundColour(lbg);
+
+    m_gridWin->SetDefaultForegroundColour(gfg);
+    m_gridWin->SetDefaultBackgroundColour(gbg);
+    
     Init();
 }
 
