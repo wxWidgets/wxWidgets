@@ -1652,10 +1652,17 @@ bool wxWindowMac::Enable(bool enable)
         return FALSE;
 
     bool former = MacIsReallyEnabled() ;
+#if TARGET_API_MAC_OSX
     if ( enable )
         EnableControl( (ControlRef) m_macControl ) ;
     else
         DisableControl( (ControlRef) m_macControl ) ;
+#else
+    if ( enable )
+        ActivateControl( (ControlRef) m_macControl ) ;
+    else
+        DeactivateControl( (ControlRef) m_macControl ) ;
+#endif
 
     if ( former != MacIsReallyEnabled() )
         MacPropagateEnabledStateChanged() ;
@@ -1757,7 +1764,11 @@ bool wxWindowMac::MacIsReallyShown()
 
 bool wxWindowMac::MacIsReallyEnabled() 
 {
+#if TARGET_API_MAC_OSX
     return IsControlEnabled( (ControlRef) m_macControl ) ;
+#else
+    return IsControlActive( (ControlRef) m_macControl ) ;
+#endif
 }
 
 bool wxWindowMac::MacIsReallyHilited() 
