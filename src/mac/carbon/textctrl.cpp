@@ -55,9 +55,9 @@
 #include <Scrap.h>
 #endif
 #include <MacTextEditor.h>
-#include "ATSUnicode.h"
-#include "TextCommon.h"
-#include "TextEncodingConverter.h"
+#include <ATSUnicode.h>
+#include <TextCommon.h>
+#include <TextEncodingConverter.h>
 #include "wx/mac/uma.h"
 
 #define TE_UNLIMITED_LENGTH 0xFFFFFFFFUL
@@ -68,8 +68,6 @@ extern wxControl *wxFindControlFromMacControl(ControlHandle inControl ) ;
 // the MLTE engine registers itself for the key events thus the normal flow never occurs, the only measure for the
 // moment is to avoid setting the true focus on the control, the proper solution at the end would be to have
 // an alternate path for carbon key events that routes automatically into the same wx flow of events
-
-#include "MacTextEditor.h"
 
 /* part codes */
 
@@ -852,7 +850,7 @@ wxString wxTextCtrl::GetValue() const
         }
         else
         {
-            actualSize = GetHandleSize( theText ) ;
+            actualSize = GetHandleSize( theText ) / sizeof( UniChar) ;
             if ( actualSize > 0 )
             {
                 wxChar *ptr = result.GetWriteBuf(actualSize*sizeof(wxChar)) ;
@@ -865,7 +863,7 @@ wxString wxTextCtrl::GetValue() const
 				HUnlock( theText ) ;
 #endif
                 ptr[actualSize] = 0 ;
-                result.UngetWriteBuf( actualSize ) ;
+                result.UngetWriteBuf( actualSize *sizeof(wxChar) ) ;
             }
             DisposeHandle( theText ) ;
         }
