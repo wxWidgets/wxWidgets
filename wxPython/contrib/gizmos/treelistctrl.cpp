@@ -140,16 +140,14 @@ public:
     void RemoveColumn(size_t column);
 
     void SetColumn(size_t column, const wxTreeListColumnInfo& info);
-    const wxTreeListColumnInfo& GetColumn(size_t column) const
+    const wxTreeListColumnInfo GetColumn(size_t column) const
     {
-        static wxTreeListColumnInfo tmp;
-        wxCHECK_MSG(column < GetColumnCount(), tmp, wxT("Invalid column"));
+        wxCHECK_MSG(column < GetColumnCount(), wxTreeListColumnInfo(), wxT("Invalid column"));
         return m_columns[column];
     }
-    wxTreeListColumnInfo& GetColumn(size_t column)
+    wxTreeListColumnInfo GetColumn(size_t column)
     {
-        static wxTreeListColumnInfo tmp;
-        wxCHECK_MSG(column < GetColumnCount(), tmp, wxT("Invalid column"));
+        wxCHECK_MSG(column < GetColumnCount(), wxTreeListColumnInfo(), wxT("Invalid column"));
         return m_columns[column];
     }
 
@@ -688,18 +686,15 @@ public:
     // trivial accessors
     wxArrayTreeListItems& GetChildren() { return m_children; }
 
-    const wxString& GetText() const
+    const wxString GetText() const
     {
-        //return m_text;
-        static wxString empty = wxEmptyString;
         if(m_text.GetCount() > 0) return m_text[0];
-        return empty;
+        return wxEmptyString;
     }
-    const wxString& GetText(size_t col) const
+    const wxString GetText(size_t col) const
     {
-        static wxString empty = wxEmptyString;
         if(m_text.GetCount() > col) return m_text[col];
-        return empty;
+        return wxEmptyString;
     }
     int GetImage(wxTreeItemIcon which = wxTreeItemIcon_Normal) const
         { return m_images[which]; }
@@ -1156,7 +1151,7 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     int numColumns = GetColumnCount();
     for ( int i = 0; i < numColumns && x < w; i++ )
     {
-        wxTreeListColumnInfo& column = GetColumn(i);
+        wxTreeListColumnInfo column = GetColumn(i);
         int wCol = column.GetWidth();
 
         // the width of the rect to draw: make it smaller to fit entirely
@@ -1817,11 +1812,11 @@ bool wxTreeListMainWindow::Create(wxTreeListCtrl *parent,
 
     SetBackgroundColour( wxSystemSettings::GetSystemColour( wxSYS_COLOUR_LISTBOX ) );
 
-#ifdef __WXMSW__
-    m_dottedPen = wxPen( "black", 0, wxDOT );  // too slow under XFree86
-#else
+// #ifdef __WXMSW__
+//     m_dottedPen = wxPen( "black", 0, wxDOT );  // too slow under XFree86
+// #else
     m_dottedPen = wxPen( wxT("grey"), 0, 0 );
-#endif
+// #endif
 
     // ALB
     m_owner = parent;
@@ -4626,10 +4621,10 @@ void wxTreeListCtrl::RemoveColumn(size_t column)
 void wxTreeListCtrl::SetColumn(size_t column, const wxTreeListColumnInfo& col)
 { m_header_win->SetColumn(column, col); }
 
-const wxTreeListColumnInfo& wxTreeListCtrl::GetColumn(size_t column) const
+const wxTreeListColumnInfo wxTreeListCtrl::GetColumn(size_t column) const
 { return m_header_win->GetColumn(column); }
 
-wxTreeListColumnInfo& wxTreeListCtrl::GetColumn(size_t column)
+wxTreeListColumnInfo wxTreeListCtrl::GetColumn(size_t column)
 { return m_header_win->GetColumn(column); }
 
 void wxTreeListCtrl::Refresh(bool erase, const wxRect* rect)

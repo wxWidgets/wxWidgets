@@ -60,6 +60,15 @@ public:
         m_alignment = alignment;
     }
 
+    wxTreeListColumnInfo(const wxTreeListColumnInfo& other)
+    {
+        m_image = other.m_image;
+        m_selected_image = other.m_selected_image;
+        m_text = other.m_text;
+        m_width = other.m_width;
+        m_alignment = other.m_alignment;
+    }
+
     ~wxTreeListColumnInfo() {}
 
     // getters
@@ -201,8 +210,8 @@ public:
     wxString GetColumnText(size_t column) const;
 
     void SetColumn(size_t column, const wxTreeListColumnInfo& info);
-    wxTreeListColumnInfo& GetColumn(size_t column);
-    const wxTreeListColumnInfo& GetColumn(size_t column) const;
+    wxTreeListColumnInfo GetColumn(size_t column);
+    const wxTreeListColumnInfo GetColumn(size_t column) const;
 
 
     // Functions to work with tree list ctrl items.
