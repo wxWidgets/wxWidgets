@@ -411,6 +411,13 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
     return win;
 }
 
+
+bool wxListbook::DeleteAllPages()
+{
+    m_list->DeleteAllItems();
+    return wxBookCtrl::DeleteAllPages();
+}
+
 // ----------------------------------------------------------------------------
 // wxListbook events
 // ----------------------------------------------------------------------------

@@ -109,6 +109,8 @@ public:
     // returns true if we have wxLB_TOP or wxLB_BOTTOM style
     bool IsVertical() const { return HasFlag(wxLB_BOTTOM | wxLB_TOP); }
 
+    virtual bool DeleteAllPages();
+
 protected:
     virtual wxWindow *DoRemovePage(size_t page);
 
