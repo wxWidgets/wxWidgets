@@ -186,10 +186,8 @@ GridFrame::GridFrame()
     logger->SetTimestamp( NULL );
 
     // this will create a grid and, by default, an associated grid
-    // table for string data
-    //
-    //grid->CreateGrid( 100, 100 );
-    grid->SetTable(new SimpleTable(100, 100), TRUE);
+    // table for string gs_dataBugsGrid
+    grid->CreateGrid( 100, 100 );
 
     grid->SetRowSize( 0, 60 );
     grid->SetCellValue( 0, 0, "Ctrl+Home\nwill go to\nthis cell" );
@@ -695,74 +693,274 @@ BigGridFrame::BigGridFrame(long sizeGrid)
 // BugsGridFrame: a "realistic" table
 // ----------------------------------------------------------------------------
 
+enum Columns
+{
+    Col_Id,
+    Col_Summary,
+    Col_Severity,
+    Col_Priority,
+    Col_Platform,
+    Col_Opened,
+    Col_Max
+};
+
+enum Severity
+{
+    Sev_Wish,
+    Sev_Minor,
+    Sev_Normal,
+    Sev_Major,
+    Sev_Critical,
+    Sev_Max
+};
+
+static const wxChar* severities[] =
+{
+    _T("wishlist"),
+    _T("minor"),
+    _T("normal"),
+    _T("major"),
+    _T("critical"),
+};
+
+static struct BugsGridData
+{
+    int id;
+    const wxChar *summary;
+    Severity severity;
+    int prio;
+    const wxChar *platform;
+    bool opened;
+} gs_dataBugsGrid [] =
+{
+    { 18, _T("foo doesn't work"), Sev_Major, 1, _T("wxMSW"), TRUE },
+    { 27, _T("bar crashes"), Sev_Critical, 1, _T("all"), FALSE },
+    { 45, _T("printing is slow"), Sev_Minor, 3, _T("wxMSW"), TRUE },
+    { 68, _T("Rectangle() fails"), Sev_Normal, 1, _T("wxMSW"), FALSE },
+};
+
+static const wxChar *headers[Col_Max] =
+{
+    _T("Id"),
+    _T("Summary"),
+    _T("Severity"),
+    _T("Priority"),
+    _T("Platform"),
+    _T("Opened?"),
+};
+
+wxString BugsGridTable::GetTypeName(int WXUNUSED(row), int col)
+{
+    switch ( col )
+    {
+        case Col_Id:
+        case Col_Priority:
+            return wxGRID_VALUE_NUMBER;;
+
+        case Col_Severity:
+            // fall thorugh (TODO should be a list)
+
+        case Col_Summary:
+        case Col_Platform:
+            return wxGRID_VALUE_STRING;
+
+        case Col_Opened:
+            return wxGRID_VALUE_BOOL;
+    }
+
+    wxFAIL_MSG(_T("unknown column"));
+
+    return wxEmptyString;
+}
+
+long BugsGridTable::GetNumberRows()
+{
+    return WXSIZEOF(gs_dataBugsGrid);
+}
+
+long BugsGridTable::GetNumberCols()
+{
+    return Col_Max;
+}
+
+bool BugsGridTable::IsEmptyCell( int row, int col )
+{
+    return FALSE;
+}
+
+wxString BugsGridTable::GetValue( int row, int col )
+{
+    const BugsGridData& gd = gs_dataBugsGrid[row];
+
+    switch ( col )
+    {
+        case Col_Id:
+        case Col_Priority:
+        case Col_Opened:
+            wxFAIL_MSG(_T("unexpected column"));
+            break;
+
+        case Col_Severity:
+            return severities[gd.severity];
+
+        case Col_Summary:
+            return gd.summary;
+
+        case Col_Platform:
+            return gd.platform;
+    }
+
+    return wxEmptyString;
+}
+
+void BugsGridTable::SetValue( int row, int col, const wxString& value )
+{
+    BugsGridData& gd = gs_dataBugsGrid[row];
+
+    switch ( col )
+    {
+        case Col_Id:
+        case Col_Priority:
+        case Col_Opened:
+            wxFAIL_MSG(_T("unexpected column"));
+            break;
+
+        case Col_Severity:
+            {
+                size_t n;
+                for ( n = 0; n < WXSIZEOF(severities); n++ )
+                {
+                    if ( severities[n] == value )
+                    {
+                        gd.severity = (Severity)n;
+                        break;
+                    }
+                }
+
+                if ( n == WXSIZEOF(severities) )
+                {
+                    wxLogWarning(_T("Invalid severity value '%s'."),
+                                 value.c_str());
+                    gd.severity = Sev_Normal;
+                }
+            }
+
+        case Col_Summary:
+            gd.summary = value;
+            break;
+
+        case Col_Platform:
+            gd.platform = value;
+            break;
+    }
+}
+
+bool BugsGridTable::CanGetValueAs( int WXUNUSED(row), int col, const wxString& typeName )
+{
+    if ( typeName == wxGRID_VALUE_STRING )
+    {
+        return TRUE;
+    }
+    else if ( typeName == wxGRID_VALUE_BOOL )
+    {
+        return col == Col_Opened;
+    }
+    else if ( typeName == wxGRID_VALUE_NUMBER )
+    {
+        return col == Col_Id || col == Col_Priority || col == Col_Severity;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
+bool BugsGridTable::CanSetValueAs( int row, int col, const wxString& typeName )
+{
+    return CanGetValueAs(row, col, typeName);
+}
+
+long BugsGridTable::GetValueAsLong( int row, int col )
+{
+    const BugsGridData& gd = gs_dataBugsGrid[row];
+
+    switch ( col )
+    {
+        case Col_Id:
+            return gd.id;
+
+        case Col_Priority:
+            return gd.prio;
+
+        case Col_Severity:
+            return gd.severity;
+
+        default:
+            wxFAIL_MSG(_T("unexpected column"));
+            return -1;
+    }
+}
+
+bool BugsGridTable::GetValueAsBool( int row, int col )
+{
+    if ( col == Col_Opened )
+    {
+        return gs_dataBugsGrid[row].opened;
+    }
+    else
+    {
+        wxFAIL_MSG(_T("unexpected column"));
+
+        return FALSE;
+    }
+}
+
+void BugsGridTable::SetValueAsLong( int row, int col, long value )
+{
+    BugsGridData& gd = gs_dataBugsGrid[row];
+
+    switch ( col )
+    {
+        case Col_Priority:
+            gd.prio = value;
+            break;
+
+        default:
+            wxFAIL_MSG(_T("unexpected column"));
+    }
+}
+
+void BugsGridTable::SetValueAsBool( int row, int col, bool value )
+{
+    if ( col == Col_Opened )
+    {
+        gs_dataBugsGrid[row].opened = value;
+    }
+    else
+    {
+        wxFAIL_MSG(_T("unexpected column"));
+    }
+}
+
+wxString BugsGridTable::GetColLabelValue( int col )
+{
+    return headers[col];
+}
+
+BugsGridTable::BugsGridTable()
+{
+}
+
 BugsGridFrame::BugsGridFrame()
              : wxFrame(NULL, -1, "Bugs table",
                        wxDefaultPosition, wxSize(500, 300))
 {
-    enum Severity
-    {
-        Wish,
-        Minor,
-        Normal,
-        Major,
-        Critical
-    };
-
-    static const wxChar* severities[] =
-    {
-        _T("wishlist"),
-        _T("minor"),
-        _T("normal"),
-        _T("major"),
-        _T("critical"),
-    };
-
-    static const struct GridData
-    {
-        int id;
-        const wxChar *summary;
-        Severity severity;
-        int prio;
-        const wxChar *platform;
-        bool opened;
-    } data [] =
-    {
-        { 18, _T("foo doesn't work"), Major, 1, _T("wxMSW"), TRUE },
-        { 27, _T("bar crashes"), Critical, 1, _T("all"), FALSE },
-        { 45, _T("printing is slow"), Minor, 3, _T("wxMSW"), TRUE },
-        { 68, _T("Rectangle() fails"), Normal, 1, _T("wxMSW"), FALSE },
-    };
-
-    static const wxChar *headers[] =
-    {
-        _T("Id"),
-        _T("Summary"),
-        _T("Severity"),
-        _T("Priority"),
-        _T("Platform"),
-        _T("Opened?"),
-    };
-
-    // TODO the correct data type must be used for each column
-
     wxGrid *grid = new wxGrid(this, -1, wxDefaultPosition);
-    wxGridTableBase *table =
-        new wxGridStringTable(WXSIZEOF(data), WXSIZEOF(headers));
-    for ( size_t row = 0; row < WXSIZEOF(data); row++ )
-    {
-        const GridData& gd = data[row];
-        table->SetValue(row, 0, wxString::Format("%d", gd.id));
-        table->SetValue(row, 1, gd.summary);
-        table->SetValue(row, 2, severities[gd.severity]);
-        table->SetValue(row, 3, wxString::Format("%d", gd.prio));
-        table->SetValue(row, 4, gd.platform);
-        table->SetValue(row, 5, gd.opened ? _T("True") : wxEmptyString);
-    }
-
-    for ( size_t col = 0; col < WXSIZEOF(headers); col++ )
-    {
-        table->SetColLabelValue(col, headers[col]);
-    }
-
+    wxGridTableBase *table = new BugsGridTable();
     grid->SetTable(table, TRUE);
+
+    for ( size_t row = 0; row < WXSIZEOF(gs_dataBugsGrid); row++ )
+    {
+        grid->SetReadOnly(row, Col_Id);
+    }
 }

@@ -125,24 +125,6 @@ public:
 // memory
 // ----------------------------------------------------------------------------
 
-class SimpleTable : public wxGridStringTable {
-public:
-    SimpleTable( int numRows, int numCols )
-        : wxGridStringTable( numRows, numCols ) {}
-
-    // override this to fake a row as all bools
-    wxString GetTypeName( int row, int col )
-        {
-            if (row == 8)
-                return wxT("bool");
-            else if (row == 9 && col == 1)
-                return wxT("unknown type");  // to test fallback
-            else
-                return wxGridStringTable::GetTypeName(row, col);
-        }
-
-};
-
 class BigGridTable : public wxGridTableBase
 {
 public:
@@ -173,8 +155,32 @@ private:
 };
 
 // ----------------------------------------------------------------------------
-// another, more realistic, grid example
+// another, more realistic, grid example: shows typed columns and more
 // ----------------------------------------------------------------------------
+
+class BugsGridTable : public wxGridTableBase
+{
+public:
+    BugsGridTable();
+
+    virtual long GetNumberRows();
+    virtual long GetNumberCols();
+    virtual bool IsEmptyCell( int row, int col );
+    virtual wxString GetValue( int row, int col );
+    virtual void SetValue( int row, int col, const wxString& value );
+
+    virtual wxString GetColLabelValue( int col );
+
+    virtual wxString GetTypeName( int row, int col );
+    virtual bool CanGetValueAs( int row, int col, const wxString& typeName );
+    virtual bool CanSetValueAs( int row, int col, const wxString& typeName );
+
+    virtual long GetValueAsLong( int row, int col );
+    virtual bool GetValueAsBool( int row, int col );
+
+    virtual void SetValueAsLong( int row, int col, long value );
+    virtual void SetValueAsBool( int row, int col, bool value );
+};
 
 class BugsGridFrame : public wxFrame
 {

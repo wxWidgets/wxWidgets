@@ -32,6 +32,10 @@
 #include "wx/dynarray.h"
 #include "wx/timer.h"
 
+// ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
 // Default parameters for wxGrid
 //
 #define WXGRID_DEFAULT_NUMBER_ROWS            10
@@ -49,6 +53,15 @@
 #define WXGRID_MIN_COL_WIDTH                  15
 #define WXGRID_DEFAULT_SCROLLBAR_WIDTH        16
 
+// type names for grid table values
+#define wxGRID_VALUE_STRING     _T("string")
+#define wxGRID_VALUE_BOOL       _T("bool")
+#define wxGRID_VALUE_NUMBER     _T("long")
+#define wxGRID_VALUE_FLOAT      _T("double")
+
+#define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
+#define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -65,6 +78,7 @@ class WXDLLEXPORT wxGridTypeRegistry;
 
 class WXDLLEXPORT wxCheckBox;
 class WXDLLEXPORT wxTextCtrl;
+class WXDLLEXPORT wxSpinCtrl;
 
 // ----------------------------------------------------------------------------
 // wxGridCellRenderer: this class is responsible for actually drawing the cell
@@ -90,6 +104,9 @@ public:
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected) = 0;
+
+    // virtual dtor for any base class
+    virtual ~wxGridCellRenderer();
 };
 
 // the default renderer for the cells containing string data
@@ -103,13 +120,59 @@ public:
                       const wxRect& rect,
                       int row, int col,
                       bool isSelected);
+
+protected:
+    // set the text colours before drawing
+    void SetTextColoursAndFont(wxGrid& grid,
+                               wxGridCellAttr& attr,
+                               wxDC& dc,
+                               bool isSelected);
+};
+
+// the default renderer for the cells containing numeric (long) data
+class WXDLLEXPORT wxGridCellNumberRenderer : public wxGridCellStringRenderer
+{
+public:
+    // draw the string right aligned
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+};
+
+class WXDLLEXPORT wxGridCellFloatRenderer : public wxGridCellStringRenderer
+{
+public:
+    wxGridCellFloatRenderer(int width, int precision);
+
+    // get/change formatting parameters
+    int GetWidth() const { return m_width; }
+    void SetWidth(int width) { m_width = width; }
+    int GetPrecision() const { return m_precision; }
+    void SetPrecision(int precision) { m_precision = precision; }
+
+    // draw the string right aligned with given width/precision
+    virtual void Draw(wxGrid& grid,
+                      wxGridCellAttr& attr,
+                      wxDC& dc,
+                      const wxRect& rect,
+                      int row, int col,
+                      bool isSelected);
+
+private:
+    // formatting parameters
+    int m_width,
+        m_precision;
+
+    wxString m_format;
 };
 
 // renderer for boolean fields
 class WXDLLEXPORT wxGridCellBoolRenderer : public wxGridCellRenderer
 {
 public:
-
     // draw a check mark or nothing
     virtual void Draw(wxGrid& grid,
                       wxGridCellAttr& attr,
@@ -215,8 +278,70 @@ public:
 protected:
     wxTextCtrl *Text() const { return (wxTextCtrl *)m_control; }
 
+    // parts of our virtual functions reused by the derived classes
+    void DoBeginEdit(const wxString& startValue);
+    void DoReset(const wxString& startValue);
+
 private:
     wxString m_startValue;
+};
+
+// the editor for numeric (long) data
+class WXDLLEXPORT wxGridCellNumberEditor : public wxGridCellTextEditor
+{
+public:
+    // allows to specify the range - if min == max == -1, no range checking is
+    // done
+    wxGridCellNumberEditor(int min = -1, int max = -1);
+
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        wxEvtHandler* evtHandler);
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+
+    virtual void Reset();
+    virtual void StartingKey(wxKeyEvent& event);
+
+protected:
+    wxSpinCtrl *Spin() const { return (wxSpinCtrl *)m_control; }
+
+    // if HasRange(), we use wxSpinCtrl - otherwise wxTextCtrl
+    bool HasRange() const { return m_min != m_max; }
+
+    // string representation of m_valueOld
+    wxString GetString() const
+        { return wxString::Format(_T("%ld"), m_valueOld); }
+
+private:
+    int m_min,
+        m_max;
+
+    long m_valueOld;
+};
+
+// the editor for floating point numbers (double) data
+class WXDLLEXPORT wxGridCellFloatEditor : public wxGridCellTextEditor
+{
+public:
+    virtual void Create(wxWindow* parent,
+                        wxWindowID id,
+                        wxEvtHandler* evtHandler);
+
+    virtual void BeginEdit(int row, int col, wxGrid* grid);
+    virtual bool EndEdit(int row, int col,  bool saveValue, wxGrid* grid);
+
+    virtual void Reset();
+    virtual void StartingKey(wxKeyEvent& event);
+
+protected:
+    // string representation of m_valueOld
+    wxString GetString() const
+        { return wxString::Format(_T("%f"), m_valueOld); }
+
+private:
+    double m_valueOld;
 };
 
 // the editor for boolean data

@@ -41,10 +41,11 @@
     #include "wx/log.h"
     #include "wx/textctrl.h"
     #include "wx/checkbox.h"
+    #include "wx/valtext.h"
 #endif
 
-// this include needs to be outside precomp for BCC
 #include "wx/textfile.h"
+#include "wx/spinctrl.h"
 
 #include "wx/grid.h"
 
@@ -500,11 +501,16 @@ void wxGridCellTextEditor::BeginEdit(int row, int col, wxGrid* grid)
                  wxT("The wxGridCellEditor must be Created first!"));
 
     m_startValue = grid->GetTable()->GetValue(row, col);
-    Text()->SetValue(m_startValue);
+
+    DoBeginEdit(m_startValue);
+}
+
+void wxGridCellTextEditor::DoBeginEdit(const wxString& startValue)
+{
+    Text()->SetValue(startValue);
     Text()->SetInsertionPointEnd();
     Text()->SetFocus();
 }
-
 
 bool wxGridCellTextEditor::EndEdit(int row, int col, bool saveValue,
                                    wxGrid* grid)
@@ -532,7 +538,12 @@ void wxGridCellTextEditor::Reset()
     wxASSERT_MSG(m_control,
                  wxT("The wxGridCellEditor must be Created first!"));
 
-    Text()->SetValue(m_startValue);
+    DoReset(m_startValue);
+}
+
+void wxGridCellTextEditor::DoReset(const wxString& startValue)
+{
+    Text()->SetValue(startValue);
     Text()->SetInsertionPointEnd();
 }
 
@@ -574,6 +585,187 @@ void wxGridCellTextEditor::HandleReturn(wxKeyEvent& event)
     //
     event.Skip();
 #endif
+}
+
+// ----------------------------------------------------------------------------
+// wxGridCellNumberEditor
+// ----------------------------------------------------------------------------
+
+wxGridCellNumberEditor::wxGridCellNumberEditor(int min, int max)
+{
+    m_min = min;
+    m_max = max;
+}
+
+void wxGridCellNumberEditor::Create(wxWindow* parent,
+                                    wxWindowID id,
+                                    wxEvtHandler* evtHandler)
+{
+    if ( HasRange() )
+    {
+        // create a spin ctrl
+        m_control = new wxSpinCtrl(parent, -1, wxEmptyString,
+                                   wxDefaultPosition, wxDefaultSize,
+                                   wxSP_ARROW_KEYS,
+                                   m_min, m_max);
+
+        wxGridCellEditor::Create(parent, id, evtHandler);
+    }
+    else
+    {
+        // just a text control
+        wxGridCellTextEditor::Create(parent, id, evtHandler);
+
+#if wxUSE_VALIDATORS
+        Text()->SetValidator(new wxTextValidator(wxFILTER_NUMERIC));
+#endif // wxUSE_VALIDATORS
+    }
+}
+
+void wxGridCellNumberEditor::BeginEdit(int row, int col, wxGrid* grid)
+{
+    // first get the value
+    wxGridTableBase *table = grid->GetTable();
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+    {
+        m_valueOld = table->GetValueAsLong(row, col);
+    }
+    else
+    {
+        wxFAIL_MSG( _T("this cell doesn't have numeric value") );
+
+        return;
+    }
+
+    if ( HasRange() )
+    {
+        Spin()->SetValue(m_valueOld);
+    }
+    else
+    {
+        DoBeginEdit(GetString());
+    }
+}
+
+bool wxGridCellNumberEditor::EndEdit(int row, int col, bool saveValue,
+                                     wxGrid* grid)
+{
+    bool changed;
+    long value;
+
+    if ( HasRange() )
+    {
+        value = Spin()->GetValue();
+        changed = value != m_valueOld;
+    }
+    else
+    {
+        changed = Text()->GetValue().ToLong(&value) && (value != m_valueOld);
+    }
+
+    if ( changed )
+    {
+        grid->GetTable()->SetValueAsLong(row, col, value);
+    }
+
+    return changed;
+}
+
+void wxGridCellNumberEditor::Reset()
+{
+    if ( HasRange() )
+    {
+        Spin()->SetValue(m_valueOld);
+    }
+    else
+    {
+        DoReset(GetString());
+    }
+}
+
+void wxGridCellNumberEditor::StartingKey(wxKeyEvent& event)
+{
+    if ( !HasRange() )
+    {
+        long keycode = event.KeyCode();
+        if ( isdigit(keycode) || keycode == '+' || keycode == '-' )
+        {
+            wxGridCellTextEditor::StartingKey(event);
+
+            // skip Skip() below
+            return;
+        }
+    }
+
+    event.Skip();
+}
+// ----------------------------------------------------------------------------
+// wxGridCellFloatEditor
+// ----------------------------------------------------------------------------
+
+void wxGridCellFloatEditor::Create(wxWindow* parent,
+                                   wxWindowID id,
+                                   wxEvtHandler* evtHandler)
+{
+    wxGridCellTextEditor::Create(parent, id, evtHandler);
+
+#if wxUSE_VALIDATORS
+    Text()->SetValidator(new wxTextValidator(wxFILTER_NUMERIC));
+#endif // wxUSE_VALIDATORS
+}
+
+void wxGridCellFloatEditor::BeginEdit(int row, int col, wxGrid* grid)
+{
+    // first get the value
+    wxGridTableBase *table = grid->GetTable();
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
+    {
+        m_valueOld = table->GetValueAsDouble(row, col);
+    }
+    else
+    {
+        wxFAIL_MSG( _T("this cell doesn't have float value") );
+
+        return;
+    }
+
+    DoBeginEdit(GetString());
+}
+
+bool wxGridCellFloatEditor::EndEdit(int row, int col, bool saveValue,
+                                     wxGrid* grid)
+{
+    double value;
+    if ( Text()->GetValue().ToDouble(&value) && (value != m_valueOld) )
+    {
+        grid->GetTable()->SetValueAsDouble(row, col, value);
+
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
+}
+
+void wxGridCellFloatEditor::Reset()
+{
+    DoReset(GetString());
+}
+
+void wxGridCellFloatEditor::StartingKey(wxKeyEvent& event)
+{
+    long keycode = event.KeyCode();
+    if ( isdigit(keycode) ||
+         keycode == '+' || keycode == '-' || keycode == '.' )
+    {
+        wxGridCellTextEditor::StartingKey(event);
+
+        // skip Skip() below
+        return;
+    }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -738,20 +930,19 @@ void wxGridCellRenderer::Draw(wxGrid& grid,
     dc.DrawRectangle(rect);
 }
 
+wxGridCellRenderer::~wxGridCellRenderer()
+{
+}
+
 // ----------------------------------------------------------------------------
 // wxGridCellStringRenderer
 // ----------------------------------------------------------------------------
 
-void wxGridCellStringRenderer::Draw(wxGrid& grid,
-                                    wxGridCellAttr& attr,
-                                    wxDC& dc,
-                                    const wxRect& rectCell,
-                                    int row, int col,
-                                    bool isSelected)
+void wxGridCellStringRenderer::SetTextColoursAndFont(wxGrid& grid,
+                                                     wxGridCellAttr& attr,
+                                                     wxDC& dc,
+                                                     bool isSelected)
 {
-    wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
-
-    // now we only have to draw the text
     dc.SetBackgroundMode( wxTRANSPARENT );
 
     // TODO some special colours for attr.IsReadOnly() case?
@@ -766,19 +957,105 @@ void wxGridCellStringRenderer::Draw(wxGrid& grid,
         dc.SetTextBackground( attr.GetBackgroundColour() );
         dc.SetTextForeground( attr.GetTextColour() );
     }
+
     dc.SetFont( attr.GetFont() );
+}
+
+void wxGridCellStringRenderer::Draw(wxGrid& grid,
+                                    wxGridCellAttr& attr,
+                                    wxDC& dc,
+                                    const wxRect& rectCell,
+                                    int row, int col,
+                                    bool isSelected)
+{
+    wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
+
+    // now we only have to draw the text
+    SetTextColoursAndFont(grid, attr, dc, isSelected);
 
     int hAlign, vAlign;
     attr.GetAlignment(&hAlign, &vAlign);
 
     wxRect rect = rectCell;
-    rect.x++;
-    rect.y++;
-    rect.width -= 2;
-    rect.height -= 2;
+    rect.Inflate(-1);
 
     grid.DrawTextRectangle(dc, grid.GetCellValue(row, col),
                            rect, hAlign, vAlign);
+}
+
+void wxGridCellNumberRenderer::Draw(wxGrid& grid,
+                                    wxGridCellAttr& attr,
+                                    wxDC& dc,
+                                    const wxRect& rectCell,
+                                    int row, int col,
+                                    bool isSelected)
+{
+    wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
+
+    SetTextColoursAndFont(grid, attr, dc, isSelected);
+
+    // draw the text right aligned by default
+    int hAlign, vAlign;
+    attr.GetAlignment(&hAlign, &vAlign);
+    hAlign = wxRIGHT;
+
+    wxRect rect = rectCell;
+    rect.Inflate(-1);
+
+    wxGridTableBase *table = grid.GetTable();
+    wxString text;
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_NUMBER) )
+    {
+        text.Printf(_T("%ld"), table->GetValueAsLong(row, col));
+    }
+    //else: leave the string empty or put 0 into it?
+
+    grid.DrawTextRectangle(dc, text, rect, hAlign, vAlign);
+}
+
+// ----------------------------------------------------------------------------
+// wxGridCellFloatRenderer
+// ----------------------------------------------------------------------------
+
+wxGridCellFloatRenderer::wxGridCellFloatRenderer(int width, int precision)
+{
+    SetWidth(width);
+    SetPrecision(precision);
+}
+
+void wxGridCellFloatRenderer::Draw(wxGrid& grid,
+                                   wxGridCellAttr& attr,
+                                   wxDC& dc,
+                                   const wxRect& rectCell,
+                                   int row, int col,
+                                   bool isSelected)
+{
+    wxGridCellRenderer::Draw(grid, attr, dc, rectCell, row, col, isSelected);
+
+    SetTextColoursAndFont(grid, attr, dc, isSelected);
+
+    // draw the text right aligned by default
+    int hAlign, vAlign;
+    attr.GetAlignment(&hAlign, &vAlign);
+    hAlign = wxRIGHT;
+
+    wxRect rect = rectCell;
+    rect.Inflate(-1);
+
+    wxGridTableBase *table = grid.GetTable();
+    wxString text;
+    if ( table->CanGetValueAs(row, col, wxGRID_VALUE_FLOAT) )
+    {
+        if ( !m_format )
+        {
+            m_format.Printf(_T("%%%d.%d%%f"), m_width, m_precision);
+        }
+
+        text.Printf(m_format, table->GetValueAsDouble(row, col));
+    }
+    //else: leave the string empty or put 0 into it?
+
+    grid.DrawTextRectangle(dc, text, rect, hAlign, vAlign);
 }
 
 // ----------------------------------------------------------------------------
@@ -1475,13 +1752,13 @@ wxString wxGridTableBase::GetColLabelValue( int col )
 
 wxString wxGridTableBase::GetTypeName( int WXUNUSED(row), int WXUNUSED(col) )
 {
-    return wxT("string");
+    return wxGRID_VALUE_STRING;
 }
 
 bool wxGridTableBase::CanGetValueAs( int WXUNUSED(row), int WXUNUSED(col),
                                      const wxString& typeName )
 {
-    return typeName == wxT("string");
+    return typeName == wxGRID_VALUE_STRING;
 }
 
 bool wxGridTableBase::CanSetValueAs( int row, int col, const wxString& typeName )
@@ -2288,13 +2565,18 @@ void wxGrid::Create()
     m_rowLabelWidth = WXGRID_DEFAULT_ROW_LABEL_WIDTH;
     m_colLabelHeight = WXGRID_DEFAULT_COL_LABEL_HEIGHT;
 
-    // data type registration
+    // data type registration: register all standard data types
+    // TODO: may be allow the app to selectively disable some of them?
     m_typeRegistry = new wxGridTypeRegistry;
-    RegisterDataType(wxT("string"), new wxGridCellStringRenderer,
-                                    new wxGridCellTextEditor);
-    RegisterDataType(wxT("bool"), new wxGridCellBoolRenderer,
-                                  new wxGridCellBoolEditor);
-
+    RegisterDataType(wxGRID_VALUE_STRING,
+                     new wxGridCellStringRenderer,
+                     new wxGridCellTextEditor);
+    RegisterDataType(wxGRID_VALUE_BOOL,
+                     new wxGridCellBoolRenderer,
+                     new wxGridCellBoolEditor);
+    RegisterDataType(wxGRID_VALUE_NUMBER,
+                     new wxGridCellNumberRenderer,
+                     new wxGridCellNumberEditor);
 
     // subwindow components that make up the wxGrid
     m_cornerLabelWin = new wxGridCornerLabelWindow( this,
