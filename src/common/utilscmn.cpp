@@ -281,10 +281,10 @@ StringMatch (const wxChar *str1, const wxChar *str2, bool subString, bool exact)
 // [volatile]
 wxString wxNow()
 {
-  time_t now = time((time_t *) NULL);
-  char *date = ctime(&now);
-  date[24] = '\0';
-  return wxString(date);
+    time_t now = time((time_t *) NULL);
+    char *date = ctime(&now);
+    date[24] = '\0';
+    return wxString::FromAscii(date);
 }
 
 #if wxUSE_GUI

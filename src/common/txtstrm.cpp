@@ -493,12 +493,8 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
 
 wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 {
-    // these strange manipulations are needed in Unicode mode
-    char buf[2];
-    buf[0] = c;
-    buf[1] = 0;
-
-    WriteString( wxString(buf) );
+    WriteString( wxString::FromAscii(c) );
+    
     return *this;
 }
 
