@@ -70,8 +70,7 @@ public:
 
     const wxArrayLong& GetSubcontrols() const { return m_subControls; }
 
-    virtual WXHBRUSH OnCtlColor(WXHDC pDC, WXHWND pWnd, WXUINT nCtlColor,
-            WXUINT message, WXWPARAM wParam, WXLPARAM lParam);
+    virtual WXHBRUSH MSWControlColor(WXHDC pDC);
 
 protected:
     // choose the default border for this window

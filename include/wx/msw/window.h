@@ -257,7 +257,7 @@ public:
     void UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
                       WXWORD *code, WXWORD *pos, WXHWND *hwnd);
     void UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
-                        WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd);
+                        WXHDC *hdc, WXHWND *hwnd);
     void UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
                           WXWORD *item, WXWORD *flags, WXHMENU *hmenu);
 
@@ -308,7 +308,6 @@ public:
     bool HandleCtlColor(WXHBRUSH *hBrush,
                         WXHDC hdc,
                         WXHWND hWnd,
-                        WXUINT nCtlColor,
                         WXUINT message,
                         WXWPARAM wParam,
                         WXLPARAM lParam);
@@ -368,6 +367,9 @@ public:
 
     // this function should return the brush to paint the window background
     // with or 0 for the default brush
+    virtual WXHBRUSH MSWControlColor(WXHDC hDC);
+
+    // deprecated, for compatibility only: override MSWControlColor instead
     virtual WXHBRUSH OnCtlColor(WXHDC hDC,
                                 WXHWND hWnd,
                                 WXUINT nCtlColor,

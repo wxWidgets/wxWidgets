@@ -1814,7 +1814,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
 
         // here we try to do all the job which ::IsDialogMessage() usually does
         // internally
-#if 1
         if ( msg->message == WM_KEYDOWN )
         {
             bool bCtrlDown = wxIsCtrlDown();
@@ -1971,35 +1970,6 @@ bool wxWindowMSW::MSWProcessMessage(WXMSG* pMsg)
                 }
             }
         }
-#else // 0
-        // let ::IsDialogMessage() do almost everything and handle just the
-        // things it doesn't here: Ctrl-TAB for switching notebook pages
-        if ( msg->message == WM_KEYDOWN )
-        {
-            // don't process system keys here
-            if ( !(HIWORD(msg->lParam) & KF_ALTDOWN) )
-            {
-                if ( (msg->wParam == VK_TAB) && wxIsCtrlDown() )
-                {
-                    // find the first notebook parent and change its page
-                    wxWindow *win = this;
-                    wxNotebook *nbook = NULL;
-                    while ( win && !nbook )
-                    {
-                        nbook = wxDynamicCast(win, wxNotebook);
-                        win = win->GetParent();
-                    }
-
-                    if ( nbook )
-                    {
-                        bool forward = !wxIsShiftDown();
-
-                        nbook->AdvanceSelection(forward);
-                    }
-                }
-            }
-        }
-#endif // 1/0
 
         // don't let IsDialogMessage() get VK_ESCAPE as it _always_ eats the
         // message even when there is no cancel button and when the message is
@@ -2147,13 +2117,10 @@ void wxWindowMSW::UnpackScroll(WXWPARAM wParam, WXLPARAM lParam,
 }
 
 void wxWindowMSW::UnpackCtlColor(WXWPARAM wParam, WXLPARAM lParam,
-                              WXWORD *nCtlColor, WXHDC *hdc, WXHWND *hwnd)
+                                 WXHDC *hdc, WXHWND *hwnd)
 {
-#ifndef __WXMICROWIN__
-    *nCtlColor = CTLCOLOR_BTN;
     *hwnd = (WXHWND)lParam;
     *hdc = (WXHDC)wParam;
-#endif
 }
 
 void wxWindowMSW::UnpackMenuSelect(WXWPARAM wParam, WXLPARAM lParam,
@@ -2725,7 +2692,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 
         // CTLCOLOR messages are sent by children to query the parent for their
-        // colors#ifndef __WXMICROWIN__
+        // colors
 #ifndef __WXMICROWIN__
         case WM_CTLCOLORMSGBOX:
         case WM_CTLCOLOREDIT:
@@ -2735,15 +2702,13 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
         case WM_CTLCOLORSCROLLBAR:
         case WM_CTLCOLORSTATIC:
             {
-                WXWORD nCtlColor;
                 WXHDC hdc;
                 WXHWND hwnd;
-                UnpackCtlColor(wParam, lParam, &nCtlColor, &hdc, &hwnd);
+                UnpackCtlColor(wParam, lParam, &hdc, &hwnd);
 
                 processed = HandleCtlColor(&rc.hBrush,
                                            (WXHDC)hdc,
                                            (WXHWND)hwnd,
-                                           nCtlColor,
                                            message,
                                            wParam,
                                            lParam);
@@ -3773,50 +3738,40 @@ bool wxWindowMSW::HandleDisplayChange()
     return GetEventHandler()->ProcessEvent(event);
 }
 
-bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
-                              WXHDC pDC,
-                              WXHWND pWnd,
-                              WXUINT nCtlColor,
-                              WXUINT message,
-                              WXWPARAM wParam,
-                              WXLPARAM lParam)
-{
 #ifndef __WXMICROWIN__
-    WXHBRUSH hBrush = 0;
 
-#ifdef __WXWINCE__
-    if (false)
-#else
-    if ( nCtlColor == CTLCOLOR_DLG )
-#endif
-    {
-        hBrush = OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
-    }
+bool wxWindowMSW::HandleCtlColor(WXHBRUSH *brush,
+                                 WXHDC pDC,
+                                 WXHWND pWnd,
+                                 WXUINT message,
+                                 WXWPARAM wParam,
+                                 WXLPARAM lParam)
+{
 #if wxUSE_CONTROLS
+    wxControl *item = (wxControl *)FindItemByHWND(pWnd, true);
+    if ( item )
+        *brush = item->OnCtlColor(pDC, pWnd, 0, message, wParam, lParam);
     else
-    {
-        wxControl *item = (wxControl *)FindItemByHWND(pWnd, true);
-        if ( item )
-            hBrush = item->OnCtlColor(pDC, pWnd, nCtlColor, message, wParam, lParam);
-    }
 #endif // wxUSE_CONTROLS
+        *brush = NULL;
 
-    if ( hBrush )
-        *brush = hBrush;
-
-    return hBrush != 0;
-#else // __WXMICROWIN__
-    return false;
-#endif
+    return *brush != NULL;
 }
 
+#endif // __WXMICROWIN__
+
 // Define for each class of dialog and control
-WXHBRUSH wxWindowMSW::OnCtlColor(WXHDC WXUNUSED(hDC),
+WXHBRUSH wxWindowMSW::OnCtlColor(WXHDC hDC,
                                  WXHWND WXUNUSED(hWnd),
                                  WXUINT WXUNUSED(nCtlColor),
                                  WXUINT WXUNUSED(message),
                                  WXWPARAM WXUNUSED(wParam),
                                  WXLPARAM WXUNUSED(lParam))
+{
+    return MSWControlColor(hDC);
+}
+
+WXHBRUSH wxWindowMSW::MSWControlColor(WXHDC WXUNUSED(hDC))
 {
     return (WXHBRUSH)0;
 }
@@ -4070,43 +4025,52 @@ bool wxWindowMSW::HandleEraseBkgnd(WXHDC hdc)
 
 void wxWindowMSW::OnEraseBackground(wxEraseEvent& event)
 {
-    if ( GetBackgroundStyle() == wxBG_STYLE_CUSTOM )
+    switch ( GetBackgroundStyle() )
     {
-        // don't skip the event here, custom background means that the app is
-        // drawing it itself in its OnPaint()
-        return;
+        default:
+            wxFAIL_MSG( _T("unexpected background style") );
+            // fall through
+
+        case wxBG_STYLE_CUSTOM:
+            // don't skip the event here, custom background means that the app
+            // is drawing it itself in its OnPaint()
+            break;
+
+        case wxBG_STYLE_SYSTEM:
+#if wxUSE_NOTEBOOK && wxUSE_UXTHEME
+            // automatically apply the tab control theme background to any
+            // child panels to have the same look as the native property sheet
+            // dialogs
+            {
+                for ( wxWindow *win = this; win; win = win->GetParent() )
+                {
+                    wxNotebook *nbook = wxDynamicCast(win, wxNotebook);
+                    if ( nbook )
+                    {
+                        nbook->DoEraseBackground(event);
+                        return;
+                    }
+                }
+            }
+#endif // wxUSE_NOTEBOOK
+            event.Skip();
+            break;
+
+        case wxBG_STYLE_COLOUR:
+            // we have a fixed solid background colour, do use it
+            RECT rect;
+            ::GetClientRect(GetHwnd(), &rect);
+
+            HBRUSH hBrush = ::CreateSolidBrush(
+                                    wxColourToPalRGB(GetBackgroundColour()));
+            if ( !hBrush )
+                wxLogLastError(wxT("CreateSolidBrush"));
+
+            HDC hdc = GetHdcOf((*event.GetDC()));
+
+            ::FillRect(hdc, &rect, hBrush);
+            ::DeleteObject(hBrush);
     }
-
-    if ( !m_hasBgCol )
-    {
-        event.Skip();
-        return;
-    }
-
-    // we have a fixed solid background colour, do use it
-    RECT rect;
-    ::GetClientRect(GetHwnd(), &rect);
-
-    wxColour backgroundColour(GetBackgroundColour());
-    COLORREF ref = PALETTERGB(backgroundColour.Red(),
-                              backgroundColour.Green(),
-                              backgroundColour.Blue());
-    HBRUSH hBrush = ::CreateSolidBrush(ref);
-    if ( !hBrush )
-        wxLogLastError(wxT("CreateSolidBrush"));
-
-    HDC hdc = (HDC)event.GetDC()->GetHDC();
-
-#ifndef __WXWINCE__
-    int mode = ::SetMapMode(hdc, MM_TEXT);
-#endif
-
-    ::FillRect(hdc, &rect, hBrush);
-    ::DeleteObject(hBrush);
-
-#ifndef __WXWINCE__
-    ::SetMapMode(hdc, mode);
-#endif
 }
 
 // ---------------------------------------------------------------------------

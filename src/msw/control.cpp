@@ -40,7 +40,12 @@
 
 #include "wx/control.h"
 
+#if wxUSE_NOTEBOOK
+    #include "wx/notebook.h"
+#endif // wxUSE_NOTEBOOK
+
 #include "wx/msw/private.h"
+#include "wx/msw/uxtheme.h"
 
 #if defined(__WIN95__) && !(defined(__GNUWIN32_OLD__) && !defined(__CYGWIN10__))
     #include <commctrl.h>
@@ -322,35 +327,49 @@ bool wxControl::MSWOnNotify(int idCtrl,
 }
 #endif // Win95
 
-WXHBRUSH wxControl::OnCtlColor(WXHDC pDC, WXHWND WXUNUSED(pWnd), WXUINT WXUNUSED(nCtlColor),
-#if wxUSE_CTL3D
-                               WXUINT message,
-                               WXWPARAM wParam,
-                               WXLPARAM lParam
-#else
-                               WXUINT WXUNUSED(message),
-                               WXWPARAM WXUNUSED(wParam),
-                               WXLPARAM WXUNUSED(lParam)
-#endif
-    )
+WXHBRUSH wxControl::MSWControlColor(WXHDC pDC)
 {
-#if wxUSE_CTL3D
-    if ( m_useCtl3D )
-    {
-        HBRUSH hbrush = Ctl3dCtlColorEx(message, wParam, lParam);
-        return (WXHBRUSH) hbrush;
-    }
-#endif // wxUSE_CTL3D
-
     HDC hdc = (HDC)pDC;
-    wxColour colBack = GetBackgroundColour();
+    if ( m_hasFgCol )
+        ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
 
-    ::SetBkColor(hdc, wxColourToRGB(colBack));
-    ::SetTextColor(hdc, wxColourToRGB(GetForegroundColour()));
+    if ( m_hasBgCol )
+    {
+        wxColour colBack = GetBackgroundColour();
 
-    wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+        ::SetBkColor(hdc, wxColourToRGB(colBack));
 
-    return (WXHBRUSH)brush->GetResourceHandle();
+        wxBrush *brush = wxTheBrushList->FindOrCreateBrush(colBack, wxSOLID);
+
+        return (WXHBRUSH)brush->GetResourceHandle();
+    }
+
+    SetBkMode(hdc, TRANSPARENT);
+
+#if wxUSE_UXTHEME && wxUSE_NOTEBOOK
+    if ( wxUxThemeEngine::GetIfActive() )
+    {
+        for ( wxWindow *win = this; win; win = win->GetParent() )
+        {
+            wxNotebook *nbook = wxDynamicCast(win, wxNotebook);
+            if ( nbook )
+            {
+                WXHBRUSH hbr = nbook->GetThemeBackgroundBrush();
+                if ( hbr )
+                {
+                    RECT rc;
+                    GetWindowRect(GetHwnd(), &rc);
+
+                    MapWindowPoints(NULL, GetHwndOf(nbook), (POINT *)&rc, 1);
+                    SetBrushOrgEx(hdc, -rc.left, -rc.top, NULL);
+                    return hbr;
+                }
+            }
+        }
+    }
+#endif // wxUSE_UXTHEME
+
+    return GetStockObject(NULL_BRUSH);
 }
 
 // ---------------------------------------------------------------------------
