@@ -86,6 +86,40 @@ specify how big the virtual window size should be.
 
 Destructor.
 
+\membersection{wxScrolledWindow::CalcScrolledPosition}\label{wxscrolledwindowcalcscrolledposition}
+
+\constfunc{void}{CalcScrolledPosition}{
+   \param{int }{x},
+   \param{int }{y},
+   \param{int *}{xx}
+   \param{int *}{yy}}
+
+Translates the logical coordinates to the device ones. For example, if a window is
+scrolled 10 pixels to the bottom, the device coordinates of the origin are (0, 0)
+(as always), but the logical coordinates are (0, 10) and so the call to
+CalcScrolledPosition(0, 0, \&xx, \&yy) will return 10 in yy.
+
+\wxheading{See also}
+
+\helpref{CalcUnscrolledPosition}{wxscrolledwindowcalcunscrolledposition}
+
+\membersection{wxScrolledWindow::CalcUnscrolledPosition}\label{wxscrolledwindowcalcunscrolledposition}
+
+\constfunc{void}{CalcUnscrolledPosition}{
+   \param{int }{x},
+   \param{int }{y},
+   \param{int *}{xx}
+   \param{int *}{yy}}
+
+Translates the device coordinates to the logical ones. For example, if a window is
+scrolled 10 pixels to the bottom, the device coordinates of the origin are (0, 0)
+(as always), but the logical coordinates are (0, 10) and so the call to
+CalcUnscrolledPosition(0, 10, \&xx, \&yy) will return 0 in yy.
+
+\wxheading{See also}
+
+\helpref{CalcScrolledPosition}{wxscrolledwindowcalcscrolledposition}
+
 \membersection{wxScrolledWindow::Create}\label{wxscrolledwindowcreate}
 
 \func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id = -1},\rtfsp
@@ -164,7 +198,7 @@ to translate these units to logical units.
 
 \constfunc{bool}{IsRetained}{\void}
 
-TRUE if the window has a backing bitmap.
+Motif only: TRUE if the window has a backing bitmap.
 
 \membersection{wxScrolledWindow::PrepareDC}\label{wxscrolledwindowpreparedc}
 
@@ -201,45 +235,13 @@ void MyWindow::OnEvent(wxMouseEvent& event)
 
 \func{virtual void}{OnDraw}{\param{wxDC\& }{dc}}
 
-Called by the default \helpref{wxScrolledWindow::OnPaint}{wxscrolledwindowonpaint} implementation
-to allow the application to define painting behaviour without having to worry about
-calling \helpref{wxScrolledWindow::PrepareDC}{wxscrolledwindowpreparedc}.
+Called by the default paint event handler to allow the application to define
+painting behaviour without having to worry about calling 
+\helpref{wxScrolledWindow::PrepareDC}{wxscrolledwindowpreparedc}.
 
-\membersection{wxScrolledWindow::OnPaint}\label{wxscrolledwindowonpaint}
-
-\func{void}{OnPaint}{\param{wxPaintEvent\& }{event}}
-
-Sent to the window when the window must be refreshed.
-
-For more details, see \helpref{wxWindow::OnPaint}{wxwindowonpaint}.
-
-The default implementation for wxScrolledWindow's OnPaint handler is simply:
-
-\begin{verbatim}
-void wxScrolledWindow::OnPaint(wxPaintEvent& event)
-{
-	wxPaintDC dc(this);
-	PrepareDC(dc);
-
-	OnDraw(dc);
-}
-\end{verbatim}
-
-\membersection{wxScrolledWindow::OnScroll}\label{wxscrolledwindowonscroll}
-
-\func{void}{OnScroll}{\param{wxScrollEvent\& }{event}}
-
-Override this function to intercept scroll events. This
-member function implements the default scroll behaviour. If
-you do not call the default function, you will have to manage
-all scrolling behaviour including drawing the window contents
-at an appropriate position relative to the scrollbars.
-
-For more details, see \helpref{wxWindow::OnScroll}{wxwindowonscroll}.
-
-\wxheading{See also}
-
-\helpref{wxScrollEvent}{wxscrollevent}
+Instead of overriding this function you may also just process the paint event
+in the derived class as usual, but then you will have to call PrepareDC()
+yourself.
 
 \membersection{wxScrolledWindow::Scroll}\label{wxscrolledwindowscroll}
 
