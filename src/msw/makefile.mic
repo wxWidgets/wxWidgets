@@ -322,6 +322,7 @@ cleanwx:
 	-$(RM) *.o
 	-$(RM) *.bak
 	-$(RM) core
+	-$(RM) ole/*.o
 	-$(RM) ../common/y_tab.c
 	-$(RM) ../common/lex_yy.c
 	-$(RM) ../common/*.o
