@@ -248,7 +248,7 @@ IMPLEMENT_DYNAMIC_CLASS_XTI_CALLBACK(wxWindow, wxWindowBase,"wx/window.h", wxWin
 
 // make wxWindowList known before the property is used
 
-WX_COLLECTION_TYPE_INFO( wxWindow* , wxWindowList ) ;
+wxCOLLECTION_TYPE_INFO( wxWindow* , wxWindowList ) ;
 
 template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVariantArray &value)
 {
@@ -257,81 +257,82 @@ template<> void wxCollectionToVariantArray( wxWindowList const &theList, wxxVari
 
 WX_DEFINE_FLAGS( wxWindowStyle )
 
-WX_BEGIN_FLAGS( wxWindowStyle )
+wxBEGIN_FLAGS( wxWindowStyle )
     // new style border flags, we put them first to
     // use them for streaming out
-    WX_FLAGS_MEMBER(wxBORDER_SIMPLE)
-    WX_FLAGS_MEMBER(wxBORDER_SUNKEN)
-    WX_FLAGS_MEMBER(wxBORDER_DOUBLE)
-    WX_FLAGS_MEMBER(wxBORDER_RAISED)
-    WX_FLAGS_MEMBER(wxBORDER_STATIC)
-    WX_FLAGS_MEMBER(wxBORDER_NONE)
 
+    wxFLAGS_MEMBER(wxBORDER_SIMPLE)
+    wxFLAGS_MEMBER(wxBORDER_SUNKEN)
+    wxFLAGS_MEMBER(wxBORDER_DOUBLE)
+    wxFLAGS_MEMBER(wxBORDER_RAISED)
+    wxFLAGS_MEMBER(wxBORDER_STATIC)
+    wxFLAGS_MEMBER(wxBORDER_NONE)
+    
     // old style border flags
-    WX_FLAGS_MEMBER(wxSIMPLE_BORDER)
-    WX_FLAGS_MEMBER(wxSUNKEN_BORDER)
-    WX_FLAGS_MEMBER(wxDOUBLE_BORDER)
-    WX_FLAGS_MEMBER(wxRAISED_BORDER)
-    WX_FLAGS_MEMBER(wxSTATIC_BORDER)
-    WX_FLAGS_MEMBER(wxNO_BORDER)
+    wxFLAGS_MEMBER(wxSIMPLE_BORDER)
+    wxFLAGS_MEMBER(wxSUNKEN_BORDER)
+    wxFLAGS_MEMBER(wxDOUBLE_BORDER)
+    wxFLAGS_MEMBER(wxRAISED_BORDER)
+    wxFLAGS_MEMBER(wxSTATIC_BORDER)
+    wxFLAGS_MEMBER(wxNO_BORDER)
 
     // standard window styles
-    WX_FLAGS_MEMBER(wxTAB_TRAVERSAL)
-    WX_FLAGS_MEMBER(wxCLIP_CHILDREN)
-    WX_FLAGS_MEMBER(wxTRANSPARENT_WINDOW)
-    WX_FLAGS_MEMBER(wxWANTS_CHARS)
-    WX_FLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
-    WX_FLAGS_MEMBER(wxALWAYS_SHOW_SB )
-    WX_FLAGS_MEMBER(wxVSCROLL)
-    WX_FLAGS_MEMBER(wxHSCROLL)
+    wxFLAGS_MEMBER(wxTAB_TRAVERSAL)
+    wxFLAGS_MEMBER(wxCLIP_CHILDREN)
+    wxFLAGS_MEMBER(wxTRANSPARENT_WINDOW)
+    wxFLAGS_MEMBER(wxWANTS_CHARS)
+    wxFLAGS_MEMBER(wxNO_FULL_REPAINT_ON_RESIZE)
+    wxFLAGS_MEMBER(wxALWAYS_SHOW_SB )
+    wxFLAGS_MEMBER(wxVSCROLL)
+    wxFLAGS_MEMBER(wxHSCROLL)
 
-WX_END_FLAGS( wxWindowStyle )
+wxEND_FLAGS( wxWindowStyle )
 
-WX_BEGIN_PROPERTIES_TABLE(wxWindow)
-	WX_EVENT_PROPERTY( Close , wxEVT_CLOSE_WINDOW , wxCloseEvent)
-	WX_EVENT_PROPERTY( Create , wxEVT_CREATE , wxWindowCreateEvent )
-	WX_EVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
+wxBEGIN_PROPERTIES_TABLE(wxWindow)
+	wxEVENT_PROPERTY( Close , wxEVT_CLOSE_WINDOW , wxCloseEvent)
+	wxEVENT_PROPERTY( Create , wxEVT_CREATE , wxWindowCreateEvent )
+	wxEVENT_PROPERTY( Destroy , wxEVT_DESTROY , wxWindowDestroyEvent )
     // Always constructor Properties first
 
-    WX_READONLY_PROPERTY( Parent,wxWindow*, GetParent,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
-	WX_PROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
-	WX_PROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
-    WX_PROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
+    wxREADONLY_PROPERTY( Parent,wxWindow*, GetParent,  , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( Id,wxWindowID, SetId, GetId, -1, 0 /*flags*/ , wxT("Helpstring") , wxT("group") )
+	wxPROPERTY( Position,wxPoint, SetPosition , GetPosition, wxPoint(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // pos
+	wxPROPERTY( Size,wxSize, SetSize, GetSize, wxSize(-1,-1) , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // size
+    wxPROPERTY( WindowStyle , long , SetWindowStyleFlag , GetWindowStyleFlag , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // style
 
     // Then all relations of the object graph
 
-    WX_READONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetWindowChildren , wxPROP_OBJECT_GRAPH /*flags*/ , wxT("Helpstring") , wxT("group"))
+    wxREADONLY_PROPERTY_COLLECTION( Children , wxWindowList , wxWindowBase* , GetWindowChildren , wxPROP_OBJECT_GRAPH /*flags*/ , wxT("Helpstring") , wxT("group"))
 
    // and finally all other properties
 
-	WX_PROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
-	WX_PROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
-	WX_PROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
-	WX_PROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
-	WX_PROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( ExtraStyle , long , SetExtraStyle , GetExtraStyle , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // extstyle
+	wxPROPERTY( BackgroundColour , wxColour , SetBackgroundColour , GetBackgroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // bg
+	wxPROPERTY( ForegroundColour , wxColour , SetForegroundColour , GetForegroundColour , , 0 /*flags*/ , wxT("Helpstring") , wxT("group")) // fg
+	wxPROPERTY( Enabled , bool , Enable , IsEnabled , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
+	wxPROPERTY( Shown , bool , Show , IsShown , wxxVariant((bool)true) , 0 /*flags*/ , wxT("Helpstring") , wxT("group"))
 #if 0
     // possible property candidates (not in xrc) or not valid in all subclasses
-	WX_PROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
-	WX_PROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
-	WX_PROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
+	wxPROPERTY( Title,wxString, SetTitle, GetTitle, wxT("") )
+	wxPROPERTY( Font , wxFont , SetFont , GetWindowFont  , )
+	wxPROPERTY( Label,wxString, SetLabel, GetLabel, wxT("") )
 	// MaxHeight, Width , MinHeight , Width
 	// TODO switch label to control and title to toplevels
 
-	WX_PROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
-	//WX_PROPERTY( Cursor , wxCursor , SetCursor , GetCursor , )
-	// WX_PROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
-	WX_PROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
+	wxPROPERTY( ThemeEnabled , bool , SetThemeEnabled , GetThemeEnabled , )
+	//wxPROPERTY( Cursor , wxCursor , SetCursor , GetCursor , )
+	// wxPROPERTY( ToolTip , wxString , SetToolTip , GetToolTipText , )
+	wxPROPERTY( AutoLayout , bool , SetAutoLayout , GetAutoLayout , )
 
 
 
 #endif
-WX_END_PROPERTIES_TABLE()
+wxEND_PROPERTIES_TABLE()
 
-WX_BEGIN_HANDLERS_TABLE(wxWindow)
-WX_END_HANDLERS_TABLE()
+wxBEGIN_HANDLERS_TABLE(wxWindow)
+wxEND_HANDLERS_TABLE()
 
-WX_CONSTRUCTOR_DUMMY(wxWindow)
+wxCONSTRUCTOR_DUMMY(wxWindow)
 
 #else
     IMPLEMENT_DYNAMIC_CLASS(wxWindow, wxWindowBase)
