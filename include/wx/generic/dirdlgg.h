@@ -32,7 +32,7 @@ class WXDLLEXPORT wxTreeEvent;
 // wxGenericDirDialog
 //-----------------------------------------------------------------------------
 
-class wxGenericDirDialog: public wxDialog
+class WXDLLEXPORT wxGenericDirDialog: public wxDialog
 {
 public:
     wxGenericDirDialog(): wxDialog() {}
