@@ -62,7 +62,7 @@
 extern FILE *popen();
 #endif
 
-#if defined(SYSV) || defined(SVR4) || defined(VMS) || defined(WIN32) || defined( macintosh )
+#if defined(SYSV) || defined(SVR4) || defined(VMS) || defined(WIN32) || defined(macintosh) || defined(__APPLE__)
 #include <string.h>
 
 #ifndef index
@@ -79,7 +79,7 @@ extern FILE *popen();
 
 
 
-#if defined(SYSV) || defined(SVR4) || defined(VMS) || defined(WIN32) || defined( macintosh )
+#if defined(SYSV) || defined(SVR4) || defined(VMS) || defined(WIN32) || defined(macintosh) || defined(__APPLE__)
 #ifndef bcopy
 #define bcopy(source, dest, count) memcpy(dest, source, count)
 #endif

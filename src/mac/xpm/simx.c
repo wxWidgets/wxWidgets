@@ -173,7 +173,7 @@ rgbFromHex(char *hex, int *r, int *g, int *b)
 		*r = hexCharToInt(hex[1]);
 		*g = hexCharToInt(hex[2]);
 		*b = hexCharToInt(hex[3]);
-		#ifdef macintosh
+		#if defined(macintosh) || defined(__APPLE__)
 		*r <<= 12 ;
 		*g <<= 12 ;
 		*b <<= 12 ;
@@ -183,7 +183,7 @@ rgbFromHex(char *hex, int *r, int *g, int *b)
 		*r = hexCharToInt(hex[1]) * 16 + hexCharToInt(hex[2]);
 		*g = hexCharToInt(hex[3]) * 16 + hexCharToInt(hex[4]);
 		*b = hexCharToInt(hex[5]) * 16 + hexCharToInt(hex[6]);
-		#ifdef macintosh
+		#if defined(macintosh) || defined(__APPLE__)
 		*r <<= 8 ;
 		*g <<= 8 ;
 		*b <<= 8 ;
@@ -191,7 +191,7 @@ rgbFromHex(char *hex, int *r, int *g, int *b)
     } else if (len == 12 + 1) 
     {
 		/* it's like c #32329999CCCC */
-		#ifdef macintosh
+		#if defined(macintosh) || defined(__APPLE__)
 		*r = hexCharToInt(hex[1]) * 0x1000 + hexCharToInt(hex[2]) *0x0100 + hexCharToInt(hex[3]) *0x0010 + hexCharToInt(hex[4]) ;
 		*g = hexCharToInt(hex[5]) * 0x1000 + hexCharToInt(hex[6]) *0x0100 + hexCharToInt(hex[7]) *0x0010 + hexCharToInt(hex[8]);
 		*b =hexCharToInt(hex[9]) * 0x1000 + hexCharToInt(hex[10]) *0x0100 + hexCharToInt(hex[11]) *0x0010 + hexCharToInt(hex[12]);
@@ -232,7 +232,7 @@ XParseColor(Display *d, Colormap *cmap, char *name, XColor *color)
 			color->red = (BYTE) r;
 			color->green = (BYTE) g;
 			color->blue = (BYTE) b;
-    	#elif macintosh
+    	#elif defined(macintosh) || defined(__APPLE__)
     		color->pixel.red = r ;
     		color->pixel.green = g ;
     		color->pixel.blue = b ;
@@ -273,7 +273,7 @@ XQueryColors(Display *display, Colormap *colormap,
 }
 int 
 XFreeColors(Display *d, Colormap cmap,
-	    unsigned long pixels[], int npixels, unsigned long planes)
+	    Pixel *pixels, int npixels, unsigned long planes)
 {
     /* no colormap yet */
     return (0);				/* correct ??? */
@@ -302,7 +302,7 @@ XCreateImage(Display *d, Visual *v,
 	    img->bitmap = CreateBitmap(width, height, 1 /* plane */ ,
 				       depth /* bits per pixel */ , NULL);
 		}
-	#elif macintosh
+	#elif defined(macintosh) || defined(__APPLE__)
 		Rect rect ;
 		
 		rect.left= rect.top = 0 ;
@@ -346,7 +346,7 @@ XDestroyImage(XImage *img)
     if (img) {
     #if FOR_MSW
 	DeleteObject(img->bitmap);	/* check return ??? */
-	#elif macintosh
+	#elif defined(macintosh) || defined(__APPLE__)
 	if ( img->gworldptr )
 	{
 		UnlockPixels( GetGWorldPixMap( img->gworldptr ) ) ;

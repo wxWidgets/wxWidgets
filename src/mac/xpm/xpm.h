@@ -79,7 +79,7 @@
 #define SET_ZERO_PIXEL(a) { (a)  = 0 }
 #define SET_WHITE_PIXEL(a) { (a)  = 0 }
 #  include "amigax.h"
-#elif macintosh
+#elif defined(macintosh) || defined(__APPLE__)
 #define IS_EQUAL_PIXEL( a , b ) ( (a).red == (b).red && (a).green == (b).green && (a).blue == (b).blue )
 #define IS_ZERO_PIXEL(a) (!(a).red && !(a).green && !(a).blue )
 #define SET_ZERO_PIXEL(a) { (a).red = 0 ; (a).green = 0 ;(a).blue = 0 ;}

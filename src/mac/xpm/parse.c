@@ -111,7 +111,8 @@ xpmParseValues(data, width, height, ncolors, cpp,
 	    ptr = buf;
 	    got_one = False;
 	    while (!got_one) {
-	    #ifdef macintosh // we have a strange parameter problem here
+	    #if defined(macintosh) || defined(__APPLE__)
+	    // we have a strange parameter problem here
 		ptr = strchr(ptr, '_'); // index
 	    #else
 		ptr = index(ptr, '_'); 
