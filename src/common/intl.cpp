@@ -1126,7 +1126,7 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName0,
 
   // read the whole file in memory
   m_pData = new size_t8[nSize];
-  if ( fileMsg.Read(m_pData, nSize) != nSize ) {
+  if ( fileMsg.Read(m_pData, nSize) != (size_t)nSize ) {
     wxDELETEA(m_pData);
     return false;
   }
