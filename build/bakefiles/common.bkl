@@ -343,6 +343,19 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
     <!--                  Templates for wxWidgets libs:                  -->
     <!-- =============================================================== -->
 
+    <!-- NB: in monolithic build, even wxBase-only must be linked against
+             GUI extralibs, otherwise there would be unresolved references.
+             The variables below are defined so that all libs are used
+             in monolithic build, but not in multilib one. -->
+    <set var="EXTRALIBS_FOR_BASE">
+        <if cond="MONOLITHIC=='1'">$(EXTRALIBS) $(EXTRALIBS_GUI)</if>
+        <if cond="MONOLITHIC=='0'">$(EXTRALIBS)</if>
+    </set>
+    <set var="EXTRALIBS_FOR_GUI">
+        <if cond="MONOLITHIC=='1'"></if>
+        <if cond="MONOLITHIC=='0'">$(EXTRALIBS_GUI)</if>
+    </set>
+
     <template id="wx" template="common_settings">
         <set var="wxid">$(wxwin.mk_wxid(id))</set>
         <define>__WX$(TOOLKIT)__</define>
@@ -369,7 +382,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
         <sys-lib>$(LIB_REGEX)</sys-lib>
         <sys-lib>$(LIB_EXPAT)</sys-lib>
         
-        <ldlibs>$(EXTRALIBS)</ldlibs>
+        <ldlibs>$(EXTRALIBS_FOR_BASE)</ldlibs>
 
         <!-- system libraries on windows: -->
         <if cond="FORMAT!='autoconf'">
@@ -413,7 +426,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
 
     <!-- for GUI libs/samples: -->
     <template id="wx_append_nomono" template="wx_append_base_nomono">
-        <ldlibs>$(EXTRALIBS_GUI)</ldlibs>
+        <ldlibs>$(EXTRALIBS_FOR_GUI)</ldlibs>
     </template>
 
 
