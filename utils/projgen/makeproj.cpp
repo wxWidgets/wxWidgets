@@ -227,6 +227,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("VirtualVC", "virtual", dir + wxString("/samples/html/virtual"), wxStringList("virtual.cpp", 0));
     GenerateSample("WidgetVC", "widget", dir + wxString("/samples/html/widget"), wxStringList("widget.cpp", 0));
     GenerateSample("ZipVC", "zip", dir + wxString("/samples/html/zip"), wxStringList("zip.cpp", 0));
+    GenerateSample("HelpViewVC", "helpview", dir + wxString("/samples/html/helpview"), wxStringList("helpview.cpp", 0));
 
     GenerateSample("ImageVC", "image", dir + wxString("/samples/image"), wxStringList("image.cpp", 0));
     GenerateSample("InternatVC", "internat", dir + wxString("/samples/internat"), wxStringList("internat.cpp", 0));

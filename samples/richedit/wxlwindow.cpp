@@ -1099,7 +1099,7 @@ wxLayoutWindow::Paste(bool primary)
          wxTextDataObject data;
          if (wxTheClipboard->IsSupported( data.GetFormat() ))
          {
-            wxTheClipboard->GetData(&data);
+            wxTheClipboard->GetData(data);
             wxString text = data.GetText();
             wxLayoutImportText( m_llist, text);
             SetDirty();

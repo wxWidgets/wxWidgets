@@ -1215,12 +1215,14 @@ private:
    own format.
 
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-class wxLayoutDataObject : public wxPrivateDataObject
+class wxLayoutDataObject : public wxCustomDataObject
 {
 public:
    wxLayoutDataObject(void)
       {
+#if 0 // TODO: No longer exists, what should we do instead?
          SetId("application/wxlayoutlist");
+#endif
          //m_format.SetAtom((GdkAtom) 222222);
       }
 };

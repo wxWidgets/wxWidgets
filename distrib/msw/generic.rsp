@@ -910,6 +910,21 @@ samples/html/zip/*.png
 samples/html/zip/*.ico
 samples/html/zip/*.htm
 samples/html/zip/*.html
+samples/html/zip/*.zip
+
+samples/html/helpview/*.cpp
+samples/html/helpview/*.h
+samples/html/helpview/makefile*
+samples/html/helpview/*.rc
+samples/html/helpview/*.def
+samples/html/helpview/*.bmp
+samples/html/helpview/*.xpm
+samples/html/helpview/*.xbm
+samples/html/helpview/*.png
+samples/html/helpview/*.ico
+samples/html/helpview/*.htm
+samples/html/helpview/*.html
+samples/html/helpview/test.zip
 
 samples/richedit/*.cpp
 samples/richedit/*.h

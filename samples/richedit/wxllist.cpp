@@ -2382,10 +2382,23 @@ wxLayoutList::FindObjectScreen(wxDC &dc, wxPoint const pos,
        cursorPos->y = line->GetLineNumber();
 
    bool foundinline = true;
+   long cx = 0;
+
    // Now, find the object in the line:
-   wxLOiterator i = line->FindObjectScreen(dc, this,
+   wxLOiterator i;
+
+   if (cursorPos)
+   {
+     i = line->FindObjectScreen(dc, this,
                                            pos.x,
-                                           cursorPos ? &cursorPos->x : NULL,
+                                           &cx,
+                                           &foundinline);
+     cursorPos->x = cx;
+   }
+   else
+     i = line->FindObjectScreen(dc, this,
+                                           pos.x,
+                                           NULL,
                                            &foundinline);
    if ( found )
       *found = didFind && foundinline;
@@ -2831,8 +2844,9 @@ wxLayoutList::GetSelection(wxLayoutDataObject *wxlo, bool invalidate)
             exp->content.object->Write(string);
          delete exp;
       }
-
+#if 0 // FIXME: DnD/Clipboard API has changed, what should this be?
       wxlo->SetData(string.c_str(), string.Length()+1);
+#endif
    }
    return llist;
 }

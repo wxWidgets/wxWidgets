@@ -139,6 +139,12 @@ bool wxHtmlHelpFrame::Create(wxWindow* parent, wxWindowID id, const wxString& ti
 
     wxFrame::Create(parent, id, _("Help"), wxPoint(m_Cfg.x, m_Cfg.y), wxSize(m_Cfg.w, m_Cfg.h));
 
+#ifdef __WXMSW__
+    wxIcon frameIcon("wxhelp", wxBITMAP_TYPE_ICO_RESOURCE);
+    if (frameIcon.Ok())
+        SetIcon(frameIcon);
+#endif
+
     int notebook_page = 0;
 
     CreateStatusBar();
