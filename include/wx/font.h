@@ -31,6 +31,7 @@
 class WXDLLEXPORT wxFontData;
 class WXDLLEXPORT wxFontBase;
 class WXDLLEXPORT wxFont;
+class WXDLLEXPORT wxSize;
 
 // ----------------------------------------------------------------------------
 // font constants
