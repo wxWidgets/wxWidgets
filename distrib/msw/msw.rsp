@@ -64,6 +64,7 @@ src/msw/*.inc
 src/msw/winestub.c
 src/msw/gsocket.c
 src/msw/gsockmsw.c
+src/msw/version.rc
 
 src/msw/ole/*.cpp
 src/msw/*.prj

@@ -71,12 +71,14 @@
 #define wxUSE_POPUPWIN     1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
+#define wxUSE_CALENDARCTRL 0
 #define wxUSE_CARET        1
 #define wxUSE_CHECKBOX     1
 #define wxUSE_CHECKLISTBOX 1
 #define wxUSE_CHOICE       0
 #define wxUSE_COMBOBOX     1
 #define wxUSE_GAUGE        1
+#define wxUSE_IMAGLIST     1
 #define wxUSE_LISTBOX      1
 #define wxUSE_LISTCTRL     0
 #define wxUSE_RADIOBOX     1
@@ -113,6 +115,9 @@
 #define wxUSE_CHOICEDLG 0
 #define wxUSE_NUMBERDLG 0
 #define wxUSE_STARTUP_TIPS 0
+#define wxUSE_MSGDLG       1
+#define wxUSE_SPLITTER     1
+#define wxUSE_TAB_DIALOG   0
 
 #define wxUSE_METAFILE              0
 #define wxUSE_ENH_METAFILE          0

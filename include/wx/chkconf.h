@@ -457,7 +457,7 @@
 #endif /* wxUSE_COMBOBOX */
 
 #if !wxUSE_FILEDLG
-#   if defined(wxUSE_DOC_VIEW_ARCHITECTURE) || defined(wxUSE_HTML)
+#   if wxUSE_DOC_VIEW_ARCHITECTURE || wxUSE_HTML
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxFileDialog must be compiled as well"
 #       else
@@ -468,7 +468,7 @@
 #endif /* wxUSE_FILEDLG */
 
 #if !wxUSE_FONTDLG
-#   if defined(wxUSE_FONTMAP)
+#   if wxUSE_FONTMAP
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxFontDialog must be compiled as well"
 #       else
