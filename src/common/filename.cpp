@@ -82,7 +82,7 @@
 #include "wx/config.h"          // for wxExpandEnvVars
 #include "wx/utils.h"
 #include "wx/file.h"
-//#include "wx/dynlib.h"        // see GetLongPath below, code disabled.
+#include "wx/dynlib.h"
 
 // For GetShort/LongPathName
 #ifdef __WIN32__
@@ -1341,8 +1341,7 @@ wxString wxFileName::GetLongPath() const
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
     bool success = FALSE;
 
-    // VZ: why was this code disabled?
-#if 0 // wxUSE_DYNAMIC_LOADER
+#if wxUSE_DYNAMIC_LOADER
     typedef DWORD (*GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
 
     static bool s_triedToLoad = FALSE;
