@@ -264,7 +264,7 @@ wxPostScriptDC::wxPostScriptDC ()
 
     // Compatibility only
     // HH: Doesn't seem to work for wxMSW...
-    #ifndef __WXMSW__
+    #if !defined(__WXMSW__)
     m_printData = * wxThePrintSetupData;
     #endif
 }

@@ -44,7 +44,7 @@
 #endif // wxUSE_FONTDLG
 
 // For compatibility
-#if (defined(__WXMOTIF__) || defined(__WXGTK__) || defined(__WXX11__)|| defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
+#if (defined(__WXMOTIF__) || defined(__WXMGL__) || defined(__WXGTK__) || defined(__WXX11__)|| defined(__WXPM__) || defined(__WXMAC__)) && wxUSE_POSTSCRIPT
     #define wxCOMPATIBILITY_WITH_PRINTSETUPDATA 1
 #endif
 
