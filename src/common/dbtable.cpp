@@ -203,7 +203,7 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD num
     wxString s;
     tableID = ++lastTableID;
     s.Printf(wxT("wxDbTable constructor (%-20s) tableID:[%6lu] pDb:[%p]"), tblName.c_str(), tableID, pDb);
-    
+
 #ifdef __WXDEBUG__
     wxTablesInUse *tableInUse;
     tableInUse            = new wxTablesInUse();
@@ -675,22 +675,7 @@ bool wxDbTable::query(int queryType, bool forUpdate, bool distinct, const wxStri
         BuildSelectStmt(sqlStmt, queryType, distinct);
         pDb->WriteSqlLog(sqlStmt);
     }
-/*
-   This is the block of code that got added during the 2.2.1 merge with 
-   the 2.2 main branch that somehow got added here when it should not have.  - gt
 
-    else 
-        wxStrcpy(sqlStmt, pSqlStmt);
-
-    SQLFreeStmt(hstmt, SQL_CLOSE);
-    if (SQLExecDirect(hstmt, (UCHAR FAR *) sqlStmt, SQL_NTS) == SQL_SUCCESS)
-        return(TRUE);
-    else
-    {
-        pDb->DispAllErrors(henv, hdbc, hstmt);
-        return(FALSE);
-    }
-*/
     // Make sure the cursor is closed first
     if (!CloseCursor(hstmt))
         return(FALSE);
@@ -1141,7 +1126,7 @@ void wxDbTable::BuildUpdateStmt(wxString &pSqlStmt, int typeOfUpd, const wxStrin
         // Only append Updateable columns
         if (colDefs[i].Updateable)
         {
-            if (! firstColumn)
+            if (!firstColumn)
                 pSqlStmt += wxT(",");
             else
                 firstColumn = FALSE;
@@ -1395,6 +1380,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
         if (pDb->Dbms() == dbmsDB2 ||
             pDb->Dbms() == dbmsMY_SQL ||
             pDb->Dbms() == dbmsSYBASE_ASE  ||
+            pDb->Dbms() == dbmsINTERBASE  ||
             pDb->Dbms() == dbmsMS_SQL_SERVER)
         {
             if (colDefs[i].KeyField)
@@ -1630,14 +1616,18 @@ bool wxDbTable::CreateIndex(const wxString &idxName, bool unique, UWORD noIdxCol
     for (i = 0; i < noIdxCols; i++)
     {
         sqlStmt += pIdxDefs[i].ColName;
-        /* Postgres doesn't cope with ASC */
-        if (pDb->Dbms() != dbmsPOSTGRES)
+
+        // Postgres and SQL Server 7 do not support the ASC/DESC keywords for index columns
+        if (!((pDb->Dbms() == dbmsMS_SQL_SERVER) && (strncmp(pDb->dbInf.dbmsVer,"07",2)==0)) &&
+            !(pDb->Dbms() == dbmsPOSTGRES))
         {
             if (pIdxDefs[i].Ascending)
                 sqlStmt += wxT(" ASC");
             else
                 sqlStmt += wxT(" DESC");
         }
+        else
+            wxASSERT_MSG(!pIdxDefs[i].Ascending, "Datasource does not support DESCending index columns");
 
         if ((i + 1) < noIdxCols)
             sqlStmt += wxT(",");
@@ -1708,6 +1698,7 @@ bool wxDbTable::DropIndex(const wxString &idxName)
             if (!((pDb->Dbms() == dbmsSYBASE_ASA    && !wxStrcmp(pDb->sqlState,wxT("42000"))) ||  // v5.x (and lower?)
                   (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("37000"))) ||
                   (pDb->Dbms() == dbmsMS_SQL_SERVER && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
+                  (pDb->Dbms() == dbmsINTERBASE      && !wxStrcmp(pDb->sqlState,wxT("S1000"))) ||
                   (pDb->Dbms() == dbmsSYBASE_ASE    && !wxStrcmp(pDb->sqlState,wxT("S0002"))) ||  // Base table not found
                   (pDb->Dbms() == dbmsMY_SQL        && !wxStrcmp(pDb->sqlState,wxT("42S12"))) ||  // tested by Christopher Ludwik Marino-Cebulski using v3.23.21beta
                   (pDb->Dbms() == dbmsPOSTGRES      && !wxStrcmp(pDb->sqlState,wxT("08S01")))
@@ -2096,8 +2087,12 @@ void wxDbTable::SetColDefs(UWORD index, const wxString &fieldName, int dataType,
 
     if (fieldName.Length() > (unsigned int) DB_MAX_COLUMN_NAME_LEN)
     {
-        wxStrncpy (colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
+        int assertColumnNameTooLong = 0;
+        wxStrncpy(colDefs[index].ColName, fieldName, DB_MAX_COLUMN_NAME_LEN);
         colDefs[index].ColName[DB_MAX_COLUMN_NAME_LEN] = 0;
+        wxString tmpMsg;
+        tmpMsg.sprintf("Column name '%s' is too long. Truncated to '%s'.",fieldName,colDefs[index].ColName);
+        wxASSERT_MSG(assertColumnNameTooLong,tmpMsg.c_str());
     }
     else
         wxStrcpy(colDefs[index].ColName, fieldName);
