@@ -206,6 +206,9 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
                                 wxTR_HAS_VARIABLE_ROW_HEIGHT |
 #endif
                                 wxSUNKEN_BORDER);
+
+    m_treeCtrl->SetBackgroundColour(wxColour(204, 205, 79));
+
     wxTextCtrl *textCtrl = new wxTextCtrl(this, -1, "",
                                 wxDefaultPosition, wxDefaultSize,
                                 wxTE_MULTILINE | wxSUNKEN_BORDER);
