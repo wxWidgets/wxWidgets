@@ -115,13 +115,13 @@ public:
         // Additionally, the application might choose to show a state icon
         // which corresponds to an app-defined item state (for example,
         // checked/unchecked) which are taken from the state image list.
-    wxImageList *GetImageList() const;
-    wxImageList *GetStateImageList() const;
+    virtual wxImageList *GetImageList() const;
+    virtual wxImageList *GetStateImageList() const;
 
-    void SetImageList(wxImageList *imageList);
-    void SetStateImageList(wxImageList *imageList);
-    void AssignImageList(wxImageList *imageList);
-    void AssignStateImageList(wxImageList *imageList);
+    virtual void SetImageList(wxImageList *imageList);
+    virtual void SetStateImageList(wxImageList *imageList);
+    virtual void AssignImageList(wxImageList *imageList);
+    virtual void AssignStateImageList(wxImageList *imageList);
 
     // Functions to work with tree ctrl items. Unfortunately, they can _not_ be
     // member functions of wxTreeItem because they must know the tree the item
@@ -134,7 +134,7 @@ public:
         // retrieve items label
     wxString GetItemText(const wxTreeItemId& item) const;
         // get one of the images associated with the item (normal by default)
-    int GetItemImage(const wxTreeItemId& item,
+    virtual int GetItemImage(const wxTreeItemId& item,
                      wxTreeItemIcon which = wxTreeItemIcon_Normal) const;
         // get the data associated with the item
     wxTreeItemData *GetItemData(const wxTreeItemId& item) const;
@@ -154,7 +154,7 @@ public:
         // set items label
     void SetItemText(const wxTreeItemId& item, const wxString& text);
         // get one of the images associated with the item (normal by default)
-    void SetItemImage(const wxTreeItemId& item, int image,
+    virtual void SetItemImage(const wxTreeItemId& item, int image,
                       wxTreeItemIcon which = wxTreeItemIcon_Normal);
         // associate some data with the item
     void SetItemData(const wxTreeItemId& item, wxTreeItemData *data);
@@ -264,32 +264,32 @@ public:
     // ----------
 
         // add the root node to the tree
-    wxTreeItemId AddRoot(const wxString& text,
+    virtual wxTreeItemId AddRoot(const wxString& text,
                          int image = -1, int selectedImage = -1,
                          wxTreeItemData *data = NULL);
 
         // insert a new item in as the first child of the parent
-    wxTreeItemId PrependItem(const wxTreeItemId& parent,
+    virtual wxTreeItemId PrependItem(const wxTreeItemId& parent,
                              const wxString& text,
                              int image = -1, int selectedImage = -1,
                              wxTreeItemData *data = NULL);
 
         // insert a new item after a given one
-    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+    virtual wxTreeItemId InsertItem(const wxTreeItemId& parent,
                             const wxTreeItemId& idPrevious,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
                             wxTreeItemData *data = NULL);
 
         // insert a new item before the one with the given index
-    wxTreeItemId InsertItem(const wxTreeItemId& parent,
+    virtual wxTreeItemId InsertItem(const wxTreeItemId& parent,
                             size_t index,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
                             wxTreeItemData *data = NULL);
 
         // insert a new item in as the last child of the parent
-    wxTreeItemId AppendItem(const wxTreeItemId& parent,
+    virtual wxTreeItemId AppendItem(const wxTreeItemId& parent,
                             const wxString& text,
                             int image = -1, int selectedImage = -1,
                             wxTreeItemData *data = NULL);
