@@ -463,6 +463,15 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 /*
  * wxRadioBox/wxRadioButton style flags
  */
+
+// New, more intuitive names to specify majorDim argument
+
+// Same as wxRA_HORIZONTAL
+#define wxRA_SPECIFY_COLS   0x0001
+// Same as wxRA_VERTICAL
+#define wxRA_SPECIFY_ROWS   0x0002
+
+// Old names for compatibility
 #define wxRA_HORIZONTAL     wxHORIZONTAL
 #define wxRA_VERTICAL       wxVERTICAL
 #define wxRB_GROUP          0x0004
