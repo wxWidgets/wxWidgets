@@ -724,6 +724,8 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
 
     MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
 
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
+
     wxTopLevelWindows.Append(this);
 
     if ( parent )

@@ -64,8 +64,6 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     if ( !wxTopLevelWindow::Create(parent, id, title, pos, size, style & ~(wxYES|wxOK|wxNO|wxCANCEL) , name) )
         return FALSE;
 
-    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
-
     return TRUE;
 }
 
