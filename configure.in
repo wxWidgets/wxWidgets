@@ -2709,9 +2709,11 @@ fi
 if test "$wxUSE_THREADS" = "yes"; then
   AC_DEFINE(wxUSE_THREADS)
 
-  dnl must define _REENTRANT for multithreaded code
-  CFLAGS="${CFLAGS} -D_REENTRANT"
-  CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+  dnl must define _REENTRANT for multithreaded code except for Mac OS X
+  if test "$wxUSE_MAC" = "0"; then
+    CFLAGS="${CFLAGS} -D_REENTRANT"
+    CXXFLAGS="${CXXFLAGS} -D_REENTRANT"
+  fi
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
@@ -2747,7 +2749,7 @@ if test "$WXWINE" = 1 ; then
 fi
 
 if test "$wxUSE_MAC" = 1 ; then
-  TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -DTARGET_CARBON"
+  TOOLKIT_DEF="${TOOLKIT_DEF} -D__UNIX__ -D__POWERPC__ -DTARGET_CARBON"
   TOOLKIT_INCLUDE="${TOOLKIT_INCLUDE}"
 fi
 
@@ -3508,6 +3510,11 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
 
     if test "$wxUSE_MOTIF" = 1; then
         AC_MSG_WARN([Drag and drop is not yet supported under Motif])
+        wxUSE_DRAG_AND_DROP=no
+    fi
+
+    if test "$wxUSE_MAC" = 1; then
+        AC_MSG_WARN([Drag and drop is not yet supported under Mac OS X])
         wxUSE_DRAG_AND_DROP=no
     fi
 
