@@ -58,12 +58,45 @@
 #   include <fstream>
 #endif
 
-// Why oh why did someone remove the tail of this line? Bizarre.
-// It's needed for GNUWIN32 b20, at least.
 #if wxUSE_RICHEDIT && (!defined(__GNUWIN32__) || defined(wxUSE_NORLANDER_HEADERS))
     #include <richedit.h>
 #endif
 
+// ----------------------------------------------------------------------------
+// private classes
+// ----------------------------------------------------------------------------
+
+#if wxUSE_RICHEDIT
+
+// this module initializes RichEdit DLL if needed
+class wxRichEditModule : public wxModule
+{
+public:
+    virtual bool OnInit();
+    virtual void OnExit();
+
+    // get the version currently loaded, -1 if none
+    static int GetLoadedVersion() { return ms_verRichEdit; }
+
+    // load the richedit DLL of at least of required version
+    static bool Load(int version = 1);
+
+private:
+    // the handle to richedit DLL and the version of the DLL loaded
+    static HINSTANCE ms_hRichEdit;
+
+    // the DLL version loaded or -1 if none
+    static int ms_verRichEdit;
+
+    DECLARE_DYNAMIC_CLASS(wxRichEditModule)
+};
+
+HINSTANCE wxRichEditModule::ms_hRichEdit = (HINSTANCE)NULL;
+int       wxRichEditModule::ms_verRichEdit = -1;
+
+IMPLEMENT_DYNAMIC_CLASS(wxRichEditModule, wxModule)
+
+#endif // wxUSE_RICHEDIT
 
 // ----------------------------------------------------------------------------
 // event tables and other macros
@@ -166,7 +199,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         m_lDlgCode |= DLGC_WANTTAB;
 
     // do create the control - either an EDIT or RICHEDIT
-    const wxChar *windowClass = wxT("EDIT");
+    wxString windowClass = wxT("EDIT");
 
 #if wxUSE_RICHEDIT
     if ( m_windowStyle & wxTE_RICH )
@@ -178,10 +211,11 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         {
             // first try to load the RichEdit DLL (will do nothing if already
             // done)
-            if ( !wxTheApp->InitRichEdit() )
+            if ( !wxRichEditModule::Load() )
             {
                 wxLogError(_("Impossible to create a rich edit control, "
-                             "using simple text control instead."));
+                             "using simple text control instead. Please "
+                             "reinstall riched32.dll"));
 
                 s_errorGiven = TRUE;
             }
@@ -195,12 +229,31 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         {
             msStyle |= ES_AUTOVSCROLL;
             m_isRich = TRUE;
-            windowClass = wxT("RICHEDIT");
+
+            int ver = wxRichEditModule::GetLoadedVersion();
+            if ( ver == 1 )
+            {
+                windowClass = wxT("RICHEDIT");
+            }
+            else
+            {
+#ifndef RICHEDIT_CLASS
+                wxString RICHEDIT_CLASS;
+                RICHEDIT_CLASS.Printf(_T("RichEdit%d0"), ver);
+#ifdef wxUSE_UNICODE
+                RICHEDIT_CLASS += _T('W');
+#else // ANSI
+                RICHEDIT_CLASS += _T('A');
+#endif // Unicode/ANSI
+#endif // !RICHEDIT_CLASS
+
+                windowClass = RICHEDIT_CLASS;
+            }
         }
     }
     else
         m_isRich = FALSE;
-#endif
+#endif // wxUSE_RICHEDIT
 
     bool want3D;
     WXDWORD exStyle = Determine3DEffects(WS_EX_CLIENTEDGE, &want3D);
@@ -311,15 +364,56 @@ void wxTextCtrl::SetupColours()
 
 wxString wxTextCtrl::GetValue() const
 {
-    return wxGetWindowText(GetHWND());
+    // we can't use wxGetWindowText() (i.e. WM_GETTEXT internally) for
+    // retrieving more than 64Kb under Win9x
+#if wxUSE_RICHEDIT
+    if ( m_isRich )
+    {
+        wxString str;
+
+        int len = GetWindowTextLength(GetHwnd()) + 1;
+        wxChar *p = str.GetWriteBuf(len);
+
+        TEXTRANGE textRange;
+        textRange.chrg.cpMin = 0;
+        textRange.chrg.cpMax = -1;
+        textRange.lpstrText = p;
+
+        (void)SendMessage(GetHwnd(), EM_GETTEXTRANGE, 0, (LPARAM)&textRange);
+
+        // believe it or not, but EM_GETTEXTRANGE uses just CR ('\r') for the
+        // newlines which is neither Unix nor Windows style (Win95 with
+        // riched20.dll shows this behaviour) - convert it to something
+        // reasonable
+        for ( ; *p; p++ )
+        {
+            if ( *p == _T('\r') )
+                *p = _T('\n');
+        }
+
+        str.UngetWriteBuf();
+
+        return str;
+    }
+#endif // wxUSE_RICHEDIT
+
+    // WM_GETTEXT uses standard DOS CR+LF (\r\n) convention - convert to the
+    // same one as above for consitency
+    wxString str = wxGetWindowText(GetHWND());
+
+    return wxTextFile::Translate(str, wxTextFileType_Unix);
 }
 
 void wxTextCtrl::SetValue(const wxString& value)
 {
-    wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
-
-    if ( valueDos != GetValue() )
+    // if the text is long enough, it's faster to just set it instead of first
+    // comparing it with the old one (chances are that it will be different
+    // anyhow, this comparison is there to avoid flicker for small single-line
+    // edit controls mostly)
+    if ( (value.length() > 0x400) || (value != GetValue()) )
     {
+        wxString valueDos = wxTextFile::Translate(value, wxTextFileType_Dos);
+
         SetWindowText(GetHwnd(), valueDos);
 
         AdjustSpaceLimit();
@@ -839,14 +933,14 @@ bool wxTextCtrl::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             }
             break;
 
-        case EN_ERRSPACE:
+        case EN_MAXTEXT:
             // the text size limit has been hit - increase it
             AdjustSpaceLimit();
             break;
 
             // the other notification messages are not processed
         case EN_UPDATE:
-        case EN_MAXTEXT:
+        case EN_ERRSPACE:
         case EN_HSCROLL:
         case EN_VSCROLL:
         default:
@@ -867,15 +961,25 @@ void wxTextCtrl::AdjustSpaceLimit()
         limit = len + 0x8000;    // 32Kb
 
 #if wxUSE_RICHEDIT
-        if ( m_isRich || limit > 0xffff )
-#else
-        if ( limit > 0xffff )
-#endif
-            ::SendMessage(GetHwnd(), EM_LIMITTEXT, 0, limit);
+        if ( m_isRich )
+        {
+            // as a nice side effect, this also allows passing limit > 64Kb
+            ::SendMessage(GetHwnd(), EM_EXLIMITTEXT, 0, limit);
+        }
         else
+#endif // wxUSE_RICHEDIT
+        {
+            if ( limit > 0xffff )
+            {
+                // this will set it to a platform-dependent maximum (much more
+                // than 64Kb under NT)
+                limit = 0;
+            }
+
             ::SendMessage(GetHwnd(), EM_LIMITTEXT, limit, 0);
+        }
     }
-#endif
+#endif // !Win16
 }
 
 bool wxTextCtrl::AcceptsFocus() const
@@ -954,4 +1058,69 @@ void wxTextCtrl::OnUpdateRedo(wxUpdateUIEvent& event)
 {
     event.Enable( CanRedo() );
 }
+
+// ----------------------------------------------------------------------------
+// wxRichEditModule
+// ----------------------------------------------------------------------------
+
+#if wxUSE_RICHEDIT
+
+bool wxRichEditModule::OnInit()
+{
+    // don't do anything - we will load it when needed
+    return TRUE;
+}
+
+void wxRichEditModule::OnExit()
+{
+    if ( ms_hRichEdit )
+    {
+        FreeLibrary(ms_hRichEdit);
+    }
+}
+
+/* static */
+bool wxRichEditModule::Load(int version)
+{
+    wxCHECK_MSG( version >= 1 && version <= 3, FALSE,
+                 _T("incorrect richedit control version requested") );
+
+    if ( version <= ms_verRichEdit )
+    {
+        // we've already got this or better
+        return TRUE;
+    }
+
+    if ( ms_hRichEdit )
+    {
+        ::FreeLibrary(ms_hRichEdit);
+    }
+
+    // always try load riched20.dll first - like this we won't have to reload
+    // it later if we're first asked for RE 1 and then for RE 2 or 3
+    wxString dllname = _T("riched20.dll");
+    ms_hRichEdit = ::LoadLibrary(dllname);
+    ms_verRichEdit = 2; // no way to tell if it's 2 or 3, assume 2
+
+    if ( !ms_hRichEdit && (version == 1) )
+    {
+        // fall back to RE 1
+        dllname = _T("riched32.dll");
+        ms_hRichEdit = ::LoadLibrary(dllname);
+        ms_verRichEdit = 1;
+    }
+
+    if ( !ms_hRichEdit )
+    {
+        wxLogSysError(_("Could not load Rich Edit DLL '%s'"), dllname.c_str());
+
+        ms_verRichEdit = -1;
+
+        return FALSE;
+    }
+
+    return TRUE;
+}
+
+#endif // wxUSE_RICHEDIT
 

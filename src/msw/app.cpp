@@ -151,12 +151,6 @@ HBRUSH wxDisableButtonBrush = (HBRUSH) 0;
 
 LRESULT WXDLLEXPORT APIENTRY wxWndProc(HWND, UINT, WPARAM, LPARAM);
 
-#if wxUSE_RICHEDIT
-    // the handle to richedit DLL and the version of the DLL loaded
-    static HINSTANCE gs_hRichEdit = (HINSTANCE)NULL;
-    static int gs_verRichEdit = -1;
-#endif
-
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -523,11 +517,6 @@ void wxApp::CleanUp()
     //// WINDOWS-SPECIFIC CLEANUP
 
     wxSetKeyboardHook(FALSE);
-
-#if wxUSE_RICHEDIT
-    if (gs_hRichEdit != (HINSTANCE) NULL)
-        FreeLibrary(gs_hRichEdit);
-#endif
 
 #if wxUSE_PENWINDOWS
     wxCleanUpPenWin();
@@ -1110,52 +1099,6 @@ void wxApp::OnQueryEndSession(wxCloseEvent& event)
             event.Veto(TRUE);
     }
 }
-
-#if wxUSE_RICHEDIT
-
-/* static */
-bool wxApp::InitRichEdit(int version)
-{
-    wxCHECK_MSG( version >= 1 && version <= 3, FALSE,
-                 _T("incorrect richedit control version requested") );
-
-    if ( version <= gs_verRichEdit )
-    {
-        // we've already got this or better
-        return TRUE;
-    }
-
-    if ( gs_hRichEdit )
-    {
-        ::FreeLibrary(gs_hRichEdit);
-    }
-
-    // always try load riched20.dll first - like this we won't have to reload
-    // it later if we're first asked for RE 1 and then for RE 2 or 3
-    wxString dllname = _T("riched20.dll");
-    gs_hRichEdit = ::LoadLibrary(dllname);
-    if ( !gs_hRichEdit && (version == 1) )
-    {
-        // fall back to RE 1
-        dllname = _T("riched32.dll");
-        gs_hRichEdit = ::LoadLibrary(dllname);
-    }
-
-    if ( !gs_hRichEdit )
-    {
-        wxLogSysError(_("Could not load Rich Edit DLL '%s'"), dllname.c_str());
-
-        gs_verRichEdit = -1;
-
-        return FALSE;
-    }
-
-    gs_verRichEdit = version;
-
-    return TRUE;
-}
-
-#endif // wxUSE_RICHEDIT
 
 /* static */
 int wxApp::GetComCtl32Version()

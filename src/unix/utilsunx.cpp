@@ -41,9 +41,7 @@
 #include <fcntl.h>          // for O_WRONLY and friends
 #include <time.h>           // nanosleep() and/or usleep()
 #include <ctype.h>          // isspace()
-
-// JACS: needed for FD_SETSIZE
-#include <sys/time.h>
+#include <sys/time.h>       // needed for FD_SETSIZE
 
 #ifdef HAVE_UNAME
     #include <sys/utsname.h> // for uname()
@@ -97,14 +95,14 @@ void wxSleep(int nSecs)
 
 void wxUsleep(unsigned long milliseconds)
 {
-#ifdef HAVE_NANOSLEEP
+#if defined(HAVE_NANOSLEEP)
     timespec tmReq;
     tmReq.tv_sec = milliseconds / 1000;
     tmReq.tv_nsec = (milliseconds % 1000) * 1000 * 1000;
 
     // we're not interested in remaining time nor in return value
     (void)nanosleep(&tmReq, (timespec *)NULL);
-#elif defined( HAVE_USLEEP )
+#elif defined(HAVE_USLEEP)
     // uncomment this if you feel brave or if you are sure that your version
     // of Solaris has a safe usleep() function but please notice that usleep()
     // is known to lead to crashes in MT programs in Solaris 2.[67] and is not
@@ -114,6 +112,9 @@ void wxUsleep(unsigned long milliseconds)
     #endif // Sun
 
     usleep(milliseconds * 1000); // usleep(3) wants microseconds
+#elif defined(HAVE_SLEEP)
+    // under BeOS sleep() takes seconds (what about other platforms, if any?)
+    sleep(milliseconds * 1000);
 #else // !sleep function
     #error "usleep() or nanosleep() function required for wxUsleep"
 #endif // sleep function
@@ -566,18 +567,19 @@ bool wxGetUserId(wxChar *buf, int sz)
 bool wxGetUserName(wxChar *buf, int sz)
 {
     struct passwd *who;
-    char *comma;
 
     *buf = wxT('\0');
-    if ((who = getpwuid (getuid ())) != NULL) {
-#ifndef __VMS__
-       comma = strchr(who->pw_gecos, ',');
+    if ((who = getpwuid (getuid ())) != NULL)
+    {
+        // pw_gecos field in struct passwd is not standard
+#if HAVE_PW_GECOS
+       char *comma = strchr(who->pw_gecos, ',');
        if (comma)
            *comma = '\0'; // cut off non-name comment fields
        wxStrncpy (buf, wxConvertMB2WX(who->pw_gecos), sz - 1);
-#else
+#else // !HAVE_PW_GECOS
        wxStrncpy (buf, wxConvertMB2WX(who->pw_name), sz - 1);
-#endif
+#endif // HAVE_PW_GECOS/!HAVE_PW_GECOS
        return TRUE;
     }
 

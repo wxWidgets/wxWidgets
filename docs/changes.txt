@@ -7,6 +7,7 @@ next release (2.1.12 or 2.2?)
 wxBase:
 
 - it is now possible to build wxBase under Win32 (using VC++ only so far)
+  and BeOS (without thread support yet)
 
 - wxThread class modified to support both detached and joinable threads, also
   added new GetCPUCount() and SetConcurrency() functions (useful under Solaris
@@ -40,6 +41,7 @@ wxMSW:
 - implemented setting colours for push buttons
 - wxTreeCtrl::IsVisible() bug fixed (thanks to Gary Chessun)
 - tooltips work with wxRadioBox
+- loading/saving big (> 32K) files in wxTextCtrl works
 - returning FALSE from OnPrintPage() aborts printing
 
 wxGTK:

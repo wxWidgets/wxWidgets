@@ -429,6 +429,8 @@ dnl ------------------------------------------------------------------------
 dnl assume Unix
 USE_UNIX=1
 USE_WIN32=0
+USE_BEOS=0
+
 USE_LINUX=
 USE_SGI=
 USE_HPUX=
@@ -471,6 +473,10 @@ DEFAULT_DEFAULT_wxUSE_MOTIF=0
 DEFAULT_DEFAULT_wxUSE_MSW=0
 DEFAULT_DEFAULT_wxUSE_WINE=0
 
+dnl to support a new system, you need to add its canonical name (as determined
+dnl by config.sub or specified by the configure command line) to this "case"
+dnl and also define the shared library flags below - search for
+dnl SHARED_LIB_SETUP to find the exact place
 case "${host}" in
   *-hp-hpux* )
     USE_HPUX=1
@@ -568,15 +574,27 @@ case "${host}" in
     AC_DEFINE(__EMX__)
   ;;
 
+  *-*-beos* )
+    dnl leave USE_UNIX on - BeOS is sufficiently Unix-like for this
+    USE_BEOS=1
+    AC_DEFINE(__BEOS__)
+  ;;
+
   *)
     AC_MSG_ERROR(unknown system type ${host}.)
 esac
 
 if test "$USE_UNIX" = 1 ; then
-  wxUSE_UNIX=yes
-  AC_DEFINE(__UNIX__)
-  SRC_SUBDIRS="$SRC_SUBDIRS unix"
-  INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS unix"
+    wxUSE_UNIX=yes
+    AC_DEFINE(__UNIX__)
+
+    SRC_SUBDIRS="$SRC_SUBDIRS unix"
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS unix"
+fi
+
+if test "$USE_BEOS" = 1; then
+    SRC_SUBDIRS="$SRC_SUBDIRS be"
+    INCLUDE_SUBDIRS="$INCLUDE_SUBDIRS be"
 fi
 
 dnl Linux: test for libc5/glibc2: glibc2 has gettext() included
@@ -862,79 +880,7 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(gui,         [  --enable-gui            use GUI classes], wxUSE_GUI)
 
-dnl disable everything GUI related then
-if test "$wxUSE_GUI" = "no"; then
-  DEFAULT_wxUSE_ZLIB=no
-  DEFAULT_wxUSE_LIBPNG=no
-  DEFAULT_wxUSE_LIBJPEG=no
-  DEFAULT_wxUSE_LIBTIFF=no
-  DEFAULT_wxUSE_SOCKETS=no
-  DEFAULT_wxUSE_JOYSTICK=no
-  DEFAULT_wxUSE_AFM_FOR_POSTSCRIPT=no
-  DEFAULT_wxUSE_NORMALIZED_PS_FONTS=no
-  DEFAULT_wxUSE_POSTSCRIPT=no
-  DEFAULT_wxUSE_X_RESOURCES=no
-  DEFAULT_wxUSE_CLIPBOARD=no
-  DEFAULT_wxUSE_TOOLTIPS=no
-  DEFAULT_wxUSE_DRAG_AND_DROP=no
-  DEFAULT_wxUSE_SPLINES=no
-  DEFAULT_wxUSE_MDI_ARCHITECTURE=no
-  DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
-  DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
-  DEFAULT_wxUSE_PROLOGIO=no
-  DEFAULT_wxUSE_RESOURCES=no
-  DEFAULT_wxUSE_CONSTRAINTS=no
-  DEFAULT_wxUSE_IPC=no
-  DEFAULT_wxUSE_HELP=no
-  DEFAULT_wxUSE_WXTREE=no
-  DEFAULT_wxUSE_METAFILE=no
-  DEFAULT_wxUSE_COMMONDLGS=no
-  DEFAULT_wxUSE_DIRDLG=no
-  DEFAULT_wxUSE_TEXTDLG=no
-  DEFAULT_wxUSE_STARTUP_TIPS=no
-  DEFAULT_wxUSE_PROGRESSDLG=no
-  DEFAULT_wxUSE_MINIFRAME=no
-  DEFAULT_wxUSE_HTML=no
-  DEFAULT_wxUSE_FS_INET=no
-  DEFAULT_wxUSE_FS_ZIP=no
-  DEFAULT_wxUSE_BUSYINFO=no
-  DEFAULT_wxUSE_ZIPSTREAM=no
-  DEFAULT_wxUSE_VALIDATORS=no
-  DEFAULT_wxUSE_ACCEL=no
-  DEFAULT_wxUSE_CARET=no
-  DEFAULT_wxUSE_BMPBUTTON=no
-  DEFAULT_wxUSE_CHECKBOX=no
-  DEFAULT_wxUSE_CHECKLST=no
-  DEFAULT_wxUSE_CHOICE=no
-  DEFAULT_wxUSE_COMBOBOX=no
-  DEFAULT_wxUSE_GAUGE=no
-  DEFAULT_wxUSE_GRID=no
-  DEFAULT_wxUSE_NEW_GRID=no
-  DEFAULT_wxUSE_IMAGLIST=no
-  DEFAULT_wxUSE_LISTBOX=no
-  DEFAULT_wxUSE_LISTCTRL=no
-  DEFAULT_wxUSE_NOTEBOOK=no
-  DEFAULT_wxUSE_RADIOBOX=no
-  DEFAULT_wxUSE_RADIOBTN=no
-  DEFAULT_wxUSE_SASH=no
-  DEFAULT_wxUSE_SCROLLBAR=no
-  DEFAULT_wxUSE_SLIDER=no
-  DEFAULT_wxUSE_SPINBTN=no
-  DEFAULT_wxUSE_SPINCTRL=no
-  DEFAULT_wxUSE_SPLITTER=no
-  DEFAULT_wxUSE_STATBMP=no
-  DEFAULT_wxUSE_STATBOX=no
-  DEFAULT_wxUSE_STATLINE=no
-  DEFAULT_wxUSE_STATUSBAR=no
-  DEFAULT_wxUSE_TABDIALOG=no
-  DEFAULT_wxUSE_TOOLBAR=no
-  DEFAULT_wxUSE_TOOLBAR_NATIVE=no
-  DEFAULT_wxUSE_TOOLBAR_SIMPLE=no
-  DEFAULT_wxUSE_TREECTRL=no
-  DEFAULT_wxUSE_GIF=no
-  DEFAULT_wxUSE_PCX=no
-  DEFAULT_wxUSE_PNM=no
-fi
+if test "$wxUSE_GUI" = "yes"; then
 
 AC_ARG_WITH(gtk,           [  --with-gtk              use GTK+], [wxUSE_GTK="$withval" CACHE_GTK=1 TOOLKIT_GIVEN=1])
 AC_ARG_WITH(motif,         [  --with-motif            use Motif/Lesstif], [wxUSE_MOTIF="$withval" CACHE_MOTIF=1 TOOLKIT_GIVEN=1])
@@ -947,12 +893,16 @@ AC_ARG_WITH(gtk-prefix,    [  --with-gtk-prefix=PFX   Prefix where GTK is instal
 AC_ARG_WITH(gtk-exec-prefix, [  --with-gtk-exec-prefix=PFX  Exec prefix where GTK is installed],
             gtk_config_exec_prefix="$withval", gtk_config_exec_prefix="")
 
-WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
-WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(libpng,        [  --with-libpng           use libpng (PNG image format)], wxUSE_LIBPNG)
 WX_ARG_WITH(libjpeg,       [  --with-libjpeg          use libjpeg (JPEG file format)], wxUSE_LIBJPEG)
 WX_ARG_WITH(libtiff,       [  --with-libtiff          use libtiff (TIFF file format)], wxUSE_LIBTIFF)
 WX_ARG_WITH(opengl,        [  --with-opengl           use OpenGL (or Mesa)], wxUSE_OPENGL)
+
+fi
+dnl for GUI only
+
+WX_ARG_WITH(dmalloc,       [  --with-dmalloc          use dmalloc library (www.letters.com/dmalloc)], wxUSE_DMALLOC)
+WX_ARG_WITH(zlib,          [  --with-zlib             use zlib for LZW compression], wxUSE_ZLIB)
 WX_ARG_WITH(odbc,          [  --with-odbc             use the IODBC and wxODBC classes], wxUSE_ODBC)
 
 dnl ====================
@@ -992,7 +942,14 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(intl,          [  --enable-intl           use internationalization system], wxUSE_INTL)
 WX_ARG_ENABLE(config,        [  --enable-config         use wxConfig (and derived) classes], wxUSE_CONFIG)
+
+dnl can't use sockets without GUI so far
+if test "$wxUSE_GUI" = "yes"; then
 WX_ARG_ENABLE(sockets,       [  --enable-sockets        use socket/network classes], wxUSE_SOCKETS)
+else
+wxUSE_SOCKETS=no
+fi
+
 WX_ARG_ENABLE(dialupman,     [  --enable-dialupman      use dialup network classes], wxUSE_DIALUP_MANAGER)
 WX_ARG_ENABLE(ipc,           [  --enable-ipc            use interprocess communication (wxSocket etc.)], wxUSE_IPC)
 WX_ARG_ENABLE(apple_ieee,    [  --enable-apple_ieee     use the Apple IEEE codec], wxUSE_APPLE_IEEE)
@@ -1020,6 +977,8 @@ dnl ---------------------------------------------------------------------------
 
 WX_ARG_ENABLE(threads,     [  --enable-threads        use threads], wxUSE_THREADS)
 WX_ARG_ENABLE(serial,      [  --enable-serial         use class serialization], wxUSE_SERIAL)
+
+if test "$wxUSE_GUI" = "yes"; then
 
 dnl ---------------------------------------------------------------------------
 dnl "big" GUI options
@@ -1191,6 +1150,9 @@ WX_ARG_ENABLE(gif,         [  --enable-gif            use gif images (GIF file f
 WX_ARG_ENABLE(pcx,         [  --enable-pcx            use pcx images (PCX file format)], wxUSE_PCX)
 WX_ARG_ENABLE(pnm,         [  --enable-pnm            use pnm images (PNM file format)], wxUSE_PNM)
 
+fi
+dnl for GUI only
+
 dnl cache the options values before (may be) aborting below
 WX_ARG_CACHE_FLUSH
 
@@ -1200,6 +1162,10 @@ dnl we have a default one
 AC_MSG_CHECKING(for toolkit)
 
 if test "$wxUSE_GUI" = "yes"; then
+
+if test "$USE_BEOS" = 1; then
+    AC_MSG_ERROR([BeOS GUI is not supported yet, use --disable-gui])
+fi
 
 if test "$TOOLKIT_GIVEN" = 1; then
   dnl convert "yes" to 1 and "no" to 0
@@ -1753,6 +1719,8 @@ WX_ALL=
 WX_ALL_INSTALLED=
 BURNT_LIBRARY_NAME=
 
+dnl --- the marker for quick search, leave it here: SHARED_LIB_SETUP ---
+
 if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-hp-hpux* )
@@ -1766,12 +1734,14 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_LIBRARY_NAME_SHARED="libwx_${TOOLKIT_DIR}.sl"
         WX_ALL=${WX_LIBRARY_NAME_SHARED}
       ;;
+
+      dnl in fact, these settings are for any platform using gcc
       *-*-linux* )
         SHARED_LD="${CC} -shared -o"
         PIC_FLAG="-fPIC"
         WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
         WX_ALL="CREATE_LINKS"
-	dnl BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
+        dnl BURNT_LIBRARY_NAME="-Wl,-soname -Wl,${WX_LIBRARY_NAME_SHARED}"
       ;;
       *-*-irix5* | *-*-irix6* )
         if test "$GCC" = yes ; then
@@ -1833,12 +1803,20 @@ if test "$wxUSE_SHARED" = "yes"; then
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
       ;;
-        *-*-mingw32* )
+      *-*-mingw32* )
         dnl only static for now
         WX_TARGET_LIBRARY="${WX_LIBRARY_NAME_STATIC}"
         WX_ALL="${WX_LIBRARY_NAME_STATIC}"
       ;;
       *-pc-os2_emx )
+      ;;
+      *-*-beos* )
+        dnl can't use gcc under BeOS for shared library creation because it
+        dnl complains about missing 'main'
+        SHARED_LD="${LD} -shared -o"
+        PIC_FLAG="-fPIC"
+        WX_ALL_INSTALLED="CREATE_INSTALLED_LINKS"
+        WX_ALL="CREATE_LINKS"
       ;;
       *)
         AC_MSG_ERROR(unknown system type ${host}.)
@@ -1892,6 +1870,26 @@ AC_TYPE_UID_T
 dnl ---------------------------------------------------------------------------
 dnl Checks for structures
 dnl ---------------------------------------------------------------------------
+
+dnl does passwd struct has the pw_gecos field?
+AC_CACHE_CHECK([for pw_gecos in struct passwd], wx_cv_struct_pw_gecos,
+    [
+        AC_TRY_COMPILE([#include <pwd.h>],
+             [
+                char *p;
+                struct passwd *pw;
+                p = pw->pw_gecos;
+             ],
+             [
+                wx_cv_struct_pw_gecos=yes
+                AC_DEFINE(HAVE_PW_GECOS)
+             ],
+             [
+                wx_cv_struct_pw_gecos=no
+             ]
+        )
+    ]
+)
 
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
@@ -1996,17 +1994,33 @@ AC_CHECK_FUNCS(vfork)
 dnl check for timegm() used by datetime.cpp
 AC_CHECK_FUNCS(timegm)
 
-POSIX4_LINK=
-AC_CHECK_FUNCS(nanosleep, AC_DEFINE(HAVE_NANOSLEEP), [
-    AC_CHECK_LIB(posix4, nanosleep, [
-      AC_DEFINE(HAVE_NANOSLEEP)
-      POSIX4_LINK="-lposix4"
-    ], [
-    AC_CHECK_FUNCS(usleep,
-        AC_DEFINE(HAVE_USLEEP),
-        AC_MSG_WARN([wxSleep() function will not work]))
-    ])
-])
+HAVE_SOME_SLEEP_FUNC=0
+if test "$USE_BEOS" = 1; then
+    dnl BeOS has its own (wonder where did they get it from) sleep() function
+    dnl in unistd.h
+    AC_DEFINE(HAVE_SLEEP)
+    HAVE_SOME_SLEEP_FUNC=1
+fi
+
+if test "$HAVE_SOME_SLEEP_FUNC" != 1; then
+    dnl try nanosleep() in libc and libposix4, if this fails - usleep()
+    POSIX4_LINK=
+    AC_CHECK_FUNCS(nanosleep,
+        AC_DEFINE(HAVE_NANOSLEEP),
+        [
+            AC_CHECK_LIB(posix4, nanosleep,
+                [
+                    AC_DEFINE(HAVE_NANOSLEEP)
+                    POSIX4_LINK="-lposix4"
+                ],
+                [
+                    AC_CHECK_FUNCS(usleep)
+                    AC_MSG_WARN([wxSleep() function will not work])
+                ]
+            )
+        ]
+    )
+fi
 
 dnl check for uname (POSIX) and gethostname (BSD)
 AC_CHECK_FUNCS(uname gethostname, break)
@@ -2068,6 +2082,9 @@ THREADS_OBJ=""
 if test "$wxUSE_THREADS" = "yes" ; then
     if test "$wxUSE_WINE" = 1 ; then
         AC_MSG_WARN([Threads are not supported under WINE])
+        wxUSE_THREADS="no"
+    elif test "$USE_BEOS" = 1; then
+        AC_MSG_WARN([BeOS threads are not yet supported])
         wxUSE_THREADS="no"
     fi
 fi
@@ -2177,7 +2194,7 @@ if test "$wxUSE_THREADS" = "yes"; then
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
 else
-  dnl on some systems, _REENTRANT should bedefined if we want to use any _r()
+  dnl on some systems, _REENTRANT should be defined if we want to use any _r()
   dnl functions - add tests for other functions here as well
   if test "$ac_cv_func_strtok_r" = "yes"; then
     AC_MSG_CHECKING(if -D_REENTRANT is needed)
@@ -2428,10 +2445,6 @@ if test "$wxUSE_STREAMS" = "yes" ; then
   AC_DEFINE(wxUSE_STREAMS)
 fi
 
-if test "$wxUSE_SERIAL" = "yes" ; then
-  AC_DEFINE(wxUSE_SERIAL)
-fi
-
 dnl ------------------------------------------------------------------------
 dnl time/date functions
 dnl ------------------------------------------------------------------------
@@ -2650,18 +2663,20 @@ if test "$wxUSE_DYNLIB_CLASS" = "yes"; then
     if test "$HAVE_DL_FUNCS" = 0; then
         if test "$HAVE_SHL_FUNCS" = 0; then
           if test "$USE_UNIX" = 1; then
-              AC_MSG_WARN("--with-dynlib and --with-odbc will be disabled due to missing shared library support")
-              wxUSE_ODBC=no
+              AC_MSG_WARN([Missing dynamic loading support, several features will be disabled])
               wxUSE_DYNLIB_CLASS=no
           else
-              AC_MSG_WARN("Cannot check dynlib requirements on non-Unix platforms. dynlib remains enabled.")
+              AC_MSG_WARN([Assuming wxLibrary class works on this platform])
           fi
         fi
     fi
 fi
 
 if test "$wxUSE_DYNLIB_CLASS" = "yes" ; then
-  AC_DEFINE(wxUSE_DYNLIB_CLASS)
+    AC_DEFINE(wxUSE_DYNLIB_CLASS)
+else
+    wxUSE_ODBC=no
+    wxUSE_SERIAL=no
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2678,6 +2693,14 @@ fi
 
 if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then
   AC_DEFINE(wxUSE_EXPERIMENTAL_PRINTF)
+fi
+
+dnl ----------------------------------------------------------------
+dnl serialization support
+dnl ----------------------------------------------------------------
+
+if test "$wxUSE_SERIAL" = "yes" ; then
+    AC_DEFINE(wxUSE_SERIAL)
 fi
 
 dnl ----------------------------------------------------------------
@@ -3099,8 +3122,12 @@ if test "$wxUSE_GUI" = "yes"; then
     dnl      mfc, nativdlg, oleauto, ownerdrw, proplist
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS bombs controls dialogs drawing dynamic \
                      font forty fractal image minimal richedit wxpoem"
+
+    dnl this is needed to be able to find AFM files
+    EXTRADEFS="-DwxINSTALL_PREFIX=\"$prefix\""
 else
     SAMPLES_SUBDIRS=""
+    EXTRADEFS=
 fi
 
 dnl for convenience, sort the samples in alphabetical order
@@ -3168,6 +3195,7 @@ AC_SUBST(USER_SUBDIRS)
 dnl additional libraries and linker settings
 AC_SUBST(LDFLAGS)
 AC_SUBST(EXTRA_LIBS)
+AC_SUBST(EXTRADEFS)
 AC_SUBST(LIBS)
 AC_SUBST(LD_LIBS)
 

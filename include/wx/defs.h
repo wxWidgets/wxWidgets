@@ -16,21 +16,16 @@
     #pragma interface "defs.h"
 #endif
 
-
-// needed to handle strings with xgettext:
-#ifndef gettext_noop
-#  define gettext_noop(x) x
-#endif
-
 // ----------------------------------------------------------------------------
 // compiler and OS identification
 // ----------------------------------------------------------------------------
 
-// OS
+// OS: first test for generic Unix defines, then for particular flavours and
+//     finally for Unix-like systems
 #if defined(__unix) || defined(__unix__) || defined(____SVR4____) || \
-    defined(__LINUX__) || defined(__sgi ) || \
+    defined(__LINUX__) || defined(__sgi) || \
     defined(__hpux) || defined(sun) || defined(__SUN__) || defined(_AIX) || \
-    defined(__EMX__) || defined( __VMS )
+    defined(__EMX__) || defined(__VMS) || defined(__BEOS__)
 
     #define __UNIX_LIKE__
 
@@ -224,7 +219,7 @@
     #define __HPUX__
 #endif // HP-UX
 
-// if we're on a Unixsystem but didn't use configure (so that setup.h didn't
+// if we're on a Unix system but didn't use configure (so that setup.h didn't
 // define __UNIX__), do define __UNIX__ now
 #if !defined(__UNIX__) && defined(__UNIX_LIKE__)
     #define __UNIX__
@@ -497,32 +492,32 @@ typedef void (*wxFunction) (wxObject&, wxEvent&);
 // Not all platforms are currently available or supported
 enum
 {
-  wxUNKNOWN_PLATFORM,
-  wxCURSES,                 // Text-only CURSES
-  wxXVIEW_X,                // Sun's XView OpenLOOK toolkit
-  wxMOTIF_X,                // OSF Motif 1.x.x
-  wxCOSE_X,                 // OSF Common Desktop Environment
-  wxNEXTSTEP,               // NeXTStep
-  wxMACINTOSH,              // Apple System 7 and 8
-  wxBEOS,                   // BeOS
-  wxGTK,                    // GTK on X
-  wxGTK_WIN32,              // GTK on Win32
-  wxGTK_OS2,                // GTK on OS/2
-  wxGTK_BEOS,               // GTK on BeOS
-  wxQT,                     // Qt
-  wxGEOS,                   // GEOS
-  wxOS2_PM,                 // OS/2 Workplace
-  wxWINDOWS,                // Windows or WfW
-  wxPENWINDOWS,             // Windows for Pen Computing
-  wxWINDOWS_NT,             // Windows NT
-  wxWIN32S,                 // Windows 32S API
-  wxWIN95,                  // Windows 95
-  wxWIN386,                 // Watcom 32-bit supervisor modus
-  wxMGL_UNIX,               // MGL with direct hardware access
-  wxMGL_X,                  // MGL on X
-  wxMGL_WIN32,              // MGL on Win32
-  wxMGL_OS2,                // MGL on OS/2
-  wxWINDOWS_OS2             // Native OS/2 PM
+    wxUNKNOWN_PLATFORM,
+    wxCURSES,                 // Text-only CURSES
+    wxXVIEW_X,                // Sun's XView OpenLOOK toolkit
+    wxMOTIF_X,                // OSF Motif 1.x.x
+    wxCOSE_X,                 // OSF Common Desktop Environment
+    wxNEXTSTEP,               // NeXTStep
+    wxMACINTOSH,              // Apple System 7 and 8
+    wxBEOS,                   // BeOS
+    wxGTK,                    // GTK on X
+    wxGTK_WIN32,              // GTK on Win32
+    wxGTK_OS2,                // GTK on OS/2
+    wxGTK_BEOS,               // GTK on BeOS
+    wxQT,                     // Qt
+    wxGEOS,                   // GEOS
+    wxOS2_PM,                 // OS/2 Workplace
+    wxWINDOWS,                // Windows or WfW
+    wxPENWINDOWS,             // Windows for Pen Computing
+    wxWINDOWS_NT,             // Windows NT
+    wxWIN32S,                 // Windows 32S API
+    wxWIN95,                  // Windows 95
+    wxWIN386,                 // Watcom 32-bit supervisor modus
+    wxMGL_UNIX,               // MGL with direct hardware access
+    wxMGL_X,                  // MGL on X
+    wxMGL_WIN32,              // MGL on Win32
+    wxMGL_OS2,                // MGL on OS/2
+    wxWINDOWS_OS2             // Native OS/2 PM
 };
 
 // ----------------------------------------------------------------------------

@@ -70,14 +70,6 @@
     #include <clib.h>
 #endif
 
-// Pattern matching code. (FIXME)
-// Yes, this path is deliberate (for Borland compilation)
-#ifdef wx_mac /* MATTHEW: [5] Mac doesn't like paths with "/" */
-#include "glob.inc"
-#else
-#include "../common/glob.inc"
-#endif
-
 #ifdef __WXMSW__
     #include "windows.h"
 #endif

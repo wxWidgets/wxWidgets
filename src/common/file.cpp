@@ -122,8 +122,9 @@
     #define   R_OK        4
 #endif
 
-// there is no distinction between text and binary files under Unix
-#ifdef    __UNIX__
+// there is no distinction between text and binary files under Unix, so define
+// O_BINARY as 0 if the system headers don't do it already
+#if defined(__UNIX__) && !defined(O_BINARY)
     #define   O_BINARY    (0)
 #endif  //__UNIX__
 

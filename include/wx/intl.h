@@ -32,12 +32,12 @@
 // gettext() style macro (notice that xgettext should be invoked with "-k_"
 // option to extract the strings inside _() from the sources)
 #ifndef WXINTL_NO_GETTEXT_MACRO
-    #define   _(str)  wxGetTranslation(wxT(str))
+    #define   _(str)  wxGetTranslation(_T(str))
 #endif
 
 // another one which just marks the strings for extraction, but doesn't
 // perform the translation (use -kwxTRANSLATE with xgettext!)
-#define wxTRANSLATE(str) wxT(str)
+#define wxTRANSLATE(str) _T(str)
 
 // ----------------------------------------------------------------------------
 // forward decls
@@ -145,13 +145,23 @@ inline const wxMB2WXbuf wxGetTranslation(const wxChar *sz)
 
 #else // !wxUSE_INTL
 
-#ifndef WXINTL_NO_GETTEXT_MACRO
+// the macros should still be defined - otherwise compilation would fail
+
+#if !defined(WXINTL_NO_GETTEXT_MACRO) && !defined(_)
     #define   _(str)  (str)
 #endif
+
+#define wxTRANSLATE(str) _T(str)
 
 inline const wxChar *wxGetTranslation(const wxChar *sz) { return sz; }
 
 #endif // wxUSE_INTL/!wxUSE_INTL
+
+// define this one just in case it occurs somewhere (instead of preferred
+// wxTRANSLATE) too
+#if !defined(WXINTL_NO_GETTEXT_MACRO) && !defined(gettext_noop)
+    #define gettext_noop(str) _T(str)
+#endif
 
 #endif
     // _WX_INTLH__

@@ -28,7 +28,9 @@
 
 #ifndef WX_PRECOMP
   #include "wx/string.h"
-  #include "wx/icon.h"
+  #if wxUSE_GUI
+    #include "wx/icon.h"
+  #endif
 #endif //WX_PRECOMP
 
 // Doesn't compile in WIN16 mode
@@ -54,6 +56,9 @@
 
 // other standard headers
 #include <ctype.h>
+
+// in case we're compiling in non-GUI mode
+class WXDLLEXPORT wxIcon;
 
 // ----------------------------------------------------------------------------
 // private classes

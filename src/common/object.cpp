@@ -298,7 +298,6 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
 
 #include "wx/serbase.h"
 #include "wx/dynlib.h"
-#include "wx/msgdlg.h"
 
 wxObject* wxCreateStoredObject( wxInputStream &stream )
 {
