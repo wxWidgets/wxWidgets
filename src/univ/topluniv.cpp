@@ -265,7 +265,7 @@ long wxTopLevelWindow::HitTest(const wxPoint& pt) const
     wxTopLevelWindowNative::DoGetClientSize(&w, &h);
     wxRect rect(wxTopLevelWindowNative::GetClientAreaOrigin(), wxSize(w, h));
 
-    return m_renderer->HitTestFrame(rect, pt, GetDecorationsStyle());
+    return m_renderer->HitTestFrame(rect, pt+GetClientAreaOrigin(), GetDecorationsStyle());
 }
 
 // ----------------------------------------------------------------------------
