@@ -171,8 +171,10 @@ class PlotGraphics:
 
 class PlotCanvas(wx.wxWindow):
 
-    def __init__(self, parent, id = -1):
-        wx.wxWindow.__init__(self, parent, id, wx.wxPyDefaultPosition, wx.wxPyDefaultSize)
+    def __init__(self, parent, id=-1,
+                 pos = wx.wxDefaultPosition, size = wx.wxDefaultSize,
+                 style = 0, name = 'plotCanvas'):
+        wx.wxWindow.__init__(self, parent, id, pos, size, style, name)
         self.border = (1,1)
         self.SetClientSizeWH(400,400)
         self.SetBackgroundColour(wx.wxNamedColour("white"))
