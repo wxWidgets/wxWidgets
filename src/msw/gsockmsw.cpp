@@ -7,6 +7,21 @@
  * -------------------------------------------------------------------------
  */
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 /*
  * TODO: for WinCE we need to replace WSAAsyncSelect
  * (Windows message-based notification of network events for a socket)

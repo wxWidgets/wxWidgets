@@ -8,6 +8,21 @@
  * -------------------------------------------------------------------------
  */
 
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
+
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
 #ifdef _MSC_VER
    /* RPCNOTIFICATION_ROUTINE in rasasync.h (included from winsock.h),
     * warning: conditional expression is constant.
