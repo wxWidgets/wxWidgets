@@ -284,7 +284,6 @@
         <if cond="FORMAT!='autoconf'">
             <sys-lib>$(UNICOWS_LIB)</sys-lib>
             <if cond="COMPILER=='bcc'">
-                <sys-lib>import32</sys-lib>
                 <sys-lib>ole2w32</sys-lib>
             </if>
             <if cond="COMPILER!='bcc'">
