@@ -2324,11 +2324,15 @@ protected:
     // hooks for wxWindow used by ProcessEvent()
     // -----------------------------------------
 
-    // this one is called before trying our own event table to allow plugging
-    // in the validators
-#if wxUSE_VALIDATORS
+    // This one is called before trying our own event table to allow plugging
+    // in the validators.
+    // 
+    // NB: This method is intentionally *not* inside wxUSE_VALIDATORS!
+    //     It is part of wxBase which doesn't use validators and the code
+    //     is compiled out when building wxBase w/o GUI classes, which affects
+    //     binary compatiblity and wxBase library can't be used by GUI
+    //     ports.
     virtual bool TryValidator(wxEvent& WXUNUSED(event)) { return false; }
-#endif // wxUSE_VALIDATORS
 
     // this one is called after failing to find the event handle in our own
     // table to give a chance to the other windows to process it

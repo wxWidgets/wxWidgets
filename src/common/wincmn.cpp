@@ -2152,10 +2152,9 @@ void wxWindowBase::SendDestroyEvent()
 // event processing
 // ----------------------------------------------------------------------------
 
-#if wxUSE_VALIDATORS
-
 bool wxWindowBase::TryValidator(wxEvent& event)
 {
+#if wxUSE_VALIDATORS
     // Can only use the validator of the window which
     // is receiving the event
     if ( event.GetEventObject() == this )
@@ -2163,14 +2162,13 @@ bool wxWindowBase::TryValidator(wxEvent& event)
         wxValidator *validator = GetValidator();
         if ( validator && validator->ProcessEvent(event) )
         {
-            return TRUE;
+            return true;
         }
     }
-
-    return FALSE;
-}
-
 #endif // wxUSE_VALIDATORS
+
+    return false;
+}
 
 bool wxWindowBase::TryParent(wxEvent& event)
 {

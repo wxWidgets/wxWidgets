@@ -914,9 +914,7 @@ public:
 
 protected:
     // event handling specific to wxWindow
-#if wxUSE_VALIDATORS
     virtual bool TryValidator(wxEvent& event);
-#endif // wxUSE_VALIDATORS
     virtual bool TryParent(wxEvent& event);
 
 

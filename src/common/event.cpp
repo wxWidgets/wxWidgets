@@ -1107,10 +1107,8 @@ bool wxEvtHandler::ProcessEvent(wxEvent& event)
     {
         // if we have a validator, it has higher priority than our own event
         // table
-#if wxUSE_VALIDATORS
         if ( TryValidator(event) )
             return TRUE;
-#endif // wxUSE_VALIDATORS
 
         // Handle per-instance dynamic event tables first
         if ( m_dynamicEvents && SearchDynamicEventTable(event) )
