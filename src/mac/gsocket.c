@@ -84,7 +84,7 @@ extern pascal void OTDebugStr(const char* str);
   #include <OTDebug.h>
 #endif
 InetSvcRef gInetSvcRef = 0 ;
-
+int gOTInited = 0 ;
 
 OSStatus DoNegotiateIPReuseAddrOption(EndpointRef ep, Boolean enableReuseIPMode);
 
@@ -211,6 +211,7 @@ int GSocket_Verify_Inited()
       return TRUE ;
 
     InitOpenTransportInContext(kInitOTForApplicationMask, &clientcontext);
+    gOTInited = 1 ;
     gInetSvcRef = OTOpenInternetServicesInContext(kDefaultInternetServicesPath,
 						NULL, &err, clientcontext);
 #else	
@@ -218,6 +219,7 @@ int GSocket_Verify_Inited()
       return TRUE ;
  
     InitOpenTransport() ;
+    gOTInited = 1 ;
     gInetSvcRef = OTOpenInternetServices(kDefaultInternetServicesPath, NULL, &err);
 #endif
     if ( gInetSvcRef == NULL ||  err != kOTNoError )
@@ -230,13 +232,16 @@ int GSocket_Verify_Inited()
 
 void GSocket_Cleanup()
 {
-  if ( gInetSvcRef != NULL )
-	OTCloseProvider( gInetSvcRef );
-#if TARGET_CARBON
-  CloseOpenTransportInContext( NULL ) ;
-#else
-  CloseOpenTransport() ;
-#endif
+    if ( gOTInited != 0 )
+    {
+      if ( gInetSvcRef != NULL )
+    	OTCloseProvider( gInetSvcRef );
+    #if TARGET_CARBON
+      CloseOpenTransportInContext( NULL ) ;
+    #else
+      CloseOpenTransport() ;
+    #endif
+    }
 }
 
 /* Constructors / Destructors for GSocket */
