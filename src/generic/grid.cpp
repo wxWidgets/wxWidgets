@@ -538,7 +538,15 @@ void wxGridCellTextEditor::SetSize(const wxRect& rectOrig)
     }
 #else // !GTK
     int extra_x = ( rect.x > 2 )? 2 : 1;
+    
+// MB: treat MSW separately here otherwise the caret doesn't show 
+// when the editor is in the first row. 
+#if defined(__WXMSW__)
+    int extra_y = 2;
+#else
     int extra_y = ( rect.y > 2 )? 2 : 1;
+#endif // MSW
+
 #if defined(__WXMOTIF__)
     extra_x *= 2;
     extra_y *= 2;
