@@ -205,27 +205,27 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 #endif
 
     wxPanel *test = new wxPanel( this, -1, wxPoint(10, 110), wxSize(130,50), wxSIMPLE_BORDER | wxTAB_TRAVERSAL );
-    test->SetBackgroundColour( "WHEAT" );
+    test->SetBackgroundColour( wxT("WHEAT") );
 
 #if 0
 
     wxButton *test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
 
     test = new wxPanel( this, -1, wxPoint(160, 530), wxSize(130,120), wxSUNKEN_BORDER | wxTAB_TRAVERSAL );
-    test->SetBackgroundColour( "WHEAT" );
+    test->SetBackgroundColour( wxT("WHEAT") );
     test->SetCursor( wxCursor( wxCURSOR_NO_ENTRY ) );
     test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
     test2->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
 
     test = new wxPanel( this, -1, wxPoint(310, 530), wxSize(130,120), wxRAISED_BORDER | wxTAB_TRAVERSAL );
-    test->SetBackgroundColour( "WHEAT" );
+    test->SetBackgroundColour( wxT("WHEAT") );
     test->SetCursor( wxCursor( wxCURSOR_PENCIL ) );
     test2 = new wxButton( test, -1, "Hallo", wxPoint(10,10) );
     test2->SetCursor( wxCursor( wxCURSOR_NO_ENTRY ) );
 
 #endif
 
-    SetBackgroundColour( "BLUE" );
+    SetBackgroundColour( wxT("BLUE") );
 
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
 }

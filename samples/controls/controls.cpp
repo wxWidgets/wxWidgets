@@ -326,8 +326,8 @@ bool MyApp::OnInit()
         y = 50;
     if ( argc == 3 )
     {
-        wxSscanf(argv[1], "%d", &x);
-        wxSscanf(argv[2], "%d", &y);
+        wxSscanf(wxString(argv[1]), wxT("%d"), &x);
+        wxSscanf(wxString(argv[2]), wxT("%d"), &y);
     }
 
     // Create the main frame window
@@ -487,7 +487,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     m_text = new wxTextCtrl(this, -1, "This is the log window.\n",
                             wxPoint(0, 250), wxSize(100, 50), wxTE_MULTILINE);
-    m_text->SetBackgroundColour("wheat");
+    m_text->SetBackgroundColour(wxT("wheat"));
 
     if ( 0 )
         wxLog::AddTraceMask(_T("focus"));
@@ -609,7 +609,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     SetChoiceClientData(wxT("choice"), m_choiceSorted);
 
     m_choice->SetSelection(2);
-    m_choice->SetBackgroundColour( "red" );
+    m_choice->SetBackgroundColour( wxT("red") );
     (void)new wxButton( panel, ID_CHOICE_SEL_NUM, "Select #&2", wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_CHOICE_SEL_STR, "&Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_CHOICE_CLEAR, "&Clear", wxPoint(180,80), wxSize(140,30) );
@@ -876,16 +876,16 @@ void MyPanel::OnChangeColour(wxCommandEvent& WXUNUSED(event))
         SetBackgroundColour(s_colOld);
         s_colOld = wxNullColour;
 
-        m_lbSelectThis->SetForegroundColour("red");
-        m_lbSelectThis->SetBackgroundColour("white");
+        m_lbSelectThis->SetForegroundColour(wxT("red"));
+        m_lbSelectThis->SetBackgroundColour(wxT("white"));
     }
     else
     {
-        s_colOld = wxColour("red");
-        SetBackgroundColour("white");
+        s_colOld = wxColour(wxT("red"));
+        SetBackgroundColour(wxT("white"));
 
-        m_lbSelectThis->SetForegroundColour("white");
-        m_lbSelectThis->SetBackgroundColour("red");
+        m_lbSelectThis->SetForegroundColour(wxT("white"));
+        m_lbSelectThis->SetBackgroundColour(wxT("red"));
     }
 
     m_lbSelectThis->Refresh();

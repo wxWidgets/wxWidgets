@@ -253,7 +253,7 @@ MyCanvas::MyCanvas( wxWindow *parent, wxWindowID id,
 
     wxMemoryDC dc;
     dc.SelectObject( bitmap );
-    dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+    dc.SetBrush( wxBrush( wxT("orange"), wxSOLID ) );
     dc.SetPen( *wxBLACK_PEN );
     dc.DrawRectangle( 0, 0, 100, 100 );
     dc.SetBrush( *wxWHITE_BRUSH );
@@ -388,7 +388,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     if (my_square && my_square->Ok()) dc.DrawBitmap( *my_square, 30, 30 );
 
     dc.DrawText( "Drawn directly", 150, 10 );
-    dc.SetBrush( wxBrush( "orange", wxSOLID ) );
+    dc.SetBrush( wxBrush( wxT("orange"), wxSOLID ) );
     dc.SetPen( *wxBLACK_PEN );
     dc.DrawRectangle( 150, 30, 100, 100 );
     dc.SetBrush( *wxWHITE_BRUSH );
@@ -439,14 +439,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         dc.DrawText( "XBM bitmap", 30, 1975 );
         dc.DrawText( "(green on red)", 30, 1990 );
-        dc.SetTextForeground( "GREEN" );
-        dc.SetTextBackground( "RED" );
+        dc.SetTextForeground( wxT("GREEN") );
+        dc.SetTextBackground( wxT("RED") );
         dc.DrawBitmap( *my_smile_xbm, 30, 2010 );
 
-        dc.SetTextForeground( "BLACK" );
+        dc.SetTextForeground( wxT("BLACK") );
         dc.DrawText( "After wxImage conversion", 150, 1975 );
         dc.DrawText( "(red on white)", 150, 1990 );
-        dc.SetTextForeground( "RED" );
+        dc.SetTextForeground( wxT("RED") );
         wxImage i = my_smile_xbm->ConvertToImage();
         i.SetMaskColour( 255, 255, 255 );
         i.Replace( 0, 0, 0,
@@ -454,7 +454,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 2010, TRUE );
-        dc.SetTextForeground( "BLACK" );
+        dc.SetTextForeground( wxT("BLACK") );
     }
 
 
@@ -476,14 +476,14 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         dc.DrawText( "Mono bitmap", 30, 2095 );
         dc.DrawText( "(red on green)", 30, 2110 );
-        dc.SetTextForeground( "RED" );
-        dc.SetTextBackground( "GREEN" );
+        dc.SetTextForeground( wxT("RED") );
+        dc.SetTextBackground( wxT("GREEN") );
         dc.DrawBitmap( mono, 30, 2130 );
 
-        dc.SetTextForeground( "BLACK" );
+        dc.SetTextForeground( wxT("BLACK") );
         dc.DrawText( "After wxImage conversion", 150, 2095 );
         dc.DrawText( "(red on white)", 150, 2110 );
-        dc.SetTextForeground( "RED" );
+        dc.SetTextForeground( wxT("RED") );
         wxImage i = mono.ConvertToImage();
         i.SetMaskColour( 255,255,255 );
         i.Replace( 0,0,0,
@@ -491,7 +491,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
         dc.DrawBitmap( i.ConvertToBitmap(), 150, 2130, TRUE );
-        dc.SetTextForeground( "BLACK" );
+        dc.SetTextForeground( wxT("BLACK") );
     }
 
     dc.DrawText("XPM bitmap", 30, 2230);
@@ -518,7 +518,7 @@ void MyCanvas::CreateAntiAliasedBitmap()
   dc.Clear();
 
   dc.SetFont( wxFont( 24, wxDECORATIVE, wxNORMAL, wxNORMAL) );
-  dc.SetTextForeground( "RED" );
+  dc.SetTextForeground( wxT("RED") );
   dc.DrawText( "This is anti-aliased Text.", 20, 20 );
   dc.DrawText( "And a Rectangle.", 20, 60 );
 

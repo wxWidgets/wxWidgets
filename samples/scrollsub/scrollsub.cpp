@@ -153,7 +153,7 @@ MyScrolledWindow::MyScrolledWindow( wxWindow *parent, wxWindowID id,
     
     SetTargetWindow( m_canvas );
 
-    SetBackgroundColour( "WHEAT" );
+    SetBackgroundColour( wxT("WHEAT") );
   
     SetCursor( wxCursor( wxCURSOR_HAND ) );
     
@@ -264,7 +264,7 @@ MyCanvas::MyCanvas( wxScrolledWindow *parent, MyTopLabels *top, MyRightLabels *r
     (void)new wxTextCtrl( this, -1, "Text I", wxPoint(0,100), wxSize(100,25) );
     (void)new wxTextCtrl( this, -1, "Text II", wxPoint(200,100), wxSize(100,25) );
 
-    SetBackgroundColour( "WHEAT" );
+    SetBackgroundColour( wxT("WHEAT") );
   
     SetCursor( wxCursor( wxCURSOR_IBEAM ) );
 }

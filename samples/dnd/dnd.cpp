@@ -1864,7 +1864,7 @@ void DnDShapeDataObject::CreateBitmap() const
     wxBitmap bitmap(x, y);
     wxMemoryDC dc;
     dc.SelectObject(bitmap);
-    dc.SetBrush(wxBrush("white", wxSOLID));
+    dc.SetBrush(wxBrush(wxT("white"), wxSOLID));
     dc.Clear();
     m_shape->Draw(dc);
     dc.SelectObject(wxNullBitmap);

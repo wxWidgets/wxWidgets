@@ -308,7 +308,7 @@ void MyFrame::DoCreateStatusBar(MyFrame::StatBarKind kind)
             break;
 
         default:
-            wxFAIL_MSG("unknown stat bar kind");
+            wxFAIL_MSG(wxT("unknown stat bar kind"));
     }
 
     GetStatusBar()->Show();

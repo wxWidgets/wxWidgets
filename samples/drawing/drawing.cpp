@@ -406,17 +406,17 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
             {
                 dc.SetLogicalFunction(wxCOPY);
 
-                dc.SetPen( wxPen( "black", 4, wxSOLID) );
+                dc.SetPen( wxPen( wxT("black"), 4, wxSOLID) );
                 dc.SetBrush( *brush4 );
                 dc.DrawPolygon(5,todraw,0,0,wxWINDING_RULE);
 
-                dc.SetPen( wxPen( "red", 4, wxSOLID) );
+                dc.SetPen( wxPen( wxT("red"), 4, wxSOLID) );
                 dc.SetBrush( *brush36 );
                 dc.SetTextForeground(*wxCYAN);
                 dc.SetTextBackground(m_owner->m_colourBackground);
                 dc.DrawRectangle( x+10, y+10, 200, 200 );
 
-                dc.SetPen( wxPen( "green", 4, wxSOLID) );
+                dc.SetPen( wxPen( wxT("green"), 4, wxSOLID) );
                 dc.SetBrush( *brush4_mono );
                 dc.SetTextForeground(*wxCYAN);
                 dc.SetTextBackground(m_owner->m_colourBackground);
@@ -441,7 +441,7 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
                 memDC->Clear();
                 memDC->SetBackground(wxNullBrush);
 
-                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("black"), 4, wxSOLID) );
                 memDC->SetBrush( wxNullBrush);
                 memDC->SetBrush( *brush4 );
                 memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
@@ -463,12 +463,12 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 
 
                 //don't understand how but the outline is also depending on logicalfunction
-                memDC->SetPen( wxPen( "red", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("red"), 4, wxSOLID) );
                 memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
 
                 memDC->SetLogicalFunction(wxCOPY);
 
-                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("black"), 4, wxSOLID) );
                 memDC->SetBrush( wxNullBrush);
                 memDC->SetBrush( *brush36 );
                 memDC->SetTextForeground(*wxBLACK);            // 0s --> 0x000000 (black)
@@ -487,7 +487,7 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
                 memDC->SetLogicalFunction(wxOR);
 
                 //don't understand how but the outline is also depending on logicalfunction
-                memDC->SetPen( wxPen( "yellow", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("yellow"), 4, wxSOLID) );
                 memDC->DrawRectangle( 10, 10, 200, 200 );
 
                 memDC->SetBrush(wxNullBrush);
@@ -510,7 +510,7 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
                 memDC->Clear();
                 memDC->SetBackground(wxNullBrush);
 
-                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("black"), 4, wxSOLID) );
                 memDC->SetBrush( *brush4 );
                 memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
                 memDC->SetTextForeground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
@@ -530,12 +530,12 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 
 
                 //don't understand how but the outline is also depending on logicalfunction
-                memDC->SetPen( wxPen( "red", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("red"), 4, wxSOLID) );
                 memDC->DrawPolygon(5,todraw2,0,0,wxWINDING_RULE);
 
                 memDC->SetLogicalFunction(wxCOPY);
 
-                memDC->SetPen( wxPen( "black", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("black"), 4, wxSOLID) );
                 memDC->SetBrush( *brush36 );
                 memDC->SetTextBackground(*wxBLACK);            // 0s --> 0x000000 (black)
                 memDC->SetTextForeground(*wxWHITE);    // 1s --> 0xFFFFFF (white)
@@ -552,7 +552,7 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
                 memDC->SetLogicalFunction(wxOR);
 
                 //don't understand how but the outline is also depending on logicalfunction
-                memDC->SetPen( wxPen( "yellow", 4, wxSOLID) );
+                memDC->SetPen( wxPen( wxT("yellow"), 4, wxSOLID) );
                 memDC->DrawRectangle( 10, 10, 200, 200 );
 
                 memDC->SetBrush(wxNullBrush);
@@ -570,39 +570,39 @@ void MyCanvas::DrawTestPoly( int x, int y,wxDC &dc,int transparent )
 
 void MyCanvas::DrawTestLines( int x, int y, int width, wxDC &dc )
 {
-    dc.SetPen( wxPen( "black", width, wxSOLID) );
+    dc.SetPen( wxPen( wxT("black"), width, wxSOLID) );
     dc.SetBrush( *wxRED_BRUSH );
     dc.DrawText(wxString::Format(wxT("Testing lines of width %d"), width), x + 10, y - 10);
     dc.DrawRectangle( x+10, y+10, 100, 190 );
 
     dc.DrawText("Solid/dot/short dash/long dash/dot dash", x + 150, y + 10);
-    dc.SetPen( wxPen( "black", width, wxSOLID) );
+    dc.SetPen( wxPen( wxT("black"), width, wxSOLID) );
     dc.DrawLine( x+20, y+20, 100, y+20 );
-    dc.SetPen( wxPen( "black", width, wxDOT) );
+    dc.SetPen( wxPen( wxT("black"), width, wxDOT) );
     dc.DrawLine( x+20, y+30, 100, y+30 );
-    dc.SetPen( wxPen( "black", width, wxSHORT_DASH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxSHORT_DASH) );
     dc.DrawLine( x+20, y+40, 100, y+40 );
-    dc.SetPen( wxPen( "black", width, wxLONG_DASH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxLONG_DASH) );
     dc.DrawLine( x+20, y+50, 100, y+50 );
-    dc.SetPen( wxPen( "black", width, wxDOT_DASH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxDOT_DASH) );
     dc.DrawLine( x+20, y+60, 100, y+60 );
 
     dc.DrawText("Misc hatches", x + 150, y + 70);
-    dc.SetPen( wxPen( "black", width, wxBDIAGONAL_HATCH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxBDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+70, 100, y+70 );
-    dc.SetPen( wxPen( "black", width, wxCROSSDIAG_HATCH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxCROSSDIAG_HATCH) );
     dc.DrawLine( x+20, y+80, 100, y+80 );
-    dc.SetPen( wxPen( "black", width, wxFDIAGONAL_HATCH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxFDIAGONAL_HATCH) );
     dc.DrawLine( x+20, y+90, 100, y+90 );
-    dc.SetPen( wxPen( "black", width, wxCROSS_HATCH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxCROSS_HATCH) );
     dc.DrawLine( x+20, y+100, 100, y+100 );
-    dc.SetPen( wxPen( "black", width, wxHORIZONTAL_HATCH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxHORIZONTAL_HATCH) );
     dc.DrawLine( x+20, y+110, 100, y+110 );
-    dc.SetPen( wxPen( "black", width, wxVERTICAL_HATCH) );
+    dc.SetPen( wxPen( wxT("black"), width, wxVERTICAL_HATCH) );
     dc.DrawLine( x+20, y+120, 100, y+120 );
 
     dc.DrawText("User dash", x + 150, y + 140);
-    wxPen ud( "black", width, wxUSER_DASH );
+    wxPen ud( wxT("black"), width, wxUSER_DASH );
     wxDash dash1[1];
     dash1[0] = 0;
     ud.SetDashes( 1, dash1 );

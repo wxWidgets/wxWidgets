@@ -662,7 +662,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     PrepareDC(dc);
 
     // set background
-    dc.SetBackground(wxBrush("white", wxSOLID));
+    dc.SetBackground(wxBrush(wxT("white"), wxSOLID));
     dc.Clear();
 
     // output the font name/info
