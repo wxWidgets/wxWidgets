@@ -29,7 +29,7 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/defs.h"
+    #include "wx/app.h"
     #include "wx/string.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
