@@ -454,3 +454,15 @@ Checking in src/msw/button.cpp;
 /pack/cvsroots/wxwindows/wxWindows/src/msw/button.cpp,v  <--  button.cpp
 new revision: 1.59; previous revision: 1.58
 
+39. Alt-letter didn't switch focus to a spin ctrl following static control
+    with "&letter" accel
+
+http://sf.net/tracker/index.php?func=detail&aid=672974&group_id=9863&atid=109863
+
+Checking in src/msw/spinctrl.cpp;
+/pack/cvsroots/wxwindows/wxWindows/src/msw/spinctrl.cpp,v  <--  spinctrl.cpp
+new revision: 1.24; previous revision: 1.23
+Checking in include/wx/msw/spinctrl.h;
+/pack/cvsroots/wxwindows/wxWindows/include/wx/msw/spinctrl.h,v  <--  spinctrl.h
+new revision: 1.16; previous revision: 1.15
+
