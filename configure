@@ -9085,7 +9085,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  ZLIB_LINK="-lz"
+  ZLIB_LINK=" -lz"
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -9190,7 +9190,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  PNG_LINK="-lpng"
+  PNG_LINK=" -lpng"
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -9300,7 +9300,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  JPEG_LINK="-ljpeg"
+  JPEG_LINK=" -ljpeg"
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -9397,7 +9397,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  TIFF_LINK="-ltiff"
+  TIFF_LINK=" -ltiff"
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -9498,7 +9498,7 @@ LIBS="$ac_save_LIBS"
 fi
 if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
-  FREETYPE_LINK="-lfreetype"
+  FREETYPE_LINK=" -lfreetype"
 else
   echo "$ac_t""no" 1>&6
 fi
@@ -9665,7 +9665,7 @@ echo "$ac_t""$wx_cv_w32api_win32_ie" 1>&6
     esac
 
         if test "$wxUSE_ODBC" = "yes" ; then
-        LIBS="$LIBS -lodbc32 -lole32 -loleaut32"
+        LIBS=" -lodbc32 -lole32 -loleaut32$LIBS"
     fi
 
     RESFLAGS="--include-dir \$(top_srcdir)/include --include-dir \$(top_srcdir)/\$(program_dir) --define __WIN32__ --define __WIN95__ --define __GNUWIN32__"
@@ -9687,7 +9687,7 @@ if test "$wxUSE_GUI" = "yes"; then
 
                                 case "${host}" in
             *-*-mingw32* )
-                EXTRA_LIBS="$EXTRA_LIBS -Wl,--subsystem,windows -mwindows"
+                LDFLAGS="$LDFLAGS -Wl,--subsystem,windows -mwindows"
         esac
     fi
 
@@ -10394,7 +10394,7 @@ else
 fi
 
 
-        xpm_link=""
+        xpm_link=
         echo $ac_n "checking for Xpm library""... $ac_c" 1>&6
 echo "configure:10400: checking for Xpm library" >&5
         
@@ -10411,7 +10411,7 @@ for ac_dir in $SEARCH_LIB;
 
         if test "$ac_find_libraries" != "" ; then
             GUI_TK_LIBRARY="-L$ac_find_libraries"
-            xpm_link="-lXpm"
+            xpm_link=" -lXpm"
             cat >> confdefs.h <<\EOF
 #define wxHAVE_LIB_XPM 1
 EOF
@@ -10422,7 +10422,7 @@ EOF
             echo "configure: warning: library will be compiled without support for images in XPM format" 1>&2
         fi
 
-        mesa_link=""
+        mesa_link=
         echo $ac_n "checking for Mesa library""... $ac_c" 1>&6
 echo "configure:10428: checking for Mesa library" >&5
         
@@ -10439,13 +10439,13 @@ for ac_dir in $SEARCH_LIB;
 
         if test "$ac_find_libraries" != "" ; then
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY -L$ac_find_libraries"
-            mesa_link="-lMesaGL"
+            mesa_link=" -lMesaGL"
             echo "$ac_t""found at $ac_find_libraries" 1>&6
         else
             { echo "configure: error: no" 1>&2; exit 1; }
         fi
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine $mesa_link $xpm_link -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lwine$mesa_link$xpm_link -lXxf86dga -lXxf86vm -lSM -lICE -lXext -lXmu -lX11 -lncurses"
         TOOLKIT=MSW
         GUIDIST=MSW_DIST
         TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D__WXWINE__"
@@ -11416,7 +11416,7 @@ rm -f conftest*
             fi
         fi
 
-        xpm_link=""
+        xpm_link=
         echo $ac_n "checking for Xpm library""... $ac_c" 1>&6
 echo "configure:11422: checking for Xpm library" >&5
         
@@ -11442,7 +11442,7 @@ for ac_dir in $SEARCH_LIB;
   fi
 
             GUI_TK_LIBRARY="$GUI_TK_LIBRARY $ac_path_to_link"
-            xpm_link="-lXpm "
+            xpm_link=" -lXpm"
             cat >> confdefs.h <<\EOF
 #define wxHAVE_LIB_XPM 1
 EOF
@@ -11465,7 +11465,7 @@ EOF
 if { (eval echo configure:11466: \"$ac_compile\") 1>&5; (eval $ac_compile) 2>&5; }; then
   rm -rf conftest*
   
-                    xpm_link="-lXpm "
+                    xpm_link=" -lXpm"
                     cat >> confdefs.h <<\EOF
 #define wxHAVE_LIB_XPM 1
 EOF
@@ -11486,7 +11486,7 @@ fi
 rm -f conftest*
         fi
 
-        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm $xpm_link -lXmu -lXext -lXt -lX11"
+        GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXm$xpm_link -lXmu -lXext -lXt -lX11"
         TOOLKIT_VPATH="\${top_srcdir}/src/motif${PATH_IFS}\${top_srcdir}/src/motif/xmcombo"
         TOOLKIT=MOTIF
         GUIDIST=MOTIF_DIST
@@ -11494,12 +11494,12 @@ rm -f conftest*
 
     if test "$wxUSE_MAC" = 1; then
         if test "$wxUSE_PRECOMP" = "yes"; then
-            CPPFLAGS="${CPPFLAGS} -cpp-precomp"
+            CPPFLAGS="$CPPFLAGS -cpp-precomp"
         fi
-	CPPFLAGS="${CPPFLAGS} -I/Developer/Headers/FlatCarbon -I\${top_srcdir}/src/mac/morefile"
-        CFLAGS="${CFLAGS} -fpascal-strings"
-        CXXFLAGS="${CXXFLAGS} -fpascal-strings"
-        TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -DTARGET_CARBON"
+        CPPFLAGS="$CPPFLAGS -I/Developer/Headers/FlatCarbon -I\${top_srcdir}/src/mac/morefile"
+        CFLAGS="$CFLAGS -fpascal-strings"
+        CXXFLAGS="$CXXFLAGS -fpascal-strings"
+        TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -DTARGET_CARBON"
 
         TOOLKIT_VPATH="\${top_srcdir}/src/mac${PATH_IFS}\${top_srcdir}/src/mac/morefile"
         TOOLKIT=MAC
@@ -11820,7 +11820,7 @@ if test "$wxUSE_SHARED" = "yes"; then
     case "${host}" in
       *-hp-hpux* )
                 if test "$GCC" != "yes"; then
-                        LDFLAGS="-L/usr/lib"
+                        LDFLAGS="$LDFLAGS -L/usr/lib"
 
             SHARED_LD="${CXX} -b -o"
             PIC_FLAG="+Z"
@@ -11893,9 +11893,9 @@ echo "$ac_t""$wx_cv_prog_icc" 1>&6
       ;;
 
       *-*-darwin* )
-        CFLAGS="${CFLAGS} -fno-common"
-        CXXFLAGS="${CXXFLAGS} -fno-common"
-        SHARED_LD="${CXX} -dynamiclib -o"
+        CFLAGS="$CFLAGS -fno-common"
+        CXXFLAGS="$CXXFLAGS -fno-common"
+        SHARED_LD="$CXX -dynamiclib -o"
         PIC_FLAG="-dynamic -fPIC"
       ;;
 
@@ -13605,7 +13605,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 #define HAVE_WCSLEN 1
 EOF
 
-            WCHAR_LINK=""
+            WCHAR_LINK=
         
 else
   echo "$ac_t""no" 1>&6
@@ -13650,7 +13650,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 #define HAVE_WCSLEN 1
 EOF
 
-                WCHAR_LINK="-lw"
+                WCHAR_LINK=" -lw"
             
 else
   echo "$ac_t""no" 1>&6
@@ -13695,7 +13695,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 #define HAVE_WCSLEN 1
 EOF
 
-                    WCHAR_LINK=""
+                    WCHAR_LINK=
                 
 else
   echo "$ac_t""no" 1>&6
@@ -14663,7 +14663,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 #define HAVE_NANOSLEEP 1
 EOF
 
-                    POSIX4_LINK="-lposix4"
+                    POSIX4_LINK=" -lposix4"
                 
 else
   echo "$ac_t""no" 1>&6
@@ -15123,7 +15123,7 @@ if test "x$INET_LINK" != "x"; then
 #define HAVE_INET_ADDR 1
 EOF
 
-    INET_LINK="-l$INET_LINK"
+    INET_LINK=" -l$INET_LINK"
 fi
 
 fi
@@ -15514,7 +15514,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   cat >> confdefs.h <<\EOF
 #define HAVE_SCHED_YIELD 1
 EOF
- POSIX4_LINK="-lposix4"
+ POSIX4_LINK=" -lposix4"
 else
   echo "$ac_t""no" 1>&6
 echo "configure: warning: wxThread::Yield will not work properly" 1>&2
@@ -15671,7 +15671,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
                             HAVE_PRIOR_FUNCS=1
-                            POSIX4_LINK="-lposix4"
+                            POSIX4_LINK=" -lposix4"
                          
 else
   echo "$ac_t""no" 1>&6
@@ -15881,12 +15881,12 @@ EOF
     fi
   fi
 
-  THREADS_LINK="-l$THREADS_LINK"
+  THREADS_LINK=" -l$THREADS_LINK"
 
       if test "$USE_SOLARIS" = "yes" -a "$GCC" != "yes"; then
-      CPPFLAGS="${CFLAGS} -mt"
-      CXXFLAGS="${CXXFLAGS} -mt"
-      LDFLAGS="${LDFLAGS} -mt"
+      CPPFLAGS="$CFLAGS -mt"
+      CXXFLAGS="$CXXFLAGS -mt"
+      LDFLAGS="$LDFLAGS -mt"
   fi
 fi
 
@@ -15899,7 +15899,7 @@ EOF
 
 
     if test "$USE_DARWIN" != 1; then
-    TOOLCHAIN_DEFS="${TOOLCHAIN_DEFS} -D_REENTRANT"
+    TOOLCHAIN_DEFS="$TOOLCHAIN_DEFS -D_REENTRANT"
   fi
 
   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS thread"
@@ -15979,12 +15979,12 @@ EOF
 fi
 
 if test "$wxUSE_DMALLOC" = "yes" ; then
-    DMALLOC_LINK="-ldmalloc"
+    DMALLOC_LIBS="-ldmalloc"
 fi
 
 PROFILE=
 if test "$wxUSE_PROFILE" = "yes" ; then
-    PROFILE="-pg"
+    PROFILE=" -pg"
 fi
 
 if test "$GCC" = yes ; then
@@ -15998,8 +15998,8 @@ if test "$GCC" = yes ; then
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -fpermissive"
     fi
     if test "$wxUSE_NO_DEPS" = "no" ; then
-        CFLAGS="-MMD ${CFLAGS}"
-        CXXFLAGS="-MMD ${CXXFLAGS}"
+        CFLAGS="-MMD $CFLAGS"
+        CXXFLAGS="-MMD $CXXFLAGS"
     fi
     if test "$USE_WIN32" = 1 ; then
         # I'm not even really sure what this was ever added to solve,
@@ -17071,7 +17071,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
 EOF
 
                                 HAVE_DL_FUNCS=1
-                                LIBS="$LIBS -ldl"
+                                DL_LINK=" -ldl$DL_LINK"
                             
 else
   echo "$ac_t""no" 1>&6
@@ -17171,7 +17171,7 @@ if eval "test \"`echo '$ac_cv_lib_'$ac_lib_var`\" = yes"; then
   echo "$ac_t""yes" 1>&6
   
                                                                 HAVE_SHL_FUNCS=1
-                                                                LIBS="$LIBS -ldld"
+                                                                DL_LINK=" -ldld$DL_LINK"
                                                              
 else
   echo "$ac_t""no" 1>&6
@@ -17561,7 +17561,7 @@ done
         if test "$GCC" = yes ; then
             ALL_OBJECTS="$ALL_OBJECTS \$(OLEOBJS)"
             CODE_GEN_FLAGS_CXX="$CODE_GEN_FLAGS_CXX -fvtable-thunks"
-            LIBS="$LIBS -lrpcrt4 -loleaut32 -lole32 -luuid"
+            LIBS=" -lrpcrt4 -loleaut32 -lole32 -luuid$LIBS"
             cat >> confdefs.h <<\EOF
 #define wxUSE_OLE 1
 EOF
@@ -18274,16 +18274,18 @@ EOF
 
 
 
-GUILIBS="$GUI_TK_LIBRARY $TOOLKIT_LINK"
 
-EXTRA_LIBS="$EXTRA_LIBS $LIBS $POSIX4_LINK $INET_LINK $WCHAR_LINK $THREADS_LINK $DMALLOC_LINK $DL_LINK $ZLIB_LINK -lm"
 
 if test "$wxUSE_MAC" = 1 ; then
-    EXTRA_LIBS="$EXTRA_LIBS -framework Carbon -framework System"
+    LDFLAGS="$LDFLAGS -framework Carbon -framework System"
 fi
 
+
+LIBS="$ZLIB_LINK$POSIX4_LINK$INET_LINK$WCHAR_LINK$THREADS_LINK$DL_LINK -lm$LIBS"
+
 if test "$wxUSE_GUI" = "yes"; then
-    EXTRA_LIBS="$GUILIBS $PNG_LINK $JPEG_LINK $TIFF_LINK $FREETYPE_LINK $EXTRA_LIBS"
+
+    LIBS=" $GUI_TK_LIBRARY$PNG_LINK$JPEG_LINK$TIFF_LINK$FREETYPE_LINK$LIBS"
 
         
             SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS controls dialogs \
@@ -18295,14 +18297,13 @@ else
     SAMPLES_SUBDIRS="console"
 fi
 
-LD_LIBS="\${top_builddir}/lib/${WX_LIBRARY_NAME_STATIC} $EXTRA_LIBS"
 
 INCLUDES="-I\${top_builddir}/lib/wx/include/${TOOLCHAIN_NAME} -I\${top_srcdir}/include \
 $REGEX_INCLUDE $ZLIB_INCLUDE $PNG_INCLUDE $JPEG_INCLUDE $TIFF_INCLUDE \
 $FREETYPE_INCLUDE $TOOLKIT_INCLUDE"
 
-if test "$wxUSE_GTK" = 1; then
-    WXCONFIG_INCLUDE=""
+if test $wxUSE_GTK = 1; then
+    WXCONFIG_INCLUDE=
 else
     WXCONFIG_INCLUDE="$TOOLKIT_INCLUDE"
 fi
@@ -18310,12 +18311,12 @@ fi
 if test "$GXX" = yes ; then
         CXXWARNINGS="-Wall"
         fi
-EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG $PROFILE $OPTIMISE $INCLUDES"
+EXTRA_CFLAGS="$WXDEBUG $WXODBCFLAG$PROFILE $OPTIMISE $INCLUDES"
 
 CFLAGS=`echo $CFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \\+/ /g'`
 CXXFLAGS=`echo $CXXFLAGS $EXTRA_CFLAGS $CXXWARNINGS | sed 's/ \+/ /g'`
 
-LDFLAGS="$LDFLAGS $PROFILE"
+LDFLAGS="$LDFLAGS$PROFILE"
 
 SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq | tr '\n' ' '| tr -d '\r'`"
 
@@ -18401,10 +18402,8 @@ SAMPLES_SUBDIRS="`echo $SAMPLES_SUBDIRS | tr -s ' ' | tr ' ' '\n' | sort | uniq 
 
 
 
-
-
 echo $ac_n "checking whether ${MAKE-make} sets \${MAKE}""... $ac_c" 1>&6
-echo "configure:18408: checking whether ${MAKE-make} sets \${MAKE}" >&5
+echo "configure:18407: checking whether ${MAKE-make} sets \${MAKE}" >&5
 set dummy ${MAKE-make}; ac_make=`echo "$2" | sed 'y%./+-%__p_%'`
 if eval "test \"`echo '$''{'ac_cv_prog_make_${ac_make}_set'+set}'`\" = set"; then
   echo $ac_n "(cached) $ac_c" 1>&6
@@ -18674,10 +18673,9 @@ s%@DISTDIR@%$DISTDIR%g
 s%@RPM_SPEC@%$RPM_SPEC%g
 s%@RPM_FILES@%$RPM_FILES%g
 s%@SAMPLES_SUBDIRS@%$SAMPLES_SUBDIRS%g
-s%@EXTRA_LIBS@%$EXTRA_LIBS%g
 s%@OPENGL_LIBS@%$OPENGL_LIBS%g
+s%@DMALLOC_LIBS@%$DMALLOC_LIBS%g
 s%@EXTRADEFS@%$EXTRADEFS%g
-s%@LD_LIBS@%$LD_LIBS%g
 s%@RESFLAGS@%$RESFLAGS%g
 s%@RESPROGRAMOBJ@%$RESPROGRAMOBJ%g
 s%@WX_RESOURCES_MACOSX@%$WX_RESOURCES_MACOSX%g

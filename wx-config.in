@@ -8,11 +8,12 @@ CXX="@CXX@"
 LD="@SHARED_LD@"
 cross_compiling=@cross_compiling@
 target=@host_alias@
+static_flag=no
 
 usage()
 {
     cat <<EOF
-Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version]
+Usage: wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--version] [--static]
                  [--libs] [--gl-libs] [--cppflags] [--cflags] [--cxxflags] [--rezflags]
                  [--cc] [--cxx] [--ld]
 
@@ -69,6 +70,9 @@ while test $# -gt 0; do
     --version)
       echo @WX_MAJOR_VERSION_NUMBER@.@WX_MINOR_VERSION_NUMBER@.@WX_RELEASE_NUMBER@
       ;;
+    --static)
+      static_flag=yes
+      ;;
     --cppflags)
       cppflags
       ;;
@@ -88,7 +92,13 @@ while test $# -gt 0; do
       then
           libs="-L@libdir@"
       fi
-      echo $libs @WXCONFIG_LIBS@ @EXTRA_LIBS@
+
+      if test $static_flag = yes ; then
+          echo "-static $libs @LDFLAGS@ @WXCONFIG_LIBS@ @LIBS@ @DMALLOC_LIBS@"
+      else
+          echo $libs @LDFLAGS@ @WXCONFIG_LIBS@ @DMALLOC_LIBS@
+      fi
+
       ;;
     --gl-libs)
       echo @WXCONFIG_LIBS_GL@
