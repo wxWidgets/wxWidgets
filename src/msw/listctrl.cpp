@@ -1350,29 +1350,29 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 	       NM_RCLICK waits for the WM_RBUTTONUP message as well before firing off.
 	       We want to have notify events for both down -and- up. */
 	    {
-		// if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(), don't do
-		// anything else
-		if ( wxControl::MSWOnNotify(idCtrl, lParam, result) ) {
-		    return TRUE;
-		}
-		
-		// else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
-		LVHITTESTINFO lvhti;
-#ifdef __GNUWIN32__
-		memset(&lvhti,0,sizeof(LVHITTESTINFO));
-#else
-		ZeroMemory(&lvhti, sizeof(LVHITTESTINFO)); // must set all fields to 0
-#endif
-		::GetCursorPos(&(lvhti.pt));
-		::ScreenToClient(GetHwnd(),&(lvhti.pt));
-		if(ListView_HitTest(GetHwnd(),&lvhti)!=-1) {
-		    if(lvhti.flags & LVHT_ONITEM) {
-			eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
-			event.m_itemIndex = lvhti.iItem;
+		    // if the user processes it in wxEVT_COMMAND_RIGHT_CLICK(), don't do
+		    // anything else
+		    if ( wxControl::MSWOnNotify(idCtrl, lParam, result) ) {
+    		    return TRUE;
 		    }
-		}
+    		
+		    // else translate it into wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK event
+		    LV_HITTESTINFO lvhti;
+#ifdef __GNUWIN32__
+		    memset(&lvhti,0,sizeof(LV_HITTESTINFO));
+#else
+		    ZeroMemory(&lvhti, sizeof(LV_HITTESTINFO)); // must set all fields to 0
+#endif
+    		::GetCursorPos(&(lvhti.pt));
+		    ::ScreenToClient(GetHwnd(),&(lvhti.pt));
+		    if(ListView_HitTest(GetHwnd(),&lvhti)!=-1) {
+    			if(lvhti.flags & LVHT_ONITEM) {
+				    eventType = wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK;
+				    event.m_itemIndex = lvhti.iItem;
+			    }
+            }
 	    }
-	    break;
+	        break;
       
 	    /*
 	      case NM_MCLICK: // ***** THERE IS NO NM_MCLICK. Subclass anyone? ******
