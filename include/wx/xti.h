@@ -45,7 +45,9 @@
 // some compilers have troubles getting the correct wxPropertyAccessorT constructor
 // set this to 1 to make things work for these, too
 
+#ifndef WX_XTI_TEMPLATE_FIX
 #define WX_XTI_TEMPLATE_FIX 0
+#endif
 
 #if WX_XTI_TEMPLATE_FIX
 #define WX_XTI_PARAM_FIX(a,b) a,b
