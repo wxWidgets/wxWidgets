@@ -888,7 +888,7 @@ void wxSocketBase::SetTimeout(long seconds)
   m_timeout = seconds;
 
   if (m_socket)
-    GSocket_SetTimeout(m_socket, m_timeout);
+    GSocket_SetTimeout(m_socket, m_timeout * 1000);
 }
 
 // --------------------------------------------------------------
@@ -1104,7 +1104,7 @@ wxSocketServer::wxSocketServer(wxSockAddress& addr_man,
     return;
   }
 
-  GSocket_SetTimeout(m_socket, m_timeout);
+  GSocket_SetTimeout(m_socket, m_timeout * 1000);
   GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                 GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                 wx_socket_callback, (char *)this);
@@ -1142,7 +1142,7 @@ bool wxSocketServer::AcceptWith(wxSocketBase& sock, bool wait)
   sock.m_socket = child_socket;
   sock.m_connected = TRUE;
 
-  GSocket_SetTimeout(sock.m_socket, sock.m_timeout);
+  GSocket_SetTimeout(sock.m_socket, sock.m_timeout * 1000);
   GSocket_SetCallback(sock.m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                      GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                      wx_socket_callback, (char *)&sock);
@@ -1206,7 +1206,7 @@ bool wxSocketClient::Connect(wxSockAddress& addr_man, bool wait)
   if (!m_socket)
     return FALSE;
 
-  GSocket_SetTimeout(m_socket, m_timeout);
+  GSocket_SetTimeout(m_socket, m_timeout * 1000);
   GSocket_SetCallback(m_socket, GSOCK_INPUT_FLAG | GSOCK_OUTPUT_FLAG |
                                 GSOCK_LOST_FLAG | GSOCK_CONNECTION_FLAG,
                                 wx_socket_callback, (char *)this);
