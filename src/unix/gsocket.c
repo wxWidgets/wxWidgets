@@ -57,6 +57,14 @@
 
 #endif
 
+#if !defined(__LINUX__) && !defined(__FREEBSD__)
+#   define CAN_USE_TIMEOUT
+#elif defined(__GLIBC__) && defined(__GLIBC_MINOR__)
+#   if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 1)
+#      define CAN_USE_TIMEOUT
+#   endif
+#endif
+
 /* Global initialisers */
 
 bool GSocket_Init()
@@ -210,8 +218,7 @@ GAddress *GSocket_GetLocal(GSocket *socket)
     socket->m_error = GSOCK_MEMERR;
     return NULL;
   }
-  if (!_GAddress_translate_from(address, &addr, size)) {
-    socket->m_error = GSOCK_MEMERR;
+  if (_GAddress_translate_from(address, &addr, size) != GSOCK_NOERROR) {
     GAddress_destroy(address);
     return NULL;
   }
@@ -487,38 +494,30 @@ bool GSocket_DataAvailable(GSocket *socket)
   GSocket_SetNonBlocking() puts the socket in non-blocking mode. This is useful
   if we don't want to wait.
 */
-void GSocket_SetNonBlocking(GSocket *socket, bool block)
+void GSocket_SetNonBlocking(GSocket *socket, bool non_block)
 {
   assert(socket != NULL);
 
-  socket->m_blocking = block;
+  socket->m_blocking = non_block;
 
   if (socket->m_fd != -1)
-    ioctl(socket->m_fd, FIONBIO, &block);
+    ioctl(socket->m_fd, FIONBIO, &non_block);
 }
 
 /*
  * GSocket_SetTimeout()
  */
 
-#if !defined(__LINUX__) && !defined(__FREEBSD__)
-#   define CAN_USE_TIMEOUT
-#elif defined(__GLIBC__) && defined(__GLIBC_MINOR__)
-#   if (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 1)
-#      define CAN_USE_TIMEOUT
-#   endif
-#endif
-
 void GSocket_SetTimeout(GSocket *socket, unsigned long millisec)
 {
   assert(socket != NULL);
 
+  socket->m_timeout = millisec;
  /* Neither GLIBC 2.0 nor the kernel 2.0.36 define SO_SNDTIMEO or
     SO_RCVTIMEO. The man pages, that these flags should exist but
     are read only. RR. */
  /* OK, restrict this to GLIBC 2.1. GL. */
 #ifdef CAN_USE_TIMEOUT 
-  socket->m_timeout = millisec;
   if (socket->m_fd != -1) {
     struct timeval tval;
 
@@ -616,6 +615,37 @@ if (socket->m_iocalls[event] && \
   signal(SIGPIPE, old_handler); \
 }
 
+#if 0
+#ifndef CAN_USE_TIMEOUT
+
+#define ENABLE_TIMEOUT(socket) \
+{ \
+  struct itimerval old_ival, new_ival; \
+  void (*old_timer_sig)(int); \
+\
+  new_ival.it_interval.tv_sec = socket->m_timeout / 1000; \
+  new_ival.it_interval.tv_usec = (socket->m_timeout % 1000) * 1000; \
+  setitimer(ITIMER_REAL, &new_ival, &old_ival); \
+  old_timer_sig = signal(SIGALRM, _GSocket_Timer);
+
+#define DISABLE_TIMEOUT(socket) \
+  signal(SIGALRM, old_timer_sig); \
+  setitimer(ITIMER_REAL, &old_ival, NULL); \
+}
+
+#else
+
+#define ENABLE_TIMEOUT(s)
+#define DISABLE_TIMEOUT(s)
+
+#endif
+
+#endif
+
+/* Temporary */
+#define ENABLE_TIMEOUT(s)
+#define DISABLE_TIMEOUT(s)
+
 void _GSocket_Enable(GSocket *socket, GSocketEvent event)
 {
   socket->m_iocalls[event] = TRUE;
@@ -635,8 +665,11 @@ int _GSocket_Recv_Stream(GSocket *socket, char *buffer, int size)
   int ret;
 
   MASK_SIGNAL();
+  ENABLE_TIMEOUT(socket);
   ret = recv(socket->m_fd, buffer, size, 0);
+  DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
+
   if (ret == -1 && errno != EAGAIN) {
     socket->m_error = GSOCK_IOERR;
     return -1;
@@ -657,7 +690,9 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
   fromlen = sizeof(from);
 
   MASK_SIGNAL();
+  ENABLE_TIMEOUT(socket);
   ret = recvfrom(socket->m_fd, buffer, size, 0, &from, &fromlen);
+  DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
   if (ret == -1 && errno != EAGAIN) {
     socket->m_error = GSOCK_IOERR;
@@ -676,10 +711,8 @@ int _GSocket_Recv_Dgram(GSocket *socket, char *buffer, int size)
       return -1;
     }
   }
-  if (!_GAddress_translate_from(socket->m_peer, &from, fromlen)) {
-    socket->m_error = GSOCK_MEMERR;
+  if (_GAddress_translate_from(socket->m_peer, &from, fromlen) != GSOCK_NOERROR)
     return -1;
-  }
 
   return ret;
 }
@@ -689,7 +722,9 @@ int _GSocket_Send_Stream(GSocket *socket, const char *buffer, int size)
   int ret;
 
   MASK_SIGNAL();
+  ENABLE_TIMEOUT(socket);
   ret = send(socket->m_fd, buffer, size, 0);
+  DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
   if (ret == -1 && errno != EAGAIN) {
     socket->m_error = GSOCK_IOERR;
@@ -712,13 +747,14 @@ int _GSocket_Send_Dgram(GSocket *socket, const char *buffer, int size)
     return -1;
   }
 
-  if (!_GAddress_translate_to(socket->m_peer, &addr, &len)) {
-    socket->m_error = GSOCK_MEMERR;
+  if (_GAddress_translate_to(socket->m_peer, &addr, &len) != GSOCK_NOERROR) {
     return -1;
   }
 
   MASK_SIGNAL();
+  ENABLE_TIMEOUT(socket);
   ret = sendto(socket->m_fd, buffer, size, 0, addr, len);
+  DISABLE_TIMEOUT(socket);
   UNMASK_SIGNAL();
 
   /* Frees memory allocated from _GAddress_translate_to */
@@ -779,9 +815,8 @@ void _GSocket_Detected_Write(GSocket *socket)
 #define CHECK_ADDRESS(address, family, retval) \
 { \
   if (address->m_family == GSOCK_NOFAMILY) \
-    if (!_GAddress_Init_##family(address)) {\
-      address->m_error = GSOCK_MEMERR; \
-      return retval; \
+    if (_GAddress_Init_##family(address) != GSOCK_NOERROR) {\
+      return address->m_error; \
     }\
   if (address->m_family != GSOCK_##family) {\
     address->m_error = GSOCK_INVADDR; \
@@ -851,7 +886,7 @@ GAddressType GAddress_GetFamily(GAddress *address)
   return address->m_family;
 }
 
-bool _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len){
+GSocketError _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len){
   address->m_realfamily = addr->sa_family;
   switch (addr->sa_family) {
   case AF_INET:
@@ -867,7 +902,8 @@ bool _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len)
 #endif
   default:
     {
-    /* TODO error */
+    address->m_error = GSOCK_INVOP;
+    return GSOCK_INVOP;
     }
   }
 
@@ -876,28 +912,32 @@ bool _GAddress_translate_from(GAddress *address, struct sockaddr *addr, int len)
 
   address->m_len  = len;
   address->m_addr = (struct sockaddr *)malloc(len);
-  if (address->m_addr == NULL)
-    return FALSE;
+  if (address->m_addr == NULL) {
+    address->m_error = GSOCK_MEMERR;
+    return GSOCK_MEMERR;
+  }
   memcpy(address->m_addr, addr, len);
 
-  return TRUE;
+  return GSOCK_NOERROR;
 }
 
-bool _GAddress_translate_to(GAddress *address,
-                            struct sockaddr **addr, int *len)
+GSocketError _GAddress_translate_to(GAddress *address,
+                                    struct sockaddr **addr, int *len)
 {
   if (!address->m_addr) {
-    /* TODO error */
-    return;
+    address->m_error = GSOCK_INVADDR;
+    return GSOCK_INVADDR;
   }
 
   *len = address->m_len;
   *addr = (struct sockaddr *)malloc(address->m_len);
-  if (*addr == NULL)
-    return FALSE;
+  if (*addr == NULL) {
+    address->m_error = GSOCK_MEMERR;
+    return GSOCK_MEMERR;
+  }
 
   memcpy(*addr, address->m_addr, address->m_len);
-  return TRUE;
+  return GSOCK_NOERROR;
 }
 
 /*
@@ -906,11 +946,13 @@ bool _GAddress_translate_to(GAddress *address,
  * -------------------------------------------------------------------------
  */
 
-bool _GAddress_Init_INET(GAddress *address)
+GSocketError _GAddress_Init_INET(GAddress *address)
 {
   address->m_addr = (struct sockaddr *)malloc(sizeof(struct sockaddr_in));
-  if (address->m_addr == NULL)
-    return FALSE;
+  if (address->m_addr == NULL) {
+    address->m_error = GSOCK_MEMERR;
+    return GSOCK_MEMERR;
+  }
 
   address->m_len  = sizeof(struct sockaddr_in);
 
@@ -974,7 +1016,7 @@ GSocketError GAddress_INET_SetPortName(GAddress *address, const char *port,
 
   if (!port) {
     address->m_error = GSOCK_INVPORT;
-    return GSOCK_INVOP;
+    return GSOCK_INVPORT;
   }
  
   se = getservbyname(port, protocol);
@@ -1063,11 +1105,13 @@ unsigned short GAddress_INET_GetPort(GAddress *address)
  * -------------------------------------------------------------------------
  */
 
-bool _GAddress_Init_UNIX(GAddress *address)
+GSocketError _GAddress_Init_UNIX(GAddress *address)
 {
   address->m_addr = (struct sockaddr *)malloc(address->m_len);
-  if (address->m_addr == NULL)
-    return FALSE;
+  if (address->m_addr == NULL) {
+    address->m_error = GSOCK_MEMERR;
+    return GSOCK_MEMERR;
+  }
 
   address->m_len  = sizeof(struct sockaddr_un);
   address->m_family = GSOCK_UNIX;
