@@ -330,57 +330,57 @@ END_DECLARE_EVENT_TYPES()
 //
 // if you call event.Allow(), the drag operation will start and a
 // EVT_TREE_END_DRAG event will be sent when the drag is over.
-#define EVT_TREE_BEGIN_DRAG(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_BEGIN_DRAG, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TREE_BEGIN_RDRAG(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_BEGIN_RDRAG, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_BEGIN_DRAG(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_BEGIN_DRAG, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_BEGIN_RDRAG(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_BEGIN_RDRAG, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 // GetItem() is the item on which the drop occured (if any) and GetPoint() the
 // current mouse coords
-#define EVT_TREE_END_DRAG(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_END_DRAG, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_END_DRAG(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_END_DRAG, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 // GetItem() returns the itme whose label is being edited, GetLabel() returns
 // the current item label for BEGIN and the would be new one for END.
 //
 // Vetoing BEGIN event means that label editing won't happen at all,
 // vetoing END means that the new value is discarded and the old one kept
-#define EVT_TREE_BEGIN_LABEL_EDIT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TREE_END_LABEL_EDIT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_END_LABEL_EDIT, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_BEGIN_LABEL_EDIT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_END_LABEL_EDIT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_END_LABEL_EDIT, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 // provide/update information about GetItem() item
-#define EVT_TREE_GET_INFO(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_GET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TREE_SET_INFO(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SET_INFO, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_GET_INFO(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_GET_INFO, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_SET_INFO(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SET_INFO, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 // GetItem() is the item being expanded/collapsed, the "ING" versions can use
-#define EVT_TREE_ITEM_EXPANDED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_EXPANDED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TREE_ITEM_EXPANDING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_EXPANDING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TREE_ITEM_COLLAPSED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_COLLAPSED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TREE_ITEM_COLLAPSING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_ITEM_EXPANDED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_EXPANDED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_ITEM_EXPANDING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_EXPANDING, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_ITEM_COLLAPSED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_COLLAPSED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_ITEM_COLLAPSING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
 
 // GetOldItem() is the item which had the selection previously, GetItem() is
 // the item which acquires selection
-#define EVT_TREE_SEL_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SEL_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
-#define EVT_TREE_SEL_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SEL_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_SEL_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SEL_CHANGED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_SEL_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_SEL_CHANGING, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
 
 // GetKeyCode() returns the key code
 // NB: this is the only message for which GetItem() is invalid (you may get the
 //     item from GetSelection())
-#define EVT_TREE_KEY_DOWN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_KEY_DOWN, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_KEY_DOWN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_KEY_DOWN, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
 
 // GetItem() returns the item being deleted, the associated data (if any) will
 // be deleted just after the return of this event handler (if any)
-#define EVT_TREE_DELETE_ITEM(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_DELETE_ITEM, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_DELETE_ITEM(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_DELETE_ITEM, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 // GetItem() returns the item that was activated (double click, enter, space)
-#define EVT_TREE_ITEM_ACTIVATED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_ITEM_ACTIVATED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_ACTIVATED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
 
 // GetItem() returns the item that was clicked on
-#define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
-#define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_ITEM_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_ITEM_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_MIDDLE_CLICK, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
 
 // GetItem() returns the item whose state image was clicked on
-#define EVT_TREE_STATE_IMAGE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
+#define EVT_TREE_STATE_IMAGE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_STATE_IMAGE_CLICK, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), NULL ),
 
 // GetItem() is the item for which the tooltip is being requested
-#define EVT_TREE_ITEM_GETTOOLTIP(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TREE_ITEM_GETTOOLTIP(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TREE_ITEM_GETTOOLTIP, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTreeEventFunction, & fn ), (wxObject *) NULL ),
 
 #endif // wxUSE_TREECTRL
 

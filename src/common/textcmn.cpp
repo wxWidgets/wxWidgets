@@ -128,27 +128,27 @@ wxTextAttr wxTextAttr::Combine(const wxTextAttr& attr,
     }
 
     wxTextAttr newAttr(colFg, colBg, font);
-    
+
     if (attr.HasAlignment())
         newAttr.SetAlignment(attr.GetAlignment());
     else if (attrDef.HasAlignment())
         newAttr.SetAlignment(attrDef.GetAlignment());
-    
+
     if (attr.HasTabs())
         newAttr.SetTabs(attr.GetTabs());
     else if (attrDef.HasTabs())
         newAttr.SetTabs(attrDef.GetTabs());
-    
+
     if (attr.HasLeftIndent())
         newAttr.SetLeftIndent(attr.GetLeftIndent(), attr.GetLeftSubIndent());
     else if (attrDef.HasLeftIndent())
         newAttr.SetLeftIndent(attrDef.GetLeftIndent(), attr.GetLeftSubIndent());
-    
+
     if (attr.HasRightIndent())
         newAttr.SetRightIndent(attr.GetRightIndent());
     else if (attrDef.HasRightIndent())
-        newAttr.SetRightIndent(attrDef.GetRightIndent());    
-    
+        newAttr.SetRightIndent(attrDef.GetRightIndent());
+
     return newAttr;
 }
 
@@ -171,14 +171,14 @@ bool wxTextCtrlBase::SetStyle(long WXUNUSED(start), long WXUNUSED(end),
                               const wxTextAttr& WXUNUSED(style))
 {
     // to be implemented in derived TextCtrl classes
-    return FALSE;
+    return false;
 }
 
 // get the styling at the given position
 bool wxTextCtrlBase::GetStyle(long WXUNUSED(position), wxTextAttr& WXUNUSED(style))
 {
     // to be implemented in derived TextCtrl classes
-    return FALSE;
+    return false;
 }
 
 // change default text attributes
@@ -192,7 +192,7 @@ bool wxTextCtrlBase::SetDefaultStyle(const wxTextAttr& style)
     else
         m_defaultStyle = wxTextAttr::Combine(style, m_defaultStyle, this);
 
-    return TRUE;
+    return true;
 }
 
 // get default text attributes
@@ -220,14 +220,14 @@ bool wxTextCtrlBase::LoadFile(const wxString& filename)
 
             m_filename = filename;
 
-            return TRUE;
+            return true;
         }
     }
 
     wxLogError(_("File couldn't be loaded."));
 #endif // wxUSE_FFILE
 
-    return FALSE;
+    return false;
 }
 
 bool wxTextCtrlBase::SaveFile(const wxString& filename)
@@ -238,7 +238,7 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
         // what kind of message to give? is it an error or a program bug?
         wxLogDebug(wxT("Can't save textctrl to file without filename."));
 
-        return FALSE;
+        return false;
     }
 
 #if wxUSE_FFILE
@@ -251,13 +251,13 @@ bool wxTextCtrlBase::SaveFile(const wxString& filename)
         // if it worked, save for future calls
         m_filename = filenameToUse;
 
-        return TRUE;
+        return true;
     }
 #endif // wxUSE_FFILE
 
     wxLogError(_("The text couldn't be saved."));
 
-    return FALSE;
+    return false;
 }
 
 // ----------------------------------------------------------------------------
@@ -355,7 +355,7 @@ bool wxTextCtrlBase::CanPaste() const
 // the generic version is unused in wxMSW
 bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& WXUNUSED(event))
 {
-    return FALSE;
+    return false;
 }
 #else // !__WIN32__
 bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
@@ -443,10 +443,10 @@ bool wxTextCtrlBase::EmulateKeyPress(const wxKeyEvent& event)
     {
         WriteText(ch);
 
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 #endif // !__WIN32__
 
@@ -483,12 +483,12 @@ void wxTextCtrlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
 {
     if ( event.GetSetEnabled() )
         Enable(event.GetEnabled());
-    
+
     if ( event.GetSetText() )
     {
         if ( event.GetText() != GetValue() )
             SetValue(event.GetText());
-    }    
+    }
 }
 
 // ----------------------------------------------------------------------------

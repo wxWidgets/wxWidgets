@@ -43,14 +43,14 @@ public:
 
     // get the current tip and update the internal state to return the next tip
     // when called for the next time
-    virtual wxString GetTip() = 0;  
+    virtual wxString GetTip() = 0;
 
     // get the current tip "index" (or whatever allows the tip provider to know
     // from where to start the next time)
     size_t GetCurrentTip() const { return m_currentTip; }
 
-    // Allows any user-derived class to optionally override this function to 
-    // modify the tip as soon as it is read. If return wxEmptyString, then 
+    // Allows any user-derived class to optionally override this function to
+    // modify the tip as soon as it is read. If return wxEmptyString, then
     // the tip is skipped, and the next one is read.
     virtual wxString PreprocessTip(const wxString& tip) { return tip; }
 
@@ -78,10 +78,10 @@ WXDLLIMPEXP_ADV wxTipProvider *wxCreateFileTipProvider(const wxString& filename,
 // the user to disable this (however, it's the program which should show, or
 // not, the dialog on startup depending on its value, not this class).
 //
-// The function returns TRUE if this checkbox is checked, FALSE otherwise.
+// The function returns true if this checkbox is checked, false otherwise.
 WXDLLIMPEXP_ADV bool wxShowTip(wxWindow *parent,
                                wxTipProvider *tipProvider,
-                               bool showAtStartup = TRUE);
+                               bool showAtStartup = true);
 
 #endif // wxUSE_STARTUP_TIPS
 

@@ -6,7 +6,7 @@
 // Created:     28/06/1998
 // RCS-ID:      $Id$
 // Copyright:   (c) Guilhem Lavaux
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef _WX_TXTSTREAM_H_
@@ -32,7 +32,7 @@ WXDLLIMPEXP_BASE wxTextOutputStream &endl( wxTextOutputStream &stream );
 #define wxEOT wxT('\4') // the End-Of-Text control code (used only inside wxTextInputStream)
 
 // If you're scanning through a file using wxTextInputStream, you should check for EOF _before_
-// reading the next item (word / number), because otherwise the last item may get lost. 
+// reading the next item (word / number), because otherwise the last item may get lost.
 // You should however be prepared to receive an empty item (empty string / zero number) at the
 // end of file, especially on Windows systems. This is unavoidable because most (but not all) files end
 // with whitespace (i.e. usually a newline).
@@ -77,7 +77,7 @@ protected:
     wxInputStream &m_input;
     wxString m_separators;
     char m_lastBytes[10]; // stores the bytes that were read for the last character
-    
+
 #if wxUSE_UNICODE
     wxMBConv &m_conv;
 #endif
@@ -136,7 +136,7 @@ public:
 protected:
     wxOutputStream &m_output;
     wxEOL           m_mode;
-    
+
 #if wxUSE_UNICODE
     wxMBConv &m_conv;
 #endif

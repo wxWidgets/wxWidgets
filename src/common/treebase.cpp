@@ -75,7 +75,7 @@ wxTreeEvent::wxTreeEvent(wxEventType commandType, int id)
            : wxNotifyEvent(commandType, id)
 {
     m_itemOld = 0l;
-    m_editCancelled = FALSE;
+    m_editCancelled = false;
 }
 
 #endif // wxUSE_TREECTRL

@@ -87,7 +87,7 @@ protected:
     friend class wxURLNativeImp;
     // pointer to a native URL implementation object
     wxURLNativeImp *m_nativeImp;
-    // Creates on the heap and returns a native 
+    // Creates on the heap and returns a native
     // implementation object for the current platform.
     static wxURLNativeImp *CreateNativeImpObject();
 #endif

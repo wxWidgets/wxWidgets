@@ -322,12 +322,12 @@ bool wxGetEmailAddress(wxChar *address, int maxSize)
 {
     wxString email = wxGetEmailAddress();
     if ( !email )
-        return FALSE;
+        return false;
 
     wxStrncpy(address, email, maxSize - 1);
     address[maxSize - 1] = wxT('\0');
 
-    return TRUE;
+    return true;
 }
 
 wxString wxGetEmailAddress()
@@ -335,10 +335,10 @@ wxString wxGetEmailAddress()
     wxString email;
 
     wxString host = wxGetFullHostName();
-    if ( !!host )
+    if ( !host.IsEmpty() )
     {
         wxString user = wxGetUserId();
-        if ( !!user )
+        if ( !user.IsEmpty() )
         {
             email << user << wxT('@') << host;
         }
@@ -447,18 +447,18 @@ wxString wxGetCurrentDir()
 
 // wxDoExecuteWithCapture() helper: reads an entire stream into one array
 //
-// returns TRUE if ok, FALSE if error
+// returns true if ok, false if error
 #if wxUSE_STREAMS
 static bool ReadAll(wxInputStream *is, wxArrayString& output)
 {
-    wxCHECK_MSG( is, FALSE, _T("NULL stream in wxExecute()?") );
+    wxCHECK_MSG( is, false, _T("NULL stream in wxExecute()?") );
 
     // the stream could be already at EOF or in wxSTREAM_BROKEN_PIPE state
     is->Reset();
 
     wxTextInputStream tis(*is);
 
-    bool cont = TRUE;
+    bool cont = true;
     while ( cont )
     {
         wxString line = tis.ReadLine();
@@ -467,7 +467,7 @@ static bool ReadAll(wxInputStream *is, wxArrayString& output)
 
         if ( !*is )
         {
-            cont = FALSE;
+            cont = false;
         }
         else
         {
@@ -538,7 +538,7 @@ bool wxYield()
 
 bool wxYieldIfNeeded()
 {
-    return wxTheApp && wxTheApp->Yield(TRUE);
+    return wxTheApp && wxTheApp->Yield(true);
 }
 
 #endif // wxUSE_BASE
@@ -660,7 +660,7 @@ wxFindWindowByName (const wxString& name, wxWindow * parent)
     return wxWindow::FindWindowByName( name, parent );
 }
 
-// Returns menu item id or -1 if none.
+// Returns menu item id or wxNOT_FOUND if none.
 int
 wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& itemString)
 {
@@ -670,7 +670,7 @@ wxFindMenuItemId (wxFrame * frame, const wxString& menuString, const wxString& i
       return menuBar->FindMenuItem (menuString, itemString);
 #endif // wxUSE_MENUS
 
-  return -1;
+  return wxNOT_FOUND;
 }
 
 // Try to find the deepest child that contains 'pt'.
@@ -831,7 +831,7 @@ wxString wxGetPasswordFromUser(const wxString& message,
 wxColour wxGetColourFromUser(wxWindow *parent, const wxColour& colInit)
 {
     wxColourData data;
-    data.SetChooseFull(TRUE);
+    data.SetChooseFull(true);
     if ( colInit.Ok() )
     {
         data.SetColour((wxColour &)colInit); // const_cast
@@ -951,7 +951,7 @@ bool wxSafeYield(wxWindow *win, bool onlyIfNeeded)
 #ifndef __WXGTK__
 bool wxSetDetectableAutoRepeat( bool WXUNUSED(flag) )
 {
-    return TRUE;    // detectable auto-repeat is the only mode MSW supports
+    return true;    // detectable auto-repeat is the only mode MSW supports
 }
 #endif // !wxGTK
 

@@ -33,10 +33,10 @@
 // more readable flags for Start():
 
 // generate notifications periodically until the timer is stopped (default)
-#define wxTIMER_CONTINUOUS FALSE
+#define wxTIMER_CONTINUOUS false
 
 // only send the notification once and then stop the timer
-#define wxTIMER_ONE_SHOT TRUE
+#define wxTIMER_ONE_SHOT true
 
 // the interface of wxTimer class
 class WXDLLEXPORT wxTimerBase : public wxEvtHandler
@@ -52,11 +52,11 @@ public:
     // ctor which allows to avoid having to override Notify() in the derived
     // class: the owner will get timer notifications which can be handled with
     // EVT_TIMER
-    wxTimerBase(wxEvtHandler *owner, int timerid = -1)
+    wxTimerBase(wxEvtHandler *owner, int timerid = wxID_ANY)
         { Init(); SetOwner(owner, timerid); }
 
     // same as ctor above
-    void SetOwner(wxEvtHandler *owner, int timerid = -1)
+    void SetOwner(wxEvtHandler *owner, int timerid = wxID_ANY)
         { m_owner = owner; m_idTimer = timerid; }
     wxEvtHandler* GetOwner() const { return m_owner; }
 
@@ -70,7 +70,7 @@ public:
     //
     // it is now valid to call Start() multiple times: this just restarts the
     // timer if it is already running
-    virtual bool Start(int milliseconds = -1, bool oneShot = FALSE);
+    virtual bool Start(int milliseconds = -1, bool oneShot = false);
 
     // stop the timer
     virtual void Stop() = 0;
@@ -82,28 +82,28 @@ public:
     // getting info
     // ------------
 
-    // return TRUE if the timer is running
+    // return true if the timer is running
     virtual bool IsRunning() const = 0;
 
     // get the (last) timer interval in the milliseconds
     int GetInterval() const { return m_milli; }
 
-    // return TRUE if the timer is one shot
+    // return true if the timer is one shot
     bool IsOneShot() const { return m_oneShot; }
 
     // return the timer ID
     int GetId() const { return m_idTimer; }
-    
+
 
 protected:
     // common part of all ctors
-    void Init() { m_oneShot = FALSE; m_milli = 0; }
+    void Init() { m_oneShot = false; m_milli = 0; }
 
     wxEvtHandler *m_owner;
     int     m_idTimer;
 
     int     m_milli;        // the timer interval
-    bool    m_oneShot;      // TRUE if one shot
+    bool    m_oneShot;      // true if one shot
 
     DECLARE_NO_COPY_CLASS(wxTimerBase)
 };
@@ -134,13 +134,13 @@ class WXDLLEXPORT wxTimerRunner
 {
 public:
     wxTimerRunner(wxTimer& timer) : m_timer(timer) { }
-    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = FALSE)
+    wxTimerRunner(wxTimer& timer, int milli, bool oneShot = false)
         : m_timer(timer)
     {
         m_timer.Start(milli, oneShot);
     }
 
-    void Start(int milli, bool oneShot = FALSE)
+    void Start(int milli, bool oneShot = false)
     {
         m_timer.Start(milli, oneShot);
     }
@@ -188,7 +188,7 @@ private:
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 
 #define EVT_TIMER(timerid, func) \
-    DECLARE_EVENT_TABLE_ENTRY( wxEVT_TIMER, timerid, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTimerEventFunction, & func ), NULL),
+    DECLARE_EVENT_TABLE_ENTRY( wxEVT_TIMER, timerid, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxTimerEventFunction, & func ), NULL),
 
 #endif // wxUSE_GUI && wxUSE_TIMER
 

@@ -321,7 +321,7 @@ public:
     bool IsOk() const;
 
     // NB: the associated mutex MUST be locked beforehand by the calling thread
-    // 
+    //
     // it atomically releases the lock on the associated mutex
     // and starts waiting to be woken up by a Signal()/Broadcast()
     // once its signaled, then it will wait until it can reacquire
@@ -332,7 +332,7 @@ public:
     // timeout ellapses even if the condition hasn't been signalled: in this
     // case, the return value is false, otherwise (i.e. in case of a normal
     // return) it is true
-    // 
+    //
     // the timeeout parameter specifies a interval that needs to be waited in
     // milliseconds
     wxCondError WaitTimeout(unsigned long milliseconds);

@@ -50,7 +50,7 @@ enum wxToolBarToolStyle
 // ----------------------------------------------------------------------------
 // wxToolBarTool is a toolbar element.
 //
-// It has a unique id (except for the separators which always have id -1), the
+// It has a unique id (except for the separators which always have id wxID_ANY), the
 // style (telling whether it is a normal button, separator or a control), the
 // state (toggled or not, enabled or not) and short and long help strings. The
 // default implementations use the short help string for the tooltip text which
@@ -88,8 +88,8 @@ public:
 
         m_kind = kind;
 
-        m_enabled = TRUE;
-        m_toggled = FALSE;
+        m_enabled = true;
+        m_toggled = false;
 
         m_toolStyle = toolid == wxID_SEPARATOR ? wxTOOL_STYLE_SEPARATOR
                                            : wxTOOL_STYLE_BUTTON;
@@ -103,8 +103,8 @@ public:
 
         m_kind = wxITEM_MAX;    // invalid value
 
-        m_enabled = TRUE;
-        m_toggled = FALSE;
+        m_enabled = true;
+        m_toggled = false;
 
         m_toolStyle = wxTOOL_STYLE_CONTROL;
     }
@@ -168,7 +168,7 @@ public:
         }
     }
 
-    // modifiers: return TRUE if the state really changed
+    // modifiers: return true if the state really changed
     bool Enable(bool enable);
     bool Toggle(bool toggle);
     bool SetToggle(bool toggle);
@@ -329,14 +329,14 @@ public:
     virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
     virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
 
-    // add an arbitrary control to the toolbar, return TRUE if ok (notice that
+    // add an arbitrary control to the toolbar (notice that
     // the control will be deleted by the toolbar and that it will also adjust
     // its position/size)
     //
     // NB: the control should have toolbar as its parent
     virtual wxToolBarToolBase *AddControl(wxControl *control);
     virtual wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
-    
+
     // get the control with the given id or return NULL
     virtual wxControl *FindControl( int toolid );
 
@@ -375,7 +375,7 @@ public:
     // returns tool pos, or wxNOT_FOUND if tool isn't found
     virtual int GetToolPos(int id) const;
 
-    // return TRUE if the tool is toggled
+    // return true if the tool is toggled
     virtual bool GetToolState(int toolid) const;
 
     virtual bool GetToolEnabled(int toolid) const;
@@ -432,7 +432,7 @@ public:
     // find the tool by id
     wxToolBarToolBase *FindById(int toolid) const;
 
-    // return TRUE if this is a vertical toolbar, otherwise FALSE
+    // return true if this is a vertical toolbar, otherwise false
     bool IsVertical() const { return HasFlag(wxTB_VERTICAL); }
 
 
@@ -443,7 +443,7 @@ public:
     wxToolBarToolBase *AddTool(int toolid,
                                const wxBitmap& bitmap,
                                const wxBitmap& bmpDisabled,
-                               bool toggle = FALSE,
+                               bool toggle = false,
                                wxObject *clientData = NULL,
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString)
@@ -469,7 +469,7 @@ public:
                                const wxBitmap& bmpDisabled,
                                bool toggle,
                                wxCoord xPos,
-                               wxCoord yPos = -1,
+                               wxCoord yPos = wxDefaultCoord,
                                wxObject *clientData = NULL,
                                const wxString& shortHelp = wxEmptyString,
                                const wxString& longHelp = wxEmptyString)
@@ -483,7 +483,7 @@ public:
                                   int toolid,
                                   const wxBitmap& bitmap,
                                   const wxBitmap& bmpDisabled = wxNullBitmap,
-                                  bool toggle = FALSE,
+                                  bool toggle = false,
                                   wxObject *clientData = NULL,
                                   const wxString& shortHelp = wxEmptyString,
                                   const wxString& longHelp = wxEmptyString)
@@ -498,14 +498,14 @@ public:
 
     // NB: these functions are deprecated, use EVT_TOOL_XXX() instead!
 
-    // Only allow toggle if returns TRUE. Call when left button up.
+    // Only allow toggle if returns true. Call when left button up.
     virtual bool OnLeftClick(int toolid, bool toggleDown);
 
     // Call when right button down.
     virtual void OnRightClick(int toolid, long x, long y);
 
     // Called when the mouse cursor enters a tool bitmap.
-    // Argument is -1 if mouse is exiting the toolbar.
+    // Argument is wxID_ANY if mouse is exiting the toolbar.
     virtual void OnMouseEnter(int toolid);
 
     // more deprecated functions
@@ -523,7 +523,7 @@ public:
     virtual void UpdateWindowUI(long flags = wxUPDATE_UI_NONE) ;
 
     // don't want toolbars to accept the focus
-    virtual bool AcceptsFocus() const { return FALSE; }
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
     // to implement in derived classes
@@ -541,8 +541,8 @@ protected:
                                    const wxString& shortHelp = wxEmptyString,
                                    const wxString& longHelp = wxEmptyString,
                                    wxObject *clientData = NULL,
-                                   wxCoord xPos = -1,
-                                   wxCoord yPos = -1
+                                   wxCoord xPos = wxDefaultCoord,
+                                   wxCoord yPos = wxDefaultCoord
                                );
 
     // the tool is not yet inserted into m_tools list when this function is

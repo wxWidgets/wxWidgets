@@ -50,5 +50,5 @@ void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))
         delete menu;
     }
 }
-    
+
 #endif // defined(wxHAS_TASK_BAR_ICON)

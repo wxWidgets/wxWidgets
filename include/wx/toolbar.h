@@ -79,7 +79,7 @@ enum
                                const wxString& shortHelpString = wxEmptyString,
                                const wxString& longHelpString = wxEmptyString)
             {
-                return wxToolBarSimple::AddTool(toolid, bitmap, wxNullBitmap, FALSE, -1, -1, NULL,
+                return wxToolBarSimple::AddTool(toolid, bitmap, wxNullBitmap, false, wxDefaultCoord, wxDefaultCoord, NULL,
                        shortHelpString, longHelpString);
             }
 
@@ -95,7 +95,7 @@ enum
                                    const wxString& longHelpString = wxEmptyString
                                )
             {
-                return wxToolBarSimple::AddTool(toolid, bitmap, pushedBitmap, toggle, -1, -1, clientData,
+                return wxToolBarSimple::AddTool(toolid, bitmap, pushedBitmap, toggle, wxDefaultCoord, wxDefaultCoord, clientData,
                        shortHelpString, longHelpString);
             }
 
@@ -107,7 +107,7 @@ enum
                                    const wxBitmap& pushedBitmap,
                                    bool toggle,
                                    wxCoord xPos,
-                                   wxCoord yPos = -1,
+                                   wxCoord yPos = wxDefaultCoord,
                                    wxObject *clientData = NULL,
                                    const wxString& shortHelpString = wxEmptyString,
                                    const wxString& longHelpString = wxEmptyString

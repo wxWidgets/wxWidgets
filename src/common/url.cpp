@@ -45,7 +45,7 @@ USE_PROTOCOL(wxHTTP)
 USE_PROTOCOL(wxFTP)
 
     wxHTTP *wxURL::ms_proxyDefault = NULL;
-    bool wxURL::ms_useDefaultProxy = FALSE;
+    bool wxURL::ms_useDefaultProxy = false;
 #endif
 
 // --------------------------------------------------------------
@@ -73,7 +73,7 @@ wxURL::wxURL(const wxString& url)
         if ( !ms_proxyDefault )
         {
             // don't try again
-            ms_useDefaultProxy = FALSE;
+            ms_useDefaultProxy = false;
         }
     }
 
@@ -98,14 +98,14 @@ bool wxURL::ParseURL()
     if (!PrepProto(last_url))
     {
       m_error = wxURL_SNTXERR;
-      return FALSE;
+      return false;
     }
 
     // Find and create the protocol object
     if (!FetchProtocol())
     {
       m_error = wxURL_NOPROTO;
-      return FALSE;
+      return false;
     }
 
     // Do we need a host name ?
@@ -115,7 +115,7 @@ bool wxURL::ParseURL()
       if (!PrepHost(last_url))
       {
         m_error = wxURL_SNTXERR;
-        return FALSE;
+        return false;
       }
     }
 
@@ -123,7 +123,7 @@ bool wxURL::ParseURL()
     if (!PrepPath(last_url))
     {
       m_error = wxURL_NOPATH;
-      return FALSE;
+      return false;
     }
   }
   // URL parse finished.
@@ -147,7 +147,7 @@ bool wxURL::ParseURL()
 #endif
 
   m_error = wxURL_NOERR;
-  return TRUE;
+  return true;
 }
 
 void wxURL::CleanData()
@@ -180,14 +180,14 @@ bool wxURL::PrepProto(wxString& url)
 
   // Find end
   pos = url.Find(wxT(':'));
-  if (pos == -1)
-    return FALSE;
+  if (pos == wxNOT_FOUND)
+    return false;
 
   m_protoname = url(0, pos);
 
   url = url(pos+1, url.Length());
 
-  return TRUE;
+  return true;
 }
 
 bool wxURL::PrepHost(wxString& url)
@@ -196,51 +196,51 @@ bool wxURL::PrepHost(wxString& url)
   int pos, pos2;
 
   if ((url.GetChar(0) != wxT('/')) || (url.GetChar(1) != wxT('/')))
-    return FALSE;
+    return false;
 
   url = url(2, url.Length());
 
   pos = url.Find(wxT('/'));
-  if (pos == -1)
+  if (pos == wxNOT_FOUND)
     pos = url.Length();
 
   if (pos == 0)
-    return FALSE;
+    return false;
 
   temp_url = url(0, pos);
   url = url(url.Find(wxT('/')), url.Length());
 
   // Retrieve service number
-  pos2 = temp_url.Find(wxT(':'), TRUE);
-  if (pos2 != -1 && pos2 < pos)
+  pos2 = temp_url.Find(wxT(':'), true);
+  if (pos2 != wxNOT_FOUND && pos2 < pos)
   {
     m_servname = temp_url(pos2+1, pos);
     if (!m_servname.IsNumber())
-      return FALSE;
+      return false;
     temp_url = temp_url(0, pos2);
   }
 
   // Retrieve user and password.
   pos2 = temp_url.Find(wxT('@'));
-  // Even if pos2 equals -1, this code is right.
+  // Even if pos2 equals wxNOT_FOUND, this code is right.
   m_hostname = temp_url(pos2+1, temp_url.Length());
 
   m_user = wxT("");
   m_password = wxT("");
 
-  if (pos2 == -1)
-    return TRUE;
+  if (pos2 == wxNOT_FOUND)
+    return true;
 
   temp_url = temp_url(0, pos2);
   pos2 = temp_url.Find(wxT(':'));
 
-  if (pos2 == -1)
-    return FALSE;
+  if (pos2 == wxNOT_FOUND)
+    return false;
 
   m_user = temp_url(0, pos2);
   m_password = temp_url(pos2+1, url.Length());
 
-  return TRUE;
+  return true;
 }
 
 bool wxURL::PrepPath(wxString& url)
@@ -249,7 +249,7 @@ bool wxURL::PrepPath(wxString& url)
     m_path = ConvertToValidURI(url);
   else
     m_path = wxT("/");
-  return TRUE;
+  return true;
 }
 
 bool wxURL::FetchProtocol()
@@ -265,11 +265,11 @@ bool wxURL::FetchProtocol()
 
       m_protoinfo = info;
       m_protocol = (wxProtocol *)m_protoinfo->m_cinfo->CreateObject();
-      return TRUE;
+      return true;
     }
     info = info->next;
   }
-  return FALSE;
+  return false;
 }
 
 // --------------------------------------------------------------
@@ -318,7 +318,7 @@ wxInputStream *wxURL::GetInputStream()
 
     addr.Service(m_servname);
 
-    if (!m_protocol->Connect(addr, TRUE)) // Watcom needs the 2nd arg for some reason
+    if (!m_protocol->Connect(addr, true)) // Watcom needs the 2nd arg for some reason
     {
       m_error = wxURL_CONNERR;
       return NULL;
@@ -327,7 +327,7 @@ wxInputStream *wxURL::GetInputStream()
 #endif
 
   // When we use a proxy, we have to pass the whole URL to it.
-  wxInputStream *the_i_stream = 
+  wxInputStream *the_i_stream =
        (m_useProxy) ? m_protocol->GetInputStream(m_url) :
                       m_protocol->GetInputStream(m_path);
 
@@ -356,7 +356,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
   {
       wxString tmp_str = url_proxy;
       int pos = tmp_str.Find(wxT(':'));
-      if (pos == -1)
+      if (pos == wxNOT_FOUND)
           return;
 
       wxString hostname = tmp_str(0, pos),
@@ -373,7 +373,7 @@ void wxURL::SetDefaultProxy(const wxString& url_proxy)
           ms_proxyDefault->Close();
       else
           ms_proxyDefault = new wxHTTP();
-      ms_proxyDefault->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
+      ms_proxyDefault->Connect(addr, true); // Watcom needs the 2nd arg for some reason
   }
 }
 
@@ -387,7 +387,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
             delete m_proxy;
         }
 
-        m_useProxy = FALSE;
+        m_useProxy = false;
     }
     else
     {
@@ -399,7 +399,7 @@ void wxURL::SetProxy(const wxString& url_proxy)
         tmp_str = url_proxy;
         pos = tmp_str.Find(wxT(':'));
         // This is an invalid proxy name.
-        if (pos == -1)
+        if (pos == wxNOT_FOUND)
             return;
 
         hostname = tmp_str(0, pos);
@@ -412,11 +412,11 @@ void wxURL::SetProxy(const wxString& url_proxy)
         if (m_proxy && m_proxy != ms_proxyDefault)
             delete m_proxy;
         m_proxy = new wxHTTP();
-        m_proxy->Connect(addr, TRUE); // Watcom needs the 2nd arg for some reason
+        m_proxy->Connect(addr, true); // Watcom needs the 2nd arg for some reason
 
         CleanData();
         // Reparse url.
-        m_useProxy = TRUE;
+        m_useProxy = true;
         ParseURL();
     }
 }
@@ -441,7 +441,7 @@ wxString wxURL::ConvertToValidURI(const wxString& uri, const wxChar* delims)
     else
     {
       // GRG, Apr/2000: modified according to the URI definition (RFC 2396)
-      // 
+      //
       // - Alphanumeric characters are never escaped
       // - Unreserved marks are never escaped
       // - Delimiters must be escaped if they appear within a component
@@ -530,10 +530,10 @@ bool wxURLModule::OnInit()
 
     if ( getenv("HTTP_PROXY") )
     {
-        wxURL::ms_useDefaultProxy = TRUE;
+        wxURL::ms_useDefaultProxy = true;
     }
 
-    return TRUE;
+    return true;
 }
 
 void wxURLModule::OnExit()

@@ -145,15 +145,15 @@ public:
                   size_t n,
                   wxTextFileType type = typeDefault)
     {
-        m_aLines.insert(m_aLines.begin() + n, str); 
-        m_aTypes.insert(m_aTypes.begin()+n, type); 
+        m_aLines.insert(m_aLines.begin() + n, str);
+        m_aTypes.insert(m_aTypes.begin()+n, type);
     }
 
     // delete one line
     void RemoveLine(size_t n)
     {
         m_aLines.erase(m_aLines.begin() + n);
-        m_aTypes.erase(m_aTypes.begin() + n); 
+        m_aTypes.erase(m_aTypes.begin() + n);
     }
 
     // remove all lines

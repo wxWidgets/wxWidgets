@@ -18,7 +18,7 @@
 
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__EMX__)
 // Some older compilers (such as EMX) cannot handle
-// #pragma interface/implementation correctly, iff 
+// #pragma interface/implementation correctly, iff
 // #pragma implementation is used in _two_ translation
 // units (as created by e.g. event.cpp compiled for
 // libwx_base and event.cpp compiled for libwx_gui_core).
@@ -272,17 +272,17 @@ WXDLLIMPEXP_BASE unsigned long wxGetProcessId();
 WXDLLIMPEXP_BASE long wxGetFreeMemory();
 
 // should wxApp::OnFatalException() be called?
-WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = TRUE);
+WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
 
 // ----------------------------------------------------------------------------
 // Environment variables
 // ----------------------------------------------------------------------------
 
-// returns TRUE if variable exists (value may be NULL if you just want to check
+// returns true if variable exists (value may be NULL if you just want to check
 // for this)
 WXDLLIMPEXP_BASE bool wxGetEnv(const wxString& var, wxString *value);
 
-// set the env var name to the given value, return TRUE on success
+// set the env var name to the given value, return true on success
 WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxChar *value);
 
 // remove the env var from environment
@@ -349,7 +349,7 @@ WXDLLEXPORT wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
 // Window search
 // ----------------------------------------------------------------------------
 
-// Returns menu item id or -1 if none.
+// Returns menu item id or wxNOT_FOUND if none.
 WXDLLEXPORT int wxFindMenuItemId(wxFrame *frame, const wxString& menuString, const wxString& itemString);
 
 // Find the wxWindow at the given point. wxGenericFindWindowAtPoint
@@ -374,10 +374,10 @@ WXDLLEXPORT wxWindow* wxFindWindowByName(const wxString& name, wxWindow *parent 
 // ----------------------------------------------------------------------------
 
 // Yield to other apps/messages and disable user input
-WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = FALSE);
+WXDLLEXPORT bool wxSafeYield(wxWindow *win = NULL, bool onlyIfNeeded = false);
 
 // Enable or disable input to all top level windows
-WXDLLEXPORT void wxEnableTopLevelWindows(bool enable = TRUE);
+WXDLLEXPORT void wxEnableTopLevelWindows(bool enable = true);
 
 // Check whether this window wants to process messages, e.g. Stop button
 // in long calculations.
@@ -412,7 +412,7 @@ WXDLLEXPORT void wxBeginBusyCursor(wxCursor *cursor = wxHOURGLASS_CURSOR);
 // Restore cursor to normal
 WXDLLEXPORT void wxEndBusyCursor();
 
-// TRUE if we're between the above two calls
+// true if we're between the above two calls
 WXDLLEXPORT bool wxIsBusy();
 
 // Convenience class so we can just create a wxBusyCursor object on the stack

@@ -143,7 +143,7 @@ wxTextBuffer::wxTextBuffer(const wxString& strBufferName)
             : m_strBufferName(strBufferName)
 {
     m_nCurLine = 0;
-    m_isOpened = FALSE;
+    m_isOpened = false;
 }
 
 wxTextBuffer::~wxTextBuffer()
@@ -172,13 +172,13 @@ bool wxTextBuffer::Create()
     wxASSERT( !m_strBufferName.IsEmpty() );
 
     // if the buffer already exists do nothing
-    if ( Exists() ) return FALSE;
-  
+    if ( Exists() ) return false;
+
     if ( !OnOpen(m_strBufferName, WriteAccess) )
-        return FALSE;
+        return false;
 
     OnClose();
-    return TRUE;
+    return true;
 }
 
 bool wxTextBuffer::Open(const wxString& strBufferName, wxMBConv& conv)
@@ -195,7 +195,7 @@ bool wxTextBuffer::Open(wxMBConv& conv)
 
     // open buffer in read-only mode
     if ( !OnOpen(m_strBufferName, ReadAccess) )
-        return FALSE;
+        return false;
 
     // read buffer into memory
     m_isOpened = OnRead(conv);
@@ -275,9 +275,9 @@ bool wxTextBuffer::Close()
     m_aTypes.Clear();
     m_aLines.Clear();
     m_nCurLine = 0;
-    m_isOpened = FALSE;
+    m_isOpened = false;
 
-    return TRUE;
+    return true;
 }
 
 bool wxTextBuffer::Write(wxTextFileType typeNew, wxMBConv& conv)

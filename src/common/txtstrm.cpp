@@ -70,14 +70,14 @@ wxChar wxTextInputStream::NextChar()
 #if wxUSE_UNICODE
     wxChar wbuf[2];
     memset((void*)m_lastBytes, 0, 10);
-    for(size_t inlen = 0; inlen < 9; inlen++) 
+    for(size_t inlen = 0; inlen < 9; inlen++)
     {
         // actually read the next character
         m_lastBytes[inlen] = m_input.GetC();
 
-        if(m_input.LastRead() <= 0) 
+        if(m_input.LastRead() <= 0)
             return wxEOT;
-        
+
         int retlen = (int) m_conv.MB2WC(wbuf, m_lastBytes, 2); // returns -1 for failure
         if(retlen >= 0) // res == 0 could happen for '\0' char
             return wbuf[0];
@@ -86,13 +86,13 @@ wxChar wxTextInputStream::NextChar()
     return wxEOT;
 #else
     m_lastBytes[0] = m_input.GetC();
-    
-    if(m_input.LastRead() <= 0) 
+
+    if(m_input.LastRead() <= 0)
         return wxEOT;
-    
+
     return m_lastBytes[0];
 #endif
-    
+
 }
 
 wxChar wxTextInputStream::NextNonSeparators()
@@ -112,18 +112,18 @@ wxChar wxTextInputStream::NextNonSeparators()
 
 bool wxTextInputStream::EatEOL(const wxChar &c)
 {
-    if (c == wxT('\n')) return TRUE; // eat on UNIX
+    if (c == wxT('\n')) return true; // eat on UNIX
 
     if (c == wxT('\r')) // eat on both Mac and DOS
     {
         wxChar c2 = NextChar();
-        if(c2 == wxEOT) return TRUE; // end of stream reached, had enough :-)
+        if(c2 == wxEOT) return true; // end of stream reached, had enough :-)
 
         if (c2 != wxT('\n')) UngetLast(); // Don't eat on Mac
-        return TRUE;
+        return true;
     }
 
-    return FALSE;
+    return false;
 }
 
 wxUint32 wxTextInputStream::Read32(int base)
@@ -191,7 +191,7 @@ wxString wxTextInputStream::ReadLine()
         wxChar c = NextChar();
         if(c == wxEOT)
             break;
-        
+
         if ( !m_input )
             break;
 
@@ -216,13 +216,13 @@ wxString wxTextInputStream::ReadWord()
         return word;
 
     word += c;
-    
+
     while ( !m_input.Eof() )
     {
         c = NextChar();
         if(c == wxEOT)
             break;
-            
+
         if (m_separators.Contains(c))
             break;
 
@@ -421,7 +421,7 @@ wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
 wxTextOutputStream& wxTextOutputStream::operator<<(char c)
 {
     WriteString( wxString::FromAscii(c) );
-    
+
     return *this;
 }
 

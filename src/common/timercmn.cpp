@@ -85,7 +85,7 @@ bool wxTimerBase::Start(int milliseconds, bool oneShot)
 
     m_oneShot = oneShot;
 
-    return TRUE;
+    return true;
 }
 
 #endif // wxUSE_TIMER

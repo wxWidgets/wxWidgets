@@ -66,13 +66,13 @@ class WXDLLEXPORT wxTopLevelWindowBase;
 // "close" but round instead of squared and just hides the applications
 // instead of closing it) in the title bar
 #if defined(__WXWINCE__)
-	#if defined(__SMARTPHONE__)
-		#define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE)
+    #if defined(__SMARTPHONE__)
+        #define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE)
     #elif defined(__WINCE_STANDARDSDK__)
-		#define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE|wxCLOSE_BOX)
-	#else
-		#define wxDEFAULT_FRAME_STYLE (0)
-	#endif
+        #define wxDEFAULT_FRAME_STYLE (wxMAXIMIZE|wxCLOSE_BOX)
+    #else
+        #define wxDEFAULT_FRAME_STYLE (0)
+    #endif
 #else // !__WXWINCE__
     #define wxDEFAULT_FRAME_STYLE \
             (wxSYSTEM_MENU | \
@@ -125,19 +125,19 @@ public:
     // top level wnd state
     // --------------------
 
-    // maximize = TRUE => maximize, otherwise - restore
-    virtual void Maximize(bool maximize = TRUE) = 0;
+    // maximize = true => maximize, otherwise - restore
+    virtual void Maximize(bool maximize = true) = 0;
 
     // undo Maximize() or Iconize()
     virtual void Restore() = 0;
 
-    // iconize = TRUE => iconize, otherwise - restore
-    virtual void Iconize(bool iconize = TRUE) = 0;
+    // iconize = true => iconize, otherwise - restore
+    virtual void Iconize(bool iconize = true) = 0;
 
-    // return TRUE if the frame is maximized
+    // return true if the frame is maximized
     virtual bool IsMaximized() const = 0;
 
-    // return TRUE if the frame is iconized
+    // return true if the frame is iconized
     virtual bool IsIconized() const = 0;
 
     // get the frame icon
@@ -155,7 +155,7 @@ public:
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;
 
-    // return TRUE if the frame is in fullscreen mode
+    // return true if the frame is in fullscreen mode
     virtual bool IsFullScreen() const = 0;
 
     /*
@@ -167,9 +167,9 @@ public:
      */
 
     // Set the shape of the window to the given region.
-    // Returns TRUE if the platform supports this feature (and the
+    // Returns true if the platform supports this feature (and the
     // operation is successful.)
-    virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return FALSE; }
+    virtual bool SetShape(const wxRegion& WXUNUSED(region)) { return false; }
 
     // Attracts the users attention to this window if the application is
     // inactive (should be called when a background event occurs)
@@ -181,7 +181,7 @@ public:
 
     // override some base class virtuals
     virtual bool Destroy();
-    virtual bool IsTopLevel() const { return TRUE; }
+    virtual bool IsTopLevel() const { return true; }
     virtual wxSize GetMaxSize() const;
 
     // event handlers
@@ -204,21 +204,21 @@ protected:
     // test whether this window makes part of the frame
     // (menubar, toolbar and statusbar are excluded from automatic layout)
     virtual bool IsOneOfBars(const wxWindow *WXUNUSED(win)) const
-        { return FALSE; }
+        { return false; }
 
     // check if we should exit the program after deleting this top level
     // window (this is used in common dtor and wxMSW code)
     bool IsLastBeforeExit() const;
 
-    // send the iconize event, return TRUE if processed
-    bool SendIconizeEvent(bool iconized = TRUE);
+    // send the iconize event, return true if processed
+    bool SendIconizeEvent(bool iconized = true);
 
     // Get the default size for the new window if no explicit size given. If
     // there are better default sizes then these can be changed, just as long
     // as they are not too small for TLWs (and not larger than screen).
     static wxSize GetDefaultSize();
-    static int WidthDefault(int w) { return w == -1 ? GetDefaultSize().x : w; }
-    static int HeightDefault(int h) { return h == -1 ? GetDefaultSize().y : h; }
+    static int WidthDefault(int w) { return w == wxDefaultCoord ? GetDefaultSize().x : w; }
+    static int HeightDefault(int h) { return h == wxDefaultCoord ? GetDefaultSize().y : h; }
 
     // the frame icon
     wxIconBundle m_icons;

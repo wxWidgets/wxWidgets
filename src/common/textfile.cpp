@@ -102,25 +102,25 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     strPtr = strBuf = new char[1024];
     strEnd = strBuf + 1024;
 
-    do 
+    do
     {
         nRead = m_file.Read(buf, WXSIZEOF(buf));
-        if ( nRead == wxInvalidOffset ) 
+        if ( nRead == wxInvalidOffset )
         {
             // read error (error message already given in wxFile::Read)
             delete[] strBuf;
-            return FALSE;
+            return false;
         }
 
         for (n = 0; n < nRead; n++)
         {
             ch = buf[n];
-            switch ( ch ) 
+            switch ( ch )
             {
                 case '\n':
                     // Dos/Unix line termination
                     *strPtr = '\0';
-                    AddLine(wxString(strBuf, conv), 
+                    AddLine(wxString(strBuf, conv),
                             chLast == '\r' ? wxTextFileType_Dos
                                            : wxTextFileType_Unix);
                     strPtr = strBuf;
@@ -128,7 +128,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
                     break;
 
                 case '\r':
-                    if ( chLast == '\r' ) 
+                    if ( chLast == '\r' )
                     {
                         // Mac empty line
                         AddLine(wxEmptyString, wxTextFileType_Mac);
@@ -147,7 +147,7 @@ bool wxTextFile::OnRead(wxMBConv& conv)
                         strPtr = strBuf;
                         *(strPtr++) = ch;
                     }
-                    else 
+                    else
                     {
                         // add to the current line
                         *(strPtr++) = ch;
@@ -168,15 +168,15 @@ bool wxTextFile::OnRead(wxMBConv& conv)
     } while ( nRead == WXSIZEOF(buf) );
 
     // anything in the last line?
-    if ( strPtr != strBuf ) 
+    if ( strPtr != strBuf )
     {
         *strPtr = '\0';
-        AddLine(wxString(strBuf, conv), 
+        AddLine(wxString(strBuf, conv),
                 wxTextFileType_None); // no line terminator
     }
 
     delete[] strBuf;
-    return TRUE;
+    return true;
 }
 
 
@@ -194,7 +194,7 @@ bool wxTextFile::OnWrite(wxTextFileType typeNew, wxMBConv& conv)
 
     if ( !fileTmp.IsOpened() ) {
         wxLogError(_("can't write buffer '%s' to disk."), m_strBufferName.c_str());
-        return FALSE;
+        return false;
     }
 
     size_t nCount = GetLineCount();

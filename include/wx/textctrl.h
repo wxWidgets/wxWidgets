@@ -233,7 +233,7 @@ private:
     wxTextAttrAlignment m_textAlignment;
     wxArrayInt          m_tabs; // array of int: tab stops in 1/10 mm
     int                 m_leftIndent; // left indent in 1/10 mm
-    int                 m_leftSubIndent; // left indent for all but the first 
+    int                 m_leftSubIndent; // left indent for all but the first
                                          // line in a paragraph relative to the
                                          // first line, in 1/10 mm
     int                 m_rightIndent; // right indent in 1/10 mm
@@ -307,7 +307,7 @@ public:
     virtual void AppendText(const wxString& text) = 0;
 
     // insert the character which would have resulted from this key event,
-    // return TRUE if anything has been inserted
+    // return true if anything has been inserted
     virtual bool EmulateKeyPress(const wxKeyEvent& event);
 
     // text control under some platforms supports the text styles: these
@@ -466,10 +466,10 @@ public:
 
 typedef void (wxEvtHandler::*wxTextUrlEventFunction)(wxTextUrlEvent&);
 
-#define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, -1, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxTextUrlEventFunction, & fn ), (wxObject *) NULL ),
-#define EVT_TEXT_MAXLEN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_MAXLEN, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_UPDATED, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT_ENTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_ENTER, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT_URL(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_URL, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction) (wxCommandEventFunction)  wxStaticCastEvent( wxTextUrlEventFunction, & fn ), (wxObject *) NULL ),
+#define EVT_TEXT_MAXLEN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_TEXT_MAXLEN, id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxCommandEventFunction, & fn ), (wxObject *) NULL ),
 
 #ifndef NO_TEXT_WINDOW_STREAM
 
