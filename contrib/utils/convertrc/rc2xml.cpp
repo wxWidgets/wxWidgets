@@ -68,6 +68,11 @@ bool rc2xml::Convert(wxString rcfile, wxString xmlfile)
     m_rc.Open(rcfile.c_str());
     m_filesize=m_rc.Length();
     
+    m_workingpath=wxPathOnly(rcfile);
+    m_targetpath=wxPathOnly(xmlfile)+"\\";
+
+    wxSetWorkingDirectory(m_workingpath);
+
     bool result;
     result=m_xmlfile.Open(xmlfile.c_str(),"w+t");
     wxASSERT_MSG(result,"Couldn't create XML file");	
@@ -236,7 +241,7 @@ void rc2xml::ParsePushButton()
     int x,y,width,height;
     ReadRect(x,y,width,height);
 
-    m_xmlfile.Write("\t\t<object class\"wxButton\"");
+    m_xmlfile.Write("\t\t<object class=\"wxButton\"");
     WriteBasicInfo(x,y,width,height,varname);
     WriteLabel(phrase);
     m_xmlfile.Write("\t\t</object>\n");
@@ -825,7 +830,7 @@ void rc2xml::WriteToolButton(wxString name,int index, int width, int height, wxB
     wxRect r(x,0,width,height);
     wxBitmap little;
     little=bitmap.GetSubBitmap(r);
-    little.SaveFile(name,wxBITMAP_TYPE_BMP);
+    little.SaveFile(m_targetpath+name,wxBITMAP_TYPE_BMP);
 }
 
 void rc2xml::ParseStringTable(wxString varname)
@@ -961,6 +966,8 @@ wxString rc2xml::CleanName(wxString name)
     name.Replace("idr_","");
     name.Replace("idb_","");
     name.Replace("idc_","");
+    name.Replace(".ico","");
+    name.Replace(".bmp","");
     return name;
 }
 // And the award for most messed up control goes to...
@@ -1114,6 +1121,7 @@ void rc2xml::WriteBitmap(wxString bitmapname)
     
     wxString *bitmappath;
     bitmappath=(wxString *)node->Data();
+    bitmapname=wxFileNameFromPath(*bitmappath);
     wxBitmap bitmap;
     if (!bitmap.LoadFile(*bitmappath,wxBITMAP_TYPE_BMP ))
         wxLogError("Unable to load bitmap:"+*bitmappath);
@@ -1122,7 +1130,7 @@ void rc2xml::WriteBitmap(wxString bitmapname)
     bitmapname=CleanName(bitmapname);
     bitmapname+=".bmp";
     m_xmlfile.Write("\t\t\t<bitmap>"+bitmapname+"</bitmap>\n");
-    bitmap.SaveFile(bitmapname,wxBITMAP_TYPE_BMP);
+    bitmap.SaveFile(m_targetpath+bitmapname,wxBITMAP_TYPE_BMP);
 }
 
 void rc2xml::WriteIcon(wxString iconname)
@@ -1144,12 +1152,12 @@ wxNode *node=m_iconlist->Find(iconname);
 #else
     bitmap = icon;
 #endif
-
+    iconname=wxFileNameFromPath(*iconpath);
     //Make a bitmap file name
     iconname=CleanName(iconname);
     iconname+=".bmp";
     m_xmlfile.Write("\t\t\t<bitmap>"+iconname+"</bitmap>\n");
-    bitmap.SaveFile(iconname,wxBITMAP_TYPE_BMP);
+    bitmap.SaveFile(m_targetpath+iconname,wxBITMAP_TYPE_BMP);
 
     
 }
