@@ -32,7 +32,15 @@ class WXDLLIMPEXP_BASE wxCmdLineParser;
 class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 
-class WXDLLEXPORT wxEventLoop;
+// wxUSE_EVTLOOP_IN_APP is a temporary hack needed until all ports are updated
+// to use wxEventLoop, otherwise we get linking errors on wxMac, it's going to
+// disappear a.s.a.p.
+#ifdef __WXMAC__
+    #define wxUSE_EVTLOOP_IN_APP 0
+#else
+    #define wxUSE_EVTLOOP_IN_APP 1
+    class WXDLLEXPORT wxEventLoop;
+#endif
 
 // ----------------------------------------------------------------------------
 // typedefs
@@ -498,9 +506,11 @@ protected:
     virtual wxAppTraits *CreateTraits();
 
 
+#if wxUSE_EVTLOOP_IN_APP
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
     wxEventLoop *m_mainLoop;
+#endif // wxUSE_EVTLOOP_IN_APP
 
     // the main top level window (may be NULL)
     wxWindow *m_topWindow;
