@@ -20,7 +20,7 @@ CFG =
 # Standard flags for CC 
 CFLAGS = 
 # Standard preprocessor flags (common for CC and CXX) 
-CPPFLAGS = /DWIN32 /D_WINDOWS
+CPPFLAGS = 
 # C++ compiler 
 CXX = cl
 # Standard flags for C++ 
