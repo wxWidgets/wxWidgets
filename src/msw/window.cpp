@@ -71,6 +71,10 @@
     #include "wx/caret.h"
 #endif // wxUSE_CARET
 
+#if wxUSE_SPINCTRL
+    #include "wx/spinctrl.h"
+#endif // wxUSE_SPINCTRL
+
 #include "wx/intl.h"
 #include "wx/log.h"
 
@@ -3227,6 +3231,17 @@ bool wxWindow::HandleCommand(WXWORD id, WXWORD cmd, WXHWND control)
 
         return GetEventHandler()->ProcessEvent(event);
     }
+#if wxUSE_SPINCTRL
+    else
+    {
+        // the text ctrl which is logically part of wxSpinCtrl sends WM_COMMAND
+        // notifications to its parent which we want to reflect back to
+        // wxSpinCtrl
+        wxSpinCtrl *spin = wxSpinCtrl::GetSpinForTextCtrl(control);
+        if ( spin && spin->ProcessTextCommand(cmd, id) )
+            return TRUE;
+    }
+#endif // wxUSE_SPINCTRL
 
     return FALSE;
 }

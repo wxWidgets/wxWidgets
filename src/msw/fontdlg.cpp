@@ -52,7 +52,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-    IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
+IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 // ============================================================================
 // implementation
