@@ -961,7 +961,8 @@ bool wxTextCtrl::IsModified() const
 
 bool wxTextCtrl::IsEditable() const
 {
-    return m_isEditable;
+    // disabled control can never be edited
+    return m_isEditable && IsEnabled();
 }
 
 void wxTextCtrl::DiscardEdits()
@@ -1878,6 +1879,8 @@ void wxTextCtrl::OnIdle(wxIdleEvent& event)
         m_updateScrollbarX =
         m_updateScrollbarY = FALSE;
     }
+
+    event.Skip();
 }
 
 // ----------------------------------------------------------------------------
@@ -2303,7 +2306,8 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
          sel = FALSE;
     if ( actionOrig.StartsWith(wxACTION_TEXT_PREFIX_DEL, &action) )
     {
-        del = TRUE;
+        if ( IsEditable() )
+            del = TRUE;
     }
     else if ( actionOrig.StartsWith(wxACTION_TEXT_PREFIX_SEL, &action) )
     {
@@ -2356,7 +2360,7 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     }
     else if ( action == wxACTION_TEXT_INSERT )
     {
-        if ( !strArg.empty() )
+        if ( IsEditable() && !strArg.empty() )
         {
             WriteText(strArg);
 
@@ -2381,11 +2385,13 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
     }
     else if ( action == wxACTION_TEXT_CUT )
     {
-        Cut();
+        if ( IsEditable() )
+            Cut();
     }
     else if ( action == wxACTION_TEXT_PASTE )
     {
-        Paste();
+        if ( IsEditable() )
+            Paste();
     }
     else
     {
@@ -2440,6 +2446,8 @@ bool wxTextCtrl::PerformAction(const wxControlAction& actionOrig,
 
     if ( textChanged )
     {
+        wxASSERT_MSG( IsEditable(), _T("non editable control changed?") );
+
         wxCommandEvent event(wxEVT_COMMAND_TEXT_UPDATED, GetId());
         InitCommandEvent(event);
         event.SetString(GetValue());

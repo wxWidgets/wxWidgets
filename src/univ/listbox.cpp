@@ -287,8 +287,31 @@ void wxListBox::Delete(int n)
     }
     //else: current item may stay
 
-    m_selections.Remove(n);
+    // update the selections array: the indices of all seletected items after
+    // the one being deleted must change and the item itselfm ust be removed
+    int index = wxNOT_FOUND;
+    size_t count = m_selections.GetCount();
+    for ( size_t item = 0; item < count; item++ )
+    {
+        if ( m_selections[item] == n )
+        {
+            // remember to delete it later
+            index = item;
+        }
+        else if ( m_selections[item] > n )
+        {
+            // to account for the index shift
+            m_selections[item]--;
+        }
+        //else: nothing changed for this one
+    }
 
+    if ( index != wxNOT_FOUND )
+    {
+        m_selections.RemoveAt(index);
+    }
+
+    // the number of items has changed, hence the scrollbar may disappear
     m_updateScrollbarY = TRUE;
 }
 

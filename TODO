@@ -19,9 +19,9 @@ All
 *   text ctrl wxTE_XXX styles support
 *   listbox inc kbd search
 
-MSW
+*   popup menu for text ctrls
 
-    wxTextCtrl caret is not shown until *next* refresh
+MSW
 
 GTK
 
@@ -40,6 +40,8 @@ All
 +   listbox: horz scrollbar doesn't appear
 
 MSW
+
++   wxTextCtrl caret is not shown until *next* refresh
 
 GTK
 

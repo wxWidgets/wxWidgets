@@ -34,6 +34,7 @@
 
     #include "wx/button.h"
     #include "wx/scrolbar.h"
+    #include "wx/textctrl.h"
 #endif // WX_PRECOMP
 
 #include "wx/univ/renderer.h"
@@ -697,9 +698,17 @@ wxColour wxWin32ColourScheme::GetBackground(wxWindow *win) const
 
     if ( win->IsContainerWindow() )
     {
-        // doesn't depend on the state
+        wxTextCtrl *text = wxDynamicCast(win, wxTextCtrl);
+        if ( text )
+        {
+            if ( !text->IsEditable() )
+                col = Get(CONTROL);
+            //else: execute code below
+        }
+
         if ( !col.Ok() )
         {
+            // doesn't depend on the state
             col = Get(WINDOW);
         }
     }

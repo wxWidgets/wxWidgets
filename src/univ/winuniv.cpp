@@ -88,7 +88,9 @@ bool wxWindow::Create(wxWindow *parent,
     // we add wxCLIP_CHILDREN and wxNO_FULL_REPAINT_ON_RESIZE because without
     // these styles we can't get rid of flicker on wxMSW
     if ( !wxWindowNative::Create(parent, id, pos, size,
-                                 style | wxCLIP_CHILDREN, name) )
+                                 style |
+                                 wxCLIP_CHILDREN |
+                                 wxNO_FULL_REPAINT_ON_RESIZE, name) )
     {
         return FALSE;
     }
@@ -308,6 +310,12 @@ bool wxWindow::Enable(bool enable)
 {
     if ( !wxWindowBase::Enable(enable) )
         return FALSE;
+
+    // disabled window can't keep focus
+    if ( FindFocus() == this )
+    {
+        GetParent()->SetFocus();
+    }
 
     if ( m_renderer )
     {
