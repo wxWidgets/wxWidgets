@@ -1103,7 +1103,7 @@ WXHBITMAP wxToolBar::CreateMappedBitmap(WXHINSTANCE hInstance, WXHBITMAP hBitmap
     if ( !hDIB )
         return 0;
 
-    WXHBITMAP newBitmap = CreateMappedBitmap(hInstance, GlobalHandle(hDIB));
+    WXHBITMAP newBitmap = CreateMappedBitmap(hInstance, GlobalPtr(hDIB));
 
     GlobalFree(hDIB);
 
