@@ -1384,12 +1384,12 @@ void wxWindowMac::MacGetContentAreaInset( int &left , int &top , int &right , in
     if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) == noErr )
     {
         GetRegionBounds( rgn , &content ) ;
-        DisposeRgn( rgn ) ;
     }
     else
     {
         m_peer->GetRect( &content ) ;
     }
+    DisposeRgn( rgn ) ;
     Rect structure ;
     m_peer->GetRect( &structure ) ;
 #if !TARGET_API_MAC_OSX
@@ -1412,12 +1412,12 @@ wxSize wxWindowMac::DoGetSizeFromClientSize( const wxSize & size )  const
     if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) == noErr )
     {
         GetRegionBounds( rgn , &content ) ;
-        DisposeRgn( rgn ) ;
     }
     else
     {
         m_peer->GetRect( &content ) ;
     }
+    DisposeRgn( rgn ) ;
     Rect structure ;
     m_peer->GetRect( &structure ) ;
 #if !TARGET_API_MAC_OSX
@@ -1444,12 +1444,12 @@ void wxWindowMac::DoGetClientSize(int *x, int *y) const
     if ( m_peer->GetRegion( kControlContentMetaPart , rgn ) == noErr )
     {
         GetRegionBounds( rgn , &content ) ;
-        DisposeRgn( rgn ) ;
     }
     else
     {
         m_peer->GetRect( &content ) ;
     }
+    DisposeRgn( rgn ) ;
 #if !TARGET_API_MAC_OSX
     Rect structure ;
     m_peer->GetRect( &structure ) ;
