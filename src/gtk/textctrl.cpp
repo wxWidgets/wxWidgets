@@ -607,6 +607,26 @@ void wxTextCtrl::SetEditable( bool editable )
         gtk_entry_set_editable( GTK_ENTRY(m_text), editable );
 }
 
+bool wxTextCtrl::Enable( bool enable )
+{
+    if (!wxWindowBase::Enable(enable))
+    {
+        // nothing to do
+        return FALSE;
+    }
+    
+    if (m_windowStyle & wxTE_MULTILINE)
+    {
+        gtk_text_set_editable( GTK_TEXT(m_text), enable );
+    }
+    else
+    {
+        gtk_widget_set_sensitive( m_text, enable );
+    }
+
+    return TRUE;
+}
+
 void wxTextCtrl::DiscardEdits()
 {
     m_modified = FALSE;

@@ -1155,10 +1155,11 @@ void wxFileDialog::GetPaths( wxArrayString& paths ) const
     item.m_mask = wxLIST_MASK_TEXT;
 
     item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-    while ( item.m_itemId != -1 ) {
+    while ( item.m_itemId != -1 ) 
+    {
         m_list->GetItem( item );
         paths.Add( dir + item.m_text );
-        item.m_itemId = m_list->GetNextItem( item.m_itemId + 1,
+        item.m_itemId = m_list->GetNextItem( item.m_itemId,
             wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
     }
 }
@@ -1177,10 +1178,11 @@ void wxFileDialog::GetFilenames(wxArrayString& files) const
     item.m_mask = wxLIST_MASK_TEXT;
 
     item.m_itemId = m_list->GetNextItem( -1, wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
-    while ( item.m_itemId != -1 ) {
+    while ( item.m_itemId != -1 ) 
+    {
         m_list->GetItem( item );
         files.Add( item.m_text );
-        item.m_itemId = m_list->GetNextItem( item.m_itemId + 1,
+        item.m_itemId = m_list->GetNextItem( item.m_itemId,
             wxLIST_NEXT_ALL, wxLIST_STATE_SELECTED );
     }
 }

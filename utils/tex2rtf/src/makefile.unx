@@ -1,17 +1,23 @@
-#
-# File:		makefile.unx
-# Author:	Julian Smart
-# Created:	1998
-# Updated:	
-# Copyright:	(c) 1998 Julian Smart
-#
-# "%W% %G%"
-#
-# Makefile for Tex2RTF (Unix)
+# makefile
 
-PROGRAM=tex2rtf
+CC = g++
+
+PROGRAM = tex2rtf
 
 OBJECTS = tex2rtf.o tex2any.o texutils.o rtfutils.o xlputils.o htmlutil.o readshg.o table.o
 
-include ../../../src/makeprog.env
+# implementation
+
+.SUFFIXES:	.o .cpp
+
+.cpp.o :
+	$(CC) -c `wx-config --cflags` -o $@ $<
+
+all:    $(PROGRAM)
+
+$(PROGRAM):	$(OBJECTS)
+	$(CC) -o $(PROGRAM) $(OBJECTS) `wx-config --libs`
+
+clean:
+	rm -f *.o $(PROGRAM)
 

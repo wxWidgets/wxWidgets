@@ -112,6 +112,8 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
+    virtual bool Enable( bool enable );
+
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
     void OnChar( wxKeyEvent &event );

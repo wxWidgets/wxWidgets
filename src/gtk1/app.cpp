@@ -285,9 +285,6 @@ bool wxApp::OnInitGui()
         visual = vis;
     }
 
-    wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
-    gtk_widget_realize( wxRootWindow );
-
     /* Nothing to do for 15, 16, 24, 32 bit displays */
     if (visual->depth > 8) return TRUE;
 
@@ -634,6 +631,9 @@ int wxEntry( int argc, char *argv[] )
 
     if ( !wxTheApp->OnInitGui() )
         retValue = -1;
+
+    wxRootWindow = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_widget_realize( wxRootWindow );
 
     // Here frames insert themselves automatically into wxTopLevelWindows by
     // getting created in OnInit().
