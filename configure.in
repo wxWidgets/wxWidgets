@@ -3707,10 +3707,18 @@ if test "$GCC" = "yes" ; then
     dnl for each subroutine by default -- using the switch below only creates
     dnl one entry per file instead at the price of minor performance penalty
     dnl
+    dnl As of wx2.4 a bug in the hppa gcc compiler causes a similar problem
+    dnl without -ffunction-sections.  No idea how long we'll need to maintain
+    dnl this, or even the extent of gcc/wx version combinations affected, but
+    dnl also as above, this 'fix' does not come without side effects.
+    dnl
     dnl TODO: test for the gcc version here (how?)
     case "${host}" in
       powerpc*-*-aix* )
         CODE_GEN_FLAGS="$CODE_GEN_FLAGS -mminimal-toc"
+        ;;
+      *-hppa* )
+        CODE_GEN_FLAGS="$CODE_GEN_FLAGS -ffunction-sections"
         ;;
     esac
 fi

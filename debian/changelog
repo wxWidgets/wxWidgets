@@ -1,3 +1,10 @@
+wxwindows2.3 (2.3.4) unstable; urgency=low
+
+  * 2.4.0pre1 I guess.
+  * Added -ffunction-sections for broken hppa linker. Closes: #162948
+
+ -- Ron Lee <ron@debian.org>  Mon, 18 Nov 2002 18:54:21 -0800
+
 wxwindows2.3 (2.3.3.2) unstable; urgency=low
 
   * The one more for luck release.
