@@ -75,9 +75,11 @@ bool wxTopLevelWindow::Create(wxWindow *parent,
     long styleOrig = 0,
          exstyleOrig = 0;
 
-    // FIXME -- wxUniv should provide a way to force non-native decorations!
     if ( ms_drawDecorations == -1 )
-        ms_drawDecorations = !wxSystemSettings::HasFrameDecorations();
+        ms_drawDecorations = !wxSystemSettings::HasFrameDecorations() ||
+                             wxGetEnv(wxT("WXDECOR"), NULL);
+        // FIXME -- wxUniv should provide a way to force non-native decorations!
+        //          $WXDECOR is just a hack in absence of better wxUniv solution
 
     if ( ms_drawDecorations )
     {
