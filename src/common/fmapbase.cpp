@@ -519,6 +519,11 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
         {
             encoding = wxFONTENCODING_EUC_JP;
         }
+        else if ( cs == wxT("EUC-KR") ||
+                  cs == wxT("EUC_KR") )
+        {
+            encoding = wxFONTENCODING_CP949;
+        } 
         else if ( cs == wxT("KOI8-R") ||
                   cs == wxT("KOI8-RU") )
         {
