@@ -42,10 +42,11 @@
 
 #else // !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
-#include <stddef.h>             // for ptrdiff_t
 
 #ifdef __WXWINCE__
 typedef int ptrdiff_t;
+#else
+#include <stddef.h>             // for ptrdiff_t
 #endif
 
 // private
