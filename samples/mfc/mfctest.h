@@ -40,7 +40,6 @@ class CDummyWindow: public CWnd
 /////////////////////////////////////////////////////////////////////////////
 
 // CTheApp:
-// See hello.cpp for the code to the InitInstance member function.
 //
 class CTheApp : public CWinApp
 {
