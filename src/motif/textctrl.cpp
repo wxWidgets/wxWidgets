@@ -257,37 +257,36 @@ bool wxTextCtrl::LoadFile(const wxString& file)
 
     Clear();
 
-    ifstream input((char*) (const char*) file, ios::nocreate | ios::in);
+    Widget textWidget = (Widget) m_mainWidget;
+    FILE *fp;
 
-    if (!input.bad())
+    struct stat statb;
+    if ((stat ((char*) (const char*) file, &statb) == -1) || (statb.st_mode & S_IFMT) != S_IFREG ||
+      !(fp = fopen ((char*) (const char*) file, "r")))
     {
-        struct stat stat_buf;
-        if (stat(file, &stat_buf) < 0)
-            return FALSE;
-        // This may need to be a bigger buffer than the file size suggests,
-        // if it's a UNIX file. Give it an extra 1000 just in case.
-        char *tmp_buffer = (char*)malloc((size_t)(stat_buf.st_size+1+1000));
-        long no_lines = 0;
-        long pos = 0;
-        while (!input.eof() && input.peek() != EOF)
-        {
-            input.getline(wxBuffer, 500);
-	        int len = strlen(wxBuffer);
-	        wxBuffer[len] = 13;
-	        wxBuffer[len+1] = 10;
-	        wxBuffer[len+2] = 0;
-	        strcpy(tmp_buffer+pos, wxBuffer);
-	        pos += strlen(wxBuffer);
-	        no_lines++;
-         }
-
-         // TODO add line
-
-         free(tmp_buffer);
-
-         return TRUE;
+      return FALSE;
     }
-    return FALSE;
+    else
+    {
+      long len = statb.st_size;
+      char *text;
+      if (!(text = XtMalloc ((unsigned) (len + 1))))
+	{
+	  fclose (fp);
+	  return FALSE;
+	}
+      if (fread (text, sizeof (char), len, fp) != (size_t) len)
+	{
+	}
+      fclose (fp);
+
+      text[len] = 0;
+      XmTextSetString (textWidget, text);
+      //      m_textPosition = len;
+      XtFree (text);
+      m_modified = FALSE;
+      return TRUE;
+    }
 }
 
 // If file is null, try saved file name first
@@ -301,13 +300,31 @@ bool wxTextCtrl::SaveFile(const wxString& file)
         return FALSE;
     m_fileName = theFile;
 
-    ofstream output((char*) (const char*) theFile);
-    if (output.bad())
-	    return FALSE;
+  Widget textWidget = (Widget) m_mainWidget;
+  FILE *fp;
 
-    // TODO get and save text
+  if (!(fp = fopen ((char*) (const char*) theFile, "w")))
+    {
+      return FALSE;
+    }
+  else
+    {
+      char *text = XmTextGetString (textWidget);
+      long len = XmTextGetLastPosition (textWidget);
 
-    return FALSE;
+      if (fwrite (text, sizeof (char), len, fp) != (size_t) len)
+	{
+	  // Did not write whole file
+	}
+      // Make sure newline terminates the file
+      if (text[len - 1] != '\n')
+	fputc ('\n', fp);
+
+      fclose (fp);
+      XtFree (text);
+      m_modified = FALSE;
+      return TRUE;
+    }
 }
 
 void wxTextCtrl::WriteText(const wxString& text)

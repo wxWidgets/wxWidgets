@@ -37,29 +37,19 @@ High Priority
 
 - wxSpinButton
 
-- wxTextCtrl text file loading and saving.
-
 - A generic version of wxNotebook that can be used in wxMotif and
   other toolkits that don't have a native control. Perhaps use wxTab as a
   starting point.
-
-- Complete the MDI implementation. Could eventually alter the MDI
-  widgets to be more Windows-like -- currently it's half-hearted.
 
 - Tidy dialogs such as the colour and font selectors.
 
 - Use generic wxTreeCtrl, wxListCtrl: debug and enhance these.
 
-- Write a better generic wxToolBar class than wxToolBarSimple.
-  Alternatively, write a toolbar using Motif as described here:
-  http://www.motifzone.com/tmd/articles/Kurt_Huhner/jun96.html.
-  This article also explains how to implement tooltips.
-
 - Find out why modal dialogs give a grab warning.
 
-- Find out why UI updates aren't working (probably an OnIdle failure).
-
-- wxSystemSettings
+- wxSystemSettings. Eventually, should have control panel-like utility
+  to change colours/fonts but meanwhile should maybe read them
+  from a file.
 
 - wxThread (hopefully, similar to wxGTK)
 
@@ -106,7 +96,13 @@ Low Priority
   Netscape is running. See:
   http://www.motifzone.com/tmd/articles/John_Cwikla/index.html
 
+- wxRCConfig (a config class using X .rc files). Could simply
+  implement it in terms of current wxGet/WriteResource functions.
+
 - wxCheckBoxList
+
+- Reimplement combobox using Lesstif's widget (avoiding GPL'ed
+  widget currently used).
 
 - Write generic wxDirDialog (directory selector)
 
@@ -116,3 +112,6 @@ Low Priority
   Linux)
 
 - Blit scaling
+
+- Could eventually alter the MDI widgets to be more Windows-like
+  -- currently it's half-hearted.

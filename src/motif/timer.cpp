@@ -55,6 +55,7 @@ wxTimer::wxTimer()
 wxTimer::~wxTimer()
 {
     Stop();
+    wxTimerList.DeleteObject(this);
 }
 
 bool wxTimer::Start(int milliseconds, bool mode)

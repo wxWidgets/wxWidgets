@@ -169,7 +169,7 @@ void wxBitmapButton::SetBitmapLabel(const wxBitmap& bitmap)
         // since it is no longer valid.
         XtVaSetValues ((Widget) m_mainWidget,
             XmNlabelType, XmSTRING,
-            XmNlabelPixmap, NULL, // TODO: Does this work?
+            XmNlabelPixmap, XmUNSPECIFIED_PIXMAP,
     	    XmNlabelInsensitivePixmap, NULL,
             XmNarmPixmap, NULL,
             NULL);

@@ -70,9 +70,18 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
   // necessary for completing the toolbar construction.
   bool Realize() { return CreateTools(); };
 
+// Implementation
+  void DestroyPixmaps();
+  int FindIndexForWidget(WXWidget w);
+  WXWidget FindWidgetForIndex(int index);
+
 protected:
   // List of widgets in the toolbar, indexed by tool index
   wxList    m_widgets;
+
+  // List of pixmaps to destroy when tools are recreated or
+  // or toolbar is destroyed.
+  wxList    m_pixmaps;
 
 DECLARE_EVENT_TABLE()
 };

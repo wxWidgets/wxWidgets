@@ -114,7 +114,7 @@ void wxStaticBitmap::SetBitmap(const wxBitmap& bitmap)
         // since it is no longer valid.
         XtVaSetValues (widget,
             XmNlabelType, XmSTRING,
-            XmNlabelPixmap, NULL, // TODO: Does this work?
+            XmNlabelPixmap, XmUNSPECIFIED_PIXMAP,
             NULL);
     }
 }
