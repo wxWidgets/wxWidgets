@@ -76,6 +76,10 @@
     #define TVS_CHECKBOXES          0x0100
 #endif
 
+#ifndef TVS_FULLROWSELECT
+    #define TVS_FULLROWSELECT       0x1000
+#endif
+
 // old headers might miss these messages (comctl32.dll 4.71+ only)
 #ifndef TVM_SETBKCOLOR
     #define TVM_SETBKCOLOR          (TV_FIRST + 29)
