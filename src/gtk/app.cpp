@@ -756,7 +756,7 @@ int wxEntryInitGui()
         retValue = -1;
 
     wxGetRootWindow();
-
+    
     return retValue;
 }
 
@@ -818,7 +818,8 @@ int wxEntry( int argc, char *argv[] )
     int mb_argc = 0;
     while (mb_argc < argc)
     {
-        wxTheApp->argv[mb_argc] = wxStrdup(wxConvLibc.cMB2WX(argv[mb_argc]));
+        wxString tmp = wxString::FromAscii( argv[mb_argc] );
+        wxTheApp->argv[mb_argc] = wxStrdup( tmp.c_str() );
         mb_argc++;
     }
     wxTheApp->argv[mb_argc] = (wxChar *)NULL;
