@@ -849,9 +849,10 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
 /*  64 bit */
 
-/*  NB: we #define and not typedef wxLongLong_t because we want to be able to */
-/*      use 'unsigned wxLongLong_t' as well and because we use "#ifdef */
+/*  NB: we #define and not typedef wxLongLong_t because we use "#ifdef */
 /*      wxLongLong_t" in wx/longlong.h */
+
+/*      wxULongLong_t is set later (usually to unsigned wxLongLong_t) */
 
 /*  to avoid compilation problems on 64bit machines with ambiguous method calls */
 /*  we will need to define this */
@@ -864,6 +865,10 @@ inline void *wxUIntToPtr(wxUIntPtr p)
     #define wxLongLongSuffix l
     #define wxLongLongFmtSpec _T("l")
     #define wxLongLongIsLong
+#elif defined(__WXPALMOS__)
+    #define wxLongLong_t int64_t
+    #define wxLongLongSuffix ll
+    #define wxLongLongFmtSpec _T("ll")
 #elif (defined(__VISUALC__) && defined(__WIN32__))
     #define wxLongLong_t __int64
     #define wxLongLongSuffix i64
@@ -904,12 +909,19 @@ inline void *wxUIntToPtr(wxUIntPtr p)
 
 
 #ifdef wxLongLong_t
+
+    #ifdef __WXPALMOS__
+        #define wxULongLong_t uint64_t
+    #else
+        #define wxULongLong_t unsigned wxLongLong_t
+    #endif
+
     /*  these macros allow to definea 64 bit constants in a portable way */
     #define wxLL(x) wxCONCAT(x, wxLongLongSuffix)
     #define wxULL(x) wxCONCAT(x, wxCONCAT(u, wxLongLongSuffix))
 
     typedef wxLongLong_t wxInt64;
-    typedef unsigned wxLongLong_t wxUint64;
+    typedef wxULongLong_t wxUint64;
 #endif
 
 

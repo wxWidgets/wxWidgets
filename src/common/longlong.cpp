@@ -751,7 +751,7 @@ wxULongLongWx& wxULongLongWx::operator*=(const wxULongLongWx& ll)
     m_hi = m_lo = 0;
 
 #ifdef wxLONGLONG_TEST_MODE
-    unsigned wxLongLong_t llOld = m_ll;
+    wxULongLong_t llOld = m_ll;
     m_ll = 0;
 #endif // wxLONGLONG_TEST_MODE
 

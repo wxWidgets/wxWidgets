@@ -320,13 +320,13 @@ public:
         // default ctor initializes to 0
     wxULongLongNative() : m_ll(0) { }
         // from long long
-    wxULongLongNative(unsigned wxLongLong_t ll) : m_ll(ll) { }
+    wxULongLongNative(wxULongLong_t ll) : m_ll(ll) { }
         // from 2 longs
     wxULongLongNative(unsigned long hi, unsigned long lo) : m_ll(0)
     {
         // assign first to avoid precision loss!
-        m_ll = ((unsigned wxLongLong_t) hi) << 32;
-        m_ll |= (unsigned wxLongLong_t) lo;
+        m_ll = ((wxULongLong_t) hi) << 32;
+        m_ll |= (wxULongLong_t) lo;
     }
 
     // default copy ctor is ok
@@ -335,7 +335,7 @@ public:
 
     // assignment operators
         // from native 64 bit integer
-    wxULongLongNative& operator=(unsigned wxLongLong_t ll)
+    wxULongLongNative& operator=(wxULongLong_t ll)
         { m_ll = ll; return *this; }
 
     // assignment operators from wxULongLongNative is ok
@@ -349,7 +349,7 @@ public:
         { return (unsigned long)m_ll; }
 
         // convert to native ulong long
-    unsigned wxLongLong_t GetValue() const { return m_ll; }
+    wxULongLong_t GetValue() const { return m_ll; }
 
         // convert to ulong with range checking in the debug mode (only!)
     unsigned long ToULong() const
@@ -367,9 +367,9 @@ public:
     wxULongLongNative& operator+=(const wxULongLongNative& ll)
         { m_ll += ll.m_ll; return *this; }
 
-    wxULongLongNative operator+(const unsigned wxLongLong_t ll) const
+    wxULongLongNative operator+(const wxULongLong_t ll) const
         { return wxULongLongNative(m_ll + ll); }
-    wxULongLongNative& operator+=(const unsigned wxLongLong_t ll)
+    wxULongLongNative& operator+=(const wxULongLong_t ll)
         { m_ll += ll; return *this; }
 
         // pre increment
@@ -386,9 +386,9 @@ public:
     wxULongLongNative& operator-=(const wxULongLongNative& ll)
         { m_ll -= ll.m_ll; return *this; }
 
-    wxULongLongNative operator-(const unsigned wxLongLong_t ll) const
+    wxULongLongNative operator-(const wxULongLong_t ll) const
         { return wxULongLongNative(m_ll - ll); }
-    wxULongLongNative& operator-=(const unsigned wxLongLong_t ll)
+    wxULongLongNative& operator-=(const wxULongLong_t ll)
         { m_ll -= ll; return *this; }
 
         // pre decrement
@@ -496,7 +496,7 @@ public:
     wxString& operator<<(wxString&, const wxULongLongNative&);
 
 private:
-    unsigned wxLongLong_t  m_ll;
+    wxULongLong_t  m_ll;
 };
 
 #endif // wxUSE_LONGLONG_NATIVE
@@ -889,7 +889,7 @@ private:
         wxASSERT( (m_ll >> 32) == m_hi && (unsigned long)m_ll == m_lo );
     }
 
-    unsigned wxLongLong_t m_ll;
+    wxULongLong_t m_ll;
 #endif // wxLONGLONG_TEST_MODE
 };
 

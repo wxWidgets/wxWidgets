@@ -240,7 +240,19 @@ wxLongLong wxGetLocalTimeMillis()
     // If possible, use a function which avoids conversions from
     // broken-up time structures to milliseconds
 
-#if defined(__WXMSW__) && (defined(__WINE__) || defined(__MWERKS__))
+#if defined(__WXPALMOS__)
+    DateTimeType thenst;
+    thenst.second  = 0;
+    thenst.minute  = 0;
+    thenst.hour    = 0;
+    thenst.day     = 1;
+    thenst.month   = 1;
+    thenst.year    = 1970;
+    thenst.weekDay = 5;
+    uint32_t now = TimGetSeconds();
+    uint32_t then = TimDateTimeToSeconds (&thenst);
+    return SysTimeToMilliSecs(SysTimeInSecs(now - then));
+#elif defined(__WXMSW__) && (defined(__WINE__) || defined(__MWERKS__))
     // This should probably be the way all WXMSW compilers should do it
     // Go direct to the OS for time
 

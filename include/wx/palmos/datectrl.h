@@ -20,7 +20,7 @@ class WXDLLIMPEXP_ADV wxDatePickerCtrl : public wxDatePickerCtrlBase
 {
 public:
     // ctors
-    wxDatePickerCtrl() { }
+    wxDatePickerCtrl() { Init(); }
 
     wxDatePickerCtrl(wxWindow *parent,
                      wxWindowID id,
@@ -31,6 +31,7 @@ public:
                      const wxValidator& validator = wxDefaultValidator,
                      const wxString& name = wxDatePickerCtrlNameStr)
     {
+        Init();
         Create(parent, id, dt, pos, size, style, validator, name);
     }
 
@@ -58,6 +59,11 @@ public:
 
 protected:
     virtual wxSize DoGetBestSize() const;
+
+private:
+    wxDateTime m_dt;
+
+    void Init() { m_dt = wxDateTime::Today(); }
 
     DECLARE_NO_COPY_CLASS(wxDatePickerCtrl)
 };
