@@ -107,6 +107,7 @@ public:
 
     void DoRemoveText();
     void DoReplaceText();
+    void DoSelectText();
     void DoMoveToEndOfText();
     void DoMoveToEndOfEntry();
 
@@ -163,6 +164,8 @@ public:
         { m_panel->DoRemoveText(); }
     void OnReplaceText( wxCommandEvent& event )
         { m_panel->DoReplaceText(); }
+    void OnSelectText( wxCommandEvent& event )
+        { m_panel->DoSelectText(); }
 
     void OnMoveToEndOfText( wxCommandEvent &event )
         { m_panel->DoMoveToEndOfText(); }
@@ -296,6 +299,7 @@ enum
     TEXT_PAGE_UP,
     TEXT_REMOVE,
     TEXT_REPLACE,
+    TEXT_SELECT,
     TEXT_SET,
 
     // log menu
@@ -352,6 +356,7 @@ bool MyApp::OnInit()
     menuText->Append(TEXT_ADD_FREEZE, _T("&Append text with freeze/thaw\tShift-Ctrl-A"));
     menuText->Append(TEXT_REMOVE, _T("&Remove first 10 characters\tCtrl-Y"));
     menuText->Append(TEXT_REPLACE, _T("&Replace characters 4 to 8 with ABC\tCtrl-R"));
+    menuText->Append(TEXT_SELECT, _T("&Select characters 4 to 8\tCtrl-I"));
     menuText->Append(TEXT_SET, _T("&Set the first text zone value\tCtrl-E"));
     menuText->AppendSeparator();
     menuText->Append(TEXT_MOVE_ENDTEXT, _T("Move cursor to the end of &text"));
@@ -1046,6 +1051,11 @@ void MyPanel::DoReplaceText()
     GetFocusedText(m_multitext)->Replace(3, 8, _T("ABC"));
 }
 
+void MyPanel::DoSelectText()
+{
+    GetFocusedText(m_multitext)->SetSelection(3, 8);
+}
+
 //----------------------------------------------------------------------
 // MyFrame
 //----------------------------------------------------------------------
@@ -1075,6 +1085,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(TEXT_REMOVE,             MyFrame::OnRemoveText)
     EVT_MENU(TEXT_REPLACE,            MyFrame::OnReplaceText)
+    EVT_MENU(TEXT_SELECT,             MyFrame::OnSelectText)
     EVT_MENU(TEXT_ADD_SOME,           MyFrame::OnAddText)
     EVT_MENU(TEXT_ADD_FREEZE,         MyFrame::OnAddTextFreeze)
     EVT_MENU(TEXT_MOVE_ENDTEXT,       MyFrame::OnMoveToEndOfText)
