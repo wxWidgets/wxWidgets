@@ -59,7 +59,7 @@ WXDLLEXPORT_DATA(extern HFONT) wxSTATUS_LINE_FONT;
 // define things missing from some compilers' headers
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUWIN32__) && !defined(wxUSE_NORLANDER_HEADERS)
+#if defined(__GNUWIN32__) && !wxUSE_NORLANDER_HEADERS
 #ifndef ZeroMemory
     inline void ZeroMemory(void *buf, size_t len) { memset(buf, 0, len); }
 #endif

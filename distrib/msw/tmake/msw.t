@@ -39,15 +39,20 @@
     }
 
     foreach $file (sort keys %wxMSW) {
-        #! OLE files can'be compiled with mingw32 yet
-        next if $wxMSW{$file} =~ /\b(O|16)\b/;
+        next if $wxMSW{$file} =~ /\b16\b/;
 
         ($fileobj = $file) =~ s/cp?p?$/\o/;
         ($filedep = $file) =~ s/cp?p?$/\d/;
 
-        $project{"MSW_SOURCES"} .= "msw/" . $file . " ";
-        $project{"GUIOBJS"} .= $fileobj . " ";
-        $project{"GUIDEPS"} .= $filedep . " "
+        if( $wxMSW{$file} =~ /\bO\b/ ) {
+            $project{"MSW_SOURCES"} .= "msw/ole/" . $file . " ";
+            $project{"OLEOBJS"} .= $fileobj . " ";
+            $project{"OLEDEPS"} .= $filedep . " ";
+        } else {
+            $project{"MSW_SOURCES"} .= "msw/" . $file . " ";
+            $project{"GUIOBJS"} .= $fileobj . " ";
+            $project{"GUIDEPS"} .= $filedep . " ";
+        }
     }
 
     foreach $file (sort keys %wxHTML) {
@@ -120,6 +125,12 @@ HTMLOBJS = \
 
 HTMLDEPS = \
 		#$ ExpandList("HTMLDEPS");
+
+OLEOBJS = \
+		#$ ExpandList("OLEOBJS");
+
+OLEDEPS = \
+		#$ ExpandList("OLEDEPS");
 
 IODBCOBJS = \
 		#$ ExpandList("IODBCOBJS");
