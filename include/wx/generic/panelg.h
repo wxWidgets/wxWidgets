@@ -18,7 +18,7 @@
 
 #include "wx/window.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
 
 class WXDLLEXPORT wxPanel : public wxWindow

@@ -20,7 +20,7 @@
 #include "wx/pen.h"
 #include "wx/font.h"
 
-WXDLLEXPORT_DATA(extern const char*) wxPanelNameStr;
+WXDLLEXPORT_DATA(extern const wxChar*) wxPanelNameStr;
 
 class WXDLLEXPORT wxStatusBar: public wxWindow
 {
