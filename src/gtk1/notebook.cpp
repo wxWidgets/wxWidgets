@@ -24,11 +24,14 @@
 #include "wx/intl.h"
 #include "wx/log.h"
 #include "wx/bitmap.h"
+#include "wx/fontutil.h"
 
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
+
+#include "wx/msgdlg.h"
 
 // ----------------------------------------------------------------------------
 // events
@@ -64,22 +67,79 @@ extern bool g_blockEventsOnDrag;
 class wxGtkNotebookPage: public wxObject
 {
 public:
-  wxGtkNotebookPage()
-  {
-    m_image = -1;
-    m_page = (GtkNotebookPage *) NULL;
-    m_box = (GtkWidget *) NULL;
-  }
+    wxGtkNotebookPage()
+    {
+        m_image = -1;
+        m_page = (GtkNotebookPage *) NULL;
+        m_box = (GtkWidget *) NULL;
+        m_labelStyle = (GtkStyle*) NULL;
+    }
+    
+    ~wxGtkNotebookPage()
+    {
+        if (m_labelStyle)
+            gtk_style_unref( m_labelStyle );
+    }
+    
+    bool SetFont(const wxFont& font);
 
-  wxString           m_text;
-  int                m_image;
-  GtkNotebookPage   *m_page;
-  GtkLabel          *m_label;
-  GtkWidget         *m_box;     // in which the label and image are packed
+    wxString           m_text;
+    int                m_image;
+    GtkNotebookPage   *m_page;
+    GtkLabel          *m_label;
+    GtkWidget         *m_box;     // in which the label and image are packed
+    GtkStyle          *m_labelStyle;
 };
+
+
+bool wxGtkNotebookPage::SetFont(const wxFont& font)
+{
+    if (!m_label)
+		return false;
+
+    if (m_labelStyle)
+    {
+        GtkStyle *remake = gtk_style_copy( m_labelStyle );
+
+#ifndef __WXGTK20__
+        remake->klass = m_labelStyle->klass;
+#endif
+
+        gtk_style_unref( m_labelStyle );
+        m_labelStyle = remake;
+    }
+    else
+    {
+        GtkStyle *def = gtk_rc_get_style( GTK_WIDGET(m_label) );
+
+        if (!def)
+            def = gtk_widget_get_default_style();
+
+        m_labelStyle = gtk_style_copy( def );
+
+        // FIXME: no more klass in 2.0
+#ifndef __WXGTK20__
+        m_labelStyle->klass = def->klass;
+#endif
+    }
+
+#ifdef __WXGTK20__
+	pango_font_description_free( m_labelStyle->font_desc );
+	m_labelStyle->font_desc = pango_font_description_copy( font.GetNativeFontInfo()->description );
+#else
+	gdk_font_unref( m_labelStyle->font );
+	m_labelStyle->font = gdk_font_ref( font.GetInternalFont( 1.0 ) );
+#endif
+
+    gtk_widget_set_style( GTK_WIDGET(m_label), m_labelStyle );
+
+	return true;
+}
+
 
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxGtkNotebookPagesList);
+
 
 //-----------------------------------------------------------------------------
 // "switch_page"
@@ -655,10 +715,12 @@ bool wxNotebook::InsertPage( size_t position,
     }
 
     /* set the label text */
+
     nb_page->m_text = text;
     if (nb_page->m_text.IsEmpty()) nb_page->m_text = wxT("");
 
     nb_page->m_label = GTK_LABEL( gtk_label_new(wxGTK_CONV(nb_page->m_text)) );
+	nb_page->SetFont(GetFont());
     gtk_box_pack_end( GTK_BOX(nb_page->m_box), GTK_WIDGET(nb_page->m_label), FALSE, FALSE, m_padding );
 
     /* show the label */
@@ -791,6 +853,19 @@ bool wxNotebook::IsOwnGtkWindow( GdkWindow *window )
 {
     return ((m_widget->window == window) ||
             (NOTEBOOK_PANEL(m_widget) == window));
+}
+
+bool  wxNotebook::SetFont(const wxFont& font)
+{
+	bool rc=wxNotebookBase::SetFont(font);
+
+	if (rc)
+	{
+		size_t i;
+		for (i=0 ; i < m_pagesData.GetCount() ; i++)
+			GetNotebookPage(i)->SetFont(font);
+	}
+	return rc;
 }
 
 //-----------------------------------------------------------------------------
