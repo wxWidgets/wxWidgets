@@ -1,4 +1,23 @@
 
+25th June '99: Seventh wxGTK 2.1 snapshot released
+
+Many fixes to th new makefile system. The last version gave
+immediate crashes on all Unices except Linux when linked
+dynamically against an application. I reordered the object
+files in the library as I guess that this was the cause.
+
+Added icons to message box. This also slightly killed the
+layout so this needs to be changed again.
+
+wxGTK now chooses the best visual available on the display instead
+of the default one.
+
+Fixed wxProgressDialog again.
+
+Some more corrections I forgot.
+
+New wxPython (includes new layout system and printing).
+
 15th June '99: Sixth wxGTK 2.1 snapshot released
   
  

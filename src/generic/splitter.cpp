@@ -363,7 +363,7 @@ void wxSplitterWindow::OnSize(wxSizeEvent& event)
         parent = parent->GetParent();
     }
 
-    bool iconized = false;
+    bool iconized = FALSE;
     wxFrame *frame = wxDynamicCast(parent, wxFrame);
     if ( frame )
         iconized = frame->IsIconized();

@@ -218,8 +218,8 @@ bool wxPostScriptPrinter::Print(wxWindow *parent, wxPrintout *printout, bool pro
                }
                else
                {
-                  sm_abortIt = true;
-                  keepGoing = false;
+                  sm_abortIt = TRUE;
+                  keepGoing = FALSE;
                }
             }
 	    wxYield();
