@@ -18,6 +18,20 @@
 #endif
 
 #include <windows.h>
+
+#ifdef __WXWINCE__
+    // this doesn't make any sense knowing that windows.h includes all these
+    // headers anyhow, but the fact remains that when building using eVC 4 the
+    // functions and constants from these headers are not defined unless we
+    // explicitly include them ourselves -- how is it possible is beyond me...
+    #include <winbase.h>
+    #include <wingdi.h>
+    #include <winuser.h>
+
+    // this one OTOH contains many useful CE-only functions
+    #include <shellapi.h>
+#endif // __WXWINCE__
+
 #include "wx/msw/winundef.h"
 
 // types DWORD_PTR, ULONG_PTR and so on might be not defined in old headers but
