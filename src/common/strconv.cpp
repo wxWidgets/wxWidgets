@@ -54,7 +54,7 @@
     WXDLLEXPORT_DATA(wxCSConv) wxConvLocal((const wxChar *)NULL);
 #else
     // stand-ins in absence of wchar_t
-    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile;
+    WXDLLEXPORT_DATA(wxMBConv) wxConvLibc, wxConvFile, wxConvLocal;
 #endif // wxUSE_WCHAR_T
 
 WXDLLEXPORT_DATA(wxMBConv *) wxConvCurrent = &wxConvLibc;
