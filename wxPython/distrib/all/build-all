@@ -263,7 +263,7 @@ if [ $skiplinux != yes ]; then
     # unpack the tarball and most of the  other steps...
 
     
-    echo "Copying source filesa nd build script..."
+    echo "Copying source files and build script..."
     ssh root@$LINUX_HOST "mkdir -p $LINUX_BUILD && rm -rf $LINUX_BUILD/*"
     scp $STAGING_DIR/wxPython*.src.rpm \
 	distrib/all/build-linux \
