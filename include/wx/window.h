@@ -680,9 +680,13 @@ public:
     // misc
     // ----
 
-    // get the window border style: uses the current style and falls back to
-    // the default style for this class otherwise (see GetDefaultBorder())
-    wxBorder GetBorder() const;
+    // get the window border style from the given flags: this is different from
+    // simply doing flags & wxBORDER_MASK because it uses GetDefaultBorder() to
+    // translate wxBORDER_DEFAULT to something reasonable
+    wxBorder GetBorder(long flags) const;
+
+    // get border for the flags of this window
+    wxBorder GetBorder() const { return GetBorder(GetWindowStyleFlag()); }
 
     void UpdateWindowUI();
 

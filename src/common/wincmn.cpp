@@ -1994,9 +1994,9 @@ void wxWindowListNode::DeleteData()
 // borders
 // ----------------------------------------------------------------------------
 
-wxBorder wxWindowBase::GetBorder() const
+wxBorder wxWindowBase::GetBorder(long flags) const
 {
-    wxBorder border = (wxBorder)(m_windowStyle & wxBORDER_MASK);
+    wxBorder border = (wxBorder)(flags & wxBORDER_MASK);
     if ( border == wxBORDER_DEFAULT )
     {
         border = GetDefaultBorder();
