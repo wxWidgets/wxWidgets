@@ -41,12 +41,14 @@ public:
     // NB: the "wxWindow *win" parameter is unused and is here only for wxGTK
     //     compatibility, as well as both icon parameters
     wxDropSource(wxWindow *win = NULL,
-            const wxIcon &go = wxNullIcon,
-            const wxIcon &stop = wxNullIcon );
+                 const wxCursor &cursorCopy = wxNullCursor,
+                 const wxCursor &cursorMove = wxNullCursor,
+                 const wxCursor &cursorStop = wxNullCursor);
     wxDropSource(wxDataObject& data,
-            wxWindow *win = NULL,
-            const wxIcon &go = wxNullIcon,
-            const wxIcon &stop = wxNullIcon );
+                 wxWindow *win = NULL,
+                 const wxCursor &cursorCopy = wxNullCursor,
+                 const wxCursor &cursorMove = wxNullCursor,
+                 const wxCursor &cursorStop = wxNullCursor);
 
     virtual ~wxDropSource();
 
@@ -57,7 +59,7 @@ public:
     // overridable: you may give some custom UI feedback during d&d operation
     // in this function (it's called on each mouse move, so it shouldn't be
     // too slow). Just return false if you want default feedback.
-    virtual bool GiveFeedback(wxDragResult effect, bool bScrolling);
+    virtual bool GiveFeedback(wxDragResult effect);
 
 protected:
     void Init();

@@ -45,7 +45,13 @@ inline WXDLLEXPORT bool wxIsDragResultOk(wxDragResult res)
 class WXDLLEXPORT wxDropSourceBase
 {
 public:
-    wxDropSourceBase() { m_data = (wxDataObject *)NULL; }
+    wxDropSourceBase(const wxCursor &cursorCopy = wxNullCursor,
+                     const wxCursor &cursorMove = wxNullCursor,
+                     const wxCursor &cursorStop = wxNullCursor)
+        : m_cursorCopy(cursorCopy),
+          m_cursorMove(cursorMove),
+          m_cursorStop(cursorStop)
+        { m_data = (wxDataObject *)NULL; }
     virtual ~wxDropSourceBase() { }
 
     // set the data which is transfered by drag and drop
@@ -55,21 +61,42 @@ public:
     wxDataObject *GetDataObject()
       { return m_data; }
 
+    // set the icon corresponding to given drag result
+    void SetCursor(wxDragResult res, const wxCursor& cursor)
+    {
+        if ( res == wxDragCopy )
+            m_cursorCopy = cursor;
+        else if ( res == wxDragMove )
+            m_cursorMove = cursor;
+        else
+            m_cursorStop = cursor;
+    }
+
     // start drag action, see enum wxDragResult for return value description
     //
     // if bAllowMove is TRUE, data can be moved, if not - only copied
     virtual wxDragResult DoDragDrop(bool bAllowMove = FALSE) = 0;
 
     // override to give feedback depending on the current operation result
-    // "effect"
-    virtual bool GiveFeedback( wxDragResult WXUNUSED(effect),
-                               bool WXUNUSED(bScrolling) )
-    {
-        return TRUE;
-    }
+    // "effect" and return TRUE if you did something, FALSE to let the library
+    // give the default feedback
+    virtual bool GiveFeedback(wxDragResult WXUNUSED(effect)) { return FALSE; }
 
 protected:
+    const wxCursor& GetCursor(wxDragResult res) const
+    {
+        if ( res == wxDragCopy )
+            return m_cursorCopy;
+        else if ( res == wxDragMove )
+            return m_cursorMove;
+        else
+            return m_cursorStop;
+    }
+
     wxDataObject *m_data;
+
+    // the cursors to use for feedback
+    wxCursor      m_cursorCopy, m_cursorMove, m_cursorStop;
 };
 
 // ----------------------------------------------------------------------------

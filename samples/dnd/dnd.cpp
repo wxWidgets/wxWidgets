@@ -871,7 +871,10 @@ void DnDFrame::OnLeftDown(wxMouseEvent &WXUNUSED(event) )
     {
         // start drag operation
         wxTextDataObject textData(m_strText);
-        wxDropSource source(textData, this, wxICON(mondrian));
+        wxDropSource source(textData, this,
+                            wxCURSOR_PENCIL,            // for copy
+                            wxCURSOR_SPRAYCAN,          // for move
+                            wxCURSOR_QUESTION_ARROW);   // for nothing
 
         const char *pc;
 
@@ -1253,7 +1256,7 @@ void DnDShapeFrame::OnDrag(wxMouseEvent& event)
 
     // start drag operation
     DnDShapeDataObject shapeData(m_shape);
-    wxDropSource source(shapeData, this, wxICON(mondrian));
+    wxDropSource source(shapeData, this);
 
     const char *pc = NULL;
     switch ( source.DoDragDrop(TRUE) )

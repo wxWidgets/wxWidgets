@@ -140,8 +140,7 @@ STDMETHODIMP wxIDropSource::GiveFeedback(DWORD dwEffect)
   else
     effect = wxDragNone;
 
-  if ( m_pDropSource->GiveFeedback(effect,
-                                   (dwEffect & DROPEFFECT_SCROLL) != 0 ) )
+  if ( m_pDropSource->GiveFeedback(effect) )
     return S_OK;
 
   return DRAGDROP_S_USEDEFAULTCURSORS;
@@ -156,29 +155,33 @@ STDMETHODIMP wxIDropSource::GiveFeedback(DWORD dwEffect)
 // common part of all ctors
 void wxDropSource::Init()
 {
-  m_pIDropSource = new wxIDropSource(this);
-  m_pIDropSource->AddRef();
+    m_pIDropSource = new wxIDropSource(this);
+    m_pIDropSource->AddRef();
 }
 
 wxDropSource::wxDropSource(wxWindow* WXUNUSED(win),
-                           const wxIcon & WXUNUSED(go),
-                           const wxIcon & WXUNUSED(stop))
+                           const wxCursor &cursorCopy,
+                           const wxCursor &cursorMove,
+                           const wxCursor &cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
 {
-  Init();
+    Init();
 }
 
 wxDropSource::wxDropSource(wxDataObject& data,
                            wxWindow* WXUNUSED(win),
-                           const wxIcon & WXUNUSED(go),
-                           const wxIcon & WXUNUSED(stop))
+                           const wxCursor &cursorCopy,
+                           const wxCursor &cursorMove,
+                           const wxCursor &cursorStop)
+            : wxDropSourceBase(cursorCopy, cursorMove, cursorStop)
 {
-  Init();
-  SetData(data);
+    Init();
+    SetData(data);
 }
 
 wxDropSource::~wxDropSource()
 {
-  m_pIDropSource->Release();
+    m_pIDropSource->Release();
 }
 
 // Name    : DoDragDrop
@@ -223,7 +226,8 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
       wxLogError(wxT("Drag & drop operation failed."));
     }
     else {
-      wxLogDebug(wxT("Unexpected success return code %08lx from DoDragDrop."), hr);
+      wxLogDebug(wxT("Unexpected success return code %08lx from DoDragDrop."),
+                 hr);
     }
 
     return wxDragError;
@@ -234,11 +238,20 @@ wxDragResult wxDropSource::DoDragDrop(bool bAllowMove)
 // Purpose : visually inform the user about d&d operation state
 // Returns : bool: true if we do all ourselves or false for default feedback
 // Params  : [in] DragResult effect - what would happen if we dropped now
-//           [in] bool bScrolling   - true if target is scrolling
 // Notes   : here we just leave this stuff for default implementation
-bool wxDropSource::GiveFeedback(wxDragResult effect, bool bScrolling)
+bool wxDropSource::GiveFeedback(wxDragResult effect)
 {
-  return FALSE;
+    const wxCursor& cursor = GetCursor(effect);
+    if ( cursor.Ok() )
+    {
+        ::SetCursor((HCURSOR)cursor.GetHCURSOR());
+
+        return TRUE;
+    }
+    else
+    {
+        return FALSE;
+    }
 }
 
 #endif  //USE_DRAG_AND_DROP
