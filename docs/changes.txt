@@ -4,13 +4,17 @@ wxWindows 2 Change Log
 INCOMPATIBLE CHANGES SINCE 2.2.x
 ================================
 
+    Please take a few minutes to read the following list, especially
+    paying attention to the most important changes which are marked
+    with '!' in the first column.
+
 wxBase:
 
-- wxArray<T>::Remove(size_t) has been removed to fix compilation problems
+! wxArray<T>::Remove(size_t) has been removed to fix compilation problems
   under 64 bit architectures, please replace it with RemoveAt() in your
   code.
 
-- wxArray<T> macros have been changed to fix runtime problems under 64 bit
+! wxArray<T> macros have been changed to fix runtime problems under 64 bit
   architectures and as a side effect of this WX_DEFINE_ARRAY() can only be
   used now for the pointer types, WX_DEFINE_ARRAY_INT should be used for the
   arrays containing non-pointers.
@@ -22,10 +26,6 @@ wxBase:
   by all derived classes, if you have user-defined event classes please
   add "wxEvent *Clone() const { return new MyEvent(*this); }" line to them
 
-- wxCondition now must be used with a mutex, please read the (updated) class
-  documentation for details and revise your code accordingly: this change was
-  unfortunately needed as the old class didn't behave correctly in all cases
-
 - small change to wxStopWatch::Pause() semantics, please see the documentation
 
 - unlikely but possible incompatibility: the definition of TRUE has changed
@@ -36,7 +36,7 @@ wxBase:
 
 All (GUI):
 
-- the event type constants are not constants any more but are dynamically
+! the event type constants are not constants any more but are dynamically
   allocated during run-time which means that they can't be used as case labels
   in the switch()es, you must rewrite them to use if()s instead
 
@@ -44,9 +44,13 @@ All (GUI):
   but this is strongly discouraged, please consider changing your codei
   instead!
 
-- wxDialog does not derive from wxPanel any longer - if you were using it in
+! wxDialog does not derive from wxPanel any longer - if you were using it in
   your code, please update it. The quick fix for the most cases is to replace
   the occurences of wxPanel with wxWindow.
+
+! if you handle (and don't skip) EVT_KEY_DOWN, the EVT_CHAR event is not
+  generated at all, so you must call event.Skip() in your OnKeyDown() if
+  you want to get OnChar() as well
 
 - wxYES_NO is now wxYES | wxNO and the manifest values of both wxYES and wxNO
   have changed (to fix some unfortunate clashes), please check your code to
@@ -59,9 +63,6 @@ All (GUI):
                 ... do something else ...
 
 - wxGLCanvas now derives directly from wxWindow, not wxScrolledWindow
-
-- if you handle (and don't skip) EVT_KEY_DOWN, the EVT_CHAR event is not
-  generated at all
 
 - wxGridCellAttrProvider class API changed, you will need to update your code
   if you derived any classes from it
@@ -82,7 +83,7 @@ All (GUI):
 
 wxMSW:
 
-- build system changed: setup.h is not a static file in include/wx any more
+! build system changed: setup.h is not a static file in include/wx any more
   but is created as part of the build process under lib/<toolkit>/wx/include
   where <toolkit> is of the form (msw|univ)[dll][u][d]. You'll need to update
   the include path in your make/project files appropriately. Furthermore,
@@ -99,17 +100,37 @@ wxMSW:
 - wxGetHomeDir() uses HOME environment variable and if it is set will not
   return the programs directory any longer but its value (this function has
   never been meant to return the programs directory anyhow)
-  
+
 - wxHTML apps don't need to include wx/html/msw/wxhtml.rc in resources file
   anymore. The file was removed from wxMSW
 
 
 Unix ports:
 
-- You should use `wx-config --cxxflags` in your makefiles instead of
+! You should use `wx-config --cxxflags` in your makefiles instead of
   `wx-config --cflags` for compiling C++ files. CXXFLAGS contains CFLAGS
   and the compiler flags for C++ files only, CFLAGS should still be used
   to compile pure C files.
+
+
+wxThread and related classes:
+
+- The thread-related classes have been heavily changed since 2.2.x versions
+  as the old code had many serious problems. This could have resulted in
+  semantical changes other than those mentioned here, please review use of
+  wxThread, wxMutex and wxCondition classes in your code.
+
+! wxCondition now *must* be used with a mutex, please read the (updated) class
+  documentation for details and revise your code accordingly: this change was
+  unfortunately needed as it was impossible to ensure the correct behaviour
+  (i.e. absense of race conditions) using the old API.
+
+- wxMutex is not recursive any more in POSIX implementation (it hasn't been
+  recursive in 2.2.x but was in 2.3.1 and 2.3.2), please refer to the class
+  documentation for the discussion of the recursive mutexes.
+
+- wxMutex::IsLocked() doesn't exist any more and should have never existed:
+  this is was unique example of a thread-unsafe-by-design method.
 
 
 OTHER CHANGES
