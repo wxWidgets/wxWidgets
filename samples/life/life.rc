@@ -1,0 +1,6 @@
+mondrian ICON "mondrian.ico"
+#include "wx/msw/wx.rc"
+
+reset BITMAP "bitmaps/reset.bmp"
+play  BITMAP "bitmaps/play.bmp"
+stop  BITMAP "bitmaps/stop.bmp"
