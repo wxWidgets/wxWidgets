@@ -610,6 +610,7 @@ wxPageSetupDialogData& wxPageSetupDialogData::operator=(const wxPageSetupDialogD
 wxPageSetupDialogData& wxPageSetupDialogData::operator=(const wxPrintData& data)
 {
     m_printData = data;
+    CalculatePaperSizeFromId();
 
     return *this;
 }
@@ -659,6 +660,12 @@ void wxPageSetupDialogData::SetPaperSize(wxPaperSize id)
     m_printData.SetPaperId(id);
 
     CalculatePaperSizeFromId();
+}
+
+void wxPageSetupDialogData::SetPrintData(const wxPrintData& printData)
+{
+    m_printData = printData;
+    CalculatePaperSizeFromId();    
 }
 
 // Use paper size defined in this object to set the wxPrintData

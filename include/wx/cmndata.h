@@ -431,7 +431,7 @@ public:
     wxPageSetupDialogData& operator=(const wxPrintData& data);
 
     wxPrintData& GetPrintData() { return m_printData; }
-    void SetPrintData(const wxPrintData& printData) { m_printData = printData; }
+    void SetPrintData(const wxPrintData& printData);
 
 private:
     wxSize          m_paperSize; // The dimensions selected by the user (on return, same as in wxPrintData?)
