@@ -138,6 +138,8 @@ void wxFrame::UpdateFrameNSView()
         NSView *tbarNSView = m_frameToolBar->GetNSViewForSuperview();
         if(![tbarNSView superview])
             [m_frameNSView addSubview: tbarNSView];
+        // Do this after addSubView so that SetSize can work
+        m_frameToolBar->SetSize(m_frameToolBar->DoGetBestSize());
         NSRect tbarRect = [tbarNSView frame];
         tbarRect.size.width = frameRect.size.width;
         tbarRect.origin.x = 0.0;
@@ -212,6 +214,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
 {
     if(m_frameToolBar)
     {
+        m_frameToolBar->SetOwningFrame(NULL);
         [m_frameToolBar->GetNSViewForSuperview() removeFromSuperview];
         [m_frameToolBar->GetNSViewForSuperview() setAutoresizingMask: NSViewMinYMargin];
         if(m_frameToolBar->GetParent())
@@ -221,6 +224,7 @@ void wxFrame::SetToolBar(wxToolBar *toolbar)
     if(m_frameToolBar)
     {
         m_frameToolBar->CocoaRemoveFromParent();
+        m_frameToolBar->SetOwningFrame(this);
     }
     UpdateFrameNSView();
 }
@@ -233,6 +237,7 @@ wxToolBar* wxFrame::CreateToolBar(long style,
     if(m_frameToolBar)
     {
         m_frameToolBar->CocoaRemoveFromParent();
+        m_frameToolBar->SetOwningFrame(this);
     }
     UpdateFrameNSView();
     return m_frameToolBar;
