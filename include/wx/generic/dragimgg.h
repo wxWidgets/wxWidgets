@@ -1,20 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/msw/dragimag.h
+// Name:        wx/generic/dragimgg.h
 // Purpose:     wxDragImage class: a kind of a cursor, that can cope
 //              with more sophisticated images
 // Author:      Julian Smart
 // Modified by:
-// Created:     08/04/99
+// Created:     29/2/2000
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_DRAGIMAG_H_
-#define _WX_DRAGIMAG_H_
+#ifndef _WX_DRAGIMGG_H_
+#define _WX_DRAGIMGG_H_
 
 #ifdef __GNUG__
-#pragma interface "dragimag.h"
+#pragma interface "dragimgg.h"
 #endif
 
 #include "wx/bitmap.h"
@@ -87,56 +87,48 @@
 */
 
 /*
- Notes for Unix version:
- Can we simply use cursors instead, creating a cursor dynamically, setting it into the window
- in BeginDrag, and restoring the old cursor in EndDrag?
- For a really bog-standard implementation, we could simply use a normal dragging cursor
- and ignore the image.
-*/
-
-/*
- * wxDragImage
+ * wxGenericDragImage
  */
 
-class WXDLLEXPORT wxDragImage: public wxObject
+class WXDLLEXPORT wxGenericDragImage: public wxObject
 {
 public:
 
     // Ctors & dtor
     ////////////////////////////////////////////////////////////////////////////
 
-    wxDragImage();
-    wxDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
+    wxGenericDragImage();
+    wxGenericDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
     {
         Init();
 
         Create(image, cursor, hotspot);
     }
-    wxDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
+    wxGenericDragImage(const wxIcon& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
     {
         Init();
 
         Create(image, cursor, hotspot);
     }
-    wxDragImage(const wxString& str, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
+    wxGenericDragImage(const wxString& str, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
     {
         Init();
 
         Create(str, cursor, hotspot);
     }
-    wxDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
+    wxGenericDragImage(const wxTreeCtrl& treeCtrl, wxTreeItemId& id)
     {
         Init();
 
         Create(treeCtrl, id);
     }
-    wxDragImage(const wxListCtrl& listCtrl, long id)
+    wxGenericDragImage(const wxListCtrl& listCtrl, long id)
     {
         Init();
 
         Create(listCtrl, id);
     }
-    ~wxDragImage();
+    ~wxGenericDragImage();
 
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
@@ -184,28 +176,36 @@ public:
     // Implementation
     ////////////////////////////////////////////////////////////////////////////
 
-    // Initialize variables
     void Init();
 
-    // Returns the native image list handle
-    WXHIMAGELIST GetHIMAGELIST() const { return m_hImageList; }
+    wxRect GetImageRect(const wxPoint& pos) const;
 
-    // Returns the native image list handle for the cursor
-    WXHIMAGELIST GetCursorHIMAGELIST() const { return m_hCursorImageList; }
+    // Erase and redraw simultaneously if possible
+    bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos, bool eraseOld, bool drawNew);
 
 protected:
-    WXHIMAGELIST    m_hImageList;
-    WXHIMAGELIST    m_hCursorImageList;
+    wxBitmap        m_bitmap;
+    wxIcon          m_icon;
     wxCursor        m_cursor;
+    wxCursor        m_oldCursor;
     wxPoint         m_hotspot;
     wxPoint         m_position;
+    bool            m_isDirty;
+    bool            m_isShown;
     wxWindow*       m_window;
+    wxDC*           m_windowDC;
+
+    // Stores the window contents while we're dragging the image around
+    wxBitmap        m_backingBitmap;
+    // A temporary bitmap for repairing/redrawing
+    wxBitmap        m_repairBitmap;
+
     wxRect          m_boundingRect;
     bool            m_fullScreen;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxDragImage)
+    DECLARE_DYNAMIC_CLASS(wxGenericDragImage)
 };
 
 #endif
-    // _WX_DRAGIMAG_H_
+    // _WX_DRAGIMGG_H_

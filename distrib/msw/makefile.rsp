@@ -12,6 +12,7 @@ samples/dialogs/Makefile.in
 samples/dnd/Makefile.in
 samples/docview/Makefile.in
 samples/docvwmdi/Makefile.in
+samples/dragimag/Makefile.in
 samples/drawing/Makefile.in
 samples/dynamic/Makefile.in
 samples/exec/Makefile.in

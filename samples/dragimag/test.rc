@@ -1,0 +1,5 @@
+mondrian ICON "mondrian.ico"
+dragicon ICON "dragicon.ico"
+
+#include "wx/msw/wx.rc"
+

@@ -8,6 +8,7 @@ ALL_SOURCES = \
 		generic/colrdlgg.cpp \
 		generic/dcpsg.cpp \
 		generic/dirdlgg.cpp \
+		generic/dragimgg.cpp \
 		generic/filedlgg.cpp \
 		generic/grid.cpp \
 		generic/helpext.cpp \
@@ -748,6 +749,7 @@ GENERICOBJS = \
 		caret.o \
 		choicdgg.o \
 		colrdlgg.o \
+		dragimgg.o \
 		dcpsg.o \
 		dirdlgg.o \
 		filedlgg.o \
@@ -788,6 +790,7 @@ GENERICDEPS = \
 		colrdlgg.d \
 		dcpsg.d \
 		dirdlgg.d \
+		dragimgg.d \
 		filedlgg.d \
 		grid.d \
 		helpext.d \

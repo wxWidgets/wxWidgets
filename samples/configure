@@ -652,6 +652,7 @@ trap 'rm -fr `echo "
             docview/Makefile
             docvwmdi/Makefile
             dnd/Makefile
+            dragimag/Makefile
             drawing/Makefile
             exec/Makefile
             font/Makefile

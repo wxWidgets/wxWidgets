@@ -1725,6 +1725,15 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             case WM_LBUTTONDOWN:
                 if ( htItem && isMultiple )
                 {
+<<<<<<< treectrl.cpp
+                    int x = GET_X_LPARAM(lParam),
+                        y = GET_Y_LPARAM(lParam);
+
+                    m_dragImage->Move(wxPoint(x, y));
+
+                    HTREEITEM htiTarget = GetItemFromPoint(GetHwnd(), x, y);
+                    if ( htiTarget )
+=======
                     if ( wParam & MK_CONTROL )
                     {
                         SetFocus();
@@ -1783,9 +1792,9 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
                     {
                         // highlight the item as target (hiding drag image is
                         // necessary - otherwise the display will be corrupted)
-                        m_dragImage->Hide(this);
+                        m_dragImage->Hide();
                         TreeView_SelectDropTarget(GetHwnd(), htItem);
-                        m_dragImage->Show(this);
+                        m_dragImage->Show();
                     }
                 }
                 break;
@@ -1794,7 +1803,7 @@ long wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
             case WM_RBUTTONUP:
                 if ( m_dragImage )
                 {
-                    m_dragImage->EndDrag(this);
+                    m_dragImage->EndDrag();
                     delete m_dragImage;
                     m_dragImage = NULL;
 
@@ -2202,7 +2211,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
                 m_dragImage = new wxDragImage(*this, event.m_item);
                 m_dragImage->BeginDrag(wxPoint(0, 0), this);
-                m_dragImage->Show(this);
+                m_dragImage->Show();
             }
             break;
 

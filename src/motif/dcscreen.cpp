@@ -14,6 +14,7 @@
 #endif
 
 #include "wx/window.h"
+#include "wx/frame.h"
 #include "wx/dcscreen.h"
 #include "wx/utils.h"
 
@@ -64,6 +65,7 @@ wxScreenDC::wxScreenDC()
 
 wxScreenDC::~wxScreenDC()
 {
+    EndDrawingOnTop();
 }
 
 bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
@@ -71,7 +73,7 @@ bool wxScreenDC::StartDrawingOnTop(wxWindow* window)
     wxRect rect;
     int x, y, width, height;
     window->GetPosition(& x, & y);
-    if (window->GetParent())
+    if (window->GetParent() && !window->IsKindOf(CLASSINFO(wxFrame)))
         window->GetParent()->ClientToScreen(& x, & y);
     window->GetSize(& width, & height);
     rect.x = x; rect.y = y;

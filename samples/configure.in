@@ -20,6 +20,7 @@ AC_OUTPUT([
             docview/Makefile
             docvwmdi/Makefile
             dnd/Makefile
+            dragimag/Makefile
             drawing/Makefile
             exec/Makefile
             font/Makefile

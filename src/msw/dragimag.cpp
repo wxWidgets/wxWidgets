@@ -43,6 +43,8 @@
 
 #include "wx/log.h"
 #include "wx/intl.h"
+#include "wx/frame.h"
+#include "wx/image.h"
 
 #include "wx/msw/dragimag.h"
 #include "wx/msw/private.h"
@@ -69,15 +71,24 @@ IMPLEMENT_DYNAMIC_CLASS(wxDragImage, wxObject)
 
 wxDragImage::wxDragImage()
 {
-    m_hImageList = 0;
+    Init();
 }
 
 wxDragImage::~wxDragImage()
 {
     if ( m_hImageList )
         ImageList_Destroy(GetHimageList());
+    if ( m_hCursorImageList )
+        ImageList_Destroy((HIMAGELIST) m_hCursorImageList);
 }
 
+void wxDragImage::Init()
+{
+    m_hImageList = 0;
+    m_hCursorImageList = 0;
+    m_window = (wxWindow*) NULL;
+    m_fullScreen = FALSE;
+}
 
 // Attributes
 ////////////////////////////////////////////////////////////////////////////
@@ -93,24 +104,43 @@ bool wxDragImage::Create(const wxBitmap& image, const wxCursor& cursor, const wx
         ImageList_Destroy(GetHimageList());
     m_hImageList = 0;
 
-    UINT flags = 0;
-    bool mask = TRUE; // ?
+    UINT flags = 0 ;
+    if (image.GetDepth() <= 4)
+        flags = ILC_COLOR4;
+    else if (image.GetDepth() <= 8)
+        flags = ILC_COLOR8;
+    else if (image.GetDepth() <= 16)
+        flags = ILC_COLOR16;
+    else if (image.GetDepth() <= 24)
+        flags = ILC_COLOR24;
+    else
+        flags = ILC_COLOR32;
+
+    bool mask = (image.GetMask() != 0);
     if ( mask )
         flags |= ILC_MASK;
 
     m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
 
-    HBITMAP hBitmap1 = (HBITMAP) image.GetHBITMAP();
-    HBITMAP hBitmap2 = 0;
-    if ( image.GetMask() )
-        hBitmap2 = (HBITMAP) image.GetMask()->GetMaskBitmap();
+    int index;
+    if (!mask)
+    {
+        HBITMAP hBitmap1 = (HBITMAP) image.GetHBITMAP();
+        index = ImageList_Add(GetHimageList(), hBitmap1, 0);
+    }
+    else
+    {
+        HBITMAP hBitmap1 = (HBITMAP) image.GetHBITMAP();
+        HBITMAP hBitmap2 = (HBITMAP) image.GetMask()->GetMaskBitmap();
+        HBITMAP hbmpMask = wxInvertMask(hBitmap2);
 
-    int index = ImageList_Add(GetHimageList(), hBitmap1, hBitmap2);
+        index = ImageList_Add(GetHimageList(), hBitmap1, hbmpMask);
+        ::DeleteObject(hbmpMask);
+    }
     if ( index == -1 )
     {
         wxLogError(_("Couldn't add an image to the image list."));
     }
-
     m_cursor = cursor; // Can only combine with drag image after calling BeginDrag.
     m_hotspot = hotspot;
 
@@ -124,8 +154,18 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor, const wxPo
         ImageList_Destroy(GetHimageList());
     m_hImageList = 0;
 
-    UINT flags = 0;
-    bool mask = TRUE; // ?
+    UINT flags = 0 ;
+    if (image.GetDepth() <= 4)
+        flags = ILC_COLOR4;
+    else if (image.GetDepth() <= 8)
+        flags = ILC_COLOR8;
+    else if (image.GetDepth() <= 16)
+        flags = ILC_COLOR16;
+    else if (image.GetDepth() <= 24)
+        flags = ILC_COLOR24;
+    else
+        flags = ILC_COLOR32;
+    bool mask = TRUE;
     if ( mask )
         flags |= ILC_MASK;
 
@@ -154,17 +194,33 @@ bool wxDragImage::Create(const wxString& str, const wxCursor& cursor, const wxPo
     wxScreenDC dc;
     dc.SetFont(font);
     dc.GetTextExtent(str, & w, & h);
+    dc.SetFont(wxNullFont);
 
     wxMemoryDC dc2;
     dc2.SetFont(font);
-    wxBitmap bitmap((int) w, (int) h);
+    wxBitmap bitmap((int) w+2, (int) h+2);
     dc2.SelectObject(bitmap);
 
     dc2.SetBackground(* wxWHITE_BRUSH);
     dc2.Clear();
+    dc2.SetBackgroundMode(wxTRANSPARENT);
+    dc2.SetTextForeground(* wxLIGHT_GREY);
     dc2.DrawText(str, 0, 0);
+    dc2.DrawText(str, 1, 0);
+    dc2.DrawText(str, 2, 0);
+    dc2.DrawText(str, 1, 1);
+    dc2.DrawText(str, 2, 1);
+    dc2.DrawText(str, 1, 2);
+    dc2.DrawText(str, 2, 2);
+    dc2.SetTextForeground(* wxBLACK);
+    dc2.DrawText(str, 1, 1);
 
     dc2.SelectObject(wxNullBitmap);
+
+    // Make the bitmap masked
+    wxImage image(bitmap);
+    image.SetMaskColour(255, 255, 255);
+    bitmap = image.ConvertToBitmap();
 
     return Create(bitmap, cursor, hotspot);
 }
@@ -190,9 +246,14 @@ bool wxDragImage::Create(const wxListCtrl& listCtrl, long id)
 }
 
 // Begin drag
-bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window)
+bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, bool fullScreen, wxRect* rect)
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in BeginDrag."));
+    wxASSERT_MSG( (window != 0), wxT("Window must not be null in BeginDrag."));
+
+    m_fullScreen = fullScreen;
+    if (rect)
+        m_boundingRect = * rect;
 
     bool ret = (ImageList_BeginDrag(GetHimageList(), 0, hotspot.x, hotspot.y) != 0);
 
@@ -205,25 +266,57 @@ bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window)
 
     if (m_cursor.Ok())
     {
+        if (!m_hCursorImageList)
+        {           
+            int cxCursor = GetSystemMetrics(SM_CXCURSOR); 
+            int cyCursor = GetSystemMetrics(SM_CYCURSOR); 
+ 
+            m_hCursorImageList = (WXHIMAGELIST) ImageList_Create(cxCursor, cyCursor, ILC_MASK, 1, 1);
+        }
+
         // First add the cursor to the image list
-        int cursorIndex = ImageList_AddIcon(GetHimageList(), (HICON) m_cursor.GetHCURSOR());
+        HCURSOR hCursor = (HCURSOR) m_cursor.GetHCURSOR();
+        int cursorIndex = ImageList_AddIcon((HIMAGELIST) m_hCursorImageList, (HICON) hCursor);
 
         wxASSERT_MSG( (cursorIndex != -1), wxT("ImageList_AddIcon failed in BeginDrag."));
 
         if (cursorIndex != -1)
         {
-            ImageList_SetDragCursorImage(GetHimageList(), cursorIndex, m_hotspot.x, m_hotspot.y);
+            ImageList_SetDragCursorImage((HIMAGELIST) m_hCursorImageList, cursorIndex, m_hotspot.x, m_hotspot.y);
         }
     }
 
+    m_window = window;
     ::ShowCursor(FALSE);
+
     ::SetCapture(GetHwndOf(window));
 
     return TRUE;
 }
 
+// Begin drag. hotspot is the location of the drag position relative to the upper-left
+// corner of the image. This is full screen only. fullScreenRect gives the
+// position of the window on the screen, to restrict the drag to.
+bool wxDragImage::BeginDrag(const wxPoint& hotspot, wxWindow* window, wxWindow* fullScreenRect)
+{
+    wxRect rect;
+
+    int x = fullScreenRect->GetPosition().x;
+    int y = fullScreenRect->GetPosition().y;
+    
+    wxSize sz = fullScreenRect->GetSize();
+
+    if (fullScreenRect->GetParent() && !fullScreenRect->IsKindOf(CLASSINFO(wxFrame)))
+        fullScreenRect->GetParent()->ClientToScreen(& x, & y);
+
+    rect.x = x; rect.y = y;
+    rect.width = sz.x; rect.height = sz.y;
+
+    return BeginDrag(hotspot, window, TRUE, & rect);
+}
+
 // End drag
-bool wxDragImage::EndDrag(wxWindow* WXUNUSED(window))
+bool wxDragImage::EndDrag()
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in EndDrag."));
 
@@ -235,13 +328,14 @@ bool wxDragImage::EndDrag(wxWindow* WXUNUSED(window))
     }
 
     ::ShowCursor(TRUE);
+    m_window = (wxWindow*) NULL;
 
     return TRUE;
 }
 
 // Move the image: call from OnMouseMove. Pt is in window client coordinates if window
 // is non-NULL, or in screen coordinates if NULL.
-bool wxDragImage::Move(const wxPoint& pt, wxWindow* window)
+bool wxDragImage::Move(const wxPoint& pt)
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Move."));
 
@@ -253,26 +347,26 @@ bool wxDragImage::Move(const wxPoint& pt, wxWindow* window)
     return ret;
 }
 
-bool wxDragImage::Show(wxWindow* window)
+bool wxDragImage::Show()
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Show."));
 
     HWND hWnd = 0;
-    if (window)
-        hWnd = (HWND) window->GetHWND();
+    if (m_window && !m_fullScreen)
+        hWnd = (HWND) m_window->GetHWND();
 
     bool ret = (ImageList_DragEnter( hWnd, m_position.x, m_position.y ) != 0);
 
     return ret;
 }
 
-bool wxDragImage::Hide(wxWindow* window)
+bool wxDragImage::Hide()
 {
     wxASSERT_MSG( (m_hImageList != 0), wxT("Image list must not be null in Hide."));
 
     HWND hWnd = 0;
-    if (window)
-        hWnd = (HWND) window->GetHWND();
+    if (m_window && !m_fullScreen)
+        hWnd = (HWND) m_window->GetHWND();
 
     bool ret = (ImageList_DragLeave( hWnd ) != 0);
 

@@ -304,6 +304,7 @@ void MyApp::GenerateSamples(const wxString& dir)
     GenerateSample("FontVC", "font", dir + wxString("/samples/font"), wxStringList("font.cpp", 0));
     GenerateSample("MenuVC", "menu", dir + wxString("/samples/menu"), wxStringList("menu.cpp", 0));
     GenerateSample("TreelayVC", "test", dir + wxString("/samples/treelay"), wxStringList("test.cpp", "test.h", 0));
+    GenerateSample("DragimagVC", "test", dir + wxString("/samples/dragimag"), wxStringList("test.cpp", "test.h", 0));
 
     //// Demos
 

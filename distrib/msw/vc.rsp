@@ -39,6 +39,9 @@ samples/dialup/DialupVC.dsw
 samples/dnd/DndVC.dsp
 samples/dnd/DndVC.dsw
 
+samples/dragimag/DragimagVC.dsp
+samples/dragimag/DragimagVC.dsw
+
 samples/docview/DocviewVC.dsp
 samples/docview/DocviewVC.dsw
 

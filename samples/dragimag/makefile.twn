@@ -1,0 +1,43 @@
+#
+# File:		makefile.unx
+# Author:	Julian Smart
+# Created:	1993
+# Updated:	
+# Copyright:	(c) 1993, AIAI, University of Edinburgh
+#
+# "%W% %G%"
+#
+# Makefile for test example (UNIX).
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/test.$(OBJSUFF) $(OBJDIR)/test_resources.$(OBJSUFF)
+
+all:    $(OBJDIR) test$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+test$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o test$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/test.$(OBJSUFF):	test.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ test.$(SRCSUFF)
+
+test_resources.c:  test.rc
+	$(RESCOMP) $(RCINPUTSWITCH) test.rc $(RCOUTPUTSWITCH) test_resources.c $(RESFLAGS)
+
+$(OBJDIR)/test_resources.$(OBJSUFF):	test_resources.c
+	$(CC) -c $(CPPFLAGS) -o $@ test_resources.c
+
+#$(OBJDIR)/test_resources.o:  test.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) test.rc $(RCOUTPUTSWITCH) $(OBJDIR)/test_resources.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) test$(GUISUFFIX).exe core *.rsc *.res

@@ -514,6 +514,10 @@ SOURCE=.\generic\choicdgg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\generic\dragimgg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\generic\grid.cpp
 # End Source File
 # Begin Source File

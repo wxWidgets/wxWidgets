@@ -1945,23 +1945,14 @@ wxBitmap wxImage::ConvertToBitmap() const
 
     bitmap.Create( width, height, bpp );
 
-    /*
     // Create mask
 
-      GdkImage *mask_image = (GdkImage*) NULL;
-
-        if (HasMask())
-        {
-        unsigned char *mask_data = (unsigned char*)malloc( ((width >> 3)+8) * height );
-
-          mask_image =  gdk_image_new_bitmap( gdk_visual_get_system(), mask_data, width, height );
-
-            wxMask *mask = new wxMask();
-            mask->m_bitmap = gdk_pixmap_new( (GdkWindow*)&gdk_root_parent, width, height, 1 );
-
-              bitmap.SetMask( mask );
-              }
-    */
+    XImage *mask_image = (XImage*) NULL;
+    if (HasMask())
+    {
+        mask_image = XCreateImage( dpy, vis, 1, ZPixmap, 0, 0, width, height, 32, 0 );
+        mask_image->data = (char*) malloc( mask_image->bytes_per_line * mask_image->height );
+    }
 
     // Retrieve depth info
 
@@ -1997,11 +1988,9 @@ wxBitmap wxImage::ConvertToBitmap() const
         else if ((vi->green_mask > vi->blue_mask) && (vi->blue_mask > vi->red_mask))  b_o = GBR;
     }
 
-    /*
     int r_mask = GetMaskRed();
     int g_mask = GetMaskGreen();
     int b_mask = GetMaskBlue();
-    */
 
     XColor colors[256];
     if (bpp == 8)
@@ -2015,6 +2004,8 @@ wxBitmap wxImage::ConvertToBitmap() const
     wxSearchColor scolor( 256, colors );
     unsigned char* data = GetData();
 
+    bool hasMask = HasMask();
+
     int index = 0;
     for (int y = 0; y < height; y++)
     {
@@ -2027,15 +2018,13 @@ wxBitmap wxImage::ConvertToBitmap() const
             int b = data[index];
             index++;
 
-            /*
-            if (HasMask())
+            if (hasMask)
             {
-            if ((r == r_mask) && (b == b_mask) && (g == g_mask))
-            gdk_image_put_pixel( mask_image, x, y, 1 );
-            else
-            gdk_image_put_pixel( mask_image, x, y, 0 );
+              if ((r == r_mask) && (b == b_mask) && (g == g_mask))
+                XPutPixel( mask_image, x, y, 0 );
+              else
+                XPutPixel( mask_image, x, y, 1 );
             }
-            */
 
             switch (bpp)
             {
@@ -2113,19 +2102,24 @@ wxBitmap wxImage::ConvertToBitmap() const
     XDestroyImage( data_image );
     XFreeGC( dpy, gc );
 
-    /*
     // Blit mask
+    if (HasMask())
+    {
+        wxBitmap maskBitmap(width, height, 1);
 
-      if (HasMask())
-      {
-      GdkGC *mask_gc = gdk_gc_new( bitmap.GetMask()->GetBitmap() );
+        GC gcMask = XCreateGC( dpy, (Pixmap) maskBitmap.GetPixmap(), (XtGCMask) 0, (XGCValues*)NULL );
+        XPutImage( dpy, (Drawable)maskBitmap.GetPixmap(), gcMask, mask_image, 0, 0, 0, 0, width, height );
 
-        gdk_draw_image( bitmap.GetMask()->GetBitmap(), mask_gc, mask_image, 0, 0, 0, 0, width, height );
+        XDestroyImage( mask_image );
+        XFreeGC( dpy, gcMask );
 
-          gdk_image_destroy( mask_image );
-          gdk_gc_unref( mask_gc );
-          }
-    */
+        wxMask* mask = new wxMask;
+        mask->SetPixmap(maskBitmap.GetPixmap());
+
+        bitmap.SetMask(mask);
+
+        maskBitmap.SetPixmapNull();
+    }
 
     return bitmap;
 }

@@ -42,6 +42,7 @@ DOCDIR = $(WXDIR)\docs
 GENERICOBJS= busyinfo.obj &
 	calctrl.obj &
 	choicdgg.obj &
+	dragimgg.obj &
 	grid.obj &
 	laywin.obj &
 	logg.obj &

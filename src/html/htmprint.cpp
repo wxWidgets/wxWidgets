@@ -191,8 +191,8 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     /* prepare headers/footers renderer: */
     
     m_RendererHdr -> SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
-    m_RendererHdr -> SetSize(ppmm_h * (mm_w - m_MarginLeft - m_MarginTop), 
-                          ppmm_v * (mm_h - m_MarginTop - m_MarginBottom));
+    m_RendererHdr -> SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginTop)), 
+                          (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom)));
     if (m_Headers[0] != wxEmptyString) {
         m_RendererHdr -> SetHtmlText(TranslateHeader(m_Headers[0], 1));
         m_HeaderHeight = m_RendererHdr -> GetTotalHeight();
@@ -212,12 +212,12 @@ bool wxHtmlPrintout::OnBeginDocument(int startPage, int endPage)
     
     /* prepare main renderer: */
     m_Renderer -> SetDC(GetDC(), (double)ppiPrinterY / (double)ppiScreenY);
-    m_Renderer -> SetSize(ppmm_h * (mm_w - m_MarginLeft - m_MarginTop), 
-                          ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) - 
+    m_Renderer -> SetSize((int) (ppmm_h * (mm_w - m_MarginLeft - m_MarginTop)), 
+                          (int) (ppmm_v * (mm_h - m_MarginTop - m_MarginBottom) - 
                           m_FooterHeight - m_HeaderHeight -
                           ((m_HeaderHeight == 0) ? 0 : m_MarginSpace * ppmm_v) -
                           ((m_FooterHeight == 0) ? 0 : m_MarginSpace * ppmm_v)
-                          );
+                          ));
     m_Renderer -> SetHtmlText(m_Document, m_BasePath, m_BasePathIsDir);
     CountPages();
     return TRUE;
@@ -317,8 +317,8 @@ void wxHtmlPrintout::CountPages()
     
     m_PageBreaks[0] = 0;
     do {
-        pos = m_Renderer -> Render(ppmm_h * m_MarginLeft, 
-                                   ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight,
+        pos = m_Renderer -> Render((int)( ppmm_h * m_MarginLeft), 
+                                   (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
                                    pos, TRUE);
         m_PageBreaks[++m_NumPages] = pos;
     } while (pos < m_Renderer -> GetTotalHeight());
@@ -351,18 +351,18 @@ void wxHtmlPrintout::RenderPage(wxDC *dc, int page)
     
     dc -> SetBackgroundMode(wxTRANSPARENT);
 
-    m_Renderer -> Render(ppmm_h * m_MarginLeft, 
-                         ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight,
+    m_Renderer -> Render((int) (ppmm_h * m_MarginLeft), 
+                         (int) (ppmm_v * (m_MarginTop + (m_HeaderHeight == 0 ? 0 : m_MarginSpace)) + m_HeaderHeight),
                          m_PageBreaks[page-1]);
     
     m_RendererHdr -> SetDC(dc, (double)ppiPrinterY / (double)ppiScreenY);
     if (m_Headers[page % 2] != wxEmptyString) {
         m_RendererHdr -> SetHtmlText(TranslateHeader(m_Headers[page % 2], page));
-        m_RendererHdr -> Render(ppmm_h * m_MarginLeft, ppmm_v * m_MarginTop);
+        m_RendererHdr -> Render((int) (ppmm_h * m_MarginLeft), (int) (ppmm_v * m_MarginTop));
     }
     if (m_Footers[page % 2] != wxEmptyString) {
         m_RendererHdr -> SetHtmlText(TranslateHeader(m_Footers[page % 2], page));
-        m_RendererHdr -> Render(ppmm_h * m_MarginLeft, pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight);
+        m_RendererHdr -> Render((int) (ppmm_h * m_MarginLeft), (int) (pageHeight - ppmm_v * m_MarginBottom - m_FooterHeight));
     }
 }
 

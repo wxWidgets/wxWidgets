@@ -1035,6 +1035,16 @@ samples/rotate/*.xpm
 samples/rotate/*.txt
 samples/rotate/*.bmp
 
+samples/dragimag/*.cpp
+samples/dragimag/*.h
+samples/dragimag/makefile*
+samples/dragimag/*.rc
+samples/dragimag/*.def
+samples/dragimag/*.ico
+samples/dragimag/*.xpm
+samples/dragimag/*.png
+samples/dragimag/*.bmp
+
 samples/treelay/*.cpp
 samples/treelay/*.h
 samples/treelay/makefile*
