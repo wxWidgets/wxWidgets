@@ -133,12 +133,16 @@ void wxStatusBarGeneric::SetStatusText(const wxString& text, int number)
     wxCHECK_RET( (number >= 0) && (number < m_nFields),
                  _T("invalid status bar field index") );
 
-    m_statusStrings[number] = text;
+    wxString oldText = m_statusStrings[number];
+    if (oldText != text)
+    {
+        m_statusStrings[number] = text;
 
-    wxRect rect;
-    GetFieldRect(number, rect);
+        wxRect rect;
+        GetFieldRect(number, rect);
 
-    Refresh( TRUE, &rect );
+        Refresh( TRUE, &rect );
+    }
 }
 
 wxString wxStatusBarGeneric::GetStatusText(int n) const
