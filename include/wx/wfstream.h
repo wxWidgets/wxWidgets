@@ -30,7 +30,7 @@
 // wxFileStream using wxFile
 // ----------------------------------------------------------------------------
 
-class wxFileInputStream: public wxInputStream {
+class WXDLLEXPORT wxFileInputStream: public wxInputStream {
  public:
   wxFileInputStream(const wxString& ifileName);
   wxFileInputStream(wxFile& file);
@@ -53,7 +53,7 @@ class wxFileInputStream: public wxInputStream {
   bool m_file_destroy;
 };
 
-class wxFileOutputStream: public wxOutputStream {
+class WXDLLEXPORT wxFileOutputStream: public wxOutputStream {
  public:
   wxFileOutputStream(const wxString& fileName);
   wxFileOutputStream(wxFile& file);
@@ -81,7 +81,7 @@ class wxFileOutputStream: public wxOutputStream {
   bool m_file_destroy;
 };
 
-class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
+class WXDLLEXPORT wxFileStream: public wxFileInputStream, public wxFileOutputStream {
  public:
   wxFileStream(const wxString& fileName);
 };
@@ -90,7 +90,7 @@ class wxFileStream: public wxFileInputStream, public wxFileOutputStream {
 // wxFFileStream using wxFFile
 // ----------------------------------------------------------------------------
 
-class wxFFileInputStream: public wxInputStream {
+class WXDLLEXPORT wxFFileInputStream: public wxInputStream {
  public:
   wxFFileInputStream(const wxString& ifileName);
   wxFFileInputStream(wxFFile& file);
@@ -113,7 +113,7 @@ class wxFFileInputStream: public wxInputStream {
   bool m_file_destroy;
 };
 
-class wxFFileOutputStream: public wxOutputStream {
+class WXDLLEXPORT wxFFileOutputStream: public wxOutputStream {
  public:
   wxFFileOutputStream(const wxString& fileName);
   wxFFileOutputStream(wxFFile& file);
@@ -141,7 +141,7 @@ class wxFFileOutputStream: public wxOutputStream {
   bool m_file_destroy;
 };
 
-class wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
+class WXDLLEXPORT wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
  public:
   wxFFileStream(const wxString& fileName);
 };
@@ -150,4 +150,11 @@ class wxFFileStream: public wxFFileInputStream, public wxFFileOutputStream {
 
 #endif
   // _WX_WXFSTREAM_H__
+
+
+
+
+
+
+
 
