@@ -1018,9 +1018,12 @@ long wxHashTableBase::MakeKey( const wxChar *str )
     return int_key;
 }
 
-//
+// ----------------------------------------------------------------------------
+// wxHashTable
+// ----------------------------------------------------------------------------
 
 wxHashTable::wxHashTable( const wxHashTable& table )
+           : wxHashTableBase()
 {
     DoCopy( table );
 }
