@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        imaglist.h
+// Name:        wx/generic/imaglist.h
 // Purpose:
 // Author:      Robert Roebling
 // Created:     01/02/97
 // Id:
 // Copyright:   (c) 1998 Robert Roebling, Julian Smart and Markus Holzem
-// Licence:   	wxWindows licence
+// Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
 #ifndef __IMAGELISTH_G__
@@ -49,15 +49,16 @@ enum {
 
 class wxImageList: public wxObject
 {
-   DECLARE_DYNAMIC_CLASS(wxImageList)
-   
-  public:
-
+public:
     wxImageList() { }
     wxImageList( int width, int height, bool mask = TRUE, int initialCount = 1 );
     ~wxImageList();
+    bool Create( int width, int height, bool mask = TRUE, int initialCount = 1 );
     bool Create();
+
     int GetImageCount() const;
+    bool GetSize( int index, int &width, int &height ) const;
+
     int Add( const wxBitmap& bitmap );
     int Add( const wxBitmap& bitmap, const wxBitmap& mask );
     int Add( const wxBitmap& bitmap, const wxColour& maskColour );
@@ -65,15 +66,18 @@ class wxImageList: public wxObject
     bool Replace( int index, const wxBitmap &bitmap );
     bool Remove( int index );
     bool RemoveAll();
-    bool GetSize( int index, int &width, int &height ) const;
+
     bool Draw(int index, wxDC& dc, int x, int y,
-      int flags = wxIMAGELIST_DRAW_NORMAL, bool solidBackground = FALSE );
+              int flags = wxIMAGELIST_DRAW_NORMAL,
+              bool solidBackground = FALSE);
 
-  private:
-
+private:
     wxList  m_images;
+
     int     m_width;
     int     m_height;
+
+    DECLARE_DYNAMIC_CLASS(wxImageList)
 };
 
 #endif  // __IMAGELISTH_G__

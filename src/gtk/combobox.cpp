@@ -577,6 +577,7 @@ void wxComboBox::OnChar( wxKeyEvent &event )
             if ( FindString(value) == wxNOT_FOUND )
             {
                 Append(value);
+                SetStringSelection(value);
 
                 // and generate the selected event for it
                 wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, GetId() );

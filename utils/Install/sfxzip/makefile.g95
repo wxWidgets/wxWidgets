@@ -1,0 +1,164 @@
+# Makefile for UnZip, fUnZip and UnZipSFX for native Win32-Intel ports of gcc.
+# Currently supported implementations: Cygnus/Win32 and MinGW32.
+#
+# First version: Cosmin Truta <cosmint@cs.ubbcluj.ro>, Dec 1997.
+# Last revision: Christian Spieler, 29-Apr-1998
+#
+# To use, do "make -f win32/makefile.gcc".
+
+
+### Optional section
+
+# Optional nonstandard preprocessor flags (as -DUSE_ZLIB or -DUSE_SMITH_CODE)
+# should be added to the environment via "set LOCAL_UNZIP=-DFOO" or added
+# to the declaration of LOCFLAGS here:
+LOCFLAGS = $(LOCAL_UNZIP)
+
+
+### Compiler-specific section
+
+# ------------ GNU C ------------
+CC = gcc
+
+#AS = as
+AS = $(CC)
+
+#LD = ld
+LD = $(CC)
+
+# Quiet
+CC_QUIET_OPT =
+AS_QUIET_OPT = $(CC_QUIET_OPT)
+LD_QUIET_OPT = $(CC_QUIET_OPT)
+
+# Warnings
+CC_WARN_OPT = -Wall
+AS_WARN_OPT = $(CC_WARN_OPT)
+LD_WARN_OPT =
+
+# Debug version
+CC_DEBUG_OPT = -g
+AS_DEBUG_OPT = $(CC_DEBUG_OPT)
+LD_DEBUG_OPT = $(CC_DEBUG_OPT)
+
+# Release version
+CC_RELEASE_OPT =
+AS_RELEASE_OPT =
+#LD_RELEASE_OPT = -s
+
+# Smallest code
+CC_SIZE_OPT = -O1
+
+# Fastest code
+CC_SPEED_OPT = -O2
+
+# Output object file name
+CC_OUT_OPT = -o
+
+# Other specific options
+#CC_SPECIFIC_OPT = -c -DASM_CRC -DWIN32 -mno-cygwin
+CC_SPECIFIC_OPT = -c -DWIN32 -I../inczip -g  -I.. -D_X86_=1 -DWIN32 -D_WIN32 -DWINVER=0x0400 -D__WIN95__ -D__GNUWIN32__ -D__WIN32__ -I../../../include -I../../../src/png -I../../../src/jpeg -I../../../src/zlib   -I../../../include/wx/msw/gnuwin32  -DSTRICT  -D__WXMSW__ -D__WINDOWS__ -D__WXDEBUG__ -Wall -fno-pcc-struct-return -O2 -fno-rtti -fno-exceptions
+AS_SPECIFIC_OPT = -c
+LD_SPECIFIC_OPT = -Wl,--subsystem,windows -mwindows -L../../../lib -o $@
+
+# Libraries for the debug & release version
+LD_RELEASE_LIBS = ../../../lib/libwx.a -lpng -ljpeg -lzlib -lxpm -lstdc++ -lgcc -lwinspool -lwinmm -lshell32 -lcomctl32 -lctl3d32 -lodbc32 -ladvapi32 -lole32 -loleaut32 -luuid -lodbc32 -lwsock32
+LD_DEBUG_LIBS = $(LD_RELEASE_LIBS)
+
+
+### System-specific section
+
+# Suffixes
+OBJ = .o
+EXE = .exe
+
+.SUFFIXES: .c .S $(OBJ) $(EXE)
+
+# Commands
+RM = rm -f
+
+
+### General section
+
+CFLAGS  = $(CC_SPECIFIC_OPT) $(CC_QUIET_OPT) $(CC_WARN_OPT) $(LOCFLAGS) \
+ $(CC_OUT_OPT) $@
+ASFLAGS = $(AS_SPECIFIC_OPT) $(AS_QUIET_OPT) $(AS_WARN_OPT) $(LOCFLAGS)
+LDFLAGS = $(LD_SPECIFIC_OPT) $(LD_QUIET_OPT) $(LD_WARN_OPT)
+
+# To build with debug info, use 'make DEBUG=1'.
+ifdef DEBUG
+CVER     = $(CC_DEBUG_OPT)
+ASVER    = $(AS_DEBUG_OPT)
+LDVER    = $(LD_DEBUG_OPT)
+GENFLAGS =
+FFLAGS   = -DFUNZIP
+SFXFLAGS = -DSFX
+LDLIBS   = $(LD_DEBUG_LIBS)
+else
+CVER     = $(CC_RELEASE_OPT)
+ASVER    = $(AS_RELEASE_OPT)
+LDVER    = $(LD_RELEASE_OPT)
+GENFLAGS = $(CC_SPEED_OPT)
+FFLAGS   = $(CC_SPEED_OPT) -DFUNZIP
+SFXFLAGS = $(CC_SIZE_OPT) -DSFX
+LDLIBS   = $(LD_RELEASE_LIBS)
+endif
+
+# Object files
+OBJA  = crc_i386$(OBJ) install$(OBJ) wxmain$(OBJ) instsup$(OBJ)
+OBJS1 = unzip$(OBJ) crc32$(OBJ) crctab$(OBJ) crypt$(OBJ) envargs$(OBJ)
+OBJS2 = explode$(OBJ) extract$(OBJ) fileio$(OBJ) globals$(OBJ) inflate$(OBJ)
+OBJS3 = list$(OBJ) match$(OBJ) process$(OBJ) ttyio$(OBJ) unreduce$(OBJ)
+OBJS4 = unshrink$(OBJ) zipinfo$(OBJ) win32$(OBJ) nt$(OBJ)
+OBJS  = $(OBJS1) $(OBJS2) $(OBJS3) $(OBJS4) $(OBJA)
+
+UNZIP_H = ../inczip/unzip.h ../inczip/unzpriv.h ../inczip/globals.h ../inczip/w32cfg.h
+
+
+# Default target is all the executables
+unzips: sfx$(EXE)
+
+sfx$(EXE): $(OBJS)
+	$(LD) $(LDFLAGS) $(LDVER) $(OBJS) $(LDLIBS)
+
+# How to compile sources
+.c$(OBJ):
+	$(CC) $(CFLAGS) $(CVER) $(GENFLAGS) $<
+.S$(OBJ):
+	$(AS) $(ASFLAGS) $(ASVER) $(GENFLAGS) $<
+
+# Dependencies
+crc32$(OBJ):    crc32.c $(UNZIP_H) ../inczip/zip.h
+crctab$(OBJ):   crctab.c $(UNZIP_H) ../inczip/zip.h
+crypt$(OBJ):    crypt.c $(UNZIP_H) ../inczip/zip.h ../inczip/crypt.h ../inczip/ttyio.h
+envargs$(OBJ):  envargs.c $(UNZIP_H)
+explode$(OBJ):  explode.c $(UNZIP_H)
+extract$(OBJ):  extract.c $(UNZIP_H) ../inczip/crypt.h
+fileio$(OBJ):   fileio.c $(UNZIP_H) ../inczip/crypt.h ../inczip/ttyio.h ../inczip/ebcdic.h
+funzip$(OBJ):   funzip.c $(UNZIP_H) ../inczip/crypt.h ../inczip/ttyio.h ../inczip/tables.h
+globals$(OBJ):  globals.c $(UNZIP_H)
+inflate$(OBJ):  inflate.c ../inczip/inflate.h $(UNZIP_H)
+list$(OBJ):     list.c $(UNZIP_H)
+match$(OBJ):    match.c $(UNZIP_H)
+process$(OBJ):  process.c $(UNZIP_H)
+ttyio$(OBJ):    ttyio.c $(UNZIP_H) ../inczip/zip.h ../inczip/crypt.h ../inczip/ttyio.h
+unreduce$(OBJ): unreduce.c $(UNZIP_H)
+unshrink$(OBJ): unshrink.c $(UNZIP_H)
+unzip$(OBJ):    unzip.c $(UNZIP_H) ../inczip/crypt.h ../inczip/version.h ../inczip/consts.h
+zipinfo$(OBJ):  zipinfo.c $(UNZIP_H)
+crc_i386$(OBJ): crc_i386.S
+win32$(OBJ): win32.c $(UNZIP_H) ../inczip/nt.h
+nt$(OBJ): nt.c ../inczip/nt.h
+        
+install$(OBJ): ../install.c
+	$(CC) $(CFLAGS) $(CVER) $(GENFLAGS) $<
+        
+wxmain$(OBJ): ../wxmain.cpp
+	$(CC) $(CFLAGS) $(CVER) $(GENFLAGS) $<
+        
+instsup$(OBJ): ../instsup.cpp
+	$(CC) $(CFLAGS) $(CVER) $(GENFLAGS) $<
+
+clean:
+	$(RM) *$(OBJ)
+	$(RM) *$(EXE)

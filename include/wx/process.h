@@ -19,7 +19,10 @@
 #include "wx/defs.h"
 #include "wx/object.h"
 #include "wx/event.h"
+
+#if wxUSE_STREAMS
 #include "wx/stream.h"
+#endif
 
 // Process Event handling
 class WXDLLEXPORT wxProcessEvent : public wxEvent
@@ -72,20 +75,31 @@ public:
     // before the process it started terminates
     void Detach();
 
+#if wxUSE_STREAMS
     // Pipe handling
     wxInputStream *GetInputStream() const { return m_inputStream; }
+    wxInputStream *GetErrorStream() const { return m_errorStream; }
     wxOutputStream *GetOutputStream() const { return m_outputStream; }
 
+    // close the output stream indicating that nothing more will be written
+    void CloseOutput() { delete m_outputStream; m_outputStream = NULL; }
+
     // implementation only (for wxExecute)
-    void SetPipeStreams(wxInputStream *inStream, wxOutputStream *outStream);
+    void SetPipeStreams(wxInputStream *inStream,
+                        wxOutputStream *outStream,
+                        wxInputStream *errStream);
+#endif // wxUSE_STREAMS
 
 protected:
     void Init(wxEvtHandler *parent, int id, bool redirect);
 
     int m_id;
 
-    wxInputStream  *m_inputStream;
+#if wxUSE_STREAMS
+    wxInputStream  *m_inputStream,
+                   *m_errorStream;
     wxOutputStream *m_outputStream;
+#endif // wxUSE_STREAMS
 
     bool m_redirect;
 };

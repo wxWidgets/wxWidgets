@@ -100,12 +100,12 @@ wxPen& wxPen::operator = ( const wxPen& pen )
     return *this;
 }
 
-bool wxPen::operator == ( const wxPen& pen )
+bool wxPen::operator == ( const wxPen& pen ) const
 {
     return m_refData == pen.m_refData;
 }
 
-bool wxPen::operator != ( const wxPen& pen )
+bool wxPen::operator != ( const wxPen& pen ) const
 {
     return m_refData != pen.m_refData;
 }

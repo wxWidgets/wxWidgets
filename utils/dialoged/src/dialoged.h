@@ -26,16 +26,16 @@ class MyChild;
 // Define a new application
 class MyApp: public wxApp
 {
-  public:
+public:
     MyApp(void);
     bool OnInit(void);
     int OnExit(void);
-
+    
     void OnObjectPopupMenu(wxCommandEvent& event)
     {
         ObjectMenuProc((wxMenu *)event.GetEventObject(), event);
     }
-
+    
 private:
     DECLARE_EVENT_TABLE()
 };

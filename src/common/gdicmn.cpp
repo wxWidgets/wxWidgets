@@ -136,106 +136,95 @@ wxColourDatabase::~wxColourDatabase ()
 // Colour database stuff
 void wxColourDatabase::Initialize ()
 {
-  // Don't initialize for X: colours are found
-  // in FindColour below.
-  // Added: Not all
+    static const struct wxColourDesc
+    {
+        const wxChar *name;
+        int r,g,b;
+    }
+    wxColourTable[] =
+    {
+        {wxT("AQUAMARINE"),112, 219, 147},
+        {wxT("BLACK"),0, 0, 0},
+        {wxT("BLUE"), 0, 0, 255},
+        {wxT("BLUE VIOLET"), 159, 95, 159},
+        {wxT("BROWN"), 165, 42, 42},
+        {wxT("CADET BLUE"), 95, 159, 159},
+        {wxT("CORAL"), 255, 127, 0},
+        {wxT("CORNFLOWER BLUE"), 66, 66, 111},
+        {wxT("CYAN"), 0, 255, 255},
+        {wxT("DARK GREY"), 47, 47, 47},   // ?
 
-  struct cdef {
-   wxChar *name;
-   int r,g,b;
-  };
-  cdef cc;
-  static cdef table[]={
+        {wxT("DARK GREEN"), 47, 79, 47},
+        {wxT("DARK OLIVE GREEN"), 79, 79, 47},
+        {wxT("DARK ORCHID"), 153, 50, 204},
+        {wxT("DARK SLATE BLUE"), 107, 35, 142},
+        {wxT("DARK SLATE GREY"), 47, 79, 79},
+        {wxT("DARK TURQUOISE"), 112, 147, 219},
+        {wxT("DIM GREY"), 84, 84, 84},
+        {wxT("FIREBRICK"), 142, 35, 35},
+        {wxT("FOREST GREEN"), 35, 142, 35},
+        {wxT("GOLD"), 204, 127, 50},
+        {wxT("GOLDENROD"), 219, 219, 112},
+        {wxT("GREY"), 128, 128, 128},
+        {wxT("GREEN"), 0, 255, 0},
+        {wxT("GREEN YELLOW"), 147, 219, 112},
+        {wxT("INDIAN RED"), 79, 47, 47},
+        {wxT("KHAKI"), 159, 159, 95},
+        {wxT("LIGHT BLUE"), 191, 216, 216},
+        {wxT("LIGHT GREY"), 192, 192, 192},
+        {wxT("LIGHT STEEL BLUE"), 143, 143, 188},
+        {wxT("LIME GREEN"), 50, 204, 50},
+        {wxT("LIGHT MAGENTA"), 255, 0, 255},
+        {wxT("MAGENTA"), 255, 0, 255},
+        {wxT("MAROON"), 142, 35, 107},
+        {wxT("MEDIUM AQUAMARINE"), 50, 204, 153},
+        {wxT("MEDIUM GREY"), 100, 100, 100},
+        {wxT("MEDIUM BLUE"), 50, 50, 204},
+        {wxT("MEDIUM FOREST GREEN"), 107, 142, 35},
+        {wxT("MEDIUM GOLDENROD"), 234, 234, 173},
+        {wxT("MEDIUM ORCHID"), 147, 112, 219},
+        {wxT("MEDIUM SEA GREEN"), 66, 111, 66},
+        {wxT("MEDIUM SLATE BLUE"), 127, 0, 255},
+        {wxT("MEDIUM SPRING GREEN"), 127, 255, 0},
+        {wxT("MEDIUM TURQUOISE"), 112, 219, 219},
+        {wxT("MEDIUM VIOLET RED"), 219, 112, 147},
+        {wxT("MIDNIGHT BLUE"), 47, 47, 79},
+        {wxT("NAVY"), 35, 35, 142},
+        {wxT("ORANGE"), 204, 50, 50},
+        {wxT("ORANGE RED"), 255, 0, 127},
+        {wxT("ORCHID"), 219, 112, 219},
+        {wxT("PALE GREEN"), 143, 188, 143},
+        {wxT("PINK"), 188, 143, 234},
+        {wxT("PLUM"), 234, 173, 234},
+        {wxT("PURPLE"), 176, 0, 255},
+        {wxT("RED"), 255, 0, 0},
+        {wxT("SALMON"), 111, 66, 66},
+        {wxT("SEA GREEN"), 35, 142, 107},
+        {wxT("SIENNA"), 142, 107, 35},
+        {wxT("SKY BLUE"), 50, 153, 204},
+        {wxT("SLATE BLUE"), 0, 127, 255},
+        {wxT("SPRING GREEN"), 0, 255, 127},
+        {wxT("STEEL BLUE"), 35, 107, 142},
+        {wxT("TAN"), 219, 147, 112},
+        {wxT("THISTLE"), 216, 191, 216},
+        {wxT("TURQUOISE"), 173, 234, 234},
+        {wxT("VIOLET"), 79, 47, 79},
+        {wxT("VIOLET RED"), 204, 50, 153},
+        {wxT("WHEAT"), 216, 216, 191},
+        {wxT("WHITE"), 255, 255, 255},
+        {wxT("YELLOW"), 255, 255, 0},
+        {wxT("YELLOW GREEN"), 153, 204, 50},
+        {wxT("MEDIUM GOLDENROD"), 234, 234, 173},
+        {wxT("MEDIUM FOREST GREEN"), 107, 142, 35},
+        {wxT("LIGHT MAGENTA"), 255, 0, 255},
+        {wxT("MEDIUM GREY"), 100, 100, 100},
+    };
 
-// #ifdef __WXMSW__
-   {wxT("AQUAMARINE"),112, 219, 147},
-   {wxT("BLACK"),0, 0, 0},
-   {wxT("BLUE"), 0, 0, 255},
-   {wxT("BLUE VIOLET"), 159, 95, 159},
-   {wxT("BROWN"), 165, 42, 42},
-   {wxT("CADET BLUE"), 95, 159, 159},
-   {wxT("CORAL"), 255, 127, 0},
-   {wxT("CORNFLOWER BLUE"), 66, 66, 111},
-   {wxT("CYAN"), 0, 255, 255},
-   {wxT("DARK GREY"), 47, 47, 47},   // ?
-
-   {wxT("DARK GREEN"), 47, 79, 47},
-   {wxT("DARK OLIVE GREEN"), 79, 79, 47},
-   {wxT("DARK ORCHID"), 153, 50, 204},
-   {wxT("DARK SLATE BLUE"), 107, 35, 142},
-   {wxT("DARK SLATE GREY"), 47, 79, 79},
-   {wxT("DARK TURQUOISE"), 112, 147, 219},
-   {wxT("DIM GREY"), 84, 84, 84},
-   {wxT("FIREBRICK"), 142, 35, 35},
-   {wxT("FOREST GREEN"), 35, 142, 35},
-   {wxT("GOLD"), 204, 127, 50},
-   {wxT("GOLDENROD"), 219, 219, 112},
-   {wxT("GREY"), 128, 128, 128},
-   {wxT("GREEN"), 0, 255, 0},
-   {wxT("GREEN YELLOW"), 147, 219, 112},
-   {wxT("INDIAN RED"), 79, 47, 47},
-   {wxT("KHAKI"), 159, 159, 95},
-   {wxT("LIGHT BLUE"), 191, 216, 216},
-   {wxT("LIGHT GREY"), 192, 192, 192},
-   {wxT("LIGHT STEEL BLUE"), 143, 143, 188},
-   {wxT("LIME GREEN"), 50, 204, 50},
-   {wxT("LIGHT MAGENTA"), 255, 0, 255},
-   {wxT("MAGENTA"), 255, 0, 255},
-   {wxT("MAROON"), 142, 35, 107},
-   {wxT("MEDIUM AQUAMARINE"), 50, 204, 153},
-   {wxT("MEDIUM GREY"), 100, 100, 100},
-   {wxT("MEDIUM BLUE"), 50, 50, 204},
-   {wxT("MEDIUM FOREST GREEN"), 107, 142, 35},
-   {wxT("MEDIUM GOLDENROD"), 234, 234, 173},
-   {wxT("MEDIUM ORCHID"), 147, 112, 219},
-   {wxT("MEDIUM SEA GREEN"), 66, 111, 66},
-   {wxT("MEDIUM SLATE BLUE"), 127, 0, 255},
-   {wxT("MEDIUM SPRING GREEN"), 127, 255, 0},
-   {wxT("MEDIUM TURQUOISE"), 112, 219, 219},
-   {wxT("MEDIUM VIOLET RED"), 219, 112, 147},
-   {wxT("MIDNIGHT BLUE"), 47, 47, 79},
-   {wxT("NAVY"), 35, 35, 142},
-   {wxT("ORANGE"), 204, 50, 50},
-   {wxT("ORANGE RED"), 255, 0, 127},
-   {wxT("ORCHID"), 219, 112, 219},
-   {wxT("PALE GREEN"), 143, 188, 143},
-   {wxT("PINK"), 188, 143, 234},
-   {wxT("PLUM"), 234, 173, 234},
-   {wxT("PURPLE"), 176, 0, 255},
-   {wxT("RED"), 255, 0, 0},
-   {wxT("SALMON"), 111, 66, 66},
-   {wxT("SEA GREEN"), 35, 142, 107},
-   {wxT("SIENNA"), 142, 107, 35},
-   {wxT("SKY BLUE"), 50, 153, 204},
-   {wxT("SLATE BLUE"), 0, 127, 255},
-   {wxT("SPRING GREEN"), 0, 255, 127},
-   {wxT("STEEL BLUE"), 35, 107, 142},
-   {wxT("TAN"), 219, 147, 112},
-   {wxT("THISTLE"), 216, 191, 216},
-   {wxT("TURQUOISE"), 173, 234, 234},
-   {wxT("VIOLET"), 79, 47, 79},
-   {wxT("VIOLET RED"), 204, 50, 153},
-   {wxT("WHEAT"), 216, 216, 191},
-   {wxT("WHITE"), 255, 255, 255},
-   {wxT("YELLOW"), 255, 255, 0},
-   {wxT("YELLOW GREEN"), 153, 204, 50},
-// #endif
-
-#if defined(__WXGTK__) || defined(__X__)
-   {wxT("MEDIUM GOLDENROD"), 234, 234, 173},
-   {wxT("MEDIUM FOREST GREEN"), 107, 142, 35},
-   {wxT("LIGHT MAGENTA"), 255, 0, 255},
-   {wxT("MEDIUM GREY"), 100, 100, 100},
-#endif
-
-   {0,0,0,0}
-  };
-  int i;
-  for (i=0;cc=table[i],cc.name!=0;i++)
-  {
-    Append(cc.name,new wxColour(cc.r,cc.g,cc.b));
-  }
-
+    for ( size_t n = 0; n < WXSIZEOF(wxColourTable); n++ )
+    {
+        const wxColourDesc& cc = wxColourTable[n];
+        Append(cc.name, new wxColour(cc.r,cc.g,cc.b));
+    }
 }
 
 /*
@@ -249,45 +238,54 @@ void wxColourDatabase::Initialize ()
 
 wxColour *wxColourDatabase::FindColour(const wxString& colour)
 {
-  // VZ: make the comparaison case insensitive
-  wxString str = colour;
-  str.MakeUpper();
+    // VZ: make the comparaison case insensitive and also match both grey and
+    //     gray
+    wxString colName = colour;
+    colName.MakeUpper();
+    wxString colName2 = colName;
+    if ( !colName2.Replace(_T("GRAY"), _T("GREY")) )
+        colName2.clear();
 
-  wxNode *node = Find(str);
-  if (node)
-    return (wxColour *)node->Data();
+    wxNode *node = First();
+    while ( node )
+    {
+        const wxChar *key = node->GetKeyString();
+        if ( colName == key || colName2 == key )
+        {
+            return (wxColour *)node->Data();
+        }
+
+        node = node->Next();
+    }
 
 #ifdef __WXMSW__
-  else return NULL;
+  return NULL;
 #endif
 #ifdef __WXPM__
-  else return NULL;
+  return NULL;
 #endif
 
 // TODO for other implementations. This should really go into
 // platform-specific directories.
 #ifdef __WXMAC__
-  else return NULL;
+  return NULL;
 #endif
 #ifdef __WXSTUBS__
-  else return NULL;
+  return NULL;
 #endif
 
 #ifdef __WXGTK__
-  else {
-    wxColour *col = new wxColour( colour );
+  wxColour *col = new wxColour( colour );
 
-    if (!(col->Ok())) {
+  if (!(col->Ok())) {
       delete col;
       return (wxColour *) NULL;
-    }
-    Append( colour, col );
-    return col;
   }
+  Append( colour, col );
+  return col;
 #endif
 
 #ifdef __X__
-  else {
     XColor xcolour;
 
 #ifdef __WXMOTIF__
@@ -311,8 +309,7 @@ wxColour *wxColourDatabase::FindColour(const wxString& colour)
     Append(colour, col);
 
     return col;
-  }
-#endif
+#endif // __X__
 }
 
 wxString wxColourDatabase::FindName (const wxColour& colour) const
@@ -595,34 +592,76 @@ void wxFontList::RemoveFont (wxFont * font)
   DeleteObject (font);
 }
 
-wxFont *wxFontList::
-        FindOrCreateFont (int PointSize, int FamilyOrFontId, int Style, int Weight, bool underline, const wxString& Face, wxFontEncoding encoding)
+wxFont *wxFontList::FindOrCreateFont(int pointSize,
+                                     int family,
+                                     int style,
+                                     int weight,
+                                     bool underline,
+                                     const wxString& facename,
+                                     wxFontEncoding encoding)
 {
-  for (wxNode * node = First (); node; node = node->Next ())
+    wxFont *font = (wxFont *)NULL;
+    wxNode *node;
+    for ( node = First(); node; node = node->Next() )
     {
-      wxFont *each_font = (wxFont *) node->Data ();
-      if (each_font &&
-          each_font->GetVisible() &&
-          each_font->Ok() &&
-          each_font->GetPointSize () == PointSize &&
-          each_font->GetStyle () == Style &&
-          each_font->GetWeight () == Weight &&
-          each_font->GetUnderlined () == underline &&
+        font = (wxFont *)node->Data();
+        if ( font->GetVisible() &&
+             font->Ok() &&
+             font->GetPointSize () == pointSize &&
+             font->GetStyle () == style &&
+             font->GetWeight () == weight &&
+             font->GetUnderlined () == underline )
+        {
+            int fontFamily = font->GetFamily();
+
 #if defined(__WXGTK__)
-          (each_font->GetFamily() == FamilyOrFontId ||
-          (each_font->GetFamily() == wxSWISS && FamilyOrFontId == wxDEFAULT)) &&
-#else
-          each_font->GetFamily() == FamilyOrFontId &&
-#endif
-          ((each_font->GetFaceName() == wxT("")) || each_font->GetFaceName() == Face) &&
-          (encoding == wxFONTENCODING_DEFAULT || each_font->GetEncoding() == encoding))
-        return each_font;
+            // under GTK the default family is wxSWISS, so looking for a font
+            // with wxDEFAULT family should return a wxSWISS one instead of
+            // creating a new one
+            bool same = (fontFamily == family) ||
+                        (fontFamily == wxSWISS && family == wxDEFAULT);
+#else // !GTK
+            // VZ: but why elsewhere do we require an exact match? mystery...
+            bool same = fontFamily == family;
+#endif // GTK/!GTK
+
+            // empty facename matches anything at all: this is bad because
+            // depending on which fonts are already created, we might get back
+            // a different font if we create it with empty facename, but it is
+            // still better than never matching anything in the cache at all
+            // in this case
+            if ( same && !!facename )
+            {
+                const wxString& fontFace = font->GetFaceName();
+
+                // empty facename matches everything
+                same = !fontFace || fontFace == facename;
+            }
+
+            if ( same && (encoding != wxFONTENCODING_DEFAULT) )
+            {
+                // have to match the encoding too
+                same = font->GetEncoding() == encoding;
+            }
+
+            if ( same )
+            {
+                return font;
+            }
+        }
     }
-  wxFont *font = new wxFont (PointSize, FamilyOrFontId, Style, Weight, underline, Face, encoding);
 
-  font->SetVisible(TRUE);
+    if ( !node )
+    {
+        // font not found, create the new one
+        font = new wxFont(pointSize, family, style, weight,
+                          underline, facename, encoding);
 
-  return font;
+        // and mark it as being cacheable
+        font->SetVisible(TRUE);
+    }
+
+    return font;
 }
 
 void wxBitmapList::AddBitmap(wxBitmap *bitmap)
@@ -644,31 +683,12 @@ wxSize wxGetDisplaySize()
 
 wxResourceCache::~wxResourceCache ()
 {
-  wxNode *node = First ();
-  while (node) {
-    wxGDIObject *item = (wxGDIObject *)node->Data();
-    if (item->IsKindOf(CLASSINFO(wxBrush))) {
-      wxBrush *brush = (wxBrush *)item;
-      delete brush;
-    }
+    wxNode *node = First ();
+    while (node) {
+        wxObject *item = (wxObject *)node->Data();
+        delete item;
 
-    if (item->IsKindOf(CLASSINFO(wxFont))) {
-      wxFont *font = (wxFont *)item;
-      delete font;
+        node = node->Next ();
     }
-
-    if (item->IsKindOf(CLASSINFO(wxBitmap))) {
-      wxBitmap *bitmap = (wxBitmap *)item;
-      delete bitmap;
-    }
-
-    if (item->IsKindOf(CLASSINFO(wxColour))) {
-      wxColour *colour = (wxColour *)item;
-      delete colour;
-    }
-
-    wxNode *next = node->Next ();
-    node = next;
-  }
 }
 

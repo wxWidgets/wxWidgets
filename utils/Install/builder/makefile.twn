@@ -1,0 +1,35 @@
+# Purpose: makefile for toolbar example (TWIN)
+# Created: 2000-03-14
+
+WXDIR = ../..
+
+# All common UNIX compiler flags and options are now in
+# this central makefile.
+include $(WXDIR)/src/maketwin.env
+
+OBJECTS = $(OBJDIR)/toolbar.$(OBJSUFF) $(OBJDIR)/toolbar.$(OBJSUFF)
+
+all:    $(OBJDIR) toolbar$(GUISUFFIX)$(EXESUFF)
+
+wx:
+
+$(OBJDIR):
+	mkdir $(OBJDIR)
+
+toolbar$(GUISUFFIX)$(EXESUFF):	$(OBJECTS) $(WXLIB)
+	$(CC) $(LDFLAGS) -o toolbar$(GUISUFFIX)$(EXESUFF) $(OBJECTS) $(LDLIBS)
+
+$(OBJDIR)/toolbar.$(OBJSUFF):	toolbar.$(SRCSUFF)
+	$(CC) -c $(CPPFLAGS) -o $@ toolbar.$(SRCSUFF)
+
+toolbar.c:  toolbar.rc
+	$(RESCOMP) $(RCINPUTSWITCH) toolbar.rc $(RCOUTPUTSWITCH) toolbar.c $(RESFLAGS)
+
+$(OBJDIR)/toolbar.$(OBJSUFF):	toolbar.c
+	$(CC) -c $(CPPFLAGS) -o $@ toolbar.c
+
+#$(OBJDIR)/toolbar.o:  toolbar.rc
+#	$(RESCOMP) $(RCINPUTSWITCH) toolbar.rc $(RCOUTPUTSWITCH) $(OBJDIR)/toolbar.o $(RESFLAGS)
+
+clean:
+	rm -f $(OBJECTS) toolbar$(GUISUFFIX).exe core *.rsc *.res

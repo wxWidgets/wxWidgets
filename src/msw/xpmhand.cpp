@@ -55,7 +55,7 @@ static void XpmToBitmap(wxBitmap *bitmap,
     BITMAP bm;
     if ( !::GetObject(GetHbitmapOf(*bitmap), sizeof(bm), (LPSTR) & bm) )
     {
-        wxLogLastError("GetObject(bitmap)");
+        wxLogLastError(wxT("GetObject(bitmap)"));
     }
 
     refData->m_width     = bm.bmWidth;

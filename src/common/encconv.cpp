@@ -29,6 +29,11 @@
 #include "unictabl.inc" 
 #endif
 
+#if wxUSE_WCHAR_T
+typedef wchar_t tchar;
+#else
+typedef char tchar;
+#endif
 
 static wxUint16* LINKAGEMODE GetEncTable(wxFontEncoding enc)
 {
@@ -83,7 +88,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
     if (m_Table) {delete[] m_Table; m_Table = NULL;}
 
-#if !wxUSE_UNICODE
+#if !wxUSE_WCHAR_T
     if (input_enc == wxFONTENCODING_UNICODE || output_enc == wxFONTENCODING_UNICODE) return FALSE;
 #endif
 
@@ -96,19 +101,19 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
     {
         if ((out_tbl = GetEncTable(output_enc)) == NULL) return FALSE;
 
-        m_Table = new wxChar[65536];
-        for (i = 0; i < 128; i++)  m_Table[i] = (wxChar)i; // 7bit ASCII
-        for (i = 128; i < 65536; i++)  m_Table[i] = (wxChar)'?'; 
+        m_Table = new tchar[65536];
+        for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
+        for (i = 128; i < 65536; i++)  m_Table[i] = (tchar)'?'; 
                 // FIXME - this should be character that means `unicode to charset' impossible, not '?'
 
         if (method == wxCONVERT_SUBSTITUTE)
         {
             for (i = 0; i < encoding_unicode_fallback_count; i++)
-                m_Table[encoding_unicode_fallback[i].c] = (wxChar) encoding_unicode_fallback[i].s;
+                m_Table[encoding_unicode_fallback[i].c] = (tchar) encoding_unicode_fallback[i].s;
         }
 
         for (i = 0; i < 128; i++)
-            m_Table[out_tbl[i]] = (wxChar)(128 + i);
+            m_Table[out_tbl[i]] = (tchar)(128 + i);
 
         m_UnicodeInput = TRUE;
         return TRUE;
@@ -122,12 +127,12 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
 
         m_UnicodeInput = FALSE;
         
-        m_Table = new wxChar[256];
-        for (i = 0; i < 128; i++)  m_Table[i] = (wxChar)i; // 7bit ASCII
+        m_Table = new tchar[256];
+        for (i = 0; i < 128; i++)  m_Table[i] = (tchar)i; // 7bit ASCII
         
         if (output_enc == wxFONTENCODING_UNICODE)
         {
-            for (i = 0; i < 128; i++)  m_Table[128 + i] = (wxChar)in_tbl[i]; // wxChar is 2byte now
+            for (i = 0; i < 128; i++)  m_Table[128 + i] = (tchar)in_tbl[i];
             return TRUE;
         }
         else 
@@ -143,7 +148,7 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
                     item = (CharsetItem*) bsearch(&key, encoding_unicode_fallback, 
                                 encoding_unicode_fallback_count, sizeof(CharsetItem), CompareCharsetItems);
                 if (item)
-                    m_Table[128 + i] = (wxChar)item -> c;
+                    m_Table[128 + i] = (tchar)item -> c;
                 else
                     m_Table[128 + i] = 128 + i; // don't know => don't touch
             }
@@ -152,83 +157,6 @@ bool wxEncodingConverter::Init(wxFontEncoding input_enc, wxFontEncoding output_e
             return TRUE;
         }
     }
-}
-
-
-
-void wxEncodingConverter::Convert(const wxChar* input, wxChar* output)
-{
-    if (m_JustCopy)
-    {
-        wxStrcpy(output, input);
-        return;
-    }
-    
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-    
-    const wxChar *i;
-    wxChar *o;
-    
-    if (m_UnicodeInput)
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (wxChar)(m_Table[(wxUint16)*i]);
-    else
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (wxChar)(m_Table[(wxUint8)*i]);
-    *o = 0;
-}
-
-
-#if wxUSE_UNICODE // otherwise wxChar === char
-
-void wxEncodingConverter::Convert(const char* input, wxChar* output)
-{
-    wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
-
-    const char *i;
-    wxChar *o;
-
-    if (m_JustCopy)
-    {
-        for (i = input, o = output; *i != 0;)
-            *(o++) = (wxChar)(*(i++));
-        *o = 0;
-        return;
-    }
-    
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-       
-    for (i = input, o = output; *i != 0;)
-        *(o++) = (wxChar)(m_Table[(wxUint8)*(i++)]);
-    *o = 0;
-}
-
-
-
-void wxEncodingConverter::Convert(const wxChar* input, char* output)
-{
-    wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
-
-    const wxChar *i;
-    char *o;
-
-    if (m_JustCopy)
-    {
-        for (i = input, o = output; *i != 0;)
-            *(o++) = (char)(*(i++));
-        *o = 0;
-        return;
-    }
-    
-    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
-       
-    if (m_UnicodeInput)
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (char)(m_Table[(wxUint16)*i]);
-    else
-        for (i = input, o = output; *i != 0; i++, o++)
-            *o = (char)(m_Table[(wxUint8)*i]);
-    *o = 0;
 }
 
 
@@ -254,7 +182,84 @@ void wxEncodingConverter::Convert(const char* input, char* output)
     *o = 0;
 }
 
-#endif // wxUSE_UNICODE
+
+#if wxUSE_WCHAR_T
+
+void wxEncodingConverter::Convert(const char* input, wchar_t* output)
+{
+    wxASSERT_MSG(m_UnicodeOutput, wxT("You cannot convert to 8-bit if output is const wchar_t*!"));
+    wxASSERT_MSG(!m_UnicodeInput, wxT("You cannot convert from unicode if input is const char*!"));
+
+    const char *i;
+    wchar_t *o;
+
+    if (m_JustCopy)
+    {
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (wchar_t)(*(i++));
+        *o = 0;
+        return;
+    }
+    
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+       
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (wchar_t)(m_Table[(wxUint8)*(i++)]);
+    *o = 0;
+}
+
+
+
+void wxEncodingConverter::Convert(const wchar_t* input, char* output)
+{
+    wxASSERT_MSG(!m_UnicodeOutput, wxT("You cannot convert to unicode if output is const char*!"));
+    wxASSERT_MSG(m_UnicodeInput, wxT("You cannot convert from 8-bit if input is const wchar_t*!"));
+
+    const wchar_t *i;
+    char *o;
+
+    if (m_JustCopy)
+    {
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (char)(*(i++));
+        *o = 0;
+        return;
+    }
+    
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+       
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (char)(m_Table[(wxUint16)*(i++)]);
+    *o = 0;
+}
+
+
+
+void wxEncodingConverter::Convert(const wchar_t* input, wchar_t* output)
+{
+    wxASSERT_MSG(m_UnicodeOutput, wxT("You cannot convert to 8-bit if output is const wchar_t*!"));
+    wxASSERT_MSG(m_UnicodeInput, wxT("You cannot convert from 8-bit if input is const wchar_t*!"));
+
+    const wchar_t *i;
+    wchar_t *o;
+
+    if (m_JustCopy)
+    {
+        // wcscpy() is not guaranteed to exist
+        for (i = input, o = output; *i != 0;)
+            *(o++) = (*(i++));
+        *o = 0;
+        return;
+    }
+    
+    wxASSERT_MSG(m_Table != NULL, wxT("You must call wxEncodingConverter::Init() before actually converting!"));
+       
+    for (i = input, o = output; *i != 0;)
+        *(o++) = (wchar_t)(m_Table[(wxUint8)*(i++)]);
+    *o = 0;
+}
+
+#endif // wxUSE_WCHAR_T
 
 
 wxString wxEncodingConverter::Convert(const wxString& input)

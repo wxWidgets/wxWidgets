@@ -2,7 +2,7 @@
 # File:		makefile.b32
 # Author:	Julian Smart
 # Created:	1999
-# Updated:	
+# Updated:
 # Copyright:
 #
 # Makefile : Builds wxMMedia library for 32-bit BC++
@@ -21,25 +21,36 @@ STCEXTRACPPFLAGS=-D__WX__ -DSCI_LEXER -I$(SCINTILLA)/include -I$(S)
 LIBTARGET=$(WXDIR)\contrib\lib\stc.lib
 
 OBJECTS = \
-	Accessor.obj	\
+	Accessor.obj		\
 	AutoComplete.obj	\
-	CallTip.obj	\
-	CellBuffer.obj	\
-	ContractionState.obj\
-	Document.obj	\
+	CallTip.obj		\
+	CellBuffer.obj		\
+	ContractionState.obj	\
+	Document.obj		\
+	DocumentAccessor.obj	\
 	Editor.obj		\
-	Indicator.obj	\
+	Indicator.obj		\
 	KeyMap.obj		\
-	KeyWords.obj	\
-	LineMarker.obj	\
-	PropSet.obj	\
+	KeyWords.obj		\
+	LexCPP.obj		\
+	LexHTML.obj		\
+	LexOthers.obj		\
+	LexPerl.obj		\
+	LexPython.obj		\
+	LexSQL.obj		\
+	LexVB.obj		\
+	LineMarker.obj		\
+	PropSet.obj		\
 	ScintillaBase.obj	\
 	Style.obj		\
-	ViewStyle.obj	\
+	UniConversion.obj	\
+	ViewStyle.obj		\
+	WindowAccessor.obj	\
 				\
 	PlatWX.obj		\
-	ScintillaWX.obj	\
-	stc.obj		\
+	ScintillaWX.obj		\
+	stc.obj			\
+
 
 !include $(WXDIR)\src\makelib.b32
 

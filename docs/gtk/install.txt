@@ -1,7 +1,7 @@
 
   !!! When sending bug reports tell us what version of wxWindows you are 
       using (including the beta) and what compiler on what system. One 
-      example: wxGTK 2.1 beta 6, egcs 1.1.1, Redhat 5.0 !!!
+      example: wxGTK 2.2.0, egcs 1.1.1, Redhat 6.2 !!!
 
 * The most simple case
 -----------------------

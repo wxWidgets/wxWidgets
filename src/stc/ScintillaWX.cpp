@@ -14,6 +14,8 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+#include <ctype.h>
+
 #include "ScintillaWX.h"
 #include "wx/stc/stc.h"
 
@@ -60,6 +62,29 @@ void  wxSTCDropTarget::OnLeave() {
 }
 
 
+class wxSTCCallTip : public wxWindow {
+public:
+    wxSTCCallTip(wxWindow* parent, int ID, CallTip* ct)
+        : wxWindow(parent, ID)
+        {
+            m_ct = ct;
+        }
+
+    void OnPaint(wxPaintEvent& evt) {
+        wxPaintDC dc(this);
+        Surface surfaceWindow;
+        surfaceWindow.Init(&dc);
+        m_ct->PaintCT(&surfaceWindow);
+        surfaceWindow.Release();
+    }
+
+    CallTip*    m_ct;
+    DECLARE_EVENT_TABLE()
+};
+
+BEGIN_EVENT_TABLE(wxSTCCallTip, wxWindow)
+    EVT_PAINT(wxSTCCallTip::OnPaint)
+END_EVENT_TABLE()
 
 //----------------------------------------------------------------------
 // Constructor/Destructor
@@ -193,9 +218,8 @@ void ScintillaWX::NotifyParent(SCNotification scn) {
 void ScintillaWX::Copy() {
     if (currentPos != anchor) {
         char* text = CopySelectionRange();
-        textDO.SetText(text);
         wxTheClipboard->Open();
-        wxTheClipboard->SetData(&textDO);
+        wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
     }
 }
@@ -236,7 +260,7 @@ bool ScintillaWX::CanPaste() {
 }
 
 void ScintillaWX::CreateCallTipWindow(PRectangle) {
-    ct.wCallTip = new wxWindow(wDraw.GetID(), -1);
+    ct.wCallTip = new wxSTCCallTip(wDraw.GetID(), -1, &ct);
     ct.wDraw = ct.wCallTip;
 }
 
@@ -384,7 +408,10 @@ void ScintillaWX::DoButtonMove(Point pt) {
 
 
 void ScintillaWX::DoAddChar(char ch) {
+    //bool acActiveBeforeCharAdded = ac.Active();
     AddChar(ch);
+    //if (acActiveBeforeCharAdded)
+    //    AutoCompleteChanged(ch);
 }
 
 int  ScintillaWX::DoKeyDown(int key, bool shift, bool ctrl, bool alt) {
@@ -401,6 +428,9 @@ void ScintillaWX::DoContextMenu(Point pt) {
     ContextMenu(pt);
 }
 
+void ScintillaWX::DoOnListBox() {
+    AutoCompleteCompleted();
+}
 
 //----------------------------------------------------------------------
 
@@ -433,12 +463,13 @@ void ScintillaWX::DoDragLeave() {
 // Redraw all of text area. This paint will not be abandoned.
 void ScintillaWX::FullPaint() {
     paintState = painting;
-    rcPaint = GetTextRectangle();
-    wxClientDC dc(wMain.GetID());
-    Surface surfaceWindow;
-    surfaceWindow.Init(&dc);
-    Paint(&surfaceWindow, rcPaint);
-    surfaceWindow.Release();
+//      rcPaint = GetTextRectangle();
+//      wxClientDC dc(wMain.GetID());
+//      Surface surfaceWindow;
+//      surfaceWindow.Init(&dc);
+//      Paint(&surfaceWindow, rcPaint);
+//      surfaceWindow.Release();
+    wMain.GetID()->Refresh(FALSE);
     paintState = notPainting;
 }
 

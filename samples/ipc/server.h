@@ -30,6 +30,7 @@ public:
     MyFrame(wxFrame *frame, const wxString& title);
 
     void OnListBoxClick(wxCommandEvent& event);
+    void OnExit(wxCommandEvent& event);
 
 private:
     wxPanel *panel;
@@ -76,6 +77,6 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#define SERVER_QUIT         wxID_EXIT
+#define SERVER_EXIT         wxID_EXIT
 #define SERVER_LISTBOX      500
 #define SERVER_QUIT_BUTTON  501

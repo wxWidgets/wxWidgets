@@ -598,6 +598,26 @@ Returns TRUE if the user has aborted the print job.
 
 Creates the default printing abort window, with a cancel button.
 
+
+\membersection{wxPrinter::GetLastError}\label{wxprintergetlasterror}
+
+\func{static wxPrinterError}{GetLastError}{\void}
+
+Return last error. Valid after calling \helpref{Print}{wxprinterprint},
+\helpref{PrintDialog}{wxprinterprintdialog} or 
+\helpref{wxPrintPreview::Print}{wxprintpreviewprint}. These functions 
+set last error to {\bf wxPRINTER\_NO\_ERROR} if no error happened.
+
+Returned value is one of the following:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxPRINTER\_NO\_ERROR}}{No error happened.}
+\twocolitem{{\bf wxPRINTER\_CANCELLED}}{The user cancelled printing.}
+\twocolitem{{\bf wxPRINTER\_ERROR}}{There was an error during printing.}
+\end{twocollist}
+
+
 \membersection{wxPrinter::GetPrintDialogData}\label{wxprintergetprintdialogdata}
 
 \func{wxPrintDialogData\&}{GetPrintDialogData}{\void}
@@ -612,7 +632,9 @@ Starts the printing process. Provide a parent window, a user-defined wxPrintout 
 the printing of a document, and whether the print dialog should be invoked first.
 
 Print could return FALSE if there was a problem initializing the printer device context
-(current printer not set, for example).
+(current printer not set, for example) or the user cancelled printing. Call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error.
 
 \membersection{wxPrinter::PrintDialog}\label{wxprinterprintdialog}
 
@@ -620,7 +642,9 @@ Print could return FALSE if there was a problem initializing the printer device 
 
 Invokes the print dialog. If successful (the user did not press Cancel
 and no error occurred), a suitable device context will be returned
-(otherwise NULL is returned).
+(otherwise NULL is returned -- call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error).
 
 The application must delete this device context to avoid a memory leak.
 
@@ -783,7 +807,7 @@ this by a scaling factor to take the preview DC size into account.
 
 \func{bool}{HasPage}{\param{int}{ pageNum}}
 
-Should be overriden to return TRUE if the document has this page, or FALSE
+Should be overridden to return TRUE if the document has this page, or FALSE
 if not. Returning FALSE signifies the end of the document. By default,
 HasPage behaves as if the document has only one page.
 
@@ -802,9 +826,9 @@ this function cancels the print job. OnBeginDocument is called once for every
 copy printed.
 
 The base wxPrintout::OnBeginDocument {\it must} be called (and the return value
-checked) from within the overriden function, since it calls wxDC::StartDoc.
+checked) from within the overridden function, since it calls wxDC::StartDoc.
 
-\pythonnote{If this method is overriden in a Python class then the
+\pythonnote{If this method is overridden in a Python class then the
 base class version can be called by using the method
 {\tt base_OnBeginDocument(startPage, endPage)}. }
 
@@ -816,7 +840,7 @@ Called by the framework at the end of document printing. OnEndDocument
 is called once for every copy printed.
 
 The base wxPrintout::OnEndDocument {\it must} be called
-from within the overriden function, since it calls wxDC::EndDoc.
+from within the overridden function, since it calls wxDC::EndDoc.
 
 \membersection{wxPrintout::OnBeginPrinting}\label{wxprintoutonbeginprinting}
 
@@ -983,6 +1007,10 @@ Invokes the print process using the second wxPrintout object
 supplied in the wxPrintPreview constructor.
 Will normally be called by the {\bf Print...} panel item on the
 preview frame's control bar.
+
+Returns FALSE in case of error -- call
+\helpref{wxPrinter::GetLastError}{wxprintergetlasterror} to get detailed
+information about the kind of the error.
 
 \membersection{wxPrintPreview::RenderPage}\label{wxprintpreviewrenderpage}
 

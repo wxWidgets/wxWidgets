@@ -38,6 +38,7 @@
     #include "wx/settings.h"
     #include "wx/dcclient.h"
     #include "wx/mdi.h"
+    #include "wx/panel.h"
 #endif // WX_PRECOMP
 
 #include "wx/msw/private.h"
@@ -106,9 +107,14 @@ void wxFrame::Init()
     m_fsStatusBarFields = 0;
     m_fsStatusBarHeight = 0;
     m_fsToolBarHeight = 0;
-//    m_fsMenu = 0;
+//  m_fsMenu = 0;
     m_fsIsMaximized = FALSE;
     m_fsIsShowing = FALSE;
+
+    m_winLastFocused = (wxWindow *)NULL;
+
+    // unlike (almost?) all other windows, frames are created hidden
+    m_isShown = FALSE;
 }
 
 bool wxFrame::Create(wxWindow *parent,
@@ -148,13 +154,13 @@ bool wxFrame::Create(wxWindow *parent,
   if ((m_windowStyle & wxFRAME_FLOAT_ON_PARENT) == 0)
     parent = NULL;
 
-  if (!parent)
-    wxTopLevelWindows.Append(this);
+  wxTopLevelWindows.Append(this);
 
   MSWCreate(m_windowId, parent, wxFrameClassName, this, title,
             x, y, width, height, style);
 
   wxModelessWindows.Append(this);
+
   return TRUE;
 }
 
@@ -163,6 +169,9 @@ wxFrame::~wxFrame()
   m_isBeingDeleted = TRUE;
   wxTopLevelWindows.DeleteObject(this);
 
+  // the ~wxToolBar() code relies on the previous line to be executed before
+  // this one, i.e. the frame should remove itself from wxTopLevelWindows
+  // before destorying its toolbar
   DeleteAllBars();
 
   if (wxTheApp && (wxTopLevelWindows.Number() == 0))
@@ -287,6 +296,10 @@ void wxFrame::DoShowWindow(int nShowCmd)
 
 bool wxFrame::Show(bool show)
 {
+    // don't use wxWindow version as we want to call DoShowWindow()
+    if ( !wxWindowBase::Show(show) )
+        return FALSE;
+
     DoShowWindow(show ? SW_SHOW : SW_HIDE);
 
     if ( show )
@@ -404,75 +417,57 @@ void wxFrame::PositionStatusBar()
 
 void wxFrame::DetachMenuBar()
 {
-    if (m_frameMenuBar)
+    if ( m_frameMenuBar )
     {
         m_frameMenuBar->Detach();
         m_frameMenuBar = NULL;
     }
 }
 
-void wxFrame::SetMenuBar(wxMenuBar *menu_bar)
+void wxFrame::SetMenuBar(wxMenuBar *menubar)
 {
-    if (!menu_bar)
+    if ( !menubar )
     {
         DetachMenuBar();
-        return;
+
+        // actually remove the menu from the frame
+        m_hMenu = (WXHMENU)0;
+        InternalSetMenuBar();
     }
-
-    m_frameMenuBar = NULL;
-
-    // Can set a menubar several times.
-    // TODO: how to prevent a memory leak if you have a currently-unattached
-    // menubar? wxWindows assumes that the frame will delete the menu (otherwise
-    // there are problems for MDI).
-    if (menu_bar->GetHMenu())
+    else // set new non NULL menu bar
     {
-        m_hMenu = menu_bar->GetHMenu();
+        m_frameMenuBar = NULL;
+
+        // Can set a menubar several times.
+        // TODO: how to prevent a memory leak if you have a currently-unattached
+        // menubar? wxWindows assumes that the frame will delete the menu (otherwise
+        // there are problems for MDI).
+        if ( menubar->GetHMenu() )
+        {
+            m_hMenu = menubar->GetHMenu();
+        }
+        else
+        {
+            menubar->Detach();
+
+            m_hMenu = menubar->Create();
+
+            if ( !m_hMenu )
+                return;
+        }
+
+        InternalSetMenuBar();
+
+        m_frameMenuBar = menubar;
+        menubar->Attach(this);
     }
-    else
-    {
-        menu_bar->Detach();
-
-        m_hMenu = menu_bar->Create();
-
-        if ( !m_hMenu )
-            return;
-    }
-
-    InternalSetMenuBar();
-
-    m_frameMenuBar = menu_bar;
-    menu_bar->Attach(this);
-
-#if 0 // Old code that assumes only one call of SetMenuBar per frame.
-    if (!menu_bar)
-    {
-        DetachMenuBar();
-        return;
-    }
-
-    wxCHECK_RET( !menu_bar->GetFrame(), wxT("this menubar is already attached") );
-
-    if (m_frameMenuBar)
-        delete m_frameMenuBar;
-
-    m_hMenu = menu_bar->Create();
-
-    if ( !m_hMenu )
-        return;
-
-    InternalSetMenuBar();
-
-    m_frameMenuBar = menu_bar;
-    menu_bar->Attach(this);
-#endif
 }
 
 void wxFrame::InternalSetMenuBar()
 {
     if ( !::SetMenu(GetHwnd(), (HMENU)m_hMenu) )
     {
-        wxLogLastError("SetMenu");
+        wxLogLastError(wxT("SetMenu"));
     }
 }
 
@@ -504,8 +499,8 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         m_fsIsShowing = TRUE;
         m_fsStyle = style;
 
-	     wxToolBar *theToolBar = GetToolBar();
-	     wxStatusBar *theStatusBar = GetStatusBar();
+        wxToolBar *theToolBar = GetToolBar();
+        wxStatusBar *theStatusBar = GetStatusBar();
 
         int dummyWidth;
 
@@ -530,7 +525,7 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         {
             m_fsStatusBarFields = theStatusBar->GetFieldsCount();
             SetStatusBar((wxStatusBar*) NULL);
-	         delete theStatusBar;
+            delete theStatusBar;
         }
         else
             m_fsStatusBarFields = 0;
@@ -540,11 +535,11 @@ bool wxFrame::ShowFullScreen(bool show, long style)
         // save the 'normal' window style
         m_fsOldWindowStyle = GetWindowLong((HWND)GetHWND(), GWL_STYLE);
 
-	    // save the old position, width & height, maximize state
+        // save the old position, width & height, maximize state
         m_fsOldSize = GetRect();
-	     m_fsIsMaximized = IsMaximized();
+        m_fsIsMaximized = IsMaximized();
 
-	    // decide which window style flags to turn off
+        // decide which window style flags to turn off
         LONG newStyle = m_fsOldWindowStyle;
         LONG offFlags = 0;
 
@@ -638,7 +633,7 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
     msflags |= WS_THICKFRAME;
   if (style & wxSYSTEM_MENU)
     msflags |= WS_SYSMENU;
-  if ((style & wxMINIMIZE) || (style & wxICONIZE))
+  if ( style & wxMINIMIZE )
     msflags |= WS_MINIMIZE;
   if (style & wxMAXIMIZE)
     msflags |= WS_MAXIMIZE;
@@ -690,37 +685,32 @@ bool wxFrame::MSWCreate(int id, wxWindow *parent, const wxChar *wclass, wxWindow
 // subwindow found.
 void wxFrame::OnActivate(wxActivateEvent& event)
 {
-    if ( !event.GetActive() )
+    if ( event.GetActive() )
     {
-        event.Skip();
+        // restore focus to the child which was last focused
+        wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
 
-        return;
+        wxSetFocusToChild(this, &m_winLastFocused);
     }
-
-    wxLogTrace(_T("focus"), _T("wxFrame %08x activated."), m_hWnd);
-
-    for ( wxWindowList::Node *node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
+    else
     {
-        // FIXME all this is totally bogus - we need to do the same as wxPanel,
-        //       but how to do it without duplicating the code?
-
-        // restore focus
-        wxWindow *child = node->GetData();
-
-        if ( !child->IsTopLevel()
-#if wxUSE_TOOLBAR
-             && !wxDynamicCast(child, wxToolBar)
-#endif // wxUSE_TOOLBAR
-#if wxUSE_STATUSBAR
-             && !wxDynamicCast(child, wxStatusBar)
-#endif // wxUSE_STATUSBAR
-           )
+        // remember the last focused child
+        m_winLastFocused = FindFocus();
+        while ( m_winLastFocused )
         {
-            child->SetFocus();
-            break;
+            if ( GetChildren().Find(m_winLastFocused) )
+                break;
+
+            m_winLastFocused = m_winLastFocused->GetParent();
         }
+
+        wxLogTrace(_T("focus"),
+                   _T("wxFrame %08x deactivated, last focused: %08x."),
+                   m_hWnd,
+                   m_winLastFocused ? GetHwndOf(m_winLastFocused)
+                                    : NULL);
+
+        event.Skip();
     }
 }
 
@@ -962,7 +952,15 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
     else
     {
         // don't give hints for separators (doesn't make sense) nor for the
-        // items opening popup menus (they don't have them anyhow)
+        // items opening popup menus (they don't have them anyhow) but do clear
+        // the status line - otherwise, we would be left with the help message
+        // for the previous item which doesn't apply any more
+        wxStatusBar *statbar = GetStatusBar();
+        if ( statbar )
+        {
+            statbar->SetStatusText(wxEmptyString);
+        }
+
         return FALSE;
     }
 

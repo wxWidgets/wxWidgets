@@ -32,6 +32,12 @@
     #include "wx/unix/execute.h"
 #endif
 
+// SGI signal.h defines signal handler arguments differently depending on
+// whether _LANGUAGE_C_PLUS_PLUS is set or not - do set it
+#if defined(__SGI__) && !defined(_LANGUAGE_C_PLUS_PLUS)
+    #define _LANGUAGE_C_PLUS_PLUS 1
+#endif // SGI hack
+
 #include <stdarg.h>
 #include <dirent.h>
 #include <string.h>
@@ -397,7 +403,11 @@ long wxExecute(wxChar **argv,
                bool sync,
                wxProcess *process)
 {
-    wxCHECK_MSG( *argv, 0, wxT("can't exec empty command") );
+    // for the sync execution, we return -1 to indicate failure, but for async
+    // cse we return 0 which is never a valid PID
+    long errorRetCode = sync ? -1 : 0;
+
+    wxCHECK_MSG( *argv, errorRetCode, wxT("can't exec empty command") );
 
 #if wxUSE_UNICODE
     int mb_argc = 0;
@@ -432,18 +442,22 @@ long wxExecute(wxChar **argv,
 
         ARGS_CLEANUP;
 
-        return 0;
+        return errorRetCode;
     }
 #endif // wxUSE_GUI
 
-    int pipeIn[2];
-    int pipeOut[2];
+    // pipes for inter process communication
+    int pipeIn[2],      // stdin
+        pipeOut[2],     // stdout
+        pipeErr[2];     // stderr
+
     pipeIn[0] = pipeIn[1] =
-    pipeOut[0] = pipeOut[1] = -1;
+    pipeOut[0] = pipeOut[1] =
+    pipeErr[0] = pipeErr[1] = -1;
 
     if ( process && process->IsRedirected() )
     {
-        if ( pipe(pipeIn) == -1 || pipe(pipeOut) == -1 )
+        if ( pipe(pipeIn) == -1 || pipe(pipeOut) == -1 || pipe(pipeErr) == -1 )
         {
 #if wxUSE_GUI
             // free previously allocated resources
@@ -456,7 +470,7 @@ long wxExecute(wxChar **argv,
 
             ARGS_CLEANUP;
 
-            return 0;
+            return errorRetCode;
         }
     }
 
@@ -476,13 +490,15 @@ long wxExecute(wxChar **argv,
         close(pipeIn[1]);
         close(pipeOut[0]);
         close(pipeOut[1]);
+        close(pipeErr[0]);
+        close(pipeErr[1]);
 #endif // wxUSE_GUI
 
         wxLogSysError( _("Fork failed") );
 
         ARGS_CLEANUP;
 
-        return 0;
+        return errorRetCode;
     }
     else if ( pid == 0 )  // we're in child
     {
@@ -498,7 +514,7 @@ long wxExecute(wxChar **argv,
         {
             for ( int fd = 0; fd < FD_SETSIZE; fd++ )
             {
-                if ( fd == pipeIn[0] || fd == pipeOut[1]
+                if ( fd == pipeIn[0] || fd == pipeOut[1] || fd == pipeErr[1]
 #if wxUSE_GUI
                      || fd == end_proc_detect[1]
 #endif // wxUSE_GUI
@@ -514,19 +530,19 @@ long wxExecute(wxChar **argv,
             }
         }
 
-        // redirect stdio and stdout
-        // (TODO: what about stderr?)
+        // redirect stdio, stdout and stderr
         if ( pipeIn[0] != -1 )
         {
             if ( dup2(pipeIn[0], STDIN_FILENO) == -1 ||
-                 dup2(pipeOut[1], STDOUT_FILENO) == -1 )
+                 dup2(pipeOut[1], STDOUT_FILENO) == -1 ||
+                 dup2(pipeErr[1], STDERR_FILENO) == -1 )
             {
-                wxLogSysError(_("Failed to redirect child process "
-                                "input/output"));
+                wxLogSysError(_("Failed to redirect child process input/output"));
             }
 
             close(pipeIn[0]);
             close(pipeOut[1]);
+            close(pipeErr[1]);
         }
 
         execvp (*mb_argv, mb_argv);
@@ -544,10 +560,13 @@ long wxExecute(wxChar **argv,
             // These two streams are relative to this process.
             wxOutputStream *outStream = new wxProcessFileOutputStream(pipeIn[1]);
             wxInputStream *inStream = new wxProcessFileInputStream(pipeOut[0]);
+            wxInputStream *errStream = new wxProcessFileInputStream(pipeErr[0]);
+
             close(pipeIn[0]); // close reading side
             close(pipeOut[1]); // close writing side
+            close(pipeErr[1]); // close writing side
 
-            process->SetPipeStreams(inStream, outStream);
+            process->SetPipeStreams(inStream, outStream, errStream);
         }
 
 #if wxUSE_GUI
@@ -603,11 +622,9 @@ long wxExecute(wxChar **argv,
         return exitcode;
 #endif // wxUSE_GUI
     }
-
-    return 0;
-
-    #undef ARGS_CLEANUP
 }
+
+#undef ARGS_CLEANUP
 
 // ----------------------------------------------------------------------------
 // file and directory functions
@@ -848,7 +865,7 @@ long wxGetFreeMemory()
 
 #include <signal.h>
 
-static void wxFatalSignalHandler(int WXUNUSED(signal))
+static void wxFatalSignalHandler(wxTYPE_SA_HANDLER)
 {
     if ( wxTheApp )
     {

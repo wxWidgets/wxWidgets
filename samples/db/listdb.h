@@ -26,10 +26,10 @@
 const int LOOKUP_COL_LEN = 250;
 
 // Global database connection
-extern wxDB *READONLY_DB;
+extern wxDb *READONLY_DB;
 
 // Clookup class
-class Clookup : public wxTable
+class Clookup : public wxDbTable
 {
     public:
 
@@ -40,14 +40,14 @@ class Clookup : public wxTable
 };  // Clookup
 
 // Clookup2 class
-class Clookup2 : public wxTable
+class Clookup2 : public wxDbTable
 {
     public:
 
         char lookupCol1[LOOKUP_COL_LEN+1];
         char lookupCol2[LOOKUP_COL_LEN+1];
 
-        Clookup2(char *tblName, char *colName1, char *colName2, wxDB *pDb);
+        Clookup2(char *tblName, char *colName1, char *colName2, wxDb *pDb);
 
 };  // Clookup2
 
@@ -109,7 +109,7 @@ class ClookUpDlg : public wxDialog
                       bool   distinctValues,            // e.g. SELECT DISTINCT ...
                       char  *selectStmt = 0,            // If you wish to query by SQLstmt (complicated lookups)
                       int    maxLenCol1 = 0,            // Mandatory if querying by SQLstmt
-                      wxDB  *pDb        = READONLY_DB,  // Database connection pointer
+                      wxDb  *pDb        = READONLY_DB,  // Database connection pointer
                       bool   allowOk    = TRUE);        // is the OK button enabled
 
         void        OnButton( wxCommandEvent &event );

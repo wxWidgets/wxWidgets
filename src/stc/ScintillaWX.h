@@ -126,6 +126,7 @@ public:
 
     void DoCommand(int ID);
     void DoContextMenu(Point pt);
+    void DoOnListBox();
 
 
     // helpers
@@ -139,7 +140,6 @@ private:
     bool                capturedMouse;
     wxStyledTextCtrl*   stc;
 
-    wxTextDataObject    textDO;
     wxSTCDropTarget*    dropTarget;
     wxDragResult        dragResult;
 };

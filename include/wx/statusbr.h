@@ -63,7 +63,7 @@ protected:
 // we can't just typedef wxStatusBar to be one of 95/Generic because we should
 // be able to forward declare it (done in several places) and because wxWin
 // RTTI wouldn't work then
-class wxStatusBar : public wxStatusBarReal
+class WXDLLEXPORT wxStatusBar : public wxStatusBarReal
 {
 public:
     wxStatusBar() { }

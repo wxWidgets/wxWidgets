@@ -179,14 +179,14 @@ class WXDLLEXPORT wxHtmlEasyPrinting : public wxObject
         wxHtmlEasyPrinting(const wxString& name = "Printing", wxFrame *parent_frame = NULL);
         ~wxHtmlEasyPrinting();
         
-        void PreviewFile(const wxString &htmlfile);
-        void PreviewText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
+        bool PreviewFile(const wxString &htmlfile);
+        bool PreviewText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
                 // Preview file / html-text for printing
                 // (and offers printing)
                 // basepath is base directory for opening subsequent files (e.g. from <img> tag)
                 
-        void PrintFile(const wxString &htmlfile);
-        void PrintText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
+        bool PrintFile(const wxString &htmlfile);
+        bool PrintText(const wxString &htmltext, const wxString& basepath = wxEmptyString);
                 // Print file / html-text w/o preview
                 
         void PrinterSetup();
@@ -211,8 +211,8 @@ class WXDLLEXPORT wxHtmlEasyPrinting : public wxObject
     private:
     
         wxHtmlPrintout *CreatePrintout();
-        void DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);
-        void DoPrint(wxHtmlPrintout *printout);
+        bool DoPreview(wxHtmlPrintout *printout1, wxHtmlPrintout *printout2);
+        bool DoPrint(wxHtmlPrintout *printout);
     
         wxPrintData *m_PrintData;
         wxPageSetupDialogData *m_PageSetupData;

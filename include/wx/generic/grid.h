@@ -298,6 +298,8 @@ public:
     wxGridCellEditor();
 
     bool IsCreated() { return m_control != NULL; }
+    wxControl* GetControl() { return m_control; }
+    void SetControl(wxControl* control) { m_control = control; }
 
     // Creates the actual edit control
     virtual void Create(wxWindow* parent,
@@ -326,9 +328,18 @@ public:
     // Reset the value in the control back to its starting value
     virtual void Reset() = 0;
 
-    // If the editor is enabled by pressing keys on the grid,
-    // this will be called to let the editor do something about
-    // that first key if desired.
+    // return TRUE to allow the given key to start editing: the base class
+    // version only checks that the event has no modifiers. The derived
+    // classes are supposed to do "if ( base::IsAcceptedKey() && ... )" in
+    // their IsAcceptedKey() implementation, although, of course, it is not a
+    // mandatory requirment.
+    //
+    // NB: if the key is F2 (special), editing will always start and this
+    //     method will not be called at all (but StartingKey() will)
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
+
+    // If the editor is enabled by pressing keys on the grid, this will be
+    // called to let the editor do something about that first key if desired
     virtual void StartingKey(wxKeyEvent& event);
 
     // if the editor is enabled by clicking on the cell, this method will be
@@ -377,6 +388,7 @@ public:
 
     virtual void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -414,6 +426,7 @@ public:
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -447,10 +460,13 @@ private:
 class WXDLLEXPORT wxGridCellFloatEditor : public wxGridCellTextEditor
 {
 public:
+    wxGridCellFloatEditor(int width = -1, int precision = -1);
+
     virtual void Create(wxWindow* parent,
                         wxWindowID id,
                         wxEvtHandler* evtHandler);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -460,12 +476,16 @@ public:
     virtual wxGridCellEditor *Clone() const
         { return new wxGridCellFloatEditor; }
 
+    // parameters string format is "width,precision"
+    virtual void SetParameters(const wxString& params);
+
 protected:
     // string representation of m_valueOld
-    wxString GetString() const
-        { return wxString::Format(_T("%f"), m_valueOld); }
+    wxString GetString() const;
 
 private:
+    int m_width,
+        m_precision;
     double m_valueOld;
 };
 
@@ -480,6 +500,7 @@ public:
     virtual void SetSize(const wxRect& rect);
     virtual void Show(bool show, wxGridCellAttr *attr = (wxGridCellAttr *)NULL);
 
+    virtual bool IsAcceptedKey(wxKeyEvent& event);
     virtual void BeginEdit(int row, int col, wxGrid* grid);
     virtual bool EndEdit(int row, int col, wxGrid* grid);
 
@@ -502,7 +523,7 @@ class WXDLLEXPORT wxGridCellChoiceEditor : public wxGridCellEditor
 public:
     // if !allowOthers, user can't type a string not in choices array
     wxGridCellChoiceEditor(size_t count = 0,
-                           const wxChar* choices[] = NULL,
+                           const wxString choices[] = NULL,
                            bool allowOthers = FALSE);
 
     virtual void Create(wxWindow* parent,
@@ -754,11 +775,6 @@ public:
     // a wxGridCellAttrProvider if necessary.
     virtual bool CanHaveAttributes();
 
-
-    // change row/col number in attribute if needed
-    virtual void UpdateAttrRows( size_t pos, int numRows );
-    virtual void UpdateAttrCols( size_t pos, int numCols );
-
     // by default forwarded to wxGridCellAttrProvider if any. May be
     // overridden to handle attributes directly in the table.
     virtual wxGridCellAttr *GetAttr( int row, int col );
@@ -933,8 +949,8 @@ private:
 
 // For comparisons...
 //
-extern wxGridCellCoords wxGridNoCellCoords;
-extern wxRect           wxGridNoCellRect;
+extern WXDLLEXPORT wxGridCellCoords wxGridNoCellCoords;
+extern WXDLLEXPORT wxRect           wxGridNoCellRect;
 
 // An array of cell coords...
 //
@@ -979,10 +995,10 @@ public:
 
     // ------ display update functions
     //
-    void CalcRowLabelsExposed( wxRegion& reg );
+    void CalcRowLabelsExposed( const wxRegion& reg );
 
-    void CalcColLabelsExposed( wxRegion& reg );
-    void CalcCellsExposed( wxRegion& reg );
+    void CalcColLabelsExposed( const wxRegion& reg );
+    void CalcCellsExposed( const wxRegion& reg );
 
 
     // ------ event handlers
@@ -1049,7 +1065,8 @@ public:
     // flicker
     //
     void     BeginBatch() { m_batchCount++; }
-    void     EndBatch() { if ( m_batchCount > 0 ) m_batchCount--; }
+    void     EndBatch();
+
     int      GetBatchCount() { return m_batchCount; }
 
 
@@ -1062,6 +1079,7 @@ public:
     void DisableCellEditControl() { EnableCellEditControl(FALSE); }
     bool CanEnableCellControl() const;
     bool IsCellEditControlEnabled() const;
+    bool IsCellEditControlShown() const;
 
     bool IsCurrentCellReadOnly() const;
 
@@ -1131,6 +1149,7 @@ public:
     wxString GetRowLabelValue( int row );
     wxString GetColLabelValue( int col );
     wxColour GetGridLineColour() { return m_gridLineColour; }
+    wxColour GetCellHighlightColour() { return m_cellHighlightColour; }
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
@@ -1142,6 +1161,7 @@ public:
     void     SetRowLabelValue( int row, const wxString& );
     void     SetColLabelValue( int col, const wxString& );
     void     SetGridLineColour( const wxColour& );
+    void     SetCellHighlightColour( const wxColour& );
 
     void     EnableDragRowSize( bool enable = TRUE );
     void     DisableDragRowSize() { EnableDragRowSize( FALSE ); }
@@ -1296,15 +1316,6 @@ public:
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
                               const wxGridCellCoords & bottomRight );
 
-    // This function returns the rectangle that encloses the selected cells
-    // in device coords and clipped to the client size of the grid window.
-    //
-    wxRect SelectionToDeviceRect()
-        {
-            return BlockToDeviceRect( m_selectingTopLeft,
-                                      m_selectingBottomRight );
-        }
-
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
         { return m_selectionBackground; }
@@ -1347,7 +1358,7 @@ public:
             int x, int y, int w = -1, int h = -1,
             long style = wxWANTS_CHARS,
             const wxString& name = wxPanelNameStr )
-        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h), 
+        : wxScrolledWindow( parent, -1, wxPoint(x,y), wxSize(w,h),
                             (style|wxWANTS_CHARS), name )
         {
             Create();
@@ -1579,6 +1590,7 @@ protected:
 
     wxColour   m_gridLineColour;
     bool       m_gridLinesEnabled;
+    wxColour   m_cellHighlightColour;
 
     // common part of AutoSizeColumn/Row() and GetBestSize()
     int SetOrCalcColumnSizes(bool calcOnly, bool setAsMin = TRUE);
@@ -1704,6 +1716,7 @@ protected:
     void OnPaint( wxPaintEvent& );
     void OnSize( wxSizeEvent& );
     void OnKeyDown( wxKeyEvent& );
+    void OnKeyUp( wxKeyEvent& );
     void OnEraseBackground( wxEraseEvent& );
 
 

@@ -94,7 +94,7 @@ scrolwin.cpp	G
 splitter.cpp	G
 statline.cpp	G	U,R,P
 statusbr.cpp	G
-tabg.cpp	G	16,P
+tabg.cpp	G	P
 numdlgg.cpp	G
 tbarsmpl.cpp	G
 textdlgg.cpp	G
@@ -123,7 +123,7 @@ docmdi.cpp	C
 docview.cpp	C
 dynarray.cpp	C	B
 dynlib.cpp	C	B
-encconv.cpp	C
+encconv.cpp	C	B
 event.cpp	C	B
 extended.c	C	B
 ffile.cpp	C	B
@@ -132,7 +132,7 @@ fileconf.cpp	C	B
 filefn.cpp	C	B
 filesys.cpp	C	B
 fontcmn.cpp	C
-fontmap.cpp	C
+fontmap.cpp	C	B
 framecmn.cpp	C
 fs_inet.cpp	C	B
 fs_zip.cpp	C	B
@@ -253,6 +253,7 @@ gaugemsw.cpp	M	16
 gdiimage.cpp	M
 gdiobj.cpp	M
 glcanvas.cpp	M
+helpchm.cpp	M	32
 helpwin.cpp	M
 icon.cpp	M
 imaglist.cpp	M	32
@@ -349,6 +350,7 @@ frame.cpp	R
 gauge.cpp	R
 gdiobj.cpp	R
 icon.cpp	R
+joystick.cpp	R
 listbox.cpp	R
 main.cpp	R
 mdi.cpp	R
@@ -585,7 +587,7 @@ docview.h	W
 dragimag.h	W
 dynarray.h	W	B
 dynlib.h	W	B
-encconv.h	W
+encconv.h	W	B
 event.h	W	B
 expr.h	W
 ffile.h	W	B
@@ -596,10 +598,11 @@ filefn.h	W	B
 filesys.h	W	B
 font.h	W
 fontdlg.h	W
+fontenc.h	W	B
 fontenum.h	W
-fontmap.h	W
+fontmap.h	W	B
 fontdlg.h	W
-fontutil.h	W
+fontutil.h	W	B
 frame.h	W
 fs_inet.h	W	B
 fs_zip.h	W	B
@@ -616,6 +619,7 @@ hash.h	W	B
 help.h	W
 helpbase.h	W
 helphtml.h	W
+helpchm.h	W
 helpwin.h	W
 helpxlp.h	W
 icon.h	W
@@ -901,6 +905,7 @@ gaugemsw.h	9
 gdiimage.h	9
 gdiobj.h	9
 glcanvas.h	9
+helpchm.h	9
 helpwin.h	9
 icon.h	9
 imaglist.h	9

@@ -85,9 +85,9 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 #define   IMPLEMENT_IUNKNOWN_METHODS(classname)                               \
   STDMETHODIMP classname::QueryInterface(REFIID riid, void **ppv)             \
   {                                                                           \
-    wxLogQueryInterface(#classname, riid);                                    \
+    wxLogQueryInterface(_T(#classname), riid);                                \
                                                                               \
-    if ( IsIidFromList(riid, ms_aIids, WXSIZEOF(ms_aIids)) ) {                  \
+    if ( IsIidFromList(riid, ms_aIids, WXSIZEOF(ms_aIids)) ) {                \
       *ppv = this;                                                            \
       AddRef();                                                               \
                                                                               \
@@ -96,20 +96,20 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
     else {                                                                    \
       *ppv = NULL;                                                            \
                                                                               \
-      return (HRESULT) E_NOINTERFACE;                                                   \
+      return (HRESULT) E_NOINTERFACE;                                         \
     }                                                                         \
   }                                                                           \
                                                                               \
   STDMETHODIMP_(ULONG) classname::AddRef()                                    \
   {                                                                           \
-    wxLogAddRef(#classname, m_cRef);                                          \
+    wxLogAddRef(_T(#classname), m_cRef);                                      \
                                                                               \
     return ++m_cRef;                                                          \
   }                                                                           \
                                                                               \
   STDMETHODIMP_(ULONG) classname::Release()                                   \
   {                                                                           \
-    wxLogRelease(#classname, m_cRef);                                         \
+    wxLogRelease(_T(#classname), m_cRef);                                     \
                                                                               \
     if ( --m_cRef == 0 ) {                                                    \
       delete this;                                                            \
@@ -132,11 +132,11 @@ bool IsIidFromList(REFIID riid, const IID *aIids[], size_t nCount);
 // ----------------------------------------------------------------------------
 
 // tries to translate riid into a symbolic name, if possible
-void wxLogQueryInterface(const char *szInterface, REFIID riid);
+void wxLogQueryInterface(const wxChar *szInterface, REFIID riid);
 
 // these functions print out the new value of reference counter
-void wxLogAddRef (const char *szInterface, ULONG cRef);
-void wxLogRelease(const char *szInterface, ULONG cRef);
+void wxLogAddRef (const wxChar *szInterface, ULONG cRef);
+void wxLogRelease(const wxChar *szInterface, ULONG cRef);
 
 #else   //!WXDEBUG
   #define   wxLogQueryInterface(szInterface, riid)

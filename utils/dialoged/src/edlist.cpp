@@ -41,8 +41,8 @@ BEGIN_EVENT_TABLE(wxResourceEditorControlList, wxListCtrl)
 END_EVENT_TABLE()
 
 wxResourceEditorControlList::wxResourceEditorControlList(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
-        long style):
-     wxListCtrl(parent, id, pos, size, style), m_imageList(16, 16, TRUE)
+                                                         long style):
+wxListCtrl(parent, id, pos, size, style), m_imageList(16, 16, TRUE)
 {
     Initialize();
 }
@@ -74,7 +74,7 @@ void wxResourceEditorControlList::Initialize()
     wxIcon icon16("RADIOBTN_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
     wxIcon icon17("SCROLBAR_ICON", wxBITMAP_TYPE_ICO_RESOURCE, 16, 16);
 #else
-
+    
 #include "bitmaps/arrow.xpm"
     wxIcon icon1( arrow_xpm );
 #include "bitmaps/button.xpm"
@@ -110,7 +110,7 @@ void wxResourceEditorControlList::Initialize()
 #include "bitmaps/scrolbar.xpm"
     wxIcon icon17( scrolbar_xpm );
 #endif
-
+    
     m_imageList.Add(icon1);
     m_imageList.Add(icon2);
     m_imageList.Add(icon3);
@@ -130,7 +130,7 @@ void wxResourceEditorControlList::Initialize()
     m_imageList.Add(icon17);
     
     SetImageList(& m_imageList, wxIMAGE_LIST_SMALL);
-
+    
     long id = InsertItem(0,             "Pointer", 0);
     id = InsertItem(1,                  "wxButton", 1);
     id = InsertItem(2,                  "wxBitmapButton", 2);
@@ -148,14 +148,14 @@ void wxResourceEditorControlList::Initialize()
     id = InsertItem(14,                  "wxRadioBox", 14);
     id = InsertItem(15,                  "wxRadioButton", 15);
     id = InsertItem(16,                  "wxScrollBar", 16);
-
-/*
+    
+    /*
     InsertItem(RESED_TREECTRL,          "wxTreeCtrl", 16);
     InsertItem(RESED_LISTCTRL,          "wxListCtrl", 17);
     InsertItem(RESED_SPINBUTTON,        "wxSpinButton", 18);
-*/
-
-//    SetColumnWidth(-1, 80);
+    */
+    
+    //    SetColumnWidth(-1, 80);
 }
 
 // Get selection, or -1

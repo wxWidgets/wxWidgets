@@ -42,6 +42,18 @@ static const int VIEWPORT_EXTENT = 1000;
 static const int MM_POINTS = 9;
 static const int MM_METRIC = 10;
 
+// usually this is defined in math.h
+#ifndef M_PI
+    static const double M_PI = 3.14159265358979323846;
+#endif // M_PI
+
+// ---------------------------------------------------------------------------
+// private functions
+// ---------------------------------------------------------------------------
+
+// convert degrees to radians
+static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; }
+
 // ===========================================================================
 // implementation
 // ===========================================================================
@@ -52,17 +64,17 @@ static const int MM_METRIC = 10;
 
 wxDC::wxDC(void)
 {
-    m_canvas  = NULL;
+    m_pCanvas     = NULL;
 
-    m_oldBitmap  = 0;
-    m_oldPen     = 0;
-    m_oldBrush   = 0;
-    m_oldFont    = 0;
-    m_oldPalette = 0;
+    m_hOldBitmap  = 0;
+    m_hOldPen     = 0;
+    m_hOldBrush   = 0;
+    m_hOldFont    = 0;
+    m_hOldPalette = 0;
 
-    m_bOwnsDC = FALSE;
-    m_hDC        = 0;
-    m_hDCCount   = 0;
+    m_bOwnsDC     = FALSE;
+    m_hDC         = 0;
+    m_nDCCount    = 0;
 };
 
 wxDC::~wxDC(void)
@@ -77,52 +89,59 @@ void wxDC::SelectOldObjects(WXHDC dc)
 {
     if (dc)
     {
-        if (m_oldBitmap)
+        if (m_hOldBitmap)
         {
 //            ::SelectObject((HDC) dc, (HBITMAP) m_oldBitmap);
-            if (m_selectedBitmap.Ok())
+            if (m_vSelectedBitmap.Ok())
             {
-                m_selectedBitmap.SetSelectedInto(NULL);
+                m_vSelectedBitmap.SetSelectedInto(NULL);
             }
         }
-        m_oldBitmap = 0;
-        if (m_oldPen)
+        m_hOldBitmap = 0;
+        if (m_hOldPen)
         {
 //            ::SelectObject((HDC) dc, (HPEN) m_oldPen);
         }
-        m_oldPen = 0;
-        if (m_oldBrush)
+        m_hOldPen = 0;
+        if (m_hOldBrush)
         {
 //            ::SelectObject((HDC) dc, (HBRUSH) m_oldBrush);
         }
-        m_oldBrush = 0;
-        if (m_oldFont)
+        m_hOldBrush = 0;
+        if (m_hOldFont)
         {
 //            ::SelectObject((HDC) dc, (HFONT) m_oldFont);
         }
-        m_oldFont = 0;
-        if (m_oldPalette)
+        m_hOldFont = 0;
+        if (m_hOldPalette)
         {
 //            ::SelectPalette((HDC) dc, (HPALETTE) m_oldPalette, TRUE);
         }
-        m_oldPalette = 0;
+        m_hOldPalette = 0;
     }
 
-    m_brush = wxNullBrush;
-    m_pen = wxNullPen;
-    m_palette = wxNullPalette;
-    m_font = wxNullFont;
+    m_brush           = wxNullBrush;
+    m_pen             = wxNullPen;
+    m_palette         = wxNullPalette;
+    m_font            = wxNullFont;
     m_backgroundBrush = wxNullBrush;
-    m_selectedBitmap = wxNullBitmap;
+    m_vSelectedBitmap = wxNullBitmap;
 }
 
 // ---------------------------------------------------------------------------
 // clipping
 // ---------------------------------------------------------------------------
 
-void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
-{
-   // TODO
+#define DO_SET_CLIPPING_BOX()                   \
+{                                               \
+    RECT rect;                                  \
+                                                \
+    GetClipBox(GetHdc(), &rect);                \
+                                                \
+    m_clipX1 = (wxCoord) XDEV2LOG(rect.left);   \
+    m_clipY1 = (wxCoord) YDEV2LOG(rect.top);    \
+    m_clipX2 = (wxCoord) XDEV2LOG(rect.right);  \
+    m_clipY2 = (wxCoord) YDEV2LOG(rect.bottom); \
 }
 
 void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y
@@ -132,14 +151,9 @@ void wxDC::DoSetClippingRegion( wxCoord x, wxCoord y
    // TODO
 }
 
-void wxDC::DoClipping(WXHDC dc)
+void wxDC::DoSetClippingRegionAsRegion(const wxRegion& region)
 {
-    if (m_clipping && dc)
-    {
-//      TODO:
-//      IntersectClipRect((HDC) dc, XLOG2DEV(m_clipX1), YLOG2DEV(m_clipY1),
-//                                  XLOG2DEV(m_clipX2), YLOG2DEV(m_clipY2));
-    }
+   // TODO
 }
 
 void wxDC::DestroyClippingRegion(void)
@@ -213,6 +227,12 @@ void wxDC::DoDrawArc( wxCoord x1, wxCoord y1
    // TODO
 }
 
+void wxDC::DoDrawCheckMark(wxCoord x1, wxCoord y1,
+                           wxCoord width, wxCoord height)
+{
+    // TODO
+}
+
 void wxDC::DoDrawPoint(wxCoord x, wxCoord y)
 {
    // TODO
@@ -280,6 +300,11 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
    // TODO
 }
 
+void wxDC::DrawAnyText(const wxString& text, wxCoord x, wxCoord y)
+{
+    // TODO
+}
+
 void wxDC::DoDrawRotatedText(const wxString& text,
                              wxCoord x, wxCoord y,
                              double angle)
@@ -345,9 +370,39 @@ void wxDC::SetPalette(const wxPalette& palette)
    // TODO
 }
 
-void wxDC::SetFont(const wxFont& font)
+void wxDC::SetFont(
+  const wxFont&                     rFont
+)
 {
-   // TODO
+    //
+    // Set the old object temporarily, in case the assignment deletes an object
+    // that's not yet selected out.
+    //
+    if (m_hOldFont)
+    {
+//        ::SelectObject(GetHdc(), (HFONT) m_hOldFont);
+        m_hOldFont = 0;
+    }
+
+    m_font = rFont;
+
+    if (!rFont.Ok())
+    {
+        if (m_hOldFont)
+//            ::SelectObject(GetHdc(), (HFONT) m_hOldFont);
+        m_hOldFont = 0;
+    }
+
+    if (m_font.Ok() && m_font.GetResourceHandle())
+    {
+        HFONT                       hFont = (HFONT)0; //::SelectObject(GetHdc(), (HFONT) m_font.GetResourceHandle());
+        if (hFont == (HFONT) NULL)
+        {
+            wxLogDebug(wxT("::SelectObject failed in wxDC::SetFont."));
+        }
+        if (!m_hOldFont)
+            m_hOldFont = (WXHFONT) hFont;
+    }
 }
 
 void wxDC::SetPen(const wxPen& pen)
@@ -496,71 +551,43 @@ void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 
 wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
 {
-    wxCoord new_x = x - m_deviceOriginX;
-    if (new_x > 0)
-        return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
-    else
-        return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
-};
+    return (wxCoord) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX) - m_logicalOriginX);
+}
 
 wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
 {
-    if (x > 0)
-        return (wxCoord)((double)(x) / m_scaleX + 0.5);
-    else
-        return (wxCoord)((double)(x) / m_scaleX - 0.5);
-};
+    return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX));
+}
 
 wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
 {
-    wxCoord new_y = y - m_deviceOriginY;
-    if (new_y > 0)
-        return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
-    else
-        return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
-};
+    return (wxCoord) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY) - m_logicalOriginY);
+}
 
 wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
 {
-    if (y > 0)
-        return (wxCoord)((double)(y) / m_scaleY + 0.5);
-    else
-        return (wxCoord)((double)(y) / m_scaleY - 0.5);
-};
+    return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY));
+}
 
 wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
 {
-    wxCoord new_x = x - m_logicalOriginX;
-    if (new_x > 0)
-        return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
-    else
-    return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
-};
+    return (wxCoord) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
+}
 
 wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
 {
-    if (x > 0)
-        return (wxCoord)((double)(x) * m_scaleX + 0.5);
-    else
-        return (wxCoord)((double)(x) * m_scaleX - 0.5);
-};
+    return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX);
+}
 
 wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
 {
-    wxCoord new_y = y - m_logicalOriginY;
-    if (new_y > 0)
-        return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
-    else
-        return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
-};
+    return (wxCoord) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
+}
 
 wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
 {
-    if (y > 0)
-        return (wxCoord)((double)(y) * m_scaleY + 0.5);
-    else
-        return (wxCoord)((double)(y) * m_scaleY - 0.5);
-};
+    return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY);
+}
 
 // ---------------------------------------------------------------------------
 // bit blit

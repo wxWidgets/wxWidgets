@@ -117,17 +117,24 @@ bool CellBox::SetCell(int dx, int dy, bool alive)
 
 Life::Life()
 {
-    m_numcells  = 0;
-    m_boxes     = new CellBox *[HASHSIZE];
-    m_head      = NULL;
-    m_available = NULL;
+    // pattern description
+    m_name        = _("");
+    m_rules       = _("");
+    m_description = _("");
+
+    // pattern data
+    m_numcells    = 0;
+    m_boxes       = new CellBox *[HASHSIZE];
+    m_head        = NULL;
+    m_available   = NULL;
     for (int i = 0; i < HASHSIZE; i++)
         m_boxes[i] = NULL;
 
-    m_cells     = new Cell[ARRAYSIZE];
-    m_ncells    = 0;
-    m_findmore  = FALSE;
-    m_changed   = FALSE;
+    // state vars for BeginFind & FindMore
+    m_cells       = new Cell[ARRAYSIZE];
+    m_ncells      = 0;
+    m_findmore    = FALSE;
+    m_changed     = FALSE;
 }
 
 Life::~Life()
@@ -144,8 +151,6 @@ Life::~Life()
 void Life::Clear()
 {
     CellBox *c, *nc;
-
-    m_numcells = 0;
 
     // clear the hash table pointers
     for (int i = 0; i < HASHSIZE; i++)
@@ -170,6 +175,12 @@ void Life::Clear()
         c = nc;
     }
     m_available = NULL;
+
+    // reset state
+    m_name        = _("");
+    m_rules       = _("");
+    m_description = _("");
+    m_numcells    = 0;
 }
 
 // --------------------------------------------------------------------------
@@ -204,19 +215,38 @@ void Life::SetCell(wxInt32 x, wxInt32 y, bool alive)
     }
 }
 
-void Life::SetShape(const LifeShape& shape)
+void Life::SetPattern(const LifePattern& pattern)
 {
-    char *p = shape.m_data;
-
-    int i0 = -(shape.m_width / 2);
-    int j0 = -(shape.m_height / 2);
-    int i1 = i0 + shape.m_width - 1;
-    int j1 = j0 + shape.m_height - 1;
+    wxArrayString data = pattern.m_shape;
+    wxString line;
+    long x = 0,
+         y = 0;
 
     Clear();
-    for (int j = j0; j <= j1; j++)
-        for (int i = i0; i <= i1; i++)
-            SetCell(i, j, *(p++) == '*');
+    for (size_t n = 0; n < data.GetCount(); n++)
+    {
+        line = data[n];
+
+        if ( (line.GetChar(0) != wxT('*')) &&
+             (line.GetChar(0) != wxT('.')) )
+        {
+            // assume that it is a digit or a minus sign
+            line.BeforeFirst(wxT(' ')).ToLong(&x);
+            line.AfterFirst(wxT(' ')).ToLong(&y);
+        }
+        else
+        {
+            // pattern data
+            for (size_t k = 0; k < line.Len(); k++)
+                SetCell(x + k, y, line.GetChar(k) == wxT('*'));
+
+            y++;
+        }
+    }
+
+    m_name = pattern.m_name;
+    m_rules = pattern.m_rules;
+    m_description = pattern.m_description;
 }
 
 // --------------------------------------------------------------------------
@@ -337,110 +367,110 @@ void Life::KillBox(CellBox *c)
 
 Cell Life::FindCenter()
 {
-    double i, j;
+    double sx, sy;
     int n;
-    i = 0.0;
-    j = 0.0;
+    sx = 0.0;
+    sy = 0.0;
     n = 0;
 
     CellBox *c;
     for (c = m_head; c; c = c->m_next)
         if (!c->m_dead)
         {
-            i += c->m_x;
-            j += c->m_y;
+            sx += c->m_x;
+            sy += c->m_y;
             n++;
         }
 
     if (n > 0)
     {
-        i = (i / n) + CELLBOX / 2;
-        j = (j / n) + CELLBOX / 2;
+        sx = (sx / n) + CELLBOX / 2;
+        sy = (sy / n) + CELLBOX / 2;
     }
 
     Cell cell;
-    cell.i = (wxInt32) i;
-    cell.j = (wxInt32) j;
+    cell.i = (wxInt32) sx;
+    cell.j = (wxInt32) sy;
     return cell;
 }
 
 Cell Life::FindNorth()
 {
-    wxInt32 i = 0, j = 0;
+    wxInt32 x = 0, y = 0;
     bool first = TRUE;
 
     CellBox *c;
     for (c = m_head; c; c = c->m_next)
-        if (!c->m_dead && ((first) || (c->m_y < j)))
+        if (!c->m_dead && ((first) || (c->m_y < y)))
         {
-            i = c->m_x;
-            j = c->m_y;
+            x = c->m_x;
+            y = c->m_y;
             first = FALSE;
         }
     
     Cell cell;
-    cell.i = first? 0 : i + CELLBOX / 2;
-    cell.j = first? 0 : j + CELLBOX / 2;
+    cell.i = first? 0 : x + CELLBOX / 2;
+    cell.j = first? 0 : y + CELLBOX / 2;
     return cell;
 }
 
 Cell Life::FindSouth()
 {
-    wxInt32 i = 0, j = 0;
+    wxInt32 x = 0, y = 0;
     bool first = TRUE;
 
     CellBox *c;
     for (c = m_head; c; c = c->m_next)
-        if (!c->m_dead && ((first) || (c->m_y > j)))
+        if (!c->m_dead && ((first) || (c->m_y > y)))
         {
-            i = c->m_x;
-            j = c->m_y;
+            x = c->m_x;
+            y = c->m_y;
             first = FALSE;
         }
     
     Cell cell;
-    cell.i = first? 0 : i + CELLBOX / 2;
-    cell.j = first? 0 : j + CELLBOX / 2;
+    cell.i = first? 0 : x + CELLBOX / 2;
+    cell.j = first? 0 : y + CELLBOX / 2;
     return cell;
 }
 
 Cell Life::FindWest()
 {
-    wxInt32 i = 0, j = 0;
+    wxInt32 x = 0, y = 0;
     bool first = TRUE;
 
     CellBox *c;
     for (c = m_head; c; c = c->m_next)
-        if (!c->m_dead && ((first) || (c->m_x < i)))
+        if (!c->m_dead && ((first) || (c->m_x < x)))
         {
-            i = c->m_x;
-            j = c->m_y;
+            x = c->m_x;
+            y = c->m_y;
             first = FALSE;
         }
     
     Cell cell;
-    cell.i = first? 0 : i + CELLBOX / 2;
-    cell.j = first? 0 : j + CELLBOX / 2;
+    cell.i = first? 0 : x + CELLBOX / 2;
+    cell.j = first? 0 : y + CELLBOX / 2;
     return cell;
 }
 
 Cell Life::FindEast()
 {
-    wxInt32 i = 0, j = 0;
+    wxInt32 x = 0, y = 0;
     bool first = TRUE;
 
     CellBox *c;
     for (c = m_head; c; c = c->m_next)
-        if (!c->m_dead && ((first) || (c->m_x > i)))
+        if (!c->m_dead && ((first) || (c->m_x > x)))
         {
-            i = c->m_x;
-            j = c->m_y;
+            x = c->m_x;
+            y = c->m_y;
             first = FALSE;
         }
     
     Cell cell;
-    cell.i = first? 0 : i + CELLBOX / 2;
-    cell.j = first? 0 : j + CELLBOX / 2;
+    cell.i = first? 0 : x + CELLBOX / 2;
+    cell.j = first? 0 : y + CELLBOX / 2;
     return cell;
 }
 
@@ -453,35 +483,35 @@ Cell Life::FindEast()
 //  argument (or pass 0, the default value) to post alive cells
 //  only, else it will post cells which have changed.
 //
-void Life::DoLine(wxInt32 i, wxInt32 j, wxUint32 live, wxUint32 old)
+void Life::DoLine(wxInt32 x, wxInt32 y, wxUint32 live, wxUint32 old)
 {
     wxUint32 diff = (live ^ old) & 0xff;
 
     if (!diff) return;
 
-    for (wxInt32 k = 8; k; k--, i++)
+    for (wxInt32 k = 8; k; k--, x++)
     {
         if (diff & 0x01)
         {
-            m_cells[m_ncells].i = i;
-            m_cells[m_ncells].j = j;
+            m_cells[m_ncells].i = x;
+            m_cells[m_ncells].j = y;
             m_ncells++;
         }
         diff >>= 1;
     }
 }
 
-void Life::BeginFind(wxInt32 i0, wxInt32 j0, wxInt32 i1, wxInt32 j1, bool changed)
+void Life::BeginFind(wxInt32 x0, wxInt32 y0, wxInt32 x1, wxInt32 y1, bool changed)
 {
     // TODO: optimize for the case where the maximum number of
     // cellboxes that fit in the specified viewport is smaller
     // than the current total of boxes; iterating over the list
     // should then be faster than searching in the hash table.
 
-    m_i0 = m_i = i0 & 0xfffffff8;
-    m_j0 = m_j = j0 & 0xfffffff8;
-    m_i1 = (i1 + 7) & 0xfffffff8;
-    m_j1 = (j1 + 7) & 0xfffffff8;
+    m_x0 = m_x = x0 & 0xfffffff8;
+    m_y0 = m_y = y0 & 0xfffffff8;
+    m_x1 = (x1 + 7) & 0xfffffff8;
+    m_y1 = (y1 + 7) & 0xfffffff8;
 
     m_findmore = TRUE;
     m_changed = changed;
@@ -495,10 +525,10 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
 
     if (m_changed)
     {
-        for ( ; m_j <= m_j1; m_j += 8, m_i = m_i0)
-            for ( ; m_i <= m_i1; m_i += 8)
+        for ( ; m_y <= m_y1; m_y += 8, m_x = m_x0)
+            for ( ; m_x <= m_x1; m_x += 8)
             {
-                if ((c = LinkBox(m_i, m_j, FALSE)) == NULL)
+                if ((c = LinkBox(m_x, m_y, FALSE)) == NULL)
                     continue;
 
                 // check whether there is enough space left in the array
@@ -508,22 +538,22 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
                     return FALSE;
                 }
 
-                DoLine(m_i, m_j    , c->m_live1,       c->m_old1      );
-                DoLine(m_i, m_j + 1, c->m_live1 >> 8,  c->m_old1 >> 8 );
-                DoLine(m_i, m_j + 2, c->m_live1 >> 16, c->m_old1 >> 16);
-                DoLine(m_i, m_j + 3, c->m_live1 >> 24, c->m_old1 >> 24);
-                DoLine(m_i, m_j + 4, c->m_live2,       c->m_old2      );
-                DoLine(m_i, m_j + 5, c->m_live2 >> 8,  c->m_old2 >> 8 );
-                DoLine(m_i, m_j + 6, c->m_live2 >> 16, c->m_old2 >> 16);
-                DoLine(m_i, m_j + 7, c->m_live2 >> 24, c->m_old2 >> 24);
+                DoLine(m_x, m_y    , c->m_live1,       c->m_old1      );
+                DoLine(m_x, m_y + 1, c->m_live1 >> 8,  c->m_old1 >> 8 );
+                DoLine(m_x, m_y + 2, c->m_live1 >> 16, c->m_old1 >> 16);
+                DoLine(m_x, m_y + 3, c->m_live1 >> 24, c->m_old1 >> 24);
+                DoLine(m_x, m_y + 4, c->m_live2,       c->m_old2      );
+                DoLine(m_x, m_y + 5, c->m_live2 >> 8,  c->m_old2 >> 8 );
+                DoLine(m_x, m_y + 6, c->m_live2 >> 16, c->m_old2 >> 16);
+                DoLine(m_x, m_y + 7, c->m_live2 >> 24, c->m_old2 >> 24);
             }
     }
     else
     {
-        for ( ; m_j <= m_j1; m_j += 8, m_i = m_i0)
-            for ( ; m_i <= m_i1; m_i += 8)
+        for ( ; m_y <= m_y1; m_y += 8, m_x = m_x0)
+            for ( ; m_x <= m_x1; m_x += 8)
             {
-                if ((c = LinkBox(m_i, m_j, FALSE)) == NULL)
+                if ((c = LinkBox(m_x, m_y, FALSE)) == NULL)
                     continue;
 
                 // check whether there is enough space left in the array
@@ -533,14 +563,14 @@ bool Life::FindMore(Cell *cells[], size_t *ncells)
                     return FALSE;
                 }
 
-                DoLine(m_i, m_j    , c->m_live1      );
-                DoLine(m_i, m_j + 1, c->m_live1 >> 8 );
-                DoLine(m_i, m_j + 2, c->m_live1 >> 16);
-                DoLine(m_i, m_j + 3, c->m_live1 >> 24);
-                DoLine(m_i, m_j + 4, c->m_live2      );
-                DoLine(m_i, m_j + 5, c->m_live2 >> 8 );
-                DoLine(m_i, m_j + 6, c->m_live2 >> 16);
-                DoLine(m_i, m_j + 7, c->m_live2 >> 24);
+                DoLine(m_x, m_y    , c->m_live1      );
+                DoLine(m_x, m_y + 1, c->m_live1 >> 8 );
+                DoLine(m_x, m_y + 2, c->m_live1 >> 16);
+                DoLine(m_x, m_y + 3, c->m_live1 >> 24);
+                DoLine(m_x, m_y + 4, c->m_live2      );
+                DoLine(m_x, m_y + 5, c->m_live2 >> 8 );
+                DoLine(m_x, m_y + 6, c->m_live2 >> 16);
+                DoLine(m_x, m_y + 7, c->m_live2 >> 24);
             }
     }
 

@@ -105,6 +105,12 @@ bool MyApp::OnInit()
 
   // there are very few systems right now which support locales other than "C"
   m_locale.Init(language, langid, "C");
+               // note that under GTK starting from version 1.2.8 if
+               // you set locale to "C" and then use ASCII characters above
+               // #128 in GUI elements, they will be truncated (it seems GTK
+               // replaces them by \0). You should use either "" (checks
+               // the value of LC_ALL etc. environment variables) or the form
+               // accepted by glibc, e.g cs_CZ. 
 
   // Initialize the catalogs we'll be using
   /* not needed any more, done in wxLocale ctor

@@ -1,0 +1,19 @@
+# Makefile for OGL Studio.
+# $Id$
+
+top_srcdir = @top_srcdir@/..
+top_builddir = ../../../..
+program_dir = contrib/samples/ogl/studio
+
+PROGRAM=studio
+
+DATAFILES=studio_resources.wxr
+
+OBJECTS=$(PROGRAM).o doc.o shapes.o symbols.o view.o cspalette.o\
+  mainfrm.o project.o dialogs.o csprint.o
+
+APPEXTRALIBS=$(top_builddir)/lib/libogl.@WX_TARGET_LIBRARY_TYPE@
+APPEXTRADEFS=-I$(top_srcdir)/contrib/include -I$(top_srcdir)/$(program_dir)/bitmaps
+
+include $(top_builddir)/src/makeprog.env
+

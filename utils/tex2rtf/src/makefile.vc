@@ -91,6 +91,8 @@ cleanall:
 DOCSOURCES=$(LOCALDOCDIR)\tex2rtf.tex
 
 html: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+htmlhelp: $(DOCDIR)\htmlhelp\tex2rtf.chm
+htb:	$(DOCDIR)\htb\tex2rtf.htb
 hlp: $(DOCDIR)\winhelp\tex2rtf.hlp
 pdfrtf: $(DOCDIR)\pdf\tex2rtf.rtf
 ps: $(WXDIR)\docs\ps\tex2rtf.ps
@@ -118,10 +120,29 @@ $(DOCDIR)\pdf\tex2rtf.rtf: $(DOCSOURCES)
 $(DOCDIR)\html\tex2rtf\t2rtf.htm:         $(DOCSOURCES)
         cd $(LOCALDOCDIR)
         -mkdir $(DOCDIR)\html\tex2rtf
+        -copy *.gif $(DOCDIR)\html\tex2rtf
         -start /w tex2rtf $(LOCALDOCDIR)\tex2rtf.tex $(DOCDIR)\html\tex2rtf\t2rtf.htm -twice -html
         -erase $(DOCDIR)\html\tex2rtf\*.con
         -erase $(DOCDIR)\html\tex2rtf\*.ref
         cd $(THISDIR)
+
+$(DOCDIR)\htmlhelp\tex2rtf.chm : $(DOCDIR)\html\tex2rtf\t2rtf.htm $(DOCDIR)\html\tex2rtf\t2rtf.hhp
+	cd $(DOCDIR)\html\tex2rtf
+	-hhc t2rtf.hhp
+    move t2rtf.chm $(DOCDIR)\htmlhelp\tex2rtf.chm
+	cd $(THISDIR)
+
+# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
+# files, renamed to htb.
+# This can then be used with e.g. helpview.
+# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
+$(DOCDIR)\htb\tex2rtf.htb: $(DOCDIR)\html\tex2rtf\t2rtf.htm
+	cd $(DOCDIR)\html\tex2rtf
+    -erase /Y tex2rtf.zip tex2rtf.htb
+    zip32 tex2rtf.zip *.htm *.gif *.hhp *.hhc *.hhk
+    -mkdir $(DOCDIR)\htb
+    move tex2rtf.zip $(DOCDIR)\htb\tex2rtf.htb
+    cd $(THISDIR)
 
 $(LOCALDOCDIR)\tex2rtf.dvi:	$(DOCSOURCES)
 	cd $(LOCALDOCDIR)

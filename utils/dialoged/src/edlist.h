@@ -21,15 +21,15 @@ public:
     wxResourceEditorControlList(wxWindow* parent, wxWindowID id, const wxPoint& pos, const wxSize& size,
         long style = wxLC_SMALL_ICON|wxLC_AUTOARRANGE|wxLC_SINGLE_SEL);
     ~wxResourceEditorControlList();
-
+    
     // Load icons and add to the list
     void Initialize();
-
+    
     // Get selection, or -1
     long GetSelection() const;
-
-DECLARE_EVENT_TABLE()
-
+    
+    DECLARE_EVENT_TABLE()
+        
 protected:
     wxImageList m_imageList;
 };

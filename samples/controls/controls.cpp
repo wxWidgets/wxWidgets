@@ -88,6 +88,8 @@ public:
     void OnChoice( wxCommandEvent &event );
     void OnChoiceButtons( wxCommandEvent &event );
     void OnCombo( wxCommandEvent &event );
+    void OnComboTextChanged( wxCommandEvent &event );
+    void OnComboTextEnter( wxCommandEvent &event );
     void OnComboButtons( wxCommandEvent &event );
     void OnRadio( wxCommandEvent &event );
     void OnRadioButtons( wxCommandEvent &event );
@@ -180,6 +182,96 @@ private:
 
     MyPanel *m_panel;
 
+    DECLARE_EVENT_TABLE()
+};
+
+// a button which intercepts double clicks (for testing...)
+class MyButton : public wxButton
+{
+public:
+    MyButton(wxWindow *parent,
+             wxWindowID id,
+             const wxString& label = wxEmptyString,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize)
+        : wxButton(parent, id, label, pos, size)
+    {
+    }
+
+    void OnDClick(wxMouseEvent& event)
+    {
+        wxLogMessage(_T("MyButton::OnDClick"));
+
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+// a combo which intercepts chars (to test Windows behaviour)
+class MyComboBox : public wxComboBox
+{
+public:
+    MyComboBox(wxWindow *parent, wxWindowID id,
+               const wxString& value = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0, const wxString choices[] = NULL,
+               long style = 0,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxComboBoxNameStr)
+        : wxComboBox(parent, id, value, pos, size, n, choices, style,
+                     validator, name) { }
+
+protected:
+    void OnChar(wxKeyEvent& event);
+    void OnKeyDown(wxKeyEvent& event);
+    void OnKeyUp(wxKeyEvent& event);
+    void OnFocusGot(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyComboBox::OnFocusGot"));
+
+        event.Skip();
+    }
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
+// a radiobox which handles focus set/kill (for testing)
+class MyRadioBox : public wxRadioBox
+{
+public:
+    MyRadioBox(wxWindow *parent,
+               wxWindowID id,
+               const wxString& title = wxEmptyString,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               int n = 0, const wxString choices[] = NULL,
+               int majorDim = 1,
+               long style = wxRA_HORIZONTAL,
+               const wxValidator& validator = wxDefaultValidator,
+               const wxString& name = wxComboBoxNameStr)
+        : wxRadioBox(parent, id, title, pos, size, n, choices, majorDim,
+                     style, validator, name) { }
+
+protected:
+    void OnFocusGot(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyRadioBox::OnFocusGot"));
+
+        event.Skip();
+    }
+
+    void OnFocusLost(wxFocusEvent& event)
+    {
+        wxLogMessage(_T("MyRadioBox::OnFocusLost"));
+
+        event.Skip();
+    }
+
+private:
     DECLARE_EVENT_TABLE()
 };
 
@@ -356,6 +448,8 @@ EVT_BUTTON    (ID_CHOICE_DELETE,        MyPanel::OnChoiceButtons)
 EVT_BUTTON    (ID_CHOICE_FONT,          MyPanel::OnChoiceButtons)
 EVT_CHECKBOX  (ID_CHOICE_ENABLE,        MyPanel::OnChoiceButtons)
 EVT_COMBOBOX  (ID_COMBO,                MyPanel::OnCombo)
+EVT_TEXT      (ID_COMBO,                MyPanel::OnComboTextChanged)
+EVT_TEXT_ENTER(ID_COMBO,                MyPanel::OnComboTextEnter)
 EVT_BUTTON    (ID_COMBO_SEL_NUM,        MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_SEL_STR,        MyPanel::OnComboButtons)
 EVT_BUTTON    (ID_COMBO_CLEAR,          MyPanel::OnComboButtons)
@@ -386,6 +480,27 @@ EVT_BUTTON    (ID_BUTTON_TEST1,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BUTTON_TEST2,         MyPanel::OnTestButton)
 EVT_BUTTON    (ID_BITMAP_BTN,           MyPanel::OnBmpButton)
 END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyButton, wxButton)
+    EVT_LEFT_DCLICK(MyButton::OnDClick)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyComboBox, wxComboBox)
+    EVT_CHAR(MyComboBox::OnChar)
+    EVT_KEY_DOWN(MyComboBox::OnKeyDown)
+    EVT_KEY_UP(MyComboBox::OnKeyUp)
+
+    EVT_SET_FOCUS(MyComboBox::OnFocusGot)
+END_EVENT_TABLE()
+
+BEGIN_EVENT_TABLE(MyRadioBox, wxRadioBox)
+    EVT_SET_FOCUS(MyRadioBox::OnFocusGot)
+    EVT_KILL_FOCUS(MyRadioBox::OnFocusLost)
+END_EVENT_TABLE()
+
+// ============================================================================
+// implementation
+// ============================================================================
 
 MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
        : wxPanel( frame, -1, wxPoint(x, y), wxSize(w, h) ),
@@ -485,9 +600,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_lbSelectNum = new wxButton( panel, ID_LISTBOX_SEL_NUM, "Select #&2", wxPoint(180,30), wxSize(140,30) );
     m_lbSelectThis = new wxButton( panel, ID_LISTBOX_SEL_STR, "&Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_CLEAR, "&Clear", wxPoint(180,80), wxSize(140,30) );
-    (void)new wxButton( panel, ID_LISTBOX_APPEND, "&Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
+    (void)new MyButton( panel, ID_LISTBOX_APPEND, "&Append 'Hi!'", wxPoint(340,80), wxSize(140,30) );
     (void)new wxButton( panel, ID_LISTBOX_DELETE, "D&elete selected item", wxPoint(180,130), wxSize(140,30) );
-    wxButton *button = new wxButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
+    wxButton *button = new MyButton( panel, ID_LISTBOX_FONT, "Set &Italic font", wxPoint(340,130), wxSize(140,30) );
 
     button->SetDefault();
 
@@ -512,10 +627,8 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     m_choiceSorted = new wxChoice( panel, ID_CHOICE_SORTED, wxPoint(10,70), wxSize(120,-1),
                                    5, choices, wxCB_SORT );
 
-#ifndef __WXMOTIF__
     SetControlClientData("choice", m_choice);
     SetControlClientData("choice", m_choiceSorted);
-#endif
 
     m_choice->SetSelection(2);
     m_choice->SetBackgroundColour( "red" );
@@ -532,7 +645,11 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     panel = new wxPanel(m_notebook);
     (void)new wxStaticBox( panel, -1, "&Box around combobox",
                            wxPoint(5, 5), wxSize(150, 100));
-    m_combo = new wxComboBox( panel, ID_COMBO, "This", wxPoint(20,25), wxSize(120,-1), 5, choices, wxCB_READONLY );
+    m_combo = new MyComboBox( panel, ID_COMBO, "This",
+                              wxPoint(20,25), wxSize(120, -1),
+                              5, choices,
+                              /* wxCB_READONLY | */ wxPROCESS_ENTER);
+
     (void)new wxButton( panel, ID_COMBO_SEL_NUM, "Select #&2", wxPoint(180,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_SEL_STR, "&Select 'This'", wxPoint(340,30), wxSize(140,30) );
     (void)new wxButton( panel, ID_COMBO_CLEAR, "&Clear", wxPoint(180,80), wxSize(140,30) );
@@ -551,7 +668,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     };
 
     panel = new wxPanel(m_notebook);
-    (void)new wxRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
+    (void)new MyRadioBox( panel, ID_RADIOBOX, "&That", wxPoint(10,160), wxSize(-1,-1), WXSIZEOF(choices2), choices2, 1, wxRA_SPECIFY_ROWS );
     m_radio = new wxRadioBox( panel, ID_RADIOBOX, "T&his", wxPoint(10,10), wxSize(-1,-1), WXSIZEOF(choices), choices, 1, wxRA_SPECIFY_COLS );
 
 #if wxUSE_TOOLTIPS
@@ -571,7 +688,9 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
 
     panel = new wxPanel(m_notebook);
     (void)new wxStaticBox( panel, -1, "&wxGauge and wxSlider", wxPoint(10,10), wxSize(200,130) );
-    m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30) );
+    m_gauge = new wxGauge( panel, -1, 200, wxPoint(18,50), wxSize(155, 30), wxGA_HORIZONTAL|wxNO_BORDER );
+    m_gauge->SetBackgroundColour(*wxGREEN);
+    m_gauge->SetForegroundColour(*wxRED);
     m_slider = new wxSlider( panel, ID_SLIDER, 0, 0, 200, wxPoint(18,90), wxSize(155,-1), wxSL_LABELS );
     (void)new wxStaticBox( panel, -1, "&Explanation", wxPoint(220,10), wxSize(270,130) );
 #ifdef __WXMOTIF__
@@ -662,7 +781,7 @@ MyPanel::MyPanel( wxFrame *frame, int x, int y, int w, int h )
     (void)new wxButton(panel, ID_BUTTON_LABEL, "&Toggle label", wxPoint(250, 20));
     m_label = new wxStaticText(panel, -1, "Label with some long text",
                                wxPoint(250, 60), wxDefaultSize,
-                               wxALIGN_RIGHT | wxST_NO_AUTORESIZE);
+                               wxALIGN_RIGHT /*| wxST_NO_AUTORESIZE*/);
     m_label->SetForegroundColour( *wxBLUE );
 
     m_notebook->AddPage(panel, "wxBitmapXXX");
@@ -727,7 +846,7 @@ void MyPanel::OnPageChanging( wxNotebookEvent &event )
                           "page change from taking place - if you select\n"
                           "[No] the current page will stay the third one\n",
                           "Control sample",
-                          wxICON_QUESTION | wxYES_NO) != wxYES )
+                          wxICON_QUESTION | wxYES_NO, this) != wxYES )
         {
             event.Veto();
 
@@ -875,9 +994,11 @@ void MyPanel::OnListBoxButtons( wxCommandEvent &event )
             {
                 int idx;
                 idx = m_listbox->GetSelection();
-                m_listbox->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_listbox->Delete( idx );
                 idx = m_listboxSorted->GetSelection();
-                m_listboxSorted->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_listboxSorted->Delete( idx );
                 break;
             }
         case ID_LISTBOX_FONT:
@@ -958,9 +1079,11 @@ void MyPanel::OnChoiceButtons( wxCommandEvent &event )
         case ID_CHOICE_DELETE:
             {
                 int idx = m_choice->GetSelection();
-                m_choice->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_choice->Delete( idx );
                 idx = m_choiceSorted->GetSelection();
-                m_choiceSorted->Delete( idx );
+                if ( idx != wxNOT_FOUND )
+                    m_choiceSorted->Delete( idx );
                 break;
             }
         case ID_CHOICE_FONT:
@@ -980,6 +1103,18 @@ void MyPanel::OnCombo( wxCommandEvent &event )
     m_text->AppendText( "ComboBox control selection string is: " );
     m_text->AppendText( m_combo->GetStringSelection() );
     m_text->AppendText( "\n" );
+}
+
+void MyPanel::OnComboTextChanged(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Text in the combobox changed: now is '%s'."),
+                 m_combo->GetValue().c_str());
+}
+
+void MyPanel::OnComboTextEnter(wxCommandEvent& WXUNUSED(event))
+{
+    wxLogMessage(_T("Enter pressed in the combobox: value is '%s'."),
+                 m_combo->GetValue().c_str());
 }
 
 void MyPanel::OnComboButtons( wxCommandEvent &event )
@@ -1070,7 +1205,7 @@ void MyPanel::OnUpdateLabel( wxCommandEvent &WXUNUSED(event) )
     static bool s_long = TRUE;
 
     s_long = !s_long;
-    m_label->SetLabel(s_long ? "very very very long text" : "shorter text");
+    m_label->SetLabel(s_long ? "Very very very very very long text." : "Shorter text.");
 }
 
 void MyPanel::OnSliderUpdate( wxCommandEvent &WXUNUSED(event) )
@@ -1321,6 +1456,33 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 
         SetStatusText(msg);
     }
+}
+
+void MyComboBox::OnChar(wxKeyEvent& event)
+{
+    wxLogMessage(_T("MyComboBox::OnChar"));
+
+    if ( event.KeyCode() == 'w' )
+        wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
+    else
+        event.Skip();
+}
+
+void MyComboBox::OnKeyDown(wxKeyEvent& event)
+{
+    wxLogMessage(_T("MyComboBox::OnKeyDown"));
+
+    if ( event.KeyCode() == 'w' )
+        wxLogMessage(_T("MyComboBox: 'w' will be ignored."));
+    else
+        event.Skip();
+}
+
+void MyComboBox::OnKeyUp(wxKeyEvent& event)
+{
+    wxLogMessage(_T("MyComboBox::OnKeyUp"));
+
+    event.Skip();
 }
 
 static void SetControlClientData(const char *name,

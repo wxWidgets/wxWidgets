@@ -15,6 +15,8 @@
 #include "SciLexer.h"
 #include "PropSet.h"
 #include "Accessor.h"
+#include "WindowAccessor.h"
+#include "DocumentAccessor.h"
 #include "KeyWords.h"
 #endif
 #include "ContractionState.h"
@@ -50,11 +52,11 @@ void ScintillaBase::RefreshColourPalette(Palette &pal, bool want) {
 	ct.RefreshColourPalette(pal, want);
 }
 
-void ScintillaBase::AddChar(char ch) {
+void ScintillaBase::AddCharUTF(char *s, unsigned int len) {
 	bool acActiveBeforeCharAdded = ac.Active();
-	Editor::AddChar(ch);
+	Editor::AddCharUTF(s, len);
 	if (acActiveBeforeCharAdded)
-		AutoCompleteChanged(ch);
+		AutoCompleteChanged(s[0]);
 }
 
 void ScintillaBase::Command(int cmdId) {
@@ -276,20 +278,20 @@ void ScintillaBase::Colourise(int start, int end) {
 		end = lengthDoc;
 	int len = end - start;
 
-	PropSet props;
-	
-	StylingContext styler(wMain.GetID(), props);
+	//WindowAccessor styler(wMain.GetID(), props);
+	DocumentAccessor styler(pdoc, props);
 
 	int styleStart = 0;
 	if (start > 0)
 		styleStart = styler.StyleAt(start - 1);
-
-	ColouriseDoc(pdoc->dbcsCodePage, start, len, styleStart, lexLanguage, keyWordLists, styler);
+	styler.SetCodePage(pdoc->dbcsCodePage);
+	
+	LexerModule::Colourise(start, len, styleStart, lexLanguage, keyWordLists, styler);
 	styler.Flush();
 }
 #endif
 
-void ScintillaBase::NotifyStyleNeeded(int endStyleNeeded) {
+void ScintillaBase::NotifyStyleToNeeded(int endStyleNeeded) {
 #ifdef SCI_LEXER
 	if (lexLanguage != SCLEX_CONTAINER) {
 		int endStyled = Platform::SendScintilla(wMain.GetID(), SCI_GETENDSTYLED, 0, 0);
@@ -299,7 +301,7 @@ void ScintillaBase::NotifyStyleNeeded(int endStyleNeeded) {
 		return;
 	}
 #endif
-	Editor::NotifyStyleNeeded(endStyleNeeded);
+	Editor::NotifyStyleToNeeded(endStyleNeeded);
 }
 
 LRESULT ScintillaBase::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
@@ -322,8 +324,19 @@ LRESULT ScintillaBase::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		AutoCompleteCompleted();
 		break;
 
+	case SCI_AUTOCSETSEPARATOR:
+		ac.SetSeparator(wParam);
+		break;
+
+	case SCI_AUTOCGETSEPARATOR:
+		return ac.GetSeparator();
+
 	case SCI_AUTOCSTOPS:
 		ac.SetStopChars(reinterpret_cast<char *>(lParam));
+		break;
+		
+	case SCI_AUTOCSELECT:
+		ac.Select(reinterpret_cast<char *>(lParam));
 		break;
 
 	case SCI_CALLTIPSHOW: {
@@ -377,6 +390,7 @@ LRESULT ScintillaBase::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		
 	case SCI_COLOURISE:
 		Colourise(wParam, lParam);
+		Redraw();
 		break;
 		
 	case SCI_SETPROPERTY:
@@ -385,7 +399,7 @@ LRESULT ScintillaBase::WndProc(UINT iMessage, WPARAM wParam, LPARAM lParam) {
 		break;
 		
 	case SCI_SETKEYWORDS:
-		if ((wParam >= 0) && (wParam < numWordLists)) {
+		if (wParam < numWordLists) {
 			keyWordLists[wParam]->Clear();
 			keyWordLists[wParam]->Set(reinterpret_cast<const char *>(lParam));
 		}

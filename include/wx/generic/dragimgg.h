@@ -97,7 +97,11 @@ public:
     // Ctors & dtor
     ////////////////////////////////////////////////////////////////////////////
 
-    wxGenericDragImage();
+    wxGenericDragImage(const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
+    {
+        Init();
+        Create(cursor, hotspot);
+    }
     wxGenericDragImage(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0))
     {
         Init();
@@ -133,8 +137,15 @@ public:
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
 
+    // For efficiency, tell wxGenericDragImage to use a bitmap that's already
+    // created (e.g. from last drag)
+    void SetBackingBitmap(wxBitmap* bitmap) { m_pBackingBitmap = bitmap; }
+
     // Operations
     ////////////////////////////////////////////////////////////////////////////
+
+    // Create a drag image with a virtual image (need to override DoDrawImage, GetImageRect)
+    bool Create(const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
 
     // Create a drag image from a bitmap and optional cursor
     bool Create(const wxBitmap& image, const wxCursor& cursor = wxNullCursor, const wxPoint& hotspot = wxPoint(0, 0));
@@ -178,10 +189,22 @@ public:
 
     void Init();
 
-    wxRect GetImageRect(const wxPoint& pos) const;
+    // Override this if you are using a virtual image (drawing your own image)
+    virtual wxRect GetImageRect(const wxPoint& pos) const;
+
+    // Override this if you are using a virtual image (drawing your own image)
+    virtual bool DoDrawImage(wxDC& dc, const wxPoint& pos) const;
+
+    // Override this if you wish to draw the window contents to the backing bitmap
+    // yourself. This can be desirable if you wish to avoid flicker by not having to
+    // redraw the window itself before dragging in order to be graphic-minus-dragged-objects.
+    // Instead, paint the drag image's backing bitmap to be correct, and leave the window
+    // to be updated only when dragging the objects away (thus giving a smoother appearance).
+    virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC,
+        const wxRect& sourceRect, const wxRect& destRect) const;
 
     // Erase and redraw simultaneously if possible
-    bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos, bool eraseOld, bool drawNew);
+    virtual bool RedrawImage(const wxPoint& oldPos, const wxPoint& newPos, bool eraseOld, bool drawNew);
 
 protected:
     wxBitmap        m_bitmap;
@@ -189,6 +212,7 @@ protected:
     wxCursor        m_cursor;
     wxCursor        m_oldCursor;
     wxPoint         m_hotspot;
+    wxPoint         m_offset; // The hostpot value passed to BeginDrag
     wxPoint         m_position;
     bool            m_isDirty;
     bool            m_isShown;
@@ -197,6 +221,8 @@ protected:
 
     // Stores the window contents while we're dragging the image around
     wxBitmap        m_backingBitmap;
+    wxBitmap*       m_pBackingBitmap; // Pointer to existing backing bitmap
+                                      // (pass to wxGenericDragImage as an efficiency measure)
     // A temporary bitmap for repairing/redrawing
     wxBitmap        m_repairBitmap;
 
