@@ -479,12 +479,11 @@ void wxFrame::SetSize(int x, int y, int width, int height, int sizeFlags)
   if (!(height == -1 && width == -1))
   {
     PreResize();
- /* JACS: not sure if this is necessary
+
     wxSizeEvent sizeEvent(wxSize(width, height), GetId());
     sizeEvent.SetEventObject(this);
 
     GetEventHandler()->ProcessEvent(sizeEvent);
-  */
   }
 }
 

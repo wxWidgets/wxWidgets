@@ -96,10 +96,8 @@ void wxSashWindow::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
 
-#if 0
-    if ( m_borderSize > 0 )
-        DrawBorders(dc);
-#endif
+    //    if ( m_borderSize > 0 )
+    DrawBorders(dc);
 
     DrawSashes(dc);
 }

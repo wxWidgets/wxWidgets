@@ -10,11 +10,11 @@
 
 include ../make.env
 
-TARGETLIB=../../lib/libzlib.a
+TARGETLIB=../../lib/libpng.a
 
-LIB_C_SRC = adler32.c compress.c crc32.c gzio.c uncompr.c deflate.c \
-  trees.c zutil.c inflate.c infblock.c inftrees.c infcodes.c \
-  infutil.c inffast.c 
+LIB_C_SRC = png.c pngread.c pngrtran.c pngrutil.c \
+ pngpread.c pngtrans.c pngwrite.c pngwtran.c pngwutil.c \
+ pngerror.c pngmem.c pngwio.c pngrio.c pngget.c pngset.c
 
 all:    $(TARGETLIB)
 

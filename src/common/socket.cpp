@@ -514,7 +514,12 @@ void wxSocketBase::Discard()
 // Under glibc 2.0.7, socketbits.h declares socklen_t to be unsigned int
 // and it uses *socklen_t as the 3rd parameter. Robert.
 
-#ifdef __LINUX__
+// JACS - How can we detect this?
+// Meanwhile, if your compiler complains about socklen_t,
+// switch lines below.
+
+#if defined(__LINUX__)
+// #if 0
 #define wxSOCKET_INT socklen_t
 #else
 #define wxSOCKET_INT int

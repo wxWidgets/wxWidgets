@@ -1542,3 +1542,18 @@ wxImage::wxImage( const wxBitmap &bitmap )
 }
 
 #endif
+
+// TODO
+
+#ifdef __WXMOTIF__
+wxBitmap wxImage::ConvertToBitmap() const
+{
+  wxFAIL_MSG("Sorry, wxImage::ConvertToBitmap isn't implemented for wxMotif yet.");
+  return wxNullBitmap;
+}
+
+wxImage::wxImage( const wxBitmap &bitmap )
+{
+  wxFAIL_MSG("Sorry, wxImage::wxImage(const wxBitmap&) isn't implemented for wxMotif yet.");
+}
+#endif

@@ -30,6 +30,7 @@ LIB_CPP_SRC=\
  ../common/helpbase.cpp \
  ../common/intl.cpp \
  ../common/ipcbase.cpp \
+ ../common/image.cpp \
  ../common/layout.cpp \
  ../common/list.cpp \
  ../common/log.cpp \
@@ -180,7 +181,7 @@ LIB_C_SRC=\
 # already have a zlib library installed on our system
 # (or we wish to statically link them for some reason)
 EXTRA_C_SRC=\
-  xmcombo/xmcombo.c # $(ZLIB_SRC)
+  xmcombo/xmcombo.c
 
 EXTRA_CPP_SRC=\
 
@@ -192,7 +193,7 @@ EXTRA_CPP_SRC=\
 #  mdi/lib/XsOutline.C\
 #  mdi/lib/XsResizeOutline.C
 
-all:    $(WXLIB)
+all:    $(WXLIB) png zlib
 
 # Define library objects
 OBJECTS=\
@@ -224,6 +225,18 @@ $(WXLIB) : $(OBJECTS)
 combobox/combobox.o: combobox/combobox.c
 	$(CCC) -c $(CFLAGS) -o $@ combobox/combobox.c
 
-clean:
+zlib:
+	cd ../zlib; make -f makefile.unx motif
+
+png:
+	cd ../png; make -f makefile.unx motif
+
+clean: cleanzlib cleanpng
 	rm -f $(OBJECTS) $(WXLIB)
+
+cleanzlib:
+	cd ../zlib; make -f makefile.unx cleanmotif
+
+cleanpng:
+	cd ../png; make -f makefile.unx cleanmotif
 

@@ -199,6 +199,7 @@ utils/glcanvas/win/*.xpm
 utils/glcanvas/win/*.txt
 utils/glcanvas/win/*.ico
 utils/glcanvas/win/*.bmp
+
 utils/glcanvas/src/*.h
 utils/glcanvas/src/*.cpp
 utils/glcanvas/src/*.def
@@ -209,6 +210,12 @@ utils/glcanvas/src/*.xpm
 utils/glcanvas/src/*.txt
 utils/glcanvas/src/*.ico
 utils/glcanvas/src/*.bmp
+
+utils/glcanvas/motif/*.h
+utils/glcanvas/motif/*.cpp
+utils/glcanvas/motif/makefile*
+utils/glcanvas/motif/*.txt
+
 utils/glcanvas/samples/cube/*.h
 utils/glcanvas/samples/cube/*.cpp
 utils/glcanvas/samples/cube/*.def

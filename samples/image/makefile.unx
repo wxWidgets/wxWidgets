@@ -7,11 +7,11 @@
 #
 # "%W% %G%"
 #
-# Makefile for bombs example (UNIX).
+# Makefile for image example (UNIX).
 
-PROGRAM=bombs
+PROGRAM=image
 
-OBJECTS = bombs.o bombs1.o game.o
+OBJECTS=$(PROGRAM).o
 
 include ../../src/makeprog.env
 
