@@ -908,7 +908,7 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             wxPalette *pal = bmp.GetPalette();
             if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
             {
-                oldPal = ::SelectPalette( hdcMem, GetHpalette(pal), FALSE);
+                oldPal = ::SelectPalette(hdcMem, GetHpaletteOf(pal), FALSE);
                 ::RealizePalette(hdcMem);
             }
 #endif // wxUSE_PALETTE
@@ -962,8 +962,8 @@ void wxDC::DoDrawBitmap( const wxBitmap &bmp, wxCoord x, wxCoord y, bool useMask
             wxPalette *pal = bmp.GetPalette();
             if ( pal && ::GetDeviceCaps(cdc,BITSPIXEL) <= 8 )
             {
-                oldPal = ::SelectPalette( hdcMem, GetHpalette(pal), FALSE);
-                ::RealizePalette(hdcMem);
+                oldPal = ::SelectPalette(memdc, GetHpaletteOf(pal), FALSE);
+                ::RealizePalette(memdc);
             }
 #endif // wxUSE_PALETTE
 
