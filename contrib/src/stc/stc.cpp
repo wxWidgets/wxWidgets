@@ -1055,7 +1055,7 @@ void wxStyledTextCtrl::SetText(const wxString& text) {
 // Retrieve all the text in the document.
 wxString wxStyledTextCtrl::GetText() {
                         wxString text;
-                        int   len  = GetTextLength();
+                        int   len  = GetTextLength()+1;
                         char* buff = text.GetWriteBuf(len+1);
 
                         SendMsg(2182, len, (long)buff);

@@ -338,7 +338,7 @@ methodOverrideMap = {
 
                  '''wxString %s() {
                         wxString text;
-                        int   len  = GetTextLength();
+                        int   len  = GetTextLength()+1;
                         char* buff = text.GetWriteBuf(len+1);
 
                         SendMsg(%s, len, (long)buff);
