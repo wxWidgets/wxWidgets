@@ -429,6 +429,8 @@ DocStr(wxTextEntryDialog,
 
 MustHaveApp(wxTextEntryDialog);
 
+enum { wxTextEntryDialogStyle };
+
 class wxTextEntryDialog : public wxDialog {
 public:
     %pythonAppend wxTextEntryDialog   "self._setOORInfo(self)"
