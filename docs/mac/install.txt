@@ -35,18 +35,60 @@ file is automatically generated during the configuration of wxMac.
 OpenGL
 ------
 
-in order to build opengl support with CodeWarrior, you must install the opengl libraries and headers
+In order to build opengl support with CodeWarrior, you must install the opengl libraries and headers
 from http://developer.apple.com/opengl/index.html
 
-if you want OpenGL support with CodeWarrior, set wxUSE_OPENGL in include/wx/setup.h to 1
+If you want OpenGL support with CodeWarrior, set wxUSE_OPENGL in include/wx/setup.h to 1
 
-if you want OpenGL support with the Apple Developer Tools under Mac OS X, add --with-opengl to the
+If you don't want OpenGl support, remove the file "glcanvas.cpp" from the project before
+compilation and leave the setting at 0
+
+If you want OpenGL support with the Apple Developer Tools under Mac OS X, add --with-opengl to the
 arguments of configure when configuring wxMac.
 
 Project Files
 -------------
 
-there are always the makemac.mcp files for Pro 5.3 and the makemac6.mcp files for Pro 6
+There are always the makemac.mcp files for Pro 5.3 and the makemac6.mcp files for Pro 6
+
+In order to build the library (and then the samples) you need to make the following
+projects (for 5.3)
+:src:makemac.mcp
+:src:png:makemac.mcp
+:src:tif:makemac.mcp
+:src:jpeg:makemac.mcp
+:src:zlib:makemac.mcp
+
+Apple Developers Tools
+----------------------
+
+As in all Unix projects, you need to do something like this
+under MacOS 10.1 with the Apple Developers Tools installed.
+
+1) cd into the source dir
+2) mkdir build
+3) cd build
+4) ../configure
+5) make
+
+If you want to install the library, you need to be able
+to log in as "root". For this, "root" has to be activated
+in the NetInfo utility - there you will also have to
+choose a password for the "root" user. Then
+
+6) su
+7) type <PASSWORD>
+8) make install
+9) exit
+
+Note: There are currently link problems (in some rare cases)
+with wxMAC and Apple's tools when compiling the library as
+a shared library (the default). You might want to type
+
+4) ../configure --disable-shared
+
+to build a static library instead.
+
 
 Problems with .xpm files
 ------------------------
@@ -58,7 +100,9 @@ tipdlg.cpp line 201   #include "wx/generic/tip.xpm"
 
 then your cvs has changed the type of the .xpm files to something other than text, in order to fix this
 either change the type by using a resource editor or drag the files from /include/wx/generic/..xpm on 
-the SetTypeFromExtension application that is included in this folder
+the SetTypeFromExtension application that is included in this folder. This small applet itself queries
+the Internet Config, so you will have to associate the "xpm" extension with CodeWarrior before making
+use of this applet.
 
 Missing PLStringFuncsLib
 ------------------------
