@@ -257,7 +257,7 @@ void wxTopLevelWindowX11::SetIcon(const wxIcon& icon)
         if (icon.GetMask())
         {
             wmHints->flags |= IconMaskHint;
-            wmHints->icon_mask = (Pixmap) icon.GetMask()->GetPixmap();
+            wmHints->icon_mask = (Pixmap) icon.GetMask()->GetBitmap();
         }
 
         XSetWMHints(wxGlobalDisplay(), (Window) GetMainWindow(), wmHints);

@@ -602,9 +602,7 @@ void wxApp::CleanUp()
     wxCleanUpResourceSystem();
 #endif
 
-    if (wxTheColourDatabase)
-        delete wxTheColourDatabase;
-
+    delete wxTheColourDatabase;
     wxTheColourDatabase = (wxColourDatabase*) NULL;
 
     wxDeleteStockObjects();
@@ -614,16 +612,15 @@ void wxApp::CleanUp()
     delete wxTheApp;
     wxTheApp = (wxApp*) NULL;
 
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
+    delete[] wxBuffer;
+    wxBuffer = NULL;
+
+    wxClassInfo::CleanUpClasses();
+
 #if wxUSE_THREADS
     delete wxPendingEvents;
     delete wxPendingEventsLocker;
 #endif
-
-    delete[] wxBuffer;
-
-    wxClassInfo::CleanUpClasses();
 
     // check for memory leaks
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT

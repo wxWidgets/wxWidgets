@@ -18,42 +18,39 @@
 
 #include "wx/bitmap.h"
 
-#define M_ICONDATA ((wxBitmapRefData *)m_refData)
-#define M_ICONHANDLERDATA ((wxBitmapRefData *)bitmap->GetRefData())
+//-----------------------------------------------------------------------------
+// wxIcon
+//-----------------------------------------------------------------------------
 
-// Icon
-class WXDLLEXPORT wxIcon: public wxBitmap
+class wxIcon: public wxBitmap
 {
-    DECLARE_DYNAMIC_CLASS(wxIcon)
-        
 public:
     wxIcon();
-    
-    // Copy constructors
-    inline wxIcon(const wxIcon& icon) { Ref(icon); }
-    
-    // Initialize with XBM data
-    wxIcon(const char bits[], int width, int height);
-    
-    // Initialize with XPM data
-    wxIcon(const char **data);
-    wxIcon(char **data);
-    
-    wxIcon(const wxString& name, long flags = wxBITMAP_TYPE_XPM,
-        int desiredWidth = -1, int desiredHeight = -1);
-    ~wxIcon();
-    
-    bool LoadFile(const wxString& name, long flags = wxBITMAP_TYPE_XPM,
-        int desiredWidth = -1, int desiredHeight = -1);
-    
-    inline wxIcon& operator = (const wxIcon& icon) { if (*this == icon) return (*this); Ref(icon); return *this; }
-    inline bool operator == (const wxIcon& icon) const { return m_refData == icon.m_refData; }
-    inline bool operator != (const wxIcon& icon) const { return m_refData != icon.m_refData; }
-    
-    virtual bool Ok() const { return ((m_refData != NULL) && (M_ICONDATA->m_ok)); }
+    wxIcon( const wxIcon& icon);
+    wxIcon( const char **bits, int width=-1, int height=-1 );
 
-    bool CopyFromBitmap(const wxBitmap& bitmap);
+    // For compatibility with wxMSW where desired size is sometimes required to
+    // distinguish between multiple icons in a resource.
+    wxIcon( const wxString& filename, int type = wxBITMAP_TYPE_XPM, 
+            int WXUNUSED(desiredWidth)=-1, int WXUNUSED(desiredHeight)=-1 ) :
+        wxBitmap(filename, type)
+    {
+    }
+    wxIcon( char **bits, int width=-1, int height=-1 );
+
+    wxIcon& operator = (const wxIcon& icon);
+    inline bool operator == (const wxIcon& icon) { return m_refData == icon.m_refData; }
+    inline bool operator != (const wxIcon& icon) { return m_refData != icon.m_refData; }
+
+    // create from bitmap (which should have a mask unless it's monochrome):
+    // there shouldn't be any implicit bitmap -> icon conversion (i.e. no
+    // ctors, assignment operators...), but it's ok to have such function
+    void CopyFromBitmap(const wxBitmap& bmp);
+  
+private:
+    DECLARE_DYNAMIC_CLASS(wxIcon)
 };
+
 
 #endif
 // _WX_ICON_H_

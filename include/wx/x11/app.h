@@ -91,11 +91,14 @@ public:
     
     WXWindow       GetTopLevelWidget() const { return m_topLevelWidget; }
     WXColormap     GetMainColormap(WXDisplay* display);
-    WXDisplay*     GetInitialDisplay() const { return m_initialDisplay; }
     long           GetMaxRequestSize() const { return m_maxRequestSize; }
     
     // This handler is called when a property change event occurs
     virtual void   HandlePropertyChange(WXEvent *event);
+    
+    // We need this before create the app
+    static   WXDisplay* GetDisplay() { return ms_display; }
+    static   WXDisplay* ms_display;
     
 public:
     static long    sm_lastMessageTime;
@@ -106,7 +109,6 @@ protected:
     
     WXWindow              m_topLevelWidget;
     WXColormap            m_mainColormap;
-    WXDisplay*            m_initialDisplay;
     long                  m_maxRequestSize;
     wxEventLoop*          m_mainLoop;
     

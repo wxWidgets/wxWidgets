@@ -16,72 +16,42 @@
 #include "wx/icon.h"
 #include "wx/window.h"
 
-#ifdef __VMS__
-#pragma message disable nosimpint
-#endif
-
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
 #include "wx/x11/private.h"
 
-IMPLEMENT_DYNAMIC_CLASS(wxIcon, wxBitmap)
+//-----------------------------------------------------------------------------
+// wxIcon
+//-----------------------------------------------------------------------------
 
-/*
-* Icons
-*/
+IMPLEMENT_DYNAMIC_CLASS(wxIcon,wxBitmap)
 
-wxIcon::wxIcon()
+wxIcon::wxIcon( const char **bits, int WXUNUSED(width), int WXUNUSED(height) ) :
+    wxBitmap( bits )
 {
 }
 
-// Create from XBM data
-wxIcon::wxIcon(const char bits[], int width, int height)
-{
-    (void) Create((void*) bits, wxBITMAP_TYPE_XBM_DATA, width, height, 1);
-}
-
-// Create from XPM data
-wxIcon::wxIcon(char **data)
-{
-    (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
-}
-
-wxIcon::wxIcon(const char **data)
-{
-    (void) Create((void*) data, wxBITMAP_TYPE_XPM_DATA, 0, 0, 0);
-}
-
-wxIcon::wxIcon(const wxString& icon_file, long flags,
-               int desiredWidth, int desiredHeight)
-               
-{
-    LoadFile(icon_file, flags, desiredWidth, desiredHeight);
-}
-
-wxIcon::~wxIcon()
+wxIcon::wxIcon( char **bits, int WXUNUSED(width), int WXUNUSED(height) ) :
+    wxBitmap( bits )
 {
 }
 
-bool wxIcon::LoadFile(const wxString& filename, long type,
-                      int desiredWidth, int desiredHeight)
+wxIcon::wxIcon() :  wxBitmap()
 {
-    UnRef();
-    
-    m_refData = new wxBitmapRefData;
-    
-    wxBitmapHandler *handler = FindHandler(type);
-    
-    if ( handler )
-        return handler->LoadFile(this, filename, type, desiredWidth, desiredHeight);
-    else
-        return FALSE;
 }
 
-bool wxIcon::CopyFromBitmap(const wxBitmap& bitmap)
+wxIcon::wxIcon( const wxIcon& icon ) : wxBitmap()
 {
-    wxIcon* icon = (wxIcon*) (& bitmap);
+    Ref(icon);
+}
+
+wxIcon& wxIcon::operator = ( const wxIcon& icon )
+{
+    if (*this == icon) return (*this);
+    Ref(icon);
+    return *this;
+}
+
+void wxIcon::CopyFromBitmap(const wxBitmap& bmp)
+{
+    wxIcon *icon = (wxIcon*)(&bmp);
     *this = *icon;
-    return TRUE;
 }

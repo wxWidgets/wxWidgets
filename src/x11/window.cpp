@@ -430,11 +430,10 @@ bool wxWindowX11::SetCursor(const wxCursor& cursor)
     else
         cursor2 = wxSTANDARD_CURSOR;
 
-    WXDisplay *dpy = GetXDisplay();
-    WXCursor x_cursor = cursor2->GetXCursor(dpy);
+    WXCursor x_cursor = cursor2->GetCursor();
 
     Window win = (Window) GetMainWindow();
-    XDefineCursor((Display*) dpy, win, (Cursor) x_cursor);
+    XDefineCursor((Display*) wxGlobalDisplay(), win, (Cursor) x_cursor);
 
     return TRUE;
 }

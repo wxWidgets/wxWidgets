@@ -848,7 +848,6 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     wxCHECK_RET( bitmap.Ok(), wxT("invalid bitmap") );
     
-#if 0
     bool is_mono = (bitmap.GetBitmap() != NULL);
 
     /* scale/translate size and position */
@@ -881,9 +880,11 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     {
         wxImage image( bitmap );
         image.Rescale( ww, hh );
+#if 0
         if (is_mono)
             use_bitmap = image.ConvertToMonoBitmap(255,255,255);
         else
+#endif
             use_bitmap = image.ConvertToBitmap();
     }
     else
@@ -892,12 +893,13 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
     }
 
     /* apply mask if any */
-    GdkBitmap *mask = (GdkBitmap *) NULL;
+    WXPixmap mask = NULL;
     if (use_bitmap.GetMask()) mask = use_bitmap.GetMask()->GetBitmap();
-
+    {
         if (useMask && mask)
         {
-            GdkBitmap *new_mask = (GdkBitmap*) NULL;
+            WXPixmap new_mask = NULL;
+#if 0
             if (!m_currentClippingRegion.IsNull())
             {
                 GdkColor col;
@@ -917,53 +919,56 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
                 gdk_draw_rectangle( new_mask, gc, TRUE, 0, 0, ww, hh );
                 gdk_gc_unref( gc );
             }
-
+#endif
             if (is_mono)
             {
                 if (new_mask)
-                    gdk_gc_set_clip_mask( m_textGC, new_mask );
+                    XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) new_mask );
                 else
-                    gdk_gc_set_clip_mask( m_textGC, mask );
-                gdk_gc_set_clip_origin( m_textGC, xx, yy );
+                    XSetClipMask( (Display*) m_display, (GC) m_textGC, (Pixmap) mask );
+                XSetClipOrigin( (Display*) m_display, (GC) m_textGC, xx, yy );
             }
             else
             {
                 if (new_mask)
-                    gdk_gc_set_clip_mask( m_penGC, new_mask );
+                    XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) new_mask );
                 else
-                    gdk_gc_set_clip_mask( m_penGC, mask );
-                gdk_gc_set_clip_origin( m_penGC, xx, yy );
+                    XSetClipMask( (Display*) m_display, (GC) m_penGC, (Pixmap) mask );
+                XSetClipOrigin( (Display*) m_display, (GC) m_penGC, xx, yy );
             }
+            
             if (new_mask)
-                gdk_bitmap_unref( new_mask );
+               XFreePixmap( (Display*) m_display, (Pixmap) new_mask );
         }
+    }
 
     /* Draw XPixmap or XBitmap, depending on what the wxBitmap contains. For
        drawing a mono-bitmap (XBitmap) we use the current text GC */
     if (is_mono)
-        gdk_wx_draw_bitmap( m_window, m_textGC, use_bitmap.GetBitmap(), 0, 0, xx, yy, -1, -1 );
+        XCopyPlane( (Display*) m_display, (Pixmap) use_bitmap.GetBitmap(), (Window) m_window,
+            (GC) m_textGC, 0, 0, w, h, xx, yy, 1 );
     else
-        gdk_draw_pixmap( m_window, m_penGC, use_bitmap.GetPixmap(), 0, 0, xx, yy, -1, -1 );
+        XCopyArea( (Display*) m_display, (Pixmap) use_bitmap.GetPixmap(), (Window) m_window,
+            (GC) m_penGC, 0, 0, w, h, xx, yy );
 
     /* remove mask again if any */
     if (useMask && mask)
     {
         if (is_mono)
         {
-            gdk_gc_set_clip_mask( m_textGC, (GdkBitmap *) NULL );
-            gdk_gc_set_clip_origin( m_textGC, 0, 0 );
+            XSetClipMask( (Display*) m_display, (GC) m_textGC, None );
+            XSetClipOrigin( (Display*) m_display, (GC) m_textGC, 0, 0 );
             if (!m_currentClippingRegion.IsNull())
-                gdk_gc_set_clip_region( m_textGC, m_currentClippingRegion.GetRegion() );
+                XSetRegion( (Display*) m_display, (GC) m_textGC, (Region) m_currentClippingRegion.GetX11Region() );
         }
         else
         {
-            gdk_gc_set_clip_mask( m_penGC, (GdkBitmap *) NULL );
-            gdk_gc_set_clip_origin( m_penGC, 0, 0 );
+            XSetClipMask( (Display*) m_display, (GC) m_penGC, None );
+            XSetClipOrigin( (Display*) m_display, (GC) m_penGC, 0, 0 );
             if (!m_currentClippingRegion.IsNull())
-                gdk_gc_set_clip_region( m_penGC, m_currentClippingRegion.GetRegion() );
+                XSetRegion( (Display*) m_display, (GC) m_penGC, (Region) m_currentClippingRegion.GetX11Region() );
         }
     }
-#endif
 }
 
 bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
@@ -996,7 +1001,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord he
     {
         xsrcMask = xsrc; ysrcMask = ysrc;
     }
-
+    
 #if 0
     if (srcDC->m_isMemDC)
     {
@@ -1232,13 +1237,6 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     x = XLOG2DEV(x);
     y = YLOG2DEV(y);
 
-    XCharStruct overall_return;
-    int direction = 0;
-    int slen = text.Length();
-    int ascent = 0;
-    int descent = 0;
-    (void)XTextExtents((XFontStruct*) xfont, (char*) (const char*) text, slen, &direction,
-                               &ascent, &descent, &overall_return);
 #if 0
     wxCoord width = gdk_string_width( font, text.mbc_str() );
     wxCoord height = font->ascent + font->descent;
@@ -1255,8 +1253,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
     if ((xfont->min_byte1 == 0) && (xfont->max_byte1 == 0))
 	{
         XDrawString( (Display*) m_display, (Window) m_window, 
-            (GC) m_textGC, x, y + ascent, text.c_str(), text.Len() );
-	wxLogDebug("Drawing text %s at %d, %d", text.c_str(), x, y);
+            (GC) m_textGC, x, y + xfont->ascent, text.c_str(), text.Len() );
 	}
 
 #if 0
@@ -1930,6 +1927,13 @@ wxClientDC::wxClientDC( wxWindow *win )
           : wxWindowDC( win )
 {
     wxCHECK_RET( win, _T("NULL window in wxClientDC::wxClientDC") );
+    
+#ifdef __WXUNIVERSAL__
+    wxPoint ptOrigin = win->GetClientAreaOrigin();
+    SetDeviceOrigin(ptOrigin.x, ptOrigin.y);
+    wxSize size = win->GetClientSize();
+    SetClippingRegion(wxPoint(0, 0), size);
+#endif // __WXUNIVERSAL__
 }
 
 void wxClientDC::DoGetSize(int *width, int *height) const

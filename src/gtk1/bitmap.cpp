@@ -300,6 +300,8 @@ bool wxBitmap::Create( int width, int height, int depth )
 
 bool wxBitmap::CreateFromXpm( const char **bits )
 {
+    UnRef();
+
     wxCHECK_MSG( bits != NULL, FALSE, wxT("invalid bitmap data") )
 
     GdkVisual *visual = wxTheApp->GetGdkVisual();
@@ -327,6 +329,8 @@ bool wxBitmap::CreateFromXpm( const char **bits )
 
 bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 {
+    UnRef();
+
     wxCHECK_MSG( image.Ok(), FALSE, wxT("invalid image") )
     wxCHECK_MSG( depth == -1 || depth == 1, FALSE, wxT("invalid bitmap depth") )
 
@@ -510,7 +514,7 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
         if (bpp > 8)
         {
             if ((visual->red_mask > visual->green_mask) && (visual->green_mask > visual->blue_mask))      b_o = RGB;
-            else if ((visual->red_mask > visual->blue_mask) && (visual->blue_mask > visual->green_mask))  b_o = RGB;
+            else if ((visual->red_mask > visual->blue_mask) && (visual->blue_mask > visual->green_mask))  b_o = RBG;
             else if ((visual->blue_mask > visual->red_mask) && (visual->red_mask > visual->green_mask))   b_o = BRG;
             else if ((visual->blue_mask > visual->green_mask) && (visual->green_mask > visual->red_mask)) b_o = BGR;
             else if ((visual->green_mask > visual->red_mask) && (visual->red_mask > visual->blue_mask))   b_o = GRB;

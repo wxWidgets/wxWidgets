@@ -79,6 +79,7 @@ static int wxXErrorHandler(Display *dpy, XErrorEvent *xevent)
 #endif // __WXDEBUG__
 
 long wxApp::sm_lastMessageTime = 0;
+WXDisplay *wxApp::ms_display = NULL;
 
 bool wxApp::Initialize()
 {
@@ -102,8 +103,6 @@ bool wxApp::Initialize()
     wxInitializeResourceSystem();
 #endif
 
-    wxBitmap::InitStandardHandlers();
-
     wxWidgetHashTable = new wxHashTable(wxKEY_INTEGER);
 
     wxModule::RegisterModules();
@@ -123,27 +122,21 @@ void wxApp::CleanUp()
     wxCleanUpResourceSystem();
 #endif
 
-    wxDeleteStockObjects() ;
-
-    // Destroy all GDI lists, etc.
-
-    wxDeleteStockLists();
-
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
 
-    wxBitmap::CleanUpHandlers();
+    wxDeleteStockObjects();
+    
+    wxDeleteStockLists();
+
+    delete wxTheApp;
+    wxTheApp = NULL;
 
     delete[] wxBuffer;
     wxBuffer = NULL;
 
     wxClassInfo::CleanUpClasses();
 
-    delete wxTheApp;
-    wxTheApp = NULL;
-
-    // GL: I'm annoyed ... I don't know where to put this and I don't want to
-    // create a module for that as it's part of the core.
 #if wxUSE_THREADS
     delete wxPendingEvents;
     delete wxPendingEventsLocker;
@@ -168,6 +161,46 @@ void wxApp::CleanUp()
     delete wxLog::SetActiveTarget(NULL);
 }
 
+// NB: argc and argv may be changed here, pass by reference!
+int wxEntryStart( int& argc, char *argv[] )
+{
+#ifdef __WXDEBUG__
+    // install the X error handler
+    gs_pfnXErrorHandler = XSetErrorHandler( wxXErrorHandler );
+#endif // __WXDEBUG__
+
+    Display* xdisplay = XOpenDisplay(NULL);
+
+    if (!xdisplay)
+    {
+        wxLogError( _("wxWindows could not open display. Exiting.") );
+        return -1;
+    }
+    
+    wxApp::ms_display = (WXDisplay*) xdisplay;
+    
+    XSelectInput( xdisplay, XDefaultRootWindow(xdisplay), PropertyChangeMask);
+        
+//    wxSetDetectableAutoRepeat( TRUE );
+
+    if (!wxApp::Initialize())
+        return -1;
+
+    return 0;
+}
+
+
+int wxEntryInitGui()
+{
+    int retValue = 0;
+
+    if ( !wxTheApp->OnInitGui() )
+        retValue = -1;
+
+    return retValue;
+}
+
+
 int wxEntry( int argc, char *argv[] )
 {
 #if (defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING) || wxUSE_DEBUG_CONTEXT
@@ -179,9 +212,9 @@ int wxEntry( int argc, char *argv[] )
     // checked, but this is a reasonable compromise.
     wxDebugContext::SetCheckpoint();
 #endif
-
-    if (!wxApp::Initialize())
-        return FALSE;
+    int err = wxEntryStart(argc, argv);
+    if (err)
+        return err;
 
     if (!wxTheApp)
     {
@@ -206,14 +239,18 @@ int wxEntry( int argc, char *argv[] )
     wxTheApp->argc = argc;
     wxTheApp->argv = argv;
 
-    // GUI-specific initialization, such as creating an app context.
-    wxTheApp->OnInitGui();
+    int retValue;
+    retValue = wxEntryInitGui();
 
     // Here frames insert themselves automatically into wxTopLevelWindows by
     // getting created in OnInit().
+    if ( retValue == 0 )
+    {
+        if ( !wxTheApp->OnInit() )
+            retValue = -1;
+    }
 
-    int retValue = 0;
-    if (wxTheApp->OnInit())
+    if ( retValue == 0 )
     {
         if (wxTheApp->Initialized()) retValue = wxTheApp->OnRun();
     }
@@ -257,7 +294,6 @@ wxApp::wxApp()
     m_mainColormap = (WXColormap) NULL;
     m_topLevelWidget = (WXWindow) NULL;
     m_maxRequestSize = 0;
-    m_initialDisplay = (WXDisplay*) 0;
     m_mainLoop = NULL;
 }
 
@@ -621,30 +657,13 @@ bool wxApp::OnInitGui()
     // now we don't want to try popping up a dialog
     // for error messages.
     delete wxLog::SetActiveTarget(new wxLogStderr);
+    
     if (!wxAppBase::OnInitGui())
 	return FALSE;
     
-    // TODO: parse argv and get display to pass to XOpenDisplay
-    Display* dpy = XOpenDisplay(NULL);
-    m_initialDisplay = (WXDisplay*) dpy;
 
-    if (!dpy) {
-        wxString className(wxTheApp->GetClassName());
-        wxLogError(_("wxWindows could not open display for '%s': exiting."),
-            (const char*) className);
-        exit(-1);
-    }
-    XSelectInput((Display*) m_initialDisplay,
-        XDefaultRootWindow((Display*) m_initialDisplay),
-        PropertyChangeMask);
-
-#ifdef __WXDEBUG__
-    // install the X error handler
-    gs_pfnXErrorHandler = XSetErrorHandler(wxXErrorHandler);
-#endif // __WXDEBUG__
-
-    GetMainColormap(dpy);
-    m_maxRequestSize = XMaxRequestSize((Display*) dpy);
+    GetMainColormap( wxApp::GetDisplay() );
+    m_maxRequestSize = XMaxRequestSize( (Display*) wxApp::GetDisplay() );
 
     return TRUE;
 }
