@@ -27,8 +27,9 @@
     #include "wx/msgdlg.h"
     #include "wx/intl.h"
     #include "wx/dynarray.h"
-#   include "wx/wxchar.h"
-#   include "wx/icon.h"
+    #include "wx/wxchar.h"
+    #include "wx/icon.h"
+    #include "wx/timer.h"
 #endif
 
 #include "wx/log.h"
