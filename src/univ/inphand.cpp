@@ -78,12 +78,6 @@ wxScrollBarTimer::wxScrollBarTimer(wxStdScrollBarInputHandler *handler,
     m_handler = handler;
     m_action = action;
     m_control = control;
-
-    // start scrolling immediately
-    Notify();
-
-    // and continue it later
-    Start(50); // FIXME make this delay configurable
 }
 
 void wxScrollBarTimer::Notify()
@@ -408,6 +402,11 @@ wxControlActions wxStdScrollBarInputHandler::Map(wxControl *control,
                                                          action,
                                                          event,
                                                          scrollbar);
+                    // start scrolling immediately
+                    m_timerScroll->Notify();
+
+                    // and continue it later
+                    m_timerScroll->Start(50); // FIXME hardcoded delay
                 }
                 else // no (immediate) action
                 {
