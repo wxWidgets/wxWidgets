@@ -554,21 +554,21 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( _T("GREEN") );
         dc.SetTextBackground( _T("RED") );
         dc.DrawBitmap( *my_smile_xbm, 30, 2010 );
-
+        
         dc.SetTextForeground( wxT("BLACK") );
         dc.DrawText( _T("After wxImage conversion"), 150, 1975 );
         dc.DrawText( _T("(red on white)"), 150, 1990 );
         dc.SetTextForeground( wxT("RED") );
-        wxImage i = my_smile_xbm->ConvertToImage();
-        i.SetMaskColour( 255, 255, 255 );
-        i.Replace( 0, 0, 0,
+        wxImage img = my_smile_xbm->ConvertToImage();
+        img.SetMaskColour( 255, 255, 255 );
+        img.Replace( 0, 0, 0,
                wxRED_PEN->GetColour().Red(),
                wxRED_PEN->GetColour().Green(),
                wxRED_PEN->GetColour().Blue() );
-        dc.DrawBitmap( wxBitmap(i), 150, 2010, TRUE );
+        wxBitmap bmp( img );
+        dc.DrawBitmap( bmp, 150, 2010, TRUE );
         dc.SetTextForeground( wxT("BLACK") );
     }
-
 
     wxBitmap mono( 60,50,1 );
     wxMemoryDC memdc;
@@ -577,7 +577,10 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     memdc.SetBrush( *wxWHITE_BRUSH );
     memdc.DrawRectangle( 0,0,60,50 );
     memdc.SetTextForeground( *wxBLACK );
+#ifndef __WXGTK20__
+    // I cannot convince GTK2 to draw into mono bitmaps
     memdc.DrawText( _T("Hi!"), 5, 5 );
+#endif
     memdc.SetBrush( *wxBLACK_BRUSH );
     memdc.DrawRectangle( 33,5,20,20 );
     memdc.SetPen( *wxRED_PEN );
@@ -591,7 +594,6 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         dc.SetTextForeground( wxT("RED") );
         dc.SetTextBackground( wxT("GREEN") );
         dc.DrawBitmap( mono, 30, 2130 );
-
         dc.SetTextForeground( wxT("BLACK") );
         dc.DrawText( _T("After wxImage conversion"), 150, 2095 );
         dc.DrawText( _T("(red on white)"), 150, 2110 );
@@ -608,15 +610,11 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     dc.DrawText(_T("XPM bitmap"), 30, 2230);
     if ( m_bmpSmileXpm.Ok() )
-    {
         dc.DrawBitmap(m_bmpSmileXpm, 30, 2250, TRUE);
-    }
 
     dc.DrawText(_T("XPM icon"), 150, 2230);
     if ( m_iconSmileXpm.Ok() )
-    {
         dc.DrawIcon(m_iconSmileXpm, 150, 2250);
-    }
 
     dc.DrawText( _T("ICO handler (1st image)"), 30, 2290 );
     if (my_horse_ico32 && my_horse_ico32->Ok())
